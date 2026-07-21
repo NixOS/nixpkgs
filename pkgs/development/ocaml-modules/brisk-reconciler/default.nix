@@ -8,11 +8,7 @@
 }:
 
 let
-  version =
-    if lib.versionAtLeast ocaml.version "5.3" then
-      throw "brisk-reconciler is not available for OCaml ${ocaml.version}"
-    else
-      "1.0.0-alpha1";
+  version = "1.0.0-alpha1";
 in
 
 buildDunePackage {
@@ -40,7 +36,8 @@ buildDunePackage {
       * stateful functions: Functions that maintain state over time. Imagine that you can take any variable in your function and manage its value over the function's invocation. Now, imagine that any function invocation really creates its own "instance" of the function which will track this state separately from other invocations of this function.
     '';
     homepage = "https://github.com/briskml/brisk-reconciler";
-    maintainers = with lib.maintainers; [ momeemt ];
+    maintainers = [ ];
     license = lib.licenses.mit;
+    broken = lib.versionAtLeast ocaml.version "5.3";
   };
 }

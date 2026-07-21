@@ -4,7 +4,7 @@
   fetchurl,
   pkg-config,
   nettle,
-  libidn,
+  libidn2,
   libnetfilter_conntrack,
   nftables,
   buildPackages,
@@ -16,7 +16,7 @@
 let
   copts = lib.concatStringsSep " " (
     [
-      "-DHAVE_IDN"
+      "-DHAVE_LIBIDN2"
       "-DHAVE_DNSSEC"
     ]
     ++ lib.optionals dbusSupport [
@@ -28,13 +28,13 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dnsmasq";
-  version = "2.91";
+  version = "2.93";
 
   src = fetchurl {
-    url = "https://www.thekelleys.org.uk/dnsmasq/${pname}-${version}.tar.xz";
-    hash = "sha256-9iJoKEizNnetsratCCZGGKKuCgHaSGqT/YzZEYaz0VM=";
+    url = "https://www.thekelleys.org.uk/dnsmasq/dnsmasq-${finalAttrs.version}.tar.xz";
+    hash = "sha256-DADU5cl8gwbl+5MrNIs0JpycKaDn3w6OgpWLQHCSvBk=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     "PKG_CONFIG=${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config"
   ];
 
-  hardeningEnable = [ "pie" ];
+  enableParallelBuilding = true;
 
   postBuild = lib.optionalString stdenv.hostPlatform.isLinux ''
     make -C contrib/lease-tools
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     nettle
-    libidn
+    libidn2
   ]
   ++ lib.optionals dbusSupport [ dbus ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -106,17 +106,17 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) dnscrypt-proxy;
     kubernetes-dns-single = nixosTests.kubernetes.dns-single-node;
     kubernetes-dns-multi = nixosTests.kubernetes.dns-multi-node;
+    pihole-ftl-dnsmasq = nixosTests.pihole-ftl.dnsmasq;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Integrated DNS, DHCP and TFTP server for small networks";
     homepage = "https://www.thekelleys.org.uk/dnsmasq/doc.html";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     mainProgram = "dnsmasq";
-    platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [
       fpletz
-      globin
     ];
   };
-}
+})

@@ -14,19 +14,19 @@ let
   testsuite = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "testsuite";
-    rev = "e05365077e13a1d86ffe77acfb1a835b7aa78422";
-    hash = "sha256-yvZ5AZTPUA6nsD3xpFC0VLthiu2CxVto66RTXBXXeJM=";
+    rev = "4b24564c844e3d34bf46dfcb3c774ee5163e31cc";
+    hash = "sha256-8VirKLRro0iST58Rfg17u4tTO57KNC/7F/NB43dZ7w4=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "binaryen";
-  version = "124";
+  version = "129";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "binaryen";
     rev = "version_${version}";
-    hash = "sha256-tkvO0gNESliRV6FOpXDQd7ZKujGe6q1mGX5V+twcE1o=";
+    hash = "sha256-rmCNBrKHVozjzyWPAD4pZw0uViMMRRQsZALm4jbYIJk=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +41,12 @@ stdenv.mkDerivation rec {
       sed -i '/gtest/d' third_party/CMakeLists.txt
       rmdir test/spec/testsuite
       ln -s ${testsuite} test/spec/testsuite
+      # scripts/test/lld.py checks `'64' in input_path` to enable the
+      # memory64/bigint flags; the full Nix build path leaks digits that
+      # can accidentally contain "64", wrongly triggering those flags for
+      # non-memory64 tests (e.g. duplicate_imports.wat). Match on basename.
+      substituteInPlace scripts/test/lld.py \
+        --replace-fail "'64' in input_path" "'64' in os.path.basename(input_path)"
     else
       cmakeFlagsArray=($cmakeFlagsArray -DBUILD_TESTS=0)
     fi
@@ -80,15 +86,14 @@ stdenv.mkDerivation rec {
 
   doCheck = (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin);
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/WebAssembly/binaryen";
     description = "Compiler infrastructure and toolchain library for WebAssembly, in C++";
-    platforms = platforms.all;
-    maintainers = with maintainers; [
-      asppsa
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       willcohen
     ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
   passthru.tests = { inherit emscripten; };
 }

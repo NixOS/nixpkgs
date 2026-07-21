@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "salut";
-  version = "unstable-2022-12-17";
+  version = "3.0.1-unstable-2022-12-17";
 
   src = fetchFromGitLab {
     owner = "snakedye";
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage {
     description = "Sleek notification daemon for Wayland";
     homepage = "https://gitlab.com/snakedye/salut/-/wikis/Home";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "salut";
     platforms = lib.platforms.linux;
   };

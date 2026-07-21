@@ -47,16 +47,17 @@ let
   };
 in
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "osqp";
-  version = "1.0.4";
+  version = "1.1.3";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "osqp";
     repo = "osqp-python";
-    tag = "v${version}";
-    hash = "sha256-i39tphtGO//MS5sqwn6qx5ORR/A8moi0O8ltGGmkv2w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xK7ljAwVwsmj84s5yxeU64nwT6N/Ec58aYjiUUOr4Ig=";
   };
 
   patches = [
@@ -107,7 +108,10 @@ buildPythonPackage rec {
     '';
     homepage = "https://osqp.org/";
     downloadPage = "https://github.com/oxfordcontrol/osqp-python/releases";
+    changelog = "https://github.com/osqp/osqp-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ drewrisinger ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+    ];
   };
-}
+})

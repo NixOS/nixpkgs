@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nunicode";
-  version = "1.11";
+  version = "1.11.1";
 
   outputs = [
     "out"
@@ -19,8 +19,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromBitbucket {
     owner = "alekseyt";
     repo = "nunicode";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-6255YdX7eYSAj0EAE4RgX1m4XDNIF/Nc4ZCvXzTxpag=";
+    tag = finalAttrs.version;
+    hash = "sha256-73jkbWbQGSya4hf+/5c2bpJsRmncgjA2m+6bud2UN0A=";
   };
 
   postPatch = ''
@@ -45,6 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
   # avoid name-clash on case-insensitive filesystems
   cmakeBuildDir = "build-dir";
 
+  cmakeFlags = [
+    # fix compatibility with CMake (https://cmake.org/cmake/help/latest/command/cmake_minimum_required.html)
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "4.0")
+  ];
+
   doCheck = true;
 
   checkPhase = ''
@@ -68,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Fast, small and portable Unicode library with SQLite extension";
     homepage = "https://bitbucket.org/alekseyt/nunicode";
-    changelog = "https://bitbucket.org/alekseyt/nunicode/src/${finalAttrs.version}/CHANGELOG";
+    changelog = "https://bitbucket.org/alekseyt/nunicode/src/${finalAttrs.src.tag}/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.mjoerg ];
     platforms = lib.platforms.unix;

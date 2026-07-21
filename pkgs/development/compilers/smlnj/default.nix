@@ -4,7 +4,7 @@
   fetchurl,
 }:
 let
-  version = "110.99.8";
+  version = "110.99.9";
   baseurl = "https://smlnj.cs.uchicago.edu/dist/working/${version}";
 
   arch = if stdenv.hostPlatform.is64bit then "64" else "32";
@@ -89,7 +89,6 @@ stdenv.mkDerivation {
     platforms = [
       "x86_64-linux"
       "i686-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     maintainers = with lib.maintainers; [

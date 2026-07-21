@@ -15,11 +15,9 @@
 */
 
 {
+  lib,
   pkgs',
   emacs',
-  makeScope,
-  makeOverridable,
-  dontRecurseIntoAttrs,
 }:
 
 let
@@ -68,14 +66,14 @@ let
   emacsWithPackages =
     { pkgs, lib }:
     pkgs.callPackage ../applications/editors/emacs/build-support/wrapper.nix {
-      inherit (pkgs.xorg) lndir;
+      inherit (pkgs) lndir;
       inherit lib;
     };
 
 in
-makeScope pkgs'.newScope (
+lib.makeScope pkgs'.newScope (
   self:
-  makeOverridable (
+  lib.makeOverridable (
     {
       pkgs ? pkgs',
       lib ? pkgs.lib,
@@ -122,7 +120,7 @@ makeScope pkgs'.newScope (
         # Propagate overridden scope
         emacs = emacs'.overrideAttrs (old: {
           passthru = (old.passthru or { }) // {
-            pkgs = dontRecurseIntoAttrs self;
+            pkgs = lib.dontRecurseIntoAttrs self;
           };
         });
 

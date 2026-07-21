@@ -57,8 +57,6 @@ let
       ];
       networking.firewall = firewallSettings;
 
-      nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ "consul" ];
-
       services.consul = {
         enable = true;
         inherit webUi;
@@ -86,8 +84,6 @@ let
         }
       ];
       networking.firewall = firewallSettings;
-
-      nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ "consul" ];
 
       services.consul =
         assert builtins.elem thisConsensusServerHost allConsensusServerHosts;

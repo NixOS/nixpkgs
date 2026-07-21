@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
+  espeak-ng,
   onnxruntime-native,
   piper-phonemize-native,
   pybind11,
@@ -10,7 +11,7 @@
 
 buildPythonPackage {
   inherit (piper-phonemize-native) pname version src;
-  format = "pyproject";
+  pyproject = true;
 
   nativeBuildInputs = [
     pybind11
@@ -18,9 +19,9 @@ buildPythonPackage {
   ];
 
   buildInputs = [
+    espeak-ng
     onnxruntime-native
     piper-phonemize-native
-    piper-phonemize-native.espeak-ng
   ];
 
   # coredump in onnxruntime::logging::Logger& onnxruntime::logging::LoggingManager::DefaultLogger()
@@ -30,6 +31,8 @@ buildPythonPackage {
   doCheck = false;
 
   meta = {
+    # dylib import fails with no LC_RPATH's found
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86;
     description = "Phonemization libary used by Piper text to speech system";
     inherit (piper-phonemize-native.meta) homepage license maintainers;
   };

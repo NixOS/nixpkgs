@@ -15,27 +15,39 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libphonenumber";
-  version = "9.0.15";
+  version = "9.0.35";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "libphonenumber";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JpQ9I6Bm6HbRYDGZYkif/IWK6PXhGeTl2yY+K3ydLqI=";
+    hash = "sha256-bGbPTZJWdGTdnWQCK9yXqcqK0AkAOsmZ/rRR2a+IT7M=";
   };
 
   patches = [
     # An earlier version of this patch was submitted upstream but did not get
     # any interest there - https://github.com/google/libphonenumber/pull/2921
     ./build-reproducibility.patch
+    # Fix include directory in generated cmake files with split outputs
+    ./cmake-include-dir.patch
+    # Finding `boost_system` fails because the stub compiled library of
+    # Boost.System, which has been a header-only library since 1.69, was
+    # removed in 1.89.
+    # Upstream PR: https://github.com/google/libphonenumber/pull/3903
+    ./boost-1.89.patch
+  ];
+
+  outputs = [
+    "out"
+    "dev"
   ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    protobuf
   ]
   ++ lib.optionals enableTests [
-    gtest
     jre
   ];
 
@@ -44,6 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
     protobuf
   ]
   ++ lib.optionals enableTests [
+    gtest
+  ];
+
+  propagatedBuildInputs = lib.optionals enableTests [
     boost
   ];
 
@@ -53,22 +69,26 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkTarget = "tests";
 
-  cmakeFlags =
-    lib.optionals (!enableTests) [
-      (lib.cmakeBool "REGENERATE_METADATA" false)
-      (lib.cmakeBool "USE_BOOST" false)
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      (lib.cmakeFeature "CMAKE_CROSSCOMPILING_EMULATOR" (stdenv.hostPlatform.emulator buildPackages))
-      (lib.cmakeFeature "PROTOC_BIN" (lib.getExe buildPackages.protobuf))
-    ];
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-error=deprecated-declarations")
+  ]
+  ++ lib.optionals (!enableTests) [
+    (lib.cmakeBool "REGENERATE_METADATA" false)
+    (lib.cmakeBool "USE_BOOST" false)
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    (lib.cmakeFeature "CMAKE_CROSSCOMPILING_EMULATOR" (stdenv.hostPlatform.emulator buildPackages))
+    (lib.cmakeFeature "PROTOC_BIN" (lib.getExe buildPackages.protobuf))
+  ];
 
-  meta = with lib; {
+  strictDeps = true;
+
+  meta = {
     changelog = "https://github.com/google/libphonenumber/blob/${finalAttrs.src.rev}/release_notes.txt";
     description = "Google's i18n library for parsing and using phone numbers";
     homepage = "https://github.com/google/libphonenumber";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       illegalprime
       wegank
     ];

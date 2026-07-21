@@ -18,18 +18,18 @@
   nix-update-script,
 }:
 let
-  version = "1.3.19";
+  version = "1.3.22";
   src = fetchFromGitHub {
     owner = "michaelb";
     repo = "sniprun";
     tag = "v${version}";
-    hash = "sha256-a2hEV83NOnt+9BwDk94Ns+rIC9DeHFdu2dZG1XPtdnY=";
+    hash = "sha256-lehL28qI1YArYK38v5tGRe7SSzHxU8Fbf10fG4ShMUw=";
   };
   sniprun-bin = rustPlatform.buildRustPackage {
     pname = "sniprun-bin";
     inherit version src;
 
-    cargoHash = "sha256-Ps9Ugq8ISbuXO3Dxo1WQUVPCxf24oSHvem2Xg0sIgOQ=";
+    cargoHash = "sha256-YbovDLXVYnwCWwUC5FNAdvGbBThbkI4kOF5ukDY1IhA=";
 
     nativeBuildInputs = [ makeWrapper ];
 

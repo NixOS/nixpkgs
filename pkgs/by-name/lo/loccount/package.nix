@@ -4,14 +4,14 @@
   fetchFromGitLab,
   python3,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "loccount";
   version = "2.16";
 
   src = fetchFromGitLab {
     owner = "esr";
     repo = "loccount";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-uHX45KZO6R0tgTU10csKLiVYZZ/ea2V6BwhF6vfKKtA=";
   };
 
@@ -32,7 +32,7 @@ buildGoModule rec {
     go generate
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Re-implementation of sloccount in Go";
     mainProgram = "loccount";
     longDescription = ''
@@ -48,7 +48,7 @@ buildGoModule rec {
     '';
     homepage = "https://gitlab.com/esr/loccount";
     downloadPage = "https://gitlab.com/esr/loccount/tree/master";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ calvertvl ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ calvertvl ];
   };
-}
+})

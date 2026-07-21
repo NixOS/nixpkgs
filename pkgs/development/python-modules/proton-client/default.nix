@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   replaceVars,
   bcrypt,
   pyopenssl,
@@ -17,7 +16,6 @@ buildPythonPackage rec {
   pname = "proton-client";
   version = "0.7.1";
   format = "setuptools";
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ProtonMail";
@@ -48,15 +46,19 @@ buildPythonPackage rec {
   disabledTests = [
     #ValueError: Invalid modulus
     "test_modulus_verification"
+    # bcrypt 5.0 rejects test fixture password longer than 72 bytes
+    "test_compute_v"
+    "test_generate_v"
+    "test_srp"
   ];
 
   pythonImportsCheck = [ "proton" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Proton client module";
     homepage = "https://github.com/ProtonMail/proton-python-client";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

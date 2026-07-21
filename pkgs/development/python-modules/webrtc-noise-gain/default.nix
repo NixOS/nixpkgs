@@ -15,17 +15,21 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "webrtc-noise-gain";
-  version = "1.2.5";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "webrtc-noise-gain";
-    tag = "v${version}";
-    hash = "sha256-GbdG2XM11zgPk2VZ0mu7qMv256jaMyJDHdBCBUnynMY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EfMqmtdW7k7DDPWxpOOsnpH9H4ifGQORnNlO+pnoLRk=";
   };
+
+  patches = [
+    ./0001-fix-missing-cstdint-include.patch
+  ];
 
   postPatch = with stdenv.hostPlatform.uname; ''
     # Configure the correct host platform for cross builds
@@ -37,10 +41,7 @@ buildPythonPackage rec {
       'machine = "${lib.toLower processor}"'
   '';
 
-  nativeBuildInputs = [
-    pybind11
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   buildInputs = [ abseil-cpp ];
 
@@ -48,11 +49,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  preCheck = ''
+    rm -rf webrtc_noise_gain
+  '';
+
+  meta = {
     description = "Tiny wrapper around webrtc-audio-processing for noise suppression/auto gain only";
     homepage = "https://github.com/rhasspy/webrtc-noise-gain";
-    changelog = "https://github.com/rhasspy/webrtc-noise-gain/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    changelog = "https://github.com/rhasspy/webrtc-noise-gain/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

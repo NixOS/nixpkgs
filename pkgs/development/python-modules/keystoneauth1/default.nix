@@ -11,7 +11,6 @@
   os-service-types,
   oslo-config,
   oslo-utils,
-  pbr,
   pycodestyle,
   pyyaml,
   requests,
@@ -27,12 +26,12 @@
 
 buildPythonPackage rec {
   pname = "keystoneauth1";
-  version = "5.12.0";
+  version = "5.15.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3RE8Lz3LQY2fdhxzuM1DqW3fqKYStRxXaCI4HznKSug=";
+    hash = "sha256-ziys39Ao5lvSP/QD1lcuv6s7AG1tLd46qFwmNnWp+7U=";
   };
 
   build-system = [ setuptools ];
@@ -40,13 +39,12 @@ buildPythonPackage rec {
   dependencies = [
     iso8601
     os-service-types
-    pbr
     requests
     stevedore
     typing-extensions
   ]
   # TODO: remove this workaround and fix breakages
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   optional-dependencies = {
     betamax = [
@@ -69,7 +67,7 @@ buildPythonPackage rec {
     testresources
     testtools
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   # test_keystoneauth_betamax_fixture is incompatible with urllib3 2.0.0
   # https://bugs.launchpad.net/keystoneauth/+bug/2020112
@@ -80,10 +78,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "keystoneauth1" ];
 
-  meta = with lib; {
+  meta = {
     description = "Authentication Library for OpenStack Identity";
     homepage = "https://github.com/openstack/keystoneauth";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

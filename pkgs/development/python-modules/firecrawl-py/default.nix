@@ -3,6 +3,7 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  httpx,
   nest-asyncio,
   pydantic,
   python-dotenv,
@@ -11,24 +12,25 @@
   websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "firecrawl-py";
-  version = "1.15.0";
+  version = "2.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mendableai";
     repo = "firecrawl";
-    tag = "v${version}";
-    hash = "sha256-GIde8FiU1/gS3oFfTf7f7Tc4KvDVL873VE5kjyh33Is=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7dB3jdp5jkRiNx63C5sjs3t85fuz5vzurfvYY5jWQyU=";
   };
 
-  sourceRoot = "${src.name}/apps/python-sdk";
+  sourceRoot = "${finalAttrs.src.name}/apps/python-sdk";
 
   build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
+    httpx
     nest-asyncio
     pydantic
     python-dotenv
@@ -44,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Turn entire websites into LLM-ready markdown or structured data. Scrape, crawl and extract with a single API";
     homepage = "https://firecrawl.dev";
-    changelog = "https://github.com/mendableai/firecrawl/releases/tag/${src.tag}";
+    changelog = "https://github.com/mendableai/firecrawl/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
-}
+})

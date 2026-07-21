@@ -1,7 +1,7 @@
 { lib, pkgs, ... }:
 let
-  oldNetbox = "netbox_4_2";
-  newNetbox = "netbox_4_3";
+  oldNetbox = "netbox_4_4";
+  newNetbox = "netbox_4_5";
 
   apiVersion =
     version:
@@ -18,7 +18,6 @@ in
 
   meta.maintainers = with lib.maintainers; [
     minijackson
-    raitobezarius
   ];
 
   node.pkgsReadOnly = false;
@@ -35,20 +34,10 @@ in
         # Pick the NetBox package from this config's "pkgs" argument,
         # so that `nixpkgs.config.permittedInsecurePackages` works
         package = pkgs.${oldNetbox};
-        secretKeyFile = pkgs.writeText "secret" ''
-          abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
-        '';
-      };
 
-      services.nginx = {
-        enable = true;
-
-        recommendedProxySettings = true;
-
-        virtualHosts.netbox = {
-          default = true;
-          locations."/".proxyPass = "http://localhost:${toString config.services.netbox.port}";
-          locations."/static/".alias = "/var/lib/netbox/static/";
+        nginx = {
+          enable = true;
+          hostname = "localhost";
         };
       };
 
@@ -79,7 +68,7 @@ in
           headers = machine.succeed(
             "curl -sSL http://localhost/api/ --head -H 'Content-Type: application/json'"
           )
-          assert api_version(headers) == version
+          t.assertEqual(api_version(headers), version)
 
       with subtest("NetBox version is the old one"):
           check_api_version("${oldApiVersion}")

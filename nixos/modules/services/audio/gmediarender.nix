@@ -81,18 +81,21 @@ in
           SupplementaryGroups = [ "audio" ];
           ExecStart =
             "${cfg.package}/bin/gmediarender "
-            + lib.optionalString (cfg.audioDevice != null) (
-              "--gstout-audiodevice=${utils.escapeSystemdExecArg cfg.audioDevice} "
-            )
-            + lib.optionalString (cfg.audioSink != null) (
-              "--gstout-audiosink=${utils.escapeSystemdExecArg cfg.audioSink} "
-            )
-            + lib.optionalString (cfg.friendlyName != null) (
-              "--friendly-name=${utils.escapeSystemdExecArg cfg.friendlyName} "
-            )
-            + lib.optionalString (cfg.initialVolume != 0) ("--initial-volume=${toString cfg.initialVolume} ")
-            + lib.optionalString (cfg.port != null) ("--port=${toString cfg.port} ")
-            + lib.optionalString (cfg.uuid != null) ("--uuid=${utils.escapeSystemdExecArg cfg.uuid} ");
+            + lib.optionalString (
+              cfg.audioDevice != null
+            ) "--gstout-audiodevice=${utils.escapeSystemdExecArg cfg.audioDevice} "
+
+            + lib.optionalString (
+              cfg.audioSink != null
+            ) "--gstout-audiosink=${utils.escapeSystemdExecArg cfg.audioSink} "
+
+            + lib.optionalString (
+              cfg.friendlyName != null
+            ) "--friendly-name=${utils.escapeSystemdExecArg cfg.friendlyName} "
+
+            + lib.optionalString (cfg.initialVolume != 0) "--initial-volume=${toString cfg.initialVolume} "
+            + lib.optionalString (cfg.port != null) "--port=${toString cfg.port} "
+            + lib.optionalString (cfg.uuid != null) "--uuid=${utils.escapeSystemdExecArg cfg.uuid} ";
           Restart = "always";
           RuntimeDirectory = "gmediarender";
 

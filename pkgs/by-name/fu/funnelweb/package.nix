@@ -13,6 +13,11 @@ stdenv.mkDerivation {
     sha256 = "0zqhys0j9gabrd12mnk8ibblpc8dal4kbl8vnhxmdlplsdpwn4wg";
   };
 
+  postPatch = ''
+    substituteInPlace source/style.h \
+      --replace-fail "typedef unsigned        bool   ; /* Unsigned, [0,1].                          */" ""
+  '';
+
   buildPhase = ''
     cd source
     ${stdenv.cc}/bin/cc -D__linux__ -o fw *.c
@@ -23,13 +28,13 @@ stdenv.mkDerivation {
     install fw $out/bin/fw
   '';
 
-  meta = with lib; {
+  meta = {
     version = "3.20";
     description = "Simple, reliable literate-programming macro preprocessor";
     mainProgram = "fw";
     homepage = "http://www.ross.net/funnelweb/";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

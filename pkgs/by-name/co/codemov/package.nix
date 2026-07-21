@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage {
     description = "Create a video of how a git repository's code changes over time";
     homepage = "https://github.com/sloganking/codemov";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "codemov";
   };
 }

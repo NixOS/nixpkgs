@@ -8,13 +8,16 @@
 
   # dependencies
   click,
-  langgraph,
+  httpx,
   langgraph-runtime-inmem,
   langgraph-sdk,
+  langgraph,
+  pathspec,
   python-dotenv,
 
   # testing
   pytest-asyncio,
+  pytest-mock,
   pytestCheckHook,
   docker-compose,
 
@@ -22,25 +25,29 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langgraph-cli";
-  version = "0.4.2";
+  version = "0.4.31";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    tag = "cli==${version}";
-    hash = "sha256-me9Qn7wwDsls419LOoRnYgIgmCblqLEFwNdH3I/tv0U=";
+    tag = "cli==${finalAttrs.version}";
+    hash = "sha256-9q+/IKQcNT04WVSGU+ByoLxAPiUSbxPBhqI5uxpobHk=";
   };
 
-  sourceRoot = "${src.name}/libs/cli";
+  sourceRoot = "${finalAttrs.src.name}/libs/cli";
 
   build-system = [ hatchling ];
 
   dependencies = [
     click
+    httpx
     langgraph-sdk
+    pathspec
+    python-dotenv
   ];
 
   optional-dependencies = {
@@ -53,10 +60,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-mock
     pytestCheckHook
     docker-compose
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   enabledTestPaths = [ "tests/unit_tests" ];
 
@@ -85,15 +93,16 @@ buildPythonPackage rec {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "cli==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 
   meta = {
     description = "Official CLI for LangGraph API";
     homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/cli";
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "langgraph";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})

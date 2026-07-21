@@ -10,7 +10,7 @@ let
 in
 {
   meta = {
-    maintainers = lib.teams.lxc.members;
+    teams = [ lib.teams.lxc ];
   };
 
   imports = [
@@ -25,7 +25,7 @@ in
 
       partitionTableType = "efi";
       format = "qcow2-compressed";
-      copyChannel = true;
+      copyChannel = config.system.installer.channel.enable;
     };
 
     fileSystems = {

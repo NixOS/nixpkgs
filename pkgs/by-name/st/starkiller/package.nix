@@ -10,18 +10,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "starkiller";
-  version = "3.1.0";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "bc-security";
     repo = "starkiller";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-KjEHbRhbXY57886uziRzUoA/MzK6QZx7/b1lrmIKsWc=";
+    hash = "sha256-uFSv/SfXATi01e4VH6iImvRnlFTUB3OarhfSTLQDg/M=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-fkpYRnBEM/nUtdqnWMb7Trqa5SnCrdX7RUYgd73RGFE=";
+    hash = "sha256-NAnROD2Bt2sYydLbZVzudwDajbc4zonTjSLcdD32KNE=";
   };
 
   buildPhase = ''

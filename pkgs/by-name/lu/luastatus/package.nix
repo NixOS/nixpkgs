@@ -13,19 +13,18 @@
   glib,
   libnl,
   udev,
-  libXau,
-  libXdmcp,
+  libxau,
+  libxdmcp,
   pcre2,
-  pcre,
   util-linux,
   libselinux,
   libsepol,
   lua5,
   docutils,
   libxcb,
-  libX11,
-  xcbutil,
-  xcbutilwm,
+  libx11,
+  libxcb-util,
+  libxcb-wm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,11 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libxcb
-    libX11
-    xcbutil
-    xcbutilwm
-    libXdmcp
-    libXau
+    libx11
+    libxcb-util
+    libxcb-wm
+    libxdmcp
+    libxau
     libpulseaudio
     libnl
     libselinux
@@ -61,11 +60,15 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     udev
     pcre2
-    pcre
     util-linux
     lua5
     docutils
   ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 3.1.3)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   postInstall = ''
     wrapProgram $out/bin/luastatus-stdout-wrapper \
@@ -78,12 +81,12 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix LUASTATUS : $out/bin/luastatus
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Universal status bar content generator";
     homepage = "https://github.com/shdown/luastatus";
-    changelog = "https://github.com/shdown/luastatus/releases/tag/${finalAttrs.version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ kashw2 ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/shdown/luastatus/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ kashw2 ];
+    platforms = lib.platforms.linux;
   };
 })

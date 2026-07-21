@@ -8,13 +8,13 @@
   js_of_ocaml,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "multicore-magic";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchurl {
-    url = "https://github.com/ocaml-multicore/multicore-magic/releases/download/${version}/multicore-magic-${version}.tbz";
-    hash = "sha256-Adcgi9yfEhhygbBK04H6N9ozg3O6JJWrXrD1MxUcGV8=";
+    url = "https://github.com/ocaml-multicore/multicore-magic/releases/download/${finalAttrs.version}/multicore-magic-${finalAttrs.version}.tbz";
+    hash = "sha256-jY1wqCOq4c4EMDgIQqqIHErIONJFyvJ+0P8ld1CHF18=";
   };
 
   doCheck = true;
@@ -34,4 +34,4 @@ buildDunePackage rec {
     homepage = "https://github.com/ocaml-multicore/multicore-magic";
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

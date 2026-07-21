@@ -7,20 +7,25 @@
   crcmod,
   eval-type-backport,
   pydantic,
+  pyprojectVersionPatchHook,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "smp";
-  version = "3.3.2";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JPHutchins";
     repo = "smp";
     tag = version;
-    hash = "sha256-klMFJOKGSy6s16M+9wQhSvLSWdNPO/IMNdY5RW+wyFc=";
+    hash = "sha256-RjecTnMYNcJeD7wqq4FkwRvEgTn5V/RwMfOjf2dqQ+U=";
   };
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [
     poetry-core
@@ -31,6 +36,10 @@ buildPythonPackage rec {
     crcmod
     eval-type-backport
     pydantic
+  ];
+
+  pythonRelaxDeps = [
+    "cbor2"
   ];
 
   nativeCheckInputs = [

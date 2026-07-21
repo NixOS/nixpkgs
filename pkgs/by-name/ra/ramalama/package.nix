@@ -1,80 +1,85 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
   go-md2man,
 
-  # TODO: switch to llama-cpp-vulkan when moltenvk is upgraded to 1.3.0:
-  # https://github.com/NixOS/nixpkgs/pull/434130
-  llama-cpp,
+  llama-cpp-vulkan,
   podman,
   withPodman ? true,
+  writableTmpDirAsHomeHook,
 
   # passthru
   ramalama,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ramalama";
-  version = "0.12.2";
+  version = "0.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "ramalama";
-    tag = "v${version}";
-    hash = "sha256-v9/cE6GFOUT5urHQwif7skP5vnRCdu435QGAAypWX0w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-k3VfZ9+ATu2Cwx531D0WVagjn1ZMIKR1i3yyq+3IGJ4=";
   };
 
-  build-system = with python3.pkgs; [
+  build-system = with python3Packages; [
     setuptools
     wheel
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     argcomplete
+    bcrypt
     pyyaml
+    jinja2
   ];
 
   nativeBuildInputs = [
     go-md2man
   ];
 
+  postPatch = ''
+    substituteInPlace ramalama/config.py --replace-fail "{sys.prefix}" "$out"
+    patchShebangs hack/markdown-preprocess
+  '';
+
   preBuild = ''
     make docs
   '';
 
-  postInstall = lib.optionalString withPodman ''
-    wrapProgram $out/bin/ramalama \
-      --prefix PATH : ${
-        lib.makeBinPath (
-          [
-            llama-cpp
-            podman
-          ]
-          ++ (
-            with python3.pkgs;
-            [
-              huggingface-hub
-            ]
-            ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform mlx-lm) mlx-lm
-          )
-        )
-      }
-  '';
+  postInstall =
+    let
+      binPackages = [
+        llama-cpp-vulkan
+      ]
+      ++ (with python3Packages; [
+        huggingface-hub
+        mlx-lm
+      ])
+      ++ lib.optional withPodman podman;
+    in
+    ''
+      wrapProgram $out/bin/ramalama \
+        --prefix PATH : ${lib.makeBinPath binPackages}
+    '';
 
   pythonImportsCheck = [
     "ramalama"
   ];
 
   nativeCheckInputs = [
-    python3.pkgs.pytestCheckHook
+    podman
+    python3Packages.pytestCheckHook
+    python3Packages.requests
+    writableTmpDirAsHomeHook
   ];
 
-  # Enable when https://github.com/containers/ramalama/pull/1891 is released
-  disabledTests = [
-    "test_ollama_model_pull"
-  ];
+  preCheck = ''
+    export PATH="$out/bin:$PATH"
+  '';
 
   passthru = {
     tests = {
@@ -96,4 +101,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ booxter ];
     mainProgram = "ramalama";
   };
-}
+})

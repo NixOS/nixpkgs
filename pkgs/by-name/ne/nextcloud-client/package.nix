@@ -5,15 +5,15 @@
   qt6Packages,
   stdenv,
   cmake,
-  extra-cmake-modules,
   inotify-tools,
   kdePackages,
+  kdsingleapplication,
   libcloudproviders,
   libp11,
   librsvg,
   libsecret,
   openssl,
-  pcre,
+  pcre2,
   pkg-config,
   sphinx,
   sqlite,
@@ -21,9 +21,9 @@
   libsysprof-capture,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nextcloud-client";
-  version = "3.17.2";
+  version = "33.0.7";
 
   outputs = [
     "out"
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nextcloud-releases";
     repo = "desktop";
-    tag = "v${version}";
-    hash = "sha256-jBlQh5tHP+2LyFCnP0m/ud3nU40i5cWtUwSeM5auQX8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hfATh24U9o2ZifB1UlLu893aENILb9a/j/IvIytIR5s=";
   };
 
   patches = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     librsvg
     sphinx
     qt6Packages.wrapQtAppsHook
@@ -63,11 +63,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     inotify-tools
     kdePackages.kio
+    kdsingleapplication
     libcloudproviders
     libp11
     libsecret
     openssl
-    pcre
+    pcre2
     qt6Packages.qt5compat
     qt6Packages.qtbase
     qt6Packages.qtkeychain
@@ -95,15 +96,14 @@ stdenv.mkDerivation rec {
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
-    changelog = "https://github.com/nextcloud/desktop/releases/tag/v${version}";
+    changelog = "https://github.com/nextcloud/desktop/releases/tag/v${finalAttrs.version}";
     description = "Desktop sync client for Nextcloud";
     homepage = "https://nextcloud.com";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      kranzes
       SuperSandro2000
     ];
     platforms = lib.platforms.linux;
     mainProgram = "nextcloud";
   };
-}
+})

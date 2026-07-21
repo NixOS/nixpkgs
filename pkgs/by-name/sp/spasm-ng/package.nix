@@ -12,7 +12,7 @@
 stdenv.mkDerivation {
   pname = "spasm-ng";
 
-  version = "unstable-2022-07-05";
+  version = "0.5-beta.3-unstable-2022-07-05";
 
   src = fetchFromGitHub {
     owner = "alberthdev";
@@ -47,12 +47,12 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/spasm --add-flags "-I $out/include"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/alberthdev/spasm-ng";
     description = "Z80 assembler with extra features to support development for TI calculators";
     mainProgram = "spasm";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ siraben ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ siraben ];
+    platforms = lib.platforms.unix;
   };
 }

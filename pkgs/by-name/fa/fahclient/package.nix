@@ -6,7 +6,8 @@
   openssl,
   re2,
   libevent,
-  git,
+  gitMinimal,
+  versionCheckHook,
   zlib,
   expat,
   scons,
@@ -15,30 +16,32 @@
 }:
 let
   pname = "fah-client";
-  version = "8.4.9";
+  version = "8.5.6";
 
   cbangSrc = fetchFromGitHub {
     owner = "cauldrondevelopmentllc";
     repo = "cbang";
-    rev = "bastet-v${version}";
-    sha256 = "sha256-xApE5m8YyIFRJLQYeboWelWukuuIjHNZxPDyq0RzSL4=";
+    tag = "bastet-v${version}";
+    hash = "sha256-oh3q/gmAKx8BHoaw6Dxkd0GoxYyJ6is8uCKcivQVv2g=";
   };
 
   fah-client = stdenv.mkDerivation {
     inherit pname version;
+    __structuredAttrs = true;
+    strictDeps = true;
 
     src = fetchFromGitHub {
       owner = "FoldingAtHome";
       repo = "fah-client-bastet";
-      rev = "v${version}";
-      sha256 = "sha256-PewXhmkTru2yJhMkenbn7pcmVsa7eomjrMvs1PUGph8=";
+      tag = "v${version}";
+      hash = "sha256-B5h2eXSCvYG5juNkBRBh+KUsm26O9JTI1S7yKkHgZ7c=";
     };
 
     nativeBuildInputs = [
-      scons
-      re2
+      gitMinimal
       libevent
-      git
+      re2
+      scons
     ];
 
     buildInputs = [ openssl ];
@@ -69,6 +72,11 @@ let
       runHook postInstall
     '';
 
+    nativeInstallCheckInputs = [
+      versionCheckHook
+    ];
+    doInstallCheck = true;
+
   };
 in
 buildFHSEnv {
@@ -91,7 +99,7 @@ buildFHSEnv {
     homepage = "https://foldingathome.org/";
     license = lib.licenses.gpl3;
     mainProgram = "fah-client";
-    maintainers = [ lib.maintainers.zimbatm ];
+    maintainers = [ lib.maintainers.GaetanLepage ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -5,6 +5,7 @@
   cmake,
   elfutils,
   fetchFromGitHub,
+  fetchpatch,
   flex,
   iperf,
   lib,
@@ -22,14 +23,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "bcc";
-  version = "0.35.0";
+  version = "0.36.1";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "iovisor";
     repo = "bcc";
     tag = "v${version}";
-    hash = "sha256-eP/VEq7cPALi2oDKAZFQGQ3NExdmcBKyi6ddRZiYmbI=";
+    hash = "sha256-+XBFENCAKP8Z+5dviBervDXHOM2qY3lfDFsDKVjzMbM=";
   };
 
   patches = [
@@ -42,6 +43,12 @@ python3Packages.buildPythonApplication rec {
 
     (replaceVars ./absolute-ausyscall.patch {
       ausyscall = lib.getExe' audit "ausyscall";
+    })
+
+    (fetchpatch {
+      # https://github.com/iovisor/bcc/issues/5501
+      url = "https://github.com/iovisor/bcc/commit/c3f35ecca18b1ce926bd272f60f6d4465656a80b.patch";
+      hash = "sha256-Fr5SqDUpQzZj8yPST0V1QExNMCSoRbOXG5ZaChDXTZQ=";
     })
   ];
 
@@ -111,7 +118,7 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [ "bcc" ];
 
   postFixup = ''
-    wrapPythonProgramsIn "$out/share/bcc/tools" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/share/bcc/tools" "$out ''${pythonPath[*]}"
   '';
 
   outputs = [
@@ -123,17 +130,17 @@ python3Packages.buildPythonApplication rec {
     bpf = nixosTests.bpf;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Dynamic Tracing Tools for Linux";
     homepage = "https://iovisor.github.io/bcc/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       ragge
       mic92
       thoughtpolice
       martinetd
       ryan4yin
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

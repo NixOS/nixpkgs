@@ -5,6 +5,7 @@
   buildPythonPackage,
   dacite,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-error-for-skips,
   pytestCheckHook,
@@ -15,17 +16,21 @@
 
 buildPythonPackage rec {
   pname = "gios";
-  version = "6.1.2";
+  version = "7.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.12";
+  disabled = pythonOlder "3.13";
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = "gios";
     tag = version;
-    hash = "sha256-z0MFXlim0YJ2ifAU94IjDOsIgaRzQk6YRqy64+LNehQ=";
+    hash = "sha256-m7baTU7oWcjqCgiZ7GcOYVM23jcvycQcAbPhO1jWahk=";
   };
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ setuptools ];
 
@@ -49,11 +54,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gios" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for getting air quality data from GIOS";
     homepage = "https://github.com/bieniu/gios";
-    changelog = "https://github.com/bieniu/gios/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/bieniu/gios/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

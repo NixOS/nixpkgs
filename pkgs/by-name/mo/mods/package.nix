@@ -75,9 +75,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/charmbracelet/mods";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      dit7ya
       caarlos0
-      delafthi
     ];
     mainProgram = "mods";
   };

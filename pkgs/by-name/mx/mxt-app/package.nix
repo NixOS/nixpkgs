@@ -6,15 +6,15 @@
   libtool,
 }:
 
-stdenv.mkDerivation rec {
-  version = "1.45";
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.52";
   pname = "mxt-app";
 
   src = fetchFromGitHub {
     owner = "atmel-maxtouch";
     repo = "mxt-app";
-    rev = "v${version}";
-    sha256 = "sha256-kMVNakIzqGvT2+7plNsiqPdQ+0zuS7gh+YywF0hA1H4=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-CW2iWkYuI0joTQJXt271XLO70Qq/Yg8eX9f56XnJht8=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "fortify" ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line utility for Atmel maXTouch devices";
     homepage = "https://github.com/atmel-maxtouch/mxt-app";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "mxt-app";
   };
-}
+})

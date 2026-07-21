@@ -13,7 +13,7 @@
   graphviz,
 
   # propagatedBuildInputs
-  cereal_1_3_2,
+  cereal,
   eigen,
   jrl-cmakemodules,
   simde,
@@ -27,14 +27,19 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "proxsuite";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "simple-robotics";
     repo = "proxsuite";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-1+a5tFOlEwzhGZtll35EMFceD0iUOOQCbwJd9NcFDlk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qJZQV9vNLQ/rtPMRdAfjwrYExyyDC2OP8uVeywkQ56Y=";
   };
+
+  patches = [
+    # Set Python_VERSION to Python3_VERSION if not already set
+    ./fix-cmake-python-version.patch
+  ];
 
   outputs = [
     "doc"
@@ -60,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
-    cereal_1_3_2
+    cereal
     eigen
     jrl-cmakemodules
     simde

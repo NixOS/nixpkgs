@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "stumpy";
-  version = "1.13.0";
+  version = "1.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TDAmeritrade";
     repo = "stumpy";
     tag = "v${version}";
-    hash = "sha256-S+Rb6pHphXfbqz4VMnN1p7ZrlWB/g7XCdy/T5/Q8VD8=";
+    hash = "sha256-wBOOYN9UVjc+++lYzgL2+ZqyhLTZOpd5baxYRi2HFJA=";
   };
 
   build-system = [

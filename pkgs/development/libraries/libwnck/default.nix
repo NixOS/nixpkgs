@@ -9,13 +9,13 @@
   gtk-doc,
   docbook_xsl,
   docbook_xml_dtd_412,
-  libX11,
+  libx11,
   glib,
   gtk3,
   pango,
   cairo,
-  libXres,
-  libXi,
+  libxres,
+  libxi,
   libstartup_notification,
   gettext,
   gobject-introspection,
@@ -53,12 +53,12 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     libstartup_notification
     pango
     cairo
-    libXres
-    libXi
+    libxres
+    libxi
   ];
 
   propagatedBuildInputs = [
@@ -76,10 +76,10 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library to manage X windows and workspaces (via pagers, tasklists, etc.)";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ liff ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ liff ];
   };
 }

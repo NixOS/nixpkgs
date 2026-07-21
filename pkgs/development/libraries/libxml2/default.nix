@@ -2,38 +2,48 @@
   lib,
   callPackage,
   fetchFromGitLab,
-  fetchpatch2,
+  fetchpatch,
 }:
 
 let
   packages = {
     libxml2_13 = callPackage ./common.nix {
-      version = "2.13.8";
+      version = "2.13.9";
       src = fetchFromGitLab {
         domain = "gitlab.gnome.org";
         owner = "GNOME";
         repo = "libxml2";
         tag = "v${packages.libxml2_13.version}";
-        hash = "sha256-acemyYs1yRSTSLH7YCGxnQzrEDm8YPTK4HtisC36LsY=";
+        hash = "sha256-1qrgoMu702MglErNH9N2eCWFqxQnNHepR13m53GJb58=";
       };
       extraPatches = [
-        # same as upstream patch but fixed conflict and added required import:
-        # https://gitlab.gnome.org/GNOME/libxml2/-/commit/acbbeef9f5dcdcc901c5f3fa14d583ef8cfd22f0.diff
-        ./CVE-2025-6021.patch
-        (fetchpatch2 {
-          name = "CVE-2025-49794-49796.patch";
-          url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/f7ebc65f05bffded58d1e1b2138eb124c2e44f21.patch";
-          hash = "sha256-k+IGq6pbv9EA7o+uDocEAUqIammEjLj27Z+2RF5EMrs=";
+        # Unmerged ABI-breaking patch required to fix the following security issues:
+        # - https://gitlab.gnome.org/GNOME/libxslt/-/issues/139
+        # - https://gitlab.gnome.org/GNOME/libxslt/-/issues/140
+        # See also https://gitlab.gnome.org/GNOME/libxml2/-/issues/906
+        # Source: https://github.com/chromium/chromium/blob/4fb4ae8ce3daa399c3d8ca67f2dfb9deffcc7007/third_party/libxml/chromium/xml-attr-extra.patch
+        ./xml-attr-extra.patch
+
+        (fetchpatch {
+          name = "CVE-2026-0990.patch";
+          url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/1961208e958ca22f80a0b4e4c9d71cfa050aa982.patch";
+          hash = "sha256-Df2WLCTsP/ItSzgnVkNjRpLKkBP4xUOXEfCUV9o/Yks=";
         })
-        (fetchpatch2 {
-          name = "CVE-2025-49795.patch";
-          url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/c24909ba2601848825b49a60f988222da3019667.patch";
-          hash = "sha256-r7PYKr5cDDNNMtM3ogNLsucPFTwP/uoC7McijyLl4kU=";
-          excludes = [ "runtest.c" ]; # tests were rewritten in C and are on schematron for 2.13.x, meaning this does not apply
+
+        # Based on https://gitlab.gnome.org/GNOME/libxml2/-/commit/f75abfcaa419a740a3191e56c60400f3ff18988d
+        # Vendored, because there is no xmlCatalogPrintDebug in 2.13.9, use fprintf instead
+        ./2.13-CVE-2026-0992.patch
+
+        # Based on https://gitlab.gnome.org/GNOME/libxml2/-/commit/19549c61590c1873468c53e0026a2fbffae428ef.patch
+        # There are only whitespace differences from upstream.
+        ./2.13-CVE-2026-0989.patch
+
+        (fetchpatch {
+          name = "CVE-2026-11979.patch";
+          url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/c2e233fc1b341685fc99621b2768b503f777a72e.patch";
+          hash = "sha256-DcPZl6rOuP6aycK+1EHUgPX4YWDAH+ctAZtOI48QO2Q=";
+          excludes = [ "test/catalogs/test.sh" ];
         })
-        # same as upstream, fixed conflicts
-        # https://gitlab.gnome.org/GNOME/libxml2/-/commit/c340e419505cf4bf1d9ed7019a87cc00ec200434
-        ./CVE-2025-6170.patch
       ];
       freezeUpdateScript = true;
       extraMeta = {
@@ -43,14 +53,21 @@ let
       };
     };
     libxml2 = callPackage ./common.nix {
-      version = "2.14.5";
+      version = "2.15.3";
       src = fetchFromGitLab {
         domain = "gitlab.gnome.org";
         owner = "GNOME";
         repo = "libxml2";
         tag = "v${packages.libxml2.version}";
-        hash = "sha256-vxKlw8Kz+fgUP6bhWG2+4346WJVzqG0QvPG/BT7RftQ=";
+        hash = "sha256-fDntZDyITs223by8n7ueOXiO7yyzshtANoWbY0+yeqo=";
       };
+      extraPatches = [
+        (fetchpatch {
+          name = "CVE-2026-11979.patch";
+          url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/c2e233fc1b341685fc99621b2768b503f777a72e.patch";
+          hash = "sha256-s7hnAW7r4fbb95WnFHhUMZbMJzTynV7umKIqc7Kdp/Q=";
+        })
+      ];
       extraMeta = {
         maintainers = with lib.maintainers; [
           jtojnar

@@ -7,7 +7,7 @@
   zita-resampler,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tamgamp.lv2";
   version = "unstable-2020-06-14";
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sadko4u/tamgamp.lv2";
     description = "Guitar amplifier simulator";
     longDescription = ''
@@ -56,8 +56,8 @@ stdenv.mkDerivation rec {
       - VOX AC-30 Brilliant channel
       - VOX AC-30 normal channel
     '';
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
-    license = licenses.lgpl3Plus;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl3Plus;
   };
 }

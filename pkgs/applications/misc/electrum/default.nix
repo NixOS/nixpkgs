@@ -2,11 +2,11 @@
   lib,
   stdenv,
   fetchurl,
-  protobuf,
   wrapQtAppsHook,
   python3,
   zbar,
   enableQt ? true,
+  enablePythonEcdsa ? false,
   callPackage,
   qtwayland,
 }:
@@ -20,17 +20,26 @@ let
     else
       "libzbar${stdenv.hostPlatform.extensions.sharedLibrary}";
 in
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "electrum";
-  version = "4.6.0";
-  format = "setuptools";
+  version = "4.8.0";
+  pyproject = true;
 
   src = fetchurl {
-    url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    hash = "sha256-aQqZXyfqFgc1j2r836eaaayOmSzDijHlYXmF+OBw418=";
+    url = "https://download.electrum.org/${finalAttrs.version}/Electrum-${finalAttrs.version}.tar.gz";
+    hash = "sha256-z14bzs81eJNTMSWSBLTyCmsljDNztG54SVkoTcSqvsM=";
   };
 
-  build-system = [ protobuf ] ++ lib.optionals enableQt [ wrapQtAppsHook ];
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  nativeBuildInputs = [
+    python3.pkgs.pythonRelaxDepsHook
+  ]
+  ++ lib.optionals enableQt [
+    wrapQtAppsHook
+  ];
   buildInputs = lib.optional (stdenv.hostPlatform.isLinux && enableQt) qtwayland;
 
   dependencies =
@@ -56,23 +65,39 @@ python3.pkgs.buildPythonApplication rec {
       electrum-ecc
       # plugins
       ledger-bitcoin
+      cbor2
+      pyserial
+    ]
+    ++ lib.optionals enablePythonEcdsa [
+      # enablePythonEcdsa gates plugins known to pull in python-ecdsa, which we
+      # avoid by default due to CVE-2024-23342.
       ckcc-protocol
       keepkey
       trezor
       bitbox02
-      cbor2
-      pyserial
     ]
     ++ lib.optionals enableQt [
       pyqt6
       qdarkstyle
     ];
 
+  pythonRelaxDeps = [
+    "attrs"
+    "dnspython"
+  ];
+
+  pythonRemoveDeps = [
+    "protobuf"
+  ];
+
   checkInputs =
     with python3.pkgs;
     lib.optionals enableQt [
       pyqt6
     ];
+  disabledTestPaths = lib.optionals (!enableQt) [
+    "tests/test_qml_types.py"
+  ];
 
   postPatch =
     if enableQt then
@@ -95,7 +120,15 @@ python3.pkgs.buildPythonApplication rec {
     wrapQtApp $out/bin/electrum
   '';
 
+  preFixup = ''
+    makeWrapperArgs+=(--prefix PYTHONPATH : ${python3.pkgs.protobuf}/${python3.sitePackages})
+  ''
+  + lib.optionalString enableQt ''
+    qtWrapperArgs+=(--prefix PYTHONPATH : ${python3.pkgs.protobuf}/${python3.sitePackages})
+  '';
+
   nativeCheckInputs = with python3.pkgs; [
+    protobuf
     pytestCheckHook
     pyaes
     pycryptodomex
@@ -105,6 +138,7 @@ python3.pkgs.buildPythonApplication rec {
 
   # avoid homeless-shelter error in tests
   preCheck = ''
+    export PYTHONPATH=${python3.pkgs.protobuf}/${python3.sitePackages}:$PYTHONPATH
     export HOME="$(mktemp -d)"
   '';
 
@@ -114,7 +148,7 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.updateScript = callPackage ./update.nix { };
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight Bitcoin wallet";
     longDescription = ''
       An easy-to-use Bitcoin client featuring wallets generated from
@@ -125,13 +159,13 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://electrum.org/";
     downloadPage = "https://electrum.org/#download";
     changelog = "https://github.com/spesmilo/electrum/blob/master/RELEASE-NOTES";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
-      joachifm
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       np
       prusnak
+      ryand56
     ];
     mainProgram = "electrum";
   };
-}
+})

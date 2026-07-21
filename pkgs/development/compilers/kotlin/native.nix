@@ -8,14 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kotlin-native";
-  version = "2.2.20";
+  version = "2.2.21";
 
   src =
     let
       getArch =
         {
           "aarch64-darwin" = "macos-aarch64";
-          "x86_64-darwin" = "macos-x86_64";
           "x86_64-linux" = "linux-x86_64";
         }
         .${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
@@ -29,7 +28,7 @@ stdenv.mkDerivation rec {
         {
           "macos-aarch64" = "sha256-UnDl9wj/7RXrEaApuAaLczIfz0lscQPf+pCeSdJxJeY=";
           "macos-x86_64" = "sha256-mmsBQrx0yKqvvhnD8CU+oxqhWsOT1RzvzSniN3CeG7g=";
-          "linux-x86_64" = "sha256-2Ff+4rTj/W0tQBo6lADcQMIN4dAj32UnIXF9PRme0Nw=";
+          "linux-x86_64" = "sha256-oTW6qe+SklxcKu8gwc8DZzTKj+L65duYYXO+uWp6gfg=";
         }
         .${arch};
     in

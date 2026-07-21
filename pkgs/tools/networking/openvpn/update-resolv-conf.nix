@@ -38,11 +38,11 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Script to update your /etc/resolv.conf with DNS settings that come from the received push dhcp-options";
     homepage = "https://github.com/masterkorp/openvpn-update-resolv-conf/";
     maintainers = [ ];
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
   };
 }

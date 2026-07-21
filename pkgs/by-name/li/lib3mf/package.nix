@@ -18,29 +18,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lib3mf";
-  version = "2.4.1";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "3MFConsortium";
     repo = "lib3mf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wq/dT/8m+em/qFoNNj6s5lyx/MgNeEBGSMBpuJiORqA=";
+    hash = "sha256-8S892kvea6c9RynfVHo7epBjT9cWCV4VchGZ8G1hvHc=";
   };
-
-  patches = [
-    # some patches are required for the gcc 14 source build
-    # remove next release
-    # https://github.com/3MFConsortium/lib3mf/pull/413
-    (fetchpatch {
-      url = "https://github.com/3MFConsortium/lib3mf/pull/413/commits/96b2f5ec9714088907fe8a6f05633e2bbd82053f.patch?full_index=1";
-      hash = "sha256-cJRc+SW1/6Ypf2r34yroVTxu4NMJWuoSmzsmoXogrUk=";
-    })
-    # https://github.com/3MFConsortium/lib3mf/pull/421
-    (fetchpatch {
-      url = "https://github.com/3MFConsortium/lib3mf/pull/421/commits/6d7b5709a4a1cf9bd55ae8b4ae999c9ca014f62c.patch?full_index=1";
-      hash = "sha256-rGOyXZUZglRNMu1/oVhgSpRdi0pUa/wn5SFHCS9jVOY=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -54,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_INSTALL_INCLUDEDIR=include/lib3mf"
+    "-DCMAKE_INSTALL_INCLUDEDIR=${placeholder "dev"}/include/lib3mf"
     "-DUSE_INCLUDED_ZLIB=OFF"
     "-DUSE_INCLUDED_LIBZIP=OFF"
     "-DUSE_INCLUDED_GTEST=OFF"
@@ -62,12 +47,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libzip
     gtest
     openssl
     zlib
   ]
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) libuuid;
+
+  propagatedBuildInputs = [
+    libzip
+  ];
 
   postPatch = ''
     # fix libdir=''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
@@ -86,25 +74,35 @@ stdenv.mkDerivation (finalAttrs: {
     EOF
 
     mkdir Libraries/fast_float
-    ln -s ${lib.getInclude fast-float}/include/fast_float Libraries/fast_float/Include
+    ln -s ${lib.getInclude fast-float}/include/ Libraries/fast_float/Include
 
     # functions are no longer in openssl, remove them from test cleanup function
     substituteInPlace Tests/CPP_Bindings/Source/UnitTest_EncryptionUtils.cpp \
-      --replace-warn "RAND_cleanup();" "" \
-      --replace-warn "EVP_cleanup();" "" \
-      --replace-warn "CRYPTO_cleanup_all_ex_data();" ""
+      --replace-fail "RAND_cleanup();" "" \
+      --replace-fail "EVP_cleanup();" "" \
+      --replace-fail "CRYPTO_cleanup_all_ex_data();" ""
+
+    # Fix CMake export
+    # ref https://github.com/3MFConsortium/lib3mf/pull/434
+    substituteInPlace cmake/lib3mfConfig.cmake \
+      --replace-fail "$""{LIB3MF_ROOT_DIR}/include" "$""{LIB3MF_ROOT_DIR}/include/lib3mf" \
+      --replace-fail "$""{LIB3MF_ROOT_DIR}/lib" "$out/lib"
+
+    # Use absolute CMAKE_INSTALL_INCLUDEDIR
+    substituteInPlace lib3mf.pc.in \
+      --replace-fail "includedir=$""{prefix}/@CMAKE_INSTALL_INCLUDEDIR@" "includedir=@CMAKE_INSTALL_INCLUDEDIR@"
   '';
 
   doCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/3MFConsortium/lib3mf/releases/tag/${finalAttrs.src.tag}";
     description = "Reference implementation of the 3D Manufacturing Format file standard";
     homepage = "https://3mf.io/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ nim65s ];
+    platforms = lib.platforms.all;
   };
 })

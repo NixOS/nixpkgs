@@ -5,12 +5,12 @@
   ezjsonm,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ezjsonm-encoding";
   version = "2.1.0";
 
   src = fetchurl {
-    url = "https://github.com/lthms/ezjsonm-encoding/releases/download/${version}/ezjsonm-encoding-${version}.tbz";
+    url = "https://github.com/lthms/ezjsonm-encoding/releases/download/${finalAttrs.version}/ezjsonm-encoding-${finalAttrs.version}.tbz";
     hash = "sha256-qR8Nn3pL1K33qTBLkElaqsTjLjudtI8IMe0GEK08qW4=";
   };
 
@@ -22,4 +22,4 @@ buildDunePackage rec {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ fgaz ];
   };
-}
+})

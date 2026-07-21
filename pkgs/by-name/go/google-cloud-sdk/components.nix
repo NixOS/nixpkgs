@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  system,
   snapshotPath,
   autoPatchelfHook,
   python3,
@@ -69,7 +68,7 @@ let
     lib.fix (
       self:
       builtins.listToAttrs (
-        builtins.map (component: {
+        map (component: {
           name = component.id;
           value = componentFromSnapshot self {
             inherit
@@ -96,7 +95,7 @@ let
       version,
     }@attrs:
     let
-      baseUrl = builtins.dirOf schema_version.url;
+      baseUrl = dirOf schema_version.url;
       # Architectures supported by this component.  Defaults to all available
       # architectures.
       architectures = builtins.filter (arch: builtins.elem arch (builtins.attrNames arches)) (
@@ -115,17 +114,17 @@ let
         "source"
       ] component) "${baseUrl}/${component.data.source}";
       sha256 = lib.attrByPath [ "data" "checksum" ] "" component;
-      dependencies = builtins.map (dep: builtins.getAttr dep components) component.dependencies;
+      dependencies = map (dep: builtins.getAttr dep components) component.dependencies;
       platforms =
         if component.platform == { } then
           lib.platforms.all
         else
-          builtins.concatMap (arch: builtins.map (os: toNixPlatform arch os) operating_systems) architectures;
+          builtins.concatMap (arch: map (os: toNixPlatform arch os) operating_systems) architectures;
       snapshot = snapshotFromComponent attrs;
     };
 
   # Filter out dependencies not supported by current system
-  filterForSystem = builtins.filter (drv: builtins.elem system drv.meta.platforms);
+  filterForSystem = builtins.filter (drv: lib.meta.availableOn stdenv.hostPlatform drv);
 
   # Make a google-cloud-sdk component
   mkComponent =
@@ -167,7 +166,7 @@ let
         fi
 
         # Write the snapshot file to the `.install` folder
-        cp $snapshotPath $out/google-cloud-sdk/.install/${pname}.snapshot.json
+        printf "%s" "$snapshot" > $out/google-cloud-sdk/.install/${pname}.snapshot.json
       '';
       nativeBuildInputs = [
         python3
@@ -182,7 +181,7 @@ let
       passthru = {
         dependencies = filterForSystem dependencies;
       };
-      passAsFile = [ "snapshot" ];
+      __structuredAttrs = true;
       meta = {
         inherit description platforms;
       };

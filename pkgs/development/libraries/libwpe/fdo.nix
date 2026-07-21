@@ -12,16 +12,16 @@
   libwpe,
   libxkbcommon,
   libGL,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
   pname = "wpebackend-fdo";
-  version = "1.16.0";
+  version = "1.16.1";
 
   src = fetchurl {
     url = "https://wpewebkit.org/releases/wpebackend-fdo-${version}.tar.xz";
-    sha256 = "sha256-vt3zISMtW9CBBsF528YA+M6I6zYgtKWaYykGO3j2RjU=";
+    sha256 = "sha256-VErhQBL45+QmuMtSLrCqqsgxrXw1YB0c8x03Zw4Ouzs=";
   };
 
   depsBuildBuild = [
@@ -42,14 +42,14 @@ stdenv.mkDerivation rec {
     libwpe
     libxkbcommon
     libGL
-    libX11
+    libx11
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Freedesktop.org backend for WPE WebKit";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     homepage = "https://wpewebkit.org";
-    maintainers = with maintainers; [ matthewbauer ];
-    platforms = platforms.linux;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

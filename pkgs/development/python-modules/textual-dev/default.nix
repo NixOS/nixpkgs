@@ -13,19 +13,18 @@
   textual,
   textual-serve,
   typing-extensions,
-  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "textual-dev";
-  version = "1.7.0";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "textual-dev";
     tag = "v${version}";
-    hash = "sha256-f/tceRELDLONzOVVpbbqa5eiXJ1QzYw3A47R/9EqEU4=";
+    hash = "sha256-0NOFc0FKbVEeZ6rNZGX8lo5W8RU3lKJlH+AqRCifuOE=";
   };
 
   build-system = [ poetry-core ];

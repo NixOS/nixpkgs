@@ -13,7 +13,7 @@ let
   checkShellApplication =
     args@{ name, expected, ... }:
     let
-      writeShellApplicationArgs = builtins.removeAttrs args [ "expected" ];
+      writeShellApplicationArgs = removeAttrs args [ "expected" ];
       script = writeShellApplication writeShellApplicationArgs;
       executable = lib.getExe script;
       expected' = writeTextFile {
@@ -35,14 +35,15 @@ in
 linkFarm "writeShellApplication-tests" {
   test-meta =
     let
-      script = writeShellApplication {
+      args = {
         name = "test-meta";
         text = "";
         meta.description = "Test for the `writeShellApplication` `meta` argument";
       };
+      script = writeShellApplication args;
     in
-    assert script.meta.mainProgram == "test-meta";
-    assert script.meta.description == "A test for the `writeShellApplication` `meta` argument";
+    assert script.meta.mainProgram == args.name;
+    assert script.meta.description == args.meta.description;
     script;
 
   test-runtime-inputs = checkShellApplication {
@@ -80,6 +81,50 @@ linkFarm "writeShellApplication-tests" {
       my-cool-env-value
       my-other-cool-env-value
     '';
+  };
+
+  test-no-inherit-path-no-runtimeInputs = checkShellApplication {
+    name = "test-no-inherit-path-no-runtimeInputs";
+    inheritPath = false;
+    runtimeInputs = [ ];
+    text = ''
+      if [[ ''${#PATH} -eq 0 ]]; then
+        echo -n "PATH is empty"
+      fi
+    '';
+    expected = "PATH is empty";
+  };
+
+  test-no-inherit-path-runtimeInputs = checkShellApplication {
+    name = "test-no-inherit-path-runtimeInputs";
+    inheritPath = false;
+    runtimeInputs = [ hello ];
+    text = ''
+      extra_colon_pattern='(^:|:$)'
+      if [[ ''${PATH} =~ $extra_colon_pattern ]]; then
+        echo "PATH should not start or end with a colon: $PATH"
+      fi
+      if [[ ''${#PATH} -gt 0 ]]; then
+        echo -n "PATH is not empty"
+      fi
+    '';
+    expected = "PATH is not empty";
+  };
+
+  test-inherit-path-no-runtimeInputs = checkShellApplication {
+    name = "test-inherit-path-no-runtimeInputs";
+    inheritPath = true;
+    runtimeInputs = [ ];
+    text = ''
+      extra_colon_pattern='(^:|:$)'
+      if [[ ''${PATH} =~ $extra_colon_pattern ]]; then
+        echo "PATH should not start or end with a colon: $PATH"
+      fi
+      if [[ ''${#PATH} -gt 0 ]]; then
+        echo -n "PATH is not empty"
+      fi
+    '';
+    expected = "PATH is not empty";
   };
 
   test-check-phase = checkShellApplication {

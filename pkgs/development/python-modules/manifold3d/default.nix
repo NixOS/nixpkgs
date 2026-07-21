@@ -11,12 +11,12 @@
   pkg-config,
   numpy,
   clipper2,
-  tbb,
+  onetbb,
   pytestCheckHook,
   trimesh,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "manifold3d";
   inherit (manifold) version src;
   pyproject = true;
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    tbb
+    onetbb
     clipper2
   ];
 

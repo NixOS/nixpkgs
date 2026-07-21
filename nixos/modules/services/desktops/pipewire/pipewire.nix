@@ -11,11 +11,17 @@ let
   inherit (lib) maintainers teams;
   inherit (lib.attrsets)
     attrByPath
-    attrsToList
     concatMapAttrs
     filterAttrs
+    mapAttrs'
+    nameValuePair
     ;
-  inherit (lib.lists) flatten optional optionals;
+  inherit (lib.lists)
+    elem
+    flatten
+    optional
+    optionals
+    ;
   inherit (lib.modules) mkIf mkRemovedOptionModule;
   inherit (lib.options)
     literalExpression
@@ -23,7 +29,7 @@ let
     mkOption
     mkPackageOption
     ;
-  inherit (lib.strings) concatMapStringsSep hasPrefix optionalString;
+  inherit (lib.strings) hasPrefix optionalString;
   inherit (lib.types)
     attrsOf
     bool
@@ -32,17 +38,6 @@ let
     ;
 
   json = pkgs.formats.json { };
-  mapToFiles =
-    location: config:
-    concatMapAttrs (name: value: {
-      "share/pipewire/${location}.conf.d/${name}.conf" = json.generate "${name}" value;
-    }) config;
-  extraConfigPkgFromFiles =
-    locations: filesSet:
-    pkgs.runCommand "pipewire-extra-config" { } ''
-      mkdir -p ${concatMapStringsSep " " (l: "$out/share/pipewire/${l}.conf.d") locations}
-      ${concatMapStringsSep ";" ({ name, value }: "ln -s ${value} $out/${name}") (attrsToList filesSet)}
-    '';
   cfg = config.services.pipewire;
   enable32BitAlsaPlugins =
     cfg.alsa.support32Bit && pkgs.stdenv.hostPlatform.isx86_64 && pkgs.pkgsi686Linux.pipewire != null;
@@ -58,11 +53,24 @@ let
 
   configPackages = cfg.configPackages;
 
-  extraConfigPkg = extraConfigPkgFromFiles [ "pipewire" "client" "jack" "pipewire-pulse" ] (
-    mapToFiles "pipewire" cfg.extraConfig.pipewire
-    // mapToFiles "client" cfg.extraConfig.client
-    // mapToFiles "jack" cfg.extraConfig.jack
-    // mapToFiles "pipewire-pulse" cfg.extraConfig.pipewire-pulse
+  extraConfigPkg = pkgs.linkFarm "pipewire-extra-config" (
+    concatMapAttrs
+      (
+        location: config:
+        mapAttrs' (
+          name: value:
+          nameValuePair "share/pipewire/${location}.conf.d/${name}.conf" (json.generate name value)
+        ) config
+      )
+      # cfg.extraConfig contains deprecated options, i.e. client-rt
+      {
+        inherit (cfg.extraConfig)
+          pipewire
+          client
+          jack
+          pipewire-pulse
+          ;
+      }
   );
 
   configs = pkgs.buildEnv {
@@ -83,9 +91,25 @@ let
     paths = cfg.extraLv2Packages ++ requiredLv2Packages;
     pathsToLink = [ "/lib/lv2" ];
   };
+
+  requiredLadspaPackages = flatten (
+    concatMap (p: attrByPath [ "passthru" "requiredLadspaPackages" ] [ ] p) configPackages
+  );
+
+  ladspaPlugins = pkgs.buildEnv {
+    name = "pipewire-ladspa-plugins";
+    paths = cfg.extraLadspaPackages ++ requiredLadspaPackages;
+    pathsToLink = [ "/lib/ladspa" ];
+  };
+
+  pluginsEnv = {
+    LV2_PATH = "${lv2Plugins}/lib/lv2";
+    LADSPA_PATH = "${ladspaPlugins}/lib/ladspa";
+  };
 in
 {
-  meta.maintainers = teams.freedesktop.members ++ [ maintainers.k900 ];
+  meta.teams = [ teams.freedesktop ];
+  meta.maintainers = [ maintainers.k900 ];
 
   ###### interface
   options = {
@@ -144,7 +168,7 @@ in
 
           Enabling system-wide PipeWire is however not recommended and disabled
           by default according to
-          https://github.com/PipeWire/pipewire/blob/master/NEWS
+          https://github.com/PipeWire/pipewire/blob/0.3.11/NEWS#L14-L16
         '';
       };
 
@@ -285,8 +309,8 @@ in
           List of packages that provide PipeWire configuration, in the form of
           `share/pipewire/*/*.conf` files.
 
-          LV2 dependencies will be picked up from config packages automatically
-          via `passthru.requiredLv2Packages`.
+          LV2/LADSPA dependencies will be picked up from config packages automatically
+          via `passthru.requiredLv2Packages`/`passthru.requiredLadspaPackages`.
         '';
       };
 
@@ -301,6 +325,22 @@ in
           Config packages have their required LV2 plugins added automatically,
           so they don't need to be specified here. Config packages need to set
           `passthru.requiredLv2Packages` for this to work.
+
+          [wiki-filter-chain]: https://docs.pipewire.org/page_module_filter_chain.html
+        '';
+      };
+
+      extraLadspaPackages = mkOption {
+        type = listOf package;
+        default = [ ];
+        example = literalExpression "[ pkgs.noisetorch-ladspa ]";
+        description = ''
+          List of packages that provide LADSPA plugins in `lib/ladspa` that should
+          be made available to PipeWire for [filter chains][wiki-filter-chain].
+
+          Config packages have their required LADSPA plugins added automatically,
+          so they don't need to be specified here. Config packages need to set
+          `passthru.requiredLadspaPackages` for this to work.
 
           [wiki-filter-chain]: https://docs.pipewire.org/page_module_filter_chain.html
         '';
@@ -365,10 +405,9 @@ in
     systemd.user.sockets.pipewire.enable = !cfg.systemWide;
     systemd.user.services.pipewire.enable = !cfg.systemWide;
 
-    systemd.services.pipewire.environment.LV2_PATH = mkIf cfg.systemWide "${lv2Plugins}/lib/lv2";
-    systemd.user.services.pipewire.environment.LV2_PATH = mkIf (
-      !cfg.systemWide
-    ) "${lv2Plugins}/lib/lv2";
+    systemd.services.pipewire.environment = mkIf cfg.systemWide pluginsEnv;
+    systemd.user.services.pipewire.environment = mkIf (!cfg.systemWide) pluginsEnv;
+    systemd.user.services.filter-chain.environment = pluginsEnv;
 
     # Mask pw-pulse if it's not wanted
     systemd.services.pipewire-pulse.enable = cfg.pulse.enable && cfg.systemWide;

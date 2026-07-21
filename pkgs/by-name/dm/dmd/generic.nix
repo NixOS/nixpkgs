@@ -32,15 +32,15 @@ let
     text = (
       lib.generators.toINI { } {
         Environment = {
-          DFLAGS = ''-I@out@/include/dmd -L-L@out@/lib -fPIC ${
+          DFLAGS = "-I@out@/include/dmd -L-L@out@/lib -fPIC ${
             lib.optionalString (!targetPackages.stdenv.cc.isClang) "-L--export-dynamic"
-          }'';
+          }";
         };
       }
     );
   };
 
-  bits = builtins.toString stdenv.hostPlatform.parsed.cpu.bits;
+  bits = toString stdenv.hostPlatform.parsed.cpu.bits;
   osname = if stdenv.hostPlatform.isDarwin then "osx" else stdenv.hostPlatform.parsed.kernel.name;
 
   pathToDmd = "\${NIX_BUILD_TOP}/dmd/generated/${osname}/release/${bits}/dmd";
@@ -226,15 +226,15 @@ stdenv.mkDerivation (finalAttrs: {
     inherit dmdBootstrap;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Official reference compiler for the D language";
     homepage = "https://dlang.org/";
     changelog = "https://dlang.org/changelog/${finalAttrs.version}.html";
     # Everything is now Boost licensed, even the backend.
     # https://github.com/dlang/dmd/pull/6680
-    license = licenses.boost;
+    license = lib.licenses.boost;
     mainProgram = "dmd";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lionello
       dukc
       jtbx
@@ -242,7 +242,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "i686-linux"
-      "x86_64-darwin"
     ];
     # ld: section __DATA/__thread_bss has type zero-fill but non-zero file offset file '/private/tmp/nix-build-dmd-2.109.1.drv-0/.rdmd-301/rdmd-build.d-A1CF043A7D87C5E88A58F3C0EF5A0DF7/objs/build.o' for architecture x86_64
     # clang-16: error: linker command failed with exit code 1 (use -v to see invocation)

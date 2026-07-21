@@ -1,6 +1,6 @@
 {
   lib,
-  llvmPackages,
+  llvmPackages_18,
   fetchFromGitHub,
   makeBinaryWrapper,
   which,
@@ -8,17 +8,18 @@
 }:
 
 let
+  llvmPackages = llvmPackages_18;
   inherit (llvmPackages) stdenv;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "odin";
-  version = "dev-2025-09";
+  version = "dev-2026-07a";
 
   src = fetchFromGitHub {
     owner = "odin-lang";
     repo = "Odin";
     tag = finalAttrs.version;
-    hash = "sha256-PxegNMEzxytZtmhmzDgb1Umzx/9aUIlc9SDojRlZfsE=";
+    hash = "sha256-sjL6mj2zfUVpiwkooTTBCVkPRoPWR7ci/hb9TYF+J/I=";
   };
 
   patches = [
@@ -38,12 +39,12 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/build_settings.cpp \
       --replace-fail "arm64-apple-macosx" "arm64-apple-darwin"
 
-    rm -r vendor/raylib/{linux,macos,macos-arm64,wasm,windows}
+    rm -r vendor/raylib/{linux,macos,wasm,windows}
 
     patchShebangs --build build_odin.sh
   '';
 
-  LLVM_CONFIG = lib.getExe' llvmPackages.llvm.dev "llvm-config";
+  env.LLVM_CONFIG = lib.getExe' llvmPackages.llvm.dev "llvm-config";
 
   dontConfigure = true;
 
@@ -95,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "odin";
     maintainers = with lib.maintainers; [
       astavie
-      diniamo
+      atomicptr
     ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isMusl;

@@ -2,13 +2,18 @@
   lib,
   buildPythonPackage,
   marisa,
+  setuptools,
   swig,
 }:
 
 buildPythonPackage {
   pname = "marisa";
-  format = "setuptools";
   inherit (marisa) src version;
+  pyproject = true;
+
+  patches = marisa.patches or [ ];
+
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [ swig ];
 

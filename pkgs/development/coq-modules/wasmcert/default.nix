@@ -11,7 +11,6 @@
   version ? null,
 }:
 
-with lib;
 mkCoqDerivation {
   pname = "wasm";
   repo = "WasmCert-Coq";
@@ -28,16 +27,15 @@ mkCoqDerivation {
         inherit out;
       };
     in
-    with lib.versions;
     lib.switch
       [ coq.coq-version mathcomp-boot.version ]
       [
-        (case (isEq "8.20") (isEq "2.4") "2.2.0")
+        (case (lib.versions.range "8.20" "9.1") (lib.versions.range "2.4" "2.5") "2.2.0")
       ]
       null;
 
-  release."2.1.0".sha256 = "sha256-k094mxDLLeelYP+ABm+dm6Y5YrachrbhNeZhfwLHNRo=";
-  release."2.2.0".sha256 = "sha256-GsfNpXgCG6XGqDE+bekzwZsWIHyjDTzWRuNnjCtS/88=";
+  release."2.1.0".hash = "sha256-k094mxDLLeelYP+ABm+dm6Y5YrachrbhNeZhfwLHNRo=";
+  release."2.2.0".hash = "sha256-GsfNpXgCG6XGqDE+bekzwZsWIHyjDTzWRuNnjCtS/88=";
 
   mlPlugin = true;
   useDune = true;
@@ -62,7 +60,7 @@ mkCoqDerivation {
 
   meta = {
     description = "Wasm mechanisation in Coq/Rocq";
-    maintainers = with maintainers; [ womeier ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ womeier ];
+    license = lib.licenses.mit;
   };
 }

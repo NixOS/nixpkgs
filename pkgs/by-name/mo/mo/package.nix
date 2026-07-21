@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mo";
   version = "3.0.5";
 
   src = fetchFromGitHub {
     owner = "tests-always-included";
     repo = "mo";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-CFAvTpziKzSkdomvCf8PPXYbYcJxjB4EValz2RdD2b0=";
   };
 
@@ -27,10 +27,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Moustache templates for Bash";
     homepage = "https://github.com/tests-always-included/mo";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sheepforce ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sheepforce ];
+    mainProgram = "mo";
   };
-}
+})

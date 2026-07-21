@@ -7,8 +7,11 @@
   nixosTests,
   nix-update-script,
   autoPatchelfHook,
+  installShellFiles,
   cmake,
   ncurses,
+  scdoc,
+  shaderc,
   pkg-config,
   gcc-unwrapped,
   fontconfig,
@@ -16,10 +19,10 @@
   vulkan-loader,
   libxkbcommon,
   withX11 ? !stdenv.hostPlatform.isDarwin,
-  libX11,
-  libXcursor,
-  libXi,
-  libXrandr,
+  libx11,
+  libxcursor,
+  libxi,
+  libxrandr,
   libxcb,
   withWayland ? !stdenv.hostPlatform.isDarwin,
   wayland,
@@ -36,10 +39,10 @@ let
       vulkan-loader
     ]
     ++ lib.optionals withX11 [
-      libX11
-      libXcursor
-      libXi
-      libXrandr
+      libx11
+      libxcursor
+      libxi
+      libxrandr
       libxcb
     ]
     ++ lib.optionals withWayland [
@@ -48,25 +51,36 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rio";
-  version = "0.2.30";
+  version = "0.4.7";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YkZq9mPQTeYtDuvGrEzV7PlDQZHUED/JuSLvsFWxYI0=";
+    hash = "sha256-vlNt8hBb1fhO5tEAID5WXMc7I0k9vn6/L45nkTXS6Qg=";
   };
 
-  cargoHash = "sha256-Rr6FiievKElzWhLEXOQZdcJ4KKlfvW9p8k7r7wIm0MQ=";
+  cargoHash = "sha256-8qVS9wINEBLKKWbylG3sHO+oqnLvsa1wgN0OOHFzOBM=";
+
+  # The 0.4.7 "update to rust 1.96" bump (raphamorim/rio@6a11aa33c7) only made
+  # clippy-style refactors that build on older rustc; the MSRV pin is cosmetic.
+  # Lower it so nixpkgs' rustc (1.95) can build rio.
+  postPatch = ''
+    substituteInPlace Cargo.toml \
+      --replace-fail 'rust-version = "1.96.0"' 'rust-version = "1.95.0"'
+  '';
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
     ncurses
+    scdoc
+    installShellFiles
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     cmake
     pkg-config
     autoPatchelfHook
+    shaderc
   ];
 
   runtimeDependencies = rlinkLibs;
@@ -99,6 +113,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tic -xe rio,rio-direct -o "$terminfo/share/terminfo" misc/rio.terminfo
     mkdir -p $out/nix-support
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+
+    scdoc < extra/man/rio.1.scd > rio.1
+    scdoc < extra/man/rio.5.scd > rio.5
+    scdoc < extra/man/rio-bindings.5.scd > rio-bindings.5
+    installManPage rio.1 rio.5 rio-bindings.5
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications/
@@ -137,7 +156,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       oluceps
     ];
     platforms = lib.platforms.unix;
-    changelog = "https://github.com/raphamorim/rio/blob/v${finalAttrs.version}/docs/docs/releases.md";
+    changelog = "https://github.com/raphamorim/rio/releases/tag/v${finalAttrs.version}";
     mainProgram = "rio";
   };
 })

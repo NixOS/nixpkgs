@@ -6,14 +6,14 @@
   oniguruma,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codevis";
   version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "sloganking";
     repo = "codevis";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-LZ6NsoyEPUvgcVdbG7U2Vzuz/TLLraScvW97PocUNpU=";
   };
 
@@ -31,12 +31,12 @@ rustPlatform.buildRustPackage rec {
     RUSTONIG_SYSTEM_LIBONIG = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to take all source code in a folder and render them to one image";
     homepage = "https://github.com/sloganking/codevis";
-    changelog = "https://github.com/sloganking/codevis/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/sloganking/codevis/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "codevis";
   };
-}
+})

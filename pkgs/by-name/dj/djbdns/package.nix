@@ -39,7 +39,7 @@ stdenv.mkDerivation {
   ];
 
   postPatch = ''
-    echo gcc -O2 -include ${glibc.dev}/include/errno.h > conf-cc
+    echo gcc -O2 -include ${glibc.dev}/include/errno.h -std=gnu17 > conf-cc
     echo $out > conf-home
     # djbdns ships with an outdated list of root servers
     awk '/^.?.ROOT-SERVERS.NET/ { print $4 }' ${dns-root-data}/root.hints > dnsroots.global
@@ -62,11 +62,11 @@ stdenv.mkDerivation {
     tinydns = nixosTests.tinydns;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Collection of Domain Name System tools";
     longDescription = "Includes software for all the fundamental DNS operations: DNS cache: finding addresses of Internet hosts; DNS server: publishing addresses of Internet hosts; and DNS client: talking to a DNS cache.";
     homepage = "https://cr.yp.to/djbdns.html";
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [ jerith666 ];
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [ jerith666 ];
   };
 }

@@ -48,6 +48,6 @@ buildDotnetModule (finalAttrs: {
     changelog = "https://github.com/hedge-dev/HedgeModManager/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 })

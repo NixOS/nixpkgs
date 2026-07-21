@@ -5,27 +5,27 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bgpq4";
-  version = "1.15";
+  version = "1.16";
 
   src = fetchFromGitHub {
     owner = "bgp";
     repo = "bgpq4";
-    rev = version;
-    sha256 = "sha256-3mfFj9KoQbDe0gH7Le03N1Yds/bTEmY+OiXNaOtHkpY=";
+    tag = finalAttrs.version;
+    sha256 = "sha256-6pUwfySR7EWr53V0kj+cHXNFYoUZphhnbTs9TVrZzVk=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "BGP filtering automation tool";
     homepage = "https://github.com/bgp/bgpq4";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ vincentbernat ];
-    platforms = with platforms; unix;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ vincentbernat ];
+    platforms = with lib.platforms; unix;
     mainProgram = "bgpq4";
   };
-}
+})

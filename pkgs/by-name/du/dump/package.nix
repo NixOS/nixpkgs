@@ -11,12 +11,12 @@
   readline,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dump";
   version = "0.4b51";
 
   src = fetchurl {
-    url = "mirror://sourceforge/dump/dump-${version}.tar.gz";
+    url = "mirror://sourceforge/dump/dump-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-huaDpzNVNMkVzwpQUlPay/RrYiSnD79or3RgsWPkU+s=";
   };
 
@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
     readline
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dump.sourceforge.io/";
     description = "Linux Ext2 filesystem dump/restore utilities";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
-}
+})

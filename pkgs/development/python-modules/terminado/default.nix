@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "terminado";
   version = "0.18.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -36,10 +36,10 @@ buildPythonPackage rec {
   ];
   pytestFlags = [ "-Wignore::pytest.PytestUnraisableExceptionWarning" ];
 
-  meta = with lib; {
+  meta = {
     description = "Terminals served by Tornado websockets";
     homepage = "https://github.com/jupyter/terminado";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

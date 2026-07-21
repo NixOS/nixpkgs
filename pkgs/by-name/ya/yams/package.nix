@@ -22,7 +22,7 @@ python3Packages.buildPythonPackage rec {
   dependencies = with python3Packages; [
     pyyaml
     psutil
-    mpd2
+    python-mpd2
     requests
   ];
 
@@ -30,11 +30,11 @@ python3Packages.buildPythonPackage rec {
 
   pythonImportsCheck = [ "yams.scrobble" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Berulacks/yams";
     description = "Last.FM scrobbler for MPD";
     mainProgram = "yams";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ccellado ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ ];
   };
 }

@@ -7,13 +7,13 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "snpeff";
   version = "4.3t";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/snpeff/snpEff_v${
-      builtins.replaceStrings [ "." ] [ "_" ] version
+      builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }_core.zip";
     sha256 = "0i12mv93bfv8xjwc3rs2x73d6hkvi7kgbbbx3ry984l3ly4p6nnm";
   };
@@ -38,13 +38,13 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/snpsift $out/bin/snpSift
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Genetic variant annotation and effect prediction toolbox";
-    license = licenses.lgpl3;
+    license = lib.licenses.lgpl3;
     homepage = "https://snpeff.sourceforge.net/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    maintainers = with maintainers; [ jbedo ];
-    platforms = platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    maintainers = with lib.maintainers; [ jbedo ];
+    platforms = lib.platforms.all;
   };
 
-}
+})

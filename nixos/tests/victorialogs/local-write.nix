@@ -3,7 +3,7 @@
   name = "victorialogs-local-write";
   meta.maintainers = with lib.maintainers; [ marie ];
 
-  nodes.machine =
+  containers.machine =
     { pkgs, ... }:
     {
       services.victorialogs.enable = true;

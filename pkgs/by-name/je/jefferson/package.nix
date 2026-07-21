@@ -5,17 +5,16 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "jefferson";
-  version = "0.4.6";
-  format = "pyproject";
-  disabled = python3.pkgs.pythonOlder "3.9";
+  version = "0.4.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "onekey-sec";
     repo = "jefferson";
-    rev = "v${version}";
-    hash = "sha256-6eh4i9N3aArU8+W8K341pp9J0QYEojDiMrEc8yax4SY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dIb6ZmjGxDwUO0L6Uy2SlgioY8NCnTO7IGveRraw0LI=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -24,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     click
-    cstruct
+    dissect-cstruct
     lzallright
   ];
 
@@ -39,14 +38,14 @@ python3.pkgs.buildPythonApplication rec {
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "JFFS2 filesystem extraction tool";
     homepage = "https://github.com/onekey-sec/jefferson";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       tnias
       vlaci
     ];
     mainProgram = "jefferson";
   };
-}
+})

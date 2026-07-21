@@ -1,27 +1,28 @@
 {
   lib,
+  stdenv,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
+  installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mitra";
-  version = "4.10.1";
+  version = "5.6.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "silverpill";
     repo = "mitra";
-    rev = "v${version}";
-    hash = "sha256-JGiPCvfWsluWeJk14cbAVUJO69OKXG/+93FrGMRlCxU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-1G1XHLCdeETSqltrYxfxQCL4q1x7L2sqr9C2VOB9ecs=";
   };
 
-  cargoHash = "sha256-DmQo/DDD5b1bpBiB5JfpIDD9cQ+ColorY4kTW1Xh9lo=";
+  cargoHash = "sha256-VGJ1ObOe/QQzSwRov06hkf9zkrmSmODiJUkhC2+Bcrk=";
 
   # require running database
   doCheck = false;
 
-  RUSTFLAGS = [
+  env.RUSTFLAGS = toString [
     # MEMO: mitra use ammonia crate with unstable rustc flag
     "--cfg=ammonia_unstable"
   ];
@@ -30,6 +31,17 @@ rustPlatform.buildRustPackage rec {
     "production"
   ];
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd mitra \
+      --bash <($out/bin/mitra completion --shell bash) \
+      --fish <($out/bin/mitra completion --shell fish) \
+      --zsh <($out/bin/mitra completion --shell zsh)
+  '';
+
   meta = {
     description = "Federated micro-blogging platform";
     homepage = "https://codeberg.org/silverpill/mitra";
@@ -37,4 +49,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ haruki7049 ];
     mainProgram = "mitra";
   };
-}
+})

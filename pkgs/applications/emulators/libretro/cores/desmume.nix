@@ -6,24 +6,24 @@
   libpcap,
   libGLU,
   libGL,
-  xorg,
+  libx11,
 }:
 mkLibretroCore {
   core = "desmume";
-  version = "0-unstable-2024-10-21";
+  version = "0-unstable-2026-05-16";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "desmume";
-    rev = "7f05a8d447b00acd9e0798aee97b4f72eb505ef9";
-    hash = "sha256-BttWMunVbfPOTGx+DV+3QyOwW+55tgXKVIn99DZhbBI=";
+    rev = "ae0f7f51f96d9b5741b47b425505a4a4224b91fa";
+    hash = "sha256-M8Z2Zk9wjEuOOg++Tk68A8hgCmE63nh9+oJhu4fsQsk=";
   };
 
   extraBuildInputs = [
     libpcap
     libGLU
     libGL
-    xorg.libX11
+    libx11
   ];
 
   makeFlags =

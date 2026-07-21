@@ -48,7 +48,24 @@ let
 
   hoogleWithPackages' = if withHoogle then hoogleWithPackages selectPackages else null;
 
-  packages = selectPackages haskellPackages ++ [ hoogleWithPackages' ];
+  # Catches obviously-wrong inputs (functions, strings, etc.) but lets
+  # non-Haskell derivations through; shellFor passes libraryFrameworkDepends
+  # and similar mixed inputs in, and those are dropped later by the
+  # closure-side `isHaskellLibrary` filter.
+  checkPackage =
+    p:
+    if p == null || lib.isDerivation p then
+      p
+    else
+      throw ''
+        ghcWithPackages: expected a derivation, got a ${builtins.typeOf p}.
+        A common cause is missing parentheses around an override, e.g.
+          (hp: [ dontCheck hp.foo ])
+        should be written as
+          (hp: [ (dontCheck hp.foo) ]).
+      '';
+
+  packages = map checkPackage (selectPackages haskellPackages ++ [ hoogleWithPackages' ]);
 
   isHaLVM = ghc.isHaLVM or false;
   ghcCommand' = "ghc";
@@ -63,7 +80,7 @@ let
   docDir = "$out/share/doc/ghc/html";
   packageCfgDir = "${libDir}/package.conf.d";
   paths = lib.concatLists (
-    builtins.map (pkg: [ pkg ] ++ lib.optionals installDocumentation [ (lib.getOutput "doc" pkg) ]) (
+    map (pkg: [ pkg ] ++ lib.optionals installDocumentation [ (lib.getOutput "doc" pkg) ]) (
       lib.filter (x: x ? isHaskellLibrary) (lib.closePropagation packages)
     )
   );
@@ -124,7 +141,8 @@ else
         fi
       done
 
-      # haddock was referring to the base ghc, https://github.com/NixOS/nixpkgs/issues/36976
+      # haddock needs to be wrapped like GHC, see
+      # https://github.com/NixOS/nixpkgs/issues/36976 krank:ignore-line
       if [[ -x "${ghc}/bin/haddock" ]]; then
         rm -f $out/bin/haddock
         makeWrapper ${ghc}/bin/haddock $out/bin/haddock    \
@@ -171,7 +189,7 @@ else
         # ghc-pkg is now trying to open the file.  These file are symlink
         # to another nix derivation, so they are not writable.  Removing
         # them allow the correct behavior of ghc-pkg recache
-        # See: https://github.com/NixOS/nixpkgs/issues/79441
+        # See: https://github.com/NixOS/nixpkgs/issues/79441 krank:ignore-line
         rm ${packageCfgDir}/package.cache.lock
         rm ${packageCfgDir}/package.cache
 
@@ -182,7 +200,7 @@ else
     + postBuild;
     preferLocalBuild = true;
     passthru = {
-      inherit (ghc) version targetPrefix;
+      inherit (ghc) version meta targetPrefix;
 
       hoogle = hoogleWithPackages';
 
@@ -202,10 +220,5 @@ else
 
           Also note that withLLVM has been renamed to useLLVM for consistency with
           the GHC Nix expressions.'';
-    };
-    pos = __curPos;
-    meta = ghc.meta // {
-      # To be fixed by <https://github.com/NixOS/nixpkgs/pull/440774>.
-      broken = useLLVM;
     };
   }

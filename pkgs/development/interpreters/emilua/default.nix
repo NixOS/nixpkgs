@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "emilua";
-  version = "0.11.7";
+  version = "0.12.1";
 
   src = fetchFromGitLab {
     owner = "emilua";
     repo = "emilua";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c+X8HD/G75XD54Fs89DSkebLDd7h12Bk45+w7VBUXPY=";
+    hash = "sha256-h/uC5yAj64A5cVQN6XPVlFg+mDFdugwWblp6qNoU824=";
   };
 
   propagatedBuildInputs = [
@@ -73,6 +73,19 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "version_suffix" "-nixpkgs1")
   ];
 
+  patches = [
+    # https://gitlab.com/emilua/emilua/-/commit/9f3964f22b2289c98b64a1af729712a862459aeb
+    # The above commit added a fallback allocator that just calls `realloc` from
+    # libc, which is fine on x86 because Linux userspace pointers are 47 bits on
+    # x86-64 and that aligns perfectly with LuaJIT's NaN-tagging representation:
+    # https://github.com/LuaJIT/LuaJIT/issues/49
+    # But on ARM64, Linux userspace pointers are 48 bits, so libc does not
+    # provide an allocator that can be safely used for LuaJIT. To fix that, we
+    # delete the libc-based allocator and instead use LuaJIT's own default
+    # allocator as the fallback, which is what Emilua did before the regression.
+    ./use-luajit-default-allocator.patch
+  ];
+
   postPatch = ''
     patchShebangs src/emilua_gperf.awk --interpreter '${lib.getExe gawk} -f'
   '';
@@ -97,7 +110,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

@@ -56,7 +56,7 @@ in
       }
       ''
         export HOME="$(mktemp -d)"
-        wine64 $exe help
+        wine $exe help
         mkdir $out
       '';
 }

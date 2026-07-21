@@ -2,17 +2,18 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "memtest86+";
-  version = "7.20";
+  version = "8.00";
 
   src = fetchFromGitHub {
     owner = "memtest86plus";
     repo = "memtest86plus";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JZ6feyk66DLKEnugc+yXN4KckQrCTMNqQL4TvCTw1EU=";
+    hash = "sha256-7oOe35TI+H8Nox2VJMrdoMGyTxzrJzebBH+DLanXtpo=";
   };
 
   # Binaries are booted directly by BIOS/UEFI or bootloader
@@ -20,15 +21,17 @@ stdenv.mkDerivation (finalAttrs: {
   dontPatchELF = true;
   dontStrip = true;
 
-  passthru.efi = "${finalAttrs.finalPackage}/memtest.efi";
+  passthru.efi = "${finalAttrs.finalPackage}/mt86plus.efi";
 
   preBuild = ''
-    cd ${if stdenv.hostPlatform.isi686 then "build32" else "build64"}
+    cd build/${if stdenv.hostPlatform.isi686 then "i586" else "x86_64"}
   '';
 
   installPhase = ''
-    install -Dm0444 -t $out/ memtest.bin memtest.efi
+    install -Dm0444 mt86plus $out/mt86plus.efi
   '';
+
+  passthru.tests.systemd-boot-memtest = nixosTests.systemd-boot.memtest86;
 
   meta = {
     homepage = "https://www.memtest.org/";

@@ -2,49 +2,63 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
+  pythonAtLeast,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
   dacite,
-  htmlmin,
+  filetype,
   imagehash,
   jinja2,
   matplotlib,
+  minify-html,
   multimethod,
   numba,
   numpy,
   pandas,
   phik,
-  pyarrow,
   pydantic,
   pyyaml,
   requests,
   scipy,
-  setuptools,
-  setuptools-scm,
   seaborn,
   statsmodels,
   tqdm,
   typeguard,
   visions,
   wordcloud,
+
+  # tests
+  pyarrow,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ydata-profiling";
-  version = "4.16.1";
+  version = "4.18.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ydataai";
     repo = "ydata-profiling";
-    tag = "v${version}";
-    hash = "sha256-gmMEW1aAwBar/xR22Wm98hbjP20ty3idvxfqCJ1uRGM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-CNeHsOpFkKvcCWGEholabcsqXJzINUUxFZ7I5bPBoYM=";
   };
 
+  # pydantic.v1.errors.ConfigError: unable to infer type for attribute "sortby"
+  disabled = pythonAtLeast "3.14";
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=72.0.0,<80.0.0" "setuptools" \
+      --replace-fail "setuptools-scm>=8.0.0,<9.0.0" "setuptools-scm"
+  '';
+
   preBuild = ''
-    echo ${version} > VERSION
+    echo ${finalAttrs.version} > VERSION
   '';
 
   build-system = [
@@ -56,15 +70,18 @@ buildPythonPackage rec {
     "imagehash"
     "matplotlib"
     "multimethod"
+    "numba"
     "numpy"
+    "scipy"
   ];
 
   dependencies = [
     dacite
-    htmlmin
+    filetype
     imagehash
     jinja2
     matplotlib
+    minify-html
     multimethod
     numba
     numpy
@@ -91,6 +108,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # needs Spark:
     "tests/backends/spark_backend"
+
     # try to download data:
     "tests/issues"
     "tests/unit/test_console.py"
@@ -111,9 +129,9 @@ buildPythonPackage rec {
   meta = {
     description = "Create HTML profiling reports from Pandas DataFrames";
     homepage = "https://ydata-profiling.ydata.ai";
-    changelog = "https://github.com/ydataai/ydata-profiling/releases/tag/v${version}";
+    changelog = "https://github.com/ydataai/ydata-profiling/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
     mainProgram = "ydata_profiling";
   };
-}
+})

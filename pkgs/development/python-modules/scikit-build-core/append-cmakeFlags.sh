@@ -1,18 +1,9 @@
 scikitBuildFlagsHook() {
-  OLD_IFS="$IFS"
-  IFS=';'
+  concatTo flagsArray cmakeFlags cmakeFlagsArray
 
-  local args=()
-  if [[ -n "$SKBUILD_CMAKE_ARGS" ]]; then
-    read -ra existing_args <<< "$SKBUILD_CMAKE_ARGS"
-    args+=("${existing_args[@]}")
-  fi
-  args+=($cmakeFlags)
-  args+=("${cmakeFlagsArray[@]}")
-  export SKBUILD_CMAKE_ARGS="${args[*]}"
-
-  IFS="$OLD_IFS"
-  unset OLD_IFS
+  for arg in "${flagsArray[@]}"; do
+    appendToVar pypaBuildFlags "-Ccmake.args=$arg"
+  done
 }
 
 preConfigureHooks+=(scikitBuildFlagsHook)

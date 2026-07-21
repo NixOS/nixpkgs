@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "sphinx-pytest";
-  version = "0.2.0";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chrisjsewell";
     repo = "sphinx-pytest";
     tag = "v${version}";
-    hash = "sha256-oSBBt+hSMs4mvGqibQHoYHXr2j/bpsGOnIMfwfTfWKQ=";
+    hash = "sha256-z71IrUr3e2oAPeZMjUBwMwy2SkoAA3oxtK4+iR9vLEc=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -34,11 +34,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
-    changelog = "https://github.com/sphinx-extensions2/sphinx-pytest/releases/tag/v${version}";
+  disabledTests = [
+    # https://github.com/sphinx-extensions2/sphinx-pytest/issues/28
+    "test_no_transforms"
+  ];
+
+  meta = {
+    changelog = "https://github.com/sphinx-extensions2/sphinx-pytest/releases/tag/${src.tag}";
     description = "Helpful pytest fixtures for Sphinx extensions";
     homepage = "https://github.com/chrisjsewell/sphinx-pytest";
-    license = licenses.mit;
-    maintainers = with maintainers; [ loicreynier ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ loicreynier ];
   };
 }

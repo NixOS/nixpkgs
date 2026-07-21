@@ -11,26 +11,27 @@
   git,
   pkg-config,
   openssl,
+  cmake,
   cacert,
+  tzdata,
   usage,
-  mise,
   testers,
   runCommand,
   jq,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mise";
-  version = "2025.9.10";
+  version = "2026.7.10";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
-    rev = "v${version}";
-    hash = "sha256-CPi0scFKv8+K/s7wh6cdURyzKA3frSPf59kq6Y2XDV0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-klEexXMGaGM0YkcSDaHa8lD1jdwAfCcms7soRKy3r3w=";
   };
 
-  cargoHash = "sha256-lbSGcnkiJYTI0VyUskxH+sxAUr+loI2mhyWaK/DgMN8=";
+  cargoHash = "sha256-O32fVQGb8+ECopUPeU9Pm8xKP4Aj494MtyHYwR3wFnM=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -60,14 +61,27 @@ rustPlatform.buildRustPackage rec {
       --replace-fail 'cmd!("direnv"' 'cmd!("${lib.getExe direnv}"'
   '';
 
-  nativeCheckInputs = [ cacert ];
+  nativeCheckInputs = [
+    cacert
+    cmake
+    # gix spawns git-upload-pack by name in file:// clone tests.
+    git
+    rustPlatform.bindgenHook
+  ];
+
+  env = {
+    # disable warnings as errors for aws-lc-sys in checkPhase
+    NIX_CFLAGS_COMPILE = "-Wno-error";
+    # tera date helper tests look up timezone data via TZDIR.
+    TZDIR = "${tzdata}/share/zoneinfo";
+  };
 
   checkFlags = [
     # last_modified will always be different in nix
     "--skip=tera::tests::test_last_modified"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-darwin") [
-    # started failing mid-April 2025
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    # x86_64-darwin started failing mid-April 2025; aarch64 in Feb 2026
     "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_with_cache"
     "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_without_cache"
   ];
@@ -76,11 +90,14 @@ rustPlatform.buildRustPackage rec {
   # some tests access the same folders, don't test in parallel to avoid race conditions
   dontUseCargoParallelTests = true;
 
+  # HTTP tests use mock servers that bind to localhost. Without this, darwin builds fail.
+  __darwinAllowLocalNetworking = true;
+
   postInstall = ''
     installManPage ./man/man1/mise.1
 
     substituteInPlace ./completions/{mise.bash,mise.fish,_mise}  \
-      --replace-fail '-v usage' '-v ${lib.getExe usage}' \
+      --replace-fail '-p usage' '-p ${lib.getExe usage}' \
       --replace-fail 'usage complete-word' '${lib.getExe usage} complete-word'
 
     installShellCompletion \
@@ -93,9 +110,14 @@ rustPlatform.buildRustPackage rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        # Ignore subcrate releases (fox, aqua-registry)
+        "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9]+)$"
+      ];
+    };
     tests = {
-      version = (testers.testVersion { package = mise; }).overrideAttrs (old: {
+      version = (testers.testVersion { package = finalAttrs.finalPackage; }).overrideAttrs (old: {
         nativeBuildInputs = old.nativeBuildInputs ++ [ cacert ];
       });
       usageCompat =
@@ -103,7 +125,7 @@ rustPlatform.buildRustPackage rec {
         runCommand "mise-usage-compatibility"
           {
             nativeBuildInputs = [
-              mise
+              finalAttrs.finalPackage
               usage
               jq
             ];
@@ -111,10 +133,9 @@ rustPlatform.buildRustPackage rec {
           ''
             export HOME=$(mktemp -d)
 
-            spec="$(mise usage)"
             for shl in bash fish zsh; do
               echo "testing $shl"
-              usage complete-word --shell $shl --spec "$spec"
+              usage complete-word --shell $shl --file <(mise usage)
             done
 
             touch $out
@@ -125,9 +146,12 @@ rustPlatform.buildRustPackage rec {
   meta = {
     homepage = "https://mise.jdx.dev";
     description = "Front-end to your dev env";
-    changelog = "https://github.com/jdx/mise/releases/tag/v${version}";
+    changelog = "https://github.com/jdx/mise/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ konradmalik ];
+    maintainers = with lib.maintainers; [
+      konradmalik
+      Br1ght0ne
+    ];
     mainProgram = "mise";
   };
-}
+})

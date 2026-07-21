@@ -2,32 +2,34 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xmind";
   version = "1.2.0";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "zhuifengshen";
     repo = "xmind";
-    rev = "v${version}";
-    sha256 = "xC1WpHz2eHb5+xShM/QUQAIYnJNyK1EKWbTXJKhDwbQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xC1WpHz2eHb5+xShM/QUQAIYnJNyK1EKWbTXJKhDwbQ=";
   };
+
+  build-system = [ setuptools ];
 
   # Project thas no tests
   doCheck = false;
 
   pythonImportsCheck = [ "xmind" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to create mindmaps";
     homepage = "https://github.com/zhuifengshen/xmind";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

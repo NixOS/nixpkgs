@@ -8,11 +8,12 @@
   openssl,
   versionCheckHook,
   nix-update-script,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "arti";
-  version = "1.5.0";
+  version = "2.5.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
@@ -20,37 +21,49 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "core";
     repo = "arti";
     tag = "arti-v${finalAttrs.version}";
-    hash = "sha256-14wOkbsfNomSCLuozUbKbOGUvhlLkG9iglN6ddkpEPk=";
+    hash = "sha256-jOCFXlBI2xAzgpb7Fa8ap53SpDF6kcRGYnBXcu3vpk4=";
   };
 
-  cargoHash = "sha256-I2xH61x6gZXKsHBejMu7C2H4E6oLRj+GUeJEfRz48os=";
+  # Working around a bug in cargo that appears with cargo-auditable, see
+  # https://github.com/rust-secure-code/cargo-auditable/issues/124.
+  postPatch = ''
+    substituteInPlace crates/arti/Cargo.toml \
+      --replace-fail '"tokio-util"' '"dep:tokio-util"'
+  '';
+
+  buildAndTestSubdir = "crates/arti";
+  cargoHash = "sha256-JK6ubp697jZ98ErNrZdFe0mXIez3lUZ5SmAHkyD97WQ=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
   buildInputs = [ sqlite ] ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
+  # `full` includes all stable and non-conflicting feature flags. the primary
+  # downsides are increased binary size and memory usage for building, but
+  # those are acceptable for nixpkgs
+  buildFeatures = [ "full" ];
 
-  cargoBuildFlags = [
-    "--package"
-    "arti"
-  ];
-
-  cargoTestFlags = [
-    "--package"
-    "arti"
+  # several tests under `full` require access to internal types, which are
+  # currently marked as experimental for public usage.
+  checkFeatures = [
+    "full"
+    "experimental-api"
   ];
 
   checkFlags = [
     # problematic test that hangs the build
-    "--skip=reload_cfg::test::watch_multiple"
+    "--skip=reload_cfg::test::watch_single_file"
   ];
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgramArg = "--version";
+  # some of the CLI tests attempt to validate that the filesystem and runtime
+  # environment are securely configured, which breaks inside the nix build
+  # sandbox. this does NOT affect downstream users of Arti.
+  env.ARTI_FS_DISABLE_PERMISSION_CHECKS = 1;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
   passthru = {
+    tests = { inherit (nixosTests) tor; };
     updateScript = nix-update-script { extraArgs = [ "--version-regex=^arti-v(.*)$" ]; };
   };
 
@@ -59,10 +72,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "arti";
     homepage = "https://arti.torproject.org/";
     changelog = "https://gitlab.torproject.org/tpo/core/arti/-/blob/arti-v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20
-      mit
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
+    maintainers = with lib.maintainers; [
+      rapiteanu
+      whispersofthedawn
     ];
-    maintainers = with lib.maintainers; [ rapiteanu ];
   };
 })

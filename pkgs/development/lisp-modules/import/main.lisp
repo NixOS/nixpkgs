@@ -49,7 +49,7 @@
           (truename "imported.nix")))
 
 (defun run-nix-formatter ()
-  (uiop:run-program '("nixfmt" "imported.nix")))
+  (uiop:run-program '("treefmt" "imported.nix")))
 
 (defun main ()
   (format t "~%")

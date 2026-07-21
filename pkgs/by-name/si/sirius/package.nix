@@ -51,15 +51,18 @@ assert builtins.elem gpuBackend [
 ];
 assert enablePython -> pythonPackages != null;
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "SIRIUS";
-  version = "7.8.0-unstable-2025-07-23";
+  version = "7.10.0";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "electronic-structure";
     repo = "SIRIUS";
-    rev = "258c8c6543af0350ac002a52fbe18221ea275590";
-    hash = "sha256-HHt3iw3muIGz86NmI9p6yuv7jrXoiz/83qTTueU7Lpk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-cq4ajtAJXfIH1B866FYhgROMSwd7nsbXf/6kbSwJAso=";
   };
 
   outputs = [
@@ -70,9 +73,11 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     cmake
     gfortran
+    mpi
     pkg-config
   ]
-  ++ lib.optional (gpuBackend == "cuda") cudaPackages.cuda_nvcc;
+  ++ lib.optionals (gpuBackend == "cuda") [ cudaPackages.cuda_nvcc ]
+  ++ lib.optionals enablePython [ pythonPackages.python ];
 
   buildInputs = [
     blas
@@ -100,12 +105,15 @@ stdenv.mkDerivation {
   ++ lib.optionals (gpuBackend == "cuda") [
     cudaPackages.cuda_cudart
     cudaPackages.cuda_profiler_api
-    cudaPackages.cudatoolkit
+    cudaPackages.cuda_nvtx
+    cudaPackages.libcufft
+    cudaPackages.libcusolver
     cudaPackages.libcublas
   ]
   ++ lib.optionals (gpuBackend == "rocm") [
     rocmPackages.clr
     rocmPackages.rocblas
+    rocmPackages.rocsolver
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     llvmPackages.openmp
@@ -133,7 +141,7 @@ stdenv.mkDerivation {
     ]
   );
 
-  CXXFLAGS = [
+  env.CXXFLAGS = toString [
     # GCC 13: error: 'uintptr_t' in namespace 'std' does not name a type
     "-include cstdint"
   ];
@@ -149,7 +157,6 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals (gpuBackend == "cuda") [
     "-DSIRIUS_USE_CUDA=ON"
-    "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}"
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
   ]
   ++ lib.optionals (gpuBackend == "rocm") [
@@ -160,7 +167,7 @@ stdenv.mkDerivation {
     "-DSIRIUS_CREATE_PYTHON_MODULE=ON"
   ];
 
-  doCheck = true;
+  doCheck = !umpire.passthru.rocmSupport;
 
   # Can not run parallel checks generally as it requires exactly multiples of 4 MPI ranks
   # Even cpu_serial tests had to be disabled as they require scalapack routines in the sandbox
@@ -175,11 +182,11 @@ stdenv.mkDerivation {
     ctestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Domain specific library for electronic structure calculations";
     homepage = "https://github.com/electronic-structure/SIRIUS";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.sheepforce ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

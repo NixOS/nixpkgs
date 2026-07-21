@@ -9,6 +9,9 @@
       temporal =
         { config, pkgs, ... }:
         {
+          virtualisation.cores = 2;
+
+          networking.useDHCP = false;
           networking.firewall.allowedTCPPorts = [ 7233 ];
 
           environment.systemPackages = [
@@ -93,6 +96,7 @@
                     asyncio.run(main())
               ''
             )
+            pkgs.grpc-health-probe
             pkgs.temporal-cli
           ];
 
@@ -266,6 +270,18 @@
       temporal.wait_for_open_port(7235)
 
       temporal.wait_until_succeeds(
+        "grpc-health-probe -addr=localhost:7233 -service=temporal.api.workflowservice.v1.WorkflowService"
+      )
+
+      temporal.wait_until_succeeds(
+        "grpc-health-probe -addr=localhost:7234 -service=temporal.api.workflowservice.v1.HistoryService"
+      )
+
+      temporal.wait_until_succeeds(
+        "grpc-health-probe -addr=localhost:7235 -service=temporal.api.workflowservice.v1.MatchingService"
+      )
+
+      temporal.wait_until_succeeds(
         "journalctl -o cat -u temporal.service | grep 'server-version' | grep '${pkgs.temporal.version}'"
       )
 
@@ -274,32 +290,32 @@
       )
 
       import json
-      cluster_list_json = json.loads(temporal.wait_until_succeeds("temporal operator cluster list --output json"))
+      cluster_list_json = json.loads(temporal.wait_until_succeeds("temporal operator cluster list --output json", timeout=60))
       assert cluster_list_json[0]['clusterName'] == "active"
 
-      cluster_describe_json = json.loads(temporal.wait_until_succeeds("temporal operator cluster describe --output json"))
+      cluster_describe_json = json.loads(temporal.wait_until_succeeds("temporal operator cluster describe --output json", timeout=60))
       assert cluster_describe_json['serverVersion'] in "${pkgs.temporal.version}"
 
-      temporal.log(temporal.wait_until_succeeds("temporal operator namespace create --namespace default"))
+      temporal.log(temporal.wait_until_succeeds("temporal operator namespace create --namespace default", timeout=60))
 
       temporal.wait_until_succeeds(
         "journalctl -o cat -u temporal.service | grep 'Register namespace succeeded'"
       )
 
-      namespace_list_json = json.loads(temporal.wait_until_succeeds("temporal operator namespace list --output json"))
+      namespace_list_json = json.loads(temporal.wait_until_succeeds("temporal operator namespace list --output json", timeout=60))
       assert len(namespace_list_json) == 2
 
-      namespace_describe_json = json.loads(temporal.wait_until_succeeds("temporal operator namespace describe --output json --namespace default"))
+      namespace_describe_json = json.loads(temporal.wait_until_succeeds("temporal operator namespace describe --output json --namespace default", timeout=60))
       assert namespace_describe_json['namespaceInfo']['name'] == "default"
       assert namespace_describe_json['namespaceInfo']['state'] == "NAMESPACE_STATE_REGISTERED"
 
-      workflow_json = json.loads(temporal.wait_until_succeeds("temporal workflow list --output json"))
+      workflow_json = json.loads(temporal.wait_until_succeeds("temporal workflow list --output json", timeout=60))
       assert len(workflow_json) == 0
 
-      out = temporal.wait_until_succeeds("temporal-hello-workflow.py")
+      out = temporal.wait_until_succeeds("temporal-hello-workflow.py", timeout=60)
       assert "Result: Hello, World!" in out
 
-      workflow_json = json.loads(temporal.wait_until_succeeds("temporal workflow list --output json"))
+      workflow_json = json.loads(temporal.wait_until_succeeds("temporal workflow list --output json", timeout=60))
       assert workflow_json[0]['execution']['workflowId'] == "hello-activity-workflow-id"
       assert workflow_json[0]['status'] == "WORKFLOW_EXECUTION_STATUS_COMPLETED"
 

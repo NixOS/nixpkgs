@@ -13,24 +13,19 @@
   cmdlinerSupport ? lib.versionAtLeast cmdliner.version "1.1",
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
+  name = "ocaml${ocaml.version}-${finalAttrs.pname}-${finalAttrs.version}";
   pname = "uuseg";
-  webpage = "https://erratique.ch/software/${pname}";
-in
-
-stdenv.mkDerivation rec {
-
-  name = "ocaml${ocaml.version}-${pname}-${version}";
   inherit version;
 
   src = fetchurl {
-    url = "${webpage}/releases/${pname}-${version}.tbz";
+    url = "https://erratique.ch/software/uuseg/releases/uuseg-${finalAttrs.version}.tbz";
     hash =
       {
         "17.0.0" = "sha256-Fn41ajEFbMv3LLkD+zqy76217/kWFS7q9jm9ubc6TI4=";
         "15.0.0" = "sha256-q8x3bia1QaKpzrWFxUmLWIraKqby7TuPNGvbSjkY4eM=";
       }
-      ."${version}";
+      ."${finalAttrs.version}";
   };
 
   nativeBuildInputs = [
@@ -58,12 +53,12 @@ stdenv.mkDerivation rec {
 
   inherit (topkg) installPhase;
 
-  meta = with lib; {
+  meta = {
     description = "OCaml library for segmenting Unicode text";
-    homepage = webpage;
-    license = licenses.bsd3;
-    maintainers = [ maintainers.vbgl ];
+    homepage = "https://erratique.ch/software/uuseg";
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.vbgl ];
     mainProgram = "usegtrip";
     inherit (ocaml.meta) platforms;
   };
-}
+})

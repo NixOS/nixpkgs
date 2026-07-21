@@ -1,30 +1,28 @@
 {
   lib,
-  python3,
-  fetchFromGitHub,
+  python3Packages,
+  fetchPypi,
 }:
 
-python3.pkgs.buildPythonApplication {
-  pname = "regippy";
-  version = "2.0.1";
+python3Packages.buildPythonApplication (finalAttrs: {
+  pname = "regrippy";
+  version = "2.0.2";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "airbus-cert";
-    repo = "regrippy";
-    rev = "05c9db999853c47af1d15f92f1a34aa2441e8882";
-    hash = "sha256-gS7qVPlXwn6UXRXPN5ahPmQL3JpwmESUEi0KKAzOo+8=";
+  src = fetchPypi {
+    inherit (finalAttrs) pname version;
+    hash = "sha256-43Wh5iQE1ihD8aGxDmmwKDkPeMfySP0mdk0XhrVefyc=";
   };
 
   postInstall = ''
     mv $out/bin/regrip.py $out/bin/regrippy
   '';
 
-  build-system = [ python3.pkgs.setuptools ];
+  build-system = [ python3Packages.setuptools ];
 
-  dependencies = [
-    python3.pkgs.importlib-resources
-    python3.pkgs.python-registry
+  dependencies = with python3Packages; [
+    importlib-resources
+    python-registry
   ];
 
   meta = {
@@ -34,4 +32,4 @@ python3.pkgs.buildPythonApplication {
     maintainers = with lib.maintainers; [ mikehorn ];
     mainProgram = "regrippy";
   };
-}
+})

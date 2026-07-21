@@ -27,19 +27,23 @@ import ../../make-test-python.nix (
 
     skipTypeCheck = true;
 
-    nodes.machine =
+    containers.machine =
       { config, ... }:
       {
-        virtualisation.memorySize = 2048;
+        boot.kernelParams = [
+          # helps debugging seccomp filter issues
+          "audit=1"
+        ];
         services.netbox = {
           enable = true;
           package = netbox;
-          secretKeyFile = pkgs.writeText "secret" ''
-            abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
-          '';
 
-          enableLdap = true;
-          ldapConfigPath = pkgs.writeText "ldap_config.py" ''
+          nginx = {
+            enable = true;
+            hostname = "localhost";
+          };
+
+          ldapConfigFile = pkgs.writeText "ldap_config.py" ''
             import ldap
             from django_auth_ldap.config import LDAPSearch, PosixGroupType
 
@@ -64,18 +68,6 @@ import ../../make-test-python.nix (
             # For more granular permissions, we can map LDAP groups to Django groups.
             AUTH_LDAP_FIND_GROUP_PERMS = True
           '';
-        };
-
-        services.nginx = {
-          enable = true;
-
-          recommendedProxySettings = true;
-
-          virtualHosts.netbox = {
-            default = true;
-            locations."/".proxyPass = "http://localhost:${toString config.services.netbox.port}";
-            locations."/static/".alias = "/var/lib/netbox/static/";
-          };
         };
 
         # Adapted from the sssd-ldap NixOS test
@@ -155,10 +147,32 @@ import ../../make-test-python.nix (
           u.set_password('netbox')
           u.save()
         '';
+        createToken = pkgs.writeText "create-token-v2.py" ''
+          from users.models import Token, User
+          from users.choices import TokenVersionChoices
+          u = User.objects.first()
+          t = Token.objects.create(user=u, token="0123456789abcdef0123456789abcdef01234567", version=TokenVersionChoices.V2)
+          print(t.get_auth_header_prefix())
+        '';
+        netboxVersion = netbox.version;
       in
       builtins.replaceStrings
-        [ "$\{changePassword}" "$\{testUser}" "$\{testPassword}" "$\{testGroup}" ]
-        [ "${changePassword}" "${testUser}" "${testPassword}" "${testGroup}" ]
+        [
+          "\${changePassword}"
+          "\${testUser}"
+          "\${testPassword}"
+          "\${testGroup}"
+          "\${createToken}"
+          "\${netboxVersion}"
+        ]
+        [
+          "${changePassword}"
+          "${testUser}"
+          "${testPassword}"
+          "${testGroup}"
+          "${createToken}"
+          "${netboxVersion}"
+        ]
         (lib.readFile "${./testScript.py}");
   }
 )

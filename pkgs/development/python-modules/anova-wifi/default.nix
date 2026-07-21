@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   poetry-core,
   aiohttp,
   sensor-state-data,
@@ -13,16 +12,14 @@
 
 buildPythonPackage rec {
   pname = "anova-wifi";
-  version = "0.17.1";
+  version = "1.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "Lash-L";
     repo = "anova_wifi";
     tag = "v${version}";
-    hash = "sha256-TRiv5ljdVqc4qeX+fSH+aTDf5UyNII8/twlNx3KC6oI=";
+    hash = "sha256-/9R/41gClcLuJoaJ+CokX9sh4mQryDUsleO+NylU1AE=";
   };
 
   build-system = [ poetry-core ];
@@ -47,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "anova_wifi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package for reading anova sous vide api data";
     homepage = "https://github.com/Lash-L/anova_wifi";
     changelog = "https://github.com/Lash-L/anova_wifi/releases/tag/v${version}";
-    maintainers = with maintainers; [ jamiemagee ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ jamiemagee ];
+    license = lib.licenses.mit;
   };
 }

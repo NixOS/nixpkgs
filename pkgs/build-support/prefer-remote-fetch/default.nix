@@ -10,18 +10,38 @@
 # $ mkdir ~/.config/nixpkgs/overlays/
 # $ echo 'self: super: super.prefer-remote-fetch self super' > ~/.config/nixpkgs/overlays/prefer-remote-fetch.nix
 #
-self: super: {
-  binary-cache = args: super.binary-cache ({ preferLocalBuild = false; } // args);
-  buildenv = args: super.buildenv ({ preferLocalBuild = false; } // args);
-  fetchfossil = args: super.fetchfossil ({ preferLocalBuild = false; } // args);
-  fetchdocker = args: super.fetchdocker ({ preferLocalBuild = false; } // args);
-  fetchgit = args: super.fetchgit ({ preferLocalBuild = false; } // args);
-  fetchgx = args: super.fetchgx ({ preferLocalBuild = false; } // args);
-  fetchhg = args: super.fetchhg ({ preferLocalBuild = false; } // args);
-  fetchipfs = args: super.fetchipfs ({ preferLocalBuild = false; } // args);
-  fetchrepoproject = args: super.fetchrepoproject ({ preferLocalBuild = false; } // args);
-  fetchs3 = args: super.fetchs3 ({ preferLocalBuild = false; } // args);
-  fetchsvn = args: super.fetchsvn ({ preferLocalBuild = false; } // args);
-  fetchurl = args: super.fetchurl ({ preferLocalBuild = false; } // args);
-  mkNugetSource = args: super.mkNugetSource ({ preferLocalBuild = false; } // args);
+self: super:
+let
+  preferLocal =
+    orig:
+    self.lib.extendMkDerivation {
+      constructDrv = orig;
+      extendDrvArgs =
+        finalAttrs:
+        {
+          preferLocalBuild ? false,
+          ...
+        }:
+        {
+          inherit preferLocalBuild;
+        };
+    };
+
+in
+{
+  binary-cache = preferLocal super.binary-cache;
+  buildenv = preferLocal super.buildenv;
+  fetchfossil = preferLocal super.fetchfossil;
+  fetchdocker = preferLocal super.fetchdocker;
+  fetchgit = (preferLocal super.fetchgit) // {
+    inherit (super.fetchgit) getRevWithTag;
+  };
+  fetchgx = preferLocal super.fetchgx;
+  fetchhg = preferLocal super.fetchhg;
+  fetchipfs = preferLocal super.fetchipfs;
+  fetchrepoproject = preferLocal super.fetchrepoproject;
+  fetchs3 = preferLocal super.fetchs3;
+  fetchsvn = preferLocal super.fetchsvn;
+  fetchurl = preferLocal super.fetchurl;
+  mkNugetSource = preferLocal super.mkNugetSource;
 }

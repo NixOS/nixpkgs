@@ -4,11 +4,13 @@
   src,
   pkg-config,
   tcl,
-  libXft,
+  libxft,
   zip,
   zlib,
   patches ? [ ],
   enableAqua ? stdenv.hostPlatform.isDarwin,
+  # TODO: Clean up on `staging`.
+  llvmPackages,
   ...
 }:
 
@@ -74,13 +76,17 @@ tcl.mkTclDerivation {
   ++ lib.optionals (lib.versionAtLeast tcl.version "9.0") [
     # Only used to detect the presence of zlib. Could be replaced with a stub.
     zip
+  ]
+  # TODO: Clean up on `staging`.
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.lld
   ];
   buildInputs = lib.optionals (lib.versionAtLeast tcl.version "9.0") [
     zlib
   ];
 
   propagatedBuildInputs = [
-    libXft
+    libxft
   ];
 
   enableParallelBuilding = true;
@@ -89,17 +95,28 @@ tcl.mkTclDerivation {
 
   inherit tcl;
 
+  env =
+    lib.optionalAttrs (lib.versionOlder tcl.version "8.6") {
+      NIX_CFLAGS_COMPILE = "-std=gnu17";
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      # workaround for ld64 hardening issue
+      #
+      # TODO: Clean up on `staging`
+      NIX_CFLAGS_COMPILE = "-fuse-ld=lld";
+    };
+
   passthru = rec {
     inherit (tcl) release version;
     libPrefix = "tk${tcl.release}";
     libdir = "lib/${libPrefix}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Widget toolkit that provides a library of basic elements for building a GUI in many different programming languages";
     homepage = "https://www.tcl.tk/";
-    license = licenses.tcltk;
-    platforms = platforms.all;
+    license = lib.licenses.tcltk;
+    platforms = lib.platforms.all;
     maintainers = [ ];
     broken = stdenv.hostPlatform.isDarwin && lib.elem (lib.versions.majorMinor tcl.version) [ "8.5" ];
   };

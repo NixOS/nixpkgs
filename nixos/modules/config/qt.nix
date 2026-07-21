@@ -74,7 +74,6 @@ in
 {
   meta.maintainers = with lib.maintainers; [
     romildo
-    thiagokokada
   ];
 
   imports = [

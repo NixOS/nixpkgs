@@ -26,10 +26,10 @@ buildPythonPackage rec {
   # No tests on PyPI
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/libkeepass/libkeepass";
     description = "Library to access KeePass 1.x/KeePassX (v3) and KeePass 2.x (v4) files";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ jqueiroz ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ jqueiroz ];
   };
 }

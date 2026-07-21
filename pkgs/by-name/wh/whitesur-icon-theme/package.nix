@@ -31,13 +31,13 @@ lib.checkListOfEnum "${pname}: theme variants"
   stdenvNoCC.mkDerivation
   rec {
     inherit pname;
-    version = "2025-08-02";
+    version = "2025-12-27";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "WhiteSur-icon-theme";
-      tag = "${version}";
-      hash = "sha256-oBKDvCVHEjN6JT0r0G+VndzijEWU9L8AvDhHQTmw2E4=";
+      tag = version;
+      hash = "sha256-5AWyuqREKpgBCXPplpkdrcInDTZfjVIm/JtTleOmaNY=";
     };
 
     nativeBuildInputs = [
@@ -61,7 +61,7 @@ lib.checkListOfEnum "${pname}: theme variants"
 
       ./install.sh --dest $out/share/icons \
         --name WhiteSur \
-        --theme ${builtins.toString themeVariants} \
+        --theme ${toString themeVariants} \
         ${lib.optionalString alternativeIcons "--alternative"} \
         ${lib.optionalString boldPanelIcons "--bold"} \
 
@@ -70,12 +70,17 @@ lib.checkListOfEnum "${pname}: theme variants"
       runHook postInstall
     '';
 
-    meta = with lib; {
+    # Drop dangling symlinks from the upstream icon set.
+    postFixup = ''
+      find $out/share/icons -xtype l -delete
+    '';
+
+    meta = {
       description = "MacOS Big Sur style icon theme for Linux desktops";
       homepage = "https://github.com/vinceliuice/WhiteSur-icon-theme";
-      license = licenses.gpl3Plus;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ icy-thought ];
+      license = lib.licenses.gpl3Plus;
+      platforms = lib.platforms.linux;
+      maintainers = with lib.maintainers; [ icy-thought ];
     };
 
   }

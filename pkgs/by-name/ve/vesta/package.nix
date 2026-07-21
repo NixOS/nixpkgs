@@ -5,14 +5,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "vesta";
   version = "1.0.10";
 
   src = fetchFromGitHub {
     owner = "kvesta";
     repo = "vesta";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/AIzIXtevFRW7gxA3dgNC8SPpT5ABrulf62GOpsw5Wc=";
   };
 
@@ -34,9 +34,9 @@ buildGoModule rec {
   meta = {
     description = "Static analysis of vulnerabilities, Docker and Kubernetes cluster configuration";
     homepage = "https://github.com/kvesta/vesta";
-    changelog = "https://github.com/kvesta/vesta/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/kvesta/vesta/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "vesta";
   };
-}
+})

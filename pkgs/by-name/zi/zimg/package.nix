@@ -5,14 +5,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zimg";
   version = "3.0.6";
 
   src = fetchFromGitHub {
     owner = "sekrit-twc";
     repo = "zimg";
-    rev = "release-${version}";
+    rev = "release-${finalAttrs.version}";
     sha256 = "sha256-T+/wuTxPK+PLofqJm3dujGqGGXhpdGQLjAttTQPsgOI=";
   };
 
@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Scaling, colorspace conversion and dithering library";
     homepage = "https://github.com/sekrit-twc/zimg";
-    license = licenses.wtfpl;
-    platforms = with platforms; unix ++ windows;
-    maintainers = with maintainers; [ rnhmjoj ];
+    license = lib.licenses.wtfpl;
+    platforms = with lib.platforms; unix ++ windows;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
   };
-}
+})

@@ -9,19 +9,21 @@
   stress,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "s-tui";
-  version = "1.2.0";
-  format = "setuptools";
+  version = "1.4.0";
+  pyproject = true;
+
+  build-system = with python3Packages; [ setuptools ];
 
   src = fetchFromGitHub {
     owner = "amanusk";
     repo = "s-tui";
-    tag = "v${version}";
-    hash = "sha256-VdQSDRDdRO6jHSuscOQZXnVM6nWHaXRfR4sZ3x5lriI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PDDT37W0x7VJ6OnkbwvPXttphD+vHDul0zmA3VY/Sao=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     python3Packages.urwid
     python3Packages.psutil
     stress
@@ -32,12 +34,12 @@ python3Packages.buildPythonPackage rec {
     tests = testers.testVersion { package = s-tui; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://amanusk.github.io/s-tui/";
     description = "Stress-Terminal UI monitoring tool";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lilacious ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ lilacious ];
     broken = stdenv.hostPlatform.isDarwin; # https://github.com/amanusk/s-tui/issues/49
     mainProgram = "s-tui";
   };
-}
+})

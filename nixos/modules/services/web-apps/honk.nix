@@ -152,7 +152,7 @@ in
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     doc = ./honk.md;
   };
 }

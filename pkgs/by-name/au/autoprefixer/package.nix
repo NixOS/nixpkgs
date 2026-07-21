@@ -2,31 +2,35 @@
   lib,
   stdenv,
   nodejs,
-  pnpm_9,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   fetchFromGitHub,
   callPackage,
   nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "autoprefixer";
-  version = "10.4.21";
+  version = "10.5.3";
 
   src = fetchFromGitHub {
     owner = "postcss";
     repo = "autoprefixer";
-    rev = finalAttrs.version;
-    hash = "sha256-25FVNUXMEuzPJtpld/GHEppspa2ns7fAuniBCltSync=";
+    tag = finalAttrs.version;
+    hash = "sha256-hjckcgWojItp2gseQI18zzxizjw/HxQPiTb/JegSCcs=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_10
   ];
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-zb/BwL//i0oly5HEXN20E3RzZXdaOn+G2yIWRas3PB4=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-diOgX9lXKOwCx9V737mmmtrhqDg5beXJH/PjlJHFpto=";
   };
 
   installPhase = ''
@@ -56,9 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Parse CSS and add vendor prefixes to CSS rules using values from the Can I Use website";
     homepage = "https://github.com/postcss/autoprefixer";
-    changelog = "https://github.com/postcss/autoprefixer/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/postcss/autoprefixer/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     mainProgram = "autoprefixer";
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ lib.maintainers.skohtv ];
   };
 })

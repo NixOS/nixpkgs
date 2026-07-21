@@ -4,7 +4,11 @@
   python3,
 }:
 let
-  python = python3;
+  python = python3.override {
+    packageOverrides = final: prev: {
+      django = final.django_5;
+    };
+  };
 
   common = callPackage ./common.nix { };
 
@@ -15,7 +19,7 @@ python.pkgs.buildPythonPackage {
 
   inherit (common) version src;
 
-  format = "other";
+  pyproject = false;
 
   patches = [
     ./pytest-xdist.patch # adapt pytest.ini the use $NIX_BUILD_CORES
@@ -92,6 +96,8 @@ python.pkgs.buildPythonPackage {
     # Tests
     fido2
     litellm
+    requests-hardened
+    thefuzz
   ];
 
   configurePhase = ''
@@ -162,7 +168,7 @@ python.pkgs.buildPythonPackage {
     updateScript = ./update.sh;
 
     tests = {
-      inherit (nixosTests) tandoor-recipes tandoor-recipes-script-name;
+      inherit (nixosTests) tandoor-recipes tandoor-recipes-script-name tandoor-recipes-media;
     };
   };
 

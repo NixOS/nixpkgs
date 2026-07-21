@@ -4,15 +4,12 @@
   fetchPypi,
   aiohttp,
   python-dateutil,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyplaato";
   version = "0.0.19";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -29,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyplaato" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API client for fetching Plaato data";
     homepage = "https://github.com/JohNan/pyplaato";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

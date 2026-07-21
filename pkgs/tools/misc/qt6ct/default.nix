@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeFeature "PLUGINDIR" "$out/${qtbase.qtPluginPrefix}")
+    (lib.cmakeFeature "PLUGINDIR" "${placeholder "out"}/${qtbase.qtPluginPrefix}")
   ];
 
   meta = {

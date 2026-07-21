@@ -13,14 +13,14 @@
   libxkbcommon,
   libressl,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "waynergy";
   version = "0.0.17";
 
   src = fetchFromGitHub {
     owner = "r-c-f";
     repo = "waynergy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-cwpW6O+KJNDvSrHeSM1Ci7S0kNw6a8KCdGAIhowPEIw=";
   };
 
@@ -44,14 +44,14 @@ stdenv.mkDerivation rec {
     substituteInPlace waynergy.desktop --replace "Exec=/usr/bin/waynergy" "Exec=$out/bin/waynergy"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Synergy client for Wayland compositors";
     longDescription = ''
       A synergy client for Wayland compositors
     '';
     homepage = "https://github.com/r-c-f/waynergy";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ maxhero ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ maxhero ];
   };
-}
+})

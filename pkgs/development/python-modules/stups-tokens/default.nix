@@ -22,6 +22,11 @@ buildPythonPackage rec {
     sha256 = "09z3l3xzdlwpivbi141gk1k0zd9m75mjwbdy81zc386rr9k8s0im";
   };
 
+  postPatch = ''
+    substituteInPlace tokens/__init__.py \
+      --replace-fail "__version__ = '0.8'" "__version__ = '${version}'"
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [ requests ];
@@ -31,10 +36,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library that keeps OAuth 2.0 service access tokens in memory for your usage";
     homepage = "https://github.com/zalando-stups/python-tokens";
-    license = licenses.asl20;
-    maintainers = [ maintainers.mschuwalow ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.mschuwalow ];
   };
 }

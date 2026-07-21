@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pixiewps";
   version = "1.4.2";
   src = fetchFromGitHub {
     owner = "wiire-a";
     repo = "pixiewps";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-cJ20Gp6YaSdgUXK/ckK5Yv0rGbGXuFMP5zKZG0c4oOY=";
   };
 
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "pixiewps";
   };
-}
+})

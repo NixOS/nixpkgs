@@ -8,14 +8,14 @@
   wayland,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eepers";
   version = "1.3";
 
   src = fetchFromGitHub {
     owner = "tsoding";
     repo = "eepers";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-KG7ci327qlTtlN4yV54P8Q34ExFLJfTGMTZxN3RtZbc=";
   };
 
@@ -72,10 +72,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Simple Turn-based Game";
     homepage = "https://github.com/tsoding/eepers";
-    changelog = "https://github.com/tsoding/eepers/blob/${src.rev}/CHANGELOG.txt";
+    changelog = "https://github.com/tsoding/eepers/blob/${finalAttrs.src.rev}/CHANGELOG.txt";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "eepers";
     platforms = lib.platforms.all;
   };
-}
+})

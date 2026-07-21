@@ -1,21 +1,20 @@
 {
   lib,
   python3Packages,
-  fetchFromGitea,
+  fetchFromCodeberg,
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "synadm";
-  version = "0.48";
+  version = "0.49.2";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "synadm";
     repo = "synadm";
-    tag = "v${version}";
-    hash = "sha256-6t4CXXt22/yR0gIxSsM/r+zJQeoKz5q/Ifg8PLNojLI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Nh4pzOXBXwbhq49Hq8vmPi6AS6N/tRqDBjIVKH3Gh6s=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -27,6 +26,7 @@ python3Packages.buildPythonApplication rec {
     tabulate
     pyyaml
     requests
+    requests-unixsocket
   ];
 
   checkPhase = ''
@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Command line admin tool for Synapse";
     mainProgram = "synadm";
     longDescription = ''
@@ -46,10 +46,10 @@ python3Packages.buildPythonApplication rec {
       conveniently issue commands available via its admin API's
       (element-hq/synapse@master/docs/admin_api)
     '';
-    changelog = "https://codeberg.org/synadm/synadm/releases/tag/${src.tag}";
+    changelog = "https://codeberg.org/synadm/synadm/releases/tag/${finalAttrs.src.tag}";
     downloadPage = "https://codeberg.org/synadm/synadm";
     homepage = "https://synadm.readthedocs.io/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

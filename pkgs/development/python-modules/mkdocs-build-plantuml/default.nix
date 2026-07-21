@@ -10,20 +10,20 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-build-plantuml";
-  version = "1.11.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "christo-ph";
     repo = "mkdocs_build_plantuml";
     tag = version;
-    hash = "sha256-cbyxvWBIV+v81m+xGZZsUypkM1uuj4ADMUrAYlc/XBI=";
+    hash = "sha256-KTtZXeMZwbrx1M6Keu9BzT3GmarsVx9kEmn63rwHatI=";
   };
 
   # There's only one substitution, no patch is needed.
   postPatch = ''
     substituteInPlace mkdocs_build_plantuml_plugin/plantuml.py \
-      --replace-fail '/usr/local/bin/plantuml' '${lib.getExe pkgs.plantuml}'
+      --replace-fail "shutil.which('plantuml') or 'plantuml'" "'${lib.getExe pkgs.plantuml}'"
   '';
 
   build-system = [ setuptools ];
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "MkDocs plugin to help generate your plantuml images locally or remotely as files (NOT inline)";
     homepage = "https://github.com/christo-ph/mkdocs_build_plantuml";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

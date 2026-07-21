@@ -4,7 +4,7 @@
   fetchgit,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "PStreams";
   version = "1.0.1";
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
       let
         dot2Underscore = lib.strings.stringAsChars (c: if c == "." then "_" else c);
       in
-      "RELEASE_${dot2Underscore version}";
+      "RELEASE_${dot2Underscore finalAttrs.version}";
     sha256 = "0r8aj0nh5mkf8cvnzl8bdy4nm7i74vs83axxfimcd74kjfn0irys";
   };
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   # `make install` fails on case-insensitive file systems (e.g. APFS by
   # default) because this target exists
 
-  meta = with lib; {
+  meta = {
     description = "POSIX Process Control in C++";
     longDescription = ''
       PStreams allows you to run another program from your C++ application and
@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://pstreams.sourceforge.net/";
     downloadPage = "https://pstreams.sourceforge.net/download/";
-    maintainers = with maintainers; [ arthur ];
-    license = licenses.boost;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ arthur ];
+    license = lib.licenses.boost;
+    platforms = lib.platforms.all;
   };
-}
+})

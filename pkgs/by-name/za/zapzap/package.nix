@@ -1,21 +1,30 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   python3Packages,
   qt6,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "zapzap";
-  version = "6.2.1";
+  version = "7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rafatosta";
     repo = "zapzap";
-    tag = version;
-    hash = "sha256-DvQuhoO7jxnkX7uW+fltEjKu2Ugg8cgLKe+5pkln6g4=";
+    tag = finalAttrs.version;
+    hash = "sha256-0LrIx7k9b0+zsmezjF6CmJo4nqU7GPW1HHWAUVVnbzk=";
   };
+
+  patches = [
+    # Support setting dict lookup path. Remove with next release.
+    (fetchpatch {
+      url = "https://github.com/rafatosta/zapzap/commit/3517079e8fbd3853fe184c393137709de68f020e.patch";
+      hash = "sha256-Eqy483+mJHLHsS21B8LnJ9oIqwTRCMVKhHBO8hleBh4=";
+    })
+  ];
 
   nativeBuildInputs = [
     qt6.wrapQtAppsHook
@@ -54,12 +63,12 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "zapzap" ];
 
-  meta = with lib; {
+  meta = {
     description = "WhatsApp desktop application written in Pyqt6 + PyQt6-WebEngine";
     homepage = "https://rtosta.com/zapzap/";
     mainProgram = "zapzap";
-    license = licenses.gpl3Only;
-    changelog = "https://github.com/rafatosta/zapzap/releases/tag/${src.tag}";
-    maintainers = [ maintainers.eymeric ];
+    license = lib.licenses.gpl3Only;
+    changelog = "https://github.com/rafatosta/zapzap/releases/tag/${finalAttrs.src.tag}";
+    maintainers = [ lib.maintainers.eymeric ];
   };
-}
+})

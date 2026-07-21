@@ -38,24 +38,25 @@
 let
   usingMKL = blas.implementation == "mkl" || lapack.implementation == "mkl";
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jax";
-  version = "0.7.2";
+  version = "0.11.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "jax";
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
-    tag = "jax-v${version}";
-    hash = "sha256-GBpHFjvF7SvxJafu7aVlTp0jxSo4jAi9oPeMg2B/P24=";
+    tag = "jax-v${finalAttrs.version}";
+    hash = "sha256-EE4JuiiwgdQlTsX6dE8KRjcGZHRiQVDXlDVFHchfyYs=";
   };
 
   build-system = [ setuptools ];
 
   # The version is automatically set to ".dev" if this variable is not set.
   # https://github.com/google/jax/commit/e01f2617b85c5bdffc5ffb60b3d8d8ca9519a1f3
-  JAX_RELEASE = "1";
+  env.JAX_RELEASE = "1";
 
   dependencies = [
     jaxlib
@@ -64,7 +65,7 @@ buildPythonPackage rec {
     opt-einsum
     scipy
   ]
-  ++ lib.optionals cudaSupport optional-dependencies.cuda;
+  ++ lib.optionals cudaSupport finalAttrs.passthru.optional-dependencies.cuda;
 
   optional-dependencies = rec {
     cuda = [ jax-cuda12-plugin ];
@@ -124,6 +125,17 @@ buildPythonPackage rec {
   disabledTests = [
     # Exceeds tolerance when the machine is busy
     "test_custom_linear_solve_aux"
+
+    # pytest-xdist/execnet cannot serialize the numpy `type` objects this test passes to
+    # self.subTest(dtype=...) when shipping subtest reports between workers.
+    # The assertions themselves pass; the failure is a harness artifact of running with
+    # --numprocesses.
+    # New test in jax 0.10.2 (tests/random_impl_test.py).
+    "test_random_bits"
+
+    # Jax uses deprecated numpy logic as an oracle. Fixed upstream in jax 0.11.0, can't be properly backported.
+    # https://github.com/jax-ml/jax/commit/d219f03b589a1075f499148113aa9c647e1be0b9
+    "testCross"
   ]
   ++ lib.optionals usingMKL [
     # See
@@ -178,10 +190,11 @@ buildPythonPackage rec {
   meta = {
     description = "Source-built JAX frontend: differentiate, compile, and transform Numpy code";
     homepage = "https://github.com/google/jax";
+    changelog = "https://docs.jax.dev/en/latest/changelog.html";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       GaetanLepage
       samuela
     ];
   };
-}
+})

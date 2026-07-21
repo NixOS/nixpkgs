@@ -30,17 +30,17 @@
 
 let
   pname = "scopehal-apps";
-  version = "0.1";
+  version = "0.1.1";
 in
 stdenv.mkDerivation {
-  pname = "${pname}";
+  pname = "scopehal-apps";
   version = "${version}";
 
   src = fetchFromGitHub {
     owner = "ngscopeclient";
-    repo = "${pname}";
+    repo = "scopehal-apps";
     tag = "v${version}";
-    hash = "sha256-AfO6JaWA9ECMI6FkMg/LaAG4QMeZmG9VxHiw0dSJYNM=";
+    hash = "sha256-7ZXfxfRa+1fbMj2IDF/boNL/qCy4i9IyMnzIgOZunDw=";
     fetchSubmodules = true;
   };
 
@@ -85,11 +85,17 @@ stdenv.mkDerivation {
   ];
 
   cmakeFlags = [
-    "-DNGSCOPECLIENT_VERSION=${version}"
+    "-DNGSCOPECLIENT_PACKAGE_VERSION=v${version}"
+    "-DNGSCOPECLIENT_PACKAGE_VERSION_LONG=v${version}-0"
+  ];
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    # error: variable 'empty_string' is uninitialized when passed as a const pointer argument here [-Werror,-Wuninitialized-const-pointer]
+    "-Wno-error=uninitialized"
   ];
 
   patches = [
-    ./remove-git-derived-version.patch
+    ./remove-required-lsb-release.patch
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ./remove-brew-molten-vk-lookup.patch
@@ -98,7 +104,7 @@ stdenv.mkDerivation {
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mv -v $out/bin/ngscopeclient $out/bin/.ngscopeclient-unwrapped
     makeWrapper $out/bin/.ngscopeclient-unwrapped $out/bin/ngscopeclient \
-      --prefix DYLD_LIBRARY_PATH : "${lib.makeLibraryPath ([ vulkan-loader ])}"
+      --prefix DYLD_LIBRARY_PATH : "${lib.makeLibraryPath [ vulkan-loader ]}"
   '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''

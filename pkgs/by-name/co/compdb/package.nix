@@ -4,15 +4,15 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "compdb";
   version = "0.2.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Sarcasm";
     repo = "compdb";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-nFAgTrup6V5oE+LP4UWDOCgTVCv2v9HbQbkGW+oDnTg=";
   };
 
@@ -20,11 +20,11 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool to manipulate compilation databases";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/Sarcasm/compdb";
-    maintainers = [ maintainers.detegr ];
+    maintainers = [ lib.maintainers.detegr ];
     mainProgram = "compdb";
   };
-}
+})

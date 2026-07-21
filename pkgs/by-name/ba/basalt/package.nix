@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "basalt";
-  version = "0.9.0";
+  version = "0.12.6";
 
   src = fetchFromGitHub {
     owner = "erikjuhani";
     repo = "basalt";
     tag = "basalt/v${finalAttrs.version}";
-    hash = "sha256-r34MlNSLZAHqNWlFMGNxT6zTSX+IKKQmJ4klEB4kjek=";
+    hash = "sha256-MlKrVxNU9PNakIA9hiv5ll7ImkPDekQnassWFO/smkE=";
   };
 
-  cargoHash = "sha256-TpbJ1HCBocgLAXGb5dBbZNMlOYXR9IGBRtfShgwlMIo=";
+  cargoHash = "sha256-sTU0AUwR5xdnqLvrRycxuMk+KNcsEcYU3XvyODKT1Ns=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

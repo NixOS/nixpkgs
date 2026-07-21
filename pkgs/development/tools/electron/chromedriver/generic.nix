@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   glib,
-  xorg,
+  libxcb,
   nspr,
   nss,
   autoPatchelfHook,
@@ -14,7 +14,7 @@ version: hashes:
 let
   pname = "electron-chromedriver";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.electronjs.org/";
     description = "WebDriver server for running Selenium tests on Chrome";
     longDescription = ''
@@ -25,14 +25,13 @@ let
       an unofficial build of ChromeDriver compiled by the Electronjs
       project.
     '';
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       liammurphy14
-      yayayayaka
     ];
+    teams = [ lib.teams.electron ];
     platforms = [
-      "x86_64-darwin"
       "x86_64-linux"
       "armv7l-linux"
       "aarch64-linux"
@@ -52,7 +51,6 @@ let
     x86_64-linux = "linux-x64";
     aarch64-linux = "linux-arm64";
     armv7l-linux = "linux-armv7l";
-    x86_64-darwin = "darwin-x64";
     aarch64-darwin = "darwin-arm64";
   };
 
@@ -65,7 +63,7 @@ let
     buildInputs = [
       (lib.getLib stdenv.cc.cc)
       glib
-      xorg.libxcb
+      libxcb
       nspr
       nss
     ];
@@ -86,6 +84,9 @@ let
       install -m777 -D chromedriver $out/bin/chromedriver
       runHook postInstall
     '';
+
+    __structuredAttrs = true;
+    strictDeps = true;
   };
 
   darwin = {

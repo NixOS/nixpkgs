@@ -7,12 +7,12 @@
   ounit2,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "arg-complete";
   version = "0.2.1";
 
   src = fetchurl {
-    url = "https://github.com/sim642/ocaml-arg-complete/releases/download/${version}/arg-complete-${version}.tbz";
+    url = "https://github.com/sim642/ocaml-arg-complete/releases/download/${finalAttrs.version}/arg-complete-${finalAttrs.version}.tbz";
     hash = "sha256-SZvLaeeqY3j2LUvqxGs0Vw57JnnpdvAk1jnE3pk27QU=";
   };
 
@@ -24,8 +24,8 @@ buildDunePackage rec {
   meta = {
     description = "Bash completion support for OCaml Stdlib.Arg";
     homepage = "https://sim642.github.io/ocaml-arg-complete/";
-    changelog = "https://raw.githubusercontent.com/sim642/ocaml-arg-complete/refs/tags/${version}/CHANGELOG.md";
+    changelog = "https://raw.githubusercontent.com/sim642/ocaml-arg-complete/refs/tags/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

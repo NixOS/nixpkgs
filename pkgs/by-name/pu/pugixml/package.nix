@@ -8,15 +8,15 @@
   shared ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pugixml";
-  version = "1.15";
+  version = "1.16";
 
   src = fetchFromGitHub {
     owner = "zeux";
     repo = "pugixml";
-    tag = "v${version}";
-    hash = "sha256-t/57lg32KgKPc7qRGQtO/GOwHRqoj78lllSaE/A8Z9Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gdfVktqG4Adcq1QvLyvx7EFV336gnNWXL+X/NOFJ0gs=";
   };
 
   outputs = [ "out" ] ++ lib.optionals shared [ "dev" ];
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ pSub ];
     platforms = lib.platforms.unix;
   };
-}
+})

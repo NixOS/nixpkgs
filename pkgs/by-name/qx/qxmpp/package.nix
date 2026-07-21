@@ -5,27 +5,29 @@
   cmake,
   pkg-config,
   kdePackages,
+  ctestCheckHook,
   withGstreamer ? true,
   gst_all_1,
   withOmemo ? true,
   libomemo-c,
+  withEncryption ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qxmpp";
-  version = "1.11.2";
+  version = "1.16.1";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "libraries";
     repo = "qxmpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OR/rBp84pXv286Vd0I6IRzeUdC/+nnlRCZMAMXKgyxo=";
+    hash = "sha256-JuGSLi0oqlUTbJnjlqd9qo0Dk2yCY1hfryQy0CuEjLo=";
   };
 
   nativeBuildInputs = [
     cmake
-    kdePackages.wrapQtAppsNoGuiHook
+    kdePackages.wrapQtAppsHook
   ]
   ++ lib.optionals (withGstreamer || withOmemo) [
     pkg-config
@@ -46,21 +48,30 @@ stdenv.mkDerivation (finalAttrs: {
       libomemo-c
     ];
   cmakeFlags = [
-    "-DBUILD_EXAMPLES=false"
-    "-DBUILD_TESTS=false"
-  ]
-  ++ lib.optionals withGstreamer [
-    "-DWITH_GSTREAMER=ON"
-  ]
-  ++ lib.optionals withOmemo [
-    "-DBUILD_OMEMO=ON"
+    (lib.cmakeBool "BUILD_DOCUMENTATION" false)
+    (lib.cmakeBool "BUILD_EXAMPLES" false)
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.doCheck)
+    (lib.cmakeBool "BUILD_OMEMO" withOmemo)
+    (lib.cmakeBool "WITH_ENCRYPTION" withEncryption)
+    (lib.cmakeBool "WITH_GSTREAMER" withGstreamer)
+  ];
+
+  doCheck = true;
+  nativeCheckInputs = [ ctestCheckHook ];
+  disabledTests = [
+    "tst_QXmppIceConnection"
+    "tst_QXmppTransferManager"
   ];
 
   meta = {
     description = "Cross-platform C++ XMPP client and server library";
+    changelog = "https://invent.kde.org/libraries/qxmpp/-/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     homepage = "https://invent.kde.org/libraries/qxmpp";
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ astro ];
+    maintainers = with lib.maintainers; [
+      astro
+      haansn08
+    ];
     platforms = with lib.platforms; linux;
   };
 })

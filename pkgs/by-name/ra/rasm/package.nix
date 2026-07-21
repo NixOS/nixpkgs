@@ -2,24 +2,34 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rasm";
-  version = "2.3.9";
+  version = "3.2.5";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "EdouardBERGE";
     repo = "rasm";
-    rev = "v${version}";
-    hash = "sha256-vTN9EmqfSZh8ecHlaSCi6qgsKtZBh8qr0vaqyiP5R9I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sLSODTaVxhybtkzRAjQw4bRSPhp9O69S5OzkEq/pK0M=";
   };
+
+  nativeBuildInputs = [ installShellFiles ];
 
   # by default the EXEC variable contains `rasm.exe`
   makeFlags = [ "EXEC=rasm" ];
 
   installPhase = ''
-    install -Dt $out/bin rasm
+    runHook preInstall
+
+    installBin rasm
+
+    runHook postInstall
   '';
 
   meta = {
@@ -31,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ sigmanificient ];
     platforms = lib.platforms.all;
   };
-}
+})

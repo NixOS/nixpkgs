@@ -10,7 +10,7 @@
 {
   lib,
   stdenv,
-  Xaw3d,
+  libxaw3d,
   acl,
   alsa-lib,
   apple-sdk,
@@ -29,13 +29,12 @@
   gtk3-x11,
   harfbuzz,
   imagemagick,
-  jansson,
-  libXaw,
-  libXcursor,
-  libXft,
-  libXi,
-  libXpm,
-  libXrandr,
+  libxaw,
+  libxcursor,
+  libxft,
+  libxi,
+  libxpm,
+  libxrandr,
   libgccjit,
   libjpeg,
   libotf,
@@ -53,34 +52,33 @@
   ncurses,
   nixosTests,
   pkg-config,
-  recurseIntoAttrs,
   sigtool,
   sqlite,
   replaceVars,
   systemdLibs,
   tree-sitter,
   texinfo,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wrapGAppsHook3,
   zlib,
 
   # Boolean flags
   withNativeCompilation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   noGui ? false,
-  srcRepo ? false,
+  srcRepo ? true,
   withAcl ? false,
   withAlsaLib ? false,
   withAthena ? false,
   withCairo ? withX,
   withCsrc ? true,
   withDbus ? stdenv.hostPlatform.isLinux,
+  # https://github.com/emacs-mirror/emacs/blob/emacs-30.2/etc/NEWS#L52-L56
+  withGcMarkTrace ? false,
   withGTK3 ? withPgtk && !noGui,
   withGlibNetworking ? withPgtk || withGTK3 || (withX && withXwidgets),
   withGpm ? stdenv.hostPlatform.isLinux,
-  # https://github.com/emacs-mirror/emacs/blob/master/etc/NEWS.27#L140-L142
+  # https://github.com/emacs-mirror/emacs/blob/emacs-27.2/etc/NEWS#L118-L120
   withImageMagick ? false,
-  # Emacs 30+ has native JSON support
-  withJansson ? lib.versionOlder version "30",
   withMailutils ? true,
   withMotif ? false,
   withNS ? stdenv.hostPlatform.isDarwin && !(variant == "macport" || noGui),
@@ -96,9 +94,10 @@
   withXwidgets ?
     !noGui
     && (withGTK3 || withPgtk || withNS || variant == "macport")
-    && (stdenv.hostPlatform.isDarwin || lib.versionOlder version "30"),
+    && (stdenv.hostPlatform.isDarwin || lib.versions.major version != "30"),
   # XXX: - upstream bug 66068 precludes newer versions of webkit2gtk (https://lists.gnu.org/archive/html/bug-gnu-emacs/2024-09/msg00695.html)
   # XXX: - Apple_SDK WebKit is compatible with Emacs.
+  # XXX: - upstream bug 80728 lifts the webkit2gtk version check added in upstream bug 66068
   withSmallJaDic ? false,
   withCompressInstall ? true,
 
@@ -139,6 +138,8 @@ let
   ++ lib.optionals (stdenv.cc ? cc.lib.libgcc) [
     "${lib.getLib stdenv.cc.cc.lib.libgcc}/lib"
   ];
+
+  withWebkitgtk = withXwidgets && stdenv.hostPlatform.isLinux;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname =
@@ -161,38 +162,33 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches =
     patches fetchpatch
+    ++ [
+      ./load-the-early-default-library-after-early-init.el.patch
+    ]
     ++ lib.optionals withNativeCompilation [
-      (replaceVars
-        (
-          if lib.versionOlder finalAttrs.version "30" then
-            ./native-comp-driver-options.patch
-          else
-            ./native-comp-driver-options-30.patch
-        )
-        {
-          backendPath = (
-            lib.concatStringsSep " " (
-              builtins.map (x: ''"-B${x}"'') (
-                [
-                  # Paths necessary so the JIT compiler finds its libraries:
-                  "${lib.getLib libgccjit}/lib"
-                ]
-                ++ libGccJitLibraryPaths
-                ++ [
-                  # Executable paths necessary for compilation (ld, as):
-                  "${lib.getBin stdenv.cc.cc}/bin"
-                  "${lib.getBin stdenv.cc.bintools}/bin"
-                  "${lib.getBin stdenv.cc.bintools.bintools}/bin"
-                ]
-                ++ lib.optionals stdenv.hostPlatform.isDarwin [
-                  # The linker needs to know where to find libSystem on Darwin.
-                  "${apple-sdk.sdkroot}/usr/lib"
-                ]
-              )
+      (replaceVars ./native-comp-driver-options-30.patch {
+        backendPath = (
+          lib.concatStringsSep " " (
+            map (x: ''"-B${x}"'') (
+              [
+                # Paths necessary so the JIT compiler finds its libraries:
+                "${lib.getLib libgccjit}/lib"
+              ]
+              ++ libGccJitLibraryPaths
+              ++ [
+                # Executable paths necessary for compilation (ld, as):
+                "${lib.getBin stdenv.cc.cc}/bin"
+                "${lib.getBin stdenv.cc.bintools}/bin"
+                "${lib.getBin stdenv.cc.bintools.bintools}/bin"
+              ]
+              ++ lib.optionals stdenv.hostPlatform.isDarwin [
+                # The linker needs to know where to find libSystem on Darwin.
+                "${apple-sdk.sdkroot}/usr/lib"
+              ]
             )
-          );
-        }
-      )
+          )
+        );
+      })
     ];
 
   postPatch = lib.concatStringsSep "\n" [
@@ -245,26 +241,22 @@ stdenv.mkDerivation (finalAttrs: {
     ""
   ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     makeWrapper
     pkg-config
-  ]
-  ++ lib.optionals (variant == "macport") [
     texinfo
   ]
   ++ lib.optionals srcRepo [
     autoreconfHook
-    texinfo
   ]
-  ++ lib.optionals (withPgtk || withX && (withGTK3 || withXwidgets)) [ wrapGAppsHook3 ];
+  ++ lib.optionals (withPgtk || withX && (withGTK3 || withXwidgets)) [ wrapGAppsHook3 ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ];
 
   buildInputs = [
-    gettext
     gnutls
     (lib.getDev harfbuzz)
-  ]
-  ++ lib.optionals withJansson [
-    jansson
   ]
   ++ [
     libxml2
@@ -311,7 +303,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withPgtk [
     giflib
     gtk3
-    libXpm
+    libxpm
     libjpeg
     libpng
     librsvg
@@ -330,11 +322,11 @@ stdenv.mkDerivation (finalAttrs: {
     libwebp
   ]
   ++ lib.optionals withX [
-    Xaw3d
+    libxaw3d
     giflib
-    libXaw
-    libXpm
-    libXrandr
+    libxaw
+    libxpm
+    libxrandr
     libjpeg
     libpng
     librsvg
@@ -344,16 +336,13 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
   ]
   ++ lib.optionals (withX && !withCairo) [
-    libXft
+    libxft
   ]
   ++ lib.optionals withXinput2 [
-    libXi
+    libxi
   ]
-  ++ lib.optionals (withXwidgets && stdenv.hostPlatform.isLinux) [
-    webkitgtk_4_0
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    sigtool
+  ++ lib.optionals withWebkitgtk [
+    webkitgtk_4_1
   ]
   ++ lib.optionals withNS [
     librsvg
@@ -408,6 +397,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeature withNS "ns")
   ]
   ++ [
+    (lib.enableFeature withGcMarkTrace "gc-mark-trace")
     (lib.withFeature withCompressInstall "compress-install")
     (lib.withFeature withToolkitScrollBars "toolkit-scroll-bars")
     (lib.withFeature withNativeCompilation "native-compilation")
@@ -420,6 +410,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeature withDbus "dbus")
     (lib.withFeature withSelinux "selinux")
   ];
+
+  __structuredAttrs = true;
 
   env =
     lib.optionalAttrs withNativeCompilation {
@@ -474,14 +466,13 @@ stdenv.mkDerivation (finalAttrs: {
       | xargs -n $((1000/NIX_BUILD_CORES + 1)) -P $NIX_BUILD_CORES \
         $out/bin/emacs --batch -l comp --eval "(while argv \
           (comp-trampoline-compile (intern (pop argv))))"
-    mkdir -p $out/share/emacs/native-lisp
     $out/bin/emacs --batch \
-      --eval "(add-to-list 'native-comp-eln-load-path \"$out/share/emacs/native-lisp\")" \
+      --eval "(add-to-list 'native-comp-eln-load-path \"$out/lib/emacs/$siteVersionDir/native-lisp\")" \
       -f batch-native-compile $out/share/emacs/site-lisp/site-start.el
   '';
 
   postFixup = lib.optionalString (stdenv.hostPlatform.isLinux && withX && toolkit == "lucid") ''
-    patchelf --add-rpath ${lib.makeLibraryPath [ libXcursor ]} $out/bin/emacs
+    patchelf --add-rpath ${lib.makeLibraryPath [ libxcursor ]} $out/bin/emacs
     patchelf --add-needed "libXcursor.so.1" "$out/bin/emacs"
   '';
 
@@ -491,7 +482,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit withNativeCompilation;
     inherit withTreeSitter;
     inherit withXwidgets;
-    pkgs = recurseIntoAttrs (emacsPackagesFor finalAttrs.finalPackage);
+    pkgs = lib.recurseIntoAttrs (emacsPackagesFor finalAttrs.finalPackage);
     tests = {
       inherit (nixosTests) emacs-daemon;
       withPackages = callPackage ./build-support/wrapper-test.nix {
@@ -502,9 +493,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     broken = withNativeCompilation && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
-    knownVulnerabilities = lib.optionals (lib.versionOlder version "30") [
-      "CVE-2024-53920 CVE-2025-1244, please use newer versions such as emacs30"
-    ];
   }
   // meta;
 })

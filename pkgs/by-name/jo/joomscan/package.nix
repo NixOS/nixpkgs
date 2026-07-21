@@ -16,7 +16,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "joomscan";
-  version = "unstable-2021-06-08";
+  version = "0.0.7-unstable-2021-06-08";
 
   src = fetchFromGitHub {
     owner = "owasp";
@@ -38,12 +38,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Joomla Vulnerability Scanner";
     homepage = "https://wiki.owasp.org/index.php/Category:OWASP_Joomla_Vulnerability_Scanner_Project";
     mainProgram = "joomscan.pl";
-    maintainers = with maintainers; [ emilytrau ];
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ emilytrau ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
   };
 }

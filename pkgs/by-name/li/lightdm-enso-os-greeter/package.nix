@@ -8,7 +8,9 @@
   dbus,
   pcre,
   libepoxy,
-  xorg,
+  libxdmcp,
+  libx11,
+  libpthread-stubs,
   at-spi2-core,
   libxklavier,
   libxkbcommon,
@@ -51,15 +53,15 @@ stdenv.mkDerivation {
     pcre
     libepoxy
     libgee
-    xorg.libX11
+    libx11
     lightdm
-    xorg.libXdmcp
+    libxdmcp
     gdk-pixbuf
     clutter-gtk
     libxklavier
     at-spi2-core
     libxkbcommon
-    xorg.libpthreadstubs
+    libpthread-stubs
     librsvg
   ];
 
@@ -79,16 +81,16 @@ stdenv.mkDerivation {
       --replace "pantheon-greeter" "$out/bin/pantheon-greeter"
   '';
 
-  meta = with lib; {
+  meta = {
     description = ''
       A fork of pantheon greeter that positions elements in a central and
       vertigal manner and adds a blur effect to the background
     '';
     mainProgram = "pantheon-greeter";
     homepage = "https://github.com/nick92/Enso-OS";
-    platforms = platforms.linux;
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       eadwu
     ];
   };

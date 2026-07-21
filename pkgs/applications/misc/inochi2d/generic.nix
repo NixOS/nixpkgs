@@ -16,7 +16,7 @@
   zenity,
   luajit_2_1,
   libGL,
-  libX11,
+  libx11,
 
   builderArgs,
 }:
@@ -58,7 +58,7 @@ buildDubPackage (
       freetype
       SDL2
       libGL
-      libX11
+      libx11
     ];
 
     dontUseCmakeConfigure = true;
@@ -91,6 +91,10 @@ buildDubPackage (
       # Upstream uses a cmake script to fetch the `cimgui` submodule anyway, which we can't do
       # We get around this by manually pre-fetching the submodule and copying it into the right place
       cp -r --no-preserve=all ${cimgui-src}/* "$cimgui_dir/deps/cimgui"
+
+      # bump cmake minimum version to a version supported by cmake 4
+      substituteInPlace "$cimgui_dir/deps/cimgui/CMakeLists.txt" \
+          --replace-fail "cmake_minimum_required(VERSION 3.1)" "cmake_minimum_required(VERSION 3.10)"
 
       # Disable the original cmake fetcher script
       substituteInPlace "$cimgui_dir/deps/CMakeLists.txt" \

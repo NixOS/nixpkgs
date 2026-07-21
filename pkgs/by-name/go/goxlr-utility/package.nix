@@ -11,18 +11,18 @@
   udevCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "goxlr-utility";
-  version = "1.2.2";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "GoXLR-on-Linux";
     repo = "goxlr-utility";
-    rev = "v${version}";
-    hash = "sha256-Z/VqQKmfzqd1htMlXU8sDkOSw2xczb3tG53LVC0MZhM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-WPEk7rMfvwN3YyUfxu3wP09rfOZQ+GMPt1OAY5jEj8Y=";
   };
 
-  cargoHash = "sha256-tSlFMMZWsyZBXBeEW64s0eBt/qrAREfOpfxAgcTK4XQ=";
+  cargoHash = "sha256-7s2P9kvYEfgVRFaOkkzsVHbgTaxodvG6bOw5/HTmvyI=";
 
   buildInputs = [
     libpulseaudio
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
     install -Dm644 "50-goxlr.rules" "$out/etc/udev/rules.d/50-goxlr.rules"
     install -Dm644 "daemon/resources/goxlr-utility.png" "$out/share/icons/hicolor/48x48/apps/goxlr-utility.png"
     install -Dm644 "daemon/resources/goxlr-utility.svg" "$out/share/icons/hicolor/scalable/apps/goxlr-utility.svg"
-    install -Dm644 "daemon/resources/goxlr-utility-large.png" "$out/share/pixmaps/goxlr-utility.png"
+    install -Dm644 "daemon/resources/goxlr-utility-large.png" "$out/share/icons/hicolor/128x128/apps/goxlr-utility.png"
     install -Dm644 "daemon/resources/goxlr-utility.desktop" "$out/share/applications/goxlr-utility.desktop"
     substituteInPlace $out/share/applications/goxlr-utility.desktop \
       --replace-fail /usr/bin $out/bin
@@ -61,10 +61,10 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --zsh  $completions_dir/_goxlr-daemon
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Unofficial GoXLR App replacement for Linux, Windows and MacOS";
     homepage = "https://github.com/GoXLR-on-Linux/goxlr-utility";
-    license = licenses.mit;
-    maintainers = with maintainers; [ errnoh ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ errnoh ];
   };
-}
+})

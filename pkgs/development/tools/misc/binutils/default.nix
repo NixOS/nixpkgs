@@ -19,7 +19,9 @@ in
 
   enableGold ? withGold stdenv.targetPlatform,
   enableGoldDefault ? false,
-  enableShared ? !stdenv.hostPlatform.isStatic,
+  # shared lib linking fails on cygwin due to multiple definitions
+  # https://cygwin.com/cgit/cygwin-packages/binutils/blame/binutils.cygport
+  enableShared ? (!stdenv.hostPlatform.isStatic && !stdenv.hostPlatform.isCygwin),
   # WARN: Enabling all targets increases output size to a multiple.
   withAllTargets ? false,
 }:
@@ -32,7 +34,7 @@ assert enableGoldDefault -> enableGold;
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
-  version = "2.44";
+  version = "2.46";
 
   #INFO: The targetPrefix prepended to binary names to allow multiple binuntils
   # on the PATH to both be usable.
@@ -80,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnu/binutils/binutils-with-gold-${version}.tar.bz2";
-    hash = "sha256-NHM+pJXMDlDnDbTliQ3sKKxB8OFMShZeac8n+5moxMg=";
+    hash = "sha256-uMmj15bcCw6OqTXcJMXI1vNF6xd62lrGpbESLHfWIVg=";
   };
 
   # WARN: this package is used for bootstrapping fetchurl, and thus cannot use
@@ -201,7 +203,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [
     "format"
-    "pie"
   ];
 
   configurePlatforms = [
@@ -353,7 +354,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tools for manipulating binaries (linker, assembler, etc.)";
     longDescription = ''
       The GNU Binutils are a collection of binary tools.  The main
@@ -362,12 +363,12 @@ stdenv.mkDerivation (finalAttrs: {
       `gprof', `nm', `strip', etc.
     '';
     homepage = "https://www.gnu.org/software/binutils/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       ericson2314
       lovesegfault
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
 
     # INFO: Give binutils a lower priority than gcc-wrapper to prevent a
     # collision due to the ld/as wrappers/symlinks in the latter.

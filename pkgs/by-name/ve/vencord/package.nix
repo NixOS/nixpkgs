@@ -7,32 +7,54 @@
   nix-update,
   nodejs,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   stdenv,
   writeShellScript,
+  discord,
+  discord-ptb,
+  discord-canary,
+  discord-development,
   buildWebExtension ? false,
 }:
-
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
-  version = "1.13.0";
+  version = "1.14.15";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MdbO74vAbsZyB6seOqxHvQL0HT4IdVnDjd+N3a9XAns=";
+    hash = "sha256-jQeLZa1rpKDkzWSpAqOa8snGRKLpv9xf9cwJ6hUwMzA=";
   };
 
-  pnpmDeps = pnpm_10.fetchDeps {
-    inherit (finalAttrs) pname src;
-    fetcherVersion = 2;
-    hash = "sha256-JP9HOaP3DG+2F89tC77JZFD0ls35u/MzxNmvMCbBo9Y=";
+  patches = [ ./fix-deps.patch ];
+
+  postPatch = ''
+    substituteInPlace packages/vencord-types/package.json \
+      --replace-fail '"@types/react": "18.3.1"' '"@types/react": "19.0.12"'
+  '';
+
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs)
+      pname
+      src
+      patches
+      postPatch
+      ;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-pm5f6bGm07pzNCqpDHRyKFnuX2ZTE5w9BtJu5xXPHiI=";
   };
 
   nativeBuildInputs = [
     git
     nodejs
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm
   ];
 
   env = {
@@ -58,34 +80,41 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  # We need to fetch the latest *tag* ourselves, as nix-update can only fetch the latest *releases* from GitHub
-  # Vencord had a single "devbuild" release that we do not care about
-  passthru.updateScript = writeShellScript "update-vencord" ''
-    export PATH="${
-      lib.makeBinPath [
-        curl
-        jq
-        nix-update
-      ]
-    }:$PATH"
-    ghTags=$(curl ''${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} "https://api.github.com/repos/Vendicated/Vencord/tags")
-    latestTag=$(echo "$ghTags" | jq -r .[0].name)
+  passthru = {
+    # We need to fetch the latest *tag* ourselves, as nix-update can only fetch the latest *releases* from GitHub
+    # Vencord had a single "devbuild" release that we do not care about
+    updateScript = writeShellScript "update-vencord" ''
+      export PATH="${
+        lib.makeBinPath [
+          curl
+          jq
+          nix-update
+        ]
+      }:$PATH"
+      ghTags=$(curl ''${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} "https://api.github.com/repos/Vendicated/Vencord/tags")
+      latestTag=$(echo "$ghTags" | jq -r .[0].name)
 
-    echo "Latest tag: $latestTag"
+      echo "Latest tag: $latestTag"
 
-    exec nix-update --version "$latestTag" "$@"
-  '';
+      exec nix-update --version "$latestTag" "$@"
+    '';
+
+    tests = lib.genAttrs' [ discord discord-ptb discord-canary discord-development ] (
+      p: lib.nameValuePair p.pname p.tests.withVencord
+    );
+  };
 
   meta = {
     description = "Cutest Discord client mod";
     homepage = "https://github.com/Vendicated/Vencord";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      FlameFlag
+      _4evy
       FlafyDev
       Gliczy
       NotAShelf
       Scrumplex
+      ryand56
     ];
   };
 })

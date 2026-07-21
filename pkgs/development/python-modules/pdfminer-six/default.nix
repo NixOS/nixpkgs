@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pdfminer-six";
-  version = "20250506";
+  version = "20260107";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pdfminer";
     repo = "pdfminer.six";
     tag = version;
-    hash = "sha256-BE/HMl/e1KnkSc2jXU5Du5FMF+rCBv5AJ7a88oFrBgM=";
+    hash = "sha256-spWDwPoBLdySysYblCWABIWtokOMoJdpYQ6qxX94wIE=";
   };
 
   build-system = [
@@ -58,7 +58,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/pdfminer/pdfminer.six/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/pdfminer/pdfminer.six/blob/${src.tag}/CHANGELOG.md";
     description = "PDF parser and analyzer";
     homepage = "https://github.com/pdfminer/pdfminer.six";
     license = lib.licenses.mit;

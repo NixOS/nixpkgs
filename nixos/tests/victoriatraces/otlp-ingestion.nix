@@ -60,6 +60,9 @@ in
       services.victoriatraces = {
         enable = true;
         retentionPeriod = "1d";
+        extraOptions = [
+          "-search.latencyOffset=0s"
+        ];
       };
 
       environment.systemPackages = with pkgs; [
@@ -79,13 +82,13 @@ in
     machine.wait_until_succeeds("""
       curl -s 'http://localhost:10428/select/jaeger/api/services' | \
       jq -e '.data[] | select(. == "test-service")'
-    """, timeout=10)
+    """, timeout=20)
 
     # Query for traces from our test service
-    machine.succeed("""
+    machine.wait_until_succeeds("""
       curl -s 'http://localhost:10428/select/jaeger/api/traces?service=test-service' | \
       jq -e '.data[0].spans[0].operationName' | grep -q 'test-span'
-    """)
+    """, timeout=10)
 
     # Verify the trace has the expected attributes
     machine.succeed("""

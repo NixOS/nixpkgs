@@ -13,7 +13,10 @@
   libunwind,
   openssl,
   xinput,
-  xorg,
+  libxi,
+  libx11,
+  libsm,
+  libice,
 }:
 buildDotnetModule rec {
   pname = "opentracker";
@@ -52,29 +55,27 @@ buildDotnetModule rec {
     gtk3
     openssl
     xinput
-  ]
-  ++ (with xorg; [
-    libICE
-    libSM
-    libX11
-    libXi
-  ]);
+    libice
+    libsm
+    libx11
+    libxi
+  ];
 
   autoPatchelfIgnoreMissingDeps = [
     "libc.musl-x86_64.so.1"
     "libintl.so.8"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tracking application for A Link to the Past Randomizer";
     homepage = "https://github.com/trippsc2/OpenTracker";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       # deps
       binaryBytecode
       binaryNativeCode
     ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "OpenTracker";
     platforms = [ "x86_64-linux" ];

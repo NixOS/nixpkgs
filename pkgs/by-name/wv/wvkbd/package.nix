@@ -13,21 +13,16 @@
   scdoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wvkbd";
-  version = "0.18";
+  version = "0.19.4";
 
   src = fetchFromGitHub {
     owner = "jjsullivan5196";
     repo = "wvkbd";
-    tag = "v${version}";
-    hash = "sha256-RfZbPAaf8UB4scUZ9XSL12QZ4UkYMzXqfmNt9ObOgQ0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aQA5xY3jDSLsANxNX3mGu+LElyOn6lPjxEaqS1v2JaI=";
   };
-
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace-fail "pkg-config" "$PKG_CONFIG"
-  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -46,11 +41,12 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jjsullivan5196/wvkbd";
     description = "On-screen keyboard for wlroots";
-    platforms = platforms.linux;
-    license = licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "wvkbd-mobintl";
+    maintainers = with lib.maintainers; [ colinsane ];
   };
-}
+})

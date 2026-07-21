@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nyx";
   version = "2.1.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "02rrlllz2ci6i6cs3iddyfns7ang9a54jrlygd2jw1f9s6418ll8";
   };
 
@@ -23,11 +23,11 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "nyx" ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line monitor for Tor";
     mainProgram = "nyx";
     homepage = "https://nyx.torproject.org/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ offline ];
+    license = lib.licenses.gpl3;
+    maintainers = [ ];
   };
-}
+})

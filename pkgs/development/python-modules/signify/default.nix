@@ -7,23 +7,20 @@
   mscerts,
   oscrypto,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "signify";
-  version = "0.8.1";
+  version = "0.9.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ralphje";
     repo = "signify";
-    tag = "v${version}";
-    hash = "sha256-kEQPoCNO3jGucnqYKRKOivaBtHHX4SMW9KALBMqqqVo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ICmBzIbkynxRNojNQrQZoydMyFd6j3F1BLWN8VeB5dE=";
   };
 
   build-system = [ setuptools ];
@@ -41,10 +38,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    changelog = "https://github.com/ralphje/signify/blob/refs/tags/${src.tag}/docs/changelog.rst";
+    changelog = "https://github.com/ralphje/signify/blob/refs/tags/${finalAttrs.src.tag}/docs/changelog.rst";
     description = "Library that verifies PE Authenticode-signed binaries";
     homepage = "https://github.com/ralphje/signify";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ baloo ];
   };
-}
+})

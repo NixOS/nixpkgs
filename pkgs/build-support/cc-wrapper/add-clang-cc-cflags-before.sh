@@ -35,3 +35,7 @@ elif [[ $0 != *cpp ]]; then
         extraBefore+=(-mabi=@explicitAbiValue@)
     fi
 fi
+
+if [[ "@darwinMinVersion@" ]] && [ "@isFlang@" != 1 ]; then
+    extraBefore+=(-Werror=unguarded-availability)
+fi

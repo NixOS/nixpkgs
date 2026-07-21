@@ -5,8 +5,8 @@
   unstableGitUpdater,
   installShellFiles,
   makeWrapper,
-  apple-sdk_13,
-  xorg,
+  libxt,
+  libx11,
   pkg-config,
   wayland-scanner,
   pipewire,
@@ -23,13 +23,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "drawterm";
-  version = "0-unstable-2025-09-11";
+  version = "0-unstable-2026-06-27";
 
   src = fetchFrom9Front {
     owner = "plan9front";
     repo = "drawterm";
-    rev = "7523180ec9e5210e28eb0191268066188cdf91ab";
-    hash = "sha256-IOZCpNXJcTpqCRsNp8aaP2vORvusLktLtyoQ7gykJB8=";
+    rev = "a3b107c7356e034b95e83cdf40b367d68f1dc204";
+    hash = "sha256-z0V3TM34yRpHYznQsniwyuxtVD2TtqgwIbEZTltxQ+o=";
   };
 
   enableParallelBuilding = true;
@@ -52,10 +52,9 @@ stdenv.mkDerivation {
       libdecor
     ]
     ++ lib.optionals withXorg [
-      xorg.libX11
-      xorg.libXt
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_13;
+      libx11
+      libxt
+    ];
 
   makeFlags =
     lib.optional withWayland "CONF=linux"

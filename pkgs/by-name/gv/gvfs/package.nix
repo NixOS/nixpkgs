@@ -11,7 +11,7 @@
   glib,
   udevSupport ? stdenv.hostPlatform.isLinux,
   libgudev,
-  udisks2,
+  udisks,
   libgcrypt,
   libcap,
   polkit,
@@ -39,21 +39,18 @@
   libnfs,
   openssh,
   libsecret,
-  libgdata,
   libmsgraph,
   python3,
   gsettings-desktop-schemas,
-  googleSupport ? false, # dependency on vulnerable libsoup versions
 }:
 
-assert googleSupport -> gnomeSupport;
 stdenv.mkDerivation (finalAttrs: {
   pname = "gvfs";
-  version = "1.57.2";
+  version = "1.60.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gvfs/${lib.versions.majorMinor finalAttrs.version}/gvfs-${finalAttrs.version}.tar.xz";
-    hash = "sha256-8Wvvjsof1sEX6F2wEdIekVZpeQ1VhnNJxfGykSmelYU=";
+    hash = "sha256-kOq6Mzq30xp/3q3kWVSlE8NmHM672aE4qrP7SB37nkA=";
   };
 
   patches = [
@@ -94,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals udevSupport [
     libgudev
-    udisks2
+    udisks
     fuse3
     libcdio
     samba
@@ -109,9 +106,6 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-online-accounts
     libsecret
     libmsgraph
-  ]
-  ++ lib.optionals googleSupport [
-    libgdata
   ];
 
   mesonFlags = [
@@ -136,14 +130,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dkeyring=false"
     "-Donedrive=false"
   ]
-  ++ lib.optionals (!googleSupport) [
-    "-Dgoogle=false"
-  ]
   ++ lib.optionals (avahi == null) [
     "-Ddnssd=false"
   ]
   ++ lib.optionals (samba == null) [
-    # Xfce don't want samba
     "-Dsmb=false"
   ];
 
@@ -159,11 +149,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description =
-      "Virtual Filesystem support library" + optionalString gnomeSupport " (full GNOME support)";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.unix;
-    teams = [ teams.gnome ];
+      "Virtual Filesystem support library" + lib.optionalString gnomeSupport " (full GNOME support)";
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.gnome ];
   };
 })

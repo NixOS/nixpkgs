@@ -16,18 +16,18 @@
   mbedtls,
   openssl,
   gtk3,
-  libpthreadstubs,
+  libpthread-stubs,
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "neko";
   version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "HaxeFoundation";
     repo = "neko";
-    rev = "v${lib.replaceStrings [ "." ] [ "-" ] version}";
+    rev = "v${lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
     hash = "sha256-cTu+AlDnpXAow6jM77Ct9DM8p//z6N1utk7Wsd+0g9U=";
   };
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     libmysqlclient
     mbedtls
     openssl
-    libpthreadstubs
+    libpthread-stubs
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux gtk3;
   cmakeFlags = [ "-DRUN_LDCONFIG=OFF" ];
@@ -79,13 +79,12 @@ stdenv.mkDerivation rec {
       lib.licenses.zlib # zlib.ndll
       lib.licenses.asl20 # mod_neko, mod_tora, mbedTLS
       lib.licenses.mit # overall, other libs
-      "https://github.com/HaxeFoundation/neko/blob/v2-3-0/LICENSE#L24-L40" # boehm gc
+      lib.licenses.boehmGC # boehm gc
     ];
     maintainers = with lib.maintainers; [
-      marcweber
       locallycompact
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
-}
+})

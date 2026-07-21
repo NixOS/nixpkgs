@@ -92,14 +92,14 @@ stdenv.mkDerivation {
     substituteInPlace $out/lib/pkgconfig/libftdipp1.pc --replace-fail "libdir=$out/$out/lib" "libdir=$out/lib"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library to talk to FTDI chips using libusb";
     homepage = "https://www.intra2net.com/en/developer/libftdi/";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl2Only
       gpl2Only
     ];
-    platforms = platforms.all;
-    maintainers = with maintainers; [ bjornfor ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ bjornfor ];
   };
 }

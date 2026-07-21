@@ -1,35 +1,30 @@
 {
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   lib,
   nixosTests,
   ghostunnel,
-  apple-sdk_12,
-  darwinMinVersionHook,
-  writeScript,
-  runtimeShell,
 }:
 
 buildGoModule rec {
   pname = "ghostunnel";
-  version = "1.8.4";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "ghostunnel";
     repo = "ghostunnel";
     rev = "v${version}";
-    hash = "sha256-NnRm1HEdfK6WI5ntilLSwdR2B5czG5CIcMFzl2TzEds=";
+    hash = "sha256-BntQCauAgnaiNn31nrVEsHFvQv7zK6D0z/rInbCVTr0=";
   };
 
-  vendorHash = "sha256-vP8OtjpYNMm1KkNfD3pmNrHh3HRy1GkzUbfLKWKhHbo=";
+  patches = [
+    # upstream left an untidied go.mod/go.sum in v1.10.0
+    ./pkg-errors.patch
+  ];
+
+  vendorHash = "sha256-pd7fTP0BAgpd4mD8ZG8Ak9fFF2sC0JGCDbPG8tAnWvw=";
 
   deleteVendor = true;
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_12
-    (darwinMinVersionHook "12.0")
-  ];
 
   # These tests don't exist for Linux, and on Darwin they attempt to use the macOS Keychain
   # which doesn't work from a nix build. Presumably other platform implementations of the
@@ -44,9 +39,7 @@ buildGoModule rec {
 
   passthru.services.default = {
     imports = [
-      (lib.modules.importApply ./service.nix {
-        inherit writeScript runtimeShell;
-      })
+      (lib.modules.importApply ./service.nix { })
     ];
     ghostunnel.package = ghostunnel; # FIXME: finalAttrs.finalPackage
   };

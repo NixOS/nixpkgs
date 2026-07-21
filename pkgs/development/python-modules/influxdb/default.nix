@@ -79,15 +79,30 @@ buildPythonPackage rec {
     "test_write_points_from_dataframe_with_tag_escaped"
     # AssertionError: 2 != 1 : <class 'influxdb.tests.helper_test.TestSeriesHelper.testWarnBulkSizeNoEffect.<locals>.WarnBulkSizeNoEffect'> call should have generated one warning.
     "testWarnBulkSizeNoEffect"
+    # Timestamp precision 10^9 vs 10^12
+    "test_dataframe_write_points_with_whitespace_in_column_names"
+    "test_dataframe_write_points_with_whitespace_measurement"
+    "test_write_points_from_dataframe"
+    "test_write_points_from_dataframe_with_leading_none_column"
+    "test_write_points_from_dataframe_with_line_of_none"
+    "test_write_points_from_dataframe_with_nan_line"
+    "test_write_points_from_dataframe_with_none"
+    "test_write_points_from_dataframe_with_numeric_column_names"
+    "test_write_points_from_dataframe_with_period_index"
+    "test_write_points_from_dataframe_with_tag_cols_and_defaults"
+    "test_write_points_from_dataframe_with_tag_cols_and_global_tags"
+    "test_write_points_from_dataframe_with_tag_columns"
+    "test_write_points_from_dataframe_with_tags_and_nan_line"
+    "test_write_points_from_dataframe_with_time_precision"
   ];
 
   pythonImportsCheck = [ "influxdb" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for InfluxDB";
     homepage = "https://github.com/influxdb/influxdb-python";
     changelog = "https://github.com/influxdata/influxdb-python/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

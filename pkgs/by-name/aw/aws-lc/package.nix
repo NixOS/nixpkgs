@@ -4,19 +4,22 @@
   cmakeMinimal,
   fetchFromGitHub,
   ninja,
+  rust-bindgen,
   testers,
   aws-lc,
+  nix-update-script,
   useSharedLibraries ? !stdenv.hostPlatform.isStatic,
+  withRustBindings ? true,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "aws-lc";
-  version = "1.56.0";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-lc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-h7GrR86h/Z9pfJowABJFwBf/TlQzsMMG2x0/dsepbmQ=";
+    hash = "sha256-Dvy6mzEfKgimxCGp7q2fPk9urBMJMU6gZmaZXwdZfWw=";
   };
 
   outputs = [
@@ -28,10 +31,14 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmakeMinimal
     ninja
+  ]
+  ++ lib.optionals withRustBindings [
+    rust-bindgen
   ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" useSharedLibraries)
+    (lib.cmakeBool "GENERATE_RUST_BINDINGS" withRustBindings)
     "-GNinja"
     "-DDISABLE_GO=ON"
     "-DDISABLE_PERL=ON"
@@ -46,6 +53,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
+  postInstall = ''
+    moveToOutput lib/crypto/cmake "$dev"
+    moveToOutput lib/ssl/cmake "$dev"
+  ''
+  + lib.optionalString withRustBindings ''
+    moveToOutput share/rust "$dev"
+  '';
+
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.cc.isGNU [
       # Needed with GCC 12 but breaks on darwin (with clang)
@@ -53,28 +68,24 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  postFixup = ''
-    for f in $out/lib/crypto/cmake/*/crypto-targets.cmake; do
-      substituteInPlace "$f" \
-        --replace-fail 'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/include"' 'INTERFACE_INCLUDE_DIRECTORIES ""'
-    done
-  '';
-
   __darwinAllowLocalNetworking = true;
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = aws-lc;
-      command = "bssl version";
+  passthru = {
+    tests = {
+      version = testers.testVersion {
+        package = aws-lc;
+        command = "bssl version";
+      };
+      pkg-config = testers.hasPkgConfigModules {
+        package = aws-lc;
+        moduleNames = [
+          "libcrypto"
+          "libssl"
+          "openssl"
+        ];
+      };
     };
-    pkg-config = testers.hasPkgConfigModules {
-      package = aws-lc;
-      moduleNames = [
-        "libcrypto"
-        "libssl"
-        "openssl"
-      ];
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = {

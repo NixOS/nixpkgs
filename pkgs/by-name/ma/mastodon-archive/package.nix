@@ -4,15 +4,15 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "mastodon-archive";
   version = "1.4.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kensanata";
-    repo = "mastodon-backup";
-    rev = "v${version}";
+    repo = "mastodon-archive";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-yz17ddcA0U9fq1aDlPmD3OkNL6Epzdp9C7L+31yNLBc=";
   };
 
@@ -31,11 +31,11 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "mastodon_archive" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility for backing up your Mastodon content";
     mainProgram = "mastodon-archive";
     homepage = "https://alexschroeder.ch/software/Mastodon_Archive";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ julm ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ julm ];
   };
-}
+})

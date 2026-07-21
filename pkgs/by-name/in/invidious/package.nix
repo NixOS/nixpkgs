@@ -3,6 +3,7 @@
   callPackage,
   crystal,
   fetchFromGitHub,
+  fetchpatch2,
   librsvg,
   pkg-config,
   libxml2,
@@ -31,6 +32,7 @@ in
 crystal.buildCrystalPackage rec {
   pname = "invidious";
   inherit (versions.invidious) version;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "iv-org";
@@ -39,6 +41,15 @@ crystal.buildCrystalPackage rec {
     rev = versions.invidious.rev or "refs/tags/v${version}";
     inherit (versions.invidious) hash;
   };
+
+  patches = [
+    # Remove with the first release containing this commit.
+    (fetchpatch2 {
+      name = "CVE-2026-58447.patch";
+      url = "https://github.com/iv-org/invidious/commit/77ad41678b45c4f6815940123f1796fc51259f45.patch?full_index=1";
+      hash = "sha256-0pf6eu0ckQ2gYHLr2tEDy+1dvAhVjepG26kuxuHbZl8=";
+    })
+  ];
 
   postPatch =
     let
@@ -50,6 +61,7 @@ crystal.buildCrystalPackage rec {
       # This always uses the latest commit which invalidates the cache even if
       # the assets were not changed
       assetCommitTemplate = ''{{ "#{`git rev-list HEAD --max-count=1 --abbrev-commit -- assets`.strip}" }}'';
+      tagTemplate = ''{{ "#{`git tag --points-at HEAD`.strip}" }}'';
 
       inherit (versions.invidious) commit date;
     in
@@ -62,11 +74,12 @@ crystal.buildCrystalPackage rec {
           --replace-fail ${lib.escapeShellArg branchTemplate} '"master"' \
           --replace-fail ${lib.escapeShellArg commitTemplate} '"${commit}"' \
           --replace-fail ${lib.escapeShellArg versionTemplate} '"${date}"' \
-          --replace-fail ${lib.escapeShellArg assetCommitTemplate} '"${commit}"'
+          --replace-fail ${lib.escapeShellArg assetCommitTemplate} '"${commit}"' \
+          --replace-fail ${lib.escapeShellArg tagTemplate} '"v${version}"'
 
       # Patch the assets and locales paths to be absolute
       substituteInPlace src/invidious.cr \
-          --replace-fail 'public_folder "assets"' 'public_folder "${placeholder "out"}/share/invidious/assets"'
+          --replace-fail 'StaticAssetsHandler.new("assets"' 'StaticAssetsHandler.new("${placeholder "out"}/share/invidious/assets"'
       substituteInPlace src/invidious/helpers/i18n.cr \
           --replace-fail 'File.read("locales/' 'File.read("${placeholder "out"}/share/invidious/locales/'
 
@@ -138,7 +151,6 @@ crystal.buildCrystalPackage rec {
     maintainers = with lib.maintainers; [
       _999eagle
       GaetanLepage
-      sbruder
     ];
   };
 }

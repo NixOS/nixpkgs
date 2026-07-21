@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "uv-dynamic-versioning";
-  version = "0.11.2";
+  version = "0.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     tag = "v${version}";
     # Tests perform mock operations on the local repo
     leaveDotGit = true;
-    hash = "sha256-KB5EhXXQfaxAWM3DpkRxpBbelJc25btTtTppSn38b3o=";
+    hash = "sha256-MI4LRo9XDmafXQ/xN1G8vtrBVE20qviwspMo5vIabFI=";
   };
 
   build-system = [
@@ -62,7 +62,7 @@ buildPythonPackage rec {
   meta = {
     description = "Dynamic versioning based on VCS tags for uv/hatch project";
     homepage = "https://github.com/ninoseki/uv-dynamic-versioning";
-    changelog = "https://github.com/ninoseki/uv-dynamic-versioning/releases/tag/v${version}";
+    changelog = "https://github.com/ninoseki/uv-dynamic-versioning/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

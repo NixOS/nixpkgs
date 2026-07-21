@@ -11,14 +11,14 @@
   enablePython ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flann";
   version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "flann-lib";
     repo = "flann";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "13lg9nazj5s9a41j61vbijy04v6839i67lqd925xmxsbybf36gjc";
   };
 
@@ -54,6 +54,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # The LZ4 patch updates cmake_minimum_required to 3.12, but only for non-clang builds.
+  # For clang builds (like Darwin), we need to manually update it.
+  # ref. https://github.com/flann-lib/flann/pull/526 not merged yet
+  postPatch = lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.5)"
+  '';
+
   cmakeFlags = [
     "-DBUILD_EXAMPLES:BOOL=OFF"
     "-DBUILD_TESTS:BOOL=OFF"
@@ -79,4 +87,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

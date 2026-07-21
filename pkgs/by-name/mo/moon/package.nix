@@ -5,24 +5,26 @@
   fetchFromGitHub,
   openssl,
   pkg-config,
+  protobuf,
   versionCheckHook,
   nix-update-script,
   installShellFiles,
   buildPackages,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "moon";
-  version = "1.38.5";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "moonrepo";
     repo = "moon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jWLyg7K+ucCsrHwFNrpmWAXznSD+3TaYGfbZ2hWlnP0=";
+    hash = "sha256-Nc3J6s6+Go73lOnveH7agT80y9PVqLZw+x22vvi2mcg=";
   };
 
-  cargoHash = "sha256-2E59P0d3SDZUgbN5V52Rr9liONiKcFUFv3dSrtFJ8NE=";
+  cargoHash = "sha256-+pmn9+7VNQyggoTmlhZ7s9vTnhSDWp5rqnFFbyLAfMk=";
 
   env = {
     RUSTFLAGS = "-C strip=symbols";
@@ -32,7 +34,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [ openssl ];
   nativeBuildInputs = [
     pkg-config
+    protobuf
     installShellFiles
+    writableTmpDirAsHomeHook
   ];
 
   postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (

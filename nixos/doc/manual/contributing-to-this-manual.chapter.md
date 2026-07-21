@@ -1,19 +1,17 @@
 # Contributing to this manual {#chap-contributing}
 
 The sources of the NixOS manual are in the [nixos/doc/manual](https://github.com/NixOS/nixpkgs/tree/master/nixos/doc/manual) subdirectory of the [Nixpkgs](https://github.com/NixOS/nixpkgs) repository.
-This manual uses the [Nixpkgs manual syntax](https://nixos.org/manual/nixpkgs/unstable/#sec-contributing-markup).
+This manual uses the [Nixpkgs manual syntax](https://github.com/NixOS/nixpkgs/blob/master/doc/README.md#syntax) and [stylistic conventions](https://github.com/NixOS/nixpkgs/blob/master/doc/README.md#documentation-conventions).
 
 You can quickly check your edits with the following:
 
 ```ShellSession
 $ cd /path/to/nixpkgs
-$ $EDITOR doc/nixos/manual/... # edit the manual
+$ $EDITOR nixos/doc/manual/... # edit the manual
 $ nix-build nixos/release.nix -A manual.x86_64-linux
 ```
 
 If the build succeeds, the manual will be in `./result/share/doc/nixos/index.html`.
-
-There's also [a convenient development daemon](https://nixos.org/manual/nixpkgs/unstable/#sec-contributing-devmode).
 
 The above instructions don't deal with the appendix of available `configuration.nix` options, and the manual pages related to NixOS. These are built, and written in a different location and in a different format, as explained in the next sections.
 
@@ -37,9 +35,11 @@ Make sure that your local files aren't added to Git history by adding the follow
 /**/.direnv
 ```
 
-### `devmode` {#sec-contributing-devmode}
+### Live preview {#sec-contributing-devmode}
 
-Use [`devmode`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/de/devmode/README.md) for a live preview when editing the manual.
+Run [`devmode`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/de/devmode/README.md) for a live preview while editing the manual: it rebuilds on every change and reloads the page in your browser automatically.
+
+Changes to the renderer 'pkgs/by-name/ni/nixos-render-docs' need a manual restart. Run: `devmode` again.
 
 ## Testing redirects {#sec-contributing-redirects}
 

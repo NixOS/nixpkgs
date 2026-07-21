@@ -1,5 +1,6 @@
 {
   lib,
+  fetchpatch,
   fetchFromGitHub,
   armadillo,
   cmake,
@@ -38,6 +39,10 @@ gnuradio.pkgs.mkDerivation rec {
     # cpu_features which is bundled in the source. NOTE: Perhaps this patch
     # should be sent upstream.
     ./fix_libcpu_features_install_path.patch
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/g/gnss-sdr/0.0.20-2/debian/patches/boost1.90.diff";
+      hash = "sha256-IeLV0DIVzw+Nix9RmrqrbGDEjquvSws114UsdYphV58=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -69,7 +74,7 @@ gnuradio.pkgs.mkDerivation rec {
   ++ lib.optionals (gnuradio.hasFeature "gr-uhd") [
     gnuradio.unwrapped.uhd
   ]
-  ++ lib.optionals (enableRawUdp) [
+  ++ lib.optionals enableRawUdp [
     libpcap
   ]
   ++ lib.optionals (gnuradio.hasFeature "gr-ctrlport") [
@@ -82,7 +87,7 @@ gnuradio.pkgs.mkDerivation rec {
   ++ lib.optionals (gnuradio.hasFeature "gr-pdu") [
     gnuradio.unwrapped.libad9361
   ]
-  ++ lib.optionals (enableOsmosdr) [
+  ++ lib.optionals enableOsmosdr [
     gnuradio.pkgs.osmosdr
   ];
 
@@ -114,10 +119,10 @@ gnuradio.pkgs.mkDerivation rec {
     (lib.cmakeFeature "LAPACK_LIBRARIES" "-llapack")
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source Global Navigation Satellite Systems software-defined receiver";
     homepage = "https://gnss-sdr.org/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

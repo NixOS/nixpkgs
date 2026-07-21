@@ -5,14 +5,14 @@
   libsndfile,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "accuraterip-checksum";
   version = "1.5";
 
   src = fetchFromGitHub {
     owner = "leo-bogert";
     repo = "accuraterip-checksum";
-    tag = "version${version}";
+    tag = "version${finalAttrs.version}";
     sha256 = "1a6biy78jb094rifazn4a2g1dlhryg5q8p8gwj0a60ipl0vfb9bj";
   };
 
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
     description = "Program for computing the AccurateRip checksum of singletrack WAV files";
     homepage = "https://github.com/leo-bogert/accuraterip-checksum";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "accuraterip-checksum";
   };
-}
+})

@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
   version = "1.901b";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/f/fonts-${pname}/fonts-${pname}_${version}.orig.tar.bz2";
+    url = "mirror://debian/pool/main/f/fonts-tibetan-machine/fonts-tibetan-machine_${version}.orig.tar.bz2";
     hash = "sha256-c/1Sgv7xKHpsJGjY9ZY2qOJHShGHL1robvphFNJOt5w=";
   };
 
@@ -22,10 +22,10 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tibetan Machine - an OpenType Tibetan, Dzongkha and Ladakhi font";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ serge ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

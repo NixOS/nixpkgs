@@ -42,17 +42,13 @@ buildGoModule (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/metal";
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Official Equinix Metal CLI";
     homepage = "https://github.com/equinix/metal-cli/";
     changelog = "https://github.com/equinix/metal-cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      Br1ght0ne
-      teutat3s
-    ];
+    maintainers = [ ];
     mainProgram = "metal";
   };
 })

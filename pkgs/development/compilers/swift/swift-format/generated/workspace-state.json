@@ -12,8 +12,8 @@
         },
         "state": {
           "checkoutState": {
-            "branch": "main",
-            "revision": "c5050aa63ed5bb23209e7120b7ff6618ee06e0ee"
+            "revision": "309a47b2b1d9b5e991f36961c983ecec72275be3",
+            "version": "1.6.1"
           },
           "name": "sourceControlCheckout"
         },
@@ -22,53 +22,53 @@
       {
         "basedOn": null,
         "packageRef": {
-          "identity": "swift-syntax",
+          "identity": "swift-cmark",
           "kind": "remoteSourceControl",
-          "location": "https://github.com/apple/swift-syntax.git",
-          "name": "SwiftSyntax"
+          "location": "https://github.com/swiftlang/swift-cmark.git",
+          "name": "cmark-gfm"
         },
         "state": {
           "checkoutState": {
-            "branch": "main",
-            "revision": "cd793adf5680e138bf2bcbaacc292490175d0dcd"
+            "revision": "b97d09472e847a416629f026eceae0e2afcfad65",
+            "version": "0.7.0"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-cmark"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-markdown",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-markdown.git",
+          "name": "swift-markdown"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "d8cf111c276ed18cff82d3cad563d2ca5903b982",
+            "version": "0.7.1"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-markdown"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-syntax",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-syntax.git",
+          "name": "swift-syntax"
+        },
+        "state": {
+          "checkoutState": {
+            "branch": "release/5.10",
+            "revision": "cdd571f366a4298bb863a9dcfe1295bb595041d5"
           },
           "name": "sourceControlCheckout"
         },
         "subpath": "swift-syntax"
-      },
-      {
-        "basedOn": null,
-        "packageRef": {
-          "identity": "swift-system",
-          "kind": "remoteSourceControl",
-          "location": "https://github.com/apple/swift-system.git",
-          "name": "swift-system"
-        },
-        "state": {
-          "checkoutState": {
-            "revision": "836bc4557b74fe6d2660218d56e3ce96aff76574",
-            "version": "1.1.1"
-          },
-          "name": "sourceControlCheckout"
-        },
-        "subpath": "swift-system"
-      },
-      {
-        "basedOn": null,
-        "packageRef": {
-          "identity": "swift-tools-support-core",
-          "kind": "remoteSourceControl",
-          "location": "https://github.com/apple/swift-tools-support-core.git",
-          "name": "swift-tools-support-core"
-        },
-        "state": {
-          "checkoutState": {
-            "branch": "main",
-            "revision": "1296d2f11b0226c4b83540010936c7238d21c12b"
-          },
-          "name": "sourceControlCheckout"
-        },
-        "subpath": "swift-tools-support-core"
       }
     ]
   },

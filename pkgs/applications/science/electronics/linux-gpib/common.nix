@@ -4,12 +4,12 @@
   lib,
 }:
 rec {
-  version = "4.3.6";
+  version = "4.3.7";
   inherit pname;
 
   src = fetchurl {
     url = "mirror://sourceforge/project/linux-gpib/linux-gpib%20for%203.x.x%20and%202.6.x%20kernels/${version}/linux-gpib-${version}.tar.gz";
-    hash = "sha256-Gze4xrvkhEgn+J5Jhrycezjp2uhlD1v6aX0WGv4J2Jg=";
+    hash = "sha256-s/+BJgaGXIW1iwEqQhim/juC0XfIwKvHlcsi20HzrWg=";
   };
 
   unpackPhase = ''
@@ -19,11 +19,11 @@ rec {
 
   sourceRoot = "${pname}-${version}";
 
-  meta = with lib; {
+  meta = {
     description = "Support package for GPIB (IEEE 488) hardware";
     homepage = "https://linux-gpib.sourceforge.io/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fsagbuya ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fsagbuya ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -8,14 +8,14 @@
   lilv,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "lilv";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-lilv";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "080ja8c4sxprk5qnldpfzxriag57m9603vny3b4bnwh5xm1id08c";
   };
 
@@ -28,10 +28,10 @@ buildDunePackage rec {
     lilv
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/savonet/ocaml-lilv";
     description = "OCaml bindings for lilv";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
-}
+})

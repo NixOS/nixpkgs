@@ -3,7 +3,7 @@
   buildEnv,
   makeWrapper,
   lib,
-  python311,
+  python,
   writeShellScript,
 }:
 let
@@ -31,12 +31,12 @@ let
     in
     lib.optionalString (val != null) "--run ${installer}";
 
-  pythonsProcessed = builtins.map (
+  pythonsProcessed = map (
     pyt:
     if builtins.isString pyt then
       pyt
     else if builtins.isFunction pyt then
-      "${(python311.withPackages pyt)}/lib/python3.11/site-packages"
+      "${(python.withPackages pyt)}/${python.sitePackages}"
     else
       throw "Expected string or function as python paths for freecad"
   );
@@ -57,7 +57,7 @@ let
         let
           modulesStr = wrapPathsStr "--module-path" modules;
           pythonsStr = wrapPathsStr "--python-path" (pythonsProcessed pythons);
-          makeWrapperFlagsStr = builtins.concatStringsSep " " (builtins.map (f: "'${f}'") makeWrapperFlags);
+          makeWrapperFlagsStr = builtins.concatStringsSep " " (map (f: "'${f}'") makeWrapperFlags);
 
           userCfgStr = wrapCfgStr "user" userCfg;
           systemCfgStr = wrapCfgStr "system" systemCfg;

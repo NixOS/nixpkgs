@@ -5,15 +5,15 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libfann";
-  version = "2.2.0";
+  version = "2.2.0-unstable-2025-10-13";
 
   src = fetchFromGitHub {
     owner = "libfann";
     repo = "fann";
-    rev = version;
-    sha256 = "0awbs0vjsrdglqiaybb0ln13ciizmyrw9ahllahvgbq4nr0nvf6y";
+    rev = "3907e1b37f94ed606b627c55dd2238956046a19b";
+    sha256 = "sha256-UdEpUD7ASrqygwFgW4CdCDGIJtUTKeJbHZDnnQI5jSI=";
   };
 
   nativeBuildInputs = [ cmake ];

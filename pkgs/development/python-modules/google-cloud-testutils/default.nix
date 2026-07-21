@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-testutils";
-  version = "1.6.4";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-test-utils";
     tag = "v${version}";
-    hash = "sha256-VTu/ElWZrSUrUBrfLPTBV4PMSQCRAyF9Ka7jKEqVzLk=";
+    hash = "sha256-g7XwDQp4c+duKfUWqhnI8T001fu6cM22oWLriyCZZag=";
   };
 
   build-system = [ setuptools ];

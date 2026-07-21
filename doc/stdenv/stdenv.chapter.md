@@ -327,14 +327,14 @@ Dependency propagation takes cross compilation into account, meaning that depend
 
 To determine the exact rules for dependency propagation, we start by assigning to each dependency a couple of ternary numbers (`-1` for `build`, `0` for `host`, and `1` for `target`) representing its [dependency type](#possible-dependency-types), which captures how its host and target platforms are each "offset" from the depending derivation’s host and target platforms. The following table summarize the different combinations that can be obtained:
 
-| `host → target`     | attribute name      | offset   | typical purpose                               |
-| ------------------- | ------------------- | -------- | --------------------------------------------- |
-| `build --> build`   | `depsBuildBuild`    | `-1, -1` | compilers for build helpers                   |
-| `build --> host`    | `nativeBuildInputs` | `-1, 0`  | build tools, compilers, setup hooks           |
-| `build --> target`  | `depsBuildTarget`   | `-1, 1`  | compilers to build stdlibs to run on target   |
-| `host --> host`     | `depsHostHost`      | `0, 0`   | compilers to build C code at runtime (rare)   |
-| `host --> target`   | `buildInputs`       | `0, 1`   | libraries                                     |
-| `target --> target` | `depsTargetTarget`  | `1, 1`   | stdlibs to run on target                      |
+| Dependency type   | attribute name      | offset   | typical purpose                               |
+| ----------------- | ------------------- | -------- | --------------------------------------------- |
+| `build → build`   | `depsBuildBuild`    | `-1, -1` | compilers for build helpers                   |
+| `build → host`    | `nativeBuildInputs` | `-1, 0`  | build tools, compilers, setup hooks           |
+| `build → target`  | `depsBuildTarget`   | `-1, 1`  | compilers to build stdlibs to run on target   |
+| `host → host`     | `depsHostHost`      | `0, 0`   | compilers to build C code at runtime (rare)   |
+| `host → target`   | `buildInputs`       | `0, 1`   | libraries                                     |
+| `target → target` | `depsTargetTarget`  | `1, 1`   | stdlibs to run on target                      |
 
 Algorithmically, we traverse propagated inputs, accumulating every propagated dependency’s propagated dependencies and adjusting them to account for the “shift in perspective” described by the current dependency’s platform offsets. This results in a sort of transitive closure of the dependency relation, with the offsets being approximately summed when two dependency links are combined. We also prune transitive dependencies whose combined offsets go out-of-bounds, which can be viewed as a filter over that transitive closure removing dependencies that are blatantly absurd.
 
@@ -431,7 +431,7 @@ Overall, the unifying theme here is that propagation shouldn’t be introducing 
 
 ##### `depsBuildBuild` {#var-stdenv-depsBuildBuild}
 
-A list of dependencies whose host and target platforms are the new derivation’s build platform. These are programs and libraries used at build time that produce programs and libraries also used at build time. If the dependency doesn’t care about the target platform (i.e. isn’t a compiler or similar tool), put it in `nativeBuildInputs` instead. The most common use of this `buildPackages.stdenv.cc`, the default C compiler for this role. That example crops up more than one might think in old commonly used C libraries.
+A list of dependencies whose host and target platforms are the new derivation’s build platform. These are programs and libraries used at build time that produce programs and libraries also used at build time. If the dependency doesn’t care about the target platform (i.e. isn’t a compiler or similar tool), put it in `nativeBuildInputs` instead. The most common use of this `buildPackages.stdenv.cc` (the compiler for `buildPackages`, which means that it's from the package set `buildPackages.buildPackages = pkgsBuildBuild`), the default C compiler for this role. That example crops up more than one might think in old commonly used C libraries.
 
 Since these packages are able to be run at build-time, they are always added to the `PATH`, as described above. But since these packages are only guaranteed to be able to run then, they shouldn’t persist as run-time dependencies. This isn’t currently enforced, but could be in the future.
 
@@ -487,6 +487,14 @@ The propagated equivalent of `buildInputs`. This would be called `depsHostTarget
 
 The propagated equivalent of `depsTargetTarget`. This is prefixed for the same reason of alerting potential users.
 
+##### `strictDeps` {#var-stdenv-strictDeps}
+
+When using native compilation, `stdenv` is lenient towards incorrect placement of a dependency into one of the dependency lists described above. That means a dependency needed at runtime often works, even if it is only present in `nativeBuildInputs`. Vice-versa, dependencies containing binaries that need to be executed during the build will work even if they are only listed in `buildInputs`.
+
+While convenient for getting to a package quickly, this behavior can break cross-compilation. Adding `strictDeps = true` as a parameter to `mkDerivation` or any of its language specific wrappers disables this behavior.
+
+The specialized `build*` functions for dlang, emacs, go, nim, ocaml, python, and rust enable this option by default.
+
 ## Attributes {#ssec-stdenv-attributes}
 
 ### Variables affecting `stdenv` initialisation {#variables-affecting-stdenv-initialisation}
@@ -503,9 +511,33 @@ If set to `true`, `stdenv` will pass specific flags to `make` and other build to
 
 Unless set to `false`, some build systems with good support for parallel building including `cmake`, `meson`, and `qmake` will set it to `true`.
 
+#### `__structuredAttrs` {#var-stdenv-__structuredAttrs}
+
+`__structuredAttrs` defines how derivation attributes are passed to the builder.
+
+If enabled, a shell script and a JSON representation of the derivation attributes are created.
+The environment variables {env}`NIX_ATTRS_SH_FILE` and {env}`NIX_ATTRS_JSON_FILE` point to the exact location of these files.
+
+Attributes intended to be _exported_ as environment variables must be defined in the `env` attribute.
+Attributes that are _local_ to the buildscript should be defined outside of `env`, to benefit from structured shell variables.
+
+::: {.important}
+`__structuredAttrs` is a complete replacement for the way attributes are handled currently, and is the preferred default.
+
+`passAsFile` is disabled when `__structuredAttrs` is enabled, since {env}`NIX_ATTRS_JSON_FILE` can be read from instead.
+
+All new top level packages must enable `__structuredAttrs`.
+
+:::
+
+See the upstream nix documentation for more detail:
+  - [Advanced Derivation Attributes](https://nix.dev/manual/nix/2.34/language/advanced-attributes.html#adv-attr-structuredAttrs)
+  - [Builder Execution](https://nix.dev/manual/nix/2.34/store/building.html#builder-execution)
+  - [Structured Attributes](https://nix.dev/manual/nix/2.34/store/derivation/#structured-attrs)
+
 ### Fixed-point arguments of `mkDerivation` {#mkderivation-recursive-attributes}
 
-If you pass a function to `mkDerivation`, it will receive as its argument the final arguments, including the overrides when reinvoked via `overrideAttrs`. For example:
+If you pass a function to `mkDerivation`, it will call the function with an argument that represents the final state of the package: the return value of the function itself, with any overrides applied, as the function is reinvoked by any `overrideAttrs` calls. For example:
 
 ```nix
 mkDerivation (finalAttrs: {
@@ -744,7 +776,7 @@ By default, the flag `--disable-dependency-tracking` is added to the configure f
 
 ##### `dontFixLibtool` {#var-stdenv-dontFixLibtool}
 
-By default, the configure phase applies some special hackery to all files called `ltmain.sh` before running the configure script in order to improve the purity of Libtool-based packages [^footnote-stdenv-sys-lib-search-path] . If this is undesirable, set this variable to true.
+By default, the configure phase applies some special hackery to all files called `ltmain.sh` before running the configure script to improve the purity of Libtool-based packages [^footnote-stdenv-sys-lib-search-path] . If this is undesirable, set this variable to true.
 
 ##### `dontDisableStatic` {#var-stdenv-dontDisableStatic}
 
@@ -907,7 +939,7 @@ The fixup phase performs (Nix-specific) post-processing actions on the files ins
 
 - It moves the `man/`, `doc/` and `info/` subdirectories of `$out` to `share/`.
 - It strips libraries and executables of debug information.
-- On Linux, it applies the `patchelf` command to ELF executables and libraries to remove unused directories from the `RPATH` in order to prevent unnecessary runtime dependencies.
+- On Linux, it applies the `patchelf` command to ELF executables and libraries to remove unused directories from the `RPATH` to prevent unnecessary runtime dependencies.
 - It rewrites the interpreter paths of shell scripts to paths found in `PATH`. E.g., `/usr/bin/perl` will be rewritten to `/nix/store/some-perl/bin/perl` found in `PATH`. See [](#patch-shebangs.sh) for details.
 
 #### Variables controlling the fixup phase {#variables-controlling-the-fixup-phase}
@@ -1313,7 +1345,7 @@ $ echo $configureFlags
 
 Nix itself considers a build-time dependency as merely something that should previously be built and accessible at build time—packages themselves are on their own to perform any additional setup. In most cases, that is fine, and the downstream derivation can deal with its own dependencies. But for a few common tasks, that would result in almost every package doing the same sort of setup work—depending not on the package itself, but entirely on which dependencies were used.
 
-In order to alleviate this burden, the setup hook mechanism was written, where any package can include a shell script that \[by convention rather than enforcement by Nix\], any downstream reverse-dependency will source as part of its build process. That allows the downstream dependency to merely specify its dependencies, and lets those dependencies effectively initialize themselves. No boilerplate mirroring the list of dependencies is needed.
+To alleviate this burden, the setup hook mechanism was written, where any package can include a shell script that \[by convention rather than enforcement by Nix\], any downstream reverse-dependency will source as part of its build process. That allows the downstream dependency to merely specify its dependencies, and lets those dependencies effectively initialize themselves. No boilerplate mirroring the list of dependencies is needed.
 
 The setup hook mechanism is a bit of a sledgehammer though: a powerful feature with a broad and indiscriminate area of effect. The combination of its power and implicit use may be expedient, but isn’t without costs. Nix itself is unchanged, but the spirit of added dependencies being effect-free is violated even if the latter isn’t. For example, if a derivation path is mentioned more than once, Nix itself doesn’t care and makes sure the dependency derivation is already built just the same—depending is just needing something to exist, and needing is idempotent. However, a dependency specified twice will have its setup hook run twice, and that could easily change the build environment (though a well-written setup hook will therefore strive to be idempotent so this is in fact not observable). More broadly, setup hooks are anti-modular in that multiple dependencies, whether the same or different, should not interfere and yet their setup hooks may well do so.
 
@@ -1623,26 +1655,11 @@ Adds the `-fzero-call-used-regs=used-gpr` compiler option. This causes the gener
 
 This flag adds the `-fstack-clash-protection` compiler option, which causes growth of a program's stack to access each successive page in order. This should force the guard page to be accessed and cause an attempt to "jump over" this guard page to crash.
 
-### Hardening flags disabled by default {#sec-hardening-flags-disabled-by-default}
+#### `libcxxhardeningfast` {#libcxxhardeningfast}
 
-The following flags are disabled by default and should be enabled with `hardeningEnable` for packages that take untrusted input like network services.
+Adds the `-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_FAST` compiler flag. This flag only has an effect on libc++ targets, and when defined, enables a set of assertions that prevent undefined behavior caused by violating preconditions of the standard library. libc++ provides several hardening modes, and this "fast" mode contains a set of security-critical checks that can be done with relatively little overhead in constant time.
 
-#### `nostrictaliasing` {#nostrictaliasing}
-
-This flag adds the `-fno-strict-aliasing` compiler option, which prevents the compiler from assuming code has been written strictly following the standard in regards to pointer aliasing and therefore performing optimizations that may be unsafe for code that has not followed these rules.
-
-#### `pie` {#pie}
-
-This flag is disabled by default for normal `glibc` based NixOS package builds, but enabled by default for
-
-  - `musl`-based package builds, except on Aarch64 and Aarch32, where there are issues.
-
-  - Statically-linked for OpenBSD builds, where it appears to be required to get a working binary.
-
-Adds the `-fPIE` compiler and `-pie` linker options. Position Independent Executables are needed to take advantage of Address Space Layout Randomization, supported by modern kernel versions. While ASLR can already be enforced for data areas in the stack and heap (brk and mmap), the code areas must be compiled as position-independent. Shared libraries already do this with the `pic` flag, so they gain ASLR automatically, but binary .text regions need to be build with `pie` to gain ASLR. When this happens, ROP attacks are much harder since there are no static locations to bounce off of during a memory corruption attack.
-
-Static libraries need to be compiled with `-fPIE` so that executables can link them in with the `-pie` linker option.
-If the libraries lack `-fPIE`, you will get the error `recompile with -fPIE`.
+Disabling `libcxxhardeningfast` implies disablement of checks from `libcxxhardeningextensive`.
 
 #### `strictflexarrays1` {#strictflexarrays1}
 
@@ -1651,6 +1668,14 @@ This flag adds the `-fstrict-flex-arrays=1` compiler option, which reduces the c
 Enabling this flag on packages that still use length declarations of flexible arrays >1 may cause the package to fail to compile citing accesses beyond the bounds of an array or even crash at runtime by detecting an array access as an "overrun". Few projects still use length declarations of flexible arrays >1.
 
 Disabling `strictflexarrays1` implies disablement of `strictflexarrays3`.
+
+### Hardening flags disabled by default {#sec-hardening-flags-disabled-by-default}
+
+The following flags are disabled by default and should be enabled with `hardeningEnable` for packages that take untrusted input like network services.
+
+#### `nostrictaliasing` {#nostrictaliasing}
+
+This flag adds the `-fno-strict-aliasing` compiler option, which prevents the compiler from assuming code has been written strictly following the standard in regards to pointer aliasing and therefore performing optimizations that may be unsafe for code that has not followed these rules.
 
 #### `strictflexarrays3` {#strictflexarrays3}
 
@@ -1687,6 +1712,12 @@ sorry, unimplemented: __builtin_clear_padding not supported for variable length 
 Adds the `-D_GLIBCXX_ASSERTIONS` compiler flag. This flag only has an effect on libstdc++ targets, and when defined, enables extra error checking in the form of precondition assertions, such as bounds checking in c++ strings and null pointer checks when dereferencing c++ smart pointers.
 
 These checks may have an impact on performance in some cases.
+
+#### `libcxxhardeningextensive` {#libcxxhardeningextensive}
+
+Adds the `-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_EXTENSIVE` compiler flag. This flag only has an effect on libc++ targets, and when defined, enables a set of assertions that prevent undefined behavior caused by violating preconditions of the standard library. libc++ provides several hardening modes, and this "extensive" mode adds checks for undefined behavior that incur relatively little overhead but aren’t security-critical. The additional rigour impacts performance more than fast mode: benchmarking is recommended to determine if it is acceptable for a particular application.
+
+Enabling this flag implies enablement of checks from `libcxxhardeningfast`. Disabling this flag does not imply disablement of checks from `libcxxhardeningfast`.
 
 #### `pacret` {#pacret}
 

@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "unityhub";
-  version = "3.14.1";
+  version = "3.19.5";
 
   src = fetchurl {
-    url = "https://hub-dist.unity3d.com/artifactory/hub-debian-prod-local/pool/main/u/unity/unityhub_amd64/unityhub-amd64-${version}.deb";
-    hash = "sha256-QXuto6Ydbt/wTNSJBHWstv/SomhWl40EbVSRfR0N8j0=";
+    url = "https://hub-dist.unity3d.com/artifactory/hub-debian-prod-local/pool/main/u/unity/unityhub_amd64/UnityHubSetup-${version}-amd64.deb";
+    hash = "sha256-WltXrcnOIJMcQVTFf/3tCPP/onQyhv3xTJ563WshJUA=";
   };
 
   nativeBuildInputs = [
@@ -33,8 +33,10 @@ stdenv.mkDerivation rec {
       with pkgs;
       [
         # Unity Hub binary dependencies
-        xorg.libXrandr
+        libxrandr
         xdg-utils
+        p7zip
+        unzip
 
         # GTK filepicker
         gsettings-desktop-schemas
@@ -67,14 +69,14 @@ stdenv.mkDerivation rec {
         dbus
         at-spi2-core
         pango
-        xorg.libXcomposite
-        xorg.libXext
-        xorg.libXdamage
-        xorg.libXfixes
-        xorg.libxcb
-        xorg.libxshmfence
-        xorg.libXScrnSaver
-        xorg.libXtst
+        libxcomposite
+        libxext
+        libxdamage
+        libxfixes
+        libxcb
+        libxshmfence
+        libxscrnsaver
+        libxtst
 
         # Unity Hub additional dependencies
         libva
@@ -92,8 +94,8 @@ stdenv.mkDerivation rec {
 
         # Unity Editor dependencies
         libglvnd # provides ligbl
-        xorg.libX11
-        xorg.libXcursor
+        libx11
+        libxcursor
         glib
         gdk-pixbuf
         libxml2_13
@@ -106,8 +108,8 @@ stdenv.mkDerivation rec {
         vulkan-loader
 
         # Unity Bug Reporter specific dependencies
-        xorg.libICE
-        xorg.libSM
+        libice
+        libsm
 
         # Fonts used by built-in and third party editor tools
         corefonts

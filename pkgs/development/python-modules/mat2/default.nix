@@ -3,54 +3,41 @@
   stdenv,
   buildPythonPackage,
   pytestCheckHook,
-  fetchFromGitLab,
+  fetchFromGitHub,
   fetchpatch,
+  fetchpatch2,
   replaceVars,
-  bubblewrap,
   exiftool,
   ffmpeg,
   setuptools,
   wrapGAppsHook3,
   gdk-pixbuf,
+  gnome,
   gobject-introspection,
   librsvg,
   poppler_gi,
+  webp-pixbuf-loader,
   mutagen,
   pygobject3,
   pycairo,
   dolphinIntegration ? false,
   kdePackages,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "mat2";
-  version = "0.13.5";
+  version = "0.14.0";
   pyproject = true;
 
-  src = fetchFromGitLab {
-    domain = "0xacab.org";
+  src = fetchFromGitHub {
     owner = "jvoisin";
     repo = "mat2";
     tag = version;
-    hash = "sha256-ivFgH/88DBucZRaO/OMsLlwJCjv/VQXb6AiKWhZ8XH0=";
+    hash = "sha256-JTt2/PuSxOXXHUuRP42y8jxw09mNMMz1piJM4ldnjq0=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "exiftool-13.25-compat.patch";
-      url = "https://0xacab.org/jvoisin/mat2/-/commit/473903b70e1b269a6110242a9c098a10c18554e2.patch";
-      hash = "sha256-vxxjAFwiTDlcTT3ZlfhOG4rlzBJS+LhLoA++8y2hEok=";
-    })
-    (fetchpatch {
-      name = "fix-test-on-python313.patch";
-      url = "https://0xacab.org/jvoisin/mat2/-/commit/f07344444d6d2f04a1f93e2954f4910b194bee0c.patch";
-      hash = "sha256-y756sKkjGO11A2lrRsXAwWgupOZ00u0cDypvkbsiNbY=";
-    })
-    (fetchpatch {
-      name = "fix-test-on-python312.patch";
-      url = "https://0xacab.org/jvoisin/mat2/-/commit/7a8ea224bc327b8ee929379d577c74968ea1c352.patch";
-      hash = "sha256-pPiYhoql5WhjhLKvd6y3OnvxORSbXIGCsZMc7UH3i1Q=";
-    })
     # hardcode paths to some binaries
     (replaceVars ./paths.patch {
       exiftool = lib.getExe exiftool;
@@ -64,10 +51,20 @@ buildPythonPackage rec {
     ./executable-name.patch
     # hardcode path to mat2 executable
     ./tests.patch
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-    (replaceVars ./bubblewrap-path.patch {
-      bwrap = lib.getExe bubblewrap;
+    (fetchpatch {
+      name = "fix-test_html.patch";
+      url = "https://github.com/jvoisin/mat2/commit/00b4f110711754496932c59d5af3c0b2ed694484.patch";
+      hash = "sha256-5h/nM1dK8HmYtoIBVGOvUegMFBpGxcfpn5O6QrjLi9M=";
+    })
+    # Loosen test_climat2 assertions split across terminal-width boundaries.
+    (fetchpatch2 {
+      url = "https://github.com/jvoisin/mat2/commit/690e01d475117a4e0c85f26154b26ef332f036be.patch?full_index=1";
+      hash = "sha256-pDbY3E6BPp20orDOx7zxhCdAB+nAdpddTYjPYHStVLc=";
+    })
+    # Fix test_climat2 under Python 3.14+ argparse usage formatting.
+    (fetchpatch2 {
+      url = "https://github.com/jvoisin/mat2/commit/05f34a17695be65b1ad9782911f87e000de8fc8b.patch?full_index=1";
+      hash = "sha256-rIaXocT+LKM2De5iBPIPoBdFbdd17TJJPyFrPzNAJF0=";
     })
   ];
 
@@ -86,7 +83,6 @@ buildPythonPackage rec {
 
   buildInputs = [
     gdk-pixbuf
-    librsvg
     poppler_gi
   ];
 
@@ -97,6 +93,15 @@ buildPythonPackage rec {
   ];
 
   postInstall = ''
+    export GDK_PIXBUF_MODULE_FILE="${
+      gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+        extraLoaders = [
+          librsvg
+          webp-pixbuf-loader
+        ];
+      }
+    }"
+
     install -Dm 444 data/mat2.svg -t "$out/share/icons/hicolor/scalable/apps"
     install -Dm 444 doc/mat2.1 -t "$out/share/man/man1"
   ''
@@ -106,12 +111,14 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  meta = {
     description = "Handy tool to trash your metadata";
-    homepage = "https://0xacab.org/jvoisin/mat2";
-    changelog = "https://0xacab.org/jvoisin/mat2/-/blob/${version}/CHANGELOG.md";
-    license = licenses.lgpl3Plus;
+    homepage = "https://github.com/jvoisin/mat2";
+    changelog = "https://github.com/jvoisin/mat2/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.lgpl3Plus;
     mainProgram = "mat2";
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

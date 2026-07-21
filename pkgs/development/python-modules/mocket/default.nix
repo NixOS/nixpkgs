@@ -11,6 +11,7 @@
   decorator,
   h11,
   puremagic,
+  typing-extensions,
   urllib3,
 
   # optional-dependencies
@@ -36,12 +37,12 @@
 
 buildPythonPackage rec {
   pname = "mocket";
-  version = "3.13.11";
+  version = "3.14.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kdG2Md90YknRA265u+JjHuiKw/6h1NcdwYOLXy8UF1o=";
+    hash = "sha256-lDDPfk8a1/HPxIzgCKv4eq+asnJkFsWBCUROnF6g+wg=";
   };
 
   build-system = [ hatchling ];
@@ -50,6 +51,7 @@ buildPythonPackage rec {
     decorator
     h11
     puremagic
+    typing-extensions
     urllib3
   ];
 
@@ -73,7 +75,7 @@ buildPythonPackage rec {
     requests
     sure
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   # Skip http tests, they require network access
   env.SKIP_TRUE_HTTP = true;
@@ -88,6 +90,8 @@ buildPythonPackage rec {
     "test_gethostbyname"
     # httpx read failure
     "test_no_dangling_fds"
+    # redis-py response mismatch
+    "test_hgetall"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # fails on darwin due to upstream bug: https://github.com/mindflayer/python-mocket/issues/287
@@ -96,11 +100,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mocket" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/mindflayer/python-mocket/releases/tag/${version}";
     description = "Socket mock framework for all kinds of sockets including web-clients";
     homepage = "https://github.com/mindflayer/python-mocket";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

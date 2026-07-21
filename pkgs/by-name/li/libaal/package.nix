@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.0.7";
   pname = "libaal";
 
   src = fetchurl {
-    url = "mirror://sourceforge/reiser4/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/reiser4/libaal-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-fIVohp2PVCaNaQRVJ4zfW8mukiiqM3BgF8Vwu9qrmJE=";
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.namesys.com/";
     description = "Support library for Reiser4";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
-}
+})

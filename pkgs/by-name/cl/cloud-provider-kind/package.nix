@@ -5,19 +5,19 @@
   gitUpdater,
   stdenv,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cloud-provider-kind";
-  version = "0.6.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "cloud-provider-kind";
-    tag = "v${version}";
-    hash = "sha256-6HdP6/uUCtLyZ7vjFGB2NLqe73v/yolRTUE5s/KyIIk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-cepXHW5L7aqo6L1rtjvH35aMxv7CcB0Ii8Ci0FXcw5k=";
   };
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  vendorHash = null;
+  vendorHash = "sha256-kFcAY78xPGiRQ8a3mAdnO2OylrLi6JTtp0YCsc6jXvo=";
 
   checkFlags = lib.optional stdenv.hostPlatform.isDarwin "-skip=^Test_firstSuccessfulProbe$";
 
@@ -28,4 +28,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ nicoo ];
     mainProgram = "cloud-provider-kind";
   };
-}
+})

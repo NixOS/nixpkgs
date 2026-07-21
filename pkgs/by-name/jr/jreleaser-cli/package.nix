@@ -7,11 +7,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "jreleaser-cli";
-  version = "1.20.0";
+  version = "1.25.0";
 
   src = fetchurl {
     url = "https://github.com/jreleaser/jreleaser/releases/download/v${version}/jreleaser-tool-provider-${version}.jar";
-    hash = "sha256-47MpBFUEHx2yVk05Gd9CyVrHYHRK7NtcGosBJJbdhD0=";
+    hash = "sha256-ixcHrzCX+b1iEkmk2rWZidFBtT2Ar58pRSGLzwaDYSM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

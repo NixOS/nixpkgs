@@ -7,14 +7,14 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "genmap";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "cpockrandt";
     repo = "genmap";
-    rev = "genmap-v${version}";
+    rev = "genmap-v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-7sIKBRMNzyCrZ/c2nXkknb6a5YsXe6DRE2IFhp6AviY=";
   };
@@ -34,6 +34,11 @@ stdenv.mkDerivation rec {
     echo > benchmarks/CMakeLists.txt
   '';
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 3.0.0)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = {
     description = "Ultra-fast computation of genome mappability";
     mainProgram = "genmap";
@@ -41,5 +46,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/cpockrandt/genmap";
     maintainers = with lib.maintainers; [ jbedo ];
     platforms = lib.platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

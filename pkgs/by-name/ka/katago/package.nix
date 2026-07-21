@@ -29,10 +29,8 @@ assert lib.assertOneOf "backend" backend [
   "eigen"
 ];
 
-# N.b. older versions of cuda toolkit (e.g. 10) do not support newer versions
-# of gcc.  If you need to use cuda10, please override stdenv with gcc8Stdenv
 let
-  githash = "cd0ed6c0712088ddb901be68189ba7fa1439a9e7";
+  githash = "ba938676d7f42d70950b3a535af2466fb642008c";
   fakegit = writeShellScriptBin "git" "echo ${githash}";
   stdenv' =
     if
@@ -47,19 +45,30 @@ let
 in
 stdenv'.mkDerivation rec {
   pname = "katago";
-  version = "1.15.3";
+  version = "1.16.5";
 
   src = fetchFromGitHub {
     owner = "lightvector";
     repo = "katago";
     rev = "v${version}";
-    sha256 = "sha256-hZc8LlOxnVqJqyqOSIWKv3550QOaGr79xgqsAQ8B8SM=";
+    sha256 = "sha256-+s4JO6+UMyeSHUqyRFEhJD2kmsdhcydanFWjTqxC1Tc=";
   };
 
   nativeBuildInputs = [
     cmake
     makeWrapper
   ];
+
+  # Included from release 1.16.2:
+  # https://github.com/lightvector/KataGo/commit/9030f72d152da42c1dd03590aa5116993ea842f6
+  # Doesn't apply cleanly as a patch so doing a quick replacement to the same effect.
+  prePatch = lib.optionalString (backend == "tensorrt") ''
+    nixLog "patching $PWD/cpp/CMakeLists.txt to work around outdated TensorRT version detection"
+    substituteInPlace "$PWD/cpp/CMakeLists.txt" \
+      --replace-fail \
+        'if(TENSORRT_VERSION VERSION_LESS 8.5)' \
+        'if(NOT TENSORRT_VERSION STREQUAL ".." AND TENSORRT_VERSION VERSION_LESS 8.5)'
+  '';
 
   buildInputs = [
     libzip
@@ -69,7 +78,7 @@ stdenv'.mkDerivation rec {
   ++ lib.optionals (backend == "cuda") (
     with cudaPackages;
     [
-      cuda_cccl
+      cccl
       cuda_cudart
       cuda_nvcc
       cudnn
@@ -123,12 +132,12 @@ stdenv'.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Go engine modeled after AlphaGo Zero";
     mainProgram = "katago";
     homepage = "https://github.com/lightvector/katago";
-    license = licenses.mit;
-    maintainers = [ maintainers.omnipotententity ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.omnipotententity ];
     platforms = [ "x86_64-linux" ];
   };
 }

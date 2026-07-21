@@ -29,15 +29,15 @@ rec {
     inherit version;
     inherit src;
 
-    meta = with lib; {
+    meta = {
       homepage = "https://www.rust-lang.org/";
-      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       description = "Safe, concurrent, practical language";
       mainProgram = "rustc";
-      maintainers = with maintainers; [ qknight ];
+      maintainers = with lib.maintainers; [ qknight ];
       license = [
-        licenses.mit
-        licenses.asl20
+        lib.licenses.mit
+        lib.licenses.asl20
       ];
     };
 
@@ -79,7 +79,6 @@ rec {
       targetPlatformsWithHostTools = [
         # Platforms with host tools from
         # https://doc.rust-lang.org/nightly/rustc/platform-support.html
-        "x86_64-darwin"
         "aarch64-darwin"
         "i686-freebsd"
         "x86_64-freebsd"
@@ -119,6 +118,7 @@ rec {
         "armv6l-netbsd"
         "mipsel-netbsd"
         "riscv64-netbsd"
+        "riscv32-none"
         "x86_64-redox"
         "wasm32-wasi"
       ];
@@ -137,14 +137,14 @@ rec {
     inherit version;
     inherit src;
 
-    meta = with lib; {
+    meta = {
       homepage = "https://doc.rust-lang.org/cargo/";
-      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       description = "Rust package manager";
-      maintainers = with maintainers; [ qknight ];
+      maintainers = with lib.maintainers; [ qknight ];
       license = [
-        licenses.mit
-        licenses.asl20
+        lib.licenses.mit
+        lib.licenses.asl20
       ];
     };
 

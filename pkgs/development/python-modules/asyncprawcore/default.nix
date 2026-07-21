@@ -3,44 +3,36 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
-  mock,
+  hatchling,
   pytestCheckHook,
-  pytest-asyncio_0,
+  pytest-asyncio,
   pytest-vcr,
-  requests,
-  requests-toolbelt,
-  testfixtures,
   vcrpy,
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "asyncprawcore";
-  version = "2.4.0";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "praw-dev";
     repo = "asyncprawcore";
-    tag = "v${version}";
-    hash = "sha256-FDQdtnNjsbiEp9BUYdQFMC/hkyJDhCh2WHhQWSQwrFY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-kpqd6H8uiqp4rM+8B+qJxfslrY5uvRTEARwh/0runIg=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
-    requests
     aiohttp
     yarl
   ];
 
   nativeCheckInputs = [
-    testfixtures
-    mock
-    requests-toolbelt
     pytestCheckHook
-    pytest-asyncio_0
+    pytest-asyncio
     pytest-vcr
     vcrpy
   ];
@@ -51,13 +43,18 @@ buildPythonPackage rec {
     "tests/integration/test_sessions.py"
   ];
 
+  disabledTests = [
+    # Test requires network access
+    "test_initialize"
+  ];
+
   pythonImportsCheck = [ "asyncprawcore" ];
 
   meta = {
     description = "Low-level asynchronous communication layer for Async PRAW";
     homepage = "https://asyncpraw.readthedocs.io/";
-    changelog = "https://github.com/praw-dev/asyncprawcore/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/praw-dev/asyncprawcore/blob/v${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.amadejkastelic ];
   };
-}
+})

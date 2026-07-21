@@ -2,7 +2,6 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  pythonOlder,
   hatchling,
   flask,
   itsdangerous,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "flask-wtf";
   version = "1.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "flask_wtf";
@@ -44,10 +41,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_wtf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple integration of Flask and WTForms";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       mic92
       anthonyroussel
     ];

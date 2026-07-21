@@ -4,7 +4,6 @@
   fetchPypi,
   hatch-vcs,
   hatchling,
-  pythonOlder,
   sphinx,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "sphinx-thebe";
   version = "0.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version;
@@ -30,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_thebe" ];
 
-  meta = with lib; {
+  meta = {
     description = "Integrate interactive code blocks into your documentation with Thebe and Binder";
     homepage = "https://github.com/executablebooks/sphinx-thebe";
     changelog = "https://github.com/executablebooks/sphinx-thebe/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

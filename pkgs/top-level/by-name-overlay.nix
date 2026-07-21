@@ -19,6 +19,10 @@ let
     mergeAttrsList
     ;
 
+  inherit (lib.trivial)
+    flip
+    ;
+
   # Package files for a single shard
   # Type: String -> String -> AttrsOf Path
   namesForShard =
@@ -41,10 +45,6 @@ let
   # if the overlay has to be applied multiple times
   packageFiles = mergeAttrsList (mapAttrsToList namesForShard (readDir baseDirectory));
 in
-# TODO: Consider optimising this using `builtins.deepSeq packageFiles`,
-# which could free up the above thunks and reduce GC times.
-# Currently this would be hard to measure until we have more packages
-# and ideally https://github.com/NixOS/nix/pull/8895
 self: super:
 {
   # This attribute is necessary to allow CI to ensure that all packages defined in `pkgs/by-name`
@@ -53,6 +53,6 @@ self: super:
   # and whether it's defined by this file here or `all-packages.nix`.
   # TODO: This can be removed once `pkgs/by-name` can handle custom `callPackage` arguments without `all-packages.nix` (or any other way of achieving the same result).
   # Because at that point the code in ./stage.nix can be changed to not allow definitions in `all-packages.nix` to override ones from `pkgs/by-name` anymore and throw an error if that happens instead.
-  _internalCallByNamePackageFile = file: self.callPackage file { };
+  _internalCallByNamePackageFile = flip self.callPackage { };
 }
 // mapAttrs (name: self._internalCallByNamePackageFile) packageFiles

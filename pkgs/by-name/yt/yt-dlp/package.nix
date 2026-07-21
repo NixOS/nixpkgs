@@ -1,17 +1,30 @@
 {
   lib,
+  stdenvNoCC,
   python3Packages,
+  atomicparsley,
+  deno,
+  # Override jsRuntime with `nodejs`, `bun`, `quickjs`, or `quickjs-ng` if you want to use another default JS runtime.
+  # You still need to enable them in your yt-dlp config with `--js-runtimes [runtime]`.
+  jsRuntime ? deno,
   fetchFromGitHub,
   ffmpeg-headless,
-  rtmpdump,
-  atomicparsley,
-  pandoc,
   installShellFiles,
+  pandoc,
+  rtmpdump,
   atomicparsleySupport ? true,
   ffmpegSupport ? true,
+  javascriptSupport ? true,
   rtmpSupport ? true,
   withAlias ? false, # Provides bin/youtube-dl for backcompat
+  withSecretStorage ? !stdenvNoCC.hostPlatform.isDarwin,
   nix-update-script,
+  # required for tests
+  yt-dlp,
+  nodejs,
+  bun,
+  quickjs,
+  quickjs-ng,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -19,20 +32,34 @@ python3Packages.buildPythonApplication rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2025.09.26";
+  version = "2026.07.04";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yt-dlp";
     repo = "yt-dlp";
     tag = version;
-    hash = "sha256-/uzs87Vw+aDNfIJVLOx3C8RyZvWLqjggmnjrOvUX1Eg=";
+    hash = "sha256-+oHcVylLXFJTRR6jXF6IXvgntXJz0tRdtnwTruRPkoc=";
   };
 
   postPatch = ''
     substituteInPlace yt_dlp/version.py \
       --replace-fail "UPDATE_HINT = None" 'UPDATE_HINT = "Nixpkgs/NixOS likely already contain an updated version.\n       To get it run nix-channel --update or nix flake update in your config directory."'
+    ${lib.optionalString javascriptSupport ''
+      # A JavaScript runtime is required for full YouTube support (since 2025.11.12).
+      # This makes yt-dlp find `jsRuntime` even if it is used as a python dependency, i.e. in kodiPackages.sendtokodi.
+      # Crafted so people can replace the default deno with one of the other JS runtimes.
+      substituteInPlace yt_dlp/utils/_jsruntime.py \
+        --replace-fail "path = _determine_runtime_path(self._path, '${jsRuntime.meta.mainProgram}')" "path = '${lib.getExe jsRuntime}'"
+    ''}
   '';
+
+  __structuredAttrs = true;
+  outputs = [
+    "out"
+    "man"
+    "doc"
+  ];
 
   build-system = with python3Packages; [ hatchling ];
 
@@ -42,7 +69,10 @@ python3Packages.buildPythonApplication rec {
   ];
 
   # expose optional-dependencies, but provide all features
-  dependencies = lib.flatten (lib.attrValues optional-dependencies);
+  dependencies =
+    optional-dependencies.default
+    ++ optional-dependencies.curl-cffi
+    ++ lib.optionals withSecretStorage optional-dependencies.secretstorage;
 
   optional-dependencies = {
     default = with python3Packages; [
@@ -53,6 +83,7 @@ python3Packages.buildPythonApplication rec {
       requests
       urllib3
       websockets
+      yt-dlp-ejs # keep pinned version in sync!
     ];
     curl-cffi = [ python3Packages.curl-cffi ];
     secretstorage = with python3Packages; [
@@ -85,17 +116,25 @@ python3Packages.buildPythonApplication rec {
   makeWrapperArgs =
     let
       packagesToBinPath =
-        [ ]
-        ++ lib.optional atomicparsleySupport atomicparsley
+        lib.optional atomicparsleySupport atomicparsley
         ++ lib.optional ffmpegSupport ffmpeg-headless
         ++ lib.optional rtmpSupport rtmpdump;
     in
     lib.optionals (packagesToBinPath != [ ]) [
-      ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"''
+      "--prefix"
+      "PATH"
+      ":"
+      ''"${lib.makeBinPath packagesToBinPath}"''
     ];
 
-  # Requires network
-  doCheck = false;
+  checkPhase = ''
+    # Check for "unsupported" string in yt-dlp -v output.
+    output=$($out/bin/yt-dlp -v 2>&1 || true)
+    if echo $output | grep -q "unsupported"; then
+      echo "ERROR: Found \"unsupported\" string in yt-dlp -v output."
+      exit 1
+    fi
+  '';
 
   postInstall = ''
     installManPage yt-dlp.1
@@ -105,17 +144,28 @@ python3Packages.buildPythonApplication rec {
       --fish completions/fish/yt-dlp.fish \
       --zsh completions/zsh/_yt-dlp
 
-    install -Dm644 Changelog.md README.md -t "$out/share/doc/yt_dlp"
+    install -Dm644 Changelog.md README.md -t "$doc/share/doc/yt_dlp"
   ''
   + lib.optionalString withAlias ''
     ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    # Try to build with each of the supported JS runtimes
+    tests = lib.genAttrs' [ nodejs bun quickjs quickjs-ng ] (
+      runtime:
+      lib.nameValuePair runtime.pname (
+        yt-dlp.override {
+          jsRuntime = runtime;
+        }
+      )
+    );
+  };
 
   meta = {
     changelog = "https://github.com/yt-dlp/yt-dlp/blob/${version}/Changelog.md";
-    description = "Command-line tool to download videos from YouTube.com and other sites (youtube-dl fork)";
+    description = "Feature-rich command-line audio/video downloader";
     homepage = "https://github.com/yt-dlp/yt-dlp/";
     license = lib.licenses.unlicense;
     longDescription = ''
@@ -129,7 +179,7 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "yt-dlp";
     maintainers = with lib.maintainers; [
       SuperSandro2000
-      FlameFlag
+      _4evy
     ];
   };
 }

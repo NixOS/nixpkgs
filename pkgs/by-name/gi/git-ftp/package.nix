@@ -17,13 +17,13 @@
   man,
 }:
 
-resholve.mkDerivation rec {
+resholve.mkDerivation (finalAttrs: {
   pname = "git-ftp";
   version = "1.6.0";
   src = fetchFromGitHub {
     owner = "git-ftp";
     repo = "git-ftp";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1hxkqf7jbrx24q18yxpnd3dxzh4xk6asymwkylp1x7zg6mcci87d";
   };
 
@@ -93,12 +93,12 @@ resholve.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Git powered FTP client written as shell script";
     homepage = "https://git-ftp.github.io/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ tweber ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ tweber ];
+    platforms = lib.platforms.unix;
     mainProgram = "git-ftp";
   };
-}
+})

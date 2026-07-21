@@ -60,7 +60,7 @@ in
             description = "Whether to start the web-ui. This is the preferred way of configuring things such as the steam guard token.";
           };
 
-          package = lib.mkPackageOption pkgs [ "ArchiSteamFarm" "ui" ] {
+          package = lib.mkPackageOption pkgs [ "archisteamfarm" "ui" ] {
             extraDescription = ''
               ::: {.note}
               Contents must be in lib/dist
@@ -78,7 +78,7 @@ in
       description = "The Web-UI hosted on 127.0.0.1:1242.";
     };
 
-    package = lib.mkPackageOption pkgs "ArchiSteamFarm" {
+    package = lib.mkPackageOption pkgs "archisteamfarm" {
       extraDescription = ''
         ::: {.warning}
         Should always be the latest version, for security reasons,

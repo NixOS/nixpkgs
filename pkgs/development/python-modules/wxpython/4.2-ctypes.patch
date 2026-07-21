@@ -1,8 +1,17 @@
 diff --git a/wx/lib/wxcairo/wx_pycairo.py b/wx/lib/wxcairo/wx_pycairo.py
-index 7cfe3071..24d1120f 100644
+index 19a28dd131f659cd596de280bc52f3f7fb1acb5f..dc6bea6afb36e4197fac990877b7112ade84d6f4 100644
 --- a/wx/lib/wxcairo/wx_pycairo.py
 +++ b/wx/lib/wxcairo/wx_pycairo.py
-@@ -197,7 +197,12 @@ def _findCairoLib():
+@@ -25,7 +25,7 @@ import ctypes.util
+ #----------------------------------------------------------------------------
+ 
+ # A reference to the cairo shared lib via ctypes.CDLL
+-cairoLib = None
++cairoLib = ctypes.CDLL("@libcairo@")
+ 
+ # A reference to the pycairo C API structure
+ pycairoAPI = None
+@@ -196,7 +196,11 @@ def _findCairoLib():
  
  # For other DLLs we'll just use a dictionary to track them, as there
  # probably isn't any need to use them outside of this module.
@@ -10,7 +19,6 @@ index 7cfe3071..24d1120f 100644
 +_dlls = {
 +    "gdk": ctypes.CDLL("@libgdk@"),
 +    "pangocairo": ctypes.CDLL("@libpangocairo@"),
-+    "cairoLib": ctypes.CDLL("@libcairo@"),
 +    "appsvc": ctypes.CDLL(None),
 +}
  

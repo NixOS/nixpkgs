@@ -5,8 +5,6 @@
   setuptools,
   legacy-cgi,
   pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
 
   # for passthru.tests
   pyramid,
@@ -16,22 +14,20 @@
 
 buildPythonPackage rec {
   pname = "webob";
-  version = "1.8.9";
+  version = "1.8.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Pylons";
     repo = "webob";
     tag = version;
-    hash = "sha256-axJQwlybuqBS6RgI2z9pbw58vHF9aC9AxCg13CIKCLs=";
+    hash = "sha256-r3fURb+Je/XevpeMGb/XEF2xjj1q172P4pTAbGkeloY=";
   };
 
   build-system = [ setuptools ];
 
   # https://github.com/Pylons/webob/issues/437
-  dependencies = lib.optionals (pythonAtLeast "3.13") [ legacy-cgi ];
+  dependencies = [ legacy-cgi ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -47,10 +43,10 @@ buildPythonPackage rec {
     inherit pyramid routes tokenlib;
   };
 
-  meta = with lib; {
+  meta = {
     description = "WSGI request and response object";
     homepage = "https://webob.org/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -6,15 +6,15 @@
   bpp-seq,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bpp-popgen";
 
-  inherit (bpp-core) version;
+  inherit (bpp-core) version postPatch;
 
   src = fetchFromGitHub {
     owner = "BioPP";
     repo = "bpp-popgen";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0bz0fhrq3dri6a0hvfc3zlvrns8mrzzlnicw5pyfa812gc1qwfvh";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/BioPP/bpp-popgen";
     changelog = "https://github.com/BioPP/bpp-popgen/blob/master/ChangeLog";
   };
-}
+})

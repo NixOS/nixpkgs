@@ -5,17 +5,18 @@
   perl,
   bdftopcf,
   bdf2psf,
-  xorg,
+  mkfontscale,
+  fonttosfnt,
   targetsDat ? null,
   variantsDat ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uw-ttyp0";
   version = "2.1";
 
   src = fetchurl {
-    url = "https://people.mpi-inf.mpg.de/~uwe/misc/${pname}/${pname}-${version}.tar.gz";
+    url = "https://people.mpi-inf.mpg.de/~uwe/misc/uw-ttyp0/uw-ttyp0-${finalAttrs.version}.tar.gz";
     hash = "sha256-mVBt2HlOGl1c1YEebB5V7u+Yn4w1Af25Jlvalyq6FjA=";
   };
 
@@ -23,8 +24,8 @@ stdenv.mkDerivation rec {
     perl
     bdftopcf
     bdf2psf
-    xorg.fonttosfnt
-    xorg.mkfontdir
+    fonttosfnt
+    mkfontscale
   ];
 
   # configure sizes, encodings and variants
@@ -67,14 +68,14 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Monospace bitmap screen fonts for X11";
     homepage = "https://people.mpi-inf.mpg.de/~uwe/misc/uw-ttyp0/";
-    license = with licenses; [
+    license = with lib.licenses; [
       free
       mit
     ];
-    maintainers = with maintainers; [ rnhmjoj ];
+    maintainers = with lib.maintainers; [ rnhmjoj ];
   };
 
-}
+})

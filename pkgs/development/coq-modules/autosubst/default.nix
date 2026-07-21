@@ -12,9 +12,9 @@ mkCoqDerivation {
 
   releaseRev = v: "v${v}";
 
-  release."1.7".sha256 = "sha256-qoyteQ5W2Noxf12uACOVeHhPLvgmTzrvEo6Ts+FKTGI=";
-  release."1.8".sha256 = "sha256-n0lD8D+tjqkDDjFiE4CggxczOPS5TkEnxpB3zEwWZ2I=";
-  release."1.9".sha256 = "sha256-XiLZjMc+1iwRGOstfLm/WQRF6FTdX6oJr5urn3wmLlA=";
+  release."1.7".hash = "sha256-qoyteQ5W2Noxf12uACOVeHhPLvgmTzrvEo6Ts+FKTGI=";
+  release."1.8".hash = "sha256-n0lD8D+tjqkDDjFiE4CggxczOPS5TkEnxpB3zEwWZ2I=";
+  release."1.9".hash = "sha256-XiLZjMc+1iwRGOstfLm/WQRF6FTdX6oJr5urn3wmLlA=";
 
   inherit version;
   defaultVersion =
@@ -33,13 +33,13 @@ mkCoqDerivation {
     stdlib
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.ps.uni-saarland.de/autosubst/";
     description = "Automation for de Bruijn syntax and substitution in Coq";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       siraben
       jwiegley
     ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

@@ -11,7 +11,7 @@
   click,
 
   pytest,
-  pytest-cov,
+  pytest-cov-stub,
   mock,
   requests-mock,
   tox,
@@ -19,12 +19,12 @@
 
 buildPythonPackage rec {
   pname = "pyairtable";
-  version = "3.2.0";
+  version = "3.4.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9v0eOr3CgBTb7N6FkcgmVgxctaLTieUYZHwuXsuIR40=";
+    hash = "sha256-umABkxSJSMEACenkRJSRkJp9qLqUvIv6r4ZGsO6MA8o=";
   };
 
   build-system = [
@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest
-    pytest-cov
+    pytest-cov-stub
     mock
     requests-mock
     tox

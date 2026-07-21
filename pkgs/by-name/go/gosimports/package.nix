@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gosimports";
   version = "0.3.8";
 
   src = fetchFromGitHub {
     owner = "rinchsan";
     repo = "gosimports";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-xM1CGW8UB+VHN+2Rm6cF/1bOBVDeUG+6kxUxUcvP7FM=";
   };
 
@@ -22,14 +22,14 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/rinchsan/gosimports";
     description = "Simpler goimports";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ maolonglong ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ maolonglong ];
     mainProgram = "gosimports";
   };
-}
+})

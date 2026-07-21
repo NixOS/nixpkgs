@@ -5,7 +5,7 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "samplicator";
   version = "1.3.8rc1";
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sleinen";
     repo = "samplicator";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0fv5vldmwd6qrdv2wkk946dk9rn9nrv3c84ldvvqqn1spxfzgirm";
   };
 
@@ -25,4 +25,4 @@ stdenv.mkDerivation rec {
     mainProgram = "samplicate";
     platforms = lib.platforms.unix;
   };
-}
+})

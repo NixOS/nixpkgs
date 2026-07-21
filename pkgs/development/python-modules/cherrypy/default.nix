@@ -16,7 +16,6 @@
   pytestCheckHook,
   python-memcached,
   pythonAtLeast,
-  pythonOlder,
   requests-toolbelt,
   routes,
   setuptools-scm,
@@ -28,8 +27,6 @@ buildPythonPackage rec {
   pname = "cherrypy";
   version = "18.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -83,6 +80,8 @@ buildPythonPackage rec {
     "test_basic_request"
     "test_3_Redirect"
     "test_4_File_deletion"
+    # excepts a tcp reset for the 16th connection, but doesn't get it
+    "test_queue_full"
   ]
   ++ lib.optionals (pythonAtLeast "3.11") [
     "testErrorHandling"
@@ -120,12 +119,12 @@ buildPythonPackage rec {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Object-oriented HTTP framework";
     mainProgram = "cherryd";
     homepage = "https://cherrypy.dev/";
     changelog = "https://github.com/cherrypy/cherrypy/blob/v${version}/CHANGES.rst";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -8,18 +8,18 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dotter";
-  version = "0.13.4";
+  version = "0.13.5";
 
   src = fetchFromGitHub {
     owner = "SuperCuber";
     repo = "dotter";
-    rev = "v${version}";
-    hash = "sha256-cxabaCxbwP2YbnG2XfmVJWFTw9LGO0D1dlLy6fuux+M=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-xA/6j+wMTPx9p4aOHaqixlzUZcqgRazfJ1PwKaByTrw=";
   };
 
-  cargoHash = "sha256-KLU+4CYqTKEH8wuvinVS0Zs+nFgOer2ho8LXnLDNVKY=";
+  cargoHash = "sha256-0yBuaTwP2IxZjRzC8jMhZ8eNDdFHKyJjSP0ZH15F3LI=";
 
   nativeCheckInputs = [
     which
@@ -37,11 +37,11 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Dotfile manager and templater written in Rust";
     homepage = "https://github.com/SuperCuber/dotter";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ linsui ];
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ linsui ];
     mainProgram = "dotter";
   };
-}
+})

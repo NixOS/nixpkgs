@@ -32,20 +32,31 @@ let
     name = "rocm";
     paths = rocmList;
   };
-
-  # rocm build fails with gcc stdenv due to unrecognised arg parallel-jobs
-  stdenv' = if enableRocm then rocmPackages.stdenv else stdenv;
 in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
+  # TODO(@connorbaker):
+  # When strictDeps is enabled, `cuda_nvcc` is required as the argument to `--with-cuda` in `configureFlags` or else
+  # configurePhase fails with `checking for cuda_runtime.h... no`.
+  # This is odd, especially given `cuda_runtime.h` is provided by `cuda_cudart.dev`, which is already in `buildInputs`.
+  strictDeps = true;
+
   pname = "ucx";
-  version = "1.19.0";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucx";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-n3xJmbvUXZzfhotOBJRyH2OEL4NFZIKyB808HwEQSYo=";
+    tag = "v${finalAttrs.version}";
+    # Otherwise compilation fails with:
+    #   fatal error: gpunetio/common/doca_gpunetio_verbs_def.h: No such file or directory
+    fetchSubmodules = true;
+    hash = "sha256-Td6L5wXDadIbHfk251bj6k9J3kIjqCYVx5lDso/u76M=";
   };
+
+  postPatch = ''
+    patchShebangs config/nvcc_wrap.sh
+  '';
 
   outputs = [
     "out"
@@ -73,15 +84,23 @@ stdenv'.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableCuda [
     cudaPackages.cuda_cudart
+    cudaPackages.cuda_nvcc
     cudaPackages.cuda_nvml_dev
 
   ]
   ++ lib.optionals enableRocm rocmList;
 
-  LDFLAGS = lib.optionals enableCuda [
-    # Fake libnvidia-ml.so (the real one is deployed impurely)
-    "-L${lib.getLib cudaPackages.cuda_nvml_dev}/lib/stubs"
-  ];
+  # NOTE: With `__structuredAttrs` enabled, `LDFLAGS` must be set under `env` so it is assured to be a string;
+  # otherwise, we might have forgotten to convert it to a string and Nix would make LDFLAGS a shell variable
+  # referring to an array!
+  env.LDFLAGS = toString (
+    lib.optionals enableCuda [
+      # Fake libcuda.so (the real one is deployed impurely)
+      "-L${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs"
+      # Fake libnvidia-ml.so (the real one is deployed impurely)
+      "-L${lib.getOutput "stubs" cudaPackages.cuda_nvml_dev}/lib/stubs"
+    ]
+  );
 
   configureFlags = [
     "--with-rdmacm=${lib.getDev rdma-core}"
@@ -90,8 +109,8 @@ stdenv'.mkDerivation (finalAttrs: {
     "--with-dm"
     "--with-verbs=${lib.getDev rdma-core}"
   ]
-  ++ lib.optionals enableCuda [ "--with-cuda=${cudaPackages.cuda_cudart}" ]
-  ++ lib.optional enableRocm "--with-rocm=${rocm}";
+  ++ lib.optionals enableCuda [ "--with-cuda=${cudaPackages.cuda_nvcc}" ]
+  ++ lib.optionals enableRocm [ "--with-rocm=${rocm}" ];
 
   postInstall = ''
     find $out/lib/ -name "*.la" -exec rm -f \{} \;

@@ -2,7 +2,10 @@
 {
   name = "engelsystem";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ talyz ];
+    maintainers = [
+      talyz
+      tmarkus
+    ];
   };
 
   nodes.engelsystem =

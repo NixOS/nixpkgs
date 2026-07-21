@@ -18,12 +18,9 @@ let
 
   sources = rec {
     aarch64-darwin = {
-      # Upstream does not provide archives of previous versions,
-      # therefore a capture using the wayback machine is used
-      url = "https://web.archive.org/web/20250520135916/https://oryx.nyc3.cdn.digitaloceanspaces.com/keymapp/keymapp-latest.dmg";
+      url = "https://oryx.nyc3.cdn.digitaloceanspaces.com/keymapp/keymapp-${version}.dmg";
       hash = "sha256-H6xRau7pWuSF5Aa6lblwi/Lg5KxC+HM3rtUMjX+hEE8=";
     };
-    x86_64-darwin = aarch64-darwin;
     aarch64-linux = {
       url = "https://oryx.nyc3.cdn.digitaloceanspaces.com/keymapp/keymapp-${version}.tar.gz";
       hash = "sha256-qHvHCDzWRhuhDg2kuU8kmikQDXElQtVEmPAelHz4aPo=";

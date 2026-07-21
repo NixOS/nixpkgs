@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Stream JSON parser for Python";
     homepage = "https://github.com/AMDmi3/jsonslicer";
     changelog = "https://github.com/AMDmi3/jsonslicer/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jopejoe1 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jopejoe1 ];
   };
 }

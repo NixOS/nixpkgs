@@ -6,15 +6,19 @@
   libyaml,
   pkg-config,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yaml-filter";
   version = "0.2.0";
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2." "cmake_minimum_required(VERSION 3.10"
+  '';
 
   src = fetchFromGitHub {
     owner = "OpenSCAP";
     repo = "yaml-filter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-HDHjOapMFjuDcWW5+opKD2tllbwz4YBw/EI4W7Wf/6g=";
   };
 
@@ -33,4 +37,4 @@ stdenv.mkDerivation rec {
     mainProgram = "yamlp";
     platforms = lib.platforms.all;
   };
-}
+})

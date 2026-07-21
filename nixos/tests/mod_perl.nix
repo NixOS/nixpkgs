@@ -35,7 +35,7 @@
             '';
             startup = pkgs.writeScript "startup.pl" ''
               use lib "${inc}",
-                split ":","${with pkgs.perl.pkgs; makeFullPerlPath ([ mod_perl2 ])}";
+                split ":","${with pkgs.perl.pkgs; makeFullPerlPath [ mod_perl2 ]}";
               1;
             '';
           in

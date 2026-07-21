@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "elastic-apm";
-  version = "6.24.0";
+  version = "6.25.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "apm-agent-python";
     tag = "v${version}";
-    hash = "sha256-mHDUcIII1gERlGMJvXPe3Hb38wNAylfMQpeLjA1Xbuk=";
+    hash = "sha256-0RNZqQqXVI7CkzcKE0qA+iOBkjkH0s7Tre/a38LPW7c=";
   };
 
   build-system = [ setuptools ];
@@ -91,12 +91,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "elasticapm" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python agent for the Elastic APM";
     homepage = "https://github.com/elastic/apm-agent-python";
     changelog = "https://github.com/elastic/apm-agent-python/releases/tag/${src.tag}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "elasticapm-run";
   };
 }

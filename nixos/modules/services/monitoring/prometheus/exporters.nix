@@ -10,11 +10,9 @@
 let
   inherit (lib)
     concatStrings
-    foldl
     foldl'
     genAttrs
     literalExpression
-    maintainers
     mapAttrs
     mapAttrsToList
     mkDefault
@@ -22,9 +20,7 @@ let
     mkIf
     mkMerge
     mkOption
-    optional
     types
-    mkOptionDefault
     flip
     attrNames
     xor
@@ -66,6 +62,8 @@ let
         "domain"
         "dovecot"
         "ebpf"
+        "elasticsearch"
+        "fail2ban"
         "fastly"
         "flow"
         "fritz"
@@ -88,6 +86,7 @@ let
         "lnd"
         "mail"
         "mailman3"
+        "mail-tlsa-check"
         "mikrotik"
         "modemmanager"
         "mongodb"
@@ -101,6 +100,7 @@ let
         "node-cert"
         "nut"
         "nvidia-gpu"
+        "opnsense"
         "pgbouncer"
         "php-fpm"
         "pihole"
@@ -113,26 +113,28 @@ let
         "rasdaemon"
         "redis"
         "restic"
-        "rspamd"
         "rtl_433"
         "sabnzbd"
-        "scaphandre"
         "script"
         "shelly"
         "smartctl"
         "smokeping"
         "snmp"
+        "speedtest"
         "sql"
         "statsd"
         "storagebox"
         "surfboard"
         "systemd"
+        "tailscale"
         "tibber"
         "unbound"
         "unpoller"
         "v2ray"
         "varnish"
         "wireguard"
+        "xray"
+        "zfs-siebenmann"
         "zfs"
       ]
       (
@@ -326,6 +328,7 @@ let
           description = "Prometheus ${name} exporter service user";
           isSystemUser = true;
           inherit (conf) group;
+          extraGroups = mkIf (name == "libvirt") [ "libvirtd" ];
         }
       );
       users.groups = mkMerge [
@@ -339,18 +342,43 @@ let
       services.udev.extraRules = mkIf (name == "smartctl") ''
         ACTION=="add", SUBSYSTEM=="nvme", KERNEL=="nvme[0-9]*", RUN+="${pkgs.acl}/bin/setfacl -m g:smartctl-exporter-access:rw /dev/$kernel"
       '';
+      systemd.services.prometheus-fail2ban-exporter-setup =
+        mkIf (config.services.fail2ban.enable && name == "fail2ban")
+          {
+            description = "Set fail2ban socket ACLs";
+            after = [ "fail2ban.service" ];
+            requires = [ "fail2ban.service" ];
+            before = [ "prometheus-fail2ban-exporter.service" ];
+            wantedBy = [ "prometheus-fail2ban-exporter.service" ];
+            path = [
+              pkgs.acl
+              pkgs.coreutils
+            ];
+            script = ''
+              while [ ! -S ${conf.fail2banSocket} ]; do
+                sleep 0.1
+              done
+
+              setfacl -m u:${conf.user}:x $(dirname ${conf.fail2banSocket})
+              setfacl -m u:${conf.user}:rwx ${conf.fail2banSocket}
+            '';
+            serviceConfig = {
+              Type = "oneshot";
+              User = "root";
+            };
+          };
       networking.firewall.extraCommands = mkIf (conf.openFirewall && !nftables) (concatStrings [
         "ip46tables -A nixos-fw ${conf.firewallFilter} "
         "-m comment --comment ${name}-exporter -j nixos-fw-accept"
       ]);
       networking.firewall.extraInputRules = mkIf (conf.openFirewall && nftables) conf.firewallRules;
-      systemd.services."prometheus-${name}-exporter" = mkMerge ([
+      systemd.services."prometheus-${name}-exporter" = mkMerge [
         {
           wantedBy = [ "multi-user.target" ];
           after = [ "network.target" ];
           serviceConfig.Restart = mkDefault "always";
           serviceConfig.PrivateTmp = mkDefault true;
-          serviceConfig.WorkingDirectory = mkDefault /tmp;
+          serviceConfig.WorkingDirectory = mkDefault "/tmp";
           serviceConfig.DynamicUser = mkDefault enableDynamicUser;
           serviceConfig.User = mkDefault conf.user;
           serviceConfig.Group = conf.group;
@@ -381,14 +409,14 @@ let
           serviceConfig.UMask = "0077";
         }
         serviceOpts
-      ]);
+      ];
     };
 in
 {
 
   options.services.prometheus.exporters = mkOption {
     type = types.submodule {
-      options = (mkSubModules);
+      options = mkSubModules;
       imports = [
         ../../../misc/assertions.nix
         (lib.mkRenamedOptionModule [ "unifi-poller" ] [ "unpoller" ])
@@ -398,6 +426,10 @@ in
         '')
         (lib.mkRemovedOptionModule [ "tor" ] ''
           The Tor exporter has been removed, as it was broken and unmaintained.
+        '')
+        (lib.mkRemovedOptionModule [ "rspamd" ] ''
+          The Rspamd exporter has been removed. You can use the Rspamd /metrics endpoint directly instead:
+          https://docs.rspamd.com/developers/protocol#controller-http-endpoints
         '')
       ];
     };
@@ -490,26 +522,6 @@ in
             '';
           }
           {
-            assertion = cfg.scaphandre.enable -> (pkgs.stdenv.targetPlatform.isx86_64 == true);
-            message = ''
-              Scaphandre only support x86_64 architectures.
-            '';
-          }
-          {
-            assertion =
-              cfg.scaphandre.enable
-              -> ((lib.kernel.whenHelpers pkgs.linux.version).whenOlder "5.11" true).condition == false;
-            message = ''
-              Scaphandre requires a kernel version newer than '5.11', '${pkgs.linux.version}' given.
-            '';
-          }
-          {
-            assertion = cfg.scaphandre.enable -> (builtins.elem "intel_rapl_common" config.boot.kernelModules);
-            message = ''
-              Scaphandre needs 'intel_rapl_common' kernel module to be enabled. Please add it in 'boot.kernelModules'.
-            '';
-          }
-          {
             assertion =
               cfg.idrac.enable -> ((cfg.idrac.configurationPath == null) != (cfg.idrac.configuration == null));
             message = ''
@@ -568,16 +580,6 @@ in
     ++ [
       (mkIf config.services.postfix.enable {
         services.prometheus.exporters.postfix.group = mkDefault config.services.postfix.setgidGroup;
-      })
-    ]
-    ++ [
-      (mkIf config.services.prometheus.exporters.deluge.enable {
-        system.activationScripts = {
-          deluge-exported.text = ''
-            mkdir -p /etc/deluge-exporter
-            echo "DELUGE_PASSWORD=$(cat ${config.services.prometheus.exporters.deluge.delugePasswordFile})" > /etc/deluge-exporter/password
-          '';
-        };
       })
     ]
     ++ (mapAttrsToList (

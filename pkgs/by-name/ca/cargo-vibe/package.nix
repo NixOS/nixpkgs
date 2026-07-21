@@ -31,11 +31,11 @@ rustPlatform.buildRustPackage {
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux udev;
 
-  meta = with lib; {
+  meta = {
     description = "Cargo x Buttplug.io";
     mainProgram = "cargo-vibe";
     homepage = "https://github.com/shadlock0133/cargo-vibe";
-    license = licenses.mit;
-    maintainers = with maintainers; [ _999eagle ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ _999eagle ];
   };
 }

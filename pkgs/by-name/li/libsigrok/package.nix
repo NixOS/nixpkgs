@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchgit,
   autoreconfHook,
   pkg-config,
   libzip,
@@ -17,16 +16,16 @@
   libieee1284,
   bluez,
   sigrok-firmware-fx2lafw,
+  fetchgit,
 }:
-
 stdenv.mkDerivation {
   pname = "libsigrok";
-  version = "0.5.2-unstable-2024-10-20";
+  version = "0.6.0-unstable-2025-11-20";
 
   src = fetchgit {
     url = "git://sigrok.org/libsigrok";
-    rev = "f06f788118191d19fdbbb37046d3bd5cec91adb1";
-    hash = "sha256-8aco5tymkCJ6ya1hyp2ODrz+dlXvZmcYoo4o9YC6D6o=";
+    rev = "0bc2487778e660f4d3116729b6f4aee2b1996bb0";
+    hash = "sha256-j79Wx5FFFKptcwtIjQ0Cvtzl46lnow6bExpMNzI8KlM=";
   };
 
   enableParallelBuilding = true;
@@ -74,12 +73,17 @@ stdenv.mkDerivation {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Core library of the sigrok signal analysis software suite";
+    longDescription = "
+      Core library of the sigrok signal analysis software suite
+
+      Please note that if you are using slogic devices you must overlay libsigrok-sipeed as this library for your device to work
+    ";
     homepage = "https://sigrok.org/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
       bjornfor
       vifino
     ];

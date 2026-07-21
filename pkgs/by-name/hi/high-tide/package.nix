@@ -18,16 +18,16 @@
   nix-update-script,
 }:
 
-python313Packages.buildPythonApplication rec {
+python313Packages.buildPythonApplication (finalAttrs: {
   pname = "high-tide";
-  version = "1.1.0";
+  version = "1.5.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Nokse22";
     repo = "high-tide";
-    tag = "v${version}";
-    hash = "sha256-AHdv2eazUnxgw5D4SlIzWm/wnC26zedwiAGT0OzjdZs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uZkXpzRIDzn6wT3GmwNQbtf2/G9ddU13f7iMkj9Qopc=";
   };
 
   nativeBuildInputs = [
@@ -49,6 +49,7 @@ python313Packages.buildPythonApplication rec {
     gstreamer
     gst-plugins-base
     gst-plugins-good
+    gst-plugins-bad
     libsecret
   ]);
 
@@ -59,7 +60,7 @@ python313Packages.buildPythonApplication rec {
     pygobject3
     tidalapi
     requests
-    mpd2
+    python-mpd2
     pypresence
   ]);
 
@@ -72,7 +73,7 @@ python313Packages.buildPythonApplication rec {
   meta = {
     description = "Libadwaita TIDAL client for Linux";
     homepage = "https://github.com/Nokse22/high-tide";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     mainProgram = "high-tide";
     maintainers = with lib.maintainers; [
       drafolin
@@ -82,4 +83,4 @@ python313Packages.buildPythonApplication rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

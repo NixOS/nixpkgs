@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yapesdl";
-  version = "0.80.1";
+  version = "0.81.1";
 
   src = fetchFromGitHub {
     owner = "calmopyrin";
     repo = "yapesdl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-VCjxdVatu1h6VNMkLYL8Nknwn7ax0J2OhO1bc7dnQRA=";
+    hash = "sha256-vCScQmkODKZKbvrauuR9WNTjjKEvlomfzB0QifHxSVs=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/calmopyrin/yapesdl/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl2Plus;
     mainProgram = "yapesdl";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };

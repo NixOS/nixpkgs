@@ -4,21 +4,18 @@
   buildPythonPackage,
   fetchPypi,
   pyjwt,
-  pythonOlder,
   requests,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "msal";
-  version = "1.33.0";
+  version = "1.37.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-g2rYD6o+JafXEBXJkM5h9wSocyix5zvLsGI6GMvxdRA=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-GxZyoz7kZ8HXCzQbsWyv1RuzyBcUepW5MmN5SwOXG+w=";
   };
 
   build-system = [ setuptools ];
@@ -36,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "msal" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to access the Microsoft Cloud by supporting authentication of users with Microsoft Azure Active Directory accounts (AAD) and Microsoft Accounts (MSA) using industry standard OAuth2 and OpenID Connect";
     homepage = "https://github.com/AzureAD/microsoft-authentication-library-for-python";
-    changelog = "https://github.com/AzureAD/microsoft-authentication-library-for-python/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kamadorueda ];
+    changelog = "https://github.com/AzureAD/microsoft-authentication-library-for-python/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
-}
+})

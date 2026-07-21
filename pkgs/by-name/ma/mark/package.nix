@@ -6,23 +6,23 @@
 
 # Tests with go 1.24 do not work. For now
 # https://github.com/kovetskiy/mark/pull/581#issuecomment-2797872996
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mark";
-  version = "14.1.1";
+  version = "16.5.1";
 
   src = fetchFromGitHub {
     owner = "kovetskiy";
     repo = "mark";
-    rev = "${version}";
-    sha256 = "sha256-jKc5QugqfdjSQjK7SbLG02a9+YdFcweS+91LhdR0Dzg=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-k1VDB/wV8zFtMr8KcgTsw1/+7/PElD62zn5UQ1IuJLU=";
   };
 
-  vendorHash = "sha256-AHtIVp2n5v4YoYfWAsE7eD1QcEFKdjSqzGIlR7+mnxg=";
+  vendorHash = "sha256-dCELGpByfx4sEV6/bZ7O+xU5b15Ptbq+wPcbjMXzGZc=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   checkFlags =
@@ -37,14 +37,14 @@ buildGoModule rec {
       "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for syncing your markdown documentation with Atlassian Confluence pages";
     mainProgram = "mark";
     homepage = "https://github.com/kovetskiy/mark";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       rguevara84
       wrbbz
     ];
   };
-}
+})

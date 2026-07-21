@@ -47,5 +47,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ chuangzhu ];
+    broken = kernel.kernelAtLeast "6.17";
   };
 }

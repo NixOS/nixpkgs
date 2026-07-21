@@ -14,18 +14,17 @@
 
 stdenv.mkDerivation rec {
   pname = "gettext";
-  version = "0.25.1";
+  version = "1.0";
 
   src = fetchurl {
     url = "mirror://gnu/gettext/${pname}-${version}.tar.gz";
-    hash = "sha256-dG+VXULXHrac52OGnLkmgvCaQGZSjQGLbKej9ICJoIU=";
+    hash = "sha256-hdmbecmBpASHTALgNCF2z3XHaY4rUf5BAxz2Um2XTxo=";
   };
   patches = [
     ./absolute-paths.diff
     # fix reproducibile output, in particular in the grub2 build
     # https://savannah.gnu.org/bugs/index.php?59658
     ./0001-msginit-Do-not-use-POT-Creation-Date.patch
-    ./memory-safety.patch
   ];
 
   outputs = [
@@ -34,8 +33,6 @@ stdenv.mkDerivation rec {
     "doc"
     "info"
   ];
-
-  LDFLAGS = lib.optionalString stdenv.hostPlatform.isSunOS "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec";
 
   configureFlags = [
     "--disable-csharp"
@@ -56,22 +53,18 @@ stdenv.mkDerivation rec {
     # Fixing this requires replacing all the older copies of the problematic file with a new one.
     #
     # This is ugly, but it avoids requiring workarounds in every package using gettext and autoreconfPhase.
-    declare -a oldFiles=($(tar tf gettext-tools/misc/archive.dir.tar | grep '^gettext-0\.[19].*/extern-inline.m4'))
+    declare -a oldFiles=($(tar tf gettext-tools/autotools/archive.dir.tar | grep '^gettext-0\.[19].*/extern-inline.m4'))
     oldFilesDir=$(mktemp -d)
     for oldFile in "''${oldFiles[@]}"; do
       mkdir -p "$oldFilesDir/$(dirname "$oldFile")"
       cp -a gettext-tools/gnulib-m4/extern-inline.m4 "$oldFilesDir/$oldFile"
     done
-    tar uf gettext-tools/misc/archive.dir.tar --owner=0 --group=0 --numeric-owner -C "$oldFilesDir" "''${oldFiles[@]}"
+    tar uf gettext-tools/autotools/archive.dir.tar --owner=0 --group=0 --numeric-owner -C "$oldFilesDir" "''${oldFiles[@]}"
 
     substituteAllInPlace gettext-runtime/src/gettext.sh.in
     substituteInPlace gettext-tools/projects/KDE/trigger --replace "/bin/pwd" pwd
     substituteInPlace gettext-tools/projects/GNOME/trigger --replace "/bin/pwd" pwd
     substituteInPlace gettext-tools/src/project-id --replace "/bin/pwd" pwd
-  ''
-  + lib.optionalString stdenv.hostPlatform.isCygwin ''
-    sed -i -e "s/\(cldr_plurals_LDADD = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
-    sed -i -e "s/\(libgettextsrc_la_LDFLAGS = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
   ''
   + lib.optionalString stdenv.hostPlatform.isMinGW ''
     sed -i "s/@GNULIB_CLOSE@/1/" */*/unistd.in.h
@@ -85,7 +78,7 @@ stdenv.mkDerivation rec {
     lib.optionals (!stdenv.hostPlatform.isMinGW) [
       bashNonInteractive
     ]
-    ++ lib.optionals (!stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isCygwin) [
+    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
       # HACK, see #10874 (and 14664)
       libiconv
     ];
@@ -102,12 +95,15 @@ stdenv.mkDerivation rec {
     # https://github.com/Homebrew/homebrew-core/pull/199639
     # https://savannah.gnu.org/bugs/index.php?66541
     am_cv_func_iconv_works = "yes";
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isSunOS {
+    LDFLAGS = "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec";
   };
 
   enableParallelBuilding = true;
   enableParallelChecking = false; # fails sometimes
 
-  meta = with lib; {
+  meta = {
     description = "Well integrated set of translation tools and documentation";
 
     longDescription = ''
@@ -131,9 +127,9 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.gnu.org/software/gettext/";
 
-    maintainers = with maintainers; [ zimbatm ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ zimbatm ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
   };
 }
 

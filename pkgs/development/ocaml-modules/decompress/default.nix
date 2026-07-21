@@ -17,14 +17,14 @@
   bos,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "decompress";
   version = "1.5.3";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/mirage/decompress/releases/download/v${version}/decompress-${version}.tbz";
+    url = "https://github.com/mirage/decompress/releases/download/v${finalAttrs.version}/decompress-${finalAttrs.version}.tbz";
     hash = "sha256-+R5peL7/P8thRA0y98mcmfHoZUtPsYQIdB02A1NzrGA=";
   };
 
@@ -54,4 +54,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.vbgl ];
     mainProgram = "decompress.pipe";
   };
-}
+})

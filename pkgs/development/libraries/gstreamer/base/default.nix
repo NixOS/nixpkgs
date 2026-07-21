@@ -25,9 +25,9 @@
   buildPackages,
   gobject-introspection,
   enableX11 ? stdenv.hostPlatform.isLinux,
-  libXext,
-  libXi,
-  libXv,
+  libxext,
+  libxi,
+  libxv,
   libdrm,
   enableWayland ? stdenv.hostPlatform.isLinux,
   wayland-scanner,
@@ -50,7 +50,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-base";
-  version = "1.26.5";
+  version = "1.28.4";
 
   outputs = [
     "out"
@@ -61,9 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-${finalAttrs.version}.tar.xz";
-    hash = "sha256-8MDibL7apXcyy2pXjozBOhFkvxjXN9VcMzBhxS8MSNc=";
+    hash = "sha256-qJiv1XZhcrAEnmeBVY4GiQmL+HudgrhGxlLlccAdYNg=";
   };
 
+  __structuredAttrs = true;
   strictDeps = true;
   depsBuildBuild = [
     pkg-config
@@ -111,9 +112,9 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
   ]
   ++ lib.optionals enableX11 [
-    libXext
-    libXi
-    libXv
+    libxext
+    libxi
+    libxv
   ]
   ++ lib.optionals enableWayland [
     wayland
@@ -170,6 +171,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false; # fails, wants DRI access for OpenGL
 
+  preFixup = ''
+    moveToOutput "lib/gstreamer-1.0/pkgconfig" "$dev"
+  '';
+
   passthru = {
     # Downstream `gst-*` packages depending on `gst-plugins-base`
     # have meson build options like 'gl' etc. that depend
@@ -186,22 +191,22 @@ stdenv.mkDerivation (finalAttrs: {
     glEnabled = enableGl;
     waylandEnabled = enableWayland;
 
-    updateScript = directoryListingUpdater { };
+    updateScript = directoryListingUpdater { odd-unstable = true; };
   };
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Base GStreamer plug-ins and helper libraries";
     homepage = "https://gstreamer.freedesktop.org";
-    license = licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
     pkgConfigModules = [
       "gstreamer-audio-1.0"
       "gstreamer-base-1.0"
       "gstreamer-net-1.0"
       "gstreamer-video-1.0"
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ matthewbauer ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ tmarkus ];
   };
 })

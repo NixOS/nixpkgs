@@ -5,7 +5,7 @@
   lwt,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   minimalOCamlVersion = "4.08";
 
   pname = "mirage-time";
@@ -14,16 +14,16 @@ buildDunePackage rec {
   duneVersion = "3";
 
   src = fetchurl {
-    url = "https://github.com/mirage/mirage-time/releases/download/v${version}/mirage-time-v${version}.tbz";
+    url = "https://github.com/mirage/mirage-time/releases/download/v${finalAttrs.version}/mirage-time-v${finalAttrs.version}.tbz";
     hash = "sha256-DUCUm1jix+i3YszIzgZjRQRiM8jJXQ49F6JC/yicvXw=";
   };
 
   propagatedBuildInputs = [ lwt ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mirage/mirage-time";
     description = "Time operations for MirageOS";
-    license = licenses.isc;
-    maintainers = with maintainers; [ sternenseemann ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ sternenseemann ];
   };
-}
+})

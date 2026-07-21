@@ -29,15 +29,15 @@ stdenv.mkDerivation rec {
     "BASHCOMPDIR=$(out)/share/bash-completion/completions"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pass extension for managing one-time-password (OTP) tokens";
     homepage = "https://github.com/tadfisher/pass-otp";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       jwiegley
       tadfisher
       toonn
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

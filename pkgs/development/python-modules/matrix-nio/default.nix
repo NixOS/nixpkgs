@@ -60,6 +60,13 @@ buildPythonPackage rec {
     ./allow-tests-without-olm.patch
   ];
 
+  postPatch = ''
+    # Fix yarl compat about url normalization
+    substituteInPlace tests/async_client_test.py \
+      --replace-fail "?&" "?"
+
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [
@@ -115,6 +122,9 @@ buildPythonPackage rec {
     "test_connect_wrapper"
     # time dependent and flaky
     "test_transfer_monitor_callbacks"
+    # _plain_data_generator yields str but test expectes bytes
+    "test_upload_retry"
+    "test_upload_text_file_object"
   ]
   ++ lib.optionals (!withOlm) [
     "test_client_account_sharing"
@@ -161,12 +171,12 @@ buildPythonPackage rec {
     inherit opsdroid pantalaimon zulip;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/poljar/matrix-nio";
     changelog = "https://github.com/poljar/matrix-nio/blob/${version}/CHANGELOG.md";
     description = "Python Matrix client library, designed according to sans I/O principles";
-    license = licenses.isc;
-    maintainers = with maintainers; [
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [
       tilpner
       symphorien
     ];

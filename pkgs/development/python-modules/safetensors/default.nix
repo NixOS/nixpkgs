@@ -7,6 +7,7 @@
 
   # optional-dependencies
   numpy,
+  packaging,
   torch,
   tensorflow,
   flax,
@@ -25,29 +26,26 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "safetensors";
-  version = "0.6.2";
+  version = "0.8.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "safetensors";
-    tag = "v${version}";
-    hash = "sha256-IyKk29jMAbYW+16mrpqQWjnsmNFEvUwkB048AAx/Cvw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jD12fRcQ9mPQVr3M1G5pP9rC3cPE5Eu9m9Ga5N9Tsqg=";
   };
 
-  sourceRoot = "${src.name}/bindings/python";
+  sourceRoot = "${finalAttrs.src.name}/bindings/python";
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit
-      pname
-      version
-      src
-      sourceRoot
-      ;
-    hash = "sha256-+92fCILZwk/TknGXgR9lRN55WnmkgUJfCszFthstzXs=";
-  };
+  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
+
+  postPatch = ''
+    ln -s ${./Cargo.lock} Cargo.lock
+  '';
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
@@ -57,6 +55,7 @@ buildPythonPackage rec {
   optional-dependencies = lib.fix (self: {
     numpy = [ numpy ];
     torch = self.numpy ++ [
+      packaging
       torch
     ];
     tensorflow = self.numpy ++ [
@@ -127,8 +126,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/huggingface/safetensors";
     description = "Fast (zero-copy) and safe (unlike pickle) format for storing tensors";
-    changelog = "https://github.com/huggingface/safetensors/releases/tag/v${version}";
+    changelog = "https://github.com/huggingface/safetensors/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

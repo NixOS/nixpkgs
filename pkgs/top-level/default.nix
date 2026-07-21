@@ -25,7 +25,7 @@
   localSystem,
 
   # The system packages will ultimately be run on.
-  crossSystem ? localSystem,
+  crossSystem ? null,
 
   # Allow a configuration attribute set to be passed in as an argument.
   config ? { },
@@ -76,20 +76,45 @@ let
         }
       );
 
-  inherit (lib) throwIfNot;
+  inherit (lib) throwIfNot throwIf;
+
+  x86_64DarwinDeprecationMessage = ''
+    Nixpkgs 26.11 has dropped support for x86_64-darwin.
+
+    The 26.05 stable branch still supports x86_64-darwin, and will
+    receive security fixes until the end of 2026. If you use channels,
+    you can switch to 26.05 as follows:
+
+        $ sudo nix-channel --add https://nixos.org/channels/nixpkgs-26.05-darwin nixpkgs
+        $ sudo nix-channel --update
+
+    If this doesn’t work, you may need to run:
+
+        # Lack of sudo is deliberate:
+        $ nix-channel --remove nixpkgs
+
+    If you use flakes, switch your flake input:
+
+        inputs.nixpkgs = {
+          url = "github:NixOS/nixpkgs/nixpkgs-26.05-darwin";
+        };
+
+    See the release notes for more information and alternatives:
+
+      https://nixos.org/manual/nixpkgs/unstable/release-notes#x86_64-darwin-26.11
+  '';
 
   checked =
-    throwIfNot (lib.isList overlays) "The overlays argument to nixpkgs must be a list." lib.foldr
-      (x: throwIfNot (lib.isFunction x) "All overlays passed to nixpkgs must be functions.")
-      (r: r)
-      overlays
-      throwIfNot
-      (lib.isList crossOverlays)
-      "The crossOverlays argument to nixpkgs must be a list."
-      lib.foldr
-      (x: throwIfNot (lib.isFunction x) "All crossOverlays passed to nixpkgs must be functions.")
-      (r: r)
-      crossOverlays;
+    (throwIfNot (lib.isList overlays) "The overlays argument to nixpkgs must be a list.")
+      (throwIfNot (lib.all lib.isFunction overlays) "All overlays passed to nixpkgs must be functions.")
+      (throwIfNot (lib.isList crossOverlays) "The crossOverlays argument to nixpkgs must be a list.")
+      (throwIfNot (lib.all lib.isFunction crossOverlays) "All crossOverlays passed to nixpkgs must be functions.")
+      (
+        throwIf (
+          ((localSystem.isDarwin && localSystem.isx86) || (crossSystem.isDarwin && crossSystem.isx86))
+          && config.allowDeprecatedx86_64Darwin != "force"
+        ) x86_64DarwinDeprecationMessage
+      );
 
   localSystem = lib.systems.elaborate args.localSystem;
 
@@ -114,7 +139,7 @@ let
   # Allow both:
   # { /* the config */ } and
   # { pkgs, ... } : { /* the config */ }
-  config1 = if lib.isFunction config0 then config0 { inherit pkgs; } else config0;
+  config1 = if lib.isFunction config0 then config0 { inherit lib pkgs; } else config0;
 
   configEval = lib.evalModules {
     modules = [
@@ -131,7 +156,16 @@ let
   };
 
   # take all the rest as-is
-  config = lib.showWarnings configEval.config.warnings configEval.config;
+  config =
+    let
+      failedAssertionsString = lib.concatMapStringsSep "\n" (x: "- ${x.message}") (
+        lib.filter (x: !x.assertion) configEval.config.assertions
+      );
+    in
+    if failedAssertionsString != "" then
+      throw "Failed assertions:\n${failedAssertionsString}"
+    else
+      lib.showWarnings configEval.config.warnings configEval.config;
 
   # A few packages make a new package set to draw their dependencies from.
   # (Currently to get a cross tool chain, or forced-i686 package.) Rather than
@@ -184,7 +218,39 @@ let
       ;
   };
 
-  pkgs = boot stages;
+  fixedPoint = boot stages;
+
+  removeInternallyDisallowedAttrPaths =
+    let
+      # Same as `lib.removeAttrs`, but can remove nested attributes (and order of arguments is fixed)
+      # TODO: Consider moving to lib.attrpaths.removeAttrPaths
+      removeAttrPaths =
+        attrPathsToRemove: set:
+        let
+          split = lib.partition (
+            attrPath:
+            assert attrPath != [ ];
+            lib.length attrPath == 1
+          ) attrPathsToRemove;
+          nestedApplied =
+            set
+            // lib.mapAttrs (name: attrPaths: removeAttrPaths (lib.map lib.tail attrPaths) set.${name}) (
+              lib.groupBy (attrPath: lib.head attrPath) split.wrong
+            );
+        in
+        lib.removeAttrs nestedApplied (lib.map lib.head split.right);
+    in
+    removeAttrPaths (map (x: x.attrPath) config.attrPathsDisallowedForInternalUse);
+
+  pkgs =
+    # Generally only set by CI, don't want to cause a performance hit for users
+    if config.attrPathsDisallowedForInternalUse == [ ] then
+      fixedPoint
+    else
+      # See ./stage.nix, which replaced config.attrPathsDisallowedForInternalUse with aborts.
+      # To prevent these attributes from causing CI failures we remove them entirely.
+      # These attrs are still evaluated but in a different way, see ci/eval/default.nix
+      removeInternallyDisallowedAttrPaths fixedPoint;
 
 in
 checked pkgs

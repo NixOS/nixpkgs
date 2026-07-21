@@ -10,11 +10,11 @@
 buildKodiAddon rec {
   pname = "trakt";
   namespace = "script.trakt";
-  version = "3.6.1";
+  version = "3.8.2";
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/${namespace}/${namespace}-${version}.zip";
-    sha256 = "sha256-ZlBucYYRA1cL5c0H1jhXeKE1itReZe2gAJYFFxuUebo=";
+    sha256 = "sha256-75neHPVWpHhzMIOfNFvvX/Xqy3n1DO3SGg16zv/r9dU=";
   };
 
   propagatedBuildInputs = [
@@ -29,10 +29,10 @@ buildKodiAddon rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://kodi.wiki/view/Add-on:Trakt";
     description = "Trakt.tv movie and TV show scrobbler for Kodi";
-    license = licenses.gpl2Only;
-    teams = [ teams.kodi ];
+    license = lib.licenses.gpl2Only;
+    teams = [ lib.teams.kodi ];
   };
 }

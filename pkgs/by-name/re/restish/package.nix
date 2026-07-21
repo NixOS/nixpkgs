@@ -3,53 +3,61 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
-  restish,
-  testers,
-  xorg,
+  libx11,
+  libxcursor,
+  libxi,
+  libxinerama,
+  libxrandr,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "restish";
-  version = "0.21.0";
+  version = "2.2.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "danielgtaylor";
     repo = "restish";
-    tag = "v${version}";
-    hash = "sha256-eLbeH6i+QbW59DMOHf83olrO8R7Ji975KkJKs621Xi0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wGchbKSEbzr1vQlYWgUTubA1xQVcxq7iyRUIuWqVL0Y=";
   };
 
-  vendorHash = "sha256-bO0z+LCiF/Dp0hKNulBmCgk16NzCCoY32P2/Ieq8y+c=";
+  vendorHash = "sha256-Y0GwgrkD09WAlmyI6Oe3Kw6L62E7QRTCIThZGXbbn74=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXinerama
-    xorg.libXrandr
+    libx11
+    libxcursor
+    libxi
+    libxinerama
+    libxrandr
+  ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   ldflags = [
     "-s"
-    "-w"
-    "-X=main.version=${version}"
+    "-X=github.com/rest-sh/restish/v2/internal/cli.Version=${finalAttrs.version}"
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  checkFlags = [
+    # Test requires network access and test with hard-coded version '2.0.0'
+    "-skip=TestAPISyncDiscoveryDoesNotSendAuthToCrossOriginLinkSpec|TestVersion$|TestVersionCommand"
+  ];
 
-  passthru.tests.version = testers.testVersion {
-    package = restish;
-    command = "HOME=$(mktemp -d) restish --version";
-  };
+  doInstallCheck = true;
 
   meta = {
     description = "CLI tool for interacting with REST-ish HTTP APIs";
     homepage = "https://rest.sh/";
-    changelog = "https://github.com/danielgtaylor/restish/releases/tag/v${version}";
+    changelog = "https://github.com/danielgtaylor/restish/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "restish";
   };
-}
+})

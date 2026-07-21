@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   attrs,
   docopt,
@@ -19,16 +18,14 @@
 
 buildPythonPackage rec {
   pname = "psd-tools";
-  version = "1.10.12";
+  version = "1.12.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "psd-tools";
     repo = "psd-tools";
     tag = "v${version}";
-    hash = "sha256-BNicUiFZSNCcJ2g/zNBH8h2FGT+pd45IurBnnBqklUY=";
+    hash = "sha256-YasCeRl9oF0ES1E9D7WXCOFTGKhQZltu7EPu6llndrM=";
   };
 
   build-system = [

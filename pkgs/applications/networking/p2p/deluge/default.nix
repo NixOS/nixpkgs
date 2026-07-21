@@ -5,6 +5,7 @@
   libtorrent-rasterbar,
   python3Packages,
   gtk3,
+  libappindicator-gtk3,
   glib,
   gobject-introspection,
   librsvg,
@@ -47,13 +48,14 @@ let
           six
           zope-interface
           dbus-python
-          pycairo
-          librsvg
         ]
         ++ optionals withGUI [
+          pycairo
+          librsvg
           gtk3
           gobject-introspection
           pygobject3
+          libappindicator-gtk3
         ];
 
       nativeBuildInputs = [
@@ -102,14 +104,12 @@ let
 
       passthru.tests = { inherit (nixosTests) deluge; };
 
-      meta = with lib; {
+      meta = {
         description = "Torrent client";
         homepage = "https://deluge-torrent.org";
-        license = licenses.gpl3Plus;
-        maintainers = with maintainers; [
-          ebzzry
-        ];
-        platforms = platforms.all;
+        license = lib.licenses.gpl3Plus;
+        maintainers = with lib.maintainers; [ a-peirogon ];
+        platforms = lib.platforms.all;
       };
     };
 

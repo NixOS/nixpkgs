@@ -28,12 +28,10 @@
         # This is purely for testing purposes!
         environment.etc."authelia/storageEncryptionKeyFile" = {
           mode = "0400";
-          user = "authelia-testing";
           text = "you_must_generate_a_random_string_of_more_than_twenty_chars_and_configure_this";
         };
         environment.etc."authelia/jwtSecretFile" = {
           mode = "0400";
-          user = "authelia-testing";
           text = "a_very_important_secret";
         };
         environment.etc."authelia/users_database.yml" = {

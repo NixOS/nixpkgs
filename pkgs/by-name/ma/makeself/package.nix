@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation rec {
   pname = "makeself";
-  version = "2.5.0";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "megastep";
     repo = "makeself";
     tag = "release-${version}";
     fetchSubmodules = true;
-    hash = "sha256-QPisihCGnzG9gaZyb/bUroWdPAoC2GdQiz1tSkoScjs=";
+    hash = "sha256-X35vdzsfAQWAHMvlQSxCeu7IgUNVvnOQaakS27SXlFA=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
     sed -e "s|^HEADER=.*|HEADER=${sharePath}/makeself-header.sh|" -i $out/bin/makeself
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://makeself.io";
     description = "Utility to create self-extracting packages";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.wmertens ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.wmertens ];
+    platforms = lib.platforms.all;
     mainProgram = "makeself";
   };
 }

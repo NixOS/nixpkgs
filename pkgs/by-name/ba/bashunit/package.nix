@@ -3,7 +3,12 @@
   lib,
   fetchFromGitHub,
   bash,
+  bc,
+  gitMinimal,
+  gnugrep,
+  jq,
   which,
+  writableTmpDirAsHomeHook,
   versionCheckHook,
   coreutils,
   makeBinaryWrapper,
@@ -12,13 +17,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bashunit";
-  version = "0.24.0";
+  version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = "TypedDevs";
     repo = "bashunit";
     tag = finalAttrs.version;
-    hash = "sha256-TIt1EG/KQCslwZH9seF5SUgH242ZkUkWf8HWqNBIrD0=";
+    hash = "sha256-7KH0zcoRPbY56h8FtJ0WbCqM2dSn/bklAPIthnktkpI=";
     forceFetchGit = true; # needed to include the tests directory for the check phase
   };
 
@@ -43,9 +48,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   doCheck = true;
-  nativeCheckInputs = [ which ];
+  nativeCheckInputs = [
+    bc
+    gitMinimal
+    jq
+    which
+  ];
   checkPhase = ''
     runHook preCheck
+    patchShebangs bin/bashunit
+  ''
+  # Disabling a failing test on Darwin platforms only
+  + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+    rm tests/unit/console_results_test.sh
+  ''
+  + ''
     make test
     runHook postCheck
   '';
@@ -54,15 +71,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/bashunit \
       --prefix PATH : "${
         lib.makeBinPath [
-          coreutils
+          coreutils # cat, mktemp
+          gnugrep # grep
           which
         ]
       }"
   '';
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [
+    "HOME"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

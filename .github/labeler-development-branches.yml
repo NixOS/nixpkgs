@@ -1,4 +1,4 @@
-# This file is used by .github/workflows/labels.yml
+# This file is used by .github/workflows/bot.yml
 # This version is only run for Pull Requests from development branches like staging-next, haskell-updates or python-updates.
 
 "4.workflow: package set update":

@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python -p nix 'python3.withPackages (pp: [ pp.requests ])'
+#!nix-shell -i python3 -p nix 'python3.withPackages (ps: [ ps.requests ])'
 
 import json
 import os
@@ -138,7 +138,7 @@ def update_plugins():
             "updateUrl": update_url,
             "pname": pname,
             "version": e["version"],
-            "description": e["description"],
+            "description": e["description"].rstrip("."),
             "initConfig": {
                 "configKey": e["configKey"],
                 "configExcludes": e["configExcludes"],

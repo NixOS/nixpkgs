@@ -46,9 +46,7 @@ outer@{
   postInstall ? "",
   meta ? null,
   nginx-doc ? outer.nginx-doc,
-  passthru ? {
-    tests = { };
-  },
+  passthru ? { },
 }:
 
 let
@@ -117,6 +115,7 @@ stdenv.mkDerivation {
     "--sbin-path=bin/nginx"
     "--with-http_ssl_module"
     "--with-http_v2_module"
+    "--with-http_v3_module"
     "--with-http_realip_module"
     "--with-http_addition_module"
     "--with-http_xslt_module"
@@ -254,8 +253,6 @@ stdenv.mkDerivation {
       --replace-fail '@nixStoreDirLen@' "''${#NIX_STORE}"
   '' postPatch;
 
-  hardeningEnable = lib.optional (!stdenv.hostPlatform.isDarwin) "pie";
-
   enableParallelBuilding = true;
 
   preInstall = ''
@@ -282,45 +279,46 @@ stdenv.mkDerivation {
 
   passthru = {
     inherit modules;
-    tests = {
-      inherit (nixosTests)
-        nginx
-        nginx-auth
-        nginx-etag
-        nginx-etag-compression
-        nginx-globalredirect
-        nginx-http3
-        nginx-proxyprotocol
-        nginx-pubhtml
-        nginx-sso
-        nginx-status-page
-        nginx-unix-socket
-        ;
-      variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
-      acme-integration = nixosTests.acme.nginx;
-    }
-    // passthru.tests;
+    tests =
+      passthru.tests or {
+        inherit (nixosTests)
+          nginx
+          nginx-auth
+          nginx-etag
+          nginx-etag-compression
+          nginx-globalredirect
+          nginx-http3
+          nginx-lua
+          nginx-proxyprotocol
+          nginx-pubhtml
+          nginx-sso
+          nginx-status-page
+          nginx-unix-socket
+          ;
+        variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
+        acme-integration = nixosTests.acme.nginx;
+        acme-integration-without-reload = nixosTests.acme.nginx-without-reload;
+      };
+  }
+  // lib.optionalAttrs (passthru ? updateScript) {
+    inherit (passthru) updateScript;
   };
 
   meta =
     if meta != null then
       meta
     else
-      with lib;
       {
         description = "Reverse proxy and lightweight webserver";
         mainProgram = "nginx";
-        homepage = "http://nginx.org";
-        license = [ licenses.bsd2 ] ++ concatMap (m: m.meta.license) modules;
+        homepage = "https://nginx.org";
+        license = [ lib.licenses.bsd2 ] ++ lib.concatMap (m: lib.toList m.meta.license) modules;
         broken = lib.any (m: m.meta.broken or false) modules;
-        platforms = platforms.all;
-        maintainers = with maintainers; [
-          fpletz
-          raitobezarius
-        ];
-        teams = with teams; [
-          helsinki-systems
-          stridtech
+        platforms = lib.platforms.all;
+        maintainers = with lib.maintainers; [
+          helsinki-Jo
+          ma27
+          leona
         ];
       };
 }

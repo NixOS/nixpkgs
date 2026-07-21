@@ -10,9 +10,9 @@
   gnome-common,
   gtk3,
   libwnck,
-  libX11,
-  libXfixes,
-  libXi,
+  libx11,
+  libxfixes,
+  libxi,
   pango,
   gettext,
   pkg-config,
@@ -27,12 +27,12 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "plank";
   version = "0.11.89";
 
   src = fetchurl {
-    url = "https://launchpad.net/${pname}/1.0/${version}/+download/${pname}-${version}.tar.xz";
+    url = "https://launchpad.net/plank/1.0/${finalAttrs.version}/+download/plank-${finalAttrs.version}.tar.xz";
     sha256 = "17cxlmy7n13jp1v8i4abxyx9hylzb39andhz3mk41ggzmrpa8qm6";
   };
 
@@ -55,9 +55,9 @@ stdenv.mkDerivation rec {
     gnome-menus
     dconf
     gtk3
-    libX11
-    libXfixes
-    libXi
+    libx11
+    libxfixes
+    libxi
     libdbusmenu-gtk3
     libgee
     libwnck
@@ -80,13 +80,13 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/file" "${file}/bin/file"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Elegant, simple, clean dock";
     mainProgram = "plank";
     homepage = "https://launchpad.net/plank";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ davidak ];
-    teams = [ teams.pantheon ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ davidak ];
+    teams = [ lib.teams.pantheon ];
   };
-}
+})

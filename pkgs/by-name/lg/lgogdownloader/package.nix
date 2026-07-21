@@ -13,7 +13,7 @@
   tinyxml-2,
   help2man,
   html-tidy,
-  libsForQt5,
+  qt6,
   testers,
 
   enableGui ? false,
@@ -21,14 +21,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lgogdownloader";
-  version = "3.17";
+  version = "3.18";
 
   src = fetchFromGitHub {
     owner = "Sude-";
     repo = "lgogdownloader";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rERcwPVuioZT4lqw4SUaM0TQIks6ggA5x8fuI+1GAsk=";
+    hash = "sha256-dVEV2smZxB6+Utm9FApiFydAS3hLm4y9YZja1B/PiEk=";
   };
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "set_property(TARGET \''${PROJECT_NAME} PROPERTY CXX_STANDARD 11)" "set_property(TARGET \''${PROJECT_NAME} PROPERTY CXX_STANDARD 17)"
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -36,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     help2man
     html-tidy
   ]
-  ++ lib.optional enableGui libsForQt5.wrapQtAppsHook;
+  ++ lib.optional enableGui qt6.wrapQtAppsHook;
 
   buildInputs = [
     boost
@@ -48,11 +53,15 @@ stdenv.mkDerivation (finalAttrs: {
     tinyxml-2
   ]
   ++ lib.optionals enableGui [
-    libsForQt5.qtbase
-    libsForQt5.qtwebengine
+    qt6.qtbase
+    qt6.qtwebengine
   ];
 
-  cmakeFlags = lib.optional enableGui "-DUSE_QT_GUI=ON";
+  cmakeFlags = [
+    (lib.cmakeBool "USE_QT_GUI" enableGui)
+    (lib.cmakeFeature "CMAKE_CXX_STANDARD" "17")
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-DJSONCPP_HAS_STRING_VIEW=1")
+  ];
 
   passthru.tests = {
     version = testers.testVersion { package = finalAttrs.finalPackage; };

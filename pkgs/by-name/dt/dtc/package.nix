@@ -49,8 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
         }
       );
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
-
   nativeBuildInputs = [
     meson
     ninja
@@ -99,12 +97,12 @@ stdenv.mkDerivation (finalAttrs: {
       # hostPlatform binaries during the configurePhase.
       (with stdenv; buildPlatform.canExecute hostPlatform);
 
-  meta = with lib; {
+  meta = {
     description = "Device Tree Compiler";
     homepage = "https://git.kernel.org/pub/scm/utils/dtc/dtc.git";
-    license = licenses.gpl2Plus; # dtc itself is GPLv2, libfdt is dual GPL/BSD
-    maintainers = [ maintainers.dezgeg ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus; # dtc itself is GPLv2, libfdt is dual GPL/BSD
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
     mainProgram = "dtc";
   };
 })

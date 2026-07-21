@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   src = fetchFromGitHub {
     owner = "xnd-project";
-    repo = "ndtypes";
+    repo = "libndtypes";
     rev = "3ce6607c96d8fe67b72cc0c97bf595620cdd274e";
     sha256 = "18303q0jfar1lmi4krp94plczb455zcgw772f9lb8xa5p0bkhx01";
   };
@@ -26,10 +26,10 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Dynamic types for data description and in-memory computations";
     homepage = "https://xnd.io/";
-    license = licenses.bsdOriginal;
-    maintainers = [ maintainers.costrouc ];
+    license = lib.licenses.bsdOriginal;
+    maintainers = [ lib.maintainers.costrouc ];
   };
 }

@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "meritous";
     repo = "meritous";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6KK2anjX+fPsYf4HSOHQ0EQBINqZiVbxo1RmBR6pslg=";
   };
 
@@ -28,6 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/meritous/meritous/-/commit/68029f02ccaea86fb96d6dd01edb269ac3e6eff0.patch";
       hash = "sha256-YRV0cEcn6nEJUdHF/cheezNbsgZmjy0rSUw0tuhUYf0=";
     })
+
+    # https://gitlab.com/meritous/meritous/-/merge_requests/6
+    ./gcc15-fix.patch
   ];
 
   prePatch = ''
@@ -53,13 +56,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Action-adventure dungeon crawl game";
     homepage = "https://gitlab.com/meritous/meritous";
     changelog = "https://gitlab.com/meritous/meritous/-/blob/master/NEWS";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "meritous";
-    maintainers = [ maintainers.alexvorobiev ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.alexvorobiev ];
+    platforms = lib.platforms.linux;
   };
 })

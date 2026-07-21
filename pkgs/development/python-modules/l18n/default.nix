@@ -6,13 +6,13 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "l18n";
   version = "2021.3";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-GVbokNZz0XE1zCCRMlPBVPa8HAAmbCK31QPMGlpC2Eg=";
   };
 
@@ -26,11 +26,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "l18n" ];
 
-  meta = with lib; {
+  meta = {
     description = "Locale internationalization package";
     homepage = "https://github.com/tkhyn/l18n";
-    changelog = "https://github.com/tkhyn/l18n/blob/${version}/CHANGES.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sephi ];
+    changelog = "https://github.com/tkhyn/l18n/blob/v${finalAttrs.version}.0/CHANGES.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sephi ];
   };
-}
+})

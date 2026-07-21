@@ -39,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "subprocess_tee" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pycontribs/subprocess-tee";
     description = "Subprocess.run drop-in replacement that supports a tee mode";
     changelog = "https://github.com/pycontribs/subprocess-tee/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ putchar ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ putchar ];
   };
 }

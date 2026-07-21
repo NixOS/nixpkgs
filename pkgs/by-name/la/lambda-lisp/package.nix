@@ -62,7 +62,7 @@ stdenv.mkDerivation {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lisp interpreter written in untyped lambda calculus";
     homepage = "https://github.com/woodrush/lambdalisp";
     longDescription = ''
@@ -76,8 +76,8 @@ stdenv.mkDerivation {
       consists of the beta-reduction of lambda terms, without introducing any
       non-lambda-type object.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ cafkafk ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cafkafk ];
     platforms = [ "x86_64-linux" ];
   };
 }

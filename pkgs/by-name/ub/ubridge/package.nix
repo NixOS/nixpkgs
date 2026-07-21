@@ -8,15 +8,15 @@
   ubridge,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ubridge";
-  version = "0.9.19";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "GNS3";
     repo = "ubridge";
-    tag = "v${version}";
-    hash = "sha256-utzXLPF0VszMZORoik5/0lKhiyKO9heKuNO4KPsPVsI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fiRiL6S+APBRk5FZNKF7HLNFiCVVkLdCpY2sb5voGbQ=";
   };
 
   postPatch = ''
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
       and TAP interfaces is supported. Packet capture is also supported.
     '';
     homepage = "https://github.com/GNS3/ubridge";
-    changelog = "https://github.com/GNS3/ubridge/releases/tag/v${version}";
+    changelog = "https://github.com/GNS3/ubridge/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     mainProgram = "ubridge";
     maintainers = with lib.maintainers; [
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

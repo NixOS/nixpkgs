@@ -2,58 +2,74 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-
-  certifi,
-  cython,
   gdal,
-  numpy,
-  packaging,
+
+  # build-system
+  cython,
   setuptools,
   versioneer,
-  wheel,
+
+  # dependencies
+  certifi,
+  numpy,
+  packaging,
+
+  # tests
+  fiona,
+  pandas,
+  pytest-benchmark,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyogrio";
-  version = "0.11.1";
+  version = "0.13.0";
   pyproject = true;
-  disabled = pythonOlder "3.9";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "pyogrio";
-    tag = "v${version}";
-    hash = "sha256-F6XfkihN3k2xquYS8jJMlqtLXzaTORaduJ2Q9LhSQGM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9WaJMrh3FN4hWpdGNq2TynoLqT91tLQ7iTTl/NWYQTI=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "versioneer[toml]==0.28" "versioneer[toml]"
+      --replace-fail \
+        "versioneer[toml]==0.28" \
+        "versioneer[toml]"
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     cython
-    gdal # for gdal-config
     setuptools
     versioneer
-    wheel
-  ]
-  ++ versioneer.optional-dependencies.toml;
+  ];
+
+  nativeBuildInputs = [
+    gdal # for gdal-config
+  ];
 
   buildInputs = [ gdal ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     certifi
     numpy
     packaging
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  pythonImportsCheck = [ "pyogrio" ];
+
+  nativeCheckInputs = [
+    fiona
+    pandas
+    pytestCheckHook
+    pytest-benchmark
+  ];
 
   preCheck = ''
-    python setup.py build_ext --inplace
+    rm pyogrio/__init__.py
   '';
 
   disabledTestMarks = [
@@ -61,13 +77,26 @@ buildPythonPackage rec {
     "network"
   ];
 
-  pythonImportsCheck = [ "pyogrio" ];
+  disabledTests = [
+    # Circular dependencies with geopandas
+    "test_detect_zip_path"
+    "test_path_absolute"
+    "test_path_relative_dataframe"
+    "test_uri_local_file_dataframe"
+    "test_vsi_handling_read_dataframe"
+    "test_zip_path_dataframe"
+  ];
+
+  disabledTestPaths = [
+    # NameError: name 'shapely' is not defined
+    "pyogrio/tests/test_geopandas_io.py"
+  ];
 
   meta = {
     description = "Vectorized spatial vector file format I/O using GDAL/OGR";
     homepage = "https://pyogrio.readthedocs.io/";
-    changelog = "https://github.com/geopandas/pyogrio/blob/${src.tag}/CHANGES.md";
+    changelog = "https://github.com/geopandas/pyogrio/blob/${finalAttrs.src.tag}/CHANGES.md";
     license = lib.licenses.mit;
     teams = [ lib.teams.geospatial ];
   };
-}
+})

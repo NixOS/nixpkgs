@@ -15,10 +15,6 @@ let
   src =
     fetchurl
       {
-        x86_64-darwin = {
-          url = "https://github.com/ransome1/sleek/releases/download/v${version}/sleek-2.0.14-mac-x64.dmg";
-          hash = "sha256-f5mMSRa+gAoakOy9TSZeALqCylGLd0nUJIh8o+LWAro=";
-        };
         x86_64-linux = {
           url = "https://github.com/ransome1/sleek/releases/download/v${version}/sleek-2.0.14.AppImage";
           hash = "sha256-d2fLsCI7peuNBtjgHs1qumgPAF9eJeBYiIIffoSv9Jk=";
@@ -34,7 +30,6 @@ let
     mainProgram = "sleek-todo";
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
     ];
   };
   appimageContents = appimageTools.extract { inherit pname version src; };

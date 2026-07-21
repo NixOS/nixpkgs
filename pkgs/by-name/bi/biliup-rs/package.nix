@@ -8,14 +8,14 @@
   sqlite,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "biliup-rs";
   version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "biliup";
     repo = "biliup-rs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Zbl/d0LXwxHWyzfcLg+AMJrLXlXOf+aIzdNYHEvAd90=";
   };
 
@@ -29,12 +29,12 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/biliup/biliup-rs/releases/tag/v${version}";
+    changelog = "https://github.com/biliup/biliup-rs/releases/tag/v${finalAttrs.version}";
     description = "CLI tool for uploading videos to Bilibili";
     homepage = "https://biliup.github.io/biliup-rs";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "biliup";
     platforms = lib.platforms.all;
   };
-}
+})

@@ -9,10 +9,10 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flyway";
-  version = "11.13.0";
+  version = "12.11.0";
   src = fetchurl {
     url = "https://github.com/flyway/flyway/releases/download/flyway-${finalAttrs.version}/flyway-commandline-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-yIptnNIt76qYer9AhLRZ0hhuUhx56PWXU3jjkLBz11M=";
+    sha256 = "sha256-2IVSuzrtwqsvqpj7KlCQblD7j7HCK3HMOs1tkcL0ClU=";
   };
   nativeBuildInputs = [ makeWrapper ];
   dontBuild = true;
@@ -26,13 +26,13 @@ stdenv.mkDerivation (finalAttrs: {
     done
     makeWrapper "${jre_headless}/bin/java" $out/bin/flyway \
       --add-flags "-Djava.security.egd=file:/dev/../dev/urandom" \
-      --add-flags "-classpath '$out/share/flyway/lib/*:$out/share/flyway/lib/flyway/*:$out/share/flyway/lib/aad/*:$out/share/flyway/lib/netty/*:$out/share/flyway/drivers/*'" \
-      --add-flags "org.flywaydb.commandline.Main" \
+      --add-flags "-classpath '$out/share/flyway/lib/*:$out/share/flyway/lib/aad/*:$out/share/flyway/lib/flyway/*:$out/share/flyway/lib/netty/*:$out/share/flyway/drivers/*:$out/share/flyway/drivers/aws/*:$out/share/flyway/drivers/gcp/*:$out/share/flyway/drivers/cassandra/*:$out/share/flyway/drivers/couchbase/*:$out/share/flyway/drivers/mongo/*'" \
+      --add-flags "org.flywaydb.commandline.Main"
   '';
   passthru.tests = {
     version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
-  meta = with lib; {
+  meta = {
     description = "Evolve your Database Schema easily and reliably across all your instances";
     longDescription = ''
       The Flyway command-line tool is a standalone Flyway distribution.
@@ -45,9 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://github.com/flyway/flyway";
     homepage = "https://flywaydb.org/";
     changelog = "https://documentation.red-gate.com/fd/release-notes-for-flyway-engine-179732572.html";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.cmcdragonkai ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.cmcdragonkai ];
   };
 })

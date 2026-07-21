@@ -2,20 +2,25 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   click,
   urllib3,
   requests,
   pytest,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "waybackpy";
   version = "3.0.6";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-SXo3F1arp2ROt62g69TtsVy4xTvBNMyXO/AjoSyv+D8=";
   };
+
+  build-system = [ setuptools ];
 
   dependencies = [
     click
@@ -27,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "waybackpy" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://akamhy.github.io/waybackpy/";
     description = "Wayback Machine API interface & a command-line tool";
-    license = licenses.mit;
-    maintainers = with maintainers; [ chpatrick ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ chpatrick ];
   };
-}
+})

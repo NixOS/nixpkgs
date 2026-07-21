@@ -9,7 +9,7 @@ let
 in
 {
   name = "mitmproxy";
-  meta.maintainers = [ lib.teams.ngi.members ];
+  meta.maintainers = lib.teams.ngi.members;
 
   nodes.machine =
     { pkgs, ... }:
@@ -86,7 +86,7 @@ in
     ''
       def curl(command: str, proxy: bool = False):
           if proxy:
-              command = "curl --proxy 127.0.0.1:8080 --cacert ~/.mitmproxy/mitmproxy-ca-cert.pem " + command
+              command = "curl --proxy 127.0.0.1:8080 --cacert ~/.mitmproxy/mitmproxy-ca.pem " + command
           else:
               command = "curl " + command
           return machine.succeed(command)

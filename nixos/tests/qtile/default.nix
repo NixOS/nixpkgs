@@ -37,7 +37,7 @@
 
       environment.systemPackages = [
         pkgs.kitty
-        pkgs.xorg.xwininfo
+        pkgs.xwininfo
       ];
     };
 

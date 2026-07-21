@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "ilua";
   version = "0.2.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -35,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ilua" ];
 
-  meta = with lib; {
+  meta = {
     description = "Portable Lua kernel for Jupyter";
     mainProgram = "ilua";
     homepage = "https://github.com/guysv/ilua";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
   };
 }

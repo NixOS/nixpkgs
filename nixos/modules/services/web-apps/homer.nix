@@ -41,7 +41,7 @@ in
     settings = lib.mkOption {
       default = { };
       description = ''
-        Settings serialized into `config.yml` before build.
+        Settings serialized into {file}`config.yml` before build.
         If left empty, the default configuration shipped with the package will be used instead.
         For more information, see the [official documentation](https://github.com/bastienwirtz/homer/blob/main/docs/configuration.md).
 
@@ -169,11 +169,25 @@ in
       enable = true;
       virtualHosts."${cfg.virtualHost.domain}".extraConfig = ''
         root * ${cfg.package}
-        file_server
+        encode zstd gzip
+
+        @immutable path /resources/*
+        header @immutable Cache-Control "public, max-age=31536000, immutable"
+
+        @html not path /resources/*
+        header @html Cache-Control "no-store"
+
+        header {
+          -ETag
+          -Last-Modified
+        }
+
         handle_path /assets/config.yml {
           root * ${configFile}
           file_server
         }
+
+        file_server
       '';
     };
   };

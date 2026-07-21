@@ -11,32 +11,29 @@
   qtsvg,
   qtwayland,
   qtdeclarative,
-  qtx11extras ? null,
   kitemviews,
   kwidgetsaddons,
-  qtquickcontrols2 ? null,
+  kcmutils,
   kcoreaddons,
   kdeclarative,
   kirigami ? null,
-  kirigami2 ? null,
   isocodes,
-  xkeyboardconfig,
+  xkeyboard-config,
   libxkbfile,
   libplasma ? null,
-  plasma-framework ? null,
   wrapQtAppsHook,
   kcmSupport ? true,
 }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-configtool";
-  version = "5.1.10";
+  version = "5.1.14";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-Py2UDBQRqvT7kwZeQIXKrIjGAbOjjxEyEfO5tdtizW4=";
+    hash = "sha256-+lpJlGaVGTcZpoGvcHAsb5N5M4Y3McV4GSZpSwZxX3Y=";
   };
 
   cmakeFlags = [
@@ -60,35 +57,24 @@ stdenv.mkDerivation rec {
     kitemviews
     kwidgetsaddons
     isocodes
-    xkeyboardconfig
+    xkeyboard-config
     libxkbfile
   ]
-  ++ lib.optionals (lib.versions.major qtbase.version == "5") [
-    qtx11extras
-  ]
-  ++ lib.optionals kcmSupport (
-    [
-      qtdeclarative
-      kcoreaddons
-      kdeclarative
-    ]
-    ++ lib.optionals (lib.versions.major qtbase.version == "5") [
-      qtquickcontrols2
-      plasma-framework
-      kirigami2
-    ]
-    ++ lib.optionals (lib.versions.major qtbase.version == "6") [
-      libplasma
-      kirigami
-    ]
-  );
+  ++ lib.optionals kcmSupport [
+    qtdeclarative
+    kcoreaddons
+    kdeclarative
+    kcmutils
+    libplasma
+    kirigami
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Configuration Tool for Fcitx5";
     homepage = "https://github.com/fcitx/fcitx5-configtool";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ poscat ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ poscat ];
+    platforms = lib.platforms.linux;
     mainProgram = "fcitx5-config-qt";
   };
 }

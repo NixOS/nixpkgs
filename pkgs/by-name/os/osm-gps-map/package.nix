@@ -51,6 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
+  configureFlags = [
+    "CFLAGS=-std=gnu17"
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     gtk-doc
@@ -73,7 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "GTK widget for displaying OpenStreetMap tiles";
     homepage = "https://nzjrs.github.io/osm-gps-map";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ hrdinka ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

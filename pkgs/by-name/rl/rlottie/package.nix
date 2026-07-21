@@ -3,54 +3,47 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  cmake,
+  meson,
   ninja,
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rlottie";
-  version = "0.2";
+  version = "0.2-unstable-2026-07-03";
 
   src = fetchFromGitHub {
     owner = "Samsung";
     repo = "rlottie";
-    rev = "v${version}";
-    sha256 = "10bxr1zf9wxl55d4cw2j02r6sgqln7mbxplhhfvhw0z92fi40kr3";
+    rev = "f487eff2f8086b84ae1c7faa0418abec909e874b";
+    hash = "sha256-/Sv5qX1V6VltJN0+bkKU2utaj8Yw1owb0KjJFWv41Js=";
   };
 
-  patches = [
-    # Fixed build with GCC 11
-    (fetchpatch {
-      url = "https://github.com/Samsung/rlottie/commit/2d7b1fa2b005bba3d4b45e8ebfa632060e8a157a.patch";
-      hash = "sha256-2JPsj0WiBMMu0N3NUYDrHumvPN2YS8nPq5Zwagx6UWE=";
-    })
-  ];
-
   nativeBuildInputs = [
-    cmake
+    meson
     ninja
     pkg-config
   ];
 
-  cmakeFlags = [
-    (lib.cmakeFeature "LIB_INSTALL_DIR" "${placeholder "out"}/lib")
+  patches = [
+    # rename format to run-clang-format to avoid conflict
+    ./rename_format_to_run-clang-format.patch
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString (
     stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
   ) "-U__ARM_NEON__";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Samsung/rlottie";
     description = "Platform independent standalone c++ library for rendering vector based animations and art in realtime";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       bsd3
       mpl11
       ftl
     ];
-    platforms = platforms.all;
-    maintainers = with maintainers; [ CRTified ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ CRTified ];
   };
 }

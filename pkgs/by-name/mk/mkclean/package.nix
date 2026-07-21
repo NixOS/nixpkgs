@@ -18,6 +18,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [ "format" ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1.2)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   postInstall = ''
     install -Dm0755 mkclean/mkclean $out/bin/mkclean
   '';

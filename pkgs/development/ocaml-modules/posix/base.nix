@@ -6,18 +6,16 @@
   integers,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "posix-base";
-  version = "2.2.0";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-posix";
-    tag = "v${version}";
-    hash = "sha256-JKJIiuo4lW8DmcK1mJlT22784J1NS2ig860jDbRIjIo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nBSIuz4WEnESlECdKujEcSxFOcSBFxW1zo7J/lT/lCY=";
   };
-
-  minimalOCamlVersion = "4.08";
 
   propagatedBuildInputs = [
     ctypes
@@ -30,4 +28,4 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

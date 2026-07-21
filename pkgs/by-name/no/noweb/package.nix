@@ -88,16 +88,11 @@ stdenv.mkDerivation (finalAttrs: {
     "tex"
   ];
 
-  passthru = {
-    tlType = "run";
-    pkgs = [ finalAttrs.finalPackage.tex ];
-  };
-
-  meta = with lib; {
+  meta = {
     description = "Simple, extensible literate-programming tool";
     homepage = "https://www.cs.tufts.edu/~nr/noweb";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ yurrriq ];
-    platforms = with platforms; linux ++ darwin;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ yurrriq ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 })

@@ -7,10 +7,10 @@
 }:
 let
   pname = "redact";
-  version = "0.18.0";
+  version = "0.21.18";
   src = fetchurl {
     url = "https://update-desktop.redact.dev/build/Redact-${version}.AppImage";
-    hash = "sha256-qqqf8BAwXEKgZwl6vsPw/0S+qItz5ZqB59DJkW9q1xc=";
+    hash = "sha256-NnOQIVv/Y4C+qR5TsXh7rQq/WOYd7Vdtfru4x78djZA=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname src version; };
 in
@@ -41,11 +41,8 @@ appimageTools.wrapType2 {
         set -eu -o pipefail
         url="$(curl -ILs -w %{url_effective} -o /dev/null https://download.redact.dev/windows)"
         version="$(echo $url | sed -n 's/.*Redact-Setup-\([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p')"
-        currentVersion=$(nix-instantiate --eval -E "with import ./. {}; redact.version or (lib.getVersion redact)" | tr -d '"')
-        if [[ "$version" != "$currentVersion" ]]; then
-          hash=$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url "$url")")
-          update-source-version redact "$version" "$hash" --print-changes
-        fi
+        hash=$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url "https://update-desktop.redact.dev/build/Redact-$version.AppImage")")
+        update-source-version redact "$version" "$hash" --print-changes --ignore-same-version
       '';
 
   meta = {

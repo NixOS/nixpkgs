@@ -19,12 +19,12 @@
   gobject-introspection,
   gsound,
   gtk3,
-  intltool,
+  ibus,
   json-glib,
   libsecret,
   libstartup_notification,
-  libXtst,
-  libXdamage,
+  libxtst,
+  libxdamage,
   libgbm,
   muffin,
   networkmanager,
@@ -35,7 +35,6 @@
   wrapGAppsHook3,
   libxml2,
   gtk-doc,
-  caribou,
   python3,
   keybinder3,
   cairo,
@@ -46,6 +45,7 @@
   accountsservice,
   gnome-online-accounts,
   glib-networking,
+  graphene,
   pciutils,
   timezonemap,
   libnma,
@@ -58,7 +58,6 @@
 let
   pythonEnv = python3.withPackages (
     pp: with pp; [
-      dbus-python
       setproctitle
       pygobject3
       pycairo
@@ -74,30 +73,31 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cinnamon";
-  version = "6.4.13";
+  version = "6.6.8";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon";
-    rev = version;
-    hash = "sha256-XGG5Qf6Kx1gvZITuuZWn1ggY4FNW/aEuBLbpWyxE2V8=";
+    tag = finalAttrs.version;
+    hash = "sha256-ByPn2VV40y+3/FW/KPIsLt43FhVxQAQldCK26KNKdjw=";
   };
 
   patches = [
     ./use-sane-install-dir.patch
     ./libdir.patch
 
-    # js: Use DesktopAppInfo form GioUnix, not Gio
-    # https://github.com/linuxmint/cinnamon/pull/13091
+    # util.js: Adapt to GIR 2.0
     (fetchpatch {
-      url = "https://github.com/linuxmint/cinnamon/commit/fa3aef20533af4499fb1161011e62e048bbdc396.patch";
-      hash = "sha256-qhgBniaUE/8q9BQ+EXcY7BF6eMJg+wC7EYgktwAMbwM=";
+      url = "https://github.com/linuxmint/cinnamon/commit/3a2d558aa575f0ea364c5b4e30d2eb3ee604ee58.patch";
+      hash = "sha256-+uAGuQJ0VsIvMvPFafyoXmU4MiHfbbRXLzeW/n62ucw=";
     })
+
+    # cinnamon-calendar-server.py: Allow ICal 4.0
     (fetchpatch {
-      url = "https://github.com/linuxmint/cinnamon/commit/330b9ff19f33ec1e94e36048ca46011404f796b4.patch";
-      hash = "sha256-YEQG6C4tx2T3wMfCLZXPFynAzEeIE1eVoadWVENZDFc=";
+      url = "https://github.com/linuxmint/cinnamon/commit/dcf2d986c1ec167b0a8005ef2ca427317438c8d7.patch";
+      hash = "sha256-4sCZShUOXPaJoumiuEG558e0l8CIehH0P+C9OouG3vI=";
     })
   ];
 
@@ -113,13 +113,15 @@ stdenv.mkDerivation rec {
     gcr
     gdk-pixbuf
     glib
+    graphene
     gsound
     gtk3
+    ibus
     json-glib
     libsecret
     libstartup_notification
-    libXtst
-    libXdamage
+    libxtst
+    libxdamage
     libgbm
     muffin
     networkmanager
@@ -131,7 +133,6 @@ stdenv.mkDerivation rec {
 
     # bindings
     cairo
-    caribou
     keybinder3
     upower
     xapp
@@ -151,7 +152,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     wrapGAppsHook3
-    intltool
     gtk-doc
     perl
     python3.pkgs.libsass # for pysassc
@@ -177,7 +177,6 @@ stdenv.mkDerivation rec {
                                                           --replace-fail 'subprocess.run(["/usr/bin/' 'subprocess.run(["' \
                                                           --replace-fail "msgfmt" "${gettext}/bin/msgfmt"
       substituteInPlace ./modules/cs_info.py              --replace-fail "lspci" "${pciutils}/bin/lspci"
-      substituteInPlace ./modules/cs_keyboard.py          --replace-fail "/usr/bin/cinnamon-dbus-command" "$out/bin/cinnamon-dbus-command"
       substituteInPlace ./modules/cs_themes.py            --replace-fail "$out/share/cinnamon/styles.d" "/run/current-system/sw/share/cinnamon/styles.d"
       substituteInPlace ./modules/cs_user.py              --replace-fail "/usr/bin/passwd" "/run/wrappers/bin/passwd"
     popd
@@ -189,7 +188,7 @@ stdenv.mkDerivation rec {
     substituteInPlace ./files/usr/bin/cinnamon-session-{cinnamon,cinnamon2d} \
       --replace-fail "exec cinnamon-session" "exec ${cinnamon-session}/bin/cinnamon-session"
 
-    patchShebangs src/data-to-c.pl data/theme/parse-sass.sh
+    patchShebangs src/data-to-c.pl
   '';
 
   postInstall = ''
@@ -198,11 +197,6 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    # https://github.com/NixOS/nixpkgs/issues/101881
-    gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${caribou}/share"
-    )
-
     buildPythonPath "$out ${python3.pkgs.python-xapp}"
 
     # https://github.com/NixOS/nixpkgs/issues/200397
@@ -227,11 +221,11 @@ stdenv.mkDerivation rec {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/cinnamon";
     description = "Cinnamon desktop environment";
-    license = [ licenses.gpl2 ];
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
-}
+})

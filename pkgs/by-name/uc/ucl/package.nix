@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ucl";
   version = "1.03";
 
   src = fetchurl {
-    url = "https://www.oberhumer.com/opensource/ucl/download/ucl-${version}.tar.gz";
+    url = "https://www.oberhumer.com/opensource/ucl/download/ucl-${finalAttrs.version}.tar.gz";
     sha256 = "b865299ffd45d73412293369c9754b07637680e5c826915f097577cd27350348";
   };
 
@@ -23,4 +23,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
   };
-}
+})

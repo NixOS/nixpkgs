@@ -1,35 +1,44 @@
 {
   lib,
-  black,
   buildPythonPackage,
-  click,
   fetchFromGitHub,
-  gitpython,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  click,
   jinja2,
   platformdirs,
-  poetry-core,
+  tqdm,
+
+  # optional-dependencies
+  black,
+  gitpython,
+
+  # tests
+  addBinToPathHook,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
-  tqdm,
+  versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sqlfmt";
-  version = "0.27.0";
+  version = "0.30.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "sqlfmt";
-    tag = "v${version}";
-    hash = "sha256-Yel9SB7KrDqtuZxNx4omz6u4AID8Fk5kFYKBEZD1fuU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/8BTH2nuqO+du6PsTPB59L21HvvAIZKDcG1kV9XHxsg=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
+
+  pythonRelaxDeps = [ "click" ];
 
   dependencies = [
     click
@@ -43,25 +52,29 @@ buildPythonPackage rec {
     sqlfmt_primer = [ gitpython ];
   };
 
-  nativeCheckInputs = [
-    pytest-asyncio
-    pytestCheckHook
-    writableTmpDirAsHomeHook
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
-
-  preCheck = ''
-    export PATH="$PATH:$out/bin";
-  '';
-
   pythonImportsCheck = [ "sqlfmt" ];
 
+  nativeCheckInputs = [
+    addBinToPathHook
+    pytest-asyncio
+    pytestCheckHook
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
+
+  disabledTestPaths = [
+    # TypeError: CliRunner.__init__() got an unexpected keyword argument 'mix_stderr'
+    "tests/functional_tests/test_end_to_end.py"
+    "tests/unit_tests/test_cli.py"
+  ];
+
   meta = {
-    description = "Sqlfmt formats your dbt SQL files so you don't have to";
+    description = "Formatter for dbt SQL files";
     homepage = "https://github.com/tconbeer/sqlfmt";
-    changelog = "https://github.com/tconbeer/sqlfmt/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/tconbeer/sqlfmt/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pcboy ];
     mainProgram = "sqlfmt";
   };
-}
+})

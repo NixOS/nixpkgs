@@ -54,7 +54,7 @@ EOF
     false
   fi
   echo 'initializing postgresql'
-  initdb -U postgres
+  initdb --encoding=UTF8 -U postgres
 
   echo "$postgresqlExtraSettings" >>"$PGDATA/postgresql.conf"
 

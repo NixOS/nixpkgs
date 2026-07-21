@@ -11,16 +11,16 @@
   libadwaita,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ascii-draw";
-  version = "1.1.0";
+  version = "1.3.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Nokse22";
     repo = "ascii-draw";
-    tag = "v${version}";
-    hash = "sha256-ed8RSS9anU5gstWTrJc2APx7PLmTzVVWXg8Sif8tySM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-AwcOFqPWPJoZt3spWdl0AlGZ25aEIhP45EO3pjb14hs=";
   };
 
   nativeBuildInputs = [
@@ -57,4 +57,4 @@ python3Packages.buildPythonApplication rec {
     # gnulib bindtextdomain is missing on various other unix platforms
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -3,8 +3,8 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  fetchpatch2,
   just,
+  killall,
   libcosmicAppHook,
   libinput,
   openssl,
@@ -14,16 +14,25 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-initial-setup";
-  version = "1.0.0-beta.1.1";
+  version = "1.2.0";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-initial-setup";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-kjJqGNcIlnzEsfA4eQ9D23ZGgRcmWQyWheAlwpjfALA=";
+    hash = "sha256-UABqbmbwW2ZBOO7mq16/h0s55VCWRF2yyf/1TaubC88=";
   };
 
-  cargoHash = "sha256-orwK9gcFXK4/+sfwRubcz0PP6YAFqsENRHnlSLttLxM=";
+  postPatch = ''
+    # Installs in $out/etc/xdg/autostart instead of /etc/xdg/autostart
+    substituteInPlace justfile \
+      --replace-fail \
+      "autostart-dst := rootdir / 'etc' / 'xdg' / 'autostart' / desktop-entry" \
+      "autostart-dst := prefix / 'etc' / 'xdg' / 'autostart' / desktop-entry"
+  '';
+
+  cargoHash = "sha256-DESnl5NjakU4++Ep6CHxDZzHn+o0Gi0eREpXk5BN5iY=";
 
   buildFeatures = [ "nixos" ];
 
@@ -35,36 +44,25 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # https://github.com/rust-secure-code/cargo-auditable/issues/225
   auditable = false;
 
+  separateDebugInfo = true;
+  __structuredAttrs = true;
+
+  env = {
+    VERGEN_GIT_SHA = finalAttrs.src.tag;
+    DISABLE_IF_EXISTS = "/iso/nix-store.squashfs";
+  };
+
   nativeBuildInputs = [
     libcosmicAppHook
     just
   ];
 
   buildInputs = [
+    killall
     libinput
     openssl
     udev
   ];
-
-  # These are not needed for NixOS
-  patches = [
-    ./disable-language-page.patch
-    ./disable-timezone-page.patch
-    # TODO: Remove in next update
-    (fetchpatch2 {
-      name = "fix-layout-and-themes-page.patch";
-      url = "https://patch-diff.githubusercontent.com/raw/pop-os/cosmic-initial-setup/pull/53.diff?full_index=1";
-      hash = "sha256-081qyQnPhh+FRPU/JKJVCK+l3SKjHAIV5b6/7WN6lb8=";
-    })
-  ];
-
-  postPatch = ''
-    # Installs in $out/etc/xdg/autostart instead of /etc/xdg/autostart
-    substituteInPlace justfile \
-      --replace-fail \
-      "autostart-dst := rootdir / 'etc' / 'xdg' / 'autostart' / desktop-entry" \
-      "autostart-dst := prefix / 'etc' / 'xdg' / 'autostart' / desktop-entry"
-  '';
 
   dontUseJustBuild = true;
   dontUseJustCheck = true;
@@ -78,7 +76,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
-  env.DISABLE_IF_EXISTS = "/iso/nix-store.squashfs";
+  preFixup = ''
+    libcosmicAppWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ killall ]})
+  '';
 
   passthru = {
     tests = {
@@ -92,8 +92,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     updateScript = nix-update-script {
       extraArgs = [
-        "--version"
-        "unstable"
         "--version-regex"
         "epoch-(.*)"
       ];

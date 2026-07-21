@@ -30,12 +30,6 @@ let
     r13y  reproducibility
   '';
 
-  dwWithAcronyms = pkgs.dokuwiki.overrideAttrs (prev: {
-    installPhase = prev.installPhase or "" + ''
-      ln -sf ${acronymsFile} $out/share/dokuwiki/conf/acronyms.local.conf
-    '';
-  });
-
   mkNode =
     webserver:
     { ... }:
@@ -53,9 +47,11 @@ let
             };
           };
           "site2.local" = {
-            package = dwWithAcronyms;
             usersFile = "/var/lib/dokuwiki/site2.local/users.auth.php";
             plugins = [ plugin-icalevents ];
+            extraConfigs = {
+              "acronyms.local.conf" = acronymsFile;
+            };
             settings = {
               useacl = true;
               superuser = "admin";
@@ -102,8 +98,8 @@ let
 in
 {
   name = "dokuwiki";
-  meta = with pkgs.lib; {
-    maintainers = with maintainers; [
+  meta = {
+    maintainers = with pkgs.lib.maintainers; [
       _1000101
       onny
       e1mo

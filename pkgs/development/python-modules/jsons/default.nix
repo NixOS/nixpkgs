@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   typish,
   tzdata,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "jsons";
   version = "1.6.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ramonhagenaars";
@@ -45,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jsons" ];
 
-  meta = with lib; {
+  meta = {
     description = "Turn Python objects into dicts or json strings and back";
     homepage = "https://github.com/ramonhagenaars/jsons";
     changelog = "https://github.com/ramonhagenaars/jsons/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fmoda3 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fmoda3 ];
   };
 }

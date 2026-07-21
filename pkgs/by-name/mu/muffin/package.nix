@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   replaceVars,
   cairo,
   cinnamon-desktop,
@@ -23,9 +22,9 @@
   libstartup_notification,
   libwacom,
   libxcvt,
-  libXdamage,
+  libxdamage,
   libxkbcommon,
-  libXtst,
+  libxtst,
   mesa-gl-headers,
   meson,
   ninja,
@@ -37,14 +36,14 @@
   wayland-protocols,
   wayland-scanner,
   wrapGAppsHook3,
-  xorgserver,
+  xorg-server,
   xwayland,
   zenity,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "muffin";
-  version = "6.4.1";
+  version = "6.6.3";
 
   outputs = [
     "out"
@@ -55,20 +54,13 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "muffin";
-    rev = version;
-    hash = "sha256-cGC1yGft3uEqefm2DvZrMaROoZKYd6LNY0IJ+58f6vs=";
+    rev = finalAttrs.version;
+    hash = "sha256-PNL6PAZinds+kqCUCesJkTS+93juhm35sPE7RFUdxeU=";
   };
 
   patches = [
     (replaceVars ./fix-paths.patch {
       inherit zenity;
-    })
-
-    # Fix Qt apps crashing on wayland
-    # https://github.com/linuxmint/muffin/pull/739
-    (fetchpatch {
-      url = "https://github.com/linuxmint/muffin/commit/760e2a3046e13610c4fda1291a9a28e589d2bd93.patch";
-      hash = "sha256-D0u8UxW5USzMW9KlP3Y4XCWxrQ1ySufDv+eCbrAP71c=";
     })
   ];
 
@@ -79,7 +71,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     wrapGAppsHook3
-    xorgserver # for cvt command
+    xorg-server # for cvt command
     gobject-introspection
     wayland-scanner
   ];
@@ -100,7 +92,7 @@ stdenv.mkDerivation rec {
     libstartup_notification
     libwacom
     libxcvt
-    libXdamage
+    libxdamage
     libxkbcommon
     pipewire
     udev
@@ -112,14 +104,13 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     # required for pkg-config to detect muffin-clutter
     json-glib
-    libXtst
+    libxtst
     graphene
     mesa-gl-headers
   ];
 
   mesonFlags = [
     # Based on Mint's debian/rules.
-    "-Degl_device=true"
     "-Dwayland_eglstream=true"
     "-Dxwayland_path=${lib.getExe xwayland}"
   ];
@@ -128,12 +119,12 @@ stdenv.mkDerivation rec {
     patchShebangs src/backends/native/gen-default-modes.py
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/muffin";
     description = "Window management library for the Cinnamon desktop (libmuffin) and its sample WM binary (muffin)";
     mainProgram = "muffin";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
-}
+})

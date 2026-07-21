@@ -2,7 +2,13 @@ dubCheckHook() {
     runHook preCheck
     echo "Executing dubCheckHook"
 
-    dub test --skip-registry=all "${dubTestFlags[@]}" "${dubFlags[@]}"
+    local flagsArray=(
+        --skip-registry=all
+    )
+    concatTo flagsArray dubTestFlags dubFlags
+
+    echoCmd 'dubCheckHook flags' "${flagsArray[@]}"
+    dub test "${flagsArray[@]}"
 
     echo "Finished dubCheckHook"
     runHook postCheck

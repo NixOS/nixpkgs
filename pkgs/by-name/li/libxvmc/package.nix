@@ -4,15 +4,15 @@
   fetchurl,
   pkg-config,
   xorgproto,
-  libX11,
-  libXext,
-  libXv,
+  libx11,
+  libxext,
+  libxv,
   writeScript,
   testers,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxvmc";
-  version = "1.0.14";
+  version = "1.0.15";
 
   outputs = [
     "out"
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://xorg/individual/lib/libXvMC-${finalAttrs.version}.tar.xz";
-    hash = "sha256-5L6etra6/bv4H0f3FjBHIVN25F4tx4bQ6mGByTByXtk=";
+    hash = "sha256-T1GK/ePX/UNTRq97No0vc1F/PV+CZHyWLK8/e7j/cHg=";
   };
 
   strictDeps = true;
@@ -31,9 +31,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     xorgproto
-    libX11
-    libXext
-    libXv
+    libx11
+    libxext
+    libxv
   ];
 
   propagatedBuildInputs = [ xorgproto ];

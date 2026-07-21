@@ -4,6 +4,7 @@
   ocaml-ng,
   ipaexfont,
   junicode,
+  libpng,
   lmodern,
   lmmath,
   which,
@@ -47,7 +48,7 @@ ocamlPackages.buildDunePackage {
   };
 
   preConfigure = ''
-    substituteInPlace src/frontend/main.ml --replace \
+    substituteInPlace src/frontend/main.ml --replace-fail \
     '/usr/local/share/satysfi"; "/usr/share/satysfi' \
     $out/share/satysfi
   '';
@@ -59,6 +60,7 @@ ocamlPackages.buildDunePackage {
 
   buildInputs = [
     camlpdf
+    libpng
     yojson-with-position
   ]
   ++ (with ocamlPackages; [
@@ -77,7 +79,7 @@ ocamlPackages.buildDunePackage {
     mkdir -p $out/share/satysfi/dist/fonts
     cp -r lib-satysfi/dist/ $out/share/satysfi/
     cp -r \
-      ${ipaexfont}/share/fonts/opentype/* \
+      ${ipaexfont}/share/fonts/truetype/* \
       ${lmodern}/share/fonts/opentype/public/lm/* \
       ${lmmath}/share/fonts/opentype/latinmodern-math.otf \
       ${junicode}/share/fonts/truetype/Junicode-{Bold,BoldItalic,Italic}.ttf \
@@ -93,7 +95,6 @@ ocamlPackages.buildDunePackage {
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [
       mt-caret
-      momeemt
     ];
     platforms = lib.platforms.all;
     mainProgram = "satysfi";

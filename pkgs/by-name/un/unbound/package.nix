@@ -31,6 +31,8 @@
   systemd ? null,
   # optionally support DNS-over-HTTPS as a server
   withDoH ? false,
+  # optionally support DNS-over-QUIC as a server
+  withDoQ ? false,
   withECS ? false,
   withDNSCrypt ? false,
   withDNSTAP ? false,
@@ -38,7 +40,7 @@
   withRedis ? false,
   # Avoid .lib depending on lib.getLib openssl
   # The build gets a little hacky, so in some cases we disable this approach.
-  withSlimLib ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl && !withDNSTAP,
+  withSlimLib ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl && !withDNSTAP && !withDoQ,
   # enable support for python plugins in unbound: note this is distinct from pyunbound
   # see https://unbound.docs.nlnetlabs.nl/en/latest/developer/python-modules.html
   withPythonModule ? false,
@@ -47,22 +49,27 @@
   withLto ? !stdenv.hostPlatform.isStatic && !stdenv.hostPlatform.isMinGW,
   withMakeWrapper ? !stdenv.hostPlatform.isMinGW,
   libnghttp2,
+  ngtcp2,
 
   # for passthru.updateScript
   nix-update-script,
   # for passthru.tests
   gnutls,
+  versionCheckHook,
 }:
 
+assert lib.assertMsg (
+  !withDoQ || lib.versionAtLeast openssl.version "3.5.0"
+) "unbound: withDoQ requires OpenSSL with QUIC support (OpenSSL >= 3.5)";
 stdenv.mkDerivation (finalAttrs: {
   pname = "unbound";
-  version = "1.23.1";
+  version = "1.25.1";
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = "unbound";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-65bv/AYQ3Dxwuwv49dU2UuA2imZFbUWnQEJESJvqC6w=";
+    hash = "sha256-1PXnxCPxoB5IrVBQIsrxiWAq+IoH7Ma9T1TTJsoTJc4=";
   };
 
   outputs = [
@@ -89,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withSystemd [ systemd ]
   ++ lib.optionals withDoH [ libnghttp2 ]
+  ++ lib.optionals withDoQ [ ngtcp2 ]
   ++ lib.optionals withPythonModule [ python ];
 
   enableParallelBuilding = true;
@@ -119,6 +127,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withDoH [
     "--with-libnghttp2=${libnghttp2.dev}"
   ]
+  ++ lib.optionals withDoQ [
+    "--with-libngtcp2=${ngtcp2.dev}"
+  ]
   ++ lib.optionals withECS [
     "--enable-subnet"
   ]
@@ -146,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-libhiredis=${hiredis}"
   ];
 
-  PROTOC_C = lib.optionalString withDNSTAP "${protobufc}/bin/protoc-c";
+  env.PROTOC_C = lib.optionalString withDNSTAP "${protobufc}/bin/protoc-c";
 
   # Remove references to compile-time dependencies that are included in the configure flags
   postConfigure =
@@ -202,6 +213,12 @@ stdenv.mkDerivation (finalAttrs: {
       ) " --replace '-L${pkg.dev}/lib' '-L${pkg.out}/lib' --replace '-R${pkg.dev}/lib' '-R${pkg.out}/lib'"
     ) (builtins.filter (p: p != null) finalAttrs.buildInputs);
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "-V";
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script {
       extraArgs = [
@@ -219,7 +236,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Validating, recursive, and caching DNS resolver";
     license = lib.licenses.bsd3;
     homepage = "https://www.unbound.net";
+    changelog = "https://github.com/NLnetLabs/unbound/releases/tag/release-${finalAttrs.version}";
     maintainers = with lib.maintainers; [ Scrumplex ];
+    mainProgram = "unbound";
     platforms = with lib.platforms; unix ++ windows;
   };
 })

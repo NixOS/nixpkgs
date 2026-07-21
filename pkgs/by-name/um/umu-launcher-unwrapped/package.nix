@@ -3,28 +3,29 @@
   cargo,
   fetchFromGitHub,
   lib,
-  nix-update-script,
   python3Packages,
   rustPlatform,
   scdoc,
   writableTmpDirAsHomeHook,
   withTruststore ? true,
   withDeltaUpdates ? true,
+  versionCheckHook,
+  nix-update-script,
 }:
 python3Packages.buildPythonPackage rec {
   pname = "umu-launcher-unwrapped";
-  version = "1.2.9";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "Open-Wine-Components";
     repo = "umu-launcher";
     tag = version;
-    hash = "sha256-nqI2XmMS28dvYrgD9kh7Xc510CvG7ifIybj+HlrU3qI=";
+    hash = "sha256-ZpYxoXux80QbmJUWyK5P9Om0iKNTWLrWH0RWDFXx5zE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-qGkEc4VPShMMNgSB4JmSf7Mq4jEOxEK+BqlR680ZO9k=";
+    hash = "sha256-f9Me1dCS5GxXN4mADS6Z20M7YnX5ck3JXOXUFhM+h5o=";
   };
 
   nativeCheckInputs = [
@@ -34,20 +35,22 @@ python3Packages.buildPythonPackage rec {
 
   nativeBuildInputs = [
     cargo
-    python3Packages.build
-    python3Packages.installer
-    python3Packages.hatchling
-    python3Packages.hatch-vcs
     rustPlatform.cargoSetupHook
     scdoc
-  ];
+  ]
+  ++ (with python3Packages; [
+    build
+    hatchling
+    hatch-vcs
+    installer
+  ]);
 
   pythonPath =
     with python3Packages;
     [
       pyzstd
       urllib3
-      xlib
+      python-xlib
     ]
     ++ lib.optionals withTruststore [
       truststore
@@ -84,6 +87,9 @@ python3Packages.buildPythonPackage rec {
     "test_parse_args_noopts"
   ];
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
@@ -93,7 +99,6 @@ python3Packages.buildPythonPackage rec {
     license = lib.licenses.gpl3;
     mainProgram = "umu-run";
     maintainers = with lib.maintainers; [
-      diniamo
       MattSturgeon
       fuzen
     ];

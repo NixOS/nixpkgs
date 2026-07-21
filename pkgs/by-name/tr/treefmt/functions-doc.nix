@@ -24,7 +24,7 @@ in
 {
   locations = lib.pipe attrs [
     builtins.attrNames
-    (builtins.map (
+    (map (
       name:
       let
         pos = builtins.unsafeGetAttrPos name attrs;

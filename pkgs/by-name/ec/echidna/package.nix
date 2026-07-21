@@ -3,6 +3,7 @@
   stdenv,
   makeWrapper,
   haskellPackages,
+  fetchpatch,
   fetchFromGitHub,
   # dependencies
   slither-analyzer,
@@ -10,23 +11,28 @@
 
 haskellPackages.mkDerivation rec {
   pname = "echidna";
-  version = "2.2.6";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "echidna";
     tag = "v${version}";
-    sha256 = "sha256-5nzis7MXOqs0bhx2jrEexjZYZI2qY6D0D7AWO+SPs+A=";
+    sha256 = "sha256-Zopkqc01uUccJzdjP+qmHHZzB2iXK0U0fQi6EhgCRKg=";
   };
 
   isExecutable = true;
 
   buildTools = with haskellPackages; [
     hpack
+    makeWrapper
   ];
 
+  prePatch = ''
+    hpack
+  '';
+
   executableHaskellDepends = with haskellPackages; [
-    # base dependencies
+    # package.yml/dependencies
     aeson
     base
     containers
@@ -35,9 +41,9 @@ haskellPackages.mkDerivation rec {
     MonadRandom
     mtl
     text
-    # library dependencies
+    # package.yml/library.dependencies
     ansi-terminal
-    async
+    array
     base16-bytestring
     binary
     brick
@@ -48,11 +54,14 @@ haskellPackages.mkDerivation rec {
     exceptions
     extra
     filepath
+    Glob
     hashable
     html-conduit
     html-entities
     http-conduit
     ListLike
+    mcp-server
+    mustache
     optics
     optics-core
     process
@@ -61,19 +70,22 @@ haskellPackages.mkDerivation rec {
     semver
     signal
     split
+    stm
     strip-ansi-escape
     time
     unliftio
+    unliftio-core
     utf8-string
     vector
     vty
     vty-crossplatform
     wai-extra
     warp
+    wreq
     word-wrap
     xml-conduit
     yaml
-    # executable dependencies
+    # package.yml/ecutable.echidna.dependencies
     code-page
     filepath
     hashable
@@ -81,14 +93,6 @@ haskellPackages.mkDerivation rec {
     time
     with-utf8
   ];
-
-  executableToolDepends = [
-    makeWrapper
-  ];
-
-  preConfigure = ''
-    hpack
-  '';
 
   postInstall =
     with haskellPackages;

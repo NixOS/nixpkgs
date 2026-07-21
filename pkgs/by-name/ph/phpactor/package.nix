@@ -7,16 +7,16 @@
 }:
 php.buildComposerProject2 (finalAttrs: {
   pname = "phpactor";
-  version = "2025.07.25.0";
+  version = "2026.06.25.0";
 
   src = fetchFromGitHub {
     owner = "phpactor";
     repo = "phpactor";
     tag = finalAttrs.version;
-    hash = "sha256-9XWlWwq+xvqPgKIc7IGoMVTxajjYsrPo/ra/0JIE168=";
+    hash = "sha256-3KnD/ME5UXHfeFrpJBlHssQgZ3GZuc6P2EbiGToZK1k=";
   };
 
-  vendorHash = "sha256-3xkt0QjytW4BOCgZdevat7zkSuZTPPvwz3yptiq5zoo=";
+  vendorHash = "sha256-k6Mus33SVpKJ//oAlbZFNHh+t+f7rQiryOxlkzyhV8s=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -27,7 +27,6 @@ php.buildComposerProject2 (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/phpactor/phpactor/releases/tag/${finalAttrs.version}";

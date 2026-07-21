@@ -10,20 +10,23 @@
   xz,
   zlib,
   mpi,
+  mpiCheckPhaseHook,
   withPtScotch ? false,
   testers,
+  pkgsMusl ? { }, # default to empty set to avoid CI fails with allowVariants = false
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "scotch";
-  version = "7.0.9";
+  version = "7.0.12";
 
   src = fetchFromGitLab {
     domain = "gitlab.inria.fr";
     owner = "scotch";
     repo = "scotch";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-dbf18XdmDP0KgS4H4L7Wnam7kGF88yBcCvehYRRpHvA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DE0VCGCSOOeSRIz/LQPCBNSBTNmXQtYAUKm3EeqnDBs=";
   };
 
   outputs = [
@@ -37,8 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_PTSCOTCH" withPtScotch)
     # Prefix Scotch version of MeTiS routines
     (lib.cmakeBool "SCOTCH_METIS_PREFIX" true)
-    # building tests is broken with SCOTCH_METIS_PREFIX enabled in 7.0.9
-    (lib.cmakeBool "ENABLE_TESTS" false)
+    (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   nativeBuildInputs = [
@@ -58,14 +60,13 @@ stdenv.mkDerivation (finalAttrs: {
     mpi
   ];
 
-  passthru = {
-    tests = {
-      cmake-config = testers.hasCmakeConfigModules {
-        moduleNames = [ "SCOTCH" ];
-        package = finalAttrs.finalPackage;
-      };
-    };
-  };
+  nativeCheckInputs = lib.optionals withPtScotch [
+    mpiCheckPhaseHook
+  ];
+
+  __darwinAllowLocalNetworking = withPtScotch;
+
+  doCheck = true;
 
   # SCOTCH provide compatibility with Metis/Parmetis interface.
   # We install the metis compatible headers to subdirectory to
@@ -74,6 +75,18 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $dev/include/scotch
     mv $dev/include/{*metis,metisf}.h $dev/include/scotch
   '';
+
+  passthru = {
+    tests = {
+      cmake-config = testers.hasCmakeConfigModules {
+        moduleNames = [ "SCOTCH" ];
+        package = finalAttrs.finalPackage;
+      };
+      musl = pkgsMusl.scotch or null;
+    };
+
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Graph and mesh/hypergraph partitioning, graph clustering, and sparse matrix ordering";

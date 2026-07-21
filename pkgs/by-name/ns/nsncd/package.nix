@@ -38,15 +38,15 @@ rustPlatform.buildRustPackage {
     "--skip=handlers::test::test_handle_getservbyport_port_proto_aliases"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Name service non-caching daemon";
     mainProgram = "nsncd";
     longDescription = ''
       nsncd is a nscd-compatible daemon that proxies lookups, without caching.
     '';
     homepage = "https://github.com/twosigma/nsncd";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       flokli
       picnoir
     ];
@@ -56,6 +56,6 @@ rustPlatform.buildRustPackage {
 
   passthru = {
     tests.nscd = nixosTests.nscd;
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script { extraArgs = [ "--version-regex=^v([0-9][0-9.]+)$" ]; };
   };
 }

@@ -6,12 +6,6 @@
   scdoc,
   installShellFiles,
   nix-update-script,
-  # legacy passthrus
-  gtkgreet,
-  qtgreet,
-  regreet,
-  tuigreet,
-  wlgreet,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -44,24 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installManPage man/*
   '';
 
-  # Added 2025-07-23. To be deleted on 26.05
-  passthru =
-    let
-      warnPassthru = name: lib.warnOnInstantiate "`greetd.${name}` was renamed to `${name}`";
-    in
-    lib.mapAttrs warnPassthru {
-      inherit
-        gtkgreet
-        qtgreet
-        regreet
-        tuigreet
-        wlgreet
-        ;
-    }
-    // {
-      greetd = warnPassthru "greetd" finalAttrs.finalPackage;
-      updateScript = nix-update-script { };
-    };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Minimal and flexible login manager daemon";
@@ -72,8 +49,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     homepage = "https://sr.ht/~kennylevinsen/greetd/";
     mainProgram = "greetd";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

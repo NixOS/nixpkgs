@@ -11,16 +11,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gcompris";
-  version = "25.1.1";
+  version = "26.1";
 
   src = fetchurl {
     url = "mirror://kde/stable/gcompris/qt/src/gcompris-qt-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Y23pFov1/WKPrwYYRfGI8sOF0tp/ksSwRJE5zmxtoSo=";
+    hash = "sha256-w4m4Y7KfASzMGz7vdAmC/2x2VME6LjQzl+5GYSTzEzk=";
   };
 
-  # fix concatenation of absolute paths like
-  # /nix/store/77zcv3vmndif01d4wh1rh0d1dyvyqzpy-gcompris-25.1.1/bin/..//nix/store/77zcv3vmndif01d4wh1rh0d1dyvyqzpy-gcompris-25.1.1/share/gcompris-qt/rcc/core.rcc
   postPatch = ''
+    # fix concatenation of absolute paths like
+    # /nix/store/77zcv3vmndif01d4wh1rh0d1dyvyqzpy-gcompris-25.1.1/bin/..//nix/store/77zcv3vmndif01d4wh1rh0d1dyvyqzpy-gcompris-25.1.1/share/gcompris-qt/rcc/core.rcc
     substituteInPlace src/core/config.h.in  --replace-fail \
       "../@_data_dest_dir@" "../share/gcompris-qt"
   '';
@@ -46,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
       qtbase
       qtcharts
       qtdeclarative
+      qtgraphs
       qtimageformats
       qtmultimedia
       qtsensors

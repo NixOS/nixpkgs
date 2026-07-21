@@ -13,14 +13,14 @@
   help2man,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mmv";
   version = "2.10";
 
   src = fetchFromGitHub {
     owner = "rrthomas";
     repo = "mmv";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-h+hdrIQz+7jKdMdJtWhBbZgvmNTIOr7Q38nhfAWC+G4=";
     fetchSubmodules = true;
   };
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ siraben ];
   };
-}
+})

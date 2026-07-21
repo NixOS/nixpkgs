@@ -7,20 +7,23 @@
   afew,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "afew";
-  version = "3.0.1";
+  version = "4.0.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "0wpfqbqjlfb9z0hafvdhkm7qw56cr9kfy6n8vb0q42dwlghpz1ff";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-gsfqyoVD6CXXd14MiyA5nq0e7wE6yymW9Ssmxpu6+E4=";
   };
 
-  nativeBuildInputs = with python3Packages; [
-    sphinxHook
-    setuptools
-    setuptools-scm
+  build-system = [
+    python3Packages.setuptools
+    python3Packages.setuptools-scm
+  ];
+
+  nativeBuildInputs = [
+    python3Packages.sphinxHook
   ];
 
   sphinxBuilders = [
@@ -28,11 +31,10 @@ python3Packages.buildPythonApplication rec {
     "man"
   ];
 
-  propagatedBuildInputs = with python3Packages; [
-    chardet
-    dkimpy
-    notmuch
-    setuptools
+  dependencies = [
+    python3Packages.chardet
+    python3Packages.dkimpy
+    python3Packages.notmuch2
   ];
 
   nativeCheckInputs = [
@@ -66,4 +68,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ flokli ];
   };
-}
+})

@@ -1,47 +1,60 @@
 {
   lib,
-  stdenv,
-  fetchPypi,
+  fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
+  stdenv,
+
+  # build-system
+  cython,
+  setuptools,
+  sphinx,
+
+  # build-inputs
   blosc2,
   bzip2,
   c-blosc,
-  cython,
   hdf5,
   lzo,
-  numpy,
+  pkg-config,
+
+  # dependencies
   numexpr,
-  packaging,
-  setuptools,
-  sphinx,
+  numpy,
+  packaging, # uses packaging.version at runtime
+  py-cpuinfo,
   typing-extensions,
+
   # Test inputs
   python,
-  pytest,
-  py-cpuinfo,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tables";
-  version = "3.10.2";
-  format = "setuptools";
+  version = "3.11.1";
+  pyproject = true;
+  __structuredAttrs = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-JUSBKnGG+tuoMdbdNOtJzNeI1qg/TkwrQxuDW2eWyRA=";
+  src = fetchFromGitHub {
+    owner = "PyTables";
+    repo = "PyTables";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ImzfUc+B5odozROkwhnDUY2a9XDXn8Il2wKuLzOvKAg=";
+    fetchSubmodules = true;
   };
 
   build-system = [
-    blosc2
     cython
     setuptools
     sphinx
   ];
 
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
   buildInputs = [
+    blosc2
     bzip2
     c-blosc
     blosc2.c-blosc2
@@ -51,6 +64,8 @@ buildPythonPackage rec {
 
   dependencies = [
     blosc2
+    c-blosc
+    blosc2.c-blosc2
     py-cpuinfo
     numpy
     numexpr
@@ -58,37 +73,36 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  # When doing `make distclean`, ignore docs
   postPatch = ''
     # Force test suite to error when unittest runner fails
     substituteInPlace tables/tests/test_suite.py \
       --replace-fail "return 0" "assert result.wasSuccessful(); return 0" \
       --replace-fail "return 1" "assert result.wasSuccessful(); return 1"
+    # Hard-code the blosc2 path to avoid issues with blosc2.c-blosc2
     substituteInPlace tables/__init__.py \
-      --replace-fail 'find_library("blosc2")' '"${lib.getLib c-blosc}/lib/libblosc${stdenv.hostPlatform.extensions.sharedLibrary}"'  '';
-
-  # Regenerate C code with Cython
-  preBuild = ''
-    make distclean
+      --replace-fail "ctypes.CDLL(str(lib_path))" \
+      "ctypes.CDLL('"${lib.getLib c-blosc}/lib/libblosc${stdenv.hostPlatform.extensions.sharedLibrary}"')"
   '';
 
-  setupPyBuildFlags = [
-    "--hdf5=${lib.getDev hdf5}"
-    "--lzo=${lib.getDev lzo}"
-    "--bzip2=${lib.getDev bzip2}"
-    "--blosc=${lib.getDev c-blosc}"
-    "--blosc2=${lib.getDev blosc2.c-blosc2}"
+  env = {
+    HDF5_DIR = lib.getDev hdf5;
+    LZO_DIR = lib.getDev lzo;
+    BZIP2_DIR = lib.getDev bzip2;
+    BLOSC_DIR = lib.getDev c-blosc;
+    BLOSC2_DIR = lib.getDev blosc2.c-blosc2;
+  };
+
+  nativeCheckInputs = [
+    python
+    writableTmpDirAsHomeHook
   ];
 
-  nativeCheckInputs = [ pytest ];
-
   preCheck = ''
-    export HOME=$(mktemp -d)
-    cd ..
+    cd tables/tests
   '';
 
   # Runs the light (yet comprehensive) subset of the test suite.
-  # The whole "heavy" test suite supposedly takes ~4 hours to run.
+  # Pass `--heavy` for the whole "heavy" test suite (hour+ runtime).
   checkPhase = ''
     runHook preCheck
     ${python.interpreter} -m tables.tests.test_all
@@ -97,11 +111,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tables" ];
 
-  meta = with lib; {
+  meta = {
     description = "Hierarchical datasets for Python";
     homepage = "https://www.pytables.org/";
-    changelog = "https://github.com/PyTables/PyTables/releases/tag/v${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ drewrisinger ];
+    changelog = "https://github.com/PyTables/PyTables/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})

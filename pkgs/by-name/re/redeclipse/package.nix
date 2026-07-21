@@ -8,24 +8,24 @@
   freetype,
   zlib,
   libGL,
-  libX11,
+  libx11,
   SDL2,
   SDL2_image,
   SDL2_mixer,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "redeclipse";
   version = "2.0.0";
 
   src = fetchurl {
-    url = "https://github.com/redeclipse/base/releases/download/v${version}/redeclipse_${version}_nix.tar.bz2";
+    url = "https://github.com/redeclipse/base/releases/download/v${finalAttrs.version}/redeclipse_${finalAttrs.version}_nix.tar.bz2";
     sha256 = "143i713ggbk607qr4n39pi0pn8d93x9x6fcbh8rc51jb9qhi8p5i";
   };
 
   buildInputs = [
     libGL
-    libX11
+    libx11
     freetype
     zlib
     SDL2
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     cp -R -t $out/share/redeclipse/data/ data/*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "First person arena shooter, featuring parkour, impulse boosts, and more";
     longDescription = ''
       Red Eclipse is a fun-filled new take on the first person arena shooter,
@@ -62,12 +62,12 @@ stdenv.mkDerivation rec {
       environments.
     '';
     homepage = "https://www.redeclipse.net";
-    license = with licenses; [
-      licenses.zlib
+    license = with lib.licenses; [
+      lib.licenses.zlib
       cc-by-sa-30
     ];
-    maintainers = with maintainers; [ lambda-11235 ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ lambda-11235 ];
+    platforms = lib.platforms.linux;
     hydraPlatforms = [ ];
   };
-}
+})

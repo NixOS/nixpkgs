@@ -11,6 +11,7 @@
   openpyxl,
   pytestCheckHook,
   poetry-core,
+  pyprojectVersionPatchHook,
   pyyaml,
   tabulate,
   ttp-templates,
@@ -19,17 +20,21 @@
 
 buildPythonPackage rec {
   pname = "ttp";
-  version = "0.9.5";
-  format = "pyproject";
+  version = "0.10.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dmulyalin";
     repo = "ttp";
     tag = version;
-    hash = "sha256-IWqPFspERBVkjsTYTAkOTOrugq4fD65Q140G3SCEV0w=";
+    hash = "sha256-A0McQRpSjr0EYIrHQExtBqMe+AmL+IGWaRHeexyvtvg=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   propagatedBuildInputs = [
     # https://github.com/dmulyalin/ttp/blob/master/docs/source/Installation.rst#additional-dependencies
@@ -99,12 +104,12 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "test/pytest" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/dmulyalin/ttp/releases/tag/${version}";
     description = "Template Text Parser";
     mainProgram = "ttp";
     homepage = "https://github.com/dmulyalin/ttp";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -3,12 +3,12 @@
   stdenv,
   fetchFromGitHub,
   xorgproto,
-  libX11,
-  libXft,
-  libXcomposite,
-  libXdamage,
-  libXext,
-  libXinerama,
+  libx11,
+  libxft,
+  libxcomposite,
+  libxdamage,
+  libxext,
+  libxinerama,
   libjpeg,
   giflib,
   pkg-config,
@@ -16,25 +16,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "skippy-xd";
-  version = "2025.09.07";
+  version = "2025.11.30";
 
   src = fetchFromGitHub {
     owner = "felixfung";
     repo = "skippy-xd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PxVU0atl5OLINFTM1n3REVA/M9iozkHOW9kPgTU/+qI=";
+    hash = "sha256-aN1ZJnN8xH5ggH3lknrIrz2MxrVreElUKhL8RjvZBO0=";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     xorgproto
-    libX11
-    libXft
-    libXcomposite
-    libXdamage
-    libXext
-    libXinerama
+    libx11
+    libxft
+    libxcomposite
+    libxdamage
+    libxext
+    libxinerama
     libjpeg
     giflib
   ];

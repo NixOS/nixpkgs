@@ -1,27 +1,27 @@
 {
   lib,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "unifiedpush-common-proxies";
-  version = "2.0.1";
+  version = "3.1.0";
 
-  src = fetchFromGitHub {
-    owner = "unifiedpush";
+  src = fetchFromCodeberg {
+    owner = "UnifiedPush";
     repo = "common-proxies";
-    rev = "v${version}";
-    sha256 = "sha256-pMzKK18FZCqJ86nqXfOT7tKCqIw6P0ioxRUi72aef0A=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-VRxwEsQt1LlcMIMEkGqkVtMrqJ7f4tYh3OExE9VITh4=";
   };
 
-  vendorHash = "sha256-wVZR/h0AtwZ1eo7EoRKNzaS2Wp0X01e2u3Ugmsnj644=";
+  vendorHash = "sha256-rGsSuO7cnb9e4A1SnIwfgfz4vu18JzxKtLnDfCSQqck=";
 
-  meta = with lib; {
+  meta = {
     description = "Set of rewrite proxies and gateways for UnifiedPush";
     homepage = "https://github.com/UnifiedPush/common-proxies";
-    license = licenses.mit;
-    maintainers = [ ];
-    mainProgram = "up_rewrite";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.zimward ];
+    mainProgram = "common-proxies";
   };
-}
+})

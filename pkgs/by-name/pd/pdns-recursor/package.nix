@@ -15,29 +15,31 @@
   rustPlatform,
   cargo,
   rustc,
+  python3,
   enableProtoBuf ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdns-recursor";
-  version = "5.2.5";
+  version = "5.4.3";
 
   src = fetchurl {
-    url = "https://downloads.powerdns.com/releases/pdns-recursor-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-qKZXp6vW6dI3zdJnU/fc9czVuMSKyBILCNK41XodhWo=";
+    url = "https://downloads.powerdns.com/releases/pdns-recursor-${finalAttrs.version}.tar.xz";
+    hash = "sha256-opICnFQ6xFOMpXYouBQsntypsoOjqAyzk+2UfgWE8A8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    sourceRoot = "pdns-recursor-${finalAttrs.version}/settings/rust";
-    hash = "sha256-A3NX1zj9+9qCLTkfca3v8Rr8oc/zL/Ruknjl3g1aMG4=";
+    sourceRoot = "pdns-recursor-${finalAttrs.version}/rec-rust-lib/rust";
+    hash = "sha256-eAiXdsHWZca0wx5FONGfa7JDcpDHyCABJOUROhwAsZo=";
   };
 
-  cargoRoot = "settings/rust";
+  cargoRoot = "rec-rust-lib/rust";
 
   nativeBuildInputs = [
     cargo
     rustc
+    python3
     rustPlatform.cargoSetupHook
     pkg-config
   ];
@@ -70,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    changelog = "https://doc.powerdns.com/recursor/changelog/${lib.versions.majorMinor finalAttrs.version}.html#change-${finalAttrs.version}";
     description = "Recursive DNS server";
     homepage = "https://www.powerdns.com/";
     platforms = lib.platforms.linux;

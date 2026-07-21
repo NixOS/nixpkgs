@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "seabreeze";
-  version = "2.10.1";
+  version = "2.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ap--";
     repo = "python-seabreeze";
     tag = "v${version}";
-    hash = "sha256-q4qBblebCb5z67KgWBIzsvCWNZf146I7LHPCyAabDUM=";
+    hash = "sha256-PplymlXZlRt+BzhCzIYRMjr+rMFf+XfSq846QAlbRi0=";
     leaveDotGit = true;
   };
 
@@ -80,16 +80,16 @@ buildPythonPackage rec {
     mock
     zipp
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [ "TestHardware" ];
 
   setupPyBuildFlags = [ "--without-cseabreeze" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ap--/python-seabreeze";
     description = "Python library to access Ocean Optics spectrometers";
     maintainers = [ ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

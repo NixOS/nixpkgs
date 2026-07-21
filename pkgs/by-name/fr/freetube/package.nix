@@ -2,13 +2,14 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  fetchYarnDeps,
+  fetchPnpmDeps,
   replaceVars,
   makeDesktopItem,
 
   nodejs,
-  yarnConfigHook,
-  yarnBuildHook,
+  pnpmConfigHook,
+  pnpmBuildHook,
+  pnpm_10,
   makeShellWrapper,
   copyDesktopItems,
   electron,
@@ -17,45 +18,53 @@
 }:
 let
   description = "Open Source YouTube app for privacy";
+  pnpm = pnpm_10;
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "freetube";
-  version = "0.23.9";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "FreeTubeApp";
     repo = "FreeTube";
     tag = "v${finalAttrs.version}-beta";
-    hash = "sha256-KTVGmYlDOqugTbC4YQcoTUW+Ja9y1H6mwULrMkZVI0Y=";
+    hash = "sha256-oXa+3BXLVDTaLUzt0imgTtZ4/NywibFzul/y0wymnWk=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   # Darwin requires writable Electron dist
   postUnpack =
     if stdenvNoCC.hostPlatform.isDarwin then
       ''
-        cp -r ${electron.dist} electron-dist
-        chmod -R u+w electron-dist
+        cp -r ${electron.dist} source/electron-dist
+        chmod -R u+w source/electron-dist
       ''
     else
       ''
-        ln -s ${electron.dist} electron-dist
+        ln -s ${electron.dist} source/electron-dist
       '';
 
   patches = [
     (replaceVars ./patch-build-script.patch {
       electron-version = electron.version;
     })
+    ./targets.patch
   ];
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-CnOxWA36D9x+p/Xx6sE865MSyTgPt054SX+ASr9K7zI=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-xHlxmeMtMd9/ImheeMH1K22MC0zmIzzgAHXzK+tLnQc=";
   };
 
   nativeBuildInputs = [
     nodejs
-    yarnConfigHook
-    yarnBuildHook
+    pnpmConfigHook
+    pnpmBuildHook
+    pnpm
     makeShellWrapper
     copyDesktopItems
   ];
@@ -69,12 +78,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     makeWrapper ${lib.getExe electron} $out/bin/freetube \
       --add-flags "$out/share/freetube/resources/app.asar" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     install -D _icons/icon.svg $out/share/icons/hicolor/scalable/apps/freetube.svg
   ''
   + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
-    mkdir -p $out/Applications
+    mkdir -p $out/Applications $out/bin
     cp -r build/mac*/FreeTube.app $out/Applications
     ln -s "$out/Applications/FreeTube.app/Contents/MacOS/FreeTube" $out/bin/freetube
   ''
@@ -109,11 +118,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ryand56
       sigmasquadron
       ddogfoodd
-    ];
-    badPlatforms = [
-      # output app is called "Electron.app" while derivation expects "FreeTube.app"
-      #see: https://github.com/NixOS/nixpkgs/pull/384596#issuecomment-2677141349
-      lib.systems.inspect.patterns.isDarwin
     ];
     inherit (electron.meta) platforms;
     mainProgram = "freetube";

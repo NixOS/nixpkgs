@@ -7,12 +7,12 @@
   xz,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stt";
   version = "1.4.0";
 
   src = fetchurl {
-    url = "https://github.com/coqui-ai/STT/releases/download/v${version}/native_client.tflite.Linux.tar.xz";
+    url = "https://github.com/coqui-ai/STT/releases/download/v${finalAttrs.version}/native_client.tflite.Linux.tar.xz";
     hash = "sha256-RVYc64pLYumQoVUEFZdxfUUaBMozaqgD0h/yiMaWN90=";
   };
 
@@ -36,13 +36,13 @@ stdenv.mkDerivation rec {
     install -D libstt.so $out/lib/libstt.so
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/coqui-ai/STT";
     description = "Deep learning toolkit for Speech-to-Text, battle-tested in research and production";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.mpl20;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.mpl20;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ rvolosatovs ];
+    maintainers = with lib.maintainers; [ rvolosatovs ];
     mainProgram = "stt";
   };
-}
+})

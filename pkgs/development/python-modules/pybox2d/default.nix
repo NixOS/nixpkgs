@@ -34,10 +34,10 @@ buildPythonPackage rec {
   # Tests need to start GUI windows.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "2D Game Physics for Python";
     homepage = "https://github.com/pybox2d/pybox2d";
-    license = licenses.zlib;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

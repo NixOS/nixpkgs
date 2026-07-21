@@ -65,6 +65,16 @@ in
         '';
       };
 
+      limit = mkOption {
+        default = null;
+        type = types.nullOr (types.strMatching "[0-9]+[KMGT]?");
+        example = "100M";
+        description = ''
+          The scrub throughput limit applied on all scrubbed filesystems.
+          The value is bytes per second, and accepts the usual KMGT prefixes.
+        '';
+      };
+
     };
   };
 
@@ -79,12 +89,11 @@ in
         "crc32c"
       ]
       ++ optionals (config.boot.kernelPackages.kernel.kernelAtLeast "5.5") [
-        # Needed for mounting filesystems with new checksums
-        "xxhash_generic"
-        "blake2b_generic"
-
-        # `sha256` is always available, whereas `sha256_generic` is not available from 6.17 onwards
+        # The canonical names of these modules are not very stable, so use the algorithm names that the btrfs module expects.
+        # See: https://github.com/torvalds/linux/blob/v6.19-rc1/fs/btrfs/super.c#L2705-L2708
+        "xxhash64"
         "sha256" # Should be baked into our kernel, just to be sure
+        "blake2b-256"
       ];
 
       boot.initrd.extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) ''
@@ -185,7 +194,9 @@ in
                 Type = "simple";
                 Nice = 19;
                 IOSchedulingClass = "idle";
-                ExecStart = "${pkgs.btrfs-progs}/bin/btrfs scrub start -B ${fs}";
+                ExecStart = "${pkgs.btrfs-progs}/bin/btrfs scrub start -B ${
+                  lib.optionalString (cfgScrub.limit != null) "--limit ${cfgScrub.limit}"
+                } ${fs}";
                 # if the service is stopped before scrub end, cancel it
                 ExecStop = pkgs.writeShellScript "btrfs-scrub-maybe-cancel" ''
                   (${pkgs.btrfs-progs}/bin/btrfs scrub status ${fs} | ${pkgs.gnugrep}/bin/grep finished) || ${pkgs.btrfs-progs}/bin/btrfs scrub cancel ${fs}

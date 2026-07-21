@@ -23,15 +23,16 @@
   libtirpc,
   rpcsvc-proto,
   curl,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql";
-  version = "8.4.6";
+  version = "8.4.10";
 
   src = fetchurl {
     url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor finalAttrs.version}/mysql-${finalAttrs.version}.tar.gz";
-    hash = "sha256-oeUj3IvpbRilreEGmYZhKFygG29bRsCLJlQRDkDfL7c=";
+    hash = "sha256-1XpnMLrvFK4Rj39KbgKEW1tQkzdY32H7BuEE8nzMj5Y=";
   };
 
   nativeBuildInputs = [
@@ -111,15 +112,22 @@ stdenv.mkDerivation (finalAttrs: {
     connector-c = finalAttrs.finalPackage;
     server = finalAttrs.finalPackage;
     mysqlVersion = lib.versions.majorMinor finalAttrs.version;
+    tests = {
+      mysql =
+        nixosTests.mysql."mysql${lib.versions.major finalAttrs.version}${lib.versions.minor finalAttrs.version}";
+      mysql-secure-root-by-default =
+        nixosTests.mysql-secure-root.secure-by-default."mysql${lib.versions.major finalAttrs.version}${lib.versions.minor finalAttrs.version}";
+      mysql-root-can-be-kept-insecure =
+        nixosTests.mysql-secure-root.can-be-insecure."mysql${lib.versions.major finalAttrs.version}${lib.versions.minor finalAttrs.version}";
+    };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.mysql.com/";
     description = "World's most popular open source database";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [
-      orivej
+    license = lib.licenses.gpl2;
+    maintainers = [
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

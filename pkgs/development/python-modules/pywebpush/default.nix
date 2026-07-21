@@ -8,7 +8,6 @@
   mock,
   py-vapid,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   six,
@@ -16,14 +15,12 @@
 
 buildPythonPackage rec {
   pname = "pywebpush";
-  version = "2.0.3";
+  version = "2.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WEh448JD6HOiLbiJVQXZVxW8eW73TMG4/pn1lhdBYeM=";
+    hash = "sha256-0eJ9uN6eZ1fBh19nKSVUvVTEGHTDb0tcTrtUQtziBPI=";
   };
 
   build-system = [ setuptools ];
@@ -44,12 +41,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pywebpush" ];
 
-  meta = with lib; {
+  meta = {
     description = "Webpush Data encryption library for Python";
     homepage = "https://github.com/web-push-libs/pywebpush";
     changelog = "https://github.com/web-push-libs/pywebpush/releases/tag/${version}";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ peterhoeg ];
     mainProgram = "pywebpush";
   };
 }

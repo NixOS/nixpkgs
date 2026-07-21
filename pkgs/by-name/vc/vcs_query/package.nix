@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vcs_query";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "mageta";
     repo = "vcs_query";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "05va0na9yxkpqhm9v0x3k58148qcf2bbcv5bnmj7vn9r7fwyjrlx";
   };
 
@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     patchPythonScript $out/bin/vcs_query
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mageta/vcs_query";
     description = "Email query-command to use vCards in mutt and Vim";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ma27 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ma27 ];
     mainProgram = "vcs_query";
   };
-}
+})

@@ -33,15 +33,15 @@ appimageTools.wrapType2 {
       --replace 'Exec=AppRun' 'Exec=${pname}'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GUI Client for GRPC Services";
     longDescription = ''
       Inspired by Postman and GraphQL Playground BloomRPC aims to provide the simplest
       and most efficient developer experience for exploring and querying your GRPC services.
     '';
     homepage = "https://github.com/uw-labs/bloomrpc";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ zoedsoupe ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ zoedsoupe ];
     platforms = [ "x86_64-linux" ];
   };
 }

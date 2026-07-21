@@ -14,7 +14,8 @@ let
   format = "wheel";
   pyShortVersion = "cp${builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion}";
   src = fetchPypi {
-    inherit pname version format;
+    inherit pname version;
+    format = "wheel";
     dist = pyShortVersion;
     python = pyShortVersion;
     abi = pyShortVersion;

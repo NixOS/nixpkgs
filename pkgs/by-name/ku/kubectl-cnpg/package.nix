@@ -4,26 +4,26 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubectl-cnpg";
-  version = "1.27.0";
+  version = "1.30.0";
 
   src = fetchFromGitHub {
     owner = "cloudnative-pg";
     repo = "cloudnative-pg";
-    rev = "v${version}";
-    hash = "sha256-GDPVrGWawzuOjTCtXIDFH2XUQ6Ot3i+w4x61QK3TyIE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-UHgllbD2eNBVYrF5nPZhethZIyyBkEji1xf0okGshoI=";
   };
 
-  vendorHash = "sha256-CekPp3Tmte08DdFulVTNxlh4OuWz+ObqQ9jDd5b+Qn8=";
+  vendorHash = "sha256-Eh057tW8NTCNVtgyeY4A+Cc8wQbRDpUYDFmj4l+pn8o=";
 
   subPackages = [ "cmd/kubectl-cnpg" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://cloudnative-pg.io/";
     description = "Plugin for kubectl to manage a CloudNativePG cluster in Kubernetes";
     mainProgram = "kubectl-cnpg";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ devusb ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ devusb ];
   };
-}
+})

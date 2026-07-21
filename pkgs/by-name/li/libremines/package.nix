@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libremines";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "Bollos00";
     repo = "libremines";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JLA+QpPhhEiv75jpzKncBHsC5WGK0dht5jVJx56pz88=";
+    hash = "sha256-bV7k0RhOLqyX7kKbISTo8gRiMVGx3Y2EdmihpdtIWz4=";
   };
 
   nativeBuildInputs = [

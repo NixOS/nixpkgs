@@ -13,6 +13,7 @@
   makeDesktopItem,
   makeWrapper,
   p7zip,
+  gnutar,
   writeShellScript,
 }:
 let
@@ -41,14 +42,22 @@ let
       version,
       ...
     }:
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation (finalAttrs: {
       inherit src version;
 
       pname = "pianoteq-${name}";
 
-      unpackPhase = ''
-        ${p7zip}/bin/7z x $src
-      '';
+      unpackPhase =
+        if lib.hasSuffix ".7z" src then
+          ''
+            ${p7zip}/bin/7z x $src
+          ''
+        else if lib.hasSuffix ".tar.xz" src then
+          ''
+            ${gnutar}/bin/tar -xf $src
+          ''
+        else
+          throw "unexpected file format";
 
       nativeBuildInputs = [
         autoPatchelfHook
@@ -66,11 +75,11 @@ let
 
       desktopItems = [
         (makeDesktopItem {
-          name = pname;
+          name = finalAttrs.pname;
           exec = ''"${mainProgram}"'';
           desktopName = mainProgram;
           icon = "pianoteq";
-          comment = meta.description;
+          comment = finalAttrs.meta.description;
           categories = [
             "AudioVideo"
             "Audio"
@@ -84,7 +93,7 @@ let
       installPhase = ''
         runHook preInstall
         mkdir -p $out/bin
-        mv -t $out/bin ${builtins.concatStringsSep " " (builtins.map (dir: "Pianoteq*/${dir}/*") archdirs)}
+        mv -t $out/bin ${builtins.concatStringsSep " " (map (dir: "Pianoteq*/${dir}/*") archdirs)}
         install -Dm644 ${./pianoteq.svg} $out/share/icons/hicolor/scalable/apps/pianoteq.svg
         for size in 16 22 32 48 64 128 256; do
           dir=$out/share/icons/hicolor/"$size"x"$size"/apps
@@ -99,22 +108,22 @@ let
         runHook postInstall
       '';
 
-      meta = with lib; {
+      meta = {
         homepage = "https://www.modartt.com/pianoteq";
         description = "Software synthesizer that features real-time MIDI-control of digital physically modeled pianos and related instruments";
-        license = licenses.unfree;
+        license = lib.licenses.unfree;
         inherit mainProgram;
         platforms = [
           "x86_64-linux"
           "aarch64-linux"
         ];
-        maintainers = with maintainers; [
+        maintainers = with lib.maintainers; [
           mausch
           ners
         ];
         sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
       };
-    };
+    });
 
   fetchWithCurlScript =
     {
@@ -243,6 +252,7 @@ let
   version6 = "6.7.3";
   version7 = "7.5.4";
   version8 = "8.4.0";
+  version9 = "9.1.2";
 
   mkStandard =
     version: hash:
@@ -292,8 +302,35 @@ let
         inherit hash;
       };
     };
+  mkTrial9 =
+    hash:
+    mkPianoteq {
+      name = "trial";
+      version = version9;
+      mainProgram = "Pianoteq 9";
+      startupWMClass = "Pianoteq Trial";
+      src = fetchPianoteqTrial {
+        name = "pianoteq_trial_v${versionForFile version9}.tar.xz";
+        inherit hash;
+      };
+    };
+  mkStage9 =
+    hash:
+    mkPianoteq {
+      name = "stage";
+      version = version9;
+      mainProgram = "Pianoteq 9 STAGE";
+      startupWMClass = "Pianoteq STAGE";
+      src = fetchPianoteqWithLogin {
+        name = "pianoteq_setup_v${versionForFile version9}.tar.xz";
+        inherit hash;
+      };
+    };
 in
 {
+  trial_9 = mkTrial9 "sha256-1ofPL6F12Gv+k2rZBadOa5Iyukuji6vdww87ufdKjM8=";
+  stage_9 = mkStage9 "sha256-Jvm/AhBwgj5INW8U48rJjgDB7j/Z1VnYKczvtrpl/AY=";
+
   standard_8 = mkStandard version8 "sha256-ZDGB/SOOz+sWz7P+sNzyaipEH452n8zq5LleO3ztSXc=";
   stage_8 = mkStage version8 "";
   standard-trial_8 = mkStandardTrial version8 "sha256-K3LbAWxciXt9hVAyRayxSoE/IYJ38Fd03+j0s7ZsMuw=";

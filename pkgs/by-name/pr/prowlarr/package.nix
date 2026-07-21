@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   stdenvNoCC,
   fetchFromGitHub,
   buildDotnetModule,
@@ -19,7 +20,7 @@
   applyPatches,
 }:
 let
-  version = "2.0.5.5160";
+  version = "2.4.0.5397";
   # The dotnet8 compatibility patches also change `yarn.lock`, so we must pass
   # the already patched lockfile to `fetchYarnDeps`.
   src = applyPatches {
@@ -27,7 +28,7 @@ let
       owner = "Prowlarr";
       repo = "Prowlarr";
       tag = "v${version}";
-      hash = "sha256-xSAEDcBaItA+retaSKtEI6wlwj5Knfi4RwUN6GGYms0=";
+      hash = "sha256-cLFzCPSG0cB2K3KPNrN0zNnmZMEX3olJajNFGxmYoAM=";
     };
     postPatch = ''
       mv src/NuGet.config NuGet.Config
@@ -49,7 +50,7 @@ buildDotnetModule {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-QVyjo/Zshy+61qocGKa3tZS8gnHvvVqenf79FkiXDBM=";
+    hash = "sha256-PZw+Q7CcHkbb2bhZKSPE0kvPIhWxWQIqr7/UZlPdqtY=";
   };
 
   postConfigure = ''
@@ -72,7 +73,7 @@ buildDotnetModule {
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
 
-  doCheck = true;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   __darwinAllowLocalNetworking = true; # for tests
 

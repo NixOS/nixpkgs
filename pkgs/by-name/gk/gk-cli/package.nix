@@ -85,11 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
           hash = "sha256-nDVehD0TTNTvhuDU8RB4lZiVcEJpB+l6EGkzckC7JuU=";
           stripRoot = false;
         };
-        x86_64-darwin = fetchzip {
-          url = "${base_url}darwin_amd64.zip";
-          hash = "sha256-Lhuqb5592T6VcTMVmAdIDfGMXaS4dSu0wbQeHheXXk4=";
-          stripRoot = false;
-        };
         aarch64-windows = fetchzip {
           url = "${base_url}windows_arm64.zip";
           hash = "sha256-sXHeqR4AW/sRPp74PieXI1n4VGV94CnrcMF1ovAek8E=";
@@ -131,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.gitkraken.com";
     license = lib.licenses.unfree;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    maintainers = [ lib.maintainers.pinage404 ];
+    maintainers = [ ];
     mainProgram = "gk";
     platforms = builtins.attrNames finalAttrs.passthru.sources;
   };

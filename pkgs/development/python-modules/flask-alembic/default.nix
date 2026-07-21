@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
   flit-core,
   alembic,
   flask,
@@ -14,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "flask-alembic";
-  version = "3.1.1";
+  version = "3.2.0";
 
   pyproject = true;
 
@@ -22,7 +21,7 @@ buildPythonPackage rec {
     owner = "pallets-eco";
     repo = "flask-alembic";
     tag = version;
-    hash = "sha256-iHJr9l3w1WwZXDl573IV7+A7RDcawGL20sxxhAQQ628=";
+    hash = "sha256-g5xl5CEfSZUbZxCLYykjd94eVjxzBAkgoBcR4y7IYfM=";
   };
 
   build-system = [ flit-core ];
@@ -41,12 +40,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_alembic" ];
 
-  meta = with lib; {
-    # https://github.com/pallets-eco/flask-alembic/issues/47
-    broken = pythonAtLeast "3.13";
+  meta = {
     homepage = "https://github.com/pallets-eco/flask-alembic";
     changelog = "https://github.com/pallets-eco/flask-alembic/blob/${src.tag}/CHANGES.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ erictapen ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 }

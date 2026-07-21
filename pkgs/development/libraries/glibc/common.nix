@@ -33,6 +33,7 @@
   libpng ? null,
   libidn2,
   bison,
+  gettext,
   python3Minimal,
 }:
 
@@ -49,9 +50,9 @@
 }@args:
 
 let
-  version = "2.40";
-  patchSuffix = "-66";
-  sha256 = "sha256-GaiQF16SY9dI9ieZPeb0sa+c0h4D8IDkv7Oh+sECBaI=";
+  version = "2.42";
+  patchSuffix = "-67";
+  sha256 = "sha256-0XdeMuRijmTvkw9DW2e7Y691may2viszW58Z8WUJ8X8=";
 in
 
 assert withLinuxHeaders -> linuxHeaders != null;
@@ -67,18 +68,18 @@ stdenv.mkDerivation (
     patches = [
       /*
         No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
-         $ git fetch --all -p && git checkout origin/release/2.40/master && git describe
-         glibc-2.40-142-g2eb180377b
-         $ git show --minimal --reverse glibc-2.40.. ':!ADVISORIES' > 2.40-master.patch
+         $ git fetch --all -p && git checkout origin/release/2.42/master && git describe
+         glibc-2.42-67-g4ebd33dd77
+         $ git show --minimal --reverse glibc-2.42.. ':!ADVISORIES' > 2.42-master.patch
 
         To compare the archive contents zdiff can be used.
-         $ diff -u 2.40-master.patch ../nixpkgs/pkgs/development/libraries/glibc/2.40-master.patch
+         $ diff -u 2.42-master.patch ../nixpkgs/pkgs/development/libraries/glibc/2.42-master.patch
 
         Please note that each commit has changes to the file ADVISORIES excluded since
         that conflicts with the directory advisories/ making cross-builds from
         hosts with case-insensitive file-systems impossible.
       */
-      ./2.40-master.patch
+      ./2.42-master.patch
 
       # Allow NixOS and Nix to handle the locale-archive.
       ./nix-locale-archive.patch
@@ -111,6 +112,19 @@ stdenv.mkDerivation (
         & https://github.com/NixOS/nixpkgs/pull/188492#issuecomment-1233802991
       */
       ./reenable_DT_HASH.patch
+
+      # enable parallel & reproducible build of glibcLocales
+      ./0001-localedata-allow-reproducible-parallel-install-of-lo.patch
+      ./0002-Makeconfig-make-inst_complocaledir-overridable.patch
+
+      # Security fixes.
+      #
+      # Can be dropped on 2.44. The first patch is only to make it
+      # easier to backport the fix for CVE-2026-6238 and it seems
+      # useful in its own right anyhow.
+      ./0001-resolv-Check-for-inet_ntop-failure-in-ns_sprintrrf.patch
+      ./0002-resolv-More-types-as-unknown-in-ns_sprintrrf-CVE-202.patch
+      ./0003-resolv-Fix-buffer-overreads-in-ns_sprintrrf-CVE-2026.patch
     ]
     /*
       NVCC does not support ARM intrinsics. Since <math.h> is pulled in by almost
@@ -160,15 +174,6 @@ stdenv.mkDerivation (
       -#define LIBIDN2_SONAME "libidn2.so.0"
       +#define LIBIDN2_SONAME "${lib.getLib libidn2}/lib/libidn2.so.0"
       EOF
-    ''
-    # For some reason, with gcc-15 build fails with the following error:
-    #
-    #     zic.c:3767:1: note: did you mean to specify it after ')' following function parameters?
-    #     zic.c:3781:1: error: standard 'reproducible' attribute can only be applied to function declarators or type specifiers with function type []
-    + ''
-      for path in timezone/zic.c timezone/zdump.c ; do
-        substituteInPlace $path  --replace-fail "ATTRIBUTE_REPRODUCIBLE" ""
-      done
     '';
 
     configureFlags = [
@@ -213,7 +218,12 @@ stdenv.mkDerivation (
 
     makeFlags =
       (args.makeFlags or [ ])
-      ++ [ "OBJCOPY=${stdenv.cc.targetPrefix}objcopy" ]
+      ++ [
+        "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
+        # zonedir does nothing on NixOS but is important for non-NixOS.
+        # See https://github.com/NixOS/nixpkgs/pull/491193
+        "zonedir=/usr/share/zoneinfo"
+      ]
       ++ lib.optionals (stdenv.cc.libc != null) [
         "BUILD_LDFLAGS=-Wl,-rpath,${stdenv.cc.libc}/lib"
         "OBJDUMP=${stdenv.cc.bintools.bintools}/bin/objdump"
@@ -242,6 +252,7 @@ stdenv.mkDerivation (
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     nativeBuildInputs = [
       bison
+      gettext
       python3Minimal
     ]
     ++ extraNativeBuildInputs;
@@ -295,13 +306,13 @@ stdenv.mkDerivation (
             sed -i "$i" -e "s^/bin/pwd^$PWD_P^g"
         done
 
-        mkdir ../build
-        cd ../build
+        mkdir build
+        cd build
 
-        configureScript="`pwd`/../$sourceRoot/configure"
+        configureScript="`pwd`/../configure"
       ''
       + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-        sed -i s/-lgcc_eh//g "../$sourceRoot/Makeconfig"
+        sed -i s/-lgcc_eh//g ../Makeconfig
 
         cat > config.cache << "EOF"
         libc_cv_forced_unwind=yes
@@ -337,7 +348,7 @@ stdenv.mkDerivation (
       doCheck = false; # fails
 
       meta =
-        with lib;
+
         {
           homepage = "https://www.gnu.org/software/libc/";
           description = "GNU C Library";
@@ -351,13 +362,14 @@ stdenv.mkDerivation (
             most systems with the Linux kernel.
           '';
 
-          license = licenses.lgpl2Plus;
+          license = lib.licenses.lgpl2Plus;
 
-          maintainers = with maintainers; [
+          maintainers = with lib.maintainers; [
             ma27
             connorbaker
           ];
-          platforms = platforms.linux;
+          teams = [ lib.teams.security-review ];
+          platforms = lib.platforms.linux;
         }
         // (args.meta or { });
     }

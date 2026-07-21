@@ -6,14 +6,14 @@
   kube-score,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kube-score";
   version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "zegl";
     repo = "kube-score";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ZqhuqPWCfJKi38Jdazr5t5Wulsqzl1D4/81ZTvW10Co=";
   };
 
@@ -22,8 +22,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
-    "-X=main.commit=${src.rev}"
+    "-X=main.version=${finalAttrs.version}"
+    "-X=main.commit=${finalAttrs.src.rev}"
   ];
 
   passthru.tests = {
@@ -37,8 +37,8 @@ buildGoModule rec {
     description = "Kubernetes object analysis with recommendations for improved reliability and security";
     mainProgram = "kube-score";
     homepage = "https://github.com/zegl/kube-score";
-    changelog = "https://github.com/zegl/kube-score/releases/tag/v${version}";
+    changelog = "https://github.com/zegl/kube-score/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ j4m3s ];
   };
-}
+})

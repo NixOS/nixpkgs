@@ -11,13 +11,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "kaniko";
-  version = "1.25.2";
+  version = "1.25.15";
 
   src = fetchFromGitHub {
-    owner = "chainguard-dev";
+    owner = "chainguard-forks";
     repo = "kaniko";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-4P/NKwC32/hW4goUelnx28zY9bBD5Hbbz/y+S00rt7k=";
+    hash = "sha256-0d0QdNmR7FaybJJEq6bb9WshTg6dX3HtO9oESg1e4S4=";
   };
 
   vendorHash = null;
@@ -52,7 +52,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Tool to build container images from a Dockerfile, inside a container or Kubernetes cluster";
-    homepage = "https://github.com/chainguard-dev/kaniko";
+    homepage = "https://github.com/chainguard-forks/kaniko";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [

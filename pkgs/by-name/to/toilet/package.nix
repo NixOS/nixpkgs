@@ -8,12 +8,12 @@
   testers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "toilet";
   version = "0.3";
 
   src = fetchurl {
-    url = "http://caca.zoy.org/raw-attachment/wiki/toilet/toilet-${version}.tar.gz";
+    url = "http://caca.zoy.org/raw-attachment/wiki/toilet/toilet-${finalAttrs.version}.tar.gz";
     sha256 = "1pl118qb7g0frpgl9ps43w4sd0psjirpmq54yg1kqcclqcqbbm49";
   };
 
@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     package = toilet;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Display large colourful characters in text mode";
     homepage = "http://caca.zoy.org/wiki/toilet";
-    license = licenses.wtfpl;
-    maintainers = with maintainers; [ pSub ];
-    platforms = platforms.all;
+    license = lib.licenses.wtfpl;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = lib.platforms.all;
     mainProgram = "toilet";
   };
-}
+})

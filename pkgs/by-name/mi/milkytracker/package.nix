@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   gitUpdater,
   alsa-lib,
   cmake,
@@ -26,6 +27,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-IMX1+gJUghBxnaSTWnfDYzQVbKFQzQIS70H+L6ogVro=";
   };
 
+  patches = [
+    # Fix compat with CMake 4
+    # Remove when version > 1.06
+    (fetchpatch2 {
+      name = "0001-milkytracker-Build-SET-CMP0004-OLD-only-if-CMake-lt-4.0.patch";
+      url = "https://github.com/milkytracker/MilkyTracker/commit/517b27faf6e1471c2ccb25c3c22f78eb862cd552.patch?full_index=1";
+      hash = "sha256-/+Orf6BKZxhe90VT7p0gdJtHDHLrJy+rmPt03ma410s=";
+    })
+  ];
+
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -48,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm644 $src/resources/milkytracker.desktop $out/share/applications/milkytracker.desktop
-    install -Dm644 $src/resources/pictures/carton.png $out/share/pixmaps/milkytracker.png
+    install -Dm644 $src/resources/pictures/carton.png $out/share/icons/hicolor/128x128/apps/milkytracker.png
     install -Dm644 resources/org.milkytracker.MilkyTracker.metainfo.xml $out/share/appdata/org.milkytracker.MilkyTracker.metainfo.xml
   '';
 

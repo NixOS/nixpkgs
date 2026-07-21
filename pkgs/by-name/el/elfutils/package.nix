@@ -26,13 +26,13 @@
 }:
 
 # TODO: Look at the hardcoded paths to kernel, modules etc.
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "elfutils";
-  version = "0.193";
+  version = "0.195";
 
   src = fetchurl {
-    url = "https://sourceware.org/elfutils/ftp/${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-eFf0S2JPTY1CHfhRqq57FALP5rzdLYBJ8V/AfT3edjU=";
+    url = "https://sourceware.org/elfutils/ftp/${finalAttrs.version}/elfutils-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-N2Kf338fPcKBjhOPyiuAlBd9bC0PcB07tlClYSGNwCY=";
   };
 
   patches = [
@@ -56,6 +56,11 @@ stdenv.mkDerivation rec {
       name = "musl-strndupa.patch";
       url = "https://git.alpinelinux.org/aports/plain/main/elfutils/musl-strndupa.patch?id=2e3d4976eeffb4704cf83e2cc3306293b7c7b2e9";
       sha256 = "sha256-7daehJj1t0wPtQzTv+/Rpuqqs5Ng/EYnZzrcf2o/Lb0=";
+    })
+    (fetchpatch {
+      name = "fix-i386_tlsdesc_relocation.patch";
+      url = "https://sourceware.org/git/?p=elfutils.git;a=patch;h=bfd519cc58e190544a6785d3f0a27fcfaf7d8da3";
+      hash = "sha256-N7DL2FG1AWLc+hcnxGMbUl5TuieoAc9OD6gc0sbsiGI=";
     })
   ]
   ++ lib.optionals stdenv.hostPlatform.isMusl [ ./musl-error_h.patch ];
@@ -85,8 +90,8 @@ stdenv.mkDerivation rec {
     flex
     gettext
     bzip2
-  ]
-  ++ lib.optional enableDebuginfod pkg-config;
+    pkg-config
+  ];
   buildInputs = [
     zlib
     zstd
@@ -109,18 +114,6 @@ stdenv.mkDerivation rec {
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
   hardeningDisable = [ "strictflexarrays3" ];
-
-  # build elfutils out-of-source-tree to avoid ./stack inclusion
-  # as a c++ header on libc++: https://sourceware.org/PR33103
-  preConfigure =
-    if (stdenv.targetPlatform.useLLVM or false) then
-      ''
-        mkdir build-tree
-        cd build-tree
-      ''
-    else
-      null;
-  configureScript = if (stdenv.targetPlatform.useLLVM or false) then "../configure" else null;
 
   configureFlags = [
     "--program-prefix=eu-" # prevent collisions with binutils
@@ -146,32 +139,25 @@ stdenv.mkDerivation rec {
     && (stdenv.hostPlatform == stdenv.buildPlatform);
   doInstallCheck = !stdenv.hostPlatform.isMusl && (stdenv.hostPlatform == stdenv.buildPlatform);
 
-  preCheck = ''
-    # Workaround lack of rpath linking:
-    #   ./dwarf_srclang_check: error while loading shared libraries:
-    #     libelf.so.1: cannot open shared object file: No such file or directory
-    # Remove once https://sourceware.org/PR32929 is fixed.
-    export LD_LIBRARY_PATH="$PWD/libelf:$LD_LIBRARY_PATH"
-  '';
-
   passthru.updateScript = gitUpdater {
     url = "https://sourceware.org/git/elfutils.git";
     rev-prefix = "elfutils-";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sourceware.org/elfutils/";
     description = "Set of utilities to handle ELF objects";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     # https://lists.fedorahosted.org/pipermail/elfutils-devel/2014-November/004223.html
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
     # licenses are GPL2 or LGPL3+ for libraries, GPL3+ for bins,
     # but since this package isn't split that way, all three are listed.
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       lgpl3Plus
       gpl3Plus
     ];
-    maintainers = with maintainers; [ r-burns ];
+    maintainers = with lib.maintainers; [ r-burns ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "elfutils_project" finalAttrs.version;
   };
-}
+})

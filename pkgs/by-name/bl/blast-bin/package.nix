@@ -26,10 +26,6 @@ let
       url = "https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/${version}/ncbi-blast-${version}+-aarch64-linux.tar.gz";
       hash = "sha256-1EeiMu08R9Glq8qRky4OTT5lQPLJcM7iaqUrmUOS4MI=";
     };
-    x86_64-darwin = fetchurl {
-      url = "https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/${version}/ncbi-blast-${version}+-x64-macosx.tar.gz";
-      hash = "sha256-fu4edyD12q8G452ckrEl2Qct5+uB9JnABd7bCLkyMkw=";
-    };
     aarch64-darwin = fetchurl {
       url = "https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/${version}/ncbi-blast-${version}+-aarch64-macosx.tar.gz";
       hash = "sha256-6NpPNLBCHaBRscLZ5fjh5Dv3bjjPk2Gh2+L7xEtiJNs=";
@@ -67,15 +63,14 @@ stdenv.mkDerivation {
       --replace /bin/rm ${coreutils}/bin/rm
   '';
 
-  meta = with lib; {
+  meta = {
     inherit (blast.meta) description homepage license;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ natsukium ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

@@ -2,37 +2,36 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchFromBitbucket,
   setuptools,
   numpy,
   scipy,
   sympy,
   recursivenodes,
   symengine,
-  fenics-ufl,
+  firedrake-ufl,
   pytestCheckHook,
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "firedrake-fiat";
-  version = "2025.4.2";
+  version = "2026.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firedrakeproject";
     repo = "fiat";
-    tag = version;
-    hash = "sha256-SIi/4JW9L4kyFxEmbG9pqe0QtY80UMOh7LSFLmrHhZY=";
+    tag = finalAttrs.version;
+    hash = "sha256-aO4iFDwt9l5+s+96kjxja92OWnJb64OBpYXu6oxk51c=";
   };
 
   postPatch =
     let
-      fiat-reference-data = fetchFromBitbucket {
-        owner = "fenics-project";
+      fiat-reference-data = fetchFromGitHub {
+        owner = "firedrakeproject";
         repo = "fiat-reference-data";
-        rev = "0c8c97f7e4919402129e5ff3b54e3f0b9e902b7c";
-        hash = "sha256-vdCkmCkKvLSYACF6MnZ/WuKuCNAoC3uu1A/9m9KwBK8=";
+        rev = "508bd755e024010f6fc691a36e51a8f4d7de7efe";
+        hash = "sha256-Ylq5u3d54SnCiB3nLRkkQu7IkRVuMcUWPgIjn7SIQ0M=";
       };
     in
     ''
@@ -46,7 +45,7 @@ buildPythonPackage rec {
     scipy
     sympy
     recursivenodes
-    fenics-ufl
+    firedrake-ufl
     symengine
   ];
 
@@ -82,4 +81,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ qbisi ];
   };
-}
+})

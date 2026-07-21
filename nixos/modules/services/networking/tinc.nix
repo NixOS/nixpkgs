@@ -376,11 +376,11 @@ in
           network: data:
           flip mapAttrs' data.hosts (
             host: text:
-            nameValuePair ("tinc/${network}/hosts/${host}") ({
+            nameValuePair "tinc/${network}/hosts/${host}" {
               mode = "0644";
               user = "tinc-${network}";
               inherit text;
-            })
+            }
           )
           // {
             "tinc/${network}/tinc.conf" = {
@@ -399,7 +399,7 @@ in
 
       systemd.services = flip mapAttrs' cfg.networks (
         network: data:
-        nameValuePair ("tinc.${network}") (
+        nameValuePair "tinc.${network}" (
           let
             version = getVersion data.package;
           in
@@ -421,10 +421,7 @@ in
               ExecStart = "${data.package}/bin/tincd -D -U tinc-${network} -n ${network} ${optionalString (data.chroot) "-R"} --pidfile /run/tinc.${network}.pid -d ${toString data.debugLevel}";
             };
             preStart = ''
-              mkdir -p /etc/tinc/${network}/hosts
-              chown tinc-${network} /etc/tinc/${network}/hosts
-              mkdir -p /etc/tinc/${network}/invitations
-              chown tinc-${network} /etc/tinc/${network}/invitations
+              install -d -o tinc-${network} /etc/tinc/${network} /etc/tinc/${network}/hosts /etc/tinc/${network}/invitations
 
               # Determine how we should generate our keys
               if type tinc >/dev/null 2>&1; then
@@ -481,11 +478,11 @@ in
 
       users.users = flip mapAttrs' cfg.networks (
         network: _:
-        nameValuePair ("tinc-${network}") ({
+        nameValuePair "tinc-${network}" {
           description = "Tinc daemon user for ${network}";
           isSystemUser = true;
           group = "tinc-${network}";
-        })
+        }
       );
       users.groups = flip mapAttrs' cfg.networks (network: _: nameValuePair "tinc-${network}" { });
     }

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  pdm-backend,
+  hatchling,
 
   # dependencies
   langchain-core,
@@ -22,20 +22,20 @@
 
 buildPythonPackage rec {
   pname = "langchain-deepseek";
-  version = "0.1.4";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-deepseek==${version}";
-    hash = "sha256-lIlThVpyZF5osiCyYMO8kQUNtG5eUjXGZLdgRraj4Yc=";
+    hash = "sha256-IHWTArtJB/CLIk0tKirRxUPcdJiqf1NDXn5Y+HBYv/g=";
   };
 
   sourceRoot = "${src.name}/libs/partners/deepseek";
 
   build-system = [
-    pdm-backend
+    hatchling
   ];
 
   pythonRelaxDeps = [
@@ -65,6 +65,7 @@ buildPythonPackage rec {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-deepseek==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

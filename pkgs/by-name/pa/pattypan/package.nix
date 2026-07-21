@@ -4,6 +4,7 @@
   fetchFromGitHub,
   ant,
   jdk,
+  imagemagick,
   makeWrapper,
   wrapGAppsHook3,
   makeDesktopItem,
@@ -26,11 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     ant
-    jdk
+    jdk'
     makeWrapper
     wrapGAppsHook3
     copyDesktopItems
     stripJavaArchivesHook
+    imagemagick
   ];
 
   dontWrapGApps = true;
@@ -45,8 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
+    mkdir -p $out/share/icons/hicolor/96x96/apps
     install -Dm644 pattypan.jar -t $out/share/pattypan
-    install -Dm644 src/pattypan/resources/logo.png $out/share/pixmaps/pattypan.png
+    magick src/pattypan/resources/logo.png -resize 96x96 $out/share/icons/hicolor/96x96/apps/pattypan.png
     runHook postInstall
   '';
 
@@ -68,14 +71,14 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Uploader for Wikimedia Commons";
     homepage = "https://commons.wikimedia.org/wiki/Commons:Pattypan";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "pattypan";
-    maintainers = with maintainers; [ fee1-dead ];
-    platforms = platforms.all;
-    sourceProvenance = with sourceTypes; [
+    maintainers = with lib.maintainers; [ fee1-dead ];
+    platforms = lib.platforms.all;
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # source bundles dependencies as jars
     ];

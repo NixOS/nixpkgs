@@ -5,7 +5,7 @@
   cliff,
   fixtures,
   flit-core,
-  subunit,
+  python-subunit,
   testtools,
   tomlkit,
   voluptuous,
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   dependencies = [
     cliff
     fixtures
-    subunit
+    python-subunit
     testtools
     tomlkit
     voluptuous
@@ -44,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "stestr" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parallel Python test runner built around subunit";
     mainProgram = "stestr";
     homepage = "https://github.com/mtreinish/stestr";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

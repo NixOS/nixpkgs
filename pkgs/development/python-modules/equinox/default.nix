@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -20,16 +19,17 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "equinox";
-  version = "0.13.1";
+  version = "0.13.8";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "equinox";
-    tag = "v${version}";
-    hash = "sha256-txgL5a+kKT28gAS8HianBgnnR+J25R2wrpRr8HEWCXA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JiIZKWuSkvrF09GdmegUeTyidaM5IRp4uqjJRsn86E4=";
   };
 
   # Relax speed constraints on tests that can fail on busy builders
@@ -57,18 +57,19 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-    # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
-    "test_filter"
-  ];
-
   pythonImportsCheck = [ "equinox" ];
+
+  disabledTests = [
+    # Flaky under heavy load:
+    #   AssertionError: Non-linear scaling detected: ratio=1.56
+    "test_speed_buffer_while"
+  ];
 
   meta = {
     description = "JAX library based around a simple idea: represent parameterised functions (such as neural networks) as PyTrees";
-    changelog = "https://github.com/patrick-kidger/equinox/releases/tag/v${version}";
+    changelog = "https://github.com/patrick-kidger/equinox/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/patrick-kidger/equinox";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

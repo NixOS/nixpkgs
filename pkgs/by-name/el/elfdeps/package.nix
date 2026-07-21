@@ -5,7 +5,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "elfdeps";
   version = "0.2.0";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "python-wheel-build";
     repo = "elfdeps";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5CrxVmtZcBYBMXw7o58CpFopYFgXD4W/S42aow1z1Xw=";
   };
 
@@ -51,4 +51,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ booxter ];
     mainProgram = "elfdeps";
   };
-}
+})

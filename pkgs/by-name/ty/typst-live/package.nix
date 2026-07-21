@@ -6,12 +6,12 @@
   typst,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typst-live";
   version = "0.8.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-bR4Rhhs6rAC6C1nfPFj/3rCtfEziuTGn5m33CR0qZkU=";
   };
 
@@ -26,11 +26,11 @@ rustPlatform.buildRustPackage rec {
       --suffix PATH : ${lib.makeBinPath [ typst ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Hot reloading for your typst files";
     homepage = "https://github.com/ItsEthra/typst-live";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "typst-live";
   };
-}
+})

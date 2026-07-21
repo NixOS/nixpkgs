@@ -11,15 +11,15 @@
   addBinToPathHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "flye";
   version = "2.9.6";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "fenderglass";
+    owner = "mikolmogorov";
     repo = "flye";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ZdrAxPKY3+HJ388tGCdpDcvW70mJ5wd4uOUkuufyqK8=";
   };
 
@@ -54,11 +54,11 @@ python3Packages.buildPythonApplication rec {
     python3Packages.pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "De novo assembler for single molecule sequencing reads using repeat graphs";
-    homepage = "https://github.com/fenderglass/Flye";
-    license = licenses.bsd3;
+    homepage = "https://github.com/mikolmogorov/Flye";
+    license = lib.licenses.bsd3;
     mainProgram = "flye";
-    maintainers = with maintainers; [ assistant ];
+    maintainers = with lib.maintainers; [ assistant ];
   };
-}
+})

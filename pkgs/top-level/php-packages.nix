@@ -10,7 +10,7 @@
   bzip2,
   curl,
   cyrus_sasl,
-  enchant2,
+  enchant,
   freetds,
   gd,
   gettext,
@@ -29,7 +29,6 @@
   nix-update-script,
   oniguruma,
   openldap,
-  openssl_1_1,
   openssl,
   pam,
   pcre2,
@@ -38,7 +37,7 @@
   readline,
   rsync,
   sqlite,
-  unixODBC,
+  unixodbc,
   uwimap,
   valgrind,
   zlib,
@@ -115,7 +114,7 @@ lib.makeScope pkgs.newScope (
         ...
       }@args:
       stdenv.mkDerivation (
-        (builtins.removeAttrs args [ "name" ])
+        (removeAttrs args [ "name" ])
         // {
           pname = "php-${name}";
           extensionName = extName;
@@ -250,14 +249,13 @@ lib.makeScope pkgs.newScope (
 
       phpspy = callPackage ../development/php-packages/phpspy { };
 
-      phpstan = callPackage ../development/php-packages/phpstan { };
-
       psalm = callPackage ../development/php-packages/psalm { };
     }
     // lib.optionalAttrs config.allowAliases {
       deployer = throw "`php8${lib.versions.minor php.version}Packages.deployer` has been removed, use `deployer`";
       phpcbf = throw "`php8${lib.versions.minor php.version}Packages.phpcbf` has been removed, use `php-codesniffer` instead which contains both `phpcs` and `phpcbf`.";
       phpcs = throw "`php8${lib.versions.minor php.version}Packages.phpcs` has been removed, use `php-codesniffer` instead which contains both `phpcs` and `phpcbf`.";
+      phpstan = throw "`php8${lib.versions.minor php.version}Packages.phpstan` has been removed, use `phpstan` instead.";
       psysh = throw "`php8${lib.versions.minor php.version}Packages.psysh` has been removed, use `psysh`";
     };
 
@@ -407,6 +405,7 @@ lib.makeScope pkgs.newScope (
       }
       // lib.optionalAttrs config.allowAliases {
         php-spx = throw "php-spx is deprecated, use spx instead";
+        openssl-legacy = throw "openssl-legacy has been removed";
       }
       // (
         # Core extensions
@@ -416,7 +415,10 @@ lib.makeScope pkgs.newScope (
           #
           # These will be passed as arguments to mkExtension above.
           extensionData = [
-            { name = "bcmath"; }
+            {
+              name = "bcmath";
+              env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+            }
             {
               name = "bz2";
               buildInputs = [ bzip2 ];
@@ -445,10 +447,14 @@ lib.makeScope pkgs.newScope (
               configureFlags = [
                 "--enable-dom"
               ];
+              # PHP 8.5+ has lexbor built into core; dom needs its headers.
+              env = lib.optionalAttrs (lib.versionAtLeast php.version "8.5") {
+                NIX_CFLAGS_COMPILE = "-I${php.unwrapped.dev}/include/php/ext/lexbor";
+              };
             }
             {
               name = "enchant";
-              buildInputs = [ enchant2 ];
+              buildInputs = [ enchant ];
               configureFlags = [ "--with-enchant" ];
               doCheck = false;
             }
@@ -553,7 +559,7 @@ lib.makeScope pkgs.newScope (
               # The configure script doesn't correctly add library link
               # flags, so we add them to the variable used by the Makefile
               # when linking.
-              MYSQLND_SHARED_LIBADD = "-lz -lssl -lcrypto";
+              env.MYSQLND_SHARED_LIBADD = "-lz -lssl -lcrypto";
               # The configure script builds a config.h which is never
               # included. Let's include it in the main header file
               # included by all .c-files.
@@ -572,40 +578,8 @@ lib.makeScope pkgs.newScope (
               ];
             }
             {
-              name = "opcache";
-              buildInputs = [
-                pcre2
-              ]
-              ++ lib.optional (
-                !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
-              ) valgrind.dev;
-              configureFlags = lib.optional php.ztsSupport "--disable-opcache-jit";
-              zendExtension = true;
-              postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-                # Tests are flaky on darwin
-                rm ext/opcache/tests/blacklist.phpt
-                rm ext/opcache/tests/bug66338.phpt
-                rm ext/opcache/tests/bug78106.phpt
-                rm ext/opcache/tests/issue0115.phpt
-                rm ext/opcache/tests/issue0149.phpt
-                rm ext/opcache/tests/revalidate_path_01.phpt
-              '';
-              # Tests launch the builtin webserver.
-              __darwinAllowLocalNetworking = true;
-            }
-            {
               name = "openssl";
               buildInputs = [ openssl ];
-              configureFlags = [ "--with-openssl" ];
-              doCheck = false;
-            }
-            # This provides a legacy OpenSSL PHP extension
-            # For situations where OpenSSL 3 do not support a set of features
-            # without a specific openssl.cnf file
-            {
-              name = "openssl-legacy";
-              extName = "openssl";
-              buildInputs = [ openssl_1_1 ];
               configureFlags = [ "--with-openssl" ];
               doCheck = false;
             }
@@ -636,8 +610,8 @@ lib.makeScope pkgs.newScope (
             {
               name = "pdo_odbc";
               internalDeps = [ php.extensions.pdo ];
-              buildInputs = [ unixODBC ];
-              configureFlags = [ "--with-pdo-odbc=unixODBC,${unixODBC}" ];
+              buildInputs = [ unixodbc ];
+              configureFlags = [ "--with-pdo-odbc=unixODBC,${unixodbc}" ];
               doCheck = false;
             }
             {
@@ -744,7 +718,10 @@ lib.makeScope pkgs.newScope (
             }
             { name = "sysvmsg"; }
             { name = "sysvsem"; }
-            { name = "sysvshm"; }
+            {
+              name = "sysvshm";
+              configureFlags = [ "CFLAGS=-std=gnu17" ];
+            }
             {
               name = "tidy";
               configureFlags = [ "--with-tidy=${html-tidy}" ];
@@ -837,6 +814,30 @@ lib.makeScope pkgs.newScope (
                 "--with-kerberos"
               ];
             }
+          ]
+          ++ lib.optionals (lib.versionOlder php.version "8.5") [
+            {
+              name = "opcache";
+              buildInputs = [
+                pcre2
+              ]
+              ++ lib.optional (
+                !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
+              ) valgrind.dev;
+              configureFlags = lib.optional php.ztsSupport "--disable-opcache-jit";
+              zendExtension = true;
+              postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+                # Tests are flaky on darwin
+                rm ext/opcache/tests/blacklist.phpt
+                rm ext/opcache/tests/bug66338.phpt
+                rm ext/opcache/tests/bug78106.phpt
+                rm ext/opcache/tests/issue0115.phpt
+                rm ext/opcache/tests/issue0149.phpt
+                rm ext/opcache/tests/revalidate_path_01.phpt
+              '';
+              # Tests launch the builtin webserver.
+              __darwinAllowLocalNetworking = true;
+            }
           ];
 
           # Convert the list of attrs:
@@ -845,7 +846,7 @@ lib.makeScope pkgs.newScope (
           # [ { name = <name>; value = <extension drv>; } ... ]
           #
           # which we later use listToAttrs to make all attrs available by name.
-          namedExtensions = builtins.map (drv: {
+          namedExtensions = map (drv: {
             name = drv.name;
             value = mkExtension drv;
           }) extensionData;

@@ -1,5 +1,12 @@
 {
   lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   attrs,
   azure-common,
   azure-core,
@@ -11,12 +18,9 @@
   azure-monitor-query,
   beautifulsoup4,
   bokeh,
-  buildPythonPackage,
-  cache,
   cryptography,
   deprecated,
   dnspython,
-  fetchFromGitHub,
   folium,
   geoip2,
   html5lib,
@@ -26,9 +30,8 @@
   ipywidgets,
   keyring,
   lxml,
-  markdown,
-  msal-extensions,
   msal,
+  msal-extensions,
   msrest,
   msrestazure,
   nest-asyncio,
@@ -39,36 +42,34 @@
   pydantic,
   pygments,
   pyjwt,
-  pythonOlder,
   pyyaml,
-  setuptools,
   tldextract,
   tqdm,
   typing-extensions,
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "msticpy";
-  version = "2.17.0";
+  version = "3.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "msticpy";
-    tag = "v${version}";
-    hash = "sha256-f2aCVD3EPRFjbpN+HcM3be46fPbVXkIFUFw/xoRzGfg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-utE77oSCAAYKmsyf8ZPep7spUSIoJXBU6NzeLpDIvUs=";
   };
+
+  build-system = [ setuptools ];
 
   pythonRelaxDeps = [
     "azure-kusto-data"
     "bokeh"
+    "nest_asyncio"
+    "pandas"
   ];
-
-  build-system = [ setuptools ];
-
   dependencies = [
     attrs
     azure-common
@@ -120,8 +121,8 @@ buildPythonPackage rec {
   meta = {
     description = "Microsoft Threat Intelligence Security Tools";
     homepage = "https://github.com/microsoft/msticpy";
-    changelog = "https://github.com/microsoft/msticpy/releases/tag/${src.tag}";
+    changelog = "https://github.com/microsoft/msticpy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

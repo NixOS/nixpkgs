@@ -15,6 +15,20 @@ in
 {
   options = {
     pathInStore = mkOption { type = types.lazyAttrsOf types.pathInStore; };
+    externalPath = mkOption { type = types.lazyAttrsOf types.externalPath; };
+    # serializableValueWith
+    nullableValue = mkOption {
+      type = types.attrsOf (types.serializableValueWith { typeName = "VAL"; });
+    };
+    structuredValue = mkOption {
+      type = types.attrsOf (
+        types.serializableValueWith {
+          typeName = "VAL";
+          nullable = false;
+        }
+      );
+    };
+
     assertions = mkOption { };
   };
   config = {
@@ -26,6 +40,29 @@ in
     pathInStore.bad3 = "${storeDir}/";
     pathInStore.bad4 = "${storeDir}/.links"; # technically true, but not reasonable
     pathInStore.bad5 = "/foo/bar";
+    externalPath.bad1 = "${storeDir}/0lz9p8xhf89kb1c1kk6jxrzskaiygnlh-bash-5.2-p15.drv";
+    externalPath.bad2 = "${storeDir}/0fb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15";
+    externalPath.bad3 = "${storeDir}/0fb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15/bin/bash";
+    externalPath.bad4 = "";
+    externalPath.bad5 = "./foo/bar";
+    externalPath.ok1 = "/foo/bar";
+    externalPath.ok2 = "/";
+
+    # serializableValueWith { nullable = true; }
+    nullableValue.null = null; # null
+    nullableValue.bool = true; # bool
+    nullableValue.int = 1; # int
+    nullableValue.float = 1.1; # float
+    nullableValue.str = "foo"; # str
+    nullableValue.path = ./.; # path
+    nullableValue.attrs = {
+      foo = 1;
+    };
+    nullableValue.list = [ { bar = [ 1 ]; } ]; # list
+    nullableValue.lambda = x: x; # Error
+
+    # serializableValueWith { nullable = false; }
+    structuredValue.null = null; # Error
 
     assertions =
       with lib.types;
@@ -130,6 +167,28 @@ in
           elemType = str;
           lazy = false;
         }).description == "attribute set of string";
+      assert (attrListOf str).description == "attribute list of string";
+      assert (attrListOf int).description == "attribute list of signed integer";
+      assert (attrListOf bool).description == "attribute list of boolean";
+      assert (attrListOf (either int str)).description == "attribute list of (signed integer or string)";
+      assert (attrListOf (nullOr str)).description == "attribute list of (null or string)";
+      assert (attrListOf (listOf str)).description == "attribute list of list of string";
+      assert
+        (attrListOf (attrsOf int)).description == "attribute list of attribute set of signed integer";
+      assert (attrListOf (attrListOf str)).description == "attribute list of attribute list of string";
+      assert (attrListOf ints.positive).description == "attribute list of (positive integer, meaning >0)";
+      assert
+        (attrListOf (enum [
+          "a"
+          "b"
+        ])).description == "attribute list of (one of \"a\", \"b\")";
+      assert
+        (attrListOf (strMatching "[0-9]+")).description
+        == "attribute list of string matching the pattern [0-9]+";
+      assert
+        (attrListOf (nonEmptyListOf str)).description == "attribute list of non-empty (list of string)";
+      assert (attrListOf (submodule { })).description == "attribute list of (submodule)";
+
       assert (coercedTo str abort int).description == "signed integer or string convertible to it";
       assert (coercedTo int abort str).description == "string or signed integer convertible to it";
       assert (coercedTo bool abort str).description == "string or boolean convertible to it";
@@ -380,7 +439,7 @@ in
       assert (pathWith { absolute = null; }).description == "path";
       assert (pathWith { inStore = false; }).description == "path not in the Nix store";
       assert (pathWith { inStore = null; }).description == "path";
-      assert (separatedString "").description == "Concatenated string";
+      assert (separatedString "").description == "strings concatenated with \"\"";
       assert (separatedString ",").description == "strings concatenated with \",\"";
       assert (separatedString "\n").description == ''strings concatenated with "\n"'';
       assert (separatedString ":").description == "strings concatenated with \":\"";
@@ -478,6 +537,9 @@ in
       assert (unique { message = "custom"; } (listOf str)).description == "list of string";
       assert (unique { message = "test"; } (either int str)).description == "signed integer or string";
       assert (unique { message = "test"; } (listOf str)).description == "list of string";
+      # json & toml
+      assert json.description == "JSON value";
+      assert toml.description == "TOML value";
       # done
       "ok";
   };

@@ -95,7 +95,6 @@ in
       homepage = "https://github.com/CyberShadow/znc-clientbuffer";
       license = lib.licenses.asl20;
       maintainers = with lib.maintainers; [
-        hrdinka
         szlend
         cybershadow
       ];
@@ -138,7 +137,9 @@ in
     meta = {
       description = "ZNC FiSH module";
       homepage = "https://github.com/oilslump/znc-fish";
-      maintainers = [ lib.maintainers.offline ];
+      maintainers = [ ];
+      # has no license
+      license = lib.licenses.unfree;
     };
   };
 
@@ -198,7 +199,6 @@ in
       description = "Advanced playback module for ZNC";
       homepage = "https://github.com/jpnurmi/znc-playback";
       license = lib.licenses.asl20;
-      maintainers = with lib.maintainers; [ hrdinka ];
     };
   };
 
@@ -217,6 +217,8 @@ in
     meta = {
       description = "ZNC privmsg module";
       homepage = "https://github.com/kylef/znc-contrib";
+      # has no license
+      license = lib.licenses.unfree;
     };
   };
 
@@ -236,10 +238,7 @@ in
       description = "Push notification service module for ZNC";
       homepage = "https://github.com/jreese/znc-push";
       license = lib.licenses.mit;
-      maintainers = with lib.maintainers; [
-        offline
-        schneefux
-      ];
+      maintainers = [ ];
     };
   };
 }

@@ -15,6 +15,7 @@
   jsonschema,
   pydantic,
   pydantic-settings,
+  pyjwt,
   python-multipart,
   sse-starlette,
   starlette,
@@ -39,27 +40,23 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mcp";
-  version = "1.14.0";
+  version = "1.27.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "modelcontextprotocol";
     repo = "python-sdk";
-    tag = "v${version}";
-    hash = "sha256-LHc2G5mzyfZ2GvUIuaXYp8AHOVGs6Xtk4MTDYtUcySI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LhoLcFC5+7xOCfud23sbHyTMxKYmdeZh0c+UtGdvzCs=";
   };
 
+  # time.sleep(0.1) feels a bit optimistic and it has been flaky whilst
+  # testing this on macOS under load.
   postPatch = lib.optionalString stdenv.buildPlatform.isDarwin ''
-    # time.sleep(0.1) feels a bit optimistic and it has been flaky whilst
-    # testing this on macOS under load.
-    substituteInPlace \
-      "tests/client/test_stdio.py" \
-      "tests/server/fastmcp/test_integration.py" \
-      "tests/shared/test_ws.py" \
-      "tests/shared/test_sse.py" \
-      "tests/shared/test_streamable_http.py" \
+    substituteInPlace tests/client/test_stdio.py \
       --replace-fail "time.sleep(0.1)" "time.sleep(1)"
   '';
 
@@ -79,6 +76,7 @@ buildPythonPackage rec {
     jsonschema
     pydantic
     pydantic-settings
+    pyjwt
     python-multipart
     sse-starlette
     starlette
@@ -109,7 +107,11 @@ buildPythonPackage rec {
     pytestCheckHook
     requests
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
+
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn10Warning"
+  ];
 
   disabledTests = [
     # attempts to run the package manager uv
@@ -142,6 +144,7 @@ buildPythonPackage rec {
     # Flaky: httpx.ConnectError: All connection attempts failed
     "test_sse_security_"
     "test_streamable_http_"
+    "test_streamablehttp_"
 
     # This just feels a bit optimistic...
     #     	assert duration < 3 * _sleep_time_seconds
@@ -155,7 +158,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    changelog = "https://github.com/modelcontextprotocol/python-sdk/releases/tag/${src.tag}";
+    changelog = "https://github.com/modelcontextprotocol/python-sdk/releases/tag/${finalAttrs.src.tag}";
     description = "Official Python SDK for Model Context Protocol servers and clients";
     homepage = "https://github.com/modelcontextprotocol/python-sdk";
     license = lib.licenses.mit;
@@ -164,4 +167,4 @@ buildPythonPackage rec {
       josh
     ];
   };
-}
+})

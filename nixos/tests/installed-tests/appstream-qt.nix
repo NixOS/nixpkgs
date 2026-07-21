@@ -1,7 +1,7 @@
 { pkgs, makeInstalledTest, ... }:
 
 makeInstalledTest {
-  tested = pkgs.libsForQt5.appstream-qt;
+  tested = pkgs.kdePackages.appstream-qt;
 
   testConfig = {
     appstream.enable = true;

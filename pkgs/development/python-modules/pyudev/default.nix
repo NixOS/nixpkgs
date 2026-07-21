@@ -9,16 +9,17 @@
   hypothesis,
   docutils,
   stdenvNoCC,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyudev";
-  version = "0.24.3";
-  format = "setuptools";
+  version = "0.24.4";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-LpRUJ6IWdIk7uXYyQB22ITnZHOoe6WE3zHsHrSIZj8c=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-54i7mDcAsahO/C6IhisKUa8qmV1bhryZl1RlBc97Nrw=";
   };
 
   postPatch = lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
@@ -26,13 +27,9 @@ buildPythonPackage rec {
       --replace "find_library(name)" "'${lib.getLib udev}/lib/libudev.so'"
   '';
 
-  nativeCheckInputs = [
-    pytest
-    mock
-    hypothesis
-    docutils
-  ];
-  propagatedBuildInputs = [ six ];
+  build-system = [ setuptools ];
+
+  dependencies = [ six ];
 
   checkPhase = ''
     py.test
@@ -42,10 +39,18 @@ buildPythonPackage rec {
   # https://github.com/pyudev/pyudev/issues/187
   doCheck = false;
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    pytest
+    mock
+    hypothesis
+    docutils
+  ];
+
+  meta = {
     homepage = "https://pyudev.readthedocs.org/";
     description = "Pure Python libudev binding";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ frogamic ];
+    changelog = "https://github.com/pyudev/pyudev/blob/v${finalAttrs.version}/CHANGES.rst";
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ ];
   };
-}
+})

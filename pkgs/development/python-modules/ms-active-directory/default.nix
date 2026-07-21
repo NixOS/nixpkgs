@@ -6,7 +6,6 @@
   ldap3,
   pyasn1,
   pycryptodome,
-  pythonOlder,
   pytz,
   setuptools,
   six,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "ms-active-directory";
   version = "1.14.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "zorn96";
@@ -42,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ms_active_directory" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for integrating with Microsoft Active Directory domains";
     homepage = "https://github.com/zorn96/ms_active_directory/";
     changelog = "https://github.com/zorn96/ms_active_directory/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

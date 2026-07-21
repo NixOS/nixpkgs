@@ -31,13 +31,12 @@ jq '
       | map(
           if .url | contains("linux-aarch64") then
             {key: "aarch64-linux", value: .}
-          elif .url | contains("linux-amd64") then
+          elif .url | contains("linux-x86_64") then
             {key: "x86_64-linux", value: .}
           elif .url | contains("macOS-universal") then
-            [{key: "aarch64-darwin", value: .}, {key: "x86_64-darwin", value: .}]
+            {key: "aarch64-darwin", value: .}
           else null end
         )
-      | flatten
       | from_entries
     )
   }

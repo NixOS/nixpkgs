@@ -1,6 +1,5 @@
 {
   buildPythonPackage,
-  coverage,
   fetchPypi,
   jsonschema,
   lib,

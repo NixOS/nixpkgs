@@ -31,9 +31,9 @@
   gi-docgen,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eog";
-  version = "47.0";
+  version = "50.1";
 
   outputs = [
     "out"
@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/eog/${lib.versions.major version}/eog-${version}.tar.xz";
-    hash = "sha256-217b9SJNdRJqe32O5OknKi8wqVMzHVuvbT88DODL3mY=";
+    url = "mirror://gnome/sources/eog/${lib.versions.major finalAttrs.version}/eog-${finalAttrs.version}.tar.xz";
+    hash = "sha256-b17m11ZUi4jiWph+DQbavDxsMlmPt99J+wiUXB/pSlU=";
   };
 
   patches = [
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
           libjxl
           librsvg
           webp-pixbuf-loader
-          libheif.out
+          libheif.lib
         ];
       }
     }"
@@ -125,10 +125,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "GNOME image viewer";
     homepage = "https://gitlab.gnome.org/GNOME/eog";
-    changelog = "https://gitlab.gnome.org/GNOME/eog/-/blob/${version}/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/GNOME/eog/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
     mainProgram = "eog";
   };
-}
+})

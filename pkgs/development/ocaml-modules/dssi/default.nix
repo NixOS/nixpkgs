@@ -7,17 +7,15 @@
   alsa-lib,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "dssi";
   version = "0.1.5";
-
-  useDune2 = true;
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-dssi";
-    rev = "v${version}";
-    sha256 = "1frbmx1aznwp60r6bkx1whqyr6mkflvd9ysmjg7s7b80mh0s4ix6";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pkeiAawAraPPk1X71DZ1s5rsMeShz2UyMJfbr0KvK7s=";
   };
 
   buildInputs = [ dune-configurator ];
@@ -26,10 +24,10 @@ buildDunePackage rec {
     alsa-lib
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/savonet/ocaml-dssi";
     description = "Bindings for the DSSI API which provides audio synthesizers";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
-}
+})

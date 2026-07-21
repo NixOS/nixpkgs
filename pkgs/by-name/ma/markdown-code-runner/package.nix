@@ -3,26 +3,30 @@
   fetchFromGitHub,
   rustPlatform,
   versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "markdown-code-runner";
-  version = "0.2.3";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "drupol";
     repo = "markdown-code-runner";
     tag = finalAttrs.version;
-    hash = "sha256-fmyjrsEBUskN/cYmsqOprw56vpjonXETRdBH3y0ypkA=";
+    hash = "sha256-GcPMkwXwLyHoVljOpfnhmysDYIFXSyvNL5P3f6q/KJw=";
   };
 
-  cargoHash = "sha256-hBFUsluSZluWJIbvJjFSFe+Y2ICr+mug0Mxrz4pLW5E=";
+  cargoHash = "sha256-ul5cl6FDYkW02HGtQmLHkOsSaTIn2lCaTpKjCUzdcjM=";
 
   dontUseCargoParallelTests = true;
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Configurable Markdown code runner that executes and optionally replaces code blocks using external commands";

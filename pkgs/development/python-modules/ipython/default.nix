@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  pythonAtLeast,
   pythonOlder,
 
   # Build dependencies
@@ -16,6 +15,7 @@
   matplotlib-inline,
   pexpect,
   prompt-toolkit,
+  psutil,
   pygments,
   stack-data,
   traitlets,
@@ -34,14 +34,18 @@
   testpath,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ipython";
-  version = "9.4.0";
+  version = "9.14.0";
+  outputs = [
+    "out"
+    "man"
+  ];
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-wDPG1OeRTD2XaKq+drvoe6HcZqkqBdtr+hEl2B8u4nA=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-byf/Dx2eoFDgVR9xVovEs02KuleejxEcW0F19ErGtKo=";
   };
 
   build-system = [ setuptools ];
@@ -53,6 +57,7 @@ buildPythonPackage rec {
     matplotlib-inline
     pexpect
     prompt-toolkit
+    psutil
     pygments
     stack-data
     traitlets
@@ -81,15 +86,11 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # UnboundLocalError: local variable 'child' referenced before assignment
-    "test_system_interrupt"
+    # timing sensitive
+    "test_debug_magic_passes_through_generators"
+    "test_nest_embed"
   ]
-  ++ lib.optionals (pythonAtLeast "3.13") [
-    # AttributeError: 'Pdb' object has no attribute 'curframe'. Did you mean: 'botframe'?
-    "test_run_debug_twice"
-    "test_run_debug_twice_with_breakpoint"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # FileNotFoundError: [Errno 2] No such file or directory: 'pbpaste'
     "test_clipboard_get"
   ];
@@ -102,9 +103,9 @@ buildPythonPackage rec {
     description = "IPython: Productive Interactive Computing";
     downloadPage = "https://github.com/ipython/ipython/";
     homepage = "https://ipython.readthedocs.io/en/stable/";
-    changelog = "https://github.com/ipython/ipython/blob/${version}/docs/source/whatsnew/version${lib.versions.major version}.rst";
+    changelog = "https://github.com/ipython/ipython/blob/${finalAttrs.version}/docs/source/whatsnew/version${lib.versions.major finalAttrs.version}.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bjornfor ];
     teams = [ lib.teams.jupyter ];
   };
-}
+})

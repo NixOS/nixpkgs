@@ -10,7 +10,10 @@ let
   cfg = config.services.recyclarr;
   format = pkgs.formats.yaml { };
   stateDir = "/var/lib/recyclarr";
-  configPath = "${stateDir}/config.json";
+  configPath = "${stateDir}/config.yml";
+  secretsReplacement = utils.genJqSecretsReplacement {
+    loadCredential = true;
+  } cfg.configuration configPath;
 in
 {
   options.services.recyclarr = {
@@ -22,24 +25,24 @@ in
       type = format.type;
       default = { };
       example = {
-        sonarr = [
-          {
+        sonarr = {
+          sonarr-main = {
             instance_name = "main";
             base_url = "http://localhost:8989";
             api_key = {
               _secret = "/run/credentials/recyclarr.service/sonarr-api_key";
             };
-          }
-        ];
-        radarr = [
-          {
+          };
+        };
+        radarr = {
+          radarr-main = {
             instance_name = "main";
             base_url = "http://localhost:7878";
             api_key = {
               _secret = "/run/credentials/recyclarr.service/radarr-api_key";
             };
-          }
-        ];
+          };
+        };
       };
       description = ''
         Recyclarr YAML configuration as a Nix attribute set.
@@ -47,14 +50,7 @@ in
         For detailed configuration options and examples, see the
         [official configuration reference](https://recyclarr.dev/wiki/yaml/config-reference/).
 
-        The configuration is processed using [utils.genJqSecretsReplacementSnippet](https://github.com/NixOS/nixpkgs/blob/master/nixos/lib/utils.nix#L232-L331) to handle secret substitution.
-
-        To avoid permission issues, secrets should be provided via systemd's credential mechanism:
-
-        ```nix
-        systemd.services.recyclarr.serviceConfig.LoadCredential = [
-          "radarr-api_key:''${config.sops.secrets.radarr-api_key.path}"
-        ];
+        The configuration is processed using [utils.genJqSecretsReplacement](https://github.com/NixOS/nixpkgs/blob/master/nixos/lib/utils.nix#L232-L331) to handle secret substitution.
         ```
       '';
     };
@@ -102,15 +98,19 @@ in
     systemd.services.recyclarr = {
       description = "Recyclarr Service";
 
-      # YAML is a JSON super-set
-      preStart = utils.genJqSecretsReplacementSnippet cfg.configuration configPath;
+      preStart = secretsReplacement.script;
 
       serviceConfig = {
         Type = "oneshot";
         User = cfg.user;
         Group = cfg.group;
         StateDirectory = "recyclarr";
-        ExecStart = "${lib.getExe cfg.package} ${cfg.command} --app-data ${stateDir} --config ${configPath}";
+        Environment = [
+          "RECYCLARR_CONFIG_DIR=${stateDir}"
+          "RECYCLARR_DATA_DIR=${stateDir}"
+        ];
+        ExecStart = "${lib.getExe cfg.package} ${cfg.command} --config ${configPath}";
+        LoadCredential = secretsReplacement.credentials;
 
         ProtectSystem = "strict";
         ProtectHome = true;
@@ -154,4 +154,6 @@ in
       };
     };
   };
+
+  meta.maintainers = [ lib.maintainers.josephst ];
 }

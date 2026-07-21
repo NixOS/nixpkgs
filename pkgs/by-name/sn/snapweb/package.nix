@@ -8,16 +8,16 @@
 
 buildNpmPackage rec {
   pname = "snapweb";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "badaix";
     repo = "snapweb";
     rev = "v${version}";
-    hash = "sha256-vrPmN06dLEoz7vFrH8kOdudg9FQcd1BpMWKpU6kZrzE=";
+    hash = "sha256-7W7rvJPVcRtXcQt+wWAvrl0DOIh7zEfXZdFDcH23/ls=";
   };
 
-  npmDepsHash = "sha256-VDGoZ6XgVtr7xePXmfW4Vk6iTZv1HRx7bjsS+Qauz3U=";
+  npmDepsHash = "sha256-STZ/+vmiUAOZ8+yeaFg+428pZ/iZZXXUeGx6gLmnDQ8=";
 
   # For 'sharp' dependency, otherwise it will try to build it
   nativeBuildInputs = [ pkg-config ];
@@ -31,10 +31,10 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Web client for Snapcast";
     homepage = "https://github.com/badaix/snapweb";
-    maintainers = with maintainers; [ ettom ];
-    license = licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ ettom ];
+    license = lib.licenses.gpl3Plus;
   };
 }

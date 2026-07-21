@@ -11,11 +11,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "plantuml";
-  version = "1.2025.7";
+  version = "1.2026.3";
 
   src = fetchurl {
     url = "https://github.com/plantuml/plantuml/releases/download/v${finalAttrs.version}/plantuml-pdf-${finalAttrs.version}.jar";
-    hash = "sha256-iimzT6g/W+E4V6AxiQtRDuPJhfmXLR6qx9gkB31N6H8=";
+    hash = "sha256-ElMmvC2H8NRYwcEY5oIqo7fsiKAJBZDNqRFXOv2o5IE=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +59,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "plantuml";
     maintainers = with lib.maintainers; [
       bjornfor
-      Mogria
       anthonyroussel
     ];
     platforms = lib.platforms.unix;

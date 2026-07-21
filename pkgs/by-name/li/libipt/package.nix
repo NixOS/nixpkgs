@@ -6,15 +6,15 @@
   freebsd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libipt";
-  version = "2.1.2";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "libipt";
-    rev = "v${version}";
-    sha256 = "sha256-rO2Mf2/BfKlPh1wHe0qTuyQAyqpSB/j3Q+JWpNDyNm0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hSC00GbVllJStgt9iA9WT54U8NQRtgJHuyZyb5ougc8=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -24,11 +24,12 @@ stdenv.mkDerivation rec {
     NIX_LDFLAGS = "-lstdthreads";
   };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/intel/libipt/releases/tag/v${finalAttrs.version}";
     description = "Intel Processor Trace decoder library";
     homepage = "https://github.com/intel/libipt";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
-}
+})

@@ -18,6 +18,9 @@ stdenv.mkDerivation {
     hash = "sha256-rm9Nt3WLgq9QOXzrkYBGp45EALNYFTQGInxfYIN0XcU=";
   };
 
+  # Fix build with gcc 15
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   nativeBuildInputs = [
     wayland-scanner
   ];

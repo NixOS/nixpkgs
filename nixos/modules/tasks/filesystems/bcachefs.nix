@@ -242,24 +242,11 @@ in
           }
         ];
 
-        warnings = lib.mkIf cfg.modulePackage.meta.broken [
-          ''
-            Using unmaintained in-tree bcachefs kernel module. This
-            will be removed in 26.05. Please use a kernel supported
-            by the out-of-tree module package.
-          ''
-        ];
-
-        # Bcachefs upstream recommends using the latest kernel
-        boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
-
         # needed for systemd-remount-fs
         system.fsPackages = [ cfg.package ];
         services.udev.packages = [ cfg.package ];
 
-        boot.extraModulePackages = lib.optionals (!cfg.modulePackage.meta.broken) [
-          cfg.modulePackage
-        ];
+        boot.extraModulePackages = [ cfg.modulePackage ];
 
         systemd = {
           packages = [ cfg.package ];
@@ -286,6 +273,10 @@ in
           "bcachefs" = "${cfg.package}/bin/bcachefs";
           "mount.bcachefs" = "${cfg.package}/bin/mount.bcachefs";
         };
+        boot.initrd.systemd.storePaths = [
+          # Used by the ExecStart= in bcachefs-wait-devices@.service.
+          "${cfg.package}/sbin/bcachefs"
+        ];
         boot.initrd.extraUtilsCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
           copy_bin_and_libs ${cfg.package}/bin/bcachefs
           copy_bin_and_libs ${cfg.package}/bin/mount.bcachefs
@@ -298,6 +289,7 @@ in
           commonFunctions + lib.concatStrings (lib.mapAttrsToList openCommand bootFs)
         );
 
+        boot.initrd.systemd.packages = [ cfg.package ];
         boot.initrd.systemd.services = lib.mapAttrs' (mkUnits "/sysroot") bootFs;
       })
 
@@ -378,12 +370,16 @@ in
                   "sleep.target"
                 ];
 
-                script = "${lib.getExe cfg.package} data scrub ${fs}";
-
                 serviceConfig = {
                   Type = "oneshot";
                   Nice = 19;
                   IOSchedulingClass = "idle";
+
+                  ExecStart = lib.join " " [
+                    (lib.getExe cfg.package)
+                    (if lib.versionOlder cfg.package.version "v1.34.0" then "data scrub" else "scrub")
+                    (utils.escapeSystemdExecArg fs)
+                  ];
                 };
               };
           in

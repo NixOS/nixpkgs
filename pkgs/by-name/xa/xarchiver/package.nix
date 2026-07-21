@@ -17,19 +17,21 @@
   bzip2,
   gzip,
   lhasa,
+  xz,
+  zstd,
   wrapGAppsHook3,
   desktopToDarwinBundle,
 }:
 
-stdenv.mkDerivation rec {
-  version = "0.5.4.26";
+stdenv.mkDerivation (finalAttrs: {
+  version = "0.5.4.27";
   pname = "xarchiver";
 
   src = fetchFromGitHub {
     owner = "ib";
     repo = "xarchiver";
-    rev = version;
-    hash = "sha256-s6lVKtWJRAFrkUYUwKGH+XNTGi/L+Zt0kSWIekBUWYs=";
+    rev = finalAttrs.version;
+    hash = "sha256-s4RM9loFlKVcOtxNolt6+wZTp3ITdGaHTNUtDnAmqfs=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +60,8 @@ stdenv.mkDerivation rec {
         bzip2
         gzip
         lhasa
+        xz
+        zstd
         coreutils
       ]
     }
@@ -73,4 +77,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "xarchiver";
   };
-}
+})

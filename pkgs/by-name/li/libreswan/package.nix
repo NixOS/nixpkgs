@@ -51,11 +51,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libreswan";
-  version = "5.3";
+  version = "5.3.2";
 
   src = fetchurl {
-    url = "https://download.libreswan.org/${pname}-${version}.tar.gz";
-    hash = "sha256-wdNQw/Mpb9IbnbB5TiPT8xmykviAv4F4uC71xjkcYMA=";
+    url = "https://download.libreswan.org/libreswan-${version}.tar.gz";
+    hash = "sha256-+5GK+gu5K9BDDB2oYe+AaIZNJdchMN8MYweh+dp2EIg=";
   };
 
   strictDeps = true;
@@ -128,15 +128,15 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) libreswan libreswan-nat; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://libreswan.org";
     description = "Free software implementation of the VPN protocol based on IPSec and the Internet Key Exchange";
-    platforms = platforms.linux ++ platforms.freebsd;
-    license = with licenses; [
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+    license = with lib.licenses; [
       gpl2Plus
       mpl20
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       rnhmjoj
     ];
     mainProgram = "ipsec";

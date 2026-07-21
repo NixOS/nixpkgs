@@ -3,14 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   aiohttp,
-  isPy27,
 }:
 
 buildPythonPackage rec {
   pname = "plexauth";
   version = "0.0.6";
   format = "setuptools";
-  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "jjlawren";
@@ -27,10 +25,10 @@ buildPythonPackage rec {
   # at least guarantee the module can be imported
   pythonImportsCheck = [ "plexauth" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jjlawren/python-plexauth/";
     description = "Handles the authorization flow to obtain tokens from Plex.tv via external redirection";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

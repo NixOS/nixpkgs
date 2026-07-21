@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   wheel,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "anthemav";
   version = "1.4.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nugget";
@@ -35,12 +32,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "anthemav" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python asyncio module to interface with Anthem AVM and MRX receivers";
     mainProgram = "anthemav_monitor";
     homepage = "https://github.com/nugget/python-anthemav";
     changelog = "https://github.com/nugget/python-anthemav/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

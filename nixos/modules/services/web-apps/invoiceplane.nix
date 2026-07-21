@@ -348,7 +348,6 @@ in
       };
 
       services.phpfpm = {
-        phpPackage = pkgs.php81;
         pools = mapAttrs' (
           hostName: cfg:
           (nameValuePair "invoiceplane-${hostName}" {
@@ -442,7 +441,7 @@ in
         enable = true;
         virtualHosts = mapAttrs' (
           hostName: cfg:
-          (nameValuePair "http://${hostName}" {
+          (nameValuePair hostName {
             extraConfig = ''
               root * ${pkg hostName cfg}
               file_server

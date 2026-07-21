@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  name = "pass-secret-service";
+  name = "xscreensaver";
   meta.maintainers = with lib.maintainers; [
     vancluever
   ];
@@ -54,9 +54,25 @@
           })
         ];
       };
+
+    hooks =
+      { lib, ... }:
+      {
+        imports = [
+          ./common/x11.nix
+          ./common/user-account.nix
+        ];
+        test-support.displayManager.auto.user = "alice";
+        services.xscreensaver = {
+          enable = true;
+          hooks = {
+            "UNBLANK" = ":> /home/alice/xscreensaver-works";
+          };
+        };
+      };
   };
 
-  testScript = ''
+  testScript = /* python */ ''
     ok.wait_for_x()
     ok.wait_for_unit("xscreensaver", "alice")
     _, output_ok = ok.systemctl("status xscreensaver", "alice")
@@ -77,5 +93,10 @@
     assert 'To prevent the kernel from randomly unlocking' in output_bad_wrapperPrefix
     assert 'your screen via the out-of-memory killer' in output_bad_wrapperPrefix
     assert '"xscreensaver-auth" must be setuid root' in output_bad_wrapperPrefix
+
+    hooks.wait_for_x()
+    hooks.wait_for_unit("xscreensaver", "alice")
+    hooks.wait_for_unit("xscreensaver-hooks", "alice")
+    hooks.wait_for_file("/home/alice/xscreensaver-works")
   '';
 }

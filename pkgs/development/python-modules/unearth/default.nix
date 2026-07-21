@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
+  fetchpatch,
   packaging,
   pdm-backend,
   httpx,
@@ -16,15 +16,23 @@
 
 buildPythonPackage rec {
   pname = "unearth";
-  version = "0.17.5";
+  version = "0.18.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oZ4cAuZLQFGNCIB5x0FvxBtFpki4GkEoqsAllyNO5ro=";
+    hash = "sha256-HlPX9S9G3V+HXnf/HFWxJHfiFaCS5LZsl2SnffSptSA=";
   };
+
+  patches = [
+    # https://github.com/frostming/unearth/pull/176
+    (fetchpatch {
+      name = "fix-packaging-26.0-changes.patch";
+      url = "https://github.com/frostming/unearth/commit/69ece0800edeefb1daf035bb0ee348e17a4393fd.patch";
+      hash = "sha256-t/Ubv9qC1Fvh4JsnfVgOZO/O7ZpCGHugBUt9qAjnH8c=";
+      excludes = [ "pdm.lock" ];
+    })
+  ];
 
   build-system = [ pdm-backend ];
 
@@ -46,12 +54,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "unearth" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility to fetch and download Python packages";
     mainProgram = "unearth";
     homepage = "https://github.com/frostming/unearth";
     changelog = "https://github.com/frostming/unearth/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ betaboon ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ betaboon ];
   };
 }

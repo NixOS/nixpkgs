@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   flit-core,
@@ -12,11 +11,9 @@
   sphinx-rtd-theme,
   myst-parser,
 
-  # propagates
-  typing-extensions,
-
   # optionals
   cryptography,
+  fonttools,
   pillow,
 
   # tests
@@ -27,10 +24,8 @@
 
 buildPythonPackage rec {
   pname = "pypdf";
-  version = "6.1.0";
+  version = "6.14.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "py-pdf";
@@ -38,7 +33,7 @@ buildPythonPackage rec {
     tag = version;
     # fetch sample files used in tests
     fetchSubmodules = true;
-    hash = "sha256-qfLN6g2+3j35E4m9vGcWXL1BLiFdDZEFmxYgnknlW3M=";
+    hash = "sha256-h7JuQTTUZ5tWoAhixjp+grDVA3JQ8PbHcMBzIyCMOJU=";
   };
 
   outputs = [
@@ -59,11 +54,10 @@ buildPythonPackage rec {
     myst-parser
   ];
 
-  dependencies = lib.optionals (pythonOlder "3.11") [ typing-extensions ];
-
   optional-dependencies = rec {
-    full = crypto ++ image;
+    full = crypto ++ fonts ++ image;
     crypto = [ cryptography ];
+    fonts = [ fonttools ];
     image = [ pillow ];
   };
 
@@ -81,11 +75,11 @@ buildPythonPackage rec {
     "enable_socket"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pure-python PDF library capable of splitting, merging, cropping, and transforming the pages of PDF files";
     homepage = "https://github.com/py-pdf/pypdf";
     changelog = "https://github.com/py-pdf/pypdf/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ javaes ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ javaes ];
   };
 }

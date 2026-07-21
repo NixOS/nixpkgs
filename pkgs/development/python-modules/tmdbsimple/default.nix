@@ -6,16 +6,16 @@
   requests,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "tmdbsimple";
-  version = "2.9.2-unstable-2025-01-07";
+  version = "2.9.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "celiao";
     repo = "tmdbsimple";
-    rev = "0b3359f7bab3ade391b2e5de964ed115b00984a6";
-    hash = "sha256-usyL2lHSJwvPnWncI3K+yTmeU5DN1AkRzHC5nFh3vxs=";
+    tag = finalAttrs.version;
+    hash = "sha256-ooyfwRCvH980gym8ujpLxbmR7FYfi59gGXqT8K40pNw=";
   };
 
   build-system = [ setuptools ];
@@ -33,4 +33,4 @@ buildPythonPackage {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ theobori ];
   };
-}
+})

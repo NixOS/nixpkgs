@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "papeer";
-  version = "0.8.5";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "lapwat";
     repo = "papeer";
-    rev = "v${version}";
-    hash = "sha256-9cHbXo/kpe9S6MQE4wzgCZ4+m9gwGmckRmNhI+1zrS8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ICiw45pRKlsO2nPlyf/YkFXBzgclwm3cSc5d9BzyT6U=";
   };
 
-  vendorHash = "sha256-ZPkaS2obfeWS5/tWSkDe+Lua95mvoNXeNx3JEXrx/Es=";
+  vendorHash = "sha256-xlZWA87dRWU+dnmf4RqqkrIXVyI2Sg/odwPe7GQbgn8=";
 
   doCheck = false; # uses network
 
@@ -25,4 +25,4 @@ buildGoModule rec {
     homepage = "https://papeer.tech/";
     license = lib.licenses.gpl3Plus;
   };
-}
+})

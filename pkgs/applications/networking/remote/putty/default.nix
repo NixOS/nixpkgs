@@ -12,7 +12,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.83";
+  version = "0.84";
   pname = "putty";
 
   src = fetchurl {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       "https://the.earth.li/~sgtatham/putty/${version}/${pname}-${version}.tar.gz"
       "ftp://ftp.wayne.edu/putty/putty-website-mirror/${version}/${pname}-${version}.tar.gz"
     ];
-    hash = "sha256-cYd3wT1j0N/5H+AxYrwqBbTfyLCCdjTNYLUc79/2McY=";
+    hash = "sha256-BgV4Yq4Zjx29IZ0MdJMIDVn2BhlLtQVsVJ40KqAbaf4=";
   };
 
   nativeBuildInputs = [
@@ -62,7 +62,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
+    maintainers = with lib.maintainers; [ aprl ];
     description = "Free Telnet/SSH Client";
     longDescription = ''
       PuTTY is a free implementation of Telnet and SSH for Windows and Unix
@@ -70,7 +71,7 @@ stdenv.mkDerivation rec {
       It is written and maintained primarily by Simon Tatham.
     '';
     homepage = "https://www.chiark.greenend.org.uk/~sgtatham/putty/";
-    license = licenses.mit;
-    platforms = platforms.unix ++ platforms.windows;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 }

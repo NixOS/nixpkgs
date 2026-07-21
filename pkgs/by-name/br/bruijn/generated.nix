@@ -22,10 +22,10 @@
 }:
 mkDerivation {
   pname = "bruijn";
-  version = "0.1.0.0";
+  version = "0-unstable-2026-07-16";
   src = fetchzip {
-    url = "https://github.com/marvinborner/bruijn/archive/31ba54046e33618905fc99e0b079bd3aa2594284.tar.gz";
-    sha256 = "11b3i32y36i29haym4agn1pgik20byldihgs2qsi5p7vy17z0a78";
+    url = "https://github.com/marvinborner/bruijn/archive/9f1ac8856d09666a7444874f80b91b876929eecf.tar.gz";
+    sha256 = "18mcwp2xn7wgr81mgqr38irvkf24rf0nvwzi8janasq5favim0vy";
   };
   isLibrary = true;
   isExecutable = true;

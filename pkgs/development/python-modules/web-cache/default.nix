@@ -2,30 +2,36 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   isPy3k,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "web-cache";
   version = "1.1.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
+
   disabled = !isPy3k;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "web_cache";
-    sha256 = "1d8f1s3i0s3h1jqvjq6cp639hhbbpxvyq7cf9dwzrvvvr0s0m8fm";
+    hash = "sha256-1aEKNMh77/x5S44d7He/a0GYhrnMYLmxDHBoEIcODrU=";
   };
+
+  build-system = [ setuptools ];
 
   # No tests in downloaded archive
   doCheck = false;
 
   pythonImportsCheck = [ "web_cache" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple Python key-value storage backed up by sqlite3 database";
     homepage = "https://github.com/desbma/web_cache";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ moni ];
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ moni ];
   };
-}
+})

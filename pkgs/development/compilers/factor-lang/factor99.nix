@@ -220,7 +220,7 @@ stdenv.mkDerivation {
     withLibs = wrapFactor;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://factorcode.org/";
     description = "Concatenative, stack-based programming language";
     longDescription = ''
@@ -236,9 +236,9 @@ stdenv.mkDerivation {
       on all platforms. Full source code for the Factor project is available
       under a BSD license.
     '';
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ spacefrogg ];
-    platforms = lib.intersectLists platforms.x86_64 platforms.linux;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ spacefrogg ];
+    platforms = lib.intersectLists lib.platforms.x86_64 lib.platforms.linux;
     mainProgram = "factor";
   };
 }

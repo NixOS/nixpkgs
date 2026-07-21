@@ -8,16 +8,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "wrtag";
-  version = "0.18.0";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
     owner = "sentriz";
     repo = "wrtag";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XQyvm4nFMLuIIBhlqI/tiqjEDnMDHQas5lg5SN+1ENU=";
+    hash = "sha256-M+HzGCcTWObLwE5W5cSDUTiIy8eCjw+AsIjOIeL9vrQ=";
   };
 
-  vendorHash = "sha256-bqqt/p4wzYpz/nkM9ZgzVYHo/I5bUkG/pvY6irx6Z+w=";
+  vendorHash = "sha256-nXEWwXfX/6Op7P7Aj3B4wzKAWBcPxx7utB5LxePWSVg=";
 
   nativeBuildInputs = [ installShellFiles ];
 

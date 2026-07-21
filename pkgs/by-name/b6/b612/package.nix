@@ -2,29 +2,23 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "b612";
   version = "1.008";
 
   src = fetchFromGitHub {
     owner = "polarsys";
     repo = "b612";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-uyBC8UNOwztCHXhR9XZuWDwrty0eClbo0E+gI1PmjEg=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    mkdir -p $out/share/fonts/truetype
-    mv fonts/ttf/*.ttf $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
-
-  meta = with lib; {
+  meta = {
     homepage = "https://b612-font.com/";
     description = "Highly legible font family for use on aircraft cockpit screens";
     longDescription = ''
@@ -41,12 +35,12 @@ stdenvNoCC.mkDerivation rec {
       imaginary asteroid of the aviator Saint‑Exupéry, benefited from a complete
       hinting on all the characters.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       ofl
       epl10
       bsd3
     ];
-    maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ sternenseemann ];
+    platforms = lib.platforms.all;
   };
-}
+})

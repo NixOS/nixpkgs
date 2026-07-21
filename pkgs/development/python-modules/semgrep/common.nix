@@ -1,9 +1,13 @@
 { lib }:
 
 rec {
-  version = "1.104.0";
+  version = "1.164.0";
 
-  srcHash = "sha256-rVBnjG+g7OaOQ8LYCurqNC2dYY/Dm4hdocgotc4lADg=";
+  srcHash = "sha256-ced287/jH+as/1rGBOfoZ06UuQ1sf1YI4AMHbHrtnHU=";
+
+  # This tag is used to select the correct wheel from PyPI.
+  # It is updated by the update.sh script.
+  pythonWheelTag = "cp310.cp311.cp312.cp313.cp314.py310.py311.py312.py313.py314";
 
   # submodule dependencies
   # these are fetched so we:
@@ -13,8 +17,8 @@ rec {
     "cli/src/semgrep/semgrep_interfaces" = {
       owner = "semgrep";
       repo = "semgrep-interfaces";
-      rev = "5e0c767ec323f3f2356d3bf8dbdf7c7836497d8a";
-      hash = "sha256-RvkUbS+q/UqkKLDBCvDWkuRYDzWXp+JonFE7qVkEsY8=";
+      rev = "f4a74a03e8ec3dd368b96101648a3210e03fa61e";
+      hash = "sha256-dy+oOB0QmZjMpTYINSPIjzhpN6d/45DaajqumKIYxC4=";
     };
   };
 
@@ -24,24 +28,20 @@ rec {
   # on github releases
   core = {
     x86_64-linux = {
-      platform = "musllinux_1_0_x86_64.manylinux2014_x86_64";
-      hash = "sha256-Qn97ZJI1//n47z/qX87AuIWRvvXurwH26C/vBrZ12gc=";
+      platform = "manylinux_2_34_x86_64";
+      hash = "sha256-dFrlzhvvfJsDyStDHRdMpu54AaXioEfGSsIQTH5pUvs=";
     };
     aarch64-linux = {
-      platform = "musllinux_1_0_aarch64.manylinux2014_aarch64";
-      hash = "sha256-vuLuxsqnaPSbcVuwyhRRTTTwDVCZvOkRJURZUKnh/9I=";
-    };
-    x86_64-darwin = {
-      platform = "macosx_10_14_x86_64";
-      hash = "sha256-QWESQQyBzyupzC1V5zs1GgZBtHEUgayvcKwDn+5pXUc=";
+      platform = "manylinux_2_34_aarch64";
+      hash = "sha256-N24E9xOyRO7pXopRs+gSQM2nwHE214GfcntcoH7H7Kk=";
     };
     aarch64-darwin = {
       platform = "macosx_11_0_arm64";
-      hash = "sha256-gkX82X79L+v5A1Mby6sCqXcx79fgJGIfmRdARtULmUc=";
+      hash = "sha256-AsKxA5Wmy3NEQJ0kS6ylE33d0W86e9F494aiIkwyrcA=";
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://semgrep.dev/";
     downloadPage = "https://github.com/semgrep/semgrep/";
     changelog = "https://github.com/semgrep/semgrep/blob/v${version}/CHANGELOG.md";
@@ -53,10 +53,11 @@ rec {
       uploaded. Its rules look like the code you already write; no abstract
       syntax trees, regex wrestling, or painful DSLs.
     '';
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [
       jk
       ambroisie
+      caverav
     ];
   };
 }

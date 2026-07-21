@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "tweepy";
-  version = "4.16.0";
+  version = "4.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tweepy";
     repo = "tweepy";
     tag = "v${version}";
-    hash = "sha256-9rJrZb9X3twVtfnQTFjWLH/TttfUNm4KA3/6AIHDKc0=";
+    hash = "sha256-Jr/62vXxBIiZGQeM5bbqnHDP9GCxrbJmCF2oiYglLbE=";
   };
 
   build-system = [ flit-core ];
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     pytestCheckHook
     vcrpy
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "tweepy" ];
 
@@ -68,11 +68,11 @@ buildPythonPackage rec {
     "testcursornext"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Twitter library for Python";
     homepage = "https://github.com/tweepy/tweepy";
     changelog = "https://github.com/tweepy/tweepy/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ marius851000 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ marius851000 ];
   };
 }

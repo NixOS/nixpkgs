@@ -1,5 +1,5 @@
 import ./make-test-python.nix (
-  { lib, pkgs, ... }:
+  { lib, ... }:
 
   let
     config_refresh = "10";
@@ -13,19 +13,17 @@ import ./make-test-python.nix (
       lewo
     ];
 
-    nodes.machine =
-      { config, pkgs, ... }:
-      {
-        services.osquery = {
-          enable = true;
+    nodes.machine = _: {
+      services.osquery = {
+        enable = true;
 
-          settings.options = { inherit nullvalue utc; };
-          flags = {
-            inherit config_refresh;
-            nullvalue = "IGNORED";
-          };
+        settings.options = { inherit nullvalue utc; };
+        flags = {
+          inherit config_refresh;
+          nullvalue = "IGNORED";
         };
       };
+    };
 
     testScript =
       { nodes, ... }:

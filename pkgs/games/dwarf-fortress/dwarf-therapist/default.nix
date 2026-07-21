@@ -54,15 +54,15 @@ stdenv.mkDerivation rec {
     inherit maxDfVersion;
   };
 
-  meta = with lib; {
+  meta = {
     mainProgram = "dwarftherapist";
     description = "Tool to manage dwarves in a running game of Dwarf Fortress";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       bendlas
       numinit
     ];
-    license = licenses.mit;
-    platforms = platforms.x86;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.x86;
     homepage = "https://github.com/Dwarf-Therapist/Dwarf-Therapist";
   };
 }

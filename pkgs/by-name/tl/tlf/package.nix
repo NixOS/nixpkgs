@@ -9,33 +9,25 @@
   pkg-config,
   glib,
   perl,
+  python3Packages,
   ncurses5,
   hamlib,
   xmlrpc_c,
+  pythonPluginSupport ? true,
+  python3,
+  cmocka,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tlf";
-  version = "1.4.1";
+  version = "1.4.1-unstable-2026-03-27";
 
   src = fetchFromGitHub {
-    owner = "tlf";
+    owner = "Tlf";
     repo = "tlf";
-    rev = "tlf-${version}";
-    sha256 = "1xpgs4k27pjd9mianfknknp6mf34365bcp96wrv5xh4dhph573rj";
+    rev = "e6385f88ad793043d874b89d56d29bea5dac4e26";
+    hash = "sha256-XYj0vUqxnc6SuH+fV0EWgVBV3W1W2yhMCK/zcEWrMQ4=";
   };
-
-  patches = [
-    # Pull upstream fix for ncurses-6.3:
-    #   https://github.com/Tlf/tlf/pull/282
-    # We use Debian's patch as upstream fixes don't apply as is due to
-    # related code changes. The change will be a part of 1.4.2 release.
-    (fetchpatch {
-      name = "ncurses-6.3.patch";
-      url = "https://salsa.debian.org/debian-hamradio-team/tlf/-/raw/5a2d79fc35bde97f653b1373fd970d41fe01a3ec/debian/patches/warnings-as-errors.patch?inline=false";
-      sha256 = "1zi1dd4vqkgl2pg29lnhj91ralqg58gmkzq9fkcx0dyakbjm6070";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -43,25 +35,38 @@ stdenv.mkDerivation rec {
     automake
     pkg-config
     perl
+    python3Packages.pexpect
   ];
+
   buildInputs = [
     glib
     ncurses5
     hamlib
     xmlrpc_c
+  ]
+  ++ lib.optionals pythonPluginSupport [
+    python3
   ];
 
   configureFlags = [
-    "--enable-hamlib"
     "--enable-fldigi-xmlrpc"
+  ]
+  ++ lib.optionals pythonPluginSupport [
+    "--enable-python-plugin"
   ];
+
+  nativeCheckInputs = [
+    cmocka
+  ];
+
+  doCheck = true;
 
   postInstall = ''
     mkdir -p $out/lib
     ln -s ${ncurses5.out}/lib/libtinfo.so.5 $out/lib/libtinfo.so.5
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Advanced ham radio logging and contest program";
     longDescription = ''
       TLF is a curses based console mode general logging and contest program for
@@ -72,8 +77,8 @@ stdenv.mkDerivation rec {
       contests, general QSO and DXpedition mode.
     '';
     homepage = "https://tlf.github.io/";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

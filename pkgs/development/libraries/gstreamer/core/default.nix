@@ -40,7 +40,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gstreamer";
-  version = "1.26.5";
+  version = "1.28.4";
 
   outputs = [
     "bin"
@@ -52,13 +52,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Cn7bDntC2+a1dfzmGkgIo/ayDghaHq7LwCXQ7CHx53Q=";
+    hash = "sha256-9a3H6PRIwQJgs7JaoQHJ1UBnTI2aVMK3eobQTys7UN0=";
   };
 
   depsBuildBuild = [
     pkg-config
   ];
 
+  __structuredAttrs = true;
   strictDeps = true;
   nativeBuildInputs = [
     meson
@@ -134,6 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preFixup = ''
+    moveToOutput "lib/gstreamer-1.0/pkgconfig" "$dev"
     moveToOutput "share/bash-completion" "$bin"
   '';
 
@@ -143,20 +145,19 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
-    updateScript = directoryListingUpdater { };
+    updateScript = directoryListingUpdater { odd-unstable = true; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open source multimedia framework";
     homepage = "https://gstreamer.freedesktop.org";
-    license = licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
     pkgConfigModules = [
       "gstreamer-controller-1.0"
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
-      ttuegel
-      matthewbauer
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      tmarkus
     ];
   };
 })

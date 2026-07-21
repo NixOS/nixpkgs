@@ -7,9 +7,8 @@ lib: {
     jlamur
     bearfm
   ];
-  platforms = lib.map (lib.removeSuffix ".nix") (
-    lib.filter (name: name != "meta.nix" && name != "package.nix") (
-      builtins.attrNames (builtins.readDir ./.)
-    )
-  );
+  platforms = [
+    "x86_64-linux"
+    "aarch64-linux"
+  ];
 }

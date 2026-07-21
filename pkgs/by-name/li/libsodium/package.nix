@@ -1,18 +1,21 @@
 {
   lib,
   stdenv,
-  fetchurl,
   autoreconfHook,
+  fetchFromGitHub,
   testers,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libsodium";
-  version = "1.0.20";
+  version = "1.0.22-unstable-2026-04-16";
 
-  src = fetchurl {
-    url = "https://download.libsodium.org/libsodium/releases/libsodium-${finalAttrs.version}.tar.gz";
-    hash = "sha256-67Ze9spDkzPCu0GgwZkFhyiNoH9sf9B8s6GMwY0wzhk=";
+  src = fetchFromGitHub {
+    owner = "jedisct1";
+    repo = "libsodium";
+    rev = "33cc75ab1565d9dcbe808354191bd572ad6b64d0";
+    hash = "sha256-8kS9FBoaFaJOjH7XZc8IG3GaQaUiYD/awQOhs7j0n1Y=";
   };
 
   outputs = [
@@ -37,14 +40,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru = {
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    updateScript = unstableGitUpdater {
+      branch = "stable";
+      tagConverter = "cut -d - -f 1";
+    };
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Modern and easy-to-use crypto library";
     homepage = "https://doc.libsodium.org/";
-    license = licenses.isc;
-    maintainers = with maintainers; [ raskin ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [
+      mdaniels5757
+    ];
+    teams = [ lib.teams.security-review ];
     pkgConfigModules = [ "libsodium" ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

@@ -9,7 +9,6 @@
   cmake,
   ninja,
   llvm,
-  targetLlvm,
   lit,
   clang-unwrapped,
   perl,
@@ -20,7 +19,7 @@
   ompdSupport ? true,
   ompdGdbSupport ? ompdSupport,
   getVersionFile,
-  fetchpatch,
+  checkPhaseThreadLimitHook,
 }:
 
 assert lib.assertMsg (ompdGdbSupport -> ompdSupport) "OMPD GDB support requires OMPD support!";
@@ -31,11 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   src =
     if monorepoSrc != null then
-      runCommand "openmp-src-${version}" { inherit (monorepoSrc) passthru; } (''
+      runCommand "openmp-src-${version}" { inherit (monorepoSrc) passthru; } ''
         mkdir -p "$out"
         cp -r ${monorepoSrc}/cmake "$out"
         cp -r ${monorepoSrc}/openmp "$out"
-      '')
+      ''
     else
       src;
 
@@ -46,9 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  # TODO: Remove on `staging`.
-  patchFlags = null;
-
   patches =
     lib.optional (lib.versionOlder release_version "19") (getVersionFile "openmp/fix-find-tool.patch")
     ++ [
@@ -57,15 +53,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    python3.pythonOnBuildForHost
+    python3
     perl
     ninja
     pkg-config
     lit
   ];
 
+  propagatedNativeBuildInputs = [
+    checkPhaseThreadLimitHook
+  ];
+
   buildInputs = [
-    (if stdenv.buildPlatform == stdenv.hostPlatform then llvm else targetLlvm)
+    llvm
   ]
   ++ lib.optionals (ompdSupport && ompdGdbSupport) [
     python3

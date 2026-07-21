@@ -4,7 +4,8 @@
   buildPythonPackage,
   pythonAtLeast,
   pythonOlder,
-  fetchPypi,
+  fetchFromGitHub,
+  fetchpatch,
   python,
 
   # build-system
@@ -55,26 +56,38 @@
 
 buildPythonPackage rec {
   pname = "twisted";
-  version = "25.5.0";
-  format = "pyproject";
+  version = "26.4.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    extension = "tar.gz";
-    hash = "sha256-HesnI1jLa+Hj6PxvnIs2946w+nwiM9Lb4R7G/uBOoxY=";
+  src = fetchFromGitHub {
+    owner = "twisted";
+    repo = "twisted";
+    tag = "twisted-${version}";
+    hash = "sha256-D6vDa+8qwjryKnElPBZgXCNokMX2l3i2bMdtk4FhEp4=";
   };
+
+  patches = [
+    # pyOpenSSL 26.3.0 dropped some deprecated APIs, which breaks various
+    # functionality in twisted. We include the patch which replaces these
+    # with equivalent functionality from pyca/cryptography.
+    # https://github.com/twisted/twisted/issues/12660
+    # https://github.com/twisted/twisted/pull/12661
+    (fetchpatch {
+      name = "twisted-replace-pyopenssl-x509req-with-cryptography-csr.patch";
+      url = "https://github.com/twisted/twisted/commit/5b4601c9965ffc92d6aa952b8c05127d5ac37307.patch";
+      hash = "sha256-mbSZOvzinfUolfOHJl+vEdAEGjy8OF2S/SrTsAbvjIw=";
+    })
+  ];
 
   __darwinAllowLocalNetworking = true;
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-fancy-pypi-readme
     incremental
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     automat
     constantly
@@ -172,6 +185,15 @@ buildPythonPackage rec {
           "ProcessTestsBuilder_AsyncioSelectorReactorTests.test_processEnded"
           "ProcessTestsBuilder_SelectReactorTests.test_processEnded"
         ];
+        "src/twisted/internet/test/test_tcp.py" = [
+          # flaky on macOS, suspected kernel bug in socket notifications
+          # https://github.com/twisted/twisted/issues/12151
+          "AbortConnectionTests_AsyncioSelectorReactorTests.test_fullWriteBufferAfterByteExchange"
+          "AbortConnectionTests_AsyncioSelectorReactorTests.test_resumeProducingAbort"
+          "AbortConnectionTests_AsyncioSelectorReactorTests.test_resumeProducingAbortLater"
+          # Times out in Hydra on x86_64-darwin
+          "AbortConnectionTests_AsyncioSelectorReactorTests.test_fullWriteBufferAfterByteExchange"
+        ];
       };
     in
     lib.concatStringsSep "\n" (
@@ -258,11 +280,11 @@ buildPythonPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/twisted/twisted/blob/twisted-${version}/NEWS.rst";
     homepage = "https://github.com/twisted/twisted";
     description = "Asynchronous networking framework written in Python";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

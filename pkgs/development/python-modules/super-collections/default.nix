@@ -6,18 +6,19 @@
   hjson,
   pytestCheckHook,
   rich,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "super-collections";
-  version = "0.5.4";
+  version = "0.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fralau";
     repo = "super-collections";
     tag = "v${version}";
-    hash = "sha256-gp5BREoa1oHGm1ymDlIdlLTqyIvB0RmkNLYDJssI3VE=";
+    hash = "sha256-7QW5cL+TZlPX8ZMNNH+xZSGNIGr8Cy2jP1oSWy5tKaY=";
   };
 
   build-system = [
@@ -31,6 +32,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     rich
+    pyyaml
   ];
 
   pythonImportsCheck = [

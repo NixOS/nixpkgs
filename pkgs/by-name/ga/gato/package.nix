@@ -5,7 +5,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gato";
   version = "1.6";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "praetorian-inc";
     repo = "gato";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-vXQFgP0KDWo1VWe7tMGCB2yEYlr/1KMXsiNupBVLBqc=";
   };
 
@@ -43,9 +43,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "GitHub Self-Hosted Runner Enumeration and Attack Tool";
     homepage = "https://github.com/praetorian-inc/gato";
-    changelog = "https://github.com/praetorian-inc/gato/releases/tag/${version}";
+    changelog = "https://github.com/praetorian-inc/gato/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "gato";
   };
-}
+})

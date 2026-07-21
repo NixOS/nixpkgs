@@ -11,7 +11,7 @@
   gsettings-desktop-schemas,
   p7zip,
   autoPatchelfHook,
-  libXxf86vm,
+  libxxf86vm,
   libGL,
   copyDesktopItems,
 
@@ -26,7 +26,7 @@ let
 
   # TODO: Should we move this to `lib`? Seems like its would be useful in many cases.
   extensionOf =
-    filePath: lib.concatStringsSep "." (lib.tail (lib.splitString "." (builtins.baseNameOf filePath)));
+    filePath: lib.concatStringsSep "." (lib.tail (lib.splitString "." (baseNameOf filePath)));
 
   installIcons =
     iconName: icons:
@@ -96,7 +96,7 @@ stdenv.mkDerivation {
     p7zip
     gtk3
     gsettings-desktop-schemas
-    libXxf86vm
+    libxxf86vm
   ];
 
   # upstream targets Java 7 by default

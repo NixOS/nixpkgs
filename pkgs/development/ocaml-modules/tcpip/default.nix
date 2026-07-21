@@ -26,8 +26,6 @@
   ipaddr-cstruct,
   lru,
   metrics,
-  withFreestanding ? false,
-  ocaml-freestanding,
 }:
 
 buildDunePackage rec {
@@ -64,9 +62,6 @@ buildDunePackage rec {
     metrics
     arp
     mirage-flow
-  ]
-  ++ lib.optionals withFreestanding [
-    ocaml-freestanding
   ];
 
   doCheck = true;
@@ -77,10 +72,10 @@ buildDunePackage rec {
   ];
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "OCaml TCP/IP networking stack, used in MirageOS";
     homepage = "https://github.com/mirage/mirage-tcpip";
-    maintainers = [ maintainers.sternenseemann ];
-    license = licenses.isc;
+    maintainers = [ lib.maintainers.sternenseemann ];
+    license = lib.licenses.isc;
   };
 }

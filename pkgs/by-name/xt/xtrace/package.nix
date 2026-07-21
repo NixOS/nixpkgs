@@ -3,12 +3,12 @@
   stdenv,
   autoreconfHook,
   fetchFromGitLab,
-  libX11,
+  libx11,
   xauth,
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xtrace";
   version = "1.4.0";
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "xtrace";
-    rev = "xtrace-${version}";
+    rev = "xtrace-${finalAttrs.version}";
     sha256 = "1yff6x847nksciail9jly41mv70sl8sadh0m5d847ypbjmxcwjpq";
   };
 
@@ -24,19 +24,19 @@ stdenv.mkDerivation rec {
     autoreconfHook
     makeWrapper
   ];
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   postInstall = ''
     wrapProgram "$out/bin/xtrace" \
         --prefix PATH ':' "${xauth}/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://salsa.debian.org/debian/xtrace";
     description = "Tool to trace X11 protocol connections";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
     mainProgram = "xtrace";
   };
-}
+})

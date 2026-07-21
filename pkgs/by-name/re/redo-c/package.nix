@@ -3,14 +3,14 @@
   stdenv,
   fetchFromGitHub,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "redo-c";
   version = "0.3";
 
   src = fetchFromGitHub {
     owner = "leahneukirchen";
     repo = "redo-c";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-oZcaBgESIaD7/SUBE7luh7axucKTEzXPVkQAQs2NCXE=";
   };
 
@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
     cp '${./Makefile}' Makefile
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the redo build system in portable C with zero dependencies";
     homepage = "https://github.com/leahneukirchen/redo-c";
-    license = licenses.cc0;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ck3d ];
+    license = lib.licenses.cc0;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ ck3d ];
   };
-}
+})

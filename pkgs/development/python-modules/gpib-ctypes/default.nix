@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   pytestCheckHook,
   linux-gpib,
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "gpib-ctypes";
   version = "0.3.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "gpib_ctypes";
@@ -31,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gpib_ctypes.gpib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform Python bindings for the NI GPIB and linux-gpib C interfaces";
     homepage = "https://github.com/tivek/gpib_ctypes/";
     changelog = "https://github.com/tivek/gpib_ctypes/blob/${version}/HISTORY.rst";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fsagbuya ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fsagbuya ];
   };
 }

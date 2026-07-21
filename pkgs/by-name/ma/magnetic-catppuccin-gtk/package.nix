@@ -13,14 +13,21 @@
 let
   validAccents = [
     "default"
-    "purple"
+    "blue"
+    "flamingo"
+    "green"
+    "grey"
+    "lavender"
+    "maroon"
+    "mauve"
+    "peach"
     "pink"
     "red"
-    "orange"
-    "yellow"
-    "green"
+    "rosewater"
+    "sapphire"
+    "sky"
     "teal"
-    "grey"
+    "yellow"
     "all"
   ];
   validShades = [
@@ -59,13 +66,13 @@ lib.checkListOfEnum "${pname} Valid theme accent(s)" validAccents accent lib.che
   stdenv.mkDerivation
   {
     pname = "magnetic-${lib.toLower pname}";
-    version = "0-unstable-2025-04-25";
+    version = "0-unstable-2026-01-15";
 
     src = fetchFromGitHub {
       owner = "Fausto-Korpsvart";
       repo = "Catppuccin-GTK-Theme";
-      rev = "c961826d027ed93fae12a9a309616e36d140e6b9";
-      hash = "sha256-7F4FrhM+kBFPeLp2mjmYkoDiF9iKDUkC27LUBuFyz7g=";
+      rev = "f25d8cf688d8f224f0ce396689ffcf5767eb647e";
+      hash = "sha256-W+NGyPnOEKoicJPwnftq26iP7jya1ZKq38lMjx/k9ss=";
     };
 
     nativeBuildInputs = [

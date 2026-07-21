@@ -3,6 +3,63 @@
 let
   user = "alice"; # from ./common/user-account.nix
   password = "foobar"; # from ./common/user-account.nix
+
+  # A minimal Cockpit plugin that runs `hello` and displays the output
+  # This tests that the cockpitPath mechanism works correctly
+  helloPlugin =
+    pkgs.runCommand "cockpit-hello-test" { } ''
+      mkdir -p $out/share/cockpit/hello-test
+
+      cat > $out/share/cockpit/hello-test/manifest.json << 'EOF'
+      {
+        "name": "hello-test",
+        "menu": {
+          "index": {
+            "label": "Hello Test",
+            "order": 100
+          }
+        }
+      }
+      EOF
+
+      cat > $out/share/cockpit/hello-test/index.html << 'EOF'
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Hello Test</title>
+        <meta charset="utf-8">
+        <script src="../base1/cockpit.js"></script>
+      </head>
+      <body>
+        <h1>Hello Test Plugin</h1>
+        <div id="output">Loading...</div>
+        <script src="test.js"></script>
+      </body>
+      </html>
+      EOF
+
+      cat > $out/share/cockpit/hello-test/test.js << 'EOF'
+      (function() {
+        var output = document.getElementById("output");
+
+        if (typeof cockpit === "undefined") {
+          output.innerText = "FAILED: cockpit.js not loaded";
+          return;
+        }
+
+        cockpit.spawn(["hello"], { err: "message" })
+          .then(function(data) {
+            output.innerText = "SUCCESS: " + data;
+          })
+          .catch(function(error) {
+            output.innerText = "FAILED: " + (error ? error.message : "unknown error");
+          });
+      })();
+      EOF
+    ''
+    // {
+      passthru.cockpitPath = [ pkgs.hello ];
+    };
 in
 {
   name = "cockpit";
@@ -22,6 +79,7 @@ in
           enable = true;
           port = 7890;
           openFirewall = true;
+          plugins = [ helloPlugin ];
           allowed-origins = [
             "https://server:${toString config.services.cockpit.port}"
           ];
@@ -44,7 +102,6 @@ in
                   from selenium.webdriver.firefox.options import Options
                   from selenium.webdriver.support.ui import WebDriverWait
                   from selenium.webdriver.support import expected_conditions as EC
-                  from time import sleep
 
 
                   def log(msg):
@@ -71,18 +128,13 @@ in
                       wait.until(EC.presence_of_element_located((by, query)))
 
 
-                  def wait_title_contains(title, timeout=10):
+                  def wait_title_contains(title, timeout=30):
                       wait = WebDriverWait(driver, timeout)
                       wait.until(EC.title_contains(title))
 
 
                   def find_element(by, query):
                       return driver.find_element(by, query)
-
-
-                  def set_value(elem, value):
-                      script = 'arguments[0].value = arguments[1]'
-                      return driver.execute_script(script, elem, value)
 
 
                   log("Waiting for the homepage to load")
@@ -93,41 +145,65 @@ in
 
                   log("Homepage loaded!")
 
+                  # Prefer send_keys over setting .value via JS: Cockpit's login
+                  # form (and PatternFly widgets) do not always react to the latter.
                   log("Filling out username")
                   login_input = find_element(By.CSS_SELECTOR, 'input#login-user-input')
-                  set_value(login_input, "${user}")
+                  login_input.clear()
+                  login_input.send_keys("${user}")
 
                   log("Filling out password")
-                  password_input = find_element(By.CSS_SELECTOR, 'input#login-password-input')
-                  set_value(password_input, "${password}")
+                  password_input = find_element(
+                      By.CSS_SELECTOR, 'input#login-password-input'
+                  )
+                  password_input.clear()
+                  password_input.send_keys("${password}")
 
                   log("Submitting credentials for login")
                   driver.find_element(By.CSS_SELECTOR, 'button#login-button').click()
 
-                  # driver.implicitly_wait(1)
-                  # driver.get("https://server:7890/system")
-
                   log("Waiting dashboard to load")
                   wait_title_contains("${user}@server")
 
-                  log("Waiting for the frontend to initialize")
-                  sleep(1)
-
                   log("Looking for that banner that tells about limited access")
-                  container_iframe = find_element(By.CSS_SELECTOR, 'iframe.container-frame')
+                  wait_elem(By.CSS_SELECTOR, 'iframe.container-frame', timeout=30)
+                  container_iframe = find_element(
+                      By.CSS_SELECTOR, 'iframe.container-frame'
+                  )
                   driver.switch_to.frame(container_iframe)
-
-                  assert "Web console is running in limited access mode" in driver.page_source
+                  # Wait for the overview iframe to render the limited-access alert.
+                  # Fixed sleeps were flaky after Cockpit 364 (slower SPA init).
+                  phrase = "Web console is running in limited access mode"
+                  WebDriverWait(driver, 30).until(
+                      lambda d: phrase in d.page_source
+                  )
 
                   log("Clicking the sudo button")
+                  # Button label is "Turn on administrative access"
                   for button in driver.find_elements(By.TAG_NAME, "button"):
-                      if 'admin' in button.text:
+                      if 'admin' in button.text.casefold():
                           button.click()
+                          break
                   driver.switch_to.default_content()
 
                   log("Checking that /nonexistent is not a thing")
                   assert '/nonexistent' not in driver.page_source
                   assert len(driver.find_elements(By.CSS_SELECTOR, '#machine-reconnect')) == 0
+
+                  log("Checking plugin path")
+                  driver.get("https://server:7890/hello-test")
+                  wait_elem(By.CSS_SELECTOR, 'iframe.container-frame', timeout=30)
+                  for iframe in driver.find_elements(By.TAG_NAME, "iframe"):
+                      if "hello-test" in (iframe.get_attribute("src") or ""):
+                          driver.switch_to.frame(iframe)
+                          break
+                  output = find_element(By.ID, "output")
+                  WebDriverWait(driver, 30).until(
+                      lambda d: "SUCCESS: Hello, world!" in output.text
+                      or output.text.startswith("FAILED:")
+                  )
+                  text = output.text
+                  assert "SUCCESS: Hello, world!" in text, f"Plugin failed: {text}"
 
                   driver.close()
                 '';
@@ -146,8 +222,10 @@ in
 
     server.wait_for_unit("sockets.target")
     server.wait_for_open_port(7890)
+    # Port open is not enough: cockpit-ws may still be finishing startup.
+    server.wait_until_succeeds("curl -k https://127.0.0.1:7890 -o /dev/null")
 
-    client.succeed("curl -k https://server:7890 -o /dev/stderr")
+    client.wait_until_succeeds("curl -k https://server:7890 -o /dev/stderr")
     print(client.succeed("whoami"))
     client.succeed('PYTHONUNBUFFERED=1 selenium-script')
   '';

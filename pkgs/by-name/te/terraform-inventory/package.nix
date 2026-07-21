@@ -6,14 +6,14 @@
   terraform-inventory,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "terraform-inventory";
   version = "0.10";
 
   src = fetchFromGitHub {
     owner = "adammck";
     repo = "terraform-inventory";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-gkSDxcBoYmCBzkO8y1WKcRtZdfl8w5qVix0zbyb4Myo=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.build_version=${version}"
+    "-X main.build_version=${finalAttrs.version}"
   ];
 
   doCheck = false;
@@ -31,11 +31,11 @@ buildGoModule rec {
     package = terraform-inventory;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/adammck/terraform-inventory";
     description = "Terraform state to ansible inventory adapter";
     mainProgram = "terraform-inventory";
-    license = licenses.mit;
-    maintainers = with maintainers; [ htr ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ htr ];
   };
-}
+})

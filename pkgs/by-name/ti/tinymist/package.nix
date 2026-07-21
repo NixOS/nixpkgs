@@ -15,16 +15,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tinymist";
   # Please update the corresponding vscode extension when updating
   # this derivation.
-  version = "0.13.28";
+  version = "0.15.2";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Myriad-Dreamin";
     repo = "tinymist";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Z2FAlFjFHCzFhlLILcXseynoSdMhRQ30fWC7rW946N4=";
+    hash = "sha256-wNSMjfU3upsqKQQUYx76iFGC+5ghcErlxy65ZJ/LvHk=";
   };
 
-  cargoHash = "sha256-7p+TNZO+uFqXhhMzmHj0r1X2WgDdg8aonMc0jgsrEnk=";
+  cargoHash = "sha256-NEvINvHMD9tVG9kyj84AC8DEAbR0ndjkCHpwR4OD6YA=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -54,6 +56,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=references::tests::test"
     "--skip=rename::tests::test"
     "--skip=semantic_tokens_full::tests::test"
+
+    # Return "No compatible device found" when testing preview
+    "--skip=doc::tests::diff_v1_preview_frame_paints_generated_page"
+    "--skip=doc::tests::full_current_preview_frame_paints_generated_page_after_reset"
+    "--skip=doc::tests::page_canvas_exposes_synthetic_accesskit_link_nodes"
+    "--skip=doc::tests::page_canvas_exposes_synthetic_accesskit_text_runs"
+    "--skip=doc::tests::page_canvas_paints_selection_overlay_above_scene"
+    "--skip=doc::tests::page_canvas_paints_supplied_white_background"
+    "--skip=doc::tests::page_canvas_selects_and_copies_text"
+    "--skip=doc::tests::page_canvas_uses_pointer_cursor_over_links"
   ];
 
   postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (

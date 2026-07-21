@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fontconfig";
-  version = "2.16.2";
+  version = "2.18.1";
 
   outputs = [
     "bin"
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   # ref: https://github.com/NixOS/nixpkgs/pull/401037#discussion_r2055430206
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/api/v4/projects/890/packages/generic/fontconfig/${finalAttrs.version}/fontconfig-${finalAttrs.version}.tar.xz";
-    hash = "sha256-FluP0qEZhkyHRksjOYbEobwJ77CcZd4cpAzB6F/7d+I=";
+    hash = "sha256-IwDz2/pyU7OkT0/uzbyN+kXd5dws+3H86vMfOUy0EDE=";
   };
 
   nativeBuildInputs = [
@@ -41,12 +41,9 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  buildInputs = [
-    expat
-  ];
-
   propagatedBuildInputs = [
     freetype
+    expat
   ];
 
   postPatch = ''
@@ -54,7 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '/check_PROGRAMS += test-crbug1004254/d' test/Makefile.am
 
     # Test causes error without patch shebangs.
-    patchShebangs doc/check-whitespace-in-args.py
+    patchShebangs doc/check-whitespace-in-args.py \
+      doc/check-missing-doc.py
   '';
 
   configureFlags = [
@@ -66,11 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
+    "ac_cv_va_copy=C99"
   ];
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   installFlags = [
     # Don't try to write to /var/cache/fontconfig at install time.
@@ -97,7 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "bin"}/bin/fc-list";
-  versionCheckProgramArg = "--version";
 
   installCheckPhase = ''
     runHook preInstallCheck
@@ -121,12 +119,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library for font customization and configuration";
     homepage = "http://fontconfig.org/";
-    license = licenses.bsd2; # custom but very bsd-like
-    platforms = platforms.all;
-    teams = [ teams.freedesktop ];
+    license = lib.licenses.bsd2; # custom but very bsd-like
+    platforms = lib.platforms.all;
+    teams = [ lib.teams.freedesktop ];
     pkgConfigModules = [ "fontconfig" ];
   };
 })

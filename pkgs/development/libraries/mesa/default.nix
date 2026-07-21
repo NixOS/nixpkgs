@@ -12,14 +12,13 @@
   glslang,
   spirv-tools,
   intltool,
-  jdupes,
+  libdisplay-info,
   libdrm,
   libgbm,
   libglvnd,
   libpng,
   libunwind,
   libva-minimal,
-  libvdpau,
   llvmPackages,
   lm_sensors,
   meson,
@@ -38,8 +37,15 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  xcbutilkeysyms,
-  xorg,
+  libxcb-keysyms,
+  libxxf86vm,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libx11,
+  xorgproto,
+  libxshmfence,
+  libxcb,
   zstd,
   enablePatentEncumberedCodecs ? true,
   withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light,
@@ -50,6 +56,7 @@
     "asahi" # Apple AGX
     "crocus" # Intel legacy
     "d3d12" # WSL emulated GPU (aka Dozen)
+    "ethosu" # ARM Ethos NPU
     "etnaviv" # Vivante GPU designs (mostly NXP/Marvell SoCs)
     "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
     "i915" # Intel extra legacy
@@ -61,6 +68,7 @@
     "r300" # very old AMD
     "r600" # less old AMD
     "radeonsi" # new AMD (GCN+)
+    "rocket" # Rockchip NPU
     "softpipe" # older software renderer
     "svga" # VMWare virtualized GPU
     "tegra" # Nvidia Tegra SoCs
@@ -75,7 +83,7 @@
     "broadcom" # Broadcom VC5 (Raspberry Pi 4, aka V3D)
     "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
     "gfxstream" # Android virtualized GPU
-    "imagination-experimental" # PowerVR Rogue (currently N/A)
+    "imagination" # PowerVR Rogue (currently N/A)
     "intel_hasvk" # Intel Haswell/Broadwell, "legacy" Vulkan driver (https://www.phoronix.com/news/Intel-HasVK-Drop-Dead-Code)
     "intel" # new Intel (aka ANV)
     "microsoft-experimental" # WSL virtualized GPU (aka DZN/Dozen)
@@ -96,13 +104,13 @@
     "wayland"
   ],
   vulkanLayers ? [
+    "anti-lag"
     "device-select"
     "intel-nullhw"
     "overlay"
     "screenshot"
     "vram-report-limit"
   ],
-  mesa,
   mesa-gl-headers,
   makeSetupHook,
 }:
@@ -120,8 +128,8 @@ let
   toCommand = dep: "ln -s ${dep} $out/${dep.pname}-${dep.version}.tar.gz";
 
   packageCacheCommand = lib.pipe rustDeps [
-    (builtins.map fetchDep)
-    (builtins.map toCommand)
+    (map fetchDep)
+    (map toCommand)
     (lib.concatStringsSep "\n")
   ];
 
@@ -134,7 +142,7 @@ let
 
   common = import ./common.nix { inherit lib fetchFromGitLab; };
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   inherit (common)
     pname
     version
@@ -210,6 +218,10 @@ stdenv.mkDerivation {
     # is ignored when freedreno is not being built.
     (lib.mesonOption "freedreno-kmds" "msm,kgsl,virtio,wsl")
 
+    # Enable virtio-gpu kernel mode driver (native context) support for amdgpu as well.
+    # This option is ignored when RadeonSI/RADV are not being built.
+    (lib.mesonBool "amdgpu-virtio" true)
+
     # Required for OpenCL
     (lib.mesonOption "clang-libdir" "${lib.getLib llvmPackages.clang-unwrapped}/lib")
 
@@ -247,45 +259,43 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  buildInputs =
-    with xorg;
-    [
-      directx-headers
-      elfutils
-      expat
-      spirv-tools
-      libdrm
-      libgbm
-      libglvnd
-      libpng
-      libunwind
-      libva-minimal
-      libvdpau
-      libX11
-      libxcb
-      libXext
-      libXfixes
-      libXrandr
-      libxshmfence
-      libXxf86vm
-      llvmPackages.clang
-      llvmPackages.clang-unwrapped
-      llvmPackages.libclc
-      llvmPackages.libllvm
-      lm_sensors
-      python3Packages.python # for shebang
-      spirv-llvm-translator
-      udev
-      vulkan-loader
-      wayland
-      wayland-protocols
-      xcbutilkeysyms
-      xorgproto
-      zstd
-    ]
-    ++ lib.optionals withValgrind [
-      valgrind-light
-    ];
+  buildInputs = [
+    directx-headers
+    elfutils
+    expat
+    spirv-tools
+    libdisplay-info
+    libdrm
+    libgbm
+    libglvnd
+    libpng
+    libunwind
+    libva-minimal
+    libx11
+    libxcb
+    libxext
+    libxfixes
+    libxrandr
+    libxshmfence
+    libxxf86vm
+    llvmPackages.clang
+    llvmPackages.clang-unwrapped
+    llvmPackages.libclc
+    llvmPackages.libllvm
+    lm_sensors
+    python3Packages.python # for shebang
+    spirv-llvm-translator
+    udev
+    vulkan-loader
+    wayland
+    wayland-protocols
+    libxcb-keysyms
+    xorgproto
+    zstd
+  ]
+  ++ lib.optionals withValgrind [
+    valgrind-light
+  ];
 
   depsBuildBuild = [
     pkg-config
@@ -306,7 +316,6 @@ stdenv.mkDerivation {
     python3Packages.mako
     python3Packages.ply
     python3Packages.pyyaml
-    jdupes
     # Use bin output from glslang to not propagate the dev output at
     # the build time with the host glslang.
     (lib.getBin glslang)
@@ -333,6 +342,7 @@ stdenv.mkDerivation {
     moveToOutput bin/panfrost_compile $cross_tools
     moveToOutput bin/panfrost_texfeatures $cross_tools
     moveToOutput bin/panfrostdump $cross_tools
+    moveToOutput bin/pco_clc $cross_tools
     moveToOutput bin/vtn_bindgen2 $cross_tools
 
     moveToOutput "lib/lib*OpenCL*" $opencl
@@ -369,11 +379,8 @@ stdenv.mkDerivation {
     # Don't depend on build python
     patchShebangs --host --update $out/bin/*
 
-    # NAR doesn't support hard links, so convert them to symlinks to save space.
-    jdupes --hard-links --link-soft --recurse "$out"
-
     # add RPATH here so Zink can find libvulkan.so
-    patchelf --add-rpath ${vulkan-loader}/lib $out/lib/libgallium*.so
+    patchelf --add-rpath ${vulkan-loader}/lib $out/lib/libgallium*.so $opencl/lib/libRusticlOpenCL.so
   '';
 
   passthru = {
@@ -387,19 +394,20 @@ stdenv.mkDerivation {
       ;
 
     # for compatibility
-    drivers = lib.warn "`mesa.drivers` is deprecated, use `mesa` instead" mesa;
+    drivers = lib.warn "`mesa.drivers` is deprecated, use `mesa` instead" finalAttrs.finalPackage;
 
     tests.outDoesNotDependOnLLVM = stdenv.mkDerivation {
       name = "mesa-does-not-depend-on-llvm";
       buildCommand = ''
-        echo ${mesa} >>$out
+        echo ${finalAttrs.finalPackage} >>$out
       '';
       disallowedRequisites = [ llvmPackages.llvm ];
     };
 
     llvmpipeHook = makeSetupHook {
       name = "llvmpipe-hook";
-      substitutions.mesa = mesa;
+      substitutions.mesa = finalAttrs.finalPackage;
+      meta.license = lib.licenses.mit;
     } ./llvmpipe-hook.sh;
   };
-}
+})

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pygments,
   gitMinimal,
   mercurial,
@@ -10,16 +11,18 @@
   less,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ydiff";
-  version = "1.4.2";
-  format = "setuptools";
+  version = "1.5";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ymattw";
     repo = "ydiff";
-    tag = version;
-    hash = "sha256-JaGkABroj+/7MrgpFYI2vE1bndsilIodopMUnfmNhwA=";
+    tag = finalAttrs.version;
+    hash = "sha256-9a7M6+CqGRvO1yainImN2RQVH3XMxE9PTLXJGKekXLg=";
   };
 
   patchPhase = ''
@@ -36,6 +39,8 @@ buildPythonPackage rec {
     patchShebangs tests/*.sh
   '';
 
+  build-system = [ setuptools ];
+
   nativeCheckInputs = [ pygments ];
 
   checkPhase = ''
@@ -44,7 +49,9 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  pythonImportsCheck = [ "ydiff" ];
+
+  meta = {
     description = "View colored, incremental diff in workspace or from stdin with side by side and auto pager support (Was \"cdiff\")";
     mainProgram = "ydiff";
     longDescription = ''
@@ -54,8 +61,10 @@ buildPythonPackage rec {
       and auto pager support.
     '';
     homepage = "https://github.com/ymattw/ydiff";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ leenaars ];
-    teams = [ teams.deshaw ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      de11n
+      despsyched
+    ];
   };
-}
+})

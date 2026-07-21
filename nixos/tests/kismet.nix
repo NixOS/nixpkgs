@@ -69,7 +69,7 @@ in
         };
 
       station =
-        { config, ... }:
+        { config, pkgs, ... }:
         {
           networking.interfaces.eth1.ipv4.addresses = lib.mkForce [
             {
@@ -98,10 +98,11 @@ in
               inherit serverAddress;
             };
           };
+          environment.systemPackages = [ pkgs.nettools ];
         };
 
       monitor =
-        { config, ... }:
+        { config, pkgs, ... }:
         {
           networking.interfaces.eth1.ipv4.addresses = lib.mkForce [
             {
@@ -189,10 +190,10 @@ in
             };
           };
 
-          environment.systemPackages = with pkgs; [
+          environment.systemPackages = [
             config.services.kismet.package
             config.services.vwifi.package
-            jq
+            pkgs.jq
           ];
         };
     };

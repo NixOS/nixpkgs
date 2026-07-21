@@ -11,12 +11,12 @@ let
     enableJavaFX = true;
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ganttproject-bin";
   version = "3.3.3316";
 
   src = fetchzip {
-    url = "https://dl.ganttproject.biz/ganttproject-${version}/ganttproject-${version}.zip";
+    url = "https://dl.ganttproject.biz/ganttproject-${finalAttrs.version}/ganttproject-${finalAttrs.version}.zip";
     stripRoot = false;
     hash = "sha256-tiEq/xdC0gXiUInLS9xGR/vI/BpdSA+mSf5yukuejc4=";
   };
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
         icon = "ganttproject";
         desktopName = "GanttProject";
         genericName = "Shedule and manage projects";
-        comment = meta.description;
+        comment = finalAttrs.meta.description;
         categories = [ "Office" ];
       };
 
@@ -49,22 +49,21 @@ stdenv.mkDerivation rec {
       mkdir -pv "$out/bin"
       wrapProgram "$out/share/ganttproject/ganttproject" \
         --set JAVA_HOME "${jre}" \
-        --prefix _JAVA_OPTIONS " " "${builtins.toString javaOptions}"
+        --prefix _JAVA_OPTIONS " " "${toString javaOptions}"
 
       mv -v "$out/share/ganttproject/ganttproject" "$out/bin"
 
       cp -rv "${desktopItem}/share/applications" "$out/share"
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Project scheduling and management";
     homepage = "https://www.ganttproject.biz/";
     downloadPage = "https://www.ganttproject.biz/download";
     # GanttProject itself is GPL3+. All bundled libraries are declared
     # ‘GPL3-compatible’. See ${downloadPage} for detailed information.
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.vidbina ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "ganttproject";
   };
-}
+})

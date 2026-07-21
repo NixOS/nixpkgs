@@ -7,14 +7,14 @@
   treegen,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "treegen";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "bilbilak";
     repo = "treegen";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-PPWUEfX7OXKZnghiVXU+eCjveA1VszA3uS8C3uI3pFM=";
   };
 
@@ -23,7 +23,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/bilbilak/treegen/config.Version=${version}"
+    "-X github.com/bilbilak/treegen/config.Version=${finalAttrs.version}"
   ];
 
   passthru = {
@@ -46,4 +46,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ _4r7if3x ];
     platforms = with lib.platforms; unix ++ windows;
   };
-}
+})

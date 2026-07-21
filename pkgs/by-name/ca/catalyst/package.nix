@@ -19,14 +19,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "catalyst";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.kitware.com";
     owner = "paraview";
     repo = "catalyst";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uPb7vgJpKquZVmSMxeWDVMiNkUdYv3oVVKu7t4+zkbs=";
+    hash = "sha256-8pBQQE5/h9LKRgFJi/KHtQPQ9rm7JyxBRVgh6Uf0Q98=";
   };
 
   nativeBuildInputs = [
@@ -75,10 +75,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [ ctestCheckHook ] ++ lib.optional mpiSupport mpiCheckPhaseHook;
 
-  disabledTests = lib.optionals fortranSupport [
-    # unexpected fortran binding symbol *__iso_c_binding_C_ptr
-    "catalyst-abi-nm"
-  ];
+  disabledTests =
+    lib.optionals (fortranSupport || stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64)
+      [
+        # unexpected fortran binding symbol *__iso_c_binding_C_ptr
+        # unexpected symbol in libc++ from darwin sdk
+        "catalyst-abi-nm"
+      ];
 
   pythonImportsCheck = [ "catalyst" ];
 

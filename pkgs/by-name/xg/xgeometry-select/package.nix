@@ -2,10 +2,10 @@
   lib,
   stdenv,
   fetchurl,
-  libX11,
+  libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xgeometry-select";
   version = "0.1";
 
@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   buildPhase = ''
-    gcc -Wall -lX11 ${src} -o xgeometry-select
+    gcc -Wall -lX11 ${finalAttrs.src} -o xgeometry-select
   '';
 
   installPhase = ''
@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
     mv -v xgeometry-select $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Select a region with mouse and prints geometry information (x/y/w/h)";
     homepage = "https://bbs.archlinux.org/viewtopic.php?pid=660837";
-    maintainers = with maintainers; [ obadz ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ obadz ];
+    platforms = lib.platforms.linux;
     mainProgram = "xgeometry-select";
   };
-}
+})

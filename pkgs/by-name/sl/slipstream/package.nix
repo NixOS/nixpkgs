@@ -20,7 +20,7 @@ maven.buildMavenPackage rec {
   };
 
   mvnJdk = jdk;
-  mvnHash = "sha256-woOSkF5TuzaJ84EndryMoXTMbbK/V/BShM1k+WB8D/c=";
+  mvnHash = "sha256-PRgzlXEa5PWf2jwpLYKLMxY6RECKvdsGWBPKVNz/bnc=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -46,11 +46,11 @@ maven.buildMavenPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Mod manager for FTL: Faster Than Light";
     homepage = "https://github.com/Vhati/Slipstream-Mod-Manager";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ mib ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ mib ];
     mainProgram = "slipstream";
   };
 }

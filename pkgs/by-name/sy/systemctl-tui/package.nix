@@ -6,35 +6,35 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "systemctl-tui";
-  version = "0.4.0";
+  version = "0.7.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rgwood";
     repo = "systemctl-tui";
-    tag = "v${version}";
-    hash = "sha256-1KYaw4q1+dPHImjjCnUPXNu7ihdEfNuzQfHfPi1uDOw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-g6WVIuesNK/21IdvlEJjhYbKZ94o+OGPaCY7v/45pEs=";
   };
 
-  cargoHash = "sha256-rOmoV8sHeoM2ypDlBbiLDIYHhFQZJ6T2D5VkSNW+uuc=";
+  cargoHash = "sha256-tfUrDBP2GAnwBkpWy+8qs42QrQCZUFebfvQsnjQ2dtw=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
-    updateScript = nix-update-script;
+    updateScript = nix-update-script { };
   };
 
   meta = {
     description = "Simple TUI for interacting with systemd services and their logs";
     homepage = "https://crates.io/crates/systemctl-tui";
-    changelog = "https://github.com/rgwood/systemctl-tui/releases/tag/v${version}";
+    changelog = "https://github.com/rgwood/systemctl-tui/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ siph ];
     mainProgram = "systemctl-tui";
   };
-}
+})

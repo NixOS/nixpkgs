@@ -13,6 +13,7 @@ in
 {
   options.services.dendrite = {
     enable = lib.mkEnableOption "matrix.org dendrite";
+    package = lib.mkPackageOption pkgs "dendrite" { };
     httpPort = lib.mkOption {
       type = lib.types.nullOr lib.types.port;
       default = 8008;
@@ -321,14 +322,14 @@ in
         ];
         ExecStart = lib.strings.concatStringsSep " " (
           [
-            "${pkgs.dendrite}/bin/dendrite"
+            (lib.getExe cfg.package)
             "--config /run/dendrite/dendrite.yaml"
           ]
           ++ lib.optionals (cfg.httpPort != null) [
-            "--http-bind-address :${builtins.toString cfg.httpPort}"
+            "--http-bind-address :${toString cfg.httpPort}"
           ]
           ++ lib.optionals (cfg.httpsPort != null) [
-            "--https-bind-address :${builtins.toString cfg.httpsPort}"
+            "--https-bind-address :${toString cfg.httpsPort}"
             "--tls-cert ${cfg.tlsCert}"
             "--tls-key ${cfg.tlsKey}"
           ]
@@ -341,5 +342,4 @@ in
       };
     };
   };
-  meta.maintainers = lib.teams.matrix.members;
 }

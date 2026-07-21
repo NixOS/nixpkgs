@@ -5,35 +5,25 @@
   nodejs,
   makeWrapper,
   stdenv,
+  versionCheckHook,
+  pnpmConfigHook,
 }:
-
-let
-  inherit (immich) pnpm;
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "immich-cli";
-  version = "2.2.92";
-  inherit (immich) src pnpmDeps;
-
-  postPatch = ''
-    local -r cli_version="$(jq -r .version cli/package.json)"
-    test "$cli_version" = ${version} \
-      || (echo "error: update immich-cli version to $cli_version" && exit 1)
-  '';
+  inherit (immich) version src pnpmDeps;
 
   nativeBuildInputs = [
     jq
     makeWrapper
     nodejs
-    pnpm
-    pnpm.configHook
+    pnpmConfigHook
+    immich.pnpm
   ];
 
   buildPhase = ''
     runHook preBuild
 
-    pnpm --filter @immich/sdk build
-    pnpm --filter @immich/cli build
+    pnpm --filter @immich/cli... build
 
     runHook postBuild
   '';
@@ -51,6 +41,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
   meta = {
     description = "Self-hosted photo and video backup solution (command line interface)";
     homepage = "https://immich.app/docs/features/command-line-interface";
@@ -59,4 +55,4 @@ stdenv.mkDerivation rec {
     inherit (nodejs.meta) platforms;
     mainProgram = "immich";
   };
-}
+})

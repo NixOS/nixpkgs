@@ -5,25 +5,26 @@
   lxml,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "unittest-xml-reporting";
-  version = "3.2.0";
+  version = "4.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "xmlrunner";
     repo = "unittest-xml-reporting";
     tag = version;
-    hash = "sha256-lOJ/+8CVJUXdIaZLLF5PpPkG0DzlNgo46kRZ1Xy7Ju0=";
+    hash = "sha256-9gV/DX/G12bthonBJlMDKaS6Iwt9nF5DrNG33KK7KbU=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [ lxml ];
 
@@ -39,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xmlrunner" ];
 
-  meta = with lib; {
+  meta = {
     description = "Unittest-based test runner with Ant/JUnit like XML reporting";
     homepage = "https://github.com/xmlrunner/unittest-xml-reporting";
-    changelog = "https://github.com/xmlrunner/unittest-xml-reporting/releases/tag/${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ rprospero ];
+    changelog = "https://github.com/xmlrunner/unittest-xml-reporting/releases/tag/${src.tag}";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ rprospero ];
   };
 }

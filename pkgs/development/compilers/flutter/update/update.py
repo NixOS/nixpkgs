@@ -153,13 +153,12 @@ def get_artifact_hashes(flutter_compact_version):
 
 
 def get_dart_hashes(dart_version, channel):
-    platforms = ["x86_64-linux", "aarch64-linux", "x86_64-darwin", "aarch64-darwin"]
+    platforms = ["x86_64-linux", "aarch64-linux", "aarch64-darwin"]
     result_dict = {}
     for platform in platforms:
         code = load_code(
             "get-dart-hashes.nix",
             dart_version=dart_version,
-            channel=channel,
             platform=platform,
         )
         stderr = nix_build_to_fail(code)

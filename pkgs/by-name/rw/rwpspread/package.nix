@@ -7,18 +7,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rwpspread";
-  version = "0.4.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "0xk1f0";
     repo = "rwpspread";
-    rev = "v${version}";
-    hash = "sha256-1i1675OiyleCXcc/uN95kyY7m5ht/rS3UKY7EmuSsrk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-SWykTlj51lrPz7c9TfNOhMEZcpi8NMLDx50ZqnNlfsU=";
   };
 
-  cargoHash = "sha256-NuOOg9aIa0JW+urxDVaPn66bS4H7+0tbKYNVDUV8D80=";
+  cargoHash = "sha256-vrCxtbhCFtHRvqwDow7njz/V2QWzs7p/28MTZL4XsBc=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -34,4 +34,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "rwpspread";
   };
-}
+})

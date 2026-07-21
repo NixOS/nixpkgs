@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   glfw,
   enableShared ? !stdenv.hostPlatform.isStatic,
@@ -11,31 +10,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mlx42";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "codam-coding-college";
     repo = "MLX42";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/HCP6F7N+J97n4orlLxg/4agEoq4+rJdpeW/3q+DI1I=";
+    hash = "sha256-IMwDdWtbu882N43oTr/c6Fq34TduCuUt34Vh2Hx/TJY=";
   };
-
-  patches = [
-    # clang no longer allows using -Ofast
-    # see: https://github.com/codam-coding-college/MLX42/issues/147
-    (fetchpatch {
-      name = "replace-ofast-with-o3.patch";
-      url = "https://github.com/codam-coding-college/MLX42/commit/ce254c3a19af8176787601a2ac3490100a5c4c61.patch";
-      hash = "sha256-urL/WVOXinf7hWR5kH+bAVTcAzldkkWfY0+diSf7jHE=";
-    })
-  ];
 
   postPatch = ''
     patchShebangs --build ./tools
-  ''
-  + lib.optionalString enableShared ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "mlx42 STATIC" "mlx42 SHARED"
   '';
 
   strictDeps = true;
@@ -44,7 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ glfw ];
 
-  cmakeFlags = [ (lib.cmakeBool "DEBUG" enableDebug) ];
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared)
+    (lib.cmakeBool "DEBUG" enableDebug)
+  ];
 
   postInstall = ''
     mkdir -p $out/lib/pkgconfig

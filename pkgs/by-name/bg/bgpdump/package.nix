@@ -7,14 +7,14 @@
   bzip2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bgpdump";
   version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "RIPE-NCC";
     repo = "bgpdump";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-1HXMf9mHManR7jhonU2Agon0YFXOlM9APIN1Zm840AM=";
   };
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "Analyze dump files produced by Zebra/Quagga or MRT";
     license = lib.licenses.hpnd;
     maintainers = with lib.maintainers; [ lewo ];
-    platforms = with lib.platforms; linux;
+    platforms = lib.platforms.unix;
     mainProgram = "bgpdump";
   };
-}
+})

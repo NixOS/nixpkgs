@@ -4,14 +4,14 @@
   fetchPypi,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "websecprobe";
   version = "0.0.12";
   pyproject = true;
 
   src = fetchPypi {
     pname = "WebSecProbe";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-RX4tc6JaUVaNx8nidn8eMcbsmbcSY+VZbup6c6P7oOs=";
   };
 
@@ -31,10 +31,10 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Web Security Assessment Tool";
     homepage = "https://github.com/spyboy-productions/WebSecProbe/";
-    changelog = "https://github.com/spyboy-productions/WebSecProbe/releases/tag/${version}";
+    changelog = "https://github.com/spyboy-productions/WebSecProbe/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "websecprobe";
     platforms = lib.platforms.linux;
   };
-}
+})

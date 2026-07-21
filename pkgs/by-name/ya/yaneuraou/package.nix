@@ -43,13 +43,13 @@
 #   with clangStdenv.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "yaneuraou";
-  version = "8.60";
+  version = "9.01";
 
   src = fetchFromGitHub {
     owner = "yaneurao";
     repo = "YaneuraOu";
     tag = "v${finalAttrs.version}git";
-    hash = "sha256-1awnGCGIdeMAqAd0TWgoJr5spJo2mFBWdR3iMc2i4OM=";
+    hash = "sha256-uhr3jS+ttN5pF1zZpHq2xWy3sdMV19eRUhuj2uPspak=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/source";

@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xh";
-  version = "0.25.0";
+  version = "0.26.1";
 
   src = fetchFromGitHub {
     owner = "ducaale";
     repo = "xh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UuWNLsJAoSjDPs/8VzW2vics3A/nsXWR5xmjMqTmYvQ=";
+    hash = "sha256-Y8T/r7DaKha0cjWewJPzq4jo6Lab18cDrAj8Ek1D5Bg=";
   };
 
-  cargoHash = "sha256-SsJSBkOdQSpbEbFPK+qscSBePUKMLM1UpajpvpR2ZEo=";
+  cargoHash = "sha256-JjXv4QMmOF0xsRloaKqbdJ8ztHtEg80QRJmnTW1/3Lc=";
 
   buildFeatures = lib.optional withNativeTls "native-tls";
 
@@ -61,7 +61,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
@@ -71,7 +70,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/ducaale/xh/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      figsoda
       defelo
     ];
     mainProgram = "xh";

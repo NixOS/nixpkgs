@@ -1,67 +1,46 @@
 {
   buildPgrxExtension,
-  cargo-pgrx_0_14_1,
-  clang,
+  cargo-pgrx_0_17_0,
   fetchFromGitHub,
   lib,
   nix-update-script,
   postgresql,
   postgresqlTestExtension,
-  replaceVars,
-  rust-jemalloc-sys,
+  rustc,
   stdenv,
 }:
-let
-  # Follow upstream and use rust-jemalloc-sys on linux aarch64 and x86_64
-  # Additionally, disable init exec TLS, since it causes issues with postgres.
-  # https://github.com/tensorchord/VectorChord/blob/0.4.2/Cargo.toml#L43-L44
-  useSystemJemalloc =
-    stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isx86_64);
-  rust-jemalloc-sys' = (
-    rust-jemalloc-sys.override (old: {
-      jemalloc = old.jemalloc.override { disableInitExecTls = true; };
-    })
-  );
-in
 buildPgrxExtension (finalAttrs: {
   inherit postgresql;
-  cargo-pgrx = cargo-pgrx_0_14_1;
+  cargo-pgrx = cargo-pgrx_0_17_0;
 
   pname = "vectorchord";
-  version = "0.4.2";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
-    owner = "tensorchord";
-    repo = "vectorchord";
+    owner = "supervc-stack";
+    repo = "VectorChord";
     tag = finalAttrs.version;
-    hash = "sha256-EdMuSNcWwCBsAY0e3d0WVug1KBWYWldvKStF6cf/uRs=";
+    hash = "sha256-QL9XGSQFOcrpww03Y5F0JuDbpo0v8oidUqucLxggkqE=";
   };
 
-  patches = [
-    # Tell the `simd` crate to use the flags from the rust bindgen hook
-    (replaceVars ./0001-read-clang-flags-from-environment.diff {
-      clang = lib.getExe clang;
-    })
-    # Add feature flags needed for features not yet stabilised in rustc stable
-    ./0002-add-feature-flags.diff
-  ];
+  cargoHash = "sha256-IXOCzKJArNOcb/2TcJbLz1XdCquUpyF/cLHYU5vmlko=";
 
-  buildInputs = lib.optionals (useSystemJemalloc) [
-    rust-jemalloc-sys'
+  patches = lib.optional (lib.versionOlder rustc.llvm.version "22.0.0" && stdenv.isx86_64) [
+    # Due to a bug in LLVM 21, build fails on x86_64 with:
+    # `rustc-LLVM ERROR: Cannot select: intrinsic %llvm.x86.avx512.vpdpbusd.512`.
+    # This has been fixed in Rust's build of LLVM and LLVM 22 with https://github.com/rust-lang/llvm-project/commit/94e2c19f86a699d7a19ff0f4130b696699189c8d,
+    # but this is not reflected in nixpkgs' packaging of rustc.
+    # For this reason, we temporarily disable avx512vnni support until this is fixed in nixpkgs.
+    # This might cause a performance penalty, but should not affect correctness.
+    # See https://github.com/NixOS/nixpkgs/pull/537113#issuecomment-4846239887
+    ./0001-disable-avx512vnni.patch
   ];
-
-  cargoHash = "sha256-8NwfsJn5dnvog3fexzLmO3v7/3+L7xtv+PHWfCCWoHY=";
 
   # Include upgrade scripts in the final package
-  # https://github.com/tensorchord/VectorChord/blob/0.4.2/crates/make/src/main.rs#L224
+  # https://github.com/supervc-stack/VectorChord/blob/0.5.0/crates/make/src/main.rs#L366
   postInstall = ''
     cp sql/upgrade/* $out/share/postgresql/extension/
   '';
-
-  env = {
-    # Bypass rust nightly features not being available on rust stable
-    RUSTC_BOOTSTRAP = 1;
-  };
 
   # This crate does not have the "pg_test" feature
   usePgTestCheckFeature = false;
@@ -123,16 +102,19 @@ buildPgrxExtension (finalAttrs: {
   };
 
   meta = {
-    # PostgreSQL 18 is not yet supported
-    # Will be supported in the next release (likely 0.5.0), as it's already supported in the main branch
+    # PostgreSQL 19 is not yet supported
+    # See https://github.com/supervc-stack/VectorChord/issues/464
     # Check after next package update.
     broken = lib.warnIf (
-      finalAttrs.version != "0.4.2"
-    ) "Is postgresql18Packages.vectorchord still broken?" (lib.versionAtLeast postgresql.version "18");
-    changelog = "https://github.com/tensorchord/VectorChord/releases/tag/${finalAttrs.version}";
+      finalAttrs.version != "1.1.1"
+    ) "Is postgresql19Packages.vectorchord still broken?" (lib.versionAtLeast postgresql.version "19");
+    changelog = "https://github.com/supervc-stack/VectorChord/releases/tag/${finalAttrs.version}";
     description = "Scalable, fast, and disk-friendly vector search in Postgres, the successor of pgvecto.rs";
-    homepage = "https://github.com/tensorchord/VectorChord";
-    license = lib.licenses.agpl3Only; # dual licensed with Elastic License v2 (ELv2)
+    homepage = "https://github.com/supervc-stack/VectorChord";
+    license = lib.licenses.OR [
+      lib.licenses.agpl3Only
+      lib.licenses.elastic20
+    ];
     maintainers = with lib.maintainers; [
       diogotcorreia
     ];

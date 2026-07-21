@@ -7,14 +7,14 @@
   gtk3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "screen-message";
   version = "0.29";
 
   src = fetchFromGitHub {
     owner = "nomeata";
     repo = "screen-message";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-fwKle+aXZuiNo5ksrigj7BGLv2fUILN2GluHHZ6co6s=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     mainProgram = "sm";
     platforms = lib.platforms.unix;
   };
-}
+})

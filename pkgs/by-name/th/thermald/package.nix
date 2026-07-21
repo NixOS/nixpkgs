@@ -17,9 +17,9 @@
   upower,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "thermald";
-  version = "2.5.9";
+  version = "2.5.11";
 
   outputs = [
     "out"
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "intel";
     repo = "thermal_daemon";
-    rev = "v${version}";
-    sha256 = "sha256-ydv6wZ3r2QxVji9bSx0sgpaOQNtgN+Y4rPZ44XtxNh8=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-IHBfNqiMd2q5vj+xpo31LFy19zwv0GkB0GoHq8Ni7aA=";
   };
 
   nativeBuildInputs = [
@@ -66,11 +66,11 @@ stdenv.mkDerivation rec {
     cp ./data/thermal-conf.xml $out/etc/thermald/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Thermal Daemon";
     homepage = "https://github.com/intel/thermal_daemon";
     changelog = "https://github.com/intel/thermal_daemon/blob/master/README.txt";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     platforms = [
       "x86_64-linux"
       "i686-linux"
@@ -78,4 +78,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "thermald";
   };
-}
+})

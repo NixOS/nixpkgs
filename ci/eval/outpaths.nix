@@ -6,11 +6,18 @@
   includeBroken ? true, # set this to false to exclude meta.broken packages from the output
   path ? ./../..,
 
-  # used by ./attrpaths.nix
+  # used by ./pre-eval.nix
   attrNamesOnly ? false,
 
   # Set this to `null` to build for builtins.currentSystem only
-  systems ? builtins.fromJSON (builtins.readFile ../supportedSystems.json),
+  systems ? builtins.fromJSON (
+    builtins.readFile (path + "/pkgs/top-level/release-supported-systems.json")
+  ),
+
+  attrPathsDisallowedForInternalUse ? [ ],
+
+  # Customize the config used to evaluate nixpkgs
+  extraNixpkgsConfig ? { },
 }:
 let
   lib = import (path + "/lib");
@@ -29,6 +36,25 @@ let
             allowInsecurePredicate = x: true;
             allowVariants = !attrNamesOnly;
             checkMeta = true;
+
+            # We don't need to care about problems being caught using the
+            # standard mechanism, because any problems whose kind is not
+            # nixpkgsInternalUseAllowed cause the corresponding attributes to
+            # be disallowed entirely for internal use with
+            # attrPathsDisallowedForInternalUse, see also ./pre-eval.nix
+            problems.matchers = lib.mkForce [
+              # We only need to set the broken handler to error, so that CI
+              # doesn't evaluate those. No reason it couldn't evaluate them
+              # afaik, but this is how it's been before.
+              {
+                kind = "broken";
+                handler = "error";
+              }
+            ];
+            inherit attrPathsDisallowedForInternalUse;
+
+            # Silence the `x86_64-darwin` deprecation warning.
+            allowDeprecatedx86_64Darwin = true;
 
             handleEvalIssue =
               reason: errormsg:
@@ -55,7 +81,8 @@ let
                 true;
 
             inHydra = true;
-          };
+          }
+          // extraNixpkgsConfig;
 
           __allowFileset = false;
         };
@@ -63,7 +90,9 @@ let
 
   nixosJobs = import (path + "/nixos/release.nix") {
     inherit attrNamesOnly;
-    supportedSystems = if systems == null then [ builtins.currentSystem ] else systems;
+    supportedSystems = lib.filter (lib.hasSuffix "-linux") (
+      if systems == null then [ builtins.currentSystem ] else systems
+    );
   };
 
   recurseIntoAttrs = attrs: attrs // { recurseForDerivations = true; };
@@ -95,8 +124,10 @@ let
 
 in
 tweak (
-  (builtins.removeAttrs nixpkgsJobs blacklist)
+  (removeAttrs nixpkgsJobs blacklist)
   // {
-    nixosTests.simple = nixosJobs.tests.simple;
+    nixosTests = lib.filterAttrs (
+      name: _: name == "simple-container" || name == "simple-vm"
+    ) nixosJobs.tests;
   }
 )

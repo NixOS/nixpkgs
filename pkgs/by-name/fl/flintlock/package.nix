@@ -9,18 +9,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "flintlock";
-  version = "0.8.1";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
-    owner = "weaveworks";
+    owner = "liquidmetal-dev";
     repo = "flintlock";
-    rev = "v${version}";
-    sha256 = "sha256-Kbk94sqj0aPsVonPsiu8kbjhIOURB1kX9Lt3NURL+jk=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-0d67+UXJ0cxTb8E81slMi9y2KOeOIr4B1zTyf4RF8zQ=";
   };
 
-  vendorHash = "sha256-Iv1qHEQLgw6huCA/6PKNmm+dS2yHgOvY/oy2fKjwEpY=";
+  vendorHash = "sha256-kdGvDDSM/Kp74+PVBFraN6kvUyvvZOVf1/iw+ZmXpz0=";
 
   subPackages = [
     "cmd/flintlock-metrics"
@@ -30,7 +30,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/weaveworks/flintlock/internal/version.Version=v${version}"
+    "-X github.com/weaveworks/flintlock/internal/version.Version=v${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [
@@ -54,14 +54,14 @@ buildGoModule rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Create and manage the lifecycle of MicroVMs backed by containerd";
     homepage = "https://github.com/weaveworks-liquidmetal/flintlock";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with maintainers; [ techknowlogick ];
+    maintainers = with lib.maintainers; [ techknowlogick ];
   };
-}
+})

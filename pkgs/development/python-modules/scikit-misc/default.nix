@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "scikit-misc";
-  version = "0.5.1";
+  version = "0.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "has2k1";
     repo = "scikit-misc";
     tag = "v${version}";
-    hash = "sha256-w6RHmVxJjLx9ov2LxXvicxmY8jixfkIRfbfVnV2yhOU=";
+    hash = "sha256-G0zK13upo0tPd8x87X8cTBKWK63E5JPmAr1IVEijtaw=";
   };
 
   postPatch = ''
@@ -66,10 +66,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "skmisc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Miscellaneous tools for scientific computing";
     homepage = "https://github.com/has2k1/scikit-misc";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

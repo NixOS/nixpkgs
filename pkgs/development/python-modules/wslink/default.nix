@@ -1,33 +1,26 @@
 {
   lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
   aiohttp,
-  msgpack,
+  buildPythonPackage,
   cryptography,
+  fetchFromGitHub,
+  hatchling,
+  msgpack,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wslink";
-  version = "2.4.0";
+  version = "2.5.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kitware";
     repo = "wslink";
-    tag = "v${version}";
-    hash = "sha256-IFXxMN+OXJ/J2BSegxOBjE4iSA27pLyCpyyx4hmo9NU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-47vHc+b5Z3ipkLZ5k0yEasNaKz0Seu2jiGBVmAI5u6U=";
   };
 
-  sourceRoot = "${src.name}/python";
-
-  # add missing version string to dist-info
-  postPatch = ''
-    sed -i "/name *= */a\    version='${version}'," setup.py
-  '';
-
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp
@@ -46,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python/JavaScript library for communicating over WebSocket";
     homepage = "https://github.com/Kitware/wslink";
-    changelog = "https://github.com/Kitware/wslink/releases/tag/${src.tag}";
+    changelog = "https://github.com/Kitware/wslink/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ qbisi ];
   };
-}
+})

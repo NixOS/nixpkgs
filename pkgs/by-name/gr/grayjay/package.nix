@@ -7,7 +7,14 @@
   libz,
   icu,
   openssl,
-  xorg,
+  libgbm,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxcb,
   gtk3,
   glib,
   nss,
@@ -22,7 +29,6 @@
   cairo,
   udev,
   alsa-lib,
-  mesa,
   libGL,
   libsecret,
   nix-update-script,
@@ -35,24 +41,24 @@
   _experimental-update-script-combinators,
 }:
 let
-  version = "9";
+  version = "17";
   src = fetchFromGitLab {
     domain = "gitlab.futo.org";
     owner = "videostreaming";
     repo = "Grayjay.Desktop";
     tag = version;
-    hash = "sha256-O211trFJ9tQRVdlztp5ER0Ej6SIrCDn45mRGns7NV90=";
+    hash = "sha256-/oeoLXKewjYkCO7naZNOzauWm1OYDKnsxXY9EkI7fTM=";
     fetchSubmodules = true;
     fetchLFS = true;
   };
   frontend = buildNpmPackage {
-    name = "grayjay-frontend";
+    pname = "grayjay-frontend";
     inherit version src;
 
     sourceRoot = "source/Grayjay.Desktop.Web";
 
     npmBuildScript = "build";
-    npmDepsHash = "sha256-pTEbMSAJwTY6ZRriPWfBFnRHSYufSsD0d+hWGz35xFM=";
+    npmDepsHash = "sha256-3yJIPkuEvkFL9Wb4y/r0yEULQbXx/wHqicFBLzOPj68=";
 
     installPhase = ''
       runHook preInstall
@@ -68,12 +74,12 @@ buildDotnetModule (finalAttrs: {
 
   buildInputs = [
     openssl
+    libgbm
     libgcc
-    xorg.libX11
+    libx11
     gtk3
     glib
     alsa-lib
-    mesa
     nspr
     nss
     icu
@@ -108,7 +114,6 @@ buildDotnetModule (finalAttrs: {
   ];
 
   testProjectFile = [
-    "Grayjay.Desktop.Tests/Grayjay.Desktop.Tests.csproj"
     "Grayjay.Engine/Grayjay.Engine.Tests/Grayjay.Engine.Tests.csproj"
   ];
 
@@ -124,7 +129,7 @@ buildDotnetModule (finalAttrs: {
       targetPackages
       ;
   };
-  dotnet-runtime = dotnetCorePackages.aspnetcore_9_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
 
   executables = [ "Grayjay" ];
 
@@ -155,12 +160,12 @@ buildDotnetModule (finalAttrs: {
   runtimeDeps = [
     libz
 
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrandr
-    xorg.libxcb
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
+    libxcb
 
     dbus
     atk
@@ -181,10 +186,10 @@ buildDotnetModule (finalAttrs: {
         "--subpackage"
         "frontend"
         "--url"
-        "https://github.com/futo-org/Grayjay.Desktop"
+        "https://gitlab.futo.org/api/v4/projects/videostreaming%2FGrayjay%2EDesktop/repository/archive.tar.gz?sha=refs%2Ftags%2F10"
       ];
     })
-    (finalAttrs.passthru.fetch-deps)
+    finalAttrs.passthru.fetch-deps
   ];
 
   meta = {
@@ -198,7 +203,10 @@ buildDotnetModule (finalAttrs: {
     '';
     homepage = "https://grayjay.app/desktop/";
     license = lib.licenses.sfl;
-    maintainers = with lib.maintainers; [ samfundev ];
+    maintainers = with lib.maintainers; [
+      kruziikrel13
+      samfundev
+    ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "Grayjay";
   };

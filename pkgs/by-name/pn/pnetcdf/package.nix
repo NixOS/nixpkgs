@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pnetcdf";
-  version = "1.14.0";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "Parallel-NetCDF";
     repo = "PnetCDF";
     tag = "checkpoint.${finalAttrs.version}";
-    hash = "sha256-Zyhzyvdh9Pf5GkcJW3duGgI6m3Dy0RR5B9YtA83Hpr4=";
+    hash = "sha256-nz40Ji9qh6UatlLOuChsWYvHwfVNacJI87usGBcYyFk=";
   };
 
   nativeBuildInputs = [
@@ -30,8 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ mpi ];
 
   postPatch = ''
-    patchShebangs src/binding/f77/buildiface
+    patchShebangs src/binding/f77/buildiface test examples benchmarks
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   doCheck = true;
 

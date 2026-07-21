@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Turn quickly bulky LAS files into compact LAZ files without information loss";
     homepage = "https://laszip.org";
     license = lib.licenses.lgpl2;
-    maintainers = with lib.maintainers; [ michelk ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

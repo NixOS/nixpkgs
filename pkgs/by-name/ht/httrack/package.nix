@@ -1,19 +1,22 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   zlib,
   openssl,
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
-  version = "3.49.2";
+stdenv.mkDerivation (finalAttrs: {
+  version = "3.49.7";
   pname = "httrack";
 
-  src = fetchurl {
-    url = "https://mirror.httrack.com/httrack-${version}.tar.gz";
-    sha256 = "09a0gm67nml86qby1k1gh7rdxamnrnzwr6l9r5iiq94favjs0xrl";
+  src = fetchFromGitHub {
+    owner = "xroche";
+    repo = "httrack";
+    tag = finalAttrs.version;
+    hash = "sha256-GTNXTFU5a/c1F6dBE8iHOq4PyTgUhXrjLEE6FsPeJbQ=";
+    fetchSubmodules = true;
   };
 
   buildInputs = [
@@ -22,12 +25,11 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  enableParallelBuilding = true;
-
-  meta = with lib; {
+  meta = {
     description = "Easy-to-use offline browser / website mirroring utility";
-    homepage = "http://www.httrack.com";
-    license = licenses.gpl3;
-    platforms = with platforms; unix;
+    homepage = "https://www.httrack.com";
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ tbutter ];
+    platforms = with lib.platforms; unix;
   };
-}
+})

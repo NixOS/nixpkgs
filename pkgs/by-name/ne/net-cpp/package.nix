@@ -5,8 +5,7 @@
   gitUpdater,
   makeFontsConf,
   testers,
-  # https://gitlab.com/ubports/development/core/lib-cpp/net-cpp/-/issues/5
-  boost186,
+  boost,
   cmake,
   curl,
   doxygen,
@@ -31,13 +30,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "net-cpp";
-  version = "3.2.0";
+  version = "3.2.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lib-cpp/net-cpp";
-    rev = finalAttrs.version;
-    hash = "sha256-JfVSAwBWtHw7a0CtY5C1xuxThO3FbS4MgNuIO1CGuts=";
+    tag = finalAttrs.version;
+    hash = "sha256-6isbPSzoPcnqbv6+ju/Arbcy+PgFxFF376d4CGmQ6wM=";
   };
 
   outputs = [
@@ -45,12 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
     "doc"
   ];
-
-  postPatch = lib.optionalString finalAttrs.finalPackage.doCheck ''
-    # Use wrapped python. Removing just the /usr/bin doesn't seem to work?
-    substituteInPlace tests/httpbin.h.in \
-      --replace '/usr/bin/python3' '${lib.getExe pythonEnv}'
-  '';
 
   strictDeps = true;
 
@@ -63,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    boost186
+    boost
     curl
   ];
 
@@ -92,7 +85,10 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelChecking = false;
 
   passthru = {
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      versionCheck = true;
+    };
     updateScript = gitUpdater { };
   };
 

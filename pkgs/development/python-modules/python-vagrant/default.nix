@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   version = "1.1.0";
   pname = "python-vagrant";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pycontribs";

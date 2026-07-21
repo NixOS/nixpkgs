@@ -47,8 +47,6 @@ let
 
       systemd = config.systemd.package;
 
-      bootspecTools = config.boot.bootspec.package;
-
       nix = config.nix.package.out;
 
       timeout = if config.boot.loader.timeout == null then "menu-force" else config.boot.loader.timeout;
@@ -83,27 +81,29 @@ let
       '';
 
       copyExtraFiles = pkgs.writeShellScript "copy-extra-files" ''
-        empty_file=$(${pkgs.coreutils}/bin/mktemp)
-
         ${concatStrings (
           mapAttrsToList (n: v: ''
             ${pkgs.coreutils}/bin/install -Dp "${v}" "${bootMountPoint}/"${escapeShellArg n}
-            ${pkgs.coreutils}/bin/install -D $empty_file "${bootMountPoint}/${nixosDir}/.extra-files/"${escapeShellArg n}
+            ${pkgs.coreutils}/bin/install -D /dev/null "${bootMountPoint}/${nixosDir}/.extra-files/"${escapeShellArg n}
           '') cfg.extraFiles
         )}
 
         ${concatStrings (
           mapAttrsToList (n: v: ''
             ${pkgs.coreutils}/bin/install -Dp "${pkgs.writeText n v}" "${bootMountPoint}/loader/entries/"${escapeShellArg n}
-            ${pkgs.coreutils}/bin/install -D $empty_file "${bootMountPoint}/${nixosDir}/.extra-files/loader/entries/"${escapeShellArg n}
+            ${pkgs.coreutils}/bin/install -D /dev/null "${bootMountPoint}/${nixosDir}/.extra-files/loader/entries/"${escapeShellArg n}
           '') cfg.extraEntries
         )}
       '';
+
+      bootCountingTries = cfg.bootCounting.tries;
+      bootCounting = if cfg.bootCounting.enable then "True" else "False";
     };
   };
 
   finalSystemdBootBuilder = pkgs.writeScript "install-systemd-boot.sh" ''
     #!${pkgs.runtimeShell}
+    set -euo pipefail
     ${systemdBootBuilder}/bin/systemd-boot "$@"
     ${cfg.extraInstallCommands}
   '';
@@ -246,7 +246,7 @@ in
 
     installDeviceTree = mkOption {
       default = with config.hardware.deviceTree; enable && name != null;
-      defaultText = ''with config.hardware.deviceTree; enable && name != null'';
+      defaultText = "with config.hardware.deviceTree; enable && name != null";
       description = ''
         Install the devicetree blob specified by `config.hardware.deviceTree.name`
         to the ESP and instruct systemd-boot to pass this DTB to linux.
@@ -393,7 +393,7 @@ in
       type = types.attrsOf types.path;
       default = { };
       example = literalExpression ''
-        { "efi/memtest86/memtest.efi" = "''${pkgs.memtest86plus}/memtest.efi"; }
+        { "efi/memtest86/memtest.efi" = pkgs.memtest86plus.efi; }
       '';
       description = ''
         A set of files to be copied to {file}`$BOOT`.
@@ -416,6 +416,26 @@ in
         Only enable this option if `systemd-boot` otherwise fails to install, as the
         scope or implication of the `--graceful` option may change in the future.
       '';
+    };
+
+    bootCounting = {
+      enable = mkEnableOption ''
+        [Automatic Boot Assessment](https://systemd.io/AUTOMATIC_BOOT_ASSESSMENT/).
+
+        New boot entries are written with a boot counter in the file name. On
+        each boot, systemd-boot decrements the counter; once the booted system
+        reaches `boot-complete.target`, `systemd-bless-boot.service` removes the
+        counter and marks the entry as good. An entry whose counter reaches zero
+        is considered bad and will be skipped in favour of an older generation
+      '';
+      tries = mkOption {
+        default = 3;
+        type = types.ints.positive;
+        description = ''
+          Number of boot attempts a freshly written entry is given before it is
+          considered bad.
+        '';
+      };
     };
 
     rebootForBitlocker = mkOption {
@@ -580,7 +600,7 @@ in
 
     boot.loader.systemd-boot.extraFiles = mkMerge [
       (mkIf cfg.memtest86.enable {
-        "efi/memtest86/memtest.efi" = "${pkgs.memtest86plus.efi}";
+        "efi/memtest86/memtest.efi" = pkgs.memtest86plus.efi;
       })
       (mkIf cfg.netbootxyz.enable {
         "efi/netbootxyz/netboot.xyz.efi" = "${pkgs.netbootxyz-efi}";

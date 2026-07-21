@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc16Stdenv,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -12,7 +12,7 @@
   tomlplusplus,
   nix-update-script,
 }:
-stdenv.mkDerivation (finalAttrs: {
+gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprcursor";
   version = "0.1.13";
 
@@ -42,6 +42,9 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
     "lib"
   ];
+
+  cmakeBuildType = "RelWithDebInfo";
+  separateDebugInfo = true;
 
   passthru.updateScript = nix-update-script { };
 

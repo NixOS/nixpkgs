@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # build-system
   uv-build,
@@ -14,35 +13,37 @@
   jedi,
   loro,
   markdown,
+  msgspec,
   narwhals,
   packaging,
   psutil,
   pygments,
   pymdown-extensions,
+  python-multipart,
   pyyaml,
-  ruff,
+  pyzmq,
   starlette,
   tomlkit,
-  typing-extensions,
   uvicorn,
   websockets,
 
   # tests
   versionCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "marimo";
-  version = "0.15.2";
+  version = "0.23.11";
   pyproject = true;
 
   # The github archive does not include the static assets
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cmkz/ZyVYfpz4yOxghsXPF4PhRluwqSXo1CcwvwkXFg=";
+    hash = "sha256-8y/DCVqh5G07nPn2dymz4SHrkb//+3XzgOFEnYMoiHg=";
   };
 
   build-system = [ uv-build ];
+
+  pythonRelaxDeps = [ "jedi" ];
 
   dependencies = [
     click
@@ -51,19 +52,20 @@ buildPythonPackage rec {
     jedi
     loro
     markdown
+    msgspec
     narwhals
     packaging
     psutil
     pygments
     pymdown-extensions
+    python-multipart
     pyyaml
-    ruff
+    pyzmq
     starlette
     tomlkit
     uvicorn
     websockets
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+  ];
 
   pythonImportsCheck = [ "marimo" ];
 
@@ -71,7 +73,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Reactive Python notebook that's reproducible, git-friendly, and deployable as scripts or apps";

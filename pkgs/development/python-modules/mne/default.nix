@@ -2,6 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
+  stdenv,
   hatchling,
   hatch-vcs,
   numpy,
@@ -21,23 +23,22 @@
   lazy-loader,
   h5io,
   pymatreader,
-  pythonOlder,
   procps,
   optipng,
 }:
 
 buildPythonPackage rec {
   pname = "mne";
-  version = "1.10.1";
+  version = "1.12.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mne-tools";
     repo = "mne-python";
     tag = "v${version}";
-    hash = "sha256-xxkv+8RAkpRyMWznUMpwc6E72mb9DUPW6O5hFHiNz98=";
+    hash = "sha256-8PzYTG8z35IG0nVegoPaJB/vpULujqHDd2VtLeXS0SQ=";
   };
 
   postPatch = ''
@@ -78,7 +79,7 @@ buildPythonPackage rec {
     pytest-timeout
     writableTmpDirAsHomeHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     export MNE_SKIP_TESTING_DATASET_TESTS=true
@@ -93,11 +94,11 @@ buildPythonPackage rec {
     # flaky
     "test_fine_cal_systems"
     "test_simulate_raw_bem"
-  ];
-
-  pytestFlag = [
-    # removes 700k lines from pytest log, remove this when scipy is at v1.17.0
-    "--disable-warnings"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # Fails when no "model name" is present in /proc/cpuinfo,
+    # which is common on Arm Linux systems
+    "test_sys_info_basic"
   ];
 
   disabledTestMarks = [
@@ -116,7 +117,6 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       bcdarwin
-      mbalatsko
     ];
   };
 }

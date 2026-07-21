@@ -7,8 +7,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "vscode-eslint";
     publisher = "dbaeumer";
-    version = "3.0.16";
-    hash = "sha256-UxD07bouMK8nuysh5TAV7ZVhkLiOV6R1qfvVZcXB2Hc=";
+    version = "3.0.24";
+    hash = "sha256-ZQVzpSSLf3tpO4QtLjbCOje3L5/EqzT9A9IOssl6e54=";
   };
 
   meta = {
@@ -17,6 +17,5 @@ vscode-utils.buildVscodeMarketplaceExtension {
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint";
     homepage = "https://github.com/Microsoft/vscode-eslint";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.datafoo ];
   };
 }

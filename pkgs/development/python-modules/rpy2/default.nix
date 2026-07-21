@@ -1,26 +1,27 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchPypi,
   isPyPy,
   rpy2-rinterface,
   rpy2-robjects,
-  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
-  version = "3.6.3";
-  format = "pyproject";
+  version = "3.6.7";
+  pyproject = true;
   pname = "rpy2";
 
   disabled = isPyPy;
   src = fetchPypi {
     inherit version pname;
-    hash = "sha256-lCYYoSUhljAG0i6IqqTUgakjghwDoXQsmb7uci6w/Fo=";
+    hash = "sha256-8ftGSc59FOk1EzCI3sl82ifrN858xxA4X4HcpVb+jJ8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     rpy2-rinterface
     rpy2-robjects
   ];

@@ -8,26 +8,22 @@
   pendulum,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   setuptools,
-  tomli,
   tomli-w,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "mashumaro";
-  version = "3.16";
+  version = "3.22";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Fatal1ty";
     repo = "mashumaro";
     tag = "v${version}";
-    hash = "sha256-SAdhBNQx5zWsXFwWxEAozprb2c7eJRdxZQwZMgBj/iA=";
+    hash = "sha256-/aAyylHOEjSmcjb+OKDNY0OOlR2JXepvVpVsfGbKSyw=";
   };
 
   build-system = [ setuptools ];
@@ -38,7 +34,7 @@ buildPythonPackage rec {
     orjson = [ orjson ];
     msgpack = [ msgpack ];
     yaml = [ pyyaml ];
-    toml = [ tomli-w ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+    toml = [ tomli-w ];
   };
 
   nativeCheckInputs = [
@@ -47,15 +43,14 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "mashumaro" ];
 
-  meta = with lib; {
+  meta = {
     description = "Serialization library on top of dataclasses";
     homepage = "https://github.com/Fatal1ty/mashumaro";
     changelog = "https://github.com/Fatal1ty/mashumaro/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ tjni ];
+    license = lib.licenses.asl20;
   };
 }

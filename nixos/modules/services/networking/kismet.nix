@@ -28,7 +28,14 @@ let
     typeOf
     match
     ;
-  inherit (lib.lists) all isList flatten;
+  inherit (lib.lists)
+    all
+    isList
+    head
+    tail
+    flatten
+    foldl'
+    ;
   inherit (lib.attrsets)
     attrsToList
     filterAttrs
@@ -48,19 +55,60 @@ let
     in
     prev
     // {
-      check = value: prev.check value && (override type value);
+      check =
+        value:
+        let
+          prevResult = builtins.tryEval (prev.check value);
+          nextResult = builtins.tryEval (override type value);
+        in
+        prevResult.success && prevResult.value && nextResult.success && nextResult.value;
+
+      # We need to typecheck prior to merging, so deoptimize in case prev.merge is a functor.
+      merge = opts: prev.merge opts;
     };
 
   # Deep listOf.
-  listOf' = deep types.listOf (type: value: all type.check value);
+  inherit (types) listOf;
+  listOf' = deep listOf (type: value: all type.check value);
 
   # Deep attrsOf.
-  attrsOf' = deep types.attrsOf (type: value: all (item: type.check item.value) (attrsToList value));
+  inherit (types) attrsOf;
+  attrsOf' = deep attrsOf (type: value: all (item: type.check item.value) (attrsToList value));
+
+  # Deep either and oneOf that performs typecheck prior to merging.
+  inherit (types) either;
+  either' =
+    first: second:
+    let
+      prev = either first second;
+    in
+    prev
+    // {
+      check =
+        value:
+        let
+          firstResult = builtins.tryEval (first.check value);
+          secondResult = builtins.tryEval (second.check value);
+        in
+        firstResult.success && firstResult.value || secondResult.success && secondResult.value;
+
+      # We need to typecheck prior to merging, so deoptimize in case prev.merge is a functor.
+      merge = opts: prev.merge opts;
+    };
+
+  oneOf' =
+    ts:
+    let
+      head' =
+        if ts == [ ] then throw "types.oneOf needs to get at least one type in its argument" else head ts;
+      tail' = tail ts;
+    in
+    foldl' either' head' tail';
 
   # Kismet config atoms.
   atom =
     with types;
-    oneOf [
+    oneOf' [
       number
       bool
       str
@@ -68,7 +116,10 @@ let
 
   # Composite types.
   listOfAtom = listOf' atom;
-  atomOrList = with types; either atom listOfAtom;
+  atomOrList = oneOf' [
+    atom
+    listOfAtom
+  ];
   lists = listOf' atomOrList;
   kvPair = attrsOf' atomOrList;
   kvPairs = listOf' kvPair;
@@ -80,19 +131,17 @@ let
   # Toplevel config type.
   topLevel =
     let
-      topLevel' =
-        with types;
-        oneOf [
-          headerKvPairs
-          headerKvPair
-          kvPairs
-          kvPair
-          listOfAtom
-          lists
-          atom
-        ];
+      topLevel' = oneOf' [
+        headerKvPairs
+        headerKvPair
+        kvPairs
+        kvPair
+        listOfAtom
+        lists
+        atom
+      ];
     in
-    topLevel'
+    attrsOf' topLevel'
     // {
       description = "Kismet config stanza";
     };
@@ -239,7 +288,7 @@ in
         https://www.kismetwireless.net/docs/readme/configuring/configfiles/
       '';
       default = { };
-      type = with types; attrsOf topLevel;
+      type = topLevel;
       example = literalExpression ''
         {
           /* Examples for atoms */

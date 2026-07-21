@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "qlementine-icons";
-  version = "1.11.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "oclero";
     repo = "qlementine-icons";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h0vcrXCpiTrP3wApXdAqz0QAlHDqiqBSQR6FIlrTeBM=";
+    hash = "sha256-dnKl245hLBfENAh0ICQ/OX+3KDC2RE3t7uboiUc1XGY=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/oclero/qlementine-icons";
     changelog = "https://github.com/oclero/qlementine-icons/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ normalcea ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

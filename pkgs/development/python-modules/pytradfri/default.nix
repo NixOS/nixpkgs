@@ -6,6 +6,7 @@
   aiocoap,
   dtlssocket,
   pydantic,
+  pytest-asyncio,
   pytestCheckHook,
 }:
 
@@ -32,15 +33,19 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.async;
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ]
+  ++ optional-dependencies.async;
 
   pythonImportsCheck = [ "pytradfri" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package to communicate with the IKEA Trådfri ZigBee Gateway";
     homepage = "https://github.com/home-assistant-libs/pytradfri";
     changelog = "https://github.com/home-assistant-libs/pytradfri/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

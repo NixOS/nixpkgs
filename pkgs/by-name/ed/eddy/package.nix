@@ -6,7 +6,7 @@
   qt5,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "eddy";
   version = "3.7.1";
   format = "setuptools";
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "obdasystems";
     repo = "eddy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-K8yd7A4D1LAgwuaJvxdF0oqACuMxX/CZ6yKbR7D+uEQ=";
   };
 
@@ -38,12 +38,12 @@ python3Packages.buildPythonApplication rec {
     wrapQtApp "$out/bin/eddy" --prefix JAVA_HOME : ${jre}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.obdasystems.com/eddy";
     description = "Graphical editor for the specification and visualization of Graphol ontologies";
     mainProgram = "eddy";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ koslambrou ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ koslambrou ];
   };
-}
+})

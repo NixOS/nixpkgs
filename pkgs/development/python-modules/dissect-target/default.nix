@@ -2,12 +2,14 @@
   lib,
   stdenv,
   asn1crypto,
+  backports-zstd,
   buildPythonPackage,
   defusedxml,
   dissect-btrfs,
   dissect-cim,
   dissect-clfs,
   dissect-cstruct,
+  dissect-database,
   dissect-esedb,
   dissect-etl,
   dissect-eventlog,
@@ -33,30 +35,28 @@
   paho-mqtt,
   pycryptodome,
   pytestCheckHook,
-  pythonOlder,
+  pythonAtLeast,
   ruamel-yaml,
   setuptools,
   setuptools-scm,
   structlog,
-  tomli,
   yara-python,
-  zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-target";
-  version = "3.23.1";
+  version = "3.25.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.target";
     tag = version;
-    hash = "sha256-WOFtDFCN3OfhEjfhEgwtJN/tQVRGvd2RMQzcKtf0atU=";
+    hash = "sha256-vFVKnzlzXWvNt2/oNsV2oBBHX+LHzAAzP6gz5fFNTWY=";
     fetchLFS = true;
   };
+
+  disabled = pythonAtLeast "3.14";
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -71,6 +71,7 @@ buildPythonPackage rec {
   dependencies = [
     defusedxml
     dissect-cstruct
+    dissect-database
     dissect-eventlog
     dissect-evidence
     dissect-hypervisor
@@ -85,9 +86,11 @@ buildPythonPackage rec {
   optional-dependencies = {
     full = [
       asn1crypto
+      backports-zstd
       dissect-btrfs
       dissect-cim
       dissect-clfs
+      dissect-database
       dissect-esedb
       dissect-etl
       dissect-extfs
@@ -102,9 +105,7 @@ buildPythonPackage rec {
       pycryptodome
       ruamel-yaml
       yara-python
-      zstandard
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+    ];
     yara = [ yara-python ] ++ optional-dependencies.full;
     smb = [ impacket ] ++ optional-dependencies.full;
     mqtt = [ paho-mqtt ] ++ optional-dependencies.full;
@@ -173,11 +174,11 @@ buildPythonPackage rec {
     "tests/loaders/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect module that provides a programming API and command line tools";
     homepage = "https://github.com/fox-it/dissect.target";
     changelog = "https://github.com/fox-it/dissect.target/releases/tag/${src.tag}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -2,7 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   hatchling,
+
+  # dependencies
   attrs,
   chardet,
   humanize,
@@ -23,7 +27,7 @@
   typing-extensions,
   validators,
 
-  # Optional formats
+  # optional-dependencies
   boto3,
   google-api-python-client,
   datasette,
@@ -45,32 +49,30 @@
   visidata,
   tatsu,
 
-  # Tests
-  pytestCheckHook,
-  pytest-cov,
-  pytest-dotenv,
+  # tests
+  moto,
+  openpyxl,
   pytest-lazy-fixtures,
   pytest-mock,
   pytest-timeout,
   pytest-vcr,
-  moto,
+  pytestCheckHook,
   requests-mock,
-
-  # Tests depending on excel
-  openpyxl,
   xlrd,
+  yattag,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "frictionless";
-  version = "5.18.1";
+  version = "5.19.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "frictionlessdata";
     repo = "frictionless-py";
-    tag = "v${version}";
-    hash = "sha256-svspEHcEw994pEjnuzWf0FFaYeFZuqriK96yFAB6/gI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/l+IXcyraXCwdrM7pWr1hvjiIasDzNUQt+mQAXHS+jM=";
   };
 
   build-system = [
@@ -178,39 +180,43 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-cov
-    pytest-dotenv
+    moto
+    openpyxl
     pytest-lazy-fixtures
     pytest-mock
     pytest-timeout
     pytest-vcr
-    moto
+    pytestCheckHook
     requests-mock
-
-    # We do not have all packages for the `excel` format to fully function,
-    # but it's required for some of the tests.
-    openpyxl
     xlrd
+    yattag
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  # datasette is transitively broken by asgi-csrf
+  ++ lib.concatAttrValues (lib.removeAttrs finalAttrs.passthru.optional-dependencies [ "datasette" ]);
 
   disabledTestPaths = [
     # Requires optional dependencies that have not been packaged (commented out above)
     # The tests of other unavailable formats are auto-skipped
-    "frictionless/formats/excel"
-    "frictionless/formats/spss"
+    "frictionless/formats/excel/__spec__/test_mapper.py"
+    "frictionless/formats/excel/parsers/__spec__/test_xls.py"
   ];
 
-  pythonImportsCheck = [
-    "frictionless"
+  disabledTests = [
+    # AssertionError: assert 'cp1258' == 'utf-8'
+    "test_resource_encoding_detection_accent"
+
+    # UnicodeDecodeError: 'utf-8' codec can't decode byte 0xa9 in position 20: invalid start byte
+    "test_remote_loader_latin1"
   ];
+
+  pythonImportsCheck = [ "frictionless" ];
 
   meta = {
     description = "Data management framework for Python that provides functionality to describe, extract, validate, and transform tabular data";
     homepage = "https://github.com/frictionlessdata/frictionless-py";
-    changelog = "https://github.com/frictionlessdata/frictionless-py/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/frictionlessdata/frictionless-py/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ zhaofengli ];
+    mainProgram = "frictionless";
   };
-}
+})

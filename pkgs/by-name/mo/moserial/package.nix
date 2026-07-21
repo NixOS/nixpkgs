@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitLab,
   autoreconfHook,
+  wrapGAppsHook3,
   intltool,
   itstool,
   pkg-config,
@@ -14,7 +15,7 @@
   lrzsz,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "moserial";
   version = "3.0.21";
 
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "moserial";
-    rev = "moserial_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    rev = "moserial_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     sha256 = "sha256-wfdI51ECqVNcUrIVjYBijf/yqpiwSQeMiKaVJSSma3k=";
   };
 
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
     itstool
     pkg-config
     vala
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -47,12 +49,12 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Clean, friendly gtk-based serial terminal for the gnome desktop";
     homepage = "https://gitlab.gnome.org/GNOME/moserial";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ linsui ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ linsui ];
+    platforms = lib.platforms.linux;
     mainProgram = "moserial";
   };
-}
+})

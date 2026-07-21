@@ -16,15 +16,15 @@
   desktop-file-utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "goodvibes";
-  version = "0.8.2";
+  version = "0.8.4";
 
   src = fetchFromGitLab {
     owner = "goodvibes";
     repo = "goodvibes";
-    rev = "v${version}";
-    hash = "sha256-AHw8KlU1lmgH837GOpxGBgngwRIs5XV3+TvH4MuCx54=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-KEB6qSbsi+Q8NRHx5O9xOViIhuBDZceto53sWJv7As8=";
   };
 
   nativeBuildInputs = [
@@ -56,11 +56,11 @@ stdenv.mkDerivation rec {
     patchShebangs scripts
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight internet radio player";
     homepage = "https://gitlab.com/goodvibes/goodvibes";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ zendo ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ zendo ];
   };
-}
+})

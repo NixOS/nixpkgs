@@ -9,7 +9,11 @@ let
 in
 {
   meta = {
-    maintainers = lib.teams.cachix.members ++ [ lib.maintainers.jfroche ];
+    maintainers = with lib.maintainers; [
+      domenkozar
+      jfroche
+      sandydoo
+    ];
   };
 
   options.services.cachix-watch-store = {

@@ -11,7 +11,7 @@
   cacert,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "curly";
   version = "0.3.0";
 
@@ -20,7 +20,7 @@ buildDunePackage rec {
   duneVersion = "3";
 
   src = fetchurl {
-    url = "https://github.com/rgrinberg/curly/releases/download/${version}/curly-${version}.tbz";
+    url = "https://github.com/rgrinberg/curly/releases/download/${finalAttrs.version}/curly-${finalAttrs.version}.tbz";
     hash = "sha256-Qn/PKBNOcMt3dk2f7uJD8x0yo4RHobXSjTQck7fcXTw=";
   };
 
@@ -41,12 +41,15 @@ buildDunePackage rec {
   postPatch = ''
     substituteInPlace src/curly.ml \
       --replace "exe=\"curl\"" "exe=\"${curl}/bin/curl\""
+    substituteInPlace test/test_curly.ml \
+      --replace-fail "let body_header b = [\"content-length\", string_of_int (String.length b)]" \
+                     "let body_header b = [\"connection\", \"keep-alive\"; \"content-length\", string_of_int (String.length b)]"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Curly is a brain dead wrapper around the curl command line utility";
     homepage = "https://github.com/rgrinberg/curly";
-    license = licenses.isc;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
-}
+})

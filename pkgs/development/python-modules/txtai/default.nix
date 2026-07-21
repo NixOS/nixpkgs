@@ -7,7 +7,7 @@
   setuptools,
 
   # dependencies
-  faiss,
+  faiss-cpu,
   torch,
   transformers,
   huggingface-hub,
@@ -93,7 +93,7 @@
   pytestCheckHook,
 }:
 let
-  version = "9.0.1";
+  version = "9.10.0";
   agent = [
     mcpadapt
     smolagents
@@ -241,7 +241,7 @@ let
     owner = "neuml";
     repo = "txtai";
     tag = "v${version}";
-    hash = "sha256-ciQDKpqTdgYe4oIgd2uxY7491SMr9Snha9XyTpxgXyY=";
+    hash = "sha256-J+JIsaK43LXPoVrrw7Eh/zVMJ1b6WAsTdghE/jLjRX0=";
   };
 in
 buildPythonPackage {
@@ -251,13 +251,8 @@ buildPythonPackage {
 
   build-system = [ setuptools ];
 
-  pythonRemoveDeps = [
-    # We call it faiss, not faiss-cpu.
-    "faiss-cpu"
-  ];
-
   dependencies = [
-    faiss
+    faiss-cpu
     huggingface-hub
     msgpack
     numpy
@@ -290,7 +285,7 @@ buildPythonPackage {
   ++ optional-dependencies.api
   ++ optional-dependencies.similarity;
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "test/python/*"
   ];
 

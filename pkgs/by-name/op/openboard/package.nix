@@ -22,8 +22,8 @@
   lame,
   fdk_aac,
   libass,
-  libXext,
-  libXfixes,
+  libxext,
+  libxfixes,
 }:
 
 let
@@ -39,14 +39,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openboard";
-  version = "1.7.3";
+  version = "1.7.7";
 
   src = fetchFromGitHub {
     owner = "OpenBoard-org";
     repo = "OpenBoard";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Igp5WSVQ9FrzS2AhDDPwVBo76SaFw9xP6lqgW7S/KIE=";
+    hash = "sha256-MjUbfv+3o3f4qsLPxLDeUn+/h5YupMMhC/SecwmCR8Q=";
   };
+
+  patches = [
+    ./poppler-26-compat.patch # https://github.com/OpenBoard-org/OpenBoard/pull/1474
+  ];
 
   postPatch = ''
     substituteInPlace resources/etc/OpenBoard.config \
@@ -89,19 +93,18 @@ stdenv.mkDerivation (finalAttrs: {
     fdk_aac
     libass
     quazip
-    libXext
-    libXfixes
+    libxext
+    libxfixes
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Interactive whiteboard application";
     homepage = "https://openboard.ch/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      atinba
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       fufexan
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "openboard";
   };
 })

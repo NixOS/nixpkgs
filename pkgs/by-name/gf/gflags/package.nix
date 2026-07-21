@@ -6,15 +6,15 @@
   enableShared ? !stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gflags";
-  version = "2.2.2";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "gflags";
     repo = "gflags";
-    rev = "v${version}";
-    sha256 = "147i3md3nxkjlrccqg4mq1kyzc7yrhvqv5902iibc7znkvzdvlp0";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sud3c6XH24YA6vzGQ7LhSoiKycan5JYehC5l2gH6DEo=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "C++ library that implements commandline flags processing";
     mainProgram = "gflags_completions.sh";
     longDescription = ''
@@ -38,8 +38,9 @@ stdenv.mkDerivation rec {
       It was owned by Google. google-gflags project has been renamed to gflags and maintained by new community.
     '';
     homepage = "https://gflags.github.io/gflags/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.linquize ];
-    platforms = platforms.all;
+    changelog = "https://github.com/gflags/gflags/blob/${finalAttrs.src.tag}/ChangeLog.txt";
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
   };
-}
+})

@@ -2,42 +2,55 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  # rns optionally depends on lxmf but we can't have two versions of rns in a closure
+  propagateRns ? false,
+  qrcode,
   rns,
   setuptools,
+  versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lxmf";
-  version = "0.8.0";
+  version = "1.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "markqvist";
     repo = "lxmf";
-    tag = version;
-    hash = "sha256-toxie5QdrgwyvC9v0G7mvGS6/ZEqA5gpRtEeaHgspD0=";
+    tag = finalAttrs.version;
+    hash = "sha256-Lx7eG7idbqjJrOE15/OJ8kh++4STQHxNVMTRVXdAEYE=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ rns ];
+  buildInputs = lib.optionals (!propagateRns) [
+    rns
+  ];
 
-  # Module has no tests
-  doCheck = false;
+  dependencies = [
+    qrcode
+  ]
+  ++ lib.optionals propagateRns [
+    rns
+  ];
 
   pythonImportsCheck = [ "LXMF" ];
 
-  meta = with lib; {
+  nativeCheckInputs = lib.optionals propagateRns [
+    versionCheckHook
+  ];
+
+  meta = {
     description = "Lightweight Extensible Message Format for Reticulum";
     homepage = "https://github.com/markqvist/lxmf";
-    changelog = "https://github.com/markqvist/LXMF/releases/tag/${src.tag}";
-    # Reticulum License
-    # https://github.com/markqvist/LXMF/blob/master/LICENSE
-    license = licenses.unfree;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/markqvist/LXMF/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.reticulum;
+    maintainers = with lib.maintainers; [
+      drupol
+      fab
+    ];
     mainProgram = "lxmd";
   };
-}
+})

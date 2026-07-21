@@ -6,21 +6,21 @@
   meson,
   ninja,
   docutils,
-  libpthreadstubs,
+  libpthread-stubs,
   withIntel ? lib.meta.availableOn stdenv.hostPlatform libpciaccess,
   libpciaccess,
-  withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light,
+  withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light && !stdenv.cc.isClang,
   valgrind-light,
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libdrm";
-  version = "2.4.125";
+  version = "2.4.134";
 
   src = fetchurl {
-    url = "https://dri.freedesktop.org/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-1LrpJ5elD4GpNSR2LgQQpJzYTPoPmXeVvAFyrI+x2Wo=";
+    url = "https://dri.freedesktop.org/libdrm/libdrm-${finalAttrs.version}.tar.xz";
+    hash = "sha256-rF500VeDDri+5Exqa/OtSXdO8N0qcr2tdKjyAwi1KpU=";
   };
 
   outputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     docutils
   ];
   buildInputs = [
-    libpthreadstubs
+    libpthread-stubs
   ]
   ++ lib.optional withIntel libpciaccess
   ++ lib.optional withValgrind valgrind-light;
@@ -47,9 +47,7 @@ stdenv.mkDerivation rec {
     (lib.mesonEnable "intel" withIntel)
     (lib.mesonEnable "omap" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "valgrind" withValgrind)
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isAarch [
-    "-Dtegra=enabled"
+    (lib.mesonEnable "tegra" stdenv.hostPlatform.isLinux)
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
     "-Detnaviv=disabled"
@@ -65,7 +63,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.freedesktop.org/mesa/drm";
     downloadPage = "https://dri.freedesktop.org/libdrm/";
     description = "Direct Rendering Manager library and headers";
@@ -81,8 +79,8 @@ stdenv.mkDerivation rec {
       libdrm is a low-level library, typically used by graphics drivers such as
       the Mesa drivers, the X drivers, libva and similar projects.
     '';
-    license = licenses.mit;
-    platforms = lib.subtractLists platforms.darwin platforms.unix;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.mit;
+    platforms = lib.subtractLists lib.platforms.darwin lib.platforms.unix;
+    maintainers = [ ];
   };
-}
+})

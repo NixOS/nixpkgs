@@ -7,21 +7,22 @@
   nix-update-script,
   testers,
   awscli,
+  versionCheckHook,
 }:
 
 let
-  self = python3Packages.buildPythonApplication rec {
+  self = python3Packages.buildPythonApplication (finalAttrs: {
     pname = "awscli";
     # N.B: if you change this, change botocore and boto3 to a matching version too
     # check e.g. https://github.com/aws/aws-cli/blob/1.33.21/setup.py
-    version = "1.42.4";
+    version = "1.44.21";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "aws";
       repo = "aws-cli";
-      tag = version;
-      hash = "sha256-vkQFhSsK9MWhp+jvomkVdjxXuBOH4GnFgz/9jtPRNIs=";
+      tag = finalAttrs.version;
+      hash = "sha256-yQFK1YjehmACZGMXfMQLc5OiiIGDO08OtwFSpaRyi58=";
     };
 
     pythonRelaxDeps = [
@@ -62,32 +63,31 @@ let
       runHook preInstallCheck
 
       $out/bin/aws --version | grep "${python3Packages.botocore.version}"
-      $out/bin/aws --version | grep "${version}"
+      $out/bin/aws --version | grep "${finalAttrs.version}"
 
       runHook postInstallCheck
     '';
+
+    nativeInstallCheckInputs = [
+      versionCheckHook
+    ];
 
     passthru = {
       python = python3Packages.python; # for aws_shell
       updateScript = nix-update-script {
         extraArgs = [ "--version=skip" ];
       };
-      tests.version = testers.testVersion {
-        package = awscli;
-        command = "aws --version";
-        inherit version;
-      };
     };
 
     meta = {
       homepage = "https://aws.amazon.com/cli/";
-      changelog = "https://github.com/aws/aws-cli/blob/${version}/CHANGELOG.rst";
+      changelog = "https://github.com/aws/aws-cli/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
       description = "Unified tool to manage your AWS services";
       license = lib.licenses.asl20;
       mainProgram = "aws";
       maintainers = with lib.maintainers; [ anthonyroussel ];
     };
-  };
+  });
 in
 assert self ? pythonRelaxDeps -> !(lib.elem "botocore" self.pythonRelaxDeps);
 self

@@ -10,15 +10,12 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "open-meteo";
   version = "0.4.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.11";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frenck";
@@ -30,7 +27,7 @@ buildPythonPackage rec {
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
     substituteInPlace pyproject.toml \
-      --replace-fail "0.0.0" "${version}" \
+      --replace-fail "0.0.0" "${version}"
   '';
 
   nativeBuildInputs = [ poetry-core ];
@@ -55,11 +52,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "open_meteo" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/frenck/python-open-meteo/releases/tag/v${version}";
     description = "Python client for the Open-Meteo API";
     homepage = "https://github.com/frenck/python-open-meteo";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

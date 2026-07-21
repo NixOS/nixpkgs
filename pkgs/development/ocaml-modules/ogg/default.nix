@@ -6,14 +6,14 @@
   libogg,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ogg";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-xiph";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mVMuPPjQRfwtQqpoUaEtTilMcGO0MJ4xiOd0D7ucOEQ=";
   };
 
@@ -22,10 +22,10 @@ buildDunePackage rec {
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ libogg ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/savonet/ocaml-ogg";
     description = "Bindings to libogg";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
-}
+})

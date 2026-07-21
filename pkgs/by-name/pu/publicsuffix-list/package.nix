@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "publicsuffix-list";
-  version = "0-unstable-2025-07-22";
+  version = "0-unstable-2026-06-24";
 
   src = fetchFromGitHub {
     owner = "publicsuffix";
     repo = "list";
-    rev = "66d74ce941749134f5b0c9f0b9ab3393084b0c21";
-    hash = "sha256-FKDL0cWyIP/zwKgqwZ8qb/Oc99CvXdXllMVnL2nnWRo=";
+    rev = "18ecca5d54471f21918798da451dd8d03a18f3c7";
+    hash = "sha256-xvOAZpWhuOU3koEHgNfVK6aHy+VMYRoHj3fq9PxaAFo=";
   };
 
   dontBuild = true;
@@ -28,11 +28,11 @@ stdenvNoCC.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://publicsuffix.org/";
     description = "Cross-vendor public domain suffix database";
-    platforms = platforms.all;
-    license = licenses.mpl20;
-    maintainers = [ maintainers.c0bw3b ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.mpl20;
+    maintainers = [ ];
   };
 }

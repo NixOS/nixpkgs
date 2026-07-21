@@ -1,8 +1,8 @@
 {
   buildFHSEnv,
-  electron_36,
   fetchFromGitHub,
   fetchYarnDeps,
+  electron,
   git,
   lib,
   makeDesktopItem,
@@ -25,17 +25,21 @@ let
     hash = "sha256-e9PLgkqWBNLBw7uuNpPluOQ6+aGLYQLyTzcLa+LMOzs=";
   };
 
-  electron = electron_36;
+  patches = [
+    ./dont-use-initial-releases-json.patch
+    ./dont-fetch-contributors.patch
+
+    # zip extraction fails on newer nodejs versions without this fix
+    ./bump-yauzl.patch
+  ];
 
   unwrapped = stdenvNoCC.mkDerivation {
     pname = "${pname}-unwrapped";
-    inherit version src;
-
-    patches = [ ./dont-use-initial-releases-json.patch ];
+    inherit version src patches;
 
     offlineCache = fetchYarnDeps {
-      inherit src;
-      hash = "sha256-mB8WG6tX204u6AJ8qLbWrA+pSN3oDihHqj0t3bWcuAI=";
+      inherit src patches;
+      hash = "sha256-5yUsjXQ3OHwEGFgMTUJAXAuTdAl4zkb8zxTs5OT6sw4=";
     };
 
     nativeBuildInputs = [
@@ -62,6 +66,9 @@ let
       substituteInPlace node_modules/@electron/packager/dist/packager.js \
         --replace-fail 'await this.getElectronZipPath(downloadOpts)' '"electron.zip"'
     '';
+
+    # electron-forge's console output is squeezed into one narrow column if unset
+    env.CI = "1";
 
     yarnBuildScript = "package";
 
@@ -98,6 +105,8 @@ buildFHSEnv {
   inherit pname version;
   runScript = "${lib.getExe electron} ${unwrapped}/lib/electron-fiddle/resources/app.asar";
 
+  passthru = { inherit unwrapped; };
+
   extraInstallCommands = ''
     mkdir -p "$out/share/icons/hicolor/scalable/apps"
     ln -s "${unwrapped}/share/icons/hicolor/scalable/apps/electron-fiddle.svg" "$out/share/icons/hicolor/scalable/apps/"
@@ -129,28 +138,28 @@ buildFHSEnv {
       nspr
       nss
       pango
-      xorg.libX11
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXrandr
-      xorg.libxcb
+      libx11
+      libxcomposite
+      libxdamage
+      libxext
+      libxfixes
+      libxrandr
+      libxcb
 
       # for running Electron before 18.3.5/19.0.5/20.0.0 inside
       gdk-pixbuf
 
       # for running Electron before 16.0.0 inside
-      xorg.libxshmfence
+      libxshmfence
 
       # for running Electron before 11.0.0 inside
-      xorg.libXcursor
-      xorg.libXi
-      xorg.libXrender
-      xorg.libXtst
+      libxcursor
+      libxi
+      libxrender
+      libxtst
 
       # for running Electron before 10.0.0 inside
-      xorg.libXScrnSaver
+      libxscrnsaver
 
       # for running Electron before 8.0.0 inside
       libuuid
@@ -165,12 +174,12 @@ buildFHSEnv {
       # https://github.com/electron/electron/issues/13972
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Easiest way to get started with Electron";
     homepage = "https://www.electronjs.org/fiddle";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "electron-fiddle";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       andersk
       tomasajt
     ];

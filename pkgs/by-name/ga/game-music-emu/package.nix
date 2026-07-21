@@ -7,15 +7,15 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
-  version = "0.6.4";
+stdenv.mkDerivation (finalAttrs: {
+  version = "0.6.5";
   pname = "game-music-emu";
 
   src = fetchFromGitHub {
     owner = "libgme";
     repo = "game-music-emu";
-    tag = version;
-    hash = "sha256-qGNWFFUUjv2R5e/nQrriAyDJCARISqNB8e5/1zEJ3fk=";
+    tag = finalAttrs.version;
+    hash = "sha256-zn1t0oDj8hz/sfbG7lrstkv2Kf6cL7zAEMpIu9X4dyQ=";
   };
   nativeBuildInputs = [
     cmake
@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     description = "Collection of video game music file emulators";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
-}
+})

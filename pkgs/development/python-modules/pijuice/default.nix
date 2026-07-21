@@ -2,24 +2,22 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   smbus-cffi,
   urwid,
 }:
 
 buildPythonPackage rec {
   pname = "pijuice";
-  version = "1.7";
+  version = "1.8";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "PiSupply";
     repo = "PiJuice";
     # Latest commit that fixes using the library against python 3.9 by renaming
     # isAlive() to is_alive(). The former function was removed in python 3.9.
-    rev = "e2dca1f8dcfa12e009952a882c0674a545d193d6";
-    sha256 = "07Jr7RSjqI8j0tT0MNAjrN1sjF1+mI+V0vtKInvtxj8=";
+    tag = "V${version}";
+    sha256 = "sha256-tPYuI+VzbxmTeY/L3s0oDoydRDXJ6t76KmLUyJzxUvU=";
   };
 
   patches = [
@@ -29,8 +27,10 @@ buildPythonPackage rec {
     ./patch-shebang.diff
   ];
 
-  PIJUICE_BUILD_BASE = 1;
-  PIJUICE_VERSION = version;
+  env = {
+    PIJUICE_BUILD_BASE = 1;
+    PIJUICE_VERSION = version;
+  };
 
   preBuild = ''
     cd Software/Source
@@ -43,29 +43,25 @@ buildPythonPackage rec {
 
   # Remove the following files from the package:
   #
-  # pijuice_cli - A precompiled ELF binary that is a setuid wrapper for calling
-  #               pijuice_cli.py
-  #
-  # pijuiceboot - a precompiled ELF binary for flashing firmware. Not needed for
-  #               the python library.
+  # pijuiceboot{32,64} - precompiled ELF binaries for flashing firmware.
+  #                      Not needed for the python library.
   #
   # pijuice_sys.py - A program that acts as a system daemon for monitoring the
   #                  pijuice.
-  preFixup = ''
-    rm $out/bin/pijuice_cli
+  postFixup = ''
     rm $out/bin/pijuice_sys.py
-    rm $out/bin/pijuiceboot
+    rm $out/bin/pijuiceboot{32,64}
     mv $out/bin/pijuice_cli.py $out/bin/pijuice_cli
   '';
 
   # no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Library and resources for PiJuice HAT for Raspberry Pi";
     mainProgram = "pijuice_cli";
     homepage = "https://github.com/PiSupply/PiJuice";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hexagonal-sun ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ hexagonal-sun ];
   };
 }

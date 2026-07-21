@@ -7,6 +7,7 @@
   python3,
   stdenvNoCC,
   makeWrapper,
+  codeowners,
 }:
 let
   python = python3.withPackages (ps: [
@@ -48,8 +49,8 @@ in
 {
   combinedDir,
   touchedFilesJson,
-  githubAuthorId,
-  byName ? false,
+  baseBranch,
+  ownersFile ? ../../OWNERS,
 }:
 let
   # Usually we expect a derivation, but when evaluating in multiple separate steps, we pass
@@ -74,8 +75,37 @@ let
         {
           attrdiff: {
             added: ["package1"],
-            changed: ["package2", "package3"],
+            changed: ["package2", "package3", "package4"],
             removed: ["package4"],
+          },
+          attrdiffByKernel: {
+            darwin: {
+              added: [],
+              changed: ["package2", "package4"],
+              removed: ["package4"],
+            },
+            linux: {
+              added: ["package1"],
+              changed: ["package3", "package4"],
+              removed: [],
+            },
+          },
+          attrdiffByPlatform: {
+            aarch64-darwin: {
+              added: [],
+              changed: ["package2"],
+              removed: ["package4"],
+            },
+            aarch64-linux: {
+              added: ["package1"],
+              changed: ["package3"],
+              removed: [],
+            },
+            x86_64-linux: {
+              added: [],
+              changed: ["package4"],
+              removed: [],
+            },
           },
           labels: {
             "10.rebuild-darwin: 1-10": true,
@@ -113,6 +143,8 @@ let
   inherit (import ./utils.nix { inherit lib; })
     groupByKernel
     convertToPackagePlatformAttrs
+    groupAttrdiffByKernel
+    groupAttrdiffByPlatform
     groupByPlatform
     extractPackageNames
     getLabels
@@ -123,21 +155,29 @@ let
   # - values: lists of `packagePlatformPath`s
   diffAttrs = builtins.fromJSON (builtins.readFile "${combined}/combined-diff.json");
 
-  changedPackagePlatformAttrs = convertToPackagePlatformAttrs diffAttrs.changed;
   rebuildsPackagePlatformAttrs = convertToPackagePlatformAttrs diffAttrs.rebuilds;
-  removedPackagePlatformAttrs = convertToPackagePlatformAttrs diffAttrs.removed;
 
   changed-paths =
     let
+      attrdiff = lib.mapAttrs (_: extractPackageNames) {
+        inherit (diffAttrs) added changed removed;
+      };
+      attrdiffByPlatform = groupAttrdiffByPlatform {
+        inherit (diffAttrs) added changed removed;
+      };
+      attrdiffByKernel = groupAttrdiffByKernel {
+        inherit (diffAttrs) added changed removed;
+      };
       rebuildsByPlatform = groupByPlatform rebuildsPackagePlatformAttrs;
       rebuildsByKernel = groupByKernel rebuildsPackagePlatformAttrs;
       rebuildCountByKernel = lib.mapAttrs (
         kernel: kernelRebuilds: lib.length kernelRebuilds
       ) rebuildsByKernel;
+      rebuildNames = extractPackageNames diffAttrs.rebuilds;
     in
     writeText "changed-paths.json" (
       builtins.toJSON {
-        attrdiff = lib.mapAttrs (_: extractPackageNames) { inherit (diffAttrs) added changed removed; };
+        inherit attrdiff attrdiffByKernel attrdiffByPlatform;
         inherit
           rebuildsByPlatform
           rebuildsByKernel
@@ -151,28 +191,24 @@ let
           ) rebuildsByKernel
           // {
             "10.rebuild-nixos-tests" =
-              lib.elem "nixosTests.simple" (extractPackageNames diffAttrs.rebuilds)
-              &&
-                # Only set this label when no other label with indication for staging has been set.
-                # This avoids confusion whether to target staging or batch this with kernel updates.
-                lib.last (lib.sort lib.lessThan (lib.attrValues rebuildCountByKernel)) <= 500;
-            # Set the "11.by: package-maintainer" label to whether all packages directly
-            # changed are maintained by the PR's author.
-            "11.by: package-maintainer" =
-              maintainers ? ${githubAuthorId}
-              && lib.all (lib.flip lib.elem maintainers.${githubAuthorId}) (
-                lib.flatten (lib.attrValues maintainers)
-              );
+              lib.elem "nixosTests.simple-container" rebuildNames || lib.elem "nixosTests.simple-vm" rebuildNames;
           };
       }
     );
 
-  maintainers = callPackage ./maintainers.nix { } {
-    changedattrs = lib.attrNames (lib.groupBy (a: a.name) changedPackagePlatformAttrs);
-    changedpathsjson = touchedFilesJson;
-    removedattrs = lib.attrNames (lib.groupBy (a: a.name) removedPackagePlatformAttrs);
-    inherit byName;
-  };
+  getMaintainers = callPackage ./maintainers.nix { };
+
+  inherit
+    (getMaintainers {
+      affectedAttrPaths = map (a: a.packagePath) (
+        convertToPackagePlatformAttrs (diffAttrs.changed ++ diffAttrs.removed)
+      );
+      changedFiles = lib.importJSON touchedFilesJson;
+    })
+    users
+    teams
+    packages
+    ;
 in
 runCommand "compare"
   {
@@ -180,9 +216,16 @@ runCommand "compare"
     nativeBuildInputs = map lib.getBin [
       jq
       cmp-stats
+      codeowners
     ];
-    maintainers = builtins.toJSON maintainers;
-    passAsFile = [ "maintainers" ];
+    users = builtins.toJSON users;
+    teams = builtins.toJSON teams;
+    packages = builtins.toJSON (lib.map (lib.concatStringsSep ".") packages);
+    passAsFile = [
+      "users"
+      "teams"
+      "packages"
+    ];
   }
   ''
     mkdir $out
@@ -196,33 +239,71 @@ runCommand "compare"
       jq -r -f ${./generate-step-summary.jq} < ${changed-paths}
     } >> $out/step-summary.md
 
-    if jq -e '(.attrdiff.added | length == 0) and (.attrdiff.removed | length == 0)' "${changed-paths}" > /dev/null; then
-      # Chunks have changed between revisions
-      # We cannot generate a performance comparison
-      {
-        echo
-        echo "# Performance comparison"
-        echo
-        echo "This compares the performance of this branch against its pull request base branch (e.g., 'master')"
-        echo
-        echo "For further help please refer to: [ci/README.md](https://github.com/NixOS/nixpkgs/blob/master/ci/README.md)"
-        echo
-      } >> $out/step-summary.md
+    {
+      echo
+      echo "# Performance comparison"
+      echo
+      echo "This compares the performance of this branch against the \`${baseBranch}\` branch."
+      echo
+    } >> $out/step-summary.md
 
-      cmp-stats --explain ${combined}/before/stats ${combined}/after/stats >> $out/step-summary.md
-
-    else
-      # Package chunks are the same in both revisions
-      # We can use the to generate a performance comparison
+    # cmp-stats only compares the stats chunks present in both revisions, so the
+    # comparison is still produced when packages were added/removed. The paired
+    # chunks may cover different attrs in that case, so caveat the figures.
+    if ! jq -e '(.attrdiff.added | length == 0) and (.attrdiff.removed | length == 0)' "${changed-paths}" > /dev/null; then
       {
+        echo "> [!NOTE]"
+        echo "> The package sets differ between the two revisions. This comparison only"
+        echo "> covers packages evaluated in both, so treat the figures as approximate."
         echo
-        echo "# Performance Comparison"
-        echo
-        echo "Performance stats were skipped because the package sets differ between the two revisions."
-        echo
-        echo "For further help please refer to: [ci/README.md](https://github.com/NixOS/nixpkgs/blob/master/ci/README.md)"
       } >> $out/step-summary.md
     fi
 
-    cp "$maintainersPath" "$out/maintainers.json"
+    {
+      echo "For further help please refer to: [ci/README.md](https://github.com/NixOS/nixpkgs/blob/master/ci/README.md)"
+      echo
+    } >> $out/step-summary.md
+
+    cmp-stats --explain ${combined}/before/stats ${combined}/after/stats >> $out/step-summary.md
+
+    jq -r '.[]' "${touchedFilesJson}" > ./touched-files
+    readarray -t touchedFiles < ./touched-files
+    echo "This PR touches ''${#touchedFiles[@]} files"
+
+    # TODO: Move ci/OWNERS to Nix and produce owners.json instead of owners.txt.
+    touch "$out/owners.txt"
+    for file in "''${touchedFiles[@]}"; do
+        result=$(codeowners --file "${ownersFile}" "$file")
+
+        # Remove the file prefix and trim the surrounding spaces
+        read -r owners <<< "''${result#"$file"}"
+        if [[ "$owners" == "(unowned)" ]]; then
+            echo "File $file is unowned"
+            continue
+        fi
+        echo "File $file is owned by $owners"
+
+        # Split up multiple owners, separated by arbitrary amounts of spaces
+        IFS=" " read -r -a entries <<< "$owners"
+
+        for entry in "''${entries[@]}"; do
+            # GitHub technically also supports Emails as code owners,
+            # but we can't easily support that, so let's not
+            if [[ ! "$entry" =~ @(.*) ]]; then
+                echo -e "\e[33mCodeowner \"$entry\" for file $file is not valid: Must start with \"@\"\e[0m"
+                # Don't fail, because the PR for which this script runs can't fix it,
+                # it has to be fixed in the base branch
+                continue
+            fi
+            # The first regex match is everything after the @
+            entry=''${BASH_REMATCH[1]}
+
+            echo "$entry" >> "$out/owners.txt"
+        done
+
+    done
+
+    cp "$usersPath" "$out/maintainers.json"
+    cp "$teamsPath" "$out/teams.json"
+    cp "$packagesPath" "$out/packages.json"
   ''

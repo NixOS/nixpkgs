@@ -1,55 +1,100 @@
 {
   callPackage,
   lib,
-  stdenv,
-  fetchurl,
-  jre_headless,
+  jre_minimal,
+  fetchFromGitHub,
+  fetchpatch,
+  maven,
   makeWrapper,
+  nix-update-script,
 }:
 
 let
-  jre = jre_headless;
-  this = stdenv.mkDerivation (finalAttrs: {
-    version = "7.15.0";
+  jre = jre_minimal.override {
+    modules = [
+      "java.base"
+      "java.compiler"
+      "java.datatransfer"
+      "java.desktop"
+      "java.instrument"
+      "java.logging"
+      "java.management"
+      "java.naming"
+      "java.net.http"
+      "java.prefs"
+      "java.scripting"
+      "java.security.jgss"
+      "java.sql"
+      "java.xml"
+      "jdk.compiler"
+      "jdk.unsupported"
+    ];
+  };
+  version = "7.22.0";
+  mainProgram = "openapi-generator-cli";
+  this = maven.buildMavenPackage {
+    inherit version;
+
     pname = "openapi-generator-cli";
 
-    jarfilename = "openapi-generator-cli-${finalAttrs.version}.jar";
+    src = fetchFromGitHub {
+      owner = "OpenAPITools";
+      repo = "openapi-generator";
+      tag = "v${version}";
+      hash = "sha256-G3MuOJFXVpKNG9Y3JEVMJFxt2wWv1I1dSGuxni4JYdc=";
+    };
+
+    patches = [
+      # Achieve reproducible mvnHash by pinning develocity plugin.
+      (fetchpatch {
+        url = "https://github.com/OpenAPITools/openapi-generator/commit/ff66e1bc7fe33dcee89de7296eb7bcd5e2a11cc6.patch";
+        hash = "sha256-E1VgtaIW1V+8ch2RpW850fVNl5Iqitjog+0b8DKFgZw=";
+      })
+    ];
+
+    mvnHash = "sha256-oJnXNHAYZxWi9YDHw+RR1HWf7hlTKoZmnDIHxXNpp1M=";
+    mvnParameters = "-Duser.home=$TMPDIR";
+    doCheck = false;
+
+    # Otherwise, Gradle fails with `java.net.SocketException: Operation not permitted`
+    __darwinAllowLocalNetworking = true;
 
     nativeBuildInputs = [
       makeWrapper
     ];
 
-    src = fetchurl {
-      url = "mirror://maven/org/openapitools/openapi-generator-cli/${finalAttrs.version}/${finalAttrs.jarfilename}";
-      sha256 = "sha256-TaGnzbeMOkOx6rBkiJETXow1R9Lu26Ddadrzd/hl82Y=";
-    };
-
-    dontUnpack = true;
-
     installPhase = ''
       runHook preInstall
 
-      install -D "$src" "$out/share/java/${finalAttrs.jarfilename}"
+      mkdir -p $out/bin $out/share/java
+      jarfilename=$out/share/java/openapi-generator-cli.jar
+      install -Dm644 modules/openapi-generator-cli/target/openapi-generator-cli.jar $jarfilename
 
-      makeWrapper ${jre}/bin/java $out/bin/${finalAttrs.pname} \
-        --add-flags "-jar $out/share/java/${finalAttrs.jarfilename}"
+      makeWrapper ${jre}/bin/java $out/bin/${mainProgram} \
+        --add-flags "-jar $jarfilename"
 
       runHook postInstall
     '';
 
-    meta = with lib; {
-      description = "Allows generation of API client libraries (SDK generation), server stubs and documentation automatically given an OpenAPI Spec";
-      homepage = "https://github.com/OpenAPITools/openapi-generator";
-      changelog = "https://github.com/OpenAPITools/openapi-generator/releases/tag/v${finalAttrs.version}";
-      sourceProvenance = with sourceTypes; [ binaryBytecode ];
-      license = licenses.asl20;
-      maintainers = with maintainers; [ shou ];
-      mainProgram = "openapi-generator-cli";
+    passthru = {
+      updateScript = nix-update-script { };
+      tests.example = callPackage ./example.nix {
+        openapi-generator-cli = this;
+      };
     };
 
-    passthru.tests.example = callPackage ./example.nix {
-      openapi-generator-cli = this;
+    meta = {
+      description = "Allows generation of API client libraries (SDK generation), server stubs and documentation automatically given an OpenAPI Spec";
+      homepage = "https://github.com/OpenAPITools/openapi-generator";
+      changelog = "https://github.com/OpenAPITools/openapi-generator/releases/tag/v${version}";
+      sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [
+        booxter
+        shou
+      ];
+      inherit mainProgram;
     };
-  });
+  };
 in
 this

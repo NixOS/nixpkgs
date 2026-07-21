@@ -11,7 +11,8 @@ let
   cfg = config.networking.networkmanager;
   ini = pkgs.formats.ini { };
 
-  delegateWireless = config.networking.wireless.enable == true && cfg.unmanaged != [ ];
+  # Whether wpa_supplicant is managed independently
+  delegateWireless = config.networking.wireless.networks != { } && cfg.unmanaged != [ ];
 
   enableIwd = cfg.wifi.backend == "iwd";
 
@@ -23,6 +24,9 @@ let
       rc-manager = if config.networking.resolvconf.enable then "resolvconf" else "unmanaged";
     };
     keyfile = {
+      # NM's compiled-in default; made explicit so the tmpfiles rule below
+      # can follow it when the user redirects the keyfile store elsewhere.
+      path = "/etc/NetworkManager/system-connections";
       unmanaged-devices = if cfg.unmanaged == [ ] then null else lib.concatStringsSep ";" cfg.unmanaged;
     };
     logging = {
@@ -136,17 +140,13 @@ let
     cfg.package
   ]
   ++ cfg.plugins
-  ++ pluginRuntimeDeps
-  ++ lib.optionals (!delegateWireless && !enableIwd) [
-    pkgs.wpa_supplicant
-  ];
+  ++ pluginRuntimeDeps;
 in
 {
 
   meta = {
-    maintainers = teams.freedesktop.members ++ [
-      lib.maintainers.frontear
-    ];
+    teams = [ lib.teams.freedesktop ];
+    maintainers = [ lib.maintainers.frontear ];
   };
 
   ###### interface
@@ -240,7 +240,7 @@ in
           types.listOf networkManagerPluginPackage;
         default = [ ];
         example = literalExpression ''
-          [
+          with pkgs; [
             networkmanager-fortisslvpn
             networkmanager-iodine
             networkmanager-l2tp
@@ -348,7 +348,7 @@ in
         ];
         default = "default";
         description = ''
-          Set the DNS (`resolv.conf`) processing mode.
+          Set the DNS ({file}`resolv.conf`) processing mode.
 
           A description of these modes can be found in the main section of
           [
@@ -541,9 +541,9 @@ in
 
     assertions = [
       {
-        assertion = config.networking.wireless.enable == true -> cfg.unmanaged != [ ];
+        assertion = config.networking.wireless.networks != { } -> cfg.unmanaged != [ ];
         message = ''
-          You can not use networking.networkmanager with networking.wireless.
+          You can not use networking.networkmanager with networking.wireless.networks.
           Except if you mark some interfaces as <literal>unmanaged</literal> by NetworkManager.
         '';
       }
@@ -604,13 +604,27 @@ in
 
     systemd.packages = packages;
 
-    systemd.tmpfiles.rules = [
-      "d /etc/NetworkManager/system-connections 0700 root root -"
-      "d /var/lib/misc 0755 root root -" # for dnsmasq.leases
+    systemd.tmpfiles.settings.networkmanager = {
+      ${configAttrs.keyfile.path}.d = {
+        mode = "0700";
+        user = "root";
+        group = "root";
+      };
+      # for dnsmasq.leases
+      "/var/lib/misc".d = {
+        mode = "0755";
+        user = "root";
+        group = "root";
+      };
       # ppp isn't able to mkdir that directory at runtime
-      "d /run/pppd/lock 0700 root root -"
-    ]
-    ++ pluginTmpfilesRules;
+      "/run/pppd/lock".d = {
+        mode = "0700";
+        user = "root";
+        group = "root";
+      };
+    };
+
+    systemd.tmpfiles.rules = pluginTmpfilesRules;
 
     systemd.services.NetworkManager = {
       wantedBy = [ "multi-user.target" ];
@@ -676,6 +690,13 @@ in
         useDHCP = false;
       })
 
+      (mkIf (!delegateWireless && !enableIwd) {
+        # Enable wpa_supplicant but fully control it over DBus
+        wireless.enable = true;
+        wireless.autoDetectInterfaces = false;
+        wireless.dbusControlled = true;
+      })
+
       (mkIf enableIwd {
         wireless.iwd.enable = true;
       })
@@ -697,6 +718,8 @@ in
     security.polkit.extraConfig = polkitConf;
 
     services.dbus.packages = packages ++ pluginDbusDeps ++ optional (cfg.dns == "dnsmasq") pkgs.dnsmasq;
+
+    services.firewalld.packages = packages;
 
     services.udev.packages = packages;
 

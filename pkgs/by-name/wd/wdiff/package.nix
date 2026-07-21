@@ -6,12 +6,12 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wdiff";
   version = "1.2.2";
 
   src = fetchurl {
-    url = "mirror://gnu/wdiff/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/wdiff/wdiff-${finalAttrs.version}.tar.gz";
     sha256 = "0sxgg0ms5lhi4aqqvz1rj4s77yi9wymfm3l3gbjfd1qchy66kzrl";
   };
 
@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/wdiff/";
     description = "Comparing files on a word by word basis";
     mainProgram = "wdiff";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ SuperSandro2000 ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    platforms = lib.platforms.unix;
   };
-}
+})

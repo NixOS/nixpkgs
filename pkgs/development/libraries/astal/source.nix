@@ -7,15 +7,15 @@ let
   originalDrv = fetchFromGitHub {
     owner = "Aylur";
     repo = "astal";
-    rev = "344a6dce56437a190b99e516a6cab8332cccf19e";
-    hash = "sha256-BSfvr7wdY5SbathVlrOW7vCyI9UGVIe2b9rTJ0O5IKo=";
+    rev = "fd94e333c8bd45557291c805f1df79d5f787d590";
+    hash = "sha256-flVUft590tsDX9z97O4DzVFg6zvOOmGeYhPeDdaP1DI=";
   };
 in
 originalDrv.overrideAttrs (
   final: prev: {
     name = "${final.pname}-${final.version}"; # fetchFromGitHub already defines name
     pname = "astal-source";
-    version = "0-unstable-2025-09-10";
+    version = "0-unstable-2026-07-19";
 
     meta = prev.meta // {
       description = "Building blocks for creating custom desktop shells (source)";
@@ -24,7 +24,7 @@ originalDrv.overrideAttrs (
         `astal` namespace. This package is just a `fetchFromGitHub`, which is
         reused between all subpackages.
       '';
-      maintainers = with lib.maintainers; [ perchun ];
+      maintainers = with lib.maintainers; [ PerchunPak ];
       platforms = lib.platforms.linux;
     };
 

@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
   version = "1.56.0";
 
   src = fetchurl {
-    url = "http://download.libguestfs.org/binaries/appliance/appliance-${version}.tar.xz";
+    url = "https://download.libguestfs.org/binaries/appliance/appliance-${version}.tar.xz";
     hash = "sha256-YbJlNaogMyutdtc7d+etyJvdd//yE8tedsZfkGXJr54=";
   };
 
@@ -22,14 +22,14 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "VM appliance disk image used in libguestfs package";
     homepage = "https://libguestfs.org";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl2Plus
     ];
-    maintainers = with maintainers; [ lukts30 ];
+    maintainers = with lib.maintainers; [ lukts30 ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

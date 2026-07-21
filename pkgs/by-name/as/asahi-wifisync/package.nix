@@ -2,26 +2,31 @@
   lib,
   fetchCrate,
   rustPlatform,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asahi-wifisync";
-  version = "0.2.0";
+  version = "0.2.3";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-wKd6rUUnegvl6cHODVQlllaOXuAGlmwx9gr73I/2l/c=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-YO7Yq3S7F7WuW79MR1wrViw3tTBZi8XIsXrd4f0xCzs=";
   };
 
-  cargoHash = "sha256-ZxgRxQyDID3mBpr8dhHScctk14Pm9V51Gn24d24JyVk=";
-  cargoDepsName = pname;
+  cargoHash = "sha256-cfgsY34wFeBTy0CYwVRZN22Ndifn6ZPs2t6f8DS3S2k=";
+  cargoDepsName = finalAttrs.pname;
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Tool to sync Wifi passwords with macos on ARM Macs";
     homepage = "https://crates.io/crates/asahi-wifisync";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lukaslihotzki ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lukaslihotzki ];
     mainProgram = "asahi-wifisync";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

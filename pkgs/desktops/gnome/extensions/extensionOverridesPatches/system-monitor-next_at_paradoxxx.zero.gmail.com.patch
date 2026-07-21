@@ -22,7 +22,7 @@ index ee8c3a9..ca72885 100644
  
  import * as Util from "resource:///org/gnome/shell/misc/util.js";
  
-+GIRepository.Repository.prepend_search_path('@gtop_path@');
++GIRepository.Repository.dup_default().prepend_search_path('@gtop_path@');
 +const GTop = (await import("gi://GTop")).default;
 +
  const NetworkManager = NM;

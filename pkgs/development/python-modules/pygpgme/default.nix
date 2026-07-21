@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchurl,
-  gpgme,
+  gpg,
   isPyPy,
   pythonAtLeast,
 }:
@@ -24,12 +24,12 @@ buildPythonPackage rec {
   # error: invalid command 'test'
   doCheck = false;
 
-  propagatedBuildInputs = [ gpgme ];
+  propagatedBuildInputs = [ gpg ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://launchpad.net/pygpgme";
     description = "Python wrapper for the GPGME library";
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     maintainers = [ ];
   };
 }

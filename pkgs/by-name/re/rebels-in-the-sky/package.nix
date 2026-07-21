@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   rustPlatform,
   cmake,
   pkg-config,
@@ -14,16 +15,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rebels-in-the-sky";
-  version = "1.0.31";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "ricott1";
     repo = "rebels-in-the-sky";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0/Vsb6GMl0XH7uxyFSUO18kKoz49MXbOEQChhZZJL24=";
+    hash = "sha256-bLyAki9XJuQRwKhO8jiR1wcssfvXTXGftOS4WRyvVe0=";
   };
 
-  cargoHash = "sha256-DI6BAfbIEGCq3GaBoQz/nn9AZYWUDWBD2osgm1K44+w=";
+  cargoHash = "sha256-PUo9avg1wWgS7D6u3zIBbgv1/eM6N9PbA+EwzdNHC0w=";
 
   patches = lib.optionals (!withRadio) [
     ./disable-radio.patch
@@ -47,7 +48,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/rebels";
-  versionCheckProgramArg = "--version";
   # Darwin: "Error: Operation not permitted (os error 1)"
   doInstallCheck = !stdenv.hostPlatform.isDarwin;
 

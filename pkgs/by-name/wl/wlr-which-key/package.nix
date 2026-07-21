@@ -9,14 +9,14 @@
   pango,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wlr-which-key";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "MaxVerevkin";
     repo = "wlr-which-key";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-2dVTN5aaXeGBUKhsuUyDfELyL4AcKoaPXD0gN7ydL/Y=";
   };
 
@@ -33,12 +33,12 @@ rustPlatform.buildRustPackage rec {
     pango
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Keymap manager for wlroots-based compositors";
     homepage = "https://github.com/MaxVerevkin/wlr-which-key";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ xlambein ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ xlambein ];
+    platforms = lib.platforms.linux;
     mainProgram = "wlr-which-key";
   };
-}
+})

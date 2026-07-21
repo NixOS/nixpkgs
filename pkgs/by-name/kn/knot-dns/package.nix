@@ -26,18 +26,19 @@
   sphinx,
   autoreconfHook,
   nixosTests,
-  knot-resolver,
+  knot-resolver_5,
+  knot-resolver-manager_6,
   knot-dns,
   runCommandLocal,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "knot-dns";
-  version = "3.5.0";
+  version = "3.5.6";
 
   src = fetchurl {
-    url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "d52538bf7364c280999dec58c2a02a405dd922ef5794da1473ca7c3cf7f01277";
+    url = "https://secure.nic.cz/files/knot-dns/knot-${finalAttrs.version}.tar.xz";
+    sha256 = "8e2dde44c97f8a63ec5e6c11db26099acd5341286af5b6be900b62ccade68898";
   };
 
   outputs = [
@@ -97,7 +98,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   strictDeps = true;
 
-  CFLAGS = [
+  env.CFLAGS = toString [
     "-O2"
     "-DNDEBUG"
   ];
@@ -113,9 +114,10 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    inherit knot-resolver;
+    inherit knot-resolver_5;
   }
   // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    inherit knot-resolver-manager_6; # not very reliable on non-Linux yet
     inherit (nixosTests) knot kea;
     prometheus-exporter = nixosTests.prometheus-exporters.knot;
     # Some dependencies are very version-sensitive, so the might get dropped
@@ -134,10 +136,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Authoritative-only DNS server from .cz domain registry";
     homepage = "https://knot-dns.cz";
-    changelog = "https://gitlab.nic.cz/knot/knot-dns/-/releases/v${version}";
+    changelog = "https://gitlab.nic.cz/knot/knot-dns/-/releases/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.vcunat ];
     mainProgram = "knotd";
   };
-}
+})

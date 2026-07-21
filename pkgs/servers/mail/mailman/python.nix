@@ -26,19 +26,7 @@ lib.fix (
             [1] 72a14ea563a3f5bf85db659349a533fe75a8b0ce
             [2] f931bc81d63f5cfda55ac73d754c87b3fd63b291
           */
-
-          django-allauth = super.django-allauth.overrideAttrs (
-            new:
-            { src, ... }:
-            {
-              version = "0.63.6";
-              src = src.override {
-                tag = new.version;
-                hash = "sha256-13/QbA//wyHE9yMB7Jy/sJEyqPKxiMN+CZwSc4U6okU=";
-              };
-              patches = [ ];
-            }
-          );
+          django = super.django_5;
         })
 
         overlay;

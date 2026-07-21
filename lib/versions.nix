@@ -3,8 +3,16 @@
 
 rec {
 
+  inherit (builtins) compareVersions;
+
   /**
     Break a version string into its component parts.
+
+    # Type
+
+    ```
+    splitVersion :: String -> [String]
+    ```
 
     # Examples
     :::{.example}
@@ -28,6 +36,12 @@ rec {
 
     : 1\. Function argument
 
+    # Type
+
+    ```
+    major :: String -> String
+    ```
+
     # Examples
     :::{.example}
     ## `major` usage example
@@ -49,6 +63,12 @@ rec {
     `v`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    minor :: String -> String
+    ```
 
     # Examples
     :::{.example}
@@ -72,6 +92,12 @@ rec {
 
     : 1\. Function argument
 
+    # Type
+
+    ```
+    patch :: String -> String
+    ```
+
     # Examples
     :::{.example}
     ## `patch` usage example
@@ -94,6 +120,12 @@ rec {
     `v`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    majorMinor :: String -> String
+    ```
 
     # Examples
     :::{.example}
@@ -120,6 +152,12 @@ rec {
     `version`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    pad :: Int -> String -> String
+    ```
 
     # Examples
     :::{.example}

@@ -113,6 +113,13 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail '"libtpms.so"' '"${libtpms.out}/lib/libtpms.so"' \
         --replace-fail '"libtpms.so.0"' '"${libtpms.out}/lib/libtpms.so.0"'
     done
+    substituteInPlace src/tss2-fapi/ifapi_config.c \
+      --replace-fail 'SYSCONFDIR' '"/etc"'
+
+    # https://github.com/tpm2-software/tpm2-tss/pull/3041
+    substituteInPlace test/unit/tcti-libtpms.c \
+      --replace-fail 'check_expected_ptr(st);' 'check_expected(st);' \
+      --replace-fail 'check_expected_ptr(buf_len);' 'check_expected(buf_len);'
   ''
   # tcti tests rely on mocking function calls, which appears not to be supported
   # on clang
@@ -143,6 +150,16 @@ stdenv.mkDerivation (finalAttrs: {
     # Do not install the upstream udev rules, they rely on specific
     # users/groups which aren't guaranteed to exist on the system.
     rm -R $out/lib/udev
+
+    mkdir -p $out/etc/tpm2-tss
+
+    # write fapi-config suitable for testing
+    cat > $out/etc/tpm2-tss/fapi-config-test.json <<EOF
+    {
+      "profile_dir": "${placeholder "out"}/etc/tpm2-tss/fapi-profiles/",
+      "system_pcrs" : []
+    }
+    EOF
   '';
 
   doCheck = false;
@@ -150,17 +167,22 @@ stdenv.mkDerivation (finalAttrs: {
     stdenv.buildPlatform.canExecute stdenv.hostPlatform
     && !stdenv.hostPlatform.isDarwin
     # Tests rely on mocking, which can't work with static libs.
-    && !stdenv.hostPlatform.isStatic;
+    && !stdenv.hostPlatform.isStatic
+    # swtpm does not build on 32-bit targets
+    && !stdenv.hostPlatform.is32bit;
   # Since we rewrote the load path in the dynamic loader for the TCTI
   # The various tcti implementation should be placed in their target directory
   # before we could run tests, so we make turn checkPhase into installCheckPhase
   installCheckTarget = "check";
 
-  meta = with lib; {
+  meta = {
     description = "OSS implementation of the TCG TPM2 Software Stack (TSS2)";
     homepage = "https://github.com/tpm2-software/tpm2-tss";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ baloo ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      baloo
+      scottstephens
+    ];
   };
 })

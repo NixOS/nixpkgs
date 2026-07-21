@@ -6,12 +6,12 @@
   lib,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "gluten";
   version = "0.5.2";
 
   src = fetchurl {
-    url = "https://github.com/anmonteiro/gluten/releases/download/${version}/gluten-${version}.tbz";
+    url = "https://github.com/anmonteiro/gluten/releases/download/${finalAttrs.version}/gluten-${finalAttrs.version}.tbz";
     hash = "sha256-se7Yn59ggLtL0onMjSUsa88B8D05Vybmb6YGcgfnAV8=";
   };
 
@@ -28,6 +28,6 @@ buildDunePackage rec {
     description = "Implementation of a platform specific runtime code for driving network libraries based on state machines, such as http/af, h2 and websocketaf";
     license = lib.licenses.bsd3;
     homepage = "https://github.com/anmonteiro/gluten";
-    maintainers = with lib.maintainers; [ anmonteiro ];
+    maintainers = [ ];
   };
-}
+})

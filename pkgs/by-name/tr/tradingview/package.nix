@@ -19,17 +19,19 @@
   sqlite,
   systemd,
   wayland,
-  xorg,
+  libxext,
+  libx11,
+  libxcb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tradingview";
-  version = "2.12.0";
-  revision = "66";
+  version = "3.2.0";
+  revision = "71";
 
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/nJdITJ6ZJxdvfu8Ch7n5kH5P99ClzBYV_${finalAttrs.revision}.snap";
-    hash = "sha512-ydk0/mJh4M02oIEfU3PKTwEO+nMpeJGuxQAly8WqJLx5GOQAb/J7VRB8IQpHHqWGeRfbwhantdZryQF8ngFJ/g==";
+    hash = "sha512-hT4U+RGqZ4OliAiLqWKkuv/OxeOpKHmFY0/ia9V7MZz1ZhogIaCLUUXXCmlfX1zhQDA1Xrw1uiwl/aeijgdq7g==";
   };
 
   nativeBuildInputs = [
@@ -54,9 +56,9 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
     systemd
     wayland
-    xorg.libxcb
-    xorg.libX11
-    xorg.libXext
+    libxcb
+    libx11
+    libxext
   ];
 
   unpackPhase = ''
@@ -96,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://www.tradingview.com/support/solutions/43000673888/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ prominentretail ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "tradingview";
   };

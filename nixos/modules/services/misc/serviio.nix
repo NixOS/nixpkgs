@@ -39,6 +39,14 @@ in
         '';
       };
 
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Open ports in the firewall for the Serviio Media Server.
+        '';
+      };
+
       dataDir = lib.mkOption {
         type = lib.types.path;
         default = "/var/lib/serviio";
@@ -76,7 +84,7 @@ in
 
     users.groups.serviio = { };
 
-    networking.firewall = {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [
         8895 # serve UPnP responses
         23423 # console

@@ -3,7 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  hatchling,
   requests,
   pytestCheckHook,
   httpretty,
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   };
 
   build-system = [
-    setuptools
+    hatchling
   ];
 
   dependencies = [
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/bennylope/pygeocodio/tree/master";
     changelog = "https://github.com/bennylope/pygeocodio/blob/${src.tag}/HISTORY.rst";
     homepage = "https://www.geocod.io/docs/#introduction";
-    license = with lib.licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
   };
 }

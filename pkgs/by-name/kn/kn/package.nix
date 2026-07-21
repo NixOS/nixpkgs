@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kn";
-  version = "1.19.5";
+  version = "1.22.1";
 
   src = fetchFromGitHub {
     owner = "knative";
     repo = "client";
     tag = "knative-v${finalAttrs.version}";
-    hash = "sha256-CgKwZCdjNN27wP79vzzTkGdk56owUDBMN79rk/ckpaI=";
+    hash = "sha256-/mQvYYMwOvrwrIt8xo3j5qXXmfwDFJByaj1quHc5ebk=";
   };
 
-  vendorHash = "sha256-MYIUOIdoYzHK7HBTdQzu7Jp17MYMJUnoK64jPEmIR+E=";
+  vendorHash = "sha256-1CTzRMlMsF4AZHYZMq0klmNpfmk4/O6ToitHyA9eEg0=";
 
   env.GOWORK = "off";
 
@@ -48,8 +48,8 @@ buildGoModule (finalAttrs: {
     description = "Create Knative resources interactively from the command line or from within scripts";
     mainProgram = "kn";
     homepage = "https://github.com/knative/client";
-    changelog = "https://github.com/knative/client/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/knative/client/releases/tag/knative-v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ bryanasdev000 ];
+    maintainers = [ ];
   };
 })

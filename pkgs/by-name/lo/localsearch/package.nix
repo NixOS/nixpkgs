@@ -8,7 +8,7 @@
   gettext,
   itstool,
   libxslt,
-  gexiv2,
+  gexiv2_0_16,
   tinysparql,
   meson,
   mesonEmulatorHook,
@@ -27,18 +27,17 @@
   icu,
   json-glib,
   libcue,
-  libexif,
   libgsf,
-  libgudev,
   libgxps,
-  libiptcdata,
   libjpeg,
   libosinfo,
   libpng,
   libseccomp,
   libtiff,
   libuuid,
+  libwebp,
   libxml2,
+  libzip,
   poppler,
   systemd,
   taglib,
@@ -49,11 +48,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "localsearch";
-  version = "3.9.0";
+  version = "3.11.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/localsearch/${lib.versions.majorMinor finalAttrs.version}/localsearch-${finalAttrs.version}.tar.xz";
-    hash = "sha256-1C9AjcP7KP5U9amrv18d7PWBjbnC6exRwJRkvf0MFLk=";
+    hash = "sha256-ezmmwoqKzysXLxWy+17nx6N2TER8L0oUyqI5t+vmGUI=";
   };
 
   patches = [
@@ -86,23 +85,22 @@ stdenv.mkDerivation (finalAttrs: {
     exempi
     ffmpeg
     giflib
-    gexiv2
+    gexiv2_0_16
     totem-pl-parser
     tinysparql
     icu
     json-glib
     libcue
-    libexif
     libgsf
-    libgudev
     libgxps
-    libiptcdata
     libjpeg
     libosinfo
     libpng
     libtiff
     libuuid
+    libwebp
     libxml2
+    libzip
     poppler
     taglib
   ]

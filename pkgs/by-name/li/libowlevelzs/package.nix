@@ -5,15 +5,15 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libowlevelzs";
   version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "fogti";
     repo = "libowlevelzs";
-    rev = "v${version}";
-    sha256 = "y/EaMMsmJEmnptfjwiat4FC2+iIKlndC2Wdpop3t7vY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-y/EaMMsmJEmnptfjwiat4FC2+iIKlndC2Wdpop3t7vY=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -25,4 +25,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ sigmanificient ];
     platforms = lib.platforms.all;
   };
-}
+})

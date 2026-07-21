@@ -4,7 +4,7 @@
   bashNonInteractive,
   coreutils,
   fetchFromGitHub,
-  fuse,
+  fuse3,
   gawk,
   gnugrep,
   gnused,
@@ -12,24 +12,26 @@
   libusb1,
   makeBinaryWrapper,
   pciutils,
+  perl,
   pkg-config,
   procps,
   pv,
   stdenv,
-  which,
+  systemd,
   util-linux,
+  which,
   withBfbInstall ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rshim-user-space";
-  version = "2.4.4";
+  version = "2.7.3";
 
   src = fetchFromGitHub {
     owner = "Mellanox";
     repo = "rshim-user-space";
-    rev = "rshim-${version}";
-    hash = "sha256-w2+1tUDWYmgDC0ycWGdtVfdbkZCmtvwXm47qK5PCCfg=";
+    rev = "rshim-${finalAttrs.version}";
+    hash = "sha256-2Hu5ysjh38dBaGeZirke+qMb6jw+6sTh8qd4LPei5ms=";
   };
 
   nativeBuildInputs = [
@@ -40,13 +42,27 @@ stdenv.mkDerivation rec {
   ++ lib.optionals withBfbInstall [ makeBinaryWrapper ];
 
   buildInputs = [
-    pciutils
+    fuse3
     libusb1
-    fuse
+    pciutils
+    systemd
+  ];
+
+  patches = [
+    # https://github.com/Mellanox/rshim-user-space/pull/391
+    # Avoid nested PKG_CHECK_MODULES which leaks help text into ./configure
+    # as bare shell, producing "fuse_CFLAGS: command not found" noise.
+    ./fix-fuse-3-support.patch
+    # https://github.com/Mellanox/rshim-user-space/pull/363
+    # Fix console handling under glibc >= 2.42 where struct termio was removed.
+    ./fix-console-handling.patch
   ];
 
   prePatch = ''
     patchShebangs scripts/bfb-install
+    patchShebangs scripts/bf-reg
+    substituteInPlace scripts/bfb-install \
+      --replace-fail 'bf-reg' "${placeholder "out"}/bin/bf-reg"
   '';
 
   strictDeps = true;
@@ -59,6 +75,7 @@ stdenv.mkDerivation rec {
   ''
   + lib.optionalString withBfbInstall ''
     cp -a scripts/bfb-install "$out"/bin/
+    cp -a scripts/bf-reg "$out"/bin/
   '';
 
   postFixup = lib.optionalString withBfbInstall ''
@@ -71,15 +88,17 @@ stdenv.mkDerivation rec {
           gnugrep
           gnused
           pciutils
+          perl
           procps
           pv
+          systemd
           util-linux
           which
         ]
       }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "User-space rshim driver for the BlueField SoC";
     longDescription = ''
       The rshim driver provides a way to access the rshim resources on the
@@ -89,10 +108,10 @@ stdenv.mkDerivation rec {
       target and provides a way to access the internal rshim registers.
     '';
     homepage = "https://github.com/Mellanox/rshim-user-space";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       thillux
     ];
   };
-}
+})

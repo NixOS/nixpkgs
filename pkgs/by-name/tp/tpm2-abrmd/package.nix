@@ -13,14 +13,14 @@
   cmocka,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tpm2-abrmd";
   version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "tpm2-software";
     repo = "tpm2-abrmd";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-l0ncCMsStaeFACRU3Bt6F1zyiOTGY6wOHewA4AD58Ww=";
   };
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   # Emulate the required behavior of ./bootstrap in the original
   # package
   preAutoreconf = ''
-    echo "${version}" > VERSION
+    echo "${finalAttrs.version}" > VERSION
   '';
 
   # Unit tests are currently broken as the check phase attempts to start a dbus daemon etc.
@@ -59,12 +59,15 @@ stdenv.mkDerivation rec {
       --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ tpm2-tss ]}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "TPM2 resource manager, accessible via D-Bus";
     mainProgram = "tpm2-abrmd";
     homepage = "https://github.com/tpm2-software/tpm2-tools";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      matthiasbeyer
+      scottstephens
+    ];
   };
-}
+})

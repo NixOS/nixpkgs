@@ -4,7 +4,18 @@
   fetchurl,
   unzip,
   cairo,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libxcb,
   gdk-pixbuf,
   fontconfig,
   pango,
@@ -52,25 +63,25 @@ let
     libxkbcommon
     libgbm
 
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXtst
-    xorg.libxcb
-    xorg.libXext
-    xorg.libXi
-    xorg.libXdamage
-    xorg.libXrandr
-    xorg.libXcomposite
-    xorg.libXfixes
-    xorg.libXrender
-    xorg.libXScrnSaver
+    libx11
+    libxcursor
+    libxtst
+    libxcb
+    libxext
+    libxi
+    libxdamage
+    libxrandr
+    libxcomposite
+    libxfixes
+    libxrender
+    libxscrnsaver
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "react-native-debugger";
   version = "0.14.0";
   src = fetchurl {
-    url = "https://github.com/jhen0409/react-native-debugger/releases/download/v${version}/rn-debugger-linux-x64.zip";
+    url = "https://github.com/jhen0409/react-native-debugger/releases/download/v${finalAttrs.version}/rn-debugger-linux-x64.zip";
     sha256 = "sha256-RioBe0MAR47M84aavFaTJikGsJtcZDak8Tkg3WtX2l0=";
   };
 
@@ -97,7 +108,7 @@ stdenv.mkDerivation rec {
 
     ln -s $out/share/react-native-debugger $out/bin/react-native-debugger
 
-    install -Dm644 "${desktopItem}/share/applications/"* \
+    install -Dm644 "${finalAttrs.desktopItem}/share/applications/"* \
       -t $out/share/applications/
   '';
 
@@ -112,12 +123,12 @@ stdenv.mkDerivation rec {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jhen0409/react-native-debugger";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.mit;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.mit;
     description = "Standalone app based on official debugger of React Native, and includes React Inspector / Redux DevTools";
     mainProgram = "react-native-debugger";
     maintainers = [ ];
   };
-}
+})

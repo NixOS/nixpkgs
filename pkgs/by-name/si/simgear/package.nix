@@ -5,16 +5,16 @@
   plib,
   libglut,
   xorgproto,
-  libX11,
-  libXext,
-  libXi,
-  libICE,
-  libSM,
-  libXt,
-  libXmu,
+  libx11,
+  libxext,
+  libxi,
+  libice,
+  libsm,
+  libxt,
+  libxmu,
   libGLU,
   libGL,
-  boost179,
+  boost,
   zlib,
   libjpeg,
   freealut,
@@ -25,36 +25,24 @@
   apr,
   xz,
   curl,
+  c-ares,
 }:
-let
-  version = "2024.1.1";
-in
-stdenv.mkDerivation rec {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "simgear";
-  inherit version;
+  version = "2024.1.6-rc1";
 
   src = fetchFromGitLab {
     owner = "flightgear";
     repo = "simgear";
-    tag = "v${version}";
-    hash = "sha256-hOA/q/cTsqRy82rTAXRxyHBDdw93TW9UL+K5Jq5b/08=";
+    tag = finalAttrs.version;
+    hash = "sha256-uj8yVJNjAsrO0ydL5xMVtRRqx+5mXZ60qrPW2BAHl0g=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     plib
-    libglut
-    xorgproto
-    libX11
-    libXext
-    libXi
-    libICE
-    libSM
-    libXt
-    libXmu
-    libGLU
-    libGL
-    boost179
+    boost
     zlib
     libjpeg
     freealut
@@ -64,13 +52,28 @@ stdenv.mkDerivation rec {
     apr
     curl
     xz
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libglut
+    xorgproto
+    libx11
+    libxext
+    libxi
+    libice
+    libsm
+    libxt
+    libxmu
+    libGLU
+    libGL
   ];
 
-  meta = with lib; {
+  propagatedBuildInputs = [ c-ares ];
+
+  meta = {
     description = "Simulation construction toolkit";
     homepage = "https://wiki.flightgear.org/SimGear";
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
-    license = licenses.lgpl2;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.lgpl2;
   };
-}
+})

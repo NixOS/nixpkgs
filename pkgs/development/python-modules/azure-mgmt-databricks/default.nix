@@ -30,11 +30,11 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure Data Bricks Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/databricks/azure-mgmt-databricks";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-databricks_${version}/sdk/databricks/azure-mgmt-databricks/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

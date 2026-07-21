@@ -35,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fuse" ];
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Python bindings for FUSE";
     homepage = "https://github.com/libfuse/python-fuse";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ psyanticy ];
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ psyanticy ];
   };
 }

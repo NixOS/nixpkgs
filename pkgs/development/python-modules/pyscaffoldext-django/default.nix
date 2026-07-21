@@ -2,18 +2,14 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+
+  # build-system
   setuptools,
   setuptools-scm,
-  wheel,
+
+  # dependencies
   django,
   pyscaffold,
-  configupdater,
-  pre-commit,
-  pytest,
-  pytest-cov,
-  pytest-xdist,
-  tox,
-  virtualenv,
 }:
 
 buildPythonPackage rec {
@@ -26,36 +22,26 @@ buildPythonPackage rec {
     hash = "sha256-5yzF3VK/9VlCSrRsRJWX4arr9n34G2R6O5A51jTpLhg=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     django
     pyscaffold
   ];
 
-  optional-dependencies = {
-    testing = [
-      configupdater
-      pre-commit
-      pytest
-      pytest-cov
-      pytest-xdist
-      setuptools-scm
-      tox
-      virtualenv
-    ];
-  };
+  pythonRelaxDeps = [ "django" ];
+
+  doCheck = false; # tests require git checkout
 
   pythonImportsCheck = [ "pyscaffoldext.django" ];
 
-  meta = with lib; {
+  meta = {
     description = "Integration of django builtin scaffold cli (django-admin) into PyScaffold";
     homepage = "https://pypi.org/project/pyscaffoldext-django/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

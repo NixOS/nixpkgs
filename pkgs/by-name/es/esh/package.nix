@@ -10,14 +10,14 @@
   esh,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "esh";
   version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "jirutka";
     repo = "esh";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1ddaji5nplf1dyvgkrhqjy8m5djaycqcfhjv30yprj1avjymlj6w";
   };
 
@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
     execer can bin/esh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple templating engine based on shell";
     mainProgram = "esh";
     homepage = "https://github.com/jirutka/esh";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mnacamura ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mnacamura ];
+    platforms = lib.platforms.unix;
   };
-}
+})

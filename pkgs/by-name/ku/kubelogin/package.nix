@@ -8,21 +8,25 @@
   kubelogin,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubelogin";
-  version = "0.2.10";
+  version = "0.2.14";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "kubelogin";
-    rev = "v${version}";
-    sha256 = "sha256-pi2dzIf48mqD3S7QqaZZ5sgcgPRtQZ10KpfojLVYCZA=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-s9W5wvA4L0Qbn5vimLU03oqx10XqCybE3YvC9gV3y7A=";
   };
 
-  vendorHash = "sha256-tuqWg7z9YJygEW3XwBXDwXHUNwaJeTAxRS1xv6bQpj4=";
+  patches = [
+    ./disable-nix-incompatible-test.patch
+  ];
+
+  vendorHash = "sha256-CWgvbN8NnroSVqfKF8UG6kXqVWrQ0TmKwri1f218K+M=";
 
   ldflags = [
-    "-X main.gitTag=v${version}"
+    "-X main.gitTag=v${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -36,16 +40,16 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion {
     package = kubelogin;
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Kubernetes credential plugin implementing Azure authentication";
     mainProgram = "kubelogin";
-    inherit (src.meta) homepage;
-    license = licenses.mit;
+    inherit (finalAttrs.src.meta) homepage;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -11,15 +11,15 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sameboy";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "LIJI32";
     repo = "SameBoy";
-    rev = "v${version}";
-    sha256 = "sha256-rNP1jGnGqZG5jz8vQzqDNEKticg51uCcZQaUteawlPU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Sk5/Wojl9rFkTuBFSGN/W8oq8OJNrV5W3E8PdsaMll8=";
   };
 
   enableParallelBuilding = true;
@@ -45,14 +45,19 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace OpenDialog/gtk.c \
-      --replace '"libgtk-3.so"' '"${gtk3}/lib/libgtk-3.so"'
+      --replace-fail '"libgtk-3.so"' '"${gtk3}/lib/libgtk-3.so"'
   '';
 
-  meta = with lib; {
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/sameboy.thumbnailer \
+      --replace-fail "TryExec=sameboy-thumbnailer" "TryExec=$out/bin/sameboy-thumbnailer" \
+      --replace-fail "Exec=sameboy-thumbnailer" "Exec=$out/bin/sameboy-thumbnailer"
+  '';
+
+  meta = {
     homepage = "https://sameboy.github.io";
     description = "Game Boy, Game Boy Color, and Super Game Boy emulator";
     mainProgram = "sameboy";
-
     longDescription = ''
       SameBoy is a user friendly Game Boy, Game Boy Color and Super
       Game Boy emulator for macOS, Windows and Unix-like platforms.
@@ -62,9 +67,8 @@ stdenv.mkDerivation rec {
       capabilities, SameBoy has all the features one would expect from
       an emulator – from save states to scaling filters.
     '';
-
-    license = licenses.mit;
-    maintainers = with maintainers; [ NieDzejkob ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ NieDzejkob ];
+    platforms = lib.platforms.linux;
   };
-}
+})

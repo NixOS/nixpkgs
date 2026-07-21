@@ -8,13 +8,13 @@
   coreutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cytoscape";
-  version = "3.10.3";
+  version = "3.10.4";
 
   src = fetchurl {
-    url = "https://github.com/cytoscape/cytoscape/releases/download/${version}/${pname}-unix-${version}.tar.gz";
-    sha256 = "sha256-62i3F6uGNoC8z55iUIYQDAimWcQocsZ52USdpruZRLQ=";
+    url = "https://github.com/cytoscape/cytoscape/releases/download/${finalAttrs.version}/cytoscape-unix-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-gHCU97AfBzo4r+F+Fc5lHd+kQtj/NsoCNipAhv5O7sE=";
   };
 
   patches = [
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.mimame ];
     platforms = lib.platforms.unix;
   };
-}
+})

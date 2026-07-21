@@ -9,7 +9,9 @@
 }:
 
 stdenvNoLibc.mkDerivation {
-  name = "newlib";
+  pname = "vc4-newlib";
+  version = "0-unstable-2017-01-08";
+
   src = fetchFromGitHub {
     owner = "itszor";
     repo = "newlib-vc4";
@@ -36,5 +38,9 @@ stdenvNoLibc.mkDerivation {
   passthru = {
     incdir = "/${stdenv.targetPlatform.config}/include";
     libdir = "/${stdenv.targetPlatform.config}/lib";
+  };
+
+  meta = {
+    homepage = "https://github.com/itszor/newlib-vc4";
   };
 }

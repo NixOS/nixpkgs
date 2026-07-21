@@ -4,25 +4,25 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "peep";
   version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "ryochack";
     repo = "peep";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-6Y7ZI0kIPE7uMMOkXgm75JMEec090xZPBJFJr9DaswA=";
   };
 
   cargoHash = "sha256-9VybBzW+saOjtQiyGu2pKHm94yCPw35Y56mhayCeW/c=";
 
-  meta = with lib; {
+  meta = {
     description = "CLI text viewer tool that works like less command on small pane within the terminal window";
     homepage = "https://github.com/ryochack/peep";
-    changelog = "https://github.com/ryochack/peep/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/ryochack/peep/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "peep";
   };
-}
+})

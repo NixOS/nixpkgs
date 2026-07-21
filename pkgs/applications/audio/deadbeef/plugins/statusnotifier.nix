@@ -9,15 +9,15 @@
   libdbusmenu,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "deadbeef-statusnotifier-plugin";
-  version = "1.6";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "vovochka404";
     repo = "deadbeef-statusnotifier-plugin";
-    rev = "v${version}";
-    sha256 = "sha256-6WEbY59vPNrL3W5GUwFQJimmSS+td8Ob+G46fPAxfV4=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-pDiQn+iHSTNWTO01j/fbEq3P374TMmnUiC5/Jn2hwBI=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "DeaDBeeF StatusNotifier Plugin";
     homepage = "https://github.com/vovochka404/deadbeef-statusnotifier-plugin";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.kurnevsky ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.kurnevsky ];
+    platforms = lib.platforms.linux;
   };
-}
+})

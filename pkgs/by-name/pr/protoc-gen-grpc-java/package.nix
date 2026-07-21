@@ -46,9 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [
+  nativeBuildInputs = (lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ]) ++ [
     makeWrapper
-    autoPatchelfHook
   ];
   buildInputs = [ stdenv.cc.cc ];
 
@@ -81,7 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
       "powerpc64le-linux"
       "s390x-linux"
       # Darwin
-      "x86_64-darwin"
       "aarch64-darwin"
       # Windows
       "x86_64-windows"

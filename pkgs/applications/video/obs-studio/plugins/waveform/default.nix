@@ -20,6 +20,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-Bg1n1yV4JzNFEXFNayNa1exsSZhmRJ0RLHDjLWmqGZE=";
   };
 
+  postPatch = ''
+    substituteInPlace \
+      src/source.hpp src/source.cpp src/source_generic.cpp \
+      src/source_avx2.cpp src/source_avx.cpp \
+      --replace circlebuf deque
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config

@@ -11,10 +11,20 @@
   platformdirs,
   rich,
   typing-extensions,
+  mdit-py-plugins,
 
   # optional-dependencies
   tree-sitter,
-  tree-sitter-languages,
+  tree-sitter-c-sharp,
+  tree-sitter-html,
+  tree-sitter-javascript,
+  tree-sitter-make,
+  tree-sitter-markdown,
+  tree-sitter-python,
+  tree-sitter-rust,
+  tree-sitter-sql,
+  tree-sitter-yaml,
+  tree-sitter-zeek,
 
   # tests
   jinja2,
@@ -23,26 +33,29 @@
   pytestCheckHook,
   syrupy,
   time-machine,
-  tree-sitter-markdown,
-  tree-sitter-python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "textual";
-  version = "6.2.0";
+  version = "8.2.8";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "textual";
-    tag = "v${version}";
-    hash = "sha256-XvuKwQwaNwgwKScgHNQyxkPXzDQtOA690Dt+VndmZ6o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4T+/eD0adPugDP7TCDoDaOe0OrEFskCUadLVEixmTwo=";
   };
 
   build-system = [ poetry-core ];
 
+  pythonRelaxDeps = [
+    "rich"
+  ];
   dependencies = [
     markdown-it-py
+    mdit-py-plugins
     platformdirs
     rich
     typing-extensions
@@ -53,8 +66,17 @@ buildPythonPackage rec {
   optional-dependencies = {
     syntax = [
       tree-sitter
-    ]
-    ++ lib.optionals (!tree-sitter-languages.meta.broken) [ tree-sitter-languages ];
+      tree-sitter-c-sharp
+      tree-sitter-html
+      tree-sitter-javascript
+      tree-sitter-make
+      tree-sitter-markdown
+      tree-sitter-python
+      tree-sitter-rust
+      tree-sitter-sql
+      tree-sitter-yaml
+      tree-sitter-zeek
+    ];
   };
 
   nativeCheckInputs = [
@@ -95,8 +117,8 @@ buildPythonPackage rec {
   meta = {
     description = "TUI framework for Python inspired by modern web development";
     homepage = "https://github.com/Textualize/textual";
-    changelog = "https://github.com/Textualize/textual/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Textualize/textual/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gepbird ];
   };
-}
+})

@@ -2,6 +2,7 @@
   lib,
   buildDunePackage,
   fetchFromGitHub,
+  fetchpatch,
   ocaml,
   ppxlib,
   ounit,
@@ -34,16 +35,19 @@ let
       };
 in
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ppx_deriving_yojson";
   inherit (param) version;
 
-  minimalOCamlVersion = "4.07";
+  patches = fetchpatch {
+    url = "https://github.com/ocaml-ppx/ppx_deriving_yojson/commit/1bbbe2c4c5822c4297b0b812c59a155cf96c5089.patch";
+    hash = "sha256-jYW2/Ix6T94vfI2mGnIkYSG1rjsWEsnOPA1mufP3sd4=";
+  };
 
   src = fetchFromGitHub {
     owner = "ocaml-ppx";
     repo = "ppx_deriving_yojson";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     inherit (param) sha256;
   };
 
@@ -54,13 +58,13 @@ buildDunePackage rec {
   ]
   ++ param.propagatedBuildInputs or [ ];
 
-  doCheck = lib.versionAtLeast ocaml.version "4.08";
+  doCheck = true;
   inherit (param) checkInputs;
 
   meta = {
     description = "Yojson codec generator for OCaml >= 4.04";
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

@@ -18,30 +18,36 @@
   patchelf,
   openssl,
   stdenv,
-  xorg,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxkbfile,
+  libsecret,
+  webkitgtk_4_1,
 }:
 let
   pname = "positron-bin";
-  version = "2025.09.0-139";
+  version = "2026.06.1-6";
 in
 stdenv.mkDerivation {
+  dontFixup = stdenv.hostPlatform.isDarwin;
   inherit version pname;
 
   src =
     if stdenv.hostPlatform.isDarwin then
       fetchurl {
-        url = "https://cdn.posit.co/positron/releases/mac/universal/Positron-${version}-universal.dmg";
-        hash = "sha256-N6urQYmpVoL2JeriHxO/H0J66U6nAez7U8w8qbzZ+ys=";
+        url = "https://cdn.posit.co/positron/releases/mac/arm64/Positron-${version}-arm64.dmg";
+        hash = "sha256-v5FaquIX7zYHvU6FddR4dDyt9uLheHr0+IpxLVpuKMg=";
       }
     else if stdenv.hostPlatform.system == "aarch64-linux" then
       fetchurl {
         url = "https://cdn.posit.co/positron/releases/deb/arm64/Positron-${version}-arm64.deb";
-        hash = "sha256-IbMLnI/SDDLKIL1sTWjez186tbY3SZtuNmfNe9b6PXw=";
+        hash = "sha256-Xc+ZlYPqKkiZgTvpfKo79LXGhD0voanEj98aJOsfjo0=";
       }
     else
       fetchurl {
         url = "https://cdn.posit.co/positron/releases/deb/x86_64/Positron-${version}-x64.deb";
-        hash = "sha256-XlRj+1Gmo7HUzluehmJ4VjcIWbqWl2ncB0dfyC6iz8I=";
+        hash = "sha256-kTVHMNRbPoLg2Ua+Fo6UaUiUA6OqPwNAXXpgtqaBjls=";
       };
 
   buildInputs = [
@@ -57,10 +63,12 @@ stdenv.mkDerivation {
     nss
     stdenv.cc.cc
     openssl
-    xorg.libX11
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libxkbfile
+    libx11
+    libxcomposite
+    libxdamage
+    libxkbfile
+    libsecret
+    webkitgtk_4_1
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     blas
@@ -86,15 +94,14 @@ stdenv.mkDerivation {
     if stdenv.hostPlatform.isDarwin then
       ''
         runHook preInstall
-        mkdir -p "$out/Applications" "$out/bin"
-        cp -r . "$out/Applications/Positron.app"
+        mkdir -p "$out/Applications/Positron.app" "$out/bin"
+        cp -r Positron.app/. "$out/Applications/Positron.app"
 
         # Positron will use the system version of BLAS if we don't provide the nix version.
-        wrapProgram "$out/Applications/Positron.app/Contents/Resources/app/bin/code" \
+        makeShellWrapper "$out/Applications/Positron.app/Contents/Resources/app/bin/code" "$out/bin/positron" \
           --prefix DYLD_INSERT_LIBRARIES : "${lib.makeLibraryPath [ blas ]}/libblas.dylib" \
           --add-flags "--disable-updates"
 
-        ln -s "$out/Applications/Positron.app/Contents/Resources/app/bin/code" "$out/bin/positron"
         runHook postInstall
       ''
     else
@@ -130,11 +137,11 @@ stdenv.mkDerivation {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Positron, a next-generation data science IDE";
     homepage = "https://github.com/posit-dev/positron";
-    license = licenses.elastic20;
-    maintainers = with maintainers; [
+    license = lib.licenses.elastic20;
+    maintainers = with lib.maintainers; [
       b-rodrigues
       detroyejr
     ];
@@ -142,7 +149,7 @@ stdenv.mkDerivation {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-    ]
-    ++ platforms.darwin;
+      "aarch64-darwin"
+    ];
   };
 }

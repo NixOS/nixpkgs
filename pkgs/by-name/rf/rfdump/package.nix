@@ -11,12 +11,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rfdump";
   version = "1.6";
 
   src = fetchurl {
-    url = "https://www.rfdump.org/dl/rfdump-${version}.tar.bz2";
+    url = "https://www.rfdump.org/dl/rfdump-${finalAttrs.version}.tar.bz2";
     hash = "sha256-fbEmh7i3ug5GCeyJ2wT45bbDq0ZEOv8yH+MOJwzER4U=";
   };
 
@@ -65,6 +65,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "LIBS=-lexpat" ];
 
+  postInstall = ''
+    install -D $out/share/pixmaps/rfdump.png -t $out/share/icons/hicolor/128x128/apps
+    rm -r $out/share/pixmaps
+  '';
+
   meta = {
     description = "Tool to detect RFID-Tags and show their meta information";
     homepage = "https://www.rfdump.org/";
@@ -74,4 +79,4 @@ stdenv.mkDerivation rec {
     mainProgram = "rfdump";
     platforms = lib.platforms.all;
   };
-}
+})

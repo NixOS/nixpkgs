@@ -143,9 +143,6 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs utils/cat_files.py
   '';
 
-  # TODO: Remove on `staging`.
-  patches = [ ];
-
   nativeBuildInputs = [
     cmake
     ninja

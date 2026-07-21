@@ -18,15 +18,17 @@ assert (
   ]
 );
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "toml-f";
-  version = "0.4.2";
+  version = "0.5.1";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "toml-f";
     repo = "toml-f";
-    rev = "v${version}";
-    hash = "sha256-+cac4rUNpd2w3yBdH1XoCKdJ9IgOHZioZg8AhzGY0FE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lReez2rSAJVnLFngjUYgGkm+HUDH8VsCC2m9zYOOr4A=";
   };
 
   patches = [
@@ -42,7 +44,9 @@ stdenv.mkDerivation rec {
     meson
     ninja
   ]
-  ++ lib.optional (buildType == "cmake") cmake;
+  ++ lib.optionals (buildType == "cmake") [
+    cmake
+  ];
 
   buildInputs = [ test-drive ];
 
@@ -58,14 +62,15 @@ stdenv.mkDerivation rec {
   # tftest-build fails on aarch64-linux
   doCheck = !stdenv.hostPlatform.isAarch64;
 
-  meta = with lib; {
+  meta = {
     description = "TOML parser implementation for data serialization and deserialization in Fortran";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
     homepage = "https://github.com/toml-f/toml-f";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.sheepforce ];
+    changelog = "https://github.com/toml-f/toml-f/releases/tag/${finalAttrs.src.tag}";
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

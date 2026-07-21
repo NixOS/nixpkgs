@@ -9,7 +9,6 @@
   pytestCheckHook,
   python-gnupg,
   pythonAtLeast,
-  pythonOlder,
   qrcode,
   requests,
   setuptools,
@@ -17,16 +16,14 @@
 
 buildPythonPackage rec {
   pname = "blocksat-cli";
-  version = "2.5.1";
+  version = "2.5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Blockstream";
     repo = "satellite";
     tag = "v${version}";
-    hash = "sha256-SH1MZx/ZkhhWhxhREqFCGoob58J2XMZSpe+q7UgiyF4=";
+    hash = "sha256-KwLUE8+/SJ178az/j9WONwwrTsos1vrsP2hpeczNt4Y=";
   };
 
   # Upstream setup.py installs both the CLI and GUI versions.
@@ -66,12 +63,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "blocksatcli" ];
 
-  meta = with lib; {
+  meta = {
     description = "Blockstream Satellite CLI";
     homepage = "https://github.com/Blockstream/satellite";
     changelog = "https://github.com/Blockstream/satellite/releases/tag/${src.tag}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ prusnak ];
     mainProgram = "blocksat-cli";
   };
 }

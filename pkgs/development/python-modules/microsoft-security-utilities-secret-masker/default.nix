@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "Tool for detecting and masking secrets";
     homepage = "https://pypi.org/project/microsoft-security-utilities-secret-masker/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

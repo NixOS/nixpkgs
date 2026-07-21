@@ -9,14 +9,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "finalfusion-utils";
   version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "finalfusion";
     repo = "finalfusion-utils";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-suzivynlgk4VvDOC2dQR40n5IJHoJ736+ObdrM9dIqE=";
   };
 
@@ -42,11 +42,11 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion finalfusion.{bash,fish,zsh}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Utility for converting, quantizing, and querying word embeddings";
     homepage = "https://github.com/finalfusion/finalfusion-utils/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "finalfusion";
   };
-}
+})

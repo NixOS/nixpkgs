@@ -6,9 +6,9 @@
   cmake,
   help2man,
   gzip,
-  libXt,
+  libxt,
   openusd,
-  tbb,
+  onetbb,
   vtk,
   autoPatchelfHook,
   python3Packages,
@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation rec {
   pname = "f3d";
-  version = "3.2.0";
+  version = "3.5.0";
 
   outputs = [ "out" ] ++ lib.optionals withManual [ "man" ];
 
@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
     owner = "f3d-app";
     repo = "f3d";
     tag = "v${version}";
-    hash = "sha256-p1Cqam3sYDXJCU1A2sC/fV1ohxS3FGiVrxeGooNXVBQ=";
+    hash = "sha256-j8OSG3MNWAlCIZcjhWCMeskbcv+4pTn4ktRZXKYmBkc=";
+    fetchLFS = true;
   };
 
   nativeBuildInputs = [
@@ -58,9 +59,9 @@ stdenv.mkDerivation rec {
     python3Packages.pybind11
   ]
   ++ lib.optionals withUsd [
-    libXt
+    libxt
     openusd
-    tbb
+    onetbb
   ];
 
   cmakeFlags = [
@@ -82,6 +83,14 @@ stdenv.mkDerivation rec {
   ++ lib.optionals withUsd [
     "-DF3D_PLUGIN_BUILD_USD=ON"
   ];
+
+  postInstall = ''
+    for thumbnailer in $out/share/thumbnailers/f3d-plugin-*.thumbnailer; do
+      substituteInPlace $thumbnailer \
+        --replace-fail "TryExec=f3d" "TryExec=$out/bin/f3d" \
+        --replace-fail "Exec=f3d" "Exec=$out/bin/f3d"
+    done
+  '';
 
   meta = {
     description = "Fast and minimalist 3D viewer using VTK";

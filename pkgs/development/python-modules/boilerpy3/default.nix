@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 }:
 
 let
@@ -12,8 +11,6 @@ in
 buildPythonPackage {
   inherit pname version;
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "jmriebold";
@@ -30,11 +27,11 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "boilerpy3" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jmriebold/BoilerPy3";
     description = "Python port of Boilerpipe library";
     changelog = "https://github.com/jmriebold/BoilerPy3/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

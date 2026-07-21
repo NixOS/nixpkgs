@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   pkg-config,
   zlib,
@@ -10,23 +11,31 @@
   libiconv,
   pcsclite,
   libassuan,
-  libXt,
+  libxt,
   docbook_xsl,
   libxslt,
   docbook_xml_dtd_412,
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opensc";
-  version = "0.26.1";
+  version = "0.27.1";
 
   src = fetchFromGitHub {
     owner = "OpenSC";
     repo = "OpenSC";
-    tag = version;
-    hash = "sha256-H5df+x15fz28IlL/G9zPBxbNBzc+BlDmmgNZVEYQgac=";
+    tag = finalAttrs.version;
+    hash = "sha256-s/3bIhPGa3+SKjMh0CNgsU3nOkhEaxPTpmEbc6VIn3Q=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2026-10275.patch";
+      url = "https://github.com/OpenSC/OpenSC/commit/814f745b3b6d100295f65f1935edd33d520d33ab.patch";
+      hash = "sha256-S8PeXCRAUlkKUPYOl/n5+4QIqWOZtHX3yEDnpFhJO8k=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -38,7 +47,7 @@ stdenv.mkDerivation rec {
     readline
     openssl
     libassuan
-    libXt
+    libxt
     libiconv
     docbook_xml_dtd_412
   ]
@@ -67,13 +76,13 @@ stdenv.mkDerivation rec {
     "completiondir=$(out)/etc"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=^([0-9\\.]+)$" ]; };
 
-  meta = with lib; {
+  meta = {
     description = "Set of libraries and utilities to access smart cards";
     homepage = "https://github.com/OpenSC/OpenSC/wiki";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.all;
-    maintainers = [ maintainers.michaeladler ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.michaeladler ];
   };
-}
+})

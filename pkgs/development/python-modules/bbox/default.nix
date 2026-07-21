@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   matplotlib,
   numpy,
   pendulum,
@@ -16,8 +15,6 @@ buildPythonPackage {
   pname = "bbox";
   version = "0.9.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "varunagrawal";
@@ -59,6 +56,6 @@ buildPythonPackage {
     description = "Python library for 2D/3D bounding boxes";
     homepage = "https://github.com/varunagrawal/bbox";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ lucasew ];
+    maintainers = [ ];
   };
 }

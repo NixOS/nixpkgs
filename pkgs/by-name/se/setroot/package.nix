@@ -2,22 +2,22 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
   imlib2,
   pkg-config,
   fetchpatch,
   enableXinerama ? true,
-  libXinerama,
+  libxinerama,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.0.2";
   pname = "setroot";
 
   src = fetchFromGitHub {
     owner = "ttzhou";
     repo = "setroot";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0w95828v0splk7bj5kfacp4pq6wxpyamvyjmahyvn5hc3ycq21mq";
   };
 
@@ -31,21 +31,21 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    libX11
+    libx11
     imlib2
   ]
-  ++ lib.optionals enableXinerama [ libXinerama ];
+  ++ lib.optionals enableXinerama [ libxinerama ];
 
   buildFlags = [ (if enableXinerama then "xinerama=1" else "xinerama=0") ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple X background setter inspired by imlibsetroot and feh";
     homepage = "https://github.com/ttzhou/setroot";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.vyp ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
     mainProgram = "setroot";
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mustache-spec";
   version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "mustache";
     repo = "mustache";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "03xrfyjzm5ss6zkdlpl9ypwzcglspcdcnr3f94vj1rjfqm2rxcjw";
   };
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
     homepage = "http://mustache.github.io/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ Profpatsch ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

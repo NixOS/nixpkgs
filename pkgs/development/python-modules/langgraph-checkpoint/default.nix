@@ -15,27 +15,29 @@
   dataclasses-json,
   numpy,
   pandas,
+  pycryptodome,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
+  redis,
 
   # passthru
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langgraph-checkpoint";
-  version = "2.1.1";
+  version = "4.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    tag = "checkpoint==${version}";
-    hash = "sha256-UY3AChShKfOrtOQzOm5vi3Yy3rlBc+TAje9L2L6My/U=";
+    tag = "checkpoint==${finalAttrs.version}";
+    hash = "sha256-P4SbQK6lFG572WKxisnNn/ZiHcMYBBM/vcBB9N6xpfo=";
   };
 
-  sourceRoot = "${src.name}/libs/checkpoint";
+  sourceRoot = "${finalAttrs.src.name}/libs/checkpoint";
 
   build-system = [ hatchling ];
 
@@ -52,15 +54,11 @@ buildPythonPackage rec {
     dataclasses-json
     numpy
     pandas
+    pycryptodome
     pytest-asyncio
     pytest-mock
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    # assert 1.0000000000000004 == 1.0000000000000002
-    # https://github.com/langchain-ai/langgraph/issues/5845
-    "test_embed_with_path"
+    redis
   ];
 
   passthru = {
@@ -68,11 +66,12 @@ buildPythonPackage rec {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "checkpoint==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${finalAttrs.src.tag}";
     description = "Library with base interfaces for LangGraph checkpoint savers";
     homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/checkpoint";
     license = lib.licenses.mit;
@@ -80,4 +79,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})

@@ -18,7 +18,6 @@
 
   # tests
   black,
-  coverage,
   ipykernel,
   pytest-cov-stub,
   pytest-regressions,
@@ -38,6 +37,17 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-LoK0wb7rAbVbgyURCbSfckWvJDef3tPY+7V4YU1IBRU=";
   };
+
+  patches = [
+    # Rename pytest_collect_file hook parameter `path` -> `file_path` for pytest 9.
+    ./pytest9-collect-hook.patch
+  ];
+
+  postPatch = ''
+    # we disable the tests relying on coverage for unrelated reasons
+    substituteInPlace tests/test_execution.py \
+      --replace-fail "from coverage import CoverageData" ""
+  '';
 
   build-system = [
     flit-core
@@ -62,7 +72,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     black
-    coverage
     ipykernel
     pytest-cov-stub
     pytest-regressions

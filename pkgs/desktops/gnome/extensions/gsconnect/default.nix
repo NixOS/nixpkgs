@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell-extension-gsconnect";
-  version = "66";
+  version = "72";
 
   outputs = [
     "out"
@@ -33,14 +33,15 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "GSConnect";
     repo = "gnome-shell-extension-gsconnect";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-QPvdSmt4aUkPvaOUonovrCxW4pxrgoopXGi3KSukVD8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-w9MQVEUQUcO1lqftBi76w5xSTlryKuZJxE6Ogg1J+ho=";
   };
 
   patches = [
     # Make typelibs available in the extension
     (replaceVars ./fix-paths.patch {
       gapplication = "${glib.bin}/bin/gapplication";
+      gjs = "${gjs}/bin/gjs";
       # Replaced in postPatch
       typelibPath = null;
     })
@@ -68,14 +69,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    "-Dgnome_shell_libdir=${gnome-shell}/lib"
-    "-Dchrome_nmhdir=${placeholder "out"}/etc/opt/chrome/native-messaging-hosts"
-    "-Dchromium_nmhdir=${placeholder "out"}/etc/chromium/native-messaging-hosts"
-    "-Dopenssl_path=${openssl}/bin/openssl"
-    "-Dsshadd_path=${openssh}/bin/ssh-add"
-    "-Dsshkeygen_path=${openssh}/bin/ssh-keygen"
-    "-Dsession_bus_services_dir=${placeholder "out"}/share/dbus-1/services"
-    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+    (lib.mesonOption "gnome_shell_libdir" "${gnome-shell}/lib")
+    (lib.mesonOption "chrome_nmhdir" "${placeholder "out"}/etc/opt/chrome/native-messaging-hosts")
+    (lib.mesonOption "chromium_nmhdir" "${placeholder "out"}/etc/chromium/native-messaging-hosts")
+    (lib.mesonOption "openssl_path" "${openssl}/bin/openssl")
+    (lib.mesonOption "sshadd_path" "${openssh}/bin/ssh-add")
+    (lib.mesonOption "sshkeygen_path" "${openssh}/bin/ssh-keygen")
+    (lib.mesonOption "session_bus_services_dir" "${placeholder "out"}/share/dbus-1/services")
+    (lib.mesonOption "installed_test_prefix" "${placeholder "installedTests"}")
   ];
 
   postPatch = ''
@@ -120,6 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "KDE Connect implementation for Gnome Shell";
     homepage = "https://github.com/GSConnect/gnome-shell-extension-gsconnect/wiki";
+    changelog = "https://github.com/GSConnect/gnome-shell-extension-gsconnect/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ doronbehar ];
     teams = [ lib.teams.gnome ];

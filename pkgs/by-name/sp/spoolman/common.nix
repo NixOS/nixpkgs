@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub }:
 let
-  version = "0.22.1";
+  version = "0.23.1";
 in
 {
   inherit version;
@@ -9,14 +9,14 @@ in
     owner = "Donkie";
     repo = "Spoolman";
     rev = "v${version}";
-    hash = "sha256-EVGpwcjEh4u8Vtgu2LypqMqArYLZe7oh1qYhGZpgjh0=";
+    hash = "sha256-Oa/cNmpc0hWRf0EQI5aXIE/p9//Sos5Nj3QFEjKgj5o=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Keep track of your inventory of 3D-printer filament spools";
     homepage = "https://github.com/Donkie/Spoolman";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       MayNiklas
       pinpox
     ];

@@ -7,7 +7,7 @@
   fetchFromGitHub,
   go,
   pykerberos,
-  pythonOlder,
+  hatchling,
   skein,
   sqlalchemy,
   traitlets,
@@ -15,23 +15,23 @@
 
 buildPythonPackage rec {
   pname = "dask-gateway-server";
-  version = "2023.9.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "2025.4.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask-gateway";
-    rev = version;
-    hash = "sha256-hwNLcuFN6ItH5KhC2gDUsaZT7qTC48fPR/Qx6u8B1+M=";
+    tag = version;
+    hash = "sha256-Ezt5QkA21SDfuCMm+XY8d+xso8SDb4lmK/yd89Guu0Y=";
   };
 
   sourceRoot = "${src.name}/${pname}";
 
   nativeBuildInputs = [ go ];
 
-  propagatedBuildInputs = [
+  build-system = [ hatchling ];
+
+  dependencies = [
     aiohttp
     colorlog
     cryptography
@@ -57,10 +57,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dask_gateway_server" ];
 
-  meta = with lib; {
+  meta = {
     description = "Multi-tenant server for securely deploying and managing multiple Dask clusters";
     homepage = "https://gateway.dask.org/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

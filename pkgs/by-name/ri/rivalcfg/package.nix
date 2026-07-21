@@ -43,11 +43,11 @@ python3Packages.buildPythonPackage rec {
 
   pythonImportsCheck = [ "rivalcfg" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility program that allows you to configure SteelSeries Rival gaming mice";
     homepage = "https://github.com/flozz/rivalcfg";
-    license = licenses.wtfpl;
-    maintainers = with maintainers; [ ornxka ];
+    license = lib.licenses.wtfpl;
+    maintainers = with lib.maintainers; [ ornxka ];
     mainProgram = "rivalcfg";
   };
 }

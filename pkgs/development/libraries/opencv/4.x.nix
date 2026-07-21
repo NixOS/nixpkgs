@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   unzip,
@@ -27,6 +28,8 @@
   libtiff,
   enableWebP ? true,
   libwebp,
+  enableJpegXL ? true,
+  libjxl,
   enableEXR ? !stdenv.hostPlatform.isDarwin,
   openexr,
   enableJPEG2000 ? true,
@@ -58,7 +61,7 @@
   enableVtk ? false,
   vtk,
   enableFfmpeg ? true,
-  ffmpeg,
+  ffmpeg-headless,
   enableGStreamer ? true,
   elfutils,
   gst_all_1,
@@ -69,7 +72,7 @@
   tesseract,
   leptonica,
   enableTbb ? false,
-  tbb,
+  onetbb,
   enableOvis ? false,
   ogre,
   enableGPhoto2 ? false,
@@ -103,7 +106,7 @@ let
     ;
   inherit (lib.trivial) flip;
 
-  version = "4.12.0";
+  version = "4.13.0";
 
   # It's necessary to consistently use backendStdenv when building with CUDA
   # support, otherwise we get libstdc++ errors downstream
@@ -114,21 +117,21 @@ let
     owner = "opencv";
     repo = "opencv";
     tag = version;
-    hash = "sha256-TZdEeZyBY3vCI53g4VDMzl3AASMuXAZKrSH/+XlxR7c=";
+    hash = "sha256-h9gpSf+xf/OafQSCYq3JYBt/ShnxafSG7WbxesTjM/A=";
   };
 
   contribSrc = fetchFromGitHub {
     owner = "opencv";
     repo = "opencv_contrib";
     tag = version;
-    hash = "sha256-YNd96qFJ8SHBgDEEsoNps888myGZdELbbuYCae9pW3M=";
+    hash = "sha256-8YRCq1H9afb1a0pVevH0x61SMW4dTpLAno/P9A6bOIg=";
   };
 
   testDataSrc = fetchFromGitHub {
     owner = "opencv";
     repo = "opencv_extra";
     tag = version;
-    hash = "sha256-EqlGlemztYlk03MX1LAviArWT+OA3/qL3jfgHYC+SP8=";
+    hash = "sha256-r73Hphh5ZuKt3IoQMzbtL1AxeVZd2OSpvZ8x8v6Bd0k=";
   };
 
   # Contrib must be built in order to enable Tesseract support:
@@ -140,8 +143,8 @@ let
       fetchFromGitHub {
         owner = "opencv";
         repo = "opencv_3rdparty";
-        rev = "7f55c0c26be418d494615afca15218566775c725";
-        hash = "sha256-XbmS+FXUL8MAG7kawbDkb2XHG9R0DpPhiYhq/18eTnY=";
+        rev = "c934a2a15a6df020446ac3dfa07e3acf72b63a8f";
+        hash = "sha256-L1n1pq7SiPLOMTCEpju4kXPHxhH9La8AvmwZrYU9iEQ=";
       }
       + "/ippicv";
     files =
@@ -292,39 +295,55 @@ effectiveStdenv.mkDerivation {
   cudaPropagateToOutput = "cxxdev";
 
   postUnpack = optionalString buildContrib ''
-    cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/source/opencv_contrib"
+    cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/${src.name}/opencv_contrib"
   '';
 
   # Ensures that we use the system OpenEXR rather than the vendored copy of the source included with OpenCV.
   patches = [
     ./cmake-don-t-use-OpenCVFindOpenEXR.patch
+    ./0001-cmake-OpenCVUtils.cmake-invalidate-Nix-store-paths-b.patch
   ]
-  ++ optionals enableCuda [
-    ./cuda_opt_flow.patch
-  ];
+  ++ optionals enableCuda (
+    [
+      ./cuda_opt_flow.patch
+    ]
+    ++ optionals (cudaPackages.cudaAtLeast "13.2") [
+      # Backport https://github.com/opencv/opencv_contrib/pull/4097
+      (fetchpatch {
+        name = "fix-cuda-13-2-compat";
+        url = "https://github.com/opencv/opencv_contrib/commit/f2854f4f5e7b67d4e073ea002ae0174d437e2962.patch";
+        stripLen = 2;
+        extraPrefix = "opencv_contrib/";
+        hash = "sha256-nJqPT3gvqTTKFDR9uTFR/7gummlpz1Dw+UQ4EWPfqOA=";
+      })
+    ]
+  );
 
-  # This prevents cmake from using libraries in impure paths (which
-  # causes build failure on non NixOS)
-  postPatch = ''
-    sed -i '/Add these standard paths to the search paths for FIND_LIBRARY/,/^\s*$/{d}' CMakeLists.txt
-  '';
+  postPatch =
+    # This prevents cmake from using libraries in impure paths (which
+    # causes build failure on non NixOS)
+    ''
+      sed -i '/Add these standard paths to the search paths for FIND_LIBRARY/,/^\s*$/{d}' CMakeLists.txt
+    ''
+    # TODO
+    + ''
+      substituteInPlace modules/ts/include/opencv2/ts/ts_gtest.h \
+        --replace-fail \
+          "#if defined(__GNUC__) && (__GNUC__ == 14)" \
+          "#if defined(__GNUC__)"
+    '';
 
   preConfigure =
     installExtraFile ade
     + optionalString enableIpp (installExtraFiles ippicv)
     + (optionalString buildContrib ''
-      cmakeFlagsArray+=("-DOPENCV_EXTRA_MODULES_PATH=$NIX_BUILD_TOP/source/opencv_contrib")
+      cmakeFlagsArray+=("-DOPENCV_EXTRA_MODULES_PATH=$NIX_BUILD_TOP/${src.name}/opencv_contrib")
 
       ${installExtraFiles vgg}
       ${installExtraFiles boostdesc}
       ${installExtraFiles face}
       ${installExtraFiles wechat_qrcode}
     '');
-
-  postConfigure = ''
-    [ -e modules/core/version_string.inc ]
-    echo '"(build info elided)"' > modules/core/version_string.inc
-  '';
 
   buildInputs = [
     boost
@@ -362,6 +381,9 @@ effectiveStdenv.mkDerivation {
   ++ optionals enableWebP [
     libwebp
   ]
+  ++ optionals enableJpegXL [
+    libjxl
+  ]
   ++ optionals enableEXR [
     openexr
   ]
@@ -369,7 +391,7 @@ effectiveStdenv.mkDerivation {
     openjpeg
   ]
   ++ optionals enableFfmpeg [
-    ffmpeg
+    ffmpeg-headless
   ]
   ++ optionals (enableGStreamer && effectiveStdenv.hostPlatform.isLinux) [
     elfutils
@@ -406,7 +428,7 @@ effectiveStdenv.mkDerivation {
     leptonica
   ]
   ++ optionals enableTbb [
-    tbb
+    onetbb
   ]
   ++ optionals effectiveStdenv.hostPlatform.isDarwin [
     bzip2
@@ -417,7 +439,7 @@ effectiveStdenv.mkDerivation {
   ]
   ++ optionals enableCuda [
     cudaPackages.cuda_cudart
-    cudaPackages.cuda_cccl # <thrust/*>
+    cudaPackages.cccl # <thrust/*>
     cudaPackages.libnpp # npp.h
     nvidia-optical-flow-sdk
   ]
@@ -455,11 +477,14 @@ effectiveStdenv.mkDerivation {
     cudaPackages.cuda_nvcc
   ];
 
-  # Configure can't find the library without this.
-  OpenBLAS_HOME = optionalString withOpenblas openblas_.dev;
-  OpenBLAS = optionalString withOpenblas openblas_;
+  env = {
+    # Configure can't find the library without this.
+    OpenBLAS_HOME = optionalString withOpenblas openblas_.dev;
+    OpenBLAS = optionalString withOpenblas openblas_;
+  };
 
   cmakeFlags = [
+    (cmakeBool "BUILD_INFO_SKIP_SYSTEM_VERSION" true)
     (cmakeBool "OPENCV_GENERATE_PKGCONFIG" true)
     (cmakeBool "WITH_OPENMP" true)
     (cmakeBool "BUILD_PROTOBUF" false)
@@ -477,6 +502,7 @@ effectiveStdenv.mkDerivation {
     (cmakeBool "WITH_IPP" enableIpp)
     (cmakeBool "WITH_TIFF" enableTIFF)
     (cmakeBool "WITH_WEBP" enableWebP)
+    (cmakeBool "WITH_JPEGXL" enableJpegXL)
     (cmakeBool "WITH_JPEG" enableJPEG)
     (cmakeBool "WITH_PNG" enablePNG)
     (cmakeBool "WITH_OPENEXR" enableEXR)
@@ -632,7 +658,7 @@ effectiveStdenv.mkDerivation {
         inherit opencv4;
       };
     }
-    // optionalAttrs (enableCuda) {
+    // optionalAttrs enableCuda {
       no-libstdcxx-errors = callPackage ./libstdcxx-test.nix { attrName = "opencv4"; };
     };
   }

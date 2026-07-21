@@ -15,15 +15,15 @@
 
 let
   mavenGroupIdUrl = "https://packages.atlassian.com/maven/public/com/atlassian/amps";
-
 in
-stdenv.mkDerivation rec {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "atlassian-plugin-sdk";
-  version = "9.1.1";
+  version = "9.9.1";
 
   src = fetchurl {
-    url = "${mavenGroupIdUrl}/atlassian-plugin-sdk/${version}/atlassian-plugin-sdk-${version}.tar.gz";
-    hash = "sha256-sEAe1eif9qXvIOu8RfZ4MWngEO5yCjU74g4Crd85J3Y=";
+    url = "${mavenGroupIdUrl}/atlassian-plugin-sdk/${finalAttrs.version}/atlassian-plugin-sdk-${finalAttrs.version}.tar.gz";
+    hash = "sha256-6svtGwk9d+/ipPHy/1kCQ5kyt1v9uaTwjYv6/ncCStc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out
-    cp -r atlassian-plugin-sdk-${version}/* $out
+    cp -r atlassian-plugin-sdk-${finalAttrs.version}/* $out
     rm $out/bin/*.bat
 
     for file in "$out"/bin/*; do
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     tests.version = testers.testVersion {
       package = atlassian-plugin-sdk;
       command = "atlas-version";
-      version = "atlassian-plugin-sdk-${version}";
+      version = "atlassian-plugin-sdk-${finalAttrs.version}";
     };
 
     updateScript = writeShellScript "update-atlassian-plugin-sdk" ''
@@ -63,26 +63,26 @@ stdenv.mkDerivation rec {
         ]
       }:$PATH"
 
-      NEW_VERSION=$(curl -s ${mavenGroupIdUrl}/atlassian-plugin-sdk/maven-metadata.xml | xq -r '.metadata.versioning.latest')
+      NEW_VERSION=$(curl -sL ${mavenGroupIdUrl}/atlassian-plugin-sdk/maven-metadata.xml | xq -r '.metadata.versioning.latest')
 
-      if [[ "${version}" = "$NEW_VERSION" ]]; then
+      if [[ "${finalAttrs.version}" = "$NEW_VERSION" ]]; then
           echo "The new version same as the old version."
           exit 0
       fi
 
-      DOWNLOAD_URL="${mavenGroupIdUrl}/atlassian-plugin-sdk/${version}/atlassian-plugin-sdk-$NEW_VERSION.tar.gz"
+      DOWNLOAD_URL="${mavenGroupIdUrl}/atlassian-plugin-sdk/${finalAttrs.version}/atlassian-plugin-sdk-$NEW_VERSION.tar.gz"
       NIX_HASH=$(nix --extra-experimental-features nix-command hash to-sri sha256:$(nix-prefetch-url $DOWNLOAD_URL))
 
       update-source-version "atlassian-plugin-sdk" "$NEW_VERSION" "$NIX_HASH" "$DOWNLOAD_URL"
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Atlassian Plugin SDK";
     homepage = "https://developer.atlassian.com/server/framework/atlassian-sdk/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ pathob ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ pathob ];
+    platforms = lib.platforms.linux;
     mainProgram = "atlas-mvn";
   };
-}
+})

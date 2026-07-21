@@ -8,14 +8,14 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libjwt";
   version = "1.18.1";
 
   src = fetchFromGitHub {
     owner = "benmcollins";
     repo = "libjwt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-0gFMeSW4gfbI6MUctcN8UuKhMDswaT8BzHTV2VuwZzc=";
   };
 
@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/benmcollins/libjwt";
     description = "JWT C Library";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ pnotequalnp ];
-    platforms = platforms.all;
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ pnotequalnp ];
+    platforms = lib.platforms.all;
   };
-}
+})

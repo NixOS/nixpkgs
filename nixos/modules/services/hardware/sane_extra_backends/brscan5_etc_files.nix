@@ -58,26 +58,26 @@ stdenv.mkDerivation {
   dontConfigure = true;
 
   buildPhase = ''
-    TARGET_DIR="$out/etc/opt/brother/scanner/brscan5"
+    TARGET_DIR="$out/tmp"
     mkdir -p "$TARGET_DIR"
     cp -rp "./models" "$TARGET_DIR"
     cp -rp "./brscan5.ini" "$TARGET_DIR"
     cp -rp "./brsanenetdevice.cfg" "$TARGET_DIR"
-
     export NIX_REDIRECTS="/etc/opt/brother/scanner/brscan5/=$TARGET_DIR/"
-
     printf '${addAllNetDev netDevices}\n'
-
     ${addAllNetDev netDevices}
+
+    mkdir -p "$out/etc/opt/brother/scanner/brscan5"
+    mv -T "$TARGET_DIR" "$out/etc/opt/brother/scanner/brscan5"
   '';
 
   dontInstall = true;
 
-  meta = with lib; {
+  meta = {
     description = "Brother brscan5 sane backend driver etc files";
     homepage = "https://www.brother.com";
-    platforms = platforms.linux;
-    license = licenses.unfree;
-    maintainers = with maintainers; [ mattchrist ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ mattchrist ];
   };
 }

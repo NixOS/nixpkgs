@@ -8,12 +8,12 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mythes";
   version = "1.2.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/hunspell/mythes-${version}.tar.gz";
+    url = "mirror://sourceforge/hunspell/mythes-${finalAttrs.version}.tar.gz";
     sha256 = "0prh19wy1c74kmzkkavm9qslk99gz8h8wmjvwzjc6lf8v2az708y";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     inherit (hunspell.meta) platforms;
   };
-}
+})

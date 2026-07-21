@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 let
-  version = "1.2.14";
+  version = "1.2.17";
 in
 python3Packages.buildPythonApplication {
   pname = "mktxp";
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication {
     owner = "akpw";
     repo = "mktxp";
     tag = "v${version}";
-    hash = "sha256-4+0aw/r71FcVrxASco3AkYzi7zbFeiEkJB7acGdb1FQ=";
+    hash = "sha256-SFnLLmtRF5JT1a78R0lwB+9XTJXW0fLyVJkN5xD3NIw=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -32,6 +32,7 @@ python3Packages.buildPythonApplication {
     speedtest-cli
     waitress
     packaging
+    pyyaml
   ];
 
   meta = {

@@ -1,11 +1,12 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   callPackage,
   swift,
   swiftpm,
   swiftpm2nix,
+  installShellFiles,
+  Dispatch,
   Foundation,
 }:
 let
@@ -21,19 +22,15 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     swift
     swiftpm
+    installShellFiles
   ];
   buildInputs = [ Foundation ];
 
-  configurePhase = generated.configure + ''
-    swiftpmMakeMutable swift-tools-support-core
-    patch -p1 -d .build/checkouts/swift-tools-support-core -i ${
-      fetchpatch {
-        url = "https://github.com/apple/swift-tools-support-core/commit/990afca47e75cce136d2f59e464577e68a164035.patch";
-        hash = "sha256-PLzWsp+syiUBHhEFS8+WyUcSae5p0Lhk7SSRdNvfouE=";
-        includes = [ "Sources/TSCBasic/FileSystem.swift" ];
-      }
-    }
-  '';
+  env.LD_LIBRARY_PATH = lib.optionalString stdenv.hostPlatform.isLinux (
+    lib.makeLibraryPath [ Dispatch ]
+  );
+
+  configurePhase = generated.configure;
 
   # We only install the swift-format binary, so don't need the other products.
   swiftpmFlags = [ "--product swift-format" ];
@@ -42,6 +39,16 @@ stdenv.mkDerivation {
     binPath="$(swiftpmBinPath)"
     mkdir -p $out/bin
     cp $binPath/swift-format $out/bin/
+
+    # Generate shell completions
+    for shell in bash zsh fish; do
+      $out/bin/swift-format --generate-completion-script $shell > swift-format.$shell
+    done
+
+    installShellCompletion --cmd swift-format \
+      --bash swift-format.bash \
+      --zsh swift-format.zsh \
+      --fish swift-format.fish
   '';
 
   meta = {

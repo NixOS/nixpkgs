@@ -2,18 +2,28 @@
   name = "dovecot";
 
   nodes.machine =
-    { pkgs, ... }:
+    { config, pkgs, ... }:
+    let
+      dovecot = config.services.dovecot2.package;
+    in
     {
       imports = [ common/user-account.nix ];
       services.postfix.enable = true;
       services.dovecot2 = {
         enable = true;
-        protocols = [
-          "imap"
-          "pop3"
-        ];
-        mailUser = "vmail";
-        mailGroup = "vmail";
+        enablePAM = true;
+        settings = {
+          dovecot_config_version = dovecot.version;
+          dovecot_storage_version = dovecot.version;
+          mail_driver = "maildir";
+          mail_path = "${config.services.postfix.settings.main.mail_spool_directory}/%{user}";
+          protocols = [
+            "imap"
+            "pop3"
+          ];
+          mail_uid = "vmail";
+          mail_gid = "vmail";
+        };
       };
       environment.systemPackages =
         let
@@ -31,7 +41,7 @@
           sendTestMailViaDeliveryAgent = pkgs.writeScriptBin "send-lda" ''
             #!${pkgs.runtimeShell}
 
-            exec ${pkgs.dovecot}/libexec/dovecot/deliver -d bob <<MAIL
+            exec ${dovecot}/libexec/dovecot/deliver -d bob <<MAIL
             From: root@localhost
             To: bob@localhost
             Subject: Something else...
@@ -74,7 +84,7 @@
 
         in
         [
-          pkgs.dovecot_pigeonhole
+          dovecot.passthru.dovecot_pigeonhole
           sendTestMail
           sendTestMailViaDeliveryAgent
           testImap

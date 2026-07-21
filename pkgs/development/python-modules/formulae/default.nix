@@ -2,24 +2,31 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   setuptools,
   setuptools-scm,
-  pytestCheckHook,
+
+  # dependencies
   numpy,
+  packaging,
   pandas,
   scipy,
+
+  # tests
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "formulae";
-  version = "0.5.4";
+  version = "0.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bambinos";
     repo = "formulae";
-    tag = version;
-    hash = "sha256-SSyQa7soIp+wSXX5wek9LG95q7J7K34mztzx01lPiWo=";
+    tag = finalAttrs.version;
+    hash = "sha256-Q+oHt9euUBQs/D5TlJeeUN76HwQkmGHC1cTzmAQx+2M=";
   };
 
   build-system = [
@@ -29,6 +36,7 @@ buildPythonPackage rec {
 
   dependencies = [
     numpy
+    packaging
     pandas
     scipy
   ];
@@ -48,11 +56,11 @@ buildPythonPackage rec {
     "formulae.matrices"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://bambinos.github.io/formulae";
     description = "Formulas for mixed-effects models in Python";
-    changelog = "https://github.com/bambinos/formulae/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    changelog = "https://github.com/bambinos/formulae/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

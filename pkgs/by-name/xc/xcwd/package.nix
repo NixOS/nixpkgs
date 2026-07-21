@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-M6/1H6hI50Cvx40RTKzZXoUui0FGZfwe1IwdaxMJIQo=";
   };
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   makeFlags = [ "prefix=$(out)" ];
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/schischi/xcwd";
     license = lib.licenses.bsd3;
     mainProgram = "xcwd";
-    maintainers = [ lib.maintainers.grburst ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

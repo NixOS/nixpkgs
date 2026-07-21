@@ -10,7 +10,7 @@
   python-glanceclient,
   setuptools,
   stestr,
-  subunit,
+  python-subunit,
   testscenarios,
   testtools,
 }:
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     fixtures
     jsonschema
-    subunit
+    python-subunit
     oslotest
     stestr
     testscenarios
@@ -57,10 +57,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "os_client_config" ];
 
-  meta = with lib; {
+  meta = {
     description = "Unified config handling for client libraries and programs";
     homepage = "https://github.com/openstack/os-client-config";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

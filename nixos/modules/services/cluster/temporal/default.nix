@@ -137,7 +137,7 @@ in
           "@chown"
         ];
       }
-      // (lib.optionalAttrs (usingDefaultDataDir) {
+      // (lib.optionalAttrs usingDefaultDataDir {
         StateDirectory = "temporal";
         StateDirectoryMode = "0700";
       });

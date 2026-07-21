@@ -15,19 +15,20 @@
 
 buildPythonPackage rec {
   pname = "jobspy";
-  version = "1.1.79";
+  version = "1.1.82";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bunsly";
     repo = "JobSpy";
-    tag = "v${version}";
-    hash = "sha256-09UVZUcBNyKLSbqHOctct7dRJhmRdS6wb5hjMI3YWdg=";
+    tag = version;
+    hash = "sha256-iLtUIM7QBIl6UAcb1RvKt2uw5gHEIQXuo4z/OQu86wM=";
   };
 
   pythonRelaxDeps = [
     "numpy"
     "markdownify"
+    "regex"
   ];
 
   build-system = [ poetry-core ];
@@ -52,7 +53,7 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/Bunsly/JobSpy";
     homepage = "https://github.com/Bunsly/JobSpy";
     changelog = "https://github.com/Bunsly/JobSpy/releases/tag/${src.tag}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
   };
 }

@@ -5,17 +5,19 @@
   fetchzip,
   callPackage,
   newScope,
-  recurseIntoAttrs,
   ocamlPackages_4_09,
   ocamlPackages_4_10,
   ocamlPackages_4_12,
   ocamlPackages_4_14,
+  ocamlPackages_5_4,
   rocqPackages_9_0,
   rocqPackages_9_1,
+  rocqPackages_9_2,
   rocqPackages,
   fetchpatch,
   makeWrapper,
   coq2html,
+  dune,
 }@args:
 let
   lib = import ../build-support/coq/extra-lib.nix { inherit (args) lib; };
@@ -25,14 +27,14 @@ let
     self: coq:
     let
       callPackage = self.callPackage;
-    in
-    {
-      inherit coq lib;
-      coqPackages = self // {
+      rocqPackages = self // {
         recurseForDerivations = false;
       };
+    in
+    {
+      inherit rocqPackages lib;
 
-      metaFetch = import ../build-support/coq/meta-fetch/default.nix {
+      metaFetch = import ../build-support/rocq/meta-fetch/default.nix {
         inherit
           lib
           stdenv
@@ -40,9 +42,29 @@ let
           fetchurl
           ;
       };
-      mkCoqDerivation = lib.makeOverridable (callPackage ../build-support/coq { });
+      mkRocqDerivation = lib.makeOverridable (callPackage ../build-support/rocq { });
+      mkCoqDerivation =
+        args:
+        self.mkRocqDerivation (
+          {
+            useCoq = true;
+            namePrefix = [ "coq" ];
+          }
+          // args
+        );
 
-      contribs = recurseIntoAttrs (callPackage ../development/coq-modules/contribs { });
+      coq = coq.overrideAttrs (oldAttrs: {
+        passthru = (oldAttrs.passthru or { }) // {
+          withPackages =
+            f:
+            (callPackage ../applications/science/logic/coq/with-packages.nix {
+              inherit coq;
+            })
+              (f self);
+        };
+      });
+
+      contribs = lib.recurseIntoAttrs (callPackage ../development/coq-modules/contribs { });
 
       aac-tactics = callPackage ../development/coq-modules/aac-tactics { };
       addition-chains = callPackage ../development/coq-modules/addition-chains { };
@@ -56,14 +78,17 @@ let
           callPackage ../development/coq-modules/bignums { }
         else
           null;
+      CakeMLExtraction = callPackage ../development/coq-modules/CakeMLExtraction { };
       category-theory = callPackage ../development/coq-modules/category-theory { };
       ceres = callPackage ../development/coq-modules/ceres { };
+      ceres-bs = callPackage ../development/coq-modules/ceres-bs { };
+      CertiRocq = callPackage ../development/coq-modules/CertiRocq { };
       Cheerios = callPackage ../development/coq-modules/Cheerios { };
       coinduction = callPackage ../development/coq-modules/coinduction { };
       CoLoR = callPackage ../development/coq-modules/CoLoR (
-        (lib.optionalAttrs (lib.versions.isEq self.coq.coq-version "8.13") {
+        lib.optionalAttrs (lib.versions.isEq self.coq.coq-version "8.13") {
           bignums = self.bignums.override { version = "8.13.0"; };
-        })
+        }
       );
       compcert = callPackage ../development/coq-modules/compcert {
         inherit
@@ -73,8 +98,8 @@ let
           lib
           stdenv
           ;
-        ocamlPackages = ocamlPackages_4_14;
       };
+      ConCert = callPackage ../development/coq-modules/ConCert { };
       coq-bits = callPackage ../development/coq-modules/coq-bits { };
       coq-elpi = callPackage ../development/coq-modules/coq-elpi { };
       coq-hammer = callPackage ../development/coq-modules/coq-hammer { };
@@ -85,9 +110,9 @@ let
       coq-record-update = callPackage ../development/coq-modules/coq-record-update { };
       coq-tactical = callPackage ../development/coq-modules/coq-tactical { };
       coqeal = callPackage ../development/coq-modules/coqeal (
-        (lib.optionalAttrs (lib.versions.range "8.13" "8.14" self.coq.coq-version) {
+        lib.optionalAttrs (lib.versions.range "8.13" "8.14" self.coq.coq-version) {
           bignums = self.bignums.override { version = "${self.coq.coq-version}.0"; };
-        })
+        }
       );
       coqhammer = callPackage ../development/coq-modules/coqhammer { };
       coqide = callPackage ../development/coq-modules/coqide { };
@@ -136,10 +161,12 @@ let
       mathcomp-boot = self.mathcomp.boot;
       mathcomp-order = self.mathcomp.order;
       mathcomp-ssreflect = self.mathcomp.ssreflect;
+      mathcomp-finite-group = self.mathcomp.fingroup;
       mathcomp-fingroup = self.mathcomp.fingroup;
       mathcomp-algebra = self.mathcomp.algebra;
       mathcomp-solvable = self.mathcomp.solvable;
       mathcomp-field = self.mathcomp.field;
+      mathcomp-group-representation = self.mathcomp.character;
       mathcomp-character = self.mathcomp.character;
       mathcomp-abel = callPackage ../development/coq-modules/mathcomp-abel { };
       mathcomp-algebra-tactics = callPackage ../development/coq-modules/mathcomp-algebra-tactics { };
@@ -211,6 +238,11 @@ let
       tlc = callPackage ../development/coq-modules/tlc { };
       topology = callPackage ../development/coq-modules/topology { };
       trakt = callPackage ../development/coq-modules/trakt { };
+      TypedExtraction = callPackage ../development/coq-modules/TypedExtraction { };
+      TypedExtraction-common = self.TypedExtraction.common;
+      TypedExtraction-elm = self.TypedExtraction.elm;
+      TypedExtraction-rust = self.TypedExtraction.rust;
+      TypedExtraction-plugin = self.TypedExtraction.plugin;
       unicoq = callPackage ../development/coq-modules/unicoq { };
       validsdp = callPackage ../development/coq-modules/validsdp { };
       vcfloat = callPackage ../development/coq-modules/vcfloat (
@@ -220,19 +252,17 @@ let
       );
       Velisarios = callPackage ../development/coq-modules/Velisarios { };
       Verdi = callPackage ../development/coq-modules/Verdi { };
+      verified-extraction = callPackage ../development/coq-modules/verified-extraction { };
       Vpl = callPackage ../development/coq-modules/Vpl { };
       VplTactic = callPackage ../development/coq-modules/VplTactic { };
       vscoq-language-server = callPackage ../development/coq-modules/vscoq-language-server { };
+      vsrocq-language-server = callPackage ../development/rocq-modules/vsrocq-language-server { };
       VST = callPackage ../development/coq-modules/VST (
         (lib.optionalAttrs (lib.versionAtLeast self.coq.version "8.14") {
           compcert = self.compcert.override {
             version =
               with lib.versions;
               lib.switch self.coq.version [
-                {
-                  case = range "8.19" "8.20";
-                  out = "3.15";
-                }
                 {
                   case = range "8.15" "8.18";
                   out = "3.13.1";
@@ -265,7 +295,7 @@ let
         let
           v = set.${name} or null;
         in
-        lib.optional (!v.meta.coqFilter or false) (
+        lib.optional (!v.meta.rocqFilter or false) (
           lib.nameValuePair name (
             if lib.isAttrs v && v.recurseForDerivations or false then filterCoqPackages v else v
           )
@@ -281,6 +311,7 @@ let
         ocamlPackages_4_10
         ocamlPackages_4_12
         ocamlPackages_4_14
+        ocamlPackages_5_4
         ;
       rocqPackages = rp;
     };
@@ -303,40 +334,42 @@ rec {
     in
     self.filterPackages (!coq.dontFilter or false);
 
-  coq_8_7 = mkCoq "8.7" { };
-  coq_8_8 = mkCoq "8.8" { };
-  coq_8_9 = mkCoq "8.9" { };
-  coq_8_10 = mkCoq "8.10" { };
-  coq_8_11 = mkCoq "8.11" { };
-  coq_8_12 = mkCoq "8.12" { };
-  coq_8_13 = mkCoq "8.13" { };
-  coq_8_14 = mkCoq "8.14" { };
-  coq_8_15 = mkCoq "8.15" { };
-  coq_8_16 = mkCoq "8.16" { };
-  coq_8_17 = mkCoq "8.17" { };
-  coq_8_18 = mkCoq "8.18" { };
-  coq_8_19 = mkCoq "8.19" { };
-  coq_8_20 = mkCoq "8.20" { };
-  coq_9_0 = mkCoq "9.0" rocqPackages_9_0;
-  coq_9_1 = mkCoq "9.1" rocqPackages_9_1;
+  coqPackages_8_7 = mkCoqPackages (mkCoq "8.7" { });
+  coqPackages_8_8 = mkCoqPackages (mkCoq "8.8" { });
+  coqPackages_8_9 = mkCoqPackages (mkCoq "8.9" { });
+  coqPackages_8_10 = mkCoqPackages (mkCoq "8.10" { });
+  coqPackages_8_11 = mkCoqPackages (mkCoq "8.11" { });
+  coqPackages_8_12 = mkCoqPackages (mkCoq "8.12" { });
+  coqPackages_8_13 = mkCoqPackages (mkCoq "8.13" { });
+  coqPackages_8_14 = mkCoqPackages (mkCoq "8.14" { });
+  coqPackages_8_15 = mkCoqPackages (mkCoq "8.15" { });
+  coqPackages_8_16 = mkCoqPackages (mkCoq "8.16" { });
+  coqPackages_8_17 = mkCoqPackages (mkCoq "8.17" { });
+  coqPackages_8_18 = mkCoqPackages (mkCoq "8.18" { });
+  coqPackages_8_19 = mkCoqPackages (mkCoq "8.19" { });
+  coqPackages_8_20 = mkCoqPackages (mkCoq "8.20" { });
+  coqPackages_9_0 = mkCoqPackages (mkCoq "9.0" rocqPackages_9_0);
+  coqPackages_9_1 = mkCoqPackages (mkCoq "9.1" rocqPackages_9_1);
+  coqPackages_9_2 = mkCoqPackages (mkCoq "9.2" rocqPackages_9_2);
 
-  coqPackages_8_7 = mkCoqPackages coq_8_7;
-  coqPackages_8_8 = mkCoqPackages coq_8_8;
-  coqPackages_8_9 = mkCoqPackages coq_8_9;
-  coqPackages_8_10 = mkCoqPackages coq_8_10;
-  coqPackages_8_11 = mkCoqPackages coq_8_11;
-  coqPackages_8_12 = mkCoqPackages coq_8_12;
-  coqPackages_8_13 = mkCoqPackages coq_8_13;
-  coqPackages_8_14 = mkCoqPackages coq_8_14;
-  coqPackages_8_15 = mkCoqPackages coq_8_15;
-  coqPackages_8_16 = mkCoqPackages coq_8_16;
-  coqPackages_8_17 = mkCoqPackages coq_8_17;
-  coqPackages_8_18 = mkCoqPackages coq_8_18;
-  coqPackages_8_19 = mkCoqPackages coq_8_19;
-  coqPackages_8_20 = mkCoqPackages coq_8_20;
-  coqPackages_9_0 = mkCoqPackages coq_9_0;
-  coqPackages_9_1 = mkCoqPackages coq_9_1;
+  coq_8_7 = coqPackages_8_7.coq;
+  coq_8_8 = coqPackages_8_8.coq;
+  coq_8_9 = coqPackages_8_9.coq;
+  coq_8_10 = coqPackages_8_10.coq;
+  coq_8_11 = coqPackages_8_11.coq;
+  coq_8_12 = coqPackages_8_12.coq;
+  coq_8_13 = coqPackages_8_13.coq;
+  coq_8_14 = coqPackages_8_14.coq;
+  coq_8_15 = coqPackages_8_15.coq;
+  coq_8_16 = coqPackages_8_16.coq;
+  coq_8_17 = coqPackages_8_17.coq;
+  coq_8_18 = coqPackages_8_18.coq;
+  coq_8_19 = coqPackages_8_19.coq;
+  coq_8_20 = coqPackages_8_20.coq;
+  coq_9_0 = coqPackages_9_0.coq;
+  coq_9_1 = coqPackages_9_1.coq;
+  coq_9_2 = coqPackages_9_2.coq;
 
-  coqPackages = recurseIntoAttrs coqPackages_9_0;
+  coqPackages = lib.recurseIntoAttrs coqPackages_9_1;
   coq = coqPackages.coq;
 }

@@ -20,7 +20,7 @@ See the [CONTRIBUTING.md](../CONTRIBUTING.md) document for more general informat
 - [`pkgs-lib`](./pkgs-lib): Definitions for utilities that need packages but are not needed for packages
 - [`test`](./test): Tests not directly associated with any specific packages
 - [`by-name`](./by-name): Top-level packages organised by name ([docs](./by-name/README.md))
-- All other directories loosely categorise top-level packages definitions, see [category hierarchy][categories]
+- All other directories loosely categorise top-level package definitions, see [category hierarchy][categories]
 
 ## Quick Start to Adding a Package
 
@@ -58,7 +58,7 @@ Because entries in the Nix store are inert and do nothing by themselves, package
   For example:
   * Any package which does not follow upstream security policies should be considered vulnerable.
     In particular, packages that vendor or fork web engines like Blink, Gecko or Webkit need to keep up with the frequent updates of those projects.
-  * Any security-critical fast-moving package such as Chrome or Firefox (or their forks) must have at least one active committer among the maintainers.
+  * Any security-critical fast-moving package such as Chrome or Firefox (or their forks) must have at least one committer among the maintainers, who actively reviews, merges and backports updates.
     This ensures no critical fixes are delayed unnecessarily, endangering unsuspecting users.
   * Services which typically work on web traffic are working on untrusted input.
   * Data (such as archives or rich documents) commonly shared over untrusted channels (e.g. email) is untrusted.
@@ -75,7 +75,7 @@ Because entries in the Nix store are inert and do nothing by themselves, package
 
 This section describes a general framework of understanding and exceptions might apply.
 
-Luckily it's pretty easy to maintain your own package set with Nix, which can then be added to the [Nix User Repository](https://github.com/nix-community/nur) project.
+Luckily it's pretty easy to maintain your own package set with Nix, which can then be added to the [Nix User Repository](https://github.com/nix-community/nur) project or included in [search.nixos.org's list of indexed 3rd-party flakes](https://github.com/NixOS/nixos-search/blob/main/flakes/manual.toml)
 
 ---
 
@@ -148,7 +148,7 @@ To add a package to Nixpkgs:
 
    - All other [`meta`](https://nixos.org/manual/nixpkgs/stable/#chap-meta) attributes are optional, but it’s still a good idea to provide at least the `description`, `homepage` and [`license`](https://nixos.org/manual/nixpkgs/stable/#sec-meta-license).
 
-   - The exact syntax and semantics of the Nix expression language, including the built-in functions, are [Nix language reference](https://nixos.org/manual/nix/stable/language/).
+   - The exact syntax and semantics of the Nix expression language, including the built-in functions, can be found in the [Nix language reference](https://nixos.org/manual/nix/stable/language/).
 
 5. To test whether the package builds, run the following command from the root of the nixpkgs source tree:
 
@@ -183,11 +183,17 @@ To add a package to Nixpkgs:
   Examples:
 
   * nginx: init at 2.0.1
+  * qt6Packages.qtdeclarative: fix build
   * firefox: 54.0.1 -> 55.0
 
     https://www.mozilla.org/en-US/firefox/55.0/releasenotes/
 
 (using "→" instead of "->" is also accepted)
+
+For package sets with multiple versions, such as `perlPackages` (aliased to
+`perl5Packages`) and `python3Packages` (aliased to `python313Packages` at the
+time of writing), please use the unversioned attribute in your commit message
+unless the change is specific to one version.
 
 Using the `(pkg-name):` prefix is important beyond just being a convention: it queues automatic builds by CI.
 More sophisticated prefixes are also possible:
@@ -196,8 +202,8 @@ More sophisticated prefixes are also possible:
 |--------------------------------------------------------------------------|------------------------------------------------------------|
 | `vim: 1.0.0 -> 2.0.0`                                                    | `vim`                                                      |
 | `vagrant: fix dependencies for version 2.0.2`                            | `vagrant`                                                  |
-| `python3{9,10}Packages.requests: 1.0.0 -> 2.0.0`                         | `python39Packages.requests`, `python310Packages.requests`  |
-| `python312.pkgs.numpy,python313.pkgs.scipy: fix build`                   | `python312.pkgs.numpy` , `python313.pkgs.scipy`            |
+| `python3Packages.requests: 1.0.0 -> 2.0.0`                               | `python3Packages.requests`                                 |
+| `python3Packagess.{numpy,scipy}: fix build`                              | `python3Packages.numpy` , `python3Packages.scipy`          |
 
 When opening a PR with multiple commits, CI creates a single build job for all detected packages.
 If `passthru.tests` attributes are available, these will be built as well.
@@ -305,10 +311,6 @@ For example, the `libxml2` package builds both a library and some tools; but it�
 
   - `servers/http` (e.g. `apache-httpd`)
 
-- **If it’s an implementation of the X Windowing System:**
-
-  - `servers/x11` (e.g. `xorg` — this includes the client libraries and programs)
-
 - **Else:**
 
   - `servers/misc`
@@ -331,7 +333,7 @@ A (typically large) program with a distinct user interface, primarily used inter
 
 - **If it’s a _terminal emulator_:**
 
-  - `applications/terminal-emulators` (e.g. `alacritty` or `rxvt` or `termite`)
+  - `applications/terminal-emulators` (e.g. `alacritty` or `rxvt`)
 
 - **If it’s a _file manager_:**
 
@@ -437,7 +439,7 @@ Follow these guidelines:
   - It _must_ be a valid identifier in Nix.
 
   - If the `pname` starts with a digit, the attribute name _should_ be prefixed with an underscore.
-    Otherwise the attribute name _should not_ be prefixed with an underline.
+    Otherwise the attribute name _should not_ be prefixed with an underscore.
 
     Example: The corresponding attribute name for `0ad` should be `_0ad`.
 
@@ -460,7 +462,7 @@ Follow these guidelines:
 ## Versioning
 [versioning]: #versioning
 
-These are the guidelines the `version` attribute of a package:
+These are the guidelines for the `version` attribute of a package:
 
 - It _must_ start with a digit.
   This is required for backwards-compatibility with [how `nix-env` parses derivation names](https://nix.dev/manual/nix/latest/command-ref/nix-env#selectors).
@@ -487,7 +489,7 @@ See also [`pkgs/by-name/README.md`'s section on this topic](https://github.com/N
 
 ## Meta attributes
 
-The `meta` attribute set should always be placed last in the derivativion and any other "meta"-like attribute sets like `passthru` should be written before it.
+The `meta` attribute set should always be placed last in the derivation and any other "meta"-like attribute sets like `passthru` should be written before it.
 
 * `meta.description` must:
   * Be short, just one sentence.
@@ -501,6 +503,8 @@ The `meta` attribute set should always be placed last in the derivativion and an
 * `meta.license` must be set and match the upstream license.
   * If there is no upstream license, `meta.license` should default to `lib.licenses.unfree`.
   * If in doubt, try to contact the upstream developers for clarification.
+* `meta.sourceProvenance` must be set if the package is not built from source.
+  * If you are repackaging a `.deb`, `.rpm`, `.whl`, or any other format provided by your upstream, this should almost always be set to `lib.sourceTypes.binaryNativeCode`.
 * `meta.mainProgram` must be set to the name of the executable which facilitates the primary function or purpose of the package, if there is such an executable in `$bin/bin/` (or `$out/bin/`, if there is no `"bin"` output).
   * Packages that only have a single executable in the applicable directory above should set `meta.mainProgram`.
     For example, the package `ripgrep` only has a single executable `rg` under `$out/bin/`, so `ripgrep.meta.mainProgram` is set to `"rg"`.
@@ -653,7 +657,7 @@ The latter avoids link rot when the upstream abandons, squashes or rebases their
 { patches = [ ./0001-add-missing-include.patch ]; }
 ```
 
-If you do need to do create this sort of patch file, one way to do so is with git:
+If you do need to create this sort of patch file, one way to do so is with git:
 
 1. Move to the root directory of the source code you're patching.
 
@@ -728,7 +732,7 @@ We use jbidwatcher as an example for a discontinued project here.
 1. Create a pull request against Nixpkgs.
    Mention the package maintainer.
 
-This is how the pull request looks like in this case: [https://github.com/NixOS/nixpkgs/pull/116470](https://github.com/NixOS/nixpkgs/pull/116470)
+This is what the pull request looks like in this case: [https://github.com/NixOS/nixpkgs/pull/116470](https://github.com/NixOS/nixpkgs/pull/116470)
 
 ## Package tests
 
@@ -741,7 +745,7 @@ To run the main types of tests locally:
 
 Tests are important to ensure quality and make reviews and automatic updates easy.
 
-The following types of tests exists:
+The following types of tests exist:
 
 * [NixOS **module tests**](https://nixos.org/manual/nixos/stable/#sec-nixos-tests), which spawn one or more NixOS VMs.
   They exercise both NixOS modules and the packaged programs used within them.
@@ -876,7 +880,7 @@ $ nix-build -A phoronix-test-suite.tests
 Here are examples of package tests:
 
 - [Jasmin compile test](by-name/ja/jasmin/test-assemble-hello-world/default.nix)
-- [Lobster compile test](development/compilers/lobster/test-can-run-hello-world.nix)
+- [Lobster compile test](by-name/lo/lobster/test-can-run-hello-world.nix)
 - [Spacy annotation test](development/python-modules/spacy/annotation-test/default.nix)
 - [Libtorch test](development/libraries/science/math/libtorch/test/default.nix)
 - [Multiple tests for nanopb](./by-name/na/nanopb/package.nix)
@@ -908,10 +912,14 @@ stdenv.mkDerivation {
 ## Automatic package updates
 [automatic-package-updates]: #automatic-package-updates
 
-Nixpkgs periodically tries to update all packages that have a `passthru.updateScript` attribute.
+The [community bot `r-ryantm`](https://nix-community.org/update-bot/), periodically tries to update all packages in Nixpkgs.
+`r-ryantm` runs the program [`nixpkgs-update`](https://nix-community.github.io/nixpkgs-update/) to find new versions of packages.
+In most cases, `nixpkgs-update` will be capable of finding new versions and perform the update with out any special instructions.
+Putting a `passthru.updateScript` attribute sets an explicit update procedure for `nixpkgs-update`, but this is not required for most cases.
+To learn more about the default update procedures, read their [FAQ for Nixpkgs maintainers](https://nix-community.github.io/nixpkgs-update/nixpkgs-maintainer-faq/).
 
 > [!Note]
-> A common pattern is to use the [`nix-update-script`](../pkgs/by-name/ni/nix-update/nix-update-script.nix) attribute provided in Nixpkgs, which runs [`nix-update`](https://github.com/Mic92/nix-update):
+> A common pattern is to use the [`nix-update-script`](../pkgs/by-name/ni/nix-update/nix-update-script.nix) function provided in Nixpkgs, which makes automatic updates use [`nix-update`](https://github.com/Mic92/nix-update):
 >
 > ```nix
 > { stdenv, nix-update-script }:
@@ -921,9 +929,10 @@ Nixpkgs periodically tries to update all packages that have a `passthru.updateSc
 > }
 > ```
 >
-> For simple packages, this is often enough, and will ensure that the package is updated automatically by [`nixpkgs-update`](https://github.com/nix-community/nixpkgs-update) when a new version is released.
-> The [update bot](https://nix-community.org/update-bot) runs periodically to attempt to automatically update packages, and will run `passthru.updateScript` if set.
-> While not strictly necessary if the project is listed on [Repology](https://repology.org), using `nix-update-script` allows the package to update via many more sources (e.g. GitHub releases).
+> `nix-update` is a little bit more flexible than `nixpkgs-update` in performing updates, so it can be useful for cases such as:
+>
+>  - A `nix-update` CLI flag like `--version branch` or `--version-regex` are needed to make the update work.
+>  - You don't want to rely upon new versions to be listed in [Repology](https://repology.org/), and `nix-update` finds new versions easily (e.g GitLab projects).
 
 The `passthru.updateScript` attribute can contain one of the following:
 
@@ -1021,7 +1030,7 @@ Furthermore each update script will be passed the following environment variable
 > An update script will be usually run from the root of the Nixpkgs repository, but you should not rely on that.
 > Also note that `update.nix` executes update scripts in parallel by default, so you should avoid running `git commit` or any other commands that cannot handle that.
 
-While update scripts should not create commits themselves, `update.nix` supports automatically creating commits when running it with `--argstr commit true`.
+While update scripts should not create commits themselves, `update.nix` supports automatically creating commits when running it with `--arg commit true`.
 If you need to customize commit message, you can have the update script implement the `commit` feature.
 
 ### Supported features
@@ -1048,7 +1057,7 @@ If you need to customize commit message, you can have the update script implemen
   ```
   :::
 
-  When `update.nix` is run with `--argstr commit true`, it will create a separate commit for each of the objects.
+  When `update.nix` is run with `--arg commit true`, it will create a separate commit for each of the objects.
   An empty list can be returned when the script did not update any files; for example, when the package is already at the latest version.
 
   The commit object contains the following values:
@@ -1135,7 +1144,7 @@ Sample template for a package update review is provided below.
 ### New packages
 
 New packages are a common type of pull requests.
-These pull requests consist in adding a new nix-expression for a package.
+These pull requests consist of adding a new nix-expression for a package.
 
 Review process:
 
@@ -1144,7 +1153,7 @@ Review process:
 - Ensure that the package versioning [fits the guidelines](#versioning).
 - Ensure that the commit text [fits the guidelines](../CONTRIBUTING.md#commit-conventions).
 - Ensure that the source is fetched from an official location, one of our [trusted mirrors](./build-support/fetchurl/mirrors.nix), or a mirror trusted by the authors.
-- Ensure that the meta fields [fits the guidelines](#meta-attributes) and contain the correct information:
+- Ensure that the meta fields [fit the guidelines](#meta-attributes) and contain the correct information:
   - License must match the upstream license.
   - Platforms should be set (or the package will not get binary substitutes).
   - Maintainers must be set.
@@ -1212,7 +1221,7 @@ Security fixes are submitted in the same way as other changes and thus the same 
 
 If a security fix applies to both master and a stable release then, similar to regular changes, they are preferably delivered via master first and cherry-picked to the release branch.
 
-Critical security fixes may by-pass the staging branches and be delivered directly to release branches such as `master` and `release-*`.
+Critical security fixes may bypass the staging branches and be delivered directly to release branches such as `master` and `release-*`.
 
 ### Vulnerability Roundup
 
@@ -1248,7 +1257,7 @@ Note that there can be an extra comment containing links to previously reported 
 #### Triaging and Fixing
 
 **Note**: An issue can be a "false positive" (i.e. automatically opened, but without the package it refers to being actually vulnerable).
-If you find such a "false positive", comment on the issue an explanation of why it falls into this category, linking as much information as the necessary to help maintainers double check.
+If you find such a "false positive", comment on the issue an explanation of why it falls into this category, linking as much information as necessary to help maintainers double check.
 
 If you are investigating a "true positive":
 

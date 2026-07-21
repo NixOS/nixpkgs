@@ -3,9 +3,11 @@
   stdenv,
   fetchFromGitHub,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs_24,
   makeWrapper,
-  prisma-engines,
+  prisma-engines_6,
   ffmpeg,
   openssl,
   vips,
@@ -22,23 +24,25 @@ let
     NEXT_TELEMETRY_DISABLED = "1";
     FFMPEG_PATH = lib.getExe ffmpeg;
     FFPROBE_PATH = lib.getExe' ffmpeg "ffprobe";
-    PRISMA_SCHEMA_ENGINE_BINARY = lib.getExe' prisma-engines "schema-engine";
-    PRISMA_QUERY_ENGINE_BINARY = lib.getExe' prisma-engines "query-engine";
-    PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines}/lib/libquery_engine.node";
-    PRISMA_INTROSPECTION_ENGINE_BINARY = lib.getExe' prisma-engines "introspection-engine";
-    PRISMA_FMT_BINARY = lib.getExe' prisma-engines "prisma-fmt";
+    PRISMA_SCHEMA_ENGINE_BINARY = lib.getExe' prisma-engines_6 "schema-engine";
+    PRISMA_QUERY_ENGINE_BINARY = lib.getExe' prisma-engines_6 "query-engine";
+    PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines_6}/lib/libquery_engine.node";
+    PRISMA_INTROSPECTION_ENGINE_BINARY = lib.getExe' prisma-engines_6 "introspection-engine";
+    PRISMA_FMT_BINARY = lib.getExe' prisma-engines_6 "prisma-fmt";
   };
+
+  pnpm' = pnpm_10.override { nodejs-slim = nodejs_24; };
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zipline";
-  version = "4.3.1";
+  version = "4.6.4";
 
   src = fetchFromGitHub {
     owner = "diced";
     repo = "zipline";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tQRfgLU0Dvf3vhELsttprfzscvHUgI1u7k9RA4S4vqo=";
+    hash = "sha256-feGsg481S+LShOIE0JMHsCkIShQk+cYvfQUYupQnJp0=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git_head
@@ -46,10 +50,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 2;
-    hash = "sha256-zbr57RVBKGpnL5u0evbQAKGyMftHXj6cuntYBHiUxiM=";
+    pnpm = pnpm';
+    fetcherVersion = 3;
+    hash = "sha256-iaC3jJ2+oLY3ycTBE01HzrDhBN9MpvgDFOyjzy2LLAo=";
   };
 
   buildInputs = [
@@ -58,7 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm'
     nodejs_24
     makeWrapper
     # for sharp build:
@@ -67,7 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  env = environment;
+  env = environment // {
+    DATABASE_URL = "dummy";
+    NODE_PATH = "${node-gyp}/lib/node_modules";
+  };
 
   buildPhase = ''
     runHook preBuild
@@ -75,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Force build of sharp against native libvips (requires running install scripts).
     # This is necessary for supporting old CPUs (ie. without SSE 4.2 instruction set).
     pnpm config set nodedir ${nodejs_24}
-    pnpm install --force --offline --frozen-lockfile
+    npm explore sharp -- pnpm run build
 
     pnpm build
 
@@ -115,11 +124,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/ziplinectl";
-  versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [ "DATABASE_URL" ];
   doInstallCheck = true;
 
   passthru = {
-    inherit prisma-engines;
+    prisma-engines = prisma-engines_6;
     tests = { inherit (nixosTests) zipline; };
     updateScript = nix-update-script { };
   };

@@ -11,17 +11,16 @@
   # dependencies
   exceptiongroup,
   idna,
-  sniffio,
   typing-extensions,
 
   # optionals
   trio,
 
   # tests
-  blockbuster,
   hypothesis,
   psutil,
   pytest-mock,
+  pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
   trustme,
@@ -33,29 +32,23 @@
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "4.10.0";
+  version = "4.14.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "agronholm";
     repo = "anyio";
     tag = version;
-    hash = "sha256-9nOGQTqdO3VzA9c97BpZqqwpll5O5+3gRvF/l2Y2ars=";
+    hash = "sha256-MEU0c8/NI1vlyNtBsg/hGLv6DR619ZqoZzNY1eJLEWM=";
   };
 
   build-system = [ setuptools-scm ];
 
   dependencies = [
     idna
-    sniffio
   ]
   ++ lib.optionals (pythonOlder "3.13") [
     typing-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    exceptiongroup
   ];
 
   optional-dependencies = {
@@ -63,11 +56,11 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    blockbuster
     exceptiongroup
     hypothesis
     psutil
     pytest-mock
+    pytest-timeout
     pytest-xdist
     pytestCheckHook
     trustme
@@ -77,6 +70,9 @@ buildPythonPackage rec {
 
   pytestFlags = [
     "-Wignore::trio.TrioDeprecationWarning"
+    # DeprecationWarning for asyncio.iscoroutinefunction is propagated from uvloop used internally
+    # https://github.com/agronholm/anyio/commit/e7bb0bd496b1ae0d1a81b86de72312d52e8135ed
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTestMarks = [
@@ -95,10 +91,9 @@ buildPythonPackage rec {
     "test_nonexistent_main_module"
     #  3 second timeout expired
     "test_keyboardinterrupt_during_test"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # PermissionError: [Errno 1] Operation not permitted: '/dev/console'
-    "test_is_block_device"
+    "test_dynamic_async_fixture_access_does_not_hang"
+    # racy with high thread count, see https://github.com/NixOS/nixpkgs/issues/448125
+    "test_multiple_threads"
 
     # These tests become flaky under heavy load
     "test_asyncio_run_sync_called"
@@ -106,6 +101,13 @@ buildPythonPackage rec {
     "test_run_in_custom_limiter"
     "test_cancel_from_shielded_scope"
     "test_start_task_soon_cancel_later"
+
+    # fails to monkeypatch __file__.__main__
+    "test_entrypoint_main_module"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # PermissionError: [Errno 1] Operation not permitted: '/dev/console'
+    "test_is_block_device"
 
     # AssertionError: assert 'wheel' == 'nixbld'
     "test_group"
@@ -124,11 +126,11 @@ buildPythonPackage rec {
     inherit starlette;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/agronholm/anyio/blob/${src.tag}/docs/versionhistory.rst";
     description = "High level compatibility layer for multiple asynchronous event loop implementations on Python";
     homepage = "https://github.com/agronholm/anyio";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

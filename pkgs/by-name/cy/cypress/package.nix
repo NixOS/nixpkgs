@@ -1,6 +1,7 @@
 {
   alsa-lib,
   autoPatchelfHook,
+  darwin,
   fetchzip,
   gtk2,
   gtk3,
@@ -12,7 +13,6 @@
   stdenv,
   udev,
   unzip,
-  xorg,
 }:
 
 let
@@ -28,10 +28,6 @@ let
     aarch64-darwin = {
       platform = "darwin-arm64";
       hash = "sha256-8qvMsC+tRKK12jC2r1A54kS/PZ6q+sErvLvTkse6Kn4=";
-    };
-    x86_64-darwin = {
-      platform = "darwin-x64";
-      hash = "sha256-cCLJloLcuCDgTEiMMJKY6rYiPPhZfFfqXFP5NAMhw4Q=";
     };
   };
   inherit (stdenv.hostPlatform) system;
@@ -55,6 +51,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     unzip
     makeShellWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.autoSignDarwinBinariesHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
@@ -115,14 +114,14 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fast, easy and reliable testing for anything that runs in a browser";
     homepage = "https://www.cypress.io";
     mainProgram = "Cypress";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.mit;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.mit;
     platforms = lib.attrNames availableBinaries;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       tweber
       mmahut
       Crafter

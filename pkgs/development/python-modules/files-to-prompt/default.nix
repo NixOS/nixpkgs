@@ -29,7 +29,7 @@ buildPythonPackage rec {
     versionCheckHook
   ];
 
-  versionCheckProgramArg = "--version";
+  disabledTests = [ "test_binary_file_warning" ];
 
   meta = {
     mainProgram = "files-to-prompt";

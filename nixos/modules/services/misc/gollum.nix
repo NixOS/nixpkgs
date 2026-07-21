@@ -18,6 +18,11 @@ in
       ]
       "MathJax rendering might be discontinued in the future, use services.gollum.math instead to enable KaTeX rendering or file a PR if you really need Mathjax"
     )
+    (lib.mkRemovedOptionModule [
+      "services"
+      "gollum"
+      "local-time"
+    ] "Set the value in services.gollum.extraConfig")
   ];
 
   options.services.gollum = {
@@ -38,6 +43,13 @@ in
     extraConfig = lib.mkOption {
       type = lib.types.lines;
       default = "";
+      example = ''
+        wiki_options = {
+          show_local_time: true
+        }
+
+        Precious::App.set(:wiki_options, wiki_options)
+      '';
       description = "Content of the configuration file";
     };
 
@@ -87,12 +99,6 @@ in
       description = "Disable editing pages";
     };
 
-    local-time = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Use the browser's local timezone instead of the server's for displaying dates.";
-    };
-
     branch = lib.mkOption {
       type = lib.types.str;
       default = "master";
@@ -139,10 +145,16 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.git ];
-
       preStart = ''
-        # This is safe to be run on an existing repo
-        git init ${cfg.stateDir}
+        # Check if it's a bare repository.
+        IS_BARE=$(git -C "${cfg.stateDir}" rev-parse --is-bare-repository 2>/dev/null || echo "false")
+
+        if [ "$IS_BARE" = "true" ]; then
+          echo "Directory is a bare repository. Skipping initialization."
+        else
+          echo "Directory is not a bare repository. Initializing..."
+          git init "${cfg.stateDir}"
+        fi
       '';
 
       serviceConfig = {
@@ -159,7 +171,6 @@ in
             ${lib.optionalString cfg.emoji "--emoji"} \
             ${lib.optionalString cfg.h1-title "--h1-title"} \
             ${lib.optionalString cfg.no-edit "--no-edit"} \
-            ${lib.optionalString cfg.local-time "--local-time"} \
             ${lib.optionalString (cfg.allowUploads != null) "--allow-uploads ${cfg.allowUploads}"} \
             ${lib.optionalString (cfg.user-icons != null) "--user-icons ${cfg.user-icons}"} \
             ${cfg.stateDir}

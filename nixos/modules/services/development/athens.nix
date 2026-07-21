@@ -7,7 +7,7 @@
 let
   cfg = config.services.athens;
 
-  athensConfig = lib.flip lib.recursiveUpdate cfg.extraConfig ({
+  athensConfig = lib.flip lib.recursiveUpdate cfg.extraConfig {
     GoBinary = "${cfg.goBinary}/bin/go";
     GoEnv = cfg.goEnv;
     GoBinaryEnvVars = lib.mapAttrsToList (k: v: "${k}=${v}") cfg.goBinaryEnvVars;
@@ -81,14 +81,6 @@ let
         Bucket = cfg.storage.gcp.bucket;
         JSONKey = cfg.storage.gcp.jsonKey;
       };
-      Minio = {
-        Endpoint = cfg.storage.minio.endpoint;
-        Key = cfg.storage.minio.key;
-        Secret = cfg.storage.minio.secret;
-        EnableSSL = cfg.storage.minio.enableSSL;
-        Bucket = cfg.storage.minio.bucket;
-        region = cfg.storage.minio.region;
-      };
       Mongo = {
         URL = cfg.storage.mongo.url;
         DefaultDBName = cfg.storage.mongo.defaultDBName;
@@ -141,7 +133,7 @@ let
         };
       };
     };
-  });
+  };
 
   configFile = lib.pipe athensConfig [
     (lib.filterAttrsRecursive (_k: v: v != null))
@@ -272,7 +264,7 @@ in
 
     filterFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      description = ''Filename for the include exclude filter.'';
+      description = "Filename for the include exclude filter.";
       default = null;
       example = lib.literalExpression ''
         pkgs.writeText "filterFile" '''
@@ -285,7 +277,7 @@ in
 
     robotsFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      description = ''Provides /robots.txt for net crawlers.'';
+      description = "Provides /robots.txt for net crawlers.";
       default = null;
       example = lib.literalExpression ''pkgs.writeText "robots.txt" "# my custom robots.txt ..."'';
     };
@@ -303,7 +295,6 @@ in
         "disk"
         "mongo"
         "gcp"
-        "minio"
         "s3"
         "azureblob"
         "external"
@@ -700,44 +691,6 @@ in
         };
       };
 
-      minio = {
-        endpoint = lib.mkOption {
-          type = lib.types.nullOr lib.types.str;
-          description = "Endpoint of the minio storage backend.";
-          example = "minio.example.com:9001";
-          default = null;
-        };
-        key = lib.mkOption {
-          type = lib.types.nullOr lib.types.str;
-          description = "Access key id for the minio storage backend.";
-          example = "minio";
-          default = null;
-        };
-        secret = lib.mkOption {
-          type = lib.types.nullOr lib.types.str;
-          description = "Secret key for the minio storage backend. Warning: this is stored in plain text in the config file.";
-          example = "minio123";
-          default = null;
-        };
-        enableSSL = lib.mkOption {
-          type = lib.types.bool;
-          description = "Enable SSL for the minio storage backend.";
-          default = false;
-        };
-        bucket = lib.mkOption {
-          type = lib.types.nullOr lib.types.str;
-          description = "Bucket name for the minio storage backend.";
-          example = "gomods";
-          default = null;
-        };
-        region = lib.mkOption {
-          type = lib.types.nullOr lib.types.str;
-          description = "Region for the minio storage backend.";
-          example = "us-east-1";
-          default = null;
-        };
-      };
-
       mongo = {
         url = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
@@ -774,7 +727,6 @@ in
         key = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
           description = "Access key id for the S3 storage backend.";
-          example = "minio";
           default = null;
         };
         secret = lib.mkOption {
@@ -956,7 +908,7 @@ in
       serviceConfig = {
         Restart = "on-abnormal";
         Nice = 5;
-        ExecStart = ''${cfg.package}/bin/athens -config_file=${configFile}'';
+        ExecStart = "${cfg.package}/bin/athens -config_file=${configFile}";
 
         KillMode = "mixed";
         KillSignal = "SIGINT";
@@ -991,4 +943,12 @@ in
     };
   };
 
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "athens"
+      "storage"
+      "minio"
+    ] "Support for Minio storage backend has been removed, as minio is unmaintained.")
+  ];
 }

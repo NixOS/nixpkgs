@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "uritemplate";
   version = "4.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,14 +22,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "uritemplate" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of RFC 6570 URI templates";
     homepage = "https://github.com/python-hyper/uritemplate";
     changelog = "https://github.com/python-hyper/uritemplate/blob/${version}/HISTORY.rst";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       bsd3
     ];
-    maintainers = with maintainers; [ matthiasbeyer ];
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
 }

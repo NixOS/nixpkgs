@@ -3,15 +3,12 @@
   buildPythonPackage,
   cython,
   fetchFromGitHub,
-  fetchpatch,
   gmpy2,
   hypothesis,
   mpmath,
   numpy,
   pexpect,
-  pythonOlder,
   pytest-cov-stub,
-  pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
   scipy,
@@ -23,22 +20,12 @@ buildPythonPackage rec {
   version = "0.15.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "diofant";
     repo = "diofant";
     tag = "v${version}";
     hash = "sha256-uQvAYSURDhuAKcX0WVMk4y2ZXiiq0lPZct/7A5n5t34=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "remove-pip-from-build-dependencies.patch";
-      url = "https://github.com/diofant/diofant/commit/117e441808faa7c785ccb81bf211772d60ebdec3.patch";
-      hash = "sha256-MYk1Ku4F3hAv7+jJQLWhXd8qyKRX+QYuBzPfYWT0VbU=";
-    })
-  ];
 
   build-system = [ setuptools-scm ];
 
@@ -80,11 +67,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "diofant" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://diofant.readthedocs.io/en/latest/release/notes-${src.tag}.html";
     description = "Python CAS library";
     homepage = "https://github.com/diofant/diofant";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ suhr ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

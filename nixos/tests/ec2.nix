@@ -19,9 +19,13 @@ let
         ../modules/profiles/qemu-guest.nix
         {
           # Hack to make the partition resizing work in QEMU.
-          boot.initrd.postDeviceCommands = mkBefore ''
-            ln -s vda /dev/xvda
-            ln -s vda1 /dev/xvda1
+          boot.initrd.services.udev.rules = ''
+            KERNEL==vda, SYMLINK+=xvda
+            KERNEL==vda1, SYMLINK+=xvda1
+          '';
+          services.udev.extraRules = ''
+            KERNEL==vda, SYMLINK+=xvda
+            KERNEL==vda1, SYMLINK+=xvda1
           '';
 
           amazonImage.format = "qcow2";
@@ -33,7 +37,7 @@ let
 
           # Needed by nixos-rebuild due to the lack of network
           # access. Determined by trial and error.
-          system.extraDependencies = with pkgs; ([
+          system.extraDependencies = with pkgs; [
             # Needed for a nixos-rebuild.
             busybox
             cloud-utils
@@ -44,7 +48,7 @@ let
             stdenvNoCC
             texinfo
             unionfs-fuse
-            xorg.lndir
+            lndir
 
             # These are used in the configure-from-userdata tests
             # for EC2. Httpd and valgrind are requested by the
@@ -53,13 +57,13 @@ let
             apacheHttpd.doc
             apacheHttpd.man
             valgrind.doc
-          ]);
+          ];
 
           nixpkgs.pkgs = pkgs;
         }
       ];
     }).config;
-  image = "${imageCfg.system.build.amazonImage}/${imageCfg.image.imageFile}";
+  image = "${imageCfg.system.build.amazonImage}/${imageCfg.image.fileName}";
 
   sshKeys = import ./ssh-keys.nix pkgs;
   snakeOilPrivateKey = sshKeys.snakeOilPrivateKey.text;
@@ -123,7 +127,7 @@ in
     inherit image;
     sshPublicKey = snakeOilPublicKey;
 
-    # ### https://nixos.org/channels/nixos-unstable nixos
+    # ### https://channels.nixos.org/nixos-unstable nixos
     userData = ''
       { pkgs, ... }:
 

@@ -4,18 +4,18 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "grpcui";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "fullstorydev";
     repo = "grpcui";
-    rev = "v${version}";
-    sha256 = "sha256-mZeNK/NwN887TN4fnvGzrqwJCBYnYcuW/K+O0LgX0uo=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-qJ8X4l4Efww6fJ1Xr/MXn2Nr7O0zCmDTb0YAWGInVp4=";
   };
 
-  vendorHash = "sha256-y4OK610q+8m48M/HX3bXNV7YguoOaZKnCw+JnEvqbEI=";
+  vendorHash = "sha256-S6GeFwxyrlHzsXWz66jrNa+mtoACn7w2oY3M9XjPusk=";
 
   doCheck = false;
 
@@ -24,15 +24,15 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Interactive web UI for gRPC, along the lines of postman";
     homepage = "https://github.com/fullstorydev/grpcui";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pradyuman ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pradyuman ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "grpcui";
   };
-}
+})

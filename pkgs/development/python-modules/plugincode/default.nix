@@ -8,15 +8,12 @@
   pluggy,
   pytestCheckHook,
   pytest-xdist,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "plugincode";
   version = "32.0.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -46,11 +43,11 @@ buildPythonPackage rec {
     "test_skeleton_codestyle"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library that provides plugin functionality for ScanCode toolkit";
     homepage = "https://github.com/nexB/plugincode";
     changelog = "https://github.com/nexB/plugincode/blob/v${version}/CHANGELOG.rst";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

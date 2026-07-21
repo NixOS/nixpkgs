@@ -29,16 +29,16 @@
   giflib,
   libpng,
   lcms2,
-  libX11,
-  libICE,
-  libXext,
-  libXrender,
-  libXtst,
-  libXt,
-  libXi,
-  libXinerama,
-  libXcursor,
-  libXrandr,
+  libx11,
+  libice,
+  libxext,
+  libxrender,
+  libxtst,
+  libxt,
+  libxi,
+  libxinerama,
+  libxcursor,
+  libxrandr,
   fontconfig,
 
   setJavaClassPath,
@@ -58,15 +58,11 @@
   enableJavaFX ? false,
   openjfx17,
   openjfx21,
-  openjfx23,
-  openjfx24,
   openjfx25,
   openjfx_jdk ?
     {
       "17" = openjfx17;
       "21" = openjfx21;
-      "23" = openjfx23;
-      "24" = openjfx24;
       "25" = openjfx25;
     }
     .${featureVersion} or (throw "JavaFX is not supported on OpenJDK ${featureVersion}"),
@@ -80,8 +76,6 @@
   temurin-bin-11,
   temurin-bin-17,
   temurin-bin-21,
-  temurin-bin-23,
-  temurin-bin-24,
   temurin-bin-25,
   jdk-bootstrap ?
     {
@@ -89,8 +83,6 @@
       "11" = temurin-bin-11.__spliced.buildBuild or temurin-bin-11;
       "17" = temurin-bin-17.__spliced.buildBuild or temurin-bin-17;
       "21" = temurin-bin-21.__spliced.buildBuild or temurin-bin-21;
-      "23" = temurin-bin-23.__spliced.buildBuild or temurin-bin-23;
-      "24" = temurin-bin-24.__spliced.buildBuild or temurin-bin-24;
       "25" = temurin-bin-25.__spliced.buildBuild or temurin-bin-25;
     }
     .${featureVersion},
@@ -107,7 +99,6 @@ let
   atLeast17 = lib.versionAtLeast featureVersion "17";
   atLeast21 = lib.versionAtLeast featureVersion "21";
   atLeast23 = lib.versionAtLeast featureVersion "23";
-  atLeast24 = lib.versionAtLeast featureVersion "24";
   atLeast25 = lib.versionAtLeast featureVersion "25";
 
   tagPrefix = if atLeast11 then "jdk-" else "jdk";
@@ -152,8 +143,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (
-      if atLeast24 then
-        ./24/patches/fix-java-home-jdk24.patch
+      if atLeast25 then
+        ./25/patches/fix-java-home-jdk25.patch
       else if atLeast21 then
         ./21/patches/fix-java-home-jdk21.patch
       else if atLeast11 then
@@ -162,8 +153,8 @@ stdenv.mkDerivation (finalAttrs: {
         ./8/patches/fix-java-home-jdk8.patch
     )
     (
-      if atLeast24 then
-        ./24/patches/read-truststore-from-env-jdk24.patch
+      if atLeast25 then
+        ./25/patches/read-truststore-from-env-jdk25.patch
       else if atLeast11 then
         ./11/patches/read-truststore-from-env-jdk10.patch
       else
@@ -243,6 +234,9 @@ stdenv.mkDerivation (finalAttrs: {
       else
         ./8/patches/swing-use-gtk-jdk8.patch
     )
+  ]
+  ++ lib.optionals (featureVersion == "11") [
+    ./11/patches/fix-oopdesc-ptr-alignment-ub.patch
   ];
 
   strictDeps = true;
@@ -271,7 +265,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals atLeast21 [
     ensureNewerSourcesForZipFilesHook
   ]
-  ++ lib.optionals atLeast24 [
+  ++ lib.optionals atLeast25 [
     pandoc
   ];
 
@@ -285,16 +279,16 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     libjpeg
     giflib
-    libX11
-    libICE
-    libXext
-    libXrender
-    libXtst
-    libXt
-    libXi
-    libXinerama
-    libXcursor
-    libXrandr
+    libx11
+    libice
+    libxext
+    libxrender
+    libxtst
+    libxt
+    libxi
+    libxinerama
+    libxcursor
+    libxrandr
     fontconfig
   ]
   ++ lib.optionals (atLeast11 && !atLeast21) [
@@ -362,17 +356,10 @@ stdenv.mkDerivation (finalAttrs: {
         "--with-milestone=fcs"
       ]
   )
-  ++ lib.optionals (!atLeast21) (
-    if atLeast11 then
-      [
-        "--with-freetype=system"
-        "--with-harfbuzz=system"
-      ]
-    else
-      [
-        "--disable-freetype-bundling"
-      ]
-  )
+  ++ lib.optionals (!atLeast21 && atLeast11) [
+    "--with-freetype=system"
+    "--with-harfbuzz=system"
+  ]
   ++ lib.optionals atLeast11 [
     "--with-libjpeg=system"
     "--with-libpng=system"
@@ -421,10 +408,16 @@ stdenv.mkDerivation (finalAttrs: {
       if atLeast17 then
         "-Wno-error"
       else if atLeast11 then
-        # Workaround for
-        # `cc1plus: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]`
-        # when building jtreg
-        "-Wformat"
+        lib.concatStringsSep " " (
+          # Workaround for
+          # `cc1plus: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]`
+          # when building jtreg
+          [ "-Wformat" ]
+          ++ lib.optionals (stdenv.cc.isGNU && featureVersion == "11") [
+            # Fix build with gcc15
+            "-std=gnu17"
+          ]
+        )
       else
         lib.concatStringsSep " " (
           [
@@ -444,6 +437,10 @@ stdenv.mkDerivation (finalAttrs: {
             # error by default in GCC 14
             "-Wno-error=int-conversion"
             "-Wno-error=incompatible-pointer-types"
+          ]
+          ++ lib.optionals (stdenv.cc.isGNU && featureVersion == "8") [
+            # Fix build with gcc15
+            "-std=gnu17"
           ]
         );
 
@@ -477,7 +474,7 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +x configure
     patchShebangs --build configure
   ''
-  + lib.optionalString atLeast24 ''
+  + lib.optionalString atLeast25 ''
     chmod +x make/scripts/*.{template,sh,pl}
     patchShebangs --build make/scripts
   '';
@@ -615,7 +612,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://openjdk.java.net/";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
-      edwtjo
       infinidoge
     ];
     teams = [ lib.teams.java ];

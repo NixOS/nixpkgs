@@ -2,12 +2,12 @@
 {
   lib,
   runCommand,
-  invalidateFetcherByDrvHash,
+  testers,
   cacert,
   python3,
 }:
 
-invalidateFetcherByDrvHash (
+testers.invalidateFetcherByDrvHash (
   {
     name ? "manual_check-manpage-urls",
     script ? ./manpage-urls.py,

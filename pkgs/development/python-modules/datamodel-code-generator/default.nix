@@ -3,38 +3,47 @@
   argcomplete,
   black,
   buildPythonPackage,
+  email-validator,
   fetchFromGitHub,
-  freezegun,
   genson,
   graphql-core,
+  grpcio-tools,
   hatch-vcs,
   hatchling,
   httpx,
+  hypothesis,
+  hypothesis-jsonschema,
   inflect,
+  inline-snapshot,
   isort,
+  jsonschema,
+  msgspec,
   jinja2,
   openapi-spec-validator,
   packaging,
   prance,
   ruff,
   pydantic,
-  pytest-benchmark,
+  pysnooper,
   pytest-mock,
+  pytest-timeout,
+  pytest-xdist,
   pytestCheckHook,
   pyyaml,
-  toml,
+  time-machine,
+  watchfiles,
 }:
 
 buildPythonPackage rec {
   pname = "datamodel-code-generator";
-  version = "0.33.0";
+  version = "0.68.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "koxudaxi";
     repo = "datamodel-code-generator";
     tag = version;
-    hash = "sha256-SyRF4Rn9LdcMTEH0xphDNIfEABknwvUoN2BYlNJFbrA=";
+    hash = "sha256-fYnI7S4FJ927qZXyAsWQzxhLTrcpscYqJunmcSt/gkk=";
   };
 
   pythonRelaxDeps = [
@@ -57,33 +66,49 @@ buildPythonPackage rec {
     packaging
     pydantic
     pyyaml
-    toml
   ];
 
   optional-dependencies = {
+    all = lib.concatAttrValues (lib.removeAttrs optional-dependencies [ "all" ]);
+    debug = [ pysnooper ];
     graphql = [ graphql-core ];
     http = [ httpx ];
+    protobuf = [ grpcio-tools ];
     ruff = [ ruff ];
     validation = [
       openapi-spec-validator
       prance
     ];
+    watch = [
+      watchfiles
+    ];
   };
 
   nativeCheckInputs = [
-    freezegun
-    pytest-benchmark
+    email-validator
+    inline-snapshot
+    hypothesis
+    hypothesis-jsonschema
+    jsonschema
+    msgspec
     pytest-mock
+    pytest-timeout
+    pytest-xdist
     pytestCheckHook
+    time-machine
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ optional-dependencies.all;
 
-  pythonImportsCheck = [ "datamodel_code_generator" ];
+  pytestFlags = [
+    "--maxfail=2"
+  ];
 
   disabledTests = [
     # remote testing, name resolution failure.
     "test_openapi_parser_parse_remote_ref"
   ];
+
+  pythonImportsCheck = [ "datamodel_code_generator" ];
 
   meta = {
     description = "Pydantic model and dataclasses.dataclass generator for easy conversion of JSON, OpenAPI, JSON Schema, and YAML data sources";

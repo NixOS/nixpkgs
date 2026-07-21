@@ -16,14 +16,13 @@
 
 buildPythonPackage rec {
   pname = "skia-pathops";
-  version = "0.8.0.post2";
+  version = "0.9.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "skia_pathops";
     inherit version;
-    extension = "zip";
-    hash = "sha256-niUs3rbE0WLoKYbTHb2JxnXRZ3y4AZwuE+YpXUpVcmk=";
+    hash = "sha256-S22EWfb0ppKCyyb8oMK7CzIcxYqb+cxleaUqOR7cAxk=";
   };
 
   postPatch = ''
@@ -73,7 +72,7 @@ buildPythonPackage rec {
     description = "Python access to operations on paths using the Skia library";
     homepage = "https://github.com/fonttools/skia-pathops";
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.BarinovMaxim ];
+    maintainers = [ ];
     # "The Skia team is not endian-savvy enough to support big-endian CPUs."
     badPlatforms = lib.platforms.bigEndian;
     # ERROR at //gn/BUILDCONFIG.gn:87:14: Script returned non-zero exit code.

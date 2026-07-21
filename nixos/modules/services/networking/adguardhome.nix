@@ -176,31 +176,72 @@ in
         StartLimitBurst = 10;
       };
 
-      preStart = lib.optionalString (settings != null) ''
-        if    [ -e "$STATE_DIRECTORY/AdGuardHome.yaml" ] \
-           && [ "${toString cfg.mutableSettings}" = "1" ]; then
-          # First run a schema_version update on the existing configuration
-          # This ensures that both the new config and the existing one have the same schema_version
-          # Note: --check-config has the side effect of modifying the file at rest!
-          ${lib.getExe cfg.package} -c "$STATE_DIRECTORY/AdGuardHome.yaml" --check-config
+      preStart =
+        let
+          installFresh = ''
+            cp --force "${configFile}" "$STATE_DIRECTORY/AdGuardHome.yaml"
+            chmod 600 "$STATE_DIRECTORY/AdGuardHome.yaml"
+          '';
+        in
+        lib.optionalString (settings != null) (
+          if cfg.mutableSettings then
+            ''
+              if [ -e "$STATE_DIRECTORY/AdGuardHome.yaml" ]; then
+                # First run a schema_version update on the existing configuration
+                # This ensures that both the new config and the existing one have the same schema_version
+                # Note: --check-config has the side effect of modifying the file at rest!
+                ${lib.getExe cfg.package} -c "$STATE_DIRECTORY/AdGuardHome.yaml" --check-config
 
-          # Writing directly to AdGuardHome.yaml results in empty file
-          ${lib.getExe pkgs.yaml-merge} "$STATE_DIRECTORY/AdGuardHome.yaml" "${configFile}" > "$STATE_DIRECTORY/AdGuardHome.yaml.tmp"
-          mv "$STATE_DIRECTORY/AdGuardHome.yaml.tmp" "$STATE_DIRECTORY/AdGuardHome.yaml"
-        else
-          cp --force "${configFile}" "$STATE_DIRECTORY/AdGuardHome.yaml"
-          chmod 600 "$STATE_DIRECTORY/AdGuardHome.yaml"
-        fi
-      '';
+                # Writing directly to AdGuardHome.yaml results in empty file
+                ${lib.getExe pkgs.yaml-merge} "$STATE_DIRECTORY/AdGuardHome.yaml" "${configFile}" > "$STATE_DIRECTORY/AdGuardHome.yaml.tmp"
+                mv "$STATE_DIRECTORY/AdGuardHome.yaml.tmp" "$STATE_DIRECTORY/AdGuardHome.yaml"
+              else
+                ${installFresh}
+              fi
+            ''
+          else
+            installFresh
+        );
 
       serviceConfig = {
         DynamicUser = true;
         ExecStart = "${lib.getExe cfg.package} ${args}";
+        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ] ++ lib.optionals cfg.allowDHCP [ "CAP_NET_RAW" ];
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ] ++ lib.optionals cfg.allowDHCP [ "CAP_NET_RAW" ];
         Restart = "always";
         RestartSec = 10;
         RuntimeDirectory = "AdGuardHome";
         StateDirectory = "AdGuardHome";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+          "~@resources"
+        ];
+        SystemCallArchitectures = "native";
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = "strict";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_NETLINK"
+          "AF_INET"
+          "AF_INET6"
+        ]
+        ++ lib.optionals cfg.allowDHCP [ "AF_PACKET" ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        UMask = "0077";
       };
     };
 

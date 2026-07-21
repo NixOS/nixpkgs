@@ -2,18 +2,28 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dasm";
   version = "2.20.14.1";
 
   src = fetchFromGitHub {
     owner = "dasm-assembler";
     repo = "dasm";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1bna0bj503xyn5inwzzsrsgi9qg8p20by4dfk7azj91ynw56pl41";
   };
+
+  patches = [
+    # Pull upstream gcc-15 build fix.
+    (fetchpatch {
+      name = "gcc-15.patch";
+      url = "https://github.com/dasm-assembler/dasm/commit/ed21db28a0e9693c455d6491cdc120a5936b007a.patch";
+      hash = "sha256-CR5/Cs82JN63TmMRt398iWlMdt0QaLL7N2bbOiCAz9s=";
+    })
+  ];
 
   configurePhase = false;
   installPhase = ''
@@ -28,11 +38,11 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Assembler for 6502 and other 8-bit microprocessors";
     homepage = "https://dasm-assembler.github.io";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.jwatt ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.jwatt ];
+    platforms = lib.platforms.all;
   };
-}
+})

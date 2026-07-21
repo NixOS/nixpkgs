@@ -15,7 +15,8 @@
   openssl,
   pango,
   pkg-config,
-  xorg,
+  libxrandr,
+  libx11,
 }:
 let
   buildVM =
@@ -59,7 +60,7 @@ let
           --replace "/bin/rm" "rm"
         substituteInPlace ./platforms/unix/config/configure \
           --replace "/usr/bin/file" "file" \
-          --replace "/usr/bin/pkg-config" "pkg-config" \
+          --replace "/usr/bin/pkg-config" "pkg-config"
       '';
 
       preConfigure = ''
@@ -91,8 +92,8 @@ let
         libuuid
         openssl
         pango
-        xorg.libX11
-        xorg.libXrandr
+        libx11
+        libxrandr
       ];
 
       postInstall = ''
@@ -109,7 +110,7 @@ let
         description = "Cross-platform virtual machine for Squeak, Pharo, Cuis, and Newspeak";
         mainProgram = scriptName;
         homepage = "https://opensmalltalk.org/";
-        license = with lib.licenses; [ mit ];
+        license = lib.licenses.mit;
         maintainers = with lib.maintainers; [ jakewaksbaum ];
         platforms = [ stdenv.targetPlatform.system ];
       };
@@ -197,5 +198,5 @@ if (!config.allowAliases && !(vmsByPlatform ? platform)) then
 else
   vmsByPlatform.${platform} or (throw (
     "Unsupported platform ${platform}: only the following platforms are supported: "
-    + builtins.toString (builtins.attrNames vmsByPlatform)
+    + toString (builtins.attrNames vmsByPlatform)
   ))

@@ -8,7 +8,7 @@
 {
   _module.args.latestKernel = lib.mkDefault false;
   name = "login";
-  meta = with pkgs.lib.maintainers; {
+  meta = {
     maintainers = [ ];
   };
 

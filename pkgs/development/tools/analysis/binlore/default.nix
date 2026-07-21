@@ -136,7 +136,7 @@ rec {
         +
           # append lore from package's $out and drv.binlore.${drv.outputName} (last entry wins)
           ''
-            for lore_type in ${builtins.toString lore.types}; do
+            for lore_type in ${toString lore.types}; do
               if [[ -f "${drv}/nix-support/$lore_type" ]]; then
                 cat "${drv}/nix-support/$lore_type" >> "$out/$lore_type"
               fi

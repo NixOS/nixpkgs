@@ -7,14 +7,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-metrics";
   version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "jdrouet";
     repo = "git-metrics";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-SdA/FpdrbC36Ny7aBpTUvFldbYXyajSqWGheaDPHYoE=";
   };
 
@@ -43,10 +43,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     homepage = "https://github.com/jdrouet/git-metrics";
     description = "Git extension to be able to track metrics about your project, within the git repository";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
     mainProgram = "git-metrics";
   };
-}
+})

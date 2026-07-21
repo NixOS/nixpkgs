@@ -6,37 +6,28 @@
   fontconfig,
   zlib,
   icu,
-  libX11,
-  libXext,
-  libXi,
-  libXrandr,
-  libICE,
-  libSM,
+  libx11,
+  libxext,
+  libxi,
+  libxrandr,
+  libice,
+  libsm,
   openssl,
-  unzip,
   xdg-utils,
-  makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "muse-sounds-manager";
-  version = "2.0.4.872";
+  version = "2.2.1.953";
 
-  # Use web.archive.org since upstream does not provide a stable (versioned) URL.
-  # To see if there are new versions on the Web Archive, visit
-  # http://web.archive.org/cdx/search/cdx?url=https://muse-cdn.com/Muse_Sounds_Manager_x64.tar.gz
-  # then replace the date in the URL below with date when the SHA1
-  # changes (currently QLR46LKDOAPB7VSF45HEAXWVNWFJHITG) and replace
-  # the version above with the version in the .deb metadata (or in the
-  # settings of muse-sounds-manager).
+  # Permalink from https://support.musehub.com/en/articles/15070607-changelog
   src = fetchurl {
-    url = "https://web.archive.org/web/20250729165100if_/https://muse-cdn.com/Muse_Sounds_Manager_x64.tar.gz";
-    hash = "sha256-VcLBXpLDk90yd0j9NIzBOXXAciSLWP9y5X51L2/9W4A=";
+    url = "https://muse-cdn.com/muse-sounds-manager/Muse_Sounds_Manager_x64_${finalAttrs.version}.tar.gz";
+    hash = "sha256-y7fKHh2pG8uT4p0vq20rsW8bSAp1mepkd2sW/06N3EI=";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
-    makeWrapper
   ];
 
   buildInputs = [
@@ -44,16 +35,16 @@ stdenv.mkDerivation rec {
     stdenv.cc.cc
     zlib
   ]
-  ++ runtimeDependencies;
+  ++ finalAttrs.runtimeDependencies;
 
   runtimeDependencies = map lib.getLib [
     icu
-    libX11
-    libXext
-    libXi
-    libXrandr
-    libICE
-    libSM
+    libx11
+    libxext
+    libxi
+    libxrandr
+    libice
+    libsm
     openssl
   ];
 
@@ -70,8 +61,6 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     ln -s ${xdg-utils}/bin/xdg-open $out/bin/open
-    wrapProgram $out/bin/muse-sounds-manager \
-      --prefix PATH : ${lib.makeBinPath [ unzip ]}
   '';
 
   dontStrip = true;
@@ -82,10 +71,9 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     mainProgram = "muse-sounds-manager";
     maintainers = with lib.maintainers; [
-      orivej
       sarunint
     ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})

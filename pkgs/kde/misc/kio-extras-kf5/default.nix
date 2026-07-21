@@ -3,6 +3,8 @@
   fetchurl,
   kio-extras,
   cmake,
+  pkg-config,
+  extra-cmake-modules,
   libsForQt5,
   samba,
   libssh,
@@ -25,43 +27,53 @@ stdenv.mkDerivation rec {
     hash = "sha256-qar1jzuALINBu6HOuVBU+RUFnqRH9Z/8e5M8ynGxKsk=";
   };
 
-  nativeBuildInputs = with libsForQt5; [
+  nativeBuildInputs = [
     cmake
+    pkg-config
     extra-cmake-modules
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
-  buildInputs = with libsForQt5; [
-    qtbase
+  # override ECM defaults that assume Qt6
+  # this can't be cmakeFlags because we need this to be set last so it wins
+  preConfigure = ''
+    appendToVar cmakeFlags "-DKDE_INSTALL_LOGGINGCATEGORIESDIR=${placeholder "out"}/share/qlogging-categories5"
+  '';
 
-    kactivities
-    kactivities-stats
-    karchive
-    kconfig
-    kconfigwidgets
-    kcoreaddons
-    kdbusaddons
-    kdnssd
-    kdoctools
-    kdsoap
-    kguiaddons
-    ki18n
-    kio
-    # libkexiv2
-    phonon
-    solid
-    syntax-highlighting
+  buildInputs =
+    with libsForQt5;
+    with libsForQt5.__internalKF5;
+    [
+      qtbase
 
-    samba
-    libssh
-    libmtp
-    libimobiledevice
-    gperf
-    libtirpc
-    openexr
-    taglib
-    libappimage
-  ];
+      kactivities
+      kactivities-stats
+      karchive
+      kconfig
+      kconfigwidgets
+      kcoreaddons
+      kdbusaddons
+      kdnssd
+      kdoctools
+      kdsoap
+      kguiaddons
+      ki18n
+      kio
+      # libkexiv2
+      # phonon
+      solid
+      syntax-highlighting
+
+      samba
+      libssh
+      libmtp
+      libimobiledevice
+      gperf
+      libtirpc
+      openexr
+      taglib
+      libappimage
+    ];
 
   meta = kio-extras.meta;
 }

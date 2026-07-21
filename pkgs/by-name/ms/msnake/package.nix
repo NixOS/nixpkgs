@@ -18,6 +18,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-5q3yT7amPF+SSvO6/eUU7IiK0k6f3nme9YYBUobSuuo=";
   };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        "cmake_minimum_required(VERSION 2.8.4)" \
+        "cmake_minimum_required(VERSION 4.0)" \
+      --replace-fail "project(msnake)" "project(msnake C)"
+  '';
+
+  # fixes: error: conflicting types for 'display_highscore'
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   nativeBuildInputs = [
     cmake
   ];

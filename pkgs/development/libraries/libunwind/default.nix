@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libunwind";
-  version = "1.8.2";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "libunwind";
     repo = "libunwind";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-MsUReXFHlj15SgEZHOYhdSfAbSeVVl8LCi4NnUwvhpw=";
+    hash = "sha256-ed+FUPApDxNHxznXMhiTeNr8yRxRDSCyJJdIhouGNho=";
   };
 
   postPatch =
@@ -64,10 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheck = true;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nongnu.org/libunwind";
     description = "Portable and efficient API to determine the call-chain of a program";
-    maintainers = with maintainers; [ orivej ];
+    maintainers = [ ];
     pkgConfigModules = [
       "libunwind"
       "libunwind-coredump"
@@ -96,6 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-linux"
       "x86_64-solaris"
     ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 })

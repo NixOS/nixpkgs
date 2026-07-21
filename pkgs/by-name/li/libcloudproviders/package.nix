@@ -7,8 +7,7 @@
   pkg-config,
   gobject-introspection,
   vala,
-  gtk-doc,
-  docbook_xsl,
+  gi-docgen,
   glib,
   mesonEmulatorHook,
   gnome,
@@ -16,13 +15,13 @@
 
 # TODO: Add installed tests once https://gitlab.gnome.org/World/libcloudproviders/issues/4 is fixed
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcloudproviders";
-  version = "0.3.6";
+  version = "0.4.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libcloudproviders/${lib.versions.majorMinor version}/libcloudproviders-${version}.tar.xz";
-    hash = "sha256-O3URCzpP3vTFxaRA5IcB/gVNKuBh0VbIkTa7W6BedLc=";
+    url = "mirror://gnome/sources/libcloudproviders/${lib.versions.majorMinor finalAttrs.version}/libcloudproviders-${finalAttrs.version}.tar.xz";
+    hash = "sha256-JHsijRAnsmg4aOfXCA04aTpFfpCKrdDBGdUt5Zo5gGQ=";
   };
 
   outputs = [
@@ -32,24 +31,35 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Denable-gtk-doc=true"
+    "-Ddocumentation=true"
   ];
 
   strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
     gobject-introspection
     vala
-    gtk-doc
-    docbook_xsl
+    gi-docgen
   ]
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
   ];
 
-  buildInputs = [ glib ];
+  buildInputs = [
+    glib
+  ];
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -57,11 +67,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "DBus API that allows cloud storage sync clients to expose their services";
     homepage = "https://gitlab.gnome.org/World/libcloudproviders";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ jtojnar ];
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -27,7 +27,10 @@
   cupsSupport ? config.ghostscript.cups or (!stdenv.hostPlatform.isDarwin),
   cups,
   x11Support ? cupsSupport,
-  xorg, # with CUPS, X11 only adds very little
+  libice,
+  libx11,
+  libxext,
+  libxt,
   dynamicDrivers ? true,
 
   # for passthru.tests
@@ -62,15 +65,15 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ghostscript${lib.optionalString x11Support "-with-X"}";
-  version = "10.05.1";
+  version = "10.07.1";
 
   src = fetchurl {
     url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs${
-      lib.replaceStrings [ "." ] [ "" ] version
-    }/ghostscript-${version}.tar.xz";
-    hash = "sha256-IvK9yhXCiDDJcVzdxcKW6maJi/2rC2BKTgvP6wOvbK0=";
+      lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
+    }/ghostscript-${finalAttrs.version}.tar.xz";
+    hash = "sha256-HNt2bejbjx5YnIF/CcWFXqX2XfyFQORlpprBTBhBYCU=";
   };
 
   patches = [
@@ -123,10 +126,10 @@ stdenv.mkDerivation rec {
     openjpeg
   ]
   ++ lib.optionals x11Support [
-    xorg.libICE
-    xorg.libX11
-    xorg.libXext
-    xorg.libXt
+    libice
+    libx11
+    libxext
+    libxt
   ]
   ++ lib.optional cupsSupport cups;
 
@@ -155,6 +158,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
+    "CFLAGS=-std=gnu17"
     "--with-system-libtiff"
     "--without-tesseract"
   ]
@@ -184,7 +188,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     ln -s gsc "$out"/bin/gs
 
-    cp -r Resource "$out/share/ghostscript/${version}"
+    cp -r Resource "$out/share/ghostscript/${finalAttrs.version}"
 
     mkdir -p $fonts/share/fonts
     cp -rv ${fonts}/* "$fonts/share/fonts/"
@@ -229,6 +233,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://www.ghostscript.com/";
+    changelog = "https://ghostscript.readthedocs.io/en/gs${finalAttrs.version}/News.html";
     description = "PostScript interpreter (mainline version)";
     longDescription = ''
       Ghostscript is the name of a set of tools that provides (i) an
@@ -240,7 +245,7 @@ stdenv.mkDerivation rec {
     '';
     license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.tobim ];
+    maintainers = with lib.maintainers; [ tobim ];
     mainProgram = "gs";
   };
-}
+})

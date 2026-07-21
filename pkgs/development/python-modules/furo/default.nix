@@ -1,28 +1,69 @@
 {
+  stdenv,
   lib,
+  nodejs,
   buildNpmPackage,
   buildPythonPackage,
+  runCommand,
   fetchFromGitHub,
+  fetchPypi,
   flit-core,
   accessible-pygments,
   beautifulsoup4,
   pygments,
   sphinx,
   sphinx-basic-ng,
+  unzip,
+  useWebNative ? (lib.meta.availableOn stdenv.buildPlatform nodejs),
 }:
 
 let
   pname = "furo";
-  version = "2025.07.19";
+  version = "2025.12.19";
+  # version on pypi doesn't have month & day padded with 0
+  pypiVersion =
+    let
+      versionComponents = lib.strings.splitString "." version;
+      dropLeadingZero = lib.strings.removePrefix "0";
+    in
+    # year
+    (lib.lists.elemAt versionComponents 0)
+    + "."
+    # month
+    + (dropLeadingZero (lib.lists.elemAt versionComponents 1))
+    + "."
+    # day
+    + (dropLeadingZero (lib.lists.elemAt versionComponents 2));
 
   src = fetchFromGitHub {
     owner = "pradyunsg";
     repo = "furo";
     tag = version;
-    hash = "sha256-pIF5zrh5YbkuSkrateEB/tDULSNbeVn2Qx+Fm3nOYGE=";
+    hash = "sha256-s9CQXmHI3PoXbB24e8rUd9ip02UZTjPHP4Ar6hV3mUc=";
   };
 
-  web = buildNpmPackage {
+  web-bin =
+    let
+      web-bin-src = fetchPypi {
+        inherit pname;
+        version = pypiVersion;
+        format = "wheel";
+        dist = "py3";
+        python = "py3";
+        hash = "sha256-uw6tUwn5UAEwZlomvuh2k8Qc5Nvf+GTb+2sNrkZz0k8=";
+      };
+    in
+    runCommand "${pname}-web-bin"
+      {
+        nativeBuildInputs = [ unzip ];
+      }
+      ''
+        mkdir $out
+        unzip ${web-bin-src}
+        cp -rv furo/theme/furo/static/{scripts,styles} $out/
+      '';
+
+  web-native = buildNpmPackage {
     pname = "${pname}-web";
     inherit version src;
 
@@ -35,6 +76,8 @@ let
       popd
     '';
   };
+
+  web = if useWebNative then web-native else web-bin;
 in
 
 buildPythonPackage rec {
@@ -70,11 +113,11 @@ buildPythonPackage rec {
     inherit web;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Clean customizable documentation theme for Sphinx";
     homepage = "https://github.com/pradyunsg/furo";
     changelog = "https://github.com/pradyunsg/furo/blob/${version}/docs/changelog.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Luflosi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

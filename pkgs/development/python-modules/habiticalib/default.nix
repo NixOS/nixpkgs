@@ -4,7 +4,6 @@
   aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
-  habitipy,
   hatch-regex-commit,
   hatchling,
   mashumaro,
@@ -19,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "habiticalib";
-  version = "0.4.5";
+  version = "0.4.7";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -28,7 +27,7 @@ buildPythonPackage rec {
     owner = "tr4nt0r";
     repo = "habiticalib";
     tag = "v${version}";
-    hash = "sha256-9IMC4MkL5hRCDjeuSuLBcn986LmO/zz32NV0RGTEf1M=";
+    hash = "sha256-ZZY7UnA4d4JNHGLMtaEGobAgzAwYDgL2SUGfxGABxTs=";
   };
 
   build-system = [
@@ -36,9 +35,12 @@ buildPythonPackage rec {
     hatchling
   ];
 
+  pythonRelaxDeps = [
+    "orjson"
+  ];
+
   dependencies = [
     aiohttp
-    habitipy
     mashumaro
     orjson
     pillow
@@ -51,8 +53,6 @@ buildPythonPackage rec {
     pytestCheckHook
     syrupy
   ];
-
-  pytestFlags = [ "--snapshot-update" ];
 
   pythonImportsCheck = [ "habiticalib" ];
 

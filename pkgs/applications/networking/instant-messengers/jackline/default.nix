@@ -19,6 +19,10 @@ buildDunePackage {
     hash = "sha256-6QZZ77C1G3x/GOJsUEQMrCatVsyyxNjq36ez/TgeHSY=";
   };
 
+  postPatch = ''
+    substituteInPlace cli/dune --replace-warn 'notty notty.lwt' 'notty-community.lwt'
+  '';
+
   nativeBuildInputs = [
     ppx_sexp_conv
     ppx_deriving
@@ -35,7 +39,7 @@ buildDunePackage {
     otr
     astring
     ptime
-    notty
+    notty-community
     sexplib
     hex
     uchar
@@ -48,11 +52,11 @@ buildDunePackage {
     ppx_sexp_conv
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/hannesm/jackline";
     description = "Minimalistic secure XMPP client in OCaml";
     mainProgram = "jackline";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ sternenseemann ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ sternenseemann ];
   };
 }

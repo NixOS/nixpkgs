@@ -15,14 +15,14 @@
   zfs,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "booster";
   version = "0.12";
 
   src = fetchFromGitHub {
     owner = "anatol";
     repo = "booster";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-uHxPzuD3PxKAI2JOZd7lcLvcqYqk9gW9yeZgOS1Y7x4=";
   };
 
@@ -59,11 +59,11 @@ buildGoModule rec {
       wrapProgram $out/bin/init --prefix PATH : ${lib.makeBinPath runtimeInputs}
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast and secure initramfs generator";
     homepage = "https://github.com/anatol/booster";
-    license = licenses.mit;
-    maintainers = with maintainers; [ urandom ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "init";
   };
-}
+})

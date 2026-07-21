@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "argon2-cffi";
   version = "25.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "argon2_cffi";
@@ -36,9 +36,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "argon2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Secure Password Hashes for Python";
     homepage = "https://argon2-cffi.readthedocs.io/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

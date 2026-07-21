@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   cython,
@@ -25,6 +26,9 @@ buildPythonPackage rec {
   pname = "pydantic";
   version = "1.10.24";
   pyproject = true;
+
+  # https://github.com/pydantic/pydantic/pull/12263
+  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "pydantic";
@@ -51,7 +55,7 @@ buildPythonPackage rec {
     pytest7CheckHook
     writableTmpDirAsHomeHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   enableParallelBuilding = true;
 

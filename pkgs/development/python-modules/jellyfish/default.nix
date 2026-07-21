@@ -4,7 +4,6 @@
   cargo,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   rustc,
   rustPlatform,
   unicodecsv,
@@ -12,16 +11,14 @@
 
 buildPythonPackage rec {
   pname = "jellyfish";
-  version = "1.1.2";
+  version = "1.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "jamesturk";
     repo = "jellyfish";
-    rev = version;
-    hash = "sha256-xInjoTXYgZuHyvyKm+N4PAwHozE5BOkxoYhRzZnPs3Q=";
+    rev = "v${version}";
+    hash = "sha256-jKz7FYzV66TUkJZfWDTy8GXmTZ6SU5jEdtkjYLDfS/8=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {

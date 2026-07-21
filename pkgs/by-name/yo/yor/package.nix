@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "yor";
   version = "0.1.200";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "yor";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-IoQe1/D3Sl1y76dXH0CuwU6/LBC6n6or9vsysHhDeeg=";
   };
 
@@ -24,7 +24,7 @@ buildGoModule rec {
     cat << EOF > src/common/version.go
     package common
 
-    const Version = "${version}"
+    const Version = "${finalAttrs.version}"
     EOF
   '';
 
@@ -36,8 +36,8 @@ buildGoModule rec {
   meta = {
     description = "Extensible auto-tagger for your IaC files. The ultimate way to link entities in the cloud back to the codified resource which created it";
     homepage = "https://github.com/bridgecrewio/yor";
-    changelog = "https://github.com/bridgecrewio/yor/releases/tag/${version}";
+    changelog = "https://github.com/bridgecrewio/yor/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.ivankovnatsky ];
   };
-}
+})

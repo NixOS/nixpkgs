@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hn-text";
   version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "piqoni";
     repo = "hn-text";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-YoPdYuNlWrLITyd2XeCOeGy70Ews1rvtOQzYZAQTI+Y=";
   };
 
@@ -32,4 +32,4 @@ buildGoModule rec {
     mainProgram = "hn-text";
     maintainers = with lib.maintainers; [ Guanran928 ];
   };
-}
+})

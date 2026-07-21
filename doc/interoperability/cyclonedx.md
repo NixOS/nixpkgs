@@ -3,10 +3,10 @@
 [OWASP](https://owasp.org/) [CycloneDX](https://cyclonedx.org/) is a Software [Bill of Materials](https://en.wikipedia.org/wiki/Bill_of_materials) (SBOM) standard.
 The standards described here are for including Nix specific information within SBOMs in a way that is interoperable with external SBOM tooling.
 
-## `nix` Namespace Property Taxonomy  {#sec-interop.cylonedx-nix}
+## `nix` Namespace Property Taxonomy {#sec-interop.cylonedx-nix}
 
-The following tables describe namespaces for [properties](https://cyclonedx.org/docs/1.6/json/#components_items_properties) that may be attached to components within SBOMs.
-Component properties are lists of name-value-pairs where values must be strings.
+The following tables describe namespaces for [properties](https://cyclonedx.org/docs/1.6/json/#components_items_properties) that can be attached to components within SBOMs.
+Component properties are lists of name-value-pairs where the values must be strings.
 Properties with the same name may appear more than once.
 Names and values are case-sensitive.
 

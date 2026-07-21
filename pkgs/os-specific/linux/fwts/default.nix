@@ -14,17 +14,20 @@
   dmidecode,
   acpica-tools,
   libbsd,
+  zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fwts";
-  version = "24.09.00";
+  version = "25.09.00";
 
   src = fetchzip {
-    url = "https://fwts.ubuntu.com/release/fwts-V${version}.tar.gz";
-    hash = "sha256-ZJSlx8O38e7bJYTgZacayslr28TLHHJsISXq9Uzsnyc=";
+    url = "https://fwts.ubuntu.com/release/fwts-V${finalAttrs.version}.tar.gz";
+    hash = "sha256-OJI2O9MptckmGj4rTrh9haIGaXJOO3er59yIorbgSVw=";
     stripRoot = false;
   };
+
+  sourceRoot = "${finalAttrs.src.name}/fwts-${finalAttrs.version}";
 
   nativeBuildInputs = [
     autoreconfHook
@@ -42,6 +45,7 @@ stdenv.mkDerivation rec {
     dmidecode
     acpica-tools
     libbsd
+    zlib
   ];
 
   postPatch = ''
@@ -53,6 +57,10 @@ stdenv.mkDerivation rec {
     substituteInPlace src/lib/src/fwts_devicetree.c \
                       src/devicetree/dt_base/dt_base.c \
       --replace-fail "dtc -I" "${dtc}/bin/dtc -I"
+
+    # libfwts uses gzopen/gzclose/gzgets but does not link zlib.
+    substituteInPlace src/lib/src/Makefile.am \
+      --replace-fail "-lm -lpthread -lbsd" "-lm -lpthread -lbsd -lz"
   '';
 
   enableParallelBuilding = true;
@@ -64,4 +72,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ tadfisher ];
   };
-}
+})

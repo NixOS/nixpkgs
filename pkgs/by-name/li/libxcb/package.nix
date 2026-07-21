@@ -57,6 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isMinGW {
+    NIX_CFLAGS_COMPILE = toString [ "-Wno-incompatible-pointer-types" ];
+  };
+
   meta = {
     description = "C interface to the X Window System protocol";
     homepage = "https://gitlab.freedesktop.org/xorg/lib/libxcb";

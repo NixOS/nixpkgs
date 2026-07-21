@@ -12,7 +12,7 @@
   gtk2,
   gdk-pixbuf,
   at-spi2-atk,
-  xorg,
+  libx11,
   libnotify,
 
   nix-update-script,
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk2
     gdk-pixbuf
     at-spi2-atk
-    xorg.libX11
+    libx11
     libnotify
   ];
 
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Note taking app that works and synchronises between Linux, Windows and macOS";
     homepage = "https://github.com/tomboy-notes/tomboy-ng";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pluiedev ];
     mainProgram = "tomboy-ng";
     platforms = lib.platforms.unix ++ lib.platforms.windows;

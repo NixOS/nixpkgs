@@ -2,10 +2,10 @@
   lib,
   pkgs,
   buildPythonPackage,
-  fetchFromGitea,
+  fetchFromGitHub,
   replaceVars,
   colord,
-  setuptools,
+  flit-core,
   pikepdf,
   pillow,
   stdenv,
@@ -22,15 +22,16 @@
 
 buildPythonPackage rec {
   pname = "img2pdf";
-  version = "0.6.1";
+  version = "0.6.3";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "gitlab.mister-muffin.de";
+  # gitlab.mister-muffin.de produces a 500 error on 0.6.1
+  # when upgrading, switch src attribute back to gitlab if fixed.
+  src = fetchFromGitHub {
     owner = "josch";
     repo = "img2pdf";
     tag = version;
-    hash = "sha256-71u6ex+UAEFPDtR9QI8Ezah5zCorn4gMdAnzFz4blsI=";
+    hash = "sha256-uHcGCx5DdUxFnATG3T565R+NatLukPPpnRj0TZHToC0=";
   };
 
   patches = [
@@ -46,7 +47,7 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = [ setuptools ];
+  build-system = [ flit-core ];
 
   dependencies = [
     pikepdf
@@ -86,6 +87,10 @@ buildPythonPackage rec {
     # these only fail on aarch64
     "test_png_rgba8"
     "test_png_gray8a"
+    # AssertionError: assert 'resolution' not in ...
+    # (starting with ImagMagick 7.1.2-5)
+    "test_date"
+    "test_jpg"
   ];
 
   pythonImportsCheck = [ "img2pdf" ];

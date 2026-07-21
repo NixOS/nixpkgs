@@ -1,7 +1,22 @@
 { pkgs, lib, ... }:
+let
+  token = "1234";
+  dummyFile = pkgs.writeTextFile {
+    name = "secrets";
+    text = "dummy=value";
+  };
+  secretFile = pkgs.writeTextFile {
+    name = "secrets";
+    text = "token=${token}";
+  };
+  portRange = 6003;
+in
 {
   name = "frp";
-  meta.maintainers = with lib.maintainers; [ zaldnoay ];
+  meta.maintainers = with lib.maintainers; [
+    zaldnoay
+    epireyn
+  ];
   nodes = {
     frps = {
       networking = {
@@ -15,12 +30,18 @@
         networkConfig.Address = "10.0.0.1/24";
       };
 
-      services.frp = {
+      services.frp.instances.server = {
         enable = true;
         role = "server";
+        environmentFiles = [
+          (builtins.toPath dummyFile)
+          (builtins.toPath secretFile)
+        ];
         settings = {
           bindPort = 7000;
           vhostHTTPPort = 80;
+          auth.method = "token";
+          auth.token = "{{ .Envs.token }}";
         };
       };
     };
@@ -39,26 +60,39 @@
       services.httpd = {
         enable = true;
         adminAddr = "admin@example.com";
-        virtualHosts."test-appication" =
+        virtualHosts =
           let
             testdir = pkgs.writeTextDir "web/index.php" "<?php phpinfo();";
           in
           {
-            documentRoot = "${testdir}/web";
-            locations."/" = {
-              index = "index.php index.html";
+            "test-appication" = {
+              documentRoot = "${testdir}/web";
+              locations."/" = {
+                index = "index.php index.html";
+              };
+            };
+            "test-range" = {
+              documentRoot = "${testdir}/web";
+              listen = [
+                { port = portRange; }
+              ];
+              locations."/" = {
+                index = "index.php index.html";
+              };
             };
           };
-        phpPackage = pkgs.php81;
+        phpPackage = pkgs.php84;
         enablePHP = true;
       };
 
-      services.frp = {
+      services.frp.instances.client = {
         enable = true;
         role = "client";
         settings = {
           serverAddr = "10.0.0.1";
           serverPort = 7000;
+          auth.method = "token";
+          auth.token = token;
           proxies = [
             {
               name = "web";
@@ -68,18 +102,35 @@
             }
           ];
         };
+        extraConfig = ''
+          {{- range $_, $v := parseNumberRangePair "6000-6006,6007" "6000-6006,6007" }}
+          [[proxies]]
+          name = "tcp-{{ $v.First }}"
+          type = "tcp"
+          localPort = {{ $v.First }}
+          remotePort = {{ $v.Second }}
+          {{- end }}
+        '';
       };
     };
   };
 
   testScript = ''
     start_all()
-    frps.wait_for_unit("frp.service")
+    frps.wait_for_unit("frp-server.service")
     frps.wait_for_open_port(80)
-    frpc.wait_for_unit("frp.service")
+    frpc.wait_for_unit("frp-client.service")
+
+    # Test config written in Nix
     response = frpc.succeed("curl -fvvv -s http://127.0.0.1/")
-    assert "PHP Version ${pkgs.php81.version}" in response, "PHP version not detected"
+    assert "PHP Version ${pkgs.php84.version}" in response, "PHP version not detected"
     response = frpc.succeed("curl -fvvv -s http://10.0.0.1/")
-    assert "PHP Version ${pkgs.php81.version}" in response, "PHP version not detected"
+    assert "PHP Version ${pkgs.php84.version}" in response, "PHP version not detected"
+
+    # Test `extraConfig` option with port range
+    response = frpc.succeed("curl -fvvv -s http://127.0.0.1:${toString portRange}/")
+    assert "PHP Version ${pkgs.php84.version}" in response, "PHP version not detected"
+    response = frpc.succeed("curl -fvvv -s http://10.0.0.1:${toString portRange}/")
+    assert "PHP Version ${pkgs.php84.version}" in response, "PHP version not detected"
   '';
 }

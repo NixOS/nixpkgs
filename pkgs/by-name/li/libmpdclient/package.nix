@@ -41,8 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Client library for MPD (music player daemon)";
     homepage = "https://www.musicpd.org/libs/libmpdclient/";
     changelog = "https://raw.githubusercontent.com/MusicPlayerDaemon/libmpdclient/${finalAttrs.src.rev}/NEWS";
-    license = with lib.licenses; [ bsd2 ];
-    maintainers = with lib.maintainers; [ ];
+    license = lib.licenses.bsd2;
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

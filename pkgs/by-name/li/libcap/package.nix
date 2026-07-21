@@ -22,17 +22,19 @@
   squid,
   tor,
   uwsgi,
+  testers,
+  libcap,
 }:
 
 assert usePam -> pam != null;
 
 stdenv.mkDerivation rec {
   pname = "libcap";
-  version = "2.76";
+  version = "2.78";
 
   src = fetchurl {
     url = "mirror://kernel/linux/libs/security/linux-privs/libcap2/${pname}-${version}.tar.xz";
-    hash = "sha256-Yp2kqymQDQ9/zDYicHN0MRmSX9cRyZoWibv1ybQMjm8=";
+    hash = "sha256-DWIeVi/ZMsz2e5Zg+wGORopoPXuCdUHfJ4EyKMmWuxE=";
   };
 
   outputs = [
@@ -56,14 +58,14 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "lib=lib"
-    "PAM_CAP=${if usePam then "yes" else "no"}"
+    "PAM_CAP=${lib.boolToYesNo usePam}"
     "BUILD_CC=$(CC_FOR_BUILD)"
     "CC:=$(CC)"
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ]
   ++ lib.optionals withGo [
     "GOLANG=yes"
-    ''GOCACHE=''${TMPDIR}/go-cache''
+    "GOCACHE=\${TMPDIR}/go-cache"
     "GOFLAGS=-trimpath"
     "GOARCH=${pkgsBuildHost.go.GOARCH}"
     "GOOS=${pkgsBuildHost.go.GOOS}"
@@ -86,11 +88,6 @@ stdenv.mkDerivation rec {
       --replace 'lib_prefix=$(exec_prefix)' "lib_prefix=$lib" \
       --replace 'inc_prefix=$(prefix)' "inc_prefix=$dev" \
       --replace 'man_prefix=$(prefix)' "man_prefix=$doc"
-  ''
-  + lib.optionalString withGo ''
-    # disable cross compilation for artifacts which are run as part of the build
-    substituteInPlace go/Makefile \
-      --replace-fail '$(GO) run' 'GOOS= GOARCH= $(GO) run'
   '';
 
   installFlags = [ "RAISE_SETFCAP=no" ];
@@ -124,6 +121,9 @@ stdenv.mkDerivation rec {
       tor
       uwsgi
       ;
+    pkg-config = testers.hasPkgConfigModules {
+      package = libcap;
+    };
   };
 
   meta = {
@@ -131,5 +131,10 @@ stdenv.mkDerivation rec {
     homepage = "https://sites.google.com/site/fullycapable";
     platforms = lib.platforms.linux;
     license = lib.licenses.bsd3;
+    pkgConfigModules = [
+      "libcap"
+      "libpsx"
+    ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libcap_project" version;
   };
 }

@@ -4,20 +4,19 @@
   hatch-vcs,
   hatchling,
   lib,
-  nix-update-script,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "inject";
-  version = "5.3.0";
+  version = "5.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ivankorobkov";
     repo = "python-inject";
-    tag = "v${version}";
-    hash = "sha256-c/OpEsT9KF7285xfD+VRorrNHn3r9IPp/ts9JHyGK9s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-F2YzzcMFmhurTcP1ETvJIfsFHUpPyi0mubGws2YYpok=";
   };
 
   build-system = [
@@ -31,13 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "inject" ];
 
-  passthru.updateScript = nix-update-script { };
-
   meta = {
     description = "Python dependency injection framework";
     homepage = "https://github.com/ivankorobkov/python-inject";
-    changelog = "https://github.com/ivankorobkov/python-inject/blob/${version}/CHANGES.md";
+    changelog = "https://github.com/ivankorobkov/python-inject/blob/${finalAttrs.src.tag}/CHANGES.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ perchun ];
+    maintainers = with lib.maintainers; [ PerchunPak ];
   };
-}
+})

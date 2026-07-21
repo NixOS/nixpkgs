@@ -1,28 +1,36 @@
 {
   lib,
   stdenv,
+
   buildNpmPackage,
   fetchFromGitHub,
-  copyDesktopItems,
   makeDesktopItem,
+
+  copyDesktopItems,
   makeWrapper,
+  xcbuild,
+
   libpng,
-  libX11,
-  libXi,
-  libXtst,
+  libx11,
+  libxi,
+  libxtst,
   zlib,
-  electron,
+
+  electron_41,
 }:
 
+let
+  electron = electron_41;
+in
 buildNpmPackage rec {
   pname = "jitsi-meet-electron";
-  version = "2025.2.0";
+  version = "2026.5.0";
 
   src = fetchFromGitHub {
     owner = "jitsi";
     repo = "jitsi-meet-electron";
     rev = "v${version}";
-    hash = "sha256-Pk62BpfXblRph3ktxy8eF9umRmPRZbZGjRWduy+3z+s=";
+    hash = "sha256-yeYDft2d2RHNXYrmnHlBzsZ43bvBgwwsqxQr/Q+/AuQ=";
   };
 
   nativeBuildInputs = [
@@ -30,25 +38,28 @@ buildNpmPackage rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
   ];
 
   # robotjs node-gyp dependencies
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libpng
-    libX11
-    libXi
-    libXtst
+    libx11
+    libxi
+    libxtst
     zlib
   ];
 
-  npmDepsHash = "sha256-TckV91RJo06OKb8nIvxBCxu28qyHtA/ACDshOlaCQxA=";
+  npmDepsHash = "sha256-5y7q6SnA9s85+HFOhqif1N8XRO7ekGJ4nfVbWZ/diuI=";
 
   makeCacheWritable = true;
 
-  env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
-
-  # disable code signing on Darwin
-  env.CSC_IDENTITY_AUTO_DISCOVERY = "false";
+  env = {
+    ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
+    NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
+  };
 
   preBuild = ''
     # remove some prebuilt binaries
@@ -64,6 +75,8 @@ buildNpmPackage rec {
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
 
+    export npm_config_nodedir=${electron.headers}
+
     # npmRebuild is needed because robotjs won't be built on darwin otherwise
     # asarUnpack makes sure to unwrap binaries so that nix can see the RPATH
     npm exec electron-builder -- \
@@ -71,10 +84,9 @@ buildNpmPackage rec {
         -c.npmRebuild=true \
         -c.asarUnpack="**/*.node" \
         -c.electronDist=electron-dist \
-        -c.electronVersion=${electron.version}
+        -c.electronVersion=${electron.version} \
+        -c.mac.identity=null
   '';
-
-  NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
 
   installPhase = ''
     runHook preInstall
@@ -120,14 +132,14 @@ buildNpmPackage rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/jitsi/jitsi-meet-electron/releases/tag/${src.rev}";
     description = "Jitsi Meet desktop application powered by Electron";
     homepage = "https://github.com/jitsi/jitsi-meet-electron";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "jitsi-meet-electron";
-    maintainers = [ maintainers.tomasajt ];
-    teams = [ teams.jitsi ];
+    maintainers = [ lib.maintainers.tomasajt ];
+    teams = [ lib.teams.jitsi ];
     inherit (electron.meta) platforms;
   };
 }

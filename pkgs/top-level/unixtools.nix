@@ -42,9 +42,9 @@ let
           priority = 10;
           platforms = platforms.${stdenv.hostPlatform.parsed.kernel.name} or platforms.all;
         };
+        inherit (provider) version pname;
         passthru = {
           inherit provider;
-          inherit (provider) version;
         }
         // lib.optionalAttrs (builtins.hasAttr "binlore" providers) {
           binlore.out = (binlore.synthesize (getBin bins.${cmd}) providers.binlore);
@@ -71,10 +71,15 @@ let
 
   # more is unavailable in darwin
   # so we just use less
-  more_compat = runCommand "more-${pkgs.less.name}" { } ''
-    mkdir -p $out/bin
-    ln -s ${pkgs.less}/bin/less $out/bin/more
-  '';
+  more_compat =
+    runCommand pkgs.less.name
+      {
+        inherit (pkgs.less) version pname;
+      }
+      ''
+        mkdir -p $out/bin
+        ln -s ${pkgs.less}/bin/less $out/bin/more
+      '';
 
   bins = mapAttrs singleBinary {
     # singular binaries
@@ -153,6 +158,7 @@ let
     };
     logger = {
       linux = pkgs.util-linux;
+      darwin = pkgs.darwin.remote_cmds;
     };
     more = {
       linux = pkgs.util-linux;
@@ -236,6 +242,7 @@ let
     };
     wall = {
       linux = pkgs.util-linux;
+      darwin = pkgs.darwin.remote_cmds;
     };
     watch = {
       linux = pkgs.procps;
@@ -260,8 +267,7 @@ let
   makeCompat =
     pname: paths:
     buildEnv {
-      name = "${pname}-${version}";
-      inherit paths;
+      inherit paths pname version;
     };
 
   # Compatibility derivations

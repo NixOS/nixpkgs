@@ -19,13 +19,13 @@ in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   pname = "c3c${optionalString debug "-debug"}";
-  version = "0.7.5";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "c3lang";
     repo = "c3c";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-o95Y5CYPITjn8KjxIZlBtwc6FfvZo2m5atR1Fyh9w+c=";
+    hash = "sha256-6XUMlF9SRQ9aqVRl5BQdELVsj/DyXhCnH85QrbK8Xxo=";
   };
 
   cmakeBuildType = if debug then "Debug" else "Release";
@@ -59,7 +59,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   doCheck =
     lib.elem llvmPackages.stdenv.system [
       "x86_64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ]
     && checks;
@@ -74,15 +73,15 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Compiler for the C3 language";
     homepage = "https://github.com/c3lang/c3c";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [
       hucancode
       anas
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "c3c";
   };
 })

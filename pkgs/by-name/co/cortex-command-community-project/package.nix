@@ -16,7 +16,7 @@
   pkg-config,
   SDL2,
   SDL2_image,
-  tbb,
+  onetbb,
 }:
 
 stdenv.mkDerivation rec {
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     luajit
     minizip
     SDL2_image
-    tbb
+    onetbb
   ];
 
   passthru.updateScript = nix-update-script { };

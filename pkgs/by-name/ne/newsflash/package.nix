@@ -13,36 +13,38 @@
   wrapGAppsHook4,
   gdk-pixbuf,
   clapper-unwrapped,
+  glycin-loaders,
   gtk4,
+  gtksourceview5,
   libadwaita,
+  libglycin,
   libxml2,
   openssl,
   sqlite,
   webkitgtk_6_0,
   glib-networking,
-  librsvg,
   gst_all_1,
-  gitUpdater,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "newsflash";
-  version = "4.1.4";
+  version = "5.2.3";
 
   src = fetchFromGitLab {
     owner = "news-flash";
     repo = "news_flash_gtk";
     tag = "v.${finalAttrs.version}";
-    hash = "sha256-3RGa1f+V7dIgTxQKOceVSr7RwajUgwq05ypBhg6RjMA=";
+    hash = "sha256-EeB2DNXxvo7biIv426+dkCKbjn2uxyXgvA1FbKevaFQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-CRQH22EP/G6osjsuZJmTWwjq4C06DxiIXlz6zxgbDv4=";
+    hash = "sha256-OPxMsNhdMSt8mLhsNIBTjggSL1f3bZMH/5shESDV6yE=";
   };
 
   postPatch = ''
-    patchShebangs build-aux/cargo.sh
+    patchShebangs --build build-aux/cargo.sh
     meson rewrite kwargs set project / version '${finalAttrs.version}'
     substituteInPlace src/meson.build --replace-fail \
       "'src' / rust_target / 'news_flash_gtk'" \
@@ -55,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     blueprint-compiler
     cargo
     desktop-file-utils
+    libglycin.patchVendorHook
     meson
     ninja
     pkg-config
@@ -65,13 +68,15 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Provides setup hook to fix "Unrecognized image file format"
     gdk-pixbuf
-
   ];
 
   buildInputs = [
     clapper-unwrapped
+    glycin-loaders
     gtk4
+    gtksourceview5
     libadwaita
+    libglycin
     libxml2
     openssl
     sqlite
@@ -79,9 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # TLS support for loading external content in webkitgtk WebView
     glib-networking
-
-    # SVG support for gdk-pixbuf
-    librsvg
   ]
   ++ (with gst_all_1; [
     # Audio & video support for webkitgtk WebView
@@ -91,17 +93,20 @@ stdenv.mkDerivation (finalAttrs: {
     gst-plugins-bad
   ]);
 
-  # For https://gitlab.com/news-flash/news_flash_gtk/-/blob/8e5fc4acf5ca6be5b8cd616466a17e7a273f9dda/src/meson.build#L47
+  # For https://gitlab.com/news-flash/news_flash_gtk/-/blob/v.4.2.1/src/meson.build#L48
   env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v.";
-    ignoredVersions = "(alpha|beta|rc)";
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v.(\\d+\\.\\d+\\.\\d+)$"
+    ];
   };
 
   meta = {
     description = "Modern feed reader designed for the GNOME desktop";
     homepage = "https://gitlab.com/news-flash/news_flash_gtk";
+    changelog = "https://gitlab.com/news-flash/news_flash_gtk/-/raw/${finalAttrs.src.tag}/data/io.gitlab.news_flash.NewsFlash.appdata.xml.in.in#:~:text=%3Crelease%20version=%22${finalAttrs.version}%22,%3C/release%3E";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       kira-bruneau

@@ -8,21 +8,18 @@
   anyio,
   distro,
   sniffio,
-  pythonOlder,
   hatchling,
   hatch-fancy-pypi-readme,
 }:
 
 buildPythonPackage rec {
   pname = "cloudflare";
-  version = "4.3.1";
+  version = "5.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-seHGvuuNmPY7/gocuodPxOIuAAvMSQVE+VbGibO1slg=";
+    hash = "sha256-pXFvBqv/FyHQLsuc6DuhXYeVwhbQHCEtTlWzvKb6hiE=";
   };
 
   postPatch = ''

@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation {
   version = "${majorVersion}.${minorVersion}";
 
   src = fetchzip {
-    url = "https://dotcolon.net/download/fonts/f5_6_${majorVersion}${minorVersion}.zip";
+    url = "https://dotcolon.net/files/fonts/f5_6_${majorVersion}${minorVersion}.zip";
     hash = "sha256-FeCU+mzR0iO5tixI72XUnhvpGj+WRfKyT3mhBtud3uE=";
     stripRoot = false;
   };
@@ -26,14 +26,13 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    homepage = "http://dotcolon.net/font/f5_6/";
+  meta = {
+    homepage = "https://dotcolon.net/font/f5_6/";
     description = "Weighted decorative font";
-    platforms = platforms.all;
-    maintainers = with maintainers; [
-      leenaars
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       minijackson
     ];
-    license = licenses.ofl;
+    license = lib.licenses.ofl;
   };
 }

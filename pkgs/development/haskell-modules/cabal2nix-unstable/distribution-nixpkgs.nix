@@ -18,10 +18,10 @@
 }:
 mkDerivation {
   pname = "distribution-nixpkgs";
-  version = "1.7.1.1-unstable-2025-09-17";
+  version = "1.7.1.1-unstable-2026-03-30";
   src = fetchzip {
-    url = "https://github.com/NixOS/cabal2nix/archive/3cc36a5df16a10bac9a858208845e3d05b79845d.tar.gz";
-    sha256 = "1z1knv2ggm9ddyl0v120nhcnjmq50z7q1m88qj7rfz51gx1ifnim";
+    url = "https://github.com/NixOS/cabal2nix/archive/41239bcc0622a0975c6705a03a44dfeffeb56f23.tar.gz";
+    sha256 = "01qj6cvaif0810v83r6izcj1bbfpcqqxw4wybq04qsq92sqybpw2";
   };
   postUnpack = "sourceRoot+=/distribution-nixpkgs; echo source root reset to $sourceRoot";
   enableSeparateDataOutput = true;
@@ -49,5 +49,5 @@ mkDerivation {
   ];
   homepage = "https://github.com/NixOS/cabal2nix/tree/master/distribution-nixpkgs#readme";
   description = "Types and functions to manipulate the Nixpkgs distribution";
-  license = lib.licenses.bsd3;
+  license = lib.licensesSpdx."BSD-3-Clause";
 }

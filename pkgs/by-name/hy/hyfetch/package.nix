@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hyfetch";
-  version = "2.0.2";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "hykilpikonna";
     repo = "hyfetch";
     tag = finalAttrs.version;
-    hash = "sha256-Y9v2vrpTPlsgFRoo33NDVoyQSgUD/stKQLJXzUxFesA=";
+    hash = "sha256-/aOVgl93n9IL5lDzY1REg88BXhlqtDDjrZnkD4rQ9aw=";
   };
 
-  cargoHash = "sha256-auOeH/1KtxS7a1APOtCMwNTdEQ976BL/jEKj2ADaakQ=";
+  cargoHash = "sha256-uTIzLY5H+zoCsC/YalA0ImnJ817KhU5sXHWkbvWEfVk=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -56,11 +56,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   versionCheckKeepEnvironment = [ "PATH" ];
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^(\\d+\\.\\d+\\.\\d+)$" ];
+  };
 
   meta = {
     description = "Neofetch with LGBTQ+ pride flags";
@@ -82,6 +83,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       isabelroses
       nullcube
       defelo
+      Misaka13514
     ];
   };
 })

@@ -8,7 +8,7 @@
   spidermonkey_140,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "plowshare";
   version = "2.1.7";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mcrapet";
     repo = "plowshare";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-6fQgJZF5IxRSalB6rUpIVqlwhgbhSG8AuI2qTxswGt0=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ aforemny ];
     platforms = lib.platforms.linux;
   };
-}
+})

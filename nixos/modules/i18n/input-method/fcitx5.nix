@@ -109,7 +109,8 @@ in
         (pkgs.writeTextDir "share/fcitx5/data/QuickPhrase.mb" (
           lib.concatStringsSep "\n" (
             lib.mapAttrsToList (
-              name: value: "${name} ${builtins.replaceStrings [ "\\" "\n" ] [ "\\\\" "\\n" ] value}"
+              name: value:
+              "${name} \"${builtins.replaceStrings [ "\\" "\n" "\"" ] [ "\\\\" "\\n" "\\\"" ] value}\""
             ) cfg.quickPhrase
           )
         ))
@@ -117,7 +118,7 @@ in
       ++ lib.optionals (cfg.quickPhraseFiles != { }) [
         (pkgs.linkFarm "quickPhraseFiles" (
           lib.mapAttrs' (
-            name: value: lib.nameValuePair ("share/fcitx5/data/quickphrase.d/${name}.mb") value
+            name: value: lib.nameValuePair "share/fcitx5/data/quickphrase.d/${name}.mb" value
           ) cfg.quickPhraseFiles
         ))
       ];

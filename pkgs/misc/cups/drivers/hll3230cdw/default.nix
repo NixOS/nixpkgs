@@ -82,11 +82,11 @@ stdenv.mkDerivation rec {
       --replace \"\$"@"\" \"\$"@\" | LD_PRELOAD= ${gnused}/bin/sed -E '/^(function list :|resource file :).*/{s#/opt#$out/opt#}'"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Brother HL-L3230CDW printer driver";
-    license = licenses.unfree;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ aplund ];
+    license = lib.licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ aplund ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

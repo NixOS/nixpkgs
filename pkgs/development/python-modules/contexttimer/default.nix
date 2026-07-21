@@ -10,7 +10,7 @@
 
 buildPythonPackage {
   pname = "contexttimer";
-  version = "unstable-2024-09-05";
+  version = "0.3.3-unstable-2024-09-05";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -40,6 +40,6 @@ buildPythonPackage {
     homepage = "https://github.com/brouberol/contexttimer";
     description = "Timer as a context manager";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ atila ];
+    maintainers = [ ];
   };
 }

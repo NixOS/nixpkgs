@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "sqlmc";
   version = "1.1.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "malvads";
     repo = "sqlmc";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-8p+9A1j+J3WItc1u8kG7LHY086kcwMGhEMENym2p/Fo=";
   };
 
@@ -37,9 +37,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool to check URLs of a domain for SQL injections";
     homepage = "https://github.com/malvads/sqlmc";
-    changelog = "https://github.com/malvads/sqlmc/releases/tag/${version}";
+    changelog = "https://github.com/malvads/sqlmc/releases/tag/${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "sqlmc";
   };
-}
+})

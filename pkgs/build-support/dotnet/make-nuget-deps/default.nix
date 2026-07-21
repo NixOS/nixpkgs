@@ -21,7 +21,7 @@ lib.makeOverridable (
             assert (lib.isPath sourceFile);
             import sourceFile
           else
-            { fetchNuGet }: builtins.map fetchNuGet (lib.importJSON sourceFile);
+            { fetchNuGet }: map fetchNuGet (lib.importJSON sourceFile);
       in
       loadDeps {
         fetchNuGet = args: fetchNupkg (args // { inherit installable; });

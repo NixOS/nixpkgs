@@ -14,14 +14,14 @@
   yt-dlp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ytfzf";
   version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "pystardust";
     repo = "ytfzf";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-rwCVOdu9UfTArISt8ITQtLU4Gj2EZd07bcFKvxXQ7Bc=";
   };
 
@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
       --set YTFZF_SYSTEM_ADDON_DIR "$out/share/ytfzf/addons"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Posix script to find and watch youtube videos from the terminal";
     homepage = "https://github.com/pystardust/ytfzf";
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ dotlambda ];
     mainProgram = "ytfzf";
   };
-}
+})

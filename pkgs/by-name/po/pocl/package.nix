@@ -41,13 +41,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pocl";
-  version = "7.0";
+  version = "7.1";
 
   src = fetchFromGitHub {
     owner = "pocl";
     repo = "pocl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pyolM0SR6xiwhad7K0mX9I/PKbIa8Ltin0CYoA1U/qo=";
+    hash = "sha256-bS6vTIjLO7YLs7qYLKW0cYYbEJ/hRS/+IjjAKbkj8ac=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -56,24 +56,27 @@ stdenv.mkDerivation (finalAttrs: {
       "static_cast<size_t>(Dev.getInfo<CL_DEVICE_GLOBAL_MEM_SIZE>())"
   '';
 
-  cmakeFlags = [
-    # avoid the runtime linker pulling in a different llvm e.g. from graphics drivers
-    (lib.cmakeBool "STATIC_LLVM" true)
-    (lib.cmakeBool "ENABLE_POCL_BUILDING" false)
-    (lib.cmakeBool "POCL_ICD_ABSOLUTE_PATH" true)
-    (lib.cmakeBool "ENABLE_ICD" true)
-    (lib.cmakeBool "ENABLE_REMOTE_CLIENT" true)
-    (lib.cmakeBool "ENABLE_REMOTE_SERVER" true)
-    (lib.cmakeFeature "CLANG" "${clangWrapped}/bin/clang")
-    (lib.cmakeFeature "CLANGXX" "${clangWrapped}/bin/clang++")
-  ]
-  # Only x86_64 supports "distro" which allows runtime detection of SSE/AVX
-  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-    (lib.cmakeFeature "KERNELLIB_HOST_CPU_VARIANTS" "distro")
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
-    (lib.cmakeFeature "LLC_HOST_CPU" "generic")
-  ];
+  cmakeFlags =
+    (lib.mapAttrsToList lib.cmakeBool {
+      # avoid the runtime linker pulling in a different llvm e.g. from graphics drivers
+      "STATIC_LLVM" = true;
+      "ENABLE_POCL_BUILDING" = false;
+      "POCL_ICD_ABSOLUTE_PATH" = true;
+      "ENABLE_ICD" = true;
+      "ENABLE_REMOTE_CLIENT" = true;
+      "ENABLE_REMOTE_SERVER" = true;
+    })
+    ++ (lib.mapAttrsToList lib.cmakeFeature {
+      "CLANG" = "${clangWrapped}/bin/clang";
+      "CLANGXX" = "${clangWrapped}/bin/clang++";
+    })
+    # Only x86_64 supports "distro" which allows runtime detection of SSE/AVX
+    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+      (lib.cmakeFeature "KERNELLIB_HOST_CPU_VARIANTS" "distro")
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
+      (lib.cmakeFeature "LLC_HOST_CPU" "generic")
+    ];
 
   nativeBuildInputs = [
     cmake

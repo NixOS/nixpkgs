@@ -22,7 +22,6 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Johnny Decimal daemon for automatically organizing files into the correct drawer using their filename";

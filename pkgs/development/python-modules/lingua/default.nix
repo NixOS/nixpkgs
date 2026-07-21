@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "lingua";
   version = "4.15.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lingua" ];
 
-  meta = with lib; {
+  meta = {
     description = "Translation toolset";
     homepage = "https://github.com/wichert/lingua";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ np ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ np ];
   };
 }

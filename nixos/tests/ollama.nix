@@ -5,7 +5,7 @@ let
 in
 {
   name = "ollama";
-  meta.maintainers = with lib.maintainers; [ abysssol ];
+  meta.maintainers = [ ];
 
   nodes = {
     cpu =

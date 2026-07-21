@@ -4,18 +4,18 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cpc";
-  version = "3.0.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "probablykasper";
     repo = "cpc";
-    tag = "v${version}";
-    hash = "sha256-DjJIXV5rJxQOiMH8/0yZQBvDh+jbejzADt4WSGyhozI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Gd2bFOyPERcwTGurJJDMNrRjFq7smtkgFMGUXxZVwaI=";
   };
 
-  cargoHash = "sha256-2k+aFrP/PQmlGr3gIF1queDjuo/+3KtnrOrx1+wrqEg=";
+  cargoHash = "sha256-visApJ3DgQ1ohaQ2IE63bzdf0RuQI4NnpQqspP8WKjg=";
 
   meta = {
     mainProgram = "cpc";
@@ -26,4 +26,4 @@ rustPlatform.buildRustPackage rec {
       s0me1newithhand7s
     ];
   };
-}
+})

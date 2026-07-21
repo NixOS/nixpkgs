@@ -3,14 +3,14 @@
   lib,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tgswitch";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "warrensbox";
     repo = "tgswitch";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-Q3Cef3B7hfVHLvW8Rx6IdH9g/3luDhpUMZ8TXVpb8gQ=";
   };
 
@@ -26,11 +26,11 @@ buildGoModule rec {
   # 2. Operation on `/var/empty` not permitted on macOS
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool to switch between different versions of terragrunt";
     mainProgram = "tgswitch";
     homepage = "https://github.com/warrensbox/tgswitch";
-    license = licenses.mit;
-    maintainers = with maintainers; [ psibi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ psibi ];
   };
-}
+})

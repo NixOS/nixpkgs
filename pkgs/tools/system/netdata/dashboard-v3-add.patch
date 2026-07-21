@@ -1,16 +1,22 @@
 diff --git a/packaging/cmake/Modules/NetdataDashboard.cmake b/packaging/cmake/Modules/NetdataDashboard.cmake
-index 098eaffcf..e52375bd0 100644
+index 098eaffcf..9f827d840 100644
 --- a/packaging/cmake/Modules/NetdataDashboard.cmake
 +++ b/packaging/cmake/Modules/NetdataDashboard.cmake
-@@ -26,29 +26,12 @@ function(bundle_dashboard)
+@@ -21,37 +21,11 @@ endfunction()
+ # This is unfortunately complicated due to how we need to handle the
+ # generation of the CMakeLists file for the dashboard code.
+ function(bundle_dashboard)
+-  include(ExternalProject)
+-
    set(dashboard_src_dir "${CMAKE_BINARY_DIR}/dashboard-src")
-   set(dashboard_src_prefix "${dashboard_src_dir}/dist/agent")
+-  set(dashboard_src_prefix "${dashboard_src_dir}/dist/agent")
++  set(dashboard_src_prefix "${dashboard_src_dir}/agent")
    set(dashboard_bin_dir "${CMAKE_BINARY_DIR}/dashboard-bin")
 -  set(DASHBOARD_URL "https://app.netdata.cloud/agent.tar.gz" CACHE STRING
 -      "URL used to fetch the local agent dashboard code")
-
-   message(STATUS "Preparing local agent dashboard code")
-
+-
+-  message(STATUS "Preparing local agent dashboard code")
+-
 -  message(STATUS "  Fetching ${DASHBOARD_URL}")
 -  file(DOWNLOAD
 -       "${DASHBOARD_URL}"
@@ -25,11 +31,14 @@ index 098eaffcf..e52375bd0 100644
 -  else()
 -    message(STATUS "  Fetching ${DASHBOARD_URL} -- Done")
 -  endif()
--
-   message(STATUS "  Extracting dashboard code")
-   extract_gzipped_tarball(
+ 
+-  message(STATUS "  Extracting dashboard code")
+-  extract_gzipped_tarball(
 -    "${CMAKE_BINARY_DIR}/dashboard.tar.gz"
-+    "@dashboardTarball@"
-     "${dashboard_src_dir}"
-   )
-   message(STATUS "  Extracting dashboard code -- Done")
+-    "${dashboard_src_dir}"
+-  )
+-  message(STATUS "  Extracting dashboard code -- Done")
++  file(COPY "@dashboardPath@/" DESTINATION "${dashboard_src_dir}" NO_SOURCE_PERMISSIONS)
+ 
+   handle_braindead_versioning_insanity("${dashboard_src_prefix}")
+ 

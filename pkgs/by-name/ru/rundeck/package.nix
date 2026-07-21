@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rundeck";
-  version = "5.15.0-20250902";
+  version = "6.0.1-20260715";
 
   src = fetchurl {
     url = "https://packagecloud.io/pagerduty/rundeck/packages/java/org.rundeck/rundeck-${finalAttrs.version}.war/artifacts/rundeck-${finalAttrs.version}.war/download?distro_version_id=167";
-    hash = "sha256-3Nlpd0Sl6NCH+TNPNnh7NJxzOZUNQvKupyFOQOdJsto=";
+    hash = "sha256-TuA09wAHLIkF5ynK1kihXGNHYb61TmKp/uX9dApBO7k=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

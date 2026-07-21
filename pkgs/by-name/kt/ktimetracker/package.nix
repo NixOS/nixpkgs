@@ -51,6 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "ktimetracker";
     license = lib.licenses.gpl2;
     homepage = "https://userbase.kde.org/KTimeTracker";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 })

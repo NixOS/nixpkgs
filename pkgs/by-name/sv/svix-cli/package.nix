@@ -38,10 +38,10 @@ buildGoModule rec {
     "-X github.com/svix/svix-cli/version.Version=v${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI for interacting with the Svix API";
     homepage = "https://github.com/svix/svix-cli/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ techknowlogick ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ techknowlogick ];
   };
 }

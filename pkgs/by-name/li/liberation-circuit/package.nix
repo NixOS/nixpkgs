@@ -39,7 +39,9 @@ stdenv.mkDerivation {
 
     install -D linux-packaging/liberation-circuit.desktop $out/share/applications/liberation-circuit.desktop
     install -D linux-packaging/liberation-circuit.appdata.xml $out/share/metainfo/liberation-circuit.appdata.xml
-    install -D linux-packaging/icon-256px.png $out/share/pixmaps/liberation-circuit.png
+    install -D linux-packaging/icon-16px.png $out/share/icons/hicolor/16x16/apps/liberation-circuit.png
+    install -D linux-packaging/icon-32px.png $out/share/icons/hicolor/32x32/apps/liberation-circuit.png
+    install -D linux-packaging/icon-256px.png $out/share/icons/hicolor/256x256/apps/liberation-circuit.png
 
     runHook postInstall
   '';

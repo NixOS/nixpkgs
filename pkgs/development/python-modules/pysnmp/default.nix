@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "pysnmp";
-  version = "7.1.21";
+  version = "7.1.27";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lextudio";
     repo = "pysnmp";
     tag = "v${version}";
-    hash = "sha256-IbVs/fjNRDhp4a78ZbgqUOxyrlZjEwsKSlQV3+mmCjo=";
+    hash = "sha256-BFdPdEa5aZAYa6i7714k33wM36Sq1ExJO/6dmsGLzVg=";
   };
 
   build-system = [ flit-core ];
@@ -64,6 +64,7 @@ buildPythonPackage rec {
     "test_v2c_get_table_bulk_0_5_subtree"
     "test_v2c_get_table_bulk_0_6_subtree"
     # pysnmp.smi.error.MibNotFoundError
+    # mibs are not part of the repo and expensive to pull
     "test_send_v3_trap_notification"
     "test_addAsn1MibSource"
     "test_v1_walk"
@@ -72,6 +73,9 @@ buildPythonPackage rec {
     "test_syntax_unsigned"
     "test_add_asn1_mib_source"
     "test_syntax_fixed_length_octet_string"
+    "test_inet_address_ipv4_resolv"
+    "test_inet_address_ipv6_resolv"
+    "test_inet_address_roundtrip"
   ];
 
   disabledTestPaths = [
@@ -81,11 +85,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysnmp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python SNMP library";
     homepage = "https://github.com/lextudio/pysnmp";
     changelog = "https://github.com/lextudio/pysnmp/blob/${src.rev}/CHANGES.rst";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

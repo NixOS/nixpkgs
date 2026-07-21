@@ -3,7 +3,6 @@
   stdenv,
   ocaml,
   findlib,
-  dune_1,
   dune_2,
   dune_3,
 }:
@@ -30,7 +29,7 @@ lib.extendMkDerivation {
           dune-version = args.duneVersion or "3";
         in
         {
-          "1" = dune_1;
+          "1" = throw "Support for dune version 1 has been removed";
           "2" = dune_2;
           "3" = dune_3;
         }

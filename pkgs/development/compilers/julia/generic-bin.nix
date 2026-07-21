@@ -15,9 +15,6 @@ let
   skip_tests = [
     # Test flaky on ofborg
     "channels"
-    # Test flaky because of our RPATH patching
-    # https://github.com/NixOS/nixpkgs/pull/230965#issuecomment-1545336489
-    "compiler/codegen"
     # Test flaky
     "read"
   ]
@@ -34,6 +31,17 @@ let
     "loading"
     "cmdlineargs"
   ]
+  ++ lib.optionals (lib.versionAtLeast version "1.12") [
+    # Test flaky because of our RPATH patching
+    # https://github.com/NixOS/nixpkgs/pull/230965#issuecomment-1545336489
+    "Compiler/codegen"
+    "precompile"
+    "compileall"
+    "Profile"
+  ]
+  ++ lib.optionals (lib.versionOlder version "1.12") [
+    "compiler/codegen" # older versions' test was in lowercase
+  ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Test flaky on ofborg
     "FileWatching"
@@ -41,6 +49,7 @@ let
     "InteractiveUtils"
     # Test requires network access
     "Sockets"
+    "Distributed"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # Test Failed at $out/share/julia/stdlib/v1.8/LinearAlgebra/test/blas.jl:702
@@ -63,10 +72,6 @@ stdenv.mkDerivation {
       aarch64-linux = fetchurl {
         url = "https://julialang-s3.julialang.org/bin/linux/aarch64/${lib.versions.majorMinor version}/julia-${version}-linux-aarch64.tar.gz";
         sha256 = sha256.aarch64-linux;
-      };
-      x86_64-darwin = fetchurl {
-        url = "https://julialang-s3.julialang.org/bin/mac/x64/${lib.versions.majorMinor version}/julia-${version}-mac64.tar.gz";
-        sha256 = sha256.x86_64-darwin;
       };
       aarch64-darwin = fetchurl {
         url = "https://julialang-s3.julialang.org/bin/mac/aarch64/${lib.versions.majorMinor version}/julia-${version}-macaarch64.tar.gz";
@@ -142,7 +147,6 @@ stdenv.mkDerivation {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     mainProgram = "julia";

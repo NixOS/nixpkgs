@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytest,
   gym,
   scipy,
@@ -19,17 +20,21 @@
 buildPythonPackage {
   pname = "baselines";
   version = "0.1.6"; # remember to manually adjust the rev
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "baselines";
     # Unfortunately releases are not tagged. This commit bumps the version in setup.py
     rev = "2bca7901f51c88cdef3ca0666c6a87c454a4dbe8";
-    sha256 = "0j2ck7rsrcyny9qbmrw9aqvzfhv70nbign8iva2dsisa2x24gbcl";
+    hash = "sha256-lK1HRBdKR92E2hHZF5cFZ0P3N1aJ57pw8tazrPOZTEg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     gym
     scipy
     tqdm
@@ -55,10 +60,12 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytest ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "baselines" ];
+
+  meta = {
     description = "High-quality implementations of reinforcement learning algorithms";
     homepage = "https://github.com/openai/baselines";
-    license = licenses.mit;
-    maintainers = with maintainers; [ timokau ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ timokau ];
   };
 }

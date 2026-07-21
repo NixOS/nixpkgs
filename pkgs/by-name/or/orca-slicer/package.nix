@@ -1,5 +1,5 @@
 {
-  stdenv,
+  clangStdenv,
   lib,
   binutils,
   fetchFromGitHub,
@@ -12,7 +12,8 @@
   cgal_5,
   curl,
   dbus,
-  eigen,
+  draco,
+  eigen_5,
   expat,
   ffmpeg,
   gcc-unwrapped,
@@ -25,46 +26,54 @@
   gtest,
   gtk3,
   hicolor-icon-theme,
-  ilmbase,
+  libsecret,
   libpng,
   mpfr,
   nlopt,
   opencascade-occt_7_6,
   openvdb,
   opencv,
-  pcre,
   systemd,
-  tbb_2022,
+  onetbb,
   webkitgtk_4_1,
-  wxGTK31,
-  xorg,
+  wxwidgets_3_3,
+  libx11,
   libnoise,
-  withSystemd ? stdenv.hostPlatform.isLinux,
+  withSystemd ? clangStdenv.hostPlatform.isLinux,
+  withNvidiaGLWorkaround ? false,
 }:
 let
   wxGTK' =
-    (wxGTK31.override {
-      withCurl = true;
+    (wxwidgets_3_3.override {
       withPrivateFonts = true;
       withWebKit = true;
+      withEGL = true;
     }).overrideAttrs
       (old: {
+        buildInputs = old.buildInputs ++ [ libsecret ];
         configureFlags = old.configureFlags ++ [
           # Disable noisy debug dialogs
           "--enable-debug=no"
+          "--enable-secretstore"
         ];
       });
 in
-stdenv.mkDerivation (finalAttrs: {
+# Build with clang even on Linux, because GCC uses absolutely obscene amounts of memory
+# on this particular code base (OOM with 32GB memory and --cores 16 on GCC, succeeds
+# with --cores 32 on clang).
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "orca-slicer";
-  version = "v2.3.0";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
-    owner = "SoftFever";
+    owner = "OrcaSlicer";
     repo = "OrcaSlicer";
-    tag = finalAttrs.version;
-    hash = "sha256-MEa57jFBJkqwoAkqI7wXOn1X1zxgLQt3SNeanfD88kU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gUwLC0XkeohEdL0EScdOrA8MWXGuR8kUfezoQsk9i/A=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
@@ -89,7 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
     cgal_5
     curl
     dbus
-    eigen
+    draco
+    eigen_5
     expat
     ffmpeg
     gcc-unwrapped
@@ -101,20 +111,19 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-good
+    (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
     gtk3
     hicolor-icon-theme
-    ilmbase
+    libsecret
     libpng
     mpfr
     nlopt
     opencascade-occt_7_6
     openvdb
-    pcre
-    tbb_2022
+    onetbb
     webkitgtk_4_1
     wxGTK'
-    xorg.libX11
+    libx11
     opencv.cxxdev
     libnoise
   ]
@@ -126,15 +135,16 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/0001-not-for-upstream-CMakeLists-Link-against-webkit2gtk-.patch
     # Link opencv_core and opencv_imgproc instead of opencv_world
     ./patches/dont-link-opencv-world-orca.patch
-    # Don't link osmesa
-    ./patches/no-osmesa.patch
-    # The changeset from https://github.com/SoftFever/OrcaSlicer/pull/7650, can be removed when that PR gets merged
+    # The changeset from https://github.com/OrcaSlicer/OrcaSlicer/pull/7650, can be removed when that PR gets merged
     # Allows disabling the update nag screen
     (fetchpatch {
       name = "pr-7650-configurable-update-check.patch";
-      url = "https://github.com/SoftFever/OrcaSlicer/commit/d10a06ae11089cd1f63705e87f558e9392f7a167.patch";
-      hash = "sha256-t4own5AwPsLYBsGA15id5IH1ngM0NSuWdFsrxMRXmTk=";
+      url = "https://github.com/OrcaSlicer/OrcaSlicer/commit/300df7c99b0a2173f645c8bf40e8758eb5f2c486.patch";
+      hash = "sha256-hgQeagPhS3aNQoFSq0S+Ch60ygm81uHMIvGopw/AZT8=";
     })
+
+    # Pick https://github.com/prusa3d/PrusaSlicer/pull/14207 to remove unused and insecure ilmbase dependency
+    ./patches/no-ilmbase.patch
   ];
 
   doCheck = true;
@@ -142,20 +152,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   separateDebugInfo = true;
 
-  NLOPT = nlopt;
+  env = {
+    NLOPT = nlopt;
 
-  NIX_CFLAGS_COMPILE = toString (
-    [
+    NIX_CFLAGS_COMPILE = toString [
       "-Wno-ignored-attributes"
       "-I${opencv.out}/include/opencv4"
       "-Wno-error=incompatible-pointer-types"
-      "-Wno-template-id-cdtor"
+      "-Wno-error=format-security"
       "-Wno-uninitialized"
       "-Wno-unused-result"
       "-Wno-deprecated-declarations"
-      "-Wno-use-after-free"
       "-Wno-format-overflow"
-      "-Wno-stringop-overflow"
       "-DBOOST_ALLOW_DEPRECATED_HEADERS"
       "-DBOOST_MATH_DISABLE_STD_FPCLASSIFY"
       "-DBOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS"
@@ -164,23 +172,20 @@ stdenv.mkDerivation (finalAttrs: {
       "-DBOOST_MATH_MAX_FLOAT128_DIGITS=0"
       "-DBOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT"
       "-DBOOST_MATH_DISABLE_FLOAT128_BUILTIN_FPCLASSIFY"
-    ]
-    # Making it compatible with GCC 14+, see https://github.com/SoftFever/OrcaSlicer/pull/7710
-    ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "14") [
-      "-Wno-error=template-id-cdtor"
-    ]
-  );
+    ];
 
-  NIX_LDFLAGS = toString [
-    (lib.optionalString withSystemd "-ludev")
-    "-L${boost186}/lib"
-    "-lboost_log"
-    "-lboost_log_setup"
-  ];
+    NIX_LDFLAGS = toString [
+      (lib.optionalString withSystemd "-ludev")
+      "-L${boost186}/lib"
+      "-lboost_log"
+      "-lboost_log_setup"
+    ];
+  };
 
   prePatch = ''
     sed -i 's|nlopt_cxx|nlopt|g' cmake/modules/FindNLopt.cmake
     sed -i 's|"libnoise/noise.h"|"noise/noise.h"|' src/libslic3r/PerimeterGenerator.cpp
+    sed -i 's|"libnoise/noise.h"|"noise/noise.h"|' src/libslic3r/Feature/FuzzySkin/FuzzySkin.cpp
   '';
 
   cmakeFlags = [
@@ -193,13 +198,13 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-DGL_SILENCE_DEPRECATION")
     (lib.cmakeFeature "CMAKE_EXE_LINKER_FLAGS" "-Wl,--no-as-needed")
     (lib.cmakeBool "ORCA_VERSION_CHECK_DEFAULT" false)
-    (lib.cmakeFeature "LIBNOISE_INCLUDE_DIR" "${libnoise}/include/noise")
-    (lib.cmakeFeature "LIBNOISE_LIBRARY" "${libnoise}/lib/libnoise-static.a")
+    (lib.cmakeFeature "LIBNOISE_INCLUDE_DIR" "${libnoise}/include")
+    (lib.cmakeFeature "LIBNOISE_LIBRARY_RELEASE" "${libnoise}/lib/libnoise-static.a")
     "-Wno-dev"
   ];
 
   # Generate translation files
-  postBuild = "( cd .. && ./run_gettext.sh )";
+  postBuild = "( cd .. && ./scripts/run_gettext.sh )";
 
   preFixup = ''
     gappsWrapperArgs+=(
@@ -209,6 +214,13 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       }"
       --set WEBKIT_DISABLE_COMPOSITING_MODE 1
+      ${lib.optionalString withNvidiaGLWorkaround ''
+        --set __GLX_VENDOR_LIBRARY_NAME mesa
+        --set __EGL_VENDOR_LIBRARY_FILENAMES /run/opengl-driver/share/glvnd/egl_vendor.d/50_mesa.json
+        --set MESA_LOADER_DRIVER_OVERRIDE zink
+        --set GALLIUM_DRIVER zink
+        --set WEBKIT_DISABLE_DMABUF_RENDERER 1
+      ''}
     )
   '';
 
@@ -218,14 +230,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "G-code generator for 3D printers (Bambu, Prusa, Voron, VzBot, RatRig, Creality, etc.)";
-    homepage = "https://github.com/SoftFever/OrcaSlicer";
-    changelog = "https://github.com/SoftFever/OrcaSlicer/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/OrcaSlicer/OrcaSlicer";
+    changelog = "https://github.com/OrcaSlicer/OrcaSlicer/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       zhaofengli
       ovlach
       pinpox
       liberodark
+      zraexy
     ];
     mainProgram = "orca-slicer";
     platforms = lib.platforms.linux;

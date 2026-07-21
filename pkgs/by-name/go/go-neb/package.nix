@@ -27,13 +27,13 @@ buildGoModule {
 
   passthru.tests.go-neb = nixosTests.go-neb;
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Extensible matrix bot written in Go";
     mainProgram = "go-neb";
     homepage = "https://github.com/matrix-org/go-neb";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       hexa
       maralorn
     ];

@@ -7,12 +7,12 @@
   e2fsprogs,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pam_mktemp";
   version = "1.1.1";
 
   src = fetchurl {
-    url = "https://openwall.com/pam/modules/${pname}/${pname}-${version}.tar.gz";
+    url = "https://openwall.com/pam/modules/pam_mktemp/pam_mktemp-${finalAttrs.version}.tar.gz";
     hash = "sha256-Zs+AwYQ5yjRW25ZALy7qwUsaBQPMHRvn8rFtXwefPz0=";
   };
 
@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.openwall.com/pam/";
     description = "PAM for login service to provide per-user private directories";
-    license = licenses.bsd0;
-    maintainers = with maintainers; [ wladmis ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd0;
+    maintainers = with lib.maintainers; [ wladmis ];
+    platforms = lib.platforms.linux;
   };
-}
+})

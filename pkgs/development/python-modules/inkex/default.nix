@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
+  fetchpatch,
   inkscape,
   poetry-core,
   cssselect,
@@ -25,6 +26,21 @@ buildPythonPackage {
 
   inherit (inkscape) src;
 
+  patches = [
+    # Fix tests with newer libxml2
+    # https://gitlab.com/inkscape/extensions/-/merge_requests/712
+    (fetchpatch {
+      url = "https://gitlab.com/inkscape/extensions/-/commit/b04ab718b400778a264f2085bbc779faebc08368.patch";
+      hash = "sha256-BXRcfoeX7X8+x6CuKKBhrnzUHIwgnPay22Z8+rPZS54=";
+      stripLen = 1;
+      extraPrefix = "share/extensions/";
+    })
+
+    # Fix binary DXF parsing on big-endian
+    # https://gitlab.com/inkscape/extensions/-/merge_requests/721
+    ./1001-dxf-fix-binary-dxf-double-parsing-on-big-endian.patch
+  ];
+
   build-system = [ poetry-core ];
 
   pythonRelaxDeps = [
@@ -45,6 +61,9 @@ buildPythonPackage {
   ];
 
   pythonImportsCheck = [ "inkex" ];
+
+  # The inkex version isn't update in tandem with inkscape
+  dontCheckPythonMetadata = true;
 
   nativeCheckInputs = [
     gobject-introspection

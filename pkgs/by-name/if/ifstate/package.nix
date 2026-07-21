@@ -3,24 +3,23 @@
   stdenv,
   yq,
   python3Packages,
-  fetchFromGitea,
+  fetchFromCodeberg,
+  ethtool,
   iproute2,
   libbpf,
   nixosTests,
   withBpf ? false,
   withConfigValidation ? true,
   withShellColor ? false,
-  withWireguard ? true,
 }:
 
 let
-  version = "2.0.1";
-  src = fetchFromGitea {
-    domain = "codeberg.org";
-    owner = "liske";
+  version = "2.4.1";
+  src = fetchFromCodeberg {
+    owner = "routerkit";
     repo = "ifstate";
     tag = version;
-    hash = "sha256-QxjziDlkbTxAVd3qA8u4+JT8NWJxBMVAp7G5Zma9d10=";
+    hash = "sha256-/kibcWSGg7AqkjvQAzhSs+aoRHE/YoYhTqVjw4NWNgA=";
   };
   docs = stdenv.mkDerivation {
     pname = "ifstate-docs";
@@ -34,7 +33,9 @@ let
       (
         [
           mkdocs-material
+          mike
           mkdocs-glightbox
+          mkdocs-macros-plugin
           mkdocs-minify-plugin
         ]
         ++ mkdocs-material.optional-dependencies.imaging
@@ -62,6 +63,9 @@ let
     postPatch = ''
       substituteInPlace libifstate/routing/__init__.py \
         --replace-fail '/usr/share/iproute2' '${iproute2}/share/iproute2'
+
+      substituteInPlace libifstate/link/base.py \
+        --replace-fail "/usr/sbin/ethtool" "${lib.getExe ethtool}"
     ''
     + lib.optionalString withBpf ''
       substituteInPlace libifstate/bpf/ctypes.py \
@@ -80,8 +84,7 @@ let
         setproctitle
       ]
       ++ lib.optional withConfigValidation jsonschema
-      ++ lib.optional withShellColor pygments
-      ++ lib.optional withWireguard wgnlpy;
+      ++ lib.optional withShellColor pygments;
 
     pythonRemoveDeps = lib.optional (!withConfigValidation) "jsonschema";
 
@@ -100,7 +103,6 @@ let
           withBpf
           withConfigValidation
           withShellColor
-          withWireguard
           ;
       };
       # needed for access in schema validaten in module

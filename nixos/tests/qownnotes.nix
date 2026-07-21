@@ -50,13 +50,13 @@
           machine.wait_for_text("Note folder")
           machine.send_key("ret")
           machine.wait_for_console_text("Note path '/home/alice/Notes' was now created.")
-          machine.wait_for_text("Panel layout")
+          machine.wait_for_text("Layout preset")
           machine.send_key("ret")
           machine.wait_for_text("Nextcloud")
           machine.send_key("ret")
 
-          # OCR can't detect "App metric" anymore, so we will wait for another text
-          machine.wait_for_text("Open network settings")
+          # OCR can't detect "App metric" or "Open network settings" anymore, so we will wait for another text
+          machine.wait_for_text("usage data")
           machine.send_key("ret")
 
           # Doesn't work for non-root

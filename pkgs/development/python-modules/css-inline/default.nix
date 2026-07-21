@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "css-inline";
-  version = "0.17.0";
+  version = "0.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Stranger6667";
     repo = "css-inline";
     rev = "python-v${version}";
-    hash = "sha256-RclMgVJpK2dOtuFKearRMK8rpa6vFTa8T3Z+A7mk7Zs=";
+    hash = "sha256-hXrcomE//BScA395zXSKQayeRn8G8ivfcIJkIKu+PUE=";
   };
 
   postPatch = ''
@@ -43,7 +43,7 @@ buildPythonPackage rec {
       cd bindings/python
       ln -s ${./Cargo.lock} Cargo.lock
     '';
-    hash = "sha256-WvUlumpXVLiu9htY07wfGyibro2StWgYF7XVW411ePw=";
+    hash = "sha256-Nj7DA20qCvSQ6EhC6GO+25TBqPeAf3SV/gmpRISgWtM=";
   };
 
   nativeBuildInputs = [
@@ -72,11 +72,11 @@ buildPythonPackage rec {
     "test_invalid_href"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Inline CSS into style attributes";
     homepage = "https://github.com/Stranger6667/css-inline";
     changelog = "https://github.com/Stranger6667/css-inline/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

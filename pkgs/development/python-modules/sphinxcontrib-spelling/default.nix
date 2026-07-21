@@ -2,40 +2,35 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  importlib-metadata,
   sphinx,
   pyenchant,
-  setuptools,
-  setuptools-scm,
+  hatchling,
+  hatch-vcs,
   wheel,
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-spelling";
-  version = "8.0.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "8.0.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sphinx-contrib";
     repo = "spelling";
     tag = version;
-    hash = "sha256-gN+FkgIzk7wG/ni+DzaeiePjCiK9k7Jrn2IUDgy8DOg=";
+    hash = "sha256-f9n3hp+d3UvfVt2KmhxYm80XsEnIx3EVkdrQJxWDxks=";
   };
 
   nativeBuildInputs = [
-    setuptools
-    setuptools-scm
+    hatchling
+    hatch-vcs
     wheel
   ];
 
   propagatedBuildInputs = [
     sphinx
     pyenchant
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ];
 
   # No tests included
   doCheck = false;
@@ -44,11 +39,11 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx spelling extension";
     homepage = "https://github.com/sphinx-contrib/spelling";
-    changelog = "https://github.com/sphinx-contrib/spelling/blob/${version}/docs/source/history.rst";
-    license = licenses.bsd2;
+    changelog = "https://github.com/sphinx-contrib/spelling/blob/${src.tag}/docs/source/history.rst";
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

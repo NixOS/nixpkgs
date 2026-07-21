@@ -7,22 +7,20 @@
   fetchFromGitLab,
   makeBinaryWrapper,
   makeDesktopItem,
+  nix-update-script,
 }:
-let
-  version = "2.250914.1";
-in
 buildNpmPackage (finalAttrs: {
   pname = "gridtracker2";
-  inherit version;
+  version = "2.260714.0";
 
   src = fetchFromGitLab {
     owner = "gridtracker.org";
     repo = "gridtracker2";
-    tag = "v${version}";
-    hash = "sha256-ME68kGRlIRPs5tUOGb3g2CXJKC52QuMuTMc1ctAMzlk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZY+p86wgjzVNALBt6+Gn68sZ6tNcsq5wo1QykZccPT0=";
   };
 
-  npmDepsHash = "sha256-MUXwJPo/A0gxtUbM3MOWfMcspM1losuDhc5XTc2oqCo=";
+  npmDepsHash = "sha256-5h3bswjVf/8JHhwHRFTUfydN7XXtWbxNHTZ0mLL7RT8=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -50,34 +48,22 @@ buildNpmPackage (finalAttrs: {
     })
   ];
 
-  postPatch = ''
-    install -Dvm644 ${./package-lock.json} package-lock.json
-  '';
-
   buildPhase = ''
     runHook preBuild
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # electronDist needs to be modifiable on Darwin
-    cp -r ${electron.dist} electron-dist
-    chmod -R u+w electron-dist
 
-    # Disable code signing during build on macOS.
-    # https://github.com/electron-userland/electron-builder/blob/fa6fc16/docs/code-signing.md#how-to-disable-code-signing-during-the-build-process-on-macos
-    export CSC_IDENTITY_AUTO_DISCOVERY=false
+    # the electronDist directory needs to be outside of the working directory
+    # otherwise the electron-builder config accidentally includes it inside the .asar file
+    electron_dist="$(mktemp -d)"
+    cp -r ${electron.dist}/. "$electron_dist"
+    chmod -R u+w "$electron_dist"
 
     npm exec electron-builder -- \
       --dir \
-      -c.electronDist=electron-dist \
-      -c.electronVersion=${electron.version}
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    npm exec electron-builder -- \
-      --dir \
-      -c.electronDist=${electron.dist} \
-      -c.electronVersion=${electron.version}
-  ''
-  + ''
+      -c.electronDist="$electron_dist" \
+      -c.electronVersion=${electron.version} \
+      -c.mac.identity=null
+    # ^ disable codesigning on Darwin
+
     runHook postBuild
   '';
 
@@ -91,7 +77,7 @@ buildNpmPackage (finalAttrs: {
     install -Dvm644 -t "$out/share/gridtracker2/locales" \
       ./dist/linux*/locales/*
     install -Dvm644 ./resources/icon.png \
-      "$out/share/pixmaps/gridtracker2.png"
+      "$out/share/icons/hicolor/256x256/apps/gridtracker2.png"
 
     makeWrapper ${lib.getExe electron} $out/bin/gridtracker2 \
       --add-flags $out/share/gridtracker2/resources/app.asar \
@@ -107,6 +93,8 @@ buildNpmPackage (finalAttrs: {
   + ''
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Warehouse of amateur radio information";

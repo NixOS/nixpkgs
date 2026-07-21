@@ -4,6 +4,7 @@ bcachefs-tools:
   stdenv,
   kernelModuleMakeFlags,
   kernel,
+  rustPlatform,
 }:
 
 stdenv.mkDerivation {
@@ -11,8 +12,14 @@ stdenv.mkDerivation {
   version = "${kernel.version}-${bcachefs-tools.version}";
 
   __structuredAttrs = true;
+  strictDeps = true;
 
   src = bcachefs-tools.dkms;
+
+  postPatch = ''
+    substituteInPlace src/fs/bcachefs/Makefile \
+      --replace-fail '$(objtree)/vmlinux' '${kernel.dev}/vmlinux'
+  '';
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
@@ -21,6 +28,7 @@ stdenv.mkDerivation {
   makeFlags = kernelModuleMakeFlags ++ [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=${placeholder "out"}"
+    "RUST_LIB_SRC=${rustPlatform.rustLibSrc}"
   ];
 
   installPhase = ''
@@ -38,11 +46,12 @@ stdenv.mkDerivation {
 
     inherit (bcachefs-tools.meta)
       homepage
+      downloadPage
       license
       maintainers
       platforms
       ;
 
-    broken = !(lib.versionAtLeast kernel.version "6.16" && lib.versionOlder kernel.version "6.18");
+    broken = !(lib.versionAtLeast kernel.version "6.16" && lib.versionOlder kernel.version "7.3");
   };
 }

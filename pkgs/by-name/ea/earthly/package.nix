@@ -7,14 +7,14 @@
   earthly,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "earthly";
   version = "0.8.16";
 
   src = fetchFromGitHub {
     owner = "earthly";
     repo = "earthly";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-2+Ya5i6V2QDzHsYR+Ro14u0VWR3wrQJHZRXBatGC8BA=";
   };
 
@@ -29,9 +29,9 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=v${version}"
-    "-X main.DefaultBuildkitdImage=docker.io/earthly/buildkitd:v${version}"
-    "-X main.GitSha=v${version}"
+    "-X main.Version=v${finalAttrs.version}"
+    "-X main.DefaultBuildkitdImage=docker.io/earthly/buildkitd:v${finalAttrs.version}"
+    "-X main.GitSha=v${finalAttrs.version}"
     "-X main.DefaultInstallationName=earthly"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -53,18 +53,18 @@ buildGoModule rec {
   passthru = {
     tests.version = testers.testVersion {
       package = earthly;
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
   };
 
   meta = {
     description = "Build automation for the container era";
     homepage = "https://earthly.dev/";
-    changelog = "https://github.com/earthly/earthly/releases/tag/v${version}";
+    changelog = "https://github.com/earthly/earthly/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       zoedsoupe
       konradmalik
     ];
   };
-}
+})

@@ -6,15 +6,14 @@ Subject: [PATCH] fix: use an impure path to csd-backlight-helper to fix
 
 ---
  plugins/power/csd-power-manager.c                             | 4 ++--
- .../org.cinnamon.settings-daemon.plugins.power.policy.in      | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/plugins/power/csd-power-manager.c b/plugins/power/csd-power-manager.c
-index 33f4489..84dd98b 100644
+index e80ea05..f02454e 100644
 --- a/plugins/power/csd-power-manager.c
 +++ b/plugins/power/csd-power-manager.c
-@@ -2529,7 +2529,7 @@ backlight_helper_get_value (const gchar *argument, CsdPowerManager* manager,
- #endif
+@@ -2481,7 +2481,7 @@ backlight_helper_get_value (const gchar *argument, CsdPowerManager* manager,
+         gchar *endptr = NULL;
  
          /* get the data */
 -        command = g_strdup_printf (LIBEXECDIR "/csd-backlight-helper --%s %s",
@@ -22,7 +21,7 @@ index 33f4489..84dd98b 100644
                                     argument,
                                     manager->priv->backlight_helper_preference_args);
          ret = g_spawn_command_line_sync (command,
-@@ -2619,7 +2619,7 @@ backlight_helper_set_value (const gchar *argument,
+@@ -2571,7 +2571,7 @@ backlight_helper_set_value (const gchar *argument,
  #endif
  
          /* get the data */
@@ -31,19 +30,3 @@ index 33f4489..84dd98b 100644
                                     argument, value,
                                     manager->priv->backlight_helper_preference_args);
          ret = g_spawn_command_line_sync (command,
-diff --git a/plugins/power/org.cinnamon.settings-daemon.plugins.power.policy.in b/plugins/power/org.cinnamon.settings-daemon.plugins.power.policy.in
-index 504f017..3569e8c 100644
---- a/plugins/power/org.cinnamon.settings-daemon.plugins.power.policy.in
-+++ b/plugins/power/org.cinnamon.settings-daemon.plugins.power.policy.in
-@@ -25,7 +25,7 @@
-       <allow_inactive>no</allow_inactive>
-       <allow_active>yes</allow_active>
-     </defaults>
--    <annotate key="org.freedesktop.policykit.exec.path">@libexecdir@/csd-backlight-helper</annotate>
-+    <annotate key="org.freedesktop.policykit.exec.path">/run/current-system/sw/bin/cinnamon-settings-daemon/csd-backlight-helper</annotate>
-   </action>
- 
- </policyconfig>
--- 
-2.30.0
-

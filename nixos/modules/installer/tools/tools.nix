@@ -30,15 +30,20 @@ let
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
     replacements = {
-      perl = "${
+      perl = lib.getExe (
         pkgs.perl.withPackages (p: [
           p.FileSlurp
           p.ConfigIniFiles
         ])
-      }/bin/perl";
+      );
       hostPlatformSystem = pkgs.stdenv.hostPlatform.system;
-      detectvirt = "${config.systemd.package}/bin/systemd-detect-virt";
-      btrfs = "${pkgs.btrfs-progs}/bin/btrfs";
+      detectvirt = lib.getExe' config.systemd.package "systemd-detect-virt";
+      bcachefs =
+        if pkgs.bcachefs-tools.meta.broken then
+          lib.getExe' pkgs.coreutils "false"
+        else
+          lib.getExe pkgs.bcachefs-tools;
+      btrfs = lib.getExe pkgs.btrfs-progs;
       inherit (config.system.nixos-generate-config) configuration desktopConfiguration flake;
       xserverEnabled = config.services.xserver.enable;
     };
@@ -68,18 +73,15 @@ let
   };
 
   nixos-install = pkgs.nixos-install.override { };
-  nixos-rebuild = pkgs.nixos-rebuild.override { nix = config.nix.package; };
   nixos-rebuild-ng = pkgs.nixos-rebuild-ng.override {
     nix = config.nix.package;
-    withNgSuffix = false;
-    withReexec = true;
   };
 
   defaultFlakeTemplate = ''
     {
       inputs = {
         # This is pointing to an unstable release.
-        # If you prefer a stable release instead, you can this to the latest number shown here: https://nixos.org/download
+        # If you prefer a stable release instead, you can change the word unstable to the latest number shown here: https://nixos.org/download
         # i.e. nixos-24.11
         # Use `nix flake update` to update the flake to the latest revision of the chosen release channel.
         nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -279,14 +281,6 @@ in
     '';
   };
 
-  options.system.rebuild.enableNg = lib.mkEnableOption "" // {
-    default = true;
-    description = ''
-      Whether to use ‘nixos-rebuild-ng’ in place of ‘nixos-rebuild’, the
-      Python-based re-implementation of the original in Bash.
-    '';
-  };
-
   imports =
     let
       mkToolModule =
@@ -317,32 +311,52 @@ in
         name = "nixos-install";
         package = config.system.build.nixos-install;
       })
-      (mkToolModule { name = "nixos-option"; })
+      (mkToolModule {
+        name = "nixos-option";
+        package = pkgs.nixos-option.override { nix = config.nix.package; };
+      })
       (mkToolModule {
         name = "nixos-rebuild";
         package = config.system.build.nixos-rebuild;
       })
+      (
+        { config, ... }:
+        {
+          options.system.tools.nixos-rebuild.enableRun0Elevation = lib.mkEnableOption ''
+            support for being targeted by `nixos-rebuild --elevate=run0
+            --ask-elevate-password`.
+
+            This enables polkit and adds {command}`polkit-stdin-agent` to
+            {option}`environment.systemPackages` so that a deploying host
+            can find a target-architecture agent at
+            {file}`<toplevel>/sw/bin/polkit-stdin-agent` after copying the
+            closure (which is required for cross-architecture deploys and
+            mismatched nixpkgs revisions to work).
+          '';
+
+          config = lib.mkIf config.system.tools.nixos-rebuild.enableRun0Elevation {
+            security.run0.enable = lib.mkDefault true;
+            environment.systemPackages = [ pkgs.polkit-stdin-agent ];
+          };
+        }
+      )
       (mkToolModule {
         name = "nixos-version";
         package = nixos-version;
       })
+      (lib.mkRemovedOptionModule [ "system" "rebuild" "enableNg" ] ''
+        The Bash implementation of nixos-rebuild has been removed in favor of the new Python implementation.
+        If you have any issues with the new implementation, please create an issue in GitHub and tag the maintainers of 'nixos-rebuild-ng'.
+      '')
     ];
 
   config = {
     documentation.man.man-db.skipPackages = [ nixos-version ];
 
-    warnings = lib.optional (!config.system.disableInstallerTools && !config.system.rebuild.enableNg) ''
-      The Bash implementation of nixos-rebuild will be deprecated and removed in the 26.05 release of NixOS.
-      Please migrate to the newer implementation by removing 'system.rebuild.enableNg = false' from your configuration.
-      If you are unable to migrate due to any issues with the new implementation, please create an issue and tag the maintainers of 'nixos-rebuild-ng'.
-    '';
-
     # These may be used in auxiliary scripts (ie not part of toplevel), so they are defined unconditionally.
     system.build = {
       inherit nixos-generate-config nixos-install;
-      nixos-rebuild = if config.system.rebuild.enableNg then nixos-rebuild-ng else nixos-rebuild;
-      nixos-option = lib.warn "Accessing nixos-option through `config.system.build` is deprecated, use `pkgs.nixos-option` instead." pkgs.nixos-option;
-      nixos-enter = lib.warn "Accessing nixos-enter through `config.system.build` is deprecated, use `pkgs.nixos-enter` instead." pkgs.nixos-enter;
+      nixos-rebuild = nixos-rebuild-ng;
     };
   };
 }

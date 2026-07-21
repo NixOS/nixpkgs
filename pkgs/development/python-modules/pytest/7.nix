@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   callPackage,
-  pythonOlder,
   fetchPypi,
   writeText,
 
@@ -12,11 +11,9 @@
 
   # dependencies
   attrs,
-  exceptiongroup,
   iniconfig,
   packaging,
   pluggy,
-  tomli,
 
   # optional-dependencies
   argcomplete,
@@ -52,10 +49,6 @@ let
       iniconfig
       packaging
       pluggy
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [
-      exceptiongroup
-      tomli
     ];
 
     optional-dependencies = {
@@ -102,16 +95,14 @@ let
 
     pythonImportsCheck = [ "pytest" ];
 
-    meta = with lib; {
+    meta = {
       description = "Framework for writing tests";
       homepage = "https://docs.pytest.org";
       changelog = "https://github.com/pytest-dev/pytest/releases/tag/${version}";
-      maintainers = with maintainers; [
-        lovek323
+      maintainers = with lib.maintainers; [
         madjar
-        lsix
       ];
-      license = licenses.mit;
+      license = lib.licenses.mit;
     };
   };
 in

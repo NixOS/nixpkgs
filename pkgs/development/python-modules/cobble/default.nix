@@ -40,12 +40,12 @@ buildPythonPackage rec {
     "test_sub_sub_classes_are_included_in_abc"
   ];
 
-  passthru.updateScripts = gitUpdater { };
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Create Python data objects";
     homepage = "https://github.com/mwilliamson/python-cobble";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

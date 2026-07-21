@@ -6,7 +6,6 @@
   libspatialindex,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   wheel,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "rtree";
   version = "1.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Toblerity";
@@ -44,12 +41,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rtree" ];
 
-  meta = with lib; {
+  meta = {
     description = "R-Tree spatial index for Python GIS";
     homepage = "https://github.com/Toblerity/rtree";
     changelog = "https://github.com/Toblerity/rtree/blob/${src.tag}/CHANGES.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bgamari ];
-    teams = [ teams.geospatial ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bgamari ];
+    teams = [ lib.teams.geospatial ];
   };
 }

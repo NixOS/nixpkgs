@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "git-point";
   version = "0.2.2";
 
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
       lib.maintainers.qyriad
       lib.maintainers.philiptaron
     ];
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     platforms = lib.platforms.all;
     mainProgram = "git-point";

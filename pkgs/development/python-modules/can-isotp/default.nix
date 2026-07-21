@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   setuptools,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "can-isotp";
   version = "2.0.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pylessard";
@@ -39,12 +36,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "isotp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package that provides support for ISO-TP (ISO-15765) protocol";
     homepage = "https://github.com/pylessard/python-can-isotp";
     changelog = "https://github.com/pylessard/python-can-isotp/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       jacobkoziej
     ];
   };

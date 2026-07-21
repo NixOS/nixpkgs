@@ -6,14 +6,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "joshuto";
   version = "0.9.9";
 
   src = fetchFromGitHub {
     owner = "kamiyaa";
     repo = "joshuto";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-hfu3Verbrq0to3I5/gX6ZhVr7ewjHNamzvaUcmcUIRU=";
   };
 
@@ -28,16 +28,15 @@ rustPlatform.buildRustPackage rec {
       --fish <($out/bin/joshuto completions fish)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Ranger-like terminal file manager written in Rust";
     homepage = "https://github.com/kamiyaa/joshuto";
-    changelog = "https://github.com/kamiyaa/joshuto/releases/tag/${src.rev}";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [
-      figsoda
+    changelog = "https://github.com/kamiyaa/joshuto/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [
       totoroot
       xrelkd
     ];
     mainProgram = "joshuto";
   };
-}
+})

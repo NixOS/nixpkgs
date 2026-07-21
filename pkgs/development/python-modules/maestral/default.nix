@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   makePythonPath,
-  pythonOlder,
   python,
   click,
   dbus-python,
@@ -26,22 +25,28 @@
   watchdog,
   xattr,
   pytestCheckHook,
+  gitUpdater,
   nixosTests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "maestral";
-  version = "1.9.4";
+  version = "1.9.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral";
-    tag = "v${version}";
-    hash = "sha256-akh0COltpUU4Z4kfubg6A7k6W8ICoqVYkmFpMkTC8H8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mYFiQL4FumJWP2y1u5tIo1CZL027J8/EIYqJQde7G/c=";
   };
+
+  postPatch = ''
+    # is_not_closed was removed from dropbox in https://github.com/dropbox/dropbox-sdk-python/pull/537
+    # Upstream has been archived so we cannot expect a fix - use this workaround to keep the package alive a bit longer
+    substituteInPlace src/maestral/errorhandling.py \
+      --replace-fail "elif session_lookup_error.is_not_closed():" "elif False:"
+  '';
 
   build-system = [ setuptools ];
 
@@ -51,7 +56,6 @@ buildPythonPackage rec {
     dbus-python
     dropbox
     fasteners
-    importlib-metadata
     keyring
     keyrings-alt
     packaging
@@ -69,8 +73,14 @@ buildPythonPackage rec {
 
   makeWrapperArgs = [
     # Add the installed directories to the python path so the daemon can find them
-    "--prefix PYTHONPATH : ${makePythonPath dependencies}"
-    "--prefix PYTHONPATH : $out/${python.sitePackages}"
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    (makePythonPath finalAttrs.finalPackage.dependencies)
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "$out/${python.sitePackages}"
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -115,18 +125,24 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "maestral" ];
 
-  passthru.tests.maestral = nixosTests.maestral;
+  passthru = {
+    updateScript = gitUpdater {
+      ignoredVersions = "dev";
+      rev-prefix = "v";
+    };
+    tests.maestral = nixosTests.maestral;
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source Dropbox client for macOS and Linux";
     mainProgram = "maestral";
     homepage = "https://maestral.app";
-    changelog = "https://github.com/samschott/maestral/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/samschott/maestral/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       natsukium
       peterhoeg
       sfrijters
     ];
   };
-}
+})

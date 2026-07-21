@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
 
   dontPatchShebangs = true; # There are no scripts and it complains about null bytes.
 
-  meta = with lib; {
+  meta = {
     description = "Supermicro IPMI configuration tool";
     homepage = "http://www.supermicro.com/products/nfo/ipmi.cfm";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ sorki ];
+    maintainers = with lib.maintainers; [ sorki ];
   };
 }

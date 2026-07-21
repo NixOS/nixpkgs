@@ -12,22 +12,25 @@
   rustPlatform,
   vulkan-loader,
   wayland,
-  xorg,
+  libxi,
+  libxcursor,
+  libx11,
+  libxcb,
   alsa-lib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "halloy";
-  version = "2025.9";
+  version = "2026.7.2";
 
   src = fetchFromGitHub {
     owner = "squidowl";
     repo = "halloy";
-    tag = version;
-    hash = "sha256-yjia9tNNaXCTQFe8xfUeBYVHhW214AaOeCLFjAG703E=";
+    tag = finalAttrs.version;
+    hash = "sha256-+qFHwlwRxVN4W9DG+gY5N6um+JARD+3EiLlsD7R9Tpc=";
   };
 
-  cargoHash = "sha256-GmcRm6/dvY3stjV2ON8NVlVWZ5m0LXa9Kv0gqycbRoY=";
+  cargoHash = "sha256-/nFtOJXpusIlc7orGv013qzad8fdfQr32c8DAlccHIA=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -43,10 +46,10 @@ rustPlatform.buildRustPackage rec {
     libxkbcommon
     vulkan-loader
     wayland
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libxcb
+    libx11
+    libxcursor
+    libxi
+    libxcb
   ];
 
   desktopItems = [
@@ -55,7 +58,7 @@ rustPlatform.buildRustPackage rec {
       desktopName = "Halloy";
       comment = "IRC client written in Rust";
       icon = "org.squidowl.halloy";
-      exec = pname;
+      exec = finalAttrs.meta.mainProgram;
       terminal = false;
       mimeTypes = [
         "x-scheme-handler/irc"
@@ -96,11 +99,11 @@ rustPlatform.buildRustPackage rec {
     APP_DIR="$out/Applications/Halloy.app/Contents"
 
     mkdir -p "$APP_DIR/MacOS"
-    cp -r ${src}/assets/macos/Halloy.app/Contents/* "$APP_DIR"
+    cp -r ${finalAttrs.src}/assets/macos/Halloy.app/Contents/* "$APP_DIR"
 
     substituteInPlace "$APP_DIR/Info.plist" \
-      --replace-fail "{{ VERSION }}" "${version}" \
-      --replace-fail "{{ BUILD }}" "${version}-nixpkgs"
+      --replace-fail "{{ VERSION }}" "${finalAttrs.version}" \
+      --replace-fail "{{ BUILD }}" "${finalAttrs.version}-nixpkgs"
 
     makeWrapper "$out/bin/halloy" "$APP_DIR/MacOS/halloy"
   '';
@@ -110,7 +113,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "IRC application";
     homepage = "https://github.com/squidowl/halloy";
-    changelog = "https://github.com/squidowl/halloy/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/squidowl/halloy/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       fab
@@ -119,4 +122,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "halloy";
   };
-}
+})

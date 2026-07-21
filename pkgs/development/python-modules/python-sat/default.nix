@@ -1,30 +1,45 @@
 {
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   lib,
+  setuptools,
   six,
   pypblib,
   pytestCheckHook,
+  fetchurl,
 }:
-buildPythonPackage rec {
+let
+  kissat404src = fetchurl {
+    url = "https://github.com/arminbiere/kissat/archive/refs/tags/rel-4.0.4.tar.gz";
+    hash = "sha256-v+k+qmMjtIAR5LH890s/LiD53lRHZ+coAJ5bIBgpYZM=";
+  };
+  minisatepsrc = fetchurl {
+    url = "https://github.com/hchenqide/minisat/archive/90305f7b9ab9c9c9c560238f16b47c26506d0750.zip";
+    hash = "sha256-eS5+wPrcZ00DRZMaJp4yZOZ1uz72Auin6FK6G2SId64=";
+  };
+in
+buildPythonPackage (finalAttrs: {
   pname = "python-sat";
-  version = "0.1.8.dev20";
-  format = "setuptools";
+  version = "1.9.dev6";
+  pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "pysathq";
-    repo = "pysat";
-    rev = "d94f51e5eff2feef35abbc25480659eafa615cc0"; # upstream does not tag releases
-    hash = "sha256-fKZcdEVuqpv8jWnK8Cr1UJ7szJqXivK6x3YPYHH5ccI=";
+  build-system = [ setuptools ];
+
+  src = fetchPypi {
+    inherit (finalAttrs) version;
+    pname = "python_sat";
+    hash = "sha256-7YCz8nvHcKNKtgQoRShp/xgWHMyJ48GkFMZCkR+g54w=";
   };
 
-  # Build SAT solver backends in parallel and fix hard-coded g++ reference for
-  # darwin, where stdenv uses clang
-  postPatch = ''
-    substituteInPlace solvers/prepare.py \
-      --replace-fail "&& make &&" "&& make -j$NIX_BUILD_CORES &&"
-    substituteInPlace solvers/patches/glucose421.patch \
-      --replace-fail "+CXX      := g++" "+CXX      := c++"
+  # The kissat source archive is not included in the repo and pysat attempts to
+  # download it at build time. We therefore prefetch and link it.
+  prePatch = ''
+    ln -s ${kissat404src} solvers/kissat404.tar.gz
+    ln -s ${minisatepsrc} solvers/minisatep.zip
+  '';
+
+  preBuild = ''
+    export MAKEFLAGS="-j$NIX_BUILD_CORES"
   '';
 
   propagatedBuildInputs = [
@@ -32,19 +47,32 @@ buildPythonPackage rec {
     pypblib
   ];
 
+  pythonImportsCheck = [
+    "pysat"
+    "pysat.examples"
+    "pysat.allies"
+  ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTestPaths = [ "tests/test_unique_mus.py" ];
+  # Due to `python -m pytest` appending the local directory to `PYTHONPATH`,
+  # importing `pysat.examples` in the tests fails. Removing the `pysat`
+  # directory fixes since then only the installed version in `$out` is
+  # imported, which has `pysat.examples` correctly installed.
+  # See https://github.com/NixOS/nixpkgs/issues/255262
+  preCheck = ''
+    rm -r pysat
+  '';
 
-  meta = with lib; {
-    description = "Toolkit to provide interface for various SAT (without optional dependancy py-aiger-cnf)";
+  meta = {
+    description = "Toolkit for SAT-based prototyping in Python (without optional dependencies)";
     homepage = "https://github.com/pysathq/pysat";
     changelog = "https://pysathq.github.io/updates/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [
-      maintainers.marius851000
-      maintainers.chrjabs
+      lib.maintainers.marius851000
+      lib.maintainers.chrjabs
     ];
     platforms = lib.platforms.all;
   };
-}
+})

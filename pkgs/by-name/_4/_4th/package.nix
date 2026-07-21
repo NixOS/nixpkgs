@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "4th";
-  version = "3.64.1";
+  version = "3.64.2";
 
   src = fetchurl {
     url = "https://sourceforge.net/projects/forth-4th/files/4th-${finalAttrs.version}/4th-${finalAttrs.version}-unix.tar.gz";
-    hash = "sha256-+W6nTNsqrf3Dvr+NbSz3uJdrXVbBI3OHR5v/rs7en+M=";
+    hash = "sha256-ufQiuRDPmcYzFSQf16cuZSrOEbH3itq7yZYo87zPs1g=";
   };
 
   outputs = [
@@ -18,12 +18,12 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
-  patches = [
-    # Fix install manual; report this patch to upstream
-    ./001-install-manual-fixup.diff
-  ];
-
   dontConfigure = true;
+
+  preBuild = ''
+    cp sources/include${if stdenv.hostPlatform.is64bit then "64" else "32"}/* sources/
+    make -C sources clean
+  '';
 
   makeFlags = [
     "-C sources"
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Portable Forth compiler";
     license = lib.licenses.lgpl3Plus;
     mainProgram = "4th";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ chillcicada ];
     platforms = lib.platforms.unix;
   };
 })

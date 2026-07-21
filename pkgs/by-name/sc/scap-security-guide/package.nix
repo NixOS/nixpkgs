@@ -15,15 +15,15 @@
   yamllint,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scap-security-guide";
-  version = "0.1.76";
+  version = "0.1.79";
 
   src = fetchFromGitHub {
     owner = "ComplianceAsCode";
     repo = "content";
-    tag = "v${version}";
-    hash = "sha256-M1o9UG2pKtkFByp37UP++am8lJFfnoDBkRh1fos+ED0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GRjolHyNmgzv5ZBMaVG1mzIX9VsSXzWrgeJxegepjxc=";
   };
 
   postPatch = ''
@@ -54,7 +54,6 @@ stdenv.mkDerivation rec {
       myst-parser
       mypy
       openpyxl
-      pcre2-py
       pygithub
       pyyaml
       pandas
@@ -82,4 +81,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ tochiaha ];
     platforms = lib.platforms.all;
   };
-}
+})

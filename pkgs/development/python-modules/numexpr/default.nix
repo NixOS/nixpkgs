@@ -3,18 +3,24 @@
   buildPythonPackage,
   fetchPypi,
   numpy,
+  pytest-run-parallel,
   pytestCheckHook,
   setuptools,
+  # sets NUMEXPR_NUM_THREADS and OMP_NUM_THREADS for packages
+  # invoking numexpr during checkPhase/installCheckPhase to
+  # avoid overloading builders with excessive parallelism
+  # See also: https://numexpr.readthedocs.io/en/latest/user_guide.html#threadpool-configuration
+  checkPhaseThreadLimitHook,
 }:
 
 buildPythonPackage rec {
   pname = "numexpr";
-  version = "2.11.0";
+  version = "2.14.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dbLAGk7aLnw1e8Z6P1w912UGwVtf1NxChF7y4YIYG60=";
+    hash = "sha256-S+ALEIbHt6XDLjFVgSK3uAJD/gmFebFwln2oPzFStIs=";
   };
 
   build-system = [
@@ -29,7 +35,17 @@ buildPythonPackage rec {
     ln -s ${numpy.cfg} site.cfg
   '';
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-run-parallel
+    pytestCheckHook
+  ];
+
+  propagatedNativeBuildInputs = [
+    checkPhaseThreadLimitHook
+  ];
+
+  # tests check for OMP_NUM_THREADS application and complete quick enough
+  env.dontLimitCheckPhaseThreads = 1;
 
   preCheck = ''
     pushd $out
@@ -48,10 +64,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "numexpr" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast numerical array expression evaluator for NumPy";
     homepage = "https://github.com/pydata/numexpr";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

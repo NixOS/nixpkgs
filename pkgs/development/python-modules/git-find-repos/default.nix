@@ -6,14 +6,14 @@
 }:
 buildPythonPackage rec {
   pname = "git-find-repos";
-  version = "2.1.0";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "acroz";
     repo = "git-find-repos";
     rev = version;
-    sha256 = "sha256-4TuZlt6XH4//DBHPuIMl/i3Tp6Uft62dGCTAuZ2rseE=";
+    sha256 = "sha256-+MiCMgIakpJaWWdN2grerlPbPAnfIXuclvRw8XQ1YiI=";
   };
 
   build-system = [ setuptools-scm ];

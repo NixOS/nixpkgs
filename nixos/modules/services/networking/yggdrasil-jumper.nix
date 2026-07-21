@@ -10,11 +10,14 @@ let
     escapeShellArgs
     filter
     hasPrefix
+    makeBinPath
     mapAttrsToList
     mkEnableOption
     mkIf
     mkOption
     mkPackageOption
+    optional
+    optionals
     ;
   format = pkgs.formats.toml { };
 in
@@ -55,14 +58,23 @@ in
           '';
         };
 
+        detectWireguard = mkOption {
+          type = bool;
+          default = true;
+          description = ''
+            Control whether `settings.wireguard = true` should automatically
+            provide CAP_NET_ADMIN capability and make the necessary packages
+            available to Yggdrasil Jumper service.
+          '';
+        };
+
         settings = mkOption {
           type = format.type;
           default = { };
           example = {
             listen_port = 9999;
-            whitelist = [
-              "<IPv6 address of a remote node>"
-            ];
+            whitelist = [ "<IPv6 address of a remote node>" ];
+            wireguard = true;
           };
           description = ''
             Configuration for Yggdrasil Jumper as a Nix attribute set.
@@ -114,10 +126,22 @@ in
     let
       cfg = config.services.yggdrasil-jumper;
 
+      wg = cfg.detectWireguard && (cfg.settings ? wireguard) && cfg.settings.wireguard;
+      wgExtraPkgs = optionals wg (
+        with pkgs;
+        [
+          iproute2
+          iptables
+          wireguard-tools
+          conntrack-tools
+        ]
+      );
+
       # Generate, concatenate and validate config file
       jumperSettings = format.generate "yggdrasil-jumper-settings" cfg.settings;
       jumperExtraConfig = pkgs.writeText "yggdrasil-jumper-extra-config" cfg.extraConfig;
       jumperConfig = pkgs.runCommand "yggdrasil-jumper-config" { } ''
+        export PATH="${makeBinPath wgExtraPkgs}:$PATH"
         cat ${jumperSettings} ${jumperExtraConfig} \
           | tee $out \
           | ${cfg.package}/bin/yggdrasil-jumper --validate --config -
@@ -158,6 +182,7 @@ in
         unitConfig.BindsTo = [ "yggdrasil.service" ];
         wantedBy = [ "multi-user.target" ];
 
+        path = wgExtraPkgs;
         serviceConfig = {
           User = "yggdrasil";
           DynamicUser = true;
@@ -179,9 +204,16 @@ in
           MemoryDenyWriteExecute = true;
           ProtectControlGroups = true;
           ProtectHome = "tmpfs";
-          RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";
+          RestrictAddressFamilies = [
+            "AF_UNIX"
+            "AF_INET"
+            "AF_INET6"
+          ]
+          ++ optional wg "AF_NETLINK";
           RestrictNamespaces = true;
           RestrictRealtime = true;
+          AmbientCapabilities = optional wg "CAP_NET_ADMIN";
+          CapabilityBoundingSet = optional wg "CAP_NET_ADMIN";
           SystemCallArchitectures = "native";
           SystemCallFilter = [
             "@system-service"

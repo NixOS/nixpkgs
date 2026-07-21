@@ -4,20 +4,20 @@
   rustPlatform,
   openssl,
   pkg-config,
+  nix-update-script,
 }:
-
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rsrpc";
-  version = "0.24.3";
+  version = "0.27.1";
 
   src = fetchFromGitHub {
     owner = "SpikeHD";
     repo = "rsRPC";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qQduMRITva425T+w2sWX/mRmJLq2SsfPkFzgjyq9x9E=";
+    hash = "sha256-QzPFhdnZXiJZ4g+J9kB2v8duM2PgShptNRHliTYW3AU=";
   };
 
-  cargoHash = "sha256-aUTy+8XCUgsBEBBWr0PmvZ6agkq0sojXPWi9rDWp2Iw=";
+  cargoHash = "sha256-6Krtsj9hm8NqkFQMQ0MAPrFAjnzcTt4q5C1Fs5mx2SM=";
 
   nativeBuildInputs = [
     pkg-config
@@ -26,6 +26,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     openssl
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/SpikeHD/rsRPC/releases/tag/v${finalAttrs.version}";

@@ -12,9 +12,9 @@
   libsndfile,
   libxcb,
   libxkbcommon,
-  xcbutil,
-  xcbutilcursor,
-  xcbutilkeysyms,
+  libxcb-util,
+  libxcb-cursor,
+  libxcb-keysyms,
   zenity,
   curl,
   rsync,
@@ -62,13 +62,24 @@ stdenv.mkDerivation (finalAttrs: {
     libsndfile
     libxcb
     libxkbcommon
-    xcbutil
-    xcbutilcursor
-    xcbutilkeysyms
+    libxcb-util
+    libxcb-cursor
+    libxcb-keysyms
     zenity
     curl
     rsync
   ];
+
+  # Fix build with gcc 15
+  env.NIX_CFLAGS_COMPILE = "-Wno-deprecated";
+
+  # The generated ScalablePiggy.S has no .note.GNU-stack section, so the linker
+  # marks the LV2/VST3 plugin .so as requiring an executable stack. Since glibc
+  # 2.41 dlopen() refuses to load such objects ("cannot enable executable stack
+  # as shared object requires"). This breaks the post-build step that dlopens
+  # the freshly built LV2 plugin to generate its .ttl manifest. Force a
+  # non-executable stack at link time.
+  env.NIX_LDFLAGS = "-z noexecstack";
 
   postPatch = ''
     substituteInPlace src/common/SurgeStorage.cpp \
@@ -77,6 +88,9 @@ stdenv.mkDerivation (finalAttrs: {
       --replace '"zenity' '"${zenity}/bin/zenity'
     patchShebangs scripts/linux/
     cp -r $extraContent/Skins/ resources/data/skins
+
+    substituteInPlace libs/libsamplerate/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1..3.18)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   installPhase = ''
@@ -102,7 +116,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [
       magnetophon
-      orivej
     ];
   };
 })

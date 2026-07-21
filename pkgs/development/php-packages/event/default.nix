@@ -32,10 +32,10 @@ buildPecl {
   ];
   internalDeps = [ php.extensions.sockets ];
 
-  meta = with lib; {
+  meta = {
     description = "Efficiently schedule I/O, time and signal based events using the best I/O notification mechanism available";
-    license = licenses.php301;
+    license = lib.licenses.php301;
     homepage = "https://bitbucket.org/osmanov/pecl-event/";
-    teams = [ teams.php ];
+    teams = [ lib.teams.php ];
   };
 }

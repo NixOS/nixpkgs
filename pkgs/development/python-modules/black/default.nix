@@ -2,9 +2,7 @@
   stdenv,
   lib,
   buildPythonPackage,
-  fetchPypi,
-  fetchpatch,
-  pythonOlder,
+  fetchFromGitHub,
   pytestCheckHook,
   aiohttp,
   click,
@@ -18,58 +16,36 @@
   pathspec,
   parameterized,
   platformdirs,
+  pytokens,
   tokenize-rt,
-  tomli,
-  typing-extensions,
   uvloop,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "black";
-  version = "25.1.0";
-  format = "pyproject";
+  version = "26.5.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-M0ltXNEiKtczkTUrSujaFSU8Xeibk6gLPiyNmhnsJmY=";
+  src = fetchFromGitHub {
+    owner = "psf";
+    repo = "black";
+    tag = finalAttrs.version;
+    hash = "sha256-xALg9ta0U2V6i/b7VYiPKu0oNnHfg9T+XuK3CvqJmjs=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "click-8.2-compat-1.patch";
-      url = "https://github.com/psf/black/commit/14e1de805a5d66744a08742cad32d1660bf7617a.patch";
-      hash = "sha256-fHRlMetE6+09MKkuFNQQr39nIKeNrqwQuBNqfIlP4hc=";
-    })
-    (fetchpatch {
-      name = "click-8.2-compat-2.patch";
-      url = "https://github.com/psf/black/commit/ed64d89faa7c738c4ba0006710f7e387174478af.patch";
-      hash = "sha256-df/J6wiRqtnHk3mAY3ETiRR2G4hWY1rmZMfm2rjP2ZQ=";
-    })
-    (fetchpatch {
-      name = "click-8.2-compat-3.patch";
-      url = "https://github.com/psf/black/commit/b0f36f5b4233ef4cf613daca0adc3896d5424159.patch";
-      hash = "sha256-SGLCxbgrWnAi79IjQOb2H8mD/JDbr2SGfnKyzQsJrOA=";
-    })
-  ];
-
-  nativeBuildInputs = [
+  build-system = [
     hatch-fancy-pypi-readme
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     mypy-extensions
     packaging
     pathspec
     platformdirs
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-    typing-extensions
+    pytokens
   ];
 
   optional-dependencies = {
@@ -90,7 +66,7 @@ buildPythonPackage rec {
     pytestCheckHook
     parameterized
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pytestFlags = [
     "-Wignore::DeprecationWarning"
@@ -111,9 +87,6 @@ buildPythonPackage rec {
   disabledTests = [
     # requires network access
     "test_gen_check_output"
-    # broken on Python 3.13.4
-    # FIXME: remove this when fixed upstream
-    "test_simple_format[pep_701]"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # fails on darwin
@@ -125,15 +98,15 @@ buildPythonPackage rec {
   # multiple tests exceed max open files on hydra builders
   doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
 
-  meta = with lib; {
+  meta = {
     description = "Uncompromising Python code formatter";
     homepage = "https://github.com/psf/black";
-    changelog = "https://github.com/psf/black/blob/${version}/CHANGES.md";
-    license = licenses.mit;
+    changelog = "https://github.com/psf/black/blob/${finalAttrs.src.tag}/CHANGES.md";
+    license = lib.licenses.mit;
     mainProgram = "black";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       sveitser
       autophagy
     ];
   };
-}
+})

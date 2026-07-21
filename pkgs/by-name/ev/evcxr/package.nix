@@ -9,7 +9,7 @@
   libiconv,
   cargo,
   gcc,
-  mold,
+  mold-unwrapped,
   rustc,
   nix-update-script,
 
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.21.1";
 
   src = fetchFromGitHub {
-    owner = "google";
+    owner = "evcxr";
     repo = "evcxr";
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-8dV+NNtU4HFerrgRyc1kO+MSsMTJJItTtJylEIN014g=";
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-HJrEXt6O7qCNJ/xOh4kjmqKJ22EVwBTzV1S+q98k0VQ=";
 
-  RUST_SRC_PATH = "${rustPlatform.rustLibSrc}";
+  env.RUST_SRC_PATH = "${rustPlatform.rustLibSrc}";
 
   nativeBuildInputs = [
     pkg-config
@@ -75,7 +75,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
                 gcc
                 rustc
               ]
-              ++ lib.optional withMold mold
+              ++ lib.optional withMold mold-unwrapped
             )
           } \
           --set-default RUST_SRC_PATH "$RUST_SRC_PATH"
@@ -91,7 +91,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Evaluation context for Rust";
-    homepage = "https://github.com/google/evcxr";
+    homepage = "https://github.com/evcxr/evcxr";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       protoben

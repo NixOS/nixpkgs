@@ -20,7 +20,9 @@ let
       darwinSuffixSalt = stdenv.cc.suffixSalt;
       avrSuffixSalt = avrgcc.suffixSalt;
     };
+    meta.license = lib.licenses.mit;
   } ./setup-hook-darwin.sh;
+
 in
 stdenv.mkDerivation rec {
   pname = "simavr";
@@ -62,13 +64,16 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "-C tests run_tests";
 
-  meta = with lib; {
+  meta = {
     description = "Lean and mean Atmel AVR simulator";
     mainProgram = "simavr";
     homepage = "https://github.com/buserror/simavr";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ goodrone ];
-  };
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
 
+    maintainers = with lib.maintainers; [
+      goodrone
+      patryk27
+    ];
+  };
 }

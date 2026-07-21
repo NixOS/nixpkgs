@@ -35,6 +35,9 @@ stdenv.mkDerivation rec {
     "--without-libfam"
   ];
 
+  # gcc 15 C23 default breaks K&R () prototypes and errors on -Wincompatible-pointer-types
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   nativeBuildInputs = [
     autoreconfHook
     groff
@@ -48,11 +51,11 @@ stdenv.mkDerivation rec {
     perl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Full GPL'd suite of Electronic Design Automation tools";
     homepage = "https://geda.sourceforge.net/";
-    maintainers = with maintainers; [ pjones ];
-    platforms = platforms.linux;
-    license = licenses.gpl2;
+    maintainers = with lib.maintainers; [ pjones ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2;
   };
 }

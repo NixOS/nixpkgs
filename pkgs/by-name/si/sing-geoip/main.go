@@ -1,36 +1,14 @@
 func main() {
 	var err error
 
-  input := os.Args[1]
-  ruleSetOutput := "rule-set"
+	input := os.Args[1]
+	ruleSetOutput := "rule-set"
 
-  binary, err := os.ReadFile(input)
+	binary, err := os.ReadFile(input)
 	if err != nil {
 		panic(err)
 	}
-  metadata, countryMap, err := parse(binary)
-	if err != nil {
-		panic(err)
-	}
-	allCodes := make([]string, 0, len(countryMap))
-	for code := range countryMap {
-		allCodes = append(allCodes, code)
-	}
-
-	writer, err := newWriter(metadata, allCodes)
-	if err != nil {
-		panic(err)
-	}
-	err = write(writer, countryMap, "geoip.db", nil)
-	if err != nil {
-		panic(err)
-	}
-
-	writer, err = newWriter(metadata, []string{"cn"})
-	if err != nil {
-		panic(err)
-	}
-	err = write(writer, countryMap, "geoip-cn.db", []string{"cn"})
+	_, countryMap, err := parse(binary)
 	if err != nil {
 		panic(err)
 	}

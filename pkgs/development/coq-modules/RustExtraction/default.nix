@@ -7,7 +7,6 @@
   version ? null,
 }:
 
-with lib;
 mkCoqDerivation {
   pname = "RustExtraction";
   repo = "coq-rust-extraction";
@@ -24,9 +23,9 @@ mkCoqDerivation {
         ];
         inherit out;
       };
+      inherit (lib.versions) range;
     in
-    with versions;
-    switch
+    lib.switch
       [
         coq.coq-version
         metacoq.version
@@ -37,8 +36,8 @@ mkCoqDerivation {
       ]
       null;
 
-  release."0.1.0".sha256 = "+Of/DP2Vjsa7ASKswjlvqqhcmDhC9WrozridedNZQkY=";
-  release."0.1.1".sha256 = "CPZ5J9knJ1aYoQ7RQN8YFSpxqJXjgQaxIA4F8G6X4tM=";
+  release."0.1.0".hash = "sha256:+Of/DP2Vjsa7ASKswjlvqqhcmDhC9WrozridedNZQkY=";
+  release."0.1.1".hash = "sha256:CPZ5J9knJ1aYoQ7RQN8YFSpxqJXjgQaxIA4F8G6X4tM=";
 
   releaseRev = v: "v${v}";
 
@@ -56,7 +55,7 @@ mkCoqDerivation {
 
   meta = {
     description = "Framework for extracting Coq programs to Rust";
-    maintainers = with maintainers; [ _4ever2 ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ _4ever2 ];
+    license = lib.licenses.mit;
   };
 }

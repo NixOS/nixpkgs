@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitea,
+  fetchFromGitHub,
 
   # build-system
   pbr,
@@ -19,15 +19,14 @@
 
 buildPythonPackage rec {
   pname = "oslo-metrics";
-  version = "0.11.0";
-  format = "setuptools";
+  version = "0.16.0";
+  pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "opendev.org";
+  src = fetchFromGitHub {
     owner = "openstack";
     repo = "oslo.metrics";
     tag = version;
-    hash = "sha256-PiMrfVWRV3GQPJ7PnXzhAdTncXcFDPZFd+sMHVr65UU=";
+    hash = "sha256-LV4NGHs0lBtktjzboOsPOnA56QqjnaKwtGGdy5WlW6Q=";
   };
 
   env.PBR_VERSION = version;
@@ -56,10 +55,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oslo_metrics" ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenStack library for collecting metrics from Oslo libraries";
-    homepage = "https://opendev.org/openstack/oslo.metrics";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    homepage = "https://github.com/openstack/oslo.metrics";
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

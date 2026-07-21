@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tbox";
-  version = "1.7.7";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "tboox";
     repo = "tbox";
-    rev = "v${version}";
-    hash = "sha256-piPfPg3NAvP2zhWgtPlNvlAHoqIU77TE/kd1B/6GIuc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-tUN9H6TejbFbJR4Lr0N8HoYkRAo8a/Rh4HEMOG1aPoE=";
   };
 
   configureFlags = [
@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
     substituteAll ${./libtbox.pc.in} $out/lib/pkgconfig/libtbox.pc
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Glib-like multi-platform c library";
     homepage = "https://docs.tboox.org";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ wineee ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ wineee ];
   };
-}
+})

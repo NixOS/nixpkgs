@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "3.1";
 
   src = fetchurl {
-    url = "http://download.cdn.yandex.net/mystem/${pname}-${version}-linux-64bit.tar.gz";
+    url = "https://download.cdn.yandex.net/mystem/${pname}-${version}-linux-64bit.tar.gz";
     sha256 = "0qha7jvkdmil3jiwrpsfhkqsbkqn9dzgx3ayxwjdmv73ikmg95j6";
   };
 
@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
     patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) $out/bin/mystem
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Morphological analysis of Russian text";
     homepage = "https://yandex.ru/dev/mystem/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfreeRedistributable;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfreeRedistributable;
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "mystem";

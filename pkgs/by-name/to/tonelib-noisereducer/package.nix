@@ -9,10 +9,10 @@
   libglvnd,
   libgbm,
   curl,
-  libXcursor,
-  libXinerama,
-  libXrandr,
-  libXrender,
+  libxcursor,
+  libxinerama,
+  libxrandr,
+  libxrender,
   libjack2,
 }:
 stdenv.mkDerivation rec {
@@ -31,10 +31,10 @@ stdenv.mkDerivation rec {
 
   runtimeDependencies = map lib.getLib [
     curl
-    libXcursor
-    libXinerama
-    libXrandr
-    libXrender
+    libxcursor
+    libxinerama
+    libxrandr
+    libxrender
     libjack2
   ];
 
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     homepage = "https://tonelib.net/tl-noisereducer.html";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "ToneLib-NoiseReducer";
   };

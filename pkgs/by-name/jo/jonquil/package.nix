@@ -19,15 +19,15 @@ assert (
   ]
 );
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jonquil";
-  version = "0.3.0";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "toml-f";
     repo = "jonquil";
-    rev = "v${version}";
-    hash = "sha256-2JCTHA0nyA7xE0IA+LNrEAulHU2eIbNRvFGQ7YSQMRE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-eu5+cVvIF8AXye8zrcfaHoQzd+7bx6q9KtFuH5w2sFc=";
   };
 
   patches = [
@@ -58,14 +58,14 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "JSON parser on top of TOML implementation";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
     homepage = "https://github.com/toml-f/jonquil";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.sheepforce ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

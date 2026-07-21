@@ -19,14 +19,14 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lesspipe";
   version = "2.20";
 
   src = fetchFromGitHub {
     owner = "wofr06";
     repo = "lesspipe";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-yb3IzdaMiv1PwqHOfSyHvmWXyStvK/XXC49saXVAJFU=";
   };
 
@@ -223,7 +223,7 @@ stdenv.mkDerivation rec {
     }}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Preprocessor for less";
     longDescription = ''
       Usually lesspipe.sh is called as an input filter to less. With the help
@@ -238,8 +238,8 @@ stdenv.mkDerivation rec {
     '';
     mainProgram = "lesspipe.sh";
     homepage = "https://github.com/wofr06/lesspipe";
-    platforms = platforms.all;
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.martijnvermaat ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.martijnvermaat ];
   };
-}
+})

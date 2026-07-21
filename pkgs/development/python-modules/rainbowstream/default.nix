@@ -57,7 +57,7 @@ buildPythonPackage {
     sed -i 's/requests.*"/requests"/' setup.py
   '';
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   postInstall = ''
     mkdir -p $out/lib
@@ -73,11 +73,11 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "rainbowstream" ];
 
-  meta = with lib; {
+  meta = {
     description = "Streaming command-line twitter client";
     mainProgram = "rainbowstream";
     homepage = "https://github.com/orakaro/rainbowstream";
-    license = licenses.mit;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

@@ -15,6 +15,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-P/oHaLxoQzjFuvmHyRdShHv1ayruy6O/I9w8aTyya2s=";
   };
 
+  patches = [
+    # https://github.com/abacus-gene/paml/pull/78
+    ./fix-ProcessNodeAnnotation-declaration.patch
+  ];
+
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-D_POSIX_C_SOURCE";
 
   preBuild = ''

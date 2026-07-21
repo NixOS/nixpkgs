@@ -12,7 +12,6 @@ let
       x86_64-linux = "amd64";
       aarch64-linux = "arm64";
       armv7l-linux = "arm";
-      x86_64-darwin = "amd64";
       aarch64-darwin = "arm64";
     }
     ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -31,7 +30,6 @@ let
       hash_amd64-linux = "sha256-tmUfDKLO35qCs1hauJQKhJhcnMhqOpcqDFtAggMFhLE=";
       hash_arm64-linux = "sha256-ggRDW1cnTHMQKvOvCDH3eptH3O3PgYaondlzOGHTjio=";
       hash_arm-linux = "sha256-uMLRow1NeHufSI5B4k5qSIfH3lTxg+WxzLxgdedAz40=";
-      hash_amd64-darwin = "sha256-LZ6n/f2MdbFaPnBCoJqZZ7HQiLG3Z6ZoatgFsxaFvMc=";
       hash_arm64-darwin = "sha256-k5X2ZInFS/HlToOZPX23TRJqlx/XM1ZG++Xr4BHn8SY=";
     }
     ."hash_${arch}-${os}";
@@ -57,27 +55,26 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = ./update.py;
 
-  meta = with lib; {
+  meta = {
     description = "ownCloud Infinite Scale Stack";
     homepage = "https://owncloud.dev/ocis/";
     changelog = "https://github.com/owncloud/ocis/releases/tag/v${finalAttrs.version}";
     # oCIS is licensed under non-free EULA which can be found here :
     # https://github.com/owncloud/ocis/releases/download/v5.0.1/End-User-License-Agreement-for-ownCloud-Infinite-Scale.pdf
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       ramblurr
       bhankas
-      danth
       ramblurr
     ];
 
     platforms =
-      (lib.intersectLists platforms.linux (
+      (lib.intersectLists lib.platforms.linux (
         lib.platforms.arm ++ lib.platforms.aarch64 ++ lib.platforms.x86
       ))
-      ++ (lib.intersectLists platforms.darwin (lib.platforms.aarch64 ++ lib.platforms.x86_64));
+      ++ lib.platforms.darwin;
 
-    sourceProvenance = [ sourceTypes.binaryNativeCode ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     mainProgram = "ocis";
   };
 })

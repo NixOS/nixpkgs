@@ -2,7 +2,7 @@
 { lib, pkgs, ... }:
 {
   name = "docker-rootless";
-  meta = with pkgs.lib.maintainers; {
+  meta = {
     maintainers = [ ];
   };
 
@@ -22,7 +22,7 @@
   testScript =
     { nodes, ... }:
     let
-      user = nodes.machine.config.users.users.alice;
+      user = nodes.machine.users.users.alice;
       sudo = lib.concatStringsSep " " [
         "XDG_RUNTIME_DIR=/run/user/${toString user.uid}"
         "DOCKER_HOST=unix:///run/user/${toString user.uid}/docker.sock"

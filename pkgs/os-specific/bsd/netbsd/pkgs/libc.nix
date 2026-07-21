@@ -13,8 +13,7 @@
   version,
 }:
 
-symlinkJoin rec {
-  name = "${pname}-${version}";
+symlinkJoin {
   pname = "libc-netbsd";
   inherit version;
 

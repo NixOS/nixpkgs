@@ -10,6 +10,7 @@
   jh2,
   lib,
   pytest-asyncio,
+  pytest-rerunfailures,
   pytest-timeout,
   pytestCheckHook,
   python-socks,
@@ -24,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "urllib3-future";
-  version = "2.14.900";
+  version = "2.22.901";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jawah";
     repo = "urllib3.future";
     tag = version;
-    hash = "sha256-TMxYnvGkLZEaE4ECgzIN6XTI8OMI5N9mNcsvXeYCVbM=";
+    hash = "sha256-SP6C6xF9McRbmCAfARKrFVSxKRkNZvs7fLdcR9pIEyM=";
   };
 
   postPatch = ''
@@ -68,21 +69,21 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aiofile
     pytest-asyncio
+    pytest-rerunfailures
     pytest-timeout
     pytestCheckHook
     tornado
     trustme
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
+
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn10Warning"
+  ];
 
   disabledTestPaths = [
     # test connects to the internet
     "test/contrib/test_resolver.py::test_url_resolver"
-  ];
-
-  disabledTests = [
-    # test hangs
-    "test_proxy_rejection"
   ];
 
   meta = {

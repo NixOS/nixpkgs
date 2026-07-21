@@ -18,7 +18,7 @@ let
         cmd,
         ...
       }:
-      ''${lib.concatMapStringsSep "+" (x: "KEY_" + x) keys} ${
+      "${lib.concatMapStringsSep "+" (x: "KEY_" + x) keys} ${
         toString
           {
             press = 1;
@@ -26,7 +26,7 @@ let
             release = 0;
           }
           .${event}
-      } ${cmd}''
+      } ${cmd}"
     ) cfg.bindings}
     ${cfg.extraConfig}
   '';

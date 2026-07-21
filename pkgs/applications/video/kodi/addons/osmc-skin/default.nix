@@ -6,22 +6,20 @@
 buildKodiAddon rec {
   pname = "osmc-skin";
   namespace = "skin.osmc";
-  version = "20.1.0";
+  version = "21.1.1";
 
   src = fetchFromGitHub {
     owner = "osmc";
     repo = namespace;
-    rev = "v20.1.0-August-update";
-    sha256 = "E/+gC7NlVRMaymeYMBO39/+rs0blDjr2zIROr24ekzQ=";
+    tag = "v${version}-August-update";
+    hash = "sha256-3BR6HfKefuyybDv9c/ZkkZMRDyWNZWpftulXyUAD9nY=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/osmc/skin.osmc";
     description = "Default skin for OSMC";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     maintainers = [ ];
-    license = licenses.cc-by-nc-sa-30;
-
-    broken = true; # no release for kodi 21
+    license = lib.licenses.cc-by-nc-sa-30;
   };
 }

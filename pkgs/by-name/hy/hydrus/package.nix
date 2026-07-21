@@ -14,16 +14,16 @@
   enableSwftools ? false,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "hydrus";
-  version = "631";
-  format = "other";
+  version = "679";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
-    tag = "v${version}";
-    hash = "sha256-YZnlQIiq0dUGEnQgVCTvNS+kuSpXlaAN5UvZAQ3xeZM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-NIELa4E7l8T1oeF6V0kr1fhS4nj9TSSHAHo0Q3v0GTY=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ python3Packages.buildPythonApplication rec {
       exec = "hydrus-client";
       desktopName = "Hydrus Client";
       icon = "hydrus-client";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       terminal = false;
       type = "Application";
       categories = [
@@ -104,7 +104,7 @@ python3Packages.buildPythonApplication rec {
 
     # Move the hydrus module and related directories
     mkdir -p $out/${python3Packages.python.sitePackages}
-    mv {hydrus,static,db} $out/${python3Packages.python.sitePackages}
+    mv hydrus static $out/${python3Packages.python.sitePackages}
     # Fix random files being marked with execute permissions
     chmod -x $out/${python3Packages.python.sitePackages}/static/*.{png,svg,ico}
     # Build docs
@@ -161,10 +161,11 @@ python3Packages.buildPythonApplication rec {
     description = "Danbooru-like image tagging and searching system for the desktop";
     license = lib.licenses.wtfpl;
     homepage = "https://hydrusnetwork.github.io/hydrus/";
-    changelog = "https://github.com/hydrusnetwork/hydrus/releases/tag/${src.tag}";
+    changelog = "https://github.com/hydrusnetwork/hydrus/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [
       dandellion
       evanjs
+      KunyaKud
     ];
   };
-}
+})

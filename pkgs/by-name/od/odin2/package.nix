@@ -8,11 +8,11 @@
   freetype,
   libjack2,
   lv2,
-  libX11,
-  libXcursor,
-  libXext,
-  libXinerama,
-  libXrandr,
+  libx11,
+  libxcursor,
+  libxext,
+  libxinerama,
+  libxrandr,
   libGL,
   gcc-unwrapped,
   copyDesktopItems,
@@ -43,24 +43,22 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     libjack2
     lv2
-    libX11
-    libXcursor
-    libXext
-    libXinerama
-    libXrandr
+    libx11
+    libxcursor
+    libxext
+    libxinerama
+    libxrandr
     libGL
   ];
 
   # JUCE dlopen's these at runtime, crashes without them
-  NIX_LDFLAGS = (
-    toString [
-      "-lX11"
-      "-lXext"
-      "-lXcursor"
-      "-lXinerama"
-      "-lXrandr"
-    ]
-  );
+  env.NIX_LDFLAGS = toString [
+    "-lX11"
+    "-lXext"
+    "-lXcursor"
+    "-lXinerama"
+    "-lXrandr"
+  ];
 
   # JUCE wants to write to $HOME/.{lv2,vst3}
   preConfigure = ''
@@ -105,12 +103,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Odin 2 Synthesizer Plugin";
     homepage = "https://thewavewarden.com/odin2";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ magnetophon ];
+    maintainers = with lib.maintainers; [ magnetophon ];
     mainProgram = "Odin2";
   };
 })

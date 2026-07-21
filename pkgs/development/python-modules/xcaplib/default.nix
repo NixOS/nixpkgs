@@ -9,17 +9,17 @@
   unstableGitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "xcaplib";
   # latest commit is needed for python 3.13 compat.
-  version = "2.0.1-unstable-2025-03-20";
+  version = "2.0.2-unstable-2026-07-09";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AGProjects";
     repo = "python3-xcaplib";
-    rev = "925846f2520d823f0b83279ceca6202808a4ca4f";
-    hash = "sha256-8EtXwHMQcPzPfP8JpB6gTV7PADHz+bJIJMhvR3DkPkk=";
+    rev = "73cc7f405f2a10fd113b5cbbc80e4b3fc5537236";
+    hash = "sha256-67go56VUKbZOyaofpurfN50acpzBrzzmjrGqh7mUKZg=";
   };
 
   build-system = [

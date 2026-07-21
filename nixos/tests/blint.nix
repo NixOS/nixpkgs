@@ -7,12 +7,14 @@
 {
   name = "owasp blint test";
 
-  meta.maintainers = with lib; [
-    maintainers.ethancedwards8
-    teams.ngi
-  ];
+  meta.maintainers =
+    with lib;
+    [
+      maintainers.ethancedwards8
+    ]
+    ++ teams.ngi.members;
 
-  nodes.machine = {
+  containers.machine = {
     environment.systemPackages = with pkgs; [
       blint
       jq

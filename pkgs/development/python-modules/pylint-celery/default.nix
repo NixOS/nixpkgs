@@ -26,10 +26,10 @@ buildPythonPackage rec {
   # Testing requires a very old version of pylint, incompatible with other dependencies
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Pylint plugin to analyze Celery applications";
     homepage = "https://github.com/PyCQA/pylint-celery";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ kamadorueda ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

@@ -40,7 +40,6 @@ in
     { makePythonHook }:
     makePythonHook {
       name = "conda-unpack-hook";
-      propagatedBuildInputs = [ ];
     } ./conda-unpack-hook.sh
   ) { };
 
@@ -48,7 +47,6 @@ in
     { makePythonHook }:
     makePythonHook {
       name = "egg-build-hook.sh";
-      propagatedBuildInputs = [ ];
     } ./egg-build-hook.sh
   ) { };
 
@@ -67,7 +65,6 @@ in
     { makePythonHook }:
     makePythonHook {
       name = "egg-unpack-hook.sh";
-      propagatedBuildInputs = [ ];
     } ./egg-unpack-hook.sh
   ) { };
 
@@ -138,12 +135,31 @@ in
           propagatedBuildInputs = [ installer ];
           substitutions = {
             inherit pythonInterpreter pythonSitePackages;
+            python = python.interpreter;
           };
         } ./pypa-install-hook.sh
       )
       {
         inherit (pythonOnBuildForHost.pkgs) installer;
       };
+
+  pyprojectVersionPatchHook = callPackage (
+    { makePythonHook }:
+    makePythonHook {
+      name = "pyproject-version-patch-hook.sh";
+      substitutions = {
+        pythonInterpreter =
+          (pythonOnBuildForHost.withPackages (ps: [
+            ps.packaging
+            ps.tomlkit
+          ])).interpreter;
+        script = ./pyproject-version-patch-hook.py;
+      };
+      meta = {
+        maintainers = [ lib.maintainers.dotlambda ];
+      };
+    } ./pyproject-version-patch-hook.sh
+  ) { };
 
   pytestCheckHook = callPackage (
     {
@@ -345,6 +361,20 @@ in
     } ./python-imports-check-hook.sh
   ) { };
 
+  pythonMetadataCheckHook = callPackage (
+    { makePythonHook }:
+    makePythonHook {
+      name = "python-metadata-check-hook.sh";
+      substitutions = {
+        inherit pythonInterpreter pythonSitePackages;
+        pythonWithPackaging = lib.getExe (pythonOnBuildForHost.withPackages (ps: [ ps.packaging ]));
+      };
+      meta = {
+        maintainers = [ lib.maintainers.dotlambda ];
+      };
+    } ./python-metadata-check-hook.sh
+  ) { };
+
   pythonNamespacesHook = callPackage (
     { makePythonHook, buildPackages }:
     makePythonHook {
@@ -441,18 +471,15 @@ in
     } ./setuptools-build-hook.sh
   ) { };
 
-  setuptoolsRustBuildHook = callPackage (
-    { makePythonHook, setuptools-rust }:
+  stestrCheckHook = callPackage (
+    { makePythonHook }:
     makePythonHook {
-      name = "setuptools-rust-setup-hook";
-      propagatedBuildInputs = [ setuptools-rust ];
+      name = "stestr-check-hook";
+      propagatedBuildInputs = [ stestr ];
       substitutions = {
-        pyLibDir = "${python}/lib/${python.libPrefix}";
-        cargoBuildTarget = stdenv.hostPlatform.rust.rustcTargetSpec;
-        cargoLinkerVar = stdenv.hostPlatform.rust.cargoEnvVarTarget;
-        targetLinker = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
+        inherit pythonCheckInterpreter;
       };
-    } ./setuptools-rust-hook.sh
+    } ./stestr-check-hook.sh
   ) { };
 
   unittestCheckHook = callPackage (

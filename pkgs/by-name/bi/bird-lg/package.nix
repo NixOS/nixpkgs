@@ -2,6 +2,7 @@
   buildGoModule,
   fetchFromGitHub,
   lib,
+  nix-update-script,
   symlinkJoin,
 }:
 let
@@ -9,13 +10,13 @@ let
     { modRoot, vendorHash }:
     buildGoModule rec {
       pname = "bird-lg-${modRoot}";
-      version = "1.3.11";
+      version = "1.4.7";
 
       src = fetchFromGitHub {
         owner = "xddxdd";
         repo = "bird-lg-go";
         rev = "v${version}";
-        hash = "sha256-C0JC8vLLEk+d6vlrtuW7tHj06K7A3HBjKXZ5Nt+2i4I=";
+        hash = "sha256-Ca+wMiIMcknqhn+p8Cb00ibvsrsFXyFxvGhqOWrzZcA=";
       };
 
       doDist = false;
@@ -41,21 +42,30 @@ let
 
   bird-lg-frontend = generic {
     modRoot = "frontend";
-    vendorHash = "sha256-kNysGHtOUtYGHDFDlYNzdkCXGUll105Triy4UR7UP0M=";
+    vendorHash = "sha256-SmpCCvOP9HQh+Niqa3EhRGj1a7EXQgwRW2hTJgv+oIw=";
   };
 
   bird-lg-proxy = generic {
     modRoot = "proxy";
-    vendorHash = "sha256-iosWHHeJyqMPF+Y01+mj70HDKWw0FAZKDpEESAwS/i4=";
+    vendorHash = "sha256-LRj5OvCu0e0iNW8nEUmbnKhhvaUXOVNIYGv0Lmai28g=";
   };
 in
 symlinkJoin {
-  name = "bird-lg-${bird-lg-frontend.version}";
+  pname = "bird-lg";
+  inherit (bird-lg-frontend) version meta src;
   paths = [
     bird-lg-frontend
     bird-lg-proxy
   ];
-}
-// {
-  inherit (bird-lg-frontend) version meta;
+  passthru = {
+    inherit bird-lg-frontend bird-lg-proxy;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "bird-lg-frontend"
+        "--subpackage"
+        "bird-lg-proxy"
+      ];
+    };
+  };
 }

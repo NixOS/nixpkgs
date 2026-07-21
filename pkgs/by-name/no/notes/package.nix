@@ -17,6 +17,11 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # Based on https://github.com/nuttyartist/notes/pull/758 which doesn't apply cleanly
+    ./qt610-fix.patch
+  ];
+
   cmakeFlags = [ "-DUPDATE_CHECKER=OFF" ];
 
   nativeBuildInputs = [

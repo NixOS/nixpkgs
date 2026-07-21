@@ -7,7 +7,6 @@
   name = "wireguard-generated";
   meta.maintainers = with lib.maintainers; [
     ma27
-    grahamc
   ];
 
   nodes = {

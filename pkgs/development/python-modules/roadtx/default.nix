@@ -4,25 +4,24 @@
   fetchPypi,
   pycryptodomex,
   pyotp,
-  pythonOlder,
   requests,
   roadlib,
   selenium,
-  selenium-wire,
+  selenium-wire-roadtx,
   setuptools,
   signxml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "roadtx";
-  version = "1.18.0";
+  version = "1.22.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-tJLsxo8XQ0FGyob2SSpjvN9RgVYYhDxGcbP6jytcjaU=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-2GIJAjLxOqy3E+5j1gnby8F5IAvdnChMT4Lfq5I5zeE=";
   };
 
   build-system = [ setuptools ];
@@ -33,16 +32,16 @@ buildPythonPackage rec {
     requests
     roadlib
     selenium
-    selenium-wire
+    selenium-wire-roadtx
     signxml
   ];
 
   pythonImportsCheck = [ "roadtools.roadtx" ];
 
-  meta = with lib; {
+  meta = {
     description = "ROADtools Token eXchange";
     homepage = "https://pypi.org/project/roadtx/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

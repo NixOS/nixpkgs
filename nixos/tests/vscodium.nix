@@ -41,13 +41,18 @@ let
         nodes."${name}" = machine;
 
         meta.maintainers = with lib.maintainers; [
-          synthetica
           turion
         ];
+
+        # x86_64: https://github.com/NixOS/nixpkgs/pull/452801#issuecomment-3415680343
+        # aarch64: https://github.com/NixOS/nixpkgs/issues/207234
+        meta.broken = name == "wayland";
 
         enableOCR = true;
 
         testScript = ''
+          machine = ${name}
+
           @polling_condition
           def codium_running():
               machine.succeed('pgrep -x codium')
@@ -59,9 +64,9 @@ let
 
           codium_running.wait() # type: ignore[union-attr]
           with codium_running: # type: ignore[union-attr]
-              # Wait until vscodium is visible. "File" is in the menu bar.
-              machine.wait_for_text('(Get|Started|with|Customize|theme)')
-              machine.screenshot('start_screen')
+              # Wait until vscodium is visible.
+              machine.wait_for_text('Search')
+              machine.screenshot('screen')
 
               test_string = 'testfile'
 

@@ -1,55 +1,61 @@
 {
   lib,
   stdenv,
-  fetchzip,
+  fetchurl,
+  unzip,
   cups,
   autoPatchelfHook,
-  detox,
 }:
 
+let
+  archAttrset = {
+    aarch64-linux = "aarch64";
+    armv6l-linux = "arm";
+    armv7l-linux = "armhf";
+    i686-linux = "i386";
+    x86_64-linux = "x86_64";
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "labelife-label-printer";
-  version = "2.0.0";
+  version = "2.3.1.001";
 
   arch =
-    {
-      aarch64-linux = "aarch64";
-      armv7l-linux = "armhf";
-      i686-linux = "i386";
-      x86_64-linux = "x86_64";
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    archAttrset.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  src = fetchzip {
-    url = "https://oss.qu-in.ltd/Labelife/Label_Printer_Driver_Linux.zip";
-    hash = "sha256-0ESZ0EqPh9Wz6ogQ6vTsAogujbn4zINtMh62sEpNRs4=";
+  src = fetchurl {
+    url = "https://web.archive.org/web/20260607010653/https://oss.qu-in.ltd/Labelife/Label_Printer_Driver_Linux.zip";
+    hash = "sha256-qpsyOuTrOTcXEQeCNNRV0QeV0s0RD2eqy/tGTA7qMWA=";
   };
 
   nativeBuildInputs = [
+    unzip
     autoPatchelfHook
-    detox
   ];
   buildInputs = [ cups ];
 
   unpackPhase = ''
     runHook preUnpack
 
-    tar -xzf ${finalAttrs.src}/LabelPrinter-${finalAttrs.version}.001.tar.gz --strip-components=1
+    # Extract outer ZIP file
+    unzip -q ${finalAttrs.src}
+
+    # Extract inner tar.gz with --strip-components=1 to remove the `LabelPrinter-${finalAttrs.version}/` prefix
+    tar -xzf LabelPrinter-${finalAttrs.version}.tar.gz --strip-components=1
 
     runHook postUnpack
   '';
 
   installPhase = ''
     runHook preInstall
-    # Remove spaces from PPD filenames
-    detox ppds
 
     # Install the CUPS filter with executable permissions
     install -Dm755 ./${finalAttrs.arch}/rastertolabeltspl $out/lib/cups/filter/rastertolabeltspl
 
     # Install all PPD files with read and write permissions for owner, and read for group and others
     for ppd in ./ppds/*.ppd; do
-      install -Dm644 $ppd $out/share/cups/model/label/$(basename $ppd)
+      install -Dm644 "$ppd" "$out/share/cups/model/label/$(basename "$ppd")"
     done
     runHook postInstall
   '';
@@ -60,9 +66,14 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://labelife.net";
     license = lib.licenses.unfree;
     longDescription = ''
-      Supported printer models include:
-      - D520 & D520BT
-      - PM-241 & PM-241-BT
+      CUPS driver for Labelife-compatible thermal label printers.
+      Supported printer families include D-series (D420D, D520, D530,
+      D550), PM-series (PM-241, PM-246S, PM-249, PM-344), T-series
+      (T200, T300, T410, T460, T800), CT-series (CT200, CT310, CT510),
+      AM-series (AM-242, AM-243), and others (A646, PL70, DS-50P, 6XL).
+
+      Many models are available in multiple connectivity variants
+      (BT, WF, WIFI).
 
       Brands using Labelife drivers include:
       - Phomemo
@@ -71,12 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
       - Aimo
     '';
     maintainers = with lib.maintainers; [ daniel-fahey ];
-    platforms = [
-      "aarch64-linux"
-      "armv7l-linux"
-      "i686-linux"
-      "x86_64-linux"
-    ];
+    platforms = lib.attrNames archAttrset;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

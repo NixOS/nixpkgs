@@ -5,7 +5,7 @@
   testtools,
   testresources,
   pbr,
-  subunit,
+  python-subunit,
   fixtures,
   python,
 }:
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   buildInputs = [ pbr ];
   propagatedBuildInputs = [
     fixtures
-    subunit
+    python-subunit
     testtools
   ];
 
@@ -32,10 +32,10 @@ buildPythonPackage rec {
     ${python.interpreter} ./testr
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Database of test results which can be used as part of developer workflow";
     mainProgram = "testr";
-    homepage = "https://pypi.python.org/pypi/testrepository";
-    license = licenses.bsd2;
+    homepage = "https://pypi.org/project/testrepository/";
+    license = lib.licenses.bsd2;
   };
 }

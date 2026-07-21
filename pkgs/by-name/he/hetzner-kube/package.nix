@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hetzner-kube";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "xetys";
     repo = "hetzner-kube";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-XHvR+31yq0o3txMBHh2rCh2peDlG5Kh3hdl0LGm9D8c=";
   };
 
@@ -28,7 +28,7 @@ buildGoModule rec {
   doCheck = false;
 
   ldflags = [
-    "-X github.com/xetys/hetzner-kube/cmd.version=${version}"
+    "-X github.com/xetys/hetzner-kube/cmd.version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [
@@ -51,4 +51,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ eliasp ];
   };
-}
+})

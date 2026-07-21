@@ -48,3 +48,4 @@ prisma_version=$(grep "@prisma/engines@" "$lock" | head -n1 |  awk -F"[@']" '{pr
 rm "$lock"
 
 nix-update --version "$prisma_version" umami.prisma-engines
+nix-update --version "$prisma_version" umami.prisma

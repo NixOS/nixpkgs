@@ -14,7 +14,7 @@ melpaBuild {
   src = fetchFromGitHub {
     owner = "emacsmirror";
     repo = "rect-mark";
-    rev = version;
+    tag = version;
     hash = "sha256-/8T1VTYkKUxlNWXuuS54S5jpl4UxJBbgSuWc17a/VyM=";
   };
 
@@ -22,6 +22,6 @@ melpaBuild {
     homepage = "http://emacswiki.org/emacs/RectangleMark";
     description = "Mark a rectangle of text with highlighting";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

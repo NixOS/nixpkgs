@@ -83,6 +83,11 @@ stdenv.mkDerivation rec {
   + lib.optionalString pythonSupport ''
     # Hardcode path to the shared library into the bindings.
     sed "s#@libiio@#$lib/lib/libiio${stdenv.hostPlatform.extensions.sharedLibrary}#g" ${./hardcode-library-path.patch} | patch -p1
+  ''
+  + lib.optionalString (pythonSupport && stdenv.hostPlatform.isDarwin) ''
+    # Because we’re not building the framework, always use the dylib.
+    substituteInPlace bindings/python/setup.py.cmakein \
+      --replace-fail '"iio" if "Darwin" in _system() else' ""
   '';
 
   postInstall = lib.optionalString pythonSupport ''

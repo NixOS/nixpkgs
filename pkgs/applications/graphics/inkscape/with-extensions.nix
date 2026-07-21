@@ -15,7 +15,13 @@ let
 in
 
 symlinkJoin {
-  name = "inkscape-with-extensions-${lib.getVersion inkscape}";
+  inherit (inkscape) version;
+  pname = "inkscape-with-extensions";
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   paths = [ inkscape ] ++ selectedExtensions;
 
@@ -24,6 +30,8 @@ symlinkJoin {
   postBuild = ''
     rm -f $out/bin/inkscape
     makeWrapper "${inkscape}/bin/inkscape" "$out/bin/inkscape" --set INKSCAPE_DATADIR "$out/share"
+
+    ln -s ${inkscape.man} $man
   '';
 
   inherit (inkscape) meta;

@@ -7,24 +7,24 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "shiori";
-  version = "1.7.4";
+  version = "1.8.0";
 
-  vendorHash = "sha256-RTnaDAl79LScbeKKAGJOI/YOiHEwwlxS2CmNhw80KL0=";
+  vendorHash = "sha256-H2IakJKaX/LzD+vzkGWK9YuCKvBfnKCZT6bm1zDaWeY=";
 
   doCheck = false;
 
   src = fetchFromGitHub {
     owner = "go-shiori";
     repo = "shiori";
-    rev = "v${version}";
-    sha256 = "sha256-T4EFwvejLgNkcykPjSHU8WXJwqSqYPFaAD+9JX+uiJU=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-oycD/Tyl3+CGW9EO0O4RHKONLt3mw2lzPEYELYNG0gw=";
   };
 
   ldflags = [
-    "-X main.version=${version}"
-    "-X main.commit=nixpkgs-${src.rev}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.commit=nixpkgs-${finalAttrs.src.rev}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -37,14 +37,14 @@ buildGoModule rec {
 
   passthru.tests.smoke-test = nixosTests.shiori;
 
-  meta = with lib; {
+  meta = {
     description = "Simple bookmark manager built with Go";
     mainProgram = "shiori";
     homepage = "https://github.com/go-shiori/shiori";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       minijackson
       CaptainJawZ
     ];
   };
-}
+})

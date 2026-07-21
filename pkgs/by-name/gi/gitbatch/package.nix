@@ -5,14 +5,14 @@
   git,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gitbatch";
   version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "isacikgoz";
     repo = "gitbatch";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-ovmdbyPRSebwmW6AW55jBgBKaNdY6w5/wrpUF2cMKw8=";
   };
 
@@ -36,12 +36,12 @@ buildGoModule rec {
     "-skip=Test(Run|Start|(Fetch|Pull)With(Go|)Git)"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Running git UI commands";
     homepage = "https://github.com/isacikgoz/gitbatch";
-    license = licenses.mit;
-    maintainers = with maintainers; [ teto ];
-    platforms = with platforms; linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ teto ];
+    platforms = with lib.platforms; linux;
     mainProgram = "gitbatch";
   };
-}
+})

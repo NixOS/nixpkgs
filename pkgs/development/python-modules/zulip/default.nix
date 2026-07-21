@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   requests,
@@ -14,24 +13,20 @@
 
 buildPythonPackage rec {
   pname = "zulip";
-  version = "0.9.0";
-
-  disabled = pythonOlder "3.8";
-
+  version = "0.9.1";
   pyproject = true;
 
-  # no sdist on PyPI
   src = fetchFromGitHub {
     owner = "zulip";
     repo = "python-zulip-api";
-    rev = version;
-    hash = "sha256-YnNXduZ2KOjRHGwhojkqpMP2mwhflk8/f4FVZL8NvHU=";
+    tag = version;
+    hash = "sha256-mcqIfha+4nsqlshayLQ2Sd+XOYVKf1FkoczjiFRNybc=";
   };
   sourceRoot = "${src.name}/zulip";
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     requests
     distro
     click
@@ -46,10 +41,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "zulip" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bindings for the Zulip message API";
     homepage = "https://github.com/zulip/python-zulip-api";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

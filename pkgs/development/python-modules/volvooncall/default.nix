@@ -7,24 +7,24 @@
   docopt,
   fetchFromGitHub,
   fetchpatch,
+  setuptools,
   geopy,
   mock,
   pytest-asyncio_0,
   pytestCheckHook,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "volvooncall";
   version = "0.10.4";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "molobrakos";
     repo = "volvooncall";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xr3g93rt3jvxVZrZY7cFh5eBP3k0arsejsgvx8p5EV4=";
   };
 
@@ -37,7 +37,9 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ aiohttp ];
+  build-system = [ setuptools ];
+
+  dependencies = [ aiohttp ];
 
   optional-dependencies = {
     console = [
@@ -56,16 +58,16 @@ buildPythonPackage rec {
     pytest-asyncio_0
     pytestCheckHook
   ]
-  ++ optional-dependencies.mqtt;
+  ++ finalAttrs.passthru.optional-dependencies.mqtt;
 
   pythonImportsCheck = [ "volvooncall" ];
 
-  meta = with lib; {
+  meta = {
     description = "Retrieve information from the Volvo On Call web service";
     homepage = "https://github.com/molobrakos/volvooncall";
-    changelog = "https://github.com/molobrakos/volvooncall/releases/tag/v${version}";
-    license = licenses.unlicense;
+    changelog = "https://github.com/molobrakos/volvooncall/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.unlicense;
     mainProgram = "voc";
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

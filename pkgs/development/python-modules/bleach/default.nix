@@ -1,31 +1,33 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
-  html5lib,
   setuptools,
   tinycss2,
-  packaging,
   webencodings,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bleach";
-  version = "6.2.0";
+  version = "6.4.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Ej6JQRi4pZn9gNPsGm1Mx85OWIKxMXp+G6abVulfmR8=";
+  src = fetchFromGitHub {
+    owner = "mozilla";
+    repo = "bleach";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2HcJIxmH78TIE4q481OZPL5ZempMqka6OChEv+BFctY=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  pythonRelaxDeps = [
+    # Upstream views pins as known-good versions: https://github.com/mozilla/bleach/pull/741
+    "tinycss2"
+  ];
 
-  propagatedBuildInputs = [
-    html5lib
-    packaging
-    setuptools
+  build-system = [ setuptools ];
+
+  dependencies = [
     webencodings
   ];
 
@@ -42,7 +44,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bleach" ];
 
-  meta = with lib; {
+  meta = {
     description = "Easy, HTML5, whitelisting HTML sanitizer";
     longDescription = ''
       Bleach is an HTML sanitizing library that escapes or strips markup and
@@ -57,8 +59,8 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/mozilla/bleach";
     downloadPage = "https://github.com/mozilla/bleach/releases";
-    changelog = "https://github.com/mozilla/bleach/blob/v${version}/CHANGES";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ prikhi ];
+    changelog = "https://github.com/mozilla/bleach/blob/${finalAttrs.src.tag}/CHANGES";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ prikhi ];
   };
-}
+})

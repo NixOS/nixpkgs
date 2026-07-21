@@ -3,7 +3,6 @@
   stdenv,
   airspy,
   airspyhf,
-  apple-sdk_12,
   aptdec,
   boost,
   cm256cc,
@@ -15,13 +14,17 @@
   fetchFromGitHub,
   fftwFloat,
   flac,
+  ggmorse,
   glew,
   hackrf,
   hidapi,
   ffmpeg,
+  inmarsatc,
   libiio,
+  libogg,
   libopus,
   libpulseaudio,
+  libunwind,
   libusb1,
   limesuite,
   libbladeRF,
@@ -31,6 +34,7 @@
   pkg-config,
   qt6,
   qt6Packages,
+  rnnoise,
   rtl-sdr,
   serialdv,
   sdrplay,
@@ -39,18 +43,22 @@
   uhd,
   zlib,
   withSDRplay ? false,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdrangel";
-  version = "7.22.8";
+  version = "7.27.1";
 
   src = fetchFromGitHub {
     owner = "f4exb";
     repo = "sdrangel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Uj6BzMUhhi/0Jz8jKe/MCiXinoKcyXy4DqC/USdkcpA=";
+    hash = "sha256-rdPXqA0ySnqh/rlMlfcDLyAd6egbggWHrRQRnXeQPFM=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
@@ -72,11 +80,13 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg
     fftwFloat
     flac
+    ggmorse
     glew
     hackrf
     hidapi
     libbladeRF
     libiio
+    libogg
     libopus
     libpulseaudio
     libusb1
@@ -93,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6Packages.qtspeech
     qt6Packages.qttools
     qt6Packages.qtwebsockets
-    qt6Packages.qtwebengine
+    rnnoise
     rtl-sdr
     serialdv
     sgp4
@@ -101,18 +111,24 @@ stdenv.mkDerivation (finalAttrs: {
     uhd
     zlib
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6Packages.qtwayland ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_12 ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    inmarsatc
+    libunwind
+    qt6Packages.qtwayland
+    qt6Packages.qtwebengine
+  ]
   ++ lib.optionals withSDRplay [ sdrplay ];
 
   cmakeFlags = [
-    "-DAPT_DIR=${aptdec}"
-    "-DDAB_DIR=${dab_lib}"
-    "-DSGP4_DIR=${sgp4}"
-    "-DSOAPYSDR_DIR=${soapysdr-with-plugins}"
+    (lib.cmakeFeature "APT_DIR" aptdec.outPath)
+    (lib.cmakeFeature "DAB_DIR" dab_lib.outPath)
+    (lib.cmakeFeature "SGP4_DIR" sgp4.outPath)
+    (lib.cmakeFeature "SOAPYSDR_DIR" soapysdr-with-plugins.outPath)
+    (lib.cmakeBool "ENABLE_QT6" true)
     "-Wno-dev"
-    "-DENABLE_QT6=ON"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Software defined radio (SDR) software";
@@ -122,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
       SDRangel is an Open Source Qt6 / OpenGL 3.0+ SDR and signal analyzer frontend to various hardware.
     '';
     maintainers = with lib.maintainers; [
+      aciceri
       alkeryn
       Tungsten842
     ];

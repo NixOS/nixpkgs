@@ -71,6 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ];
 
   cmakeFlags = [
+    # TODO: drop in the next version bump
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
     (lib.cmakeBool "USE_DISCORD_RPC" enableDiscordRpc)
   ];
 
@@ -100,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
       not support.
     '';
     changelog = "https://raw.githubusercontent.com/mgba-emu/mgba/${finalAttrs.src.rev}/CHANGES";
-    license = with lib.licenses; [ mpl20 ];
+    license = lib.licenses.mpl20;
     mainProgram = "mgba";
     maintainers = with lib.maintainers; [ Gliczy ];
     platforms = lib.platforms.linux;

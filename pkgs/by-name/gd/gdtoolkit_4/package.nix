@@ -27,20 +27,22 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "gdtoolkit";
-  version = "4.3.4";
-  format = "setuptools";
+  version = "4.5.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Scony";
     repo = "godot-gdscript-toolkit";
     tag = version;
-    hash = "sha256-D67iwGGF3CrdAi/XKGVkusZlFCsMPIKdVpKDwcVQMrI=";
+    hash = "sha256-Jam7Txm+Fq5zEkJZMmbWW5Ok4ThsPyi6NIeawQot0RE=";
   };
 
-  disabled = python.pythonOlder "3.7";
+  build-system = with python.pkgs; [
+    setuptools
+  ];
 
-  propagatedBuildInputs = with python.pkgs; [
-    docopt
+  dependencies = with python.pkgs; [
+    docopt-ng
     lark
     pyyaml
     radon
@@ -74,10 +76,10 @@ python.pkgs.buildPythonApplication rec {
     "gdtoolkit.parser"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Independent set of tools for working with Godot's GDScript - parser, linter and formatter";
     homepage = "https://github.com/Scony/godot-gdscript-toolkit";
-    license = licenses.mit;
-    maintainers = with maintainers; [ squarepear ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ squarepear ];
   };
 }

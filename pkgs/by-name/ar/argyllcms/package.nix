@@ -3,19 +3,19 @@
   fetchzip,
   jam,
   unzip,
-  libX11,
-  libXxf86vm,
-  libXrandr,
-  libXinerama,
-  libXrender,
-  libXext,
+  libx11,
+  libxxf86vm,
+  libxrandr,
+  libxinerama,
+  libxrender,
+  libxext,
   libtiff,
   libjpeg,
   libpng,
-  libXScrnSaver,
+  libxscrnsaver,
   writeText,
-  libXdmcp,
-  libXau,
+  libxdmcp,
+  libxau,
   lib,
   openssl,
   buildPackages,
@@ -136,15 +136,15 @@ stdenv.mkDerivation rec {
     libtiff
     libjpeg
     libpng
-    libX11
-    libXxf86vm
-    libXrandr
-    libXinerama
-    libXext
-    libXrender
-    libXScrnSaver
-    libXdmcp
-    libXau
+    libx11
+    libxxf86vm
+    libxrandr
+    libxinerama
+    libxext
+    libxrender
+    libxscrnsaver
+    libxdmcp
+    libxau
     openssl
   ];
 
@@ -182,11 +182,11 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.argyllcms.com/";
     description = "Color management system (compatible with ICC)";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -8,9 +8,8 @@
   pytest-cov-stub,
   pytest-tornado,
   pytest8_3CheckHook,
-  pythonOlder,
   pytz,
-  setuptools,
+  setuptools_80,
   setuptools-scm,
   tornado,
   twisted,
@@ -19,16 +18,14 @@
 
 buildPythonPackage rec {
   pname = "apscheduler";
-  version = "3.11.0";
+  version = "3.11.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "agronholm";
     repo = "apscheduler";
     tag = version;
-    hash = "sha256-tFEm9yXf8CqcipSYtM7JM6WQ5Qm0YtgWhZvZOBAzy+w=";
+    hash = "sha256-AhVlACRg0Xwy9XmFRl29of5uM2aJa5Gv2SzFuJXVCpE=";
   };
 
   postPatch = ''
@@ -36,7 +33,7 @@ buildPythonPackage rec {
   '';
 
   build-system = [
-    setuptools
+    setuptools_80
     setuptools-scm
   ];
 
@@ -69,10 +66,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "apscheduler" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/agronholm/apscheduler/releases/tag/${src.tag}";
     description = "Library that lets you schedule your Python code to be executed";
     homepage = "https://github.com/agronholm/apscheduler";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

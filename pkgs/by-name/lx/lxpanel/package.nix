@@ -12,12 +12,12 @@
   keybinder3,
   gtk2-x11,
   gtk3,
-  libX11,
+  libx11,
   libfm,
   libwnck,
   libwnck2,
-  libXmu,
-  libXpm,
+  libxmu,
+  libxpm,
   cairo,
   gdk-pixbuf,
   gdk-pixbuf-xlib,
@@ -55,11 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     (if withGtk3 then keybinder3 else keybinder)
     (if withGtk3 then gtk3 else gtk2-x11)
-    libX11
+    libx11
     (libfm.override { inherit withGtk3; })
     (if withGtk3 then libwnck else libwnck2)
-    libXmu
-    libXpm
+    libxmu
+    libxpm
     cairo
     gdk-pixbuf
     gdk-pixbuf-xlib.dev

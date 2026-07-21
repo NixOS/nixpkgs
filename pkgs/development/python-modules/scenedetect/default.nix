@@ -20,20 +20,25 @@ let
     hash = "sha256-7ws7F7CkEJAa0PgfMEOwnpF4Xl2BQCn9+qFQb5MMlZ0=";
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "scenedetect";
-  version = "0.6.6";
+  version = "0.6.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Breakthrough";
     repo = "PySceneDetect";
-    tag = "v${version}-release";
-    hash = "sha256-G5NLk6eOpclfrzzHad2KT3uZqydSJU0oF/4L2NIdZe0=";
+    tag = "v${finalAttrs.version}-release";
+    hash = "sha256-bLR04wn4O23fHC12ZvWwDI7gLGvMhm+YnBOy4zYMPSM=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+  ];
 
+  pythonRelaxDeps = [
+    "click"
+  ];
   dependencies = [
     av
     click
@@ -43,9 +48,7 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  pythonImportsCheck = [
-    "scenedetect"
-  ];
+  pythonImportsCheck = [ "scenedetect" ];
 
   preCheck = ''
     cp -r ${testsResources}/tests/resources tests/
@@ -62,9 +65,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python and OpenCV-based scene cut/transition detection program & library";
     homepage = "https://www.scenedetect.com";
-    changelog = "https://github.com/Breakthrough/PySceneDetect/releases/tag/v${version}-release";
+    changelog = "https://github.com/Breakthrough/PySceneDetect/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "scenedetect";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ DataHearth ];
   };
-}
+})

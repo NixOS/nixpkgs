@@ -4,9 +4,9 @@ let
 in
 {
   options.number = mkOption {
-    type = types.submodule ({
+    type = types.submodule {
       freeformType = types.attrsOf (types.either types.int types.int);
-    });
+    };
     default = {
       int = 42;
     }; # should not emit a warning

@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
+  libredirect,
   bzip2,
   zstd,
   stdenv,
@@ -10,13 +11,15 @@
   nix-update-script,
   testers,
   matrix-tuwunel,
-  enableBlurhashing ? true,
   # upstream tuwunel enables jemalloc by default, so we follow suit
   enableJemalloc ? true,
   rust-jemalloc-sys,
   enableLiburing ? stdenv.hostPlatform.isLinux,
+  enableLdap ? true,
   liburing,
   nixosTests,
+  writeTextFile,
+  rustc-unwrapped,
 }:
 let
   rust-jemalloc-sys' = rust-jemalloc-sys.override {
@@ -40,8 +43,8 @@ let
             # The commit on the rocksdb fork, tuwunel-changes branch referenced by the upstream
             # tuwunel flake.lock:
             # https://github.com/matrix-construct/tuwunel/blob/main/flake.lock#L557C17-L557C57
-            rev = "cf7f65d0b377af019661c240f9165b3ef60640c3";
-            hash = "sha256-ZSjvAZBfZkJrBIpw8ANZMbJVb8AeuogvuAipGVE4Qe4=";
+            rev = "0bd7e6d6438d318d66e8374ec1fe24126204f3b3";
+            hash = "sha256-THAHov40punmqm3J9kNYwFXfdRZ2VwjR/+lmFhun/xk=";
           };
           version = "tuwunel-changes";
           patches = [ ];
@@ -85,20 +88,26 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-tuwunel";
-  version = "1.4.2";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "matrix-construct";
     repo = "tuwunel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h7a8nbKZ6cK6SoAGwORc6+D+jJxQOut7y5KzHfBbqDE=";
+    hash = "sha256-3qMVu+IQMzI4Jtfb8mJsuDAcd7Jb7XSU07RlvnH7vfc=";
   };
 
-  cargoHash = "sha256-RjoO5eiAXYhC8Tg5UNqCpBsFVN1I+0UhchslAmhm0Qo=";
+  cargoHash = "sha256-VzmaQAsNORH8VxYSUgKeQSIgcCPnI9cAzu3K9ks7ODA=";
 
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
+  ];
+
+  patches = [
+    # reduce closure size by not storing a reference to rustc-unwrapped
+    # alternative to https://github.com/NixOS/nixpkgs/pull/462394
+    ./dont-record-compilation-flags.patch
   ];
 
   buildInputs = [
@@ -117,7 +126,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildNoDefaultFeatures = true;
   # See https://github.com/matrix-construct/tuwunel/blob/main/src/main/Cargo.toml
   # for available features.
-  # We enable all default features except jemalloc, blurhashing, and io_uring, which
+  # We enable all default features except jemalloc and io_uring, which
   # we guard behind our own (default-enabled) flags.
   buildFeatures = [
     "brotli_compression"
@@ -130,12 +139,42 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "url_preview"
     "zstd_compression"
   ]
-  ++ lib.optional enableBlurhashing "blurhashing"
   ++ lib.optional enableJemalloc [
     "jemalloc"
     "jemalloc_conf"
   ]
-  ++ lib.optional enableLiburing "io_uring";
+  ++ lib.optional enableLiburing "io_uring"
+  ++ lib.optional enableLdap "ldap";
+
+  nativeCheckInputs = [
+    libredirect.hook
+  ];
+
+  # Make sure tuwunel doesn't try to write to arbitrary
+  # directories or have DNS timeouts during `cargo test`.
+  preCheck =
+    let
+      fakeResolvConf = writeTextFile {
+        name = "resolv.conf";
+        text = ''
+          nameserver 0.0.0.0
+        '';
+      };
+    in
+    ''
+      export NIX_REDIRECTS="/etc/resolv.conf=${fakeResolvConf}"
+      export TUWUNEL_DATABASE_PATH="$(mktemp -d)/smoketest.db"
+    '';
+
+  doCheck = true;
+
+  # 2026-06-24: Tuwunel has 16 integration tests. Cargo turns each of these
+  # into a separate binary that links in all 110 MB worth of tuwunel.  Linking
+  # 16 big binaries like this takes a really long time and was causing Hydra
+  # to time out the build during `checkPhase`.  So, we run the checks in the
+  # "debug" profile.  This reduces the build+test time on my machine from
+  # 44min to 12min.
+  checkType = "debug";
 
   passthru = {
     rocksdb = rocksdb'; # make used rocksdb version available (e.g., for backup scripts)
@@ -150,6 +189,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       inherit (nixosTests) matrix-tuwunel;
     };
   };
+
+  disallowedReferences = [ rustc-unwrapped ];
 
   meta = {
     description = "Matrix homeserver written in Rust, official successor to conduwuit";

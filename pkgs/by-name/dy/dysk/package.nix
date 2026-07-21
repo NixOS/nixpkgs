@@ -5,18 +5,18 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dysk";
-  version = "3.1.0";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "dysk";
-    rev = "v${version}";
-    hash = "sha256-2YqKKgNOx5+DLzIEkJTYqTAuxmKMhpCb79w7qLabvOk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6yjLIioul6wEocv3pzghPMWLKd5kDqCb7ezh4oFcdmU=";
   };
 
-  cargoHash = "sha256-2raAjpHh49ifZQfG2/WK94gR0lQzF/5cgmUzd69Kh3o=";
+  cargoHash = "sha256-vpSel0bHQ40kMRfvi3YKf6oAl0f/sjK5GHxAEt6of8Y=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -27,16 +27,16 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion $releaseDir/build/*/out/{dysk.bash,dysk.fish,_dysk}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Get information on your mounted disks";
     homepage = "https://github.com/Canop/dysk";
-    changelog = "https://github.com/Canop/dysk/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      figsoda
+    changelog = "https://github.com/Canop/dysk/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       koral
+      osbm
     ];
     mainProgram = "dysk";
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

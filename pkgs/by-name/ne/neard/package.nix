@@ -13,9 +13,9 @@
   python3Packages,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "neard";
-  version = "0.19-unstable-2024-07-02";
+  version = "0.20";
 
   outputs = [
     "out"
@@ -25,8 +25,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "linux-nfc";
     repo = "neard";
-    rev = "a0a7d4d677800a39346f0c89d93d0fe43a95efad";
-    hash = "sha256-6BgX7cJwxX+1RX3wU+HY/PIBgzomzOKemnl0SDLJNro=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Ty2jXaSuaI+ZuRBSpdh36Yi3V5nd8jGI43Jc9cLkMW4=";
   };
 
   postPatch = ''
@@ -50,7 +50,6 @@ stdenv.mkDerivation {
     "--enable-tools"
     "--with-sysconfdir=/etc"
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
-    "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
   ];
 
   buildInputs = [
@@ -72,14 +71,15 @@ stdenv.mkDerivation {
 
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
-    wrapPythonProgramsIn "$out/lib/neard" "$pythonPath"
+    wrapPythonProgramsIn "$out/lib/neard" "''${pythonPath[*]}"
   '';
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/linux-nfc/neard/blob/${finalAttrs.src.tag}/ChangeLog";
     description = "Near Field Communication manager";
     homepage = "https://01.org/linux-nfc";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

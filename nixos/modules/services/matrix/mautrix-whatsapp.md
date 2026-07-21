@@ -13,7 +13,7 @@
 
 ::: {.warning}
 Mautrix-Whatsapp allows for some options like `encryption.pickle_key`,
-`provisioning.shared_secret`, allow the value `generate` to be set.
+`provisioning.shared_secret`, to allow the value `generate` to be set.
 Since the configuration file is regenerated on every start of the
 service, the generated values would be discarded and might break your
 installation. Instead, set those values via

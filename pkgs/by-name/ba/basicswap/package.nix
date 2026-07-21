@@ -56,7 +56,7 @@ let
     }
   );
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "basicswap";
   version = "0.14.4";
   pyproject = true;
@@ -64,7 +64,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "basicswap";
     repo = "basicswap";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UhuBTbGULImqRSsbg0QNb3yvnN7rnSzycweDLbqrW+8=";
   };
 
@@ -100,11 +100,11 @@ python3Packages.buildPythonApplication rec {
 
   passthru.bindir = bindir;
 
-  meta = with lib; {
+  meta = {
     description = "Basic Atomic Swap Proof of Concept";
     homepage = "https://basicswapdex.com";
-    license = licenses.mit;
-    maintainers = with maintainers; [ linsui ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ linsui ];
     mainProgram = "basicswap-run";
   };
-}
+})

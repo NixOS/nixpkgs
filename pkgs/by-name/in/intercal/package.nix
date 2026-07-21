@@ -3,37 +3,34 @@
   stdenv,
   fetchurl,
   fetchpatch,
-  pkg-config,
+  autoreconfHook,
   bison,
   flex,
   makeWrapper,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
 
   pname = "intercal";
-  version = "0.31";
+  version = "0.34";
 
   src = fetchurl {
-    url = "http://catb.org/esr/intercal/${pname}-${version}.tar.gz";
-    sha256 = "1z2gpa5rbqb7jscqlf258k0b0jc7d2zkyipb5csjpj6d3sw45n4k";
+    url = "http://catb.org/esr/intercal/intercal-${version}.tar.gz";
+    hash = "sha256-fvYUjDUd9mhGbi3L15UXci+RwzyqORWVcTfzgzcfjVU=";
   };
 
-  patches = [
-    # Pull patch pending upstream inclusion for -fno-common toolchains:
-    #   https://gitlab.com/esr/intercal/-/issues/4
-    (fetchpatch {
-      name = "fno-common.patch";
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-lang/c-intercal/files/c-intercal-31.0-no-common.patch?id=a110a98b4de6f280d770ba3cc92a4612326205a3";
-      sha256 = "03523fc40042r2ryq5val27prlim8pld4950qqpawpism4w3y1p2";
-    })
-  ];
+  postPatch = ''
+    # Workaround: https://gitlab.com/esr/intercal/-/work_items/9
+    substituteInPlace src/abcessh.in --replace-fail "#ifdef HAVE_STDARG_H" "#if 1"
+  '';
 
   nativeBuildInputs = [
-    pkg-config
+    autoreconfHook
     bison
     flex
     makeWrapper
+    pkg-config
   ];
 
   # Intercal invokes gcc, so we need an explicit PATH
@@ -41,7 +38,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/ick --suffix PATH ':' ${stdenv.cc}/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Original esoteric programming language";
     longDescription = ''
       INTERCAL, an abbreviation for "Compiler Language With No
@@ -53,9 +50,9 @@ stdenv.mkDerivation rec {
       from its use of an assignment statement.
     '';
     homepage = "http://www.catb.org/~esr/intercal/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }
 # TODO: investigate if LD_LIBRARY_PATH needs to be set

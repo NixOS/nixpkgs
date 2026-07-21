@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  mkDerivation,
+  fetchpatch,
   fetchurl,
   cmake,
   runtimeShell,
@@ -12,35 +12,34 @@
   fftw,
   curl,
   gcc,
-  libsForQt5,
-  libXt,
-  qtbase,
-  qttools,
-  qtwebengine,
+  qt6,
+  libxt,
   readline,
-  qtwebsockets,
   useSCEL ? false,
+  useQtWebEngine ? true,
   emacs,
   gitUpdater,
   supercollider-with-plugins,
   supercolliderPlugins,
   writeText,
   runCommand,
-  withWebengine ? false, # vulnerable, so disabled by default
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "supercollider";
-  version = "3.13.1";
+  version = "3.14.1";
 
   src = fetchurl {
     url = "https://github.com/supercollider/supercollider/releases/download/Version-${version}/SuperCollider-${version}-Source.tar.bz2";
-    sha256 = "sha256-aXnAFdqs/bVZMovoDV1P4mv2PtdFD2QuXHjnsnEyMSs=";
+    sha256 = "sha256-7mQMaHd65pdoIGbOXEqLflbFsiPnbHnBO1vlOH7lW7I=";
   };
 
   patches = [
-    # add support for SC_DATA_DIR and SC_PLUGIN_DIR env vars to override compile-time values
-    ./supercollider-3.12.0-env-dirs.patch
+    # add support for Qt 6.11 in SuperCollider 3.14.1
+    (fetchpatch {
+      url = "https://github.com/supercollider/supercollider/commit/e997e47890a9cee137756dede664811a58dbf85a.patch";
+      hash = "sha256-Koh5CwkedDEXwvSFyZSrdKyVIKpX7nPrIcsr2FXaejo=";
+    })
   ];
 
   postPatch = ''
@@ -52,8 +51,8 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    qttools
-    libsForQt5.wrapQtAppsHook
+    qt6.qttools
+    qt6.wrapQtAppsHook
   ]
   ++ lib.optionals useSCEL [ emacs ];
 
@@ -63,12 +62,13 @@ mkDerivation rec {
     libsndfile
     fftw
     curl
-    libXt
-    qtbase
-    qtwebsockets
+    libxt
+    qt6.qtbase
+    qt6.qtwebsockets
+    qt6.qtwayland
+    qt6.qtwebengine
     readline
   ]
-  ++ lib.optional withWebengine qtwebengine
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) alsa-lib;
 
   hardeningDisable = [ "stackprotector" ];
@@ -76,7 +76,7 @@ mkDerivation rec {
   cmakeFlags = [
     "-DSC_WII=OFF"
     "-DSC_EL=${if useSCEL then "ON" else "OFF"}"
-    (lib.cmakeBool "SC_USE_QTWEBENGINE" withWebengine)
+    (lib.cmakeBool "SC_USE_QTWEBENGINE" useQtWebEngine)
   ];
 
   passthru = {
@@ -109,12 +109,14 @@ mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Programming language for real time audio synthesis";
     homepage = "https://supercollider.github.io";
     changelog = "https://github.com/supercollider/supercollider/blob/Version-${version}/CHANGELOG.md";
-    maintainers = [ ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [
+      pretentiousUsername
+    ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

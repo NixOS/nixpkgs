@@ -19,8 +19,6 @@ let
   };
 
   settingsFormat = pkgs.formats.yaml { };
-  configFile = settingsFormat.generate "headscale.yaml" cfg.settings;
-  cliConfigFile = settingsFormat.generate "headscale.yaml" cliConfig;
 
   assertRemovedOption = option: message: {
     assertion = !lib.hasAttrByPath option cfg;
@@ -34,6 +32,18 @@ in
       enable = lib.mkEnableOption "headscale, Open Source coordination server for Tailscale";
 
       package = lib.mkPackageOption pkgs "headscale" { };
+
+      configFile = lib.mkOption {
+        type = lib.types.path;
+        readOnly = true;
+        default = settingsFormat.generate "headscale.yaml" (
+          lib.filterAttrsRecursive (n: v: v != null) cfg.settings
+        );
+        defaultText = lib.literalExpression ''(pkgs.formats.yaml { }).generate "headscale.yaml" (lib.filterAttrsRecursive (n: v: v != null) config.services.headscale.settings)'';
+        description = ''
+          Path to the configuration file of headscale.
+        '';
+      };
 
       user = lib.mkOption {
         default = "headscale";
@@ -319,6 +329,15 @@ in
                 example = "tailnet.example.com";
               };
 
+              override_local_dns = lib.mkOption {
+                type = lib.types.bool;
+                default = true;
+                description = ''
+                  Whether to [override clients' DNS servers](https://tailscale.com/kb/1054/dns#override-dns-servers).
+                '';
+                example = false;
+              };
+
               nameservers = {
                 global = lib.mkOption {
                   type = lib.types.listOf lib.types.str;
@@ -327,6 +346,68 @@ in
                     List of nameservers to pass to Tailscale clients.
                   '';
                 };
+              };
+
+              split = lib.mkOption {
+                type = lib.types.attrsOf (lib.types.listOf lib.types.str);
+                default = { };
+                description = ''
+                  Split DNS configuration (map of domains and which DNS server to use for each).
+                  See <https://tailscale.com/kb/1054/dns/>.
+                '';
+                example = {
+                  "foo.bar.com" = [ "1.1.1.1" ];
+                };
+              };
+
+              extra_records = lib.mkOption {
+                type = lib.types.nullOr (
+                  lib.types.listOf (
+                    lib.types.submodule {
+                      options = {
+                        name = lib.mkOption {
+                          type = lib.types.str;
+                          description = "DNS record name.";
+                          example = "grafana.tailnet.example.com";
+                        };
+                        type = lib.mkOption {
+                          type = lib.types.enum [
+                            "A"
+                            "AAAA"
+                          ];
+                          description = "DNS record type.";
+                          example = "A";
+                        };
+                        value = lib.mkOption {
+                          type = lib.types.str;
+                          description = "DNS record value (IP address).";
+                          example = "100.64.0.3";
+                        };
+                      };
+                    }
+                  )
+                );
+                default = null;
+                description = ''
+                  Extra DNS records to expose to clients.
+                '';
+                example = ''
+                  [ {
+                    name = "grafana.tailnet.example.com";
+                    type = "A";
+                    example = "100.64.0.3";
+                  } ]
+                '';
+              };
+
+              extra_records_path = lib.mkOption {
+                type = lib.types.nullOr lib.types.str;
+                default = null;
+                description = ''
+                  Path to a JSON file containing extra DNS records.
+                  This is mutually exclusive with {option}`extra_records`.
+                '';
+                example = "/run/headscale/records.json";
               };
 
               search_domains = lib.mkOption {
@@ -584,6 +665,14 @@ in
         assertion = with cfg.settings; dns.magic_dns -> dns.base_domain != "";
         message = "dns.base_domain must be set when using MagicDNS";
       }
+      {
+        assertion = with cfg.settings; dns.override_local_dns -> dns.nameservers.global != [ ];
+        message = "dns.nameservers.global must be set when overriding local DNS";
+      }
+      {
+        assertion = with cfg.settings; dns.extra_records_path == null || dns.extra_records == null;
+        message = "dns.extra_records and dns.extra_records_path are mutually exclusive";
+      }
       (assertRemovedOption [ "settings" "acl_policy_path" ] "Use `policy.path` instead.")
       (assertRemovedOption [ "settings" "db_host" ] "Use `database.postgres.host` instead.")
       (assertRemovedOption [ "settings" "db_name" ] "Use `database.postgres.name` instead.")
@@ -621,7 +710,7 @@ in
     environment = {
       # Headscale CLI needs a minimal config to be able to locate the unix socket
       # to talk to the server instance.
-      etc."headscale/config.yaml".source = cliConfigFile;
+      etc."headscale/config.yaml".source = settingsFormat.generate "headscale.yaml" cliConfig;
 
       systemPackages = [ cfg.package ];
     };
@@ -646,7 +735,7 @@ in
           export HEADSCALE_DATABASE_POSTGRES_PASS="$(head -n1 ${lib.escapeShellArg cfg.settings.database.postgres.password_file})"
         ''}
 
-        exec ${lib.getExe cfg.package} serve --config ${configFile}
+        exec ${lib.getExe cfg.package} serve --config ${cfg.configFile}
       '';
 
       serviceConfig =

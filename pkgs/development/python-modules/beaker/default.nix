@@ -12,11 +12,8 @@
   sqlalchemy,
   pycrypto,
   cryptography,
-  isPy27,
   pytestCheckHook,
   setuptools,
-  funcsigs ? null,
-  pycryptopp ? null,
 }:
 
 buildPythonPackage rec {
@@ -38,10 +35,6 @@ buildPythonPackage rec {
     sqlalchemy
     pycrypto
     cryptography
-  ]
-  ++ lib.optionals (isPy27) [
-    funcsigs
-    pycryptopp
   ];
 
   nativeCheckInputs = [
@@ -66,7 +59,7 @@ buildPythonPackage rec {
     description = "Session and Caching library with WSGI Middleware";
     homepage = "https://github.com/bbangert/beaker";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     knownVulnerabilities = [ "CVE-2013-7489" ];
   };
 }

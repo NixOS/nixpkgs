@@ -12,15 +12,15 @@
   tagparser,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tageditor";
-  version = "3.9.7";
+  version = "3.9.11";
 
   src = fetchFromGitHub {
     owner = "martchus";
     repo = "tageditor";
-    tag = "v${version}";
-    hash = "sha256-ETRlyAOCWIz8tioCsGXnmnuTnzWiUOb64vKsPm1hIt0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5hOflEaBABu2vjrl0bPFhWHK65+yvoXzQAlb8Ealq+o=";
   };
 
   nativeBuildInputs = [
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "tageditor";
   };
-}
+})

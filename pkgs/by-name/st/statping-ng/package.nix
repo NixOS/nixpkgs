@@ -93,7 +93,7 @@ buildGoModule rec {
   meta = {
     description = "Status Page for monitoring your websites and applications with beautiful graphs, analytics, and plugins";
     homepage = "https://github.com/statping-ng/statping-ng";
-    changelog = "https://github.com/statping-ng/statping-ng/releases/tag/v${src.tag}";
+    changelog = "https://github.com/statping-ng/statping-ng/releases/tag/${src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       FKouhai

@@ -73,7 +73,7 @@ in
         services.mautrix-meta.instances.instagram = {
           enable = true;
 
-          environmentFile = pkgs.writeText ''my-secrets'' ''
+          environmentFile = pkgs.writeText "my-secrets" ''
             AS_TOKEN=${asToken}
             HS_TOKEN=${hsToken}
           '';

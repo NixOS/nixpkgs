@@ -1,11 +1,9 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   hatchling,
   packaging,
-  tomli,
   pyyaml,
   pytestCheckHook,
 }:
@@ -14,8 +12,6 @@ buildPythonPackage rec {
   pname = "dparse";
   version = "0.6.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pyupio";
@@ -26,7 +22,7 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
-  dependencies = [ packaging ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  dependencies = [ packaging ];
 
   optional-dependencies = {
     # FIXME pipenv = [ pipenv ];
@@ -36,7 +32,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "dparse" ];
 
@@ -45,11 +41,11 @@ buildPythonPackage rec {
     "test_update_pipfile"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Parser for Python dependency files";
     homepage = "https://github.com/pyupio/dparse";
     changelog = "https://github.com/pyupio/dparse/blob/${version}/HISTORY.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ thomasdesr ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ thomasdesr ];
   };
 }

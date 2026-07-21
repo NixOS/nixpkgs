@@ -24,11 +24,11 @@ buildGoModule {
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
-  meta = with lib; {
+  meta = {
     description = "Waybar component/utility for displaying and controlling MPRIS2 compliant media players individually";
     homepage = "https://git.hrfee.pw/hrfee/waybar-mpris";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "waybar-mpris";
-    maintainers = with maintainers; [ khaneliman ];
+    maintainers = with lib.maintainers; [ khaneliman ];
   };
 }

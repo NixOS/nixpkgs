@@ -1,6 +1,6 @@
 {
   coreutils,
-  flattenReferencesGraph,
+  flatten-references-graph,
   lib,
   jq,
   runCommand,
@@ -26,7 +26,7 @@ else
       inherit pipeline;
       nativeBuildInputs = [
         coreutils
-        flattenReferencesGraph
+        flatten-references-graph
         jq
       ];
     }

@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "msgpack-cxx";
-  version = "7.0.0";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "msgpack";
     repo = "msgpack-c";
     tag = "cpp-${finalAttrs.version}";
-    hash = "sha256-kg4mpNiigfZ59ZeL8LXEHwtkLU8Po+vgRcUcgTJd+h4=";
+    hash = "sha256-11eRM63rjmbIi0glwY5dEuKG9wnVOLx8VXb7CXqCbJE=";
   };
 
   strictDeps = true;
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     boost
   ];
 
@@ -40,11 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-  meta = with lib; {
+  meta = {
     description = "MessagePack implementation for C++";
     homepage = "https://github.com/msgpack/msgpack-c";
     changelog = "https://github.com/msgpack/msgpack-c/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = licenses.boost;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 })

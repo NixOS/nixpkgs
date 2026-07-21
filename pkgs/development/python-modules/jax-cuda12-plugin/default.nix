@@ -36,35 +36,35 @@ let
 
   # upstream does not distribute jax-cuda12-plugin 0.4.38 binaries for aarch64-linux
   srcs = {
-    "3.11-x86_64-linux" = getSrcFromPypi {
-      platform = "manylinux_2_27_x86_64";
-      dist = "cp311";
-      hash = "sha256-rckk68ekXI00AOoBGNxwpwgrKobjVxFzjUA904FdCb8=";
-    };
-    "3.11-aarch64-linux" = getSrcFromPypi {
-      platform = "manylinux_2_27_aarch64";
-      dist = "cp311";
-      hash = "sha256-KnJ6ia5prCHB9Qk9jVrviaDmkuZrA0/JNMiszHLkApA=";
-    };
     "3.12-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp312";
-      hash = "sha256-goTnz39USQZgTxEXAqbwARqW338BE4eLOBvsCQUXJTY=";
+      hash = "sha256-Mf/iRdDi/Rz07lclT/xMiFBbuOf1639rOjfWkdc2ZQo=";
     };
     "3.12-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_aarch64";
       dist = "cp312";
-      hash = "sha256-mKl1ZVOChY2HTWRxzpcZQxBgnQoqfEKDxuB+N5M7d2g=";
+      hash = "sha256-PpXLnerCmI4VImxtiSfnK//IQVBdI2Ix5IQ6ixZnnyU=";
     };
     "3.13-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp313";
-      hash = "sha256-chLBLXW33FEnXycYJ99KbTeEMMBvZQ5sMcFi/pV5/xI=";
+      hash = "sha256-tvcG1sEP6b+v4DNMXVLkDm6Z80PCTY508EWsZ7f3rOI=";
     };
     "3.13-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_aarch64";
       dist = "cp313";
-      hash = "sha256-Xj4qpNch+wLdECgmKq6uwpWORbylxNNRKykVG1cMtCU=";
+      hash = "sha256-7xA7NTZHlXCMSkOAN22Nc/w9SHNWpwN/zyDKtzX7WaY=";
+    };
+    "3.14-x86_64-linux" = getSrcFromPypi {
+      platform = "manylinux_2_27_x86_64";
+      dist = "cp314";
+      hash = "sha256-S2sGD+c//eIG5iwmNweWGMNMK0t0vlywNxsipDqQfEo=";
+    };
+    "3.14-aarch64-linux" = getSrcFromPypi {
+      platform = "manylinux_2_27_aarch64";
+      dist = "cp314";
+      hash = "sha256-L43Mb/NIMxWCUbUrcRo7XHN4XsNkdxKUvDgnqq6nVFA=";
     };
   };
 in
@@ -72,6 +72,7 @@ buildPythonPackage {
   pname = "jax-cuda12-plugin";
   inherit version;
   pyproject = false;
+  __structuredAttrs = true;
 
   src = (
     srcs."${python.pythonVersion}-${stdenv.hostPlatform.system}"

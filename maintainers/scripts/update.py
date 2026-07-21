@@ -92,7 +92,15 @@ async def attr_instantiation_worker(
 ) -> tuple[Path, str]:
     async with semaphore:
         eprint(f"Instantiating {attr_path}…")
-        return (await nix_instantiate(attr_path), attr_path)
+        try:
+            return (await nix_instantiate(attr_path), attr_path)
+        except Exception as e:
+            # Failure should normally terminate the script but
+            # looks like Python is buggy so we need to do it ourselves.
+            eprint(f"Failed to instantiate {attr_path}")
+            if e.stderr:
+                eprint(e.stderr.decode("utf-8"))
+            sys.exit(1)
 
 
 async def requisites_worker(
@@ -299,7 +307,7 @@ async def commit_changes(
             commit_message = "{attrPath}: {oldVersion} -> {newVersion}".format(**change)
             if "commitMessage" in change:
                 commit_message = change["commitMessage"]
-            elif "commitBody" in change:
+            if "commitBody" in change:
                 commit_message = commit_message + "\n\n" + change["commitBody"]
             await check_subprocess_output(
                 "git",

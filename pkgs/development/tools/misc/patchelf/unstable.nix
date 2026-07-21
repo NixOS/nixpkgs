@@ -26,7 +26,6 @@ stdenv.mkDerivation {
   setupHook = [ ./setup-hook.sh ];
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
@@ -36,12 +35,12 @@ stdenv.mkDerivation {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/NixOS/patchelf";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     description = "Small utility to modify the dynamic linker and RPATH of ELF executables";
     mainProgram = "patchelf";
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

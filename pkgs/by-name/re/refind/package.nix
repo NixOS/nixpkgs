@@ -2,7 +2,8 @@
   lib,
   stdenv,
   fetchurl,
-  gnu-efi_3,
+  fetchpatch,
+  gnu-efi,
   nixosTests,
   efibootmgr,
   openssl,
@@ -37,12 +38,12 @@ let
     ;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "refind";
   version = "0.14.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/refind/${version}/refind-src-${version}.tar.gz";
+    url = "mirror://sourceforge/project/refind/${finalAttrs.version}/refind-src-${finalAttrs.version}.tar.gz";
     hash = "sha256-99k86A2na4bFZygeoiW2qHkHzob/dyM8k1elIsEVyPA=";
   };
 
@@ -57,6 +58,16 @@ stdenv.mkDerivation rec {
     # Avoid leaking the build timestamp
     # https://sourceforge.net/p/refind/code/merge-requests/53/
     ./0002-preserve-dates.patch
+
+    # gnu-efi 4 compatibility
+    (fetchpatch {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/refind/-/raw/0.14.2-2/fix-target-option.patch";
+      hash = "sha256-8JxTlgbbgZnXxRrqbPMIBcuT5KEbwXQ8eURKZXeVLU0=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/refind/-/raw/0.14.2-2/gnu-efi-4-compat.patch";
+      hash = "sha256-F37fCfVhLJBQB8HnNYMN4lSA/+wfuRKUgkT8PBSdkOs=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -64,16 +75,16 @@ stdenv.mkDerivation rec {
     installShellFiles
   ];
 
-  buildInputs = [ gnu-efi_3 ];
+  buildInputs = [ gnu-efi ];
 
   hardeningDisable = [ "stackprotector" ];
 
   makeFlags = [
     "prefix="
-    "EFIINC=${gnu-efi_3}/include/efi"
-    "EFILIB=${gnu-efi_3}/lib"
-    "GNUEFILIB=${gnu-efi_3}/lib"
-    "EFICRT0=${gnu-efi_3}/lib"
+    "EFIINC=${gnu-efi}/include/efi"
+    "EFILIB=${gnu-efi}/lib"
+    "GNUEFILIB=${gnu-efi}/lib"
+    "EFICRT0=${gnu-efi}/lib"
     "HOSTARCH=${hostarch}"
     "ARCH=${hostarch}"
   ]
@@ -166,7 +177,7 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) refind;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Graphical {,U}EFI boot manager";
     longDescription = ''
       rEFInd is a graphical boot manager for EFI- and UEFI-based
@@ -184,7 +195,7 @@ stdenv.mkDerivation rec {
       Linux kernels that provide EFI stub support.
     '';
     homepage = "http://refind.sourceforge.net/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       johnrtitor
       RossComputerGuy
     ];
@@ -193,7 +204,7 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
       "aarch64-linux"
     ];
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
   };
 
-}
+})

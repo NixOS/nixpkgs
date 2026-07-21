@@ -3,10 +3,10 @@
   stdenv,
   fetchFromGitHub,
   libxcb,
-  xorg,
+  libxcb-util,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "wmutils-opt";
   version = "1.0-unstable-2024-09-09";
 
@@ -19,16 +19,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libxcb
-    xorg.xcbutil
+    libxcb-util
   ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Optional addons to wmutils";
     homepage = "https://github.com/wmutils/opt";
-    license = licenses.isc;
-    maintainers = with maintainers; [ vifino ];
-    platforms = platforms.unix;
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ vifino ];
+    platforms = lib.platforms.unix;
   };
 }

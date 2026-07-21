@@ -12,12 +12,12 @@
   espeak ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rockbox-utility";
   version = "1.5.1";
 
   src = fetchurl {
-    url = "https://download.rockbox.org/rbutil/source/RockboxUtility-v${version}-src.tar.bz2";
+    url = "https://download.rockbox.org/rbutil/source/RockboxUtility-v${finalAttrs.version}-src.tar.bz2";
     hash = "sha256-guNO11a0d30RexPEAAQGIgV9W17zgTjZ/LNz/oUn4HM=";
   };
 
@@ -56,12 +56,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.rockbox.org";
     description = "Open source firmware for digital music players";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ozkutuk ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ozkutuk ];
     mainProgram = "RockboxUtility";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

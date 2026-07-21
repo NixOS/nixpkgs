@@ -17,7 +17,7 @@
 }:
 
 let
-  version = "0.8.8";
+  version = "0.8.9";
 
 in
 stdenv.mkDerivation {
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     owner = "fdupoux";
     repo = "fsarchiver";
     rev = version;
-    sha256 = "sha256-bEwNqPQRpjfOVTUog9wsZfS5yQ7Z21pHolPRLlbzHAA=";
+    sha256 = "sha256-eJ+25wfOZ7qYL5zi2kz0+03xg6gnKmLG+xjC7wEJ2HM=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation {
     libgpg-error
   ];
 
-  meta = with lib; {
+  meta = {
     description = "File system archiver for linux";
     longDescription = ''
       FSArchiver is a system tool that allows you to save the contents of a
@@ -62,9 +62,9 @@ stdenv.mkDerivation {
       corrupt, you just loose the current file, not the whole archive.
     '';
     homepage = "https://www.fsarchiver.org/";
-    license = licenses.lgpl2;
+    license = lib.licenses.lgpl2;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "fsarchiver";
   };
 }

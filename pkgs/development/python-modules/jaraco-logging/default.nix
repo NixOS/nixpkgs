@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   tempora,
@@ -11,9 +10,7 @@
 buildPythonPackage rec {
   pname = "jaraco-logging";
   version = "3.4.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "jaraco_logging";
@@ -39,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jaraco.logging" ];
 
-  meta = with lib; {
+  meta = {
     description = "Support for Python logging facility";
     homepage = "https://github.com/jaraco/jaraco.logging";
     changelog = "https://github.com/jaraco/jaraco.logging/blob/v${version}/NEWS.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

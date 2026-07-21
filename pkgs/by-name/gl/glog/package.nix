@@ -38,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     # consumers of the CMake config file to fail at the configuration step.
     # Explicitly disabling unwind support sidesteps the issue.
     "-DWITH_UNWIND=OFF"
+    # Enable pkg-config support so that a `.pc` file is generated.
+    "-DWITH_PKGCONFIG=ON"
   ];
 
   doCheck = true;
@@ -75,6 +77,11 @@ stdenv.mkDerivation (finalAttrs: {
         ]
         ++ [
           "logging" # works around segfaults for now
+        ]
+        ++ lib.optionals (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian) [
+          # CHECK_STREQ failed: symbol == "non_inline_func" ((/build/source/build/symbolize_unittest+0x1000b840) vs. non_inline_func)
+          # TestWithPCInsideNonInlineFunction doesn't use TEST(), so can't exclude via GTEST_FILTER
+          "symbolize"
         ];
       excludedTestsRegex = lib.optionalString (
         excludedTests != [ ]
@@ -86,12 +93,12 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postCheck
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/google/glog";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     description = "Library for application-level logging";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       nh2
       r-burns
     ];

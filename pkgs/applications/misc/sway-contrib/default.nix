@@ -26,10 +26,10 @@ let
     hash = "sha256-/gWL0hA8hDjpK5YJxuZqmvo0zuVRQkhAkgHlI4JzNP8=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/OctopusET/sway-contrib";
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
   };
 in
 {
@@ -83,14 +83,11 @@ in
       fi
     '';
 
-    meta =
-      with lib;
-      meta
-      // {
-        description = "Helper for screenshots within sway";
-        maintainers = with maintainers; [ evils ];
-        mainProgram = "grimshot";
-      };
+    meta = meta // {
+      description = "Helper for screenshots within sway";
+      maintainers = [ ];
+      mainProgram = "grimshot";
+    };
   };
 
   inactive-windows-transparency =
@@ -103,7 +100,7 @@ in
 
       pname = "sway-${lname}";
 
-      format = "other";
+      pyproject = false;
       dontBuild = true;
       dontConfigure = true;
 
@@ -114,14 +111,11 @@ in
       '';
 
       meta =
-        with lib;
-        meta
-        // {
+
+        meta // {
           description = "It makes inactive sway windows transparent";
           mainProgram = "${lname}.py";
-          maintainers = with maintainers; [
-            evils # packaged this as a side-effect of grimshot but doesn't use it
-          ];
+          maintainers = [ ];
         };
     };
 

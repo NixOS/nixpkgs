@@ -13,33 +13,24 @@
   replaceVars,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cjdns";
-  version = "22.1";
+  version = "22.3";
 
   src = fetchFromGitHub {
     owner = "cjdelisle";
     repo = "cjdns";
-    tag = "cjdns-v${version}";
-    hash = "sha256-0imQrkcvIA+2Eq/zlC65USMR7T3OUKwQxrB1KtVexyU=";
+    tag = "cjdns-v${finalAttrs.version}";
+    hash = "sha256-A5KPcjFrCIYhT/6W+J4Nvb1y23cAgv9M6PWcyN43st4=";
   };
 
   patches = [
     (replaceVars ./system-libsodium.patch {
       libsodium_include_dir = "${libsodium.dev}/include";
     })
-    # Remove mkpasswd since it is failing the build
-    (fetchpatch {
-      url = "https://github.com/cjdelisle/cjdns/commit/6391dba3f5fdab45df4b4b6b71dbe9620286ce32.patch";
-      hash = "sha256-XVA4tdTVMLrV6zuGoBCkOgQq6NXh0x7u8HgmaxFeoRI=";
-    })
-    (fetchpatch {
-      url = "https://github.com/cjdelisle/cjdns/commit/436d9a9784bae85734992c2561c778fbd2f5ac32.patch";
-      hash = "sha256-THcYNGVbMx/xf3/5UIxEhz3OlODE0qiYgDBOlHunhj8=";
-    })
   ];
 
-  cargoHash = "sha256-f96y6ZW0HxC+73ts5re8GIo2aigQgK3gXyF7fMrcJ0o=";
+  cargoHash = "sha256-tob45/99svE0R1Kk7G1+H7waBWYmI9VKC8ffl3ZmdcU=";
 
   nativeBuildInputs = [
     which
@@ -81,9 +72,10 @@ rustPlatform.buildRustPackage rec {
   passthru.tests.basic = nixosTests.cjdns;
 
   meta = {
-    homepage = "https://github.com/cjdelisle/cjdns";
     description = "Encrypted networking for regular people";
+    homepage = "https://github.com/cjdelisle/cjdns";
+    changelog = "https://github.com/cjdelisle/cjdns/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

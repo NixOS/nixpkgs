@@ -2,26 +2,28 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildNpmPackage {
   pname = "coc-clangd";
-  version = "0.31.0";
+  version = "0-unstable-2026-07-01";
 
   src = fetchFromGitHub {
     owner = "clangd";
     repo = "coc-clangd";
-    # Upstream has no tagged versions
-    rev = "3a85a36f1ac08454deab1ed8d2553e0cae00cc1c";
-    hash = "sha256-uxK0nciLq4ZKFCoMJrO4dR0tuOBHYpgdZUc/KJ+JA/I=";
+    rev = "d745e149736451664ab448d08f3e9f83ec3cc70d";
+    hash = "sha256-juqZg1zsmQYdokvH83InUP1YpS8oybPhglapMas5z0A=";
   };
 
-  npmDepsHash = "sha256-93MEug2eEL/Hum+RFmXx0JYO6jUygF8QRmL5nTTFyrs=";
+  npmDepsHash = "sha256-OgNHgDSAqINNmskwhrWNh+TiHGRE4Y9SCFc0+RTs+CI=";
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "clangd extension for coc.nvim";
     homepage = "https://github.com/clangd/coc-clangd";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 }

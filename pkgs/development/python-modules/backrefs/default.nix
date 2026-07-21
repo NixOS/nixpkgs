@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "backrefs";
-  version = "6.0.1";
+  version = "6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "facelessuser";
     repo = "backrefs";
     tag = version;
-    hash = "sha256-7kB8z8pNU6eLuz4eSYXkSDL5npowlYsm0hjjh8zcAK0=";
+    hash = "sha256-y0scI6FBvjuvWLx1V3AHiGhtLB2Mk7jCx4hEjOv+ETA=";
   };
 
   build-system = [
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/facelessuser/backrefs";
     changelog = "https://github.com/facelessuser/backrefs/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

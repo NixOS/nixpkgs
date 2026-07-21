@@ -17,9 +17,9 @@ buildPythonPackage rec {
   # Only manual tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Console colouring for python";
-    homepage = "https://pypi.python.org/pypi/python-termstyle/0.1.10";
-    license = licenses.bsdOriginal;
+    homepage = "https://pypi.org/project/python-termstyle/";
+    license = lib.licenses.bsdOriginal;
   };
 }

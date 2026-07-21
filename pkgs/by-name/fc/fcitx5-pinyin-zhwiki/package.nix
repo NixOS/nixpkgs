@@ -5,20 +5,36 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "fcitx5-pinyin-zhwiki";
-  version = "0.2.5";
-  date = "20250823";
+  version = "0.3.0";
+  date = "20251223";
 
-  src = fetchurl {
-    url = "https://github.com/felixonmars/fcitx5-pinyin-zhwiki/releases/download/${finalAttrs.version}/zhwiki-${finalAttrs.date}.dict";
-    hash = "sha256-cD0FKxPvdQfcrfR/Fh4aNb+pK/IFiFLyvg8LhnYI+vs=";
-  };
+  srcs = [
+    (fetchurl {
+      url = "https://github.com/felixonmars/fcitx5-pinyin-zhwiki/releases/download/${finalAttrs.version}/web-slang-${finalAttrs.date}.dict";
+      hash = "sha256-J3sDjcty3IWrnQWIn4dEPL56/Qipl/hJMu02baP2094=";
+    })
+    (fetchurl {
+      url = "https://github.com/felixonmars/fcitx5-pinyin-zhwiki/releases/download/${finalAttrs.version}/zhwiki-${finalAttrs.date}.dict";
+      hash = "sha256-1/KKfeRhor1LGYBrOHqLvxfK9Byv3AplzqVX3lRO50Y=";
+    })
+    (fetchurl {
+      url = "https://github.com/felixonmars/fcitx5-pinyin-zhwiki/releases/download/${finalAttrs.version}/zhwikisource-${finalAttrs.date}.dict";
+      hash = "sha256-UXJ2uMAI6DK/hCHNuZEydPYMt0u/PfIv6RnCC+G2UPI=";
+    })
+    (fetchurl {
+      url = "https://github.com/felixonmars/fcitx5-pinyin-zhwiki/releases/download/${finalAttrs.version}/zhwiktionary-${finalAttrs.date}.dict";
+      hash = "sha256-bG4LPuJDdNgB1N6SNQy0cINRBWaQEMdNONSaptjkFHk=";
+    })
+  ];
 
   dontUnpack = true;
 
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 $src $out/share/fcitx5/pinyin/dictionaries/zhwiki.dict
+    for dict in $srcs; do
+      install -D $dict $out/share/fcitx5/pinyin/dictionaries/$(basename $(stripHash $dict) | sed 's/-[0-9]\{8\}//')
+    done
 
     runHook postInstall
   '';

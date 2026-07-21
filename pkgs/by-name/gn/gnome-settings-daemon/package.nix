@@ -2,6 +2,7 @@
   stdenv,
   lib,
   replaceVars,
+  fetchpatch,
   buildPackages,
   fetchurl,
   meson,
@@ -10,13 +11,12 @@
   gnome,
   perl,
   gettext,
-  gtk3,
   glib,
   libnotify,
   libgnomekbd,
   libpulseaudio,
   alsa-lib,
-  libcanberra-gtk3,
+  libcanberra,
   upower,
   colord,
   libgweather,
@@ -25,15 +25,14 @@
   geoclue2,
   systemd,
   libgudev,
-  libwacom,
   libxslt,
   libxml2,
   modemmanager,
   networkmanager,
   gnome-desktop,
   geocode-glib_2,
-  docbook_xsl,
-  wrapGAppsHook3,
+  docbook-xsl-nons,
+  wrapGAppsNoGuiHook,
   python3,
   tzdata,
   gcr_4,
@@ -44,11 +43,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-settings-daemon";
-  version = "48.1";
+  version = "50.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-settings-daemon/${lib.versions.major finalAttrs.version}/gnome-settings-daemon-${finalAttrs.version}.tar.xz";
-    hash = "sha256-OGCi6iFNy8tmAK56HjNYpTiSFQh7w+SkfO4/h7ruBi4=";
+    hash = "sha256-3SyXMJFPDs7KAindiowpQKV93rCAJDRVjUsWTXnP4Fw=";
   };
 
   patches = [
@@ -74,14 +73,13 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     libxml2
     libxslt
-    docbook_xsl
-    wrapGAppsHook3
+    docbook-xsl-nons
+    wrapGAppsNoGuiHook
     python3
     udevCheckHook
   ];
 
   buildInputs = [
-    gtk3
     glib
     gsettings-desktop-schemas
     modemmanager
@@ -91,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-desktop
     libpulseaudio
     alsa-lib
-    libcanberra-gtk3
+    libcanberra
     upower
     colord
     libgweather
@@ -99,7 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
     geocode-glib_2
     geoclue2
     libgudev
-    libwacom
     gcr_4
   ]
   ++ lib.optionals withSystemd [
@@ -133,9 +130,9 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
-    license = licenses.gpl2Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
+  meta = {
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 })

@@ -4,68 +4,65 @@
   fetchFromGitHub,
   versionCheckHook,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rclip";
-  version = "2.0.8";
+  version = "3.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yurijmikhalevich";
     repo = "rclip";
-    tag = "v${version}";
-    hash = "sha256-ScNyy5qWDskKgqxjfRU7y8WBCdThXTjlE3x0oIa8fhU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LiqhJNt6wSSmwJ6kQJQpIHXYjdQI9eR2rrqkYPZknrQ=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.11.12,<0.12.0" uv_build
+  '';
+
   build-system = with python3Packages; [
-    poetry-core
+    uv-build
   ];
 
   dependencies = with python3Packages; [
+    ftfy
+    huggingface-hub
     numpy
-    open-clip-torch
+    onnxruntime
     pillow
+    pillow-heif
+    regex
     requests
-    torch
-    torchvision
     tqdm
     rawpy
   ];
 
   pythonRelaxDeps = [
     "numpy"
-    "open_clip_torch"
     "pillow"
     "rawpy"
-    "torch"
-    "torchvision"
   ];
 
   pythonImportsCheck = [ "rclip" ];
 
   nativeCheckInputs = [
     versionCheckHook
+    python3Packages.jinja2
   ]
   ++ (with python3Packages; [ pytestCheckHook ]);
-  versionCheckProgramArg = "--version";
 
   disabledTestPaths = [
     # requires network
     "tests/e2e/test_rclip.py"
   ];
 
-  disabledTests = [
-    # requires network
-    "test_text_model_produces_the_same_vector_as_the_main_model"
-    "test_loads_text_model_when_text_processing_only_requested_and_checkpoint_exists"
-    "test_loads_full_model_when_text_processing_only_requested_and_checkpoint_doesnt_exist"
-  ];
-
   meta = {
     description = "AI-Powered Command-Line Photo Search Tool";
     homepage = "https://github.com/yurijmikhalevich/rclip";
-    changelog = "https://github.com/yurijmikhalevich/rclip/releases/tag/${src.tag}";
+    changelog = "https://github.com/yurijmikhalevich/rclip/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ iynaix ];
     mainProgram = "rclip";
   };
-}
+})

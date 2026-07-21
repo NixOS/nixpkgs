@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdwarf";
-  version = "2.1.0";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "davea42";
     repo = "libdwarf-code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Q+ke5vRSBFZirCIBu8M88LzBQW851kjkW4vUgE89ejQ=";
+    hash = "sha256-65jEnM+eJ7HnZlpEM2D67W0Xgb9B/aa4JhajowG0Z8o=";
   };
 
   nativeBuildInputs = [

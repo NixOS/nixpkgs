@@ -72,6 +72,13 @@ in
   );
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = config.services.nextcloud.config.dbtype != "sqlite";
+        message = "notify_push only supports Nextcloud's with either a Postgres or MariaDB database, not sqlite.";
+      }
+    ];
+
     systemd.services = {
       nextcloud-notify_push = {
         description = "Push daemon for Nextcloud clients";
@@ -159,27 +166,29 @@ in
       "::1" = [ cfgN.hostName ];
     };
 
-    services = lib.mkMerge [
-      {
-        nginx.virtualHosts.${cfgN.hostName}.locations."^~ /push/" = {
-          proxyPass = "http://unix:${cfg.socketPath}";
-          proxyWebsockets = true;
-          recommendedProxySettings = lib.mkDefault true;
-          extraConfig = # nginx
-            ''
-              # disable in case it was configured on a higher level
-              keepalive_timeout 0;
-              proxy_buffering off;
-            '';
+    services = {
+      nginx.virtualHosts.${cfgN.hostName}.locations."^~ /push/" = {
+        proxyPass = "http://unix:${cfg.socketPath}";
+        proxyWebsockets = true;
+        recommendedProxySettings = lib.mkDefault true;
+        extraConfig = # nginx
+          ''
+            # disable in case it was configured on a higher level
+            keepalive_timeout 0;
+            proxy_buffering off;
+          '';
+      };
+      nextcloud = {
+        extraApps = {
+          inherit (config.services.nextcloud.package.packages.apps)
+            notify_push
+            ;
         };
-      }
-
-      (lib.mkIf cfg.bendDomainToLocalhost {
-        nextcloud.settings.trusted_proxies = [
+        settings.trusted_proxies = lib.mkIf cfg.bendDomainToLocalhost [
           "127.0.0.1"
           "::1"
         ];
-      })
-    ];
+      };
+    };
   };
 }

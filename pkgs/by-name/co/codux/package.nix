@@ -16,7 +16,7 @@ let
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in
 
-appimageTools.wrapType2 rec {
+appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
@@ -31,7 +31,6 @@ appimageTools.wrapType2 rec {
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [
-      dit7ya
       kashw2
     ];
     mainProgram = "codux";

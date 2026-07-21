@@ -13,13 +13,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "pjsip";
-  version = "2.15.1";
+  version = "2.16";
 
   src = fetchFromGitHub {
     owner = "pjsip";
     repo = "pjproject";
     tag = finalAttrs.version;
-    hash = "sha256-9WzOIKWGy71OMzaPOp1P8/pvhHio2rDJOkH1VaNItjU=";
+    hash = "sha256-WDKkC/M8khhPaRLsAh6FXoUSTgCBK+RAFpEcB9+MBHc=";
   };
 
   postPatch = ''
@@ -130,13 +130,13 @@ stdenv.mkDerivation (finalAttrs: {
     ${(python3.withPackages (pkgs: [ pkgs.pjsua2 ])).interpreter} -c "import pjsua2" > $out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Multimedia communication library written in C, implementing standard based protocols such as SIP, SDP, RTP, STUN, TURN, and ICE";
     homepage = "https://pjsip.org/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ olynch ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ olynch ];
     mainProgram = "pjsua";
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     pkgConfigModules = [ "libpjproject" ];
   };
 })

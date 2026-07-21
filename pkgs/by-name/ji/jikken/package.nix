@@ -8,18 +8,18 @@
   pkg-config,
   openssl,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jikken";
-  version = "0.8.2";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "jikkenio";
     repo = "jikken";
-    rev = "v${version}";
-    hash = "sha256-8A9b9Ms/unv+qQRd5jiTV/6SJa6ZYLsE0fK97ohacPI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-j9Rmo9szQtTZU2O6YRhkjMr5pV8tflUdr5hgXqYQxjc=";
   };
 
-  cargoHash = "sha256-nwFTKol5phXFuDzAcnPoFq8UrrqMDE6NuitpXE5qJwU=";
+  cargoHash = "sha256-V7Qy+0l3UvW5bM2OV3haGVg3KWDaEiEMvg4wvpwwuk4=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -32,12 +32,12 @@ rustPlatform.buildRustPackage rec {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Powerful, source control friendly REST API testing toolkit";
     homepage = "https://jikken.io/";
-    changelog = "https://github.com/jikkenio/jikken/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vinnymeller ];
+    changelog = "https://github.com/jikkenio/jikken/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vinnymeller ];
     mainProgram = "jk";
   };
-}
+})

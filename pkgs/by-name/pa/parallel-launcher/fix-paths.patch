@@ -1,8 +1,8 @@
 diff --git a/src/core/retroarch.cpp b/src/core/retroarch.cpp
-index c2a2c47..97fa782 100644
+index 7502922..c6a572b 100644
 --- a/src/core/retroarch.cpp
 +++ b/src/core/retroarch.cpp
-@@ -102,7 +102,7 @@ static void loadConfig( std::map<string, string> &configs ) {
+@@ -103,7 +103,7 @@ static void loadConfig( std::map<string, string> &configs ) {
  
  	const fs::path basePath = RetroArch::getBasePath();
  	configs["system_directory"] = (basePath / _NFS("system")).u8string();
@@ -11,7 +11,7 @@ index c2a2c47..97fa782 100644
  	configs["savefile_directory"] = (basePath / _NFS("saves")).u8string();
  	configs["savestate_directory"] = (basePath / _NFS("states")).u8string();
  	configs["libretro_info_path"] = (basePath / _NFS("info")).u8string();
-@@ -110,7 +110,7 @@ static void loadConfig( std::map<string, string> &configs ) {
+@@ -111,7 +111,7 @@ static void loadConfig( std::map<string, string> &configs ) {
  #if defined(FLATPAK_VERSION)
  	configs["assets_directory"] = "/app/share/libretro/assets/";
  #elif defined(__linux__)
@@ -20,7 +20,7 @@ index c2a2c47..97fa782 100644
  	configs["osk_overlay_directory"] = (BaseDir::data() / "retro-data" / "overlays" / "keyboards").u8string();
  	configs["overlay_directory"] = (BaseDir::data() / "retro-data" / "overlays").u8string();
  	configs["audio_filter_dir"] = (BaseDir::data() / "retro-data" / "filters" / "audio").u8string();
-@@ -845,13 +845,7 @@ fs::path RetroArch::getBasePath() {
+@@ -866,13 +866,7 @@ fs::path RetroArch::getBasePath() {
  }
  
  fs::path RetroArch::getCorePath() {
@@ -35,7 +35,7 @@ index c2a2c47..97fa782 100644
  }
  
  fs::path RetroArch::getConfigPath() {
-@@ -866,7 +860,7 @@ fs::path RetroArch::getExePath() {
+@@ -887,7 +881,7 @@ fs::path RetroArch::getExePath() {
  #elif defined(FLATPAK_VERSION)
  	return BaseDir::program() / "retroarch";
  #else
@@ -45,27 +45,41 @@ index c2a2c47..97fa782 100644
  }
  
 diff --git a/src/main.cpp b/src/main.cpp
-index 3ca39b2..f3c14ba 100644
+index fbd4c92..91ef84e 100644
 --- a/src/main.cpp
 +++ b/src/main.cpp
-@@ -200,6 +200,7 @@ int main( int argc, char **argv ) {
+@@ -209,7 +209,7 @@ int main( int argc, char **argv ) {
  		fs::path( "/usr/local/share/parallel-launcher/translations/" ),
  		fs::path( "/usr/share/parallel-launcher/translations/" )
  #else
-+		fs::read_symlink( "/proc/self/exe" ).parent_path().parent_path() / "share/parallel-launcher/translations/",
- 		fs::path( "/usr/share/parallel-launcher/translations/" ),
+-		fs::path( "/usr/share/parallel-launcher/translations/" ),
++		fs::path( "@sharePath@/translations/" ),
  		fs::path( "/usr/local/share/parallel-launcher/translations/" ),
  		BaseDir::program() / "lang"
+ #endif
+diff --git a/src/plugins/discord-plugin.cpp b/src/plugins/discord-plugin.cpp
+index 055c0ee..7ce44fb 100644
+--- a/src/plugins/discord-plugin.cpp
++++ b/src/plugins/discord-plugin.cpp
+@@ -38,7 +38,7 @@ const DiscordPlugin &DiscordPlugin::tryLoad( bool *success ) noexcept {
+ 		return s_abi;
+ 	}
+ 
+-	void *handle = dlopen( (BaseDir::data() / "plugins" / "libdiscord-rpc.so").u8string().c_str(), RTLD_NOW );
++	void *handle = dlopen( "libdiscord-rpc.so", RTLD_NOW );
+ 	if( !handle ) {
+ 		if( success != nullptr ) *success = false;
+ 		return s_stub;
 diff --git a/src/polyfill/base-directory.cpp b/src/polyfill/base-directory.cpp
-index 720a754..db607ca 100644
+index 2dcc704..45970a4 100644
 --- a/src/polyfill/base-directory.cpp
 +++ b/src/polyfill/base-directory.cpp
-@@ -134,7 +134,7 @@ static Locations getLocations() {
+@@ -146,7 +146,7 @@ static Locations getLocations() {
  #if defined(FLATPAK_VERSION)
  		fs::path( "/app/share/parallel-launcher" )
  #elif defined(__linux__)
 -		fs::path( "/usr/share/parallel-launcher" )
-+		fs::read_symlink( "/proc/self/exe" ).parent_path().parent_path() / "share/parallel-launcher"
++		fs::path( "@sharePath@" )
  #endif
  	};
  }

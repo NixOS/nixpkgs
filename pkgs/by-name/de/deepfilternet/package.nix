@@ -5,14 +5,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deepfilternet";
   version = "0.5.6";
 
   src = fetchFromGitHub {
     owner = "Rikorose";
     repo = "DeepFilterNet";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-5bYbfO1kmduNm9YV5niaaPvRIDRmPt4QOX7eKpK+sWY=";
   };
 
@@ -40,6 +40,6 @@ rustPlatform.buildRustPackage rec {
       asl20
     ];
     maintainers = with lib.maintainers; [ ralismark ];
-    changelog = "https://github.com/Rikorose/DeepFilterNet/releases/tag/${src.rev}";
+    changelog = "https://github.com/Rikorose/DeepFilterNet/releases/tag/${finalAttrs.src.rev}";
   };
-}
+})

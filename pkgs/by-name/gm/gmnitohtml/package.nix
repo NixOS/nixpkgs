@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gmnitohtml";
   version = "0.1.3";
 
   src = fetchFromSourcehut {
     owner = "~adnano";
     repo = "gmnitohtml";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-9lsZgh/OyxAu1rsixD6XUgQzR1xDGOxGt0sR12zrs2M=";
   };
   vendorHash = "sha256-ppplXXqb2DM/AU+B+LefndrBiiTgCRNw6hEupfeWr+o=";
@@ -44,7 +44,7 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.sr.ht/~adnano/gmnitohtml";
     changelog = "https://git.sr.ht/~adnano/gmnitohtml/log";
     description = "Gemini text to HTML converter";
@@ -52,11 +52,11 @@ buildGoModule rec {
       he gmnitohtml utility reads Gemini text from the standard input and writes
       HTML to the standard output.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       jk
       sikmir
     ];
     mainProgram = "gmnitohtml";
   };
-}
+})

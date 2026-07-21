@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchurl,
-  fetchpatch2,
+  fetchpatch,
   gettext,
   meson,
   mesonEmulatorHook,
@@ -35,7 +35,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tinysparql";
-  version = "3.9.2";
+  version = "3.11.1";
 
   outputs = [
     "out"
@@ -47,8 +47,20 @@ stdenv.mkDerivation (finalAttrs: {
     url =
       with finalAttrs;
       "mirror://gnome/sources/tinysparql/${lib.versions.majorMinor version}/tinysparql-${version}.tar.xz";
-    hash = "sha256-FM4DkCQTXhgQIrzOSxqtLgA3fdnH2BK5g5HM/HVtrY4=";
+    hash = "sha256-z9RgIe4VFK1DXnFPeqHsenh8f1FqlPTHQ4iX7j1uyh4=";
   };
+
+  patches = [
+    # sqlite changed the precision of float <-> text conversions, causing
+    # failures in the test suite. patch here until this appears in a release.
+    # https://gitlab.gnome.org/GNOME/tinysparql/-/work_items/496
+    # https://gitlab.gnome.org/GNOME/tinysparql/-/merge_requests/811
+    (fetchpatch {
+      name = "tinysparql-sqlite-double-value-precision.patch";
+      url = "https://gitlab.gnome.org/GNOME/tinysparql/-/commit/47d5bf9313d0ccb1feb7169eed9047d0e1597a39.patch";
+      hash = "sha256-k6eELZCEEtD8s7GiMckjTlf6QcAiUNY1Mraw7GROsm4=";
+    })
+  ];
 
   strictDeps = true;
 
@@ -112,14 +124,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  patches = [
-    (fetchpatch2 {
-      name = "make-dbus-dep-optional.patch";
-      url = "https://gitlab.gnome.org/GNOME/tinysparql/-/commit/31b5a793cd40cdce032e0f7d7c3ef7841c6e3691.patch?full_index=1";
-      hash = "sha256-YoWJEa2bFIjZdPW9pJ3iHTxi0dvveYDjKaDokcIvnj8=";
-    })
-  ];
-
   postPatch = ''
     patchShebangs \
       utils/data-generators/cc/generate
@@ -178,13 +182,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tracker.gnome.org/";
     description = "Desktop-neutral user information store, search tool and indexer";
     mainProgram = "tinysparql";
-    teams = [ teams.gnome ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     pkgConfigModules = [
       "tracker-sparql-3.0"
       "tinysparql-3.0"

@@ -1,6 +1,5 @@
 {
   lib,
-  pythonOlder,
   fetchPypi,
   buildPythonPackage,
   rustPlatform,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pycddl";
   version = "0.6.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -44,6 +41,8 @@ buildPythonPackage rec {
     hash = "sha256-cEpvkSqe/wRCxEajmM148jbo6a346x2t81pMRpKEJyE=";
   };
 
+  env.PYO3_USE_ABI3_FORWARD_COMPATIBILITY = 1;
+
   nativeCheckInputs = [
     hypothesis
     pytestCheckHook
@@ -58,11 +57,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycddl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for the Rust cddl crate";
     homepage = "https://gitlab.com/tahoe-lafs/pycddl";
     changelog = "https://gitlab.com/tahoe-lafs/pycddl/-/tree/v${version}#release-notes";
-    license = licenses.mit;
-    maintainers = [ maintainers.exarkun ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.exarkun ];
   };
 }

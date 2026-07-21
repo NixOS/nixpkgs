@@ -3,7 +3,6 @@
   pkgs,
   pulumiPackages,
   buildPythonPackage,
-  pythonOlder,
   hatchling,
   protobuf,
   grpcio,
@@ -37,8 +36,6 @@ buildPythonPackage {
   ];
 
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   build-system = [ hatchling ];
 
@@ -97,7 +94,6 @@ buildPythonPackage {
     homepage = "https://www.pulumi.com";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      teto
       tie
     ];
   };

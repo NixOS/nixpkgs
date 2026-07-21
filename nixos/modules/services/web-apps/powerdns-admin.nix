@@ -84,7 +84,7 @@ in
     systemd.services.powerdns-admin = {
       description = "PowerDNS web interface";
       wantedBy = [ "multi-user.target" ];
-      after = [ "networking.target" ];
+      after = [ "network.target" ];
 
       environment.FLASK_CONF = builtins.toFile "powerdns-admin-config.py" configText;
       environment.PYTHONPATH = pkgs.powerdns-admin.pythonPath;

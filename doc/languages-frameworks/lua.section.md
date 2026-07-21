@@ -103,7 +103,7 @@ final: prev: {
   lua = prev.lua.override {
     packageOverrides = luaself: luaprev: {
 
-      luarocks-nix = luaprev.luarocks-nix.overrideAttrs (oa: {
+      luarocks-nix = luaprev.luarocks-nix.overrideAttrs (old: {
         pname = "luarocks-nix";
         src = /home/my_luarocks/repository;
       });
@@ -160,6 +160,14 @@ the package `luarocks-packages-updater`:
 ```sh
 
 nix-shell -p luarocks-packages-updater --run luarocks-packages-updater
+```
+
+To add a new package without updating all packages, run
+
+```sh
+
+nix-shell -p luarocks-packages-updater
+luarocks-packages-updater add <package-name>
 ```
 
 [luarocks2nix](https://github.com/nix-community/luarocks) is a tool capable of generating nix derivations from both rockspec and src.rock (and favors the src.rock).
@@ -232,7 +240,7 @@ The following is an example:
         vyp
         lblasc
       ];
-      license.fullName = "MIT/X11";
+      license = lib.licenses.mit;
     };
   };
 }

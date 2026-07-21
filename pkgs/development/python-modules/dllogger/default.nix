@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   wheel,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "dllogger";
   version = "1.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
@@ -38,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dllogger" ];
 
-  meta = with lib; {
+  meta = {
     description = "Logging tool for deep learning";
     homepage = "https://github.com/NVIDIA/dllogger";
     changelog = "https://github.com/NVIDIA/dllogger/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

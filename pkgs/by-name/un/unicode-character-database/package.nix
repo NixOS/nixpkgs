@@ -7,11 +7,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "unicode-character-database";
-  version = "16.0.0";
+  version = "17.0.0";
 
   src = fetchurl {
-    url = "https://www.unicode.org/Public/zipped/${version}/UCD.zip";
-    sha256 = "sha256-yG3YHysUpDsMwGSqX4mqckE4aAHjXFnHmE5XmDJjTrI=";
+    url = "https://www.unicode.org/Public/${version}/ucd/UCD.zip";
+    sha256 = "sha256-IGbRkJsuqTkWzgktocDuSAjqPvhAfJS08U9bfrJj0o4=";
   };
 
   nativeBuildInputs = [
@@ -30,10 +30,10 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Unicode Character Database";
     homepage = "https://www.unicode.org/";
-    license = licenses.unicode-dfs-2016;
-    platforms = platforms.all;
+    license = lib.licenses.unicode-dfs-2016;
+    platforms = lib.platforms.all;
   };
 }

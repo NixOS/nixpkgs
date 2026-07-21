@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "coreaction";
-  version = "5.0.0";
+  version = "5.0.1";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
     repo = "coreaction";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-R/pzudaxs85etbI4hh2NwHNtO7EqI+vgJALY/4rIvrs=";
+    hash = "sha256-93/1emCLXP3hHDGdzjF5horWkpG51yM5p68RUs1yoVg=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "coreaction";
     homepage = "https://gitlab.com/cubocore/coreapps/coreaction";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

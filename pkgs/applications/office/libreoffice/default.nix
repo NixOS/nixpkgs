@@ -1,12 +1,13 @@
 {
   stdenv,
-  runCommand,
   fetchurl,
   fetchgit,
   fetchpatch2,
+  fetchFromGitLab,
   lib,
   pam,
-  python311,
+  python3,
+  python3Packages,
   libxslt,
   perl,
   perlPackages,
@@ -28,6 +29,8 @@
   flex,
   zip,
   unzip,
+  fast-float,
+  md4c,
   gtk3,
   libmspack,
   getopt,
@@ -35,10 +38,21 @@
   cairo,
   which,
   icu,
+  boost,
+  boost188,
   jdk21,
   ant,
   cups,
-  xorg,
+  libixion,
+  libxtst,
+  libxi,
+  libxinerama,
+  libxext,
+  libxdmcp,
+  libxaw,
+  libx11,
+  libpthread-stubs,
+  libxshmfence,
   fontforge,
   jre21_minimal,
   openssl,
@@ -66,10 +80,11 @@
   nspr,
   libwpg,
   dbus-glib,
-  clucene_core_2,
+  clucene-core_2,
   libcdr,
   lcms2,
-  unixODBC,
+  unixodbc,
+  mdds,
   sane-backends,
   mythes,
   libexttextcat,
@@ -93,11 +108,14 @@
   ncurses,
   libepoxy,
   gpgme,
+  gpgmepp,
   libwebp,
   abseil-cpp,
+  libfreehand,
   libepubgen,
   libetonyek,
   libpng,
+  liborcus,
   libxcrypt,
   langs ? [
     "ar"
@@ -148,7 +166,7 @@
   liberation-sans-narrow,
   liberation_ttf_v2,
   libertine,
-  libertine-g,
+  linux-libertine-g,
   noto-fonts,
   noto-fonts-lgc-plus,
   noto-fonts-cjk-sans,
@@ -156,12 +174,14 @@
   lp_solve,
   xmlsec,
   libcmis,
+  frozen-containers,
 }:
 
 assert builtins.elem variant [
   "fresh"
   "still"
   "collabora"
+  "collabora-coda"
 ];
 
 let
@@ -176,15 +196,6 @@ let
     optionalString
     ;
 
-  notoSubset =
-    suffixes:
-    runCommand "noto-fonts-subset" { } ''
-      mkdir -p "$out/share/fonts/noto/"
-      ${concatMapStrings (x: ''
-        cp "${noto-fonts}/share/fonts/noto/NotoSans${x}["*.[ot]tf "$out/share/fonts/noto/"
-      '') suffixes}
-    '';
-
   fontsConf = makeFontsConf {
     fontDirectories = [
       amiri
@@ -196,10 +207,9 @@ let
       liberation-sans-narrow
       liberation_ttf_v2
       libertine
-      libertine-g
-      # Font priority issues in some tests in Still
+      linux-libertine-g
       noto-fonts-lgc-plus
-      (if variant == "fresh" then noto-fonts else (notoSubset [ "Arabic" ]))
+      noto-fonts
       noto-fonts-cjk-sans
     ];
   };
@@ -213,6 +223,90 @@ let
     ];
   };
 
+  mdds_2_1 = mdds.overrideAttrs {
+    version = "2.1.1";
+    src = fetchFromGitLab {
+      owner = "mdds";
+      repo = "mdds";
+      rev = "2.1.1";
+      hash = "sha256-a412LpgDiYM8TMToaUrTlHtblYS1HehzrDOwvIAAxiA=";
+    };
+  };
+
+  # required for libreoffice-collabora version 25.04.9-4
+  libixion_0_19 = libixion.overrideAttrs {
+    version = "0.19.0";
+
+    src = fetchFromGitLab {
+      owner = "ixion";
+      repo = "ixion";
+      rev = "0.19.0";
+      hash = "sha256-BrexWRaxrLTWuoU62kqws3tlSqVOHecSV5MXc4ZezFs=";
+    };
+
+    buildInputs = [
+      boost188
+      mdds_2_1
+      python3
+    ];
+
+    patches = [
+      # fix build with gcc 15, Add a missing <cstdint> include
+      (fetchpatch2 {
+        url = "https://gitlab.com/ixion/ixion/-/merge_requests/70.patch";
+        hash = "sha256-FzU/aejcMktrDQql5pzobiq6BJXryIXQXZTBWCkyqtU=";
+      })
+    ];
+  };
+
+  # required for libreoffice-collabora version 25.04.9-4
+  liborcus_0_19 = liborcus.overrideAttrs {
+    version = "0.19.2";
+
+    src = fetchFromGitLab {
+      owner = "orcus";
+      repo = "orcus";
+      rev = "0.19.2";
+      hash = "sha256-+9C52H99c/kL5DEIoXV+WcLnTftRbicRLQN/FdIXBw8=";
+    };
+
+    buildInputs = [
+      boost188
+      libixion_0_19
+      mdds_2_1
+      python3
+      zlib
+    ];
+
+    patches = [
+      # fix build with gcc 15, Add missing <cstdint> includes
+      (fetchpatch2 {
+        url = "https://gitlab.com/orcus/orcus/-/merge_requests/200.patch";
+        hash = "sha256-CZVw1+ri6UO56Bg/Y27W6G8JkGU6xDInd7fABr6i+7g=";
+      })
+    ];
+  };
+
+  # required for libreoffice-still version 25.8.5.2
+  liborcus_0_20 = liborcus.overrideAttrs {
+    version = "0.20.1";
+
+    src = fetchFromGitLab {
+      owner = "orcus";
+      repo = "orcus";
+      rev = "0.20.1";
+      hash = "sha256-+YTK0EPgGHN4yKurJjuWWrAHzgtbc1dOvtppcvuRei4=";
+    };
+
+    buildInputs = [
+      boost188
+      libixion
+      mdds
+      python3
+      zlib
+    ];
+  };
+
   importVariant = f: import (./. + "/src-${variant}/${f}");
   # Update these files with:
   # nix-shell maintainers/scripts/update.nix --argstr package libreoffice-$VARIANT.unwrapped
@@ -221,16 +315,7 @@ let
     main = importVariant "main.nix";
     help = importVariant "help.nix";
     translations = importVariant "translations.nix";
-    deps = (importVariant "deps.nix") ++ [
-      # TODO: Why is this needed?
-      (rec {
-        name = "unowinreg.dll";
-        url = "https://dev-www.libreoffice.org/extern/${md5name}";
-        sha256 = "1infwvv1p6i21scywrldsxs22f62x85mns4iq8h6vr6vlx3fdzga";
-        md5 = "185d60944ea767075d27247c3162b3bc";
-        md5name = "${md5}-${name}";
-      })
-    ];
+    deps = importVariant "deps.nix";
   };
   srcs = {
     third_party = map (
@@ -246,26 +331,29 @@ let
     help = srcsAttributes.help { inherit fetchurl fetchgit; };
   };
 
+  kdeDependencies = [
+    qt6.qtbase.out # has a dev output but you cannot find the headers there
+    qt6.qtmultimedia.out
+    kdePackages.kconfig
+    kdePackages.kcoreaddons
+    kdePackages.ki18n
+    kdePackages.kio
+    kdePackages.kwindowsystem
+  ];
+  mkKdeDeps =
+    pkgs: func:
+    symlinkJoin {
+      name = "libreoffice-kde-dependencies-${version}";
+      paths = flatten (
+        map (e: [
+          (func e)
+        ]) pkgs
+      );
+    };
   # See `postPatch` for details
-  kdeDeps = symlinkJoin {
-    name = "libreoffice-kde-dependencies-${version}";
-    paths = flatten (
-      map
-        (e: [
-          (getDev e)
-          (getLib e)
-        ])
-        [
-          qt6.qtbase
-          qt6.qtmultimedia
-          kdePackages.kconfig
-          kdePackages.kcoreaddons
-          kdePackages.ki18n
-          kdePackages.kio
-          kdePackages.kwindowsystem
-        ]
-    );
-  };
+  kdeDepsIncludes = mkKdeDeps kdeDependencies getDev;
+  kdeDepsLibs = mkKdeDeps kdeDependencies getLib;
+
   tarballPath = "external/tarballs";
 
 in
@@ -285,7 +373,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   ''
   + (
-    if (variant != "collabora") then
+    if (variant != "collabora" && variant != "collabora-coda") then
       ''
         ln -sv ${srcs.help} $sourceRoot/${tarballPath}/${srcs.help.name}
         ln -svf ${srcs.translations} $sourceRoot/${tarballPath}/${srcs.translations.name}
@@ -311,26 +399,52 @@ stdenv.mkDerivation (finalAttrs: {
     # Don't detect Qt paths from qmake, so our patched-in onese are used
     ./dont-detect-qt-paths-from-qmake.patch
 
+    # Fix build with Poppler 26.02
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/25.8.7-2/fix_build_with_poppler_26.02.0.patch";
+      hash = "sha256-IInhSoqTemDITB+AtkvVa9eGbodTbUGSpMMpC9N/mmg=";
+    })
+    # Fix build with Poppler 26.04
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/25.8.7-2/fix_build_with_poppler_26.04.0.patch";
+      hash = "sha256-I9owj/NTCTi6ISszuasH410NLlhunPn/Ig22tenu8tw=";
+    })
+    # Fix build with Poppler 26.05
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/25.8.7-2/fix_build_with_poppler_26.05.0.patch";
+      hash = "sha256-7wdiciTf/LrTk0MibBBYGliWRCvK1rtTGESgH7db1I4=";
+    })
+    # Fix build with Poppler 26.06
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/25.8.7-3/fix_build_with_poppler_26.06.0.patch";
+      hash = "sha256-j66IsrzaqQ55MRVzhlw25guuoDtxx1D4XeJsBhgWP2c=";
+    })
+  ]
+  ++ lib.optionals (variant != "fresh") [
+    # Fix build with Poppler 26.01
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/25.8.7-2/fix_build_with_poppler_26.01.0.patch";
+      hash = "sha256-5JTTvJFIV5MG0Gz7y46wAr3q9tWdSVoZ9TJQlMJVqBc=";
+    })
+  ]
+  ++ lib.optionals (variant != "collabora" && variant != "collabora-coda") [
     # Revert part of https://github.com/LibreOffice/core/commit/6f60670877208612b5ea320b3677480ef6508abb that broke zlib linking
     ./readd-explicit-zlib-link.patch
-
   ]
-  ++ lib.optionals (lib.versionOlder version "25.8") [
-    # Backport patch to fix build with Poppler 25.05
+  ++ lib.optionals (variant == "collabora" || variant == "collabora-coda") [
+    # Backport patch to fix build with Poppler 25.09
     (fetchpatch2 {
-      url = "https://github.com/LibreOffice/core/commit/0ee2636304ac049f21415c67e92040f7d6c14d35.patch";
+      url = "https://github.com/LibreOffice/core/commit/7848e02819c007026952a3fdc9da0961333dc079.patch";
       includes = [ "sdext/*" ];
-      hash = "sha256-8yipl5ln1yCNfVM8SuWowsw1Iy/SXIwbdT1ZfNw4cJA=";
+      hash = "sha256-Nw6GFmkFy13w/ktCxw5s7SHL34auP1BQ9JvQnQ65aVU=";
     })
-  ]
-  ++ lib.optionals (lib.versionOlder version "24.8") [
+
+    # Fix build with Poppler 25.10
     (fetchpatch2 {
-      name = "icu74-compat.patch";
-      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-fresh/-/raw/main/libreoffice-7.5.8.2-icu-74-compatibility.patch?ref_type=heads.patch";
-      hash = "sha256-OGBPIVQj8JTYlkKywt4QpH7ULAzKmet5jTLztGpIS0Y=";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/f5241554e4a0f6fd95ac4e5cc398a30243407e6a/fix_build_with_poppler_25.10.patch";
+      hash = "sha256-lbPOkc1HeT5Qsp6XfVyVJtmvSL68qTrmbd3q9lvKSu8=";
     })
-  ]
-  ++ lib.optionals (variant == "collabora") [
+
     ./fix-unpack-collabora.patch
   ];
 
@@ -343,7 +457,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix this path to point to where the headers can actually be found instead.
     substituteInPlace configure.ac --replace-fail \
       'GPGMEPP_CFLAGS=-I/usr/include/gpgme++' \
-      'GPGMEPP_CFLAGS=-I${gpgme.dev}/include/gpgme++'
+      'GPGMEPP_CFLAGS=-I${lib.getDev gpgmepp}/include/gpgme++'
 
     # Fix for Python 3.12
     substituteInPlace configure.ac --replace-fail distutils.sysconfig sysconfig
@@ -367,7 +481,7 @@ stdenv.mkDerivation (finalAttrs: {
     perlPackages.ArchiveZip
     perlPackages.IOCompress
     pkg-config
-    python311
+    python3
     unzip
     zip
   ]
@@ -377,6 +491,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withJava [
     ant
     jdk21
+  ]
+  ++ optionals (lib.versionAtLeast version "26.2.1.2") [
+    python3Packages.afdko
   ];
 
   buildInputs =
@@ -390,9 +507,10 @@ stdenv.mkDerivation (finalAttrs: {
       coinmp
       abseil-cpp
       bluez5
+      boost
       box2d_2
       cairo
-      clucene_core_2
+      clucene-core_2
       cppunit
       cups
       curl
@@ -407,6 +525,7 @@ stdenv.mkDerivation (finalAttrs: {
       glm
       adwaita-icon-theme
       gpgme
+      gpgmepp
       graphite2
       gtk3
       (harfbuzz.override { withIcu = true; })
@@ -416,18 +535,19 @@ stdenv.mkDerivation (finalAttrs: {
       libGL
       libGLU
       libtool
-      xorg.libX11
-      xorg.libXaw
-      xorg.libXdmcp
-      xorg.libXext
-      xorg.libXi
-      xorg.libXinerama
-      xorg.libXtst
+      libx11
+      libxaw
+      libxdmcp
+      libxext
+      libxi
+      libxinerama
+      libxtst
       libabw
       libargon2
       libatomic_ops
       libcdr
       libcmis
+      libfreehand
       libe-book
       libepoxy
       libepubgen
@@ -438,7 +558,7 @@ stdenv.mkDerivation (finalAttrs: {
       libmspack
       libmwaw
       libodfgen
-      xorg.libpthreadstubs
+      libpthread-stubs
       librdf_redland
       librevenge
       librsvg
@@ -449,11 +569,12 @@ stdenv.mkDerivation (finalAttrs: {
       libwps
       libxcrypt
       libxml2
-      xorg.libxshmfence
+      libxshmfence
       libxslt
       libzmf
       libwebp
       lp_solve
+      mdds
       mythes
       ncurses
       neon
@@ -464,13 +585,14 @@ stdenv.mkDerivation (finalAttrs: {
       pam
       poppler
       libpq
-      python311
+      python3
       sane-backends
-      unixODBC
+      unixodbc
       util-linux
       which
       xmlsec
       zlib
+      frozen-containers
     ]
     ++ optionals kdeIntegration [
       qt6.qtbase
@@ -479,6 +601,20 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ optionals withJava [
       jre'
+    ]
+    ++ optionals (variant == "collabora" || variant == "collabora-coda") [
+      fast-float
+      liborcus_0_19
+      mdds_2_1
+      md4c
+    ]
+    ++ optionals (variant == "still") [
+      liborcus_0_20
+    ]
+    ++ optionals (variant == "fresh") [
+      fast-float
+      liborcus
+      md4c
     ];
 
   preConfigure = ''
@@ -506,10 +642,10 @@ stdenv.mkDerivation (finalAttrs: {
     # The 2nd option is not very Nix'y, but I'll take robust over nice any day.
     # Additionally, it's much easier to fix if LO breaks on the next upgrade (just
     # add the missing dependencies to it).
-    export QT6INC=${kdeDeps}/include
-    export QT6LIB=${kdeDeps}/lib
-    export KF6INC="${kdeDeps}/include ${kdeDeps}/include/KF6"
-    export KF6LIB=${kdeDeps}/lib
+    export QT6INC=${kdeDepsIncludes}/include
+    export QT6LIB=${kdeDepsLibs}/lib
+    export KF6INC="${kdeDepsIncludes}/include ${kdeDepsIncludes}/include/KF6"
+    export KF6LIB=${kdeDepsLibs}/lib
   '';
 
   configureFlags = [
@@ -521,6 +657,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-buildconfig-recorded"
 
     (lib.withFeature withHelp "help")
+    "--with-boost=${getDev boost}"
+    "--with-boost-libdir=${getLib boost}/lib"
     "--with-vendor=NixOS"
     "--disable-report-builder"
     "--disable-online-update"
@@ -547,28 +685,31 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeature withFonts "fonts")
     "--without-doxygen"
 
+    "--with-system-afdko"
     "--with-system-cairo"
     "--with-system-coinmp"
+    "--with-system-fast-float"
     "--with-system-headers"
     "--with-system-libabw"
     "--with-system-libcmis"
+    "--with-system-libfreehand"
     "--with-system-libepubgen"
     "--with-system-libetonyek"
     "--with-system-liblangtag"
     "--with-system-libs"
     "--with-system-libwps"
     "--with-system-lpsolve"
+    "--with-system-mdds"
     "--with-system-openldap"
     "--with-system-openssl"
     "--with-system-orcus"
     "--with-system-postgresql"
     "--with-system-xmlsec"
+    "--with-system-frozen"
 
     # TODO: package these as system libraries
     "--without-system-altlinuxhyph"
-    "--without-system-frozen"
     "--without-system-libeot"
-    "--without-system-libfreehand"
     "--without-system-libmspub"
     "--without-system-libnumbertext"
     "--without-system-libpagemaker"
@@ -576,12 +717,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-system-libqxp"
     "--without-system-dragonbox"
     "--without-system-libfixmath"
-
-    # TODO: bump this to 0.20
-    "--without-system-orcus"
-
-    # TODO: bump this to 3.0 (#382851)
-    "--without-system-mdds"
 
     # requires an oddly specific, old version
     "--without-system-hsqldb"
@@ -592,32 +727,20 @@ stdenv.mkDerivation (finalAttrs: {
     # is packaged but headers can't be found because there is no pkg-config file
     "--without-system-zxcvbn"
 
-    # cannot find headers, no idea why
-    "--without-system-boost"
+    "--without-system-java-websocket"
   ]
   ++ optionals kdeIntegration [
     "--enable-kf6"
     "--enable-qt6"
   ]
   ++ optionals withJava [
+    "--with-system-rhino"
+    "--with-rhino-jar=${rhino}/share/java/js.jar"
+
     "--with-system-beanshell"
     "--with-ant-home=${ant.home}"
     "--with-beanshell-jar=${bsh}"
-  ]
-  ++ (
-    if variant == "fresh" || variant == "collabora" then
-      [
-        "--with-system-rhino"
-        "--with-rhino-jar=${rhino}/share/java/js.jar"
-
-        "--without-system-java-websocket"
-      ]
-    else
-      [
-        # our Rhino is too new for older versions
-        "--without-system-rhino"
-      ]
-  );
+  ];
 
   env = {
     # FIXME: this is a hack, because the right cflags are not being picked up
@@ -640,6 +763,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   preCheck = ''
     export HOME=$(pwd)
+  ''
+  + lib.optionalString (variant == "collabora" || variant == "collabora-coda") ''
+    export XDG_RUNTIME_DIR=$(mktemp -d)
+
+    # tests try to access x11 and fail
+    export GST_GL_WINDOW=dummy
+    export GST_VIDEOSINK=fakesink
+    export GST_AUDIOSINK=fakesink
   '';
 
   checkTarget = concatStringsSep " " [
@@ -648,7 +779,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--keep-going" # easier to debug test failures
   ];
 
-  postInstall = optionalString (variant != "collabora") ''
+  postInstall = optionalString (variant != "collabora" && variant != "collabora-coda") ''
     mkdir -p $out/{include,share/icons}
 
     cp -r include/LibreOfficeKit $out/include/
@@ -674,12 +805,14 @@ stdenv.mkDerivation (finalAttrs: {
   # Wrapping is done in ./wrapper.nix
   dontWrapQtApps = true;
 
+  __structuredAttrs = true;
+
   strictDeps = true;
 
   passthru = {
     inherit srcs;
     jdk = if withJava then jre' else null;
-    python = python311; # for unoconv
+    python = python3; # for unoconv
     updateScript = [
       ./update.sh
       # Pass it this file name as argument
@@ -699,7 +832,7 @@ stdenv.mkDerivation (finalAttrs: {
       gst-plugins-base
       gst-plugins-good
       gst-plugins-ugly
-      gstreamer
+      gstreamer.out
     ];
     qmlPackages = [
       kdePackages.ki18n

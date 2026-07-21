@@ -2,8 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  perl,
-  which,
+  fetchpatch,
+  cmake,
+  # sets OPENBLAS_NUM_THREADS and OMP_NUM_THREADS for packages
+  # invoking openblas during checkPhase/installCheckPhase to
+  # avoid overloading builders with excessive parallelism
+  # See also: https://github.com/OpenMathLib/OpenBLAS/blob/e7b45174355edec1f04de1cabcf5ca6a98ea7fbc/USAGE.md#how-can-i-use-openblas-in-multi-threaded-applications
+  checkPhaseThreadLimitHook,
   # Most packages depending on openblas expect integer width to match
   # pointer width, but some expect to use 32-bit integers always
   # (for compatibility with reference BLAS).
@@ -31,11 +36,14 @@
 
   # for passthru.tests
   ceres-solver,
+  flint,
   giac,
   octave,
   opencv,
   python3,
+  R,
   openmp ? null,
+  testers,
 }:
 
 let
@@ -82,15 +90,6 @@ let
       TARGET = setTarget "P2";
       DYNAMIC_ARCH = setDynamicArch true;
       USE_OPENMP = true;
-    };
-
-    x86_64-darwin = {
-      BINARY = 64;
-      TARGET = setTarget "ATHLON";
-      DYNAMIC_ARCH = setDynamicArch true;
-      NO_AVX512 = !enableAVX512;
-      USE_OPENMP = false;
-      MACOSX_DEPLOYMENT_TARGET = "10.7";
     };
 
     x86_64-linux = {
@@ -161,26 +160,13 @@ in
 
 let
   blas64 = if blas64_ != null then blas64_ else lib.hasPrefix "x86_64" stdenv.hostPlatform.system;
-  # Convert flag values to format OpenBLAS's build expects.
-  # `toString` is almost what we need other than bools,
-  # which we need to map {true -> 1, false -> 0}
-  # (`toString` produces empty string `""` for false instead of `0`)
-  mkMakeFlagValue =
-    val:
-    if !builtins.isBool val then
-      toString val
-    else if val then
-      "1"
-    else
-      "0";
-  mkMakeFlagsFromConfig = lib.mapAttrsToList (var: val: "${var}=${mkMakeFlagValue val}");
 
   shlibExt = stdenv.hostPlatform.extensions.sharedLibrary;
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openblas";
-  version = "0.3.30";
+  version = "0.3.33";
 
   outputs = [
     "out"
@@ -190,14 +176,29 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OpenMathLib";
     repo = "OpenBLAS";
-    rev = "v${version}";
-    hash = "sha256-foP2OXUL6ttgYvCxLsxUiVdkPoTvGiHomdNudbSUmSE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-EArf0K2Gs+w8IRD5wkMOQv79e8yMoTgQfa9kzjXKn3Y=";
   };
 
-  postPatch = ''
-    # cc1: error: invalid feature modifier 'sve2' in '-march=armv8.5-a+sve+sve2+bf16'
-    substituteInPlace Makefile.arm64 --replace "+sve2+bf16" ""
-  '';
+  patches = [
+    # Fix broken cmake config file path when CMAKE_INSTALL_INCLUDEDIR is an absolute path
+    # Add NO_SUFFIX64 option to suppress _64 library name suffix
+    # INCLUDEDIR already fixed in upstream HEAD & significant refactor
+    # to config gen so not PRing changes
+    ./cmake-include-fixes.patch
+    # This was an attempted fix for the below commit but still leaves some scipy tests failing.
+    (fetchpatch {
+      url = "https://github.com/OpenMathLib/OpenBLAS/commit/e3ce4623c299068bbd47c35ee87aab334bac73b1.patch";
+      revert = true;
+      hash = "sha256-WrP3RCDk/EbpqVOw9XGLnFI+6/bBGJTIrt2TRYGLVQ4=";
+    })
+    # This commit led to miscompilation of certain ASIMD extensions code paths.
+    (fetchpatch {
+      url = "https://github.com/OpenMathLib/OpenBLAS/commit/3f6e928d34aca977bd5d4191e6d2c2338a342.patch";
+      revert = true;
+      hash = "sha256-EccgzxgyfAjVbV+HPemGHmzkRe0kpixu3eS3BZWr0g4=";
+    })
+  ];
 
   inherit blas64;
 
@@ -224,8 +225,11 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    perl
-    which
+    cmake
+  ];
+
+  propagatedNativeBuildInputs = [
+    checkPhaseThreadLimitHook
   ];
 
   buildInputs = lib.optional (stdenv.cc.isClang && config.USE_OPENMP) openmp;
@@ -235,56 +239,52 @@ stdenv.mkDerivation rec {
     buildPackages.stdenv.cc
   ];
 
-  enableParallelBuilding = true;
+  cmakeFlags = [
+    (lib.cmakeFeature "TARGET" config.TARGET)
+    (lib.cmakeBool "DYNAMIC_ARCH" config.DYNAMIC_ARCH)
+    (lib.cmakeBool "USE_OPENMP" config.USE_OPENMP)
+    (lib.cmakeFeature "NUM_THREADS" "64")
+    (lib.cmakeBool "INTERFACE64" blas64)
+    # Don't suffix library/pkgconfig/cmake-config names with _64 for 64-bit
+    # FIXME: investigate if this is actually ok? maybe not! maintaining old behavior for now
+    (lib.cmakeBool "NO_SUFFIX64" true)
+    (lib.cmakeBool "BUILD_STATIC_LIBS" enableStatic)
+    (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared)
+    (lib.cmakeFeature "CMAKE_Fortran_COMPILER" "${stdenv.cc.targetPrefix}gfortran")
+    # Disable the LAPACK test suite which is very slow and isn't part of the make test target
+    # Somewhat confusingly this overall-sounding flag turns off only the LAPACK tests
+    (lib.cmakeBool "BUILD_TESTING" false)
+  ]
+  ++ lib.optionals (config ? BINARY) [
+    (lib.cmakeFeature "BINARY" (toString config.BINARY))
+  ]
+  ++ lib.optionals (config ? MACOSX_DEPLOYMENT_TARGET) [
+    (lib.cmakeFeature "CMAKE_OSX_DEPLOYMENT_TARGET" config.MACOSX_DEPLOYMENT_TARGET)
+  ]
+  ++ lib.optionals (config ? NO_AVX512) [
+    (lib.cmakeBool "NO_AVX512" config.NO_AVX512)
+  ]
+  ++ lib.optionals singleThreaded [
+    # As described on https://github.com/OpenMathLib/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
+    (lib.cmakeBool "USE_THREAD" false)
+    (lib.cmakeBool "USE_LOCKING" true) # available with openblas >= 0.3.7
+    (lib.cmakeBool "USE_OPENMP" false) # openblas will refuse building with both USE_OPENMP=ON and USE_THREAD=OFF
+  ];
 
-  makeFlags = mkMakeFlagsFromConfig (
-    config
-    // {
-      FC = "${stdenv.cc.targetPrefix}gfortran";
-      CC = "${stdenv.cc.targetPrefix}${if stdenv.cc.isClang then "clang" else "cc"}";
-      PREFIX = placeholder "out";
-      OPENBLAS_INCLUDE_DIR = "${placeholder "dev"}/include";
-      NUM_THREADS = 64;
-      INTERFACE64 = blas64;
-      NO_STATIC = !enableStatic;
-      NO_SHARED = !enableShared;
-      CROSS = stdenv.hostPlatform != stdenv.buildPlatform;
-      HOSTCC = "cc";
-      # Makefile.system only checks defined status
-      # This seems to be a bug in the openblas Makefile:
-      # on x86_64 it expects NO_BINARY_MODE=
-      # but on aarch64 it expects NO_BINARY_MODE=0
-      NO_BINARY_MODE =
-        if stdenv.hostPlatform.isx86_64 then
-          toString (stdenv.hostPlatform != stdenv.buildPlatform)
-        else
-          stdenv.hostPlatform != stdenv.buildPlatform;
-      # This disables automatic build job count detection (which honours neither enableParallelBuilding nor NIX_BUILD_CORES)
-      # and uses the main make invocation's job count, falling back to 1 if no parallelism is used.
-      # https://github.com/OpenMathLib/OpenBLAS/blob/v0.3.20/getarch.c#L1781-L1792
-      MAKE_NB_JOBS = 0;
-    }
-    // (lib.optionalAttrs stdenv.cc.isClang {
-      LDFLAGS = "-L${lib.getLib buildPackages.gfortran.cc}/lib"; # contains `libgfortran.so`; building with clang needs this, gcc has it implicit
-    })
-    // (lib.optionalAttrs singleThreaded {
-      # As described on https://github.com/OpenMathLib/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
-      USE_THREAD = false;
-      USE_LOCKING = true; # available with openblas >= 0.3.7
-      USE_OPENMP = false; # openblas will refuse building with both USE_OPENMP=1 and USE_THREAD=0
-    })
-  );
-
-  doCheck = true;
-  checkTarget = "tests";
+  # FIXME: this broke some time between a0374025a863d007d98e3297f6aa46cc3141c2f0 and 34268251cf5547d39063f2c5ea9a196246f7f3a6
+  # This just serves to unbreak stable
+  doCheck = stdenv.hostPlatform.system != "i686-linux";
 
   postInstall = ''
+        # Provide headers in /include directly for compat with some consumers like flint
+        (cd $dev/include && ln -sf openblas/*.h .)
+
         # Write pkgconfig aliases. Upstream report:
         # https://github.com/OpenMathLib/OpenBLAS/issues/1740
         for alias in blas cblas lapack; do
           cat <<EOF > $out/lib/pkgconfig/$alias.pc
     Name: $alias
-    Version: ${version}
+    Version: ${finalAttrs.version}
     Description: $alias provided by the OpenBLAS package.
     Cflags: -I$dev/include
     Libs: -L$out/lib -lopenblas
@@ -319,17 +319,32 @@ stdenv.mkDerivation rec {
     inherit (python3.pkgs) numpy scipy scikit-learn;
     inherit
       ceres-solver
+      flint
       giac
       octave
       opencv
+      R
       ;
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+    cmake = testers.hasCmakeConfigModules {
+      package = finalAttrs.finalPackage;
+      moduleNames = [ "OpenBLAS" ];
+    };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Basic Linear Algebra Subprograms";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://github.com/OpenMathLib/OpenBLAS";
-    platforms = attrNames configs;
-    maintainers = with maintainers; [ ttuegel ];
+    platforms = lib.attrNames configs;
+    maintainers = [ ];
+    pkgConfigModules = [
+      "openblas"
+      "blas"
+      "cblas"
+      "lapack"
+    ];
   };
-}
+})

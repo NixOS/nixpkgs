@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gobatmon";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "ulinja";
     repo = "gobatmon";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-morcsU9RhY17XlaDC6J0uDRYiSYjnXquFjuOh7AEKkA=";
   };
 
@@ -24,7 +24,7 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ ulinja ];
     mainProgram = "gobatmon";
     downloadPage = "https://github.com/ulinja/gobatmon/releases/latest";
-    changelog = "https://github.com/ulinja/gobatmon/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/ulinja/gobatmon/blob/v${finalAttrs.version}/CHANGELOG.md";
     platforms = lib.platforms.linux;
   };
-}
+})

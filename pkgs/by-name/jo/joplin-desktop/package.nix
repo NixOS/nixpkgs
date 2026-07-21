@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  nodejs,
+  nodejs_22,
   makeDesktopItem,
   copyDesktopItems,
   makeWrapper,
@@ -13,36 +13,23 @@
   cairo,
   pixman,
   libsecret,
-  electron_36,
+  electron,
   xcbuild,
   buildPackages,
   callPackage,
-  runCommand,
   libGL,
+  clang_20,
+  jq,
+  glib,
+  gsettings-desktop-schemas,
 }:
 
 let
-  electron = electron_36;
-  yarn-berry = yarn-berry_4;
+  # nodejs pin should be obsolete once #522655 is in master
+  nodejs = nodejs_22;
+  yarn-berry = yarn-berry_4.override { inherit nodejs; };
 
   releaseData = lib.importJSON ./release-data.json;
-
-  buildPlugin = import ./buildPlugin.nix;
-
-  getPluginPatch =
-    src: id:
-    runCommand "${id}.diff" { } ''
-      patch="${src}/packages/default-plugins/plugin-patches/${id}.diff"
-
-      if [ -f "$patch" ]; then
-        cp "$patch" "$out"
-      else
-        # create an empty patch file if it doesn't exist – can't check this from Nix code without IFD
-        touch "$out"
-      fi
-    '';
-
-  getDefaultPlugins = map (callPackage buildPlugin);
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -58,6 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
     postFetch = ''
       # there's a file with a weird name that causes a hash mismatch on darwin
       rm $out/packages/app-cli/tests/support/photo*
+
+      # Remove after upstream updates to Yarn 4.14
+      # https://github.com/laurent22/joplin/blob/dev/package.json#L103
+      sed -i '/__metadata/{n;s/version: 8$/version: 9/;}' $out/yarn.lock
     '';
     inherit (releaseData) hash;
   };
@@ -65,20 +56,21 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes postPatch;
+    inherit (finalAttrs)
+      src
+      missingHashes
+      ;
     hash = releaseData.deps_hash;
   };
 
-  # allows overriding to disable building the plugins
-  defaultPlugins = getDefaultPlugins (
-    lib.mapAttrsToList (
-      id: plugin:
-      plugin
-      // {
-        patches = [ (getPluginPatch finalAttrs.src id) ];
-      }
-    ) releaseData.plugins
-  );
+  # allows overriding to disable building these plugins or add other ones
+  defaultPlugins = [
+    (callPackage ./joplin-plugin-backup.nix {
+      patches = [
+        (finalAttrs.src + "/packages/default-plugins/plugin-patches/io.github.jackgruber.backup.diff")
+      ];
+    })
+  ];
 
   buildInputs = [
     libGL
@@ -95,10 +87,12 @@ stdenv.mkDerivation (finalAttrs: {
     pixman
     libsecret
     makeWrapper
+    jq
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     xcbuild
     buildPackages.cctools
+    clang_20 # clang_21 breaks keytar, sqlite
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
@@ -118,20 +112,25 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '/postinstall/d' package.json
     # Don't install onenote-converter subpackage deps
     sed -i '/onenote-converter/d' packages/{lib,app-desktop}/package.json
-    # Don't build the default plugins, would require networking. We build them separately.
-    sed -i "/'buildDefaultPlugins',/d" packages/app-desktop/gulpfile.ts
   '';
 
   buildPhase = ''
     runHook preBuild
 
-    unset YARN_ENABLE_SCRIPTS
-
     for node_modules in packages/*/node_modules; do
       patchShebangs $node_modules
     done
 
+    unset YARN_ENABLE_SCRIPTS
+
     yarn config set enableInlineBuilds true
+
+    # fails otherwise because it tries to set up git hooks, not needed here
+    sed -i 's/"preinstall": ".*"/"preinstall": "echo skipped preinstall"/' packages/default-plugins/node_modules/joplin-plugin-freehand-drawing/package.json
+
+    # Don't let joplin build plugins from source, would require networking. We build them separately.
+    pluginRepositories=packages/default-plugins/pluginRepositories.json
+    jq 'with_entries(select(.value | has("package")))' <<< "$(cat $pluginRepositories)" > $pluginRepositories
 
     echo "installing yarn dependencies..."
     yarn workspaces focus \
@@ -195,6 +194,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       makeWrapper "$outdir"/joplin $out/bin/joplin-desktop \
         --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
+        --prefix XDG_DATA_DIRS : "${glib.getSchemaDataDirPath gsettings-desktop-schemas}" \
         --add-flags "--no-sandbox" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-wayland-ime --ozone-platform=wayland --enable-features=WaylandWindowDecorations}}" \
         --inherit-argv0
@@ -209,6 +209,15 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  # Necessary for builtin Backup plugin
+  postFixup =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      chmod a+x $out/share/joplin-desktop/resources/build/7zip/7za
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      chmod a+x $out/Applications/Joplin.app/Contents/Resources/build/7zip/7za
+    '';
+
   desktopItems = [
     (makeDesktopItem {
       name = "joplin";
@@ -217,12 +226,12 @@ stdenv.mkDerivation (finalAttrs: {
       icon = "joplin";
       comment = "Joplin for Desktop";
       categories = [ "Office" ];
-      startupWMClass = "@joplin/app-desktop";
+      startupWMClass = "joplin-app-desktop";
       mimeTypes = [ "x-scheme-handler/joplin" ];
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source note taking and to-do application with synchronisation capabilities";
     mainProgram = "joplin-desktop";
     longDescription = ''
@@ -233,8 +242,8 @@ stdenv.mkDerivation (finalAttrs: {
       Markdown format.
     '';
     homepage = "https://joplinapp.org";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       fugi
     ];
     inherit (electron.meta) platforms;

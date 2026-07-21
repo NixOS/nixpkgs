@@ -21,8 +21,10 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
   buildInputs = [ ipset ];
 
-  env.RUSTC_BOOTSTRAP = true;
-  env.RUSTFLAGS = "--cfg tokio_unstable";
+  env = {
+    RUSTC_BOOTSTRAP = true;
+    RUSTFLAGS = "--cfg tokio_unstable";
+  };
 
   meta = {
     homepage = "https://github.com/lazytiger/trojan-rs";

@@ -10,14 +10,14 @@
   ncurses,
 }:
 
-resholve.mkDerivation rec {
+resholve.mkDerivation (finalAttrs: {
   pname = "shunit2";
   version = "2.1.8";
 
   src = fetchFromGitHub {
     owner = "kward";
     repo = "shunit2";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-IZHkgkVqzeh+eEKCDJ87sqNhSA+DU6kBCNDdQaUEeiM=";
   };
 
@@ -91,15 +91,15 @@ resholve.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kward/shunit2";
     description = "XUnit based unit test framework for Bourne based shell scripts";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       abathur
       utdemir
     ];
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
     mainProgram = "shunit2";
   };
-}
+})

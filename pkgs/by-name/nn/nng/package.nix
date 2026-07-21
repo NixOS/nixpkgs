@@ -8,15 +8,15 @@
   mbedtls,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nng";
-  version = "1.11";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "nanomsg";
     repo = "nng";
-    rev = "v${version}";
-    hash = "sha256-yH/iK/DuVff2qby/wk6jJ9Tsmxrl9eMrb9bOxCzvmdA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-czfZYx4d8El6QOcvLhpBd82UpC4cDYI/HfYS2QOUezY=";
   };
 
   nativeBuildInputs = [
@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
     "-DNNG_ENABLE_TLS=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://nng.nanomsg.org/";
     description = "Nanomsg next generation";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "nngcat";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ nviets ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ nviets ];
   };
-}
+})

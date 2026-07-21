@@ -36,6 +36,12 @@ melpaBuild (finalAttrs: {
     npmHooks.npmConfigHook
   ];
 
+  postPatch = ''
+    substituteInPlace buffer.py \
+      --replace-fail "aria2_args = [\"aria2c\"]" \
+                     "aria2_args = [\"${lib.getExe aria2}\"]"
+  '';
+
   files = ''
     ("*.el"
      "*.py"
@@ -54,10 +60,8 @@ melpaBuild (finalAttrs: {
     eafPythonDeps =
       ps: with ps; [
         pysocks
+        pycookiecheat
       ];
-    eafOtherDeps = [
-      aria2
-    ];
   };
 
   meta = {

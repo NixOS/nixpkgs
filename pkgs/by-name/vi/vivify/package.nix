@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  nix-update-script,
   fetchYarnDeps,
   fetchFromGitHub,
   yarnConfigHook,
@@ -12,18 +13,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vivify";
-  version = "0.8.2";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "jannis-baum";
     repo = "Vivify";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2lxf21T9y4GMFlk0+qbaJJ/twRffYEBoBXZXe/NRDQk=";
+    hash = "sha256-CszMG+c0bNHfXWqcI3b4iGpeFJ+FmzHDzxflPS+wEe0=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-mOgfwetiLMTDquw3f3+U1iEhBbvf0OC5lkNJHdrRSK0=";
+    hash = "sha256-svgEanFiBSQn0TdTuB0CnLR71lkANABEaDiKB+Vc0Rc=";
   };
 
   installPhase = ''
@@ -40,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace node_modules/.bin/postject \
       --replace-fail '/usr/bin/env node' '${lib.getExe nodejs}'
 
-    make linux
+    make VIV_VERSION=${finalAttrs.version} linux
 
     mkdir -p $out/bin
     install -Dm755 ./build/linux/viv $out/bin/viv
@@ -68,6 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
   # (segmentation fault)
   dontStrip = true;
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Live Markdown viewer";
     longDescription = ''
@@ -76,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
       serve as a directory browser and let you view code files with syntax highlighting.
     '';
     homepage = "https://github.com/jannis-baum/Vivify";
-    changelog = "https://github.com/jannis-baum/Vivify/releases/tag/v${finalAttrs.src.tag}";
+    changelog = "https://github.com/jannis-baum/Vivify/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ skohtv ];
     platforms = lib.platforms.linux;

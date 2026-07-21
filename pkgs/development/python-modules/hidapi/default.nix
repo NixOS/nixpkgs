@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "hidapi";
-  version = "0.14.0.post4";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SPziU+Um0XtmP7+ZicccfvdlPO1fS+ZfFDfDE/s9vfY=";
+    hash = "sha256-7LwmXL6Le4h1X0IeC6JfCECR7FUMK5D/no3dT81UAxE=";
   };
 
   build-system = [
@@ -42,16 +42,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hid" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cython interface to the hidapi from https://github.com/libusb/hidapi";
     homepage = "https://github.com/trezor/cython-hidapi";
     # license can actually be either bsd3 or gpl3
     # see https://github.com/trezor/cython-hidapi/blob/master/LICENSE-orig.txt
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       gpl3Only
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       np
       prusnak
     ];

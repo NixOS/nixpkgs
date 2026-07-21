@@ -1,33 +1,31 @@
 {
   lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  rustPlatform,
   anyio,
-
-  # tests
+  buildPythonPackage,
   dirty-equals,
+  fetchFromGitHub,
   pytest-mock,
   pytest-timeout,
   pytestCheckHook,
+  rustPlatform,
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "watchfiles";
-  version = "1.0.5";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "samuelcolvin";
     repo = "watchfiles";
-    tag = "v${version}";
-    hash = "sha256-a6SHqYRNMGXNkVvwj9RpLj449dAQtWXO44v1ko5suaw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gfH/8o3WsGL4Qki5kRrWpQLyk85HgTtR6iImInPYthg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname src version;
-    hash = "sha256-2RMWxeOjitbEqer9+ETpMX9WxHEiPzVmEv7LpSiaRVg=";
+    inherit (finalAttrs) pname src version;
+    hash = "sha256-GFGhEXW0M23G0NB4Bu1FXV9Bmdt9weznHHSD/6rBSjI=";
   };
 
   nativeBuildInputs = [
@@ -35,9 +33,7 @@ buildPythonPackage rec {
     rustPlatform.maturinBuildHook
   ];
 
-  dependencies = [
-    anyio
-  ];
+  dependencies = [ anyio ];
 
   # Tests need these permissions in order to use the FSEvents API on macOS.
   sandboxProfile = ''
@@ -51,11 +47,14 @@ buildPythonPackage rec {
     pytestCheckHook
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   preCheck = ''
     rm -rf watchfiles
   '';
+
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn10Warning"
+  ];
 
   disabledTests = [
     #  BaseExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
@@ -67,9 +66,9 @@ buildPythonPackage rec {
   meta = {
     description = "File watching and code reload";
     homepage = "https://watchfiles.helpmanual.io/";
-    changelog = "https://github.com/samuelcolvin/watchfiles/releases/tag/v${version}";
+    changelog = "https://github.com/samuelcolvin/watchfiles/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "watchfiles";
   };
-}
+})

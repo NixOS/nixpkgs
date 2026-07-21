@@ -4,36 +4,25 @@
   fetchFromGitHub,
   clang,
   cmake,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "highs";
-  version = "1.10.0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "ERGO-Code";
     repo = "HiGHS";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-CzHE2d0CtScexdIw95zHKY1Ao8xFodtfSNNkM6dNCac=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0KmA5B2g3AFCxMbN9gHdXxAEftZglhQKOqj1/TMxxps=";
   };
 
-  # CMake Error in CMakeLists.txt:
-  #   Imported target "highs::highs" includes non-existent path
-  #     "/include"
-  #   in its INTERFACE_INCLUDE_DIRECTORIES.
-  postPatch = ''
-    sed -i "/CMAKE_CUDA_PATH/d" src/CMakeLists.txt
-  '';
-
   strictDeps = true;
+  __structuredAttrs = true;
 
-  outputs = [ "out" ];
-
+  nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-
-  installCheckPhase = ''
-    "$out/bin/highs" --version
-  '';
 
   nativeBuildInputs = [
     clang
@@ -42,12 +31,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ERGO-Code/HiGHS";
     description = "Linear optimization software";
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     mainProgram = "highs";
-    maintainers = with maintainers; [ silky ];
+    maintainers = with lib.maintainers; [
+      galabovaa
+      silky
+    ];
   };
 })

@@ -47,7 +47,7 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
-  CXXFLAGS = [
+  env.CXXFLAGS = toString [
     "-DCOMPILE_WITH_LZFSE=1"
     "-llzfse"
   ];
@@ -56,12 +56,12 @@ stdenv.mkDerivation {
     inherit (nixosTests) darling-dmg;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.darlinghq.org/";
     description = "FUSE module for .dmg files (containing an HFS+ filesystem)";
     mainProgram = "darling-dmg";
-    platforms = platforms.unix;
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ Luflosi ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

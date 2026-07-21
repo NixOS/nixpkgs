@@ -68,6 +68,15 @@ in
           '';
         };
       };
+
+      environmentFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.externalPath;
+        default = null;
+        description = ''
+          Environment file, used to set any secret ATUIN_* environment variables, such as ATUIN_DB_URI containing a password.
+          See https://docs.atuin.sh/cli/self-hosting/server-setup/#configuration for available environment variables.
+        '';
+      };
     };
   };
 
@@ -104,7 +113,8 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package} server start";
+        ExecStart = "${lib.getExe' cfg.package "atuin-server"} start";
+        EnvironmentFile = lib.mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
         RuntimeDirectory = "atuin";
         RuntimeDirectoryMode = "0700";
         DynamicUser = true;

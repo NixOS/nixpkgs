@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miriway";
-  version = "25.10";
+  version = "26.01";
 
   src = fetchFromGitHub {
     owner = "Miriway";
     repo = "Miriway";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VAYnIMspGKSeqg+9YG6WrmoeaNNg0uLE3Ht4jJZSLLk=";
+    hash = "sha256-JHLP5M9uBS4CmTGx3xgNq7YN1Tj8FZyKo1C8aGTtG9E=";
   };
 
   postPatch = ''
@@ -32,9 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   strictDeps = true;
-
-  # Source has a path "systemd/usr/{libexec,lib}/...", don't break references to that
-  dontFixCmake = true;
 
   nativeBuildInputs = [
     cmake

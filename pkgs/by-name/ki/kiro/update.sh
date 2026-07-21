@@ -12,7 +12,6 @@ SOURCES_JSON="${SCRIPT_DIR}/sources.json"
 # Platform configuration
 declare -A PLATFORM_URLS=(
     ["x86_64-linux"]="https://prod.download.desktop.kiro.dev/stable/metadata-linux-x64-stable.json"
-    ["x86_64-darwin"]="https://prod.download.desktop.kiro.dev/stable/metadata-dmg-darwin-x64-stable.json"
     ["aarch64-darwin"]="https://prod.download.desktop.kiro.dev/stable/metadata-dmg-darwin-arm64-stable.json"
 )
 
@@ -42,7 +41,7 @@ for platform in "${!PLATFORM_URLS[@]}"; do
 
     # Extract file URL and version from metadata
     file_url=$(echo "$response" | jq -r '
-        .releases[0].updateTo
+        .releases[].updateTo
         | select(.url | test("\\.(tar|dmg)(\\.|$)"))
         | .url' | head -1)
 

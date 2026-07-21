@@ -35,6 +35,7 @@ python3.pkgs.buildPythonApplication rec {
   dependencies = with python3.pkgs; [
     pygobject3
     stem
+    pycountry
   ];
 
   postInstall = ''
@@ -43,11 +44,11 @@ python3.pkgs.buildPythonApplication rec {
     cp apparmor/usr.bin.onioncircuits $out/etc/apparmor.d
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tails.boum.org";
     description = "GTK application to display Tor circuits and streams";
     mainProgram = "onioncircuits";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ wattmto ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ wattmto ];
   };
 }

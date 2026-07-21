@@ -13,11 +13,11 @@
   glfw3,
   imgui,
   libGLU,
-  libX11,
-  libXcursor,
-  libXi,
-  libXinerama,
-  libXrandr,
+  libx11,
+  libxcursor,
+  libxi,
+  libxinerama,
+  libxrandr,
   libglut,
   xorgproto,
 
@@ -72,11 +72,11 @@ stdenv.mkDerivation (finalAttrs: {
       IMGUI_BUILD_GLFW_BINDING = true;
     })
     libGLU
-    libX11
-    libXcursor
-    libXi
-    libXinerama
-    libXrandr
+    libx11
+    libxcursor
+    libxi
+    libxinerama
+    libxrandr
     libglut
     xorgproto
   ];

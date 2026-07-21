@@ -17,8 +17,8 @@
 
   testScript = ''
     start_all();
-    machine.wait_for_unit("snmpd.service")
-    machine.succeed("snmpwalk -v 2c -c public localhost | grep SNMPv2-MIB::sysName.0");
+    snmpd.wait_for_unit("snmpd.service")
+    snmpd.succeed("snmpwalk -v 2c -c public localhost | grep SNMPv2-MIB::sysName.0");
   '';
 
 }

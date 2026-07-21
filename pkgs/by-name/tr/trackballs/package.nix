@@ -16,18 +16,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "trackballs";
-  version = "1.3.4";
+  version = "1.3.5";
 
   src = fetchFromGitHub {
     owner = "trackballs";
     repo = "trackballs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JKSiNe5mu8rRztUhduGFY6IsSMx6VyBqKcGO5EssI+8=";
+    hash = "sha256-Zy4o/khWAdy27P6WIU7gouNTYXLgN5ursSoSDDboXAk=";
   };
-
-  postPatch = ''
-    substituteInPlace src/glHelp.h --replace-fail _TTF_Font TTF_Font
-  '';
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [

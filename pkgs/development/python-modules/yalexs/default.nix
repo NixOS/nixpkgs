@@ -3,7 +3,6 @@
   aiofiles,
   aiohttp,
   aioresponses,
-  aiounittest,
   buildPythonPackage,
   ciso8601,
   fetchFromGitHub,
@@ -17,7 +16,6 @@
   pytestCheckHook,
   python-dateutil,
   python-socketio,
-  pythonOlder,
   requests-mock,
   requests,
   typing-extensions,
@@ -25,16 +23,14 @@
 
 buildPythonPackage rec {
   pname = "yalexs";
-  version = "9.0.1";
+  version = "9.2.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "yalexs";
     tag = "v${version}";
-    hash = "sha256-ISrmOumxOmCpelHFdKGFsRVtvPP+Fys8Db0SPsxgHWs=";
+    hash = "sha256-HZN3ot5z/JbWZaWLffyTWLneD1gG3tTdYLKevXYnJnw=";
   };
 
   build-system = [ poetry-core ];
@@ -57,7 +53,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aioresponses
-    aiounittest
     pytest-asyncio
     pytest-cov-stub
     pytest-freezegun
@@ -65,13 +60,18 @@ buildPythonPackage rec {
     requests-mock
   ];
 
+  disabledTests = [
+    # aiohttp api breakage, remove when bumping to 9.2.8 or newer
+    "test__raise_response_exceptions"
+  ];
+
   pythonImportsCheck = [ "yalexs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for Yale Access (formerly August) Smart Lock and Doorbell";
     homepage = "https://github.com/bdraco/yalexs";
     changelog = "https://github.com/bdraco/yalexs/blob/${src.tag}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

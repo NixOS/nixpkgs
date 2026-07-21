@@ -17,7 +17,8 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit version;
+    pname = "pushbullet.py";
     sha256 = "917883e1af4a0c979ce46076b391e0243eb8fe0a81c086544bcfa10f53e5ae64";
   };
 
@@ -47,9 +48,9 @@ buildPythonPackage rec {
     "test_new_chat_ok"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple python client for pushbullet.com";
     homepage = "https://github.com/randomchars/pushbullet.py";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

@@ -20,12 +20,12 @@
   desktop-file-utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-taquin";
   version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-taquin/${lib.versions.majorMinor version}/gnome-taquin-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-taquin/${lib.versions.majorMinor finalAttrs.version}/gnome-taquin-${finalAttrs.version}.tar.xz";
     hash = "sha256-lts9j61JeSSnOQrRCKPvckMqHWLSRWyuXhk0BXAYgU8=";
   };
 
@@ -65,12 +65,12 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "gnome-taquin"; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-taquin";
     description = "Move tiles so that they reach their places";
     mainProgram = "gnome-taquin";
-    teams = [ teams.gnome ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
   };
-}
+})

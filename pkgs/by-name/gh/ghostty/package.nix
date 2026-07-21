@@ -9,74 +9,30 @@
   freetype,
   glib,
   glslang,
+  gst_all_1,
   gtk4-layer-shell,
   harfbuzz,
-  libGL,
-  libX11,
   libadwaita,
+  libGL,
+  libx11,
+  libxml2,
   ncurses,
   nixosTests,
   oniguruma,
   pandoc,
   pkg-config,
   removeReferencesTo,
-  util-linux,
   versionCheckHook,
   wrapGAppsHook4,
-  writeShellApplication,
-  zig_0_14,
+  zig_0_15,
 
-  # Usually you would override `zig.hook` with this, but we do that internally
-  # since upstream recommends a non-default level
+  # Upstream recommends a non-default level
   # https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/PACKAGING.md#build-options
   optimizeLevel ? "ReleaseFast",
 }:
-let
-  zig = zig_0_14;
-
-  # HACK:
-  # Work around a Zig bug where embedding a large enough file could crash
-  # the compiler when too many cores are used, which causes Hydra builds to
-  # reliably fail. See these links for more info:
-  #
-  #  * https://github.com/ziglang/zig/issues/25297
-  #  * https://github.com/ziglang/zig/issues/22867
-  #  * https://github.com/ghostty-org/ghostty/discussions/8676
-  #
-  # Note that the `-j` parameter does NOT fix this. It seems like the faulty
-  # intern pool logic always depends on the full amount of available cores
-  # instead of the value of `-j`, so we have to use `taskset` to trick Zig
-  # into thinking it only has access to a limited amount of cores.
-  zigWithLimitedCores = writeShellApplication {
-    name = "zig";
-    passthru = {
-      inherit (zig) version meta;
-    };
-    runtimeInputs = [
-      zig
-      util-linux
-    ];
-    text = ''
-      maxCores=$(nproc)
-      # 32 cores seem to be the upper limit through empiric testing
-      coreLimit=$((maxCores < 32 ? maxCores : 32))
-      # Also take NIX_BUILD_CORES into account so the build respects the `--cores` argument
-      effectiveCores=$((NIX_BUILD_CORES > coreLimit ? coreLimit : NIX_BUILD_CORES))
-      taskset -c "0-$((effectiveCores - 1))" zig "$@"
-    '';
-  };
-
-  zig_hook =
-    (zig.hook.override {
-      zig = zigWithLimitedCores;
-    }).overrideAttrs
-      {
-        zig_default_flags = "-Dcpu=baseline -Doptimize=${optimizeLevel} --color off";
-      };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghostty";
-  version = "1.2.0";
+  version = "1.3.1";
 
   outputs = [
     "out"
@@ -90,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ghostty-org";
     repo = "ghostty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Z6lndpkEqBwgsjIeZhmVIQ5D7YdQSH/fG6NCY+YWEAo=";
+    hash = "sha256-+ddMmUe9Jjkun4qqW8XFXVgwVZdVHsGWcQzndgIlBjQ=";
   };
 
   deps = callPackage ./deps.nix {
@@ -104,12 +60,13 @@ stdenv.mkDerivation (finalAttrs: {
     pandoc
     pkg-config
     removeReferencesTo
-    zig_hook
+    zig_0_15
 
     # GTK frontend
     glib # Required for `glib-compile-schemas`
     wrapGAppsHook4
     blueprint-compiler
+    libxml2 # `xmllint`
   ];
 
   buildInputs = [
@@ -117,8 +74,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     # GTK frontend
     libadwaita
-    libX11
+    libx11
     gtk4-layer-shell
+    gst_all_1.gstreamer # Used for playing audio, e.g. audible bells
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-base
 
     # OpenGL renderer
     glslang
@@ -131,16 +91,24 @@ stdenv.mkDerivation (finalAttrs: {
     harfbuzz
   ];
 
-  zigBuildFlags = [
+  dontSetZigDefaultFlags = true;
+
+  zigCheckFlags = [
     "--system"
     "${finalAttrs.deps}"
     "-Dversion-string=${finalAttrs.version}"
+    "-Dcpu=baseline"
   ]
   ++ lib.mapAttrsToList (name: package: "-fsys=${name} --search-prefix ${lib.getLib package}") {
     inherit glslang;
   };
 
-  zigCheckFlags = finalAttrs.zigBuildFlags;
+  # Only specify the optimization level for the actual build.
+  # Tests do not work on ReleaseFast as they rely on triggering
+  # specific integrity violations within the internal data structures.
+  zigBuildFlags = finalAttrs.zigCheckFlags ++ [
+    "-Doptimize=${optimizeLevel}"
+  ];
 
   doCheck = true;
 
@@ -180,7 +148,6 @@ stdenv.mkDerivation (finalAttrs: {
     rmdir $out/share/vim
     ln -s $vim $out/share/vim-plugins
 
-
     remove-references-to -t ${finalAttrs.deps} $out/bin/.ghostty-wrapped
   '';
 
@@ -190,13 +157,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = "--version";
-
   passthru = {
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
       inherit (nixosTests) allTerminfo;
       nixos = nixosTests.terminal-emulators.ghostty;
     };
+    updateScript = ./update.nu;
   };
 
   meta = {
@@ -208,6 +174,7 @@ stdenv.mkDerivation (finalAttrs: {
       features, or native UIs. Ghostty provides all three.
     '';
     homepage = "https://ghostty.org/";
+    donationPage = "https://ghostty.org/docs/sponsor";
     downloadPage = "https://ghostty.org/download";
     changelog = "https://ghostty.org/docs/install/release-notes/${
       builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version

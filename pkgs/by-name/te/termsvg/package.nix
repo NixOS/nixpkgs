@@ -4,32 +4,32 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "termsvg";
-  version = "0.9.3";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
-    owner = "mrmarble";
+    owner = "MrMarble";
     repo = "termsvg";
-    rev = "v${version}";
-    hash = "sha256-ejrg1UywPQDCeaymkGzU+xZoPXME6XEP/SBe3Yxf4YU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-wV5b0HXf+DVSn5FbPU9/AXTaNKyenbxEGB9yI29e/cc=";
   };
 
-  vendorHash = "sha256-BoXRLWhQmfvMIN658MiXGCFMbnvuXfv/H/jCE6h4aWk=";
+  vendorHash = "sha256-6cXckWJFc/nYlz0HeLHXaXWNFR7HLEfU10gd2K2zgq0=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
-    "-X=main.commit=${src.rev}"
+    "-X=main.version=${finalAttrs.version}"
+    "-X=main.commit=${finalAttrs.src.rev}"
     "-X=main.date=1970-01-01T00:00:00Z"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Record, share and export your terminal as a animated SVG image";
-    homepage = "https://github.com/mrmarble/termsvg";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ pbsds ];
+    homepage = "https://github.com/MrMarble/termsvg";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ pbsds ];
     mainProgram = "termsvg";
   };
-}
+})

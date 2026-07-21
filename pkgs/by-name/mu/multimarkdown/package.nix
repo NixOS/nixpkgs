@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   perl,
   pkg-config,
@@ -17,6 +18,14 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-b6yCn0NFpONI7WwfjDOc0d2nCKMIiUXi+rsnytiNc0Q=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "multimarkdown-fix-cmake-4.patch";
+      url = "https://github.com/fletcher/MultiMarkdown-6/commit/655c0908155758e7c94858af2fb99dc992709075.patch";
+      hash = "sha256-d1b5NcBQDVnbmTvVnPyiTS8aSx/VGgRLHD0nSs+JksI=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs tools/enumsToPerl.pl
@@ -52,8 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
       - glossary entries (LaTeX only)
       - document metadata (e.g. title, author, date, etc.)
     '';
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 })

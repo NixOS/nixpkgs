@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pydantic,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "sigstore-rekor-types";
   version = "0.0.18";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "trailofbits";

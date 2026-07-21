@@ -202,13 +202,32 @@ if [[ "$NIX_DONT_SET_RPATH_@suffixSalt@" != 1 && "$linkType" != static-pie ]]; t
     # the link time chosen objects will be those of runtime linking.
     declare -A rpaths
     for dir in ${libDirs+"${libDirs[@]}"}; do
-        if [[ "$dir" =~ [/.][/.] ]] && dir2=$(readlink -f "$dir"); then
+        # If the path is in the store, do not resolve any symlinks and add it to the rpath.
+        # Resolving symlinks in the store breaks bootstrapping, see issue #454199.
+        # If it is outside the store, resolve symlinks step by step until it falls
+        # into the store or it becomes not a symlink.
+        # Always canonicalize the path before checking it is in the store or not.
+        if dir2=$(realpath -s "$dir"); then
             dir="$dir2"
+        else
+            continue
         fi
+        while [ -z "${rpaths[$dir]:-}" ] && [[ "$dir" != "${NIX_STORE:-}"/* ]] && [ -L "$dir" ]; do
+            if dir2=$(readlink "$dir"); then
+                dir="dir2"
+            else
+                break
+            fi
+            if dir2=$(realpath -s "$dir"); then
+                dir="dir2"
+            else
+                break
+            fi
+        done
+        # If the path turns out to be outside the store, we do not add it to rpath.
+        # This typically happens for libraries in /tmp that are later
+        # copied to $out/lib. If not, we're screwed.
         if [ -n "${rpaths[$dir]:-}" ] || [[ "$dir" != "${NIX_STORE:-}"/* ]]; then
-            # If the path is not in the store, don't add it to the rpath.
-            # This typically happens for libraries in /tmp that are later
-            # copied to $out/lib.  If not, we're screwed.
             continue
         fi
         for path in "$dir"/*; do

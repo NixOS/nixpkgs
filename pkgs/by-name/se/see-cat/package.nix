@@ -2,24 +2,19 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  pkg-config,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "see-cat";
-  version = "0.8.1";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "guilhermeprokisch";
     repo = "see";
-    rev = "v${version}";
-    hash = "sha256-VCUrPCaG2fKp9vpFLzNLcfCBu2NiwdY2+bo1pd7anZY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BmLMKTu9GHjO9/E31SBegC40qou7tvaX+dfG0GyXg/s=";
   };
 
-  cargoHash = "sha256-Yw6zRvwT+y3CFb6WwKBiMSWz8igLQ7JmyGalHdRDGL0=";
-
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  cargoHash = "sha256-Ct+NPJe7qMVC29s1dD0jDZN6iQElkf0kM3N9YH8Nh3Y=";
 
   meta = {
     description = "Cute cat(1) for the terminal";
@@ -35,4 +30,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "see";
     maintainers = with lib.maintainers; [ louis-thevenet ];
   };
-}
+})

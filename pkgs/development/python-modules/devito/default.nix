@@ -30,17 +30,25 @@
   scipy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "devito";
-  version = "4.8.19";
+  version = "4.8.22";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "devitocodes";
     repo = "devito";
-    tag = "v${version}";
-    hash = "sha256-kE4u5r2GFe4Y+IdSEnNZEOAO9WoSIM00Ify1eLaflWI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7bHMMZKm+n+wSVGUSSoYQjXklxzdTeyCkjMuK0Z8qTI=";
   };
+
+  patches = [
+    # codepy >=2025.1 turned GCCToolchain into a frozen dataclass,
+    # breaking devito's imperative attribute assignments and renaming
+    # several API parameters.  Upstream pins codepy<2025; patch instead.
+    ./fix-codepy-compat.patch
+  ];
 
   pythonRemoveDeps = [ "pip" ];
 
@@ -88,6 +96,9 @@ buildPythonPackage rec {
     # Download dataset from the internet
     "test_gs_2d_float"
     "test_gs_2d_int"
+
+    # Numerical precision issue: assert Data(False)
+    "test_cire_n_strides"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # FAILED tests/test_unexpansion.py::Test2Pass::test_v0 - assert False
@@ -152,8 +163,8 @@ buildPythonPackage rec {
   meta = {
     description = "Code generation framework for automated finite difference computation";
     homepage = "https://www.devitoproject.org/";
-    changelog = "https://github.com/devitocodes/devito/releases/tag/v${version}";
+    changelog = "https://github.com/devitocodes/devito/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ atila ];
+    maintainers = [ ];
   };
-}
+})

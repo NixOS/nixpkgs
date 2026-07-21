@@ -8,23 +8,23 @@
   kustomize,
   kubernetes-helm,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "holos";
-  version = "0.105.0";
+  version = "0.106.0";
 
   src = fetchFromGitHub {
     owner = "holos-run";
     repo = "holos";
-    rev = "v${version}";
-    hash = "sha256-6DUsJWD5dNMG0tCmnIdjgAaStfyLkySml1VwRCaqbrI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-IDIqSlHzmX0rdO3frDx5S+x18OJoJKMicQPx2exIMP8=";
   };
 
-  vendorHash = "sha256-iK0jilQtbU+mlh6oxWTLgdMlTysGtusWe7jjrCYxN0M=";
+  vendorHash = "sha256-Ev8DuecVz/FVpOBk53ddF6aCRkLt7i6O4D/UU0iumHs=";
 
   ldflags = [
     "-w"
-    "-X github.com/holos-run/holos/version.GitDescribe=v${version}"
-    "-X github.com/holos-run/holos/version.GitCommit=${src.rev}"
+    "-X github.com/holos-run/holos/version.GitDescribe=v${finalAttrs.version}"
+    "-X github.com/holos-run/holos/version.GitCommit=${finalAttrs.src.rev}"
     "-X github.com/holos-run/holos/version.GitTreeState=clean"
     # fix time for deterministic builds
     "-X github.com/holos-run/holos/version.BuildDate=1970-01-01T00:00:00Z"
@@ -41,14 +41,14 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = holos;
     command = "holos --version || true";
-    version = "${version}";
+    version = "${finalAttrs.version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Holos CLI tool";
     homepage = "https://github.com/holos-run/holos";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ cameronraysmith ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ cameronraysmith ];
     mainProgram = "holos";
   };
-}
+})

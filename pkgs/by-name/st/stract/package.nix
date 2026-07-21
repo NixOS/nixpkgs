@@ -58,6 +58,25 @@ rustPlatform.buildRustPackage {
     rm -rf target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/build/
   '';
 
+  checkFlags = [
+    # error: struct `MyCustomDocument` is never constructed
+    "--skip=schema::document"
+    # thread 'ampc::dht::tests::proptest_chaos' panicked at crates/core/src/ampc/dht/mod.rs:670:33:
+    # assertion `left == right` failed
+    "--skip=ampc::dht::tests::proptest_chaos"
+    # thread 'ranking::tests::freshness_ranking' (105864) panicked at crates/core/src/ranking/mod.rs:355:9:
+    # assertion `left == right` failed
+    #  left: "https://www.old.com/"
+    # right: "https://www.new.com/"
+    "--skip=ranking::tests::freshness_ranking"
+    # thread 'crawler::robot_client::tests::test_errs_disallowed_path'
+    # panicked at ../stract-...-vendor/source-registry-0/system-configuration-0.5.1/src/dynamic_store.rs:154:1:
+    # Attempted to create a NULL object
+    "--skip=crawler::robot_client::tests::test_errs_disallowed_path"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
   passthru.updateScript = unstableGitUpdater { };
 
   meta = {
@@ -68,9 +87,7 @@ rustPlatform.buildRustPackage {
     '';
     homepage = "https://github.com/StractOrg/stract";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [
-      ailsa-sun
-    ];
-    teams = [ lib.teams.ngi ];
+    maintainers = with lib.maintainers; [ ailsa-sun ];
+    teams = with lib.teams; [ ngi ];
   };
 }

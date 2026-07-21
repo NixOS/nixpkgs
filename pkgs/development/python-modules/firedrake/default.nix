@@ -4,9 +4,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   python,
-  pax-utils,
 
   # build-system
   setuptools,
@@ -17,12 +15,13 @@
   decorator,
   cachetools,
   mpi4py,
-  fenics-ufl,
+  firedrake-ufl,
   firedrake-fiat,
   h5py,
   libsupermesh,
   loopy,
   petsc4py,
+  petsctools,
   numpy,
   packaging,
   pkgconfig,
@@ -36,6 +35,7 @@
   sympy,
   islpy,
   matplotlib,
+  immutabledict,
 
   # tests
   pytest,
@@ -56,38 +56,26 @@ let
     mpi-pytest = self.callPackage mpi-pytest.override { };
   });
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "firedrake";
-  version = "2025.4.2";
+  version = "2026.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firedrakeproject";
     repo = "firedrake";
-    tag = version;
-    hash = "sha256-bAGmXoHPAdMYJMMQYVq98LYro1Vd+o9pfvXC3BsQUf0=";
+    tag = finalAttrs.version;
+    hash = "sha256-scsxxs9k280R9+mM5CC7aIkKJ8rR1faexnUuMrDO9+k=";
   };
 
-  postPatch =
-    # relax build-dependency petsc4py
-    ''
-      substituteInPlace pyproject.toml --replace-fail \
-        "petsc4py==3.23.4" "petsc4py"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace firedrake/petsc.py --replace-fail \
-        'program = ["ldd"]' \
-        'program = ["${lib.getExe' pax-utils "lddtree"}"]'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace firedrake/petsc.py --replace-fail \
-        'program = ["otool"' \
-        'program = ["${lib.getExe' stdenv.cc.bintools.bintools "otool"}"'
-    '';
+  # relax build-dependency petsc4py
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace-fail \
+      "petsc4py==3.25.0" "petsc4py"
+  '';
 
   pythonRelaxDeps = [
     "decorator"
-    "slepc4py"
   ];
 
   build-system = [
@@ -110,12 +98,14 @@ buildPythonPackage rec {
     decorator
     cachetools
     firedrakePackages.mpi4py
-    fenics-ufl
+    firedrake-ufl
     firedrake-fiat
     firedrakePackages.h5py
+    immutabledict
     libsupermesh
     loopy
     petsc4py
+    petsctools
     numpy
     packaging
     pkgconfig
@@ -152,20 +142,11 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
-  # These scripts are used by official sdist/editable_wheel only
-  postInstall = ''
-    rm $out/bin/firedrake-{check,status,run-split-tests}
-  '';
-
-  preCheck = ''
-    rm -rf firedrake pyop2 tinyasm tsfc
-  '';
-
   # run official smoke tests
   checkPhase = ''
     runHook preCheck
 
-    make check
+    $out/bin/firedrake-check
 
     runHook postCheck
   '';
@@ -198,4 +179,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ qbisi ];
   };
-}
+})

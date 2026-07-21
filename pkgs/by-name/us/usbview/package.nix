@@ -8,14 +8,14 @@
   gtk3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "usbview";
   version = "3.1";
 
   src = fetchFromGitHub {
     owner = "gregkh";
     repo = "usbview";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-h+sB83BYsrB2VxwtatPWNiM0WdTCMY289nh+/0o8GOw=";
   };
 
@@ -29,15 +29,14 @@ stdenv.mkDerivation rec {
     gtk3
   ];
 
-  meta = with lib; {
+  meta = {
     description = "USB viewer for Linux";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     homepage = "http://www.kroah.com/linux-usb/";
-    maintainers = with maintainers; [
-      shamilton
+    maintainers = with lib.maintainers; [
       h7x4
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "usbview";
   };
-}
+})

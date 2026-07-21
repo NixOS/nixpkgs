@@ -7,16 +7,20 @@
 
 buildGoModule (finalAttrs: {
   pname = "atmos";
-  version = "1.189.0";
+  version = "1.220.0";
 
   src = fetchFromGitHub {
     owner = "cloudposse";
     repo = "atmos";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-udreQcDKZYnOLxeEUQfC+OsLg1VdwXP9R7hDKD6YEkw=";
+    hash = "sha256-kUCSa6Kw8wfGfMi3swqwt9mT0ZmniQVE/h5XWkjh+SM=";
   };
 
-  vendorHash = "sha256-RnmYUEgVQyZXvPPIXxS8cCkpKkQTGxQzawfDN4zVLHw=";
+  vendorHash = "sha256-X8R0hRTDKvKmBWgV4ujVQrHIE935wG6sogQAzv2fdTg=";
+
+  env.CGO_ENABLED = 0; # Compiles a pure statically linked Go binary.
+
+  subPackages = [ "." ]; # Speeds up the build.
 
   ldflags = [
     "-s"
@@ -54,6 +58,5 @@ buildGoModule (finalAttrs: {
     description = "Universal Tool for DevOps and Cloud Automation (works with terraform, helm, helmfile, etc)";
     mainProgram = "atmos";
     license = lib.licenses.asl20;
-    teams = [ lib.teams.cloudposse ];
   };
 })

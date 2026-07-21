@@ -4,15 +4,15 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "polenum";
   version = "1.7";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Wh1t3Fox";
     repo = "polenum";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-/xjGwolpbkh/ig0N9gpSTQMIJ/2ayThRBzx3tF1kfjM=";
   };
 
@@ -28,11 +28,11 @@ python3.pkgs.buildPythonApplication rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to get the password policy from a windows machine";
     homepage = "https://github.com/Wh1t3Fox/polenum";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ exploitoverload ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ exploitoverload ];
     mainProgram = "polenum";
   };
-}
+})

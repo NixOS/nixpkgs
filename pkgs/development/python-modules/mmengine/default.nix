@@ -6,7 +6,7 @@
   fetchpatch,
 
   # build-system
-  setuptools,
+  setuptools_80,
 
   # dependencies
   addict,
@@ -21,18 +21,18 @@
 
   # tests
   bitsandbytes,
-  coverage,
   dvclive,
   lion-pytorch,
   lmdb,
   mlflow,
   parameterized,
   pytestCheckHook,
+  torchvision,
   transformers,
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mmengine";
   version = "0.10.7";
   pyproject = true;
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "open-mmlab";
     repo = "mmengine";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hQnwenuxHQwl+DwQXbIfsKlJkmcRvcHV1roK7q2X1KA=";
   };
 
@@ -64,14 +64,15 @@ buildPythonPackage rec {
       substituteInPlace setup.py \
         --replace-fail \
           "return locals()['__version__']" \
-          "return '${version}'"
+          "return '${finalAttrs.version}'"
     ''
     + ''
       substituteInPlace tests/test_config/test_lazy.py \
         --replace-fail "import numpy.compat" ""
     '';
 
-  build-system = [ setuptools ];
+  # https://github.com/open-mmlab/mmengine/issues/1616
+  build-system = [ setuptools_80 ];
 
   dependencies = [
     addict
@@ -89,13 +90,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     bitsandbytes
-    coverage
     dvclive
     lion-pytorch
     lmdb
     mlflow
     parameterized
     pytestCheckHook
+    torchvision
     transformers
     writableTmpDirAsHomeHook
   ];
@@ -109,6 +110,11 @@ buildPythonPackage rec {
     '';
 
   disabledTestPaths = [
+    # MlflowVisBackend uses the deprecated mlflow filesystem store, which is
+    # throws an error since mlflow 3.13. See upstream issue:
+    # https://github.com/open-mmlab/mmengine/issues/1687
+    "tests/test_visualizer/test_vis_backend.py::TestMLflowVisBackend"
+
     # Require unpackaged aim
     "tests/test_visualizer/test_vis_backend.py::TestAimVisBackend"
 
@@ -130,9 +136,39 @@ buildPythonPackage rec {
     # ValueError: User specified autocast device_type must be cuda or cpu, but got mps
     "tests/test_runner/test_runner.py::TestRunner::test_test"
     "tests/test_runner/test_runner.py::TestRunner::test_val"
+
+    # Fails in pytestCheckHook due to multiple copies accessing the same resources (nixpkgs-review
+    "tests/test_hooks/test_ema_hook.py::TestEMAHook::test_after_test_epoch"
+    "tests/test_hooks/test_ema_hook.py::TestEMAHook::test_after_val_epoch"
+    "tests/test_hooks/test_ema_hook.py::TestEMAHook::test_before_test_epoch"
+    "tests/test_hooks/test_ema_hook.py::TestEMAHook::test_before_val_epoch"
+    "tests/test_infer/test_infer.py"
+    "tests/test_runner/test_runner.py::TestRunner::test_checkpoint"
+
+    # torch.distributed.DistNetworkError: [...] message: address already in use
+    # Happens in nixpkgs-review due to the lack of network namespacing
+    # Note: These all worked fine in nix-build
+    "tests/test_dist/test_dist.py"
+    "tests/test_dist/test_utils.py" # fails in _init_dist_env
+    "tests/test_hooks/test_sync_buffers_hook.py::TestSyncBuffersHook::test_sync_buffers_hook"
+    "tests/test_model/test_model_utils.py::test_is_model_wrapper"
+    "tests/test_model/test_wrappers/test_model_wrapper.py::TestDistributedDataParallel"
+    "tests/test_optim/test_optimizer/test_optimizer.py::TestZeroOptimizer::test_zero_redundancy_optimizer"
+    "tests/test_runner/test_runner.py::TestRunner::test_custom_loop"
+    "tests/test_runner/test_runner.py::TestRunner::test_default_scope"
+    "tests/test_runner/test_runner.py::TestRunner::test_init"
+    "tests/test_runner/test_runner.py::TestRunner::test_train"
+    "tests/test_optim/test_optimizer/test_optimizer_wrapper.py::TestOptimWrapper::test_optim_context"
+    "tests/test_testing/test_runner_test_case.py"
+
+    # TypeError: 'BaseDataset' object is not callable
+    "tests/test_dataset/test_base_dataset.py::TestBaseDataset::test_get_subset[False-True]"
   ];
 
   disabledTests = [
+    # AssertionError: No valid profiler activities found
+    "test_with_runner"
+
     # Require network access
     "test_fileclient"
     "test_http_backend"
@@ -147,20 +183,37 @@ buildPythonPackage rec {
     # AssertionError: os is not <module 'os' (frozen)>
     "test_lazy_module"
   ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # RuntimeError: Failed to initialize cpuinfo!
+    "test_to_device_and_dtype_00_cpu"
+    "test_to_device_and_dtype_01_cpu"
+    "test_to_device_and_dtype_02_cpu"
+    "test_to_device_and_dtype_09_cpu"
+    "test_to_device_and_dtype_10_cpu"
+    "test_to_device_and_dtype_11_cpu"
+    "test_to_device_and_dtype_12"
+    "test_to_device_and_dtype_13"
+    "test_to_device_and_dtype_14"
+    "test_to_device_and_dtype_21"
+    "test_to_device_and_dtype_22"
+    "test_to_device_and_dtype_23"
+    "test_to_dtype_0"
+    "test_to_dtype_3"
+  ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Fails when max-jobs is set to use fewer processes than cores
     # for example `AssertionError: assert 14 == 4`
     "test_setup_multi_processes"
-  ];
 
-  # torch.distributed.DistNetworkError: The server socket has failed to bind.
-  __darwinAllowLocalNetworking = true;
+    # Crashes in pytestCheckHook due to MPS incompatibility in torch
+    "test_with_runner"
+  ];
 
   meta = {
     description = "Library for training deep learning models based on PyTorch";
     homepage = "https://github.com/open-mmlab/mmengine";
-    changelog = "https://github.com/open-mmlab/mmengine/releases/tag/v${version}";
-    license = with lib.licenses; [ asl20 ];
+    changelog = "https://github.com/open-mmlab/mmengine/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rxiao ];
   };
-}
+})

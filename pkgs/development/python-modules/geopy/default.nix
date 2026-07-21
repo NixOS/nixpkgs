@@ -3,27 +3,30 @@
   buildPythonPackage,
   docutils,
   fetchFromGitHub,
+  setuptools,
   geographiclib,
   pytest7CheckHook,
   pythonAtLeast,
-  pythonOlder,
   pytz,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "geopy";
   version = "2.4.1";
-  format = "setuptools";
-  disabled = pythonOlder "3.7";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "geopy";
     repo = "geopy";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-mlOXDEtYry1IUAZWrP2FuY/CGliUnCPYLULnLNN0n4Y=";
   };
 
-  propagatedBuildInputs = [ geographiclib ];
+  build-system = [ setuptools ];
+
+  dependencies = [ geographiclib ];
 
   nativeCheckInputs = [
     docutils
@@ -44,11 +47,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/geopy/geopy";
     description = "Python Geocoding Toolbox";
-    changelog = "https://github.com/geopy/geopy/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/geopy/geopy/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

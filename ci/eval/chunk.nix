@@ -2,21 +2,24 @@
 {
   lib ? import ../../lib,
   path ? ../..,
-  # The file containing all available attribute paths, which are split into chunks here
-  attrpathFile,
+  # The file containing the preEval result
+  preEvalFile,
   chunkSize,
   myChunk,
   includeBroken,
   systems,
+  extraNixpkgsConfigJson,
 }:
 
 let
-  attrpaths = lib.importJSON attrpathFile;
-  myAttrpaths = lib.sublist (chunkSize * myChunk) chunkSize attrpaths;
+  preEvalResult = lib.importJSON preEvalFile;
+  myAttrpaths = lib.sublist (chunkSize * myChunk) chunkSize preEvalResult.paths;
 
   unfiltered = import ./outpaths.nix {
     inherit path;
     inherit includeBroken systems;
+    inherit (preEvalResult) attrPathsDisallowedForInternalUse;
+    extraNixpkgsConfig = builtins.fromJSON extraNixpkgsConfigJson;
   };
 
   # Turns the unfiltered recursive attribute set into one that is limited to myAttrpaths

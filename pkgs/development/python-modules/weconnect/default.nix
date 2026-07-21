@@ -5,30 +5,28 @@
   fetchFromGitHub,
   oauthlib,
   pillow,
+  pyjwt,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "weconnect";
-  version = "0.60.8";
+  version = "0.60.11";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "tillsteinbach";
     repo = "WeConnect-python";
-    tag = "v${version}";
-    hash = "sha256-o8g409R+3lXlwPiDFi9eCzTwcDcZhMEMcc8a1YvlomM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-llAWCjhP/fwI+H8BRpMYxba8jC+WDc66xkUDwT3NHcA=";
   };
 
   postPatch = ''
     substituteInPlace weconnect/__version.py \
-      --replace-fail "0.0.0dev" "${version}"
+      --replace-fail "0.0.0dev" "${finalAttrs.version}"
     substituteInPlace setup.py \
       --replace-fail "setup_requires=SETUP_REQUIRED" "setup_requires=[]" \
       --replace-fail "tests_require=TEST_REQUIRED" "tests_require=[]"
@@ -36,14 +34,18 @@ buildPythonPackage rec {
       --replace-fail "required_plugins = pytest-cov" ""
   '';
 
+  pythonRelaxDeps = [
+    "oauthlib"
+    "requests"
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [
     oauthlib
+    pyjwt
     requests
   ];
-
-  pythonRelaxDeps = [ "oauthlib" ];
 
   optional-dependencies = {
     Images = [
@@ -59,11 +61,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "weconnect" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for the Volkswagen WeConnect Services";
     homepage = "https://github.com/tillsteinbach/WeConnect-python";
-    changelog = "https://github.com/tillsteinbach/WeConnect-python/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/tillsteinbach/WeConnect-python/releases/tag/v${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

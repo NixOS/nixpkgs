@@ -53,12 +53,12 @@ stdenv.mkDerivation rec {
     ${git}/bin/git apply ${p1}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "X11 keyboard indicator and switcher";
     homepage = "https://zen-tools.github.io/gxkb/";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.omgbebebe ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.omgbebebe ];
+    platforms = lib.platforms.linux;
     mainProgram = "gxkb";
   };
 }

@@ -57,7 +57,7 @@ let
   inherit (lib.strings) toJSON;
 
   cfg = config.systemd;
-  lndir = "${pkgs.buildPackages.xorg.lndir}/bin/lndir";
+  lndir = "${pkgs.buildPackages.lndir}/bin/lndir";
   systemd = cfg.package;
 in
 rec {
@@ -67,7 +67,9 @@ rec {
   mkPathSafeName = replaceStrings [ "@" ":" "\\" "[" "]" ] [ "-" "-" "-" "" "" ];
 
   # a type for options that take a unit name
-  unitNameType = types.strMatching "[a-zA-Z0-9@%:_.\\-]+[.](service|socket|device|mount|automount|swap|target|path|timer|scope|slice)";
+  # note: redundantly escaping backslash in the bracket expression makes the regex
+  # slightly more portable even though POSIX doesn't require it.
+  unitNameType = types.strMatching "[a-zA-Z0-9@%:_.\\\\-]+[.](service|socket|device|mount|automount|swap|target|path|timer|scope|slice)";
 
   makeUnit =
     name: unit:
@@ -76,16 +78,13 @@ rec {
         {
           preferLocalBuild = true;
           allowSubstitutes = false;
-          # unit.text can be null. But variables that are null listed in
-          # passAsFile are ignored by nix, resulting in no file being created,
-          # making the mv operation fail.
-          text = optionalString (unit.text != null) unit.text;
-          passAsFile = [ "text" ];
+          text = unit.text or "";
+          __structuredAttrs = true;
         }
         ''
           name=${shellEscape name}
           mkdir -p "$out/$(dirname -- "$name")"
-          mv "$textPath" "$out/$name"
+          printf "%s" "$text" > "$out/$name"
         ''
     else
       pkgs.runCommand "unit-${mkPathSafeName name}-disabled"
@@ -138,7 +137,7 @@ rec {
   toIntBaseDetected =
     value:
     assert (match "[0-9]+|0x[0-9a-fA-F]+" value) != null;
-    (builtins.fromTOML "v=${value}").v;
+    (fromTOML "v=${value}").v;
 
   hexChars = stringToCharacters "0123456789abcdefABCDEF";
 
@@ -278,6 +277,21 @@ rec {
       attr ? ${name} && !(hasPrefix "@" attr.${name})
     ) "Systemd ${group} field `${name}' is not a systemd credential";
 
+  assertRouteMetricOrTriple =
+    name: group: attr:
+    let
+      isMetric = n: 0 <= n && 4294967295 >= n;
+
+      parts = splitString ":" attr.${name};
+      partsValid =
+        length parts == 3 && all (p: (match "[0-9]+" p) != null && isMetric (toIntBase10 p)) parts;
+      valid = (isInt attr.${name} && isMetric attr.${name}) || partsValid;
+    in
+    optional (attr ? ${name} && !valid) (
+      "Systemd ${group} field `${name}' must either be an integer in the range [0,4294967295]"
+      + " or a string containing three integers separated with `:`"
+    );
+
   checkUnitConfig =
     group: checks: attrs:
     let
@@ -349,6 +363,15 @@ rec {
       )
     );
 
+  settingsToSections =
+    settings:
+    concatStringsSep "\n" (
+      mapAttrsToList (section_name: section_attrs: ''
+        [${section_name}]
+        ${attrsToSection section_attrs}
+      '') settings
+    );
+
   generateUnits =
     {
       allowCollisions ? true,
@@ -361,12 +384,13 @@ rec {
     }:
     let
       typeDir =
-        ({
+        {
           system = "system";
           initrd = "system";
           user = "user";
           nspawn = "nspawn";
-        }).${type};
+        }
+        .${type};
     in
     pkgs.runCommand "${type}-units"
       {
@@ -678,17 +702,19 @@ rec {
       };
     };
 
-  stage2ServiceConfig = {
-    imports = [ serviceConfig ];
-    # Default path for systemd services. Should be quite minimal.
-    config.path = mkAfter [
-      pkgs.coreutils
-      pkgs.findutils
-      pkgs.gnugrep
-      pkgs.gnused
-      systemd
-    ];
-  };
+  stage2ServiceConfig =
+    { config, ... }:
+    {
+      imports = [ serviceConfig ];
+      # Default path for systemd services. Should be quite minimal.
+      config.path = mkIf config.enableDefaultPath (mkAfter [
+        pkgs.coreutils
+        pkgs.findutils
+        pkgs.gnugrep
+        pkgs.gnused
+        systemd
+      ]);
+    };
 
   stage1ServiceConfig = serviceConfig;
 
@@ -723,10 +749,7 @@ rec {
 
   commonUnitText =
     def: lines:
-    ''
-      [Unit]
-      ${attrsToSection def.unitConfig}
-    ''
+    (settingsToSections { Unit = def.unitConfig; })
     + lines
     + optionalString (def.wantedBy != [ ]) ''
 
@@ -744,10 +767,7 @@ rec {
       enable
       overrideStrategy
       ;
-    text = ''
-      [Unit]
-      ${attrsToSection def.unitConfig}
-    '';
+    text = (settingsToSections { Unit = def.unitConfig; });
   };
 
   serviceToUnit = def: {
@@ -831,10 +851,9 @@ rec {
       enable
       overrideStrategy
       ;
-    text = commonUnitText def ''
-      [Timer]
-      ${attrsToSection def.timerConfig}
-    '';
+    text = commonUnitText def (settingsToSections {
+      Timer = def.timerConfig;
+    });
   };
 
   pathToUnit = def: {
@@ -847,10 +866,9 @@ rec {
       enable
       overrideStrategy
       ;
-    text = commonUnitText def ''
-      [Path]
-      ${attrsToSection def.pathConfig}
-    '';
+    text = commonUnitText def (settingsToSections {
+      Path = def.pathConfig;
+    });
   };
 
   mountToUnit = def: {
@@ -863,10 +881,9 @@ rec {
       enable
       overrideStrategy
       ;
-    text = commonUnitText def ''
-      [Mount]
-      ${attrsToSection def.mountConfig}
-    '';
+    text = commonUnitText def (settingsToSections {
+      Mount = def.mountConfig;
+    });
   };
 
   automountToUnit = def: {
@@ -879,10 +896,9 @@ rec {
       enable
       overrideStrategy
       ;
-    text = commonUnitText def ''
-      [Automount]
-      ${attrsToSection def.automountConfig}
-    '';
+    text = commonUnitText def (settingsToSections {
+      Automount = def.automountConfig;
+    });
   };
 
   sliceToUnit = def: {
@@ -895,10 +911,9 @@ rec {
       enable
       overrideStrategy
       ;
-    text = commonUnitText def ''
-      [Slice]
-      ${attrsToSection def.sliceConfig}
-    '';
+    text = commonUnitText def (settingsToSections {
+      Slice = def.sliceConfig;
+    });
   };
 
   # Create a directory that contains systemd definition files from an attrset

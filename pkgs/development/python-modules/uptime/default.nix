@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "uptime";
   version = "3.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "uptime" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform way to retrieve system uptime and boot time";
     homepage = "https://github.com/Cairnarvon/uptime";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ rob ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ rob ];
   };
 }

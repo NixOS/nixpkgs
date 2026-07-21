@@ -6,7 +6,7 @@
   ninja,
   nasm,
   pkg-config,
-  xxHash,
+  xxhash,
   withTools ? false, # "dav1d" binary
   withExamples ? false,
   SDL2, # "dav1dplay" binary
@@ -25,15 +25,15 @@
 
 assert useVulkan -> withExamples;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dav1d";
-  version = "1.5.1";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "videolan";
     repo = "dav1d";
-    rev = version;
-    hash = "sha256-qcs9QoZ/uWEQ8l1ChZ8nYctZnnWJ0VvCw1q2rEktC9g=";
+    rev = finalAttrs.version;
+    hash = "sha256-E3da/LJ8HNy1osExmupovqnL8JHgVNzPUCG5F8TJKXQ=";
   };
 
   outputs = [
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   ];
   # TODO: doxygen (currently only HTML and not build by default).
   buildInputs = [
-    xxHash
+    xxhash
   ]
   ++ lib.optional withExamples SDL2
   ++ lib.optionals useVulkan [
@@ -83,11 +83,11 @@ stdenv.mkDerivation rec {
       hardware decoder. It supports all features from AV1, including all
       subsampling and bit-depth parameters.
     '';
-    inherit (src.meta) homepage;
-    changelog = "https://code.videolan.org/videolan/dav1d/-/tags/${version}";
-    # More technical: https://code.videolan.org/videolan/dav1d/blob/${version}/NEWS
+    inherit (finalAttrs.src.meta) homepage;
+    changelog = "https://code.videolan.org/videolan/dav1d/-/tags/${finalAttrs.version}";
+    # More technical: https://code.videolan.org/videolan/dav1d/blob/${finalAttrs.version}/NEWS
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix ++ lib.platforms.windows;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
-}
+})

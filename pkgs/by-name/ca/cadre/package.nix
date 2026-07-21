@@ -11,14 +11,14 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "cadre";
 
-  meta = with lib; {
+  meta = {
     description = "Toolkit to add Ruby development - in-editor coverage, libnotify of test runs";
     homepage = "https://github.com/nyarly/cadre";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       nyarly
       nicknovitski
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

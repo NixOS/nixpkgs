@@ -13,20 +13,26 @@
 
   # tests
   inline-snapshot,
+  pydantic,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rich-toolkit";
-  version = "0.15.1";
+  version = "0.20.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "patrick91";
     repo = "rich-toolkit";
-    tag = version;
-    hash = "sha256-NcdABfbqE+VzE6bptBO98Cf7jetlfVqa/LB5Chg/P8Y=";
+    tag = finalAttrs.version;
+    hash = "sha256-XYSksCMCCxO6wzsEEJ6X340iT32hU5n/EikKLZ2m7A0=";
   };
+
+  postPatch = ''
+    # the commit updating the version happens only after tagging
+    sed -i 's/version = ".*"/version = "${finalAttrs.version}"/' pyproject.toml
+  '';
 
   build-system = [ hatchling ];
 
@@ -38,16 +44,17 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     inline-snapshot
+    pydantic
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "rich_toolkit" ];
 
   meta = {
-    changelog = "https://github.com/patrick91/rich-toolkit/releases/tag/${src.tag}";
+    changelog = "https://github.com/patrick91/rich-toolkit/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Rich toolkit for building command-line applications";
     homepage = "https://github.com/patrick91/rich-toolkit/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
-}
+})

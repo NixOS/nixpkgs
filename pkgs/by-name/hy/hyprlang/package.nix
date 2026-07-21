@@ -1,21 +1,21 @@
 {
   lib,
-  stdenv,
+  gcc16Stdenv,
   fetchFromGitHub,
   cmake,
   pkg-config,
   hyprutils,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprlang";
-  version = "0.6.4";
+  version = "0.6.8";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprlang";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-pyDe001L3a1dQiUun25y2z4R8vOgx0cmo9l1SvWKEyA=";
+    hash = "sha256-ZGzcH3gKD9nj8oDLV1+o6ice6kMHZRXkNx24cfyPkRs=";
   };
 
   nativeBuildInputs = [
@@ -34,14 +34,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  cmakeBuildType = "RelWithDebInfo";
+  separateDebugInfo = true;
+
   meta = {
     homepage = "https://github.com/hyprwm/hyprlang";
     description = "Official implementation library for the hypr config language";
     license = lib.licenses.lgpl3Only;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [
-      iogamaster
-    ];
     teams = [ lib.teams.hyprland ];
   };
 })

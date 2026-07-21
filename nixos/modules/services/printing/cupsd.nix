@@ -54,6 +54,7 @@ let
       cups-filters
       pkgs.ghostscript
     ]
+    ++ lib.optional cfg.browsed.enable cfg.browsed.package
     ++ cfg.drivers;
     pathsToLink = [
       "/lib"
@@ -139,7 +140,7 @@ let
       splitAddress = addr: strings.splitString ":" addr;
       extractPort = addr: builtins.foldl' (a: b: b) "" (splitAddress addr);
     in
-    builtins.map (address: strings.toInt (extractPort address)) addresses;
+    map (address: strings.toInt (extractPort address)) addresses;
 
 in
 
@@ -425,7 +426,9 @@ in
 
       preStart =
         lib.optionalString cfg.stateless ''
-          rm -rf /var/cache/cups /var/lib/cups /var/spool/cups
+          shopt -s extglob
+          rm -rf /var/cache/cups /var/spool/cups /var/lib/cups/!(ssl)
+          shopt -u extglob
         ''
         + ''
           (umask 022 && mkdir -p /var/cache /var/lib /var/spool)
@@ -540,6 +543,6 @@ in
 
   };
 
-  meta.maintainers = with lib.maintainers; [ matthewbauer ];
+  meta.maintainers = [ ];
 
 }

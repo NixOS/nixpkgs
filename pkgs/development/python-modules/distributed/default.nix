@@ -6,7 +6,6 @@
   # build-system
   setuptools,
   setuptools-scm,
-  versioneer,
 
   # dependencies
   click,
@@ -22,34 +21,26 @@
   tblib,
   toolz,
   tornado,
-  urllib3,
   zict,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "distributed";
-  version = "2025.7.0";
+  version = "2026.7.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "distributed";
-    tag = version;
-    hash = "sha256-np4hCamNTbnmLdfjFeHsxEEm9XI1O0kOczDe1YjSziw=";
+    tag = finalAttrs.version;
+    hash = "sha256-JwN+Ey+Ii8mELa6oVS+SDiOPYyMcKdaiSjjMqDze+kc=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "versioneer[toml]==" "versioneer[toml]>=" \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
-  '';
 
   build-system = [
     setuptools
     setuptools-scm
-    versioneer
-  ]
-  ++ versioneer.optional-dependencies.toml;
+  ];
 
   pythonRelaxDeps = [ "dask" ];
 
@@ -67,7 +58,6 @@ buildPythonPackage rec {
     tblib
     toolz
     tornado
-    urllib3
     zict
   ];
 
@@ -79,8 +69,8 @@ buildPythonPackage rec {
   meta = {
     description = "Distributed computation in Python";
     homepage = "https://distributed.readthedocs.io/";
-    changelog = "https://github.com/dask/distributed/releases/tag/${src.tag}";
+    changelog = "https://github.com/dask/distributed/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ teh ];
   };
-}
+})

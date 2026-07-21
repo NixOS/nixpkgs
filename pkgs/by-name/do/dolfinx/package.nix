@@ -25,19 +25,15 @@ let
   );
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "0.9.0.post1";
+  version = "0.11.0.post0";
   pname = "dolfinx";
 
   src = fetchFromGitHub {
     owner = "fenics";
     repo = "dolfinx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4IIx7vUZeDwOGVdyC2PBvfhVjrmGZeVQKAwgDYScbY0=";
+    hash = "sha256-brmU6AA7lN4TyHjHcg4mHUIj/OvJ16pfspEN95M4oOE=";
   };
-
-  preConfigure = ''
-    cd cpp
-  '';
 
   nativeBuildInputs = [
     cmake
@@ -62,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.fenics-ffcx
   ];
 
+  cmakeDir = "../cpp";
+
   cmakeFlags = [
     (lib.cmakeBool "DOLFINX_ENABLE_ADIOS2" true)
     (lib.cmakeBool "DOLFINX_ENABLE_PETSC" true)
@@ -79,9 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
       pname = "${finalAttrs.pname}-unittests";
       inherit (finalAttrs) version src;
 
-      preConfigure = ''
-        cd cpp/test
-      '';
+      cmakeDir = "../cpp/test";
 
       nativeBuildInputs = [
         cmake

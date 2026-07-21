@@ -2,30 +2,33 @@
   lib,
   fetchPypi,
   buildPythonPackage,
+  setuptools,
   tkinter,
 }:
 
 buildPythonPackage rec {
   pname = "pymsgbox";
-  version = "1.0.9";
-  format = "setuptools";
+  version = "2.0.1";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "PyMsgBox";
+    pname = "pymsgbox";
     inherit version;
-    hash = "sha256-IZQifei/96PW2lQYSHBaFV3LsqBu4SDZ8oCh1/USY/8=";
+    hash = "sha256-mNBVxJpRHcwQ+gjDBD5xAtRo9eSzqDxtPGHfcix9eY0=";
   };
 
-  propagatedBuildInputs = [ tkinter ];
+  build-system = [ setuptools ];
+
+  dependencies = [ tkinter ];
 
   # Finding tests fails
   doCheck = false;
   pythonImportsCheck = [ "pymsgbox" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple, cross-platform, pure Python module for JavaScript-like message boxes";
     homepage = "https://github.com/asweigart/PyMsgBox";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jluttine ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jluttine ];
   };
 }

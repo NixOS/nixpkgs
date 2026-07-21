@@ -11,7 +11,7 @@
 assert (!blas.isILP64);
 assert blas.isILP64 == lapack.isILP64;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wannier90";
   version = "3.1.0";
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "wannier-developers";
     repo = "wannier90";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+Mq7lM6WuwAnK/2FlDz9gNRIg2sRazQRezb3BfD0veY=";
   };
 
@@ -73,19 +73,16 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkInputs = [ python3 ];
   checkTarget = [ "test-serial" ];
-  preCheck = ''
-    export OMP_NUM_THREADS=4
-  '';
 
   enableParallelBuilding = true;
 
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     description = "Calculation of maximally localised Wannier functions";
     homepage = "https://github.com/wannier-developers/wannier90";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.sheepforce ];
+    maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

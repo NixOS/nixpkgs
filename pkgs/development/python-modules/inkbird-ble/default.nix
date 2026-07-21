@@ -9,22 +9,19 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   sensor-state-data,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "inkbird-ble";
-  version = "1.1.0";
+  version = "1.5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "inkbird-ble";
-    tag = "v${version}";
-    hash = "sha256-Dwp65FKtqJbgux+T3Ql09sDy6m8CCeK26aDKM3I3eJo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-I07HIbrYXTlaP4TSfyZmEhj1HAjus05JEiPD9UxRatc=";
   };
 
   build-system = [ poetry-core ];
@@ -44,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "inkbird_ble" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for Inkbird BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/inkbird-ble";
-    changelog = "https://github.com/Bluetooth-Devices/inkbird-ble/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Bluetooth-Devices/inkbird-ble/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

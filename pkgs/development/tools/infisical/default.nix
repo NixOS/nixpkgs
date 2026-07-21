@@ -13,7 +13,7 @@
 # from the root of the nixpkgs git repository, run:
 #
 #    nix-shell maintainers/scripts/update.nix \
-#      --argstr commit true \
+#      --arg commit true \
 #      --argstr package infisical
 
 let
@@ -31,7 +31,6 @@ let
           # map the platform name to the golang toolchain suffix
           # NOTE: must be synchronized with update.sh!
           x86_64-linux = "linux_amd64";
-          x86_64-darwin = "darwin_amd64";
           aarch64-linux = "linux_arm64";
           aarch64-darwin = "darwin_arm64";
         }
@@ -74,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Official Infisical CLI";
     longDescription = ''
       Infisical is the open-source secret management platform:
@@ -82,15 +81,14 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://infisical.com";
     changelog = "https://github.com/infisical/infisical/releases/tag/infisical-cli%2Fv${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "infisical";
-    maintainers = with maintainers; [ hausken ];
-    teams = [ teams.infisical ];
+    maintainers = with lib.maintainers; [ hausken ];
+    teams = [ lib.teams.infisical ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
   };
 })

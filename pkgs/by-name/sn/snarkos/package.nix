@@ -27,16 +27,18 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  # Needed to get openssl-sys to use pkg-config.
-  OPENSSL_NO_VENDOR = 1;
-  OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
-  OPENSSL_DIR = "${lib.getDev openssl}";
+  env = {
+    # Needed to get openssl-sys to use pkg-config.
+    OPENSSL_NO_VENDOR = 1;
+    OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
+    OPENSSL_DIR = "${lib.getDev openssl}";
 
-  # TODO check why rust compilation fails by including the rocksdb from nixpkgs
-  # Used by build.rs in the rocksdb-sys crate. If we don't set these, it would
-  # try to build RocksDB from source.
-  # ROCKSDB_INCLUDE_DIR="${rocksdb}/include";
-  # ROCKSDB_LIB_DIR="${rocksdb}/lib";
+    # TODO check why rust compilation fails by including the rocksdb from nixpkgs
+    # Used by build.rs in the rocksdb-sys crate. If we don't set these, it would
+    # try to build RocksDB from source.
+    # ROCKSDB_INCLUDE_DIR="${rocksdb}/include";
+    # ROCKSDB_LIB_DIR="${rocksdb}/lib";
+  };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     curl
@@ -52,12 +54,14 @@ rustPlatform.buildRustPackage rec {
   #   "--skip=helpers::block_requests::tests::test_block_requests_case_2ca"
   # ];
 
-  meta = with lib; {
+  meta = {
+    # Marked broken 2025-11-28 because it has failed on Hydra for at least one year.
+    broken = true;
     description = "Decentralized Operating System for Zero-Knowledge Applications";
     homepage = "https://snarkos.org";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
+    platforms = lib.platforms.unix;
     mainProgram = "snarkos";
   };
 }

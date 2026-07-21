@@ -18,7 +18,7 @@
   expect,
   xvfb-run,
   writeText,
-  enableStoneSense ? false,
+  enableStoneSense ? enableDFHack,
   enableTWBT ? false,
   twbt,
   themes ? { },
@@ -33,7 +33,7 @@
   # An attribute set of settings to override in data/init/*.txt.
   # For example, `init.FOO = true;` is translated to `[FOO:YES]` in init.txt
   settings ? { },
-# TODO world-gen.txt, interface.txt require special logic
+  # TODO world-gen.txt, interface.txt require special logic
 }:
 
 let
@@ -281,18 +281,18 @@ lib.throwIf (enableTWBT' && !enableDFHack) "dwarf-fortress: TWBT requires DFHack
         export HOME="$(mktemp -dt dwarf-fortress.XXXXXX)"
       ''
       + lib.optionalString enableDFHack ''
-        expect ${dfHackExpectScript}
+        expect ${dfHackExpectScript} | tr -d '\r'
         df_home="$(find ~ -name "df_*" | head -n1)"
         test -f "$df_home/dfhack"
       ''
       + lib.optionalString isAtLeast50 ''
-        expect ${vanillaExpectScript true}
+        expect ${vanillaExpectScript true} | tr -d '\r'
         df_home="$(find ~ -name "df_*" | head -n1)"
         test ! -f "$df_home/dfhack"
         test -f "$df_home/libfmod_plugin.so"
       ''
       + ''
-        expect ${vanillaExpectScript false}
+        expect ${vanillaExpectScript false} | tr -d '\r'
         df_home="$(find ~ -name "df_*" | head -n1)"
         test ! -f "$df_home/dfhack"
         test ! -f "$df_home/libfmod_plugin.so"

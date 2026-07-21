@@ -156,7 +156,7 @@ let
 
         # Verify all the udev rules
         echo "Verifying udev rules using udevadm verify..."
-        udevadm verify --resolve-names=never --no-style $out
+        udevadm verify --resolve-names=late --no-style $out
         echo "OK"
 
         # If auto-configuration is disabled, then remove
@@ -179,7 +179,8 @@ let
         for i in $packages; do
           echo "Adding hwdb files for package $i"
           for j in $i/{etc,lib}/udev/hwdb.d/*; do
-            ln -s $j etc/udev/hwdb.d/$(basename $j)
+            # This must be a copy, not a symlink, because --root below will chase links within the root argument.
+            cp $j etc/udev/hwdb.d/$(basename $j)
           done
         done
 
@@ -409,7 +410,7 @@ in
           config.hardware.firmwareCompression == "zstd" -> config.boot.kernelPackages.kernelAtLeast "5.19";
         message = ''
           The firmware compression method is set to zstd, but the kernel version is too old.
-          The kernel version must be at least 5.3 to use zstd compression.
+          The kernel version must be at least 5.19 to use zstd compression.
         '';
       }
       {
@@ -454,7 +455,6 @@ in
       "systemd-udevd-control.socket"
       "systemd-udevd-kernel.socket"
       "systemd-udevd.service"
-      "systemd-udev-settle.service"
       "systemd-udev-trigger.service"
     ];
     boot.initrd.systemd.storePaths = [
@@ -464,6 +464,14 @@ in
       "${config.boot.initrd.systemd.package}/lib/udev/scsi_id"
       "${config.boot.initrd.systemd.package}/lib/udev/rules.d"
     ]
+    ++ lib.optional (
+      # https://github.com/systemd/systemd/blob/v259/meson.build#L1529-L1530
+      pkgs.stdenv.hostPlatform.isx86
+      || pkgs.stdenv.hostPlatform.isAarch
+      || pkgs.stdenv.hostPlatform.isLoongArch64
+      || pkgs.stdenv.hostPlatform.isMips
+      || pkgs.stdenv.hostPlatform.isRiscV64
+    ) "${config.boot.initrd.systemd.package}/lib/udev/dmi_memory_id"
     ++ map (x: "${x}/bin") config.boot.initrd.services.udev.binPackages;
 
     # Generate the udev rules for the initrd

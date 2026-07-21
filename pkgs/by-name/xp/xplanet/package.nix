@@ -13,12 +13,12 @@
   netpbm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xplanet";
   version = "1.3.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/xplanet/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/xplanet/xplanet-${finalAttrs.version}.tar.gz";
     sha256 = "1rzc1alph03j67lrr66499zl0wqndiipmj99nqgvh9xzm1qdb023";
   };
 
@@ -48,15 +48,14 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing";
 
-  meta = with lib; {
+  meta = {
     description = "Renders an image of the earth or other planets into the X root window";
     mainProgram = "xplanet";
     homepage = "https://xplanet.sourceforge.net";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [
       lassulus
-      sander
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

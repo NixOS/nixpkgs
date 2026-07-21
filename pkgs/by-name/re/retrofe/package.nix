@@ -28,6 +28,11 @@ stdenv.mkDerivation {
     sha256 = "sha256-uBfECbU2Df/pPpEXXq62S7Ec0YU4lPIsZ8k5UmKD7xQ=";
   };
 
+  postPatch = ''
+    substituteInPlace RetroFE/Source/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.8)" "cmake_minimum_required (VERSION 3.10)"
+  '';
+
   nativeBuildInputs = [
     cmake
     makeWrapper
@@ -102,11 +107,10 @@ stdenv.mkDerivation {
       --run 'export RETROFE_PATH=''${RETROFE_PATH:-$PWD}'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Frontend for arcade cabinets and media PCs";
     homepage = "http://retrofe.nl/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hrdinka ];
-    platforms = with platforms; linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = with lib.platforms; linux;
   };
 }

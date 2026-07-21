@@ -20,8 +20,8 @@
   protobuf,
   pyflakes,
   pyrsistent,
+  pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   rdkafka,
   requests,
@@ -32,16 +32,14 @@
 
 buildPythonPackage rec {
   pname = "confluent-kafka";
-  version = "2.11.1";
+  version = "2.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "confluentinc";
     repo = "confluent-kafka-python";
     tag = "v${version}";
-    hash = "sha256-WpvWv6UG7T0yJ1ZKZweHbWjh+C0PbEIYbbMAS4yyhzg=";
+    hash = "sha256-VnZf6YvvpOs9/9uJHJvcmF56Ra9hhsoqrVisDuf+C6w=";
   };
 
   buildInputs = [ rdkafka ];
@@ -90,11 +88,12 @@ buildPythonPackage rec {
     cachetools
     orjson
     pyflakes
+    pytest-asyncio
     pytestCheckHook
     requests-mock
     respx
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "confluent_kafka" ];
 
@@ -113,13 +112,15 @@ buildPythonPackage rec {
     "tests/schema_registry/_sync/test_config.py"
     # crashes the test runner on shutdown
     "tests/test_kafka_error.py"
+    # stats_cb can raise during consumer.close() causing race-condition
+    "tests/test_Consumer.py::test_callback_exception_no_system_error"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Confluent's Apache Kafka client for Python";
     homepage = "https://github.com/confluentinc/confluent-kafka-python";
     changelog = "https://github.com/confluentinc/confluent-kafka-python/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mlieberman85 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mlieberman85 ];
   };
 }

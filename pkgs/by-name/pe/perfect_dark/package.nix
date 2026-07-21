@@ -22,13 +22,13 @@ assert lib.assertOneOf "romID" romID roms;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "perfect_dark";
-  version = "0-unstable-2025-08-25";
+  version = "0-unstable-2026-05-29";
 
   src = fetchFromGitHub {
-    owner = "fgsfdsfgs";
+    owner = "perfect-dark-pc-port";
     repo = "perfect_dark";
-    rev = "bb4fcffeb5dc382fce4c609897a2e82590d7d709";
-    hash = "sha256-naWE+oWgvrd4CSoBm6W4em60baTWn4uSnKbWh8WKPDM=";
+    rev = "514bf7affd3259b7919165201342ff81a026d92c";
+    hash = "sha256-HjkVk7AJFTpWE2RqQTwEp6vUzocIjMp7xs8c6Az7CBo=";
 
     postFetch = ''
       pushd $out
@@ -73,9 +73,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Point toward the compiled binary and not the shell wrapper since
     # the rom auto-detection logic is not needed in this build.
     + ''
-      substituteInPlace dist/linux/io.github.fgsfdsfgs.perfect_dark.desktop \
-        --replace-fail "Exec=io.github.fgsfdsfgs.perfect_dark.sh" \
-                       "Exec=io.github.fgsfdsfgs.perfect_dark"
+      substituteInPlace dist/linux/io.github.perfect_dark_pc_port.perfect_dark.desktop \
+        --replace-fail "Exec=io.github.perfect_dark_pc_port.perfect_dark.sh" \
+                       "Exec=io.github.perfect_dark_pc_port.perfect_dark"
     '';
 
   preConfigure = ''
@@ -86,12 +86,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     pushd ..
-    install -Dm755 build/pd.* $out/bin/io.github.fgsfdsfgs.perfect_dark
-    install -Dm644 dist/linux/io.github.fgsfdsfgs.perfect_dark.desktop \
+    install -Dm755 build/pd.* $out/bin/io.github.perfect_dark_pc_port.perfect_dark
+    install -Dm644 dist/linux/io.github.perfect_dark_pc_port.perfect_dark.desktop \
             -t $out/share/applications
-    install -Dm644 dist/linux/io.github.fgsfdsfgs.perfect_dark.png \
+    install -Dm644 dist/linux/io.github.perfect_dark_pc_port.perfect_dark.png \
             -t $out/share/icons/hicolor/256x256/apps
-    install -Dm644 dist/linux/io.github.fgsfdsfgs.perfect_dark.metainfo.xml \
+    install -Dm644 dist/linux/io.github.perfect_dark_pc_port.perfect_dark.metainfo.xml \
             -t $out/share/metainfo
     popd
 
@@ -121,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       Supported romIDs are `${lib.generators.toPretty { } roms}`.
     '';
-    homepage = "https://github.com/fgsfdsfgs/perfect_dark/";
+    homepage = "https://github.com/perfect-dark-pc-port/perfect_dark/";
     license = with lib.licenses; [
       # perfect_dark, khrplatform.h, port/fast3d
       mit
@@ -130,10 +130,9 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       PaulGrandperrin
-      normalcea
       sigmasquadron
     ];
-    mainProgram = "io.github.fgsfdsfgs.perfect_dark";
+    mainProgram = "io.github.perfect_dark_pc_port.perfect_dark";
     platforms = lib.platforms.linux;
   };
 })

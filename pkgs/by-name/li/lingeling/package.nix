@@ -5,17 +5,22 @@
   aiger,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "lingeling";
-  # This is the version used in satcomp2020
-  version = "pre1_708beb26";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "arminbiere";
     repo = "lingeling";
-    rev = "708beb26a7d5b5d5e7abd88d6f552fb1946b07c1";
-    sha256 = "1lb2g37nd8qq5hw5g6l691nx5095336yb2zlbaw43mg56hkj8357";
+    tag = "rel-${version}";
+    hash = "sha256-gVFznoptP9Ukux+1jbUpXZDPbc45EAdQ4UyeaD2cX0M=";
   };
+
+  patches = [
+    # Fix incompatible pointer type errors from GCC 15
+    # https://github.com/arminbiere/lingeling/pull/11
+    ./gcc-15.patch
+  ];
 
   configurePhase = ''
     runHook preConfigure
@@ -49,11 +54,11 @@ stdenv.mkDerivation {
     "lib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast SAT solver";
     homepage = "http://fmv.jku.at/lingeling/";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

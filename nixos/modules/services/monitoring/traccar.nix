@@ -35,8 +35,7 @@ let
       user = "sa";
     };
     logger.console = "true";
-    media.path = "${stateDirectory}/media";
-    templates.root = "${stateDirectory}/templates";
+    web.override = "${stateDirectory}/override";
   };
 
 in
@@ -95,21 +94,20 @@ in
         wants = [ "network-online.target" ];
 
         preStart = ''
-          # Copy new templates into our state directory.
-          cp -a --update=none ${pkgs.traccar}/templates ${stateDirectory}
           test -f '${configFilePath}' && rm -f '${configFilePath}'
 
-          # Substitute the configFile from Envvars read from EnvironmentFile
+          # Perform envvars substition read from environmentFile
           old_umask=$(umask)
           umask 0177
           ${lib.getExe pkgs.envsubst} \
             -i ${configuration} \
             -o ${configFilePath}
-          umask $old_umask
+          umask "$old_umask"
         '';
 
         serviceConfig = {
           DynamicUser = true;
+          WorkingDirectory = "${pkgs.traccar}";
           EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
           ExecStart = "${lib.getExe pkgs.traccar} ${configFilePath}";
           LockPersonality = true;
@@ -132,11 +130,6 @@ in
           StateDirectory = "traccar";
           SuccessExitStatus = 143;
           Type = "simple";
-          # Set the working directory to traccar's package.
-          # Traccar only searches for the DB migrations relative to it's WorkingDirectory and nothing worked to
-          # work around this. To avoid copying the migrations over to the state directory, we use the package as
-          # WorkingDirectory.
-          WorkingDirectory = "${pkgs.traccar}";
         };
       };
     };

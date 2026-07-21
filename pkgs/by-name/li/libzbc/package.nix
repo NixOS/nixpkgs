@@ -9,14 +9,14 @@
   guiSupport ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libzbc";
   version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "westerndigitalcorporation";
     repo = "libzbc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-8+HF5Wf6lQHbi8Vp2tpom1FO56lQ5RyYsgs8ii+2RD0=";
   };
 
@@ -30,14 +30,14 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional guiSupport "--enable-gui";
 
-  meta = with lib; {
+  meta = {
     description = "ZBC device manipulation library";
     homepage = "https://github.com/westerndigitalcorporation/libzbc";
     maintainers = [ ];
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd2
       lgpl3Plus
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

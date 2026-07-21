@@ -5,12 +5,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "log4cplus";
   version = "2.1.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/log4cplus/log4cplus-${version}.tar.bz2";
+    url = "mirror://sourceforge/log4cplus/log4cplus-${finalAttrs.version}.tar.bz2";
     hash = "sha256-JFDfu0qzXdLJ5k2MdQxRS/cpO4HY8yr3qxJEF/cK360=";
   };
 
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -2,10 +2,7 @@
     Test CUDA packages.
 
     This release file is currently not tested on hydra.nixos.org
-    because it requires unfree software, but it is tested by
-    https://hydra.nix-community.org/jobset/nixpkgs/cuda-nixos-unstable.
-
-    Cf. https://github.com/nix-community/infra/pull/1335
+    because it requires unfree software.
 
     Test for example like this:
 
@@ -28,6 +25,9 @@ in
   nixpkgsArgs ? {
     config = {
       allowUnfreePredicate = cudaLib.allowUnfreeCudaPredicate;
+      # [CVE-2026-24188](https://github.com/NixOS/nixpkgs/issues/522570):
+      # OOB write
+      allowInsecurePredicate = p: lib.getName p == "tensorrt";
       "${variant}Support" = true;
       inHydra = true;
 
@@ -92,12 +92,13 @@ let
       firefox-beta-unwrapped = linux;
       firefox-devedition = linux;
       firefox-devedition-unwrapped = linux;
+      freecad = linux;
       gimp = linux;
-      gimp3 = linux;
       gpu-screen-recorder = linux;
       gst_all_1.gst-plugins-bad = linux;
       jellyfin-ffmpeg = linux;
       kdePackages.kdenlive = linux;
+      krita = linux;
       lightgbm = linux;
       llama-cpp = linux;
       meshlab = linux;
@@ -146,6 +147,7 @@ let
         triton = linux;
         openai-whisper = linux;
         opencv4 = linux;
+        opencv4Full = linux;
         opensfm = linux;
         pycuda = linux;
         pymc = linux;

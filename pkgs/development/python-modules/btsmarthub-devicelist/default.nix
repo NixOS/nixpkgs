@@ -3,25 +3,25 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
+  setuptools,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "btsmarthub-devicelist";
   version = "0.2.3";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jxwolstenholme";
     repo = "btsmarthub_devicelist";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-7ncxCpY+A2SuSFa3k21QchrmFs1dPRUMb1r1z/laa6M=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
 
   nativeCheckInputs = [
     responses
@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   disabledTests = [ "test_btsmarthub2_detection_neither_router_present" ];
 
-  meta = with lib; {
+  meta = {
     description = "Retrieve a list of devices from a bt smarthub or bt smarthub 2 on a local network";
     homepage = "https://github.com/jxwolstenholme/btsmarthub_devicelist";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jamiemagee ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jamiemagee ];
   };
-}
+})

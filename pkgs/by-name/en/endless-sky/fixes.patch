@@ -1,21 +1,8 @@
-diff --git a/SConstruct b/SConstruct
-index 48fd080..419b40d 100644
---- a/SConstruct
-+++ b/SConstruct
-@@ -55,7 +55,7 @@ sky = env.Program("endless-sky", Glob("build/" + env["mode"] + "/*.cpp"))
- 
- 
- # Install the binary:
--env.Install("$DESTDIR$PREFIX/games", sky)
-+env.Install("$DESTDIR$PREFIX/bin", sky)
- 
- # Install the desktop file:
- env.Install("$DESTDIR$PREFIX/share/applications", "endless-sky.desktop")
 diff --git a/source/Files.cpp b/source/Files.cpp
-index f5dec21..ad57c55 100644
+index bb03ecf..6e37336 100644
 --- a/source/Files.cpp
 +++ b/source/Files.cpp
-@@ -115,6 +115,7 @@ void Files::Init(const char * const *argv)
+@@ -135,6 +135,7 @@ void Files::Init(const char * const *argv)
  		else if(IsParent(STANDARD_PATH, resources))
  			resources = STANDARD_PATH / RESOURCE_PATH;
  #endif
@@ -23,3 +10,16 @@ index f5dec21..ad57c55 100644
  	}
  	// If the resources are not here, search in the directories containing this
  	// one. This allows, for example, a Mac app that does not actually have the
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 17f290163..169fef120 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -312,7 +312,7 @@ elseif(WIN32)
+ 	include(CPack)
+ elseif(UNIX)
+	# Install the binary.
+-	install(TARGETS EndlessSky CONFIGURATIONS Release RUNTIME DESTINATION games)
++	install(TARGETS EndlessSky CONFIGURATIONS Release RUNTIME DESTINATION bin)
+
+ 	# Install the desktop file.
+ 	install(FILES io.github.endless_sky.endless_sky.desktop DESTINATION share/applications)

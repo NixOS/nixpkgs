@@ -6,28 +6,29 @@
   installShellFiles,
   pandoc,
   makeWrapper,
-  testers,
-  ov,
+  nix-update-script,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ov";
-  version = "0.43.1";
+  version = "0.54.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "noborus";
     repo = "ov";
-    tag = "v${version}";
-    hash = "sha256-G0oP+c/SBF2sFZnVrs+/3l+fvnmPtol3NP2XXsdcOro=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-cIjtu4T9It+u/ZVC+XoUacvnYw51QSnbTNge1QaHr0s=";
   };
 
-  vendorHash = "sha256-Jko2nKmqx8ly6QLSKxarucpADHDoDG+Q6bRHR7w7yVk=";
+  vendorHash = "sha256-eQh/S2isNvT9l+A4uK+/APcw+krsFL54OD5E6yEduxU=";
 
   ldflags = [
     "-s"
-    "-w"
-    "-X=main.Version=v${version}"
-    "-X=main.Revision=${src.rev}"
+    "-X=main.Version=v${finalAttrs.version}"
+    "-X=main.Revision=${finalAttrs.src.rev}"
   ];
 
   subPackages = [ "." ];
@@ -61,22 +62,21 @@ buildGoModule rec {
       cp $src/ov.yaml $doc/share/$name/sample-config.yaml
     '';
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = ov;
-      version = "v${version}";
-    };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
   };
 
   meta = {
     description = "Feature-rich terminal-based text viewer";
     homepage = "https://noborus.github.io/ov";
-    changelog = "https://github.com/noborus/ov/releases/tag/v${version}";
+    changelog = "https://github.com/noborus/ov/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      farcaller
-      figsoda
-    ];
+    maintainers = with lib.maintainers; [ Holiu618 ];
     mainProgram = "ov";
   };
-}
+})

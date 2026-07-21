@@ -4,10 +4,10 @@
   fetchFromGitHub,
   fetchpatch,
   dbus,
-  fltk13,
+  fltk_1_3,
   gtk2,
-  libICE,
-  libSM,
+  libice,
+  libsm,
   libtiff,
   pkg-config,
 }:
@@ -36,13 +36,19 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/afterstep/afterstep/commit/5e9e897cf8c455390dd6f5b27fec49707f6b9088.patch";
       hash = "sha256-aGMTyojzXEHGjO9lMT6dwLl01Fd333BUuCIX0FU9ac4=";
     })
+
+    # fix build with c23
+    #   fs.c:821:66: error: passing argument 4 of 'qsort' from incompatible pointer type [-Wincompatible-pointer-types]
+    #   Ident.c:326:1: error: conflicting types for 'make_ident_window'; have 'Window(int,  int)' {aka 'long unsigned int(int,  int)'}
+    #   menuitem.c:85:11: error: conflicting types for 'CreateMenuData'; have 'MenuData *(char *)'
+    ./fix-build-with-c23.patch
   ];
 
   postPatch = ''
     # Causes fatal ldconfig cache generation attempt on non-NixOS Linux
     for mkfile in autoconf/Makefile.common.lib.in libAfter{Base,Image}/Makefile.in; do
       substituteInPlace $mkfile \
-        --replace 'test -w /etc' 'false'
+        --replace-fail 'test -w /etc' 'false'
     done
   '';
 
@@ -52,10 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     dbus
-    fltk13
+    fltk_1_3
     gtk2
-    libICE
-    libSM
+    libice
+    libsm
     libtiff
   ];
 
@@ -66,20 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  # A strange type of bug: dbus is not immediately found by pkg-config
   preConfigure = ''
-    # binutils 2.37 fix
-    # https://github.com/afterstep/afterstep/issues/2
-    fixupList=(
-      "autoconf/Makefile.defines.in"
-      "libAfterImage/aftershow/Makefile.in"
-      "libAfterImage/apps/Makefile.in"
-      "libAfterBase/Makefile.in"
-      "libAfterImage/Makefile.in"
-    )
-    for toFix in "''${fixupList[@]}"; do
-      substituteInPlace "$toFix" --replace "clq" "cq"
-    done
+    # A strange type of bug: dbus is not immediately found by pkg-config
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config dbus-1 --cflags)"
   '';
 
@@ -100,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
       improving aestetics, and efficient use of system resources.
     '';
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "afterstep";
     platforms = lib.platforms.linux;
   };

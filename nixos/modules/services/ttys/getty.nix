@@ -13,6 +13,8 @@ let
   baseArgs = [
     "--login-program"
     "${cfg.loginProgram}"
+    "--issue-file"
+    "/etc/issue:/etc/issue.d:/run/issue:/run/issue.d"
   ]
   ++ optionals (cfg.autologinUser != null && !cfg.autologinOnce) [
     "--autologin"
@@ -74,6 +76,24 @@ in
         '';
       };
 
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Include getty in the system.
+
+          getty is quiescent until called into action and does not have
+          runtime costs if it is not used. The benefit of disabling it is
+          in reducing closure size.
+
+          Disabling getty means that console login may not be possible,
+          `machinectl shell` and `login` may not work, and other ills.
+          It is only recommended for lights-out, headless containers,
+          appliances, and similar configurations not meant for any human
+          interaction ever.
+        '';
+      };
+
       loginProgram = mkOption {
         type = types.path;
         default = "${pkgs.shadow}/bin/login";
@@ -131,7 +151,7 @@ in
 
   ###### implementation
 
-  config = mkIf config.console.enable {
+  config = mkIf cfg.enable {
     # Note: this is set here rather than up there so that changing
     # nixos.label would not rebuild manual pages
     services.getty.greetingLine = mkDefault ''<<< Welcome to ${config.system.nixos.distroName} ${config.system.nixos.label} (\m) - \l >>>'';
@@ -151,11 +171,9 @@ in
     # We can't just rely on 'Conflicts=autovt@tty1.service' because
     # 'switch-to-configuration switch' will start 'autovt@tty1.service'
     # and kill the display manager.
-    systemd.targets.getty.wants =
-      lib.mkIf (!(config.systemd.services.display-manager.enable or false))
-        [
-          "autovt@tty1.service"
-        ];
+    systemd.targets.getty.wants = lib.mkIf (!config.services.displayManager.enable) [
+      "autovt@tty1.service"
+    ];
 
     systemd.services."getty@" = {
       serviceConfig.ExecStart = [
@@ -165,20 +183,15 @@ in
       ];
       environment.TTY = "%I";
       restartIfChanged = false;
+      # logind hardcodes spawning autovt@ttyN.service on VT switch. Upstream
+      # declares this alias via [Install] Alias=, which NixOS does not process.
+      aliases = [ "autovt@.service" ];
     };
 
     systemd.services."serial-getty@" = {
       serviceConfig.ExecStart = [
         "" # override upstream default with an empty ExecStart
         (gettyCmd "%I --keep-baud $TERM")
-      ];
-      restartIfChanged = false;
-    };
-
-    systemd.services."autovt@" = {
-      serviceConfig.ExecStart = [
-        "" # override upstream default with an empty ExecStart
-        (gettyCmd "--noclear %I $TERM")
       ];
       restartIfChanged = false;
     };

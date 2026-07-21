@@ -6,24 +6,21 @@
   pillow,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   regex,
   setuptools-scm,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "textile";
-  version = "4.0.3";
+  version = "4.0.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "textile";
     repo = "python-textile";
-    tag = version;
-    hash = "sha256-KVDppsvX48loV9OJ70yqmQ5ZSypzcxrjH1j31DcyfM8=";
+    tag = finalAttrs.version;
+    hash = "sha256-fHji+TOIFVljkvlOaRp/8EnZ6KYgMu/DLpg6PmOSEbk=";
   };
 
   build-system = [
@@ -47,12 +44,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "textile" ];
 
-  meta = with lib; {
-    description = "MOdule for generating web text";
+  meta = {
+    description = "Module for generating web text";
     homepage = "https://github.com/textile/python-textile";
-    changelog = "https://github.com/textile/python-textile/blob/${version}/CHANGELOG.textile";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/textile/python-textile/blob/${finalAttrs.src.tag}/CHANGELOG.textile";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pytextile";
   };
-}
+})

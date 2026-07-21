@@ -109,28 +109,63 @@
       [ ];
 
   /**
-    Maps a Nix system to a NVIDIA redistributable system.
+    The lowest Jetson CUDA capability which uses the `linux-sbsa` redist (rather than `linux-aarch64`) for a given
+    CUDA version. Jetson capabilities below this threshold use `linux-aarch64`.
 
-    NOTE: We swap out the default `linux-sbsa` redist (for server-grade ARM chips) with the `linux-aarch64` redist
-    (which is for Jetson devices) if we're building any Jetson devices. Since both are based on aarch64, we can only
-    have one or the other, otherwise there's an ambiguity as to which should be used.
-
-    NOTE: This function *will* be called by unsupported systems because `cudaPackages` is evaluated on all systems. As
-    such, we need to handle unsupported systems gracefully.
+    The threshold depends on the CUDA version because NVIDIA moved Jetson onto the SBSA software stack incrementally:
+    - CUDA 12 (JetPack 6): only Thor (10.1) is SBSA; Orin (8.7) is `linux-aarch64`.
+    - CUDA 13 (JetPack 7.2): Orin (8.7) and Thor (11.0) are both SBSA.
 
     # Type
 
     ```
-    getRedistSystem :: (hasJetsonCudaCapability :: Bool) -> (nixSystem :: String) -> String
+    _getJetsonMinSbsaCapability :: (cudaMajorMinorVersion :: String) -> CudaCapability
     ```
 
     # Inputs
 
-    `hasJetsonCudaCapability`
+    `cudaMajorMinorVersion`
 
-    : If configured for a Jetson device
+    : The major and minor version of CUDA (e.g. "12.6")
+  */
+  _getJetsonMinSbsaCapability =
+    cudaMajorMinorVersion: if lib.versionAtLeast cudaMajorMinorVersion "13.0" then "8.7" else "10.1";
 
-    `nixSystem`
+  /**
+    Maps a Nix system to a NVIDIA redistributable system.
+
+    NOTE: Certain Nix systems can map to multiple NVIDIA redistributable systems. In particular, ARM systems can map to
+    either `linux-sbsa` (for server-grade ARM chips) or `linux-aarch64` (for Jetson devices). Complicating matters
+    further, as of CUDA 13.0, Jetson Thor and Orin devices use `linux-sbsa` instead of `linux-aarch64`.
+
+    NOTE: This function *will* be called by unsupported systems because `cudaPackages` is evaluated on all systems. As
+    such, we need to handle unsupported systems gracefully.
+
+    NOTE: This function does not check whether the provided CUDA capabilities are valid for the given CUDA version.
+    The heavy validation work to ensure consistency of CUDA capabilities is performed by backendStdenv.
+
+    # Type
+
+    ```
+    getRedistSystem ::
+      { cudaCapabilities :: List String
+      , cudaMajorMinorVersion :: String
+      , system :: String
+      }
+      -> String
+    ```
+
+    # Inputs
+
+    `cudaCapabilities`
+
+    : The list of CUDA capabilities to build GPU code for
+
+    `cudaMajorMinorVersion`
+
+    : The major and minor version of CUDA (e.g. "12.6")
+
+    `system`
 
     : The Nix system
 
@@ -140,22 +175,55 @@
     ## `cudaLib.getRedistSystem` usage examples
 
     ```nix
-    getRedistSystem true "aarch64-linux"
+    getRedistSystem {
+      cudaCapabilities = [ "8.7" ];
+      cudaMajorMinorVersion = "12.6";
+      system = "aarch64-linux";
+    }
     => "linux-aarch64"
     ```
 
     ```nix
-    getRedistSystem false "aarch64-linux"
+    getRedistSystem {
+      cudaCapabilities = [ "11.0" ];
+      cudaMajorMinorVersion = "13.0";
+      system = "aarch64-linux";
+    }
+    => "linux-sbsa"
+    ```
+
+    ```nix
+    getRedistSystem {
+      cudaCapabilities = [ "8.0" "8.9" ];
+      cudaMajorMinorVersion = "12.6";
+      system = "aarch64-linux";
+    }
     => "linux-sbsa"
     ```
     :::
   */
   getRedistSystem =
-    hasJetsonCudaCapability: nixSystem:
-    if nixSystem == "x86_64-linux" then
+    {
+      cudaCapabilities,
+      cudaMajorMinorVersion,
+      system,
+    }:
+    if system == "x86_64-linux" then
       "linux-x86_64"
-    else if nixSystem == "aarch64-linux" then
-      if hasJetsonCudaCapability then "linux-aarch64" else "linux-sbsa"
+    else if system == "aarch64-linux" then
+      # If all the Jetson devices are SBSA-compatible, then we've got SBSA.
+      if
+        let
+          sbsaJetsonCapability = _cuda.lib._getJetsonMinSbsaCapability cudaMajorMinorVersion;
+        in
+        lib.all (
+          cap: _cuda.db.cudaCapabilityToInfo.${cap}.isJetson -> lib.versionAtLeast cap sbsaJetsonCapability
+        ) cudaCapabilities
+      then
+        "linux-sbsa"
+      # Otherwise we've got some Jetson devices older than Thor and need to use linux-aarch64.
+      else
+        "linux-aarch64"
     else
       "unsupported";
 
@@ -193,4 +261,34 @@
       )
       ++ [ relativePath ]
     );
+
+  /**
+    Function which accepts an attribute set mapping redistributable name to version and retrieves the corresponding
+    collection of manifests from `_cuda.manifests`. Additionally, the version provided is used to populate the
+    `release_label` field in the corresponding manifest if it is missing.
+
+    It is an error to provide a redistributable name and version for which there is no corresponding manifest.
+
+    # Type
+
+    ```
+    selectManifests :: (versions :: AttrSet RedistName Version) -> AttrSet RedistName Manifest
+    ```
+
+    # Inputs
+
+    `versions`
+
+    : An attribute set mapping redistributable name to manifest version
+  */
+  selectManifests = lib.mapAttrs (
+    name: version:
+    let
+      manifest = _cuda.manifests.${name}.${version};
+    in
+    manifest
+    // {
+      release_label = manifest.release_label or version;
+    }
+  );
 }

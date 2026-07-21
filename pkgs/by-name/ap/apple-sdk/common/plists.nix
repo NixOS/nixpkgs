@@ -2,40 +2,50 @@
   lib,
   stdenvNoCC,
   xcodePlatform,
+  sdkVersion,
 }:
 
 let
   inherit (lib.generators) toPlist;
 
-  Info = {
-    CFBundleIdentifier = "com.apple.platform.${lib.toLower xcodePlatform}";
-    Type = "Platform";
+  Info = rec {
+    CFBundleIdentifier = "com.apple.platform.${Name}";
+    DefaultProperties = {
+      COMPRESS_PNG_FILES = "NO";
+      DEPLOYMENT_TARGET_SETTING_NAME = stdenvNoCC.hostPlatform.darwinMinVersionVariable;
+      STRIP_PNG_TEXT = "NO";
+    };
+    Description = if stdenvNoCC.hostPlatform.isMacOS then "macOS" else "iOS";
+    FamilyIdentifier = lib.toLower xcodePlatform;
+    FamilyName = Description;
+    Identifier = CFBundleIdentifier;
+    MinimumSDKVersion = stdenvNoCC.hostPlatform.darwinMinVersion;
     Name = lib.toLower xcodePlatform;
+    Type = "Platform";
+    Version = sdkVersion;
   };
 
   # These files are all based off of Xcode spec files found in
   # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Xcode/PrivatePlugIns/IDEOSXSupportCore.ideplugin/Contents/Resources.
 
-  # Based off of the "MacOSX Architectures.xcspec" file. All i386 stuff
-  # is removed because NixPkgs only supports darwin-x86_64 and darwin-arm64.
+  # Based off of the "MacOSX Architectures.xcspec" file. All x86 stuff
+  # is removed because Nixpkgs only supports aarch64-darwin.
   Architectures = [
     {
       Identifier = "Standard";
       Type = "Architecture";
-      Name = "Standard Architectures (Apple Silicon, 64-bit Intel)";
+      Name = "Standard Architectures (Apple Silicon)";
       RealArchitectures = [
         "arm64"
-        "x86_64"
       ];
       ArchitectureSetting = "ARCHS_STANDARD";
     }
     {
       Identifier = "Universal";
       Type = "Architecture";
-      Name = "Universal (Apple Silicon, 64-bit Intel)";
+      Name = "Universal (Apple Silicon)";
       RealArchitectures = [
         "arm64"
-        "x86_64"
       ];
       ArchitectureSetting = "ARCHS_STANDARD_32_64_BIT";
     }
@@ -48,17 +58,16 @@ let
     {
       Identifier = "Standard64bit";
       Type = "Architecture";
-      Name = "Apple Silicon, 64-bit Intel";
+      Name = "Apple Silicon";
       RealArchitectures = [
         "arm64"
-        "x86_64"
       ];
       ArchitectureSetting = "ARCHS_STANDARD_64_BIT";
     }
     {
       Identifier = stdenvNoCC.hostPlatform.darwinArch;
       Type = "Architecture";
-      Name = "Apple Silicon or Intel 64-bit";
+      Name = "Apple Silicon";
     }
     {
       Identifier = "Standard_Including_64_bit";
@@ -66,7 +75,6 @@ let
       Name = "Standard Architectures (including 64-bit)";
       RealArchitectures = [
         "arm64"
-        "x86_64"
       ];
       ArchitectureSetting = "ARCHS_STANDARD_INCLUDING_64_BIT";
     }

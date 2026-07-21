@@ -9,13 +9,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "rfc";
-  version = "1.0.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "bfontaine";
     repo = "rfc";
     rev = "v${version}";
-    hash = "sha256-bCqgLkbZGQFcxhLwekVw+rUGinXTc7QJHlVRGtNf6Jc=";
+    hash = "sha256-g6JUdN58Q5630Qb1kijWtReGCq1o5FBE4SWifL6lirI=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to read RFCs from the command line";
     longDescription = ''
       rfc is a little tool written in Bash to read RFCs from the command-line.
@@ -45,9 +45,9 @@ stdenvNoCC.mkDerivation rec {
     '';
     homepage = "https://github.com/bfontaine/rfc";
     changelog = "https://github.com/bfontaine/rfc/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ azahi ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ azahi ];
+    platforms = lib.platforms.all;
     mainProgram = "rfc";
   };
 }

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   regex,
   requests,
 }:
@@ -13,11 +12,9 @@ buildPythonPackage rec {
   version = "1.16.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "InQuest";
-    repo = "python-iocextract";
+    repo = "iocextract";
     tag = "v${version}";
     hash = "sha256-cCp9ug/TuVY1zL+kiDlFGBmfFJyAmVwxLD36WT0oRAE=";
   };
@@ -38,12 +35,12 @@ buildPythonPackage rec {
     "test_refang_data"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to extract Indicator of Compromises (IOC)";
     mainProgram = "iocextract";
-    homepage = "https://github.com/InQuest/python-iocextract";
-    changelog = "https://github.com/InQuest/python-iocextract/releases/tag/v${version}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fab ];
+    homepage = "https://github.com/InQuest/iocextract";
+    changelog = "https://github.com/InQuest/iocextract/releases/tag/v${version}";
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

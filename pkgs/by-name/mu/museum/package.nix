@@ -10,17 +10,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "museum";
-  version = "1.2.8";
+  version = "1.3.58";
 
   src = fetchFromGitHub {
-    owner = "ente-io";
+    owner = "ente";
     repo = "ente";
     sparseCheckout = [ "server" ];
     tag = "photos-v${finalAttrs.version}";
-    hash = "sha256-CHdDtIEohEWKULkEZMs2+fsQR0HL++ejdCL2KA9SXt0=";
+    hash = "sha256-G9T5qsBKzO7bMCf3IexF9YyDeHK+gZI1Unm4pBq69iI=";
   };
 
-  vendorHash = "sha256-iltf6TVTzMhNpQxLtp/wqOCVXeJCmPvmlfWARbNgc4g=";
+  vendorHash = "sha256-Ri2hsPkBvAGGbk9vREmkYxY+JX+nv/OfIAkhU2y0xnQ=";
 
   sourceRoot = "${finalAttrs.src.name}/server";
 
@@ -55,13 +55,13 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "API server for ente.io";
-    homepage = "https://github.com/ente-io/ente/tree/main/server";
-    changelog = "https://github.com/ente-io/ente/releases/tag/photos-v${finalAttrs.version}";
+    homepage = "https://github.com/ente/ente/tree/main/server";
+    changelog = "https://github.com/ente/ente/releases/tag/photos-v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       pinpox
       oddlama
-      iedame
+      nicegamer7
     ];
     mainProgram = "museum";
     platforms = lib.platforms.linux;

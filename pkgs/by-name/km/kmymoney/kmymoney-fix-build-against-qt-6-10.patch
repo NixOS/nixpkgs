@@ -1,0 +1,30 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 32e2840..f21e7ed 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -183,7 +183,7 @@ if (PkgConfig_FOUND)
+ endif()
+ 
+ find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} REQUIRED COMPONENTS Core DBus Widgets Svg Xml Test PrintSupport)
+-find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} OPTIONAL_COMPONENTS Sql Concurrent QuickWidgets)
++find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} OPTIONAL_COMPONENTS Sql SqlPrivate Concurrent QuickWidgets)
+ 
+ find_package(KF${QT_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS Archive CoreAddons Config ConfigWidgets Crash I18n Completion KCMUtils ItemModels ItemViews Service XmlGui TextWidgets Notifications KIO)
+ 
+diff --git a/kmymoney/plugins/sqlcipher/CMakeLists.txt b/kmymoney/plugins/sqlcipher/CMakeLists.txt
+index ee6f2e7..aa3fc19 100644
+--- a/kmymoney/plugins/sqlcipher/CMakeLists.txt
++++ b/kmymoney/plugins/sqlcipher/CMakeLists.txt
+@@ -32,10 +32,8 @@ target_link_libraries(qsqlcipher
+   PRIVATE
+     PkgConfig::SQLCIPHER
+ )
+-if (TARGET Qt::SqlPrivate)
+-  target_link_libraries(qsqlcipher PRIVATE Qt::SqlPrivate)
+-endif()
+-target_link_libraries(qsqlcipher PRIVATE Qt::Sql)
++
++target_link_libraries(qsqlcipher PRIVATE Qt::Sql Qt::SqlPrivate)
+ 
+ if(BUILD_TESTING)
+  add_subdirectory(tests)

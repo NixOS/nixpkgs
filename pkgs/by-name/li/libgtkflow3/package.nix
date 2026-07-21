@@ -12,7 +12,7 @@
   libgflow,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgtkflow3";
   version = "1.0.6";
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     domain = "notabug.org";
     owner = "grindhold";
     repo = "libgtkflow";
-    rev = "gtkflow3_${version}";
+    rev = "gtkflow3_${finalAttrs.version}";
     hash = "sha256-JoVq7U5JQ3pRxptR7igWFw7lcBTsgr3aVXxayLqhyFo=";
   };
 
@@ -60,11 +60,11 @@ stdenv.mkDerivation rec {
     rm -r libgflow
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Flow graph widget for GTK 3";
     homepage = "https://notabug.org/grindhold/libgtkflow";
-    maintainers = with maintainers; [ grindhold ];
-    license = licenses.lgpl3Plus;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ grindhold ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.unix;
   };
-}
+})

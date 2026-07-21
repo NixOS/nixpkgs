@@ -4,6 +4,9 @@
   fetchFromGitHub,
   autoreconfHook,
   libsodium,
+  pcre2,
+  regexSupport ? false,
+  batchSize ? 2048,
 }:
 
 stdenv.mkDerivation rec {
@@ -53,21 +56,25 @@ stdenv.mkDerivation rec {
       ''
         install -D ${
           stdenv.mkDerivation {
-            name = "mkp224o-${suffix}-${version}";
-            inherit version src configureFlags;
+            pname = "mkp224o-${suffix}";
+            inherit version src;
+            configureFlags =
+              configureFlags
+              ++ [ "--enable-batchnum=${builtins.toString batchSize}" ]
+              ++ lib.optionals regexSupport [ "--enable-regex=yes" ];
             nativeBuildInputs = [ autoreconfHook ];
-            buildInputs = [ libsodium ];
+            buildInputs = [ libsodium ] ++ lib.optionals regexSupport [ pcre2 ];
             installPhase = "install -D mkp224o $out";
           }
         } $out/bin/mkp224o-${suffix}
       ''
     ) variants;
 
-  meta = with lib; {
+  meta = {
     description = "Vanity address generator for tor onion v3 (ed25519) hidden services";
     homepage = "http://cathug2kyi4ilneggumrenayhuhsvrgn6qv2y47bgeet42iivkpynqad.onion/";
-    license = licenses.cc0;
-    platforms = platforms.unix;
+    license = lib.licenses.cc0;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

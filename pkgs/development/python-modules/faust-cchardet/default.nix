@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "faust-cchardet";
   version = "2.1.19";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "faust-streaming";
@@ -48,7 +48,6 @@ buildPythonPackage rec {
     license = lib.licenses.mpl11;
     maintainers = with lib.maintainers; [
       dotlambda
-      ivan
     ];
   };
 }

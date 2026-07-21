@@ -30,50 +30,49 @@ in
 {
   imports = [
     (mkRenamedOptionModule
-      [ "services" "snapserver" "controlPort" ]
-      [ "services" "snapserver" "tcp" "port" ]
-    )
-
-    (mkRenamedOptionModule
       [ "services" "snapserver" "listenAddress" ]
-      [ "services" "snapserver" "settings" "stream" "bind_to_address" ]
+      [ "services" "snapserver" "settings" "tcp-streaming" "bind_to_address" ]
     )
     (mkRenamedOptionModule
       [ "services" "snapserver" "port" ]
-      [ "services" "snapserver" "settings" "stream" "port" ]
+      [ "services" "snapserver" "settings" "tcp-streaming" "port" ]
     )
     (mkRenamedOptionModule
       [ "services" "snapserver" "sampleFormat" ]
-      [ "services" "snapserver" "settings" "stream" "sampleformat" ]
+      [ "services" "snapserver" "settings" "tcp-streaming" "sampleformat" ]
     )
     (mkRenamedOptionModule
       [ "services" "snapserver" "codec" ]
-      [ "services" "snapserver" "settings" "stream" "codec" ]
+      [ "services" "snapserver" "settings" "tcp-streaming" "codec" ]
     )
     (mkRenamedOptionModule
       [ "services" "snapserver" "streamBuffer" ]
-      [ "services" "snapserver" "settings" "stream" "chunk_ms" ]
+      [ "services" "snapserver" "settings" "tcp-streaming" "chunk_ms" ]
     )
     (mkRenamedOptionModule
       [ "services" "snapserver" "buffer" ]
-      [ "services" "snapserver" "settings" "stream" "buffer" ]
+      [ "services" "snapserver" "settings" "tcp-streaming" "buffer" ]
     )
     (mkRenamedOptionModule
       [ "services" "snapserver" "send" ]
-      [ "services" "snapserver" "settings" "stream" "chunk_ms" ]
+      [ "services" "snapserver" "settings" "tcp-streaming" "chunk_ms" ]
     )
 
     (mkRenamedOptionModule
+      [ "services" "snapserver" "controlPort" ]
+      [ "services" "snapserver" "settings" "tcp-control" "port" ]
+    )
+    (mkRenamedOptionModule
       [ "services" "snapserver" "tcp" "enable" ]
-      [ "services" "snapserver" "settings" "tcp" "enabled" ]
+      [ "services" "snapserver" "settings" "tcp-control" "enabled" ]
     )
     (mkRenamedOptionModule
       [ "services" "snapserver" "tcp" "listenAddress" ]
-      [ "services" "snapserver" "settings" "tcp" "bind_to_address" ]
+      [ "services" "snapserver" "settings" "tcp-control" "bind_to_address" ]
     )
     (mkRenamedOptionModule
       [ "services" "snapserver" "tcp" "port" ]
-      [ "services" "snapserver" "settings" "tcp" "port" ]
+      [ "services" "snapserver" "settings" "tcp-control" "port" ]
     )
 
     (mkRenamedOptionModule
@@ -121,6 +120,20 @@ in
           freeformType = format.type;
           options = {
             stream = {
+              source = mkOption {
+                type = with types; either str (listOf str);
+                example = "pipe:///tmp/snapfifo?name=default";
+                description = ''
+                  One or multiple URIs to PCM input streams.
+                '';
+              };
+            };
+
+            tcp-streaming = {
+              enabled = mkEnableOption "streaming via TCP" // {
+                default = true;
+              };
+
               bind_to_address = mkOption {
                 default = "::";
                 description = ''
@@ -135,17 +148,9 @@ in
                   Port to listen on for snapclient connections.
                 '';
               };
-
-              source = mkOption {
-                type = with types; either str (listOf str);
-                example = "pipe:///tmp/snapfifo?name=default";
-                description = ''
-                  One or multiple URIs to PCM inpuit streams.
-                '';
-              };
             };
 
-            tcp = {
+            tcp-control = {
               enabled = mkEnableOption "the TCP JSON-RPC";
 
               bind_to_address = mkOption {
@@ -245,8 +250,10 @@ in
     };
 
     networking.firewall.allowedTCPPorts =
-      lib.optionals cfg.openFirewall [ cfg.settings.stream.port ]
-      ++ lib.optional (cfg.openFirewall && cfg.settings.tcp.enabled) cfg.settings.tcp.port
+      lib.optionals (cfg.openFirewall && cfg.settings.tcp-streaming.enabled) [
+        cfg.settings.tcp-streaming.port
+      ]
+      ++ lib.optional (cfg.openFirewall && cfg.settings.tcp-control.enabled) cfg.settings.tcp-control.port
       ++ lib.optional (cfg.openFirewall && cfg.settings.http.enabled) cfg.settings.http.port;
   };
 

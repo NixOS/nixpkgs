@@ -46,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
     (lib.cmakeBool "CPM_USE_LOCAL_PACKAGES" true)
     (lib.cmakeFeature "VERSION_NUMERIC" finalAttrs.version)
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
   ];
 
   preConfigure = ''
@@ -90,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "TT-NN operator library, and TT-Metalium low level kernel programming model";
     homepage = "https://github.com/tenstorrent/tt-metal";
     maintainers = with lib.maintainers; [ RossComputerGuy ];
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
   };
 })

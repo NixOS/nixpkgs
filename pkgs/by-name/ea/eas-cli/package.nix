@@ -1,35 +1,76 @@
 {
   lib,
-  stdenvNoCC,
+  stdenv,
   fetchFromGitHub,
-  fetchYarnDeps,
-  yarnConfigHook,
-  yarnBuildHook,
+  yarn-berry_4,
   nodejs,
   jq,
+  makeWrapper,
+  pkg-config,
+  python3,
 }:
-stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "eas-cli";
-  version = "16.4.0";
-
+let
+  version = "20.4.0";
   src = fetchFromGitHub {
     owner = "expo";
     repo = "eas-cli";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-cHayMBhqiLY//t/ljjwJm4qMuVn531z7x2cqJE4z6hQ=";
+    rev = "v${version}";
+    hash = "sha256-EMN54PR9lhrZcGMq2iNUsdyBP3wVk4G/isjsneIGslI=";
   };
+  missingHashes = ./missing-hashes.json;
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/expo/eas-cli/blob/v18.7.0/package.json#L37
+    ./yarn-4.14-support.patch
+  ];
+in
+# cc is necessary because of building an npm package without a prebuilt binary
+#  for ARM. See comment in nativeBuildInputs below.
+stdenv.mkDerivation (finalAttrs: {
+  pname = "eas-cli";
+  inherit
+    src
+    version
+    missingHashes
+    patches
+    ;
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = finalAttrs.src + "/yarn.lock"; # Point to the root lockfile
-    hash = "sha256-qDUwAdShpKjIUyYvtA6/hgGdO1z1xLqdsJkL3oqkMSw=";
+  yarnOfflineCache = yarn-berry_4.fetchYarnBerryDeps {
+    inherit src missingHashes patches;
+    hash = "sha256-dOx4T009+FMFEvTZtlyJpAUo2UYBm1O1hIyBnSbqIgw=";
   };
 
   nativeBuildInputs = [
-    yarnConfigHook
-    yarnBuildHook
+    yarn-berry_4
+    yarn-berry_4.yarnBerryConfigHook
     nodejs
     jq
+    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # The version of utf-8-validate -> node-gyp -> bufferutil that this package
+    #  uses not have pre-built binary for ARM. It appears that this should be
+    #  fixed by the version of utf-8-validate that this depends on, so there
+    #  may be some underlying transitive dependency causing this.
+    #  https://github.com/websockets/utf-8-validate/issues/106
+    pkg-config
+    python3
   ];
+
+  postPatch = ''
+    # Disable Nx integration in Lerna to avoid the native pseudo terminal panic in the sandbox.
+    tmpfile="$(mktemp)"
+    jq '.useNx = false' lerna.json > "$tmpfile"
+    mv "$tmpfile" lerna.json
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    yarn build
+
+    runHook postBuild
+  '';
 
   # yarnInstallHook strips out build outputs within packages/eas-cli resulting in most commands missing from eas-cli.
   installPhase = ''
@@ -45,6 +86,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   postFixup = ''
     mkdir -p $out/bin
     ln -sf $out/lib/node_modules/eas-cli-root/packages/eas-cli/bin/run $out/bin/eas
+    wrapProgram $out/bin/eas --suffix PATH : ${lib.makeBinPath [ nodejs ]}
   '';
 
   meta = {

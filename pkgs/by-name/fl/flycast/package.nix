@@ -13,18 +13,19 @@
   lua,
   miniupnpc,
   SDL2,
+  systemdLibs,
   vulkan-loader,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flycast";
-  version = "2.5";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "flyinghead";
     repo = "flycast";
-    tag = "v${version}";
-    hash = "sha256-OnlSkwPDUrpj9uEPEAxZO1iSgd5ZiQUJLneu14v9pKQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Lq6Oj+U4mpwNlL/t3ZB9gjE5NAVQyhdvBwLUGu1C+j0=";
     fetchSubmodules = true;
   };
 
@@ -43,6 +44,7 @@ stdenv.mkDerivation rec {
     lua
     miniupnpc
     SDL2
+    systemdLibs
   ];
 
   cmakeFlags = [
@@ -55,11 +57,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/flyinghead/flycast";
-    changelog = "https://github.com/flyinghead/flycast/releases/tag/v${version}";
+    changelog = "https://github.com/flyinghead/flycast/releases/tag/v${finalAttrs.version}";
     description = "Multi-platform Sega Dreamcast, Naomi and Atomiswave emulator";
     mainProgram = "flycast";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
-}
+})

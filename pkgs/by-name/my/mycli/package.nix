@@ -5,19 +5,20 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mycli";
-  version = "1.31.2";
+  version = "1.44.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dbcli";
     repo = "mycli";
-    tag = "v${version}";
-    hash = "sha256-s5PzWrxG2z0sOyQIyACLkG7dau+MHYLtLNLig6UfuCs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7G7Yy0jdULzBiQr4JACWuBG4XdXDYZ8IyfbzGQKF428=";
   };
 
   pythonRelaxDeps = [
+    "sqlglot" # https://github.com/dbcli/mycli/issues/1696
     "sqlparse"
     "click"
   ];
@@ -34,9 +35,10 @@ python3Packages.buildPythonApplication rec {
       click
       configobj
       cryptography
+      llm
       paramiko
       prompt-toolkit
-      pyaes
+      pycryptodomex
       pygments
       pymysql
       pyperclip
@@ -63,4 +65,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jojosch ];
   };
-}
+})

@@ -4,8 +4,8 @@
   lib,
   ncurses,
   openssl,
-  aspell,
   cjson,
+  enchant,
   gnutls,
   gettext,
   zlib,
@@ -21,7 +21,7 @@
   guileSupport ? true,
   guile,
   luaSupport ? true,
-  lua5,
+  lua5_3,
   perlSupport ? true,
   perl,
   pythonSupport ? true,
@@ -76,7 +76,7 @@ let
       name = "lua";
       enabled = luaSupport;
       cmakeFlag = "ENABLE_LUA";
-      buildInputs = [ lua5 ];
+      buildInputs = [ lua5_3 ];
     }
     {
       name = "python";
@@ -105,11 +105,11 @@ assert lib.all (p: p.enabled -> !(builtins.elem null p.buildInputs)) plugins;
 
 stdenv.mkDerivation rec {
   pname = "weechat";
-  version = "4.7.1";
+  version = "4.9.4";
 
   src = fetchurl {
     url = "https://weechat.org/files/src/weechat-${version}.tar.xz";
-    hash = "sha256-6D+3HKJRxd10vZxaa9P4XcLrjs7AlV9DwH8+CRHtt9M=";
+    hash = "sha256-P8UDWfOjsljJ8DFIsC87nFkZRTXRtGXEgfuFp2wu0AU=";
   };
 
   # Why is this needed? https://github.com/weechat/weechat/issues/2031
@@ -144,8 +144,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     openssl
-    aspell
     cjson
+    enchant
     gnutls
     gettext
     zlib
@@ -157,8 +157,6 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.concatMap (p: p.buildInputs) enabledPlugins
   ++ extraBuildInputs;
-
-  hardeningEnable = [ "pie" ];
 
   env.NIX_CFLAGS_COMPILE =
     "-I${python}/include/${python.libPrefix}"
@@ -176,7 +174,6 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = writeScript "update-weechat" ''
     #!/usr/bin/env nix-shell
@@ -202,7 +199,7 @@ stdenv.mkDerivation rec {
       on https://nixos.org/nixpkgs/manual/#sec-weechat .
     '';
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ ncfavier ];
+    maintainers = with lib.maintainers; [ abbe ];
     mainProgram = "weechat";
     platforms = lib.platforms.unix;
   };

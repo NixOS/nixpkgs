@@ -4,26 +4,20 @@
   fetchurl,
   ipaddr,
   macaddr,
-  cmdliner,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "tuntap";
-  version = "2.0.0";
-
-  duneVersion = "3";
-
-  minimalOCamlVersion = "4.04.2";
+  version = "2.0.2";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-tuntap/releases/download/v${version}/tuntap-v${version}.tbz";
-    sha256 = "12wmls28h3jzikwyfw08d5f7ycsc9njwzbhd3qk2l8jnf5rakfsa";
+    url = "https://github.com/mirage/ocaml-tuntap/releases/download/v${finalAttrs.version}/tuntap-${finalAttrs.version}.tbz";
+    hash = "sha256-DfztWPkNhdSIX/TaldCoNhAA/AZwQDqCdRmDOyOORu0=";
   };
 
   propagatedBuildInputs = [
     ipaddr
     macaddr
-    cmdliner
   ];
 
   # tests manipulate network devices and use network
@@ -34,6 +28,5 @@ buildDunePackage rec {
     description = "Bindings to the UNIX tuntap facility";
     homepage = "https://github.com/mirage/ocaml-tuntap";
     license = lib.licenses.isc;
-    mainProgram = "otunctl";
   };
-}
+})

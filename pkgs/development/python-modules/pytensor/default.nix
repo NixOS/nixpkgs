@@ -15,13 +15,13 @@
   filelock,
   logical-unification,
   minikanren,
+  numba,
   numpy,
   scipy,
 
   # tests
   jax,
   jaxlib,
-  numba,
   pytest-benchmark,
   pytest-mock,
   pytestCheckHook,
@@ -31,20 +31,28 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytensor";
-  version = "2.32.0";
+  version = "3.1.3";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pytensor";
-    tag = "rel-${version}";
+    tag = "rel-${finalAttrs.version}";
     postFetch = ''
-      sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/pytensor/_version.py
+      sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${finalAttrs.src.tag})"/' $out/pytensor/_version.py
     '';
-    hash = "sha256-B72BZmSYl/trpgaTUXwjWo95gR90pNPcKgpnnOqP7Tg=";
+    hash = "sha256-9Apjyg+wmAWrK7hMSF54b1u/3TT0GGitDlyF6rQA4OY=";
   };
+
+  # DeprecationWarning: scipy.linalg: the `lwork` keyword is deprecated and no longer in use as of
+  # SciPy 1.18.0 and will be removed in SciPy 1.20.0
+  postPatch = ''
+    substituteInPlace pytensor/link/numba/dispatch/linalg/decomposition/qr.py \
+      --replace-fail "lwork=lwork," ""
+  '';
 
   build-system = [
     setuptools
@@ -58,8 +66,10 @@ buildPythonPackage rec {
     filelock
     logical-unification
     minikanren
+    numba
     numpy
     scipy
+    setuptools
   ];
 
   nativeCheckInputs = [
@@ -82,11 +92,18 @@ buildPythonPackage rec {
     rm -rf pytensor
   '';
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTests = [
+    # AssertionError: Not equal to tolerance rtol=0.0001, atol=0
+    "test_Searchsorted"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Numerical assertion error
     # tests.unittest_tools.WrongValue: WrongValue
     "test_op_sd"
     "test_op_ss"
+
+    # AssertionError: equal_computations failed
+    "test_infer_shape_db_handles_xtensor_lowering"
 
     # pytensor.link.c.exceptions.CompileError: Compilation failed (return status=1)
     "OpFromGraph"
@@ -159,7 +176,13 @@ buildPythonPackage rec {
     # Don't run the most compute-intense tests
     "tests/scan/"
     "tests/tensor/"
-    "tests/sparse/sandbox/"
+
+    # The IndexedElemwise fusion is intentionally disabled on the 3.0.x line
+    # (it can trigger a RecursionError, see the comment in
+    # pytensor/tensor/rewriting/indexed_elemwise.py), but these tests still
+    # assert that the fusion produces an IndexedElemwise node. Upstream test bug.
+    "tests/link/numba/test_indexed_elemwise.py"
+    "tests/benchmarks/test_gather_fusion.py"
   ];
 
   passthru.updateScript = nix-update-script {
@@ -173,11 +196,10 @@ buildPythonPackage rec {
     description = "Python library to define, optimize, and efficiently evaluate mathematical expressions involving multi-dimensional arrays";
     mainProgram = "pytensor-cache";
     homepage = "https://github.com/pymc-devs/pytensor";
-    changelog = "https://github.com/pymc-devs/pytensor/releases/tag/rel-${src.tag}";
+    changelog = "https://github.com/pymc-devs/pytensor/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       bcdarwin
-      ferrine
     ];
   };
-}
+})

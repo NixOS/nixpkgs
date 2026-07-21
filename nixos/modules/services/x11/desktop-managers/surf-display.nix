@@ -25,7 +25,7 @@ let
 
     # Setting for internal inactivity timer to restart surf-display
     # if the user goes inactive/idle.
-    INACTIVITY_INTERVAL="${builtins.toString cfg.inactivityInterval}"
+    INACTIVITY_INTERVAL="${toString cfg.inactivityInterval}"
 
     # log to syslog instead of .xsession-errors
     LOG_TO_SYSLOG="yes"

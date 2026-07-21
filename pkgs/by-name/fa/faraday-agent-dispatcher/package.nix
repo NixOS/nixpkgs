@@ -2,32 +2,37 @@
   lib,
   fetchFromGitHub,
   python3,
+  writableTmpDirAsHomeHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "faraday-agent-dispatcher";
-  version = "3.4.2";
+  version = "3.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = "faraday_agent_dispatcher";
-    tag = version;
-    hash = "sha256-Qr3ZGU4y7f6yHD78ecdv7a6IBFDpT+/4Yez0n/MenN0=";
+    tag = finalAttrs.version;
+    hash = "sha256-uf1oXE8pFvIPTDgcHXRbZDz8NZn9NecPe1eYuYhb1Xw=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail '"pytest-runner",' ""
-  '';
+      --replace-fail '"pytest-runner",' ""  '';
 
   pythonRelaxDeps = [
+    "pytenable"
     "python-socketio"
   ];
 
-  build-system = with python3.pkgs; [
-    setuptools-scm
+  pythonRemoveDeps = [
+    "python-owasp-zap-v2.4"
   ];
+
+  build-system = with python3.pkgs; [ setuptools-scm ];
+
+  nativeBuildInputs = with python3.pkgs; [ python-owasp-zap-v2-4 ];
 
   dependencies = with python3.pkgs; [
     aiohttp
@@ -42,6 +47,7 @@ python3.pkgs.buildPythonApplication rec {
     python-socketio
     pyyaml
     requests
+    requests-ratelimiter
     syslog-rfc5424-formatter
     websockets
   ];
@@ -49,11 +55,8 @@ python3.pkgs.buildPythonApplication rec {
   nativeCheckInputs = with python3.pkgs; [
     pytest-asyncio
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
 
   disabledTests = [
     "test_execute_agent"
@@ -66,16 +69,14 @@ python3.pkgs.buildPythonApplication rec {
     "tests/unittests/test_import_official_executors.py"
   ];
 
-  pythonImportsCheck = [
-    "faraday_agent_dispatcher"
-  ];
+  pythonImportsCheck = [ "faraday_agent_dispatcher" ];
 
   meta = {
     description = "Tool to send result from tools to the Faraday Platform";
     homepage = "https://github.com/infobyte/faraday_agent_dispatcher";
-    changelog = "https://github.com/infobyte/faraday_agent_dispatcher/releases/tag/${version}";
+    changelog = "https://github.com/infobyte/faraday_agent_dispatcher/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "faraday-dispatcher";
   };
-}
+})

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   aiohttp,
   urllib3,
   orjson,
@@ -13,16 +12,14 @@
 
 buildPythonPackage rec {
   pname = "tesla-powerwall";
-  version = "0.5.2";
+  version = "0.5.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jrester";
     repo = "tesla_powerwall";
     tag = "v${version}";
-    hash = "sha256-cAsJKFM0i0e7w2T4HP4a5ybJGuDvBAGCGmPEKFzNFAY=";
+    hash = "sha256-IFJ3NmQtMTPUQ4FA3CQOEPgqAhoW0V9p+JSGx+8WF+A=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -47,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tesla_powerwall" ];
 
-  meta = with lib; {
+  meta = {
     description = "API for Tesla Powerwall";
     homepage = "https://github.com/jrester/tesla_powerwall";
     changelog = "https://github.com/jrester/tesla_powerwall/blob/v${version}/CHANGELOG";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

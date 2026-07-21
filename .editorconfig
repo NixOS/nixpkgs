@@ -64,6 +64,9 @@ insert_final_newline = unset
 end_of_line = unset
 trim_trailing_whitespace = unset
 
+[*.json]
+insert_final_newline = unset
+
 [*.lock]
 indent_size = unset
 
@@ -87,6 +90,13 @@ trim_trailing_whitespace = unset
 
 [registry.dat]
 end_of_line = unset
+insert_final_newline = unset
+
+# see https://manual.jule.dev/project/code-style.html#indentions
+[*.jule]
+indent_style = tab
+
+[jule.mod]
 insert_final_newline = unset
 
 # Keep this hint at the bottom:

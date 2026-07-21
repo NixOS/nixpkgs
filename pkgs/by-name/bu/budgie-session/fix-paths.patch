@@ -27,9 +27,9 @@ index 327c7c7f..301ec7ee 100644
 @@ -219,7 +219,7 @@ require_dbus_session (int      argc,
          }
          new_argv[i + 2] = NULL;
-         
+ 
 -        if (!execvp ("dbus-launch", new_argv)) {
 +        if (!execvp ("@dbusLaunch@", new_argv)) {
-                 g_set_error (error, 
+                 g_set_error (error,
                               G_SPAWN_ERROR,
                               G_SPAWN_ERROR_FAILED,

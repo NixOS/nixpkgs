@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tlv8" ];
 
-  meta = with lib; {
+  meta = {
     description = "Type-Length-Value8 (TLV8) for Python";
     longDescription = ''
       Python module to handle type-length-value (TLV) encoded data 8-bit type, 8-bit length, and N-byte
@@ -30,7 +30,7 @@ buildPythonPackage rec {
       Release R2.
     '';
     homepage = "https://github.com/jlusiardi/tlv8_python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jojosch ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jojosch ];
   };
 }

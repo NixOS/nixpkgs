@@ -8,24 +8,25 @@
 
 linkFarm "zig-packages" [
   {
-    name = "chameleon-3.0.0-bqfnCfhtAAAAxXGw5t9odkb4ayCTTqOcPvL-TgSMUacF";
-    path = fetchzip {
-      url = "https://github.com/DonIsaac/chameleon/archive/7c7477fa76da53c2791f9e1f860481f64140ccbc.zip";
-      hash = "sha256-fbKhLQLE/6aHmpYr8+daxyUSWNpDq5zApHP4brRYvlo=";
+    name = "chameleon-2.0.1-ZOxajZ17AADmYCpHFqqoGfaXQiRkXM8B5lYJfir9tqsz";
+    path = fetchgit {
+      url = "https://github.com/tr1ckydev/chameleon";
+      rev = "414169dede742d9ac8261d31b9fca6e31a1d7246";
+      hash = "sha256-/TGzbVh+Z6dPEKtW0M0Tv1vXvc6jmb+kHf6Q0rHmEPE=";
     };
   }
   {
-    name = "recover-1.1.0-Zd97oqomAADqISI8KEhW_UUjiPSExhw9hzeoNpg1Nveo";
+    name = "recover-1.3.0-Zd97opwlAAB5ocfOuy8Fxp7_prPehOuEnh0R_8rBsNCk";
     path = fetchzip {
-      url = "https://github.com/dimdin/zig-recover/archive/36133afaa1b085db7063ffc97c08ae0bddc2de4e.zip";
-      hash = "sha256-0oPP6BLVEIR79Q8KcvOlSeDfNLT+8inmIU6ZkuJWrfU=";
+      url = "https://github.com/dimdin/zig-recover/archive/refs/tags/1.3.0.tar.gz";
+      hash = "sha256-3x7ptCcmGjCop703ftS/KWuTlAdcCw431C8Q4VAdLIs=";
     };
   }
   {
-    name = "smart_pointers-0.0.3-NPos2MOwAABoujUzLcVLofXqRAgYWLc5pG-TKDhyK0cq";
+    name = "smart_pointers-0.0.4-NPos2JOtAACuxKEoBGQgkmncI0APAPl-QwaI6klLObuP";
     path = fetchzip {
-      url = "https://github.com/DonIsaac/smart-pointers/archive/refs/tags/v0.0.3.tar.gz";
-      hash = "sha256-oSI76wyiAX7YDvKGhzRbZdEvl7+DPLtMb56w0QsYrkg=";
+      url = "https://github.com/DonIsaac/smart-pointers/archive/refs/tags/v0.0.4.tar.gz";
+      hash = "sha256-gSvAggi0qQgTd9avuqI9AspTGXr+w5ZkgNiI3kf0+dU=";
     };
   }
 ]

@@ -7,6 +7,7 @@
   npmHooks,
   nodejs,
   git,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "auto-changelog";
@@ -40,12 +41,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Command line tool for generating a changelog from git tags and commit history";
     homepage = "https://github.com/cookpete/auto-changelog";
     changelog = "https://github.com/cookpete/auto-changelog/blob/master/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "auto-changelog";
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

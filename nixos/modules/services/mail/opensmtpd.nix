@@ -105,12 +105,21 @@ in
       };
     };
 
-    security.wrappers.smtpctl = {
-      owner = "root";
-      group = "smtpq";
-      setuid = false;
-      setgid = true;
-      source = "${cfg.package}/bin/smtpctl";
+    security.wrappers = {
+      makemap = {
+        owner = "root";
+        group = "smtpq";
+        setuid = false;
+        setgid = true;
+        source = "${cfg.package}/bin/smtpctl";
+      };
+      smtpctl = {
+        owner = "root";
+        group = "smtpq";
+        setuid = false;
+        setgid = true;
+        source = "${cfg.package}/bin/smtpctl";
+      };
     };
 
     services.mail.sendmailSetuidWrapper = lib.mkIf cfg.setSendmail (

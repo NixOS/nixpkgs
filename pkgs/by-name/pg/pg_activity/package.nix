@@ -4,17 +4,16 @@
   lib,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pg_activity";
-  version = "3.6.1";
+  version = "3.6.2";
   pyproject = true;
-  disabled = python3Packages.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dalibo";
     repo = "pg_activity";
-    tag = "v${version}";
-    sha256 = "sha256-TzY+3RE06TxIrhl75wol9CvZDIz25GfgOx11vkREw2c=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-W5R521eyJjblCE5NG546ItMZo0CeBAhFLxMHUrbRGms=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -29,11 +28,11 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "pgactivity" ];
 
-  meta = with lib; {
+  meta = {
     description = "Top like application for PostgreSQL server activity monitoring";
     mainProgram = "pg_activity";
     homepage = "https://github.com/dalibo/pg_activity";
-    license = licenses.postgresql;
-    maintainers = with maintainers; [ mausch ];
+    license = lib.licenses.postgresql;
+    maintainers = with lib.maintainers; [ mausch ];
   };
-}
+})

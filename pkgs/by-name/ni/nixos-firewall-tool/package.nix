@@ -7,8 +7,8 @@
 }:
 
 stdenvNoCC.mkDerivation {
-  name = "nixos-firewall-tool";
-
+  pname = "nixos-firewall-tool";
+  version = lib.trivial.release;
   src = builtins.filterSource (name: _: !(lib.hasSuffix ".nix" name)) ./.;
 
   strictDeps = true;
@@ -31,15 +31,15 @@ stdenvNoCC.mkDerivation {
     shellcheck nixos-firewall-tool
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to temporarily manipulate the NixOS firewall";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       clerie
       rvfg
       garyguo
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "nixos-firewall-tool";
   };
 }

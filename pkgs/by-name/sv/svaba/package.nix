@@ -7,14 +7,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.1.0";
   pname = "svaba";
 
   src = fetchFromGitHub {
     owner = "walaj";
     repo = "svaba";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "1vv5mc9z5d22kgdy7mm27ya5aahnqgkcrskdr2405058ikk9g8kp";
     fetchSubmodules = true;
   };
@@ -44,14 +44,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Structural variant and INDEL caller for DNA sequencing data, using genome-wide local assembly";
     mainProgram = "svaba";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     homepage = "https://github.com/walaj/svaba";
-    maintainers = with maintainers; [ scalavision ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     longDescription = ''
       SvABA is a method for detecting structural variants in sequencing data
       using genome-wide local assembly. Under the hood, SvABA uses a custom
@@ -65,4 +64,4 @@ stdenv.mkDerivation rec {
     '';
 
   };
-}
+})

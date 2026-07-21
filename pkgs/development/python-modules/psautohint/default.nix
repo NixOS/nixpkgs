@@ -2,11 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  fonttools,
-  lxml,
-  fs, # for fonttools extras
+  setuptools,
   setuptools-scm,
+  fonttools,
   pytestCheckHook,
   pytest-cov-stub,
   pytest-xdist,
@@ -14,33 +12,32 @@
   psautohint, # for passthru.tests
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "psautohint";
   version = "2.4.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adobe-type-tools";
     repo = "psautohint";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "125nx7accvbk626qlfar90va1995kp9qfrz6a978q4kv2kk37xai";
     fetchSubmodules = true; # data dir for tests
   };
 
   postPatch = ''
-    echo '#define PSAUTOHINT_VERSION "${version}"' > libpsautohint/src/version.h
+    echo '#define PSAUTOHINT_VERSION "${finalAttrs.version}"' > libpsautohint/src/version.h
     sed -i '/use_scm_version/,+3d' setup.py
-    sed -i '/setup(/a \     version="${version}",' setup.py
+    sed -i '/setup(/a \     version="${finalAttrs.version}",' setup.py
   '';
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     fonttools
-    lxml
-    fs
   ];
 
   nativeCheckInputs = [
@@ -48,6 +45,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-xdist
   ];
+
   disabledTests = lib.optionals (!runAllTests) [
     # Slow tests, reduces test time from ~5 mins to ~30s
     "test_mmufo"
@@ -66,10 +64,10 @@ buildPythonPackage rec {
     fullTestsuite = psautohint.override { runAllTests = true; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Script to normalize the XML and other data inside of a UFO";
     homepage = "https://github.com/adobe-type-tools/psautohint";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
-}
+})

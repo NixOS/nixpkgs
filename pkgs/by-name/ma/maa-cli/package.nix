@@ -12,14 +12,14 @@
   git,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "maa-cli";
   version = "0.5.9";
 
   src = fetchFromGitHub {
     owner = "MaaAssistantArknights";
     repo = "maa-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-TLm8B1cQ00l9aRADYU3Qv7nA04kDaxsXX86qvsTRWwk=";
   };
 
@@ -65,12 +65,12 @@ rustPlatform.buildRustPackage rec {
     installManPage manpage/*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple CLI for MAA by Rust";
     homepage = "https://github.com/MaaAssistantArknights/maa-cli";
-    license = licenses.agpl3Only;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ Cryolitia ];
+    license = lib.licenses.agpl3Only;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ Cryolitia ];
     mainProgram = "maa";
   };
-}
+})

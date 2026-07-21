@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
 
   # build-system
   setuptools,
@@ -21,27 +20,18 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymc";
-  version = "5.25.1";
+  version = "6.1.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pymc";
-    tag = "v${version}";
-    hash = "sha256-zh6FsCEviuyqapguTrUDsWKq70ef0IKRhnn2dkgQ/KA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-veJ42myRo23JXh33qC1OXxiGVI0VAARuYKVs7ObFr+Q=";
   };
-
-  patches = [
-    # TODO: remove at next release
-    # https://github.com/pymc-devs/pytensor/pull/1471
-    (fetchpatch2 {
-      name = "pytensor-2-32-compat";
-      url = "https://github.com/pymc-devs/pymc/commit/59176b6adda88971e546a0cf93ca04424af5197f.patch";
-      hash = "sha256-jkDwlKwxbn9DwpkxEbSXk/kbGjT/Xu8bsZHFBWYpMgA=";
-    })
-  ];
 
   build-system = [
     setuptools
@@ -70,11 +60,10 @@ buildPythonPackage rec {
   meta = {
     description = "Bayesian estimation, particularly using Markov chain Monte Carlo (MCMC)";
     homepage = "https://github.com/pymc-devs/pymc";
-    changelog = "https://github.com/pymc-devs/pymc/releases/tag/v${version}";
+    changelog = "https://github.com/pymc-devs/pymc/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       nidabdella
-      ferrine
     ];
   };
-}
+})

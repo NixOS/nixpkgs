@@ -7,14 +7,14 @@
   perlPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "timelapse-deflicker";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "cyberang3l";
     repo = "timelapse-deflicker";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0bbfnrdycrpyz7rqrql5ib9qszny7z5xpqp65c1mxqd2876gv960";
   };
 
@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     ClassMethodMaker
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple script to deflicker images taken for timelapses";
     mainProgram = "timelapse-deflicker";
     homepage = "https://github.com/cyberang3l/timelapse-deflicker";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ valeriangalliat ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ valeriangalliat ];
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -1,24 +1,38 @@
 {
   lib,
+  config,
   buildPlatform,
   callPackage,
   kaem,
   mescc-tools-extra,
   checkMeta,
+  hostPlatform,
 }:
+let
+  assertValidity = checkMeta.assertValidity hostPlatform;
+  commonMeta = checkMeta.commonMeta hostPlatform;
+in
 rec {
+  maybeContentAddressed = lib.optionalAttrs config.contentAddressedByDefault {
+    __contentAddressed = true;
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
+  };
+
   derivationWithMeta =
     attrs:
     let
       passthru = attrs.passthru or { };
-      validity = checkMeta.assertValidity { inherit meta attrs; };
-      meta = checkMeta.commonMeta { inherit validity attrs; };
+      validity = assertValidity { inherit meta attrs; };
+      meta = commonMeta { inherit validity attrs; };
       baseDrv = derivation (
         {
           inherit (buildPlatform) system;
-          inherit (meta) name;
+          # redefining from meta to avoid forcing the thunk until it's used
+          name = attrs.name or "${attrs.pname}-${attrs.version}";
         }
-        // (builtins.removeAttrs attrs [
+        // maybeContentAddressed
+        // (removeAttrs attrs [
           "meta"
           "passthru"
         ])
@@ -57,7 +71,7 @@ rec {
           ''
             target=''${out}''${destination}
           ''
-          + lib.optionalString (builtins.dirOf destination == ".") ''
+          + lib.optionalString (dirOf destination == ".") ''
             mkdir -p ''${out}''${destinationDir}
           ''
           + ''
@@ -70,7 +84,7 @@ rec {
       ];
 
       PATH = lib.makeBinPath [ mescc-tools-extra ];
-      destinationDir = builtins.dirOf destination;
+      destinationDir = dirOf destination;
       inherit destination;
     };
 

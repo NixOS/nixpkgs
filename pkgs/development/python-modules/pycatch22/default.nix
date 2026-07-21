@@ -4,7 +4,6 @@
   fetchFromGitHub,
   setuptools,
   pandas,
-  pythonOlder,
   numpy,
   pytestCheckHook,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pycatch22";
   version = "0.4.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "DynamicsAndNeuralSystems";
@@ -38,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/DynamicsAndNeuralSystems/pycatch22";
     changelog = "https://github.com/DynamicsAndNeuralSystems/pycatch22/releases/tag/v${version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }

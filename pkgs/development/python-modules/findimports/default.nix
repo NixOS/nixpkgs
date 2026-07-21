@@ -2,47 +2,37 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  python,
-  pythonOlder,
+  pytestCheckHook,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "findimports";
-  version = "2.6.0";
+  version = "3.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mgedmin";
     repo = "findimports";
     tag = version;
-    hash = "sha256-2hhonlv7FF4s+wDOsBGnLsMxJEXlMlNbLEkI8HptyOI=";
+    hash = "sha256-3MYHl35FfStmyhBNvedIHIZQYTyBuRyg5OI3d3Mi57I=";
   };
 
   build-system = [ setuptools ];
 
+  nativeCheckInputs = [ pytestCheckHook ];
+
   pythonImportsCheck = [ "findimports" ];
 
-  checkPhase = ''
-    # Tests fails
-    rm tests/cmdline.txt
-
-    runHook preCheck
-    ${python.interpreter} testsuite.py
-    runHook postCheck
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Module for the analysis of Python import statements";
     homepage = "https://github.com/mgedmin/findimports";
-    changelog = "https://github.com/mgedmin/findimports/blob/${version}/CHANGES.rst";
-    license = with licenses; [
+    changelog = "https://github.com/mgedmin/findimports/blob/${src.tag}/CHANGES.rst";
+    license = with lib.licenses; [
       gpl2Only # or
       gpl3Only
     ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "findimports";
   };
 }

@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 
@@ -27,20 +28,11 @@ in
         type = types.bool;
         default = false;
         description = ''
-          This enables Parallels Tools for Linux guests, along with provided
-          video, mouse and other hardware drivers.
+          This enables Parallels Tools for Linux guests.
         '';
       };
 
-      package = mkOption {
-        type = types.nullOr types.package;
-        default = config.boot.kernelPackages.prl-tools;
-        defaultText = "config.boot.kernelPackages.prl-tools";
-        example = literalExpression "config.boot.kernelPackages.prl-tools";
-        description = ''
-          Defines which package to use for prl-tools. Override to change the version.
-        '';
-      };
+      package = lib.mkPackageOption pkgs "prl-tools" { };
     };
 
   };
@@ -53,16 +45,26 @@ in
 
     boot.extraModulePackages = [ prl-tools ];
 
-    boot.kernelModules = [
-      "prl_tg"
-    ];
-
     services.timesyncd.enable = false;
+
+    # Parallels Desktop 26+ mounts shared folders under /mnt/psf by default.
+    # prltoolsd tries to create subdirectories there at runtime, which fails
+    # if /mnt/psf does not exist. Create it declaratively via tmpfiles.
+    systemd.tmpfiles.rules = [
+      "d /mnt/psf 0755 root root - -"
+    ];
 
     systemd.services.prltoolsd = {
       description = "Parallels Tools Service";
       wantedBy = [ "multi-user.target" ];
-      path = [ prl-tools ];
+      # prltoolsd mount scripts invoke coreutils (tail, mkdir, chmod)
+      # and gnused (sed) without inheriting the service PATH in all
+      # code paths. Make them available alongside prl-tools.
+      path = [
+        prl-tools
+        pkgs.coreutils
+        pkgs.gnused
+      ];
       serviceConfig = {
         ExecStart = "${prl-tools}/bin/prltoolsd -f";
         PIDFile = "/var/run/prltoolsd.pid";

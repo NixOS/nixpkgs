@@ -4,42 +4,49 @@
   autoconf,
   automake,
   fetchFromGitHub,
+  libgcrypt,
   libpcap,
   ncurses,
   openssl,
-  pcre,
+  pcre2,
+  pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sngrep";
-  version = "1.8.2";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "irontec";
     repo = "sngrep";
-    rev = "v${version}";
-    sha256 = "sha256-nvuT//FWJAa6DzmjBsBW9s2p1M+6Zs4cVmpK4dVemnE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-4DLbQ3OOMvJw37n3jVuztG49HlPbWrfxByi6g6AvELQ=";
   };
 
   nativeBuildInputs = [
     autoconf
     automake
+    pkg-config
   ];
 
   buildInputs = [
+    libgcrypt
     libpcap
     ncurses
-    ncurses
     openssl
-    pcre
+    pcre2
   ];
 
   configureFlags = [
-    "--with-pcre"
+    "--with-pcre2"
     "--enable-unicode"
     "--enable-ipv6"
     "--enable-eep"
     "--with-openssl"
+  ];
+
+  patches = [
+    ./fix-sng_strncpy-declaration.patch
   ];
 
   preConfigure = ''
@@ -48,12 +55,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Tool for displaying SIP calls message flows from terminal";
     mainProgram = "sngrep";
     homepage = "https://github.com/irontec/sngrep";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ jorise ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ jorise ];
   };
-}
+})

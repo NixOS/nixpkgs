@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "GMIC_QT_HOST" (
       if variant == "standalone" then
         "none"
-      else if variant == "gimp" && gimp.majorVersion == "3.0" then
+      else if variant == "gimp" && gimp.apiVersion == "3.0" then
         "gimp3"
       else
         variant
@@ -134,7 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (variants.${variant}) description;
     license = lib.licenses.gpl3Plus;
     mainProgram = "gmic_qt";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

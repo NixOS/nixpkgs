@@ -10,14 +10,14 @@
   gtk3,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "myxer";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "Aurailus";
     repo = "myxer";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-c5SHjnhWLp0jMdmDlupMTA0hWphub5DFY1vOI6NW8E0=";
   };
 
@@ -42,15 +42,15 @@ rustPlatform.buildRustPackage rec {
   # Currently no tests are implemented, so we avoid building the package twice
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Modern Volume Mixer for PulseAudio";
     homepage = "https://github.com/Aurailus/Myxer";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       erin
       rster2002
     ];
     mainProgram = "myxer";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

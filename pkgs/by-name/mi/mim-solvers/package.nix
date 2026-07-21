@@ -3,70 +3,55 @@
   crocoddyl,
   ctestCheckHook,
   fetchFromGitHub,
+  fetchpatch,
   lib,
   llvmPackages,
   pkg-config,
   proxsuite,
-  python3Packages,
-  pythonSupport ? false,
   stdenv,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mim-solvers";
-  version = "0.1.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "machines-in-motion";
     repo = "mim_solvers";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-1Mqu9Hfy65HUIOVG/gJBpSMlOwDWVcH+LrR8CaWz0BE=";
+    hash = "sha256-t21zzUo+Oiqvr3lYN9v1lCeoki3I1FWPqo3gWzM6Kdw=";
   };
-
-  # eigenpy is not used without python support
-  postPatch = lib.optionalString (!pythonSupport) ''
-    substituteInPlace CMakeLists.txt --replace-fail \
-      "add_project_dependency(eigenpy 2.7.10 REQUIRED)" \
-      ""
-  '';
 
   nativeBuildInputs = [
     cmake
     pkg-config
-  ]
-  ++ lib.optional pythonSupport python3Packages.pythonImportsCheckHook;
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
-  propagatedBuildInputs =
-    lib.optionals pythonSupport [
-      python3Packages.crocoddyl
-      python3Packages.osqp
-      python3Packages.proxsuite
-      python3Packages.scipy
-    ]
-    ++ lib.optionals (!pythonSupport) [
-      crocoddyl
-      proxsuite
-    ];
+  ];
+
+  buildInputs = lib.optional (
+    stdenv.hostPlatform.isDarwin && crocoddyl.withMultithread
+  ) llvmPackages.openmp;
+
+  propagatedBuildInputs = [
+    crocoddyl
+    proxsuite
+  ];
 
   cmakeFlags = [
-    (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
+    (lib.cmakeBool "BUILD_PYTHON_INTERFACE" false)
     (lib.cmakeBool "BUILD_WITH_PROXSUITE" true)
-  ]
-  ++ lib.optional (stdenv.hostPlatform.isDarwin) (
-    lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'py-test-clqr-osqp'"
-  )
-  ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) (
-    lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'test_solvers'"
-  );
+    (lib.cmakeBool "BUILD_WITH_MULTITHREADS" crocoddyl.withMultithread)
+  ];
 
   nativeCheckInputs = [
     ctestCheckHook
   ];
   disabledTests = [
     # Fails with osqp>=1.0.0
-    # See https://github.com/machines-in-motion/mim_solvers/pull/66
+    # See https://github.com/machines-in-motion/mim_solvers/pull/67
     "py-test-clqr-osqp"
+    # need removed ActuationModelMultiCopterBase in crocoddyl 3.1.0
+    "py-test-sqp-no-reg"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # Several errors such as:
@@ -77,8 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     "test_solvers"
   ];
   doCheck = true;
-
-  pythonImportsCheck = [ "mim_solvers" ];
 
   passthru.updateScript = nix-update-script { };
 

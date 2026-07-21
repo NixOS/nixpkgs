@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     icu
   ];
 
-  NIX_LDFLAGS = lib.strings.concatStringsSep " " [
+  env.NIX_LDFLAGS = toString [
     "-L${lib.getLib zlib}"
     "-lz"
     "-L${lib.getLib gtest}"
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "SDK for building Orthanc plugins and related applications";
     homepage = "https://www.orthanc-server.com/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

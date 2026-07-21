@@ -32,6 +32,7 @@ runCommand "nixpkgs-vet"
   }
   ''
     export NIX_STATE_DIR=$(mktemp -d)
+    $NIXPKGS_VET_NIX_PACKAGE/bin/nix-store --init
 
     nixpkgs-vet --base ${filteredBase} ${filteredHead}
 

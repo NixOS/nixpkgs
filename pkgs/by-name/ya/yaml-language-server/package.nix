@@ -1,39 +1,20 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
-  fetchYarnDeps,
-  nodejs,
-  yarnConfigHook,
-  yarnBuildHook,
-  yarnInstallHook,
+  buildNpmPackage,
 }:
-
-stdenv.mkDerivation (finalAttrs: {
+buildNpmPackage (finalAttrs: {
   pname = "yaml-language-server";
-  version = "1.18.0";
+  version = "1.24.0";
 
   src = fetchFromGitHub {
     owner = "redhat-developer";
     repo = "yaml-language-server";
     tag = finalAttrs.version;
-    hash = "sha256-HBhoadWIebeuHZXSdnFiPMSmDla77yhrTNMdz8si88c=";
+    hash = "sha256-JIThwWGunUn4fHxPx7wBqi/F9aslNhWjcx11TvMyoDQ=";
   };
 
-  offlineCache = fetchYarnDeps {
-    yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-2OVxvvijnfB8Bytgoaybyx4p66nD/aahtyjxLf8womE=";
-  };
-
-  nativeBuildInputs = [
-    nodejs
-    yarnConfigHook
-    yarnBuildHook
-    yarnInstallHook
-  ];
-
-  # NodeJS is also needed here so that script interpreter get patched
-  buildInputs = [ nodejs ];
+  npmDepsHash = "sha256-0jmq/4XpuZLjoRCxpGBZdGgfyvBTBBoT893o2mooCVw=";
 
   strictDeps = true;
 
@@ -43,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/redhat-developer/yaml-language-server";
     license = lib.licenses.mit;
     mainProgram = "yaml-language-server";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      nick-linux
+    ];
   };
 })

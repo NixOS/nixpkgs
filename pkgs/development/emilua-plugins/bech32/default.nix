@@ -54,11 +54,11 @@ stdenv.mkDerivation rec {
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Bech32 codec for Emilua";
     homepage = "https://emilua.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ manipuladordedados ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ manipuladordedados ];
+    platforms = lib.platforms.linux;
   };
 }

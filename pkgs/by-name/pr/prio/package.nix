@@ -31,8 +31,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/letoram/prio";
     description = "Plan9- Rio like Window Manager for Arcan";
-    license = with lib.licenses; [ bsd3 ];
-    maintainers = with lib.maintainers; [ ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

@@ -2,39 +2,39 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
-  setuptools-scm,
+  hatchling,
+  hatch-vcs,
   six,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pystardict";
-  version = "0.8";
-  format = "setuptools";
+  version = "0.9";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lig";
     repo = "pystardict";
-    rev = version;
-    hash = "sha256-YrZpIhyxfA3G7rP0SJ+EvzGwAXlne80AYilkj6cIDnA=";
+    tag = "v${version}";
+    hash = "sha256-VWOxggAKifN5f6nSN1xsSbg0hpKzrHDw+UqnAOzsXj0=";
   };
 
-  propagatedBuildInputs = [ six ];
-
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
+  build-system = [
+    hatchling
+    hatch-vcs
   ];
+
+  dependencies = [ six ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pystardict" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for manipulating StarDict dictionaries from within Python";
     homepage = "https://github.com/lig/pystardict";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ thornycrackers ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ thornycrackers ];
   };
 }

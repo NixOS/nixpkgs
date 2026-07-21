@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "django-weasyprint";
-  version = "2.4.0";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fdemmer";
     repo = "django-weasyprint";
     tag = "v${version}";
-    hash = "sha256-eSh1p+5MyYb6GIEgSdlFxPzVCenlkwSCTkTzgKjezIg=";
+    hash = "sha256-EwTEBIqAZGmtSXkSLZgNPCKA98IrymsUEaCHc1uQ2XE=";
   };
 
   build-system = [
@@ -31,6 +31,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Fails with weasyprint >= 68 (tries to open /static/css/print.css in test env)
+    "test_get_pdf_download_and_options"
   ];
 
   pythonImportsCheck = [ "django_weasyprint" ];

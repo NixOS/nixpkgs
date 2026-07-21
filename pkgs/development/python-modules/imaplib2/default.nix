@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   pytestCheckHook,
 }:
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "imaplib2";
   version = "3.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "jazzband";
@@ -24,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "imaplib2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Threaded Python IMAP4 client";
     homepage = "https://github.com/jazzband/imaplib2";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

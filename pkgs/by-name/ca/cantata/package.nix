@@ -5,6 +5,7 @@
   cmake,
   pkg-config,
   qt6,
+  kdePackages,
   perl,
 
   # Cantata doesn't build with cdparanoia enabled so we disable that
@@ -24,14 +25,14 @@
   withHttpStream ? true,
   gst_all_1,
   withReplaygain ? true,
-  ffmpeg,
+  ffmpeg_6,
   speex,
   mpg123,
   withMtp ? true,
   libmtp,
   withOnlineServices ? true,
   withDevices ? true,
-  udisks2,
+  udisks,
   withDynamic ? true,
   withHttpServer ? true,
   withLibVlc ? true,
@@ -91,7 +92,7 @@ let
       ];
       enable = withReplaygain;
       pkgs = [
-        ffmpeg
+        ffmpeg_6
         speex
         mpg123
       ];
@@ -155,20 +156,20 @@ let
     {
       names = [ "UDISKS2" ];
       enable = withUdisks;
-      pkgs = [ udisks2 ];
+      pkgs = [ udisks ];
     }
   ];
 
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cantata";
-  version = "3.3.1";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "nullobsi";
     repo = "cantata";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-4lkfY+87lEE2A863JogG5PtO5SyGn7Hb8shQljSqq3Q=";
+    hash = "sha256-jwIsuNgsd1TFb1Zkyen/AulGQfVY2RWKfAJaWvg4WMI=";
   };
 
   patches = [
@@ -186,6 +187,8 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
     qt6.qtsvg
     qt6.qtwayland
+    kdePackages.karchive
+    kdePackages.kitemviews
     (perl.withPackages (ppkgs: with ppkgs; [ URI ]))
   ]
   ++ lib.flatten (builtins.catAttrs "pkgs" (builtins.filter (e: e.enable) options));

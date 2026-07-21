@@ -5,6 +5,7 @@
   meson,
   ninja,
   pkg-config,
+  coreutils,
   gtk-doc,
   docbook-xsl-nons,
   docbook_xml_dtd_43,
@@ -12,9 +13,9 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glib-testing";
-  version = "0.1.1";
+  version = "0.2.0";
 
   outputs = [
     "out"
@@ -27,8 +28,8 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "pwithnall";
     repo = "libglib-testing";
-    rev = version;
-    sha256 = "U3epLDdLES7MA71z7Q1WXMjzySTFERWBU0u8poObbEo=";
+    rev = finalAttrs.version;
+    hash = "sha256-OgKWC4plX4oiIakd/8bHtyiuZijV58URILXUHQqFMW8=";
   };
 
   patches = [
@@ -54,17 +55,23 @@ stdenv.mkDerivation rec {
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
   ];
 
+  postPatch = ''
+    # Note: Does not appear to be needed by anything.
+    substituteInPlace libglib-testing/dbus-queue.c \
+      --replace-fail 'Exec=/bin/true' 'Exec=${coreutils}/bin/true'
+  '';
+
   passthru = {
     tests = {
       installedTests = nixosTests.installed-tests.glib-testing;
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Test library providing test harnesses and mock classes complementing the classes provided by GLib";
     homepage = "https://gitlab.gnome.org/pwithnall/libglib-testing";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ jtojnar ];
+    platforms = lib.platforms.unix;
   };
-}
+})

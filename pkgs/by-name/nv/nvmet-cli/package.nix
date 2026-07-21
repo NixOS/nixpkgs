@@ -4,13 +4,13 @@
   fetchurl,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nvmet-cli";
   version = "0.7";
   format = "setuptools";
 
   src = fetchurl {
-    url = "ftp://ftp.infradead.org/pub/nvmetcli/nvmetcli-${version}.tar.gz";
+    url = "ftp://ftp.infradead.org/pub/nvmetcli/nvmetcli-${finalAttrs.version}.tar.gz";
     sha256 = "051y1b9w46azy35118154c353v3mhjkdzh6h59brdgn5054hayj2";
   };
 
@@ -21,11 +21,11 @@ python3Packages.buildPythonApplication rec {
   # This package requires the `nvmet` kernel module to be loaded for tests.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "NVMe target CLI";
     mainProgram = "nvmetcli";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ hoverbear ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ hoverbear ];
   };
-}
+})

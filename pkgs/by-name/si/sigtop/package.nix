@@ -6,18 +6,18 @@
   libsecret,
 }:
 
-buildGoModule rec {
-  name = "sigtop";
-  version = "0.22.0";
+buildGoModule (finalAttrs: {
+  pname = "sigtop";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "tbvdm";
     repo = "sigtop";
-    rev = "v${version}";
-    sha256 = "sha256-EvdO7fGnNdu1/f61c4k2dpeMUqKaq9xKGgevAQ+f3q0=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-NJl30LCIiPWTqbpTPW6wa9OsCl19bc//QZsMJIUImR4=";
   };
 
-  vendorHash = "sha256-EAMnuDm3Lmw2i4sumgCTE58JCtMq9QeT6pjtmC/PKMA=";
+  vendorHash = "sha256-6pNBYziJvJ1MMjzcbIjPFAUTW6ZrCNmtYzzAS/ANtEw=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libsecret ];
@@ -26,11 +26,12 @@ buildGoModule rec {
     "PREFIX=\${out}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility to export messages, attachments and other data from Signal Desktop";
+    homepage = "https://github.com/tbvdm/sigtop";
     mainProgram = "sigtop";
-    license = licenses.isc;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ fricklerhandwerk ];
+    license = lib.licenses.isc;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ fricklerhandwerk ];
   };
-}
+})

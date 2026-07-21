@@ -3,9 +3,9 @@
   stdenvNoCC,
   fetchurl,
   nixosTests,
-  cacert,
-  caBundle ? "${cacert}/etc/ssl/certs/ca-bundle.crt",
-  nextcloud31Packages,
+  nextcloud32Packages,
+  nextcloud33Packages,
+  nextcloud34Packages,
 }:
 
 let
@@ -21,21 +21,13 @@ let
       pname = "nextcloud";
       inherit version;
 
+      __structuredAttrs = true;
+      strictDeps = true;
+
       src = fetchurl {
         url = "https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2";
         inherit hash;
       };
-
-      passthru = {
-        tests = lib.filterAttrs (
-          key: _: (lib.hasSuffix (lib.versions.major version) key)
-        ) nixosTests.nextcloud;
-        inherit packages;
-      };
-
-      postPatch = ''
-        cp ${caBundle} resources/config/ca-bundle.crt
-      '';
 
       installPhase = ''
         runHook preInstall
@@ -43,6 +35,13 @@ let
         cp -R . $out/
         runHook postInstall
       '';
+
+      passthru = {
+        tests = lib.filterAttrs (
+          key: _: (lib.hasSuffix (lib.versions.major version) key)
+        ) nixosTests.nextcloud;
+        inherit packages;
+      };
 
       meta = {
         changelog = "https://nextcloud.com/changelog/#${lib.replaceStrings [ "." ] [ "-" ] version}";
@@ -57,10 +56,22 @@ let
     };
 in
 {
-  nextcloud31 = generic {
-    version = "31.0.9";
-    hash = "sha256-qrhBTMY1gco6jfRy9F60ErK4Q6lms4cCdUIbrQ1nD2g=";
-    packages = nextcloud31Packages;
+  nextcloud32 = generic {
+    version = "32.0.12";
+    hash = "sha256-rxWPclccjhXim8E2wjqSEYjOHVZoVQAK2U+JuAqPGAw=";
+    packages = nextcloud32Packages;
+  };
+
+  nextcloud33 = generic {
+    version = "33.0.6";
+    hash = "sha256-eRghpVAplE3gQxnPyvysSujn71a0zR78JjG/MLedFt4=";
+    packages = nextcloud33Packages;
+  };
+
+  nextcloud34 = generic {
+    version = "34.0.1";
+    hash = "sha256-BOnDL8P+Ofa2qKGJFe9a/SgKVrSn90Thj1+i7/+8SmM=";
+    packages = nextcloud34Packages;
   };
 
   # tip: get the sha with:

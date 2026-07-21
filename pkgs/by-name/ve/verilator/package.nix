@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
+  bash,
   perl,
   flex,
   bison,
@@ -18,29 +18,16 @@
   gdb,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "verilator";
-  version = "5.040";
-
-  # Verilator gets the version from this environment variable
-  # if it can't do git describe while building.
-  VERILATOR_SRC_VERSION = "v${version}";
+  version = "5.050";
 
   src = fetchFromGitHub {
     owner = "verilator";
     repo = "verilator";
-    tag = "v${version}";
-    hash = "sha256-S+cDnKOTPjLw+sNmWL3+Ay6+UM8poMadkyPSGd3hgnc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZOwBBbVNP0PaYUvrjdvbWu88fZOZ6IJ8BHAiajcOjP8=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "clang-V3hash-overload-fix.patch";
-      url = "https://github.com/verilator/verilator/commit/2aa260a03b67d3fe86bc64b8a59183f8dc21e117.patch";
-      hash = "sha256-waUsctWiAMG3lCpQi+VUUZ7qMw/kJGu/wNXPHZGuAoU=";
-    })
-  ];
-
   enableParallelBuilding = true;
   buildInputs = [
     perl
@@ -85,8 +72,8 @@ stdenv.mkDerivation rec {
     test_regress/t/t_a1_first_cc.py \
     test_regress/t/t_a2_first_sc.py \
     ci/* ci/docker/run/* ci/docker/run/hooks/* ci/docker/buildenv/build.sh
-    # verilator --gdbbt uses /bin/echo to test if gdb works.
-    substituteInPlace bin/verilator --replace-fail "/bin/echo" "${coreutils}/bin/echo"
+    # verilator --gdbbt uses /bin/sh to test if gdb works.
+    substituteInPlace bin/verilator --replace-fail "/bin/sh" "${bash}/bin/sh"
   '';
   # grep '^#!/' -R . | grep -v /nix/store | less
   # (in nix-shell after patchPhase)
@@ -97,22 +84,25 @@ stdenv.mkDerivation rec {
   '';
 
   env = {
+    # Verilator gets the version from this environment variable
+    # if it can't do git describe while building.
+    VERILATOR_SRC_VERSION = "v${finalAttrs.version}";
+
     SYSTEMC_INCLUDE = "${lib.getDev systemc}/include";
     SYSTEMC_LIBDIR = "${lib.getLib systemc}/lib";
   };
 
-  meta = with lib; {
-    changelog = "https://github.com/verilator/verilator/blob/${src.tag}/Changes";
+  meta = {
+    changelog = "https://github.com/verilator/verilator/blob/${finalAttrs.src.tag}/Changes";
     description = "Fast and robust (System)Verilog simulator/compiler and linter";
     homepage = "https://www.veripool.org/verilator";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl3Only
       artistic2
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       thoughtpolice
-      amiloradovsky
     ];
   };
-}
+})

@@ -4,28 +4,28 @@
   cachetools,
   fetchFromGitHub,
   paho-mqtt,
-  pythonOlder,
   pytz,
   requests,
   requests-oauthlib,
   schedule,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysmappee";
   version = "0.2.29";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "smappee";
     repo = "pysmappee";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-Ffi55FZsZUKDcS4qV46NpRK3VP6axzrL2BO+hYW7J9E=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cachetools
     paho-mqtt
     pytz
@@ -39,10 +39,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysmappee" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Library for the Smappee dev API";
     homepage = "https://github.com/smappee/pysmappee";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

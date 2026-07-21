@@ -5,12 +5,12 @@
   xz,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "autoconf-archive";
   version = "2024.10.16";
 
   src = fetchurl {
-    url = "mirror://gnu/autoconf-archive/autoconf-archive-${version}.tar.xz";
+    url = "mirror://gnu/autoconf-archive/autoconf-archive-${finalAttrs.version}.tar.xz";
     hash = "sha256-e81dABkW86UO10NvT3AOPSsbrePtgDIZxZLWJQKlc2M=";
   };
 
@@ -28,10 +28,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ xz ];
 
-  meta = with lib; {
+  meta = {
     description = "Archive of autoconf m4 macros";
     homepage = "https://www.gnu.org/software/autoconf-archive/";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -70,10 +70,11 @@ let
 
   envFile = pkgs.writeText "peertube.env" (
     lib.concatMapStrings (s: s + "\n") (
-      (lib.concatLists (
+      lib.concatLists (
         lib.mapAttrsToList (name: value: lib.optional (value != null) ''${name}="${toString value}"'') env
-      ))
+      )
     )
+
   );
 
   peertubeEnv = pkgs.writeShellScriptBin "peertube-env" ''
@@ -524,7 +525,7 @@ in
       environment = env;
 
       path = with pkgs; [
-        nodejs_20
+        cfg.package.nodejs
         yarn
         ffmpeg-headless
         openssl
@@ -945,7 +946,7 @@ in
       })
       (lib.attrsets.setAttrByPath
         [ cfg.user "packages" ]
-        [ peertubeEnv pkgs.nodejs_20 pkgs.yarn pkgs.ffmpeg-headless ]
+        [ peertubeEnv cfg.package.nodejs pkgs.yarn pkgs.ffmpeg-headless ]
       )
       (lib.mkIf cfg.redis.enableUnixSocket {
         ${config.services.peertube.user}.extraGroups = [ "redis-peertube" ];

@@ -17,18 +17,22 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "evdi";
-  version = "1.14.10";
+  version = "1.14.15";
 
   src = fetchFromGitHub {
     owner = "DisplayLink";
     repo = "evdi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xB3AHg9t/X8vw5p7ohFQ+WuMjb1P8DAP3pROiwWkVPs=";
+    hash = "sha256-tms+UNws+oBmwLvDFaDSIa/bUdSpK+CADodbsip3tRg=";
   };
+
+  prePatch = ''
+    substituteInPlace module/Makefile \
+      --replace-fail '/etc/os-release' '/dev/null'
+  '';
 
   env.CFLAGS = toString [
     "-Wno-error"
-    "-Wno-error=discarded-qualifiers" # for Linux 4.19 compatibility
     "-Wno-error=sign-compare"
   ];
 
@@ -72,10 +76,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Extensible Virtual Display Interface";
     homepage = "https://www.displaylink.com/";
     license = with lib.licenses; [
-      lgpl21Only
+      mit
+      lgpl21Plus
       gpl2Only
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

@@ -4,49 +4,47 @@
   fetchFromGitHub,
 
   libGL,
-  libX11,
-  libXcursor,
-  libXinerama,
-  libXi,
-  libXrandr,
-  libXxf86vm,
+  libx11,
+  libxcursor,
+  libxinerama,
+  libxi,
+  libxrandr,
+  libxxf86vm,
   pkg-config,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fyne";
-  # This is the current latest version
-  # version "1.26.1" was a typo of "1.6.2" - maybe, don't "upgrade" to it
-  version = "1.6.2";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "fyne-io";
     repo = "tools";
-    rev = "v${version}";
-    hash = "sha256-N5v1oytSwRHE631KQDHTulUAqs/Jlr8YJqE8wy+Ygdk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-kLhh44zRYEPD6kwh+DHaRYidbV+YWq9Tc0yB3f290Z4=";
   };
 
-  vendorHash = "sha256-LU3UkWHsf0Qt6w5tNIz11ubI+OIWkbtqqSlcoYJVFZU=";
+  vendorHash = "sha256-EzwSZDq3s74ohGk0s9NV5RwSFqlUA5AFM8DvKSZeXnM=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     libGL
-    libX11
-    libXcursor
-    libXinerama
-    libXi
-    libXrandr
-    libXxf86vm
+    libx11
+    libxcursor
+    libxinerama
+    libxi
+    libxrandr
+    libxxf86vm
   ];
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://fyne.io";
     description = "Cross platform GUI toolkit in Go";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ greg ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ greg ];
     mainProgram = "fyne";
   };
-}
+})

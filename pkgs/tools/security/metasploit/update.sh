@@ -4,12 +4,15 @@
 set -eu -o pipefail
 cd "$(dirname "$(readlink -f "$0")")"
 
-latest=$(curl https://github.com/rapid7/metasploit-framework/tags.atom | xmlstarlet sel -N atom="http://www.w3.org/2005/Atom" -t -m /atom:feed/atom:entry -v atom:title -n | head -n1)
+latest=$(curl -sL https://github.com/rapid7/metasploit-framework/tags.atom | xmlstarlet sel -N atom="http://www.w3.org/2005/Atom" -t -m /atom:feed/atom:entry -v atom:title -n | head -n1)
 echo "Updating metasploit to $latest"
 
 sed -i "s#refs/tags/.*#refs/tags/$latest\"#" Gemfile
 
-bundler install
+# Remove stale bundler git cache so bundle lock fetches the updated tags
+find "${XDG_DATA_HOME:-$HOME/.local/share}/gem/ruby" -maxdepth 4 -type d -name "metasploit-framework-*" -exec rm -rf {} + 2>/dev/null || true
+
+BUNDLE_FORCE_RUBY_PLATFORM=true bundle lock --update
 bundix
 sed -i '/[ ]*dependencies =/d' gemset.nix
 

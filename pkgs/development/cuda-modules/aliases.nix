@@ -10,19 +10,10 @@ final: _:
 builtins.mapAttrs mkRenamed {
   # A comment to prevent empty { } from collapsing into a single line
 
-  cudaFlags = {
-    path = "cudaPackages.flags";
-    package = final.flags;
+  # NVIDIA renamed cuda_cccl to cccl in CUDA 13.3.
+  # For the sake of simplicity, we updated the attrname tree-wide, accross all cudaPackages version.
+  cuda_cccl = {
+    path = "cccl";
+    package = final.cccl;
   };
-
-  cudaVersion = {
-    path = "cudaPackages.cudaMajorMinorVersion";
-    package = final.cudaMajorMinorVersion;
-  };
-
-  cudatoolkit-legacy-runfile = {
-    path = "cudaPackages.cudatoolkit";
-    package = final.cudatoolkit;
-  };
-
 }

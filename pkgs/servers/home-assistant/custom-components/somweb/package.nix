@@ -19,11 +19,11 @@ buildHomeAssistantComponent rec {
 
   dependencies = [ somweb ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/taarskog/home-assistant-component-somweb/releases/tag/v${version}";
     description = "Custom component for Home Assistant to manage garage doors and gates by Sommer through SOMweb";
     homepage = "https://github.com/taarskog/home-assistant-component-somweb";
-    maintainers = with maintainers; [ uvnikita ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ uvnikita ];
+    license = lib.licenses.mit;
   };
 }

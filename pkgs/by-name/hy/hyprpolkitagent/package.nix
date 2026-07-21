@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc16Stdenv,
   cmake,
   pkg-config,
   fetchFromGitHub,
@@ -10,7 +10,7 @@
   polkit,
   qt6,
 }:
-stdenv.mkDerivation (finalAttrs: {
+gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpolkitagent";
   version = "0.1.3";
 

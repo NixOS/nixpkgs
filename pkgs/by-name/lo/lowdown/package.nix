@@ -11,13 +11,15 @@
   enableDarwinSandbox ? true,
   # for passthru.tests
   nix,
+  lix,
+  lowdown-unsandboxed,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lowdown${
     lib.optionalString (stdenv.hostPlatform.isDarwin && !enableDarwinSandbox) "-unsandboxed"
   }";
-  version = "2.0.2";
+  version = "3.0.1";
 
   outputs = [
     "out"
@@ -28,8 +30,11 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://kristaps.bsd.lv/lowdown/snapshots/lowdown-${version}.tar.gz";
-    hash = "sha512-cfzhuF4EnGmLJf5EGSIbWqJItY3npbRSALm+GarZ7SMU7Hr1xw0gtBFMpOdi5PBar4TgtvbnG4oRPh+COINGlA==";
+    sha512 = "fe68e1b7ff23f3992398356d7aa9a330dfd7b72e22bea9a91eeef74182b209ecea0c9f3e2b2216e1a07b2358da2b746238ec9cbbdeebdd3551cef14dd2d79f46";
   };
+
+  # https://github.com/kristapsdz/lowdown/pull/171
+  patches = [ ./fix-cygwin-build.patch ];
 
   nativeBuildInputs = [
     which
@@ -53,6 +58,7 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isCygwin "-D_GNU_SOURCE";
   # Fix rpath change on darwin to avoid failure like:
   #     error: install_name_tool: changing install names or
   #     rpaths can't be redone for: liblowdown.1.dylib (for architecture
@@ -62,6 +68,13 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "bins" # prevents shared object from being built unnecessarily
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isCygwin [
+    "EXESUFFIX=.exe"
+    "LINKER_SOSUFFIX=dll"
+    "LIB_SO=cyglowdown.dll"
+    "IMPLIB=liblowdown.dll.a"
+    "LDFLAGS=-Wl,--out-implib,liblowdown.dll.a"
   ];
 
   installTargets = [
@@ -74,53 +87,35 @@ stdenv.mkDerivation rec {
     "install_static"
   ];
 
-  postInstall =
-    let
-      soVersion = "2";
-    in
+  postInstall = lib.optionalString stdenv.hostPlatform.isCygwin ''
+    mkdir -p "$lib"/bin
+    mv "$lib"/lib/*.dll "$lib"/bin/
+    chmod +x "$lib"/bin/*.dll
+  '';
 
-    # Check that soVersion is up to date even if we are not on darwin
-    lib.optionalString (enableShared && !stdenv.hostPlatform.isDarwin) ''
-      test -f $lib/lib/liblowdown.so.${soVersion} || \
-        die "postInstall: expected $lib/lib/liblowdown.so.${soVersion} is missing"
-    ''
-    # Fix lib extension so that fixDarwinDylibNames detects it, see
-    # <https://github.com/kristapsdz/lowdown/issues/87#issuecomment-1532243650>.
-    + lib.optionalString (enableShared && stdenv.hostPlatform.isDarwin) ''
-      darwinDylib="$lib/lib/liblowdown.${soVersion}.dylib"
-      mv "$lib/lib/liblowdown.so.${soVersion}" "$darwinDylib"
-
-      # Make sure we are re-creating a symbolic link here
-      test -L "$lib/lib/liblowdown.so" || \
-        die "postInstall: expected $lib/lib/liblowdown.so to be a symlink"
-      ln -s "$darwinDylib" "$lib/lib/liblowdown.dylib"
-      rm "$lib/lib/liblowdown.so"
-    '';
-
-  doInstallCheck = true;
-
-  installCheckPhase = lib.optionalString (!stdenv.hostPlatform.isDarwin || !enableDarwinSandbox) ''
+  doInstallCheck = !stdenv.hostPlatform.isDarwin || !enableDarwinSandbox;
+  installCheckPhase = ''
     runHook preInstallCheck
 
     echo '# TEST' > test.md
-    $out/bin/lowdown test.md
+    $out/bin/lowdown test.md | grep '[hH]1'
 
     runHook postInstallCheck
   '';
 
-  doCheck = true;
+  doCheck = !stdenv.hostPlatform.isDarwin || !enableDarwinSandbox;
   checkTarget = "regress";
 
   passthru.tests = {
-    # most important consumer in nixpkgs
-    inherit nix;
+    # most important consumers in nixpkgs
+    inherit nix lix lowdown-unsandboxed;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://kristaps.bsd.lv/lowdown/";
     description = "Simple markdown translator";
-    license = licenses.isc;
-    maintainers = [ maintainers.sternenseemann ];
-    platforms = platforms.unix;
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.sternenseemann ];
+    platforms = lib.platforms.unix;
   };
 }

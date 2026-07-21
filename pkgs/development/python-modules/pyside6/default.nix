@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit (shiboken6) version src;
 
-  sourceRoot = "pyside-setup-everywhere-src-${finalAttrs.version}/sources/pyside6";
+  sourceRoot = "${finalAttrs.src.name}/sources/pyside6";
 
   # Qt Designer plugin moved to a separate output to reduce closure size
   # for downstream things
@@ -109,12 +109,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [ shiboken6 ];
 
-  cmakeFlags = [ "-DBUILD_TESTS=OFF" ];
+  cmakeFlags = [
+    "-DBUILD_TESTS=OFF"
+    "-Dis_pyside6_superproject_build=1"
+  ];
 
   dontWrapQtApps = true;
 
   postInstall = ''
     cd ../../..
+    chmod +w .
     ${python.pythonOnBuildForHost.interpreter} setup.py egg_info --build-type=pyside6
     cp -r PySide6.egg-info $out/${python.sitePackages}/
 
@@ -133,7 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     homepage = "https://wiki.qt.io/Qt_for_Python";
     changelog = "https://code.qt.io/cgit/pyside/pyside-setup.git/tree/doc/changelogs/changes-${finalAttrs.version}?h=v${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

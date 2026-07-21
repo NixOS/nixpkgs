@@ -108,6 +108,7 @@ stdenv.mkDerivation rec {
       target = getArch stdenv.hostPlatform;
       target_system = stdenv.hostPlatform.uname.system;
       host = getArch stdenv.buildPlatform;
+      targetIsPpc64le = stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian;
 
       buildFlags = [
         "-v"
@@ -126,6 +127,10 @@ stdenv.mkDerivation rec {
       ++ lib.optional stdenv.hostPlatform.isDarwin "--clang"
       ++ lib.optionals (target_system != stdenv.buildPlatform.uname.system) [
         "-DOS=${target_system}"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isPower [
+        "-Ddisable_altivec=${if targetIsPpc64le then "0" else "1"}"
+        "-Ddisable_crypto_vsx=${if targetIsPpc64le then "0" else "1"}"
       ]
       ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
         "--disable-tests"
@@ -252,15 +257,15 @@ stdenv.mkDerivation rec {
       inherit (nixosTests) firefox;
     };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS";
     description = "Set of libraries for development of security-enabled client and server applications";
     changelog = "https://github.com/nss-dev/nss/blob/master/doc/rst/releases/nss_${underscoreVersion}.rst";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       hexa
       ajs124
     ];
-    license = licenses.mpl20;
-    platforms = platforms.all;
+    license = lib.licenses.mpl20;
+    platforms = lib.platforms.all;
   };
 }

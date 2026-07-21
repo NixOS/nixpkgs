@@ -56,7 +56,7 @@ maven.buildMavenPackage {
 
   mvnJdk = jdk;
   mvnParameters = "-pl !packaging";
-  mvnHash = "sha256-SV5nfyUeyRul/YfZZXor8O37ARdCtKkrHCLzQrmr96s=";
+  mvnHash = "sha256-95lyc+pimtSM6v8S58bLG16/TotbHGa4EhHDzfxwPAk=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -119,15 +119,15 @@ maven.buildMavenPackage {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Power tool for working with messy data and improving it";
     homepage = "https://openrefine.org";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       ris
       arcstur
     ];
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # maven dependencies
     ];

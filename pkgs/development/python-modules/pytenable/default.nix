@@ -15,7 +15,6 @@
   pytestCheckHook,
   python-box,
   python-dateutil,
-  pythonOlder,
   requests-pkcs12,
   requests-toolbelt,
   requests,
@@ -26,24 +25,17 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytenable";
-  version = "1.8.4";
+  version = "26.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "tenable";
     repo = "pyTenable";
-    tag = version;
-    hash = "sha256-Dt6jN+0Ktv3CO88RmbgKCU8v3Oa10MnKjyJaePxXsaI=";
+    tag = finalAttrs.version;
+    hash = "sha256-KRZbrJgIxdNAnlmP7Ww/JasoDJqJZkBkd0qXm9gfXp4=";
   };
-
-  pythonRelaxDeps = [
-    "cryptography"
-    "defusedxml"
-  ];
 
   build-system = [ setuptools ];
 
@@ -73,6 +65,10 @@ buildPythonPackage rec {
     responses
   ];
 
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn9Warning"
+  ];
+
   disabledTestPaths = [
     # Disable tests that requires network access
     "tests/io/"
@@ -87,6 +83,7 @@ buildPythonPackage rec {
     # Test requires network access
     "test_assets_list_vcr"
     "test_events_list_vcr"
+    "test_session_ssl_error"
     # https://github.com/tenable/pyTenable/issues/953
     "test_construct_query_str"
     "test_construct_query_stored_file"
@@ -98,11 +95,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tenable" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for the Tenable.io and TenableSC API";
     homepage = "https://github.com/tenable/pyTenable";
-    changelog = "https://github.com/tenable/pyTenable/releases/tag/${src.tag}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/tenable/pyTenable/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

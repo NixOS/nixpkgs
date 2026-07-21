@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitLab,
   fetchpatch,
+  nix-update-script,
 
   SDL2,
   boost,
@@ -10,7 +11,7 @@
   cmake,
   collada-dom,
   ffmpeg,
-  libXt,
+  libxt,
   lua,
   luajit,
   lz4,
@@ -35,7 +36,7 @@ assert lib.assertOneOf "GLPreference" GLPreference [
 ];
 stdenv.mkDerivation (finalAttrs: {
   pname = "openmw";
-  version = "0.49.0";
+  version = "0.51.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -82,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "OpenMW";
     repo = "openmw";
     tag = "openmw-${finalAttrs.version}";
-    hash = "sha256-Eyjn3jPpo0d7XENg0Ea/3MN60lZBSUAMkz1UtTiIP80=";
+    hash = "sha256-D+2nEQRkAjmDvRoas9bYPmdygQYT3MAv46n73OonE0o=";
   };
 
   postPatch = ''
@@ -109,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     collada-dom
     ffmpeg
-    libXt
+    libxt
     (if isAarch64Linux then lua else luajit)
     lz4
     mygui
@@ -132,6 +133,15 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "OPENMW_USE_SYSTEM_RECASTNAVIGATION" true)
     (lib.cmakeBool "OPENMW_OSX_DEPLOYMENT" isDarwin)
   ];
+
+  env.LANG = "C.UTF-8";
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "openmw-(.*)"
+    ];
+  };
 
   meta = {
     description = "Unofficial open source engine reimplementation of the game Morrowind";

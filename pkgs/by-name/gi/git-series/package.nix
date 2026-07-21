@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage {
     installManPage ./git-series.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to help with formatting git patches for review on mailing lists";
     longDescription = ''
       git series tracks changes to a patch series over time. git
@@ -56,8 +56,8 @@ rustPlatform.buildRustPackage {
       formats the series for email, and prepares pull requests.
     '';
     homepage = "https://github.com/git-series/git-series";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       edef
       vmandela
       aleksana

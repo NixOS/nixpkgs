@@ -31,6 +31,9 @@ flutter329.buildFlutterApplication rec {
     libappindicator
   ];
 
+  # https://github.com/juliansteenbakker/flutter_secure_storage/issues/965
+  env.CXXFLAGS = toString [ "-Wno-deprecated-literal-operator" ];
+
   postInstall = ''
     substituteInPlace snap/gui/org.proninyaroslav.libretrack.desktop \
       --replace-fail 'Icon=''${SNAP}/meta/gui/libretrack.png' 'Icon=libretrack' \

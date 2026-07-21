@@ -7,12 +7,12 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libotr";
   version = "4.1.1";
 
   src = fetchurl {
-    url = "https://otr.cypherpunks.ca/libotr-${version}.tar.gz";
+    url = "https://otr.cypherpunks.ca/libotr-${finalAttrs.version}.tar.gz";
     sha256 = "1x8rliydhbibmzwdbyr7pd7n87m2jmxnqkpvaalnf4154hj1hfwb";
   };
 
@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
   ];
   propagatedBuildInputs = [ libgcrypt ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.cypherpunks.ca/otr/";
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     description = "Library for Off-The-Record Messaging";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

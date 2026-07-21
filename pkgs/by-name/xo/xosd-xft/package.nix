@@ -5,7 +5,9 @@
   versionCheckHook,
   nix-update-script,
   pkg-config,
-  xorg,
+  libxrandr,
+  libxinerama,
+  libxft,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,10 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
   ];
-  buildInputs = with xorg; [
-    libXft
-    libXrandr
-    libXinerama
+  buildInputs = [
+    libxft
+    libxrandr
+    libxinerama
   ];
 
   nativeInstallCheckInputs = [
@@ -35,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   versionCheckProgram = "${placeholder "out"}/bin/osd-echo";
   versionCheckProgramArg = "--help";
 
-  updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Show text content with Xft/TTF fonts on X11 display";

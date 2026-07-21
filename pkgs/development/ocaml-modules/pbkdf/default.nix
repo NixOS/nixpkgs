@@ -8,12 +8,12 @@
   ohex,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "pbkdf";
   version = "2.0.0";
 
   src = fetchzip {
-    url = "https://github.com/abeaumont/ocaml-pbkdf/archive/${version}.tar.gz";
+    url = "https://github.com/abeaumont/ocaml-pbkdf/archive/${finalAttrs.version}.tar.gz";
     hash = "sha256-D2dXpf1D/wsJrcajU3If37tuLYjahoA/+QoXZKr1vQs=";
   };
 
@@ -34,4 +34,4 @@ buildDunePackage rec {
     license = lib.licenses.bsd2;
     homepage = "https://github.com/abeaumont/ocaml-pbkdf";
   };
-}
+})

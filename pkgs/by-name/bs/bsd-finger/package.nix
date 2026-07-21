@@ -203,7 +203,7 @@ stdenv.mkDerivation (finalAttrs: {
         "daemon" = "fingerd";
       }
       .${buildProduct};
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

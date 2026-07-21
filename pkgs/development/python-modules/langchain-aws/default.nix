@@ -4,13 +4,20 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   boto3,
   langchain-core,
   numpy,
   pydantic,
+
+  # tests
+  langchain,
+
+  # optional-dependencies
+  anthropic,
+  langchain-anthropic,
 
   # tests
   langchain-tests,
@@ -22,16 +29,17 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-aws";
-  version = "0.2.33";
+  version = "1.6.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-aws";
-    tag = "langchain-aws==${version}";
-    hash = "sha256-8VRZhwrR5PdLo9FamQClKbYfuHUGVxamku4osyl8Wl4=";
+    tag = "langchain-aws==${finalAttrs.version}";
+    hash = "sha256-MFlC9/9ZC1b5jAkvLRy2alcSYU5+KETJ6rIW05nLR5I=";
   };
 
   postPatch = ''
@@ -39,9 +47,9 @@ buildPythonPackage rec {
       --replace-fail "--snapshot-warn-unused" ""
   '';
 
-  sourceRoot = "${src.name}/libs/aws";
+  sourceRoot = "${finalAttrs.src.name}/libs/aws";
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     boto3
@@ -51,21 +59,32 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
-    # Boto @ 1.35 has outstripped the version requirement
+    # Boto3 spec has outstripped the version requirement
     "boto3"
-    # Each component release requests the exact latest core.
-    # That prevents us from updating individual components.
-    "langchain-core"
   ];
 
+  optional-dependencies = {
+    anthropic = anthropic.optional-dependencies.bedrock ++ [
+      langchain-anthropic
+    ];
+  };
+
   nativeCheckInputs = [
+    anthropic
+    langchain
     langchain-tests
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
-  ];
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   enabledTestPaths = [ "tests/unit_tests" ];
+
+  disabledTests = [
+    # Fails when langchain-core gets ahead of this package
+    "test_serdes"
+  ];
 
   pythonImportsCheck = [ "langchain_aws" ];
 
@@ -74,11 +93,12 @@ buildPythonPackage rec {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-aws==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain-aws/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain-aws/releases/tag/${finalAttrs.src.tag}";
     description = "Build LangChain application on AWS";
     homepage = "https://github.com/langchain-ai/langchain-aws/";
     license = lib.licenses.mit;
@@ -87,4 +107,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})

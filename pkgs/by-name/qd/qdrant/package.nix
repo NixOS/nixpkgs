@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  cacert,
   protobuf,
   pkg-config,
   openssl,
@@ -13,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "qdrant";
-  version = "1.15.4";
+  version = "1.18.2";
 
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "qdrant";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t+j7gq0PidvBGkjkyU8Zny9bgjKGNITUJOmyFnneZVY=";
+    hash = "sha256-HLISCnfYM07jJ1jfER6i+zMlzYxWq+DJ2FVgpjkTytg=";
   };
 
-  cargoHash = "sha256-bcPSHoUOUliAU+GersU4auzdUiv9PPuAjrPO/FxovB8=";
+  cargoHash = "sha256-QG4HMADZmOu5ilFZBqogdrwBaBegoqNP9GvsDddUYbs=";
 
   nativeBuildInputs = [
     protobuf
@@ -39,6 +40,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Needed to get openssl-sys to use pkg-config.
   env.OPENSSL_NO_VENDOR = 1;
 
+  nativeCheckInputs = [ cacert ];
+
+  checkFlags = [
+    # This test assumes the process starts without any existing children,
+    # which is not reliable in the Nix build sandbox.
+    "--skip=common::metrics::procfs_metrics::test_child_processes"
+  ];
+
   # Fix cargo-auditable issue with bench_rocksdb = ["dep:rocksdb"]
   auditable = false;
 
@@ -47,7 +56,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -60,6 +68,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     homepage = "https://github.com/qdrant/qdrant";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = with lib.maintainers; [
+      miniharinn
+    ];
   };
 })

@@ -6,12 +6,12 @@
   librsync,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "btar";
   version = "1.1.1";
 
   src = fetchurl {
-    url = "https://vicerveza.homeunix.net/~viric/soft/btar/btar-${version}.tar.gz";
+    url = "https://vicerveza.homeunix.net/~viric/soft/btar/btar-${finalAttrs.version}.tar.gz";
     sha256 = "0miklk4bqblpyzh1bni4x6lqn88fa8fjn15x1k1n8bxkx60nlymd";
   };
 
@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tar-compatible block-based archiver";
     mainProgram = "btar";
     license = lib.licenses.gpl3Plus;
     homepage = "https://briantracy.xyz/writing/btar.html";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

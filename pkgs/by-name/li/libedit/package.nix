@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libedit";
-  version = "20250104-3.1";
+  version = "20260508-3.1";
 
   src = fetchurl {
     url = "https://thrysoee.dk/editline/libedit-${finalAttrs.version}.tar.gz";
-    hash = "sha256-I3knAWlFUKU3IGMM0c1hZxAbV3Ot3ctBBPc0W3OlaKw=";
+    hash = "sha256-kfQtZXHdjZL67dE0ETTOWrygxdC0s1KBQYbTPysRJy4=";
   };
 
   outputs = [
@@ -60,8 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
       provides generic line editing, history, and tokenization functions,
       similar to those found in GNU Readline.
     '';
-    license = with lib.licenses; [ bsd3 ];
-    maintainers = with lib.maintainers; [ ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ corngood ];
     platforms = lib.platforms.all;
   };
 })

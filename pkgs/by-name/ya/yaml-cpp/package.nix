@@ -8,14 +8,14 @@
   static ? stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yaml-cpp";
   version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "jbeder";
     repo = "yaml-cpp";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-J87oS6Az1/vNdyXu3L7KmUGWzU0IAkGrGMUUha+xDXI=";
   };
 
@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "YAML parser and emitter for C++";
     homepage = "https://github.com/jbeder/yaml-cpp";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ OPNA2608 ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
   };
-}
+})

@@ -6,14 +6,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ptags";
   version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "dalance";
     repo = "ptags";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-bxp38zWufqS6PZqhw8X5HR5zMRcwH58MuZaJmDRuiys=";
   };
 
@@ -32,11 +32,11 @@ rustPlatform.buildRustPackage rec {
     $releaseDir/ptags --help > /dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Parallel universal-ctags wrapper for git repository";
     mainProgram = "ptags";
     homepage = "https://github.com/dalance/ptags";
-    maintainers = with maintainers; [ pamplemousse ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ pamplemousse ];
+    license = lib.licenses.mit;
   };
-}
+})

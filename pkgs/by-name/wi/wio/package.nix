@@ -16,7 +16,7 @@
   unstableGitUpdater,
   wayland,
   wayland-protocols,
-  wlroots,
+  wlroots_0_19,
   xwayland,
 }:
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     udev
     wayland
     wayland-protocols
-    wlroots
+    wlroots_0_19
     xwayland
   ];
 
@@ -76,9 +76,9 @@ stdenv.mkDerivation (finalAttrs: {
       Wio is a Wayland compositor for Linux and FreeBSD which has a similar look
       and feel to plan9's rio.
     '';
-    license = with lib.licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
     mainProgram = "wio";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     inherit (wayland.meta) platforms;
   };
 })

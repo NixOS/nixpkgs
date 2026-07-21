@@ -21,19 +21,20 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupyter-collaboration";
-  version = "4.1.0";
+  version = "4.4.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jupyterlab";
     repo = "jupyter-collaboration";
-    tag = "v${version}";
-    hash = "sha256-PnfUWtOXdXYG5qfzAW5kATSQr2sWKDBNiINA8/G4ZX4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6FF4KtQSIrB0LeJDNMWWpRIAxRkFMzz566WB6H5ePXs=";
   };
 
-  sourceRoot = "${src.name}/projects/jupyter-collaboration";
+  sourceRoot = "${finalAttrs.src.name}/projects/jupyter-collaboration";
 
   build-system = [ hatchling ];
 
@@ -64,13 +65,18 @@ buildPythonPackage rec {
     appendToVar enabledTestPaths "$src/tests"
   '';
 
+  disabledTests = [
+    # Failed: Timeout (>300.0s) from pytest-timeout
+    "test_document_ttl_from_settings"
+  ];
+
   __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "JupyterLab Extension enabling Real-Time Collaboration";
     homepage = "https://github.com/jupyterlab/jupyter_collaboration";
-    changelog = "https://github.com/jupyterlab/jupyter_collaboration/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/jupyterlab/jupyter_collaboration/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.jupyter ];
   };
-}
+})

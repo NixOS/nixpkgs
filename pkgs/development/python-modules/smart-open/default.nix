@@ -1,9 +1,9 @@
 {
   lib,
+  backports-zstd,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
-  awscli,
+  awscli2,
   azure-common,
   azure-core,
   azure-storage-blob,
@@ -14,27 +14,26 @@
   numpy,
   paramiko,
   pytest-cov-stub,
+  pytest-timeout,
+  pytest-xdist,
   pytestCheckHook,
   pyopenssl,
   responses,
   setuptools,
   setuptools-scm,
   wrapt,
-  zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "smart-open";
-  version = "7.3.1";
+  version = "7.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "RaRe-Technologies";
     repo = "smart_open";
     tag = "v${version}";
-    hash = "sha256-yrJmcwCVjPnkP8931xdb5fsOteBd+d/xEkg1/xahio8=";
+    hash = "sha256-MKQvvz75PBUZwQ9e/vR+XGdaT+pD2agZtdHOV0Gw9Kk=";
   };
 
   build-system = [
@@ -55,22 +54,24 @@ buildPythonPackage rec {
     http = [ requests ];
     webhdfs = [ requests ];
     ssh = [ paramiko ];
-    zst = [ zstandard ];
+    zst = [ backports-zstd ];
   };
 
   pythonImportsCheck = [ "smart_open" ];
 
   nativeCheckInputs = [
-    awscli
+    awscli2
     moto
     numpy
     pytest-cov-stub
+    pytest-timeout
+    pytest-xdist
     pytestCheckHook
     pyopenssl
     responses
   ]
   ++ moto.optional-dependencies.server
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   enabledTestPaths = [ "tests" ];
 
@@ -82,10 +83,10 @@ buildPythonPackage rec {
     "test_seek_from_start"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/piskvorky/smart_open/releases/tag/${src.tag}";
     description = "Library for efficient streaming of very large file";
     homepage = "https://github.com/piskvorky/smart_open";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

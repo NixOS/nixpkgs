@@ -34,4 +34,9 @@ stdenv.mkDerivation {
     cmake
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
+
+  passthru.tests = {
+    # Test luv too
+    luv = lua.pkgs.luv.passthru.tests.test;
+  };
 }

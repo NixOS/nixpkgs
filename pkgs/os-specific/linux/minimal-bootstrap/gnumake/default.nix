@@ -6,6 +6,7 @@
   gnupatch,
 }:
 let
+  inherit (import ./common.nix { inherit lib; }) meta;
   pname = "gnumake";
   version = "4.4.1";
 
@@ -152,25 +153,16 @@ let
       "src/posixos.c"
     ];
 
-  objects = map (x: lib.replaceStrings [ ".c" ] [ ".o" ] (builtins.baseNameOf x)) sources;
+  objects = map (x: lib.replaceStrings [ ".c" ] [ ".o" ] (baseNameOf x)) sources;
 in
 kaem.runCommand "${pname}-${version}"
   {
-    inherit pname version;
+    inherit pname version meta;
 
     nativeBuildInputs = [
       tinycc.compiler
       gnupatch
     ];
-
-    meta = with lib; {
-      description = "Tool to control the generation of non-source files from sources";
-      homepage = "https://www.gnu.org/software/make";
-      license = licenses.gpl3Plus;
-      teams = [ teams.minimal-bootstrap ];
-      mainProgram = "make";
-      platforms = platforms.unix;
-    };
   }
   ''
     # Unpack

@@ -21,10 +21,10 @@ buildPythonPackage rec {
     requests
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Hawk authentication strategy for the requests python library";
     homepage = "https://github.com/mozilla-services/requests-hawk";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ austinbutler ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ austinbutler ];
   };
 }

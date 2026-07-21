@@ -22,7 +22,7 @@
   libsndfile,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "roc-toolkit";
   version = "0.4.0";
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "roc-streaming";
     repo = "roc-toolkit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-53irDq803dTg0YqtC1SOXmYNGypSMAEK+9HJ65pR5PA=";
   };
 
@@ -83,11 +83,11 @@ stdenv.mkDerivation rec {
     NIX_LDFLAGS = "-lpthread";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Roc is a toolkit for real-time audio streaming over the network";
     homepage = "https://github.com/roc-streaming/roc-toolkit";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ bgamari ];
-    platforms = platforms.unix;
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ bgamari ];
+    platforms = lib.platforms.unix;
   };
-}
+})

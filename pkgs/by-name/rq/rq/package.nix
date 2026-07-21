@@ -30,12 +30,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm build.rs
   '';
 
-  VERGEN_SEMVER = finalAttrs.version;
+  env.VERGEN_SEMVER = finalAttrs.version;
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -46,11 +45,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Tool for doing record analysis and transformation";
     mainProgram = "rq";
     homepage = "https://github.com/dflemstr/rq";
-    license = with lib.licenses; [ asl20 ];
-    maintainers = with lib.maintainers; [
-      aristid
-      Br1ght0ne
-      figsoda
-    ];
+    license = lib.licenses.asl20;
   };
 })

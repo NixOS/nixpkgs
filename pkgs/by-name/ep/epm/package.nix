@@ -6,14 +6,14 @@
   rpm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "epm";
   version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "jimjag";
     repo = "epm";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-o4B5lWBeve+U70FDgF1DrtNrXxaEY4etkPpwbqF7fmc=";
   };
 
@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ rpm ];
 
-  meta = with lib; {
+  meta = {
     description = "ESP Package Manager generates distribution archives for a variety of platforms";
     homepage = "https://jimjag.github.io/epm/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ pSub ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = lib.platforms.unix;
   };
-}
+})

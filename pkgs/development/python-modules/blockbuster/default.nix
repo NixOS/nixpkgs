@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "blockbuster";
-  version = "1.5.25";
+  version = "1.5.26";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cbornet";
     repo = "blockbuster";
     tag = "v${version}";
-    hash = "sha256-1+Q1IdJXqLAy7kIcVU38TC3dtMeWAn7YOLyGrjCkxD0=";
+    hash = "sha256-2p1xKThna33nhT3rkp1kfZPVkzsJd42OPs3cHenizJs=";
   };
 
   build-system = [ hatchling ];
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Utility to detect blocking calls in the async event loop";
     homepage = "https://github.com/cbornet/blockbuster";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

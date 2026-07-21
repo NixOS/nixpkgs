@@ -41,11 +41,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for reading, writing, and converting computational chemistry file formats and generating input files";
     mainProgram = "iodata-convert";
     homepage = "https://github.com/theochem/iodata";
-    license = licenses.lgpl3Only;
-    maintainers = [ maintainers.sheepforce ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 }

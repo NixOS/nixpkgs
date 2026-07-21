@@ -18,13 +18,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "byobu";
-  version = "6.13";
+  version = "6.15";
 
   src = fetchFromGitHub {
     owner = "dustinkirkland";
     repo = "byobu";
-    rev = finalAttrs.version;
-    hash = "sha256-h+3BEMfBRozmpqFNRyfKzjKgevaYm8v7DsJMwkhiCQ4=";
+    tag = finalAttrs.version;
+    hash = "sha256-QovoXH8cm8CZMSYGjI7FgynHtJjahpe9R2s62F7aZvo=";
   };
 
   nativeBuildInputs = [
@@ -69,6 +69,13 @@ stdenv.mkDerivation (finalAttrs: {
       # scripts points to the filename and byobu matches against this to know
       # which backend to start with
       bname="$(basename $file)"
+
+      # Don't wrap byobu-launch to fix failing automatic byobu launches
+      # See: https://github.com/NixOS/nixpkgs/issues/131353
+      if [ $bname == "byobu-launch" ]; then
+        continue
+      fi
+
       mv "$file" "$out/bin/.$bname"
       makeWrapper "$out/bin/.$bname" "$out/bin/$bname" \
         --argv0 $bname \
@@ -96,9 +103,9 @@ stdenv.mkDerivation (finalAttrs: {
       Tmux terminal multiplexer, and works on most Linux, BSD, and Mac
       distributions.
     '';
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     mainProgram = "byobu";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ cbrxyz ];
     platforms = lib.platforms.unix;
   };
 })

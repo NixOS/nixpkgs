@@ -2,31 +2,36 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "shellescape";
   version = "3.8.1";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "chrissimpkins";
     repo = "shellescape";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HAe3Qf3lLeVWw/tVkW0J+CfoxSoOnCcWDR2nEWZn7HM=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "shellescape" ];
 
-  meta = with lib; {
+  meta = {
     description = "Shell escape a string to safely use it as a token in a shell command (backport of Python shlex.quote)";
     homepage = "https://github.com/chrissimpkins/shellescape";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       psfl
     ];
-    maintainers = with maintainers; [ veprbl ];
+    maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

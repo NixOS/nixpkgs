@@ -95,6 +95,12 @@ in
       type = lib.types.bool;
       description = "Whether to load vboxsf";
     };
+
+    use3rdPartyModules = lib.mkOption {
+      default = true;
+      type = lib.types.bool;
+      description = "Whether to use the kernel modules provided by VirtualBox instead of the ones from the upstream kernel.";
+    };
   };
 
   ###### implementation
@@ -111,7 +117,7 @@ in
 
         environment.systemPackages = [ kernel.virtualboxGuestAdditions ];
 
-        boot.extraModulePackages = [ kernel.virtualboxGuestAdditions ];
+        boot.extraModulePackages = lib.mkIf cfg.use3rdPartyModules [ kernel.virtualboxGuestAdditions ];
 
         systemd.services.virtualbox = {
           description = "VirtualBox Guest Services";
@@ -125,10 +131,12 @@ in
           serviceConfig.ExecStart = "@${kernel.virtualboxGuestAdditions}/bin/VBoxService VBoxService --foreground";
         };
 
+        users.groups.vboxuserdev = { };
+
         services.udev.extraRules = ''
           # /dev/vboxuser is necessary for VBoxClient to work.  Maybe we
           # should restrict this to logged-in users.
-          KERNEL=="vboxuser",  OWNER="root", GROUP="root", MODE="0666"
+          KERNEL=="vboxuser",  OWNER="root", GROUP="vboxuserdev", MODE="0660", TAG+="uaccess"
 
           # Allow systemd dependencies on vboxguest.
           SUBSYSTEM=="misc", KERNEL=="vboxguest", TAG+="systemd"

@@ -1,18 +1,19 @@
 {
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   fetchpatch2,
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "prometheus-packet-sd";
   version = "0.0.3";
 
   src = fetchFromGitHub {
     owner = "packethost";
     repo = "prometheus-packet-sd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-2k8AsmyhQNNZCzpVt6JdgvI8IFb5pRi4ic6Yn2NqHMM=";
   };
 
@@ -39,11 +40,13 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus service discovery for Equinix Metal";
     homepage = "https://github.com/packethost/prometheus-packet-sd";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "prometheus-packet-sd";
+    # The last successful Darwin Hydra build was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

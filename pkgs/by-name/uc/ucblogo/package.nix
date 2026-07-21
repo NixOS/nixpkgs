@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  wxGTK32,
+  wxwidgets_3_2,
   texinfo,
   tetex,
   wrapGAppsHook3,
@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ucblogo-code";
-  version = "6.2.4";
+  version = "6.2.5";
 
   src = fetchFromGitHub {
     owner = "jrincayc";
     repo = "ucblogo-code";
-    rev = "ca23b30a62eaaf03ea203ae71d00dc45a046514e";
-    hash = "sha256-BVNKkT0YUqI/z5W6Y/u3WbrHmaw7Z165vFt/mlzjd+8=";
+    tag = "version_${finalAttrs.version}";
+    hash = "sha256-QofC7G6IS5TNxwRm23uhuThLou05etGuG/S3Wm29yUI=";
   };
 
   nativeBuildInputs = [
@@ -30,16 +30,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    wxGTK32
+    wxwidgets_3_2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Berkeley Logo interpreter";
     homepage = "https://github.com/jrincayc/ucblogo-code";
     changelog = "https://github.com/jrincayc/ucblogo-code/blob/${finalAttrs.src.rev}/changes.txt";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
     mainProgram = "ucblogo-code";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

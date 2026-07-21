@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   pytestCheckHook,
   matplotlib,
@@ -47,8 +46,6 @@ buildPythonPackage rec {
 
   dependencies = [
     setuptools # pkg_resources is referenced at runtime
-  ]
-  ++ lib.optionals (!pythonOlder "3.13") [
     legacy-cgi
   ];
 
@@ -68,7 +65,7 @@ buildPythonPackage rec {
   meta = {
     description = "Pythonic, lightweight and websocket-based webui library";
     homepage = "https://github.com/rawpython/remi";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pbsds ];
   };
 }

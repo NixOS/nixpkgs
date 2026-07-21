@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "coreinfo";
-  version = "5.0.0";
+  version = "5.0.1";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
     repo = "coreinfo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/L69lrkJZh+SJRoNxvogdJ5KRIorwcBzm7WGxrNpexM=";
+    hash = "sha256-Ct/vAxtdFcXIxleaePhWD5L42d88go/3arYKSrw/c2c=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "coreinfo";
     homepage = "https://gitlab.com/cubocore/coreapps/coreinfo";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

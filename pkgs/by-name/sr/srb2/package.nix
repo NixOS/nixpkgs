@@ -66,6 +66,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+  # Fix build with gcc15 (-std=gnu23)
+  # Note that upstream fixed compatibility with C23 as of commit 639b58c6d718452ef343a0bc927d043bed9e40d6,
+  # so it's likely this can be removed on the next version after 2.2.15.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   cmakeFlags = [
     "-DSRB2_ASSET_DIRECTORY=${finalAttrs.assets}/share/srb2"
     "-DGME_INCLUDE_DIR=${game-music-emu}/include"
@@ -94,12 +99,10 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share/applications $out/share/pixmaps $out/share/icons
-
+    mkdir -p $out/bin $out/share/applications
     copyDesktopItems
 
-    cp ../srb2.png $out/share/pixmaps/.
-    cp ../srb2.png $out/share/icons/.
+    install -D ../srb2.png -t $out/share/icons/hicolor/256x256/apps
 
     cp bin/lsdlsrb2 $out/bin/srb2
     wrapProgram $out/bin/srb2 --set SRB2WADDIR "${finalAttrs.assets}/share/srb2"
@@ -107,12 +110,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Sonic Robo Blast 2 is a 3D Sonic the Hedgehog fangame based on a modified version of Doom Legacy";
     homepage = "https://www.srb2.org/";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       zeratax
       donovanglover
     ];

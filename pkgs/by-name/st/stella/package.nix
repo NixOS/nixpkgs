@@ -45,9 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
       As of its 3.5 release, Stella is officially donationware.
     '';
     changelog = "https://github.com/stella-emu/stella/releases/tag/${finalAttrs.src.rev}";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     mainProgram = "stella";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

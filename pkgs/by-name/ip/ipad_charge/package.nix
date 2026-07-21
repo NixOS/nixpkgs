@@ -5,7 +5,7 @@
   libusb1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ipad_charge";
   version = "2015-02-03";
 
@@ -35,16 +35,16 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,lib/udev/rules.d}
   '';
 
-  meta = with lib; {
-    inherit (src.meta) homepage;
+  meta = {
+    inherit (finalAttrs.src.meta) homepage;
     description = "Apple device USB charging utility for Linux";
     longDescription = ''
       USB charging control utility used to enable/disable charging of an Apple
       device connected to USB port. For a list of supported devices, see
       https://github.com/mkorenkov/ipad_charge#supported-devices.
     '';
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "ipad_charge";
   };
-}
+})

@@ -5,7 +5,8 @@
 # matches with the version of hpack used by the upstream stack release.  This
 # is because hpack works slightly differently based on the version, and it can
 # be frustrating to use hpack in a team setting when members are using different
-# versions. See for more info: https://github.com/NixOS/nixpkgs/issues/223390
+# versions. See for more info:
+# https://github.com/NixOS/nixpkgs/issues/223390 krank:ignore-line
 #
 # This test is written as a fixed-output derivation, because we need to access
 # accesses the internet to download the upstream stack release.
@@ -146,9 +147,9 @@ stdenv.mkDerivation {
   ''
   + testScript;
 
-  meta = with lib; {
+  meta = {
     description = "Test that the stack in Nixpkgs uses the same version of Hpack as the upstream stack release";
-    maintainers = with maintainers; [ cdepillabout ];
+    maintainers = with lib.maintainers; [ cdepillabout ];
 
     # This derivation internally runs a statically-linked version of stack from
     # upstream.  This statically-linked version of stack is only available for

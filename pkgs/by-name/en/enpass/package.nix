@@ -2,7 +2,17 @@
   stdenv,
   fetchurl,
   dpkg,
-  xorg,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libxscrnsaver,
+  libxrender,
+  libxi,
+  libx11,
+  libsm,
+  libice,
+  libxcb,
   glib,
   libGLU,
   libGL,
@@ -42,38 +52,35 @@ let
   baseUrl = "https://apt.enpass.io";
 
   # used of both wrappers and libpath
-  libPath = lib.makeLibraryPath (
-    with xorg;
-    [
-      libGLU
-      libGL
-      fontconfig
-      freetype
-      libpulseaudio
-      zlib
-      dbus
-      libX11
-      libXi
-      libSM
-      libICE
-      libXrender
-      libXScrnSaver
-      libxcb
-      libcap
-      glib
-      gtk3
-      pango
-      curl
-      libuuid
-      cups
-      xcbutilwm # libxcb-icccm.so.4
-      xcbutilimage # libxcb-image.so.0
-      xcbutilkeysyms # libxcb-keysyms.so.1
-      xcbutilrenderutil # libxcb-render-util.so.0
-      xz
-      libxkbcommon
-    ]
-  );
+  libPath = lib.makeLibraryPath [
+    libGLU
+    libGL
+    fontconfig
+    freetype
+    libpulseaudio
+    zlib
+    dbus
+    libx11
+    libxi
+    libsm
+    libice
+    libxrender
+    libxscrnsaver
+    libxcb
+    libcap
+    glib
+    gtk3
+    pango
+    curl
+    libuuid
+    cups
+    libxcb-wm # libxcb-icccm.so.4
+    libxcb-image # libxcb-image.so.0
+    libxcb-keysyms # libxcb-keysyms.so.1
+    libxcb-render-util # libxcb-render-util.so.0
+    xz
+    libxkbcommon
+  ];
   package = stdenv.mkDerivation {
 
     inherit (data) version;
@@ -84,19 +91,16 @@ let
       url = "${baseUrl}/${data.path}";
     };
 
-    meta = with lib; {
+    meta = {
       description = "Well known password manager";
       homepage = "https://www.enpass.io/";
-      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-      license = licenses.unfree;
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+      license = lib.licenses.unfree;
       platforms = [
         "x86_64-linux"
         "i686-linux"
       ];
-      maintainers = with maintainers; [
-        ewok
-        dritter
-      ];
+      maintainers = with lib.maintainers; [ ewok ];
     };
 
     nativeBuildInputs = [ makeWrapper ];
@@ -127,17 +131,18 @@ let
   updater = {
     update = stdenv.mkDerivation {
       name = "enpass-update-script";
-      SCRIPT = ./update_script.py;
+      SCRIPT = toString ./update_script.py;
 
       buildInputs = with python3Packages; [
         python
         requests
+        packaging
         pathlib2
         six
         attrs
       ];
       shellHook = ''
-        exec python $SCRIPT --target pkgs/tools/security/enpass/data.json --repo ${baseUrl}
+        exec python $SCRIPT --target pkgs/by-name/en/enpass/data.json --repo ${baseUrl}
       '';
 
     };

@@ -24,7 +24,7 @@ let
           printf 'HTTP/1.0 200 OK\n'
           printf 'Content-Length: ${toString (1 + builtins.stringLength msg)}\n'
           printf '\n${msg}\n\n'
-        } | ${pkgs.libressl.nc}/bin/nc -${toString ip}nvl 80
+        } | ${pkgs.netcat}/bin/nc -${toString ip}nvl 80
         done
       '';
     };
@@ -306,8 +306,8 @@ in
         client.succeed("curl --fail -s http://[64:ff9b::203.0.113.16] | grep -q IPv4!")
 
       with subtest("Router BIB entries are correctly populated"):
-        router.succeed("jool bib display | grep -q 'Dynamic TCP.*2001:db8::8'")
-        router.succeed("jool bib display | grep -q 'Static TCP.*2001:db8::9'")
+        router.succeed("jool bib display --numeric | grep -q 'Dynamic TCP.*2001:db8::8'")
+        router.succeed("jool bib display --numeric | grep -q 'Static TCP.*2001:db8::9'")
 
       with subtest("WAN server can reach the LAN server"):
         homeserver.wait_for_open_port(80)

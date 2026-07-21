@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
@@ -13,14 +12,17 @@ buildPythonPackage rec {
   version = "5.1.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
-
   src = fetchFromGitHub {
     owner = "timmo001";
     repo = "system-bridge-models";
     tag = version;
     hash = "sha256-Yh16la+3zk+igdMyHov4rf2M1yAT3JYYe/0IYu/SmVY=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail ".dev0" ""
+  '';
 
   build-system = [ setuptools ];
 

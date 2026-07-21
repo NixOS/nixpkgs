@@ -3,14 +3,14 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bitbucket-cli";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "swisscom";
     repo = "bitbucket-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8Qvlv/S5IkRk+2D/Pnb0+FP7ryHh1kSRJCiUjSO0OtI=";
   };
 
@@ -27,4 +27,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ attila ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

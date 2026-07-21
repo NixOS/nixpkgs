@@ -13,25 +13,21 @@
   fetchFromGitHub,
   orjson,
   poetry-core,
-  pytest-asyncio_0,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
   zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "aiohomekit";
-  version = "3.2.18";
+  version = "3.2.20";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "Jc2k";
     repo = "aiohomekit";
     tag = version;
-    hash = "sha256-0RCKJqhD/SMMB21ZwrR81jmb6yenZxGPQOQ+TkXb0Uo=";
+    hash = "sha256-iVLW7oaYJ2imVs0aMUpGbiCyE86JOaHZJr86ZGRkfLM=";
   };
 
   build-system = [ poetry-core ];
@@ -51,7 +47,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    (pytest-aiohttp.override { pytest-asyncio = pytest-asyncio_0; })
+    pytest-aiohttp
     pytestCheckHook
   ];
 
@@ -62,7 +58,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiohomekit" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module that implements the HomeKit protocol";
     longDescription = ''
       This Python library implements the HomeKit protocol for controlling
@@ -70,8 +66,8 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/Jc2k/aiohomekit";
     changelog = "https://github.com/Jc2k/aiohomekit/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "aiohomekitctl";
   };
 }

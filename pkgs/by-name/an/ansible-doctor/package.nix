@@ -4,18 +4,19 @@
   python3Packages,
   fetchFromGitHub,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ansible-doctor";
-  version = "7.2.1";
+  version = "8.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thegeeklab";
     repo = "ansible-doctor";
-    tag = "v${version}";
-    hash = "sha256-2cJ1wV3hqoqSvLq3c7/J5nh1GTTcj9sexRhX3hfPoTc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3xdMTuy6Rtb2VwfzN6SV73UZmp+9fmU9SfPySHCayJg=";
   };
 
   build-system = with python3Packages; [
@@ -45,17 +46,18 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "ansibledoctor" ];
 
-  # ansible.errors.AnsibleError: Unable to create local directories(/private/var/empty/.ansible/tmp)
-  nativeCheckInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ versionCheckHook ];
-
-  versionCheckProgramArg = "--version";
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+    versionCheckHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   meta = {
     description = "Annotation based documentation for your Ansible roles";
     mainProgram = "ansible-doctor";
     homepage = "https://github.com/thegeeklab/ansible-doctor";
-    changelog = "https://github.com/thegeeklab/ansible-doctor/releases/tag/${src.tag}";
+    changelog = "https://github.com/thegeeklab/ansible-doctor/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ tboerger ];
   };
-}
+})

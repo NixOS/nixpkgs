@@ -13,9 +13,9 @@
   path ? null,
   max-workers ? null,
   include-overlays ? false,
-  keep-going ? null,
-  commit ? null,
-  skip-prompt ? null,
+  keep-going ? false,
+  commit ? false,
+  skip-prompt ? false,
   order ? null,
 }:
 
@@ -120,7 +120,7 @@ let
     let
       maintainer =
         if !builtins.hasAttr maintainer' lib.maintainers then
-          builtins.throw "Maintainer with name `${maintainer'} does not exist in `maintainers/maintainer-list.nix`."
+          throw "Maintainer with name `${maintainer'} does not exist in `maintainers/maintainer-list.nix`."
         else
           builtins.getAttr maintainer' lib.maintainers;
     in
@@ -147,7 +147,7 @@ let
       pathContent = lib.attrByPath prefix null pkgs;
     in
     if pathContent == null then
-      builtins.throw "Attribute path `${path}` does not exist."
+      throw "Attribute path `${path}` does not exist."
     else
       packagesWithPath prefix (path: pkg: (get-script pkg != null)) pathContent;
 
@@ -158,9 +158,9 @@ let
       package = lib.attrByPath (lib.splitString "." path) null pkgs;
     in
     if package == null then
-      builtins.throw "Package with an attribute name `${path}` does not exist."
+      throw "Package with an attribute name `${path}` does not exist."
     else if get-script package == null then
-      builtins.throw "Package with an attribute name `${path}` does not have a `passthru.updateScript` attribute defined."
+      throw "Package with an attribute name `${path}` does not have a `passthru.updateScript` attribute defined."
     else
       {
         attrPath = path;
@@ -178,7 +178,7 @@ let
     else if path != null then
       packagesWithUpdateScript path pkgs
     else
-      builtins.throw "No arguments provided.\n\n${helpText}";
+      throw "No arguments provided.\n\n${helpText}";
 
   helpText = ''
     Please run:
@@ -206,18 +206,18 @@ let
 
     to increase the number of jobs in parallel, or
 
-        --argstr keep-going true
+        --arg keep-going true
 
     to continue running when a single update fails.
 
     You can also make the updater automatically commit on your behalf from updateScripts
     that support it by adding
 
-        --argstr commit true
+        --arg commit true
 
-    to skip prompt:
+    To skip the prompt, you can add
 
-        --argstr skip-prompt true
+        --arg skip-prompt true
 
     By default, the updater will update the packages in arbitrary order. Alternately, you can force a specific order based on the packages’ dependency relations:
 
@@ -242,7 +242,7 @@ let
       name = package.name;
       pname = lib.getName package;
       oldVersion = lib.getVersion package;
-      updateScript = map builtins.toString (lib.toList (updateScript.command or updateScript));
+      updateScript = map toString (lib.toList (updateScript.command or updateScript));
       supportedFeatures = updateScript.supportedFeatures or [ ];
       attrPath = updateScript.attrPath or attrPath;
     };
@@ -250,11 +250,15 @@ let
   # JSON file with data for update.py.
   packagesJson = pkgs.writeText "packages.json" (builtins.toJSON (map packageData packages));
 
+  # Allow boolean arguments to be provided with either --arg or --argstr.
+  # The ability to use the string "true" will be deprecated.
+  isTrue = arg: arg == true || arg == "true";
+
   optionalArgs =
     lib.optional (max-workers != null) "--max-workers=${max-workers}"
-    ++ lib.optional (keep-going == "true") "--keep-going"
-    ++ lib.optional (commit == "true") "--commit"
-    ++ lib.optional (skip-prompt == "true") "--skip-prompt"
+    ++ lib.optional (isTrue keep-going) "--keep-going"
+    ++ lib.optional (isTrue commit) "--commit"
+    ++ lib.optional (isTrue skip-prompt) "--skip-prompt"
     ++ lib.optional (order != null) "--order=${order}";
 
   args = [ packagesJson ] ++ optionalArgs;

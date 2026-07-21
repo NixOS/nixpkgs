@@ -3,13 +3,13 @@
   stdenv,
   fetchurl,
   cmake,
-  wxGTK32,
+  wxwidgets_3_2,
   openal,
   pkg-config,
   curl,
   libtorrent-rasterbar,
   libpng,
-  libX11,
+  libx11,
   gettext,
   boost,
   libnotify,
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
   buildInputs = [
-    wxGTK32
+    wxwidgets_3_2
     openal
     curl
     libtorrent-rasterbar
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     jsoncpp
     boost
     libpng
-    libX11
+    libx11
     libnotify
     gtk3
     glib
@@ -68,11 +68,11 @@ stdenv.mkDerivation rec {
       --set SPRING_BUNDLE_DIR "${spring}/lib"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://springlobby.springrts.com";
     description = "Cross-platform lobby client for the Spring RTS project";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       qknight
     ];
     platforms = [

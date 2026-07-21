@@ -5,12 +5,16 @@
   makeWrapper,
   nix-update-script,
   nodejs,
-  pnpm,
-  testers,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm_10,
+  versionCheckHook,
 }:
 
 let
   workspace = "@typespec/compiler...";
+
+  pnpm = pnpm_10;
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "typespec";
@@ -26,11 +30,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm
   ];
 
   pnpmWorkspaces = [ workspace ];
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
@@ -38,8 +43,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       pnpmWorkspaces
       postPatch
       ;
-    fetcherVersion = 1;
-    hash = "sha256-/Y7KhdNeyUV2CQQWjhYBDDT24oE6UdBO6HTweUUaNqc=";
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-wZvnRSALrupyhpSN8zNL3b6SZnVPXX3BdHrbzHUNtUg=";
   };
 
   postPatch = ''
@@ -91,9 +97,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ ''--version-regex=typespec-stable@(\d+\.\d+\.\d+)'' ];

@@ -5,18 +5,18 @@
   gpgme,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nasty";
   version = "0.6";
 
   src = fetchurl {
-    url = "https://www.vanheusden.com/nasty/${pname}-${version}.tgz";
+    url = "https://www.vanheusden.com/nasty/nasty-${finalAttrs.version}.tgz";
     sha256 = "1dznlxr728k1pgy1kwmlm7ivyl3j3rlvkmq34qpwbwbj8rnja1vn";
   };
 
   # does not apply cleanly with patchPhase/fetchpatch
   # https://sources.debian.net/src/nasty/0.6-3/debian/patches/02_add_largefile_support.patch
-  CFLAGS = "-D_FILE_OFFSET_BITS=64";
+  env.CFLAGS = "-D_FILE_OFFSET_BITS=64";
 
   buildInputs = [ gpgme ];
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     cp nasty $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Recover the passphrase of your PGP or GPG-key";
     mainProgram = "nasty";
     longDescription = ''
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
       this program could be at least 100x faster.
     '';
     homepage = "http://www.vanheusden.com/nasty/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ davidak ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ davidak ];
+    platforms = lib.platforms.unix;
   };
-}
+})

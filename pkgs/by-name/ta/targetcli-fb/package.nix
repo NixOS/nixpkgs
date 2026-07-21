@@ -8,16 +8,16 @@
   glib,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "targetcli-fb";
-  version = "3.0.1";
+  version = "3.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
     repo = "targetcli-fb";
-    tag = "v${version}";
-    hash = "sha256-jRujBgUdeJY8ekVBDscitajDhYohlx/BS4wn+jFkZSg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ajBKlgnXeksvEkewo93PIeqwI9X90NvLNf6YxzC0824=";
   };
 
   build-system = with python3Packages; [
@@ -49,10 +49,10 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Command shell for managing the Linux LIO kernel target";
     homepage = "https://github.com/open-iscsi/targetcli-fb";
-    changelog = "https://github.com/open-iscsi/targetcli-fb/releases/tag/v${version}";
+    changelog = "https://github.com/open-iscsi/targetcli-fb/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "targetcli";
   };
-}
+})

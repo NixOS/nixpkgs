@@ -1,19 +1,17 @@
+diff --git a/src/r2mm/launching/runners/linux/SteamGameRunner_Linux.ts b/src/r2mm/launching/runners/linux/SteamGameRunner_Linux.ts
+index 08ad22ab..97a96272 100644
 --- a/src/r2mm/launching/runners/linux/SteamGameRunner_Linux.ts
 +++ b/src/r2mm/launching/runners/linux/SteamGameRunner_Linux.ts
-@@ -64,15 +64,8 @@
-     async start(game: Game, args: string): Promise<void | R2Error> {
+@@ -73,12 +73,7 @@ export default class SteamGameRunner_Linux extends GameRunnerProvider {
+         if (env.LD_PRELOAD) { proxyArgs['LD_PRELOAD'] = `'${env.LD_PRELOAD}'` }
  
          const settings = await ManagerSettings.getSingleton(game);
 -        const steamDir = await GameDirectoryResolverProvider.instance.getSteamDirectory();
--        if(steamDir instanceof R2Error) {
+-
+-        if (steamDir instanceof R2Error) {
 -            return steamDir;
 -        }
--
--        LoggerProvider.instance.Log(LogSeverity.INFO, `Steam folder is: ${steamDir}`);
--
-         try {
--            const cmd = `"${steamDir}/steam.sh" -applaunch ${game.activePlatform.storeIdentifier} ${args} ${settings.getContext().gameSpecific.launchParameters}`;
-+            const cmd = `steam -applaunch ${game.activePlatform.storeIdentifier} ${args} ${settings.getContext().gameSpecific.launchParameters}`;
-             LoggerProvider.instance.Log(LogSeverity.INFO, `Running command: ${cmd}`);
-             await exec(cmd);
-         } catch(err) {
+-        const steamExecutable = `${steamDir}/steam.sh`;
++        const steamExecutable = `steam`;
+ 
+         LoggerProvider.instance.Log(LogSeverity.INFO, `Steam executable to call is: ${steamExecutable}`); 

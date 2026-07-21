@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s "${pkgsCross.mingwW64.rhsrvany}/bin/" $out/share/virt-tools
   '';
 
-  PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR = "${placeholder "out"}/share/bash-completion/completions";
+  env.PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR = "${placeholder "out"}/share/bash-completion/completions";
 
   passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 

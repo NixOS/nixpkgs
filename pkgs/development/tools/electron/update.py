@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python -p python3.pkgs.joblib python3.pkgs.click python3.pkgs.click-log nix nurl prefetch-yarn-deps prefetch-npm-deps gclient2nix
+#! nix-shell -i python -p python3.pkgs.joblib python3.pkgs.click python3.pkgs.click-log nix nurl prefetch-npm-deps yarn-berry_4.yarn-berry-fetcher nix-prefetch-git gclient2nix
 """
 electron updater
 
@@ -17,7 +17,8 @@ to specify the major release to be updated.
 The `update-all command updates all non-eol major releases.
 
 The `update` and `update-all` commands accept an optional `--commit`
-flag to automatically commit the changes for you.
+flag to automatically commit the changes for you, and `--force` to
+skip the up-to-date version check.
 """
 import base64
 import json
@@ -112,17 +113,38 @@ def get_chromium_gn_source(chromium_tag: str) -> dict:
         }
     }
 
+
 @memory.cache
-def get_electron_yarn_hash(electron_tag: str) -> str:
-    print(f"prefetch-yarn-deps", file=sys.stderr)
+def get_electron_yarn_data(electron_tag: str) -> dict:
+    print(f"yarn-berry-fetcher prefetch", file=sys.stderr)
     with tempfile.TemporaryDirectory() as tmp_dir:
+        print(f"Patching yarn.lock for yarn 4.14 support", file=sys.stderr)
+        yarn_lock_file=get_electron_file(electron_tag, "yarn.lock")
+        patched_yarn_lock_file=yarn_lock_file.replace('version: 8', 'version: 9', count=1)
         with open(tmp_dir + "/yarn.lock", "w") as f:
-            f.write(get_electron_file(electron_tag, "yarn.lock"))
-        return (
-            subprocess.check_output(["prefetch-yarn-deps", tmp_dir + "/yarn.lock"])
+            f.write(patched_yarn_lock_file)
+        missing_hashes_str = (
+            subprocess.check_output(
+                ["yarn-berry-fetcher", "missing-hashes", tmp_dir + "/yarn.lock"]
+            )
             .decode("utf-8")
-            .strip()
         )
+        missing_hashes = json.loads(missing_hashes_str)
+        cmd = ["yarn-berry-fetcher", "prefetch", tmp_dir + "/yarn.lock"]
+        if missing_hashes:
+            with open(tmp_dir + "/missing-hashes.json", "w") as f:
+                f.write(missing_hashes_str)
+            cmd.append(tmp_dir + "/missing-hashes.json")
+        hash = subprocess.check_output(cmd).decode("utf-8").strip()
+
+        data = {
+            "hash": hash,
+        }
+        if missing_hashes:
+            data["missing_hashes"] = missing_hashes
+
+        return data
+
 
 @memory.cache
 def get_chromium_npm_hash(chromium_tag: str) -> str:
@@ -142,7 +164,12 @@ def get_chromium_npm_hash(chromium_tag: str) -> str:
 def get_update(major_version: str, m: str, gclient_data: any) -> Tuple[str, dict]:
 
     tasks = []
-    a = lambda: (("electron_yarn_hash", get_electron_yarn_hash(gclient_data["src/electron"]["args"]["tag"])))
+    a = lambda: (
+        (
+            "electron_yarn_data",
+            get_electron_yarn_data(gclient_data["src/electron"]["args"]["tag"]),
+        )
+    )
     tasks.append(delayed(a)())
     a = lambda: (
         (
@@ -178,12 +205,13 @@ def non_eol_releases(releases: Iterable[int]) -> Iterable[int]:
     return tuple(filter(lambda x: x in supported_version_range(), releases))
 
 
-def update_source(version: str, commit: bool) -> None:
+def update_source(version: str, commit: bool, force: bool) -> None:
     """Update a given electron-source release
 
     Args:
         version: The major version number, e.g. '27'
         commit: Whether the updater should commit the result
+        force: Whether to fetch even when the version is already up-to-date
     """
     major_version = version
 
@@ -198,7 +226,7 @@ def update_source(version: str, commit: bool) -> None:
     )
 
     m, rev = get_latest_version(major_version)
-    if old_version == m["version"]:
+    if old_version == m["version"] and not force:
         print(f"{package_name} is up-to-date")
         return
 
@@ -222,13 +250,15 @@ def cli() -> None:
 @cli.command("update", help="Update a single major release")
 @click.option("-v", "--version", required=True, type=str, help="The major version, e.g. '23'")
 @click.option("-c", "--commit", is_flag=True, default=False, help="Commit the result")
-def update(version: str, commit: bool) -> None:
-    update_source(version, commit)
+@click.option("-f", "--force", is_flag=True, default=False, help="Skip up-to-date version check")
+def update(version: str, commit: bool, force: bool) -> None:
+    update_source(version, commit, force)
 
 
 @cli.command("update-all", help="Update all releases at once")
 @click.option("-c", "--commit", is_flag=True, default=False, help="Commit the result")
-def update_all(commit: bool) -> None:
+@click.option("-f", "--force", is_flag=True, default=False, help="Skip up-to-date version check")
+def update_all(commit: bool, force: bool) -> None:
     """Update all eletron-source releases at once
 
     Args:
@@ -239,7 +269,7 @@ def update_all(commit: bool) -> None:
     filtered_releases = non_eol_releases(tuple(map(lambda x: int(x), old_info.keys())))
 
     for major_version in filtered_releases:
-        update_source(str(major_version), commit)
+        update_source(str(major_version), commit, force)
 
 
 if __name__ == "__main__":

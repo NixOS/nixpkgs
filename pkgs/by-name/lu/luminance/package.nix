@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "luminance";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "sidevesh";
     repo = "Luminance";
     tag = finalAttrs.version;
-    hash = "sha256-1xDRs+OBzcrB75pILA3ZxIrZEleWVBROBNZz0MsCWnA=";
+    hash = "sha256-3pjcJVd4TY39OQFCGMBRnHddy2LFE5/3ZgimJcUm7/I=";
   };
 
   # Use our own ddcbc-api source

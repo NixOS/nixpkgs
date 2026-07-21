@@ -38,7 +38,7 @@
 
 let
   pname = "mindustry";
-  version = "151.1";
+  version = "159.3";
   buildVersion = makeBuildVersion version;
 
   jdk = jdk17;
@@ -48,21 +48,21 @@ let
     owner = "Anuken";
     repo = "Mindustry";
     tag = "v${version}";
-    hash = "sha256-/WBO66Ii/1IuL3VaQNCTrcK43VWS8FVLYPxxtJMYKus=";
+    hash = "sha256-i29EbiKBVWab9YJWPWeVFQLLvRcigvHJPc7803A5e6g=";
   };
   Arc = fetchFromGitHub {
     name = "Arc-source";
     owner = "Anuken";
     repo = "Arc";
     tag = "v${version}";
-    hash = "sha256-jI9bvo8MEEe1guM8YuQmGOi/wP5eFH88dvsin7sAPY0=";
+    hash = "sha256-1HEPON+cfsPYhPtYwVhj7zrc7fMdwpOA6H2r8yp4erE=";
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
     repo = "soloud";
-    # This is pinned in Arc's arc-core/build.gradle
-    tag = "v0.11";
-    hash = "sha256-jybIILdK3cqyZ2LIuoWDfZWocVTbKszekKCLil0WXRY=";
+    # This is pinned in Arc's build.gradle
+    tag = "2026.06.01";
+    hash = "sha256-0/A3myfCYb+AMP3WH6stmXeb1eiA4dgX6H1Quj4AD9Q=";
   };
 
   desktopItem = makeDesktopItem {
@@ -92,14 +92,31 @@ stdenv.mkDerivation {
     runHook postUnpack
   '';
 
-  patches = [
-    ./0001-fix-include-path-for-SDL2-on-linux.patch
-  ];
-
   postPatch = ''
     # Ensure the prebuilt shared objects don't accidentally get shipped
     rm -r Arc/natives/natives-*/libs/*
     rm -r Arc/backends/backend-*/libs/*
+    rm -f Arc/arc-core/unsafe/unsafe.jar
+
+    # Remove unbuildable Android
+    substituteInPlace Arc/settings.gradle \
+      --replace-fail 'include ":natives:natives-android"' ""
+    rm Arc/backends/backend-android/build.gradle
+
+    # avoid a circular dependency with rebuilding those
+    pushd Arc/arc-core/unsafe/
+    javac --target 8 --source 8 -d . UnsafeBuffers.java
+    javac --target 16 --source 16 -d . Java16Buffers.java
+    jar cvf unsafe.jar arc
+    rm -r arc
+    popd
+
+    # We need to mock those as otherwise mitmCache tries to download them
+    pushd Arc/backends/backend-sdl/
+    mkdir -p build/jnigen/sources/
+    touch build/jnigen/sources/glew.zip
+    touch build/jnigen/sources/sdlmingw.tar.gz
+    popd
 
     cd Mindustry
 
@@ -155,16 +172,17 @@ stdenv.mkDerivation {
   ''
   + lib.optionalString enableClient ''
     pushd ../Arc
-    gradle jnigenBuild
-    gradle jnigenJarNativesDesktop
-    glewlib=${lib.getLib glew}/lib/libGLEW.so
-    sdllib=${lib.getLib SDL2}/lib/libSDL2.so
+    gradle jnigenBuildLinux_x86_64
+    # Copy freshly-built libraries to where Gradle resource dirs expect them.
+    # Using jnigenBuildLinux64 skips the postJni tasks, so we copy manually.
+    # arc-core uses relative libsDir, others use absolute which causes path doubling.
+    cp arc-core/build/natives/*/* natives/natives-desktop/libs/
+    cp extensions/freetype/build/natives/*/* natives/natives-freetype-desktop/libs/
+    cp extensions/filedialogs/build/natives/*/* natives/natives-filedialogs/libs/
     patchelf backends/backend-sdl/libs/linux64/libsdl-arc*.so \
-      --add-needed $glewlib \
-      --add-needed $sdllib
-    # Put the freshly-built libraries where the pre-built libraries used to be:
-    cp arc-core/libs/*/* natives/natives-desktop/libs/
-    cp extensions/freetype/libs/*/* natives/natives-freetype-desktop/libs/
+      --add-needed "${lib.getLib glew}/lib/libGLEW.so" \
+      --add-needed "${lib.getLib SDL2}/lib/libSDL2.so"
+    gradle jnigenPackageAllDesktop
     popd
 
     gradle desktop:dist

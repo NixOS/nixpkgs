@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation rec {
   version = "1.30.0";
 
   src = fetchzip {
-    url = "https://github.com/slavfox/Cozette/releases/download/v.${version}/CozetteFonts-v-${
+    url = "https://github.com/the-moonwitch/Cozette/releases/download/v.${version}/CozetteFonts-v-${
       builtins.replaceStrings [ "." ] [ "-" ] version
     }.zip";
     hash = "sha256-Njh6V5wTBKM/1QKmPwG1qiOYyAJSVQXLTBLN03V6DaE=";
@@ -52,8 +52,8 @@ stdenvNoCC.mkDerivation rec {
 
   meta = {
     description = "Bitmap programming font optimized for coziness";
-    homepage = "https://github.com/slavfox/cozette";
-    changelog = "https://github.com/slavfox/Cozette/blob/v.${version}/CHANGELOG.md";
+    homepage = "https://github.com/the-moonwitch/cozette";
+    changelog = "https://github.com/the-moonwitch/Cozette/blob/v.${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ brettlyons ];

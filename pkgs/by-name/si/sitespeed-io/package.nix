@@ -9,7 +9,8 @@
   imagemagick_light,
   procps,
   python3,
-  xorg,
+  versionCheckHook,
+  xorg-server,
   nix-update-script,
 
   # chromedriver is more efficient than geckodriver, but is available on less platforms.
@@ -24,25 +25,23 @@
 }:
 assert
   (!withFirefox && !withChromium) -> throw "Either `withFirefox` or `withChromium` must be enabled.";
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "sitespeed-io";
-  version = "38.3.0";
+  version = "39.4.2";
 
   src = fetchFromGitHub {
     owner = "sitespeedio";
     repo = "sitespeed.io";
-    tag = "v${version}";
-    hash = "sha256-45lvEM8vkoXdbZNJamUR94PD0EwtoNEhWSNyV68yzPo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-klPdbYVeV4hrwMfwmOiocB4YkJzZsRKUelBZSO+fB/w=";
   };
 
-  postPatch = ''
-    ln -s npm-shrinkwrap.json package-lock.json
-  '';
-
-  # Don't try to download the browser drivers
-  CHROMEDRIVER_SKIP_DOWNLOAD = true;
-  GECKODRIVER_SKIP_DOWNLOAD = true;
-  EDGEDRIVER_SKIP_DOWNLOAD = true;
+  env = {
+    # Don't try to download the browser drivers
+    CHROMEDRIVER_SKIP_DOWNLOAD = true;
+    GECKODRIVER_SKIP_DOWNLOAD = true;
+    EDGEDRIVER_SKIP_DOWNLOAD = true;
+  };
 
   buildInputs = [
     systemdLibs
@@ -50,12 +49,17 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
   npmInstallFlags = [ "--omit=dev" ];
-  npmDepsHash = "sha256-rXGoIIbKNZCBhhuRM/0WcaciH/bLQamipmOIh1EXJlU=";
+  npmDepsHash = "sha256-4BvB49+ujSB5XM/BvOqoqRjC7X9Ih3dzt5AQdL3f2z4=";
 
   postInstall = ''
     mv $out/bin/sitespeed{.,-}io
     mv $out/bin/sitespeed{.,-}io-wpr
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   postFixup =
     let
@@ -81,7 +85,7 @@ buildNpmPackage rec {
             ]))
             ffmpeg-headless
             imagemagick_light
-            xorg.xorgserver
+            xorg-server
             procps
             coreutils
           ]
@@ -99,9 +103,11 @@ buildNpmPackage rec {
   meta = {
     description = "Open source tool that helps you monitor, analyze and optimize your website speed and performance";
     homepage = "https://sitespeed.io";
+    downloadPage = "https://github.com/sitespeedio/sitespeed.io";
+    changelog = "https://github.com/sitespeedio/sitespeed.io/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ misterio77 ];
     platforms = lib.unique (geckodriver.meta.platforms ++ chromedriver.meta.platforms);
     mainProgram = "sitespeed-io";
   };
-}
+})

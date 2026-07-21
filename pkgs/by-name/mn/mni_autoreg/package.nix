@@ -48,6 +48,12 @@ stdenv.mkDerivation {
     done
   '';
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 3.1)" "cmake_minimum_required(VERSION 3.10)" \
+      --replace-fail "CMAKE_POLICY(SET CMP0026 OLD)" "CMAKE_POLICY(SET CMP0026 NEW)"
+  '';
+
   meta = {
     homepage = "https://github.com/BIC-MNI/mni_autoreg";
     description = "Tools for automated registration using the MINC image format";

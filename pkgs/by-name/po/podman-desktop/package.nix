@@ -2,12 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  makeWrapper,
-  copyDesktopItems,
-  electron_37,
-  nodejs,
+  makeBinaryWrapper,
+  electron_42,
+  nodejs-slim_24,
   pnpm_10,
-  makeDesktopItem,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   darwin,
   nix-update-script,
   _experimental-update-script-combinators,
@@ -16,15 +16,19 @@
   jq,
   gnugrep,
   podman,
+  krunkit,
+  extraPackages ? [ ],
 }:
 
 let
-  electron = electron_37;
+  nodejs-slim = nodejs-slim_24;
+  pnpm = pnpm_10.override { inherit nodejs-slim; };
+  electron = electron_42;
   appName = "Podman Desktop";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "podman-desktop";
-  version = "1.21.0";
+  version = "1.28.2";
 
   passthru.updateScript = _experimental-update-script-combinators.sequence [
     (nix-update-script { })
@@ -37,12 +41,19 @@ stdenv.mkDerivation (finalAttrs: {
       ];
       runtimeEnv = {
         PNAME = "podman-desktop";
-        PKG_FILE = builtins.toString ./package.nix;
+        PKG_FILE = toString ./package.nix;
       };
       text = ''
         new_src="$(nix-build --attr "pkgs.$PNAME.src" --no-out-link)"
-        new_electron_major="$(jq '.devDependencies.electron' "$new_src/package.json" | grep --perl-regexp --only-matching '\d+' | head -n 1)"
-        new_pnpm_major="$(jq '.packageManager' "$new_src/package.json" | grep --perl-regexp --only-matching '\d+' | head -n 1)"
+        get_major_version() {
+          jq -r "$1" "$new_src/package.json" | grep --perl-regexp --only-matching '[0-9]+' | head -n 1
+        }
+
+        new_node_major="$(get_major_version '.engines.node')"
+        new_electron_major="$(get_major_version '.devDependencies.electron')"
+        new_pnpm_major="$(get_major_version '.packageManager')"
+
+        sed -i -E "s/nodejs_[0-9]+/nodejs_$new_node_major/g" "$PKG_FILE"
         sed -i -E "s/electron_[0-9]+/electron_$new_electron_major/g" "$PKG_FILE"
         sed -i -E "s/pnpm_[0-9]+/pnpm_$new_pnpm_major/g" "$PKG_FILE"
       '';
@@ -54,33 +65,36 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "containers";
+    owner = "podman-desktop";
     repo = "podman-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Wio+lETdsDhcZvluKV6gUqjT0lTE9nYL5TqPLCR4Kr0=";
+    hash = "sha256-8pp1lxWduKZuxDXmq3GQQ7w10PUC9wR667gO6u9OhSI=";
   };
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-yteFC4/raBdL4gjBtsGL/lVRpo11BuhS7Xm0mFgz3t4=";
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-llkgy+JDJRxTZXxXHxza3RKdACU/Yd9xiGJ5CyptXpY=";
   };
 
   patches = [
     # podman should be installed with nix; disable auto-installation
     ./extension-no-download-podman.patch
+    ./system-defaults-dir.patch
   ];
 
-  ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  env = {
+    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+    ELECTRON_OVERRIDE_DIST_PATH = electron.dist;
+  };
 
   nativeBuildInputs = [
-    makeWrapper
-    nodejs
-    pnpm_10.configHook
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    copyDesktopItems
-    makeWrapper
+    makeBinaryWrapper
+    nodejs-slim
+    nodejs-slim.npm
+    pnpm
+    pnpmConfigHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.autoSignDarwinBinariesHook
@@ -108,7 +122,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase =
     let
-      commonWrapperArgs = "--prefix PATH : ${lib.makeBinPath [ podman ]}";
+      prefixPackages = lib.makeBinPath (
+        [ podman ]
+        ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform krunkit) krunkit
+        ++ extraPackages
+      );
+      commonWrapperArgs = "--prefix PATH : ${prefixPackages}";
     in
     (
       ''
@@ -128,6 +147,13 @@ stdenv.mkDerivation (finalAttrs: {
 
         install -Dm644 buildResources/icon.svg "$out/share/icons/hicolor/scalable/apps/podman-desktop.svg"
 
+        # Derive the .desktop entry from upstream to keep it aligned and avoid regressions.
+        install -Dm644 .flatpak.desktop "$out/share/applications/podman-desktop.desktop"
+        substituteInPlace "$out/share/applications/podman-desktop.desktop" \
+          --replace-fail 'Exec=run.sh %U' 'Exec=podman-desktop %U' \
+          --replace-fail 'Icon=io.podman_desktop.PodmanDesktop' 'Icon=podman-desktop'
+        sed -i '/^X-Flatpak=/d' "$out/share/applications/podman-desktop.desktop"
+
         makeWrapper '${electron}/bin/electron' "$out/bin/podman-desktop" \
           --add-flags "$out/share/lib/podman-desktop/resources/app.asar" \
           --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
@@ -140,24 +166,10 @@ stdenv.mkDerivation (finalAttrs: {
       ''
     );
 
-  # see: https://github.com/containers/podman-desktop/blob/main/.flatpak.desktop
-  desktopItems = [
-    (makeDesktopItem {
-      name = "podman-desktop";
-      exec = "podman-desktop %U";
-      icon = "podman-desktop";
-      desktopName = appName;
-      genericName = "Desktop client for podman";
-      comment = finalAttrs.meta.description;
-      categories = [ "Utility" ];
-      startupWMClass = appName;
-    })
-  ];
-
   meta = {
     description = "Graphical tool for developing on containers and Kubernetes";
     homepage = "https://podman-desktop.io";
-    changelog = "https://github.com/containers/podman-desktop/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/podman-desktop/podman-desktop/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       booxter

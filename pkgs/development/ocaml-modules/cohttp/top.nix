@@ -4,8 +4,6 @@ buildDunePackage {
   pname = "cohttp-top";
   inherit (cohttp) version src;
 
-  duneVersion = "3";
-
   propagatedBuildInputs = [ cohttp ];
 
   doCheck = true;

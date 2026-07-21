@@ -5,7 +5,13 @@
   curlWithGnuTls,
   zlib,
   glib,
-  xorg,
+  libxrender,
+  libxi,
+  libxext,
+  libx11,
+  libsm,
+  libice,
+  libxcb,
   dbus,
   fontconfig,
   libGL,
@@ -49,13 +55,13 @@ stdenv.mkDerivation rec {
     stdenv.cc.cc
     zlib
     glib
-    xorg.libXi
-    xorg.libxcb
-    xorg.libXrender
-    xorg.libX11
-    xorg.libSM
-    xorg.libICE
-    xorg.libXext
+    libxi
+    libxcb
+    libxrender
+    libx11
+    libsm
+    libice
+    libxext
     dbus
     fontconfig
     freetype
@@ -91,13 +97,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://robomongo.org/";
     description = "Query GUI for mongodb. Formerly called Robomongo";
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ eperuffo ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ eperuffo ];
     mainProgram = "robo3t";
   };
 }

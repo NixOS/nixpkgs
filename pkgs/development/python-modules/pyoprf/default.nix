@@ -13,7 +13,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyoprf";
   pyproject = true;
 
@@ -29,9 +29,12 @@ buildPythonPackage rec {
     ''
       substituteInPlace ./pyoprf/__init__.py --replace-fail \
         "ctypes.util.find_library('oprf') or ctypes.util.find_library('liboprf')" "'${lib.getLib liboprf}/lib/liboprf${soext}'"
+      substituteInPlace pyoprf/noisexk.py \
+        --replace-fail "ctypes.util.find_library('oprf-noiseXK')" "'${lib.getLib liboprf}/lib/liboprf-noiseXK${soext}'" \
+        --replace-fail "or ctypes.util.find_library('liboprf-noiseXK')" ""
     '';
 
-  sourceRoot = "${src.name}/python";
+  sourceRoot = "${finalAttrs.src.name}/python";
 
   build-system = [ setuptools ];
 
@@ -48,15 +51,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests/test.py" ];
+  enabledTestPaths = [ "tests/test.py" ];
 
   meta = {
+    homepage = "https://github.com/stef/liboprf/tree/master/python";
     inherit (liboprf.meta)
       description
-      homepage
       changelog
       license
       teams
       ;
   };
-}
+})

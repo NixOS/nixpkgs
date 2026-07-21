@@ -13,14 +13,14 @@
   ounit,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "dose3";
   version = "7.0.0";
 
   src = fetchFromGitLab {
     owner = "irill";
     repo = "dose3";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-K0fYSAWV48Rers/foDrEIqieyJ0PvpXkuYrFrZGBkkE=";
   };
 
@@ -45,11 +45,11 @@ buildDunePackage rec {
   # Check are not compatible with re ≥ 1.12
   doCheck = lib.versionAtLeast ocaml.version "4.08" && !lib.versionAtLeast ocaml.version "4.12";
 
-  meta = with lib; {
+  meta = {
     description = "Dose library (part of Mancoosi tools)";
     downloadPage = "https://gitlab.com/irill/dose3/";
     homepage = "https://www.mancoosi.org/software/";
-    license = licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
     longDescription = ''
       The dose suite provides libraries for handling package meta-data, and various tools for analyzing package relationships in a large package repository.
       * dose-builddebcheck checks, given a collection of source package stanzas and a collection of binary package stanzas of Debian packages, whether the build-dependencies of each source package can be satisfied by the binary packages.
@@ -60,4 +60,4 @@ buildDunePackage rec {
       * dose-deb-coinstall, a Debian-specific tool for checking whether a set of packages can be installed all together.
     '';
   };
-}
+})

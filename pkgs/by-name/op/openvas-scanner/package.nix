@@ -29,14 +29,14 @@
   util-linux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openvas-scanner";
   version = "23.28.0";
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "openvas-scanner";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ggmex/BmAVgdE1JNM3kybEmr/uKqrIl8JdSoBnsg+40=";
   };
 
@@ -79,13 +79,13 @@ stdenv.mkDerivation rec {
     "-DOPENVAS_FEED_LOCK_PATH=$out/var/lib/openvas/feed-update.lock"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Scanner component for Greenbone Community Edition";
     homepage = "https://github.com/greenbone/openvas-scanner";
-    changelog = "https://github.com/greenbone/openvas-scanner/blob/${src.rev}/changelog.toml";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/greenbone/openvas-scanner/blob/${finalAttrs.src.rev}/changelog.toml";
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "openvas-scanner";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

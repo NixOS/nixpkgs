@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://calcoo.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
     mainProgram = "calcoo";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     inherit (jdk.meta) platforms;
   };
 })

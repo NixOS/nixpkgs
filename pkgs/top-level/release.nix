@@ -19,14 +19,13 @@
   system ? builtins.currentSystem,
   officialRelease ? false,
   # The platform doubles for which we build Nixpkgs.
-  supportedSystems ? builtins.fromJSON (builtins.readFile ../../ci/supportedSystems.json),
+  supportedSystems ? builtins.fromJSON (builtins.readFile ./release-supported-systems.json),
   # The platform triples for which we build bootstrap tools.
   bootstrapConfigs ? [
-    "aarch64-apple-darwin"
+    "arm64-apple-darwin"
     "aarch64-unknown-linux-gnu"
     "aarch64-unknown-linux-musl"
     "i686-unknown-linux-gnu"
-    "x86_64-apple-darwin"
     "x86_64-unknown-linux-gnu"
     "x86_64-unknown-linux-musl"
     # we can uncomment that once our bootstrap tarballs are fixed
@@ -40,12 +39,13 @@
       allowAliases = false;
       allowUnfree = false;
       inHydra = true;
+      recursionMode = "hydra";
       # Exceptional unsafe packages that we still build and distribute,
       # so users choosing to allow don't have to rebuild them every time.
       permittedInsecurePackages = [
         "olm-3.2.16" # see PR #347899
-        "kanidm_1_6-1.6.4"
-        "kanidmWithSecretProvisioning_1_6-1.6.4"
+        "kanidm_1_8-1.8.6"
+        "kanidmWithSecretProvisioning_1_8-1.8.6"
       ];
     };
 
@@ -85,21 +85,16 @@ let
     id
     isDerivation
     optionals
-    recursiveUpdate
     ;
 
   inherit (release-lib.lib.attrsets) unionOfDisjoint;
 
-  supportDarwin = genAttrs [
-    "x86_64"
-    "aarch64"
-  ] (arch: elem "${arch}-darwin" supportedSystems);
+  supportDarwin = elem "aarch64-darwin" supportedSystems;
 
-  nonPackageJobs = rec {
+  nonPackageJobs = {
     tarball = import ./make-tarball.nix {
       inherit
         pkgs
-        lib-tests
         nixpkgs
         officialRelease
         ;
@@ -111,11 +106,9 @@ let
 
     manual = pkgs.nixpkgs-manual.override { inherit nixpkgs; };
     metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
-    lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };
-    pkgs-lib-tests = import ../pkgs-lib/tests { inherit pkgs; };
 
     darwin-tested =
-      if supportDarwin.x86_64 || supportDarwin.aarch64 then
+      if supportDarwin then
         pkgs.releaseTools.aggregate {
           name = "nixpkgs-darwin-${jobs.tarball.version}";
           meta.description = "Release-critical builds for the Nixpkgs darwin channel";
@@ -123,51 +116,7 @@ let
             jobs.tarball
             jobs.release-checks
           ]
-          ++ optionals supportDarwin.x86_64 [
-            jobs.cabal2nix.x86_64-darwin
-            jobs.ghc.x86_64-darwin
-            jobs.git.x86_64-darwin
-            jobs.go.x86_64-darwin
-            jobs.mariadb.x86_64-darwin
-            jobs.nix.x86_64-darwin
-            jobs.nixpkgs-review.x86_64-darwin
-            jobs.nix-info.x86_64-darwin
-            jobs.nix-info-tested.x86_64-darwin
-            jobs.openssh.x86_64-darwin
-            jobs.openssl.x86_64-darwin
-            jobs.pandoc.x86_64-darwin
-            jobs.postgresql.x86_64-darwin
-            jobs.python3.x86_64-darwin
-            jobs.ruby.x86_64-darwin
-            jobs.rustc.x86_64-darwin
-            # blocking ofBorg CI 2020-02-28
-            # jobs.stack.x86_64-darwin
-            jobs.stdenv.x86_64-darwin
-            jobs.vim.x86_64-darwin
-            jobs.cachix.x86_64-darwin
-            jobs.darwin.linux-builder.x86_64-darwin
-
-            # UI apps
-            # jobs.firefox-unwrapped.x86_64-darwin
-            jobs.qt5.qtmultimedia.x86_64-darwin
-            jobs.inkscape.x86_64-darwin
-            jobs.gimp.x86_64-darwin
-            jobs.emacs.x86_64-darwin
-            jobs.wireshark.x86_64-darwin
-            jobs.transmission_3-gtk.x86_64-darwin
-            jobs.transmission_4-gtk.x86_64-darwin
-
-            # Tests
-            /*
-              jobs.tests.cc-wrapper.default.x86_64-darwin
-              jobs.tests.cc-wrapper.llvmPackages.clang.x86_64-darwin
-              jobs.tests.cc-wrapper.llvmPackages.libcxx.x86_64-darwin
-              jobs.tests.stdenv-inputs.x86_64-darwin
-              jobs.tests.macOSSierraShared.x86_64-darwin
-              jobs.tests.stdenv.hooks.patch-shebangs.x86_64-darwin
-            */
-          ]
-          ++ optionals supportDarwin.aarch64 [
+          ++ optionals supportDarwin [
             jobs.cabal2nix.aarch64-darwin
             jobs.ghc.aarch64-darwin
             jobs.git.aarch64-darwin
@@ -195,11 +144,9 @@ let
             # jobs.firefox-unwrapped.aarch64-darwin
             jobs.qt5.qtmultimedia.aarch64-darwin
             jobs.inkscape.aarch64-darwin
-            jobs.gimp.aarch64-darwin
+            jobs.gimp2.aarch64-darwin # FIXME replace with gimp once https://github.com/NixOS/nixpkgs/issues/411189 is resoved
             jobs.emacs.aarch64-darwin
             jobs.wireshark.aarch64-darwin
-            jobs.transmission_3-gtk.aarch64-darwin
-            jobs.transmission_4-gtk.aarch64-darwin
 
             # Tests
             /*
@@ -223,8 +170,8 @@ let
         jobs.release-checks
         jobs.metrics
         jobs.manual
-        jobs.lib-tests
-        jobs.pkgs-lib-tests
+        jobs.tests.lib-tests.x86_64-linux
+        jobs.tests.pkgs-lib.formats-tests.x86_64-linux
         jobs.stdenv.x86_64-linux
         jobs.cargo.x86_64-linux
         jobs.go.x86_64-linux
@@ -258,33 +205,7 @@ let
         */
       ]
       ++ collect isDerivation jobs.stdenvBootstrapTools
-      ++ optionals supportDarwin.x86_64 [
-        jobs.stdenv.x86_64-darwin
-        jobs.cargo.x86_64-darwin
-        jobs.cachix.x86_64-darwin
-        jobs.devenv.x86_64-darwin
-        jobs.go.x86_64-darwin
-        jobs.python3.x86_64-darwin
-        jobs.nixpkgs-review.x86_64-darwin
-        jobs.nix.x86_64-darwin
-        jobs.nix-info.x86_64-darwin
-        jobs.nix-info-tested.x86_64-darwin
-        jobs.git.x86_64-darwin
-        jobs.mariadb.x86_64-darwin
-        jobs.vim.x86_64-darwin
-        jobs.inkscape.x86_64-darwin
-        jobs.qt5.qtmultimedia.x86_64-darwin
-        jobs.darwin.linux-builder.x86_64-darwin
-        /*
-          jobs.tests.cc-wrapper.default.x86_64-darwin
-          jobs.tests.cc-wrapper.llvmPackages.clang.x86_64-darwin
-          jobs.tests.cc-wrapper.llvmPackages.libcxx.x86_64-darwin
-          jobs.tests.stdenv-inputs.x86_64-darwin
-          jobs.tests.macOSSierraShared.x86_64-darwin
-          jobs.tests.stdenv.hooks.patch-shebangs.x86_64-darwin
-        */
-      ]
-      ++ optionals supportDarwin.aarch64 [
+      ++ optionals supportDarwin [
         jobs.stdenv.aarch64-darwin
         jobs.cargo.aarch64-darwin
         jobs.cachix.aarch64-darwin
@@ -301,7 +222,13 @@ let
         jobs.inkscape.aarch64-darwin
         jobs.qt5.qtmultimedia.aarch64-darwin
         jobs.darwin.linux-builder.aarch64-darwin
-        # consider adding tests, as suggested above for x86_64-darwin
+        /*
+          jobs.tests.cc-wrapper.default.aarch64-darwin
+          jobs.tests.cc-wrapper.llvmPackages.clang.aarch64-darwin
+          jobs.tests.cc-wrapper.llvmPackages.libcxx.aarch64-darwin
+          jobs.tests.stdenv-inputs.aarch64-darwin
+          jobs.tests.stdenv.hooks.patch-shebangs.aarch64-darwin
+        */
       ];
     };
 
@@ -363,7 +290,6 @@ let
           packages =
             genAttrs
               [
-                "ghc94"
                 "ghc96"
                 "ghc98"
                 "ghc910"
@@ -397,8 +323,7 @@ let
           "aarch64-linux"
         ];
 
-        # Fails CI in its current state
-        ocamlPackages = { };
+        pkgsRocm = pkgs.rocmPackages.meta.release-packagePlatforms;
       };
       mapTestOn-packages = if attrNamesOnly then packageJobs else mapTestOn packageJobs;
     in

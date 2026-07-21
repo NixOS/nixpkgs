@@ -6,36 +6,36 @@
   patch2pr,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "patch2pr";
-  version = "0.38.0";
+  version = "0.46.0";
 
   src = fetchFromGitHub {
     owner = "bluekeyes";
     repo = "patch2pr";
-    rev = "v${version}";
-    hash = "sha256-WkjO6FBeJ5E2bc4PT9lkfNq5CYL3Kh1Mgai+39YDzSU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-SMMqLW9Gvrc+lt/AhGD+RRE+dC/6CxSKmUtJJ3SXtLo=";
   };
 
-  vendorHash = "sha256-RiaFvvPwNxfQE6F93BdPT+LLmUkNC9sYOfHyFgG9/30=";
+  vendorHash = "sha256-XVEqnYzlm9l2e/grLwopEZlPSTY64po7veL8JqL9S7Y=";
 
   ldflags = [
-    "-X main.version=${version}"
-    "-X main.commit=${src.rev}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.commit=${finalAttrs.src.rev}"
   ];
 
   passthru.tests.patch2pr-version = testers.testVersion {
     package = patch2pr;
     command = "${patch2pr.meta.mainProgram} --version";
-    version = version;
+    version = finalAttrs.version;
   };
 
   meta = {
     description = "Create pull requests from patches without cloning the repository";
     homepage = "https://github.com/bluekeyes/patch2pr";
-    changelog = "https://github.com/bluekeyes/patch2pr/releases/tag/v${version}";
+    changelog = "https://github.com/bluekeyes/patch2pr/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ katrinafyi ];
     mainProgram = "patch2pr";
   };
-}
+})

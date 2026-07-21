@@ -1,32 +1,38 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
+  fetchpatch,
   pkg-config,
-  libX11,
-  libXtst,
+  libx11,
+  libxtst,
   xorgproto,
-  libXi,
+  libxi,
 }:
 
 stdenv.mkDerivation {
   pname = "xcape";
-  version = "unstable-2018-03-01";
+  version = "1.2";
 
-  src = fetchFromGitHub {
-    owner = "alols";
-    repo = "xcape";
-    rev = "a34d6bae27bbd55506852f5ed3c27045a3c0bd9e";
-    sha256 = "04grs4w9kpfzz25mqw82zdiy51g0w355gpn5b170p7ha5972ykc8";
+  src = fetchurl {
+    url = "http://deb.debian.org/debian/pool/main/x/xcape/xcape_1.2.orig.tar.gz";
+    hash = "sha256-on7YhP2U8DBYr2Wjnt/jrz8vj7t2upkgACp2vgf7KCE=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/x/xcape/1.2-3/debian/patches/0001-Fix-cross-building-by-removing-hard-coded-pkg-config.patch";
+      hash = "sha256-uQNy7EIQdAO5iHYNA2pBoDltNrn1xrfAAjN/ZdGGa4s=";
+    })
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    libX11
-    libXtst
+    libx11
+    libxtst
     xorgproto
-    libXi
+    libxi
   ];
 
   makeFlags = [
@@ -36,7 +42,7 @@ stdenv.mkDerivation {
 
   postInstall = "install -Dm444 --target-directory $out/share/doc README.md";
 
-  meta = with lib; {
+  meta = {
     description = "Utility to configure modifier keys to act as other keys";
     longDescription = ''
       xcape allows you to use a modifier key as another key when
@@ -47,9 +53,9 @@ stdenv.mkDerivation {
       released on its own.
     '';
     homepage = "https://github.com/alols/xcape";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
     mainProgram = "xcape";
   };
 }

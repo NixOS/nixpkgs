@@ -7,7 +7,6 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   setuptools-scm,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "aiooss2";
   version = "0.2.11";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "karajan1001";
@@ -59,11 +56,11 @@ buildPythonPackage rec {
     "tests/unit/test_adapter.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for aliyun OSS (Object Storage Service)";
     homepage = "https://github.com/karajan1001/aiooss2";
     changelog = "https://github.com/karajan1001/aiooss2/blob/${version}/CHANGES.txt";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

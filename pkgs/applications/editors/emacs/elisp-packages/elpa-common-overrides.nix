@@ -76,6 +76,9 @@ in
 
   cl-print = null; # builtin
 
+  # https://github.com/NixOS/nixpkgs/issues/483425
+  consult = addPackageRequires super.consult [ self.flymake ];
+
   # missing optional dependencies https://codeberg.org/rahguzar/consult-hoogle/issues/4
   consult-hoogle = addPackageRequiresIfOlder super.consult-hoogle [ self.consult ] "0.2.2";
 
@@ -116,7 +119,7 @@ in
             })
           ]
         else
-          previousAttrs.patches or null;
+          previousAttrs.patches or [ ];
       preBuild =
         if applyOrgRoamMissingPatch then
           previousAttrs.preBuild or ""
@@ -129,7 +132,7 @@ in
             popd
           ''
         else
-          previousAttrs.preBuild or null;
+          previousAttrs.preBuild or "";
     }
   );
 
@@ -154,7 +157,7 @@ in
 
     nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [ pkgs.pkg-config ];
 
-    buildInputs = old.buildInputs or [ ] ++ [ pkgs.enchant2 ];
+    buildInputs = old.buildInputs or [ ] ++ [ pkgs.enchant_2 ];
 
     postBuild =
       old.postBuild or ""
@@ -273,6 +276,31 @@ in
 
   tle = null; # builtin
 
+  # test/resources/foo.iso/ is introduced in 2.8.0.4
+  # it causes a build error: "Package does not untar cleanly into directory tramp-2.8.0.4/"
+  # delete it as a workaround
+  # minimal reproducing example:
+  #   (let ((file "/path/to/tramp-2.8.0.4.tar"))
+  #   (with-temp-buffer
+  #     (insert-file-contents-literally file)
+  #     (tar-mode)
+  #     (let ((pkg-desc (package-tar-file-info)))
+  #       (package-unpack pkg-desc))))
+  # only the first run errors, the second run works well, seems like an Emacs bug
+  tramp = super.tramp.overrideAttrs (old: {
+    dontUnpack = false;
+    postUnpack =
+      old.postUnpack or ""
+      + "\n"
+      + ''
+        local content_directory=$(echo tramp-*)
+        rm --verbose --recursive $content_directory/test
+        src=$PWD/$content_directory.tar
+        tar --create --verbose --file=$src $content_directory
+        rm --verbose --recursive $content_directory/*
+      '';
+  });
+
   # kv is required in triples-test.el
   # Alternatively, we can delete that file.  But adding a dependency is easier.
   triples = addPackageRequires super.triples [ self.kv ];
@@ -294,9 +322,6 @@ in
         rm $outd/xapian-lite.cc $outd/emacs-module.h $outd/emacs-module-prelude.h $outd/demo.gif $outd/Makefile
       '';
   });
-
-  # native-ice https://github.com/mattiase/xr/issues/9
-  xr = ignoreCompilationError super.xr;
 
   # keep-sorted end
 }

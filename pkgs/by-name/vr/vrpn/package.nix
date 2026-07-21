@@ -8,14 +8,14 @@
   libGL,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vrpn";
   version = "07.36";
 
   src = fetchFromGitHub {
     owner = "vrpn";
     repo = "vrpn";
-    rev = "version_${version}";
+    rev = "version_${finalAttrs.version}";
     hash = "sha256-eXmj9Wqm+ytsnypC+MrOLnJg9zlri5y0puavamZqFmY=";
   };
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     libGL
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Virtual Reality Peripheral Network";
     longDescription = ''
       The Virtual-Reality Peripheral Network (VRPN) is a set of classes
@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
       (VR) system.
     '';
     homepage = "https://github.com/vrpn/vrpn";
-    license = licenses.boost; # see https://github.com/vrpn/vrpn/wiki/License
-    platforms = platforms.darwin ++ platforms.linux;
-    maintainers = with maintainers; [ ludo ];
+    license = lib.licenses.boost; # see https://github.com/vrpn/vrpn/wiki/License
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ludo ];
   };
-}
+})

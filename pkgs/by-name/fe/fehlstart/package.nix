@@ -5,15 +5,14 @@
   gtk3,
   glib,
   keybinder3,
-  fetchFromGitea,
+  fetchFromCodeberg,
 }:
 
 stdenv.mkDerivation {
   pname = "fehlstart";
   version = "0.5-unstable-2025-01-12";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "chuvok";
     repo = "fehlstart";
     rev = "cf08d6c3964da9abc8d1af0725894fef62352064";
@@ -39,7 +38,6 @@ stdenv.mkDerivation {
     description = "Small desktop application launcher with reasonable memory footprint";
     homepage = "https://codeberg.org/Chuvok/fehlstart";
     license = lib.licenses.gpl3Only;
-    maintainers = [ lib.maintainers.mounium ];
     platforms = lib.platforms.linux;
     mainProgram = "fehlstart";
   };

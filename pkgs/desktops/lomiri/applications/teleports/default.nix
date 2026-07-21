@@ -28,27 +28,34 @@
 }:
 
 let
-  tdlib-1811 = tdlib.overrideAttrs (
-    oa: fa: {
-      version = "1.8.11";
-      src = fetchFromGitHub {
-        owner = "tdlib";
-        repo = "td";
-        rev = "3179d35694a28267a0b6273fc9b5bdce3b6b1235";
-        hash = "sha256-XvqqDXaFclWK/XpIxOqAXQ9gcc/dTljl841CN0KrlyA=";
-      };
-    }
-  );
+  tdlib-1811 = tdlib.overrideAttrs {
+    version = "1.8.11";
+    src = fetchFromGitHub {
+      owner = "tdlib";
+      repo = "td";
+      rev = "3179d35694a28267a0b6273fc9b5bdce3b6b1235";
+      hash = "sha256-XvqqDXaFclWK/XpIxOqAXQ9gcc/dTljl841CN0KrlyA=";
+    };
+
+    # CMake 4 compat
+    postPatch = ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'cmake_minimum_required(VERSION 3.0.2 FATAL_ERROR)' 'cmake_minimum_required(VERSION 3.10 FATAL_ERROR)'
+
+      substituteInPlace td/generate/tl-parser/CMakeLists.txt \
+        --replace-fail 'cmake_minimum_required(VERSION 3.0 FATAL_ERROR)' 'cmake_minimum_required(VERSION 3.10 FATAL_ERROR)'
+    '';
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "teleports";
-  version = "1.21";
+  version = "1.22";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/apps/teleports";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-V9yOQbVXtZGxdiieggPwHd17ilRZ0xMEI2yphgjx188=";
+    hash = "sha256-y0oXlhu2cvOGYZCEHfL6DcyStCQcIz7JtIpR4Tygm/4=";
   };
 
   patches = [
@@ -58,6 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/ubports/development/apps/teleports/-/commit/dd537c08453be9bfcdb2ee1eb692514c7e867e41.patch";
       hash = "sha256-zxxFvoj6jluGPCA9GQsxuYYweaSOVrkD01hZwCtq52U=";
     })
+
+    # Remove when https://gitlab.com/ubports/development/apps/teleports/-/merge_requests/586 merged & in release
+    ./1001-app-CMakeLists.txt-Drop-explicit-dependency-on-rlottie.patch
   ];
 
   postPatch = ''
@@ -98,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     quazip
     quickflux
     rlottie
-    tdlib-1811
+    finalAttrs.passthru.tdlib
   ];
 
   postInstall = ''
@@ -112,6 +122,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    tdlib = tdlib-1811;
+
     updateScript = gitUpdater { rev-prefix = "v"; };
     tests.vm = nixosTests.teleports;
   };

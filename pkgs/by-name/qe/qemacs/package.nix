@@ -6,9 +6,9 @@
   which,
   texi2html,
   enableX11 ? true,
-  libX11,
-  libXext,
-  libXv,
+  libx11,
+  libxext,
+  libxv,
   libpng,
 }:
 
@@ -35,9 +35,9 @@ stdenv.mkDerivation {
   ];
   buildInputs = lib.optionals enableX11 [
     libpng
-    libX11
-    libXext
-    libXv
+    libx11
+    libxext
+    libxv
   ];
 
   enableParallelBuilding = true;
@@ -59,10 +59,10 @@ stdenv.mkDerivation {
     mkdir -p $out/bin $out/man
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://bellard.org/qemacs/";
     description = "Very small but powerful UNIX editor";
-    license = licenses.mit;
-    maintainers = with maintainers; [ iblech ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ iblech ];
   };
 }

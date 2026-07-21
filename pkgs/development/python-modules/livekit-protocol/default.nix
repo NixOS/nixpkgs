@@ -2,26 +2,26 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  hatchling,
   protobuf,
   gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "livekit-protocol";
-  version = "1.0.6";
+  version = "1.1.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "livekit";
     repo = "python-sdks";
     tag = "protocol-v${version}";
-    hash = "sha256-Sl/pAwiCS7sAY8VHJzSqm/Mj92NsO5NLuxQ/Y5GnaAw=";
+    hash = "sha256-XTBQi1ckwHw7bpd2jQWqwhDXO0iHQRirc2GjfDtYILA=";
   };
 
   pypaBuildFlags = [ "livekit-protocol" ];
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     protobuf

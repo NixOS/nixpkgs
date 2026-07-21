@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/frontend/yarn.lock";
-    hash = "sha256-TdrglyRtb2Q8SFtoiCoDj/zBV2+7DwzIm/Fzlt0ZvSo=";
+    hash = "sha256-R2xHcHksTtFfFh41FLeBhpuz84ceixGt6oz6SQWWyMQ=";
   };
 
   nativeBuildInputs = [
@@ -27,8 +27,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
-    mkdir $out
-    cp -R dist/* $out
+    mkdir -p $out/admin
+    cp -R dist/* $out/admin
+    cp node_modules/altcha/dist/altcha.umd.cjs $out/altcha.umd.js
   '';
 
   inherit meta;

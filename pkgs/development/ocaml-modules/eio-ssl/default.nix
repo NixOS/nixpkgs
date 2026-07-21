@@ -6,12 +6,12 @@
   ssl,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "eio-ssl";
   version = "0.3.0";
 
   src = fetchurl {
-    url = "https://github.com/anmonteiro/eio-ssl/releases/download/${version}/eio-ssl-${version}.tbz";
+    url = "https://github.com/anmonteiro/eio-ssl/releases/download/${finalAttrs.version}/eio-ssl-${finalAttrs.version}.tbz";
     hash = "sha256-m4CiUQtXVSMfLthbDsAftpiOsr24I5IGiU1vv7Rz8go=";
   };
 
@@ -25,4 +25,4 @@ buildDunePackage rec {
     description = "OpenSSL binding to EIO";
     license = lib.licenses.lgpl21;
   };
-}
+})

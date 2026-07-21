@@ -2,29 +2,26 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  hatchling,
   bash,
   openssh,
   pytestCheckHook,
-  pythonOlder,
   stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "deploykit";
-  version = "1.1.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "1.2.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "deploykit";
     rev = version;
-    hash = "sha256-7PiXq1bQJ1jswLHNqCDSYZabgfp8HRuRt5YPGzd5Ej0=";
+    hash = "sha256-RONE/oJdNmVjLYdJWDTzyXnmStkLIx92GsydaYYG5O4=";
   };
 
-  buildInputs = [ setuptools ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [
     bash
@@ -39,15 +36,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "deploykit" ];
 
-  meta = with lib; {
+  meta = {
     description = "Execute commands remote via ssh and locally in parallel with python";
     homepage = "https://github.com/numtide/deploykit";
     changelog = "https://github.com/numtide/deploykit/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       mic92
       zowoq
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

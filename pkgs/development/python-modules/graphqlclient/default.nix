@@ -2,30 +2,36 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "graphqlclient";
   version = "0.2.4";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "0b6r3ng78qsn7c9zksx4rgdkmp5296d40kbmjn8q614cz0ymyc5k";
+    pname = "graphqlclient";
+    inherit (finalAttrs) version;
+    hash = "sha256-szBfPfiMBIORlXVNQJpJotw628uk6/kTO1ZjdJ4d2Sw=";
   };
 
-  propagatedBuildInputs = [ six ];
+  build-system = [ setuptools ];
+
+  dependencies = [ six ];
 
   # Project has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "graphqlclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple GraphQL client for Python";
     homepage = "https://github.com/prisma-labs/python-graphql-client";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lde ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lde ];
   };
-}
+})

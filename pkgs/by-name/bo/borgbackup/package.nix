@@ -10,32 +10,46 @@
   openssh,
   openssl,
   python3,
-  xxHash,
+  xxhash,
   zstd,
   installShellFiles,
   nixosTests,
+  nix-update-script,
+  versionCheckHook,
 }:
 
 let
   python = python3;
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "borgbackup";
-  version = "1.4.1";
+  version = "1.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "borgbackup";
     repo = "borg";
-    tag = version;
-    hash = "sha256-1RRizsHY6q1ruofTkRZ4sSN4k6Hoo+sG85w2zz+7yL8=";
+    tag = finalAttrs.version;
+    hash = "sha256-pMZr9cVr84b948b5Iuevpy6AtMeYo/Ma8uFLuagAYy4=";
   };
 
   patches = [
     (fetchpatch {
-      name = "allow-msgpack-1.1.1.patch";
-      url = "https://github.com/borgbackup/borg/commit/f6724bfef2515ed5bf66c9a0434655c60a82aae2.patch";
-      hash = "sha256-UfLaAFKEAHvbIR5WDYJY7bz3aiffdwAXJKfzZZU+NT8=";
+      name = "msgspec-1.2.0-compat.patch";
+      url = "https://github.com/borgbackup/borg/commit/364438f58c86aebd157b55bd2202afaf5945e008.patch";
+      excludes = [ "docs/changes.rst" ];
+      hash = "sha256-YhZDD6i2cn7p00Dgmpqi8uGJzFZzixMZmHPcZroB1sE=";
+    })
+    (fetchpatch {
+      name = "msgspec-1.2.1-compat.patch";
+      url = "https://github.com/borgbackup/borg/commit/8abdd3b8bf065dceecd52d2b22d92b3c407a7c1d.patch";
+      excludes = [ "docs/changes.rst" ];
+      hash = "sha256-bvSRxEzNvejG6PQFkeNDuQB7Zd4/EYPEZkrgjpgQ9Ss=";
+    })
+    (fetchpatch {
+      name = "msgspec-1.2.1-unpacker-compat.patch";
+      url = "https://github.com/borgbackup/borg/commit/b09bbed3de095d6ac9d69a42a486ec18523046dc.patch";
+      hash = "sha256-F8CIqOcQOLdYn7srsev2op0pgkgt8zdkc5DQUH1c6xg=";
     })
   ];
 
@@ -69,7 +83,7 @@ python.pkgs.buildPythonApplication rec {
   buildInputs = [
     libb2
     lz4
-    xxHash
+    xxhash
     zstd
     openssl
   ]
@@ -77,11 +91,15 @@ python.pkgs.buildPythonApplication rec {
     acl
   ];
 
-  dependencies = with python.pkgs; [
-    msgpack
-    packaging
-    (if stdenv.hostPlatform.isLinux then pyfuse3 else llfuse)
-  ];
+  dependencies =
+    with python.pkgs;
+    [
+      msgpack
+      packaging
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      pyfuse3
+    ];
 
   makeWrapperArgs = [
     ''--prefix PATH ':' "${openssh}/bin"''
@@ -106,7 +124,8 @@ python.pkgs.buildPythonApplication rec {
     py
     pytest-benchmark
     pytest-xdist
-    pytestCheckHook
+    pytest9_0CheckHook
+    versionCheckHook
   ];
 
   pytestFlags = [
@@ -129,6 +148,11 @@ python.pkgs.buildPythonApplication rec {
     "test_get_keys_dir"
     "test_get_security_dir"
     "test_get_config_dir"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Tests create files with append-only flags that cause cleanup issues on macOS
+    "test_extract_restores_append_flag"
+    "test_file_status_excluded"
   ];
 
   preCheck = ''
@@ -145,19 +169,23 @@ python.pkgs.buildPythonApplication rec {
     "man"
   ];
 
-  disabled = python.pythonOlder "3.9";
-
-  meta = with lib; {
-    changelog = "https://github.com/borgbackup/borg/blob/${src.rev}/docs/changes.rst";
-    description = "Deduplicating archiver with compression and encryption";
-    homepage = "https://www.borgbackup.org";
-    license = licenses.bsd3;
-    platforms = platforms.unix; # Darwin and FreeBSD mentioned on homepage
-    mainProgram = "borg";
-    maintainers = with maintainers; [
-      dotlambda
-      globin
-      iedame
+  passthru.updateScript = nix-update-script {
+    # Only match tags formatted as x.y.z (e.g., 1.2.3)
+    extraArgs = [
+      "--version-regex"
+      "^([0-9]+\\.[0-9]+\\.[0-9]+)$"
     ];
   };
-}
+
+  meta = {
+    changelog = "https://github.com/borgbackup/borg/blob/${finalAttrs.src.rev}/docs/changes.rst";
+    description = "Deduplicating archiver with compression and encryption";
+    homepage = "https://www.borgbackup.org";
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix; # Darwin and FreeBSD mentioned on homepage
+    mainProgram = "borg";
+    maintainers = with lib.maintainers; [
+      dotlambda
+    ];
+  };
+})

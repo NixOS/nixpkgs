@@ -6,14 +6,14 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libchardet";
   version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "Joungkyun";
     repo = "libchardet";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-JhEiWM3q8X+eEBHxv8k9yYOaTGoJOzI+/iFYC0gZJJs=";
   };
 
@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Mozilla's Universal Charset Detector C/C++ API";
     mainProgram = "chardet-config";
     homepage = "ftp://ftp.oops.org/pub/oops/libchardet/index.html";
-    license = licenses.mpl11;
+    license = lib.licenses.mpl11;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "xdoctest";
-  version = "1.3.0";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Erotemic";
     repo = "xdoctest";
     tag = "v${version}";
-    hash = "sha256-kxisUcpfAxhB7wd2QLY5jkoUXXDYrkJx7bNB1wMVB30=";
+    hash = "sha256-cwRelkADUrSbrzJ8JjgLCiPil2ynwFmaLLWByJWkXwA=";
   };
 
   nativeBuildInputs = [
@@ -33,12 +33,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xdoctest" ];
 
-  meta = with lib; {
+  meta = {
     description = "Rewrite of Python's builtin doctest module (with pytest plugin integration) with AST instead of REGEX";
     homepage = "https://github.com/Erotemic/xdoctest";
     changelog = "https://github.com/Erotemic/xdoctest/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "xdoctest";
   };
 }

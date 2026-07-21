@@ -6,12 +6,12 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bk";
   version = "0.6.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-rSMvx/zUZqRRgj48TVVG7RwQT8e70m0kertRJysDY4Y=";
   };
 
@@ -32,11 +32,11 @@ rustPlatform.buildRustPackage rec {
     installManPage bk.?
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/aeosynth/bk";
     description = "Terminal epub reader written in rust";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vuimuich ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vuimuich ];
     mainProgram = "bk";
   };
-}
+})

@@ -4,27 +4,27 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "rabtap";
-  version = "1.44.1";
+  version = "1.45.0";
 
   src = fetchFromGitHub {
     owner = "jandelgado";
     repo = "rabtap";
-    rev = "v${version}";
-    sha256 = "sha256-mW2O8/22zbA3/wpYkQHCI0z8EEL0Wyud2TD5vNUJrNI=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-1cNwNqbvF+i5GgzRD3RyFesGjA4/kJWFotPjJC+r/7g=";
   };
 
-  vendorHash = "sha256-Yi4vH3UMOE//p3H9iCR5RY3SjjR0mu2sBRx8WK57Dq8=";
+  vendorHash = "sha256-fp605VqspavEFQESP7yY6VG80ZpV6h33uhj2hoQiDKk=";
 
   ldflags = [
-    "-X main.BuildVersion=v${version}"
+    "-X main.BuildVersion=v${finalAttrs.version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "RabbitMQ wire tap and swiss army knife";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     homepage = "https://github.com/jandelgado/rabtap";
-    maintainers = with maintainers; [ eigengrau ];
+    maintainers = [ ];
   };
-}
+})

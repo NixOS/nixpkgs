@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-recursion-effect";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-PeWJy423QbX4NULuS15LJ/IR/W+tXCJD9TjZdJOGk6A=";
   };
 

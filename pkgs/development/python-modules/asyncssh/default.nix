@@ -6,6 +6,7 @@
   fetchPypi,
   fido2,
   gssapi,
+  ifaddr,
   libnacl,
   libsodium,
   nettle,
@@ -14,21 +15,19 @@
   pyopenssl,
   pytestCheckHook,
   python-pkcs11,
-  pythonOlder,
   setuptools,
+  stdenv,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "asyncssh";
-  version = "2.21.1";
+  version = "2.24.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mUOAKVXiExU2wrHnGqzGj1aXOjmZN+0LclCG10YcmQw=";
+    hash = "sha256-QGTFkOWc4ujYKi9m018xINdlgotN9ePb+we0qMJGhsk=";
   };
 
   build-system = [ setuptools ];
@@ -44,6 +43,7 @@ buildPythonPackage rec {
   optional-dependencies = {
     bcrypt = [ bcrypt ];
     fido2 = [ fido2 ];
+    ifaddr = [ ifaddr ];
     gssapi = [ gssapi ];
     libnacl = [ libnacl ];
     pkcs11 = [ python-pkcs11 ];
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     openssl
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   patches = [
     # Reverts https://github.com/ronf/asyncssh/commit/4b3dec994b3aa821dba4db507030b569c3a32730
@@ -81,17 +81,23 @@ buildPythonPackage rec {
     "test_connect_timeout_exceeded"
     # Fails in the sandbox
     "test_forward_remote"
-    # (2.21.0) SFTP copy ends up with an empty file
+    # Seems weirdly filesystem specific
+    "test_put_name_too_long"
+    # SFTP copy ends up with an empty file on ZFS
     "test_copy_max_requests"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Requires network access
+    "test_canonicalize_failure"
   ];
 
   pythonImportsCheck = [ "asyncssh" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous SSHv2 Python client and server library";
     homepage = "https://asyncssh.readthedocs.io/";
     changelog = "https://github.com/ronf/asyncssh/blob/v${version}/docs/changes.rst";
-    license = with licenses; [
+    license = with lib.licenses; [
       epl20 # or
       gpl2Plus
     ];

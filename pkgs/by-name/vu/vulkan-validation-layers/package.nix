@@ -5,14 +5,15 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
+  python3,
   jq,
   glslang,
   libffi,
-  libX11,
-  libXau,
+  libx11,
+  libxau,
   libxcb,
-  libXdmcp,
-  libXrandr,
+  libxdmcp,
+  libxrandr,
   spirv-headers,
   spirv-tools,
   vulkan-headers,
@@ -23,15 +24,15 @@
 let
   robin-hood-hashing = callPackage ./robin-hood-hashing.nix { };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-validation-layers";
-  version = "1.4.321.0";
+  version = "1.4.350.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-ValidationLayers";
-    rev = "vulkan-sdk-${version}";
-    hash = "sha256-aTO8AIwN6/oOcxu6AgYBoOQiUHQkT6MJGAYNgP5js9I=";
+    rev = "vulkan-sdk-${finalAttrs.version}";
+    hash = "sha256-3qUZP/R29eqTR4IAWH6jBGgmRqE0d1ahcdKbxUOAmTY=";
   };
 
   strictDeps = true;
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    python3
     jq
   ];
 
@@ -51,10 +53,10 @@ stdenv.mkDerivation rec {
     vulkan-utility-libraries
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
-    libXau
-    libXdmcp
-    libXrandr
+    libx11
+    libxau
+    libxdmcp
+    libxrandr
     libffi
     libxcb
     wayland
@@ -64,6 +66,8 @@ stdenv.mkDerivation rec {
     "-DBUILD_LAYER_SUPPORT_FILES=ON"
     # Hide dev warnings that are useless for packaging
     "-Wno-dev"
+    # Don't run update_deps.py which tries to git clone dependencies
+    "-DUPDATE_DEPS=OFF"
   ];
 
   # Tests require access to vulkan-compatible GPU, which isn't
@@ -81,11 +85,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Official Khronos Vulkan validation layers";
     homepage = "https://github.com/KhronosGroup/Vulkan-ValidationLayers";
-    platforms = platforms.all;
-    license = licenses.asl20;
-    maintainers = [ maintainers.ralith ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.ralith ];
   };
-}
+})

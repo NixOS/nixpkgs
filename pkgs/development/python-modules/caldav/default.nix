@@ -1,17 +1,24 @@
 {
   lib,
   buildPythonPackage,
+  dnspython,
   fetchFromGitHub,
   icalendar,
+  icalendar-searcher,
   lxml,
-  pytestCheckHook,
+  manuel,
+  pytest9_0CheckHook,
   python,
+  radicale,
   recurring-ical-events,
-  requests,
+  niquests,
   hatchling,
   hatch-vcs,
   proxy-py,
   pyfakefs,
+  pytest-asyncio,
+  python-dateutil,
+  pyyaml,
   toPythonModule,
   tzlocal,
   vobject,
@@ -21,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "caldav";
-  version = "2.0.1";
+  version = "3.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-caldav";
     repo = "caldav";
     tag = "v${version}";
-    hash = "sha256-n7ZKTBXg66firbS34J41NrTM/PL/OrKMnS4iguRz4Ho=";
+    hash = "sha256-SCqc0MVxKaHpES+NkDcaItHlkk0kCFj6kFqH8k08vdA=";
   };
 
   build-system = [
@@ -37,35 +44,39 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    vobject
+    dnspython
     lxml
-    requests
+    niquests
     icalendar
+    icalendar-searcher
     recurring-ical-events
+    python-dateutil
+    pyyaml
   ];
 
   nativeCheckInputs = [
+    manuel
     proxy-py
     pyfakefs
-    pytestCheckHook
+    pytest-asyncio
+    pytest9_0CheckHook
+    (toPythonModule (radicale.override { python3 = python; }))
     tzlocal
-    (toPythonModule (xandikos.override { python3Packages = python.pkgs; }))
+    vobject
     writableTmpDirAsHomeHook
+    (toPythonModule (xandikos.override { python3Packages = python.pkgs; }))
   ];
 
-  disabledTestPaths = [
-    "tests/test_docs.py"
-    "tests/test_examples.py"
-  ];
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "caldav" ];
 
-  meta = with lib; {
+  meta = {
     description = "CalDAV (RFC4791) client library";
     homepage = "https://github.com/python-caldav/caldav";
     changelog = "https://github.com/python-caldav/caldav/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       marenz
       dotlambda
     ];

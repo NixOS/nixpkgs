@@ -6,20 +6,20 @@
   openssl_3,
   protobuf,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sgxs-tools";
-  version = "0.8.6";
+  version = "0.9.2";
   nativeBuildInputs = [
     pkg-config
     protobuf
   ];
   buildInputs = [ openssl_3 ];
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-24lUhi4IPv+asM51/BfufkOUYVellXoXsbWXWN/zoBw=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-vLbSjDULrYL8emQTha4fhEbr00OlhXNa00QhCKCnWDc=";
   };
 
-  cargoHash = "sha256-7Jzr9Y6ixK1SHCHXaNKVXk0qfbtmXpr9dz1UNk7Q3XI=";
+  cargoHash = "sha256-5JMChgqFny9bB8ur/5koW3/YFCOVjb7cDsn4Ki2FSzA=";
   meta = {
     description = "Utilities for working with the SGX stream format";
     homepage = "https://github.com/fortanix/rust-sgx";
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     platforms = [ "x86_64-linux" ];
     license = lib.licenses.mpl20;
   };
-}
+})

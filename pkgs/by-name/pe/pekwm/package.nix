@@ -2,19 +2,19 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  awk,
+  gawk,
   cmake,
-  grep,
-  libXext,
-  libXft,
-  libXinerama,
-  libXpm,
-  libXrandr,
+  gnugrep,
+  libxext,
+  libxft,
+  libxinerama,
+  libxpm,
+  libxrandr,
   libjpeg,
   libpng,
   pkg-config,
   runtimeShell,
-  sed,
+  gnused,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,11 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libXext
-    libXft
-    libXinerama
-    libXpm
-    libXrandr
+    libxext
+    libxft
+    libxinerama
+    libxpm
+    libxrandr
     libjpeg
     libpng
   ];
@@ -51,9 +51,9 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   cmakeFlags = [
-    "-DAWK=${lib.getBin awk}/bin/awk"
-    "-DGREP=${lib.getBin grep}/bin/grep"
-    "-DSED=${lib.getBin sed}/bin/sed"
+    "-DAWK=${lib.getBin gawk}/bin/awk"
+    "-DGREP=${lib.getBin gnugrep}/bin/grep"
+    "-DSED=${lib.getBin gnused}/bin/sed"
     "-DSH=${runtimeShell}"
   ];
 

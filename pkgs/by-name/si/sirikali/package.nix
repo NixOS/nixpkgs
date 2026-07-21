@@ -8,11 +8,8 @@
   pkg-config,
   qt6,
   kdePackages,
-  cryfs,
-  encfs,
   fscrypt-experimental,
   gocryptfs,
-  securefs,
   sshfs,
   libgcrypt,
   libsecret,
@@ -20,15 +17,15 @@
   withLibsecret ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sirikali";
-  version = "1.8.3";
+  version = "1.8.6";
 
   src = fetchFromGitHub {
     owner = "mhogomchungu";
     repo = "sirikali";
-    rev = version;
-    hash = "sha256-phZvytma4PsH4RZxWDORyall2qjS9rdLzUQId5IU6qY=";
+    rev = finalAttrs.version;
+    hash = "sha256-x3YCnIAPAJ5mOUboo+8Wg8ePyPYKoO++aSh3nSOj00I=";
   };
 
   buildInputs = [
@@ -47,16 +44,13 @@ stdenv.mkDerivation rec {
   ];
 
   qtWrapperArgs = [
-    ''--prefix PATH : ${
+    "--prefix PATH : ${
       lib.makeBinPath [
-        cryfs
-        encfs
         fscrypt-experimental
         gocryptfs
-        securefs
         sshfs
       ]
-    }''
+    }"
   ];
 
   doCheck = true;
@@ -68,13 +62,14 @@ stdenv.mkDerivation rec {
     "-DBUILD_WITH_QT6=true"
   ];
 
-  meta = with lib; {
-    description = "Qt/C++ GUI front end to sshfs, ecryptfs-simple, cryfs, gocryptfs, securefs, fscrypt and encfs";
+  meta = {
+    description = "Qt/C++ GUI front end to sshfs, ecryptfs-simple, gocryptfs and fscrypt";
+    longDescription = "Sirikali also supports `cryfs`, but `cryfs` is no longer available in Nixpkgs.";
     homepage = "https://github.com/mhogomchungu/sirikali";
-    changelog = "https://github.com/mhogomchungu/sirikali/blob/${src.rev}/changelog";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ linuxissuper ];
+    changelog = "https://github.com/mhogomchungu/sirikali/blob/${finalAttrs.src.rev}/changelog";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ linuxissuper ];
     mainProgram = "sirikali";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

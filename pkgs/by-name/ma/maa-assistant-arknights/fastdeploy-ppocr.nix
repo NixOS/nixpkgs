@@ -44,7 +44,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals cudaSupport (
     with cudaPackages;
     [
-      cuda_cccl # cub/cub.cuh
+      cccl # cub/cub.cuh
       libcublas # cublas_v2.h
       libcurand # curand.h
       libcusparse # cusparse.h
@@ -68,11 +68,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     install -Dm644 ${finalAttrs.src}/cmake/Findonnxruntime.cmake $cmake/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "MaaAssistantArknights stripped-down version of FastDeploy";
     homepage = "https://github.com/MaaAssistantArknights/FastDeploy";
-    platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.asl20;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.asl20;
     broken = cudaSupport && stdenv.hostPlatform.system != "x86_64-linux";
   };
 })

@@ -13,13 +13,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "nvidia-container-toolkit";
-  version = "1.17.8";
+  version = "1.19.1";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nvidia-container-toolkit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-B17cPxdrQ8qMNgFh4XcDwwKryukMrn0GV2LNPHM7kBo=";
+    hash = "sha256-0ivgJA5JY/17FIoOrOvUF7NjMMu7aXfh39sMQcabCm8=";
 
   };
 
@@ -33,15 +33,16 @@ buildGoModule (finalAttrs: {
   patches = [
     # This patch causes library lookups to first attempt loading via dlopen
     # before falling back to the regular symlink location and ldcache location.
+    # Required on NixOS, where the driver libraries live outside the ldcache and
+    # the FHS paths that the upstream locators search. Upstream tried to add an
+    # equivalent locator but reverted it; tracked in
+    # https://github.com/NVIDIA/nvidia-container-toolkit/issues/1677
     ./0001-Add-dlopen-discoverer.patch
   ];
 
   postPatch = ''
-    substituteInPlace internal/config/config.go \
+    substituteInPlace api/config/v1/config.go \
       --replace-fail '/usr/bin/nvidia-container-runtime-hook' "$tools/bin/nvidia-container-runtime-hook" \
-      --replace-fail '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
-
-    substituteInPlace tools/container/toolkit/toolkit.go \
       --replace-fail '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
 
     substituteInPlace cmd/nvidia-cdi-hook/update-ldcache/update-ldcache.go \

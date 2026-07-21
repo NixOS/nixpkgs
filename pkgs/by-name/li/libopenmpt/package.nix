@@ -15,9 +15,9 @@
   libpulseaudio,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libopenmpt";
-  version = "0.8.2";
+  version = "0.8.7";
 
   outputs = [
     "out"
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://lib.openmpt.org/files/libopenmpt/src/libopenmpt-${version}+release.autotools.tar.gz";
-    hash = "sha256-hE5P+Y29mUK75KEEgib5H4vFtGC3vsZInmfO2z4KrDc=";
+    url = "https://lib.openmpt.org/files/libopenmpt/src/libopenmpt-${finalAttrs.version}+release.autotools.tar.gz";
+    hash = "sha256-J1wp70e+mZL2KjX8yW98oFwG0v0FySmLje6fdD91sIk=";
   };
 
   enableParallelBuilding = true;
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform C++ and C library to decode tracked music files into a raw PCM audio stream";
     mainProgram = "openmpt123";
     longDescription = ''
@@ -70,8 +70,8 @@ stdenv.mkDerivation rec {
       libopenmpt is based on the player code of the OpenMPT project.
     '';
     homepage = "https://lib.openmpt.org/libopenmpt/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -77,7 +77,7 @@ let
   inherit (cudaPackages)
     libcublas
     cuda_nvcc
-    cuda_cccl
+    cccl
     cuda_cudart
     libcufft
     ;
@@ -112,7 +112,7 @@ let
           hash = "sha256-b9B5I3EbBFrkWc6RLXMWcCRKayyWjlGuQrogUcrISrc=";
           fetchSubmodules = true;
         };
-        postPatch = prev.postPatch + ''
+        postPatch = ''
           cd examples
           cp -r --no-preserve=mode ${src}/backend/cpp/llama grpc-server
           cp llava/clip* llava/llava.* grpc-server
@@ -255,7 +255,7 @@ let
     buildInputs =
       [ ]
       ++ lib.optionals with_cublas [
-        cuda_cccl
+        cccl
         cuda_cudart
         libcublas
         libcufft
@@ -337,7 +337,7 @@ let
   pname = "local-ai";
   version = "2.28.0";
   src = fetchFromGitHub {
-    owner = "go-skynet";
+    owner = "mudler";
     repo = "LocalAI";
     tag = "v${version}";
     hash = "sha256-Hpz0dGkgasSY/FGO7mDzqsLjXut0LdQ9PUXGaURUOlY=";
@@ -528,16 +528,16 @@ let
     passthru.tests = callPackages ./tests.nix { inherit self; };
     passthru.lib = callPackages ./lib.nix { };
 
-    meta = with lib; {
+    meta = {
       description = "OpenAI alternative to run local LLMs, image and audio generation";
       mainProgram = "local-ai";
       homepage = "https://localai.io";
-      license = licenses.mit;
-      maintainers = with maintainers; [
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
         onny
         ck3d
       ];
-      platforms = platforms.linux;
+      platforms = lib.platforms.linux;
       # Doesn't build with >buildGo123Module.
       # 'cp: cannot stat 'bin/rpc-server': No such file or directory'
       broken = true;

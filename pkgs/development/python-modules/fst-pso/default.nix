@@ -4,7 +4,6 @@
   fetchPypi,
   miniful,
   numpy,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "fst-pso";
   version = "1.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "fst_pso";
@@ -33,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fstpso" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fuzzy Self-Tuning PSO global optimization library";
     homepage = "https://github.com/aresio/fst-pso";
     changelog = "https://github.com/aresio/fst-pso/releases/tag/${version}";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

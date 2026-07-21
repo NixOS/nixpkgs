@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "txredisapi";
-  version = "1.4.11";
-  format = "pyproject";
+  version = "1.4.12";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "IlyaSkriblovsky";
     repo = "txredisapi";
     tag = version;
-    hash = "sha256-gPXkpUcHAuXx/olB/nKstRrfIUFFLf4gFyv7ReRvV2E=";
+    hash = "sha256-jvxqHYDRTnG1X+VkC1syTM/W+CRiL9w4Ehf7pe147Uo=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   passthru.tests.unit-tests = nixosTests.txredisapi;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/IlyaSkriblovsky/txredisapi";
     description = "Non-blocking redis client for python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
 }

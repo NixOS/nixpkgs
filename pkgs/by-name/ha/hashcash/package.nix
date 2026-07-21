@@ -5,14 +5,14 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hashcash";
   version = "1.22";
 
   buildInputs = [ openssl ];
 
   src = fetchurl {
-    url = "http://www.hashcash.org/source/hashcash-${version}.tgz";
+    url = "http://www.hashcash.org/source/hashcash-${finalAttrs.version}.tgz";
     sha256 = "15kqaimwb2y8wvzpn73021bvay9mz1gqqfc40gk4hj6f84nz34h1";
   };
 
@@ -27,10 +27,10 @@ stdenv.mkDerivation rec {
     "DOC_INSTALL_PATH=${placeholder "out"}/share/doc/hashcash-$(version)"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Proof-of-work algorithm used as spam and denial-of-service counter measure";
     homepage = "http://hashcash.org";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ kisonecat ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ kisonecat ];
   };
-}
+})

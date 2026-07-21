@@ -9,14 +9,14 @@
   texinfo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guile-fibers";
   version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "wingo";
     repo = "fibers";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jJKA5JEHsmqQ/IKb1aNmOtoVaGKNjcgTKyo5VCiJbXM=";
   };
 
@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
     "GUILE_AUTO_COMPILE=0"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/wingo/fibers";
     description = "Concurrent ML-like concurrency for Guile";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ vyp ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = [ ];
     platforms = guile.meta.platforms;
   };
-}
+})

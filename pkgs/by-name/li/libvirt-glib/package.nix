@@ -21,7 +21,7 @@
   docbook-xsl-nons,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libvirt-glib";
   version = "5.0.0";
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional withDocs "devdoc";
 
   src = fetchurl {
-    url = "https://libvirt.org/sources/glib/${pname}-${version}.tar.xz";
+    url = "https://libvirt.org/sources/glib/libvirt-glib-${finalAttrs.version}.tar.xz";
     sha256 = "m/7DRjgkFqNXXYcpm8ZBsqRkqlGf2bEofjGKpDovO4s=";
   };
 
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     (lib.mesonEnable "introspection" withIntrospection)
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper library of libvirt for glib-based applications";
     longDescription = ''
       libvirt-glib wraps libvirt to provide a high-level object-oriented API better
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
       - libvirt-gobject - GObjects for managing libvirt objects
     '';
     homepage = "https://libvirt.org/";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.unix;
   };
-}
+})

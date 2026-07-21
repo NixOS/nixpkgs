@@ -5,7 +5,7 @@
   vkbasalt,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "vkbasalt-cli";
   version = "3.1.1";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "TheEvilSkeleton";
     repo = "vkbasalt-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-4MFqndnvwAsqyer9kMNuCZFP/Xdl7W//AyCe7n83328=";
   };
 
@@ -26,14 +26,14 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "vkbasalt.lib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line utility for vkBasalt";
     homepage = "https://gitlab.com/TheEvilSkeleton/vkbasalt-cli";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl3Only
       gpl3Only
     ];
     maintainers = [ ];
     mainProgram = "vkbasalt";
   };
-}
+})

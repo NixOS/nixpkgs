@@ -6,13 +6,13 @@
   runtimeShell,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "avr8-burn-omat";
   version = "2.1.2";
 
   src = fetchurl {
     url = "http://avr8-burn-o-mat.aaabbb.de/AVR8_Burn-O-Mat_${
-      lib.replaceStrings [ "." ] [ "_" ] version
+      lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }.zip";
     sha256 = "02k0fd0cd3y1yqip36wr3bkxbywp8913w4y7jdg6qwqxjnii58ln";
   };
@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/avr8-burn-omat
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GUI tool for avrdude";
     mainProgram = "avr8-burn-omat";
     homepage = "http://avr8-burn-o-mat.aaabbb.de/avr8_burn_o_mat_avrdude_gui_en.html";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.gpl3;
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

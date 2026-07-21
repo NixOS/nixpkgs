@@ -1,6 +1,5 @@
 {
   lib,
-  pythonOlder,
   stdenv,
   buildPythonPackage,
   fetchPypi,
@@ -35,14 +34,13 @@
 
 buildPythonPackage rec {
   pname = "jupyter-server";
-  version = "2.16.0";
+  version = "2.20.0";
   pyproject = true;
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "jupyter_server";
     inherit version;
-    hash = "sha256-ZdS0T98ty73+CqGs5KhC1Kr3RqK3sWgTTVqu01Yht/Y=";
+    hash = "sha256-tXeLozfYAVo9wrgIA+zdWsGNN5f932GlDqX7RytOvhQ=";
   };
 
   build-system = [
@@ -105,6 +103,9 @@ buildPythonPackage rec {
     "test_subscribe_websocket"
     # test is presumable broken in sandbox
     "test_authorized_requests"
+    # Fails under load on Hydra; kernel stays in 'starting' state due to a zmq socket error
+    "test_cull_connected"
+    "test_execution_state"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # attempts to use trashcan, build env doesn't allow this

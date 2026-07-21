@@ -6,29 +6,21 @@
   cmake,
   ninja,
   llvmPackages,
-  tbb,
+  onetbb,
   mpi,
   mpiSupport ? true,
   testers,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "viskores";
-  version = "1.0.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "viskores";
     repo = "viskores";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jKuDM/NPfbMIfNpDNsDpmXdKuVobsr3s9+iht1zBLvI=";
+    hash = "sha256-fD0L+offvoeYa2yuJ828VRa4GA9/PiyXmxrFAei7u2w=";
   };
-
-  patches = [
-    # https://github.com/Viskores/viskores/pull/137
-    (fetchpatch2 {
-      url = "https://github.com/Viskores/viskores/commit/36bf609511adb5530e6952bc14daefeafdf4ab11.patch?full_index=1";
-      hash = "sha256-SKmgVZhkCk1/X17dLXZ8ceF9Pq1Kkc2sXuFdrvotsdo=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -36,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
-    tbb
+    onetbb
   ]
   ++ lib.optional mpiSupport mpi
   ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
@@ -60,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Visualization library for many-threaded devices";
     homepage = "https://github.com/Viskores/viskores";
     changelog = "https://github.com/Viskores/viskores/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ qbisi ];
   };
