@@ -3,13 +3,18 @@
   stdenvNoCC,
   fetchFromGitHub,
   makeWrapper,
+  versionCheckHook,
   animdl,
+  bashNonInteractive,
+  coreutils,
   frece,
   fzf,
+  getopt,
+  gnused,
   mpv,
   perl,
   trackma,
-  ueberzug,
+  ueberzugpp,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "adl";
@@ -26,23 +31,37 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   # https://github.com/RaitaroH/adl#requirements
   buildInputs = [
-    animdl
-    frece
-    fzf
-    mpv
-    perl
-    trackma
-    ueberzug
+    bashNonInteractive
   ];
 
   dontBuild = true;
 
   installPhase = ''
+    runHook postInstall
+
     mkdir -p $out/bin
     cp $src/adl $out/bin
     wrapProgram $out/bin/adl \
-      --prefix PATH : ${lib.makeBinPath finalAttrs.buildInputs}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          animdl
+          frece
+          fzf
+          getopt
+          gnused
+          mpv
+          perl
+          trackma
+          ueberzugpp
+        ]
+      }
+
+    runHook preInstall
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     homepage = "https://github.com/RaitaroH/adl";
