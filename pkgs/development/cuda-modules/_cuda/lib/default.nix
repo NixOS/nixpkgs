@@ -20,8 +20,6 @@
     _cudaCapabilityIsSupported
     _mkCudaVariant
     allowUnfreeCudaPredicate
-    cudaCapabilitiesIncludeJetson
-    cudaCapabilitiesIncludeJetsonArch
     getJetsonCudaCapabilities
     getJetsonCudaCapabilitiesForArch
     ;

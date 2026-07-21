@@ -239,55 +239,6 @@
     lib.intersectLists (_cuda.db.cudaArchNameToJetsonCapabilities.${archName} or [ ]) cudaCapabilities;
 
   /**
-    Returns whether a list of CUDA capabilities includes any Jetson capability.
-
-    This is the stable public API for `_cudaCapabilitiesIncludeJetson`.
-
-    # Type
-
-    ```
-    cudaCapabilitiesIncludeJetson :: (cudaCapabilities :: [CudaCapability]) -> Bool
-    ```
-
-    # Inputs
-
-    `cudaCapabilities`
-
-    : The list of CUDA capabilities to check
-  */
-  cudaCapabilitiesIncludeJetson =
-    cudaCapabilities: _cuda.lib.getJetsonCudaCapabilities cudaCapabilities != [ ];
-
-  /**
-    Returns whether a list of CUDA capabilities includes any Jetson capability belonging to the
-    given micro-architecture.
-
-    This is the stable public API for `_cudaCapabilitiesIncludeJetsonArch`.
-
-    # Type
-
-    ```
-    cudaCapabilitiesIncludeJetsonArch
-      :: (archName :: String)
-      -> (cudaCapabilities :: [CudaCapability])
-      -> Bool
-    ```
-
-    # Inputs
-
-    `archName`
-
-    : The micro-architecture name (e.g. `"Ampere"`, `"Blackwell"`)
-
-    `cudaCapabilities`
-
-    : The list of CUDA capabilities to check
-  */
-  cudaCapabilitiesIncludeJetsonArch =
-    archName: cudaCapabilities:
-    _cuda.lib.getJetsonCudaCapabilitiesForArch archName cudaCapabilities != [ ];
-
-  /**
     A predicate which, given a package, returns true if the package has a free license or one of NVIDIA's licenses.
 
     This function is intended to be provided as `config.allowUnfreePredicate` when `import`-ing Nixpkgs.
