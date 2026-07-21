@@ -18,13 +18,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dropbear";
-  version = "2026.92";
+  version = "2026.93";
 
   src = fetchFromGitHub {
     owner = "mkj";
     repo = "dropbear";
     tag = "DROPBEAR_${finalAttrs.version}";
-    hash = "sha256-xXjKWj6tMW/Qlq4DttxKAqOwsER2QEeb1Qw3Gllu2QQ=";
+    hash = "sha256-Xs5LTVaNdfRKx0cFTQknaHXka6QhxBS2JNTQ8RoHG80=";
   };
 
   patches = [
