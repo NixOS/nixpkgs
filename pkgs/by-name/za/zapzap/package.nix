@@ -4,8 +4,25 @@
   fetchpatch,
   python3Packages,
   qt6,
+  linkFarm,
+  hunspellDictsChromium,
+  dictionaries ? [
+    hunspellDictsChromium.en-us
+    hunspellDictsChromium.en-gb
+    hunspellDictsChromium.de-de
+    hunspellDictsChromium.fr-fr
+    hunspellDictsChromium.sv-se
+  ],
 }:
 
+let
+  qtwebengineDictionaries = linkFarm "zapzap-qtwebengine-dictionaries" (
+    map (d: {
+      name = d.dictFileName;
+      path = d;
+    }) dictionaries
+  );
+in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "zapzap";
   version = "7.0";
@@ -55,7 +72,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dontWrapQtApps = true;
   preFixup = ''
-    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+    makeWrapperArgs+=(
+      "''${qtWrapperArgs[@]}"
+      ${lib.optionalString (dictionaries != [ ]) ''
+        --set-default QTWEBENGINE_DICTIONARIES_PATH "${qtwebengineDictionaries}"
+      ''}
+    )
   '';
 
   # has no tests
