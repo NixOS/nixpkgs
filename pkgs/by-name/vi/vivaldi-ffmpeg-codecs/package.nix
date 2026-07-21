@@ -2,7 +2,7 @@
   fetchurl,
   lib,
   squashfsTools,
-  stdenv,
+  stdenvNoCC,
 }:
 
 # This derivation roughly follows the update-ffmpeg script that ships with the official Vivaldi
@@ -20,22 +20,31 @@ let
     };
   };
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "chromium-codecs-ffmpeg-extra";
 
   version = "2026-05-18";
 
-  src = sources."${stdenv.hostPlatform.system}";
+  src = sources."${stdenvNoCC.hostPlatform.system}";
 
-  buildInputs = [ squashfsTools ];
+  nativeBuildInputs = [ squashfsTools ];
 
   unpackPhase = ''
     unsquashfs -dest . $src
   '';
 
-  installPhase = ''
-    install -vD chromium-ffmpeg-git-${finalAttrs.version}/chromium-ffmpeg/libffmpeg.so $out/lib/libffmpeg.so
-  '';
+  # arm64 and x86_64 snaps may ship different ffmpeg versions.
+  installPhase =
+    let
+      ffmpegData =
+        if stdenvNoCC.hostPlatform.system == "x86_64-linux" then
+          "chromium-ffmpeg-git-2026-05-18"
+        else
+          "chromium-ffmpeg-git-2026-03-16";
+    in
+    ''
+      install -vD ${ffmpegData}/chromium-ffmpeg/libffmpeg.so $out/lib/libffmpeg.so
+    '';
 
   passthru = {
     inherit sources;
