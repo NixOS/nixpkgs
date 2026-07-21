@@ -30,6 +30,10 @@ appimageTools.wrapType2 rec {
   src = fetchurl {
     url = "https://github.com/klaussinani/tusk/releases/download/v${version}/tusk-${version}-x86_64.AppImage";
     sha256 = "02q7wsnhlyq8z74avflrm7805ny8fzlmsmz4bmafp4b4pghjh5ky";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "klaussinani/tusk@${version}";
+    };
   };
 
   profile = ''

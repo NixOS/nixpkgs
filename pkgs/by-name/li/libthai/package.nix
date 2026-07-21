@@ -19,6 +19,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/tlwg/libthai/releases/download/v${finalAttrs.version}/libthai-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-3bqLU9/lhMMlN2YDAhioiCVIilGn3u8EHQlucVr2S90=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "tlwg/libthai@${finalAttrs.version}";
+    };
   };
 
   strictDeps = true;

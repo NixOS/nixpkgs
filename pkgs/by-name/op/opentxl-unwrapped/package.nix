@@ -28,6 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/CordyJ/OpenTxl/releases/download/v${finalAttrs.version}/OpenTxl-${finalAttrs.version}-csrc.tar.gz";
     hash = "sha256-qIvxQqo1yCVJImjUvNNinzhoywVgaq9s0E+Ab+QStc0=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "CordyJ/OpenTxl@${finalAttrs.version}";
+    };
   };
 
   # Required for patchShebangs to find the right shell for runtime scripts.

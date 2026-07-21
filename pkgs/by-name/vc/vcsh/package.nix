@@ -18,6 +18,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/RichiH/vcsh/releases/download/v${finalAttrs.version}/vcsh-${finalAttrs.version}.zip";
     hash = "sha256-M/UME2kNCxwzngKXMYp0cdps7LWVwoS2I/mTrvPts7g=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "RichiH/vcsh@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

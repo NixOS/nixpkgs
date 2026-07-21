@@ -21,6 +21,10 @@ let
     src = fetchurl {
       url = "https://github.com/samtools/htslib/releases/download/${version}/htslib-${version}.tar.bz2";
       sha256 = "sha256-YGt8ev9zc0zwM+zRVvQFKfpXkvVFJJUqKJOMoIkNeSQ=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "samtools/htslib@${version}";
+      };
     };
     configureFlags = [
       "--disable-libcurl"

@@ -25,6 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/Vector35/binaryninja-api/releases/download/stable/${finalAttrs.version}/binaryninja_free_linux.zip";
     hash = "sha256-YlBr/Cdjev7LWY/VsKgv/i3zHj4YR49RX69zmhhie7U=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Vector35/binaryninja-api@${finalAttrs.version}";
+    };
   };
 
   icon = fetchurl {

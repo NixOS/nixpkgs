@@ -13,10 +13,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     (fetchurl {
       url = "https://github.com/intel/intel-one-mono/releases/download/V${finalAttrs.version}/otf.zip";
       hash = "sha256-dO+O5mdAPHYHRbwS/F4ssWhFRBlPrT1TQJGcFzqCJ/w=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "intel/intel-one-mono@${finalAttrs.version}";
+      };
     })
     (fetchurl {
       url = "https://github.com/intel/intel-one-mono/releases/download/V${finalAttrs.version}/ttf.zip";
       hash = "sha256-VIY1UtJdy5w/U2CylvyYDW4fv9AuDSFCJOi3jworzPA=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "intel/intel-one-mono@${finalAttrs.version}";
+      };
     })
   ];
 

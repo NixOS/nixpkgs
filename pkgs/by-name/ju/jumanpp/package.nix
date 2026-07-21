@@ -14,6 +14,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/ku-nlp/jumanpp/releases/download/v${finalAttrs.version}/jumanpp-${finalAttrs.version}.tar.xz";
     hash = "sha256-qyy0mTBrH3y8OBIVXuTHIDV+AbQIvCIA7rzhbI2b8y8=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "ku-nlp/jumanpp@${finalAttrs.version}";
+    };
   };
 
   doCheck = true;

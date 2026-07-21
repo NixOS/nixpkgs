@@ -97,14 +97,26 @@ stdenv.mkDerivation rec {
       aarch64-darwin = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-osx-arm64.tar.gz";
         hash = "sha256-8CY8IHL+fQlTeBxgSXpXS+qZs3I38lVKWc5LrQfejTY=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "PowerShell/PowerShell@${version}";
+        };
       };
       aarch64-linux = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-linux-arm64.tar.gz";
         hash = "sha256-ehSjheyn3FvtwciqPYt2X0Sa2jCqvleFqf0zEmbrBi0=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "PowerShell/PowerShell@${version}";
+        };
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-linux-x64.tar.gz";
         hash = "sha256-hW0HZdIzI3f516Sup279/eTeUURudzjd4t/aQdup4qc=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "PowerShell/PowerShell@${version}";
+        };
       };
     };
     tests.version = testers.testVersion {

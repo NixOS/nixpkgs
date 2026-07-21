@@ -12,6 +12,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/jwilk/mwic/releases/download/${finalAttrs.version}/mwic-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-dmIHPehkxpSb78ymVpcPCu4L41coskrHQOg067dprOo=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "jwilk/mwic@${finalAttrs.version}";
+    };
   };
 
   makeFlags = [ "PREFIX=\${out}" ];

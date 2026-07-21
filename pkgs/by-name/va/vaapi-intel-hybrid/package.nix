@@ -29,6 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchurl {
       url = "https://github.com/01org/intel-hybrid-driver/pull/26.diff";
       sha256 = "1ql4mbi5x1d2a5c8mkjvciaq60zj8nhx912992winbhfkyvpb3gx";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "01org/intel-hybrid-driver@${finalAttrs.version}";
+      };
     })
   ];
 

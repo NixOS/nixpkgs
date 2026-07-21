@@ -18,6 +18,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/Querz/mcaselector/releases/download/${finalAttrs.version}/mcaselector-${finalAttrs.version}.jar";
     hash = "sha256-ZFBfOe35ybXUfmZpgfgePDqInU8SKzBlr34mn0jlNCM=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Querz/mcaselector@${finalAttrs.version}";
+    };
   };
 
   dontUnpack = true;

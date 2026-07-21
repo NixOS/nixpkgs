@@ -74,6 +74,10 @@ stdenv.mkDerivation (finalAttrs: {
       lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }/ghostscript-${finalAttrs.version}.tar.xz";
     hash = "sha256-HNt2bejbjx5YnIF/CcWFXqX2XfyFQORlpprBTBhBYCU=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "ArtifexSoftware/ghostpdl-downloads@${finalAttrs.version}";
+    };
   };
 
   patches = [

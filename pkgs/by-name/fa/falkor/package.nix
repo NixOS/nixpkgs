@@ -15,6 +15,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/Team-Falkor/falkor/releases/download/v0.1.0-alpha/Falkor.deb";
     hash = "sha256-L1EBJ49+g7n6NtKs1BTBD30glL/K0SerL/k5Dl2SgqM=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Team-Falkor/falkor@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

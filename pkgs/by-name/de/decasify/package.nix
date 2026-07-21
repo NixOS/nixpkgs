@@ -19,6 +19,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/alerque/decasify/releases/download/v${finalAttrs.version}/decasify-${finalAttrs.version}.tar.zst";
     hash = "sha256-JATJ8cFjtCkK65NpTTrUkYHAo4nDrqftarqyJInRTpM=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "alerque/decasify@${finalAttrs.version}";
+    };
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {

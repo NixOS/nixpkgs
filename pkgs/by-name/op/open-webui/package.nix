@@ -28,6 +28,10 @@ let
     pyodide = fetchurl {
       hash = "sha256-fcqubT8VmGoJ8PnmxHE6DA8kv/DJDHToWoFyPxvGCUA=";
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "pyodide/pyodide@${version}";
+      };
     };
 
     npmDepsHash = "sha256-yw/1n1jBCUtt8wUqJmIkB3W53wsXTKuAFG/EMwcTpx8=";

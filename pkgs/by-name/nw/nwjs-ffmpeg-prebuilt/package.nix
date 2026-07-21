@@ -23,6 +23,10 @@ stdenv.mkDerivation {
     fetchurl {
       url = "https://github.com/nwjs-ffmpeg-prebuilt/nwjs-ffmpeg-prebuilt/releases/download/${version}/${version}-linux-${bits}.zip";
       hash = hashes.${bits};
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "nwjs-ffmpeg-prebuilt/nwjs-ffmpeg-prebuilt@${version}";
+      };
     };
   sourceRoot = ".";
 

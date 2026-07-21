@@ -11,6 +11,10 @@ let
   src = fetchurl {
     url = "https://github.com/lehtoroni/lmath-issues/releases/download/v${version}/LMath_Linux_r${version}-release.AppImage";
     hash = "sha256-JOV+g7izjctCkHl5q/9T2PSUZzPzVPisHppbPofVYy0=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "lehtoroni/lmath-issues@${version}";
+    };
   };
 
   appimageContents = appimageTools.extractType2 {

@@ -16,6 +16,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/askimed/nf-test/releases/download/v${finalAttrs.version}/nf-test-${finalAttrs.version}.tar.gz";
     hash = "sha256-t2eeuQzclkK/qJ6WNNsCzm5pneU6017w4vSEdjT8FkE=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "askimed/nf-test@${finalAttrs.version}";
+    };
   };
   sourceRoot = ".";
 

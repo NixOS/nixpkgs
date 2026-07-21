@@ -34,14 +34,26 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-linux" = fetchurl {
         url = "https://github.com/speakeasy-api/speakeasy/releases/download/v${finalAttrs.version}/speakeasy_linux_amd64.zip";
         hash = "sha256-RFkoxw0Zne9Fq1kh32eFpVvWTUiU5gWLu1E+kDQsQj8=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "speakeasy-api/speakeasy@${finalAttrs.version}";
+        };
       };
       "aarch64-darwin" = fetchurl {
         url = "https://github.com/speakeasy-api/speakeasy/releases/download/v${finalAttrs.version}/speakeasy_darwin_arm64.zip";
         hash = "sha256-zXcwjpnwlKaAcwXMrCnY8kBZN8LGlFuMgSXzRG5wxcs=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "speakeasy-api/speakeasy@${finalAttrs.version}";
+        };
       };
       "aarch64-linux" = fetchurl {
         url = "https://github.com/speakeasy-api/speakeasy/releases/download/v${finalAttrs.version}/speakeasy_linux_arm64.zip";
         hash = "sha256-pKF3PhFd22bSEvQLqw8/M28ljc239pRLa6yr7J3VsvQ=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "speakeasy-api/speakeasy@${finalAttrs.version}";
+        };
       };
     };
     updateScript = writeShellScript "update-speakeasy" ''

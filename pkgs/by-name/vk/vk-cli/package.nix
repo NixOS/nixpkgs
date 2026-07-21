@@ -16,6 +16,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/vk-cli/vk/releases/download/${finalAttrs.version}/vk-${finalAttrs.version}-64-bin.7z";
     sha256 = "sha256-Y40oLjddunrd7ZF1JbCcgjSCn8jFTubq69jhAVxInXw=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "vk-cli/vk@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

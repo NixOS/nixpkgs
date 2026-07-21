@@ -15,6 +15,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/EliverLara/${themeName}/releases/download/v${finalAttrs.version}/${themeName}.tar";
     hash = "sha256-f8lkJrUN8bBuqdMz+7IGJqr2wN5bvHpImfJVe07h7/Y=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "EliverLara/${themeName}@${finalAttrs.version}";
+    };
   };
 
   propagatedUserEnvPkgs = [

@@ -14,6 +14,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/headsetapp/headset-electron/releases/download/v${finalAttrs.version}/headset_${finalAttrs.version}_amd64.deb";
     hash = "sha256-81gsIq74sggauE6g8pM6z05KTmsbe49CZa9aRQEDwMo=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "headsetapp/headset-electron@${finalAttrs.version}";
+    };
   };
 
   dontConfigure = true;

@@ -31,6 +31,10 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
     hash = "sha256-9UDYvUuIhaz31vgq37KFtsfH3B2IzszzMaa/VSN8JW8=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "lwindolf/${pname}@${version}";
+    };
   };
 
   nativeBuildInputs = [

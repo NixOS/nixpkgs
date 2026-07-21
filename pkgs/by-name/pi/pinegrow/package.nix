@@ -31,6 +31,10 @@ let
           builtins.substring 0 4 (versions."7".version)
         }/PinegrowLinux64.${versions."7".version}.zip";
         hash = "sha256-tYQfPfzKRwClNwgSoJfMwG3LHhi3O/iFuuwIVHS8OXk=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "Pinegrow/PinegrowReleases@7.8";
+        };
       };
     };
   };

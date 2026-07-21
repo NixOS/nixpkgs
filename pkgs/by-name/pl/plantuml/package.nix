@@ -16,6 +16,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/plantuml/plantuml/releases/download/v${finalAttrs.version}/plantuml-pdf-${finalAttrs.version}.jar";
     hash = "sha256-ElMmvC2H8NRYwcEY5oIqo7fsiKAJBZDNqRFXOv2o5IE=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "plantuml/plantuml@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

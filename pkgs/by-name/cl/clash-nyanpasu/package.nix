@@ -11,6 +11,10 @@ appimageTools.wrapType2 rec {
   src = fetchurl {
     url = "https://github.com/LibNyanpasu/clash-nyanpasu/releases/download/v${version}/clash-nyanpasu_${version}_amd64.AppImage";
     hash = "sha256-buxhsO/X4orChaMYA2JgceeybWRlryPqY1PlF+9KoNI=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "LibNyanpasu/clash-nyanpasu@${version}";
+    };
   };
 
   extraInstallCommands =

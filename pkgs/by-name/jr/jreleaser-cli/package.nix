@@ -12,6 +12,10 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/jreleaser/jreleaser/releases/download/v${version}/jreleaser-tool-provider-${version}.jar";
     hash = "sha256-ixcHrzCX+b1iEkmk2rWZidFBtT2Ar58pRSGLzwaDYSM=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "jreleaser/jreleaser@${version}";
+    };
   };
 
   nativeBuildInputs = [ makeWrapper ];

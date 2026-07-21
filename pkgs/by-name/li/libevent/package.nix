@@ -19,6 +19,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/libevent/libevent/releases/download/release-${finalAttrs.version}-stable/libevent-${finalAttrs.version}-stable.tar.gz";
     hash = "sha256-9+k4O4wLqoG2h+W17swBvu+vGxm2QVHZXtYWR/56MVw=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "libevent/libevent@${finalAttrs.version}";
+    };
   };
 
   patches = [

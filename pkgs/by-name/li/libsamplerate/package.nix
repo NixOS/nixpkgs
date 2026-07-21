@@ -13,6 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/libsndfile/libsamplerate/releases/download/${finalAttrs.version}/libsamplerate-${finalAttrs.version}.tar.xz";
     hash = "sha256-MljaKAUR0ktJ1rCGFbvoJNDKzJhCsOTK8RxSzysEOJM=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "libsndfile/libsamplerate@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [ pkg-config ];

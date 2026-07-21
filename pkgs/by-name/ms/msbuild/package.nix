@@ -17,6 +17,10 @@ let
   xplat = fetchurl {
     url = "https://github.com/mono/msbuild/releases/download/v16.9.0/mono_msbuild_6.12.0.137.zip";
     sha256 = "1wnzbdpk4s9bmawlh359ak2b8zi0sgx1qvcjnvfncr1wsck53v7q";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "mono/msbuild@${version}";
+    };
   };
 
   inherit (stdenv.hostPlatform.extensions) sharedLibrary;
@@ -151,6 +155,10 @@ mkPackage rec {
   '';
 
   meta = {
+    identifiers.purlParts = {
+      type = "github";
+      spec = "mono/msbuild@${version}";
+    };
     description = "Mono version of Microsoft Build Engine, the build platform for .NET, and Visual Studio";
     mainProgram = "msbuild";
     homepage = "https://github.com/mono/msbuild";

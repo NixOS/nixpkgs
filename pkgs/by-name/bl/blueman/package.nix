@@ -34,6 +34,10 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/blueman-project/blueman/releases/download/${version}/blueman-${version}.tar.xz";
     sha256 = "sha256-xxKnN/mFWQZoTAdNFm1PEMfxZTeK+WYSgYu//Pv45WY=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "blueman-project/blueman@${version}";
+    };
   };
 
   nativeBuildInputs = [

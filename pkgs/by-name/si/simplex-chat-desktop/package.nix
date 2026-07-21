@@ -17,6 +17,10 @@ let
     "x86_64-linux" = fetchurl {
       url = "https://github.com/simplex-chat/simplex-chat/releases/download/v${version}/simplex-desktop-x86_64.AppImage";
       hash = "sha256-p4Wa/IP0+8O11meRt3ZSUeh040fhKLMVjDhqtxXOneU=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "simplex-chat/simplex-chat@${version}";
+      };
     };
   };
 

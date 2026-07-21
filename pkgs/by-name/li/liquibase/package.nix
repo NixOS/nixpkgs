@@ -31,6 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/liquibase/liquibase/releases/download/v${finalAttrs.version}/liquibase-${finalAttrs.version}.tar.gz";
     hash = "sha256-hlqrORvpy+P+4iRhOS1dKap2ZSWWWYsUcAo/XwXJ4rc=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "liquibase/liquibase@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [ makeWrapper ];

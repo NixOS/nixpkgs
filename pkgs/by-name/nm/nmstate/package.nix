@@ -20,6 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     (fetchurl {
       url = "https://github.com/nmstate/nmstate/releases/download/v${finalAttrs.version}/nmstate-vendor-${finalAttrs.version}.tar.xz";
       hash = "sha256-stOHNezPLPjSrt/f3HmhqWMxSaSfOh/hYVGB2+l8Pb4=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "nmstate/nmstate@${finalAttrs.version}";
+      };
     })
   ];
   sourceRoot = ".";

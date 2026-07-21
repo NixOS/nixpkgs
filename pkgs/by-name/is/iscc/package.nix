@@ -17,6 +17,10 @@ stdenvNoCC.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/jrsoftware/issrc/releases/download/is-${tagVersion}/innosetup-${version}.exe";
     hash = "sha256-9Bdg4fGuFdIIm7arFi4hcguSrnUG7XBmezkgAGPWjjQ=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "jrsoftware/issrc@${version}";
+    };
   };
   nativeBuildInputs = [
     innoextract

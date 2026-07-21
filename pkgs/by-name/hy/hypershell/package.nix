@@ -26,6 +26,10 @@ buildNpmPackage rec {
     (fetchurl {
       url = "https://github.com/holepunchto/hypershell/commit/a1775ee32d93bfe06b839da41d1727a575bccb3a.patch";
       hash = "sha256-xqQNXKaBN3sVWIEuzB67Ww43mQRkVQl7Div2SCMn0o0=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "holepunchto/hypershell@${version}";
+      };
     })
   ];
 

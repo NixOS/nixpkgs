@@ -13,6 +13,10 @@ stdenv.mkDerivation {
   src = fetchurl {
     url = "https://github.com/ginatrapani/todo.txt-cli/releases/download/v${version}/todo.txt_cli-${version}.tar.gz";
     sha256 = "sha256-07klQ0ApqsISITwQP7ZXOk+WDHTdRno++sm9mv6J0V8=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "ginatrapani/todo.txt-cli@${version}";
+    };
   };
 
   installPhase = ''

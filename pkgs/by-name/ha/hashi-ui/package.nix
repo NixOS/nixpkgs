@@ -11,6 +11,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/jippi/hashi-ui/releases/download/v${finalAttrs.version}/hashi-ui-linux-amd64";
     sha256 = "999a34b6e99657ffc7e6c98a15b8ea744c28420e891a8802c7d99b737752dfb6";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "jippi/hashi-ui@${finalAttrs.version}";
+    };
   };
 
   dontUnpack = true;

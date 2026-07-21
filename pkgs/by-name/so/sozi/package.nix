@@ -10,6 +10,10 @@ let
   src = fetchurl {
     url = "https://github.com/sozi-projects/Sozi/releases/download/v23.07/Sozi-${version}.AppImage";
     hash = "sha256-QHvgevv60ZTkkdt+IWaCuXt0XVnhe5Q5oROwa2LFie8=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "sozi-projects/Sozi@${version}";
+    };
   };
 
   appimageContents = appimageTools.extract {

@@ -18,6 +18,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/samtools/htslib/releases/download/${finalAttrs.version}/htslib-${finalAttrs.version}.tar.bz2";
     hash = "sha256-YlDB3yl9tHdRbmCsjfRe11plLR8lsPN/EvWxcmnq/ek=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "samtools/htslib@${finalAttrs.version}";
+    };
   };
 
   patches = [

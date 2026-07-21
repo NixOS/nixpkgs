@@ -132,6 +132,10 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchurl {
       url = "https://github.com/openscenegraph/OpenSceneGraph/commit/9da8d428f6666427c167b951b03edd21708e1f43.patch";
       hash = "sha256-YGG/DIHU1f6StbeerZoZrNDm348wYB3ydmVIIGTM7fU=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "openscenegraph/OpenSceneGraph@${finalAttrs.version}";
+      };
     })
   ];
 

@@ -21,6 +21,10 @@ stdenv.mkDerivation (finalAttrs: {
         aarch64-linux = "sha256-YNS/P6TU7qLPn39X6GyUtjBw7GXOi2btd3AV+etpUhQ=";
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Jojo4GH/nav@${finalAttrs.version}";
+    };
   };
 
   sourceRoot = ".";

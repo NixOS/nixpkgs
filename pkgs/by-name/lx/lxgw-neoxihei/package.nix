@@ -11,6 +11,10 @@ stdenvNoCC.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/lxgw/LxgwNeoXiHei/releases/download/v${version}/LXGWNeoXiHei.ttf";
     hash = "sha256-WWXdmSKQhhxtYihQmNxcp/bGaZMHZf0R1dD9SRLYFuc=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "lxgw/LxgwNeoXiHei@${version}";
+    };
   };
 
   dontUnpack = true;

@@ -13,6 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/allure-framework/allure2/releases/download/${finalAttrs.version}/allure-${finalAttrs.version}.tgz";
     hash = "sha256-cCGpCCjADNbsmSAnzOSOipS9h/rUPQwtysR5XK3BeNc=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "allure-framework/allure2@${finalAttrs.version}";
+    };
   };
 
   dontConfigure = true;

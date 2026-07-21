@@ -16,6 +16,10 @@ stdenv.mkDerivation (finalAttrs: {
       lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }.jar";
     sha256 = "sha256-oecRjD7JUuvFym8N/hSE5cbAFQojS6yxOuxpwWRlW9M=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "toolbox4minecraft/amidst@${finalAttrs.version}";
+    };
   };
 
   dontUnpack = true;

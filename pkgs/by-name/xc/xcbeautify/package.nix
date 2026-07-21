@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
       arm64 = "sha256-7TKXLkG8OqGViPiw9KAgnvcMZjrWC79K2Eot5zNV1jc=";
       x86_64 = "sha256-umXo78Lr6MbxM5Oq64ig/4SSeNlIDuFJav+qPbeBrG4=";
     };
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "cpisciotta/xcbeautify@${version}";
+    };
   };
 
   nativeBuildInputs = [ unzip ];

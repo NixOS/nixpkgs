@@ -22,10 +22,18 @@ stdenv.mkDerivation rec {
       x86_64-linux = fetchurl {
         url = "https://github.com/TeamRizu/OutFox/releases/download/OF5.0.0-043/OutFox-alpha-0.5.0-pre-043-Final-24.04-amd64-current-date-20250907.tar.gz";
         hash = "sha256-1YN3YCcSluHBUpNRQdh0pJ9R9hTHKBuTSULTKL28OO0=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "TeamRizu/OutFox@${version}";
+        };
       };
       aarch64-linux = fetchurl {
         url = "https://github.com/TeamRizu/OutFox/releases/download/OF5.0.0-043/OutFox-alpha-0.5.0-pre-043-Final-RaspberryPi-debian12-arm64-aarch64-current-date-20250927.tar.gz";
         hash = "sha256-/E4Keh1J3iytqaq0ziJy9F1mRR3mPbjlGto1Dbct3JM=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "TeamRizu/OutFox@${version}";
+        };
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");

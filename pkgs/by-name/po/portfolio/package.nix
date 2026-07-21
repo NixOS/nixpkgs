@@ -53,6 +53,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/buchen/portfolio/releases/download/${finalAttrs.version}/PortfolioPerformance-${finalAttrs.version}-linux.gtk.x86_64.tar.gz";
     hash = "sha256-7qSWHlHKIzqHO5iCbi+y0+u7OoIC9tUYL1e0mpAHAWM=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "buchen/portfolio@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [
