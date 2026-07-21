@@ -1,0 +1,292 @@
+{
+  stdenv,
+  lib,
+  buildPackages,
+  fetchurl,
+  fetchpatch,
+  fetchFromGitLab,
+  enableStatic ? stdenv.hostPlatform.isStatic,
+  enableMinimal ? false,
+  enableAppletSymlinks ? true,
+  # Allow forcing musl without switching stdenv itself, e.g. for our bootstrapping:
+  # nix build -f pkgs/top-level/release.nix stdenvBootstrapTools.x86_64-linux.dist
+  useMusl ? stdenv.hostPlatform.libc == "musl",
+  musl,
+  extraConfig ? "",
+
+  # For tests
+  hostname,
+  coreutils,
+  zip,
+  which,
+  simple-http-server,
+}:
+
+assert stdenv.hostPlatform.libc == "musl" -> useMusl;
+
+let
+  configParser = ''
+    function parseconfig {
+        while IFS=" " read NAME OPTION; do
+            if ! [[ "$NAME" =~ ^CONFIG_ ]]; then continue; fi
+
+            echo "parseconfig: removing $NAME"
+            sed -i /$NAME'\(=\| \)'/d .config
+
+            echo "parseconfig: setting $NAME=$OPTION"
+            echo "$NAME=$OPTION" >> .config
+        done
+    }
+  '';
+
+  libcConfig = lib.optionalString useMusl ''
+    CONFIG_FEATURE_UTMP n
+    CONFIG_FEATURE_WTMP n
+  '';
+
+  # The debian version lags behind the upstream version and also contains
+  # a debian-specific suffix. We only fetch the debian repository to get the
+  # default.script
+  debianVersion = "1.30.1-6";
+  debianSource = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "installer-team";
+    repo = "busybox";
+    rev = "debian/1%${debianVersion}";
+    sha256 = "sha256-6r0RXtmqGXtJbvLSD1Ma1xpqR8oXL2bBKaUE/cSENL8=";
+  };
+  debianDispatcherScript = "${debianSource}/debian/tree/udhcpc/etc/udhcpc/default.script";
+  outDispatchPath = "$out/default.script";
+
+  pname = "busybox";
+  version = "1.37.0";
+in
+
+stdenv.mkDerivation (finalAttrs: {
+  inherit pname version;
+
+  # Note to whoever is updating busybox: please verify that:
+  # nix-build pkgs/stdenv/linux/make-bootstrap-tools.nix -A test
+  # still builds after the update.
+  src = fetchurl {
+    url = "https://busybox.net/downloads/${pname}-${version}.tar.bz2";
+    sha256 = "sha256-MxHf8y50ZJn03w1d8E1+s5Y4LX4Qi7klDntRm4NwQ6Q=";
+  };
+
+  hardeningDisable = [
+    "format"
+  ]
+  ++ lib.optionals enableStatic [ "fortify" ];
+
+  patches = [
+    # Allow BusyBox to be invoked as "<something>-busybox". This is
+    # necessary when it's run from the Nix store as <hash>-busybox during
+    # stdenv bootstrap.
+    ./busybox-in-store.patch
+    # Fix aarch64 build failure: sha1_process_block64_shaNI is x86-specific
+    # https://lists.busybox.net/pipermail/busybox/2024-September/090943.html
+    ./fix-aarch64-sha1.patch
+    # archival: disallow path traversals (CVE-2023-39810)
+    (fetchpatch {
+      name = "CVE-2023-39810.patch";
+      url = "https://git.busybox.net/busybox/patch/?id=9a8796436b9b0641e13480811902ea2ac57881d3";
+      hash = "sha256-pOARbCwiucrkNITBoOMpLF3GniYvJiyBeBi2/Aw2JY8=";
+    })
+    # tar: strip unsafe hardlink components - GNU tar does the same
+    (fetchpatch {
+      name = "CVE-2026-26157_CVE-2026-26158.patch";
+      url = "https://git.busybox.net/busybox/patch/?id=3fb6b31c716669e12f75a2accd31bb7685b1a1cb";
+      excludes = [ "networking/httpd_ratelimit_cgi.c" ]; # New since release.
+      hash = "sha256-Msm9sDZrVx7ofunnvnTS73SPKUUpR3Tv5xZ/wBd+rts=";
+    })
+    # tar: only strip unsafe components from hardlinks, not symlinks
+    # fix issue introduced by the previous patch (CVE-2026-26157_CVE-2026-26158.patch)
+    (fetchpatch {
+      name = "CVE-2026-26157_CVE-2026-26158-2.patch";
+      url = "https://github.com/vda-linux/busybox_mirror/commit/599f5dd8fac390c18b79cba4c14c334957605dae.patch";
+      hash = "sha256-go/KHSsuMSm21nC0yvKEtAQs8Jnjjqdcs5i8RWBGwT4=";
+    })
+    # syslogd: fix writing to local log file
+    # https://lists.busybox.net/pipermail/busybox/2024-October/090969.html
+    (fetchpatch {
+      url = "https://hg.slitaz.org/wok/raw-file/1cba565dc2a9/busybox/stuff/busybox-1.37-fix-syslogd.patch";
+      hash = "sha256-NZRctLv1CpTfnR6+CA890YY8ljBQLGkkselyP5/TnsQ=";
+    })
+    # https://lists.busybox.net/pipermail/busybox/2026-March/092010.html
+    ./build-system-buffer-overflow.patch
+
+    # [PATCH v2 1/1] wget: don't allow control characters or spaces in the URL
+    # https://lists.busybox.net/pipermail/busybox/2025-November/091840.html
+    ./CVE-2025-60876.patch
+  ]
+  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
+
+  separateDebugInfo = true;
+
+  postPatch = "patchShebangs .";
+
+  configurePhase = ''
+    export KCONFIG_NOTIMESTAMP=1
+    make ${if enableMinimal then "allnoconfig" else "defconfig"}
+
+    ${configParser}
+
+    cat << EOF | parseconfig
+
+    CONFIG_PREFIX "$out"
+    CONFIG_INSTALL_NO_USR y
+
+    CONFIG_LFS y
+
+    # More features for modprobe.
+    ${lib.optionalString (!enableMinimal) ''
+      CONFIG_FEATURE_MODPROBE_BLACKLIST y
+      CONFIG_FEATURE_MODUTILS_ALIAS y
+      CONFIG_FEATURE_MODUTILS_SYMBOLS y
+      CONFIG_MODPROBE_SMALL n
+    ''}
+
+    ${lib.optionalString enableStatic ''
+      CONFIG_STATIC y
+    ''}
+
+    ${lib.optionalString (!enableAppletSymlinks) ''
+      CONFIG_INSTALL_APPLET_DONT y
+      CONFIG_INSTALL_APPLET_SYMLINKS n
+    ''}
+
+    # Use the external mount.cifs program.
+    CONFIG_FEATURE_MOUNT_CIFS n
+    CONFIG_FEATURE_MOUNT_HELPERS y
+
+    # Set paths for console fonts.
+    CONFIG_DEFAULT_SETFONT_DIR "/etc/kbd"
+
+    # Bump from 4KB, much faster I/O
+    CONFIG_FEATURE_COPYBUF_KB 64
+
+    # Doesn't build with current kernel headers.
+    # https://bugs.busybox.net/show_bug.cgi?id=15934
+    CONFIG_TC n
+
+    # Set the path for the udhcpc script
+    CONFIG_UDHCPC_DEFAULT_SCRIPT "${outDispatchPath}"
+
+    ${extraConfig}
+    CONFIG_CROSS_COMPILER_PREFIX "${stdenv.cc.targetPrefix}"
+    ${libcConfig}
+    EOF
+
+    make oldconfig
+
+    runHook postConfigure
+  '';
+
+  postConfigure = lib.optionalString (useMusl && stdenv.hostPlatform.libc != "musl") ''
+    makeFlagsArray+=("CC=${stdenv.cc.targetPrefix}cc -isystem ${musl.dev}/include -B${musl}/lib -L${musl}/lib")
+  '';
+
+  makeFlags = [ "SKIP_STRIP=y" ];
+
+  postInstall = ''
+    sed -e '
+    1 a busybox() { '$out'/bin/busybox "$@"; }\
+    logger() { '$out'/bin/logger "$@"; }\
+    ' ${debianDispatcherScript} > ${outDispatchPath}
+    sed -i 's|/sbin/resolvconf|"$(busybox which resolvconf)"|g' ${outDispatchPath}
+    chmod 555 ${outDispatchPath}
+    HOST_PATH=$out/bin patchShebangs --host ${outDispatchPath}
+  '';
+
+  strictDeps = true;
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  buildInputs = lib.optionals (enableStatic && !useMusl && stdenv.cc.libc ? static) [
+    stdenv.cc.libc
+    stdenv.cc.libc.static
+  ];
+
+  enableParallelBuilding = true;
+
+  doCheck = false; # Takes a while, requires extra dependencies
+  passthru = {
+    shellPath = "/bin/ash";
+
+    tests.withCheck = finalAttrs.finalPackage.overrideAttrs (_: {
+      doCheck = true;
+
+      nativeCheckInputs = [
+        hostname
+        zip
+        which
+        simple-http-server
+      ];
+
+      preCheck = ''
+        # Replace hard-coded dependencies on /bin
+        sed -i 's|/bin/date|${lib.getExe' coreutils "date"}|' testsuite/date/date-works-1
+
+        # wget tests rely on network access, use simple-http-server instead
+        simple-http-server --index &
+        sed -i 's|http://www.google.com|http://127.0.0.1:8000|' testsuite/wget/*
+
+        skip-files() {
+          for file in "$@"; do
+            echo "echo SKIPPED $file; exit 0" > $file
+          done
+        }
+
+        skip-testcase() {
+          sed -i "s@testing \"$2\"@echo SKIPPED $2 || testing \"$2\"@" "$1"
+        }
+
+        # Skip known-broken tests
+        export SKIP_KNOWN_BUGS=y
+
+        # There are some semi-expected locale-related issues, disable tests that rely on it
+        export CONFIG_UNICODE_USING_LOCALE=y
+
+        # DISABLE SOME TESTS
+        # TODO(balsoft): fix the tests instead of skipping
+
+        pushd testsuite
+
+        # Weird failures, may or may not be related to locales
+        skip-files du/du-{h,k,l}-works
+
+        # Relies on a default PATH (/bin/ls in particular)
+        skip-files which/which-uses-default-path
+
+        # Hangs indefinitely if run from sandbox
+        skip-files md5sum.tests
+
+        # Doesn't work with coreutils's "false"
+        skip-testcase start-stop-daemon.tests "start-stop-daemon with both -x and -a"
+
+        # Relies on /usr/bin
+        skip-testcase cpio.tests "cpio -p with absolute paths"
+
+        # Relies on suid/guid bits
+        skip-testcase cpio.tests "cpio restores suid/sgid bits"
+
+        popd
+      '';
+    });
+  };
+
+  meta = {
+    description = "Tiny versions of common UNIX utilities in a single small executable";
+    homepage = "https://busybox.net/";
+    license = lib.licenses.gpl2Only;
+    mainProgram = "busybox";
+    maintainers = with lib.maintainers; [
+      TethysSvensson
+      qyliss
+    ];
+    teams = [ lib.teams.security-review ];
+    platforms = lib.platforms.linux;
+    priority = 15; # below systemd (halt, init, poweroff, reboot) and coreutils
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "busybox" version;
+  };
+})

@@ -1,0 +1,13 @@
+diff --git a/configure.ac b/configure.ac
+index 9946a0e..4621771 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -4,6 +4,8 @@ AC_PREREQ(2.59d)
+ AC_CONFIG_MACRO_DIR([m4])
+ AC_CANONICAL_TARGET
+ AM_INIT_AUTOMAKE([foreign])
++AM_GNU_GETTEXT_VERSION([0.25])
++AM_GNU_GETTEXT([external])
+ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES(yes)])
+ AC_CONFIG_HEADERS(include/config.h)
+ 

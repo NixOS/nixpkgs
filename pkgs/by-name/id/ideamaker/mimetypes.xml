@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
+  <mime-type type="model/3mf">
+    <icon name="3MF"/>
+    <generic-icon name="3MF"/>
+  </mime-type>
+  <mime-type type="application/x-ideamaker">
+    <glob pattern="*.idea"/>
+    <comment xml:lang="en">IDEA project</comment>
+    <icon name="IDEA"/>
+    <generic-icon name="IDEA"/>
+  </mime-type>
+  <mime-type type="model/stl">
+    <icon name="STL"/>
+    <generic-icon name="STL"/>
+  </mime-type>
+  <mime-type type="model/obj">
+    <icon name="OBJ"/>
+    <generic-icon name="OBJ"/>
+  </mime-type>
+  <mime-type type="text/x.gcode">
+    <icon name="GCODE"/>
+    <generic-icon name="GCODE"/>
+  </mime-type>
+</mime-info>

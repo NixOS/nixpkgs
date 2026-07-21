@@ -1,0 +1,14 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 22d6ca5b0d..15acfb3c6c 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -71,6 +71,9 @@
+ [tool.poetry.scripts]
+ kresctl = 'knot_resolver.client.main:main'
+ knot-resolver = 'knot_resolver.manager.main:main'
++supervisord = 'supervisor.supervisord:main'
++supervisorctl = 'supervisor.supervisorctl:main'
++
+
+ [tool.poe.tasks]
+ # tasks runed through scripts located in 'scripts/poe-tasks/'

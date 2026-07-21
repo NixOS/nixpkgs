@@ -1,0 +1,26 @@
+From 2806cc84abb7bf6aa9d9ff062944d664ab644127 Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Fri, 2 Jan 2026 13:09:02 -0400
+Subject: [PATCH] Fix compilation on Cygwin
+
+Cygwin uses COFF like Windows, so it needs the symver stub.
+---
+ lib/crypt-port.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/crypt-port.h b/lib/crypt-port.h
+index 23c7efa..0c90ade 100644
+--- a/lib/crypt-port.h
++++ b/lib/crypt-port.h
+@@ -205,7 +205,7 @@ extern size_t strcpy_or_abort (void *dst, size_t d_size, const void *src);
+   __asm__(".globl _" extstr);                           \
+   __asm__(".set _" extstr ", _" #intname)
+ 
+-#elif defined _WIN32
++#elif defined _WIN32 || defined __CYGWIN__
+ 
+ /* .symver is only supported for ELF format, Windows uses COFF/PE */
+ # define symver_set(extstr, intname, version, mode)
+-- 
+2.51.2
+
