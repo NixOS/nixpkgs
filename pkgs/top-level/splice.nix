@@ -123,7 +123,10 @@ in
 
   callPackages = lib.callPackagesWith pkgsForCall;
 
-  newScope = extra: lib.callPackageWith (pkgsForCall // extra);
+  # `newScope = extra: ...` but as a callable set that could be spliced
+  newScope = {
+    __functor = _: extra: lib.callPackageWith (pkgsForCall // extra);
+  };
 
   pkgs = if actuallySplice then splicedPackages // { recurseForDerivations = false; } else pkgs;
 
