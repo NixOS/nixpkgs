@@ -7,6 +7,7 @@
 buildGoModule {
   pname = "logo-ls-modernized";
   version = "1.3.7";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "orhnk";
