@@ -1,9 +1,8 @@
 let
-  sources = import ./npins;
-  nikpkgs = import sources.nixpkgs { };
+  nixpkgs = import ../../../.. { };
 in
 {
-  pkgs ? nikpkgs,
+  pkgs ? nixpkgs,
 }:
 pkgs.mkShell {
   packages = [
