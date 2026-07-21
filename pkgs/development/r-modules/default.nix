@@ -736,6 +736,7 @@ let
     markets = [ pkgs.gsl ]; # for gsl-config
     mashr = [ pkgs.gsl ]; # for gsl-config via RcppGSL
     mcrPioda = [ pkgs.gsl ]; # for gsl-config
+    minimaxALT = [ pkgs.gsl ]; # for gsl-config via RcppGSL
     mixlink = [ pkgs.gsl ]; # for gsl-config
     mixture = [ pkgs.gsl ]; # for gsl-config
     mmpca = [ pkgs.gsl ]; # for gsl-config via RcppGSL
@@ -751,6 +752,7 @@ let
     n1qn1 = [ pkgs.gfortran ];
     ncdf4 = [ pkgs.netcdf ]; # for nc-config
     neojags = [ pkgs.pkg-config ];
+    netboost = [ pkgs.perl ];
     nloptr = [ pkgs.pkg-config ];
     odbc = [ pkgs.pkg-config ];
     opencv = [ pkgs.pkg-config ];
@@ -1347,6 +1349,7 @@ let
     ];
     imbibe = [ pkgs.zlib ];
     immunoClust = [ pkgs.gsl ];
+    impARI = [ pkgs.boost ];
     interpolation = with pkgs; [
       gmp
       mpfr
@@ -1410,6 +1413,7 @@ let
       xz
     ];
     milorGWAS = [ pkgs.zlib ];
+    minimaxALT = [ pkgs.gsl ];
     mitoClone2 = with pkgs; [
       xz
       bzip2
@@ -1640,6 +1644,7 @@ let
       tcl
       tk
     ];
+    telegramR = [ pkgs.openssl ];
     terra = with pkgs; [
       proj
       sqlite
