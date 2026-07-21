@@ -1,0 +1,29 @@
+Replace `pkg_resources` with `importlib.resources` for Python >= 3.12.
+
+`pkg_resources` is deprecated and is no longer shipped by setuptools >= 81,
+so importing it breaks `wfuzz.helpers.file_func` outright.
+`importlib.resources.files` is the documented stdlib replacement.
+
+Reported upstream: https://github.com/xmendez/wfuzz/issues/381
+
+diff --git a/src/wfuzz/helpers/file_func.py b/src/wfuzz/helpers/file_func.py
+--- a/src/wfuzz/helpers/file_func.py
++++ b/src/wfuzz/helpers/file_func.py
+@@ -1,7 +1,7 @@
+ import os
+ import sys
+ import re
+-import pkg_resources
++from importlib.resources import files
+
+ from chardet.universaldetector import UniversalDetector
+ import chardet
+@@ -15,7 +15,7 @@ def get_filter_help_file():
+
+     filter_help_text = None
+     try:
+-        fname = pkg_resources.resource_filename("wfuzz", FILTER_HELP_FILE)
++        fname = files("wfuzz").joinpath(FILTER_HELP_FILE)
+         filter_help_text = open(fname).read()
+     except IOError:
+         filter_help_text = open(get_path(FILTER_HELP_DEV_FILE)).read()
