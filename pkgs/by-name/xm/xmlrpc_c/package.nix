@@ -73,6 +73,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Lightweight RPC library based on XML and HTTP";
     homepage = "https://xmlrpc-c.sourceforge.net/";
+    changelog = "https://xmlrpc-c.sourceforge.io/change.html";
     # <xmlrpc-c>/doc/COPYING also lists "ABYSS Web Server License" and "Python 1.5.2 License"
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
