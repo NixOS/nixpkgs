@@ -397,6 +397,7 @@ let
 
   packagesWithRDepends = {
     # keep-sorted start block=yes
+    BayesPET = [ self.rstantools ];
     TriDimRegression = [ self.rstantools ];
     bayesdfa = [ self.rstantools ];
     bbmix = [ self.rstantools ];
@@ -1871,6 +1872,7 @@ let
     "DiceView"
     "EstMix"
     "GNOSIS"
+    "GapAnalysis"
     "MSnID"
     "OmnipathR"
     "PCRA"
