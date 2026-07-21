@@ -59,7 +59,6 @@ let
       Crafter
       evanjs
       johnrichardrinehart
-      tricktron
     ];
     platforms = [
       "aarch64-darwin"
