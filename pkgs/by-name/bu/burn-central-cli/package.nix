@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "burn-central-cli";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "tracel-ai";
-    repo = "burn-central-cli";
+    repo = "tracel-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wXLfmCV6aElnYnhOCScr/3+4I6oOfNPrZ8+0t4TPDOA=";
+    hash = "sha256-1QXlN1cq5MKZAPgGx5mnf8Jy7o4CnKJDKi0sSith6n0=";
   };
 
   strictDeps = true;
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildAndTestSubdir = "crates/burn-central-cli";
 
-  cargoHash = "sha256-MeDIYFXkyJdxierq9iVIAvEIc8JU13szrbSTfKyUkJk=";
+  cargoHash = "sha256-c0DfH5wtm/aiK8Mcf7xqVqnFzByMKkbspF1reeGZNJw=";
 
   nativeBuildInputs = [
     pkg-config
@@ -45,8 +45,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       with Burn Central, the centralized platform for experiment tracking,
       model sharing, and deployment for Burn users.
     '';
-    homepage = "https://github.com/tracel-ai/burn-central-cli";
-    changelog = "https://github.com/tracel-ai/burn-central-cli/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/tracel-ai/tracel-cli";
+    changelog = "https://github.com/tracel-ai/tracel-cli/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       mit
       asl20

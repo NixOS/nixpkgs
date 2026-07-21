@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "wyoming-faster-whisper";
-  version = "3.1.0";
+  version = "3.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "wyoming-faster-whisper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-p1FCyj/D7ndKJD1/V5YzhT0xlkg61DSx2m3DCELmPO8=";
+    hash = "sha256-+RmP552zsvWbxIpfhmKNdU4EZSeEImUdaF827g6Tuco=";
   };
 
   build-system = with python3Packages; [
@@ -25,13 +25,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "wyoming"
   ];
 
-  pythonRemoveDeps = [
-    # https://github.com/rhasspy/wyoming-faster-whisper/pull/81
-    "requests"
-  ];
-
   dependencies = with python3Packages; [
     faster-whisper
+    pysilero-vad
     wyoming
   ];
 
@@ -58,7 +54,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "wyoming_faster_whisper"
   ];
 
-  # no tests
+  # tests require models from huggingface
   doCheck = false;
 
   meta = {

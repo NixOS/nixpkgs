@@ -83,4 +83,5 @@ in
   testUbuntu2204i386Image = makeImageTestScript diskImages.ubuntu2204i386;
   testUbuntu2204x86_64Image = makeImageTestScript diskImages.ubuntu2204x86_64;
   testUbuntu2404x86_64Image = makeImageTestScript diskImages.ubuntu2404x86_64;
+  testUbuntu2604x86_64Image = makeImageTestScript diskImages.ubuntu2604x86_64;
 }

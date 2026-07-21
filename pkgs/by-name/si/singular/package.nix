@@ -55,11 +55,6 @@ stdenv.mkDerivation rec {
     "--with-ntl=${ntl}"
     "--with-flint=${flint}"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-    # omalloc does not support pagesizes >= 16K
-    # https://github.com/Singular/Singular/blob/spielwiese/omalloc/configure.ac
-    "--disable-omalloc"
-  ]
   ++ lib.optionals enableDocs [
     "--enable-doc-build"
   ];
@@ -76,8 +71,8 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  # Use fq_nmod_mat_entry instead of row pointer (removed in flint 3.3.0)
   patches = [
+    # Use fq_nmod_mat_entry instead of row pointer (removed in flint 3.3.0)
     (fetchpatch {
       url = "https://github.com/Singular/Singular/commit/05f5116e13c8a4f5f820c78c35944dd6d197d442.patch";
       hash = "sha256-4l7JaCCFzE+xINU+E92eBN5CJKIdtQHly4Ed3ZwbKTA=";
@@ -85,6 +80,15 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://github.com/Singular/Singular/commit/595d7167e6e019d45d9a4f1e18ae741df1f3c41d.patch";
       hash = "sha256-hpTZy/eAiHAaleasWPAenxM35aqeNAZ//o6OqqdGOJ4=";
+    })
+    # Fix omalloc on aarch64-darwin
+    (fetchpatch {
+      url = "https://github.com/Singular/Singular/commit/6a47eae152527e3147e3168989301b676576e9eb.patch";
+      hash = "sha256-JW72CoDg0Pkmcg+uklkyV94F9qaT3cnHUhUG/6bStKY=";
+    })
+    (fetchpatch {
+      url = "https://github.com/Singular/Singular/commit/935a043cac58180942ab753efbd576ba59eaab8e.patch";
+      hash = "sha256-T9ml6SnXCKImnQDnBU4zrpYGRi2wlTYvjmln0r1AvPM=";
     })
   ];
 

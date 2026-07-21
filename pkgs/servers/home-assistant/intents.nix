@@ -21,7 +21,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "home-assistant-intents";
-  version = "2026.5.5";
+  version = "2026.6.24";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
     repo = "intents-package";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-R6PPZSiDiFvB+lNxyuIHwMIgpQvVI0oqrucnw4jnYNU=";
+    hash = "sha256-fuVS+s3l/oStgrRdeLzHrzCr9cmFesq6sYV8EgNNsIo=";
   };
 
   build-system = [
@@ -63,6 +63,7 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/OHF-Voice/intents-package/releases/tag/${finalAttrs.src.tag}";
     description = "Intents to be used with Home Assistant";
     homepage = "https://github.com/OHF-Voice/intents-package";
+    # https://github.com/OHF-Voice/intents-package/issues/12
     license = lib.licenses.cc-by-40;
     teams = [ lib.teams.home-assistant ];
   };

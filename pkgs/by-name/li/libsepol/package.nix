@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libsepol";
-  version = "3.10";
+  version = "3.11";
   se_url = "https://github.com/SELinuxProject/selinux/releases/download";
 
   outputs = [
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "${finalAttrs.se_url}/${finalAttrs.version}/libsepol-${finalAttrs.version}.tar.gz";
-    hash = "sha256-1VVYZ5f6nzg0RJbSp+wRR7bKrz/MRMQtjVFz7denmnE=";
+    hash = "sha256-efPSyI9Et+tc9U2XkuAyMil+F/l6F5Fj8nUAmaAPFk0=";
   };
 
   nativeBuildInputs = [ flex ];

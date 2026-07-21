@@ -8,19 +8,22 @@
 
 buildGoModule (finalAttrs: {
   pname = "versitygw";
-  version = "1.3.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "versity";
     repo = "versitygw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1SQE0bhv8L70Fdm6CvV2/kq945jvzZretVPsT8dGOJY=";
+    hash = "sha256-O3rXqg0wSAb4YXxgXqf42oo9sJinZhZ1U6e5WCnvo9I=";
   };
 
-  vendorHash = "sha256-x9KrZRso/7LfBCbBfCvwqnFKOWS4SEYw6DwxpEAHfZ8=";
+  vendorHash = "sha256-8WrGFLIoXmHQmyFGhOjBAFkaYZ1xhx0aldpyZULfAL4=";
 
-  # Require access to online S3 services
-  doCheck = false;
+  excludedPackages = [
+    "plugins/noop"
+    "tests/checker"
+    "tests/rest_scripts"
+  ];
 
   # Needed for "versitygw --version" to not show placeholders
   ldflags = [
@@ -29,10 +32,11 @@ buildGoModule (finalAttrs: {
     "-X main.Version=v${finalAttrs.version}"
   ];
 
+  # requires real s3
+  checkFlags = [ "-skip=^TestIntegration$" ];
+
   doInstallCheck = true;
-
   nativeInstallCheckInputs = [ versionCheckHook ];
-
   versionCheckProgramArg = "--version";
 
   passthru = {
@@ -44,7 +48,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/versity/versitygw";
     changelog = "https://github.com/versity/versitygw/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ genga898 ];
+    maintainers = with lib.maintainers; [
+      adamcstephens
+      genga898
+    ];
     mainProgram = "versitygw";
   };
 })

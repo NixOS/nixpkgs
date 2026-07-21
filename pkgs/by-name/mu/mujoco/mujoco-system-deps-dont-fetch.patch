@@ -84,6 +84,15 @@ index d2404bc1..5c7ddaf6 100644
    TARGETS
    ccd
    EXCLUDE_FROM_ALL
+@@ -256,8 +256,6 @@ set(BUILD_TESTS OFF)
+ set(BUILD_TESTS OFF)
+ fetchpackage(
+   PACKAGE_NAME  miniz
+-  GIT_REPO      https://github.com/richgel999/miniz.git
+-  GIT_TAG       ${MUJOCO_DEP_VERSION_miniz}
+   TARGETS       miniz
+ )
+ if(_BUILD_TESTS_WAS_DEFINED)
 @@ -261,10 +241,6 @@ if(MUJOCO_BUILD_TESTS OR MUJOCO_BUILD_STUDIO OR MUJOCO_USE_FILAMENT)
      absl
      LIBRARY_NAME

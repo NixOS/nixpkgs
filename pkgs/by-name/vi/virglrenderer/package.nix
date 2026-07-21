@@ -68,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     (lib.mesonBool "video" vaapiSupport)
     (lib.mesonBool "venus" vulkanSupport)
+    (lib.mesonBool "vulkan-dload" false)
     (lib.mesonOption "drm-renderers" (
       lib.optionalString nativeContextSupport (
         lib.concatStringsSep "," (

@@ -2,7 +2,7 @@
   lib,
   buildGoModule,
   coreutils,
-  python3,
+  python313,
   src,
   version,
   pkg-config,
@@ -11,6 +11,9 @@
 }:
 
 let
+  # tensorflow does not yet support python314: https://github.com/tensorflow/tensorflow/issues/102890
+  python3 = python313;
+
   # we need to copy these, to add the symlinks, so the linker actually finds these libraries
   libtensorflow = symlinkJoin {
     name = "libtensorflow";
@@ -58,6 +61,9 @@ buildGoModule {
     homepage = "https://photoprism.app";
     description = "Photoprism's backend";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ benesim ];
+    maintainers = with lib.maintainers; [
+      benesim
+      ipetkov
+    ];
   };
 }

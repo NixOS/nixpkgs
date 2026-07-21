@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "coturn";
-  version = "4.9.0";
+  version = "4.13.1";
 
   src = fetchFromGitHub {
     owner = "coturn";
     repo = "coturn";
     tag = finalAttrs.version;
-    hash = "sha256-NSdmz5ZkzgP+kP6iutYX8+l1b4ErgB+kicskTn6OlRE=";
+    hash = "sha256-66bPrw/jUleEOKBBdNDa8qyxxQCiLk5saTnUQfDdTak=";
   };
 
   nativeBuildInputs = [
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "TURN server";
     homepage = "https://coturn.net/";
     changelog = "https://github.com/coturn/coturn/blob/${finalAttrs.version}/ChangeLog";
-    license = with lib.licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ _0x4A6F ];
     broken = stdenv.hostPlatform.isDarwin; # 2018-10-21

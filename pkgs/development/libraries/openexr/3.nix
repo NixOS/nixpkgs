@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openexr";
-  version = "3.4.10";
+  version = "3.4.11";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "openexr";
     rev = "v${version}";
-    hash = "sha256-jXio+PvagKTR8NjcYIQ/j8LOMNc/0sQBuaixKk/0V3k=";
+    hash = "sha256-5dx2tag6XyuJfNfJgc68X+VWKXaHOL3M7ZJEQbQwFDA=";
   };
 
   outputs = [
@@ -78,6 +78,14 @@ stdenv.mkDerivation rec {
     "OpenEXR.testSampleImages"
     "OpenEXR.testSharedFrameBuffer"
     "OpenEXR.testTiledRgba"
+
+    # Lack of proper endianness handling in OpenJPH
+    # https://github.com/aous72/OpenJPH/issues/266
+    # "ojph error 0x00050041 at ojph_params.cpp:687: error reading SIZ marker", and similar errors
+    "OpenEXR.testConversion"
+    "OpenEXR.testExistingStreams"
+    "OpenEXR.testLargeDataWindowOffsets"
+    "OpenEXR.testTiledCompression"
   ];
 
   passthru.tests = {

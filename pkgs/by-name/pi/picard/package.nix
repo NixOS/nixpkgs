@@ -45,17 +45,13 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform qt5.qtwayland) [
     qt5.qtwayland
   ]
-  ++ lib.optionals (pyqt5.multimediaEnabled) (
-    [
-      qt5.qtmultimedia.bin
-      gst_all_1.gst-libav
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-    ]
-    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform gst_all_1.gst-vaapi) [
-      gst_all_1.gst-vaapi
-    ]
-  );
+  ++ lib.optionals (pyqt5.multimediaEnabled) [
+    qt5.qtmultimedia.bin
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+  ];
 
   pythonRelaxDeps = lib.optionals stdenv.hostPlatform.isDarwin [
     # Should be resolved in the next version

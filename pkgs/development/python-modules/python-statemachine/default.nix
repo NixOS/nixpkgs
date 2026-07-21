@@ -11,11 +11,14 @@
   pytest-timeout,
   pytest-django,
   pydot,
+  docutils,
+  pyyaml,
+  jsonschema,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "python-statemachine";
-  version = "3.0.0";
+  version = "3.2.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -23,7 +26,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     pname = "python_statemachine";
     inherit (finalAttrs) version;
-    hash = "sha256-kVI/nq1zwdb+zJddXG4L/jY/v1N8XwvzCbzQ+U+UQbI=";
+    hash = "sha256-RLmMubsQgYke9u+pB8gh0FyuUxSiuZcT5W1Wqcli3gg=";
   };
 
   build-system = [ hatchling ];
@@ -36,6 +39,9 @@ buildPythonPackage (finalAttrs: {
     pytest-timeout
     pytest-django
     pydot
+    docutils
+    pyyaml
+    jsonschema
   ];
 
   pytestFlags = [ "--benchmark-disable" ];
@@ -44,6 +50,9 @@ buildPythonPackage (finalAttrs: {
     # quite slow
     "tests/test_weighted_transitions.py"
     "tests/scxml/"
+
+    # requires sphinx, which is not worth pulling in for this relatively low-signal test
+    "statemachine/contrib/diagram/sphinx_ext.py"
   ];
 
   disabledTests = [

@@ -303,8 +303,12 @@ in
             systemd = {
               enable = true;
               # avoids reaching cryptsetup.target before recreation of the
-              # "state" volume completed, during the factory reset
+              # "state" volume completed, during the factory reset and tries to
+              # ensure that devices are retriggered before trying to work with them.
               services.systemd-repart.before = [
+                "systemd-cryptsetup@state.service"
+              ];
+              services.systemd-factory-reset-complete.before = [
                 "systemd-cryptsetup@state.service"
               ];
               repart = {

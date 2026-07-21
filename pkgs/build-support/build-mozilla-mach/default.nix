@@ -58,6 +58,7 @@ in
   pkg-config,
   pkgsCross, # wasm32 rlbox
   python3,
+  python313,
   runCommand,
   rustc,
   rust-cbindgen,
@@ -144,7 +145,13 @@ in
   ),
   overrideCC,
   buildPackages,
-  pgoSupport ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform == stdenv.buildPlatform),
+  # PGO merges profile data with a 32-bit llvm-profdata, which runs out of
+  # address space on the huge libxul profile, so disable it on 32-bit.
+  pgoSupport ? (
+    stdenv.hostPlatform.isLinux
+    && stdenv.hostPlatform == stdenv.buildPlatform
+    && stdenv.hostPlatform.is64bit
+  ),
   xvfb-run,
   elfhackSupport ?
     isElfhackPlatform stdenv && !(stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isAarch64),
@@ -303,6 +310,9 @@ buildStdenv.mkDerivation {
 
   inherit src unpackPhase;
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   meta =
     meta
     // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
@@ -332,6 +342,19 @@ buildStdenv.mkDerivation {
       # https://hg-edge.mozilla.org/mozilla-central/rev/aa8a29bd1fb9
       ./139-wayland-drag-animation.patch
     ]
+    ++ lib.optionals (lib.versionAtLeast version "140" && lib.versionOlder version "144") [
+      # Versions before 144 vendor bindgen 0.69. On Darwin, libc++ 21 changed
+      # basic_string::__self_view from a typedef to an attributed using alias;
+      # bindgen then emits it without its template parameter, producing invalid
+      # Rust. Vendored bindgen was updated in:
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1985509
+      ./140-bindgen-string-view.patch
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "140" && lib.versionOlder version "140.13") [
+      # https://github.com/mozilla/cbindgen/issues/1165
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=2046162
+      ./153-cbindgen-0.29.4-compat.patch
+    ]
     ++ extraPatches;
 
   postPatch = ''
@@ -356,7 +379,7 @@ buildStdenv.mkDerivation {
     makeBinaryWrapper
     nodejs
     perl
-    python3
+    (if lib.versionAtLeast version "143.0" then python3 else python313)
     rust-cbindgen
     rustPlatform.bindgenHook
     rustc
@@ -587,7 +610,7 @@ buildStdenv.mkDerivation {
 
   profilingPhase = lib.optionalString pgoSupport ''
     # Avoid compressing the instrumented build with high levels of compression
-    export MOZ_PKG_FORMAT=tar
+    export MOZ_PKG_FORMAT=TAR
 
     # Package up Firefox for profiling
     ./mach package

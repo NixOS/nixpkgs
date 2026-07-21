@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libisofs";
-  version = "1.5.8";
+  version = "1.5.8.pl02";
 
   src = fetchFromGitea {
     domain = "dev.lovelyhq.com";
     owner = "libburnia";
     repo = "libisofs";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-tOkJfS/utUPn38rn0u5zAo1N4IIkvpejg89Oxw6Xqv4=";
+    hash = "sha256-uyE+7H5zWcBgtOsoFtiLFroeqA0Kj7tg7s+1IzXNKBo=";
   };
 
   nativeBuildInputs = [

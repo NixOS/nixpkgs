@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
+    homepage = "https://github.com/xbmc/kodi-platform";
     license = lib.licenses.gpl2Plus;
   };
 }

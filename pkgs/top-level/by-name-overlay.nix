@@ -19,6 +19,10 @@ let
     mergeAttrsList
     ;
 
+  inherit (lib.trivial)
+    flip
+    ;
+
   # Package files for a single shard
   # Type: String -> String -> AttrsOf Path
   namesForShard =
@@ -49,6 +53,6 @@ self: super:
   # and whether it's defined by this file here or `all-packages.nix`.
   # TODO: This can be removed once `pkgs/by-name` can handle custom `callPackage` arguments without `all-packages.nix` (or any other way of achieving the same result).
   # Because at that point the code in ./stage.nix can be changed to not allow definitions in `all-packages.nix` to override ones from `pkgs/by-name` anymore and throw an error if that happens instead.
-  _internalCallByNamePackageFile = file: self.callPackage file { };
+  _internalCallByNamePackageFile = flip self.callPackage { };
 }
 // mapAttrs (name: self._internalCallByNamePackageFile) packageFiles

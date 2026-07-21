@@ -39,9 +39,7 @@ let
 
   mozillaPlatforms = {
     x86_64-linux = "linux-x86_64";
-    # bundles are universal and can be re-used for both darwin architectures
     aarch64-darwin = "mac";
-    x86_64-darwin = "mac";
   };
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
@@ -69,7 +67,8 @@ let
   meta = {
     changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
     description = "Mozilla Thunderbird, a full-featured email client (binary package)";
-    homepage = "http://www.mozilla.org/thunderbird/";
+    homepage = "https://www.thunderbird.net/";
+    donationPage = "https://www.thunderbird.net/donate/";
     mainProgram = "thunderbird";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.mpl20;

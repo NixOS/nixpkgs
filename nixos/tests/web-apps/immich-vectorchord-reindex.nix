@@ -37,6 +37,10 @@
                     hash = "sha256-+BOuiinbKPZZaDl9aYsIoZPgvLZ4FA6Rb4/W+lAz4so=";
                   };
 
+                  # Remove the patches currently used for vectorchord 1.1.1,
+                  # as vectorchord 1.0.0 does not need them.
+                  patches = [ ];
+
                   cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
                     inherit (finalAttrs) src;
                     hash = "sha256-kwe2x7OTjpdPonZsvnR1C/89D5W/R5JswYF79YcSFEA=";

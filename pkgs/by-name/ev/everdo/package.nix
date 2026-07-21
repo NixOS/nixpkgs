@@ -5,11 +5,11 @@
 }:
 let
   pname = "everdo";
-  version = "1.9.0";
+  version = "1.11.9";
 
   src = fetchurl {
     url = "https://downloads.everdo.net/electron/Everdo-${version}.AppImage";
-    hash = "sha256-mM2rCjK548kjNR60Mr/YxBiVk+jxuVU01B9GHfIp1Mk=";
+    hash = "sha256-67b0gSoVcCIfkFRUL3afgB6eYj5YEuvDTtQgTIwV9S0=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };

@@ -6,9 +6,12 @@
   py-cpuinfo,
   h5py,
   pkgconfig,
+  c-blosc,
   c-blosc2,
+  bzip2,
   charls,
   lz4,
+  zfp,
   zlib,
   zstd,
   stdenv,
@@ -18,16 +21,21 @@
   avx512Support ? stdenv.hostPlatform.avx512Support,
 }:
 
-buildPythonPackage rec {
+let
+  c-blosc' = c-blosc.override { snappySupport = true; };
+  # H5Z-ZFP needs an 8-bit bitstream word so the compressed HDF5 data is byte-portable
+  zfp' = zfp.override { bitStreamWordSize = 8; };
+in
+buildPythonPackage (finalAttrs: {
   pname = "hdf5plugin";
-  version = "6.0.0";
+  version = "7.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "silx-kit";
     repo = "hdf5plugin";
-    tag = "v${version}";
-    hash = "sha256-LW6rY+zLta4hENBbTll+1amf9TYJiuAumwzgpk1LZ3M=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wi5EITlRI8tgAXUV5u/CA3eiWjNAVs5ynT+PUsqcqVA=";
   };
 
   build-system = [
@@ -39,27 +47,35 @@ buildPythonPackage rec {
   dependencies = [ h5py ];
 
   buildInputs = [
-    #c-blosc
+    c-blosc'
     c-blosc2
-    # bzip2_1_1
+    bzip2
     charls
     lz4
-    # snappy
-    # zfp
+    zfp'
     zlib
     zstd
   ];
 
+  # devendor
+  postPatch = ''
+    rm -rf lib/c-blosc
+    rm -rf lib/c-blosc2
+    rm -rf lib/bzip2
+    rm -rf lib/charls
+    rm -rf lib/zfp
+    rm -rf lib/zstd
+  '';
+
   # opt-in to use use system libs instead
   env.HDF5PLUGIN_SYSTEM_LIBRARIES = lib.concatStringsSep "," [
-    #"blosc" # AssertionError: 4000 not less than 4000
+    "blosc"
     "blosc2"
-    # "bz2" # only works with bzip2_1_1
+    "bzip2"
     "charls"
     "lz4"
-    # "snappy" # snappy tests fail
     # "sperr" # not packaged?
-    # "zfp" #  pkgconfig: (lib)zfp not found
+    "zfp"
     "zlib"
     "zstd"
   ];
@@ -82,6 +98,19 @@ buildPythonPackage rec {
 
   preBuild = ''
     mkdir src/hdf5plugin/plugins
+
+    mkdir -p pkg-config
+    export PKG_CONFIG_PATH="$PWD/pkg-config''${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
+
+    # zfp ships only a CMake config; synthesise the pkg-config module hdf5plugin probes for
+    cat >pkg-config/zfp.pc <<EOF
+    includedir=${lib.getDev zfp'}/include
+    Name: zfp
+    Version: ${zfp'.version}
+    Description: zfp
+    Libs: -L${lib.getLib zfp'}/lib -lzfp
+    Cflags: -I${lib.getDev zfp'}/include
+    EOF
   '';
 
   meta = {
@@ -94,4 +123,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];
   };
-}
+})

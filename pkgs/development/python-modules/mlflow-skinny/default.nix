@@ -40,7 +40,7 @@ buildPythonPackage (finalAttrs: {
     owner = "mlflow";
     repo = "mlflow";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OxhM+KCem0sb9cwtyzrUD/MGfoiiCfgU47qipYRDaFk=";
+    hash = "sha256-e11ZncpvThb1Nt6OH+O6Do74N3dphxBiK/HIeLQMxAw=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/skinny";

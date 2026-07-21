@@ -9,7 +9,7 @@
 mkRocqDerivation {
 
   namePrefix = [
-    "rocq-core"
+    "rocq"
     "mathcomp"
   ];
   pname = "bigenough";

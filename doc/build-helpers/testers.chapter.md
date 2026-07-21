@@ -98,6 +98,14 @@ It has two modes:
 
 : The path to the files to check.
 
+`relocatable` (boolean, optional) {#tester-lycheeLinkCheck-param-relocatable}
+
+: Whether the site is expected to be relocatable, i.e. servable from any URL path prefix.
+
+  When `true` (the default), root-relative links (starting with `/`) are treated as errors, because they break when the site is served from a subpath or opened via `file://` URLs.
+
+  When `false`, root-relative links are resolved against the `site` directory.
+
 `remap` (attribute set, optional) {#tester-lycheeLinkCheck-param-remap}
 
 : An attribute set where the attribute names are regular expressions.
@@ -728,5 +736,103 @@ Notable attributes:
  * `nodes`: the evaluated NixOS configurations. Useful for debugging and exploring the configuration.
 
  * `driverInteractive`: a script that launches an interactive Python session in the context of the `testScript`.
+
+## `modularServiceCompliance` {#tester-modularServiceCompliance}
+
+Compliance suite for [modular service](https://nixos.org/manual/nixos/unstable/#modular-services) integrations.
+
+Tests that a service manager integration correctly handles the portable modular services contract: `process.argv`, sub-services, assertions, and warnings.
+
+### Return value {#tester-modularServiceCompliance-return}
+
+An attribute set of derivations which perform the tests during their build.
+
+### Inputs {#tester-modularServiceCompliance-inputs}
+
+`evalConfig` (function)
+
+: `{ services } -> { config; checkDrv; }`.
+  Function to evaluate the given services in the integration's full context.
+  This function is called for evaluation checks on configurations that will not be run.
+  - Input `services` is an attrset of modular service configurations. These should be used verbatim.
+  - Output attribute `config` is the resulting evaluated services attrset (e.g., the value of the `system.services` option in NixOS).
+    This attribute must be available even if `checkDrv` would fail.
+  - Output attribute `checkDrv` is a representative derivation whose existence and buildability prove the eval is sound (e.g., `system.build.toplevel` in NixOS, but could perhaps be more specific in the case of another process manager integration).
+
+`mkTest` (function)
+
+: `{ name, services, testExe } -> derivation`.
+  - Input `name` is a test name, suitable for use as a derivation name.
+  - Input `services` is an attrset of modular service configurations, matching the structure of the integration's services option.
+  - Input `testExe` is a store path to an executable that verifies the services.
+  - Output: a derivation that runs the service manager with the provided configuration inputs and then calls `testExe` after starting the services. That executable must have access to `sharedDir`.
+
+`sharedDir` (string)
+
+: Path to a directory writable by service processes and readable by `testExe`.
+  The integration must ensure this directory is available when the services and `testExe` run.
+
+:::{.example #ex-modularServiceCompliance-nixos}
+
+# NixOS invocation of the compliance suite
+
+```nix
+# In nixos/tests/all-tests.nix:
+# modularServiceCompliance =
+recurseIntoAttrs (
+  pkgs.testers.modularServiceCompliance {
+    sharedDir = "/tmp/modular-service-compliance";
+    evalConfig =
+      { services }:
+      let
+        machine = evalSystem (
+          { ... }:
+          {
+            system.services = services;
+            system.stateVersion = "25.05";
+            fileSystems."/" = {
+              device = "/test/dummy";
+              fsType = "auto";
+            };
+            boot.loader.grub.enable = false;
+          }
+        );
+      in
+      {
+        config = machine.config.system.services;
+        checkDrv = machine.config.system.build.toplevel;
+      };
+    mkTest =
+      {
+        name,
+        services,
+        testExe,
+      }:
+      runTest {
+        _class = "nixosTest";
+        inherit name;
+        nodes.machine.system.services = services;
+        testScript = ''
+          machine.wait_for_unit("multi-user.target")
+          machine.succeed("${testExe}")
+        '';
+      };
+  }
+)
+```
+
+:::
+
+### Manual compliance items {#tester-modularServiceCompliance-manual}
+
+The following compliance items are not yet automated and must be verified manually when implementing a new modular service integration.
+
+- **Failing assertions prevent deployment.**
+  A service with `assertions = [{ assertion = false; message = "..."; }]` must cause the deployment to fail.
+  The mechanism is integration-specific (e.g., NixOS checks assertions during `system.build.toplevel` evaluation).
+
+- **Warnings are visible to the user.**
+  A service with `warnings = [ "..." ]` must surface the warning to the user.
+  On NixOS these are `builtins.warn` messages emitted during evaluation.
 
 [file system object]: https://nix.dev/manual/nix/latest/store/file-system-object

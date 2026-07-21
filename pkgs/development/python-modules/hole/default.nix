@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "hole";
-  version = "0.9.1";
+  version = "0.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "python-hole";
     tag = finalAttrs.version;
-    hash = "sha256-rIKb6GeULi2ooNtWD2a23JQxO9HkXiUYy0AroYeVeKU=";
+    hash = "sha256-j9fwetfxc0HG+Ly+MpRYL3jDHAwtt+Ls3tUcizHuUrg=";
   };
 
   build-system = [ hatchling ];

@@ -194,7 +194,7 @@
       swaymsg("exec swaylock")
       machine.wait_until_succeeds("pgrep -xf swaylock")
       machine.sleep(3)
-      machine.send_chars("${nodes.machine.config.users.users.alice.password}")
+      machine.send_chars("${nodes.machine.users.users.alice.password}")
       machine.send_key("ret")
       machine.wait_until_fails("pgrep -xf swaylock")
 

@@ -4,8 +4,8 @@
   hostPlatform,
   fetchurl,
   bash,
+  gcc-buildbuild,
   gcc,
-  musl,
   binutils,
   gnumake,
   gnupatch,
@@ -33,8 +33,6 @@ let
   ];
 
   configureFlags = [
-    "CC=musl-gcc"
-    "LDFLAGS=--static"
     "--prefix=${placeholder "out"}"
     "--build=${buildPlatform.config}"
     "--host=${hostPlatform.config}"
@@ -42,10 +40,11 @@ let
     "--disable-dependency-tracking"
     "--disable-nls"
 
-    "--with-sysroot=/"
     "--enable-deterministic-archives"
     # depends on bison
     "--disable-gprofng"
+    # unused downstream
+    "--disable-gprof"
 
     # Turn on --enable-new-dtags by default to make the linker set
     # RUNPATH instead of RPATH on binaries.  This is important because
@@ -56,6 +55,10 @@ let
     # libbfd and libopcodes into a default visibility. Drop default lib
     # path to force users to declare their use of these libraries.
     "--with-lib-path=:"
+    "--disable-gold"
+    # unused in the bootstrap path and removed from the output
+    "--disable-libctf"
+    "--disable-plugins"
   ];
 in
 bash.runCommand "${pname}-${version}"
@@ -64,7 +67,7 @@ bash.runCommand "${pname}-${version}"
 
     nativeBuildInputs = [
       gcc
-      musl
+      gcc-buildbuild
       binutils
       gnumake
       gnupatch
@@ -81,6 +84,7 @@ bash.runCommand "${pname}-${version}"
       result:
       bash.runCommand "${pname}-get-version-${version}" { } ''
         ${result}/bin/ld --version
+        ${result}/${hostPlatform.config}/bin/ld --version
         mkdir $out
       '';
   }
@@ -104,5 +108,17 @@ bash.runCommand "${pname}-${version}"
 
     # gprof/addr2line/elfedit + man pages are unused downstream.
     rm -f $out/bin/gprof $out/bin/addr2line $out/bin/elfedit
-    rm -rf $out/share/info $out/share/man
+    rm -rf $out/include $out/lib $out/share
+
+    # The target-prefixed tools duplicate the unprefixed tools byte-for-byte.
+    # Keep the conventional target-prefixed paths, but make them symlinks.
+    targetBin=$out/${hostPlatform.config}/bin
+    if [ -d "$targetBin" ]; then
+      for tool in ar as ld ld.bfd nm objcopy objdump ranlib readelf strip; do
+        if [ -e "$targetBin/$tool" ] && cmp -s "$out/bin/$tool" "$targetBin/$tool"; then
+          rm "$targetBin/$tool"
+          ln -s ../../bin/$tool "$targetBin/$tool"
+        fi
+      done
+    fi
   ''

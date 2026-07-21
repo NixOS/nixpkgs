@@ -62,7 +62,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/Big-B/swaylock-fancy";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ frogamic ];
+    maintainers = [ ];
     inherit mainProgram;
   };
 }

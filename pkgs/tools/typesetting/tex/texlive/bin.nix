@@ -143,10 +143,7 @@ let
   common = {
     # initial TeX Live 2025 release
     # src = fetchurl {
-    #   urls = [
-    #     "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0308-source.tar.xz"
-    #     "ftp://tug.ctan.org/pub/tex/historic/systems/texlive/${year}/texlive-${year}0308-source.tar.xz"
-    #   ];
+    #   url = "mirror://texhistoric/systems/texlive/${year}/texlive-${year}0308-source.tar.xz";
     #   hash = "sha256-//2xo9FDwXekOYoiKaQNaojxgJjl9tz9V2SMnyQXSQ8=";
     # };
 
@@ -649,46 +646,6 @@ rec {
     GS = lib.getExe ghostscript_headless;
 
     enableParallelBuilding = true;
-  };
-
-  pygmentex = python3Packages.buildPythonApplication rec {
-    pname = "pygmentex";
-    inherit (src) version;
-    pyproject = false;
-
-    src = assertFixedHash pname texlive.pkgs.pygmentex.tex;
-
-    propagatedBuildInputs = with python3Packages; [
-      pygments
-      chardet
-    ];
-
-    dontBuild = true;
-
-    doCheck = false;
-
-    installPhase = ''
-      runHook preInstall
-
-      install -D ./scripts/pygmentex/pygmentex.py "$out"/bin/pygmentex
-
-      runHook postInstall
-    '';
-
-    meta = {
-      homepage = "https://www.ctan.org/pkg/pygmentex";
-      description = "Auxiliary tool for typesetting code listings in LaTeX documents using Pygments";
-      longDescription = ''
-        PygmenTeX is a Python-based LaTeX package that can be used for
-        typesetting code listings in a LaTeX document using Pygments.
-
-        Pygments is a generic syntax highlighter for general use in all kinds of
-        software such as forum systems, wikis or other applications that need to
-        prettify source code.
-      '';
-      license = lib.licenses.lppl13c;
-      maintainers = with lib.maintainers; [ romildo ];
-    };
   };
 
   asymptote =

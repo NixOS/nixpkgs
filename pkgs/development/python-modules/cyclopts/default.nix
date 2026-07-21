@@ -28,15 +28,17 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cyclopts";
-  version = "4.16.0";
+  version = "4.20.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BrianPugh";
     repo = "cyclopts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tDDYVqhjvTRQ0rTvib4ek49zEnEefkKoq1t/3C/PRlQ=";
+    hash = "sha256-zmvqpRJGZnfmhOiHwYogMbqLaAkfIG34CFbRXUUEr0E=";
   };
+
+  pythonRelaxDeps = [ "rich-rst" ];
 
   build-system = [
     hatchling
@@ -81,16 +83,12 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Building docs
     "build_succeeds"
-    # https://github.com/BrianPugh/cyclopts/issues/820
-    "test_behavior[fish-literal-positional]"
-    "test_behavior[fish-multi-positional-second]"
-    "test_behavior[fish-equals-form-option-value]"
-    "test_behavior[fish-multi-positional-third]"
-  ]
-  # https://github.com/BrianPugh/cyclopts/issues/821
-  ++ lib.lists.optional (
-    stdenv.hostPlatform.system == "aarch64-linux"
-  ) "test_collection_option_repeats";
+    # timeouts under heavy concurrency
+    "test_behavior[zsh-root-subcommands]"
+    "test_behavior[zsh-subcommand-prefix]"
+    "test_path_completion_action"
+    "test_requires_equals_eq_form_value_completion"
+  ];
 
   meta = {
     description = "Module to create CLIs based on Python type hints";

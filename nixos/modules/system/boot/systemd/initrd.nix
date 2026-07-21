@@ -124,6 +124,16 @@ let
   jobScripts = concatLists (
     mapAttrsToList (_: unit: unit.jobScripts or [ ]) (filterAttrs (_: v: v.enable) cfg.services)
   );
+  unitEnv = pkgs.buildEnv {
+    name = "initrd-unit-env";
+    paths = concatLists (
+      mapAttrsToList (_: unit: unit.path or [ ]) (filterAttrs (_: v: v.enable) cfg.services)
+    );
+    pathsToLink = [
+      "/bin"
+      "/sbin"
+    ];
+  };
 
   stage1Units = generateUnits {
     type = "initrd";
@@ -636,6 +646,7 @@ in
         "${pkgs.bashNonInteractive}/bin"
       ]
       ++ jobScripts
+      ++ [ unitEnv ]
       ++ map (c: removeAttrs c [ "text" ]) (builtins.attrValues cfg.contents)
       ++ lib.optional (pkgs.stdenv.hostPlatform.libc == "glibc") "${pkgs.glibc}/lib/libnss_files.so.2";
 
@@ -763,12 +774,21 @@ in
           ];
         };
         serviceConfig.Type = "oneshot";
+        serviceConfig.EnvironmentFile = "-/etc/switch-root.conf";
         description = "NixOS Activation";
 
         script = # bash
           ''
             set -uo pipefail
             export PATH="/bin:${cfg.package.util-linux}/bin"
+
+            # A non-NixOS closure (e.g. init=/bin/sh) has no prepare-root;
+            # initrd-find-nixos-closure records this as a non-empty NEW_INIT.
+            # Skip activation and let initrd-switch-root hand over to it directly.
+            if [ -n "''${NEW_INIT:-}" ]; then
+              echo "$NEW_INIT is not a NixOS system - not activating"
+              exit 0
+            fi
 
             closure="$(realpath /nixos-closure)"
 

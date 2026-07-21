@@ -66,13 +66,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cyrus-imapd";
-  version = "3.12.2";
+  version = "3.12.3";
 
   src = fetchFromGitHub {
     owner = "cyrusimap";
     repo = "cyrus-imapd";
     tag = "cyrus-imapd-${finalAttrs.version}";
-    hash = "sha256-zPEaxETzG4Aj8JYP/aZpN2xXrD+O22io/HzI4LK+s/o=";
+    hash = "sha256-2HTrFjFlFFqF1TWtClPSOJSCgmomjSgEU7o2UPgd/Cs=";
   };
 
   nativeBuildInputs = [
@@ -191,7 +191,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.cyrusimap.org";
     description = "Email, contacts and calendar server";
     changelog = "https://www.cyrusimap.org/imap/download/release-notes/${lib.versions.majorMinor finalAttrs.version}/x/${finalAttrs.version}.html";
-    license = with lib.licenses; [ bsdOriginal ];
+    license = lib.licenses.bsdOriginal;
     mainProgram = "cyradm";
     maintainers = with lib.maintainers; [
       moraxyc

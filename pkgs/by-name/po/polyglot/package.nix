@@ -33,10 +33,16 @@ maven.buildMavenPackage rec {
 
   mvnHash =
     {
-      aarch64-linux = "sha256-Tlz2I6xE8g3GqKz9N7VXRO0ObE1XOv6IfTrKZmVlscY=";
-      x86_64-linux = "sha256-nQScNCkA+eaeL3tcLCec1qIoYO6ct28FLxGp/Cm4nn4=";
+      aarch64-linux = "sha256-o5dFk1pghCOaaxAto7e5kXn2mrVEGAtb9kTwQQN2N8o=";
+      x86_64-linux = "sha256-KYgeVBhqBjP6dqwpSzoqH8dfsL4WpJcSiHEMfgk0CNE=";
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  mvnFetchExtraArgs.env = {
+    inherit (env) SOURCE_DATE_EPOCH;
+  };
+
+  # fix for "date 1980-01-01T00:00:00Z is not within the valid range 1980-01-01T00:00:02Z to 2099-12-31T23:59:59Z"
+  env.SOURCE_DATE_EPOCH = 315532802; # 1980-01-01T00:00:02Z
 
   mvnParameters = "-DskipTests";
 

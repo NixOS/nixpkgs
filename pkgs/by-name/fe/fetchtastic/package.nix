@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "fetchtastic";
-  version = "0.10.9";
+  version = "0.10.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jeremiah-k";
     repo = "fetchtastic";
     tag = finalAttrs.version;
-    hash = "sha256-eFDj3qv3cYt/7tf+v93QwqoVLEEfpt21g4l0MrLTaLc=";
+    hash = "sha256-/kp9bfJJLffZp+9dEY7G+RQmE43XXwNozkDYjeAjPkc=";
   };
 
   pythonRelaxDeps = [ "platformdirs" ];

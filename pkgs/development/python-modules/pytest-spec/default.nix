@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytest-spec";
-  version = "6.0.0";
+  version = "6.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pchomik";
     repo = "pytest-spec";
     tag = finalAttrs.version;
-    hash = "sha256-2DXC02FSiGzsavdkoDFlxKdYaYpPAy3VbEG4YZSO5c8=";
+    hash = "sha256-9kJLIe2msS2DrpEerSOa9rh3XfBJQMfY7wwrtH3XQn0=";
   };
 
   build-system = [

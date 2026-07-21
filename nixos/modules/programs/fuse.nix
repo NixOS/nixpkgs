@@ -12,9 +12,7 @@ in
   meta.maintainers = [ ];
 
   options.programs.fuse = {
-    enable = lib.mkEnableOption "fuse" // {
-      default = true;
-    };
+    enable = lib.mkEnableOption "fuse";
 
     mountMax = lib.mkOption {
       # In the C code it's an "int" (i.e. signed and at least 16 bit), but

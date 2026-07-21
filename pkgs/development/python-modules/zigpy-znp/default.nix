@@ -15,23 +15,23 @@
   zigpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zigpy-znp";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-znp";
-    tag = "v${version}";
-    hash = "sha256-beIFbmJ6h1wj+e+g+JvXedvBFjnjaTZ60PCYTbiUqic=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JQe8A4pfKEBJInd0Fq91c2/UgAsQP1vbHy4wF/FO46c=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "timeout = 20" "timeout = 300" \
       --replace-fail ', "setuptools-git-versioning<2"' "" \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail 'dynamic = ["version"]' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [ setuptools ];
@@ -65,9 +65,9 @@ buildPythonPackage rec {
   meta = {
     description = "Library for zigpy which communicates with TI ZNP radios";
     homepage = "https://github.com/zigpy/zigpy-znp";
-    changelog = "https://github.com/zigpy/zigpy-znp/releases/tag/v${version}";
+    changelog = "https://github.com/zigpy/zigpy-znp/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ mvnetbiz ];
     platforms = lib.platforms.linux;
   };
-}
+})

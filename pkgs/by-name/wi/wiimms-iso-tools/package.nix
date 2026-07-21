@@ -5,7 +5,8 @@
   fetchpatch,
   zlib,
   ncurses,
-  fuse,
+  fuse3,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     zlib
     ncurses
-    fuse
+    fuse3
   ];
 
   patches = [
@@ -49,6 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs install.sh
     ./install.sh --no-sudo
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/wit";
 
   meta = {
     homepage = "https://wit.wiimm.de";

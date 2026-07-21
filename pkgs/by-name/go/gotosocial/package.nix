@@ -11,13 +11,13 @@
 }:
 buildGo125Module (finalAttrs: {
   pname = "gotosocial";
-  version = "0.21.2";
+  version = "0.22.0";
 
   src = fetchFromCodeberg {
     owner = "superseriousbusiness";
     repo = "gotosocial";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Z3j5/pXnNTHgBmPEfFgjOJuL03LsPtvAwbuoL9wb5bk=";
+    hash = "sha256-rslzi9WqPqN/wm9PN6SWdXtLdMRJJV6Hhb3whJ0RicU=";
   };
 
   vendorHash = null;
@@ -63,6 +63,9 @@ buildGo125Module (finalAttrs: {
   '';
 
   postInstall = ''
+    # remove a Go codegen helper binary
+    rm $out/bin/gen
+
     mkdir -p $out/share/gotosocial/web
     mv web/{assets,template} $out/share/gotosocial/web
   '';

@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nu_plugin_desktop_notifications";
-  version = "0.112.2";
+  version = "0.114.1";
 
   src = fetchFromGitHub {
     owner = "FMotalleb";
     repo = "nu_plugin_desktop_notifications";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-u/7KUcVoNAAxY+FQe7kB8Yuj2mygdNvS242I+HTA6Ac=";
+    hash = "sha256-/41DHPv9UKHUY551UppiauEiwoB0qQnkSrl6pHytwLs=";
   };
 
-  cargoHash = "sha256-xgCXB06QXl97udmgmnHodNSV/aK2UXaBmdo6dIhG4lo=";
+  cargoHash = "sha256-csBlo1Gly1LbvMxfmydmLlzhQh7ul2haLr7IAq/GlbI=";
 
   passthru.updateScript = nix-update-script { };
 
@@ -26,6 +26,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/FMotalleb/nu_plugin_desktop_notifications";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ timon ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

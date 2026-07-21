@@ -17,6 +17,7 @@
 
   # tests
   flax,
+  hypothesis,
   jax,
   optax,
   pettingzoo,
@@ -29,6 +30,7 @@ buildPythonPackage (finalAttrs: {
   pname = "skrl";
   version = "1.4.3";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Toni-SM";
@@ -70,6 +72,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     flax
+    hypothesis
     jax
     optax
     pettingzoo

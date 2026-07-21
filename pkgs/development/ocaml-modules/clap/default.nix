@@ -19,6 +19,7 @@ buildDunePackage (finalAttrs: {
 
   meta = {
     description = "Command-Line Argument Parsing, imperative style with a consumption mechanism";
+    homepage = "https://github.com/rbardou/clap";
     license = lib.licenses.mit;
   };
 })

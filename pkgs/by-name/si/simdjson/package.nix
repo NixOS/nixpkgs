@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "simdjson";
-  version = "4.6.0";
+  version = "4.6.4";
 
   src = fetchFromGitHub {
     owner = "simdjson";
     repo = "simdjson";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VGErBWAHk63XMv8yC+Na+gXHByhYhtIEMSBySwIDlXk=";
+    hash = "sha256-8oQzsR7DSaNTN9su1uI9tRQ9HvOwXShPwSrnQj8+lGM=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -30,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://simdjson.org/";
+    changelog = "https://github.com/simdjson/simdjson/releases/tag/${finalAttrs.src.tag}";
     description = "Parsing gigabytes of JSON per second";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;

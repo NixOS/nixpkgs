@@ -30,22 +30,22 @@
   installShellFiles,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ocrmypdf";
-  version = "17.4.2";
+  version = "17.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ocrmypdf";
     repo = "OCRmyPDF";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     # The content of .git_archival.txt is substituted upon tarball creation,
     # which creates indeterminism if master no longer points to the tag.
     # See https://github.com/ocrmypdf/OCRmyPDF/issues/841
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-UH05Q80FgbHzCvTnMX/J5LXGb7mNj5giLIx+8FdbKfU=";
+    hash = "sha256-+KDn/x1BNqteodwhdr9QKzZ8/j5/wkzwQ+cWxOzz63g=";
   };
 
   patches = [
@@ -107,7 +107,7 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [
       dotlambda
     ];
-    changelog = "https://github.com/ocrmypdf/OCRmyPDF/blob/${src.tag}/docs/releasenotes/version17.md";
+    changelog = "https://github.com/ocrmypdf/OCRmyPDF/blob/${finalAttrs.src.tag}/docs/releasenotes/version17.md";
     mainProgram = "ocrmypdf";
   };
-}
+})

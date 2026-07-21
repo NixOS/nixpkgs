@@ -47,13 +47,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "wxwidgets";
-  version = "3.2.9";
+  version = "3.2.11";
 
   src = fetchFromGitHub {
     owner = "wxWidgets";
     repo = "wxWidgets";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mYMUW3FnFkKHDQXb/k9UosSiWCPW7OQn+/orwq4Q95k=";
+    hash = "sha256-YaQrPJSlTpJKwjXLdRsGB04f7wKJCWfHjXWkB45qyEg=";
   };
 
   nativeBuildInputs = [ pkg-config ];

@@ -284,7 +284,6 @@ qtModule {
   meta = {
     description = "Web engine based on the Chromium web browser";
     platforms = [
-      "x86_64-darwin"
       "aarch64-darwin"
       "aarch64-linux"
       "armv7a-linux"

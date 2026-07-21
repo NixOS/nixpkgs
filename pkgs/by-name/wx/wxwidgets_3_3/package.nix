@@ -27,19 +27,21 @@
   compat32 ? true,
   withMesa ? !stdenv.hostPlatform.isDarwin,
   withWebKit ? true,
+  withEGL ? true,
+  withPrivateFonts ? false,
   webkitgtk_4_1,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wxwidgets";
-  version = "3.3.2";
+  version = "3.3.3.1";
 
   src = fetchFromGitHub {
     owner = "wxWidgets";
     repo = "wxWidgets";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-UL1NuByKFGMQ/dhjuWRdnWTgdy4+1cD9pSls3e1mur8=";
+    hash = "sha256-gB+mEk8rHpB4z1m8RWJSV+upKzLt7pZtlviS2g03EHY=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -85,6 +87,8 @@ stdenv.mkDerivation (finalAttrs: {
     (if compat32 then "--enable-compat32" else "--disable-compat32")
   ]
   ++ lib.optional withMesa "--with-opengl"
+  ++ lib.optional (!withEGL) "--disable-glcanvasegl"
+  ++ lib.optional withPrivateFonts "--enable-privatefonts"
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--with-macosx-version-min=${stdenv.hostPlatform.darwinMinVersion}"
     "--with-osx_cocoa"
@@ -115,7 +119,12 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   passthru = {
-    inherit compat30 compat32;
+    inherit
+      compat30
+      compat32
+      withEGL
+      withPrivateFonts
+      ;
   };
 
   meta = {

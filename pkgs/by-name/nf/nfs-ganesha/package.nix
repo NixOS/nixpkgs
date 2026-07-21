@@ -21,11 +21,13 @@
   ceph,
   useDbus ? true,
   dbus,
+  rdma-core,
+  openssl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nfs-ganesha";
-  version = "9.13";
+  version = "11.1";
 
   outputs = [
     "out"
@@ -37,7 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "nfs-ganesha";
     repo = "nfs-ganesha";
     tag = "V${finalAttrs.version}";
-    hash = "sha256-e6BDxb4Dt8xp9KdOcjxZKzRiKYPe+GP1UPvK/DAdX6M=";
+    hash = "sha256-1l1l8wkGp0N0bYXzhF6IqGm8oGVh6523Jfpq8VucHQs=";
+    fetchSubmodules = true;
   };
 
   patches = lib.optional useDbus ./allow-bypassing-dbus-pkg-config-test.patch;
@@ -54,6 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON"
     "-DUSE_MAN_PAGE=ON"
     "-DUSE_MONITORING=ON"
+    "-DUSE_NFS_RDMA=ON"
+    "-DUSE_TLS=ON"
+    "-DUSE_QOS=ON"
   ]
   ++ lib.optionals useCeph [
     "-DUSE_RADOS_RECOV=ON"
@@ -90,6 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
     liburcu
     nfs-utils
     prometheus-cpp-lite
+    rdma-core
+    openssl
   ]
   ++ lib.optional useCeph ceph;
 

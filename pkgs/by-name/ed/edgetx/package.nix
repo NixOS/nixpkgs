@@ -34,7 +34,7 @@ let
       pillow
       lz4
       jinja2
-      libclang
+      clang
     ]
   );
 
@@ -47,14 +47,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "edgetx";
-  version = "2.11.3";
+  version = "2.11.5";
 
   src = fetchFromGitHub {
     owner = "EdgeTX";
     repo = "edgetx";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-vlJsfebTWhdh6HDpUEA1QJJSVGMlcL49XFwIx4A9zHs=";
+    hash = "sha256-M0NiHvYZD1Qw2VYRV+TKMI0qTfF5MBdTxsBZRMMrnnk=";
   };
 
   nativeBuildInputs = [

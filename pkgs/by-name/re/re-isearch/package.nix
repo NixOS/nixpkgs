@@ -39,7 +39,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ writableTmpDirAsHomeHook ];
 
-  buildinputs = [
+  buildInputs = [
     db
     file # libmagic
     libnsl

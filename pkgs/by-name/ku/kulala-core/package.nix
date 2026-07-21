@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kulala-core";
-  version = "0.6.0";
+  version = "0.28.2";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "mistweaverco";
     repo = "kulala-core";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qEPJFd1/C9F8oyUTx3PMmRS9B8kdjQT9O0bfoalAJ/k=";
+    hash = "sha256-hXCVufxl8S+PxW7tvMHDRuSvELxTbsgH/Euvl+u+7BM=";
   };
 
   node_modules = stdenv.mkDerivation {
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     dontFixup = true;
 
-    outputHash = "sha256-NjHm6KU6Cd0ZyL1c+bmNbEHb5E83/xjQ5UGRjY1hzgQ=";
+    outputHash = "sha256-jvl3eJvweE7ZTcOaa9qTe9UwGzouK+6WUREkgRhYJfc=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
@@ -78,11 +78,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     cp -R ${finalAttrs.node_modules}/node_modules .
     echo '{ "version": "${finalAttrs.version}" }' > packages/core/version.json
-    bun build src/cli.ts \
-      --define __KULALA_EMBED_CURL__=false \
-      --target bun \
-      --outfile dist/kulala-core.js \
-      --cwd packages/core
+    (
+      cd packages/core
+      bun build src/cli.ts \
+        --target=bun \
+        --outdir=dist \
+        --asset-naming='[name].[ext]'
+    )
 
     runHook postBuild
   '';
@@ -90,7 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 packages/core/dist/kulala-core.js $out/lib/kulala-core/kulala-core.js
+    install -Dm644 packages/core/dist/cli.js $out/lib/kulala-core/kulala-core.js
+    install -Dm644 packages/core/dist/liblua5.1.wasm $out/lib/kulala-core/liblua5.1.wasm
     makeWrapper ${lib.getExe bun} $out/bin/kulala-core \
       --add-flags $out/lib/kulala-core/kulala-core.js \
       --set KULALA_CURL_PATH ${lib.getExe curl}
@@ -113,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Core parser and runner for kulala.nvim";
+    description = "HTTP client library powering the Kulala toolchain";
     homepage = "https://github.com/mistweaverco/kulala-core";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];

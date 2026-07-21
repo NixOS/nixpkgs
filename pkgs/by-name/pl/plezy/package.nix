@@ -2,7 +2,7 @@
   lib,
   stdenv,
   stdenvNoCC,
-  flutter338,
+  flutter344,
   fetchFromGitHub,
   fetchurl,
   pkg-config,
@@ -21,17 +21,19 @@
   _7zz,
   makeBinaryWrapper,
   runCommand,
+  noto-fonts-cjk-sans ? null,
+  use16kPagesizeWorkaround ? false,
 }:
 
 let
   pname = "plezy";
-  version = "2.1.0";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "edde746";
     repo = "plezy";
     tag = version;
-    hash = "sha256-l09xiSTyV8MNE9ZI69nM+DTpumQ0ZOaRjhLlq4rXX0w=";
+    hash = "sha256-Fc2KWx4byfrulWzOGm0WW6EUXMvV8uwmvVjoSgzQmuA=";
   };
 
   simdutf = fetchurl {
@@ -53,9 +55,9 @@ let
     maintainers = with lib.maintainers; [
       mio
       miniharinn
+      BatteredBunny
     ];
     platforms = lib.platforms.linux ++ [
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     sourceProvenance = lib.optionals stdenv.hostPlatform.isDarwin (
@@ -63,17 +65,16 @@ let
     );
   };
 
-  linux = flutter338.buildFlutterApplication rec {
+  linux = flutter344.buildFlutterApplication rec {
     inherit pname version src;
 
     pubspecLock = lib.importJSON ./pubspec.lock.json;
 
     gitHashes = lib.importJSON ./git-hashes.json;
 
-    # Upstream uses a sentry-dart fork that fetches sentry-native as a zip instead of via
-    # git clone. The PR was merged and reverted upstream (getsentry/sentry-dart#3630), so
-    # we use upstream since theres no actual meaningful difference
-    patches = [ ./replace-sentry-fork.patch ];
+    patches = lib.optionals use16kPagesizeWorkaround [
+      ./16k-font-workaround.patch
+    ];
 
     nativeBuildInputs = [
       pkg-config
@@ -102,6 +103,12 @@ let
       substituteInPlace linux/CMakeLists.txt \
         --replace-fail "URL https://github.com/simdutf/simdutf/releases/download/v6.4.2/singleheader.zip" \
                        "URL file://${simdutf}"
+    ''
+    + lib.optionalString use16kPagesizeWorkaround ''
+      # Opt-in workaround for invisible text on aarch64-linux systems with 16K page size kernels
+      # (e.g. Asahi Linux). Text was invisible; bundling the font as a Dart asset fixed it,
+      # likely related to libflutter_linux_gtk.so being compiled with 4K page alignment only.
+      install -Dm644 ${noto-fonts-cjk-sans}/share/fonts/opentype/noto-cjk/NotoSansCJK-VF.otf.ttc assets/fonts/NotoSans.ttc
     '';
 
     desktopItems = [
@@ -139,7 +146,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/edde746/plezy/releases/download/${version}/plezy-macos.dmg";
-      hash = "sha256-khmDHKsW8zs7ehIj86EgqortRKKDUoOfPsX7VpvnfNY=";
+      hash = "sha256-jNwMukPYLTWBk1daanHtxYdJpZCB5I/hiKvFx4tL4sY=";
     };
 
     nativeBuildInputs = [

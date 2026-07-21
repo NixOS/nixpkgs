@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "switchbot-api";
-  version = "2.11.1";
+  version = "2.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SeraphicCorp";
     repo = "py-switchbot-api";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xgfFpylMS8Xs3erM7vuJKun6fYOtJ6kfXgBVSkejbJI=";
+    hash = "sha256-mvGWuj+YpAqMg8dpICMwkY73vVwrvF6Klld2h2q1Mig=";
   };
 
   build-system = [ poetry-core ];

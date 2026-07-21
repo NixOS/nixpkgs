@@ -8,6 +8,21 @@
   ...
 }:
 let
+  inherit (lib)
+    attrNames
+    catAttrs
+    concatLines
+    concatMap
+    filter
+    unique
+    flip
+    elem
+    attrValues
+    concatMapStrings
+    hasPrefix
+    concatStringsSep
+    sort
+    ;
 
   moduleSettingsType =
     with lib.types;
@@ -663,6 +678,14 @@ let
           '';
         };
 
+        oo7 = {
+          enable = lib.mkEnableOption ''
+            automatically unlock the user's default Session Keyring using pam_oo7.
+            If the user's login password does not match their keyring password,
+            oo7 will prompt separately after login.
+          '';
+        };
+
         enableUMask = lib.mkOption {
           default = config.security.pam.enableUMask;
           defaultText = lib.literalExpression "config.security.pam.enableUMask";
@@ -881,41 +904,30 @@ let
 
         text =
           let
-            ensureUniqueOrder =
-              type: rules:
-              let
-                checkPair =
-                  a: b:
-                  assert lib.assertMsg (a.order != b.order)
-                    "security.pam.services.${name}.rules.${type}: rules '${a.name}' and '${b.name}' cannot have the same order value (${toString a.order})";
-                  b;
-                checked = lib.zipListsWith checkPair rules (lib.drop 1 rules);
-              in
-              lib.take 1 rules ++ checked;
             # Formats a string for use in `module-arguments`. See `man pam.conf`.
             formatModuleArgument =
               token: if lib.hasInfix " " token then "[${lib.replaceStrings [ "]" ] [ "\\]" ] token}]" else token;
+
             formatRules =
               type:
-              lib.pipe cfg.rules.${type} [
-                lib.attrValues
-                (lib.filter (rule: rule.enable))
-                (lib.sort (a: b: a.order < b.order))
-                (ensureUniqueOrder type)
-                (map (
-                  rule:
-                  lib.concatStringsSep " " (
-                    [
-                      type
-                      rule.control
-                      rule.modulePath
-                    ]
-                    ++ map formatModuleArgument rule.args
-                    ++ [ "# ${rule.name} (order ${toString rule.order})" ]
+              concatStringsSep "\n" (
+                map
+                  (
+                    rule:
+                    "${type} ${rule.control} ${rule.modulePath}${
+                      if rule.args == [ ] then "" else " " + concatStringsSep " " (map formatModuleArgument rule.args)
+                    } # ${rule.name} (order ${toString rule.order})"
                   )
-                ))
-                (lib.concatStringsSep "\n")
-              ];
+                  (
+                    sort (
+                      a: b:
+                      if a.order != b.order then
+                        a.order < b.order
+                      else
+                        throw "security.pam.services.${name}.rules.${type}: rules '${a.name}' and '${b.name}' cannot have the same order value (${toString a.order})"
+                    ) (filter (rule: rule.enable) (attrValues cfg.rules.${type}))
+                  )
+              );
           in
           lib.mkDefault ''
             # Account management.
@@ -1004,7 +1016,7 @@ let
               {
                 name = "unix";
                 control = "required";
-                modulePath = "${package}/lib/security/pam_unix.so";
+                modulePath = config.security.pam.pam_unixModulePath;
               }
               # pam_slurm_adopt must be the last module in the account stack.
               {
@@ -1194,6 +1206,7 @@ let
                       || cfg.pamMount
                       || cfg.kwallet.enable
                       || cfg.enableGnomeKeyring
+                      || cfg.oo7.enable
                       || config.services.intune.enable
                       || cfg.googleAuthenticator.enable
                       || cfg.gnupg.enable
@@ -1213,11 +1226,11 @@ let
                       name = "unix-early";
                       enable = cfg.unixAuth;
                       control = "optional";
-                      modulePath = "${package}/lib/security/pam_unix.so";
+                      modulePath = config.security.pam.pam_unixModulePath;
                       settings = {
                         nullok = cfg.allowNullPassword;
                         inherit (cfg) nodelay;
-                        likeauth = true;
+                        likeauth = lib.mkIf config.security.pam.enableLegacySettings true;
                       };
                     }
                     {
@@ -1256,6 +1269,12 @@ let
                       enable = cfg.enableGnomeKeyring;
                       control = "optional";
                       modulePath = "${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so";
+                    }
+                    {
+                      name = "oo7";
+                      enable = cfg.oo7.enable;
+                      control = "optional";
+                      modulePath = "${pkgs.oo7-pam}/lib/security/pam_oo7.so";
                     }
                     {
                       name = "intune";
@@ -1311,11 +1330,11 @@ let
                   name = "unix";
                   enable = cfg.unixAuth;
                   control = "sufficient";
-                  modulePath = "${package}/lib/security/pam_unix.so";
+                  modulePath = config.security.pam.pam_unixModulePath;
                   settings = {
                     nullok = cfg.allowNullPassword;
                     inherit (cfg) nodelay;
-                    likeauth = true;
+                    likeauth = lib.mkIf config.security.pam.enableLegacySettings true;
                     try_first_pass = true;
                   };
                 }
@@ -1400,10 +1419,10 @@ let
               {
                 name = "unix";
                 control = "sufficient";
-                modulePath = "${package}/lib/security/pam_unix.so";
+                modulePath = config.security.pam.pam_unixModulePath;
                 settings = {
                   nullok = true;
-                  yescrypt = true;
+                  yescrypt = lib.mkIf config.security.pam.enableLegacySettings true;
                 };
               }
               {
@@ -1473,6 +1492,12 @@ let
                   use_authtok = true;
                 };
               }
+              {
+                name = "oo7";
+                enable = cfg.oo7.enable;
+                control = "optional";
+                modulePath = "${pkgs.oo7-pam}/lib/security/pam_oo7.so";
+              }
             ];
 
             session = utils.pam.autoOrderRules [
@@ -1489,7 +1514,7 @@ let
               {
                 name = "unix";
                 control = "required";
-                modulePath = "${package}/lib/security/pam_unix.so";
+                modulePath = config.security.pam.pam_unixModulePath;
               }
               {
                 name = "loginuid";
@@ -1692,6 +1717,15 @@ let
                 };
               }
               {
+                name = "oo7";
+                enable = cfg.oo7.enable;
+                control = "optional";
+                modulePath = "${pkgs.oo7-pam}/lib/security/pam_oo7.so";
+                settings = {
+                  auto_start = true;
+                };
+              }
+              {
                 name = "gnupg";
                 enable = cfg.gnupg.enable;
                 control = "optional";
@@ -1798,11 +1832,6 @@ let
     else
       config.users.motdFile;
 
-  makePAMService = name: service: {
-    name = "pam.d/${name}";
-    value.source = pkgs.writeText "${name}.pam" service.text;
-  };
-
   optionalSudoConfigForSSHAgentAuth =
     lib.optionalString (config.security.pam.sshAgentAuth.enable || config.security.pam.rssh.enable)
       ''
@@ -1854,7 +1883,26 @@ in
 
   options = {
 
+    security.pam.enable = lib.mkOption {
+      default = true;
+      type = lib.types.bool;
+
+      description = ''
+        Whether to enable PAM, or entirely disable it.
+
+        Unless you're building a container image, you probably don't want to disable PAM.
+      '';
+    };
+
     security.pam.package = lib.mkPackageOption pkgs "pam" { };
+
+    security.pam.pam_unixModulePath = lib.mkOption {
+      type = lib.types.pathInStore;
+      default = "${package}/lib/security/pam_unix.so";
+      defaultText = "\${config.security.pam.package}/lib/security/pam_unix.so";
+      description = "The pam_unix module to use in all the default pam services.";
+      internal = true;
+    };
 
     security.pam.loginLimits = lib.mkOption {
       default = [ ];
@@ -1897,6 +1945,19 @@ in
         e.g. {command}`login` or {command}`passwd`.
         Each attribute of this set defines a PAM service, with the attribute name
         defining the name of the service.
+      '';
+    };
+
+    security.pam.enableLegacySettings = lib.mkOption {
+      default = true;
+      type = lib.types.bool;
+      description = ''
+        Alternative implementations of pam_unix may not support all legacy arguments.
+        This option will disable all known legacy settings.
+        ::: {.note}
+        Setting this option to false will omit arguments, such as `yescrypt`.
+        Doing so is only safe if the defaults used by pam_unix are sensible.
+        :::
       '';
     };
 
@@ -2214,6 +2275,30 @@ in
               '';
             };
 
+            prompt = lib.mkOption {
+              default = null;
+              type = with lib.types; nullOr str;
+              description = ''
+                Set individual prompt message for interactive mode.
+                By setting this option, you can set a message to be shown by the
+                {option}`security.pam.u2f.settings.interactive` option.
+
+                Requires {option}`security.pam.u2f.settings.interactive` to be set to `true`.
+              '';
+            };
+
+            cue_prompt = lib.mkOption {
+              default = null;
+              type = with lib.types; nullOr str;
+              description = ''
+                Set individual prompt message for cue mode.
+                By setting this option, you can set a message to be shown by the
+                {option}`security.pam.u2f.settings.cue` option.
+
+                Requires {option}`security.pam.u2f.settings.cue` to be set to `true`.
+              '';
+            };
+
             cue = lib.mkOption {
               default = false;
               type = lib.types.bool;
@@ -2475,7 +2560,7 @@ in
 
   ###### implementation
 
-  config = {
+  config = lib.mkIf config.security.pam.enable {
     assertions = [
       {
         assertion = config.users.motd == "" || config.users.motdFile == null;
@@ -2558,7 +2643,26 @@ in
       };
     };
 
-    environment.etc = lib.mapAttrs' makePAMService enabledServices;
+    environment.etc =
+      let
+        # Write all pam config in a single derivation for performance
+        pamd =
+          pkgs.runCommand "pam.d"
+            {
+              __structuredAttrs = true;
+              services = lib.mapAttrs (_: svc: svc.text) enabledServices;
+            }
+            ''
+              mkdir $out
+              for i in "''${!services[@]}"; do
+                printf '%s' "''${services[$i]}" > "$out/$i"
+              done
+            '';
+      in
+      lib.mapAttrs' (name: service: {
+        name = "pam.d/${name}";
+        value.source = "${pamd}/${name}";
+      }) enabledServices;
 
     systemd =
       lib.mkIf (lib.any (service: service.lastlog.enable) (lib.attrValues config.security.pam.services))
@@ -2637,35 +2741,29 @@ in
     };
 
     security.apparmor.includes."abstractions/pam" =
-      lib.concatMapStrings (name: "r ${config.environment.etc."pam.d/${name}".source},\n") (
-        lib.attrNames enabledServices
+      concatMapStrings (name: "r ${config.environment.etc."pam.d/${name}".source},\n") (
+        attrNames enabledServices
       )
       + (
-        with lib;
-        pipe enabledServices [
-          lib.attrValues
-          (catAttrs "rules")
-          (lib.concatMap lib.attrValues)
-          (lib.concatMap lib.attrValues)
-          (lib.filter (rule: rule.enable))
-          (lib.filter (
+        let
+          types = concatMap attrValues (catAttrs "rules" (attrValues enabledServices));
+          rules = concatMap attrValues types;
+
+          isDirect = flip elem [
+            "include"
+            "substack"
+          ];
+          activeRules = filter (rule: rule.enable && !isDirect rule.control) rules;
+
+          modulePaths = concatMap (
             rule:
-            !builtins.elem rule.control [
-              "include"
-              "substack"
-            ]
-          ))
-          (lib.catAttrs "modulePath")
-          (map (
-            modulePath:
-            lib.throwIfNot (lib.hasPrefix "/" modulePath)
-              ''non-absolute PAM modulePath "${modulePath}" is unsupported by apparmor''
-              modulePath
-          ))
-          lib.unique
-          (map (module: "mr ${module},"))
-          concatLines
-        ]
+            if (!hasPrefix "/" rule.modulePath) then
+              throw ''non-absolute PAM modulePath "${rule.modulePath}" is unsupported by apparmor''
+            else
+              [ rule.modulePath ]
+          ) activeRules;
+        in
+        concatLines (map (module: "mr ${module},") (unique modulePaths))
       );
 
     security.sudo.extraConfig = optionalSudoConfigForSSHAgentAuth;

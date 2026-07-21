@@ -18,6 +18,7 @@
   pypaInstallHook,
   pythonCatchConflictsHook,
   pythonImportsCheckHook,
+  pythonMetadataCheckHook,
   pythonNamespacesHook,
   pythonOutputDistHook,
   pythonRelaxDepsHook,
@@ -48,6 +49,8 @@ let
     optionalString
     removePrefix
     stringLength
+    all
+    seq
     ;
 
   leftPadName =
@@ -263,10 +266,10 @@ lib.extendMkDerivation {
 
           checkDrv =
             attrName: drv:
-            if (isPythonModule drv) && (isMismatchedPython drv) then throwMismatch attrName drv else drv;
+            if isPythonModule drv && isMismatchedPython drv then throwMismatch attrName drv else true;
 
         in
-        attrName: map (checkDrv attrName);
+        attrName: inputs: seq (all (checkDrv attrName) inputs) inputs;
 
       isBootstrapInstallPackage = isBootstrapInstallPackage' (finalAttrs.pname or null);
 
@@ -356,6 +359,21 @@ lib.extendMkDerivation {
         # This is a test, however, it should be ran independent of the checkPhase and checkInputs
         pythonImportsCheckHook
       ]
+      ++
+        optionals
+          (
+            finalAttrs ? "pname"
+            && finalAttrs ? "version"
+            # We don't care about the METADATA of Python applications.
+            && isPythonModule finalAttrs.passthru
+            # METADATA is unlikely to be correct if pyproject is false or null.
+            && pyproject == true
+            && !lib.hasInfix "unstable-" finalAttrs.version
+            && !isBootstrapPackage
+          )
+          [
+            pythonMetadataCheckHook
+          ]
       ++ optionals (python.pythonAtLeast "3.3") [
         # Optionally enforce PEP420 for python3
         pythonNamespacesHook

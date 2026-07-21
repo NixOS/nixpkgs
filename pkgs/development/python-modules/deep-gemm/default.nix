@@ -2,6 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  replaceVars,
+  symlinkJoin,
 
   # build-system
   setuptools,
@@ -47,6 +49,23 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
   patches = [
     ./use-system-libraries.patch
+
+    # DeepGEMM does JIT compilation and needs to access the NVIDIA compiler and some libraries at
+    # runtime.
+    # Instead of letting it search for the cuda toolkit on the host, hardcode the path to a custom
+    # closure.
+    (replaceVars ./patch-runtime-cuda-home-path.patch {
+      cuda_home = symlinkJoin {
+        name = "cuda-toolkit";
+        paths = with cudaPackages; [
+          (lib.getBin cuda_nvcc) # bin/nvcc, bin/ptxas, nvvm/, nvcc.profile
+          (lib.getBin cutlass) # include/cute, include/cutlass
+          (lib.getInclude cccl) # include/cuda/std/* (libcu++)
+          (lib.getInclude cuda_cudart) # include/cuda_runtime.h, cuda_bf16.h, cuda_fp8.h
+          (lib.getInclude cuda_cuobjdump) # bin/cuobjdump
+        ];
+      };
+    })
   ];
 
   env = optionalAttrs cudaSupport {

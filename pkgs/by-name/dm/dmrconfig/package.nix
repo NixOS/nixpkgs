@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.1";
 
   src = fetchFromGitHub {
-    owner = "sergev";
+    owner = "OpenRTX";
     repo = "dmrconfig";
     rev = finalAttrs.version;
     sha256 = "1qwix75z749628w583fwp7m7kxbj0k3g159sxb7vgqxbadqqz1ab";
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     longDescription = ''
       DMRconfig is a utility for programming digital radios via USB programming cable.
     '';
-    homepage = "https://github.com/sergev/dmrconfig";
+    homepage = "https://github.com/OpenRTX/dmrconfig";
     license = lib.licenses.asl20;
     maintainers = [ ];
     platforms = lib.platforms.linux;

@@ -12,19 +12,19 @@
 
 buildPythonPackage rec {
   pname = "patiencediff";
-  version = "0.2.18";
+  version = "0.2.19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "breezy-team";
     repo = "patiencediff";
     tag = "v${version}";
-    hash = "sha256-jwApncXyyc3m3XSsftaRNO/LeXIhdduaiBDm0KEDc98=";
+    hash = "sha256-xynrYf5oCIPk22jqjvXNYTyaXzVaUjRpn35vbx+t8vU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-GFVam/41RVziU7smtyI45unPe945OCLLQ0MqLqUK2JU=";
+    hash = "sha256-JW2Oj1oxAVf9K3lyJQpbHqw9eeNYDg3Agb189bduqlI=";
   };
 
   # make rust bindings non-optional

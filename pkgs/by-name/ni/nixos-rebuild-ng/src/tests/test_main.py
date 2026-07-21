@@ -21,6 +21,37 @@ DEFAULT_RUN_KWARGS = {
 }
 
 
+def test_parse_args_elevate() -> None:
+    r, _ = nr.parse_args(["nixos-rebuild", "switch"])
+    assert r.elevator is nr.elevate.NO_ELEVATOR
+
+    r, _ = nr.parse_args(["nixos-rebuild", "switch", "--elevate=sudo"])
+    assert isinstance(r.elevator, nr.elevate.SudoElevator)
+
+    r, _ = nr.parse_args(["nixos-rebuild", "switch", "--elevate=run0"])
+    assert isinstance(r.elevator, nr.elevate.Run0Elevator)
+
+    # back-compat aliases
+    for flag in ("--sudo", "--use-remote-sudo"):
+        r, _ = nr.parse_args(["nixos-rebuild", "switch", flag])
+        assert isinstance(r.elevator, nr.elevate.SudoElevator)
+
+    r, _ = nr.parse_args(["nixos-rebuild", "switch", "--ask-sudo-password"])
+    assert isinstance(r.elevator, nr.elevate.SudoElevator)
+    assert r.ask_elevate_password
+
+    # -S without --elevate implies sudo
+    r, _ = nr.parse_args(["nixos-rebuild", "switch", "-S"])
+    assert isinstance(r.elevator, nr.elevate.SudoElevator)
+
+    # explicit --elevate wins over the --sudo alias
+    r, _ = nr.parse_args(["nixos-rebuild", "switch", "--elevate=none", "--sudo"])
+    assert isinstance(r.elevator, nr.elevate.NoElevator)
+
+    with pytest.raises(SystemExit):
+        nr.parse_args(["nixos-rebuild", "switch", "--elevate=doas"])
+
+
 def test_parse_args() -> None:
     with pytest.raises(SystemExit) as e:
         nr.parse_args(["nixos-rebuild", "unknown-action"])
@@ -57,6 +88,22 @@ def test_parse_args() -> None:
     )
     assert r_store_path.flake is False
     assert r_store_path.store_path == "/nix/store/foo"
+
+    # --file and --attr should disable flake auto-detection
+    r_file, _ = nr.parse_args(["nixos-rebuild", "switch", "--file", "foo.nix"])
+    assert r_file.flake is False
+    assert r_file.file == "foo.nix"
+
+    r_attr, _ = nr.parse_args(["nixos-rebuild", "switch", "--attr", "bar"])
+    assert r_attr.flake is False
+    assert r_attr.attr == "bar"
+
+    r_file_attr, _ = nr.parse_args(
+        ["nixos-rebuild", "switch", "--file", "foo.nix", "--attr", "bar"]
+    )
+    assert r_file_attr.flake is False
+    assert r_file_attr.file == "foo.nix"
+    assert r_file_attr.attr == "bar"
 
     r1, g1 = nr.parse_args(
         [
@@ -663,7 +710,7 @@ def test_execute_nix_switch_build_target_host(
                     "--",
                     "/bin/sh",
                     "-c",
-                    """'exec env -i PATH="${PATH-}" "$@"'""",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
                     "sh",
                     "mktemp",
                     "-d",
@@ -682,7 +729,7 @@ def test_execute_nix_switch_build_target_host(
                     "--",
                     "/bin/sh",
                     "-c",
-                    """'exec env -i PATH="${PATH-}" "$@"'""",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
                     "sh",
                     "nix-store",
                     "--realise",
@@ -702,7 +749,7 @@ def test_execute_nix_switch_build_target_host(
                     "--",
                     "/bin/sh",
                     "-c",
-                    """'exec env -i PATH="${PATH-}" "$@"'""",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
                     "sh",
                     "readlink",
                     "-f",
@@ -720,7 +767,7 @@ def test_execute_nix_switch_build_target_host(
                     "--",
                     "/bin/sh",
                     "-c",
-                    """'exec env -i PATH="${PATH-}" "$@"'""",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
                     "sh",
                     "rm",
                     "-rf",
@@ -753,7 +800,7 @@ def test_execute_nix_switch_build_target_host(
                     "sudo",
                     "/bin/sh",
                     "-c",
-                    """'exec env -i PATH="${PATH-}" "$@"'""",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
                     "sh",
                     "nix-env",
                     "-p",
@@ -772,7 +819,7 @@ def test_execute_nix_switch_build_target_host(
                     "--",
                     "/bin/sh",
                     "-c",
-                    """'exec env -i PATH="${PATH-}" "$@"'""",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
                     "sh",
                     "test",
                     "-d",
@@ -790,7 +837,7 @@ def test_execute_nix_switch_build_target_host(
                     "sudo",
                     "/bin/sh",
                     "-c",
-                    """'exec env -i PATH="${PATH-}" LOCALE_ARCHIVE="${LOCALE_ARCHIVE-}" NIXOS_NO_CHECK="${NIXOS_NO_CHECK-}" NIXOS_INSTALL_BOOTLOADER=0 "$@"'""",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" LOCALE_ARCHIVE="${LOCALE_ARCHIVE-}" NIXOS_NO_CHECK="${NIXOS_NO_CHECK-}" NIXOS_INSTALL_BOOTLOADER=0 "$@"'""",
                     "sh",
                     *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
                     str(config_path / "bin/switch-to-configuration"),
@@ -879,7 +926,7 @@ def test_execute_nix_switch_flake_target_host(
                     "sudo",
                     "/bin/sh",
                     "-c",
-                    """'exec env -i PATH="${PATH-}" "$@"'""",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
                     "sh",
                     "nix-env",
                     "-p",
@@ -898,7 +945,7 @@ def test_execute_nix_switch_flake_target_host(
                     "--",
                     "/bin/sh",
                     "-c",
-                    """'exec env -i PATH="${PATH-}" "$@"'""",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
                     "sh",
                     "test",
                     "-d",
@@ -916,7 +963,7 @@ def test_execute_nix_switch_flake_target_host(
                     "sudo",
                     "/bin/sh",
                     "-c",
-                    """'exec env -i PATH="${PATH-}" LOCALE_ARCHIVE="${LOCALE_ARCHIVE-}" NIXOS_NO_CHECK="${NIXOS_NO_CHECK-}" NIXOS_INSTALL_BOOTLOADER=0 "$@"'""",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" LOCALE_ARCHIVE="${LOCALE_ARCHIVE-}" NIXOS_NO_CHECK="${NIXOS_NO_CHECK-}" NIXOS_INSTALL_BOOTLOADER=0 "$@"'""",
                     "sh",
                     *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
                     str(config_path / "bin/switch-to-configuration"),
@@ -1004,7 +1051,7 @@ def test_execute_nix_switch_flake_build_host(
                     "--",
                     "/bin/sh",
                     "-c",
-                    """'exec env -i PATH="${PATH-}" "$@"'""",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
                     "sh",
                     "nix",
                     "--extra-experimental-features",
@@ -1243,7 +1290,7 @@ def test_execute_build_dry_run_build_and_target_remote(
                     "--",
                     "/bin/sh",
                     "-c",
-                    """'exec env -i PATH="${PATH-}" "$@"'""",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
                     "sh",
                     "nix",
                     "--extra-experimental-features",
@@ -1498,7 +1545,7 @@ def test_execute_switch_store_path_target_host(
                     "--",
                     "/bin/sh",
                     "-c",
-                    """'exec env -i PATH="${PATH-}" "$@"'""",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
                     "sh",
                     "test",
                     "-f",
@@ -1516,7 +1563,7 @@ def test_execute_switch_store_path_target_host(
                     "sudo",
                     "/bin/sh",
                     "-c",
-                    """'exec env -i PATH="${PATH-}" "$@"'""",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
                     "sh",
                     "nix-env",
                     "-p",
@@ -1535,7 +1582,7 @@ def test_execute_switch_store_path_target_host(
                     "--",
                     "/bin/sh",
                     "-c",
-                    """'exec env -i PATH="${PATH-}" "$@"'""",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
                     "sh",
                     "test",
                     "-d",
@@ -1553,7 +1600,7 @@ def test_execute_switch_store_path_target_host(
                     "sudo",
                     "/bin/sh",
                     "-c",
-                    """'exec env -i PATH="${PATH-}" LOCALE_ARCHIVE="${LOCALE_ARCHIVE-}" NIXOS_NO_CHECK="${NIXOS_NO_CHECK-}" NIXOS_INSTALL_BOOTLOADER=0 "$@"'""",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" LOCALE_ARCHIVE="${LOCALE_ARCHIVE-}" NIXOS_NO_CHECK="${NIXOS_NO_CHECK-}" NIXOS_INSTALL_BOOTLOADER=0 "$@"'""",
                     "sh",
                     *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
                     str(config_path / "bin/switch-to-configuration"),

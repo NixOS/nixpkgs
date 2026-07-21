@@ -1,7 +1,7 @@
 {
   lib,
   buildGoModule,
-  fetchFromGitea,
+  fetchFromCodeberg,
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
@@ -18,14 +18,13 @@ in
 
 buildGoModule (finalAttrs: {
   pname = "searchix";
-  version = "0.4.7";
+  version = "0.4.9";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "alinnow";
     repo = "searchix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+mvE68j+rozEePbAqIuit+zFZ/nQkiR6VlesD4/ilo8=";
+    hash = "sha256-pyBl6y53Efa+4qQ92elA4r+zO7rPxha+4hnmmFTsoaE=";
   };
 
   vendorHash = "sha256-BG6v4HsXtSCmEmzdawH1YfEfDMbXNH8XGMF+jJgy+3w=";

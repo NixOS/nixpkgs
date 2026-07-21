@@ -66,7 +66,7 @@ py.pkgs.buildPythonApplication rec {
         social-auth-app-django
         sorl-thumbnail
         strawberry-graphql
-        strawberry-django
+        strawberry-graphql-django
         svgwrite
         tablib
 
@@ -128,7 +128,6 @@ py.pkgs.buildPythonApplication rec {
     ];
     maintainers = with lib.maintainers; [
       minijackson
-      raitobezarius
       transcaffeine
     ];
   };

@@ -32,7 +32,7 @@ let
   outpaths = lib.filter (outpath: outpath != null) (
     with cudaPackages;
     [
-      cuda_cccl # <nv/target>
+      cccl # <nv/target>
       cuda_cudart
       cuda_nvcc # <crt/host_defines.h>
       cuda_nvprof

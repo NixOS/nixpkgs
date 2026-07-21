@@ -5,8 +5,8 @@
   fetchpatch,
   autoreconfHook,
   pkg-config,
-  fuse,
   fuse3,
+  macfuse-stubs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = if stdenv.hostPlatform.isDarwin then [ fuse ] else [ fuse3 ];
+  buildInputs = if stdenv.hostPlatform.isDarwin then [ macfuse-stubs ] else [ fuse3 ];
 
   configureFlags = lib.optional stdenv.hostPlatform.isDarwin "--disable-macos-fs-link";
 

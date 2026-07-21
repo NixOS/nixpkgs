@@ -30,13 +30,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "audit";
-  version = "4.1.2-unstable-2025-09-06"; # fixes to non-static builds right after 4.1.2 release
+  version = "4.1.4";
 
   src = fetchFromGitHub {
     owner = "linux-audit";
     repo = "audit-userspace";
-    rev = "cb13fe75ee2c36d5c525ed9de22aae10dbc8caf4";
-    hash = "sha256-NX0TWA+LtcZgbM9aQfokWv2rGNAAb3ksGqAH8URAkYM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GdJ9nzlDAdOazOHH/YWuEoELrJh+G5ZJUKwIqAKAzpo=";
   };
 
   postPatch = ''
@@ -132,10 +132,6 @@ stdenv.mkDerivation (finalAttrs: {
   # Instead, we load audit rules in a dedicated module.
   postFixup = ''
     moveToOutput bin/augenrules $scripts
-    substituteInPlace $scripts/bin/augenrules \
-      --replace-fail "/sbin/auditctl -R" "$bin/bin/auditctl -R" \
-      --replace-fail "auditctl -s" "$bin/bin/auditctl -s" \
-      --replace-fail "/bin/ls" "ls"
     wrapProgram $scripts/bin/augenrules \
       --prefix PATH : ${
         lib.makeBinPath [

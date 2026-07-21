@@ -70,9 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/NVIDIA/egl-wayland/";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
-    maintainers = with lib.maintainers; [
-      hedning
-      ccicnce113424
-    ];
+    maintainers = with lib.maintainers; [ ccicnce113424 ];
   };
 })

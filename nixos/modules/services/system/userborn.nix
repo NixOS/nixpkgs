@@ -86,7 +86,7 @@ in
         The primary motivation for this is an immutable `/etc`, where we cannot
         write the files directly to `/etc`.
 
-        However this an also serve other use cases, e.g. when `/etc` is on a `tmpfs`.
+        However this can also serve other use cases, e.g. when `/etc` is on a `tmpfs`.
       '';
     };
 

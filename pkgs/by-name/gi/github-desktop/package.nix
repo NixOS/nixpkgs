@@ -29,19 +29,19 @@
 
 let
   inherit (stdenv.hostPlatform.node) arch platform;
-  cacheRootHash = "sha256-OJDxq1Yep3swLU87YyJz7WfpPzpxo5ISukB4pIwxJBA=";
-  cacheAppHash = "sha256-DYUlLNxWn4sn7PBir/miJUoDVAQ2/nbOVGWSGN+IPxw=";
+  cacheRootHash = "sha256-2LV8hZCuX96h1KYYcL6b6XGC3uGcH5IQM4D61R7Em/U=";
+  cacheAppHash = "sha256-zX4V9mg7ljQ1AKl1fgATPVrFpx1a6jsyiLzN2VixpFE=";
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "github-desktop";
-  version = "3.5.10";
+  version = "3.6.3";
 
   src = fetchFromGitHub {
     owner = "desktop";
     repo = "desktop";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-AG5YiX8Jyi3ebgPSU4he2UamEdxgTjEYjezh2WkZjC8=";
+    hash = "sha256-HzfecIgPp/Hof5djWkKrrZD83Z0Afr1iC2WbzQrOyyI=";
     fetchSubmodules = true;
     postCheckout = "git -C $out rev-parse HEAD > $out/.gitrev";
   };
@@ -100,9 +100,15 @@ stdenv.mkDerivation (finalAttrs: {
     yarn --cwd app/node_modules/desktop-notifications run install
 
     # use git from nixpkgs instead of an automatically downloaded one by dugite
-    makeWrapper ${lib.getExe git} app/node_modules/dugite/git/bin/git \
+    gitRoot=app/node_modules/dugite/git
+    makeWrapper ${lib.getExe git} "$gitRoot/bin/git" \
       --prefix PATH : ${lib.makeBinPath [ git-lfs ]}
 
+    mkdir -p "$gitRoot/libexec/git-core"
+
+    for script in ${git}/libexec/git-core/*; do
+      ln -s "$script" "$gitRoot/libexec/git-core/$(basename "$script")"
+    done
 
     # exception: printenvz needs `node-gyp` configure first for some reason
     pushd node_modules/printenvz

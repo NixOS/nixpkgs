@@ -3,7 +3,6 @@
   lib,
   fetchFromGitHub,
   makeWrapper,
-  nix-update-script,
   nodejs,
   nixosTests,
   yarn-berry_4,
@@ -11,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "outline";
-  version = "1.7.1";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-LHU3OQglvxLVemDKoDxeI7cGyuSnIUYoPV3aj/LR9XA=";
+    hash = "sha256-F9JdeCuzmYeV2hxk0b1thQgo4cRl+aeUbBjK0MLzKH8=";
   };
 
   patches = [
@@ -36,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-yMHpM/1hQ/86MItCu8SP82CgF/ED97l6lVHF+Cf8h+U=";
+    hash = "sha256-xj6IBvANRQr2C/R47KrsSacPXqwtrAGv4ZeidJ4T5Hc=";
   };
 
   buildPhase = ''
@@ -70,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       basic-functionality = nixosTests.outline;
     };
-    updateScript = nix-update-script { };
+    updateScript = ./update.sh;
     # alias for nix-update to be able to find and update this attribute
     inherit (finalAttrs) offlineCache;
   };
@@ -78,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Fastest wiki and knowledge base for growing teams. Beautiful, feature rich, and markdown compatible";
     homepage = "https://www.getoutline.com/";
-    changelog = "https://github.com/outline/outline/releases";
+    changelog = "https://github.com/outline/outline/releases/v${finalAttrs.version}";
     license = lib.licenses.bsl11;
     maintainers = with lib.maintainers; [
       cab404

@@ -16,15 +16,22 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dermotduffy";
     repo = "advanced-camera-card";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GHSyDdKGgPPMbcPIqlQbRA0V8gPd1YsId8gqPF0VgTs=";
-    leaveDotGit = true; # gitInfo plugin
+    hash = "sha256-NdWP2nYzDEzmO4DpwVUpn3/KsungKNOzOQf8FxZ4fGw=";
   };
 
   patches = [
     # Remove after upstream updates to Yarn 4.14
     # https://github.com/dermotduffy/advanced-camera-card/blob/main/package.json#L201
     ./yarn-4.14-support.patch
+
+    # Drop hard dependency on .git repo during build
+    ./gitinfo.patch
   ];
+
+  postPatch = ''
+    substituteInPlace package.json \
+      --replace-fail "0.0.0-dev" "${finalAttrs.version}"
+  '';
 
   missingHashes = ./missing-hashes.json;
 

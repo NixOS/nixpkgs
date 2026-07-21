@@ -1,5 +1,6 @@
 {
   lib,
+  backports-zstd,
   buildPythonPackage,
   defusedxml,
   dissect-cstruct,
@@ -10,18 +11,20 @@
   pytestCheckHook,
   setuptools,
   setuptools-scm,
+  zstandard,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "dissect-hypervisor";
-  version = "3.20";
+  version = "3.21";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.hypervisor";
     tag = finalAttrs.version;
-    hash = "sha256-/b/7u3b0G3XRqXxjyhHn5dYzueQOPoacYGeDYv21I0w=";
+    fetchLFS = true;
+    hash = "sha256-T6dv8TtGTwjOVoGplgBJgRmFRst4Q0EMYgPheGSAEU4=";
   };
 
   patches = [
@@ -51,11 +54,15 @@ buildPythonPackage (finalAttrs: {
 
   optional-dependencies = {
     full = [
+      backports-zstd
       pycryptodome
     ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "dissect.hypervisor" ];
 

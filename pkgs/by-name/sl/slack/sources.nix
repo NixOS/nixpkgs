@@ -9,13 +9,6 @@
       hash = "sha256-u5NppmmRyC+6HaPIcSSGOOdVRiZdT9GE1eHvad6rYdY=";
     };
   };
-  x86_64-darwin = {
-    version = "4.49.89";
-    src = fetchurl {
-      url = "https://downloads.slack-edge.com/desktop-releases/mac/x64/4.49.89/Slack-4.49.89-macOS.dmg";
-      hash = "sha256-eysKaQ1SXScsL0vji+32r/NgWN0eni62+LkB4svTHUE=";
-    };
-  };
   x86_64-linux = {
     version = "4.49.89";
     src = fetchurl {

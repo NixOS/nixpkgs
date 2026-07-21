@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyworxcloud";
-  version = "6.3.6";
+  version = "6.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MTrab";
     repo = "pyworxcloud";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9UBtzSo+CKbY8KXERdN+Cxu+D03qf33oTrXp288Qgik=";
+    hash = "sha256-cr1zQwyavvAo9AJtTVof+Pw6BEdDAf5G+Msspx3OOZ0=";
   };
 
   pythonRelaxDeps = [ "awsiotsdk" ];

@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   cmake,
-  pcre,
+  pcre2,
   zlib,
   python3,
   openssl,
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
   buildInputs = [
-    pcre
+    pcre2
     zlib
     openssl
   ];

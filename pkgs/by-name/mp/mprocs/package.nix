@@ -8,16 +8,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mprocs";
-  version = "0.9.2";
+  version = "0.9.6";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pvolok";
-    repo = "mprocs";
+    repo = "dekit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UZFFeaesT71UQHPjiG2w5O2Ulyt86OVuFw7i3A7b91I=";
+    hash = "sha256-fh294Re4gEveWgX29m0SXdI8hwuiXuniTq7pVZ464ws=";
   };
 
-  cargoHash = "sha256-htgl0zh73oHXbc9E90xtb5jM8zhXvSJCE9DBhd1SH2E=";
+  cargoHash = "sha256-Qp0o7ruXUZBCi7Abrj8V5MAY/qzo5Uf7pwIcFGwCfnw=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -30,8 +31,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "TUI tool to run multiple commands in parallel and show the output of each command separately";
-    homepage = "https://github.com/pvolok/mprocs";
-    changelog = "https://github.com/pvolok/mprocs/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/pvolok/dekit";
+    changelog = "https://github.com/pvolok/dekit/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     platforms = lib.platforms.unix;

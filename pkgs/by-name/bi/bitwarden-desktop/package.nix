@@ -9,7 +9,6 @@
   fetchFromGitHub,
   gnome-keyring,
   jq,
-  llvmPackages_18,
   makeDesktopItem,
   makeWrapper,
   nix-update-script,
@@ -22,24 +21,18 @@
 }:
 
 let
-  description = "Secure and free password manager for all of your devices";
   icon = "bitwarden";
   electron = electron_39;
-
-  # argon2 npm dependency is using `std::basic_string<uint8_t>`, which is no longer allowed in LLVM 19
-  buildNpmPackage' = buildNpmPackage.override {
-    stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_18.stdenv else stdenv;
-  };
 in
-buildNpmPackage' rec {
+buildNpmPackage (finalAttrs: {
   pname = "bitwarden-desktop";
-  version = "2026.3.1";
+  version = "2026.6.1";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
-    rev = "desktop-v${version}";
-    hash = "sha256-ecaCHk04N9h0RP8gK0o+MLgYS6Linsqi7AaC86hwQ3U=";
+    tag = "desktop-v${finalAttrs.version}";
+    hash = "sha256-ee+C58Y5pZWEmqbRO/w7rdY+e6gy4EL7Sn0S1AxGMXI=";
   };
 
   patches = [
@@ -55,10 +48,6 @@ buildNpmPackage' rec {
   ];
 
   postPatch = ''
-    # https://github.com/bitwarden/clients/pull/20480
-    substituteInPlace package-lock.json apps/desktop/desktop_native/napi/package.json \
-      --replace-fail '"@napi-rs/cli": "3.5.1"' '"@napi-rs/cli": "3.2.0"'
-
     # remove code under unfree license
     rm -r bitwarden_license
 
@@ -84,25 +73,22 @@ buildNpmPackage' rec {
   ];
 
   npmWorkspace = "apps/desktop";
-  npmDepsFetcherVersion = 2;
-  npmDepsHash = "sha256-1t4CSd1NDC1medTTFHSzX9ZkgHqPG2L//yjaloH47z0=";
+  npmDepsFetcherVersion = 3;
+  npmDepsHash = "sha256-C5GLei/WWetd4qLv7obBJWbQR9LBy+Sqdbjko3/W7VY=";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
       cargoRoot
       patches
       ;
-    hash = "sha256-d9Iv7OekHOteH1lyAuyj/EzfU/KSCW6ATx83foOW3IE=";
+    hash = "sha256-xyK3+z2yfCG9K5XAB6LNEeyqMRknONi6ZfY/3oko7Z8=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
-
-  # make electron-builder not attempt to codesign the app on darwin
-  env.CSC_IDENTITY_AUTO_DISCOVERY = "false";
 
   nativeBuildInputs = [
     cargo
@@ -153,7 +139,8 @@ buildNpmPackage' rec {
     npm exec electron-builder -- \
       --dir \
       -c.electronDist=electron-dist \
-      -c.electronVersion=${electron.version}
+      -c.electronVersion=${electron.version} \
+      ${lib.optionalString stdenv.hostPlatform.isDarwin "-c.mac.identity=null"}
 
     popd
   '';
@@ -177,7 +164,7 @@ buildNpmPackage' rec {
   ];
 
   preCheck = ''
-    pushd ${cargoRoot}
+    pushd ${finalAttrs.cargoRoot}
     cargoCheckType=release
     HOME=$(mktemp -d)
   '';
@@ -231,7 +218,7 @@ buildNpmPackage' rec {
       name = "bitwarden";
       exec = "bitwarden %U";
       inherit icon;
-      comment = description;
+      comment = finalAttrs.meta.description;
       desktopName = "Bitwarden";
       categories = [ "Utility" ];
       mimeTypes = [ "x-scheme-handler/bitwarden" ];
@@ -248,17 +235,19 @@ buildNpmPackage' rec {
   };
 
   meta = {
-    changelog = "https://github.com/bitwarden/clients/releases/tag/${src.rev}";
-    inherit description;
+    changelog = "https://github.com/bitwarden/clients/releases/tag/${finalAttrs.src.tag}";
+    description = "Secure and free password manager for all of your devices";
     homepage = "https://bitwarden.com";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ amarshall ];
+    maintainers = with lib.maintainers; [
+      tree-sapii
+      amarshall
+    ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     mainProgram = "bitwarden";
   };
-}
+})

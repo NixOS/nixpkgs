@@ -44,8 +44,6 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-IfKePiU38fUd5HefaS7J1s8Mb6hVmldINemxAJY+83o=";
   };
 
-  buildInputs = [ llvmPackages.openmp ];
-
   build-system = [ setuptools ];
 
   dependencies = [

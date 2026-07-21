@@ -11,11 +11,9 @@
   pkgsBuildBuild,
   callPackage,
   fetchFromGitHub,
-  fetchpatch,
   microhs-boot,
   stdenv,
   versionCheckHook,
-  writeShellScript,
 }:
 
 let
@@ -30,10 +28,10 @@ let
     };
 
     patches = [
-      patches/hugs.patch
-      patches/hugs-viewpatterns.patch
+      ./patches/hugs.patch
+      ./patches/hugs-viewpatterns.patch
     ]
-    ++ lib.optional stdenv.hostPlatform.isGnu patches/link-math.patch;
+    ++ lib.optional stdenv.hostPlatform.isGnu ./patches/link-math.patch;
 
     # The source contains pre-compiled files
     # We delete them to be certain we are building from source

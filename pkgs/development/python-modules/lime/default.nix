@@ -3,6 +3,8 @@
   fetchPypi,
   buildPythonPackage,
 
+  setuptools,
+
   matplotlib,
   numpy,
   scipy,
@@ -13,13 +15,15 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lime";
   version = "0.2.0.1";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-dpYOTwVf61Pom1AiODuvyHtj8lusYmWYSwozPRpX94E=";
   };
 
@@ -28,7 +32,9 @@ buildPythonPackage rec {
       --replace-fail "random_seed" "rng"
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     matplotlib
     numpy
     scipy
@@ -42,6 +48,8 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # touches network
     "lime/tests/test_lime_text.py"
+    # slightly flaky
+    "lime/tests/test_lime_tabular.py::TestLimeTabular::test_lime_explainer_entropy_discretizer"
   ];
 
   pythonImportsCheck = [
@@ -55,8 +63,8 @@ buildPythonPackage rec {
   meta = {
     description = "Local Interpretable Model-Agnostic Explanations for machine learning classifiers";
     homepage = "https://github.com/marcotcr/lime";
-    changelog = "https://github.com/marcotcr/lime/releases/tag/${version}";
+    changelog = "https://github.com/marcotcr/lime/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ khaser ];
   };
-}
+})

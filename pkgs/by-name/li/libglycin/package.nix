@@ -15,6 +15,7 @@
   glib,
   gobject-introspection,
   glycin-loaders,
+  glycin-thumbnailer,
   libglycin-gtk4,
   fontconfig,
   libseccomp,
@@ -94,12 +95,19 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs \
       build-aux/crates-version.py
+    substituteInPlace libglycin/meson.build --replace-fail \
+      "cargo_output = cargo_target_dir / rust_target" \
+      "cargo_output = cargo_target_dir / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target"
   '';
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     moveToOutput "share/doc" "$devdoc"
   '';
+
+  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
+
+  strictDeps = true;
 
   passthru = {
     updateScript =
@@ -146,6 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       inherit
         glycin-loaders
+        glycin-thumbnailer
         libglycin-gtk4
         ;
     };
@@ -155,10 +164,12 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Sandboxed and extendable image loading library";
     homepage = "https://gitlab.gnome.org/GNOME/glycin";
     changelog = "https://gitlab.gnome.org/GNOME/glycin/-/tags/${finalAttrs.version}";
-    license = with lib.licenses; [
-      mpl20 # or
-      lgpl21Plus
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mpl20
+        lgpl21Plus
+      ];
     maintainers = [ ];
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;

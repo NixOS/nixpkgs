@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "astropy-iers-data";
-  version = "0.2026.1.19.0.42.31";
+  version = "0.2026.6.22.1.23.34";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "astropy";
     repo = "astropy-iers-data";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-psxVL7375xQuo6mqh+5rvv0xEuZNUOtFco1BrPPWLtg=";
+    hash = "sha256-q3uW3G3WTHpaRC54tO7ytmSg65SMaOQKO5KbqaSxeq4=";
   };
 
   build-system = [

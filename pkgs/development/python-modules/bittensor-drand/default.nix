@@ -8,7 +8,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "bittensor-drand";
-  version = "1.3.0";
+  version = "2.0.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -17,12 +17,12 @@ buildPythonPackage (finalAttrs: {
     owner = "latent-to";
     repo = "bittensor-drand";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0GizpmKGWbDjWCIAF1kPdz2sjn8B/e0qSIHmDqlDzZc=";
+    hash = "sha256-c1dAbHlVpQ9+x8ASmOO3zAwJLvyJBTzti1qEOfoKzxg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-JasDf3qXzB6ddp1NjC+xtozsggwyk2nQbRw/Lbt02Kg=";
+    hash = "sha256-XpAuoJfBpXNgI3MeMXuMOi9l91oJDb0qfbQ1acflM9s=";
   };
 
   nativeBuildInputs = with rustPlatform; [

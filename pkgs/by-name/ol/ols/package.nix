@@ -17,6 +17,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-9tQVyauvXGTkKnQUSYKAhjL5ZZbhglqdcxdcs27P2k4=";
   };
 
+  patches = [
+    # Since Odin removed Haiku support in dev-2026-06 and there is still no update
+    # for ols we're removing the haiku parts so that this builds again
+    ./remove-haiku.patch
+  ];
+
   postPatch = ''
     substituteInPlace build.sh \
       --replace-fail "-microarch:native" ""
@@ -39,7 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm755 ols odinfmt -t $out/bin/
-    wrapProgram $out/bin/ols --set-default ODIN_ROOT ${odin}/share
+    wrapProgram $out/bin/ols \
+      --set-default ODIN_ROOT ${odin}/share \
+      --set-default OLS_BUILTIN_FOLDER ${odin}/share/base/builtin
 
     runHook postInstall
   '';

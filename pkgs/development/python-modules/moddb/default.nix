@@ -5,22 +5,25 @@
   beautifulsoup4,
   pyrate-limiter,
   requests,
+  setuptools_80,
   toolz,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "moddb";
   version = "0.12.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ClementJ18";
     repo = "moddb";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-idBja/W9r8iX69Af+x2TZcLpSLy45fC9pmrMKJZ0RsA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools_80 ];
+
+  dependencies = [
     beautifulsoup4
     pyrate-limiter
     requests
@@ -39,4 +42,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

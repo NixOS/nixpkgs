@@ -36,8 +36,7 @@ body:
       options:
         - "Please select a version."
         - "- Unstable (26.11)"
-        - "- Beta (26.05)"
-        - "- Stable (25.11)"
+        - "- Stable (26.05)"
       default: 0
     validations:
       required: true

@@ -268,15 +268,6 @@ let
       };
     };
 
-  writeOidcJwksConfigFile =
-    oidcIssuerPrivateKeyFile:
-    pkgs.writeText "oidc-jwks.yaml" ''
-      identity_providers:
-        oidc:
-          jwks:
-            - key: {{ secret "${oidcIssuerPrivateKeyFile}" | mindent 10 "|" | msquote }}
-    '';
-
   # Remove an attribute in a nested set
   # https://discourse.nixos.org/t/modify-an-attrset-in-nix/29919/5
   removeAttrByPath =
@@ -362,7 +353,12 @@ in
           execCommand = "${instance.package}/bin/authelia";
           configFile = format.generate "config.yml" cleanedSettings;
           oidcJwksConfigFile = lib.optional (instance.secrets.oidcIssuerPrivateKeyFile != null) (
-            writeOidcJwksConfigFile instance.secrets.oidcIssuerPrivateKeyFile
+            pkgs.writeText "oidc-jwks.yaml" ''
+              identity_providers:
+                oidc:
+                  jwks:
+                    - key: {{ mustEnv "CREDENTIALS_DIRECTORY" | printf "%s/oidcIssuerPrivateKeyFile" | secret | mindent 10 "|" | msquote }}
+            ''
           );
           configArg = "--config ${
             builtins.concatStringsSep "," (
@@ -373,21 +369,25 @@ in
               ]
             )
           }";
+          # Mapping between the Authelia env variables and the secret keys defined in the module
+          envSecretsMap = {
+            AUTHELIA_IDENTITY_VALIDATION_RESET_PASSWORD_JWT_SECRET_FILE = "jwtSecretFile";
+            AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE = "storageEncryptionKeyFile";
+            AUTHELIA_SESSION_SECRET_FILE = "sessionSecretFile";
+            AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET_FILE = "oidcHmacSecretFile";
+          };
+          nonNullEnvSecretsMap = lib.filterAttrs (_: v: instance.secrets.${v} != null) envSecretsMap;
         in
         {
           description = "Authelia authentication and authorization server";
           wantedBy = [ "multi-user.target" ];
           after = [ "network-online.target" ]; # Checks SMTP notifier creds during startup
           wants = [ "network-online.target" ];
-          environment =
-            (lib.filterAttrs (_: v: v != null) {
-              X_AUTHELIA_CONFIG_FILTERS = lib.mkIf (oidcJwksConfigFile != [ ]) "template";
-              AUTHELIA_IDENTITY_VALIDATION_RESET_PASSWORD_JWT_SECRET_FILE = instance.secrets.jwtSecretFile;
-              AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE = instance.secrets.storageEncryptionKeyFile;
-              AUTHELIA_SESSION_SECRET_FILE = instance.secrets.sessionSecretFile;
-              AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET_FILE = instance.secrets.oidcHmacSecretFile;
-            })
-            // instance.environmentVariables;
+          environment = {
+            X_AUTHELIA_CONFIG_FILTERS = lib.mkIf (oidcJwksConfigFile != [ ]) "template";
+          }
+          // lib.mapAttrs (_: v: "%d/${v}") nonNullEnvSecretsMap
+          // instance.environmentVariables;
 
           preStart = "${execCommand} ${configArg} validate-config";
           serviceConfig = {
@@ -398,6 +398,12 @@ in
             RestartSec = "5s";
             StateDirectory = autheliaName instance.name;
             StateDirectoryMode = "0700";
+
+            LoadCredential =
+              lib.optional (
+                instance.secrets.oidcIssuerPrivateKeyFile != null
+              ) "oidcIssuerPrivateKeyFile:${instance.secrets.oidcIssuerPrivateKeyFile}"
+              ++ lib.mapAttrsToList (_: v: "${v}:${instance.secrets.${v}}") nonNullEnvSecretsMap;
 
             # Security options:
             AmbientCapabilities = "";

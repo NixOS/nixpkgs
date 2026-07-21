@@ -6,11 +6,11 @@
 }:
 appimageTools.wrapType2 rec {
   pname = "cubelify";
-  version = "1.25.11";
+  version = "1.25.13";
 
   src = fetchurl {
     url = "https://storage.cubelify.com/overlay/v1/Cubelify%20Overlay-${version}.AppImage";
-    hash = "sha512-iWOkFTH5iPw3gzirWph14f8/M0cLQgsUyGX5Xnestc1oqcrKOJgdVb65RBWgCQBywhMkEXC0h1wzaZiBaKYuAQ==";
+    hash = "sha512-1gNMoaEdh5qAySgRl9rjrFPLFpdTt6YxMaYdry4AJpQhNYxv45M1pq7D5HqJ4xgZHQZxfERPo+Wvfzk1rwaWog==";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -33,7 +33,7 @@ appimageTools.wrapType2 rec {
   meta = {
     description = "Powerful and feature-rich Hypixel anti-sniping stats overlay";
     homepage = "https://cubelify.com/";
-    license = with lib.licenses; [ unfree ];
+    license = lib.licenses.unfree;
     mainProgram = "cubelify";
     maintainers = with lib.maintainers; [ yunfachi ];
     platforms = [ "x86_64-linux" ];

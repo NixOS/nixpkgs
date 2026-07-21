@@ -47,7 +47,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "autopush";
-  version = "1.81.3";
+  version = "1.82.2";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -61,10 +61,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "mozilla-services";
     repo = "autopush-rs";
     tag = finalAttrs.version;
-    hash = "sha256-DP02mcEMoQoJqi5rw5eSuep0i7zeJ0LLYsakikt9hho=";
+    hash = "sha256-do0EllSpXlJtPM9FnIWgwKemXHhDcj0P+aH6rnt4poE=";
   };
 
-  cargoHash = "sha256-LqmuUtFF30TO6iw7LPFB7yJGrzrhh7R0OKCWMhe/OjU=";
+  cargoHash = "sha256-tXkNjgHW4sVWNCQehumbDW1H2azelqyqp5Wxk8M6sPc=";
 
   nativeBuildInputs = [
     pkg-config

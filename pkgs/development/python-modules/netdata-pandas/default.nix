@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Library to pull data from the netdata REST API into a pandas dataframe";
     homepage = "https://github.com/netdata/netdata-pandas";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ raitobezarius ];
+    maintainers = [ ];
   };
 }

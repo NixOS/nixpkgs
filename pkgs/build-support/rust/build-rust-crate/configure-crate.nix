@@ -148,7 +148,7 @@ in
   export CARGO_CFG_TARGET_OS=${stdenv.hostPlatform.rust.platform.os}
   export CARGO_CFG_TARGET_FAMILY="unix"
   export CARGO_CFG_UNIX=1
-  export CARGO_CFG_TARGET_ENV="gnu"
+  export CARGO_CFG_TARGET_ENV=${stdenv.hostPlatform.rust.platform.env}
   export CARGO_CFG_TARGET_ENDIAN=${
     if stdenv.hostPlatform.parsed.cpu.significantByte.name == "littleEndian" then "little" else "big"
   }

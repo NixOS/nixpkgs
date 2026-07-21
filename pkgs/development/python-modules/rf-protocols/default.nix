@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   prek,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
@@ -10,17 +11,26 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "rf-protocols";
-  version = "2.2.0";
+  version = "4.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "rf-protocols";
     tag = finalAttrs.version;
-    hash = "sha256-eB9Rcgd2eRs4Wx9Vjw//BT0jPPXN/PS0sukXOwmNnuc=";
+    hash = "sha256-g2e+iQXBaoGO1Yv5v+xpiM+beecErI58Ua5/FODg8Bo=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=78.1.1,<83.0" setuptools
+  '';
+
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   nativeCheckInputs = [
     prek

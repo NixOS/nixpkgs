@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "m-cli";
-  version = "2.0.7";
+  version = "2.0.9";
 
   src = fetchFromGitHub {
     owner = "rgcr";
     repo = "m-cli";
     tag = "v${version}";
-    sha256 = "sha256-a/X7HaShb8mXJIYtTDxEPN4DcskUDourRFgHnOXksYM=";
+    sha256 = "sha256-Esq7ECkl34L+hk5jGS3pTmUu9vnI9hfn0Q+w0/AbvgY=";
   };
 
   dontBuild = true;

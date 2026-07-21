@@ -78,6 +78,9 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     moveToOutput bin/xslt-config "$dev"
     moveToOutput lib/xsltConf.sh "$dev"
+
+    substituteInPlace "$dev/lib/cmake/libxslt/libxslt-config.cmake" \
+      --replace-fail '"''${PACKAGE_PREFIX_DIR}/lib"' "\"$out/lib\""
   ''
   + lib.optionalString pythonSupport ''
     mkdir -p $py/nix-support

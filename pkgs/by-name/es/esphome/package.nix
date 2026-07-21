@@ -18,29 +18,20 @@ let
     packageOverrides = self: super: {
       esphome-dashboard = self.callPackage ./dashboard.nix { };
 
-      paho-mqtt = super.paho-mqtt.overridePythonAttrs (oldAttrs: rec {
-        version = "1.6.1";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          tag = "v${version}";
-          hash = "sha256-9nH6xROVpmI+iTKXfwv2Ar1PAmWbEunI3HO0pZyK6Rg=";
-        };
-        build-system = with self; [ setuptools ];
-        doCheck = false;
-      });
+      paho-mqtt = self.paho-mqtt_1;
     };
   };
 in
 python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "esphome";
-  version = "2026.5.1";
+  version = "2026.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = finalAttrs.version;
-    hash = "sha256-faW44FhAymqGQG4khAUEcv6QoAn49KPSghi3YcXttNk=";
+    hash = "sha256-h7aMPSXmIUutCGMoZlE3Z1wX2xNxdmZsHfBllcFHBHc=";
   };
 
   patches = [
@@ -96,6 +87,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     pillow
     platformio
     puremagic
+    py7zr
     pyparsing
     pyserial
     pyyaml
@@ -151,6 +143,10 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   disabledTestPaths = [
     # platformio builds; requires networking for dependency resolution
     "tests/integration"
+
+    # tries to dynamically patch platformio module
+    "tests/unit_tests/test_writer.py"
+    "tests/unit_tests/test_espidf_component.py"
   ];
 
   preCheck = ''

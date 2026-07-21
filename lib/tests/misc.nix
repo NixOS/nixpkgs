@@ -2164,6 +2164,21 @@ runTests {
     };
   };
 
+  testConcatMapAttrsDuplicates = {
+    expr =
+      concatMapAttrs
+        (name: value: {
+          final = value;
+        })
+        {
+          a = 1;
+          b = 2;
+        };
+    expected = {
+      final = 2;
+    };
+  };
+
   testFilterAttrs = {
     expr = filterAttrs (n: v: n != "a" && (v.hello or false) == true) {
       a.hello = true;
@@ -4672,7 +4687,7 @@ runTests {
   };
 
   testPlatformMatchNoMatch = {
-    expr = meta.platformMatch { system = "x86_64-darwin"; } "x86_64-linux";
+    expr = meta.platformMatch { system = "x86_64-freebsd"; } "x86_64-linux";
     expected = false;
   };
 

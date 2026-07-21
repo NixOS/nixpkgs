@@ -62,6 +62,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  disabledTests = [
+    # DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated,
+    # and will raise an error in the future. This includes implicit conversion of bare
+    # integers (e.g. `+ 1`).Please use a specific unit instead.
+    "test_import_without_warning"
+  ];
+
   # Workaround https://github.com/NixOS/nixpkgs/issues/123561
   preCheck = ''
     mv fastparquet/test .

@@ -3,7 +3,7 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  hatchling,
   pytestCheckHook,
   pytest-asyncio,
   pytest-vcr,
@@ -11,19 +11,19 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "asyncprawcore";
-  version = "3.0.2";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "praw-dev";
     repo = "asyncprawcore";
-    tag = "v${version}";
-    hash = "sha256-0FOMY/0LXGcHwDe4t+NMAovMhX83/mMv8sWvIf5gxok=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-kpqd6H8uiqp4rM+8B+qJxfslrY5uvRTEARwh/0runIg=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp
@@ -53,8 +53,8 @@ buildPythonPackage rec {
   meta = {
     description = "Low-level asynchronous communication layer for Async PRAW";
     homepage = "https://asyncpraw.readthedocs.io/";
-    changelog = "https://github.com/praw-dev/asyncprawcore/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/praw-dev/asyncprawcore/blob/v${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.amadejkastelic ];
   };
-}
+})

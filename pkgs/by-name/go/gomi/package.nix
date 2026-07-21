@@ -9,7 +9,7 @@ buildGoModule (finalAttrs: {
   version = "1.6.2";
 
   src = fetchFromGitHub {
-    owner = "b4b4r07";
+    owner = "babarot";
     repo = "gomi";
     tag = "v${finalAttrs.version}";
     hash = "sha256-Ino7jUd9JvX6afvS6ouPHxU42GYfF696m+OS5CSvx5g=";
@@ -40,7 +40,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Replacement for UNIX rm command";
-    homepage = "https://github.com/b4b4r07/gomi";
+    homepage = "https://github.com/babarot/gomi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       mimame

@@ -163,7 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Software modular synth with controllers support, scripting and VST";
     homepage = "https://www.bespokesynth.com/";
-    license = [ lib.licenses.gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       astro
       tobiasBora

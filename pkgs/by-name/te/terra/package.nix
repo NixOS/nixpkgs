@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   stdenv,
   fetchFromGitHub,
@@ -8,9 +9,10 @@
   libxml2,
   symlinkJoin,
   cudaPackages,
-  enableCUDA ? false,
+  enableCUDA ? config.cudaSupport,
   libffi,
   libpfm,
+  versionCheckHook,
 }:
 
 let
@@ -20,7 +22,7 @@ let
   luajitSrc = fetchFromGitHub {
     owner = "LuaJIT";
     repo = "LuaJIT";
-    rev = luajitRev;
+    tag = luajitRev;
     hash = "sha256-L9T6lc32dDLAp9hPI5mKOzT0c4juW9JHA3FJCpm7HNQ=";
   };
 
@@ -37,8 +39,6 @@ let
     ];
   };
 
-  cuda = cudaPackages.cudatoolkit;
-
   clangVersion = llvmPackages.clang-unwrapped.version;
 
 in
@@ -46,21 +46,30 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "terra";
   version = "1.2.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "terralang";
     repo = "terra";
-    rev = "release-${finalAttrs.version}";
+    tag = "release-${finalAttrs.version}";
     hash = "sha256-CukNCvTHZUhjdHyvDUSH0YCVNkThUFPaeyLepyEKodA=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ] ++ lib.optionals enableCUDA [ cudaPackages.cuda_nvcc ];
   buildInputs = [
     llvmMerged
     ncurses
     libffi
     libxml2
   ]
-  ++ lib.optionals enableCUDA [ cuda ]
+  ++ lib.optionals enableCUDA (
+    with cudaPackages;
+    [
+      cuda_nvcc # crt/host_config.h; even though we include this in nativeBuildInputs, it's needed here too
+      cuda_cudart
+    ]
+  )
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) libpfm;
 
   cmakeFlags =
@@ -100,13 +109,20 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 -t $bin/bin bin/terra
     install -Dm755 -t $out/lib lib/terra${stdenv.hostPlatform.extensions.sharedLibrary}
     install -Dm644 -t $static/lib lib/libterra_s.a
 
     mkdir -pv $dev/include
     cp -rv include/terra $dev/include
+
+    runHook postInstall
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Low-level counterpart to Lua";
@@ -123,5 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Linux Aarch64 broken above LLVM11
     # https://github.com/terralang/terra/issues/597
     broken = stdenv.hostPlatform.isAarch64;
+    mainProgram = "terra";
   };
 })

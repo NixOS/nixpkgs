@@ -10,6 +10,7 @@
   generateSplicesForMkScope,
   lib,
   stdenv,
+  callPackages,
   gcc14Stdenv,
   fetchurl,
   fetchgit,
@@ -291,11 +292,13 @@ let
             inherit debug;
             fix_qmake_libtool = ../hooks/fix-qmake-libtool.sh;
           };
+          meta.license = lib.licenses.mit;
         } ../hooks/qmake-hook.sh
       ) { };
 
       wrapQtAppsHook = callPackage (
         {
+          wrapQtAppsHook,
           makeBinaryWrapper,
           qtbase,
           qtwayland,
@@ -307,6 +310,10 @@ let
             makeBinaryWrapper
           ]
           ++ lib.optional stdenv.hostPlatform.isLinux qtwayland.dev;
+          passthru.tests = callPackages ../../qt-6/tests/wrap-qt-apps-hook.nix {
+            inherit qtbase wrapQtAppsHook;
+          };
+          meta.license = lib.licenses.mit;
         } ../hooks/wrap-qt-apps-hook.sh
       ) { };
     }

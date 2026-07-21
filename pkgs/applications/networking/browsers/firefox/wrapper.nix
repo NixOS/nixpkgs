@@ -166,36 +166,34 @@ let
           ) (lib.optionals usesNixExtensions nixExtensions);
 
       enterprisePolicies = {
-        policies = {
-          DisableAppUpdate = true;
-        }
-        // lib.optionalAttrs usesNixExtensions {
-          ExtensionSettings = {
-            "*" = {
-              blocked_install_message = "You can't have manual extension mixed with nix extensions";
-              installation_mode = "blocked";
-            };
-          }
-          // lib.foldr (
-            e: ret:
-            ret
-            // {
-              "${e.extid}" = {
-                installation_mode = "allowed";
+        policies =
+          lib.optionalAttrs usesNixExtensions {
+            ExtensionSettings = {
+              "*" = {
+                blocked_install_message = "You can't have manual extension mixed with nix extensions";
+                installation_mode = "blocked";
               };
             }
-          ) { } extensions;
+            // lib.foldr (
+              e: ret:
+              ret
+              // {
+                "${e.extid}" = {
+                  installation_mode = "allowed";
+                };
+              }
+            ) { } extensions;
 
-          Extensions = {
-            Install = lib.foldr (e: ret: ret ++ [ "${e.outPath}/${e.extid}.xpi" ]) [ ] extensions;
-          };
-        }
-        // lib.optionalAttrs smartcardSupport {
-          SecurityDevices = {
-            "OpenSC PKCS#11 Module" = "opensc-pkcs11.so";
-          };
-        }
-        // extraPolicies;
+            Extensions = {
+              Install = lib.foldr (e: ret: ret ++ [ "${e.outPath}/${e.extid}.xpi" ]) [ ] extensions;
+            };
+          }
+          // lib.optionalAttrs smartcardSupport {
+            SecurityDevices = {
+              "OpenSC PKCS#11 Module" = "opensc-pkcs11.so";
+            };
+          }
+          // extraPolicies;
       };
 
       mozillaCfg = ''
@@ -217,6 +215,7 @@ let
     in
     stdenv.mkDerivation (finalAttrs: {
       __structuredAttrs = true;
+      strictDeps = true;
       inherit pname version;
 
       desktopItem = makeDesktopItem (
@@ -230,7 +229,7 @@ let
           terminal = false;
         }
         // (
-          if libName == "thunderbird" then
+          if lib.strings.hasPrefix "thunderbird" libName then
             {
               genericName = "Email Client";
               comment = "Read and write e-mails or RSS feeds, or manage tasks on calendars.";
@@ -414,6 +413,9 @@ let
             ln -sfT "$target" "$out/$l"
           done
 
+          # Disable update checks
+          touch "$out/${libDir}/is-packaged-app"
+
           cd "$out"
 
         ''
@@ -433,7 +435,7 @@ let
                 ;;
               *)
                 # Copy if the symlink resolves to a Mach-O dylib
-                otool -l "$file" 2>/dev/null | grep -q 'LC_ID_DYLIB' || continue
+                otool -l "$file" 2>/dev/null | grep -F 'LC_ID_DYLIB' >/dev/null || continue
                 ;;
             esac
 

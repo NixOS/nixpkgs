@@ -1,7 +1,6 @@
 {
   lib,
   beam27Packages,
-  elixir_1_18,
   stdenv,
   fetchurl,
   python3,
@@ -41,7 +40,7 @@ let
     ]
   );
 
-  beamPackages = beam27Packages.extend (self: super: { elixir = elixir_1_18; });
+  beamPackages = beam27Packages.extend (self: super: { elixir = self.elixir_1_18; });
 in
 
 stdenv.mkDerivation (finalAttrs: {

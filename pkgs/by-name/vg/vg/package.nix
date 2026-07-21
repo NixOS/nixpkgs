@@ -42,13 +42,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vg";
-  version = "1.74.1";
+  version = "1.75.1";
 
   src = fetchFromGitHub {
     owner = "vgteam";
     repo = "vg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CY4nUtVetdmoex/sRnoncEbvuQloV0WMZXtQpPksO1s=";
+    hash = "sha256-CPyOZ4w5b26NQ+bz5QSaB6DcwQnlyjNNHlK1hHIEu9s=";
     fetchSubmodules = true;
   };
 
@@ -128,14 +128,15 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  # needed, else build fails
-  env.VG_GIT_VERSION = finalAttrs.src.tag;
-
-  # deps/elfutils
-  NIX_CFLAGS_COMPILE = toString [
-    "-Wno-error=stringop-overflow"
-    "-Wno-error=unterminated-string-initialization"
-  ];
+  env = {
+    # needed, else build fails
+    VG_GIT_VERSION = finalAttrs.src.tag;
+    # deps/elfutils
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=stringop-overflow"
+      "-Wno-error=unterminated-string-initialization"
+    ];
+  };
 
   makeFlags = [
     # don't build statically

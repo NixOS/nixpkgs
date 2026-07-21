@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  isPy27,
   pytest,
   tornado,
 }:
@@ -11,7 +10,6 @@ buildPythonPackage {
   pname = "pytest-tornasync";
   version = "0.6.0.post2";
   format = "setuptools";
-  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "eukaryote";

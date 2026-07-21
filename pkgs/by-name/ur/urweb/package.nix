@@ -76,6 +76,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = [
+      lib.maintainers.buggymcbugfix
       lib.maintainers.thoughtpolice
       lib.maintainers.sheganinans
     ];

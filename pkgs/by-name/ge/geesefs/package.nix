@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "0.43.7";
+  version = "0.43.8";
 in
 buildGoModule {
   pname = "geesefs";
@@ -15,7 +15,7 @@ buildGoModule {
     owner = "yandex-cloud";
     repo = "geesefs";
     rev = "v${version}";
-    hash = "sha256-D9ZFjsmM4x1TVHRGcu6uredWjhwEsNjTr+kwQDmpyGE=";
+    hash = "sha256-NDe3GnB0xVly6Elfpa60+Wx3RyWhfPfssf1l7Tt20zY=";
   };
 
   # hashes differ per architecture otherwise.
@@ -27,7 +27,7 @@ buildGoModule {
   meta = {
     homepage = "https://github.com/yandex-cloud/geesefs";
     description = "Finally, a good FUSE FS implementation over S3";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers.flokli ];
     platforms = lib.platforms.unix;
     mainProgram = "geesefs";

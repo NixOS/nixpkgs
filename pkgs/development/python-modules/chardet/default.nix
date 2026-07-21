@@ -1,26 +1,36 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
   hypothesis,
+  pytest-timeout,
+  pytest-xdist,
   pytestCheckHook,
-  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "chardet";
-  version = "5.2.0";
+  version = "6.0.0.post1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Gztv9HmoxBS8P6LAhSmVaVxKAm3NbQYzst0JLKOcHPc=";
+  src = fetchFromGitHub {
+    owner = "chardet";
+    repo = "chardet";
+    tag = finalAttrs.version;
+    hash = "sha256-7G998L4VRvNiGBBNAxPJB27lI2DtL1lTteowUH2NBDk=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
 
   nativeCheckInputs = [
     hypothesis
+    pytest-timeout
+    pytest-xdist
     pytestCheckHook
   ];
 
@@ -32,11 +42,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "chardet" ];
 
   meta = {
-    changelog = "https://github.com/chardet/chardet/releases/tag/${version}";
+    changelog = "https://github.com/chardet/chardet/releases/tag/${finalAttrs.src.tag}";
     description = "Universal encoding detector";
     mainProgram = "chardetect";
     homepage = "https://github.com/chardet/chardet";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
-}
+})

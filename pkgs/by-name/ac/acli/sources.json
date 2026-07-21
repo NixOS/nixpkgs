@@ -1,21 +1,17 @@
 {
-  "version": "1.3.18-stable",
+  "version": "1.3.22-stable",
   "sources": {
     "aarch64-darwin": {
-      "url": "https://acli.atlassian.com/darwin/1.3.18-stable/acli_1.3.18-stable_darwin_arm64.tar.gz",
-      "sha256": "9e4890e441e2762adbb6bd94451fdea554177806a6044469ece7b14e603d2040"
+      "url": "https://acli.atlassian.com/darwin/1.3.22-stable/acli_1.3.22-stable_darwin_arm64.tar.gz",
+      "sha256": "3a9a6ff1bb0bce5902780e26e748b18b9adb4489df67d88ea878f4b7673944ad"
     },
     "aarch64-linux": {
-      "url": "https://acli.atlassian.com/linux/1.3.18-stable/acli_1.3.18-stable_linux_arm64.tar.gz",
-      "sha256": "ac71711da43649854689ad0f74e44f18b0da3fd0ee776ceb4307ae7eb1e5da85"
-    },
-    "x86_64-darwin": {
-      "url": "https://acli.atlassian.com/darwin/1.3.18-stable/acli_1.3.18-stable_darwin_amd64.tar.gz",
-      "sha256": "4078846601b2e222ecbbc6b314a1c58ca6c41c18d1b118833814c942be00befe"
+      "url": "https://acli.atlassian.com/linux/1.3.22-stable/acli_1.3.22-stable_linux_arm64.tar.gz",
+      "sha256": "1a9e86d0b46a62a8f1992c1ef98b3af7e9a9ee3f76d0efa215fe1f2d1b2fd139"
     },
     "x86_64-linux": {
-      "url": "https://acli.atlassian.com/linux/1.3.18-stable/acli_1.3.18-stable_linux_amd64.tar.gz",
-      "sha256": "4ad4badc481ac1eff452f531c405a20422eb57513cc898d2a1f8ea945d6c24f6"
+      "url": "https://acli.atlassian.com/linux/1.3.22-stable/acli_1.3.22-stable_linux_amd64.tar.gz",
+      "sha256": "de9e0a60a556e4119428b9072f6ca787e75b9f9a538aa71ebcc8084deb8ca1a6"
     }
   }
 }

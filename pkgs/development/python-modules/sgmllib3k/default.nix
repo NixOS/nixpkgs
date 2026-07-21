@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  isPy27,
   pytestCheckHook,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "sgmllib3k";
   version = "1.0.0";
   format = "setuptools";
-
-  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

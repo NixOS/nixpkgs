@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "unifi-discovery";
-  version = "1.4.0";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "unifi-discovery";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pn8WRsYGbBy4EwQ1DufY2WbbVM65dM4h8ZReG+qkr6k=";
+    hash = "sha256-nL1liMg7qImY4AXdhvLbLXgZs/S3eypQCSJF5yZldmU=";
   };
 
   build-system = [ poetry-core ];

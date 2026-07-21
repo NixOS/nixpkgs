@@ -4,7 +4,7 @@
   backendStdenv,
   cudaAtLeast,
   cudaMajorMinorVersion,
-  cuda_cccl ? null,
+  cccl ? null,
   cuda_crt ? null,
   cuda_cudart ? null,
   cuda_cuobjdump ? null,
@@ -40,7 +40,7 @@ let
     cuda_nvprune
   ];
   targetPackages = [
-    cuda_cccl
+    cccl
     cuda_cudart
     cuda_cupti
     cuda_cuxxfilt

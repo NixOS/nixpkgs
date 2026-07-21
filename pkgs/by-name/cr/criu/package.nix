@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   protobuf,
   protobufc,
   asciidoc,
@@ -34,9 +35,17 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "checkpoint-restore";
     repo = "criu";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-SfpJskXX7r3jbAwgZl2qpa7j1M4i8/sV6rlAWiUEoQs=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "conflicting-redefinition-of-rseq-enums.patch";
+      url = "https://github.com/checkpoint-restore/criu/commit/3f3acc3200a23140abaa32a2017ae159d3c2d02c.patch?full_index=1";
+      hash = "sha256-J8n4TjqjzJLLULnpJdR/6YWa/8moFQMn+wNo4a0otgE=";
+    })
+  ];
 
   enableParallelBuilding = true;
   depsBuildBuild = [
@@ -73,11 +82,14 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.protobuf
   ]);
 
+  strictDeps = true;
+
   postPatch = ''
     substituteInPlace ./Documentation/Makefile \
-      --replace "2>/dev/null" "" \
-      --replace "-m custom.xsl" "-m custom.xsl --skip-validation -x ${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl"
-    substituteInPlace ./Makefile --replace "head-name := \$(shell git tag -l v\$(CRIU_VERSION))" "head-name = ${finalAttrs.version}.0"
+      --replace-fail "2>/dev/null" "" \
+      --replace-fail "-m custom.xsl" "-m custom.xsl --skip-validation -x ${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl"
+    substituteInPlace ./Makefile \
+      --replace-fail "head-name := \$(shell git tag -l v\$(CRIU_VERSION))" "head-name = ${finalAttrs.version}.0"
     ln -sf ${protobuf}/include/google/protobuf/descriptor.proto ./images/google/protobuf/descriptor.proto
   '';
 

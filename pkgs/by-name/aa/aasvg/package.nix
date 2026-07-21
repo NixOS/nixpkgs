@@ -8,13 +8,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "aasvg";
-  version = "0.5.2";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "martinthomson";
     repo = "aasvg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Le6ZbJY7ZkqblZx4TkHWIiRKn1foi8jB+rldhu95NQ0=";
+    hash = "sha256-D3ompmRt9Mxmzr0TxFLBrSl/dNE986TZbOvfuyk9rJo=";
   };
 
   # the project has no dependencies

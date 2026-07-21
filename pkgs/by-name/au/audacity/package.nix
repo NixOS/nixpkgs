@@ -31,7 +31,7 @@
   libid3tag,
   libopus,
   libuuid,
-  ffmpeg_7,
+  ffmpeg_8,
   soundtouch,
   portaudio, # given up fighting their portaudio.patch?
   portmidi,
@@ -59,17 +59,17 @@
 # 1. detach sbsms
 
 let
-  ffmpeg = ffmpeg_7;
+  ffmpeg = ffmpeg_8;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "audacity";
-  version = "3.7.7";
+  version = "3.7.8";
 
   src = fetchFromGitHub {
     owner = "audacity";
     repo = "audacity";
     rev = "Audacity-${finalAttrs.version}";
-    hash = "sha256-UyQffN9vOSD3uDk4jpYGsjH577pU4V7FpFAu0xdsXUA=";
+    hash = "sha256-Vp3Nx3LuNu5fqeLF6dvZ9/hhkoUCu0eCAdIEDtS1IwU=";
   };
 
   patches = [

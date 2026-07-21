@@ -2,29 +2,34 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
 
   # nativeBuildInputs
   cmake,
-  wrapGAppsHook3,
-  pkg-config,
   ninja,
+  pkg-config,
+  wrapGAppsHook3,
 
   # buildInputs
   alsa-lib,
   alsa-plugins,
+  ffmpeg,
+  flac,
   freetype,
+  qt6,
+  lame,
   libjack2,
   libogg,
+  libopus,
+  libopusenc,
   libpulseaudio,
   libsndfile,
   libvorbis,
+  mnxdom,
   portaudio,
   portmidi,
-  flac,
-  libopusenc,
-  libopus,
-  mnxdom,
-  kdePackages,
+  pugixml,
+  utf8cpp,
 
   # passthru tests
   nixosTests,
@@ -32,14 +37,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.7.0";
+  version = "4.7.4";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AEYZWkcjqB2pW+oBow2oMX1HQn4kRaTBBxhyxIbG0a4=";
+    hash = "sha256-ny6s5hQUxopb6c45KJugYEZULkC8fLP+Au5ghic0KvI=";
   };
+
+  patches = [
+    # Fix for https://github.com/musescore/MuseScore/issues/34091 also reported
+    # downstream at: https://github.com/NixOS/nixpkgs/issues/540783. PR to
+    # track: https://github.com/musescore/MuseScore/pull/34204
+    (fetchpatch {
+      url = "https://github.com/musescore/MuseScore/commit/f273501e418842351c4bda10cce32b0e329eaff1.patch";
+      hash = "sha256-zrZRzeAHSFGtCuw/o4A3b1Blbo3FxKGxw1UDu9IggzY=";
+    })
+  ];
 
   cmakeFlags = [
     (lib.cmakeFeature "MUSE_APP_BUILD_MODE" "release")
@@ -59,6 +74,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Implies also OPUS
     "OPUSENC"
     "FLAC"
+    "PUGIXML"
+    "LAME"
+    "UTF8CPP"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # https://github.com/musescore/MuseScore/issues/33467
@@ -67,17 +85,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   qtWrapperArgs = [
     # MuseScore JACK backend loads libjack at runtime.
-    "--prefix ${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH : ${
-      lib.makeLibraryPath [ libjack2 ]
-    }"
+    "--prefix"
+    "${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH"
+    ":"
+    (lib.makeLibraryPath [ libjack2 ])
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-    "--set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib"
+    "--set"
+    "ALSA_PLUGIN_DIR"
+    "${alsa-plugins}/lib/alsa-lib"
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     # There are some issues with using the wayland backend, see:
     # https://musescore.org/en/node/321936
-    "--set-default QT_QPA_PLATFORM xcb"
+    "--set-default"
+    "QT_QPA_PLATFORM"
+    "xcb"
   ];
 
   preFixup = ''
@@ -87,11 +110,11 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapGApps = true;
 
   nativeBuildInputs = [
-    kdePackages.wrapQtAppsHook
     cmake
-    kdePackages.qttools
-    pkg-config
+    qt6.qttools
+    qt6.wrapQtAppsHook
     ninja
+    pkg-config
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # Since https://github.com/musescore/MuseScore/pull/13847/commits/685ac998
@@ -100,29 +123,44 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libjack2
+    flac
     freetype
+    qt6.qt5compat
+    qt6.qtbase
+    qt6.qtdeclarative
+    qt6.qtnetworkauth
+    qt6.qtscxml
+    qt6.qtsvg
+    lame
+    libjack2
     libogg
+    libopus
+    libopusenc
     libpulseaudio
     libsndfile
     libvorbis
+    mnxdom
     portaudio
     portmidi
-    flac
-    libopusenc
-    libopus
-    mnxdom
-    kdePackages.qtbase
-    kdePackages.qtdeclarative
-    kdePackages.qt5compat
-    kdePackages.qtsvg
-    kdePackages.qtscxml
-    kdePackages.qtnetworkauth
+    pugixml
+    utf8cpp
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-    kdePackages.qtwayland
+    qt6.qtwayland
   ];
+
+  # Put the default, `$prefix/lib` directory to look for ffmpeg shared objects,
+  # Nixpkgs' provided ffmpeg, for both MacOS & Linux. Note that upstream uses
+  # the /usr/lib/x86_64-linux-gnu location for any Linux (e.g aarch64 too).
+  preConfigure = ''
+    substituteInPlace src/framework/media/internal/ffmpegutils.cpp \
+      --replace-fail "/usr/lib/x86_64-linux-gnu" "${lib.getLib ffmpeg}/lib" \
+      --replace-fail "/opt/homebrew/lib" "${lib.getLib ffmpeg}/lib" \
+  '';
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p "$out/Applications"
@@ -157,7 +195,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Don't run bundled upstreams tests, as they require a running X window system.
   doCheck = false;
 
-  passthru.tests = nixosTests.musescore;
+  passthru.tests.nixos = nixosTests.musescore;
 
   meta = {
     description = "Music notation and composition software";

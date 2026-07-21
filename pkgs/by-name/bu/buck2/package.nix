@@ -33,7 +33,7 @@
 #
 # from the root of the nixpkgs git repository, run:
 #
-#    nix-shell maintainers/scripts/update.nix --argstr commit true --argstr package buck2
+#    nix-shell maintainers/scripts/update.nix --arg commit true --argstr package buck2
 
 let
 
@@ -47,7 +47,6 @@ let
   # NOTE (aseipp): must be synchronized with update.nu!
   platform-suffix =
     {
-      x86_64-darwin = "x86_64-apple-darwin";
       aarch64-darwin = "aarch64-apple-darwin";
       x86_64-linux = "x86_64-unknown-linux-gnu";
       aarch64-linux = "aarch64-unknown-linux-gnu";
@@ -150,7 +149,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

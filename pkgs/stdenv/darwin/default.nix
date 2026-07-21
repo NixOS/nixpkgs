@@ -13,13 +13,12 @@
   crossSystem,
   config,
   overlays,
-  crossOverlays ? [ ],
   # Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
   bootstrapFiles ? (config.replaceBootstrapFiles or lib.id) (
     if localSystem.isAarch64 then
       import ./bootstrap-files/aarch64-apple-darwin.nix
     else
-      import ./bootstrap-files/x86_64-apple-darwin.nix
+      throw "Unsupported platform for the Darwin stdenv"
   ),
 }:
 
@@ -27,6 +26,7 @@ assert crossSystem == localSystem;
 
 let
   inherit (localSystem) system;
+  genericStdenv = import ../generic { defaultConfig = config; };
 
   llvmVersion = "21"; # This needs to be updated when the default LLVM version is changed.
   sdkMajorVersion = lib.versions.major localSystem.darwinSdkVersion;
@@ -104,14 +104,12 @@ let
 
       bashNonInteractive = prevStage.bashNonInteractive or bootstrapTools;
 
-      thisStdenv = import ../generic {
+      thisStdenv = genericStdenv {
         name = "${name}-stdenv-darwin";
 
         buildPlatform = localSystem;
         hostPlatform = localSystem;
         targetPlatform = localSystem;
-
-        inherit config;
 
         extraBuildInputs = [ prevStage.apple-sdk ];
         inherit extraNativeBuildInputs;
@@ -287,7 +285,6 @@ let
   };
   sdkDarwinPackages = prevStage: {
     inherit (prevStage.darwin)
-      Csu
       adv_cmds
       copyfile
       libiconv
@@ -603,6 +600,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         python3-bootstrap = super.python3.override {
           self = self.python3-bootstrap;
           pythonAttr = "python3-bootstrap";
+          zstd = null; # Avoid infinite recursion due to zstd depending on libiconv, which depends on Python via Meson.
           enableLTO = false;
         };
 
@@ -975,14 +973,12 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     in
     {
       inherit config overlays;
-      stdenv = import ../generic {
+      stdenv = genericStdenv {
         name = "stdenv-darwin";
 
         buildPlatform = localSystem;
         hostPlatform = localSystem;
         targetPlatform = localSystem;
-
-        inherit config;
 
         preHook = ''
           ${commonPreHook}
@@ -1062,7 +1058,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
             prevStage.updateAutotoolsGnuConfigScriptsHook
             prevStage.updateAutotoolsGnuConfigScriptsHook.gnu_config
           ]
-          ++ lib.optionals localSystem.isx86_64 [ prevStage.darwin.Csu ]
           ++ (with prevStage.darwin; [
             binutils
             binutils.bintools

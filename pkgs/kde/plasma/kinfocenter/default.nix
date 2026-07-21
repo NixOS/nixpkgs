@@ -55,7 +55,7 @@ mkKdeDerivation {
   ];
 
   postPatch = ''
-    substituteInPlace kcms/firmware_security/fwupdmgr.sh \
+    substituteInPlace kcms/{firmware_security/fwupdmgr.sh,network/ip.sh} \
       --replace-fail " aha " " ${lib.getExe aha} "
   '';
 

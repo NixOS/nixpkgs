@@ -6,24 +6,21 @@
   pkg-config,
   libgcrypt,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcotp";
-  version = "3.1.1";
+  version = "4.1.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "paolostivanin";
     repo = "libcotp";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-5Jjk8uby1QjvU7TraTTTp+29Yh5lzbCvlorfPbGvciM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-iNmCQHAl2LIkdJiVByc9CWiJSTo1HIz5Ma5Xjo2n9mA=";
   };
 
-  postPatch = lib.optionalString stdenv.cc.isClang ''
-    substituteInPlace CMakeLists.txt \
-      --replace "add_link_options(-Wl," "# add_link_options(-Wl,"
-  '';
-
   buildInputs = [ libgcrypt ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -32,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "C library that generates TOTP and HOTP";
     homepage = "https://github.com/paolostivanin/libcotp";
+    changelog = "https://github.com/paolostivanin/libcotp/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ alexbakker ];
     platforms = lib.platforms.all;

@@ -13,7 +13,6 @@
 
   # checks
   pytestCheckHook,
-  pytest-mpl,
 }:
 
 buildPythonPackage rec {
@@ -38,7 +37,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-mpl
   ];
 
   pythonImportsCheck = [ "flexcache" ];

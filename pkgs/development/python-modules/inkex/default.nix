@@ -35,6 +35,10 @@ buildPythonPackage {
       stripLen = 1;
       extraPrefix = "share/extensions/";
     })
+
+    # Fix binary DXF parsing on big-endian
+    # https://gitlab.com/inkscape/extensions/-/merge_requests/721
+    ./1001-dxf-fix-binary-dxf-double-parsing-on-big-endian.patch
   ];
 
   build-system = [ poetry-core ];
@@ -57,6 +61,9 @@ buildPythonPackage {
   ];
 
   pythonImportsCheck = [ "inkex" ];
+
+  # The inkex version isn't update in tandem with inkscape
+  dontCheckPythonMetadata = true;
 
   nativeCheckInputs = [
     gobject-introspection

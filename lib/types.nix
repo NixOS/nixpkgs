@@ -21,7 +21,6 @@ let
     isString
     substring
     sort
-    throwIf
     toDerivation
     toList
     types
@@ -99,7 +98,6 @@ let
     { elemType, ... }@payload:
     {
       inherit name payload;
-      wrappedDeprecationMessage = makeWrappedDeprecationMessage payload;
       type = types.${name};
       binOp =
         a: b:
@@ -108,14 +106,6 @@ let
         in
         if merged == null then null else { elemType = merged; };
     };
-  makeWrappedDeprecationMessage =
-    payload:
-    { loc }:
-    lib.warn ''
-      The deprecated `${lib.optionalString (loc != null) "type."}functor.wrapped` attribute ${
-        lib.optionalString (loc != null) "of the option `${showOption loc}` "
-      }is accessed, use `${lib.optionalString (loc != null) "type."}nestedTypes.elemType` instead.
-    '' payload.elemType;
 
   checkDefsForError =
     check: loc: defs:
@@ -168,21 +158,11 @@ rec {
   defaultTypeMerge =
     f: f':
     let
-      mergedWrapped = f.wrapped.typeMerge f'.wrapped.functor;
       mergedPayload = f.binOp f.payload f'.payload;
 
       hasPayload =
         assert (f'.payload != null) == (f.payload != null);
         f.payload != null;
-      hasWrapped =
-        let
-          hasWrappedNonNull = set: set ? "wrapped" && set.wrapped != null;
-        in
-        assert (hasWrappedNonNull f') == (hasWrappedNonNull f);
-        hasWrappedNonNull f;
-
-      typeFromPayload = if mergedPayload == null then null else f.type mergedPayload;
-      typeFromWrapped = if mergedWrapped == null then null else f.type mergedWrapped;
     in
     # Abort early: cannot merge different types
     if f.name != f'.name then
@@ -190,22 +170,7 @@ rec {
     else
 
     if hasPayload then
-      # Just return the payload if returning wrapped is deprecated
-      if f ? wrappedDeprecationMessage then
-        typeFromPayload
-      else if hasWrapped then
-        # Has both wrapped and payload
-        throw ''
-          Type ${f.name} defines both `functor.payload` and `functor.wrapped` at the same time, which is not supported.
-
-          Use either `functor.payload` or `functor.wrapped` but not both.
-
-          If your code worked before remove either `functor.wrapped` or `functor.payload` from the type definition.
-        ''
-      else
-        typeFromPayload
-    else if hasWrapped then
-      typeFromWrapped
+      if mergedPayload == null then null else f.type mergedPayload
     else
       f.type;
 
@@ -213,7 +178,6 @@ rec {
   defaultFunctor = name: {
     inherit name;
     type = lib.types.${name} or null;
-    wrapped = null;
     payload = null;
     binOp = a: b: null;
   };
@@ -309,17 +273,8 @@ rec {
         deprecationMessage
         nestedTypes
         descriptionClass
+        functor
         ;
-      functor =
-        if functor ? wrappedDeprecationMessage then
-          functor
-          // {
-            wrapped = functor.wrappedDeprecationMessage {
-              loc = null;
-            };
-          }
-        else
-          functor;
       description = if description == null then name else description;
     };
 
@@ -452,7 +407,7 @@ rec {
       betweenDesc = lowest: highest: "${toString lowest} and ${toString highest} (both inclusive)";
       between =
         lowest: highest:
-        assert lib.assertMsg (lowest <= highest) "ints.between: lowest must be smaller than highest";
+        assert lowest <= highest || throw "ints.between: lowest must be smaller than highest";
         addCheck int (x: x >= lowest && x <= highest)
         // {
           name = "intBetween";
@@ -539,7 +494,7 @@ rec {
     {
       between =
         lowest: highest:
-        assert lib.assertMsg (lowest <= highest) "numbers.between: lowest must be smaller than highest";
+        assert lowest <= highest || throw "numbers.between: lowest must be smaller than highest";
         addCheck number (x: x >= lowest && x <= highest)
         // {
           name = "numberBetween";
@@ -704,10 +659,10 @@ rec {
       inStore ? null,
       absolute ? null,
     }:
-    throwIf (inStore != null && absolute != null && inStore && !absolute)
-      "In pathWith, inStore means the path must be absolute"
-      mkOptionType
-      {
+    if inStore != null && absolute != null && inStore && !absolute then
+      throw "In pathWith, inStore means the path must be absolute"
+    else
+      mkOptionType {
         name = "path";
         description = (
           (if absolute == null then "" else (if absolute then "absolute " else "relative "))
@@ -1123,8 +1078,8 @@ rec {
         builtins.addErrorContext
           "while checking that attrTag tag ${lib.strings.escapeNixIdentifier n} is an option with a type${inAttrPosSuffix tags_ n}"
           (
-            throwIf (opt._type or null != "option")
-              "In attrTag, each tag value must be an option, but tag ${lib.strings.escapeNixIdentifier n} ${
+            if opt._type or null != "option" then
+              throw "In attrTag, each tag value must be an option, but tag ${lib.strings.escapeNixIdentifier n} ${
                 if opt ? _type then
                   if opt._type == "option-type" then
                     "was a bare type, not wrapped in mkOption."
@@ -1133,23 +1088,24 @@ rec {
                 else
                   "was not."
               }"
+            else
               opt
-            // {
-              declarations =
-                opt.declarations or (
-                  let
-                    pos = builtins.unsafeGetAttrPos n tags_;
-                  in
-                  if pos == null then [ ] else [ pos.file ]
-                );
-              declarationPositions =
-                opt.declarationPositions or (
-                  let
-                    pos = builtins.unsafeGetAttrPos n tags_;
-                  in
-                  if pos == null then [ ] else [ pos ]
-                );
-            }
+              // {
+                declarations =
+                  opt.declarations or (
+                    let
+                      pos = builtins.unsafeGetAttrPos n tags_;
+                    in
+                    if pos == null then [ ] else [ pos.file ]
+                  );
+                declarationPositions =
+                  opt.declarationPositions or (
+                    let
+                      pos = builtins.unsafeGetAttrPos n tags_;
+                    in
+                    if pos == null then [ ] else [ pos ]
+                  );
+              }
           )
       ) tags_;
       choicesStr = concatMapStringsSep ", " lib.strings.escapeNixIdentifier (attrNames tags);
@@ -1184,6 +1140,27 @@ rec {
         else
           throw "The option `${showOption loc}` is defined as ${lib.strings.escapeNixIdentifier choice}, but ${lib.strings.escapeNixIdentifier choice} is not among the valid choices (${choicesStr}). Value ${choice} was defined in ${showFiles (getFiles defs)}.";
       nestedTypes = tags;
+      getSubModules =
+        let
+          tagsWithSubModules = filterAttrs (_: mods: mods != null) (
+            mapAttrs (_: opt: opt.type.getSubModules) tags
+          );
+        in
+        if tagsWithSubModules == { } then null else [ tagsWithSubModules ];
+      substSubModules =
+        allWrappedModules:
+        let
+          tagsWithNewTypes = zipAttrsWith (tag: tags.${tag}.type.substSubModules) (
+            concatMap (
+              { _file, imports }: map (mapAttrs (_: imports: { inherit _file imports; })) imports
+            ) allWrappedModules
+          );
+        in
+        attrTag (
+          mapAttrs (
+            tag: opt: opt // (optionalAttrs (tagsWithNewTypes ? ${tag}) { type = tagsWithNewTypes.${tag}; })
+          ) tags
+        );
       functor = defaultFunctor "attrTag" // {
         type = { tags, ... }: lib.types.attrTag tags;
         payload = { inherit tags; };
@@ -1772,9 +1749,9 @@ rec {
   # converted to `finalType` using `coerceFunc`.
   coercedTo =
     coercedType: coerceFunc: finalType:
-    assert lib.assertMsg (
+    assert
       coercedType.getSubModules == null
-    ) "coercedTo: coercedType must not have submodules (it’s a ${coercedType.description})";
+      || throw "coercedTo: coercedType must not have submodules (it’s a ${coercedType.description})";
     mkOptionType rec {
       name = "coercedTo";
       description = "${optionDescriptionPhrase (class: class == "noun") finalType} or ${
@@ -1834,9 +1811,7 @@ rec {
       getSubModules = finalType.getSubModules;
       substSubModules = m: coercedTo coercedType coerceFunc (finalType.substSubModules m);
       typeMerge = t: null;
-      functor = (defaultFunctor name) // {
-        wrappedDeprecationMessage = makeWrappedDeprecationMessage { elemType = finalType; };
-      };
+      functor = defaultFunctor name;
       nestedTypes.coercedType = coercedType;
       nestedTypes.finalType = finalType;
     };

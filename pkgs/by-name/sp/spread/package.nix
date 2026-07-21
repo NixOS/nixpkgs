@@ -12,7 +12,7 @@
 
 buildGoModule {
   pname = "spread";
-  version = "0-unstable-2025-02-06";
+  version = "2026.07.12";
 
   src = fetchFromGitHub {
     owner = "snapcore";

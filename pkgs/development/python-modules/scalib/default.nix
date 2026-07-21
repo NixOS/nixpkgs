@@ -17,6 +17,8 @@
   pytest-cov-stub,
   scikit-learn,
   scipy,
+
+  nix-update-script,
 }:
 buildPythonPackage (finalAttrs: {
   pname = "scalib";
@@ -27,6 +29,10 @@ buildPythonPackage (finalAttrs: {
     repo = "SCALib";
     tag = "v${finalAttrs.version}";
     hash = "sha256-DVXb93W0TmOcyGyMN5GmIJNAdbLeeFnNm+3QfTw2j5s=";
+  };
+
+  env = {
+    SCALIB_PORTABLE = "1";
   };
 
   postPatch = ''
@@ -69,6 +75,8 @@ buildPythonPackage (finalAttrs: {
     scipy
     numpy
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Side-Channel Analysis Library";

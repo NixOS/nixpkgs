@@ -22,7 +22,7 @@ let
       pyqt6-sip
       sexpdata
       six
-      xlib
+      python-xlib
     ];
   pythonEnv = python3.withPackages pythonPkgs;
 

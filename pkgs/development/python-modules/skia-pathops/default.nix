@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "skia-pathops";
-  version = "0.9.1";
+  version = "0.9.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "skia_pathops";
     inherit version;
-    hash = "sha256-8Sc+9NojVw8z5253U5CEhOWkokaPexCJ+REMzuYpP5k=";
+    hash = "sha256-S22EWfb0ppKCyyb8oMK7CzIcxYqb+cxleaUqOR7cAxk=";
   };
 
   postPatch = ''

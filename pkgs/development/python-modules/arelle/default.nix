@@ -52,14 +52,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "arelle${lib.optionalString (!gui) "-headless"}";
-  version = "2.38.7";
+  version = "2.39.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Arelle";
     repo = "Arelle";
     tag = finalAttrs.version;
-    hash = "sha256-9ARMEXqoiBuAnj8hRrA1PqArmTMmRMP1BwASekOTQoc=";
+    hash = "sha256-oMZZCmZyUfCP3qe3FMHmR9IbmtDcKLS5NHmnWQJ8TZQ=";
   };
 
   outputs = [
@@ -69,7 +69,7 @@ buildPythonPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace pyproject.toml --replace-fail \
-        'requires = ["setuptools>=80.9,<81", "wheel>=0.45,<1", "setuptools_scm[toml]>=9.2,<10"]' \
+        'requires = ["setuptools>=82,<83", "wheel>=0.46,<0.47", "setuptools_scm>=10.0,<11.0"]' \
         'requires = ["setuptools", "wheel", "setuptools_scm[toml]"]'
   '';
 

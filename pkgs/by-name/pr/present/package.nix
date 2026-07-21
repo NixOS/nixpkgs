@@ -8,14 +8,7 @@ let
   # https://github.com/NixOS/nixpkgs/issues/348788
   pythonPackages = python3Packages.overrideScope (
     self: super: {
-      mistune = super.mistune.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.5";
-        src = fetchPypi {
-          inherit (oldAttrs) pname;
-          inherit version;
-          hash = "sha256-AkYRPLJJLbh1xr5Wl0p8iTMzvybNkokchfYxUc7gnTQ=";
-        };
-      });
+      mistune = self.mistune_2;
     }
   );
 in

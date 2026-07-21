@@ -18,6 +18,7 @@ let
     substitutions = {
       unzip = "${buildPackages.unzip}/bin/unzip";
     };
+    meta.license = lib.licenses.mit;
   } ./unpack-vsix-setup-hook.sh;
   buildVscodeExtension = lib.extendMkDerivation {
     constructDrv = stdenv.mkDerivation;
@@ -71,6 +72,9 @@ let
 
         # This cannot be removed, it is used by some extensions.
         installPrefix = "share/vscode/extensions/${vscodeExtUniqueId}";
+
+        strictDeps = true;
+        __structuredAttrs = true;
 
         nativeBuildInputs = [ unpackVsixSetupHook ] ++ nativeBuildInputs;
 

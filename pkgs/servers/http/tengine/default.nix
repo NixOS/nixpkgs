@@ -4,7 +4,7 @@
   fetchFromGitHub,
   openssl,
   zlib,
-  pcre,
+  pcre2,
   libxcrypt,
   libxml2,
   libxslt,
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     openssl
     zlib
-    pcre
+    pcre2
     libxcrypt
     libxml2
     libxslt

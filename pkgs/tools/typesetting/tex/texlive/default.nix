@@ -21,7 +21,7 @@
   ruby,
   perl,
   tk,
-  jdk,
+  jre_headless,
   bash,
   snobol4,
   coreutils,
@@ -46,6 +46,7 @@
   nixfmt,
   luajit,
   texinfo,
+  texlive,
   # for bin.nix
   gnum4,
   jdk_headless,
@@ -73,7 +74,6 @@
   unzip,
   fetchFromGitHub,
   buildPackages,
-  texlive,
   zlib,
   libiconv,
   libpng,
@@ -99,6 +99,7 @@ let
   overriddenTlpdb =
     let
       overrides = import ./tlpdb-overrides.nix {
+        inherit (texlive) pkgs;
         inherit
           stdenv
           lib
@@ -106,7 +107,6 @@ let
           bin
           tlpdb
           tlpdbxz
-          tl
           installShellFiles
           coreutils
           findutils
@@ -156,8 +156,7 @@ let
         [
           # tlnet-final snapshot; used when texlive.tlpdb is frozen
           # the TeX Live yearly freeze typically happens in mid-March
-          "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${toString version.texliveYear}/tlnet-final"
-          "ftp://tug.org/texlive/historic/${toString version.texliveYear}/tlnet-final"
+          "mirror://texhistoric/systems/texlive/${toString version.texliveYear}/tlnet-final"
         ]
       else
         [
@@ -203,7 +202,7 @@ let
       runCommand
       writeShellScript
       bash
-      jdk
+      jre_headless
       perl
       python3
       ruby
@@ -227,13 +226,15 @@ let
         inherit mirrors pname;
         fixedHashes = fixedHashes."${pname}-${toString revision}${extraRevision}" or { };
       }
-      // lib.optionalAttrs (args ? deps) { deps = map (n: tl.${n} or bin.${n}) (args.deps or [ ]); }
+      // lib.optionalAttrs (args ? deps) {
+        deps = map (n: texlive.pkgs.${n} or bin.${n}) (args.deps or [ ]);
+      }
     )
   ) overriddenTlpdb;
 
   # function for creating a working environment
   buildTeXEnv = import ./build-tex-env.nix {
-    inherit tl;
+    inherit (texlive) pkgs;
     inherit tlpdbVersion;
     ghostscript = ghostscript_headless;
     inherit
@@ -261,7 +262,7 @@ let
       drvWithoutDeps = removeAttrs drv [ "tlDeps" ];
       drvWithDeps =
         if (drv ? tlDeps) then
-          drv // { tlDeps = if builtins.isFunction drv.tlDeps then drv.tlDeps tl else drv.tlDeps; }
+          drv // { tlDeps = if builtins.isFunction drv.tlDeps then drv.tlDeps texlive.pkgs else drv.tlDeps; }
         else
           drv;
     in
@@ -321,10 +322,10 @@ let
   # function for creating a working environment from a set of TL packages
   # now a legacy wrapper around buildTeXEnv
   combine = import ./combine-wrapper.nix {
+    inherit (texlive) pkgs;
     inherit
       buildTeXEnv
       lib
-      tl
       toTLPkgList
       ;
   };
@@ -625,6 +626,7 @@ let
             meta = meta // {
               description = "TeX Live environment for ${pname}";
               license = licenses.${pname};
+              problems.removal.message = "texlive.combined schemes are deprecated and will be removed from Nixpkgs 27.05. Please switch to texliveSmall or another top level scheme.";
             };
           }
       )
@@ -668,7 +670,8 @@ allPkgLists
     bin
     // {
       # for backward compatibility
-      latexindent = tl.latexindent;
+      latexindent = texlive.pkgs.latexindent;
+      pygmentex = texlive.pkgs.pigmentex;
     };
 
   combine =

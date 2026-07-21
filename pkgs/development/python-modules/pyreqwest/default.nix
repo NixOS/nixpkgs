@@ -43,6 +43,7 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "pyreqwest" ];
 
   nativeCheckInputs = [
+    cacert
     dirty-equals
     docker
     granian
@@ -57,11 +58,11 @@ buildPythonPackage (finalAttrs: {
     yarl
   ];
 
-  preCheck = ''
-    # Without this tests fails with
-    #     unexpected error: No CA certificates were loaded from the system
-    export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
-  '';
+  disabledTests = [
+    # snapshot has different dict key ordering
+    "test_assert_called_exact_count_failure"
+    "test_assert_called_regex_matchers_display"
+  ];
 
   disabledTestPaths = [
     # requires a running Docker daemon

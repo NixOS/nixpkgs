@@ -260,4 +260,6 @@
   shellcheck = callPackage ./shellcheck/tester.nix { };
 
   shfmt = callPackage ./shfmt { };
+
+  modularServiceCompliance = callPackage ./modular-service-compliance.nix { };
 }

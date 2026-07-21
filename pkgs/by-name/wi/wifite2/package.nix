@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   fetchpatch,
-  python3,
   python3Packages,
   wirelesstools,
   aircrack-ng,
@@ -20,16 +19,10 @@
   macchanger,
 }:
 
-let
-  pythonDependencies = with python3Packages; [
-    chardet
-    scapy
-  ];
-in
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "wifite2";
   version = "2.7.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kimocoder";
@@ -37,6 +30,8 @@ python3.pkgs.buildPythonApplication rec {
     rev = version;
     hash = "sha256-G2AKKZUDS2UQm95TEhGJIucyMRcm7oL0d3J8uduEQhw=";
   };
+
+  build-system = with python3Packages; [ setuptools ];
 
   patches = [
     (fetchpatch {
@@ -53,6 +48,13 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
+  dependencies = with python3Packages; [
+    chardet
+    scapy
+  ];
+
+  pythonRemoveDeps = [ "argparse" ];
+
   propagatedBuildInputs = [
     aircrack-ng
     wireshark-cli
@@ -68,10 +70,9 @@ python3.pkgs.buildPythonApplication rec {
     john
     iw
     macchanger
-  ]
-  ++ pythonDependencies;
+  ];
 
-  nativeCheckInputs = propagatedBuildInputs ++ [ python3.pkgs.unittestCheckHook ];
+  nativeCheckInputs = propagatedBuildInputs ++ [ python3Packages.pytestCheckHook ];
 
   meta = {
     homepage = "https://github.com/kimocoder/wifite2";

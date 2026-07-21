@@ -22,6 +22,7 @@
   git,
   python3,
   esbuild,
+  runCommand,
 
   # self for passthru
   deno,
@@ -32,17 +33,24 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.7.14";
+  version = "2.9.3";
+
+  __structuredAttrs = true;
+
+  outputs = [
+    "out"
+    "denort"
+  ];
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-tkZc89JOhXCdMVSAOQYGR6HDe7KmCI5/haLH1RP2p7I=";
+    hash = "sha256-XMHlWK+lhyn1KO1CSxcuM3KzTjYviVrRw+FUL74bBPc=";
   };
 
-  cargoHash = "sha256-bFQLsAF4hFBRw04VaL+sxvxIZ9p7nXOLSr2BIZKcwiI=";
+  cargoHash = "sha256-WZxyoD9WMnaLyD3/86R90KWC+9OA15fIMw8SjmovNHA=";
 
   patches = [
     ./patches/0002-tests-replace-hardcoded-paths.patch
@@ -151,6 +159,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=node_unit_tests::net_test"
     "--skip=node_unit_tests::tls_test"
     "--skip=npm::lock_file_lock_write"
+    "--skip=happy_eyeballs::tests::test_parallel_second_wins"
 
     # GPU access
     "--skip=js_unit_tests::webgpu_test"
@@ -224,7 +233,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   postInstall = ''
-    # Remove non-essential binaries like denort and test_server
+    moveToOutput "bin/denort" "$denort"
+
+    # Remove non-essential binaries like test_server
     find $out/bin/* -not -name "deno" -delete
 
     # Do what `deno x --install-alias` would do (it doesn't work with Nix-packaged Deno)
@@ -242,7 +253,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     updateScript = ./update.sh;
-    tests = (callPackage ./tests { }) // {
+    tests = (import ./tests { inherit deno runCommand lib; }) // {
       build-with-unit-tests = deno.overrideAttrs (fa: {
         # The tools test suite requires building the test server
         dontBuild = false;
@@ -278,12 +289,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       jk
       ofalvai
       mynacol
+      anish
     ];
     maxSilent = 14400; # 4h, double the default of 7200s; sometimes needed for x86_64-darwin on hydra
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

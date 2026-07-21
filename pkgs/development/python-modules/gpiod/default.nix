@@ -21,6 +21,9 @@ buildPythonPackage {
   doCheck = false;
   pythonImportsCheck = [ "gpiod" ];
 
+  # the tag component of the version doesn't align
+  dontCheckPythonMetadata = true;
+
   meta = {
     description = "Python bindings for libgpiod";
     homepage = "https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/about/";

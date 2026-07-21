@@ -2,7 +2,7 @@
   lib,
   asn1crypto,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   hatchling,
   pytest-mock,
   pytestCheckHook,
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   version = "1.4.5";
   pyproject = true;
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "tlocke";
     repo = "scramp";
     rev = version;

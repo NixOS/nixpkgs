@@ -23,9 +23,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
     substituteInPlace src/pyhanko/cli/version.py \
       --replace-fail "0.0.0.dev1" "${finalAttrs.version}" \
       --replace-fail "(0, 0, 0, 'dev1')" "tuple(\"${finalAttrs.version}\".split(\".\"))"
-    substituteInPlace pyproject.toml \
-      --replace-fail "0.0.0.dev1" "${finalAttrs.version}"
   '';
+
+  nativeBuildInputs = [
+    python3Packages.pyprojectVersionPatchHook
+  ];
 
   build-system = [ python3Packages.setuptools ];
 

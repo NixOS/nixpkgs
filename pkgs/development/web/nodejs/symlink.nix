@@ -5,10 +5,7 @@
 }:
 (symlinkJoin {
   pname = "nodejs";
-  inherit (nodejs-slim) version meta;
-  passthru = nodejs-slim.passthru // {
-    inherit (nodejs-slim) src;
-  };
+  inherit (nodejs-slim) version passthru meta;
   paths = [
     nodejs-slim
     nodejs-slim.npm
@@ -44,6 +41,10 @@
                 "man"
                 "out"
                 "static"
+
+                # Filter out outputs that didn't exist on 25.11
+                "npm"
+                "corepack"
               ])
               && !(builtins.hasAttr name nodejs)
             ) (builtins.attrNames nodejs-slim)

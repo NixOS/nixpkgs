@@ -1,6 +1,6 @@
 {
   lib,
-  buildGo125Module,
+  buildGoModule,
   fetchFromGitHub,
   versionCheckHook,
   runCommand,
@@ -10,20 +10,22 @@
   symlinkJoin,
 }:
 
-buildGo125Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "tflint";
-  version = "0.61.0";
+  version = "0.63.1";
 
   src = fetchFromGitHub {
     owner = "terraform-linters";
     repo = "tflint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j2bP3McVCxtVEVQYs3mHWFtmUTKDIEd5aU4I/6W/Pns=";
+    hash = "sha256-HFzifDEhwr9C/A8xNMyF7k3qbKkpBLLJWXpcIbvTo6Y=";
   };
 
-  vendorHash = "sha256-R4NmHSyay0FGpOSMNPbXWxNJFH3lhyWxGeJsNefkBrc=";
+  vendorHash = "sha256-73JuhXBVjCHYPcEyGsBlJZG4EVEf5zF0Hm5Nkrc/yJk=";
 
   doCheck = false;
+
+  env.CGO_ENABLED = 0;
 
   subPackages = [ "." ];
 
@@ -61,6 +63,6 @@ buildGo125Module (finalAttrs: {
     homepage = "https://github.com/terraform-linters/tflint";
     changelog = "https://github.com/terraform-linters/tflint/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ momeemt ];
+    maintainers = [ ];
   };
 })

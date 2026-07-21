@@ -18,7 +18,6 @@ ARCH_MAP = {
     'aarch64-linux': Arch(os='Linux', name='arm64', ext='tgz'),
     'armv7l-linux': Arch(os='Linux', name='arm', ext='tgz'),
     'aarch64-darwin': Arch(os='MacOSX', name='arm64', ext='pkg'),
-    'x86_64-darwin': Arch(os='MacOSX', name='x86_64', ext='pkg'),
 }
 
 

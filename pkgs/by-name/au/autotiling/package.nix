@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "autotiling";
-  version = "1.9.3";
+  version = "1.9.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "autotiling";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-k+UiAGMB/fJiE+C737yGdyTpER1ciZrMkZezkcn/4yk=";
+    hash = "sha256-iD5ids+tmb/QFbsGa3QhfxXVCEBQZTG3ZAweOwdGfeE=";
   };
 
   build-system = [

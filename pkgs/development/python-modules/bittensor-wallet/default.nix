@@ -9,13 +9,13 @@
   libsodium,
   libiconv,
   pytestCheckHook,
-  ansible-vault-rw,
+  ansible-vault,
   setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "bittensor-wallet";
-  version = "4.0.1";
+  version = "4.1.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -24,12 +24,12 @@ buildPythonPackage (finalAttrs: {
     owner = "latent-to";
     repo = "btwallet";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-L774RPoasixvW+0Z4WuJ6eLuazLQscckRU++VCAiFug=";
+    hash = "sha256-XjDldS3B3d9cR21M7HElqTAIyWjCdhSw1yBWHarVOcI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-ETr7XhSmUTqtWDGzJMq5ijaLL8+tqmLJa/ngmzwWiFg=";
+    hash = "sha256-Dy9/yD/dT7cjKpM7S+h0iaXQUBnqYDMtQVZfIuaY1Ck=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytestCheckHook
-    ansible-vault-rw
+    ansible-vault
     setuptools
   ];
 

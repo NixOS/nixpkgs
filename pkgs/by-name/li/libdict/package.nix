@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdict";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "rtbrick";
     repo = "libdict";
     rev = finalAttrs.version;
-    hash = "sha256-604escyV5MVuYggs1awIrorCrdXSUj3IhjwXV2QdDMU=";
+    hash = "sha256-JO8gIZwSZ1vOigiM2IoGRYW2m2zoAa1af/eMBP3ZRjY=";
   };
 
   nativeBuildInputs = [

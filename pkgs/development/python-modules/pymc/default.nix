@@ -22,7 +22,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pymc";
-  version = "6.0.0";
+  version = "6.1.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -30,7 +30,7 @@ buildPythonPackage (finalAttrs: {
     owner = "pymc-devs";
     repo = "pymc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-djioOgEtfKxXcbxYJGjPjCQOxcXi54xXNowJJhUWjE4=";
+    hash = "sha256-veJ42myRo23JXh33qC1OXxiGVI0VAARuYKVs7ObFr+Q=";
   };
 
   build-system = [

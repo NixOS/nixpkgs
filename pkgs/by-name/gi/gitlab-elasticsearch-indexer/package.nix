@@ -11,17 +11,17 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "gitlab-elasticsearch-indexer";
-  version = "5.14.1";
+  version = "5.14.7";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-elasticsearch-indexer";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-yYl2cSPY5hn1GSda5ioMD3rEectNMtYGstVpz73pi3Y=";
+    hash = "sha256-1fVBCem23X8u1NQ6ph37EiXRvMpzF/8Yac+VefAe9Yg=";
   };
 
-  vendorHash = "sha256-yeVEQEXHGAkdkfcnjok8iOvVRxucObVAxhuACmyFDJw=";
+  vendorHash = "sha256-cUHXrUd+pSMiS6iSwKKA+o1B6ZHbaQYHYPeVk1Y6wYM=";
 
   buildInputs = [ icu ];
   nativeBuildInputs = [ pkg-config ];
@@ -52,6 +52,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Indexes Git repositories into Elasticsearch for GitLab";
+    homepage = "https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer";
     mainProgram = "gitlab-elasticsearch-indexer";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [

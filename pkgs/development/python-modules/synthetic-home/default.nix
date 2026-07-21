@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "synthetic-home";
-  version = "5.0.2";
+  version = "5.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "synthetic-home";
     tag = finalAttrs.version;
-    hash = "sha256-u5suLTK7Cdp6IKVxnmiw8p+xQiXV5nfc6QUvpqCyxTk=";
+    hash = "sha256-oXZVnw4Oc0jC1TBVTV4EI3Ta1zsqLop+c8uyEzAFpLI=";
   };
 
   build-system = [ setuptools ];

@@ -22,7 +22,7 @@
 }:
 let
   pname = "gcc";
-  version = "15.2.0";
+  version = "15.3.0";
   linkerName =
     {
       i686-linux = "ld-linux.so.2";
@@ -32,7 +32,7 @@ let
 
   src = fetchurl {
     url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.xz";
-    hash = "sha256-Q4/ZloJrDIJIWinaA6ctcdbjVBqD7HAt9Ccfb+Al0k4=";
+    hash = "sha256-+lnBvu+JlfJ8TXHB3yJ1hxiTFdPm+v8btDBuYbDFMOs=";
   };
 
   gmpVersion = "6.3.0";
@@ -47,16 +47,10 @@ let
     hash = "sha256-tnugOD736KhWNzTi6InvXsPDuJigHQD6CmhprYHGzgE=";
   };
 
-  mpcVersion = "1.3.1";
+  mpcVersion = "1.4.1";
   mpc = fetchurl {
-    url = "mirror://gnu/mpc/mpc-${mpcVersion}.tar.gz";
-    hash = "sha256-q2QkkvXPiCt0qgy3MM1BCoHtzb7IlRg86TDnBsHHWbg=";
-  };
-
-  islVersion = "0.24";
-  isl = fetchurl {
-    url = "https://gcc.gnu.org/pub/gcc/infrastructure/isl-${islVersion}.tar.bz2";
-    hash = "sha256-/PeN2WVsEOuM+fvV9ZoLawE4YgX+GTSzsoegoYmBRcA=";
+    url = "mirror://gnu/mpc/mpc-${mpcVersion}.tar.xz";
+    hash = "sha256-kSBM0y8WS9O3yZLUpqjOZRlRGq2rMPeLaYLQv41z6TE=";
   };
 in
 bash.runCommand "${pname}-${version}"
@@ -115,17 +109,19 @@ bash.runCommand "${pname}-${version}"
     tar xf ${gmp}
     tar xf ${mpfr}
     tar xf ${mpc}
-    tar xf ${isl}
     cd gcc-${version}
 
     ln -s ../gmp-${gmpVersion} gmp
     ln -s ../mpfr-${mpfrVersion} mpfr
     ln -s ../mpc-${mpcVersion} mpc
-    ln -s ../isl-${islVersion} isl
 
     # Configure
     export CC="gcc -Wl,-dynamic-linker -Wl,${musl}/lib/libc.so"
     export CXX="g++ -Wl,-dynamic-linker -Wl,${musl}/lib/libc.so"
+    export CFLAGS="-O1 -pipe"
+    export CXXFLAGS="-O1 -pipe"
+    export CFLAGS_FOR_TARGET="-O0"
+    export CXXFLAGS_FOR_TARGET="-O0"
 
     bash ./configure \
       --prefix=$out \
@@ -148,7 +144,10 @@ bash.runCommand "${pname}-${version}"
       --disable-multilib \
       --disable-nls \
       --disable-plugin \
-      --with-specs="%x{-dynamic-linker=${glibc}/lib/${linkerName}} %x{-L${glibc}/lib/} -B${glibc}/lib"
+      --with-specs="%x{-dynamic-linker=${glibc}/lib/${linkerName}} %x{-L${glibc}/lib/} -B${glibc}/lib" \
+      --without-isl \
+      --disable-libstdcxx-backtrace \
+      --disable-libstdcxx-filesystem-ts
 
     # Build
     make -j $NIX_BUILD_CORES

@@ -60,7 +60,7 @@ effectiveStdenv.mkDerivation rec {
     ]
     ++ lib.optionals enableCuda [
       cudaPackages.cuda_cudart
-      cudaPackages.cuda_cccl
+      cudaPackages.cccl
       cudaPackages.libcublas
     ];
 
@@ -114,7 +114,7 @@ effectiveStdenv.mkDerivation rec {
       gpl2Plus
       lgpl21Plus
     ];
-    maintainers = with lib.maintainers; [ ttuegel ];
+    maintainers = [ ];
     platforms = with lib.platforms; unix;
   };
 }

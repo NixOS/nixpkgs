@@ -4,7 +4,7 @@
   fetchFromGitHub,
   setuptools,
 
-  xlib,
+  python-xlib,
   typing-extensions,
 }:
 
@@ -23,7 +23,7 @@ buildPythonPackage (finalAttrs: {
   build-system = [ setuptools ];
 
   dependencies = [
-    xlib
+    python-xlib
     typing-extensions
   ];
 

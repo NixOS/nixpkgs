@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
   version = "1.1.2";
 
   src = fetchFromGitHub {
-    owner = "Silicasandwhich";
+    owner = "silica-dev";
     repo = "Bibata_Cursor_Translucent";
     rev = "v${version}";
     sha256 = "sha256-RroynJfdFpu+Wl9iw9NrAc9wNZsSxWI+heJXUTwEe7s=";
@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = {
     description = "Translucent Varient of the Material Based Cursor";
-    homepage = "https://github.com/Silicasandwhich/Bibata_Cursor_Translucent";
+    homepage = "https://github.com/silica-dev/Bibata_Cursor_Translucent";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     maintainers = [ ];

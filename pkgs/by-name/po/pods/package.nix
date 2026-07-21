@@ -23,18 +23,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pods";
-  version = "2.3.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "marhkb";
     repo = "pods";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JWOxp3J+7k0ikdFJ8SDFcspuM5SO5rQm5/21G4FAAag=";
+    hash = "sha256-GMFrcWFozRR0G0+7g5JJyMkWzPY79cVF4Go1Wd/4HtA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-UkXBlqFmODlJEm2NBHdKoO5Yc086NAHjo9HOuWb3Jq0=";
+    hash = "sha256-P0teC048Z61pMrl5cvlvrGaPcccxTki/AIthyzQusGI=";
   };
 
   nativeBuildInputs = [
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Podman desktop application";
     homepage = "https://github.com/marhkb/pods";
-    changelog = "https://github.com/marhkb/pods/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/marhkb/pods/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ iamanaws ];
     platforms = lib.platforms.linux;

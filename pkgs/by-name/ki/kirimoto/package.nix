@@ -5,12 +5,12 @@
 }:
 
 let
-  version = "4.7.0";
+  version = "4.7.1";
   pname = "kirimoto";
 
   src = fetchurl {
     url = "https://github.com/GridSpace/grid-apps/releases/download/${version}/KiriMoto-linux-x86_64.AppImage";
-    hash = "sha256-bLeGDZzAzBVC4tTwcC8uDngqOEeJ/vyTJGre+EovOgs=";
+    hash = "sha256-qFvPuzoH/QsOA4WgBTn5t8Pkto3Sg5h+VSmFn7aEtR8=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };

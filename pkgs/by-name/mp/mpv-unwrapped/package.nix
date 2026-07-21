@@ -304,10 +304,6 @@ stdenv.mkDerivation (finalAttrs: {
       vapoursynth
       ;
 
-    # Should be removed in the future. These can't be added to `pkgs/top-level/aliases.nix`.
-    scripts = throw "'mpv-unwrapped.scripts' has been removed. Please use 'mpvScripts' instead."; # Added 2025-12-29
-    wrapper = throw "'mpv-unwrapped.wrapper' has been removed. Please use 'mpv.override' instead."; # Added 2025-12-29
-
     tests = {
       inherit (nixosTests) mpv;
 
