@@ -21,11 +21,19 @@ let
   stringTheory = fetchurl {
     url = "https://github.com/zrax/string_theory/archive/3.8.tar.gz";
     hash = "sha256-mq7pW3qRZs03/SijzbTl1txJHCSW/TO+gvRLWZh/11M=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "zrax/string_theory@3.8";
+    };
   };
 
   magicEnum = fetchurl {
     url = "https://github.com/Neargye/magic_enum/archive/v0.8.2.zip";
     hash = "sha256-oQ+mUDB8YJULcSploz+0bprJbqclhc+p/Pmsn1AsAes=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Neargye/magic_enum@0.8.2";
+    };
   };
 in
 stdenv.mkDerivation rec {

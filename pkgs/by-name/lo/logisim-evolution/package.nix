@@ -14,6 +14,10 @@ let
   icon = fetchurl {
     url = "https://github.com/logisim-evolution/logisim-evolution/raw/9e0afa3cd6a8bfa75dab61830822cde83c70bb4b/artwork/logisim-evolution-icon.svg";
     hash = "sha256-DNRimhNFt6jLdjqv7o2cNz38K6XnevxD0rGymym3xBs=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "logisim-evolution/logisim-evolution@4.1.0";
+    };
   };
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -23,6 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/logisim-evolution/logisim-evolution/releases/download/v${finalAttrs.version}/logisim-evolution-${finalAttrs.version}-all.jar";
     hash = "sha256-/mOGoyF6WRvMMRpO2knh9Do4m0md09D29A80T8hfJXc=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "logisim-evolution/logisim-evolution@${finalAttrs.version}";
+    };
   };
   dontUnpack = true;
 

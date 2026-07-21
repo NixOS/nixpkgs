@@ -24,6 +24,10 @@ let
       name = "techmino.png";
       url = "https://github.com/26F-Studio/Techmino/assets/9590981/95981af1-f39a-47d9-bd99-a78ab767c08f";
       hash = "sha256-+j+8m2vwaWgHYSFL6urvTcB0vA+PCZ+FYJ22CNXfcSc=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "26F-Studio/Techmino@0.17.21";
+      };
     };
     comment = description;
     desktopName = "Techmino";
@@ -39,6 +43,10 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/26F-Studio/Techmino/releases/download/v${version}/Techmino_Bare.love";
     hash = "sha256-8gMIyNP1FS52LnbpQ+G9XNtK3rQruzkMDRz7Gk9LZcQ=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "26F-Studio/Techmino@${version}";
+    };
   };
 
   nativeBuildInputs = [ makeWrapper ];

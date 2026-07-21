@@ -33,6 +33,10 @@ let
       src = fetchurl {
         url = "https://github.com/csukuangfj/espeak-ng/archive/f6fed6c58b5e0998b8e68c6610125e2d07d595a7.zip";
         hash = "sha256-cMv0BQ56AUquGRQLBeVySdpHIPVhKEWfvjqTvq+XGuY=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "csukuangfj/espeak-ng@f6fed6c";
+        };
       };
     }
     {
@@ -40,6 +44,10 @@ let
       src = fetchurl {
         url = "https://github.com/csukuangfj/kaldi-native-fbank/archive/refs/tags/v1.22.3.tar.gz";
         hash = "sha256-kXbMZvx84e34XPNVsG4yDFfbYpffdCd/V1GDRoiTz2E=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "csukuangfj/kaldi-native-fbank@1.22.3";
+        };
       };
     }
     {
@@ -47,6 +55,10 @@ let
       src = fetchurl {
         url = "https://github.com/pkufool/simple-sentencepiece/archive/refs/tags/v0.7.tar.gz";
         hash = "sha256-F0ioIgYKNbqp9mCfhO/I61TcDnS57OPYI2e3EZ/cda8=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "pkufool/simple-sentencepiece@0.7";
+        };
       };
     }
     {
@@ -54,6 +66,10 @@ let
       src = fetchurl {
         url = "https://github.com/k2-fsa/kaldifst/archive/refs/tags/v1.8.0.tar.gz";
         hash = "sha256-PyR7flokCQcSAvXivGIABg9mcowKNEPAOSOtJyPgQLM=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "k2-fsa/kaldifst@1.8.0";
+        };
       };
     }
     {
@@ -61,6 +77,10 @@ let
       src = fetchurl {
         url = "https://github.com/k2-fsa/kaldi-decoder/archive/refs/tags/v0.3.0.tar.gz";
         hash = "sha256-ufNM+0/TsTRBAO6tee9NN6oVliJ0ueMFbeNFAh92obA=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "k2-fsa/kaldi-decoder@0.3.0";
+        };
       };
     }
     {
@@ -68,6 +88,10 @@ let
       src = fetchurl {
         url = "https://github.com/likle/cargs/archive/refs/tags/v1.0.3.tar.gz";
         hash = "sha256-3bolvTXpxsdbxwbBJgAbjOjghNQO83BQ5qppY+g264s=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "likle/cargs@1.0.3";
+        };
       };
     }
     {
@@ -75,6 +99,10 @@ let
       src = fetchurl {
         url = "https://github.com/csukuangfj/piper-phonemize/archive/78a788e0b719013401572d70fef372e77bff8e43.zip";
         hash = "sha256-iWQaRkiaSJh1RkPOV72pybVLTKRkhf3AK/DchLhmZF0=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "csukuangfj/piper-phonemize@78a788e";
+        };
       };
     }
     {
@@ -82,6 +110,10 @@ let
       src = fetchurl {
         url = "https://github.com/csukuangfj/openfst/archive/refs/tags/v1.8.5-2026-04-11.tar.gz";
         hash = "sha256-V/vEuVCugbGg4eKYrxVlLalopnI6WSt4dOm0AnqApbQ=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "csukuangfj/openfst@1.8.5-2026-04-11";
+        };
       };
     }
     {
@@ -89,6 +121,10 @@ let
       src = fetchurl {
         url = "https://github.com/csukuangfj/hclust-cpp/archive/refs/tags/2026-02-25.tar.gz";
         hash = "sha256-jxTgJMcJ1zr7QK5pyyLeS3Pbpny85A8uUYgT2oE5q1Y=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "csukuangfj/hclust-cpp@2026-02-25";
+        };
       };
     }
   ]
@@ -98,6 +134,10 @@ let
       src = fetchurl {
         url = "https://github.com/chriskohlhoff/asio/archive/refs/tags/asio-1-24-0.tar.gz";
         hash = "sha256-y8qroPZnInh7Gnwzr+G++zoBK1rzrX2n/w9rjJt6ils=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "chriskohlhoff/asio@asio-1-24-0";
+        };
       };
     }
     {
@@ -105,6 +145,10 @@ let
       src = fetchurl {
         url = "https://github.com/zaphoyd/websocketpp/archive/b9aeec6eaf3d5610503439b4fae3581d9aff08e8.zip";
         hash = "sha256-E4UTXt6Bkaf7757ICZ48Wmc9SN8MFDlYIWzRaQVn9YM=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "zaphoyd/websocketpp@b9aeec6";
+        };
       };
     }
   ];

@@ -33,6 +33,10 @@ let
   musicRemixes = fetchurl {
     url = "https://github.com/omf2097/openomf-music-mod/releases/download/1.0/openomf-mods-1.0.zip";
     hash = "sha256-uiaM6n+dDcTeBNNnypEWXPNG8Xac1JQXCTfVkORfvi0=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "omf2097/openomf@0.8.0";
+    };
   };
 in
 stdenv.mkDerivation (finalAttrs: {
