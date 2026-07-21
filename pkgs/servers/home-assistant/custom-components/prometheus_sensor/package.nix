@@ -7,13 +7,13 @@
 buildHomeAssistantComponent rec {
   owner = "mweinelt";
   domain = "prometheus_sensor";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "mweinelt";
     repo = "ha-prometheus-sensor";
     tag = version;
-    hash = "sha256-uIC/yGqjigVURZYVMMLY33VqRbadSCqTtT0Qtaq71uc=";
+    hash = "sha256-o/bGSqD6b0o3f/b/al+eGg/LqwrWi1deB53NOTNkb8Q=";
   };
 
   meta = {
