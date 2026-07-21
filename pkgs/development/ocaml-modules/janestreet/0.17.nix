@@ -375,7 +375,10 @@ with self;
       async_extra
       async_rpc_websocket
       babel
-      cohttp-async
+      # bonsai.opam requires cohttp-async < 6.0.0; also avoids mixing both
+      # cohttp lines in one closure (async_rpc_websocket pulls in
+      # cohttp_async_websocket, which uses cohttp-async_5_3)
+      cohttp-async_5_3
       core_bench
       fuzzy_match
       incr_dom
