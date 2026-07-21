@@ -22822,6 +22822,7 @@ with self;
     buildInputs = [ pkgs.apacheHttpd ];
     doCheck = false; # would try to start Apache HTTP server
     passthru.tests = nixosTests.mod_perl;
+    __darwinAllowLocalNetworking = true;
     meta = {
       description = "Embed a Perl interpreter in the Apache/2.x HTTP server";
       license = lib.licenses.asl20;
