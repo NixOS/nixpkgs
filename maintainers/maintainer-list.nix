@@ -27475,6 +27475,12 @@
     githubId = 129148;
     name = "Tad Fisher";
   };
+  tadomika_ari = {
+    email = "lucasee558@gmail.com";
+    github = "Tadomika-Ari";
+    githubId = 124564764;
+    name = "Lucas Eeckhoutte";
+  };
   taeer = {
     email = "taeer@necsi.edu";
     github = "Radvendii";

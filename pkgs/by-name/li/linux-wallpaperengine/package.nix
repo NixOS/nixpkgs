@@ -129,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Almamu/linux-wallpaperengine";
     license = lib.licenses.gpl3Plus;
     mainProgram = "linux-wallpaperengine";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.tadomika_ari ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
