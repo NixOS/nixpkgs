@@ -12,8 +12,7 @@
   installShellFiles,
   historySupport ? true,
   readlineSupport ? true,
-  lineEditingLibrary ?
-    if (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isStatic) then "null" else "readline",
+  lineEditingLibrary ? if stdenv.hostPlatform.isDarwin then "null" else "readline",
 }:
 
 assert lib.elem lineEditingLibrary [
@@ -74,7 +73,9 @@ stdenv.mkDerivation (finalAttrs: {
     "MANPREFIX=${placeholder "man"}/share/man"
     "CPPFLAGS=\"-DSIGCLD=SIGCHLD\""
     "EDIT=${lineEditingLibrary}"
-  ];
+  ]
+  # Required to fix static build, harmless for dynamic builds.
+  ++ lib.optional (lineEditingLibrary == "readline") "LDLIBS=-lncurses";
 
   buildFlags = [
     "all"
