@@ -91,7 +91,7 @@ elif args["command"] == "set":
 	setSecret(args["generator"], args["filename"], os.environ["in"])
 elif args["command"] == "exists":
 	if not hostSecretPath().exists():
-		sys.exist(42)
+		sys.exit(42)
 elif args["command"] == "list":
 	for generator, filename in listHostSecrets():
 		print(f"{generator} {filename}")
