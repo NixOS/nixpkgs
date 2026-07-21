@@ -415,7 +415,7 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [ "format" ];
 
   # TODO: Clean up on `staging`.
-  env.NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isDarwin "-fuse-ld=lld";
+  env.NIX_CFLAGS_LINK = "-fuse-ld=lld";
 
   doCheck = false; # fails 20 out of 58 tests, expensive
 
