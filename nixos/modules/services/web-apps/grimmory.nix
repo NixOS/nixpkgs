@@ -242,6 +242,7 @@ in
         User = cfg.user;
         Group = cfg.group;
         WorkingDirectory = cfg.dataDir;
+        StateDirectory = "grimmory";
         EnvironmentFile = cfg.environmentFile;
 
         Restart = "on-failure";
