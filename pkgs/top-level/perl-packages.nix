@@ -39340,10 +39340,10 @@ with self;
 
   YAMLSyck = buildPerlPackage {
     pname = "YAML-Syck";
-    version = "1.45";
+    version = "1.47";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TODDR/YAML-Syck-1.45.tar.gz";
-      hash = "sha256-8t4a+08MVsNubVJgqgvSyPGOTYUAnc9YQiBOoqf7w98=";
+      url = "mirror://cpan/authors/id/T/TO/TODDR/YAML-Syck-1.47.tar.gz";
+      hash = "sha256-ZyGWyhwCHjxo9LX3tK7DBa1HG7v0SMU8fkADTW67fh0=";
     };
     env.NIX_CFLAGS_COMPILE = "-std=gnu11";
     meta = {
