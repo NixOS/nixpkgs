@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "headlamp-server";
-  version = "0.42.0";
+  version = "0.43.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -15,12 +15,12 @@ buildGoModule rec {
     owner = "kubernetes-sigs";
     repo = "headlamp";
     tag = "v${version}";
-    hash = "sha256-SBPSh6dsKvMw1C80THri0mNPoTMgcrjONk455S/g9v0=";
+    hash = "sha256-6TGKBKR0WR4Xv7lGCgMFVG/nc19oMOP5cJcgT0bw6Ag=";
   };
 
   modRoot = "backend";
 
-  vendorHash = "sha256-dBU053QtUEMWjzkOEHzELH3j7PJOKuoBZCVZFmZ5z7E=";
+  vendorHash = "sha256-U0H1Dj38ajRGFqcWszveWckxenaKa4nrPg81GyIpS0U=";
 
   # Don't embed frontend - Electron serves it directly. This also prevents
   # the server from auto-opening a browser window.
