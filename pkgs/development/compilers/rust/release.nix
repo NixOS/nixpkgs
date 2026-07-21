@@ -88,7 +88,7 @@ import ./default.nix
       x86_64-unknown-freebsd = "77101232e3769395e99c0e663d2c8beb3d4127857945cf7c812c1886ba823b8f";
     };
 
-    selectRustPackage = pkgs: pkgs.rust_1_97;
+    selectRustPackage = pkgs: pkgs.rust;
   }
 
   (
