@@ -30,6 +30,8 @@ lib.makeScope newScope (
 
     pidgin-xmpp-receipts = callPackage ./pidgin-xmpp-receipts { };
 
+    pidgin-libnotify = callPackage ./pidgin-libnotify { };
+
     pidgin-otr = callPackage ./otr { };
 
     pidgin-osd = callPackage ./pidgin-osd { };
