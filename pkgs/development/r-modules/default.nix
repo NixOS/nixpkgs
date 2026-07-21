@@ -2209,12 +2209,6 @@ let
       '';
     });
 
-    Rmpi = old.Rmpi.overrideAttrs (attrs: {
-      configureFlags = [
-        "--with-Rmpi-type=OPENMPI"
-      ];
-    });
-
     Rrdrand = old.Rrdrand.override { platforms = lib.platforms.x86_64 ++ lib.platforms.x86; };
 
     Rserve = old.Rserve.overrideAttrs (attrs: {
