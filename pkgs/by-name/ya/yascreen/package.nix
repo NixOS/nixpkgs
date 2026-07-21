@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yascreen";
-  version = "2.11";
+  version = "2.13";
 
   src = fetchFromGitHub {
     owner = "bbonev";
     repo = "yascreen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SkJPq1xeC2XU8zP9uPdXECotgvG4siKvvHfi7z0APio=";
+    hash = "sha256-641H0uR2rR9vVe7WF2bSzFs+6HXlPHWgD0jKH9MofqU=";
   };
 
   nativeBuildInputs = [ go-md2man ];
