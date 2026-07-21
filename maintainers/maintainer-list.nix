@@ -7884,6 +7884,12 @@
     github = "edlimerkaj";
     githubId = 71988351;
   };
+  edoars = {
+    name = "Edoardo Signorini";
+    email = "mail@edoars.me";
+    github = "edoars";
+    githubId = 44139791;
+  };
   edrex = {
     email = "ericdrex@gmail.com";
     github = "edrex";
