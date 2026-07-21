@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -18,6 +19,8 @@ buildPythonPackage (finalAttrs: {
   build-system = [ setuptools ];
 
   pythonImportsCheck = [ "interegular" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Library to check a subset of python regexes for intersections";
