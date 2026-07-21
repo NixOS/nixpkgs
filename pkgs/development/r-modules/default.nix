@@ -718,6 +718,7 @@ let
       cmake
       pkg-config
     ];
+    libimath = [ pkgs.cmake ];
     libipldr = with pkgs; [
       cargo
       rustc
