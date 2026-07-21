@@ -9747,7 +9747,7 @@ with pkgs;
   xdg-desktop-portal-hyprland =
     callPackage ../applications/window-managers/hyprwm/xdg-desktop-portal-hyprland
       {
-        stdenv = gcc15Stdenv;
+        stdenv = gcc16Stdenv;
         inherit (qt6)
           qtbase
           qttools

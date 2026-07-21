@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zizmor";
-  version = "1.26.1";
+  version = "1.27.0";
 
   src = fetchFromGitHub {
     owner = "zizmorcore";
     repo = "zizmor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AL4y9lB60zvWhr5U6vzVyg0DhxFCaKkP8+6DWdg2vYA=";
+    hash = "sha256-wiVAZ26JJB3C9WYiM5OfK83oT1HDr1jlfvcpELFHy0E=";
   };
 
-  cargoHash = "sha256-PGU9R6EKT+9ZdgxBgQqlvvmyEtDRG6zT2EdQPzlPIM0=";
+  cargoHash = "sha256-Cbu0ur4WUURgrgITe5UCz5qTHR3F6PjxEqbm1t+lpBA=";
 
   buildInputs = [
     rust-jemalloc-sys
