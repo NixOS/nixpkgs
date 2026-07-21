@@ -5,7 +5,7 @@
   cmake,
   nix-update-script,
 
-  disableFeatures ? true,
+  disableFeatures ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "QCBOR_DISABLE_INDEFINITE_LENGTH_STRINGS" disableFeatures)
     (lib.cmakeBool "QCBOR_DISABLE_INDEFINITE_LENGTH_ARRAYS" disableFeatures)
     (lib.cmakeBool "QCBOR_DISABLE_PREFERRED_FLOAT" disableFeatures)
-    (lib.cmakeFeature "BUILD_QCBOR_TEST" "APP")
+    (lib.cmakeFeature "BUILD_QCBOR_TEST" (if finalAttrs.doCheck then "APP" else "OFF"))
   ];
 
   doCheck = true;
@@ -42,7 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "CBOR encoder/decoder";
     homepage = "https://github.com/laurencelundblade/QCBOR";
     changelog = "https://github.com/laurencelundblade/QCBOR/releases/tag/${finalAttrs.src.tag}";
-    mainProgram = "qcbor";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ eljamm ];
