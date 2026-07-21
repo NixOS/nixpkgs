@@ -102,6 +102,10 @@ jdk.overrideAttrs (oldAttrs: {
         --host=*)
           # intentionally omit flag
           ;;
+        --with-version-string=*)
+          # The base JDK pins its own upstream version, which may differ from the
+          # JBR sources; let configure read the version from version-numbers.conf
+          ;;
         ${lib.optionalString (vendorVersionString != null) ''
           --with-vendor-version-string=*)
             # Replace the flag from the JDK to include that it is JBR and the package version, so it passes the installation tests
