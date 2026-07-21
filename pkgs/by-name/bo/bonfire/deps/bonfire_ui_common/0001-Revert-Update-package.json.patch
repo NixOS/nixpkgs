@@ -1,0 +1,26 @@
+From 5f240a653b0e92866ca72096c997ba10884f2733 Mon Sep 17 00:00:00 2001
+From: Julien Moutinho <julm+bonfire@sourcephile.fr>
+Date: Thu, 19 Feb 2026 06:47:20 +0100
+Subject: [PATCH] Revert "Update package.json"
+
+This reverts commit 90f53fe99bf9213dcf3ba57f89038a8c10a3189a.
+---
+ assets/package.json | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/assets/package.json b/assets/package.json
+index 762a66c..a56e8e1 100755
+--- a/assets/package.json
++++ b/assets/package.json
+@@ -60,7 +60,7 @@
+ 		"@tailwindcss/postcss": "4.1.17",
+ 		"buffer": "^6.0.3",
+ 		"cpx2": "^6.0.1",
+-		"daisyui": "^5.1.18",
++		"daisyui": "^5.1.12",
+ 		"esbuild": "^0.19.9",
+ 		"postcss": "^8.4.38",
+ 		"postcss-cli": "^11.0.0",
+-- 
+2.51.2
+
