@@ -187,6 +187,14 @@ def deploy_secrets(
 	config: VarsConfig,
 	backend: VarsGeneratorBackend,
 ):
+	inputLines = []
+	for generator in config.generators.values():
+		if generator.backend != backend.name:
+			continue
+		for file in generator.files.values():
+			if file.deploy:
+				inputLines.append(f"{generator.name} {file.name}")
+
 	local = args.local is not None and backend.deployLocal is not None
 	script = backend.deployLocal if local else backend.deploy
 
@@ -194,6 +202,7 @@ def deploy_secrets(
 	try:
 		subprocess.run(
 			[binary, args.local] if local else [binary],
+			input="\n".join(inputLines),
 			capture_output=not args.verbose,
 			text=True,
 			check=True,
@@ -274,7 +283,7 @@ def rebuild_order(
 
 
 def fixup_all(args: VarsArgs, config: VarsConfig):
-	print("Running fixup scripts...")
+	print("Running fixup scripts:")
 	if args.dry_run:
 		return
 
