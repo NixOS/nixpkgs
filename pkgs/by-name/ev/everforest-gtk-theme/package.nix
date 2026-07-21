@@ -71,7 +71,7 @@ stdenvNoCC.mkDerivation {
     description = "Everforest colour palette for GTK";
     homepage = "https://github.com/Fausto-Korpsvart/Everforest-GTK-Theme";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ jn-sena ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }
