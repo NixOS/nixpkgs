@@ -296,6 +296,10 @@ stdenv.mkDerivation (finalAttrs: {
       ;
 
     withExtensions = callPackage ./with-extensions.nix { ghidra = finalAttrs.finalPackage; };
+
+    tests.headless-analysis = callPackage ./tests/headless-analysis.nix {
+      ghidra = finalAttrs.finalPackage;
+    };
   };
 
   meta = {
