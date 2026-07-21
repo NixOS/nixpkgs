@@ -5,19 +5,22 @@
   beziers,
   glyphslib,
   numpy,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "glyphtools";
   version = "0.8.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-PXwXHWMJbsi6ZtN+daaXAnlw3gV5DFAhyRxdBa7UP+M=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     beziers
     glyphslib
     numpy
