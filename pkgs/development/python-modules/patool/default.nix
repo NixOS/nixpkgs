@@ -77,6 +77,18 @@ buildPythonPackage rec {
     "test_7z_file"
     "test_7za_file"
     "test_p7azip"
+    "test_py_tarfile_bz2"
+    "test_py_tarfile_bz2_file"
+    "test_tar_bz2"
+    "test_tar_bz2_file"
+    "test_tar_lzip"
+    "test_tar_lzma"
+    "test_tar_xz"
+    "test_tar_xz_file"
+    "test_tar_lzma"
+    "test_tar_xz"
+    "test_mime_file"
+    "test_mime_file_bzip"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_ar" ];
 
