@@ -24,6 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/Kagamma/tparted/releases/download/${finalAttrs.version}/linux_x86-64_tparted_${finalAttrs.version}.tar.gz";
     hash = "sha256-dVVNr8VL8SP2gCdysbE28QgKWGOzfGoIdVIzJRxRp9M=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Kagamma/tparted@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

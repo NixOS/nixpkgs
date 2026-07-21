@@ -48,6 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
       steamworkssdk_src = fetchurl {
         url = "https://github.com/julianxhokaxhiu/SteamworksSDKCI/releases/download/1.53/SteamworksSDK-v1.53.0_x64.zip";
         hash = "sha256-6PQGaPsaxBg/MHVWw2ynYW6LaNSrE9Rd9Q9ZLKFGPFA=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "julianxhokaxhiu/SteamworksSDKCI@${finalAttrs.version}";
+        };
       };
       # Only required for testing?
       doctest_src = null;

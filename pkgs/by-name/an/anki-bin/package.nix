@@ -21,20 +21,36 @@ let
     linux-aarch64 = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-linux-aarch64.tar.zst";
       hash = "sha256-z/w7+TKLW+xi/iJMXGOp50Yjwnv7FD5O0lNsu31dfqo=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "ankitects/anki@${version}";
+      };
     };
     linux-x86_64 = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-linux-x86_64.tar.zst";
       hash = "sha256-YiPXBVY/catAzgcqXZajkZxUbV3eHkxJ3CeXXnAGcnQ=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "ankitects/anki@${version}";
+      };
     };
 
     # For some reason anki distributes completely separate dmg-files for the aarch64 version and the x86_64 version
     darwin-x86_64 = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac-intel.dmg";
       hash = "sha256-L/TXKh0cmTop7/ROA9YC4dyBz9iAFRhpXuNRbR3wwYk=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "ankitects/anki@${version}";
+      };
     };
     darwin-aarch64 = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac-apple.dmg";
       hash = "sha256-c5NZf0uWNB7XQDYBDtgrtCU+A5Cuck0rJ1xFG8hY0Sc=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "ankitects/anki@${version}";
+      };
     };
   };
 

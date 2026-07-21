@@ -14,6 +14,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/ergoplatform/ergo/releases/download/v${finalAttrs.version}/ergo-${finalAttrs.version}.jar";
     sha256 = "sha256-SALN41UGI+Y5pdCfRdJXki4BgVxbH+ZL2v0uvGnsZ8c=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "ergoplatform/ergo@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -13,6 +13,10 @@ let
     name = "altus-${version}.AppImage";
     url = "https://github.com/amanharwara/altus/releases/download/${version}/Altus-${version}.AppImage";
     hash = "sha256-FSyXs9thTQ5T5bvCfg/+QXBZMIOyoijAw0dUsvLRGH8=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "amanharwara/altus@${version}";
+    };
   };
 
   appimageContents = appimageTools.extractType2 {

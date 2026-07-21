@@ -70,14 +70,26 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       "aarch64-darwin" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${finalAttrs.version}/bun-darwin-aarch64.zip";
         hash = "sha256-VGfj9l26Umuf6pjwzOBO+vwMY+Fpcz7Ce4dqOtMtoZA=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "oven-sh/bun@${finalAttrs.version}";
+        };
       };
       "aarch64-linux" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${finalAttrs.version}/bun-linux-aarch64.zip";
         hash = "sha256-cLrkGzkIsKEg4eWMXIrzDnSvrjuNEbDT/djnh937SyI=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "oven-sh/bun@${finalAttrs.version}";
+        };
       };
       "x86_64-linux" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${finalAttrs.version}/bun-linux-x64.zip";
         hash = "sha256-ecB3H6i5LDOq5B4VoODTB+qZ0OLwAxfHHGxTI3p44lo=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "oven-sh/bun@${finalAttrs.version}";
+        };
       };
     };
     updateScript = writeShellScript "update-bun" ''

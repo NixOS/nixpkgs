@@ -12,11 +12,19 @@ stdenvNoCC.mkDerivation rec {
       name = "zpix-pixel-font.bdf";
       url = "https://github.com/SolidZORO/zpix-pixel-font/releases/download/v${version}/zpix.bdf";
       hash = "sha256-qE6YPKuk1FRRrTvmy4YIDuxRfslma264piUDj1FWtk4=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "SolidZORO/zpix-pixel-font@${version}";
+      };
     })
     (fetchurl {
       name = "zpix-pixel-font.ttf";
       url = "https://github.com/SolidZORO/zpix-pixel-font/releases/download/v${version}/zpix.ttf";
       hash = "sha256-UIgLGsVTbyhYMKfTYiA+MZmV4dFT9HX3sxTdrcc4vE0=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "SolidZORO/zpix-pixel-font@${version}";
+      };
     })
   ];
 

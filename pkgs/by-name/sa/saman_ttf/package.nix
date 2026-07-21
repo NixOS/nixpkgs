@@ -12,6 +12,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/tcgumus/saman/releases/download/v${finalAttrs.version}/SamanDere-Regular.ttf";
     hash = "sha256-hLlo4qtxL1RDiA9PpRvo2F7rdCVGPs2G8NHKydLfJXU=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "tcgumus/saman@${finalAttrs.version}";
+    };
   };
 
   dontUnpack = true;

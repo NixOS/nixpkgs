@@ -24,6 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/pbek/QOwnNotes/releases/download/v${finalAttrs.version}/qownnotes-${finalAttrs.version}.tar.xz";
     hash = "sha256-3m/JErBDXQeCu1ShITPJtZkf/c0PL/RrKJshV/CXYls=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "pbek/QOwnNotes@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

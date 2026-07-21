@@ -13,6 +13,10 @@ let
   src = fetchurl {
     url = "https://github.com/mycryptohq/mycrypto/releases/download/${version}/linux-x86-64_${version}_MyCrypto.AppImage";
     inherit sha256;
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "mycryptohq/mycrypto@${version}";
+    };
   };
 
   appimageContents = appimageTools.extractType2 {

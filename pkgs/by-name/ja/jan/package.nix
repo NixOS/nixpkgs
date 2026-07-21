@@ -22,6 +22,10 @@ let
   linux-src = fetchurl {
     url = "https://github.com/janhq/jan/releases/download/v${version}/Jan_${version}_amd64.AppImage";
     hash = "sha256-vEmioWQ4ic/FrtNFMKaLOcEy2BTRdouPc4PYWk90ZBI=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "janhq/jan@${version}";
+    };
   };
 
   appimageContents = appimageTools.extractType2 {

@@ -11,6 +11,10 @@ let
   src = fetchurl {
     url = "https://github.com/BetterDiscord/Installer/releases/download/v${version}/Betterdiscord-Linux.AppImage";
     hash = "sha256-In5J6TWoJsFODDwMXd1lMg3341IZJD2OJebVtgISxP0=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "BetterDiscord/Installer@${version}";
+    };
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };

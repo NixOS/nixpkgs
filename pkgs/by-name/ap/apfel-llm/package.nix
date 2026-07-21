@@ -17,6 +17,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/Arthur-Ficial/apfel/releases/download/v${finalAttrs.version}/apfel-${finalAttrs.version}-arm64-macos.tar.gz";
     hash = "sha256-1AA86f5+Poo5YCrtxT1rAPGBctQbNa5hdAZmI008/yU=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Arthur-Ficial/apfel@${finalAttrs.version}";
+    };
   };
 
   sourceRoot = ".";

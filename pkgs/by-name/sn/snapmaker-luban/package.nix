@@ -45,6 +45,10 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/Snapmaker/Luban/releases/download/v${version}/snapmaker-luban-${version}-linux-x64.tar.gz";
     hash = "sha256-X4XNzkl5ky3C8fj92J9OQxj12zmIQ+xS02wYLWo94oU=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Snapmaker/Luban@${version}";
+    };
   };
 
   nativeBuildInputs = [

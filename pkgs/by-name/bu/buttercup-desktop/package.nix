@@ -10,6 +10,10 @@ let
   src = fetchurl {
     url = "https://github.com/buttercup/buttercup-desktop/releases/download/v${version}/Buttercup-linux-x86_64.AppImage";
     sha256 = "sha256-iCuvs+FisYPvCmPVg1dhYMX+Lw3WmrMSRytdy6TLrxg=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "buttercup/buttercup-desktop@${version}";
+    };
   };
   appimageContents = appimageTools.extractType2 { inherit pname src version; };
 

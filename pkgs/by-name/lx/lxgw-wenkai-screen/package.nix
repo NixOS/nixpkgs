@@ -11,6 +11,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/lxgw/LxgwWenKai-Screen/releases/download/v${finalAttrs.version}/LXGWWenKaiScreen.ttf";
     hash = "sha256-zRpvo5xOpC/Y9OKJlFeJsOUQz3AWQ1ZA+Ik82tmyIPM=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "lxgw/LxgwWenKai-Screen@${finalAttrs.version}";
+    };
   };
 
   dontUnpack = true;

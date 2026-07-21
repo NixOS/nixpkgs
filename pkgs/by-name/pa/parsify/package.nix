@@ -11,6 +11,10 @@ appimageTools.wrapType2 rec {
   src = fetchurl {
     url = "https://github.com/parsify-dev/desktop/releases/download/v${version}/Parsify-${version}-linux-x86_64.AppImage";
     hash = "sha256-ltWqRW+cBvuUJzhya62WsBY5zqIua9xhilxfd9gr24A=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "parsify-dev/desktop@${version}";
+    };
   };
 
   extraInstallCommands =

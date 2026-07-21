@@ -18,6 +18,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/stevengj/h5utils/releases/download/${finalAttrs.version}/h5utils-${finalAttrs.version}.tar.gz";
     hash = "sha256-7qeFWoI1+st8RU5hEDCY5VZY2g3fS23luCqZLl8CQ1E=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "stevengj/h5utils@${finalAttrs.version}";
+    };
   };
 
   # libdf is an alternative name for libhdf (hdf4)

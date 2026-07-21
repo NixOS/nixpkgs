@@ -12,6 +12,10 @@ appimageTools.wrapType2 rec {
   src = fetchurl {
     url = "https://github.com/ciderapp/Cider/releases/download/v${version}/Cider-${version}.AppImage";
     sha256 = "sha256-NwoV1eeAN0u9VXWpu5mANXhmgqe8u3h7BlsREP1f/pI=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "ciderapp/Cider@${version}";
+    };
   };
 
   nativeBuildInputs = [ makeWrapper ];

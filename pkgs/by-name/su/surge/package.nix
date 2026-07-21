@@ -27,6 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/surge-synthesizer/releases/releases/download/${finalAttrs.version}/SurgeSrc_${finalAttrs.version}.tgz";
     hash = "sha256-k7x+s84OpazARlHWXEP1aC57+o3uEduAzYDeyBwlTgE=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "surge-synthesizer/releases@${finalAttrs.version}";
+    };
   };
 
   extraContent = fetchFromGitHub {

@@ -13,6 +13,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/utmapp/UTM/releases/download/v${finalAttrs.version}/UTM.dmg";
     hash = "sha256-qENck8+1+Lv+6ksTTPrRrGa2djK3XkOMY7GorgQ77w4=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "utmapp/UTM@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

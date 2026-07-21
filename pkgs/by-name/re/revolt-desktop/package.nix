@@ -39,14 +39,26 @@
             x86_64-linux = fetchurl {
               url = "https://github.com/revoltchat/desktop/releases/download/v${version}/Revolt-${version}.AppImage";
               hash = "sha256-L23Je5p7VmQpOLC+IfmQRk2CKKUm4rNBdsYLvqLTlRY=";
+              meta.identifiers.purlParts = {
+                type = "github";
+                spec = "revoltchat/desktop@${version}";
+              };
             };
             armv7l-linux = fetchurl {
               url = "https://github.com/revoltchat/desktop/releases/download/v${version}/Revolt-${version}-armv7l.AppImage";
               hash = "sha256-Qwya5tgHjMB8IJi0ueGmkzgQMQu+rlsDoWIVpl6Vj2w=";
+              meta.identifiers.purlParts = {
+                type = "github";
+                spec = "revoltchat/desktop@${version}";
+              };
             };
             aarch64-linux = fetchurl {
               url = "https://github.com/revoltchat/desktop/releases/download/v${version}/Revolt-${version}-arm64.AppImage";
               hash = "sha256-VQXyXaL4Ma3peO1duAlyFwkb1CRQ/4DNZhjiAnhms6I=";
+              meta.identifiers.purlParts = {
+                type = "github";
+                spec = "revoltchat/desktop@${version}";
+              };
             };
           }
           .${stdenvNoCC.hostPlatform.system}

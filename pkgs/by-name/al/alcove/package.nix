@@ -13,6 +13,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/henrikruscon/alcove-releases/releases/download/${finalAttrs.version}/Alcove.zip";
     hash = "sha256-gzV/BdLt0cl490cPHPK5Q6S4HRaHI/e4zcOdnM+MVYg=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "henrikruscon/alcove-releases@${finalAttrs.version}";
+    };
   };
 
   sourceRoot = ".";

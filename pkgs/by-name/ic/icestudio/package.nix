@@ -25,6 +25,10 @@ let
   collection = fetchurl {
     url = "https://github.com/FPGAwars/collection-default/archive/v0.4.1.zip";
     hash = "sha256-F2cAqkTPC7xfGnPQiS8lTrD4y34EkHFUEDPVaYzVVg8=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "FPGAwars/collection-default@${version}";
+    };
   };
 
   app = buildNpmPackage {

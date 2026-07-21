@@ -13,6 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/Quantomatic/quantomatic/releases/download/v${finalAttrs.version}/Quantomatic-v${finalAttrs.version}.jar";
     sha256 = "04dd5p73a7plb4l4x2balam8j7mxs8df06rjkalxycrr1id52q4r";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Quantomatic/quantomatic@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [ makeWrapper ];

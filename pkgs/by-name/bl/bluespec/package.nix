@@ -68,6 +68,10 @@ stdenv.mkDerivation rec {
   yices-src = fetchurl {
     url = "https://github.com/B-Lang-org/bsc/releases/download/${version}/yices-src-for-bsc-${version}.tar.gz";
     sha256 = "sha256-pyEdCJvmgwOYPMZEtw7aro76tSn/Y/2GcKTyARmIh4E=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "B-Lang-org/bsc@${version}";
+    };
   };
 
   enableParallelBuilding = true;

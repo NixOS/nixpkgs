@@ -36,6 +36,10 @@ let
   passthru.updateScript = ./update.sh;
 
   metaCommon = {
+    identifiers.purlParts = {
+      type = "github";
+      spec = "wavetermdev/waveterm@${version}";
+    };
     description = "Open-source, cross-platform terminal for seamless workflows";
     homepage = "https://www.waveterm.dev";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
@@ -128,6 +132,10 @@ let
     src = fetchurl {
       url = "https://github.com/wavetermdev/waveterm/releases/download/v${version}/Wave-darwin-arm64-${version}.zip";
       hash = "sha256-NY/KFFGgtrQr9YL32nudWeTIGNDjswelcOD1wo+Jh3s=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "wavetermdev/waveterm@${version}";
+      };
     };
 
     nativeBuildInputs = [ unzip ];

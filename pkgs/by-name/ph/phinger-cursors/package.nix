@@ -11,6 +11,10 @@ stdenvNoCC.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/phisch/phinger-cursors/releases/download/v${version}/phinger-cursors-variants.tar.bz2";
     sha256 = "sha256-3bcxDGK/jg4nmKJPioZ+Svexejl1e6RcheE/OYj2Rvw=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "phisch/phinger-cursors@${version}";
+    };
   };
 
   sourceRoot = ".";

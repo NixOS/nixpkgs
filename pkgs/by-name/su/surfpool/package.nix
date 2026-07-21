@@ -13,6 +13,10 @@ let
   studioUi = fetchurl {
     url = "https://github.com/solana-foundation/surfpool-web-ui/releases/download/${studioUiVersion}/studio-dist.zip";
     hash = "sha256-DeWm2FzZbdaHXaEFA8W/YIIcJx4Z+uFkrxuajTM9n1M=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "solana-foundation/surfpool-web-ui@${studioUiVersion}";
+    };
   };
 in
 

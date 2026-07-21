@@ -13,11 +13,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       fetchurl {
         url = "https://github.com/camunda/zeebe/releases/download/${finalAttrs.version}/zbctl.darwin";
         hash = "sha256-RuZX9TWuXBxxegLw0La0l9/6zh96V/2trJvZUoCvTKk=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "camunda/zeebe@${finalAttrs.version}";
+        };
       }
     else if stdenvNoCC.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://github.com/camunda/zeebe/releases/download/${finalAttrs.version}/zbctl";
         hash = "sha256-NTJqmcOzpOzHjrtOHBU2J3u0f7sESBeZMbb8kx3zR38=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "camunda/zeebe@${finalAttrs.version}";
+        };
       }
     else
       throw "Unsupported platform ${stdenvNoCC.hostPlatform.system}";

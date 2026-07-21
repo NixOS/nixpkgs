@@ -14,6 +14,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/libtom/libtomcrypt/releases/download/v${finalAttrs.version}/crypt-${finalAttrs.version}.tar.xz";
     sha256 = "113vfrgapyv72lalhd3nkw7jnks8az0gcb5wqn9hj19nhcxlrbcn";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "libtom/libtomcrypt@${finalAttrs.version}";
+    };
   };
 
   patches = [

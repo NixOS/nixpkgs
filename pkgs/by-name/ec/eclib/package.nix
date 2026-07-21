@@ -33,6 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
     # for upstream's explanation of the above
     url = "https://github.com/JohnCremona/eclib/releases/download/${finalAttrs.version}/eclib-${finalAttrs.version}.tar.bz2";
     hash = "sha256-uI1LUmEuSRxUFZRtnjXyBiyhAV7n+74LYfFY+nTLS8k=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "JohnCremona/eclib@${finalAttrs.version}";
+    };
   };
   buildInputs = [
     pari

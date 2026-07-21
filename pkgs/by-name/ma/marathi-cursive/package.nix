@@ -11,6 +11,10 @@ stdenvNoCC.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/MihailJP/MarathiCursive/releases/download/v${version}/MarathiCursive-${version}.tar.xz";
     hash = "sha256-C/z8ALV9bht0SaYqACO5ulSVCk1d6wBwvpVC4ZLgtek=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "MihailJP/MarathiCursive@${version}";
+    };
   };
 
   installPhase = ''

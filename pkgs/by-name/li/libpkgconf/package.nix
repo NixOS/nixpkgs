@@ -17,6 +17,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/pkgconf/pkgconf/archive/refs/tags/pkgconf-${finalAttrs.version}.tar.gz";
     hash = "sha256-eXIbrcrRmH3q2cNgnrSHerm1iCHAa9rLgk8siJfBHyo=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "pkgconf/pkgconf@${finalAttrs.version}";
+    };
   };
 
   outputs = [

@@ -20,6 +20,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/mas-cli/mas/releases/download/v${finalAttrs.version}/mas-${finalAttrs.version}-arm64.pkg";
     hash = "sha256-vCGKhUyF2eHJVJapayYoe7ZgVrlWiLkPkdBPpi7SG3U=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "mas-cli/mas@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

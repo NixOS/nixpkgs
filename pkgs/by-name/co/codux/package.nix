@@ -11,6 +11,10 @@ let
   src = fetchurl {
     url = "https://github.com/wixplosives/codux-versions/releases/download/${version}/Codux-${version}.x86_64.AppImage";
     hash = "sha256-rD0yXZAEUcPtxWlWuZD77gjw6JlcUvBsaDYGj+NgLss=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "wixplosives/codux-versions@${version}";
+    };
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };

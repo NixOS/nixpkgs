@@ -36,6 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/kingToolbox/WindTerm/releases/download/${finalAttrs.version}/WindTerm_${finalAttrs.version}_Linux_Portable_x86_64.zip";
     hash = "sha256-d5dpfutgI5AgUS4rVJaVpgw5s/0B/n67BH/VCiiJEDw=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "kingToolbox/WindTerm@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

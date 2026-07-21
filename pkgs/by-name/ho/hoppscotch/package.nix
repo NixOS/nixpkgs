@@ -21,12 +21,20 @@ let
           url = "https://github.com/hoppscotch/releases/releases/download/v${version}/Hoppscotch_linux_x64.AppImage";
           hash = "sha256-irPI613Y1l0j5F+Nzm9v/JXsiJY35D8dQpmMcPMYvmU=";
         };
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "hoppscotch/releases@${version}";
+        };
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   passthru.updateScript = ./update.sh;
 
   meta = {
+    identifiers.purlParts = {
+      type = "github";
+      spec = "hoppscotch/releases@${version}";
+    };
     description = "Open source API development ecosystem";
     longDescription = ''
       Hoppscotch is a lightweight, web-based API development suite. It was built

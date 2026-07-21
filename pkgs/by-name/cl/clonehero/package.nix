@@ -29,6 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/clonehero-game/releases/releases/download/v${finalAttrs.version}-final/Linux.x86_64-Standalone.tar";
     hash = "sha256-xy7/3SDNgKw67ikA7CtRVK2gNrfjqx4cTDeRUkkSBKo=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "clonehero-game/releases@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [ autoPatchelfHook ];

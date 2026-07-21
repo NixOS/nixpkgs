@@ -22,6 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
         aarch64-darwin = "0dsapvlyfr2cb9c16b46bcnvq75by87ybys96zhf16k92z4rzrfv";
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "urbit/vere@${finalAttrs.version}";
+    };
   };
 
   unpackPhase = ''

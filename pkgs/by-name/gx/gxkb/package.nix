@@ -47,6 +47,10 @@ stdenv.mkDerivation rec {
   p1 = fetchurl {
     url = "https://github.com/omgbebebe/gxkb/commit/727ec8b595a91dbb540e6087750f43b85d0dfbc0.patch";
     hash = "sha256-x7x3MHHrOnPivvlzOFqgFAA5BDB2LOXMlalPYbwM/1Q=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "omgbebebe/gxkb@${version}";
+    };
   };
 
   postPatch = ''

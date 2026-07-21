@@ -10,6 +10,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/odlp/bluesnooze/releases/download/v${finalAttrs.version}/Bluesnooze.zip";
     hash = "sha256-B1qLfPj2bU9AAsYqGYWl0/sEPj3wnn/UBeiM4kqW/rA=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "odlp/bluesnooze@${finalAttrs.version}";
+    };
   };
 
   # Needed to avoid the binary becoming corrupted and mac refusing to open it. I

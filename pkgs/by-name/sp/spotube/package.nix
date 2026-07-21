@@ -82,6 +82,10 @@ stdenv.mkDerivation (finalAttrs: {
           name = "Spotube-${finalAttrs.version}-${suffix}";
           url = "https://github.com/KRTirtho/spotube/releases/download/v${finalAttrs.version}/Spotube-${suffix}";
           inherit hash;
+          meta.identifiers.purlParts = {
+            type = "github";
+            spec = "KRTirtho/spotube@${finalAttrs.version}";
+          };
         };
     in
     {

@@ -13,6 +13,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/SublerApp/Subler/releases/download/${finalAttrs.version}/Subler-${finalAttrs.version}.zip";
     hash = "sha256-tYFyBG2G2Am+1HdS+pyOKr9MoAEpaYmITad04CyWL3Y=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "SublerApp/Subler@${finalAttrs.version}";
+    };
   };
 
   sourceRoot = ".";

@@ -12,6 +12,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/Kotlin/kdoctor/releases/download/v${finalAttrs.version}/kdoctor_${finalAttrs.version}+97.zip";
     hash = "sha256-H4lpdMf1AIU8BC+6DlvcwM1wLuEl+Hd9xBli/TGFMV4=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Kotlin/kdoctor@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [ unzip ];

@@ -12,6 +12,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/libhugetlbfs/libhugetlbfs/releases/download/${finalAttrs.version}/libhugetlbfs-${finalAttrs.version}.tar.gz";
     hash = "sha256-1QHfqRyOrREGlno9OCnyunOMP6wKZcs1jtKrOHDdxe8=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "libhugetlbfs/libhugetlbfs@${finalAttrs.version}";
+    };
   };
 
   outputs = [

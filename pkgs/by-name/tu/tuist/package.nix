@@ -14,6 +14,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/tuist/tuist/releases/download/${finalAttrs.version}/tuist.zip";
     hash = "sha256-J/xlwRRW3zLr03jA6Xpa5frlRQGHa/nmzzlj35/30tw=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "tuist/tuist@${finalAttrs.version}";
+    };
   };
 
   dontUnpack = true;
