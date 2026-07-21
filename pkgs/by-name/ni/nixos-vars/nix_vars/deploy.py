@@ -8,7 +8,7 @@ def deploy(args: VarsArgs, config: VarsConfig):
 	generate_vars(args, config)
 
 	print(
-		f"Running deploy scripts for {len(config.generatorBackends)} backends"
+		f"Running deploy scripts for {len(config.generatorBackends)} backends:"
 	)
 
 	for backend in config.generatorBackends.values():
