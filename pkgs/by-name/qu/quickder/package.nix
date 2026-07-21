@@ -68,7 +68,8 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.py --replace 'pyparsing==' 'pyparsing>='
+    substituteInPlace setup.py --replace-fail 'pyparsing==' 'pyparsing>='
+    rm python/__init__.py
   '';
 
   doCheck = true;
