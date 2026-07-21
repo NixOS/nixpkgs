@@ -1432,6 +1432,7 @@ let
     nloptr = [ pkgs.nlopt ];
     odbc = [ pkgs.unixodbc ];
     oligo = [ pkgs.zlib ];
+    opencv = [ pkgs.opencv ];
     otelsdk = with pkgs; [
       curl
       protobuf
@@ -2544,16 +2545,6 @@ let
     oligo = old.oligo.overrideAttrs (_: {
       hardeningDisable = [ "format" ];
     });
-
-    opencv =
-      let
-        opencvGtk = pkgs.opencv.override (old: {
-          enableGtk2 = true;
-        });
-      in
-      old.opencv.overrideAttrs (attrs: {
-        buildInputs = attrs.buildInputs ++ [ opencvGtk ];
-      });
 
     openssl = old.openssl.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
