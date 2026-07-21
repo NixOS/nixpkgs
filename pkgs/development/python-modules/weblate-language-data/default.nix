@@ -11,6 +11,8 @@ buildPythonPackage (finalAttrs: {
   version = "2026.8";
   pyproject = true;
 
+  # nixpkgs-update: no auto update
+  # Only weblate uses this and we want to follow its version constraints
   src = fetchFromGitHub {
     owner = "WeblateOrg";
     repo = "language-data";
