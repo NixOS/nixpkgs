@@ -94,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
       create 30 % smaller output than gzip and 15 % smaller output than
       bzip2.
     '';
+    maintainers = with lib.maintainers; [ andrewzah ];
     license = with lib.licenses; [
       gpl2Plus
       lgpl21Plus
