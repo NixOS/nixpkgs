@@ -748,6 +748,8 @@ rec {
           selfTargetTarget,
         }:
         { },
+      spliceOutput ? false,
+      splicedPackagesAttrName ? null,
     }:
     let
       splicePackages' =
@@ -792,10 +794,25 @@ rec {
           overrideScope =
             g:
             (makeScopeWithSplicing' { inherit splicePackages newScope; } {
-              inherit otherSplices keep extra;
+              inherit
+                otherSplices
+                keep
+                extra
+                spliceOutput
+                splicedPackagesAttrName
+                ;
               f = extends g f;
             });
           packages = f;
+          ${splicedPackagesAttrName} =
+            splicePackages (
+              renameCrossIndexTo "pkgs" (
+                mapCrossIndex (as: removeAttrs as [ splicedPackagesAttrName ]) splitSelves
+              )
+            )
+            // {
+              ${splicedPackagesAttrName} = self.${splicedPackagesAttrName};
+            };
         };
       otherSplicesLower = renameCrossIndexFrom "self" otherSplices;
       splitSpliced = lib.mapAttrs (
@@ -859,8 +876,12 @@ rec {
           ;
         spliced = splitSpliced.hostTarget;
       };
+      splicedSelf = splicePackages (renameCrossIndexTo "pkgs" splitSelves);
+      explicitPackages = fExplicit (lib.renameCrossIndexTo "self" splitSelves);
+      keptPackages = keep self;
+      splicedOutput = splicedSelf // explicitPackages // keptPackages;
     in
-    self;
+    if spliceOutput then splicedOutput else self;
 
   /**
     Define a `mkDerivation`-like function based on another `mkDerivation`-like function.
