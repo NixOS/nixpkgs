@@ -9,6 +9,12 @@
 }:
 
 let
+  # Jane Street 0.17 targets the js_of_ocaml 5.x API (virtual_dom and
+  # bonsai v0.17.0 declare js_of_ocaml >= 5.1.1 & < 5.7.0); 5.9.1 is the
+  # last release before 6.x. It declares ocaml < 5.4 and its ppx breaks
+  # with ppxlib >= 0.36 (three-argument Pexp_function), so this part of
+  # the scope only builds on package sets whose ppxlib is older, i.e.
+  # OCaml <= 5.2 (see the virtual_dom and async_js broken markers).
   js_of_ocaml-compiler = self.js_of_ocaml-compiler.override { version = "5.9.1"; };
   js_of_ocaml = self.js_of_ocaml.override { inherit js_of_ocaml-compiler; };
   gen_js_api = self.gen_js_api.override {
