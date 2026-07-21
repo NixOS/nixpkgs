@@ -4,6 +4,7 @@
   buildGoModule,
   testers,
   gitea-actions-runner,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
@@ -33,9 +34,12 @@ buildGoModule (finalAttrs: {
     mv "$out/bin/runner" "$out/bin/gitea-runner"
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = gitea-actions-runner;
-    version = "v${finalAttrs.version}";
+  passthru = {
+    tests.version = testers.testVersion {
+      package = gitea-actions-runner;
+      version = "v${finalAttrs.version}";
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
