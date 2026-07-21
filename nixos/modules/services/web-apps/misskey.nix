@@ -388,9 +388,9 @@ in
     services.caddy = lib.mkIf (cfg.reverseProxy.enable && cfg.reverseProxy.webserver ? caddy) {
       enable = true;
       virtualHosts.${cfg.settings.url} = lib.mkMerge [
-        cfg.reverseProxy.webserver.caddy
+        (lib.mapAttrsRecursive (_: lib.mkDefault) cfg.reverseProxy.webserver.caddy)
         {
-          hostName = lib.mkDefault cfg.settings.url;
+          hostName = lib.mkForce cfg.settings.url;
           extraConfig = ''
             reverse_proxy localhost:${toString cfg.settings.port}
           '';
@@ -401,15 +401,15 @@ in
     services.nginx = lib.mkIf (cfg.reverseProxy.enable && cfg.reverseProxy.webserver ? nginx) {
       enable = true;
       virtualHosts.${cfg.reverseProxy.host} = lib.mkMerge [
-        cfg.reverseProxy.webserver.nginx
+        (lib.mapAttrsRecursive (_: lib.mkDefault) cfg.reverseProxy.webserver.nginx)
         {
           locations."/" = {
-            proxyPass = lib.mkDefault "http://localhost:${toString cfg.settings.port}";
-            proxyWebsockets = lib.mkDefault true;
-            recommendedProxySettings = lib.mkDefault true;
+            proxyPass = "http://localhost:${toString cfg.settings.port}";
+            proxyWebsockets = true;
+            recommendedProxySettings = true;
           };
         }
-        (lib.mkIf (cfg.reverseProxy.ssl != null) { forceSSL = lib.mkDefault cfg.reverseProxy.ssl; })
+        (lib.mkIf (cfg.reverseProxy.ssl != null) { forceSSL = cfg.reverseProxy.ssl; })
       ];
     };
   };
