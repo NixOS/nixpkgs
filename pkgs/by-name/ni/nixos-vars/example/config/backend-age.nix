@@ -19,7 +19,7 @@ let
       ))
     ];
 
-    inherit (cfg) hostDirectory;
+    inherit (cfg) hostDirectory targetDirectory;
   };
 
   # We bake the configuration and required command into the script that calls
@@ -118,9 +118,9 @@ in
     list = pkgs: ageScript pkgs "list";
     delete = pkgs: ageScript pkgs "delete";
     fixup = pkgs: ageScript pkgs "fixup";
+    deployLocal = pkgs: ageScript pkgs "deploy-local";
 
     deploy = unimplemented;
-    deployLocal = unimplemented;
 
     generatorModule = {
       options.age = {
