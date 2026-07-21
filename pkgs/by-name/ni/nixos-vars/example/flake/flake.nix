@@ -5,10 +5,7 @@
     nixosConfigurations.example = inputs.nixpkgs.lib.nixosSystem {
       system = "aarch64-linux";
 
-      modules = [
-        ../../nix_vars/nix/module.nix
-        ../config.nix
-      ];
+      modules = [ ../config.nix ];
     };
 
     varsConfigurations.differentArch = import ../../nix_vars/nix/jsonify.nix {

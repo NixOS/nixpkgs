@@ -1,6 +1,7 @@
-{ lib, ... }:
+{ lib, modulesPath, ... }:
 {
   imports = [
+    "${modulesPath}/security/vars.nix"
     ./backend-plain.nix
     ./backend-prompt.nix
     ./backend-age.nix

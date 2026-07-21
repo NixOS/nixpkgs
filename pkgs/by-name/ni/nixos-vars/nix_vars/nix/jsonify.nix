@@ -33,10 +33,7 @@ let
       config.config.vars
     else
       (import (pkgsTarget'.path + "/nixos/lib/eval-config.nix") {
-        modules = [
-          ./module.nix
-          config
-        ];
+        modules = [ config ];
       }).config.vars;
 
   evalDeferredPackage =

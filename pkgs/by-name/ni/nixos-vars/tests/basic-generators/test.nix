@@ -1,6 +1,5 @@
 let
-  sources = import ../../npins;
-  pkgs' = import sources.nixpkgs { };
+  pkgs' = import ../../../../../.. { };
   nix-vars = pkgs: pkgs.python314Packages.callPackage ../../package.nix { };
 in
 
