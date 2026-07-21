@@ -7,8 +7,6 @@
   opus,
   lib,
   stdenv,
-  # TODO: Clean up on `staging`
-  lld,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -33,20 +31,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     cmake
-  ]
-  # TODO: Clean up on `staging`
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    lld
   ];
 
   __darwinAllowLocalNetworking = true;
 
   __structuredAttrs = true;
-
-  # TODO: Clean up on `staging`
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    NIX_CFLAGS_LINK = "-fuse-ld=${lib.getExe' lld "ld64.lld"}";
-  };
 
   passthru.updateScript = nix-update-script { };
 
