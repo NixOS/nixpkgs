@@ -1,0 +1,11 @@
+diff --git a/settings.gradle b/settings.gradle
+index e69de29..a0daecb 100644
+--- a/settings.gradle
++++ b/settings.gradle
+@@ -0,0 +1,6 @@
++pluginManagement {
++	repositories {
++		maven { url = uri("@gradle-plugin-repository@") }
++		maven { url = uri("@maven-repository@") }
++	}
++}
