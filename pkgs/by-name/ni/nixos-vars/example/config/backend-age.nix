@@ -111,6 +111,48 @@ in
     };
   };
 
+  options.vars.generators = lib.mkOption {
+    type = lib.types.attrsOf (
+      lib.types.submodule {
+        options.age = {
+          publicKeys = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
+            # TODO: this will merge the lists, which is not what we want 🤔
+            default = cfg.publicKeys;
+            description = "Age public keys to encrypt to";
+          };
+
+          identity.target = lib.mkOption {
+            default = cfg.identity.target;
+
+            type = lib.types.oneOf [
+              lib.types.str
+              lib.types.path
+            ];
+
+            description = ''
+              Path to the age private key file for decryption on the target
+              machine
+            '';
+          };
+
+          identity.host = lib.mkOption {
+            default = cfg.identity.host;
+
+            type = lib.types.oneOf [
+              lib.types.str
+              lib.types.path
+            ];
+
+            description = ''
+              Path to the age private key file for decryption on the host machine
+            '';
+          };
+        };
+      }
+    );
+  };
+
   config.vars.generatorBackends.age = {
     get = pkgs: ageScript pkgs "get";
     set = pkgs: ageScript pkgs "set";
@@ -121,44 +163,6 @@ in
     deployLocal = pkgs: ageScript pkgs "deploy-local";
 
     deploy = unimplemented;
-
-    generatorModule = {
-      options.age = {
-        publicKeys = lib.mkOption {
-          type = lib.types.listOf lib.types.str;
-          # TODO: this will merge the lists, which is not what we want 🤔
-          default = cfg.publicKeys;
-          description = "Age public keys to encrypt to";
-        };
-
-        identity.target = lib.mkOption {
-          default = cfg.identity.target;
-
-          type = lib.types.oneOf [
-            lib.types.str
-            lib.types.path
-          ];
-
-          description = ''
-            Path to the age private key file for decryption on the target
-            machine
-          '';
-        };
-
-        identity.host = lib.mkOption {
-          default = cfg.identity.host;
-
-          type = lib.types.oneOf [
-            lib.types.str
-            lib.types.path
-          ];
-
-          description = ''
-            Path to the age private key file for decryption on the host machine
-          '';
-        };
-      };
-    };
 
     fileModule =
       { generator, name, ... }:

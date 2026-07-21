@@ -88,17 +88,6 @@ let
           running (even if nixos-install has successfully completed).
         '';
 
-        generatorModule = lib.mkOption {
-          type = lib.types.deferredModule;
-          internal = true;
-          default = { };
-          description = ''
-            A module to be imported in every vars.generators.<name> submodule.
-            Can be used by backends in order to add additional per-generator
-            configuration options.
-          '';
-        };
-
         fileModule = lib.mkOption {
           type = lib.types.deferredModule;
           internal = true;
@@ -166,7 +155,6 @@ let
       backend = cfg.generatorBackends.${config.backend};
     in
     {
-      imports = lib.mapAttrsToList (_: b: b.generatorModule) cfg.generatorBackends;
       options = {
         name = lib.mkOption {
           description = ''
