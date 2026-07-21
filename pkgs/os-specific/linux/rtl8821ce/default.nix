@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rtl8821ce";
-  version = "0-unstable-2025-10-13";
+  version = "0-unstable-2026-07-15";
 
   src = fetchFromGitHub {
     owner = "tomaspinho";
     repo = "rtl8821ce";
-    rev = "4e6b887f0d8c4091a4df9da9fcead9a8294b41ad";
-    hash = "sha256-fY0j6VzwAIsD62+snAWfIgGXcwne0mOwIE/Yh25lwTY=";
+    rev = "2c1684a8839df13b70d13f609528218eef95c28e";
+    hash = "sha256-XHsOGPXiLSmYWJ+9x6GL7jUeebh5m6odUjbVC4rf2xg=";
   };
 
   hardeningDisable = [ "pic" ];
