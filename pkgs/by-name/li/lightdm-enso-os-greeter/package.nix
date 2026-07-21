@@ -90,6 +90,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/nick92/Enso-OS";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3;
+    broken = true; # Segfaults when typing any input into the password box
     maintainers = with lib.maintainers; [
       eadwu
     ];

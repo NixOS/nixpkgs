@@ -46,9 +46,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoTestFlags = finalAttrs.cargoBuildFlags;
 
-  # requires unstable rust features
-  env.RUSTC_BOOTSTRAP = 1;
-
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd eww \
       --bash <($out/bin/eww shell-completions --shell bash) \

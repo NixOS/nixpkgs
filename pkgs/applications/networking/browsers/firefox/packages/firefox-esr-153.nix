@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   callPackage,
   fetchurl,
@@ -9,11 +8,11 @@
 
 buildMozillaMach rec {
   pname = "firefox";
-  version = "140.13.0esr";
+  version = "153.0esr";
   applicationName = "Firefox ESR";
   src = fetchurl {
     url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-    sha512 = "937a4103d71c5e1e4bf051821729f6ea70b5c18d444930a487695cc23d74712a0134047248f6ac02305e01becb705426a55b9d89739f02a01eda01ecf5bc27f1";
+    sha512 = "3ea7956ef2fdcaa86430ef922f04484cbb1a3faf447e035107159fcd5ecd8d0a0e4507a332fc3d7b66e4308c38733bd0624affd7629447b89c655a9ea0fb0936";
   };
 
   meta = {
@@ -22,19 +21,17 @@ buildMozillaMach rec {
     homepage = "http://www.mozilla.com/en-US/firefox/";
     maintainers = with lib.maintainers; [ hexa ];
     platforms = lib.platforms.unix;
-    broken = stdenv.buildPlatform.is32bit;
-    # since Firefox 60, build on 32-bit platforms fails with "out of memory".
-    # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
+    badPlatforms = [ lib.systems.inspect.patterns.is32bit ];
     maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
     license = lib.licenses.mpl20;
     mainProgram = "firefox";
   };
   tests = {
-    inherit (nixosTests) firefox-esr-140;
+    inherit (nixosTests) firefox-esr-153;
   };
   updateScript = callPackage ../update.nix {
-    attrPath = "firefox-esr-140-unwrapped";
-    versionPrefix = "140";
+    attrPath = "firefox-esr-153-unwrapped";
+    versionPrefix = "153";
     versionSuffix = "esr";
   };
 }

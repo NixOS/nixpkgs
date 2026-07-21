@@ -27,6 +27,8 @@ buildDartApplication (finalAttrs: {
       --replace-fail "final melosPackageFileUri = await Isolate.resolvePackageUri(melosPackageUri);" "return \"$out\";"
     substituteInPlace packages/melos/lib/src/common/utils.dart \
       --replace-fail "return p.normalize('\''${melosPackageFileUri!.toFilePath()}/../..');" " "
+    substituteInPlace packages/melos/bin/melos.dart \
+      --replace-fail "__NIX_MELOS_PACKAGE_ROOT__" "$out"
     mkdir --parents $out
     cp --recursive packages/melos/templates $out/
   '';
