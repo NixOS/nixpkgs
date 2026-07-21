@@ -1,6 +1,7 @@
 {
   stdenv,
   fetchFromGitHub,
+  fetchurl,
   lib,
   callPackage,
   cmake,
@@ -30,6 +31,7 @@ let
 
   releaseName = "NIX";
   distroPrefix = "ghidra_${version}_${releaseName}";
+
   src = fetchFromGitHub {
     owner = "NationalSecurityAgency";
     repo = "Ghidra";
@@ -57,6 +59,12 @@ let
     hash = "sha256-MtdPBjXUNFc9KwMNMtxmQ1R+cW6dhum73d3KX76GjG0=";
   };
 
+  # Bootstrap dependency for gradle/support/fetchDependencies.gradle.
+  commonsIoJar = fetchurl {
+    url = "https://repo.maven.apache.org/maven2/commons-io/commons-io/2.21.0/commons-io-2.21.0.jar";
+    hash = "sha256-fWQ6Kv6osFi3YqpvuQ5bJW9scpc5+LN4TDNw3cYJ6I0=";
+  };
+
   patches = [
     # Use our own protoc binary instead of the prebuilt one
     ./0001-Use-protobuf-gradle-plugin.patch
@@ -66,6 +74,9 @@ let
 
     # Remove build dates from output filenames for easier reference
     ./0003-Remove-build-datestamp.patch
+
+    # Avoid Gradle's worker daemon for Sleigh grammar generation on Darwin.
+    ./0004-Add-workerless-Sleigh-grammar-generation.patch
   ];
 
   postPatch = ''
@@ -77,14 +88,26 @@ let
     echo "application.build.date.short=$(cat SOURCE_DATE_EPOCH_SHORT)" >> Ghidra/application.properties
     echo "application.revision.ghidra=$(cat COMMIT)" >> Ghidra/application.properties
 
-    # Tells ghidra to use our own protoc binary instead of the prebuilt one.
-    tee -a Ghidra/Debug/Debugger-{isf,rmi-trace}/build.gradle <<HERE
-    protobuf {
-      protoc {
-        path = '${protobuf}/bin/protoc'
-      }
-    }
-    HERE
+    substituteInPlace gradle.properties \
+      --replace-fail 'org.gradle.jvmargs=-Xmx2G -Duser.language=en -Duser.country=US' \
+        'org.gradle.jvmargs=-Xms64m -Xmx2G -Dfile.encoding=UTF-8 -Duser.language=en -Duser.country=US -Duser.variant'
+    substituteInPlace gradle/support/fetchDependencies.gradle \
+      --replace-fail "dependencies { classpath 'commons-io:commons-io:2.21.0' }" \
+        "dependencies { classpath files('${commonsIoJar}') }"
+    substituteInPlace Ghidra/Debug/Debugger-{isf,rmi-trace}/build.gradle \
+      --replace-fail '@protoc@' '${protobuf}/bin/protoc'
+
+    ${lib.optionalString isMacArm64 ''
+      # Upstream wires each platform-specific distribution task to each native
+      # module's `assemble`, and Java/native modules also wire the generic
+      # distribution task to `assemble`. Gradle's native `assemble` builds
+      # every declared target platform, so use the Java jar plus Ghidra's
+      # platform-specific native rule instead. This keeps a mac_arm_64
+      # distribution from trying to link mac_x86_64 binaries.
+      substituteInPlace gradle/distributableGhidraModule.gradle \
+        --replace-fail 'dependsOn assemble' "dependsOn ((plugins.hasPlugin('cpp') || plugins.hasPlugin('c')) ? jar : assemble)" \
+        --replace-fail 't.dependsOn this.assemble' 't.dependsOn "''${project.path}:buildNatives_''${platform.name}"'
+    ''}
   '';
 
 in
@@ -139,25 +162,56 @@ stdenv.mkDerivation (finalAttrs: {
     data = ./deps.json;
   };
 
-  gradleFlags = [
-    "-Dorg.gradle.java.home=${openjdk21}"
-  ]
-  ++ lib.optionals isMacArm64 [
-    # For some reason I haven't been able to figure out yet, ghidra builds for
-    # arm64 seems to build the x64 binaries of the decompiler. These fail to
-    # build due to trying to link the x64 object files with arm64 stdc++
-    # library, which obviously fails.
-    #
-    # Those binaries are entirely unnecessary anyways, since we're targeting
-    # arm64 build here, so let's exclude them from the build.
-    "-x"
-    "Decompiler:linkSleighMac_x86_64Executable"
-    "-x"
-    "Decompiler:linkDecompileMac_x86_64Executable"
+  enableParallelBuilding = !stdenv.hostPlatform.isDarwin;
+
+  gradleFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "--max-workers=1"
+    "--init-script"
+    "${./darwin-javac-init.gradle}"
+    "-PNIX_JAVAC=${openjdk21}/bin/javac"
+    "-PNIX_GENERATE_GRAMMAR_WITHOUT_WORKER=true"
   ];
 
+  env.JAVA_HOME = openjdk21;
+
   preBuild = ''
-    export JAVA_TOOL_OPTIONS="-Duser.home=$NIX_BUILD_TOP/home"
+    export JAVA_HOME=${openjdk21}
+    export PATH="$JAVA_HOME/bin:$PATH"
+    java -XshowSettings:properties -version 2>&1 \
+      | sed -n 's/^[[:space:]]*java.home = /Using java.home = /p'
+
+    javaToolOptions="-Duser.home=$NIX_BUILD_TOP/home"
+    gradleJvmArgs="-Xms64m -Xmx2G -Dfile.encoding=UTF-8 -Duser.language=en -Duser.country=US -Duser.variant"
+    if [[ -n "''${MITM_CACHE_KEYSTORE-}" ]]; then
+      javaToolOptions+=" -Dhttp.proxyHost=$MITM_CACHE_HOST -Dhttp.proxyPort=$MITM_CACHE_PORT"
+      javaToolOptions+=" -Dhttps.proxyHost=$MITM_CACHE_HOST -Dhttps.proxyPort=$MITM_CACHE_PORT"
+      javaToolOptions+=" -Djavax.net.ssl.trustStore=$MITM_CACHE_KEYSTORE -Djavax.net.ssl.trustStorePassword=$MITM_CACHE_KS_PWD"
+      gradleJvmArgs+=" -Dhttp.proxyHost=$MITM_CACHE_HOST -Dhttp.proxyPort=$MITM_CACHE_PORT"
+      gradleJvmArgs+=" -Dhttps.proxyHost=$MITM_CACHE_HOST -Dhttps.proxyPort=$MITM_CACHE_PORT"
+      gradleJvmArgs+=" -Djavax.net.ssl.trustStore=$MITM_CACHE_KEYSTORE -Djavax.net.ssl.trustStorePassword=$MITM_CACHE_KS_PWD"
+    fi
+    export JAVA_TOOL_OPTIONS="$javaToolOptions"
+    substituteInPlace gradle.properties \
+      --replace-fail 'org.gradle.jvmargs=-Xms64m -Xmx2G -Dfile.encoding=UTF-8 -Duser.language=en -Duser.country=US -Duser.variant' \
+        "org.gradle.jvmargs=$gradleJvmArgs"
+
+    if [[ -n "''${IN_GRADLE_UPDATE_DEPS-}" ]]; then
+      mavenRepository="https://repo.maven.apache.org/maven2"
+    else
+      mavenRepository="file://${finalAttrs.mitmCache}/https/repo.maven.apache.org/maven2"
+      mkdir -p dependencies/downloads
+      while IFS= read -r -d "" dep; do
+        ln -sf "$dep" "dependencies/downloads/$(basename "$dep")"
+      done < <(find -L ${finalAttrs.mitmCache} -type f -print0)
+      ln -sf \
+        ${finalAttrs.mitmCache}/https/sourceforge.net/projects/pydev/files/pydev/PyDev%209.3.0/PyDev%209.3.0.zip \
+        "dependencies/downloads/PyDev 9.3.0.zip"
+    fi
+
+    substituteInPlace build.gradle \
+      --replace-fail 'mavenCentral()' \
+        "maven { url = uri(\"$mavenRepository\") }"
+    export GRADLE_OPTS="$gradleJvmArgs ''${GRADLE_OPTS:-}"
     gradle -I gradle/support/fetchDependencies.gradle
   '';
 

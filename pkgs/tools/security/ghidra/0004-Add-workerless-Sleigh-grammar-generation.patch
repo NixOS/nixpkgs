@@ -1,0 +1,72 @@
+diff --git a/Ghidra/Framework/SoftwareModeling/build.gradle b/Ghidra/Framework/SoftwareModeling/build.gradle
+index 2a1d0e2..770e33f 100644
+--- a/Ghidra/Framework/SoftwareModeling/build.gradle
++++ b/Ghidra/Framework/SoftwareModeling/build.gradle
+@@ -108,3 +108,67 @@ generateGrammarSource {
+ }
+ // must generate grammar before zipping if we want to include it in the source zip
+ zipSourceSubproject.dependsOn generateGrammarSource
++
++if (project.hasProperty('NIX_GENERATE_GRAMMAR_WITHOUT_WORKER')) {
++	tasks.register('generateGrammarSourceWithoutWorker') {
++		def antlrInputDir = file('src/main/antlr')
++		def generatedDir = file(buildDir.toString() + '/' + genSrcDir)
++		def grammarPaths = [
++			'ghidra/sleigh/grammar/BooleanExpression.g',
++			'ghidra/sleigh/grammar/SleighLexer.g',
++			'ghidra/sleigh/grammar/BaseLexer.g',
++			'ghidra/sleigh/grammar/DisplayLexer.g',
++			'ghidra/sleigh/grammar/SemanticLexer.g',
++			'ghidra/sleigh/grammar/SleighParser.g',
++			'ghidra/sleigh/grammar/SleighEcho.g',
++			'ghidra/sleigh/grammar/SleighCompiler.g',
++		]
++
++		inputs.files(grammarPaths.collect { file('src/main/antlr/' + it) })
++		outputs.dir(generatedDir)
++
++		doFirst {
++			delete file(generatedDir.toString() + '/ghidra/sleigh/grammar/SleighLexer.tokens')
++		}
++
++		doLast {
++			generatedDir.mkdirs()
++			def loader = new URLClassLoader(configurations.antlr.files.collect { it.toURI().toURL() } as URL[], (ClassLoader) null)
++			try {
++				def tool = loader.loadClass('org.antlr.Tool').getDeclaredConstructor().newInstance()
++				tool.setInputDirectory(antlrInputDir.absolutePath)
++				tool.setForceRelativeOutput(true)
++				def antlrArgs = ['-o', generatedDir.absolutePath] + grammarPaths
++				tool.processArgs(antlrArgs as String[])
++				tool.process()
++				if (tool.getNumErrors() != 0) {
++					throw new GradleException("ANTLR failed with " + tool.getNumErrors() + " errors")
++				}
++			}
++			finally {
++				loader.close()
++			}
++
++			delete fileTree(generatedDir.toString() + '/ghidra/sleigh/grammar') {
++				include 'SleighLexer*.java'
++			}
++			fileTree(generatedDir.toString() + '/ghidra/sleigh/grammar') {
++				include '*.java'
++			}.each { File src ->
++				def lines = src.readLines()
++				if (lines.get(0) != 'package ghidra.sleigh.grammar;') {
++					src.withWriter { wr ->
++						wr.println('package ghidra.sleigh.grammar;')
++						lines.each { line ->
++							wr.println line
++						}
++					}
++				}
++			}
++		}
++	}
++
++	generateGrammarSource.enabled = false
++	compileJava.dependsOn generateGrammarSourceWithoutWorker
++	zipSourceSubproject.dependsOn generateGrammarSourceWithoutWorker
++}
