@@ -1,0 +1,12 @@
+diff --git a/buildSrc/build.gradle b/buildSrc/build.gradle
+index 26e0515..1913e3e 100644
+--- a/buildSrc/build.gradle
++++ b/buildSrc/build.gradle
+@@ -51,3 +51,7 @@ gradlePlugin {
+         }
+     }
+ }
++
++tasks.withType(org.gradle.api.tasks.compile.GroovyCompile).configureEach {
++    groovyOptions.fork = false
++}
