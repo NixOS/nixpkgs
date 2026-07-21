@@ -29865,6 +29865,12 @@
     githubId = 59029586;
     name = "Vitor Pavan";
   };
+  vitrial = {
+    email = "111700bh@gmail.com";
+    github = "xZecora";
+    githubId = 63205921;
+    name = "Bryant Collins";
+  };
   vizid = {
     email = "mail@vizqq.cc";
     github = "ViZiD";
