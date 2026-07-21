@@ -147,6 +147,7 @@ in
 
     programs.bash.interactiveShellInit = lib.mkIf cfg.enableBashIntegration ''
       if [[ :$SHELLOPTS: =~ :(vi|emacs): ]]; then
+        source "${pkgs.bash-preexec}/share/bash/bash-preexec.sh"
         eval "$(${lib.getExe cfg.package} init bash ${escapeShellArgs cfg.flags})"
       fi
     '';
