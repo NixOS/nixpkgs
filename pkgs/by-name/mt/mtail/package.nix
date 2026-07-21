@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "mtail";
-  version = "3.4.3";
+  version = "3.4.4";
 
   src = fetchFromGitHub {
     owner = "jaqx0r";
     repo = "mtail";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-KX47oD7qLBpwItUVltysiekjy4wtpK13SVdvjSx9jmU=";
+    hash = "sha256-uwEx/nhktiThUfV6tvTchEt4/hTpQsN+EXXSqL+Fzio=";
   };
 
   proxyVendor = true;
