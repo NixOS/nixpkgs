@@ -4,19 +4,22 @@
   fetchPypi,
   importlib-metadata,
   psutil,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "helpdev";
   version = "0.7.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "0gfvj28i82va7c264jl2p4cdsl3lpf9fpb9cyjnis55crfdafqmv";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     importlib-metadata
     psutil
   ];
