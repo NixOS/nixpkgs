@@ -27,7 +27,7 @@ def generate_vars(args: VarsArgs, config: VarsConfig):
 	with tempfile.TemporaryDirectory() as temp:
 		temp = Path(temp)
 
-		print("Evaluating prompts")
+		print("Evaluating prompts:")
 
 		prompt_dir = temp / "prompts"
 		os.makedirs(prompt_dir)
