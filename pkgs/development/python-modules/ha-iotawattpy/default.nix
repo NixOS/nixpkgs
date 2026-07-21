@@ -4,6 +4,7 @@
   fetchPypi,
   httpx,
   setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ httpx ];
 
-  # Project doesn't tag releases or ship the tests with PyPI
-  # https://github.com/gtdiehl/iotawattpy/issues/14
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "iotawattpy" ];
 
