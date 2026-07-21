@@ -5,7 +5,6 @@
   # Python bits:
   buildPythonPackage,
   setuptools,
-  pytest,
   responses,
   docopt,
   flask,
@@ -14,6 +13,8 @@
   pygments,
   requests,
   tabulate,
+  addBinToPathHook,
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -41,11 +42,6 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytest
-    responses
-  ];
-
   dependencies = [
     docopt
     flask
@@ -56,12 +52,15 @@ buildPythonPackage (finalAttrs: {
     tabulate
   ];
 
-  checkPhase = ''
-    export PATH="$PATH:$out/bin"
-    py.test -xm "not assumption"
-  '';
-
   pythonImportsCheck = [ "grip" ];
+
+  nativeCheckInputs = [
+    responses
+    pytestCheckHook
+    addBinToPathHook
+  ];
+
+  enabledTestMarks = [ "not assumption" ];
 
   meta = {
     description = "Preview GitHub Markdown files like Readme locally before committing them";
