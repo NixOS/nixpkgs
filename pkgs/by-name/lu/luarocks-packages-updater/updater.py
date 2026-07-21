@@ -182,6 +182,13 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
         parser.set_defaults(proc=1, update_only=None)
         return parser
 
+    def configure_add_parser(self, parser):
+        parser.add_argument(
+            "--maintainers",
+            default="",
+            help="Space-separated nixpkgs maintainer names to add to each package",
+        )
+
     def get_current_plugins(self, _config: FetchConfig, _nixpkgs: str):
         return []
 
@@ -340,7 +347,7 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
                 "server": "",
                 "version": "",
                 "luaversion": "",
-                "maintainers": "",
+                "maintainers": args.maintainers,
             }
             existing_entries.append(new_entry)
 
