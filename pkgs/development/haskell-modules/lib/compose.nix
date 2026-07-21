@@ -337,6 +337,10 @@ rec {
     enableSeparateBinOutput = true;
   });
 
+  enableSeparateTestOutput = overrideCabal (drv: {
+    enableSeparateTestOutput = true;
+  });
+
   appendPatch = x: appendPatches [ x ];
   appendPatches =
     xs:
