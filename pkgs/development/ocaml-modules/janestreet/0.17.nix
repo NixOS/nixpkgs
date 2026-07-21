@@ -1181,6 +1181,8 @@ with self;
   ppx_css = janePackage {
     pname = "ppx_css";
     hash = "sha256-mzLMVtNTy9NrVaNgsRa+oQynxXnh2qlHJCfr3FLFJ2I=";
+    # sedlex ≥ 3.5 rejects non-ASCII character-literal intervals
+    patches = [ ./ppx_css_sedlex_3_5.patch ];
     meta.description = "PPX that takes in css strings and produces a module for accessing the unique names defined within";
     propagatedBuildInputs = [
       async
@@ -1193,7 +1195,6 @@ with self;
       sedlex
       virtual_dom
     ];
-    meta.broken = true; # Not compatible with sedlex > 3.4
   };
 
   ppx_csv_conv = janePackage {
