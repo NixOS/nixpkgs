@@ -10,14 +10,14 @@
   testers,
 }:
 let
-  version = "1.36.0";
+  version = "1.37.0";
   websiteRev = "159c0ac611e85ec85ffe0a8c8bf2c4a0330bdb38";
 
   src = fetchFromGitHub {
     owner = "inngest";
     repo = "inngest";
     tag = "v${version}";
-    hash = "sha256-KyH9Bj3n7RwARDcb3l5nerYGIIk2mgXPZWLhyNMm+f0=";
+    hash = "sha256-m9VFmplaMFD3+Z0qioehsuKeJaS6fUSb++liUabDEuM=";
   };
 
   website = fetchFromGitHub {

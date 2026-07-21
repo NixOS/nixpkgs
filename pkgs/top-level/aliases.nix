@@ -305,6 +305,9 @@ mapAliases {
   ansible_2_18 = throw "ansible_2_18 has been removed; use overridePythonAttrs if you need a specific version"; # Added 2025-11-10
   ansible_2_19 = throw "ansible_2_19 has been removed; use overridePythonAttrs if you need a specific version"; # Added 2025-11-10
   antibody = throw "antibody has been removed because it was deprecated and archived upstream. Consider using antidote instead"; # Added 2026-01-16
+  antigravity = warnAlias "'antigravity' has been renamed to 'antigravity-ide'" antigravity-ide; # Added 2026-05-20
+  antigravity-fhs = warnAlias "'antigravity-fhs' has been renamed to 'antigravity-ide-fhs'" antigravity-ide-fhs; # Added 2026-05-20
+  antigravity-fhsWithPackages = warnAlias "'antigravity-fhsWithPackages' has been renamed to 'antigravity-ide-fhsWithPackages'" antigravity-ide-fhsWithPackages; # Added 2026-05-20
   antlr4_8 = throw "antlr4_8 has been removed. Consider using a more recent version of antlr4"; # Added 2025-10-20
   ao = throw "'ao' has been renamed to/replaced by 'libfive'"; # Converted to throw 2025-10-27
   apacheAnt = throw "'apacheAnt' has been renamed to/replaced by 'ant'"; # Converted to throw 2025-10-27
@@ -1231,6 +1234,7 @@ mapAliases {
   liblastfmSF = warnAlias "'liblastfmSF' has been renamed to 'liblastfm-vambrose'" liblastfm-vambrose; # Added 2026-02-08
   liblinphone = throw "'liblinphone' has been moved to 'linphonePackages.liblinphone'"; # Added 2025-09-20
   libmesode = throw "'libmesode' has been removed because it was deprecated and archived upstream. Consider using 'libstrophe' instead"; # Added 2026-01-15
+  libmicrohttpd_0_9_77 = throw "'libmicrohttpd_0_9_77' has been removed as it is unmaintained upstream and unused in Nixpkgs. Consider upgrading to 'libmicrohttpd' 1.x instead."; # Added 2026-07-20
   libmkv = throw "'libmkv' has been removed as it is abandoned upstream"; # Added 2026-01-18
   libmp3splt = throw "'libmp3splt' has been removed due to lack of maintenance upstream."; # Added 2025-05-17
   libmusicbrainz3 = throw "libmusicbrainz3 has been removed as it was obsolete and unused"; # Added 2025-09-16
@@ -2099,6 +2103,7 @@ mapAliases {
   slrn = throw "'slrn' has been removed because it is unmaintained upstream and broken."; # Added 2025-06-11
   slurm-llnl = throw "'slurm-llnl' has been renamed to/replaced by 'slurm'"; # Converted to throw 2025-10-27
   smartgithg = throw "'smartgithg' has been renamed to/replaced by 'smartgit'"; # Converted to throw 2025-10-27
+  smbnetfs = throw "'smbnetfs' has been removed as it was unmaintained. Consider migrating to gvfs"; # Added 2026-07-20
   smtube = throw "'smtube' has been removed as it depends on insecure&unmaintained qtwebkit"; # Added 2026-04-26
   snapcraft = throw "snapcraft was removed in Sep 25 following removal of LXD from nixpkgs"; # Added 2025-09-18
   snort2 = throw "snort2 has been removed as it is deprecated and unmaintained by upstream. Consider using snort (snort3) package instead."; # 2025-05-21
