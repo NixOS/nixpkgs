@@ -12104,6 +12104,11 @@
     githubId = 17727163;
     keys = [ { fingerprint = "FBAA B86A 101B 4C5F D4F1  25D2 E93D DAC1 7E5D 6CA1"; } ];
   };
+  itsyunaya = {
+    name = "Ashley Marino";
+    github = "itsyunaya";
+    githubId = 40719746;
+  };
   ius = {
     email = "j.de.gram@gmail.com";
     name = "Joerie de Gram";
