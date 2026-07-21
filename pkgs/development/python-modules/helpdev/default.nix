@@ -5,6 +5,8 @@
   importlib-metadata,
   psutil,
   setuptools,
+  pip,
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -19,13 +21,17 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
+  postPatch = ''
+    substituteInPlace helpdev/__init__.py \
+      --replace-fail "'pip'," "'${lib.getExe pip}',"
+  '';
+
   dependencies = [
     importlib-metadata
     psutil
   ];
 
-  # No tests included in archive
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Extracts information about the Python environment easily";
