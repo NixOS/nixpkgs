@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "throttled";
-  version = "0.11";
+  version = "unstable-2026-07-22";
 
   src = fetchFromGitHub {
     owner = "erpalma";
     repo = "throttled";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-+3ktDkr5hvOfHcch4+mjgJqcuw24UgWTkJqTyDQumyk=";
+    rev = "c8ec0470697b81426a6e96f15e0c55d5757afcc8";
+    hash = "sha256-Kku6AtwNzyp99GD3PyGhNATPp0tNuQ+lPoTrf/B0gBg=";
   };
 
   nativeBuildInputs = [
@@ -28,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   pythonPath = with python3Packages; [
     configparser
     dbus-python
+    dbus-next
     pygobject3
   ];
 
