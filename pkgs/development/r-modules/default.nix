@@ -516,11 +516,19 @@ let
       pkg-config
       libxml2 # for xml2-config
     ];
+    a5R = with pkgs; [
+      cargo
+      rustc
+    ];
     abn = with pkgs; [
       gsl # for gsl-config
       jags
     ];
     adimpro = [ pkgs.imagemagick ];
+    ahocorasick = with pkgs; [
+      cargo
+      rustc
+    ];
     alcyon = with pkgs; [
       cmake
       which
@@ -628,6 +636,10 @@ let
       cargo
       rustc
     ];
+    eulerr = with pkgs; [
+      cargo
+      rustc
+    ];
     exactextractr = [ pkgs.geos ]; # for geos-config
     excursions = [ pkgs.gsl ]; # for gsl-config
     fRLR = [ pkgs.gsl ]; # for gsl-config
@@ -653,6 +665,10 @@ let
     flan = [ pkgs.gsl ]; # for gsl-config
     flint = [ pkgs.pkg-config ];
     flowPeaks = [ pkgs.gsl ]; # for gsl-config
+    fozziejoin = with pkgs; [
+      cargo
+      rustc
+    ];
     frailtyMMpen = [ pkgs.gsl ]; # for gsl-config
     fraq = [ pkgs.pkg-config ];
     fru = with pkgs; [
@@ -684,6 +700,10 @@ let
     gridmicrotex = [ pkgs.pkg-config ];
     gsl = [ pkgs.gsl ]; # for gsl-config
     gslnls = [ pkgs.gsl ]; # for gsl-config
+    gtfsrealtime = with pkgs; [
+      cargo
+      rustc
+    ];
     h3o = with pkgs; [
       cargo
       rustc
@@ -718,7 +738,12 @@ let
       cmake
       pkg-config
     ];
+    libimath = [ pkgs.cmake ];
     libipldr = with pkgs; [
+      cargo
+      rustc
+    ];
+    llmjson = with pkgs; [
       cargo
       rustc
     ];
@@ -758,6 +783,10 @@ let
       cargo
       rustc
     ];
+    osmnxr = with pkgs; [
+      cargo
+      rustc
+    ];
     otelsdk = with pkgs; [
       cmake
       which
@@ -770,6 +799,10 @@ let
     pbdPROF = [ pkgs.mpi ];
     pbdZMQ = [ pkgs.pkg-config ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.which ];
     pcaL1 = [ pkgs.pkg-config ];
+    pdfsigner = with pkgs; [
+      cargo
+      rustc
+    ];
     pdftools = [ pkgs.pkg-config ];
     pexm = [ pkgs.jags ];
     phytools = [ pkgs.which ];
@@ -803,12 +836,14 @@ let
     rgdal = [ pkgs.gdal ]; # for gdal-config
     rgeos = [ pkgs.geos ]; # for geos-config
     ridge = [ pkgs.gsl ]; # for gsl-config
+    rip_opencv = [ pkgs.pkg-config ];
     rjags = [ pkgs.pkg-config ];
     rlas = with pkgs; [
       pkg-config
       gdal # for gdal-config
       geos # for geos-config
     ];
+    rlibkriging = [ pkgs.cmake ];
     rmatio = [ pkgs.pkg-config ];
     rnetcarto = [ pkgs.gsl ]; # for gsl-config
     roxigraph = with pkgs; [
@@ -848,6 +883,10 @@ let
       rustc
     ];
     sbrl = [ pkgs.gsl ]; # for gsl-config
+    sceua = with pkgs; [
+      cargo
+      rustc
+    ];
     scip = with pkgs; [
       cmake
       which
@@ -866,6 +905,10 @@ let
       rustc
       which
     ];
+    smoothbp = with pkgs; [
+      cargo
+      rustc
+    ];
     socratadata = with pkgs; [
       cargo
       rustc
@@ -873,6 +916,10 @@ let
     sodium = [ pkgs.pkg-config ];
     spate = [ pkgs.pkg-config ];
     sphereTessellation = [ pkgs.pkg-config ];
+    spopt = with pkgs; [
+      cargo
+      rustc
+    ];
     stpphawkes = [ pkgs.gsl ]; # for gsl-config via RcppGSL
     string2path = [ pkgs.cargo ];
     stringfish = [ pkgs.pkg-config ];
@@ -910,6 +957,10 @@ let
     unigd = [ pkgs.pkg-config ];
     unix = [ pkgs.pkg-config ];
     unsum = with pkgs; [
+      cargo
+      rustc
+    ];
+    uuidx = with pkgs; [
       cargo
       rustc
     ];
@@ -1529,6 +1580,7 @@ let
       bzip2
     ];
     ridge = [ pkgs.gsl ];
+    rip_opencv = [ pkgs.opencv ];
     rjags = [ pkgs.jags ];
     rlas = with pkgs; [
       proj
@@ -2696,6 +2748,12 @@ let
 
     rhdf5filters = old.rhdf5filters.overrideAttrs (attrs: {
       patches = [ ./patches/rhdf5filters.patch ];
+    });
+
+    rlibkriging = old.rlibkriging.overrideAttrs (attrs: {
+      preConfigure = ''
+        patchShebangs tools/ src/libK/tools/
+      '';
     });
 
     rmarkdown = old.rmarkdown.overrideAttrs (_: {
