@@ -65,7 +65,19 @@ buildPythonPackage rec {
     "test_make_decisions"
     "test_saves_to_baseline"
     "test_start_halfway"
+  ]
+  ++ lib.optionals (!withGibberish) [
+    "test_load_and_output"
+    "test_quit_if_baseline_is_changed_but_not_staged"
   ];
+
+  disabledTestPaths =
+    lib.optionals (!withGibberish) [
+      "tests/filters/gibberish_filter_test.py"
+    ]
+    ++ lib.optionals (!withWordList) [
+      "tests/filters/wordlist_filter_test.py"
+    ];
 
   pythonImportsCheck = [ "detect_secrets" ];
 
