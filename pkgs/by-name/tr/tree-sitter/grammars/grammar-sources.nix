@@ -1851,6 +1851,16 @@
     };
   };
 
+  odoc = rec {
+    version = "0.1.1";
+    url = "github:tmcgilchrist/tree-sitter-odoc?ref=${version}";
+    rev = "c98439dc63d25f29304a20693cbcb6fea7152183";
+    hash = "sha256-FaaH9+OS/teC1JiCaMmswTaba2AeXeBneOyk/hWOPBA=";
+    meta = {
+      license = lib.licenses.mit;
+    };
+  };
+
   ohm = {
     version = "0-unstable-2025-12-12";
     url = "github:novusnota/tree-sitter-ohm";
