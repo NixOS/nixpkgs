@@ -23,18 +23,18 @@ let
   versionHash =
     if lib.versionAtLeast ocaml.version "5.5" then
       {
-        version = "7.0.0-55";
-        hash = "sha256:f71d2910599c230506efe01f43e02d16d4468fdaea34b537e9e3dfd7383cdf56";
+        version = "7.0.1-55";
+        hash = "sha256:8377c0860da82528ebde16a0133f270c1a03de35036bd44bbd8cfb87070a7afb";
       }
     else if lib.versionAtLeast ocaml.version "5.4" then
       {
-        version = "7.0.0-54";
-        hash = "sha256:cb78172b329c1a0a1c120801d2b915c03c83d2027014ba88416e7cafc1251a7c";
+        version = "7.0.1-54";
+        hash = "sha256:49bf9d3dd10d0d7f58abe6755a40c246d36b5fbf6b5e189f2c634c47a9de7f33";
       }
     else if lib.versionAtLeast ocaml.version "5.3" then
       {
-        version = "7.0.0-53";
-        hash = "sha256:2b3d94a770d1ce7d9cf43a83c1e61e176b0a13b7472c166bb6856121b5bd6e64";
+        version = "7.0.1-53";
+        hash = "sha256:25177453269467832be7b6416f1104132265a3309b9098e6b5185b9c0df05150";
       }
     else if lib.versionAtLeast ocaml.version "5.2" then
       {

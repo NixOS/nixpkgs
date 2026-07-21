@@ -8,6 +8,7 @@
   freezegun,
   lib,
   orjson,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
@@ -27,6 +28,10 @@ buildPythonPackage (finalAttrs: {
   };
 
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   pythonRelaxDeps = [
     "aiohttp"

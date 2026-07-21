@@ -272,6 +272,13 @@ buildPythonPackage (finalAttrs: {
     "test_signature_from_callable_with_keyword_only_arguments"
   ];
 
+  disabledTestPaths = [
+    # TypeError: pytest.approx() does not support nan_ok for datetime/timedelta comparisons.
+    "ibis/backends/tests/tpc/h/test_queries.py::test_18"
+    "ibis/backends/tests/tpc/h/test_queries.py::test_03"
+    "ibis/backends/tests/tpc/ds/test_queries.py::test_51"
+  ];
+
   # patch out tests that check formatting with black
   postPatch = ''
     find ibis/tests -type f -name '*.py' -exec sed -i \

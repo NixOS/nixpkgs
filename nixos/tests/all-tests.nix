@@ -604,6 +604,10 @@ in
     imports = [ ./firefox.nix ];
     _module.args.firefoxPackage = pkgs.firefox-esr-140;
   };
+  firefox-esr-153 = runTest {
+    imports = [ ./firefox.nix ];
+    _module.args.firefoxPackage = pkgs.firefox-esr-153;
+  };
   firefox-syncserver = runTest ./firefox-syncserver.nix;
   firefox_decrypt = runTest ./firefox_decrypt.nix;
   firefoxpwa = runTest ./firefoxpwa.nix;

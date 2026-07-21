@@ -937,8 +937,6 @@ with pkgs;
 
   ### TOOLS
 
-  _7zz-rar = _7zz.override { enableUnfree = true; };
-
   acquire = with python3Packages; toPythonApplication acquire;
 
   actdiag = with python3.pkgs; toPythonApplication actdiag;
@@ -2405,10 +2403,6 @@ with pkgs;
   nodejs = nodejs_24;
   nodejs-slim = nodejs-slim_24;
 
-  nodejs-slim_20 = callPackage ../development/web/nodejs/v20.nix { };
-  nodejs_20 = callPackage ../development/web/nodejs/symlink.nix { nodejs-slim = nodejs-slim_20; };
-  corepack_20 = callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs-slim_20; };
-
   nodejs-slim_22 = callPackage ../development/web/nodejs/v22.nix { };
   nodejs_22 = callPackage ../development/web/nodejs/symlink.nix { nodejs-slim = nodejs-slim_22; };
   corepack_22 = callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs-slim_22; };
@@ -3057,7 +3051,7 @@ with pkgs;
 
   vinyl-cache = vinyl-cache_9;
 
-  vncdo = with python3Packages; toPythonApplication vncdo;
+  vncdotool = with python3Packages; toPythonApplication vncdotool;
 
   # An alias to work around the splicing incidents
   # Related:
@@ -4068,15 +4062,15 @@ with pkgs;
   wrapRustcWith = { rustc-unwrapped, ... }@args: callPackage ../build-support/rust/rustc-wrapper args;
   wrapRustc = rustc-unwrapped: wrapRustcWith { inherit rustc-unwrapped; };
 
-  rust_1_96 = callPackage ../development/compilers/rust/1_96.nix { };
-  rust = rust_1_96;
+  rust_1_97 = callPackage ../development/compilers/rust/1_97.nix { };
+  rust = rust_1_97;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
   mrustc-bootstrap = callPackage ../development/compilers/mrustc/bootstrap.nix { };
 
-  rustPackages_1_96 = rust_1_96.packages.stable;
-  rustPackages = rustPackages_1_96;
+  rustPackages_1_97 = rust_1_97.packages.stable;
+  rustPackages = rustPackages_1_97;
 
   inherit (rustPackages)
     cargo
@@ -5903,7 +5897,7 @@ with pkgs;
     icu78
     ;
 
-  icu = icu76;
+  icu = icu78;
 
   idasen = with python3Packages; toPythonApplication idasen;
 
@@ -6214,10 +6208,6 @@ with pkgs;
   libwpe = callPackage ../development/libraries/libwpe { };
 
   libwpe-fdo = callPackage ../development/libraries/libwpe/fdo.nix { };
-
-  liquid-dsp = callPackage ../development/libraries/liquid-dsp {
-    inherit (darwin) autoSignDarwinBinariesHook;
-  };
 
   luabind = callPackage ../development/libraries/luabind { lua = lua5_1; };
 
@@ -7046,10 +7036,6 @@ with pkgs;
     pkg = callPackage ../development/compilers/ecl { };
     faslExt = "fas";
   };
-  ecl_16_1_2 = wrapLisp {
-    pkg = callPackage ../development/compilers/ecl/16.1.2.nix { };
-    faslExt = "fas";
-  };
 
   # GNU Common Lisp
   gcl = wrapLisp {
@@ -7073,14 +7059,6 @@ with pkgs;
     ];
   };
 
-  sbcl_2_6_4 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.6.4"; };
-    faslExt = "fasl";
-    flags = [
-      "--dynamic-space-size"
-      "3000"
-    ];
-  };
   sbcl_2_6_5 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl { version = "2.6.5"; };
     faslExt = "fasl";
@@ -7089,7 +7067,15 @@ with pkgs;
       "3000"
     ];
   };
-  sbcl = sbcl_2_6_5;
+  sbcl_2_6_6 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.6.6"; };
+    faslExt = "fasl";
+    flags = [
+      "--dynamic-space-size"
+      "3000"
+    ];
+  };
+  sbcl = sbcl_2_6_6;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
@@ -8674,6 +8660,17 @@ with pkgs;
           buildMozillaMach
           ;
       };
+  firefox-esr-153-unwrapped =
+    import ../applications/networking/browsers/firefox/packages/firefox-esr-153.nix
+      {
+        inherit
+          lib
+          callPackage
+          fetchurl
+          nixosTests
+          buildMozillaMach
+          ;
+      };
   firefox-esr-140-unwrapped =
     import ../applications/networking/browsers/firefox/packages/firefox-esr-140.nix
       {
@@ -8693,6 +8690,11 @@ with pkgs;
 
   firefox-mobile = callPackage ../applications/networking/browsers/firefox/mobile-config.nix { };
 
+  firefox-esr-153 = wrapFirefox firefox-esr-153-unwrapped {
+    nameSuffix = "-esr";
+    wmClass = "firefox-esr";
+    icon = "firefox-esr";
+  };
   firefox-esr-140 = wrapFirefox firefox-esr-140-unwrapped {
     nameSuffix = "-esr";
     wmClass = "firefox-esr";
@@ -9785,8 +9787,6 @@ with pkgs;
     ;
 
   ydiff = with python3.pkgs; toPythonApplication ydiff;
-
-  your-editor = callPackage ../applications/editors/your-editor { stdenv = gccStdenv; };
 
   youtube-dl = with python3Packages; toPythonApplication youtube-dl;
 

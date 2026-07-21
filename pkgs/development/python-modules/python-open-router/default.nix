@@ -7,6 +7,7 @@
   yarl,
   mashumaro,
   orjson,
+  pyprojectVersionPatchHook,
   pytestCheckHook,
   pytest-asyncio,
   pytest-cov-stub,
@@ -25,6 +26,8 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-hf8Ay3/xXH262/1R07mN0iQpOlHFhHb6VUZoYQEq8YI=";
   };
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   build-system = [ poetry-core ];
 

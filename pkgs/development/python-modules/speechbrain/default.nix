@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
 
   # build-system
   setuptools,
@@ -32,6 +33,10 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-98g9HSCD6ahsmCSKSKIY1okYOuzUqVuJO9N9WUiZMPk=";
   };
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ setuptools ];
 

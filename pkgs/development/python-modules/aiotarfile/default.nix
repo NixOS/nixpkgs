@@ -7,6 +7,7 @@
   cargo,
   rustc,
   rustPlatform,
+  semver,
 }:
 
 buildPythonPackage rec {
@@ -25,6 +26,15 @@ buildPythonPackage rec {
     inherit pname version src;
     hash = "sha256-Yf6N615X9ZB+HDp3xehMc3kjKbdsSbIJrqARRXwCRDQ=";
   };
+
+  postPatch = ''
+    patchShebangs release.py
+    ./release.py finalize
+  '';
+
+  build-system = [
+    semver # required for release.py
+  ];
 
   nativeBuildInputs = [
     cargo
