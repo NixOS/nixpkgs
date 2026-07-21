@@ -12142,12 +12142,12 @@ final: prev: {
 
   none-ls-extras-nvim = buildVimPlugin {
     pname = "none-ls-extras.nvim";
-    version = "0-unstable-2026-06-06";
+    version = "0-unstable-2026-07-17";
     src = fetchFromGitHub {
       owner = "nvimtools";
       repo = "none-ls-extras.nvim";
-      rev = "27681d797a26f1b4d6119296df42f5204c88a2dc";
-      hash = "sha256-GZLT8X1eLeSkiV5EN1nOkCQg5nwNATURi/KMj90i40I=";
+      rev = "9a8b8a9aeb43382e5aaf49b00b7cfb5d42d32118";
+      hash = "sha256-YmDhDUqSJPOllXzkyrVUgnshrI5+Kt5Te8tEmnjOAVQ=";
     };
     meta.homepage = "https://github.com/nvimtools/none-ls-extras.nvim/";
     meta.license = getLicenseFromSpdxId "Unlicense";
