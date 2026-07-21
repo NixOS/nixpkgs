@@ -19785,6 +19785,12 @@
     githubId = 364510;
     name = "Tobias Geerinckx-Rice";
   };
+  ndavd = {
+    email = "email@ndavd.com";
+    github = "ndavd";
+    githubId = 74260683;
+    name = "Nuno David";
+  };
   ndl = {
     email = "ndl@endl.ch";
     github = "ndl";
