@@ -7647,6 +7647,8 @@ self: super: with self; {
 
   hikvision = callPackage ../development/python-modules/hikvision { };
 
+  hindsight-api = callPackage ../development/python-modules/hindsight-api { };
+
   hindsight-api-slim = callPackage ../development/python-modules/hindsight-api-slim { };
 
   hiredis = callPackage ../development/python-modules/hiredis { };
