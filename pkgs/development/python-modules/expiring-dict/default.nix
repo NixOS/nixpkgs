@@ -4,16 +4,17 @@
   fetchPypi,
   setuptools,
   sortedcontainers,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "expiring-dict";
   version = "1.1.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "expiring_dict";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-yoy4AjBOrlszoj7EwZAZthCt/aUMvEyb+jrVws04djE=";
   };
 
@@ -23,10 +24,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "expiring_dict" ];
 
+  nativeCheckInputs = [ pytestCheckHook ];
+
   meta = {
     description = "Python dict with TTL support for auto-expiring caches";
     homepage = "https://github.com/dparker2/py-expiring-dict";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
