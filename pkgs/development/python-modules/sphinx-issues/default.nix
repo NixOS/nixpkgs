@@ -8,14 +8,14 @@
 }:
 buildPythonPackage rec {
   pname = "sphinx-issues";
-  version = "5.0.1";
+  version = "6.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sloria";
     repo = "sphinx-issues";
     tag = version;
-    hash = "sha256-/nc5gtZbE1ziMPWIkZTkevMfVkNtJYL/b5QLDeMhzUs=";
+    hash = "sha256-havy1wP300yAKRi68fAVfQS7t5S9NueuGqE2RqdkVP0=";
   };
 
   postPatch = ''

@@ -5,6 +5,7 @@
   buildPythonPackage,
   dacite,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-error-for-skips,
   pytestCheckHook,
@@ -26,6 +27,10 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-m7baTU7oWcjqCgiZ7GcOYVM23jcvycQcAbPhO1jWahk=";
   };
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ setuptools ];
 

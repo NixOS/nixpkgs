@@ -13,7 +13,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xrdb";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "app";
     repo = "xrdb";
     tag = "xrdb-${finalAttrs.version}";
-    hash = "sha256-XCi/E6tVaLYGRsMWJalCl1J8VIT4xV6KFuo+K//LQGY=";
+    hash = "sha256-dD9gYceg9RDfTIXBtMT/QFjoByu0cH/imBKAmSMM+7A=";
   };
 
   strictDeps = true;

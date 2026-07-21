@@ -419,7 +419,7 @@ stdenv.mkDerivation rec {
     libvirtVersion=$(curl https://gitlab.com/api/v4/projects/192693/repository/tags | jq -r '.[].name|select(. | contains("rc") | not)' | head -n1 | sed "s/v//g")
     sysvirtVersion=$(curl https://gitlab.com/api/v4/projects/192677/repository/tags | jq -r '.[].name|select(. | contains("rc") | not)' | head -n1 | sed "s/v//g")
     update-source-version ${pname} "$libvirtVersion"
-    update-source-version python3Packages.${pname} "$libvirtVersion"
+    update-source-version python3Packages.libvirt-python "$libvirtVersion"
     update-source-version perlPackages.SysVirt "$sysvirtVersion" --file="pkgs/top-level/perl-packages.nix"
   '';
 

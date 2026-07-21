@@ -12,7 +12,7 @@
   pandas,
   setuptools,
   tzlocal,
-  pytestCheckHook,
+  pytest9_0CheckHook,
 }:
 
 buildPythonPackage rec {
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     tzlocal
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytest9_0CheckHook ];
 
   pytestFlags = [
     # https://github.com/rpy2/rpy2/issues/1218

@@ -19,12 +19,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "hatchling";
-  version = "1.30.1";
+  version = "1.31.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-7uT9RTV/cuuz16QuXXLPteKe1CbXnog2KIkmxCWNXy4=";
+    hash = "sha256-a0itQGikgu1yObOoIVvFW0eq0zRdWN/JTlU8XS1GIRs=";
   };
 
   # listed in backend/pyproject.toml

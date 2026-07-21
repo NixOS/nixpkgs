@@ -68,11 +68,11 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   nativeBuildInputs = [
     autoPatchelfHook
+    jq
     makeWrapper
   ];
 
   buildInputs = [
-    jq
     libkrb5
     zlib
     (lib.getLib stdenv.cc.cc)

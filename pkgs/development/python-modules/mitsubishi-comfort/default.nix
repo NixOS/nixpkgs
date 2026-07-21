@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mitsubishi-comfort";
-  version = "0.3.2";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nikolairahimi";
     repo = "mitsubishi-comfort";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fdP2E6ICxuaOUlNJxAa7k0WICWmxKtRFfB2eKRdanG8=";
+    hash = "sha256-/JP9I5QZYRgQelsJzRyawsCO3xNc/lQu4m5j8CNDX5A=";
   };
 
   build-system = [ setuptools ];

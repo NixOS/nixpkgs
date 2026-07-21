@@ -24,7 +24,7 @@ buildPythonPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-warn 'version = "SNAPSHOT"' 'version = "${finalAttrs.version}"'
+      --replace-fail 'version = "0.0.0-dev"' 'version = "${finalAttrs.version}"'
   '';
 
   nativeBuildInputs = [ setuptools ];

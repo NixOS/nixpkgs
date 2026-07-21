@@ -5,6 +5,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
@@ -23,6 +24,10 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-YC1rUyPXWbJ/xfUus5a7vw44gw7PIAdwhrUstXB/+nI=";
   };
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ poetry-core ];
 

@@ -13,12 +13,12 @@
 let
   self = buildPythonPackage rec {
     pname = "docutils";
-    version = "0.22.4";
+    version = "0.23";
     pyproject = true;
 
     src = fetchurl {
       url = "mirror://sourceforge/docutils/docutils-${version}.tar.gz";
-      hash = "sha256-TbU7H96avsu3TZEjDTKrYm2U9rrfxXXW25GUpJ3ymWg=";
+      hash = "sha256-dG9QYDIlESgKHlDrdoRu1r8jQphLKsBNxCyqGo14eZ4=";
     };
 
     build-system = [ flit-core ];

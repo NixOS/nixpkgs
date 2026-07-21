@@ -38,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     # consumers of the CMake config file to fail at the configuration step.
     # Explicitly disabling unwind support sidesteps the issue.
     "-DWITH_UNWIND=OFF"
+    # Enable pkg-config support so that a `.pc` file is generated.
+    "-DWITH_PKGCONFIG=ON"
   ];
 
   doCheck = true;

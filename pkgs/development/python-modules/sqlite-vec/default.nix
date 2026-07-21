@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchpatch,
+  pyprojectVersionPatchHook,
 
   # build-system
   setuptools,
@@ -56,6 +57,10 @@ buildPythonPackage rec {
   build-system = [
     setuptools
     setuptools-scm
+  ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
   ];
 
   dependencies = [

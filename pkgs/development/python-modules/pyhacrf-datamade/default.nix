@@ -10,7 +10,7 @@
   setuptools,
 
   # dependencies
-  dedupe-pylbfgs,
+  pylbfgs,
 
   # tests
   pytestCheckHook,
@@ -37,7 +37,7 @@ buildPythonPackage {
   ];
 
   dependencies = [
-    dedupe-pylbfgs
+    pylbfgs
     numpy
   ];
 

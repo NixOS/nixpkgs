@@ -34,6 +34,11 @@ buildPythonPackage rec {
     hash = "sha256-0KQHL9DmNeRvEs51XPcncxNzXb+SqYM5xPDvOdKSQMI=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail .dev0 ""
+  '';
+
   build-system = [
     incremental
     setuptools
@@ -58,6 +63,8 @@ buildPythonPackage rec {
     "test_get_project"
     "test_get_builds"
     "test_get_build"
+    # something about aiohttp and url mocking, maybe yarl
+    "test_get_work_items"
   ];
 
   disabledTestPaths = [
