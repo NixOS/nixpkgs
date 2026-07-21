@@ -7,14 +7,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "helpdev";
   version = "0.7.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "0gfvj28i82va7c264jl2p4cdsl3lpf9fpb9cyjnis55crfdafqmv";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-u2KnmsusFB2t9Cyt65K7dFDdGLmCSmIEO2oLFJGQ2z0=";
   };
 
   build-system = [ setuptools ];
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     mainProgram = "helpdev";
     license = lib.licenses.mit;
   };
-}
+})
