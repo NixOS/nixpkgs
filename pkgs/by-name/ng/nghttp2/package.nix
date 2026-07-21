@@ -117,6 +117,10 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
+    identifiers.purlParts = {
+      type = "github";
+      spec = "nghttp2/nghttp2@${version}";
+    };
     description = "HTTP/2 C library and tools";
     longDescription = ''
       nghttp2 is an implementation of the HyperText Transfer Protocol version 2 in C.
