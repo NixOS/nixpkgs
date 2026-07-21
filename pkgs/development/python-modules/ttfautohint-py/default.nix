@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "ttfautohint-py";
-  version = "0.6.0";
+  version = "0.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fonttools";
     repo = "ttfautohint-py";
     tag = "v${version}";
-    hash = "sha256-wA8su7HEQnDbCShrX9fiP/VKNMtMqeayHbQXHqy8iOA=";
+    hash = "sha256-fLtGg2SsdeI58agZ10CB2/bOdSnrfkRloCPKkMwwXU8=";
   };
 
   postPatch = ''
