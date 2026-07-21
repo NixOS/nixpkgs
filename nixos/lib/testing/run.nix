@@ -35,8 +35,7 @@ let
     options = {
       devnet = mkOption {
         type = types.bool;
-        default =
-          builtins.length (lib.attrNames containers) > 0 && builtins.length (lib.attrNames nodes) > 0;
+        default = containers != { } && nodes != { };
         defaultText = lib.literalMD "`true` if both VMs and containers are present.";
         description = ''
           This heuristic setting that assumes that the majority of tests requires VMs and containers
@@ -52,7 +51,7 @@ let
       };
       uid-range = mkOption {
         type = types.bool;
-        default = builtins.length (lib.attrNames containers) > 0;
+        default = containers != { };
         defaultText = lib.literalMD "`true` if containers are present.";
         description = "Containers use systemd-nspawn, which requires pid 0 inside of the sandbox. `uid-range` enables that.";
       };
