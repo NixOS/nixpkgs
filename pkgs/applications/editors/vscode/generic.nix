@@ -419,7 +419,11 @@ stdenv.mkDerivation (
         let
           nodeModulesPath =
             if stdenv.hostPlatform.isDarwin then
-              if lib.versionAtLeast vscodeVersion "1.94.0" then
+              # 1.129 moved node_modules back into app.asar, shipping native
+              # binaries in the asar.unpacked directory like before 1.94
+              if lib.versionAtLeast vscodeVersion "1.129.0" then
+                "Contents/Resources/app/node_modules.asar.unpacked"
+              else if lib.versionAtLeast vscodeVersion "1.94.0" then
                 "Contents/Resources/app/node_modules"
               else
                 "Contents/Resources/app/node_modules.asar.unpacked"

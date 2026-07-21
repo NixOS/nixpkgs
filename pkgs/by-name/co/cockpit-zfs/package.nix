@@ -46,14 +46,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cockpit-zfs";
-  version = "1.2.30";
+  version = "1.2.33";
 
   src = fetchFromGitHub {
     owner = "45Drives";
     repo = "cockpit-zfs";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-G24xNoKoBnlXxxyo9IJIoQW3PrktQxsx37/cX6QYfyE=";
+    hash = "sha256-3KoCp4gcWYuama+7t1oQhif3/Ii/zSlhyeNTH3mvbNg=";
   };
 
   missingHashes = ./missing-hashes.json;

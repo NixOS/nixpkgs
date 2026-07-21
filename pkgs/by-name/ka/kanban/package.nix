@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       built with Rust. Features include file persistence, keyboard-driven
       navigation, multi-select capabilities, and sprint management.
     '';
-    homepage = "https://kanban.yoon.se";
+    homepage = "https://kanban.rs";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fulsomenko ];
     mainProgram = "kanban";
