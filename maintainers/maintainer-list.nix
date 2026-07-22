@@ -19919,6 +19919,12 @@
     name = "neo";
     email = "chojs990222@gmail.com";
   };
+  neobrain = {
+    github = "neobrain";
+    githubId = 4840017;
+    matrix = "@neobrain:matrix.org";
+    name = "Tony Wasserka";
+  };
   neonvoid = {
     email = "me@neonvoid.dev";
     github = "neonvoidx";
