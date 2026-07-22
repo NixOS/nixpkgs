@@ -10,7 +10,8 @@
 }:
 
 replaceVarsWith {
-  name = "uname";
+  pname = "uname";
+  version = lib.trivial.release;
 
   src = ./deterministic-uname.sh;
 
