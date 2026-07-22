@@ -937,6 +937,7 @@ let
     symbolicQspray = [ pkgs.pkg-config ];
     sysfonts = [ pkgs.pkg-config ];
     systemfonts = [ pkgs.pkg-config ];
+    talib = [ pkgs.pkg-config ];
     tergo = with pkgs; [
       cargo
       rustc
@@ -1698,6 +1699,7 @@ let
       fontconfig
       freetype
     ];
+    talib = [ pkgs.ta-lib ];
     tcltk2 = with pkgs; [
       tcl
       tk
@@ -2837,6 +2839,13 @@ let
         all: $(SHLIB)
         EOF
       '';
+    });
+
+    talib = old.talib.overrideAttrs (attrs: {
+      # the conftest.c compilation test fails because for some reason ta-lib doesn't link libm
+      env = (attrs.env or { }) // {
+        NIX_LDFLAGS = (attrs.env.NIX_LDFLAGS or "") + " -lm";
+      };
     });
 
     tesseract = old.tesseract.overrideAttrs (_: {
