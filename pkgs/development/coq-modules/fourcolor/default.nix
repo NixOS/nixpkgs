@@ -49,7 +49,7 @@ mkCoqDerivation {
 
   propagatedBuildInputs = [
     mathcomp.boot
-    mathcomp.fingroup
+    mathcomp.finite-group
     mathcomp.algebra
   ];
 

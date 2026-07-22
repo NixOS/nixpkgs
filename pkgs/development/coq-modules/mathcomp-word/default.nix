@@ -81,7 +81,7 @@ mkCoqDerivation {
   propagatedBuildInputs = [
     mathcomp.algebra
     mathcomp.ssreflect
-    mathcomp.fingroup
+    mathcomp.finite-group
     stdlib
   ];
 

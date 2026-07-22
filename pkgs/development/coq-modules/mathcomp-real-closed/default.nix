@@ -64,7 +64,7 @@ let
       mathcomp.ssreflect
       mathcomp.algebra
       mathcomp.field
-      mathcomp.fingroup
+      mathcomp.finite-group
       mathcomp.solvable
       mathcomp-bigenough
     ];
