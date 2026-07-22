@@ -9,6 +9,7 @@
   diffutils,
   writeScriptBin,
   bzip2,
+  runtimeShellPackage,
 }:
 
 # quick usage:
@@ -22,18 +23,29 @@
 
 let
   dummyMount = writeScriptBin "mount" "#!${stdenv.shell}";
+
+  perl' = perl.withPackages (p: [ p.DBFile ]);
 in
 
 stdenv.mkDerivation (finalAttrs: {
-
   version = "3.5.2";
+  pname = "storebackup";
 
-  pname = "store-backup";
-
+  __structuredAttrs = true;
   enableParallelBuilding = true;
 
+  strictDeps = true;
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ perl ];
+  nativeInstallCheckInputs = [
+    diffutils
+    perl'
+  ];
+  buildInputs = [
+    perl'
+    which
+    bzip2
+    runtimeShellPackage
+  ];
 
   src = fetchurl {
     url = "mirror://savannah/storebackup/storeBackup-${finalAttrs.version}.tar.bz2";
@@ -46,15 +58,20 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/scripts
     mv * $out
     mv $out/_ATTENTION_ $out/doc
     mv $out/{correct.sh,cron-storebackup} $out/scripts
 
-    find $out -name "*.pl" | xargs sed -i \
-      -e 's@/bin/pwd@${coreutils}/bin/pwd@' \
-      -e 's@/bin/sync@${coreutils}/bin/sync@' \
-      -e '1 s@/usr/bin/env perl@${perl.withPackages (p: [ p.DBFile ])}/bin/perl@'
+    runHook postInstall
+  '';
+
+  preFixup = ''
+    find $out -name "*.pl" -print0 | xargs --null sed -i \
+      -e 's@/bin/pwd@${coreutils}/bin/pwd@g' \
+      -e 's@/bin/sync@${coreutils}/bin/sync@g'
 
     for p in $out/bin/*
       do wrapProgram "$p" --prefix PATH ":" "${
@@ -64,8 +81,12 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       }"
     done
+  '';
 
-    patchShebangs $out
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
     # do a dummy test ensuring this works
 
     PATH=$PATH:${dummyMount}/bin
@@ -85,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
         $out/bin/storeBackup.pl --sourceDir "$source" --backupDir backup
         latestBackup=backup/default/$(ls -1 backup/default | sort | tail -n 1)
         $out/bin/storeBackupRecover.pl -b "$latestBackup" -t restored -r /
-        ${diffutils}/bin/diff -r "$source" restored
+        diff -r "$source" restored
 
         # storeBackupCheckSource should return 0
         $out/bin/storeBackupCheckSource.pl -s "$source" -b "$latestBackup"
@@ -99,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
         rm -fr restored
       }
 
-      testDir=$TMP/testDir
+      testDir=$HOME/testDir
 
       mkdir $testDir
       echo X > $testDir/X
@@ -121,6 +142,8 @@ stdenv.mkDerivation (finalAttrs: {
       backupRestore 'test 3: backup, restore' $out
       backupRestore 'test 4: backup diffutils to same backup locations, restore' ${diffutils}
     }
+
+    runHook postInstallCheck
   '';
 
   meta = {

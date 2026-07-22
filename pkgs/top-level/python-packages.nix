@@ -17414,6 +17414,8 @@ self: super: with self; {
 
   rclone-python = callPackage ../development/python-modules/rclone-python { };
 
+  rcon = callPackage ../development/python-modules/rcon { };
+
   rcssmin = callPackage ../development/python-modules/rcssmin { };
 
   rctclient = callPackage ../development/python-modules/rctclient { };
@@ -18013,6 +18015,8 @@ self: super: with self; {
   runs = callPackage ../development/python-modules/runs { };
 
   runstats = callPackage ../development/python-modules/runstats { };
+
+  runtype = callPackage ../development/python-modules/runtype { };
 
   russound = callPackage ../development/python-modules/russound { };
 
