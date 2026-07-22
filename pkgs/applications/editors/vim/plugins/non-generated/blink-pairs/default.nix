@@ -71,6 +71,9 @@ vimUtils.buildVimPlugin {
     homepage = "https://github.com/Saghen/blink.pairs";
     changelog = "https://github.com/Saghen/blink.pairs/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ isabelroses ];
+    maintainers = with lib.maintainers; [
+      isabelroses
+      saadndm
+    ];
   };
 }
