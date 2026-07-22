@@ -1083,10 +1083,21 @@ in
     f: args:
     # TODO: Should we add call-time "type" checking like built in?
     if isAttrs f then
-      f // { __functionArgs = args; }
+      if
+        removeAttrs f [
+          "__functor"
+          "__functionArgs"
+        ] != { }
+      then
+        f // { __functionArgs = args; }
+      else
+        {
+          inherit (f) __functor;
+          __functionArgs = args;
+        }
     else
       {
-        __functor = f.__functor or (self: f);
+        __functor = self: f;
         __functionArgs = args;
       };
 
@@ -1187,7 +1198,18 @@ in
     in
     g:
     if isAttrs g then
-      g // { __functionArgs = fArgs; }
+      if
+        removeAttrs g [
+          "__functor"
+          "__functionArgs"
+        ] != { }
+      then
+        g // { __functionArgs = fArgs; }
+      else
+        {
+          inherit (g) __functor;
+          __functionArgs = fArgs;
+        }
     else
       {
         __functor = self: g;
