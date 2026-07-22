@@ -21,7 +21,7 @@ let
       callPackage = self.callPackage;
     in
     {
-      inherit rocq-core lib;
+      inherit lib;
       rocqPackages = self // {
         __attrsFailEvaluation = true;
         recurseForDerivations = false;
@@ -55,6 +55,16 @@ let
           // args
         );
 
+      rocq-core = rocq-core.overrideAttrs (oldAttrs: {
+        passthru = (oldAttrs.passthru or { }) // {
+          withPackages =
+            f:
+            (callPackage ../applications/science/logic/coq/with-packages.nix {
+              coq = rocq-core;
+            })
+              (f self);
+        };
+      });
 
       contribs = lib.recurseIntoAttrs (callPackage ../development/rocq-modules/contribs { });
 
