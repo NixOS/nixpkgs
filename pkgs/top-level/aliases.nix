@@ -1549,6 +1549,7 @@ mapAliases {
   marwaita-orange = throw "'marwaita-orange' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   marwaita-peppermint = throw "'marwaita-peppermint' has been renamed to/replaced by 'marwaita-red'"; # Converted to throw 2025-10-27
   marwaita-pop_os = throw "'marwaita-pop_os' has been renamed to/replaced by 'marwaita-yellow'"; # Converted to throw 2025-10-27
+  marwaita-red = throw "'marwaita-red' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   marwaita-ubuntu = throw "'marwaita-ubuntu' has been renamed to/replaced by 'marwaita-orange'"; # Converted to throw 2025-10-27
   massif-visualizer = throw "'massif-visualizer' has been removed due to outdated KF5 dependencies."; # Added 2026-05-01
   mastodon-bot = throw "'mastodon-bot' has been removed because it was archived by upstream in 2021."; # Added 2025-11-07
