@@ -143,6 +143,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     substituteInPlace scripts/generate-protos.sh \
       --replace-fail "/usr/bin/env" "${coreutils}/bin/env"
 
+    substituteInPlace package.json \
+      --replace-fail \
+        '"build:nmh": "go build -o dist/nativeMessagingHost ./go/nativeMessagingHost.go"' \
+        '"build:nmh": "go build -trimpath -ldflags=-buildid= -o dist/nativeMessagingHost ./go/nativeMessagingHost.go"'
+
     cp -r ${anytype-heart}/lib dist/
     cp -r ${anytype-heart}/bin/anytypeHelper dist/
 
@@ -168,7 +173,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   # remove unnecessary files
   preInstall = ''
     chmod u+w -R dist node_modules
-    find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
+    find dist node_modules -type f \( -name '*.ts' -o -name '*.map' \) -delete
+    rm -f node_modules/keytar/build/{Makefile,binding.Makefile,config.gypi,keytar.target.mk}
+    rm -rf node_modules/keytar/build/Release/{.deps,obj.target}
   '';
 
   installPhase = ''
