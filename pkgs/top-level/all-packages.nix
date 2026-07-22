@@ -4061,7 +4061,9 @@ with pkgs;
   wrapRustcWith = { rustc-unwrapped, ... }@args: callPackage ../build-support/rust/rustc-wrapper args;
   wrapRustc = rustc-unwrapped: wrapRustcWith { inherit rustc-unwrapped; };
 
-  rust_1_97 = callPackage ../development/compilers/rust/1_97.nix { };
+  rust_1_97 = callPackage ../development/compilers/rust/1_97.nix {
+    llvm_22 = llvmPackages_22.libllvm;
+  };
   rust = rust_1_97;
 
   mrustc = callPackage ../development/compilers/mrustc { };

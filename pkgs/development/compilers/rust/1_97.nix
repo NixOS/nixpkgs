@@ -25,17 +25,26 @@
   pkgsTargetTarget,
   makeRustPlatform,
   wrapRustcWith,
-  llvmPackages,
-  llvm,
+  llvmPackages_22,
+  llvm_22,
   cargo-auditable,
   wrapCCWith,
   overrideCC,
   fetchpatch,
 }@args:
 let
+  # Rust 1.97 upstream is built and tested against LLVM 22 (its
+  # src/llvm-project submodule pins the rustc/22.1 branch; see the policy
+  # note at the top of this file about matching upstream's LLVM). The
+  # default llvmPackages (21) is too old: rustc codegen since 1.96 emits
+  # llvm.experimental.vector.partial.reduce.add, which the X86 backend
+  # lowers to AVX512-VNNI intrinsics (e.g. llvm.x86.avx512.vpdpwssd.512)
+  # that LLVM 21 fails to instruction-select on baseline x86-64
+  # ("Cannot select"); LLVM 22 lowers them correctly.
+  # Drop this pin once the default llvmPackages reaches 22.
   llvmSharedFor =
     pkgSet:
-    pkgSet.llvmPackages.libllvm.override (
+    pkgSet.llvmPackages_22.libllvm.override (
       {
         enableSharedLibraries = true;
       }
@@ -43,7 +52,7 @@ let
         # Force LLVM to compile using clang + LLVM libs when targeting pkgsLLVM
         stdenv = pkgSet.stdenv.override {
           allowedRequisites = null;
-          cc = pkgSet.pkgsBuildHost.llvmPackages.clangUseLLVM;
+          cc = pkgSet.pkgsBuildHost.llvmPackages_22.clangUseLLVM;
         };
       }
     );
@@ -57,7 +66,8 @@ import ./default.nix
     llvmSharedForHost = llvmSharedFor pkgsBuildHost;
     llvmSharedForTarget = llvmSharedFor pkgsBuildTarget;
 
-    inherit llvmPackages cargo-auditable;
+    inherit cargo-auditable;
+    llvmPackages = llvmPackages_22;
 
     # For use at runtime
     llvmShared = llvmSharedFor pkgsHostTarget;
@@ -93,8 +103,8 @@ import ./default.nix
 
   (
     removeAttrs args [
-      "llvmPackages"
-      "llvm"
+      "llvmPackages_22"
+      "llvm_22"
       "wrapCCWith"
       "overrideCC"
       "pkgsHostTarget"
