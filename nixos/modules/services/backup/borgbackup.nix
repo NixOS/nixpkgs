@@ -166,6 +166,8 @@ let
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
+        # Allow the job to run as long as it needs to.
+        Type = "oneshot";
         # Only run when no other process is using CPU or disk
         CPUSchedulingPolicy = "idle";
         IOSchedulingClass = "idle";
