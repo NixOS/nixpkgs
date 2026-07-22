@@ -16,18 +16,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "olivetin";
-  version = "3000.17.0";
+  version = "3000.17.3";
 
   src = fetchFromGitHub {
     owner = "OliveTin";
     repo = "OliveTin";
     tag = finalAttrs.version;
-    hash = "sha256-oLBXDd1grSFEbCvB4bK2XeVOZONSYro/6rvMJkG8eU0=";
+    hash = "sha256-fC+J1ejRDQDe3LfCNuZrt52mvXUxw8eMScCk1wsuQCo=";
   };
 
   modRoot = "service";
 
-  vendorHash = "sha256-lZ3KBoM+cDyYPX16wuZT3UQvB/SrRD6W2ic+GznG7hU=";
+  vendorHash = "sha256-33tP6bZgwOTAXBgxfdbq1Dn73uVJE5dYR1drlxBe7eo=";
 
   subPackages = [ "." ];
 
@@ -75,14 +75,14 @@ buildGoModule (finalAttrs: {
     '';
 
     outputHashMode = "recursive";
-    outputHash = "sha256-X602MebKdmdxZ9OEtQ150u+/Z1O9FEvcxRtOhMorqyw=";
+    outputHash = "sha256-+Afw5Q+3u24+eDk6yxN3WiyKmLtodaq9uk/mAKAz/G4=";
   };
 
   webui = buildNpmPackage {
     pname = "olivetin-webui";
     inherit (finalAttrs) version src;
 
-    npmDepsHash = "sha256-fr5RTPNXNd8sD/LphnDsekIbB333LgEHCb/NUEqSBIE=";
+    npmDepsHash = "sha256-c76uc+t/hRZKRGeOnqbjAK7KbaWncBkovtjMm7pgGUs=";
 
     sourceRoot = "${finalAttrs.src.name}/frontend";
 
