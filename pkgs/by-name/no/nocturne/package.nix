@@ -25,6 +25,8 @@
   webp-pixbuf-loader,
   libavif,
   libheif,
+  versionCheckHook,
+  fontconfig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -103,6 +105,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   # avoid installing Navidrome at runtime if not available, incompatible with the nix store
   patches = [ ./disable-navidrome-setup.patch ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckKeepEnvironment = [
+    "XDG_CACHE_HOME"
+    "FONTCONFIG_FILE"
+  ];
+  # it still errors due to lack of display, but the retcode is 0 and the version is printed
+  preInstallCheck = ''
+    export XDG_CACHE_HOME=$(mktemp -d)
+    export FONTCONFIG_FILE="${fontconfig.out}/etc/fonts/fonts.conf"
+  '';
 
   meta = {
     description = "Adwaita music player for OpenSubsonic servers like Navidrome";
