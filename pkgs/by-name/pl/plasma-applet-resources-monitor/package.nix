@@ -10,6 +10,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "plasma-applet-resources-monitor";
   version = "3.1.1";
 
+ __structuredAttrs = true;
+ strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "orblazer";
     repo = "plasma-applet-resources-monitor";
