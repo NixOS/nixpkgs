@@ -1,0 +1,149 @@
+{
+  lib,
+  stdenv,
+  buildNpmPackage,
+  fetchFromGitHub,
+  alsa-utils,
+  copyDesktopItems,
+  electron_41,
+  libicns,
+  makeDesktopItem,
+  makeWrapper,
+  nix-update-script,
+  versionCheckHook,
+  which,
+}:
+
+let
+  electron = electron_41;
+in
+buildNpmPackage rec {
+  pname = "teams-for-linux";
+  version = "2.13.0";
+
+  src = fetchFromGitHub {
+    owner = "IsmaelMartinez";
+    repo = "teams-for-linux";
+    tag = "v${version}";
+    hash = "sha256-30jt23bsJ1XE2gclRg06AM+mk1IrerNnkbWVDRfjqHo=";
+  };
+
+  npmDepsHash = "sha256-pz2htdFmczmZJtcrpI/X0nUUF++x2vtcYZiTWjEYglo=";
+
+  nativeBuildInputs = [
+    makeWrapper
+    versionCheckHook
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [ copyDesktopItems ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ libicns ];
+
+  doInstallCheck = stdenv.hostPlatform.isLinux;
+
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+
+  makeCacheWritable = true;
+
+  buildPhase = ''
+    runHook preBuild
+
+    electron_dist="$(mktemp -d)"
+    cp -r ${electron.dist}/. "$electron_dist"
+    chmod -R u+w "$electron_dist"
+
+    electron_builder_args=(
+      --dir
+      -c.npmRebuild=true
+      -c.asarUnpack="**/*.node"
+      -c.electronDist="$electron_dist"
+      -c.electronVersion=${electron.version}
+      -c.mac.identity=null
+    )
+
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    png2icns build/icon.icns \
+      build/icons/16x16.png \
+      build/icons/32x32.png \
+      build/icons/128x128.png \
+      build/icons/256x256.png \
+      build/icons/512x512.png \
+      build/icons/1024x1024.png
+    electron_builder_args+=(-c.mac.icon=build/icon.icns)
+  ''
+  + ''
+
+    npm exec electron-builder -- "''${electron_builder_args[@]}"
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir -p $out/share/{applications,teams-for-linux}
+    cp dist/*-unpacked/resources/app.asar $out/share/teams-for-linux/
+
+    pushd build/icons
+    for image in *png; do
+      mkdir -p $out/share/icons/hicolor/''${image%.png}/apps
+      cp -r $image $out/share/icons/hicolor/''${image%.png}/apps/teams-for-linux.png
+    done
+    popd
+
+    # Linux needs 'aplay' for notification sounds
+    makeWrapper '${lib.getExe electron}' "$out/bin/teams-for-linux" \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          alsa-utils
+          which
+        ]
+      } \
+      --add-flags "$out/share/teams-for-linux/app.asar" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer --enable-wayland-ime=true}}"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    cp -r dist/mac*/teams-for-linux.app $out/Applications
+    makeWrapper $out/Applications/teams-for-linux.app/Contents/MacOS/teams-for-linux $out/bin/teams-for-linux
+  ''
+  + ''
+
+    runHook postInstall
+  '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "teams-for-linux";
+      exec = "teams-for-linux %U";
+      icon = "teams-for-linux";
+      desktopName = "Microsoft Teams for Linux";
+      comment = meta.description;
+      categories = [
+        "Network"
+        "InstantMessaging"
+        "Chat"
+      ];
+      mimeTypes = [ "x-scheme-handler/msteams" ];
+    })
+  ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Unofficial Microsoft Teams client for Linux";
+    mainProgram = "teams-for-linux";
+    homepage = "https://github.com/IsmaelMartinez/teams-for-linux";
+    changelog = "https://github.com/IsmaelMartinez/teams-for-linux/releases/tag/v${version}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      muscaln
+      qjoly
+      chvp
+      khaneliman
+      HarisDotParis
+    ];
+    platforms = with lib.platforms; darwin ++ linux;
+  };
+}

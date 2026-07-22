@@ -1,0 +1,17 @@
+diff --git a/mkdocs.yml b/mkdocs.yml
+index 2f7f387..7ddfcf2 100644
+--- a/mkdocs.yml
++++ b/mkdocs.yml
+@@ -53,11 +53,6 @@ markdown_extensions:
+   - pymdownx.inlinehilite
+   - pymdownx.snippets
+   - attr_list
+-  - pymdownx.emoji:
+-      emoji_index: !!python/name:material.extensions.emoji.twemoji
+-      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+ 
+ plugins:
+   - search
+-  - git-revision-date-localized
+-  - social
+\ No newline at end of file

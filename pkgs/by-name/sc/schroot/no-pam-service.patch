@@ -1,0 +1,10 @@
+--- a/etc/CMakeLists.txt
++++ b/etc/CMakeLists.txt
+@@ -68,6 +68,6 @@ foreach(profile ${profiles})
+   endforeach(file)
+ endforeach(profile)
+ 
+-add_subdirectory(pam)
++# add_subdirectory(pam)
+ add_subdirectory(bash_completion)
+ add_subdirectory(setup.d)

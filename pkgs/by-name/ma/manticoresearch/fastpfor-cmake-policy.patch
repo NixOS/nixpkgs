@@ -1,0 +1,14 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index efedf74..effa1ec 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -4,7 +4,8 @@
+ # Copyright (c) 2012 Louis Dionne
+ # Copyright (c) 2021-2022 Manticore Software LTD
+ #
+-cmake_minimum_required ( VERSION 3.17 )
++# Fix build with CMake 4
++cmake_minimum_required ( VERSION 3.5 )
+ 
+ foreach (policy CMP0091 CMP0022)
+ 	if (POLICY ${policy})

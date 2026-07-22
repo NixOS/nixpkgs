@@ -1,0 +1,11 @@
+diff -ur a/aigunconstraint.c b/aigunconstraint.c
+--- a/aigunconstraint.c	2013-10-06 09:08:03.000000000 -0400
++++ b/aigunconstraint.c	2023-10-27 08:55:01.678566389 -0400
+@@ -26,6 +26,7 @@
+ #include <stdarg.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <unistd.h>
+ 
+ static const char * USAGE =
+ "usage: aigunconstraint [-h][-v] [<input> [<output>]]\n"

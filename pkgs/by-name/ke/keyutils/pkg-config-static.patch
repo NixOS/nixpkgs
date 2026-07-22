@@ -1,0 +1,28 @@
+From 4e58e9a45b87f9409d80a559984a3405d8d5a975 Mon Sep 17 00:00:00 2001
+From: Daniel Hill <daniel@gluo.nz>
+Date: Tue, 28 Feb 2023 16:57:52 +1300
+Subject: Provide a pkgconfig file with libkeyutils.a
+
+Signed-off-by: Daniel Hill <daniel@gluo.nz>
+Signed-off-by: David Howells <dhowells@redhat.com>
+Link: https://lore.kernel.org/r/CAMtG=2qKrGC-QzPENXsV8_7VBbi6sEnA6joV=SL8MQP1pfV8KA@mail.gmail.com/
+---
+ Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Makefile b/Makefile
+index 599b145..d8d4ee3 100644
+--- a/Makefile
++++ b/Makefile
+@@ -201,6 +201,8 @@ ifeq ($(NO_SOLIB),0)
+ 	$(LNS) $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SONAME)
+ 	mkdir -p $(DESTDIR)$(USRLIBDIR)
+ 	$(LNS) $(LIBDIR)/$(SONAME) $(DESTDIR)$(USRLIBDIR)/$(DEVELLIB)
++endif
++ifneq ($(filter 0, $(NO_ARLIB) $(NO_SOLIB)),)
+ 	sed \
+ 	-e 's,@VERSION\@,$(VERSION),g' \
+ 	-e 's,@prefix\@,$(PREFIX),g' \
+-- 
+cgit 1.2.3-korg
+
