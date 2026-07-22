@@ -192,6 +192,7 @@ let
         # In pkgs', the default CUDA package set is always the one we've constructed here.
         otherSplices = pkgs'.generateSplicesForMkScope [ "cudaPackages" ];
         f = extends composedExtensions cudaPackagesFixedPoint;
+        spliceOutput = false;
       };
 in
 cudaPackages
