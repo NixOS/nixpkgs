@@ -21,6 +21,10 @@ buildNpmPackage (finalAttrs: {
     repo = "icestudio";
     rev = "989c552b687993f54a5928f693e3502de02e29f8";
     hash = "sha256-GTsLt3IgqXCkGJZGmvWslHL8gqm/0tnRJWlceV64asA=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "FPGAwars/collection-default@${version}";
+    };
   };
 
   npmDepsHash = "sha256-4B5dpU7LV/2ga7gbu/TdwOYZL/HDm4fi9TXNcZEyeOI=";

@@ -12,6 +12,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/p0deje/Maccy/releases/download/${finalAttrs.version}/Maccy.app.zip";
     hash = "sha256-84iu403gmgx1MWMTA3hdmTi++akhMOIc4QScj1aq0Hc=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "p0deje/Maccy@${finalAttrs.version}";
+    };
   };
 
   dontUnpack = true;

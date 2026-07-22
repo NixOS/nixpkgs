@@ -18,6 +18,10 @@ let
       url = "https://github.com/simplex-chat/simplex-chat/releases/download/v${version}/simplex-desktop-x86_64.AppImage";
       hash = "sha256-QEIg8W8cA4ebjXQC4x6M5SXcPOemkEY3vUjhmXTyU2o=";
     };
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "simplex-chat/simplex-chat@${version}";
+    };
   };
 
   inherit (stdenv.hostPlatform) system;

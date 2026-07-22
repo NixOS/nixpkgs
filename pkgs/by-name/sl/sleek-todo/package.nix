@@ -16,6 +16,10 @@ let
     aarch64-darwin = "mac-arm64.dmg";
     aarch64-linux = "linux-arm64.AppImage";
     x86_64-linux = "linux-x86_64.AppImage";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "ransome1/sleek@${version}";
+    };
   };
 
   suffix =
@@ -34,6 +38,10 @@ let
   };
 
   meta = {
+    identifiers.purlParts = {
+      type = "github";
+      spec = "ransome1/sleek@${version}";
+    };
     description = "Todo manager based on todo.txt syntax";
     homepage = "https://github.com/ransome1/sleek";
     license = lib.licenses.mit;

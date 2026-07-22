@@ -13,6 +13,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/MrKai77/Loop/releases/download/${finalAttrs.version}/Loop.zip";
     hash = "sha256-UU6X+qs4Q837ixhZuRMzcEY5oaLOWA5PaE117+AH04Y=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "MrKai77/Loop@${finalAttrs.version}";
+    };
   };
 
   sourceRoot = ".";

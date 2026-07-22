@@ -15,6 +15,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/detekt/detekt/releases/download/v${finalAttrs.version}/detekt-cli-${finalAttrs.version}-all.jar";
     sha256 = "sha256-LOL/lS4VC68oopzacKNjsDQLPoGlX0PlHsXt/8PQZsE=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "detekt/detekt@${finalAttrs.version}";
+    };
   };
 
   dontUnpack = true;

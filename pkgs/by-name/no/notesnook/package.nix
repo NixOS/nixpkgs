@@ -31,6 +31,10 @@ let
         aarch64-darwin = "sha256-aZFiaWA8tr1Nuule/qKTr1hUuQ/9gTs2AJqrojAFeDQ=";
       }
       .${system} or throwSystem;
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "streetwriters/notesnook@${version}";
+    };
   };
 
   passthru = {

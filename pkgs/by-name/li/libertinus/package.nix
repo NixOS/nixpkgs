@@ -16,6 +16,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/alerque/libertinus/releases/download/v${finalAttrs.version}/Libertinus-${finalAttrs.version}.tar.zst";
     hash = "sha256-JQZ3ySnTd1owkTZDWUN5ryZKwu8oAQNaody+MLm+I6Y=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "alerque/libertinus@${version}";
+    };
   };
 
   outputs = [

@@ -51,6 +51,10 @@ stdenv.mkDerivation rec {
   googleapi = fetchurl {
     url = "https://github.com/googleapis/googleapis/archive/fe8ba054ad4f7eca946c2d14a63c3f07c0b586a0.tar.gz";
     hash = "sha256:1r33jj8yipxjgiarddcxr1yc5kmn98rwrjl9qxfx0fzn1bsg04q5";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "googleapis/googleapis@${version}";
+    };
   };
 
   nativeBuildInputs = [

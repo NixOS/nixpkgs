@@ -64,6 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/ventoy/Ventoy/releases/download/v${finalAttrs.version}/ventoy-${finalAttrs.version}-linux.tar.gz";
     hash = "sha256-f7TtCM72prTTndGSYNjIApGnjf35r31GFXHiPLvEOAU=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "ventoy/Ventoy@${finalAttrs.version}";
+    };
   };
 
   patches = [

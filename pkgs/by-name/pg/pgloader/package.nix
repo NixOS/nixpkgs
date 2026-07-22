@@ -23,6 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchurl {
       url = "https://github.com/dimitri/pgloader/releases/download/v3.6.9/pgloader-bundle-3.6.9.tgz";
       sha256 = "sha256-pdCcRmoJnrfVnkhbT0WqLrRbCtOEmRgGRsXK+3uByeA=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "dimitri/pgloader@${finalAttrs.version}";
+      };
     })
     # needed because bundle does not contain docs / man pages
     (fetchFromGitHub {

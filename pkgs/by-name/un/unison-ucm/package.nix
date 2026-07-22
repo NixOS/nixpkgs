@@ -86,5 +86,9 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-linux"
     ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "unisonweb/unison@${finalAttrs.version}";
+        };
   };
 })

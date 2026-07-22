@@ -31,6 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/k-pet-group/BlueJ-Greenfoot/releases/download/BLUEJ-RELEASE-${finalAttrs.version}/BlueJ-generic-${finalAttrs.version}.jar";
     sha256 = "sha256-UClhTH/9oFfhjYsScBvmD4cKZUJwuAsiyRTiVkPAV0o=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "k-pet-group/BlueJ-Greenfoot@${finalAttrs.version}";
+    };
   };
 
   unpackPhase = ''

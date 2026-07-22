@@ -37,6 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/sonic-visualiser/sonic-visualiser/releases/download/sv_v${finalAttrs.version}/sonic-visualiser-${finalAttrs.version}.tar.gz";
     hash = "sha256-LzOK8CMekwU5xeXgTax8M4QleGbMKf2hEiFfjEEImMk=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "sonic-visualiser/sonic-visualiser@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

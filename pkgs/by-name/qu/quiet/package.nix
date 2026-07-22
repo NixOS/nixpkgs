@@ -21,6 +21,10 @@ let
     changelog = "https://github.com/TryQuiet/quiet/releases/tag/@quiet/desktop@${version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ kashw2 ];
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "TryQuiet/quiet@${version}";
+      };
   };
 
   passthru.updateScript = writeShellScript "update-quiet" ''

@@ -10,6 +10,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/cirruslabs/softnet/releases/download/${finalAttrs.version}/softnet.tar.gz";
     sha256 = "1g274x524xc85hfzxi3vb4xp720bjgk740bp6hc92d1ikmp0b664";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "cirruslabs/softnet@${finalAttrs.version}";
+    };
   };
   sourceRoot = ".";
 

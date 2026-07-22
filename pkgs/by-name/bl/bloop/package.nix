@@ -114,6 +114,10 @@ stdenv.mkDerivation (finalAttrs: {
 
           touch $out
         '';
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "scalacenter/bloop@${version}";
+    };
   };
 
   meta = {

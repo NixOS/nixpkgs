@@ -12,6 +12,10 @@ let
   src = fetchurl {
     url = "https://github.com/lunatask/lunatask/releases/download/v${version}/Lunatask-${version}.AppImage";
     hash = "sha256-Ds1aOejeFA4Gl9ysnp1NOgsoJSz5OA/k4gOBRCj5KZo=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "lunatask/lunatask@${version}";
+    };
   };
 
   appimageContents = appimageTools.extract {

@@ -129,6 +129,10 @@ let
   x2t = fetchurl {
     url = "https://github.com/cryptpad/onlyoffice-x2t-wasm/releases/download/${x2t_version}/x2t.zip";
     hash = "sha256-hrbxrI8RC1pBatGZ76TAiVfUbZid7+eRuXk6lmz7OgQ=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "cryptpad/onlyoffice-x2t-wasm@${version}";
+    };
   };
   x2t_install = ''
     echo "Installing x2t"

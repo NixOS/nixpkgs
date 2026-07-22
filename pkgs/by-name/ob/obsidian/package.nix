@@ -35,6 +35,10 @@ let
       "aarch64-linux"
       "aarch64-darwin"
     ];
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "obsidianmd/obsidian-releases@${version}";
+      };
   };
 
   srcs = {

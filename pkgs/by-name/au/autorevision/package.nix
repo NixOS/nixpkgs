@@ -20,6 +20,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/Autorevision/autorevision/releases/download/v%2F${finalAttrs.version}/autorevision-${finalAttrs.version}.tgz";
     sha256 = "sha256-3ktLVC73m2xddq5BhxVKw/FJd6pZ5RVb7fv29dxUoRE=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Autorevision/autorevision@${finalAttrs.version}";
+    };
   };
 
   buildInputs = [

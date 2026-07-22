@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/oracle/opengrok/releases/download/${version}/${pname}-${version}.tar.gz";
     hash = "sha256-ODgGr8/9qTv0Ru69GhhcAmi0adonwJgrnOs/B9rQYxQ=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "oracle/opengrok@${version}";
+    };
   };
 
   nativeBuildInputs = [ makeWrapper ];

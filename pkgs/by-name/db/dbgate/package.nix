@@ -24,12 +24,20 @@ let
           url = "https://github.com/dbgate/dbgate/releases/download/v${version}/dbgate-${version}-mac_universal.dmg";
           hash = "sha256-GPdDglP2DVGCdchvj1Q5oLU3+DSzTccUbH5LmHGRj/M=";
         };
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "dbgate/dbgate@${version}";
+        };
       }
       .${stdenv.hostPlatform.system} or (throw "dbgate: ${stdenv.hostPlatform.system} is unsupported.");
 
   passthru.updateScript = ./update.sh;
 
   meta = {
+    identifiers.purlParts = {
+      type = "github";
+      spec = "dbgate/dbgate@${version}";
+    };
     description = "Database manager for MySQL, PostgreSQL, SQL Server, MongoDB, SQLite and others";
     homepage = "https://dbgate.org/";
     license = lib.licenses.mit;

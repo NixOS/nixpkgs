@@ -132,6 +132,10 @@ stdenv.mkDerivation rec {
         update-source-version "powershell" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
       done
     '';
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "PowerShell/PowerShell@${version}";
+        };
   };
 
   meta = {

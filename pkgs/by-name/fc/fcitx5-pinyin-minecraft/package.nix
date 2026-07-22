@@ -11,6 +11,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/oldherl/fcitx5-pinyin-minecraft/releases/download/${finalAttrs.version}/minecraft-cn.dict";
     hash = "sha256-5/bYexDb3lHuPZ4VpxruR0Aw9eKytfpk+S8mSGYiYEs=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "oldherl/fcitx5-pinyin-minecraft@${finalAttrs.version}";
+    };
   };
 
   dontUnpack = true;

@@ -25,6 +25,10 @@ appimageTools.wrapType2 rec {
     fetchurl {
       url = "https://github.com/pavlobu/deskreen/releases/download/v${version}/deskreen-ce-${version}-${sources.${system}.arch}.AppImage";
       inherit (sources.${system}) hash;
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "pavlobu/deskreen@${version}";
+      };
     };
   extraInstallCommands =
     let

@@ -70,6 +70,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/renode/renode/releases/download/v${finalAttrs.version}/renode-${finalAttrs.version}.linux.tar.gz";
     hash = "sha256-1kz/3kjnIGS6nof/NOGGy3qo2PKW3sm7vNaot2rn/XY=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "renode/renode@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

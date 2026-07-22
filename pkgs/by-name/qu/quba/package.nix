@@ -27,6 +27,10 @@ let
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ onny ];
     platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "ZUGFeRD/quba-viewer@${version}";
+    };
   };
 
   src = fetchurl {

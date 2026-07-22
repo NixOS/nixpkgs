@@ -38,6 +38,10 @@ stdenv.mkDerivation {
   src = fetchurl {
     url = "https://github.com/Solo5/solo5/releases/download/v${version}/solo5-v${version}.tar.gz";
     hash = "sha256-UfYkyE1k5S57kRLaYk7hRE4lOCuzjzcTv4SNtlqk9DU=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Solo5/solo5@${version}";
+    };
   };
 
   configurePhase = ''

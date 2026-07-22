@@ -20,6 +20,10 @@ let
       url = "https://github.com/vladimiry/ElectronMail/releases/download/v${version}/electron-mail-${version}-mac-arm64.dmg";
       hash = "sha256-eGOpOBZ/6CSBaFFXxD0tYdhWPCTwR9n+/stsEH7vR2U=";
     };
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "vladimiry/ElectronMail@${version}";
+      };
   };
 
   src = sources.${stdenvNoCC.hostPlatform.system};

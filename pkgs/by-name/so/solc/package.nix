@@ -35,6 +35,10 @@ let
   doInstallCheck = true;
 
   meta = {
+    identifiers.purlParts = {
+      type = "github";
+      spec = "ethereum/solidity@${version}";
+    };
     description = "Compiler for Ethereum smart contract language Solidity";
     homepage = "https://github.com/ethereum/solidity";
     changelog = "https://github.com/ethereum/solidity/releases/tag/v${version}";
@@ -154,6 +158,10 @@ let
         src = pkgs.fetchurl {
           url = "https://github.com/ethereum/solidity/releases/download/v${version}/solc-macos";
           hash = darwinHash;
+          meta.identifiers.purlParts = {
+            type = "github";
+            spec = "ethereum/solidity@${version}";
+          };
         };
         dontUnpack = true;
 

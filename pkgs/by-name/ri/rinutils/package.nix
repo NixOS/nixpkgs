@@ -13,6 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/shlomif/rinutils/releases/download/${finalAttrs.version}/rinutils-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-+eUn03psyMe4hwraY8qiTzKrDSn9ERbfPrtoZYMDCVU=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "shlomif/rinutils@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

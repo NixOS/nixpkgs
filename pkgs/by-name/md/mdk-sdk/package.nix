@@ -37,6 +37,10 @@ let
   linux = {
     url = "https://github.com/wang-bin/mdk-sdk/releases/download/v${version}/mdk-sdk-linux.tar.xz";
     hash = "sha256-bBneSsNHfMH2MoDddT1cOtnyWjRNYHo0UTqnjrLpk4Q=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "wang-bin/mdk-sdk@${version}";
+    };
   };
 
   darwin = {

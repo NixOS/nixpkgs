@@ -12,6 +12,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/jnross/Bluetility/releases/download/${finalAttrs.version}/Bluetility.app.zip";
     hash = "sha256-Batnv06nXXxvUz+DlrH1MpeL4f5kNSPDH6Iqd/UiFbw=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "jnross/Bluetility@${finalAttrs.version}";
+    };
   };
 
   dontUnpack = true;

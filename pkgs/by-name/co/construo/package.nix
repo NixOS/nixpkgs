@@ -21,6 +21,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/Construo/construo/releases/download/v${finalAttrs.version}/construo-${finalAttrs.version}.tar.gz";
     sha256 = "1wmj527hbj1qv44cdsj6ahfjrnrjwg2dp8gdick8nd07vm062qxa";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Construo/construo@${finalAttrs.version}";
+    };
   };
 
   buildInputs = [

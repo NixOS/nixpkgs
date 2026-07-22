@@ -15,6 +15,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/pegacat/jxplorer/releases/download/v${finalAttrs.version}/jxplorer-${finalAttrs.version}-project.tar.bz2";
     hash = "sha256-/lWkavH51OqNFSLpgT+4WcQcfW3WvnnOkB03jB7bE/s=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "pegacat/jxplorer@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

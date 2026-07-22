@@ -81,6 +81,10 @@ let
       popd
       mv $downloadedFile $out
     '';
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "sparrowwallet/${pname}@${version}";
+    };
   };
 
   manifest = fetchurl {

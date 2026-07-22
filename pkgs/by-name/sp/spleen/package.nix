@@ -12,6 +12,10 @@ stdenvNoCC.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/fcambus/spleen/releases/download/${version}/spleen-${version}.tar.gz";
     hash = "sha256-7EKSXGtW0hOMhisvlxR8hy5HL2dL8DQjQX2CegjWmok=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "fcambus/spleen@${version}";
+    };
   };
 
   nativeBuildInputs = [ mkfontscale ];

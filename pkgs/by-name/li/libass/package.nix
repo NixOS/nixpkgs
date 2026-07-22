@@ -22,6 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/libass/libass/releases/download/${finalAttrs.version}/libass-${finalAttrs.version}.tar.xz";
     hash = "sha256-ePEXm4ONAl6cJuj+8z+AkvZWEURP+hv8DPrGozURoFo=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "libass/libass@${finalAttrs.version}";
+    };
   };
 
   outputs = [

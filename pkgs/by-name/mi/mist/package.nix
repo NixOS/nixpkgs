@@ -12,6 +12,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/ninxsoft/Mist/releases/download/v${finalAttrs.version}/Mist.${finalAttrs.version}.dmg";
     hash = "sha256-J3Oxtw+yFV2Mpzqc6NqPPJR76r0DwywJdAU1FSvbYKE=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "ninxsoft/Mist@${finalAttrs.version}";
+    };
   };
 
   sourceRoot = ".";

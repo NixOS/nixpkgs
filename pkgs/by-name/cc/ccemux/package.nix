@@ -28,6 +28,10 @@ let
   desktopIcon = fetchurl {
     url = "https://github.com/CCEmuX/CCEmuX/raw/${rev}/src/main/resources/img/icon.png";
     hash = "sha256-gqWURXaOFD/4aZnjmgtKb0T33NbrOdyRTMmLmV42q+4=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "CCEmuX/CCEmuX@${version}";
+    };
   };
   desktopItem = makeDesktopItem {
     name = "CCEmuX";
@@ -66,6 +70,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    identifiers.purlParts = {
+      type = "github";
+      spec = "CCEmuX/CCEmuX@${version}";
+    };
     description = "Modular ComputerCraft emulator";
     homepage = "https://github.com/CCEmuX/CCEmuX";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];

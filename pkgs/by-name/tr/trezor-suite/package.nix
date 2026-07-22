@@ -28,6 +28,10 @@ let
         x86_64-linux = "sha512-Hd7tkGqLeQJqjnrEVzeULpPxTRpnPS/IZLTU6tyq0PQClrsl/Z2ADuPydfH4g2QlCmMGZMF0TBRvSzRIIrwchw==";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "trezor/trezor-suite@${version}";
+    };
   };
 
   appimageContents = appimageTools.extract {

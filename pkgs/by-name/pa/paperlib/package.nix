@@ -20,6 +20,10 @@ let
           url = "https://github.com/Future-Scholars/paperlib/releases/download/release-electron-${version}/Paperlib_${version}.AppImage";
           hash = "sha256-uBYhiUL4YWwnLLPvXMoXjlQqlqFep/OpwwnmPx7s5dY=";
         };
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "Future-Scholars/paperlib@${version}";
+        };
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
@@ -28,6 +32,10 @@ let
   };
 
   meta = {
+    identifiers.purlParts = {
+      type = "github";
+      spec = "Future-Scholars/paperlib@${version}";
+    };
     homepage = "https://github.com/Future-Scholars/paperlib";
     description = "Open-source academic paper management tool";
     license = lib.licenses.gpl3Only;

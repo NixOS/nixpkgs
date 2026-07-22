@@ -16,6 +16,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/leits/MeetingBar/releases/download/v${finalAttrs.version}/MeetingBar.dmg";
     hash = "sha256-qxBQjxW/S2xeUgpE5xdX3oOgsCv+iE3jXoMRROMMRUU=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "leits/MeetingBar@${finalAttrs.version}";
+    };
   };
 
   sourceRoot = ".";

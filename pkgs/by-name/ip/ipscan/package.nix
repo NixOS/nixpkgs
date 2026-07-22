@@ -19,6 +19,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/angryip/ipscan/releases/download/${finalAttrs.version}/ipscan_${finalAttrs.version}_amd64.deb";
     hash = "sha256-RLdlcrtpWcO4z7cKSN+y9UJzMBtnli2mAvuJSXCMoJU=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "angryip/ipscan@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

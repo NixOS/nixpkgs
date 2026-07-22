@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/MonitorControl/${pname}/releases/download/v${version}/MonitorControl.${version}.dmg";
     hash = "sha256-myx3adoU3FYYrs6LFRSiXtwSsoaujjQ/PYgAF/Xuk2g=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "MonitorControl/${pname}@${version}";
+    };
   };
 
   nativeBuildInputs = [ undmg ];

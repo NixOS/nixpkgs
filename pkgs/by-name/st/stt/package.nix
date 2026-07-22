@@ -14,6 +14,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/coqui-ai/STT/releases/download/v${finalAttrs.version}/native_client.tflite.Linux.tar.xz";
     hash = "sha256-RVYc64pLYumQoVUEFZdxfUUaBMozaqgD0h/yiMaWN90=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "coqui-ai/STT@${finalAttrs.version}";
+    };
   };
 
   sourceRoot = ".";

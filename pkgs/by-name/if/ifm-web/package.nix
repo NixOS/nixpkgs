@@ -11,6 +11,10 @@ let
   src = fetchurl {
     url = "https://github.com/misterunknown/ifm/releases/download/v${version}/cdn.ifm.php";
     hash = "sha256-io4HOtOe4J8J9Il+64eboIIwBXLWyXdv2OIBVKW+qS0=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "misterunknown/ifm@${version}";
+    };
   };
 
   serve_script = writeShellScript "ifm-serve" ''

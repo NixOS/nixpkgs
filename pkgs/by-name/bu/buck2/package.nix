@@ -130,6 +130,10 @@ stdenv.mkDerivation (finalAttrs: {
     };
 
     updateScript = ./update.nu;
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "facebook/buck2@${finalAttrs.version}";
+      };
   };
 
   meta = {

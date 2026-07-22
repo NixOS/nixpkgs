@@ -34,6 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
         "aarch64-linux" = "sha256-OMULaI8oE9VwRsm8C0CHLSA9xhoJ9HbfyOW2w2anY4w=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "github/copilot-cli@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

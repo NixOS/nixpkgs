@@ -17,6 +17,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/alonbl/gnupg-pkcs11-scd/releases/download/gnupg-pkcs11-scd-${finalAttrs.version}/gnupg-pkcs11-scd-${finalAttrs.version}.tar.bz2";
     hash = "sha256-lUeH5WLys9kpQhLDLdDYGizTesolDmaFAC0ok7uVkIc=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "alonbl/gnupg-pkcs11-scd@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

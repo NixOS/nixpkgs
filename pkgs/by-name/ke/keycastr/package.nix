@@ -11,6 +11,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/keycastr/keycastr/releases/download/v${finalAttrs.version}/KeyCastr.app.zip";
     hash = "sha256-yXxj6tv0MEwEgCwMg3XJm1gIRYS+MU6WTINm7KMYt1I=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "keycastr/keycastr@${finalAttrs.version}";
+    };
   };
 
   sourceRoot = ".";

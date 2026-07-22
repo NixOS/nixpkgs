@@ -14,6 +14,10 @@ let
       url = "https://github.com/agarick/agave/releases/download/v${version}/Agave-${name}.ttf";
       sha256 = hash;
       name = "Agave-${name}.ttf";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "agarick/agave@${version}";
+      };
     };
   # There are slashed variants, but with same name so only bundle the default versions for now:
   fonts = [

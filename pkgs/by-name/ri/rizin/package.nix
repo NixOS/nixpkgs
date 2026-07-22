@@ -157,6 +157,10 @@ let
       ];
       platforms = with lib.platforms; unix;
     };
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "rizinorg/rizin@${version}";
+    };
   };
 in
 rizin

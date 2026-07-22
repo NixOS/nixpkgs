@@ -18,6 +18,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/thkukuk/ypbind-mt/releases/download/v${finalAttrs.version}/ypbind-mt-${finalAttrs.version}.tar.xz";
     hash = "sha256-Bk8vGFZzxUk9+D9kALeZ86NZ3lYRi2ujfEMnER8vzYs=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "thkukuk/ypbind-mt@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

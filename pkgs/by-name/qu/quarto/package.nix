@@ -33,6 +33,10 @@ let
       rPackages.rmarkdown
     ]
     ++ extraRPackages;
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "quarto-dev/quarto-cli@${finalAttrs.version}";
+    };
   };
 
   pythonWithPackages = python3.withPackages (

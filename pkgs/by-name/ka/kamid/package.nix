@@ -16,6 +16,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/omar-polo/kamid/releases/download/${finalAttrs.version}/kamid-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-23LgcZ+R6wcUz1fZA+IbhyshfQOTyiFPZ+uKVwOh680=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "omar-polo/kamid@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

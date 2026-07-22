@@ -13,6 +13,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/google/bundletool/releases/download/${finalAttrs.version}/bundletool-all-${finalAttrs.version}.jar";
     sha256 = "sha256-oJnPoVQ/VVk7wu0Wpwp8Z/5UsXR7tzAfN/39bZECjik=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "google/bundletool@${finalAttrs.version}";
+    };
   };
 
   dontUnpack = true;

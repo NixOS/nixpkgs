@@ -12,6 +12,10 @@ let
   src = fetchurl {
     url = "https://github.com/DavidoTek/ProtonUp-Qt/releases/download/v${version}/ProtonUp-Qt-${version}-x86_64.AppImage";
     hash = "sha256-/Xjvsf+gkHpSV4RGJJS5tCk4+f18AZ8+rqO4+vg36ME=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "DavidoTek/ProtonUp-Qt@${version}";
+    };
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };

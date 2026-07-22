@@ -50,6 +50,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/lsp-plugins/lsp-plugins/releases/download/${finalAttrs.version}/lsp-plugins-src-${finalAttrs.version}.tar.gz";
     hash = "sha256-LJXse7IZ1WHqPbNgUbbHMhM7zXZCb7g2sd2FDcS1u2w=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "lsp-plugins/lsp-plugins@${finalAttrs.version}";
+    };
   };
 
   # By default, GStreamer plugins are installed right alongside GStreamer itself

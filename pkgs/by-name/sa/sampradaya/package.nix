@@ -11,6 +11,10 @@ stdenvNoCC.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/deepestblue/sampradaya/releases/download/v${version}/Sampradaya.ttf";
     hash = "sha256-ygKMNzHvbLR2A5HHrfY2C9ZUg0yng+JL3cyg6sBKqeQ=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "deepestblue/sampradaya@${version}";
+    };
   };
 
   dontUnpack = true;

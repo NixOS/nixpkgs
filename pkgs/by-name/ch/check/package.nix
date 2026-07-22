@@ -13,6 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/libcheck/check/releases/download/${finalAttrs.version}/check-${finalAttrs.version}.tar.gz";
     hash = "sha256-qN5OC6z7TXbdHGGN7SY1I7U7hdkqFG2INesaUpMvogo=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "libcheck/check@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

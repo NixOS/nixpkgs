@@ -12,6 +12,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/NyaMisty/AltServer-Linux/releases/download/v${finalAttrs.version}/AltServer-x86_64";
     hash = "sha256-C+fDrcaewRd6FQMrO443xdDk/vtHycQ5zWLCOLPqF/s=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "NyaMisty/AltServer-Linux@${finalAttrs.version}";
+    };
   };
 
   dontUnpack = true;

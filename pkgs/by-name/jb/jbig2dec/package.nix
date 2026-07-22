@@ -16,6 +16,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/ArtifexSoftware/jbig2dec/archive/${finalAttrs.version}/jbig2dec-${finalAttrs.version}.tar.gz";
     hash = "sha256-qXBTaaZjOrpTJpNFDsgCxWI5fhuCRmLegJ7ekvZ6/yE=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "ArtifexSoftware/jbig2dec@${finalAttrs.version}";
+    };
   };
 
   # Remove with the first release containing cc37d0931aa71582f7128736a068c92cd8712d9b.

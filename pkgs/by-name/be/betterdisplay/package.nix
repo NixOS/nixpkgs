@@ -16,6 +16,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/waydabber/BetterDisplay/releases/download/v${finalAttrs.version}/BetterDisplay-v${finalAttrs.version}.dmg";
     hash = "sha256-I0Ei9+TsbmsA6iFD1CwScgrU7OO9mL3fl3/uvCYS4JI=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "waydabber/BetterDisplay@${finalAttrs.version}";
+    };
   };
 
   dontPatch = true;

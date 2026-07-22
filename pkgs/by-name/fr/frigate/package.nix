@@ -72,6 +72,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     repo = "frigate";
     tag = "v${finalAttrs.version}";
     hash = "sha256-2FJG7tEZCuCQ6VJga9BMiuLTeswmlG8oN1MO6t0eroM=";
+    meta.identifiers.purlParts = {
++      type = "github";
++      spec = "google-coral/test_data@release-frogfish";
++    };
   };
 
   patches = [

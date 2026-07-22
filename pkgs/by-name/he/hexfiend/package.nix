@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/HexFiend/HexFiend/releases/download/v${version}/Hex_Fiend_${urlSuffix version}.dmg";
     hash = "sha256-QpGmpxDpdS+sJtsNtp0VSAd9WJXaZiKTH4yDsDK8FSk=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "HexFiend/HexFiend@${version}";
+    };
   };
 
   sourceRoot = "Hex Fiend.app";

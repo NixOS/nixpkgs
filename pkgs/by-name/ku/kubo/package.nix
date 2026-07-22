@@ -19,6 +19,10 @@ buildGoModule rec {
   src = fetchurl {
     url = "https://github.com/ipfs/kubo/releases/download/${rev}/kubo-source.tar.gz";
     hash = "sha256-Rw+Q1VHzT/ZbUzKZ6PVe09Ly0GL9FcmY6lPQlbrD7SY=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "ipfs/kubo@${version}";
+    };
   };
 
   # tarball contains multiple files/directories

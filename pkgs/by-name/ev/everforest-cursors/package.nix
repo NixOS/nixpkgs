@@ -12,6 +12,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/talwat/everforest-cursors/releases/download/${finalAttrs.version}/everforest-cursors-variants.tar.bz2";
     hash = "sha256-xXgtN9wbjbrGLUGYymMEGug9xEs9y44mq18yZVdbiuU=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "talwat/everforest-cursors@${finalAttrs.version}";
+    };
   };
 
   sourceRoot = ".";

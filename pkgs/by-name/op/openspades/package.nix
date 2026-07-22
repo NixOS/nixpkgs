@@ -71,11 +71,19 @@ stdenv.mkDerivation rec {
   devPak = fetchurl {
     url = "https://github.com/yvt/openspades-paks/releases/download/r${devPakVersion}/OpenSpadesDevPackage-r${devPakVersion}.zip";
     sha256 = "1bd2fyn7mlxa3xnsvzj08xjzw02baimqvmnix07blfhb78rdq9q9";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "yvt/openspades-paks@${version}";
+    };
   };
 
   notoFont = fetchurl {
     url = "https://github.com/yvt/openspades/releases/download/v0.1.1b/NotoFonts.pak";
     sha256 = "0kaz8j85wjjnf18z0lz69xr1z8makg30jn2dzdyicd1asrj0q1jm";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "yvt/openspades@${version}";
+    };
   };
 
   postPatch = ''

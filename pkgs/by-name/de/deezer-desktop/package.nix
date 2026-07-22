@@ -18,6 +18,10 @@ let
       url = "https://github.com/aunetx/deezer-linux/releases/download/v${version}/deezer-desktop-${version}-arm64.tar.xz";
       hash = "sha256-oKDwECjatV/dT/cnGN6Sk6RTIVDiKI8R0AAYmRvVlmo=";
     };
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "aunetx/deezer-linux@${version}";
+      };
   };
 
   src = srcs.${stdenv.hostPlatform.system} or (throw "${stdenv.hostPlatform.system} not supported");

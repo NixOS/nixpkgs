@@ -26,6 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
       builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }/squid-${finalAttrs.version}.tar.xz";
     hash = "sha256-hSF4/cN8WweGqTT8mQx9L//IKs8ZsihL4gm5ZDHSWZI=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "squid-cache/squid@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [ pkg-config ];

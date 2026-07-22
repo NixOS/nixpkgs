@@ -12,6 +12,10 @@ let
   src = fetchurl {
     url = "https://github.com/altair-graphql/altair/releases/download/v${version}/altair_${version}_x86_64_linux.AppImage";
     sha256 = "sha256-8S2ADsnPofUVO8vUGh2pFS7f52FB3O1CyeGIVw0SE6o=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "altair-graphql/altair@${version}";
+    };
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };

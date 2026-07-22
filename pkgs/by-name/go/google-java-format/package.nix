@@ -14,6 +14,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     sha256 = "sha256-g0sqDDjLd0lTMiqEtco/L0DdMVZlCzzUTTt0Q0WWL3o=";
     url = "https://github.com/google/google-java-format/releases/download/v${finalAttrs.version}/google-java-format-${finalAttrs.version}-all-deps.jar";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "google/google-java-format@${version}";
+    };
   };
 
   dontUnpack = true;

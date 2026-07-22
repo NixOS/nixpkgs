@@ -10,6 +10,10 @@ let
   src = fetchurl {
     url = "https://github.com/notion-enhancer/notion-repackaged/releases/download/v${version}/Notion-Enhanced-${version}.AppImage";
     sha256 = "sha256-SqeMnoMzxxaViJ3NPccj3kyMc1xvXWULM6hQIDZySWY=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "notion-enhancer/notion-repackaged@${version}";
+    };
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };

@@ -62,6 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
         update-source-version "speakeasy-cli" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
       done
     '';
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "speakeasy-api/speakeasy@${finalAttrs.version}";
+        };
   };
 
   meta = {

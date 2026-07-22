@@ -14,6 +14,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/pinterest/ktlint/releases/download/${finalAttrs.version}/ktlint";
     sha256 = "sha256-o/1iAgfVxA2myniblef4I8VOhUt/ref2E+kQlqNwbXU=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "pinterest/ktlint@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [ makeWrapper ];

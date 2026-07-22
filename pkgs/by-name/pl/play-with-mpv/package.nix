@@ -16,6 +16,10 @@ let
       name = "Thann-install_freedesktop-${version}.tar.gz";
       url = "https://github.com/thann/install_freedesktop/tarball/2673e8da4a67bee0ffc52a0ea381a541b4becdd4";
       hash = "sha256-O08G0iMGsF1DSyliXOHTIsOxDdJPBabNLXRhz5osDUk=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "thann/install_freedesktop@${version}";
+      };
     };
 
     # package has no tests

@@ -46,6 +46,10 @@ let
       "aarch64-darwin"
       "x86_64-linux"
     ];
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "ppy/osu@${version}";
+        };
   };
 
   passthru.updateScript = ./update.sh;

@@ -11,6 +11,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/cpputest/cpputest/releases/download/v${finalAttrs.version}/cpputest-${finalAttrs.version}.tar.gz";
     sha256 = "1xslavlb1974y5xvs8n1j9zkk05dlw8imy4saasrjlmibl895ii1";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "cpputest/cpputest@${finalAttrs.version}";
+    };
   };
 
   meta = {

@@ -22,6 +22,10 @@ let
           't.checkUdev=()=>{try{if(l.default.existsSync(f))return l.default.readFileSync(f,"utf-8").trim()===h.trim()}catch(e){d.default.error(e)}return!1}' \
           't.checkUdev=()=>{return 1}'
     '';
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Dygmalab/Bazecor@${version}";
+    };
   };
 in
 appimageTools.wrapAppImage {

@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/SeleniumHQ/htmlunit-driver/releases/download/${version}/htmlunit-driver-${version}-with-dependencies.jar";
     sha256 = "1sd3cwpamcbq9pv0mvcm8x6minqrlb4i0r12q3jg91girqswm2dp";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "SeleniumHQ/htmlunit-driver@${version}";
+    };
   };
 
   dontUnpack = true;

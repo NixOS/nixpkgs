@@ -98,6 +98,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         update-source-version "bun" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
       done
     '';
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "oven-sh/bun@${finalAttrs.version}";
+        };
   };
   meta = {
     homepage = "https://bun.sh";

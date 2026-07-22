@@ -20,6 +20,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/scop/bash-completion/releases/download/${finalAttrs.version}/bash-completion-${finalAttrs.version}.tar.xz";
     hash = "sha256-iLz4UST3f3Ty8vi80WrEOC2AeoJ+3nQqZJQMcRauoz8=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "scop/bash-completion@${finalAttrs.version}";
+    };
   };
 
   postPatch = ''
