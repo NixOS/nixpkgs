@@ -78,7 +78,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Security automation content in SCAP, Bash, Ansible, and other formats";
     homepage = "https://github.com/ComplianceAsCode/content";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ tochiaha ];
+    maintainers = with lib.maintainers; [
+      robsliwi
+      tochiaha
+    ];
     platforms = lib.platforms.all;
   };
 })
