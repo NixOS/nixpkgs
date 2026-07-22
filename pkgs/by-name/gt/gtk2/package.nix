@@ -175,5 +175,8 @@ stdenv.mkDerivation (finalAttrs: {
       "gdk-x11-2.0"
       "gtk+-x11-2.0"
     ];
+    problems.deprecated = {
+      message = "The final release of GTK2 has been 2.24.33 in December 2020. It has since been unmaintained.";
+    };
   };
 })
