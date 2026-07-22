@@ -9,6 +9,15 @@ let
 
   inherit (lib) literalExpression mkOption types;
 
+  oldRegistriesOptionsUsed = lib.any (x: x != [ ]) (
+    with cfg.registries;
+    [
+      search
+      insecure
+      block
+    ]
+  );
+
   toml = pkgs.formats.toml { };
 in
 {
@@ -61,30 +70,54 @@ in
     };
 
     registries = {
+      # TODO: remove those options in 26.11
       search = mkOption {
+        visible = false;
         type = types.listOf types.str;
-        default = [
-          "docker.io"
-          "quay.io"
-        ];
+        default = [ ];
         description = ''
           List of repositories to search.
+
+          Deprecated, examine {option}`virtualisation.registries.settings` instead.
         '';
       };
 
       insecure = mkOption {
         default = [ ];
+        visible = false;
         type = types.listOf types.str;
         description = ''
           List of insecure repositories.
+
+          Deprecated, examine {option}`virtualisation.registries.settings` instead.
         '';
       };
 
       block = mkOption {
         default = [ ];
+        visible = false;
         type = types.listOf types.str;
         description = ''
           List of blocked repositories.
+
+          Deprecated, examine {option}`virtualisation.registries.settings` instead.
+        '';
+      };
+
+      settings = mkOption {
+        type = toml.type;
+        default = {
+          registry = [
+            { location = "docker.io"; }
+            { location = "quay.io"; }
+          ];
+        };
+        description = ''
+          repositories.conf configuration.
+
+          Examine [containers-registries.conf(5)] for more information about the format.
+
+            [containers-registries.conf(5)]: https://github.com/containers/image/blob/main/docs/containers-registries.conf.5.md
         '';
       };
     };
@@ -112,6 +145,15 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    warnings = lib.optional oldRegistriesOptionsUsed "the options virtualisation.registries.search / insecure / block are deprecated. See virtualisation.registries.settings instead.";
+
+    virtualisation.containers.registries.settings = lib.mkIf oldRegistriesOptionsUsed {
+      registries = {
+        block.registries = cfg.registries.block;
+        insecure.registries = cfg.registries.insecure;
+        search.registries = cfg.registries.search;
+      };
+    };
 
     virtualisation.containers.containersConf.cniPlugins = [ pkgs.cni-plugins ];
 
@@ -136,9 +178,7 @@ in
 
       "containers/storage.conf".source = toml.generate "storage.conf" cfg.storage.settings;
 
-      "containers/registries.conf".source = toml.generate "registries.conf" {
-        registries = lib.mapAttrs (n: v: { registries = v; }) cfg.registries;
-      };
+      "containers/registries.conf".source = toml.generate "registries.conf" cfg.registries.settings;
 
       "containers/policy.json".source =
         if cfg.policy != { } then
