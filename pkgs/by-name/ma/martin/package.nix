@@ -21,6 +21,10 @@ let
   mlnHeaders = fetchurl {
     url = "https://github.com/maplibre/maplibre-native/releases/download/${mlnRelease}/maplibre-native-headers.tar.gz";
     hash = "sha256-SqZaqePNbqBZoUgMJIsZf0zqKc8EAwInYNRciv/jX1A=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "maplibre/maplibre-native@${mlnRelease}";
+    };
   };
   mlnLibrary = fetchurl (
     let
@@ -42,6 +46,10 @@ let
       postFetch = ''
         install -Dm644 $downloadedFile $out/libmbgl-core-amalgam.a
       '';
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "maplibre/maplibre-native@${mlnRelease}";
+      };
     }
   );
 in
