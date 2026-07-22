@@ -2,6 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update,
+  writeShellApplication,
 
   # build-system
   hatchling,
@@ -20,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pydantic-ai-slim";
-  version = "2.13.0";
+  version = "2.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic-ai";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mp0LYmqh2AsXXCXkDFDv+eIEaPFqvtwsK2DZ2N3RMTs=";
+    hash = "sha256-pqgNRwe3PeBUtMX9evYze6oKUeQJwEO5x9/XS8f9ago=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/pydantic_ai_slim";
@@ -52,6 +54,18 @@ buildPythonPackage (finalAttrs: {
   ];
 
   doCheck = false;
+
+  passthru.updateScript = lib.getExe (writeShellApplication {
+    name = "pydantic-ai-updater";
+    runtimeInputs = [
+      nix-update
+    ];
+    text = ''
+      nix-update --build --commit python3Packages.genai-prices
+      nix-update --build --commit python3Packages.pydantic-graph
+      nix-update --build --commit python3Packages.pydantic-ai-slim
+    '';
+  });
 
   meta = {
     changelog = "https://github.com/pydantic/pydantic-ai/releases/tag/${finalAttrs.src.tag}";

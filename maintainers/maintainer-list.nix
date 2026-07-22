@@ -1598,6 +1598,12 @@
     githubId = 153175;
     name = "Andrew Marshall";
   };
+  ambiso = {
+    email = "ambisotopy@gmail.com";
+    github = "ambiso";
+    githubId = 3750466;
+    name = "Robin Leander Schröder";
+  };
   ambossmann = {
     email = "timogottszky+git@gmail.com";
     github = "Ambossmann";
@@ -5237,6 +5243,12 @@
     github = "ckauhaus";
     githubId = 1448923;
     name = "Christian Kauhaus";
+  };
+  ckgxrg = {
+    email = "ckgxrg@ckgxrg.io";
+    github = "ckgxrg-salt";
+    githubId = 165614491;
+    name = "ckgxrg";
   };
   cko = {
     email = "christine.koppelt@gmail.com";
@@ -13259,12 +13271,6 @@
     github = "jmmv";
     githubId = 879272;
     name = "Julio Merino";
-  };
-  jn-sena = {
-    email = "jn-sena@proton.me";
-    github = "jn-sena";
-    githubId = 45771313;
-    name = "Sena";
   };
   jnsgruk = {
     email = "jon@sgrs.uk";

@@ -49,6 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   meta = {
     description = "Efficient Task Space Inverse Dynamics (TSID) based on Pinocchio";
     homepage = "https://github.com/stack-of-tasks/tsid";

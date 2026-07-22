@@ -83,6 +83,7 @@ mapAliases {
   aiosenz = throw "aiosenz was removed because Home Assistant switched to pysenz"; # added 2025-12-29
   aioshutil = throw "'aioshutil' was removed because uiprotect no longer depends on it"; # added 2026-02-16
   aioxmpp = throw "'aioxmpp' was removed because it depends on aiosasl, which is abandoned and does not work on modern Python versions."; # Added 2026-06-28
+  albumentations = throw "'albumentations' was removed because it is unmaintained since 2025. You may now use albumentationsx"; # added 2026-07-18
   amazon-kclpy = throw "amazon-kclpy has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-03
   amazon_kclpy = throw "'amazon_kclpy' has been renamed to/replaced by 'amazon-kclpy'"; # Converted to throw 2025-10-29
   amqplib = throw "amqplib has been removed as it was unmaintained upstream"; # Added 2025-11-22
@@ -132,6 +133,7 @@ mapAliases {
   bjoern = throw "'bjoern' has been removed, as the upstream repository was unmaintained and it was using libraries with severe security issues."; # Added 2025-09-01
   bkcharts = throw "'bkcharts' has been removed as the upstream repository was archived in 2018"; # added 2025-08-26
   BlinkStick = throw "'BlinkStick' has been renamed to/replaced by 'blinkstick'"; # Converted to throw 2025-10-29
+  blockchain = throw "'blockchain' has been removed because its source is unavailable"; # added 2026-07-20
   boiboite-opener-framework = throw "'boiboite-opener-framework' has been removed as it was unmaintained upstream"; # Added 2026-03-23
   bsblan = throw "'bsblan' has been renamed to/replaced by 'python-bsblan'"; # Converted to throw 2025-10-29
   bsddb3 = throw "'bsddb3' has been removed because it was deprecated in favor of 'berkeleydb'"; # added 2026-01-20
@@ -373,6 +375,7 @@ mapAliases {
   Markups = throw "'Markups' has been renamed to/replaced by 'markups'"; # Converted to throw 2025-10-29
   mathlibtools = throw "mathlibtools has been removed because the upstream repository was archived in 2023"; # added 2025-07-09
   matlink-gpapi = throw "'matlink-gpapi' has been removed as it was broken and unmaintained"; # Added 2025-11-09
+  maubot = throw "'maubot' has been promoted to a top-level attribute: `pkgs.maubot`"; # added 2026-07-12
   mdformat-tables = "'mdformat-tables' has been archived and replaced by 'mdformat-gfm"; # added 2025-01-25
   MDP = throw "'MDP' has been renamed to/replaced by 'mdp'"; # Converted to throw 2025-10-29
   MechanicalSoup = throw "'MechanicalSoup' has been renamed to/replaced by 'mechanicalsoup'"; # Converted to throw 2025-10-29
@@ -638,6 +641,7 @@ mapAliases {
   sphinxcontrib_plantuml = throw "'sphinxcontrib_plantuml' has been renamed to/replaced by 'sphinxcontrib-plantuml'"; # Converted to throw 2025-10-29
   sqlalchemy-utc = throw "'sqlalchemy-utc' has been removed as it was unmaintained upstream"; # Added 2026-03-19
   sqlalchemy-views = throw "'sqlalchemy-views' has been removed as it was broken and unmaintained upstream"; # Added 2025-11-09
+  sqlalchemy_1_3 = throw "'sqlalchemy_1_3' has been removed because it was actually version 1.4.54"; # added 2026-07-20
   sqlalchemy_migrate = throw "'sqlalchemy_migrate' has been renamed to/replaced by 'sqlalchemy-migrate'"; # Converted to throw 2025-10-29
   steamship = throw "'steamship' has been removed because it is broken and unmaintained upstream"; # Added 2026-05-06
   strawberry-django = strawberry-graphql-django; # Added 2026-07-14

@@ -42,6 +42,15 @@ in
       '';
     };
 
+    useLlamaCppCacheDir = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Whether to use {file}`/var/cache/llama-cpp` as {env}`LLAMA_CACHE` instead
+        of {file}`/var/cache/llama-swap` to share models and other cache with {option}`services.llama-cpp`.
+      '';
+    };
+
     tls = {
       enable = lib.mkEnableOption "TLS encryption";
 
@@ -113,6 +122,10 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
+      environment = {
+        LLAMA_CACHE = lib.mkDefault "/var/cache/${config.systemd.services.llama-swap.serviceConfig.CacheDirectory}";
+      };
+
       serviceConfig = {
         Type = "exec";
         ExecStart = "${lib.getExe cfg.package} ${
@@ -129,6 +142,12 @@ in
         }";
         Restart = "on-failure";
         RestartSec = 3;
+
+        CacheDirectory =
+          if cfg.useLlamaCppCacheDir then
+            config.systemd.services.llama-cpp.serviceConfig.CacheDirectory
+          else
+            "llama-swap";
 
         # for GPU acceleration
         PrivateDevices = false;

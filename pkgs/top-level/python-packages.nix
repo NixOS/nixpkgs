@@ -658,7 +658,7 @@ self: super: with self; {
 
   albucore = callPackage ../development/python-modules/albucore { };
 
-  albumentations = callPackage ../development/python-modules/albumentations { };
+  albumentationsx = callPackage ../development/python-modules/albumentationsx { };
 
   ale-py = callPackage ../development/python-modules/ale-py { };
 
@@ -2506,8 +2506,6 @@ self: super: with self; {
   block-io = callPackage ../development/python-modules/block-io { };
 
   blockbuster = callPackage ../development/python-modules/blockbuster { };
-
-  blockchain = callPackage ../development/python-modules/blockchain { };
 
   blockdiag = callPackage ../development/python-modules/blockdiag { };
 
@@ -10169,8 +10167,6 @@ self: super: with self; {
   matter-python-client = callPackage ../development/python-modules/matter-python-client { };
 
   mattermostdriver = callPackage ../development/python-modules/mattermostdriver { };
-
-  maubot = callPackage ../development/python-modules/maubot { };
 
   mautrix = callPackage ../development/python-modules/mautrix { };
 
@@ -19330,8 +19326,6 @@ self: super: with self; {
   sqlalchemy-utc = callPackage ../development/python-modules/sqlalchemy-utc { };
 
   sqlalchemy-utils = callPackage ../development/python-modules/sqlalchemy-utils { };
-
-  sqlalchemy_1_3 = callPackage ../development/python-modules/sqlalchemy/1_3.nix { };
 
   sqlalchemy_1_4 = callPackage ../development/python-modules/sqlalchemy/1_4.nix { };
 

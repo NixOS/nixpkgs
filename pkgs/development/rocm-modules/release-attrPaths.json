@@ -187,7 +187,6 @@
     "python3Packages.accelerate",
     "python3Packages.adios2",
     "python3Packages.aigpy",
-    "python3Packages.albumentations",
     "python3Packages.ale-py",
     "python3Packages.anndata",
     "python3Packages.apptools",

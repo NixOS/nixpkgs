@@ -1,21 +1,30 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   python3Packages,
   qt6,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "zapzap";
-  version = "6.5.2.5";
+  version = "7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rafatosta";
     repo = "zapzap";
     tag = finalAttrs.version;
-    hash = "sha256-VybcZNB0k1DwAmluQpEMuM7cHKI8sGyG284g9E3YcP8=";
+    hash = "sha256-0LrIx7k9b0+zsmezjF6CmJo4nqU7GPW1HHWAUVVnbzk=";
   };
+
+  patches = [
+    # Support setting dict lookup path. Remove with next release.
+    (fetchpatch {
+      url = "https://github.com/rafatosta/zapzap/commit/3517079e8fbd3853fe184c393137709de68f020e.patch";
+      hash = "sha256-Eqy483+mJHLHsS21B8LnJ9oIqwTRCMVKhHBO8hleBh4=";
+    })
+  ];
 
   nativeBuildInputs = [
     qt6.wrapQtAppsHook

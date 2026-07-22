@@ -2358,8 +2358,6 @@ with pkgs;
 
   matrix-synapse-plugins = recurseIntoAttrs matrix-synapse-unwrapped.plugins;
 
-  maubot = with python3Packages; toPythonApplication maubot;
-
   md2gemini = with python3.pkgs; toPythonApplication md2gemini;
 
   mdcat = callPackage ../tools/text/mdcat {
@@ -2499,8 +2497,6 @@ with pkgs;
 
   liquidctl = with python3Packages; toPythonApplication liquidctl;
 
-  xz = callPackage ../tools/compression/xz { };
-
   madlang = haskell.lib.compose.justStaticExecutables haskellPackages.madlang;
 
   man = man-db;
@@ -2593,6 +2589,7 @@ with pkgs;
     nomad_1_9
     nomad_1_10
     nomad_1_11
+    nomad_2_0
     ;
 
   nth = with python3Packages; toPythonApplication name-that-hash;
@@ -6089,15 +6086,7 @@ with pkgs;
 
   malcontent-ui = callPackage ../development/libraries/malcontent/ui.nix { };
 
-  inherit
-    ({
-      libmicrohttpd_0_9_77 = callPackage ../development/libraries/libmicrohttpd/0.9.77.nix { };
-      libmicrohttpd_1_0 = callPackage ../development/libraries/libmicrohttpd/1.0.nix { };
-    })
-    libmicrohttpd_0_9_77
-    libmicrohttpd_1_0
-    ;
-
+  libmicrohttpd_1_0 = callPackage ../development/libraries/libmicrohttpd/1.0.nix { };
   libmicrohttpd = libmicrohttpd_1_0;
 
   libpeas = callPackage ../development/libraries/libpeas { };
@@ -9642,8 +9631,8 @@ with pkgs;
   vscodium-fhs = vscodium.fhs;
   vscodium-fhsWithPackages = vscodium.fhsWithPackages;
 
-  antigravity-fhs = antigravity.fhs;
-  antigravity-fhsWithPackages = antigravity.fhsWithPackages;
+  antigravity-ide-fhs = antigravity-ide.fhs;
+  antigravity-ide-fhsWithPackages = antigravity-ide.fhsWithPackages;
 
   code-cursor-fhs = code-cursor.fhs;
   code-cursor-fhsWithPackages = code-cursor.fhsWithPackages;
@@ -9749,7 +9738,7 @@ with pkgs;
   xdg-desktop-portal-hyprland =
     callPackage ../applications/window-managers/hyprwm/xdg-desktop-portal-hyprland
       {
-        stdenv = gcc15Stdenv;
+        stdenv = gcc16Stdenv;
         inherit (qt6)
           qtbase
           qttools
