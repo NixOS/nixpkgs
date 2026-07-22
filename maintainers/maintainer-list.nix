@@ -14466,6 +14466,12 @@
     githubId = 28487599;
     keys = [ { fingerprint = "D9AF 0A42 09B7 C2DE 11A8  84BF ACBC 5536 60D9 993D"; } ];
   };
+  kentario = {
+    github = "kentario";
+    githubId = 48628650;
+    email = "ken+nixpkgs@wuertele.com";
+    name = "Kentaro";
+  };
   kentjames = {
     email = "jameschristopherkent@gmail.com";
     github = "KentJames";
