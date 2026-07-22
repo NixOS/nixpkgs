@@ -124,6 +124,16 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/OSGeo/gdal/commit/50eea7456d83c9586f112ef96b43249372839dea.patch";
       hash = "sha256-m1FsBC37h2uuaEeYezPZJFsDR6Ix/FDIZnuZZiSAYcw=";
     })
+
+    # Fix tests with libtiff 4.7.2
+    # FAILED gcore/tiff_read.py::test_tiff_read_stripbytecounts_count_not_same_as_stripoffsets_count -
+    #     AssertionError: assert '170' is None
+    (fetchpatch {
+      name = "0006-Internal-libtiff-resync-with-4.7.2rc3-and-adjust-tes.patch";
+      url = "https://github.com/OSGeo/gdal/commit/06ffb0333fe557cde262aa1e81466dda42684c53.patch";
+      hash = "sha256-teZ9cv8JQ2ua4tEWl3I8D9DYo8srGIBYIc2NfkgNMe4=";
+      includes = [ "autotest/gcore/tiff_read.py" ];
+    })
   ];
 
   nativeBuildInputs = [
