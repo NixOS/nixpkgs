@@ -61,7 +61,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "pyobjc-framework-Cocoa"
   ];
 
-  propagatedBuildInputs =
+  dependencies =
     with pythonPackages;
     [
       charset-normalizer
