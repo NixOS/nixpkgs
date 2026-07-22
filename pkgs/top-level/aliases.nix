@@ -2100,6 +2100,7 @@ mapAliases {
   rofi-wayland-unwrapped = throw "'rofi-wayland-unwrapped' has been merged into 'rofi-unwrapped'"; # Added 2025-09-06
   romdirfs = throw "'romdirfs' has been removed as it is unmaintained, and depends on fuse2"; # Added 2026-05-05
   root5 = throw "root5 has been removed from nixpkgs because it's a legacy version"; # Added 2025-07-17
+  rose-pine-gtk-theme = throw "'rose-pine-gtk-theme' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   rote = throw "rote has been removed due to lack of upstream maintenance"; # Added 2025-09-10
   rott = throw "'rott' has been dropped in favor of its maintained fork 'taradino'"; # Added 2026-01-25
   rott-shareware = throw "'rott-shareware' has been dropped in favor of its maintained fork 'taradino-shareware'"; # Added 2026-01-25
