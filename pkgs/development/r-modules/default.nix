@@ -777,6 +777,10 @@ let
     ncdf4 = [ pkgs.netcdf ]; # for nc-config
     neojags = [ pkgs.pkg-config ];
     nloptr = [ pkgs.pkg-config ];
+    npRmpi = with pkgs; [
+      pkg-config
+      prrte
+    ];
     odbc = [ pkgs.pkg-config ];
     opencv = [ pkgs.pkg-config ];
     orbweaver = with pkgs; [
@@ -1481,6 +1485,7 @@ let
     ndjson = [ pkgs.zlib ];
     neojags = [ pkgs.jags ];
     nloptr = [ pkgs.nlopt ];
+    npRmpi = [ pkgs.mpi ];
     odbc = [ pkgs.unixodbc ];
     oligo = [ pkgs.zlib ];
     otelsdk = with pkgs; [
@@ -2202,12 +2207,6 @@ let
       preConfigure = ''
         substituteInPlace R/zzz.R --replace-fail "-lcurl" "-L${pkgs.curl.out}/lib -lcurl"
       '';
-    });
-
-    Rmpi = old.Rmpi.overrideAttrs (attrs: {
-      configureFlags = [
-        "--with-Rmpi-type=OPENMPI"
-      ];
     });
 
     Rrdrand = old.Rrdrand.override { platforms = lib.platforms.x86_64 ++ lib.platforms.x86; };
