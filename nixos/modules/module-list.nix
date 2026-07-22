@@ -914,6 +914,7 @@
   ./services/misc/guix
   ./services/misc/headphones.nix
   ./services/misc/heisenbridge.nix
+  ./services/misc/hindsight-api.nix
   ./services/misc/homepage-dashboard.nix
   ./services/misc/hyprwhspr-rs.nix
   ./services/misc/ihaskell.nix

@@ -805,6 +805,7 @@ in
   hibernate-systemd-stage-1 = handleTestOn [ "x86_64-linux" ] ./hibernate.nix {
     systemdStage1 = true;
   };
+  hindsight-api = runTest ./hindsight-api.nix;
   hister = runTest ./hister.nix;
   hitch = runTest ./hitch;
   hledger-web = runTest ./hledger-web.nix;
