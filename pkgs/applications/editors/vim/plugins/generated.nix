@@ -2042,6 +2042,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  blink-lib = buildVimPlugin {
+    pname = "blink.lib";
+    version = "0-unstable-2026-06-19";
+    src = fetchFromGitHub {
+      owner = "saghen";
+      repo = "blink.lib";
+      rev = "5876dd95deeb70aadbe9f1c0b7117a135061cdac";
+      hash = "sha256-FsDcgBiD3fl0EO1advAoQBbA2HY1p8Ja7lwhmpB++Zc=";
+    };
+    meta.homepage = "https://github.com/saghen/blink.lib/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   blink-nerdfont-nvim = buildVimPlugin {
     pname = "blink-nerdfont.nvim";
     version = "0-unstable-2025-12-14";
