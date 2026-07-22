@@ -11,7 +11,12 @@
     {
       security.enableWrappers = false;
       systemd.settings.Manager.NoNewPrivileges = true;
-      security.account-utils.enable = true;
+      security.account-utils = {
+        enable = true;
+        pwaccessd.settings = {
+          ExpiredCheck.SpMin = true;
+        };
+      };
       users.mutableUsers = true;
       security.account-utils.extraArgs = [
         "-v"
@@ -45,6 +50,9 @@
         passwd_path = machine.succeed("realpath $(which passwd)")
         print(f"passwd path is: {passwd_path}")
         assert "account-utils" in passwd_path
+
+    with subtest("config file exists"):
+        machine.succeed("ls /etc/account-utils/pwaccessd.conf")
 
     with subtest("create user"):
         machine.succeed("useradd -m alice")
