@@ -2,6 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update,
+  writeShellApplication,
 
   # build-system
   hatchling,
@@ -52,6 +54,18 @@ buildPythonPackage (finalAttrs: {
   ];
 
   doCheck = false;
+
+  passthru.updateScript = lib.getExe (writeShellApplication {
+    name = "pydantic-ai-updater";
+    runtimeInputs = [
+      nix-update
+    ];
+    text = ''
+      nix-update --build --commit python3Packages.genai-prices
+      nix-update --build --commit python3Packages.pydantic-graph
+      nix-update --build --commit python3Packages.pydantic-ai-slim
+    '';
+  });
 
   meta = {
     changelog = "https://github.com/pydantic/pydantic-ai/releases/tag/${finalAttrs.src.tag}";
