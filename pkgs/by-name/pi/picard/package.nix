@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  python312Packages,
+  python313Packages,
   fetchFromGitHub,
 
   chromaprint,
@@ -16,7 +16,9 @@
 }:
 
 let
-  pythonPackages = python312Packages;
+  # A few more tests fail with python314Pacakges, indicating the code isn't
+  # ready for it yet.
+  pythonPackages = python313Packages;
   pyqt5 = if enablePlayback then pythonPackages.pyqt5-multimedia else pythonPackages.pyqt5;
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
