@@ -7,6 +7,7 @@
   mock,
   nix-update-script,
   polling,
+  pyprojectVersionPatchHook,
   pytestCheckHook,
   requests,
   setuptools,
@@ -16,6 +17,7 @@ buildPythonPackage (finalAttrs: {
   pname = "linode-api4";
   version = "5.45.0";
   pyproject = true;
+
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
@@ -26,6 +28,8 @@ buildPythonPackage (finalAttrs: {
   };
 
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     deprecated

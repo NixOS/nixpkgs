@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "sdkmanager";
-  version = "0.7.0";
+  version = "0.7.1";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "fdroid";
     repo = "sdkmanager";
     tag = version;
-    hash = "sha256-/MrRCR6TJ64DiL4D1290jik1L+jITi4dH9Tj3cjF+ms=";
+    hash = "sha256-UDl+hRNWuv6kmLLtz+FoPcwPOYY23uOnRzLaDwq1abI=";
   };
 
   pythonRelaxDeps = [ "urllib3" ];
