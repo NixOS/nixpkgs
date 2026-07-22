@@ -1924,6 +1924,7 @@ mapAliases {
   plant-it-frontend = throw "plant-it-frontend has been presented as being Android-only since the server-side was discontinued in september 2025"; # Added 2026-01-30
   plasma-applet-volumewin7mixer = throw "'plasma-applet-volumewin7mixer' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
   plasma-theme-switcher = throw "'plasma-theme-switcher' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
+  plata-theme = throw "'plata-theme' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   platformioPackages.platformio-chrootenv = platformio-chrootenv; # Added 2025-09-04
   platformioPackages.platformio-core = platformio-core; # Added 2025-09-04
   playbar2 = throw "'playbar2' has been removed, as Plasma 5 has reached end of life."; # Added 2026-05-01
