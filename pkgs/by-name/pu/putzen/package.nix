@@ -9,16 +9,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "putzen";
-  version = "3.3.2";
+  version = "3.3.3";
 
   src = fetchFromGitHub {
     owner = "sassman";
     repo = "putzen-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OYWsylJo7odN0BCUbM2hrrsiRbvMIapYeSBwCfY0srk=";
+    hash = "sha256-lxMePdG8R8JHI1Rn7RkrSZK2Od/AGjsQNr9DxFbjR6U=";
   };
 
-  cargoHash = "sha256-RqTBJCCJnvqujknJp7tK4oXMfBir9McfLaA5dtgYU90=";
+  cargoHash = "sha256-kp1p2JxcQnLfRA4utiKm7uWjZ1RbbV1uGDf6jO5GCQg=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
