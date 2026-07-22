@@ -1,0 +1,155 @@
+Backported from <https://github.com/openjdk/jfx/pull/1552>.
+
+Original author: Alexander Matveev <alexander.matveev@oracle.com>
+
+diff --git a/build.gradle b/build.gradle
+index d1ae3b401f..848a385f36 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -3343,6 +3343,7 @@
+             media name: "ffmpeg-4.0.2", ext: "tar.gz"
+             media name: "ffmpeg-5.1.2", ext: "tar.gz"
+             media name: "ffmpeg-6.0", ext: "tar.gz"
++            media name: "ffmpeg-7.0.2", ext: "tar.gz"
+         }
+         implementation project(":base")
+         implementation project(":graphics")
+@@ -3689,8 +3690,8 @@
+                     doLast {
+                         project.ext.libav = [:]
+                         project.ext.libav.basedir = "${buildDir}/native/linux/ffmpeg"
+-                        project.ext.libav.versions = [ "3.3.3", "4.0.2", "5.1.2", "6.0" ]
+-                        project.ext.libav.versionmap = [ "3.3.3" : "57", "4.0.2" : "58", "5.1.2" : "59", "6.0" : "60" ]
++                        project.ext.libav.versions = [ "3.3.3", "4.0.2", "5.1.2", "6.0", "7.0.2" ]
++                        project.ext.libav.versionmap = [ "3.3.3" : "57", "4.0.2" : "58", "5.1.2" : "59", "6.0" : "60", "7.0.2" : "61" ]
+ 
+                         libav.versions.each { version ->
+                             def libavDir = "${libav.basedir}/ffmpeg-${version}"
+@@ -3770,7 +3771,7 @@
+                             project.ext.libav.libavffmpeg.versions = [ "56" ]
+                             project.ext.libav.ffmpeg = [:]
+                             project.ext.libav.ffmpeg.basedir = "${buildDir}/native/linux/ffmpeg/ffmpeg"
+-                            project.ext.libav.ffmpeg.versions = [ "57", "58", "59", "60" ]
++                            project.ext.libav.ffmpeg.versions = [ "57", "58", "59", "60", "61" ]
+ 
+                             project.ext.libav.versions.each { version ->
+                                 def libavDir = "${project.ext.libav.basedir}-${version}"
+diff --git a/modules/javafx.media/src/main/java/com/sun/media/jfxmediaimpl/NativeMediaManager.java b/modules/javafx.media/src/main/java/com/sun/media/jfxmediaimpl/NativeMediaManager.java
+index b05bb68341..2add519ed4 100644
+--- a/modules/javafx.media/src/main/java/com/sun/media/jfxmediaimpl/NativeMediaManager.java
++++ b/modules/javafx.media/src/main/java/com/sun/media/jfxmediaimpl/NativeMediaManager.java
+@@ -1,5 +1,5 @@
+ /*
+- * Copyright (c) 2010, 2022, Oracle and/or its affiliates. All rights reserved.
++ * Copyright (c) 2010, 2024, Oracle and/or its affiliates. All rights reserved.
+  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+  *
+  * This code is free software; you can redistribute it and/or modify it
+@@ -126,6 +126,7 @@
+                     dependencies.add("avplugin-ffmpeg-58");
+                     dependencies.add("avplugin-ffmpeg-59");
+                     dependencies.add("avplugin-ffmpeg-60");
++                    dependencies.add("avplugin-ffmpeg-61");
+                 }
+                 if (HostUtils.isMacOSX()) {
+                     dependencies.add("fxplugins");
+diff --git a/modules/javafx.media/src/main/native/gstreamer/gstreamer-lite/gstreamer/gst/gstregistry.c b/modules/javafx.media/src/main/native/gstreamer/gstreamer-lite/gstreamer/gst/gstregistry.c
+index ee64e4bafd..0204db4250 100644
+--- a/modules/javafx.media/src/main/native/gstreamer/gstreamer-lite/gstreamer/gst/gstregistry.c
++++ b/modules/javafx.media/src/main/native/gstreamer/gstreamer-lite/gstreamer/gst/gstregistry.c
+@@ -146,7 +146,7 @@
+ // For ffmpeg (libavcodec-ffmpeg.so)
+ static const int AVCODEC_FFMPEG_EXPLICIT_VERSIONS[] = { 56 };
+ // For libav or ffmpeg (libavcodec.so)
+-static const int AVCODEC_EXPLICIT_VERSIONS[] = { 57, 58, 59, 60 };
++static const int AVCODEC_EXPLICIT_VERSIONS[] = { 57, 58, 59, 60, 61 };
+ 
+ /*
+  * Callback passed to dl_iterate_phdr(): finds the path of
+diff --git a/modules/javafx.media/src/main/native/gstreamer/plugins/av/avdefines.h b/modules/javafx.media/src/main/native/gstreamer/plugins/av/avdefines.h
+index bb93df5f96..a09b954714 100644
+--- a/modules/javafx.media/src/main/native/gstreamer/plugins/av/avdefines.h
++++ b/modules/javafx.media/src/main/native/gstreamer/plugins/av/avdefines.h
+@@ -1,5 +1,5 @@
+ /*
+- * Copyright (c) 2010, 2022, Oracle and/or its affiliates. All rights reserved.
++ * Copyright (c) 2010, 2024, Oracle and/or its affiliates. All rights reserved.
+  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+  *
+  * This code is free software; you can redistribute it and/or modify it
+@@ -50,5 +50,14 @@
+ // Do not call avcodec_register_all() and av_register_all()
+ // Not required since 58 and removed in 59
+ #define NO_REGISTER_ALL        (LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(59,0,0))
++
++// Do not use reordered_opaque to pass PTS. Use AVPacket.pts/AVFrame.pts instead.
++// reordered_opaque is removed since 61.
++#define NO_REORDERED_OPAQUE    (LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(61,0,0))
++
++// Use AVCodecContext.frame_num instead of AVCodecContext.frame_number. They same
++// except frame_num is 64-bit and frame_number is 32-bit. Since 61.
++#define USE_FRAME_NUM          (LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(61,0,0))
++
+ #endif  /* AVDEFINES_H */
+ 
+diff --git a/modules/javafx.media/src/main/native/gstreamer/plugins/av/videodecoder.c b/modules/javafx.media/src/main/native/gstreamer/plugins/av/videodecoder.c
+index fe1f96b9cb..9179ef8b68 100644
+--- a/modules/javafx.media/src/main/native/gstreamer/plugins/av/videodecoder.c
++++ b/modules/javafx.media/src/main/native/gstreamer/plugins/av/videodecoder.c
+@@ -397,10 +397,17 @@
+         if (av_new_packet(&decoder->packet, info.size) == 0)
+         {
+             memcpy(decoder->packet.data, info.data, info.size);
++#if NO_REORDERED_OPAQUE
++            if (GST_BUFFER_TIMESTAMP_IS_VALID(buf))
++                decoder->packet.pts = (int64_t)GST_BUFFER_TIMESTAMP(buf);
++            else
++                decoder->packet.pts = AV_NOPTS_VALUE;
++#else // NO_REORDERED_OPAQUE
+             if (GST_BUFFER_TIMESTAMP_IS_VALID(buf))
+                 base->context->reordered_opaque = GST_BUFFER_TIMESTAMP(buf);
+             else
+                 base->context->reordered_opaque = AV_NOPTS_VALUE;
++#endif // NO_REORDERED_OPAQUE
+ #if USE_SEND_RECEIVE
+             num_dec = avcodec_send_packet(base->context, &decoder->packet);
+             if (num_dec == 0)
+@@ -432,10 +439,17 @@
+         av_init_packet(&decoder->packet);
+         decoder->packet.data = info.data;
+         decoder->packet.size = info.size;
++#if NO_REORDERED_OPAQUE
++        if (GST_BUFFER_TIMESTAMP_IS_VALID(buf))
++            decoder->packet.pts = (int64_t)GST_BUFFER_TIMESTAMP(buf);
++        else
++            decoder->packet.pts = AV_NOPTS_VALUE;
++#else // NO_REORDERED_OPAQUE
+         if (GST_BUFFER_TIMESTAMP_IS_VALID(buf))
+             base->context->reordered_opaque = GST_BUFFER_TIMESTAMP(buf);
+         else
+             base->context->reordered_opaque = AV_NOPTS_VALUE;
++#endif // NO_REORDERED_OPAQUE
+ 
+ #if USE_SEND_RECEIVE
+         num_dec = avcodec_send_packet(base->context, &decoder->packet);
+@@ -480,10 +494,20 @@
+             }
+             else
+             {
++#if USE_FRAME_NUM
++                GST_BUFFER_OFFSET(outbuf) = base->context->frame_num;
++#else // USE_FRAME_NUM
+                 GST_BUFFER_OFFSET(outbuf) = base->context->frame_number;
++#endif // USE_FRAME_NUM
++#if NO_REORDERED_OPAQUE
++                if (base->frame->pts != AV_NOPTS_VALUE)
++                {
++                    GST_BUFFER_TIMESTAMP(outbuf) = base->frame->pts;
++#else // NO_REORDERED_OPAQUE
+                 if (base->frame->reordered_opaque != AV_NOPTS_VALUE)
+                 {
+                     GST_BUFFER_TIMESTAMP(outbuf) = base->frame->reordered_opaque;
++#endif // NO_REORDERED_OPAQUE
+                     GST_BUFFER_DURATION(outbuf) = GST_BUFFER_DURATION(buf); // Duration for video usually same
+                 }
+ 

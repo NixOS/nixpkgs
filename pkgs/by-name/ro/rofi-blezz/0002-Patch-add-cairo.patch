@@ -1,0 +1,38 @@
+From ed8943fdd9ffe7d53a89b7cd18a08165708884ad Mon Sep 17 00:00:00 2001
+From: john johnstone <jjohnstone@riseup.net>
+Date: Sun, 12 Mar 2023 04:41:44 +0000
+Subject: [PATCH] patch cairo
+
+---
+ Makefile.am  | 4 ++--
+ configure.ac | 1 +
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index cef4046..ba7051a 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -6,6 +6,6 @@ plugin_LTLIBRARIES = blezz.la
+ blezz_la_SOURCES=\
+ 		 src/blezz.c
+ 
+-blezz_la_CFLAGS= @glib_CFLAGS@ @rofi_CFLAGS@
+-blezz_la_LIBADD= @glib_LIBS@ @rofi_LIBS@
++blezz_la_CFLAGS= @glib_CFLAGS@ @rofi_CFLAGS@ @cairo_CFLAGS@
++blezz_la_LIBADD= @glib_LIBS@ @rofi_LIBS@ @cairo_LIBS@
+ blezz_la_LDFLAGS= -module -avoid-version
+diff --git a/configure.ac b/configure.ac
+index a7a589d..ce4e649 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -53,6 +53,7 @@ dnl PKG_CONFIG based dependencies
+ dnl ---------------------------------------------------------------------
+ PKG_CHECK_MODULES([glib],     [glib-2.0 >= 2.40 gio-unix-2.0 gmodule-2.0])
+ PKG_CHECK_MODULES([rofi],     [rofi])
++PKG_CHECK_MODULES([cairo],    [cairo cairo-xcb])
+ 
+ [rofi_PLUGIN_INSTALL_DIR]="`echo $out/lib/rofi`"
+ AC_SUBST([rofi_PLUGIN_INSTALL_DIR])
+-- 
+2.39.2
+

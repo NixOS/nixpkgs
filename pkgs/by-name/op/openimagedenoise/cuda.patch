@@ -1,0 +1,34 @@
+diff --git a/devices/CMakeLists.txt b/devices/CMakeLists.txt
+index a0ea112..4d03b4f 100644
+--- a/devices/CMakeLists.txt
++++ b/devices/CMakeLists.txt
+@@ -47,7 +47,6 @@ if(OIDN_DEVICE_CUDA)
+     -DCMAKE_CXX_COMPILER:FILEPATH=${_host_compiler}
+     -DCMAKE_TOOLCHAIN_FILE:FILEPATH=${CMAKE_TOOLCHAIN_FILE}
+     -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
+-    -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_CURRENT_BINARY_DIR}/cuda/preinstall
+     -DCMAKE_INSTALL_BINDIR:PATH=${CMAKE_INSTALL_BINDIR}
+     -DCMAKE_INSTALL_LIBDIR:PATH=${CMAKE_INSTALL_LIBDIR}
+     -DOIDN_ROOT_BINARY_DIR:PATH=${OIDN_ROOT_BINARY_DIR}
+@@ -78,14 +77,6 @@ if(OIDN_DEVICE_CUDA)
+     DEPENDS
+       OpenImageDenoise_core
+   )
+-
+-  # Due to limitations of CMake, the module is pre-installed at build time to a temporary location,
+-  # and then copied to the real install location at install time.
+-  install(DIRECTORY
+-    ${CMAKE_CURRENT_BINARY_DIR}/cuda/preinstall/
+-    DESTINATION "."
+-    USE_SOURCE_PERMISSIONS
+-  )
+ endif()
+ 
+ if(OIDN_DEVICE_HIP)
+@@ -186,4 +177,4 @@ endif()
+ 
+ if(OIDN_DEVICE_METAL)
+   add_subdirectory(metal)
+-endif()
+\ No newline at end of file
++endif()

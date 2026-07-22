@@ -1,0 +1,32 @@
+[
+  {
+    "pname": "KeraLua",
+    "version": "1.4.5",
+    "hash": "sha256-O3ozcLw1IVc6ssc3SZfPIvp5s0+xLyLuTZw6qrjyEyE="
+  },
+  {
+    "pname": "Microsoft.Extensions.DependencyInjection",
+    "version": "8.0.0",
+    "hash": "sha256-+qIDR8hRzreCHNEDtUcPfVHQdurzWPo/mqviCH78+EQ="
+  },
+  {
+    "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
+    "version": "8.0.0",
+    "hash": "sha256-75KzEGWjbRELczJpCiJub+ltNUMMbz5A/1KQU+5dgP8="
+  },
+  {
+    "pname": "Microsoft.Extensions.Logging.Abstractions",
+    "version": "8.0.0",
+    "hash": "sha256-Jmddjeg8U5S+iBTwRlVAVLeIHxc4yrrNgqVMOB7EjM4="
+  },
+  {
+    "pname": "NLua",
+    "version": "1.7.5",
+    "hash": "sha256-1s8cc1RqKnfwafhxpBhOdkr8ZteNjt5fBN2sfLy4e5k="
+  },
+  {
+    "pname": "Shoko.Plugin.Abstractions",
+    "version": "5.2.0",
+    "hash": "sha256-tNLOeum4rc30OEWRiH1zTzLk5+1MfSEOfvkON1MU/SY="
+  }
+]
