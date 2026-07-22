@@ -106,8 +106,6 @@
   libxdmcp,
   dbusSupport ? true,
   dbus,
-  joystickSupport ? true,
-  cwiid,
   nfsSupport ? true,
   libnfs,
   pulseSupport ? true,
@@ -374,7 +372,6 @@ stdenv.mkDerivation (
       libxfixes
     ]
     ++ lib.optional dbusSupport dbus
-    ++ lib.optional joystickSupport cwiid
     ++ lib.optional nfsSupport libnfs
     ++ lib.optional pulseSupport libpulseaudio
     ++ lib.optional pipewireSupport pipewire

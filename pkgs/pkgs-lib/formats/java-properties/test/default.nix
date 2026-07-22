@@ -53,13 +53,13 @@ stdenv.mkDerivation {
     jdk
     glibcLocales
   ];
-
+  __structuredAttrs = true;
+  strictDeps = true;
   # technically should go through the type.merge first, but that's tested
   # in tests/formats.nix.
   properties = javaProperties.generate "example.properties" input;
 
   # Expected output as printed by Main.java
-  passAsFile = [ "expected" ];
   expected = concatStrings (
     attrValues (
       mapAttrs (key: value: ''
@@ -84,7 +84,7 @@ stdenv.mkDerivation {
   checkPhase = ''
     cat -v $properties
     java Main $properties >actual
-    diff -U3 $expectedPath actual
+    diff -U3 <(printf "%s" "$expected") actual
   '';
   installPhase = "touch $out";
 }
