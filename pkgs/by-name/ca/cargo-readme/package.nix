@@ -34,6 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       baloo
       matthiasbeyer
+      sshine
     ];
   };
 })
