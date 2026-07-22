@@ -1,10 +1,10 @@
 {
   lib,
+  pkgs,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
   pillow,
-  zbar,
   pytestCheckHook,
 }:
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   dependencies = [ pillow ];
 
-  buildInputs = [ zbar ];
+  buildInputs = [ pkgs.zbar ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
