@@ -48,13 +48,13 @@ let
       }
     );
 
-  unimplemented =
-    pkgs:
-    pkgs.writeScript "deploy" ''
-      #!/bin/sh
-      echo "Not implemented :(" 1>&2 
-      exit 1
-    '';
+  # unimplemented =
+  #   pkgs:
+  #   pkgs.writeScript "unimplemented" ''
+  #     #!/bin/sh
+  #     echo "Not implemented :(" 1>&2
+  #     exit 1
+  #   '';
 in
 {
   options.vars.age = {
@@ -109,6 +109,23 @@ in
         Path to the age private key file for decryption on the host machine
       '';
     };
+
+    ssh.identity = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = ''
+        The private key to use when deploying over SSH.
+      '';
+    };
+
+    ssh.target = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      example = "eve@example.com";
+      description = ''
+        The target to deploy files over SSH to.
+      '';
+    };
   };
 
   options.vars.generators = lib.mkOption {
@@ -117,7 +134,8 @@ in
         options.age = {
           publicKeys = lib.mkOption {
             type = lib.types.listOf lib.types.str;
-            # TODO: this will merge the lists, which is not what we want 🤔
+            # TODO: this will merge the lists, which is not what we want,
+            # right? 🤔
             default = cfg.publicKeys;
             description = "Age public keys to encrypt to";
           };
@@ -161,8 +179,20 @@ in
     delete = pkgs: ageScript pkgs "delete";
     fixup = pkgs: ageScript pkgs "fixup";
     deployLocal = pkgs: ageScript pkgs "deploy-local";
-
-    deploy = unimplemented;
+    deploy = lib.mkIf (cfg.ssh.target != null) (
+      pkgs:
+      pkgs.writeScript "deploy" ''
+        #!/bin/sh
+        set -euo pipefail
+        ${ageScript pkgs "deploy"} | ssh "${cfg.ssh.target}" -i "${cfg.ssh.identity}" '
+          # set -euo pipefail # <- Can't do this because it might not be bash :(
+          # Not atomic hhhhh. A better implementation would not do it like this!
+          rm -rf "${cfg.targetDirectory}"
+          mkdir -p "${cfg.targetDirectory}"
+          tar xf - -C "${cfg.targetDirectory}"
+        '
+      ''
+    );
 
     fileModule =
       { generator, name, ... }:
