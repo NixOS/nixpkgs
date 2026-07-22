@@ -7,7 +7,6 @@
   gtk-engine-murrine,
   gtk3,
   adwaita-icon-theme,
-  gnome-icon-theme,
   numix-icon-theme-circle,
   hicolor-icon-theme,
 }:
@@ -34,7 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     adwaita-icon-theme
-    gnome-icon-theme
     numix-icon-theme-circle
     hicolor-icon-theme
   ];

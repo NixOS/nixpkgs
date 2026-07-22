@@ -3,7 +3,6 @@
   lib,
   stdenvNoCC,
   adwaita-icon-theme,
-  gnome-icon-theme,
   hicolor-icon-theme,
   gtk3,
   humanity-icon-theme,
@@ -23,7 +22,6 @@ stdenvNoCC.mkDerivation rec {
 
   propagatedBuildInputs = [
     adwaita-icon-theme
-    gnome-icon-theme
     hicolor-icon-theme
     humanity-icon-theme
     ubuntu-themes # provides ubuntu-mono-dark
