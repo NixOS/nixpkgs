@@ -30,9 +30,12 @@ import {jsonify} {{
 	config = (import {args.file.resolve()}){"" if args.attr is None else f".{args.attr}"};
 }}
 """
-		evalCommand = ["--impure", "--show-trace", "--expr", expr]
+		evalCommand = ["--impure", "--expr", expr]
 
 	try:
+		if args.verbose:
+			evalCommand.append("--show-trace")
+
 		result = subprocess.run(
 			["nix", "eval", "--json", *evalCommand],
 			capture_output=True,

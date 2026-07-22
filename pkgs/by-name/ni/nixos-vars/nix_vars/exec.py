@@ -186,14 +186,11 @@ def deploy_secrets(
 	args: VarsArgs,
 	config: VarsConfig,
 	backend: VarsGeneratorBackend,
+	files: List[tuple[str, str]],
 ):
 	inputLines = []
-	for generator in config.generators.values():
-		if generator.backend != backend.name:
-			continue
-		for file in generator.files.values():
-			if file.deploy:
-				inputLines.append(f"{generator.name} {file.name}")
+	for generator, filename in files:
+		inputLines.append(f"{generator} {filename}")
 
 	local = args.local is not None and backend.deployLocal is not None
 	script = backend.deployLocal if local else backend.deploy

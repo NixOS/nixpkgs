@@ -16,12 +16,15 @@
     age.identity.host = ./key-host.txt;
     age.identity.target = ./key-target.txt;
 
+    age.ssh.target = "root@lapetus.overlay.moonythm.dev";
+    age.ssh.identity = "/home/moon/.ssh/id_ed25519";
+
     prompts.example.description = "Your name";
     prompts.example.type = "multiline";
 
     generators.example = {
       prompts = [ "example" ];
-      files.example = { };
+      files.example.deploy = false;
       script =
         pkgs:
         pkgs.writeScript "gen-example" ''
@@ -33,7 +36,7 @@
 
     generators.derived = {
       dependencies = [ "example" ];
-      files.derived = { };
+      files.derived.deploy = false;
       script =
         pkgs:
         pkgs.writeScript "gen-derived" ''
@@ -51,7 +54,7 @@
     generators.derived2 = {
       backend = "age";
       dependencies = [ "example" ];
-      files.derived = { };
+      files.derived.deploy = true;
       script =
         pkgs:
         pkgs.writeScript "gen-derived" ''
@@ -68,7 +71,7 @@
 
     generators.derived3 = {
       dependencies = [ "derived2" ];
-      files.derived = { };
+      files.derived.deploy = false;
       script =
         pkgs:
         pkgs.writeScript "gen-derived" ''

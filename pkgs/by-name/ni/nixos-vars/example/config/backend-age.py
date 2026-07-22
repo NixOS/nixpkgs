@@ -4,6 +4,7 @@ import os
 import subprocess
 import argparse
 import json
+import tarfile
 from pathlib import Path
 
 parser = argparse.ArgumentParser(description="vars-age-backend")
@@ -38,6 +39,8 @@ fixup_parser.add_argument("filename")
 deploy_local_parser = subparsers.add_parser("deploy-local")
 deploy_local_parser.add_argument("system_root", type=Path)
 
+deploy_parser = subparsers.add_parser("deploy")
+
 args = vars(parser.parse_args())
 
 with open(args["config"]) as f:
@@ -51,9 +54,8 @@ def hostSecretPath(generator, filename):
 	return hostDirectory / "generators" / generator / "files" / filename
 
 
-def targetSecretPath(systemRoot, generator, filename):
-	# TODO: is there a better way to do this?
-	return Path(f"{systemRoot}{targetDirectory / generator / filename}")
+def targetSecretPath(generator, filename):
+	return targetDirectory / generator / filename
 
 
 def listHostSecrets():
@@ -119,14 +121,34 @@ elif args["command"] == "deploy-local":
 	for line in sys.stdin:
 		if not line:
 			continue
+
 		parts = line.strip().split()
-		if len(parts) == 2:
+		if len(parts) != 2:
+			raise f"Malformed input for deployLocal command: {line}"
+
+		[generator, filename] = parts
+		inPath = hostSecretPath(generator, filename)
+		if not inPath.exists():
+			raise f"Missing secret file '{generator}/{filename}'"
+
+		outPath = targetSecretPath(generator, filename)
+		# TODO: is there a better way to do this?
+		outPath = Path(f"{systemRoot}{outPath}")
+		outPath.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
+		inPath.copy(outPath)
+elif args["command"] == "deploy":
+	with tarfile.open("sample.tar.gz", "w|", fileobj=sys.stdout.buffer) as tar:
+		for line in sys.stdin:
+			if not line:
+				continue
+
+			parts = line.strip().split()
+			if len(parts) != 2:
+				raise f"Malformed input for deployLocal command: {line}"
+
 			[generator, filename] = parts
 			inPath = hostSecretPath(generator, filename)
 			if not inPath.exists():
 				raise f"Missing secret file '{generator}/{filename}'"
-			outPath = targetSecretPath(systemRoot, generator, filename)
-			outPath.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
-			inPath.copy(outPath)
-		else:
-			raise f"Malformed input for deployLocal command: {line}"
+
+			tar.add(inPath, arcname=f"{generator}/{filename}")
