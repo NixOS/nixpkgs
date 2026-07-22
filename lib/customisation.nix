@@ -755,7 +755,7 @@ rec {
           selfTargetTarget,
         }:
         { },
-      spliceOutput ? false,
+      spliceOutput ? isNewScopeSpliced,
       splicedPackagesAttrName ? null,
     }:
     let
