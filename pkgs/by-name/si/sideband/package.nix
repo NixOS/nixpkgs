@@ -23,9 +23,6 @@ python313Packages.buildPythonApplication (finalAttrs: {
   postPatch = ''
     substituteInPlace setup.py \
       --replace-fail \
-        "lxst>=0.4.6" \
-        "lxst" \
-      --replace-fail \
         '"kivymd")' \
         '"sbapp/kivymd")'
 
