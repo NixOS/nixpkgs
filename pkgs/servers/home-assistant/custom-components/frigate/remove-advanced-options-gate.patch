@@ -1,0 +1,57 @@
+From 88c34b9d3bc34307cae90e286aa5305e7d74fb91 Mon Sep 17 00:00:00 2001
+From: Martin Weinelt <hexa@darmstadt.ccc.de>
+Date: Thu, 4 Jun 2026 18:28:22 +0200
+Subject: [PATCH] Remove advanced options gate
+
+https://developers.home-assistant.io/blog/2026/05/26/advanced-mode-config-flow-deprecation/
+---
+ custom_components/frigate/config_flow.py |  3 ---
+ tests/test_config_flow.py                | 23 -----------------------
+ 2 files changed, 26 deletions(-)
+
+diff --git a/custom_components/frigate/config_flow.py b/custom_components/frigate/config_flow.py
+index 263dcff0..45d7c8d6 100644
+--- a/custom_components/frigate/config_flow.py
++++ b/custom_components/frigate/config_flow.py
+@@ -161,9 +161,6 @@ async def async_step_init(
+         if user_input is not None:
+             return self.async_create_entry(title="", data=user_input)
+ 
+-        if not self.show_advanced_options:
+-            return self.async_abort(reason="only_advanced_options")
+-
+         schema: dict[Any, Any] = {
+             # Whether to enable Frigate-native WebRTC for camera streaming
+             vol.Optional(
+diff --git a/tests/test_config_flow.py b/tests/test_config_flow.py
+index 41b38408..1a4011f3 100644
+--- a/tests/test_config_flow.py
++++ b/tests/test_config_flow.py
+@@ -281,26 +281,3 @@ async def test_options_advanced(hass: HomeAssistant) -> None:
+         assert result["data"][CONF_NOTIFICATION_PROXY_EXPIRE_AFTER_SECONDS] == 60
+         assert not result["data"][CONF_NOTIFICATION_PROXY_ENABLE]
+         assert not result["data"][CONF_MEDIA_BROWSER_ENABLE]
+-
+-
+-async def test_options(hass: HomeAssistant) -> None:
+-    """Check an options flow without advanced options."""
+-
+-    config_entry = create_mock_frigate_config_entry(hass)
+-    mock_client = create_mock_frigate_client()
+-
+-    with patch(
+-        "custom_components.frigate.config_flow.FrigateApiClient",
+-        return_value=mock_client,
+-    ), patch(
+-        "custom_components.frigate.async_setup_entry",
+-        return_value=True,
+-    ):
+-        await hass.async_block_till_done()
+-
+-        result = await hass.config_entries.options.async_init(
+-            config_entry.entry_id,
+-        )
+-
+-        assert result["type"] == FlowResultType.ABORT
+-        assert result["reason"] == "only_advanced_options"
+

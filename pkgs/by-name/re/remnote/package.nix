@@ -1,0 +1,54 @@
+{
+  lib,
+  fetchurl,
+  appimageTools,
+  makeWrapper,
+  writeScript,
+}:
+let
+  pname = "remnote";
+  version = "1.26.32";
+  src = fetchurl {
+    url = "https://download2.remnote.io/remnote-desktop2/RemNote-${version}.AppImage";
+    hash = "sha256-NR6SdqtLyHLPLKedXIRADN6L/J5SWhnJkKNB4P3OmPM=";
+  };
+  appimageContents = appimageTools.extract { inherit pname version src; };
+in
+appimageTools.wrapType2 {
+  inherit pname version src;
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  extraInstallCommands = ''
+    install -Dm444 ${appimageContents}/remnote.desktop -t $out/share/applications
+    substituteInPlace $out/share/applications/remnote.desktop \
+      --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=remnote %u'
+    install -Dm444 ${appimageContents}/remnote.png -t $out/share/icons/hicolor/512x512/apps
+
+    wrapProgram $out/bin/remnote \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-wayland-ime=true --wayland-text-input-version=3}}"
+  '';
+
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl coreutils gnused common-updater-scripts
+    set -eu -o pipefail
+    url="$(curl -ILs -w %{url_effective} -o /dev/null https://backend.remnote.com/desktop/linux)"
+    version="$(echo $url | sed -n 's/.*RemNote-\([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p')"
+    currentVersion=$(nix-instantiate --eval -E "with import ./. {}; remnote.version or (lib.getVersion remnote)" | tr -d '"')
+    if [[ "$version" != "$currentVersion" ]]; then
+      hash=$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url "$url")")
+      update-source-version remnote "$version" "$hash" --print-changes
+    fi
+  '';
+
+  meta = {
+    description = "Note-taking application focused on learning and productivity";
+    homepage = "https://remnote.com/";
+    changelog = "https://feedback.remnote.com/changelog";
+    maintainers = with lib.maintainers; [ talal ];
+    license = lib.licenses.unfree;
+    platforms = [ "x86_64-linux" ];
+    mainProgram = "remnote";
+  };
+}

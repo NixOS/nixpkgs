@@ -1,0 +1,13 @@
+diff --git tests/invocation.tests tests/invocation.tests
+index c629c29..537e470 100644
+--- tests/invocation.tests
++++ tests/invocation.tests
+@@ -71,7 +71,7 @@ command cd -L $TDIR
+ ./x23
+ 
+ # this should result in a cannot execute binary file error since ls is in $PATH
+-PATH=/bin:/usr/bin
++#PATH=/bin:/usr/bin
+ ${THIS_SH} ls |& sed 's|^.*: ||'
+ 
+ cd $SAVEPWD

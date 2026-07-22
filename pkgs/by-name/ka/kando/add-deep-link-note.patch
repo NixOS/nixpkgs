@@ -1,0 +1,12 @@
+diff --git a/src/main/index.ts b/src/main/index.ts
+index ad541ba..7879fdb 100644
+--- a/src/main/index.ts
++++ b/src/main/index.ts
+@@ -122,6 +122,7 @@ try {
+ 
+   if (!deepLinkSupport) {
+     console.error('Failed to register kando:// protocol. Deep links will not work.');
++    console.log("Note for nixpkgs: If you're using NixOS or home-manager on Linux, it should still work.")
+   }
+ 
+   // Choose the backend to use. We quit the app if no backend is found.

@@ -1,0 +1,30 @@
+diff --git a/tools/jdk/BUILD.tools b/tools/jdk/BUILD.tools
+index a8af76e90c..7f8b030f63 100644
+--- a/tools/jdk/BUILD.tools
++++ b/tools/jdk/BUILD.tools
+@@ -146,6 +146,25 @@ py_test(
+     ],
+ )
+ 
++##### Nonprebuilt toolchains definitions for NixOS and nix build sandboxes ####
++
++load("@rules_java//toolchains:default_java_toolchain.bzl", "default_java_toolchain", "NONPREBUILT_TOOLCHAIN_CONFIGURATION")
++
++[
++    default_java_toolchain(
++        name = "nonprebuilt_toolchain_java" + str(version),
++        configuration = NONPREBUILT_TOOLCHAIN_CONFIGURATION,
++        java_runtime = "@local_jdk//:jdk",
++        source_version = str(version),
++        target_version = str(version),
++    )
++    # Ideally we would only define toolchains for the java versions that the
++    # local jdk supports. But we cannot access this information in a BUILD
++    # file, and this is a hack anyway, so just pick a large enough upper bound.
++    # At the current pace, java <= 30 should cover all realeases until 2028.
++    for version in range(8, 31)
++]
++
+ #### Aliases to rules_java to keep backward-compatibility (begin) ####
+ 
+ TARGET_NAMES = [

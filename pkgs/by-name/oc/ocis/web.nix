@@ -1,0 +1,53 @@
+{
+  lib,
+  stdenvNoCC,
+  nodejs,
+  pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpmBuildHook,
+  fetchFromGitHub,
+}:
+stdenvNoCC.mkDerivation rec {
+  pname = "ocis-web";
+  version = "8.0.5";
+
+  src = fetchFromGitHub {
+    owner = "owncloud";
+    repo = "web";
+    tag = "v${version}";
+    hash = "sha256-hupdtK/V74+X7/eXoDmUjFvSKuhnoOtNQz7o6TLJXG4=";
+  };
+
+  nativeBuildInputs = [
+    nodejs
+    pnpmConfigHook
+    pnpmBuildHook
+    pnpm_9
+  ];
+
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out/share
+    cp -r dist/* $out/share/
+    runHook postInstall
+  '';
+
+  pnpmDeps = fetchPnpmDeps {
+    inherit
+      pname
+      version
+      src
+      ;
+    pnpm = pnpm_9;
+    fetcherVersion = 3;
+    hash = "sha256-EsoGio2D8HZmbe+uuzsOhhwaLMSbJcfV4iUJUaqtA0M=";
+  };
+
+  meta = {
+    homepage = "https://github.com/owncloud/ocis";
+    description = "ownCloud Infinite Scale Stack";
+    maintainers = with lib.maintainers; [ xinyangli ];
+    license = lib.licenses.agpl3Only;
+  };
+}
