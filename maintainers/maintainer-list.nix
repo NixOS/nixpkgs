@@ -93,6 +93,11 @@
     github = "0x120581f";
     githubId = 130835755;
   };
+  _0x2B = {
+    name = "0x2B";
+    github = "0x2B-bin";
+    githubId = 49249957;
+  };
   _0x3f = {
     name = "0x3f";
     github = "0x3fiona";
@@ -4180,6 +4185,12 @@
     email = "b@robitzs.ch";
     github = "brittonr";
     githubId = 4730485;
+  };
+  BrockoliniMorgan = {
+    name = "Brock Morgan";
+    email = "brockjamesmorgan@gmail.com";
+    github = "BrockoliniMorgan";
+    githubId = 166275321;
   };
   brodes = {
     email = "me@brod.es";
@@ -12300,6 +12311,12 @@
     github = "JachymPutta";
     githubId = 67414100;
     name = "Jachym Putta";
+  };
+  jack-avery = {
+    email = "jack.avery.business@gmail.com";
+    github = "jack-avery";
+    githubId = 47289484;
+    name = "Jack Avery";
   };
   jackcres = {
     email = "crespomerchano@gmail.com";
@@ -29855,6 +29872,11 @@
     github = "vojta001";
     githubId = 7038383;
     name = "Vojta Káně";
+  };
+  vokinn = {
+    github = "vokinn";
+    githubId = 113241287;
+    name = "vokin";
   };
   volfyd = {
     email = "lb.nix@lisbethmail.com";
