@@ -6,6 +6,7 @@
   python3,
   cmake,
   doxygen,
+  gitUpdater,
   graphviz,
   quickmem,
   arpa2common,
@@ -35,13 +36,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "quickder";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchFromGitLab {
     owner = "arpa2";
     repo = "quick-der";
     rev = "v${version}";
-    hash = "sha256-f+ph5PL+uWRkswpOLDwZFWjh938wxoJ6xocJZ2WZLEk=";
+    hash = "sha256-IxoE9h+ISExNys2egvjSEb3phkrf4ices7k5oYgOL4A=";
   };
 
   nativeBuildInputs = [
@@ -67,15 +68,19 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.py --replace 'pyparsing==' 'pyparsing>='
+    substituteInPlace setup.py --replace-fail 'pyparsing==' 'pyparsing>='
+    rm python/__init__.py
   '';
 
   doCheck = true;
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     description = "Quick (and Easy) DER, a Library for parsing ASN.1";
     homepage = "https://gitlab.com/arpa2/quick-der/";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
+    teams = with lib.teams; [ ngi ];
   };
 }
