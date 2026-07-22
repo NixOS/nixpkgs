@@ -5,7 +5,7 @@
   nix-update-script,
   websockets,
   # Test dependencies
-  pytestCheckHook,
+  pytest9_0CheckHook,
   pytest-homeassistant-custom-component,
 }:
 
@@ -25,7 +25,7 @@ buildHomeAssistantComponent rec {
 
   nativeCheckInputs = [
     pytest-homeassistant-custom-component
-    pytestCheckHook
+    pytest9_0CheckHook
   ];
 
   pytestFlags = [
