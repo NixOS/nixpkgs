@@ -12,13 +12,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zsign";
-  version = "1.0.8";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "zhlynn";
     repo = "zsign";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zyywaE87HcGZ5QV6tFsCn9j+mAD1/ENVxZ22E/ItlSA=";
+    hash = "sha256-PU/LhtTkRZobb4Chdms8/FBjPyHve4EZ7W5iHaWKwm8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/build/${platformName}";
