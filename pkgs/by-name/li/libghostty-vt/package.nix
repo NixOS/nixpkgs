@@ -17,13 +17,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libghostty-vt";
-  version = "0.1.0-unstable-2026-05-03";
+  version = "0.1.0-unstable-2026-07-20";
 
   src = fetchFromGitHub {
     owner = "ghostty-org";
     repo = "ghostty";
-    rev = "1547dd667ab6d1f4ebcdc7282adc54c95752ee67";
-    hash = "sha256-dZFc+8az7BUIs8+v45XqNnY5G6oXEwVfVVHZQuATSGQ=";
+    rev = "88b4cd047fa627cdca6781bc7e7dc8b75a2cecb9";
+    hash = "sha256-298x90knBUWX5GHGXh2SKsAKvStjU2ri9UgOGoF79/8=";
   };
 
   # Zig's build runner computes relative paths from `cwd` to the build directory.
