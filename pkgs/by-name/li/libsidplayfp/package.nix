@@ -106,7 +106,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/libsidplayfp/libsidplayfp/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      ramkromberg
       OPNA2608
     ];
     platforms = lib.platforms.all;
