@@ -69,9 +69,10 @@ melpaBuild {
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script { extraArgs = [ "--custom-dep=deps" ]; };
 
     inherit module;
+    inherit (module) deps;
   };
 
   meta = {
