@@ -40,6 +40,10 @@ let
   libsmackerdec = fetchurl {
     url = "https://github.com/diasurgical/libsmackerdec/archive/91e732bb6953489077430572f43fc802bf2c75b2.tar.gz";
     sha256 = "sha256-5WXjfvGuT4hG2cnCS4YbxW/c4tek7OR95EjgCqkEi4c=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "diasurgical/libsmackerdec@91e732bb6953489077430572f43fc802bf2c75b2";
+    };
   };
 
   # fork with patches, far behind upstream
