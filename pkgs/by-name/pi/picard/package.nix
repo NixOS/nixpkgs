@@ -47,7 +47,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform qt5.qtwayland) [
     qt5.qtwayland
   ]
-  ++ lib.optionals (pyqt5.multimediaEnabled) [
+  ++ lib.optionals pyqt5.multimediaEnabled [
     qt5.qtmultimedia.bin
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-base
@@ -106,7 +106,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   ''
-  + lib.optionalString (pyqt5.multimediaEnabled) ''
+  + lib.optionalString pyqt5.multimediaEnabled ''
     makeWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
 
