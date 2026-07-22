@@ -370,6 +370,7 @@
   ./programs/wayland/noctalia.nix
   ./programs/wayland/pinnacle.nix
   ./programs/wayland/river.nix
+  ./programs/wayland/scroll.nix
   ./programs/wayland/sway.nix
   ./programs/wayland/uwsm.nix
   ./programs/wayland/waybar.nix
