@@ -309,6 +309,7 @@ mapAliases {
   ansible_2_17 = throw "ansible_2_17 has been removed, as it is EOL"; # Added 2025-11-10
   ansible_2_18 = throw "ansible_2_18 has been removed; use overridePythonAttrs if you need a specific version"; # Added 2025-11-10
   ansible_2_19 = throw "ansible_2_19 has been removed; use overridePythonAttrs if you need a specific version"; # Added 2025-11-10
+  ant-bloody-theme = throw "'ant-bloody-theme' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   antibody = throw "antibody has been removed because it was deprecated and archived upstream. Consider using antidote instead"; # Added 2026-01-16
   antigravity = warnAlias "'antigravity' has been renamed to 'antigravity-ide'" antigravity-ide; # Added 2026-05-20
   antigravity-fhs = warnAlias "'antigravity-fhs' has been renamed to 'antigravity-ide-fhs'" antigravity-ide-fhs; # Added 2026-05-20
