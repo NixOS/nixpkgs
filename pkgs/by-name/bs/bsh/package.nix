@@ -11,5 +11,9 @@ fetchurl (finalAttrs: {
   hash = "sha256-cRksu+Seeiac/LoF3Fy5WcM7myba/NYmbKMoi0YfhqM=";
   meta = {
     license = lib.licenses.asl20;
+    identifiers.purlParts = {
+      type = "github";
+      spec = "beanshell/beanshell@${finalAttrs.version}";
+    };
   };
 })
