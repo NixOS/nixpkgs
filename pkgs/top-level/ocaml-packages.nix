@@ -269,6 +269,8 @@ let
 
         cmdliner_1 = cmdliner.override { version = "1.3.0"; };
 
+        cmon = callPackage ../development/ocaml-modules/cmon { };
+
         cohttp = callPackage ../development/ocaml-modules/cohttp { };
 
         cohttp_5_3 = cohttp.overrideAttrs (_: {
@@ -788,6 +790,8 @@ let
 
         graphql_ppx = callPackage ../development/ocaml-modules/graphql_ppx { };
 
+        grenier = callPackage ../development/ocaml-modules/grenier { };
+
         gsl = callPackage ../development/ocaml-modules/gsl {
           inherit (pkgs) gsl;
         };
@@ -1150,6 +1154,8 @@ let
         logs-syslog = callPackage ../development/ocaml-modules/logs-syslog { };
 
         lreplay = callPackage ../development/ocaml-modules/lreplay { };
+
+        lrgrep = callPackage ../development/ocaml-modules/lrgrep { };
 
         lru = callPackage ../development/ocaml-modules/lru { };
 
