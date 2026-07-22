@@ -1613,6 +1613,7 @@ mapAliases {
   mmsd = throw "'mmsd' has been removed due to being unmaintained upstream. Consider using 'mmsd-tng' instead"; # Added 2025-06-07
   mmutils = throw "'mmutils' has been removed due to being unmaintained upstream"; # Added 2025-08-29
   moar = warnAlias "`moar` has been renamed to `moor` by upstream in v2.0.0. See https://github.com/walles/moor/pull/305 for more." pkgs.moor; # Added 2025-09-02
+  mojave-gtk-theme = throw "'mojave-gtk-theme' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   mold-wrapped = warnAlias "'mold-wrapped' has been renamed to 'mold'" pkgs.mold; # Added 2025-11-12
   mongodb-6_0 = throw "mongodb-6_0 has been removed, it's end of life since July 2025"; # Added 2025-07-23
   monitor = pantheon.elementary-monitor; # Added 2025-10-10
