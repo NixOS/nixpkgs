@@ -25,6 +25,11 @@ TAG_PATTERN = re.compile(
     f"^release/({packaging.version.VERSION_PATTERN})$", re.IGNORECASE | re.VERBOSE
 )
 REMOTE = "origin"
+# The canonical repo (git.FreeBSD.org, usually `origin`) can be ahead of
+# the GitHub mirror that fetchFromGitHub actually downloads from.  For
+# branches we therefore record the merge-base of the two heads — the
+# newest commit both sides have.
+GITHUB_URL = "https://github.com/freebsd/freebsd-src.git"
 BRANCH_PATTERN = re.compile(
     f"^{REMOTE}/((stable|releng)/({packaging.version.VERSION_PATTERN}))$",
     re.IGNORECASE | re.VERBOSE,
@@ -115,6 +120,13 @@ def handle_commit(
     }
 
 
+def github_remote(repo: git.Repo) -> git.Remote:
+    for remote in repo.remotes:
+        if any("github.com" in url and "freebsd-src" in url for url in remote.urls):
+            return remote
+    return repo.create_remote("github", GITHUB_URL)
+
+
 def main() -> None:
     # Normally uses /run/user/*, which is on a tmpfs and too small
     temp_dir = tempfile.TemporaryDirectory(dir="/tmp")
@@ -166,6 +178,10 @@ def main() -> None:
 
         versions[tag.name] = result
 
+    github = github_remote(repo)
+    print(f"Fetching updates on GitHub mirror remote {github.name}")
+    github.fetch()
+
     for branch in repo.remote("origin").refs:
         m = BRANCH_PATTERN.match(branch.name)
         if m is not None:
@@ -181,8 +197,29 @@ def main() -> None:
         else:
             continue
 
+        commit = branch.commit
+        try:
+            github_commit = repo.commit(f"{github.name}/{fullname}")
+            base = repo.merge_base(commit, github_commit)[0]
+            if base not in (commit, github_commit):
+                # One repo should always be a fast-forward of the other;
+                # a third-commit merge-base means diverged histories.
+                raise RuntimeError(
+                    f"{fullname}: {REMOTE} ({commit.hexsha}) and GitHub "
+                    f"mirror ({github_commit.hexsha}) have diverged; "
+                    f"merge-base {base.hexsha} is neither head"
+                )
+            if base != commit:
+                print(
+                    f"{fullname}: {REMOTE} and GitHub mirror heads differ, "
+                    f"using older head {base.hexsha}"
+                )
+            commit = base
+        except (git.BadName, IndexError):
+            print(f"{fullname}: not on GitHub mirror, using {REMOTE} head")
+
         result = handle_commit(
-            repo, branch.commit, fullname, "branch", supported_refs, old_versions
+            repo, commit, fullname, "branch", supported_refs, old_versions
         )
         versions[fullname] = result
 
