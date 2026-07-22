@@ -7,7 +7,7 @@
   aiohttp,
   websocket-client,
   beautifulsoup4,
-  pytestCheckHook,
+  pytest9_0CheckHook,
   pytest-homeassistant-custom-component,
 }:
 
@@ -36,7 +36,7 @@ buildHomeAssistantComponent rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pytest9_0CheckHook
     pytest-homeassistant-custom-component
   ];
 
