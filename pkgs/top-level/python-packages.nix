@@ -14306,6 +14306,8 @@ self: super: with self; {
 
   pycyphal = callPackage ../development/python-modules/pycyphal { };
 
+  pycyphal2 = callPackage ../development/python-modules/pycyphal2 { };
+
   pydaikin = callPackage ../development/python-modules/pydaikin { };
 
   pydal = callPackage ../development/python-modules/pydal { };
