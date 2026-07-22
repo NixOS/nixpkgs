@@ -51,7 +51,7 @@ mkCoqDerivation {
   propagatedBuildInputs = [
     mathcomp.algebra
     mathcomp-finmap
-    mathcomp.fingroup
+    mathcomp.finite-group
     fourcolor
     stdlib
   ]

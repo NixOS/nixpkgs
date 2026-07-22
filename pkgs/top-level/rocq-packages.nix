@@ -42,6 +42,8 @@ let
       mathcomp = callPackage ../development/rocq-modules/mathcomp { };
       mathcomp-boot = self.mathcomp.boot;
       mathcomp-order = self.mathcomp.order;
+      ssreflect = self.mathcomp.ssreflect;
+      mathcomp-ssreflect = self.mathcomp.ssreflect;
       mathcomp-finite-group = self.mathcomp.finite-group;
       mathcomp-fingroup = self.mathcomp-finite-group;
       mathcomp-algebra = self.mathcomp.algebra;
