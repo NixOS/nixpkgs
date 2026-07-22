@@ -6470,6 +6470,8 @@ self: super: with self; {
 
   g2pkk = callPackage ../development/python-modules/g2pkk { };
 
+  g2pw = callPackage ../development/python-modules/g2pw { };
+
   galario = toPythonModule (
     pkgs.galario.override {
       enablePython = true;
