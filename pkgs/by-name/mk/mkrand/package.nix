@@ -11,6 +11,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/mknight-tag/MKRAND/releases/download/v${finalAttrs.version}/mkrand-${finalAttrs.version}.tar.gz";
     sha256 = "1irwyv2j5c3606k3qbq77yrd65y27rcq3jdlp295rz875q8iq9fs";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "mknight-tag/MKRAND@${finalAttrs.version}";
+    };
   };
 
   doCheck = true;

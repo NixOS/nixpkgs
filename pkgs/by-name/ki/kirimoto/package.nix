@@ -11,6 +11,10 @@ let
   src = fetchurl {
     url = "https://github.com/GridSpace/grid-apps/releases/download/${version}/KiriMoto-linux-x86_64.AppImage";
     hash = "sha256-qFvPuzoH/QsOA4WgBTn5t8Pkto3Sg5h+VSmFn7aEtR8=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "GridSpace/grid-apps@${version}";
+    };
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };

@@ -23,6 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/martpie/museeks/releases/download/${finalAttrs.version}/Museeks_${finalAttrs.version}_amd64.deb";
     hash = "sha256-2WkWBd4opWpCcjE+uWRbDC8RPQoVvflpxbWuuNF2Z54=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "martpie/museeks@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

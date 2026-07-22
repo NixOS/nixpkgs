@@ -28,6 +28,10 @@ let
   ui = fetchurl {
     url = "https://github.com/influxdata/ui/releases/download/${ui_version}/build.tar.gz";
     hash = "sha256-aC+GYMaxYKkY9GMaeRx22hQ3xi3kfWpaTLC9ajqOaAA=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "influxdata/ui@${version}";
+    };
   };
 
   flux = rustPlatform.buildRustPackage (finalAttrs: {

@@ -36,50 +36,98 @@ lib.checkListOfEnum "${pname}: color variants" colorVariantList colorVariants
       (fetchurl {
         url = "https://github.com/EliverLara/Sweet/releases/download/v${finalAttrs.version}/Sweet-Ambar-Blue-Dark-v40.tar.xz";
         hash = "sha256-LufK9MexE6YMuVniyfcNNaPfVLBMHnNmWBBNnGA2nUo=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "EliverLara/Sweet@${finalAttrs.version}";
+        };
       })
       (fetchurl {
         url = "https://github.com/EliverLara/Sweet/releases/download/v${finalAttrs.version}/Sweet-Ambar-Blue-Dark.tar.xz";
         hash = "sha256-J0YOADP4FXKYMl/Nn70clD3h7Y5LtlTfWV9VLsWL9yo=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "EliverLara/Sweet@${finalAttrs.version}";
+        };
       })
       (fetchurl {
         url = "https://github.com/EliverLara/Sweet/releases/download/v${finalAttrs.version}/Sweet-Ambar-Blue-v40.tar.xz";
         hash = "sha256-HH9oZQ+F1nFhIJyP9d9W2CL+mA0bolq5GiNQtKQgrZk=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "EliverLara/Sweet@${finalAttrs.version}";
+        };
       })
       (fetchurl {
         url = "https://github.com/EliverLara/Sweet/releases/download/v${finalAttrs.version}/Sweet-Ambar-Blue.tar.xz";
         hash = "sha256-2dcryd5Zj+Iu3R4jR++uJtyToGNoa1LtTpN1G6+kBRw=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "EliverLara/Sweet@${finalAttrs.version}";
+        };
       })
       (fetchurl {
         url = "https://github.com/EliverLara/Sweet/releases/download/v${finalAttrs.version}/Sweet-Ambar-v40.tar.xz";
         hash = "sha256-mpShu1fmBajl/wzlnu9zBWkskMlza5nEVS3u8Sh3b7s=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "EliverLara/Sweet@${finalAttrs.version}";
+        };
       })
       (fetchurl {
         url = "https://github.com/EliverLara/Sweet/releases/download/v${finalAttrs.version}/Sweet-Ambar.tar.xz";
         hash = "sha256-wcbJW6MUctGSM8GW1ouLvUCmdcDHQkjTw9h0foRBgTg=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "EliverLara/Sweet@${finalAttrs.version}";
+        };
       })
       (fetchurl {
         url = "https://github.com/EliverLara/Sweet/releases/download/v${finalAttrs.version}/Sweet-Dark-v40.tar.xz";
         hash = "sha256-aYPjnOEZMN9mPvnhK3eoCm1ybUxKPqPSoOL+kwsZsG4=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "EliverLara/Sweet@${finalAttrs.version}";
+        };
       })
       (fetchurl {
         url = "https://github.com/EliverLara/Sweet/releases/download/v${finalAttrs.version}/Sweet-Dark.tar.xz";
         hash = "sha256-Ej9p7/txrMhGUCyDTAEQHIS/pi92pfLrCV1L4HxWdZk=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "EliverLara/Sweet@${finalAttrs.version}";
+        };
       })
       (fetchurl {
         url = "https://github.com/EliverLara/Sweet/releases/download/v${finalAttrs.version}/Sweet-mars-v40.tar.xz";
         hash = "sha256-AKTNa6FHlPr1ZqlK5QYZzXRiPb5Nmzw2lTSNcWAtMAg=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "EliverLara/Sweet@${finalAttrs.version}";
+        };
       })
       (fetchurl {
         url = "https://github.com/EliverLara/Sweet/releases/download/v${finalAttrs.version}/Sweet-mars.tar.xz";
         hash = "sha256-bCL/DqiQGiHR24aaPtPyJKAkk8X+DyMxYeYuFJBuK6Y=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "EliverLara/Sweet@${finalAttrs.version}";
+        };
       })
       (fetchurl {
         url = "https://github.com/EliverLara/Sweet/releases/download/v${finalAttrs.version}/Sweet-v40.tar.xz";
         hash = "sha256-1kHWoK9r3mRYIkizekVVYyFpWXU78BExKuNUsRB4uv4=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "EliverLara/Sweet@${finalAttrs.version}";
+        };
       })
       (fetchurl {
         url = "https://github.com/EliverLara/Sweet/releases/download/v${finalAttrs.version}/Sweet.tar.xz";
         hash = "sha256-WzsquuUreT7b6TA6qGSYqGVrVWlIdQjlIdqWGMNJFpo=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "EliverLara/Sweet@${finalAttrs.version}";
+        };
       })
     ];
 

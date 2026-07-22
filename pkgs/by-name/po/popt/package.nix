@@ -13,6 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://ftp.osuosl.org/pub/rpm/popt/releases/popt-1.x/popt-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-wlpIOPyOTByKrLi9Yg7bMISj1jv4mH/a08onWMYyQPk=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "rpm-software-management/popt@popt-${finalAttrs.version}-release";
+    };
   };
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
@@ -60,9 +64,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ qyliss ];
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    identifiers.purlParts = {
-      type = "github";
-      spec = "rpm-software-management/popt@popt-${finalAttrs.version}-release";
-    };
   };
 })

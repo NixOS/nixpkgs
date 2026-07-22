@@ -11,6 +11,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/zsh-users/antigen/releases/download/v${finalAttrs.version}/antigen.zsh";
     sha256 = "1bmp3qf14509swpxin4j9f98n05pdilzapjm0jdzbv0dy3hn20ix";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "zsh-users/antigen@${finalAttrs.version}";
+    };
   };
 
   strictDeps = true;

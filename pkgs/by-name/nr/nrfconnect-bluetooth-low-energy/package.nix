@@ -14,6 +14,10 @@ let
     url = "https://github.com/NordicPlayground/pc-nrfconnect-ble-standalone/releases/download/v${version}/nrfconnect-bluetooth-low-energy-${version}-x86_64.AppImage";
     hash = "sha256-mL8ky/cYjNgfUJgE7W5LFK/w7Ky9Xx6E84UT668HRAk=";
     name = "${pname}-${version}.AppImage";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "NordicPlayground/pc-nrfconnect-ble-standalone@${version}";
+    };
   };
 
   appimageContents = appimageTools.extractType2 {

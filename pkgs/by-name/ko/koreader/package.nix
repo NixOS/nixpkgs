@@ -63,6 +63,10 @@ stdenv.mkDerivation {
         armv7l-linux = "sha256-diMWFhL0D5bWPQFc9vvZZRPMfNxlxchGyT8Lz/TLHPs=";
         x86_64-linux = "sha256-OhBu3oj9IqNmK5ngCkXvucVQq5aJohObgENtjdDcQcE=";
       };
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "koreader/koreader@${version}";
+      };
     };
 
   nativeBuildInputs = [

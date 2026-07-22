@@ -31,6 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
         x86_64-linux = "sha256-2eVLk4E/F3GwcslsWulo/7WwUvLKHEJ2K2biy4A2Kg8=";
         aarch64-linux = "sha256-yAbw2AWKSHKEFzU2rMupBBF2+CF/jITOWbbpfQSoizE=";
       };
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "ACINQ/phoenixd@${finalAttrs.version}";
+      };
     };
 
   nativeBuildInputs = [ unzip ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];

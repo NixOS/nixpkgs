@@ -72,6 +72,10 @@ stdenv'.mkDerivation (finalAttrs: {
     # Please don't convert this to a hash, in base64, see comment near src's
     # hash.
     sha256 = "15ahcxb7hsylvdzzv0q0shd3wqm7p2y4kzbqk85cvsxbdklxhsvn";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "EttusResearch/uhd@${finalAttrs.version}";
+    };
   };
   inherit (finalAttrs.finalPackage.passthru) pythonPath;
   passthru = {

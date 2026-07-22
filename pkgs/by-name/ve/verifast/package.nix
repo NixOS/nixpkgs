@@ -64,6 +64,10 @@ stdenv.mkDerivation (
   in
   {
     inherit pname version;
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "verifast/verifast@${finalAttrs.version}";
+    };
 
     src =
       srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");

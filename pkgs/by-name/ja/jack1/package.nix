@@ -31,6 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/jackaudio/jack1/releases/download/${finalAttrs.version}/jack1-${finalAttrs.version}.tar.gz";
     hash = "sha256-eykOnce5JirDKNQe74DBBTyXAT76y++jBHfLmypUReo=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "jackaudio/jack1@${finalAttrs.version}";
+    };
   };
 
   configureFlags = [

@@ -12,6 +12,10 @@ stdenvNoCC.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/dwarvesf/hidden/releases/download/v${version}/Hidden-Bar-v${version}-macos.zip";
     hash = "sha256-qKX1KZ/fq1K9/7L1cop21MumkHVOmzsS8nvTjy52wLw=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "dwarvesf/hidden@${version}";
+    };
   };
 
   sourceRoot = ".";

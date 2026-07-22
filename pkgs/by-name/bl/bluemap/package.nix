@@ -13,6 +13,10 @@ stdenvNoCC.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v${version}/BlueMap-${version}-cli.jar";
     hash = "sha256-eUDVYYkDc4l/j2vpGlLnZUYfQOW+ThxEAQBAc+4NJYA=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "BlueMap-Minecraft/BlueMap@${version}";
+    };
   };
 
   dontUnpack = true;

@@ -10,6 +10,10 @@ let
   src = fetchurl {
     url = "https://github.com/story-apps/starc/releases/download/v${version}/starc-setup.AppImage";
     hash = "sha256-7uwc4gD+AlbYGMffaWj3v2Zt2x6P5edPXY3BsznBNdQ=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "story-apps/starc@${version}";
+    };
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };

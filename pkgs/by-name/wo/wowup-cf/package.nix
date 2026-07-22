@@ -11,6 +11,10 @@ let
   src = fetchurl {
     url = "https://github.com/WowUp/WowUp.CF/releases/download/v${version}/WowUp-CF-${version}.AppImage";
     hash = "sha256-X5gDnj4YBZRBwJEeb8sVMNoGmWUI9iVdWOmsA20bWig=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "WowUp/WowUp.CF@${version}";
+    };
   };
 
   appimageContents = appimageTools.extractType1 { inherit pname version src; };

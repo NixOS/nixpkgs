@@ -15,6 +15,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/libffi/libffi/releases/download/v${finalAttrs.version}/libffi-${finalAttrs.version}.tar.gz";
     hash = "sha256-cvunkicD3fp6Ao1ROsFahcjVTI1n9V+lpIAohdxlIFY=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "libffi/libffi@${finalAttrs.version}";
+    };
   };
 
   patches = [

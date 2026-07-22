@@ -19,6 +19,10 @@ let
     url = "https://github.com/UltimateHackingKeyboard/agent/releases/download/v${version}/UHK.Agent-${version}-linux-x86_64.AppImage";
     name = "${pname}-${version}.AppImage";
     sha256 = "sha256-44wjTl2zexRbwB9CMHVl6zPQ238DhsCFtf2yaYyXMgg=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "UltimateHackingKeyboard/agent@${version}";
+    };
   };
 
   appimageContents = appimageTools.extract {

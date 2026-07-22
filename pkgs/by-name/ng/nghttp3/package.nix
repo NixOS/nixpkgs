@@ -13,6 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/ngtcp2/nghttp3/releases/download/v${finalAttrs.version}/nghttp3-${finalAttrs.version}.tar.bz2";
     hash = "sha256-IsBpidVL0mbUpx817vGS1JuJBlWfFqQfO4gssCNhdGM=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "ngtcp2/nghttp3@${finalAttrs.version}";
+    };
   };
 
   outputs = [

@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/osxfuse/osxfuse/releases/download/macfuse-${version}/macfuse-${version}.dmg";
     hash = "sha256-5fgP+MPfgm6Zf7eGs1EloMamcvS7oncLDe9rpjyk74E=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "osxfuse/osxfuse@${version}";
+    };
   };
 
   nativeBuildInputs = [

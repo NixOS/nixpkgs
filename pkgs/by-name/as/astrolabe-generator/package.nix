@@ -14,6 +14,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/wymarc/astrolabe-generator/releases/download/v${finalAttrs.version}/AstrolabeGenerator-${finalAttrs.version}.zip";
     hash = "sha256-yTYiUEjxlfZbFNSxvF56LlUPL3kRH6QVFq4GhXN1L5A=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "wymarc/astrolabe-generator@${finalAttrs.version}";
+    };
   };
 
   buildInputs = [ jre ];

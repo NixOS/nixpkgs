@@ -13,11 +13,19 @@ appimageTools.wrapType2 rec {
       fetchurl {
         url = "https://github.com/httpie/desktop/releases/download/v${version}/HTTPie-${version}-arm64.AppImage";
         hash = "sha256-FBzjlYwgCULgjaJUPALlqqRj7fZMps7hybt5m5EkeAo=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "httpie/desktop@${version}";
+        };
       }
     else
       fetchurl {
         url = "https://github.com/httpie/desktop/releases/download/v${version}/HTTPie-${version}.AppImage";
         hash = "sha256-qFDiFXQbYAhweQhgYfZW/lUMtmw09tqT9t/GPJRtZU8=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "httpie/desktop@${version}";
+        };
       };
 
   extraInstallCommands =

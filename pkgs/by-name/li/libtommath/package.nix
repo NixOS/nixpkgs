@@ -12,6 +12,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/libtom/libtommath/releases/download/v${finalAttrs.version}/ltm-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-KWJy2TQ1mRMI63NgdgDANLVYgHoH6CnnURQuZcz6nQg=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "libtom/libtommath@${finalAttrs.version}";
+    };
   };
 
   postPatch = ''

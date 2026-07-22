@@ -10,6 +10,10 @@ let
   src = fetchurl {
     url = "https://github.com/jeffvli/sonixd/releases/download/v${version}/Sonixd-${version}-linux-x86_64.AppImage";
     sha256 = "sha256-j8B+o/CJ5SsZPMNbugyP3T9Kb+xuxlVxH02loxlwwDg=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "jeffvli/sonixd@${version}";
+    };
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in

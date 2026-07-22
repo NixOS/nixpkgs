@@ -42,6 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/harfbuzz/harfbuzz/releases/download/${finalAttrs.version}/harfbuzz-${finalAttrs.version}.tar.xz";
     hash = "sha256-ZpXaPrfhvgqjCS/k2BQzoztH9FGSWcdZ1ynjqaVcFCk=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "harfbuzz/harfbuzz@${finalAttrs.version}";
+    };
   };
 
   # This test fails reliably when executed through mesonCheckPhase but passes with

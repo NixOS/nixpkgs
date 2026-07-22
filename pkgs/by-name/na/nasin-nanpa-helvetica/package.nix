@@ -12,6 +12,10 @@ stdenvNoCC.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/ETBCOR/nasin-nanpa/releases/download/n${version}/nasin-nanpa-${version}-Helvetica.otf";
     hash = "sha256-isteUDpgdHufXYkcbsC7wbT+e4LzArFe42Tw9wfj04E=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "ETBCOR/nasin-nanpa@${version}";
+    };
   };
 
   dontUnpack = true;

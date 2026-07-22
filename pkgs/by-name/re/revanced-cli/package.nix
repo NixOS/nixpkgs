@@ -13,6 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/revanced/revanced-cli/releases/download/v${finalAttrs.version}/revanced-cli-${finalAttrs.version}-all.jar";
     hash = "sha256-wlVJvBfVnS65T6X4bmDpt3oCdyyoj3BQ+PEnb5I6mVg=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "revanced/revanced-cli@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [ makeWrapper ];

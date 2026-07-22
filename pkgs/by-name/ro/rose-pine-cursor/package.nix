@@ -12,10 +12,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     (fetchurl {
       url = "https://github.com/rose-pine/cursor/releases/download/v${finalAttrs.version}/BreezeX-RosePine-Linux.tar.xz";
       hash = "sha256-szDVnOjg5GAgn2OKl853K3jZ5rVsz2PIpQ6dlBKJoa8=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "rose-pine/cursor@${finalAttrs.version}";
+      };
     })
     (fetchurl {
       url = "https://github.com/rose-pine/cursor/releases/download/v${finalAttrs.version}/BreezeX-RosePineDawn-Linux.tar.xz";
       hash = "sha256-hanfwx9ooT1TbmcgCr63KVYwC1OIzTwjmxzi4Zjcrdg=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "rose-pine/cursor@${finalAttrs.version}";
+      };
     })
   ];
 

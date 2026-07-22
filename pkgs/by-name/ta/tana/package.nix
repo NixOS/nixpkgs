@@ -71,6 +71,10 @@ stdenv.mkDerivation {
   src = fetchurl {
     url = "https://github.com/tanainc/tana-desktop-releases/releases/download/v${version}/tana_${version}_amd64.deb";
     hash = "sha256-L6opOfwlcgADWbMibPtF4YijsFWroYL7alpvDHN5rtg=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "tanainc/tana-desktop-releases@${version}";
+    };
   };
 
   nativeBuildInputs = [

@@ -38,6 +38,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/ModelioOpenSource/Modelio/releases/download/v${finalAttrs.version}/modelio-open-source-${finalAttrs.version}_amd64.deb";
     hash = "sha256-cg7ruIYpOgz2nfax37M8sUs89Qvbb5PMudyR0ZNiURo=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "ModelioOpenSource/Modelio@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

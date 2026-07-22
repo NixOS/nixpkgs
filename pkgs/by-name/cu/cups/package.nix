@@ -30,6 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/OpenPrinting/cups/releases/download/v${finalAttrs.version}/cups-${finalAttrs.version}-source.tar.gz";
     hash = "sha256-ggmEsSpn+YcFeFquLdE0f+CsCXgoAB1Fg/9kV0rtY4k=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "OpenPrinting/cups@${finalAttrs.version}";
+    };
   };
 
   __structuredAttrs = true;

@@ -13,6 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/kspalaiologos/kamilalisp/releases/download/v${finalAttrs.version}/kamilalisp-${finalAttrs.version}.jar";
     hash = "sha256-SW0U483eHptkYw+yJV/2cImfK3uEjkl8ma54yeagF6s=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "kspalaiologos/kamilalisp@${finalAttrs.version}";
+    };
   };
 
   dontUnpack = true;

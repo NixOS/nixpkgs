@@ -15,6 +15,10 @@ let
         nameValuePair (lib.strings.toLower name) (fetchurl {
           url = "https://github.com/GuiWonder/Shanggu/releases/download/${version}/Shanggu${name}TTCs.7z";
           inherit hash;
+          meta.identifiers.purlParts = {
+            type = "github";
+            spec = "GuiWonder/Shanggu@${version}";
+          };
         })
       )
       {

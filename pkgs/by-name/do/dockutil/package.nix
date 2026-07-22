@@ -70,6 +70,10 @@ let
     src = fetchurl {
       url = "https://github.com/kcrawford/dockutil/releases/download/${finalAttrs.version}/dockutil-${finalAttrs.version}.pkg";
       hash = "sha256-9g24Jz/oDXxIJFiL7bU4pTh2dcORftsAENq59S0/JYI=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "kcrawford/dockutil@${finalAttrs.version}";
+      };
     };
 
     dontPatch = true;

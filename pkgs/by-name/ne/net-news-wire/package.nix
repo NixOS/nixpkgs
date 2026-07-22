@@ -14,6 +14,10 @@ stdenvNoCC.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/Ranchero-Software/NetNewsWire/releases/download/mac-${version}/NetNewsWire${version}.zip";
     hash = "sha256-R0d2X7zj/aiuG3g2D91EQleWRR57MZacyr6HuQHWD+k=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Ranchero-Software/NetNewsWire@${version}";
+    };
   };
 
   sourceRoot = ".";

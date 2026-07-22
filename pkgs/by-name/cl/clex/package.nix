@@ -12,6 +12,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/xitop/clex/releases/download/v${finalAttrs.version}/clex-${finalAttrs.version}.tar.gz";
     hash = "sha256-3Y3ayJEy9pHLTUSeXYeekTVdopwKLZ8vVcVarLIFnpM=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "xitop/clex@${finalAttrs.version}";
+    };
   };
 
   buildInputs = [ ncurses ];

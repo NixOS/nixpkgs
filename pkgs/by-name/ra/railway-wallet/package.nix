@@ -10,6 +10,10 @@ appimageTools.wrapType2 rec {
   src = fetchurl {
     url = "https://github.com/Railway-Wallet/Railway-Wallet/releases/download/v${version}/Railway.linux.x86_64.AppImage";
     hash = "sha256-21Z9ulzYGIjntAHuA3t7Bl5yIqM7y39jALM4tDBa0Qw=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Railway-Wallet/Railway-Wallet@${version}";
+    };
   };
 
   meta = {

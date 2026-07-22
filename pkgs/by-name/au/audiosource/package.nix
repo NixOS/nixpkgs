@@ -65,6 +65,10 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.apk = fetchurl {
     url = "https://github.com/gdzx/audiosource/releases/download/v${finalAttrs.version}/audiosource.apk";
     hash = "sha256:cd48532829f41060d3c9909daa5563a669394eb9dd00baf303b6db1b5b2db1fa";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "gdzx/audiosource@${finalAttrs.version}";
+    };
   };
 
   meta = {

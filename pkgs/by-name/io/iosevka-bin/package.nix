@@ -26,6 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
         No such variant "${variant}" for package iosevka-bin.
         Valid variants are: ${lib.concatStringsSep ", " validVariants}.
       '');
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "be5invis/Iosevka@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [ unzip ];

@@ -51,6 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Z/Dl+kKSpTPtxvmLhC32DFMaic+C0DNqThq3IgKrjIM=";
     meta = {
       homepage = "https://github.com/uim/uim/";
+      identifiers.purlParts = {
+        type = "github";
+        spec = "uim/uim@${finalAttrs.version}";
+      };
     };
   };
 

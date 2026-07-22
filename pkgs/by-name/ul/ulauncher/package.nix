@@ -31,6 +31,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/Ulauncher/Ulauncher/releases/download/${finalAttrs.version}/ulauncher_${finalAttrs.version}.tar.gz";
     hash = "sha256-YgOw3Gyy/o8qorWAnAlQrAZ2ZTnyP3PagLs2Qkdg788=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Ulauncher/Ulauncher@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [
