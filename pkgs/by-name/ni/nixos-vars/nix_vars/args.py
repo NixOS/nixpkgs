@@ -12,7 +12,6 @@ class VarsArgs:
 	attr: Optional[str]
 	disable_sandbox: bool
 	dry_run: bool
-	yes: bool
 	local: Optional[str]  # "deploy" only
 	generators: List[str]  # "generate" only
 	command: str  # gotta figure out how to type this properly
