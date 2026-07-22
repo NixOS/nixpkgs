@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codemark-cli";
-  version = "0.7.23";
+  version = "0.7.24";
   __structuredAttrs = true;
   src = fetchFromGitHub {
     owner = "DanielCardonaRojas";
     repo = "codemark";
     tag = finalAttrs.version;
-    sha256 = "sha256-0BlhLWmTFqhTVH2kELOLxqPkq2M8rZAUTUyyyDjkNIk=";
+    sha256 = "sha256-Weh7JRAwUImFfcPU6bSqC+W11+Z5q5oPxXv60RzEuWw=";
   };
 
-  cargoHash = "sha256-Lv29aqMhTgbmD72pxwEE2PUlF6xSV1cVR1RNpuTgGvk=";
+  cargoHash = "sha256-dROHNUF3qDsohMTTb/1pwHjjUslWfOBx82jOgefjPH8=";
 
   # I was not able to disable the failing checks when packaging
   # Feel free to fix
