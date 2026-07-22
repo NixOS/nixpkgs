@@ -62,6 +62,7 @@ in
       # See https://github.com/coastalwhite/lemurs/issues/166
       setLoginUid = false;
       enableGnomeKeyring = lib.mkDefault config.services.gnome.gnome-keyring.enable;
+      oo7.enable = lib.mkDefault config.services.oo7.enable;
     };
 
     environment.systemPackages = [ cfg.package ];
