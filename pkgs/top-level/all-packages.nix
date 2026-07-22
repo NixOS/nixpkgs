@@ -8873,8 +8873,6 @@ with pkgs;
 
   muchsync = callPackage ../applications/networking/mailreaders/notmuch/muchsync.nix { };
 
-  obs-studio = qt6Packages.callPackage ../applications/video/obs-studio { };
-
   obs-studio-plugins = recurseIntoAttrs (
     callPackage ../applications/video/obs-studio/plugins.nix { }
   );

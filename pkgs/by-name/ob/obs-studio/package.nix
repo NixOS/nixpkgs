@@ -18,8 +18,7 @@
   libxkbcommon,
   libpthread-stubs,
   libxdmcp,
-  qtbase,
-  qtsvg,
+  qt6,
   speex,
   libv4l,
   x264,
@@ -50,8 +49,6 @@
   cjson,
   libva,
   srt,
-  qtwayland,
-  wrapQtAppsHook,
   nlohmann_json,
   websocketpp,
   asio,
@@ -103,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-JAV3UvM89asUj6P5pD9a+6/Qfa2kFIVQqVfMOZn5MJE=";
     fetchSubmodules = true;
   };
@@ -120,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     wrapGAppsHook3
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
     kdePackages.extra-cmake-modules
   ]
   ++ optional scriptingSupport swig
@@ -135,8 +132,8 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     libpthread-stubs
     libxdmcp
-    qtbase
-    qtsvg
+    qt6.qtbase
+    qt6.qtsvg
     speex
     wayland
     x264
@@ -147,7 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
     cjson
     libva
     srt
-    qtwayland
+    qt6.qtwayland
     nlohmann_json
     websocketpp
     asio
