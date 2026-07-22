@@ -1545,6 +1545,7 @@ mapAliases {
   mariadb-client = throw "mariadb-client has been renamed to mariadb.client"; # Converted to throw 2025-10-26
   marwaita-manjaro = throw "'marwaita-manjaro' has been renamed to/replaced by 'marwaita-teal'"; # Converted to throw 2025-10-27
   marwaita-mint = throw "'marwaita-mint' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
+  marwaita-orange = throw "'marwaita-orange' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   marwaita-peppermint = throw "'marwaita-peppermint' has been renamed to/replaced by 'marwaita-red'"; # Converted to throw 2025-10-27
   marwaita-pop_os = throw "'marwaita-pop_os' has been renamed to/replaced by 'marwaita-yellow'"; # Converted to throw 2025-10-27
   marwaita-ubuntu = throw "'marwaita-ubuntu' has been renamed to/replaced by 'marwaita-orange'"; # Converted to throw 2025-10-27
