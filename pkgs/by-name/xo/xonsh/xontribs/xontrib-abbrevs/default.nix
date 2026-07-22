@@ -15,20 +15,15 @@
 
 buildPythonPackage rec {
   pname = "xontrib-abbrevs";
-  version = "0.1.0";
+  version = "0.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xonsh";
     repo = "xontrib-abbrevs";
     tag = "v${version}";
-    hash = "sha256-JxH5b2ey99tvHXSUreU5r6fS8nko4RrS/1c8psNbJNc=";
+    hash = "sha256-xJUSbYo/+RFFCHenDEybVNxpOrEqSkU3eAaI+TNTmQI=";
   };
-
-  prePatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"xonsh>=0.17", ' ""
-  '';
 
   build-system = [
     setuptools
