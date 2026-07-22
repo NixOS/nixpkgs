@@ -3,6 +3,7 @@
   uthash,
   lib,
   stdenv,
+  callPackage,
   ninja,
   nv-codec-headers-12,
   fetchFromGitHub,
@@ -18,8 +19,7 @@
   libxkbcommon,
   libpthread-stubs,
   libxdmcp,
-  qtbase,
-  qtsvg,
+  qt6Packages,
   speex,
   libv4l,
   x264,
@@ -50,8 +50,6 @@
   cjson,
   libva,
   srt,
-  qtwayland,
-  wrapQtAppsHook,
   nlohmann_json,
   websocketpp,
   asio,
@@ -103,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-9i7wLHpKqbcYzPlzSMF4xEpsTINQnVDPtneLJaSM+/I=";
     fetchSubmodules = true;
   };
@@ -120,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     wrapGAppsHook3
-    wrapQtAppsHook
+    qt6Packages.wrapQtAppsHook
     kdePackages.extra-cmake-modules
   ]
   ++ optional scriptingSupport swig
@@ -135,8 +133,8 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     libpthread-stubs
     libxdmcp
-    qtbase
-    qtsvg
+    qt6Packages.qtbase
+    qt6Packages.qtsvg
     speex
     wayland
     x264
@@ -147,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     cjson
     libva
     srt
-    qtwayland
+    qt6Packages.qtwayland
     nlohmann_json
     websocketpp
     asio
@@ -243,7 +241,19 @@ stdenv.mkDerivation (finalAttrs: {
     '')
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+
+    withPlugins =
+      f:
+      callPackage ./wrapper.nix
+        {
+          obs-studio = finalAttrs.finalPackage;
+        }
+        {
+          plugins = f;
+        };
+  };
 
   meta = {
     description = "Free and open source software for video recording and live streaming";
