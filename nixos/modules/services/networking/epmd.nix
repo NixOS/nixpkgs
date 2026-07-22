@@ -21,7 +21,7 @@ in
         Erlang computations.
       '';
     };
-    package = lib.mkPackageOption pkgs "erlang" { };
+    package = lib.mkPackageOption pkgs [ "beamPackages" "erlang" ] { };
     listenStream = lib.mkOption {
       type = oneOf [
         str

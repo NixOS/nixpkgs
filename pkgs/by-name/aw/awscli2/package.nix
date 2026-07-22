@@ -70,6 +70,7 @@ py.pkgs.buildPythonApplication rec {
       --replace-fail 'awscrt==' 'awscrt>=' \
       --replace-fail 'distro>=1.5.0,<1.9.0' 'distro>=1.5.0' \
       --replace-fail 'docutils>=0.10,<0.20' 'docutils>=0.10' \
+      --replace-fail 'jmespath>=0.7.1,<1.1.0' 'jmespath>=0.7.1' \
       --replace-fail 'prompt-toolkit>=3.0.24,<3.0.52' 'prompt-toolkit>=3.0.24' \
       --replace-fail 'ruamel_yaml>=0.15.0,<=0.19.1' 'ruamel_yaml>=0.15.0' \
       --replace-fail 'ruamel_yaml_clib>=0.2.0,<=0.2.15' 'ruamel_yaml_clib>=0.2.0' \

@@ -49,7 +49,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://www.acs.com.hk";
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ berce ];
+    maintainers = [ ];
     platforms = with lib.platforms; unix;
   };
 }

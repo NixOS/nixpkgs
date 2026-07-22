@@ -17,14 +17,16 @@
   transformers,
 
   # tests
+  accelerate,
   nbconvert,
   nbformat,
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "compressed-tensors";
-  version = "0.15.0.1";
+  version = "0.17.1";
   pyproject = true;
 
   # Release on PyPI is missing the `utils` directory, which `setup.py` wants to import
@@ -32,7 +34,7 @@ buildPythonPackage (finalAttrs: {
     owner = "neuralmagic";
     repo = "compressed-tensors";
     tag = finalAttrs.version;
-    hash = "sha256-iiYo3Vne2CYlj+wMHxQFTTU7gb8oNwPtCe873nX5KgA=";
+    hash = "sha256-14AHbokDlN5iXy/fvOq7Xp1OS8N1b+Xpxd33KOylWiU=";
   };
 
   postPatch = ''
@@ -60,9 +62,11 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "compressed_tensors" ];
 
   nativeCheckInputs = [
+    accelerate
     nbconvert
     nbformat
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   disabledTests = [
@@ -87,10 +91,44 @@ buildPythonPackage (finalAttrs: {
     "test_set_item_buffers"
     "test_update_offload_parameter_with_grad"
   ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
+    # RuntimeError: Failed to initialize cpuinfo!
+    "test_mxfp4_scales_e2e"
+    "test_mxfp8_scales_e2e"
+  ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # torch._inductor.exc.InductorError: ImportError: dlopen(/nix/var/nix/builds/nix-25002-542173852/torchinductor__nixbld1/xo/cxovsevcfanmw7lgoddbnyhoxes3nzlu7ecugxedaq2zr4f6b2qh.main.so, 0x0002):
     # symbol not found in flat namespace '___kmpc_barrier'
     "test_compress_decompress_module"
+
+    # AssertionError: Torch not compiled with CUDA enabled
+    "test_match_quantizable_tensors"
+    "test_narrow_match_true_child_only"
+    "test_narrow_match_false_when_parent_also_matches"
+    "test_narrow_match_false_when_neither_matches"
+    "test_narrow_match_iterable_targets_any_true"
+    "test_narrow_match_with_explicit_module_argument"
+    "test_narrow_match_top_level_behavior_documented"
+    "test_complex_model_matching"
+    "test_parameter_and_module_consistency"
+    "test_all_functions_with_regex"
+    "test_match_quantizable_tensors"
+    "test_mtp_tensors_saved_correctly"
+    "test_index_updated"
+    "test_single_shard_dest_creates_index"
+    "test_no_mtp_tensors_raises"
+    "test_missing_dest_files_raises"
+    "test_custom_mtp_prefix"
+    "test_apply_config_detects_deepseekv3_attention_and_hooks"
+    "test_initialize_module_for_quantization_offloaded"
+    "test_correctness_model"
+    "test_random_matrix_device_handling"
+    "test_memory_sharing"
+    "test_attention_cache"
+
+    # TypeError: Trying to convert Float8_e4m3fn to the MPS backend but it does not have support for that dtype.
+    "test_compressed_model_inference_with_hook"
   ];
 
   disabledTestPaths = [
@@ -111,6 +149,17 @@ buildPythonPackage (finalAttrs: {
     "tests/test_transform/factory/test_serialization.py::test_serialization[True-True-random-hadamard]"
     "tests/test_transform/factory/test_serialization.py::test_serialization[True-False-hadamard]"
     "tests/test_transform/factory/test_serialization.py::test_serialization[True-False-random-hadamard]"
+
+    # AttributeError: 'NoneType' object has no attribute 'type'
+    "tests/test_compressors/distributed/test_distributed_compression.py"
+    "tests/test_compressors/distributed/test_module_parallel.py"
+    "tests/test_compressors/model_compressors/test_model_compressor_distributed.py"
+    "tests/test_offload"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # AssertionError: Torch not compiled with CUDA enabled
+    "tests/test_transform/utils/test_hadamard.py"
+    "tests/test_utils/test_match.py"
   ];
 
   meta = {

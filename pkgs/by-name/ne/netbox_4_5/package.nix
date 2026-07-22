@@ -122,6 +122,15 @@ py.pkgs.buildPythonApplication rec {
       inherit (nixosTests) netbox-upgrade;
     };
     updateScript = nix-update-script { };
+    plugins = lib.recurseIntoAttrs (
+      lib.makeExtensible (
+        self:
+        lib.packagesFromDirectoryRecursive {
+          inherit (py.pkgs) callPackage;
+          directory = ./plugins;
+        }
+      )
+    );
   };
 
   meta = {
@@ -132,7 +141,6 @@ py.pkgs.buildPythonApplication rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       minijackson
-      raitobezarius
       transcaffeine
     ];
   };

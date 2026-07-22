@@ -9,6 +9,8 @@
   flex,
   rsync,
   writeTextFile,
+  nix-update-script,
+  linux_latest,
 }:
 
 let
@@ -42,6 +44,7 @@ let
       src,
       version,
       patches ? [ ],
+      passthru ? { },
     }:
     stdenvNoCC.mkDerivation {
       inherit src;
@@ -139,6 +142,8 @@ let
         echo "${version}-default" > $out/include/config/kernel.release
       '';
 
+      inherit passthru;
+
       meta = {
         description = "Header files and scripts for Linux kernel";
         license = lib.licenses.gpl2Only;
@@ -163,5 +168,11 @@ in
       patches = [
         ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms
       ];
+      passthru.updateScript = nix-update-script {
+        extraArgs = [
+          "--version"
+          "${linux_latest.meta.branch}"
+        ];
+      };
     };
 }

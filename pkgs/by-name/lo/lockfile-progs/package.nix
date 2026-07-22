@@ -7,19 +7,27 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lockfile-progs";
-  version = "0.1.19";
+  version = "0.2.0";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/l/lockfile-progs/lockfile-progs_${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-LFcEsByPR0+CkheA5Fkqknsr9qbXYWNUpsXXzVZkhX4=";
+    url = "mirror://debian/pool/main/l/lockfile-progs/lockfile-progs_${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-KYj7WotAflLiqmKCzkVJf0Zckh1ZETjBAPSJghWETJA=";
   };
 
   buildInputs = [ liblockfile ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU (toString [
-    # Needed with GCC 12
-    "-Wno-error=format-overflow"
-  ]);
+  preBuild = ''
+    patchShebangs .
+  '';
+
+  env.NIX_CFLAGS_COMPILE =
+    lib.optionalString stdenv.cc.isGNU (toString [
+      # Needed with GCC 12
+      "-Wno-error=format-overflow"
+    ])
+    + lib.optionalString stdenv.hostPlatform.isDarwin (toString [
+      "-Wno-error=c23-extensions"
+    ]);
 
   installPhase = ''
     runHook preInstall

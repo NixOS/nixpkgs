@@ -100,6 +100,14 @@ in
           ];
         };
 
+        linux_7_1 = callPackage ../os-specific/linux/kernel/mainline.nix {
+          branch = "7.1";
+          kernelPatches = [
+            kernelPatches.bridge_stp_helper
+            kernelPatches.request_key_helper
+          ];
+        };
+
         linux_testing =
           let
             testing = callPackage ../os-specific/linux/kernel/mainline.nix {
@@ -332,6 +340,8 @@ in
           inherit kernel;
         };
 
+        ethercat = callPackage pkgs.ethercat.kernelModule { };
+
         evdi = callPackage ../os-specific/linux/evdi { };
 
         fanout = callPackage ../os-specific/linux/fanout { };
@@ -555,7 +565,7 @@ in
         veikk-linux-driver = callPackage ../os-specific/linux/veikk-linux-driver { };
         vendor-reset = callPackage ../os-specific/linux/vendor-reset { };
 
-        vhba = callPackage ../applications/emulators/cdemu/vhba.nix { };
+        vhba = callPackage ../by-name/cd/cdemu-daemon/vhba.nix { };
 
         virtio_vmmci = callPackage ../os-specific/linux/virtio_vmmci { };
 
@@ -619,9 +629,9 @@ in
 
         hpuefi-mod = callPackage ../os-specific/linux/hpuefi-mod { };
 
-        drbd = callPackage ../os-specific/linux/drbd/driver.nix { };
+        drbd = callPackage ../by-name/dr/drbd/driver.nix { };
 
-        nullfs = callPackage ../os-specific/linux/nullfs { };
+        nullfsvfs = callPackage ../os-specific/linux/nullfsvfs { };
 
         msi-ec = callPackage ../os-specific/linux/msi-ec { };
 
@@ -647,6 +657,7 @@ in
         system76-power = lib.warnOnInstantiate "kernelPackages.system76-power is now pkgs.system76-power" pkgs.system76-power; # Added 2024-10-16
         system76-scheduler = lib.warnOnInstantiate "kernelPackages.system76-scheduler is now pkgs.system76-scheduler" pkgs.system76-scheduler; # Added 2024-10-16
         tuxedo-keyboard = self.tuxedo-drivers; # Added 2024-09-28
+        nullfs = self.nullfsvfs; # Added 2026-05-16
         phc-intel = throw "phc-intel drivers are no longer supported by any kernel >=4.17"; # added 2025-07-18
         prl-tools = throw "Parallel Tools no longer provide any kernel module, please use pkgs.prl-tools instead."; # added 2025-10-04
         nvidia_dc_565 = throw "nvidiaPackages.dc_565 has reached end of life, see https://endoflife.date/nvidia"; # added 2026-02-10
@@ -664,6 +675,7 @@ in
     linux_6_12 = recurseIntoAttrs (packagesFor kernels.linux_6_12);
     linux_6_18 = recurseIntoAttrs (packagesFor kernels.linux_6_18);
     linux_7_0 = recurseIntoAttrs (packagesFor kernels.linux_7_0);
+    linux_7_1 = recurseIntoAttrs (packagesFor kernels.linux_7_1);
   }
   // lib.optionalAttrs config.allowAliases {
     linux_4_19 = throw "linux 4.19 was removed because it will reach its end of life within 24.11"; # Added 2024-09-21
@@ -732,7 +744,7 @@ in
   packageAliases = {
     linux_default = packages.linux_6_18;
     # Update this when adding the newest kernel major version!
-    linux_latest = packages.linux_7_0;
+    linux_latest = packages.linux_7_1;
   }
   // lib.optionalAttrs config.allowAliases {
     linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";

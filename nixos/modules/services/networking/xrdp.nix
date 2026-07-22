@@ -19,7 +19,7 @@ let
     cat > $out/startwm.sh <<EOF
     #!/bin/sh
     . /etc/profile
-    ${lib.optionalString cfg.audio.enable "${cfg.audio.package}/libexec/pulsaudio-xrdp-module/pulseaudio_xrdp_init"}
+    ${lib.optionalString cfg.audio.enable "${cfg.audio.package}/libexec/pulseaudio-xrdp-module/pulseaudio_xrdp_init"}
     ${cfg.defaultWindowManager}
     EOF
     chmod +x $out/startwm.sh
@@ -39,8 +39,12 @@ let
 
     # Ensure that clipboard works for non-ASCII characters
     sed -i -e '/.*SessionVariables.*/ a\
-    LANG=${config.i18n.defaultLocale}\
-    LOCALE_ARCHIVE=${config.i18n.glibcLocales}/lib/locale/locale-archive
+    LANG=${config.i18n.defaultLocale}${
+      lib.optionalString (config.i18n.glibcLocales != null) ''
+        \
+        LOCALE_ARCHIVE=${config.i18n.glibcLocales}/lib/locale/locale-archive
+      ''
+    }
     ' $out/sesman.ini
 
     ${cfg.extraConfDirCommands}

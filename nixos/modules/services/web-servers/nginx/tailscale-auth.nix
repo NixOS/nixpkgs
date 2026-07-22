@@ -72,6 +72,7 @@ in
 
           proxy_pass http://unix:${cfgAuth.socketPath};
           proxy_pass_request_body off;
+          proxy_set_header Content-Length "";
 
           # Upstream uses $http_host here, but we are using gixy to check nginx configurations
           # gixy wants us to use $host: https://github.com/yandex/gixy/blob/master/docs/en/plugins/hostspoofing.md

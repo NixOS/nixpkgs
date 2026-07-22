@@ -43,14 +43,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "7zz";
-  version = "26.00";
+  version = "26.01";
 
   src = fetchzip {
     url = "https://7-zip.org/a/7z${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}-src.tar.xz";
     hash =
       {
-        free = "sha256-p914FrQPb+h1a+7YIL8ms2YoIfoS1hTCeLLeBF4DjwY=";
-        unfree = "sha256-CIgPhjRSE9A0ABQQx1YTZgO+DNb3BDxRo5xOQmuzBuI=";
+        free = "sha256-52+Gg66MOFmwYUVB0OO4PAtZJtQOkoVpxV7F9xBGy58=";
+        unfree = "sha256-w0fk8EDusUYiOfrmIiUq+xevlwfQxMhjdPzfkHkOkR8=";
       }
       .${if enableUnfree then "unfree" else "free"};
     stripRoot = false;

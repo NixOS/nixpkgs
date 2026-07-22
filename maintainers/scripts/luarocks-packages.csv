@@ -12,6 +12,7 @@ cassowary,,,,,,alerque
 cldr,,,,,,alerque
 commons.nvim,,,,,5.1,mrcjkb
 compat53,,,,,,vcunat
+coop.nvim,,,,,,
 cosmo,,,,,,
 coxpcall,,,,1.17.0-1,,
 cqueues,,,,,,vcunat
@@ -34,6 +35,7 @@ haskell-tools.nvim,,,,,5.1,mrcjkb
 http,,,,0.4-0,,vcunat
 inspect,,,,,,
 jsregexp,,,,0.0.7-2,,
+kulala.nvim,,,,,,
 ldbus,,,https://luarocks.org/dev,,,
 ldoc,,,,,,
 lgi,,,,,,
@@ -49,11 +51,12 @@ lpeglabel,,,,1.6.0,,
 lrexlib-gnu,,,,,,
 lrexlib-oniguruma,,,,,,junestepp
 lrexlib-pcre,,,,,,
+lrexlib-pcre2,,,,,,wishstudio
 lrexlib-posix,,,,,,
 lsp-progress.nvim,,,,,5.1,gepbird
 lsqlite3,,,,,,
-ltreesitter-ts,,,,,,
 ltreesitter,,,,,,
+ltreesitter-ts,,,,,,
 lua-cjson,,,,,,
 lua-cmsgpack,,,,,,
 lua-curl,,,,,,
@@ -167,13 +170,16 @@ telescope.nvim,,,,,5.1,
 tiktoken_core,,,,,,natsukium
 tl,,,,,,mephistophiles
 toml-edit,,,,,5.1,mrcjkb
+tomlua,,,,,,birdee
 tree-sitter-cli,,,,,,
 tree-sitter-http,,,,0.0.33-1,,
+tree-sitter-kulala_http,,,,,,
 tree-sitter-norg,,,,,5.1,mrcjkb
 tree-sitter-norg-meta,,,,,,
 tree-sitter-orgmode,,,,,5.1,
-utf8,,,,,,
 tree-sitter-teal,,,,,,
+utf8,,,,,,
+vicious,,,,,,
 vstruct,,,,,,
 vusted,,,,,,
 xml2lua,,,,,,teto

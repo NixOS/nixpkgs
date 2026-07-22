@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -11,9 +12,17 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "smuellerDD";
     repo = "jitterentropy-rngd";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-iXpeN0PAPk8mcaNXwj6TlyK57NSFNOVs/XmEmUG1gIg=";
   };
+
+  patches = [
+    # Allow the systemd service to mlock the daemon's entropy buffer.
+    (fetchpatch {
+      url = "https://github.com/smuellerDD/jitterentropy-rngd/compare/v1.3.1...cee0c7a035e9564d161053012c6ea36b2ce27383.patch";
+      hash = "sha256-zwcY9z9EikrhxZa39p4+gl+/EeZ4sAKaItQfrL1DFSo=";
+    })
+  ];
 
   enableParallelBuilding = true;
 
@@ -36,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Random number generator, which injects entropy to the kernel";
     homepage = "https://github.com/smuellerDD/jitterentropy-rngd";
-    changelog = "https://github.com/smuellerDD/jitterentropy-rngd/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/smuellerDD/jitterentropy-rngd/releases/tag/${finalAttrs.src.tag}";
     license = [
       lib.licenses.gpl2Only
       lib.licenses.bsd3

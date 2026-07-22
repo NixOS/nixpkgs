@@ -2,6 +2,7 @@
   buildPackages,
   pkgsBuildBuild,
   callPackage,
+  writeText,
   perl,
   bison ? null,
   flex ? null,
@@ -31,7 +32,16 @@ lib.makeOverridable (
     version,
 
     # Allows overriding the default defconfig
-    defconfig ? null,
+    # TODO: Reconsider some of these defaults?
+    defconfig ?
+      if stdenv.hostPlatform.isAarch32 && stdenv.hostPlatform.parsed.cpu.version or null == "5" then
+        "multi_v5_defconfig"
+      else if stdenv.hostPlatform.isAarch32 && stdenv.hostPlatform.parsed.cpu.version or null == "6" then
+        "bcm2835_defconfig"
+      else if stdenv.hostPlatform.isPower64 then
+        if stdenv.hostPlatform.isLittleEndian then "powernv_defconfig" else "ppc64_defconfig"
+      else
+        "defconfig",
 
     # Legacy overrides to the intermediate kernel config, as string
     extraConfig ? "",
@@ -65,20 +75,20 @@ lib.makeOverridable (
     # symbolic name and `patch' is the actual patch.  The patch may
     # optionally be compressed with gzip or bzip2.
     kernelPatches ? [ ],
-    ignoreConfigErrors ?
-      !lib.elem stdenv.hostPlatform.linux-kernel.name or "" [
-        "aarch64-multiplatform"
-        "pc"
-      ],
+    ignoreConfigErrors ? !(stdenv.hostPlatform.isx86 || stdenv.hostPlatform.isAarch64),
     extraMeta ? { },
     extraPassthru ? { },
+
+    target ? null,
+    buildDTBs ? null,
 
     isLTS ? false,
     isZen ? false,
 
-    # easy overrides to stdenv.hostPlatform.linux-kernel members
-    autoModules ? stdenv.hostPlatform.linux-kernel.autoModules or true,
-    preferBuiltin ? stdenv.hostPlatform.linux-kernel.preferBuiltin or false,
+    autoModules ? true,
+    # TODO: Remove this default?
+    preferBuiltin ?
+      stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isRiscV || stdenv.hostPlatform.isLoongArch64,
     kernelArch ? stdenv.hostPlatform.linuxArch,
     kernelTests ? { },
 
@@ -115,9 +125,7 @@ lib.makeOverridable (
     intermediateNixConfig =
       configfile.moduleStructuredConfig.intermediateNixConfig
       # extra config in legacy string format
-      + extraConfig
-      # need the 'or ""' at the end in case enableCommonConfig = true and extraConfig is not present
-      + lib.optionalString enableCommonConfig stdenv.hostPlatform.linux-kernel.extraConfig or "";
+      + extraConfig;
 
     structuredConfigFromPatches = map (
       {
@@ -165,9 +173,6 @@ lib.makeOverridable (
 
       generateConfig = ./generate-config.pl;
 
-      kernelConfig = kernelConfigFun intermediateNixConfig;
-      passAsFile = [ "kernelConfig" ];
-
       depsBuildBuild = [ buildPackages.stdenv.cc ];
       nativeBuildInputs = [
         perl
@@ -183,11 +188,7 @@ lib.makeOverridable (
         rustc-unwrapped
       ];
 
-      RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
-
-      # e.g. "defconfig"
-      kernelBaseConfig =
-        if defconfig != null then defconfig else stdenv.hostPlatform.linux-kernel.baseConfig or "defconfig";
+      env.RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
 
       makeFlags = import ./common-flags.nix {
         inherit
@@ -208,41 +209,49 @@ lib.makeOverridable (
 
       inherit (kernel) src patches;
 
-      buildPhase = ''
-        export buildRoot="''${buildRoot:-build}"
+      buildPhase =
+        let
+          # e.g. "defconfig"
+          kernelBaseConfig = defconfig;
+          kernelIntermediateConfig = writeText "kernel-intermediate-config" (
+            kernelConfigFun intermediateNixConfig
+          );
+        in
+        ''
+          export buildRoot="''${buildRoot:-build}"
 
-        # Get a basic config file for later refinement with $generateConfig.
-        make $makeFlags \
-            -C . O="$buildRoot" $kernelBaseConfig \
-            ARCH=$kernelArch CROSS_COMPILE=${stdenv.cc.targetPrefix} \
-            $makeFlags
+          # Get a basic config file for later refinement with $generateConfig.
+          make $makeFlags \
+              -C . O="$buildRoot" ${kernelBaseConfig} \
+              ARCH=$kernelArch CROSS_COMPILE=${stdenv.cc.targetPrefix} \
+              $makeFlags
 
-        # Create the config file.
-        echo "generating kernel configuration..."
-        ln -s "$kernelConfigPath" "$buildRoot/kernel-config"
-        DEBUG=1 ARCH=$kernelArch CROSS_COMPILE=${stdenv.cc.targetPrefix} \
-          KERNEL_CONFIG="$buildRoot/kernel-config" AUTO_MODULES=$autoModules \
-          PREFER_BUILTIN=$preferBuiltin BUILD_ROOT="$buildRoot" SRC=. MAKE_FLAGS="$makeFlags" \
-          perl -w $generateConfig
-      ''
-      + lib.optionalString stdenv.cc.isClang ''
-        if ! grep -Fq CONFIG_CC_IS_CLANG=y $buildRoot/.config; then
-          echo "Kernel config didn't recognize the clang compiler?"
-          exit 1
-        fi
-      ''
-      + lib.optionalString stdenv.cc.bintools.isLLVM ''
-        if ! grep -Fq CONFIG_LD_IS_LLD=y $buildRoot/.config; then
-          echo "Kernel config didn't recognize the LLVM linker?"
-          exit 1
-        fi
-      ''
-      + lib.optionalString withRust ''
-        if ! grep -Fq CONFIG_RUST_IS_AVAILABLE=y $buildRoot/.config; then
-          echo "Kernel config didn't find Rust toolchain?"
-          exit 1
-        fi
-      '';
+          # Create the config file.
+          echo "generating kernel configuration..."
+          ln -s "${kernelIntermediateConfig}" "$buildRoot/kernel-config"
+          DEBUG=1 ARCH=$kernelArch CROSS_COMPILE=${stdenv.cc.targetPrefix} \
+            KERNEL_CONFIG="$buildRoot/kernel-config" AUTO_MODULES=$autoModules \
+            PREFER_BUILTIN=$preferBuiltin BUILD_ROOT="$buildRoot" SRC=. MAKE_FLAGS="$makeFlags" \
+            perl -w $generateConfig
+        ''
+        + lib.optionalString stdenv.cc.isClang ''
+          if ! grep -Fq CONFIG_CC_IS_CLANG=y $buildRoot/.config; then
+            echo "Kernel config didn't recognize the clang compiler?"
+            exit 1
+          fi
+        ''
+        + lib.optionalString stdenv.cc.bintools.isLLVM ''
+          if ! grep -Fq CONFIG_LD_IS_LLD=y $buildRoot/.config; then
+            echo "Kernel config didn't recognize the LLVM linker?"
+            exit 1
+          fi
+        ''
+        + lib.optionalString withRust ''
+          if ! grep -Fq CONFIG_RUST_IS_AVAILABLE=y $buildRoot/.config; then
+            echo "Kernel config didn't find Rust toolchain?"
+            exit 1
+          fi
+        '';
 
       installPhase = "mv $buildRoot/.config $out";
 
@@ -278,26 +287,34 @@ lib.makeOverridable (
       };
     }; # end of configfile derivation
 
-    kernel = (callPackage ./build.nix { inherit lib stdenv buildPackages; }) {
-      inherit
-        pname
-        version
-        src
-        kernelPatches
-        randstructSeed
-        extraMakeFlags
-        extraMeta
-        configfile
-        modDirVersion
-        ;
-      pos = builtins.unsafeGetAttrPos "version" args;
+    kernel = (callPackage ./build.nix { inherit lib stdenv buildPackages; }) (
+      {
+        inherit
+          pname
+          version
+          src
+          kernelPatches
+          randstructSeed
+          extraMakeFlags
+          extraMeta
+          configfile
+          modDirVersion
+          ;
+        pos = builtins.unsafeGetAttrPos "version" args;
 
-      config = {
-        CONFIG_MODULES = "y";
-        CONFIG_FW_LOADER = "y";
-        CONFIG_RUST = if withRust then "y" else "n";
-      };
-    };
+        config = {
+          CONFIG_MODULES = "y";
+          CONFIG_FW_LOADER = "y";
+          CONFIG_RUST = if withRust then "y" else "n";
+        };
+      }
+      // lib.optionalAttrs (target != null) {
+        inherit target;
+      }
+      // lib.optionalAttrs (buildDTBs != null) {
+        inherit buildDTBs;
+      }
+    );
 
   in
   kernel.overrideAttrs (

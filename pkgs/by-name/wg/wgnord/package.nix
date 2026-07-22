@@ -12,14 +12,14 @@
   wireguard-tools,
 }:
 
-resholve.mkDerivation rec {
+resholve.mkDerivation (finalAttrs: {
   pname = "wgnord";
   version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "phirecc";
     repo = "wgnord";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-26cfYXtZVQ7kIRxY6oNGCqIjdw/hjwXhVKimVgolLgk=";
   };
 
@@ -64,4 +64,4 @@ resholve.mkDerivation rec {
     mainProgram = "wgnord";
     platforms = lib.platforms.linux;
   };
-}
+})

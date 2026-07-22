@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pg_activity";
-  version = "3.6.1";
+  version = "3.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dalibo";
     repo = "pg_activity";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-TzY+3RE06TxIrhl75wol9CvZDIz25GfgOx11vkREw2c=";
+    sha256 = "sha256-W5R521eyJjblCE5NG546ItMZo0CeBAhFLxMHUrbRGms=";
   };
 
   build-system = with python3Packages; [ setuptools ];

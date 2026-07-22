@@ -185,7 +185,11 @@ in
       # added with order 501 to allow modules to go before with mkBefore
       system.nssDatabases.hosts = (mkOrder 501 [ "resolve [!UNAVAIL=return]" ]);
 
-      systemd.additionalUpstreamSystemUnits = [ "systemd-resolved.service" ];
+      systemd.additionalUpstreamSystemUnits = [
+        "systemd-resolved.service"
+        "systemd-resolved-monitor.socket"
+        "systemd-resolved-varlink.socket"
+      ];
 
       systemd.services.systemd-resolved = {
         wantedBy = [ "sysinit.target" ];
@@ -248,7 +252,12 @@ in
         tmpfiles.settings.systemd-resolved-stub."/etc/resolv.conf".L.argument =
           "/run/systemd/resolve/stub-resolv.conf";
 
-        additionalUpstreamUnits = [ "systemd-resolved.service" ];
+        additionalUpstreamUnits = [
+          "systemd-resolved.service"
+          "systemd-resolved-monitor.socket"
+          "systemd-resolved-varlink.socket"
+        ];
+
         users.systemd-resolve = { };
         groups.systemd-resolve = { };
         storePaths = [ "${config.boot.initrd.systemd.package}/lib/systemd/systemd-resolved" ];

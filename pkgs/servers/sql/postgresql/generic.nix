@@ -375,7 +375,9 @@ let
         ++ lib.optionals tclSupport [ "--with-tcl" ]
         ++ lib.optionals selinuxSupport [ "--with-selinux" ]
         ++ lib.optionals nlsSupport [ "--enable-nls" ]
-        ++ lib.optionals bonjourSupport [ "--with-bonjour" ];
+        ++ lib.optionals bonjourSupport [ "--with-bonjour" ]
+        # Configure needs a little help to find `nm` when cross-compiling.
+        ++ lib.optionals (atLeast "19") [ "NM=${stdenv'.cc}/bin/${stdenv'.cc.targetPrefix}nm" ];
 
       patches = [
         (
@@ -677,14 +679,17 @@ let
           "/share/postgresql/tsearch_data"
         ];
 
-        nativeBuildInputs = [ makeBinaryWrapper ];
-        postBuild =
-          let
-            args = lib.concatMap (ext: ext.wrapperArgs or [ ]) installedExtensions;
-          in
-          ''
-            wrapProgram "$out/bin/postgres" ${lib.concatStringsSep " " args}
-          '';
+        derivationArgs = {
+          strictDeps = true;
+          nativeBuildInputs = [ makeBinaryWrapper ];
+          postBuild =
+            let
+              args = lib.concatMap (ext: ext.wrapperArgs or [ ]) installedExtensions;
+            in
+            ''
+              wrapProgram "$out/bin/postgres" ${lib.concatStringsSep " " args}
+            '';
+        };
 
         passthru = {
           inherit installedExtensions;

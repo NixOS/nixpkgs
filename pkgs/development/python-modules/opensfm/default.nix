@@ -173,6 +173,7 @@ buildPythonPackage (finalAttrs: {
       lib.maintainers.pbsds
       lib.maintainers.SomeoneSerge
     ];
+    teams = [ lib.teams.geospatial ];
     license = lib.licenses.bsd2;
     changelog = "https://github.com/mapillary/OpenSfM/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Open source Structure-from-Motion pipeline from Mapillary";

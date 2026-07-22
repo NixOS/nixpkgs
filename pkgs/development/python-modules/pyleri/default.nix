@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "cesbit";
     repo = "pyleri";
     tag = "v${version}";
-    hash = "sha256-4t+6wtYzJbmL0TB/OXr89uZ2s8DeGlUdWwHd4YPsCW0=";
+    hash = "sha256-5umFhP6t0Aezm4ecjg4ix18JhC0mm+bjyIZYqBHZMmI=";
   };
 
   build-system = [ setuptools ];

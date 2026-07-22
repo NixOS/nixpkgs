@@ -29,6 +29,7 @@ let
       django
       django-allauth
       django-anymail
+      django-async-backend
       django-cors-headers
       django-environ
       django-extensions
@@ -76,14 +77,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glitchtip";
-  version = "6.1.6";
+  version = "6.1.8";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "glitchtip-backend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BUWLN3+ob934MgIoDLirY0O8fn6G3zmGA5wuVGPPp7w=";
+    hash = "sha256-4RAZYGoS1tUbcPVv8L0sFWqFfBX05yXKZHFZDbEn0C0=";
   };
 
   postPatch = ''

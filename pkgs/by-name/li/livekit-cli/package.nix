@@ -4,20 +4,28 @@
   fetchFromGitHub,
   nix-update-script,
   testers,
+  pkg-config,
+  portaudio,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "livekit-cli";
-  version = "2.16.2";
+  version = "2.16.6";
 
   src = fetchFromGitHub {
     owner = "livekit";
     repo = "livekit-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3nyYX/BX6FxiAOcyAx/BEmzKvT+SQYXVERplEXvnscg=";
+    hash = "sha256-lsvbnc2YGPX2OYmdH6ZW0a6eNF+o3S8Y0eLuYsb4dUs=";
   };
 
-  vendorHash = "sha256-0MOZp6ZZ+UbGGykJ5TZL0KM1rP/ZlLS297/uU9HNaO8=";
+  vendorHash = "sha256-BzEv2wpcXX7at6jJdgy9DtErbIU8ZPL+ollK1rlUWSA=";
+
+  # Use nixpkgs portaudio package + pkg-config rather than relying on a vendored
+  # git submodule, similar to the homebrew solution
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ portaudio ];
+  tags = [ "portaudio_system" ];
 
   subPackages = [ "cmd/lk" ];
 

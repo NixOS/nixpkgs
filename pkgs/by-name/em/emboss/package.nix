@@ -20,6 +20,10 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "7184a763d39ad96bb598bfd531628a34aa53e474db9e7cac4416c2a40ab10c6e";
   };
 
+  env = {
+    NIX_CFLAGS_COMPILE = "-std=gnu17";
+  };
+
   buildInputs = [
     readline
     perl

@@ -215,6 +215,22 @@ lib.runTests (
   })
 
   // {
+    test_platforms_pass_typecheck = {
+      # To improve performance, the result of parsing all 70+ systems in
+      # `lib.platforms` into their attrset representations aren't typechecked.
+      # The results are expected to be constant, and avoiding the slow
+      # validation gives a meaningful improvement to evaluation speed. We ensure
+      # that all systems pass validation here
+      expr = builtins.filter (
+        system:
+        let
+          evalResult = builtins.tryEval (lib.systems.parse.mkSystemFromString system);
+        in
+        evalResult.success == false
+      ) lib.platforms.all;
+
+      expected = [ ];
+    };
     test_equals_example_x86_64-linux = {
       expr = lib.systems.equals (lib.systems.elaborate "x86_64-linux") (
         lib.systems.elaborate "x86_64-linux"
@@ -265,6 +281,22 @@ lib.runTests (
           parsed = (lib.systems.elaborate "x86_64-linux").parsed;
         }).parsed.cpu.arch;
       expected = "i686";
+    };
+    test_equals_reelaborate_overridden_platform = {
+      expr =
+        let
+          base = lib.systems.elaborate "x86_64-linux";
+        in
+        lib.systems.equals base (
+          lib.systems.elaborate (
+            base
+            // {
+              useLLVM = true;
+              linker = "lld";
+            }
+          )
+        );
+      expected = false;
     };
   }
   // {

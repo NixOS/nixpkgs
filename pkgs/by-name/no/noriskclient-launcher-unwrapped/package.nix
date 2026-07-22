@@ -2,8 +2,6 @@
   cargo-tauri,
   desktop-file-utils,
   fetchFromGitHub,
-  fetchpatch,
-  fetchurl,
   fetchYarnDeps,
   glib,
   gtk3,
@@ -20,20 +18,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "noriskclient-launcher-unwrapped";
-  version = "0.6.20";
+  version = "0.6.24";
 
   src = fetchFromGitHub {
     owner = "NoRiskClient";
     repo = "noriskclient-launcher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VChMA6XXKgtytLFOORxnpNnTrunKaIJkFge2Xu4FjG0=";
+    hash = "sha256-X0j5cWAIMdpLSUSDAUx7oSJ42xvRLL1PY8JK9i4wGhA=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
-    yarnLock = fetchurl {
-      url = "https://raw.githubusercontent.com/NoRiskClient/noriskclient-launcher/937b275341191552a08757c9b4e5eb7802d54945/yarn.lock";
-      hash = "sha256-IqhgDMthwEAd/rzat119Ajaf8p8LgTDEj/KrS2xVFuQ=";
-    };
+    yarnLock = "${finalAttrs.src}/yarn.lock";
     hash = "sha256-VWl6YqTiBRz85GICFKGwDZRBcITGQdWE7EUzW58wHdY=";
   };
 
@@ -43,13 +38,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     # Make the launcher find java from PATH, instead of downloading its own, which is not going to work on NixOS.
     ./java-from-path.patch
-
-    # The version of tauri in Cargo.toml and in package.json aren't matching, causing the build to fail. Upstream PR is https://github.com/NoRiskClient/noriskclient-launcher/pull/222.
-    (fetchpatch {
-      name = "fix-tauri-version-mismatch";
-      url = "https://github.com/NoRiskClient/noriskclient-launcher/commit/937b275341191552a08757c9b4e5eb7802d54945.patch";
-      hash = "sha256-jI0KnvUpSJU739BfZeYFMhtZKjno1UrWWGwMLS3I6ag=";
-    })
   ];
 
   postPatch = ''
@@ -57,7 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
   '';
 
-  cargoHash = "sha256-FiM1FuWeGmfZlnKiIImGOsJnKt3qsLqvY6oRUvOSBWM=";
+  cargoHash = "sha256-dwGJKLO+3i5FUgv+Huu1ZD/hFg/KdyWofApwkIDFD1I=";
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;

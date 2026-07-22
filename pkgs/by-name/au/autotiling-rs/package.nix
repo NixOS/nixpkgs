@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/ammgws/autotiling-rs";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     mainProgram = "autotiling-rs";
   };
 })

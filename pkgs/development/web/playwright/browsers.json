@@ -2,22 +2,22 @@
   "comment": "This file is kept up to date via update.sh",
   "browsers": {
     "chromium": {
-      "revision": "1217",
-      "browserVersion": "147.0.7727.15",
+      "revision": "1223",
+      "browserVersion": "148.0.7778.96",
       "title": "Chrome for Testing"
     },
     "chromium-headless-shell": {
-      "revision": "1217",
-      "browserVersion": "147.0.7727.15",
+      "revision": "1223",
+      "browserVersion": "148.0.7778.96",
       "title": "Chrome Headless Shell"
     },
     "firefox": {
-      "revision": "1511",
-      "browserVersion": "148.0.2",
+      "revision": "1522",
+      "browserVersion": "150.0.2",
       "title": "Firefox"
     },
     "webkit": {
-      "revision": "2272",
+      "revision": "2287",
       "revisionOverrides": {
         "mac14": "2251",
         "mac14-arm64": "2251",

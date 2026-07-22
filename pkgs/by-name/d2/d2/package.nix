@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -38,7 +39,7 @@ buildGoModule (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs = lib.optionals libdrm.meta.available [
+  buildInputs = lib.optionals (lib.meta.availableOn stdenv.hostPlatform libdrm) [
     libgbm
     playwright-driver.browsers
   ];
@@ -71,7 +72,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/terrastruct/d2/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
-      dit7ya
       kashw2
     ];
   };

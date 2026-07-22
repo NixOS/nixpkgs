@@ -688,12 +688,7 @@ fn handle_modified_unit(
     let reload_list = scope.reload_list_file();
     let use_restart_as_stop_and_start = new_unit_info.is_none();
 
-    if matches!(
-        unit,
-        "sysinit.target" | "basic.target" | "multi-user.target" | "graphical.target"
-    ) || unit.ends_with(".unit")
-        || unit.ends_with(".slice")
-    {
+    if cannot_be_restarted_directly(unit) {
         // Do nothing.  These cannot be restarted directly.
 
         // Slices and Paths don't have to be restarted since properties (resource limits and
@@ -748,11 +743,6 @@ fn handle_modified_unit(
                 // This unit should be restarted instead of stopped and started.
                 units_to_restart.insert(unit.to_string(), ());
                 record_unit(&restart_list, unit);
-                // Remove from units to reload so we don't restart and reload
-                if units_to_reload.contains_key(unit) {
-                    units_to_reload.remove(unit);
-                    unrecord_unit(&reload_list, unit);
-                }
             } else {
                 // If this unit is socket-activated, then stop the socket unit(s) as well, and
                 // restart the socket(s) instead of the service.
@@ -774,10 +764,17 @@ fn handle_modified_unit(
                     };
 
                     if sockets.is_empty() {
-                        sockets.push(format!("{base_name}.socket"));
+                        // For a templated instance (`foo@bar.service`), `base_name`
+                        // includes the trailing `@`; the implicitly-associated socket
+                        // is `foo.socket`, so strip it.
+                        let socket_base = base_name.strip_suffix('@').unwrap_or(base_name);
+                        sockets.push(format!("{socket_base}.socket"));
                     }
 
                     for socket in &sockets {
+                        let socket_in_new_config =
+                            toplevel.join(scope.etc_dir()).join(socket).exists();
+
                         if active_cur.contains_key(socket) {
                             // We can now be sure this is a socket-activated unit
 
@@ -788,7 +785,7 @@ fn handle_modified_unit(
                             }
 
                             // Only restart sockets that actually exist in new configuration:
-                            if toplevel.join(scope.etc_dir()).join(socket).exists() {
+                            if socket_in_new_config {
                                 if use_restart_as_stop_and_start {
                                     units_to_restart.insert(socket.to_string(), ());
                                     record_unit(&restart_list, socket);
@@ -799,12 +796,9 @@ fn handle_modified_unit(
 
                                 socket_activated = true;
                             }
-
-                            // Remove from units to reload so we don't restart and reload
-                            if units_to_reload.contains_key(unit) {
-                                units_to_reload.remove(unit);
-                                unrecord_unit(&reload_list, unit);
-                            }
+                        } else if socket_in_new_config {
+                            // Transitioning to socket activation; let the socket start it.
+                            socket_activated = true;
                         }
                     }
                 }
@@ -833,11 +827,11 @@ fn handle_modified_unit(
                 } else {
                     units_to_stop.insert(unit.to_string(), ());
                 }
-                // Remove from units to reload so we don't restart and reload
-                if units_to_reload.contains_key(unit) {
-                    units_to_reload.remove(unit);
-                    unrecord_unit(&reload_list, unit);
-                }
+            }
+
+            // Remove from units to reload so we don't restart and reload
+            if units_to_reload.remove(unit).is_some() {
+                unrecord_unit(&reload_list, unit);
             }
         }
     }
@@ -940,6 +934,17 @@ fn parse_fstab(fstab: impl BufRead) -> (HashMap<String, Filesystem>, HashMap<Str
     (filesystems, swaps)
 }
 
+/// Whether a unit cannot be (re)started directly. Special targets are pulled
+/// in by their dependents; slices and paths get their properties applied on
+/// daemon-reload.
+fn cannot_be_restarted_directly(unit: &str) -> bool {
+    matches!(
+        unit,
+        "sysinit.target" | "basic.target" | "multi-user.target" | "graphical.target"
+    ) || unit.ends_with(".path")
+        || unit.ends_with(".slice")
+}
+
 // Returns a HashMap containing the same contents as the passed in `units`, minus the units in
 // `units_to_filter`.
 fn filter_units(
@@ -955,6 +960,50 @@ fn filter_units(
     }
 
     res
+}
+
+/// Action to take on a unit that migrated to NixOS ownership during the
+/// post-activation pass. Honours the same X-* directives as
+/// `handle_modified_unit`.
+#[derive(Debug, PartialEq)]
+enum MigrationAction {
+    Skip,
+    Reload,
+    Restart,
+    Start,
+}
+
+impl MigrationAction {
+    /// Action to take on a migrated unit that is still active.
+    fn for_active_unit(unit: &str, new_unit_info: &UnitInfo) -> Self {
+        if cannot_be_restarted_directly(unit) {
+            return Self::Skip;
+        }
+
+        if parse_systemd_bool(Some(new_unit_info), "Service", "X-ReloadIfChanged", false) {
+            return Self::Reload;
+        }
+
+        if !parse_systemd_bool(Some(new_unit_info), "Service", "X-RestartIfChanged", true)
+            || parse_systemd_bool(Some(new_unit_info), "Unit", "RefuseManualStop", false)
+            || parse_systemd_bool(Some(new_unit_info), "Unit", "X-OnlyManualStart", false)
+        {
+            return Self::Skip;
+        }
+
+        Self::Restart
+    }
+
+    /// Action to take on a migrated unit that the previous owner stopped.
+    fn for_stopped_unit(new_unit_info: &UnitInfo) -> Self {
+        if parse_systemd_bool(Some(new_unit_info), "Unit", "RefuseManualStart", false)
+            || parse_systemd_bool(Some(new_unit_info), "Unit", "X-OnlyManualStart", false)
+        {
+            return Self::Skip;
+        }
+
+        Self::Start
+    }
 }
 
 fn unit_is_active(conn: &LocalConnection, unit: &str) -> Result<bool> {
@@ -1023,14 +1072,17 @@ fn login1_proxy(conn: &LocalConnection) -> Proxy<'_, &LocalConnection> {
 fn block_on_jobs(
     conn: &LocalConnection,
     submitted_jobs: &Rc<RefCell<HashMap<dbus::Path<'static>, Job>>>,
-) {
+) -> anyhow::Result<()> {
     while !submitted_jobs.borrow().is_empty() {
         log::debug!(
             "waiting for submitted jobs to finish, still have {} job(s)",
             submitted_jobs.borrow().len()
         );
-        _ = conn.process(DBUS_PROCESS_TIME);
+        _ = conn
+            .process(DBUS_PROCESS_TIME)
+            .context("Failed to process dbus messages while waiting for jobs")?;
     }
+    Ok(())
 }
 
 fn remove_file_if_exists(p: impl AsRef<Path>) -> std::io::Result<()> {
@@ -1345,26 +1397,79 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
 
     let current_active_units = get_active_units(&systemd)?;
 
+    let old_unit_dir = old_toplevel.join(scope.etc_dir());
     let new_unit_dir = toplevel.join(scope.etc_dir());
-    let fragment_prefix = scope
-        .current_dir()
-        .to_str()
-        .expect("scope dir is valid UTF-8");
+    let fragment_dir = scope.current_dir();
 
-    // Units that are currently running from a non-/etc location (typically
-    // ~/.config/systemd/user, i.e. home-manager) but that the new NixOS
-    // configuration also defines. Pass 1 will skip these because of the
-    // FragmentPath filter; if the per-user activation (sd-switch) later drops
-    // its copy, we need a second pass to bring the NixOS-owned definition up.
+    // Determine $XDG_CONFIG_HOME/systemd/user from the user manager's own
+    // environment (we are spawned with env_clear()).
+    let user_config_unit_dir: Option<PathBuf> = match systemd.environment() {
+        Err(err) => {
+            log::debug!("Failed to read user manager environment: {err}");
+            None
+        }
+        Ok(env) => {
+            let lookup = |key: &str| {
+                env.iter().find_map(|kv| {
+                    kv.strip_prefix(key)
+                        .and_then(|rest| rest.strip_prefix('='))
+                        .filter(|v| Path::new(v).is_absolute())
+                        .map(PathBuf::from)
+                })
+            };
+            let config_home =
+                lookup("XDG_CONFIG_HOME").or_else(|| lookup("HOME").map(|h| h.join(".config")));
+            if config_home.is_none() {
+                log::debug!(
+                    "Neither $XDG_CONFIG_HOME nor $HOME is set in the user manager's environment"
+                );
+            }
+            config_home.map(|config_home| config_home.join("systemd/user"))
+        }
+    };
+
+    if user_config_unit_dir.is_none() {
+        log::debug!(
+            "Could not determine $XDG_CONFIG_HOME/systemd/user; \
+             units shadowed by ~/.config will not be considered for migration"
+        );
+    }
+
+    // Units active from a non-/etc location that the new generation defines
+    // in /etc/systemd/user. Pass 1 skips these (FragmentPath filter); pass 2
+    // brings the /etc definition into effect once /etc has won. Two cases:
+    //   * ~/.config/systemd/user (home-manager): shadows /etc, so wait for
+    //     the per-user activation (sd-switch) to remove its copy.
+    //   * anywhere else outside /etc ($XDG_DATA_HOME, $XDG_DATA_DIRS, ...):
+    //     /etc outranks these, so only act when /etc is gaining the unit;
+    //     if the previous generation already had it, leave it alone.
+    // Pass 2's `now_etc` check verifies /etc actually won before acting.
     let migration_candidates: Vec<String> = current_active_units
         .iter()
         .filter(|(unit, _)| new_unit_dir.join(unit).exists())
-        .filter(|(_, unit_state)| {
-            !unit_state
+        .filter(|(unit, unit_state)| {
+            let Ok(fragment_path) = unit_state
                 .proxy
-                .get("org.freedesktop.systemd1.Unit", "FragmentPath")
-                .map(|p: String| p.starts_with(fragment_prefix))
-                .unwrap_or(false)
+                .get::<String>("org.freedesktop.systemd1.Unit", "FragmentPath")
+            else {
+                return false;
+            };
+            let fragment_parent = Path::new(&fragment_path).parent();
+
+            // Already in /etc: handled by pass 1.
+            if fragment_parent == Some(fragment_dir) {
+                return false;
+            }
+
+            // Loaded from ~/.config/systemd/user, which shadows /etc.
+            if let Some(dir) = &user_config_unit_dir {
+                if fragment_parent == Some(dir.as_path()) {
+                    return true;
+                }
+            }
+
+            // Elsewhere: only act if /etc is gaining the unit this switch.
+            !old_unit_dir.join(unit).exists()
         })
         .map(|(unit, _)| unit.clone())
         .collect();
@@ -1372,7 +1477,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
     collect_unit_changes(
         &toplevel,
         scope,
-        &old_toplevel.join(scope.etc_dir()),
+        &old_unit_dir,
         &new_unit_dir,
         &current_active_units,
         &mut units_to_stop,
@@ -1382,6 +1487,9 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
         &mut units_to_skip,
         &mut units_to_filter,
     )?;
+
+    // Restarted unconditionally below; don't list it as skipped.
+    units_to_skip.remove("nixos-activation.service");
 
     let print_units = |verb: &str, units: &HashMap<String, ()>| {
         if units.is_empty() {
@@ -1415,7 +1523,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
             submitted_jobs.borrow_mut().insert(job_path, Job::Stop);
         }
     }
-    block_on_jobs(&dbus_conn, &submitted_jobs);
+    block_on_jobs(&dbus_conn, &submitted_jobs)?;
 
     if !units_to_skip.is_empty() {
         print_units("NOT restarting", &units_to_skip);
@@ -1441,7 +1549,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
             }
         }
     }
-    block_on_jobs(&dbus_conn, &submitted_jobs);
+    block_on_jobs(&dbus_conn, &submitted_jobs)?;
     remove_file_if_exists(&reload_list)
         .with_context(|| format!("Failed to remove {}", reload_list.display()))?;
 
@@ -1457,7 +1565,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
             }
         }
     }
-    block_on_jobs(&dbus_conn, &submitted_jobs);
+    block_on_jobs(&dbus_conn, &submitted_jobs)?;
     remove_file_if_exists(&restart_list)
         .with_context(|| format!("Failed to remove {}", restart_list.display()))?;
 
@@ -1474,7 +1582,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
             }
         }
     }
-    block_on_jobs(&dbus_conn, &submitted_jobs);
+    block_on_jobs(&dbus_conn, &submitted_jobs)?;
     remove_file_if_exists(&start_list)
         .with_context(|| format!("Failed to remove {}", start_list.display()))?;
 
@@ -1483,6 +1591,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
     // Toplevels with system.activatable = false do not ship this unit; mirror
     // the system scope's tolerance for a missing activate script.
     if new_unit_dir.join("nixos-activation.service").exists() {
+        eprintln!("restarting the following user units: nixos-activation.service");
         match systemd.restart_unit("nixos-activation.service", "replace") {
             Ok(_) => {
                 log::debug!("waiting for nixos activation to finish");
@@ -1510,29 +1619,40 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
 
         let active_after = get_active_units(&systemd)?;
 
+        let mut to_reload = HashMap::new();
         let mut to_restart = HashMap::new();
         let mut to_start = HashMap::new();
+        let mut to_skip = HashMap::new();
 
         for unit in &migration_candidates {
-            match active_after.get(unit) {
+            // Honour X-* directives so reloadIfChanged/restartIfChanged hold.
+            let new_unit_file = new_unit_dir.join(unit);
+            let new_unit_info = parse_unit(&new_unit_file, &new_unit_file)?;
+
+            let action = match active_after.get(unit) {
                 Some(unit_state) => {
+                    // Only act if /etc now wins (i.e. the higher-priority
+                    // copy is gone). Read errors are treated as "leave alone".
                     let now_etc = unit_state
                         .proxy
                         .get("org.freedesktop.systemd1.Unit", "FragmentPath")
-                        .map(|p: String| p.starts_with(fragment_prefix))
+                        .map(|p: String| Path::new(&p).parent() == Some(fragment_dir))
                         .unwrap_or(false);
-                    if now_etc {
-                        // Still running with the previous manager's binary;
-                        // restart so the /etc definition takes effect.
-                        to_restart.insert(unit.clone(), ());
+                    if !now_etc {
+                        // Still shadowed (or read error); leave it alone.
+                        continue;
                     }
-                    // else: still shadowed by ~/.config, leave it alone.
+                    MigrationAction::for_active_unit(unit, &new_unit_info)
                 }
-                None => {
-                    // Stopped by the previous manager; start the /etc copy.
-                    to_start.insert(unit.clone(), ());
-                }
-            }
+                // Stopped by the previous manager; start the /etc copy.
+                None => MigrationAction::for_stopped_unit(&new_unit_info),
+            };
+            match action {
+                MigrationAction::Skip => to_skip.insert(unit.clone(), ()),
+                MigrationAction::Reload => to_reload.insert(unit.clone(), ()),
+                MigrationAction::Restart => to_restart.insert(unit.clone(), ()),
+                MigrationAction::Start => to_start.insert(unit.clone(), ()),
+            };
         }
 
         // Re-start active targets so any other newly-unmasked dependencies are
@@ -1542,6 +1662,24 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
                 to_start.insert(unit.clone(), ());
             }
         }
+
+        if !to_skip.is_empty() {
+            print_units("NOT restarting (post-activation)", &to_skip);
+        }
+
+        print_units("reloading (post-activation)", &to_reload);
+        for unit in to_reload.keys() {
+            match systemd.reload_unit(unit, "replace") {
+                Ok(job_path) => {
+                    submitted_jobs.borrow_mut().insert(job_path, Job::Reload);
+                }
+                Err(err) => {
+                    eprintln!("Failed to reload user unit {unit}: {err}");
+                    exit_code = 4;
+                }
+            }
+        }
+        block_on_jobs(&dbus_conn, &submitted_jobs)?;
 
         print_units("restarting (post-activation)", &to_restart);
         for unit in to_restart.keys() {
@@ -1555,7 +1693,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
                 }
             }
         }
-        block_on_jobs(&dbus_conn, &submitted_jobs);
+        block_on_jobs(&dbus_conn, &submitted_jobs)?;
 
         let to_start_filtered = filter_units(&units_to_filter, &to_start);
         print_units("starting (post-activation)", &to_start_filtered);
@@ -1570,7 +1708,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
                 }
             }
         }
-        block_on_jobs(&dbus_conn, &submitted_jobs);
+        block_on_jobs(&dbus_conn, &submitted_jobs)?;
     }
 
     let finished = finished_jobs.borrow();
@@ -1627,7 +1765,6 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
     let distro_id = required_env("DISTRO_ID")?;
     let pre_switch_check = required_env("PRE_SWITCH_CHECK")?;
     let install_bootloader = required_env("INSTALL_BOOTLOADER")?;
-    let locale_archive = required_env("LOCALE_ARCHIVE")?;
     let new_systemd = PathBuf::from(required_env("SYSTEMD")?);
     let log_level = if std::env::var("STC_DEBUG").is_ok() {
         LevelFilter::Debug
@@ -1641,11 +1778,6 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
     // The action that is to be performed (like switch, boot, test, dry-activate) Also exposed via
     // environment variable from now on
     std::env::set_var("NIXOS_ACTION", Into::<&'static str>::into(action));
-
-    // Expose the locale archive as an environment variable for systemctl and the activation script
-    if !locale_archive.is_empty() {
-        std::env::set_var("LOCALE_ARCHIVE", locale_archive);
-    }
 
     let os_release = parse_os_release().context("Failed to parse os-release")?;
 
@@ -2068,7 +2200,7 @@ won't take effect until you reboot the system.
             };
         }
 
-        block_on_jobs(&dbus_conn, &submitted_jobs);
+        block_on_jobs(&dbus_conn, &submitted_jobs)?;
     }
 
     if !units_to_skip.is_empty() {
@@ -2084,7 +2216,7 @@ won't take effect until you reboot the system.
     }
 
     // Wait for all stop jobs to finish
-    block_on_jobs(&dbus_conn, &submitted_jobs);
+    block_on_jobs(&dbus_conn, &submitted_jobs)?;
 
     let mut exit_code = 0;
 
@@ -2307,7 +2439,7 @@ won't take effect until you reboot the system.
     }
 
     // Wait for the restart job of sysinit-reactivation.service to finish
-    block_on_jobs(&dbus_conn, &submitted_jobs);
+    block_on_jobs(&dbus_conn, &submitted_jobs)?;
 
     // Before reloading we need to ensure that the units are still active. They may have been
     // deactivated because one of their requirements got stopped. If they are inactive but should
@@ -2362,7 +2494,7 @@ won't take effect until you reboot the system.
             }
         }
 
-        block_on_jobs(&dbus_conn, &submitted_jobs);
+        block_on_jobs(&dbus_conn, &submitted_jobs)?;
 
         remove_file_if_exists(RELOAD_LIST_FILE)
             .with_context(|| format!("Failed to remove {RELOAD_LIST_FILE}"))?;
@@ -2390,7 +2522,7 @@ won't take effect until you reboot the system.
             }
         }
 
-        block_on_jobs(&dbus_conn, &submitted_jobs);
+        block_on_jobs(&dbus_conn, &submitted_jobs)?;
 
         remove_file_if_exists(RESTART_LIST_FILE)
             .with_context(|| format!("Failed to remove {RESTART_LIST_FILE}"))?;
@@ -2423,7 +2555,7 @@ won't take effect until you reboot the system.
         }
     }
 
-    block_on_jobs(&dbus_conn, &submitted_jobs);
+    block_on_jobs(&dbus_conn, &submitted_jobs)?;
 
     remove_file_if_exists(START_LIST_FILE)
         .with_context(|| format!("Failed to remove {START_LIST_FILE}"))?;
@@ -2868,5 +3000,108 @@ After=dev-disk-by\x2dlabel-root.device
                 "dev-disk-by\\x2dlabel-root.device"
             );
         }
+    }
+
+    fn unit_info(
+        sections: &[(&str, &[(&str, &str)])],
+    ) -> HashMap<String, HashMap<String, Vec<String>>> {
+        sections
+            .iter()
+            .map(|(section, kvs)| {
+                (
+                    section.to_string(),
+                    kvs.iter()
+                        .map(|(k, v)| (k.to_string(), vec![v.to_string()]))
+                        .collect(),
+                )
+            })
+            .collect()
+    }
+
+    #[test]
+    fn migration_action_for_active_unit() {
+        use super::MigrationAction;
+
+        // Plain service: restart.
+        assert_eq!(
+            MigrationAction::for_active_unit("foo.service", &unit_info(&[])),
+            MigrationAction::Restart
+        );
+
+        // reloadIfChanged must reload, not restart.
+        assert_eq!(
+            MigrationAction::for_active_unit(
+                "foo.service",
+                &unit_info(&[("Service", &[("X-ReloadIfChanged", "true")])])
+            ),
+            MigrationAction::Reload
+        );
+
+        // X-RestartIfChanged=false (restartIfChanged = false) must skip.
+        assert_eq!(
+            MigrationAction::for_active_unit(
+                "foo.service",
+                &unit_info(&[("Service", &[("X-RestartIfChanged", "false")])])
+            ),
+            MigrationAction::Skip
+        );
+
+        // RefuseManualStop must skip.
+        assert_eq!(
+            MigrationAction::for_active_unit(
+                "foo.service",
+                &unit_info(&[("Unit", &[("RefuseManualStop", "yes")])])
+            ),
+            MigrationAction::Skip
+        );
+
+        // X-OnlyManualStart must skip.
+        assert_eq!(
+            MigrationAction::for_active_unit(
+                "foo.service",
+                &unit_info(&[("Unit", &[("X-OnlyManualStart", "yes")])])
+            ),
+            MigrationAction::Skip
+        );
+
+        // Units that cannot be restarted directly must skip.
+        for unit in [
+            "sysinit.target",
+            "basic.target",
+            "multi-user.target",
+            "graphical.target",
+            "foo.path",
+            "bar.slice",
+        ] {
+            assert_eq!(
+                MigrationAction::for_active_unit(unit, &unit_info(&[])),
+                MigrationAction::Skip,
+                "{unit}"
+            );
+        }
+    }
+
+    #[test]
+    fn migration_action_for_stopped_unit() {
+        use super::MigrationAction;
+
+        assert_eq!(
+            MigrationAction::for_stopped_unit(&unit_info(&[])),
+            MigrationAction::Start
+        );
+        assert_eq!(
+            MigrationAction::for_stopped_unit(&unit_info(&[(
+                "Unit",
+                &[("RefuseManualStart", "true")]
+            )])),
+            MigrationAction::Skip
+        );
+        assert_eq!(
+            MigrationAction::for_stopped_unit(&unit_info(&[(
+                "Unit",
+                &[("X-OnlyManualStart", "true")]
+            )])),
+            MigrationAction::Skip
+        );
     }
 }

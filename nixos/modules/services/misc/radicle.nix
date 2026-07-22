@@ -17,8 +17,8 @@ let
   };
 
   credentials = {
-    privateKey = "xyz.radicle.node.secret";
-    privateKeyPassphrase = "xyz.radicle.node.passphrase";
+    privateKey = "dev.radicle.node.secret";
+    privateKeyPassphrase = "dev.radicle.node.passphrase";
   };
 
   # Convenient wrapper to run `rad` in the namespaces of `radicle-node.service`

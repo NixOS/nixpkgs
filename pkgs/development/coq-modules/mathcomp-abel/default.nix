@@ -43,6 +43,7 @@ mkCoqDerivation {
   release."1.0.0".sha256 = "190jd8hb8anqsvr9ysr514pm5sh8qhw4030ddykvwxx9d9q6rbp3";
 
   propagatedBuildInputs = [
+    mathcomp.ssreflect
     mathcomp.field
     mathcomp-real-closed
   ];

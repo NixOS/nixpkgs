@@ -1781,10 +1781,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0f05mq75bc35w78vkx21bn1lcl07r4w2jqysdji6afy6j1mca3ya";
+      sha256 = "158p4ivp485j7njk0gqznk5lszbgwh7y4dwzvlzpn5vrpmxasx9n";
       type = "gem";
     };
-    version = "1.0.0";
+    version = "1.0.1";
   };
   minitest = {
     groups = [

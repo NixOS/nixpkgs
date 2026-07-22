@@ -4,19 +4,22 @@
   async-timeout,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "asmog";
   version = "0.0.6";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "14b8hdxcks6qyrqpp4mm77fvzznbskqn7fw9qgwgcqx81pg45iwk";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-k8dC3g2oY/b4w4m7Y/HUy/6/3Tm1kntx9tjoyXqDaJE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     async-timeout
   ];
@@ -33,4 +36,4 @@ buildPythonPackage rec {
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

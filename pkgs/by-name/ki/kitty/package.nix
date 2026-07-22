@@ -45,27 +45,26 @@
   makeBinaryWrapper,
   darwin,
   cairo,
-  fetchpatch,
 }:
 
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.46.2";
+  version = "0.47.4";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     tag = "v${version}";
-    hash = "sha256-x+jBQrg3Iaj6PLMF1hIjS46odxv5GxPMcvC9JddYCHo=";
+    hash = "sha256-UDuWbWg7HiyJ4q/fVLLD+ZFmK74H2A2HRRwPoyGyGtU=";
   };
 
   goModules =
     (buildGo126Module {
       pname = "kitty-go-modules";
       inherit src version;
-      vendorHash = "sha256-FaSWBeQJlvw9vXcHJ/OaFd48K8d7X86X8w7wpG84Ltw=";
+      vendorHash = "sha256-o9S5KFT+9DRQ+OcZ5Wh8ZwtWE/19DYR810zCk+yUIr4=";
     }).goModules;
 
   buildInputs = [
@@ -153,6 +152,7 @@ buildPythonApplication rec {
   env = {
     CGO_ENABLED = 0;
     GOFLAGS = "-trimpath";
+    GOTOOLCHAIN = "local";
   };
 
   configurePhase = ''
@@ -215,29 +215,36 @@ buildPythonApplication rec {
   ];
 
   # skip failing tests due to darwin sandbox
-  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  preCheck =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace kitty_tests/check_build.py \
+        --replace test_macos_dictation_forwarding no_test_macos_dictation_forwarding
 
-    substituteInPlace kitty_tests/file_transmission.py \
-      --replace test_transfer_send dont_test_transfer_send
+      substituteInPlace kitty_tests/file_transmission.py \
+        --replace test_transfer_send dont_test_transfer_send
 
-    substituteInPlace kitty_tests/ssh.py \
-      --replace test_ssh_connection_data no_test_ssh_connection_data \
-      --replace test_ssh_shell_integration no_test_ssh_shell_integration \
-      --replace test_ssh_copy no_test_ssh_copy \
-      --replace test_ssh_env_vars no_test_ssh_env_vars
+      substituteInPlace kitty_tests/ssh.py \
+        --replace test_ssh_connection_data no_test_ssh_connection_data \
+        --replace test_ssh_shell_integration no_test_ssh_shell_integration \
+        --replace test_ssh_copy no_test_ssh_copy \
+        --replace test_ssh_env_vars no_test_ssh_env_vars
 
-    substituteInPlace kitty_tests/shell_integration.py \
-      --replace test_fish_integration no_test_fish_integration \
-      --replace test_zsh_integration no_test_zsh_integration
+      substituteInPlace kitty_tests/shell_integration.py \
+        --replace test_fish_integration no_test_fish_integration \
+        --replace test_zsh_integration no_test_zsh_integration
 
-    substituteInPlace kitty_tests/fonts.py \
-      --replace test_fallback_font_not_last_resort no_test_fallback_font_not_last_resort
+      substituteInPlace kitty_tests/fonts.py \
+        --replace test_fallback_font_not_last_resort no_test_fallback_font_not_last_resort
 
-    # theme collection test starts an http server
-    rm tools/themes/collection_test.go
-    # passwd_test tries to exec /usr/bin/dscl
-    rm tools/utils/passwd_test.go
-  '';
+      # theme collection test starts an http server
+      rm tools/themes/collection_test.go
+      # passwd_test tries to exec /usr/bin/dscl
+      rm tools/utils/passwd_test.go
+    ''
+    + ''
+      # These depend on files that are not available in the sandbox
+      rm tools/utils/machine_id/api_test.go
+    '';
 
   checkPhase = ''
     runHook preCheck

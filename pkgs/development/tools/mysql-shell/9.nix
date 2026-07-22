@@ -73,6 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace ../mysql/cmake/os/Darwin.cmake --replace-fail /usr/bin/libtool libtool
 
     substituteInPlace cmake/libutils.cmake --replace-fail /usr/bin/libtool libtool
+
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      patch -d .. -p1 < ${./mysql-server-libcxx-21.patch}
+    ''}
   '';
 
   strictDeps = true;

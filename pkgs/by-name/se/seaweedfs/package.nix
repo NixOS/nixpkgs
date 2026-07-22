@@ -1,17 +1,15 @@
 {
   buildGoModule,
   fetchFromGitHub,
-  iana-etc,
   installShellFiles,
   lib,
-  libredirect,
   nix-update-script,
   stdenv,
   versionCheckHook,
 }:
 buildGoModule (finalAttrs: {
   pname = "seaweedfs";
-  version = "4.19";
+  version = "4.36";
 
   src = fetchFromGitHub {
     owner = "seaweedfs";
@@ -24,22 +22,12 @@ buildGoModule (finalAttrs: {
       find "$out" -name .git -print0 | xargs -0 rm -rf
       popd
     '';
-    hash = "sha256-xMfV3WE10iP8MqxYd5w8JRUL5O7vO6ATN1ZEHB8MRxg=";
+    hash = "sha256-y42opbGNVMxWU/k0j5g27RWLBF0PLcOPlXU9eVg0jwY=";
   };
 
-  postPatch = ''
-    # Remove unmaintained code that's not used and generates various issues.
-    rm -rf unmaintained
-  '';
+  vendorHash = "sha256-peRhKuZ1D+y8Uhw1+P8Ogc1HrOh1/kYVd29lR89+rIo=";
 
-  vendorHash = "sha256-mGiA91y6ebbbdAu0+ZDylUDuZb8vcNaqeGv70/IFx9k=";
-
-  nativeBuildInputs = [
-    installShellFiles
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libredirect.hook
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   subPackages = [ "weed" ];
 
@@ -55,11 +43,13 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     "-extldflags=-static"
   ];
 
   env = {
-    CGO_ENABLED = 0;
+    CGO_ENABLED = if stdenv.hostPlatform.isDarwin then 1 else 0;
     GODEBUG = "http2client=0";
   };
 
@@ -67,26 +57,11 @@ buildGoModule (finalAttrs: {
     ldflags+=" -X \"github.com/seaweedfs/seaweedfs/weed/util/version.COMMIT=$(<COMMIT)\""
   '';
 
-  preCheck = ''
-    # Test all targets.
-    unset subPackages
-
-    # Remove tests that require specialized environment or additional setup
-    # that's not possible to achieve inside a sandbox.
-    for i in test/{fuse_integration,kafka,s3,sftp,volume_server}; do
-      find "$i" -name '*_test.go' -delete
-    done
-
-    # Required for reusing build artifacts in tests.
-    export PATH="$PATH:$NIX_BUILD_TOP/go/bin"
-  ''
-  + lib.optionalString (finalAttrs.env.CGO_ENABLED == 0) ''
-    # Depends on CGO.
-    rm -rf weed/mq/offset/{benchmark,end_to_end,sql_storage}_test.go
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/services=${iana-etc}/etc/services
-  '';
+  # Tests frequently break (mostly because of sandboxing) and keeping track of
+  # changes every release is becoming too much of a hassle resulting in Nixpkgs
+  # versions lagging behind which is not ideal for a package with a rapid
+  # release cycle.
+  doCheck = false;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     for shell in bash fish zsh; do
@@ -101,8 +76,6 @@ buildGoModule (finalAttrs: {
   versionCheckProgramArg = "version";
 
   passthru.updateScript = nix-update-script { };
-
-  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Simple and highly scalable distributed file system";

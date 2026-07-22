@@ -12,6 +12,7 @@
   gettext,
   libxml2,
   gnome,
+  fribidi,
   gtk4,
   evolution-data-server-gtk4,
   libical,
@@ -24,11 +25,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-calendar";
-  version = "49.1";
+  version = "50.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-calendar/${lib.versions.major finalAttrs.version}/gnome-calendar-${finalAttrs.version}.tar.xz";
-    hash = "sha256-DBEVqylNUyxMGfVs4Neu5T+OoysUMCCd0dntpHqD0sI=";
+    hash = "sha256-S3XfBxpS2Y+zXmR9AYAwEp0k2QB3kNAkV3RsmGF66rA=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    fribidi
     gtk4
     evolution-data-server-gtk4
     libical

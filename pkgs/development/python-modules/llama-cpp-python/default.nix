@@ -40,14 +40,14 @@ let
 in
 buildPythonPackage.override { stdenv = stdenvTarget; } rec {
   pname = "llama-cpp-python";
-  version = "0.3.22";
+  version = "0.3.23";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "abetlen";
     repo = "llama-cpp-python";
     tag = "v${version}";
-    hash = "sha256-Mdz8aTBo3bwoqtjarXnQuNYjcaU+p4HKdMQfSoYwq60=";
+    hash = "sha256-LqSgohfTv02RNZGMjKG0Pq2vHuIX+446uI2Q3KRmnzI=";
     fetchSubmodules = true;
   };
 
@@ -89,7 +89,7 @@ buildPythonPackage.override { stdenv = stdenvTarget; } rec {
     with cudaPackages;
     [
       cuda_cudart # cuda_runtime.h
-      cuda_cccl # <thrust/*>
+      cccl # <thrust/*>
       libcublas # cublas_v2.h
     ]
   );

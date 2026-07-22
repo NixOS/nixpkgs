@@ -25,6 +25,6 @@ buildPythonPackage rec {
     description = "Simple, cross-platform module for obtaining GUI information on applications' windows";
     homepage = "https://github.com/asweigart/PyGetWindow";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ lucasew ];
+    maintainers = [ ];
   };
 }

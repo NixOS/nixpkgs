@@ -7,36 +7,36 @@
   nix-update-script,
 }:
 let
-  inherit (lib.lists) last map optionals;
+  inherit (lib.lists) optionals;
   inherit (lib.trivial) boolToString;
   inherit (config) cudaSupport;
   inherit (cudaPackages)
     backendStdenv
-    cuda_cccl
+    cccl
     cuda_cudart
     cuda_nvcc
     libcublas
     ;
-  inherit (cudaPackages.flags) cudaCapabilities dropDots isJetsonBuild;
+  inherit (cudaPackages.flags) gencodeString isJetsonBuild;
 in
 backendStdenv.mkDerivation {
   pname = "gpu-burn";
-  version = "0-unstable-2025-11-04";
+  version = "0-unstable-2026-05-27";
 
   strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "wilicc";
     repo = "gpu-burn";
-    rev = "671f4be92477ce01cd9b536bc534a006dbee058f";
-    hash = "sha256-zaGzwpdvF9dw3RypBO+g6FhjOFN8/F9+yI1+lLxLjgs=";
+    rev = "dfc30426a45613a36b5da53ef901a1e29d3db374";
+    hash = "sha256-/gDD6t3gGtPEZVageQyVRIb87gTa0yeygE45zmOVli4=";
   };
 
   postPatch = ''
     substituteInPlace gpu_burn-drv.cpp \
       --replace-fail \
-        '#define COMPARE_KERNEL "compare.ptx"' \
-        '#define COMPARE_KERNEL "${placeholder "out"}/share/compare.ptx"'
+        '#define COMPARE_KERNEL "compare.fatbin"' \
+        '#define COMPARE_KERNEL "${placeholder "out"}/share/compare.fatbin"'
     substituteInPlace Makefile \
       --replace-fail \
         '${"\${CUDAPATH}/bin/nvcc"}' \
@@ -49,7 +49,7 @@ backendStdenv.mkDerivation {
   ];
 
   buildInputs = [
-    cuda_cccl # <nv/target>
+    cccl # <nv/target>
     cuda_cudart # driver_types.h
     cuda_nvcc # crt/host_defines.h
     libcublas # cublas_v2.h
@@ -58,15 +58,19 @@ backendStdenv.mkDerivation {
   makeFlags = [
     # NOTE: CUDAPATH assumes cuda_cudart is a single output containing all of lib, dev, and stubs.
     "CUDAPATH=${cuda_cudart}"
-    "COMPUTE=${last (map dropDots cudaCapabilities)}"
     "IS_JETSON=${boolToString isJetsonBuild}"
+    # Empty COMPUTE suppresses the Makefile's default -arch=compute_$(COMPUTE);
+    # gencodeString below is the single source of truth for architectures.
+    "COMPUTE="
   ];
+
+  env.NVCCFLAGS = gencodeString;
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/{bin,share}
     install -Dm755 gpu_burn $out/bin/
-    install -Dm644 compare.ptx $out/share/
+    install -Dm644 compare.fatbin $out/share/
     runHook postInstall
   '';
 

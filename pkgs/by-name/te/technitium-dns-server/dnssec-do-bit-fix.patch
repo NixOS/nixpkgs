@@ -1,0 +1,13 @@
+diff --git a/DnsServerCore/Dns/ZoneManagers/AuthZoneManager.cs b/DnsServerCore/Dns/ZoneManagers/AuthZoneManager.cs
+index 352ea6c0..41a9a1c7 100644
+--- a/DnsServerCore/Dns/ZoneManagers/AuthZoneManager.cs
++++ b/DnsServerCore/Dns/ZoneManagers/AuthZoneManager.cs
+@@ -3536,7 +3536,7 @@ namespace DnsServerCore.Dns.ZoneManagers
+                     }
+                 }
+ 
+-                return new DnsDatagram(request.Identifier, true, DnsOpcode.StandardQuery, true, false, request.RecursionDesired, isRecursionAllowed, false, false, rCode, request.Question, answer, authority, additional, udpPayloadSize: _dnsServer.UdpPayloadSize, options: eDnsOptions);
++                return new DnsDatagram(request.Identifier, true, DnsOpcode.StandardQuery, true, false, request.RecursionDesired, isRecursionAllowed, false, false, rCode, request.Question, answer, authority, additional, _dnsServer.UdpPayloadSize, request.DnssecOk ? EDnsHeaderFlags.DNSSEC_OK : EDnsHeaderFlags.None, eDnsOptions);
+             }
+         }
+ 

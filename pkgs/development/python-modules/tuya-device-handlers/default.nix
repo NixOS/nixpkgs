@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tuya-device-handlers";
-  version = "0.0.18";
+  version = "0.0.22";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "tuya-device-handlers";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZzK6IV6AF+5+oOW9ADM/zgwFTmKNT2CzaEuXXK2hyVo=";
+    hash = "sha256-6zAzHjOzCaPYNP+dwz4/2o0/WXvEAZzPIoJW5Nwenu8=";
   };
 
   build-system = [ poetry-core ];
@@ -27,6 +27,11 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytestCheckHook
     syrupy
+  ];
+
+  disabledTests = [
+    # pathlib.Path(path).relative_to(_PROJECT_ROOT) evaluates to a path that is not below the build dir
+    "test_customer_device_with_quirk_as_dict"
   ];
 
   pythonImportsCheck = [ "tuya_device_handlers" ];

@@ -43,6 +43,7 @@
   bokeh,
   boto3,
   cloudpickle,
+  cwsandbox,
   flask,
   google-cloud-artifact-registry,
   google-cloud-compute,
@@ -51,6 +52,7 @@
   jsonschema,
   kubernetes,
   kubernetes-asyncio,
+  looptime,
   matplotlib,
   moviepy,
   pandas,
@@ -75,12 +77,12 @@
 }:
 
 let
-  version = "0.26.1";
+  version = "0.28.0";
   src = fetchFromGitHub {
     owner = "wandb";
     repo = "wandb";
     tag = "v${version}";
-    hash = "sha256-QtMjiRqE9ZhA1S8gHt1F8NBXTq7QQ3ENhk02Lry80F4=";
+    hash = "sha256-YdM/LrrWQFup/1Fkv49//eOFfYFCRgpuuH7+DZIOT1M=";
   };
 
   wandb-xpu = rustPlatform.buildRustPackage {
@@ -90,7 +92,7 @@ let
 
     sourceRoot = "${src.name}/xpu";
 
-    cargoHash = "sha256-RPvtMV9Mrzb6lJhMR+fi58h/ncvbNkbIjAP35sdaOO0=";
+    cargoHash = "sha256-vB0LZjfnf//U1BXCzvaQBjlXLlGx/4g+emSZWcS+oGU=";
 
     checkFlags = [
       # fails in sandbox
@@ -120,13 +122,15 @@ let
 
     sourceRoot = "${src.name}/parquet-rust-wrapper";
 
-    cargoHash = "sha256-w98wliTcVJr4IlmKFVU+glmawMJl5qVCSUSJ8LeceJ8=";
+    cargoHash = "sha256-BkeSRbZoehYGHj15KcInugRBvOLXJlh1NqTHhRnNOK8=";
 
     # The original build script renames the library:
     # https://github.com/wandb/wandb/blob/v0.26.0/parquet-rust-wrapper/build.sh#L37-L68
     postInstall = ''
       mv $out/lib/libarrow_rs_wrapper${sharedLibrary} $out/lib/${libRustParquet}
     '';
+
+    __darwinAllowLocalNetworking = true;
   };
 
   wandb-core = buildGoModule {
@@ -136,8 +140,15 @@ let
     sourceRoot = "${src.name}/core";
 
     postPatch =
-      # hardcode the `wandb-xpu` binary path.
+      # Relax the Go toolchain requirement; nixpkgs ships 1.26.2.
       ''
+        substituteInPlace go.mod \
+          --replace-fail \
+            "go 1.26.4" \
+            "go 1.26.2"
+      ''
+      # hardcode the `wandb-xpu` binary path.
+      + ''
         substituteInPlace internal/monitor/xpuresourcemanager.go \
           --replace-fail \
             'cmdPath, err := getXPUCmdPath()' \
@@ -250,6 +261,7 @@ buildPythonPackage (finalAttrs: {
     bokeh
     boto3
     cloudpickle
+    cwsandbox
     flask
     google-cloud-artifact-registry
     google-cloud-compute
@@ -258,6 +270,7 @@ buildPythonPackage (finalAttrs: {
     jsonschema
     kubernetes
     kubernetes-asyncio
+    looptime
     matplotlib
     moviepy
     pandas
@@ -432,7 +445,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "CLI and library for interacting with the Weights and Biases API";
     homepage = "https://github.com/wandb/wandb";
-    changelog = "https://github.com/wandb/wandb/raw/${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/wandb/wandb/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ samuela ];
     broken = wandb-xpu.meta.broken || wandb-core.meta.broken;

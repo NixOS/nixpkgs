@@ -21,13 +21,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "peertube";
-  version = "8.1.5";
+  version = "8.1.8";
 
   src = fetchFromGitHub {
     owner = "Chocobozzz";
     repo = "PeerTube";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vLKjTn8tdHb/DUHj/w3ovXmRNzD8CMSKCaPleW+i7Tc=";
+    hash = "sha256-Ei7MgEyHDJyLXnjI8mT7S7pLno+pTmFWZHc6oEZaTcM=";
   };
 
   outputs = [
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-gvjk4OmKR6W/nllUCSaiX/lVXJSac9r04xr7fNiBftI=";
+    hash = "sha256-fQ0FyBPZ3v3lCSoWYz1ccbOSrfgnzwQvOyE7Dp3ZGRY=";
   };
 
   nativeBuildInputs = [

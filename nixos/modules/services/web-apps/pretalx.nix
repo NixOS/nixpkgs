@@ -27,6 +27,32 @@ let
         cfg.settings.database.backend == "postgresql"
       ) finalPackage.optional-dependencies.postgres;
   };
+
+  pretalxManageWrapper = pkgs.writeShellApplication {
+    name = "pretalx-manage";
+    runtimeInputs = with pkgs; [
+      util-linux
+    ];
+    text = ''
+      cd ${cfg.settings.filesystem.data}
+      set -a
+      ${lib.concatMapStringsSep "\n" (file: ''
+        . ${lib.escapeShellArg file}
+      '') cfg.environmentFiles}
+      set +a
+      export PRETALX_CONFIG_FILE=${configFile}
+      exec runuser ${
+        lib.cli.toCommandLineShellGNU { } {
+          inherit (cfg) user;
+          preserve-environment = true;
+        }
+      } -- ${lib.getExe' pythonEnv "pretalx-manage"} "$@"
+    '';
+    excludeShellChecks = [
+      # Not following: /run/agenix/pretalx-env was not specified as input
+      "SC1091"
+    ];
+  };
 in
 
 {
@@ -325,18 +351,7 @@ in
     # https://docs.pretalx.org/administrator/installation/
 
     environment.systemPackages = [
-      (pkgs.writeScriptBin "pretalx-manage" ''
-        cd ${cfg.settings.filesystem.data}
-        sudo=exec
-        if [[ "$USER" != ${cfg.user} ]]; then
-          sudo='exec /run/wrappers/bin/sudo -u ${cfg.user} --preserve-env=PRETALX_CONFIG_FILE'
-        fi
-        set -a
-        ${lib.concatMapStringsSep "\n" (file: ". ${lib.escapeShellArg file}") cfg.environmentFiles}
-        set +a
-        export PRETALX_CONFIG_FILE=${configFile}
-        $sudo ${lib.getExe' pythonEnv "pretalx-manage"} "$@"
-      '')
+      pretalxManageWrapper
     ];
 
     services.logrotate.settings.pretalx = {

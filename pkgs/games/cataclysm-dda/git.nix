@@ -37,7 +37,7 @@ let
     ];
 
     meta = common.meta // {
-      maintainers = with lib.maintainers; common.meta.maintainers ++ [ rardiol ];
+      maintainers = common.meta.maintainers ++ [ ];
     };
   });
 in

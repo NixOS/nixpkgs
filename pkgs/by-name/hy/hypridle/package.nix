@@ -23,7 +23,7 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hypridle";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-YzRWE3rCnsY0WDRJcn4KvyWUoe+5zdkUYNIaHGP9BZ4=";
   };
 
@@ -52,6 +52,7 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Hyprland's idle daemon";
     homepage = "https://github.com/hyprwm/hypridle";
+    changelog = "https://github.com/hyprwm/hypridle/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.hyprland ];
     mainProgram = "hypridle";

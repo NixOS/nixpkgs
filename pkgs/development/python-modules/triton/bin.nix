@@ -1,18 +1,24 @@
 {
   lib,
   stdenv,
+  config,
   cudaPackages,
   buildPythonPackage,
   fetchurl,
   python,
   autoPatchelfHook,
   zlib,
+  rocmPackages,
+
+  rocmSupport ? config.rocmSupport,
+  addDriverRunpath,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "triton";
-  version = "3.6.0";
+  version = "3.7.0";
   format = "wheel";
+  __structuredAttrs = true;
 
   src =
     let
@@ -37,10 +43,25 @@ buildPythonPackage (finalAttrs: {
 
   dontStrip = true;
 
-  # If this breaks, consider replacing with "${cuda_nvcc}/bin/ptxas"
   postFixup = ''
     mkdir -p $out/${python.sitePackages}/triton/third_party/cuda/bin/
     ln -s ${cudaPackages.cuda_nvcc}/bin/ptxas $out/${python.sitePackages}/triton/third_party/cuda/bin/
+  ''
+  # Ugly patch to circumvent the heuristic-based search logic of libcuda.so
+  + ''
+    substituteInPlace "${placeholder "out"}/${python.sitePackages}/triton/backends/nvidia/driver.py" \
+      --replace-fail \
+        "if env_libcuda_path := knobs.nvidia.libcuda_path:" \
+        "return '${addDriverRunpath.driverLink}/lib/libcuda.so'" \
+      --replace-fail \
+        "return [env_libcuda_path]" \
+        ""
+  ''
+  + lib.optionalString rocmSupport ''
+    substituteInPlace "${placeholder "out"}/${python.sitePackages}/triton/backends/amd/driver.py" \
+      --replace-fail \
+        "lib_name = "libamdhip64.so" \
+        "return '${rocmPackages.clr}/lib/libamdhip64.so'"
   '';
 
   meta = {

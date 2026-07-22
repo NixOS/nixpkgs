@@ -128,6 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://w1.fi/hostapd/";
     description = "User space daemon for access point and authentication servers";
     license = lib.licenses.bsd3;
+    mainProgram = "hostapd";
     maintainers = with lib.maintainers; [ oddlama ];
     platforms = lib.platforms.linux;
   };

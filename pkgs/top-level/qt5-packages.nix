@@ -54,10 +54,6 @@ makeScopeWithSplicing' {
       qt5
       // {
 
-        inherit
-          qt5
-          ;
-
         __internalKF5 = lib.dontRecurseIntoAttrs kdeFrameworks;
 
         ### LIBRARIES
@@ -74,9 +70,9 @@ makeScopeWithSplicing' {
 
         qgpgme = callPackage ../development/libraries/qgpgme { };
 
-        grantlee = callPackage ../development/libraries/grantlee/5 { };
+        grantlee = pkgs.grantlee;
 
-        herqq = callPackage ../development/libraries/herqq { };
+        herqq = callPackage ../by-name/he/herqq/package.nix { };
 
         kcolorpicker = callPackage ../development/libraries/kcolorpicker { };
 
@@ -106,13 +102,9 @@ makeScopeWithSplicing' {
 
         libqtpas = callPackage ../development/compilers/fpc/libqtpas.nix { };
 
-        mapbox-gl-qml = libsForQt5.callPackage ../development/libraries/mapbox-gl-qml { };
+        mapbox-gl-qml = callPackage ../development/libraries/mapbox-gl-qml { };
 
         maplibre-native-qt = callPackage ../development/libraries/maplibre-native-qt { };
-
-        mlt = pkgs.mlt.override {
-          qt = qt5;
-        };
 
         polkit-qt = callPackage ../development/libraries/polkit-qt-1 { };
 
@@ -124,9 +116,7 @@ makeScopeWithSplicing' {
 
         pyotherside = callPackage ../development/libraries/pyotherside { };
 
-        qca = callPackage ../development/libraries/qca {
-          inherit (libsForQt5) qtbase;
-        };
+        qca = callPackage ../development/libraries/qca { };
         qca-qt5 = self.qca;
 
         qcoro = callPackage ../development/libraries/qcoro { };
@@ -192,10 +182,10 @@ makeScopeWithSplicing' {
         signond = callPackage ../development/libraries/signond { };
 
         timed = callPackage ../applications/system/timed { };
-
-        xp-pen-deco-01-v2-driver = callPackage ../os-specific/linux/xp-pen-drivers/deco-01-v2 { };
       }
       // lib.optionalAttrs config.allowAliases {
+        qt5 = throw "'libsForQt5.qt5.*' attributes were removed in favor of top-level 'qt5.*' attributes"; # Added 2026-06-05
+        mlt = throw "'libsForQt5.mlt' was removed due to lack of upstream support since v7.36.0, use 'qt6Packages.mlt'."; # Added 2026-06-05
         futuresql = throw "libsForQt5.futuresql has been removed"; # Added 2026-05-01
         kdb = throw "libsForQt5.kdb has been removed"; # Added 2026-05-01
         kdiagram = throw "libsForQt5.kdiagram has been removed"; # Added 2026-05-01

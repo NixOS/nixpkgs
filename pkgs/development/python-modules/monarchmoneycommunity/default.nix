@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "monarchmoneycommunity";
-  version = "1.3.0";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bradleyseanf";
     repo = "monarchmoneycommunity";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xJKsA6YCcwWeqGiNYuMUjrPnj1kYtR6odB/JU1vZ/3c=";
+    hash = "sha256-WWwxCL5LNIMqt+K2AmFuCQtx/i7MtyCsTxagz1GMw+g=";
   };
 
   build-system = [ setuptools ];

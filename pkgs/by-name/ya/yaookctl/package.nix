@@ -6,13 +6,13 @@
 }:
 python3.pkgs.buildPythonApplication {
   pname = "yaookctl";
-  version = "0-unstable-2026-04-24";
+  version = "0-unstable-2026-06-23";
 
   src = fetchFromGitLab {
     owner = "yaook";
     repo = "yaookctl";
-    rev = "2b66a5bf50b05c68897ab80a17d41d9611d16a1d";
-    hash = "sha256-cunSKWjOx+R0gTJic1DJRVHx0RG+vXCagbf8kmTrVKY=";
+    rev = "f525f4c11422e8d556f8ff5564c5ce7180570f20";
+    hash = "sha256-QPr1ryiT/OfBOEcIghGOgqKlu2iNLglWmZoWs6BLyvU=";
   };
 
   pyproject = true;

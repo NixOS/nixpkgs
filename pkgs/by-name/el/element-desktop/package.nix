@@ -5,7 +5,7 @@
   makeWrapper,
   makeDesktopItem,
   nodejs,
-  electron_41,
+  electron_42,
   element-web,
   callPackage,
   typescript,
@@ -15,7 +15,8 @@
   commandLineArgs ? "",
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_11,
+  faketty,
   asar,
   copyDesktopItems,
   darwin,
@@ -23,19 +24,19 @@
 }:
 
 let
-  pnpm = pnpm_10;
-  electron = electron_41;
+  pnpm = pnpm_11;
+  electron = electron_42;
   seshat = callPackage ./seshat { };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "element-desktop";
-  version = "1.12.14";
+  version = "1.12.22";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "element-web";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yy7CfMOMT1DBXHDHaDyAaOgp3s2KQIKA1A6zUhVOUhM=";
+    hash = "sha256-TtC4KUnaKy/gmh5CbkPTWKCFjdeKvt8esFt3awdkA/g=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -46,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-0yqWObZtRntsH7gk+OB8pMuWsrvCQ4L9173Qv0o5abk=";
+    hash = "sha256-Cxc2/NpOpkXavDvBgaU6Douud7AO06jt1KjuaLnZh8M=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -60,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm
     pnpmConfigHook
     tsx
+    faketty
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.autoSignDarwinBinariesHook
@@ -85,13 +87,15 @@ stdenv.mkDerivation (finalAttrs: {
     cd ../../
   '';
 
+  # faketty is required to work around a bug in nx.
+  # See: https://github.com/nrwl/nx/issues/22445
   buildPhase = ''
     runHook preBuild
 
     export VERSION=${finalAttrs.version}
 
-    pnpm -C apps/desktop run build:ts
-    pnpm -C apps/desktop run build:res
+    faketty pnpm -C apps/desktop exec nx build:ts
+    faketty pnpm -C apps/desktop exec nx build:res
     pnpm -C apps/desktop exec electron-builder --dir -c.electronDist=electron-dist -c.electronVersion=${electron.version} -c.mac.identity=null
 
     cd apps/desktop

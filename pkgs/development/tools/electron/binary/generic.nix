@@ -61,7 +61,7 @@ let
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     # https://www.electronjs.org/docs/latest/tutorial/electron-timelines
-    knownVulnerabilities = lib.optional (lib.versionOlder version "39.0.0") "Electron version ${version} is EOL";
+    knownVulnerabilities = lib.optional (lib.versionOlder version "40.0.0") "Electron version ${version} is EOL";
   };
 
   fetcher =
@@ -187,6 +187,9 @@ let
     '';
 
     passthru.dist = finalAttrs.finalPackage + "/libexec/electron";
+
+    __structuredAttrs = true;
+    strictDeps = true;
   };
 
   darwin = finalAttrs: {

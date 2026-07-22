@@ -31,14 +31,14 @@ in
 buildPythonPackage (finalAttrs: {
   pname = "playwright";
   # run ./pkgs/development/web/playwright/update.sh to update
-  version = "1.59.0";
+  version = "1.60.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "playwright-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CbvVSx/KDaX+CZEJRlDd4GUwWejzjTKNyL4+FhgT6qE=";
+    hash = "sha256-gbPWUmELw77Fw5M236et2TjkkGisMVVOJzmgq61/bg0=";
   };
 
   patches = [
@@ -54,11 +54,11 @@ buildPythonPackage (finalAttrs: {
   ];
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail ', "auditwheel==6.2.0"' "" \
-      --replace-fail "setuptools-scm==8.3.1" "setuptools-scm" \
-      --replace-fail "setuptools==80.9.0" "setuptools" \
-      --replace-fail "wheel==0.45.1" "wheel"
+    # Use sed with a regex instead of substituteInPlace so we don't have to
+    # bump pinned versions on every upstream release. grep -q precheck makes
+    # the build fail loudly if upstream restructures the requires list.
+    grep -q 'requires = \["setuptools==.*", "setuptools-scm==.*", "wheel==.*", "auditwheel==.*"\]' pyproject.toml
+    sed -i -e 's/requires = \["setuptools==.*", "setuptools-scm==.*", "wheel==.*", "auditwheel==.*"\]/requires = ["setuptools", "setuptools-scm", "wheel"]/' pyproject.toml
 
     # setup.py downloads and extracts the driver.
     # This is done manually in postInstall instead.

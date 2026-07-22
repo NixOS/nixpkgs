@@ -39,6 +39,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       ipgrep extracts possibly obfuscated host names and IP addresses
       from text, resolves host names, and prints them, sorted by ASN.
     '';
+    homepage = "https://github.com/jedisct1/ipgrep";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
   };

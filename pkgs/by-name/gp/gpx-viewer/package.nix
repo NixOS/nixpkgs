@@ -9,7 +9,7 @@
   vala,
   pkg-config,
   adwaita-icon-theme,
-  libchamplain,
+  libchamplain_libsoup3,
   gdl,
   wrapGAppsHook3,
 }:
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gdl
-    libchamplain
+    libchamplain_libsoup3
     adwaita-icon-theme
     libxml2
   ];

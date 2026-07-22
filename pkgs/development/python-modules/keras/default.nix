@@ -37,7 +37,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "keras";
-  version = "3.14.1";
+  version = "3.15.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -45,7 +45,7 @@ buildPythonPackage (finalAttrs: {
     owner = "keras-team";
     repo = "keras";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BaSD21mj7rPV53qFCOxGjGMm+rVzmfCooqcLcvQZa1U=";
+    hash = "sha256-EF61E7pwyuv9eKkTaPzJOWfbhK6rwkePIvmaVeriEDM=";
   };
 
   build-system = [
@@ -89,8 +89,8 @@ buildPythonPackage (finalAttrs: {
     # Require unpackaged `grain`
     "test_basics_grain"
     "test_fit_with_data_adapter_grain_dataloader"
-    "test_fit_with_data_adapter_grain_datast"
-    "test_fit_with_data_adapter_grain_datast_with_len"
+    "test_fit_with_data_adapter_grain_dataset"
+    "test_fit_with_data_adapter_grain_dataset_with_len"
     "test_image_dataset_from_directory_binary_grain"
     "test_image_dataset_from_directory_color_modes_grain"
     "test_image_dataset_from_directory_crop_to_aspect_ratio_grain"

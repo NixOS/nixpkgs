@@ -13,11 +13,21 @@
   libmpc,
   gnutar,
   makeWrapper,
-  backend ? "mcode",
+  backend ? if stdenv.hostPlatform.isAarch64 then "llvm-jit" else "mcode",
 }:
 
-assert backend == "mcode" || backend == "llvm" || backend == "gcc";
+assert lib.asserts.assertOneOf "backend" backend [
+  "mcode"
+  "llvm"
+  "llvm-jit"
+  "gcc"
+];
 
+let
+  backendIsLLVM = backend == "llvm";
+  backendIsLLVMJit = backend == "llvm-jit";
+  backendIsGCC = backend == "gcc";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghdl-${backend}";
   version = "6.0.0";
@@ -37,17 +47,17 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     gnat
   ]
-  ++ lib.optionals (backend == "llvm" || backend == "gcc") [
+  ++ lib.optionals (backendIsLLVM || backendIsGCC) [
     makeWrapper
   ]
-  ++ lib.optionals (backend == "gcc") [
+  ++ lib.optionals backendIsGCC [
     texinfo
   ];
 
   buildInputs = [
     zlib
   ]
-  ++ lib.optionals (backend == "gcc") [
+  ++ lib.optionals backendIsGCC [
     gmp
     mpfr
     libmpc
@@ -57,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     # If llvm 7.0 works, 7.x releases should work too.
     sed -i 's/check_version  7.0/check_version  7/g' configure
   ''
-  + lib.optionalString (backend == "gcc") ''
+  + lib.optionalString backendIsGCC ''
     ${gnutar}/bin/tar -xf ${gcc13.cc.src}
   '';
 
@@ -66,14 +76,17 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-werror"
     "--enable-synth"
   ]
-  ++ lib.optionals (backend == "llvm") [
+  ++ lib.optionals (backendIsLLVM || backendIsLLVMJit) [
     "--with-llvm-config=${llvm.dev}/bin/llvm-config"
   ]
-  ++ lib.optionals (backend == "gcc") [
+  ++ lib.optionals backendIsLLVMJit [
+    "--with-llvm-jit"
+  ]
+  ++ lib.optionals backendIsGCC [
     "--with-gcc=gcc-${gcc13.cc.version}"
   ];
 
-  buildPhase = lib.optionalString (backend == "gcc") ''
+  buildPhase = lib.optionalString backendIsGCC ''
     make copy-sources
     mkdir gcc-objs
     cd gcc-objs
@@ -93,14 +106,14 @@ stdenv.mkDerivation (finalAttrs: {
       --with-mpfr-include=${mpfr.dev}/include \
       --with-mpfr-lib=${mpfr.out}/lib \
       --with-mpc=${libmpc} \
-      --enable-default-pie=${if stdenv.targetPlatform.hasSharedLibraries then "yes" else "no"}
+      --enable-default-pie=${lib.boolToYesNo stdenv.targetPlatform.hasSharedLibraries}
     make -j $NIX_BUILD_CORES
     make install
     cd ../
     make -j $NIX_BUILD_CORES ghdllib
   '';
 
-  postFixup = lib.optionalString (backend == "llvm" || backend == "gcc") ''
+  postFixup = lib.optionalString (backendIsLLVM || backendIsGCC) ''
     wrapProgram $out/bin/ghdl \
       --set LIBRARY_PATH ${lib.makeLibraryPath [ zlib ]} \
       --prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}
@@ -108,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [
   ]
-  ++ lib.optionals (backend == "gcc") [
+  ++ lib.optionals backendIsGCC [
     # GCC compilation fails with format errors
     "format"
   ];
@@ -135,7 +148,11 @@ stdenv.mkDerivation (finalAttrs: {
       thoughtpolice
       sempiternal-aurora
     ];
-    platforms =
-      lib.platforms.linux ++ lib.optionals (backend == "mcode" || backend == "llvm") [ "x86_64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+    ]
+    ++ lib.optionals (backendIsLLVM || backendIsLLVMJit || backendIsGCC) [ "aarch64-linux" ]
+    ++ lib.optionals (backendIsLLVM || backendIsLLVMJit) [ "aarch64-darwin" ];
   };
 })

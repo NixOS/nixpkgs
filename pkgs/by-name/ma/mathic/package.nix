@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mathic";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "Macaulay2";
     repo = "mathic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6xkNnn/8XugeBi91+9iTWHj8l5M6SH8tjsC8N2sLEnA=";
+    hash = "sha256-0/ws95MTrNXt6BhqyWjsOGyXvh2tTd48/pT6kWwQPd4=";
   };
 
   buildInputs = [
@@ -61,5 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Macaulay2/mathic";
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ coolcuber ];
+    platforms = lib.platforms.unix;
   };
 })

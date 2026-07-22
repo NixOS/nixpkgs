@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   lua,
   jemalloc,
   pkg-config,
@@ -25,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "valkey";
-  version = "9.0.3";
+  version = "9.1.0";
 
   src = fetchFromGitHub {
     owner = "valkey-io";
     repo = "valkey";
     rev = finalAttrs.version;
-    hash = "sha256-cic4XBRFcSyttaMK6grzmi/RmrZiLRnYjMwGiU9teMw=";
+    hash = "sha256-RMZz83fycpOTPWB1dIXU0/hdh4ZGC+6JhCws8htAQ5E=";
   };
 
   patches = lib.optional useSystemJemalloc ./use_system_jemalloc.patch;
@@ -94,13 +93,14 @@ stdenv.mkDerivation (finalAttrs: {
     fi
 
     # Skip some more flaky tests.
-    # Skip test requiring custom jemalloc (unit/memefficiency).
+    # Skip test requiring custom jemalloc (unit/memefficiency, unit/type/string).
     ./runtest \
       --no-latency \
       --timeout 2000 \
       --clients "$CLIENTS" \
       --tags -leaks \
       --skipunit unit/memefficiency \
+      --skipunit unit/type/string \
       --skipunit integration/failover \
       --skipunit integration/aof-multi-part
 
@@ -117,9 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "High-performance data structure server that primarily serves key/value workloads";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [
-      debtquity
-    ];
+    teams = [ lib.teams.redis ];
     changelog = "https://github.com/valkey-io/valkey/releases/tag/${finalAttrs.version}";
     mainProgram = "valkey-cli";
   };

@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   replaceVars,
   testers,
@@ -75,13 +74,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-ui-toolkit";
-  version = "1.3.5905";
+  version = "1.3.5906";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-ui-toolkit";
     rev = finalAttrs.version;
-    hash = "sha256-59Q7Atxt6CfR0LgNa6keGDY+HpV/eOdTngVHcUJEesg=";
+    hash = "sha256-OT3XH1NRnLHP80rgPllXfuos7vG3DHX95CXWm2fvwvI=";
   };
 
   outputs = [
@@ -93,13 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Remove when version > 1.3.5905
-    (fetchpatch {
-      name = "0001-lomiri-ui-toolkit-Fix-compatibility-with-Qt-6.11.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/commit/57303d2b01549ef78b029ed05babbc9400e102f3.patch";
-      hash = "sha256-22QSOaYZ+hsctLt8+ffrzBIY3btp+rM6NBsu0gvQMeM=";
-    })
-
     ./2001-Mark-problematic-tests.patch
 
     (replaceVars ./2002-Nixpkgs-versioned-QML-path.patch.in {

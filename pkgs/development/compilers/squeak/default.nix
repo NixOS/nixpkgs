@@ -174,7 +174,11 @@ stdenv.mkDerivation {
   #   ld: vm/vm.a(cogit.o):spur64src/vm/cogitX64SysV.c:2552: multiple definition of
   #       `traceStores'; vm/vm.a(gcc3x-cointerp.o):spur64src/vm/cogit.h:140: first defined here
   env.NIX_CFLAGS_COMPILE = toString (
-    [ "-fcommon" ]
+    [
+      "-fcommon"
+      # C23 default rejects implicit declarations (e.g. close() without <unistd.h>).
+      "-std=gnu17"
+    ]
     ++ (lib.optionals stdenv.cc.isClang [
       # LLVM 16 turned these into errors (rightly, perhaps.)
       # Allow this package to continue to build despite this change.

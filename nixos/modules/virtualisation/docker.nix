@@ -157,6 +157,14 @@ in
           Whether to periodically prune Docker resources. If enabled, a
           systemd timer will run `docker system prune -f`
           as specified by the `dates` option.
+
+          NOTE: by default this does not prune volumes. Anonymous volumes
+          can be pruned by passing "--volumes" to [autoPrune.flags](#opt-virtualisation.docker.autoPrune.flags).
+
+          To prune all volumes (not just anonymous ones) [`autoPrune.allVolumes.enable`](#opt-virtualisation.docker.autoPrune.allVolumes.enable)
+          must be used.
+
+          See [upstream documentation](https://docs.docker.com/reference/cli/docker/system/prune/#description) for further information.
         '';
       };
 
@@ -205,6 +213,28 @@ in
           useful to catch up on missed runs of the service when the
           system was powered down.
         '';
+      };
+
+      allVolumes = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Whether to periodically prune all Docker volumes when auto pruning other docker resources
+            by running {command}`docker volume prune --force --all`
+
+            To prune only anonymous volumes, instead pass `--volumes` to `autoPrune.flags`
+          '';
+        };
+
+        flags = mkOption {
+          type = types.listOf types.str;
+          default = [ ];
+          example = [ "--filter=label=<label>" ];
+          description = ''
+            Any additional flags passed to {command}`docker volume prune --force --all`.
+          '';
+        };
       };
     };
 
@@ -312,15 +342,29 @@ in
 
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = utils.escapeSystemdExecArgs (
-            [
-              (lib.getExe cfg.package)
-              "system"
-              "prune"
-              "-f"
-            ]
-            ++ cfg.autoPrune.flags
-          );
+          ExecStart = [
+            (utils.escapeSystemdExecArgs (
+              [
+                (lib.getExe cfg.package)
+                "system"
+                "prune"
+                "-f"
+              ]
+              ++ cfg.autoPrune.flags
+            ))
+          ]
+          ++ (optionals cfg.autoPrune.allVolumes.enable [
+            (utils.escapeSystemdExecArgs (
+              [
+                (lib.getExe cfg.package)
+                "volume"
+                "prune"
+                "--force"
+                "--all"
+              ]
+              ++ cfg.autoPrune.allVolumes.flags
+            ))
+          ]);
         };
 
         startAt = optional cfg.autoPrune.enable cfg.autoPrune.dates;
@@ -341,6 +385,10 @@ in
             cfg.enableNvidia && pkgs.stdenv.hostPlatform.isx86_64
             -> config.hardware.graphics.enable32Bit or false;
           message = "Option enableNvidia on x86_64 requires 32-bit support libraries";
+        }
+        {
+          assertion = cfg.autoPrune.allVolumes.enable -> cfg.autoPrune.enable;
+          message = "Option autoPrune.allVolumes.enable requires autoPrune.enable";
         }
       ];
 

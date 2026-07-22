@@ -8,6 +8,7 @@
   numpy,
   pulsectl-asyncio,
   pychromecast,
+  pytest-asyncio,
   pytestCheckHook,
   qrcode,
   readchar,
@@ -18,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sendspin";
-  version = "5.9.0";
+  version = "7.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Sendspin";
     repo = "sendspin-cli";
     tag = finalAttrs.version;
-    hash = "sha256-g+qw3mDHij50CEDKGjltMGNZoI6/HeJQ8zq8NSvD3Ls=";
+    hash = "sha256-B375jsOik0IdLtozH3t3hZKqoO+dtqkzX2bk5YuoO9Y=";
   };
 
   postPatch = ''
@@ -45,20 +46,23 @@ buildPythonPackage (finalAttrs: {
     readchar
     rich
     sounddevice
-  ];
+  ]
+  ++ aiosendspin.optional-dependencies.server;
 
   optional-dependencies = {
     cast = [ pychromecast ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "sendspin" ];
 
   disabledTests = [
-    #  AssertionError: assert None == (1, 'Digital')
-    "test_alsa_available_for_hw_device_with_mixer"
-    "test_hifiberry_dac_discovery"
+    # requires internet
+    "test_multi_worker_starts_and_serves_status"
   ];
 
   meta = {

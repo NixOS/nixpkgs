@@ -20,6 +20,6 @@ buildGoModule (finalAttrs: {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ daru-san ];
     mainProgram = "adbtuifm";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

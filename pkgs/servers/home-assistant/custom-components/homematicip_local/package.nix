@@ -7,20 +7,22 @@
   aiohomematic-config,
   aiohomematic-test-support,
   home-assistant,
+  openccu-data,
   pytest-homeassistant-custom-component,
+  pytest-xdist,
   pytestCheckHook,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "SukramJ";
   domain = "homematicip_local";
-  version = "2.6.0";
+  version = "2.7.3";
 
   src = fetchFromGitHub {
     owner = "SukramJ";
     repo = "custom_homematic";
     tag = version;
-    hash = "sha256-u3REMGuaQ+wQgDgiTvplBRMbzZJDUfcbyJm9tYOuYIw=";
+    hash = "sha256-9dXvIxMMdHTOi9JbRsHbySqRUYq6dN+MzrOocq9cpdA=";
   };
 
   postPatch = ''
@@ -33,18 +35,27 @@ buildHomeAssistantComponent rec {
   dependencies = [
     aiohomematic
     aiohomematic-config
+    openccu-data
   ];
 
   nativeCheckInputs = [
     aiohomematic-test-support
     async-upnp-client
     pytest-homeassistant-custom-component
+    pytest-xdist
     pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # tries to write to the Nix store
+    "tests/test_blueprints.py"
   ];
 
   disabledTests = [
     # custom_components.homematicip_local.support.InvalidConfig: C
     "test_async_validate_config_and_get_system_information"
+    # Failed: Lingering timer after test <TimerHandle when=3043632.864116499 Store._async_schedule_callback_delayed_write() created at /nix/store/5rh57mhaihd9wff1rqnskvs8nxh9sv3z-homeassistant-2026.6.0/lib/python3.14/site-packages/homeassistant/helpers/storage.py:516>
+    "test_reauth_flow_success"
   ];
 
   meta = {

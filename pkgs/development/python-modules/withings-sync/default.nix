@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  garth,
+  garminconnect,
   importlib-resources,
   lxml,
   poetry-core,
@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "withings-sync";
-  version = "5.3.2";
+  version = "6.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jaroslawhartman";
     repo = "withings-sync";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1pDM5paSXPQCOG5LRFxnp19K1iHcsfrGC9e7SEyxUDs=";
+    hash = "sha256-z0rVUFBbPff6xfItLQqbt+uN5Qe/BbVLAH1xMVUSfpA=";
   };
 
   postPatch = ''
@@ -27,10 +27,12 @@ buildPythonPackage (finalAttrs: {
       --replace-fail "1.0.0.dev1" "${finalAttrs.version}"
   '';
 
+  pythonRelaxDeps = [ "garminconnect" ];
+
   build-system = [ poetry-core ];
 
   dependencies = [
-    garth
+    garminconnect
     importlib-resources
     lxml
     python-dotenv

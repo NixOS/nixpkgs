@@ -16,18 +16,18 @@
 
 stdenv.mkDerivation rec {
   pname = "krunvm";
-  version = "0.2.4";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
-    owner = "containers";
+    owner = "libkrun";
     repo = "krunvm";
     rev = "v${version}";
-    hash = "sha256-YbK4DKw0nh9IO1F7QsJcbOMlHekEdeUBbDHwuQ2x1Ww=";
+    hash = "sha256-peOaPivQKOwioh5skPNFiA3ptHv9pSsnjpy43cms8O8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-TMV9xCcqBQgPsUSzsTJAi4qsplTOSm3ilaUmtmdaGnE=";
+    hash = "sha256-MRcQ0Vnd3PJqE2q981JpXPjwMUKT4t+RcOvzWptK7PQ=";
   };
 
   nativeBuildInputs = [
@@ -51,12 +51,12 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # do not pollute etc
     substituteInPlace src/utils.rs \
-      --replace "etc/containers" "share/krunvm/containers"
+      --replace-fail "etc/containers" "share/krunvm/containers"
   '';
 
   postInstall = ''
     mkdir -p $out/share/krunvm/containers
-    install -D -m755 ${buildah-unwrapped.src}/docs/samples/registries.conf $out/share/krunvm/containers/registries.conf
+    install -D -m755 ${buildah-unwrapped.src}/tests/registries.conf $out/share/krunvm/containers/registries.conf
     install -D -m755 ${buildah-unwrapped.src}/tests/policy.json $out/share/krunvm/containers/policy.json
   '';
 
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "CLI-based utility for creating microVMs from OCI images";
-    homepage = "https://github.com/containers/krunvm";
+    homepage = "https://github.com/libkrun/krunvm";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nickcao ];
     platforms = libkrun.meta.platforms;

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -11,7 +10,6 @@
   # tests
   asttokens,
   littleutils,
-  rich,
   pytestCheckHook,
 }:
 
@@ -36,8 +34,7 @@ buildPythonPackage rec {
     asttokens
     littleutils
     pytestCheckHook
-  ]
-  ++ lib.optionals (pythonAtLeast "3.11") [ rich ];
+  ];
 
   disabledTests = [
     # requires ipython, which causes a circular dependency

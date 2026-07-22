@@ -2,9 +2,12 @@
   lib,
   stdenv,
   fetchurl,
+  fstrm,
   libevent,
   openssl,
   pkg-config,
+  protobuf,
+  protobufc,
   systemdMinimal,
   nixosTests,
   config,
@@ -14,37 +17,42 @@
   bind8Stats ? config.nsd.bind8Stats or false,
   checking ? config.nsd.checking or false,
   ipv6 ? config.nsd.ipv6 or true,
-  mmap ? config.nsd.mmap or false,
   minimalResponses ? config.nsd.minimalResponses or true,
+  mmap ? config.nsd.mmap or false,
   nsec3 ? config.nsd.nsec3 or true,
   ratelimit ? config.nsd.ratelimit or false,
   recvmmsg ? config.nsd.recvmmsg or false,
   rootServer ? config.nsd.rootServer or false,
   rrtypes ? config.nsd.rrtypes or false,
   zoneStats ? config.nsd.zoneStats or false,
+  withDnstap ? true,
   withSystemd ? config.nsd.withSystemd or (lib.meta.availableOn stdenv.hostPlatform systemdMinimal),
   configFile ? config.nsd.configFile or "/etc/nsd/nsd.conf",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nsd";
-  version = "4.12.0";
+  version = "4.14.3";
 
   src = fetchurl {
     url = "https://www.nlnetlabs.nl/downloads/nsd/nsd-${finalAttrs.version}.tar.gz";
-    hash = "sha256-+ezCz3m6UFgPLfYpGO/EQAhMW/EQV9tEwZqpZDzUteg=";
+    hash = "sha256-limtZNnBsBm74iKW1RSNeuZfWIziZaZCR1B0DwUrsSs=";
   };
 
   nativeBuildInputs = [
     pkg-config
-  ];
+  ]
+  ++ lib.optionals withDnstap [ protobuf ];
 
   buildInputs = [
     libevent
     openssl
   ]
-  ++ lib.optionals withSystemd [
-    systemdMinimal
+  ++ lib.optionals withSystemd [ systemdMinimal ]
+  ++ lib.optionals withDnstap [
+    fstrm
+    # NSD links against libprotobuf-c, it's not just a build-time dependency.
+    protobufc
   ];
 
   enableParallelBuilding = true;
@@ -73,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ edf rootServer "root-server"
     ++ edf rrtypes "draft-rrtypes"
     ++ edf zoneStats "zone-stats"
+    ++ edf withDnstap "dnstap"
     ++ edf withSystemd "systemd"
     ++ [
       "--with-ssl=${openssl.dev}"

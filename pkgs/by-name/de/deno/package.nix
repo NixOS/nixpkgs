@@ -9,6 +9,7 @@
   protobuf,
   installShellFiles,
   makeBinaryWrapper,
+  versionCheckHook,
   librusty_v8 ? callPackage ./rusty-v8 { },
   libffi,
   sqlite,
@@ -21,6 +22,7 @@
   git,
   python3,
   esbuild,
+  runCommand,
 
   # self for passthru
   deno,
@@ -31,17 +33,24 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.7.14";
+  version = "2.8.3";
+
+  __structuredAttrs = true;
+
+  outputs = [
+    "out"
+    "denort"
+  ];
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-tkZc89JOhXCdMVSAOQYGR6HDe7KmCI5/haLH1RP2p7I=";
+    hash = "sha256-jOcIrZj+830XMZJcgTm0C4yDvk96dbW7RYGgyhLHS4Y=";
   };
 
-  cargoHash = "sha256-bFQLsAF4hFBRw04VaL+sxvxIZ9p7nXOLSr2BIZKcwiI=";
+  cargoHash = "sha256-QtCkmNXOrtl4T4NSESV7J3qiyKMwMOoa4oWfTZIJRMc=";
 
   patches = [
     ./patches/0002-tests-replace-hardcoded-paths.patch
@@ -223,7 +232,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   postInstall = ''
-    # Remove non-essential binaries like denort and test_server
+    moveToOutput "bin/denort" "$denort"
+
+    # Remove non-essential binaries like test_server
     find $out/bin/* -not -name "deno" -delete
 
     # Do what `deno x --install-alias` would do (it doesn't work with Nix-packaged Deno)
@@ -237,16 +248,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   doInstallCheck = canExecute;
-  installCheckPhase = lib.optionalString canExecute ''
-    runHook preInstallCheck
-    $out/bin/deno --help
-    $out/bin/deno --version | grep "deno ${finalAttrs.version}"
-    runHook postInstallCheck
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru = {
     updateScript = ./update.sh;
-    tests = (callPackage ./tests { }) // {
+    tests = (import ./tests { inherit deno runCommand lib; }) // {
       build-with-unit-tests = deno.overrideAttrs (fa: {
         # The tools test suite requires building the test server
         dontBuild = false;
@@ -282,7 +288,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       jk
       ofalvai
       mynacol
+      anish
     ];
+    maxSilent = 14400; # 4h, double the default of 7200s; sometimes needed for x86_64-darwin on hydra
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

@@ -10,22 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "btest";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "manawenuz";
     repo = "btest-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ltePF8HX46FDbdyq30u19FNVpIwPxhOo8AgNvKRzKHE=";
+    hash = "sha256-bS70knj5xUMj0zCoKUJLJDXMPOErH+yoyISlhbyhFIU=";
   };
 
-  cargoHash = "sha256-8AO7eTzZMzvNWcls3VXP0kPun/D5gsA1ih0FOqZ57R0=";
-
-  postPatch = ''
-    # https://github.com/manawenuz/btest-rs/pull/1
-    substituteInPlace Cargo.toml \
-      --replace-fail "0.6.0" "${finalAttrs.version}"
-  '';
+  cargoHash = "sha256-ydHr+4yKCzWbznwF6oWjn8S0dTkJqbV01j4p3ksT+60=";
 
   nativeBuildInputs = [ pkg-config ];
 

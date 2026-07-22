@@ -10,6 +10,7 @@
   nix-update-script,
   which,
   rustPlatform,
+  runCommand,
   emscripten,
   openssl,
   pkg-config,
@@ -18,8 +19,11 @@
   substitute,
   installShellFiles,
   buildPackages,
+  cmake,
+  wasmtime_36,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? stdenv.hostPlatform.isStatic,
+  wasmSupport ? false,
   webUISupport ? false,
 }:
 
@@ -57,6 +61,7 @@ let
       fetchFromSourcehut
       fetchFromCodeberg
       fetchpatch
+      stdenv
       ;
   };
 
@@ -109,6 +114,8 @@ let
 
   allGrammars = lib.filter (p: !(p.meta.broken or false)) (lib.attrValues builtGrammars);
 
+  isWasi = stdenv.hostPlatform.isWasi;
+
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tree-sitter";
@@ -124,8 +131,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-9FeWnWWPUWmMF15Psmul8GxGv2JceHWc2WZPmOr81gw=";
 
+  cargoBuildFeatures = lib.optionals wasmSupport [ "wasm" ];
+
   buildInputs = [
     installShellFiles
+  ]
+  ++ lib.optionals wasmSupport [
+    wasmtime_36
   ]
   ++ lib.optionals webUISupport [
     openssl
@@ -133,6 +145,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     rustPlatform.bindgenHook
     which
+  ]
+  ++ lib.optionals wasmSupport [
+    cmake
   ]
   ++ lib.optionals webUISupport [
     emscripten
@@ -164,6 +179,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
       sed -i '/^install:/,/^[^[:space:]]/ { /$(SOEXT/d; }' ./Makefile
     '';
 
+  # The Makefile install can't enable the wasm feature.
+  cmakeFlags = lib.optionals wasmSupport [
+    (lib.cmakeBool "TREE_SITTER_FEATURE_WASM" true)
+    (lib.cmakeFeature "WASMTIME_INCLUDE_DIR" "${lib.getDev wasmtime_36}/include")
+    (lib.cmakeFeature "WASMTIME_LIBRARY" "${lib.getLib wasmtime_36}/lib/libwasmtime${stdenv.hostPlatform.extensions.sharedLibrary}")
+    (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+  ];
+
   # Compile web assembly with emscripten. The --debug flag prevents us from
   # minifying the JavaScript; passing it allows us to side-step more Node
   # JS dependencies for installation.
@@ -175,6 +199,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     PREFIX=$out make install
+  ''
+  + lib.optionalString wasmSupport ''
+    cmake --install $cmakeBuildDir
+  ''
+  + ''
     ${lib.optionalString (!enableShared) "rm -f $out/lib/*.so{,.*}"}
     ${lib.optionalString (!enableStatic) "rm -f $out/lib/*.a"}
 
@@ -196,6 +225,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # test result: FAILED. 120 passed; 13 failed; 0 ignored; 0 measured; 0 filtered out
   doCheck = false;
 
+  # CMake builds libtree-sitter with wasm support; cargo still builds the CLI.
+  ${if wasmSupport then "configurePhase" else null} = ''
+    cmakeConfigurePhase
+    cd ..
+  '';
+
+  ${if wasmSupport then "postBuild" else null} = ''
+    cmake --build $cmakeBuildDir
+  '';
+
   passthru = {
     inherit
       grammars
@@ -211,6 +250,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tests = {
       # make sure all grammars build
       builtGrammars = lib.recurseIntoAttrs builtGrammars;
+    }
+    // lib.optionalAttrs isWasi {
+      wasmGrammar =
+        let
+          grammar = builtGrammars.tree-sitter-nix;
+        in
+        runCommand "tree-sitter-wasm-grammar-test" { } ''
+          test -f ${grammar}/parser.wasm
+          # WebAssembly binaries start with "\0asm".
+          test "$(od -An -tx1 -N4 ${grammar}/parser.wasm | tr -d ' \n')" = "0061736d"
+          test ! -e ${grammar}/parser
+          touch $out
+        '';
     };
   };
 

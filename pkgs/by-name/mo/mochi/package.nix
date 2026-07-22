@@ -12,14 +12,14 @@
 
 let
   pname = "mochi";
-  version = "1.21.10";
+  version = "1.21.16";
 
   linux = appimageTools.wrapType2 rec {
     inherit pname version meta;
 
     src = fetchurl {
       url = "https://download.mochi.cards/releases/Mochi-${version}.AppImage";
-      hash = "sha256-yNgKbG5cJmCFpb3JnCevYZJXrdNJHoEPaUELLl10F00=";
+      hash = "sha256-LWwv/+2/djc2bdqhnJiG5etXg+MFaEZbpttewVBZdeg=";
     };
 
     appimageContents = appimageTools.extractType2 { inherit pname version src; };
@@ -44,9 +44,9 @@ let
       url = "https://download.mochi.cards/releases/Mochi-${version}${lib.optionalString stdenv.hostPlatform.isAarch64 "-arm64"}.dmg";
       hash =
         if stdenv.hostPlatform.isAarch64 then
-          "sha256-nnAL1w2ERAH02nm8OMtVIuVjMqSnLuiBLsxuBlQNlPI="
+          "sha256-dtdQZYGrukT/UgfNdsnGxOYmpuebJCDHXW8cAGN2GZE="
         else
-          "sha256-7Xt3wPqEH7PPOGtwGHKAWBIvpdkkZe9R12S0TnQuCuM=";
+          "sha256-FdNFpuIOMgRzniB9Aze3GUpNY27h++StTdwqfF1k07I=";
     };
 
     sourceRoot = ".";

@@ -28,6 +28,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/un1t/django-cleanup";
     changelog = "https://github.com/un1t/django-cleanup/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mmai ];
+    maintainers = [ ];
   };
 }

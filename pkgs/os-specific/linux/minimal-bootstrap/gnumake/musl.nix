@@ -72,6 +72,7 @@ bash.runCommand "${pname}-${version}"
       --disable-dependency-tracking
 
     # Build
+    # NOTE: parallel build (-j) under tcc-musl is unstable; keep serial.
     make AR="tcc -ar"
 
     # Install

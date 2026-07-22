@@ -34,6 +34,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ SDL ];
 
+  # CMake's default framework search order on Darwin finds Kernel.framework
+  # headers while detecting SDL 1.2, which makes standard includes like
+  # <string.h> resolve to the wrong SDK header and breaks the build.
+  # Keep this package on the old Nixpkgs search order without restoring it
+  # globally: https://github.com/NixOS/nixpkgs/pull/455592
+  # CMake docs: https://cmake.org/cmake/help/latest/variable/CMAKE_FIND_FRAMEWORK.html
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DCMAKE_FIND_FRAMEWORK=LAST"
+  ];
+
   desktopItems = [
     (makeDesktopItem {
       name = "Ballerburg";

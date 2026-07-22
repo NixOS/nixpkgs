@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libusermetrics";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/libusermetrics";
     rev = finalAttrs.version;
-    hash = "sha256-NXwOdKII7Bvjnk2xUEYRCP7r7Woj7DOh8BOO8yuS9kk=";
+    hash = "sha256-WkQqMuPoDDzA2HwD+6YCS9ZigiGL8WGNRZ51ywGNm4s=";
   };
 
   outputs = [

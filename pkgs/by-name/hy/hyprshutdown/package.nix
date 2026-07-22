@@ -54,6 +54,7 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "A graceful shutdown utility for Hyprland";
     homepage = "https://github.com/hyprwm/hyprshutdown";
+    changelog = "https://github.com/hyprwm/hyprshutdown/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.mithicspirit ];
     teams = [ lib.teams.hyprland ];

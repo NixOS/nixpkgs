@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  makeWrapper,
   pkg-config,
   pipewire,
   wayland,
@@ -14,28 +13,30 @@
   libxi,
   libxcursor,
   libx11,
+  vulkan-loader,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "openmeters";
-  version = "0-unstable-2025-12-15";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "httpsworldview";
     repo = "openmeters";
-    rev = "701b22b40796e33b118719724a54be231144a5ac";
-    hash = "sha256-svsC0lxAnkVuyk6LZPyFSjeOL8H0yY3dRA37+K1e/xY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-b1Nq+eZJ/87bOygIfU+BK7t0xu9HSBhWmFU1Fmv11vo=";
   };
 
-  cargoHash = "sha256-jm/8FdJiVVh/PAyJiLA/KK4IaXi4gUBMGIKz/FL3KZ8=";
+  cargoHash = "sha256-cAYnHeAHEAiovibyKeDB5T74FWfT0ndOI2MtOZC0dVE=";
 
   nativeBuildInputs = [
-    makeWrapper
     pkg-config
     rustPlatform.bindgenHook
   ];
 
   buildInputs = [
     pipewire
+    libxkbcommon
   ];
 
   postFixup = ''
@@ -50,15 +51,31 @@ rustPlatform.buildRustPackage (finalAttrs: {
         libxcursor
         libxi
         libxrandr
+        vulkan-loader
       ]
     }' $out/bin/openmeters
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    description = "Fast and simple audio metering/visualization program for Linux";
+    description = "Fast and professional audio metering/visualization for Linux";
+    longDescription = ''
+      OpenMeters is a fast audio metering application for Linux built with
+      Rust and PipeWire. It provides LUFS/RMS/true-peak loudness meters
+      (ITU-R BS.1770-5), a spectrogram with spectral reassignment, a
+      spectrum analyser, an oscilloscope with stable-trigger mode, a
+      stereometer (X/Y vector scope, M/S goniometer) and a waveform view,
+      with per-application and per-device capture.
+    '';
+
     homepage = "https://github.com/httpsworldview/openmeters";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.bitbloxhub ];
+    changelog = "https://github.com/httpsworldview/openmeters/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      bitbloxhub
+      magnetophon
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "openmeters";
   };

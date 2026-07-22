@@ -24,6 +24,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-jdv9GfcSBM7Ount8cnJLFbP6h7q16B5Fp1vvc2oaPHY=";
   };
 
+  patches = [
+    # https://github.com/jaraco/irc/pull/236
+    ./python-3.14-event-loop.patch
+  ];
+
   nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [

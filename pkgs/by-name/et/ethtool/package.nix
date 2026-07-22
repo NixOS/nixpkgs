@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ethtool";
-  version = "6.19";
+  version = "7.0";
 
   src = fetchurl {
     url = "mirror://kernel/software/network/ethtool/ethtool-${finalAttrs.version}.tar.xz";
-    hash = "sha256-HCEUq24MDSqmfWmZYOsR3080HiQDE5zfKK6dqFimAl8=";
+    hash = "sha256-Zgv5clp4cTQ6DSMgaKdjT7z7abbC+O/0VYJ/rvsM0WI=";
   };
 
   nativeBuildInputs = [
@@ -29,14 +29,14 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = writeScript "update-ethtool" ''
       #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl pcre common-updater-scripts
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
       set -eu -o pipefail
 
       # Expect the text in format of '<a href="ethtool-VER.tar.xz">...</a>'
       # The page always lists versions newest to oldest. Pick the first one.
       new_version="$(curl -s https://mirrors.edge.kernel.org/pub/software/network/ethtool/ |
-          pcregrep -o1 '<a href="ethtool-([0-9.]+)[.]tar[.]xz">' |
+          pcre2grep -o1 '<a href="ethtool-([0-9.]+)[.]tar[.]xz">' |
           head -n1)"
       update-source-version ethtool "$new_version"
     '';

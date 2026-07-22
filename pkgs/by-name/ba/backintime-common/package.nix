@@ -9,7 +9,7 @@
   cron,
   openssh,
   sshfs-fuse,
-  encfs,
+  fuse3,
   gocryptfs,
   which,
   ps,
@@ -33,7 +33,6 @@ let
     cron
     rsync
     sshfs-fuse
-    encfs
     gocryptfs
   ];
 in
@@ -75,10 +74,13 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "share" "${python'.sitePackages}"
 
     substituteInPlace "schedule.py" \
-      --replace-fail "'crontab'" "'${cron}/bin/crontab'" \
+      --replace-fail "'crontab'" "'${lib.getExe' cron "crontab"}'" \
       --replace-fail "'which'" "'${lib.getExe which}'" \
       --replace-fail "'ps'" "'${lib.getExe ps}'" \
       --replace-fail "'grep'" "'${lib.getExe gnugrep}'" \
+
+    substituteInPlace mount.py \
+      --replace-fail "'fusermount'" "'${lib.getExe' fuse3 "fusermount3"}'"
 
     substituteInPlace "bitlicense.py" \
       --replace-fail "/usr/share/doc" "$out/share/doc" \

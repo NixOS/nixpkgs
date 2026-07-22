@@ -12,7 +12,7 @@
   pillow,
   pkg-config,
   psutil,
-  xlib,
+  python-xlib,
 }:
 
 buildPythonPackage rec {
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     docopt
     pillow
     psutil
-    xlib
+    python-xlib
   ];
 
   doCheck = false;

@@ -134,13 +134,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rectangle";
-  version = "0.95";
+  version = "0.96";
 
   src = fetchFromGitHub {
     owner = "rxhanson";
     repo = "Rectangle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-M/qZo2dWsFQxiBD5ypKh0M7AdHdLkY/rx4Lx01OBSlc=";
+    hash = "sha256-3FDCptlNztmexfFDRD/XX9fVuEHVG+EzcrqksJeI+fo=";
   };
 
   nativeBuildInputs = [

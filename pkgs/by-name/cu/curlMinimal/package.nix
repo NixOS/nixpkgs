@@ -84,7 +84,7 @@ assert
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.19.0";
+  version = "8.20.0";
 
   src = fetchurl {
     urls = [
@@ -93,8 +93,15 @@ stdenv.mkDerivation (finalAttrs: {
         builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
       }/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-TrQUiXkNGeGQ16x+GOgoV83Wivj05mspLO1WLTM/Ed8=";
+    hash = "sha256-Y/4twUi6DOromSLvg49+XJRicsLni3xZ+rS3nTziuJY=";
   };
+
+  patches = [
+    # https://github.com/curl/curl/commit/2a2104f3cff44bb28bb570a093be52bbeeed8f23
+    # According to <https://curl.se/mail/distros-2026-05/0000.html>, this fixes
+    # a performance regression, causing high CPU usage
+    ./fix-wakeup-consumption.patch
+  ];
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
   # necessary for FreeBSD code path in configure
@@ -115,6 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   env = {
     CXX = "${stdenv.cc.targetPrefix}c++";
@@ -188,8 +196,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeatureAs idnSupport "libidn2" (lib.getDev libidn2))
     (lib.withFeatureAs opensslSupport "openssl" (lib.getDev openssl))
     (lib.withFeatureAs scpSupport "libssh2" (lib.getDev libssh2))
-    # TODO: Clean up on `staging`.
-    "--without-wolfssl"
   ]
   ++ lib.optional gssSupport "--with-gssapi=${lib.getDev libkrb5}"
   # For the 'urandom', maybe it should be a cross-system option
@@ -278,6 +284,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://curl.se/ch/${finalAttrs.version}.html";
     description = "Command line tool for transferring files with URL syntax";
     homepage = "https://curl.se/";
+    donationPage = "https://curl.se/donation.html";
     license = lib.licenses.curl;
     maintainers = with lib.maintainers; [
       Scrumplex

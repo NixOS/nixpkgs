@@ -240,6 +240,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Nix package manager";
     longDescription = nix-cli.meta.longDescription;
     homepage = nix-cli.meta.homepage;
+    donationPage = nix-cli.meta.donationPage;
     license = nix-cli.meta.license;
     teams = teams;
     platforms = nix-cli.meta.platforms;

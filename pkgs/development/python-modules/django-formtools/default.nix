@@ -2,41 +2,56 @@
   lib,
   buildPythonPackage,
   django,
-  fetchPypi,
-  python,
+  fetchFromGitHub,
+  setuptools,
   setuptools-scm,
+  pytestCheckHook,
+  pytest-django,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-formtools";
-  version = "2.5.1";
+  version = "2.6.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-R8s0VSxu/KCIhj1pMoTQT8NuqvNQ6yHhodk14N9SPJM=";
+  src = fetchFromGitHub {
+    owner = "jazzband";
+    repo = "django-formtools";
+    tag = finalAttrs.version;
+    hash = "sha256-cg6bl2KJL2aOES7vWqrR25Bd6t9vWGTZLWtbMUhkCkg=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [ django ];
+  dependencies = [ django ];
 
-  checkPhase = ''
-    runHook preCheck
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-django
+  ];
 
-    ${python.interpreter} -m django test --settings=tests.settings
-
-    runHook postCheck
+  preCheck = ''
+    export DJANGO_SETTINGS_MODULE=tests.settings
   '';
+
+  disabledTests = [
+    # mismatch between test collection of django and pytest-django
+    "TestStorage"
+    # Django 6.0.6/5.2.15 compat issue
+    # https://github.com/jazzband/django-formtools/issues/298
+    "test_reset_cookie"
+  ];
 
   pythonImportsCheck = [ "formtools" ];
 
   meta = {
-    description = "Set of high-level abstractions for Django forms";
+    description = "High-level abstractions for Django forms";
     homepage = "https://github.com/jazzband/django-formtools";
-    changelog = "https://github.com/jazzband/django-formtools/blob/master/docs/changelog.rst";
+    changelog = "https://github.com/jazzband/django-formtools/blob/${finalAttrs.src.tag}/docs/changelog.rst";
     license = lib.licenses.bsd3;
-    maintainers = [
-    ];
+    maintainers = [ ];
   };
-}
+})

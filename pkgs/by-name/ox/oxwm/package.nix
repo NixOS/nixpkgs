@@ -1,8 +1,9 @@
 {
   lib,
   stdenv,
+  callPackage,
   fetchFromGitHub,
-  zig_0_15,
+  zig_0_16,
   pkg-config,
   libx11,
   libxft,
@@ -14,17 +15,24 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "oxwm";
-  version = "0.11.3";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "tonybanters";
     repo = "oxwm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-W6muqajSk9UR646ZmLkx/wWfiaWLo+d1lJMiLm82NC8=";
+    hash = "sha256-N0uKA51AR0YFUcp6MdIiJS5HtHobSaDdXPRrMEOCSEM=";
   };
 
+  deps = callPackage ./build.zig.zon.nix { };
+
+  zigBuildFlags = [
+    "--system"
+    "${finalAttrs.deps}"
+  ];
+
   nativeBuildInputs = [
-    zig_0_15.hook
+    zig_0_16.hook
     pkg-config
   ];
 

@@ -64,5 +64,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/randyzwitch/streamlit-folium/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+    teams = [ lib.teams.geospatial ];
   };
 })

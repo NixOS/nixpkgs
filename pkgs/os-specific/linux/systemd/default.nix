@@ -5,7 +5,6 @@
   pkgsCross,
   testers,
   fetchFromGitHub,
-  fetchzip,
   buildPackages,
   makeBinaryWrapper,
   ninja,
@@ -14,10 +13,8 @@
   pkg-config,
   coreutils,
   gperf,
-  getent,
   glibcLocales,
   autoPatchelfHook,
-  fetchpatch,
 
   # glib is only used during tests (test-bus-gvariant, test-bus-marshal)
   glib,
@@ -41,8 +38,6 @@
   libgpg-error,
   libidn2,
   curl,
-  gnutar,
-  gnupg,
   zlib,
   xz,
   zstd,
@@ -206,14 +201,27 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "260.1";
+  version = "260.2";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-FUKj3lvjz8TIsyu8NyJYtiNele+1BhdJPdw7r7nW6as=";
+    hash = "sha256-NXmmSV7/9WIW6C8wjdOwaerCy4v7Zcrd8+XDzcS8rEk=";
   };
+
+  # PATCH POLICY
+  #
+  # There are only two reasons we accept patches on systemd:
+  # 1. systemd functionality is fundamentally incompatible with how NixOS works
+  #    and workarounds are not possible.
+  # 2. Hotfixes that we want to apply before they have reached a systemd branch
+  #    we can use. If we come up with the fixes in Nixpkgs, they need to be
+  #    reported upstream and the upstream issue needs to be linked in the
+  #    commit message of the patch.
+  #
+  # Importantly, patches to improve usability, enable new features on NixOS or
+  # add entirely new features to systemd are not allowed.
 
   # On major changes, or when otherwise required, you *must* :
   # 1. reformat the patches,
@@ -224,30 +232,14 @@ stdenv.mkDerivation (finalAttrs: {
   # Use `find . -name "*.patch" | sort` to get an up-to-date listing of all
   # patches
   patches = [
-    ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
-    ./0002-Don-t-try-to-unmount-nix-or-nix-store.patch
-    ./0003-Fix-NixOS-containers.patch
-    ./0004-Add-some-NixOS-specific-unit-directories.patch
-    ./0005-Get-rid-of-a-useless-message-in-user-sessions.patch
-    ./0006-hostnamed-localed-timedated-disable-methods-that-cha.patch
-    ./0007-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
-    ./0008-localectl-use-etc-X11-xkb-for-list-x11.patch
-    ./0009-add-rootprefix-to-lookup-dir-paths.patch
-    ./0010-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
-    ./0011-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
-    ./0012-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
-    ./0013-inherit-systemd-environment-when-calling-generators.patch
-    ./0014-core-don-t-taint-on-unmerged-usr.patch
-    ./0015-tpm2_context_init-fix-driver-name-checking.patch
-    ./0016-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
-
-    # systemd tries to link the systemd-ssh-proxy ssh config snippet with tmpfiles
-    # if the install prefix is not /usr, but that does not work for us
-    # because we include the config snippet manually
-    ./0017-meson-Don-t-link-ssh-dropins.patch
+    ./0001-Don-t-try-to-unmount-nix-or-nix-store.patch
+    ./0002-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
+    ./0003-add-rootprefix-to-lookup-dir-paths.patch
+    ./0004-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+    ./0005-core-don-t-taint-on-unmerged-usr.patch
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
-    ./0018-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
+    ./0006-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
   ];
 
   postPatch = ''
@@ -371,7 +363,14 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (withHomed || withCryptsetup) [ libfido2 ]
   ++ lib.optionals withLibBPF [ libbpf ]
   ++ lib.optional withTpm2Tss tpm2-tss
-  ++ lib.optional withUkify (python3Packages.python.withPackages (ps: with ps; [ pefile ]))
+  ++ lib.optional withUkify (
+    python3Packages.python.withPackages (
+      ps: with ps; [
+        cryptography
+        pefile
+      ]
+    )
+  )
   ++ lib.optionals withPasswordQuality [ libpwquality ]
   ++ lib.optionals withQrencode [ qrencode ]
   ++ lib.optionals withLibarchive [ libarchive ]
@@ -400,6 +399,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "tty-gid" "3") # tty in NixOS has gid 3
     (lib.mesonOption "pamconfdir" "${placeholder "out"}/etc/pam.d")
     (lib.mesonOption "shellprofiledir" "${placeholder "out"}/etc/profile.d")
+    (lib.mesonOption "ntp-servers" "0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
 
     # /bin/sh is also the upstream default. Explicitly set this so that we're
     # independent of upstream changes to the default.
@@ -570,146 +570,31 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "gshadow" false)
     (lib.mesonBool "idn" false)
   ];
-  preConfigure =
-    let
-      # A list of all the runtime binaries referenced by the source code (plus
-      # scripts and unit files) of systemd executables, tests and libraries.
-      # As soon as a dependency is lo longer required we should remove it from
-      # the list.
-      # The `where` attribute for each of the replacement patterns must be
-      # exhaustive. If another (unhandled) case is found in the source code the
-      # build fails with an error message.
-      binaryReplacements = [
-        {
-          search = "/sbin/mkswap";
-          replacement = "${lib.getBin util-linux}/sbin/mkswap";
-          where = [
-            "man/systemd-makefs@.service.xml"
-          ];
-        }
-        {
-          search = "/bin/echo";
-          replacement = "${coreutils}/bin/echo";
-          where = [
-            "man/systemd-analyze.xml"
-            "man/systemd.service.xml"
-            "man/systemd-run.xml"
-            "src/analyze/test-verify.c"
-            "src/test/test-env-file.c"
-            "src/test/test-load-fragment.c"
-          ];
-        }
-        {
-          search = "/bin/cat";
-          replacement = "${coreutils}/bin/cat";
-          where = [
-            "test/test-execute/exec-noexecpaths-simple.service"
-          ];
-        }
-        {
-          search = "/usr/lib/systemd/systemd-fsck";
-          replacement = "$out/lib/systemd/systemd-fsck";
-          where = [ "man/systemd-fsck@.service.xml" ];
-        }
-      ]
-      ++ lib.optionals withImportd [
-        {
-          search = "\"gpg\"";
-          replacement = "\\\"${gnupg}/bin/gpg\\\"";
-          where = [ "src/import/pull-common.c" ];
-        }
-        {
-          search = "\"tar\"";
-          replacement = "\\\"${gnutar}/bin/tar\\\"";
-          where = [
-            "src/import/export-tar.c"
-            "src/import/import-tar.c"
-          ];
-          ignore = [
-            # occurrences here refer to the tar sub command
-            "src/sysupdate/sysupdate-resource.c"
-            "src/sysupdate/sysupdate-transfer.c"
-            "src/import/pull.c"
-            "src/import/export.c"
-            "src/import/import.c"
-            "src/import/importd.c"
-            # runs `tar` but also creates a temporary directory with the string
-            "src/import/pull-tar.c"
-            # pull-oci.c has tar references handled in postPatch
-            "src/import/pull-oci.c"
-            # tar referenced as file suffix
-            "src/shared/import-util.c"
-          ];
-        }
-      ]
-      ++ lib.optionals withKmod [
-        {
-          search = "ExecStart=-modprobe";
-          replacement = "ExecStart=-${lib.getBin kmod}/bin/modprobe";
-          where = [ "units/modprobe@.service" ];
-        }
-      ];
-
-      # { replacement, search, where, ignore } -> List[str]
-      mkSubstitute =
-        {
-          replacement,
-          search,
-          where,
-          ignore ? [ ],
-        }:
-        map (path: "substituteInPlace ${path} --replace '${search}' \"${replacement}\"") where;
-      mkEnsureSubstituted =
-        {
-          replacement,
-          search,
-          where,
-          ignore ? [ ],
-        }:
-        let
-          ignore' = lib.concatStringsSep "|" (
-            ignore
-            ++ [
-              "^test"
-              "NEWS"
-            ]
-          );
-        in
-        ''
-          set +e
-          search=$(grep '${search}' -r | grep -v "${replacement}" | grep -Ev "${ignore'}")
-          set -e
-          if [[ -n "$search" ]]; then
-            echo "Not all references to '${search}' have been replaced. Found the following matches:"
-            echo "$search"
-            exit 1
-          fi
-        '';
-    in
-    ''
-      mesonFlagsArray+=(-Dntp-servers="0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
-      export LC_ALL="en_US.UTF-8";
-
-      ${lib.concatStringsSep "\n" (lib.flatten (map mkSubstitute binaryReplacements))}
-      ${lib.concatMapStringsSep "\n" mkEnsureSubstituted binaryReplacements}
-
-      substituteInPlace src/libsystemd/sd-journal/catalog.c \
-        --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
-
-      substituteInPlace src/import/pull-tar.c src/import/pull-oci.c \
-        --replace 'wait_for_terminate_and_check("tar"' 'wait_for_terminate_and_check("${gnutar}/bin/tar"'
-    '';
+  preConfigure = ''
+    substituteInPlace src/libsystemd/sd-journal/catalog.c \
+      --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
+  '';
 
   # These defines are overridden by CFLAGS and would trigger annoying
   # warning messages
   postConfigure = ''
     substituteInPlace config.h \
-      --replace-fail "SYSTEMD_BINARY_PATH" "_SYSTEMD_BINARY_PATH"
+      --replace-fail "SYSTEMD_BINARY_PATH" "_SYSTEMD_BINARY_PATH" \
+      --replace-fail "SYSTEM_SHUTDOWN_PATH" "_SYSTEM_SHUTDOWN_PATH" \
+      --replace-fail "SYSTEM_SLEEP_PATH" "_SYSTEM_SLEEP_PATH"
   '';
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-USYSTEMD_BINARY_PATH"
     "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
+
+    # This path is not exposed via meson
+    "-USYSTEM_SHUTDOWN_PATH"
+    "-DSYSTEM_SHUTDOWN_PATH=\"/etc/systemd/system-shutdown\""
+
+    # This path is not exposed via meson
+    "-USYSTEM_SLEEP_PATH"
+    "-DSYSTEM_SLEEP_PATH=\"/etc/systemd/system-sleep\""
   ];
 
   doCheck = false;
@@ -740,12 +625,6 @@ stdenv.mkDerivation (finalAttrs: {
 
       # For compatibility with dependents that use sbin instead of bin.
       ln -s bin "$out/sbin"
-
-      rm -rf $out/etc/rpm
-    ''
-    + lib.optionalString (!withKernelInstall) ''
-      # "kernel-install" shouldn't be used on NixOS.
-      find $out -name "*kernel-install*" -exec rm {} \;
     ''
     + lib.optionalString (!withDocumentation) ''
       rm -rf $out/share/doc
@@ -824,6 +703,7 @@ stdenv.mkDerivation (finalAttrs: {
       withMachined
       withNetworkd
       withNspawn
+      withRepart
       withPortabled
       withSysupdate
       withTimedated
@@ -838,106 +718,140 @@ stdenv.mkDerivation (finalAttrs: {
     # enabled. See https://github.com/systemd/systemd/blob/876ee10e0eb4bbb0920bdab7817a9f06cc34910f/units/meson.build#L521
     withTpm2Units = withTpm2Tss && withBootloader && withOpenSSL;
 
-    tests =
+    # These are all the tests that need to pass in order to merge a PR that
+    # updates systemd.
+    #
+    # This list cannot grow indefinitely. It needs to balance the coverage of
+    # important features of a NixOS system exposed via systemd and the actual
+    # ability of maintainers to execute the tests. Only if this remains
+    # executable with reasonable effort, can it serve its purpose as a quality
+    # gate for updating systemd.
+    nixosTests =
       let
-        # Some entries in the `nixosTests.systemd-*` set of attributes are collections of tests,
-        # not individual tests themselves. Let's gather them into one set.
-        gatherNixosTestsFromCollection =
-          prefix: collection:
+        prefixTests =
+          prefix:
           lib.mapAttrs' (name: value: {
             name = "${prefix}-${name}";
             inherit value;
-          }) collection;
-
-        # Here's all the nixosTests that are collections of tests, rather than individual tests.
-        collectedNixosTests = lib.mergeAttrsList (
-          lib.mapAttrsToList gatherNixosTestsFromCollection {
-            inherit (nixosTests)
-              systemd-binfmt
-              systemd-boot
-              systemd-initrd-networkd
-              systemd-repart
-              installer-systemd-stage-1
-              ;
-          }
-        );
-
-        # ... and here's all the individual tests.
-        individualNixosTests = {
-          inherit (nixosTests)
-            fsck-systemd-stage-1
-            hibernate-systemd-stage-1
-            switchTest
-            systemd
-            systemd-analyze
-            systemd-bpf
-            systemd-confinement
-            systemd-coredump
-            systemd-cryptenroll
-            systemd-credentials-tpm2
-            systemd-escaping
-            systemd-initrd-btrfs-raid
-            systemd-initrd-luks-fido2
-            systemd-initrd-luks-keyfile
-            systemd-initrd-luks-empty-passphrase
-            systemd-initrd-luks-password
-            systemd-initrd-luks-tpm2
-            systemd-initrd-modprobe
-            systemd-initrd-shutdown
-            systemd-initrd-simple
-            systemd-initrd-swraid
-            systemd-initrd-vconsole
-            systemd-initrd-networkd-ssh
-            systemd-initrd-networkd-openvpn
-            systemd-initrd-vlan
-            systemd-journal
-            systemd-journal-gateway
-            systemd-journal-upload
-            systemd-machinectl
-            systemd-networkd
-            systemd-networkd-bridge
-            systemd-networkd-dhcpserver
-            systemd-networkd-dhcpserver-static-leases
-            systemd-networkd-ipv6-prefix-delegation
-            systemd-networkd-vrf
-            systemd-no-tainted
-            systemd-nspawn
-            systemd-nspawn-configfile
-            systemd-oomd
-            systemd-portabled
-            systemd-pstore
-            systemd-resolved
-            systemd-shutdown
-            systemd-sysupdate
-            systemd-sysusers-mutable
-            systemd-sysusers-immutable
-            systemd-sysusers-password-option-override-ordering
-            systemd-timesyncd-nscd-dnssec
-            systemd-user-linger
-            systemd-user-tmpfiles-rules
-            systemd-misc
-            systemd-userdbd
-            systemd-homed
-            ;
-        };
-
-        # Finally, make an attrset we're fairly sure is just tests.
-        relevantNixosTests = lib.mapAttrs (
-          name: value:
-          assert lib.assertMsg (lib.isDerivation value) "${name} is not a derivation";
-          value
-        ) (individualNixosTests // collectedNixosTests);
+          }) nixosTests."${prefix}";
       in
-      relevantNixosTests
+      {
+        inherit (prefixTests "systemd-binfmt")
+          systemd-binfmt-basic
+          systemd-binfmt-chroot
+          systemd-binfmt-ldPreload
+          systemd-binfmt-preserveArgvZero
+          ;
+      }
       // {
-        cross =
-          let
-            systemString = if stdenv.buildPlatform.isAarch64 then "gnu64" else "aarch64-multiplatform";
-          in
-          pkgsCross.${systemString}.systemd;
-
-        pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+        inherit (prefixTests "systemd-initrd-networkd")
+          systemd-initrd-networkd-basic
+          systemd-initrd-networkd-doFlush
+          systemd-initrd-networkd-dontFlush
+          ;
+      }
+      // {
+        inherit (prefixTests "systemd-boot")
+          systemd-boot-basic
+          systemd-boot-basicXbootldr
+          systemd-boot-bootCounting
+          systemd-boot-bootCountingSpecialisation
+          systemd-boot-defaultEntry
+          systemd-boot-defaultEntryWithBootCounting
+          systemd-boot-edk2-uefi-shell
+          systemd-boot-entryFilenameXbootldr
+          systemd-boot-extraEntries
+          systemd-boot-extraFiles
+          systemd-boot-fallback
+          systemd-boot-garbage-collect-entry
+          systemd-boot-garbageCollectEntryWithBootCounting
+          systemd-boot-memtest86
+          systemd-boot-memtestSortKey
+          systemd-boot-netbootxyz
+          systemd-boot-secureBoot
+          systemd-boot-specialisation
+          systemd-boot-switch-test
+          systemd-boot-update
+          systemd-boot-windows
+          ;
+      }
+      // {
+        inherit (prefixTests "systemd-repart")
+          systemd-repart-after-initrd
+          systemd-repart-basic
+          systemd-repart-create-root
+          systemd-repart-encrypt-tpm2
+          systemd-repart-factory-reset
+          ;
+      }
+      // {
+        inherit (nixosTests)
+          simple-vm
+          fsck-systemd-stage-1
+          hibernate-systemd-stage-1
+          switchTest
+          # systemd # broken on master
+          systemd-analyze
+          systemd-bpf
+          systemd-confinement
+          # systemd-coredump # broken on master
+          systemd-cryptenroll
+          systemd-credentials-tpm2
+          systemd-escaping
+          systemd-initrd-btrfs-raid
+          systemd-initrd-luks-fido2
+          systemd-initrd-luks-keyfile
+          systemd-initrd-luks-empty-passphrase
+          systemd-initrd-luks-password
+          systemd-initrd-luks-tpm2
+          systemd-initrd-modprobe
+          systemd-initrd-shutdown
+          systemd-initrd-simple
+          systemd-initrd-swraid
+          # systemd-initrd-vconsole # broken on master
+          systemd-initrd-networkd-ssh
+          systemd-initrd-networkd-openvpn
+          systemd-initrd-vlan
+          systemd-journal
+          # systemd-journal-gateway # broken on master
+          systemd-journal-upload
+          # systemd-machinectl # broken on master
+          systemd-networkd
+          systemd-networkd-bridge
+          systemd-networkd-dhcpserver
+          systemd-networkd-dhcpserver-static-leases
+          systemd-networkd-ipv6-prefix-delegation
+          systemd-networkd-vrf
+          systemd-no-tainted
+          systemd-nspawn
+          systemd-nspawn-configfile
+          systemd-oomd
+          systemd-portabled
+          systemd-pstore
+          systemd-resolved
+          systemd-shutdown
+          systemd-sysupdate
+          systemd-sysusers-mutable
+          systemd-sysusers-immutable
+          systemd-sysusers-password-option-override-ordering
+          # systemd-timesyncd-nscd-dnssec # broken on master
+          systemd-user-linger
+          systemd-user-tmpfiles-rules
+          systemd-misc
+          systemd-userdbd
+          # systemd-homed # broken on master
+          ;
       };
+
+    tests = finalAttrs.passthru.nixosTests // {
+      cross =
+        let
+          systemString = if stdenv.buildPlatform.isAarch64 then "gnu64" else "aarch64-multiplatform";
+        in
+        pkgsCross.${systemString}.systemd;
+
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
   };
 
   meta = {

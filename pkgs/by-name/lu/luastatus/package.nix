@@ -16,7 +16,6 @@
   libxau,
   libxdmcp,
   pcre2,
-  pcre,
   util-linux,
   libselinux,
   libsepol,
@@ -61,7 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     udev
     pcre2
-    pcre
     util-linux
     lua5
     docutils

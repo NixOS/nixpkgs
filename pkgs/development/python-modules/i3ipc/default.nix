@@ -4,7 +4,7 @@
   fetchFromGitHub,
   coreutils,
   setuptools,
-  xlib,
+  python-xlib,
   fontconfig,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   '';
 
   build-system = [ setuptools ];
-  dependencies = [ xlib ];
+  dependencies = [ python-xlib ];
 
   # Fontconfig error: Cannot load default config file
   env.FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";

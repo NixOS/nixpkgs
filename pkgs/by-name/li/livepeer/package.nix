@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "livepeer";
-  version = "0.8.8";
+  version = "0.8.10";
 
   proxyVendor = true;
-  vendorHash = "sha256-cEpRLnLR0ia5vvoJ8Fwk/0qgvsnYw7vSpyS9BJQ8UfY=";
+  vendorHash = "sha256-Cn7GHNrFjGgzKPjSVGnoRE9Q2gd3Ji/ZrdVGB9v+0A8=";
 
   src = fetchFromGitHub {
     owner = "livepeer";
     repo = "go-livepeer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DVgB/pE3nq6oHzLi+g/WUMQqrmXvJhPub7bmeLgyEDQ=";
+    hash = "sha256-jz8lgZItPDzAGKJrAFLiEUJ5nyTdw6kGneP6LtmWDYw=";
   };
 
   nativeBuildInputs = [
@@ -29,6 +29,10 @@ buildGoModule (finalAttrs: {
   buildInputs = [
     ffmpeg-livepeer
     gnutls
+  ];
+
+  env.CGO_LDFLAGS = toString [
+    "-lm"
   ];
 
   __darwinAllowLocalNetworking = true;

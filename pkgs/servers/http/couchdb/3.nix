@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  erlang,
+  beamMinimalPackages,
   icu,
   openssl,
   python3,
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    erlang
+    beamMinimalPackages.erlang
   ];
 
   buildInputs = [

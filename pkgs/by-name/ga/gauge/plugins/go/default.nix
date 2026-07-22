@@ -13,7 +13,7 @@ makeGaugePlugin {
     description = "Gauge plugin that lets you write tests in Go";
     homepage = "https://github.com/getgauge-contrib/gauge-go";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ marie ];
+    maintainers = [ ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     platforms = [
       "aarch64-darwin"

@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Integer to Roman numerals converter";
     changelog = "https://github.com/zopefoundation/roman/blob/${finalAttrs.version}/CHANGES.rst";
-    homepage = "https://pypi.python.org/pypi/roman";
+    homepage = "https://pypi.org/project/roman/";
     license = lib.licenses.psfl;
     maintainers = with lib.maintainers; [ sigmanificient ];
     mainProgram = "roman";

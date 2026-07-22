@@ -18,8 +18,6 @@ stdenvNoCC.mkDerivation {
 
   __structuredAttrs = true;
 
-  stripDeps = true;
-
   postPatch = "cp $src linja-sike-5.otf";
 
   nativeBuildInputs = [ installFonts ];

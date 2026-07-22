@@ -32,9 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtsvg
     qt6.qtwebengine
   ]
-  ++ lib.optional stdenv.hostPlatform.isLinux [
-    qt6.qtwayland
-  ];
+  ++ lib.optional stdenv.hostPlatform.isLinux qt6.qtwayland;
 
   # We use a separate build-dir as otherwise ld seems to get confused between
   # directory and executable name on buildPhase.
@@ -62,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/artoh/kitupiikki";
     license = lib.licenses.gpl3Plus;
     mainProgram = "kitsas";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.lajp ];
     platforms = lib.platforms.unix;
   };
 })

@@ -50,7 +50,7 @@ python3Packages.buildPythonPackage rec {
     [
       pyzstd
       urllib3
-      xlib
+      python-xlib
     ]
     ++ lib.optionals withTruststore [
       truststore

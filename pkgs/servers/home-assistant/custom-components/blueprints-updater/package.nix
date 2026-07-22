@@ -2,7 +2,7 @@
   lib,
   buildHomeAssistantComponent,
   fetchFromGitHub,
-  h2,
+  httpx,
   home-assistant,
   pytest-cov-stub,
   pytest-homeassistant-custom-component,
@@ -13,13 +13,13 @@
 buildHomeAssistantComponent rec {
   owner = "luuquangvu";
   domain = "blueprints_updater";
-  version = "2.4.0";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "blueprints-updater";
     tag = version;
-    hash = "sha256-O5HGjnj9fz+RrCq6sgdYlU1r9qFJhmUdfYWdFrwFngw=";
+    hash = "sha256-OGQ6lE14w84C88QJv5w+mNBGg7gbCtqb9nde47FkL6A=";
   };
 
   patches = [
@@ -31,12 +31,10 @@ buildHomeAssistantComponent rec {
   postPatch = ''
     # avoid dependency on rather big pytest-timeout
     substituteInPlace pyproject.toml \
-      --replace-fail '"--timeout=60"' ""
+      --replace-fail '"--timeout=60",' ""
   '';
 
-  dependencies = [
-    h2
-  ];
+  dependencies = httpx.optional-dependencies.http2;
 
   nativeCheckInputs = [
     home-assistant
@@ -46,12 +44,11 @@ buildHomeAssistantComponent rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
+  disabledTestPaths = [
     # pytest-homeassistant-custom-component tries to create temporary directories inside the nix store
-    "test_async_fetch_content_forum_invalid_json_sets_fetch_error"
-    "test_full_update_lifecycle"
-    "test_restore_blueprint_service"
-    "test_update_all_service"
+    "tests/integration/test_init.py::test_full_update_lifecycle"
+    "tests/integration/test_services.py::test_restore_blueprint_service"
+    "tests/integration/test_services.py::test_update_all_service"
   ];
 
   meta = {

@@ -1,51 +1,54 @@
 {
   lib,
-  python3,
+  stdenv,
+  python3Packages,
   fetchFromGitHub,
   ffmpeg_7-headless,
   nixosTests,
   replaceVars,
+  writableTmpDirAsHomeHook,
   providers ? [ ],
 }:
 
 let
-  python = python3.override {
-    self = python;
-    packageOverrides = self: super: {
-      music-assistant-frontend = self.callPackage ./frontend.nix { };
+  pythonPackages = python3Packages.overrideScope (
+    prev: final: {
+      music-assistant-frontend = prev.callPackage ./frontend.nix { };
 
-      music-assistant-models = super.music-assistant-models.overridePythonAttrs (oldAttrs: {
-        version = "1.1.115";
+      music-assistant-models = final.music-assistant-models.overridePythonAttrs (oldAttrs: {
+        version = "1.1.129";
 
         src = oldAttrs.src.override {
-          hash = "sha256-oEXL0B8JNH4PcltpES375ov7QGs+gtYKlMGr1B7BlKY=";
+          hash = "sha256-6gVHlFTt/bsj4nUGPS6HDUQ7zczpfos75U6l4Yk9W6k=";
         };
       });
-    };
-  };
+    }
+  );
 
-  providerPackages = (import ./providers.nix).providers;
+  providersMeta = import ./providers.nix;
+  providerPackages = providersMeta.providers;
   providerNames = lib.attrNames providerPackages;
   providerDependencies = lib.concatMap (
-    provider: (providerPackages.${provider} python.pkgs)
+    provider: (providerPackages.${provider} pythonPackages)
   ) providers;
 
-  pythonPath = python.pkgs.makePythonPath providerDependencies;
+  pythonPath = pythonPackages.makePythonPath providerDependencies;
 in
 
 assert
   (lib.elem "ariacast" providers) -> throw "music-assistant: ariacast has not been packaged, yet.";
 
-python.pkgs.buildPythonApplication rec {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "music-assistant";
-  version = "2.8.7";
+  version = "2.9.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
-    tag = version;
-    hash = "sha256-m91q/8XYoZ5Azu79fKD0euRCuf29w3vj5cxdFheDsmI=";
+    tag = finalAttrs.version;
+    hash = "sha256-PiSBghhlxknijRqghkO8wn1CB2XqaJrjrvGNvZUlNbo=";
   };
 
   patches = [
@@ -78,11 +81,20 @@ python.pkgs.buildPythonApplication rec {
     #                          ^^^^^^^^^^^^^^^
     # E   IndexError: tuple index out of range
     ./fix-webserver-tests-in-sandbox.patch
+
+    # As providers must be configured through the nixos module, there is no gain
+    # if Music Assistant tries to enable some of them without the proper dependencies.
+    ./disable-default-provider.diff
   ];
 
   postPatch = ''
+    # Undo Python 3.14 only syntax
+    substituteInPlace music_assistant/controllers/streams/controller.py \
+      --replace-fail "except BrokenPipeError, ConnectionResetError, ConnectionError:" "except (BrokenPipeError, ConnectionResetError, ConnectionError):" \
+      --replace-fail "except BrokenPipeError, ConnectionResetError:" "except (BrokenPipeError, ConnectionResetError):"
+
     substituteInPlace pyproject.toml \
-      --replace-fail "0.0.0" "${version}" \
+      --replace-fail "0.0.0" "${finalAttrs.version}" \
       --replace-fail "==" ">="
 
     rm -rv \
@@ -98,7 +110,7 @@ python.pkgs.buildPythonApplication rec {
     fi
   '';
 
-  build-system = with python.pkgs; [
+  build-system = with pythonPackages; [
     setuptools
   ];
 
@@ -109,6 +121,7 @@ python.pkgs.buildPythonApplication rec {
     "mashumaro"
     "orjson"
     "xmltodict"
+    "zeroconf"
   ];
 
   pythonRemoveDeps = [
@@ -117,7 +130,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   dependencies =
-    with python.pkgs;
+    with pythonPackages;
     [
       # Only packages required in pyproject.toml
       aiodns
@@ -139,6 +152,7 @@ python.pkgs.buildPythonApplication rec {
       ifaddr
       librosa
       mashumaro
+      modern-colorthief
       music-assistant-frontend
       music-assistant-models
       mutagen
@@ -150,6 +164,8 @@ python.pkgs.buildPythonApplication rec {
       pyjwt
       python-slugify
       shortuuid
+      torch
+      torchaudio
       unidecode
       xmltodict
       zeroconf
@@ -161,7 +177,7 @@ python.pkgs.buildPythonApplication rec {
     ++ gql.optional-dependencies.all
     ++ pyjwt.optional-dependencies.crypto;
 
-  optional-dependencies = with python.pkgs; {
+  optional-dependencies = with pythonPackages; {
     # Required subset of optional-dependencies in pyproject.toml
     test = [
       pytest-aiohttp
@@ -171,20 +187,38 @@ python.pkgs.buildPythonApplication rec {
   };
 
   nativeCheckInputs =
-    with python.pkgs;
+    with pythonPackages;
     [
       pytestCheckHook
+      writableTmpDirAsHomeHook
     ]
-    ++ lib.concatAttrValues optional-dependencies
-    ++ (map (provider: providerPackages.${provider} python.pkgs) [
+    ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies
+    ++ (lib.concatMap (provider: providerPackages.${provider} pythonPackages) [
+      "acoustid_lookup"
       "audible"
       "dlna"
+      "fastmcp_server"
       "jellyfin"
+      "mpd"
+      "msx_bridge"
       "opensubsonic"
       "sendspin"
+      "smart_fades"
       "snapcast"
+      "sonic_analysis"
+      "sonic_similarity"
       "tidal"
+      "wiim"
+      "ytmusic"
     ]);
+
+  preCheck = ''
+    export NUMBA_CACHE_DIR=$(mktemp -d)
+
+    # required for smart_fades tests
+    mkdir -p $HOME/.cache/torch/hub/checkpoints/
+    cp ${pythonPackages.beat-this.passthru.small0Ckpt} $HOME/.cache/torch/hub/checkpoints/beat_this-small0.ckpt
+  '';
 
   disabledTestPaths = [
     # no multicast support in build sandbox:
@@ -193,28 +227,41 @@ python.pkgs.buildPythonApplication rec {
     # provider is missing dependencies
     "tests/providers/apple_music"
     "tests/providers/bandcamp"
+    "tests/providers/hue_entertainment"
     "tests/providers/kion_music"
     "tests/providers/nicovideo"
+    "tests/providers/qqmusic"
     "tests/providers/yandex_music"
+    "tests/providers/yandex_ynison"
     "tests/providers/zvuk_music"
     # mocking music_assistant.providers.airplay.pairing.AirPlayPairing does not work
     "tests/providers/airplay/test_player.py::test_start_pairing__pin_decision"
+  ];
+
+  disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # RuntimeError: failed to initialize QNNPACK
+    "test_beat_detection"
+    "test_extended_analysis_fields"
+    "test_finalize_returns_audio_analysis_data"
+    "test_finalize_returns_none_on_early_exit"
   ];
 
   pythonImportsCheck = [ "music_assistant" ];
 
   passthru = {
     inherit
-      python
+      pythonPackages
       pythonPath
       providerPackages
       providerNames
       ;
+    providersBuiltins = providersMeta.builtins;
     tests = nixosTests.music-assistant;
   };
 
   meta = {
-    changelog = "https://github.com/music-assistant/server/releases/tag/${version}";
+    broken = stdenv.hostPlatform.isDarwin;
+    changelog = "https://github.com/music-assistant/server/releases/tag/${finalAttrs.src.tag}";
     description = "Music Assistant is a music library manager for various music sources which can easily stream to a wide range of supported players";
     longDescription = ''
       Music Assistant is a free, opensource Media library manager that connects to your streaming services and a wide
@@ -229,4 +276,4 @@ python.pkgs.buildPythonApplication rec {
     ];
     mainProgram = "mass";
   };
-}
+})

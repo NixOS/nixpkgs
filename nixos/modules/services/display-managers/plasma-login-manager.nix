@@ -125,12 +125,12 @@ in
             {
               name = "nologin";
               control = "requisite";
-              modulePath = "pam_nologin.so";
+              modulePath = "${config.security.pam.package}/lib/security/pam_nologin.so";
             }
             {
               name = "permit";
               control = "required";
-              modulePath = "pam_permit.so";
+              modulePath = "${config.security.pam.package}/lib/security/pam_permit.so";
             }
           ];
 
@@ -166,7 +166,7 @@ in
               # Load environment from /etc/environment and ~/.pam_environment
               name = "env";
               control = "required";
-              modulePath = "pam_env.so";
+              modulePath = "${config.security.pam.package}/lib/security/pam_env.so";
               settings.conffile = "/etc/pam/environment";
               settings.readenv = 0;
             }
@@ -174,7 +174,7 @@ in
               # Always let the greeter start without authentication
               name = "permit";
               control = "required";
-              modulePath = "pam_permit.so";
+              modulePath = "${config.security.pam.package}/lib/security/pam_permit.so";
             }
           ];
 
@@ -183,7 +183,7 @@ in
               # No action required for account management
               name = "permit";
               control = "required";
-              modulePath = "pam_permit.so";
+              modulePath = "${config.security.pam.package}/lib/security/pam_permit.so";
             }
           ];
 
@@ -192,7 +192,7 @@ in
               # Can't change password
               name = "deny";
               control = "required";
-              modulePath = "pam_deny.so";
+              modulePath = "${config.security.pam.package}/lib/security/pam_deny.so";
             }
           ];
 
@@ -201,7 +201,7 @@ in
               # Setup session
               name = "unix";
               control = "required";
-              modulePath = "pam_unix.so";
+              modulePath = "${config.security.pam.package}/lib/security/pam_unix.so";
             }
             {
               name = "systemd";

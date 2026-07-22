@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -22,7 +23,7 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "stable-baselines3";
-  version = "2.8.0";
+  version = "2.9.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -30,7 +31,7 @@ buildPythonPackage (finalAttrs: {
     owner = "DLR-RM";
     repo = "stable-baselines3";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eMtkcPvTtdy0gqedCD8NxlC85rDEB9Dam5fIKujEWp4=";
+    hash = "sha256-vKbILFjQuD2gAkl3J3RA/vEo5UYqWttJ99kZdlEsqkY=";
   };
 
   build-system = [ setuptools ];
@@ -77,6 +78,11 @@ buildPythonPackage (finalAttrs: {
     # Tests that attempt to access the filesystem
     "test_make_atari_env"
     "test_vec_env_monitor_kwargs"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # RuntimeError: *** -[__NSPlaceholderArray initWithObjects:count:]: attempt to insert nil object from objects[1]
+    "test_report_figure_to_tensorboard"
+    "test_unsupported_figure_format"
   ];
 
   meta = {

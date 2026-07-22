@@ -1,5 +1,6 @@
 {
   fetchurl,
+  fetchpatch,
   runCommand,
   lib,
   stdenv,
@@ -56,6 +57,7 @@
   gnome-settings-daemon,
   xorg-server,
   python3,
+  python3Packages,
   wayland-scanner,
   wrapGAppsHook4,
   gi-docgen,
@@ -71,7 +73,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "49.4";
+  version = "50.2";
 
   outputs = [
     "out"
@@ -82,8 +84,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    hash = "sha256-wWZuxQVhUwviXLiNk5wrzCrzTwHGO4sWuCuJLuM9eFU=";
+    hash = "sha256-/ejfinRlAMUfHJJbUeV8PdhwByM771Yweegx9Tv6O1Y=";
   };
+
+  patches = [
+    # mutter 50.2 spams logs, clutter_input_focus_set_cursor_location
+    # https://gitlab.gnome.org/GNOME/mutter/-/work_items/4840
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/f1570318ec3e9a38615eb91708bb71628ab8bcfd.patch";
+      hash = "sha256-73GI2DTgoEBUQGa7nTUIur/ZuDHgDu4SwjUWHBRCyuo=";
+    })
+  ];
 
   mesonFlags = [
     "-Degl_device=true"
@@ -117,7 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
     xvfb-run
     pkg-config
     python3
-    python3.pkgs.argcomplete # for register-python-argcomplete
+    python3Packages.argcomplete # for register-python-argcomplete
     wayland-scanner
     wrapGAppsHook4
     gi-docgen
@@ -206,7 +217,7 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    libmutter_api_version = "17"; # bumped each dev cycle
+    libmutter_api_version = "18"; # bumped each dev cycle
     libdir = "${finalAttrs.finalPackage}/lib/mutter-${finalAttrs.passthru.libmutter_api_version}";
 
     tests = {

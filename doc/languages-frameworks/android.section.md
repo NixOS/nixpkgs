@@ -308,7 +308,7 @@ Ensure that your buildToolsVersion and ndkVersion match what is declared in andr
 If you are using cmake, make sure its declared version is correct too.
 
 Otherwise, you may get cryptic errors from aapt2 and the Android Gradle plugin warning
-that it cannot install the build tools because the SDK directory is not writeable.
+that it cannot install the build tools because the SDK directory is not writable.
 
 ```gradle
 android {

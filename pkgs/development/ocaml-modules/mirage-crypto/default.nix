@@ -41,7 +41,6 @@ buildDunePackage (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       sternenseemann
-      momeemt
     ];
   };
 })

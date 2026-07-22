@@ -1,6 +1,7 @@
 {
   aiofiles,
   aiohttp,
+  aiointercept,
   aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
@@ -15,17 +16,21 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "imgw-pib";
-  version = "2.1.1";
+  version = "2.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = "imgw-pib";
     tag = finalAttrs.version;
-    hash = "sha256-R1WhKOboItkKamO+hyyJyTl0veDCHDc4N70UE7IuFqI=";
+    hash = "sha256-IJOzQV2WYc6ZWo6S6kkgSJLC4Y5kWbwkyMDvuFSmESU=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "aiohttp"
+  ];
 
   dependencies = [
     aiofiles
@@ -36,6 +41,7 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "imgw_pib" ];
 
   nativeCheckInputs = [
+    aiointercept
     aioresponses
     freezegun
     pytest-asyncio

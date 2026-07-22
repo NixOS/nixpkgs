@@ -76,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" false)
     (lib.cmakeBool "USE_SYSTEM_ZLIB" true)
     (lib.cmakeBool "USE_SYSTEM_LIBUSB" true)
     (lib.cmakeBool "USE_SYSTEM_LIBPNG" true)
@@ -116,7 +117,9 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qtmultimedia
     openal
-    glew
+    # RPCS3's X11 swap-interval path uses GLEW's GLXEW symbols, which
+    # are not provided in the default EGL-enabled GLEW build.
+    (glew.override { enableEGL = false; })
     vulkan-headers
     vulkan-loader
     libpng

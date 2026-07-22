@@ -17,7 +17,7 @@
   runtimeShell,
   # List of Node.js runtimes the package should support
   nodeRuntimes ? [
-    "node20"
+    # Node.js 20.x has reached EOL and is marked as insecure in Nixpkgs, thus omitted here
     "node24"
   ],
   nodejs_20,
@@ -35,13 +35,13 @@ assert builtins.all (
 
 buildDotnetModule (finalAttrs: {
   pname = "github-runner";
-  version = "2.333.1";
+  version = "2.335.1";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5hSnveIebRQhvIHZc8sN9/8e9W1rlfITIB2uNMsQM6k=";
+    hash = "sha256-mFwWhpFzp0pT7WaMpF/N6PGw0IJt3I6/e7GDgw9wA2U=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git-revision
@@ -184,13 +184,21 @@ buildDotnetModule (finalAttrs: {
     "TestSelfUpdateAsync_ValidateHash"
     "TestSelfUpdateAsync"
   ]
+  # Includes an `ActionDownloadInfo` that fails with sandboxed networking
   ++ map (x: "GitHub.Runner.Common.Tests.Worker.ActionManagerL0.PrepareActions_${x}") [
+    "BatchesResolutionAcrossCompositeActions"
     "CompositeActionWithActionfile_CompositeContainerNested"
     "CompositeActionWithActionfile_CompositePrestepNested"
     "CompositeActionWithActionfile_MaxLimit"
     "CompositeActionWithActionfile_Node"
+    "DeduplicatesResolutionAcrossDepthLevels"
     "DownloadActionFromGraph"
+    "DownloadsNextLevelActionsBeforeRecursing"
+    "MultipleTopLevelActions_BatchesResolution"
+    "NestedCompositeContainers_BatchedResolution"
     "NotPullOrBuildImagesMultipleTimes"
+    "ParallelDownloadsAtSameDepth"
+    "ParallelDownloads_MultipleUniqueActions"
     "RepositoryActionWithActionYamlFile_DockerHubImage"
     "RepositoryActionWithActionfileAndDockerfile"
     "RepositoryActionWithActionfile_DockerHubImage"
@@ -202,6 +210,10 @@ buildDotnetModule (finalAttrs: {
     "RepositoryActionWithDockerfilePrepareActions_Repository"
     "RepositoryActionWithInvalidWrapperActionfile_Node"
     "RepositoryActionWithWrapperActionfile_PreSteps"
+  ]
+  ++ [
+    "GitHub.Runner.Common.Tests.Worker.ActionManagerL0.GetDownloadInfoAsync_OmitsDependencies_WhenEmpty"
+    "GitHub.Runner.Common.Tests.Worker.ActionManagerL0.GetDownloadInfoAsync_PropagatesDependencies_WhenPresent"
   ]
   ++ map (x: "GitHub.Runner.Common.Tests.DotnetsdkDownloadScriptL0.${x}") [
     "EnsureDotnetsdkBashDownloadScriptUpToDate"

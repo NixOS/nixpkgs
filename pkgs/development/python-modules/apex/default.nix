@@ -4,6 +4,7 @@
   fetchFromGitHub,
 
   # build-system
+  ninja,
   setuptools,
   torch,
 
@@ -49,18 +50,32 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     # Fix incompatibility with more recent versions of cudnn to de-vendor it:
     #   error: ‘throw_if’ is not a member of ‘cudnn_frontend’
     ./fix-cudnn-frontend-compat.patch
+
+    # By default apex's setup.py will taget all capabilities instead of using TORCH_CUDA_ARCH_LIST
+    # This result in the build failing on recent versions of CUDA.
+    # Instead, use TORCH_CUDA_ARCH_LIST as the source of truth for selecting capabilities
+    ./fix-cuda-capabilities-selection.patch
   ];
 
-  # Don't use git submodules for cuda dependencies
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail \
-        'subprocess.run(["git", "submodule", "update", "--init", "apex/contrib/csrc/multihead_attn/cutlass"])' \
-        "" \
-      --replace-fail \
-        'subprocess.run(["git", "submodule", "update", "--init", "apex/contrib/csrc/cudnn-frontend/"])' \
-        ""
-  '';
+  postPatch =
+    # Don't use git submodules for cuda dependencies
+    ''
+      substituteInPlace setup.py \
+        --replace-fail \
+          'subprocess.run(["git", "submodule", "update", "--init", "apex/contrib/csrc/multihead_attn/cutlass"])' \
+          "" \
+        --replace-fail \
+          'subprocess.run(["git", "submodule", "update", "--init", "apex/contrib/csrc/cudnn-frontend/"])' \
+          ""
+    ''
+    # Disambiguate apex's local `lerp` from `std::lerp`, which is now reachable through ATen/torch
+    # headers with CUDA 13's C++20 standard and gcc 15's <cmath>.
+    + ''
+      substituteInPlace apex/contrib/csrc/optimizers/multi_tensor_distopt_adam_kernel.cu \
+        --replace-fail \
+          "lerp(" \
+          "apex_lerp("
+    '';
 
   env = {
     APEX_CPP_EXT = 1;
@@ -87,6 +102,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   '';
 
   build-system = [
+    ninja
     setuptools
     torch
   ];

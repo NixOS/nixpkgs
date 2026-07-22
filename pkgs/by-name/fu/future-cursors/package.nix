@@ -10,6 +10,9 @@ stdenvNoCC.mkDerivation {
   pname = "future-cursors";
   version = "0-unstable-2021-09-18";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "yeyushengfan258";
     repo = "future-cursors";
@@ -34,7 +37,7 @@ stdenvNoCC.mkDerivation {
     export FONTCONFIG_FILE=${inkscape}/etc/fonts/fonts.conf
     export XDG_CACHE_HOME="$TMPDIR/cache"
     mkdir -p "$XDG_CACHE_HOME/fontconfig"
-    
+
     HOME="$NIX_BUILD_ROOT" ./build.sh
 
     runHook postBuild
@@ -44,7 +47,7 @@ stdenvNoCC.mkDerivation {
     runHook preInstall
 
     install -dm 755 $out/share/icons
-    
+
     # Only copy directories that were actually built
     for color in "" "-black" "-cyan" "-dark"; do
       if [ -d "dist$color" ]; then
@@ -59,7 +62,7 @@ stdenvNoCC.mkDerivation {
     description = "Future cursors for linux desktops";
     homepage = "https://github.com/yeyushengfan258/future-cursors";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ gambled23 ];
+    maintainers = with maintainers; [ Gambled23 ];
     platforms = platforms.linux;
   };
 }

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
   setuptools,
   typing-extensions,
   pytestCheckHook,
@@ -24,12 +25,20 @@ buildPythonPackage {
 
   dependencies = [ typing-extensions ];
 
-  pythonImportsCheck = [ "typed_argparse" ];
-
   nativeCheckInputs = [
     pytestCheckHook
     pytest-cov-stub
   ];
+
+  # https://github.com/typed-argparse/typed-argparse/pull/82
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    "test_nargs_with_choices__literal_illegal_default"
+    "test_nargs_with_choices__enum_illegal_default"
+    "test_bindings_check"
+    "test_check_reserved_names"
+  ];
+
+  pythonImportsCheck = [ "typed_argparse" ];
 
   meta = {
     description = "Type-safe Python argument parsing";

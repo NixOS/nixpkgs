@@ -61,7 +61,7 @@ in
           certs.ca.cert
         ];
         networking.extraHosts = ''
-          ${nodes.server.config.networking.primaryIPAddress} ${domain}
+          ${nodes.server.networking.primaryIPAddress} ${domain}
         '';
         services.alps = {
           enable = true;
@@ -83,7 +83,7 @@ in
 
             baseurl = "http://localhost:${toString config.services.alps.port}"
             username = "alice"
-            password = "${nodes.server.config.users.users.alice.password}"
+            password = "${nodes.server.users.users.alice.password}"
             cookiejar = CookieJar()
             cookieprocessor = HTTPCookieProcessor(cookiejar)
             opener = build_opener(cookieprocessor)
@@ -125,7 +125,7 @@ in
 
       client.start()
       client.wait_for_unit("alps.service")
-      client.wait_for_open_port(${toString nodes.client.config.services.alps.port})
+      client.wait_for_open_port(${toString nodes.client.services.alps.port})
       client.succeed("test-alps-login")
     '';
 }

@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "epitran";
-  version = "1.35.1";
+  version = "1.35.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dmort27";
     repo = "epitran";
     tag = "v${version}";
-    hash = "sha256-XXEZEptrVH+wfWm85B8yZ+RI+6AUZjWFKMjst/V7aE0=";
+    hash = "sha256-O9AzL+snaL0WawsL00v0nnuUZqqC0gAmrlJWLsDnfyU=";
   };
 
   build-system = [

@@ -150,7 +150,14 @@ in
         config.enableDebugHook -> isLinux
       ) "The debugging hook is not supported for macOS host systems!";
       {
-        name = "vm-test-run-${config.name}";
+        name =
+          let
+            inherit (config.driverConfiguration) containers vms;
+            kind = lib.concatStringsSep "-and-" (
+              (lib.optional (containers != { }) "container") ++ (lib.optional (vms != { }) "vm")
+            );
+          in
+          "${kind}-test-run-${config.name}";
 
         requiredSystemFeatures = lib.attrNames (lib.filterAttrs (_: v: v) config.requiredFeatures);
 

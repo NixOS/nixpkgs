@@ -1,0 +1,17 @@
+diff --git a/cmake/libslirp.cmake b/cmake/libslirp.cmake
+index 1cb6758..bef1793 100644
+--- a/cmake/libslirp.cmake
++++ b/cmake/libslirp.cmake
+@@ -2,12 +2,6 @@ add_library(slirp STATIC
+         src/glib-stub/glib.c
+ )
+ 
+-# Copy libslirp's files to another directory so that we can include it as <slirp/libslirp.h>
+-file(MAKE_DIRECTORY "${libslirp_BINARY_DIR}/include")
+-file(REMOVE_RECURSE "${libslirp_BINARY_DIR}/include/slirp")
+-file(COPY "${libslirp_SOURCE_DIR}/src" DESTINATION "${libslirp_BINARY_DIR}/include")
+-file(RENAME "${libslirp_BINARY_DIR}/include/src" "${libslirp_BINARY_DIR}/include/slirp")
+-
+ target_include_directories(slirp PUBLIC
+     "${libslirp_BINARY_DIR}/include"
+     "${libslirp_SOURCE_DIR}/src"

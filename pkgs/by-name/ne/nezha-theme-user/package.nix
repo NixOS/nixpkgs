@@ -2,36 +2,44 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm_11,
   nix-update-script,
 }:
 
+let
+  pnpm = pnpm_11;
+in
 buildNpmPackage (finalAttrs: {
   pname = "nezha-theme-user";
-  version = "2.0.1";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "hamster1963";
-    repo = "nezha-dash-v1";
+    repo = "nezha-dash-v2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3zaA3T4zW18caOQe5DBF8Zsms3cjks3Ywyfkyk6N2N0=";
+    hash = "sha256-/2G0KhlXIvVM8db4nATJHiwPsvKXh8SNE+9DpllfSTs=";
   };
 
-  # TODO: Switch to the bun build function once available in nixpkgs
   postPatch = ''
-    cp ${./package-lock.json} package-lock.json
-
     # We cannot directly get the git commit hash from the tarball
     substituteInPlace vite.config.ts \
-      --replace-fail 'git rev-parse --short HEAD' 'echo refs/tags/v${finalAttrs.version}'
+      --replace-fail 'git rev-parse --short HEAD' 'echo ${finalAttrs.src.rev}'
     substituteInPlace src/components/Footer.tsx \
       --replace-fail '/commit/' '/tree/'
   '';
 
-  npmDepsHash = "sha256-hjVvp2dWBHqXrq/7+kLDmcUUrV15ln/8tNNqDmJ/Sh4=";
+  nativeBuildInputs = [ pnpm ];
 
-  npmPackFlags = [ "--ignore-scripts" ];
-
-  npmFlags = [ "--legacy-peer-deps" ];
+  npmDeps = null;
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-k/05ccqV72kC9E9MX+os8R0wmgIhnDYIwRNmIbedL1I=";
+  };
+  npmConfigHook = pnpmConfigHook;
 
   dontNpmInstall = true;
   installPhase = ''
@@ -42,13 +50,13 @@ buildNpmPackage (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--generate-lockfile" ]; };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Nezha monitoring user frontend based on next.js";
-    changelog = "https://github.com/hamster1963/nezha-dash-v1/releases/tag/v${finalAttrs.version}";
-    homepage = "https://github.com/hamster1963/nezha-dash-v1";
-    license = lib.licenses.apsl20;
+    changelog = "https://github.com/hamster1963/nezha-dash-v2/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/hamster1963/nezha-dash-v2";
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ moraxyc ];
   };
 })

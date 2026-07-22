@@ -1,8 +1,8 @@
 diff --git a/transformer_engine/common/__init__.py b/transformer_engine/common/__init__.py
-index 40933f17..f2eb337c 100644
+index 40933f17..e59f43bb 100644
 --- a/transformer_engine/common/__init__.py
 +++ b/transformer_engine/common/__init__.py
-@@ -239,119 +239,7 @@ def _get_sys_extension() -> str:
+@@ -239,64 +239,7 @@ def _get_sys_extension() -> str:
  def _nvidia_cudart_include_dir() -> str:
      """Returns the include directory for cuda_runtime.h if exists in python environment."""
  
@@ -64,66 +64,11 @@ index 40933f17..f2eb337c 100644
 -        raise RuntimeError(f"{lib_name} shared object not found.")
 -
 -    return path_found, ctypes_handles
--
--
--@functools.lru_cache(maxsize=None)
--def _load_cuda_library_from_system(lib_name: str):
--    """
--    Attempts to load shared object file installed via system/cuda-toolkit.
--
--    `lib_name`: Name of library to load without extension or `lib` prefix.
--    """
--
--    # Where to look for the shared lib in decreasing order of preference.
--    paths = (
--        os.environ.get(f"{lib_name.upper()}_HOME"),
--        os.environ.get(f"{lib_name.upper()}_PATH"),
--        os.environ.get("CUDA_HOME"),
--        os.environ.get("CUDA_PATH"),
--        "/usr/local/cuda",
--    )
--
--    for path in paths:
--        if path is None:
--            continue
--        libs = glob.glob(f"{path}/**/lib{lib_name}{_get_sys_extension()}*", recursive=True)
--        libs = [lib for lib in libs if "stub" not in lib]
--        libs.sort(reverse=True, key=os.path.basename)
--        if libs:
--            return True, ctypes.CDLL(libs[0], mode=ctypes.RTLD_GLOBAL)
--
--    # Search in LD_LIBRARY_PATH.
--    try:
--        _lib_handle = ctypes.CDLL(f"lib{lib_name}{_get_sys_extension()}", mode=ctypes.RTLD_GLOBAL)
--        return True, _lib_handle
--    except OSError:
--        return False, None
--
--
--@functools.lru_cache(maxsize=None)
--def _load_cuda_library(lib_name: str):
--    """
--    Load given shared library.
--    Prioritize loading from system/toolkit
--    before checking python packages.
--    """
--
--    # Attempt to locate library in system.
--    found, handle = _load_cuda_library_from_system(lib_name)
--    if found:
--        return True, handle
--
--    # Attempt to locate library in Python dist-packages.
--    found, handle = _load_cuda_library_from_python(lib_name)
--    if found:
--        return False, handle
--
--    raise RuntimeError(f"{lib_name} shared object not found.")
 +    return "@cudart_include_dir@"
  
  
  @functools.lru_cache(maxsize=None)
-@@ -366,18 +254,9 @@ if "NVTE_PROJECT_BUILDING" not in os.environ or bool(int(os.getenv("NVTE_RELEASE
+@@ -366,18 +309,9 @@ if "NVTE_PROJECT_BUILDING" not in os.environ or bool(int(os.getenv("NVTE_RELEASE
      # `_load_cuda_library` is used for packages that must be loaded
      # during runtime. Both system and pypi packages are searched
      # and an error is thrown if not found.

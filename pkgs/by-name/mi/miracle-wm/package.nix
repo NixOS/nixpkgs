@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   gitUpdater,
   nixosTests,
   boost,
@@ -25,36 +26,38 @@
   pkg-config,
   python3,
   systemd,
+  wasmedge,
   wayland,
+  wayland-scanner,
   yaml-cpp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miracle-wm";
-  version = "0.8.3";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "miracle-wm-org";
     repo = "miracle-wm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N8FDoQDEfv0xGjtnKx+jNfRwxvJdb4ETvQnZuBvlccQ=";
+    hash = "sha256-7JtdSopKBHfFK0KsV0+9OxrOx3vrSydmZSmAiBvKQiI=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "0001-miracle-wm-mir2.28.patch";
+      url = "https://github.com/miracle-wm-org/miracle-wm/commit/0fcfb54c59327d0776f6e8074e885080731a95c4.patch";
+      excludes = [
+        ".github/workflows/test-deb-install.yml"
+      ];
+      hash = "sha256-HuXwPkM0whLFIy8HM6n9bG9I/DZOuzAajmDpJMZt9BQ=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace-fail 'DESTINATION /usr/lib' 'DESTINATION ''${CMAKE_INSTALL_LIBDIR}' \
+      --replace-fail 'DESTINATION lib' 'DESTINATION ''${CMAKE_INSTALL_LIBDIR}' \
       --replace-fail '-march=native' '# -march=native'
-  ''
-  # Fix compat with newer Mir
-  # https://github.com/miracle-wm-org/miracle-wm/commit/aaae6e64261d8a00c2a1df47e2eab99400382d69
-  # Remove when version > 0.8.3
-  + ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'pkg_check_modules(MIRRENDERER REQUIRED mirrenderer' 'pkg_check_modules(MIRRENDERER mirrenderer'
-  ''
-  + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'add_subdirectory(tests/)' ""
   '';
 
   strictDeps = true;
@@ -63,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     makeWrapper
     pkg-config
+    wayland-scanner
   ];
 
   buildInputs = [
@@ -85,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
         tenacity
       ]
     ))
+    wasmedge
     wayland
     yaml-cpp
   ];
@@ -93,6 +98,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_LTO" true)
+    (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
+    # https://github.com/miracle-wm-org/miracle-wm/issues/865
+    (lib.cmakeBool "FEATURE_PLUGIN_SYSTEM" false)
     (lib.cmakeBool "SYSTEMD_INTEGRATION" true)
     (lib.cmakeBool "END_TO_END_TESTS" finalAttrs.finalPackage.doCheck)
   ];

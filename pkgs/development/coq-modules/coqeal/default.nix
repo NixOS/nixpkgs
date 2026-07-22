@@ -58,6 +58,7 @@ let
     release."1.0.3".sha256 = "0hc63ny7phzbihy8l7wxjvn3haxx8jfnhi91iw8hkq8n29i23v24";
 
     propagatedBuildInputs = [
+      mathcomp.ssreflect
       mathcomp.algebra
       bignums
       multinomials

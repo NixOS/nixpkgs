@@ -15,6 +15,7 @@ let
   baseAttrs = {
     strictDeps = true;
     enableParallelBuilding = true;
+    __structuredAttrs = true;
     doCheck = true;
     configurePhase = ''
       runHook preConfigure

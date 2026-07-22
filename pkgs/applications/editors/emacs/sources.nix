@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  fetchzip,
+  fetchgit,
 }:
 
 let
@@ -26,9 +26,9 @@ let
       src =
         {
           "mainline" = (
-            fetchzip {
-              url = "mirror://gnu/emacs/${rev}.tar.xz";
-              inherit hash;
+            fetchgit {
+              url = "https://https.git.savannah.gnu.org/git/emacs.git";
+              inherit rev hash;
             }
           );
           "macport" = (
@@ -74,7 +74,7 @@ let
         '';
         changelog =
           {
-            "mainline" = "https://www.gnu.org/savannah-checkouts/gnu/emacs/news/NEWS.${version}";
+            "mainline" = "https://cgit.git.savannah.gnu.org/cgit/emacs.git/plain/etc/NEWS?h=${rev}";
             "macport" = "https://github.com/jdtsmith/emacs-mac/blob/${rev}/NEWS-mac";
           }
           .${variant};
@@ -105,12 +105,20 @@ let
     };
 in
 {
+  emacs31 = import ./make-emacs.nix (mkArgs {
+    pname = "emacs";
+    version = "31.0.90";
+    variant = "mainline";
+    rev = "emacs-31.0.90";
+    hash = "sha256-Rzlnn+NKQ+jICXLNop27RnVInq79myn4hueJieDO2Ck=";
+  });
+
   emacs30 = import ./make-emacs.nix (mkArgs {
     pname = "emacs";
     version = "30.2";
     variant = "mainline";
     rev = "emacs-30.2";
-    hash = "sha256-W2eZ+cNQhi/fMeRkwOqSKU7Vzvp43WUOpiwaLLNEXtg=";
+    hash = "sha256-3Lfb3HqdlXqSnwJfxe7npa4GGR9djldy8bKRpkQCdSA=";
     patches = fetchpatch: [
       (fetchpatch {
         name = "fix-off-by-one-mistake-80851-CVE-2026-6861.patch";
@@ -138,14 +146,9 @@ in
     pname = "emacs-mac";
     version = "30.2.50";
     variant = "macport";
-    rev = "emacs-mac-30.2";
-    hash = "sha256-i/W2Xa6Vk1+T1fs6fa4wJVMLLB6BK8QAPcdmPrU8NwM=";
+    rev = "emacs-mac-30.2.1";
+    hash = "sha256-KFgQZBW0QRX0k4k8gkVuGhNTfxArOH1+rwUzsmyEuss=";
     patches = fetchpatch: [
-      (fetchpatch {
-        name = "fix-off-by-one-mistake-80851-CVE-2026-6861.patch";
-        url = "https://cgit.git.savannah.gnu.org/cgit/emacs.git/patch/?id=8f535370b9efbc91673b20c6987a5cae4f6dc562";
-        hash = "sha256-ny44eIi8DUa9pQhVGzhGz4H6FXU4+ki86SITLXhkwpw=";
-      })
       (fetchpatch {
         # tree-sitter 0.26 compatibility fix, see https://bugs.gentoo.org/970856
         url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/30.2/01_all_treesit-0.26.patch?id=d0f47979806d9be5a190fdb4ffa1bde439b2d616";

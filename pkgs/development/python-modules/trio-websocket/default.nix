@@ -55,6 +55,9 @@ buildPythonPackage rec {
     "test_server_close_timeout"
     "test_server_handler_exit"
     "test_server_open_timeout"
+    # Race condition
+    # https://github.com/python-trio/trio-websocket/issues/202
+    "test_open_websocket_internal_exc"
   ];
 
   __darwinAllowLocalNetworking = true;

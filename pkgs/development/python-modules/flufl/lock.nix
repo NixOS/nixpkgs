@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "flufl-lock";
-  version = "8.2.0";
+  version = "9.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "flufl_lock";
     inherit version;
-    hash = "sha256-FbMzw1+rGjayI4QAVyWK60zXnw+6+CwUTyPN9s8U1eM=";
+    hash = "sha256-jXPIjKt8mLeSZxApnBFivsfOJT+bnF8KLKgDf58kAjQ=";
   };
 
   build-system = [ hatchling ];

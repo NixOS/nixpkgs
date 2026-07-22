@@ -26,7 +26,7 @@
   zip,
 
   boost190,
-  electron_39,
+  electron_41,
   fontconfig,
   gnumake,
   hunspellDicts,
@@ -45,7 +45,7 @@
 }:
 
 let
-  electron = electron_39;
+  electron = electron_41;
   boost = boost190;
 
   mathJaxSrc = fetchzip {
@@ -201,6 +201,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # Partly taken from https://github.com/rstudio/rstudio/pull/17470
+    ./electron-41.patch
+
+    # zip extraction fails on newer nodejs versions without this fix
+    ./bump-yauzl.patch
+
     # Hack RStudio to only use the input R and provided libclang.
     (replaceVars ./r-location.patch {
       R = lib.getBin R;
@@ -249,9 +255,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     name = "rstudio-${finalAttrs.version}-npm-deps";
-    inherit (finalAttrs) src;
+    inherit (finalAttrs) src patches;
     postPatch = "cd ${finalAttrs.npmRoot}";
-    hash = "sha256-lO+wJk0HWYrKO1Rqz8laVpZK5RUfA9ijYvtPEtVf1r4=";
+    hash = "sha256-rdtnQKaOUp9jfWRA4BuEOyJn8emimiy+Kvxu1939H30=";
   };
 
   preConfigure = ''
@@ -367,10 +373,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Set of integrated tools for the R language";
     homepage = "https://www.rstudio.com/";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [
-      ciil
-      tomasajt
-    ];
+    maintainers = [ lib.maintainers.tomasajt ];
     mainProgram = "rstudio" + lib.optionalString server "-server";
     # rstudio-server on darwin is only partially supported by upstream
     platforms = lib.platforms.linux ++ lib.optionals (!server) lib.platforms.darwin;

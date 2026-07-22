@@ -2,7 +2,6 @@
   lib,
   stdenv,
   python3,
-  fetchpatch,
   fetchPypi,
   openssl,
   # Many Salt modules require various Python modules to be installed,
@@ -12,36 +11,31 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "salt";
-  version = "3007.13";
+  version = "3008.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-xmOnOGy9R6/pSm2LCxrx/M3DUFnM7CuTMQ55IHBTRPs=";
+    hash = "sha256-abf3Phwx7IjP7CqbvVZsf84Ajdqrmiab4xfPeyb2j/w=";
   };
 
   patches = [
     ./fix-libcrypto-loading.patch
-    (fetchpatch {
-      name = "urllib.patch";
-      url = "https://src.fedoraproject.org/rpms/salt/raw/1c6e7b7a88fb81902f5fcee32e04fa80713b81f8/f/urllib.patch";
-      hash = "sha256-yldIurafduOAYpf2X0PcTQyyNjz5KKl/N7J2OTEF/c0=";
-    })
   ];
 
   postPatch = ''
     substituteInPlace "salt/utils/rsax931.py" \
       --subst-var-by "libcrypto" "${lib.getLib openssl}/lib/libcrypto${stdenv.hostPlatform.extensions.sharedLibrary}"
-    substituteInPlace requirements/base.txt \
-      --replace contextvars ""
 
     # Don't require optional dependencies on Darwin, let's use
     # `extraInputs` like on any other platform
     echo -n > "requirements/darwin.txt"
 
-    # Remove windows-only requirement
-    substituteInPlace "requirements/zeromq.txt" \
-      --replace 'pyzmq==25.0.2 ; sys_platform == "win32"' ""
+    # Fix duplicated script in bin and scripts:
+    # FileExistsError: File already exists: /nix/store/...-salt-3008.0/bin/salt
+    # See https://github.com/pypa/installer/pull/170 and https://github.com/saltstack/salt/issues/65083
+    substituteInPlace "tools/pkg/salt_build_backend.py" \
+      --replace-fail 'get_scripts(dist=None):' $'get_scripts(dist=None):\n    return []'
   '';
 
   propagatedBuildInputs =

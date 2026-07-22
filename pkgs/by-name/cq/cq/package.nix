@@ -35,7 +35,7 @@ buildGraalvmNativeImage (finalAttrs: {
   meta = {
     description = "Clojure Query: A Command-line Data Processor for JSON, YAML, EDN, XML and more";
     homepage = "https://github.com/markus-wa/cq";
-    changelog = "https://github.com/markus-wa/cq/releases/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/markus-wa/cq/releases/tag/${finalAttrs.version}";
     license = lib.licenses.epl20;
     maintainers = [ ];
     platforms = lib.platforms.unix;

@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "asn1";
-  version = "3.2.0";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "andrivet";
     repo = "python-asn1";
     tag = "v${version}";
-    hash = "sha256-Ge4ffqew/cfYUoKSudCz4S3+In6nEUPOK6Zes//R4Ls=";
+    hash = "sha256-gqFW+akhWwvtqJQb4LqcgjyJb6bcInl0gT6f2CMTtA0=";
   };
 
   build-system = [ setuptools ];

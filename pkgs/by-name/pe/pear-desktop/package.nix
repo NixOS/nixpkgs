@@ -7,7 +7,7 @@
   python3,
   copyDesktopItems,
   nodejs,
-  pnpm_10_29_2,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   makeDesktopItem,
@@ -31,9 +31,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10_29_2;
-    fetcherVersion = 3;
-    hash = "sha256-BHxieFMMUFbHJHWu8spz0z803kx+kwJ99oYkDpm6a58=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-BNvAGM9ECtptDwxWsmJVq82Bky1AxslYt51FyvOBEvs=";
   };
 
   nativeBuildInputs = [
@@ -41,24 +41,23 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     nodejs
     pnpmConfigHook
-    pnpm_10_29_2
+    pnpm_10
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ copyDesktopItems ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
-  postBuild =
-    lib.optionalString stdenv.hostPlatform.isDarwin ''
-      cp -R ${electron.dist}/Electron.app Electron.app
-      chmod -R u+w Electron.app
-    ''
-    + ''
-      pnpm build
-      ./node_modules/.bin/electron-builder \
-        --dir \
-        -c.electronDist=${if stdenv.hostPlatform.isDarwin then "." else electron.dist} \
-        -c.electronVersion=${electron.version}
-    '';
+  postBuild = ''
+    pnpm build
+
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
+
+    ./node_modules/.bin/electron-builder \
+      --dir \
+      -c.electronDist=electron-dist \
+      -c.electronVersion=${electron.version}
+  '';
 
   desktopItems = [
     (makeDesktopItem {

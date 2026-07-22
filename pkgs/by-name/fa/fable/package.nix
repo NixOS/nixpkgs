@@ -23,7 +23,7 @@ buildDotnetGlobalTool (finalAttrs: {
     homepage = "https://github.com/fable-compiler/fable";
     changelog = "https://github.com/fable-compiler/fable/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
       anpin
       mdarocha

@@ -1,0 +1,32 @@
+From 2a2104f3cff44bb28bb570a093be52bbeeed8f23 Mon Sep 17 00:00:00 2001
+From: Stefan Eissing <stefan@eissing.org>
+Date: Mon, 11 May 2026 14:56:04 +0200
+Subject: [PATCH] event: fix wakeup consumption
+
+The events on a multi wakeup socketpair were only consumed via
+curl_multi_poll()/curl_multi_wait() but not in event based processing on
+a curl_multi_socket() call. That led to busy loops as reported in
+
+Fixes #21547
+Reported-by: Earnestly on github
+Closes #21549
+---
+ lib/multi.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/lib/multi.c b/lib/multi.c
+index be32740a7097..5e84133f13fd 100644
+--- a/lib/multi.c
++++ b/lib/multi.c
+@@ -2703,6 +2703,11 @@ static CURLMcode multi_runsingle(struct Curl_multi *multi,
+   Curl_uint32_bset_remove(&multi->dirty, data->mid);
+ 
+   if(data == multi->admin) {
++#ifdef ENABLE_WAKEUP
++    /* Consume any pending wakeup signals before processing.
++     * This is necessary for event based processing. See #21547 */
++    (void)Curl_wakeup_consume(multi->wakeup_pair, TRUE);
++#endif
+ #ifdef USE_RESOLV_THREADED
+     Curl_async_thrdd_multi_process(multi);
+ #endif

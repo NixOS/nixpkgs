@@ -1,36 +1,35 @@
 {
   lib,
   buildPythonPackage,
+  curl-cffi,
   fetchFromGitHub,
   garth,
   pdm-backend,
   requests,
-  withings-sync,
+  ua-generator,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "garminconnect";
-  version = "0.2.40";
+  version = "0.3.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cyberjunky";
     repo = "python-garminconnect";
-    tag = version;
-    hash = "sha256-EAmKrOmnJFn+vTfmAprd5onqW/uyOe/shSB1u0HVrIE=";
+    tag = finalAttrs.version;
+    hash = "sha256-2nhBLaITFZPzk6fWnS6VAllPxkFofTIU8M+2yLvQMdA=";
   };
 
-  pythonRelaxDeps = [
-    "garth"
-    "withings-sync"
-  ];
+  pythonRelaxDeps = [ "garth" ];
 
   build-system = [ pdm-backend ];
 
   dependencies = [
+    curl-cffi
     garth
     requests
-    withings-sync
+    ua-generator
   ];
 
   # Tests require a token
@@ -41,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Garmin Connect Python API wrapper";
     homepage = "https://github.com/cyberjunky/python-garminconnect";
-    changelog = "https://github.com/cyberjunky/python-garminconnect/releases/tag/${src.tag}";
+    changelog = "https://github.com/cyberjunky/python-garminconnect/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

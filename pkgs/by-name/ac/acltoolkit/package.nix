@@ -1,19 +1,18 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonPackage {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "acltoolkit";
-  version = "0-unstable-2023-02-03";
+  version = "0.2.2-unstable-2023-02-03";
   pyproject = true;
-
-  build-system = with python3.pkgs; [ setuptools ];
 
   src = fetchFromGitHub {
     owner = "zblurx";
     repo = "acltoolkit";
+    # https://github.com/zblurx/acltoolkit/issues/6
     rev = "a5219946aa445c0a3b4a406baea67b33f78bca7c";
     hash = "sha256-97cbkGyIkq2Pk1hydMcViXWoh+Ipi3m0YvEYiaV4zcM=";
   };
@@ -23,7 +22,9 @@ python3.pkgs.buildPythonPackage {
     sed -i -e "s/==[0-9.]*//" setup.py
   '';
 
-  dependencies = with python3.pkgs; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     asn1crypto
     dnspython
     impacket
@@ -35,15 +36,13 @@ python3.pkgs.buildPythonPackage {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "acltoolkit"
-  ];
+  pythonImportsCheck = [ "acltoolkit" ];
 
   meta = {
     description = "ACL abuse swiss-knife";
-    mainProgram = "acltoolkit";
     homepage = "https://github.com/zblurx/acltoolkit";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "acltoolkit";
   };
-}
+})

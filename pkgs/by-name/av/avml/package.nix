@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "avml";
-  version = "0.17.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "avml";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-G+0Q4V+7K6GuMc7c1s7DYSrV9l+deu0+KYAWZYdxNU0=";
+    hash = "sha256-2oVqweq06pzFVcUVq1lCJ4rGmiZG0A7xq6g1RSwR12M=";
   };
 
-  cargoHash = "sha256-a6mCdhi2pBc+YE3iJnjjog37lZh/a2TQRihZc0X0M8g=";
+  cargoHash = "sha256-40NKzbxNY9t5e7OJnw9Kfvx86YsPAolcezeWeFsD0C4=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];

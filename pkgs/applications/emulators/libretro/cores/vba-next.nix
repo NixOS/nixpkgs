@@ -5,13 +5,13 @@
 }:
 mkLibretroCore {
   core = "vba-next";
-  version = "0-unstable-2026-05-12";
+  version = "0-unstable-2026-06-06";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "vba-next";
-    rev = "f56ea99799b51fb107a4d3afe2a97a1364e8d806";
-    hash = "sha256-gbBurV2N6evLnZqvcxAZ2xfKMsybVeu+Nml0p0APTRE=";
+    rev = "349b57c6442af56248433c114500a460ef9bfd8c";
+    hash = "sha256-46ps2P1a8pa9vcZ7Saz8Mh+w5e2lEWjIRAw5WQh1BjQ=";
   };
 
   meta = {

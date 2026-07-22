@@ -35,8 +35,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-cov-stub
-    pydantic.optional-dependencies.email
-  ];
+  ]
+  ++ pydantic.optional-dependencies.email;
 
   meta = {
     changelog = "https://github.com/georgebv/drf-pydantic/releases/tag/${src.tag}";

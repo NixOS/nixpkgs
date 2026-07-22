@@ -18,6 +18,7 @@
   pkg-config,
   lit,
   filecheck,
+  buildPackages,
   rocmPackages ? { },
   rocmGpuTargets ? lib.optionalString (rocmPackages ? clr.gpuTargets) (
     builtins.concatStringsSep ";" rocmPackages.clr.gpuTargets
@@ -41,10 +42,22 @@ let
     ];
   };
 
+  # Minimal rocm join required at runtime
+  # We pass this to clang in its wrapper later.
+  # This is a separate join from the above because we don't
+  # need to pull in hsakmt and comgr at runtime, only build time.
+  rocmPath = symlinkJoin {
+    name = "rocm-path";
+    paths = with rocmPackages; [
+      clr
+      rocm-device-libs
+    ];
+  };
+
   cudatoolkit_joined = symlinkJoin {
     name = "cuda-merged";
 
-    paths = with cudaPackages; [
+    paths = with buildPackages.cudaPackages; [
       cuda_cudart
       cuda_nvcc
       cuda_nvml_dev.include
@@ -157,6 +170,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CUDAToolkit_CUPTI_INCLUDE_DIR" "${cudatoolkit_joined}/include")
     (lib.cmakeFeature "CUDA_cupti_LIBRARY" "${cudatoolkit_joined}/lib/libcupti.so")
   ];
+
+  passthru.setupVars =
+    lib.optionalAttrs rocmSupport { ROCM_PATH = rocmPath; }
+    // lib.optionalAttrs cudaSupport { CUDA_PATH = cudatoolkit_joined; };
 
   passthru.backends =
     lib.optionals levelZeroSupport [

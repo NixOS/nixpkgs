@@ -21,22 +21,22 @@ defaults:
 jobs:
   backport:
     name: Backport Pull Request
-    if: vars.NIXPKGS_CI_APP_ID && github.event.pull_request.merged == true && (github.event.action != 'labeled' || startsWith(github.event.label.name, 'backport'))
+    if: vars.NIXPKGS_CI_CLIENT_ID && github.event.pull_request.merged == true && (github.event.action != 'labeled' || startsWith(github.event.label.name, 'backport'))
     runs-on: ubuntu-slim
     timeout-minutes: 3
     steps:
       # Use a GitHub App to create the PR so that CI gets triggered
       # The App is scoped to Repository > Contents and Pull Requests: write for Nixpkgs
-      - uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3.1.1
+      - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         id: app-token
         with:
-          app-id: ${{ vars.NIXPKGS_CI_APP_ID }}
+          client-id: ${{ vars.NIXPKGS_CI_CLIENT_ID }}
           private-key: ${{ secrets.NIXPKGS_CI_APP_PRIVATE_KEY }}
           permission-contents: write
           permission-pull-requests: write
           permission-workflows: write
 
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           token: ${{ steps.app-token.outputs.token }}
@@ -49,7 +49,7 @@ jobs:
 
       - name: Create backport PRs
         id: backport
-        uses: korthout/backport-action@bf97bcfb53d5250af8b9a15fab0f56158a63b224 # v4.5.1
+        uses: korthout/backport-action@66065406958f46e82238fd59546f5a99e69e22aa # v4.5.2
         with:
           # Config README: https://github.com/korthout/backport-action#backport-action
           add_author_as_reviewer: true

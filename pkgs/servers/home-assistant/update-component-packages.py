@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ packaging rich ])" -p pyright ruff isort nixfmt
+#! nix-shell -i python3 -p "python314.withPackages (ps: with ps; [ packaging rich ])" -p pyright ruff isort nixfmt
 #
 # This script downloads Home Assistant's source tarball.
 # Inside the homeassistant/components directory, each integration has an associated manifest.json,
@@ -34,12 +34,13 @@ from rich.console import Console
 from rich.table import Table
 
 COMPONENT_PREFIX = "homeassistant.components"
-PKG_SET = "home-assistant.python.pkgs"
+PKG_SET = "home-assistant.python3Packages"
 
 # If some requirements are matched by multiple or no Python packages, the
 # following can be used to choose the correct one
 PKG_PREFERENCES = {
     "av": "av",
+    "caldav": "caldav",
     "fiblary3": "fiblary3-fork",  # https://github.com/home-assistant/core/issues/66466
     "fints": "fints",
     "HAP-python": "hap-python",
@@ -72,6 +73,7 @@ EXTRA_COMPONENT_DEPS = {
 OUR_VERSION_IS_NEWER_THAN = {
     "blinkstick": "1.2.0",
     "gps3": "0.33.3",
+    "ouman-eh-800-api": "0.5.0",
     "proxmoxer": "2.2.0",
     "py-cpuinfo": "9.0.0",
     "pybluez": "0.22",

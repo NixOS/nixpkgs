@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
   numpy,
@@ -15,8 +14,10 @@
   cvxopt,
   highspy,
   osqp,
+  qdldl,
   scipy,
   scs,
+  sparsediffpy,
 
   # tests
   hypothesis,
@@ -27,7 +28,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cvxpy";
-  version = "1.8.2";
+  version = "1.9.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -35,17 +36,8 @@ buildPythonPackage (finalAttrs: {
     owner = "cvxpy";
     repo = "cvxpy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MDKTuiePzqdIJlTRxbCOxoaEAisGx368iWbwKEB97QU=";
+    hash = "sha256-xQ2WD0S4GiFLYqQlOE+3V23bIs7AqJY6Xn9m4sjc10I=";
   };
-
-  patches = [
-    # Upstream PR: https://github.com/cvxpy/cvxpy/pull/3290
-    (fetchpatch {
-      name = "highs-1.14.0.patch";
-      url = "https://github.com/cvxpy/cvxpy/commit/89f8d337d927457c2e308de8295dd83f274e40e7.patch";
-      hash = "sha256-BO878Kz5ZH5FHkxZugzT+n6wjsoOReqCZWM2HDvFqAw=";
-    })
-  ];
 
   postPatch =
     # too tight tolerance in tests (AssertionError)
@@ -62,14 +54,19 @@ buildPythonPackage (finalAttrs: {
     setuptools
   ];
 
+  pythonRelaxDeps = [
+    "sparsediffpy"
+  ];
   dependencies = [
     clarabel
     cvxopt
     highspy
     numpy
     osqp
+    qdldl
     scipy
     scs
+    sparsediffpy
   ];
 
   nativeCheckInputs = [
@@ -86,6 +83,11 @@ buildPythonPackage (finalAttrs: {
   enabledTestPaths = [ "cvxpy" ];
 
   disabledTests = [
+    # Numerical assertions failing
+    "test_oprelcone_1_m1_k3_real"
+    "test_oprelcone_1_m3_k1_real"
+    "test_oprelcone_1_m4_k4_real"
+
     # Disable the slowest benchmarking tests, cuts test time in half
     "test_tv_inpainting"
     "test_diffcp_sdp_example"

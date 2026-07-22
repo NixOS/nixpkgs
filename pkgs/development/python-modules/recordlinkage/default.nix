@@ -58,6 +58,6 @@ buildPythonPackage rec {
     homepage = "https://recordlinkage.readthedocs.io/";
     changelog = "https://github.com/J535D165/recordlinkage/releases/tag/v${version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ raitobezarius ];
+    maintainers = [ ];
   };
 }

@@ -14,6 +14,7 @@
   eprover-ho,
   cvc5,
   libpoly,
+  symfpu,
   csdp,
   rlwrap,
   perl,
@@ -107,6 +108,10 @@ let
     (cvc5.override {
       libpoly = libpoly.overrideAttrs {
         version = "0.2.0";
+        __intentionallyOverridingVersion = true;
+      };
+      symfpu = symfpu.overrideAttrs {
+        version = "0-unstable-2019-05-17";
         __intentionallyOverridingVersion = true;
       };
     }).overrideAttrs

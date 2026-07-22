@@ -12,7 +12,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "stripe-cli";
-  version = "1.37.2";
+  version = "1.43.2";
 
   # required for tests
   __darwinAllowLocalNetworking = true;
@@ -21,9 +21,9 @@ buildGoModule (finalAttrs: {
     owner = "stripe";
     repo = "stripe-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Hsp90qmwy8D6SpDrgElB0Om6lumtkFjp2e///GEwkuE=";
+    hash = "sha256-FopjU7m6RbEJTekIFG2XppZ52U/TrFpipVUDWwngPJI=";
   };
-  vendorHash = "sha256-EDdRgApJ7gv/4ma/IfaHi+jjpTPegsUfqHbvoFMn048=";
+  vendorHash = "sha256-6z6jfRMmEll1703xUJYSc4WU7CN7tMMyidNtay6vo2M=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -64,10 +64,14 @@ buildGoModule (finalAttrs: {
         # network access
         "TestConflictWithPluginCommand"
         "TestLogin"
+        "TestRefreshPluginManifestSucceedsIfNoAPIKey"
 
         # not providing git or the various editors it wants to call
         "TestGetOpenEditorCommand"
         "TestGetDefaultGitEditor"
+
+        # broken for aarch64
+        "TestGetReleaseForVersion"
       ];
     in
     [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];

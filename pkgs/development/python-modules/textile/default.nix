@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "textile";
-  version = "4.0.3";
+  version = "4.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "textile";
     repo = "python-textile";
     tag = finalAttrs.version;
-    hash = "sha256-KVDppsvX48loV9OJ70yqmQ5ZSypzcxrjH1j31DcyfM8=";
+    hash = "sha256-fHji+TOIFVljkvlOaRp/8EnZ6KYgMu/DLpg6PmOSEbk=";
   };
 
   build-system = [
@@ -45,9 +45,9 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "textile" ];
 
   meta = {
-    description = "MOdule for generating web text";
+    description = "Module for generating web text";
     homepage = "https://github.com/textile/python-textile";
-    changelog = "https://github.com/textile/python-textile/blob/${finalAttrs.version}/CHANGELOG.textile";
+    changelog = "https://github.com/textile/python-textile/blob/${finalAttrs.src.tag}/CHANGELOG.textile";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pytextile";

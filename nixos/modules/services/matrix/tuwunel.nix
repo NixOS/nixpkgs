@@ -62,6 +62,19 @@ in
       };
     };
 
+    environmentFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      example = "/run/secrets/matrix-tuwunel.env";
+      description = ''
+        Path to a file containing sensitive environment variables as described in {manpage}`systemd.exec(5).
+
+        Refer to
+        <https://matrix-construct.github.io/tuwunel/configuration.html#environment-variables>
+        for specifying options as environment variables.
+      '';
+    };
+
     settings = lib.mkOption {
       type = lib.types.submodule {
         freeformType = format.type;
@@ -255,6 +268,7 @@ in
         ExecStart = lib.getExe cfg.package;
         Restart = "on-failure";
         RestartSec = 10;
+        EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
       };
     };
   };

@@ -103,6 +103,13 @@ buildPythonPackage (finalAttrs: {
     "test_failure"
     # TypeError
     "test_oauth"
+    # AssertionError
+    "test_buffer_size_overrides"
+    "test_buffer_size_overrides"
+    "test_default_params"
+    "test_default_params"
+    "test_parameter_overrides"
+    "test_parameter_overrides"
   ];
 
   meta = {

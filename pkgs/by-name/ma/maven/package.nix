@@ -47,17 +47,26 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         // {
           overrideMavenAttrs = newArgs: makeOverridableMavenPackage mavenRecipe (overrideWith newArgs);
         };
+
+      # Exposed so other Maven versions (e.g. maven_4) can reuse the builder
+      # without duplicating build-maven-package.nix.
+      mkBuildMavenPackage =
+        maven:
+        makeOverridableMavenPackage (
+          callPackage ./build-maven-package.nix {
+            inherit maven;
+          }
+        );
     in
     {
       buildMaven = callPackage ./build-maven.nix {
         maven = finalAttrs.finalPackage;
       };
 
-      buildMavenPackage = makeOverridableMavenPackage (
-        callPackage ./build-maven-package.nix {
-          maven = finalAttrs.finalPackage;
-        }
-      );
+      inherit mkBuildMavenPackage;
+
+      buildMavenPackage = mkBuildMavenPackage finalAttrs.finalPackage;
+
       tests = {
         version = testers.testVersion {
           package = finalAttrs.finalPackage;

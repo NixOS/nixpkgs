@@ -36,13 +36,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ueberzugpp";
-  version = "2.9.8";
+  version = "2.9.10";
 
   src = fetchFromGitHub {
     owner = "jstkdng";
     repo = "ueberzugpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BTOuOS0zCdYTTc47UHaGI6wqFEv6e71cD2XBZtnKGLU=";
+    hash = "sha256-YrMFSbNQLamqT7asVxDz8JYgjYNdbdbR7axeopgWTMk=";
   };
 
   strictDeps = true;

@@ -41,6 +41,9 @@ stdenv.mkDerivation (
     inherit url runtimeModes altRuntimeMode;
     inherit (runtimeModesBuilds.${mainRuntimeMode}) version src meta;
 
+    strictDeps = true;
+    __structuredAttrs = true;
+
     dontUnpack = true;
     dontBuild = true;
 

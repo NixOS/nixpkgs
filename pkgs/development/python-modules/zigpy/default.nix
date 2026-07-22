@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   aiohttp,
   aioresponses,
   aiosqlite,
@@ -22,22 +21,22 @@
   voluptuous,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zigpy";
-  version = "1.4.1";
+  version = "1.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy";
-    tag = version;
-    hash = "sha256-9e+n4C2ViCAHFw2Ed+NxPSAbcVX5KJl7biIIsYr8E4c=";
+    tag = finalAttrs.version;
+    hash = "sha256-AbVVv/3a/FZuk+VWLereCF7NEwu4u8HjZrsXsfarSZA=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail '"setuptools-git-versioning<2"' "" \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail 'dynamic = ["version"]' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [ setuptools ];
@@ -88,9 +87,9 @@ buildPythonPackage rec {
   meta = {
     description = "Library implementing a ZigBee stack";
     homepage = "https://github.com/zigpy/zigpy";
-    changelog = "https://github.com/zigpy/zigpy/releases/tag/${version}";
+    changelog = "https://github.com/zigpy/zigpy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ mvnetbiz ];
     platforms = lib.platforms.linux;
   };
-}
+})

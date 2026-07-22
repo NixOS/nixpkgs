@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://www.tradingview.com/support/solutions/43000673888/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ prominentretail ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "tradingview";
   };

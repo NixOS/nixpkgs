@@ -43,10 +43,8 @@ buildDotnetModule rec {
   };
 
   nativeBuildInputs =
-    lib.optional stdenv.hostPlatform.isLinux [
-      wrapGAppsHook3
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin [
+    lib.optional stdenv.hostPlatform.isLinux wrapGAppsHook3
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools
       darwin.sigtool
     ];
@@ -82,11 +80,11 @@ buildDotnetModule rec {
     libGL
     SDL2
   ]
-  ++ lib.optional (!stdenv.hostPlatform.isDarwin) [
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     udev
     pulseaudio
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin [ moltenvk ];
+  ++ lib.optional stdenv.hostPlatform.isDarwin moltenvk;
 
   projectFile = "Ryujinx.sln";
   testProjectFile = "src/Ryujinx.Tests/Ryujinx.Tests.csproj";

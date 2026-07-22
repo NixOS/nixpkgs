@@ -7,7 +7,7 @@
   setuptools,
   setuptools-scm,
 
-  # dependenices
+  # dependencies
   numpy,
   packaging,
   pandas,
@@ -32,6 +32,7 @@
 
   # tests
   pytest-asyncio,
+  pytest-xdist,
   pytestCheckHook,
   h5py,
 }:
@@ -98,8 +99,14 @@ buildPythonPackage (finalAttrs: {
       accel ++ io ++ etc ++ parallel ++ viz;
   };
 
+  preCheck = ''
+    # tests become flaky with to many cores
+    export NIX_BUILD_CORES=$((NIX_BUILD_CORES > 8 ? 8 : NIX_BUILD_CORES))
+  '';
+
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-xdist
     pytestCheckHook
   ]
   # Besides scipy, these are not strictly needed for the tests, but adding all

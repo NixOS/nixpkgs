@@ -2,7 +2,6 @@
   lib,
   stdenv,
   capnproto,
-  kdePackages,
   fetchFromGitHub,
   fontconfig,
   installShellFiles,
@@ -18,20 +17,19 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "turbo-unwrapped";
-  version = "2.9.6";
+  version = "2.9.18";
 
   src = fetchFromGitHub {
     owner = "vercel";
     repo = "turborepo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-baERDG5/r64Tn1Ay6ikFJfZLeR//88Fl42TPbLj6IrQ=";
+    hash = "sha256-ugPkWeUJqt1KnGYC85hihHXl3JPlfbTvk4RaLIvVq2Y=";
   };
 
-  cargoHash = "sha256-+ptA25gdZfZwr8+6qUSzYvc66WyaBwvXFRlhUiYSNVA=";
+  cargoHash = "sha256-LBGaZgW4q//VJfXIqzByQogz0o/fyQcTAAFwlHPuRUc=";
 
   nativeBuildInputs = [
     capnproto
-    kdePackages.extra-cmake-modules
     installShellFiles
     pkg-config
     protobuf

@@ -53,12 +53,8 @@ buildPythonPackage (finalAttrs: {
     # Many of the failures below are reported in:
     # https://github.com/aboutcode-org/typecode/issues/36
 
-    # AssertionError: assert 'application/x-bytecode.python'...
-    "test_package_json"
-
     # fails due to change in file (libmagic) 5.45
-    "test_doc_postscript_eps"
-    "test_package_debian"
+    "test_media_image_img"
   ];
 
   pythonImportsCheck = [ "typecode" ];
@@ -68,6 +64,7 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/aboutcode-org/typecode";
     changelog = "https://github.com/aboutcode-org/typecode/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ eljamm ];
+    teams = with lib.teams; [ ngi ];
   };
 })

@@ -130,6 +130,10 @@ stdenv.mkDerivation (finalAttrs: {
         "shutdown_close_pipe"
       ]
       ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+        # ENETUNREACH when performed in jailed build env
+        "tcp_connect"
+        "udp_connect"
+        "connect_unspecified"
         # EOPNOTSUPP when performed in jailed build env
         "tcp_reuseport"
         "udp_reuseport"
@@ -206,7 +210,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://libuv.org/";
     changelog = "https://github.com/libuv/libuv/blob/v${finalAttrs.version}/ChangeLog";
     pkgConfigModules = [ "libuv" ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ miniharinn ];
     platforms = lib.platforms.all;
     license = with lib.licenses; [
       mit

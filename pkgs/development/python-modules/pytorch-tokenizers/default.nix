@@ -30,15 +30,16 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "pytorch-tokenizers";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "meta-pytorch";
     repo = "tokenizers";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-4VWOKCdRx1VpYoJq7LYfpdcAAQeHnLD5mxI65XrrEHs=";
+    hash = "sha256-1G6mDUSwy4KXKgdtEimj9rrQDonGHdo8R8DvPQppvwE=";
   };
 
   patches = [
@@ -61,6 +62,17 @@ buildPythonPackage (finalAttrs: {
     setuptools
   ];
   dontUseCmakeConfigure = true;
+
+  # pkgs/by-name/cm/cmake/setup-hook.sh
+  preBuild = ''
+    if ! [[ -v enableParallelBuilding ]]; then
+        enableParallelBuilding=1
+        echo "cmake: enabled parallel building"
+    fi
+    if [[ "$enableParallelBuilding" -ne 0 ]]; then
+        export CMAKE_BUILD_PARALLEL_LEVEL=$NIX_BUILD_CORES
+    fi
+  '';
 
   dependencies = [
     sentencepiece
@@ -90,6 +102,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "C++ implementations for various tokenizers (sentencepiece, tiktoken, etc.)";
     homepage = "https://github.com/meta-pytorch/tokenizers";
+    changelog = "https://github.com/meta-pytorch/tokenizers/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

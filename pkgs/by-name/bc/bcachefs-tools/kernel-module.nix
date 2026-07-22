@@ -11,8 +11,14 @@ stdenv.mkDerivation {
   version = "${kernel.version}-${bcachefs-tools.version}";
 
   __structuredAttrs = true;
+  strictDeps = true;
 
   src = bcachefs-tools.dkms;
+
+  postPatch = ''
+    substituteInPlace src/fs/bcachefs/Makefile \
+      --replace-fail '$(objtree)/vmlinux' '${kernel.dev}/vmlinux'
+  '';
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
@@ -44,6 +50,6 @@ stdenv.mkDerivation {
       platforms
       ;
 
-    broken = !(lib.versionAtLeast kernel.version "6.16" && lib.versionOlder kernel.version "7.1");
+    broken = !(lib.versionAtLeast kernel.version "6.16" && lib.versionOlder kernel.version "7.2");
   };
 }

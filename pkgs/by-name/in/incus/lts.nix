@@ -79,6 +79,76 @@ import ./generic.nix {
       url = "https://github.com/lxc/incus/commit/5b29ecc164ef28239d2e2a874a7c871a2e419083.patch?full_index=1";
       hash = "sha256-jpyJYjiZvRw/aOGsykEx8uotRBF7p1q5O08PVhyQtvk=";
     })
+    (fetchpatch2 {
+      name = "incusd-storage_Fix-unsafe-access-to-backup-data.patch";
+      url = "https://github.com/lxc/incus/commit/d71c5053a4c8318e6eb07337a7a4a07a6608ef73.patch?full_index=1";
+      hash = "sha256-/mH0/KmX9sG8HZTcdk8MT+QZtNqZa934wcHptvdVtXM=";
+    })
+    (fetchpatch2 {
+      name = "incusd-storage_Guard-nil-ExpiresAt-in-CreateCustomVolumeFromBackup.patch";
+      url = "https://github.com/lxc/incus/commit/ab6b7dff0c770044875d9d26a6254a7075b4d00b.patch?full_index=1";
+      hash = "sha256-d7VUetQzUTBq3GLYM1JKy2KDbBxOW5Lg7Di1/JPNzSE=";
+    })
+    (fetchpatch2 {
+      name = "incusd-storage_Guard-nil-fields-in-createDependentVolumesFromBackup.patch";
+      url = "https://github.com/lxc/incus/commit/98e64f0a6fcfdc9676eea0246418d490c53297bf.patch?full_index=1";
+      hash = "sha256-+lB7eHsGZ/dW7aL4/wIWD4AF6t7s4QYfAld1bQOw2tQ=";
+    })
+    (fetchpatch2 {
+      name = "incusd-storage-s3_Confine-multipart-uploads-with-os.Root.patch";
+      url = "https://github.com/lxc/incus/commit/a6012422b45c86f3b1956788cff5d75c604ad838.patch?full_index=1";
+      hash = "sha256-u3NLKE8Rh8i6HMbJ0KNhH7gbuwIpJ1SPqiyVoiuw9Sc=";
+    })
+    (fetchpatch2 {
+      name = "incusd-instances_Check-source-instance-access-on-copy.patch";
+      url = "https://github.com/lxc/incus/commit/1e3ffc53a10950e55de62ac1e0d612be597b84eb.patch?full_index=1";
+      hash = "sha256-1foxIu1rWcK1QbpmAPoQ46Tl1mrPvoctPnDhKRTWbd0=";
+    })
+    (fetchpatch2 {
+      name = "incusd-storage_Check-source-volume-access-on-copy.patch";
+      url = "https://github.com/lxc/incus/commit/2e01078366e2653712719dec82318e51c6d21b28.patch?full_index=1";
+      hash = "sha256-FP9v/8V0ZFLgy1tODKLJlw5f/6qJ8AMP/yme2YhYSaA=";
+    })
+    (fetchpatch2 {
+      name = "incusd-images_Validate-fingerprint-on-direct-download.patch";
+      url = "https://github.com/lxc/incus/commit/46d6ef232186df5535c49ca9f3597cab381f9b86.patch?full_index=1";
+      hash = "sha256-R8gsvdmb7KVC6W1vFH1CojzhrGNgNiFOOTYbCrDAajg=";
+    })
+    (fetchpatch2 {
+      name = "shared-validate_Reject-compression-algorithm-arguments.patch";
+      url = "https://github.com/lxc/incus/commit/873a032a461df6b09b7586435b592873863a4e88.patch?full_index=1";
+      hash = "sha256-QvxGxwHvswUZFst71zA12ZdxNIErl1LkaNyQdcPiglI=";
+    })
+    (fetchpatch2 {
+      name = "incusd-instance_Confine-template-access-to-instance-root.patch";
+      url = "https://github.com/lxc/incus/commit/cbefa31ae0da8fd96361178aed3a3c631e098fef.patch?full_index=1";
+      hash = "sha256-ZOHqnlIG6LyIUO6WP76SZJKTeqoiw9qj2YByGxqGP+E=";
+    })
+    (fetchpatch2 {
+      name = "incusd-instance_Enforce-project-restrictions-on-snapshot-restore.patch";
+      url = "https://github.com/lxc/incus/commit/3fe3bc99891940fcd3e758d49f65a853104fcd6b.patch?full_index=1";
+      hash = "sha256-j+lTbDaUjnZRY0lmaOSH4oKNAeIe5GXTwd1oM50it+Y=";
+    })
+    (fetchpatch2 {
+      name = "incusd-exec_Reject-exec-output-symlink.patch";
+      url = "https://github.com/lxc/incus/commit/e109655d642c7cb7c9039b7c06323000407f76dd.patch?full_index=1";
+      hash = "sha256-v/H12n8u+aqm9+ZxrarBxQEQSMN1gpX13oyummGWXl8=";
+    })
+    (fetchpatch2 {
+      name = "incusd_Reject-rootfs-symlink-for-instances.patch";
+      url = "https://github.com/lxc/incus/commit/7e58425ca7ffeb21bb116869e71a0d002dae9e72.patch?full_index=1";
+      hash = "sha256-MU+Khx+DhYQWUVs71D05PnJGamrhRXxsahtdXZeSfvU=";
+    })
+    (fetchpatch2 {
+      name = "shared-logger_Add-WarnOnError-helper.patch";
+      url = "https://github.com/lxc/incus/commit/1bc4d3feb8cd3bd005b7406c0d44ad3ea59400bf.patch?full_index=1";
+      hash = "sha256-ima4IGl0CyL30yZVdQ2pmp9SukIzrdBftGkO/GUPB3g=";
+    })
+    (fetchpatch2 {
+      name = "incus-0001-incusd-daemon_images-Add-missing-import.patch";
+      url = "https://raw.githubusercontent.com/zabbly/incus/a7fd42d2f5115c4e6893b23e64209db511fff828/patches/incus-0001-incusd-daemon_images-Add-missing-import.patch";
+      hash = "sha256-xtuuASy9bck+BgXbea9goNhrMV8Yme9cmFp4WNrkIdI=";
+    })
   ];
   nixUpdateExtraArgs = [
     "--version-regex=^v(7\\.0\\.[0-9]+)$"

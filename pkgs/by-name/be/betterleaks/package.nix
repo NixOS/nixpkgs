@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "betterleaks";
-  version = "1.2.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "betterleaks";
     repo = "betterleaks";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1cP+mOboazalNuGe8LXBVKCSPvrAFBM2HR3keZdY4Bw=";
+    hash = "sha256-7Oa6mtFhkHqgd4/FH85W7Bc/KSMwPCeHRhIFk2KVkik=";
   };
 
-  vendorHash = "sha256-bDe3SjKW3zIbDtkkUfk8RGooW9Nir/f5EVOwXCyPiAs=";
+  vendorHash = "sha256-KAZfl2t8LUsgQBKsrgXsh/1ziX0FZvDhnSUAv7D/hSA=";
 
   ldflags = [
     "-s"

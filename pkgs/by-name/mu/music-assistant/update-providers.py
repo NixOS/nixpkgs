@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=./. -i python3 -p "music-assistant.python.withPackages (ps: music-assistant.dependencies ++ (with ps; [ jinja2 packaging ]))" -p nixfmt pyright ruff isort
+#!nix-shell -I nixpkgs=./. -i python3 -p "music-assistant.pythonPackages.python.withPackages (ps: music-assistant.dependencies ++ (with ps; [ jinja2 packaging ]))" -p nixfmt pyright ruff isort
 import asyncio
 import json
 import os.path
@@ -24,13 +24,22 @@ TEMPLATE = """# Do not edit manually, run ./update-providers.py
 
 {
   version = "{{ version }}";
+  builtins = [
+{%- for builtin in builtins | sort %}
+    "{{ builtin }}"
+{%- endfor %}
+  ];
   providers = {
 {%- for provider in providers | sort(attribute='domain') %}
     {{ provider.domain }} = {% if provider.available %}ps: with ps;{% else %}ps:{% endif %} [
 {%- for requirement in provider.available | sort %}
-      {{ requirement }}
+    {{ requirement }}
 {%- endfor %}
-    ];{% if provider.missing %} # missing {{ ", ".join(provider.missing) }}{% endif %}
+    ]
+{%- for requirement in provider.extra_list_deps | sort %}
+    ++ {{ requirement }}
+{%- endfor %}
+;{% if provider.missing %} # missing {{ ", ".join(provider.missing) }}{% endif %}
 {%- endfor %}
   };
 }
@@ -50,18 +59,26 @@ ROOT: Final = (
     .strip()
 )
 
-PACKAGE_SET = "music-assistant.python.pkgs"
+PACKAGE_SET = "music-assistant.pythonPackages"
 PACKAGE_MAP = {
     "git+https://github.com/MarvinSchenkel/pytube.git": "pytube",
 }
 
 
 EXTRA_DEPS = {
+    # Those providers cannot guard pydantic behind TYPE_CHECKING
+    "msx_bridge": ["pydantic"],
+    "nicovideo": ["pydantic"],
     "ytmusic": [
         # https://github.com/music-assistant/server/blob/2.5.8/music_assistant/providers/ytmusic/__init__.py#L120
         "bgutil-ytdlp-pot-provider",
         "yt-dlp",
     ],
+}
+
+
+EXTRA_LIST_DEPS = {
+    "sendspin": ["aiosendspin.optional-dependencies.server"],
 }
 
 
@@ -143,7 +160,7 @@ def packageset_attributes():
             ROOT,
             "-qa",
             "-A",
-            "music-assistant.python.pkgs",
+            "music-assistant.pythonPackages",
             "--arg",
             "config",
             "{ allowAliases = false; }",
@@ -162,7 +179,7 @@ class NoMatch(Exception):
 
 
 def resolve_package_attribute(package: str) -> str:
-    pattern = re.compile(rf"^music-assistant\.python\.pkgs\.{package}$", re.I)
+    pattern = re.compile(rf"^music-assistant\.pythonPackages\.{package}$", re.I)
     packages = packageset_attributes()
     matches = []
     for attr in packages.keys():
@@ -189,6 +206,7 @@ class Provider:
     domain: str
     available: list[str] = field(default_factory=list)
     missing: list[str] = field(default_factory=list)
+    extra_list_deps: list[str] = field(default_factory=list)
 
     def __eq__(self, other):
         return self.domain == other.domain
@@ -197,12 +215,12 @@ class Provider:
         return hash(self.domain)
 
 
-async def resolve_providers(manifests) -> Set:
+async def resolve_providers(manifests) -> tuple[Set, Set]:
     errors = []
     providers = set()
     for manifest in manifests:
         provider = Provider(manifest.domain)
-        requirements = manifest.requirements + EXTRA_DEPS.get(manifest.domain, [])
+        requirements = manifest.requirements
         for requirement in requirements:
             # allow substituting requirement specifications that packaging cannot parse
             if requirement in PACKAGE_MAP:
@@ -223,26 +241,37 @@ async def resolve_providers(manifests) -> Set:
             version = await get_package_version(attr)
             if version not in requirement.specifier:
                 errors.append(f"{requirement} not satisfied by version {version}")
+        if manifest.domain in EXTRA_DEPS:
+            for requirement in EXTRA_DEPS[manifest.domain]:
+                provider.available.append(requirement)
+        if manifest.domain in EXTRA_LIST_DEPS:
+            for requirement in EXTRA_LIST_DEPS[manifest.domain]:
+                provider.extra_list_deps.append(requirement)
         providers.add(provider)
     if errors:
         print("\n - ", end="")
         print("\n - ".join(errors))
-    return providers
+
+    builtins = {manifest.domain for manifest in manifests if manifest.builtin}
+
+    return providers, builtins
 
 
-def render(outpath: str, version: str, providers: Set):
+def render(outpath: str, version: str, providers: Set, builtins: Set):
     env = Environment()
     template = env.from_string(TEMPLATE)
-    template.stream(version=version, providers=providers).dump(outpath)
+    template.stream(version=version, providers=providers, builtins=builtins).dump(
+        outpath
+    )
 
 
 async def main():
     version: str = cast(str, await Nix.eval("music-assistant.version"))
     manifests = await get_provider_manifests(version)
-    providers = await resolve_providers(manifests)
+    providers, builtins = await resolve_providers(manifests)
 
     outpath = os.path.join(ROOT, "pkgs/by-name/mu/music-assistant/providers.nix")
-    render(outpath, version, providers)
+    render(outpath, version, providers, builtins)
 
     run_sync(["nixfmt", outpath])
 

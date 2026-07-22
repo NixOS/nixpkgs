@@ -23,6 +23,7 @@
   openssl,
   xz,
   zlib,
+  rust-jemalloc-sys,
   bintools,
   which,
   libffi,
@@ -402,6 +403,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     openssl
+    rust-jemalloc-sys
   ]
   ++ optionals stdenv.hostPlatform.isDarwin [
     zlib

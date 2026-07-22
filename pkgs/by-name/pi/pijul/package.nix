@@ -14,18 +14,19 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "pijul";
-  version = "1.0.0-beta.11";
+  version = "1.0.0-beta.14";
 
   src = fetchCrate {
     inherit (finalAttrs) version pname;
-    hash = "sha256-+rMMqo2LBYlCFQJv8WFCSEJgDUbMi8DnVDKXIWm3tIk=";
+    hash = "sha256-Ex8fCIcif2lmZ3ytLARwgGzEeq6GB2NDvwd96niDKbQ=";
   };
 
-  cargoHash = "sha256-IhArTiReUdj49bA+XseQpOiszK801xX5LdLj8vXD8rs=";
+  cargoHash = "sha256-yPzDzfD+QdhAXdyvzDV1z9HDe1mwF9cRCsliejr8H88=";
 
-  patches = [ ./fix-rand-0.9-sanakirja-imports.patch ];
-
+  # Tests require a TTY, which the Nix sandbox does not provide.
   doCheck = false;
   nativeBuildInputs = [
     installShellFiles

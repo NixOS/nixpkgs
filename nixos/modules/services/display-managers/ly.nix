@@ -113,12 +113,12 @@ in
             {
               name = "nologin";
               control = "requisite";
-              modulePath = "pam_nologin.so";
+              modulePath = "${config.security.pam.package}/lib/security/pam_nologin.so";
             }
             {
               name = "ly-normal-user";
               control = "required";
-              modulePath = "pam_succeed_if.so";
+              modulePath = "${config.security.pam.package}/lib/security/pam_succeed_if.so";
               settings.quiet = true;
               args = lib.mkBefore [
                 "uid"
@@ -129,7 +129,7 @@ in
             {
               name = "permit";
               control = "required";
-              modulePath = "pam_permit.so";
+              modulePath = "${config.security.pam.package}/lib/security/pam_permit.so";
             }
           ];
 

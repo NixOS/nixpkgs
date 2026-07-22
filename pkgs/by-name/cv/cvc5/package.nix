@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cvc5";
-  version = "1.3.3";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "cvc5";
     repo = "cvc5";
     tag = "cvc5-${finalAttrs.version}";
-    hash = "sha256-tXhOMrf/sZwEZFWB2Amp9lApWEsfuPqaj9H7RmI733o=";
+    hash = "sha256-PZcOArSTyJzyd2DKT8K0aFC4RlVXgTCnkoU0f08KPfY=";
   };
 
   __structuredAttrs = true;

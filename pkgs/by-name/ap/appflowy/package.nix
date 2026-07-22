@@ -27,11 +27,11 @@ let
     rec {
       x86_64-linux = {
         urlSuffix = "linux-x86_64.tar.gz";
-        hash = "sha256-6akFImNU5EQLW6f2dQRUXUC8srM32xyVI14pjVxV6Sw=";
+        hash = "sha256-A8JUYzEMQH1sEKYrKZ84QZAgYbz0OvpHa3t9RIUVE9c=";
       };
       x86_64-darwin = {
         urlSuffix = "macos-universal.zip";
-        hash = "sha256-sJ4mXSYsJICXMpDZemqRF3uYgB9SWNdbzcT1s2gHpZA=";
+        hash = "sha256-LSNvFL1ud/FkzNSGk17ZqN2debnqsjlVDHd4NBjTds0=";
       };
       aarch64-darwin = x86_64-darwin;
     }
@@ -40,7 +40,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "appflowy";
-  version = "0.11.8";
+  version = "0.11.9";
 
   src = fetchzip {
     url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${finalAttrs.version}/AppFlowy-${finalAttrs.version}-${dist.urlSuffix}";
@@ -126,7 +126,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Open-source alternative to Notion";
     homepage = "https://www.appflowy.io/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.agpl3Only;
+    license = with lib.licenses; [
+      # The LICENSE file clearly claims the project is using AGPL-3.0
+      #
+      # c.f. https://github.com/AppFlowy-IO/AppFlowy/blob/main/LICENSE
+      agpl3Only
+      # But, the source code has not been synced with any major release since
+      # the end of 2025. One of the core team member said that they will "merge
+      # Flutter code back into this public repository at a later stage". However,
+      # 2 months later, nothing has changed.
+      #
+      # c.f. https://github.com/AppFlowy-IO/AppFlowy/issues/8479#issuecomment-4053301446
+      unfreeRedistributable
+    ];
     changelog = "https://github.com/AppFlowy-IO/appflowy/releases/tag/${finalAttrs.version}";
     maintainers = with lib.maintainers; [ darkonion0 ];
     platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;

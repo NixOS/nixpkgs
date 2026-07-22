@@ -21,9 +21,9 @@
   zigpy-znp,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zha";
-  version = "1.3.1";
+  version = "1.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -31,14 +31,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zha";
-    tag = version;
-    hash = "sha256-JYwTDD3YmHPgSSwFTGhoL9MY5SZ2jLBlgGqQDEnvF1k=";
+    tag = finalAttrs.version;
+    hash = "sha256-Jf8k/4z7eERiV2jwDzhV990sLBebasEKe5/0WbX1hYc=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail '"setuptools-git-versioning<3"' "" \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail 'dynamic = ["version"]' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [
@@ -96,13 +96,11 @@ buildPythonPackage rec {
     "test_gateway_startup_failure" # Failed first attempt, passed second, flaky
   ];
 
-  disabledTestPaths = [ "tests/test_cluster_handlers.py" ];
-
   meta = {
     description = "Zigbee Home Automation";
     homepage = "https://github.com/zigpy/zha";
-    changelog = "https://github.com/zigpy/zha/releases/tag/${version}";
+    changelog = "https://github.com/zigpy/zha/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

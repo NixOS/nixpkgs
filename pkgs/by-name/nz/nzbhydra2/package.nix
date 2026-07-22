@@ -35,13 +35,13 @@ let
 in
 maven.buildMavenPackage rec {
   pname = "nzbhydra2";
-  version = "8.8.1";
+  version = "8.8.4";
 
   src = fetchFromGitHub {
     owner = "theotherp";
     repo = "nzbhydra2";
     tag = "v${version}";
-    hash = "sha256-r6vv636evAetj5Pa4Ql2vkKP36BQ16JdmbAQLatCr9c=";
+    hash = "sha256-A6Q6UoeyuOZP4FD4Y6oVOCu1a2bbIe+3xVHQIuOg0qk=";
   };
 
   mvnHash = "sha256-mZ/mOF9k5URheNNxmrKkCiklP26zeTGKhDGxqRiDBuk=";

@@ -9,7 +9,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "1.0.2";
 
   src = fetchFromGitHub {
-    owner = "solana-foundation";
+    owner = "otter-sec";
     repo = "anchor";
     tag = "v${finalAttrs.version}";
     hash = "sha256-J8q+oNT6x36LlTO/szlkxIcT5oFJ3y8b3YyqwBjDYX8=";
@@ -32,8 +32,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Solana Sealevel Framework";
-    homepage = "https://github.com/solana-foundation/anchor";
-    changelog = "https://github.com/solana-foundation/anchor/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/otter-sec/anchor";
+    changelog = "https://github.com/otter-sec/anchor/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       Denommus

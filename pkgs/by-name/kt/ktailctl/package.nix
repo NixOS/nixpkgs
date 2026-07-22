@@ -11,21 +11,21 @@
 }:
 
 let
-  version = "0.21.5";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "f-koehler";
     repo = "KTailctl";
     rev = "v${version}";
-    hash = "sha256-DqPerb8NcNynMMmoG8Ld0ZEyhrNg2q17TaErAbXIHC0=";
+    hash = "sha256-20hR/N3m1BsbMGiaWVV/SH/OHgfk7ZC1+WWhYqQpIls=";
   };
 
   goDeps =
     (buildGoModule {
       pname = "ktailctl-go-wrapper";
       inherit src version;
-      modRoot = "src/wrapper";
-      vendorHash = "sha256-jA1yortzyaBOP9GenmARhBBNDdpkGo9DNz0CXlh3BIU=";
+      modRoot = "src/tailscale/wrapper";
+      vendorHash = "sha256-h2gf9igVOguNRroGK6qvinUlEkpeZ2YJTtKArvlMj88=";
     }).goModules;
 in
 stdenv.mkDerivation {
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
   inherit version src;
 
   postPatch = ''
-    cp -r --reflink=auto ${goDeps} src/wrapper/vendor
+    cp -r --reflink=auto ${goDeps} src/tailscale/wrapper/vendor
   '';
 
   # needed for go build to work

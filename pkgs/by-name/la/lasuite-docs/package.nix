@@ -11,12 +11,12 @@
   yarnConfigHook,
 }:
 let
-  version = "4.8.6";
+  version = "5.3.0";
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "docs";
     tag = "v${version}";
-    hash = "sha256-8xMHHyj9qUdrd5dFYVlN2bi7EVjcEqoBBxIifC8xk3k=";
+    hash = "sha256-GQAhCwtcp/9rSk1B1/EWL2jnfd46w1vikEMJeucD1bA=";
   };
 
   mail-templates = stdenv.mkDerivation {
@@ -29,7 +29,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/src/mail/yarn.lock";
-      hash = "sha256-B2vtdQYFhhsA7dK5nwAJl65kaedspfYySJJBjVwYeBM=";
+      hash = "sha256-MYzADDcXHGieGkygmlbZQbYcS68NdKWyHYGgoSaqDO8=";
     };
 
     nativeBuildInputs = [
@@ -52,14 +52,22 @@ python3Packages.buildPythonApplication (finalAttrs: {
   patches = [
     # Support configuration throught environment variables for SECURE_*
     ./secure_settings.patch
-
-    # Fix creation of unsafe C function in postgresql migrations
-    ./postgresql_fix.patch
   ];
 
+  # They use a old version of mistralai which exported a class
+  # at the top level
+  postPatch = ''
+    substituteInPlace core/services/ai_services/legacy.py \
+      --replace-fail \
+        "from mistralai import Mistral" \
+        "from mistralai.client import Mistral"
+
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.11.9,<0.12" "uv_build"
+  ''
   # Otherwise fails with:
   # socket.gaierror: [Errno 8] nodename nor servname provided, or not known
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace impress/settings.py \
       --replace-fail \
         "gethostname()" \
@@ -67,7 +75,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   '';
   __darwinAllowLocalNetworking = true;
 
-  build-system = with python3Packages; [ setuptools ];
+  build-system = with python3Packages; [ uv-build ];
 
   dependencies =
     with python3Packages;
@@ -75,6 +83,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
       beautifulsoup4
       boto3
       celery
+      emoji
+      dj-database-url
       django
       django-configurations
       django-cors-headers
@@ -100,9 +110,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
       langfuse
       lxml
       markdown
+      mistralai
       mozilla-django-oidc
       nested-multipart-parser
       openai
+      posthog
       psycopg
       pycrdt
       pydantic-ai-slim
@@ -164,6 +176,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       ma27
     ];
     mainProgram = "docs";
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.linux;
   };
 })

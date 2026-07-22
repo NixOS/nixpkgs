@@ -7,14 +7,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pyhanko-cli";
-  version = "0.3.1";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "pyhanko";
     tag = "pyhanko-cli/v${finalAttrs.version}";
-    hash = "sha256-ZBlkp6nhTKEAWxCPDq9NIoOullwWartpU3eL0QIGFpw=";
+    hash = "sha256-huOy04wY7xP1gZ5azsZYnMXLZ4MwMkLGujlgXTtjLy4=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/pkgs/pyhanko-cli";
@@ -46,6 +46,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ]
   ++ (with python3Packages; [
     pytestCheckHook
+    pytest-asyncio
     pyhanko.testData
     requests-mock
     freezegun

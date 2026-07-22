@@ -38,10 +38,11 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "2.11.0";
+  version = "2.12.0";
 in
 buildPythonPackage {
   inherit version;
+  __structuredAttrs = true;
 
   pname = "torch";
   # Don't forget to update torch to the same version.
@@ -92,10 +93,11 @@ buildPythonPackage {
 
   pythonRemoveDeps = [
     "cuda-toolkit"
-    "nvidia-cudnn-cu12"
-    "nvidia-cusparselt-cu12"
-    "nvidia-nccl-cu12"
-    "nvidia-nvshmem-cu12"
+    "nvidia-cublas"
+    "nvidia-cudnn-cu13"
+    "nvidia-cusparselt-cu13"
+    "nvidia-nccl-cu13"
+    "nvidia-nvshmem-cu13"
   ];
   dependencies = [
     filelock
@@ -178,5 +180,16 @@ buildPythonPackage {
       GaetanLepage
       junjihashimoto
     ];
+    # cuda-bindings<14,>=13.0.3 not satisfied by version 12.9.7
+    problems = lib.optionalAttrs (lib.versionOlder cuda-bindings.version "13.0.3") {
+      unsupported-cuda-version = {
+        message = ''
+          cudaPackages is too old (${cudaPackages.cudaMajorMinorVersion}).
+          PyTorch expects cuda-bindings>=13.0.3, current is ${cuda-bindings.version}.
+          Please override cudaPackages with a more recent version.
+        '';
+        kind = "broken";
+      };
+    };
   };
 }

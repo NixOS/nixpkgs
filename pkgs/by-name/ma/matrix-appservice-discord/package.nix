@@ -25,11 +25,11 @@ let
     nodejs = nodejs_20;
   };
   yarnConfigHook' = yarnConfigHook.override {
-    nodejs = nodejs_20;
+    nodejs-slim = nodejs_20;
     yarn = yarn';
   };
   yarnBuildHook' = yarnBuildHook.override {
-    nodejs = nodejs_20;
+    nodejs-slim = nodejs_20;
     yarn = yarn';
   };
   matrix-sdk-crypto-nodejs' = matrix-sdk-crypto-nodejs.override {

@@ -7,18 +7,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kanban";
-  version = "0.3.5";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "fulsomenko";
     repo = "kanban";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MIj1wSCKYg7bLj9sPGU/5peZX0i3J5crUzjcuJeF6O8=";
+    hash = "sha256-4wvSVnVck3AJ4pv6whxFiwsmoWl4f5Q0a2lSFeMGdZs=";
   };
 
   env.GIT_COMMIT_HASH = finalAttrs.src.rev;
 
-  cargoHash = "sha256-vCBHnYUpyyZcatAVaBVslng9EBrRkk5BzePcPZ07vtc=";
+  cargoHash = "sha256-Qmma0UkuuAhnD3zUUS5iCX2rUGvtO6U5zNFpg3Din7U=";
 
   passthru.updateScript = nix-update-script { };
 

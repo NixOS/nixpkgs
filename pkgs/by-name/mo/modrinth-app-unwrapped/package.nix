@@ -31,13 +31,13 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "modrinth-app-unwrapped";
-  version = "0.13.17";
+  version = "0.14.8";
 
   src = fetchFromGitHub {
     owner = "modrinth";
     repo = "code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Qn4IlqJagLoIcP9p9QdKzu2wdcBDLvfq/2sgVwIjbm4=";
+    hash = "sha256-s34vmm0Apy20FrfSjESXtj+uggvr4ODpOrxfapAKtlc=";
   };
 
   patches = [
@@ -67,7 +67,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '1.0.0-local' '${finalAttrs.version}'
   '';
 
-  cargoHash = "sha256-iI1AjFApd9fzss3hSVJLofHLZ6SJqUccHJ7PHqtBk+k=";
+  cargoHash = "sha256-JU8QhdDikqe9a/MXVe2jSsXATvwdgpyjWr7pV/75C9E=";
 
   mitmCache = gradle.fetchDeps {
     inherit (finalAttrs) pname;
@@ -78,7 +78,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-oPZt68SosRgzl50VR/xWozcc0weQKiY6T1UcvgMRq1M=";
+    hash = "sha256-pbEKD8xkO7+//m0PBcAL62q0LC5YEKR+wOPGnzXIRJk=";
   };
 
   nativeBuildInputs = [
@@ -91,7 +91,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pnpmConfigHook
     pnpm_10
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     makeBinaryWrapper
     xcbuild
   ];

@@ -12,7 +12,11 @@ buildPythonPackage rec {
 
   inherit (xrootd) version src;
 
-  sourceRoot = "${src.name}/bindings/python";
+  sourceRoot = "${src.name}/python";
+
+  env.CMAKE_ARGS = lib.toString [
+    (lib.cmakeFeature "XRootD_INCLUDE_DIR" "${lib.getDev xrootd}/include/xrootd;${src}/src")
+  ];
 
   build-system = [
     cmake

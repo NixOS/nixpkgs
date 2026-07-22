@@ -24,14 +24,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-anthropic";
-  version = "1.4.3";
+  version = "1.4.6";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-anthropic==${finalAttrs.version}";
-    hash = "sha256-u0Ur2SZFI8NkiVMBFieZIkc3cJL2IvrFvB4ueCvGMEU=";
+    hash = "sha256-X+YS+T9mG+H4I2vHDYBi3Eev6OaCMgi56nKHEewgEXg=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/partners/anthropic";
@@ -62,6 +63,8 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Fails when langchain-core gets ahead of this
     "test_serdes"
+    # KeyError: 'versions' in 1.4.6
+    "test_anthropic_model_params"
   ];
 
   pythonImportsCheck = [ "langchain_anthropic" ];
@@ -75,7 +78,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain-anthropic/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${finalAttrs.src.tag}";
     description = "Build LangChain applications with Anthropic";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/anthropic";
     license = lib.licenses.mit;

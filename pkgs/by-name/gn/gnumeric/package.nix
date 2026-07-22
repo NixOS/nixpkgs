@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   pkg-config,
   intltool,
   libxml2,
@@ -27,24 +26,15 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnumeric";
-  version = "1.12.60";
+  version = "1.12.61";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gnumeric";
     tag = "GNUMERIC_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-fv4RlIfJiLY3MbsAsgRgJ010/Ob1X1be29XfoweCMpI=";
+    hash = "sha256-SrAFYLCYacTobOmb+Jk4f4OWVLcWS8aq8OBFrdwYcbE=";
   };
-
-  patches = [
-    # Replace bool type with gboolean.
-    # See https://gitlab.gnome.org/GNOME/gnumeric/-/merge_requests/39.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnumeric/-/commit/dee6523426b75c10c36b188fafe6e7a27b6631e3.patch";
-      hash = "sha256-a4KgxsrU9m/dZqu2LNC+jWiXvCTcRPzZW/67pg8yLGY=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace configure.ac \
@@ -96,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    changelog = "https://gitlab.gnome.org/GNOME/gnumeric/-/blob/${finalAttrs.src.tag}/NEWS";
     description = "GNOME Office Spreadsheet";
     license = lib.licenses.gpl2Plus;
     homepage = "http://projects.gnome.org/gnumeric/";

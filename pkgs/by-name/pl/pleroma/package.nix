@@ -2,7 +2,7 @@
   beam,
   lib,
   fetchFromGitHub,
-  fetchFromGitLab,
+  fetchFromForgejo,
   fetchHex,
   file,
   cmake,
@@ -19,14 +19,14 @@ let
 in
 beamPackages.mixRelease rec {
   pname = "pleroma";
-  version = "2.10.0";
+  version = "2.10.2";
 
-  src = fetchFromGitLab {
+  src = fetchFromForgejo {
     domain = "git.pleroma.social";
     owner = "pleroma";
     repo = "pleroma";
     rev = "v${version}";
-    sha256 = "sha256-kW4AcOYHtm8lVXRroDCUM7jY7o39JHx/J/mfy2XfBgs=";
+    sha256 = "sha256-5BFzV2alNDjO/bS08+V4idzFaXQLr+4pNlLLXayBqIE=";
   };
 
   patches = [ ./Revert-Config-Restrict-permissions-of-OTP-config.patch ];
@@ -72,7 +72,7 @@ beamPackages.mixRelease rec {
         name = "captcha";
         version = "0.1.0";
 
-        src = fetchFromGitLab {
+        src = fetchFromForgejo {
           domain = "git.pleroma.social";
           owner = "pleroma/elixir-libraries";
           repo = "elixir-captcha";
@@ -96,7 +96,7 @@ beamPackages.mixRelease rec {
       oban_plugins_lazarus = beamPackages.buildMix {
         name = "oban_plugins_lazarus";
         version = "0.1.0";
-        src = fetchFromGitLab {
+        src = fetchFromForgejo {
           domain = "git.pleroma.social";
           owner = "pleroma/elixir-libraries";
           repo = "oban_plugins_lazarus";
@@ -109,7 +109,7 @@ beamPackages.mixRelease rec {
         name = "remote_ip";
         version = "0.1.5";
 
-        src = fetchFromGitLab {
+        src = fetchFromForgejo {
           domain = "git.pleroma.social";
           owner = "pleroma/elixir-libraries";
           repo = "remote_ip";
@@ -136,15 +136,23 @@ beamPackages.mixRelease rec {
 
       syslog = prev.syslog.override { buildPlugins = with beamPackages; [ pc ]; };
 
+      phoenix_live_view = prev.phoenix_live_view.override {
+        # This listener breaks with elixir 1.18.
+        # It's only using for dev, let's remove it.
+        postPatch = ''
+          sed -i '/listeners: \[Phoenix.CodeReloader\]/d' mix.exs
+        '';
+      };
+
+      oban_web = prev.oban_web.override {
+        # This listener breaks with elixir 1.18.
+        # It's only using for dev, let's remove it.
+        postPatch = ''
+          sed -i '/listeners: \[Phoenix.CodeReloader\]/d' mix.exs
+        '';
+      };
+
       vix = prev.vix.override {
-        # TOREMOVE override when upstream bumps the dependency. See
-        # https://git.pleroma.social/pleroma/pleroma/-/issues/3393
-        src = fetchFromGitHub {
-          owner = "akash-akya";
-          repo = "vix";
-          tag = "v0.36.0";
-          hash = "sha256-14gqzu5TBbgrqCU4+qz0jWCK6Ar5JvmKKLcfgz5BHtw=";
-        };
         nativeBuildInputs = [ pkg-config ];
         buildInputs = [
           vips

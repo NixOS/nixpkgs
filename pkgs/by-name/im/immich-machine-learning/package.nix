@@ -1,5 +1,6 @@
 {
   lib,
+  fetchpatch2,
   immich,
   python3,
   nixosTests,
@@ -16,8 +17,18 @@ python.pkgs.buildPythonApplication rec {
   src = "${immich.src}/machine-learning";
   pyproject = true;
 
+  patches = [
+    (fetchpatch2 {
+      name = "fix_tests_with_openvino_ep.patch";
+      relative = "machine-learning";
+      url = "https://github.com/immich-app/immich/commit/7f611d90317d75ac3d75adf428f367376171e106.patch?full_index=1";
+      hash = "sha256-dntL5AZS3VIp7++yUec4HWIdtwltrnIePNFPJaiZdy4=";
+    })
+  ];
+
   pythonRelaxDeps = [
     "huggingface-hub"
+    "insightface"
     "numpy"
     "pillow"
     "pydantic-settings"

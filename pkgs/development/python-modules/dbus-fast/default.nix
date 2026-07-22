@@ -13,16 +13,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dbus-fast";
-  version = "4.0.4";
+  version = "5.0.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "dbus-fast";
-    tag = "v${version}";
-    hash = "sha256-lfAG17R33YsU8HYbnM9te0H7YoVUUpB6TtqQrWbhR6Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wZ4ufGua56weOuaOkyjBIzDex/gjmLeAczYzeLQRFwo=";
   };
 
   postPatch = ''
@@ -69,8 +69,8 @@ buildPythonPackage rec {
   meta = {
     description = "Faster version of dbus-next";
     homepage = "https://github.com/bluetooth-devices/dbus-fast";
-    changelog = "https://github.com/Bluetooth-Devices/dbus-fast/releases/tag/${src.tag}";
+    changelog = "https://github.com/Bluetooth-Devices/dbus-fast/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

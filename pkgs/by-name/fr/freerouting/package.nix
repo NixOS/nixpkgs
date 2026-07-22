@@ -32,13 +32,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freerouting";
-  version = "2.2.3";
+  version = "2.2.4";
 
   src = fetchFromGitHub {
     owner = "freerouting";
     repo = "freerouting";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e9aqMYvWp/xfY+g5viH4vyOfl/JhNxMIIUKTy/8aIXs=";
+    hash = "sha256-stsU8QwXSrjVpEeMhgrbAKfjIzTDF32uVxluBTbF7ag=";
   };
 
   gradleBuildTask = "dist";

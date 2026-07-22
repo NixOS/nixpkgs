@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ayatana-indicator-display";
-  version = "24.5.2";
+  version = "26.6.0";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-display";
     tag = finalAttrs.version;
-    hash = "sha256-rsZjEfAiz1HC5XMjPume1Y6miNAv1kmPFP4J/+NKlsA=";
+    hash = "sha256-A4v2cdsFgR50b8BGAMpR9DrHxlVlahaM8Fii+eQ3UcA=";
   };
 
   postPatch = ''

@@ -36,14 +36,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "plopp";
-  version = "26.4.2";
+  version = "26.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scipp";
     repo = "plopp";
     tag = finalAttrs.version;
-    hash = "sha256-nluNaOQKkXolGCgx3Pr0m5OQ6vZbWPfdN7kbNKaVU68=";
+    hash = "sha256-hM8Y5kusKUu54SYPjPwZ7YnxXFzX/IM28GFWcfkdnsA=";
   };
 
   build-system = [

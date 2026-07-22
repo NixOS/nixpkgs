@@ -39,6 +39,7 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/hyprwm/hyprutils";
+    changelog = "https://github.com/hyprwm/hyprutils/releases/tag/${finalAttrs.src.tag}";
     description = "Small C++ library for utilities used across the Hypr* ecosystem";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;

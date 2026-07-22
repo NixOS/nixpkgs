@@ -1,42 +1,42 @@
 {
   buildPythonPackage,
-  click,
+  cacert,
   fetchFromGitHub,
-  httpx,
   lib,
   loguru,
+  pyreqwest,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
   respx,
   setuptools,
+  typer,
   xmltodict,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "prowlpy";
-  version = "1.1.5";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OMEGARAZER";
     repo = "prowlpy";
-    tag = "v${version}";
-    hash = "sha256-psXq858y5wsDU5GqGOzVFmYBSZvfuYXzOTZ20mx8PMw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-92r1E/dsXLRzaLXQdahXAPCmSG4T1Ihh/eDFDG3GlmY=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    httpx
+    pyreqwest
     xmltodict
-  ]
-  ++ httpx.optional-dependencies.http2;
+  ];
 
   optional-dependencies = {
     cli = [
-      click
       loguru
+      typer
     ];
   };
 
@@ -48,17 +48,23 @@ buildPythonPackage rec {
     pytestCheckHook
     respx
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
+
+  preCheck = ''
+    # Without this pyreqwest fails with
+    #     unexpected error: No CA certificates were loaded from the system
+    export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
+  '';
 
   # tests fail without this
   pytestFlags = [ "-v" ];
 
   meta = {
-    changelog = "https://github.com/OMEGARAZER/prowlpy/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/OMEGARAZER/prowlpy/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Send push notifications to iPhones using the Prowl API";
     homepage = "https://github.com/OMEGARAZER/prowlpy";
     license = lib.licenses.gpl3Only;
     mainProgram = "prowlpy";
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

@@ -9,16 +9,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "iio-niri";
-  version = "2.0.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "Zhaith-Izaliel";
     repo = "iio-niri";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-foE+bPJANKWmPSt3s8BOqEIXGZoFNWRJT731xf5sr1M=";
+    hash = "sha256-6kIHZuHZYDsjY0q8V99jdDkNHwNtvrq77sxGI5SLzSs=";
   };
 
-  cargoHash = "sha256-y3Sv3JWg252XbuIqEioNagaQ99Vr9x1OfrFC6Jl4kSY=";
+  cargoHash = "sha256-gXqAUvZ0FjU7SrCmw0CpNtELPwmI0fFpJpe3wrBuqsY=";
 
   nativeBuildInputs = [
     pkg-config

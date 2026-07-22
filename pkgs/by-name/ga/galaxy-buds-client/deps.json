@@ -960,6 +960,11 @@
     "hash": "sha256-gaK/5aAummyin6ptnhaJbnA0ih4+2xADrtrLfFbHwYI="
   },
   {
+    "pname": "Tmds.DBus.Protocol",
+    "version": "0.21.3",
+    "hash": "sha256-HVEIHSeSe29ergHxsNvWYu3o7Ai8VZKo09yFn+miTnI="
+  },
+  {
     "pname": "Xaml.Behaviors.Avalonia",
     "version": "11.3.9",
     "hash": "sha256-TKKugU5qz/d6OjCV/flsogeS+HUc93memegSc/grgmE="

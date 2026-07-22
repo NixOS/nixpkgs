@@ -23,7 +23,7 @@
   optipng,
   piper-tts,
   pkg-config,
-  podofo_0_10,
+  podofo0,
   poppler-utils,
   python314Packages,
   qt6,
@@ -40,16 +40,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "9.8.0";
+  version = "9.10.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-3dkWokb8gh4JPbrBsJ9dGy/IS1PfNrAU775qxo8CaO8=";
+    hash = "sha256-U7iid8dm5sP7Xfsm+ikRn0oSm/j5qVS0I1qWPIowwwE=";
   };
 
   patches =
     let
-      debian-source = "ds+_0.10.5-1";
+      debian-source = "ds+_0.10.6-1";
       debian-tag = "${finalAttrs.version}+${debian-source}";
     in
     [
@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     libuchardet
     libusb1
     onnxruntime
-    podofo_0_10
+    podofo0
     poppler-utils
     qt6.qtbase
     qt6.qtwayland
@@ -170,8 +170,8 @@ stdenv.mkDerivation (finalAttrs: {
     MAGICK_LIB = "${lib.getLib imagemagick}/lib";
     FC_INC_DIR = "${lib.getDev fontconfig}/include/fontconfig";
     FC_LIB_DIR = "${lib.getLib fontconfig}/lib";
-    PODOFO_INC_DIR = "${lib.getDev podofo_0_10}/include/podofo";
-    PODOFO_LIB_DIR = "${lib.getLib podofo_0_10}/lib";
+    PODOFO_INC_DIR = "${lib.getDev podofo0}/include/podofo";
+    PODOFO_LIB_DIR = "${lib.getLib podofo0}/lib";
     XDG_DATA_HOME = "${placeholder "out"}/share";
     XDG_UTILS_INSTALL_MODE = "user";
   }
@@ -248,6 +248,9 @@ stdenv.mkDerivation (finalAttrs: {
         # eglInitialize: Failed to get system egl display
         # Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
         "test_recipe_browser_webengine"
+        # Flaky test, occasionally errors with python exception:
+        # urllib.error.URLError: <urlopen error NetworkError.RemoteHostClosedError: Connection closed>
+        "test_recipe_browser_qt"
       ]
       ++ lib.optionals stdenv.hostPlatform.isAarch64 [
         # https://github.com/microsoft/onnxruntime/issues/10038

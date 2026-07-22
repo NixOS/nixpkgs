@@ -9,13 +9,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "add-determinism";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "keszybz";
     repo = "add-determinism";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wy0jle1Fhq4wpxMY1IeS3FGHOOaH0Bu8qhvmaIRAJyI=";
+    hash = "sha256-Gg1tObrUtHDjw52g3jjJm5bD5ctxujWOolaCqV7+ZjQ=";
   };
 
   # this project has no Cargo.lock now

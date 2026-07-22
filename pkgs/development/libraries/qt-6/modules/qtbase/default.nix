@@ -88,6 +88,7 @@
   wayland-scanner,
   # options
   qttranslations ? null,
+  fetchpatch,
 }:
 
 let
@@ -244,6 +245,12 @@ stdenv.mkDerivation {
     ./qmlimportscanner-import-path.patch
     # don't pass qtbase's QML directory to qmlimportscanner if it's empty
     ./skip-missing-qml-directory.patch
+
+    # another crash fix
+    (fetchpatch {
+      url = "https://github.com/qt/qtbase/commit/515cbbacfba9f4259c9c3b0714a31222c2b4c879.diff";
+      hash = "sha256-93tzp4O7dZxRZv7ilN/gbQSVmaeOGmxpYgM7aomN0n8=";
+    })
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -349,6 +356,7 @@ stdenv.mkDerivation {
             qtQmlPrefix
             ;
         };
+        meta.license = lib.licenses.mit;
       } ../../hooks/qtbase-setup-hook.sh;
     in
     "${hook}/nix-support/setup-hook";

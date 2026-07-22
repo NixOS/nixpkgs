@@ -153,6 +153,7 @@ in
     console-log = runTest ./nixos-test-driver/console-log.nix;
     containers = runTest ./nixos-test-driver/containers.nix;
     skip-typecheck = runTest ./nixos-test-driver/skip-typecheck.nix;
+    options-doc-regression = import ./nixos-test-driver/options-doc-regression.nix { inherit pkgs; };
     driver-timeout =
       pkgs.runCommand "ensure-timeout-induced-failure"
         {
@@ -173,6 +174,7 @@ in
   # keep-sorted start case=no numeric=no block=yes
   _3proxy = runTest ./3proxy.nix;
   aaaaxy = runTest ./aaaaxy.nix;
+  accountsservice = runTest ./accountsservice.nix;
   acl = pkgs.callPackage ./acl.nix { };
   acme = import ./acme/default.nix {
     inherit runTest;
@@ -245,6 +247,7 @@ in
   authelia = runTest ./authelia.nix;
   auto-cpufreq = runTest ./auto-cpufreq.nix;
   autobrr = runTest ./autobrr.nix;
+  autopush-rs = runTest ./autopush-rs.nix;
   autosuspend = runTest ./autosuspend.nix;
   avahi = runTest {
     imports = [ ./avahi.nix ];
@@ -301,7 +304,6 @@ in
   bootspec = handleTestOn [ "x86_64-linux" ] ./bootspec.nix { };
   borgbackup = runTest ./borgbackup.nix;
   borgmatic = runTest ./borgmatic.nix;
-  botamusique = runTest ./botamusique.nix;
   bpf = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./bpf.nix;
   bpftune = runTest ./bpftune.nix;
   breitbandmessung = runTest ./breitbandmessung.nix;
@@ -328,8 +330,16 @@ in
   };
   castopod = runTest ./castopod.nix;
   centrifugo = runTest ./centrifugo.nix;
-  ceph-multi-node = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./ceph-multi-node.nix;
-  ceph-single-node = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./ceph-single-node.nix;
+  ceph-multi-node-bluestore = runTestOn [ "aarch64-linux" "x86_64-linux" ] (
+    import ./ceph-multi-node-bluestore.nix { }
+  );
+  ceph-multi-node-bluestore-cephfs = runTestOn [ "aarch64-linux" "x86_64-linux" ] (
+    import ./ceph-multi-node-bluestore.nix { withCephfs = true; }
+  );
+  ceph-multi-node-deprecated-filestore = runTestOn [
+    "aarch64-linux"
+    "x86_64-linux"
+  ] ./ceph-multi-node-deprecated-filestore.nix;
   ceph-single-node-bluestore = runTestOn [
     "aarch64-linux"
     "x86_64-linux"
@@ -338,6 +348,10 @@ in
     "aarch64-linux"
     "x86_64-linux"
   ] ./ceph-single-node-bluestore-dmcrypt.nix;
+  ceph-single-node-deprecated-filestore = runTestOn [
+    "aarch64-linux"
+    "x86_64-linux"
+  ] ./ceph-single-node-deprecated-filestore.nix;
   certmgr = import ./certmgr.nix { inherit pkgs runTest; };
   cfssl = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./cfssl.nix;
   cgit = runTest ./cgit.nix;
@@ -362,6 +376,7 @@ in
   };
   cloud-init = runTest ./cloud-init.nix;
   cloud-init-hostname = runTest ./cloud-init-hostname.nix;
+  cloudcompare = import ./cloudcompare.nix { inherit pkgs runTest; };
   cloudlog = runTest ./cloudlog.nix;
   cntr = import ./cntr.nix {
     inherit (pkgs) lib;
@@ -378,6 +393,7 @@ in
   collectd = runTest ./collectd.nix;
   commafeed = runTest ./commafeed.nix;
   connman = runTest ./connman.nix;
+  console = runTest ./console.nix;
   console-xkb-and-i18n = runTest ./console-xkb-and-i18n.nix;
   consul = runTest ./consul.nix;
   consul-template = runTest ./consul-template.nix;
@@ -385,6 +401,7 @@ in
   containers-custom-pkgs = runTest ./containers-custom-pkgs.nix;
   containers-ephemeral = runTest ./containers-ephemeral.nix;
   containers-extra_veth = runTest ./containers-extra_veth.nix;
+  containers-gateway = runTest ./containers-gateway.nix;
   containers-hosts = runTest ./containers-hosts.nix;
   containers-imperative = runTest ./containers-imperative.nix;
   containers-ip = runTest ./containers-ip.nix;
@@ -404,31 +421,39 @@ in
   corerad = runTest ./corerad.nix;
   corteza = runTest ./corteza.nix;
   cosmic = runTest {
-    imports = [ ./cosmic.nix ];
+    imports = [ ./cosmic ];
     _module.args.testName = "cosmic";
     _module.args.enableAutologin = false;
     _module.args.enableXWayland = true;
   };
   cosmic-autologin = runTest {
-    imports = [ ./cosmic.nix ];
+    imports = [ ./cosmic ];
     _module.args.testName = "cosmic-autologin";
     _module.args.enableAutologin = true;
     _module.args.enableXWayland = true;
   };
   cosmic-autologin-noxwayland = runTest {
-    imports = [ ./cosmic.nix ];
+    imports = [ ./cosmic ];
     _module.args.testName = "cosmic-autologin-noxwayland";
     _module.args.enableAutologin = true;
     _module.args.enableXWayland = false;
   };
   cosmic-noxwayland = runTest {
-    imports = [ ./cosmic.nix ];
+    imports = [ ./cosmic ];
     _module.args.testName = "cosmic-noxwayland";
     _module.args.enableAutologin = false;
     _module.args.enableXWayland = false;
   };
   coturn = runTest ./coturn.nix;
   couchdb = runTest ./couchdb.nix;
+  credentials-fwcfg = runTest {
+    imports = [ ./credentials.nix ];
+    _module.args.mechanism = "fw_cfg";
+  };
+  credentials-smbios = runTestOn [ "x86_64-linux" ] {
+    imports = [ ./credentials.nix ];
+    _module.args.mechanism = "smbios";
+  };
   cri-o = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./cri-o.nix;
   croc = runTest ./croc.nix;
   cross-seed = runTest ./cross-seed.nix;
@@ -452,7 +477,6 @@ in
   dependency-track = runTest ./dependency-track.nix;
   devpi-server = runTest ./devpi-server.nix;
   dex-oidc = runTest ./dex-oidc.nix;
-  dhparams = runTest ./dhparams.nix;
   dictd = runTest ./dictd.nix;
   disable-installer-tools = runTest ./disable-installer-tools.nix;
   discourse = runTest {
@@ -467,6 +491,7 @@ in
   dnsdist = import ./dnsdist.nix { inherit pkgs runTest; };
   doas = runTest ./doas.nix;
   docker = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./docker.nix;
+  docker-autoprune = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./docker-autoprune.nix;
   docker-registry = runTest ./docker-registry.nix;
   docker-rootless = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./docker-rootless.nix;
   docker-tools = runTestOn [ "x86_64-linux" ] ./docker-tools.nix;
@@ -491,6 +516,7 @@ in
   drupal = runTest ./drupal.nix;
   dublin-traceroute = runTest ./dublin-traceroute.nix;
   dwl = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./dwl.nix;
+  e57inspector = import ./e57inspector.nix { inherit pkgs runTest; };
   early-mount-options = runTest ./early-mount-options.nix;
   earlyoom = runTestOn [ "x86_64-linux" ] ./earlyoom.nix;
   easytier = runTest ./easytier.nix;
@@ -536,6 +562,9 @@ in
   etebase-server = runTest ./etebase-server.nix;
   etesync-dav = runTest ./etesync-dav.nix;
   evcc = runTest ./evcc.nix;
+  extra-initrd = import ./extra-initrd.nix {
+    inherit runTest pkgs;
+  };
   facter = runTest ./facter;
   fail2ban = runTest ./fail2ban.nix;
   fakeroute = runTest ./fakeroute.nix;
@@ -592,7 +621,9 @@ in
   firezone = runTest ./firezone/firezone.nix;
   fish = runTest ./fish.nix;
   flannel = runTestOn [ "x86_64-linux" ] ./flannel.nix;
+  flap-alerted = runTest ./flap-alerted.nix;
   flaresolverr = runTest ./flaresolverr.nix;
+  flarum = runTest ./flarum.nix;
   flood = runTest ./flood.nix;
   fluent-bit = runTest ./fluent-bit.nix;
   fluentd = runTest ./fluentd.nix;
@@ -608,6 +639,9 @@ in
     forgejoPackage = pkgs.forgejo-lts;
   };
   freenet = runTest ./freenet.nix;
+  freescout = import ./freescout {
+    inherit runTest;
+  };
   freeswitch = runTest ./freeswitch.nix;
   freetube = discoverTests (import ./freetube.nix);
   freshrss = import ./freshrss { inherit runTest; };
@@ -669,6 +703,8 @@ in
   gobgpd = runTest ./gobgpd.nix;
   gocd-agent = runTest ./gocd-agent.nix;
   gocd-server = runTest ./gocd-server.nix;
+  gocron = runTest ./gocron.nix;
+  gocryptfs = runTest ./gocryptfs.nix;
   gokapi = runTest ./gokapi.nix;
   gollum = runTest ./gollum.nix;
   gonic = runTest ./gonic.nix;
@@ -688,6 +724,7 @@ in
   grocy = runTest ./grocy.nix;
   grow-partition = runTest ./grow-partition.nix;
   grub = runTest ./grub.nix;
+  gs1200-exporter = runTest ./gs1200-exporter.nix;
   guacamole-server = runTest ./guacamole-server.nix;
   guix = handleTest ./guix { };
   gvisor = runTest ./gvisor.nix;
@@ -743,6 +780,7 @@ in
   hitch = handleTest ./hitch { };
   hledger-web = runTest ./hledger-web.nix;
   hockeypuck = runTest ./hockeypuck.nix;
+  holo-daemon-modular-service = runTest ./holo-daemon-modular.nix;
   home-assistant = runTest ./home-assistant.nix;
   homebox = runTest ./homebox.nix;
   homebridge = runTest ./homebridge.nix;
@@ -795,6 +833,7 @@ in
   installer = handleTest ./installer.nix { systemdStage1 = false; };
   installer-systemd-stage-1 = handleTest ./installer.nix { systemdStage1 = true; };
   intune = runTest ./intune.nix;
+  inventree = runTest ./inventree.nix;
   invidious = runTest ./invidious.nix;
   invoiceplane = runTest ./invoiceplane.nix;
   iodine = runTest ./iodine.nix;
@@ -835,7 +874,7 @@ in
   kbd-setfont-decompress = runTest ./kbd-setfont-decompress.nix;
   kbd-update-search-paths-patch = runTest ./kbd-update-search-paths-patch.nix;
   kea = runTest ./kea.nix;
-  keepalived = runTest ./keepalived.nix;
+  keepalived = discoverTests (import ./keepalived.nix);
   keepassxc = runTest ./keepassxc.nix;
   kerberos = handleTest ./kerberos/default.nix { };
   kernel-generic = handleTest ./kernel-generic { };
@@ -852,6 +891,7 @@ in
   kmonad = runTest ./kmonad.nix;
   kmscon = runTest ./kmscon.nix;
   knot = runTest ./knot.nix;
+  koito = runTest ./web-apps/koito.nix;
   komga = runTest ./komga.nix;
   komodo-periphery = runTest ./komodo-periphery.nix;
   krb5 = discoverTests (import ./krb5);
@@ -868,6 +908,7 @@ in
   languagetool = runTest ./languagetool.nix;
   lanraragi = runTest ./lanraragi.nix;
   lasuite-docs = runTest ./web-apps/lasuite-docs.nix;
+  lasuite-drive = runTest ./web-apps/lasuite-drive.nix;
   lasuite-meet = runTest ./web-apps/lasuite-meet.nix;
   latestKernel.login = runTest {
     imports = [ ./login.nix ];
@@ -912,9 +953,11 @@ in
   llama-swap = runTest ./web-servers/llama-swap.nix;
   lldap = runTest ./lldap.nix;
   local-content-share = runTest ./local-content-share.nix;
+  locale = runTest ./locale.nix;
   localsend = runTest ./localsend.nix;
   locate = runTest ./locate.nix;
   login = runTest ./login.nix;
+  login-nosuid = runTest ./login-nosuid.nix;
   logkeys = runTest ./logkeys.nix;
   logrotate = runTest ./logrotate.nix;
   loki = runTest ./loki.nix;
@@ -932,7 +975,7 @@ in
   lomiri-system-settings = runTest ./lomiri-system-settings.nix;
   lorri = handleTest ./lorri/default.nix { };
   luks = runTest ./luks.nix;
-  lvm2 = handleTest ./lvm2 { };
+  lvm2 = import ./lvm2 { inherit pkgs runTest; };
   lxc = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./lxc;
   lxd-image-server = runTest ./lxd-image-server.nix;
   lxqt = runTest ./lxqt.nix;
@@ -954,12 +997,14 @@ in
   matomo = runTest ./matomo.nix;
   matrix-alertmanager = runTest ./matrix/matrix-alertmanager.nix;
   matrix-appservice-irc = runTest ./matrix/appservice-irc.nix;
+  matrix-authentication-service = runTest ./matrix/matrix-authentication-service.nix;
   matrix-conduit = runTest ./matrix/conduit.nix;
   matrix-continuwuity = runTest ./matrix/continuwuity.nix;
   matrix-synapse = runTest ./matrix/synapse.nix;
   matrix-synapse-workers = runTest ./matrix/synapse-workers.nix;
   matrix-tuwunel = runTest ./matrix/tuwunel.nix;
   matter-server = runTest ./matter-server.nix;
+  matterjs-server = runTest ./matterjs-server.nix;
   mattermost = handleTest ./mattermost { };
   mautrix-discord = runTest ./matrix/mautrix-discord.nix;
   mautrix-meta-postgres = runTest ./matrix/mautrix-meta-postgres.nix;
@@ -1035,6 +1080,7 @@ in
   mysql-autobackup = handleTest ./mysql/mysql-autobackup.nix { };
   mysql-backup = handleTest ./mysql/mysql-backup.nix { };
   mysql-replication = handleTest ./mysql/mysql-replication.nix { };
+  mysql-secure-root = handleTest ./mysql/mysql-secure-root.nix { };
   n8n = runTest ./n8n.nix;
   nagios = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./nagios.nix;
   nar-serve = runTest ./nar-serve.nix;
@@ -1086,6 +1132,7 @@ in
   nextflow = runTestOn [ "x86_64-linux" ] ./nextflow.nix;
   nextjs-ollama-llm-ui = runTest ./web-apps/nextjs-ollama-llm-ui.nix;
   nexus = runTest ./nexus.nix;
+  nezha = runTest ./nezha.nix;
   # TODO: Test nfsv3 + Kerberos
   nfs3 = handleTest ./nfs { version = 3; };
   nfs4 = handleTest ./nfs { version = 4; };
@@ -1096,6 +1143,7 @@ in
   nginx-etag-compression = runTest ./nginx-etag-compression.nix;
   nginx-globalredirect = runTest ./nginx-globalredirect.nix;
   nginx-http3 = import ./nginx-http3.nix { inherit pkgs runTest; };
+  nginx-lua = runTest ./nginx-lua.nix;
   nginx-mime = runTest ./nginx-mime.nix;
   nginx-modsecurity = runTest ./nginx-modsecurity.nix;
   nginx-moreheaders = runTest ./nginx-moreheaders.nix;
@@ -1112,7 +1160,6 @@ in
   nimdow = runTest ./nimdow.nix;
   nipap = runTest ./web-apps/nipap.nix;
   nitter = runTest ./nitter.nix;
-  nix-channel = pkgs.callPackage ../modules/config/nix-channel/test.nix { };
   nix-config = runTest ./nix-config.nix;
   nix-daemon-firewall = runTest ./nix-daemon-firewall.nix;
   nix-daemon-unprivileged = runTest ./nix-daemon-unprivileged.nix;
@@ -1315,7 +1362,7 @@ in
   pixelfed = import ./web-apps/pixelfed { inherit runTestOn; };
   plantuml-server = runTest ./plantuml-server.nix;
   plasma6 = runTest ./plasma6.nix;
-  plausible = runTest ./plausible.nix;
+  plausible = import ./plausible.nix { inherit runTest; };
   playwright-python = runTest ./playwright-python.nix;
   please = runTest ./please.nix;
   pleroma = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./pleroma.nix { };
@@ -1387,14 +1434,6 @@ in
   pykms = runTest ./pykms.nix;
   qbittorrent = runTest ./qbittorrent.nix;
   qboot = runTestOn [ "x86_64-linux" "i686-linux" ] ./qboot.nix;
-  qemu-vm-credentials-fwcfg = runTest {
-    imports = [ ./qemu-vm-credentials.nix ];
-    _module.args.mechanism = "fw_cfg";
-  };
-  qemu-vm-credentials-smbios = runTestOn [ "x86_64-linux" ] {
-    imports = [ ./qemu-vm-credentials.nix ];
-    _module.args.mechanism = "smbios";
-  };
   qemu-vm-external-disk-image = runTest ./qemu-vm-external-disk-image.nix;
   qemu-vm-restrictnetwork = handleTest ./qemu-vm-restrictnetwork.nix { };
   qemu-vm-store = runTest ./qemu-vm-store.nix;
@@ -1414,7 +1453,6 @@ in
   radicale = runTest ./radicale.nix;
   radicle = runTest ./radicle.nix;
   radicle-ci-broker = runTest ./radicle-ci-broker.nix;
-  ragnarwm = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./ragnarwm.nix;
   rasdaemon = runTest ./rasdaemon.nix;
   rathole = runTest ./rathole.nix;
   rauc = runTest ./rauc.nix;
@@ -1480,11 +1518,12 @@ in
   sane = runTest ./sane.nix;
   sanoid = runTest ./sanoid.nix;
   saunafs = runTest ./saunafs.nix;
-  scaphandre = runTest ./scaphandre.nix;
+  scanservjs = runTest ./scanservjs.nix;
   schleuder = runTest ./schleuder.nix;
   scion-freestanding-deployment = runTest ./scion/freestanding-deployment;
   scrutiny = runTest ./scrutiny.nix;
   scx = runTest ./scx/default.nix;
+  scx-loader = runTest ./scx/loader.nix;
   sddm = import ./sddm.nix { inherit runTest; };
   sdl3 = runTest ./sdl3.nix;
   searx = runTest ./searx.nix;
@@ -1506,7 +1545,8 @@ in
   shoko = import ./shoko.nix { inherit runTest; };
   signal-desktop = runTest ./signal-desktop.nix;
   silverbullet = runTest ./silverbullet.nix;
-  simple = runTest ./simple.nix;
+  simple-container = runTest ./simple-container.nix;
+  simple-vm = runTest ./simple-vm.nix;
   sing-box = runTest ./sing-box.nix;
   sks = runTest ./sks.nix;
   slimserver = runTest ./slimserver.nix;
@@ -1552,6 +1592,7 @@ in
   strichliste = runTest ./web-apps/strichliste.nix;
   strongswan-swanctl = runTest ./strongswan-swanctl.nix;
   stub-ld = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./stub-ld.nix { };
+  stump = runTest ./web-apps/stump.nix;
   stunnel = import ./stunnel.nix { inherit runTest; };
   sudo = runTest ./sudo.nix;
   sudo-rs = runTest ./sudo-rs.nix;
@@ -1572,6 +1613,7 @@ in
   sx = runTest ./sx.nix;
   sympa = runTest ./sympa.nix;
   syncthing = runTest ./syncthing/main.nix;
+  syncthing-defaults = runTest ./syncthing/defaults.nix;
   syncthing-folders = runTest ./syncthing/folders.nix;
   syncthing-guiPassword = runTest ./syncthing/guiPassword.nix;
   syncthing-guiPasswordFile = runTest ./syncthing/guiPasswordFile.nix;
@@ -1581,10 +1623,23 @@ in
   syncthing-relay = runTest ./syncthing/relay.nix;
   sysfs = runTest ./sysfs.nix;
   sysinit-reactivation = runTest ./sysinit-reactivation.nix;
+  system-services-compliance = recurseIntoAttrs (
+    import ./system-services-compliance.nix {
+      inherit
+        pkgs
+        evalSystem
+        runTest
+        callTest
+        ;
+    }
+  );
   systemd = runTest ./systemd.nix;
   systemd-analyze = runTest ./systemd-analyze.nix;
   systemd-binfmt = handleTestOn [ "x86_64-linux" ] ./systemd-binfmt.nix { };
-  systemd-boot = import ./systemd-boot.nix { inherit runTest runTestOn; };
+  systemd-boot = import ./systemd-boot.nix {
+    inherit runTest runTestOn;
+    inherit (pkgs) lib;
+  };
   systemd-bpf = runTest ./systemd-bpf.nix;
   systemd-capsules = runTest ./systemd-capsules.nix;
   systemd-confinement = handleTest ./systemd-confinement { };
@@ -1612,6 +1667,7 @@ in
     "i686-linux"
   ] ./initrd-network-openvpn { systemdStage1 = true; };
   systemd-initrd-networkd-ssh = runTest ./systemd-initrd-networkd-ssh.nix;
+  systemd-initrd-non-nixos = runTest ./systemd-initrd-non-nixos.nix;
   systemd-initrd-shutdown = runTest {
     imports = [ ./systemd-shutdown.nix ];
     _module.args.systemdStage1 = true;
@@ -1653,11 +1709,14 @@ in
   systemd-sysusers-immutable = runTest ./systemd-sysusers-immutable.nix;
   systemd-sysusers-mutable = runTest ./systemd-sysusers-mutable.nix;
   systemd-sysusers-password-option-override-ordering = runTest ./systemd-sysusers-password-option-override-ordering.nix;
+  systemd-timesyncd = runTest ./systemd-timesyncd.nix;
   systemd-timesyncd-nscd-dnssec = runTest ./systemd-timesyncd-nscd-dnssec.nix;
   systemd-user-linger = runTest ./systemd-user-linger.nix;
   systemd-user-linger-purge = runTest ./systemd-user-linger-purge.nix;
+  systemd-user-settings = runTest ./systemd-user-settings.nix;
   systemd-user-tmpfiles-rules = runTest ./systemd-user-tmpfiles-rules.nix;
   systemd-userdbd = runTest ./systemd-userdbd.nix;
+  systemd-varlink = runTest ./systemd-varlink.nix;
   systemtap = handleTest ./systemtap.nix { };
   szurubooru = handleTest ./szurubooru.nix { };
   taler = handleTest ./taler { };
@@ -1682,6 +1741,7 @@ in
   tiddlywiki = runTest ./tiddlywiki.nix;
   tigervnc = handleTest ./tigervnc.nix { };
   tika = runTest ./tika.nix;
+  timekpr = runTest ./timekpr.nix;
   timezone = runTest ./timezone.nix;
   timidity = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./timidity { };
   tinc = handleTest ./tinc { };
@@ -1701,6 +1761,7 @@ in
   tracee = handleTestOn [ "x86_64-linux" ] ./tracee.nix { };
   traefik = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./traefik.nix;
   trafficserver = runTest ./trafficserver.nix;
+  tranquil-pds = runTest ./tranquil-pds.nix;
   transfer-sh = runTest ./transfer-sh.nix;
   transmission_4 = runTest ./transmission.nix;
   trezord = runTest ./trezord.nix;
@@ -1720,6 +1781,7 @@ in
   twingate = runTest ./twingate.nix;
   txredisapi = runTest ./txredisapi.nix;
   typesense = runTest ./typesense.nix;
+  tzpfms = runTest ./tzpfms.nix;
   tzupdate = runTest ./tzupdate.nix;
   ucarp = runTest ./ucarp.nix;
   udisks2 = runTest ./udisks2.nix;
@@ -1731,6 +1793,7 @@ in
   unifi = runTest ./unifi.nix;
   unit-perl = runTest ./web-servers/unit-perl.nix;
   unit-php = runTest ./web-servers/unit-php.nix;
+  unpackerr = runTest ./unpackerr.nix;
   upnp.iptables = handleTest ./upnp.nix { useNftables = false; };
   upnp.nftables = handleTest ./upnp.nix { useNftables = true; };
   uptermd = runTest ./uptermd.nix;
@@ -1751,10 +1814,6 @@ in
   utils = import ./utils { inherit runTest; };
   uwsgi = runTest ./uwsgi.nix;
   v2ray = runTest ./v2ray.nix;
-  varnish60 = runTest {
-    imports = [ ./varnish.nix ];
-    _module.args.package = pkgs.varnish60;
-  };
   varnish80 = runTest {
     imports = [ ./varnish.nix ];
     _module.args.package = pkgs.varnish80;
@@ -1768,6 +1827,7 @@ in
   vector = import ./vector { inherit runTest; };
   velocity = runTest ./velocity.nix;
   vengi-tools = runTest ./vengi-tools.nix;
+  veroroute = runTest ./veroroute.nix;
   victorialogs = import ./victorialogs { inherit runTest; };
   victoriametrics = import ./victoriametrics { inherit runTest; };
   victoriatraces = import ./victoriatraces { inherit runTest; };
@@ -1827,6 +1887,7 @@ in
   xterm = runTest ./xterm.nix;
   xxh = runTest ./xxh.nix;
   yarr = runTest ./yarr.nix;
+  yb = pkgs.callPackage ./yb.nix { inherit (pkgs.yb.passthru) ybPivHarnessTests testFixtures; };
   ydotool = import ./ydotool.nix {
     inherit (pkgs) lib;
     inherit runTest;
@@ -1836,7 +1897,7 @@ in
   zammad = runTest ./zammad.nix;
   zenohd = runTest ./zenohd.nix;
   zeronet-conservancy = runTest ./zeronet-conservancy.nix;
-  zfs = handleTest ./zfs.nix { };
+  zfs = import ./zfs.nix { inherit system pkgs runTest; };
   zigbee2mqtt = runTest ./zigbee2mqtt.nix;
   zipline = runTest ./zipline.nix;
   zoneminder = runTest ./zoneminder.nix;

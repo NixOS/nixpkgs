@@ -79,6 +79,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     teams = [ lib.teams.ngi ];
-    mainProgram = "dep-scan";
+    mainProgram = "depscan";
   };
 })

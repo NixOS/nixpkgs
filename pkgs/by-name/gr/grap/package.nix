@@ -38,9 +38,9 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    boost183.all
     libseccomp
-  ];
+  ]
+  ++ boost183.all;
 
   strictDeps = true;
 

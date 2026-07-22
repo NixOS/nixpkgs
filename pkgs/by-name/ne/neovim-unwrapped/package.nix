@@ -11,6 +11,7 @@
   unibilium,
   utf8proc,
   tree-sitter,
+  wasmtime_36,
   fetchurl,
   buildPackages,
   treesitter-parsers ? import ./treesitter-parsers.nix { inherit fetchurl; },
@@ -20,16 +21,14 @@
   versionCheckHook,
   nix-update-script,
   writableTmpDirAsHomeHook,
-
-  # now defaults to false because some tests can be flaky (clipboard etc), see
-  # also: https://github.com/neovim/neovim/issues/16233
-  nodejs ? null,
-  fish ? null,
-  python3 ? null,
+  wasmSupport ? false,
 }:
 
 let
   lua = if lib.meta.availableOn stdenv.hostPlatform luajit then luajit else lua5_1;
+  treeSitterForNeovim = tree-sitter.override {
+    inherit wasmSupport;
+  };
 in
 
 stdenv.mkDerivation (
@@ -105,7 +104,7 @@ stdenv.mkDerivation (
   in
   {
     pname = "neovim-unwrapped";
-    version = "0.12.2";
+    version = "0.12.3";
 
     __structuredAttrs = true;
 
@@ -113,7 +112,7 @@ stdenv.mkDerivation (
       owner = "neovim";
       repo = "neovim";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-V+jZiNv0SvG/GOOUPzmBkOQGrnrN3UW2BY2n9NxP2Eg=";
+      hash = "sha256-JjDU3GZf+wvsMyDjIfu1btTUBkOlpp6E1HFLqBLR9po=";
     };
 
     strictDeps = true;
@@ -161,9 +160,12 @@ stdenv.mkDerivation (
       # and it's definition at: pkgs/development/lua-modules/overrides.nix
       lua.pkgs.libluv
       neovimLuaEnv
-      tree-sitter
+      treeSitterForNeovim
       unibilium
       utf8proc
+    ]
+    ++ lib.optionals wasmSupport [
+      wasmtime_36
     ]
     ++ lib.optionals (stdenv.hostPlatform.libc != "glibc") [
       # Provide libintl for non-glibc platforms
@@ -186,29 +188,20 @@ stdenv.mkDerivation (
       pkg-config
     ];
 
-    # extra programs test via `make functionaltest`
-    nativeCheckInputs =
-      let
-        pyEnv = python3.withPackages (
-          ps: with ps; [
-            pynvim
-            msgpack
-          ]
-        );
-      in
-      [
-        fish
-        nodejs
-        pyEnv # for src/clint.py
-      ];
-
-    # nvim --version output retains compilation flags and references to build tools
-    postPatch = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      sed -i runtime/CMakeLists.txt \
-        -e "s|\".*/bin/nvim|\${stdenv.hostPlatform.emulator buildPackages} &|g"
-      sed -i src/nvim/po/CMakeLists.txt \
-        -e "s|\$<TARGET_FILE:nvim|\${stdenv.hostPlatform.emulator buildPackages} &|g"
-    '';
+    postPatch =
+      lib.optionalString wasmSupport ''
+        substituteInPlace src/nvim/CMakeLists.txt \
+          --replace-fail \
+            'find_package(Wasmtime 36.0.6 EXACT REQUIRED)' \
+            'find_package(Wasmtime REQUIRED)'
+      ''
+      # nvim --version output retains compilation flags and references to build tools
+      + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+        sed -i runtime/CMakeLists.txt \
+          -e "s|\".*/bin/nvim|\${stdenv.hostPlatform.emulator buildPackages} &|g"
+        sed -i src/nvim/po/CMakeLists.txt \
+          -e "s|\$<TARGET_FILE:nvim|\${stdenv.hostPlatform.emulator buildPackages} &|g"
+      '';
     # check that the above patching actually works
     disallowedRequisites = [
       stdenv.cc
@@ -229,6 +222,12 @@ stdenv.mkDerivation (
       (lib.cmakeBool "ENABLE_TRANSLATIONS" true)
       (lib.cmakeBool "USE_BUNDLED_BUSTED" false)
     ]
+    ++ lib.optionals wasmSupport [
+      # FindWasmtime has no pkg-config fallback.
+      (lib.cmakeBool "ENABLE_WASMTIME" true)
+      (lib.cmakeFeature "WASMTIME_INCLUDE_DIR" "${lib.getDev wasmtime_36}/include")
+      (lib.cmakeFeature "WASMTIME_LIBRARY" "${lib.getLib wasmtime_36}/lib/libwasmtime${stdenv.hostPlatform.extensions.sharedLibrary}")
+    ]
     ++ (
       if lua.pkgs.isLuaJIT then
         [
@@ -247,7 +246,7 @@ stdenv.mkDerivation (
     ''
     + lib.concatStrings (
       lib.mapAttrsToList (language: grammar: ''
-        ln -s \
+        ln -sf \
           ${grammar}/parser \
           $out/lib/nvim/parser/${language}.so
       '') finalAttrs.treesitter-parsers
@@ -287,6 +286,7 @@ stdenv.mkDerivation (
       '';
       homepage = "https://neovim.io";
       changelog = "https://github.com/neovim/neovim/releases/tag/${finalAttrs.src.tag}";
+      donationPage = "https://neovim.io/sponsors/";
       mainProgram = "nvim";
       # "Contributions committed before b17d96 by authors who did not sign the
       # Contributor License Agreement (CLA) remain under the Vim license.

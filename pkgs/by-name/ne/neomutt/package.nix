@@ -43,13 +43,13 @@ assert lib.warnIf enableMixmaster
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "neomutt";
-  version = "20260105";
+  version = "20260504";
 
   src = fetchFromGitHub {
     owner = "neomutt";
     repo = "neomutt";
     tag = finalAttrs.version;
-    hash = "sha256-rdnk1wESnnoaxctkR6WvWpq+DUg86PbH9f1EtpSL5uk=";
+    hash = "sha256-PVcQjuUWK0QwcDIuKsHTMWFCpYLHBG/3Hr1IbLtlJbg=";
   };
 
   buildInputs = [

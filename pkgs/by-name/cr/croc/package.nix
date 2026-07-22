@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "croc";
-  version = "10.4.3";
+  version = "10.4.5";
 
   src = fetchFromGitHub {
     owner = "schollz";
     repo = "croc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-cQgGs4vv7RGa9reM3QoYDW6PdREx+rIzg4uXXrahPSg=";
+    hash = "sha256-EbOjLR9xQMY2D+roK/Fv1so5FZwZ2RmNetLxq0WIw2g=";
   };
 
-  vendorHash = "sha256-qS+jjchXysIj4ZcZoUWg8W0uyYTYPPy8DdhZEP/uZGg=";
+  vendorHash = "sha256-SVljsV7xxVVQsn1ii4ShnFVFQDAFSZJe14HJ/6TQi7c=";
 
   subPackages = [ "." ];
 

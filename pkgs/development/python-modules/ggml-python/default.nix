@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
 
   # build-system
   cmake,
@@ -34,8 +35,9 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ggml-python";
-  version = "0.0.37";
+  version = "0.0.44";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "abetlen";
@@ -43,7 +45,7 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     # ggml-python expects an older version of ggml than pkgs.ggml's
     fetchSubmodules = true;
-    hash = "sha256-QFpUGQ8m4c0SpHWnHhoyPdQkcywBToeLahDtG+JMcmA=";
+    hash = "sha256-Pjc91nKBAdmEg8TmirWdD1AcKlY+BCDAoHzL6mTE2SM=";
   };
 
   build-system = [
@@ -90,6 +92,13 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytestCheckHook
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v([0-9.]+)$"
+    ];
+  };
 
   meta = {
     description = "Python bindings for ggml";

@@ -21,11 +21,11 @@ buildDunePackage rec {
   minimalOCamlVersion = "4.08";
 
   pname = "x509";
-  version = "1.0.6";
+  version = "1.1.0";
 
   src = fetchurl {
     url = "https://github.com/mirleft/ocaml-x509/releases/download/v${version}/x509-${version}.tbz";
-    hash = "sha256-/IFq4sZei0L6YNkKUHshQEleKNCVrTeyfkwmiuPADWw=";
+    hash = "sha256-BYQ74iwQ9MoOzyStOasALolWD1PMIhKKw9FHReFr+n0=";
   };
 
   checkInputs = [ alcotest ];

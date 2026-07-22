@@ -13,7 +13,6 @@
   meson-python,
   mesonEmulatorHook,
   pkg-config,
-  xcbuild,
 
   # native dependencies
   blas,
@@ -79,7 +78,6 @@ buildPythonPackage (finalAttrs: {
     meson-python
     pkg-config
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ xcbuild.xcrun ]
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 
   buildInputs = [

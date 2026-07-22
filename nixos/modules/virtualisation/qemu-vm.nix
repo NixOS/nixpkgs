@@ -399,7 +399,7 @@ in
   imports = [
     ../profiles/qemu-guest.nix
     ./disk-size-option.nix
-    ./guest-networking-options.nix
+    ./credentials-options.nix
     (mkRenamedOptionModule
       [
         "virtualisation"
@@ -552,7 +552,7 @@ in
         y = 768;
       };
       description = ''
-        The resolution of the virtual machine display.
+        The resolution of the virtual machine display (relevant only if virtualised machine uses grub bootloader).
       '';
     };
 
@@ -1127,81 +1127,20 @@ in
     };
 
     virtualisation.credentials = mkOption {
-      description = ''
-        Credentials to pass to the VM using systemd's credential system.
-
-        See {manpage}`systemd.exec(5)` , {manpage}`systemd-creds(1)` and https://systemd.io/CREDENTIALS/ for more
-        information about systemd credentials.
-      '';
-      default = { };
-      example = {
-        database-password = {
-          text = "my-secret-password";
-        };
-        ssl-cert = {
-          source = "./cert.pem";
-        };
-        binary-key = {
-          mechanism = "fw_cfg";
-          source = "./private.der";
-        };
-        config-file = {
-          mechanism = "smbios";
-          text = ''
-            [database]
-            host=localhost
-            port=5432
-          '';
-        };
-      };
       type = types.attrsOf (
-        lib.types.submodule (
-          {
-            name,
-            options,
-            config,
-            ...
-          }:
-          {
-            options = {
-              mechanism = lib.mkOption {
-                type = lib.types.enum [
-                  "fw_cfg"
-                  "smbios"
-                ];
-                default = if pkgs.stdenv.hostPlatform.isx86 then "smbios" else "fw_cfg";
-                defaultText = lib.literalExpression ''if pkgs.stdenv.hostPlatform.isx86 then "smbios" else "fw_cfg"'';
-                description = ''
-                  The mechanism used to pass the credential to the VM.
-                '';
-              };
-              source = lib.mkOption {
-                type = lib.types.nullOr (lib.types.pathWith { });
-                default = null;
-                description = ''
-                  Source file on the host containing the credential data.
-                '';
-              };
-              text = lib.mkOption {
-                default = null;
-                type = lib.types.nullOr lib.types.str;
-                description = ''
-                  Text content of the credential.
-
-                  For binary data or when the credential content should come from
-                  an existing file, use `source` instead.
-
-                  ::: {.warning}
-                  The text here is stored in the host's nix store as a file.
-                  :::
-                '';
-              };
-            };
-            config.source = lib.mkIf (config.text != null) (
-              lib.mkDerivedConfig options.text (pkgs.writeText name)
-            );
-          }
-        )
+        lib.types.submodule {
+          options.mechanism = lib.mkOption {
+            type = lib.types.enum [
+              "fw_cfg"
+              "smbios"
+            ];
+            default = if pkgs.stdenv.hostPlatform.isx86 then "smbios" else "fw_cfg";
+            defaultText = lib.literalExpression ''if pkgs.stdenv.hostPlatform.isx86 then "smbios" else "fw_cfg"'';
+            description = ''
+              The mechanism used to pass the credential to the VM.
+            '';
+          };
+        }
       );
     };
 
@@ -1308,6 +1247,8 @@ in
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
+        User = lib.mkIf (config.nix.daemonUser != "root") config.nix.daemonUser;
+        Group = lib.mkIf (config.nix.daemonGroup != "root") config.nix.daemonGroup;
       };
       script = ''
         if [[ "$(cat /proc/cmdline)" =~ regInfo=([^ ]*) ]]; then
@@ -1380,7 +1321,6 @@ in
         "-device usb-tablet,bus=usb-bus.0"
       ])
       (mkIf pkgs.stdenv.hostPlatform.isAarch [
-        "-device virtio-gpu-pci"
         "-device usb-ehci,id=usb0"
         "-device usb-kbd"
         "-device usb-tablet"

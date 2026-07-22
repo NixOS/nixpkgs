@@ -108,7 +108,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=tests::no_segfault_after_failed_compilation"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Test Panics only on Darwin, see:
+    # Another sandbox failing test, see:
     # https://github.com/tectonic-typesetting/tectonic/issues/1352
     "--skip=v2_watch_succeeds"
   ];

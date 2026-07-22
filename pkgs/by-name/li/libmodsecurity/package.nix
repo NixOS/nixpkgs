@@ -12,7 +12,6 @@
   libxml2,
   lmdb,
   lua,
-  pcre,
   pcre2,
   ssdeep,
   yajl,
@@ -21,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmodsecurity";
-  version = "3.0.14";
+  version = "3.0.15";
 
   src = fetchFromGitHub {
     owner = "owasp-modsecurity";
     repo = "ModSecurity";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-SaeBO3+WvPhHiJoiOmijB0G3/QYxjAdxgeCVqESS+4U=";
+    hash = "sha256-gI874wkqy8VuwxUmIgb8d7fULJUQ+rKBBF492NtuRMY=";
     fetchSubmodules = true;
   };
 
@@ -37,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     flex
     pkg-config
   ];
+
   buildInputs = [
     curl
     geoip
@@ -44,7 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     lmdb
     lua
-    pcre
     pcre2
     ssdeep
     yajl
@@ -58,29 +57,33 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--enable-parser-generation"
     "--disable-doxygen-doc"
-    "--with-curl=${curl.dev}"
-    "--with-libxml=${libxml2.dev}"
-    "--with-lmdb=${lmdb.out}"
-    "--with-maxmind=${libmaxminddb}"
-    "--with-pcre=${pcre.dev}"
-    "--with-pcre2=${pcre2.out}"
+    "--disable-examples"
+    "--with-lmdb=${lmdb}"
     "--with-ssdeep=${ssdeep}"
   ];
 
   postPatch = ''
-    substituteInPlace build/lmdb.m4 \
-      --replace "\''${path}/include/lmdb.h" "${lmdb.dev}/include/lmdb.h" \
-      --replace "lmdb_inc_path=\"\''${path}/include\"" "lmdb_inc_path=\"${lmdb.dev}/include\""
-    substituteInPlace build/pcre2.m4 \
-      --replace "/usr/local/pcre2" "${pcre2.out}/lib" \
-      --replace "\''${path}/include/pcre2.h" "${pcre2.dev}/include/pcre2.h" \
-      --replace "pcre2_inc_path=\"\''${path}/include\"" "pcre2_inc_path=\"${pcre2.dev}/include\""
-    substituteInPlace build/ssdeep.m4 \
-      --replace "/usr/local/libfuzzy" "${ssdeep}/lib" \
-      --replace "\''${path}/include/fuzzy.h" "${ssdeep}/include/fuzzy.h" \
-      --replace "ssdeep_inc_path=\"\''${path}/include\"" "ssdeep_inc_path=\"${ssdeep}/include\""
+    # https://github.com/owasp-modsecurity/ModSecurity/blob/v3.0.15/build.sh#L6-L25
+    echo "noinst_HEADERS = \\" > ./src/headers.mk
+    ls -1 ./src/ \
+        actions/*.h \
+        actions/ctl/*.h \
+        actions/data/*.h \
+        actions/disruptive/*.h \
+        actions/transformations/*.h \
+        debug_log/*.h \
+        audit_log/writer/*.h \
+        collection/backend/*.h \
+        operators/*.h \
+        parser/*.h \
+        request_body_processor/*.h \
+        utils/*.h \
+        variables/*.h \
+        engine/*.h \
+        *.h | tr "\012" " " >> ./src/headers.mk
+
     substituteInPlace modsecurity.conf-recommended \
-      --replace "SecUnicodeMapFile unicode.mapping 20127" "SecUnicodeMapFile $out/share/modsecurity/unicode.mapping 20127"
+      --replace-fail "SecUnicodeMapFile unicode.mapping 20127" "SecUnicodeMapFile $out/share/modsecurity/unicode.mapping 20127"
   '';
 
   postInstall = ''

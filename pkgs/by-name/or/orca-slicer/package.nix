@@ -13,7 +13,7 @@
   curl,
   dbus,
   draco,
-  eigen,
+  eigen_5,
   expat,
   ffmpeg,
   gcc-unwrapped,
@@ -28,18 +28,15 @@
   hicolor-icon-theme,
   libsecret,
   libpng,
-  makeFontsConf,
   mpfr,
-  nanum,
   nlopt,
   opencascade-occt_7_6,
   openvdb,
   opencv,
-  pcre,
   systemd,
   onetbb,
   webkitgtk_4_1,
-  wxwidgets_3_1,
+  wxwidgets_3_3,
   libx11,
   libnoise,
   withSystemd ? stdenv.hostPlatform.isLinux,
@@ -47,8 +44,7 @@
 }:
 let
   wxGTK' =
-    (wxwidgets_3_1.override {
-      withCurl = true;
+    (wxwidgets_3_3.override {
       withPrivateFonts = true;
       withWebKit = true;
       withEGL = false;
@@ -61,22 +57,16 @@ let
           "--enable-secretstore"
         ];
       });
-
-  # Workaround for crash due to missing font
-  # https://github.com/OrcaSlicer/OrcaSlicer/issues/11641
-  fontsConf = makeFontsConf {
-    fontDirectories = [ nanum ];
-  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "orca-slicer";
-  version = "2.3.2";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "OrcaSlicer";
     repo = "OrcaSlicer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c1WTODLrXGtyJWkEueOz5jHhPbA/JFcMeAwhpvoKnKo=";
+    hash = "sha256-ogo+Xuz7yBz9POVKfLofnxwIQavkApPzTIdp/Phu/UU=";
   };
 
   nativeBuildInputs = [
@@ -103,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     dbus
     draco
-    eigen
+    eigen_5
     expat
     ffmpeg
     gcc-unwrapped
@@ -124,7 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
     nlopt
     opencascade-occt_7_6
     openvdb
-    pcre
     onetbb
     webkitgtk_4_1
     wxGTK'
@@ -142,11 +131,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/dont-link-opencv-world-orca.patch
     # The changeset from https://github.com/OrcaSlicer/OrcaSlicer/pull/7650, can be removed when that PR gets merged
     # Allows disabling the update nag screen
-    (fetchpatch {
-      name = "pr-7650-configurable-update-check.patch";
-      url = "https://github.com/OrcaSlicer/OrcaSlicer/commit/d10a06ae11089cd1f63705e87f558e9392f7a167.patch";
-      hash = "sha256-t4own5AwPsLYBsGA15id5IH1ngM0NSuWdFsrxMRXmTk=";
-    })
+    #(fetchpatch {
+    #  name = "pr-7650-configurable-update-check.patch";
+    #  url = "https://github.com/OrcaSlicer/OrcaSlicer/commit/d10a06ae11089cd1f63705e87f558e9392f7a167.patch";
+    #  hash = "sha256-t4own5AwPsLYBsGA15id5IH1ngM0NSuWdFsrxMRXmTk=";
+    #})
 
     # Pick https://github.com/prusa3d/PrusaSlicer/pull/14207 to remove unused and insecure ilmbase dependency
     ./patches/no-ilmbase.patch
@@ -227,7 +216,6 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       }"
       --set WEBKIT_DISABLE_COMPOSITING_MODE 1
-      --set FONTCONFIG_FILE "${fontsConf}"
       ${lib.optionalString withNvidiaGLWorkaround ''
         --set __GLX_VENDOR_LIBRARY_NAME mesa
         --set __EGL_VENDOR_LIBRARY_FILENAMES /run/opengl-driver/share/glvnd/egl_vendor.d/50_mesa.json

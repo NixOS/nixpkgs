@@ -70,14 +70,19 @@
   zlib,
   directoryListingUpdater,
 }:
-
-stdenv.mkDerivation rec {
+let
+  inherit (lib)
+    mesonBool
+    mesonOption
+    ;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "efl";
   version = "1.28.1";
 
   src = fetchurl {
-    url = "https://download.enlightenment.org/rel/libs/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-hM9hRfnMgr//aQAFviQ5LI88UvjgD/BNjuo3FCnAlCQ=";
+    url = "https://download.enlightenment.org/rel/libs/efl/efl-${finalAttrs.version}.tar.xz";
+    hash = "sha256-hM9hRfnMgr//aQAFviQ5LI88UvjgD/BNjuo3FCnAlCQ=";
   };
 
   nativeBuildInputs = [
@@ -159,6 +164,8 @@ stdenv.mkDerivation rec {
     libxcb
   ];
 
+  strictDeps = true;
+
   dontDropIconThemeCache = true;
 
   # Fix build with gcc15 (-std=gnu23)
@@ -166,17 +173,17 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "--buildtype=release"
-    "-D build-tests=false" # disable build tests, which are not working
-    "-D ecore-imf-loaders-disabler=ibus,scim" # ibus is disabled by default, scim is not available in nixpkgs
-    "-D embedded-lz4=false"
-    "-D fb=true"
-    "-D network-backend=connman"
-    "-D sdl=true"
-    "-D elua=true"
-    "-D bindings=lua,cxx"
+    (mesonBool "build-tests" false) # disable build tests, which are not working
+    (mesonOption "ecore-imf-loaders-disabler" "ibus,scim") # ibus is disabled by default, scim is not available in nixpkgs
+    (mesonBool "embedded-lz4" false)
+    (mesonBool "fb" true)
+    (mesonOption "network-backend" "connman")
+    (mesonBool "sdl" true)
+    (mesonBool "elua" true)
+    (mesonOption "bindings" "lua,cxx")
     # for wayland client support
-    "-D wl=true"
-    "-D drm=true"
+    (mesonBool "wl" true)
+    (mesonBool "drm" true)
   ];
 
   patches = [
@@ -187,8 +194,8 @@ stdenv.mkDerivation rec {
     patchShebangs src/lib/elementary/config_embed
 
     # fix destination of systemd unit and dbus service
-    substituteInPlace systemd-services/meson.build --replace "sys_dep.get_pkgconfig_variable('systemduserunitdir')" "'$out/systemd/user'"
-    substituteInPlace dbus-services/meson.build --replace "dep.get_pkgconfig_variable('session_bus_services_dir')" "'$out/share/dbus-1/services'"
+    substituteInPlace systemd-services/meson.build --replace-fail "sys_dep.get_pkgconfig_variable('systemduserunitdir')" "'$out/systemd/user'"
+    substituteInPlace dbus-services/meson.build --replace-fail "dep.get_pkgconfig_variable('session_bus_services_dir')" "'$out/share/dbus-1/services'"
   '';
 
   # bin/edje_cc creates $HOME/.run, which would break build of reverse dependencies.
@@ -205,14 +212,14 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     # fix use of $out variable
-    substituteInPlace "$out/share/elua/core/util.lua" --replace '$out' "$out"
+    substituteInPlace "$out/share/elua/core/util.lua" --replace-fail '$out' "$out"
     rm "$out/share/elua/core/util.lua.orig"
 
     # add all module include dirs to the Cflags field in efl.pc
     modules=$(for i in "$out/include/"*/; do printf ' -I''${includedir}/'`basename $i`; done)
     substituteInPlace "$out/lib/pkgconfig/efl.pc" \
-      --replace 'Cflags: -I''${includedir}/efl-1' \
-                'Cflags: -I''${includedir}/eina-1/eina'"$modules"
+      --replace-fail 'Cflags: -I''${includedir}/efl-1' \
+                     'Cflags: -I''${includedir}/eina-1/eina'"$modules"
 
     # build icon cache
     gtk-update-icon-cache "$out"/share/icons/Enlightenment-X
@@ -226,6 +233,8 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.updateScript = directoryListingUpdater { };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Enlightenment foundation libraries";
@@ -242,4 +251,4 @@ stdenv.mkDerivation rec {
     ];
     teams = [ lib.teams.enlightenment ];
   };
-}
+})

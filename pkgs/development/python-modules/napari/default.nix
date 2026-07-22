@@ -32,6 +32,7 @@
   pydantic-settings,
   pyopengl,
   pyyaml,
+  requests,
   scikit-image,
   scipy,
   superqt,
@@ -105,6 +106,7 @@ buildPythonPackage (finalAttrs: {
     pydantic-settings
     pyopengl
     pyyaml
+    requests
     scikit-image
     scipy
     superqt

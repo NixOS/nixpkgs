@@ -19,7 +19,7 @@ let
     inherit pname version src;
   };
 in
-appimageTools.wrapType2 rec {
+appimageTools.wrapType2 {
 
   inherit pname version src;
 
@@ -36,13 +36,15 @@ appimageTools.wrapType2 rec {
 
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/notable.desktop $out/share/applications/notable.desktop
-    for size in 16 32 48 64 128 256 512 1024; do
+    for size in 16 32 48 64 128 256 512; do
       install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/''${size}x''${size}/apps/notable.png \
         $out/share/icons/hicolor/''${size}x''${size}/apps/notable.png
     done
+    install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/1024x1024/apps/notable.png \
+      $out/share/icons/notable.png
     substituteInPlace $out/share/applications/notable.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
-    wrapProgram "$out/bin/${pname}" \
+      --replace-fail 'Exec=AppRun' 'Exec=notable'
+    wrapProgram "$out/bin/notable" \
       --add-flags "--disable-seccomp-filter-sandbox"
   '';
 

@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "slidev-cli";
-  version = "52.15.1";
+  version = "52.15.2";
 
   src = fetchFromGitHub {
     owner = "slidevjs";
     repo = "slidev";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2SksaDC/OC53ZGyraS/WzySSbPEnlzdURGInZ2neQwU=";
+    hash = "sha256-h9gVfGMLTm8NDSAR/OKl5XJRBduAPHQ9mp+jtNYtxFI=";
   };
 
   pnpmWorkspaces = [ "@slidev/cli..." ];

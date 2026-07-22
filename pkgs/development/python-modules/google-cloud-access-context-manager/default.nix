@@ -9,13 +9,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-access-context-manager";
-  version = "0.5.0";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_access_context_manager";
     inherit (finalAttrs) version;
-    hash = "sha256-lQzmWXMIWB4//TeP/TheoOFsCZzdVmkyhXzBDF53R1I=";
+    hash = "sha256-dgJn+6H4voY24qjXwwICfzECYP/4BRxGuLCbl9VGjuA=";
   };
 
   build-system = [ setuptools ];

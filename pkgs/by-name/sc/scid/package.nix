@@ -35,6 +35,8 @@ tcl.mkTclDerivation rec {
     zlib
   ];
 
+  addTclConfigureFlags = false;
+
   configureFlags = [
     "BINDIR=$(out)/bin"
     "SHAREDIR=$(out)/share"

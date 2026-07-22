@@ -30,10 +30,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Isolate Applications over Tor using Linux Namespaces";
     maintainers = with lib.maintainers; [ tnias ];
     platforms = lib.platforms.linux;
-    license = with lib.licenses; [
-      asl20
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     mainProgram = "oniux";
   };
 })

@@ -93,7 +93,6 @@ python3Packages.buildPythonApplication {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       toonn
-      lucasew
     ];
     mainProgram = "ranger";
   };

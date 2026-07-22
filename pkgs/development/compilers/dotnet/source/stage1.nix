@@ -22,7 +22,7 @@ let
 in
 (mkVMR {
   inherit releaseManifestFile tarballHash;
-  bootstrapSdk = stage0.sdk.unwrapped;
+  bootstrapSdk = stage0.sdk;
   hasRuntime = true;
 }).overrideAttrs
   (old: {

@@ -133,6 +133,10 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTestPaths = [
+    # MLFlowLogger uses the deprecated mlflow filesystem store, which throws an
+    # error since mlflow 3.13. See https://github.com/NixOS/nixpkgs/pull/532943
+    "tests/torchtune/training/test_metric_logging.py::TestMLFlowLogger"
+
     # TypeError: HfHubHTTPError.__init__() missing 1 required keyword-only argument: 'response'
     "tests/torchtune/_cli/test_download.py::TestTuneDownloadCommand::test_download_calls_snapshot"
     "tests/torchtune/_cli/test_download.py::TestTuneDownloadCommand::test_gated_repo_error_no_token"

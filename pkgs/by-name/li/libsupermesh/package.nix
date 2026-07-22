@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libsupermesh";
-  version = "2025.4";
+  version = "2026.0";
 
   src = fetchFromGitHub {
     owner = "firedrakeproject";
     repo = "libsupermesh";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-VIGfuSVneCBapZyU0GXyi6isUSdhD2Ylm4mCymSvzbo=";
+    tag = finalAttrs.version;
+    hash = "sha256-f/5y3XherRbN/Eq3tfivrOHByF8LAXtYN3v9Vx82m8Q=";
   };
 
   strictDeps = true;
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/firedrakeproject/libsupermesh";
     description = "Parallel supermeshing library";
-    changelog = "https://github.com/firedrakeproject/libsupermesh/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/firedrakeproject/libsupermesh/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ qbisi ];

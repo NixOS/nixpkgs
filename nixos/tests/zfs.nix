@@ -1,12 +1,11 @@
 {
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
+  system,
+  pkgs,
+  runTest,
 }:
 
-with import ../lib/testing-python.nix { inherit system pkgs; };
-
 let
+  inherit (pkgs) lib;
 
   makeZfsTest =
     {
@@ -15,11 +14,9 @@ let
       zfsPackage,
       extraTest ? "",
     }:
-    makeTest {
+    runTest {
       name = zfsPackage.kernelModuleAttribute;
-      meta = with pkgs.lib.maintainers; {
-        maintainers = [ elvishjerricco ];
-      };
+      meta.maintainers = with lib.maintainers; [ elvishjerricco ];
 
       nodes.machine =
         {
@@ -124,82 +121,90 @@ let
           };
         };
 
-      testScript = ''
-        machine.wait_for_unit("multi-user.target")
-        machine.succeed(
-            "zpool status",
-            "parted --script /dev/vdb mklabel msdos",
-            "parted --script /dev/vdb -- mkpart primary 1024M -1s",
-            "parted --script /dev/vdc mklabel msdos",
-            "parted --script /dev/vdc -- mkpart primary 1024M -1s",
-        )
+      testScript =
+        { nodes, ... }:
+        let
+          samba = nodes.machine.specialisation.samba.configuration.system.build.toplevel;
+          encryption = nodes.machine.specialisation.encryption.configuration.system.build.toplevel;
+          forcepool = nodes.machine.specialisation.forcepool.configuration.system.build.toplevel;
+        in
+        # python
+        ''
+          machine.wait_for_unit("multi-user.target")
+          machine.succeed(
+              "zpool status",
+              "parted --script /dev/vdb mklabel msdos",
+              "parted --script /dev/vdb -- mkpart primary 1024M -1s",
+              "parted --script /dev/vdc mklabel msdos",
+              "parted --script /dev/vdc -- mkpart primary 1024M -1s",
+          )
 
-        with subtest("sharesmb works"):
-            machine.succeed(
-                "zpool create rpool /dev/vdb1",
-                "zfs create -o mountpoint=legacy rpool/root",
-                # shared datasets cannot have legacy mountpoint
-                "zfs create rpool/shared_smb",
-                "bootctl set-default nixos-generation-1-specialisation-samba.conf",
-                "sync",
-            )
-            machine.crash()
-            machine.wait_for_unit("multi-user.target")
-            machine.succeed("zfs set sharesmb=on rpool/shared_smb")
-            machine.succeed(
-                "smbclient -gNL localhost | grep rpool_shared_smb",
-                "umount /tmp/mnt",
-                "zpool destroy rpool",
-            )
+          with subtest("sharesmb works"):
+              machine.succeed(
+                  "zpool create rpool /dev/vdb1",
+                  "zfs create -o mountpoint=legacy rpool/root",
+                  # shared datasets cannot have legacy mountpoint
+                  "zfs create rpool/shared_smb",
+                  "${samba}/bin/switch-to-configuration boot",
+                  "sync",
+              )
+              machine.crash()
+              machine.wait_for_unit("multi-user.target")
+              machine.succeed("zfs set sharesmb=on rpool/shared_smb")
+              machine.succeed(
+                  "smbclient -gNL localhost | grep rpool_shared_smb",
+                  "umount /tmp/mnt",
+                  "zpool destroy rpool",
+              )
 
-        with subtest("encryption works"):
-            machine.succeed(
-                'echo password | zpool create -O mountpoint=legacy '
-                + "-O encryption=aes-256-gcm -O keyformat=passphrase automatic /dev/vdb1",
-                "zpool create -O mountpoint=legacy manual /dev/vdc1",
-                "echo otherpass | zfs create "
-                + "-o encryption=aes-256-gcm -o keyformat=passphrase manual/encrypted",
-                "zfs create -o encryption=aes-256-gcm -o keyformat=passphrase "
-                + "-o keylocation=http://localhost/zfskey manual/httpkey",
-                "bootctl set-default nixos-generation-1-specialisation-encryption.conf",
-                "sync",
-                "zpool export automatic",
-                "zpool export manual",
-            )
-            machine.crash()
-            machine.start()
-            machine.wait_for_console_text("Starting password query on")
-            machine.send_console("password\n")
-            machine.wait_for_unit("multi-user.target")
-            machine.succeed(
-                "zfs get -Ho value keystatus manual/encrypted | grep -Fx unavailable",
-                "echo otherpass | zfs load-key manual/encrypted",
-                "systemctl start manual-encrypted.mount",
-                "zfs load-key manual/httpkey",
-                "systemctl start manual-httpkey.mount",
-                "umount /automatic /manual/encrypted /manual/httpkey /manual",
-                "zpool destroy automatic",
-                "zpool destroy manual",
-            )
+          with subtest("encryption works"):
+              machine.succeed(
+                  'echo password | zpool create -O mountpoint=legacy '
+                  + "-O encryption=aes-256-gcm -O keyformat=passphrase automatic /dev/vdb1",
+                  "zpool create -O mountpoint=legacy manual /dev/vdc1",
+                  "echo otherpass | zfs create "
+                  + "-o encryption=aes-256-gcm -o keyformat=passphrase manual/encrypted",
+                  "zfs create -o encryption=aes-256-gcm -o keyformat=passphrase "
+                  + "-o keylocation=http://localhost/zfskey manual/httpkey",
+                  "${encryption}/bin/switch-to-configuration boot",
+                  "sync",
+                  "zpool export automatic",
+                  "zpool export manual",
+              )
+              machine.crash()
+              machine.start()
+              machine.wait_for_console_text("Starting password query on")
+              machine.send_console("password\n")
+              machine.wait_for_unit("multi-user.target")
+              machine.succeed(
+                  "zfs get -Ho value keystatus manual/encrypted | grep -Fx unavailable",
+                  "echo otherpass | zfs load-key manual/encrypted",
+                  "systemctl start manual-encrypted.mount",
+                  "zfs load-key manual/httpkey",
+                  "systemctl start manual-httpkey.mount",
+                  "umount /automatic /manual/encrypted /manual/httpkey /manual",
+                  "zpool destroy automatic",
+                  "zpool destroy manual",
+              )
 
-        with subtest("boot.zfs.forceImportAll works"):
-            machine.succeed(
-                "rm /etc/hostid",
-                "zgenhostid deadcafe",
-                "zpool create forcepool /dev/vdb1 -O mountpoint=legacy",
-                "bootctl set-default nixos-generation-1-specialisation-forcepool.conf",
-                "rm /etc/hostid",
-                "sync",
-            )
-            machine.crash()
-            machine.wait_for_unit("multi-user.target")
-            machine.fail("zpool import forcepool")
-            machine.succeed(
-                "systemctl start forcepool.mount",
-                "mount | grep forcepool",
-            )
-      ''
-      + extraTest;
+          with subtest("boot.zfs.forceImportAll works"):
+              machine.succeed(
+                  "rm /etc/hostid",
+                  "zgenhostid deadcafe",
+                  "zpool create forcepool /dev/vdb1 -O mountpoint=legacy",
+                  "${forcepool}/bin/switch-to-configuration boot",
+                  "rm /etc/hostid",
+                  "sync",
+              )
+              machine.crash()
+              machine.wait_for_unit("multi-user.target")
+              machine.fail("zpool import forcepool")
+              machine.succeed(
+                  "systemctl start forcepool.mount",
+                  "mount | grep forcepool",
+              )
+        ''
+        + extraTest;
 
     };
 
@@ -226,10 +231,31 @@ in
     enableSystemdStage1 = true;
   };
 
-  installerBoot = (import ./installer.nix { inherit system; }).separateBootZfs;
-  installer = (import ./installer.nix { inherit system; }).zfsroot;
+  installerBoot =
+    (import ./installer.nix {
+      inherit system;
+      systemdStage1 = false;
+    }).separateBootZfs;
 
-  expand-partitions = makeTest {
+  installer =
+    (import ./installer.nix {
+      inherit system;
+      systemdStage1 = false;
+    }).zfsroot;
+
+  installerBootWithSystemdStage1 =
+    (import ./installer.nix {
+      inherit system;
+      systemdStage1 = true;
+    }).separateBootZfs;
+
+  installerWithSystemdStage1 =
+    (import ./installer.nix {
+      inherit system;
+      systemdStage1 = true;
+    }).zfsroot;
+
+  expand-partitions = runTest {
     name = "multi-disk-zfs";
     nodes = {
       machine =

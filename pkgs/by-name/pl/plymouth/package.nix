@@ -20,12 +20,13 @@
   systemd,
   xkeyboard-config,
   fontconfig,
+  bashNonInteractive,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "plymouth";
-  version = "24.004.60";
+  version = "26.134.222";
 
   outputs = [
     "out"
@@ -36,8 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.freedesktop.org";
     owner = "plymouth";
     repo = "plymouth";
-    rev = finalAttrs.version;
-    hash = "sha256-9JmZCm8bjteJTQrMSJeL4x2CAI6RpKowFUDSCcMS4MM=";
+    tag = finalAttrs.version;
+    hash = "sha256-TarN9NLWzYmE9GS/rtaa0w8SVOES86sUMZWbnsgRDHY=";
   };
 
   patches = [
@@ -48,13 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     # fix FHS hardcoded paths
     (replaceVars ./fix-paths.patch {
       fcmatch = "${fontconfig}/bin/fc-match";
-    })
-
-    # fix build without udev, see https://gitlab.freedesktop.org/plymouth/plymouth/-/merge_requests/382 - drop on next release
-    (fetchpatch {
-      name = "fix-build-without-udev.patch";
-      url = "https://gitlab.freedesktop.org/plymouth/plymouth/-/commit/f1ce78764482699b28f60c89af1a071ea0ae13ca.patch";
-      hash = "sha256-t5xt/scO8mVwESU8pFPTSXILd0FhmG/XRZ8O/4baQB8=";
     })
   ];
 
@@ -70,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    bashNonInteractive
     gtk3
     libdrm
     libevdev

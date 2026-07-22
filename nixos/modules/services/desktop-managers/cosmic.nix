@@ -124,16 +124,7 @@ in
       };
     };
 
-    systemd = {
-      packages = [ pkgs.cosmic-session ];
-      user.targets = {
-        # TODO: remove when upstream has XDG autostart support
-        cosmic-session = {
-          wants = [ "xdg-desktop-autostart.target" ];
-          before = [ "xdg-desktop-autostart.target" ];
-        };
-      };
-    };
+    systemd.packages = [ pkgs.cosmic-session ];
 
     fonts.packages = with pkgs; [
       fira
@@ -146,7 +137,10 @@ in
     environment.sessionVariables.X11_EXTRA_RULES_XML = "${config.services.xserver.xkb.dir}/rules/base.extras.xml";
     programs.dconf.enable = true;
     programs.dconf.packages = [ pkgs.cosmic-session ];
-    security.polkit.enable = true;
+    security.polkit = {
+      enable = true;
+      enablePkexecWrapper = lib.mkDefault true;
+    };
     security.rtkit.enable = true;
     services.accounts-daemon.enable = true;
     services.displayManager.sessionPackages = [ pkgs.cosmic-session ];

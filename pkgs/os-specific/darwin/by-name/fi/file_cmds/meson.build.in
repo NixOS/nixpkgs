@@ -20,6 +20,7 @@ bzip2 = dependency('bzip2')
 xz = dependency('liblzma')
 libmd = dependency('libmd')
 libxo = dependency('libxo')
+ncurses = dependency('ncurses')
 zlib = dependency('zlib')
 
 copyfile = cc.find_library('copyfile')
@@ -218,10 +219,11 @@ install_man(f'ln/symlink.7')
 executable(
     'ls',
     c_args : [
+        '-DCOLORLS',
         # https://github.com/apple-oss-distributions/xnu/blob/94d3b452840153a99b38a3a9659680b2a006908e/bsd/sys/stat.h#L520
         '-DSF_DATALESS=0x40000000',
     ],
-    dependencies : [ libutil ],
+    dependencies : [ libutil, ncurses ],
     install : true,
     sources: [
         'ls/cmp.c',

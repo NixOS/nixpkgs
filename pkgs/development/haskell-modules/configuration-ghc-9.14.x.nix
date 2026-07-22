@@ -82,11 +82,12 @@ with haskellLib;
 
   ghc-exactprint = doDistribute self.ghc-exactprint_1_14_0_0;
   hedgehog = doDistribute self.hedgehog_1_7;
-  hie-bios = doDistribute (dontCheck self.hie-bios_0_18_0); # Tests access homeless-shelter.
+  hie-bios = doDistribute (dontCheck self.hie-bios_0_19_0); # Tests access homeless-shelter.
   lifted-async = doDistribute self.lifted-async_0_11_0;
   parallel = doDistribute self.parallel_3_3_0_0;
   tagged = doDistribute self.tagged_0_8_10;
   unordered-containers = doDistribute self.unordered-containers_0_2_21;
+  HTTP = doDistribute self.HTTP_4000_5_0;
 
   #
   # Jailbreaks
@@ -114,6 +115,9 @@ with haskellLib;
   # https://github.com/haskell/aeson/issues/1155
   text-iso8601 = doJailbreak super.text-iso8601;
   aeson = doJailbreak super.aeson;
+
+  # https://github.com/haskell-party/feed/issues/76
+  feed = doJailbreak super.feed; # time<1.15, base<4.22
 
   # https://github.com/well-typed/cborg/issues/373
   cborg = doJailbreak super.cborg;
@@ -153,4 +157,11 @@ with haskellLib;
 
   # Fails to compile with GHC 9.14 https://github.com/snoyberg/mono-traversable/pull/261
   mono-traversable = dontCheck super.mono-traversable;
+
+  # Too strict bound on containers in test suite
+  # https://github.com/jaspervdj/blaze-markup/issues/69
+  blaze-markup = doJailbreak super.blaze-markup;
+  # https://github.com/jaspervdj/blaze-html/issues/151
+  blaze-html = doJailbreak super.blaze-html;
+
 }

@@ -50,14 +50,14 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.13.4";
+  version = "3.13.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiohttp";
     tag = "v${version}";
-    hash = "sha256-/MpN8Lvdm6ZN18eLip0YXHEFzJqRsWWyx1HHfqTmjqA=";
+    hash = "sha256-bAP1/a2COHbe+39KY3GHXSo1Iq9x9xX8O2mLhmFlMlE=";
   };
 
   postPatch = ''
@@ -139,6 +139,8 @@ buildPythonPackage rec {
     "test_uvloop_secure_https_proxy"
     # Cannot connect to host example.com:443 ssl:default [Could not contact DNS servers]
     "test_tcp_connector_ssl_shutdown_timeout_passed_to_create_connection"
+    # Fails with http.cookies.CookieError: Control characters are not allowed in cookies
+    "test_parse_set_cookie_headers_uses_unquote_with_octal"
   ]
   ++ lib.optionals stdenv.hostPlatform.is32bit [ "test_cookiejar" ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [

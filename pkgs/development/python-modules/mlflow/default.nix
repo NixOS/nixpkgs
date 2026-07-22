@@ -1,202 +1,82 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
+  fetchPypi,
 
   # dependencies
   aiohttp,
   alembic,
-  cachetools,
-  click,
-  cloudpickle,
   cryptography,
-  databricks-sdk,
   docker,
-  fastapi,
   flask,
   flask-cors,
-  gitpython,
   graphene,
   gunicorn,
   huey,
-  importlib-metadata,
-  jinja2,
-  markdown,
   matplotlib,
+  mlflow-skinny,
+  mlflow-tracing,
   numpy,
-  opentelemetry-api,
-  opentelemetry-proto,
-  opentelemetry-sdk,
-  packaging,
   pandas,
-  protobuf,
   pyarrow,
-  python-dotenv,
-  pyyaml,
-  requests,
   scikit-learn,
   scipy,
   skops,
   sqlalchemy,
-  sqlparse,
-  uvicorn,
-
-  # tests
-  azure-core,
-  azure-storage-blob,
-  azure-storage-file,
-  boto3,
-  botocore,
-  catboost,
-  datasets,
-  google-cloud-storage,
-  httpx,
-  jwt,
-  keras,
-  langchain,
-  librosa,
-  moto,
-  opentelemetry-exporter-otlp,
-  optuna,
-  pydantic,
-  pyspark,
-  pytestCheckHook,
-  pytorch-lightning,
-  sentence-transformers,
-  shap,
-  starlette,
-  statsmodels,
-  tensorflow,
-  torch,
-  transformers,
-  xgboost,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mlflow";
-  version = "3.11.1";
-  pyproject = true;
+  version = "3.14.0";
+  format = "wheel";
+  __structuredAttrs = true;
 
-  src = fetchFromGitHub {
-    owner = "mlflow";
-    repo = "mlflow";
-    tag = "v${version}";
-    hash = "sha256-Oe6nBnnOz7MvGUNCcCGhHl6ZbyDfAhQ0LlfMBF4p6Hc=";
+  # We build from the PyPI wheel rather than fetchFromGitHub, because the mlflow-server
+  # JS UI is absent from GitHub but provided in the wheel.
+  src = fetchPypi {
+    pname = "mlflow";
+    inherit (finalAttrs) version;
+    format = "wheel";
+    dist = "py3";
+    python = "py3";
+    hash = "sha256-2/d/fNtbXA7Fm0ZxxhcwsbkUtN/3ookuJnpUfLVFT1Y=";
   };
+
+  # Nix-wrapped python populates sys.path via NIX_PYTHONPATH/site hooks,
+  # but PYTHONPATH stays unset in os.environ. mlflow spawns the server
+  # in a subprocess with a curated env, so without this patch the child
+  # interpreter cannot import uvicorn / mlflow itself.
+  postInstall = ''
+    patch -p1 -d "$out/lib/python"*/site-packages < ${./subprocess-pythonpath.patch}
+  '';
 
   pythonRelaxDeps = [
     "cryptography"
-    "gunicorn"
-    "importlib_metadata"
-    "packaging"
-    "protobuf"
-    "pytz"
-    "pyarrow"
   ];
-
-  build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
     alembic
-    cachetools
-    click
-    cloudpickle
     cryptography
-    databricks-sdk
     docker
-    fastapi
     flask
     flask-cors
-    gitpython
     graphene
     gunicorn
     huey
-    importlib-metadata
-    jinja2
-    markdown
     matplotlib
+    mlflow-skinny
+    mlflow-tracing
     numpy
-    opentelemetry-api
-    opentelemetry-proto
-    opentelemetry-sdk
-    packaging
     pandas
-    protobuf
     pyarrow
-    pydantic
-    python-dotenv
-    pyyaml
-    requests
     scikit-learn
     scipy
-    shap
     skops
     sqlalchemy
-    sqlparse
-    uvicorn
   ];
 
   pythonImportsCheck = [ "mlflow" ];
-
-  nativeCheckInputs = [
-    aiohttp
-    azure-core
-    azure-storage-blob
-    azure-storage-file
-    boto3
-    botocore
-    catboost
-    datasets
-    google-cloud-storage
-    httpx
-    jwt
-    keras
-    langchain
-    librosa
-    moto
-    opentelemetry-exporter-otlp
-    optuna
-    pydantic
-    pyspark
-    pytestCheckHook
-    pytorch-lightning
-    sentence-transformers
-    starlette
-    statsmodels
-    tensorflow
-    torch
-    transformers
-    uvicorn
-    xgboost
-  ];
-
-  disabledTestPaths = [
-    # Requires unpackaged `autogen`
-    "tests/autogen/test_autogen_autolog.py"
-
-    # Requires unpackaged `diviner`
-    "tests/diviner/test_diviner_model_export.py"
-
-    # Requires unpackaged `sktime`
-    "examples/sktime/test_sktime_model_export.py"
-
-    # Requires `fastai` which would cause a circular dependency
-    "tests/fastai/test_fastai_autolog.py"
-    "tests/fastai/test_fastai_model_export.py"
-
-    # Requires `spacy` which would cause a circular dependency
-    "tests/spacy/test_spacy_model_export.py"
-
-    # Requires `tensorflow.keras` which is not included in our outdated version of `tensorflow` (2.13.0)
-    "tests/gateway/providers/test_ai21labs.py"
-    "tests/tensorflow/test_keras_model_export.py"
-    "tests/tensorflow/test_keras_pyfunc_model_works_with_all_input_types.py"
-    "tests/tensorflow/test_mlflow_callback.py"
-  ];
 
   # I (@GaetanLepage) gave up at enabling tests:
   # - They require a lot of dependencies (some unpackaged);
@@ -208,8 +88,15 @@ buildPythonPackage rec {
     description = "Open source platform for the machine learning lifecycle";
     mainProgram = "mlflow";
     homepage = "https://github.com/mlflow/mlflow";
-    changelog = "https://github.com/mlflow/mlflow/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/mlflow/mlflow/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    # Build from wheel which contains pure Python and pre-built JS bundle.
+    sourceProvenance = with lib.sourceTypes; [
+      binaryBytecode
+    ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      gquetel
+    ];
   };
-}
+})

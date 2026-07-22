@@ -209,7 +209,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  propagatedBuildInputs = lib.optional stdenv.hostPlatform.isLinux xorg-server.propagatedBuildInputs;
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux xorg-server.propagatedBuildInputs;
 
   passthru.tests.tigervnc = nixosTests.tigervnc;
 
@@ -222,5 +222,6 @@ stdenv.mkDerivation (finalAttrs: {
     broken = stdenv.hostPlatform.isDarwin;
     # Prevent a store collision.
     priority = 4;
+    mainProgram = "vncviewer";
   };
 })

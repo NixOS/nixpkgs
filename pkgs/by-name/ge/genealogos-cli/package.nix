@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "genealogos-${crate}";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "genealogos";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EQrKInsrqlpjySX6duylo++2qwglB3EqGfLFJucOQM8=";
+    hash = "sha256-7DD3anpFpQD4RMOUyuJZtbSi/U4Kb78v0FnfwUEFTOU=";
     # Genealogos' fixture tests contain valid nix store paths, and are thus incompatible with a fixed-output-derivation.
     # To avoid this, we just remove the tests
     postFetch = ''
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  cargoHash = "sha256-R3HQXPpTtqgXfc7nLNdJp5zUMEpfccKWOQtS5Y786Jc=";
+  cargoHash = "sha256-VPtj26ShMERqCMCKT6dTNp4rwQDqFVP8zO0rUSeqgrQ=";
 
   cargoBuildFlags = [
     "-p"

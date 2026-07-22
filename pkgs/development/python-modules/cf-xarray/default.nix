@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cf-xarray";
-  version = "0.11.0";
+  version = "0.11.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xarray-contrib";
     repo = "cf-xarray";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EUavqGATUZ5w3XzDiPKCveJfaTQwikS4wFIbcAAwH7k=";
+    hash = "sha256-njwK8wJH0YKzA7Lq8J0gBvAzNJa24XncF7IB9Dy6Lys=";
   };
 
   build-system = [

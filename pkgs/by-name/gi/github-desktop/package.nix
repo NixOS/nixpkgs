@@ -24,25 +24,24 @@
   libsecret,
   curl,
 
-  _experimental-update-script-combinators,
   nix-update-script,
 }:
 
 let
   inherit (stdenv.hostPlatform.node) arch platform;
-  cacheRootHash = "sha256-mR5geiPPAv+oK1efT3pMfnUT1keOxB8Ge1yiq4hLtj0=";
-  cacheAppHash = "sha256-Th3I9IPiHXEvj3FTCg3gefClnX1jDT8EPb/FzIVpjiY=";
+  cacheRootHash = "sha256-/3niIma45fx3cmplxZsSxmnuS+vGtzjF2wqqZ5DcuJI=";
+  cacheAppHash = "sha256-/hmUmaPNGoIaIY9qdlP5CG/IKn2nnKCpOqf9Wvj1AwM=";
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "github-desktop";
-  version = "3.5.8";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "desktop";
     repo = "desktop";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-K3+YpdSheeXMRehkWy044OFO9jpzfBjWOK39uXAqrsE=";
+    hash = "sha256-S4lWh+6tOP3hw5nAgg6i6//Sd+gaI2aQnoRDQzHsxUg=";
     fetchSubmodules = true;
     postCheckout = "git -C $out rev-parse HEAD > $out/.gitrev";
   };
@@ -101,9 +100,15 @@ stdenv.mkDerivation (finalAttrs: {
     yarn --cwd app/node_modules/desktop-notifications run install
 
     # use git from nixpkgs instead of an automatically downloaded one by dugite
-    makeWrapper ${lib.getExe git} app/node_modules/dugite/git/bin/git \
+    gitRoot=app/node_modules/dugite/git
+    makeWrapper ${lib.getExe git} "$gitRoot/bin/git" \
       --prefix PATH : ${lib.makeBinPath [ git-lfs ]}
 
+    mkdir -p "$gitRoot/libexec/git-core"
+
+    for script in ${git}/libexec/git-core/*; do
+      ln -s "$script" "$gitRoot/libexec/git-core/$(basename "$script")"
+    done
 
     # exception: printenvz needs `node-gyp` configure first for some reason
     pushd node_modules/printenvz
@@ -182,16 +187,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit (finalAttrs) cacheRoot cacheApp;
-    updateScript = _experimental-update-script-combinators.sequence [
-      (nix-update-script {
-        extraArgs = [
-          "--version-regex"
-          ''^release-(\d\.\d\.\d)$''
-        ];
-      })
-      # TODO: in the future, use `nix-update --custom-dep`.
-      ./update-yarn-caches.sh
-    ];
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        ''^release-(\d+\.\d+\.\d+)$''
+        "--custom-dep"
+        "cacheRoot"
+        "--custom-dep"
+        "cacheApp"
+      ];
+    };
   };
 
   meta = {

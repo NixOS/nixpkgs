@@ -10,16 +10,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cook-cli";
-  version = "0.29.1";
+  version = "0.32.1";
 
   src = fetchFromGitHub {
     owner = "cooklang";
     repo = "cookcli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-fg8qq4j9NbQvnduPRBwqp+GyQaHx2axqH39KeMZqy2k=";
+    hash = "sha256-r6h7IHYvy3/3OS+6aueHj9ONXSYJ1K7gq7pcNTqN8wY=";
   };
 
-  cargoHash = "sha256-eU/iOb5gHEjWdALeVQr2K3JkD0qOwco3Vkm05HWKdIs=";
+  cargoHash = "sha256-agUqBXhLsjS1nVRwzuiUZomhcYdiXBLU1xX9xh8zN+c=";
 
   # Build without the self-updating feature
   buildNoDefaultFeatures = true;
@@ -44,6 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   preBuild = ''
     npm run build-css
+    npm run build-js
   '';
 
   meta = {

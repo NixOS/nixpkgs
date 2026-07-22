@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation {
   pname = "fzf-zsh-plugin";
-  version = "1.0.0-unstable-2026-03-03";
+  version = "1.0.0-unstable-2026-06-21";
 
   src = fetchFromGitHub {
     owner = "unixorn";
     repo = "fzf-zsh-plugin";
-    rev = "d56d2387ce376f80e42c46654a9ee1f899a40b46";
-    hash = "sha256-twry9z9gDvRfH3AOWEV/a9HX4pnlMJDSw74Sm/MBwIk=";
+    rev = "70e2ac8a12c137c1b097a6ecfdc0236e5ef51d1b";
+    hash = "sha256-qwqezNXBRFKTWyMp+9Ss2hEAU9Bznc/DK0XNGZOfVOE=";
   };
 
   strictDeps = true;

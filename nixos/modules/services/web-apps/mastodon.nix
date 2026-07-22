@@ -145,9 +145,11 @@ let
     pkgs.writeShellScriptBin "mastodon-tootctl" ''
       set -a
       export RAILS_ROOT="${cfg.package}"
+      export HOME="/var/lib/mastodon"
       source "${envFile}"
       source /var/lib/mastodon/.secrets_env
       ${sourceExtraEnv}
+      cd /var/lib/mastodon
 
       sudo=exec
       if [[ "$USER" != ${cfg.user} ]]; then

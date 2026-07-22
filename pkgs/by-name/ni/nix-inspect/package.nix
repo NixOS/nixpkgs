@@ -12,7 +12,7 @@
   fetchpatch2,
 }:
 let
-  nixComponents = nixVersions.nixComponents_2_30;
+  nixComponents = nixVersions.nixComponents_2_31;
   src = fetchFromGitHub {
     owner = "bluskript";
     repo = "nix-inspect";

@@ -20,7 +20,7 @@ buildNpmPackage {
     owner = "mafintosh";
     repo = "hyperssh";
     rev = "v5.0.3";
-    hash = "sha256-vjPSNcQRsqu0ee0hownEE9y8dFf9dqaL7alGRc9WjcI=2";
+    hash = "sha256-vjPSNcQRsqu0ee0hownEE9y8dFf9dqaL7alGRc9WjcI=";
   };
 
   patches = [

@@ -51,10 +51,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     icalendar
     jsonpath-ng
     lxml
-    mpd2
     psutil
     pygobject3
     python-dateutil
+    python-mpd2
     requests
     requests-file
     tzdata

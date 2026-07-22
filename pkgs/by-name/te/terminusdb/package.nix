@@ -105,10 +105,8 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   nativeBuildInputs = [
-    (with rustPlatform; [
-      cargoSetupHook
-      bindgenHook # provides libclang
-    ])
+    rustPlatform.cargoSetupHook
+    rustPlatform.bindgenHook # provides libclang
     cargo
     installShellFiles
     protobuf

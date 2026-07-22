@@ -3,9 +3,10 @@
   fetchurl,
   lib,
   makeWrapper,
-  electron_39, # as in upstream bundle, see https://github.com/NixOS/nixpkgs/pull/510075
+  electron_40, # see https://github.com/NixOS/nixpkgs/pull/521495
   makeDesktopItem,
   imagemagick,
+  asar,
   autoPatchelfHook,
   writeScript,
   _7zz,
@@ -37,16 +38,27 @@ let
     ];
   };
 
-  filename =
-    if stdenv.hostPlatform.isDarwin then "Obsidian-${version}.dmg" else "obsidian-${version}.tar.gz";
-  src = fetchurl {
-    url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/${filename}";
-    hash =
-      if stdenv.hostPlatform.isDarwin then
-        "sha256-O4XBO0zlVRLobhcKfNKklOLbaVrIiMBgHhU8uFt3iBs="
-      else
-        "sha256-/L4IsRHZwf2wm5wIlSsG4cgpxiFj66JYTEtOyFm+B50=";
+  srcs = rec {
+    x86_64-linux = fetchurl {
+      url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}.tar.gz";
+      hash = "sha256-/L4IsRHZwf2wm5wIlSsG4cgpxiFj66JYTEtOyFm+B50=";
+    };
+
+    aarch64-linux = fetchurl {
+      url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}-arm64.tar.gz";
+      hash = "sha256-a8hye/27bXMdWvmgb1HW3nBhxoyQjIrotDqe03miAmA=";
+    };
+
+    x86_64-darwin = fetchurl {
+      url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/Obsidian-${version}.dmg";
+      hash = "sha256-O4XBO0zlVRLobhcKfNKklOLbaVrIiMBgHhU8uFt3iBs=";
+    };
+
+    aarch64-darwin = x86_64-darwin;
   };
+
+  src =
+    srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   icon = fetchurl {
     url = "https://obsidian.md/images/obsidian-logo-gradient.svg";
@@ -76,11 +88,21 @@ let
       autoPatchelfHook
       makeWrapper
       imagemagick
+      asar
     ];
     installPhase = ''
       runHook preInstall
       mkdir -p $out/bin
-      makeWrapper ${electron_39}/bin/electron $out/bin/obsidian \
+
+      # Mark Obsidian's app:// scheme `corsEnabled` to fix the internal PDF
+      # viewer; see https://github.com/NixOS/nixpkgs/pull/525772 for details.
+      # Remove once upstream registers the scheme with `corsEnabled`.
+      asar extract resources/app.asar app-src
+      substituteInPlace app-src/main.js \
+        --replace-fail "supportFetchAPI: true," "supportFetchAPI: true, corsEnabled: true,"
+      asar pack app-src resources/app.asar
+
+      makeWrapper ${electron_40}/bin/electron $out/bin/obsidian \
         --add-flags $out/share/obsidian/app.asar \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-wayland-ime=true --wayland-text-input-version=3}}" \
         --add-flags ${lib.escapeShellArg commandLineArgs}
@@ -96,13 +118,18 @@ let
       runHook postInstall
     '';
 
-    passthru.updateScript = writeScript "updater" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl jq common-updater-scripts
-      set -eu -o pipefail
-      latestVersion="$(curl -sS https://raw.githubusercontent.com/obsidianmd/obsidian-releases/master/desktop-releases.json | jq -r '.latestVersion')"
-      update-source-version obsidian "$latestVersion"
-    '';
+    passthru = {
+      inherit srcs;
+      updateScript = writeScript "updater" ''
+        #!/usr/bin/env nix-shell
+        #!nix-shell -i bash -p curl jq common-updater-scripts
+        set -eu -o pipefail
+        latestVersion="$(curl -sS https://raw.githubusercontent.com/obsidianmd/obsidian-releases/master/desktop-releases.json | jq -r '.latestVersion')"
+        for platform in ${toString meta.platforms}; do
+          update-source-version obsidian "$latestVersion" --ignore-same-version --source-key=passthru.srcs.$platform
+        done
+      '';
+    };
   };
 
   darwin = stdenv.mkDerivation {

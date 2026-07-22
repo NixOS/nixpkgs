@@ -13,13 +13,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "krunkit";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
-    owner = "containers";
+    owner = "libkrun";
     repo = "krunkit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-T3PbSDaMqR/DLaTe1/tyMx/KseU5ENFzz1Gxd5/hRao=";
+    hash = "sha256-43XqNofzKi310nhxTNo/Gj5didVa/u/gV05hglecLtk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {

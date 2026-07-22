@@ -20,7 +20,7 @@ let
   inherit (lib.strings) concatStringsSep;
 
   inherit (cudaPackages)
-    cuda_cccl
+    cccl
     cuda_cudart
     cuda_nvcc
     cuda_nvml_dev
@@ -77,7 +77,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ucx
   ]
   ++ optionals enableCuda [
-    cuda_cccl
+    cccl
     cuda_cudart
     cuda_nvml_dev
     nccl

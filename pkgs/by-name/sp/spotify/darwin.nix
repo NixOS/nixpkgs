@@ -11,7 +11,7 @@
 stdenv.mkDerivation {
   inherit pname;
 
-  version = "1.2.88.483";
+  version = "1.2.92.147";
 
   src =
     # WARNING: This Wayback Machine URL redirects to the closest timestamp.
@@ -20,13 +20,13 @@ stdenv.mkDerivation {
     # https://web.archive.org/web/*/https://download.scdn.co/Spotify.dmg
     if stdenv.hostPlatform.isAarch64 then
       (fetchurl {
-        url = "https://web.archive.org/web/20260501151114/https://download.scdn.co/SpotifyARM64.dmg";
-        hash = "sha256-rBoJ5PKge4pr90FqYwsG+6JqyKvc3sKyPXM7OXXEmz8=";
+        url = "https://web.archive.org/web/20260607203830/https://download.scdn.co/SpotifyARM64.dmg";
+        hash = "sha256-rQuvF7LWHBR3q8GJQWO671n1NRDKinQps+zYfXPktrU=";
       })
     else
       (fetchurl {
-        url = "https://web.archive.org/web/20260501151019/https://download.scdn.co/Spotify.dmg";
-        hash = "sha256-o/qDYnVhkrca2TBDoqxsKWq0QfDQyHdhU4llbmIGUBQ=";
+        url = "https://web.archive.org/web/20260607203705/https://download.scdn.co/Spotify.dmg";
+        hash = "sha256-jX7nBPiwxnKXWpN4/XiXKBl6Eg01954+VDwWRoJfdbk=";
       });
 
   nativeBuildInputs = [ undmg ];

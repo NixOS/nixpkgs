@@ -3,7 +3,6 @@
   newScope,
   stdenv,
   fetchzip,
-  replaceVars,
   bash,
   pkg-config,
   gfortran,
@@ -110,24 +109,24 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "petsc";
-  version = "3.24.6";
+  version = "3.25.2";
 
   src = fetchzip {
     url = "https://web.cels.anl.gov/projects/petsc/download/release-snapshots/petsc-${finalAttrs.version}.tar.gz";
-    hash = "sha256-PIW+dnIgnzQjpHqNBi4k730Bg7goO3G9zYVYoehvn7k=";
+    hash = "sha256-Q+QrOdSZO9wqdQKKVfhJzKaB3U80WdlegYtdZW7ScCg=";
   };
-
-  patches = [
-    (replaceVars ./fix-petsc4py-install-prefix.patch {
-      PYTHON_SITEPACKAGES = python3Packages.python.sitePackages;
-    })
-  ];
 
   postPatch = ''
     patchShebangs ./lib/petsc/bin
 
     substituteInPlace config/example_template.py \
       --replace-fail "/usr/bin/env bash" "${bash}/bin/bash"
+
+    substituteInPlace config/BuildSystem/config/packages/petsc4py.py \
+      --replace-fail "installLibPath = os.path.join(self.installDir, 'lib')" \
+      "installLibPath = os.path.join(self.installDir, '${python3Packages.python.sitePackages}')" \
+      --replace-fail "self.addDefine('PETSC4PY_INSTALL_PATH','\"'+os.path.join(self.installdir.dir,'lib')+'\"')" \
+      "self.addDefine('PETSC4PY_INSTALL_PATH','\"'+installLibPath+'\"')"
   '';
 
   strictDeps = true;
@@ -232,11 +231,16 @@ stdenv.mkDerivation (finalAttrs: {
   # the library is installed and available.
   doInstallCheck = true;
   installCheckTarget = "check_install";
-
-  # The PETSC4PY=no flag disables the ex100 test,
-  # which compiles C code to load Python modules for solving a math problem.
-  # This test fails on the Darwin platform but is rarely a common use case for petsc4py.
-  installCheckFlags = lib.optional stdenv.hostPlatform.isDarwin "PETSC4PY=no";
+  # check_install is defined in PETSc's top-level makefile. Select it directly
+  # instead of the default GNUmakefile wrapper, then check the installed prefix
+  # by pointing PETSC_DIR at $out. PETSC_ARCH must be empty for prefix installs,
+  # where lib/petsc/conf is not nested below an architecture-specific build dir.
+  installCheckFlags = [
+    "-f"
+    "makefile"
+    "PETSC_DIR=${placeholder "out"}"
+    "PETSC_ARCH="
+  ];
 
   nativeInstallCheckInputs = [
     mpiCheckPhaseHook

@@ -10,14 +10,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.6.4";
+  version = "3.6.7";
   pyproject = true;
   pname = "rpy2";
 
   disabled = isPyPy;
   src = fetchPypi {
     inherit version pname;
-    hash = "sha256-ok6N2lxf+MvSuOvRzPbxpaCldmI3AM+R4szpjUGnn9M=";
+    hash = "sha256-8ftGSc59FOk1EzCI3sl82ifrN858xxA4X4HcpVb+jJ8=";
   };
 
   propagatedBuildInputs = [

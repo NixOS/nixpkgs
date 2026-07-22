@@ -21,7 +21,7 @@ buildPecl {
 
   buildInputs = [ rabbitmq-c ];
 
-  AMQP_DIR = rabbitmq-c;
+  env.AMQP_DIR = rabbitmq-c;
 
   meta = {
     changelog = "https://github.com/php-amqp/php-amqp/releases/tag/v${version}";

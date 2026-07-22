@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  unstableGitUpdater,
   openssl,
   nss,
   nspr,
@@ -25,13 +26,13 @@
 
 stdenv.mkDerivation {
   pname = "john";
-  version = "rolling-2604";
+  version = "1.9.0-Jumbo-1-unstable-2026-06-07";
 
   src = fetchFromGitHub {
     owner = "openwall";
     repo = "john";
-    rev = "f514ece8ec4ae5e38ad75aaa322eac86d73dcd76";
-    hash = "sha256-Fzt9KnMFBTdPpQMSlXe/zG9LMylAZnC6uzU4yJ6HSUk=";
+    rev = "309326510e585c7a1340dab2e475c2ebfa6295aa";
+    hash = "sha256-9bk5Icnm7PgQdSVrAKWHaKN0POctVKbofR7Aa9T2fXE=";
   };
 
   patches = lib.optionals withOpenCL [
@@ -39,9 +40,6 @@ stdenv.mkDerivation {
       ocl_icd = ocl-icd;
     })
   ];
-
-  # Fix build with gcc 15
-  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
   postPatch = ''
     sed -ri -e '
@@ -97,6 +95,10 @@ stdenv.mkDerivation {
       scapy
       lxml
     ])
+    # For office2john.py
+    ++ (with python3Packages; [
+      olefile
+    ])
     ++ (with perlPackages; [
       # For pass_gen.pl
       DigestMD4
@@ -109,9 +111,7 @@ stdenv.mkDerivation {
     ]);
   # TODO: Get dependencies for radius2john.pl and lion2john-alt.pl
 
-  # gcc -DAC_BUILT -Wall vncpcap2john.o memdbg.o -g    -lpcap -fopenmp -o ../run/vncpcap2john
-  # gcc: error: memdbg.o: No such file or directory
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   postInstall = ''
     mkdir -p "$out/bin" "$out/etc/john" "$out/share/john" "$out/share/doc/john" "$out/share/john/rules" "$out/share/john/opencl" "$out/${perlPackages.perl.libPrefix}"
@@ -132,6 +132,10 @@ stdenv.mkDerivation {
       wrapProgram "$i" --prefix PERL5LIB : "$PERL5LIB:$out/${perlPackages.perl.libPrefix}"
     done
   '';
+
+  passthru.updateScript = unstableGitUpdater {
+    tagFormat = "[0-9].*";
+  };
 
   meta = {
     description = "John the Ripper password cracker";

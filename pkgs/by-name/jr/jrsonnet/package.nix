@@ -8,34 +8,28 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jrsonnet";
-  version = "0.4.2";
+  version = "0.5.0-pre98";
 
   src = fetchFromGitHub {
-    rev = "v${finalAttrs.version}";
     owner = "CertainLach";
     repo = "jrsonnet";
-    sha256 = "sha256-OX+iJJ3vdCsWWr8x31psV9Vne6xWDZnJc83NbJqMK1A=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2dNzxZnvnw8TsKnnIlHGpuixrqe4z0a4faOBPv2N+ws=";
   };
 
-  cargoHash = "sha256-DA31NatwQyf3RPpaI38DdAujpRyZfJvoHgr2CZSjH3s=";
+  cargoHash = "sha256-QPJ1kVk/TftAROiBVBN6J4PZ1pwjtjldtgmJxSTC1Ao=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  # skip flaky tests
-  checkFlags = [
-    "--skip=tests::native_ext"
-  ];
-
   postInstall = ''
     ln -s $out/bin/jrsonnet $out/bin/jsonnet
-
   ''
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     for shell in bash zsh fish; do
       installShellCompletion --cmd jrsonnet \
-        --$shell <($out/bin/jrsonnet --generate $shell /dev/null)
+        --$shell <($out/bin/jrsonnet generate $shell)
       installShellCompletion --cmd jsonnet \
-        --$shell <($out/bin/jrsonnet --generate $shell /dev/null | sed s/jrsonnet/jsonnet/g)
+        --$shell <($out/bin/jrsonnet generate $shell | sed s/jrsonnet/jsonnet/g)
     done
   '';
 

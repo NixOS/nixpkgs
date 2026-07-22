@@ -51,11 +51,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libreswan";
-  version = "5.3";
+  version = "5.3.1";
 
   src = fetchurl {
     url = "https://download.libreswan.org/libreswan-${version}.tar.gz";
-    hash = "sha256-wdNQw/Mpb9IbnbB5TiPT8xmykviAv4F4uC71xjkcYMA=";
+    hash = "sha256-4/DlHYtkK/aTpqjMbx5ip2TP9BgKAjvzx+QtQ6Yt/p4=";
   };
 
   strictDeps = true;

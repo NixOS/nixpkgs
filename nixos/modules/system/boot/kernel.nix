@@ -35,6 +35,15 @@ in
 
 {
 
+  imports = [
+    (mkRemovedOptionModule [ "boot" "vesa" ] ''
+      The `boot.vesa` option has been removed. It was deprecated in 2020
+      because Xorg now works better with kernel modesetting. If you still
+      need the legacy VESA 800x600 fallback, set
+      `boot.kernelParams = [ "vga=0x317" "nomodeset" ];` directly.
+    '')
+  ];
+
   ###### interface
 
   options = {
@@ -178,19 +187,6 @@ in
       description = ''
         The kernel console `loglevel`. All Kernel Messages with a log level smaller
         than this setting will be printed to the console.
-      '';
-    };
-
-    boot.vesa = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        (Deprecated) This option, if set, activates the VESA 800x600 video
-        mode on boot and disables kernel modesetting. It is equivalent to
-        specifying `[ "vga=0x317" "nomodeset" ]` in the
-        {option}`boot.kernelParams` option. This option is
-        deprecated as of 2020: Xorg now works better with modesetting, and
-        you might want a different VESA vga setting, anyway.
       '';
     };
 
@@ -410,7 +406,7 @@ in
             ln -s ${config.hardware.deviceTree.package} $out/dtbs
           ''}
 
-          echo -n "$kernelParams" > $out/kernel-params
+          echo -n "''${kernelParams[@]}" > $out/kernel-params
 
           ${optionalString config.boot.initrd.enable ''
             ln -s ${initrdPath} $out/initrd
@@ -427,10 +423,6 @@ in
       # (so you don't need to reboot to have changes take effect).
       boot.kernelParams = [
         "loglevel=${toString config.boot.consoleLogLevel}"
-      ]
-      ++ optionals config.boot.vesa [
-        "vga=0x317"
-        "nomodeset"
       ];
 
       boot.kernel.sysctl."kernel.printk" = mkDefault config.boot.consoleLogLevel;

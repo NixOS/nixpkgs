@@ -44,6 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
+    homepage = "https://github.com/humblepenguinn/envio";
     changelog = "https://github.com/humblepenguinn/envio/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Modern and secure CLI tool for managing environment variables";
     mainProgram = "envio";

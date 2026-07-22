@@ -84,6 +84,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/supriya-project/uqbar";
     changelog = "https://github.com/supriya-project/uqbar/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ davisrichard437 ];
+    maintainers = [ ];
   };
 })

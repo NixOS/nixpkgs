@@ -106,6 +106,8 @@ lib.makeScope newScope (self: {
 
   melonds = self.callPackage ./cores/melonds.nix { };
 
+  melondsds = self.callPackage ./cores/melondsds.nix { };
+
   mesen = self.callPackage ./cores/mesen.nix { };
 
   mesen-s = self.callPackage ./cores/mesen-s.nix { };
@@ -138,6 +140,8 @@ lib.makeScope newScope (self: {
   pcsx_rearmed = lib.lowPrio (self.pcsx-rearmed); # added 2024-11-20
 
   picodrive = self.callPackage ./cores/picodrive.nix { };
+
+  pokemini = self.callPackage ./cores/pokemini.nix { };
 
   play = self.callPackage ./cores/play.nix { };
 

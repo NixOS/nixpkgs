@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mkdocs-callouts";
-  version = "1.16.0";
+  version = "1.16.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sondregronas";
     repo = "mkdocs-callouts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CffhtU5ur/QleVOk2twh+7kbHUB6HWEXt+E1YbI5I94=";
+    hash = "sha256-I7KHZgUV67Ff9Nt1z1LVjia9eQ5V+7y24ZepkpooT2w=";
   };
 
   build-system = [

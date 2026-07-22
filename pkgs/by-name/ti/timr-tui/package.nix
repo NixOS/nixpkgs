@@ -14,16 +14,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "timr-tui";
-  version = "1.8.1";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "sectore";
     repo = "timr-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9HaKBrW0MkNzDErEIINztLyGpN4mkGF5RpmXohgbK6A=";
+    hash = "sha256-MEDqrP/wlFHMkXFUwn+VQu8gEjc40xI5xcetG/VqSic=";
   };
 
-  cargoHash = "sha256-J6Zi8oEAsbxMQe+oCk9T6Ic1hPdNXI9iFmn4Z0d0lFE=";
+  cargoHash = "sha256-lQw6p0+uph2P4OdQq2Mz3EHc9o8RcH3SjYPzGvPn2tk=";
 
   # Enable upstream "sound" feature when requested
   buildFeatures = lib.optionals enableSound [ "sound" ];

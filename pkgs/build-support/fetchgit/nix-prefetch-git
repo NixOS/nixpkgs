@@ -514,6 +514,27 @@ HOME="$tmpHomePath"
 unset XDG_CONFIG_HOME
 export GIT_CONFIG_NOSYSTEM=1
 
+
+# Append a config entry via the GIT_CONFIG_* environment variables. Unlike
+# `git config` (writes a single repo) or `git -c` (one invocation), these
+# propagate to every git invocation *and* its children, including (nested)
+# submodule fetches. Done additively so it composes with any GIT_CONFIG_* the
+# caller passes via `impureEnvVars`.
+git_config_env(){
+    export GIT_CONFIG_COUNT=$(( ${GIT_CONFIG_COUNT:-0} + 1 ))
+    export "GIT_CONFIG_KEY_$(( GIT_CONFIG_COUNT - 1 ))=$1"
+    export "GIT_CONFIG_VALUE_$(( GIT_CONFIG_COUNT - 1 ))=$2"
+}
+
+# Disable maintenance and auto-gc: they're not useful for a short-lived clone,
+# and their background/detached processes race the later `.git` removal,
+# producing non-deterministic output (and outright failures with nested
+# submodules, where the legacy gc.auto path still fires).
+# https://github.com/NixOS/nixpkgs/issues/524215
+git_config_env maintenance.auto false
+git_config_env gc.auto 0
+git_config_env gc.autoDetach false
+
 if test -n "$builder"; then
     test -n "$out" -a -n "$url" -a -n "$rev" || usage
     if test -n "$rootDir"; then

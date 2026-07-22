@@ -36,14 +36,14 @@
 
 buildPythonPackage rec {
   pname = "pelican";
-  version = "4.11.0";
+  version = "4.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getpelican";
     repo = "pelican";
     tag = version;
-    hash = "sha256-SrzHAqDX+DCeaWMmlG8tgA1RKLDnICkvDIE/kUQZN+s=";
+    hash = "sha256-g/wm4ZA4KBMnvpe58ZQ7lTUBF6PywC4IivmBBco4F00=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     postFetch = ''
@@ -53,7 +53,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pelican/tests/test_pelican.py \
-      --replace "'git'" "'${git}/bin/git'"
+      --replace-fail "\"git\"" "'${git}/bin/git'"
   '';
 
   build-system = [ pdm-backend ];
@@ -88,6 +88,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     beautifulsoup4
+    git
     lxml
     mock
     pandoc
@@ -95,23 +96,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlags = [
-    # DeprecationWarning: 'jinja2.Markup' is deprecated and...
-    "-Wignore::DeprecationWarning"
-    # PendingDeprecationWarning: `Publisher.set_components()` will be removed in ...
-    "-Wignore::PendingDeprecationWarning"
-  ];
-
   disabledTests = [
     # AssertionError
     "test_basic_generation_works"
     "test_custom_generation_works"
     "test_custom_locale_generation_works"
-    "test_deprecated_attribute"
-    # AttributeError
-    "test_wp_custpost_true_dirpage_false"
-    "test_can_toggle_raw_html_code_parsing"
-    "test_dirpage_directive_for_page_kind"
   ];
 
   env.LC_ALL = "en_US.UTF-8";

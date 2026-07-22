@@ -2,11 +2,17 @@
   lib,
   fetchFromGitHub,
   stdenvNoCC,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "knewave";
   version = "2012-07-30";
+
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
   src = fetchFromGitHub {
     owner = "theleagueof";
@@ -15,14 +21,7 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-SaJU2GlxU7V3iJNQzFKg1YugaPsiJuSZpC8NCqtWyz0=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -D -m444 -t $out/share/fonts/truetype $src/*.ttf
-    install -D -m444 -t $out/share/fonts/opentype $src/*.otf
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Bold, painted face for the rocker within";
