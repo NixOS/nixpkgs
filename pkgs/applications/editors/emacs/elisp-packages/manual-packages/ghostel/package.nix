@@ -26,7 +26,7 @@ let
   module = stdenv.mkDerivation (finalAttrs: {
     inherit pname version src;
 
-    deps = zig.fetchDeps {
+    zigDeps = zig.fetchDeps {
       inherit (finalAttrs) src pname version;
       fetchAll = true;
       hash = "sha256-yrVgiofdmVjTGJ+PGPGRCc8gb/JcEca1uAzIoPgHHqU=";
@@ -49,7 +49,7 @@ let
     zigBuildFlags = finalAttrs.zigCheckFlags;
 
     postConfigure = ''
-      cp -rLT ${finalAttrs.deps} "$ZIG_GLOBAL_CACHE_DIR/p"
+      cp -rLT ${finalAttrs.zigDeps} "$ZIG_GLOBAL_CACHE_DIR/p"
       chmod -R u+w "$ZIG_GLOBAL_CACHE_DIR/p"
     '';
   });
@@ -69,10 +69,10 @@ melpaBuild {
   '';
 
   passthru = {
-    updateScript = nix-update-script { extraArgs = [ "--custom-dep=deps" ]; };
+    updateScript = nix-update-script { };
 
     inherit module;
-    inherit (module) deps;
+    inherit (module) zigDeps;
   };
 
   meta = {
