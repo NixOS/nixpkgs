@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  withAi ? true,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -16,6 +17,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-dROHNUF3qDsohMTTb/1pwHjjUslWfOBx82jOgefjPH8=";
+
+  buildNoDefaultFeatures = withAi;
+  buildFeatures = lib.optionals withAi [
+    "semantic"
+  ];
 
   # I was not able to disable the failing checks when packaging
   # Feel free to fix
