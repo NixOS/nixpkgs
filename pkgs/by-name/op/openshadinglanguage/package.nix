@@ -32,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cmakeFlags = [
+    (lib.cmakeBool "LLVM_STATIC" true)
     (lib.cmakeBool "USE_QT" false)
 
     # Build system implies llvm-config and llvm-as are in the same directory.
@@ -60,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     hexdump
     libclang
+    libxml2
     llvm
     openexr
     openimageio
@@ -68,9 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.pybind11
     robin-map
     zlib
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libxml2
   ];
 
   propagatedBuildInputs = [
