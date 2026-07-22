@@ -130,7 +130,7 @@ mkRocqDerivation {
     mathcomp.boot
     mathcomp.algebra
     mathcomp-finmap
-    mathcomp.fingroup
+    mathcomp.finite-group
     mathcomp-bigenough
   ];
 
