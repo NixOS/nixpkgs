@@ -52,13 +52,6 @@ def common_args(parser: argparse.ArgumentParser):
 	)
 
 	parser.add_argument(
-		"-y",
-		"--yes",
-		action="store_true",
-		help="Automatically confirm all backend execution prompts (dangerous)",
-	)
-
-	parser.add_argument(
 		"--no-sandbox",
 		action="store_true",
 		dest="disable_sandbox",
