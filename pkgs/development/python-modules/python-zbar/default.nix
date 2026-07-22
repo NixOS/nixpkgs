@@ -9,7 +9,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "python-zbar";
+  pname = "zbar";
   version = "0.23.93";
   pyproject = true;
 
@@ -22,6 +22,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     cd python
+    substituteInPlace ./setup.py \
+      --replace-fail "version = '0.22.2'" "version = '0.23.93'"
   '';
 
   build-system = [ setuptools ];
