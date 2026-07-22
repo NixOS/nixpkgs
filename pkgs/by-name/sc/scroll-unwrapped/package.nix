@@ -21,6 +21,7 @@
   wayland-protocols,
   libdrm,
   evdev-proto,
+  nixosTests,
   # Scroll-specific:
   glslang,
   hwdata,
@@ -139,6 +140,8 @@ stdenv.mkDerivation (finalAttrs: {
       # Scroll-specific
       (lib.strings.mesonOption "c_args" "-Wno-error=maybe-uninitialized")
     ];
+
+  passthru.tests.basic = nixosTests.scroll;
 
   meta = {
     description = "Sway fork with a scrolling tiling layout";
