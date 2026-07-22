@@ -1,11 +1,11 @@
 {
   lib,
-  python3Packages,
+  python313Packages, # Require a working version of Kivy, which is not yet working with Python 3.14
   fetchFromGitHub,
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication (finalAttrs: {
+python313Packages.buildPythonApplication (finalAttrs: {
   pname = "sideband";
   version = "2.0.0";
   pyproject = true;
@@ -35,12 +35,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
         "2.0.0"
   '';
 
-  build-system = with python3Packages; [
+  build-system = with python313Packages; [
     setuptools
   ];
 
   dependencies =
-    with python3Packages;
+    with python313Packages;
     [
       audioop-lts
       beautifulsoup4
