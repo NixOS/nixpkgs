@@ -1861,6 +1861,10 @@ in
   wasabibackend = runTest ./wasabibackend.nix;
   wastebin = runTest ./wastebin.nix;
   watchdogd = runTest ./watchdogd.nix;
+  waterfox = runTest {
+    imports = [ ./firefox.nix ];
+    _module.args.firefoxPackage = pkgs.waterfox;
+  };
   watt = runTest ./watt.nix;
   webhook = runTest ./webhook.nix;
   weblate = runTest ./web-apps/weblate.nix;
