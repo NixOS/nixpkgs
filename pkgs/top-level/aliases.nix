@@ -2183,6 +2183,7 @@ mapAliases {
   smtube = throw "'smtube' has been removed as it depends on insecure&unmaintained qtwebkit"; # Added 2026-04-26
   snapcraft = throw "snapcraft was removed in Sep 25 following removal of LXD from nixpkgs"; # Added 2025-09-18
   snort2 = throw "snort2 has been removed as it is deprecated and unmaintained by upstream. Consider using snort (snort3) package instead."; # 2025-05-21
+  snowblind = throw "'snowblind' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   snowman = throw "snowman has been removed as it is unmaintained by upstream"; # 2025-10-12
   soldat-unstable = throw "'soldat-unstable' has been renamed to/replaced by 'opensoldat'"; # Converted to throw 2025-10-27
   somatic-sniper = throw "somatic-sniper has been removed as it was archived in 2020 and fails to build."; # Added 2025-10-14
