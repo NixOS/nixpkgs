@@ -670,6 +670,7 @@ allPkgLists
     // {
       # for backward compatibility
       latexindent = texlive.pkgs.latexindent;
+      pygmentex = texlive.pkgs.pigmentex;
     };
 
   combine =
