@@ -41,6 +41,8 @@
             hevc = true;
             av1 = true;
           };
+          downMixAudioBoost = 2;
+          downMixStereoAlgorithm = "Dave750";
         };
       };
       environment.systemPackages = with pkgs; [ ffmpeg ];
@@ -177,6 +179,10 @@
           # HEVC RExt color depth verification
           assert config.get("EnableDecodingColorDepth10HevcRext") == True, f"HEVC RExt 10bit: expected True, got '{config.get('EnableDecodingColorDepth10HevcRext')}'"
           assert config.get("EnableDecodingColorDepth12HevcRext") == True, f"HEVC RExt 12bit: expected True, got '{config.get('EnableDecodingColorDepth12HevcRext')}'"
+
+          # Stereo downmixing verification
+          assert config.get("DownMixAudioBoost") == 2, f"DownMix audio boost: expected 2, got '{config.get('DownMixAudioBoost')}'"
+          assert config.get("DownMixStereoAlgorithm") == "Dave750", f"DownMix stereo algorithm: expected 'Dave750', got '{config.get('DownMixStereoAlgorithm')}'"
 
           # Hardware decoding codecs verification
           decoding_codecs = config.get("HardwareDecodingCodecs", [])
