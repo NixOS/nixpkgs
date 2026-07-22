@@ -151,6 +151,10 @@ mkPackage rec {
   '';
 
   meta = {
+    identifiers.purlParts = {
+      type = "github";
+      spec = "mono/msbuild@${version}";
+    };
     description = "Mono version of Microsoft Build Engine, the build platform for .NET, and Visual Studio";
     mainProgram = "msbuild";
     homepage = "https://github.com/mono/msbuild";

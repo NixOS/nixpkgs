@@ -35,26 +35,34 @@ let
       "aarch64-linux"
       "aarch64-darwin"
     ];
-      meta.identifiers.purlParts = {
-        type = "github";
-        spec = "obsidianmd/obsidian-releases@${version}";
-      };
   };
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}.tar.gz";
       hash = "sha256-08vjdcv6QCTbGRC5gZFkn0E0xcSK7l5gtudxOYfc2yg=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "obsidianmd/obsidian-releases@${version}";
+      };
     };
 
     aarch64-linux = fetchurl {
       url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}-arm64.tar.gz";
       hash = "sha256-mKrDTR8TKjXPUG/D+hltWV3N7v3r1EsMxfqqehohDeI=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "obsidianmd/obsidian-releases@${version}";
+      };
     };
 
     aarch64-darwin = fetchurl {
       url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/Obsidian-${version}.dmg";
       hash = "sha256-BdqlT14aRFj3XaKfj6qhfo43rhaZhDJTf2dMYm25m84=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "obsidianmd/obsidian-releases@${version}";
+      };
     };
   };
 

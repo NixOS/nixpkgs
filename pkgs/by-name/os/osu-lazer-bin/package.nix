@@ -22,6 +22,10 @@ let
       x86_64-linux = fetchurl {
         url = "https://github.com/ppy/osu/releases/download/${version}-lazer/osu.AppImage";
         hash = "sha256-3O2UY7UBAJyV2+2JGr0vCswu+4TuQzb1scw7fASl/H0=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "ppy/osu@${version}";
+        };
       };
     }
     .${stdenvNoCC.system} or (throw "osu-lazer-bin: ${stdenvNoCC.system} is unsupported.");
@@ -46,10 +50,6 @@ let
       "aarch64-darwin"
       "x86_64-linux"
     ];
-        meta.identifiers.purlParts = {
-          type = "github";
-          spec = "ppy/osu@${version}";
-        };
   };
 
   passthru.updateScript = ./update.sh;

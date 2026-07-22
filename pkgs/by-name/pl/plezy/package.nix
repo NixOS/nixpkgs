@@ -146,6 +146,10 @@ let
     src = fetchurl {
       url = "https://github.com/edde746/plezy/releases/download/${version}/plezy-macos.dmg";
       hash = "sha256-4YAoKfRybEjjj4vW53tUTq3r4XOI9y0M3T409/8tcg8=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "edde746/plezy@${version}";
+      };
     };
 
     nativeBuildInputs = [

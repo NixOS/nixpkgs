@@ -71,6 +71,10 @@ stdenv.mkDerivation (finalAttrs: {
     fetchurl {
       url = "https://github.com/facebook/buck2/releases/download/${finalAttrs.version}/${binary}-${platform-suffix}.zst";
       hash = archHashes.${binary};
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "facebook/buck2@${finalAttrs.version}";
+      };
     }
   ) binaries;
 
@@ -130,10 +134,6 @@ stdenv.mkDerivation (finalAttrs: {
     };
 
     updateScript = ./update.nu;
-      meta.identifiers.purlParts = {
-        type = "github";
-        spec = "facebook/buck2@${finalAttrs.version}";
-      };
   };
 
   meta = {

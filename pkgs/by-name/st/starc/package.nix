@@ -13,7 +13,7 @@ appimageTools.wrapType2 (finalAttrs: {
     hash = "sha256-ZNd69E70yTFOQGBAZuOJqKlzGS+0xSsAP2uh1EWb6B8=";
     meta.identifiers.purlParts = {
       type = "github";
-      spec = "story-apps/starc@${version}";
+      spec = "story-apps/starc@${finalAttrs.version}";
     };
   };
 

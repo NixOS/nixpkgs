@@ -34,14 +34,26 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-linux" = fetchurl {
         url = "https://github.com/speakeasy-api/speakeasy/releases/download/v${finalAttrs.version}/speakeasy_linux_amd64.zip";
         hash = "sha256-5qG9kl18ZXDxPj5FKzFQINL6UmBuvkLMEd9iidOZmHE=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "speakeasy-api/speakeasy@${finalAttrs.version}";
+        };
       };
       "aarch64-darwin" = fetchurl {
         url = "https://github.com/speakeasy-api/speakeasy/releases/download/v${finalAttrs.version}/speakeasy_darwin_arm64.zip";
         hash = "sha256-hDnPVymWxeiNunImezavrBrFvAFu+h/MgREoDbk/qPs=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "speakeasy-api/speakeasy@${finalAttrs.version}";
+        };
       };
       "aarch64-linux" = fetchurl {
         url = "https://github.com/speakeasy-api/speakeasy/releases/download/v${finalAttrs.version}/speakeasy_linux_arm64.zip";
         hash = "sha256-aNKx8HJFN0oMOgKvr5BQQhATc2wQAtir9+C3dk2Orng=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "speakeasy-api/speakeasy@${finalAttrs.version}";
+        };
       };
     };
     updateScript = writeShellScript "update-speakeasy" ''
@@ -62,10 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
         update-source-version "speakeasy-cli" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
       done
     '';
-        meta.identifiers.purlParts = {
-          type = "github";
-          spec = "speakeasy-api/speakeasy@${finalAttrs.version}";
-        };
   };
 
   meta = {

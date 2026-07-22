@@ -41,6 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   meta = {
+    identifiers.purlParts = {
+      type = "github";
+      spec = "jvoisin/fortify-headers@${finalAttrs.version}";
+    };
     description = "Standalone header-based fortify-source implementation";
     homepage = "https://git.2f30.org/fortify-headers";
     license = lib.licenses.bsd0;

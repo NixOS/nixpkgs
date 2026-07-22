@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://github.com/google/google-java-format/releases/download/v${finalAttrs.version}/google-java-format-${finalAttrs.version}-all-deps.jar";
     meta.identifiers.purlParts = {
       type = "github";
-      spec = "google/google-java-format@${version}";
+      spec = "google/google-java-format@${finalAttrs.version}";
     };
   };
 

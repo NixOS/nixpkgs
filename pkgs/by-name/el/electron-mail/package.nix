@@ -15,15 +15,19 @@ let
     x86_64-linux = fetchurl {
       url = "https://github.com/vladimiry/ElectronMail/releases/download/v${version}/electron-mail-${version}-linux-x86_64.AppImage";
       hash = "sha256-dzWp1HsFHGurzxqzLcNsUvcSEFcuushcwtUL+ogOoAg=";
-    };
-    aarch64-darwin = fetchurl {
-      url = "https://github.com/vladimiry/ElectronMail/releases/download/v${version}/electron-mail-${version}-mac-arm64.dmg";
-      hash = "sha256-eGOpOBZ/6CSBaFFXxD0tYdhWPCTwR9n+/stsEH7vR2U=";
-    };
       meta.identifiers.purlParts = {
         type = "github";
         spec = "vladimiry/ElectronMail@${version}";
       };
+    };
+    aarch64-darwin = fetchurl {
+      url = "https://github.com/vladimiry/ElectronMail/releases/download/v${version}/electron-mail-${version}-mac-arm64.dmg";
+      hash = "sha256-eGOpOBZ/6CSBaFFXxD0tYdhWPCTwR9n+/stsEH7vR2U=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "vladimiry/ElectronMail@${version}";
+      };
+    };
   };
 
   src = sources.${stdenvNoCC.hostPlatform.system};

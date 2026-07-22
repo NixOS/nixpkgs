@@ -70,14 +70,26 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       "aarch64-darwin" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${finalAttrs.version}/bun-darwin-aarch64.zip";
         hash = "sha256-kJh6OhbX21VtiGrD1VHnttPt8KHPQ6yu1iLoZ2vh0S8=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "oven-sh/bun@${finalAttrs.version}";
+        };
       };
       "aarch64-linux" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${finalAttrs.version}/bun-linux-aarch64.zip";
         hash = "sha256-VDKLvC2cjgyfiSxUTWbFeoO4QTnjSQnl7oF1jxrI/ac=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "oven-sh/bun@${finalAttrs.version}";
+        };
       };
       "x86_64-linux" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${finalAttrs.version}/bun-linux-x64-baseline.zip";
         hash = "sha256-xngEDxT+BEDrg503y9DOTAUaMtpygGrJfeamqra/co8=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "oven-sh/bun@${finalAttrs.version}";
+        };
       };
     };
     updateScript = writeShellScript "update-bun" ''
@@ -98,10 +110,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         update-source-version "bun" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
       done
     '';
-        meta.identifiers.purlParts = {
-          type = "github";
-          spec = "oven-sh/bun@${finalAttrs.version}";
-        };
   };
   meta = {
     homepage = "https://bun.sh";

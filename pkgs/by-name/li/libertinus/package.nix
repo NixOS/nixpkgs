@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-JQZ3ySnTd1owkTZDWUN5ryZKwu8oAQNaody+MLm+I6Y=";
     meta.identifiers.purlParts = {
       type = "github";
-      spec = "alerque/libertinus@${version}";
+      spec = "alerque/libertinus@${finalAttrs.version}";
     };
   };
 

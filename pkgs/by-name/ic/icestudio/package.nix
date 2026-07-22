@@ -21,10 +21,6 @@ buildNpmPackage (finalAttrs: {
     repo = "icestudio";
     rev = "989c552b687993f54a5928f693e3502de02e29f8";
     hash = "sha256-GTsLt3IgqXCkGJZGmvWslHL8gqm/0tnRJWlceV64asA=";
-    meta.identifiers.purlParts = {
-      type = "github";
-      spec = "FPGAwars/collection-default@${version}";
-    };
   };
 
   npmDepsHash = "sha256-4B5dpU7LV/2ga7gbu/TdwOYZL/HDm4fi9TXNcZEyeOI=";
@@ -103,6 +99,10 @@ buildNpmPackage (finalAttrs: {
     collection = fetchurl {
       url = "https://github.com/FPGAwars/collection-default/archive/v0.4.1.zip";
       hash = "sha256-F2cAqkTPC7xfGnPQiS8lTrD4y34EkHFUEDPVaYzVVg8=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "FPGAwars/collection-default@0.4.1";
+      };
     };
 
     app = buildNpmPackage {

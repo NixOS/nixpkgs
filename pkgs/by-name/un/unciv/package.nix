@@ -47,6 +47,10 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/yairm210/Unciv/releases/download/${version}/Unciv.jar";
     hash = "sha256-fIdv48YxqcKlBNhflhwUkhBkBs9q7pbc8PQ3bwqRXYg=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "yairm210/Unciv@${version}";
+    };
   };
 
   dontUnpack = true;

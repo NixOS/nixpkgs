@@ -115,6 +115,10 @@ stdenv.mkDerivation (finalAttrs: {
   signature = fetchurl {
     url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/Bisq-${version}.deb.asc";
     hash = "sha256-8FQ/HVWYENCbqtG4MD40QF6eQp3iUyqPNfZkRMAUc2A=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "bisq-network/bisq2@${version}";
+    };
   };
 
   nativeBuildInputs = [

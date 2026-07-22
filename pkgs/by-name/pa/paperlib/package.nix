@@ -16,13 +16,13 @@ let
           url = "https://github.com/Future-Scholars/paperlib/releases/download/release-electron-${version}/Paperlib_${version}_arm.dmg";
           hash = "sha256-KNMPUeCNtODHzMJhCwI4SJPRfa87RmAe6CRRazgRZCQ=";
         };
-        x86_64-linux = {
-          url = "https://github.com/Future-Scholars/paperlib/releases/download/release-electron-${version}/Paperlib_${version}.AppImage";
-          hash = "sha256-uBYhiUL4YWwnLLPvXMoXjlQqlqFep/OpwwnmPx7s5dY=";
-        };
         meta.identifiers.purlParts = {
           type = "github";
           spec = "Future-Scholars/paperlib@${version}";
+        };
+        x86_64-linux = {
+          url = "https://github.com/Future-Scholars/paperlib/releases/download/release-electron-${version}/Paperlib_${version}.AppImage";
+          hash = "sha256-uBYhiUL4YWwnLLPvXMoXjlQqlqFep/OpwwnmPx7s5dY=";
         };
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");

@@ -30,6 +30,10 @@ let
     fetchurl {
       url = "https://github.com/${repo}/releases/download/v${version}/${asset}";
       inherit hash;
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "${repo}@${version}";
+      };
     };
 
   bloop-binary = fetchAsset (
@@ -114,10 +118,6 @@ stdenv.mkDerivation (finalAttrs: {
 
           touch $out
         '';
-    meta.identifiers.purlParts = {
-      type = "github";
-      spec = "scalacenter/bloop@${version}";
-    };
   };
 
   meta = {

@@ -17,13 +17,13 @@ let
           url = "https://github.com/hoppscotch/releases/releases/download/v${version}/Hoppscotch_mac_aarch64.dmg";
           hash = "sha256-8wc2SkHlvss9k+agB/JKfF/tAHPxLVab6meIXslEeqs=";
         };
-        x86_64-linux = {
-          url = "https://github.com/hoppscotch/releases/releases/download/v${version}/Hoppscotch_linux_x64.AppImage";
-          hash = "sha256-pBt5S+8VdqipmRwOGQurHpZg5uHv0MJh0GbuzBFDTjg=";
-        };
         meta.identifiers.purlParts = {
           type = "github";
           spec = "hoppscotch/releases@${version}";
+        };
+        x86_64-linux = {
+          url = "https://github.com/hoppscotch/releases/releases/download/v${version}/Hoppscotch_linux_x64.AppImage";
+          hash = "sha256-pBt5S+8VdqipmRwOGQurHpZg5uHv0MJh0GbuzBFDTjg=";
         };
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
