@@ -32,8 +32,6 @@
         (case "8.11" lib.pred.true "1.3.2")
         (case "8.10" lib.pred.true "1.2.1")
         (case "8.9" lib.pred.true "1.1.0")
-        (case "8.8" lib.pred.true "20190311")
-        (case "8.7" (lib.versions.isLe "1.8") "1.0.0")
       ]
       null;
   release."2.1.1".hash = "sha256-tcZFpf8joEdVCgy1oKWdaM/9q3EMsF/jT+zz+kIsix8=";
@@ -48,9 +46,6 @@
   release."1.3.2".hash = "sha256:0lciwaqv288dh2f13xk2x0lrn6zyrkqy6g4yy927wwzag2gklfrs";
   release."1.2.1".hash = "sha256:17vz88xjzxh3q7hs6hnndw61r3hdfawxp5awqpgfaxx4w6ni8z46";
   release."1.1.0".hash = "sha256:1c34v1k37rk7v0xk2czv5n79mbjxjrm6nh3llg2mpfmdsqi68wf3";
-  release."1.0.0".hash = "sha256:1gqy9a4yavd0sa7kgysf9gf2lq4p8dmn4h89y8081f2j8zli0w5y";
-  release."20190311".rev = "22af9e9a223d0038f05638654422e637e863b355";
-  release."20190311".hash = "sha256:00rnr19lg6lg0haq1sy4ld38p7imzand6fc52fvfq27gblxkp2aq";
   releaseRev = v: "v${v}";
 
   preConfigure = "substituteInPlace Makefile --replace quickChickTool.byte quickChickTool.native";
