@@ -12,6 +12,7 @@
   gst_all_1,
 
   writableTmpDirAsHomeHook,
+  nix-update-script,
 }:
 
 let
@@ -20,7 +21,6 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "picard";
-  # nix-update --commit picard --version-regex 'release-(.*)'
   version = "2.13.3";
   pyproject = true;
   strictDeps = true;
@@ -107,6 +107,13 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   + lib.optionalString (pyqt5.multimediaEnabled) ''
     makeWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "release-(.*)"
+    ];
+  };
 
   meta = {
     homepage = "https://picard.musicbrainz.org";
