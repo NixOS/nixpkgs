@@ -9,6 +9,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ev-cmd";
   version = "1.0.1";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
