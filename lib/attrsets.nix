@@ -1608,8 +1608,7 @@ rec {
 
     :::
   */
-  # Since earlier elements take precedence in `listToAttrs`, we need to reverse first.
-  mergeAttrsList = list: listToAttrs (reverseList (concatMap attrsToList list));
+  mergeAttrsList = zipAttrsWith (_: values: elemAt values (length values - 1));
 
   /**
     Update `lhs` so that `rhs` wins for any given attribute path that occurs in both.
