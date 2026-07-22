@@ -1,0 +1,166 @@
+diff -Naurd x/third_party/absl/system.absl.base.BUILD y/third_party/absl/system.absl.base.BUILD
+--- x/third_party/absl/system.absl.base.BUILD	2023-09-17 09:12:05.499753364 +0000
++++ y/third_party/absl/system.absl.base.BUILD	2023-09-17 09:16:01.200082822 +0000
+@@ -22,7 +22,12 @@
+ 
+ cc_library(
+     name = "raw_logging_internal",
+-    linkopts = ["-labsl_raw_logging_internal"],
++    linkopts = [
++        "-labsl_raw_logging_internal",
++        "-labsl_log_internal_conditions",
++        "-labsl_log_internal_message",
++        "-labsl_log_internal_nullguard",
++    ],
+     visibility = [
+         "//absl:__subpackages__",
+     ],
+diff -Naurd x/third_party/absl/system.absl.log.BUILD y/third_party/absl/system.absl.log.BUILD
+--- x/third_party/absl/system.absl.log.BUILD	1970-01-01 00:00:00.000000000 +0000
++++ y/third_party/absl/system.absl.log.BUILD	2023-09-17 09:12:11.795762177 +0000
+@@ -0,0 +1,134 @@
++load("@rules_cc//cc:defs.bzl", "cc_library")
++
++package(default_visibility = ["//visibility:public"])
++
++cc_library(
++    name = "absl_check",
++    deps = [
++    ],
++)
++
++cc_library(
++    name = "absl_log",
++    deps = [
++    ],
++)
++
++cc_library(
++    name = "check",
++    deps = [
++    ],
++)
++
++cc_library(
++    name = "die_if_null",
++    deps = [
++        ":log",
++        "//absl/base:config",
++        "//absl/base:core_headers",
++        "//absl/strings",
++    ],
++)
++
++cc_library(
++    name = "flags",
++    deps = [
++        ":globals",
++        "//absl/base:config",
++        "//absl/base:core_headers",
++        "//absl/base:log_severity",
++        "//absl/flags:flag",
++        "//absl/flags:marshalling",
++        "//absl/strings",
++    ],
++)
++
++cc_library(
++    name = "globals",
++    deps = [
++        "//absl/base:atomic_hook",
++        "//absl/base:config",
++        "//absl/base:core_headers",
++        "//absl/base:log_severity",
++        "//absl/hash",
++        "//absl/strings",
++    ],
++)
++
++cc_library(
++    name = "initialize",
++    deps = [
++        ":globals",
++        "//absl/base:config",
++        "//absl/time",
++    ],
++)
++
++cc_library(
++    name = "log",
++    deps = [
++    ],
++)
++
++cc_library(
++    name = "log_entry",
++    deps = [
++        "//absl/base:config",
++        "//absl/base:core_headers",
++        "//absl/base:log_severity",
++        "//absl/strings",
++        "//absl/time",
++        "//absl/types:span",
++    ],
++)
++
++cc_library(
++    name = "log_sink",
++    deps = [
++        ":log_entry",
++        "//absl/base:config",
++    ],
++)
++
++cc_library(
++    name = "log_sink_registry",
++    deps = [
++        ":log_sink",
++        "//absl/base:config",
++    ],
++)
++
++cc_library(
++    name = "log_streamer",
++    deps = [
++        ":absl_log",
++        "//absl/base:config",
++        "//absl/base:log_severity",
++        "//absl/strings",
++        "//absl/strings:internal",
++        "//absl/types:optional",
++        "//absl/utility",
++    ],
++)
++
++cc_library(
++    name = "scoped_mock_log",
++    deps = [
++        ":log_entry",
++        ":log_sink",
++        ":log_sink_registry",
++        "//absl/base:config",
++        "//absl/base:log_severity",
++        "//absl/base:raw_logging_internal",
++        "//absl/strings",
++        "@com_google_googletest//:gtest",
++    ],
++)
++
++cc_library(
++    name = "structured",
++    deps = [
++        "//absl/base:config",
++        "//absl/strings",
++    ],
++)
+diff -Naurd x/third_party/absl/workspace.bzl y/third_party/absl/workspace.bzl
+--- x/third_party/absl/workspace.bzl	2023-09-17 09:12:05.499753364 +0000
++++ y/third_party/absl/workspace.bzl	2023-09-17 09:12:11.795762177 +0000
+@@ -20,6 +20,7 @@
+         "flags",
+         "functional",
+         "hash",
++        "log",
+         "memory",
+         "meta",
+         "numeric",

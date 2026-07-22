@@ -1,0 +1,445 @@
+From 7c6adc3fbb3624261b9c4d4e0702018697486e3b Mon Sep 17 00:00:00 2001
+From: Andrea Pappacoda <andrea@pappacoda.it>
+Date: Wed, 7 Aug 2024 00:11:15 +0200
+Subject: [PATCH] build: add Meson support
+
+I was trying to package Vixl, but the SCons build system does not
+provide an install target, so I would've had to add it. It seemed too
+difficult, so I directly created a quite basic Meson build script.
+
+It provides most features of the SCons script, except for tests and
+benchmarks, while adding a rich install target, with library soname
+versioning and a pkg-config file.
+
+Meson is a simple yet powerful build system, and you're interested in
+using it as your main build system I could add tests and benchmarks :)
+
+Origin: upstream, https://github.com/Linaro/vixl/pull/7
+Last-Update: 2025-03-22
+---
+ AUTHORS                        |   1 +
+ doc/aarch32/meson.build        |  12 +++
+ doc/aarch64/meson.build        |  21 +++++
+ doc/aarch64/topics/meson.build |  21 +++++
+ doc/meson.build                |  21 +++++
+ meson.build                    | 158 +++++++++++++++++++++++++++++++++
+ meson_options.txt              |  40 +++++++++
+ src/aarch32/meson.build        |  30 +++++++
+ src/aarch64/meson.build        |  47 ++++++++++
+ 9 files changed, 351 insertions(+)
+ create mode 100644 doc/aarch32/meson.build
+ create mode 100644 doc/aarch64/meson.build
+ create mode 100644 doc/aarch64/topics/meson.build
+ create mode 100644 doc/meson.build
+ create mode 100644 meson.build
+ create mode 100644 meson_options.txt
+ create mode 100644 src/aarch32/meson.build
+ create mode 100644 src/aarch64/meson.build
+
+diff --git a/AUTHORS b/AUTHORS
+index 257ec9d3..13809d26 100644
+--- a/AUTHORS
++++ b/AUTHORS
+@@ -6,3 +6,4 @@
+ ARM Ltd. <*@arm.com>
+ Google Inc. <*@google.com>
+ Linaro <*@linaro.org>
++Andrea Pappacoda <andrea@pappacoda.it>
+diff --git a/doc/aarch32/meson.build b/doc/aarch32/meson.build
+new file mode 100644
+index 00000000..e07fc46d
+--- /dev/null
++++ b/doc/aarch32/meson.build
+@@ -0,0 +1,12 @@
++# SPDX-FileCopyrightText: 2021 VIXL authors
++# SPDX-License-Identifier: BSD-3-Clause
++
++custom_target(
++  'doc_aarch32',
++  command: [markdown, '@INPUT@'],
++  input: 'getting-started-aarch32.md',
++  output: '@BASENAME@.html',
++  capture: true,
++  install: true,
++  install_dir: doc_dir/'aarch32'
++)
+diff --git a/doc/aarch64/meson.build b/doc/aarch64/meson.build
+new file mode 100644
+index 00000000..d25f8bfa
+--- /dev/null
++++ b/doc/aarch64/meson.build
+@@ -0,0 +1,21 @@
++# SPDX-FileCopyrightText: 2021 VIXL authors
++# SPDX-License-Identifier: BSD-3-Clause
++
++doc_aarch64_files = [
++  'getting-started-aarch64',
++  'supported-instructions-aarch64'
++]
++
++foreach file : doc_aarch64_files
++  custom_target(
++    'doc_aarch64_' + file,
++    command: [markdown, '@INPUT@'],
++    input: file + '.md',
++    output: file + '.html',
++    capture: true,
++    install: true,
++    install_dir: doc_dir/'aarch64'
++  )
++endforeach
++
++subdir('topics')
+diff --git a/doc/aarch64/topics/meson.build b/doc/aarch64/topics/meson.build
+new file mode 100644
+index 00000000..c6e8542b
+--- /dev/null
++++ b/doc/aarch64/topics/meson.build
+@@ -0,0 +1,21 @@
++# SPDX-FileCopyrightText: 2021 VIXL authors
++# SPDX-License-Identifier: BSD-3-Clause
++
++doc_aarch64_topics_files = [
++  'extending-the-disassembler',
++  'index',
++  'state-trace',
++  'ycm'
++]
++
++foreach file : doc_aarch64_topics_files
++  custom_target(
++    'doc_aarch64_topics_' + file,
++    command: [markdown, '@INPUT@'],
++    input: file + '.md',
++    output: file + '.html',
++    capture: true,
++    install: true,
++    install_dir: doc_dir/'aarch64'/'topics'
++  )
++endforeach
+diff --git a/doc/meson.build b/doc/meson.build
+new file mode 100644
+index 00000000..cbfe193d
+--- /dev/null
++++ b/doc/meson.build
+@@ -0,0 +1,21 @@
++# SPDX-FileCopyrightText: 2021 VIXL authors
++# SPDX-License-Identifier: BSD-3-Clause
++
++doc_dir = get_option('datadir')/'doc'/meson.project_name()
++
++custom_target(
++  'doc',
++  command: [markdown, '@INPUT@'],
++  input: '..'/'README.md',
++  output: '@BASENAME@.html',
++  capture: true,
++  install: true,
++  install_dir: doc_dir
++)
++
++if build_a32 or build_t32
++  subdir('aarch32')
++endif
++if build_a64
++  subdir('aarch64')
++endif
+diff --git a/meson.build b/meson.build
+new file mode 100644
+index 00000000..e0f8f79a
+--- /dev/null
++++ b/meson.build
+@@ -0,0 +1,158 @@
++# SPDX-FileCopyrightText: 2021 VIXL authors
++# SPDX-License-Identifier: BSD-3-Clause
++
++project(
++  'vixl',
++  'cpp',
++  default_options: [
++    'cpp_std=c++17',
++    'buildtype=release',
++    'warning_level=3',
++    'werror=true',
++    'd_ndebug=if-release',
++    'b_lto=true'
++  ],
++  license: 'BSD-3-Clause',
++  meson_version: '>=0.50.0',
++  version: '8.0.0',
++)
++
++deps = []
++extra_args = []
++
++if get_option('debug')
++  extra_args += '-DVIXL_DEBUG'
++endif
++
++hosts_32bit = ['arc', 'arm', 'c2000', 'csky', 'mips', 'ppc', 'riscv32', 'rx', 'sparc', 'wasm32', 'x86']
++can_target_aarch64 = not (host_machine.cpu_family() in hosts_32bit)
++
++build_a32 = false
++build_t32 = false
++build_a64 = false
++
++targets = get_option('target')
++if 'auto' in targets or 'all' in targets
++  if can_target_aarch64 or 'all' in targets
++    extra_args += [
++      '-DVIXL_INCLUDE_TARGET_A32',
++      '-DVIXL_INCLUDE_TARGET_T32',
++      '-DVIXL_INCLUDE_TARGET_A64'
++    ]
++    build_a32 = true
++    build_t32 = true
++    build_a64 = true
++  else
++    extra_args += [
++      '-DVIXL_INCLUDE_TARGET_A32',
++      '-DVIXL_INCLUDE_TARGET_T32'
++    ]
++    build_a32 = true
++    build_t32 = true
++  endif
++else
++  if 'a32' in targets or 'aarch32' in targets
++    extra_args += [
++      '-DVIXL_INCLUDE_TARGET_A32'
++    ]
++    build_a32 = true
++  endif
++  if 't32' in targets or 'aarch32' in targets
++    extra_args += [
++      '-DVIXL_INCLUDE_TARGET_T32'
++    ]
++    build_t32 = true
++  endif
++  if 'a64' in targets or 'aarch64' in targets
++    extra_args += [
++      '-DVIXL_INCLUDE_TARGET_A64'
++    ]
++    build_a64 = true
++  endif
++endif
++
++target_sources = []
++if build_a32 or build_t32
++  subdir('src'/'aarch32')
++endif
++if build_a64
++  subdir('src'/'aarch64')
++endif
++
++if get_option('simulator') == 'auto'
++  if not (host_machine.cpu_family() == 'aarch64') and can_target_aarch64
++    extra_args += '-DVIXL_INCLUDE_SIMULATOR_AARCH64'
++    deps += dependency('threads')
++  endif
++elif get_option('simulator') == 'aarch64'
++  if can_target_aarch64 and build_a64
++    extra_args += '-DVIXL_INCLUDE_SIMULATOR_AARCH64'
++    deps += dependency('threads')
++  else
++    error('Building an AArch64 simulator implies that VIXL targets AArch64. Set `target` to include `aarch64` or `a64`.')
++  endif
++endif
++
++allocator = get_option('code_buffer_allocator')
++if (allocator == 'auto' and host_machine.system() == 'linux') or allocator == 'mmap'
++  extra_args += '-DVIXL_CODE_BUFFER_MMAP'
++else
++  extra_args += '-DVIXL_CODE_BUFFER_MALLOC'
++endif
++
++if get_option('implicit_checks')
++  extra_args += '-DVIXL_ENABLE_IMPLICIT_CHECKS'
++endif
++
++markdown = find_program('markdown', required: get_option('doc'))
++if markdown.found()
++  subdir('doc')
++endif
++
++libvixl = library(
++  'vixl',
++  'src'/'code-buffer-vixl.cc',
++  'src'/'compiler-intrinsics-vixl.cc',
++  'src'/'cpu-features.cc',
++  'src'/'utils-vixl.cc',
++  cpp_args: extra_args,
++  include_directories: 'src',
++  dependencies: deps,
++  install: true,
++  sources: target_sources,
++  version: meson.project_version()
++)
++
++vixl_dep = declare_dependency(
++  compile_args: extra_args,
++  include_directories: 'src',
++  link_with: libvixl
++)
++
++if meson.version().version_compare('>=0.54.0')
++  meson.override_dependency('vixl', vixl_dep)
++endif
++
++install_headers(
++  'src'/'assembler-base-vixl.h',
++  'src'/'code-buffer-vixl.h',
++  'src'/'code-generation-scopes-vixl.h',
++  'src'/'compiler-intrinsics-vixl.h',
++  'src'/'cpu-features.h',
++  'src'/'globals-vixl.h',
++  'src'/'invalset-vixl.h',
++  'src'/'macro-assembler-interface.h',
++  'src'/'platform-vixl.h',
++  'src'/'pool-manager-impl.h',
++  'src'/'pool-manager.h',
++  'src'/'utils-vixl.h',
++  subdir: 'vixl'
++)
++
++import('pkgconfig').generate(
++  libvixl,
++  description: 'ARMv8 Runtime Code Generation Library',
++  extra_cflags: extra_args,
++  subdirs: 'vixl',
++  url: 'https://github.com/Linaro/vixl'
++)
+diff --git a/meson_options.txt b/meson_options.txt
+new file mode 100644
+index 00000000..b7b5428d
+--- /dev/null
++++ b/meson_options.txt
+@@ -0,0 +1,40 @@
++# SPDX-FileCopyrightText: 2021 VIXL authors
++# SPDX-License-Identifier: BSD-3-Clause
++
++option(
++  'target',
++  type: 'array',
++  choices: ['auto', 'all', 'aarch32', 'a32', 't32', 'aarch64', 'a64'],
++  value: ['auto'],
++  description: 'Target ISA/Architecture'
++)
++
++option(
++  'simulator',
++  type: 'combo',
++  choices: ['auto', 'aarch64', 'none'],
++  value: 'auto',
++  description: 'Simulators to include'
++)
++
++option(
++  'code_buffer_allocator',
++  type: 'combo',
++  choices: ['auto', 'malloc', 'mmap'],
++  value: 'auto',
++  description: 'Configure the allocation mechanism in the CodeBuffer'
++)
++
++option(
++  'implicit_checks',
++  type: 'boolean',
++  value: false,
++  description: 'Allow signals raised from simulated invalid (e.g: out of bounds) memory reads to be handled by the host.'
++)
++
++option(
++  'doc',
++  type: 'feature',
++  value: 'auto',
++  description: 'Convert documentation to HTML (requires the `markdown` program)'
++)
+diff --git a/src/aarch32/meson.build b/src/aarch32/meson.build
+new file mode 100644
+index 00000000..0b22336f
+--- /dev/null
++++ b/src/aarch32/meson.build
+@@ -0,0 +1,30 @@
++# SPDX-FileCopyrightText: 2021 VIXL authors
++# SPDX-License-Identifier: BSD-3-Clause
++
++# Need to wrap the filenames in files() otherwise this array would be treated
++# as a simple array of strings, and when used in the master meson.build they
++# would refer to nonexistent paths. Wrapping in files() ensures that the
++# filenames will be always relative to this directory, even if referenced in
++# a different one. As a general rule, when I need to refer to a file from a
++# different build directory I should wrap it in files().
++
++target_sources += files(
++  'assembler-aarch32.cc',
++  'constants-aarch32.cc',
++  'disasm-aarch32.cc',
++  'instructions-aarch32.cc',
++  'location-aarch32.cc',
++  'macro-assembler-aarch32.cc',
++  'operands-aarch32.cc'
++)
++
++install_headers(
++  'assembler-aarch32.h',
++  'constants-aarch32.h',
++  'disasm-aarch32.h',
++  'instructions-aarch32.h',
++  'location-aarch32.h',
++  'macro-assembler-aarch32.h',
++  'operands-aarch32.h',
++  subdir: 'vixl'/'aarch32'
++)
+diff --git a/src/aarch64/meson.build b/src/aarch64/meson.build
+new file mode 100644
+index 00000000..2898c8f6
+--- /dev/null
++++ b/src/aarch64/meson.build
+@@ -0,0 +1,47 @@
++# SPDX-FileCopyrightText: 2021 VIXL authors
++# SPDX-License-Identifier: BSD-3-Clause
++
++# Need to wrap the filenames in files() otherwise this array would be treated
++# as a simple array of strings, and when used in the master meson.build they
++# would refer to nonexistent paths. Wrapping in files() ensures that the
++# filenames will be always relative to this directory, even if referenced in
++# a different one. As a general rule, when I need to refer to a file from a
++# different build directory I should wrap it in files().
++
++target_sources += files(
++  'assembler-aarch64.cc',
++  'assembler-sve-aarch64.cc',
++  'cpu-aarch64.cc',
++  'cpu-features-auditor-aarch64.cc',
++  'debugger-aarch64.cc',
++  'decoder-aarch64.cc',
++  'disasm-aarch64.cc',
++  'instructions-aarch64.cc',
++  'logic-aarch64.cc',
++  'macro-assembler-aarch64.cc',
++  'macro-assembler-sve-aarch64.cc',
++  'operands-aarch64.cc',
++  'pointer-auth-aarch64.cc',
++  'registers-aarch64.cc',
++  'simulator-aarch64.cc'
++)
++
++install_headers(
++  'abi-aarch64.h',
++  'assembler-aarch64.h',
++  'constants-aarch64.h',
++  'cpu-aarch64.h',
++  'cpu-features-auditor-aarch64.h',
++  'debugger-aarch64.h',
++  'decoder-aarch64.h',
++  'decoder-constants-aarch64.h',
++  'decoder-visitor-map-aarch64.h',
++  'disasm-aarch64.h',
++  'instructions-aarch64.h',
++  'macro-assembler-aarch64.h',
++  'operands-aarch64.h',
++  'registers-aarch64.h',
++  'simulator-aarch64.h',
++  'simulator-constants-aarch64.h',
++  subdir: 'vixl'/'aarch64'
++)

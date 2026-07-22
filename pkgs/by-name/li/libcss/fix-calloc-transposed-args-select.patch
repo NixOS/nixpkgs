@@ -1,0 +1,29 @@
+--- a/src/select/select.c
++++ b/src/select/select.c
+@@ -138,7 +138,7 @@
+ {
+ 	struct css_node_data *nd;
+ 
+-	nd = calloc(sizeof(struct css_node_data), 1);
++	nd = calloc(1, sizeof(struct css_node_data));
+ 	if (nd == NULL) {
+ 		return CSS_NOMEM;
+ 	}
+@@ -234,7 +234,7 @@
+ 	if (result == NULL)
+ 		return CSS_BADPARM;
+ 
+-	c = calloc(sizeof(css_select_ctx), 1);
++	c = calloc(1, sizeof(css_select_ctx));
+ 	if (c == NULL)
+ 		return CSS_NOMEM;
+ 
+@@ -613,7 +613,7 @@
+ 	*node_bloom = NULL;
+ 
+ 	/* Create the node's bloom */
+-	bloom = calloc(sizeof(css_bloom), CSS_BLOOM_SIZE);
++	bloom = calloc(CSS_BLOOM_SIZE, sizeof(css_bloom));
+ 	if (bloom == NULL) {
+ 		return CSS_NOMEM;
+ 	}
