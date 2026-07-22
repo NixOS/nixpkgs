@@ -6,6 +6,7 @@
   cmake,
   dbus,
   fetchFromGitHub,
+  fetchpatch,
   ibusMinimal,
   installShellFiles,
   libGL,
@@ -85,6 +86,17 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "release-${finalAttrs.version}";
     hash = "sha256-6Dph2eLiJUmpQzPWe8EuY5LrWhrFwde2f2dwfgCcWNw=";
   };
+
+  patches = [
+    # testprocess: handle asynchronous exec failure for missing executables.
+    # On aarch64 QEMU-user under Nix sandbox, SDL_CreateProcess may return a
+    # process instead of failing synchronously.  Accept both paths.
+    # Merged upstream at https://github.com/libsdl-org/SDL/pull/15938
+    (fetchpatch {
+      url = "https://github.com/libsdl-org/SDL/commit/81b32d62839f311a4965cd7e61521197d00cb11a.patch";
+      hash = "sha256-EBggUSv7viUygwhabnu3wRBdRjuLZaHRGwlvw6UKLVw=";
+    })
+  ];
 
   postPatch =
     lib.optionalString (finalAttrs.finalPackage.doCheck) ''
