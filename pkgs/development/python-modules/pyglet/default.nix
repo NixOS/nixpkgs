@@ -13,10 +13,9 @@
   libxinerama,
   libxext,
   libx11,
+  pillow,
   pytestCheckHook,
   glibc,
-  gtk2-x11,
-  gdk-pixbuf,
   fontconfig,
   freetype,
   ffmpeg-full,
@@ -62,10 +61,6 @@ buildPythonPackage rec {
                   path = '${glibc}/lib/libc${ext}.6'
               elif name == 'X11':
                   path = '${libx11}/lib/libX11${ext}'
-              elif name == 'gdk-x11-2.0':
-                  path = '${gtk2-x11}/lib/libgdk-x11-2.0${ext}'
-              elif name == 'gdk_pixbuf-2.0':
-                  path = '${gdk-pixbuf}/lib/libgdk_pixbuf-2.0${ext}'
               elif name == 'Xext':
                   path = '${libxext}/lib/libXext${ext}'
               elif name == 'fontconfig':
@@ -125,6 +120,8 @@ buildPythonPackage rec {
     '';
 
   build-system = [ flit-core ];
+
+  dependencies = [ pillow ];
 
   # needs GL set up which isn't really possible in a build environment even in headless mode.
   # tests do run and pass in nix-shell, however.
