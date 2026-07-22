@@ -7,7 +7,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sideband";
-  version = "1.9.8";
+  version = "2.0.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "markqvist";
     repo = "Sideband";
     tag = finalAttrs.version;
-    hash = "sha256-DGX96QJS+T9CEgpF2X6aSkW66/6ORYAkNFi7hgNOEc4=";
+    hash = "sha256-RCSSyTtt2eN9hYT1xzPYjJloPjnkIS6bo21PHrlg5S8=";
   };
 
   # Unable to upstream all of this
@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     substituteInPlace sbapp/main.py \
       --replace-fail \
         "1.9.2" \
-        "1.9.8"
+        "2.0.0"
   '';
 
   build-system = with python3Packages; [
