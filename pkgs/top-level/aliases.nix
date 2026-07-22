@@ -1484,6 +1484,7 @@ mapAliases {
   log4j-vuln-scanner = throw "'log4j-vuln-scanner' has been removed, as it was unmaintained upstream and no longer relevant given that the Log4Shell vulnerability has been fixed."; # Added 2025-11-15
   log4jcheck = throw "'log4jcheck' has been removed, as it was unmaintained upstream and no longer relevant given that the Log4Shell vulnerability has been fixed."; # Added 2025-11-15
   log4shell-detector = throw "'log4shell-detector' has been removed, as it was unmaintained upstream and no longer relevant given that the Log4Shell vulnerability has been fixed."; # Added 2025-11-15
+  lounge-gtk-theme = throw "'lounge-gtk-theme' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   lowPrio = warnAlias "'lowPrio' has been removed from pkgs, use `lib.lowPrio` instead" lib.lowPrio; # Added 2025-10-30
   LPCNet = throw "'LPCNet' has been renamed to/replaced by 'lpcnet'"; # Converted to throw 2025-10-27
   lttv = throw "'lttv' has been removed, as it is broken and unmaintained. Upstream suggests using 'tracecompass' or 'babeltrace2' instead"; # Added 2026-05-04
