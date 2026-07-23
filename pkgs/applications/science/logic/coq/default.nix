@@ -146,6 +146,9 @@ let
     ocamlPackages.findlib
   ]
   ++ lib.optional (coqAtLeast "8.14") dune;
+  ocamlBuildInputs = [
+    ocamlPackages.findlib
+  ];
   ocamlPropagatedBuildInputs =
     [ ]
     ++ lib.optional (!coqAtLeast "8.10") ocamlPackages.camlp5
@@ -225,6 +228,7 @@ let
     buildInputs = [
       ncurses
     ]
+    ++ ocamlBuildInputs
     ++ lib.optionals buildIde (
       if coqAtLeast "8.10" then
         [
@@ -328,11 +332,18 @@ let
       platforms = lib.platforms.unix;
       mainProgram = if buildIde then "coqide" else "coqtop";
     };
+
+    # Things required by the CI
+    strictDeps = true;
+    __structuredAttrs = true;
   };
 in
 if coqAtLeast "8.21" then
   self.overrideAttrs (o: {
     # coq-core is now a shim for rocq
+    nativeBuildInputs = o.nativeBuildInputs ++ [
+      rocqPackages.rocq-core
+    ];
     propagatedBuildInputs = o.propagatedBuildInputs ++ [
       rocqPackages.rocq-core
     ];
