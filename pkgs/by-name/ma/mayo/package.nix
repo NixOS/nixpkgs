@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeOptionType "string" "Mayo_VersionMajor" (lib.versions.major finalAttrs.version))
     (lib.cmakeOptionType "string" "Mayo_VersionMinor" (lib.versions.minor finalAttrs.version))
     (lib.cmakeOptionType "string" "Mayo_VersionPatch" (lib.versions.patch finalAttrs.version))
-    (lib.cmakeBool "Mayo_BuildTests" finalAttrs.doCheck)
+    (lib.cmakeBool "Mayo_BuildTests" finalAttrs.finalPackage.doCheck)
   ]
   ++ lib.optional withAssimp "-DMayo_BuildPluginAssimp=ON";
 

@@ -15629,6 +15629,12 @@
     githubId = 632767;
     name = "Guillaume Maudoux";
   };
+  layzyoldman = {
+    email = "ricardopaivacampos@gmail.com";
+    github = "layzyoldman";
+    githubId = 193278607;
+    name = "Ricardo Campos";
+  };
   LazilyStableProton = {
     email = "LazilyStable@proton.me";
     github = "LazyStability";
@@ -19310,6 +19316,12 @@
     githubId = 220262;
     name = "Ion Mudreac";
   };
+  mugaizzo = {
+    email = "mugahedman@hotmail.com";
+    github = "mugaizzo";
+    githubId = 15838537;
+    name = "Mugahed Izzeldin";
+  };
   mulatta = {
     email = "seungwon@mulatta.io";
     github = "mulatta";
@@ -19806,6 +19818,12 @@
     github = "nckx";
     githubId = 364510;
     name = "Tobias Geerinckx-Rice";
+  };
+  ndavd = {
+    email = "email@ndavd.com";
+    github = "ndavd";
+    githubId = 74260683;
+    name = "Nuno David";
   };
   ndl = {
     email = "ndl@endl.ch";

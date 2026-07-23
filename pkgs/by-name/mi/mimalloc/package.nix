@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     MI_SECURE = secureBuild;
     MI_BUILD_SHARED = stdenv.hostPlatform.hasSharedLibraries;
     MI_LIBC_MUSL = stdenv.hostPlatform.libc == "musl";
-    MI_BUILD_TESTS = finalAttrs.doCheck;
+    MI_BUILD_TESTS = finalAttrs.finalPackage.doCheck;
 
     # MI_OPT_ARCH is inaccurate (e.g. it assumes aarch64 == armv8.1-a).
     # Nixpkgs's native platform configuration does a better job.
