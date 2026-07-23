@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   gtk3,
-  gtk2,
   gdk-pixbuf,
   dbus-glib,
   libx11,
@@ -44,7 +43,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtk2
     gtk3
     gdk-pixbuf
     dbus-glib
