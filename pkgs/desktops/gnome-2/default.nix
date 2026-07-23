@@ -12,10 +12,6 @@ lib.makeScope pkgs.newScope (
 
     gtkglext = callPackage ./platform/gtkglext { };
 
-    #### DESKTOP
-
-    gtksourceview = callPackage ./desktop/gtksourceview { };
-
   }
 )
 // lib.optionalAttrs config.allowAliases {
@@ -66,6 +62,7 @@ lib.makeScope pkgs.newScope (
   libgnome = throw "gnome2.libgnome has been removed"; # 2024-06-27
   libgnomeui = throw "gnome2.libgnomeui has been removed"; # 2024-06-27
   libgtkhtml = throw "gnome2.libgtkhtml has been removed"; # 2023-01-15
+  libgtksourceview = throw "gnome2.libgtksourceview has been removed as it was unmaintained upstream and depended on the deprecated GTK2 engine. Consider using gtksourceview3, gtksourceview4, or gtksourceview5 instead."; # 2026-07-23
   libIDL = throw "gnome2.libIDL has been removed as it has been archived upstream since July 2014"; # 2026-07-23
   ORBit2 = throw "gnome2.ORBit2 has been removed as it has been archived upstream since July 2016"; # 2026-07-23
   python_rsvg = throw "gnome2.python_rsvg has been removed"; # 2023-01-14
