@@ -142,7 +142,7 @@ let
       hydra-battles = callPackage ../development/coq-modules/hydra-battles { };
       interval = callPackage ../development/coq-modules/interval { };
       InfSeqExt = callPackage ../development/coq-modules/InfSeqExt { };
-      iris = callPackage ../development/coq-modules/iris { };
+      iris = callPackage ../development/rocq-modules/iris { };
       iris-named-props = callPackage ../development/coq-modules/iris-named-props { };
       itauto = callPackage ../development/coq-modules/itauto { };
       ITree = callPackage ../development/coq-modules/ITree { };
