@@ -4669,6 +4669,12 @@
     githubId = 53847249;
     name = "Casey Avila";
   };
+  caspersonn = {
+    email = "lucakasper8@gmail.com";
+    github = "Caspersonn";
+    githubId = 96787412;
+    name = "Luca Kasper";
+  };
   cassandracomar = {
     name = "Cassandra Comar";
     github = "cassandracomar";
