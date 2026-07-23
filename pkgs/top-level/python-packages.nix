@@ -18030,6 +18030,8 @@ self: super: with self; {
 
   runtype = callPackage ../development/python-modules/runtype { };
 
+  rush = callPackage ../development/python-modules/rush { };
+
   russound = callPackage ../development/python-modules/russound { };
 
   rustworkx = callPackage ../development/python-modules/rustworkx { };
