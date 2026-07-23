@@ -13,6 +13,7 @@
   cctools,
   nixosTests,
   nix-update-script,
+  fetchpatch2,
 }:
 let
   nodeSources = srcOnly nodejs_24;
@@ -36,7 +37,14 @@ buildNpmPackage (finalAttrs: {
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin cctools.libtool;
 
-  npmDepsHash = "sha256-DvQM9Kr9Hc7/1OEZadZ1GvpAjfRmbdIcA6UDuFBQ+vo=";
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/the-draupnir-project/Draupnir/commit/4e63164046153c656050c6d0a325c79f1492153a.patch?full_index=1";
+      hash = "sha256-dVG0BAE8pATfGdcHvTV8jTC+OQP0gMB7v396MtJlG4o=";
+    })
+  ];
+
+  npmDepsHash = "sha256-7WAfSFfPQJ9d/U9hk5wypasSoU2JwkoCq/nKAnzFf1o=";
 
   preBuild = ''
     # install proper version and branch info
