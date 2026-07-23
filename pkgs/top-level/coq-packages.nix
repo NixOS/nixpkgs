@@ -176,7 +176,7 @@ let
       mathcomp-experimental-reals = self.mathcomp-analysis.experimental-reals;
       mathcomp-finmap = callPackage ../development/rocq-modules/mathcomp-finmap { };
       mathcomp-infotheo = callPackage ../development/coq-modules/mathcomp-infotheo { };
-      mathcomp-real-closed = callPackage ../development/coq-modules/mathcomp-real-closed { };
+      mathcomp-real-closed = callPackage ../development/rocq-modules/mathcomp-real-closed { };
       mathcomp-reals = self.mathcomp-analysis.reals;
       mathcomp-reals-stdlib = self.mathcomp-analysis.reals-stdlib;
       mathcomp-tarjan = callPackage ../development/coq-modules/mathcomp-tarjan { };
