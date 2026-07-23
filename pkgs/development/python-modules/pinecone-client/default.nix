@@ -13,7 +13,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pinecone-client";
+  pname = "pinecone";
   version = "8.1.2";
   pyproject = true;
 
