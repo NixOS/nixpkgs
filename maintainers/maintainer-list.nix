@@ -6801,6 +6801,12 @@
     github = "deinferno";
     githubId = 14363193;
   };
+  Deizuu = {
+    name = "Deizuu";
+    github = "Deizuu";
+    matrix = "@deizu:matrix.org";
+    githubId = 120480615;
+  };
   delafthi = {
     name = "Thierry Delafontaine";
     email = "delafthi@pm.me";

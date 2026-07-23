@@ -24,6 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [
       lib.maintainers.viraptor
       lib.maintainers.gabyx
+      lib.maintainers.Deizuu
     ];
     description = "Neural Amp Modeler LV2 plugin implementation";
     homepage = finalAttrs.src.meta.homepage;
