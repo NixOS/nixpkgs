@@ -7,11 +7,8 @@
   stdenvNoCC,
   appimageTools,
   asar,
-  autoPatchelfHook,
   makeWrapper,
   electron,
-  libgcc,
-  vips,
 }:
 let
   appimageContents = appimageTools.extract { inherit pname version src; };
@@ -26,13 +23,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     asar
-    autoPatchelfHook
     makeWrapper
-  ];
-
-  buildInputs = [
-    libgcc
-    vips
   ];
 
   installPhase = ''
