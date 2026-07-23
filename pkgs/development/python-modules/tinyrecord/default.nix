@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
   tinydb,
 }:
@@ -9,7 +10,7 @@
 buildPythonPackage rec {
   pname = "tinyrecord";
   version = "0.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eugene-eeo";
@@ -17,6 +18,8 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-mF4hpHuNyiQ5DurRnyLck5e/Vp26GCLkhD8eeSB4NYs=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
