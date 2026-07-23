@@ -40,9 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   prePatch = ''
-    substituteInPlace configure.ac              \
-      --replace-fail                            \
-      "\$""{datadir}/ddccontrol-db"             \
+    substituteInPlace configure.ac \
+      --replace-fail \
+      "\$""{datadir}/ddccontrol-db" \
       "${ddccontrol-db}/share/ddccontrol-db"
 
     substituteInPlace src/ddcpci/Makefile.am    \
