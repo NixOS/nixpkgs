@@ -289,6 +289,11 @@
     name = "6543";
     keys = [ { fingerprint = "8722 B61D 7234 1082 553B  201C B8BE 6D61 0E61 C862"; } ];
   };
+  _66HEX = {
+    name = "Marek Jóźwiak";
+    github = "66HEX";
+    githubId = 168720167;
+  };
   _6AA4FD = {
     email = "f6442954@gmail.com";
     github = "6AA4FD";
