@@ -185,7 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     (mesonBool "want-math-errno" want-math-errno)
   ]
-  ++ lib.optionals finalAttrs.doCheck [
+  ++ lib.optionals finalAttrs.finalPackage.doCheck [
     (mesonBool "tests" true)
     # Something is broken with this and I'm not sure what.
     (mesonOption "tests-cdefs" "false")

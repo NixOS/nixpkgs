@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeFeature "QT_PACKAGE_PREFIX" "Qt${lib.versions.major kdePackages.qtbase.version}")
     (lib.cmakeFeature "KF_PACKAGE_PREFIX" "KF${lib.versions.major kdePackages.qtbase.version}")
-    (lib.cmakeBool "BUILD_TESTING" (finalAttrs.doCheck or false))
+    (lib.cmakeBool "BUILD_TESTING" (finalAttrs.finalPackage.doCheck or false))
     # See https://github.com/Martchus/syncthingtray/issues/208
     (lib.cmakeBool "EXCLUDE_TESTS_FROM_ALL" false)
     (lib.cmakeFeature "AUTOSTART_EXEC_PATH" autostartExecPath)

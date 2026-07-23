@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-Wno-dev" # suppress cmake warning about deprecated usage
-    (lib.cmakeBool "JSON_TUI_BUILD_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "JSON_TUI_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_GOOGLETEST" "${gtest.src}")
   ];
 
