@@ -155,6 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dm644 config.json $out/share/opencode/config.json
     install -Dm644 tui.json $out/share/opencode/tui.json
+    install -Dm644 ../web/public/theme.json $out/share/opencode/theme.json
 
     runHook postInstall
   '';
@@ -185,6 +186,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     jsonschema = {
       config = "${finalAttrs.finalPackage}/share/opencode/config.json";
+      theme = "${finalAttrs.finalPackage}/share/opencode/theme.json";
       tui = "${finalAttrs.finalPackage}/share/opencode/tui.json";
     };
     updateScript = nix-update-script {
