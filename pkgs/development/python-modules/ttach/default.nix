@@ -1,5 +1,6 @@
 {
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
   torch,
   buildPythonPackage,
@@ -9,7 +10,7 @@
 buildPythonPackage rec {
   pname = "ttach";
   version = "0.0.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qubvel";
@@ -18,7 +19,9 @@ buildPythonPackage rec {
     hash = "sha256-R6QO+9hv0eI7dZW5iJf096+LU1q+vnmOpveurgZemPc=";
   };
 
-  propagatedBuildInputs = [ torch ];
+  build-system = [ setuptools ];
+
+  dependencies = [ torch ];
 
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "ttach" ];
