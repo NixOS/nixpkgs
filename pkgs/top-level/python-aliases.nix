@@ -439,6 +439,7 @@ mapAliases {
   pilight = throw "'pilight' has been removed, because it is unmaintained since 2019 and the integration was removed from Home Assistant."; # added 2026-05-06
   pillow-avif-plugin = throw "'pillow-avif-plugin' has been removed because 'pillow' has native avif support since 11.3"; # added 2025-11-26
   pinecone-client = warnAlias "'pinecone-client' has been renamed to 'pinecone'" pinecone; # added 2026-07-22
+  pinecone-plugin-assistant = throw "'pinecone-plugin-assistant' has been integrated into 'pinecone-client'"; # Added 2026-07-22
   pizzapi = throw "pizzapi was removed because it no longer works"; # added 2025-12-03
   pkuseg = throw "'pkuseg' has been removed because it was not supported on newer versions of Python"; # added 2026-01-20
   ploomber-extension = throw "'ploomber-extension' has been removed since the upstream repo was archived"; # added 2026-02-16
