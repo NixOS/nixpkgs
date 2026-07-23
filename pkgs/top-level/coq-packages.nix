@@ -99,6 +99,7 @@ let
       ConCert = callPackage ../development/coq-modules/ConCert { };
       coq-bits = callPackage ../development/coq-modules/coq-bits { };
       coq-elpi = callPackage ../development/coq-modules/coq-elpi { };
+      rocq-elpi = callPackage ../development/coq-modules/coq-elpi { };
       coq-hammer = callPackage ../development/coq-modules/coq-hammer { };
       coq-hammer-tactics = callPackage ../development/coq-modules/coq-hammer/tactics.nix { };
       CoqMatrix = callPackage ../development/coq-modules/coq-matrix { };
@@ -134,7 +135,7 @@ let
       goedel = callPackage ../development/coq-modules/goedel { };
       graph-theory = callPackage ../development/coq-modules/graph-theory { };
       heq = callPackage ../development/coq-modules/heq { };
-      hierarchy-builder = callPackage ../development/coq-modules/hierarchy-builder { };
+      hierarchy-builder = callPackage ../development/rocq-modules/hierarchy-builder { };
       high-school-geometry = callPackage ../development/coq-modules/high-school-geometry { };
       HoTT = callPackage ../development/coq-modules/HoTT { };
       http = callPackage ../development/coq-modules/http { };
