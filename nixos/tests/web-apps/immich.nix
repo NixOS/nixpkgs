@@ -1,14 +1,14 @@
-{...}: {
+{ ... }: {
   name = "immich-nixos";
 
-  nodes.machine = {pkgs, ...}: {
+  nodes.machine = { pkgs, ... }: {
     virtualisation = {
       cores = 2;
       memorySize = 4096;
       diskSize = 4096;
     };
 
-    environment.systemPackages = with pkgs; [immich-cli];
+    environment.systemPackages = with pkgs; [ immich-cli ];
 
     services.immich = {
       enable = true;

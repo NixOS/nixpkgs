@@ -4,16 +4,15 @@
   pkgs,
   utils,
   ...
-}: let
+}:
+let
   cfg = config.services.immich;
-  format = pkgs.formats.json {};
+  format = pkgs.formats.json { };
   isPostgresUnixSocket = lib.hasPrefix "/" cfg.database.host;
   isRedisUnixSocket = lib.hasPrefix "/" cfg.redis.host;
-  secretsReplacement =
-    utils.genJqSecretsReplacement {
-      loadCredential = true;
-    }
-    cfg.settings "/run/immich/config.json";
+  secretsReplacement = utils.genJqSecretsReplacement {
+    loadCredential = true;
+  } cfg.settings "/run/immich/config.json";
 
   commonServiceConfig = {
     Type = "simple";
@@ -25,15 +24,12 @@
     NoNewPrivileges = true;
     PrivateUsers = false; # Set to false so SupplementaryGroups and extraGroups work reliably
     PrivateTmp = true;
-    PrivateDevices = cfg.accelerationDevices == [];
+    PrivateDevices = cfg.accelerationDevices == [ ];
     DeviceAllow = mkIf (cfg.accelerationDevices != null) cfg.accelerationDevices;
     PrivateMounts = false; # Required for external bind mounts / media drives
     ProtectClock = true;
     ProtectControlGroups = true;
-    ProtectHome =
-      if (lib.hasPrefix "/home" cfg.mediaLocation)
-      then "read-only"
-      else true;
+    ProtectHome = if (lib.hasPrefix "/home" cfg.mediaLocation) then "read-only" else true;
     ProtectHostname = true;
     ProtectKernelLogs = true;
     ProtectKernelModules = true;
@@ -49,8 +45,7 @@
     UMask = "0027"; # Relaxed slightly from 0077 to allow group read access
   };
 
-  inherit
-    (lib)
+  inherit (lib)
     types
     mkIf
     mkOption
@@ -58,13 +53,11 @@
     ;
 
   postgresqlPackage =
-    if cfg.database.enable
-    then config.services.postgresql.package
-    else pkgs.postgresql;
-in {
+    if cfg.database.enable then config.services.postgresql.package else pkgs.postgresql;
+in
+{
   imports = [
-    (
-      lib.mkRemovedOptionModule
+    (lib.mkRemovedOptionModule
       [
         "services"
         "immich"
@@ -77,8 +70,7 @@ in {
           `services.immich.settings.oauth.clientSecret._secret = "/path/to/secret/file";`
       ''
     )
-    (
-      lib.mkRemovedOptionModule
+    (lib.mkRemovedOptionModule
       [
         "services"
         "immich"
@@ -90,8 +82,7 @@ in {
         is no longer available. From now on, vectorchord is always enabled.
       ''
     )
-    (
-      lib.mkRemovedOptionModule
+    (lib.mkRemovedOptionModule
       [
         "services"
         "immich"
@@ -107,7 +98,7 @@ in {
 
   options.services.immich = {
     enable = mkEnableOption "Immich";
-    package = lib.mkPackageOption pkgs "immich" {};
+    package = lib.mkPackageOption pkgs "immich" { };
 
     mediaLocation = mkOption {
       type = types.path;
@@ -116,8 +107,8 @@ in {
     };
 
     environment = mkOption {
-      type = types.submodule {freeformType = types.attrsOf types.str;};
-      default = {};
+      type = types.submodule { freeformType = types.attrsOf types.str; };
+      default = { };
       example = {
         IMMICH_LOG_LEVEL = "verbose";
       };
@@ -216,8 +207,8 @@ in {
           default = true;
         };
       environment = mkOption {
-        type = types.submodule {freeformType = types.attrsOf types.str;};
-        default = {};
+        type = types.submodule { freeformType = types.attrsOf types.str; };
+        default = { };
         example = {
           MACHINE_LEARNING_MODEL_TTL = "600";
         };
@@ -229,8 +220,8 @@ in {
 
     accelerationDevices = mkOption {
       type = types.nullOr (types.listOf types.str);
-      default = [];
-      example = ["/dev/dri/renderD128"];
+      default = [ ];
+      example = [ "/dev/dri/renderD128" ];
       description = ''
         A list of device paths to hardware acceleration devices that immich should
         have access to. This is useful when transcoding media files.
@@ -244,11 +235,9 @@ in {
         // {
           default = true;
         };
-      createDB =
-        mkEnableOption "the automatic creation of the database for immich."
-        // {
-          default = true;
-        };
+      createDB = mkEnableOption "the automatic creation of the database for immich." // {
+        default = true;
+      };
       name = mkOption {
         type = types.str;
         default = "immich";
@@ -273,11 +262,9 @@ in {
     };
 
     redis = {
-      enable =
-        mkEnableOption "a redis cache for use with immich"
-        // {
-          default = true;
-        };
+      enable = mkEnableOption "a redis cache for use with immich" // {
+        default = true;
+      };
       host = mkOption {
         type = types.str;
         default = config.services.redis.servers.immich.unixSocket;
@@ -302,7 +289,7 @@ in {
 
     services.postgresql = mkIf cfg.database.enable {
       enable = true;
-      ensureDatabases = mkIf cfg.database.createDB [cfg.database.name];
+      ensureDatabases = mkIf cfg.database.createDB [ cfg.database.name ];
       ensureUsers = mkIf cfg.database.createDB [
         {
           name = cfg.database.user;
@@ -315,44 +302,46 @@ in {
         ps.vectorchord
       ];
       settings = {
-        shared_preload_libraries = ["vchord.so"];
+        shared_preload_libraries = [ "vchord.so" ];
         search_path = "\"$user\", public, vectors";
       };
     };
 
-    systemd.services.postgresql-setup.serviceConfig.ExecStartPost = let
-      extensions = [
-        "unaccent"
-        "uuid-ossp"
-        "cube"
-        "earthdistance"
-        "pg_trgm"
-        "vector"
-        "vchord"
+    systemd.services.postgresql-setup.serviceConfig.ExecStartPost =
+      let
+        extensions = [
+          "unaccent"
+          "uuid-ossp"
+          "cube"
+          "earthdistance"
+          "pg_trgm"
+          "vector"
+          "vchord"
+        ];
+        sqlFile = pkgs.writeText "immich-pgvectors-setup.sql" ''
+          -- save previous version of vectorchord to trigger reindex on update
+          SELECT COALESCE(installed_version, ''') AS vchord_version_before FROM pg_available_extensions WHERE name = 'vchord' \gset
+
+          ${lib.concatMapStringsSep "\n" (ext: "CREATE EXTENSION IF NOT EXISTS \"${ext}\";") extensions}
+          ${lib.concatMapStringsSep "\n" (ext: "ALTER EXTENSION \"${ext}\" UPDATE;") extensions}
+          ALTER SCHEMA public OWNER TO ${cfg.database.user};
+
+          -- trigger reindex if vectorchord updates
+          -- https://docs.immich.app/administration/postgres-standalone/#updating-vectorchord
+          SELECT COALESCE(installed_version, ''') AS vchord_version_after FROM pg_available_extensions WHERE name = 'vchord' \gset
+
+          SELECT (:'vchord_version_before' != ''' AND :'vchord_version_before' != :'vchord_version_after') AS has_vchord_updated \gset
+          \if :has_vchord_updated
+            REINDEX INDEX face_index;
+            REINDEX INDEX clip_index;
+          \endif
+        '';
+      in
+      [
+        ''
+          ${lib.getExe' postgresqlPackage "psql"} -d "${cfg.database.name}" -f "${sqlFile}"
+        ''
       ];
-      sqlFile = pkgs.writeText "immich-pgvectors-setup.sql" ''
-        -- save previous version of vectorchord to trigger reindex on update
-        SELECT COALESCE(installed_version, ''') AS vchord_version_before FROM pg_available_extensions WHERE name = 'vchord' \gset
-
-        ${lib.concatMapStringsSep "\n" (ext: "CREATE EXTENSION IF NOT EXISTS \"${ext}\";") extensions}
-        ${lib.concatMapStringsSep "\n" (ext: "ALTER EXTENSION \"${ext}\" UPDATE;") extensions}
-        ALTER SCHEMA public OWNER TO ${cfg.database.user};
-
-        -- trigger reindex if vectorchord updates
-        -- https://docs.immich.app/administration/postgres-standalone/#updating-vectorchord
-        SELECT COALESCE(installed_version, ''') AS vchord_version_after FROM pg_available_extensions WHERE name = 'vchord' \gset
-
-        SELECT (:'vchord_version_before' != ''' AND :'vchord_version_before' != :'vchord_version_after') AS has_vchord_updated \gset
-        \if :has_vchord_updated
-          REINDEX INDEX face_index;
-          REINDEX INDEX clip_index;
-        \endif
-      '';
-    in [
-      ''
-        ${lib.getExe' postgresqlPackage "psql"} -d "${cfg.database.name}" -f "${sqlFile}"
-      ''
-    ];
 
     services.redis.servers = mkIf cfg.redis.enable {
       immich = {
@@ -362,26 +351,29 @@ in {
       };
     };
 
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [cfg.port];
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
 
-    services.immich.environment = let
-      postgresEnv =
-        if isPostgresUnixSocket
-        then {DB_URL = "postgresql:///${cfg.database.name}?host=${cfg.database.host}";}
-        else {
-          DB_HOSTNAME = cfg.database.host;
-          DB_PORT = toString cfg.database.port;
-          DB_DATABASE_NAME = cfg.database.name;
-          DB_USERNAME = cfg.database.user;
-        };
-      redisEnv =
-        if isRedisUnixSocket
-        then {REDIS_SOCKET = cfg.redis.host;}
-        else {
-          REDIS_PORT = toString cfg.redis.port;
-          REDIS_HOSTNAME = cfg.redis.host;
-        };
-    in
+    services.immich.environment =
+      let
+        postgresEnv =
+          if isPostgresUnixSocket then
+            { DB_URL = "postgresql:///${cfg.database.name}?host=${cfg.database.host}"; }
+          else
+            {
+              DB_HOSTNAME = cfg.database.host;
+              DB_PORT = toString cfg.database.port;
+              DB_DATABASE_NAME = cfg.database.name;
+              DB_USERNAME = cfg.database.user;
+            };
+        redisEnv =
+          if isRedisUnixSocket then
+            { REDIS_SOCKET = cfg.redis.host; }
+          else
+            {
+              REDIS_PORT = toString cfg.redis.port;
+              REDIS_HOSTNAME = cfg.redis.host;
+            };
+      in
       postgresEnv
       // redisEnv
       // {
@@ -405,19 +397,20 @@ in {
 
     systemd.slices.system-immich = {
       description = "Immich (self-hosted photo and video backup solution) slice";
-      documentation = ["https://immich.app/docs"];
+      documentation = [ "https://immich.app/docs" ];
     };
 
     systemd.services.immich-server = {
       description = "Immich backend server (Self-hosted photo and video backup solution)";
       requires =
-        lib.optionals cfg.database.enable ["postgresql.service"]
-        ++ lib.optionals (cfg.redis.enable && isRedisUnixSocket) ["redis-immich.service"];
-      after =
-        ["network.target"]
-        ++ lib.optionals cfg.database.enable ["postgresql.service"]
-        ++ lib.optionals (cfg.redis.enable && isRedisUnixSocket) ["redis-immich.service"];
-      wantedBy = ["multi-user.target"];
+        lib.optionals cfg.database.enable [ "postgresql.service" ]
+        ++ lib.optionals (cfg.redis.enable && isRedisUnixSocket) [ "redis-immich.service" ];
+      after = [
+        "network.target"
+      ]
+      ++ lib.optionals cfg.database.enable [ "postgresql.service" ]
+      ++ lib.optionals (cfg.redis.enable && isRedisUnixSocket) [ "redis-immich.service" ];
+      wantedBy = [ "multi-user.target" ];
       inherit (cfg) environment;
       path = [
         # gzip and pg_dumpall are used by the backup service
@@ -430,42 +423,38 @@ in {
         chmod 0600 /run/immich/config.json
       '';
 
-      serviceConfig =
-        commonServiceConfig
-        // {
-          LoadCredential = secretsReplacement.credentials;
-          ExecStart = lib.getExe cfg.package;
-          EnvironmentFile = mkIf (cfg.secretsFile != null) cfg.secretsFile;
-          Slice = "system-immich.slice";
-          StateDirectory = "immich";
-          SyslogIdentifier = "immich";
-          RuntimeDirectory = "immich";
-          ReadWritePaths = [cfg.mediaLocation];
-          User = cfg.user;
-          Group = cfg.group;
-          # ensure that immich-server has permission to connect to the redis socket.
-          SupplementaryGroups = mkIf (cfg.redis.enable && isRedisUnixSocket) [
-            config.services.redis.servers.immich.group
-          ];
-        };
+      serviceConfig = commonServiceConfig // {
+        LoadCredential = secretsReplacement.credentials;
+        ExecStart = lib.getExe cfg.package;
+        EnvironmentFile = mkIf (cfg.secretsFile != null) cfg.secretsFile;
+        Slice = "system-immich.slice";
+        StateDirectory = "immich";
+        SyslogIdentifier = "immich";
+        RuntimeDirectory = "immich";
+        ReadWritePaths = [ cfg.mediaLocation ];
+        User = cfg.user;
+        Group = cfg.group;
+        # ensure that immich-server has permission to connect to the redis socket.
+        SupplementaryGroups = mkIf (cfg.redis.enable && isRedisUnixSocket) [
+          config.services.redis.servers.immich.group
+        ];
+      };
     };
 
     systemd.services.immich-machine-learning = mkIf cfg.machine-learning.enable {
       description = "immich machine learning";
-      requires = lib.optionals cfg.database.enable ["postgresql.service"];
-      after = ["network.target"] ++ lib.optionals cfg.database.enable ["postgresql.service"];
-      wantedBy = ["multi-user.target"];
+      requires = lib.optionals cfg.database.enable [ "postgresql.service" ];
+      after = [ "network.target" ] ++ lib.optionals cfg.database.enable [ "postgresql.service" ];
+      wantedBy = [ "multi-user.target" ];
       inherit (cfg.machine-learning) environment;
-      serviceConfig =
-        commonServiceConfig
-        // {
-          ExecStart = lib.getExe cfg.package.machine-learning;
-          Slice = "system-immich.slice";
-          CacheDirectory = "immich";
-          ReadWritePaths = [cfg.mediaLocation];
-          User = cfg.user;
-          Group = cfg.group;
-        };
+      serviceConfig = commonServiceConfig // {
+        ExecStart = lib.getExe cfg.package.machine-learning;
+        Slice = "system-immich.slice";
+        CacheDirectory = "immich";
+        ReadWritePaths = [ cfg.mediaLocation ];
+        User = cfg.user;
+        Group = cfg.group;
+      };
     };
 
     # Systemd tmpfiles setup for custom/non-default mediaLocation paths
@@ -479,13 +468,16 @@ in {
       immich = {
         name = "immich";
         group = cfg.group;
-        extraGroups = lib.optionals (cfg.accelerationDevices != []) ["render" "video"];
+        extraGroups = lib.optionals (cfg.accelerationDevices != [ ]) [
+          "render"
+          "video"
+        ];
         isSystemUser = true;
       };
     };
-    users.groups = mkIf (cfg.group == "immich") {immich = {};};
+    users.groups = mkIf (cfg.group == "immich") { immich = { }; };
   };
   meta = {
-    maintainers = with lib.maintainers; [jvanbruegge];
+    maintainers = with lib.maintainers; [ jvanbruegge ];
   };
 }
