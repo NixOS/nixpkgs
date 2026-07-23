@@ -13189,7 +13189,7 @@ self: super: with self; {
 
   pinboard = callPackage ../development/python-modules/pinboard { };
 
-  pinecone-client = callPackage ../development/python-modules/pinecone-client { };
+  pinecone = callPackage ../development/python-modules/pinecone { };
 
   pinecone-plugin-assistant = callPackage ../development/python-modules/pinecone-plugin-assistant { };
 
