@@ -10,6 +10,7 @@
   which,
   ps,
   getconf,
+  python3Packages,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
   # dependency ordering is broken at the moment when building with openssl
@@ -113,6 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       redis = nixosTests.redis;
       unitTests = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
+      valkey-python = python3Packages.valkey;
     };
     serverBin = "valkey-server";
   };

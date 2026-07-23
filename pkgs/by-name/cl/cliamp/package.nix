@@ -16,16 +16,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "cliamp";
-  version = "1.57.1";
+  version = "1.61.0";
 
   src = fetchFromGitHub {
     owner = "bjarneo";
     repo = "cliamp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wRXF2bnl3xFJtuESJX2UVSsPwl4xo6E+k7nIdtzCULo=";
+    hash = "sha256-BbyaZw+OvC6rb60Z2whhHj2iKow/ZJJ8VzuwPX7bHIE=";
   };
 
-  vendorHash = "sha256-A2Ygc1a9e2flZzaNAEXvr8Ui1cE89TxBfUNALmDzIo0=";
+  vendorHash = "sha256-KYjP6qEINdSlcDSEMKxMwDfXzuQPAQSe4oZh+o4PrFs=";
 
   nativeBuildInputs = [
     pkg-config

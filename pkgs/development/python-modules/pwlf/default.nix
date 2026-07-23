@@ -17,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pwlf";
-  version = "2.5.3";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cjekel";
     repo = "piecewise_linear_fit_py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-En8zgImub4hMVphl7c0OkdQJ1LRTEBw0kI8dSs4V+N8=";
+    hash = "sha256-RBGOQTvnLm0XdIfDItce38Cdt8+tYr7SL0QzTbkS/fQ=";
   };
 
   build-system = [
@@ -47,7 +47,5 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/cjekel/piecewise_linear_fit_py/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
-    # See https://github.com/cjekel/piecewise_linear_fit_py/issues/134
-    broken = lib.versionAtLeast scipy.version "1.18";
   };
 })

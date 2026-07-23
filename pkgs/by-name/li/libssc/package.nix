@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libssc";
-  version = "0.2.2";
+  version = "0.4.4";
 
   src = fetchFromCodeberg {
     owner = "DylanVanAssche";
     repo = "libssc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vc3phLAURKXAVD/o4uiGkBtJ3wsbLEfkwygMltEhqug=";
+    hash = "sha256-C9A0NtkGztSJQIkv4diGAPhZMUiIUszRNYif2yZL8nI=";
   };
 
   buildInputs = [
