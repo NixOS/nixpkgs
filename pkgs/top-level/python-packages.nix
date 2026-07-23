@@ -9008,6 +9008,8 @@ self: super: with self; {
 
   jsonmerge = callPackage ../development/python-modules/jsonmerge { };
 
+  jsonmodels = callPackage ../development/python-modules/jsonmodels { };
+
   jsonnet = callPackage ../development/python-modules/jsonnet { };
 
   jsonpatch = callPackage ../development/python-modules/jsonpatch { };
@@ -9035,8 +9037,6 @@ self: super: with self; {
   jsonrpclib-pelix = callPackage ../development/python-modules/jsonrpclib-pelix { };
 
   jsons = callPackage ../development/python-modules/jsons { };
-
-  jsonmodels = callPackage ../development/python-modules/jsonmodels { };
 
   jsonschema = callPackage ../development/python-modules/jsonschema { };
 

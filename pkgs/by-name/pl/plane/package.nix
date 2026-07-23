@@ -166,6 +166,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/apps/api";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [ makeWrapper ];
 
   dontBuild = true;
