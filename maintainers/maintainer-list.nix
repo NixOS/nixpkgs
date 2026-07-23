@@ -12454,6 +12454,12 @@
     github = "james-atkins";
     githubId = 9221409;
   };
+  jamesbrink = {
+    email = "dev.urandom.io@gmail.com";
+    name = "James Brink";
+    github = "jamesbrink";
+    githubId = 646361;
+  };
   jamespeapen = {
     name = "James Eapen";
     email = "james.eapen@vai.org";
