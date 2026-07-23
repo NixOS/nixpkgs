@@ -1383,15 +1383,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "kulala.nvim";
-      version = "6.21.0-1";
+      version = "6.21.2-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/kulala.nvim-6.21.0-1.rockspec";
-          sha256 = "11g9k9gi1cl9bmrcd70p6gy874nql6z0l3wfhiskjwac8385lqj3";
+          url = "mirror://luarocks/kulala.nvim-6.21.2-1.rockspec";
+          sha256 = "0w34k8676l7gavnv99v3c2d9m59926ykj509qbri0g927442pcrw";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/mistweaverco/kulala.nvim/archive/v6.21.0.zip";
-        sha256 = "0zglgmxz1lcfzk7x4p6c78drpa60b9rf9bvsnmnbg2w0rypg91wm";
+        url = "https://github.com/mistweaverco/kulala.nvim/archive/v6.21.2.zip";
+        sha256 = "175m953v0v0k12246skdxm8kjagx2drxi2na9qgiak3vb5m5k3l0";
       };
 
       disabled = luaOlder "5.1";
