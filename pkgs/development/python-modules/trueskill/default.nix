@@ -6,14 +6,17 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "trueskill";
   version = "0.4.5";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1fv7g1szyjykja9mzax2w4js7jm2z7wwzgnr5dqrsdi84j6v8qlx";
+    pname = "trueskill";
+    inherit (finalAttrs) version;
+    hash = "sha256-nWK0jSQoNp1xK9m+z/n5osqjJeGiq1+TktNL/3V4Z7s=";
   };
 
   build-system = [ setuptools ];
@@ -23,10 +26,12 @@ buildPythonPackage rec {
   # Can't build distribute, see https://github.com/NixOS/nixpkgs/pull/49340
   doCheck = false;
 
+  pythonImportsCheck = [ "trueskill" ];
+
   meta = {
     description = "Video game rating system";
     homepage = "https://trueskill.org";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ eadwu ];
   };
-}
+})
