@@ -77,7 +77,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://herdr.dev";
     changelog = "https://github.com/ogulcancelik/herdr/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ kevinpita ];
+    maintainers = with lib.maintainers; [
+      kevinpita
+      faukah
+    ];
     mainProgram = "herdr";
     platforms = lib.platforms.unix;
   };
