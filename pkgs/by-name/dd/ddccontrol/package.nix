@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   prePatch = ''
     substituteInPlace configure.ac              \
-      --replace                                 \
+      --replace-fail                            \
       "\$""{datadir}/ddccontrol-db"             \
       "${ddccontrol-db}/share/ddccontrol-db"
 
