@@ -2,13 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "tlv8";
   version = "0.10.0";
-  format = "setuptools";
+  pyproject = true;
 
   # pypi does not contain test files
   src = fetchFromGitHub {
@@ -17,6 +18,8 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "sha256-G35xMFYasKD3LnGi9q8wBmmFvqgtg0HPdC+y82nxRWA=";
   };
+
+  build-system = [ setuptools ];
 
   checkInputs = [ pytestCheckHook ];
 
