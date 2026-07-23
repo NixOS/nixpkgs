@@ -8,9 +8,6 @@
   ncurses,
   libpcap,
   libnet,
-  # alpha version of GTK interface
-  withGtk ? false,
-  gtk2,
   # enable remote admin interface
   enableAdmin ? false,
 }:
@@ -44,17 +41,16 @@ stdenv.mkDerivation {
     libpcap
     libnet
     ncurses
-  ]
-  ++ lib.optional withGtk gtk2;
+  ];
 
   autoreconfPhase = "./autogen.sh";
 
   configureFlags = [
     "--with-pcap-includes=${lib.getDev libpcap}/include"
     "--with-libnet-includes=${lib.getDev libnet}/include"
+    "--disable-gtk"
   ]
-  ++ lib.optional (!enableAdmin) "--disable-admin"
-  ++ lib.optional (!withGtk) "--disable-gtk";
+  ++ lib.optional (!enableAdmin) "--disable-admin";
 
   makeFlags = [ "LDFLAGS=-lncurses" ];
 
