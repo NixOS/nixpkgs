@@ -349,6 +349,7 @@ runCommandLocal name
       inherit nativeBuildInputs;
 
       __structuredAttrs = true;
+      strictDeps = true;
 
       passthru = passthru // {
         env =
