@@ -22,7 +22,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gitte";
-  version = "0.8.1";
+  version = "0.9.0";
 
   __structuredAttrs = true;
 
@@ -30,12 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ckruse";
     repo = "Gitte";
     tag = finalAttrs.version;
-    hash = "sha256-c7GhPn7/0PzRTYQbhfvlSUMJqHs4dRqeWRMBJG2eqdc=";
+    hash = "sha256-k10Rqpf9fhcG+PU6WGr7Q2nVwZb0tLp2B2r3BNeicoI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-yR4MYQJQMjqEs++8RhQwDV+h/blSVgFqrGYUfrPUGOg=";
+    hash = "sha256-eK8o/psq0eHwUlbfD0I/TwIqoA40Ay0eJ9CtZypZCi4=";
   };
 
   strictDeps = true;

@@ -498,6 +498,7 @@ mapAliases {
   chrome-gnome-shell = throw "'chrome-gnome-shell' has been renamed to/replaced by 'gnome-browser-connector'"; # Converted to throw 2025-10-27
   chromium-xorg-conf = throw "'chromium-xorg-conf' has been removed as it was only used by the 'cmt' NixOS module, which was removed"; # Added 2026-05-25
   ci-edit = throw "'ci-edit' has been removed due to lack of maintenance upstream"; # Added 2025-08-26
+  cider = throw "'cider' has been removed as it is unmaintained and archived upstream."; # Added 2026-07-22
   cinnamon-common = cinnamon; # Added 2025-08-06
   ciopfs = throw "'ciopfs' has been removed due to lack of fuse 3 support."; # Added 2026-06-05
   cisco-packet-tracer_8 = throw "'cisco-packet-tracer_8' has been removed as it vendored qt5 webengine. Consider updating to 'cisco-packet-tracer_9' instead."; # Added 2026-04-26
@@ -635,6 +636,7 @@ mapAliases {
   curlHTTP3 = warnAlias "'curlHTTP3' has been removed, as 'curl' now has HTTP/3 support enabled by default" curl; # Added 2025-08-22
   cvemap = vulnx; # Added 2026-04-19
   cwe-client-cli = throw "cwe-client-cli has been removed because it is archived and has unclear licensing"; # Added 2026-01-10
+  cwiid = throw "'cwiid' was removed because it depended on the deprecated GTK2 engine."; # Added 2026-07-22
   cyber = throw "cyber has been removed, as it does not build with supported Zig versions"; # Added 2025-08-09
   dale = throw "dale has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-10
   daq = throw "'daq' has been removed as it is unmaintained and broken. Snort2 has also been removed, which depended on this"; # Added 2025-05-21
@@ -1766,6 +1768,7 @@ mapAliases {
   openzwave = throw "openzwave was removed because upstream is no longer maintained. Consider using zwave-js-server"; # Added 2026-05-14
   opera = throw "'opera' has been removed due to lack of maintenance in nixpkgs"; # Added 2025-05-19
   opusTools = warnAlias "'opusTools' has been renamed to 'opus-tools'" opus-tools; # Added 2026-02-12
+  orion = throw "'orion' was removed because it depended on the deprecated GTK2 engine."; # Added 2026-07-22
   orogene = throw "'orogene' uses a wasm-specific fork of async-tar that is vulnerable to CVE-2025-62518, which is not supported by its upstream"; # Added 2025-10-24
   ortp = throw "'ortp' has been moved to 'linphonePackages.ortp'"; # Added 2025-09-20
   OSCAR = throw "'OSCAR' has been renamed to/replaced by 'oscar'"; # Converted to throw 2025-10-27
@@ -2177,6 +2180,7 @@ mapAliases {
   steamPackages.steam-fhsenv = throw "'steamPackages.steam-fhsenv' has been renamed to/replaced by 'steam'"; # Converted to throw 2025-10-27
   steamPackages.steam-fhsenv-small = throw "'steamPackages.steam-fhsenv-small' has been renamed to/replaced by 'steam'"; # Converted to throw 2025-10-27
   steamPackages.steamcmd = throw "'steamPackages.steamcmd' has been renamed to/replaced by 'steamcmd'"; # Converted to throw 2025-10-27
+  storeBackup = storebackup; # Added 2026-07-05
   StormLib = throw "'StormLib' has been renamed to/replaced by 'stormlib'"; # Converted to throw 2025-10-27
   strawberry-qt5 = throw "strawberry-qt5 has been replaced by strawberry"; # Converted to throw 2025-07-19
   strawberry-qt6 = throw "strawberry-qt6 has been replaced by strawberry"; # Added 2025-07-19
@@ -2843,6 +2847,7 @@ mapAliases {
   zigbee2mqtt_2 = zigbee2mqtt; # Added 2025-08-11
   zinc = throw "'zinc' has been renamed to/replaced by 'zincsearch'"; # Converted to throw 2025-10-27
   zint = throw "'zint' has been renamed to/replaced by 'zint-qt'"; # Converted to throw 2025-10-27
+  zkfuse = throw "'zkfuse' has been removed as it was unmaintained"; # Added 2026-07-20
   zmkBATx = warnAlias "'zmkBATx' has been renamed to 'zmkbatx'" zmkbatx; # Added 2026-02-18
   zombietrackergps = throw "'zombietrackergps' has been dropped, as it depends on KDE Gear 5 and is unmaintained"; # Added 2025-08-20
   zotero-beta = throw "'zotero-beta' has been removed. Use 'zotero' instead."; # Added 2026-03-05

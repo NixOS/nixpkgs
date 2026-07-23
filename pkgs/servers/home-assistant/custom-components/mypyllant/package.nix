@@ -19,13 +19,13 @@
 buildHomeAssistantComponent rec {
   owner = "signalkraft";
   domain = "mypyllant";
-  version = "0.9.17";
+  version = "0.9.18";
 
   src = fetchFromGitHub {
     owner = "signalkraft";
     repo = "mypyllant-component";
     tag = "v${version}";
-    hash = "sha256-OUNWju1g3vBjrUd/ZzQCMS08PWUyQUMnUkqElss9KaQ=";
+    hash = "sha256-7huCAslbm5CLzArYMzSGkKPHlQoX6Qc0WLuv7e6OYLQ=";
   };
 
   dependencies = [

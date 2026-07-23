@@ -25,17 +25,19 @@
   webp-pixbuf-loader,
   libavif,
   libheif,
+  versionCheckHook,
+  fontconfig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nocturne";
-  version = "1.3.2";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Nocturne";
     tag = finalAttrs.version;
-    hash = "sha256-uXsl438K0Ew0fdrKtGf28VkHQ76loDWKLJkounzqhEQ=";
+    hash = "sha256-q2jN1X/2Iayzqf+2d1roQ9dbZKGqWy3sXC78lKXLzPM=";
   };
 
   __structuredAttrs = true;
@@ -103,6 +105,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   # avoid installing Navidrome at runtime if not available, incompatible with the nix store
   patches = [ ./disable-navidrome-setup.patch ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckKeepEnvironment = [
+    "XDG_CACHE_HOME"
+    "FONTCONFIG_FILE"
+  ];
+  # it still errors due to lack of display, but the retcode is 0 and the version is printed
+  preInstallCheck = ''
+    export XDG_CACHE_HOME=$(mktemp -d)
+    export FONTCONFIG_FILE="${fontconfig.out}/etc/fonts/fonts.conf"
+  '';
 
   meta = {
     description = "Adwaita music player for OpenSubsonic servers like Navidrome";

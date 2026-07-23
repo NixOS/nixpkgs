@@ -309978,7 +309978,6 @@ self: {
       ];
       description = "A breakout game written in Yampa using SDL";
       license = "unknown";
-      hydraPlatforms = lib.platforms.none;
       mainProgram = "haskanoid";
     }
   ) { };
@@ -325757,7 +325756,7 @@ self: {
       )
       {
         bluetooth = null;
-        inherit (pkgs) cwiid;
+        cwiid = null;
       };
 
   hdaemonize = callPackage (

@@ -20,7 +20,6 @@
   # tests
   matplotlib,
   numpy,
-  orion,
   pytest-benchmark,
   pytest-regressions,
   pytestCheckHook,
@@ -61,7 +60,6 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     matplotlib
     numpy
-    orion
     pytest-benchmark
     pytest-regressions
     pytestCheckHook
