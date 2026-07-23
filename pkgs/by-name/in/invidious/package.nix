@@ -49,6 +49,19 @@ crystal.buildCrystalPackage rec {
       url = "https://github.com/iv-org/invidious/commit/77ad41678b45c4f6815940123f1796fc51259f45.patch?full_index=1";
       hash = "sha256-0pf6eu0ckQ2gYHLr2tEDy+1dvAhVjepG26kuxuHbZl8=";
     })
+    # fix Innertube 400 errors (block by YouTube) by changing the reported client version
+    # https://github.com/iv-org/invidious/issues/5817
+    # remove with the first release containing these two commits
+    (fetchpatch2 {
+      name = "innertube-400-hotfix-1.patch";
+      url = "https://github.com/iv-org/invidious/commit/30c0656a93ff196aa50a7f820afaf68f9994c809.patch?full_index=1";
+      hash = "sha256-7tbGlv3UzqqHrpmieV8t+RDQ2ItMqr3NBRo4hmkiuTg=";
+    })
+    (fetchpatch2 {
+      name = "innertube-400-hotfix-2.patch";
+      url = "https://github.com/iv-org/invidious/commit/adfec7646b80ab3e68d7e854730986b46726bff9.patch?full_index=1";
+      hash = "sha256-hLKBgXhFUnizEt7nucgVP8bSlSa/e6+Ehql84S/VtIY=";
+    })
   ];
 
   postPatch =
