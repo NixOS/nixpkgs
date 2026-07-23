@@ -20,6 +20,8 @@ buildPythonPackage {
   version = "0.0.50";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "joaopalotti";
     repo = "trectools";
