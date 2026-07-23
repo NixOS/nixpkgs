@@ -14741,12 +14741,12 @@ final: prev: {
 
   parrot-nvim = buildVimPlugin {
     pname = "parrot.nvim";
-    version = "2.5.1-unstable-2026-05-20";
+    version = "2.6.0";
     src = fetchFromGitHub {
       owner = "frankroeder";
       repo = "parrot.nvim";
-      rev = "964675ca588efae2a50bef35b01729acc36cb3d5";
-      hash = "sha256-EPrisAicCUpUPl0q5h/uBBSpQuuzOlSCbQpu0ispwvU=";
+      tag = "v2.6.0";
+      hash = "sha256-U5Pq6lkQQlnj4BexhQUIBVGCcSQuCfxP1d6JLR1C4rQ=";
     };
     meta.homepage = "https://github.com/frankroeder/parrot.nvim/";
     meta.license = unfree;
