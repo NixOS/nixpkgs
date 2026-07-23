@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 
   # dependencies
   torch,
@@ -14,14 +15,16 @@
 buildPythonPackage rec {
   pname = "torchdiffeq";
   version = "0.2.5";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-tQ03YNE/0TjczqxlH0uAOW9E/vzr0DegM/7P6qnMEuc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     torch
     scipy
   ];
