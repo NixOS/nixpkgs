@@ -1056,6 +1056,7 @@ mapAliases {
   hydra_unstable = throw "'hydra_unstable' has been renamed to/replaced by 'hydra'"; # Converted to throw 2025-10-27
   hydraAntLogger = warnAlias "'hydraAntLogger' has been renamed to 'hydra-ant-logger'" hydra-ant-logger; # Added 2026-02-08
   hyprfreeze = warnAlias "'hyprfreeze' has been renamed to 'wl-freeze'" wl-freeze; # Added 2026-04-10
+  hyprmagnifier = throw "'hyprmagnifier' has been removed as it was unmaintained, consider using 'hyprmag' instead"; # Added 2026-07-22
   hyprpanel = throw "'hyprpanel' has been archived, consider using 'wayle' instead"; # Added 2026-07-21
   i3-gaps = throw "'i3-gaps' has been renamed to/replaced by 'i3'"; # Converted to throw 2025-10-27
   i3lock-pixeled = throw "'i3lock-pixeled' has been unmaintained for several years now."; # Converted to throw 2026-01-24
