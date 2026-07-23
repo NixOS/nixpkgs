@@ -2,11 +2,15 @@
   lib,
   stdenv,
   fetchFromGitHub,
+
+  # nativeBuildInputs
   autoreconfHook,
   intltool,
+  pkg-config,
+
+  # buildInputs
   libxml2,
   pciutils,
-  pkg-config,
   gtk2,
   ddccontrol-db,
 }:
