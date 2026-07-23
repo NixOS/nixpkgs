@@ -4940,6 +4940,11 @@
     matrix = "@chayleaf:matrix.pavluk.org";
     name = "Anna Pavlyuk";
   };
+  cheerfulScumbag = {
+    github = "cheerfulScumbag";
+    githubId = 164391367;
+    name = "kenn";
+  };
   cheeseecake = {
     email = "chanelnjw@gmail.com";
     github = "cheeseecake";

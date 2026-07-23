@@ -1356,7 +1356,6 @@ mapAliases {
   linux_ham = throw "linux_ham has been removed in favour of the standard kernel packages"; # Added 2025-06-24
   linux_hardened = throw "linux_hardened has been removed due to lack of maintenance"; # Added 2026-03-18
   linux_latest-libre = throw "linux_latest_libre has been removed due to lack of maintenance"; # Added 2025-10-01
-  linux_lqx = throw "linux_lqx has been removed due to lack of maintenance"; # Added 2026-03-13
   linux_rpi0 = linuxKernel.kernels.linux_rpi1;
   linux_rpi1 = linuxKernel.kernels.linux_rpi1;
   linux_rpi2 = linuxKernel.kernels.linux_rpi2;
@@ -1393,7 +1392,6 @@ mapAliases {
   linuxPackages_hardened = throw "linuxPackages_hardened has been removed due to lack of maintenance"; # Added 2026-03-18
   linuxPackages_latest-libre = throw "linux_latest_libre has been removed due to lack of maintenance"; # Added 2025-10-01
   linuxPackages_latest_xen_dom0 = throw "'linuxPackages_latest_xen_dom0' has been renamed to/replaced by 'linuxPackages_latest'"; # Converted to throw 2025-10-27
-  linuxPackages_lqx = throw "linuxPackages_lqx has been removed due to lack of maintenance"; # Added 2026-03-13
   linuxPackages_rpi0 = linuxKernel.packages.linux_rpi1;
   linuxPackages_rpi1 = linuxKernel.packages.linux_rpi1;
   linuxPackages_rpi2 = linuxKernel.packages.linux_rpi2;

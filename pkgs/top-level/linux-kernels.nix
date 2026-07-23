@@ -126,6 +126,13 @@ in
           ];
         };
 
+        linux_lqx = callPackage ../os-specific/linux/kernel/liquorix-kernel.nix {
+          kernelPatches = [
+            kernelPatches.bridge_stp_helper
+            kernelPatches.request_key_helper
+          ];
+        };
+
         # This contains the variants of the XanMod kernel
         xanmodKernels = callPackage ../os-specific/linux/kernel/xanmod-kernels.nix;
 
@@ -152,7 +159,6 @@ in
         };
       }
       // lib.optionalAttrs config.allowAliases {
-        linux_lqx = throw "linux_lqx has been removed due to lack of maintenance";
         linux_libre = throw "linux_libre has been removed due to lack of maintenance";
         linux_latest_libre = throw "linux_latest_libre has been removed due to lack of maintenance";
 
@@ -699,12 +705,12 @@ in
       linux_testing = packagesFor kernels.linux_testing;
 
       linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
+      linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);
       linux_xanmod = recurseIntoAttrs (packagesFor kernels.linux_xanmod);
       linux_xanmod_stable = recurseIntoAttrs (packagesFor kernels.linux_xanmod_stable);
       linux_xanmod_latest = recurseIntoAttrs (packagesFor kernels.linux_xanmod_latest);
     }
     // lib.optionalAttrs config.allowAliases {
-      linux_lqx = throw "linux_lqx has been removed due to lack of maintenance";
       linux_libre = throw "linux_libre has been removed due to lack of maintenance";
       linux_latest_libre = throw "linux_latest_libre has been removed due to lack of maintenance";
 
