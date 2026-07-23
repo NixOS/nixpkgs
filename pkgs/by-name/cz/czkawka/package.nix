@@ -15,6 +15,7 @@
   libxi,
   libxkbcommon,
   libxrandr,
+  lld,
   pango,
   pkg-config,
   rustPlatform,
@@ -44,6 +45,9 @@ let
       gobject-introspection
       pkg-config
       wrapGAppsHook4
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      lld # ld crashes
     ];
 
     buildInputs = [
