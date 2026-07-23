@@ -85,7 +85,6 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     jinja2
     paho-mqtt
     pillow
-    platformio
     puremagic
     py7zr
     pyparsing
