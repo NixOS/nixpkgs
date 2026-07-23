@@ -13,7 +13,8 @@ stdenv.mkDerivation {
   inherit (lua.pkgs.luv) version src meta;
 
   cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic)
     "-DBUILD_MODULE=OFF"
     "-DWITH_SHARED_LIBUV=ON"
     "-DLUA_BUILD_TYPE=System"
