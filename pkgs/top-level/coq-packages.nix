@@ -231,7 +231,7 @@ let
       stalmarck-tactic = callPackage ../development/coq-modules/stalmarck { };
       stalmarck = self.stalmarck-tactic.stalmarck;
       stdlib = callPackage ../development/rocq-modules/stdlib { };
-      stdpp = callPackage ../development/coq-modules/stdpp { };
+      stdpp = callPackage ../development/rocq-modules/stdpp { };
       StructTact = callPackage ../development/coq-modules/StructTact { };
       tlc = callPackage ../development/coq-modules/tlc { };
       topology = callPackage ../development/coq-modules/topology { };
