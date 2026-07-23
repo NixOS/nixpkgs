@@ -7,11 +7,6 @@
 
 lib.makeScope pkgs.newScope (
   self: with self; {
-
-    #### PLATFORM
-
-    gtkglext = callPackage ./platform/gtkglext { };
-
   }
 )
 // lib.optionalAttrs config.allowAliases {
@@ -33,6 +28,7 @@ lib.makeScope pkgs.newScope (
   gtk = throw "gnome2.gtk has been removed, please use top-level gtk2";
   gtkmm = throw "gnome2.gtkmm has been removed, please use top-level gtkmm2";
   gtkdoc = throw "gnome2.gtkdoc has been removed, please use top-level gtk-doc";
+  gtkglext = throw "gnome2.gtkglext has been removed, please use top-level gtkglext";
   startup_notification = throw "gnome2.startup_notification has been removed, please use top-level libstartup_notification";
   startupnotification = throw "gnome2.startupnotification has been removed, please use top-level libstartup_notification";
   gnomedocutils = throw "gnome2.gnomedocutils has been removed, please use top-level gnome-doc-utils";

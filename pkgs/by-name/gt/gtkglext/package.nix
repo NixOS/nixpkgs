@@ -32,6 +32,9 @@ stdenv.mkDerivation {
     sha256 = "1d1bp4635nla7d07ci40c7w4drkagdqk8wg93hywvdipmjfb4yqb";
   };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     pkg-config
     gtk-doc
