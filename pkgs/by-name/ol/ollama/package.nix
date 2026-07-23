@@ -6,7 +6,6 @@
   makeBinaryWrapper,
   stdenv,
   addDriverRunpath,
-  nix-update-script,
 
   cmake,
   gitMinimal,
@@ -112,11 +111,12 @@ let
   # vendored in-tree. Pre-stage the pin (tracks upstream's
   # `LLAMA_CPP_VERSION` file) so the FetchContent step uses our copy
   # instead of trying to clone over the network in the sandbox.
+  llamaCppVersion = "b9888";
   llamaCppSrc = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
-    tag = "b9840";
-    hash = "sha256-SlcBqlUSeXgGltk7fz1blp4DobypzkT8cw8a7dkVGiU=";
+    tag = llamaCppVersion;
+    hash = "sha256-9G7PqT1lQ414Ecg5Fp4qrShJOfMH9iYXZgY40EyAwEw=";
   };
 
   wrapperOptions = [
@@ -366,6 +366,7 @@ goBuild (finalAttrs: {
   versionCheckKeepEnvironment = "HOME";
 
   passthru = {
+    inherit llamaCppSrc llamaCppVersion;
     tests = {
       inherit ollama;
     }
@@ -377,7 +378,7 @@ goBuild (finalAttrs: {
       service-vulkan = nixosTests.ollama-vulkan;
     };
   }
-  // lib.optionalAttrs (!enableRocm && !enableCuda) { updateScript = nix-update-script { }; };
+  // lib.optionalAttrs (!enableRocm && !enableCuda && !enableVulkan) { updateScript = ./update.sh; };
 
   meta = {
     description =
