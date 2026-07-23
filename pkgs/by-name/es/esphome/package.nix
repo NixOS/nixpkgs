@@ -24,14 +24,14 @@ let
 in
 python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "esphome";
-  version = "2026.6.2";
+  version = "2026.6.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = finalAttrs.version;
-    hash = "sha256-h7aMPSXmIUutCGMoZlE3Z1wX2xNxdmZsHfBllcFHBHc=";
+    hash = "sha256-4sbc/X86OWN/Bx2sPk3H2lgzGxdQNS6bIspNLAVqHz8=";
   };
 
   patches = [
