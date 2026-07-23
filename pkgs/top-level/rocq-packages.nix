@@ -6,7 +6,7 @@
   callPackage,
   newScope,
   ocamlPackages_4_14,
-  ocamlPackages_5_4,
+  ocamlPackages_5_5,
   fetchpatch,
   makeWrapper,
 }@args:
@@ -91,7 +91,7 @@ let
       inherit
         version
         ocamlPackages_4_14
-        ocamlPackages_5_4
+        ocamlPackages_5_5
         ;
     };
 in
