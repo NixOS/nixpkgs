@@ -17589,6 +17589,8 @@ self: super: with self; {
 
   reprint = callPackage ../development/python-modules/reprint { };
 
+  repro-zipfile = callPackage ../development/python-modules/repro-zipfile { };
+
   reproject = callPackage ../development/python-modules/reproject { };
 
   reprshed = callPackage ../development/python-modules/reprshed { };
