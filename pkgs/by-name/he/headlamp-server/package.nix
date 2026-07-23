@@ -2,6 +2,8 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update,
+  writeShellScript,
 }:
 
 buildGoModule rec {
@@ -36,6 +38,14 @@ buildGoModule rec {
 
   postInstall = ''
     mv $out/bin/cmd $out/bin/headlamp-server
+  '';
+
+  # headlamp-frontend and headlamp inherit src (and version) from here, update their hashes aswell
+  passthru.updateScript = writeShellScript "headlamp-update" ''
+    set -euo pipefail
+    ${lib.getExe nix-update} headlamp-server
+    ${lib.getExe nix-update} --version=skip --no-src headlamp-frontend
+    ${lib.getExe nix-update} --version=skip --no-src headlamp
   '';
 
   meta = {
