@@ -6,21 +6,23 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tmb";
   version = "0.1.5";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "alemuro";
     repo = "tmb";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-XuRhRmeTXAplb14UwISyzaqEIrFeg8/aCdMxUccMUos=";
   };
 
   build-system = [ setuptools ];
 
-  env.VERSION = version;
+  env.VERSION = finalAttrs.version;
 
   dependencies = [ requests ];
 
@@ -35,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
