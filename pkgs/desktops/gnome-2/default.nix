@@ -20,8 +20,6 @@ lib.makeScope pkgs.newScope (
 
     libglade = callPackage ./platform/libglade { };
 
-    GConf = callPackage ./platform/GConf { };
-
     libgnomecanvas = callPackage ./platform/libgnomecanvas { };
 
     gtkglext = callPackage ./platform/gtkglext { };
@@ -59,6 +57,7 @@ lib.makeScope pkgs.newScope (
   gnomeicontheme = throw "gnome2.gnomeicontheme has been removed, please use top-level gnome-icon-theme";
   gnome_common = throw "gnome2.gnome_common has been removed, please use top-level gnome-common";
 
+  GConf = throw "gnome2.GConf has been removed as it was long deprecated upstream. Consider using gsettings and dconf instead."; # 2026-07-23
   gnome-common = throw "gnome2.gnome-common has been removed as it was deprecated upstream and unused in Nixpkgs"; # Added 2026-07-23
   gnome_mime_data = throw "gnome2.gnome_mime_data has been removed as it was unused in Nixpkgs"; # 2026-07-23
   gnome_python = throw "gnome2.gnome_python has been removed"; # 2023-01-14
