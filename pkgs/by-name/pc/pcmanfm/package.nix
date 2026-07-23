@@ -11,17 +11,13 @@
   pkg-config,
   wrapGAppsHook3,
   adwaita-icon-theme,
-  withGtk3 ? true,
-  gtk2,
   gtk3,
   gettext,
   nix-update-script,
 }:
 
 let
-  libfm' = libfm.override { inherit withGtk3; };
-  gtk = if withGtk3 then gtk3 else gtk2;
-  inherit (lib) optional;
+  libfm' = libfm.override { withGtk3 = true; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pcmanfm";
@@ -43,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
-    gtk
+    gtk3
     libfm'
     libx11
     pango
@@ -52,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.ACLOCAL = "aclocal -I ${gettext}/share/gettext/m4";
 
-  configureFlags = optional withGtk3 "--with-gtk=3";
+  configureFlags = [ "--with-gtk=3" ];
 
   passthru.updateScript = nix-update-script { };
 
