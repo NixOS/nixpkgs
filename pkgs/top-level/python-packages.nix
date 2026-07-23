@@ -13199,8 +13199,6 @@ self: super: with self; {
 
   pinecone = callPackage ../development/python-modules/pinecone { };
 
-  pinecone-plugin-interface = callPackage ../development/python-modules/pinecone-plugin-interface { };
-
   ping3 = callPackage ../development/python-modules/ping3 { };
 
   pingouin = callPackage ../development/python-modules/pingouin { };
