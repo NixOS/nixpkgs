@@ -10,10 +10,6 @@ lib.makeScope pkgs.newScope (
 
     #### PLATFORM
 
-    libIDL = callPackage ./platform/libIDL {
-      gettext = if stdenv.hostPlatform.isDarwin then pkgs.gettext else null;
-    };
-
     libart_lgpl = callPackage ./platform/libart_lgpl { };
 
     libglade = callPackage ./platform/libglade { };
@@ -73,6 +69,7 @@ lib.makeScope pkgs.newScope (
   libgnome = throw "gnome2.libgnome has been removed"; # 2024-06-27
   libgnomeui = throw "gnome2.libgnomeui has been removed"; # 2024-06-27
   libgtkhtml = throw "gnome2.libgtkhtml has been removed"; # 2023-01-15
+  libIDL = throw "gnome2.libIDL has been removed as it has been archived upstream since July 2014"; # 2026-07-23
   ORBit2 = throw "gnome2.ORBit2 has been removed as it has been archived upstream since July 2016"; # 2026-07-23
   python_rsvg = throw "gnome2.python_rsvg has been removed"; # 2023-01-14
 }
