@@ -35,23 +35,6 @@
     };
 
     generators.derived = {
-      dependencies = [ "example" ];
-      files.derived.deploy = false;
-      script =
-        pkgs:
-        pkgs.writeScript "gen-derived" ''
-          #!/bin/sh
-          export PATH="${
-            lib.makeBinPath [
-              pkgs.coreutils
-              pkgs.cowsay
-            ]
-          }"
-          cat $in/example/example | cowsay > $out/derived
-        '';
-    };
-
-    generators.derived2 = {
       backend = "age";
       dependencies = [ "example" ];
       files.derived.deploy = true;
@@ -69,8 +52,8 @@
         '';
     };
 
-    generators.derived3 = {
-      dependencies = [ "derived2" ];
+    generators.derivedPlain = {
+      dependencies = [ "derived" ];
       files.derived.deploy = false;
       script =
         pkgs:
