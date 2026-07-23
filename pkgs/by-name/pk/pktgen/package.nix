@@ -11,9 +11,7 @@
   lua5_3,
   numactl,
   util-linux,
-  gtk2,
   which,
-  withGtk ? false,
   nix-update-script,
 }:
 
@@ -44,15 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
     lua5_3
     numactl
     which
-  ]
-  ++ lib.optionals withGtk [
-    gtk2
   ];
 
   env = {
     RTE_SDK = dpdk;
-    GUI = lib.optionalString withGtk "true";
-
     NIX_CFLAGS_COMPILE = toString [
       "-Wno-error=sign-compare"
     ];
