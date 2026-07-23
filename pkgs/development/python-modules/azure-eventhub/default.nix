@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "azure-eventhub";
-  version = "5.15.0";
+  version = "5.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-sdk-for-python";
     tag = "azure-eventhub_${version}";
-    hash = "sha256-zpj1DUeFCXgVw44LcBCYtuFcQtA9BnrDKAxKSYzu4ts=";
+    hash = "sha256-+Qx7sPdm1jwB0RYsN2dwB+GJJjqPMQsl8TI2GFCRWKA=";
   };
 
   sourceRoot = "${src.name}/sdk/eventhub/azure-eventhub";
