@@ -171,8 +171,10 @@ in
       ];
     };
 
-    services.valkey = lib.mkIf cfg.redis.createLocally {
+    services.redis.package = lib.mkIf cfg.redis.createLocally pkgs.valkey;
+    services.redis.servers.plane = lib.mkIf cfg.redis.createLocally {
       enable = true;
+      port = 6379;
     };
 
     systemd.tmpfiles.rules = [
@@ -195,8 +197,8 @@ in
         DATABASE_URL = "postgres:///${cfg.database.name}?host=/run/postgresql";
       }
       // lib.optionalAttrs cfg.redis.createLocally {
-        REDIS_URL = "redis://localhost:${toString config.services.valkey.port}/0";
-        CELERY_BROKER_URL = "redis://localhost:${toString config.services.valkey.port}/1";
+        REDIS_URL = "redis://localhost:${toString config.services.redis.servers.plane.port}/0";
+        CELERY_BROKER_URL = "redis://localhost:${toString config.services.redis.servers.plane.port}/1";
       }
     );
 
