@@ -125,7 +125,6 @@ clangStdenv.mkDerivation rec {
     "-DOPENSCAD_VERSION='${builtins.replaceStrings [ "-" ] [ "." ] unstable_date}-unstable'"
     "-DCMAKE_UNITY_BUILD=OFF" # broken compile with unity
     # IPO
-    "-DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld"
     "-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON"
 
     # The sources enable this for only apple. We turn it off globally anyway to stay
