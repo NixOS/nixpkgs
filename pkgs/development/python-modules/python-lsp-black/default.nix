@@ -10,7 +10,6 @@
 
   # dependencies
   python-lsp-server,
-  tomli,
 
   # checks
   pytestCheckHook,
