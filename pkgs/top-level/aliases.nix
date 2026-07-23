@@ -995,6 +995,16 @@ mapAliases {
   gnatcoll-zlib = throw "'gnatcoll-zlib' has been renamed to/replaced by 'gnatPackages.gnatcoll-zlib'"; # Converted to throw 2025-10-27
   gnatinspect = throw "'gnatinspect' has been renamed to/replaced by 'gnatPackages.gnatinspect'"; # Converted to throw 2025-10-27
   gnaural = throw "'gnaural' has been removed due to lack of maintenance and relying on gtk2. Consider using 'sbagen' instead"; # Added 2026-05-22
+  gnome2.GConf = throw "gnome2.GConf has been removed as it was long deprecated upstream. Consider using gsettings and dconf instead."; # Added 2026-07-23
+  gnome2.gnome-common = throw "gnome2.gnome-common has been removed as it was deprecated upstream and unused in Nixpkgs"; # Added 2026-07-23
+  gnome2.gnome_mime_data = throw "gnome2.gnome_mime_data has been removed as it was unused in Nixpkgs"; # Added 2026-07-23
+  gnome2.gtkglext = warnAlias "'gnome2.gtkglext' has been renamed to 'gtkglext'" gtkglext; # Added 2026-07-23
+  gnome2.libart_lgpl = throw "gnome2.libart_lpl has been removed as it was deprecated upstream and unused in Nixpkgs"; # Added 2026-07-23
+  gnome2.libglade = throw "gnome2.libglade has been removed as it has been archived upstream since January 2010"; # Added 2026-07-23
+  gnome2.libgnomecanvas = throw "gnome2.libgnomecanvas has been removed as it has been archived upstream since April 2012"; # Added 2026-07-23
+  gnome2.libgtksourceview = throw "gnome2.libgtksourceview has been removed as it was unmaintained upstream and depended on the deprecated GTK2 engine. Consider using gtksourceview3, gtksourceview4, or gtksourceview5 instead."; # Added 2026-07-23
+  gnome2.libIDL = throw "gnome2.libIDL has been removed as it has been archived upstream since July 2014"; # Added 2026-07-23
+  gnome2.ORBit2 = throw "gnome2.ORBit2 has been removed as it has been archived upstream since July 2016"; # Added 2026-07-23
   gnome-bluetooth_1_0 = throw "'gnome-bluetooth_1_0' has been removed as it is unmaintained upstream"; # Added 2026-03-09
   gnome-firmware-updater = throw "'gnome-firmware-updater' has been renamed to/replaced by 'gnome-firmware'"; # Converted to throw 2025-10-27
   gnome-icon-theme = throw "'gnome-icon-theme' has been removed because it is unmaintained upstream and depends on GTK 2."; # Added 2026-07-22
