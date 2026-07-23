@@ -6,7 +6,6 @@
   freetype,
   gettext,
   glib,
-  gtk2,
   libGL,
   libGLU,
   libmpeg2,
@@ -19,9 +18,8 @@
   zlib,
   nix-update-script,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
-  pname = "fs-uae";
+  pname = "fsuae";
   version = "3.2.35";
 
   src = fetchFromGitHub {
@@ -43,7 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     gettext
     glib
-    gtk2
     libGL
     libGLU
     libmpeg2
@@ -59,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     strip-nondeterminism --type zip $out/share/fs-uae/fs-uae.dat
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {};
 
   meta = {
     homepage = "https://fs-uae.net";
