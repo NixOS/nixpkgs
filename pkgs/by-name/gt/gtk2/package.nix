@@ -175,5 +175,9 @@ stdenv.mkDerivation (finalAttrs: {
       "gdk-x11-2.0"
       "gtk+-x11-2.0"
     ];
+    problems.removal = {
+      message = "gtk2 is deprecated and will be removed from Nixpkgs 26.11 because its final release 2.24.33 happened in December 2020.";
+      urls = [ "https://github.com/NixOS/nixpkgs/issues/410814" ];
+    };
   };
 })
