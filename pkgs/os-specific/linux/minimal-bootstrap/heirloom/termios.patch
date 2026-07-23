@@ -1,0 +1,141 @@
+--- ed/ed.c
++++ ed/ed.c
+@@ -68,7 +68,6 @@ static const char sccsid[] USED = "@(#)ed.sl	1.99 (gritter) 7/27/06";
+ #include <stdlib.h>
+ #include <signal.h>
+ #include "sigset.h"
+-#include <termios.h>
+ #include <setjmp.h>
+ #include <libgen.h>
+ #include <inttypes.h>
+@@ -77,7 +76,6 @@ static const char sccsid[] USED = "@(#)ed.sl	1.99 (gritter) 7/27/06";
+ #include <ctype.h>
+ #include <wctype.h>
+ #include <limits.h>
+-#include <termios.h>
+ static int	FNSIZE;
+ static int	LBSIZE;
+ static int	RHSIZE;
+@@ -2273,22 +2271,10 @@ sclose(int fd)
+ static void
+ fspec(const char *lp)
+ {
+-	struct termios	ts;
+ 	const char	*cp;
+ 
+ 	freetabs();
+ 	maxlength = 0;
+-	if (tcgetattr(1, &ts) < 0
+-#ifdef	TAB3
+-			|| (ts.c_oflag&TAB3) == 0
+-#endif
+-			)
+-		return;
+-	while (lp[0]) {
+-		if (lp[0] == '<' && lp[1] == ':')
+-			break;
+-		lp++;
+-	}
+ 	if (lp[0]) {
+ 		lp += 2;
+ 		while ((cp = ftok(&lp)) != NULL) {
+--- ls/ls.c
++++ ls/ls.c
+@@ -102,7 +102,6 @@ static char ifmt_c[] = "-pc-d-b--nl-SD--";
+ #include <grp.h>
+ #include <errno.h>
+ #include <fcntl.h>
+-#include <termios.h>
+ #include <locale.h>
+ #include <limits.h>
+ #include <ctype.h>
+@@ -110,14 +109,6 @@ static char ifmt_c[] = "-pc-d-b--nl-SD--";
+ #include <wchar.h>
+ #include <wctype.h>
+ #include "config.h"
+-#ifndef	USE_TERMCAP
+-#ifndef	sun
+-#include <curses.h>
+-#include <term.h>
+-#endif
+-#else	/* USE_TERMCAP */
+-#include <termcap.h>
+-#endif	/* USE_TERMCAP */
+ 
+ #ifdef	_AIX
+ #include <sys/sysmacros.h>
+@@ -989,13 +980,6 @@ printname(const char *name, struct file *f, int doit)
+ 			bold++;
+ 		}
+ 		if (color) {
+-#ifndef	USE_TERMCAP
+-			if (bold)
+-				vidattr(A_BOLD);
+-#else	/* USE_TERMCAP */
+-			if (Bold)
+-				tputs(Bold, 1, putchar);
+-#endif	/* USE_TERMCAP */
+ 			printf(color);
+ 		}
+ 	}
+@@ -1056,13 +1040,6 @@ printname(const char *name, struct file *f, int doit)
+ 		}
+ 	}
+ 	if (doit && color) {
+-#if !defined (USE_TERMCAP)
+-		if (bold)
+-			vidattr(A_NORMAL);
+-#else	/* USE_TERMCAP */
+-		if (Normal)
+-			tputs(Normal, 1, putchar);
+-#endif	/* USE_TERMCAP */
+ 		printf(fc_get(FC_NORMAL));
+ 	}
+ 	if (f)
+@@ -1598,16 +1575,12 @@ main(int argc, char **argv)
+ {
+ 	struct file *flist = nil, **aflist = &flist;
+ 	enum depth depth;
+-	struct winsize ws;
+ 	int i;
+ 	char *cp;
+ 
+ #ifdef	__GLIBC__
+ 	putenv("POSIXLY_CORRECT=1");
+ #endif
+-	setlocale(LC_COLLATE, "");
+-	setlocale(LC_CTYPE, "");
+-	setlocale(LC_TIME, "");
+ #ifndef	UCB
+ 	if (getenv("SYSV3") != NULL)
+ 		sysv3 = 1;
+@@ -1624,16 +1597,6 @@ main(int argc, char **argv)
+ 	}
+ 	if (istty || isatty(1)) {
+ 		istty = 1;
+-#if !defined (USE_TERMCAP)
+-		setupterm(NULL, 1, &tinfostat);
+-#else	/* USE_TERMCAP */
+-		{
+-			char	buf[2048];
+-			if ((cp = getenv("TERM")) != NULL)
+-				if (tgetent(buf, cp) > 0)
+-					tinfostat = 1;
+-		}
+-#endif	/* USE_TERMCAP */
+ 		field |= FL_STATUS;
+ 	}
+ 	while ((i = getopt(argc, argv, personalities[personality].per_opt))
+@@ -1753,12 +1716,6 @@ main(int argc, char **argv)
+ 	if ((cp = getenv("COLUMNS")) != NULL) {
+ 		ncols = atoi(cp);
+ 	} else if ((present('C') || present('x') || present('m')) && istty) {
+-		if (ioctl(1, TIOCGWINSZ, &ws) == 0 && ws.ws_col > 0)
+-			ncols = ws.ws_col - 1;
+-#if !defined (USE_TERMCAP)
+-		else if (tinfostat == 1 && columns > 0)
+-			ncols = columns;
+-#endif	/* !USE_TERMCAP */
+ 	}
+ 	depth = SURFACE;
+ 	if (optind == argc) {

@@ -1,0 +1,42 @@
+From 887cb6906afa2b2d8abf35ccfc33ce7b8dc902f8 Mon Sep 17 00:00:00 2001
+From: Maximilian Bosch <maximilian@mbosch.me>
+Date: Sun, 5 Oct 2025 12:48:43 +0200
+Subject: [PATCH 2/2] Makeconfig: make inst_complocaledir overridable
+
+On NixOS, we build the locales in a separate package from glibc itself.
+Also, packages aren't installed into a common location such as `/usr`,
+but each package has its own unique prefix below `/nix/store`.
+
+For us, the current state is a problem because `localedef` is built
+in a different package and expects DESTDIR to be the unique
+package-prefix of `glibc` itself. Our current workaround is to
+invoke `localedef` with `--prefix=$TMPDIR` and copy the contents
+to the correct prefix. This was doable without patching when
+`localedef` was doing build & locale-archive creation at the
+same time.
+
+With the previous patch, the Makefile uses `$(inst_complocaledir)` to
+tell localedef where the previously built locales are. In NixOS, we now
+need to override `$(inst_complocaledir)` to point to
+`$TMPDIR/$(glibc.out)`. Hence, this patch makes the variable overridable
+from env.
+---
+ Makeconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makeconfig b/Makeconfig
+index 9eda4fa528..43d88325bc 100644
+--- a/Makeconfig
++++ b/Makeconfig
+@@ -197,7 +197,7 @@ inst_zonedir = $(install_root)$(zonedir)
+ ifndef complocaledir
+ complocaledir = $(libdir)/locale
+ endif
+-inst_complocaledir = $(install_root)$(complocaledir)
++inst_complocaledir ?= $(install_root)$(complocaledir)
+ 
+ # Where to install the message catalog data files (which are
+ # machine-independent).
+-- 
+2.50.1
+

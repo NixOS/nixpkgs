@@ -1,0 +1,35 @@
+From be3aca2216ecb4aab6d1e3c5e11ed621fd75691a Mon Sep 17 00:00:00 2001
+From: Winter M <winter@antithesis.com>
+Date: Wed, 8 Apr 2026 17:34:43 -0400
+Subject: [PATCH] makefile: don't use tool to generate version file
+
+---
+ makefile | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/makefile b/makefile
+index fa3e0943..d3bc479e 100644
+--- a/makefile
++++ b/makefile
+@@ -118,10 +118,7 @@ pre-build:
+ 	$(COPY) $(GO_SPACE)/seelog_windows.xml.template $(GO_SPACE)/bin/
+ 	$(COPY) $(GO_SPACE)/agent/integration-cli/integration-cli.json $(GO_SPACE)/bin/
+ 
+-	@echo "Regenerate version file during pre-release"
+-# Remove overrides for GOARCH and GOOS when invoking 'go run', since we want the local host's settings
+-	GOARCH= GOOS= go run $(GO_SPACE)/agent/version/versiongenerator/version-gen.go
+-	$(COPY) $(GO_SPACE)/VERSION $(GO_SPACE)/bin/
++	echo -e 'package version\nconst Version = "@VERSION@"' > $(GO_SPACE)/agent/version/version.go
+ 
+ # General build recipe. Defaults to generating a linux/amd64 non-PIE build, but can be overriden
+ # by setting appropriate variables.
+@@ -493,4 +490,4 @@ argot-check:
+ 	$(GO_SPACE)/Tools/src/run_argot.sh
+ 
+ argot-update:
+-	$(GO_SPACE)/Tools/src/run_argot.sh "true"
+\ No newline at end of file
++	$(GO_SPACE)/Tools/src/run_argot.sh "true"
+-- 
+2.53.0
+

@@ -1,0 +1,12 @@
+diff --git a/src/plug/Widgets/ControlPage.vala b/src/plug/Widgets/ControlPage.vala
+index 7d1a17d..0d37da2 100644
+--- a/src/plug/Widgets/ControlPage.vala
++++ b/src/plug/Widgets/ControlPage.vala
+@@ -36,7 +36,6 @@ public class PC.Widgets.ControlPage : Switchboard.SettingsPage {
+         stack = new Gtk.Stack ();
+         stack.add_titled (time_limit_view, "general", _("Screen Time"));
+         stack.add_titled (internet_box, "internet", _("Internet"));
+-        stack.add_titled (apps_box, "apps", _("Applications"));
+ 
+         var switcher = new Gtk.StackSwitcher () {
+             halign = CENTER,

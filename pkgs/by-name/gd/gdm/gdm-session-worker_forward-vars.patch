@@ -1,0 +1,31 @@
+diff --git a/daemon/gdm-session-worker.c b/daemon/gdm-session-worker.c
+index 9ef4c5b..94da834 100644
+--- a/daemon/gdm-session-worker.c
++++ b/daemon/gdm-session-worker.c
+@@ -1515,6 +1515,16 @@ gdm_session_worker_load_env_d (GdmSessionWorker *worker)
+         g_object_unref (dir);
+ }
+ 
++static void
++gdm_session_worker_forward_var (GdmSessionWorker *worker, char const *var)
++{
++        char const *value = g_getenv(var);
++        if (value != NULL) {
++                g_debug ("forwarding %s= %s", var, value);
++                gdm_session_worker_set_environment_variable(worker, var, value);
++        }
++}
++
+ static gboolean
+ gdm_session_worker_accredit_user (GdmSessionWorker  *worker,
+                                   GError           **error)
+@@ -1559,6 +1569,9 @@ gdm_session_worker_accredit_user (GdmSessionWorker  *worker,
+                 goto out;
+         }
+ 
++        gdm_session_worker_forward_var(worker, "GDM_X_SERVER_EXTRA_ARGS");
++        gdm_session_worker_forward_var(worker, "GDM_X_SESSION_WRAPPER");
++
+         gdm_session_worker_update_environment_from_passwd_info (worker,
+                                                                 uid,
+                                                                 gid,

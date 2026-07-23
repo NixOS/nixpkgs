@@ -1,0 +1,41 @@
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  installFonts,
+  unstableGitUpdater,
+}:
+stdenvNoCC.mkDerivation {
+  pname = "material-symbols";
+  version = "4.0.0-unstable-2026-05-08";
+
+  src = fetchFromGitHub {
+    owner = "google";
+    repo = "material-design-icons";
+    rev = "5a4e1b7fd26f11ce3d2abf7d7fcd13274f874e6c";
+    hash = "sha256-XVza/duC2hsBrT6Ty1XxJy0m/lpuBt2rVoUo5B1JmUc=";
+    sparseCheckout = [ "variablefont" ];
+  };
+
+  outputs = [
+    "out"
+    "webfont"
+  ];
+
+  nativeBuildInputs = [ installFonts ];
+
+  passthru.updateScript = unstableGitUpdater { };
+
+  meta = {
+    description = "Material Symbols icons by Google";
+    homepage = "https://fonts.google.com/icons";
+    downloadPage = "https://github.com/google/material-design-icons";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      fufexan
+      luftmensch-luftmensch
+      alexphanna
+    ];
+    platforms = lib.platforms.all;
+  };
+}

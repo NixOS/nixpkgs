@@ -1,0 +1,31 @@
+diff --git a/renpy/script.py b/renpy/script.py
+index 62e424415..7c3ae5922 100644
+--- a/renpy/script.py
++++ b/renpy/script.py
+@@ -969,6 +969,13 @@ class Script(object):
+                 f.seek(-hashlib.md5().digest_size, 2)
+                 digest = f.read(hashlib.md5().digest_size)
+ 
++        elif dir.startswith("@systemRenpy@"):
++            data, stmts = self.load_file(dir, fn + compiled)
++            lastfn = dir + "/" + fn + compiled
++            with open(lastfn, "rb") as f:
++                f.seek(-hashlib.md5().digest_size, 2)
++                digest = f.read(hashlib.md5().digest_size)
++
+         else:
+             # Otherwise, we're loading from disk. So we need to decide if
+             # we want to load the rpy or the rpyc file.
+diff --git a/launcher/game/distribute.rpy b/launcher/game/distribute.rpy
+index bece65c63..c2590bcf7 100644
+--- a/launcher/game/distribute.rpy
++++ b/launcher/game/distribute.rpy
+@@ -606,7 +606,7 @@ fix_dlc("renios", "renios")
+                 self.log.close()
+                 return
+ 
+-            if project.data['force_recompile']:
++            if project.data['force_recompile'] and False:
+                 import compileall
+ 
+                 compileall.compile_dir(

@@ -1,0 +1,13 @@
+diff --git a/webpack.zotero-locale-plugin.js b/webpack.zotero-locale-plugin.js
+index fb6eb28..e5e040f 100644
+--- a/webpack.zotero-locale-plugin.js
++++ b/webpack.zotero-locale-plugin.js
+@@ -52,7 +52,7 @@ class ZoteroLocalePlugin {
+ 		}
+ 
+ 		// If the commit hash has changed
+-		if (lastCommitHash !== this.commitHash) {
++		if (false) {
+ 			console.log(`Detected commit hash change (was: ${lastCommitHash}, now: ${this.commitHash}). Clearing and downloading locale files...`);
+ 
+ 			// Remove and recreate the output directory

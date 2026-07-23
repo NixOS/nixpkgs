@@ -1,0 +1,40 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 0b4b9a8..8c22f60 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -125,7 +125,7 @@ if (NOT WIN32 AND NOT APPLE)
+     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/platform/unix/BuildLinuxImage.sh.in ${CMAKE_CURRENT_BINARY_DIR}/BuildLinuxImage.sh @ONLY)
+ endif ()
+
+-target_link_libraries(BambuStudio libslic3r cereal)
++target_link_libraries(BambuStudio libslic3r)
+ if (APPLE)
+ #    add_compile_options(-stdlib=libc++)
+ #    add_definitions(-DBOOST_THREAD_DONT_USE_CHRONO -DBOOST_NO_CXX11_RVALUE_REFERENCES -DBOOST_THREAD_USES_MOVE)
+diff --git a/src/libslic3r/CMakeLists.txt b/src/libslic3r/CMakeLists.txt
+index 4481362..7d41af3 100644
+--- a/src/libslic3r/CMakeLists.txt
++++ b/src/libslic3r/CMakeLists.txt
+@@ -574,7 +574,6 @@ set(OCCT_LIBS
+ target_link_libraries(libslic3r
+     libnest2d
+     admesh
+-    cereal
+     libigl
+     miniz
+     boost_libs
+diff --git a/src/slic3r/CMakeLists.txt b/src/slic3r/CMakeLists.txt
+index 0a852a4..2da0533 100644
+--- a/src/slic3r/CMakeLists.txt
++++ b/src/slic3r/CMakeLists.txt
+@@ -671,8 +671,8 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SLIC3R_GUI_SOURCES})
+
+ encoding_check(libslic3r_gui)
+
+-target_link_libraries(libslic3r_gui libslic3r cereal imgui imguizmo minilzo GLEW::GLEW OpenGL::GL hidapi ${wxWidgets_LIBRARIES} glfw libcurl OpenSSL::SSL OpenSSL::Crypto)
+-#target_link_libraries(libslic3r_gui libslic3r cereal imgui imguizmo minilzo GLEW::GLEW OpenGL::GL hidapi libcurl OpenSSL::SSL OpenSSL::Crypto ${wxWidgets_LIBRARIES} glfw)
++target_link_libraries(libslic3r_gui libslic3r imgui imguizmo minilzo GLEW::GLEW OpenGL::GL hidapi ${wxWidgets_LIBRARIES} glfw libcurl OpenSSL::SSL OpenSSL::Crypto)
++#target_link_libraries(libslic3r_gui libslic3r imgui imguizmo minilzo GLEW::GLEW OpenGL::GL hidapi libcurl OpenSSL::SSL OpenSSL::Crypto ${wxWidgets_LIBRARIES} glfw)
+
+ if (MSVC)
+     target_link_libraries(libslic3r_gui Setupapi.lib)
