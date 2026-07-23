@@ -220,3 +220,25 @@ Backends will commonly need to define custom per-generator or per-file options. 
 ```
 
 ## The vars schema
+
+Earlier on we observed that the vars CLI can take in NixOS configurations as argument. Of course, this by itself can be read in multiple ways. For example — do the configurations in question need to be evaluated already? If not, where is Nixpkgs taken from?
+
+The CLI does accept pre-evaluated configurations (like one would, for example, expect when using flakes). When given a non-evaluated configuration, the CLI will evaluate it using the Nixpkgs available in the Nix path.
+
+Once the configuration is evaluated, the CLI will extract the data it needs into a Nix attrset that can be directly serialized as JSON (this implies the package set-reliant script functions are evaluated with the host package set as an argument, for example) before being taken in by the Python code.
+
+This is done by calling to the so-called [`jsonify.nix`](./nix_vars/nix/jsonify.nix) function (proper name TBD). If we were to assign a type signature to the aforementioned function, it would look something like this:
+
+```
+jsonify : { config, pkgsTarget ? null, pkgsHost ? null } -> VarsConfiguration
+```
+
+We've already seen what happens if `config` is given to be a (possibly evaluated) NixOS instance. If this function receives a `VarsConfiguration` as the config argument, then the function will simply return the configuration it is given. This means one can side-step the `jsonify.nix` logic and produce a Nix attrset containing the needed data by whichever means they desire (for example, as part of a tool that's totally disconnected from the NixOS module system). The aforementioned function can (and should) also be called when `pkgsHost` needs to be set to a different architecture than `pkgsTarget`.
+
+The actual schema of `VarsConfiguration` is not yet documented anywhere, although that's something that would need to be done before merging this proposal.
+
+One can also sidestep going through Nix-lang altogether by using the `--json` flag to pass a JSON string satisfying the aforementioned schema
+
+## Available backends
+
+We are currently not planning to ship a production-ready backend alongside the CLI. The goal of the interface is to be lean enough such that anyone can write a simple backend meeting their needs in their language of choice. Still, two (currently somewhat scuffed) example backends can be found in [`example/config/`](./example/config)
