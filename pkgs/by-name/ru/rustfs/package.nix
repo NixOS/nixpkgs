@@ -15,7 +15,7 @@
 let
   console = stdenv.mkDerivation (finalAttrs: {
     pname = "rustfs-console";
-    version = "0.1.13";
+    version = "0.1.16";
     __structuredAttrs = true;
     __darwinAllowLocalNetworking = true;
 
@@ -23,7 +23,7 @@ let
       owner = "rustfs";
       repo = "console";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-pxpT3kV30qA+Ob/RWi11rsapGyNc6h1EN79fcPi1e1E=";
+      hash = "sha256-WZ1vROBZJltcaXdwIuTsRmOY2iZxIoi7yW8lapZcaHo=";
     };
 
     pnpmDeps = fetchPnpmDeps {
@@ -51,14 +51,14 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "rustfs";
-  version = "1.0.0-beta.9";
+  version = "1.0.0-beta.10";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rustfs";
     repo = "rustfs";
     tag = version;
-    hash = "sha256-aNbicnNHaJn05k5EffgPEURf/Uj2A8PjOHiH2UGPz4M=";
+    hash = "sha256-lBkfaTH36MhWHk39Ie2uQqcU+yf76uImPdV91C8kWV8=";
   };
 
   postPatch = ''
@@ -66,7 +66,7 @@ rustPlatform.buildRustPackage rec {
     cp -rL ${console} ./rustfs/static
   '';
 
-  cargoHash = "sha256-abbsElP4dSSZnL4UfQEoHUtiEW8B/p6Y81UA7EbqbD4=";
+  cargoHash = "sha256-PMgC4+/n/UOpBa5oiZ1F17oht5YmN1RzoFIA0qE+h6M=";
 
   nativeBuildInputs = [
     protobuf
@@ -84,10 +84,11 @@ rustPlatform.buildRustPackage rec {
   cargoTestFlags = "-p rustfs";
 
   checkFlags = [
-    # failing since 1.0.0-beta.9, seem like upstream issues
+    # require real disks
     "--skip=app::capacity_dirty_scope_test"
     "--skip=app::delete_objects_stat_gating_test"
     "--skip=app::put_prelookup_gating_test"
+    # non-deterministically panics
     "--skip=two_embedded_servers_isolate_auth_and_data_planes"
   ];
 
