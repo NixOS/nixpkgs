@@ -10104,6 +10104,8 @@ self: super: with self; {
 
   markitdown = callPackage ../development/python-modules/markitdown { };
 
+  marklas = callPackage ../development/python-modules/marklas { };
+
   marko = callPackage ../development/python-modules/marko { };
 
   markuppy = callPackage ../development/python-modules/markuppy { };
