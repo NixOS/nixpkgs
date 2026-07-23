@@ -7979,6 +7979,13 @@
     githubId = 25820532;
     name = "Luca Schwan";
   };
+  eidoom = {
+    email = "ryanmoodie@gmail.com";
+    github = "eidoom";
+    githubId = 10097705;
+    matrix = "@eidoom:matrix.org";
+    name = "Ryan Moodie";
+  };
   eikek = {
     email = "eike.kettner@posteo.de";
     github = "eikek";
