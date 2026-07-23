@@ -2,6 +2,7 @@
 
 let
   testPort = 6052;
+  remoteBuildPort = 6055;
   unixSocket = "/run/esphome/esphome.sock";
 in
 {
@@ -28,6 +29,17 @@ in
           enableUnixSocket = true;
         };
       };
+
+    esphomeRemoteBuild =
+      { ... }:
+      {
+        services.esphome = {
+          enable = true;
+          remoteBuildOnly = true;
+          inherit remoteBuildPort;
+          openFirewall = true;
+        };
+      };
   };
 
   testScript = ''
@@ -38,5 +50,8 @@ in
     esphomeUnix.wait_for_unit("esphome.service")
     esphomeUnix.wait_for_file("${unixSocket}")
     esphomeUnix.succeed("curl --fail --unix-socket ${unixSocket} http://localhost/")
+
+    esphomeRemoteBuild.wait_for_unit("esphome.service")
+    esphomeRemoteBuild.wait_for_open_port(${toString remoteBuildPort})
   '';
 }
