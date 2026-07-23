@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   poetry-core,
   pyasn1,
   pytestCheckHook,
@@ -9,27 +9,19 @@
 
 buildPythonPackage rec {
   pname = "rsa";
-  version = "4.9";
+  version = "4.9.1";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "sybrenstuvel";
-    repo = "python-rsa";
-    rev = "version-${version}";
-    hash = "sha256-PwaRe+ICy0UoguXSMSh3PFl5R+YAhJwNdNN9isadlJY=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-572/21SX2kwH39NVMOGpAmWdtv8kHjnZlTytBuvQrnU=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
+  dependencies = [ pyasn1 ];
 
-  propagatedBuildInputs = [ pyasn1 ];
-
-  preCheck = ''
-    sed -i '/addopts/d' tox.ini
-  '';
-
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTestPaths = [ "tests/test_mypy.py" ];
+  # PyPi package does not include tests.
+  doCheck = false;
 
   meta = {
     homepage = "https://stuvel.eu/rsa";
