@@ -17,7 +17,6 @@
   openvpn,
   stunnel,
 
-  gtk2,
   libayatana-indicator,
 
   mono,
@@ -70,7 +69,6 @@ buildDotnetModule (finalAttrs: {
   ];
 
   runtimeInputs = lib.makeLibraryPath [
-    gtk2
     gtk3
     libayatana-indicator
   ];
