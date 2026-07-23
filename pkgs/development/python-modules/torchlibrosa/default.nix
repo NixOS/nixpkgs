@@ -8,13 +8,15 @@
   torch,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "torchlibrosa";
   version = "0.1.0";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Yqi+7fnJtBQaBiNN8/ECKfe6huZ2eMzuAkiexO8EQCg=";
   };
 
@@ -41,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ azuwis ];
   };
-}
+})
