@@ -11,6 +11,8 @@ buildPythonPackage {
   version = "0.4.2";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "ramonsaraiva";
     repo = "timy";
@@ -23,6 +25,8 @@ buildPythonPackage {
   nativeCheckInputs = [
     pytestCheckHook
   ];
+
+  pythonImportsCheck = [ "timy" ];
 
   meta = {
     description = "Minimalist measurement of python code time";
