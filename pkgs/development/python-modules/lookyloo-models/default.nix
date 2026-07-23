@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lookyloo-models";
-  version = "0.2.9";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lookyloo";
     repo = "lookyloo-models";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jqbG8wYUePYnQqqJEek9zFnuuGLarJvwzri19lvRUbY=";
+    hash = "sha256-SoP6eRCoPFSNUHQI31JRteZ8tKHluX58rlPcmyOTTpc=";
   };
 
   postPatch = ''
