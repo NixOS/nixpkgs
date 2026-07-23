@@ -6,17 +6,19 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tlv8";
   version = "0.10.0";
   pyproject = true;
+
+  __structuredAttrs = true;
 
   # pypi does not contain test files
   src = fetchFromGitHub {
     owner = "jlusiardi";
     repo = "tlv8_python";
-    rev = "v${version}";
-    sha256 = "sha256-G35xMFYasKD3LnGi9q8wBmmFvqgtg0HPdC+y82nxRWA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-G35xMFYasKD3LnGi9q8wBmmFvqgtg0HPdC+y82nxRWA=";
   };
 
   build-system = [ setuptools ];
@@ -36,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jojosch ];
   };
-}
+})
