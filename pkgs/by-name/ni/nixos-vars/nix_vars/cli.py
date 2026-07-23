@@ -74,9 +74,7 @@ def main() -> None:
 		title="commands", dest="command", required=True
 	)
 
-	eval_parser = subparsers.add_parser(
-		"evaluate", help="Evaluate configuration"
-	)
+	eval_parser = subparsers.add_parser("evaluate")
 
 	common_args(eval_parser)
 	gen_parser = subparsers.add_parser("generate", help="(Re)generate secrets")
@@ -85,6 +83,17 @@ def main() -> None:
 		"-g",
 		"--generator",
 		dest="generators",
+		metavar="<generator>",
+		type=str,
+		default=[],
+		action="append",
+		help="Generator(s) to force the regeneration of.",
+	)
+	gen_parser.add_argument(
+		"-s",
+		"--set",
+		dest="set",
+		metavar="<generator=path>",
 		type=str,
 		default=[],
 		action="append",

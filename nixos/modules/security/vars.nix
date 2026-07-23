@@ -31,7 +31,7 @@ let
           default = name;
         };
 
-        get = delayedPackage ''
+        get = nullableDelayedPackage ''
           Given $1=gen_name and $2=file_name, the script retrieves the
           respective secret to $out.
         '';
@@ -75,7 +75,7 @@ let
           idempotent.
         '';
 
-        deploy = delayedPackage ''
+        deploy = nullableDelayedPackage ''
           Deploys every available file to the given machine. Any additional
           information required by the deploy script can be provided by the user
           through environment variables.
