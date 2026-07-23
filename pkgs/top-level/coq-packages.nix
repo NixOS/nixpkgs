@@ -9,7 +9,7 @@
   ocamlPackages_4_10,
   ocamlPackages_4_12,
   ocamlPackages_4_14,
-  ocamlPackages_5_4,
+  ocamlPackages_5_5,
   rocqPackages_9_0,
   rocqPackages_9_1,
   rocqPackages_9_2,
@@ -312,7 +312,7 @@ let
         ocamlPackages_4_10
         ocamlPackages_4_12
         ocamlPackages_4_14
-        ocamlPackages_5_4
+        ocamlPackages_5_5
         ;
       rocqPackages = rp;
     };

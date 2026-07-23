@@ -14,7 +14,7 @@
   dune,
   customOCamlPackages ? null,
   ocamlPackages_4_14,
-  ocamlPackages_5_4,
+  ocamlPackages_5_5,
   ncurses,
   csdp ? null,
   version,
@@ -67,7 +67,7 @@ let
       in
       lib.switch rocq-version [
         (case (range "9.0" "9.1") ocamlPackages_4_14)
-      ] ocamlPackages_5_4;
+      ] ocamlPackages_5_5;
   ocamlNativeBuildInputs = [
     ocamlPackages.ocaml
     ocamlPackages.findlib
