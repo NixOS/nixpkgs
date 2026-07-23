@@ -1077,9 +1077,7 @@ let
 
         lablgl = callPackage ../development/ocaml-modules/lablgl { };
 
-        lablgtk = callPackage ../development/ocaml-modules/lablgtk {
-          inherit (pkgs.gnome2) libgnomecanvas gtksourceview;
-        };
+        lablgtk = callPackage ../development/ocaml-modules/lablgtk { };
 
         lablgtk-extras =
           if lib.versionOlder "4.02" ocaml.version then
