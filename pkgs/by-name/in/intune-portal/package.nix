@@ -29,11 +29,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "intune-portal";
-  version = "1.2605.16-noble";
+  version = "1.2605.16-resolute";
+  ubuntuVersion = "26.04";
 
   src = fetchurl {
-    url = "https://packages.microsoft.com/ubuntu/24.04/prod/pool/main/i/intune-portal/intune-portal_${version}_amd64.deb";
-    hash = "sha256-lPwOwxtsI40jeiLNKvWEz858QMOwGfxvhi7nFiidgLE=";
+    url = "https://packages.microsoft.com/ubuntu/${ubuntuVersion}/prod/pool/main/i/intune-portal/intune-portal_${version}_amd64.deb";
+    hash = "sha256-EWJutvcKnzDj4Y+3oHHryRRyMLkNkaRPuCLqO2gq/Xo=";
   };
 
   nativeBuildInputs = [ dpkg ];
@@ -80,6 +81,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp -a opt/microsoft/intune/bin/* $out/bin/
     cp -a usr/share $out
+    cp -a opt/microsoft/intune/share/* $out/share/
     cp -a lib $out
     mkdir -p $out/lib/security
     cp -a ./usr/lib/x86_64-linux-gnu/security/pam_intune.so $out/lib/security/
@@ -115,6 +117,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ rhysmdnz ];
+    mainProgram = "intune-portal";
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }
