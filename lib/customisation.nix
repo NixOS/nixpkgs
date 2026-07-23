@@ -738,6 +738,16 @@ rec {
       # ```
       extra ? (_spliced0: { }),
       f,
+      fExplicit ?
+        {
+          selfBuildBuild,
+          selfBuildHost,
+          selfBuildTarget,
+          selfHostHost,
+          selfHostTarget,
+          selfTargetTarget,
+        }:
+        { },
     }:
     let
       splicePackages' =
@@ -755,8 +765,9 @@ rec {
             pkgsHostTarget = self; # Not `otherSplices.selfHostTarget`;
             pkgsTargetTarget = otherSplices.selfTargetTarget // splitSelves.targetTarget;
           };
+          explicitSelves = lib.renameCrossIndexTo "self" splitSelves;
         in
-        extra spliced0 // spliced0 // keep self;
+        extra spliced0 // spliced0 // fExplicit explicitSelves // keep self;
       getSelf =
         {
           newScope,
