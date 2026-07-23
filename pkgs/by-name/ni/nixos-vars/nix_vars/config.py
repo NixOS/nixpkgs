@@ -31,13 +31,13 @@ class VarsPrompt:
 @dataclass
 class VarsGeneratorBackend:
 	name: str
-	get: str
+	get: Optional[str]
 	set: str
 	exists: str
 	delete: Optional[str]
 	list: Optional[str]
 	fixup: Optional[str]
-	deploy: str
+	deploy: Optional[str]
 	deployLocal: Optional[str]
 
 	def from_jsom(name: str, json: Any) -> Self:

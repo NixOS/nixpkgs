@@ -63,6 +63,11 @@ def get_secret(
 	out: Path,
 ):
 	backend = config.generatorBackends[generator.backend]
+	if backend.get is None:
+		raise VarsError(
+			f"Backend '{backend.name}' has no 'get' script, yet the generator ''{generator.name}' requires one"
+		)
+
 	binary = build_binary(backend.get)
 	try:
 		env = os.environ.copy()
@@ -192,8 +197,13 @@ def deploy_secrets(
 	for generator, filename in files:
 		inputLines.append(f"{generator} {filename}")
 
-	local = args.local is not None and backend.deployLocal is not None
+	local = args.local is not None
 	script = backend.deployLocal if local else backend.deploy
+	if script is None:
+		scriptName = "deployLocal" if local else "deploy"
+		raise VarsError(
+			f"Backend '{backend.name}' has no '{scriptName}' script, yet the generator ''{generator.name}' requires one"
+		)
 
 	binary = build_binary(script)
 	try:

@@ -14,6 +14,7 @@ class VarsArgs:
 	dry_run: bool
 	local: Optional[str]  # "deploy" only
 	generators: List[str]  # "generate" only
+	set: Mapping[str, str]  # "generate" only
 	command: str  # gotta figure out how to type this properly
 	verbose: str
 
@@ -24,6 +25,22 @@ class VarsArgs:
 			d["generators"] = []
 		if "local" not in d:
 			d["local"] = None
+
+		setArgDict = dict()
+		if "set" not in d:
+			for arg in d["set"]:
+				try:
+					key, value = arg.split(",")
+					if key in setArgDict:
+						raise VarsError(
+							f"Multiple --set arguments received for generator '{key}'"
+						)
+					setArgDict[key] = Path(value)
+				except ValueError:
+					raise VarsError(
+						f"--set expects key=value pairs: '{arg}' given"
+					)
+		d["set"] = setArgDict
 
 		args = VarsArgs(**d)
 

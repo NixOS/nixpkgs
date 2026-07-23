@@ -60,7 +60,7 @@
         pkgs.writeScript "gen-derived" ''
           #!/bin/sh
           export PATH="${lib.makeBinPath [ pkgs.coreutils ]}"
-          cat $in/derived2/derived > $out/derived
+          cat $in/derived/derived > $out/derived
         '';
     };
   };
