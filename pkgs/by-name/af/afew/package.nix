@@ -3,8 +3,7 @@
   python3Packages,
   fetchPypi,
   pkgs,
-  testers,
-  afew,
+  versionCheckHook,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -39,6 +38,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = [
     pkgs.notmuch
+    versionCheckHook
   ]
   ++ (with python3Packages; [
     freezegun
@@ -54,12 +54,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "doc"
     "man"
   ];
-
-  passthru.tests = {
-    version = testers.testVersion {
-      package = afew;
-    };
-  };
 
   meta = {
     homepage = "https://github.com/afewmail/afew";
