@@ -96,10 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
 
   env = {
-    # Something is looking for <libxml/foo.h> instead of <libxml2/libxml/foo.h>
     NIX_CFLAGS_COMPILE = toString [
       "-DRENEWAL_PROG_PATH=\"${adcli}/bin/adcli\""
-      "-I${libxml2.dev}/include/libxml2"
     ];
     KRB5_CONFIG = lib.getExe' (lib.getDev libkrb5) "krb5-config";
     NSUPDATE = lib.getExe' dnsutils "nsupdate";
