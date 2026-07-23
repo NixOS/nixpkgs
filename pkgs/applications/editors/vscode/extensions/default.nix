@@ -4852,8 +4852,8 @@ let
         mktplcRef = {
           name = "emacs-mcx";
           publisher = "tuttieee";
-          version = "0.110.11";
-          hash = "sha256-LiiZI0Ze5F5w7OtiqY7wMpzdtyof/ynUH57wRfQnxFs=";
+          version = "0.111.0";
+          hash = "sha256-3z4B1NBQD3hbGcwWpS48bXuUAN1jVlSRLF0PDKGJH3A=";
         };
         meta = {
           changelog = "https://github.com/whitphx/vscode-emacs-mcx/blob/main/CHANGELOG.md";
@@ -5577,8 +5577,8 @@ let
         mktplcRef = {
           name = "vscode-zig";
           publisher = "ziglang";
-          version = "0.6.18";
-          hash = "sha256-jn/2Nmz6N84BCWnRdnM8w5AdiF2hh55h39SDTmRry5I=";
+          version = "0.6.19";
+          hash = "sha256-kdoks0da6+uofzvN5lulkDAVihSS7xoF/Q6Fo5yzQbg=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/ziglang.vscode-zig/changelog";
