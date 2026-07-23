@@ -17,6 +17,12 @@ let
     hash = "sha256-SP5Huefj35PHvVzqS8R/DGSBci/hCHoueEb5RupGVqY=";
   };
 
+  # we need datasets_3 for SpeechT5 embeddings
+  datasets = python3Packages.datasets_3;
+  colbert-ai = python3Packages.colbert-ai.override {
+    inherit datasets;
+  };
+
   frontend = buildNpmPackage rec {
     pname = "open-webui-frontend";
     inherit version src;
@@ -102,7 +108,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       chardet
       chromadb
       cryptography
-      datasets_3
+      datasets
       ddgs
       docx2txt
       einops
