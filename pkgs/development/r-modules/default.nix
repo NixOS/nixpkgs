@@ -215,6 +215,17 @@ let
       }
     ) overrides;
 
+  # Override automatically detected licenses using string representation of
+  # spdx licenses. Valid values are listed under lib.licensesSpdx
+  overrideLicenses =
+    overrides: old:
+    lib.mapAttrs (
+      name: value:
+      (builtins.getAttr name old).override {
+        spdx = value;
+      }
+    ) overrides;
+
   # Overrides package definitions with new R dependencies.
   # For example,
   #
@@ -351,7 +362,8 @@ let
       old6 = old5 // (overrideBuildInputs packagesWithBuildInputs old5);
       old7 = old6 // (overrideBroken brokenPackages old6);
       old8 = old7 // (overrideMaintainers packagesWithMaintainers old7);
-      old = old8;
+      old9 = old8 // (overrideLicenses packagesWithLicenses old8);
+      old = old9;
     in
     old // (otherOverrides old new);
 
@@ -393,6 +405,54 @@ let
     iscream = [ jamespeapen ];
     svaNUMT = [ jbedo ];
     svaRetro = [ jbedo ];
+    # keep-sorted end
+  };
+
+  packagesWithLicenses = {
+    # keep-sorted start block=yes
+    CHETAH = [ "AGPL-3.0-only" ];
+    CRISPRseek = [ "Artistic-2.0" ];
+    DMRcate = [ "GPL-3.0" ];
+    DNABarcodeCompatibility = [ "GPL-2.0" ];
+    EGSEAdata = [ "CC-BY-ND-4.0" ];
+    FRASER = [ "CC-BY-NC-4.0" ];
+    GenomicInteractionNodes = [ "Apache-2.0" ];
+    IMPCdata = [ "Apache-2.0" ];
+    LACE = [ "GPL-3.0" ];
+    MACSdata = [ "BSD-3-Clause" ];
+    MOFA2 = [ "LGPL-3.0" ];
+    MSstatsBioNet = [ "Artistic-2.0" ];
+    MultiDataSet = [ "MIT" ];
+    OUTRIDER = [ "CC-BY-NC-4.0" ];
+    OncoScore = [ "GPL-3.0" ];
+    RESOLVE = [ "Apache-2.0" ];
+    RITAN = [ "GPL-2.0" ];
+    RITANdata = [ "GPL-2.0-or-later" ];
+    Rtsne = [ "BSD-3-Clause" ];
+    Rttf2pt1 = [ "BSD-3-Clause" ];
+    SCANVIS = [ ];
+    SIMLR = [ "GPL-3.0" ];
+    SiPSiC = [ "GPL-3.0" ];
+    SparseSignatures = [ "Apache-2.0" ];
+    VERSO = [ "Apache-2.0" ];
+    biotmleData = [ "MIT" ];
+    breakpointR = [ "MIT" ];
+    breakpointRdata = [ "MIT" ];
+    cat = [ ];
+    cmapR = [ "BSD-3-Clause" ];
+    factR = [ "Apache-2.0" ];
+    fontBitstreamVera = [ "Bitstream-Vera" ];
+    fontLiberation = [ "OFL-1.1" ];
+    ggcyto = [ "MIT" ];
+    hdxmsqc = [ "Apache-2.0" ];
+    palinsol = [ ];
+    scoreInvHap = [ "MIT" ];
+    stringi = [ "BSD-3-Clause" ];
+    wpp2019 = [ "CC-BY-3.0" ];
+    x13binary = [
+      "GPL-2.0-or-later"
+      "Unlicense"
+    ];
     # keep-sorted end
   };
 
