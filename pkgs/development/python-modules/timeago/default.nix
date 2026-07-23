@@ -2,13 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "timeago";
   version = "1.0.16";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hustcc";
@@ -16,6 +17,8 @@ buildPythonPackage rec {
     rev = version;
     sha256 = "sha256-PqORJKAVrjezU/yP2ky3gb1XsM8obDI3GQzi+mok/OM=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
