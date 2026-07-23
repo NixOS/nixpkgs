@@ -24,9 +24,6 @@ lib.makeScope pkgs.newScope (
 
     libgnomecanvas = callPackage ./platform/libgnomecanvas { };
 
-    # for git-head builds
-    gnome-common = callPackage ./platform/gnome-common { };
-
     gtkglext = callPackage ./platform/gtkglext { };
 
     #### DESKTOP
@@ -62,6 +59,7 @@ lib.makeScope pkgs.newScope (
   gnomeicontheme = throw "gnome2.gnomeicontheme has been removed, please use top-level gnome-icon-theme";
   gnome_common = throw "gnome2.gnome_common has been removed, please use top-level gnome-common";
 
+  gnome-common = throw "gnome2.gnome-common has been removed as it was deprecated upstream and unused in Nixpkgs"; # Added 2026-07-23
   gnome_mime_data = throw "gnome2.gnome_mime_data has been removed as it was unused in Nixpkgs"; # 2026-07-23
   gnome_python = throw "gnome2.gnome_python has been removed"; # 2023-01-14
   gnome_python_desktop = throw "gnome2.gnome_python_desktop has been removed"; # 2023-01-14
