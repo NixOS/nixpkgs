@@ -11,6 +11,7 @@ let
     mkEnableOption
     mkIf
     mkOption
+    mkRemovedOptionModule
     types
     ;
 
@@ -18,19 +19,31 @@ let
 
   stateDir = "/var/lib/esphome";
 
-  esphomeParams =
+  esphomeHttpParams =
     if cfg.enableUnixSocket then
       "--socket /run/esphome/esphome.sock"
     else
-      "--address ${cfg.address} --port ${toString cfg.port}";
+      "--host ${cfg.address} --port ${toString cfg.port}";
+
+  esphomeParams = [
+    esphomeHttpParams
+    "--log-level ${cfg.logLevel}"
+    "--remote-build-host ${cfg.remoteBuildAddress}"
+    "--remote-build-port ${toString cfg.remoteBuildPort}"
+  ]
+  ++ lib.optional cfg.remoteBuildOnly "--remote-build-only"
+  ++ lib.optional (
+    cfg.trustedDomains != [ ]
+  ) "--trusted-domains ${lib.concatStringsSep "," cfg.trustedDomains}"
+  ++ cfg.extraArgs;
 in
 {
   meta.maintainers = with maintainers; [ oddlama ];
 
   options.services.esphome = {
-    enable = mkEnableOption "esphome, for making custom firmwares for ESP32/ESP8266";
+    enable = mkEnableOption "ESPHome Device Builder, for making custom firmwares for ESP32/ESP8266";
 
-    package = lib.mkPackageOption pkgs "esphome" { };
+    package = lib.mkPackageOption pkgs "esphome-device-builder" { };
 
     enableUnixSocket = mkOption {
       type = types.bool;
@@ -41,19 +54,54 @@ in
     address = mkOption {
       type = types.str;
       default = "localhost";
-      description = "esphome address";
+      description = "ESPHome Device Builder HTTP address";
     };
 
     port = mkOption {
       type = types.port;
       default = 6052;
-      description = "esphome port";
+      description = "ESPHome Device Builder HTTP port";
+    };
+
+    remoteBuildOnly = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Unconditionally only run the remote build server";
+    };
+
+    remoteBuildAddress = mkOption {
+      type = types.str;
+      default = "localhost";
+      description = "Address of the remote build server";
+    };
+
+    remoteBuildPort = mkOption {
+      type = types.port;
+      default = 6055;
+      description = "Port of the remote build server";
+    };
+
+    logLevel = mkOption {
+      type = types.enum [
+        "debug"
+        "info"
+        "warning"
+        "error"
+      ];
+      default = "info";
+      description = "Log level of the ESPHome Device Builder";
     };
 
     openFirewall = mkOption {
       default = false;
       type = types.bool;
       description = "Whether to open the firewall for the specified port.";
+    };
+
+    trustedDomains = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      description = "Hostnames the WebSocket handshake trusts (case-insensitive, port-tolerant)";
     };
 
     allowedDevices = mkOption {
@@ -65,18 +113,12 @@ in
         "/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0"
       ];
       description = ''
-        A list of device nodes to which {command}`esphome` has access to.
+        A list of device nodes to which {command}`esphome-device-builder` has access to.
         Refer to DeviceAllow in {manpage}`systemd.resource-control(5)` for more information.
         Beware that if a device is referred to by an absolute path instead of a device category,
         it will only allow devices that already are plugged in when the service is started.
       '';
       type = types.listOf types.str;
-    };
-
-    usePing = mkOption {
-      default = false;
-      type = types.bool;
-      description = "Use ping to check online status of devices instead of mDNS";
     };
 
     environment = mkOption {
@@ -87,8 +129,8 @@ in
         using the {option}`services.esphome.environmentFile` option.
       '';
       example = {
-        USERNAME = "reimu";
-        PASSWORD = "gensokyo9";
+        ESPHOME_TRUSTED_DOMAINS = "dashboard.example.com";
+        ESPHOME_REMOTE_BUILD_PORT = "6055";
       };
     };
 
@@ -100,10 +142,27 @@ in
         Use this option for setting the dashboard password.
       '';
     };
+
+    extraArgs = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      description = ''
+        Extra command line arguments for the ESPHome Device Builder.
+      '';
+    };
   };
 
+  imports = [
+    (mkRemovedOptionModule [ "services" "esphome" "usePing" ] ''
+      This option is no longer used by the ESPHome Device Builder which replaced the legacy ESPHome dashboard.
+    '')
+  ];
+
   config = mkIf cfg.enable {
-    networking.firewall.allowedTCPPorts = mkIf (cfg.openFirewall && !cfg.enableUnixSocket) [ cfg.port ];
+    networking.firewall.allowedTCPPorts = mkIf (cfg.openFirewall && !cfg.enableUnixSocket) [
+      cfg.port
+      cfg.remoteBuildPort
+    ];
 
     # Use a static system user instead of DynamicUser.
     # DynamicUser creates a /var/lib/esphome -> /var/lib/private/esphome symlink
@@ -118,7 +177,7 @@ in
     users.groups.esphome = { };
 
     systemd.services.esphome = {
-      description = "ESPHome dashboard";
+      description = "ESPHome Device Builder";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = [ cfg.package ];
@@ -130,11 +189,10 @@ in
         # platformio needs a writable HOME for its configuration
         HOME = stateDir;
       }
-      // lib.optionalAttrs cfg.usePing { ESPHOME_DASHBOARD_USE_PING = "true"; }
       // cfg.environment;
 
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/esphome dashboard ${esphomeParams} ${stateDir}";
+        ExecStart = "${lib.getExe cfg.package} ${lib.concatStringsSep " " esphomeParams} ${stateDir}";
         User = "esphome";
         Group = "esphome";
         WorkingDirectory = stateDir;
