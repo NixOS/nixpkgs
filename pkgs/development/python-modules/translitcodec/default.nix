@@ -15,10 +15,12 @@ buildPythonPackage {
 
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "claudep";
     repo = "translitcodec";
-    rev = "version-${version}";
+    tag = "version-${version}";
     hash = "sha256-/EKquTchx9i3fZqJ6AMzHYP9yCORvwbuUQ95WJQOQbI=";
   };
 
