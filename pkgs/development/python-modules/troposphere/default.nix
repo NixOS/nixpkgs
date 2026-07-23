@@ -4,13 +4,14 @@
   buildPythonPackage,
   cfn-flip,
   fetchFromGitHub,
+  setuptools,
   unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "troposphere";
   version = "4.10.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cloudtools";
@@ -19,7 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-o8Wq1kRBg4yFozQo02jlR5huBtpuLGZLTkLG5LuoI8s=";
   };
 
-  propagatedBuildInputs = [ cfn-flip ];
+  build-system = [ setuptools ];
+
+  dependencies = [ cfn-flip ];
 
   nativeCheckInputs = [
     awacs
