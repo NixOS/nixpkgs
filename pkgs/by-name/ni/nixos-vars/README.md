@@ -200,4 +200,23 @@ Last but not least, backends can set an optional `fileModule` that will be impor
 
 ### Per-backend generator options
 
+Backends will commonly need to define custom per-generator or per-file options. While the latter can already be achieved with the aforementioned `fileModule`, the former needs to currently be done by hand. Since the NixOS module system merges submodules defined in the same location, one can achieve the above as follows:
+
+```nix
+{
+  # Extracted from the age backend
+  options.vars.generators = lib.mkOption {
+    type = lib.types.attrsOf (lib.types.submodule {
+      options.age.identity.host = lib.mkOption {
+        default = config.vars.age.identity.host;
+        type = lib.types.oneOf [ lib.types.str lib.types.path ];
+        description = ''
+          Path to the age private key file for decryption on the host machine
+        '';
+      };
+    });
+  };
+}
+```
+
 ## The vars schema
