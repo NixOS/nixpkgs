@@ -12,13 +12,15 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "torchdiffeq";
   version = "0.2.5";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-tQ03YNE/0TjczqxlH0uAOW9E/vzr0DegM/7P6qnMEuc=";
   };
 
@@ -42,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     teams = [ lib.teams.tts ];
   };
-}
+})
