@@ -8,15 +8,17 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "troposphere";
   version = "4.10.2";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "cloudtools";
     repo = "troposphere";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-o8Wq1kRBg4yFozQo02jlR5huBtpuLGZLTkLG5LuoI8s=";
   };
 
@@ -38,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to create AWS CloudFormation descriptions";
     homepage = "https://github.com/cloudtools/troposphere";
-    changelog = "https://github.com/cloudtools/troposphere/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/cloudtools/troposphere/blob/${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ jlesquembre ];
   };
-}
+})
