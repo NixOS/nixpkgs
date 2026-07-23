@@ -2,20 +2,23 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   pyusb,
 }:
 
 buildPythonPackage rec {
   pname = "temperusb";
   version = "1.6.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-PwKHT1zzVn+nmxO/R+aK+029WaaHBo7FyVV4eQtHhbM=";
   };
 
-  propagatedBuildInputs = [ pyusb ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pyusb ];
 
   # Module has no tests which are shipped and source is not tagged
   doCheck = false;
