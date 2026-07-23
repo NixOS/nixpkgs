@@ -32,7 +32,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20
     ];
     maintainers = with lib.maintainers; [
-      baloo
       matthiasbeyer
       sshine
     ];
