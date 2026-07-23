@@ -464,8 +464,6 @@ in
 
         rtl8821au = callPackage ../os-specific/linux/rtl8821au { };
 
-        rtl8821ce = callPackage ../os-specific/linux/rtl8821ce { };
-
         rtl88x2bu = callPackage ../os-specific/linux/rtl88x2bu { };
 
         rtl8821cu = callPackage ../os-specific/linux/rtl8821cu { };
@@ -642,6 +640,7 @@ in
         hid-nintendo = throw "hid-nintendo was added in mainline kernel version 5.16"; # Added 2023-07-30
         sch_cake = throw "sch_cake was added in mainline kernel version 4.19"; # Added 2023-06-14
         rtl8723bs = throw "rtl8723bs was added in mainline kernel version 4.12"; # Added 2023-06-14
+        rtl8821ce = throw "rtl8821ce has been removed due to lack of maintenance"; # Added 2026-07-22
         vm-tools = self.mm-tools;
         xmm7360-pci = throw "Support for the XMM7360 WWAN card was added to the iosm kmod in mainline kernel version 5.18";
         amdgpu-pro = throw "amdgpu-pro was removed due to lack of maintenance"; # Added 2024-06-16
