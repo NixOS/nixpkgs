@@ -72,6 +72,9 @@ let
     ocamlPackages.findlib
     dune
   ];
+  ocamlBuildInputs = [
+    ocamlPackages.findlib
+  ];
   ocamlPropagatedBuildInputs = [ ocamlPackages.zarith ];
   self = stdenv.mkDerivation {
     pname = "rocq";
@@ -130,7 +133,7 @@ let
     };
 
     nativeBuildInputs = [ pkg-config ] ++ ocamlNativeBuildInputs;
-    buildInputs = [ ncurses ];
+    buildInputs = [ ncurses ] ++ ocamlBuildInputs;
 
     propagatedBuildInputs = ocamlPropagatedBuildInputs;
 
@@ -196,6 +199,10 @@ let
       platforms = lib.platforms.unix;
       mainProgram = "rocq";
     };
+
+    # Things required by the CI
+    strictDeps = true;
+    __structuredAttrs = true;
   };
 in
 self
