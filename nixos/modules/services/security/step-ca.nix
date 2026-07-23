@@ -86,7 +86,12 @@ in
       systemd.packages = [ cfg.package ];
 
       # configuration file indirection is needed to support reloading
-      environment.etc."smallstep/ca.json".source = configFile;
+      environment = {
+        etc."smallstep/ca.json".source = configFile;
+        systemPackages = [
+          pkgs.step-cli
+        ];
+      };
 
       systemd.services."step-ca" = {
         wantedBy = [ "multi-user.target" ];
