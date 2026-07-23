@@ -12674,6 +12674,8 @@ self: super: with self; {
 
   owslib = callPackage ../development/python-modules/owslib { };
 
+  oxipng-pybind = callPackage ../development/python-modules/oxipng-pybind { };
+
   oyaml = callPackage ../development/python-modules/oyaml { };
 
   p1monitor = callPackage ../development/python-modules/p1monitor { };
