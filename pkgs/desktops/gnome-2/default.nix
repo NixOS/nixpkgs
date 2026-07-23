@@ -10,8 +10,6 @@ lib.makeScope pkgs.newScope (
 
     #### PLATFORM
 
-    libglade = callPackage ./platform/libglade { };
-
     gtkglext = callPackage ./platform/gtkglext { };
 
     #### DESKTOP
@@ -58,6 +56,7 @@ lib.makeScope pkgs.newScope (
   libart_lgpl = throw "gnome2.libart_lpl has been removed as it was deprecated upstream and unused in Nixpkgs"; # 2026-07-23
   libbonobo = throw "gnome2.libbonobo has been removed"; # 2024-06-27
   libbonoboui = throw "gnome2.libbonoboui has been removed"; # 2024-06-27
+  libglade = throw "gnome2.libglade has been removed as it has been archived upstream since January 2010"; # 2026-07-23
   libglademm = throw "gnome2.libglademm has been removed"; # 2022-01-15
   libgnomecanvas = throw "gnome2.libgnomecanvas has been removed as it has been archived upstream since April 2012"; # 2026-07-23
   libgnomecanvasmm = throw "gnome2.libgnomecanvasmm has been removed"; # 2022-01-15
