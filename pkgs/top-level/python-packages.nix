@@ -9826,6 +9826,8 @@ self: super: with self; {
 
   localzone = callPackage ../development/python-modules/localzone { };
 
+  locate = callPackage ../development/python-modules/locate { };
+
   locationsharinglib = callPackage ../development/python-modules/locationsharinglib { };
 
   locket = callPackage ../development/python-modules/locket { };
@@ -10103,6 +10105,8 @@ self: super: with self; {
   markdownify = callPackage ../development/python-modules/markdownify { };
 
   markitdown = callPackage ../development/python-modules/markitdown { };
+
+  marklas = callPackage ../development/python-modules/marklas { };
 
   marko = callPackage ../development/python-modules/marko { };
 

@@ -192,11 +192,11 @@ linkFarm name [
     };
   }
   {
-    name = "N-V-__8AAL6FAwBDPampKgDjoxlJYDIn2jv0VaINS4W6CXJN";
+    name = "N-V-__8AALZGBAAS5NLVH-c8eC-6VtCdcH-9nUvVfUSkWS__";
     path = fetchZigArtifact {
       name = "iterm2_themes";
-      url = "https://deps.files.ghostty.org/ghostty-themes-release-20260323-152405-a2c7b60.tgz";
-      hash = "sha256-fWgXdUXh2/dNZqERzEu9hz4xyy4nl+GUjLMpUMrsRnA=";
+      url = "https://deps.files.ghostty.org/ghostty-themes-release-20260713-155359-c3968b3.tgz";
+      hash = "sha256-FLMES+9no8uDUjlzvRbTqg+wCW3dHg7Lo5FtFNbWfyA=";
       unpack = false;
     };
   }

@@ -575,6 +575,7 @@ mapAliases {
   commonsMath = warnAlias "'commonsMath' has been renamed to 'commons-math'" commons-math; # Added 2026-02-08
   computecpp = throw "'computecpp' has been removed because its source has been pulled"; # Added 2025-12-20
   computecpp-unwrapped = throw "'computecpp-unwrapped' has been removed because its source has been pulled"; # Added 2025-12-20
+  conduktor = throw "'conduktor' has been removed because Conduktor Desktop is now sunset and no longer works: https://docs.conduktor.io/desktop"; # Added 2026-07-23
   conduwuit = throw "'conduwuit' has been removed as the upstream repository has been deleted. Consider migrating to 'matrix-conduit', 'matrix-continuwuity' or 'matrix-tuwunel' instead."; # Added 2025-08-08
   cone = throw "cone has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-10
   connman-ncurses = throw "'connman-ncurses' has been removed due to lack of maintenance upstream."; # Added 2025-05-27
@@ -1055,6 +1056,7 @@ mapAliases {
   hydra_unstable = throw "'hydra_unstable' has been renamed to/replaced by 'hydra'"; # Converted to throw 2025-10-27
   hydraAntLogger = warnAlias "'hydraAntLogger' has been renamed to 'hydra-ant-logger'" hydra-ant-logger; # Added 2026-02-08
   hyprfreeze = warnAlias "'hyprfreeze' has been renamed to 'wl-freeze'" wl-freeze; # Added 2026-04-10
+  hyprmagnifier = throw "'hyprmagnifier' has been removed as it was unmaintained, consider using 'hyprmag' instead"; # Added 2026-07-22
   hyprpanel = throw "'hyprpanel' has been archived, consider using 'wayle' instead"; # Added 2026-07-21
   i3-gaps = throw "'i3-gaps' has been renamed to/replaced by 'i3'"; # Converted to throw 2025-10-27
   i3lock-pixeled = throw "'i3lock-pixeled' has been unmaintained for several years now."; # Converted to throw 2026-01-24
@@ -1312,6 +1314,7 @@ mapAliases {
   libXxf86misc = libxxf86misc; # Added 2026-02-06
   libXxf86vm = libxxf86vm; # Added 2026-02-06
   light = throw "'light' has been removed because it was unmaintained. 'brightnessctl' and 'acpilight' provide similar functionality."; # Added 2026-02-24
+  lightdm-enso-os-greeter = throw "'lightdm-enso-os-greeter' has been removed due to being archived upstream"; # Added 2026-07-19
   lightdm_gtk_greeter = throw "'lightdm_gtk_greeter' has been renamed to/replaced by 'lightdm-gtk-greeter'"; # Converted to throw 2025-10-27
   lightly-boehs = throw "'lightly-boehs' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
   lightly-qt = throw "'lightly-qt' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20

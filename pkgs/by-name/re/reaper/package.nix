@@ -13,7 +13,7 @@
   lame,
   libxml2_13,
   libjack2,
-  ffmpeg_4-headless,
+  ffmpeg-headless,
   vlc,
   xdg-utils,
   xdotool,
@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
               curl
               lame
               libxml2_13
-              ffmpeg_4-headless
+              ffmpeg-headless
               vlc
               xdotool
               stdenv.cc.cc

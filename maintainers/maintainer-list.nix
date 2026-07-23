@@ -4691,6 +4691,12 @@
     githubId = 53847249;
     name = "Casey Avila";
   };
+  caspersonn = {
+    email = "lucakasper8@gmail.com";
+    github = "Caspersonn";
+    githubId = 96787412;
+    name = "Luca Kasper";
+  };
   cassandracomar = {
     name = "Cassandra Comar";
     github = "cassandracomar";
@@ -24999,6 +25005,12 @@
     github = "SamirTalwar";
     githubId = 47582;
     name = "Samir Talwar";
+  };
+  samiser = {
+    email = "nixos@me.samiser.xyz";
+    github = "samiser";
+    githubId = 32001364;
+    name = "Sam";
   };
   samlich = {
     email = "nixos@samli.ch";
