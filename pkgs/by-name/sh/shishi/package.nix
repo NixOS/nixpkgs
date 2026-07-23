@@ -40,15 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
     libgpg-error
     libtasn1
   ]
-  ++ lib.optionals usePam [
-    pam
-  ]
-  ++ lib.optionals useLibidn [
-    libidn
-  ]
-  ++ lib.optionals useGnutls [
-    gnutls
-  ];
+  ++ lib.optionals usePam [ pam ]
+  ++ lib.optionals useLibidn [ libidn ]
+  ++ lib.optionals useGnutls [ gnutls ];
 
   configureFlags = [
     "--sysconfdir=/etc"
