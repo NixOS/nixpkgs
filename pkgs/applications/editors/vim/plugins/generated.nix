@@ -13172,12 +13172,12 @@ final: prev: {
 
   nvim-lspconfig = buildVimPlugin {
     pname = "nvim-lspconfig";
-    version = "2.10.0";
+    version = "2.11.0";
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "nvim-lspconfig";
-      tag = "v2.10.0";
-      hash = "sha256-RDhwY+C2ZHZPPRe1yvgJqonLcez77dVYvTIttVnFPis=";
+      tag = "v2.11.0";
+      hash = "sha256-d1vDEfiNSo9ccSPqTHEFqXVFCPhp/0ZozTzcyLiJrGg=";
     };
     meta.homepage = "https://github.com/neovim/nvim-lspconfig/";
     meta.license = getLicenseFromSpdxId "Apache-2.0";
