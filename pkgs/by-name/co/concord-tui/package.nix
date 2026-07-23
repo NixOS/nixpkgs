@@ -11,16 +11,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "concord-tui";
-  version = "2.4.1";
+  version = "2.4.5";
 
   src = fetchFromGitHub {
     owner = "chojs23";
     repo = "concord";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3c5jxpJrBr6vYnbcJIYD06d932Da94hXUZA5FLa3kkU=";
+    hash = "sha256-BLfNgIXTTYMr5pFmCBMfu4euKR96GAPLsGTW/AaqJjo=";
   };
 
-  cargoHash = "sha256-6iAyKsS+FoNCKkMvbL70vKSPoAaKQtUDiAQGaEMuxWk=";
+  cargoHash = "sha256-jaHDy/5e9BXXLRe3oc9g3JCCSg28bb1d2dMPkPJTkB4=";
 
   buildInputs = [
     opus
