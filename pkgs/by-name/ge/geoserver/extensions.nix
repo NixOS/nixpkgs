@@ -186,12 +186,14 @@ in
 
   # Throws "java.lang.UnsatisfiedLinkError: 'void org.libjpegturbo.turbojpeg.TJDecompressor.init()'"
   # as of 2.28.1.
+  # As of 3.0.0, loads correctly, but logs show:
+  # WARN   [turbojpeg.TurboJPEGMapResponse] - The turbo jpeg encoder is not available, check the native libs installation
   # NOTE: When re-enabling this, RE-ENABLE THE CORRESPONDING TEST, TOO! (See tests/geoserver.nix)
   #libjpeg-turbo = mkGeoserverExtension {
   #  name = "libjpeg-turbo";
   #  version = "3.0.0"; # libjpeg-turbo
   #  hash = "sha256-ckcyiZG2aoqwXGuNMF6pmi2ZjGjY8r851OOB4nQtvIo="; # libjpeg-turbo
-  #  buildInputs = [ libjpeg.out ];
+  #  buildInputs = [ libjpeg ];
   #};
 
   mapml = mkGeoserverExtension {
