@@ -17597,6 +17597,8 @@ self: super: with self; {
 
   repoze-who = callPackage ../development/python-modules/repoze-who { };
 
+  represent = callPackage ../development/python-modules/represent { };
+
   reprint = callPackage ../development/python-modules/reprint { };
 
   reproject = callPackage ../development/python-modules/reproject { };
