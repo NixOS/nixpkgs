@@ -219,7 +219,7 @@ let
       pocklington = callPackage ../development/coq-modules/pocklington { };
       QuickChick = callPackage ../development/coq-modules/QuickChick { };
       reglang = callPackage ../development/coq-modules/reglang { };
-      relation-algebra = callPackage ../development/coq-modules/relation-algebra { };
+      relation-algebra = callPackage ../development/rocq-modules/relation-algebra { };
       rewriter = callPackage ../development/coq-modules/rewriter { };
       RustExtraction = callPackage ../development/coq-modules/RustExtraction { };
       semantics = callPackage ../development/coq-modules/semantics { };
