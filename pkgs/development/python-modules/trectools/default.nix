@@ -18,7 +18,7 @@
 buildPythonPackage {
   pname = "trectools";
   version = "0.0.50";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "joaopalotti";
