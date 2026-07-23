@@ -12,20 +12,15 @@
 
 buildPythonPackage rec {
   pname = "xontrib-whole-word-jumping";
-  version = "0.0.1";
+  version = "0.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xonsh";
     repo = "xontrib-whole-word-jumping";
     tag = version;
-    hash = "sha256-zLAOGW9prjYDQBDITFNMggn4X1JTyAnVdjkBOH9gXPs=";
+    hash = "sha256-quwtTIPEVcVAyVIE//nNkW0O8gwUT2Adaxr3esoTjh8=";
   };
-
-  prePatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"xonsh>=0.12.5", ' ""
-  '';
 
   build-system = [
     setuptools
