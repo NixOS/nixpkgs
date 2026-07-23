@@ -560,6 +560,9 @@ mapAliases {
   code-browser-gtk2 = throw "'code-browser-gtk2' has been removed, as it was broken since 22.11"; # Added 2025-08-22
   code-browser-gtk = throw "'code-browser-gtk' has been removed, as it was broken since 22.11"; # Added 2025-08-22
   code-browser-qt = throw "'code-browser-qt' has been removed, as it was broken since 22.11"; # Added 2025-08-22
+  code-cursor = warnAlias "'code-cursor' has been renamed to 'cursor'" cursor; # Added 2026-07-19
+  code-cursor-fhs = warnAlias "'code-cursor-fhs' has been renamed to 'cursor-fhs'" cursor-fhs; # Added 2026-07-19
+  code-cursor-fhsWithPackages = warnAlias "'code-cursor-fhsWithPackages' has been renamed to 'cursor-fhsWithPackages'" cursor-fhsWithPackages; # Added 2026-07-19
   CoinMP = throw "'CoinMP' has been renamed to/replaced by 'coinmp'"; # Converted to throw 2025-10-27
   collada2gltf = throw "collada2gltf has been removed from Nixpkgs, as it has been unmaintained upstream for 5 years and does not build with supported GCC versions"; # Addd 2025-08-08
   colloid-kde = throw "'colloid-kde' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20

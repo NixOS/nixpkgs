@@ -52,7 +52,7 @@
 
 let
   inherit (vscode) executableName longName;
-  # The wrapped editor may override `iconName` (e.g. code-cursor, windsurf,
+  # The wrapped editor may override `iconName` (e.g. cursor, windsurf,
   # kiro and antigravity-ide all set it to a name without the `vs` prefix). Read
   # the real value from the package, falling back to the generic.nix default for
   # editors built before `iconName` was exposed via passthru.

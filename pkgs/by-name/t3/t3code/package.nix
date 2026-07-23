@@ -13,7 +13,7 @@
   enableCodex ? true,
   codex,
   enableCursor ? false,
-  code-cursor,
+  cursor,
   enableCursorCli ? false,
   cursor-cli,
   enableGitHub ? true,
@@ -37,7 +37,7 @@ let
     ++ lib.optionals enableBitbucket [ bitbucket-cli ]
     ++ lib.optionals enableClaude [ claude-code ]
     ++ lib.optionals enableCodex [ codex ]
-    ++ lib.optionals enableCursor [ code-cursor ]
+    ++ lib.optionals enableCursor [ cursor ]
     ++ lib.optionals enableCursorCli [ cursor-cli ]
     ++ lib.optionals enableGitHub [ gh ]
     ++ lib.optionals enableGit [ git ]

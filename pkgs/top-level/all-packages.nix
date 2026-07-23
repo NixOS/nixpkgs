@@ -9636,8 +9636,14 @@ with pkgs;
   antigravity-ide-fhs = antigravity-ide.fhs;
   antigravity-ide-fhsWithPackages = antigravity-ide.fhsWithPackages;
 
-  code-cursor-fhs = code-cursor.fhs;
-  code-cursor-fhsWithPackages = code-cursor.fhsWithPackages;
+  cursor-fhs = cursor.fhs.overrideAttrs {
+    strictDeps = true;
+  };
+  cursor-fhsWithPackages =
+    f:
+    (cursor.fhsWithPackages f).overrideAttrs {
+      strictDeps = true;
+    };
   kiro-fhs = kiro.fhs;
   kiro-fhsWithPackages = kiro.fhsWithPackages;
 
