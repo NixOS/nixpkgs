@@ -168,7 +168,7 @@ let
       mathcomp-character = self.mathcomp.group-representation;
       mathcomp-abel = callPackage ../development/coq-modules/mathcomp-abel { };
       mathcomp-algebra-tactics = callPackage ../development/coq-modules/mathcomp-algebra-tactics { };
-      mathcomp-analysis = callPackage ../development/coq-modules/mathcomp-analysis { };
+      mathcomp-analysis = callPackage ../development/rocq-modules/mathcomp-analysis { };
       mathcomp-analysis-stdlib = self.mathcomp-analysis.analysis-stdlib;
       mathcomp-apery = callPackage ../development/coq-modules/mathcomp-apery { };
       mathcomp-bigenough = callPackage ../development/coq-modules/mathcomp-bigenough { };
