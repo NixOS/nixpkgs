@@ -9,6 +9,7 @@
   esptool,
   git,
   versionCheckHook,
+  addBinToPathHook,
   nixosTests,
 }:
 
@@ -137,6 +138,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     ++ [
       git
       versionCheckHook
+      addBinToPathHook
     ];
 
   disabledTestPaths = [
@@ -148,10 +150,6 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     "tests/unit_tests/test_espidf_component.py"
   ];
 
-  preCheck = ''
-    export PATH=$PATH:$out/bin
-  '';
-
   postInstall =
     let
       argcomplete = lib.getExe' python.pkgs.argcomplete "register-python-argcomplete";
@@ -162,8 +160,6 @@ python.pkgs.buildPythonApplication (finalAttrs: {
         --zsh <(${argcomplete} --shell zsh esphome) \
         --fish <(${argcomplete} --shell fish esphome)
     '';
-
-  doInstallCheck = true;
 
   disabledTests = [
     # tries to import platformio, which is wrapped in an fhsenv
