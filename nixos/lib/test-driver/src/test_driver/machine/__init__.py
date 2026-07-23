@@ -660,25 +660,22 @@ class BaseMachine(ABC):
     def copy_from_machine(self, source: str, target_dir: str = "") -> None:
         """Copy a file from the machine (specified by an in-machine source path) to a path
         relative to `$out`. The file is copied via the `shared_dir` shared among
-        all the machines (using a temporary directory).
+        all the machines.
         """
         # Compute the source, target, and intermediate shared file names
         vm_src = Path(source)
-        with tempfile.TemporaryDirectory(dir=self.shared_dir) as shared_td:
-            shared_temp = Path(shared_td)
-            vm_shared_temp = Path("/tmp/shared") / shared_temp.name
-            vm_intermediate = vm_shared_temp / vm_src.name
-            intermediate = shared_temp / vm_src.name
-            # Copy the file to the shared directory inside machines
-            self.succeed(make_command(["mkdir", "-p", vm_shared_temp]))
-            self.succeed(make_command(["cp", "-r", vm_src, vm_intermediate]))
-            abs_target = self.out_dir / target_dir / vm_src.name
-            abs_target.parent.mkdir(exist_ok=True, parents=True)
-            # Copy the file from the shared directory outside machines
-            if intermediate.is_dir():
-                shutil.copytree(intermediate, abs_target)
-            else:
-                shutil.copy(intermediate, abs_target)
+        vm_intermediate = Path("/tmp/shared") / target_dir / vm_src.name
+        intermediate = self.shared_dir / target_dir / vm_src.name
+        # Copy the file to the shared directory inside machines
+        self.succeed(make_command(["mkdir", "-p", vm_intermediate.parent]))
+        self.succeed(make_command(["cp", "-r", vm_src, vm_intermediate]))
+        abs_target = self.out_dir / target_dir / vm_src.name
+        abs_target.parent.mkdir(exist_ok=True, parents=True)
+        # Copy the file from the shared directory outside machines
+        if intermediate.is_dir():
+            shutil.copytree(intermediate, abs_target)
+        else:
+            shutil.copy(intermediate, abs_target)
 
     @warnings.deprecated("Use copy_from_machine() instead")
     def copy_from_vm(self, source: str, target_dir: str = "") -> None:
