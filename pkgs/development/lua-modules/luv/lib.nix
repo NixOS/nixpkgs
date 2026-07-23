@@ -31,10 +31,7 @@ stdenv.mkDerivation {
     lua
   ];
 
-  nativeBuildInputs = [
-    cmake
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
+  nativeBuildInputs = [ cmake ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 
   passthru.tests = {
     # Test luv too
