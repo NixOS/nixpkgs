@@ -10383,7 +10383,7 @@ with pkgs;
     (callPackage ./rocq-packages.nix {
       inherit (ocaml-ng)
         ocamlPackages_4_14
-        ocamlPackages_5_4
+        ocamlPackages_5_5
         ;
     })
     mkRocqPackages
@@ -10393,6 +10393,8 @@ with pkgs;
     rocq-core_9_1
     rocqPackages_9_2
     rocq-core_9_2
+    rocqPackages_9_3
+    rocq-core_9_3
     rocqPackages
     rocq-core
     ;
@@ -10404,12 +10406,13 @@ with pkgs;
         ocamlPackages_4_10
         ocamlPackages_4_12
         ocamlPackages_4_14
-        ocamlPackages_5_4
+        ocamlPackages_5_5
         ;
       inherit
         rocqPackages_9_0
         rocqPackages_9_1
         rocqPackages_9_2
+        rocqPackages_9_3
         rocqPackages
         ;
     })
@@ -10448,6 +10451,8 @@ with pkgs;
     coq_9_1
     coqPackages_9_2
     coq_9_2
+    coqPackages_9_3
+    coq_9_3
     coqPackages
     coq
     ;

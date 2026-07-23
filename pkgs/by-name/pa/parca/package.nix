@@ -4,7 +4,7 @@
   fetchFromGitHub,
   lib,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   stdenv,
@@ -26,16 +26,16 @@ let
 
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname src version;
-      pnpm = pnpm_9;
-      fetcherVersion = 3;
-      hash = "sha256-zHdMwJyeafzbIlp+Fhh1khcUVrLsoUg6ViSGm/ByGAA=";
+      pnpm = pnpm_10;
+      fetcherVersion = 4;
+      hash = "sha256-cd9sA01DTXsrKm4enFeS3zmn3w4A5N7QXhtZ0wcpNss=";
     };
 
     nativeBuildInputs = [
       faketty
       nodejs
       pnpmConfigHook
-      pnpm_9
+      pnpm_10
     ];
 
     # faketty is required to work around a bug in nx.

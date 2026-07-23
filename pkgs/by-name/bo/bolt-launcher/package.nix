@@ -136,7 +136,7 @@ buildFHSEnv {
       with pkgs;
       [
         gtk2-x11
-        openssl_1_1
+        # openssl_1_1
       ]
     );
 
@@ -166,5 +166,8 @@ buildFHSEnv {
     ];
     platforms = lib.platforms.linux;
     mainProgram = "bolt-launcher";
-  };
+  }
+  // (lib.optionalAttrs enableRS3 {
+    problems.broken.message = "OpenSSL 1.1 has been end of life since 2023 and will be removed soon.";
+  });
 }
