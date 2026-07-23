@@ -6,14 +6,17 @@
   diff-match-patch,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "three-merge";
   version = "0.1.1";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "0w6rv7rv1zm901wbjkmm6d3vkwyf3csja9p37bb60mar8khszxk0";
+    pname = "three-merge";
+    inherit (finalAttrs) version;
+    hash = "sha256-YPav4URZVWDWOuMmJTUbzvO5RzO1Trl4AKn+sPPZ2XA=";
   };
 
   build-system = [ setuptools ];
@@ -28,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
