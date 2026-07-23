@@ -77,8 +77,8 @@ rec {
   thunderbird = thunderbird-latest;
 
   thunderbird-latest = common {
-    version = "152.0.1";
-    sha512 = "f66c87de4dd73c3c45e420a55d76c3cb6ac091a61794ccf58ba59d1a40cf8001dee19a6a7f4c6bef7d36ea94ed4e4f677449d3006b2004abbd3fab42ad1c9228";
+    version = "153.0";
+    sha512 = "f77bde3dd0933dd35870a889386c41d55ff0cbe276ec3373b27e9885f7db7e35529e7ecc2fc149ae4f8c5ae53eddb3ad444e7499a850a59a82b8940c7a4c7747";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-latest";
