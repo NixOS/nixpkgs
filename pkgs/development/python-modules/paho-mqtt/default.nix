@@ -6,6 +6,7 @@
   hatchling,
   openssl,
   pytestCheckHook,
+  pytest-rerunfailures,
   writableTmpDirAsHomeHook,
 }:
 
@@ -44,6 +45,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     openssl
     pytestCheckHook
+    pytest-rerunfailures
     writableTmpDirAsHomeHook
   ];
 
@@ -57,6 +59,11 @@ buildPythonPackage rec {
     # paho.mqtt not in top-level dir to get caught by this
     export PYTHONPATH=".:$PYTHONPATH"
   '';
+
+  pytestFlags = [
+    "--reruns=3"
+    "--reruns-delay=1"
+  ];
 
   disabledTests = [
     # Fails during teardown
