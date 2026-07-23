@@ -174,7 +174,7 @@ let
       mathcomp-bigenough = callPackage ../development/rocq-modules/mathcomp-bigenough { };
       mathcomp-classical = self.mathcomp-analysis.classical;
       mathcomp-experimental-reals = self.mathcomp-analysis.experimental-reals;
-      mathcomp-finmap = callPackage ../development/coq-modules/mathcomp-finmap { };
+      mathcomp-finmap = callPackage ../development/rocq-modules/mathcomp-finmap { };
       mathcomp-infotheo = callPackage ../development/coq-modules/mathcomp-infotheo { };
       mathcomp-real-closed = callPackage ../development/coq-modules/mathcomp-real-closed { };
       mathcomp-reals = self.mathcomp-analysis.reals;
