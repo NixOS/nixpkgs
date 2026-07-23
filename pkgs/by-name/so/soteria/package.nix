@@ -15,16 +15,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "soteria";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "imvaskel";
     repo = "soteria";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-g6DGb8PWfc5YyjUpO9q3q0MxcPUbMjatOi6POFcZEE4=";
+    hash = "sha256-2NlQSie3W7MgHyIX4AD2KX4yK13jNdL5hptmZBUkVBk=";
   };
 
-  cargoHash = "sha256-6Pk60J2RAInRgCiIk9thZRwwAyCQvychh5nVHmKU7Iw=";
+  cargoHash = "sha256-MZjNhrcnHYq8hbZaXBPxVDrgLmsbhkeSfV/ugWxUayo=";
 
   nativeBuildInputs = [
     pkg-config

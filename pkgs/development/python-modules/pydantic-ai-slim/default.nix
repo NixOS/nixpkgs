@@ -63,7 +63,7 @@ buildPythonPackage (finalAttrs: {
     text = ''
       nix-update --build --commit python3Packages.genai-prices
       nix-update --build --commit python3Packages.pydantic-graph
-      nix-update --build --commit python3Packages.pydantic-ai-slim
+      nix-update --build python3Packages.pydantic-ai-slim
     '';
   });
 
