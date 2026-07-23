@@ -2,13 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "tmb";
   version = "0.1.5";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alemuro";
@@ -17,9 +18,11 @@ buildPythonPackage rec {
     hash = "sha256-XuRhRmeTXAplb14UwISyzaqEIrFeg8/aCdMxUccMUos=";
   };
 
+  build-system = [ setuptools ];
+
   env.VERSION = version;
 
-  propagatedBuildInputs = [ requests ];
+  dependencies = [ requests ];
 
   pythonImportsCheck = [ "tmb" ];
 
