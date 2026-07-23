@@ -167,11 +167,8 @@ buildFHSEnv {
       # for running Electron before 4.0.0 inside
       fontconfig
 
-      # for running Electron before 3.0.0 inside
-      gnome2.GConf
-
-      # Electron 2.0.8 is the earliest working version, due to
-      # https://github.com/electron/electron/issues/13972
+      # Electron 3.0.0 is the earliest working version, since GConf was removed
+      # from Nixpkgs
     ];
 
   meta = {
