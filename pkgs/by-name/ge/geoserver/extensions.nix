@@ -46,6 +46,12 @@ in
     hash = "sha256-dnby18mrcbgP8pglFiW+bAhuBMMCl8ERZUejHgxAb9c="; # app-schema
   };
 
+  arcgrid = mkGeoserverExtension {
+    name = "arcgrid";
+    version = "3.0.0"; # arcgrid
+    hash = "sha256-LuBMxG6vz4z4Yd+5yuITPL6F/jysHfNpOxg2OYoWQFQ="; # arcgrid
+  };
+
   authkey = mkGeoserverExtension {
     name = "authkey";
     version = "3.0.0"; # authkey
@@ -146,6 +152,12 @@ in
     hash = "sha256-pkzbQJTrcjKUKDQz0Jp0RWXg0ousqsPPbJYeoFKOups="; # iau
   };
 
+  image = mkGeoserverExtension {
+    name = "image";
+    version = "3.0.0"; # image
+    hash = "sha256-sxz8QKvQ6Oh6mP3P/VqQMOTywp/TFPUf76QfrWcaUXs="; # image
+  };
+
   importer = mkGeoserverExtension {
     name = "importer";
     version = "3.0.0"; # importer
@@ -158,13 +170,19 @@ in
     hash = "sha256-3U0DHrk0YAUluohQAUKPPUaz9oYiKQQGh0gZs4Xnh8A="; # inspire
   };
 
-  # Needs Kakadu plugin from
-  # https://github.com/geosolutions-it/imageio-ext
-  #jp2k = mkGeoserverExtension {
-  #  name = "jp2k";
-  #  version = "3.0.0"; # jp2k
-  #  hash = "sha256-tQesDwFgdPF8bVFOXkMqxURIwtak+vyNCQcKgfD0F3s="; # jp2k
-  #};
+  # only sun jp2k is supported at the moment, not kakadu
+  # see https://docs.geoserver.org/main/en/user/extensions/jp2k/
+  jp2k = mkGeoserverExtension {
+    name = "jp2k";
+    version = "3.0.0"; # jp2k
+    hash = "sha256-tQesDwFgdPF8bVFOXkMqxURIwtak+vyNCQcKgfD0F3s="; # jp2k
+  };
+
+  kml = mkGeoserverExtension {
+    name = "kml";
+    version = "3.0.0"; # inspire
+    hash = "sha256-Rju7vHRrrqW2QQsTRAa8fpl2TaI7JekAtpfPflSw59U="; # kml
+  };
 
   # Throws "java.lang.UnsatisfiedLinkError: 'void org.libjpegturbo.turbojpeg.TJDecompressor.init()'"
   # as of 2.28.1.
@@ -226,6 +244,13 @@ in
     buildInputs = [ netcdf ];
   };
 
+  ogcapi-features = mkGeoserverExtension {
+    name = "ogcapi-features";
+    version = "3.0.0"; # ogcapi-features
+    # buildInputs = [ pkgs.gdal ];
+    hash = "sha256-WqipglArjBDQjneEwBk4WFnoCYonFyvk0LldKm2f6dg="; # ogcapi-features
+  };
+
   ogr-wfs = mkGeoserverExtension {
     name = "ogr-wfs";
     version = "3.0.0"; # ogr-wfs
@@ -271,6 +296,18 @@ in
     hash = "sha256-uIX7x56O4pmjCmsK5SHL9ucD/7OYAAew0xhuemxHym4="; # querylayer
   };
 
+  rat = mkGeoserverExtension {
+    name = "rat";
+    version = "3.0.0"; # sldservice
+    hash = "sha256-vYgl3vqv5jxuNT7OJLAxw7D2LiQdreBPs7IW6X8hJEU="; # sldservice
+  };
+
+  sec-oidc = mkGeoserverExtension {
+    name = "sec-oidc";
+    version = "3.0.0"; # sldservice
+    hash = "sha256-Na8t/eKEMEW6sMhpNe8OzRvMeMKel6cHjLJghzVk5/s="; # sec-oidc
+  };
+
   sldservice = mkGeoserverExtension {
     name = "sldservice";
     version = "3.0.0"; # sldservice
@@ -287,6 +324,18 @@ in
     name = "vectortiles";
     version = "3.0.0"; # vectortiles
     hash = "sha256-UWCQG1IKCKI1V0u8BR2duV2H0Oo7TpPBAbSjXmfKNwo="; # vectortiles
+  };
+
+  wcs1_0 = mkGeoserverExtension {
+    name = "wcs1_0";
+    version = "3.0.0"; # wcs1_0
+    hash = "sha256-Ev3iwQzgxUE5JmCOZeGbZsAT13862CeBCY6Kx+dNWps="; # wcs1_0
+  };
+
+  wcs1_1 = mkGeoserverExtension {
+    name = "wcs1_1";
+    version = "3.0.0"; # wcs1_1
+    hash = "sha256-m8uyRtoXL0qGGupedM+kTBYpnjBmdZoCn7s/yK6Rd9I="; # wcs1_1
   };
 
   wcs2_0-eo = mkGeoserverExtension {
@@ -325,6 +374,12 @@ in
     name = "wps-download";
     version = "3.0.0"; # wps-download
     hash = "sha256-fW5TgcsF2GBs7uXohiLkhgVP2LHoqio4wn9+5Nu7NUc="; # wps-download
+  };
+
+  wps-excel = mkGeoserverExtension {
+    name = "wps-excel";
+    version = "3.0.0"; # wps-excel
+    hash = "sha256-en7V++uVQ9zLdLQia75EBM25a3zF1EuKjxg7kus3t8Q="; # wps-excel
   };
 
   # Needs Postrgres configuration or similar.
