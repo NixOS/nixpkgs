@@ -7,9 +7,84 @@
 
 let
   inherit (lib) types;
+  inherit (config.system) stateVersion;
+
   cfg = config.services.ocis;
   defaultUser = "ocis";
   defaultGroup = defaultUser;
+
+  serviceEnvironment = {
+    PROXY_HTTP_ADDR = "${cfg.address}:${toString cfg.port}";
+    OCIS_URL = cfg.url;
+    OCIS_CONFIG_DIR = if cfg.configDir == null then "${cfg.stateDir}/config" else cfg.configDir;
+    OCIS_BASE_DATA_PATH = cfg.stateDir;
+  }
+  // cfg.environment;
+
+  environmentArguments = lib.mapAttrsToList (
+    name: value: "--property=Environment=${name}=${value}"
+  ) serviceEnvironment;
+
+  ocisShim = pkgs.writeShellScript "ocis-shim" ''
+    ${lib.optionalString (cfg.configDir != null) ''
+      if ! cd "$OCIS_CONFIG_DIR"; then
+        echo "Failed to change directory to $OCIS_CONFIG_DIR" >&2
+        exit 1
+      fi
+    ''}
+
+    exec ${lib.getExe cfg.package} "$@"
+  '';
+
+  # This tool is less restricted than the service because administrative
+  # commands may need to update the oCIS configuration.
+  ocisadm = pkgs.writeShellScriptBin "ocisadm" ''
+    exec ${lib.getExe' pkgs.systemd "systemd-run"} \
+      --quiet \
+      --pipe \
+      --pty \
+      --wait \
+      --collect \
+      --service-type=exec \
+      ${lib.escapeShellArgs environmentArguments} \
+      ${
+        lib.optionalString (cfg.environmentFile != null) (
+          lib.escapeShellArg "--property=EnvironmentFile=${toString cfg.environmentFile}"
+        )
+      } \
+      --property=User=${lib.escapeShellArg cfg.user} \
+      --property=Group=${lib.escapeShellArg cfg.group} \
+      --property=MemoryDenyWriteExecute=yes \
+      --property=NoNewPrivileges=yes \
+      --property=PrivateTmp=yes \
+      --property=PrivateDevices=yes \
+      --property=ProtectHome=yes \
+      --property=ProtectControlGroups=yes \
+      --property=ProtectKernelModules=yes \
+      --property=ProtectKernelTunables=yes \
+      --property=ProtectKernelLogs=yes \
+      --property=RestrictNamespaces=yes \
+      --property=RestrictRealtime=yes \
+      --property=RestrictSUIDSGID=yes \
+      --property=LockPersonality=yes \
+      --property=SystemCallArchitectures=native \
+      --working-directory=${lib.escapeShellArg cfg.stateDir} \
+      -- \
+      ${ocisShim} "$@"
+  '';
+
+  upgradePath = {
+    "5.0" = "ocis_70-bin";
+    "7.0" = "ocis_71-bin";
+    "7.1" = "ocis_72-bin";
+    "7.2" = "ocis_73-bin";
+    "7.3" = "ocis_80-bin";
+    "8.0" = "ocis_81-bin";
+  };
+
+  packageVersion = lib.versions.majorMinor (lib.getVersion cfg.package);
+  nextPackage = upgradePath.${packageVersion} or null;
+  currentPackage = cfg.package.pname or (lib.getName cfg.package);
 in
 {
   options = {
@@ -18,8 +93,16 @@ in
 
       package = lib.mkOption {
         type = types.package;
-        description = "Which package to use for the ownCloud Infinite Scale instance.";
-        relatedPackages = [ "ocis_5-bin" ];
+        description = "Package to use for the ownCloud Infinite Scale instance.";
+        relatedPackages = [
+          "ocis_5-bin"
+          "ocis_70-bin"
+          "ocis_71-bin"
+          "ocis_72-bin"
+          "ocis_73-bin"
+          "ocis_80-bin"
+          "ocis_81-bin"
+        ];
       };
 
       configDir = lib.mkOption {
@@ -141,7 +224,23 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    services.ocis.package = lib.mkDefault pkgs.ocis_5-bin;
+    warnings = lib.optional (nextPackage != null) ''
+      The configured ownCloud Infinite Scale package, ${currentPackage}, is not the latest production release.
+
+      oCIS upgrades must follow every production release in order. The next supported
+      step is:
+
+        services.ocis.package = pkgs.${toString nextPackage};
+
+      Back up the instance and follow the upstream migration instructions before
+      changing the package. Do not skip later production releases.
+
+      https://doc.owncloud.com/ocis/next/migration/upgrading-ocis.html
+    '';
+
+    services.ocis.package = lib.mkDefault (
+      if lib.versionOlder stateVersion "26.11" then pkgs.ocis_5-bin else pkgs.ocis_81-bin
+    );
 
     users.users.${defaultUser} = lib.mkIf (cfg.user == defaultUser) {
       group = cfg.group;
@@ -153,55 +252,49 @@ in
 
     users.groups = lib.mkIf (cfg.group == defaultGroup) { ${defaultGroup} = { }; };
 
-    systemd = {
-      services.ocis = {
-        description = "ownCloud Infinite Scale Stack";
-        wantedBy = [ "multi-user.target" ];
-        environment = {
-          PROXY_HTTP_ADDR = "${cfg.address}:${toString cfg.port}";
-          OCIS_URL = cfg.url;
-          OCIS_CONFIG_DIR = if (cfg.configDir == null) then "${cfg.stateDir}/config" else cfg.configDir;
-          OCIS_BASE_DATA_PATH = cfg.stateDir;
-        }
-        // cfg.environment;
-        serviceConfig = {
-          Type = "simple";
-          ExecStart = "${lib.getExe cfg.package} server";
-          WorkingDirectory = cfg.stateDir;
-          User = cfg.user;
-          Group = cfg.group;
-          Restart = "always";
-          EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
-          ReadWritePaths = [ cfg.stateDir ];
-          ReadOnlyPaths = [ cfg.configDir ];
-          MemoryDenyWriteExecute = true;
-          NoNewPrivileges = true;
-          PrivateTmp = true;
-          PrivateDevices = true;
-          ProtectSystem = "strict";
-          ProtectHome = true;
-          ProtectControlGroups = true;
-          ProtectKernelModules = true;
-          ProtectKernelTunables = true;
-          ProtectKernelLogs = true;
-          RestrictAddressFamilies = [
-            "AF_UNIX"
-            "AF_INET"
-            "AF_INET6"
-            "AF_NETLINK"
-          ];
-          RestrictNamespaces = true;
-          RestrictRealtime = true;
-          RestrictSUIDSGID = true;
-          LockPersonality = true;
-          SystemCallArchitectures = "native";
-        };
+    environment.systemPackages = [ ocisadm ];
+
+    systemd.services.ocis = {
+      description = "ownCloud Infinite Scale Stack";
+      wantedBy = [ "multi-user.target" ];
+      environment = serviceEnvironment;
+      serviceConfig = {
+        Type = "simple";
+        ExecStart = "${lib.getExe cfg.package} server";
+        WorkingDirectory = cfg.stateDir;
+        User = cfg.user;
+        Group = cfg.group;
+        Restart = "always";
+        EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
+        ReadWritePaths = [ cfg.stateDir ];
+        ReadOnlyPaths = [ cfg.configDir ];
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        ProtectControlGroups = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectKernelLogs = true;
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+          "AF_NETLINK"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        LockPersonality = true;
+        SystemCallArchitectures = "native";
       };
     };
   };
 
-  meta.maintainers = with lib.maintainers; [
-    bhankas
-    ramblurr
-  ];
+  meta = {
+    maintainers = with lib.maintainers; [ ramblurr ];
+    doc = ./ocis.md;
+  };
 }
