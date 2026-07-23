@@ -80,8 +80,8 @@
   xz,
   zlib,
   zstd,
+  buildPackages,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal" + lib.optionalString useMinimalFeatures "-minimal";
   version = "3.12.4";
@@ -123,6 +123,16 @@ stdenv.mkDerivation (finalAttrs: {
       name = "0005-netcdf-avoid-reading-attributes-without-checking-length.patch";
       url = "https://github.com/OSGeo/gdal/commit/50eea7456d83c9586f112ef96b43249372839dea.patch";
       hash = "sha256-m1FsBC37h2uuaEeYezPZJFsDR6Ix/FDIZnuZZiSAYcw=";
+    })
+
+    # Fix tests with libtiff 4.7.2
+    # FAILED gcore/tiff_read.py::test_tiff_read_stripbytecounts_count_not_same_as_stripoffsets_count -
+    #     AssertionError: assert '170' is None
+    (fetchpatch {
+      name = "0006-Internal-libtiff-resync-with-4.7.2rc3-and-adjust-tes.patch";
+      url = "https://github.com/OSGeo/gdal/commit/06ffb0333fe557cde262aa1e81466dda42684c53.patch";
+      hash = "sha256-teZ9cv8JQ2ua4tEWl3I8D9DYo8srGIBYIc2NfkgNMe4=";
+      includes = [ "autotest/gcore/tiff_read.py" ];
     })
   ];
 
@@ -166,6 +176,9 @@ stdenv.mkDerivation (finalAttrs: {
     # This is not strictly needed as the Java bindings wouldn't build anyway if
     # ant/jdk were not available.
     "-DBUILD_JAVA_BINDINGS=OFF"
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "-DCMAKE_CROSSCOMPILING_EMULATOR=${stdenv.hostPlatform.emulator buildPackages}"
   ];
 
   buildInputs =

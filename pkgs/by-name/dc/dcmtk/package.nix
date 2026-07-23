@@ -26,6 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
   # The following patches are taken from the Debian package
   # See https://salsa.debian.org/med-team/dcmtk
   patches = [
+    # Backport of upstream commit edbb085e for 3.6.9; remove when updating past 3.7.0.
+    (fetchurl {
+      name = "CVE-2026-5663.patch";
+      url = "https://salsa.debian.org/med-team/dcmtk/-/raw/debian/3.6.9-5%2Bdeb13u1/debian/patches/0016-CVE-2026-5663.patch";
+      hash = "sha256-o8k+ns+O2qECL2i4upSRIpDD8rXDhmjkwjp4kC/rv8Y=";
+    })
     (fetchurl {
       url = "https://salsa.debian.org/med-team/dcmtk/-/raw/debian/3.6.9-4/debian/patches/01_dcmtk_3.6.0-1.patch";
       hash = "sha256-kDEZvPqcF8+PYID24srMoPSBPltmnGiJ67LHsLVcPYM=";
