@@ -5,6 +5,7 @@
   docker,
   dockerfile-parse,
   fetchPypi,
+  setuptools,
   gitpython,
   idna,
   license-expression,
@@ -20,20 +21,23 @@
 buildPythonPackage rec {
   pname = "tern";
   version = "2.12.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-yMIvFiliEHrbZMqvX3ZAROWcqii5VmB54QEYHGRJocA=";
   };
 
+  build-system = [
+    setuptools
+    pbr
+  ];
+
   preBuild = ''
     cp requirements.{in,txt}
   '';
 
-  nativeBuildInputs = [ pbr ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     pyyaml
     docker
     dockerfile-parse
