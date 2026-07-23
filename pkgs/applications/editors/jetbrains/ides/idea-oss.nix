@@ -40,8 +40,9 @@ let
         rev = "694f4e0ff33369796b1aaf52a5d11e3128003299";
         hash = "sha256-Cj158kkb8jr9t5mMmMcelkwRzkvmfV1sdG+LVFytLPM=";
       };
+      lockfileHash = "sha256-LtJ3zPYozbFenJwCq8RqVDukzIoZRwN2rDWs816LMBU=";
       repoCacheFODHashes = {
-        x86_64-linux = "sha256-tTlUP8DcSS2lemXtDIu4QTcvi65PAM0FaU5i8XCKY7Q=";
+        x86_64-linux = "sha256-0eIwEmonQIIo5CPWs58CphIovg5ep+d63yJu/9RkR5s=";
       };
     };
     # update-script-end: source-args

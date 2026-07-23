@@ -56,9 +56,10 @@ let
 
   localJdkVersion = "local_jdk_21";
   bazelArgs = [
-    "--lockfile_mode=off"
     "--features=-module_maps"
     "--host_features=-module_maps"
+    # See comment in bazel-downloader.cfg
+    "--experimental_downloader_config=${./bazel-downloader.cfg}"
   ];
 
   jbr = jetbrains.jdk-no-jcef-21;
@@ -219,39 +220,6 @@ let
     else
       "//build:i_build_target";
 
-  pname = "${buildType}-oss";
-
-in
-bazel.package {
-  inherit version;
-  name = "${pname}-${version}.tar.gz";
-  src = ideaSrc;
-
-  buildInputs = [
-    zlib
-    stdenv.cc
-    libxi
-    libxtst
-    alsa-lib
-    libxrender
-    libxcrypt-legacy
-    xz
-    ncurses
-    libxml2_13
-    libpanel
-    python3
-  ];
-
-  nativeBuildInputs = [
-    stdenv.cc
-    bash
-  ];
-
-  bazel = bazel;
-  targets = [ bazelTarget ];
-  registry = bazelRegistry;
-  commandArgs = bazelArgs;
-
   postUnpack = ''
     ln -s ${androidSrc} "$sourceRoot/android"
   '';
@@ -288,6 +256,71 @@ bazel.package {
     ../patches/bump-jackson-core-in-source.patch
   ];
 
+  # The MODULE.bazel.lock is invalidated by our patches, so refresh it in a
+  # separate FOD and inject it into the builds below.
+  refreshedLockfile = bazel.derivation {
+    inherit
+      version
+      patches
+      postUnpack
+      bazel
+      ;
+    src = ideaSrc;
+    name = "intellij-community-module-lockfile";
+
+    targets = [ ];
+    registry = bazelRegistry;
+    command = "mod deps";
+    commandArgs = bazelArgs ++ [ "--lockfile_mode=refresh" ];
+
+    bazelPreBuild = ''
+      # Patch the version number (remove JetBrains/ prefix)
+      substituteInPlace .bazelversion --replace-fail "JetBrains/" ""
+    '';
+
+    installPhase = ''
+      cp MODULE.bazel.lock $out
+    '';
+
+    outputHash = bazelConfig.lockfileHash;
+    outputHashAlgo = "sha256";
+  };
+
+  pname = "${buildType}-oss";
+
+in
+bazel.package {
+  inherit version;
+  name = "${pname}-${version}.tar.gz";
+  src = ideaSrc;
+
+  buildInputs = [
+    zlib
+    stdenv.cc
+    libxi
+    libxtst
+    alsa-lib
+    libxrender
+    libxcrypt-legacy
+    xz
+    ncurses
+    libxml2_13
+    libpanel
+    python3
+  ];
+
+  nativeBuildInputs = [
+    stdenv.cc
+    bash
+  ];
+
+  bazel = bazel;
+  targets = [ bazelTarget ];
+  registry = bazelRegistry;
+  commandArgs = bazelArgs;
+
+  inherit postUnpack patches;
+
   autoPatchelfVendorDirs = [
     "toolchains_llvm++llvm+llvm_toolchain_llvm"
     "rules_python++python+python_3_11_x86_64-unknown-linux-gnu"
@@ -298,6 +331,9 @@ bazel.package {
 
   bazelPreBuild = ''
     ## BAZEL PATCHES
+    # Replace upstream's lockfile with the refreshed one
+    install -m 644 ${refreshedLockfile} MODULE.bazel.lock
+
     # Patch the version number (remove JetBrains/ prefix)
     substituteInPlace .bazelversion --replace-fail "JetBrains/" ""
     substituteInPlace platform/build-scripts/bazel/.bazelversion --replace-fail "JetBrains/" ""
@@ -372,6 +408,7 @@ bazel.package {
   };
 
   passthru = {
+    bazelLockfile = refreshedLockfile;
     inherit
       version
       buildNumber

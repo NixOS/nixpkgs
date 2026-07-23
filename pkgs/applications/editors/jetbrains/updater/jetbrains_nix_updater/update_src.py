@@ -194,28 +194,30 @@ async def get_bazel_config(intellij_outpath: Path) -> BazelConfig:
     )
 
 
-async def prebuild_repo_cache(
+async def prebuild_fod(
     config: UpdaterConfig,
     system: str,
     machine: str,
     ide_name: str,
+    attr: str,
+    label: str,
     drv_path: Path,
     placeholder_hash: str,
 ):
     if system != platform.system() or machine != platform.machine():
         print(
-            f"[!] Skipping repoCacheFODHashes generation for {machine}-{system.lower()}: can not build - please update manually."
+            f"[!] Skipping {label} generation for {machine}-{system.lower()}: can not build - please update manually."
         )
         return
 
     print(
-        f"[*] Generating repoCacheFODHash for {machine}-{system.lower()}: this can take a long time"
+        f"[*] Generating {label} for {machine}-{system.lower()}: this can take a long time"
     )
     hash = await run_command(
         [
             "nurl",
             "--expr",
-            f'(import {config.nixpkgs_root} {{}}).jetbrains."{ide_name}".src.bazelRepoCache',
+            f'(import {config.nixpkgs_root} {{}}).jetbrains."{ide_name}".src.{attr}',
         ]
     )
 
@@ -249,6 +251,7 @@ async def run_src_update(ide: Ide, info: VersionInfo, config: UpdaterConfig) -> 
     )
 
     DUMMY_HASH_X86_64_LINUX = f"sha256-{'0' * 43}"
+    DUMMY_HASH_LOCKFILE = f"sha256-{'1' * 43}"
 
     try:
         await replace_blocks(
@@ -280,6 +283,7 @@ async def run_src_update(ide: Ide, info: VersionInfo, config: UpdaterConfig) -> 
                                 rev = "{bazel_config.registry_rev}";
                                 hash = "{bazel_config.registry_hash}";
                             }};
+                            lockfileHash = "{DUMMY_HASH_LOCKFILE}";
                             repoCacheFODHashes = {{
                                 x86_64-linux = "{DUMMY_HASH_X86_64_LINUX}";
                             }};
@@ -292,9 +296,28 @@ async def run_src_update(ide: Ide, info: VersionInfo, config: UpdaterConfig) -> 
         print(f"[!] Writing update info to file failed: {e}", file=sys.stderr)
         return False
 
-    # Refresh vendor FOD hash
-    await prebuild_repo_cache(
-        config, "Linux", "x86_64", ide.name, ide.drv_path, DUMMY_HASH_X86_64_LINUX
+    # Refresh the lockfile FOD hash first: the repo cache build injects the lockfile
+    await prebuild_fod(
+        config,
+        "Linux",
+        "x86_64",
+        ide.name,
+        "bazelLockfile",
+        "lockfileHash",
+        ide.drv_path,
+        DUMMY_HASH_LOCKFILE,
+    )
+
+    # Refresh repo cache FOD hash
+    await prebuild_fod(
+        config,
+        "Linux",
+        "x86_64",
+        ide.name,
+        "bazelRepoCache",
+        "repoCacheFODHashes",
+        ide.drv_path,
+        DUMMY_HASH_X86_64_LINUX,
     )
 
     return True
