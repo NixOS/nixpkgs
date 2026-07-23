@@ -1,4 +1,57 @@
 {
+  aarch64-darwin = {
+    triplet = "aarch64-apple-darwin";
+    packages = {
+      nrfutil = {
+        version = "8.1.1";
+        hash = "sha256-uUSviI9sPRA4geccGTEe89uBU4vnPSjP+3Y5RM1oieM=";
+      };
+      nrfutil-91 = {
+        version = "0.5.0";
+        hash = "sha256-eRYmwolAW/k0nggSDvbQhU3AfOdNlfs7pMDUQBYgWjQ=";
+      };
+      nrfutil-ble-sniffer = {
+        version = "0.16.2";
+        hash = "sha256-NRdEzjfBV5SSMxzc5LCaSSGTwp5Lyd8G7aI8OKTwlaA=";
+      };
+      nrfutil-completion = {
+        version = "1.5.0";
+        hash = "sha256-8+HJUSgmGIDPztlLM3BPLQROeurgKMxZ4iPtGQJtkUI=";
+      };
+      nrfutil-device = {
+        version = "2.15.1";
+        hash = "sha256-goLcorkaAYnHkUd5elLt0irLvDwnqFWUJR0nBkXGEFQ=";
+      };
+      nrfutil-mcu-manager = {
+        version = "0.8.0";
+        hash = "sha256-1mKoXw5i/++6aUexmLml+S/Qp5KbqO5GXuDbUFJcA+4=";
+      };
+      nrfutil-npm = {
+        version = "0.3.1";
+        hash = "sha256-tyUQkzCCho6Y5sulwdKGMEazuWxeS2nQid4aOolHbNE=";
+      };
+      nrfutil-nrf5sdk-tools = {
+        version = "1.1.0";
+        hash = "sha256-TbGmQ8Nu/n4YmikQ8ND7aWCEjWvD53jZqIFcEknKQFo=";
+      };
+      nrfutil-sdk-manager = {
+        version = "1.8.0";
+        hash = "sha256-sHAwJmtoISbmJmSnl3Am+10/ulIRw5x4aVIFYpBy734=";
+      };
+      nrfutil-suit = {
+        version = "0.9.0";
+        hash = "sha256-G7/WhtkxQgr1yzFVz+mlx+zwn8cgEepGRQZcJadAkOY=";
+      };
+      nrfutil-toolchain-manager = {
+        version = "0.15.0";
+        hash = "sha256-lVdvEj5Z2O5QhtRkbOSnVVP5dzJE9S34tMVE1O32sO0=";
+      };
+      nrfutil-trace = {
+        version = "4.0.1";
+        hash = "sha256-gAqBw/EsLu1JMuq2IRVhYYfDRw8byldFY6MxNfs29Gc=";
+      };
+    };
+  };
   aarch64-linux = {
     triplet = "aarch64-unknown-linux-gnu";
     packages = {
