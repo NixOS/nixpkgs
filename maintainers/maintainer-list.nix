@@ -29497,6 +29497,11 @@
     githubId = 6882568;
     name = "Vaci";
   };
+  vadgoblin = {
+    name = "Vadgoblin";
+    github = "Vadgoblin";
+    githubId = 38049784;
+  };
   vaibhavsagar = {
     email = "vaibhavsagar@gmail.com";
     matrix = "@vaibhavsagar:matrix.org";
