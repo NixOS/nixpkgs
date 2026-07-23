@@ -42,7 +42,7 @@ let
     RestrictNamespaces = true;
     RestrictRealtime = true;
     RestrictSUIDSGID = true;
-    UMask = "0027"; # Relaxed slightly from 0077 to allow group read access
+    UMask = "0027";
   };
 
   inherit (lib)
