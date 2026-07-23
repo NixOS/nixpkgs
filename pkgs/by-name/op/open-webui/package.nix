@@ -214,7 +214,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       gcp-storage-emulator
       moto
       oracledb
-      pinecone-client
+      pinecone
       playwright
       pymilvus
       pymongo
