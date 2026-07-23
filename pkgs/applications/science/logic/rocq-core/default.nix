@@ -29,6 +29,7 @@ let
     "9.1.0".sha256 = "sha256-+QL7I1/0BfT87n7lSaOmpHj2jJuDB4idWhAxwzvVQOE=";
     "9.1.1".sha256 = "sha256-aFsGsFzexyDnOVarHPKs35HjiV8uUCpeOKSl15wXZ4s=";
     "9.2.0".sha256 = "sha256-rVhv2GLImdVPgRwwTQ+wiWNtRUflMrES0ElIrdTIN1s=";
+    "9.3+rc1".sha256 = "sha256-vGJkRRzf8ur7i9IUpRA/sxVEQvZGnxfV/ex28Lt1kWw=";
   };
   releaseRev = v: "V${v}";
   fetched =
