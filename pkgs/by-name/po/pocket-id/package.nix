@@ -43,7 +43,7 @@ buildGo127Module (finalAttrs: {
   ];
 
   # required for TestIsURLPrivate
-  __darwinAllowLocalNetworking = finalAttrs.doCheck;
+  __darwinAllowLocalNetworking = finalAttrs.finalPackage.doCheck;
 
   preFixup = ''
     mv $out/bin/cmd $out/bin/pocket-id

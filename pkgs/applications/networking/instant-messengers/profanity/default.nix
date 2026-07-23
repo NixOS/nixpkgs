@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # see also: https://profanity-im.github.io/guide/latest/build.html#expl
   mesonFlags = [
-    (lib.mesonBool "tests" finalAttrs.doCheck)
+    (lib.mesonBool "tests" finalAttrs.finalPackage.doCheck)
     (lib.mesonEnable "notifications" notifySupport)
     (lib.mesonEnable "python-plugins" pythonPluginSupport)
     (lib.mesonEnable "c-plugins" true)

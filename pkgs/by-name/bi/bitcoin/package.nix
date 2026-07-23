@@ -158,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_ZMQ" true)
     (lib.cmakeBool "WITH_USDT" enableTracing)
   ]
-  ++ lib.optionals (!finalAttrs.doCheck) [
+  ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
     (lib.cmakeBool "BUILD_TESTS" false)
     (lib.cmakeBool "BUILD_FUZZ_BINARY" false)
     (lib.cmakeBool "BUILD_GUI_TESTS" false)

@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags =
-    lib.optional finalAttrs.doCheck "-DUNIT_TESTING=ON"
+    lib.optional finalAttrs.finalPackage.doCheck "-DUNIT_TESTING=ON"
     ++ lib.optional stdenv.hostPlatform.isStatic "-DBUILD_SHARED_LIBS=OFF";
 
   doCheck = true;
