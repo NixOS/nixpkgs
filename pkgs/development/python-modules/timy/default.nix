@@ -2,13 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
 }:
 
 buildPythonPackage {
   pname = "timy";
   version = "0.4.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ramonsaraiva";
@@ -16,6 +17,8 @@ buildPythonPackage {
     rev = "36a97e55f058de002a0da4f2a8e18c00d944821c";
     hash = "sha256-4Opaph8Q1tQH+C/Epur8AA26RN4vO944DjCg0zDJqxM=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
