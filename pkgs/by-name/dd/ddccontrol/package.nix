@@ -56,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Program used to control monitor parameters by software";
     homepage = "https://github.com/ddccontrol/ddccontrol";
+    mainProgram = "ddccontrol";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
