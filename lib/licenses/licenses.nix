@@ -1309,6 +1309,14 @@ lib.mapAttrs mkLicense (
       fullName = "PHP License v3.01";
     };
 
+    polyFormShieldd100 = {
+      shortName = "polyform-shield-1.0.0";
+      fullName = "PolyForm Shield License 1.0.0";
+      url = "https://raw.githubusercontent.com/mak-kirkland/chronicler/v0.56.3-alpha/LICENSE";
+      free = false;
+      redistributable = true;
+    };
+
     postgresql = {
       spdxId = "PostgreSQL";
       fullName = "PostgreSQL License";
