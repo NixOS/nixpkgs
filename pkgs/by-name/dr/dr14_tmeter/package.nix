@@ -7,7 +7,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "dr14_tmeter";
-  version = "1.0.16-unstable-2025-09-27";
+  version = "1.0.16";
   format = "setuptools";
 
   src = fetchFromGitHub {
