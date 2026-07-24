@@ -34,5 +34,8 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "pzip";
+    knownVulnerabilities = [
+      "Path traversal vulnerability, see https://github.com/ybirader/pzip/issues/15"
+    ];
   };
 })
