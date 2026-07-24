@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_SYSTEMD" withSystemd)
     (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared)
     (lib.cmakeBool "WITH_EXAMPLES" buildExamples)
-    (lib.cmakeBool "WITH_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "WITH_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   # This test checks if using the **installed** headers works.

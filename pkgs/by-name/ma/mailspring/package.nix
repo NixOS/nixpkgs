@@ -5,6 +5,7 @@
   callPackage,
   fetchFromGitHub,
 
+  actool,
   makeBinaryWrapper,
   pkg-config,
   wrapGAppsHook3,
@@ -17,19 +18,17 @@
   commandLineArgs ? "",
 }:
 let
-  version = "1.22.0";
+  version = "1.23.0";
 
   src = fetchFromGitHub {
     owner = "Foundry376";
     repo = "Mailspring";
     tag = version;
-    hash = "sha256-32d0WIWqCsZlvuT+RDa3EYxkwTxWzQyLIfASiDfZnL8=";
+    hash = "sha256-GbY3lov3MT8c8LehEifzOH28VAYpBWDbwXrqEfFfwJg=";
     fetchSubmodules = true;
   };
 
   patches = [
-    # zip extraction fails on newer nodejs versions without this fix
-    ./bump-yauzl.patch
     ./remove-rpm-deb-and-macos-package-generation.patch
   ];
 
@@ -41,7 +40,7 @@ let
     pname = "mailspring-app";
     inherit version src patches;
     postPatch = "cd app"; # we don't use sourceRoot so that we don't have to make the patch relative to it
-    npmDepsHash = "sha256-/caWmbN4Sl3DVPLXSaXrCHEyRsk/p3FwDqSZ7lfNgUk=";
+    npmDepsHash = "sha256-JkjtC4WT3cBsVlmrfO5WAxU1Xe3vXbxuNBDs2Q7fEck=";
     dontNpmBuild = true;
     env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
@@ -67,13 +66,16 @@ buildNpmPackage (finalAttrs: {
   pname = "mailspring";
   inherit version src patches;
 
-  npmDepsHash = "sha256-nHKFuTdk3qbAiSHksSo++mc8TMasspuym7MYxjuTTHI=";
+  npmDepsHash = "sha256-0cg/DT0MUbfzTq5hejH7auSk77M9Md7FWzidov8iyA4=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
     pkg-config
     wrapGAppsHook3
     zip
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    actool
   ];
 
   npmFlags = [ "--ignore-scripts" ];
@@ -133,7 +135,7 @@ buildNpmPackage (finalAttrs: {
       cp -r app/dist/*/resources $out/share/mailspring
 
       install -Dm444 app/dist/Mailspring.desktop $out/share/applications/Mailspring.desktop
-      install -Dm444 app/dist/mailspring.appdata.xml $out/share/metainfo/mailspring.appdata.xml
+      install -Dm444 app/dist/mailspring.metainfo.xml $out/share/metainfo/mailspring.metainfo.xml
 
       for size in 16 32 64 128 256 512; do
         install -Dm444 app/build/resources/linux/icons/$size.png \

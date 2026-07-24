@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     "POD2HTML=${lib.getExe' buildPackages.perl "pod2html"}"
     "MANDIR=share/man"
   ]
-  ++ lib.optional finalAttrs.doCheck "PROVE=${lib.getExe' perl "prove"}";
+  ++ lib.optional finalAttrs.finalPackage.doCheck "PROVE=${lib.getExe' perl "prove"}";
 
   installFlags = [
     "DESTDIR=$(out)"

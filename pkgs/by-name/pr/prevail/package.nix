@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "prevail_ENABLE_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "prevail_ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   installPhase = ''

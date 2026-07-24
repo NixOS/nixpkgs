@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.strings.mesonEnable "guile" false)
     (lib.strings.mesonEnable "scm" false)
     (lib.strings.mesonEnable "readline" false)
-    (lib.strings.mesonEnable "tests" finalAttrs.doCheck)
+    (lib.strings.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
     (lib.strings.mesonOption "lispdir" "${placeholder "mu4e"}/share/emacs/site-lisp")
   ];
 

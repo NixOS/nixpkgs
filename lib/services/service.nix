@@ -7,10 +7,11 @@
 {
   lib,
   config,
+  options,
   ...
 }:
 let
-  inherit (lib) mkOption types;
+  inherit (lib) mkEnableOption mkOption types;
   pathOrStr = types.coercedTo types.path (x: "${x}") types.str;
 in
 {
@@ -40,7 +41,7 @@ in
       visible = "shallow";
     };
     process = {
-      argv = lib.mkOption {
+      argv = mkOption {
         type = types.listOf pathOrStr;
         example = lib.literalExpression ''[ (lib.getExe config.package) "--nobackground" ]'';
         description = ''
@@ -72,15 +73,12 @@ in
     };
 
     notificationProtocol = mkOption {
-      type = types.listOf (
-        types.enum [
-          "systemd"
-          "s6"
-        ]
-      );
-
-      default = [ ];
-      apply = v: lib.unique v;
+      type = types.submodule {
+        options = {
+          systemd = mkEnableOption "Whether the service supports systemd-notify.";
+          s6 = mkEnableOption "Whether the service supports s6-notify.";
+        };
+      };
       description = ''
         Notification protocol that this service supports with the underlying service manager.
       '';
@@ -90,13 +88,20 @@ in
   config = {
     assertions = [
       {
-        assertion = config.process.reloadSignal != null && config.process.reloadCommand != null;
+        # `reloadSignal` derives `reloadCommand` at `mkDefault` priority below, so a
+        # conflict only exists when the user *also* set `reloadCommand` explicitly.
+        # An explicit (non-`mkDefault`) definition has `defaultOverridePriority`.
+        assertion =
+          !(
+            config.process.reloadSignal != null
+            && options.process.reloadCommand.highestPrio <= lib.modules.defaultOverridePriority
+          );
         message = "reloadSignal conflicts with reloadCommand. Please either use reloadSignal or reloadCommand.";
       }
     ];
 
-    process.reloadCommand = (lib.mkIf config.process.reloadSignal != null) (
-      lib.mkForce "${pkgs.coreutils}/bin/kill -${config.process.reloadSignal} $MAINPID"
+    process.reloadCommand = lib.mkIf (config.process.reloadSignal != null) (
+      lib.mkDefault "${pkgs.coreutils}/bin/kill -${config.process.reloadSignal} $MAINPID"
     );
   };
 }

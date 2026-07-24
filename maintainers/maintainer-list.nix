@@ -4691,6 +4691,12 @@
     githubId = 53847249;
     name = "Casey Avila";
   };
+  caspersonn = {
+    email = "lucakasper8@gmail.com";
+    github = "Caspersonn";
+    githubId = 96787412;
+    name = "Luca Kasper";
+  };
   cassandracomar = {
     name = "Cassandra Comar";
     github = "cassandracomar";
@@ -15629,6 +15635,12 @@
     githubId = 632767;
     name = "Guillaume Maudoux";
   };
+  layzyoldman = {
+    email = "ricardopaivacampos@gmail.com";
+    github = "layzyoldman";
+    githubId = 193278607;
+    name = "Ricardo Campos";
+  };
   LazilyStableProton = {
     email = "LazilyStable@proton.me";
     github = "LazyStability";
@@ -19310,6 +19322,12 @@
     githubId = 220262;
     name = "Ion Mudreac";
   };
+  mugaizzo = {
+    email = "mugahedman@hotmail.com";
+    github = "mugaizzo";
+    githubId = 15838537;
+    name = "Mugahed Izzeldin";
+  };
   mulatta = {
     email = "seungwon@mulatta.io";
     github = "mulatta";
@@ -19807,6 +19825,12 @@
     githubId = 364510;
     name = "Tobias Geerinckx-Rice";
   };
+  ndavd = {
+    email = "email@ndavd.com";
+    github = "ndavd";
+    githubId = 74260683;
+    name = "Nuno David";
+  };
   ndl = {
     email = "ndl@endl.ch";
     github = "ndl";
@@ -19918,6 +19942,12 @@
     githubId = 55792153;
     name = "neo";
     email = "chojs990222@gmail.com";
+  };
+  neobrain = {
+    github = "neobrain";
+    githubId = 4840017;
+    matrix = "@neobrain:matrix.org";
+    name = "Tony Wasserka";
   };
   neonvoid = {
     email = "me@neonvoid.dev";
@@ -24981,6 +25011,12 @@
     github = "SamirTalwar";
     githubId = 47582;
     name = "Samir Talwar";
+  };
+  samiser = {
+    email = "nixos@me.samiser.xyz";
+    github = "samiser";
+    githubId = 32001364;
+    name = "Sam";
   };
   samlich = {
     email = "nixos@samli.ch";
@@ -30890,6 +30926,11 @@
     github = "xosnrdev";
     githubId = 106241330;
     name = "Success Kingsley";
+  };
+  xqtc161 = {
+    github = "xqtc161";
+    githubId = 65857432;
+    name = "tila";
   };
   xrelkd = {
     github = "xrelkd";

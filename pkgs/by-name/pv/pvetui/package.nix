@@ -7,7 +7,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "pvetui";
-  version = "1.4.2";
+  version = "1.4.3";
 
   __structuredAttrs = true;
 
@@ -15,10 +15,10 @@ buildGoModule (finalAttrs: {
     owner = "devnullvoid";
     repo = "pvetui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yYYGXb+CriDRZcV8e/7MN4Pq8GKP35JdMrcxozWVBpE=";
+    hash = "sha256-8mfp5bfROqT6DcxByaHZRTkDHJpfclCpeaJaINLKmlk=";
   };
 
-  vendorHash = "sha256-JOo/7/3J9LqefIYuRl9efSlSfzLvQ/B8Jpy2e5cdEio=";
+  vendorHash = "sha256-7Tuh9T3uTlNxdSlSL7gQIYXpfpNbCkQrRWj/FoU8fbU=";
 
   subPackages = [ "cmd/pvetui" ];
 
