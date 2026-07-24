@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pycync";
-  version = "0.5.0";
+  version = "0.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "Kinachi249";
     repo = "pycync";
     tag = "v${version}";
-    hash = "sha256-mYHUkenP0FMnwKOdZe4XjC/VnP3JJGPtuVdYR9UcouM=";
+    hash = "sha256-DB2nYO6uygCyZJKWnxL1SE5LczGi7y54dH9K/1l8PnY=";
   };
 
   build-system = [ hatchling ];
