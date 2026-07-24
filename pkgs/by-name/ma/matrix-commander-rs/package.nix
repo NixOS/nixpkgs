@@ -42,7 +42,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/8go/matrix-commander-rs";
     changelog = "https://github.com/8go/matrix-commander-rs/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [
+      fab
+      ilkecan
+    ];
     mainProgram = "matrix-commander-rs";
   };
 })
