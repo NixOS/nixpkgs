@@ -48,7 +48,7 @@ let
         value
     ) settings;
 
-  resolvedConf = settingsToSections (transformSettings cfg.settings);
+  resolvedConf = settingsToSections { Resolve = transformSettings cfg.settings.Resolve; };
 in
 {
   imports = [
