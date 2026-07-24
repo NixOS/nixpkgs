@@ -206,6 +206,7 @@ buildDotnetModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       kruziikrel13
       samfundev
+      pandapip1
     ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "Grayjay";
