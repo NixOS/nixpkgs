@@ -29,6 +29,19 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-hUI8sZDwBK8ZRS9asyDiTqpoIGnGbHeH/Q9i/gasut0=";
   };
+  patches = [
+    ## Backports from 1.14.0
+    # Rebased because they don't apply directly.
+    # https://github.com/stanfordnlp/stanza/security/advisories/GHSA-c9h2-qmqw-qf6h
+    # https://github.com/stanfordnlp/stanza/commit/4ca4b154af05d71a66586ea9d77b8782e19f3c67
+    ./GHSA-2fwf-f686-7p34.patch
+    # https://github.com/stanfordnlp/stanza/security/advisories/GHSA-487q-m798-cp85
+    # https://github.com/stanfordnlp/stanza/commit/031ab2e4a350eec3c7e8abc89f37617c4669b361
+    ./GHSA-487q-m798-cp85.patch
+    # https://github.com/stanfordnlp/stanza/security/advisories/GHSA-2fwf-f686-7p34
+    # https://github.com/stanfordnlp/stanza/commit/a7085e75abdf35f277754dda472bba4e6819bcbb
+    ./GHSA-c9h2-qmqw-qf6h.patch
+  ];
 
   build-system = [ setuptools ];
 

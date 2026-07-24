@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "listmonk";
-  version = "6.1.0";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "knadh";
     repo = "listmonk";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-SG9PhQOu3QB0LA9dNLnNzwwtfaib7MCfvOcBMkWMRPw=";
+    hash = "sha256-yLOs1vhTV/0zzq/2Rk5rJ3/1z+kE5xaYODM5NO06F6U=";
   };
 
-  vendorHash = "sha256-0KrjaExgT9tN4M99CfyQpqpGYnXOpzsPRk/Ih4qXsuE=";
+  vendorHash = "sha256-t4l8872bniTmNIW4ias1gImURJgrR6htXkncqfrJ+AU=";
 
   nativeBuildInputs = [
     stuffbin
