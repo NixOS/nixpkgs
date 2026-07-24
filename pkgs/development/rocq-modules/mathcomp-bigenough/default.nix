@@ -25,7 +25,7 @@ mkRocqDerivation {
     in
     with lib.versions;
     lib.switch rocq-core.rocq-version [
-      (case (range "9.0" "9.2") "1.0.4")
+      (case (range "9.0" "9.3") "1.0.4")
     ] null;
 
   propagatedBuildInputs = [ mathcomp-boot ];
