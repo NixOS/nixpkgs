@@ -653,7 +653,7 @@ let
       unsupported = hasUnsupportedPlatform' attrs;
       insecure = isMarkedInsecure attrs;
 
-      problems = completeMetaProblems config attrs;
+      problems = completeMetaProblems config hostPlatform attrs;
 
       available =
         validity.valid != "no"
@@ -701,11 +701,12 @@ let
     hostPlatform:
     let
       checkValidity' = checkValidity hostPlatform;
+      checkProblems' = checkProblems hostPlatform;
     in
     { meta, attrs }:
     let
       invalid = checkValidity' attrs;
-      problems = checkProblems attrs;
+      problems = checkProblems' attrs;
     in
     if invalid == null then
       if problems == null then

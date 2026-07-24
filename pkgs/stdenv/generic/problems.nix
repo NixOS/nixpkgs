@@ -52,6 +52,14 @@ rec {
     unique
     ;
 
+  inherit (lib.meta)
+    platformMatch
+    ;
+
+  inherit (builtins)
+    getEnv
+    ;
+
   handlers = rec {
     # Ordered from less to more
     levels = [
@@ -87,13 +95,13 @@ rec {
           # If `description` is not defined, the derivation is probably not a package.
           # Simply checking whether `meta` is defined is insufficient,
           # as some fetchers and trivial builders do define meta.
-          config: attrs:
+          config: _hostPlatform: attrs:
           # Order of checks optimised for short-circuiting the common case of having maintainers
           (attrs.meta.maintainers or [ ] == [ ])
           && (attrs.meta.teams or [ ] == [ ])
           && (!attrs ? outputHash)
           && (attrs ? meta.description);
-        value = _config: _attrs: {
+        value = _config: _hostPlatform: _attrs: {
           message = "This package has no declared maintainer, i.e. an empty `meta.maintainers` and `meta.teams` attribute.";
         };
       };
@@ -114,13 +122,14 @@ rec {
                 "config.allowBrokenPredicate is deprecated, use config.problems.handlers.myPackage.broken = \"warn\" for individual packages instead."
                 config.allowBrokenPredicate;
           in
+          _hostPlatform:
           if allowBroken then
             attrs: false
           else if config ? allowBrokenPredicate then
             attrs: attrs ? meta.broken && attrs.meta.broken && !allowBrokenPredicate attrs
           else
             attrs: attrs ? meta.broken && attrs.meta.broken;
-        value = _config: _attrs: {
+        value = _config: _hostPlatform: _attrs: {
           message = "This package is broken.";
         };
       };
@@ -153,10 +162,10 @@ rec {
   );
 
   genAutomaticProblems =
-    config: attrs:
+    config: hostPlatform: attrs:
     listToAttrs (
-      map (problem: lib.nameValuePair problem.kindName (problem.value config attrs)) (
-        filter (problem: problem.condition config attrs) automaticProblems
+      map (problem: lib.nameValuePair problem.kindName (problem.value config hostPlatform attrs)) (
+        filter (problem: problem.condition config hostPlatform attrs) automaticProblems
       )
     );
 
@@ -473,7 +482,7 @@ rec {
     };
 
   genCheckProblems =
-    config:
+    config: hostPlatform:
     let
       # This is here so that it gets cached for a (checkProblems config) thunk
       inherit (genHandlerSwitch config)
@@ -490,7 +499,7 @@ rec {
       automaticProblemsConfigCache = concatMap (
         problem:
         optional (elem problem.kindName configuredProblems) {
-          condition = problem.condition config;
+          condition = problem.condition config hostPlatform;
           handler = handlerForProblem problem.kindName problem.kindName;
         }
       ) automaticProblems;
@@ -515,7 +524,7 @@ rec {
       # Slow path, only here we actually figure out which problems we need to handle
       let
         pname = getName attrs;
-        problems = attrs.meta.problems or { } // genAutomaticProblems config attrs;
+        problems = attrs.meta.problems or { } // genAutomaticProblems config hostPlatform attrs;
         problemsToHandle = filter (v: v.handler != "ignore") (
           mapAttrsToList (name: problem: rec {
             inherit name;
@@ -529,9 +538,9 @@ rec {
       processProblems pname problemsToHandle;
 
   completeMetaProblems =
-    config: attrs:
+    config: hostPlatform: attrs:
     mapAttrs (name: problem: { kind = name; } // problem) (
-      (attrs.meta.problems or { }) // genAutomaticProblems config attrs
+      (attrs.meta.problems or { }) // genAutomaticProblems config hostPlatform attrs
     );
 
   processProblems =
