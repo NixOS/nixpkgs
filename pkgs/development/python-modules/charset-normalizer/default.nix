@@ -13,7 +13,7 @@
   withMypyc ? !isPyPy && !stdenv.hostPlatform.isStatic,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "charset-normalizer";
   version = "3.4.9";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jawah";
     repo = "charset_normalizer";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-YOskF90ach/qEwnMeYDEEO2H4DOoz/LZApXDRU9mvnM=";
   };
 
@@ -48,12 +48,14 @@ buildPythonPackage rec {
     inherit aiohttp requests;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Python module for encoding and language detection";
     mainProgram = "normalizer";
     homepage = "https://charset-normalizer.readthedocs.io/";
-    changelog = "https://github.com/jawah/charset_normalizer/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/jawah/charset_normalizer/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
