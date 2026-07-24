@@ -6,14 +6,16 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ufonormalizer";
   version = "0.6.2";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-TFcVu5SDgfLGQa+CuUk4rSQtm1Nl3RxbfOPXVVaibDo=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-TFcVu5SDgfLGQa+CuUk4rSQtm1Nl3RxbfOPXVVaibDo=";
     extension = "zip";
   };
 
@@ -22,6 +24,8 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
+  pythonImportsCheck = [ "ufonormalizer" ];
+
   meta = {
     description = "Script to normalize the XML and other data inside of a UFO";
     mainProgram = "ufonormalizer";
@@ -29,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.sternenseemann ];
   };
-}
+})
