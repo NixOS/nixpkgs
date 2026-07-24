@@ -7,6 +7,7 @@
   buildGoModule,
   installShellFiles,
   buildPackages,
+  c-ares,
   zlib,
   zstd,
   sqlite,
@@ -24,6 +25,7 @@
   go,
   p11-kit,
   nixosTests,
+  c-aresSupport ? false,
 }:
 stdenv.mkDerivation rec {
   pname = "curl-impersonate";
@@ -127,6 +129,13 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace Makefile.in \
       --replace-fail "-lc++" "-lstdc++"
+
+    ${lib.optionalString c-aresSupport ''
+      substituteInPlace Makefile.in \
+        --replace-fail \
+          'config_flags="$$config_flags --enable-ipv6";' \
+          'config_flags="$$config_flags --enable-ipv6"; config_flags="$$config_flags --enable-ares=${lib.getDev c-ares}";'
+    ''}
   '';
 
   preConfigure = ''
