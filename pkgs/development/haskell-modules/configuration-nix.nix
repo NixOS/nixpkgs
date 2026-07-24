@@ -1091,6 +1091,9 @@ builtins.intersectAttrs super {
   # Break dependency cycle between hedgehog, tasty-hedgehog and lifted-async
   lifted-async = dontCheck super.lifted-async;
 
+  # Break infinite recursion yesod-test → yesod-form → yesod-test
+  yesod-test = dontCheck super.yesod-test;
+
   # loc and loc-test depend on each other for testing. Break that infinite cycle:
   loc-test = super.loc-test.override { loc = dontCheck self.loc; };
 
