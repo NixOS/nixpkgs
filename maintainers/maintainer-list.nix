@@ -6246,6 +6246,12 @@
     githubId = 160084;
     name = "Daniel Sidhion";
   };
+  DanielTallon = {
+    email = "fredrick.martin.shultz@gmail.com";
+    github = "DanielTallon";
+    githubId = 269919984;
+    name = "Fredrick Martin-Shultz";
+  };
   danihek = {
     email = "danihek07@gmail.com";
     github = "danihek";
