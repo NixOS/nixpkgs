@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  replaceVars,
   pythonOlder,
   hatch-vcs,
   hatchling,
@@ -14,16 +13,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
-  version = "7.2.0";
+buildPythonPackage (finalAttrs: {
+  version = "7.2.2";
   pname = "icalendar";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "collective";
     repo = "icalendar";
-    tag = "v${version}";
-    hash = "sha256-0NKNbWigZ3BOfKBM8Q+XrOdoFBOF5Lu4XujJcYCMuMw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QDxyMotlG50khBP9luRwoXa9YyZ5qOA/vbdHMwFXv3g=";
   };
 
   nativeBuildInputs = [
@@ -58,11 +57,11 @@ buildPythonPackage rec {
   enabledTestPaths = [ "src/icalendar" ];
 
   meta = {
-    changelog = "https://github.com/collective/icalendar/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/collective/icalendar/blob/${finalAttrs.src.tag}/CHANGES.rst";
     description = "Parser/generator of iCalendar files";
     mainProgram = "icalendar";
     homepage = "https://github.com/collective/icalendar";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ olcai ];
   };
-}
+})
