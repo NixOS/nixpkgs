@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "zlib-ng";
     repo = "zlib-ng";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-6GlHCnx9dQtmViPnvHnMS+l9Z+g6M8ynrSxLhLtmAKU=";
   };
 
@@ -45,6 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-DINSTALL_UTILS=OFF"
   ]
   ++ lib.optionals withZlibCompat [ "-DZLIB_COMPAT=ON" ];
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Zlib data compression library for the next generation systems";
