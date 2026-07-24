@@ -75,6 +75,8 @@ buildGoModule (finalAttrs: {
     export DONT_USE_NETWORK=1
   '';
 
+  __darwinAllowLocalNetworking = true;
+
   passthru = {
     tests = { inherit (nixosTests) anubis; };
     updateScript = nix-update-script { extraArgs = [ "--version-regex=^v(\\d+\\.\\d+\\.\\d+)$" ]; };
