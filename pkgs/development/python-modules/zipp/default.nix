@@ -9,7 +9,7 @@
 }:
 
 let
-  zipp = buildPythonPackage rec {
+  zipp = buildPythonPackage (finalAttrs: {
     pname = "zipp";
     version = "4.1.0";
     pyproject = true;
@@ -17,7 +17,7 @@ let
     src = fetchFromGitHub {
       owner = "jaraco";
       repo = "zipp";
-      tag = "v${version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-qFsCud+fKDULbIF3LLGh6su/Sm1YjcvKe0+R9GH/Ies=";
     };
 
@@ -47,12 +47,14 @@ let
       });
     };
 
+    __structuredAttrs = true;
+
     meta = {
       description = "Pathlib-compatible object wrapper for zip files";
       homepage = "https://github.com/jaraco/zipp";
       license = lib.licenses.mit;
       maintainers = [ ];
     };
-  };
+  });
 in
 zipp
