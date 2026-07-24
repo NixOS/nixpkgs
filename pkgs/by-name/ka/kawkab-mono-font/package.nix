@@ -28,5 +28,6 @@ stdenvNoCC.mkDerivation {
     downloadPage = "https://github.com/aiaf/kawkab-mono";
     changelog = "https://github.com/aiaf/kawkab-mono/releases/tag/v${version}";
     license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ talal ];
   };
 }
