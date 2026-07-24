@@ -1173,6 +1173,12 @@
       }
     ];
   };
+  albfsg = {
+    name = "Alberto Francisco Solaz García";
+    github = "albfsg";
+    githubId = 227897008;
+    email = "albfsg@proton.me";
+  };
   alch-emi = {
     email = "emi@alchemi.dev";
     github = "Alch-Emi";
