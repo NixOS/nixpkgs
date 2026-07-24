@@ -52,7 +52,7 @@ self: super: {
   ghci = null;
   haddock-api = markBroken self.haddock-api_2_29_1; # depends on ghc
   haddock-library = markBroken self.haddock-library_1_11_0; # depends on ghc
-  haskeline = doDistribute self.haskeline_0_8_4_1;
+  haskeline = doDistribute self.haskeline_0_8_5_0;
   hpc = markBroken self.hpc_0_7_0_2;
   integer-gmp = markBroken self.integer-gmp_1_1;
   libiserv = null;
