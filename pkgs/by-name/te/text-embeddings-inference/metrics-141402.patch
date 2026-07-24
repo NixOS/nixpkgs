@@ -1,0 +1,15 @@
+--- a/src/recorder/mod.rs
++++ b/src/recorder/mod.rs
+@@ -72,7 +72,11 @@
+         // SAFETY: While we take a lifetime-less pointer to the given reference, the reference we
+         // derive _from_ the pointer is never given a lifetime that exceeds the lifetime of the
+         // input reference.
+-        let recorder_ptr = unsafe { NonNull::new_unchecked(recorder as *const _ as *mut _) };
++        // Rust >=1.9x rejects the lifetime-extending raw-pointer cast below
++        // (rust-lang/rust#141402); transmute bypasses that check. Soundness is
++        // unchanged: the guard clears the pointer before the reference is gone.
++        let recorder_ptr: NonNull<dyn Recorder> =
++            unsafe { std::mem::transmute(recorder as *const dyn Recorder) };
+ 
+         LOCAL_RECORDER.with(|local_recorder| {
+             local_recorder.set(Some(recorder_ptr));
