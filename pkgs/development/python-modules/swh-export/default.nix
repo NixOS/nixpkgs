@@ -71,6 +71,9 @@ buildPythonPackage (finalAttrs: {
     pkgs.pv
   ];
 
+  # Kafka tests use librdkafka's mock broker bound to the loopback interface.
+  __darwinAllowLocalNetworking = true;
+
   disabledTests = [
     # I don't know how to fix the following error
     # E       fixture 'kafka_server' not found
