@@ -62,6 +62,21 @@
   "module-boot-plymouth-tpm2-totp-quick-start-enable": [
     "index.html#module-boot-plymouth-tpm2-totp-quick-start-enable"
   ],
+  "module-services-gitlab-enterprise": [
+    "index.html#module-services-gitlab-enterprise"
+  ],
+  "module-services-gitlab-enterprise-activation-code": [
+    "index.html#module-services-gitlab-enterprise-activation-code"
+  ],
+  "module-services-gitlab-enterprise-enabling": [
+    "index.html#module-services-gitlab-enterprise-enabling"
+  ],
+  "module-services-gitlab-enterprise-license-file": [
+    "index.html#module-services-gitlab-enterprise-license-file"
+  ],
+  "module-services-gitlab-enterprise-portal-url": [
+    "index.html#module-services-gitlab-enterprise-portal-url"
+  ],
   "module-services-keycloak-unix-socket": [
     "index.html#module-services-keycloak-unix-socket"
   ],

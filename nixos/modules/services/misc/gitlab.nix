@@ -207,6 +207,12 @@ let
       # rather than version listed in Gemfile.lock
       BUNDLER_VERSION = pkgs.bundler.version;
     }
+    // optionalAttrs (cfg.enterprise.customerPortalUrl != null) {
+      CUSTOMER_PORTAL_URL = cfg.enterprise.customerPortalUrl;
+    }
+    // optionalAttrs (cfg.enterprise.licenseMode != null) {
+      GITLAB_LICENSE_MODE = cfg.enterprise.licenseMode;
+    }
     // cfg.extraEnv;
 
   runtimeDeps = [
@@ -305,8 +311,16 @@ in
         '';
       };
 
-      packages.gitlab = mkPackageOption pkgs "gitlab" {
-        example = "gitlab-ee";
+      packages.gitlab = mkOption {
+        type = types.package;
+        default = if cfg.enterprise.enable then pkgs.gitlab-ee else pkgs.gitlab;
+        defaultText = literalExpression "if config.services.gitlab.enterprise.enable then pkgs.gitlab-ee else pkgs.gitlab";
+        example = literalExpression "pkgs.gitlab-ee";
+        description = ''
+          The GitLab package to use. Defaults to `pkgs.gitlab-ee` when
+          {option}`services.gitlab.enterprise.enable` is set, otherwise
+          `pkgs.gitlab` (Community Edition).
+        '';
       };
 
       packages.gitlab-shell = mkPackageOption pkgs "gitlab-shell" { };
@@ -316,6 +330,72 @@ in
       packages.gitaly = mkPackageOption pkgs "gitaly" { };
 
       packages.pages = mkPackageOption pkgs "gitlab-pages" { };
+
+      enterprise = {
+        enable = mkEnableOption "GitLab Enterprise Edition (EE). Requires `nixpkgs.config.allowUnfree = true`. Without a valid license the instance runs EE binaries but only Community Edition features are available";
+
+        licenseFile = mkOption {
+          type = types.nullOr types.path;
+          default = null;
+          example = "/var/keys/gitlab/gitlab.gitlab-license";
+          description = ''
+            Path to an offline `.gitlab-license` file from GitLab Sales. Use this for
+            air-gapped instances that cannot reach the Customers Portal. A sha256 sentinel
+            ensures the file is only loaded when it changes, so renewing a license is just
+            a `nixos-rebuild switch` away.
+
+            Keep the file outside the Nix store (use agenix or sops-nix).
+
+            Mutually exclusive with {option}`services.gitlab.enterprise.activationCodeFile`.
+          '';
+        };
+
+        activationCodeFile = mkOption {
+          type = types.nullOr types.path;
+          default = null;
+          example = "/var/keys/gitlab/activation_code";
+          description = ''
+            Path to a file containing a 24-character GitLab EE cloud activation code from
+            the Customers Portal. Requires outbound HTTPS to the portal on every boot
+            (default `https://customers.gitlab.com`, or
+            {option}`services.gitlab.enterprise.customerPortalUrl`). Handles renewals
+            automatically. If the portal is unreachable, `gitlab-db-config.service` will
+            retry and hold back all GitLab services until it succeeds.
+
+            For air-gapped instances use
+            {option}`services.gitlab.enterprise.licenseFile` instead.
+
+            Mutually exclusive with {option}`services.gitlab.enterprise.licenseFile`.
+          '';
+        };
+
+        customerPortalUrl = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          example = "https://customers.gitlab.com";
+          description = ''
+            Override the GitLab Customers Portal URL (`CUSTOMER_PORTAL_URL`). Controls all
+            outbound traffic to the portal: activation, seat-link sync, Cloud Connector
+            token refresh, and Admin Area subscription links. Does not affect service ping
+            (`https://version.gitlab.com`); disable that separately via
+            `services.gitlab.extraConfig.usage_ping_enabled = false`.
+
+            Defaults to `https://customers.gitlab.com`. Override for the staging portal
+            (`https://customers.staging.gitlab.com`) or a custom endpoint.
+          '';
+        };
+
+        licenseMode = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          example = "test";
+          description = ''
+            Sets `GITLAB_LICENSE_MODE` on all GitLab services. Set to `"test"` when the
+            license or activation code was issued by the staging Customers Portal
+            (`https://customers.staging.gitlab.com`). Leave unset for production licenses.
+          '';
+        };
+      };
 
       statePath = mkOption {
         type = types.str;
@@ -1241,6 +1321,20 @@ in
         assertion = versionAtLeast postgresqlPackage.version "16";
         message = "PostgreSQL >= 16 is required to run GitLab 18. Follow the instructions in the manual section for upgrading PostgreSQL here: https://nixos.org/manual/nixos/stable/index.html#module-services-postgres-upgrading";
       }
+      {
+        assertion = !(cfg.enterprise.licenseFile != null && cfg.enterprise.activationCodeFile != null);
+        message = "services.gitlab.enterprise.licenseFile and services.gitlab.enterprise.activationCodeFile are mutually exclusive. Set only one.";
+      }
+      {
+        assertion =
+          (cfg.enterprise.licenseFile != null || cfg.enterprise.activationCodeFile != null)
+          -> (cfg.packages.gitlab.passthru.gitlabEnv.FOSS_ONLY or "true") == "false";
+        message = ''
+          services.gitlab.enterprise.licenseFile / activationCodeFile require an Enterprise
+          Edition package. Set services.gitlab.enterprise.enable = true, or set
+          services.gitlab.packages.gitlab = pkgs.gitlab-ee explicitly.
+        '';
+      }
     ];
 
     environment.systemPackages = [
@@ -1590,6 +1684,24 @@ in
           initial_root_password="$(<'${cfg.initialRootPasswordFile}')"
           ${gitlab-rake}/bin/gitlab-rake gitlab:db:configure GITLAB_ROOT_PASSWORD="$initial_root_password" \
                                                              GITLAB_ROOT_EMAIL='${cfg.initialRootEmail}' > /dev/null
+          ${optionalString (cfg.enterprise.enable && cfg.enterprise.licenseFile != null) ''
+            # License.create! inserts a new row on every call; use a sha256 sentinel to
+            # skip loading when the file hasn't changed.
+            _lic_hash=$(${pkgs.coreutils}/bin/sha256sum '${cfg.enterprise.licenseFile}' \
+                          | ${pkgs.coreutils}/bin/cut -c1-64)
+            _lic_sentinel='${cfg.statePath}/.license_loaded_'"$_lic_hash"
+            if [ ! -f "$_lic_sentinel" ]; then
+              export GITLAB_LICENSE_FILE='${cfg.enterprise.licenseFile}'
+              ${gitlab-rake}/bin/gitlab-rake gitlab:license:load > /dev/null
+              # If we crash before this touch, the duplicate row on next boot is harmless.
+              ${pkgs.coreutils}/bin/touch "$_lic_sentinel"
+            fi
+          ''}
+          ${optionalString (cfg.enterprise.enable && cfg.enterprise.activationCodeFile != null) ''
+            GITLAB_ACTIVATION_CODE="$(<'${cfg.enterprise.activationCodeFile}')"
+            export GITLAB_ACTIVATION_CODE
+            ${gitlab-rake}/bin/gitlab-rake gitlab:license:load > /dev/null
+          ''}
         '';
       };
     };
