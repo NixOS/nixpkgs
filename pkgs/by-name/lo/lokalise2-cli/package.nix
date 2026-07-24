@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "lokalise2-cli";
-  version = "3.1.5";
+  version = "3.1.7";
 
   src = fetchFromGitHub {
     owner = "lokalise";
     repo = "lokalise-cli-2-go";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-vMredBTXwlpRK3Y90CRV00mdpJu6SoqfPNH1AMUOsPA=";
+    sha256 = "sha256-VkfXJhgz/Ki0+jx0Q+Hqr4RHY5BnqbzWU6LBs+YGvdo=";
   };
 
   vendorHash = "sha256-NS4nKoZSJ8M/n18Y2vQb5MuKBBjS6SGRoKJi5B2J68g=";

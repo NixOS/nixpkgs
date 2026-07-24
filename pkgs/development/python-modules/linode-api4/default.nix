@@ -15,7 +15,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "linode-api4";
-  version = "5.45.0";
+  version = "5.46.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -24,7 +24,7 @@ buildPythonPackage (finalAttrs: {
     owner = "linode";
     repo = "linode_api4-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0FLF/LkU8SaR3itgMISbqOxmd4UZkGlTT3VDpmuv+QQ=";
+    hash = "sha256-d9VgHHbyEcFHy3bM2KpuwUN3Su7ABYqYRWL+nOZ1Xd4=";
   };
 
   build-system = [ setuptools ];
