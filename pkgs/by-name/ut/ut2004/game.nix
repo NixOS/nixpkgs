@@ -15,13 +15,13 @@
 
 let
   gameData = ut2004Packages.data;
-  patch-version = "3374-preview-17";
+  patch-version = "3374-preview-23";
   patch =
     rec {
       aarch64-linux = x86_64-linux;
       x86_64-linux = fetchurl {
-        url = "https://github.com/OldUnreal/UT2004Patches/releases/download/${patch-version}/OldUnreal-UT2004Patch3374-Linux-6369f34c.tar.bz2";
-        hash = "sha256-/PGV58gVe/R3lzYLheXfMWS4Y4KXp/oIzfIAorGxQzo=";
+        url = "https://github.com/OldUnreal/UT2004Patches/releases/download/${patch-version}/OldUnreal-UT2004Patch3374-Linux-094b94dc.tar.bz2";
+        hash = "sha256-F56kPIgxv/FHAFhQzTc8DsK3Dc9vhBwhCcFSXvEa1NM=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported platform: ${stdenv.hostPlatform.system}");
