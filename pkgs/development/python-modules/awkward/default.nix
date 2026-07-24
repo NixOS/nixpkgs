@@ -24,7 +24,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "awkward";
-  version = "2.10.0";
+  version = "2.11.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -32,7 +32,7 @@ buildPythonPackage (finalAttrs: {
     owner = "scikit-hep";
     repo = "awkward";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yurwjlChMMLoGGMvoDA8O63jpnQepIi8KdG6U78+2y0=";
+    hash = "sha256-zUQm8GY2dXjV7ri14W/TX67figDF2XJ63n0LgGh5DNI=";
   };
 
   build-system = [
