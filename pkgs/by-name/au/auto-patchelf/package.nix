@@ -33,6 +33,8 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Automatically patch ELF binaries using patchelf";
     mainProgram = "auto-patchelf";
