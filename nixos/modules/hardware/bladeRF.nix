@@ -17,14 +17,14 @@ in
       description = ''
         Enables udev rules for BladeRF devices. By default grants access
         to users in the "bladerf" group. You may want to install the
-        libbladeRF package.
+        libbladerf package.
       '';
     };
 
   };
 
   config = lib.mkIf cfg.enable {
-    services.udev.packages = [ pkgs.libbladeRF ];
+    services.udev.packages = [ pkgs.libbladerf ];
     users.groups.bladerf = { };
   };
 }

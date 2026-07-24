@@ -27,7 +27,7 @@
   libunwind,
   libusb1,
   limesuite,
-  libbladeRF,
+  libbladerf,
   mbelib,
   ninja,
   opencv4,
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     glew
     hackrf
     hidapi
-    libbladeRF
+    libbladerf
     libiio
     libogg
     libopus

@@ -39,7 +39,7 @@
   libad9361,
   libiio,
   withSourceBladeRF ? true,
-  libbladeRF,
+  libbladerf,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     libad9361
     libiio
   ]
-  ++ lib.optionals withSourceBladeRF [ libbladeRF ];
+  ++ lib.optionals withSourceBladeRF [ libbladerf ];
 
   cmakeFlags = [ (lib.cmakeBool "BUILD_GUI" withGUI) ];
 

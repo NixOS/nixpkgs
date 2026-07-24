@@ -5,7 +5,7 @@
   fetchpatch,
   cmake,
   pkg-config,
-  libbladeRF,
+  libbladerf,
   soapysdr,
 }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     pkg-config
   ];
   buildInputs = [
-    libbladeRF
+    libbladerf
     soapysdr
   ];
 

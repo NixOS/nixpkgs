@@ -18,7 +18,7 @@
   airspyhf,
   audio_source ? true,
   bladerf_source ? stdenv.hostPlatform.isLinux,
-  libbladeRF,
+  libbladerf,
   dragonlabs_source ? true,
   libdlcr,
   file_source ? true,
@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional stdenv.hostPlatform.isLinux libx11
   ++ lib.optional airspy_source airspy
   ++ lib.optional airspyhf_source airspyhf
-  ++ lib.optional bladerf_source libbladeRF
+  ++ lib.optional bladerf_source libbladerf
   ++ lib.optional dragonlabs_source libdlcr
   ++ lib.optional hackrf_source hackrf
   ++ lib.optional limesdr_source limesuite

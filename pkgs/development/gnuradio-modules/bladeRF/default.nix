@@ -8,7 +8,7 @@
   doxygen,
   gmp,
   gnuradio,
-  libbladeRF,
+  libbladerf,
   mpir,
   osmosdr,
   python,
@@ -31,7 +31,7 @@ mkDerivation {
     doxygen
     gmp
     gnuradio
-    libbladeRF
+    libbladerf
     mpir
     osmosdr
     spdlog

@@ -23,7 +23,7 @@
   icu,
   airspy,
   hackrf,
-  libbladeRF,
+  libbladerf,
   rtl-sdr,
   soapysdr-with-plugins,
   features ? { },
@@ -95,7 +95,7 @@ mkDerivation (finalAttrs: {
       # Other features don't have dependencies but can still be disabled in the
       # `features` argument.
       airspy = [ airspy ];
-      bladerf = [ libbladeRF ];
+      bladerf = [ libbladerf ];
       hackrf = [ hackrf ];
       rtl = [ rtl-sdr ];
       soapy = [ soapysdr-with-plugins ];
