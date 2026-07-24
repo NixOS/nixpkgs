@@ -11610,6 +11610,13 @@
     githubId = 15371828;
     name = "Hugo Lageneste";
   };
+  hugomartel = {
+    email = "hugo.martel@ik.me";
+    github = "HugoMartel";
+    githubId = 56939649;
+    name = "Hugo Martel";
+    keys = [ { fingerprint = "460D E18E 12B5 5B5F 49AC  213A 12CB 9757 F51C 86A5"; } ];
+  };
   hugoreeves = {
     email = "hugo@hugoreeves.com";
     github = "HugoReeves";
