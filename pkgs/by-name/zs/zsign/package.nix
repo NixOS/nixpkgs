@@ -1,33 +1,42 @@
 {
-  lib,
   fetchFromGitHub,
-  stdenv,
+  lib,
+  minizip,
+  nix-update-script,
   openssl,
   pkg-config,
-  nix-update-script,
+  stdenv,
   versionCheckHook,
+  zlib,
 }:
 let
   platformName = if stdenv.hostPlatform.isLinux then "linux" else "macos";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zsign";
-  version = "1.0.8";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "zhlynn";
     repo = "zsign";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zyywaE87HcGZ5QV6tFsCn9j+mAD1/ENVxZ22E/ItlSA=";
+    hash = "sha256-PU/LhtTkRZobb4Chdms8/FBjPyHve4EZ7W5iHaWKwm8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/build/${platformName}";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
+  buildInputs = [
+    minizip
+    openssl
+    zlib
+  ];
 
   makeFlags = [
     "BINDIR=bin/"
+    "SYSTEM_MINIZIP=1"
     "CXX=${stdenv.cc.targetPrefix}c++"
     "VERSION=${finalAttrs.version}"
   ];
