@@ -131,12 +131,21 @@ in
       '';
     };
 
-    remotePlay.openFirewall = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = ''
-        Open ports in the firewall for Steam Remote Play.
-      '';
+    remotePlay = {
+      vr.openFirewall = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Open ports in the firewall for VR streaming.
+        '';
+      };
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Open ports in the firewall for Steam Remote Play.
+        '';
+      };
     };
 
     dedicatedServer.openFirewall = lib.mkOption {
@@ -252,6 +261,13 @@ in
             from = 27031;
             to = 27035;
           }
+        ];
+      })
+
+      (lib.mkIf cfg.remotePlay.vr.openFirewall {
+        allowedUDPPorts = [
+          10400
+          10401
         ];
       })
 
