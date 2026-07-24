@@ -3,6 +3,9 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  pytestCheckHook,
+  hypothesis,
+  numpy,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -20,8 +23,13 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
-  # There aren't tests
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    hypothesis
+    numpy
+  ];
+
+  disabledTestPaths = [ "tests/test_external.py" ];
 
   pythonImportsCheck = [ "textdistance" ];
 
