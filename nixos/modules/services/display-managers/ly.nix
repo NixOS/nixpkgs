@@ -103,6 +103,7 @@ in
         startSession = true;
         unixAuth = true;
         enableGnomeKeyring = lib.mkDefault config.services.gnome.gnome-keyring.enable;
+        oo7.enable = lib.mkDefault config.services.oo7.enable;
       };
     }
     // optionalAttrs dmcfg.autoLogin.enable {
