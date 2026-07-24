@@ -15542,34 +15542,6 @@ with self;
     };
   };
 
-  Gtk2 = buildPerlPackage {
-    pname = "Gtk2";
-    version = "1.24993";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/X/XA/XAOC/Gtk2-1.24993.tar.gz";
-      hash = "sha256-ScRDdDsu7+EadoACck9/akxI78lP8806VZ+357aTyWc=";
-    };
-
-    env = lib.optionalAttrs stdenv.cc.isGNU {
-      NIX_CFLAGS_COMPILE = "-std=gnu17";
-    };
-
-    patches = [
-      # Fix incompatible function pointer conversion (assigning `GdkNativeWindow` to `guint32`).
-      ../development/perl-modules/Gtk2-fix-incompatible-pointer-conversion.patch
-    ];
-    buildInputs = [ pkgs.gtk2 ];
-    # https://rt.cpan.org/Public/Bug/Display.html?id=130742
-    # doCheck = !stdenv.hostPlatform.isDarwin;
-    doCheck = false;
-    propagatedBuildInputs = [ Pango ];
-    meta = {
-      description = "Perl interface to the 2.x series of the Gimp Toolkit library";
-      homepage = "https://gtk2-perl.sourceforge.net";
-      license = lib.licenses.lgpl21Plus;
-    };
-  };
-
   Gtk3 = buildPerlPackage rec {
     pname = "Gtk3";
     version = "0.038";
@@ -39805,6 +39777,7 @@ with self;
   BSON = throw "BSON has been removed"; # 2025-09-12
   BSONXS = throw "BSONXS has been removed"; # 2025-09-12
   GnuPG = throw "'GnuPG' has been removed"; # 2025-01-11
+  Gtk2 = throw "'Gtk2' has been removed as it relied on gtk2"; # 2026-07-24
   GooCanvas = throw "'GooCanvas' has been removed as it relied on gtk2"; # 2026-07-24
   Gtk2AppIndicator = throw "'Gtk2AppIndicator' has been removed as it relied on gtk2"; # 2026-07-24
   Gtk2ImageView = throw "'Gtk2ImageView' has been removed as it relied on gtk2"; # 2026-07-24
