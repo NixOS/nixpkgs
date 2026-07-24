@@ -2,7 +2,6 @@
   buildDotnetModule,
   fetchFromGitLab,
   dotnetCorePackages,
-  buildNpmPackage,
   lib,
   libz,
   icu,
@@ -39,6 +38,7 @@
   krb5,
   wrapGAppsHook3,
   _experimental-update-script-combinators,
+  grayjay-frontend,
 }:
 let
   version = "17";
@@ -51,26 +51,13 @@ let
     fetchSubmodules = true;
     fetchLFS = true;
   };
-  frontend = buildNpmPackage {
-    pname = "grayjay-frontend";
-    inherit version src;
-
-    sourceRoot = "source/Grayjay.Desktop.Web";
-
-    npmBuildScript = "build";
-    npmDepsHash = "sha256-3yJIPkuEvkFL9Wb4y/r0yEULQbXx/wHqicFBLzOPj68=";
-
-    installPhase = ''
-      runHook preInstall
-      cp -r dist/ $out
-      runHook postInstall
-    '';
-  };
 in
 buildDotnetModule (finalAttrs: {
   pname = "grayjay";
 
-  inherit version src frontend;
+  inherit version src;
+
+  frontend = grayjay-frontend;
 
   buildInputs = [
     openssl
@@ -135,7 +122,7 @@ buildDotnetModule (finalAttrs: {
 
   preBuild = ''
     rm -r Grayjay.ClientServer/wwwroot/web
-    cp -r ${frontend} Grayjay.ClientServer/wwwroot/web
+    cp -r ${grayjay-frontend} Grayjay.ClientServer/wwwroot/web
   '';
 
   postInstall = ''
