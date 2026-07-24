@@ -63,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       earldouglas
       aciceri
+      ryand56
     ];
     mainProgram = "dump1090";
   };
