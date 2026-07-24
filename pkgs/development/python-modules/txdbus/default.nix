@@ -7,14 +7,17 @@
   twisted,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "txdbus";
   version = "1.1.2";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "8375a5fb68a12054f0def91af800c821fb2232949337756ed975f88d8ea2bc97";
+    pname = "txdbus";
+    inherit (finalAttrs) version;
+    hash = "sha256-g3Wl+2ihIFTw3vka+ADIIfsiMpSTN3Vu2XX4jY6ivJc=";
   };
 
   build-system = [ setuptools ];
@@ -32,4 +35,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})
