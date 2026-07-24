@@ -15610,29 +15610,6 @@ with self;
     };
   };
 
-  Gtk2AppIndicator = buildPerlPackage {
-    pname = "Gtk2-AppIndicator";
-    version = "0.15";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OE/OESTERHOL/Gtk2-AppIndicator-0.15.tar.gz";
-      hash = "sha256-olywceIU+4m0RQqkYFAx6uibeWHhSbDW6PSRwZwUqQo=";
-    };
-    propagatedBuildInputs = [
-      pkgs.libappindicator-gtk2
-      pkgs.libdbusmenu-gtk2
-      pkgs.gtk2
-      pkgs.pkg-config
-      Gtk2
-    ];
-    # Tests fail due to no display:
-    #   Gtk-WARNING **: cannot open display:  at /nix/store/HASH-perl-Gtk2-1.2498/lib/perl5/site_perl/5.22.2/x86_64-linux-thread-multi/Gtk2.pm line 126.
-    doCheck = false;
-    meta = {
-      description = "Perl extension for libappindicator";
-      license = lib.licenses.artistic1;
-    };
-  };
-
   Gtk2ImageView = buildPerlPackage {
     pname = "Gtk2-ImageView";
     version = "0.05";
@@ -39912,6 +39889,7 @@ with self;
   BSON = throw "BSON has been removed"; # 2025-09-12
   BSONXS = throw "BSONXS has been removed"; # 2025-09-12
   GnuPG = throw "'GnuPG' has been removed"; # 2025-01-11
+  Gtk2AppIndicator = throw "'Gtk2AppIndicator' has been removed as it relied on gtk2"; # 2026-07-24
   Gtk2GladeXML = throw "Gtk2GladeXML has been removed"; # 2022-01-15
   MongoDB = throw "MongoDB has been removed"; # 2025-09-12
   pcscperl = throw "'pcscperl' has been renamed to 'ChipcardPCSC'"; # Added 2023-12-07
