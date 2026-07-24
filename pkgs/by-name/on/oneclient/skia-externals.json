@@ -1,0 +1,67 @@
+{
+  "brotli": {
+    "url": "https://skia.googlesource.com/external/github.com/google/brotli.git",
+    "rev": "6d03dfbedda1615c4cba1211f8d81735575209c8",
+    "sha256": "0l1wk83y471766n0snqv4i7h9fvqj92rbi63n0y2wqfdix0w8wf2"
+  },
+  "d3d12allocator": {
+    "url": "https://skia.googlesource.com/external/github.com/GPUOpen-LibrariesAndSDKs/D3D12MemoryAllocator.git",
+    "rev": "169895d529dfce00390a20e69c2f516066fe7a3b",
+    "sha256": "1r7m8lf0nnzmpkciz5yd1b8l5g9rb75yqpvklh0y7lfvfbzx2dp4"
+  },
+  "expat": {
+    "url": "https://chromium.googlesource.com/external/github.com/libexpat/libexpat.git",
+    "rev": "6154446fccefbf3ca644894f598969113b0c7bcd",
+    "sha256": "1h2rq5ww26xy9yfcf5rmbg3lmhlawpjjllpm4wi7zx5f8ms07ww9"
+  },
+  "freetype": {
+    "url": "https://chromium.googlesource.com/chromium/src/third_party/freetype2.git",
+    "rev": "264b5fbf5b912b39f98d038bf75d39be0a73f21b",
+    "sha256": "1y8vkdyfkvabzq7xb3jbyrn8v625xrar3jdz9i0v5pisbmfi66j5"
+  },
+  "harfbuzz": {
+    "url": "https://chromium.googlesource.com/external/github.com/harfbuzz/harfbuzz.git",
+    "rev": "9cb1fee51069b206effb4736e443b038d230789d",
+    "sha256": "0hyb2m0413czq5f5j47bdm74qzxmhk67r2b88fv8l1xgwm12v0hi"
+  },
+  "icu": {
+    "url": "https://chromium.googlesource.com/chromium/deps/icu.git",
+    "rev": "d578f2e8b7bd5938e21cfb6bf15c079e0aa5b738",
+    "sha256": "1p161vbxx33dr81cpglancjfw2v6kcd4qnaima9bf5c56992vj8f"
+  },
+  "libjpeg-turbo": {
+    "url": "https://chromium.googlesource.com/chromium/deps/libjpeg_turbo.git",
+    "rev": "e14cbfaa85529d47f9f55b0f104a579c1061f9ad",
+    "sha256": "1ywl6j1pcmx799h4jr3xmg2mnsmgv8sgrxnfzigzj3nrkadas3r2"
+  },
+  "libpng": {
+    "url": "https://skia.googlesource.com/third_party/libpng.git",
+    "rev": "d5515b5b8be3901aac04e5bd8bd5c89f287bcd33",
+    "sha256": "0f8mlsh2vsn9zmn5cdjvg5ck8bsplm23g46wvl4pnpd3bj03p79p"
+  },
+  "libwebp": {
+    "url": "https://chromium.googlesource.com/webm/libwebp.git",
+    "rev": "845d5476a866141ba35ac133f856fa62f0b7445f",
+    "sha256": "0fp9nxxddhxvikjn51r46sjrc3iiggr7mivabfgz02426skp0zll"
+  },
+  "vulkanmemoryallocator": {
+    "url": "https://chromium.googlesource.com/external/github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator",
+    "rev": "eb744ea7a2b17040121b4bbb4d6f9e8a77e3cae7",
+    "sha256": "1wyh7wym8dyr42wpxsxj04kh150hjmbm2afw2ydbj6xvi5r4j5ic"
+  },
+  "spirv-cross": {
+    "url": "https://chromium.googlesource.com/external/github.com/KhronosGroup/SPIRV-Cross",
+    "rev": "b8fcf307f1f347089e3c46eb4451d27f32ebc8d3",
+    "sha256": "021x72k68z4q7idqf5ljhdnq8hlkz4vawfpspa5fq4nz6pscr38z"
+  },
+  "wuffs": {
+    "url": "https://skia.googlesource.com/external/github.com/google/wuffs-mirror-release-c.git",
+    "rev": "e3f919ccfe3ef542cfc983a82146070258fb57f8",
+    "sha256": "0b04ksbkf4dcm9myvf1sx9aclyh8jbpkrgja3h1chkfjbzcdvgfz"
+  },
+  "zlib": {
+    "url": "https://chromium.googlesource.com/chromium/src/third_party/zlib",
+    "rev": "646b7f569718921d7d4b5b8e22572ff6c76f2596",
+    "sha256": "0d3pv2vazr8haw4gcc8d2dyybx23nwaqfn5vfaxzdryrwi5gmn4c"
+  }
+}
