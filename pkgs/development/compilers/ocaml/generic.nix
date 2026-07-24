@@ -21,6 +21,7 @@ in
   ncurses,
   binutils,
   buildEnv,
+  pkgsBuildBuild,
   libunwind,
   fetchpatch,
   libx11,
@@ -177,6 +178,7 @@ stdenv.mkDerivation (
         ]
       else
         [ "nixpkgs_world" ];
+    nativeBuildInputs = optional (stdenv.hostPlatform != stdenv.targetPlatform) pkgsBuildBuild.ocaml;
     buildInputs =
       optional (lib.versionOlder version "4.07") ncurses
       ++ optionals useX11 [
