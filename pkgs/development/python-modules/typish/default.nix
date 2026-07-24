@@ -8,15 +8,17 @@
   pythonAtLeast,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "typish";
   version = "1.9.3";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "ramonhagenaars";
     repo = "typish";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-LnOg1dVs6lXgPTwRYg7uJ3LCdExYrCxS47UEJxKHhVU=";
   };
 
@@ -47,8 +49,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for checking types of objects";
     homepage = "https://github.com/ramonhagenaars/typish";
-    changelog = "https://github.com/ramonhagenaars/typish/releases/tag/v${version}";
+    changelog = "https://github.com/ramonhagenaars/typish/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fmoda3 ];
   };
-}
+})
