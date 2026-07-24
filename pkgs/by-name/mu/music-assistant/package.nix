@@ -185,7 +185,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   nativeCheckInputs =
     with pythonPackages;
     [
-      pytestCheckHook
+      pytest9_0CheckHook
       writableTmpDirAsHomeHook
     ]
     ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies
