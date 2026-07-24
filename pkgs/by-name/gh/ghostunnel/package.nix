@@ -35,6 +35,7 @@ buildGoModule rec {
   passthru.tests = {
     nixos = nixosTests.ghostunnel;
     podman = nixosTests.podman-tls-ghostunnel;
+    modular = nixosTests.ghostunnel-modular;
   };
 
   passthru.services.default = {
