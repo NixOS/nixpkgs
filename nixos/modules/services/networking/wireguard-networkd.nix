@@ -21,7 +21,7 @@ let
     ;
   inherit (lib.modules) mkIf;
   inherit (lib.options) literalExpression mkOption;
-  inherit (lib.strings) hasInfix replaceStrings;
+  inherit (lib.strings) concatStringsSep hasInfix replaceStrings;
   inherit (lib.trivial) flip pipe;
 
   removeNulls = filterAttrs (_: v: v != null);
@@ -98,28 +98,22 @@ let
 
   generateRefreshService =
     name: interface:
+    let
+      peersWithEndpoint = filter (peer: peer.endpoint != null) interface.peers;
+      refreshPeer = peer: ''wg set ${name} peer "${peer.publicKey}" endpoint "${peer.endpoint}"'';
+    in
     nameValuePair "wireguard-dynamic-refresh-${name}" {
       description = "Wireguard dynamic endpoint refresh (${name})";
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
-      path = with pkgs; [
-        iproute2
-        systemd
-      ];
+      path = [ pkgs.wireguard-tools ];
       # networkd doesn't automatically refresh peer endpoints.
       # See: https://github.com/systemd/systemd/issues/9911
-      script = ''
-        touch /etc/systemd/network/40-${name}.netdev
-        networkctl reload
-      '';
-    };
-
-  # netdev config must be a real file (not a symlink to a store file)
-  # so the refresh service can 'touch' it.
-  generateRefreshNetdevMode =
-    name: interface:
-    nameValuePair "systemd/network/40-${name}.netdev" {
-      mode = "0444";
+      #
+      # In case the DNS entry changes, or we roam to a different network,
+      # `wg set wg0 peer <pubkey> endpoint <host:ip>` reestablishes connection.
+      # If nothing changed, this is a cheap no-op.
+      script = concatStringsSep "\n" (map refreshPeer peersWithEndpoint);
     };
 
 in
@@ -237,7 +231,6 @@ in
       networks = mapAttrs' generateNetwork cfg.interfaces;
     };
 
-    environment.etc = mapAttrs' generateRefreshNetdevMode refreshEnabledInterfaces;
     systemd.timers = mapAttrs' generateRefreshTimer refreshEnabledInterfaces;
     systemd.services = (mapAttrs' generateRefreshService refreshEnabledInterfaces) // {
       systemd-networkd.serviceConfig.LoadCredential = flatten (
