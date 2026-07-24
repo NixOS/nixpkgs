@@ -93,7 +93,9 @@ rec {
           && (attrs.meta.teams or [ ] == [ ])
           && (!attrs ? outputHash)
           && (attrs ? meta.description);
-        value.message = "This package has no declared maintainer, i.e. an empty `meta.maintainers` and `meta.teams` attribute.";
+        value = _config: _attrs: {
+          message = "This package has no declared maintainer, i.e. an empty `meta.maintainers` and `meta.teams` attribute.";
+        };
       };
     };
     broken = {
@@ -118,7 +120,9 @@ rec {
             attrs: attrs ? meta.broken && attrs.meta.broken && !allowBrokenPredicate attrs
           else
             attrs: attrs ? meta.broken && attrs.meta.broken;
-        value.message = "This package is broken.";
+        value = _config: _attrs: {
+          message = "This package is broken.";
+        };
       };
     };
     removal = {
@@ -151,7 +155,7 @@ rec {
   genAutomaticProblems =
     config: attrs:
     listToAttrs (
-      map (problem: lib.nameValuePair problem.kindName problem.value) (
+      map (problem: lib.nameValuePair problem.kindName (problem.value config attrs)) (
         filter (problem: problem.condition config attrs) automaticProblems
       )
     );
