@@ -22,13 +22,13 @@
   pika,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gevent";
   version = "26.5.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-FlXrBMHiDXGyqko8dSgWLdWP9sxGoDevHwH1NMgP77o=";
   };
 
@@ -75,6 +75,8 @@ buildPythonPackage rec {
   }
   // lib.filterAttrs (k: v: lib.hasInfix "gevent" k) python.pkgs;
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Coroutine-based networking library";
     homepage = "http://www.gevent.org/";
@@ -82,4 +84,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ bjornfor ];
     platforms = lib.platforms.unix;
   };
-}
+})
