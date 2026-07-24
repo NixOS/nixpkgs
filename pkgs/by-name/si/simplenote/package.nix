@@ -20,9 +20,6 @@ in
 appimageTools.wrapType2 {
   inherit pname version src;
 
-  __structuredAttrs = true;
-  strictDeps = true;
-
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/${pname}.desktop \
