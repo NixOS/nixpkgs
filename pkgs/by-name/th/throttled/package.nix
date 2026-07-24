@@ -2,63 +2,59 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gobject-introspection,
   python3Packages,
   pciutils,
-  wrapGAppsNoGuiHook,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "throttled";
-  version = "0.11";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "erpalma";
     repo = "throttled";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-+3ktDkr5hvOfHcch4+mjgJqcuw24UgWTkJqTyDQumyk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hwnJO9KEDOizpGcb9NYHYHoEEHKa3PkLt76cKpwgEUs=";
   };
 
-  nativeBuildInputs = [
-    gobject-introspection
-    python3Packages.wrapPython
-    wrapGAppsNoGuiHook
-  ];
+  nativeBuildInputs = [ python3Packages.wrapPython ];
 
-  pythonPath = with python3Packages; [
-    configparser
-    dbus-python
-    pygobject3
-  ];
+  pythonPath = [ python3Packages.dbus-fast ];
 
-  # The upstream unit both assumes the install location, and tries to run in a virtualenv
+  # The upstream unit assumes the /opt/throttled venv install location
   postPatch = ''
     sed -e 's|ExecStart=.*|ExecStart=${placeholder "out"}/bin/throttled.py|' -i systemd/throttled.service
 
-    substituteInPlace throttled.py --replace "'setpci'" "'${pciutils}/bin/setpci'"
+    substituteInPlace throttled.py --replace-fail "'setpci'" "'${lib.getExe' pciutils "setpci"}'"
   '';
 
   installPhase = ''
     runHook preInstall
+
     install -D -m755 -t $out/bin throttled.py
-    install -D -t $out/bin throttled.py mmio.py
+    install -D -m644 -t $out/bin mmio.py throttled_version.py
     install -D -m644 -t $out/etc etc/*
     install -D -m644 -t $out/lib/systemd/system systemd/*
+
     runHook postInstall
-  '';
-
-  dontWrapGApps = true;
-
-  preFixup = ''
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   postFixup = "wrapPythonPrograms";
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  # the check run imports mmio/throttled_version next to the script; keep it
+  # from littering $out/bin with __pycache__ (the hook strips the environment)
+  env.PYTHONDONTWRITEBYTECODE = "1";
+  versionCheckKeepEnvironment = "PYTHONDONTWRITEBYTECODE";
+
   meta = {
     description = "Fix for Intel CPU throttling issues";
     homepage = "https://github.com/erpalma/throttled";
+    changelog = "https://github.com/erpalma/throttled/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
+    mainProgram = "throttled.py";
     platforms = [ "x86_64-linux" ];
     maintainers = [ ];
   };
