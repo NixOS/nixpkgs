@@ -15592,28 +15592,6 @@ with self;
     };
   };
 
-  Gtk2Unique = buildPerlPackage {
-    pname = "Gtk2-Unique";
-    version = "0.07";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/X/XA/XAOC/Gtk2-Unique-0.07.tar.gz";
-      hash = "sha256-nOX2ikFgC8z31u/eMMBwqxFOk57XqKx8O3rZE5mJGGc=";
-    };
-    propagatedBuildInputs = [
-      pkgs.libunique
-      pkgs.gtk2
-      Gtk2
-    ];
-    meta = {
-      description = "(DEPRECATED) Use single instance applications";
-      license = with lib.licenses; [
-        artistic1
-        gpl1Plus
-      ];
-      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.Gtk2Unique.x86_64-darwin
-    };
-  };
-
   Gtk3 = buildPerlPackage rec {
     pname = "Gtk3";
     version = "0.038";
@@ -39853,6 +39831,7 @@ with self;
   Gtk2ImageView = throw "'Gtk2ImageView' has been removed as it relied on gtk2"; # 2026-07-24
   Gtk2GladeXML = throw "Gtk2GladeXML has been removed"; # 2022-01-15
   Gtk2TrayIcon = throw "'Gtk2TrayIcon' has been removed as it relied on gtk2"; # 2026-07-24
+  Gtk2Unique = throw "'Gtk2Unique' has been removed as it relied on gtk2"; # 2026-07-24
   MongoDB = throw "MongoDB has been removed"; # 2025-09-12
   pcscperl = throw "'pcscperl' has been renamed to 'ChipcardPCSC'"; # Added 2023-12-07
   HTTPHeaderParserXS = throw "HTTPHeaderParserXS has been removed"; # Added 2025-11-08
