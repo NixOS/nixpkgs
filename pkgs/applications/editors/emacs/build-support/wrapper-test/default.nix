@@ -1,7 +1,6 @@
 {
   runCommand,
   emacs,
-  git,
 }:
 
 runCommand "test-emacs-withPackages-wrapper"
@@ -9,11 +8,10 @@ runCommand "test-emacs-withPackages-wrapper"
     nativeBuildInputs = [
       (emacs.pkgs.withPackages (
         epkgs: with epkgs; [
-          magit
+          dash
           flx-ido
         ]
       ))
-      git # needed by magit
     ];
     env = {
       # emulate a default NixOS env where INFOPATH is set like this (not ending with a ":")
@@ -21,15 +19,14 @@ runCommand "test-emacs-withPackages-wrapper"
     };
   }
   ''
-    emacs --batch --eval="(require 'magit)"
-
     emacs --batch --eval="(require 'flx-ido)"
     # transitive dependencies should be made available
     # https://github.com/NixOS/nixpkgs/issues/388829
     emacs --batch --eval="(require 'flx)"
 
+    emacs --batch --eval="(require 'dash)"
     # test that https://debbugs.gnu.org/cgi/bugreport.cgi?bug=81105 is fixed or worked around
-    emacs --batch --eval='(progn (package-activate-all) (info "(magit)Top"))'
+    emacs --batch --eval='(progn (package-activate-all) (info "(dash)Top"))'
 
     touch $out
   ''
