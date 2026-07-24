@@ -22,6 +22,7 @@
   uhd,
   icu,
   airspy,
+  airspyhf,
   hackrf,
   libbladeRF,
   rtl-sdr,
@@ -79,7 +80,7 @@ mkDerivation (finalAttrs: {
     python.pkgs.pybind11
   ];
   cmakeFlags = [
-    (if (gnuradio.hasFeature "python-support") then "-DENABLE_PYTHON=ON" else "-DENABLE_PYTHON=OFF")
+    (lib.cmakeBool "ENABLE_PYTHON" (gnuradio.hasFeature "python-support"))
   ]
   ++ finalAttrs.finalPackage.passthru.enabledFeaturesCmakeFlags;
   nativeBuildInputs = [
@@ -95,6 +96,7 @@ mkDerivation (finalAttrs: {
       # Other features don't have dependencies but can still be disabled in the
       # `features` argument.
       airspy = [ airspy ];
+      airspyhf = [ airspyhf ];
       bladerf = [ libbladeRF ];
       hackrf = [ hackrf ];
       rtl = [ rtl-sdr ];
