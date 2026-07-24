@@ -20119,8 +20119,6 @@ self: super: with self; {
 
   termplotlib = callPackage ../development/python-modules/termplotlib { };
 
-  termstyle = callPackage ../development/python-modules/termstyle { };
-
   tern = callPackage ../development/python-modules/tern { };
 
   tesla-fleet-api = callPackage ../development/python-modules/tesla-fleet-api { };

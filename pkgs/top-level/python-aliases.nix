@@ -666,6 +666,7 @@ mapAliases {
   tensorflow-estimator_2 = throw "'tensorflow-estimator_2' has been renamed to/replaced by 'tensorflow-estimator'"; # Converted to throw 2025-10-29
   tensorflow-tensorboard = throw "'tensorflow-tensorboard' has been renamed to/replaced by 'tensorboard'"; # Converted to throw 2025-10-29
   tensorflow-tensorboard_2 = throw "'tensorflow-tensorboard_2' has been renamed to/replaced by 'tensorflow-tensorboard'"; # Converted to throw 2025-10-29
+  termstyle = throw "'termstyle' has been removed, since it is unmaintained upstream"; # Added 2026-07-24
   testing-postgresql = throw "testing-postgresql has been removed, since it is unmaintained since 2017"; # added 2025-05-25
   textwrap3 = throw "'textwrap3' has been removed, since it had no consumers in nixpkgs"; # Added 2026-07-24
   tgcrypto = throw "'tgcrypto' has been removed as it was archived upstream"; # Added 2026-03-21
