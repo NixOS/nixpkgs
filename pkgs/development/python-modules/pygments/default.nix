@@ -45,6 +45,8 @@ let
       });
     };
 
+    __structuredAttrs = true;
+
     meta = {
       changelog = "https://github.com/pygments/pygments/releases/tag/${finalAttrs.version}";
       homepage = "https://pygments.org/";
