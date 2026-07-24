@@ -22,13 +22,19 @@ let
       hash = "sha256-JFKWrbMdxhvSBbjQ+S9HPW87CK+5ZZiXHg8Wltlv2YY=";
     };
 
+    postPatch = ''
+      # Fix pytest.PytestRemovedIn10Warning: Passing a non-Collection iterable to parametrize is deprecated.
+      substituteInPlace tests/test_docs.py \
+        --replace-fail "examples," "list(examples),"
+    '';
+
     build-system = [ hatchling ];
 
     dependencies = [ pytz ];
 
     doCheck = false;
 
-    passthru.tests.pytest = dirty-equals.overrideAttrs { doCheck = true; };
+    passthru.tests.pytest = dirty-equals.overridePythonAttrs { doCheck = true; };
 
     nativeCheckInputs = [
       pydantic
