@@ -1,47 +1,50 @@
 {
   lib,
   buildPythonPackage,
-  certifi,
+  buildPackages,
   fetchFromGitHub,
-  hatchling,
+  httpx,
+  msgspec,
   orjson,
-  pinecone-plugin-assistant,
-  pinecone-plugin-interface,
-  python-dateutil,
-  typing-extensions,
-  urllib3,
+  rustPlatform,
 }:
 
 buildPythonPackage rec {
   pname = "pinecone";
-  version = "8.1.2";
+  version = "9.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pinecone-io";
     repo = "pinecone-python-client";
     tag = "v${version}";
-    hash = "sha256-VfoSW17Bx/eFlnSxUiQZsfY/y210/sKIF5df/kb2kTc=";
+    hash = "sha256-yWGW9qx4zb4FnDLXvtXREYXRO7e5Jk/KJoaQlpKMwpg=";
   };
 
-  build-system = [ hatchling ];
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-I3pIy9by+OHo6iU6OZp3VvJJPZOmJ/CYhkzoV8xHoMY=";
+  };
+
+  nativeBuildInputs = with rustPlatform; [
+    cargoSetupHook
+    maturinBuildHook
+  ];
+
+  env.PROTOC = "${lib.getExe buildPackages.protobuf}";
 
   dependencies = [
-    certifi
+    httpx
+    msgspec
     orjson
-    pinecone-plugin-assistant
-    pinecone-plugin-interface
-    python-dateutil
-    typing-extensions
-    urllib3
   ];
 
   pythonImportsCheck = [ "pinecone" ];
 
   meta = {
-    description = "Pinecone python client";
+    description = "Pinecone Python SDK";
     homepage = "https://www.pinecone.io/";
-    changelog = "https://github.com/pinecone-io/pinecone-python-client/releases/tag/${src.tag}";
+    changelog = "https://github.com/pinecone-io/python-sdk/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
   };
