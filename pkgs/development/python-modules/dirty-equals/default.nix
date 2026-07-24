@@ -10,7 +10,7 @@
 }:
 
 let
-  dirty-equals = buildPythonPackage rec {
+  dirty-equals = buildPythonPackage (finalAttrs: {
     pname = "dirty-equals";
     version = "0.11.0";
     pyproject = true;
@@ -18,7 +18,7 @@ let
     src = fetchFromGitHub {
       owner = "samuelcolvin";
       repo = "dirty-equals";
-      tag = "v${version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-JFKWrbMdxhvSBbjQ+S9HPW87CK+5ZZiXHg8Wltlv2YY=";
     };
 
@@ -44,13 +44,15 @@ let
 
     pythonImportsCheck = [ "dirty_equals" ];
 
+    __structuredAttrs = true;
+
     meta = {
       description = "Module for doing dirty (but extremely useful) things with equals";
       homepage = "https://github.com/samuelcolvin/dirty-equals";
-      changelog = "https://github.com/samuelcolvin/dirty-equals/releases/tag/${src.tag}";
+      changelog = "https://github.com/samuelcolvin/dirty-equals/releases/tag/${finalAttrs.src.tag}";
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ fab ];
     };
-  };
+  });
 in
 dirty-equals
