@@ -31,13 +31,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "socalabs-papu";
-  version = "1.2.5";
+  version = "1.2.7";
 
   src = fetchFromGitHub {
     owner = "FigBug";
     repo = "PAPU";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gR04DnXMxGIjlUqxBaneljfzKyzTOrhxiW//rOAQhj8=";
+    hash = "sha256-oO8CseKiVwNo9DX0+YgVLJpKu51zaCmILd9gvu5W33c=";
     fetchSubmodules = true;
   };
 
