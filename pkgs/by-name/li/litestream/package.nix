@@ -3,6 +3,7 @@
   fetchFromGitHub,
   lib,
   nixosTests,
+  testers,
 }:
 buildGoModule (finalAttrs: {
   pname = "litestream";
@@ -23,13 +24,25 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-Ms33rbFjsWzGbLy9v6kFGl6b62QQI4XAZ4wr73g5udw=";
 
-  passthru.tests = { inherit (nixosTests) litestream; };
+  # httptest servers in tests
+  __darwinAllowLocalNetworking = true;
+
+  passthru.tests = {
+    inherit (nixosTests) litestream;
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "litestream version";
+    };
+  };
 
   meta = {
     description = "Streaming replication for SQLite";
     mainProgram = "litestream";
     license = lib.licenses.asl20;
     homepage = "https://litestream.io/";
-    maintainers = with lib.maintainers; [ fbrs ];
+    maintainers = with lib.maintainers; [
+      fbrs
+      konradmalik
+    ];
   };
 })
