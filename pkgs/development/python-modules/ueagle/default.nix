@@ -2,13 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "ueagle";
   version = "0.0.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jcalbert";
@@ -17,7 +18,9 @@ buildPythonPackage rec {
     sha256 = "1hxwk5alalvmhc31y917dxsnbiwq1xci2krma3235581319xr3w7";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
 
   # Project has no tests
   doCheck = false;
