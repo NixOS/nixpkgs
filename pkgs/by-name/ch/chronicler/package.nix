@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.56.3-alpha";
 
   src = fetchurl {
-    url = "https://github.com/mak-kirkland/chronicler/releases/download/v${finalAttrs.version}/Chronicler_${lib.versions.pad 3 finalAttrs.version}_amd64.deb";
+    url = "https://github.com/mak-kirkland/chronicler/releases/download/v${finalAttrs.version}/Chronicler_${lib.head (lib.splitString "-" finalAttrs.version)}_amd64.deb";
     hash = "sha256-0MEh1Zp2hmfBZI2WcpNh58AHOnmLexteIVSllmzefnM=";
   };
 
