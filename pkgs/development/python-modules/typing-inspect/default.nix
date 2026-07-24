@@ -11,7 +11,7 @@
 buildPythonPackage {
   pname = "typing-inspect";
   version = "0.9.0-unstable-2025-10-20";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ilevkivskyi";
