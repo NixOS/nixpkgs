@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zope-interface";
   version = "8.2";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.interface";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-hOcg41lcdVWfmT2DqaYzzu4bJZYiG2y5boylJevBv6k=";
   };
 
@@ -25,11 +25,13 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "zope" ];
 
+  __structuredAttrs = true;
+
   meta = {
-    changelog = "https://github.com/zopefoundation/zope.interface/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/zopefoundation/zope.interface/blob/${finalAttrs.src.tag}/CHANGES.rst";
     description = "Implementation of object interfaces, a mechanism for labeling objects as conforming to a given API or contract";
     homepage = "https://github.com/zopefoundation/zope.interface";
     license = lib.licenses.zpl21;
     maintainers = [ ];
   };
-}
+})
