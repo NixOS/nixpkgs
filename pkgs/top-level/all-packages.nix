@@ -7343,15 +7343,12 @@ with pkgs;
 
   _surrealdbPackage = ../by-name/su/surrealdb/package.nix;
 
-  icingaweb2-ipl = callPackage ../servers/icingaweb2/ipl.nix { };
-  icingaweb2-thirdparty = callPackage ../servers/icingaweb2/thirdparty.nix { };
-  icingaweb2 = callPackage ../servers/icingaweb2 { };
   icingaweb2Modules = recurseIntoAttrs {
-    theme-april = callPackage ../servers/icingaweb2/theme-april { };
-    theme-lsd = callPackage ../servers/icingaweb2/theme-lsd { };
-    theme-particles = callPackage ../servers/icingaweb2/theme-particles { };
-    theme-snow = callPackage ../servers/icingaweb2/theme-snow { };
-    theme-spring = callPackage ../servers/icingaweb2/theme-spring { };
+    theme-april = callPackage ../by-name/ic/icingaweb2/theme-april { };
+    theme-lsd = callPackage ../by-name/ic/icingaweb2/theme-lsd { };
+    theme-particles = callPackage ../by-name/ic/icingaweb2/theme-particles { };
+    theme-snow = callPackage ../by-name/ic/icingaweb2/theme-snow { };
+    theme-spring = callPackage ../by-name/ic/icingaweb2/theme-spring { };
   };
 
   inspircdMinimal = inspircd.override { extraModules = [ ]; };
