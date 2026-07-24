@@ -28,10 +28,12 @@
 # A third fixture bakes a RUNPATH whose first directory does not exist while
 # the note is generated (the /run/opengl-driver/lib pattern): patchelf must
 # record it as a "?" search hint rather than drop it, so the loader still
-# probes it at run time. This test populates that directory afterwards with an
-# overriding libfoo and asserts the override wins over the note's exact real/
-# entry. The fixture relies on the sandbox build root being /build for both
-# the fixture build and this test, like the LD_DEBUG assumption above.
+# probes it at run time. A companion fixture covers an existing but mutable
+# absolute directory. Patchelf 0.19.1 emits no "?" hint for that case when the
+# soname is absent, so glibc must decline the cache for any non-store RUNPATH
+# and preserve first-match semantics if the directory is populated later.
+# Both fixtures rely on the sandbox build root being /build for the fixture
+# build and this test, like the LD_DEBUG assumption above.
 #
 # A fourth fixture links a hand-crafted note whose descriptor is a bare
 # "\0\0", i.e. an empty pair sequence, something patchelf never emits (it
@@ -97,6 +99,10 @@ let
           -L$out/lib/real -lfoo \
           -Wl,--enable-new-dtags -Wl,-rpath,"$out/lib/real"
 
+        $CC main_foo.c -o $out/bin/prog-mutable \
+          -L$out/lib/real -lfoo \
+          -Wl,--enable-new-dtags -Wl,-rpath,"$out/lib/real"
+
         ${lib.optionalString (!generateCache) ''
           # A well-formed note (padded to the 4-byte boundary, so readelf and
           # the loader agree on where it ends) whose descriptor is just the
@@ -115,6 +121,45 @@ let
           $CC main.c empty-note.s -o $out/bin/prog-empty \
             -L$out/lib/dep -lbar -L$out/lib/real -lfoo \
             -Wl,--enable-new-dtags -Wl,-rpath,"$out/lib/dep:$out/lib/real"
+
+          # Native helper used by the outer test to corrupt PT_NOTE p_align
+          # values without depending on the ELF class of the test platform.
+          printf '%s\n' \
+            '#include <elf.h>' \
+            '#include <fcntl.h>' \
+            '#include <stdio.h>' \
+            '#include <unistd.h>' \
+            '#if __SIZEOF_POINTER__ == 8' \
+            'typedef Elf64_Ehdr Ehdr;' \
+            'typedef Elf64_Phdr Phdr;' \
+            '#define NATIVE_CLASS ELFCLASS64' \
+            '#else' \
+            'typedef Elf32_Ehdr Ehdr;' \
+            'typedef Elf32_Phdr Phdr;' \
+            '#define NATIVE_CLASS ELFCLASS32' \
+            '#endif' \
+            'int main(int argc, char **argv) {' \
+            '  if (argc != 2) return 2;' \
+            '  int fd = open(argv[1], O_RDWR);' \
+            '  Ehdr eh;' \
+            '  if (fd < 0 || pread(fd, &eh, sizeof eh, 0) != sizeof eh' \
+            '      || eh.e_ident[EI_CLASS] != NATIVE_CLASS' \
+            '      || eh.e_phentsize != sizeof(Phdr)) return 2;' \
+            '  int changed = 0;' \
+            '  for (unsigned int i = 0; i < eh.e_phnum; ++i) {' \
+            '    off_t off = eh.e_phoff + (off_t) i * eh.e_phentsize;' \
+            '    Phdr ph;' \
+            '    if (pread(fd, &ph, sizeof ph, off) != sizeof ph) return 2;' \
+            '    if (ph.p_type == PT_NOTE) {' \
+            '      ph.p_align = -1;' \
+            '      if (pwrite(fd, &ph, sizeof ph, off) != sizeof ph) return 2;' \
+            '      changed = 1;' \
+            '    }' \
+            '  }' \
+            '  if (close(fd) != 0) return 2;' \
+            '  return changed ? 0 : 1;' \
+            '}' > corrupt-note-align.c
+          $CC -Wall -Wextra -Werror -o $out/bin/corrupt-note-align corrupt-note-align.c
         ''}
 
         runHook postBuild
@@ -133,6 +178,13 @@ let
         # proves a library placed there at run time wins over the note's exact
         # real/ entry.
         patchelf --set-rpath "/build/ld-cache-runtime-libs:$out/lib/real" "$out/bin/prog-runtime"
+
+        # Unlike prog-runtime's missing directory, this directory exists when
+        # patchelf builds the note. patchelf therefore records neither a "?"
+        # hint nor a miss for it. The loader must still search it at run time
+        # because an absolute non-store directory is mutable.
+        mkdir -p /build/ld-cache-existing-libs
+        patchelf --set-rpath "/build/ld-cache-existing-libs:$out/lib/real" "$out/bin/prog-mutable"
       '';
     };
 
@@ -226,6 +278,29 @@ runCommand "glibc-resolution-cache-test"
     "$control/bin/prog-runtime" || rc=$?
     [ "$rc" -eq 42 ]
 
+    prog_mutable="$cached/bin/prog-mutable"
+
+    echo "[test] patchelf records no search hint for an existing mutable directory"
+    readelf -p .note.nixos.ldcache "$prog_mutable" \
+      | grep -qF "=$cached/lib/real/libfoo.so.1"
+    if readelf -p .note.nixos.ldcache "$prog_mutable" \
+        | grep -qF "?/build/ld-cache-existing-libs"; then
+      echo "  unexpected search hint for existing mutable directory" >&2
+      exit 1
+    fi
+
+    echo "[test] a mutable directory populated later still wins (returns 42)"
+    mkdir -p /build/ld-cache-existing-libs
+    cp "$cached/lib/over/libfoo.so.1" /build/ld-cache-existing-libs/
+    rc=0
+    "$prog_mutable" || rc=$?
+    [ "$rc" -eq 42 ]
+
+    echo "[test] the mutable-directory control agrees (returns 42)"
+    rc=0
+    "$control/bin/prog-mutable" || rc=$?
+    [ "$rc" -eq 42 ]
+
     prog_empty="$control/bin/prog-empty"
 
     echo "[test] the crafted note carries an empty two-NUL descriptor"
@@ -246,6 +321,14 @@ runCommand "glibc-resolution-cache-test"
     echo "[test] the program with the empty note still runs (returns 7)"
     rc=0
     "$prog_empty" || rc=$?
+    [ "$rc" -eq 7 ]
+
+    echo "[test] a malformed non-power-of-two PT_NOTE alignment cannot hang the loader"
+    cp "$prog" ./prog-bad-note-align
+    chmod u+w ./prog-bad-note-align
+    "$control/bin/corrupt-note-align" ./prog-bad-note-align
+    rc=0
+    timeout 5 ./prog-bad-note-align || rc=$?
     [ "$rc" -eq 7 ]
 
     echo "[test] PASS"
