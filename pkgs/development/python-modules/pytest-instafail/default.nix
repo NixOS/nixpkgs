@@ -6,13 +6,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-instafail";
   version = "0.5.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-M6YG9+DI5kbcO/7g1eOkt7eO98NhaM+h89k698pwbJ4=";
   };
 
@@ -22,11 +22,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_instafail" ];
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Pytest plugin that shows failures and errors instantly instead of waiting until the end of test session";
     homepage = "https://github.com/pytest-dev/pytest-instafail";
-    changelog = "https://github.com/pytest-dev/pytest-instafail/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/pytest-dev/pytest-instafail/blob/v${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jacg ];
   };
-}
+})
