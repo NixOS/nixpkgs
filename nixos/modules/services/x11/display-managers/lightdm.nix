@@ -458,7 +458,6 @@ in
             control = "requisite";
             modulePath = config.security.pam.pam_unixModulePath;
             settings.nullok = true;
-            settings.yescrypt = true;
           }
         ];
 
