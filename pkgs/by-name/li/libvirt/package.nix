@@ -37,7 +37,6 @@
   runtimeShell,
   stdenv,
   replaceVars,
-  xhtml1,
   json_c,
   writeScript,
   writeShellApplication,
@@ -233,7 +232,6 @@ stdenv.mkDerivation rec {
     libxml2
     python3
     readline
-    xhtml1
     json_c
   ]
   ++ lib.optionals isLinux [
