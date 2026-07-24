@@ -15230,28 +15230,6 @@ with self;
     };
   };
 
-  GooCanvas = buildPerlPackage {
-    pname = "Goo-Canvas";
-    version = "0.06";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/Y/YE/YEWENBIN/Goo-Canvas-0.06.tar.gz";
-      hash = "sha256-DFiMUH7tXmLRLtHMHkkcb/Oh9ZxPs9Q14UIUs3qzklE=";
-    };
-    propagatedBuildInputs = [
-      pkgs.goocanvas_1
-      pkgs.gtk2
-      Gtk2
-    ];
-    env.NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion -Wno-error=implicit-function-declaration";
-    meta = {
-      description = "Perl interface to the GooCanvas";
-      license = with lib.licenses; [
-        artistic1
-        gpl1Plus
-      ];
-    };
-  };
-
   GooCanvas2 = buildPerlPackage {
     pname = "GooCanvas2";
     version = "0.06";
@@ -39827,6 +39805,7 @@ with self;
   BSON = throw "BSON has been removed"; # 2025-09-12
   BSONXS = throw "BSONXS has been removed"; # 2025-09-12
   GnuPG = throw "'GnuPG' has been removed"; # 2025-01-11
+  GooCanvas = throw "'GooCanvas' has been removed as it relied on gtk2"; # 2026-07-24
   Gtk2AppIndicator = throw "'Gtk2AppIndicator' has been removed as it relied on gtk2"; # 2026-07-24
   Gtk2ImageView = throw "'Gtk2ImageView' has been removed as it relied on gtk2"; # 2026-07-24
   Gtk2GladeXML = throw "Gtk2GladeXML has been removed"; # 2022-01-15
