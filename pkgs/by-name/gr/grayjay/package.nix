@@ -67,6 +67,8 @@ buildDotnetModule (finalAttrs: {
 
   frontend = grayjay-frontend;
 
+  __structuredAttrs = true;
+  strictDeps = true;
   buildInputs = [
     openssl
     libgbm
