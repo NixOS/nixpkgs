@@ -8,6 +8,7 @@
   openssl,
   versionCheckHook,
   nix-update-script,
+  nixosTests,
   testers,
 }:
 
@@ -65,7 +66,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+    tests = {
+      version = testers.testVersion { package = finalAttrs.finalPackage; };
+      text-embeddings-inference = nixosTests.text-embeddings-inference;
+    };
   };
 
   meta = {
