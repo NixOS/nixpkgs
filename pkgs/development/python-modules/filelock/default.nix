@@ -44,6 +44,8 @@ buildPythonPackage (finalAttrs: {
     "tests/test_read_write.py"
   ];
 
+  __structuredAttrs = true;
+
   meta = {
     changelog = "https://github.com/tox-dev/filelock/releases/tag/${finalAttrs.version}";
     description = "Platform independent file lock for Python";
