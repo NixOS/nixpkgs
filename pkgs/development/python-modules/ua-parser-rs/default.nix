@@ -46,7 +46,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Native accelerator for ua-parser";
-    homepage = "https://github.com/ua-parser/uap-rust/tree/main/ua-parser-py";
+    homepage = "https://github.com/ua-parser/uap-rust";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
