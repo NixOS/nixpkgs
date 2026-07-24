@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   numpy,
   pytestCheckHook,
   pythonAtLeast,
@@ -10,7 +11,7 @@
 buildPythonPackage rec {
   pname = "typish";
   version = "1.9.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ramonhagenaars";
@@ -18,6 +19,8 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-LnOg1dVs6lXgPTwRYg7uJ3LCdExYrCxS47UEJxKHhVU=";
   };
+
+  build-system = [ setuptools ];
 
   # Tests fail on Python 3.14
   # TypeError: 'member_descriptor' object is not iterable
