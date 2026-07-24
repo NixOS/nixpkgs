@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyelftools";
   version = "0.32";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eliben";
     repo = "pyelftools";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-58Twjf7ECOPynQ5KPCTDQWdD3nb7ADJZISozWGRGoXM=";
   };
 
@@ -32,10 +32,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "elftools" ];
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Python library for analyzing ELF files and DWARF debugging information";
     homepage = "https://github.com/eliben/pyelftools";
-    changelog = "https://github.com/eliben/pyelftools/blob/v${version}/CHANGES";
+    changelog = "https://github.com/eliben/pyelftools/blob/${finalAttrs.src.tag}/CHANGES";
     license = with lib.licenses; [
       # Public domain with Unlicense waiver.
       unlicense
@@ -49,4 +51,4 @@ buildPythonPackage rec {
     ];
     mainProgram = "readelf.py";
   };
-}
+})
