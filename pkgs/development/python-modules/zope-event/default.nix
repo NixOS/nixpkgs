@@ -28,6 +28,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonNamespaces = [ "zope" ];
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Event publishing system";
     homepage = "https://github.com/zopefoundation/zope.event";
