@@ -15,19 +15,17 @@
   pytestCheckHook,
 }:
 
-let
+buildPythonPackage (finalAttrs: {
   pname = "uasiren";
   version = "0.0.1";
-in
-
-buildPythonPackage {
-  inherit pname version;
   pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "PaulAnnekov";
     repo = "uasiren";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NHrnG5Vhz+JZgcTJyfIgGz0Ye+3dFVv2zLCCqw2++oM=";
   };
 
@@ -49,10 +47,10 @@ buildPythonPackage {
   ];
 
   meta = {
-    changelog = "https://github.com/PaulAnnekov/uasiren/releases/tag/v${version}";
+    changelog = "https://github.com/PaulAnnekov/uasiren/releases/tag/${finalAttrs.src.tag}";
     description = "Implements siren.pp.ua API - public wrapper for api.ukrainealarm.com API that returns info about Ukraine air-raid alarms";
     homepage = "https://github.com/PaulAnnekov/uasiren";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})
