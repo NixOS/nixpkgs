@@ -3,7 +3,6 @@
   callPackage,
   crystal,
   fetchFromGitHub,
-  fetchpatch2,
   librsvg,
   pkg-config,
   libxml2,
@@ -41,15 +40,6 @@ crystal.buildCrystalPackage rec {
     rev = versions.invidious.rev or "refs/tags/v${version}";
     inherit (versions.invidious) hash;
   };
-
-  patches = [
-    # Remove with the first release containing this commit.
-    (fetchpatch2 {
-      name = "CVE-2026-58447.patch";
-      url = "https://github.com/iv-org/invidious/commit/77ad41678b45c4f6815940123f1796fc51259f45.patch?full_index=1";
-      hash = "sha256-0pf6eu0ckQ2gYHLr2tEDy+1dvAhVjepG26kuxuHbZl8=";
-    })
-  ];
 
   postPatch =
     let
