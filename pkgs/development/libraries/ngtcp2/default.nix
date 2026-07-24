@@ -56,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
     inherit curl;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://github.com/ngtcp2/ngtcp2";
     changelog = "https://github.com/ngtcp2/ngtcp2/releases/tag/v${finalAttrs.version}";
