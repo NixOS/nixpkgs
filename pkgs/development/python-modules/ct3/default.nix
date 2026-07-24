@@ -6,7 +6,7 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "cheetah3";
+  pname = "ct3";
   version = "3.4.0.post5";
   pyproject = true;
 
