@@ -22,6 +22,7 @@
   uhd,
   icu,
   airspy,
+  airspyhf,
   hackrf,
   libbladeRF,
   rtl-sdr,
@@ -95,6 +96,7 @@ mkDerivation (finalAttrs: {
       # Other features don't have dependencies but can still be disabled in the
       # `features` argument.
       airspy = [ airspy ];
+      airspyhf = [ airspyhf ];
       bladerf = [ libbladeRF ];
       hackrf = [ hackrf ];
       rtl = [ rtl-sdr ];
