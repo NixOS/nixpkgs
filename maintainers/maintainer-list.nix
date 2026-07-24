@@ -6090,6 +6090,12 @@
     github = "dadada";
     githubId = 7216772;
   };
+  dageus = {
+    email = "jomouzio@gmail.com";
+    github = "Dageus";
+    githubId = 101069446;
+    name = "João Miguel Nogueira";
+  };
   dalance = {
     email = "dalance@gmail.com";
     github = "dalance";
