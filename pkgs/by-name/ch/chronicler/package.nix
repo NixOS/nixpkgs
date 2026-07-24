@@ -29,6 +29,7 @@
 , mesa
 , gsettings-desktop-schemas
 , fontconfig
+, at-spi2-atk
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -58,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     gdk-pixbuf
     atk
+    at-spi2-atk
     libappindicator-gtk3
     libX11
     libXcomposite
@@ -80,28 +82,30 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share $out/lib
+    mkdir -p $out/bin $out/share $out/lib/chronicler
     
-    # Copy binaries, icons/desktop files, and internal libraries
-    cp -r usr/bin/*       $out/bin/
-    cp -r usr/share/*     $out/share/ 2>/dev/null || true
-    cp -r usr/lib/*       $out/lib/   2>/dev/null || true
+    # 1. Copy the internal app files to our private lib directory
+    cp -r usr/lib/chronicler/* $out/lib/chronicler/ 2>/dev/null || true
+    
+    # 2. Copy the actual binary (found in usr/bin) into our private lib
+    cp usr/bin/chronicler $out/lib/chronicler/chronicler-bin 2>/dev/null || cp usr/bin/* $out/lib/chronicler/chronicler-bin
 
-    # Fix .desktop file: set Exec to the Nix store path (Ender's good idea)
-    for f in $out/share/applications/*.desktop; do
-      if [ -f "$f" ]; then
-        substituteInPlace "$f" --replace-fail "Exec=chronicler" "Exec=$out/bin/chronicler"
-      fi
-    done
+    # 3. Create a clean symlink from bin to the real binary
+    ln -s $out/lib/chronicler/chronicler-bin $out/bin/chronicler
+
+    # 4. Copy icons and desktop files
+    cp -r usr/share/* $out/share/ 2>/dev/null || true
+
+    # 5. Fix .desktop file path
+    if [ -f "$out/share/applications/chronicler.desktop" ]; then
+      substituteInPlace "$out/share/applications/chronicler.desktop" \
+        --replace-fail "Exec=chronicler" "Exec=$out/bin/chronicler"
+    fi
 
     runHook postInstall
   '';
 
-  # Ensures the app finds its own internal libraries and C++ libs
-  appendRunpaths = [ 
-    "${stdenv.cc.cc.lib}/lib"
-    "$out/lib/chronicler"
-  ];
+  appendRunpaths = [ "${stdenv.cc.cc.lib}/lib" ];
 
   meta = {
     description = "A free, offline worldbuilding tool and local wiki for writers and RPG creators";
