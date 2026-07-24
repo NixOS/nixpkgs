@@ -23,8 +23,10 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = {
-    description = "Arab fixed-width font";
+    description = "Monospaced Arabic typeface designed for code and text-editing";
     homepage = "https://makkuk.com/kawkab-mono/";
+    downloadPage = "https://github.com/aiaf/kawkab-mono";
+    changelog = "https://github.com/aiaf/kawkab-mono/releases/tag/v${version}";
     license = lib.licenses.ofl;
   };
 }
