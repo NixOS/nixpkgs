@@ -20215,8 +20215,6 @@ self: super: with self; {
 
   textualeffects = callPackage ../development/python-modules/textualeffects { };
 
-  textwrap3 = callPackage ../development/python-modules/textwrap3 { };
-
   textx = callPackage ../development/python-modules/textx { };
 
   tf-keras = callPackage ../development/python-modules/tf-keras { };
