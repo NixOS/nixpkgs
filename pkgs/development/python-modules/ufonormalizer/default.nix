@@ -2,13 +2,14 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "ufonormalizer";
   version = "0.6.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -16,7 +17,10 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   meta = {
     description = "Script to normalize the XML and other data inside of a UFO";
