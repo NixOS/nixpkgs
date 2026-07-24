@@ -107,10 +107,10 @@ in
 {
   emacs31 = import ./make-emacs.nix (mkArgs {
     pname = "emacs";
-    version = "31.0.90";
+    version = "31.0.91";
     variant = "mainline";
-    rev = "emacs-31.0.90";
-    hash = "sha256-Rzlnn+NKQ+jICXLNop27RnVInq79myn4hueJieDO2Ck=";
+    rev = "emacs-31.0.91";
+    hash = "sha256-3nvCiLiEtII1C57CLfDIbVqhiwadYViF9Nv32yDtLIQ=";
   });
 
   emacs30 = import ./make-emacs.nix (mkArgs {

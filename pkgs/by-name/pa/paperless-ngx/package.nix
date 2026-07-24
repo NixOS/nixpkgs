@@ -114,6 +114,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "django-allauth"
     "django-auditlog"
     "django-cachalot"
+    "django-filter"
     "django-guardian"
     "drf-spectacular-sidecar"
     "python-dotenv"

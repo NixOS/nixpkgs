@@ -57,6 +57,7 @@
     with subtest("create user"):
         machine.succeed("useradd -m alice")
         machine.succeed("(echo foobar; echo foobar) | passwd alice")
+        machine.succeed("grep -F 'alice:$y$' /etc/shadow")
 
     with subtest("Check whether switching VTs works"):
         machine.fail("pgrep -f 'agetty.*tty2'")

@@ -27,7 +27,6 @@ buildNpmPackage {
     description = "Photoprism's frontend";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
-      benesim
       ipetkov
     ];
   };
