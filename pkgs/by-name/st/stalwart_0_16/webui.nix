@@ -1,7 +1,7 @@
 {
   lib,
   buildNpmPackage,
-  gnutar,
+  zip,
   stalwart_0_16,
   fetchFromGitHub,
   nix-update-script,
@@ -27,7 +27,7 @@ buildNpmPackage (finalAttrs: {
     VITE_OAUTH_CLIENT_ID = "stalwart-webui";
   };
 
-  nativeBuildInputs = [ gnutar ];
+  nativeBuildInputs = [ zip ];
   preBuild = ''
     rm .env.development
   '';
@@ -42,7 +42,9 @@ buildNpmPackage (finalAttrs: {
   installPhase = ''
     runHook preInstall
     mkdir -p $out
-    tar -czvf $out/webui.tar.gz dist
+    cd dist
+    zip -r $out/webui.zip *
+    cd ..
     runHook postInstall
   '';
 
