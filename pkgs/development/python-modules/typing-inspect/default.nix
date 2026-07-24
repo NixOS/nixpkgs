@@ -13,6 +13,8 @@ buildPythonPackage {
   version = "0.9.0-unstable-2025-10-20";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "ilevkivskyi";
     repo = "typing_inspect";
