@@ -21,6 +21,8 @@ let
   envToString = env: lib.concatStringsSep "\n" (lib.mapAttrsToList (k: v: "${k}=${v}") env);
 in
 {
+  meta.maintainers = with lib.maintainers; [ DannyDannyDanny ];
+
   options.services.plane = {
     enable = lib.mkEnableOption "Plane project management server";
 
