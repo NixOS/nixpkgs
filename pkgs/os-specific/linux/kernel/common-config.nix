@@ -303,6 +303,7 @@ let
       XDP_SOCKETS = yes;
       XDP_SOCKETS_DIAG = yes;
       WAN = yes;
+      TCP_AO = whenAtLeast "6.7" yes;
       TCP_CONG_ADVANCED = yes;
       TCP_CONG_CUBIC = yes; # This is the default congestion control algorithm since 2.6.19
       # Required by systemd per-cgroup firewalling
