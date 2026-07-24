@@ -240,7 +240,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://plane.so";
     changelog = "https://github.com/makeplane/plane/releases/tag/v${version}";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ DannyDannyDanny ];
     platforms = lib.platforms.linux;
     mainProgram = "plane-api";
   };
