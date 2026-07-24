@@ -118,6 +118,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "drf-spectacular-sidecar"
     "python-dotenv"
     "gotenberg-client"
+    "nltk"
     "redis"
     "scikit-learn"
     "tika-client"
