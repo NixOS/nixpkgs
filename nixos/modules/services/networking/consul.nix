@@ -20,8 +20,8 @@ let
 
   configFiles = [
     "/etc/consul.json"
-    "/etc/consul-addrs.json"
   ]
+  ++ lib.optional (devices != [ ]) "/etc/consul-addrs.json"
   ++ cfg.extraConfigFiles;
 
   devices = lib.attrValues (lib.filterAttrs (_: i: i != null) cfg.interface);
@@ -234,41 +234,44 @@ in
             ''
               mkdir -m 0700 -p ${dataDir}
               chown -R consul ${dataDir}
-
-              # Determine interface addresses
-              getAddrOnce () {
-                ip ${family} addr show dev "$1" scope global \
-                  | awk -F '[ /\t]*' '/inet/ {print $3}' | head -n 1
-              }
-              getAddr () {
-                ADDR="$(getAddrOnce $1)"
-                LEFT=60 # Die after 1 minute
-                while [ -z "$ADDR" ]; do
-                  sleep 1
-                  LEFT=$(expr $LEFT - 1)
-                  if [ "$LEFT" -eq "0" ]; then
-                    echo "Address lookup timed out"
-                    exit 1
-                  fi
-                  ADDR="$(getAddrOnce $1)"
-                done
-                echo "$ADDR"
-              }
-              echo "{" > /etc/consul-addrs.json
-              delim=" "
             ''
-            + lib.concatStrings (
-              lib.flip lib.mapAttrsToList cfg.interface (
-                name: i:
-                lib.optionalString (i != null) ''
-                  echo "$delim \"${name}_addr\": \"$(getAddr "${i}")\"" >> /etc/consul-addrs.json
-                  delim=","
-                ''
+            + lib.optionalString (devices != [ ]) (
+              ''
+                # Determine interface addresses
+                getAddrOnce () {
+                  ip ${family} addr show dev "$1" scope global \
+                    | awk -F '[ /\t]*' '/inet/ {print $3}' | head -n 1
+                }
+                getAddr () {
+                  ADDR="$(getAddrOnce $1)"
+                  LEFT=60 # Die after 1 minute
+                  while [ -z "$ADDR" ]; do
+                    sleep 1
+                    LEFT=$(expr $LEFT - 1)
+                    if [ "$LEFT" -eq "0" ]; then
+                      echo "Address lookup timed out"
+                      exit 1
+                    fi
+                    ADDR="$(getAddrOnce $1)"
+                  done
+                  echo "$ADDR"
+                }
+                echo "{" > /etc/consul-addrs.json
+                delim=" "
+              ''
+              + lib.concatStrings (
+                lib.flip lib.mapAttrsToList cfg.interface (
+                  name: i:
+                  lib.optionalString (i != null) ''
+                    echo "$delim \"${name}_addr\": \"$(getAddr "${i}")\"" >> /etc/consul-addrs.json
+                    delim=","
+                  ''
+                )
               )
-            )
-            + ''
-              echo "}" >> /etc/consul-addrs.json
-            '';
+              + ''
+                echo "}" >> /etc/consul-addrs.json
+              ''
+            );
         };
       }
 
