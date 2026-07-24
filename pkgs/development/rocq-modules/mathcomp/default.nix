@@ -35,7 +35,7 @@ let
       inherit (lib.versions) range;
     in
     lib.switch rocq-core.rocq-version [
-      (case (range "9.2" "9.2") "2.6.0") # also compiles on Rocq 9.0 and 9.1
+      (case (range "9.2" "9.3") "2.6.0") # also compiles on Rocq 9.0 and 9.1
       (case (range "9.0" "9.1") "2.5.0")
     ] null;
   release = {

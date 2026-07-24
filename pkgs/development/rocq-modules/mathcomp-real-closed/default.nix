@@ -35,7 +35,7 @@ mkRocqDerivation {
     lib.switch
       [ rocq-core.version mathcomp.version ]
       [
-        (case (range "9.0" "9.2") (isGe "2.6.0") "2.0.6")
+        (case (range "9.0" "9.3") (isGe "2.6.0") "2.0.6")
         (case (range "9.0" "9.2") (isEq "2.5.0") "2.0.5")
       ]
       null;
