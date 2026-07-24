@@ -59,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://fukuchi.org/works/qrencode/";
     description = "C library and command line tool for encoding data in a QR Code symbol";
