@@ -2,6 +2,7 @@
   buildPythonPackage,
   lib,
   fetchPypi,
+  setuptools,
   glibcLocales,
   unittestCheckHook,
 }:
@@ -9,12 +10,14 @@
 buildPythonPackage rec {
   pname = "u-msgpack-python";
   version = "2.8.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-uAGoPW7XXm30HkRRi08qnCIdwtpLzVOA46D+2lILxho=";
   };
+
+  build-system = [ setuptools ];
 
   env.LC_ALL = "en_US.UTF-8";
 
