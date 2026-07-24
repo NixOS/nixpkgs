@@ -564,7 +564,10 @@ rec {
             if path == null then
               null
             else if isList path then
-              mapPaths f path
+              warn ''
+                Package '${args.name or args.pname}' uses a nested list in attribute 'paths'.
+                This is deprecated as of Nixpkgs release 26.11, and support will
+                be removed in a future nixpkgs release.'' (mapPaths f path)
             else
               f path
           );
