@@ -23,6 +23,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     changelog = "https://rogueamoeba.com/support/releasenotes/?product=SoundSource";
     description = "Sound controller for macOS";
