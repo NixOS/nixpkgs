@@ -80,7 +80,7 @@ mkDerivation (finalAttrs: {
     python.pkgs.pybind11
   ];
   cmakeFlags = [
-    (if (gnuradio.hasFeature "python-support") then "-DENABLE_PYTHON=ON" else "-DENABLE_PYTHON=OFF")
+    (lib.cmakeBool "ENABLE_PYTHON" (gnuradio.hasFeature "python-support"))
   ]
   ++ finalAttrs.finalPackage.passthru.enabledFeaturesCmakeFlags;
   nativeBuildInputs = [
