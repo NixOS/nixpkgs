@@ -114,6 +114,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Small build system with a focus on speed";
     mainProgram = "ninja";
