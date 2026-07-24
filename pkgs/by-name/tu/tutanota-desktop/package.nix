@@ -5,7 +5,6 @@
   fetchurl,
   makeWrapper,
   undmg,
-  gitUpdater,
 }:
 
 let
@@ -22,11 +21,7 @@ let
     hash = "sha256-oVipeWX6kuy0JqlB92hjcVl3Szwve7Lz5gd/mC7ieVg=";
   };
 
-  passthru.updateScript = gitUpdater {
-    url = "https://github.com/tutao/tutanota";
-    rev-prefix = "tutanota-desktop-release-";
-    allowedVersions = ".+\\.[0-9]{6}\\..+";
-  };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Tuta official desktop client";
