@@ -1764,6 +1764,7 @@ mapAliases {
   openmodelica = throw "'openmodelica' has been removed as it was unmaintained in nixpkgs and depends on insecure&unmtaintained qtwebkit"; # Added 2026-04-26
   openmpCheckPhaseHook = warnAlias "'openmpCheckPhaseHook' has been renamed to 'checkPhaseThreadLimitHook' to reflect its handling of all known thread-limiting mechanisms during check phase" checkPhaseThreadLimitHook; # Added 2026-07-09
   openmw-tes3mp = throw "'openmw-tes3mp' has been removed due to lack of maintenance upstream"; # Added 2025-08-30
+  openssl_1_1 = throw "'openssl_1_1' has been removed, because it was end of life'"; # Added 2026-07-24
   openssl_3_0 = throw "'openssl_3_0' has been renamed to/replaced by 'openssl_3'"; # Converted to throw 2025-10-27
   opensycl = throw "'opensycl' has been renamed to/replaced by 'adaptivecpp'"; # Converted to throw 2025-10-27
   opensyclWithRocm = throw "'opensyclWithRocm' has been renamed to/replaced by 'adaptivecppWithRocm'"; # Converted to throw 2025-10-27
