@@ -11,14 +11,14 @@
   sage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "importlib-metadata";
   version = "9.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "importlib_metadata";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-pPV6tZnmouMBbXWVz9cutGYaUQbnh6lbzJDHEFuDHvw=";
   };
 
@@ -45,6 +45,8 @@ buildPythonPackage rec {
     inherit sage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Read metadata from Python packages";
     homepage = "https://importlib-metadata.readthedocs.io/";
@@ -53,4 +55,4 @@ buildPythonPackage rec {
       fab
     ];
   };
-}
+})
