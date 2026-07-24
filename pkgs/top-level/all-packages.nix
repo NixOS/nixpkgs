@@ -7615,9 +7615,13 @@ with pkgs;
   stalwart-webadmin = stalwart_0_15.webadmin;
   stalwart-spam-filter = stalwart_0_15.spam-filter;
 
-  stalwart-enterprise = stalwart_0_15.override {
-    stalwartEnterprise = true;
-  };
+  stalwart-enterprise =
+    (stalwart_0_15.override {
+      stalwartEnterprise = true;
+    })
+    // {
+      meta = lib.removeAttrs (stalwart_0_15.meta or { }) [ "position" ];
+    };
 
   inherit (callPackages ../servers/monitoring/sensu-go { })
     sensu-go-agent
