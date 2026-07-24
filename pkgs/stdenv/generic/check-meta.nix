@@ -32,12 +32,7 @@ let
     ;
 
   inherit (lib.meta)
-    platformMatch
     cpeFullVersionWithVendor
-    ;
-
-  inherit (lib.generators)
-    toPretty
     ;
 
   inherit (builtins)
@@ -50,12 +45,11 @@ let
     completeMetaProblems
     ;
 
-
-    inherit (import ./remediation.nix { inherit lib; })
-      remediateOutputsToInstall
-      remediate_allowlist
-      remediate_predicate
-      remediate_insecure
+  inherit (import ./remediation.nix { inherit lib; })
+    remediateOutputsToInstall
+    remediate_allowlist
+    remediate_predicate
+    remediate_insecure
     ;
 
   checkProblems = genCheckProblems config;
@@ -105,9 +99,6 @@ let
 
   hasBlocklistedLicense = hasListedLicense blocklist;
 
-  allowUnsupportedSystem =
-    config.allowUnsupportedSystem || getEnv "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM" == "1";
-
   isUnfree =
     licenses:
     if isAttrs licenses && licenses ? "licenseType" then
@@ -126,20 +117,6 @@ let
   hasUnfreeLicense = attrs: attrs ? meta.license && isUnfree attrs.meta.license;
 
   isMarkedBroken = attrs: attrs.meta.broken or false;
-
-  # Logical inversion of meta.availableOn for hostPlatform
-  hasUnsupportedPlatform =
-    hostPlatform:
-    let
-      inherit (hostPlatform) system;
-      # in almost all cases, meta.platforms is a simple list of strings, and we
-      # can just check if it contains the current system. we only run the more
-      # intensive platformMatch if necessary
-      anyHostPlatform = list: elem system list || any (platformMatch hostPlatform) list;
-    in
-    pkg:
-    pkg ? meta.platforms && !(anyHostPlatform pkg.meta.platforms)
-    || pkg ? meta.badPlatforms && anyHostPlatform pkg.meta.badPlatforms;
 
   isMarkedInsecure = attrs: (attrs.meta.knownVulnerabilities or [ ]) != [ ];
 
@@ -203,7 +180,6 @@ let
   showSourceType = showLicenseOrSourceType;
 
   pos_str = meta: meta.position or "«unknown-file»";
-
 
   metaType =
     let
@@ -305,11 +281,7 @@ let
   # !!! reason strings are hardcoded into OfBorg, make sure to keep them in sync
   # Along with a boolean flag for each reason
   checkValidity =
-    hostPlatform:
-    let
-      hasUnsupportedPlatform' = hasUnsupportedPlatform hostPlatform;
-    in
-    attrs:
+    hostPlatform: attrs:
     if !attrs ? meta then
       null
     else
@@ -350,23 +322,6 @@ let
         reason = "non-source";
         msg = "contains elements not built from source (‘${showSourceType attrs.meta.sourceProvenance}’)";
         remediation = remediate_allowlist "NonSource" (remediate_predicate "allowNonSourcePredicate" attrs);
-      }
-    else if hasUnsupportedPlatform' attrs && !allowUnsupportedSystem then
-      let
-        toPretty' = toPretty {
-          allowPrettyValues = true;
-          indent = "  ";
-        };
-      in
-      {
-        reason = "unsupported";
-        msg = ''
-          is not available on the requested hostPlatform:
-            hostPlatform.system = "${hostPlatform.system}"
-            package.meta.platforms = ${toPretty' (attrs.meta.platforms or [ ])}
-            package.meta.badPlatforms = ${toPretty' (attrs.meta.badPlatforms or [ ])}
-        '';
-        remediation = remediate_allowlist "UnsupportedSystem" "";
       }
     else if hasDisallowedInsecure attrs then
       {
@@ -415,9 +370,6 @@ let
   #   validity = checkMeta.assertValidity hostPlatform { inherit meta attrs; };
   commonMeta =
     hostPlatform:
-    let
-      hasUnsupportedPlatform' = hasUnsupportedPlatform hostPlatform;
-    in
     {
       validity,
       attrs,
@@ -556,7 +508,6 @@ let
       # Expose the result of the checks for everyone to see.
       unfree = hasUnfreeLicense attrs;
       broken = isMarkedBroken attrs;
-      unsupported = hasUnsupportedPlatform' attrs;
       insecure = isMarkedInsecure attrs;
 
       problems = completeMetaProblems config hostPlatform attrs;

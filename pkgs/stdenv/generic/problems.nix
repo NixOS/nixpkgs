@@ -52,6 +52,10 @@ rec {
     unique
     ;
 
+  inherit (lib.generators)
+    toPretty
+    ;
+
   inherit (lib.meta)
     platformMatch
     ;
@@ -133,6 +137,65 @@ rec {
           message = "This package is broken.";
         };
       };
+    };
+    unsupported = {
+      manualAllowed = true;
+      isUnique = true;
+      nixpkgsInternalUseAllowed = true;
+      automatic =
+        let
+          envAllowUnsupportedSystem = getEnv "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM" == "1";
+          # Logical inversion of meta.availableOn for hostPlatform
+          hasUnsupportedPlatform =
+            hostPlatform:
+            let
+              inherit (hostPlatform) system;
+              # in almost all cases, meta.platforms is a simple list of strings, and we
+              # can just check if it contains the current system. we only run the more
+              # intensive platformMatch if necessary
+              anyHostPlatform = list: elem system list || any (platformMatch hostPlatform) list;
+            in
+            pkg:
+            pkg ? meta.platforms && !(anyHostPlatform pkg.meta.platforms)
+            || pkg ? meta.badPlatforms && anyHostPlatform pkg.meta.badPlatforms;
+        in
+        {
+          condition =
+            config:
+            let
+              allowUnsupportedSystem = config.allowUnsupportedSystem || envAllowUnsupportedSystem;
+            in
+            hostPlatform:
+            let
+              hasUnsupportedPlatform' = hasUnsupportedPlatform hostPlatform;
+            in
+            attrs: hasUnsupportedPlatform' attrs && !allowUnsupportedSystem;
+          value =
+            let
+              # lazily importing the library only when we need it for
+              # the actual message value. The import will be cached
+              # anyway and the thunk will only exist once unless there
+              # are multiple lines importing it.
+              inherit (import ./remediations.nix { inherit lib; }) remediate_allowlist;
+            in
+            _config: hostPlatform: attrs: {
+              message =
+                let
+                  toPretty' = toPretty {
+                    allowPrettyValues = true;
+                    indent = "  ";
+                  };
+                in
+                ''
+                  is not available on the requested hostPlatform:
+                    hostPlatform.system = "${hostPlatform.system}"
+                    package.meta.platforms = ${toPretty' (attrs.meta.platforms or [ ])}
+                    package.meta.badPlatforms = ${toPretty' (attrs.meta.badPlatforms or [ ])}
+                '';
+              # FIXME: add remediation support to meta.problems
+              remediation = remediate_allowlist "UnsupportedSystem" "";
+            };
+        };
     };
     removal = {
       manualAllowed = true;
@@ -580,6 +643,7 @@ rec {
               ${concatMapStringsSep "\n" (x: "- ${fullMessage x}") errorProblems}
             '';
             ## TODO: Add mention of problem.matchers, or maybe better link to docs of that
+            ## TODO: add remediation
             remediation = ''
               See also https://nixos.org/manual/nixpkgs/unstable#sec-problems
               To allow evaluation regardless, use:
