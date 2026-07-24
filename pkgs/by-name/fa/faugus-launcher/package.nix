@@ -2,48 +2,49 @@
   fetchFromGitHub,
   gobject-introspection,
   icoextract,
-  imagemagick,
   lib,
-  libayatana-appindicator,
-  libcanberra-gtk3,
   lsfg-vk,
   meson,
   ninja,
   nix-update-script,
   python3Packages,
   umu-launcher,
-  vulkan-tools,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
   xdg-utils,
+  gtk4,
+  libadwaita,
+  libmanette,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "faugus-launcher";
-  version = "1.22.8";
+  version = "2.0.2";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Faugus";
     repo = "faugus-launcher";
     tag = finalAttrs.version;
-    hash = "sha256-2FsuD40u5O7VwbziTqhsfVyceyfmSRvdmsizfBy/Xys=";
+    hash = "sha256-0knobTbMLOkRIGze+gHaee2Duq4ClMapTCzICX35A8s=";
   };
 
   nativeBuildInputs = [
     gobject-introspection
     meson
     ninja
-    wrapGAppsHook3
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    libayatana-appindicator
+    gtk4
+    libadwaita
+    libmanette
   ];
 
   dependencies = with python3Packages; [
+    dbus-python
     pillow
     psutil
-    pygame
     pygobject3
     requests
     vdf
@@ -68,10 +69,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       --suffix PATH : "${
         lib.makeBinPath [
           icoextract
-          imagemagick
-          libcanberra-gtk3
           umu-launcher
-          vulkan-tools
           xdg-utils
         ]
       }"
