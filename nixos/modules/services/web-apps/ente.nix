@@ -342,10 +342,17 @@ in
               '';
             };
           };
+          virtualHosts.${domainFor "albums"} = {
+            forceSSL = mkDefault true;
+            locations."/" = {
+              root = webPackage "albums";
+              tryFiles = "$uri $uri.html /index.html";
+              extraConfig = ''
+                add_header Access-Control-Allow-Origin 'https://${cfgWeb.domains.api}';
+              '';
+            };
+          };
           virtualHosts.${domainFor "photos"} = {
-            serverAliases = [
-              (domainFor "albums") # the albums app is shared with the photos frontend
-            ];
             forceSSL = mkDefault true;
             locations."/" = {
               root = webPackage "photos";
