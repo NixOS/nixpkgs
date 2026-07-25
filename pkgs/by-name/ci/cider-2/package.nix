@@ -72,10 +72,11 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     mv $out/share/applications/cider.desktop $out/share/applications/cider-2.desktop
     substituteInPlace $out/share/applications/cider-2.desktop \
-      --replace-fail Exec=cider Exec=cider-2
+      --replace-fail Exec=cider Exec=cider-2 \
+      --replace-fail Icon=cider Icon=cider-2
 
     install -Dm444 $out/share/pixmaps/cider.png \
-      $out/share/icons/hicolor/256x256/apps/cider.png
+      $out/share/icons/hicolor/256x256/apps/cider-2.png
 
     rm -r $out/share/{pixmaps,lintian}
   '';
