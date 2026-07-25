@@ -26,14 +26,21 @@
 # is required in the build sandbox.
 #
 # A third fixture bakes a RUNPATH whose first directory does not exist while
-# the note is generated (the /run/opengl-driver/lib pattern): patchelf must
-# record it as a "?" search hint rather than drop it, so the loader still
-# probes it at run time. A companion fixture covers an existing but mutable
-# absolute directory. Patchelf 0.19.1 emits no "?" hint for that case when the
-# soname is absent, so glibc must decline the cache for any non-store RUNPATH
-# and preserve first-match semantics if the directory is populated later.
-# Both fixtures rely on the sandbox build root being /build for the fixture
-# build and this test, like the LD_DEBUG assumption above.
+# the note is generated (the /run/opengl-driver/lib pattern), so patchelf
+# records it as a "?" search hint. A companion fixture covers an existing but
+# mutable absolute directory, for which patchelf 0.19.1 emits no hint at all
+# when the soname is absent. Neither directory is in the store, so glibc must
+# decline the cache for both objects and preserve first-match semantics when
+# the directory is populated later. Both rely on the sandbox build root being
+# /build for the fixture build and this test, like the LD_DEBUG assumption
+# above.
+#
+# Declining the cache on any non-store component means those two fixtures
+# never reach the loader's "?" branch. A fifth fixture does: its RUNPATH pairs
+# an $ORIGIN-relative directory, which patchelf can only record as a hint,
+# with a plain store directory it resolves exactly. $ORIGIN expands back into
+# the store at run time, so the cache is consulted, the hint is decomposed and
+# searched, and only then does the exact entry resolve libfoo.
 #
 # A fourth fixture links a hand-crafted note whose descriptor is a bare
 # "\0\0", i.e. an empty pair sequence, something patchelf never emits (it
@@ -124,6 +131,19 @@ let
         $CC main_foo.c -o $out/bin/prog-mutable \
           -L$out/lib/real -lfoo \
           -Wl,--enable-new-dtags -Wl,-rpath,"$out/lib/real"
+
+        # A RUNPATH mixing an $ORIGIN-relative directory, which patchelf can
+        # only record as a "?" search hint because it cannot know what $ORIGIN
+        # will be, with a plain store directory it resolves to an "=" exact
+        # entry. $ORIGIN expands back into /nix/store at run time, so this
+        # RUNPATH stays stable and the loader does consult the note. dep/ holds
+        # libbar but not libfoo, so resolving libfoo has to walk the hint and
+        # miss before reaching the exact entry: this is the fixture that covers
+        # the "?" branch of the cache walk.
+        $CC main.c -o $out/bin/prog-origin \
+          -L$out/lib/dep -lbar -L$out/lib/real -lfoo \
+          -Wl,--enable-new-dtags \
+          -Wl,-rpath,'$ORIGIN/../lib/dep':"$out/lib/real"
 
         ${lib.optionalString craftedNote ''
           # A well-formed note (padded to the 4-byte boundary, so readelf and
@@ -287,15 +307,26 @@ runCommand "glibc-resolution-cache-test"
 
     prog_runtime="$cached/bin/prog-runtime"
 
-    echo "[test] the note records the build-time-missing dir as a '?' search hint"
+    echo "[test] patchelf records a build-time-missing dir as a '?' search hint"
     readelf -p .note.nixos.ldcache "$prog_runtime" | grep -qF "?/build/ld-cache-runtime-libs"
 
-    echo "[test] with the runtime dir still absent, the exact entry resolves (returns 7)"
+    # The note exists and names real/, but /build/... is outside the store, so
+    # the loader declines the whole cache for this object. The two cases below
+    # therefore assert stock RUNPATH first-match order rather than anything
+    # about the cache; prog-origin covers the "?" branch of the cache walk.
+    echo "[test] a non-store RUNPATH component makes the loader decline the note"
+    if { LD_DEBUG=libs "$prog_runtime" 2>&1 >/dev/null || true; } \
+        | grep -q "trying cached file="; then
+      echo "  cache consulted despite a non-store RUNPATH component" >&2
+      exit 1
+    fi
+
+    echo "[test] with the runtime dir still absent, real/ resolves (returns 7)"
     rc=0
     "$prog_runtime" || rc=$?
     [ "$rc" -eq 7 ]
 
-    echo "[test] a dir populated after note generation wins over the exact entry (returns 42)"
+    echo "[test] a dir populated after note generation still wins (returns 42)"
     mkdir -p /build/ld-cache-runtime-libs
     cp "$cached/lib/over/libfoo.so.1" /build/ld-cache-runtime-libs/
     rc=0
@@ -329,6 +360,30 @@ runCommand "glibc-resolution-cache-test"
     rc=0
     "$control/bin/prog-mutable" || rc=$?
     [ "$rc" -eq 42 ]
+
+    prog_origin="$cached/bin/prog-origin"
+
+    echo '[test] the note pairs a ? hint for $ORIGIN with an = entry for the store dir'
+    readelf -p .note.nixos.ldcache "$prog_origin" | grep -qF '?$ORIGIN/../lib/dep'
+    readelf -p .note.nixos.ldcache "$prog_origin" | grep -qF "=$cached/lib/real/libfoo.so.1"
+
+    echo '[test] $ORIGIN expands into the store, so the cache is still consulted'
+    { LD_DEBUG=libs "$prog_origin" 2>&1 >/dev/null || true; } \
+      | grep -qF "trying cached file=$cached/lib/real/libfoo.so.1"
+
+    # The exact hit above proves the cache branch ran and resolved libfoo, so
+    # the normal RUNPATH walk never ran for it. Any dep/ probe can therefore
+    # only come from the ? hint being decomposed and searched inside that
+    # branch, which is the code path nothing else in this test reaches.
+    echo "[test] the ? hint is searched, and before the = entry"
+    o=$(probes "$prog_origin")
+    echo "  dep/ probes (origin hint): $o"
+    [ "$o" -gt 0 ]
+
+    echo "[test] the ORIGIN-relative fixture runs (returns 7)"
+    rc=0
+    "$prog_origin" || rc=$?
+    [ "$rc" -eq 7 ]
 
     prog_empty="$crafted/bin/prog-empty"
 
@@ -366,12 +421,25 @@ runCommand "glibc-resolution-cache-test"
     "$prog_empty" || rc=$?
     [ "$rc" -eq 7 ]
 
-    echo "[test] a malformed non-power-of-two PT_NOTE alignment cannot hang the loader"
+    echo "[test] a malformed non-power-of-two PT_NOTE alignment is rejected"
     cp "$prog" ./prog-bad-note-align
     chmod u+w ./prog-bad-note-align
     "$crafted/bin/corrupt-note-align" ./prog-bad-note-align
+    # The reader must skip the segment rather than try to walk it, which is
+    # observable without timing the process: no cache hit, and the normal
+    # RUNPATH walk takes over and probes dep/ for libfoo exactly as the
+    # no-note control does. A walk that failed to advance would hang here
+    # instead of failing, and the builder's own timeout would catch that.
+    if { LD_DEBUG=libs ./prog-bad-note-align 2>&1 >/dev/null || true; } \
+        | grep -q "trying cached file="; then
+      echo "  unexpected cache hit from a malformed note alignment" >&2
+      exit 1
+    fi
+    a=$(probes ./prog-bad-note-align)
+    echo "  dep/ probes (bad align): $a"
+    [ "$a" -gt 0 ]
     rc=0
-    timeout 5 ./prog-bad-note-align || rc=$?
+    ./prog-bad-note-align || rc=$?
     [ "$rc" -eq 7 ]
 
     echo "[test] PASS"
