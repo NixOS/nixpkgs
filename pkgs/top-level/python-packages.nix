@@ -10615,6 +10615,8 @@ self: super: with self; {
 
   mediafile = callPackage ../development/python-modules/mediafile { };
 
+  mediapipe = callPackage ../development/python-modules/mediapipe { };
+
   mediapy = callPackage ../development/python-modules/mediapy { };
 
   mediawiki-langcodes = callPackage ../development/python-modules/mediawiki-langcodes { };
