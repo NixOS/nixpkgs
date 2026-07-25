@@ -21,6 +21,8 @@ runCommand "test-emacs-withPackages-wrapper"
           dash
           flx-ido
           (mkEpkg "with-packages" ./with-packages.el epkgs.melpaBuild)
+          (mkEpkg "early-default" ./early-default.el epkgs.melpaBuild)
+          (mkEpkg "default" ./default.el epkgs.melpaBuild)
         ]
       ))
     ];
@@ -31,7 +33,12 @@ runCommand "test-emacs-withPackages-wrapper"
     };
   }
   ''
-    emacs --batch --load=with-packages --funcall=ert-run-tests-batch-and-exit
+    nonBatchEmacsSocket="$PWD/non-batch-emacs-socket"
+    emacs --daemon="$nonBatchEmacsSocket"
+
+    emacs --batch --load=with-packages \
+      --eval="(setq with-packages-non-batch-emacs-socket \"$nonBatchEmacsSocket\")" \
+      --funcall=ert-run-tests-batch-and-exit
 
     touch $out
   ''

@@ -3,6 +3,7 @@
 ;;; Code:
 
 (require 'ert)
+(eval-when-compile (require 'cl-lib))
 
 ;; Try to make tests cause no side-effects.
 
@@ -26,6 +27,76 @@
   (eval-and-compile
     (require 'info))
   (should (Info-find-file "dash" t)))
+
+;;;; Utils for non-batch tests
+
+(defmacro define-with-packages-non-batch-test-via-bound-and-true-p (test-name)
+  (declare (indent 1) (debug (symbolp)))
+  (cl-check-type test-name symbol)
+  `(defun ,test-name ()
+     (bound-and-true-p ,test-name)))
+
+(defmacro define-with-packages-non-batch-tests-via-bound-and-true-p (&rest test-names)
+  "See also `define-with-packages-non-batch-test-via-bound-and-true-p'."
+  (declare (indent 0) (debug (&rest symbolp)))
+  `(progn
+     ,@(cl-loop
+        for test-name in test-names
+        collect `(define-with-packages-non-batch-test-via-bound-and-true-p ,test-name))))
+
+(defvar with-packages-non-batch-emacs-socket nil
+  "The server socket of a non-batch Emacs to run non-batch tests on.
+Set this variable before running non-batch tests.
+
+Emacs in batch mode has a special startup process.  To test things like the
+loading of early-default.el and default.el files, we launch a non-batch Emacs,
+run non-batch tests on it and collect test results from it.")
+
+(defun with-packages--run-non-batch-test (test-name)
+  "Run non-batch test named TEST-NAME.
+Return t if the test passes.  Otherwise, return nil."
+  (cl-flet* ((eval-in-non-batch-emacs (form)
+               (cl-check-type form string)
+               (with-temp-buffer
+                 (call-process "emacsclient" nil t nil
+                               "--socket-name" with-packages-non-batch-emacs-socket
+                               "--eval" form)
+                 (string-trim (buffer-substring-no-properties (point-min) (point-max)))))
+             (funcall-in-non-batch-emacs (function-name)
+               (eval-in-non-batch-emacs (format "(%s)" function-name))))
+    ;; Load with-packages in the non-batch Emacs in case needed.
+    (eval-in-non-batch-emacs "(require 'with-packages)")
+    (not (string= (format "%s" nil)
+                  ;; Run the non-batch test.  Return non-nil, as string, if it passes.
+                  (funcall-in-non-batch-emacs test-name)))))
+
+(defmacro define-with-packages-non-batch-ert-test (test-name)
+  "See `with-packages--run-non-batch-test' for how the test is run."
+  (declare (indent 1) (debug (symbolp)))
+  (cl-check-type test-name symbol)
+  `(ert-deftest ,test-name ()
+     (should (stringp with-packages-non-batch-emacs-socket))
+     (should (file-readable-p with-packages-non-batch-emacs-socket))
+     (should (with-packages--run-non-batch-test ,(symbol-name test-name)))))
+
+(defmacro define-with-packages-non-batch-ert-tests (&rest test-names)
+  "See also `define-with-packages-non-batch-ert-test'."
+  (declare (indent 0) (debug (&rest symbolp)))
+  `(progn
+     ,@(cl-loop for test-name in test-names
+                collect `(define-with-packages-non-batch-ert-test ,test-name))))
+
+;;;; Non-batch tests
+
+(define-with-packages-non-batch-tests-via-bound-and-true-p
+  with-packages-early-default-is-loaded
+  with-packages-default-is-loaded
+  with-packages-early-default-is-loaded-before-default)
+
+(define-with-packages-non-batch-ert-tests
+  with-packages-early-default-is-loaded
+  with-packages-default-is-loaded
+  with-packages-early-default-is-loaded-before-default)
 
 (provide 'with-packages)
 
