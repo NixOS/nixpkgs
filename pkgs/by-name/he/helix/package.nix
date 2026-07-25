@@ -6,6 +6,7 @@
   helix-unwrapped,
   removeReferencesTo,
   pkgs,
+  xsel,
   tree-sitter-grammars,
   lockedGrammars ? lib.importJSON ./grammars.json,
   grammarsOverlay ? (
@@ -103,7 +104,9 @@ symlinkJoin {
   nativeBuildInputs = [ makeBinaryWrapper ];
 
   postBuild = ''
-    wrapProgram $out/bin/hx --set HELIX_RUNTIME "${runtimeDir}"
+    wrapProgram $out/bin/hx \
+      --prefix PATH : ${lib.makeBinPath [ xsel ]} \
+      --set HELIX_RUNTIME "${runtimeDir}"
   '';
 
   passthru = {
