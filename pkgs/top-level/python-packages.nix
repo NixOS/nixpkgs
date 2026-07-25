@@ -3058,8 +3058,6 @@ self: super: with self; {
 
   checksumdir = callPackage ../development/python-modules/checksumdir { };
 
-  cheetah3 = callPackage ../development/python-modules/cheetah3 { };
-
   chefiq-ble = callPackage ../development/python-modules/chefiq-ble { };
 
   cheroot = callPackage ../development/python-modules/cheroot { };
@@ -3766,6 +3764,8 @@ self: super: with self; {
   csv2md = callPackage ../development/python-modules/csv2md { };
 
   csvw = callPackage ../development/python-modules/csvw { };
+
+  ct3 = callPackage ../development/python-modules/ct3 { };
 
   ctap-keyring-device = callPackage ../development/python-modules/ctap-keyring-device { };
 
