@@ -8,6 +8,7 @@ python3Packages.buildPythonApplication rec {
   pname = "risp";
   version = "0.1.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "vksarchy";
