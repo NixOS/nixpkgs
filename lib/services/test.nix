@@ -91,10 +91,16 @@ let
     ];
   };
 
+  # Every service carries some assertions that hold; only the violated ones are of interest here.
+  failures = lib.filter (a: !a.assertion);
+
   filterEval =
     config:
     lib.optionalAttrs (config ? process) {
-      inherit (config) assertions warnings process;
+      inherit (config) warnings;
+      assertions = failures config.assertions;
+      # Only `argv` is relevant here; `process` also carries the reload options.
+      process = { inherit (config.process) argv; };
     }
     // {
       services = lib.mapAttrs (k: filterEval) config.services;
@@ -165,7 +171,7 @@ let
       ];
 
     assert
-      portable-lib.getAssertions [ "service1" ] exampleEval.config.services.service1 == [
+      failures (portable-lib.getAssertions [ "service1" ] exampleEval.config.services.service1) == [
         {
           message = "in service1: you can't enable this for that reason";
           assertion = false;
@@ -177,7 +183,7 @@ let
         "in service3.services.exclacow: The `bar' service is deprecated and will go away soon!"
       ];
     assert
-      portable-lib.getAssertions [ "service3" ] exampleEval.config.services.service3 == [
+      failures (portable-lib.getAssertions [ "service3" ] exampleEval.config.services.service3) == [
         {
           message = "in service3.services.exclacow: you can't enable this for such reason";
           assertion = false;
