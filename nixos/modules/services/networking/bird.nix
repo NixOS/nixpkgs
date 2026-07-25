@@ -7,12 +7,15 @@
 
 let
   inherit (lib)
+    mkBefore
     mkEnableOption
     mkIf
     mkMerge
     mkOption
+    optional
     optionalString
     types
+    warnIfNot
     ;
 
   cfg = config.services.bird;
@@ -100,7 +103,7 @@ in
   ###### implementation
   config = mkIf cfg.enable (mkMerge [
     {
-      environment.systemPackages = (lib.optional cfg.installWrapper userWrapper) ++ [ cfg.package ];
+      environment.systemPackages = [ cfg.package ];
 
       environment.etc."bird/bird.conf".source = pkgs.writeTextFile {
         name = "bird";
@@ -148,6 +151,15 @@ in
         groups.bird = { };
       };
     }
+
+    (mkIf cfg.installWrapper {
+      environment.systemPackages = mkBefore [ userWrapper ];
+
+      # Do not enable run0 without explicit consent, but warn instead.
+      warnings = optional (
+        !config.security.run0.enable
+      ) "security.run0.enable must be set to true for services.bird.installWrapper to take effect!";
+    })
   ]);
 
   meta = {
