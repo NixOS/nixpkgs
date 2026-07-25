@@ -1,0 +1,22 @@
+diff --git a/setup.py b/setup.py
+index 1e0a9c3..a7551e6 100644
+--- a/setup.py
++++ b/setup.py
+@@ -158,5 +158,17 @@
+ def _invoke_shell_command(shell_commands):
+   """Invokes shell command from the list of arguments."""
++  if shell_commands[0] == 'bazel':
++    shell_commands[1:1] = [
++        '--output_base=' + os.environ['bazelOut'],
++        '--output_user_root=' + os.environ['bazelUserRoot'],
++    ]
++    shell_commands.extend([
++        '--python_path=' + os.environ['PYTHON_BIN_PATH'],
++        '--registry=file://@registry@',
++        '--repo_env=JAVA_HOME=' + os.environ['JAVA_HOME'],
++        '--repo_env=HERMETIC_PYTHON_VERSION=@hermeticPythonVersion@',
++    ])
++
+   print('Invoking:', shlex.join(shell_commands))
+   try:
+     subprocess.run(shell_commands, check=True)
