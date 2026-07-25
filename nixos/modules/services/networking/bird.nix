@@ -20,6 +20,14 @@ let
     "CAP_NET_BIND_SERVICE"
     "CAP_NET_RAW"
   ];
+  userWrapper = pkgs.writeShellApplication {
+    name = "birdc";
+    text = ''
+      exec sudo -u bird \
+        "${lib.getExe' cfg.package "birdc"}" \
+        "$@"
+    '';
+  };
 in
 {
   ###### interface
@@ -65,6 +73,19 @@ in
           build time checking.
         '';
       };
+      installWrapper = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to install a sudo(8) wrapper around `birdc`, ensuring that the
+          command is executed as the `bird` user and not (accidentially) as
+          root.
+
+          An alternative would be to add the respective users to the bird group
+          manually instead of using sudo(8), which may or may not be preferred
+          depending on the use case.
+        '';
+      };
     };
   };
 
@@ -77,7 +98,7 @@ in
 
   ###### implementation
   config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = (lib.optional cfg.installWrapper userWrapper) ++ [ cfg.package ];
 
     environment.etc."bird/bird.conf".source = pkgs.writeTextFile {
       name = "bird";
