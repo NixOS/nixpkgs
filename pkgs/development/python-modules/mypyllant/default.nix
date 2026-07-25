@@ -24,16 +24,16 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mypyllant";
-  version = "0.9.17";
+  version = "0.9.18";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "signalkraft";
     repo = "myPyllant";
-    tag = "v${version}";
-    hash = "sha256-C6/rCpY4Pn8j8dNo1mlz2GRzMBeMo9CZMitlmtuBRE0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wLdyajxakYvO27DOmWNk9QnGdprdKnQNZHKPFQg0yM8=";
   };
 
   build-system = [
@@ -66,8 +66,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to interact with the API behind the myVAILLANT app";
     homepage = "https://github.com/signalkraft/myPyllant";
-    changelog = "https://github.com/signalkraft/myPyllant/releases/tag/${src.tag}";
+    changelog = "https://github.com/signalkraft/myPyllant/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ urbas ];
   };
-}
+})
