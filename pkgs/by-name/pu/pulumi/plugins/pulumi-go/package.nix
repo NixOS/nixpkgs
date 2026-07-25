@@ -9,7 +9,7 @@ buildGoModule (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/sdk/go/pulumi-language-go";
 
-  vendorHash = "sha256-jwsdMSLDn2PNJFIIVhqwBLH7acFTOFLPgVNMKbI5DZE=";
+  vendorHash = "sha256-NTIOTy6pLJgnxI6AP87Nfljr551fvih/b9c59VYg3PA=";
 
   ldflags = [
     "-s"
@@ -20,7 +20,9 @@ buildGoModule (finalAttrs: {
   checkFlags = [
     "-skip=^${
       lib.concatStringsSep "$|^" [
-        "TestLanguage"
+        "TestLanguagePublished"
+        "TestLanguageLocal"
+        "TestLanguageExtraTypes"
         "TestPluginsAndDependencies_vendored"
         "TestPluginsAndDependencies_subdir"
         "TestPluginsAndDependencies_moduleMode"
@@ -35,6 +37,7 @@ buildGoModule (finalAttrs: {
     mainProgram = "pulumi-language-go";
     maintainers = with lib.maintainers; [
       tie
+      untio11
     ];
   };
 })
