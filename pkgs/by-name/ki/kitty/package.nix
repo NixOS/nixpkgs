@@ -50,14 +50,14 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.48.0";
+  version = "0.48.1";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     tag = "v${version}";
-    hash = "sha256-+x3saXQw+6BzBYfwwur0DiTaJZVNgOYKJ4UVzeScbtk=";
+    hash = "sha256-h4dE99FET26iTgEFrmeXcFDw6DLl8dQjGep0NJ7jMzk=";
   };
 
   goModules =

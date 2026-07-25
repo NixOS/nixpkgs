@@ -3,8 +3,10 @@
   buildPythonPackage,
   fetchPypi,
   google-api-core,
+  google-auth,
   google-cloud-core,
   google-cloud-testutils,
+  grpcio,
   libcst,
   mock,
   proto-plus,
@@ -16,13 +18,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-datastore";
-  version = "2.25.0";
+  version = "2.26.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_datastore";
     inherit (finalAttrs) version;
-    hash = "sha256-3WRqPY+ZwnULtfbg8Y7Oe+2V/XbgLayt2/o1orIjKP8=";
+    hash = "sha256-GsSILwM/y5C9ddEXG0ZADs1d7yN2hZiEPZwEHgwLSmo=";
   };
 
   build-system = [ setuptools ];
@@ -31,7 +33,9 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     google-api-core
+    google-auth
     google-cloud-core
+    grpcio
     proto-plus
     protobuf
   ]

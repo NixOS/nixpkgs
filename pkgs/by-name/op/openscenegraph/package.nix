@@ -14,7 +14,6 @@
   libGL,
   glib,
   libxml2,
-  pcre,
   zlib,
   boost,
   jpegSupport ? true,
@@ -99,7 +98,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional curlSupport curl
     ++ lib.optionals colladaSupport [
       collada-dom
-      pcre
     ]
     ++ lib.optional opencascadeSupport opencascade-occt
     ++ lib.optional ffmpegSupport ffmpeg
