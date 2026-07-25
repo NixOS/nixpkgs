@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preBuild =
     let
-      maxBuildCores = 16;
+      maxBuildCores = 12;
     in
     lib.optionalString cudaSupport ''
       # https://github.com/PixarAnimationStudios/OpenSubdiv/issues/1313
