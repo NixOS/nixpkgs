@@ -24,7 +24,7 @@ let
   userWrapper = pkgs.writeShellApplication {
     name = "birdc";
     text = ''
-      exec sudo -u bird \
+      exec ${pkgs.systemd}/bin/run0 -u bird \
         "${lib.getExe' cfg.package "birdc"}" \
         "$@"
     '';
@@ -78,12 +78,12 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Whether to install a sudo(8) wrapper around `birdc`, ensuring that the
+          Whether to install a run0(8) wrapper around `birdc`, ensuring that the
           command is executed as the `bird` user and not (accidentially) as
           root.
 
           An alternative would be to add the respective users to the bird group
-          manually instead of using sudo(8), which may or may not be preferred
+          manually instead of using run0(8), which may or may not be preferred
           depending on the use case.
         '';
       };
