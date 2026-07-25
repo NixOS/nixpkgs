@@ -9,6 +9,7 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
+    mkMerge
     mkOption
     optionalString
     types
@@ -97,55 +98,57 @@ in
   ];
 
   ###### implementation
-  config = mkIf cfg.enable {
-    environment.systemPackages = (lib.optional cfg.installWrapper userWrapper) ++ [ cfg.package ];
+  config = mkIf cfg.enable (mkMerge [
+    {
+      environment.systemPackages = (lib.optional cfg.installWrapper userWrapper) ++ [ cfg.package ];
 
-    environment.etc."bird/bird.conf".source = pkgs.writeTextFile {
-      name = "bird";
-      text = cfg.config;
-      derivationArgs.nativeBuildInputs = lib.optional cfg.checkConfig cfg.package;
-      checkPhase = optionalString cfg.checkConfig ''
-        ln -s $out bird.conf
-        ${cfg.preCheckConfig}
-        bird -d -p -c bird.conf || { exit=$?; cat -n bird.conf; exit $exit; }
-      '';
-    };
+      environment.etc."bird/bird.conf".source = pkgs.writeTextFile {
+        name = "bird";
+        text = cfg.config;
+        derivationArgs.nativeBuildInputs = lib.optional cfg.checkConfig cfg.package;
+        checkPhase = optionalString cfg.checkConfig ''
+          ln -s $out bird.conf
+          ${cfg.preCheckConfig}
+          bird -d -p -c bird.conf || { exit=$?; cat -n bird.conf; exit $exit; }
+        '';
+      };
 
-    systemd.services.bird = {
-      description = "BIRD Internet Routing Daemon";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      reloadTriggers = lib.optional cfg.autoReload config.environment.etc."bird/bird.conf".source;
-      serviceConfig = {
-        Type = "forking";
-        Restart = "on-failure";
-        User = "bird";
-        Group = "bird";
-        ExecStart = "${lib.getExe' cfg.package "bird"} -c /etc/bird/bird.conf";
-        ExecReload = "${lib.getExe' cfg.package "birdc"} configure";
-        ExecStop = "${lib.getExe' cfg.package "birdc"} down";
-        RuntimeDirectory = "bird";
-        CapabilityBoundingSet = caps;
-        AmbientCapabilities = caps;
-        ProtectSystem = "full";
-        ProtectHome = "yes";
-        ProtectKernelTunables = true;
-        ProtectControlGroups = true;
-        PrivateTmp = true;
-        PrivateDevices = true;
-        SystemCallFilter = "~@cpu-emulation @debug @keyring @module @mount @obsolete @raw-io";
-        MemoryDenyWriteExecute = "yes";
+      systemd.services.bird = {
+        description = "BIRD Internet Routing Daemon";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
+        reloadTriggers = lib.optional cfg.autoReload config.environment.etc."bird/bird.conf".source;
+        serviceConfig = {
+          Type = "forking";
+          Restart = "on-failure";
+          User = "bird";
+          Group = "bird";
+          ExecStart = "${lib.getExe' cfg.package "bird"} -c /etc/bird/bird.conf";
+          ExecReload = "${lib.getExe' cfg.package "birdc"} configure";
+          ExecStop = "${lib.getExe' cfg.package "birdc"} down";
+          RuntimeDirectory = "bird";
+          CapabilityBoundingSet = caps;
+          AmbientCapabilities = caps;
+          ProtectSystem = "full";
+          ProtectHome = "yes";
+          ProtectKernelTunables = true;
+          ProtectControlGroups = true;
+          PrivateTmp = true;
+          PrivateDevices = true;
+          SystemCallFilter = "~@cpu-emulation @debug @keyring @module @mount @obsolete @raw-io";
+          MemoryDenyWriteExecute = "yes";
+        };
       };
-    };
-    users = {
-      users.bird = {
-        description = "BIRD Internet Routing Daemon user";
-        group = "bird";
-        isSystemUser = true;
+      users = {
+        users.bird = {
+          description = "BIRD Internet Routing Daemon user";
+          group = "bird";
+          isSystemUser = true;
+        };
+        groups.bird = { };
       };
-      groups.bird = { };
-    };
-  };
+    }
+  ]);
 
   meta = {
     maintainers = with lib.maintainers; [ herbetom ];
