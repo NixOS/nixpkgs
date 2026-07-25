@@ -16,22 +16,22 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "docker-sbx";
-  version = "0.34.0";
+  version = "0.37.0";
   src =
     if stdenvNoCC.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://github.com/docker/sbx-releases/releases/download/v${finalAttrs.version}/DockerSandboxes-linux-amd64.tar.gz";
-        hash = "sha256-5H9LOyKi0/SBVJ0ld6OkcP1h9r9eHrAb4fsVVVdMusg=";
+        hash = "sha256-dwq/f5GxOrqGzHu31Ui44HyBLVoQkyGQXnt9oK0H2Zg=";
       }
     else if stdenvNoCC.hostPlatform.system == "aarch64-linux" then
       fetchurl {
         url = "https://github.com/docker/sbx-releases/releases/download/v${finalAttrs.version}/DockerSandboxes-linux-arm64.tar.gz";
-        hash = "sha256-dZ/ttnmaf62rA5Cs8YSmZGHVQoy9PQh3Ok/AnIjCqZ4=";
+        hash = "sha256-tV65eOO1Zh3cpnGC+1wz086s/7wlnEw8YUGlRcmyvOw=";
       }
     else if stdenvNoCC.hostPlatform.system == "aarch64-darwin" then
       fetchurl {
         url = "https://github.com/docker/sbx-releases/releases/download/v${finalAttrs.version}/DockerSandboxes-darwin.tar.gz";
-        hash = "sha256-aBh6NbtQ5o2zxuR+d1U1gZpm2bch/J3Y8GZ73DeUBUk=";
+        hash = "sha256-uEb+wFj0z3pDQzQ5EyBsZbDDkWrd6iT82xmj2QyKuI8=";
       }
     else
       throw "Unsupported host platform ${stdenvNoCC.hostPlatform.system}";
