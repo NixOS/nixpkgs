@@ -30,13 +30,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "audit";
-  version = "4.1.4";
+  version = "4.2";
 
   src = fetchFromGitHub {
     owner = "linux-audit";
     repo = "audit-userspace";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GdJ9nzlDAdOazOHH/YWuEoELrJh+G5ZJUKwIqAKAzpo=";
+    hash = "sha256-poldhsF+ccutCxK7KE/gYpxa1x3wUQJWoCwU6pGFj6A=";
   };
 
   postPatch = ''
@@ -165,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://people.redhat.com/sgrubb/audit/";
     description = "Audit Library";
-    changelog = "https://github.com/linux-audit/audit-userspace/releases/tag/v4.1.2";
+    changelog = "https://github.com/linux-audit/audit-userspace/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ grimmauld ];
     teams = [ lib.teams.security-review ];
