@@ -40,10 +40,15 @@
 # writes no note at all when it has nothing to record). The loader must treat
 # it as an empty cache: no hits, graceful fallback to the normal RUNPATH walk,
 # and the program still runs. Because the linker (not patchelf) places this
-# note, it shares a PT_NOTE segment with the GNU build-id and ABI-tag notes,
-# so this also exercises the reader stepping over foreign notes. It lives in
-# the control package: generate-ld-cache rightly fails the build when a
-# binary already carries a note with a different descriptor.
+# note, it lands in the 4-aligned PT_NOTE segment next to .note.ABI-tag, so it
+# also exercises the reader stepping over a foreign note inside one segment.
+#
+# That fixture needs its own package, built with both dontGenerateLDCache (the
+# note hook rightly fails a build whose binary already carries a note with a
+# different descriptor) and dontPatchELF, because patchelf --shrink-rpath
+# deletes a .note.nixos.ldcache it did not itself write and runs before the
+# note hook. Keeping it out of the control package leaves that package running
+# exactly the fixups the cached one does.
 
 {
   lib,
@@ -58,11 +63,28 @@ let
   # (when enabled) is written by the normal fixup hooks, and the interpreter is
   # whatever the default stdenv uses.
   mkProg =
-    { generateCache }:
+    {
+      generateCache,
+      craftedNote ? false,
+    }:
     stdenv.mkDerivation {
-      name = "ld-cache-${if generateCache then "cached" else "control"}";
+      name = "ld-cache-${
+        if generateCache then
+          "cached"
+        else if craftedNote then
+          "crafted"
+        else
+          "control"
+      }";
       dontUnpack = true;
       dontGenerateLDCache = !generateCache;
+      # patchelf --shrink-rpath deletes any .note.nixos.ldcache it finds,
+      # treating a note it did not just write as stale, and it runs from
+      # fixupOutput, before the note hook. That is harmless for real packages
+      # (their note is written afterwards, in postFixup) but it would strip a
+      # note placed by the linker before this fixture ever runs, leaving a
+      # binary that silently tests nothing. Skip that pass here only.
+      dontPatchELF = craftedNote;
       nativeBuildInputs = [ patchelf ];
       buildPhase = ''
         runHook preBuild
@@ -103,7 +125,7 @@ let
           -L$out/lib/real -lfoo \
           -Wl,--enable-new-dtags -Wl,-rpath,"$out/lib/real"
 
-        ${lib.optionalString (!generateCache) ''
+        ${lib.optionalString craftedNote ''
           # A well-formed note (padded to the 4-byte boundary, so readelf and
           # the loader agree on where it ends) whose descriptor is just the
           # end-of-sequence NUL plus one more: an empty cache.
@@ -190,10 +212,17 @@ let
 
   cached = mkProg { generateCache = true; };
   control = mkProg { generateCache = false; };
+  # Separate from `control` so that `control` keeps running exactly the fixups
+  # `cached` does, which is what makes it a fair comparison; only this fixture
+  # needs the shrink-rpath pass skipped.
+  crafted = mkProg {
+    generateCache = false;
+    craftedNote = true;
+  };
 in
 runCommand "glibc-resolution-cache-test"
   {
-    inherit cached control;
+    inherit cached control crafted;
     nativeBuildInputs = [ binutils ]; # readelf
     meta = {
       description = "End-to-end test of the glibc DT_NEEDED resolution cache note";
@@ -301,7 +330,21 @@ runCommand "glibc-resolution-cache-test"
     "$control/bin/prog-mutable" || rc=$?
     [ "$rc" -eq 42 ]
 
-    prog_empty="$control/bin/prog-empty"
+    prog_empty="$crafted/bin/prog-empty"
+
+    # Without this the rest of the empty-note block is satisfied just as well by
+    # a binary that has no note at all, which is exactly what shrink-rpath used
+    # to leave behind. The reader only walks PT_NOTE segments, so being an
+    # SHT_NOTE section is not enough: require the section to be mapped by one.
+    echo "[test] the linker-placed note survived the build and sits in a PT_NOTE"
+    readelf -lW "$prog_empty" | awk '
+      /^ +Type +Offset/            { inph = 1; idx = 0; next }
+      inph && NF == 0              { inph = 0 }
+      inph && $1 ~ /^[A-Z_]+$/     { if ($1 == "NOTE") note[sprintf("%02d", idx)] = 1; idx++ }
+      /Section to Segment mapping/ { inmap = 1; next }
+      inmap && ($1 in note)        { if (index($0, ".note.nixos.ldcache")) found = 1 }
+      END                          { exit found ? 0 : 1 }
+    '
 
     echo "[test] the crafted note carries an empty two-NUL descriptor"
     readelf -n "$prog_empty" | grep NixOS | grep -q 0x00000002
@@ -326,7 +369,7 @@ runCommand "glibc-resolution-cache-test"
     echo "[test] a malformed non-power-of-two PT_NOTE alignment cannot hang the loader"
     cp "$prog" ./prog-bad-note-align
     chmod u+w ./prog-bad-note-align
-    "$control/bin/corrupt-note-align" ./prog-bad-note-align
+    "$crafted/bin/corrupt-note-align" ./prog-bad-note-align
     rc=0
     timeout 5 ./prog-bad-note-align || rc=$?
     [ "$rc" -eq 7 ]
