@@ -117,6 +117,7 @@ buildPythonPackage {
     homepage = "https://www.pulumi.com";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+      nicoo
       tie
       untio11
     ];

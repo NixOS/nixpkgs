@@ -55,6 +55,7 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.asl20;
     mainProgram = "pulumi-language-python";
     maintainers = with lib.maintainers; [
+      nicoo
       tie
       untio11
     ];

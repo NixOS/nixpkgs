@@ -235,9 +235,10 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.asl20;
     mainProgram = "pulumi";
     maintainers = with lib.maintainers; [
-      veehaitch
+      nicoo
       tie
       untio11
+      veehaitch
     ];
   };
 })
