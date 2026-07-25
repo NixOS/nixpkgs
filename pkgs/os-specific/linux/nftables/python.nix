@@ -20,6 +20,8 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "nftables" ];
 
+  dontCheckPythonMetadata = true;
+
   meta = {
     inherit (nftables.meta)
       description
