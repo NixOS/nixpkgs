@@ -17,12 +17,12 @@
 , atk
 , libappindicator-gtk3
 , libx11
-, libXcomposite
-, libXdamage
-, libXext
-, libXfixes
-, libXrender
-, libXrandr
+, libxcomposite
+, libxdamage
+, libxext
+, libxfixes
+, libxrender
+, libxrandr
 , libxcb
 , libxkbcommon
 , libdrm
@@ -62,12 +62,12 @@ stdenv.mkDerivation (finalAttrs: {
     at-spi2-atk
     libappindicator-gtk3
     libx11
-    libXcomposite
-    libXdamage
-    libXext
-    libXfixes
-    libXrender
-    libXrandr
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxrender
+    libxrandr
     libxcb
     libxkbcommon
     libdrm
