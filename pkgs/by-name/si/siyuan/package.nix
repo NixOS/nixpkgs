@@ -34,20 +34,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "siyuan";
-  version = "3.7.1";
+  version = "3.7.3";
 
   src = fetchFromGitHub {
     owner = "siyuan-note";
     repo = "siyuan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-K31h2noDpTn7vCXj16K2dxRPww5z+HC/nA4Gn5MAVms=";
+    hash = "sha256-7Uoo8vYaci8ROk5pqs14dNrU3q7UsadDXyw1mW8Mx5I=";
   };
 
   kernel = buildGoModule {
     name = "${finalAttrs.pname}-${finalAttrs.version}-kernel";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/kernel";
-    vendorHash = "sha256-fZLVqrWTWUHo6BhixB6+krXaM7WCiZpusHA8T2SicgQ=";
+    vendorHash = "sha256-weg5MRidW8JId13Ug1VaVgaIcJqydGBR/EquFOS3QO4=";
 
     patches = [
       (replaceVars ./set-pandoc-path.patch {
@@ -70,6 +70,14 @@ stdenv.mkDerivation (finalAttrs: {
       "-X 'github.com/siyuan-note/siyuan/kernel/util.Mode=prod'"
     ];
     tags = [ "fts5" ];
+
+    # TestSyObjectBase/windows_backslash relies on filepath.ToSlash converting
+    # backslashes on Linux, but ToSlash is OS-dependent and only does so on Windows.
+    # Upstream bug: https://github.com/siyuan-note/siyuan/issues/18378
+    checkFlags = [
+      "-skip"
+      "^TestSyObjectBase$"
+    ];
   };
 
   nativeBuildInputs = [
@@ -95,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-1QIGx0Zm6v4FIR1EYgXQzmBMZBa9Bi24vouT1K6v9EQ=";
+    hash = "sha256-i7llORlVU1CCmyVCvJr7xCQffTmbmIA9rT68Raqg5y8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/app";
