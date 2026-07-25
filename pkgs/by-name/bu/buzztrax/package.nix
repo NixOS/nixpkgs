@@ -13,7 +13,7 @@
   clutter-gtk,
   gst_all_1,
   glib,
-  gtk2,
+  gtk3,
   libgsf,
   libxml2,
   fluidsynth,
@@ -52,7 +52,7 @@ stdenv.mkDerivation {
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
     glib
-    gtk2
+    gtk3
     libgsf
     libxml2
     # optional packages

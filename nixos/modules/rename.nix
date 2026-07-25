@@ -539,6 +539,13 @@ in
     (mkRemovedOptionModule [ "services" "xserver" "cmt" ] ''
       services.xserver.cmt has been removed as it was broken and unmaintained upstream
     '')
+    (mkRemovedOptionModule
+      [
+        "services"
+        "overseerr"
+      ]
+      "`services.overseerr` has been replaced by `services.seerr` as the project has been merged with Jellyseerr under Seerr."
+    )
     # Do NOT add any option renames here, see top of the file
   ];
 }

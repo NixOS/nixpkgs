@@ -1259,6 +1259,11 @@ lib.mapAttrs mkLicense (
       fullName = "SIL Open Font License 1.1";
     };
 
+    ogluk30 = {
+      spdxId = "OGL-UK-3.0";
+      fullName = "Open Government Licence v3.0";
+    };
+
     oml = {
       spdxId = "OML";
       fullName = "Open Market License";
@@ -1421,9 +1426,8 @@ lib.mapAttrs mkLicense (
     };
 
     stk = {
-      shortName = "stk";
-      fullName = "Synthesis Tool Kit 4.3";
-      url = "https://github.com/thestk/stk/blob/master/LICENSE";
+      spdxId = "MIT-STK";
+      fullName = "MIT-STK License";
     };
 
     sudo = {
