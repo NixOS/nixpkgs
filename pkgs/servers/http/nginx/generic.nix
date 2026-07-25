@@ -51,11 +51,7 @@ outer@{
 
 let
 
-  moduleNames = map (
-    mod:
-    mod.name
-      or (throw "The nginx module with source ${toString mod.src} does not have a `name` attribute. This prevents duplicate module detection and is no longer supported.")
-  ) modules;
+  moduleNames = map (mod: mod.pname) modules;
 
   mapModules =
     attrPath:
@@ -67,7 +63,7 @@ let
       if supports nginxVersion then
         mod.${attrPath} or [ ]
       else
-        throw "Module at ${toString mod.src} does not support nginx version ${nginxVersion}!"
+        throw "Module ${mod.name} does not support nginx version ${nginxVersion}!"
     );
 
 in
@@ -107,7 +103,7 @@ stdenv.mkDerivation {
     perl
   ]
   ++ buildInputs
-  ++ mapModules "inputs"
+  ++ mapModules "buildInputs"
   ++ lib.optional withGeoIP geoip
   ++ lib.optional withImageFilter gd;
 
@@ -172,7 +168,7 @@ stdenv.mkDerivation {
     stdenv.buildPlatform != stdenv.hostPlatform
   ) "--crossbuild=${stdenv.hostPlatform.uname.system}::${stdenv.hostPlatform.uname.processor}"
   ++ configureFlags
-  ++ map (mod: "--add-module=${mod.src}") modules;
+  ++ map (mod: "--add-module=${mod}") modules;
 
   env = {
     NIX_CFLAGS_COMPILE = toString (
@@ -243,7 +239,7 @@ stdenv.mkDerivation {
           sha256 = "sha256-M7V3ZJfKImur2OoqXcoL+CbgFj/huWnfZ4xMCmvkqfc=";
         })
       ]
-      ++ mapModules "patches"
+      ++ mapModules "nginxPatches"
     )
     ++ extraPatches;
 
