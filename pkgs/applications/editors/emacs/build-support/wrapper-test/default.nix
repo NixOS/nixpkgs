@@ -33,6 +33,9 @@ runCommand "test-emacs-withPackages-wrapper"
     };
   }
   ''
+    # Give Emacs a HOME to emulate a real user environment.
+    HOME="$PWD"
+
     nonBatchEmacsSocket="$PWD/non-batch-emacs-socket"
     emacs --daemon="$nonBatchEmacsSocket"
 
