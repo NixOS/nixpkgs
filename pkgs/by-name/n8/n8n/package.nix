@@ -26,7 +26,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "2.28.6";
+  version = "2.31.4";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
@@ -38,8 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
-    fetcherVersion = 3;
-    hash = "sha256-SjmKXjxIuRY1uFbFLTMlXd0WW+3cVfu4TU+NoZtEYSo=";
+    fetcherVersion = 4;
+    hash = "sha256-uitkmRccuj+exZF0hM8tsVozGtxiTVN+V5hIzHs8Es8=";
   };
 
   nativeBuildInputs = [
@@ -66,10 +66,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preBuild
 
     # Force sass-embedded npm package to use our dart-sass instead of bundled binaries
-    substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+    substituteInPlace packages/frontend/editor-ui/node_modules/sass-embedded/dist/lib/src/compiler-path.js \
       --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
 
-    pushd node_modules/sqlite3
+    pushd packages/cli/node_modules/sqlite3
     node-gyp rebuild
     popd
 
