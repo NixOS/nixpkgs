@@ -462,8 +462,6 @@ with pkgs;
 
   fetchgitLocal = callPackage ../build-support/fetchgitlocal { };
 
-  fetchmtn = callPackage ../build-support/fetchmtn (config.fetchmtn or { });
-
   fetchMavenArtifact = callPackage ../build-support/fetchmavenartifact { };
 
   fetchpijul = callPackage ../build-support/fetchpijul { };
