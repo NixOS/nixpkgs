@@ -19,6 +19,8 @@ skawarePackages.buildPackage {
     "doc"
   ];
 
+  buildInputs = [ skalibs ];
+
   configureFlags = [
     "--libdir=${placeholder "out"}/lib"
     "--dynlibdir=${placeholder "out"}/lib"
@@ -27,8 +29,6 @@ skawarePackages.buildPackage {
     "--includedir=${placeholder "dev"}/include"
     "--pkgconfdir=${placeholder "dev"}/lib/pkgconfig"
     "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
-    "--with-include=${skalibs.dev}/include"
-    "--with-lib=${skalibs.lib}/lib"
   ];
 
   postInstall = ''

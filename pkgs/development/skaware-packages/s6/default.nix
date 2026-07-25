@@ -30,6 +30,11 @@ skawarePackages.buildPackage {
     "doc"
   ];
 
+  buildInputs = [
+    skalibs
+    execline
+  ];
+
   # TODO: nsss support
   configureFlags = [
     "--libdir=${placeholder "out"}/lib"
@@ -39,12 +44,6 @@ skawarePackages.buildPackage {
     "--includedir=${placeholder "dev"}/include"
     "--pkgconfdir=${placeholder "dev"}/lib/pkgconfig"
     "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
-    "--with-include=${skalibs.dev}/include"
-    "--with-include=${execline.dev}/include"
-    "--with-lib=${skalibs.lib}/lib"
-    "--with-lib=${execline.lib}/lib"
-    "--with-dynlib=${skalibs.lib}/lib"
-    "--with-dynlib=${execline.lib}/lib"
   ];
 
   postInstall = ''

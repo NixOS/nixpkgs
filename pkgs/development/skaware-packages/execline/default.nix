@@ -37,6 +37,7 @@ skawarePackages.buildPackage {
     "doc"
     "out"
   ];
+  buildInputs = [ skalibs ];
 
   # TODO: nsss support
   configureFlags = [
@@ -47,9 +48,6 @@ skawarePackages.buildPackage {
     "--includedir=${placeholder "dev"}/include"
     "--pkgconfdir=${placeholder "dev"}/lib/pkgconfig"
     "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
-    "--with-include=${skalibs.dev}/include"
-    "--with-lib=${skalibs.lib}/lib"
-    "--with-dynlib=${skalibs.lib}/lib"
   ];
 
   postInstall = ''
@@ -72,11 +70,10 @@ skawarePackages.buildPackage {
       -Wall -Wpedantic \
       -D "EXECLINEB_PATH()=\"$bin/bin/.execlineb-wrapped\"" \
       -D "EXECLINE_BIN_PATH()=\"$bin/bin\"" \
-      -I "${skalibs.dev}/include" \
-      -L "${skalibs.lib}/lib" \
+      $(pkg-config --cflags libskarnet) \
       -o "$bin/bin/execlineb" \
       ${./execlineb-wrapper.c} \
-      -lskarnet
+      $(pkg-config --libs libskarnet)
   '';
 
   # Write an execline script.

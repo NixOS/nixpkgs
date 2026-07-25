@@ -30,6 +30,11 @@ skawarePackages.buildPackage {
     "dev"
     "doc"
   ];
+  buildInputs = [
+    skalibs
+    execline
+    s6
+  ];
 
   configureFlags = [
     "--libdir=${placeholder "out"}/lib"
@@ -39,15 +44,6 @@ skawarePackages.buildPackage {
     "--includedir=${placeholder "dev"}/include"
     "--pkgconfdir=${placeholder "dev"}/lib/pkgconfig"
     "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
-    "--with-include=${skalibs.dev}/include"
-    "--with-include=${execline.dev}/include"
-    "--with-include=${s6.dev}/include"
-    "--with-lib=${skalibs.lib}/lib"
-    "--with-lib=${execline.lib}/lib"
-    "--with-lib=${s6.out}/lib"
-    "--with-dynlib=${skalibs.lib}/lib"
-    "--with-dynlib=${execline.lib}/lib"
-    "--with-dynlib=${s6.out}/lib"
   ];
 
   # s6-rc-compile generates built-in service definitions containing

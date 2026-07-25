@@ -22,6 +22,11 @@ skawarePackages.buildPackage {
     "doc"
     "out"
   ];
+  buildInputs = [
+    skalibs
+    execline
+    s6
+  ];
 
   configureFlags = [
     "--libdir=${placeholder "out"}/lib"
@@ -31,15 +36,6 @@ skawarePackages.buildPackage {
     "--includedir=${placeholder "dev"}/include"
     "--pkgconfdir=${placeholder "dev"}/lib/pkgconfig"
     "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
-    "--with-include=${skalibs.dev}/include"
-    "--with-include=${execline.dev}/include"
-    "--with-include=${s6.dev}/include"
-    "--with-lib=${skalibs.lib}/lib"
-    "--with-lib=${s6.out}/lib"
-    "--with-lib=${execline.lib}/lib"
-    "--with-dynlib=${skalibs.lib}/lib"
-    "--with-dynlib=${execline.lib}/lib"
-    "--with-dynlib=${s6.out}/lib"
   ];
 
   # See ../s6-rc/default.nix for an explanation
