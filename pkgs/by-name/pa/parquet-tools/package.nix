@@ -24,13 +24,6 @@ python3Packages.buildPythonApplication rec {
     ./moto5.patch
   ];
 
-  postPatch = ''
-    substituteInPlace tests/test_inspect.py \
-      --replace "parquet-cpp-arrow version 5.0.0" "parquet-cpp-arrow version ${python3Packages.pyarrow.version}" \
-      --replace "serialized_size: 2222" "serialized_size: 2221" \
-      --replace "format_version: 1.0" "format_version: 2.6"
-  '';
-
   pythonRelaxDeps = [
     "pandas"
     "tabulate"
