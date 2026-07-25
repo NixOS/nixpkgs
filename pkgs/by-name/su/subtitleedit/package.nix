@@ -1,7 +1,8 @@
 {
   lib,
-  stdenv,
-  fetchzip,
+  buildDotnetModule,
+  dotnetCorePackages,
+  fetchFromGitHub,
   makeDesktopItem,
   nix-update-script,
 
@@ -10,24 +11,30 @@
   makeWrapper,
 
   ffmpeg,
-  gtk2,
   hunspell,
-  mono,
+  libGL,
+  libx11,
   mpv,
   tesseract4,
 }:
 
-stdenv.mkDerivation rec {
+buildDotnetModule (finalAttrs: {
   pname = "subtitleedit";
-  version = "4.0.16";
+  version = "5.1.0";
 
-  src = fetchzip {
-    url = "https://github.com/SubtitleEdit/subtitleedit/releases/download/${version}/SE${
-      lib.replaceStrings [ "." ] [ "" ] version
-    }.zip";
-    hash = "sha256-SXM5aMBNXI/ClrhvoXDeo86KUntU2Ad3fxx8O3dr+j0=";
-    stripRoot = false;
+  src = fetchFromGitHub {
+    owner = "SubtitleEdit";
+    repo = "subtitleedit";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3WwRXD1JhZisJ/1sOF91PvrklfjCiI2Ena4i8AdLcm0=";
   };
+
+  projectFile = "src/ui/UI.csproj";
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
+  nugetDeps = ./deps.json;
+
+  executables = [ "SubtitleEdit" ];
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -35,48 +42,27 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  runtimeLibs = lib.makeLibraryPath [
-    gtk2
+  runtimeDeps = [
+    libGL
+    libx11
     hunspell
     mpv
     tesseract4
   ];
 
-  runtimeBins = lib.makeBinPath [
+  runtimePathDeps = [
     ffmpeg
     hunspell
     tesseract4
   ];
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/bin
-    mkdir -p $out/share/icons/hicolor/{16x16,32x32,48x48,256x256}/apps
-
-    cp -r * $out/bin/
-    ln -s ${hunspell.out}/lib/libhunspell*.so $out/bin/libhunspell.so
-    makeWrapper "${mono}/bin/mono" $out/bin/subtitleedit \
-      --add-flags "$out/bin/SubtitleEdit.exe" \
-      --prefix LD_LIBRARY_PATH : ${runtimeLibs} \
-      --prefix PATH : ${runtimeBins}
-
-    wrestool -x -t 14 SubtitleEdit.exe > subtitleedit.ico
-    icotool -x -i 3 -o $out/share/icons/hicolor/16x16/apps/subtitleedit.png subtitleedit.ico
-    icotool -x -i 6 -o $out/share/icons/hicolor/32x32/apps/subtitleedit.png subtitleedit.ico
-    icotool -x -i 9 -o $out/share/icons/hicolor/48x48/apps/subtitleedit.png subtitleedit.ico
-    icotool -x -i 10 -o $out/share/icons/hicolor/256x256/apps/subtitleedit.png subtitleedit.ico
-
-    runHook postInstall
-  '';
-
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
+      name = finalAttrs.pname;
       desktopName = "Subtitle Edit";
       exec = "subtitleedit";
       icon = "subtitleedit";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       categories = [ "AudioVideo" ];
     })
   ];
@@ -94,7 +80,7 @@ stdenv.mkDerivation rec {
     homepage = "https://nikse.dk/subtitleedit";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
     maintainers = [ ];
   };
-}
+})
