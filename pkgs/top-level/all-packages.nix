@@ -8875,7 +8875,6 @@ with pkgs;
     docutilsSupport = true;
     gitSupport = true;
     mercurialSupport = true;
-    monotoneSupport = true;
     subversionSupport = true;
   };
 

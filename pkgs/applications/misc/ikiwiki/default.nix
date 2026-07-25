@@ -14,8 +14,6 @@
   docutilsSupport ? false,
   python3,
   docutils,
-  monotoneSupport ? false,
-  monotone,
   bazaarSupport ? false,
   breezy,
   cvsSupport ? false,
@@ -71,7 +69,6 @@ stdenv.mkDerivation rec {
     docutils
   ]
   ++ lib.optionals gitSupport [ git ]
-  ++ lib.optionals monotoneSupport [ monotone ]
   ++ lib.optionals bazaarSupport [ breezy ]
   ++ lib.optionals cvsSupport [
     cvs
@@ -116,7 +113,6 @@ stdenv.mkDerivation rec {
     for a in "$out/bin/"*; do
       wrapProgram $a --suffix PERL5LIB : $PERL5LIB --prefix PATH : ${perlPackages.perl}/bin:$out/bin \
       ${lib.optionalString gitSupport "--prefix PATH : ${git}/bin "} \
-      ${lib.optionalString monotoneSupport "--prefix PATH : ${monotone}/bin "} \
       ${lib.optionalString bazaarSupport "--prefix PATH : ${breezy}/bin "} \
       ${lib.optionalString cvsSupport "--prefix PATH : ${cvs}/bin "} \
       ${lib.optionalString cvsSupport "--prefix PATH : ${cvsps}/bin "} \
