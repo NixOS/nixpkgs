@@ -8,15 +8,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "diffyml";
-  version = "1.7.0";
+  version = "1.7.1";
 
   __structuredAttrs = true;
+
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "szhekpisov";
     repo = "diffyml";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DIKHvFY/eW3CAF/ojW+D737vFCcZk0peRrSb8I/an9Q=";
+    hash = "sha256-bfFerbjpwQuTCnGKfqUj3ydf1xBdNoP+qH7UTmtZvTk=";
   };
 
   vendorHash = "sha256-QE/EwVzMqUO24ZAl0WBibGx6x0kNo1AUTZtfnQvX50k=";

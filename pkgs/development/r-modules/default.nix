@@ -3140,7 +3140,7 @@ let
     opencv =
       let
         opencvGtk = pkgs.opencv.override (old: {
-          enableGtk2 = true;
+          enableGtk3 = true;
         });
       in
       old.opencv.overrideAttrs (attrs: {
