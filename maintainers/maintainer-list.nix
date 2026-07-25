@@ -23314,6 +23314,13 @@
     github = "DaRacci";
     githubId = 90304606;
   };
+  rachalaraj = {
+    name = "Rachala Raj Kumar";
+    email = "rachaalaraj@gmail.com";
+    matrix = "@rachalaraj:matrix.org";
+    github = "rachalaraj";
+    githubId = 124191100;
+  };
   RadxaYuntian = {
     # This is the work account for @MakiseKurisu
     name = "ZHANG Yuntian";
