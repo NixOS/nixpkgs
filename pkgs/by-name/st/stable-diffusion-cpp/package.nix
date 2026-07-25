@@ -98,7 +98,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (cmakeBool "SD_BUILD_EXAMPLES" true)
-    (cmakeBool "SD_BUILD_SHARED_LIBS" true)
+    (cmakeBool "SD_BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     (cmakeBool "SD_USE_SYSTEM_GGML" false)
     (cmakeBool "SD_CUDA" cudaSupport)
     (cmakeBool "SD_HIPBLAS" rocmSupport)
