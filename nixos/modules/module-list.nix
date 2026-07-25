@@ -938,7 +938,6 @@
   ./services/misc/open-webui.nix
   ./services/misc/orthanc.nix
   ./services/misc/osrm.nix
-  ./services/misc/overseerr.nix
   ./services/misc/owncast.nix
   ./services/misc/packagekit.nix
   ./services/misc/paisa.nix
@@ -2052,6 +2051,7 @@
   ./virtualisation/openvswitch.nix
   ./virtualisation/parallels-guest.nix
   ./virtualisation/podman/default.nix
+  ./virtualisation/qemu-firmware.nix
   ./virtualisation/qemu-guest-agent.nix
   ./virtualisation/rosetta.nix
   ./virtualisation/spice-usb-redirection.nix
