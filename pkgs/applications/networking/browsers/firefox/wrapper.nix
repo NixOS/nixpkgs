@@ -215,6 +215,7 @@ let
     in
     stdenv.mkDerivation (finalAttrs: {
       __structuredAttrs = true;
+      strictDeps = true;
       inherit pname version;
 
       desktopItem = makeDesktopItem (
