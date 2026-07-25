@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  packaging,
   setuptools,
   pandas,
   requests,
@@ -21,7 +22,13 @@ buildPythonPackage rec {
     hash = "sha256-AXt8BKWyM3glm5hrRryb+vBzs3z2x61HhbR6DDZkh9o=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "from pkg_resources import parse_version" "from packaging.version import parse as parse_version"
+  '';
+
   nativeBuildInputs = [
+    packaging
     setuptools
   ];
 
