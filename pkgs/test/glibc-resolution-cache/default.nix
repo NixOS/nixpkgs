@@ -31,9 +31,9 @@
 # mutable absolute directory, for which patchelf 0.19.1 emits no hint at all
 # when the soname is absent. Neither directory is in the store, so glibc must
 # decline the cache for both objects and preserve first-match semantics when
-# the directory is populated later. Both rely on the sandbox build root being
-# /build for the fixture build and this test, like the LD_DEBUG assumption
-# above.
+# the directory is populated later. Both bake an absolute path that the
+# fixture build and this test have to agree on, so they use /tmp, which is
+# writable whether or not the build is sandboxed.
 #
 # Declining the cache on any non-store component means those two fixtures
 # never reach the loader's "?" branch. A fifth fixture does: its RUNPATH pairs
@@ -66,6 +66,15 @@
 }:
 
 let
+  # Absolute, mutable, non-store directories that the fixture bakes into a
+  # RUNPATH at build time and the test manipulates at run time, so both builds
+  # must agree on the literal path. /tmp is writable inside the sandbox and out
+  # of it, unlike the sandbox build root, which only exists when sandboxing is
+  # on. Each user is cleared before use so a shared /tmp cannot leak state
+  # between runs.
+  runtimeDir = "/tmp/nixpkgs-ld-cache-test-runtime";
+  existingDir = "/tmp/nixpkgs-ld-cache-test-existing";
+
   # An ordinary stdenv build. Nothing here is specific to the cache: the note
   # (when enabled) is written by the normal fixup hooks, and the interpreter is
   # whatever the default stdenv uses.
@@ -216,17 +225,19 @@ let
         # Prepend a directory that does not exist while the note is generated
         # (RPATH shrinking would drop it from the link-time RUNPATH, hence the
         # rewrite here). patchelf must record it as a "?" search hint; the
-        # outer test creates it under the shared sandbox build root /build and
-        # proves a library placed there at run time wins over the note's exact
-        # real/ entry.
-        patchelf --set-rpath "/build/ld-cache-runtime-libs:$out/lib/real" "$out/bin/prog-runtime"
+        # outer test creates it and proves a library placed there at run time
+        # wins over the note's exact real/ entry. Clear it first: with the
+        # sandbox disabled /tmp is shared, and a leftover directory from an
+        # earlier run would stop patchelf emitting the hint at all.
+        rm -rf ${runtimeDir}
+        patchelf --set-rpath "${runtimeDir}:$out/lib/real" "$out/bin/prog-runtime"
 
         # Unlike prog-runtime's missing directory, this directory exists when
         # patchelf builds the note. patchelf therefore records neither a "?"
         # hint nor a miss for it. The loader must still search it at run time
         # because an absolute non-store directory is mutable.
-        mkdir -p /build/ld-cache-existing-libs
-        patchelf --set-rpath "/build/ld-cache-existing-libs:$out/lib/real" "$out/bin/prog-mutable"
+        mkdir -p ${existingDir}
+        patchelf --set-rpath "${existingDir}:$out/lib/real" "$out/bin/prog-mutable"
       '';
     };
 
@@ -308,12 +319,12 @@ runCommand "glibc-resolution-cache-test"
     prog_runtime="$cached/bin/prog-runtime"
 
     echo "[test] patchelf records a build-time-missing dir as a '?' search hint"
-    readelf -p .note.nixos.ldcache "$prog_runtime" | grep -qF "?/build/ld-cache-runtime-libs"
+    readelf -p .note.nixos.ldcache "$prog_runtime" | grep -qF "?${runtimeDir}"
 
-    # The note exists and names real/, but /build/... is outside the store, so
-    # the loader declines the whole cache for this object. The two cases below
-    # therefore assert stock RUNPATH first-match order rather than anything
-    # about the cache; prog-origin covers the "?" branch of the cache walk.
+    # The note exists and names real/, but the hinted directory is outside the
+    # store, so the loader declines the whole cache for this object. The two
+    # cases below therefore assert stock RUNPATH first-match order rather than
+    # anything about the cache; prog-origin covers the "?" branch of the walk.
     echo "[test] a non-store RUNPATH component makes the loader decline the note"
     if { LD_DEBUG=libs "$prog_runtime" 2>&1 >/dev/null || true; } \
         | grep -q "trying cached file="; then
@@ -322,13 +333,14 @@ runCommand "glibc-resolution-cache-test"
     fi
 
     echo "[test] with the runtime dir still absent, real/ resolves (returns 7)"
+    rm -rf ${runtimeDir}
     rc=0
     "$prog_runtime" || rc=$?
     [ "$rc" -eq 7 ]
 
     echo "[test] a dir populated after note generation still wins (returns 42)"
-    mkdir -p /build/ld-cache-runtime-libs
-    cp "$cached/lib/over/libfoo.so.1" /build/ld-cache-runtime-libs/
+    mkdir -p ${runtimeDir}
+    cp "$cached/lib/over/libfoo.so.1" ${runtimeDir}/
     rc=0
     "$prog_runtime" || rc=$?
     [ "$rc" -eq 42 ]
@@ -344,14 +356,15 @@ runCommand "glibc-resolution-cache-test"
     readelf -p .note.nixos.ldcache "$prog_mutable" \
       | grep -qF "=$cached/lib/real/libfoo.so.1"
     if readelf -p .note.nixos.ldcache "$prog_mutable" \
-        | grep -qF "?/build/ld-cache-existing-libs"; then
+        | grep -qF "?${existingDir}"; then
       echo "  unexpected search hint for existing mutable directory" >&2
       exit 1
     fi
 
     echo "[test] a mutable directory populated later still wins (returns 42)"
-    mkdir -p /build/ld-cache-existing-libs
-    cp "$cached/lib/over/libfoo.so.1" /build/ld-cache-existing-libs/
+    rm -rf ${existingDir}
+    mkdir -p ${existingDir}
+    cp "$cached/lib/over/libfoo.so.1" ${existingDir}/
     rc=0
     "$prog_mutable" || rc=$?
     [ "$rc" -eq 42 ]
