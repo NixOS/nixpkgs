@@ -8250,7 +8250,7 @@
     name = "Emily Trau";
     email = "emily+nix@downunderctf.com";
     github = "emilytrau";
-    githubId = 13267947;flaming
+    githubId = 13267947;
   };
   Emin017 = {
     email = "cchuqiming@gmail.com";
