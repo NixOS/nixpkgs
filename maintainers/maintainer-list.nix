@@ -28147,6 +28147,12 @@
     github = "thegu5";
     githubId = 58223632;
   };
+  thejonaz = {
+    name = "Jonaz Thern";
+    email = "info@thern.io";
+    github = "TheJonaz";
+    githubId = 44526342;
+  };
   thekostins = {
     name = "Konstantin";
     email = "anisimovkosta19@gmail.com";
