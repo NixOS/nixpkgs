@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   pythonRelaxDeps = [
-    "halo"
+    "pandas"
     "tabulate"
     "thrift"
   ];
