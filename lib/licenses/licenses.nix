@@ -1259,6 +1259,11 @@ lib.mapAttrs mkLicense (
       fullName = "SIL Open Font License 1.1";
     };
 
+    ogluk30 = {
+      spdxId = "OGL-UK-3.0";
+      fullName = "Open Government Licence v3.0";
+    };
+
     oml = {
       spdxId = "OML";
       fullName = "Open Market License";
