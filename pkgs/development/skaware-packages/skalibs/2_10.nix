@@ -15,6 +15,11 @@ skawarePackages.buildPackage {
   ];
 
   configureFlags = [
+    "--libdir=${placeholder "lib"}/lib"
+    "--dynlibdir=${placeholder "out"}/lib"
+    "--libexecdir=${placeholder "lib"}/libexec"
+    "--includedir=${placeholder "dev"}/include"
+    "--pkgconfdir=${placeholder "dev"}/lib/pkgconfig"
     # assume /dev/random works
     "--enable-force-devr"
     "--libdir=\${lib}/lib"

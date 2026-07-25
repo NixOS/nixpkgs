@@ -69,6 +69,8 @@ let
     "CONTRIBUTING"
   ];
 
+  libraryOutput = if lib.elem "lib" outputs then "lib" else "out";
+
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -146,6 +148,14 @@ stdenv.mkDerivation {
   '';
 
   postFixup = ''
+    if [ -d "$dev/lib/pkgconfig" ]; then
+      for pc in "$dev"/lib/pkgconfig/*.pc; do
+        sed -i "s|^libdir=.*|libdir=${placeholder libraryOutput}/lib|" "$pc"
+        if ! grep -q '^Libs.private:' "$pc"; then
+          sed -i "/^Libs:/a Libs.private: -L${placeholder libraryOutput}/lib" "$pc"
+        fi
+      done
+    fi
     ${cleanPackaging.checkForRemainingFiles}
   '';
 

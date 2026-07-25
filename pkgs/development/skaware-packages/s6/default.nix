@@ -32,11 +32,12 @@ skawarePackages.buildPackage {
 
   # TODO: nsss support
   configureFlags = [
-    "--libdir=\${out}/lib"
-    "--libexecdir=\${out}/libexec"
-    "--dynlibdir=\${out}/lib"
-    "--bindir=\${out}/bin"
-    "--includedir=\${dev}/include"
+    "--libdir=${placeholder "out"}/lib"
+    "--dynlibdir=${placeholder "out"}/lib"
+    "--libexecdir=${placeholder "out"}/libexec"
+    "--bindir=${placeholder "out"}/bin"
+    "--includedir=${placeholder "dev"}/include"
+    "--pkgconfdir=${placeholder "dev"}/lib/pkgconfig"
     "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
     "--with-include=${skalibs.dev}/include"
     "--with-include=${execline.dev}/include"

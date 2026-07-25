@@ -20,6 +20,12 @@ skawarePackages.buildPackage {
   ];
 
   configureFlags = [
+    "--libdir=${placeholder "out"}/lib"
+    "--dynlibdir=${placeholder "out"}/lib"
+    "--libexecdir=${placeholder "out"}/libexec"
+    "--bindir=${placeholder "bin"}/bin"
+    "--includedir=${placeholder "dev"}/include"
+    "--pkgconfdir=${placeholder "dev"}/lib/pkgconfig"
     "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
     "--with-include=${skalibs.dev}/include"
     "--with-lib=${skalibs.lib}/lib"

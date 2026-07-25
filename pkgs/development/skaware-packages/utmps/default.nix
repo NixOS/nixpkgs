@@ -8,10 +8,12 @@ skawarePackages.buildPackage {
   description = "Secure utmpx and wtmp implementation";
 
   configureFlags = [
-    "--libdir=\${lib}/lib"
-    "--dynlibdir=\${lib}/lib"
-    "--bindir=\${bin}/bin"
-    "--includedir=\${dev}/include"
+    "--libdir=${placeholder "lib"}/lib"
+    "--dynlibdir=${placeholder "out"}/lib"
+    "--libexecdir=${placeholder "lib"}/libexec"
+    "--bindir=${placeholder "bin"}/bin"
+    "--includedir=${placeholder "dev"}/include"
+    "--pkgconfdir=${placeholder "dev"}/lib/pkgconfig"
     "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
     "--with-include=${skalibs.dev}/include"
     "--with-lib=${skalibs.lib}/lib"
