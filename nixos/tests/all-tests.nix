@@ -1757,6 +1757,7 @@ in
   temporal = runTest ./temporal.nix;
   terminal-emulators = handleTest ./terminal-emulators.nix { };
   test-containers-bittorrent = runTest ./test-containers-bittorrent.nix;
+  tetrd = runTest ./tetrd.nix;
   thanos = runTest ./thanos.nix;
   thelounge = handleTest ./thelounge.nix { };
   tiddlywiki = runTest ./tiddlywiki.nix;
