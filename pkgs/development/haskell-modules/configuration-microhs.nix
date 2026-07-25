@@ -66,7 +66,7 @@ self: super: {
   system-cxx-std-lib = null;
   template-haskell = null;
   terminfo = doDistribute self.terminfo_0_4_1_7;
-  time = doDistribute self.time_1_16;
+  time = doDistribute self.time_1_16_0_1;
   transformers = doDistribute self.transformers_0_6_3_0;
   unix = markBroken self.unix_2_8_8_0;
   xhtml = markBroken self.xhtml_3000_4_1_0;
