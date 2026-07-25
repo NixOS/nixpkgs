@@ -2,6 +2,7 @@
   runCommand,
   emacs,
   writeText,
+  cowsay,
 }:
 
 let
@@ -16,15 +17,14 @@ in
 runCommand "test-emacs-withPackages-wrapper"
   {
     nativeBuildInputs = [
-      (emacs.pkgs.withPackages (
-        epkgs: with epkgs; [
-          dash
-          flx-ido
-          (mkEpkg "with-packages" ./with-packages.el epkgs.melpaBuild)
-          (mkEpkg "early-default" ./early-default.el epkgs.melpaBuild)
-          (mkEpkg "default" ./default.el epkgs.melpaBuild)
-        ]
-      ))
+      (emacs.pkgs.withPackages (epkgs: [
+        epkgs.dash
+        epkgs.flx-ido
+        (mkEpkg "with-packages" ./with-packages.el epkgs.melpaBuild)
+        (mkEpkg "early-default" ./early-default.el epkgs.melpaBuild)
+        (mkEpkg "default" ./default.el epkgs.melpaBuild)
+        cowsay
+      ]))
     ];
     env = {
       # emulate a default NixOS env where INFOPATH is set like this (not ending with a ":")
