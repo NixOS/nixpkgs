@@ -16081,6 +16081,8 @@ self: super: with self; {
 
   pyrmvtransport = callPackage ../development/python-modules/pyrmvtransport { };
 
+  pyrnnoise = callPackage ../development/python-modules/pyrnnoise { };
+
   pyro-api = callPackage ../development/python-modules/pyro-api { };
 
   pyro-ppl = callPackage ../development/python-modules/pyro-ppl { };
