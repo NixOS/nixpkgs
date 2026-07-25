@@ -5,7 +5,9 @@ skawarePackages.buildPackage {
   version = "0.1.3.4";
   sha256 = "sha256-EtzBAq1qyB+BrsxJUHM9uU81CBlHBUubFHPKxckIELw=";
 
-  description = "Secure utmpx and wtmp implementation";
+  meta.description = "Secure utmpx and wtmp implementation";
+
+  buildInputs = [ skalibs ];
 
   configureFlags = [
     "--libdir=${placeholder "lib"}/lib"

@@ -5,7 +5,9 @@ skawarePackages.buildPackage {
   version = "0.2.1.3";
   sha256 = "sha256-FNpESoNtJLaihvrIilAr2qKWpNMo8J1Sl1aK07PgJoU=";
 
-  description = "Implementation of a subset of the pwd.h, group.h and shadow.h family of functions";
+  meta.description = "Implementation of a subset of the pwd.h, group.h and shadow.h family of functions";
+
+  buildInputs = [ skalibs ];
 
   # TODO: nsss support
   configureFlags = [

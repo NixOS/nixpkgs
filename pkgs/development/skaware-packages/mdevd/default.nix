@@ -9,8 +9,8 @@ skawarePackages.buildPackage {
   version = "0.1.8.2";
   sha256 = "sha256-zhrgFJtqV6NPYIIY/WGBqmqmgTXKwvTZMbW0F7By4kQ=";
 
-  description = "mdev-compatible Linux hotplug manager daemon";
-  platforms = lib.platforms.linux;
+  meta.description = "mdev-compatible Linux hotplug manager daemon";
+  meta.platforms = lib.platforms.linux;
 
   outputs = [
     "bin"

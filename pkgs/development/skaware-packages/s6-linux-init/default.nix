@@ -13,8 +13,8 @@ skawarePackages.buildPackage {
   version = "1.2.0.2";
   sha256 = "sha256-b60BTaFiwMgZJBl8V9FuGnXBM7NKIOQjQxobdB6Qex0=";
 
-  description = "Set of minimalistic tools used to create a s6-based init system, including a /sbin/init binary, on a Linux kernel";
-  platforms = lib.platforms.linux;
+  meta.description = "Set of minimalistic tools used to create a s6-based init system, including a /sbin/init binary, on a Linux kernel";
+  meta.platforms = lib.platforms.linux;
 
   outputs = [
     "bin"

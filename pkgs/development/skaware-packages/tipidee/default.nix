@@ -9,7 +9,7 @@ skawarePackages.buildPackage {
   version = "0.0.8.0";
   sha256 = "sha256-GjllM2YqxwvCsKC4xlYW/6f6IBUIhZMA67mtM82mEC0=";
 
-  description = "HTTP 1.1 webserver, serving static files and CGI/NPH";
+  meta.description = "HTTP 1.1 webserver, serving static files and CGI/NPH";
 
   outputs = [
     "bin"
@@ -46,5 +46,5 @@ skawarePackages.buildPackage {
     mv examples $doc/share/doc/tipidee/examples
   '';
 
-  broken = stdenv.hostPlatform.isDarwin;
+  meta.broken = stdenv.hostPlatform.isDarwin;
 }

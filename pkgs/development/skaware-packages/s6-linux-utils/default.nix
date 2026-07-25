@@ -10,8 +10,8 @@ skawarePackages.buildPackage {
   version = "2.6.4.1";
   sha256 = "sha256-FuGltaK0qYZ0tKlxlhKtt5WI48IMQIM2AnjqOPLTISk=";
 
-  description = "Set of minimalistic Linux-specific system utilities";
-  platforms = lib.platforms.linux;
+  meta.description = "Set of minimalistic Linux-specific system utilities";
+  meta.platforms = lib.platforms.linux;
 
   outputs = [
     "bin"

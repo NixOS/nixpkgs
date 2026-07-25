@@ -21,8 +21,8 @@ skawarePackages.buildPackage {
     maintainers = [ lib.maintainers.qyliss ];
   };
 
-  description = "Service manager for s6-based systems";
-  platforms = lib.platforms.unix;
+  meta.description = "Service manager for s6-based systems";
+  meta.platforms = lib.platforms.unix;
 
   outputs = [
     # "bin" "lib"

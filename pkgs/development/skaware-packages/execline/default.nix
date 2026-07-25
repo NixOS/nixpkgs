@@ -28,7 +28,7 @@ skawarePackages.buildPackage {
     maintainers = [ lib.maintainers.sternenseemann ];
   };
 
-  description = "Small scripting language, to be used in place of a shell in non-interactive scripts";
+  meta.description = "Small scripting language, to be used in place of a shell in non-interactive scripts";
 
   outputs = [
     "bin"
