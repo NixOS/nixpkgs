@@ -16,7 +16,7 @@
 , gdk-pixbuf
 , atk
 , libappindicator-gtk3
-, libX11
+, libx11
 , libXcomposite
 , libXdamage
 , libXext
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     atk
     at-spi2-atk
     libappindicator-gtk3
-    libX11
+    libx11
     libXcomposite
     libXdamage
     libXext
