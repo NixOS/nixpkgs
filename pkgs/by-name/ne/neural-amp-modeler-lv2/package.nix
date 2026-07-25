@@ -28,6 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     description = "Neural Amp Modeler LV2 plugin implementation";
     homepage = finalAttrs.src.meta.homepage;
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Only;
   };
 })
