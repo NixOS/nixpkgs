@@ -1,84 +1,33 @@
 {
   lib,
   buildGoModule,
+  callPackage,
   fetchFromGitHub,
-  nodejs,
-  pnpm_10,
-  fetchPnpmDeps,
-  pnpmConfigHook,
   installShellFiles,
   versionCheckHook,
   stdenv,
   nixosTests,
 }:
 
-let
+buildGoModule (finalAttrs: {
   pname = "artalk";
   version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "ArtalkJS";
     repo = "artalk";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gzagE3muNpX/dwF45p11JAN9ElsGXNFQ3fCvF1QhvdU=";
   };
-
-  frontend = stdenv.mkDerivation (finalAttrs: {
-    pname = "${pname}-frontend";
-
-    inherit src version;
-
-    nativeBuildInputs = [
-      nodejs
-      pnpmConfigHook
-      pnpm_10
-    ];
-
-    pnpmDeps = fetchPnpmDeps {
-      inherit (finalAttrs) pname version src;
-      pnpm = pnpm_10;
-      fetcherVersion = 4;
-      hash = "sha256-RSz/bx8/BAqLZH3/yQ6/H/nnwGvcCg8EzIEJ4/xkQgQ=";
-    };
-
-    buildPhase = ''
-      runHook preBuild
-
-      pnpm build:all
-      pnpm build:auth
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/{dist/{i18n,plugins},sidebar}
-
-      # dist
-      cp ./ui/artalk/dist/{Artalk,ArtalkLite}.{css,js} $out/dist
-      cp ./ui/artalk/dist/i18n/*.js $out/dist/i18n
-      cp ./ui/plugin-*/dist/*.js $out/dist/plugins
-
-      # sidebar
-      cp -r ./ui/artalk-sidebar/dist/* $out/sidebar
-
-      runHook postInstall
-    '';
-  });
-in
-buildGoModule {
-  inherit src pname version;
 
   vendorHash = "sha256-oAqYQzOUjly97H5L5PQ9I2SO2KqiUVxdJA+eoPrHD6Q=";
 
   ldflags = [
     "-s"
-    "-w"
   ];
 
-  preBuild = ''
-    cp -r ${frontend}/* ./public
+  preConfigure = ''
+    cp -r ${finalAttrs.passthru.frontend}/* ./public
   '';
 
   nativeBuildInputs = [ installShellFiles ];
@@ -94,16 +43,19 @@ buildGoModule {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "-v";
 
-  passthru.tests = {
-    inherit (nixosTests) artalk;
+  passthru = {
+    tests = {
+      inherit (nixosTests) artalk;
+    };
+    frontend = callPackage ./frontend.nix { artalk = finalAttrs.finalPackage; };
   };
 
   meta = {
     description = "Self-hosted comment system";
     homepage = "https://github.com/ArtalkJS/Artalk";
-    changelog = "https://github.com/ArtalkJS/Artalk/releases/tag/v${version}";
+    changelog = "https://github.com/ArtalkJS/Artalk/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "artalk";
   };
-}
+})
