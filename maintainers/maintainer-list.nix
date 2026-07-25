@@ -7025,6 +7025,12 @@
     githubId = 72784348;
     keys = [ { fingerprint = "8FD2 153F 4889 541A 54F1  E09E 71B6 C31C 8A5A 9D21"; } ];
   };
+  diwangs = {
+    name = "S. Diwangkara";
+    github = "diwangs";
+    githubId = 27280516;
+    email = "git+nixpkgs@diwangs.is";
+  };
   dixslyf = {
     name = "Dixon Sean Low Yan Feng";
     email = "dixonseanlow@protonmail.com";
@@ -20883,6 +20889,11 @@
     github = "ooliver1";
     githubId = 34910574;
     keys = [ { fingerprint = "D055 8A23 3947 B7A0 F966  B07F 0B41 0348 9833 7273"; } ];
+  };
+  ooonea = {
+    name = "ooonea";
+    github = "ooonea";
+    githubId = 35407790;
   };
   Oops418 = {
     email = "oooopsxxx@gmail.com";
