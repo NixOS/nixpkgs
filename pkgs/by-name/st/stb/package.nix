@@ -4,17 +4,18 @@
   fetchFromGitHub,
   copyPkgconfigItems,
   makePkgconfigItem,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stb";
-  version = "0-unstable-2023-01-29";
+  version = "0-unstable-2026-04-15";
 
   src = fetchFromGitHub {
     owner = "nothings";
     repo = "stb";
-    rev = "5736b15f7ea0ffb08dd38af21067c314d6a3aae9";
-    hash = "sha256-s2ASdlT3bBNrqvwfhhN6skjbmyEnUgvNOrvhgUSRj98=";
+    rev = "31c1ad37456438565541f4919958214b6e762fb4";
+    hash = "sha256-m2yNUlA37hDkKQVrQ+R8nufHfW/cXLnMo+n1X1Cyun0=";
   };
 
   nativeBuildInputs = [ copyPkgconfigItems ];
@@ -41,6 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp *.c $out/include/stb/
     runHook postInstall
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Single-file public domain libraries for C/C++";
