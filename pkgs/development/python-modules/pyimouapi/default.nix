@@ -40,7 +40,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Async Python client for the Imou Open Platform cloud APIs";
     homepage = "https://github.com/Imou-OpenPlatform/Py-Imou-Open-Api";
-    changelog = "https://github.com/Imou-OpenPlatform/Py-Imou-Open-Api/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/Imou-OpenPlatform/Py-Imou-Open-Api/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
