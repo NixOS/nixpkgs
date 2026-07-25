@@ -2090,7 +2090,6 @@ in
       serviceConfig = {
         ExecStartPre = [
           "${lib.getExe' pkgs.coreutils "ln"} -fs ${cfg.package}/share/grafana/conf ${cfg.dataDir}"
-          "${lib.getExe' pkgs.coreutils "ln"} -fs ${cfg.package}/share/grafana/tools ${cfg.dataDir}"
         ];
         ExecStart = "${lib.getExe cfg.package} server -homepath ${cfg.dataDir} -config ${configFile}";
 
