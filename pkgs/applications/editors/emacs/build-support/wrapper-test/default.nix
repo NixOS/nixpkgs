@@ -24,6 +24,7 @@ runCommand "test-emacs-withPackages-wrapper"
         (mkEpkg "early-default" ./early-default.el epkgs.melpaBuild)
         (mkEpkg "default" ./default.el epkgs.melpaBuild)
         cowsay
+        (epkgs.treesit-grammars.with-grammars (ps: [ ps.tree-sitter-nix ]))
       ]))
     ];
     env = {

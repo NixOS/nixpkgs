@@ -37,6 +37,10 @@
 (ert-deftest with-packages-bin-dirs-of-requested-packages-are-added-to-exec-path ()
   (should (executable-find "cowsay")))
 
+(ert-deftest with-packages-tree-sitter-dir-is-added-to-treesit-extra-load-path ()
+  (skip-unless (treesit-available-p))
+  (should (treesit-language-available-p 'nix)))
+
 ;;;; Utils for non-batch tests
 
 (defmacro define-with-packages-non-batch-test-via-bound-and-true-p (test-name)
