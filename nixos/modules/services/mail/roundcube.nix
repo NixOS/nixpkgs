@@ -199,10 +199,11 @@ in
               fastcgi_param PATH_INFO $fastcgi_path_info;
               fastcgi_split_path_info ^(.+\.php)(/.+)$;
               include ${config.services.nginx.package}/conf/fastcgi.conf;
-
-              client_max_body_size ${toString cfg.maxAttachmentSize};
             '';
           };
+          extraConfig = ''
+            client_max_body_size ${toString cfg.maxAttachmentSize};
+          '';
         };
       };
     };
