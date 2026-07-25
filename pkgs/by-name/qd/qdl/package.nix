@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qdl";
-  version = "2.7";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "linux-msm";
     repo = "qdl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oZ/1Pe81VOAmZiywSC2jC1OcDtaH84GAuo8AqiE77d4=";
+    hash = "sha256-r7DVfuTjuhkhLCXJdgzLuh34nIsoEroGzIaFQJ3oHAA=";
   };
 
   patches = [
