@@ -79,6 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
       $out/share/icons/hicolor/256x256/apps/cider-2.png
 
     rm -r $out/share/{pixmaps,lintian}
+    rm $out/lib/cider/resources/Cider{,.flatpak}.desktop
+    rm $out/lib/cider/resources/public/icon{.icns,-osx-previous.icns,.ico}
   '';
 
   passthru.updateScript = ./updater.sh;
