@@ -14,6 +14,7 @@
   libkrb5,
   libmongocrypt,
   libpq,
+  sqlite,
   dart-sass,
   makeWrapper,
 }:
@@ -60,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     libkrb5
     libmongocrypt
     libpq
+    sqlite
   ];
 
   buildPhase = ''
@@ -70,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
 
     pushd packages/cli/node_modules/sqlite3
-    node-gyp rebuild
+    npm_config_sqlite=${lib.getDev sqlite} node-gyp rebuild
     popd
 
     # TODO: use deploy after resolved https://github.com/pnpm/pnpm/issues/5315
