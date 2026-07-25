@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ffsubsync";
-  version = "0.4.31";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "smacke";
     repo = "ffsubsync";
     tag = finalAttrs.version;
-    hash = "sha256-j9E4h2de2EOtYpuxKFbPOxZ5FBRO0EkbZhJdx5RiPn8=";
+    hash = "sha256-n9bYQgbBHGRJl79EiK7pTMDCcbI4ALudZUNc2SU0Wgg=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -35,6 +35,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     typing-extensions
     webrtcvad
   ];
+
+  # webrtcvad provides the same import as upstream's wheel-only dependency.
+  pythonRemoveDeps = [ "webrtcvad-wheels" ];
 
   nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
