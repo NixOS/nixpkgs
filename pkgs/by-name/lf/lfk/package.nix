@@ -6,17 +6,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "lfk";
-  version = "0.14.19";
+  version = "0.15.14";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "janosmiko";
     repo = "lfk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-57bAYTU6/Fv7jbKK+RAbITECl4hYQzS2kkn7bytnW+Y=";
+    hash = "sha256-JTMtss7QbShk+r1NztYT7MrPoJR1VgdJvnBOWilB8Qw=";
   };
 
-  vendorHash = "sha256-WYx/eMArAsiyfEvrBZmTfK2ABxX2X1VQEtDCxC+UyP8=";
+  vendorHash = "sha256-ZyCJnSI0Lq+Fm5w6hhd/lWMZTUt0NirpwAkFrGU80lQ=";
 
   ldflags = [ "-s" ];
 
