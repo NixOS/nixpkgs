@@ -209,7 +209,15 @@ in
     systemd.services."" = {
       # TODO description;
       wantedBy = lib.mkDefault [ "multi-user.target" ];
+      environment = lib.mapAttrs (_: lib.mkDefault) (
+        lib.filterAttrs (_: v: v != null) config.process.environment
+      );
       serviceConfig = {
+        UnsetEnvironment =
+          let
+            nullEnvKeys = lib.attrNames (lib.filterAttrs (_: v: v == null) config.process.environment);
+          in
+          lib.mkIf (nullEnvKeys != [ ]) (lib.concatStringsSep " " nullEnvKeys);
         ExecReload = lib.mkIf (config.systemd.mainExecReload != null) config.systemd.mainExecReload;
         Type = lib.mkDefault (if config.notificationProtocol.systemd then "notify" else "simple");
         Restart = lib.mkDefault "always";
