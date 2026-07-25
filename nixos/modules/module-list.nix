@@ -299,6 +299,7 @@
   ./programs/partition-manager.nix
   ./programs/passless.nix
   ./programs/pay-respects.nix
+  ./programs/piper-tts.nix
   ./programs/plotinus.nix
   ./programs/pmount.nix
   ./programs/projecteur.nix
