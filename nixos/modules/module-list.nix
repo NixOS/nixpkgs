@@ -307,7 +307,6 @@
   ./programs/qgroundcontrol.nix
   ./programs/qt5ct.nix
   ./programs/quark-goldleaf.nix
-  ./programs/regreet.nix
   ./programs/rog-control-center.nix
   ./programs/rush.nix
   ./programs/rust-motd.nix
@@ -634,6 +633,7 @@
   ./services/display-managers/lemurs.nix
   ./services/display-managers/ly.nix
   ./services/display-managers/plasma-login-manager.nix
+  ./services/display-managers/regreet.nix
   ./services/display-managers/sddm.nix
   ./services/editors/emacs.nix
   ./services/editors/haste.nix
