@@ -9,9 +9,9 @@
       },
       "branch": "nixpkgs-unstable",
       "submodules": false,
-      "revision": "6edbf1a6a03e75886a6609c088801a0856449e88",
-      "url": "https://github.com/NixOS/nixpkgs/archive/6edbf1a6a03e75886a6609c088801a0856449e88.tar.gz",
-      "hash": "sha256-0lkauQbtrljJqwtzTCILPAiHAJyMvn6XDo264moDv30="
+      "revision": "421eebfd0ec7bccd4abe826ce62d7e6e83129493",
+      "url": "https://github.com/NixOS/nixpkgs/archive/421eebfd0ec7bccd4abe826ce62d7e6e83129493.tar.gz",
+      "hash": "sha256:1lxfhfgiv1sz2v7fg43gny57sa6wf59n98q7ldsyb2p06f4sal7w"
     },
     "nixpkgs-26.05-darwin": {
       "type": "Git",
