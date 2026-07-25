@@ -135,6 +135,9 @@ stdenv.mkDerivation (finalAttrs: {
     cp -d ${bootGCC.lib}/lib/libstdc++.so* $out/lib
     cp -d ${bootGCC.out}/lib/libssp.a* $out/lib
     cp -d ${bootGCC.out}/lib/libssp_nonshared.a $out/lib
+    cp -d ${bootGCC.lib}/lib/libgcc_s_asneeded.so $out/lib
+    cp -d ${bootGCC.lib}/lib/libatomic_asneeded.so $out/lib
+    cp -d ${bootGCC.out}/lib/libatomic.a* $out/lib
     cp -rd ${bootGCC.out}/lib/gcc $out/lib
     chmod -R u+w $out/lib
     rm -f $out/lib/gcc/*/*/include*/linux
@@ -156,15 +159,6 @@ stdenv.mkDerivation (finalAttrs: {
     cp -d ${mpfr.out}/lib/libmpfr*.so* $out/lib
     cp -d ${libmpc.out}/lib/libmpc*.so* $out/lib
     cp -d ${zlib.out}/lib/libz.so* $out/lib
-
-  ''
-  + lib.optionalString (stdenv.hostPlatform.isRiscV) ''
-    # libatomic is required on RiscV platform for C/C++ atomics and pthread
-    # even though they may be translated into native instructions.
-    cp -d ${bootGCC.out}/lib/libatomic.a* $out/lib
-
-  ''
-  + ''
     cp -d ${bzip2.out}/lib/libbz2.so* $out/lib
 
     # Copy binutils.
