@@ -1577,6 +1577,8 @@ self: super: with self; {
 
   audio-hotplug = callPackage ../development/python-modules/audio-hotplug { };
 
+  audiolab = callPackage ../development/python-modules/audiolab { };
+
   audioop-lts =
     if pythonAtLeast "3.13" then callPackage ../development/python-modules/audioop-lts { } else null;
 
