@@ -8,7 +8,7 @@
   libGL,
   libpng,
   libx11,
-  gtk2-x11,
+  libxfixes,
   makeDesktopItem,
   copyDesktopItems,
   unstableGitUpdater,
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libpng
     libx11
-    gtk2-x11
+    libxfixes
   ];
 
   postPatch =
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
       Source/Native/*.cpp \
       Source/Native/OpenGL/*.cpp \
       Source/Native/OpenGL/gl_load/*.c \
-      -lX11 -ldl
+      -lX11 -lXfixes -ldl
 
     runHook postBuild
   '';
@@ -92,11 +92,10 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace $out/opt/UltimateDoomBuilder/builder --replace-fail mono ${mono}/bin/mono
     substituteInPlace $out/opt/UltimateDoomBuilder/builder --replace-fail Builder.exe $out/opt/UltimateDoomBuilder/Builder.exe
 
-    # GTK, OpenGL, and other libraries are loaded dynamically by Mono at runtime
+    # OpenGL and other libraries are loaded dynamically by Mono at runtime
     wrapProgram $out/opt/UltimateDoomBuilder/builder \
       --prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
-          gtk2-x11
           libGL
           libpng
           libx11
