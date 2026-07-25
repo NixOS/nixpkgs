@@ -1,35 +1,36 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, dpkg
-, wrapGAppsHook3
-, makeWrapper
-, glib
-, gtk3
-, webkitgtk_4_1
-, libsoup_3
-, openssl
-, zlib
-, pango
-, cairo
-, gdk-pixbuf
-, atk
-, libappindicator-gtk3
-, libx11
-, libxcomposite
-, libxdamage
-, libxext
-, libxfixes
-, libxrender
-, libxrandr
-, libxcb
-, libxkbcommon
-, libdrm
-, mesa
-, gsettings-desktop-schemas
-, fontconfig
-, at-spi2-atk
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  dpkg,
+  wrapGAppsHook3,
+  makeWrapper,
+  glib,
+  gtk3,
+  webkitgtk_4_1,
+  libsoup_3,
+  openssl,
+  zlib,
+  pango,
+  cairo,
+  gdk-pixbuf,
+  atk,
+  libappindicator-gtk3,
+  libx11,
+  libxcomposite,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxrender,
+  libxrandr,
+  libxcb,
+  libxkbcommon,
+  libdrm,
+  mesa,
+  gsettings-desktop-schemas,
+  fontconfig,
+  at-spi2-atk,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -77,17 +78,20 @@ stdenv.mkDerivation (finalAttrs: {
     stdenv.cc.cc.lib
   ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   unpackPhase = "dpkg-deb -x $src .";
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/bin $out/share $out/lib/chronicler
-    
+
     # 1. Copy the internal app files to our private lib directory
     cp -r usr/lib/chronicler/* $out/lib/chronicler/ 2>/dev/null || true
-    
-    # 2. Copy the actual binary (found in usr/bin) into our private lib
+
+    # 2. Copy the actual binary into our private lib
     cp usr/bin/chronicler $out/lib/chronicler/chronicler-bin 2>/dev/null || cp usr/bin/* $out/lib/chronicler/chronicler-bin
 
     # 3. Create a clean symlink from bin to the real binary
@@ -111,7 +115,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "A free, offline worldbuilding tool and local wiki for writers and RPG creators";
     homepage = "https://chronicler.pro/";
     license = lib.licenses.polyFormShield100;
-    maintainers = with lib.maintainers; [ enderfare frozenoverthemoon ];
+    maintainers = with lib.maintainers; [
+      enderfare
+      frozenoverthemoon
+    ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     mainProgram = "chronicler";
