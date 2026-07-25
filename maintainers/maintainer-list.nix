@@ -13574,6 +13574,12 @@
     name = "Jonas Wunderlich";
     matrix = "@matrix:03j.de";
   };
+  jonascarpay = {
+    name = "Jonas Carpay";
+    email = "jonascarpay@gmail.com";
+    github = "jonascarpay";
+    githubId = 3593851;
+  };
   jonasfranke = {
     name = "Jonas Franke";
     email = "info@jonasfranke.xyz";
