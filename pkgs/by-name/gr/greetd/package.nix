@@ -36,6 +36,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       rm "$f"
     done
     installManPage man/*
+
+    substituteInPlace greetd.service --replace-fail ExecStart= ExecStart=$out/bin/
+    install -Dm444 greetd.service -t $out/lib/systemd/system
   '';
 
   passthru.updateScript = nix-update-script { };
