@@ -8,11 +8,14 @@
   boto3,
   buildPythonPackage,
   cachetools,
+  cel-python,
+  certifi,
   fastavro,
   fetchFromGitHub,
   google-auth,
   google-api-core,
   google-cloud-kms,
+  google-re2,
   hvac,
   httpx,
   jsonschema,
@@ -28,18 +31,19 @@
   requests-mock,
   respx,
   setuptools,
+  nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "confluent-kafka";
-  version = "2.13.0";
+  version = "2.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "confluentinc";
     repo = "confluent-kafka-python";
-    tag = "v${version}";
-    hash = "sha256-VnZf6YvvpOs9/9uJHJvcmF56Ra9hhsoqrVisDuf+C6w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZKeIHfFSI4o2hXttveS8rclEH3wMkl8wJiy7HFjScww=";
   };
 
   buildInputs = [ rdkafka ];
@@ -52,10 +56,16 @@ buildPythonPackage rec {
       fastavro
       requests
     ];
+    json-fast = [
+      orjson
+    ];
     json = [
       jsonschema
       pyrsistent
       requests
+    ];
+    oauthbearer-aws = [
+      boto3
     ];
     protobuf = [
       protobuf
@@ -65,10 +75,11 @@ buildPythonPackage rec {
       azure-identity
       azure-keyvault-keys
       boto3
-      # TODO: cel-python
+      cel-python
       google-auth
       google-api-core
       google-cloud-kms
+      google-re2
       # hkdf was removed
       hvac
       # TODO: jsonata-python
@@ -79,8 +90,8 @@ buildPythonPackage rec {
       attrs
       authlib
       cachetools
+      certifi
       httpx
-      orjson
     ];
   };
 
@@ -93,7 +104,7 @@ buildPythonPackage rec {
     requests-mock
     respx
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "confluent_kafka" ];
 
@@ -101,26 +112,33 @@ buildPythonPackage rec {
     "tests/integration/"
     "tests/test_Admin.py"
     "tests/test_misc.py"
-    # Failed: async def functions are not natively supported.
-    "tests/schema_registry/_async"
-    # missing cel-python dependency
-    "tests/schema_registry/_sync/test_avro_serdes.py"
-    "tests/schema_registry/_sync/test_json_serdes.py"
-    "tests/schema_registry/_sync/test_proto_serdes.py"
     # missing tink dependency
     "tests/schema_registry/_async/test_config.py"
     "tests/schema_registry/_sync/test_config.py"
+    "tests/schema_registry/_async/test_avro_serdes.py"
+    "tests/schema_registry/_sync/test_avro_serdes.py"
+    "tests/schema_registry/_async/test_json_serdes.py"
+    "tests/schema_registry/_sync/test_json_serdes.py"
+    "tests/schema_registry/_async/test_proto_serdes.py"
+    "tests/schema_registry/_sync/test_proto_serdes.py"
+    "tests/schema_registry/test_hcvault_driver.py"
     # crashes the test runner on shutdown
     "tests/test_kafka_error.py"
     # stats_cb can raise during consumer.close() causing race-condition
     "tests/test_Consumer.py::test_callback_exception_no_system_error"
   ];
 
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex=^v([0-9.]+)$" ];
+    };
+  };
+
   meta = {
     description = "Confluent's Apache Kafka client for Python";
     homepage = "https://github.com/confluentinc/confluent-kafka-python";
-    changelog = "https://github.com/confluentinc/confluent-kafka-python/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/confluentinc/confluent-kafka-python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mlieberman85 ];
   };
-}
+})
