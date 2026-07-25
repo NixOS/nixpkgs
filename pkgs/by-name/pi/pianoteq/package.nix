@@ -344,6 +344,7 @@ let
     trial_9 = mkTrial9 "sha256-1ofPL6F12Gv+k2rZBadOa5Iyukuji6vdww87ufdKjM8=";
     stage_9 = mkStage9 "sha256-Jvm/AhBwgj5INW8U48rJjgDB7j/Z1VnYKczvtrpl/AY=";
     standard_9 = mkStandard9 "sha256-Jvm/AhBwgj5INW8U48rJjgDB7j/Z1VnYKczvtrpl/AY=";
+    #TODO: Add Pianoteq 9 Pro Variant
 
     standard_8 = mkStandard version8 "sha256-ZDGB/SOOz+sWz7P+sNzyaipEH452n8zq5LleO3ztSXc=";
     stage_8 = mkStage version8 "sha256-wuZvyLQ41ZlwlVu5fqGdDW+1GTQWEEXwuCWTSGvmmHY=";
