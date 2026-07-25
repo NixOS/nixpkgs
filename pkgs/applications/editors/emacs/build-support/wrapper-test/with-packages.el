@@ -28,6 +28,12 @@
     (require 'info))
   (should (Info-find-file "dash" t)))
 
+(defun with-packages-unwrapped-site-start-is-loaded ()
+  (fboundp 'nix--profile-paths))
+
+(ert-deftest with-packages-unwrapped-site-start-is-loaded ()
+  (should (with-packages-unwrapped-site-start-is-loaded)))
+
 ;;;; Utils for non-batch tests
 
 (defmacro define-with-packages-non-batch-test-via-bound-and-true-p (test-name)
