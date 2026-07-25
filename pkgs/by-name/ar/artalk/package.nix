@@ -4,23 +4,24 @@
   callPackage,
   fetchFromGitHub,
   installShellFiles,
-  versionCheckHook,
   stdenv,
   nixosTests,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "artalk";
-  version = "2.9.1";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "ArtalkJS";
     repo = "artalk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gzagE3muNpX/dwF45p11JAN9ElsGXNFQ3fCvF1QhvdU=";
+    hash = "sha256-gtWnXRDGFjpw9W1ze6fBn/WXMQStqeyQpQHTr3wu5AU=";
   };
 
-  vendorHash = "sha256-oAqYQzOUjly97H5L5PQ9I2SO2KqiUVxdJA+eoPrHD6Q=";
+  vendorHash = "sha256-xSIkJKlWGbdBlez7jPaoeHuYbyO+2237sZ/yxjUcHf8=";
 
   ldflags = [
     "-s"
@@ -30,7 +31,12 @@ buildGoModule (finalAttrs: {
     cp -r ${finalAttrs.passthru.frontend}/* ./public
   '';
 
+  env.CGO_ENABLED = 0;
+
   nativeBuildInputs = [ installShellFiles ];
+
+  # TestAuthSSOExchange
+  __darwinAllowLocalNetworking = true;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd artalk \
@@ -41,13 +47,16 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "-v";
+  versionCheckProgramArg = "version";
+  versionCheckKeepEnvironment = [ "XDG_DATA_HOME" ];
+  preVersionCheck = "XDG_DATA_HOME=$TMPDIR";
 
   passthru = {
     tests = {
       inherit (nixosTests) artalk;
     };
     frontend = callPackage ./frontend.nix { artalk = finalAttrs.finalPackage; };
+    updateScript = nix-update-script { extraArgs = [ "--subpackage=frontend" ]; };
   };
 
   meta = {

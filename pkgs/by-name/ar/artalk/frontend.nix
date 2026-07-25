@@ -1,4 +1,5 @@
 {
+  lib,
   stdenvNoCC,
   nodejs,
   pnpmConfigHook,
@@ -22,13 +23,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 4;
-    hash = "sha256-RSz/bx8/BAqLZH3/yQ6/H/nnwGvcCg8EzIEJ4/xkQgQ=";
+    hash = "sha256-rs3isWKlV+RGA3shYZZpNImn9xJ67vpXoJmQoO6y2cE=";
   };
+
+  # vite-plugin-checker spawns a chokidar watcher during the build, which on
+  # Darwin exhausts the file descriptor limit with native fs.watch.
+  env.CHOKIDAR_USEPOLLING = lib.optionalString stdenvNoCC.hostPlatform.isDarwin "true";
 
   buildPhase = ''
     runHook preBuild
 
     pnpm build:all
+    pnpm build:plugin-kit
     pnpm build:auth
 
     runHook postBuild
