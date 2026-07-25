@@ -49,26 +49,20 @@
   coreutils,
   libxcb,
   zlib,
-
   # Darwin dependencies
   unzip,
   makeWrapper,
-
   # command line arguments which are always set e.g "--disable-gpu"
   commandLineArgs ? "",
-
   # Necessary for USB audio devices.
   pulseSupport ? stdenv.hostPlatform.isLinux,
   libpulseaudio,
-
   # For GPU acceleration support on Wayland (without the lib it doesn't seem to work)
   libGL,
-
   # For video acceleration via VA-API (--enable-features=AcceleratedVideoDecodeLinuxGL,AcceleratedVideoEncoder)
   libvaSupport ? stdenv.hostPlatform.isLinux,
   libva,
   enableVideoAcceleration ? libvaSupport,
-
   # For Vulkan support (--enable-features=Vulkan); disabled by default as it seems to break VA-API
   vulkanSupport ? false,
   addDriverRunpath,
@@ -78,8 +72,22 @@
 {
   pname,
   version,
-  hash,
-  url,
+  # Map from Nix system strings ("x86_64-linux", "aarch64-darwin", ...) to
+  # the corresponding upstream `{ url, hash }` record. Encoding the per-system
+  # sources as data rather than positional arguments lets channel-specific
+  # package.nix files drop platforms that upstream hasn't published yet.
+  archives,
+  # Upstream product flavor: "browser" (the regular Brave) or "origin" (the
+  # stripped-down Brave Origin).
+  flavor ? "browser",
+  # Flavor-specific paths supplied by the caller (default.nix).
+  optStem,
+  fileStem,
+  appIdStem,
+  darwinStem,
+  changelogFile,
+  homepage,
+  innerBinary,
 }:
 
 let
@@ -93,6 +101,19 @@ let
     strings
     escapeShellArg
     ;
+
+  # /opt/brave.com/<optName>/
+  optName = optStem;
+  # Basename used for .desktop, gnome-control-center xml and icon files.
+  fileBase = fileStem;
+  # Secondary .desktop app-id.
+  appId = appIdStem;
+  # Upstream shell wrapper inside /opt.
+  innerWrapper = fileStem;
+  # macOS .app bundle name (inside the zip).
+  darwinApp = darwinStem;
+  # Upstream Exec= target in .desktop files (replaced with our wrapper).
+  upstreamBin = "brave-${flavor}-stable";
 
   deps = [
     alsa-lib
@@ -156,13 +177,19 @@ let
   ] # disable automatic updates
   # The feature disable is needed for VAAPI to work correctly: https://github.com/brave/brave-browser/issues/20935
   ++ optionals enableVideoAcceleration [ "UseChromeOSDirectVideoDecoder" ];
+
+  archive =
+    assert lib.assertMsg (builtins.hasAttr stdenv.hostPlatform.system archives)
+      "${pname} is not available for ${stdenv.hostPlatform.system}";
+    archives.${stdenv.hostPlatform.system};
 in
 stdenv.mkDerivation {
   inherit pname version;
 
-  src = fetchurl {
-    inherit url hash;
-  };
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  src = fetchurl { inherit (archive) url hash; };
 
   dontConfigure = true;
   dontBuild = true;
@@ -201,27 +228,27 @@ stdenv.mkDerivation {
       cp -R usr/share $out
       cp -R opt/ $out/opt
 
-      export BINARYWRAPPER=$out/opt/brave.com/brave/brave-browser
+      export BINARYWRAPPER=$out/opt/brave.com/${optName}/${innerWrapper}
 
       # Fix path to bash in $BINARYWRAPPER
       substituteInPlace $BINARYWRAPPER \
           --replace-fail /bin/bash ${stdenv.shell} \
           --replace-fail 'CHROME_WRAPPER' 'WRAPPER'
 
-      ln -sf $BINARYWRAPPER $out/bin/brave
+      ln -sf $BINARYWRAPPER $out/bin/${pname}
 
-      for exe in $out/opt/brave.com/brave/{brave,chrome_crashpad_handler}; do
+      for exe in $out/opt/brave.com/${optName}/{${innerBinary},chrome_crashpad_handler}; do
           patchelf \
               --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
               --set-rpath "${rpath}" $exe
       done
 
       # Fix paths
-      substituteInPlace $out/share/applications/{brave-browser,com.brave.Browser}.desktop \
-          --replace-fail /usr/bin/brave-browser-stable $out/bin/brave
-      substituteInPlace $out/share/gnome-control-center/default-apps/brave-browser.xml \
+      substituteInPlace $out/share/applications/{${fileBase},${appId}}.desktop \
+          --replace-fail /usr/bin/${upstreamBin} $out/bin/${pname}
+      substituteInPlace $out/share/gnome-control-center/default-apps/${fileBase}.xml \
           --replace-fail /opt/brave.com $out/opt/brave.com
-      substituteInPlace $out/opt/brave.com/brave/default-app-block \
+      substituteInPlace $out/opt/brave.com/${optName}/default-app-block \
           --replace-fail /opt/brave.com $out/opt/brave.com
 
       # Correct icons location
@@ -229,13 +256,13 @@ stdenv.mkDerivation {
 
       for icon in ''${icon_sizes[*]}
       do
-          mkdir -p $out/share/icons/hicolor/$icon\x$icon/apps
-          ln -s $out/opt/brave.com/brave/product_logo_$icon.png $out/share/icons/hicolor/$icon\x$icon/apps/brave-browser.png
+          mkdir -p $out/share/icons/hicolor/''${icon}x''${icon}/apps
+          ln -s $out/opt/brave.com/${optName}/product_logo_''${icon}.png $out/share/icons/hicolor/''${icon}x''${icon}/apps/${fileBase}.png
       done
 
       # Replace xdg-settings and xdg-mime
-      ln -sf ${xdg-utils}/bin/xdg-settings $out/opt/brave.com/brave/xdg-settings
-      ln -sf ${xdg-utils}/bin/xdg-mime $out/opt/brave.com/brave/xdg-mime
+      ln -sf ${xdg-utils}/bin/xdg-settings $out/opt/brave.com/${optName}/xdg-settings
+      ln -sf ${xdg-utils}/bin/xdg-mime $out/opt/brave.com/${optName}/xdg-mime
 
       runHook postInstall
     ''
@@ -244,9 +271,9 @@ stdenv.mkDerivation {
 
       mkdir -p $out/{Applications,bin}
 
-      cp -r . "$out/Applications/Brave Browser.app"
+      cp -r . "$out/Applications/${darwinApp}.app"
 
-      makeWrapper "$out/Applications/Brave Browser.app/Contents/MacOS/Brave Browser" $out/bin/brave
+      makeWrapper "$out/Applications/${darwinApp}.app/Contents/MacOS/${darwinApp}" $out/bin/${pname}
 
       runHook postInstall
     '';
@@ -279,22 +306,33 @@ stdenv.mkDerivation {
 
   installCheckPhase = ''
     # Bypass upstream wrapper which suppresses errors
-    $out/opt/brave.com/brave/brave --version
+    $out/opt/brave.com/${optName}/brave --version
   '';
 
   passthru.updateScript = ./update.sh;
 
   meta = {
-    homepage = "https://brave.com/";
-    description = "Privacy-oriented browser for Desktop and Laptop computers";
+    homepage = homepage;
+    description =
+      "Privacy-oriented browser for Desktop and Laptop computers"
+      + lib.optionalString (flavor == "origin") " (Origin variant)";
     changelog =
-      "https://github.com/brave/brave-browser/blob/master/CHANGELOG_DESKTOP.md#"
+      "https://github.com/brave/brave-browser/blob/master/${changelogFile}#"
       + lib.replaceStrings [ "." ] [ "" ] version;
-    longDescription = ''
-      Brave browser blocks the ads and trackers that slow you down,
-      chew up your bandwidth, and invade your privacy. Brave lets you
-      contribute to your favorite creators automatically.
-    '';
+    longDescription =
+      if flavor == "origin" then
+        ''
+          Brave Origin is a stripped-down variant of the Brave browser that
+          removes most non-privacy features (rewards, wallet, AI, etc.) while
+          keeping the core privacy, adblock and Chromium-based browsing
+          experience.
+        ''
+      else
+        ''
+          Brave browser blocks the ads and trackers that slow you down,
+          chew up your bandwidth, and invade your privacy. Brave lets you
+          contribute to your favorite creators automatically.
+        '';
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
@@ -302,12 +340,9 @@ stdenv.mkDerivation {
       jefflabonte
       nasirhm
       buckley310
+      rachalaraj
     ];
-    platforms = [
-      "aarch64-linux"
-      "x86_64-linux"
-      "aarch64-darwin"
-    ];
-    mainProgram = "brave";
+    platforms = builtins.attrNames archives;
+    mainProgram = if flavor == "origin" then "brave-origin" else "brave";
   };
 }

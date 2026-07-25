@@ -33,7 +33,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.9.3";
+  version = "2.9.4";
 
   __structuredAttrs = true;
 
@@ -47,10 +47,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-XMHlWK+lhyn1KO1CSxcuM3KzTjYviVrRw+FUL74bBPc=";
+    hash = "sha256-ivch++yGRUyWtox/5QqomC4DlTvMBxK+gIcN9/7tt5E=";
   };
 
-  cargoHash = "sha256-WZxyoD9WMnaLyD3/86R90KWC+9OA15fIMw8SjmovNHA=";
+  cargoHash = "sha256-ynbHLZXkPPYpsC4dCu6jA6x8ftiTHWZ/uxzdbUcUaa0=";
 
   patches = [
     ./patches/0002-tests-replace-hardcoded-paths.patch
@@ -211,6 +211,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # Wants to access /etc/resolv.conf: https://github.com/hickory-dns/hickory-dns/issues/2959
     "--skip=tests::test_userspace_resolver"
+    # We don't have a tmp dir with sticky bit during build
+    "--skip=util::temp::test::test_ensure_secure_temp_parent_rejects_non_sticky_writable_dir"
   ];
 
   __darwinAllowLocalNetworking = true;

@@ -11,13 +11,13 @@
 buildHomeAssistantComponent rec {
   owner = "stephan192";
   domain = "hochwasserportal";
-  version = "1.0.8";
+  version = "1.0.9";
 
   src = fetchFromGitHub {
     owner = "stephan192";
     repo = "hochwasserportal";
     tag = "v${version}";
-    hash = "sha256-q2usHeWcx/1UrM7MQ156SFy8cFIiCcsmIr6721hzSLI=";
+    hash = "sha256-/mnAQc+s6L9NVzk6gDA5p1+DfY3AZ5Sy6AWhnpkT++Q=";
   };
 
   dependencies = [
