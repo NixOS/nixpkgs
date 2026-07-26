@@ -11,6 +11,7 @@
   # runtime
   espeak-ng,
   onnxruntime,
+  ffmpeg,
 
   # check
   gtest,
@@ -19,6 +20,7 @@
   withTrain ? true,
   withHTTP ? true,
   withAlignment ? true,
+  withFfplay ? false,
 }:
 
 let
@@ -123,6 +125,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ++ lib.optionals withHTTP finalAttrs.passthru.optional-dependencies.http
     ++ lib.optionals withAlignment finalAttrs.passthru.optional-dependencies.alignment;
 
+  makeWrapperArgs = lib.optionals withFfplay [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ ffmpeg ])
+  ];
+
   optional-dependencies = {
     train =
       with python3Packages;
@@ -175,6 +184,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
     tests = {
       version = testers.testVersion {
         package = finalAttrs.finalPackage;
+      };
+
+      all-flags-flipped = callPackage ./package.nix {
+        withTrain = false;
+        withHTTP = false;
+        withAlignment = false;
+        withFfplay = true;
       };
     };
     updateScript = nix-update-script { };
