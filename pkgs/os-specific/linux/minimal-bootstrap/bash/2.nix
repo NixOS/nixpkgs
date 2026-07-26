@@ -96,6 +96,13 @@ kaem.runCommand "${pname}-${version}"
 
           bash -eux $buildCommandPath
         '';
+        defaultBuildInputs = [
+          bash_2_05
+          coreutils
+          # provides untar, ungz, and unbz2
+          mescc-tools-extra
+        ];
+        defaultBinPath = lib.makeBinPath defaultBuildInputs;
       in
       name: env: buildCommand:
       derivationWithMeta (
@@ -109,15 +116,11 @@ kaem.runCommand "${pname}-${version}"
           passAsFile = [ "buildCommand" ];
 
           SHELL = "${bash_2_05}/bin/bash";
-          PATH = lib.makeBinPath (
-            (env.nativeBuildInputs or [ ])
-            ++ [
-              bash_2_05
-              coreutils
-              # provides untar, ungz, and unbz2
-              mescc-tools-extra
-            ]
-          );
+          PATH =
+            if !env ? nativeBuildInputs then
+              defaultBinPath
+            else
+              lib.makeBinPath (env.nativeBuildInputs ++ defaultBuildInputs);
         }
         // (removeAttrs env [ "nativeBuildInputs" ])
       );
