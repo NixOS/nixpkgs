@@ -33,6 +33,8 @@
   which,
   gtk3,
   gsettings-desktop-schemas,
+  versionCheckHook,
+  writeShellScript,
 }:
 let
   pythonDeps = with python3Packages; [
@@ -158,6 +160,28 @@ freecad-utils.makeCustomizable (
         ];
       };
     };
+
+    nativeInstallCheckInputs = [ versionCheckHook ];
+    doInstallCheck = true;
+
+    versionCheckProgram = writeShellScript "version-check.sh" ''
+      # As of 2026-07-26, the way FreeCAD handles `--version` is awful.
+      # - The main program, `freecad`, opens a GUI prompt for `--version`,
+      # unless `--console` is also given.
+      # - Even with `--version --console`, `freecad` crashes if there is no
+      # display server, so we need to use `freecadcmd` instead, which is a
+      # separate binary, for unknown reasons.
+      # - `freecadcmd --version` crashes if it cannot create a directory under
+      # `$HOME/.local/share/FreeCAD/`
+      #   Adding `--safe-mode` appears to fix this, but `versionCheckProgramArg`
+      #  only allows for a single argument (as a list gets concaternated),
+      #  so we need this script.
+
+      # The path to `freecadcmd` gets passed in via $1, to allow the `out`
+      # placeholder to function properly
+      exec "$1" --version --safe-mode
+    '';
+    versionCheckProgramArg = "${placeholder "out"}/bin/freecadcmd";
 
     # 6.9k object files, cuts down build time from 2-3 hours to 15 minutes
     requiredSystemFeatures = [ "big-parallel" ];
