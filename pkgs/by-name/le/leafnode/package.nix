@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  pcre,
+  pcre2,
   libxcrypt,
 }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildInputs = [
-    pcre
+    pcre2
     libxcrypt
   ];
 
