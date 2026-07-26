@@ -32,13 +32,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "music-assistant-desktop";
-  version = "0.5.9";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "desktop-app";
     tag = finalAttrs.version;
-    hash = "sha256-hkG0e/WlnEQXdaYlE9tebzzE63l4RuwCVjHQVTcTo6Y=";
+    hash = "sha256-GFe+2+/JPuDb11LGDOqYBu4+J1qkRZUzL+g9HSzxoOs=";
   };
 
   patches = [
