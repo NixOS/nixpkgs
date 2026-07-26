@@ -1353,6 +1353,7 @@ dont-distribute-packages:
  - Hashell
  - hashflare
  - hask-home
+ - haskanoid
  - haskdeep
  - haskeem
  - haskell-admin
@@ -1534,6 +1535,7 @@ dont-distribute-packages:
  - hgeometry-combinatorial
  - hgeometry-ipe
  - hgeometry-svg
+ - hgg-analyze-bridge
  - hgithub
  - hiccup
  - hie-core
@@ -2327,6 +2329,7 @@ dont-distribute-packages:
  - monte-carlo
  - moo
  - moo-nad
+ - moonlight-delta
  - morley
  - morley-client
  - morley-prelude
@@ -2959,6 +2962,8 @@ dont-distribute-packages:
  - reheat
  - rel8
  - relative-date
+ - relay-pagination-conformance
+ - relay-pagination-hasql
  - remote-json
  - remote-json-client
  - remote-json-server
@@ -3053,7 +3058,6 @@ dont-distribute-packages:
  - rv
  - s-expression
  - S3
- - safe-coloured-text-layout-gen
  - safe-coupling
  - safe-failure-cme
  - safe-plugins
@@ -3130,6 +3134,7 @@ dont-distribute-packages:
  - secret-sharing
  - secrm
  - sednaDBXML
+ - seihou-cli
  - seitz-symbol
  - SelectSequencesFromMSA
  - selenium-server
@@ -3447,6 +3452,8 @@ dont-distribute-packages:
  - syb-with-class-instances-text
  - SybWidget
  - sydtest-amqp
+ - sydtest-sqitch-postgres
+ - sydtest-sqitch-postgres-persistent
  - sydtest-webdriver-screenshot
  - sydtest-webdriver-yesod
  - sylvia

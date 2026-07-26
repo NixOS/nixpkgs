@@ -309557,6 +309557,7 @@ self: {
       ];
       description = "A breakout game written in Yampa using SDL";
       license = "unknown";
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "haskanoid";
     }
   ) { };
@@ -335130,6 +335131,7 @@ self: {
       ];
       description = "Bridge from hanalyze (Hanalyze.Model.HBM.ModelGraph) to hgg DAG rendering";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -477023,6 +477025,7 @@ self: {
       doHaddock = false;
       description = "Boundary-aware delta calculus for Moonlight";
       license = lib.meta.getLicenseFromSpdxId "MIT";
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -591042,6 +591045,7 @@ self: {
       ];
       description = "Conformance suite proving no-skip/no-duplicate pagination";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -591093,6 +591097,7 @@ self: {
       ];
       description = "Keyset-pagination engine producing Relay connections from hasql queries";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -605573,7 +605578,6 @@ self: {
       ];
       testToolDepends = [ sydtest-discover ];
       license = lib.licenses.mit;
-      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -616146,6 +616150,7 @@ self: {
       doHaddock = false;
       description = "CLI for Seihou project scaffolding";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "seihou";
     }
   ) { };
@@ -682485,6 +682490,7 @@ self: {
       testToolDepends = [ sydtest-discover ];
       description = "A sqitch-on-PostgreSQL companion library for sydtest";
       license = "unknown";
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -682531,6 +682537,7 @@ self: {
       testToolDepends = [ sydtest-discover ];
       description = "A sqitch-on-PostgreSQL + persistent companion library for sydtest";
       license = "unknown";
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
