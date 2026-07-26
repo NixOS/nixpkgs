@@ -1724,6 +1724,14 @@ with haskellLib;
         hash = "sha256-gi6ilqgN/1PLGdVNxXE217J+c0reaitLWND8X6VsV1U=";
       })
     ])
+    # Skip flaky test with ICU >= 74 (likely outdated assumptions)
+    # https://github.com/haskell/text-icu/issues/103
+    (overrideCabal (drv: {
+      testFlags = drv.testFlags or [ ] ++ [
+        "-t"
+        "!t_blockCode"
+      ];
+    }))
   ];
 
   hercules-ci-agent = self.generateOptparseApplicativeCompletions [
