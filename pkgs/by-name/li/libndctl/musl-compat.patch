@@ -1,0 +1,22 @@
+diff --git a/daxctl/device.c b/daxctl/device.c
+index e3993b1..0b2f20d 100644
+--- a/daxctl/device.c
++++ b/daxctl/device.c
+@@ -23,6 +23,8 @@
+ #include "filter.h"
+ #include "json.h"
+ 
++#include <libgen.h>
++
+ static struct {
+ 	const char *dev;
+ 	const char *mode;
+@@ -366,7 +368,7 @@ static const char *parse_device_options(int argc, const char **argv,
+ 
+ 	argc = parse_options(argc, argv, options, u, 0);
+ 	if (argc > 0)
+-		device = basename(argv[0]);
++		device = basename(strdup(argv[0]));
+ 
+ 	/* Handle action-agnostic non-option arguments */
+ 	if (argc == 0 &&

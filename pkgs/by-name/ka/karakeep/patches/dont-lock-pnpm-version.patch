@@ -1,0 +1,10 @@
+Karakeep uses a specific version of pnpm and will fail to build with other pnpm
+versions. Instead of adding this pnpm version to nixpkgs, we override this
+requirement.
+
+---
+--- a/package.json
++++ b/package.json
+@@ -40 +40 @@
+-  "packageManager": "pnpm@9.15.9",
++  "packageManager": "pnpm",

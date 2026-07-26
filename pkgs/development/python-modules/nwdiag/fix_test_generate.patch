@@ -1,0 +1,22 @@
+diff --git a/src/nwdiag/tests/test_generate_diagram.py b/src/nwdiag/tests/test_generate_diagram.py
+index 2065208..ac9b096 100644
+--- a/src/nwdiag/tests/test_generate_diagram.py
++++ b/src/nwdiag/tests/test_generate_diagram.py
+@@ -16,16 +16,4 @@
+ import os
+ 
+ from blockdiag.tests.test_generate_diagram import (get_diagram_files,
+-                                                   testcase_generator)
+-
+-import nwdiag.command
+-
+-
+-def test_generate():
+-    mainfunc = nwdiag.command.main
+-    basepath = os.path.dirname(__file__)
+-    files = get_diagram_files(basepath)
+-    options = []
+-
+-    for testcase in testcase_generator(basepath, mainfunc, files, options):
+-        yield testcase
++                                                   test_generate_with_separate)

@@ -1,0 +1,17 @@
+{
+  "aarch64-darwin": {
+    "buck2": "sha256-CIysxyxAD6Q4vkBSw2eC9Wsq+GKHqt8T7OXpdy1yRVw=",
+    "rust-project": "sha256-o5m58wQ9zKkpa5GzgLpcLUV9LpA+n+MxVa/9hH9Tr40="
+  },
+  "aarch64-linux": {
+    "buck2": "sha256-4jm/cvQKeYfbkCTrbV4yVkL2SWxYnexr5UwQCNJhihk=",
+    "rust-project": "sha256-vGSOwVETwYqwBhkxlSTDJlVcMfbAIzYwDhEKbqz+6ok="
+  },
+  "x86_64-linux": {
+    "buck2": "sha256-7MPYB90LD+/xpCNoi9WYJjuDOdIj5oVXiocZZFbBnZU=",
+    "rust-project": "sha256-de0SbH6cbjdDhcPpDTjxBo5HgQ8yS1eokQYjQrHKIDY="
+  },
+  "version": "2026-07-15",
+  "preludeGit": "caed0b8c0ee137c4e5e1f800a5054df151f490c2",
+  "preludeFod": "sha256-nMHnBf4vQJIxPgarmLPY38b15DFW2FlAQxDCzJgB+w8="
+}

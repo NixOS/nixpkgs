@@ -1,0 +1,48 @@
+From 363d17cec4d097a8160926467db33978da4001cf Mon Sep 17 00:00:00 2001
+From: flakeuser <2792697+Jdogzz@users.noreply.github.com>
+Date: Wed, 17 Dec 2025 17:44:21 -0800
+Subject: [PATCH] Remove compatibility fixes for very old LO/OO.
+
+---
+ unoconv | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
+
+diff --git a/unoconv b/unoconv
+index 6aa1bfa..ae2159f 100755
+--- a/unoconv
++++ b/unoconv
+@@ -16,7 +16,6 @@
+ 
+ from __future__ import print_function
+ 
+-from distutils.version import LooseVersion
+ import getopt
+ import glob
+ import os
+@@ -857,10 +856,7 @@ class Convertor:
+             info(3, "Launching our own listener using %s." % office.binary)
+             try:
+                 product = self.svcmgr.createInstance("com.sun.star.configuration.ConfigurationProvider").createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess", UnoProps(nodepath="/org.openoffice.Setup/Product"))
+-                if product.ooName not in ('LibreOffice', 'LOdev') or LooseVersion(product.ooSetupVersion) <= LooseVersion('3.3'):
+-                    args = [office.binary, "-headless", "-invisible", "-nocrashreport", "-nodefault", "-nofirststartwizard", "-nologo", "-norestore", "-accept=%s" % op.connection]
+-                else:
+-                    args = [office.binary, "--headless", "--invisible", "--nocrashreport", "--nodefault", "--nofirststartwizard", "--nologo", "--norestore", "--accept=%s" % op.connection]
++                args = [office.binary, "--headless", "--invisible", "--nocrashreport", "--nodefault", "--nofirststartwizard", "--nologo", "--norestore", "--accept=%s" % op.connection]
+                 if op.userProfile:
+                     args.append("-env:UserInstallation=file://" + realpath(op.userProfile))
+                 info(2, '%s listener arguments are %s.' % (product.ooName, args))
+@@ -1287,10 +1283,7 @@ def die(ret, msg=None):
+         if convertor.desktop.getCurrentFrame():
+             info(2, 'Trying to stop %s GUI listener.' % product.ooName)
+             try:
+-                if product.ooName != "LibreOffice" or product.ooSetupVersion <= 3.3:
+-                    subprocess.Popen([office.binary, "-headless", "-invisible", "-nocrashreport", "-nodefault", "-nofirststartwizard", "-nologo", "-norestore", "-unaccept=%s" % op.connection], env=os.environ)
+-                else:
+-                    subprocess.Popen([office.binary, "--headless", "--invisible", "--nocrashreport", "--nodefault", "--nofirststartwizard", "--nologo", "--norestore", "--unaccept=%s" % op.connection], env=os.environ)
++                subprocess.Popen([office.binary, "--headless", "--invisible", "--nocrashreport", "--nodefault", "--nofirststartwizard", "--nologo", "--norestore", "--unaccept=%s" % op.connection], env=os.environ)
+                 ooproc.wait()
+                 info(2, '%s listener successfully disabled.' % product.ooName)
+             except Exception as e:
+-- 
+2.51.2
+

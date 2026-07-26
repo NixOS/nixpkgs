@@ -1,0 +1,117 @@
+diff -ruN a/src/constant/kernel.ts b/src/constant/kernel.ts
+--- a/src/constant/kernel.ts
++++ b/src/constant/kernel.ts
+@@ -300,9 +300,9 @@
+       'run',
+       '--disable-color',
+       '-c',
+-      '$APP_BASE_PATH/$CORE_BASE_PATH/config.json',
++      '$CORE_BASE_PATH/config.json',
+       '-D',
+-      '$APP_BASE_PATH/$CORE_BASE_PATH',
++      '$CORE_BASE_PATH',
+     ],
+   }
+ }
+diff -ruN a/src/stores/env.ts b/src/stores/env.ts
+--- a/src/stores/env.ts
++++ b/src/stores/env.ts
+@@ -15,6 +15,7 @@
+     appName: '',
+     appVersion: '',
+     basePath: '',
++    configPath: '',
+     appPath: '',
+     os: '' as OS,
+     arch: '',
+diff -ruN a/src/stores/kernelApi.ts b/src/stores/kernelApi.ts
+--- a/src/stores/kernelApi.ts
++++ b/src/stores/kernelApi.ts
+@@ -271,19 +271,24 @@
+   const runCoreProcess = async (isAlpha: boolean) => {
+     let stopped = false
++    const coreWorkingDirectory =
++      envStore.env.os === 'linux' && envStore.env.configPath
++        ? `${envStore.env.configPath}/${CoreWorkingDirectory}`
++        : CoreWorkingDirectory
+     const pid = await ExecBackground(
+-      CoreWorkingDirectory + '/' + getKernelFileName(isAlpha),
++      coreWorkingDirectory + '/' + getKernelFileName(isAlpha),
+       getKernelRuntimeArgs(isAlpha),
+       undefined,
+       async (end) => {
+         stopped = true
+         const logs = await ReadFile(CoreLogFilePath, { Range: '-4096' }).catch((err) => String(err))
+         logs.split('\n').forEach((line) => line && logsStore.recordKernelLog(line))
+         end && logsStore.recordKernelLog(end)
+         onCoreStopped()
+       },
+       {
+-        PidFile: CorePidFilePath,
+         LogFile: CoreLogFilePath,
++        PidFile: coreWorkingDirectory + '/pid.txt',
++        WorkingDirectory: envStore.env.configPath || envStore.env.basePath,
+         Env: getKernelRuntimeEnv(isAlpha),
+       },
+     )
+diff -ruN a/src/types/app.d.ts b/src/types/app.d.ts
+--- a/src/types/app.d.ts
++++ b/src/types/app.d.ts
+@@ -19,6 +19,7 @@
+   appName: string
+   appVersion: string
+   basePath: string
++  configPath: string
+   appPath: string
+   os: OS
+   arch: string
+diff -ruN a/src/views/PluginsView/index.vue b/src/views/PluginsView/index.vue
+--- a/src/views/PluginsView/index.vue
++++ b/src/views/PluginsView/index.vue
+@@ -37,7 +37,7 @@
+     label: 'common.openFile',
+     handler: async (id: string) => {
+       const plugin = pluginsStore.getPluginById(id)
+-      await OpenURI(envStore.env.basePath + '/' + plugin!.path)
++      await OpenURI(`${envStore.env.configPath || envStore.env.basePath}/${plugin!.path}`)
+     },
+   },
+ ]
+diff -ruN a/src/views/RulesetsView/index.vue b/src/views/RulesetsView/index.vue
+--- a/src/views/RulesetsView/index.vue
++++ b/src/views/RulesetsView/index.vue
+@@ -27,7 +27,7 @@
+     label: 'common.openFile',
+     handler: async (id: string) => {
+       const ruleset = rulesetsStore.getRulesetById(id)
+-      await OpenURI(envStore.env.basePath + '/' + ruleset!.path)
++      await OpenURI(`${envStore.env.configPath || envStore.env.basePath}/${ruleset!.path}`)
+     },
+   },
+   {
+diff -ruN a/src/utils/helper.ts b/src/utils/helper.ts
+--- a/src/utils/helper.ts
++++ b/src/utils/helper.ts
+@@ -822,9 +822,21 @@
+ export const processMagicVariables = (str: string) => {
+   const { env } = useEnvStore()
+   let result = str
++  const coreBasePath =
++    env.os === 'linux' && env.configPath
++      ? `${env.configPath}/${CoreWorkingDirectory}`
++      : CoreWorkingDirectory
++
++  if (env.os === 'linux') {
++    result = result.replaceAll('$APP_BASE_PATH/$CORE_BASE_PATH', coreBasePath)
++    result = result.replaceAll(
++      `${env.basePath}/${CoreWorkingDirectory}`,
++      coreBasePath,
++    )
++  }
+   Object.entries({
+     $APP_BASE_PATH: env.basePath,
+-    $CORE_BASE_PATH: CoreWorkingDirectory,
++    $CORE_BASE_PATH: coreBasePath,
+   }).forEach(([source, target]) => {
+     result = result.replaceAll(source, target)
+   })

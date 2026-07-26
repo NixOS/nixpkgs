@@ -1,0 +1,67 @@
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  smbus-cffi,
+  urwid,
+}:
+
+buildPythonPackage rec {
+  pname = "pijuice";
+  version = "1.8";
+  format = "setuptools";
+
+  src = fetchFromGitHub {
+    owner = "PiSupply";
+    repo = "PiJuice";
+    # Latest commit that fixes using the library against python 3.9 by renaming
+    # isAlive() to is_alive(). The former function was removed in python 3.9.
+    tag = "V${version}";
+    sha256 = "sha256-tPYuI+VzbxmTeY/L3s0oDoydRDXJ6t76KmLUyJzxUvU=";
+  };
+
+  patches = [
+    # The pijuice_cli.cli file doesn't have a shebang as the first line of the
+    # script. Without it, the pythonWrapPrograms hook will not wrap the program.
+    # Add a python shebang here so that the the hook is triggered.
+    ./patch-shebang.diff
+  ];
+
+  env = {
+    PIJUICE_BUILD_BASE = 1;
+    PIJUICE_VERSION = version;
+  };
+
+  preBuild = ''
+    cd Software/Source
+  '';
+
+  propagatedBuildInputs = [
+    smbus-cffi
+    urwid
+  ];
+
+  # Remove the following files from the package:
+  #
+  # pijuiceboot{32,64} - precompiled ELF binaries for flashing firmware.
+  #                      Not needed for the python library.
+  #
+  # pijuice_sys.py - A program that acts as a system daemon for monitoring the
+  #                  pijuice.
+  postFixup = ''
+    rm $out/bin/pijuice_sys.py
+    rm $out/bin/pijuiceboot{32,64}
+    mv $out/bin/pijuice_cli.py $out/bin/pijuice_cli
+  '';
+
+  # no tests
+  doCheck = false;
+
+  meta = {
+    description = "Library and resources for PiJuice HAT for Raspberry Pi";
+    mainProgram = "pijuice_cli";
+    homepage = "https://github.com/PiSupply/PiJuice";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ hexagonal-sun ];
+  };
+}

@@ -1,0 +1,36 @@
+diff --git a/lib/libifconfig/Makefile b/lib/libifconfig/Makefile
+index 6bdb202bec1d..ebc626901cfc 100644
+--- a/lib/libifconfig/Makefile
++++ b/lib/libifconfig/Makefile
+@@ -1,7 +1,6 @@
+ 
+ PACKAGE=	lib${LIB}
+ LIB=		ifconfig
+-INTERNALLIB=	true
+ 
+ LIBADD=		m
+ 
+@@ -36,8 +35,8 @@ SRCS+=	${GEN}
+ CLEANFILES+= ${GEN}
+ 
+ # If libifconfig become public uncomment those two lines
+-#INCSDIR=	${INCLUDEDIR}
+-#INCS=		libifconfig.h libifconfig_sfp.h libifconfig_sfp_tables.h
++INCSDIR=	${INCLUDEDIR}
++INCS=		libifconfig.h libifconfig_sfp.h libifconfig_sfp_tables.h
+ 
+ #MAN=		libifconfig.3
+ 
+diff --git a/lib/libifconfig/Symbol.map b/lib/libifconfig/Symbol.map
+index 2d80fb31652a..8b08947112e5 100644
+--- a/lib/libifconfig/Symbol.map
++++ b/lib/libifconfig/Symbol.map
+@@ -2,6 +2,8 @@ FBSD_1.6 {
+ 	ifconfig_bridge_get_bridge_status;
+ 	ifconfig_bridge_free_bridge_status;
+ 	ifconfig_carp_get_info;
++	ifconfig_carp_get_vhid;
++	ifconfig_carp_set_info;
+ 	ifconfig_close;
+ 	ifconfig_create_interface;
+ 	ifconfig_create_interface_vlan;
