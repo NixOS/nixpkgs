@@ -3,7 +3,7 @@
   python3Packages,
   fetchFromGitHub,
   testers,
-  nix-update-script,
+  callPackage,
 
   # build time
   pkg-config,
@@ -20,6 +20,7 @@
   withTrain ? true,
   withHTTP ? true,
   withAlignment ? true,
+  withZh ? false,
   withFfplay ? false,
 }:
 
@@ -33,6 +34,8 @@ let
     sonicSupport = false;
     speechPlayerSupport = false;
   };
+
+  g2pwModel = callPackage ./g2pw-model { };
 in
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -64,6 +67,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # Add --version/-V flag; remove once merged upstream.
     # https://github.com/OHF-Voice/piper1-gpl/pull/239
     ./add-version-flag.patch
+
+    # Add download flag to give extra non-voice modesl like g2pW
+    # https://github.com/OHF-Voice/piper1-gpl/pull/245
+    ./add-download-flag.patch
   ];
 
   build-system =
@@ -123,7 +130,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ]
     ++ lib.optionals withTrain finalAttrs.passthru.optional-dependencies.train
     ++ lib.optionals withHTTP finalAttrs.passthru.optional-dependencies.http
-    ++ lib.optionals withAlignment finalAttrs.passthru.optional-dependencies.alignment;
+    ++ lib.optionals withAlignment finalAttrs.passthru.optional-dependencies.alignment
+    ++ lib.optionals withZh finalAttrs.passthru.optional-dependencies.zh;
 
   makeWrapperArgs = lib.optionals withFfplay [
     "--prefix"
@@ -150,6 +158,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ];
     alignment = with python3Packages; [
       onnx
+    ];
+    zh = with python3Packages; [
+      g2pw
+      sentence-stream
+      unicode-rbnf
+      torch
+      requests
     ];
   };
 
@@ -190,10 +205,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
         withTrain = false;
         withHTTP = false;
         withAlignment = false;
+        withZh = true;
         withFfplay = true;
       };
     };
-    updateScript = nix-update-script { };
+
+    updateScript = [ ./update-piper-tts.sh ];
   };
 
   postFixup = ''

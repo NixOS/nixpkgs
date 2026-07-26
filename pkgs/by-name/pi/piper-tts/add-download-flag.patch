@@ -1,0 +1,30 @@
+diff --git a/src/piper/__main__.py b/src/piper/__main__.py
+index f825570..bc7648b 100644
+--- a/src/piper/__main__.py
++++ b/src/piper/__main__.py
+@@ -96,6 +96,12 @@ def main() -> None:
+         help="Data directory to check for voice models (default: current directory)",
+     )
+     #
++    parser.add_argument(
++        "--download-dir",
++        "--download_dir",
++        help="Directory for downloadable resources like the Chinese g2pW model (default: current directory)",
++    )
++    #
+     parser.add_argument(
+         "--debug", action="store_true", help="Print DEBUG messages to console"
+     )
+@@ -146,7 +152,11 @@ def main() -> None:
+ 
+     # Load voice
+     _LOGGER.debug("Loading voice: '%s'", model_path)
+-    voice = PiperVoice.load(model_path, use_cuda=args.cuda)
++    voice = PiperVoice.load(
++        model_path, 
++        use_cuda=args.cuda,
++        download_dir=args.download_dir,
++    )
+     syn_config = SynthesisConfig(
+         speaker_id=args.speaker,
+         length_scale=args.length_scale,
