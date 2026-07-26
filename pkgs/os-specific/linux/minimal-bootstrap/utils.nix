@@ -58,6 +58,9 @@ rec {
     ) baseDrv;
 
   writeTextFile =
+    let
+      PATH = lib.makeBinPath [ mescc-tools-extra ];
+    in
     {
       name, # the name of the derivation
       text,
@@ -89,7 +92,7 @@ rec {
         ))
       ];
 
-      PATH = lib.makeBinPath [ mescc-tools-extra ];
+      inherit PATH;
       destinationDir = dirOf destination;
       inherit destination;
     };
