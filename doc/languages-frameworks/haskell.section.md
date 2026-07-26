@@ -43,7 +43,7 @@ all open source Haskell packages). See [](#haskell-available-versions) for a few
 Roughly half of the 16K packages contained in `haskellPackages` don’t actually
 build and are [marked as broken semi-automatically](https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/configuration-hackage2nix/broken.yaml).
 Most of those packages are deprecated or unmaintained, but sometimes packages
-that should build, do not build. Very often fixing them is not a lot of work.
+that should build, do not build. Fixing them is often a small amount of work.
 
 <!--
 TODO(@sternenseemann):
@@ -57,7 +57,7 @@ Available compilers are collected under `haskell.compiler`.
 Each of those compiler versions has a corresponding attribute set `packages` built with
 it. However, the non-standard package sets are not tested regularly and, as a
 result, contain fewer working packages. The corresponding package set for GHC
-9.4.8 is `haskell.packages.ghc948`. In fact, `haskellPackages` (at the time of writing) is an alias
+9.4.8 is `haskell.packages.ghc948`. In fact, `haskellPackages` is an alias
 for `haskell.packages.ghc9103`.
 
 Every package set also re-exposes the GHC used to build its packages as `haskell.packages.*.ghc`.
@@ -433,7 +433,7 @@ ensured that `pkg-config` is available at build time.
 `*FrameworkDepends`
 : Apple SDK Framework which the package depends on when compiling it on Darwin.
 
-Using these two distinctions, you should be able to categorize most of the dependency
+Using these two distinctions, you can categorize most of the dependency
 specifications that are available:
 `benchmarkFrameworkDepends`,
 `benchmarkHaskellDepends`,
@@ -479,8 +479,7 @@ That only leaves the following extra ways for specifying dependencies:
 
 The dependency specification methods in this list which are unconditional
 are especially useful when writing [overrides](#haskell-overriding-haskell-packages)
-when you want to make sure that they are definitely included. However, it is
-recommended to use the more accurate ones listed above when possible.
+when you want to make sure that they are definitely included. However, prefer the more accurate ones listed above when possible.
 
 ### Meta attributes {#haskell-derivation-meta}
 
@@ -644,7 +643,7 @@ development environment inside `nix-shell`:
 
 `packages`
 : This argument is used to select the packages for which to build the
-development environment. This should be a function which takes a haskell package
+development environment. This is a function that takes a Haskell package
 set and returns a list of packages. `shellFor` will pass the used package set to
 this function and include all dependencies of the returned package in the build
 environment. This means you can reuse Nix expressions of packages included in
@@ -1282,7 +1281,7 @@ Nixpkgs' default for your (host) platform, you will lose the ability to
 substitute from the official binary cache.
 
 If you are concerned about build times and thus want to disable profiling, it
-probably makes sense to use `haskell.lib.compose.disableLibraryProfiling` (see
+prefer `haskell.lib.compose.disableLibraryProfiling` (see
 [](#haskell-trivial-helpers)) on the packages you are building locally while
 continuing to substitute their dependencies and GHC.
 :::
