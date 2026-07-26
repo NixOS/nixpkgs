@@ -5,8 +5,7 @@
   nix-update-script,
   nixosTests,
   rustPlatform,
-  sonic-server,
-  testers,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -43,14 +42,11 @@ rustPlatform.buildRustPackage rec {
   # Found argument '--test-threads' which wasn't expected, or isn't valid in this context
   doCheck = false;
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
-    tests = {
-      inherit (nixosTests) sonic-server;
-      version = testers.testVersion {
-        command = "sonic --version";
-        package = sonic-server;
-      };
-    };
+    tests.sonic-server = nixosTests.sonic-server;
     updateScript = nix-update-script { };
   };
 
