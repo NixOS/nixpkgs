@@ -21,7 +21,7 @@ Some cryptic errors regarding V8 may appear.
 
 A lock file (package-lock.json, yarn.lock...) is supposed to make reproducible installations of `node_modules` for each tool.
 
-Guidelines of package managers, recommend to commit those lock files to the repos.
+Package manager guidelines recommend committing those lock files to the repository.
 If a particular lock file is present, it is a strong indication of which package manager is used upstream.
 
 Use a Nix tool that understands the lock file.
@@ -33,7 +33,7 @@ These files are fairly large, so when packaging for nixpkgs, this approach does 
 Exceptions to this rule are:
 
 - When you encounter one of the bugs from a Nix tool. In each of the tool-specific instructions, known problems are detailed. If a tool has a problem, try another. You may have to re-create a lock file and commit it to Nixpkgs.
-- Some lock files contain particular version of a package that has been pulled off npm for some reason. In that case, you can recreate upstream lock (by removing the original and `npm install`, `yarn`, ...) and commit this to nixpkgs.
+- Some lock files contain a particular version of a package that has been pulled off npm for some reason. In that case, you can recreate the upstream lock (by removing the original and running `npm install`, `yarn`, etc.) and commit this to Nixpkgs.
 
 ### Use upstream `package.json` {#javascript-upstream-package-json}
 
@@ -51,7 +51,7 @@ Exceptions to this rule are:
   npm run build:server
   ```
 
-  when you need to override a package.json. It's nice to use the one from the upstream source and do some explicit override. Here is an example:
+  When you need to override `package.json`, it is best to use the one from the upstream source and make explicit overrides. Here is an example:
 
   ```nix
   {
@@ -69,9 +69,9 @@ Exceptions to this rule are:
 
 Each tool has an abstraction to build the node_modules (dependencies) directory.
 You can always use the `stdenv.mkDerivation` with the node_modules to build the package (symlink the node_modules directory and then use the package build command).
-The node_modules abstraction can be also used to build some web framework frontends.
-For an example of this see how [plausible](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/pl/plausible/package.nix) is built.
-Then when building the frontend you can symlink the node_modules directory.
+The `node_modules` abstraction can also be used to build some web framework frontends.
+For an example of this, see how [plausible](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/pl/plausible/package.nix) is built.
+Then, when building the frontend, you can symlink the `node_modules` directory.
 
 ## Tool-specific instructions {#javascript-tool-specific}
 
@@ -153,7 +153,7 @@ sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
 
 `fetchNpmDeps` is a Nix function that requires the following mandatory arguments:
 
-- `src`: A directory / tarball with `package-lock.json` file
+- `src`: A directory or tarball with a `package-lock.json` file
 - `hash`: The output hash of the dependencies defined in `package-lock.json`.
 
 It returns a derivation with all `package-lock.json` dependencies downloaded into `$out/`, usable as an npm cache.
@@ -168,7 +168,7 @@ There is no need to specify a `hash`, since it relies entirely on the integrity 
 
 ##### Inputs {#javascript-buildNpmPackage-inputs}
 
-- `npmRoot`: Path to package directory containing the source tree.
+- `npmRoot`: Path to the package directory containing the source tree.
   If this is omitted, the `package` and `packageLock` arguments must be specified instead.
 - `package`: Parsed contents of `package.json`
 - `packageLock`: Parsed contents of `package-lock.json`
@@ -243,13 +243,13 @@ This is to be used together with `importNpmLock.hooks.linkNodeModulesHook` to su
 It accepts an argument with the following attributes:
 
 `npmRoot` (Path; optional)
-: Path to package directory containing the source tree. If not specified, the `package` and `packageLock` arguments must both be specified.
+: Path to the package directory containing the source tree. If not specified, the `package` and `packageLock` arguments must both be specified.
 
 `package` (Attrset; optional)
 : Parsed contents of `package.json`, as returned by `lib.importJSON ./my-package.json`. If not specified, the `package.json` in `npmRoot` is used.
 
 `packageLock` (Attrset; optional)
-: Parsed contents of `package-lock.json`, as returned `lib.importJSON ./my-package-lock.json`. If not specified, the `package-lock.json` in `npmRoot` is used.
+: Parsed contents of `package-lock.json`, as returned by `lib.importJSON ./my-package-lock.json`. If not specified, the `package-lock.json` in `npmRoot` is used.
 
 `derivationArgs` (`mkDerivation` attrset; optional)
 : Arguments passed to `stdenv.mkDerivation`
@@ -373,7 +373,7 @@ Use a pinned version of pnpm (for example `pnpm_9` or `pnpm_10`) to increase rep
  })
 ```
 
-In case you are patching `package.json` or `pnpm-lock.yaml`, make sure to pass `finalAttrs.patches` to the function as well (i.e., `inherit (finalAttrs) patches`.
+In case you are patching `package.json` or `pnpm-lock.yaml`, make sure to pass `finalAttrs.patches` to the function as well (i.e., `inherit (finalAttrs) patches`).
 
 `pnpmConfigHook` supports adding additional `pnpm install` flags via `pnpmInstallFlags` which can be set to a Nix string array:
 
@@ -575,12 +575,12 @@ This script by default runs `yarn --offline build`, and it relies upon the proje
 
 ##### `yarnInstallHook` arguments {#javascript-yarninstallhook}
 
-To install the package `yarnInstallHook` uses both `npm` and `yarn` to cleanup project files and dependencies. To disable this phase, you can set `dontYarnInstall = true` or override the `installPhase`. Below is a list of additional `mkDerivation` arguments read by this hook:
+To install the package, `yarnInstallHook` uses both `npm` and `yarn` to clean up project files and dependencies. To disable this phase, you can set `dontYarnInstall = true` or override the `installPhase`. Below is a list of additional `mkDerivation` arguments read by this hook:
 
 - `yarnKeepDevDeps`: Disables the removal of devDependencies from `node_modules` before installation.
 
 #### Yarn Berry v3/v4 {#javascript-yarn-v3-v4}
-Yarn Berry (v3 / v4) have similar formats, they start with blocks like these:
+Yarn Berry (v3 / v4) versions have similar formats. They start with blocks like these:
 
 ```yaml
 __metadata:
@@ -650,7 +650,7 @@ This prints the hash to stdout. Use it in update scripts to recalculate the hash
 Internally, this uses a patched version of Yarn to ensure git dependencies are re-packed and any attempted downloads fail immediately.
 
 ##### Patching upstream `package.json` or `yarn.lock` files {#javascript-yarnBerry-patching}
-In case patching the upstream `package.json` or `yarn.lock` is needed, it's important to pass `finalAttrs.patches` to `fetchYarnBerryDeps` as well, so the patched variants are picked up (i.e., `inherit (finalAttrs) patches`.
+In case patching the upstream `package.json` or `yarn.lock` is needed, it's important to pass `finalAttrs.patches` to `fetchYarnBerryDeps` as well, so the patched variants are picked up (i.e., `inherit (finalAttrs) patches`).
 
 ##### Missing hashes in the `yarn.lock` file {#javascript-yarnBerry-missing-hashes}
 Unfortunately, `yarn.lock` files do not include hashes for optional/platform-specific dependencies. This is [by design](https://github.com/yarnpkg/berry/issues/6759).
@@ -698,7 +698,7 @@ If you are packaging something outside Nixpkgs, consider the following:
 
 ### npmlock2nix {#javascript-npmlock2nix}
 
-[npmlock2nix](https://github.com/nix-community/npmlock2nix) aims at building `node_modules` without code generation. It hasn't reached v1 yet, the API may change.
+[npmlock2nix](https://github.com/nix-community/npmlock2nix) aims at building `node_modules` without code generation. It hasn't reached v1 yet; the API may change.
 
 #### Pitfalls {#javascript-npmlock2nix-pitfalls}
 
@@ -706,7 +706,7 @@ There are some [problems with npm v7](https://github.com/tweag/npmlock2nix/issue
 
 ### nix-npm-buildpackage {#javascript-nix-npm-buildpackage}
 
-[nix-npm-buildpackage](https://github.com/serokell/nix-npm-buildpackage) aims at building `node_modules` without code generation. It hasn't reached v1 yet, the API may change. It supports both `package-lock.json` and yarn.lock.
+[nix-npm-buildpackage](https://github.com/serokell/nix-npm-buildpackage) aims at building `node_modules` without code generation. It hasn't reached v1 yet; the API may change. It supports both `package-lock.json` and yarn.lock.
 
 #### Pitfalls {#javascript-nix-npm-buildpackage-pitfalls}
 
