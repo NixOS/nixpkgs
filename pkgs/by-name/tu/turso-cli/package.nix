@@ -4,16 +4,20 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  writableTmpDirAsHomeHook,
+  versionCheckHook,
   nix-update-script,
 }:
 buildGoModule (finalAttrs: {
   pname = "turso-cli";
   version = "1.0.30";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "tursodatabase";
     repo = "turso-cli";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-oV4lc4lbFM0G5d20P3xp2JwYOWRUc8o/v+ZTg30XL14=";
   };
 
@@ -22,12 +26,11 @@ buildGoModule (finalAttrs: {
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
+    "-s"
     "-X github.com/tursodatabase/turso-cli/internal/cmd.version=v${finalAttrs.version}"
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd turso \
@@ -35,6 +38,9 @@ buildGoModule (finalAttrs: {
       --fish <($out/bin/turso completion fish) \
       --zsh <($out/bin/turso completion zsh)
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
