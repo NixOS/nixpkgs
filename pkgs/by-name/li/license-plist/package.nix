@@ -8,14 +8,14 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "license-plist";
-  version = "3.27.7";
+  version = "3.27.9";
 
   __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchzip {
     url = "https://github.com/mono0926/LicensePlist/releases/download/${finalAttrs.version}/portable_licenseplist.zip";
-    hash = "sha256-Z8jDFRZj0s6X+edexNZ0Qx2qUC8Bm2GC9uOrKWbXtCI=";
+    hash = "sha256-L8/ymkMR+QDajW0qSeX4iEj+qubuJhhQ9nPXO3cUu/k=";
     stripRoot = false;
   };
 
