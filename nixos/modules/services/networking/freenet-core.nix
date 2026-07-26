@@ -7,18 +7,26 @@
 
 let
   cfg = config.services.freenet-core;
+  stateDir = "/var/lib/freenet-core";
+  configDir = "${stateDir}/config";
+  logDir = "/var/log/freenet-core";
 
   command = [
     (lib.getExe cfg.package)
     "network"
     "--disable-auto-update"
-    "--config-dir=${cfg.configDir}"
-    "--data-dir=${cfg.dataDir}"
-    "--log-dir=${cfg.logDir}"
+    "--config-dir=${configDir}"
+    "--data-dir=${stateDir}"
+    "--log-dir=${logDir}"
     "--network-address=${cfg.networkAddress}"
     "--network-port=${toString cfg.networkPort}"
     "--ws-api-address=${cfg.websocketAddress}"
     "--ws-api-port=${toString cfg.websocketPort}"
+  ]
+  ++ lib.optionals cfg.gateway.enable [
+    "--is-gateway"
+    "--public-network-address=${cfg.gateway.publicAddress}"
+    "--public-network-port=${toString cfg.gateway.publicPort}"
   ]
   ++ cfg.extraArgs;
 in
@@ -27,43 +35,6 @@ in
     enable = lib.mkEnableOption "Freenet node";
 
     package = lib.mkPackageOption pkgs "freenet-core" { };
-
-    user = lib.mkOption {
-      type = lib.types.str;
-      default = "freenet-core";
-      example = "freenet";
-      description = "User account under which Freenet runs.";
-    };
-
-    group = lib.mkOption {
-      type = lib.types.str;
-      default = "freenet-core";
-      example = "freenet";
-      description = "Group under which Freenet runs.";
-    };
-
-    dataDir = lib.mkOption {
-      type = lib.types.path;
-      default = "/var/lib/freenet-core";
-      example = "/srv/freenet-core";
-      description = "Directory used to store Freenet node data.";
-    };
-
-    configDir = lib.mkOption {
-      type = lib.types.path;
-      default = "${cfg.dataDir}/config";
-      defaultText = lib.literalExpression ''"''${config.services.freenet-core.dataDir}/config"'';
-      example = "/srv/freenet-core/config";
-      description = "Directory used to store Freenet configuration.";
-    };
-
-    logDir = lib.mkOption {
-      type = lib.types.path;
-      default = "${cfg.dataDir}/logs";
-      defaultText = lib.literalExpression ''"''${config.services.freenet-core.dataDir}/logs"'';
-      example = "/var/log/freenet-core";
-      description = "Directory used to store Freenet logs.";
-    };
 
     networkAddress = lib.mkOption {
       type = lib.types.str;
@@ -77,6 +48,23 @@ in
       default = 31337;
       example = 31338;
       description = "UDP port on which the Freenet peer-to-peer transport listens.";
+    };
+
+    gateway = {
+      enable = lib.mkEnableOption "Freenet gateway mode";
+
+      publicAddress = lib.mkOption {
+        type = lib.types.str;
+        example = "198.51.100.10";
+        description = "Publicly reachable address advertised by this gateway.";
+      };
+
+      publicPort = lib.mkOption {
+        type = lib.types.port;
+        default = cfg.networkPort;
+        defaultText = lib.literalExpression "config.services.freenet-core.networkPort";
+        description = "Publicly reachable UDP port advertised by this gateway.";
+      };
     };
 
     websocketAddress = lib.mkOption {
@@ -130,56 +118,60 @@ in
   config = lib.mkIf cfg.enable {
     networking.firewall.allowedUDPPorts = lib.mkIf cfg.openFirewall [ cfg.networkPort ];
 
-    systemd.tmpfiles.settings."10-freenet-core" = {
-      ${cfg.dataDir}.d = {
-        user = cfg.user;
-        group = cfg.group;
-        mode = "0700";
-      };
-      ${cfg.configDir}.d = {
-        user = cfg.user;
-        group = cfg.group;
-        mode = "0700";
-      };
-      ${cfg.logDir}.d = {
-        user = cfg.user;
-        group = cfg.group;
-        mode = "0700";
-      };
-    };
-
     systemd.services.freenet-core = {
       description = "Freenet node";
       documentation = [ "https://freenet.org/" ];
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
-      environment = cfg.environment;
+      environment = {
+        HOME = stateDir;
+      }
+      // cfg.environment;
       serviceConfig = {
+        ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p ${configDir}";
         ExecStart = lib.escapeShellArgs command;
-        User = cfg.user;
-        Group = cfg.group;
-        WorkingDirectory = cfg.dataDir;
+        User = "freenet-core";
+        DynamicUser = true;
+        StateDirectory = "freenet-core";
+        StateDirectoryMode = "0700";
+        LogsDirectory = "freenet-core";
+        LogsDirectoryMode = "0700";
+        WorkingDirectory = stateDir;
         Nice = cfg.nice;
+        LimitNOFILE = 65536;
         UMask = "0077";
         Restart = "on-failure";
+        # Exit 42 also signals a fatal listener failure and must remain restartable.
+        RestartPreventExitStatus = [ 43 ];
         RestartSec = 10;
         TimeoutStopSec = 45;
-      };
-    };
 
-    users.users = lib.mkIf (cfg.user == "freenet-core") {
-      freenet-core = {
-        isSystemUser = true;
-        group = cfg.group;
-        description = "Freenet node user";
-        home = cfg.dataDir;
-        createHome = true;
+        CapabilityBoundingSet = "";
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
       };
-    };
-
-    users.groups = lib.mkIf (cfg.group == "freenet-core") {
-      freenet-core = { };
     };
   };
 
