@@ -223,7 +223,7 @@ If `null` (which is the default value), the one included in `src` is used.
 
 `env`
 : Extra environment variables to set during the build.
-These are also set inside the [development environment defined by the `passthru.env` attribute in the returned derivation](#haskell-development-environments), but are not set inside a development environment built with [](#haskell-shellFor) that includes this package.
+These are also set inside the [development environment defined by the `passthru.env` attribute in the returned derivation](#haskell-development-environments). They are not set inside a development environment built with [](#haskell-shellFor) that includes this package.
 
 `configureFlags`
 : Extra flags passed when executing the `configure` command of `Setup.hs`.
@@ -573,8 +573,7 @@ $ nix-shell -A haskellPackages.random.env '<nixpkgs>'
 
 The environment contains a GHC which is set up so it finds all
 dependencies of `random`. This environment does not mirror
-the environment used to build the package, but is intended as a convenient
-tool for development and simple debugging. `env` relies on the `ghcWithPackages`
+the environment used to build the package. It is a convenient tool for development and simple debugging. `env` relies on the `ghcWithPackages`
 wrapper which automatically injects a pre-populated package-db into every
 GHC invocation. In contrast, using `nix-shell -A haskellPackages.random` does not result in an environment in which the dependencies are in GHCs package
 database. Instead, the Haskell builder passes in all dependencies explicitly
