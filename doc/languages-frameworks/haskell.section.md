@@ -22,7 +22,7 @@ are also exposed at the top level, and there is nothing Haskell specific to
 installing and using them.
 
 All of these packages are originally defined in the `haskellPackages` package set.
-The same packages are re-exposed with a reduced dependency closure for convenience (see `justStaticExecutables` or `separateBinOutput` below).
+The same packages are re-exposed with a reduced dependency closure for convenience (see `justStaticExecutables` or `enableSeparateBinOutput` below).
 
 :::{.note}
 See [](#chap-language-support) for techniques to explore package sets.
@@ -525,7 +525,7 @@ let
   inherit (haskell.lib.compose) overrideCabal;
 
   # Incremental builds work with GHC >=9.4.
-  turtle = haskell.packages.ghc944.turtle;
+  turtle = haskell.packages.ghc948.turtle;
 
   # This will do a full build of `turtle`, while writing the intermediate build products
   # (compiled modules, etc.) to the `intermediates` output.
@@ -791,7 +791,7 @@ need to build `nix-tree` with a more recent version of `brick` than the default
 one provided by `haskellPackages`:
 
 ```nix
-haskellPackages.nix-tree.override { brick = haskellPackages.brick_0_67; }
+haskellPackages.nix-tree.override { brick = haskellPackages.brick_2_12; }
 ```
 
 <!-- TODO(@sternenseemann): This belongs in the next section
@@ -1130,7 +1130,7 @@ benchmark component.
 Some library functions depend on packages from the Haskell package sets. Thus they are
 exposed from those instead of from `haskell.lib.compose` which can only access what is
 passed directly to it. When using the functions below, make sure that you are obtaining them
-from the same package set (`haskellPackages`, `haskell.packages.ghc944` etc.) as the packages
+from the same package set (`haskellPackages`, `haskell.packages.ghc948` etc.) as the packages
 you are working with or – even better – from the `self`/`final` fix point of your overlay to
 `haskellPackages`.
 
