@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ytdl-sub";
-  version = "2026.07.16";
+  version = "2026.07.17.post1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jmbannon";
     repo = "ytdl-sub";
     tag = finalAttrs.version;
-    hash = "sha256-uvuwp6OqdL4mK3RF7rr2hrDhETgoOaNef7ZLPU95EQg=";
+    hash = "sha256-ypbGp0R8ExUXzxwPesQ+jYyVbBGeP79VLt4Xd9hTggA=";
   };
 
   postPatch = ''
