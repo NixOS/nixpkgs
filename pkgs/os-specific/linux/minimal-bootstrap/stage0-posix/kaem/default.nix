@@ -29,6 +29,13 @@ derivationWithMeta {
   PATH = lib.makeBinPath [ mescc-tools-extra ];
 
   passthru.runCommand =
+    let
+      defaultBuildInputs = [
+        kaem
+        mescc-tools
+        mescc-tools-extra
+      ];
+    in
     name: env: buildCommand:
     derivationWithMeta (
       {
@@ -42,14 +49,7 @@ derivationWithMeta {
           (writeText "${name}-builder" buildCommand)
         ];
 
-        PATH = lib.makeBinPath (
-          (env.nativeBuildInputs or [ ])
-          ++ [
-            kaem
-            mescc-tools
-            mescc-tools-extra
-          ]
-        );
+        PATH = lib.makeBinPath ((env.nativeBuildInputs or [ ]) ++ defaultBuildInputs);
       }
       // (removeAttrs env [ "nativeBuildInputs" ])
     );
