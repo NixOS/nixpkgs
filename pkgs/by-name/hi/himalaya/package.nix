@@ -17,9 +17,9 @@
 }:
 
 let
-  version = "1.2.0";
-  hash = "sha256-BBzfDeNu7s010ARCYuydCyR7QWrbeI3/B4CxA6d4olw=";
-  cargoHash = "sha256-IkvRiU9NuD6n7aCF8J235u2LjjmLftnF1n874IWVcN0=";
+  version = "2.0.0";
+  hash = "sha256-rOCMjJV0lFSIlvstkSMqGwXKDZsBkWtTYhvXpA73ucA=";
+  cargoHash = "sha256-ppZYlGWNS5lXQZNt7RcwJIvU5jp07cXhEpmFJ9UtxRE=";
 
   inherit (stdenv.hostPlatform)
     isLinux
