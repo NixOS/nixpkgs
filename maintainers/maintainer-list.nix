@@ -23316,6 +23316,11 @@
     githubId = 52847440;
     name = "Ryan Burns";
   };
+  r0chd = {
+    github = "r0chd";
+    githubId = 100892812;
+    name = "Oskar Rochowiak";
+  };
   r17x = {
     email = "hi@rin.rocks";
     github = "r17x";
