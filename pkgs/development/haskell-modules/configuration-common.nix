@@ -1714,14 +1714,17 @@ with haskellLib;
   shh = doJailbreak super.shh;
   shh-extras = doJailbreak super.shh-extras;
 
-  # Disable test cases that were broken by insignificant changes in icu 76
-  # https://github.com/haskell/text-icu/issues/108
-  text-icu = overrideCabal (drv: {
-    testFlags = drv.testFlags or [ ] ++ [
-      "-t"
-      "!Test cases"
-    ];
-  }) super.text-icu;
+  text-icu = lib.pipe super.text-icu [
+    (appendPatches [
+      # Fix time rendering test with ICU >= 76
+      # https://github.com/haskell/text-icu/issues/108
+      (pkgs.fetchpatch {
+        name = "text-icu-time-tests-icu-76.patch";
+        url = "https://github.com/haskell/text-icu/commit/921287b296ff781051c7bff45bb9adb04ee3a6a7.patch";
+        hash = "sha256-gi6ilqgN/1PLGdVNxXE217J+c0reaitLWND8X6VsV1U=";
+      })
+    ])
+  ];
 
   hercules-ci-agent = self.generateOptparseApplicativeCompletions [
     "hercules-ci-agent"
