@@ -20,6 +20,12 @@ rec {
   };
 
   derivationWithMeta =
+    let
+      removedAttributeNames = [
+        "meta"
+        "passthru"
+      ];
+    in
     attrs:
     let
       passthru = attrs.passthru or { };
@@ -32,10 +38,7 @@ rec {
           name = attrs.name or "${attrs.pname}-${attrs.version}";
         }
         // maybeContentAddressed
-        // (removeAttrs attrs [
-          "meta"
-          "passthru"
-        ])
+        // (removeAttrs attrs removedAttributeNames)
       );
       passthru' =
         if passthru ? tests then
