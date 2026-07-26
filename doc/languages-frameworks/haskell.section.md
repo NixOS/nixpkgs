@@ -38,7 +38,7 @@ For packages that are part of [Stackage] (a curated set of known to be
 compatible packages), we use the version prescribed by a Stackage snapshot
 (usually the current LTS one) as the default version. For all other packages we
 use the latest version from [Hackage](https://hackage.org) (the repository of
-basically all open source Haskell packages). See [](#haskell-available-versions) for a few more details on this.
+all open source Haskell packages). See [](#haskell-available-versions) for a few more details on this.
 
 Roughly half of the 16K packages contained in `haskellPackages` don’t actually
 build and are [marked as broken semi-automatically](https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/configuration-hackage2nix/broken.yaml).
@@ -57,7 +57,7 @@ Available compilers are collected under `haskell.compiler`.
 Each of those compiler versions has a corresponding attribute set `packages` built with
 it. However, the non-standard package sets are not tested regularly and, as a
 result, contain fewer working packages. The corresponding package set for GHC
-9.4.8 is `haskell.packages.ghc948`. In fact, `haskellPackages` (at the time of writing) is just an alias
+9.4.8 is `haskell.packages.ghc948`. In fact, `haskellPackages` (at the time of writing) is an alias
 for `haskell.packages.ghc9103`.
 
 Every package set also re-exposes the GHC used to build its packages as `haskell.packages.*.ghc`.
@@ -116,7 +116,7 @@ given in the `.cabal` file of your package and all its dependencies.
 
 The [Haskell builder in Nixpkgs](#haskell-mkderivation) does no such thing.
 It will take as input packages with names of the desired dependencies
-and just check whether they fulfill the version bounds and fail if they don’t
+and check whether they fulfill the version bounds and fail if they don’t
 (by default, see `jailbreak` to circumvent this).
 
 The `haskellPackages.callPackage` function does the package resolution.
@@ -549,8 +549,7 @@ turtle-incremental-build
 ## Development environments {#haskell-development-environments}
 
 In addition to building and installing Haskell software, Nixpkgs can also
-provide development environments for Haskell projects. This has the obvious
-advantage that you benefit from `cache.nixos.org` and no longer need to compile
+provide development environments for Haskell projects. This has the advantage that you benefit from `cache.nixos.org` and no longer need to compile
 all project dependencies yourself. While it is often very useful, this is not
 the primary use case of our package set. Have a look at the section
 [](#haskell-available-versions) to learn which
@@ -607,7 +606,7 @@ the local Hackage db.
 
 Often you won't work on a package that is already part of `haskellPackages` or
 Hackage, so we first need to write a Nix expression to obtain the development
-environment from. Luckily, we can generate one very easily from an already
+environment from. We can generate one from an already
 existing cabal file using `cabal2nix`:
 
 ```console
@@ -617,11 +616,10 @@ $ cabal2nix ./. > my-project.nix
 ```
 
 The generated Nix expression evaluates to a function ready to be
-`callPackage`-ed. For now, we can add a minimal `default.nix` which does just
-that:
+`callPackage`-ed. For now, we can add a minimal `default.nix` that does this:
 
 ```nix
-# Retrieve nixpkgs impurely from NIX_PATH for now, you can pin it instead, of course.
+# Retrieve nixpkgs impurely from NIX_PATH. You can pin it instead.
 {
   pkgs ? import <nixpkgs> { },
 }:
@@ -637,8 +635,8 @@ inside the shell as expected.
 
 ### shellFor {#haskell-shellFor}
 
-Having to install tools globally is obviously not great, especially if you want
-to provide a batteries-included `shell.nix` with your project. Luckily there's a
+Having to install tools globally is not great, especially if you want
+to provide a batteries-included `shell.nix` with your project. There's a
 proper tool for making development environments out of packages' build
 environments: `shellFor`, a function exposed by every haskell package set. It
 takes the following arguments and returns a derivation which is suitable as a
@@ -800,7 +798,7 @@ up, you'll usually notice that Cabal noticed that more than one versions of the 
 package was present in the dependency graph. This typically causes a later compilation
 failure (the error message `haskellPackages.mkDerivation` produces tries to save
 you the time of finding this out yourself, but if you wish to do so, you can
-disable it using `allowInconsistentDependencies`). Luckily, `haskellPackages` provides
+disable it using `allowInconsistentDependencies`). `haskellPackages` provides
 you with a tool to deal with this. `overrideScope` creates a new `haskellPackages`
 instance with the override applied *globally* for this package, so the dependency
 closure automatically uses a consistent version of the overridden package. E. g.
@@ -835,7 +833,7 @@ haskell.lib.compose.overrideCabal (drv: {
    before and returns a set of arguments to replace (or add) with a new value.
 2. The Haskell derivation to override.
 
-The arguments are ordered so that you can easily create helper functions by making
+The arguments are ordered so that you can create helper functions by making
 use of currying:
 
 ```nix
