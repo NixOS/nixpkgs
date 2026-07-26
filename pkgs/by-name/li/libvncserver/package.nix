@@ -41,6 +41,18 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/LibVNC/libvncserver/commit/e64fa928170f22a2e21b5bbd6d46c8f8e7dd7a96.patch";
       hash = "sha256-AAZ3H34+nLqQggb/sNSx2gIGK96m4zatHX3wpyjNLOA=";
     })
+
+    (fetchpatch {
+      name = "CVE-2026-32854.patch";
+      url = "https://github.com/LibVNC/libvncserver/commit/dc78dee51a7e270e537a541a17befdf2073f5314.patch";
+      hash = "sha256-CgVfvsrgZWnjIzu/0UegoAuCqO7WHhCDVvhH8Yk1cXo=";
+    })
+
+    (fetchpatch {
+      name = "CVE-2026-32853.patch";
+      url = "https://github.com/LibVNC/libvncserver/commit/009008e2f4d5a54dd71f422070df3af7b3dbc931.patch";
+      hash = "sha256-ZgpiIS7KoRzDmVLQ0J86wTFFykCBVMt6bZwJsFvIO74=";
+    })
   ];
 
   nativeBuildInputs = [
