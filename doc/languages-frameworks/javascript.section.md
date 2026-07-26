@@ -6,18 +6,17 @@ Package JavaScript applications with the tools below.
 
 ## Getting unstuck / finding code examples {#javascript-finding-examples}
 
-If you find you are lacking inspiration for packaging JavaScript applications, the links below might prove useful.
-Searching online for prior art can be helpful if you are running into solved problems.
+The links below help you find existing packages to learn from.
 
 ### GitHub {#javascript-finding-examples-github}
 
 - Searching Nix files for `yarnConfigHook`: <https://github.com/search?q=yarnConfigHook+language%3ANix&type=code>
-- Searching just `flake.nix` files for `yarnConfigHook`: <https://github.com/search?q=yarnConfigHook+path%3A**%2Fflake.nix&type=code>
+- Searching `flake.nix` files for `yarnConfigHook`: <https://github.com/search?q=yarnConfigHook+path%3A**%2Fflake.nix&type=code>
 
 ### GitLab {#javascript-finding-examples-gitlab}
 
 - Searching Nix files for `yarnConfigHook`: <https://gitlab.com/search?scope=blobs&search=yarnConfigHook+extension%3Anix>
-- Searching just `flake.nix` files for `yarnConfigHook`: <https://gitlab.com/search?scope=blobs&search=yarnConfigHook+filename%3Aflake.nix>
+- Searching `flake.nix` files for `yarnConfigHook`: <https://gitlab.com/search?scope=blobs&search=yarnConfigHook+filename%3Aflake.nix>
 
 ## Tools overview {#javascript-tools-overview}
 
@@ -82,17 +81,17 @@ Exceptions to this rule are:
 
 ### Use `node_modules` directly {#javascript-using-node_modules}
 
-Each tool has an abstraction to just build the node_modules (dependencies) directory.
+Each tool has an abstraction to build the node_modules (dependencies) directory.
 You can always use the `stdenv.mkDerivation` with the node_modules to build the package (symlink the node_modules directory and then use the package build command).
 The node_modules abstraction can be also used to build some web framework frontends.
 For an example of this see how [plausible](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/pl/plausible/package.nix) is built.
-Then when building the frontend you can just symlink the node_modules directory.
+Then when building the frontend you can symlink the node_modules directory.
 
 ## Tool-specific instructions {#javascript-tool-specific}
 
 ### buildNpmPackage {#javascript-buildNpmPackage}
 
-`buildNpmPackage` allows you to package npm-based projects in Nixpkgs without the use of an auto-generated dependencies file.
+`buildNpmPackage` packages npm-based projects in Nixpkgs without the use of an auto-generated dependencies file.
 It works by utilizing npm's cache functionality -- creating a reproducible cache that contains the dependencies of a project, and pointing npm to it.
 
 Here's an example:
@@ -253,7 +252,7 @@ buildNpmPackage {
 
 `importNpmLock.buildNodeModules` returns a derivation with a pre-built `node_modules` directory, as imported by `importNpmLock`.
 
-This is to be used together with `importNpmLock.hooks.linkNodeModulesHook` to facilitate `nix-shell`/`nix develop` based development workflows.
+This is to be used together with `importNpmLock.hooks.linkNodeModulesHook` to support `nix-shell`/`nix develop` development workflows.
 
 It accepts an argument with the following attributes:
 
@@ -289,7 +288,7 @@ will create a development shell where a `node_modules` directory is created & pa
 :::{.note}
 Commands like `npm install` and `npm add` that write packages and executables need to be used with `--package-lock-only`.
 
-This means `npm` installs dependencies by writing into `package-lock.json` without modifying the `node_modules` folder. Installation happens through reloading the devShell.
+This means `npm` installs dependencies by writing into `package-lock.json` without modifying the `node_modules` folder. It installs by reloading the devShell.
 This might be best practice since it gives the `nix shell` virtually exclusive ownership over your `node_modules` folder.
 
 It's recommended to set `package-lock-only = true` in your project-local [`.npmrc`](https://docs.npmjs.com/cli/v11/configuring-npm/npmrc).
@@ -408,7 +407,7 @@ If needed, `dontPnpmConfigure = true;` can be used to fully disable `pnpmConfigH
 
 #### Dealing with `sourceRoot` {#javascript-pnpm-sourceRoot}
 
-If the pnpm project is in a subdirectory, you can just define `sourceRoot` or `setSourceRoot` for `fetchPnpmDeps`.
+If the pnpm project is in a subdirectory, you can define `sourceRoot` or `setSourceRoot` for `fetchPnpmDeps`.
 If `sourceRoot` is different between the parent derivation and `fetchPnpmDeps`, you will have to set `pnpmRoot` to effectively be the same location as it is in `fetchPnpmDeps`.
 
 Assuming the following directory structure, we can define `sourceRoot` and `pnpmRoot` as follows:
@@ -454,7 +453,7 @@ For example:
 ```
 
 The above would make `fetchPnpmDeps` call only install dependencies for the `@astrojs/language-server` workspace package.
-Note that you do not need to set `sourceRoot` to make this work.
+You do not need to set `sourceRoot` to make this work.
 
 Usually, in such cases, you'd want to use `pnpm --filter=<pnpm workspace name> build` to build your project, as `npmHooks.npmBuildHook` probably won't work. A `buildPhase` based on the following example will probably fit most workspace projects:
 
