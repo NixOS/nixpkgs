@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "simplepush";
-  version = "2.2.3";
+  version = "2.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simplepush";
     repo = "simplepush-python";
     tag = "v${version}";
-    hash = "sha256-DvDPihhx1rzJN6iQP5rHluplJ1AaN0b/glcd+tZCues=";
+    hash = "sha256-/qjGJgoyI54rP+sD/Dqr1lFh8cFRboW91GYDCZgMIlM=";
   };
 
   nativeBuildInputs = [ setuptools ];
