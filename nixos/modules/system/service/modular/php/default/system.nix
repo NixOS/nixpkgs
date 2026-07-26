@@ -1,7 +1,8 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   _class = "service";
   imports = [ ./default.nix ];
+  meta.maintainers = with lib.maintainers; [ aanderse ];
   config = {
     # Reload signal for php-fpm; sets systemd's `ExecReload`.
     systemd.mainExecReload = "${pkgs.coreutils}/bin/kill -USR2 $MAINPID";

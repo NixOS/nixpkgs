@@ -40,7 +40,7 @@ in
     ;
 
   # Environment-specific variants of the modular services, keyed by
-  # `<pkg>.<service>.<environment>`. See
+  # `<environment>.<pkg>.<service>`. See
   # nixos/modules/system/service/modular/default.nix.
   modularServices = import ../modules/system/service/modular;
 
