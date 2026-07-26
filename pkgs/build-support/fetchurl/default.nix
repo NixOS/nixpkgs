@@ -87,10 +87,10 @@ let
       map (mirror: mirror + elemAt mirrorSplit 1) mirrorList;
 
   rewriteAllUrls =
-    urls:
     if rewriteURL == null then
-      urls
+      urls: urls
     else
+      urls:
       let
         u = concatMap (
           url:
