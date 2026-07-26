@@ -41,7 +41,7 @@ all open source Haskell packages). See [](#haskell-available-versions) for a few
 Roughly half of the 16K packages contained in `haskellPackages` don’t actually
 build and are [marked as broken semi-automatically](https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/configuration-hackage2nix/broken.yaml).
 Most of those packages are deprecated or unmaintained, but sometimes packages
-that should build, do not build. Fixing them is often a small amount of work.
+that should build, do not build. Fixing them requires a small amount of work.
 
 <!--
 TODO(@sternenseemann):
@@ -150,9 +150,8 @@ specific stack solver for compiling a project.
 Even though Nixpkgs cannot use them directly, it would be desirable
 to have tooling to generate working Nix package sets from build plans generated
 by `cabal-install` or a specific Stackage snapshot via import-from-derivation.
-Nixpkgs currently doesn’t have tooling for this. For this you might be
-interested in the alternative [haskell.nix] framework, which, be warned, is
-completely incompatible with packages from `haskellPackages`.
+Nixpkgs currently doesn’t have tooling for this. See the alternative [haskell.nix]
+framework, which is completely incompatible with packages from `haskellPackages`.
 
 <!-- TODO(@maralorn) Link to package set generation docs in the contributors guide below. -->
 
@@ -167,7 +166,7 @@ Nixpkgs keeps the following GHC major versions:
 2. The two latest major versions older than the default.
 3. The currently recommended GHCup version and all later major versions.
 
-Older GHC versions might be kept longer, if there are in-tree consumers. Nixpkgs coordinates with the maintainers of those dependencies to find a way forward.
+Nixpkgs keeps older GHC versions longer if there are in-tree consumers. Nixpkgs coordinates with the maintainers of those dependencies to find a way forward.
 
 #### Minor GHC versions {#minor-ghc-deprecation}
 
@@ -366,8 +365,8 @@ builds”](#haskell-incremental-builds) for more information. Defaults to
 
 `allowInconsistentDependencies`
 : If enabled, allow multiple versions of the same Haskell package in the
-dependency tree at configure time. Often in such a situation compilation would
-later fail because of type mismatches. Defaults to `false`.
+dependency tree at configure time. In such a situation, compilation later
+fails because of type mismatches. Defaults to `false`.
 
 `enableLibraryForGhci`
 : Build and install a special object file for GHCi. This improves performance
@@ -455,7 +454,7 @@ specifications that are available:
 That only leaves the following extra ways for specifying dependencies:
 
 `buildDepends`
-: Allows specifying Haskell dependencies which are added to `propagatedBuildInputs` unconditionally.
+: Specifies Haskell dependencies added to `propagatedBuildInputs` unconditionally.
 
 `buildTools`
 : Like `*ToolDepends`, but are added to `nativeBuildInputs` unconditionally.
@@ -587,9 +586,9 @@ dependencies installed from the packages `env` via Nix. It may also consult Hack
 `cabal` with `--offline`. Note though, that for some use cases `cabal2nix` needs
 the local Hackage db.
 
-Often you won't work on a package that is already part of `haskellPackages` or
-Hackage, so you first need to write a Nix expression to obtain the development
-environment from. You can generate a Nix expression from an existing cabal file using `cabal2nix`:
+To work on a package that is not part of `haskellPackages` or Hackage,
+first write a Nix expression to obtain the development environment.
+Generate a Nix expression from an existing cabal file using `cabal2nix`:
 
 ```console
 $ ls
@@ -646,7 +645,7 @@ Defaults to `[]`.
 
 `buildInputs`
 : Expects a list of derivations to add as library dependencies, like `openssl`.
-This is rarely necessary as the haskell package expressions usually track system
+This is rarely necessary because Haskell package expressions track system
 dependencies as well. Defaults to `[]`. (see also
 [](#haskell-derivation-deps))
 
@@ -667,9 +666,8 @@ dependencies. Defaults to `lib.id`.
 Setting it to `true` causes the development environment to include all
 benchmark dependencies which would be excluded by default. Defaults to `false`.
 
-One neat property of `shellFor` is that it allows you to work on multiple
-packages using the same environment in conjunction with
-[cabal.project files][cabal-project-files].
+`shellFor` enables working on multiple packages using the same environment
+in conjunction with [cabal.project files][cabal-project-files].
 Say your example above depends on `distribution-nixpkgs` and you have a project
 file set up for both, you can add the following `shell.nix` expression:
 
@@ -1119,7 +1117,7 @@ in this section. <!-- TODO(@sternenseemann): note about ifd section -->
 `cabalSdist { src, name ? ... }`
 : Generates the Cabal sdist tarball for `src`, suitable for uploading to Hackage.
 Contrary to `haskell.lib.compose.sdistTarball`, it uses `cabal-install` over `Setup.hs`,
-so it is usually faster: No build dependencies need to be downloaded, and it can
+so it is faster: No build dependencies need to be downloaded, and it can
 skip compiling `Setup.hs`.
 
 `buildFromCabalSdist drv`
