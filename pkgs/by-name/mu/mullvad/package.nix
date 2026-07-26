@@ -63,11 +63,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "tunnel-obfuscation"
     ];
 
-  checkFlags = [
-    "--skip=version_check"
-    "--skip=config_resolver::test"
-  ];
-
   nativeBuildInputs = [
     git
     installShellFiles
@@ -112,6 +107,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://mullvad.net/";
     changelog = "https://github.com/mullvad/mullvadvpn-app/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       cole-h
       jackr
