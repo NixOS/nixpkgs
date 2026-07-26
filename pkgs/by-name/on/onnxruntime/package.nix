@@ -24,7 +24,12 @@
   darwinMinVersionHook,
   pythonSupport ? (stdenv.buildPlatform.canExecute stdenv.hostPlatform),
   cudaSupport ? config.cudaSupport,
-  ncclSupport ? cudaSupport && cudaPackages.nccl.meta.available,
+  # CUDA+NCCL fail to compile since 1.27.0
+  # onnxruntime> /build/source/onnxruntime/contrib_ops/cuda/collective/sharded_moe.h:6:10: fatal error: contrib_ops/cuda/moe/ft_moe/moe_kernel.h: No such file or directory
+  # onnxruntime>     6 | #include "contrib_ops/cuda/moe/ft_moe/moe_kernel.h"
+  # onnxruntime>       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # onnxruntime> compilation terminated
+  ncclSupport ? cudaSupport && cudaPackages.nccl.meta.available && false,
   openvinoSupport ? stdenv.isLinux,
   rocmSupport ? config.rocmSupport,
   coremlSupport ? stdenv.hostPlatform.isDarwin,
