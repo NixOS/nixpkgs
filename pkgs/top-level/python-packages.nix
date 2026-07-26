@@ -12348,6 +12348,8 @@ self: super: with self; {
 
   openevsewifi = callPackage ../development/python-modules/openevsewifi { };
 
+  openexr = callPackage ../development/python-modules/openexr { };
+
   openfga-sdk = callPackage ../development/python-modules/openfga-sdk { };
 
   openhomedevice = callPackage ../development/python-modules/openhomedevice { };
