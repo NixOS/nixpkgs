@@ -1142,7 +1142,6 @@ with haskellLib;
       url = "https://github.com/idris-lang/Idris-dev/compare/c99bc9e4af4ea32d2172f873152b76122ee4ee14...cf78f0fb337d50f4f0dba235b6bbe67030f1ff47.patch";
       hash = "sha256-RCMIRHIAK1PCm4B7v+5gXNd2buHXIqyAxei4bU8+eCk=";
     }))
-    (self.generateOptparseApplicativeCompletions [ "idris" ])
   ];
 
   # https://hydra.nixos.org/build/42769611/nixlog/1/raw
@@ -1246,20 +1245,11 @@ with haskellLib;
     preCheck = ''export PATH="$PWD/dist/build/alex:$PATH"'';
   }) super.alex;
 
-  # Generate cli completions for dhall.
-  dhall = self.generateOptparseApplicativeCompletions [ "dhall" ] super.dhall;
   # 2025-01-27: allow aeson >= 2.2, 9.8 versions of text and bytestring
-  dhall-json = self.generateOptparseApplicativeCompletions [ "dhall-to-json" "dhall-to-yaml" ] (
-    doJailbreak super.dhall-json
-  );
-  dhall-nix = self.generateOptparseApplicativeCompletions [ "dhall-to-nix" ] super.dhall-nix;
+  dhall-json = doJailbreak super.dhall-json;
   # 2025-02-10: jailbreak due to aeson < 2.2, hnix < 0.17, transformers < 0.6, turtle < 1.6
-  dhall-nixpkgs = self.generateOptparseApplicativeCompletions [ "dhall-to-nixpkgs" ] (
-    doJailbreak super.dhall-nixpkgs
-  );
-  dhall-yaml = self.generateOptparseApplicativeCompletions [ "dhall-to-yaml-ng" "yaml-to-dhall" ] (
-    doJailbreak super.dhall-yaml
-  ); # bytestring <0.12, text<2.1
+  dhall-nixpkgs = doJailbreak super.dhall-nixpkgs;
+  dhall-yaml = doJailbreak super.dhall-yaml; # bytestring <0.12, text<2.1
   # 2025-02-14: see also https://github.com/dhall-lang/dhall-haskell/issues/2638
   dhall-bash = doJailbreak super.dhall-bash; # bytestring <0.12, text <2.1
 
@@ -1650,7 +1640,6 @@ with haskellLib;
     lib.pipe super.update-nix-fetchgit [
       # 2023-06-26: Test failure: https://hydra.nixos.org/build/225081865
       dontCheck
-      (self.generateOptparseApplicativeCompletions [ "update-nix-fetchgit" ])
       (overrideCabal (drv: {
         buildTools = drv.buildTools or [ ] ++ [ pkgs.buildPackages.makeWrapper ];
         postInstall = drv.postInstall or "" + ''
@@ -1691,7 +1680,7 @@ with haskellLib;
   http-media = doJailbreak super.http-media;
 
   # 2022-03-19: strict upper bounds https://github.com/poscat0x04/hinit/issues/2
-  hinit = doJailbreak (self.generateOptparseApplicativeCompletions [ "hi" ] super.hinit);
+  hinit = doJailbreak super.hinit;
 
   # 2020-11-23: https://github.com/Rufflewind/blas-hs/issues/8
   blas-hs = dontCheck super.blas-hs;
@@ -1723,10 +1712,6 @@ with haskellLib;
     ];
   }) super.text-icu;
 
-  hercules-ci-agent = self.generateOptparseApplicativeCompletions [
-    "hercules-ci-agent"
-  ] super.hercules-ci-agent;
-
   hercules-ci-cli = lib.pipe super.hercules-ci-cli [
     unmarkBroken
     (overrideCabal (drv: {
@@ -1734,7 +1719,6 @@ with haskellLib;
     }))
     # See hercules-ci-optparse-applicative in non-hackage-packages.nix.
     (addBuildDepend super.hercules-ci-optparse-applicative)
-    (self.generateOptparseApplicativeCompletions [ "hci" ])
   ];
 
   # https://github.com/k0001/pipes-aeson/pull/21
@@ -2418,8 +2402,6 @@ with haskellLib;
           # but it compiles cleanly using deps in LTS-18 as well.  This jailbreak can
           # likely be removed when purescript-0.14.6 is released.
           doJailbreak
-          # Generate shell completions
-          (self.generateOptparseApplicativeCompletions [ "purs" ])
         ];
 
         purenix = lib.pipe (super.purenix.overrideScope purescriptOverlay) [
