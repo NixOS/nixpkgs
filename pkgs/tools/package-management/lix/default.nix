@@ -42,6 +42,16 @@ let
     excludes = [ "package.nix" ];
     hash = "sha256-uu/SIG8fgVVWhsGxmszTPHwe4SQtLgbxdShOMKbeg2w=";
   };
+  lixCpuidPatch = fetchpatch2 {
+    name = "lix-2.94-cpuid.patch";
+    url = "https://gerrit.lix.systems/changes/lix~6113/revisions/1/patch?download&raw";
+    hash = "sha256-YyKBNptp8wbOYoHlNqoxZSoFJrKFhm2H7LVvAX9Fnow=";
+  };
+  lixCpuidSeccompPatch = fetchpatch2 {
+    name = "lix-2.95-cpuid-seccomp.patch";
+    url = "https://gerrit.lix.systems/changes/lix~6114/revisions/1/patch?download&raw";
+    hash = "sha256-2J7INu0Ov9bZ/NxelYdlykWcOY1/8PzJXiVXMD1C9JQ=";
+  };
   makeLixScope =
     {
       attrName,
@@ -203,6 +213,7 @@ lib.makeExtensible (
 
         patches = [
           lixMdbookPatch
+          lixCpuidPatch
         ];
       };
     };
@@ -226,6 +237,10 @@ lib.makeExtensible (
           inherit src;
           hash = "sha256-a5XtutX+NS4wOqxeqbscWZMs99teKick5+cQfbCRGxQ=";
         };
+
+        patches = [
+          lixCpuidSeccompPatch
+        ];
       };
     };
 
@@ -248,6 +263,10 @@ lib.makeExtensible (
           inherit src;
           hash = "sha256-a5XtutX+NS4wOqxeqbscWZMs99teKick5+cQfbCRGxQ=";
         };
+
+        patches = [
+          lixCpuidSeccompPatch
+        ];
       };
     };
 
