@@ -10,6 +10,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "1.0.2-unstable-2025-04-10";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "rr-";
     repo = "pq-cli";
