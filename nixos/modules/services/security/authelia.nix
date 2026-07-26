@@ -457,11 +457,11 @@ in
           group = instance.group;
         };
       };
-      instances = lib.attrValues cfg.instances;
+      enabledInstances = lib.filterAttrs (name: instance: instance.enable) cfg.instances;
     in
     {
       assertions = lib.flatten (
-        lib.flip lib.mapAttrsToList cfg.instances (
+        lib.flip lib.mapAttrsToList enabledInstances (
           name: instance: [
             {
               assertion =
@@ -482,15 +482,12 @@ in
       );
 
       systemd.services = lib.mkMerge (
-        map (
-          instance:
-          lib.mkIf instance.enable {
-            ${autheliaName instance.name} = mkInstanceServiceConfig instance;
-          }
-        ) instances
+        map (instance: {
+          ${autheliaName instance.name} = mkInstanceServiceConfig instance;
+        }) (lib.attrValues enabledInstances)
       );
       users = lib.mkMerge (
-        map (instance: lib.mkIf instance.enable (mkInstanceUsersConfig instance)) instances
+        map (instance: (mkInstanceUsersConfig instance)) (lib.attrValues enabledInstances)
       );
     };
 
