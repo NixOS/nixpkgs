@@ -114,7 +114,7 @@ on Hackage and try to pick for every (transitive) dependency of your build
 exactly one version. Those versions need to satisfy all the version constraints
 given in the `.cabal` file of your package and all its dependencies.
 
-The [Haskell builder in nixpkgs](#haskell-mkderivation) does no such thing.
+The [Haskell builder in Nixpkgs](#haskell-mkderivation) does no such thing.
 It will take as input packages with names of the desired dependencies
 and just check whether they fulfill the version bounds and fail if they don’t
 (by default, see `jailbreak` to circumvent this).
@@ -144,15 +144,15 @@ versions may be worse, because builds will not be cached on `cache.nixos.org`
 or may fail.
 
 Thus, to get the best experience, make sure that your project can be compiled
-using the default compiler of nixpkgs and recent versions of its dependencies.
+using the default compiler of Nixpkgs and recent versions of its dependencies.
 
 A result of this setup is, that getting a valid build plan for a given
 package can sometimes be quite painful, and in fact this is where most of the
 maintenance work for `haskellPackages` is required. Besides that, it is not
-possible to get the dependencies of a legacy project from nixpkgs or to use a
+possible to get the dependencies of a legacy project from Nixpkgs or to use a
 specific stack solver for compiling a project.
 
-Even though we couldn’t use them directly in nixpkgs, it would be desirable
+Even though we couldn’t use them directly in Nixpkgs, it would be desirable
 to have tooling to generate working Nix package sets from build plans generated
 by `cabal-install` or a specific Stackage snapshot via import-from-derivation.
 Sadly we currently don’t have tooling for this. For this you might be
@@ -187,7 +187,7 @@ Older minor versions for a supported major version will only be kept, if they ar
 Every Haskell package set has its own Haskell-aware `mkDerivation` which is used
 to build its packages. Generally you won't have to interact with this builder
 since [](#haskell-cabal2nix) can generate packages
-using it for an arbitrary cabal package definition. Still it is useful to know
+using it for an arbitrary Cabal package definition. Still it is useful to know
 the parameters it takes when you need to
 [override](#haskell-overriding-haskell-packages) a generated Nix expression.
 
@@ -391,7 +391,7 @@ If unset, all available targets are built and installed.
 ### Specifying dependencies {#haskell-derivation-deps}
 
 Since `haskellPackages.mkDerivation` is intended to be generated from cabal
-files, it reflects cabal's way of specifying dependencies. For one, dependencies
+files, it reflects Cabal's way of specifying dependencies. For one, dependencies
 are grouped by what part of the package they belong to. This helps to reduce the
 dependency closure of a derivation, for example benchmark dependencies are not
 included if `doBenchmark == false`.
@@ -626,7 +626,7 @@ that:
   pkgs ? import <nixpkgs> { },
 }:
 
-# use the nixpkgs default haskell package set
+# use the Nixpkgs default haskell package set
 pkgs.haskellPackages.callPackage ./my-project.nix { }
 ```
 
@@ -700,7 +700,7 @@ file set up for both, we can add the following `shell.nix` expression:
 
 pkgs.haskellPackages.shellFor {
   packages = hpkgs: [
-    # reuse the nixpkgs for this package
+    # reuse the Nixpkgs for this package
     hpkgs.distribution-nixpkgs
     # call our generated Nix expression manually
     (hpkgs.callPackage ./my-project/my-project.nix { })
@@ -760,10 +760,10 @@ version used by the project you are working on (by asking e.g. cabal or
 stack) and pick the appropriate versioned binary from your path.
 
 Be careful when installing HLS globally and using a pinned nixpkgs for a
-Haskell project in a `nix-shell`. If the nixpkgs versions deviate to much
+Haskell project in a `nix-shell`. If the Nixpkgs versions deviate to much
 (e.g., use different `glibc` versions) the `haskell-language-server-?.?.?`
 executable will try to detect these situations and refuse to start. It is
-recommended to obtain HLS via `nix-shell` from the nixpkgs version pinned in
+recommended to obtain HLS via `nix-shell` from the Nixpkgs version pinned in
 there instead.
 
 The top level `pkgs.haskell-language-server` attribute is just a convenience
@@ -783,7 +783,7 @@ editor plugin to achieve this.
 
 <!-- TODO(@sternenseemann): we should document /somewhere/ that base == null etc. -->
 
-Like many language specific subsystems in nixpkgs, the Haskell infrastructure
+Like many language specific subsystems in Nixpkgs, the Haskell infrastructure
 also has its own quirks when it comes to overriding. Overriding of the *inputs*
 to a package at least follows the standard procedure. For example, imagine you
 need to build `nix-tree` with a more recent version of `brick` than the default
@@ -1241,7 +1241,7 @@ TODO(@NixOS/haskell): finish these planned sections
 ### Backporting {#haskell-backporting}
 
 Backporting changes to a stable NixOS version in general is covered
-in nixpkgs' `CONTRIBUTING.md` in general. In particular refer to the
+in Nixpkgs' `CONTRIBUTING.md` in general. In particular refer to the
 [backporting policy](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#criteria-for-backporting-changes)
 to check if the change you have in mind may be backported.
 
@@ -1255,7 +1255,7 @@ it does for the unstable branches.
 
 ### Why is topic X not covered in this section? Why is section Y missing? {#haskell-why-not-covered}
 
-We have been working on [moving the nixpkgs Haskell documentation back into the
+We have been working on [moving the Nixpkgs Haskell documentation back into the
 nixpkgs manual](https://github.com/NixOS/nixpkgs/issues/121403). <!-- krank:ignore-line -->
 Since this process has not been completed yet, you may find some topics missing here
 covered in the old [haskell4nix docs](https://haskell4nix.readthedocs.io/).
