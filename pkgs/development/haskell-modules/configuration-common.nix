@@ -3470,7 +3470,7 @@ with haskellLib;
       (warnAfterVersion "2.0")
     ];
     amazonka-s3-encryption = warnAfterVersion "2.0" (
-      setAmazonkaSourceRoot "lib/services/amazonka-s3-encryption" (
+      setAmazonkaSourceRoot "lib/amazonka-s3-encryption" (
         super.amazonka-s3-encryption.override { memory = self.ram; }
       )
     );

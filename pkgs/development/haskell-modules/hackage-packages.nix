@@ -73747,8 +73747,6 @@ self: {
       ];
       description = "Amazon Simple Storage Service SDK - Client-Side Encryption";
       license = lib.meta.getLicenseFromSpdxId "MPL-2.0";
-      hydraPlatforms = lib.platforms.none;
-      broken = true;
     }
   ) { };
 
