@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-n+Tj1zrCzAZ/7k+ZK9Wbw1L9xXZhkrOtGudZFvcDdPo=";
 
-  # No upstream fix exists yet; avoid embedding the build machine's wall-clock time.
+  # No upstream fix exists yet; see https://github.com/freenet/freenet-core/issues/4935.
   patches = [ ./use-source-date-epoch.patch ];
 
   cargoBuildFlags = [ "--package=freenet" ];
