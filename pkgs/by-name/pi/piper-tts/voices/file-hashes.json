@@ -1,0 +1,2042 @@
+{
+  "ar/ar_JO/kareem/low/MODEL_CARD": {
+    "gitOid": "d8962878ae5a6d53d3dffcfce68f986c49105e51",
+    "sha256": "sha256-peR7Rm1BrTPUvM0IHIGE78YMrKJfDu9NEC/eYuEe2Fw="
+  },
+  "ar/ar_JO/kareem/low/ar_JO-kareem-low.onnx": {
+    "gitOid": "49b550dec6bf1d382b8dcfdf96801ff944e91723",
+    "sha256": "sha256-KIfp1osSWWXHR+E3H6IeHO8ZVV6pjQeVoNXXEYixOJA="
+  },
+  "ar/ar_JO/kareem/low/ar_JO-kareem-low.onnx.json": {
+    "gitOid": "a7bc6151531951e493369c83039be831c313595e",
+    "sha256": "sha256-2jKOUoloJhNVCPeXwcd7RbNRF+lnxxvvw3fWVPEA8yg="
+  },
+  "ar/ar_JO/kareem/medium/MODEL_CARD": {
+    "gitOid": "5499b54a46815442889e683c2e4fdaa00a4b1109",
+    "sha256": "sha256-OOHk+UxMue2gQaY5CWdjqMVoHQvlpbPiL5kK7Wu0uG4="
+  },
+  "ar/ar_JO/kareem/medium/ar_JO-kareem-medium.onnx": {
+    "gitOid": "60c623f82460a65d8ab2971f007cc2c944cc5448",
+    "sha256": "sha256-npXKsHtnnaYDu6F8Tex6sxETIFcZZO6VwDeWA8CGSR4="
+  },
+  "ar/ar_JO/kareem/medium/ar_JO-kareem-medium.onnx.json": {
+    "gitOid": "b59e045bb026c7000fb0d4f8269d0cfbff4e8989",
+    "sha256": "sha256-6m2bnZB229tr9cmMahQe8VSVnSNZcJs3hVcnlk59bE0="
+  },
+  "bg/bg_BG/dimitar/medium/MODEL_CARD": {
+    "gitOid": "1edd2ca0cb5382181ac4ef7f112b233eae956c30",
+    "sha256": "sha256-99OWdyZZ7W4ncXHRnSPlfFAoeNAckNfFGtYQWsBdK44="
+  },
+  "bg/bg_BG/dimitar/medium/bg_BG-dimitar-medium.onnx": {
+    "gitOid": "be5d354b5dffa186c173b0b8baeb9ad0819a191d",
+    "sha256": "sha256-SXL+dkRo6FAUFkB62BZi3pTMbJzcaA/PgH2u8E4xnxM="
+  },
+  "bg/bg_BG/dimitar/medium/bg_BG-dimitar-medium.onnx.json": {
+    "gitOid": "29b60d30e4c3a0635ca4d8c6701a5562da295058",
+    "sha256": "sha256-7JqavdFzhNPbIl6DCFsvaLeQsRLwWEF8OooqxYt55/A="
+  },
+  "bn/bn_BD/google/medium/MODEL_CARD": {
+    "gitOid": "00020082c9f93bec757a93271a9700d827fff8c4",
+    "sha256": "sha256-dkbuC7KReXgId3CPJwuAcf/+5BFNiA+jvCgCnBvUThQ="
+  },
+  "bn/bn_BD/google/medium/bn_BD-google-medium.onnx": {
+    "gitOid": "2261aa4d83e95ac17e2b0b1882b204edacba79fc",
+    "sha256": "sha256-8udRjtVTSnVQJKSMcbgL9hfvrxJXC73zziValSaor9M="
+  },
+  "bn/bn_BD/google/medium/bn_BD-google-medium.onnx.json": {
+    "gitOid": "ee79e469edaed486747fb5f05067ed04f0d3d201",
+    "sha256": "sha256-vH5eOeKodL2tGGYgV2zhgIm1oGxWReJYvOo9Vv2xHAo="
+  },
+  "ca/ca_ES/upc_ona/medium/MODEL_CARD": {
+    "gitOid": "f37cccd8c075a014c6affbc29dd5b48d186868a2",
+    "sha256": "sha256-KWG1OvF8ZpcbPr47F0VmoWrm6TApl+7REafSsZVNMf0="
+  },
+  "ca/ca_ES/upc_ona/medium/ca_ES-upc_ona-medium.onnx": {
+    "gitOid": "e7d829edacc7ff678d24fffd5d5cf43f6c0b666f",
+    "sha256": "sha256-/bZS24wRpEdVJzRs8yQcsGTRujk883Dz8uwJqHLRGP0="
+  },
+  "ca/ca_ES/upc_ona/medium/ca_ES-upc_ona-medium.onnx.json": {
+    "gitOid": "a531c6932b23665ab6359d6599898478d46d34d8",
+    "sha256": "sha256-f3asycBvTtqeau8pl7dXgtl4Vaq0jUtAHrlWpuZV7dw="
+  },
+  "ca/ca_ES/upc_ona/x_low/MODEL_CARD": {
+    "gitOid": "28af710860cbf25b5c16d4e718f4c4a1524b493f",
+    "sha256": "sha256-8hY4Gc2C1TXAYK/63wT/u3uRjNT1JJ5jbEHYFvpAuhY="
+  },
+  "ca/ca_ES/upc_ona/x_low/ca_ES-upc_ona-x_low.onnx": {
+    "gitOid": "27fee8f95905a13e9830211f2e628c4fe548006e",
+    "sha256": "sha256-E2YdJkI+DHkYI4I6WXH04ar2RKYuZeDpTSmcDnBWDhQ="
+  },
+  "ca/ca_ES/upc_ona/x_low/ca_ES-upc_ona-x_low.onnx.json": {
+    "gitOid": "d10b651d3471cde556647cea36dd75c45c0f6677",
+    "sha256": "sha256-AOErIG5spnbm+ZKXNVG04Gjt2YI2CBRKYDZcAQ3Guy8="
+  },
+  "ca/ca_ES/upc_pau/x_low/MODEL_CARD": {
+    "gitOid": "80efef44a88a48e311a1d2b3c4cfaf79a32d59ed",
+    "sha256": "sha256-gtJKqZQ+Oy9zA++GP++zGpXCcK1iCD7jevd6ksdOkY4="
+  },
+  "ca/ca_ES/upc_pau/x_low/ca_ES-upc_pau-x_low.onnx": {
+    "gitOid": "6b9bd1fc3cb39e4e8654a19465f24405dfd418fe",
+    "sha256": "sha256-yTahp4sKeVrzwkIqDy7bJjA8OJ/5YWFpAroS4mtIkHE="
+  },
+  "ca/ca_ES/upc_pau/x_low/ca_ES-upc_pau-x_low.onnx.json": {
+    "gitOid": "ffd2f8f11291bb2d250fb4023a4a0077284dfc23",
+    "sha256": "sha256-8+dvBkDHOgqHSCs35chd2TUyEn+B436ih14NrOKLseI="
+  },
+  "cs/cs_CZ/jirka/low/MODEL_CARD": {
+    "gitOid": "668a04a79d2e4faed616691886196d2a137501e4",
+    "sha256": "sha256-d5ravVoMuQqR2TIv0zk9McgrgOrKDqheLIX8I0Pff2I="
+  },
+  "cs/cs_CZ/jirka/low/cs_CZ-jirka-low.onnx": {
+    "gitOid": "d159c4029dd301a836e7c460c5f3b6d69e34e8e5",
+    "sha256": "sha256-cuc/swahZbQZJ9LJ2IL3Hp8chqxe3zfFRBNwpuTm730="
+  },
+  "cs/cs_CZ/jirka/low/cs_CZ-jirka-low.onnx.json": {
+    "gitOid": "7b90d02cf4e8921ae3899dc7dc9f366e8647b96b",
+    "sha256": "sha256-/DLYzdI6ZGH901XeQi2q1iccvxUDO3VDQ7ipJizKH3Y="
+  },
+  "cs/cs_CZ/jirka/medium/MODEL_CARD": {
+    "gitOid": "dd51e06292a4b1ad130cf8633ad86da071bedd48",
+    "sha256": "sha256-uAQ8MuQ0lrEJ1Ju8KCkOVwwGSk7ZSZYqcaX/ayrWR+c="
+  },
+  "cs/cs_CZ/jirka/medium/cs_CZ-jirka-medium.onnx": {
+    "gitOid": "104868784229cd1f48d3d5a3ba0d942654678a21",
+    "sha256": "sha256-y9XJAKysyOjL7NZDR6u43jnACp0xBL7Qb+6S5PMZ78g="
+  },
+  "cs/cs_CZ/jirka/medium/cs_CZ-jirka-medium.onnx.json": {
+    "gitOid": "068bc52ed68cac1b11d474439150e3fc3d9f06f3",
+    "sha256": "sha256-+zixeZtzVICCJ8Bl76l7H/orDN5ZUFurtWo201r5xjc="
+  },
+  "cy/cy_GB/bu_tts/medium/MODEL_CARD": {
+    "gitOid": "d407e9c7e9109bc2d91a961b5fcd9807d8358a3f",
+    "sha256": "sha256-tt6hcRe026WLboNmFqtjn7IcFU5gRUFM9MuFW01xKZw="
+  },
+  "cy/cy_GB/bu_tts/medium/cy_GB-bu_tts-medium.onnx": {
+    "gitOid": "1da1dc285d98cff4c2a87243b3de65af5183c239",
+    "sha256": "sha256-QRtRPNNZdbQkjLqo4+Wp2aO422t3aAuCHje3XZhL4yk="
+  },
+  "cy/cy_GB/bu_tts/medium/cy_GB-bu_tts-medium.onnx.json": {
+    "gitOid": "249e770d63fb1dc676ebe7ba5d680a0dc9ccb973",
+    "sha256": "sha256-wxjjuHALjrTtXesnaHKwNty2fiiCzI37LVnUpkAYsoU="
+  },
+  "cy/cy_GB/gwryw_gogleddol/medium/MODEL_CARD": {
+    "gitOid": "68e61b4365d9e5ae7ba499928fd9ba4f863b8ae3",
+    "sha256": "sha256-BSjYGE+vfAtKtbp0GKc6CiEJrsy52CE2lSwWGNW+lYg="
+  },
+  "cy/cy_GB/gwryw_gogleddol/medium/cy_GB-gwryw_gogleddol-medium.onnx": {
+    "gitOid": "61ec354ab9f6725340ca54602bd44569ea80c0a7",
+    "sha256": "sha256-p9h99l4sZ93uSYKZBuxRmC/hI9QYRycx2raW9Nzv6MY="
+  },
+  "cy/cy_GB/gwryw_gogleddol/medium/cy_GB-gwryw_gogleddol-medium.onnx.json": {
+    "gitOid": "623b398d3f127f8e4995c258d424a68e6c225703",
+    "sha256": "sha256-sx0s+lHNVwk3GiNGhgtAmyTs7sGikCNcuSmc/4qcNMA="
+  },
+  "da/da_DK/talesyntese/medium/MODEL_CARD": {
+    "gitOid": "baebdac8d20150090bab97b524b04b73573c1193",
+    "sha256": "sha256-tbelHU2BWjB1lGGaUZ6zibLheDmzDA62mjnTreWx7WU="
+  },
+  "da/da_DK/talesyntese/medium/da_DK-talesyntese-medium.onnx": {
+    "gitOid": "03209209e740457ddbacfadcef8237895882261f",
+    "sha256": "sha256-uSce/SX3uElLvSjUjdZ1yMEZ2qKE8+5IgAiTX1FfEkE="
+  },
+  "da/da_DK/talesyntese/medium/da_DK-talesyntese-medium.onnx.json": {
+    "gitOid": "a2125cd10c5ba66fc4428683e9392ccb3485946d",
+    "sha256": "sha256-if4TvSUUBswAiFcNED6nrDWCMhHYRm+vkTJoq4UG9Bs="
+  },
+  "de/de_DE/eva_k/x_low/MODEL_CARD": {
+    "gitOid": "4255b7b127ea1ca0b5dc2c3d3da94181b1577a32",
+    "sha256": "sha256-GHdB+UckHBio2M33c/zsdTJRcmKEQqhmwtpEpfI+WQ8="
+  },
+  "de/de_DE/eva_k/x_low/de_DE-eva_k-x_low.onnx": {
+    "gitOid": "401b967bfbf237807f9ed3a38474ef6a2f3bddd7",
+    "sha256": "sha256-6IzykPv7dovxETMNLopG43aw2F40I6KL/rvIY6Jg2tg="
+  },
+  "de/de_DE/eva_k/x_low/de_DE-eva_k-x_low.onnx.json": {
+    "gitOid": "f6e08730748ef4dd26d7477544f1386f4112a32a",
+    "sha256": "sha256-7xSz3LJ5q0sYQip6Eyh3vuehSIIb2RFS+3rpxLPXliU="
+  },
+  "de/de_DE/karlsson/low/MODEL_CARD": {
+    "gitOid": "86307058b813506071c8ad0f12f122ca6a7ef79f",
+    "sha256": "sha256-vyN08amyW0NX86m0qwZMVbBsXprzUlBCjsg13500mz0="
+  },
+  "de/de_DE/karlsson/low/de_DE-karlsson-low.onnx": {
+    "gitOid": "1f4be24f9fe518d56ced944033bfb4fc862a94b0",
+    "sha256": "sha256-+Xk79+RhpHKzkWzyYHdL/JgS6etyYBsUftZJ0BBk6P4="
+  },
+  "de/de_DE/karlsson/low/de_DE-karlsson-low.onnx.json": {
+    "gitOid": "045aec0753965f021e5bc769f55ca231fd2108e9",
+    "sha256": "sha256-OyCVrb/u3jFvIgB6CgnUv8JVFLcYmFB0CwaACmz7mDg="
+  },
+  "de/de_DE/kerstin/low/MODEL_CARD": {
+    "gitOid": "2da47e36d5507784368e1d4dc6b9e7394e6cc3c8",
+    "sha256": "sha256-cBkAY3Sl/lNYGG1fMzPp+QQ4Xnvfu2i8hdr84aPN2uU="
+  },
+  "de/de_DE/kerstin/low/de_DE-kerstin-low.onnx": {
+    "gitOid": "bcc407e33d6beb48c01332eeb2b54eb569813167",
+    "sha256": "sha256-01KnZBiSzr8pA4Wa+U6bqBoUERAhX+OUO82n99pAG3o="
+  },
+  "de/de_DE/kerstin/low/de_DE-kerstin-low.onnx.json": {
+    "gitOid": "b673a5cfc6c61aa724c5a2526cd416db385b7268",
+    "sha256": "sha256-VucIVWt7m3pTxPiVfgIUIeafEaYAliu6VUz/vnLPLUc="
+  },
+  "de/de_DE/mls/medium/MODEL_CARD": {
+    "gitOid": "1846dd023973d08199602d890ef74653fb06b76b",
+    "sha256": "sha256-yhvwOjwof7aWis+gEOGRf4XwqlnbDzce/DooV/QDX/0="
+  },
+  "de/de_DE/mls/medium/de_DE-mls-medium.onnx": {
+    "gitOid": "ea0773f179396faabe9ef63bb2282865e0af9ce5",
+    "sha256": "sha256-ac0dKqWjWDmlGJZvzEkktfk+X4yUjtB1KxphatU/Zb8="
+  },
+  "de/de_DE/mls/medium/de_DE-mls-medium.onnx.json": {
+    "gitOid": "e19ff0af14302b97b23eeb730c851503f4cfe9fb",
+    "sha256": "sha256-sK8cid39xy0y4BVymw6JuZ7sE8LIyqHbdIjZjp5XC0A="
+  },
+  "de/de_DE/pavoque/low/MODEL_CARD": {
+    "gitOid": "e2a535a9cb28eacc8e0888b96b34036ffecf8858",
+    "sha256": "sha256-woypUbxIxp9KM8IWasY1asPw1eTvubtX70H20wb3/4s="
+  },
+  "de/de_DE/pavoque/low/de_DE-pavoque-low.onnx": {
+    "gitOid": "d6ebd6f6124e9f23feca98a21fc287659d8daa0a",
+    "sha256": "sha256-ls1B/iMD3+R0VCKiWAZYvbxfk1t+5nZAqU2nQ1pQKiY="
+  },
+  "de/de_DE/pavoque/low/de_DE-pavoque-low.onnx.json": {
+    "gitOid": "a1f60c599c1f02945c7bc93f45fc22e06367c8ff",
+    "sha256": "sha256-B9Q9iUboaSCaEtm0/XgOPyd/6a+zBcIUkaaL2X4Bt08="
+  },
+  "de/de_DE/ramona/low/MODEL_CARD": {
+    "gitOid": "17fda96a36dec4d0a9ff5fcb4b99cae42f52a728",
+    "sha256": "sha256-O22/LN5GTjXL3TwG/Ms0v4zVkIeMJROR6f0Kbxu5k9o="
+  },
+  "de/de_DE/ramona/low/de_DE-ramona-low.onnx": {
+    "gitOid": "2550d88cd2e7fa185ccfac25dff6fc666aac616c",
+    "sha256": "sha256-oQaFklMqrYxJvz0aAbh0nBHX26cmaJ7iitZOe2J65MU="
+  },
+  "de/de_DE/ramona/low/de_DE-ramona-low.onnx.json": {
+    "gitOid": "5a4c493fea278cf0eb79f7321b1e9c4d0a840f8a",
+    "sha256": "sha256-ZJBqt6BQrGhfo9zqBEuqeY9n7Xe+Fk+cZoppKYxkh9I="
+  },
+  "de/de_DE/thorsten/high/MODEL_CARD": {
+    "gitOid": "d99184518b52f1b6b1ae5c448b202040f217d9df",
+    "sha256": "sha256-Nc1FjHaRpmjsWcY+7DzK1cfOftNsn5RnZmFrJmoDjVc="
+  },
+  "de/de_DE/thorsten/high/de_DE-thorsten-high.onnx": {
+    "gitOid": "a53f66a2ba288a220df0ffe542af83c96a0629ef",
+    "sha256": "sha256-nfHEPGEUnvmznmGOK4YfvkHh/OqTkLLaxi6HYVc+pPE="
+  },
+  "de/de_DE/thorsten/high/de_DE-thorsten-high.onnx.json": {
+    "gitOid": "2329bd2dfa0c3d7aac10f25fb8fabf754a01ffcf",
+    "sha256": "sha256-bec0RE5MP54zt+vidG28GbcehfYT55xlrPYjIAuZp2o="
+  },
+  "de/de_DE/thorsten/low/MODEL_CARD": {
+    "gitOid": "26b311678d6725c7550bf248fce613b317f70280",
+    "sha256": "sha256-8J5n1ODfz1PfmWNJ/AIZ0N3eq1Atwr0M8FEsYXC8lE0="
+  },
+  "de/de_DE/thorsten/low/de_DE-thorsten-low.onnx": {
+    "gitOid": "d3649202e19ebfba36a5cf0ecf11ff94baa65406",
+    "sha256": "sha256-msJ/rRfOxcGnkRYZdqZPAm8W/AWLQAsf6mJWW4ss83U="
+  },
+  "de/de_DE/thorsten/low/de_DE-thorsten-low.onnx.json": {
+    "gitOid": "009f4b88f7b412a98cc21d4a78c269da580abd9a",
+    "sha256": "sha256-3zjoku2Un2LQxAl4vGZt4LNBxfeSGECufHL0346P+gU="
+  },
+  "de/de_DE/thorsten/medium/MODEL_CARD": {
+    "gitOid": "4b0095781c1867ad86f561d5b692472fbea25895",
+    "sha256": "sha256-UZa1qweU5gViY6HzfBi+xAe2GsGHUpvuKdHDZoceXJ4="
+  },
+  "de/de_DE/thorsten/medium/de_DE-thorsten-medium.onnx": {
+    "gitOid": "b9118e0f672b24a1da4e04872f23ed27a9d8b55f",
+    "sha256": "sha256-fmR2LY5RGLtXjy7qYgfho1qODDBZUBC2ZvmD/Ie7eBk="
+  },
+  "de/de_DE/thorsten/medium/de_DE-thorsten-medium.onnx.json": {
+    "gitOid": "71e11587184e86ebf875c9e449cee0f8df691496",
+    "sha256": "sha256-l0re55BTOtsnOhrIj0kCfSobjw8s9JBZVKR5HnkmToU="
+  },
+  "de/de_DE/thorsten_emotional/medium/MODEL_CARD": {
+    "gitOid": "02f9594f99d85850fa378cb842b35dee78943f03",
+    "sha256": "sha256-fDIB28ywYvBxo83aDc5+sF/h+In7osYYCZT5fsXur9g="
+  },
+  "de/de_DE/thorsten_emotional/medium/de_DE-thorsten_emotional-medium.onnx": {
+    "gitOid": "e685dc81add7df19071ef420c398ee1c3cab2fd8",
+    "sha256": "sha256-wXZOZSJmzW3OvxuVxhlz31lwpfUnLpS2Vf8d35qZ0f8="
+  },
+  "de/de_DE/thorsten_emotional/medium/de_DE-thorsten_emotional-medium.onnx.json": {
+    "gitOid": "a84f9e201f1f499bd2a51a1dd62ce332376fdccc",
+    "sha256": "sha256-kolbnpn3z8E/Sph52mFcPW4Lqk1mDibXtoWr3Sem0dM="
+  },
+  "el/el_GR/joy/medium/MODEL_CARD": {
+    "gitOid": "49a4637d6ad6648027783dfd6f015f9b546a665f",
+    "sha256": "sha256-o41zX0fZxSDOBn+nJkX64Wyqi2D88g5yB+ovbCidyA4="
+  },
+  "el/el_GR/joy/medium/el_GR-joy-medium.onnx": {
+    "gitOid": "b60c7bbb53f3bbb80660f52ceddb0c924f222aa0",
+    "sha256": "sha256-MbHVHcct1DpUKbZ3mOJ1mfjNz86KgCZbxvUNkyvxRLw="
+  },
+  "el/el_GR/joy/medium/el_GR-joy-medium.onnx.json": {
+    "gitOid": "e0e3a7fda42e08a2270d2b20bfdf79a9387a2a85",
+    "sha256": "sha256-RRqIhaDqcuRDL//iLmWnW70uZfZ1cnPRpantijQZhS4="
+  },
+  "el/el_GR/rapunzelina/low/MODEL_CARD": {
+    "gitOid": "c271b0d3d4d89b2be1c9f9222759f289dd2c40ed",
+    "sha256": "sha256-dBdA6ErQpGvtVE75bpiF1w68w1RLyxvEnKRZ3bHHSMo="
+  },
+  "el/el_GR/rapunzelina/low/el_GR-rapunzelina-low.onnx": {
+    "gitOid": "ba35766a92e2330ddc4706021399410cceff7ed6",
+    "sha256": "sha256-7rszWUbF2Gh0P/Nfu2a28A5DG1ubLhjK9H0/YJor8uE="
+  },
+  "el/el_GR/rapunzelina/low/el_GR-rapunzelina-low.onnx.json": {
+    "gitOid": "a9a7679a8ae29193cbf38e8a797db6b66bc084ad",
+    "sha256": "sha256-JMzDHBMG30Nk/YW1ausJq6jBhaH999sTZ6ctSv/keOQ="
+  },
+  "el/el_GR/rapunzelina/medium/MODEL_CARD": {
+    "gitOid": "53ed65d14b906ac81512c365333f795feaf13449",
+    "sha256": "sha256-3GnxU4LavtBh+o0xtlwU5cS1e6L+aQYBLHVkeNoVa1A="
+  },
+  "el/el_GR/rapunzelina/medium/el_GR-rapunzelina-medium.onnx": {
+    "gitOid": "115218750fd7be1179e16f63192e129abb384a03",
+    "sha256": "sha256-PKn7MJIhXuku38AZtD/rARX/Tf5jjrNEdIM6sd6ECVI="
+  },
+  "el/el_GR/rapunzelina/medium/el_GR-rapunzelina-medium.onnx.json": {
+    "gitOid": "1fe5fb36930ebdd5e0a976f241b8373ea3fcbf63",
+    "sha256": "sha256-OmGC7Hx1UOFO8V5dm627GPlzpDQIasllihsQmR/Rkvg="
+  },
+  "en/en_GB/alan/low/MODEL_CARD": {
+    "gitOid": "44ebf1a5833f34a4976476b65f7ff27797f5eff9",
+    "sha256": "sha256-XNiptloYXbvpbMgDBeYg8bFl3o31csSdZrU7zvn8sf4="
+  },
+  "en/en_GB/alan/low/en_GB-alan-low.onnx": {
+    "gitOid": "4fbb7895c9414b5cf929461c92ce2f7673b41cce",
+    "sha256": "sha256-ofYFhGIKK+0gPegj0I9auzNvsV89bzP4w0Hj4sq/Xd4="
+  },
+  "en/en_GB/alan/low/en_GB-alan-low.onnx.json": {
+    "gitOid": "5646c5b51dbcd1709fe5826e1c97ed1f710a287b",
+    "sha256": "sha256-yBZMwEts4QLGUc5KHniOhCn6Y4UB/KByOGBxjUtEY34="
+  },
+  "en/en_GB/alan/medium/MODEL_CARD": {
+    "gitOid": "095e2701e47cf8c3e5a44c01122ffbcd42405b84",
+    "sha256": "sha256-q8vD6WESQ5iRFDas2eqqCrFnzfIh1aJBRqoIcyxSYw8="
+  },
+  "en/en_GB/alan/medium/en_GB-alan-medium.onnx": {
+    "gitOid": "2ac9c14965ab564630cdf8cb497be802eafbaf6c",
+    "sha256": "sha256-CjCWaJMiBedigB8e/Cc2zUsBIDKWIq32K+CeVjOdMzA="
+  },
+  "en/en_GB/alan/medium/en_GB-alan-medium.onnx.json": {
+    "gitOid": "31f864659bfb7678af373cf4e58a7a0866ff52af",
+    "sha256": "sha256-wPDRJOWJXADnwDs13MgofzGaaZijZbGC3rXI51LujB4="
+  },
+  "en/en_GB/alba/medium/MODEL_CARD": {
+    "gitOid": "61e578c81ce2f7d59fb6c8840d8290ae29efb45c",
+    "sha256": "sha256-+hZrF3lATEcLC2tLoCOLxKNb+J0s0TDGeI9pcYi3N9Y="
+  },
+  "en/en_GB/alba/medium/en_GB-alba-medium.onnx": {
+    "gitOid": "e1e90ce2f071e4e97ef6ef268b16e72a01987642",
+    "sha256": "sha256-QBNpxKgdCf3YbDLFyGRECBHb3MZkZs3i1k9xM6Zq0Ds="
+  },
+  "en/en_GB/alba/medium/en_GB-alba-medium.onnx.json": {
+    "gitOid": "c0969252c640fd7c2765baa62936a1106ca856d7",
+    "sha256": "sha256-qpZaLwLsztYywmlOH8crv/bWXyZfq1Z8qUWRjHPdifQ="
+  },
+  "en/en_GB/aru/medium/MODEL_CARD": {
+    "gitOid": "667bfe0d72942adb50ef85bdb4f34db65fe47764",
+    "sha256": "sha256-uaiAd4tsxYMw54+GK6NVSDb0rJGU9hNTPb/fKPzgp/8="
+  },
+  "en/en_GB/aru/medium/en_GB-aru-medium.onnx": {
+    "gitOid": "87a14086ede68c1d7f80b8c5142a26bf02d55346",
+    "sha256": "sha256-nnTQiahWP4skRkJtAb7LBGzTw7+6/hog/QOpp5vYJhk="
+  },
+  "en/en_GB/aru/medium/en_GB-aru-medium.onnx.json": {
+    "gitOid": "1cdef9d402bbeb6209b9f9255a1f1ffe4184e8bd",
+    "sha256": "sha256-AFKfq/DnnympyxD9pbYPm3z4BnH6rCsxbhOvIOeBbV4="
+  },
+  "en/en_GB/cori/high/MODEL_CARD": {
+    "gitOid": "d115efb76a7bf218a9d8c62a55cb75b8fb2a5a9e",
+    "sha256": "sha256-E2570Wi2w1tKXfAaAlMpfldztXdc6uCvUWDyZKpYII8="
+  },
+  "en/en_GB/cori/high/en_GB-cori-high.onnx": {
+    "gitOid": "330ba61db0af22ded8d064e38c1df7d28911cbf3",
+    "sha256": "sha256-RwtN1jTJj4pIUNdib/w9/JB3Riju72YFpt2PiPMKWQM="
+  },
+  "en/en_GB/cori/high/en_GB-cori-high.onnx.json": {
+    "gitOid": "ec08ff84191b2e7fe7dd91928b6068bca12ff81b",
+    "sha256": "sha256-nn+1tWcWEsIvPIHL5Gwa6HsDGkYyvLUJ5Jna1vHirew="
+  },
+  "en/en_GB/cori/medium/MODEL_CARD": {
+    "gitOid": "e8db5ebbd9884c65262694f9a3c475617eb4c122",
+    "sha256": "sha256-ONdt/ehFg3sYRmj4urHGQmrXQLGvD868NJA3gic55TY="
+  },
+  "en/en_GB/cori/medium/en_GB-cori-medium.onnx": {
+    "gitOid": "c8fd90757f91706a7416b24e3f9c4b8fa4549a73",
+    "sha256": "sha256-GJn5jl+4MQFU88KXP0uKkpunJF5yKz06hWgLgz2V8Q0="
+  },
+  "en/en_GB/cori/medium/en_GB-cori-medium.onnx.json": {
+    "gitOid": "dba82adcb901f9cb8084dedd976a51ea5524f89a",
+    "sha256": "sha256-4mLBbX8ZL2nU7da074pZFTeeZ0lfzEAvGrFe6zPaPTY="
+  },
+  "en/en_GB/jenny_dioco/medium/MODEL_CARD": {
+    "gitOid": "cbce04cd9197c5889ff62edcd56b2b87c7684163",
+    "sha256": "sha256-vIrsMhlqsU9GJgq24ALPAEsHk93XiGARFF/gAQbiDUU="
+  },
+  "en/en_GB/jenny_dioco/medium/en_GB-jenny_dioco-medium.onnx": {
+    "gitOid": "606e942874870a3e854f0b1a1ae7ef8f2cb683b2",
+    "sha256": "sha256-RpxjDSCeE53TkqZr9KveSrhjkKAmnB5HtOXXzoFSawE="
+  },
+  "en/en_GB/jenny_dioco/medium/en_GB-jenny_dioco-medium.onnx.json": {
+    "gitOid": "88281754998487c1999a0cce36cbb5a7bab801ab",
+    "sha256": "sha256-qaepOjF8mjy2Vj436wV9+e8JwGGIqKQ0Gw/LWMulTdQ="
+  },
+  "en/en_GB/northern_english_male/medium/MODEL_CARD": {
+    "gitOid": "492a27e88841f2201eebba52d83c521a521bf1fa",
+    "sha256": "sha256-dWYcOlDAuoKzKzpDjlQQPY3+W76Pu4ZKxoegQOeZSLs="
+  },
+  "en/en_GB/northern_english_male/medium/en_GB-northern_english_male-medium.onnx": {
+    "gitOid": "0455cee2e68a4efa33e3c1d69b766f8970fd3cb6",
+    "sha256": "sha256-V6IZro5jiHPbfRiJMwS+UGnEKGjzkruVw/8X8GkNBok="
+  },
+  "en/en_GB/northern_english_male/medium/en_GB-northern_english_male-medium.onnx.json": {
+    "gitOid": "1e94f02fd642271570a935c813186aaa95b2ad13",
+    "sha256": "sha256-aVV+09l0RjRT6bDAndmaftDlK4uHtks1fb7rJUCpfUc="
+  },
+  "en/en_GB/semaine/medium/MODEL_CARD": {
+    "gitOid": "86cbab35892421184a206d57f9c088d602f9a2b9",
+    "sha256": "sha256-08Nwycc7aTR/lIfMJLDPpfKkAMR9IJ8KpM4gEjVi5G0="
+  },
+  "en/en_GB/semaine/medium/en_GB-semaine-medium.onnx": {
+    "gitOid": "0df4c7533fec2ff4f43adebfd129172caf9696f9",
+    "sha256": "sha256-1tq287kttD6j94x/INyOrbR6HxXYocnUUc88zSAaL2Y="
+  },
+  "en/en_GB/semaine/medium/en_GB-semaine-medium.onnx.json": {
+    "gitOid": "896245aa99a7657de80b10029a3250c67a4bd50d",
+    "sha256": "sha256-ZCXcuHhoQEO3fXcrFzrgBthqWDsRAwPt2ki4Q47O5e4="
+  },
+  "en/en_GB/southern_english_female/low/MODEL_CARD": {
+    "gitOid": "ab8a038fc5b744a548f7150edeb35b1c1a35d6a3",
+    "sha256": "sha256-QaZFhaSdRjYgQrGgGwpLVBJ1GOtQBjxFhG4nA+V5AmA="
+  },
+  "en/en_GB/southern_english_female/low/en_GB-southern_english_female-low.onnx": {
+    "gitOid": "b1304bd85680a323f627749e8cec9b8652248e24",
+    "sha256": "sha256-8vN67Rs6CTR29xnRN5ugwLGxz28e+ZKI4uv1ApcaB8M="
+  },
+  "en/en_GB/southern_english_female/low/en_GB-southern_english_female-low.onnx.json": {
+    "gitOid": "ec7778537f49ecb05a2da4b6ef9bb55ce64b13c8",
+    "sha256": "sha256-oa9DMQ+HVhYVBuhJooY9NCqYsIU6+eJDdYHTnpki0OU="
+  },
+  "en/en_GB/vctk/medium/MODEL_CARD": {
+    "gitOid": "ead7f850edbce2c5e0a2af5749e5c8afcf99f454",
+    "sha256": "sha256-U+xrH9kNkSXVvrrFUmHv0n9+jW3JYvYFpbX3lt8ux/s="
+  },
+  "en/en_GB/vctk/medium/en_GB-vctk-medium.onnx": {
+    "gitOid": "3c01d9375aa487856511647e24c15b2db8462e69",
+    "sha256": "sha256-Tp/IWrkAk4Uxn8a65/VVd/ii1+53/ZFZpVAOtlMfQeY="
+  },
+  "en/en_GB/vctk/medium/en_GB-vctk-medium.onnx.json": {
+    "gitOid": "8b9509fc9e58d214f0092a662441b57de1427225",
+    "sha256": "sha256-f4XmOR7Q9/RuSr0ZNFkpoWvpMaDJlFCG+WaS3OIIf6g="
+  },
+  "en/en_US/amy/low/MODEL_CARD": {
+    "gitOid": "29114de3514fe3c8648a8db2695a546e9d083a36",
+    "sha256": "sha256-cbB97TAaljRglqcdjw1ky7X0nV1RAE3OKLu3UE4/ZfA="
+  },
+  "en/en_US/amy/low/en_US-amy-low.onnx": {
+    "gitOid": "90ea9e91d5a948cab41dbd3860b9ca92ff566ebb",
+    "sha256": "sha256-pakau33g8QQ1iiWt7UgN2s8f8HYohjJYhuxAai6GqrM="
+  },
+  "en/en_US/amy/low/en_US-amy-low.onnx.json": {
+    "gitOid": "b29c9edc9581867147e252191c71e296394c85f8",
+    "sha256": "sha256-IlCppgW43DWhFnF/rcUFZpXdgJ40oV0C9yoPUtU9Prs="
+  },
+  "en/en_US/amy/medium/MODEL_CARD": {
+    "gitOid": "afaf80d8eb2304e99e5ac516c764e9f35ae624ba",
+    "sha256": "sha256-nFDgTMKYyn8E9eVDUAe+AoM0M4oshXiUo+SW2/BLJbs="
+  },
+  "en/en_US/amy/medium/en_US-amy-medium.onnx": {
+    "gitOid": "1d703b260d0732739ed941fead81f4514b91a79e",
+    "sha256": "sha256-s6bke1e4x/vmoM4lGBYaUPWanN2KUINcAssCvdYgbBg="
+  },
+  "en/en_US/amy/medium/en_US-amy-medium.onnx.json": {
+    "gitOid": "5a1e0a2d94d3719de29a4771aa0e6c116552445f",
+    "sha256": "sha256-laI+tNQpCdON9zu5rH9F9Zfb/N4tG/lSb96vVGaXfXc="
+  },
+  "en/en_US/arctic/medium/MODEL_CARD": {
+    "gitOid": "ecdf2b25279227724eba1ebffa9ef768eab70254",
+    "sha256": "sha256-eR8lcBZAKRNl4XmZZlZfpOOIxMlrWuR46Pa3S25uIrA="
+  },
+  "en/en_US/arctic/medium/en_US-arctic-medium.onnx": {
+    "gitOid": "aebeba23b778996ab132183f1616f4d334b004b5",
+    "sha256": "sha256-SDMD4pSUej7C+RDqlgk9h24WQPV3Lp2J5RHWyCxmcoY="
+  },
+  "en/en_US/arctic/medium/en_US-arctic-medium.onnx.json": {
+    "gitOid": "c6309fc830ad3ed74e130816882a499fdc508ddf",
+    "sha256": "sha256-2yyhpV2wHN084ormMDesUlEz6eAMpVdDDexXJkMjXv4="
+  },
+  "en/en_US/bryce/medium/MODEL_CARD": {
+    "gitOid": "cb4671de4558564b26945e3f2a09a82e1b67303e",
+    "sha256": "sha256-lgQsTdvUBfbkDik4sGmYf0AWo1gyEUu+/tHtBCQu5TI="
+  },
+  "en/en_US/bryce/medium/en_US-bryce-medium.onnx": {
+    "gitOid": "d9a2429f330ea5bc5c39f596a57280ad7a1ac23e",
+    "sha256": "sha256-3JyqbDExmf+1rGmLblQvpsujiK6vJzHiUmLjO5gQrvE="
+  },
+  "en/en_US/bryce/medium/en_US-bryce-medium.onnx.json": {
+    "gitOid": "2cbf22d4c9358974a8fba10bf6698194b8f0716b",
+    "sha256": "sha256-fOsbxK9tTkG20e27hsZ+keAeqnH2bbTNCukqxwTUFb4="
+  },
+  "en/en_US/danny/low/MODEL_CARD": {
+    "gitOid": "4ddbd802e442ea98d52839ed98b7d15086e85c4f",
+    "sha256": "sha256-KKluOof3dLlk+bjOIdmlBNwv0caFq3mSuiSHqKiD9fc="
+  },
+  "en/en_US/danny/low/en_US-danny-low.onnx": {
+    "gitOid": "3c929e8b28cccc4dce4273cbdd389386ae00c5c7",
+    "sha256": "sha256-VqmulJnpYVFPBgqsKGbLMjoh5ZiVkvxPII5W/cMjq2Q="
+  },
+  "en/en_US/danny/low/en_US-danny-low.onnx.json": {
+    "gitOid": "4fcf79ce8a39bb27c2c30066b85f1631efcceb2a",
+    "sha256": "sha256-GR3qG6mGMZnYyi6QSPg7IZIZ+0UPYnZ+4C8bxFaM5PQ="
+  },
+  "en/en_US/hfc_female/medium/MODEL_CARD": {
+    "gitOid": "3bd18d2ad3e90ab18d516c6f5dabed3d402c0c3e",
+    "sha256": "sha256-EI4ofyEo73JOZ7DntfiGw/m17H6qDgdVS4FdfWg8T8M="
+  },
+  "en/en_US/hfc_female/medium/en_US-hfc_female-medium.onnx": {
+    "gitOid": "b31bb18d361373d192c9f41e263fe6ab7d6d5f23",
+    "sha256": "sha256-kUxHN4j8H6i2Os4c3NtEWI9K5SPTqzffFTZhaDWhQLc="
+  },
+  "en/en_US/hfc_female/medium/en_US-hfc_female-medium.onnx.json": {
+    "gitOid": "049160c4dc214899bd6c7dd0ff90d015d3b41cfc",
+    "sha256": "sha256-A/H6BiK4BGMoNZLZesqfbomuw0WlxWtyV3I+AJPFi2w="
+  },
+  "en/en_US/hfc_male/medium/MODEL_CARD": {
+    "gitOid": "9fe8f9d8d6749e1fbc130a776e0ffb318c77f2be",
+    "sha256": "sha256-rNnzYHlpRU3q2DbBk51JBqe3thjzjf0sKChW0T5Olow="
+  },
+  "en/en_US/hfc_male/medium/en_US-hfc_male-medium.onnx": {
+    "gitOid": "ad71b262aeb3d89330c9e619b642e4dd2239f238",
+    "sha256": "sha256-0R5AOgK99aZwyHez3Fbg4cjOzm+zAolYYxTf/cCnjLA="
+  },
+  "en/en_US/hfc_male/medium/en_US-hfc_male-medium.onnx.json": {
+    "gitOid": "cfca70ab72bfd9b7afa09887020a8bb00c1377aa",
+    "sha256": "sha256-9mhHQkrtC/mey7XXz95HwKkG9Cag2vfEbzBefSGv2IY="
+  },
+  "en/en_US/joe/medium/MODEL_CARD": {
+    "gitOid": "f001792ffaccdde85ed0e21079d5636c67136bf0",
+    "sha256": "sha256-0sqmOsoPzLFVEF6Vnjk+XAwPA6HziO9bohe4Pvhgx2A="
+  },
+  "en/en_US/joe/medium/en_US-joe-medium.onnx": {
+    "gitOid": "8c620f3be0b47774b4dc5a1beea372efc4a76a93",
+    "sha256": "sha256-WK/OAyG42cRtfN+cFlAMxVp5O0IgIS26a3D7eIs7rwY="
+  },
+  "en/en_US/joe/medium/en_US-joe-medium.onnx.json": {
+    "gitOid": "b4ab600fbd71cee986a8e7714bd88996f33be945",
+    "sha256": "sha256-PW1UELN5XLGVBZUkfvjwYZBxnm/b+jojVtjsNo4arTM="
+  },
+  "en/en_US/john/medium/MODEL_CARD": {
+    "gitOid": "6f590d35c731e8f5a6c4fe20a39c9abb0609e666",
+    "sha256": "sha256-oFbaZc1w3L2pb8NCD+jTRC2/PIt19JzfgApxW0LimdE="
+  },
+  "en/en_US/john/medium/en_US-john-medium.onnx": {
+    "gitOid": "839d9893af6df45f841c75fc1c4ab153abc6d7ca",
+    "sha256": "sha256-eJxsh1cm5ifd7pPVHYcnhZq+nAkcPRQVkfS4PCBy6Yg="
+  },
+  "en/en_US/john/medium/en_US-john-medium.onnx.json": {
+    "gitOid": "dc2a9b58e311033bb24d6cee2d8ec5be2e8c3c9d",
+    "sha256": "sha256-r2Dxd7a1UPPXowJyDA+4nn+UqCtdykZHde9jscaboJo="
+  },
+  "en/en_US/kathleen/low/MODEL_CARD": {
+    "gitOid": "1f053c05000834c4ecb927179af0dd99574734d8",
+    "sha256": "sha256-obGJ9O8UgAzkboV1La9u8bydPw2ayHYGXc2FGOfT5oA="
+  },
+  "en/en_US/kathleen/low/en_US-kathleen-low.onnx": {
+    "gitOid": "e80b620cc5bc6654f814924cc5a5c75d2921eb2c",
+    "sha256": "sha256-h63xf1MmvAeCKCFHqLl4hAYjYkXw+bDmjay2Ubwd6LY="
+  },
+  "en/en_US/kathleen/low/en_US-kathleen-low.onnx.json": {
+    "gitOid": "95db36461a4f0479b68b06eb20a3f86e383a14db",
+    "sha256": "sha256-OeuriEFu3OD2N4F1RlF4hiDLl7m7c93zwB8o4ppkj+s="
+  },
+  "en/en_US/kristin/medium/MODEL_CARD": {
+    "gitOid": "40000a8e64cf5deb284a999cda92af78cdae783a",
+    "sha256": "sha256-jBgbHV99gVK5FPqrlB/L5rjwSV5j5Ridbye4xoyDk/w="
+  },
+  "en/en_US/kristin/medium/en_US-kristin-medium.onnx": {
+    "gitOid": "0c5f7cf6bcfc1b8c2778e1820f0fc238206c663d",
+    "sha256": "sha256-WEmVf5Kcv3IMJY+EWGktYQP/8vDj07GcgllHS7BqGNQ="
+  },
+  "en/en_US/kristin/medium/en_US-kristin-medium.onnx.json": {
+    "gitOid": "e94be84ab0dc3532b4b2b48cbb1f5d4a8746bedd",
+    "sha256": "sha256-VoFCbUrq0iGV3nBTHu7t20ZJPPr/xXZLLqPbc0KLZRw="
+  },
+  "en/en_US/kusal/medium/MODEL_CARD": {
+    "gitOid": "1425aeee8b85c7a90516e84004fa6d4903e6ea99",
+    "sha256": "sha256-pFSDn44Ce2SqS+QO2zPX+03RfLnKttQGqHLBMPNbp2M="
+  },
+  "en/en_US/kusal/medium/en_US-kusal-medium.onnx": {
+    "gitOid": "8e9405f72133b2b1df47fb5687df4dc0e8c1bbae",
+    "sha256": "sha256-Q4riW7MFsqf21jIyfWEC3yUBH3k+giL6nbh25zId+PM="
+  },
+  "en/en_US/kusal/medium/en_US-kusal-medium.onnx.json": {
+    "gitOid": "68eff4cb75e728b75ada72c3d1b8e54ba5cf0b3f",
+    "sha256": "sha256-3dPE39i09WgVDJNPuUkS3XiNRNuH9PCjKMRp16Z2H0E="
+  },
+  "en/en_US/l2arctic/medium/MODEL_CARD": {
+    "gitOid": "730fcd6b9186c43931106a96c6a7a0bc8599b84d",
+    "sha256": "sha256-I7h81tE02ue7T6rHuo9gE7nkEtelbigJnSM44gqLXLI="
+  },
+  "en/en_US/l2arctic/medium/en_US-l2arctic-medium.onnx": {
+    "gitOid": "81d2572366f905fd20308474d1fd2fb04fd084c2",
+    "sha256": "sha256-2J9vEkvx53NbIXnSFBuAAcPhkWnV50PtbjViT0x28EQ="
+  },
+  "en/en_US/l2arctic/medium/en_US-l2arctic-medium.onnx.json": {
+    "gitOid": "323130fea32047d7b3dff8c4a1e2ec824198bd04",
+    "sha256": "sha256-qX4rplPp783Bvc7GSjmMi+sZrl6N/b/krWhBmD5WwHw="
+  },
+  "en/en_US/lessac/high/MODEL_CARD": {
+    "gitOid": "019c2ac5e9b50aebad2a512c715e1ebbc80b7777",
+    "sha256": "sha256-dnGCbZR6D/wR3XavC9iQ2T6VawA1hpatcTSPIaqCcQA="
+  },
+  "en/en_US/lessac/high/en_US-lessac-high.onnx": {
+    "gitOid": "fe08c7518f3a88b92cab9bc2eceb88f07312b8cb",
+    "sha256": "sha256-TKv3w6Y4AXE380oVFlIgMtT+PzgiioQ8ybdk3cvNngk="
+  },
+  "en/en_US/lessac/high/en_US-lessac-high.onnx.json": {
+    "gitOid": "9a525d5a00bddbd71db1dc8d97c543fb20b5dc7e",
+    "sha256": "sha256-20K5fZhZ8le8FWG47ZgOf7I5hAIFCnTd1svskxqSQS8="
+  },
+  "en/en_US/lessac/low/MODEL_CARD": {
+    "gitOid": "cd2267b26d4931212cb63e41e933ac5512e2c236",
+    "sha256": "sha256-9PW1qzVKtx3SxxtXG80IebJZ3fq6pRablopgQn0Lc/M="
+  },
+  "en/en_US/lessac/low/en_US-lessac-low.onnx": {
+    "gitOid": "ba6045826d5a33f489e37692d6f346d4b9a3ea0a",
+    "sha256": "sha256-99Ad3jcVVXMsTDFBEax5ZysaXOL8GSZqtCF4/Y3383U="
+  },
+  "en/en_US/lessac/low/en_US-lessac-low.onnx.json": {
+    "gitOid": "74579f6dc2d27a63130153a32e0c1224f5ccf24e",
+    "sha256": "sha256-RXVN/euzuGYcP8VkcTdy3uxuBk/utbTpWUhX3HMFGTo="
+  },
+  "en/en_US/lessac/medium/MODEL_CARD": {
+    "gitOid": "c0b9a3d60eb5b2e852aedb2a806031f85d02d40b",
+    "sha256": "sha256-zknrRXdCIIFm05mkDN7Cx/qdt3lgkwAxVkq1bxKIJkU="
+  },
+  "en/en_US/lessac/medium/en_US-lessac-medium.onnx": {
+    "gitOid": "96c54a44122cdf5bc67d5d2cb24e2979dec53f93",
+    "sha256": "sha256-Xv4J5pkCGHgnr2RuGm6dJp3udp+Yd9F7FrG0buqvAZ8="
+  },
+  "en/en_US/lessac/medium/en_US-lessac-medium.onnx.json": {
+    "gitOid": "c67cea2c9a7a6501d89f7b2cdff411bc49e54a28",
+    "sha256": "sha256-7+GcQXvtBV8taZCCSMa6ZQ+hNbyGiw5quz2hgdq2kKA="
+  },
+  "en/en_US/libritts/high/MODEL_CARD": {
+    "gitOid": "3bc22608e1537151bb6f7f1c171a0e2424193193",
+    "sha256": "sha256-xHjYJqropjMvaVCScaVgg7ns4BSpk+Fvx5y5SWgQal8="
+  },
+  "en/en_US/libritts/high/en_US-libritts-high.onnx": {
+    "gitOid": "944e7e5f47210d7a2286ff12caebb3807e1a788c",
+    "sha256": "sha256-kSelWeEWA/ELNm0aIKx0JoJggdvFId5MJCDFdyjXPw8="
+  },
+  "en/en_US/libritts/high/en_US-libritts-high.onnx.json": {
+    "gitOid": "c6e20ff4e4a0317317b3982056d0bef36dd8e6a8",
+    "sha256": "sha256-Lv3G1/lUWIuBgBMsvZuAAZM/3QCTLJK8kv0NICip6z0="
+  },
+  "en/en_US/libritts_r/medium/MODEL_CARD": {
+    "gitOid": "320179c7558e5983167a29473d691143a8982dd5",
+    "sha256": "sha256-DM3mkn5btNdD9Oo5YYqTh7oYzKM1EiCoqc/bxosw/Lk="
+  },
+  "en/en_US/libritts_r/medium/en_US-libritts_r-medium.onnx": {
+    "gitOid": "a5ddf341395d49e5ad2bb7b37b9cf4c2d07f05e8",
+    "sha256": "sha256-ELuF4HHWFvz0Bx82nxeZ0EkUkqs8XVUuwZ+1SPrBMZU="
+  },
+  "en/en_US/libritts_r/medium/en_US-libritts_r-medium.onnx.json": {
+    "gitOid": "f877428b44f80af0017343815f453d7830a22864",
+    "sha256": "sha256-tHHcYNLYM16BnDk9GW1vv3koF/QAUSV7Jph4UFvJr7M="
+  },
+  "en/en_US/ljspeech/high/MODEL_CARD": {
+    "gitOid": "a7c9acc1d9f1f58484f82b7ee58de2e192048a58",
+    "sha256": "sha256-+9ucCb0z5z9odrpI/C7uoSC5mE0Hdjv6IbPIGS/UuoY="
+  },
+  "en/en_US/ljspeech/high/en_US-ljspeech-high.onnx": {
+    "gitOid": "ddf9a9d0840772ff0777b2ac5eb72f195ab163a4",
+    "sha256": "sha256-XU8IumoqSMRFku7Tzla/henePdTiDfkFQa5oqDEMApo="
+  },
+  "en/en_US/ljspeech/high/en_US-ljspeech-high.onnx.json": {
+    "gitOid": "e4c9cbdf41a9c5fadd5eb7633513435342184918",
+    "sha256": "sha256-fh9GNK9ZbYPMqZf7epMbqAtw+KMWomVe5pxVNl4KzhQ="
+  },
+  "en/en_US/ljspeech/medium/MODEL_CARD": {
+    "gitOid": "324d7470296a501e3c6396310f9b218fdbd7ed1e",
+    "sha256": "sha256-++4VKcidNrP+dtfp8/gy3OF/RJAKUtdqm9pzVlR2a00="
+  },
+  "en/en_US/ljspeech/medium/en_US-ljspeech-medium.onnx": {
+    "gitOid": "cac20d8f96f39dcd35e695a1aa83311443c7218f",
+    "sha256": "sha256-b1KnUeI0mr56dnNesJ3Bh1KYx36iNC/9L+95/4G4fyI="
+  },
+  "en/en_US/ljspeech/medium/en_US-ljspeech-medium.onnx.json": {
+    "gitOid": "73ecdec4f6ab17a437936652dfe3a925bb19e098",
+    "sha256": "sha256-FB1hLMCpXtfvwcqTa4RcI2SWfy6SF8Xb/PafxNbGWGA="
+  },
+  "en/en_US/mike/medium/MODEL_CARD": {
+    "gitOid": "a238e562db8ff7970fc91d0d6350f6e06891bbd2",
+    "sha256": "sha256-xn6mdn7c/ShoS2QUojEadMTXLmrXQUMW1djW+qBn8qs="
+  },
+  "en/en_US/mike/medium/en_US-mike-medium.onnx": {
+    "gitOid": "f3a66812d93ec4e6557e572abca6acce7a200406",
+    "sha256": "sha256-MVfmnixYDKspdIP0swHul1pFkMF9Nal1fjM0fQ6Q+uI="
+  },
+  "en/en_US/mike/medium/en_US-mike-medium.onnx.json": {
+    "gitOid": "d5ff4f2a587e499988ef2fc82c5eb6ad2abb0641",
+    "sha256": "sha256-CiU4wLHgamyrfEa5fHmr1eajSmwFt0uTdodMcJnYHa0="
+  },
+  "en/en_US/norman/medium/MODEL_CARD": {
+    "gitOid": "0c932c8a92562aab6bb0373eb502babc6275d290",
+    "sha256": "sha256-YOr00QAJ0b1KGqVV0zfa4A9gQh1y/uQVuROaAh58tdA="
+  },
+  "en/en_US/norman/medium/en_US-norman-medium.onnx": {
+    "gitOid": "54e5deae63dbd8184fb007360a0c55d29b439473",
+    "sha256": "sha256-uXOUQyMqgKWcfRiBDdhWiZvxanlkcl9auB6kmxNRy3E="
+  },
+  "en/en_US/norman/medium/en_US-norman-medium.onnx.json": {
+    "gitOid": "64985a9c6620d5522c500dd42224be7998f83f39",
+    "sha256": "sha256-bC239VikqN65/oIlg8HFEF9sToNN0PneitF6iI7p/h0="
+  },
+  "en/en_US/reza_ibrahim/medium/MODEL_CARD": {
+    "gitOid": "473931a65a77f3d94a8fdc98f0f35f3668f32a06",
+    "sha256": "sha256-7sl9ffIUP5gd66qSn87VUIZmfl/x9ho+Htp7f1H4mlM="
+  },
+  "en/en_US/reza_ibrahim/medium/en_US-reza_ibrahim-medium.onnx": {
+    "gitOid": "471615add079d5a41a22b5fc092636530c039630",
+    "sha256": "sha256-mfDDFGSiEggxyofQeeEKmis+QmzB7mYtgP+QQt8VzTw="
+  },
+  "en/en_US/reza_ibrahim/medium/en_US-reza_ibrahim-medium.onnx.json": {
+    "gitOid": "911bf9f10b062222cc27d11b314c8fc2a5f51932",
+    "sha256": "sha256-Rl3fFwKRf+YXt9ae2BMB1qLznwg6dUvRz224lV0Jo4E="
+  },
+  "en/en_US/ryan/high/MODEL_CARD": {
+    "gitOid": "e422ec797dc70302105e02385f98a05310ee5a1d",
+    "sha256": "sha256-fDszfdTpbD8xH0dhGLFdk4Z676S+5UJj4lDEX3WfrQ0="
+  },
+  "en/en_US/ryan/high/en_US-ryan-high.onnx": {
+    "gitOid": "8aaceeab8ccd969f0d21b1f3cee6f65300d63c02",
+    "sha256": "sha256-s5kNdgbhg+yNv7pwpGBwdPFi3hoMQS4BgNH/YLsVTso="
+  },
+  "en/en_US/ryan/high/en_US-ryan-high.onnx.json": {
+    "gitOid": "d50091e9aeb2e7b02517749d953ade2be28dcdb1",
+    "sha256": "sha256-xtO5jwgxXLS+vw1J1Q/E/0kbUDxkuUDNPVyihUO0gBE="
+  },
+  "en/en_US/ryan/low/MODEL_CARD": {
+    "gitOid": "9a355774ffba2b44882a7d7ede041ecbde4c6340",
+    "sha256": "sha256-gkCcnGiGNlDkB6idzr/JRq/ZkiA1k/DkryNLzoPEFE0="
+  },
+  "en/en_US/ryan/low/en_US-ryan-low.onnx": {
+    "gitOid": "e17ffefb601072fc9ad1127149ba2e52ec6d2119",
+    "sha256": "sha256-jSGghcxMABDx8+kdUAjIaRJ3zPp0TrDXR77NM6NES68="
+  },
+  "en/en_US/ryan/low/en_US-ryan-low.onnx.json": {
+    "gitOid": "ec6ce9d5658ad0c591727d5508f7dfbfdbd884e3",
+    "sha256": "sha256-snFH5WsFJZYmCfgvWBcfRhjL8XxvsEPX1yT/KMxK7WA="
+  },
+  "en/en_US/ryan/medium/MODEL_CARD": {
+    "gitOid": "b331c598d3a2067c2c1bbb2126096d61d6ee8b0b",
+    "sha256": "sha256-OiSuX3qoVhmfM4rZr3hM2nlnNPOX9+G0ob08B9BpRbE="
+  },
+  "en/en_US/ryan/medium/en_US-ryan-medium.onnx": {
+    "gitOid": "cea8ee0be78def0ff65419e3ccd078507f79c69c",
+    "sha256": "sha256-q/TCdIYlZO1ke6DSxH+O58m3F9J72tkhkQDrMQ20BHo="
+  },
+  "en/en_US/ryan/medium/en_US-ryan-medium.onnx.json": {
+    "gitOid": "90e07066093f756cf2e0d7b973cbf176b586dddf",
+    "sha256": "sha256-RANMBWyxVoGyrUlDB8fz8uRJnRJTxwDHEfoKRgf/540="
+  },
+  "en/en_US/sam/medium/MODEL_CARD": {
+    "gitOid": "fc17e5d64bd11ad93dd552703bef19a51aca7ba8",
+    "sha256": "sha256-N90MyuKjnJrSTtQ9J3txgmtPIh8hKj9nVNOpYFMEULU="
+  },
+  "en/en_US/sam/medium/en_US-sam-medium.onnx": {
+    "gitOid": "4e1d0a57db23fcf22acd9a21c6d3fc57349cc6db",
+    "sha256": "sha256-VkF7O0r+jsa7TKvwbhfWcmH91b8zRZKrz8gAUvuhEWM="
+  },
+  "en/en_US/sam/medium/en_US-sam-medium.onnx.json": {
+    "gitOid": "d83d2768992fa26e447b86fd0ea187e95a9e4c7c",
+    "sha256": "sha256-jH+0fxloOwuBA3xVZPmlrUaZqdpoXg5doKcv08P1wcQ="
+  },
+  "es/es_AR/daniela/high/MODEL_CARD": {
+    "gitOid": "33071a4b2624014e093f727fefb73ddd60b65941",
+    "sha256": "sha256-5D48s3b0RgrQObU0vliOqovnb3Jm6om6UkAyM9n5GKs="
+  },
+  "es/es_AR/daniela/high/es_AR-daniela-high.onnx": {
+    "gitOid": "05e421a431fa48926477fa0b897a719ecc67d341",
+    "sha256": "sha256-fOsfwNqzSUGMW1SmOa6e5ZUhLXyepCIiDYQZFj1cyYU="
+  },
+  "es/es_AR/daniela/high/es_AR-daniela-high.onnx.json": {
+    "gitOid": "3b4fe9ccbd36ee7c37e01ddfed39ecd8aeeae912",
+    "sha256": "sha256-rtv2lkfh11TGLs+OA2bKXxavPnaOPGtTKa9utr3jhSs="
+  },
+  "es/es_ES/carlfm/x_low/MODEL_CARD": {
+    "gitOid": "d9a317cb56dcc7de17e1584365833531887b6649",
+    "sha256": "sha256-puYqPTbDfHcC2Hf3hAASCLlS4r9NF8cqa12kQvvvtLM="
+  },
+  "es/es_ES/carlfm/x_low/es_ES-carlfm-x_low.onnx": {
+    "gitOid": "0759ad093f8a5f9aae55380cbf1b87371467fd2e",
+    "sha256": "sha256-1pZ3MjqQfNSWP0KynCCpi11r+n8+ZN8zmRXkZQwA0SU="
+  },
+  "es/es_ES/carlfm/x_low/es_ES-carlfm-x_low.onnx.json": {
+    "gitOid": "42bf487ce5404ae12c88618de06a857122360130",
+    "sha256": "sha256-2b36n/AesryeYufSWTk50eTE2Ot891+XJzFTnRI5mWY="
+  },
+  "es/es_ES/davefx/medium/MODEL_CARD": {
+    "gitOid": "848c5a69ec06c91c049d3d06f7ad9c8f5e815c67",
+    "sha256": "sha256-QgcDtdjqI5tynxPYPzHuqbrl/LiUR94j68lKqKR2j5U="
+  },
+  "es/es_ES/davefx/medium/es_ES-davefx-medium.onnx": {
+    "gitOid": "a9b417941bc25a9866f0952e80cad1245fa99712",
+    "sha256": "sha256-ZliwOxpsMW7kwmWpiWq8E5M1PC2eG8p9ZsLEQuIiqRc="
+  },
+  "es/es_ES/davefx/medium/es_ES-davefx-medium.onnx.json": {
+    "gitOid": "4d3bb330a75d71c056891102c1d957c3e5cec98d",
+    "sha256": "sha256-Dg3ah8cy9vOHcf8nSmOA2SUvMn3Kd6opY9X7357FSEI="
+  },
+  "es/es_ES/mls_10246/low/MODEL_CARD": {
+    "gitOid": "781602bc5aa6416b3edd4fdb7cc761928bb4b9a3",
+    "sha256": "sha256-+kJz4JtoFMF8rNTVCdYjksMduHfiOhZhFmiGiWqkYaY="
+  },
+  "es/es_ES/mls_10246/low/es_ES-mls_10246-low.onnx": {
+    "gitOid": "a7173650c062bf66fe841301d1fc31d9d4c50f08",
+    "sha256": "sha256-P5120neHeJQil6qwUqp7LmckjT9DYUyInugpAaIw4Zc="
+  },
+  "es/es_ES/mls_10246/low/es_ES-mls_10246-low.onnx.json": {
+    "gitOid": "00c55b5faedf5bfb51270a91b6bb70f16283cbeb",
+    "sha256": "sha256-qGWUTX9pcq80cmOwuBUkZtq7o7eLj+WmmF99Oxn9BqE="
+  },
+  "es/es_ES/mls_9972/low/MODEL_CARD": {
+    "gitOid": "6e3f517d93181ec17c059e1dcf8963cb56c6542d",
+    "sha256": "sha256-a1bd69dgvyUJG1wPUtoo+J2p0M+X4w/CkCeg+pWXnyw="
+  },
+  "es/es_ES/mls_9972/low/es_ES-mls_9972-low.onnx": {
+    "gitOid": "8f38f2e76812f1196e4fc48267471b984f489ca1",
+    "sha256": "sha256-r91hvrJtOroYJFwDUqgXPn+WGW++SXnhFVkOj3dclfA="
+  },
+  "es/es_ES/mls_9972/low/es_ES-mls_9972-low.onnx.json": {
+    "gitOid": "441b8e4d945a454cd102ae08e3ae3a3d25433314",
+    "sha256": "sha256-MiNKBwHEgLtrpi1PBdDAOpU2nyEzqmVTcNscALIZM0A="
+  },
+  "es/es_ES/sharvard/medium/MODEL_CARD": {
+    "gitOid": "8ce8fb3966b2480974b07a27036b1962d12cad84",
+    "sha256": "sha256-N2VTFNCP6KCQCrxijTvL7kj/vdj62TBriVJaCtog/vw="
+  },
+  "es/es_ES/sharvard/medium/es_ES-sharvard-medium.onnx": {
+    "gitOid": "1d8d7097fc26b9fe9d2500c6f70a7fd3c3f66b8e",
+    "sha256": "sha256-QP6/sWecaaRQX/MR3BNuEh40GaE6KQ7yZP30Pd7dD7E="
+  },
+  "es/es_ES/sharvard/medium/es_ES-sharvard-medium.onnx.json": {
+    "gitOid": "b36c5ba1a23982f6e874989454ef0234951f29c4",
+    "sha256": "sha256-dDjJtpnHKwwziNrhto0/Nk3GaiFQ/lVKHBHwM3KVeyw="
+  },
+  "es/es_MX/ald/medium/MODEL_CARD": {
+    "gitOid": "824c689d61aee72278ebcd99db9290b551c1b8d7",
+    "sha256": "sha256-HwaUzrPx54weLuDi1dpA8Z+WW8Y44bT7T8qb3KQg1xM="
+  },
+  "es/es_MX/ald/medium/es_MX-ald-medium.onnx": {
+    "gitOid": "9259a452146658db56d195d116d341a396b65a01",
+    "sha256": "sha256-AZs4Ayk8k+NKIG3S5To4iSCaUU54b9cUT3twGWxXm2M="
+  },
+  "es/es_MX/ald/medium/es_MX-ald-medium.onnx.json": {
+    "gitOid": "e88cea9baf079db4a23605ec80cf5c4041ecd7dc",
+    "sha256": "sha256-WnFJgVjgSvyAmb/QGcfofGjrnQQlBaKxqH5cGsKxph0="
+  },
+  "es/es_MX/ald/x_low/MODEL_CARD": {
+    "gitOid": "d06a370bd4acb1f26f59832d937045e3e6043759",
+    "sha256": "sha256-dd6F5xJH23UnRiTv1tgWur83z9NDWKvtQCsOl59Kpbk="
+  },
+  "es/es_MX/ald/x_low/es_MX-ald-x_low.onnx": {
+    "gitOid": "9bf5f5d791213f4bc6f88b01bd6c50f906d9b5d5",
+    "sha256": "sha256-2KrlSu6er7N/uF1tpnb6yvyjHC2E0RrNyhpbbdgrHfY="
+  },
+  "es/es_MX/ald/x_low/es_MX-ald-x_low.onnx.json": {
+    "gitOid": "13fc3be8883c3a35a1a856cb1ffb6be5d121df37",
+    "sha256": "sha256-Wzcq3x+MjY8GELkFf8LfABrT9fQs2db4U6eL7z+LBkQ="
+  },
+  "es/es_MX/claude/high/MODEL_CARD": {
+    "gitOid": "6f5160c4d63ec36f9f50012f789274505b556807",
+    "sha256": "sha256-8D2lfB6UX21wmwHnaZ0mAY4UVXATneUqx1aaqolioXQ="
+  },
+  "es/es_MX/claude/high/es_MX-claude-high.onnx": {
+    "gitOid": "181e1b544064cf5558db5f4324c833be5d3ce7a4",
+    "sha256": "sha256-PvQKcepjhSzYq35vp9Ls3PpnoLR8nEjj8Q4C7gIIPqA="
+  },
+  "es/es_MX/claude/high/es_MX-claude-high.onnx.json": {
+    "gitOid": "4a98b7593bd91a1522f893b66d5bab1f517d5068",
+    "sha256": "sha256-GvyB9wPA5Ms7TXwNyglri1SpiAaAfwFwz161VXcjwS0="
+  },
+  "eu/eu_ES/antton/medium/MODEL_CARD": {
+    "gitOid": "556156b969525c04b7aa83c98a81bbd223031918",
+    "sha256": "sha256-YeHPe7pIopC+Iloa+zFnCU/BbEec6mVbEcj/h+kkUmQ="
+  },
+  "eu/eu_ES/antton/medium/eu_ES-antton-medium.onnx": {
+    "gitOid": "519126e1a799e0788aa9b8f3ff33dc6fd2935876",
+    "sha256": "sha256-3IMF/aF7Iuki8BHNdFDFDHay8mMMLPpcNVZDJtrvFFQ="
+  },
+  "eu/eu_ES/antton/medium/eu_ES-antton-medium.onnx.json": {
+    "gitOid": "a2e676967c9879499120242c039ed56379fdb2f4",
+    "sha256": "sha256-vCbSEpVCdZQzC7jqV5yLki0dH53eG1HcmUn78/VZ3Oo="
+  },
+  "eu/eu_ES/maider/medium/MODEL_CARD": {
+    "gitOid": "531240c7da09e3ca5995754aeb2ad457cb96ed35",
+    "sha256": "sha256-u38oRYLd1Jf1ALUnXivU8GAx9IOmOw9TZ9rhjJriFP8="
+  },
+  "eu/eu_ES/maider/medium/eu_ES-maider-medium.onnx": {
+    "gitOid": "96d5c456c5784585071df977d5e3ea7bb89adbc1",
+    "sha256": "sha256-o2rIB60TDcGSt01zjjlVL5vnBPBpxAXb9KvTWLAUo5o="
+  },
+  "eu/eu_ES/maider/medium/eu_ES-maider-medium.onnx.json": {
+    "gitOid": "9582501d62019cb358845b6967bb21fff508d2dc",
+    "sha256": "sha256-2FJncO6Kdlu5vKvJjx4D2KuV8cbr2qR+jL904vnpvyg="
+  },
+  "fa/fa_IR/amir/medium/MODEL_CARD": {
+    "gitOid": "a4e9f75147e5a5ee12b7f85bb8d29f4a65dd4a88",
+    "sha256": "sha256-DX0xVpmUWsgwFi+C1IXXmvUaMwgadknomScmvUu6I4Q="
+  },
+  "fa/fa_IR/amir/medium/fa_IR-amir-medium.onnx": {
+    "gitOid": "a52c41cf7f0c2e53bc835a68c36e7ddd474cf0b3",
+    "sha256": "sha256-+4FTgNlp6jcrCyGw3hRCH1j+SBBH4VPmloXQebbhqdE="
+  },
+  "fa/fa_IR/amir/medium/fa_IR-amir-medium.onnx.json": {
+    "gitOid": "73407fafdb2a36ff47c820881390a90fd6cf2b17",
+    "sha256": "sha256-dfkYo78PV6kXmr5yWvUp8qXHnWyJniqErsdsaF1d+5o="
+  },
+  "fa/fa_IR/ganji/medium/MODEL_CARD": {
+    "gitOid": "6a333e0580167a29cb14b36ad12f47959ac29e68",
+    "sha256": "sha256-itEwAMzI+m4kmwBlmqW0qThmH6SsJyuvOi1Q+qJQTGk="
+  },
+  "fa/fa_IR/ganji/medium/fa_IR-ganji-medium.onnx": {
+    "gitOid": "2cb057352c39879b1d9e89d93615fb105405d254",
+    "sha256": "sha256-aphQS7d9wv06hjyXfTfmempSX99mGRc4XVaaP/eObK4="
+  },
+  "fa/fa_IR/ganji/medium/fa_IR-ganji-medium.onnx.json": {
+    "gitOid": "ddae5f0d966d74d940cd2250ae9ae173ebab883a",
+    "sha256": "sha256-nT4MDPABVti/OPt/lr37yyGRGzfgYqMo2gYy48LLxGU="
+  },
+  "fa/fa_IR/ganji_adabi/medium/MODEL_CARD": {
+    "gitOid": "27d0f0ede75d9cbd286d2312eff484c56a934a1b",
+    "sha256": "sha256-nUtEyX3iBqtH13Dqbzu+o5Y6csKxtDBmMKqIMSpq1XU="
+  },
+  "fa/fa_IR/ganji_adabi/medium/fa_IR-ganji_adabi-medium.onnx": {
+    "gitOid": "33a8cbec2a039e8d97162628a85061f6795dc94f",
+    "sha256": "sha256-6Qc7Qa5ldZ3PlXeOVpyPN4BAbayZVJQ29quOfSM27XI="
+  },
+  "fa/fa_IR/ganji_adabi/medium/fa_IR-ganji_adabi-medium.onnx.json": {
+    "gitOid": "ad4e994392da6270334cceb8f6f9394a77577c12",
+    "sha256": "sha256-qkMM7rqnyW2c1rHnMjGjk5Acq7I6G39T6NhReKWucMk="
+  },
+  "fa/fa_IR/gyro/medium/MODEL_CARD": {
+    "gitOid": "6829f10ec020f2d3eb4daa643336089d61c21501",
+    "sha256": "sha256-pRrHZx+uTPP04kSDKMoZLZNKkFfOsv2mDEN43IAGd3g="
+  },
+  "fa/fa_IR/gyro/medium/fa_IR-gyro-medium.onnx": {
+    "gitOid": "e9785128de207e02a7c1d294aca24e536a76b934",
+    "sha256": "sha256-N9+uQ8gu44yp5qrE/+92p01rKCzLw5eyd2HzXTVcmbo="
+  },
+  "fa/fa_IR/gyro/medium/fa_IR-gyro-medium.onnx.json": {
+    "gitOid": "ef0539656c20355fb7276a32d5e259bfe06b1970",
+    "sha256": "sha256-TNDKAYJLRg9JAiTihPm2js8H+R88ZUujvOWdTrdkYII="
+  },
+  "fa/fa_IR/reza_ibrahim/medium/MODEL_CARD": {
+    "gitOid": "473931a65a77f3d94a8fdc98f0f35f3668f32a06",
+    "sha256": "sha256-7sl9ffIUP5gd66qSn87VUIZmfl/x9ho+Htp7f1H4mlM="
+  },
+  "fa/fa_IR/reza_ibrahim/medium/fa_IR-reza_ibrahim-medium.onnx": {
+    "gitOid": "471615add079d5a41a22b5fc092636530c039630",
+    "sha256": "sha256-mfDDFGSiEggxyofQeeEKmis+QmzB7mYtgP+QQt8VzTw="
+  },
+  "fa/fa_IR/reza_ibrahim/medium/fa_IR-reza_ibrahim-medium.onnx.json": {
+    "gitOid": "83a210a6477b1380a1fadc7696bd51e196967f92",
+    "sha256": "sha256-6YZsiMFiRfi49NDq6qbqtPLhk9tpoqtGg9g/54owtso="
+  },
+  "fi/fi_FI/harri/low/MODEL_CARD": {
+    "gitOid": "de7faafd1556208adc091229d56450ed89edce1d",
+    "sha256": "sha256-E7+USRSPXsUWcJRWG0GBK+MJiTubk6Ke/we8C1kiMLc="
+  },
+  "fi/fi_FI/harri/low/fi_FI-harri-low.onnx": {
+    "gitOid": "131619ed9360e51eefdfe4c0c24cf6677991ab33",
+    "sha256": "sha256-IIhHcZoZBuKvad+rw75PGSU2vrE5TiU+KUaQqOojmFM="
+  },
+  "fi/fi_FI/harri/low/fi_FI-harri-low.onnx.json": {
+    "gitOid": "13cfdc624619d8ebacfc55d4efdf06643f96a3bf",
+    "sha256": "sha256-HcOoT5nMdEkC3MifQ8YOPHFY7mbSPEgNEFMV15XiKRU="
+  },
+  "fi/fi_FI/harri/medium/MODEL_CARD": {
+    "gitOid": "90b99487fb101188267dc3000129612b0353f42f",
+    "sha256": "sha256-oKf6PwRvHlgmidt2+TCZc1UwNDoxJvP0DtZDgMQZoLI="
+  },
+  "fi/fi_FI/harri/medium/fi_FI-harri-medium.onnx": {
+    "gitOid": "1bbc756915d88348b4b958371ac7b4beee3a5d0b",
+    "sha256": "sha256-pEFn+qNMrtlA5PytE5/MNZIiZrJZO86+d3AXdMD7I4k="
+  },
+  "fi/fi_FI/harri/medium/fi_FI-harri-medium.onnx.json": {
+    "gitOid": "ec3a8f60360fb7e9efcb97468ec44332a5a3639c",
+    "sha256": "sha256-P5yfdvdK3x++cnnkHuoX1mEHV+Re/9aAi76mvnS4kW0="
+  },
+  "fr/fr_FR/gilles/low/MODEL_CARD": {
+    "gitOid": "06455bb315201d7330194081d16a8c1668f35f1a",
+    "sha256": "sha256-KdCWRHXOBC9c1ZxGu9mW+seFqER2wJ0JcyldNShFaXQ="
+  },
+  "fr/fr_FR/gilles/low/fr_FR-gilles-low.onnx": {
+    "gitOid": "0ef2205e56d69023e8663eb9a2e83bc798678286",
+    "sha256": "sha256-XNcRhGcg4mHCoXb2kkwZinQk0Kdd1LClNXpfuctzkoU="
+  },
+  "fr/fr_FR/gilles/low/fr_FR-gilles-low.onnx.json": {
+    "gitOid": "5645b492bb2275d385fe96a938fd92b092615ee5",
+    "sha256": "sha256-WkfMB4npEmfRdma77IQt2SlQZpJxoJAj62lw7jZM+Io="
+  },
+  "fr/fr_FR/mls/medium/MODEL_CARD": {
+    "gitOid": "706ca77478563a6acdd628d06ee71b715c7e6ad2",
+    "sha256": "sha256-RDypDx7Y5X2fuALabcGcMC1dm1Hdv78noX8/tcN60VQ="
+  },
+  "fr/fr_FR/mls/medium/fr_FR-mls-medium.onnx": {
+    "gitOid": "5792d50d2fe01d39f7cdbf26bac0de63a6ea52b2",
+    "sha256": "sha256-DtIj94RmkX8rrgXukAls5pqx/eslH1VZDQ50ItI04WI="
+  },
+  "fr/fr_FR/mls/medium/fr_FR-mls-medium.onnx.json": {
+    "gitOid": "1d116b39932174613709e8ed25dd98879d6fb61b",
+    "sha256": "sha256-JSsLCm5MxJSeI+zLlW+cd5mGwy+TTy9+IZHl/cLtymE="
+  },
+  "fr/fr_FR/mls_1840/low/MODEL_CARD": {
+    "gitOid": "f29b51c6647dbb7691eeb8b743c3db354e28874a",
+    "sha256": "sha256-KBbITety06RsCmWIhS99S+Fui3bKxIyNgHx38aDfkEQ="
+  },
+  "fr/fr_FR/mls_1840/low/fr_FR-mls_1840-low.onnx": {
+    "gitOid": "00739abcc4a1289c49ef139e8136cf65ba36b959",
+    "sha256": "sha256-3Oo9SVt2DxaBeba9J8fa76HYMEzm7EiGfkK658suUHo="
+  },
+  "fr/fr_FR/mls_1840/low/fr_FR-mls_1840-low.onnx.json": {
+    "gitOid": "726bad126ab06c9fb4175a32f7be5c050b51da5b",
+    "sha256": "sha256-KUpkPeCuakqIXYQdm3RHAmPv41yB58833UPi1mP72LM="
+  },
+  "fr/fr_FR/siwis/low/MODEL_CARD": {
+    "gitOid": "3a88280386cb503df91313294736437fc23cf115",
+    "sha256": "sha256-ulF18E2t+c4tDhm5riFkMg8a2nQDdxZmICWeMhRw1Ig="
+  },
+  "fr/fr_FR/siwis/low/fr_FR-siwis-low.onnx": {
+    "gitOid": "a09816fe2369eecc94a89614e094f2c71d7bc991",
+    "sha256": "sha256-p7fcr4cimzKvgnXLGnGTcSNOpne8AxPSKJ1cUKsKxT0="
+  },
+  "fr/fr_FR/siwis/low/fr_FR-siwis-low.onnx.json": {
+    "gitOid": "7572769affcbaa52990703eb1dd590cb3a3d652b",
+    "sha256": "sha256-lyJSfXSMKE9t12OcS05mGFPU99RRQHlXH2fWqXplK2k="
+  },
+  "fr/fr_FR/siwis/medium/MODEL_CARD": {
+    "gitOid": "36c73f2fd5e9fab5fe90a8a744d36aa08280c231",
+    "sha256": "sha256-vYuNB51NPSxMwgNFiJu81YbXLwIaEy+TNXp2PrUjLM4="
+  },
+  "fr/fr_FR/siwis/medium/fr_FR-siwis-medium.onnx": {
+    "gitOid": "0d6760d87cd690b7d503affefd239a8bae6642ad",
+    "sha256": "sha256-ZB0asJfaK4ESjAdoEO2wUrOF3syL4zgYFIAqZKc7r5k="
+  },
+  "fr/fr_FR/siwis/medium/fr_FR-siwis-medium.onnx.json": {
+    "gitOid": "ecb3b00cc2fc9e72ba9c5dcc5edeb717a05fa9aa",
+    "sha256": "sha256-OUeZFsLbGStayXZNrd0MdE2D4COtiQxpdsBjOuTfiVk="
+  },
+  "fr/fr_FR/tom/medium/MODEL_CARD": {
+    "gitOid": "754b1360ed9fca6966ebf6710c91b56c9c506c7a",
+    "sha256": "sha256-7OQTLfShri+Q4iyfAVOa7BSst/jcje1k7dIFGUXQ8ek="
+  },
+  "fr/fr_FR/tom/medium/fr_FR-tom-medium.onnx": {
+    "gitOid": "3a073209844417c163ad763e2eb1980174c42566",
+    "sha256": "sha256-v2UHTM3u7qqDLnXtscClE8Acmpcr3whf+KbnHqI0/UE="
+  },
+  "fr/fr_FR/tom/medium/fr_FR-tom-medium.onnx.json": {
+    "gitOid": "526f2bd0757728b7e74275915025db812ef1c400",
+    "sha256": "sha256-L3+IWtWgqtgC48wk5PVyOf69yxQrSHbeXSOAlGdDYcw="
+  },
+  "fr/fr_FR/upmc/medium/MODEL_CARD": {
+    "gitOid": "28ee483e6b78d4df5d426a1a583207f83c82902c",
+    "sha256": "sha256-zxrHMJ4OBLsVm35q6AvI9mv86b37PmKuk6b1fiEKuYo="
+  },
+  "fr/fr_FR/upmc/medium/fr_FR-upmc-medium.onnx": {
+    "gitOid": "f7dbc2ecfd328b886532d178844597d75100481d",
+    "sha256": "sha256-mrs4AMGZFIiXqe1k4QDSJPPeg1efEABEF0rRlBjxeG8="
+  },
+  "fr/fr_FR/upmc/medium/fr_FR-upmc-medium.onnx.json": {
+    "gitOid": "ad64e0d4727318ffc0ab4caad0d02f944686ee24",
+    "sha256": "sha256-6GNuwV39XXLbN6AstTIKIPK40znyoOQzfaZMWKM6WGg="
+  },
+  "he/he_IL/saspeech/medium/MODEL_CARD": {
+    "gitOid": "63eb6c4714a4066062e6e4f7c4b717df3226fc59",
+    "sha256": "sha256-eIRvBOIsKRKhrzMgJs/5BjtxHdfJu3wMjFBebC6YS6Y="
+  },
+  "he/he_IL/saspeech/medium/he_IL-saspeech-medium.onnx": {
+    "gitOid": "59233538bcd910c919b41b2dd02dd732e3802c2e",
+    "sha256": "sha256-PcBn3ryeeCqKDQldu1h4Zkh0PUBjZtzCqoEAlmCHO00="
+  },
+  "he/he_IL/saspeech/medium/he_IL-saspeech-medium.onnx.json": {
+    "gitOid": "ae72fda805a0b969e825d83ffa085c8ddb198cde",
+    "sha256": "sha256-6YAKKCps8uRLOtl/ZAs4417SRt/gcEWNE7/PIGvvxb8="
+  },
+  "hi/hi_IN/pratham/medium/MODEL_CARD": {
+    "gitOid": "e562afe87d24b7b695c8b982743a4b7409b334d3",
+    "sha256": "sha256-ic9JHqmeabJ8lFmc7Oo/D8aurLMPTM2xKJf2WYaN8p4="
+  },
+  "hi/hi_IN/pratham/medium/hi_IN-pratham-medium.onnx": {
+    "gitOid": "fbc0a1c85c55a8da1e02ec18c2627f555efa4493",
+    "sha256": "sha256-FplksIcWZ/Z5NBbUs16XNXpouhrQHfhYDCgEiYnudpM="
+  },
+  "hi/hi_IN/pratham/medium/hi_IN-pratham-medium.onnx.json": {
+    "gitOid": "1633bac3c701633fb4111678e5eaa0d3ad176bc7",
+    "sha256": "sha256-to7dLNeVDdQ2MUATt80S6WmeWj9v5a9a+UKUz2qnuf0="
+  },
+  "hi/hi_IN/priyamvada/medium/MODEL_CARD": {
+    "gitOid": "f4bfdeb3ac55e73bcda5c5d0d73c3cd378651fae",
+    "sha256": "sha256-jOAyRGYBClkSf+jKsWQWvvzKE2q/S1fr2K1aIDPCAh4="
+  },
+  "hi/hi_IN/priyamvada/medium/hi_IN-priyamvada-medium.onnx": {
+    "gitOid": "430f00d9e8f022680fd25b75cb87ae20e50b6ae6",
+    "sha256": "sha256-qmO88s1JO1WkUPKA4jz3fwOvya9wFeblrNQ7ZS8WbIg="
+  },
+  "hi/hi_IN/priyamvada/medium/hi_IN-priyamvada-medium.onnx.json": {
+    "gitOid": "4e876ec43173468ba94ca639b832eb02d25a7360",
+    "sha256": "sha256-XvwMz3Up81KJltRuD6wflp9oHUSo5Vv6Yjb/iEG11S0="
+  },
+  "hi/hi_IN/rohan/medium/MODEL_CARD": {
+    "gitOid": "f4dbb6e2bc9442fcbf9fd2232e012987baf4bf84",
+    "sha256": "sha256-IxWSoMKZusrm5ZRe4n1aNiBOFO6dg/Ae4V40omgQZR4="
+  },
+  "hi/hi_IN/rohan/medium/hi_IN-rohan-medium.onnx": {
+    "gitOid": "9d383a5add67030ae7689e2b1e04bdc8c2c2adc5",
+    "sha256": "sha256-tl3ID7NNnc0c9oTLKXlmo0mDu8k7sWlv4gfzKwszoJE="
+  },
+  "hi/hi_IN/rohan/medium/hi_IN-rohan-medium.onnx.json": {
+    "gitOid": "1a4e2cc13929f7e26979fd2c50312ebbe2a802d7",
+    "sha256": "sha256-B7muGb0LrH+7yZ9+5pyRJF61Rw6SZjLDH8DFC6ZTyBc="
+  },
+  "hu/hu_HU/anna/medium/MODEL_CARD": {
+    "gitOid": "52580e81c8f8da2e5494fcae0d86c57a829fa9a0",
+    "sha256": "sha256-ITRVHAn2FrozNkD0GSZ9Ra7tVEO1P/3nmhGnFXN/hUY="
+  },
+  "hu/hu_HU/anna/medium/hu_HU-anna-medium.onnx": {
+    "gitOid": "2e04b8932e03d25754e8acaa053a8394cf2d7d2d",
+    "sha256": "sha256-lowMOmbLZngRJCzIhlO/+SRzlfx6BRf77vfYwIza5io="
+  },
+  "hu/hu_HU/anna/medium/hu_HU-anna-medium.onnx.json": {
+    "gitOid": "5de2493fe7c9ed818b285d3758d9a5f7d0ff67ef",
+    "sha256": "sha256-zPln2NuAGMnY/9sO3IgU/8trdSc7sNhDNzFyQPcQKDo="
+  },
+  "hu/hu_HU/berta/medium/MODEL_CARD": {
+    "gitOid": "e0b23b4ff1dae8bb164c0e203c65ee5b3f1aa7ec",
+    "sha256": "sha256-17c+2+acDKF5aAg5oGMwZ5bc7x08xQs0LiFEoqgpeGU="
+  },
+  "hu/hu_HU/berta/medium/hu_HU-berta-medium.onnx": {
+    "gitOid": "d5870c6979134b0e6759bd4be1399c23a5425b85",
+    "sha256": "sha256-Tu0F92dXO3f9LAfmvMqps8dwiaVbkjnDCZ7NPRelm+M="
+  },
+  "hu/hu_HU/berta/medium/hu_HU-berta-medium.onnx.json": {
+    "gitOid": "572ad05a2cccbeeef4ea54224464a970b2ef877f",
+    "sha256": "sha256-P9dUIvyw2obVQ5ElZgegjR7k+3DwMZQRl+RAC5BntgM="
+  },
+  "hu/hu_HU/imre/medium/MODEL_CARD": {
+    "gitOid": "20a90b6f92b8a6a8e778d5c65ac0b6fed0d3133d",
+    "sha256": "sha256-eBY0gnj/41LgtBGDcFsWOBDFQ5+dTjYcvH7oeqkZ1hI="
+  },
+  "hu/hu_HU/imre/medium/hu_HU-imre-medium.onnx": {
+    "gitOid": "d8aee7f998d76e3e220b8ef54b16fc610e7a4d87",
+    "sha256": "sha256-r32Y4gMbTwDPNpPK/EewtTR/I8KM1qWVemk/dtcgLC0="
+  },
+  "hu/hu_HU/imre/medium/hu_HU-imre-medium.onnx.json": {
+    "gitOid": "6d568f7dfd497eb0b8f82e6247c4fdd9ecea7f4c",
+    "sha256": "sha256-u5wx3YQpsUFNSG5dUtUvB5CUnGO/rxNFB11C4jrRDIM="
+  },
+  "hy/hy_AM/gor/medium/MODEL_CARD": {
+    "gitOid": "0c2c85e33f9e8b6222a02a1b73f750eb6822d9b4",
+    "sha256": "sha256-iqZXVAOFrLxuZRGF62DxYqkxerHM4dUKsI+WBJdcQBs="
+  },
+  "hy/hy_AM/gor/medium/hy_AM-gor-medium.onnx": {
+    "gitOid": "ccc42c588fb10fa69d45d157fa9e9bdd45e717bf",
+    "sha256": "sha256-HJH8M/7Lv8a3kh+dEf10h6hZBTo6GYcUf1w2EVW4nnw="
+  },
+  "hy/hy_AM/gor/medium/hy_AM-gor-medium.onnx.json": {
+    "gitOid": "8a3157088f62f826b5a2aad6e02ab08099d18532",
+    "sha256": "sha256-AahFjU/yJvrBt9x7H2GYUf28ipvQnWpgTmXjBMlgDC4="
+  },
+  "id/id_ID/news_tts/medium/MODEL_CARD": {
+    "gitOid": "d3f5d89c565fb0a6c8d4aaf34385c713ff0bd00f",
+    "sha256": "sha256-ARW/wS4rfZzCi0Pi68dG5AK27YZ8YZrmG8gNBCepXIM="
+  },
+  "id/id_ID/news_tts/medium/id_ID-news_tts-medium.onnx": {
+    "gitOid": "d3d2566dc3baa2c53cc2004d432ed015d783eea9",
+    "sha256": "sha256-7Y8Cqlk/evaxmsvbgULg2g3XL0YZTrM9OODrEKUll+g="
+  },
+  "id/id_ID/news_tts/medium/id_ID-news_tts-medium.onnx.json": {
+    "gitOid": "94dc5c4736a2786cb7827e06f82a67728c01b8ec",
+    "sha256": "sha256-HvZ3ByZopeFy4HWbHThx8SkAnRFn8JMyWhdgf3rdWtc="
+  },
+  "is/is_IS/bui/medium/MODEL_CARD": {
+    "gitOid": "52def23e17df8fc801fb094f1c9b4cae87bdae11",
+    "sha256": "sha256-sB77Yux3ChweviAV2PmYXm4b9D/XKkKmcQ0ULpN1LOM="
+  },
+  "is/is_IS/bui/medium/is_IS-bui-medium.onnx": {
+    "gitOid": "d8f3d2dc78bcee3c3a22fd78fad29bdb2b35e6d0",
+    "sha256": "sha256-OmRbLShQ5AmPAfN2XOzpMYNsA3QeAaXMUU0J0503wFw="
+  },
+  "is/is_IS/bui/medium/is_IS-bui-medium.onnx.json": {
+    "gitOid": "126e455c143b2172e9b654ded201cdbc7be59d85",
+    "sha256": "sha256-PK5yhXL7s5dxPQR/Ipkke7drYmOdnf3NZbJsV4uKukU="
+  },
+  "is/is_IS/salka/medium/MODEL_CARD": {
+    "gitOid": "c4deaa6c0c78772c862624d124bf08bf131537e1",
+    "sha256": "sha256-OPmL66uHxpOpk4LUjVOPm310HZ1B75E129jrX3wjNIo="
+  },
+  "is/is_IS/salka/medium/is_IS-salka-medium.onnx": {
+    "gitOid": "cb3f8e85c00d8b80926287f2781ad22e44170cfe",
+    "sha256": "sha256-OSqOAzdy3o99SvoyWFgPD9UJZ4tVAUw9waDT4jFHXQ4="
+  },
+  "is/is_IS/salka/medium/is_IS-salka-medium.onnx.json": {
+    "gitOid": "1f2234d27245fb3478435376df96eec8837b6f37",
+    "sha256": "sha256-5CkLfDmLlWhx/salAp5dFRG0S+gEUlEQh9DTtkCMKTo="
+  },
+  "is/is_IS/steinn/medium/MODEL_CARD": {
+    "gitOid": "97ee40854e4a578d493ab7f1260782851716c487",
+    "sha256": "sha256-JF4f5QZ2WH2aDxtCGe4HZyK18Ch/iqDIO+hL115A/kY="
+  },
+  "is/is_IS/steinn/medium/is_IS-steinn-medium.onnx": {
+    "gitOid": "796772cc35c482baab0ef636077e58101212751e",
+    "sha256": "sha256-8Q+hc8Rvubm2gwZuMZj2FxarirMQ/85nAEuiXYa7dLE="
+  },
+  "is/is_IS/steinn/medium/is_IS-steinn-medium.onnx.json": {
+    "gitOid": "4f906935e60f44b1d476a1b51dc4e347da0ccf92",
+    "sha256": "sha256-KOiJoDrWBvJXTRloSSIP33aoJxOhEaTuXBIObHTssgU="
+  },
+  "is/is_IS/ugla/medium/MODEL_CARD": {
+    "gitOid": "62472b68c4246b7b11492347a8cca25a12e2d986",
+    "sha256": "sha256-fr5VT1JhlQyqmGJKN1ijs3NxqBAexTKDbpkBiSXG3co="
+  },
+  "is/is_IS/ugla/medium/is_IS-ugla-medium.onnx": {
+    "gitOid": "05e667bd6236026b894ad2c1adbf42b6267ba6a3",
+    "sha256": "sha256-tDrvdkjRP2i22wAy2FcWuCynhxYhimhEL9fxJESnOyQ="
+  },
+  "is/is_IS/ugla/medium/is_IS-ugla-medium.onnx.json": {
+    "gitOid": "2947956a437321f041cbfc75e69a3dcec56a0be1",
+    "sha256": "sha256-DXwbJs3FQELJinXMydTjUoB3F4xWrQKbMhlEthePMnc="
+  },
+  "it/it_IT/paola/medium/MODEL_CARD": {
+    "gitOid": "0f3907c109a015bb5fce962ad322dbf3ba6aa1dc",
+    "sha256": "sha256-xT/QBw3JO0OO284Gco64N1m6Aw//DM5SMgnuSgpjY8A="
+  },
+  "it/it_IT/paola/medium/it_IT-paola-medium.onnx": {
+    "gitOid": "7fd4b57041b422cc7e81778f56d4266f9ede9599",
+    "sha256": "sha256-b8kYtaDqYTc4KDPd36Vnv/vmpQYMAgQ8hxku5ZwEIQw="
+  },
+  "it/it_IT/paola/medium/it_IT-paola-medium.onnx.json": {
+    "gitOid": "2faeb9eac1c33938d7f7a3d7a59c806272bde943",
+    "sha256": "sha256-rqGcCn/OKfvDWbk/EOeQKFRAHkyVri6jKK5RaxXSls8="
+  },
+  "it/it_IT/riccardo/x_low/MODEL_CARD": {
+    "gitOid": "4b91ee4189954d51b466372d33c862ef41b70993",
+    "sha256": "sha256-fOOy/E9FTISTaIeXFXTkNswhVASbQnpTD3C+4FCy/cY="
+  },
+  "it/it_IT/riccardo/x_low/it_IT-riccardo-x_low.onnx": {
+    "gitOid": "267840572cc88c433f4482625d8627288394cf28",
+    "sha256": "sha256-E2jeFfEjJ1p++VHJ5eML4PWKAy2qFKDaRAN0Q8HR0hs="
+  },
+  "it/it_IT/riccardo/x_low/it_IT-riccardo-x_low.onnx.json": {
+    "gitOid": "8412958723b1007259b0dadee726cf2c00f4606e",
+    "sha256": "sha256-FGq5xjSv5STp+3Uw8lEN96QvsdtWtSZYyh+z2YABpio="
+  },
+  "ka/ka_GE/natia/medium/MODEL_CARD": {
+    "gitOid": "37f2267bd1a925188c7291d8d7b3cde03a29e682",
+    "sha256": "sha256-ZyJLn6h5mfx4yCiTBfQDSJQUI8WtP9Hxuu+yvguKbBg="
+  },
+  "ka/ka_GE/natia/medium/ka_GE-natia-medium.onnx": {
+    "gitOid": "354f9f96da38388907873b8e5f91cdc92b7c4052",
+    "sha256": "sha256-BL2s8Yj6JEmYhfkQmzlf6FYaBews2Q1VRT7Fvu169GA="
+  },
+  "ka/ka_GE/natia/medium/ka_GE-natia-medium.onnx.json": {
+    "gitOid": "32d055d1cd4652164db21f60980e1cad0add979e",
+    "sha256": "sha256-kGQ20PjeefzWVXZHCxDH6pN8dQ+ba22vxyonzr1KiPY="
+  },
+  "kk/kk_KZ/iseke/x_low/MODEL_CARD": {
+    "gitOid": "f53968ae19def9449efb653a7c49783716b256f1",
+    "sha256": "sha256-MxsPxM0PpfNf2E1OaVKEAyLx6YtN47Z64jW6kWXrl/g="
+  },
+  "kk/kk_KZ/iseke/x_low/kk_KZ-iseke-x_low.onnx": {
+    "gitOid": "8e5264d117f0eec8e329c1ba8eb9c220faae662c",
+    "sha256": "sha256-3PUm4cCJgjyfiW+Pf93ZsF1Th1LhOciitM9PukHJcVw="
+  },
+  "kk/kk_KZ/iseke/x_low/kk_KZ-iseke-x_low.onnx.json": {
+    "gitOid": "e27598aa9fec43a2e8af7c6f93557cb58c2db2d4",
+    "sha256": "sha256-evkJ7cvsPVlcuM+4ENvxnqPWvtXtwY7Z5e2AYx/V46k="
+  },
+  "kk/kk_KZ/issai/high/MODEL_CARD": {
+    "gitOid": "7f44fcb74006d58f244aeceecf68cf139fd73c7e",
+    "sha256": "sha256-GwcENIoXpfhPuoTKog0UoRbuqZU7ubwUetpCNNGGh6I="
+  },
+  "kk/kk_KZ/issai/high/kk_KZ-issai-high.onnx": {
+    "gitOid": "13b88f5b547849b2387ba8cb349f66c73d29c664",
+    "sha256": "sha256-Te52fIk+hTXaghRH0SywMONWnhElTBQDCh2l2LIiLBY="
+  },
+  "kk/kk_KZ/issai/high/kk_KZ-issai-high.onnx.json": {
+    "gitOid": "e49a90994ec9f689f69cdc6418d853c2b4919a95",
+    "sha256": "sha256-6xRayHErh77anwJm6VuYytdqzOidRibNixQII06YQvA="
+  },
+  "kk/kk_KZ/raya/x_low/MODEL_CARD": {
+    "gitOid": "b98b7b4993639908f910d076019c0fce87d7a326",
+    "sha256": "sha256-5xNBtcABCfGQYWlDBs6E2V3kzsTkA5Fjl7p9EUfbyHs="
+  },
+  "kk/kk_KZ/raya/x_low/kk_KZ-raya-x_low.onnx": {
+    "gitOid": "d8594cf3bea112fdc6e23d26b4cc77b1e7e0e513",
+    "sha256": "sha256-dVUq8AJUuu6fhbl2h34Dn5Uw6obduD1wJitykleFoKo="
+  },
+  "kk/kk_KZ/raya/x_low/kk_KZ-raya-x_low.onnx.json": {
+    "gitOid": "af499f3989f65b1d37431459c9882e342a85de5f",
+    "sha256": "sha256-uKI5KCr9QJThmhqrDURiPjvEx7QVDVfDnOlyGTyecOM="
+  },
+  "ko/ko_KR/kss/medium/MODEL_CARD": {
+    "gitOid": "8b3f2c763d9e0b7c98524913baff61b041e07587",
+    "sha256": "sha256-eS255Iibab9Wv0ntWEgJKSEQ4Wvx/JBP8rmfr493jW0="
+  },
+  "ko/ko_KR/kss/medium/ko_KR-kss-medium.onnx": {
+    "gitOid": "0e810b9ba3ebdc56fb01c6925e7a8a79d61e55ac",
+    "sha256": "sha256-Yk/XdOJolfJL664b2aM3njOUuureS1hJJPg+QUCW4sk="
+  },
+  "ko/ko_KR/kss/medium/ko_KR-kss-medium.onnx.json": {
+    "gitOid": "ac684ef2271a356cc38b94c9f81596ee01e9e41b",
+    "sha256": "sha256-FTtWGdBYD4JKWRCNg8oZQ03kEOuOT+gDJbWGhP3Iod8="
+  },
+  "ku/ku_TR/berfin_renas/medium/MODEL_CARD": {
+    "gitOid": "65fa53fcf30bf0378511d75f06dc8597222bfb3f",
+    "sha256": "sha256-nGWRWsjH41NuMi+48/SyheLgBwaFiN7xLqrIFeO+1hU="
+  },
+  "ku/ku_TR/berfin_renas/medium/ku_TR-berfin_renas-medium.onnx": {
+    "gitOid": "3ec670f352ea379965795b613eb5abc72f1ee46f",
+    "sha256": "sha256-vAss8Ib5ozyh18osqAtvNfiRfQyJr+SmRcW51WrDVcQ="
+  },
+  "ku/ku_TR/berfin_renas/medium/ku_TR-berfin_renas-medium.onnx.json": {
+    "gitOid": "b661c38e3f9c56e9a8cc738bcfa2a3ac5342bfce",
+    "sha256": "sha256-ZtDah6qOVyx+buZ2R6pq9gCOheOIGWefF9ybhuOv/Kg="
+  },
+  "lb/lb_LU/marylux/medium/MODEL_CARD": {
+    "gitOid": "a9cf58deae873bdba8af4294ffc029bc4c7b69b1",
+    "sha256": "sha256-YT3IbiTX69BsoakbBFhGNlKKJfrRumIxj/ViIhGx3BA="
+  },
+  "lb/lb_LU/marylux/medium/lb_LU-marylux-medium.onnx": {
+    "gitOid": "5eabef72e631b3c579d6896c3d137ba70d2b7110",
+    "sha256": "sha256-QUfsrN2YkylR0PlWVVVC3jWNPM/3CNSZbjBcPOKHCXo="
+  },
+  "lb/lb_LU/marylux/medium/lb_LU-marylux-medium.onnx.json": {
+    "gitOid": "80fbf06d2cb641becfed4b481444b0357759d3a1",
+    "sha256": "sha256-5cXexUM9M/9XPnb6Vn6A3PY20F3l3MgXsnOWPwcz10I="
+  },
+  "lv/lv_LV/aivars/medium/MODEL_CARD": {
+    "gitOid": "3788fa7333861b43950f097e1038836d2a5c2b57",
+    "sha256": "sha256-apUKn5yVuJO3/TVT9bQvWxAl+1+8AE05JNmekiULac8="
+  },
+  "lv/lv_LV/aivars/medium/lv_LV-aivars-medium.onnx": {
+    "gitOid": "b74aa84af3c97e6975655c4cdda3600d6be60c4d",
+    "sha256": "sha256-nYVaR8IuK5R5W+ng656MTALOJR3IlGHe3pTeIP8IvY4="
+  },
+  "lv/lv_LV/aivars/medium/lv_LV-aivars-medium.onnx.json": {
+    "gitOid": "7efc5b7f7158be5a9dc7d37b4ea5541d31d24919",
+    "sha256": "sha256-CK4sKXvoqgTxXz+Xt//q4BRrMLC9j3uuvNxGvCwvM9w="
+  },
+  "ml/ml_IN/arjun/medium/MODEL_CARD": {
+    "gitOid": "d3f5d89c565fb0a6c8d4aaf34385c713ff0bd00f",
+    "sha256": "sha256-ARW/wS4rfZzCi0Pi68dG5AK27YZ8YZrmG8gNBCepXIM="
+  },
+  "ml/ml_IN/arjun/medium/ml_IN-arjun-medium.onnx": {
+    "gitOid": "d6b682e35e7fc7f148620ba43f9808709da44eb6",
+    "sha256": "sha256-6IETBRaodDBpcqB9zyYuaQAUBDDFZYExEhdEqA7z8Rs="
+  },
+  "ml/ml_IN/arjun/medium/ml_IN-arjun-medium.onnx.json": {
+    "gitOid": "7e4ce86ac5e6c6bfc1d0548965891372dab89464",
+    "sha256": "sha256-KATwcJVOVlReiBAbcDMdREQCGHiZ0Kb/A+XUS+6BMkU="
+  },
+  "ml/ml_IN/meera/medium/MODEL_CARD": {
+    "gitOid": "e51378a8d3dc579135d7ca6af85bcf93ff88f6af",
+    "sha256": "sha256-oa6gnXorghgPKDPMB0lfnR1Jmcn6k38PF1bTixR0+Aw="
+  },
+  "ml/ml_IN/meera/medium/ml_IN-meera-medium.onnx": {
+    "gitOid": "d105cf4b4456238899ea541b9331db28b6e81ab8",
+    "sha256": "sha256-DD5zD4KUKGaUysXTP0yU0FDtjqdMX9bQ1JLTjLV7UQI="
+  },
+  "ml/ml_IN/meera/medium/ml_IN-meera-medium.onnx.json": {
+    "gitOid": "d7e5af8f7df68e555f29b222b57f9f9e45184c74",
+    "sha256": "sha256-rVGTUUP1SNE5qExq0XArdXy861JwEWfAwcmL69pyA+Y="
+  },
+  "mr/mr_IN/google/medium/MODEL_CARD": {
+    "gitOid": "b40be977cc4fcb780ad3b6653bce7b06737ffb34",
+    "sha256": "sha256-FZGhO6HEuXr58zVx7YBKGYcFoBw36W1gT+FRywBPtA4="
+  },
+  "mr/mr_IN/google/medium/mr_IN-google-medium.onnx": {
+    "gitOid": "a3edb7e5d213bd8bfde06ef1f3005f29e33ace01",
+    "sha256": "sha256-4SANR0p069bRc3vix6/+VvH578GJFdRZXX9cKxXPBvQ="
+  },
+  "mr/mr_IN/google/medium/mr_IN-google-medium.onnx.json": {
+    "gitOid": "2578c91742a34a3ce4e99a977a403da6f8a1138a",
+    "sha256": "sha256-EQVTAu4ePJkC5elsA8v8Cp7sKbGwa5HvUqPGbphz7bs="
+  },
+  "ne/ne_NP/chitwan/medium/MODEL_CARD": {
+    "gitOid": "a81b5f21b2dde610031c6162f1df6ae42acfcd7c",
+    "sha256": "sha256-En6FZDMpYS2+vXoHHdD2mgNDnO7N7FtjfthkE3m0ugA="
+  },
+  "ne/ne_NP/chitwan/medium/ne_NP-chitwan-medium.onnx": {
+    "gitOid": "4a0ea7e6a8f8efd2af3f98b7eced971f1b38a073",
+    "sha256": "sha256-97prCSdoj5JxfpPKUrwG9Xg86O3HZdX4U2Ws7x1Bgiw="
+  },
+  "ne/ne_NP/chitwan/medium/ne_NP-chitwan-medium.onnx.json": {
+    "gitOid": "696c59e512b07f7da46e8c4e18469441e319d12e",
+    "sha256": "sha256-GNUjsDsgFCLRTiiSzHUKgSCNLkUVipxqfk4GpQCTDe4="
+  },
+  "ne/ne_NP/google/medium/MODEL_CARD": {
+    "gitOid": "e205115b5d390670e56f3a89c4ad84271589ddb7",
+    "sha256": "sha256-jFraw1R3HMX4XN5JBi6o70KGrMhPNg0QCNB1jWyBa1w="
+  },
+  "ne/ne_NP/google/medium/ne_NP-google-medium.onnx": {
+    "gitOid": "632dfd16e441294c84e2125fdcffdc9775eead5f",
+    "sha256": "sha256-4/88v5enwB6/KSY8f6GJnr7RXiei2Bm5Pc+4bhDTnqo="
+  },
+  "ne/ne_NP/google/medium/ne_NP-google-medium.onnx.json": {
+    "gitOid": "ce252c85e5e13818247503ab9e4ed9a675cc2fa1",
+    "sha256": "sha256-jDw2S9KrNphQrgtdl7nHo36hX7LrW5H4/RDn/9ha5Os="
+  },
+  "ne/ne_NP/google/x_low/MODEL_CARD": {
+    "gitOid": "ffc4c3729bfc992c0c5c6037cc0d6d11e8b0654f",
+    "sha256": "sha256-uLNY8/wrdlNsTWCdR8GQ5BodYAoLMdmNhiLcrSjl05k="
+  },
+  "ne/ne_NP/google/x_low/ne_NP-google-x_low.onnx": {
+    "gitOid": "577ee91e2a7b8c23b5acc6c277b5ced2f27efe1c",
+    "sha256": "sha256-KDQxwfib6bE6QPiF2oGLI6wT9spTbioKQUyXDTsT8PI="
+  },
+  "ne/ne_NP/google/x_low/ne_NP-google-x_low.onnx.json": {
+    "gitOid": "7d141b1da4640bfa99207b4795be98814e512d4d",
+    "sha256": "sha256-QBPN0vwr6gOi6aPlYY7hT2GSjO6KC8elCioW5W3i/bY="
+  },
+  "nl/nl_BE/nathalie/medium/MODEL_CARD": {
+    "gitOid": "9874ec439afb104991f1e4c545d163c93744d267",
+    "sha256": "sha256-Ep2u2mx0kD76x6pSKuT9ZiimrN0Jde6Jc4ThB5rLzS8="
+  },
+  "nl/nl_BE/nathalie/medium/nl_BE-nathalie-medium.onnx": {
+    "gitOid": "ce24583163ae7d0a9b07d3f40746cf26c638f343",
+    "sha256": "sha256-Sc9IAjhh+f1C4TqGMvBo/uZ9HOJEpu448pWVr78Ka+Q="
+  },
+  "nl/nl_BE/nathalie/medium/nl_BE-nathalie-medium.onnx.json": {
+    "gitOid": "896fe1868b89a986d6d647df06988eb92f337088",
+    "sha256": "sha256-RwSvJzYCLpEKPzJnJIDVUw3TnaXCvMB58xX2BBZv8N4="
+  },
+  "nl/nl_BE/nathalie/x_low/MODEL_CARD": {
+    "gitOid": "d19063e8d6ae1451d4d4836b7cba079b1e0af582",
+    "sha256": "sha256-Jawq+GvS1JwC3VKkY3fzRxaVw1mmTqUcyJH3kzxZVH8="
+  },
+  "nl/nl_BE/nathalie/x_low/nl_BE-nathalie-x_low.onnx": {
+    "gitOid": "3ba4e1d212c583fe9575cf7d7ce1bd7b94c05c61",
+    "sha256": "sha256-fQBdLZs9tDJvxKGshrYatAJSzPl7dtUn9P/XbU4/fb4="
+  },
+  "nl/nl_BE/nathalie/x_low/nl_BE-nathalie-x_low.onnx.json": {
+    "gitOid": "cf5d7db197f919d5fbf00cb481770aea68ac9b54",
+    "sha256": "sha256-OQ0hmSvXNKScAV/NcCfkr3snefWGf/di5kU+Mj9VS9g="
+  },
+  "nl/nl_BE/rdh/medium/MODEL_CARD": {
+    "gitOid": "2d2c9715d0a9296117466adcebb145cbd4daefd4",
+    "sha256": "sha256-oKyAQ3ahtL5a66D5guQzgLzNEFuErzR3II+KKw+4nMM="
+  },
+  "nl/nl_BE/rdh/medium/nl_BE-rdh-medium.onnx": {
+    "gitOid": "5f0e2865b9f0bd01815aa60b34a4ab29485419fc",
+    "sha256": "sha256-+xqdif9T29UQxdEL0TZcNqX3YknDymAwdmRv13gAPbE="
+  },
+  "nl/nl_BE/rdh/medium/nl_BE-rdh-medium.onnx.json": {
+    "gitOid": "0b63a34ad9246064ef6922b7522b80b38a385c3b",
+    "sha256": "sha256-Zd6yVmZNIgmbDbW7NtliN6PjLkOIXGzk7mgR5sBKjXk="
+  },
+  "nl/nl_BE/rdh/x_low/MODEL_CARD": {
+    "gitOid": "4c3e8589d41d1c89a9c815906cd5147198e720cc",
+    "sha256": "sha256-k4AxIZBd26lmrQ6on98mt+NPH3AMDDu71QT96u3pgAk="
+  },
+  "nl/nl_BE/rdh/x_low/nl_BE-rdh-x_low.onnx": {
+    "gitOid": "9cfdbc359942544db0a11768c1a57afd07b28342",
+    "sha256": "sha256-/kNlEkghm06BbkfZcI8oEvKgmvmUcO2CIRPz6RNDDVI="
+  },
+  "nl/nl_BE/rdh/x_low/nl_BE-rdh-x_low.onnx.json": {
+    "gitOid": "161bea069ef8fa7a86dff5c14acd3c0b4267b590",
+    "sha256": "sha256-FXJLfvAkfVZtnCusJSwbC27JzrfMuywKDR7Ve/A7T10="
+  },
+  "nl/nl_NL/alex/medium/MODEL_CARD": {
+    "gitOid": "670c454013952d8bbc786c77ef5ffcb00c0221ce",
+    "sha256": "sha256-HDWSMWJti9W4ao3q+4WY7yAEul1/0jkpepXurEi28Hs="
+  },
+  "nl/nl_NL/alex/medium/nl_NL-alex-medium.onnx": {
+    "gitOid": "3c892b8acc9d48bf55a0f9b14db507ce12e2ae99",
+    "sha256": "sha256-IvBJfE2JWgn7xqRpRZqolU6glV08bhnbzC4jrLuT4ws="
+  },
+  "nl/nl_NL/alex/medium/nl_NL-alex-medium.onnx.json": {
+    "gitOid": "f46942f6b957788e0e14d6b46264db124e4612c5",
+    "sha256": "sha256-nqZDhxdCwDhRG2qvIOb8CYp4oRloEi0vbKPlBANCP5U="
+  },
+  "nl/nl_NL/mls/medium/MODEL_CARD": {
+    "gitOid": "81ac78a52041fdea3f4aaaffa2f9c89f3303a969",
+    "sha256": "sha256-c9cP9ahQGoAzVJgTW9dzzZrgETPPCsM5FlOPTVHhPm4="
+  },
+  "nl/nl_NL/mls/medium/nl_NL-mls-medium.onnx": {
+    "gitOid": "aaefc500b41e8408356c519fd6cc6e88616719ed",
+    "sha256": "sha256-iDEuD79QW4fK8jc9lME4SJLoaxvy7kgs9l3Iuhecx9M="
+  },
+  "nl/nl_NL/mls/medium/nl_NL-mls-medium.onnx.json": {
+    "gitOid": "b15849ddc9e2ba575981bec905d0b731ab5b853e",
+    "sha256": "sha256-bdshXTjxOSq5Na1FRBuCraHurgRSotaEntcepPLgqmM="
+  },
+  "nl/nl_NL/mls_5809/low/MODEL_CARD": {
+    "gitOid": "3679777c385815b5067eb73c1a05725ca574ffb2",
+    "sha256": "sha256-6xsHeLaRY+z8c8XYLTRN4xOS71pLf7fCMu2uyK+Uha0="
+  },
+  "nl/nl_NL/mls_5809/low/nl_NL-mls_5809-low.onnx": {
+    "gitOid": "27edab369bc67560660d487ed7577999363b13df",
+    "sha256": "sha256-t4YK2n+ifl4psI51MbDg10s/BgLkZqIv+V9Z+AoMQyc="
+  },
+  "nl/nl_NL/mls_5809/low/nl_NL-mls_5809-low.onnx.json": {
+    "gitOid": "25bbe393ca436e380890d2fb12c926d4eefbf84b",
+    "sha256": "sha256-0hkqTtkLJhZiQ74s751xvMT7u6qUYcQTBQusdY+vwcM="
+  },
+  "nl/nl_NL/mls_7432/low/MODEL_CARD": {
+    "gitOid": "c34092f687247d7bf5d7d9fd77d12794e80fb4a5",
+    "sha256": "sha256-9fRQwJA3pgk6dGcgeKr9Cq18nLVomf0T2mvQAGiofPE="
+  },
+  "nl/nl_NL/mls_7432/low/nl_NL-mls_7432-low.onnx": {
+    "gitOid": "678725f113ecd48ea117a9aa5e800ca7c95097fa",
+    "sha256": "sha256-Av6yeHMsd/NMThBtDNxEbn5XfOKcXXBR2oWpwkHuQvA="
+  },
+  "nl/nl_NL/mls_7432/low/nl_NL-mls_7432-low.onnx.json": {
+    "gitOid": "b1e673bb354da4293e089daeee97adbe4ec93ae6",
+    "sha256": "sha256-RQ1tgJlilD4LiOGNoUL7oyAR6l4yamJ8ZKh+yUFEGFs="
+  },
+  "nl/nl_NL/pim/medium/MODEL_CARD": {
+    "gitOid": "87894842b6541693ead19a5f3e0b5dad486ea8b1",
+    "sha256": "sha256-USzKvnMS6HCavbBN8D8b8+7oSlqEIOGJtPW9oNCLakQ="
+  },
+  "nl/nl_NL/pim/medium/nl_NL-pim-medium.onnx": {
+    "gitOid": "00e8c18d011e16e21b1c03188c86d4ac61f20afe",
+    "sha256": "sha256-QD5Yw2dcOU9QXCQoEXvzTMVulULc9urb3TqEcGwS4Eg="
+  },
+  "nl/nl_NL/pim/medium/nl_NL-pim-medium.onnx.json": {
+    "gitOid": "933587969e23b97974b90b0c86b4bd9f5c7bd9ed",
+    "sha256": "sha256-CLWEVsoAz3cSOCaxcSdY+Z1f0Z3ft+x9qOGnFbBH9kI="
+  },
+  "nl/nl_NL/ronnie/medium/MODEL_CARD": {
+    "gitOid": "3d770b8806b889ab0639fd093267c899712e4272",
+    "sha256": "sha256-8sFpe1KJAbp+cXhQDW0G2m/JO6QxKbL0DRP/HBl9CIQ="
+  },
+  "nl/nl_NL/ronnie/medium/nl_NL-ronnie-medium.onnx": {
+    "gitOid": "0845560530544d96da11fac0e6c194f0a0a51b5f",
+    "sha256": "sha256-rJq6NG0giO0d3qZGqEPvl9yOFRTMdelpyQoMhDu1y/U="
+  },
+  "nl/nl_NL/ronnie/medium/nl_NL-ronnie-medium.onnx.json": {
+    "gitOid": "5e04efccc053bd72fa105781bc315c8a77a6336b",
+    "sha256": "sha256-Qymk3rGY0Rm39zZBc+OIr7jv7J7KEOhJ+TlKoakrt7w="
+  },
+  "no/no_NO/nvcc/medium/MODEL_CARD": {
+    "gitOid": "7f01bc942e005108daa3cb85574556fb7430e81a",
+    "sha256": "sha256-MJu2DmMdnIJuhiuw9XMu79nS/EospEK4+T/PaceMs70="
+  },
+  "no/no_NO/nvcc/medium/no_NO-nvcc-medium.onnx": {
+    "gitOid": "794cddc3ed45e66fdcb3cf1fddbb17445d7b95bc",
+    "sha256": "sha256-P1FwKUbZVEiYRAoaZpBhVWYanWgO4QMTD/aPczYLUS4="
+  },
+  "no/no_NO/nvcc/medium/no_NO-nvcc-medium.onnx.json": {
+    "gitOid": "214edfeed6e1fecc6362896132753eaf45014c1a",
+    "sha256": "sha256-mEEOkR5akHasRnenmwiyD5jFT1UMQ4jimXj2uvoyuD0="
+  },
+  "no/no_NO/talesyntese/medium/MODEL_CARD": {
+    "gitOid": "31d48e4eaa4ef4988dba357fe1442552e0cd8fd7",
+    "sha256": "sha256-CgOyAdsA4b3DhOLe5PhxAHXvjTLKPGTtFngrBNJgX2w="
+  },
+  "no/no_NO/talesyntese/medium/no_NO-talesyntese-medium.onnx": {
+    "gitOid": "9b6bd3afe71a0bdc684ba8c1ae3255328174bc2e",
+    "sha256": "sha256-t2OuvgLnLEYoxAdMS4tEjwX/5SO5db/NWOLF1TEnDBM="
+  },
+  "no/no_NO/talesyntese/medium/no_NO-talesyntese-medium.onnx.json": {
+    "gitOid": "fa4c6f86da3e284fab1c91d88f66c0dd42e587ec",
+    "sha256": "sha256-sOsEkfyL+YQ9K+rIrPh3O2z1knQxZAazb/V5rooZCdU="
+  },
+  "pl/pl_PL/bass/high/MODEL_CARD": {
+    "gitOid": "a94b326bfa2a75db0eb0c82278f936275e81808d",
+    "sha256": "sha256-II0kS5qiNQBZWu/+AR8GXPpX996CuxcFLRtQWh2OVlg="
+  },
+  "pl/pl_PL/bass/high/pl_PL-bass-high.onnx": {
+    "gitOid": "a39f675059b06400069c3c2887bd4eddc0e0219d",
+    "sha256": "sha256-c7hAiWfFgRhwDyHrJBPNi2ZseETGE2z2dL9d1WvecsI="
+  },
+  "pl/pl_PL/bass/high/pl_PL-bass-high.onnx.json": {
+    "gitOid": "9f97afd277aa813021ef637528b197d2b1267107",
+    "sha256": "sha256-e7QaoU/uh6McwyJkEZwJ41UzNRltPbFbObHBh5DhPFk="
+  },
+  "pl/pl_PL/darkman/medium/MODEL_CARD": {
+    "gitOid": "e6c25c3491d5247fb585767cc82b31ac76bec9ec",
+    "sha256": "sha256-jYYPDPfdhehMkjAGxa6qd5ov87H+ic9JkRbZPjpipL0="
+  },
+  "pl/pl_PL/darkman/medium/pl_PL-darkman-medium.onnx": {
+    "gitOid": "a65f75aeb7b097a197ecc31151a89a38951679f4",
+    "sha256": "sha256-21BUOKU2To4uAkLEMkEwqHPtZg376NlonO9Cj/sbZF8="
+  },
+  "pl/pl_PL/darkman/medium/pl_PL-darkman-medium.onnx.json": {
+    "gitOid": "d7973acf52d6b18a90298f73d14178b047766bdd",
+    "sha256": "sha256-cPmZ8R+orRPT73eQQe6TyfOL5avbrN+tQkSXEv6RyBs="
+  },
+  "pl/pl_PL/gosia/medium/MODEL_CARD": {
+    "gitOid": "405a53d024f0999928f7954097da91c9e95c6a02",
+    "sha256": "sha256-a03gM9//DadYu+TUOP2H+9kXq4Q73YP1kfoPMrjrV4A="
+  },
+  "pl/pl_PL/gosia/medium/pl_PL-gosia-medium.onnx": {
+    "gitOid": "bebc4ab63fb2dfc1a87d7ff4f8536f4c10034b25",
+    "sha256": "sha256-OPZkZCQO108Ybmt9wTxuOyLgI0JimfJcKzzJ36k3P7w="
+  },
+  "pl/pl_PL/gosia/medium/pl_PL-gosia-medium.onnx.json": {
+    "gitOid": "b8feaf17f485dfa6146a88f1a5812baea8a62860",
+    "sha256": "sha256-Gu+zGp1T/+RKgWP/c+yDOst6YlOEj2uwQD2KZvnHUQ0="
+  },
+  "pl/pl_PL/mc_speech/medium/MODEL_CARD": {
+    "gitOid": "b8a34135d9764d857c2b8f7743870cfa81280d94",
+    "sha256": "sha256-3v2CE+OkOOu4ATDcHbF7aZW/W/jVf97ntbdKWmnCwNI="
+  },
+  "pl/pl_PL/mc_speech/medium/pl_PL-mc_speech-medium.onnx": {
+    "gitOid": "11a723c0fa218cbbb4f9a2c212b0e7f69cdb86cc",
+    "sha256": "sha256-prBDNYvIHmwRGlFAYGohlZzn80lpuLcgf2KGl4fMOQc="
+  },
+  "pl/pl_PL/mc_speech/medium/pl_PL-mc_speech-medium.onnx.json": {
+    "gitOid": "7fe77bf4481f5bed5052af31731f31f789183f05",
+    "sha256": "sha256-uLsRIo4VxQUhmEaoj9wSnpP1fndO1/m6wmMVbRqj0yQ="
+  },
+  "pl/pl_PL/mls_6892/low/MODEL_CARD": {
+    "gitOid": "aa92e602122dc99373fc677b91e77c7a9127ad1f",
+    "sha256": "sha256-GZkJKN/R9XHzmb0if5+nTDhhfX0YHuFHj4Tfne7PHkw="
+  },
+  "pl/pl_PL/mls_6892/low/pl_PL-mls_6892-low.onnx": {
+    "gitOid": "afe0168192a4b7d06c751a5527836a0b66bf0867",
+    "sha256": "sha256-tXKrGg8dO3IrKlReCziDTm+TKFLNDxGkTAIrqo8QTBA="
+  },
+  "pl/pl_PL/mls_6892/low/pl_PL-mls_6892-low.onnx.json": {
+    "gitOid": "46f02d24b646a870ced2cb1891a5206d63ae1cba",
+    "sha256": "sha256-UvexahWQJ3Ao/OEKJZxB11XD1WXG9O/5gG4cHUM+p6I="
+  },
+  "pt/pt_BR/cadu/medium/MODEL_CARD": {
+    "gitOid": "0430d0546960154c8437773f9f7de7eee4f1f8e8",
+    "sha256": "sha256-uGfoGfSDZbWSx3ifcbulynnhyzuKSZhTSF20F9gDFCc="
+  },
+  "pt/pt_BR/cadu/medium/pt_BR-cadu-medium.onnx": {
+    "gitOid": "fd682dcd73dda12dff1fd680b50612d881248152",
+    "sha256": "sha256-dl8ICabqkDXUptDQCNv4h25ost0yApMSZy+o9AW9tTU="
+  },
+  "pt/pt_BR/cadu/medium/pt_BR-cadu-medium.onnx.json": {
+    "gitOid": "fedd776ac88886d2924880b2115511bbfe38f552",
+    "sha256": "sha256-X+A6o9SQGIBVSQWxIHVxPNVSWYyKNQRVoexz+LTmvhk="
+  },
+  "pt/pt_BR/edresson/low/MODEL_CARD": {
+    "gitOid": "0c11733ca3e9bc68d2b754eb2dfaaad5a03730d1",
+    "sha256": "sha256-2PsNqy1hrZeWkEg2+y/ArH4yTYnoC8nvFOMot35ctm8="
+  },
+  "pt/pt_BR/edresson/low/pt_BR-edresson-low.onnx": {
+    "gitOid": "d7807968b6dae66e14eea4dfacdb46683f548327",
+    "sha256": "sha256-3kzs7jizC7GmN4ozevYF1Z8MN333AsamdShw24mRzYQ="
+  },
+  "pt/pt_BR/edresson/low/pt_BR-edresson-low.onnx.json": {
+    "gitOid": "43925b4324e3b25a96298d4b8a7d907ac9867937",
+    "sha256": "sha256-8TiZLS53fR46oLuxTC0yQwew80LBvPIJeHZbO+pQbFY="
+  },
+  "pt/pt_BR/faber/medium/MODEL_CARD": {
+    "gitOid": "2a0402eaf5a1421492e0313abb1b8bf296c2b7a6",
+    "sha256": "sha256-AfGlvP0FOHgnJgWa5Afq6cLdG1s19ymP1Tpo3pGv5WM="
+  },
+  "pt/pt_BR/faber/medium/pt_BR-faber-medium.onnx": {
+    "gitOid": "324a5f23579ef280c7aa0f5c32a0ac301a2f765a",
+    "sha256": "sha256-hYVV46BkIJxXCI/mvXDEw9xU0D6qAMRdXsr0OjP5Wqc="
+  },
+  "pt/pt_BR/faber/medium/pt_BR-faber-medium.onnx.json": {
+    "gitOid": "b0206c81d70e6e4468b94d36491b4c17fac531b7",
+    "sha256": "sha256-fmlN4ZWuP8Nt1zLEResE+0m2SYVIk8tVBrl48NUKHW8="
+  },
+  "pt/pt_BR/jeff/medium/MODEL_CARD": {
+    "gitOid": "04a1d4ddc4f0d1c64b7a42c8575392af91f6c6aa",
+    "sha256": "sha256-rN6hsjOkeKjOO6wfSIahTIu2pih877QaJqZXo6dBiwg="
+  },
+  "pt/pt_BR/jeff/medium/pt_BR-jeff-medium.onnx": {
+    "gitOid": "ea9ae1816fd174c092f6584a42ff715d9c0c39e1",
+    "sha256": "sha256-Om9MRjVYE8K3u8TRa20T1g7XIHS5UqOTuqzoKn0MlLU="
+  },
+  "pt/pt_BR/jeff/medium/pt_BR-jeff-medium.onnx.json": {
+    "gitOid": "822b04e6c34bd75920d493a72eb63af827d83f79",
+    "sha256": "sha256-e/gUW1crNoBvXODx0zIrZxGXW8fQRz6NNvztSp7AAw0="
+  },
+  "pt/pt_PT/tugão/medium/MODEL_CARD": {
+    "gitOid": "a4172baa8f227377433e142164e554eeac1882d9",
+    "sha256": "sha256-HWwjCVmAwMWKBE8csj4m/cHSe9lbaNsLWwxUh4i5nVA="
+  },
+  "pt/pt_PT/tugão/medium/pt_PT-tugão-medium.onnx": {
+    "gitOid": "217248f2a203b9840f7db094a314b538da7daf3f",
+    "sha256": "sha256-Ijp6rKaaFVxhiX6K2nw7E7wwbhbHLbucL+1zPisJJ9Q="
+  },
+  "pt/pt_PT/tugão/medium/pt_PT-tugão-medium.onnx.json": {
+    "gitOid": "445c1393ec16e8a0fb9687592cbd883f4fd6bd88",
+    "sha256": "sha256-/gkY38DxqJJkpu6kr+jpXY6f7TzGyBtcL4f8srUMcyA="
+  },
+  "ro/ro_RO/mihai/medium/MODEL_CARD": {
+    "gitOid": "be1ed13b3d2309f34f4aa9bd2a24e2d55c1c6d5b",
+    "sha256": "sha256-4G+2lBGzYUY2/exK9kasdFSMbDI6isQDDjTLVOmQFqE="
+  },
+  "ro/ro_RO/mihai/medium/ro_RO-mihai-medium.onnx": {
+    "gitOid": "f8d3dc617ffa31b16e0a2e1b90f972d0ce1829b4",
+    "sha256": "sha256-4GCLu9U8gCZ8CezmgbCfUZn1TnkjVmhMgHNzjl8V0p8="
+  },
+  "ro/ro_RO/mihai/medium/ro_RO-mihai-medium.onnx.json": {
+    "gitOid": "f28756abb578bac29f0f6742030ade8c321feb39",
+    "sha256": "sha256-jMDJ8HfcDOw8JaagVeyARtuOQKJRBZFYLyychp9LxH4="
+  },
+  "ru/ru_RU/denis/medium/MODEL_CARD": {
+    "gitOid": "03daf73091666615fa7aeec626792b5003d7fd76",
+    "sha256": "sha256-i11oXdgPitP4274cVrFrsICfAMFErzZC2887cH64nBI="
+  },
+  "ru/ru_RU/denis/medium/ru_RU-denis-medium.onnx": {
+    "gitOid": "033b78cd23a48ab42159be1019edba1ceca0499b",
+    "sha256": "sha256-Ffq1bhGgl4WO4RVUXQ9pf8KjFsQaKRpTYjSfuHBBGwo="
+  },
+  "ru/ru_RU/denis/medium/ru_RU-denis-medium.onnx.json": {
+    "gitOid": "298fb1cdb5deb29defaeb53df285c6d269839a3d",
+    "sha256": "sha256-gxyGDawLUHPqqBYQoKY47CPZCmz45fhxtEhcLOw3Z8g="
+  },
+  "ru/ru_RU/dmitri/medium/MODEL_CARD": {
+    "gitOid": "b93521bf8b51f3995b221201b6f55826e5af6771",
+    "sha256": "sha256-bVnHVndtV4YCMs6mSE4bLqH8HI0sNEbvJG9wb9mHWCE="
+  },
+  "ru/ru_RU/dmitri/medium/ru_RU-dmitri-medium.onnx": {
+    "gitOid": "9f92b87ee286884cfe34f4f352d037a32d5995c2",
+    "sha256": "sha256-8HM1brxL0PgMWvWN8pU6WYi9W9qx6zhjXOlgsHH778s="
+  },
+  "ru/ru_RU/dmitri/medium/ru_RU-dmitri-medium.onnx.json": {
+    "gitOid": "89ff93dea9003ae8a364d48460c660c4f2a1ef01",
+    "sha256": "sha256-Zn7zEXvGQsKJLf92kNi9yMpCKK6qeDstwUFt9jKFXg0="
+  },
+  "ru/ru_RU/irina/medium/MODEL_CARD": {
+    "gitOid": "20d6abef2a7f737b324ede38bf8422b5a5208bdc",
+    "sha256": "sha256-9Pwt6w6MYhnykgK43QbJY4xf/VCtXGsskM8apZ1QdZM="
+  },
+  "ru/ru_RU/irina/medium/ru_RU-irina-medium.onnx": {
+    "gitOid": "0b0af08563ddb90c30573fd988d2f80cb8b85dad",
+    "sha256": "sha256-j/OCEtI9owC743BcZF5uW5R18L/eAVWOsXgT4irKqqo="
+  },
+  "ru/ru_RU/irina/medium/ru_RU-irina-medium.onnx.json": {
+    "gitOid": "7b61766dc87a3b419855f7980e6ab14d61166412",
+    "sha256": "sha256-wuwouzjitZ6TuVmz5ANIwa/rvScvMP7V1BIF0I6Yqdc="
+  },
+  "ru/ru_RU/ruslan/medium/MODEL_CARD": {
+    "gitOid": "81aad6ac008f24b986f97431cc1da8a50531c3aa",
+    "sha256": "sha256-KPXAOBwSNOsXv9d+d/iTsAiUjCm8NR+4EavS1qaedmI="
+  },
+  "ru/ru_RU/ruslan/medium/ru_RU-ruslan-medium.onnx": {
+    "gitOid": "b5b94ba353364fca86f4a54af269a991f5a7eede",
+    "sha256": "sha256-cqX4jgsgkoBk60XYjh2qIfivYtGGE1gNMsu0rtSNz38="
+  },
+  "ru/ru_RU/ruslan/medium/ru_RU-ruslan-medium.onnx.json": {
+    "gitOid": "c302bba5313f5054c5fbed0eeea60aac72a29553",
+    "sha256": "sha256-cGpPsXvDBKvQeAm1Ut6uYV5k3L/7+9CYVLo3ylnogRc="
+  },
+  "sk/sk_SK/lili/medium/MODEL_CARD": {
+    "gitOid": "f57f98baad20ddee62331c43cb8f3ea0d51d07a5",
+    "sha256": "sha256-0d+YpDbhsi9r0XkqFPs1kt2BbuJQ7j/5/zvmLNOcWbA="
+  },
+  "sk/sk_SK/lili/medium/sk_SK-lili-medium.onnx": {
+    "gitOid": "7fec245bb65573c249dbb0be383292d120067f57",
+    "sha256": "sha256-2OIWA+AWUlKEnv4Lyz+//Rsxk8Nr0fVW4RBpEegBVSY="
+  },
+  "sk/sk_SK/lili/medium/sk_SK-lili-medium.onnx.json": {
+    "gitOid": "b39144b92a9ec58ad80f83f752b143275c178354",
+    "sha256": "sha256-t8R066QRkT+f62W52jIkY+hpjnsgDSt1f25oSAKVEzM="
+  },
+  "sl/sl_SI/artur/medium/MODEL_CARD": {
+    "gitOid": "146d8f03677932e901e5335a3289e2a196e523d6",
+    "sha256": "sha256-/oQx0IMKQSYDebp/iBPj37UVwCaEoGY3AvReBH4xu6k="
+  },
+  "sl/sl_SI/artur/medium/sl_SI-artur-medium.onnx": {
+    "gitOid": "8eb55b343f99b4fadb9627b07db9c66d39bde07c",
+    "sha256": "sha256-kiLtk+9CVSStS+Cwgzaa+OqNsYRVV2pgFrFUGS9O04w="
+  },
+  "sl/sl_SI/artur/medium/sl_SI-artur-medium.onnx.json": {
+    "gitOid": "e6ab9bfffd36b70375437db8b353d575a4d60c3c",
+    "sha256": "sha256-dBKDQw8for5cYXF8bx/nlae59TdJGSc0DdEvkPOzzAQ="
+  },
+  "sq/sq_AL/edon/medium/MODEL_CARD": {
+    "gitOid": "1ff5cb474dd6b24b3c9154316a82e225931058c7",
+    "sha256": "sha256-OEneA1earqv5lsouCHku5Ff41VvUczMs0NdoT8coz7A="
+  },
+  "sq/sq_AL/edon/medium/sq_AL-edon-medium.onnx": {
+    "gitOid": "2dbe1f48bcbe0a90acba57397781154b7e06b049",
+    "sha256": "sha256-XQrorzagCsaBNReyr0e8TNpC6I7OBPYHauOw9UecV8g="
+  },
+  "sq/sq_AL/edon/medium/sq_AL-edon-medium.onnx.json": {
+    "gitOid": "3630fba481c0c7ef76e778d0b893e9f1f372e57c",
+    "sha256": "sha256-6e53vupS2AQryliUSLtIAzrA98HYba7oStHVaS0ScPc="
+  },
+  "sr/sr_RS/serbski_institut/medium/MODEL_CARD": {
+    "gitOid": "7ef78a3c06753d2a3a51acd5b7508ec0b3fae43f",
+    "sha256": "sha256-HtIgnU0Bs1lBbxd3LGwRJyvbWTWdCwsHbjGlzLh0Rqw="
+  },
+  "sr/sr_RS/serbski_institut/medium/sr_RS-serbski_institut-medium.onnx": {
+    "gitOid": "18507eb02664ed0c4e4717695fbeaa2be3a29859",
+    "sha256": "sha256-1wA4kM9ZbmU/ZgpP2X/Rf1fx7OttlyerrZzXbS/aDYA="
+  },
+  "sr/sr_RS/serbski_institut/medium/sr_RS-serbski_institut-medium.onnx.json": {
+    "gitOid": "f12b695d094d0c294cfac34eef62ee74c57838e5",
+    "sha256": "sha256-Oa1lMbRqxinAvtEKqSBd0kMeLas4CLhTWAhxHbh8K8A="
+  },
+  "sv/sv_SE/alma/medium/MODEL_CARD": {
+    "gitOid": "7ce99c3aed0980ed53b05c7d9457976d8b741e5d",
+    "sha256": "sha256-PkNHtyodOWygkFRwCUMx/ujdOppkGoNEZs2/eBLfk5Y="
+  },
+  "sv/sv_SE/alma/medium/sv_SE-alma-medium.onnx": {
+    "gitOid": "09d7d2cb34a458f15b1d09b6fe939cd72bd93a03",
+    "sha256": "sha256-91RV62r+sdueKQXVvX5BFa/NNxDg05m2pAmBdm0y/tw="
+  },
+  "sv/sv_SE/alma/medium/sv_SE-alma-medium.onnx.json": {
+    "gitOid": "7eaf3ef20af4a74e9cee9d29b98de3d9fcec0bdc",
+    "sha256": "sha256-aSQ4CJL3aa+pL8ayj/kdVYaQ1/tOPvjL+CHO+tyPOP4="
+  },
+  "sv/sv_SE/lisa/medium/MODEL_CARD": {
+    "gitOid": "a2613d815d45a9b8cbcabba119528f4253c10135",
+    "sha256": "sha256-lSwFInwXXUiq/kDrc5NdjPa3ohStT5dytBgMCE5QlMM="
+  },
+  "sv/sv_SE/lisa/medium/sv_SE-lisa-medium.onnx": {
+    "gitOid": "97618110472d6a5dcc979019a17f3f7bd1e6773e",
+    "sha256": "sha256-lMrpErMdbpFA0/UWDxgVlRWIYAx6nkPVOboegaEQ0TE="
+  },
+  "sv/sv_SE/lisa/medium/sv_SE-lisa-medium.onnx.json": {
+    "gitOid": "b2b5fb0f8af2aae4ddfb81eaa7709c6b8faa412b",
+    "sha256": "sha256-UeSLZddCeu6ejnNrNw/0/m4+ReR6VuXYgZZHtwdv+wo="
+  },
+  "sv/sv_SE/nst/medium/MODEL_CARD": {
+    "gitOid": "2ccd0d637630294f1b09c96cb0df727ad785169d",
+    "sha256": "sha256-yF0+JuR9k+nZuFctPIlTfD+P8hJZXLmj+9LgfBlDIxc="
+  },
+  "sv/sv_SE/nst/medium/sv_SE-nst-medium.onnx": {
+    "gitOid": "52debfb4c66b1aa2d051ad5ccbbb95435f53794a",
+    "sha256": "sha256-3wEfVoJaWd0e/AgMOKZaHvcEB+YPYwUOkkb0Oj1+Rx4="
+  },
+  "sv/sv_SE/nst/medium/sv_SE-nst-medium.onnx.json": {
+    "gitOid": "9766b9769436046a610a505fda925032e12a66b3",
+    "sha256": "sha256-1F3XTLtOylhpS/BKl+JDBECSR28opVriZCTwZTCGmAo="
+  },
+  "sw/sw_CD/lanfrica/medium/MODEL_CARD": {
+    "gitOid": "13dee66d516c1572d982790c7009be065e8e609c",
+    "sha256": "sha256-djpETKDiBawIvTvzpNPUTaWPVtJEoUWt8i6wqGNjirI="
+  },
+  "sw/sw_CD/lanfrica/medium/sw_CD-lanfrica-medium.onnx": {
+    "gitOid": "3dc7dd3bfcd8943913035969f5a5bbbaf6e5fb61",
+    "sha256": "sha256-Hxle0Syl54dRFGGOXwAgevNkYC4hynjIptPXZ0+SWfo="
+  },
+  "sw/sw_CD/lanfrica/medium/sw_CD-lanfrica-medium.onnx.json": {
+    "gitOid": "f847f8bd62f70ee5dcee032dc366833b5acb3e29",
+    "sha256": "sha256-W9b2rWWaqPH4n0FOI6PfhPx1PrnAZukf6Gcp2irUwfw="
+  },
+  "te/te_IN/maya/medium/MODEL_CARD": {
+    "gitOid": "39759fc347e6a58d3fa6af66757e9da9120930ea",
+    "sha256": "sha256-/gpLcNsfbJUt8jSS7R/mwJqForDfPfX4l12/LYTweZI="
+  },
+  "te/te_IN/maya/medium/te_IN-maya-medium.onnx": {
+    "gitOid": "4e5e1a9ec645cf5199dbb2e67a3d6e3c38cee95b",
+    "sha256": "sha256-w1GK1OPKjqYFnB4ALzdyBo9jSWD1iyN6lv9inbHGIA4="
+  },
+  "te/te_IN/maya/medium/te_IN-maya-medium.onnx.json": {
+    "gitOid": "5153c36bdc943b1c40dbec6e02de504d29ae8330",
+    "sha256": "sha256-wHB0qt8KM+IwZHYRr5BB4ftmCbmV0BfulQCVhqSRUI8="
+  },
+  "te/te_IN/padmavathi/medium/MODEL_CARD": {
+    "gitOid": "f3d157f451a590a508d82e3a3003aba0a44b1154",
+    "sha256": "sha256-jNzNDKTCbR6UlDHwMYC8+errPAE/YnCHxqgGo/dIewc="
+  },
+  "te/te_IN/padmavathi/medium/te_IN-padmavathi-medium.onnx": {
+    "gitOid": "82a355086e30c21f0a57193617337f5b6c21d9b3",
+    "sha256": "sha256-QUqllg2RzrbkW734wn/cca8J8gUTDXvk6ZRw88LPpX0="
+  },
+  "te/te_IN/padmavathi/medium/te_IN-padmavathi-medium.onnx.json": {
+    "gitOid": "5afaa8eee6ff257ba04497a7cbbf37bd6d513ba9",
+    "sha256": "sha256-bIbk7pnTeYFfeKdfI82tYsz1A3AGLdkVwjPW4i3nEJ8="
+  },
+  "te/te_IN/venkatesh/medium/MODEL_CARD": {
+    "gitOid": "cd627b67dfc06b877a39654e94f6f674c1fff372",
+    "sha256": "sha256-HnK3m2RTZTvWxDci+A+zT0KdvsyvGBFkgNb6ogsB5oU="
+  },
+  "te/te_IN/venkatesh/medium/te_IN-venkatesh-medium.onnx": {
+    "gitOid": "2c3d789102881e1c22bb84de509d0d355cb9b868",
+    "sha256": "sha256-36pbeDPNSNlG8/4Yyck0qqToWQqsaSL93zR4OmlMPIc="
+  },
+  "te/te_IN/venkatesh/medium/te_IN-venkatesh-medium.onnx.json": {
+    "gitOid": "319f97853e9036e84422299b434d25c561b7a450",
+    "sha256": "sha256-WbrVVnY9HySzQ0IB173uJ1uxpw2z4cZdOObD05siQ0M="
+  },
+  "tr/tr_TR/dfki/medium/MODEL_CARD": {
+    "gitOid": "b56c295a8eaabd6fd34e1a7ad6eb335cdb902866",
+    "sha256": "sha256-o+CMV7nG1Cj45PsUZRLIsfuWpoyZ1Dgg7R3+ptOcs18="
+  },
+  "tr/tr_TR/dfki/medium/tr_TR-dfki-medium.onnx": {
+    "gitOid": "4b74e9c8975c0ab1bfd8ebf78643c02b662e94e9",
+    "sha256": "sha256-KERxf1JKuWXT/obmBWLLtgHT5FaDbvzCGWzDoUESqPs="
+  },
+  "tr/tr_TR/dfki/medium/tr_TR-dfki-medium.onnx.json": {
+    "gitOid": "ea4036df5c9e4e07b8c2f42acce4d77d0fb6afdc",
+    "sha256": "sha256-E+vXgQ8bYbUCdYPPMTGgojO26oHDjyIA68T/QcPMoDk="
+  },
+  "uk/uk_UA/lada/x_low/MODEL_CARD": {
+    "gitOid": "675dbdf51dae27313d6b88ae83e7165e2ba94ca1",
+    "sha256": "sha256-5XM2TQDkSX4qqWR114WIfrPOkBs6+f2kn393LDzF/0o="
+  },
+  "uk/uk_UA/lada/x_low/uk_UA-lada-x_low.onnx": {
+    "gitOid": "b71c528cd4fca040052b2f4f51248f1abf0aebe1",
+    "sha256": "sha256-+NAV0/wZ6mvYrDyh/QwPusUFTGCVme5zeZI1/Sz1x4Y="
+  },
+  "uk/uk_UA/lada/x_low/uk_UA-lada-x_low.onnx.json": {
+    "gitOid": "8fcddc6df7b1ba857ce592a3ac0035375d57f2eb",
+    "sha256": "sha256-LfdLYi54kw6KYkMtHMg4D3nzTwLIxY69aObMvIV9gKo="
+  },
+  "uk/uk_UA/mykyta/high/MODEL_CARD": {
+    "gitOid": "3f571d358595d417a171c2d9ad338dc44f18e454",
+    "sha256": "sha256-5UD6E6kKzs0rroGyuY8Met//F9OJB3aB2F4pZ+14ZS4="
+  },
+  "uk/uk_UA/mykyta/high/uk_UA-mykyta-high.onnx": {
+    "gitOid": "252afd5c599a21c09241099c7706543b75d84c72",
+    "sha256": "sha256-CB0lPNJG19TWmMbdFHt0ytSY2v0hNSeIejpJBRkTgkM="
+  },
+  "uk/uk_UA/mykyta/high/uk_UA-mykyta-high.onnx.json": {
+    "gitOid": "10c09239698358083397564011153a306633f6c2",
+    "sha256": "sha256-tdtrTvsC1KDo8SglP9ZOgt+nLREF6QYLDG/ZYQ7sak8="
+  },
+  "uk/uk_UA/oleksa/high/MODEL_CARD": {
+    "gitOid": "fb3ea45146f2e5bdcd6ce53049db56b9e249f6c6",
+    "sha256": "sha256-Wh8wEp+U8VNclhwb/FU/TyuHEte8wo2NHbM9pZNZ71s="
+  },
+  "uk/uk_UA/oleksa/high/uk_UA-oleksa-high.onnx": {
+    "gitOid": "e2168cecbfba34007b6047e2102041140680c7a6",
+    "sha256": "sha256-5VJNjWs2havW2qYW7a4ix4Kx6qFUHA5ZIhg89fLRVbc="
+  },
+  "uk/uk_UA/oleksa/high/uk_UA-oleksa-high.onnx.json": {
+    "gitOid": "42f9b4b6df6bf967f81ba6a081f1af8676922640",
+    "sha256": "sha256-KWN0JjrRHSxsGHqeTO33Klt7o938Q42l64vzL9o+3kI="
+  },
+  "uk/uk_UA/tetiana/high/MODEL_CARD": {
+    "gitOid": "287b983becad658b1a39707a93d76b2f4091f76e",
+    "sha256": "sha256-APLR0xmNC2Lhbe35TfCSH8n76BOFYe/ByHCGs368xZs="
+  },
+  "uk/uk_UA/tetiana/high/uk_UA-tetiana-high.onnx": {
+    "gitOid": "6884574f1025b5b8ee0dfc4aaa6df324d453d12d",
+    "sha256": "sha256-EgbYRHuZYyut62PWEyJB92z1UYdOUlTriDbbNq7XyFw="
+  },
+  "uk/uk_UA/tetiana/high/uk_UA-tetiana-high.onnx.json": {
+    "gitOid": "5f5ef9b6c34ffd1d331f78b6bdf216234e9b7b10",
+    "sha256": "sha256-yWoFECiXavx0Jp9zRwZROE3raHJDH4kMrTtkJNCegSs="
+  },
+  "uk/uk_UA/ukrainian_tts/medium/MODEL_CARD": {
+    "gitOid": "8b100653abffbc8cf2a99b8e60ef110046f3147a",
+    "sha256": "sha256-zgnQydHZDNyY0eqKTsvetek31EWTh25BlDAsXqu6rZ0="
+  },
+  "uk/uk_UA/ukrainian_tts/medium/uk_UA-ukrainian_tts-medium.onnx": {
+    "gitOid": "355c89e8df1efc9df0fe0ce63e240196d6fd711e",
+    "sha256": "sha256-eSBBmsX2/YtkUFIPJLUu1aMZy1PdAY+81xyeB5y6yE8="
+  },
+  "uk/uk_UA/ukrainian_tts/medium/uk_UA-ukrainian_tts-medium.onnx.json": {
+    "gitOid": "c13f1ec4dff625299bc5607f8d4b1a35f8bcb9d0",
+    "sha256": "sha256-TpbnKRfKm5Ttx31sz+4Dpz9FC6L8HKk8LlYrwBTlqlU="
+  },
+  "ur/ur_PK/aegis_female/medium/MODEL_CARD": {
+    "gitOid": "ee88e3f5a307db3686425748a9bbc22bd404d362",
+    "sha256": "sha256-+fFvvP7sLCM74hxzQSXWwa2nrAA3xv/XdRBl9Wa1O24="
+  },
+  "ur/ur_PK/aegis_female/medium/ur_PK-aegis_female-medium.onnx": {
+    "gitOid": "7291ec99c032abde3545209e4f4b4c05099de841",
+    "sha256": "sha256-PsMGA1z9C7wiNC/uWJBFBwihbdIxgJUicxZ4qlg8lh8="
+  },
+  "ur/ur_PK/aegis_female/medium/ur_PK-aegis_female-medium.onnx.json": {
+    "gitOid": "b4540f79ebf72d360b15443e2c99c6966c929960",
+    "sha256": "sha256-qDhcIXp+J2rPUjS/AdvQrbAHpXwy/7zFfS236sOXm7Y="
+  },
+  "ur/ur_PK/fasih/medium/MODEL_CARD": {
+    "gitOid": "0c78f0f08016a52a55424cb721fb681e64adaa84",
+    "sha256": "sha256-DWQZ50+Z/bAkAYD8JgZ+L3HP9GXGG1niGKfPUzUc+R8="
+  },
+  "ur/ur_PK/fasih/medium/ur_PK-fasih-medium.onnx": {
+    "gitOid": "f41a477ef555a0ed65b13b44caa1ffb3950fc332",
+    "sha256": "sha256-RtWQuQ+7QeTU8sVN7USHSRf4sRtuBQDeKonl03MbWRc="
+  },
+  "ur/ur_PK/fasih/medium/ur_PK-fasih-medium.onnx.json": {
+    "gitOid": "84ab519af537876f609bc9181f0db21692b9cd40",
+    "sha256": "sha256-z89ISlC0A2y1VnW2u8253bkGGsEKUc+ys86DkSEyBew="
+  },
+  "vi/vi_VN/25hours_single/low/MODEL_CARD": {
+    "gitOid": "265071298d4122a889b183ac9a369ef5218b20f3",
+    "sha256": "sha256-/5q9kMTzP7MYziv6l/qUq+NmgyFv6PCRxVLm1xq07BY="
+  },
+  "vi/vi_VN/25hours_single/low/vi_VN-25hours_single-low.onnx": {
+    "gitOid": "de6c1b62de5ba6316f8ffb732bd5d2ad574dad40",
+    "sha256": "sha256-JmlFxKgMszAUUMi6b89ro1QsVs+VKgio/z0tT/CrVgk="
+  },
+  "vi/vi_VN/25hours_single/low/vi_VN-25hours_single-low.onnx.json": {
+    "gitOid": "4c03d0ed428616af2fe85dd969fa42ee2efd048b",
+    "sha256": "sha256-NEtYSfW8WFAxpjucx1+W4sRp89mIedjTrLwvzm1HAGQ="
+  },
+  "vi/vi_VN/vais1000/medium/MODEL_CARD": {
+    "gitOid": "d77035517b7e2e9446d43b2c83769890e14b000c",
+    "sha256": "sha256-MC24qTD/wrHCGB2yber4JyEW7KKwi4+A2mN1sKmUr3s="
+  },
+  "vi/vi_VN/vais1000/medium/vi_VN-vais1000-medium.onnx": {
+    "gitOid": "c9b9df265b718e05ed60899d377f98725a8dbc95",
+    "sha256": "sha256-7HyJ4shfTR7cJLYSDBiq8b2mFPBrURVn65x8DeFeLas="
+  },
+  "vi/vi_VN/vais1000/medium/vi_VN-vais1000-medium.onnx.json": {
+    "gitOid": "b11c938b28c4425d9be76beeb09d68f0d67157ba",
+    "sha256": "sha256-+vudoTVO1Ld8Ma8ijtQftBzYJcFM/6EFRUsl5q51HuA="
+  },
+  "vi/vi_VN/vivos/x_low/MODEL_CARD": {
+    "gitOid": "d3166a2c48d549df8060326344199e5a46d753ab",
+    "sha256": "sha256-F1w3wXH39KZu4uN1Rndcs2a9HgDQJ9ELGJGLXMFITIY="
+  },
+  "vi/vi_VN/vivos/x_low/vi_VN-vivos-x_low.onnx": {
+    "gitOid": "edb732298bbecb0903c96467f1434c609b981cfb",
+    "sha256": "sha256-arEzdOsIYgIaVFvv53J671nhYRfxwHWqngNiI37MmK4="
+  },
+  "vi/vi_VN/vivos/x_low/vi_VN-vivos-x_low.onnx.json": {
+    "gitOid": "b8bbc6c471f66e35aaa356053a11646f55c5abb0",
+    "sha256": "sha256-ncNz1psOTznYZMuKyf5CzuSYF6DwLYMeV6nObpROI0o="
+  },
+  "zh/zh_CN/chaowen/medium/MODEL_CARD": {
+    "gitOid": "f0241efa9eeeea5c39f7e12420565a52d85affcd",
+    "sha256": "sha256-cVUhLskZKxIBiYUAYhrlYtxe622Q+hg/MmfNBtx9W2s="
+  },
+  "zh/zh_CN/chaowen/medium/zh_CN-chaowen-medium.onnx": {
+    "gitOid": "aae4b93dbaeba7672bdef8ddc5f188df49e47b91",
+    "sha256": "sha256-gg1krBYEj7zzjdCCPTf6tfXgwr1xsBylpQ9VP6wZ50Y="
+  },
+  "zh/zh_CN/chaowen/medium/zh_CN-chaowen-medium.onnx.json": {
+    "gitOid": "59e43bf7a5668c69301295d8423cd46defaffb1d",
+    "sha256": "sha256-prssqvoGRWQvE8v34vb7uxb97WblEQn8JtYi9kcvoW8="
+  },
+  "zh/zh_CN/huayan/medium/MODEL_CARD": {
+    "gitOid": "02b4fba5ae8353637e93af3443ddddacf14c663e",
+    "sha256": "sha256-JdfY96A+k4LmKcXE8HQXbnyoTgi+EqhzAi6R/KyYwsc="
+  },
+  "zh/zh_CN/huayan/medium/zh_CN-huayan-medium.onnx": {
+    "gitOid": "6bf247ed7ba3cbc066b8a3f13f6392aed956bf74",
+    "sha256": "sha256-mSmRe/jKuyb9Uo6kTTpmmcEehzF6FHZTEkIL4jC+Dz0="
+  },
+  "zh/zh_CN/huayan/medium/zh_CN-huayan-medium.onnx.json": {
+    "gitOid": "f0e6e6ed1f91fdfa0bac50cb6f0538606fde254b",
+    "sha256": "sha256-1SHcRVBKjMyZ4yWCKzWUbdcBhAv7B+PbsxpAkp7WqCs="
+  },
+  "zh/zh_CN/huayan/x_low/MODEL_CARD": {
+    "gitOid": "00e271f38c3ea87822aed8298fa3a16fb1dacef4",
+    "sha256": "sha256-3G9o8wNqMtCnTq564HaCoMrgaoS+F+aBtZ49EcyxNT0="
+  },
+  "zh/zh_CN/huayan/x_low/zh_CN-huayan-x_low.onnx": {
+    "gitOid": "dec8441e6ae48ba3eacf311daf72a456a184696a",
+    "sha256": "sha256-0wsUP6xm2CGhKFqgEyla31zRKdPMEdcDNOUceyBmLDc="
+  },
+  "zh/zh_CN/huayan/x_low/zh_CN-huayan-x_low.onnx.json": {
+    "gitOid": "414a3c6c950e1a49c9e42fb2d95fffbdabbff7f0",
+    "sha256": "sha256-VSHcsJrfaKm+4okDL39a8Y0pv/AglTQptdIj7B+IGBY="
+  },
+  "zh/zh_CN/xiao_ya/medium/MODEL_CARD": {
+    "gitOid": "e21680611aafc30631ae2390d5b6a80257f312ae",
+    "sha256": "sha256-VyDhcNOHLc6hCAPHekprRCSprzZkMf3FZora/ZXjP0I="
+  },
+  "zh/zh_CN/xiao_ya/medium/zh_CN-xiao_ya-medium.onnx": {
+    "gitOid": "82d45e1b517d8ef910047fceb8fe16ceb043ec9b",
+    "sha256": "sha256-yyzkyh9aNqeyOuSPBlHOLIVMMx73qATlxdxkPQ908OI="
+  },
+  "zh/zh_CN/xiao_ya/medium/zh_CN-xiao_ya-medium.onnx.json": {
+    "gitOid": "b300b8d3139aed2dd7cb0e37355329c02042d48e",
+    "sha256": "sha256-4ewCe3BllZZDwUY3BTmNQT7U/apibX2O8dEquH6aAyA="
+  }
+}

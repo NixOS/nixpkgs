@@ -1,0 +1,90 @@
+commit 112ce50d6834bf1ebc92596314aa6d3663404e5f
+Author: Rasmus Enevoldsen <rasmus@enev.dk>
+Date:   Thu Jul 23 18:57:28 2026 +0200
+
+    Add --extra-models-dir flag for extra downloadable models
+    
+    The g2pW model (used for Chinese phonemization) is looked up in the
+    current working directory, and downloaded there if missing.
+    
+    This commit adds a --extra-models-dir flag so users can point Piper at a
+    prefetched model instead, e.g. for offline or sandboxed environments.
+    
+    The flag is generic and intended to cover any future downloadable
+    models, not just g2pW.
+    
+    It is not called --download-dir because that name is taken by a flag
+    in the http server cli.
+
+diff --git a/src/piper/__main__.py b/src/piper/__main__.py
+index f825570..789f74a 100644
+--- a/src/piper/__main__.py
++++ b/src/piper/__main__.py
+@@ -96,6 +96,12 @@ def main() -> None:
+         help="Data directory to check for voice models (default: current directory)",
+     )
+     #
++    parser.add_argument(
++        "--extra-models-dir",
++        "--extra_models_dir",
++        help="Directory for downloadable resources like the Chinese g2pW model (default: current directory)",
++    )
++    #
+     parser.add_argument(
+         "--debug", action="store_true", help="Print DEBUG messages to console"
+     )
+@@ -146,7 +152,11 @@ def main() -> None:
+ 
+     # Load voice
+     _LOGGER.debug("Loading voice: '%s'", model_path)
+-    voice = PiperVoice.load(model_path, use_cuda=args.cuda)
++    voice = PiperVoice.load(
++        model_path,
++        use_cuda=args.cuda,
++        download_dir=args.extra_models_dir,
++    )
+     syn_config = SynthesisConfig(
+         speaker_id=args.speaker,
+         length_scale=args.length_scale,
+diff --git a/src/piper/http_server.py b/src/piper/http_server.py
+index 901d6ae..768f73b 100644
+--- a/src/piper/http_server.py
++++ b/src/piper/http_server.py
+@@ -65,6 +65,12 @@ def main() -> None:
+         help="Path to download voices (default: first data dir)",
+     )
+     #
++    parser.add_argument(
++        "--extra-models-dir",
++        "--extra_models_dir",
++        help="Directory for downloadable resources like the Chinese g2pW model (default: current directory)",
++    )
++    #
+     parser.add_argument(
+         "--debug", action="store_true", help="Print DEBUG messages to console"
+     )
+@@ -99,7 +105,10 @@ def main() -> None:
+ 
+     # Load voice
+     default_voice = PiperVoice.load(
+-        model_path, use_cuda=args.cuda, include_alignments=True
++        model_path,
++        use_cuda=args.cuda,
++        include_alignments=True,
++        download_dir=args.extra_models_dir,
+     )
+     loaded_voices: Dict[str, PiperVoice] = {default_model_id: default_voice}
+ 
+@@ -242,7 +251,11 @@ def main() -> None:
+                 maybe_model_path = Path(data_dir) / f"{model_id}.onnx"
+                 if maybe_model_path.exists():
+                     _LOGGER.debug("Loading voice %s", model_id)
+-                    voice = PiperVoice.load(maybe_model_path, use_cuda=args.cuda)
++                    voice = PiperVoice.load(
++                        maybe_model_path,
++                        use_cuda=args.cuda,
++                        download_dir=args.extra_models_dir,
++                    )
+                     loaded_voices[model_id] = voice
+                     break
+ 

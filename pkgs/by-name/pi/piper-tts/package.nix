@@ -4,9 +4,11 @@
   fetchFromGitHub,
   testers,
   callPackage,
+  runCommand,
 
   # build time
   pkg-config,
+  piperTtsVoices,
 
   # runtime
   espeak-ng,
@@ -22,7 +24,7 @@
   withAlignment ? true,
   withZh ? false,
   withFfplay ? false,
-}:
+}@args:
 
 let
   # https://github.com/OHF-Voice/piper1-gpl/blob/v1.3.0/CMakeLists.txt#L33-L40
@@ -68,9 +70,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # https://github.com/OHF-Voice/piper1-gpl/pull/239
     ./add-version-flag.patch
 
-    # Add download flag to give extra non-voice modesl like g2pW
+    # Add extra models flag to give extra non-voice modesl like g2pW
     # https://github.com/OHF-Voice/piper1-gpl/pull/245
-    ./add-download-flag.patch
+    ./add-extra-models-flag.patch
   ];
 
   build-system =
@@ -102,18 +104,18 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   postBuild = ''
-    # Stage the checked-in test voice under the filenames PiperTestAssets
-    # expects, so libpiper's tests don't need to download a model.
-    # FIXME use a packaged piper voice, when they get packaged
-    mkdir -p $TMPDIR/piper-test-model
-    ln -s $(pwd)/tests/test_voice.onnx $TMPDIR/piper-test-model/model.onnx
-    ln -s $(pwd)/tests/test_voice.onnx.json $TMPDIR/piper-test-model/model.onnx.json
-
     # Build libpiper
+    MODEL_DIR=$TMPDIR/piper-test-model
+    mkdir -p $MODEL_DIR
+    ln -s ${piperTtsVoices.voices.en_US-amy-medium}/en_US-amy-medium.onnx \
+      $MODEL_DIR/model.onnx
+    ln -s ${piperTtsVoices.voices.en_US-amy-medium}/en_US-amy-medium.onnx.json \
+      $MODEL_DIR/model.onnx.json
+
     cmake -S libpiper -B libpiper-build \
       -DUCD_STATIC_LIB=${espeak-ng'.ucd-tools}/libucd.a \
       -DONNXRUNTIME_DIR=${onnxruntime} \
-      -DPIPER_TEST_MODEL_DIR=$TMPDIR/piper-test-model \
+      -DPIPER_TEST_MODEL_DIR=$MODEL_DIR \
       -DPIPER_BUILD_TESTS=ON \
       -DCMAKE_BUILD_TYPE=Release
     cmake --build libpiper-build
@@ -208,6 +210,37 @@ python3Packages.buildPythonApplication (finalAttrs: {
         withZh = true;
         withFfplay = true;
       };
+
+      wrapper = finalAttrs.finalPackage.withVoices (v: [ v.en_US-amy-medium ]);
+      wrapper-all = finalAttrs.finalPackage.withVoices (v: builtins.attrValues v);
+      voices = lib.recurseIntoAttrs piperTtsVoices.tests;
+
+      synthesizes = lib.recurseIntoAttrs (
+        lib.mapAttrs (
+          key: _:
+          runCommand "piper-tts-test-${key}"
+            {
+              nativeBuildInputs = [ (finalAttrs.finalPackage.withVoices (v: [ v.${key} ])) ];
+            }
+            ''
+              tmpfile=$(mktemp)
+              echo "Hello. world!" | piper -m ${lib.escapeShellArg key} -f "$tmpfile"
+
+              size=$(stat -c%s "$tmpfile")
+              test "$size" -gt 44 || (echo "No audio generated (only $size bytes)" && exit 1)
+
+              mkdir $out
+            ''
+        ) piperTtsVoices.voices
+      );
+    };
+
+    packages = piperTtsVoices;
+
+    withVoices = callPackage ./wrapper.nix {
+      piper-tts = finalAttrs.finalPackage;
+      piper-tts-zh = callPackage ./package.nix (args // { withZh = true; });
+      inherit g2pwModel;
     };
 
     updateScript = [ ./update-piper-tts.sh ];

@@ -6713,6 +6713,8 @@ with pkgs;
     libsOnly = true;
   };
 
+  piperTtsVoices = recurseIntoAttrs (callPackage ../by-name/pi/piper-tts/voices { });
+
   speex = callPackage ../development/libraries/speex {
     fftw = fftwFloat;
   };
