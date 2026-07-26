@@ -12,6 +12,8 @@ buildPythonPackage (finalAttrs: {
   pname = "textstat";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "textstat";
     repo = "textstat";
