@@ -4,6 +4,7 @@
   fetchPypi,
   setuptools,
   pyusb,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,8 +21,7 @@ buildPythonPackage rec {
 
   dependencies = [ pyusb ];
 
-  # Module has no tests which are shipped and source is not tagged
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "temperusb" ];
 
