@@ -9,6 +9,7 @@
   ImageMagick,
   which,
   highlight,
+  gitUpdater,
   gitSupport ? false,
   git,
   docutilsSupport ? false,
@@ -134,6 +135,12 @@ stdenv.mkDerivation rec {
 
   checkTarget = "test";
   doCheck = true;
+
+  passthru.updateScript = gitUpdater {
+    # No nicer place to find latest release.
+    url = "git://git.ikiwiki.info/";
+    allowedVersions = "^[0-9]";
+  };
 
   meta = {
     description = "Wiki compiler, storing pages and history in a RCS";
