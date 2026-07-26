@@ -12,7 +12,31 @@
 }:
 let
   inherit (lib) mkEnableOption mkOption types;
+
+  # Paths are interpolated rather than `toString`ed on purpose: interpolation
+  # copies the path into the store, so the resulting argument still resolves on
+  # the machine that runs the service. `toString` would yield the path of the
+  # source tree the configuration was evaluated from, which is not there at
+  # runtime.
   pathOrStr = types.coercedTo types.path (x: "${x}") types.str;
+
+  # `argv` and `flags` share a single `lib.mkOrder` space, so flags need a
+  # priority. This one sits between `lib.modules.defaultOrderPriority` (1000,
+  # what an unadorned `argv` definition gets) and `lib.mkAfter` (1500): plain
+  # flags follow plain `argv` entries, while `lib.mkAfter` on `argv` still lands
+  # after the flags. See the `flags` option description.
+  unadornedFlagPriority = 1250;
+
+  # `attrListWith` re-emits every flag wrapped in `lib.mkOrder`, using
+  # `lib.modules.defaultOrderPriority` for flags that carried no ordering
+  # property of their own. Rewrite exactly that priority; anything else is an
+  # explicit `lib.mkOrder` from the user and is passed through verbatim.
+  atFlagPriority =
+    def:
+    if def.value._type or null == "order" && def.value.priority == lib.modules.defaultOrderPriority then
+      def // { value = lib.mkOrder unadornedFlagPriority def.value.content; }
+    else
+      def;
 in
 {
   # https://nixos.org/manual/nixos/unstable/#modular-services
@@ -50,7 +74,8 @@ in
           If expansion of environmental variables is required then use
           a shell script or `importas` from `pkgs.execline`.
 
-          When `flags` are set, the generated arguments are appended to `argv`.
+          When `flags` are set, the arguments rendered from them are merged into
+          `argv`. See `flags` for how the two are ordered against each other.
         '';
       };
 
@@ -82,8 +107,10 @@ in
             types.oneOf [
               types.bool
               types.int
-              types.path
-              types.str
+              # `pathOrStr`, not `types.path`: `lib.cli.toCommandLine` renders
+              # values with `lib.generators.mkValueStringDefault`, which has no
+              # case for paths and would abort.
+              pathOrStr
             ]
           );
           asAttrs = true;
@@ -110,16 +137,30 @@ in
           repeated keys, e.g.
           `[ { "--host" = "a"; } { "--host" = "b"; } ]`.
 
-          Use `lib.mkOrder` to influence ordering between flags
-          (lower = earlier, default 1000).
+          The rendered arguments are merged into `argv`, so `argv` and `flags`
+          share a single `lib.mkOrder` space:
 
-          The generated arguments are appended to `argv`.
+          - A flag with no ordering property of its own is placed at priority
+            1250, between `lib.modules.defaultOrderPriority` (1000, which is
+            what an unadorned `argv` definition gets) and `lib.mkAfter` (1500).
+            Plain flags therefore follow the command name and any other plain
+            `argv` arguments.
+          - `lib.mkAfter` on `argv` still lands after the flags, which is how
+            trailing positional arguments are expressed.
+          - `lib.mkOrder` on a flag is honoured verbatim against `argv`, so a
+            sub-command can be placed between two groups of flags.
+
+          Because 1250 is substituted for flags that carry no ordering property,
+          `lib.mkOrder 1000` on a flag is indistinguishable from leaving that
+          flag unadorned. To order a flag around plain `argv` entries, pick a
+          priority next to 1000, such as 999 or 1001.
         '';
         example = lib.literalExpression ''
           {
             "--port" = "8080";
             "--verbose" = true;
-            "--config" = lib.mkOrder 500 "/etc/foo.conf";
+            # ordered ahead of the unadorned flags above
+            "--config" = lib.mkOrder 1100 "/etc/foo.conf";
           }
           # or, for repeated flags:
           [
@@ -183,6 +224,6 @@ in
 
     process.argv = lib.modules.mapDefinitionValue (
       attr: lib.cli.toCommandLine config.process.flagFormat attr
-    ) (lib.mkMerge options.process.flags.valueMeta.definitions);
+    ) (lib.mkMerge (map atFlagPriority options.process.flags.valueMeta.definitions));
   };
 }

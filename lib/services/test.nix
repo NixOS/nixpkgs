@@ -77,6 +77,60 @@ let
           ];
         };
       };
+      # The default `flagFormat`, and one flag of every supported value kind.
+      flagsDefault = {
+        process = {
+          argv = [ "/bin/flagged" ];
+          flags = {
+            "--bool-off" = false;
+            "--bool-on" = true;
+            "--config" = ./test.nix;
+            "--count" = 3;
+            "--name" = "example";
+            "--unset" = null;
+          };
+        };
+      };
+      # A `flagFormat` that joins with `=` and spells out booleans.
+      flagsCustomFormat = {
+        process = {
+          argv = [ "/bin/flagged" ];
+          flagFormat = name: {
+            option = "--${name}";
+            sep = "=";
+            explicitBool = true;
+          };
+          flags = {
+            port = 8080;
+            quiet = false;
+            verbose = true;
+          };
+        };
+      };
+      # The list form, which allows a flag to be repeated.
+      flagsRepeated = {
+        process = {
+          argv = [ "/bin/flagged" ];
+          flags = [
+            { "--host" = "a"; }
+            { "--host" = "b"; }
+          ];
+        };
+      };
+      # `argv` and `flags` share one `lib.mkOrder` space.
+      flagsOrdering = {
+        process = {
+          argv = lib.mkMerge [
+            (lib.mkBefore [ "/bin/gt" ])
+            (lib.mkOrder 800 [ "server" ])
+            (lib.mkAfter [ "TRAILING" ])
+          ];
+          flags = lib.mkMerge [
+            { "--listen" = "a"; }
+            { "--disable-landlock" = lib.mkOrder 600 true; }
+          ];
+        };
+      };
     };
   };
 
@@ -159,6 +213,65 @@ let
               ];
               warnings = [ "The `bar' service is deprecated and will go away soon!" ];
             };
+            assertions = [ ];
+            warnings = [ ];
+          };
+          flagsDefault = {
+            process = {
+              argv = [
+                "/bin/flagged"
+                "--bool-on"
+                "--config"
+                "${./test.nix}"
+                "--count"
+                "3"
+                "--name"
+                "example"
+              ];
+            };
+            services = { };
+            assertions = [ ];
+            warnings = [ ];
+          };
+          flagsCustomFormat = {
+            process = {
+              argv = [
+                "/bin/flagged"
+                "--port=8080"
+                "--quiet=false"
+                "--verbose=true"
+              ];
+            };
+            services = { };
+            assertions = [ ];
+            warnings = [ ];
+          };
+          flagsRepeated = {
+            process = {
+              argv = [
+                "/bin/flagged"
+                "--host"
+                "a"
+                "--host"
+                "b"
+              ];
+            };
+            services = { };
+            assertions = [ ];
+            warnings = [ ];
+          };
+          flagsOrdering = {
+            process = {
+              argv = [
+                "/bin/gt"
+                "--disable-landlock"
+                "server"
+                "--listen"
+                "a"
+                "TRAILING"
+              ];
+            };
+            services = { };
             assertions = [ ];
             warnings = [ ];
           };
