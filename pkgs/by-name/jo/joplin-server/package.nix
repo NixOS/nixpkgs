@@ -92,7 +92,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Joplin Synchronization Server";
     homepage = "https://joplinapp.org/";
-    license = lib.licenses.agpl3Only;
+    license = lib.licenses.unfreeRedistributable;
     maintainers = with lib.maintainers; [ Apollo-sudo767 ];
     mainProgram = "joplin-server";
     platforms = [ "x86_64-linux" ];
