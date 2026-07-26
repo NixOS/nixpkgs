@@ -10,18 +10,18 @@
 
 let
   pname = "osu-lazer-bin";
-  version = "2026.711.0";
+  version = "2026.726.0";
 
   src =
     {
       aarch64-darwin = fetchzip {
         url = "https://github.com/ppy/osu/releases/download/${version}-lazer/osu.app.Apple.Silicon.zip";
-        hash = "sha256-XwfNO38dDaUmu/3AEgRwV0VW6JrAUCxWD6Wt0Ew23Eo=";
+        hash = "sha256-LwikashfaYrKB2LqQ0YleOqu0ikykxrSgZE68aRaV9s=";
         stripRoot = false;
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/ppy/osu/releases/download/${version}-lazer/osu.AppImage";
-        hash = "sha256-KyA5UCvb9epk7jRtdG5wl0LzKc6/D2rkw5EJQxIaihw=";
+        hash = "sha256-PTAoYJVD3/0DewBlJgP3WShRUQC2JFvJKancRv07KaA=";
       };
     }
     .${stdenvNoCC.system} or (throw "osu-lazer-bin: ${stdenvNoCC.system} is unsupported.");
