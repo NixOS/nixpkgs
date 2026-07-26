@@ -2,11 +2,7 @@
 
 ## Introduction {#javascript-introduction}
 
-This contains instructions on how to package JavaScript applications.
-
-The various tools available will be listed in the [tools-overview](#javascript-tools-overview).
-Some general principles for packaging will follow.
-Finally, some tool-specific instructions will be given.
+Package JavaScript applications with the tools below.
 
 ## Getting unstuck / finding code examples {#javascript-finding-examples}
 
@@ -27,7 +23,7 @@ Searching online for prior art can be helpful if you are running into solved pro
 
 ## General principles {#javascript-general-principles}
 
-The following principles are given in order of importance with potential exceptions.
+The principles below are ordered by importance.
 
 ### Use the same Node.js version as upstream {#javascript-upstream-node-version}
 
