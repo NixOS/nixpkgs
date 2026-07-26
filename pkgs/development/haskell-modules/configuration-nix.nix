@@ -777,9 +777,13 @@ builtins.intersectAttrs super {
   # Wants to check against a real DB, Needs freetds
   odbc = dontCheck (addExtraLibraries [ pkgs.freetds ] super.odbc);
 
-  # Tests attempt to use npm to install from the network into
-  # /homeless-shelter. Disabled.
-  purescript = dontCheck super.purescript;
+  purescript = lib.pipe super.purescript [
+    # Tests attempt to use npm to install from the network into
+    # /homeless-shelter. Disabled.
+    dontCheck
+    # Generate shell completions
+    (self.generateOptparseApplicativeCompletions [ "purs" ])
+  ];
 
   # Hardcoded include path
   poppler = overrideCabal (drv: {
@@ -1851,9 +1855,11 @@ builtins.intersectAttrs super {
     enableSeparateBinOutput super.cachix
   );
 
-  hercules-ci-agent = super.hercules-ci-agent.override {
-    nix = self.hercules-ci-cnix-store.passthru.nixPackage;
-  };
+  hercules-ci-agent = self.generateOptparseApplicativeCompletions [ "hercules-ci-agent" ] (
+    super.hercules-ci-agent.override {
+      nix = self.hercules-ci-cnix-store.passthru.nixPackage;
+    }
+  );
   hercules-ci-cnix-expr = addTestToolDepend pkgs.git (
     super.hercules-ci-cnix-expr.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; }
   );
@@ -2362,6 +2368,31 @@ builtins.intersectAttrs super {
 
   # Workaround for flaky test: https://github.com/basvandijk/threads/issues/10
   threads = appendPatch ./patches/threads-flaky-test.patch super.threads;
+
+  idris = (self.generateOptparseApplicativeCompletions [ "idris" ]) super.idris;
+
+  # Generate cli completions for dhall.
+  dhall = self.generateOptparseApplicativeCompletions [ "dhall" ] super.dhall;
+  dhall-json = self.generateOptparseApplicativeCompletions [
+    "dhall-to-json"
+    "dhall-to-yaml"
+  ] super.dhall-json;
+  dhall-nix = self.generateOptparseApplicativeCompletions [ "dhall-to-nix" ] super.dhall-nix;
+  dhall-nixpkgs = self.generateOptparseApplicativeCompletions [
+    "dhall-to-nixpkgs"
+  ] super.dhall-nixpkgs;
+  dhall-yaml = self.generateOptparseApplicativeCompletions [
+    "dhall-to-yaml-ng"
+    "yaml-to-dhall"
+  ] super.dhall-yaml;
+
+  update-nix-fetchgit = self.generateOptparseApplicativeCompletions [
+    "update-nix-fetchgit"
+  ] super.update-nix-fetchgit;
+
+  hinit = self.generateOptparseApplicativeCompletions [ "hi" ] super.hinit;
+
+  hercules-ci-cli = self.generateOptparseApplicativeCompletions [ "hci" ] super.hercules-ci-cli;
 }
 
 // lib.optionalAttrs pkgs.config.allowAliases (
