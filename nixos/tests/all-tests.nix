@@ -649,6 +649,7 @@ in
     forgejoPackage = pkgs.forgejo-lts;
   };
   freenet = runTest ./freenet.nix;
+  freenet-core = runTest ./freenet-core.nix;
   freescout = import ./freescout {
     inherit runTest;
   };

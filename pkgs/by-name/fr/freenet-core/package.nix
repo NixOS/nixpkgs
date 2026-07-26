@@ -8,6 +8,7 @@
   versionCheckHook,
   rustc,
   nix-update-script,
+  nixosTests,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "freenet-core";
@@ -39,7 +40,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # worth trying to skip specific ones
   doCheck = false;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = {
+      inherit (nixosTests) freenet-core;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Peer-to-peer platform for decentralized applications";

@@ -68,6 +68,12 @@
   "module-boot-plymouth-tpm2-totp-quick-start-enable": [
     "index.html#module-boot-plymouth-tpm2-totp-quick-start-enable"
   ],
+  "module-services-freenet-core": [
+    "index.html#module-services-freenet-core"
+  ],
+  "module-services-freenet-core-quick-start": [
+    "index.html#module-services-freenet-core-quick-start"
+  ],
   "module-services-keycloak-unix-socket": [
     "index.html#module-services-keycloak-unix-socket"
   ],

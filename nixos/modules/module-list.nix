@@ -1228,6 +1228,7 @@
   ./services/networking/firezone/relay.nix
   ./services/networking/firezone/server.nix
   ./services/networking/flannel.nix
+  ./services/networking/freenet-core.nix
   ./services/networking/freenet.nix
   ./services/networking/freeradius.nix
   ./services/networking/frp.nix
