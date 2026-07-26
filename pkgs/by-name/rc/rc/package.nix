@@ -33,7 +33,7 @@ assert (lineEditingLibrary == "readline") -> readlineSupport;
 assert (lineEditingLibrary == "editline") -> editlineSupport;
 stdenv.mkDerivation (finalAttrs: {
   pname = "rc";
-  version = "unstable-2025-10-01";
+  version = "1.7.4-unstable-2025-10-01";
 
   src = fetchFromGitHub {
     owner = "rakitzis";
