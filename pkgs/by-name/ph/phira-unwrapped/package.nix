@@ -14,7 +14,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "phira-unwrapped";
-  version = "0.7.1";
+  version = "0.8.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "TeamFlos";
     repo = "phira";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bn1vRxL4O32Txna3RqafOzXISziDiL//S8NwiIK5c4M=";
+    hash = "sha256-v0gx5+I36J0gTS+uy2dw5+q6evg9xPmdMC4IGNawQd0=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./assets.patch
   ];
 
-  cargoHash = "sha256-a+bQ5d9n18jrsgnqygBlMKWlu7KPU5tbQQSXRXE5zWY=";
+  cargoHash = "sha256-cQ0yq4jMdf32lL5IKxg7h3+YlAJZwNW22vpPsyH1JH0=";
 
   # The developer put assets necessary for this test in gitignore, so it cannot run.
   checkFlags = [ "--skip=test_parse_chart" ];
