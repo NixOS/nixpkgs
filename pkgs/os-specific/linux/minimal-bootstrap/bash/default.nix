@@ -50,6 +50,12 @@ bootBash.runCommand "${pname}-${version}"
     ];
 
     passthru.runCommand =
+      let
+        defaultBuildInputs = [
+          bash
+          coreutils
+        ];
+      in
       name: env: buildCommand:
       derivationWithMeta (
         {
@@ -76,13 +82,7 @@ bootBash.runCommand "${pname}-${version}"
           passAsFile = [ "buildCommand" ];
 
           SHELL = "${bash}/bin/bash";
-          PATH = lib.makeBinPath (
-            (env.nativeBuildInputs or [ ])
-            ++ [
-              bash
-              coreutils
-            ]
-          );
+          PATH = lib.makeBinPath ((env.nativeBuildInputs or [ ]) ++ defaultBuildInputs);
           passthru = (env.passthru or { }) // {
             isFromMinBootstrap = true;
           };
