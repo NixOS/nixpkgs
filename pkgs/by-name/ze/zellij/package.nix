@@ -3,24 +3,36 @@
   zellij-unwrapped,
   makeBinaryWrapper,
   stdenvNoCC,
+  symlinkJoin,
 
   extraPackages ? [ ],
 }:
-stdenvNoCC.mkDerivation {
-  inherit (zellij-unwrapped) version meta;
-  pname = "zellij";
+if extraPackages == [ ] then
+  symlinkJoin {
+    inherit (zellij-unwrapped) version meta;
+    pname = "zellij";
 
-  __structuredAttrs = true;
-  strictDeps = true;
+    __structuredAttrs = true;
+    strictDeps = true;
 
-  src = zellij-unwrapped;
-  dontUnpack = true;
+    paths = [ zellij-unwrapped ];
+  }
+else
+  stdenvNoCC.mkDerivation {
+    inherit (zellij-unwrapped) version meta;
+    pname = "zellij";
 
-  nativeBuildInputs = [ makeBinaryWrapper ];
-  buildPhase = ''
-    cp -rs --no-preserve=mode "$src" "$out"
+    __structuredAttrs = true;
+    strictDeps = true;
 
-    wrapProgram "$out/bin/zellij" \
-      --prefix PATH : '${lib.makeBinPath extraPackages}'
-  '';
-}
+    src = zellij-unwrapped;
+    dontUnpack = true;
+
+    nativeBuildInputs = [ makeBinaryWrapper ];
+    buildPhase = ''
+      cp -rs --no-preserve=mode "$src" "$out"
+
+      wrapProgram "$out/bin/zellij" \
+        --prefix PATH : '${lib.makeBinPath extraPackages}'
+    '';
+  }
