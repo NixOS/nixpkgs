@@ -7,8 +7,9 @@ let
     match
     ;
 
-  # Since <nix/fetchurl.nix> currently supports only one URI,
-  # use the first listed mirror.
+  # Handle mirror:// URIs. Since <nix/fetchurl.nix> currently
+  # supports only one URI, use the first listed mirror.
+  matchMirror = match "mirror://([a-z]+)/(.*)";
   mirrors = mapAttrs (_: head) (import ./mirrors.nix);
 in
 
@@ -51,10 +52,9 @@ import <nix/fetchurl.nix> {
     ;
 
   url =
-    # Handle mirror:// URIs.
     let
       url_ = handleUrl url;
-      m = match "mirror://([a-z]+)/(.*)" url_;
+      m = matchMirror url_;
     in
     if m == null then url_ else mirrors.${head m} + (elemAt m 1);
 }
