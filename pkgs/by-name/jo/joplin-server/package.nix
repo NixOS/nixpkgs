@@ -28,6 +28,7 @@ stdenv.mkDerivation {
   __structuredAttrs = true;
   pname = "joplin-server";
   inherit version;
+  strictDeps = true;
 
   nativeBuildInputs = [
     gnutar
