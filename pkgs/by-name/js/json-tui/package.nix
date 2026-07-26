@@ -47,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
+  env.NIX_CFLAGS_COMPILE = "-fexceptions";
+
   cmakeFlags = [
     "-Wno-dev" # suppress cmake warning about deprecated usage
     (lib.cmakeBool "JSON_TUI_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
