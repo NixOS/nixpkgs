@@ -2537,6 +2537,16 @@ with haskellLib;
   # https://github.com/diogob/postgres-websockets/issues/116
   postgres-websockets = doJailbreak super.postgres-websockets;
 
+  jose-jwt = appendPatches [
+    # https://github.com/tekul/jose-jwt/issues/49
+    (pkgs.fetchpatch {
+      name = "crypton-1.1-and-ram.patch";
+      url = "https://github.com/tekul/jose-jwt/commit/f93bd9436d798eb81618fa0f699f677194efcf8c.patch";
+      includes = [ "jose-jwt.cabal" ];
+      sha256 = "sha256-XEqDEUtYOcWieHOoczbtucQsLKS12ini2SL94hG4w+o=";
+    })
+  ] ((warnAfterVersion "0.10.0") super.jose-jwt);
+
   postgrest =
     lib.pipe
       (super.postgrest.overrideScope (
