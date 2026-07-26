@@ -48,6 +48,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     poetry-core
   ];
 
+  pythonRelaxDeps = [
+    "pandas"
+  ];
+
   installPhase = ''
     runHook preInstall
 

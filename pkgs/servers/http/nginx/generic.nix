@@ -288,6 +288,7 @@ stdenv.mkDerivation {
           nginx-etag-compression
           nginx-globalredirect
           nginx-http3
+          nginx-lua
           nginx-proxyprotocol
           nginx-pubhtml
           nginx-sso
@@ -311,7 +312,7 @@ stdenv.mkDerivation {
         description = "Reverse proxy and lightweight webserver";
         mainProgram = "nginx";
         homepage = "https://nginx.org";
-        license = [ lib.licenses.bsd2 ] ++ lib.concatMap (m: m.meta.license) modules;
+        license = [ lib.licenses.bsd2 ] ++ lib.concatMap (m: lib.toList m.meta.license) modules;
         broken = lib.any (m: m.meta.broken or false) modules;
         platforms = lib.platforms.all;
         maintainers = with lib.maintainers; [

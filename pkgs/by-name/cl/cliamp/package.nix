@@ -16,16 +16,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "cliamp";
-  version = "1.57.1";
+  version = "1.61.0";
 
   src = fetchFromGitHub {
     owner = "bjarneo";
     repo = "cliamp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wRXF2bnl3xFJtuESJX2UVSsPwl4xo6E+k7nIdtzCULo=";
+    hash = "sha256-BbyaZw+OvC6rb60Z2whhHj2iKow/ZJJ8VzuwPX7bHIE=";
   };
 
-  vendorHash = "sha256-A2Ygc1a9e2flZzaNAEXvr8Ui1cE89TxBfUNALmDzIo0=";
+  vendorHash = "sha256-KYjP6qEINdSlcDSEMKxMwDfXzuQPAQSe4oZh+o4PrFs=";
 
   nativeBuildInputs = [
     pkg-config
@@ -40,6 +40,11 @@ buildGoModule (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
   ];
+
+  # macOS limits Unix socket paths to 104 bytes; use a shorter TMPDIR.
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export TMPDIR="$(mktemp -d /tmp/cliamp-XXXXXX)"
+  '';
 
   postInstall = ''
     wrapProgram $out/bin/cliamp \
@@ -60,6 +65,7 @@ buildGoModule (finalAttrs: {
     description = "Terminal Winamp - a retro terminal music player inspired by Winamp 2.x";
     homepage = "https://github.com/bjarneo/cliamp";
     license = lib.licenses.mit;
+    platforms = with lib.platforms; darwin ++ linux;
     maintainers = with lib.maintainers; [ supermarin ];
     mainProgram = "cliamp";
   };

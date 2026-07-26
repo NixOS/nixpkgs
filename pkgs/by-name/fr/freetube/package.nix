@@ -2,13 +2,14 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  fetchYarnDeps,
+  fetchPnpmDeps,
   replaceVars,
   makeDesktopItem,
 
   nodejs,
-  yarnConfigHook,
-  yarnBuildHook,
+  pnpmConfigHook,
+  pnpmBuildHook,
+  pnpm_10,
   makeShellWrapper,
   copyDesktopItems,
   electron,
@@ -17,17 +18,21 @@
 }:
 let
   description = "Open Source YouTube app for privacy";
+  pnpm = pnpm_10;
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "freetube";
-  version = "0.24.1";
+  version = "0.25.1";
 
   src = fetchFromGitHub {
     owner = "FreeTubeApp";
     repo = "FreeTube";
     tag = "v${finalAttrs.version}-beta";
-    hash = "sha256-oo5ozdP3d82jY8OOYrt568MoSfPmwBoitdtgESiRMlE=";
+    hash = "sha256-CQiwAoOJoAZpcDIwqcOfUAvJHLWTdj8fIInlR3qyjg8=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   # Darwin requires writable Electron dist
   postUnpack =
@@ -48,15 +53,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ./targets.patch
   ];
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-9rO/XYfOf1TEQOpb5clCfdTiuDeynpnk6L4WpcIIWGk=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-NWCgUjBuSeEl65mmAeJzOyIxCi2ha0Nr5qjOQq+CtMQ=";
   };
 
   nativeBuildInputs = [
     nodejs
-    yarnConfigHook
-    yarnBuildHook
+    pnpmConfigHook
+    pnpmBuildHook
+    pnpm
     makeShellWrapper
     copyDesktopItems
   ];

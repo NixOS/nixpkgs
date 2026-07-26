@@ -17,10 +17,6 @@ let
           url = "https://github.com/hoppscotch/releases/releases/download/v${version}/Hoppscotch_mac_aarch64.dmg";
           hash = "sha256-RnLMpXkDAk89T5ogNiVz8zMMdLtXTlAg5nu+sjyczEk=";
         };
-        x86_64-darwin = {
-          url = "https://github.com/hoppscotch/releases/releases/download/v${version}/Hoppscotch_mac_x64.dmg";
-          hash = "sha256-dBjwElYc3+TpAbho/8p946VtEDlCVDsfCSidQUKVC/U=";
-        };
         x86_64-linux = {
           url = "https://github.com/hoppscotch/releases/releases/download/v${version}/Hoppscotch_linux_x64.AppImage";
           hash = "sha256-irPI613Y1l0j5F+Nzm9v/JXsiJY35D8dQpmMcPMYvmU=";
@@ -46,7 +42,6 @@ let
     mainProgram = "hoppscotch";
     platforms = [
       "aarch64-darwin"
-      "x86_64-darwin"
       "x86_64-linux"
     ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];

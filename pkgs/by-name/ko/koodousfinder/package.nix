@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication {
   meta = {
     description = "Tool to allows users to search for and analyze Android apps";
     homepage = "https://github.com/HuntDownProject/KoodousFinder";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

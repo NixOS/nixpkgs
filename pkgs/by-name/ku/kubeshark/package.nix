@@ -66,7 +66,7 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/kubeshark/kubeshark/releases/tag/v${finalAttrs.version}";
     description = "API Traffic Viewer for Kubernetes";
     mainProgram = "kubeshark";
-    homepage = "https://kubeshark.co/";
+    homepage = "https://kubeshark.com/";
     license = lib.licenses.asl20;
     longDescription = ''
       The API traffic viewer for Kubernetes providing real-time, protocol-aware visibility into Kubernetes’ internal network,

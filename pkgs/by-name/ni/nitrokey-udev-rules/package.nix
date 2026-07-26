@@ -39,7 +39,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "udev rules for Nitrokey devices";
     homepage = "https://github.com/Nitrokey/nitrokey-udev-rules";
-    license = [ lib.licenses.cc0 ];
+    license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [
       robinkrahl
     ];

@@ -211,17 +211,22 @@ fn die() -> ! {
     std::process::exit(code);
 }
 
+/// Parses the key-value pairs of `/etc/os-release`.
+/// Absence or emptiness of the file become the empty map.
+/// Failure to read returns an error Result.
 fn parse_os_release() -> Result<HashMap<String, String>> {
-    Ok(std::fs::read_to_string("/etc/os-release")
-        .context("Failed to read /etc/os-release")?
-        .lines()
-        .fold(HashMap::new(), |mut acc, line| {
-            if let Some((k, v)) = line.split_once('=') {
-                acc.insert(k.to_string(), v.to_string());
-            }
+    let contents = match std::fs::read_to_string("/etc/os-release") {
+        Ok(contents) => contents,
+        Err(err) if err.kind() == std::io::ErrorKind::NotFound => String::new(),
+        Err(err) => return Err(err).context("Failed to read /etc/os-release"),
+    };
+    Ok(contents.lines().fold(HashMap::new(), |mut acc, line| {
+        if let Some((k, v)) = line.split_once('=') {
+            acc.insert(k.to_string(), v.to_string());
+        }
 
-            acc
-        }))
+        acc
+    }))
 }
 
 fn do_pre_switch_check(command: &str, toplevel: &Path, action: &Action) -> Result<()> {
@@ -2001,9 +2006,9 @@ won't take effect until you reboot the system.
             // Swap entry disappeared, so turn it off.  Can't use "systemctl stop" here because
             // systemd has lots of alias units that prevent a stop from actually calling "swapoff".
             if *action == Action::DryActivate {
-                eprintln!("would stop swap device: {}", &device);
+                eprintln!("would stop swap device: {}", device);
             } else {
-                eprintln!("stopping swap device: {}", &device);
+                eprintln!("stopping swap device: {}", device);
                 let c_device = std::ffi::CString::new(device.clone())
                     .context("failed to convert device to cstring")?;
                 if unsafe { nix::libc::swapoff(c_device.as_ptr()) } != 0 {
@@ -2376,7 +2381,7 @@ won't take effect until you reboot the system.
     match logind.list_users() {
         Err(err) => {
             eprintln!("Unable to list users with logind: {err}");
-            die();
+            exit_code = 4;
         }
         Ok(users) => {
             for (uid, name, user_dbus_path) in users {

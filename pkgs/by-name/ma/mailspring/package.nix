@@ -1,9 +1,11 @@
 {
   lib,
+  stdenv,
   buildNpmPackage,
   callPackage,
   fetchFromGitHub,
 
+  actool,
   makeBinaryWrapper,
   pkg-config,
   wrapGAppsHook3,
@@ -16,19 +18,18 @@
   commandLineArgs ? "",
 }:
 let
-  version = "1.22.0";
+  version = "1.23.0";
 
   src = fetchFromGitHub {
     owner = "Foundry376";
     repo = "Mailspring";
     tag = version;
-    hash = "sha256-32d0WIWqCsZlvuT+RDa3EYxkwTxWzQyLIfASiDfZnL8=";
+    hash = "sha256-GbY3lov3MT8c8LehEifzOH28VAYpBWDbwXrqEfFfwJg=";
     fetchSubmodules = true;
   };
 
   patches = [
-    # zip extraction fails on newer nodejs versions without this fix
-    ./bump-yauzl.patch
+    ./remove-rpm-deb-and-macos-package-generation.patch
   ];
 
   electron = electron_41;
@@ -39,7 +40,7 @@ let
     pname = "mailspring-app";
     inherit version src patches;
     postPatch = "cd app"; # we don't use sourceRoot so that we don't have to make the patch relative to it
-    npmDepsHash = "sha256-/caWmbN4Sl3DVPLXSaXrCHEyRsk/p3FwDqSZ7lfNgUk=";
+    npmDepsHash = "sha256-JkjtC4WT3cBsVlmrfO5WAxU1Xe3vXbxuNBDs2Q7fEck=";
     dontNpmBuild = true;
     env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
@@ -56,7 +57,6 @@ let
       platforms = [
         "x86_64-linux"
         "aarch64-linux"
-        "x86_64-darwin"
         "aarch64-darwin"
       ];
     };
@@ -66,13 +66,16 @@ buildNpmPackage (finalAttrs: {
   pname = "mailspring";
   inherit version src patches;
 
-  npmDepsHash = "sha256-nHKFuTdk3qbAiSHksSo++mc8TMasspuym7MYxjuTTHI=";
+  npmDepsHash = "sha256-0cg/DT0MUbfzTq5hejH7auSk77M9Md7FWzidov8iyA4=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
     pkg-config
     wrapGAppsHook3
     zip
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    actool
   ];
 
   npmFlags = [ "--ignore-scripts" ];
@@ -95,8 +98,7 @@ buildNpmPackage (finalAttrs: {
     substituteInPlace app/build/build.js \
       --replace-fail "runWriteCommitHashIntoPackage," "" \
       --replace-fail "runUpdateSandboxHelperPermissions," "" \
-      --replace-fail "runCopySymlinkedPackages," "" \
-      --replace-fail "process.argv.includes('--skip-installers')" "true"
+      --replace-fail "runCopySymlinkedPackages," ""
 
     # Use npm env vars to make node-gyp compile against the electron ABI
     export npm_config_target="${electron.version}"
@@ -125,17 +127,38 @@ buildNpmPackage (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/mailspring $out/bin
+    mkdir -p $out/bin
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
 
-    ASAR_PATH=$(find app/dist -name "app.asar" -print -quit)
-    cp -R "$(dirname "$ASAR_PATH")" $out/share/mailspring/resources
+      mkdir -p $out/share/mailspring
+      cp -r app/dist/*/resources $out/share/mailspring
+
+      install -Dm444 app/dist/Mailspring.desktop $out/share/applications/Mailspring.desktop
+      install -Dm444 app/dist/mailspring.metainfo.xml $out/share/metainfo/mailspring.metainfo.xml
+
+      for size in 16 32 64 128 256 512; do
+        install -Dm444 app/build/resources/linux/icons/$size.png \
+          $out/share/icons/hicolor/''${size}x''${size}/apps/mailspring.png
+      done
 
     makeWrapper ${lib.getExe electron} "$out/bin/mailspring" \
       --add-flags "$out/share/mailspring/resources/app.asar" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ html-tidy ]}" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
-      --add-flags ${lib.escapeShellArg commandLineArgs}
+      --add-flags ${lib.escapeShellArg commandLineArgs} \
+      --inherit-argv0
 
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+
+    mkdir -p $out/Applications
+    cp -r app/dist/*/Mailspring.app $out/Applications
+
+    makeWrapper "$out/Applications/Mailspring.app/Contents/MacOS/Mailspring" "$out/bin/mailspring" \
+      --add-flags ${lib.escapeShellArg commandLineArgs}
+  ''
+  + ''
     runHook postInstall
   '';
 
@@ -154,7 +177,6 @@ buildNpmPackage (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

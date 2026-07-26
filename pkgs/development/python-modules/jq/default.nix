@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "jq";
-  version = "1.11.0";
+  version = "1.12.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mwilliamson";
     repo = "jq.py";
     tag = version;
-    hash = "sha256-v5Hi3SkLKX7KrCHiXDuEThSLghDU5VVhNGt1KpMEqC4=";
+    hash = "sha256-glWEqoS+QaoIiBJu9DXd+VvhPnWOgRT4VaYfMpjbR5g=";
   };
 
   env.JQPY_USE_SYSTEM_LIBS = 1;

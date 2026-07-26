@@ -35,9 +35,11 @@ let
       inherit (lib.versions) range;
     in
     lib.switch rocq-core.rocq-version [
+      (case (range "9.2" "9.3") "2.6.0") # also compiles on Rocq 9.0 and 9.1
       (case (range "9.0" "9.1") "2.5.0")
     ] null;
   release = {
+    "2.6.0".sha256 = "sha256-SovoQ++213r8ISljts81j9E9G1vxVrFy+hhpsCw1fDY=";
     "2.5.0".sha256 = "sha256-M/6IP4WhTQ4j2Bc8nXBXjSjWO08QzNIYI+a2owfOh+8=";
   };
   releaseRev = v: "mathcomp-${v}";

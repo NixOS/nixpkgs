@@ -7,16 +7,16 @@
 }:
 buildNpmPackage rec {
   pname = "todoist-cli";
-  version = "1.75.3";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "Doist";
     repo = "todoist-cli";
     rev = "v${version}";
-    sha256 = "sha256-OqpwGMMEVpCLogSarf+RJBHXxvSf9EulwYO5hsuDXPY=";
+    sha256 = "sha256-5+FxpTQmxeoNF/lTjKvFxP1T7HYt7YaUflTvw0GcOac=";
   };
 
-  npmDepsHash = "sha256-Wz7UxeZwC0boDBb9hGomELJ37mK+3aL8szpYDYDtjUg=";
+  npmDepsHash = "sha256-IVabpRYKMI6ST/TumG7pMwDoUMIJBlhjUm35Eo7mSlE=";
 
   doCheck = true;
 

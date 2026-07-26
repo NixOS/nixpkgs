@@ -13,8 +13,8 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nomacs";
-  version = "3.22.1";
-  hash = "sha256-20ieFrIkoz4/T4QLK2PNdGPhw9Aj1+a9PimDvTKLqpg=";
+  version = "3.23.1";
+  hash = "sha256-Udc+J+AYJZviWJhPtWvtXDss7Wqm9Gc9T8KsfOkx4EE=";
 
   src = fetchFromGitHub {
     owner = "nomacs";
@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
       between images.
     '';
     changelog = "https://github.com/nomacs/nomacs/releases/tag/${finalAttrs.src.rev}";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     mainProgram = "nomacs";
     maintainers = with lib.maintainers; [
       mindavi

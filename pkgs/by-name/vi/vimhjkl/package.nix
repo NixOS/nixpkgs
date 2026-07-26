@@ -3,11 +3,12 @@
   python3Packages,
   fetchFromGitHub,
   nix-update-script,
+  testers,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "vimhjkl";
-  version = "0.5.1";
+  version = "0.6.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -15,7 +16,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "S-Sigdel";
     repo = "vimhjkl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1Hh6bXuuK3udixgU32yFWkBa9NA3Z7kqI50ynSGCZ+o=";
+    hash = "sha256-uBXz2O2PwtnmibaR4e/l+lKIUh7WN2Hvh6nUfpUuEeA=";
   };
 
   build-system = [
@@ -31,7 +32,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
       --replace-fail "uv_build>=0.11,<0.12" "uv_build"
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   meta = {
     description = "Learn vim from your terminal with spaced repetition";

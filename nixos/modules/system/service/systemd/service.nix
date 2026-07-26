@@ -113,6 +113,44 @@ in
       defaultText = lib.literalExpression "config.systemd.lib.escapeSystemdExecArgs config.process.argv";
     };
 
+    systemd.mainExecReload = mkOption {
+      description = ''
+        Main command line for systemd's ExecReload with systemd's specifier and
+        environment variable substitution enabled.
+
+        This option sets the primary ExecRestart entry. Additional ExecReload entries
+        can be added via `systemd.service.serviceConfig.ExecReload` with `lib.mkBefore`
+        or `lib.mkAfter`.
+
+        This option allows you to use systemd specifiers like `%n` (unit name),
+        `%i` (instance), `%t` (runtime directory), and environment variables using
+        `''${VAR}` syntax in your command line.
+
+        By default, it is set to {option}`process.reloadCommand` when specified, or an
+        empty string otherwise. Because {option}`process.reloadCommand` is already a
+        command line (not an argument list), it is used verbatim so that references
+        like `$MAINPID` are preserved.
+
+        To extend {option}`process.reloadCommand` with systemd specifiers, you can append
+        to the command line:
+
+        ```nix
+        systemd.mainExecReload =
+          config.process.reloadCommand + " --systemd-unit %n";
+        ```
+
+        This pattern allows you to pass the unit name (or other systemd specifiers)
+        as additional arguments.
+
+        See {manpage}`systemd.service(5)` (section "COMMAND LINES") for details on
+        variable substitution and {manpage}`systemd.unit(5)` (section "SPECIFIERS")
+        for available specifiers like `%n`, `%i`, `%t`.
+      '';
+      type = types.nullOr types.str;
+      default = if config.process.reloadCommand != null then config.process.reloadCommand else "";
+      defaultText = lib.literalExpression "config.process.reloadCommand";
+    };
+
     systemd.services = mkOption {
       description = ''
         This module configures systemd services, with the notable difference that their unit names will be prefixed with the abstract service name.
@@ -170,7 +208,8 @@ in
       # TODO description;
       wantedBy = lib.mkDefault [ "multi-user.target" ];
       serviceConfig = {
-        Type = lib.mkDefault "simple";
+        ExecReload = config.systemd.mainExecReload;
+        Type = lib.mkDefault (if config.notificationProtocol.systemd then "notify" else "simple");
         Restart = lib.mkDefault "always";
         RestartSec = lib.mkDefault "5";
         ExecStart = [

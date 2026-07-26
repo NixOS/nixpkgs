@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdal";
-  version = "2.9.3";
+  version = "2.10.2";
 
   src = fetchFromGitHub {
     owner = "PDAL";
     repo = "PDAL";
     tag = finalAttrs.version;
-    hash = "sha256-htuvNheRwzpdSKc4FbwugBWWaCNC7/20TSKwRpLr+7Y=";
+    hash = "sha256-VxELHAiiFMKjsvgBK4Cm6YJSrs/4QhhF1haZv4/FlZg=";
   };
 
   nativeBuildInputs = [
@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     "pdal_io_stac_reader_test"
 
     # Require data to be downloaded from Internet
-    "pdal_io_copc_reader_test"
+    "pdal_io_copc_remote_reader_test"
   ];
 
   nativeCheckInputs = [

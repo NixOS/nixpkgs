@@ -10,20 +10,20 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "weather-forecast-card";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "troinine";
     repo = "ha-weather-forecast-card";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N3bE6HSXx6Vst6ZiMsJ490XBnlDQJDm+MoEunlLusnQ=";
+    hash = "sha256-/i0BUUmiRvH1ZycS8t7yUFeuO9e5SIHlBvWz98tMAZo=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-DDJpfkblo3E6YxWThs0rtkMabhRuDW2k5fszTo4Gud8=";
+    hash = "sha256-01AGz1k7I/ENOHhk7ycVFftd6yh/3Y9X1+Bc6lJshhU=";
   };
 
   nativeBuildInputs = [

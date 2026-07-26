@@ -230,7 +230,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       flosse
       mrVanDalo
-      paperdigits
       freyacodes
     ];
   };

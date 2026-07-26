@@ -4,6 +4,7 @@
   llvmPackages,
   setuptools,
   writeText,
+  pytestCheckHook,
 }:
 
 let
@@ -50,6 +51,10 @@ buildPythonPackage {
     # set passed libclang for runtime
     echo 'Config.set_library_path("${lib.getLib libclang}/lib")' >>./clang/cindex.py
   '';
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = libclang.meta // {
     description = "Python bindings for the C language family frontend for LLVM";

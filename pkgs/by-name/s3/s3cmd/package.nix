@@ -4,22 +4,28 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "s3cmd";
   version = "2.4.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "s3tools";
     repo = "s3cmd";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-cxwf6+9WFt3U7+JdKRgZxFElD+Dgf2P2VyejHVoiDJk=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     python-magic
     python-dateutil
   ];
+
+  build-system = with python3Packages; [ setuptools ];
+
+  pythonImportsCheck = [ "S3" ];
 
   meta = {
     homepage = "https://s3tools.org/s3cmd";
@@ -28,4 +34,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
   };
-}
+})

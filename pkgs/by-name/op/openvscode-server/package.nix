@@ -32,7 +32,6 @@ let
     {
       x86_64-linux = "linux-x64";
       aarch64-linux = "linux-arm64";
-      x86_64-darwin = "darwin-x64";
       aarch64-darwin = "darwin-arm64";
     }
     .${system} or (throw "Unsupported system ${system}");
@@ -41,6 +40,9 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvscode-server";
   version = "1.109.5";
+
+  executableName = "openvscode-server";
+  longName = "OpenVSCode Server";
 
   src = fetchFromGitHub {
     owner = "gitpod-io";
@@ -239,13 +241,11 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       dguenther
-      ghuntley
       emilytrau
     ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     mainProgram = "openvscode-server";

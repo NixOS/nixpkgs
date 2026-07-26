@@ -19,13 +19,13 @@
 
 rustPlatform.buildRustPackage {
   pname = "par-lang";
-  version = "0-unstable-2026-06-24";
+  version = "0-unstable-2026-07-24";
 
   src = fetchFromGitHub {
     owner = "par-team";
     repo = "par-lang";
-    rev = "fb93d7dd2c21a7825a57c74d6f22b250bb25d9bc";
-    hash = "sha256-9NKBjOMyemgPX/r7ot/RLut1FqWl8RfuuHhXUnkv1IM=";
+    rev = "9f667875a46b9cfe43d44fa7dcf41ff34ae74e11";
+    hash = "sha256-IF9VpwfRFCjTx+CkXyHOGIC+rilHWvRhQ0/xH8rgMwE=";
   };
 
   cargoHash = "sha256-8lG+cKN3/W+LYWhmOfDwGiq6u3nlLJaD5uNABaY0zRY=";

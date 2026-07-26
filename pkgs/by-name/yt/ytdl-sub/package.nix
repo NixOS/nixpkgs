@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ytdl-sub";
-  version = "2026.06.23";
+  version = "2026.07.17.post1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jmbannon";
     repo = "ytdl-sub";
     tag = finalAttrs.version;
-    hash = "sha256-VakqR66V90MIx6Bh5MS69iX1nZsFuTJ6YOJG90kf5s0=";
+    hash = "sha256-ypbGp0R8ExUXzxwPesQ+jYyVbBGeP79VLt4Xd9hTggA=";
   };
 
   postPatch = ''
@@ -59,6 +59,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_no_config_works"
     "test_presets_run"
     "test_thumbnail"
+    # fails in bwrap nix-portable sandbox
+    "test_directory_exists"
   ];
 
   disabledTestPaths = [

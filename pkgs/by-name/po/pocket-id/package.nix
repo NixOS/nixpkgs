@@ -1,30 +1,31 @@
 {
   lib,
   fetchFromGitHub,
-  buildGo126Module,
+  buildGo127Module,
   stdenvNoCC,
   nodejs,
   pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
+  pnpmBuildHook,
   nixosTests,
   nix-update-script,
   versionCheckHook,
 }:
-buildGo126Module (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "pocket-id";
-  version = "2.9.0";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZGjlEbx7gU1HHJRRSONFq/nYnubHOjfxQsVYpEHQkGE=";
+    hash = "sha256-keib2ebju6hKlH1XJQRBmXwxBsUnVZOIs+djvYkXYqU=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/backend";
 
-  vendorHash = "sha256-elY0YGOOtZtlLnyFiDJ6ZzZULhI183kZgsFmQQAg2EE=";
+  vendorHash = "sha256-/5lXAnb2FHeGBgrpU4Jpt2KX+sgGyYH61odppTaulbs=";
 
   env.CGO_ENABLED = 0;
   ldflags = [
@@ -42,7 +43,7 @@ buildGo126Module (finalAttrs: {
   ];
 
   # required for TestIsURLPrivate
-  __darwinAllowLocalNetworking = finalAttrs.doCheck;
+  __darwinAllowLocalNetworking = finalAttrs.finalPackage.doCheck;
 
   preFixup = ''
     mv $out/bin/cmd $out/bin/pocket-id
@@ -59,24 +60,19 @@ buildGo126Module (finalAttrs: {
     nativeBuildInputs = [
       nodejs
       pnpmConfigHook
+      pnpmBuildHook
       pnpm_10
     ];
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       pnpm = pnpm_10;
-      fetcherVersion = 3;
-      hash = "sha256-lQw+hmJcEBzMe3uOTmRErfHojAHwnRBN6aTy7yK9BCA=";
+      fetcherVersion = 4;
+      hash = "sha256-aJq5yLeeHY7zlOgSr1bOJCL8e1HBwCmoL7nTD2a06tg=";
     };
 
     env.BUILD_OUTPUT_PATH = "dist";
 
-    buildPhase = ''
-      runHook preBuild
-
-      pnpm --filter pocket-id-frontend build
-
-      runHook postBuild
-    '';
+    pnpmWorkspaces = [ "pocket-id-frontend" ];
 
     installPhase = ''
       runHook preInstall

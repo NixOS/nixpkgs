@@ -598,16 +598,23 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
       #   vLLM CPU backend requires AVX512, AVX2, Power9+ ISA, S390X ISA, ARMv8 or
       #   RISC-V support.
       "aarch64-darwin"
-
-      # CMake Error at cmake/cpu_extension.cmake:78 (find_isa):
-      # find_isa Function invoked with incorrect arguments for function named:
-      # find_isa
-      "x86_64-darwin"
     ];
     knownVulnerabilities = [
+      "CVE-2026-25960"
       "CVE-2026-27893"
+      "CVE-2026-41523"
       "CVE-2026-44222"
       "CVE-2026-44223"
+      "CVE-2026-47155"
+      "CVE-2026-48746"
+      "CVE-2026-53923"
+      "CVE-2026-54232"
+      "CVE-2026-54233"
+      "CVE-2026-54234"
+      "CVE-2026-54235"
+      "CVE-2026-54236"
+      "CVE-2026-55514"
+      "CVE-2026-55574"
     ];
   };
 })

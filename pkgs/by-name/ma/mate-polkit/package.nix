@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Integrates polkit authentication for MATE desktop";
     homepage = "https://mate-desktop.org";
-    license = [ lib.licenses.gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     teams = [ lib.teams.mate ];
   };

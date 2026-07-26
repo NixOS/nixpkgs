@@ -1037,6 +1037,9 @@ class Editor:
     def rewrite_input(self, *args, **kwargs):
         return rewrite_input(*args, **kwargs)
 
+    def configure_add_parser(self, _parser: argparse.ArgumentParser) -> None:
+        """Add updater-specific arguments to the add subcommand."""
+
     def create_parser(self):
         common = argparse.ArgumentParser(
             add_help=False,
@@ -1122,6 +1125,7 @@ class Editor:
             nargs="+",
             help=f"Plugin to add to {self.attr_path} from Github in the form owner/repo",
         )
+        self.configure_add_parser(padd)
 
         pupdate = subparsers.add_parser(
             "update",

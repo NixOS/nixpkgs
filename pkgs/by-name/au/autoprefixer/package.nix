@@ -11,13 +11,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "autoprefixer";
-  version = "10.5.0";
+  version = "10.5.4";
 
   src = fetchFromGitHub {
     owner = "postcss";
     repo = "autoprefixer";
     tag = finalAttrs.version;
-    hash = "sha256-s152v9sIuQLvhfPsZvQa+O9UhoASgm/e8dnz0t4pP3A=";
+    hash = "sha256-616VFB6qJiNfsDsaxR4Y+xoqKDrBOtKgWfGMeiaDeGQ=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 4;
-    hash = "sha256-Sxt4vtdlMdXxXqt22hfZJskj8mkB5t85IZ5BsbCoDF4=";
+    hash = "sha256-+EPzrG2vt2FRIwcJqwwiYPevQFCNAbX7kgFlY+vLbqE=";
   };
 
   installPhase = ''

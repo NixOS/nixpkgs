@@ -185,7 +185,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     llvmPackages.bintools
     (python3.withPackages (
       pythonPackages: with pythonPackages; [
-        setuptools
+        packaging
         libclang
       ]
     ))
@@ -233,7 +233,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
       cmakeFlagsArray+=("-DBUILD_TESTING:BOOL=FALSE")
     else
       echo "Keeping checkPhase as-is"
-      cmakeFlagsArray+=("${lib.cmakeBool "BUILD_TESTING" finalAttrs.doCheck}")
+      cmakeFlagsArray+=("${lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck}")
     fi
   '';
 

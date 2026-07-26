@@ -104,6 +104,6 @@ buildPythonPackage (finalAttrs: {
     platforms = lib.platforms.unix;
     mainProgram = "certbot";
     maintainers = with lib.maintainers; [ miniharinn ];
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
   };
 })

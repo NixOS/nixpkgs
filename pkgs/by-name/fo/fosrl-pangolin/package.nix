@@ -35,7 +35,7 @@ in
 
 buildNpmPackage (finalAttrs: {
   pname = "pangolin";
-  version = "1.19.4";
+  version = "1.21.0";
 
   __structuredAttrs = true;
   enableParallelBuilding = true;
@@ -44,11 +44,11 @@ buildNpmPackage (finalAttrs: {
     owner = "fosrl";
     repo = "pangolin";
     tag = finalAttrs.version;
-    hash = "sha256-Joo7N92ZbKybD15ojIIoEtjLjzcho5PqAzuGlj17zag=";
+    hash = "sha256-LR4UO2xrTLKmemDVsJWtEQoV2bDy6U2ahxTtA+SDymI=";
   };
 
   npmDepsFetcherVersion = 2;
-  npmDepsHash = "sha256-XOuP3WgV9Xt2uRhHVmnjjf46RV+Pv1pl8a71yTizn10=";
+  npmDepsHash = "sha256-EBectG1zNdUb30SlhAzy9rCwF/mYHAV4HZTRbk2CbDY=";
 
   nativeBuildInputs = [
     esbuild

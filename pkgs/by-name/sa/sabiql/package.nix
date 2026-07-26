@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sabiql";
-  version = "1.13.0";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "riii111";
     repo = "sabiql";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-HDaiCLu1L2aQ+9swQWWPzb9MWqI44ECf71KyhI43emk=";
+    hash = "sha256-vxkuYBakLzfZJyOPFD92kYB0QapfaLfwvw/La6kVQXY=";
   };
 
-  cargoHash = "sha256-5o68x2pOe4ArDzPJmGI9ooqRgs8rEReSFnpT8TKItl4=";
+  cargoHash = "sha256-UN/3VFGZdjZjBGqCxgdiWUCuDS3p+3z/WqQ9CCwwQAA=";
 
   # Upstream use latest rust version need to patch use nixpkgs version
   postPatch = ''

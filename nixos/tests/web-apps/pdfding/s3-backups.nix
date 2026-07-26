@@ -31,11 +31,19 @@ in
           backup.schedule = "*/1 * * * *";
           backup.endpoint = "[::]:3900";
           extraEnvironment.BACKUP_BUCKET_NAME = "pdfding-bucket";
-          extraEnvironment.BACKUP_REGION = "garage";
+          extraEnvironment.BACKUP_REGION = "us-east-1";
 
           envFiles = [ pdfding-s3-keys ];
           installTestHelpers = true;
         };
+
+        # NOTE: on aarch64-linux github actions runer due to lack of kvm, we need to delay pdfding start and give it more time to finish
+        systemd.services.pdfding.wantedBy = lib.mkIf pkgs.stdenv.hostPlatform.isAarch64 (lib.mkForce [ ]);
+        systemd.services.pdfding.serviceConfig.TimeoutStartSec =
+          lib.mkIf pkgs.stdenv.hostPlatform.isAarch64 "900";
+        systemd.services.pdfding-background.wantedBy = lib.mkIf pkgs.stdenv.hostPlatform.isAarch64 (
+          lib.mkForce [ ]
+        );
 
         # Setup a local garage service for the backup feature
         # taken from garage nixosTest
@@ -48,7 +56,7 @@ in
             rpc_secret = "5c1915fa04d0b6739675c61bf5907eb0fe3d9c69850c83820f51b4d25d13868c";
 
             s3_api = {
-              s3_region = "garage";
+              s3_region = "us-east-1";
               api_bind_addr = "[::]:3900";
               root_domain = ".s3.garage";
             };
@@ -113,6 +121,8 @@ in
 
       # create admin
       machine.wait_for_unit("multi-user.target")
+      machine.succeed("systemctl start pdfding.service")
+      machine.succeed("systemctl start pdfding-background.service")
       machine.wait_for_open_port(${toString port})
       machine.succeed("DJANGO_SUPERUSER_PASSWORD=admin pdfding-manage createsuperuser --no-input --username admin --email admin@localhost")
 
@@ -140,7 +150,7 @@ in
           -F "description=" \
           -F "collection=1" \
           -F "use_file_name=on" \
-          -F "name=test-upload" \
+          -F "name=dummy" \
           -F "file=@{test_pdf};type=application/pdf" \
           -F "csrfmiddlewaretoken=$csrf_token" \
           -H "Referer: {endpoint}/pdf/add" \

@@ -9,7 +9,6 @@
 
 let
   opencv4WithGtk = python3Packages.opencv4.override {
-    enableGtk2 = true; # For GTK2 support
     enableGtk3 = true; # For GTK3 support
   };
 in

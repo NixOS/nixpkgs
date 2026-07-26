@@ -51,7 +51,8 @@ jobs:
             ci/github-script
 
       - name: Install dependencies
-        run: npm install bottleneck@2.19.5
+        run: npm ci --package-lock-only=false bottleneck
+        working-directory: trusted/ci/github-script
 
       - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         if: github.event_name != 'pull_request' && vars.NIXPKGS_COMMIT_CHECK_CLIENT_ID
@@ -92,8 +93,8 @@ jobs:
     if: inputs.baseBranch && inputs.headBranch
     permissions:
       pull-requests: write
-    runs-on: ubuntu-slim
-    timeout-minutes: 3
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
@@ -147,7 +148,7 @@ jobs:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
           target-as-trusted-at: ${{ inputs.targetSha }}
 
-      - uses: cachix/install-nix-action@8aa03977d8d733052d78f4e008a241fd1dbf36b3 # v31.10.6
+      - uses: cachix/install-nix-action@630ae543ea3a38a9a4166f03376c02c50f408342 # v31.11.0
 
       - uses: cachix/cachix-action@5f2d7c5294214f71b873db4b969586b980625e71 # v17
         continue-on-error: true

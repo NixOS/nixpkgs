@@ -15,14 +15,13 @@ in
       description = ''
         Enable ReGreet, a clean and customizable greeter for greetd.
 
-        To use ReGreet, {option}`services.greetd` has to be enabled and
-        {option}`services.greetd.settings.default_session` should contain the
-        appropriate configuration to launch
-        {option}`config.programs.regreet.package`. For examples, see the
-        [ReGreet Readme](https://github.com/rharish101/ReGreet#set-as-default-session).
+        By default enables {option}`services.greetd` and configures a
+        {command}`default_session` to launch ReGreet using the
+        {command}`cage` compositor.
 
-        A minimal configuration that launches ReGreet in {command}`cage` is
-        enabled by this module by default.
+        See the
+        [ReGreet Readme](https://github.com/rharish101/ReGreet#set-as-default-session)
+        for other examples.
       '';
     };
 
@@ -48,8 +47,8 @@ in
         [ "-s" "-d" "-m" "last" ]
       '';
       description = ''
-        Additional arguments to be passed to
-        [cage](https://github.com/cage-kiosk/cage).
+        Arguments to be passed to [cage](https://github.com/cage-kiosk/cage)
+        when using it as the default compositor.
       '';
     };
 

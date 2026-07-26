@@ -152,6 +152,9 @@
   "ghc-deprecation-policy": [
     "index.html#ghc-deprecation-policy"
   ],
+  "how-channels-work": [
+    "index.html#how-channels-work"
+  ],
   "inkscape-plugins": [
     "index.html#inkscape-plugins"
   ],
@@ -395,9 +398,7 @@
     "index.html#pnpm-build-hook-honored-variables"
   ],
   "preface": [
-    "index.html#preface"
-  ],
-  "overview-of-nixpkgs": [
+    "index.html#preface",
     "index.html#overview-of-nixpkgs"
   ],
   "part-using": [
@@ -2920,7 +2921,8 @@
   "setup-hook-mpi-check": [
     "index.html#setup-hook-mpi-check"
   ],
-  "setup-hook-omp-check": [
+  "setup-hook-check-phase-thread-limit": [
+    "index.html#setup-hook-check-phase-thread-limit",
     "index.html#setup-hook-omp-check"
   ],
   "ninja": [

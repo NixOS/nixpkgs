@@ -52,7 +52,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "crawl4ai";
-  version = "0.9.0";
+  version = "0.9.1";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -61,7 +61,7 @@ buildPythonPackage (finalAttrs: {
     owner = "unclecode";
     repo = "crawl4ai";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MHCnhp7itaJ6y++uUCnObBjiJ9Jw/aFBtd35WzDBz1A=";
+    hash = "sha256-8sUsve3ha+CXElnvYjOzqoIR16KEJP5UekGMB27sGeU=";
   };
 
   pythonRelaxDeps = [

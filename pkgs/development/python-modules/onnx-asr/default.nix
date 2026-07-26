@@ -23,14 +23,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "onnx-asr";
-  version = "0.11.0";
+  version = "0.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "istupakov";
     repo = "onnx-asr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gi5U56ZPSo0bJ0Fmi8nebvIXENZWwX4lofk5vKV8gag=";
+    hash = "sha256-PUlGF8ICXWwSpeWufduJL7wLsIcI+bmoHrj9ZHrgX3U=";
   };
 
   build-system = [

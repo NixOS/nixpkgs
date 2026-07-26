@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "scipopt-soplex";
-  version = "8.0.2";
+  version = "8.0.3";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "soplex";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TW3OSBw8ok64kZedsXYjkO2eFqr0LH8uvrOsi3bwQC4=";
+    hash = "sha256-5UTlSfnNPVCkAE2oMVukVbbs2drbSh0HfiDqXUktBHQ=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://soplex.zib.de/";
     description = "Sequential object-oriented simPlex";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     mainProgram = "soplex";
     maintainers = with lib.maintainers; [ pmeinhold ];
     changelog = "https://soplex.zib.de/doc-${finalAttrs.version}/html/CHANGELOG.php";

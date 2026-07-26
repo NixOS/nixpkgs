@@ -12,17 +12,23 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rtk";
-  version = "0.43.0";
+  version = "0.44.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rtk-ai";
     repo = "rtk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-n5bkPPsrdM4fE5ltocTjlq+JwRgp39yib6S79fci4m4=";
+    hash = "sha256-Ev6w0Gi2y48DYi55GSciCoPgkUFaX44aH3UWGhs1OGk=";
   };
 
-  cargoHash = "sha256-XKUKdhxfnwUCOx9slqx4oUFa09HcosPLVh5Xkh87oSk=";
+  cargoHash = "sha256-x+6bZZh0s3YPgav7S/4VrYxZBWAlX1BmvCFJHLmIjGM=";
+
+  # Rust 1.97's dead_code_pub_in_binary analysis exposes dead code in test builds.
+  # Fixed upstream on develop after 0.44.0:
+  # https://github.com/rtk-ai/rtk/commit/73b8cb3069297374a3de58552b9fe4aa2cda3a41
+  # TODO: Remove RUSTFLAGS when updating rtk to the next release.
+  env.RUSTFLAGS = "--cap-lints warn";
 
   nativeBuildInputs = [
     makeWrapper

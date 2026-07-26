@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
 
   # nativeBuildInputs
   cmake,
@@ -36,14 +37,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.7.3";
+  version = "4.7.4";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wWqFJkXLRi3JtnEW3STTG/jBBIQK1dIYPZdKCiBn0m0=";
+    hash = "sha256-ny6s5hQUxopb6c45KJugYEZULkC8fLP+Au5ghic0KvI=";
   };
+
+  patches = [
+    # Fix for https://github.com/musescore/MuseScore/issues/34091 also reported
+    # downstream at: https://github.com/NixOS/nixpkgs/issues/540783. PR to
+    # track: https://github.com/musescore/MuseScore/pull/34204
+    (fetchpatch {
+      url = "https://github.com/musescore/MuseScore/commit/f273501e418842351c4bda10cce32b0e329eaff1.patch";
+      hash = "sha256-zrZRzeAHSFGtCuw/o4A3b1Blbo3FxKGxw1UDu9IggzY=";
+    })
+  ];
 
   cmakeFlags = [
     (lib.cmakeFeature "MUSE_APP_BUILD_MODE" "release")
@@ -74,17 +85,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   qtWrapperArgs = [
     # MuseScore JACK backend loads libjack at runtime.
-    "--prefix ${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH : ${
-      lib.makeLibraryPath [ libjack2 ]
-    }"
+    "--prefix"
+    "${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH"
+    ":"
+    (lib.makeLibraryPath [ libjack2 ])
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-    "--set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib"
+    "--set"
+    "ALSA_PLUGIN_DIR"
+    "${alsa-plugins}/lib/alsa-lib"
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     # There are some issues with using the wayland backend, see:
     # https://musescore.org/en/node/321936
-    "--set-default QT_QPA_PLATFORM xcb"
+    "--set-default"
+    "QT_QPA_PLATFORM"
+    "xcb"
   ];
 
   preFixup = ''

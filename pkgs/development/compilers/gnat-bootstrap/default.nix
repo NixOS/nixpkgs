@@ -38,11 +38,6 @@ stdenv.mkDerivation (
           alireRevision = "2";
         }
         // {
-          x86_64-darwin = {
-            inherit url;
-            hash = "sha256-DNHcHTIi7pw0rsVtpyGTyLVElq3IoO2YX/OkDbdeQyo=";
-            upstreamTriplet = "x86_64-apple-darwin21.6.0";
-          };
           x86_64-linux = {
             inherit url;
             hash = "sha256-DC95udGSzRDE22ON4UpekxTYWOSBeUdJvILbSFj6MFQ=";
@@ -60,11 +55,6 @@ stdenv.mkDerivation (
           alireRevision = "1";
         }
         // {
-          x86_64-darwin = {
-            inherit url;
-            hash = "sha256-3YOnvuI6Qq7huQcqgFSz/o+ZgY2wNkKDqHIuzNz1MVY=";
-            upstreamTriplet = "x86_64-apple-darwin21.6.0";
-          };
           x86_64-linux = {
             inherit url;
             hash = "sha256-pH3IuOpCM9sY/ppTYcxBmgpsUiMrisIjmAa/rmmZXb4=";
@@ -83,31 +73,23 @@ stdenv.mkDerivation (
         }
         .${stdenv.hostPlatform.system} or throwUnsupportedSystem;
         "15" = {
-          gccVersion = "15.2.0";
+          gccVersion = "15.3.0";
+          alireRevision = "1";
         }
         // {
-          x86_64-darwin = {
-            alireRevision = "1";
-            inherit url;
-            hash = "sha256-1YTqWsLBwNH/GBAtF5CL/YZHQvfE/3PE0LlLJ9HmjAg=";
-            upstreamTriplet = "x86_64-apple-darwin22.6.0";
-          };
           x86_64-linux = {
-            alireRevision = "1";
             inherit url;
-            hash = "sha256-b4hAg3ifoBRqgPxpfMYuOdunw7wzRTL/G5YGBO+im24=";
+            hash = "sha256-8CDxqAQW7zskadfdzMjJqzPN8GZ2qu/7NWvcQLDis1s=";
             upstreamTriplet = "x86_64-pc-linux-gnu";
           };
           aarch64-linux = {
-            alireRevision = "1";
             inherit url;
-            hash = "sha256-0V/VHqOSYQI6LmvpUIHy3zB6hI3dG0njOcDsrg8oZq8=";
+            hash = "sha256-cLLYWqdZuEZxV4ofd0GtO/+pQDMKs6TAOrAHw3DgI94=";
             upstreamTriplet = "aarch64-linux-gnu";
           };
           aarch64-darwin = {
-            alireRevision = "2-pre0";
-            url = "https://github.com/alire-project/GNAT-FSF-builds/releases/download/gnat-15.2.0-2-macos-pre0/gnat-${stdenv.hostPlatform.system}-${finalAttrs.version}.tar.gz";
-            hash = "sha256-4bFtsjixfXYc8wYOc+5iAbp1MmiIS1h1NcdKno2IdJg=";
+            inherit url;
+            hash = "sha256-WKwNQJEghnXQLexKHswn494b4sz+usvgYEIoNaedzCk=";
             upstreamTriplet = "aarch64-apple-darwin24.6.0";
           };
         }
@@ -117,11 +99,6 @@ stdenv.mkDerivation (
           alireRevision = "1";
         }
         // {
-          x86_64-darwin = {
-            inherit url;
-            hash = "sha256-u/cYFKqWLTaFADTscDxnrkYSoemKrfKpNIZ8XPlTbLI=";
-            upstreamTriplet = "x86_64-apple-darwin24.6.0";
-          };
           x86_64-linux = {
             inherit url;
             hash = "sha256-5bKYPJnXDGa80BtAogLE82X0zTuYKdN2cKh503oMeic=";
@@ -289,7 +266,6 @@ stdenv.mkDerivation (
       ];
       platforms = [
         "x86_64-linux"
-        "x86_64-darwin"
         "aarch64-darwin"
       ]
       ++ lib.optionals (lib.versionAtLeast majorVersion "14") [

@@ -8,14 +8,14 @@
 }:
 buildPythonPackage rec {
   pname = "pylint-odoo";
-  version = "10.0.4";
+  version = "10.0.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OCA";
     repo = "pylint-odoo";
     tag = "v${version}";
-    hash = "sha256-OVltvmSEsL7F46LlTqJ8PH9BO4iYlFWKFTLv5AcmaVU=";
+    hash = "sha256-dCc3jwZOWlwMG0jn1d2rAK4oFQlqTMmvYu9ucR/ORfU=";
   };
 
   pythonRelaxDeps = [

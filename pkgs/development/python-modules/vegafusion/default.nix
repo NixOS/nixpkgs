@@ -37,6 +37,10 @@ buildPythonPackage rec {
     hash = "sha256-yiECw9WGd+03KFOWa+bwR10gQFqzx4Riy6uw2zwdc3s=";
   };
 
+  patches = [
+    ./fix-test_transformer.patch
+  ];
+
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";

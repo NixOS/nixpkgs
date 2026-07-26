@@ -4,6 +4,7 @@
   stdenv,
   dpkg,
   autoPatchelfHook,
+  wrapGAppsHook3,
   cairo,
   gdk-pixbuf,
   webkitgtk_4_1,
@@ -22,6 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     dpkg
     autoPatchelfHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

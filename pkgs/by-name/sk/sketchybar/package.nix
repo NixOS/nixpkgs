@@ -9,13 +9,6 @@
 
 let
   inherit (stdenv.hostPlatform) system;
-
-  target =
-    {
-      "aarch64-darwin" = "arm64";
-      "x86_64-darwin" = "x86";
-    }
-    .${system} or (throw "Unsupported system: ${system}");
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sketchybar";
@@ -32,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     apple-sdk_15
   ];
 
-  makeFlags = [ target ];
+  makeFlags = [ "arm64" ];
 
   installPhase = ''
     runHook preInstall

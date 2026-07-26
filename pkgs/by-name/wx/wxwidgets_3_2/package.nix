@@ -29,9 +29,6 @@
   withMesa ? !stdenv.hostPlatform.isDarwin,
   withWebKit ? true,
   webkitgtk_4_1,
-
-  # TODO: Clean up on `staging`.
-  llvmPackages,
 }:
 let
   catch = fetchFromGitHub {
@@ -50,20 +47,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "wxwidgets";
-  version = "3.2.9";
+  version = "3.2.11";
 
   src = fetchFromGitHub {
     owner = "wxWidgets";
     repo = "wxWidgets";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mYMUW3FnFkKHDQXb/k9UosSiWCPW7OQn+/orwq4Q95k=";
+    hash = "sha256-YaQrPJSlTpJKwjXLdRsGB04f7wKJCWfHjXWkB45qyEg=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ]
-  # TODO: Clean up on `staging`.
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.lld ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     gst_all_1.gst-plugins-base
@@ -121,17 +114,12 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-webviewwebkit"
   ];
 
-  env =
-    lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
-      SEARCH_LIB = toString [
-        "${libGLU.out}/lib"
-        "${libGL.out}/lib"
-      ];
-    }
-    # TODO: Clean up on `staging`.
-    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-      NIX_CFLAGS_LINK = "-fuse-ld=lld";
-    };
+  env = lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
+    SEARCH_LIB = toString [
+      "${libGLU.out}/lib"
+      "${libGL.out}/lib"
+    ];
+  };
 
   preConfigure = ''
     cp -r ${catch}/* 3rdparty/catch/

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
   hatch-vcs,
@@ -28,23 +27,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "scikit-build-core";
-  version = "0.12.2";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-build";
     repo = "scikit-build-core";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JE6z44u1FLfI+Gguhd2rVUvY8tyEoo/WviGJmPRT8kc=";
+    hash = "sha256-skqX3+jS+lT0zfc5E4ssrZfoZkUrel9WD6a70OX1shg=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "setuptools-scm-10-compat.patch";
-      url = "https://github.com/scikit-build/scikit-build-core/commit/1b870c538bf7ca679fc4a6e0cbba301c98d9ac35.patch";
-      hash = "sha256-JUxBvKiAHpDlIIFkvU+CflTNA6m/auxW5wd5cVYpvcM=";
-    })
-  ];
 
   build-system = [
     hatch-vcs
@@ -97,7 +88,7 @@ buildPythonPackage (finalAttrs: {
     description = "Next generation Python CMake adaptor and Python API for plugins";
     homepage = "https://github.com/scikit-build/scikit-build-core";
     changelog = "https://github.com/scikit-build/scikit-build-core/blob/${finalAttrs.src.tag}/docs/about/changelog.md";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ veprbl ];
   };
 })

@@ -34,23 +34,10 @@ in
         # Pick the NetBox package from this config's "pkgs" argument,
         # so that `nixpkgs.config.permittedInsecurePackages` works
         package = pkgs.${oldNetbox};
-        secretKeyFile = pkgs.writeText "secret" ''
-          abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
-        '';
-        apiTokenPeppersFile = pkgs.writeText "pepper" ''
-          kp7ht*76fiQAhUi5dHfASLlYUE_S^gI^(7J^K5M!LfoH@vl&b_
-        '';
-      };
 
-      services.nginx = {
-        enable = true;
-
-        recommendedProxySettings = true;
-
-        virtualHosts.netbox = {
-          default = true;
-          locations."/".proxyPass = "http://localhost:${toString config.services.netbox.port}";
-          locations."/static/".alias = "/var/lib/netbox/static/";
+        nginx = {
+          enable = true;
+          hostname = "localhost";
         };
       };
 
@@ -81,7 +68,7 @@ in
           headers = machine.succeed(
             "curl -sSL http://localhost/api/ --head -H 'Content-Type: application/json'"
           )
-          assert api_version(headers) == version
+          t.assertEqual(api_version(headers), version)
 
       with subtest("NetBox version is the old one"):
           check_api_version("${oldApiVersion}")

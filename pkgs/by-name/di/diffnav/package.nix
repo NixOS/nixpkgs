@@ -10,20 +10,21 @@
 
 buildGoModule (finalAttrs: {
   pname = "diffnav";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "dlvhdr";
     repo = "diffnav";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6VtAQzZNLQrf8QYVXxLUgb3F6xguFDbwaE9kahPhbSE=";
+    hash = "sha256-DrEbo9YYg4FCXQXuIkbPxO5Z3ZOPZJYeGoLoP/vT0Y0=";
   };
 
-  vendorHash = "sha256-gmmckzR0D1oFuTG5TAb6gLMoNbcZl9EsjbFjhPfJqnQ=";
+  vendorHash = "sha256-2OzHyBPsylQVXhPlqk2owEhiibFi3H1UENvGGDdzGss=";
 
   ldflags = [
     "-s"
     "-w"
+    "-X github.com/dlvhdr/diffnav/pkg/version.Version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [

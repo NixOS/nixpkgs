@@ -65,6 +65,24 @@
   "module-services-keycloak-unix-socket": [
     "index.html#module-services-keycloak-unix-socket"
   ],
+  "module-services-lxmd": [
+    "index.html#module-services-lxmd"
+  ],
+  "module-services-lxmd-communication-backbone": [
+    "index.html#module-services-lxmd-communication-backbone"
+  ],
+  "module-services-lxmd-communication-rpc": [
+    "index.html#module-services-lxmd-communication-rpc"
+  ],
+  "module-services-lxmd-communication-with-rnsd": [
+    "index.html#module-services-lxmd-communication-with-rnsd"
+  ],
+  "module-services-lxmd-health-check": [
+    "index.html#module-services-lxmd-health-check"
+  ],
+  "module-services-lxmd-quickstart": [
+    "index.html#module-services-lxmd-quickstart"
+  ],
   "module-services-mautrix-discord": [
     "index.html#module-services-mautrix-discord"
   ],
@@ -103,6 +121,18 @@
   ],
   "module-services-onedrive": [
     "index.html#module-services-onedrive"
+  ],
+  "module-services-rnsd": [
+    "index.html#module-services-rnsd"
+  ],
+  "module-services-rnsd-hardware-access": [
+    "index.html#module-services-rnsd-hardware-access"
+  ],
+  "module-services-rnsd-health-check": [
+    "index.html#module-services-rnsd-health-check"
+  ],
+  "module-services-rnsd-quickstart": [
+    "index.html#module-services-rnsd-quickstart"
   ],
   "module-services-tandoor-recipes-migrating-media-option-move": [
     "index.html#module-services-tandoor-recipes-migrating-media-option-move",
@@ -618,6 +648,15 @@
   ],
   "sec-luks-file-systems-fido2-systemd": [
     "index.html#sec-luks-file-systems-fido2-systemd"
+  ],
+  "sec-nfs-file-systems": [
+    "index.html#sec-nfs-file-systems"
+  ],
+  "sec-nfs-automount": [
+    "index.html#sec-nfs-automount"
+  ],
+  "sec-nfs-adhoc": [
+    "index.html#sec-nfs-adhoc"
   ],
   "sec-sshfs-file-systems": [
     "index.html#sec-sshfs-file-systems"
@@ -1891,6 +1930,9 @@
   "sec-kubernetes": [
     "index.html#sec-kubernetes"
   ],
+  "module-services-nordvpn": [
+    "index.html#module-services-nordvpn"
+  ],
   "ch-running": [
     "index.html#ch-running"
   ],
@@ -2293,6 +2335,9 @@
   ],
   "test-opt-meta.hydraPlatforms": [
     "index.html#test-opt-meta.hydraPlatforms"
+  ],
+  "test-opt-meta.teams": [
+    "index.html#test-opt-meta.teams"
   ],
   "test-opt-meta.timeout": [
     "index.html#test-opt-meta.timeout"

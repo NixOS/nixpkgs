@@ -4,6 +4,7 @@
   rustPlatform,
   fetchFromGitHub,
   zig_0_15,
+  installShellFiles,
   cctools,
   xcbuild,
   versionCheckHook,
@@ -11,7 +12,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "herdr";
-  version = "0.7.3";
+  version = "0.7.5";
 
   __structuredAttrs = true;
 
@@ -19,20 +20,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "ogulcancelik";
     repo = "herdr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Q2yvMs/N6oAF8xnRIrMxEOOV6Aj8aAXQzuvcaux2enA=";
+    hash = "sha256-3BA8eredGku+vsL2Af7sUf43QiArR5XTHNrI+X11vFM=";
   };
 
-  cargoHash = "sha256-DRjcIJXWGxiA9c7xIiQoWU9az2EFjXsnFKu5sC933eE=";
+  cargoHash = "sha256-lWnc0Ka0hp7bbm+dkKKj22Dbk+Cwrld86romXs3lzBs=";
 
   zigDeps = zig_0_15.fetchDeps {
     inherit (finalAttrs) pname version;
     src = "${finalAttrs.src}/vendor/libghostty-vt";
     fetchAll = true;
-    hash = "sha256-pgGu8+NwvFcj6SrN4VaTHLeHdA7QY731ctyrHZwgFAc=";
+    hash = "sha256-PnM+hZIlLyQwK8vJgd/Bhjt1lNIz06T8FahwliRmMrY=";
   };
 
   nativeBuildInputs = [
     zig_0_15.hook
+    installShellFiles
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
@@ -53,6 +55,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     chmod -R u+w "$ZIG_GLOBAL_CACHE_DIR/p"
   '';
 
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd herdr \
+      --bash <("$out/bin/herdr" completion bash) \
+      --fish <("$out/bin/herdr" completion fish) \
+      --zsh <("$out/bin/herdr" completion zsh)
+  '';
+
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
@@ -68,7 +77,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://herdr.dev";
     changelog = "https://github.com/ogulcancelik/herdr/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ kevinpita ];
+    maintainers = with lib.maintainers; [
+      kevinpita
+      faukah
+    ];
     mainProgram = "herdr";
     platforms = lib.platforms.unix;
   };

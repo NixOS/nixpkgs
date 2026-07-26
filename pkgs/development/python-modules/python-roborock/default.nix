@@ -27,14 +27,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-roborock";
-  version = "5.25.0";
+  version = "5.31.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Python-roborock";
     repo = "python-roborock";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Uj7rr9vAdZBseeePQU1/3bILwsI0P2CDy1bGu6R90Cg=";
+    hash = "sha256-HjiOZd+fkCTlxMEiuHWxaFeHwf7vHAYESMLkJ9Cye1U=";
   };
 
   pythonRelaxDeps = [
@@ -72,6 +72,11 @@ buildPythonPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
+
+  disabledTests = [
+    # url mocking mismatch, probably due to yarl update
+    "test_url_cycling"
+  ];
 
   __darwinAllowLocalNetworking = true;
 

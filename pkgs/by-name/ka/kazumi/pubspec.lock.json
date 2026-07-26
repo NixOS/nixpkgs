@@ -146,11 +146,11 @@
       "dependency": "transitive",
       "description": {
         "name": "auto_injector",
-        "sha256": "1fc2624898e92485122eb2b1698dd42511d7ff6574f84a3a8606fc4549a1e8f8",
+        "sha256": "81815294ad9a512e294d97819bdbeccc7f93f18daeceac321e0c046a6f25eeb1",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.1.1"
+      "version": "2.2.0"
     },
     "boolean_selector": {
       "dependency": "transitive",
@@ -524,7 +524,7 @@
       "version": "1.3.3"
     },
     "ffi": {
-      "dependency": "transitive",
+      "dependency": "direct main",
       "description": {
         "name": "ffi",
         "sha256": "6d7fd89431262d8f3125e81b50d3847a091d846eafcd4fdb88dd06f36d705a45",
@@ -729,11 +729,11 @@
       "dependency": "direct main",
       "description": {
         "name": "flutter_modular",
-        "sha256": "33a63d9fe61429d12b3dfa04795ed890f17d179d3d38e988ba7969651fcd5586",
+        "sha256": "04b924a79e17ec897aa40886a46f27954ee0194e4601a006bdba3cb2be65e180",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "6.4.1"
+      "version": "7.1.0"
     },
     "flutter_native_splash": {
       "dependency": "direct dev",
@@ -1017,6 +1017,16 @@
       "source": "hosted",
       "version": "1.0.5"
     },
+    "iregexp": {
+      "dependency": "transitive",
+      "description": {
+        "name": "iregexp",
+        "sha256": "c79119931b7ae9c0b6327adaa4495811813fcae7e6236ac68c15f45ca857d38b",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.2.0"
+    },
     "isolate_channel": {
       "dependency": "transitive",
       "description": {
@@ -1066,6 +1076,16 @@
       },
       "source": "hosted",
       "version": "4.12.0"
+    },
+    "json_path": {
+      "dependency": "direct main",
+      "description": {
+        "name": "json_path",
+        "sha256": "99cef94ca7b604ad85b9442bc8852e55396f559c08c0ab961d10b90b730c326f",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.9.0"
     },
     "leak_tracker": {
       "dependency": "transitive",
@@ -1146,6 +1166,16 @@
       },
       "source": "hosted",
       "version": "0.13.0"
+    },
+    "maybe_just_nothing": {
+      "dependency": "transitive",
+      "description": {
+        "name": "maybe_just_nothing",
+        "sha256": "57af3cacbbe57d5889a4479983755b76551db3c8862aa6335f57f50657945054",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.6.0"
     },
     "media_kit": {
       "dependency": "direct main",
@@ -1295,16 +1325,6 @@
       },
       "source": "hosted",
       "version": "2.7.7"
-    },
-    "modular_core": {
-      "dependency": "transitive",
-      "description": {
-        "name": "modular_core",
-        "sha256": "1db0420a0dfb8a2c6dca846e7cbaa4ffeb778e247916dbcb27fb25aa566e5436",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "3.4.1"
     },
     "msix": {
       "dependency": "direct dev",
@@ -1477,7 +1497,7 @@
       "version": "2.2.1"
     },
     "path_provider_platform_interface": {
-      "dependency": "transitive",
+      "dependency": "direct dev",
       "description": {
         "name": "path_provider_platform_interface",
         "sha256": "88f5779f72ba699763fa3a3b06aa4bf6de76c8e5de842cf6f29e2e06476c2334",
@@ -1527,7 +1547,7 @@
       "version": "3.1.6"
     },
     "plugin_platform_interface": {
-      "dependency": "transitive",
+      "dependency": "direct dev",
       "description": {
         "name": "plugin_platform_interface",
         "sha256": "4820fbfdb9478b1ebae27888254d445073732dae3d6ea81f0b7e06d5dedc3f02",
@@ -1557,7 +1577,7 @@
       "version": "6.5.0"
     },
     "provider": {
-      "dependency": "direct main",
+      "dependency": "transitive",
       "description": {
         "name": "provider",
         "sha256": "4e82183fa20e5ca25703ead7e05de9e4cceed1fbd1eadc1ac3cb6f565a09f272",
@@ -1606,15 +1626,15 @@
       "source": "hosted",
       "version": "0.6.0"
     },
-    "result_dart": {
+    "rfc_6901": {
       "dependency": "transitive",
       "description": {
-        "name": "result_dart",
-        "sha256": "80096f0928e276c024e53cf1bb2aaffd5a94623dac8fdfa5cb3529e82b51eb3c",
+        "name": "rfc_6901",
+        "sha256": "6a43b1858dca2febaf93e15639aa6b0c49ccdfd7647775f15a499f872b018154",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.2.0"
+      "version": "0.2.1"
     },
     "rxdart": {
       "dependency": "transitive",
@@ -2314,7 +2334,7 @@
       "version": "0.4.0"
     },
     "win32": {
-      "dependency": "transitive",
+      "dependency": "direct main",
       "description": {
         "name": "win32",
         "sha256": "d7cb55e04cd34096cd3a79b3330245f54cb96a370a1c27adb3c84b917de8b08e",
@@ -2396,6 +2416,6 @@
   },
   "sdks": {
     "dart": ">=3.11.0 <4.0.0",
-    "flutter": ">=3.44.4"
+    "flutter": ">=3.44.5"
   }
 }

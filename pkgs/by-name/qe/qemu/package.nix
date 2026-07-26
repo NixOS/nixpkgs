@@ -99,6 +99,8 @@
   capstone,
   valgrindSupport ? false,
   valgrind-light,
+  brlttySupport ? !minimal && !stdenv.hostPlatform.isDarwin,
+  brltty,
   pluginsSupport ? !stdenv.hostPlatform.isStatic,
   enableDocs ? !minimal || toolsOnly,
   enableTools ? !minimal || toolsOnly,
@@ -123,9 +125,6 @@
   minimal ? toolsOnly || userOnly,
   gitUpdater,
   qemu-utils, # for tests attribute
-
-  # TODO: Clean up on `staging`.
-  llvmPackages,
 }:
 
 assert lib.assertMsg (
@@ -144,11 +143,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString nixosTestRunner "-for-vm-tests"
     + lib.optionalString toolsOnly "-utils"
     + lib.optionalString userOnly "-user";
-  version = "11.0.1";
+  version = "11.0.2";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-DSNfWCAnjZFKMVXsJ6+OQljWl+qJKJVXCAfWnAy4zWQ=";
+    hash = "sha256-N0X26oji6H/g3IOLKx1OCncL9I4BodWhhoQqH/92zPU=";
   };
 
   depsBuildBuild = [
@@ -183,9 +182,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals hexagonSupport [ glib ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.sigtool
-
-    # TODO: Clean up on `staging`.
-    llvmPackages.lld
   ]
   ++ lib.optionals (!userOnly) [ dtc ];
 
@@ -259,6 +255,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals u2fEmuSupport [ libu2f-emu ]
   ++ lib.optionals capstoneSupport [ capstone ]
   ++ lib.optionals valgrindSupport [ valgrind-light ]
+  ++ lib.optionals brlttySupport [ brltty ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
 
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
@@ -344,6 +341,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional canokeySupport "--enable-canokey"
   ++ lib.optional u2fEmuSupport "--enable-u2f"
   ++ lib.optional capstoneSupport "--enable-capstone"
+  ++ lib.optional brlttySupport "--enable-brlapi"
   ++ lib.optional (!pluginsSupport) "--disable-plugins"
   ++ lib.optional (!enableBlobs) "--disable-install-blobs"
   ++ lib.optional userOnly "--disable-system"
@@ -430,10 +428,6 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = lib.optionalString (!minimal && !xenSupport) ''
     ln -s $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} $out/bin/qemu-kvm
   '';
-
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    NIX_CFLAGS_LINK = "-fuse-ld=lld";
-  };
 
   passthru = {
     qemu-system-i386 = "bin/qemu-system-i386";

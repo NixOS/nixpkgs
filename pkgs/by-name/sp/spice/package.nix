@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   meson,
   ninja,
   pkg-config,
@@ -38,6 +39,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./remove-rt-on-darwin.patch
+
+    # C++ does not allow designated initializers to refer to members of
+    # anonymous unions. This fails with GCC 16, and was fixed upstream across
+    # two merge requests but not yet released.
+    # https://gitlab.freedesktop.org/spice/spice/-/merge_requests/246
+    (fetchpatch {
+      name = "spice-test-display-base-initializer-anonymous-union.patch";
+      url = "https://gitlab.freedesktop.org/spice/spice/-/commit/59bc22a40611121b2ea7888bf3c1a501c4fc0b91.patch";
+      hash = "sha256-VQ+DrzmIws3EyZU5c0OqMZwMltUvCW34h5oXuHB8YWs=";
+    })
+    # https://gitlab.freedesktop.org/spice/spice/-/merge_requests/244
+    (fetchpatch {
+      name = "spice-test-gst-initializer-anonymous-union.patch";
+      url = "https://gitlab.freedesktop.org/spice/spice/-/commit/a904cd86430aa555a50730e9389e210637a546c1.patch";
+      hash = "sha256-6GGqi+Y4I/oftE8zXuRnX021+r7SrQPUdAdBsCv9MIw=";
+    })
   ];
 
   nativeBuildInputs = [

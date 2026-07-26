@@ -12,13 +12,13 @@
 # nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio-testing";
-  version = "1.81.0";
+  version = "1.82.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "grpcio_testing";
     inherit version;
-    hash = "sha256-MjcL3/wM0Jq63pKP2ID5Gb8HCv5dASot4UEkJ7LcGSE=";
+    hash = "sha256-2fxmLSRf10IpLQOJkCQtDdDmkvAKAvIQvRI0FFzxM0E=";
   };
 
   postPatch = ''
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   meta = {
     description = "Testing utilities for gRPC Python";
     homepage = "https://grpc.io/";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

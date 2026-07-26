@@ -17,7 +17,7 @@ playwright_driver_file="$root/driver.nix"
 playwright_raw_repo_url="https://raw.githubusercontent.com/microsoft/playwright"
 playwright_mcp_package_file="$root/../../../by-name/pl/playwright-mcp/package.nix"
 browser_names=(chromium chromium-headless-shell firefox webkit ffmpeg)
-browser_systems=(x86_64-linux aarch64-linux x86_64-darwin aarch64-darwin)
+browser_systems=(x86_64-linux aarch64-linux aarch64-darwin)
 
 github_api_get() {
     curl "${github_api_curl_args[@]}" -fsSL "$1"

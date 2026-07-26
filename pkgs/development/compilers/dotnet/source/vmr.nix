@@ -155,12 +155,6 @@ stdenv.mkDerivation {
     ) ./Prefer-DOTNET_ROOT-over-directory-traversal-when-fin.patch
     ++ lib.optionals (lib.versionAtLeast version "11") [
       ./Prefer-DOTNET_ROOT-over-directory-traversal-when-fin.2.patch
-      (fetchpatch2 {
-        url = "https://github.com/dotnet/roslyn/commit/0efb81ea44ddf262eb50d71c9d0f1728e2ad7ac6.patch";
-        hash = "sha256-ZZZGMtO1cuvywhPpmwF8PFAGnuidD3yht2TVGCMjVZ0=";
-        stripLen = 1;
-        extraPrefix = "src/roslyn/";
-      })
     ]
     ++ lib.optional (lib.versionAtLeast version "11" && isDarwin) ./fix-cmake-darwin.patch;
 
@@ -186,6 +180,16 @@ stdenv.mkDerivation {
       -s //Project -t elem -n PropertyGroup \
       -s \$prev -t elem -n NoWarn -v '$(NoWarn);NU1603' \
       src/nuget-client/src/NuGet.Core/NuGet.CommandLine.XPlat/NuGet.CommandLine.XPlat.csproj
+
+    # AD0001 crashes intermittently in source-build-reference-packages with
+    # CSC : error AD0001: Analyzer 'Microsoft.NetCore.CSharp.Analyzers.Runtime.CSharpDetectPreviewFeatureAnalyzer' threw an exception of type 'System.NullReferenceException' with message 'Object reference not set to an instance of an object.'.
+    # https://github.com/dotnet/roslyn/issues/81645
+    xmlstarlet ed \
+      --inplace \
+      -s //Project -t elem -n PropertyGroup \
+      -s \$prev -t elem -n NoWarn -v '$(NoWarn);AD0001' \
+      src/source-build-assets/src/referencePackages/Directory.Build.props
+
   ''
   + lib.optionalString (lib.versionOlder version "10") ''
     # https://github.com/microsoft/ApplicationInsights-dotnet/issues/2848
@@ -539,11 +543,7 @@ stdenv.mkDerivation {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
-    # build deadlocks intermittently on rosetta
-    # https://github.com/dotnet/runtime/issues/111628
-    broken = stdenv.hostPlatform.system == "x86_64-darwin";
   };
 }

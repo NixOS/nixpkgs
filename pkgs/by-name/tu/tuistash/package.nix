@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Terminal User Interface for Logstash";
     homepage = "https://github.com/edmocosta/tuistash";
     changelog = "https://github.com/edmocosta/tuistash/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = [ lib.licenses.asl20 ];
+    license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.kpbaks ];
     mainProgram = "tuistash";
   };

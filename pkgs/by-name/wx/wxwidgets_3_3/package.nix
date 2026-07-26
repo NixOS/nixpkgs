@@ -30,28 +30,21 @@
   withEGL ? true,
   withPrivateFonts ? false,
   webkitgtk_4_1,
-
-  # TODO: Clean up on `staging`.
-  llvmPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wxwidgets";
-  version = "3.3.2";
+  version = "3.3.3.1";
 
   src = fetchFromGitHub {
     owner = "wxWidgets";
     repo = "wxWidgets";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-UL1NuByKFGMQ/dhjuWRdnWTgdy4+1cD9pSls3e1mur8=";
+    hash = "sha256-gB+mEk8rHpB4z1m8RWJSV+upKzLt7pZtlviS2g03EHY=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ]
-  # TODO: Clean up on `staging`.
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.lld ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     gst_all_1.gst-plugins-base
@@ -110,17 +103,12 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-webviewwebkit"
   ];
 
-  env =
-    lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
-      SEARCH_LIB = toString [
-        "${libGLU.out}/lib"
-        "${libGL.out}/lib"
-      ];
-    }
-    # TODO: Clean up on `staging`.
-    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-      NIX_CFLAGS_LINK = "-fuse-ld=lld";
-    };
+  env = lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
+    SEARCH_LIB = toString [
+      "${libGLU.out}/lib"
+      "${libGL.out}/lib"
+    ];
+  };
 
   postInstall = "
     pushd $out/include

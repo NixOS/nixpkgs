@@ -116,6 +116,8 @@ in
       packages = [ pkgs.xdg-desktop-portal ] ++ cfg.extraPortals;
     in
     mkIf cfg.enable {
+      programs.fuse.enable = true;
+
       warnings = lib.optional (cfg.configPackages == [ ] && cfg.config == { }) ''
         xdg-desktop-portal 1.17 reworked how portal implementations are loaded, you
         should either set `xdg.portal.config` or `xdg.portal.configPackages`
@@ -150,7 +152,6 @@ in
 
         sessionVariables = {
           NIXOS_XDG_OPEN_USE_PORTAL = mkIf cfg.xdgOpenUsePortal "1";
-          NIX_XDG_DESKTOP_PORTAL_DIR = "/run/current-system/sw/share/xdg-desktop-portal/portals";
         };
 
         etc = lib.concatMapAttrs (

@@ -9,16 +9,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "flux9s";
-  version = "0.10.2";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "dgunzy";
     repo = "flux9s";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pphw27LHz+TrU5QcUZZ7zS5k02AaFWBEEHsiV+I+05E=";
+    hash = "sha256-kwUoA5NTjJjCI3aUgpFOcDpRZbDEPCTzzsk7TxVn6K4=";
   };
 
-  cargoHash = "sha256-M2UCpSwKVFGXACcYkxJ8TzRHYgTLqt29RBMMdRvHZv8=";
+  cargoHash = "sha256-5UOaIbaAlBufB4BJ+ZX82xaKTQ4qDDRZWaweM8d2AOY=";
 
   nativeBuildInputs = [ pkg-config ];
 

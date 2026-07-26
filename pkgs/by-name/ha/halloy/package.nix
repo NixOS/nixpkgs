@@ -5,7 +5,7 @@
   copyDesktopItems,
   makeDesktopItem,
   libxkbcommon,
-  makeWrapper,
+  makeBinaryWrapper,
   nix-update-script,
   openssl,
   pkg-config,
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     copyDesktopItems
-    makeWrapper
+    makeBinaryWrapper
     pkg-config
   ];
 
@@ -105,7 +105,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail "{{ VERSION }}" "${finalAttrs.version}" \
       --replace-fail "{{ BUILD }}" "${finalAttrs.version}-nixpkgs"
 
-    makeWrapper "$out/bin/halloy" "$APP_DIR/MacOS/halloy"
+    makeBinaryWrapper "$out/bin/halloy" "$APP_DIR/MacOS/halloy"
   '';
 
   passthru.updateScript = nix-update-script { };

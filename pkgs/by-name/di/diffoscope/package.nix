@@ -85,8 +85,6 @@ let
   python = python3.override {
     self = python;
     packageOverrides = final: prev: {
-      # version 2 breaks dataset and thus androguard
-      sqlalchemy = prev.sqlalchemy_1_4;
       # version 4 or newer would log the following error but tests currently don't fail because radare2 is disabled
       # ValueError: argument TNULL is not a TLSH hex string
       tlsh = prev.tlsh.overridePythonAttrs (
@@ -100,6 +98,11 @@ let
             tag = version;
             hash = "sha256-ZYEjT/yShfA4+zpbGOtaFOx1nSSOWPtMvskPhHv3c9U=";
           };
+
+          postPatch = ''
+            substituteInPlace py_ext/setup.py \
+              --replace-fail "0.2.0" "${version}"
+          '';
         }
       );
     };
@@ -109,12 +112,12 @@ in
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "323";
+  version = "325";
   pyproject = true;
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-TFSeCS7D2D496rUrosYAWP4kHsu6x386c8AJ5c4aKYs=";
+    hash = "sha256-z8mdVWYo/UHfNIQy/XSDYSMAytIwXk/R3FRm4IsikIc=";
   };
 
   outputs = [
@@ -143,7 +146,7 @@ python.pkgs.buildPythonApplication rec {
   build-system = with python.pkgs; [ setuptools ];
 
   # Most of the non-Python dependencies here are optional command-line tools for various file-format parsers.
-  # To help figuring out what's missing from the list, run: ./pkgs/tools/misc/diffoscope/list-missing-tools.sh
+  # To help figuring out what's missing from the list, run: ./pkgs/by-name/di/diffoscope/list-missing-tools.sh
   #
   # Still missing these tools:
   # Android-specific tools:

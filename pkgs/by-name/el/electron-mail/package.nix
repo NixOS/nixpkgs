@@ -21,10 +21,6 @@ let
       url = "https://github.com/vladimiry/ElectronMail/releases/download/v${version}/electron-mail-${version}-mac-arm64.dmg";
       hash = "sha256-V32Wi0oCU9dLfzqxg3OdseiILX7wPiBGNz7KuG0vlZY=";
     };
-    x86_64-darwin = fetchurl {
-      url = "https://github.com/vladimiry/ElectronMail/releases/download/v${version}/electron-mail-${version}-mac-x64.dmg";
-      hash = "sha256-I1UvFMSdAwkqgkhn+mkBGslA8v+VTajO/Za0lJ5uYZ8=";
-    };
   };
 
   src = sources.${stdenvNoCC.hostPlatform.system};
@@ -45,7 +41,6 @@ let
     platforms = [
       "x86_64-linux"
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
     changelog = "https://github.com/vladimiry/ElectronMail/releases/tag/v${version}";
   };

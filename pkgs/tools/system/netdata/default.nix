@@ -165,7 +165,7 @@ stdenv.mkDerivation (
     # We pick zlib.dev as a simple canary package with pkg-config input.
     disallowedReferences = lib.optional (!withDebug) zlib.dev;
 
-    donStrip = withDebug || withLibbacktrace;
+    dontStrip = withDebug || withLibbacktrace;
     env.NIX_CFLAGS_COMPILE = lib.optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
 
     postInstall = ''

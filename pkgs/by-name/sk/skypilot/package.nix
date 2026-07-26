@@ -78,6 +78,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       jinja2
       jsonschema
       networkx
+      orjson
       packaging
       pandas
       paramiko

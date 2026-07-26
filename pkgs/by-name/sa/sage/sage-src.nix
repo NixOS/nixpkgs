@@ -109,6 +109,35 @@ stdenv.mkDerivation rec {
       url = "https://raw.githubusercontent.com/void-linux/void-packages/f8951eacbdc6538af3330d17d5587a0c208ab349/srcpkgs/sagemath/patches/40679-Update_to_maxima_5.49.patch";
       hash = "sha256-n6YSVNomLM7f5kRAGzhijag8QnlXxKJz9RHFLVtZpdk=";
     })
+
+    # https://github.com/sagemath/sage/pull/42384, landed in 10.10.beta4
+    (fetchpatch2 {
+      name = "matplotlib-3.11-update.patch";
+      url = "https://github.com/sagemath/sage/commit/3d3a04bbfb66dc1141afadbfaefa01dff8749761.patch?full_index=1";
+      hash = "sha256-LlEblRKlPPmvSU26LmT6DTxFElvhA9SBkrU3xeIFZu4=";
+    })
+
+    # https://github.com/sagemath/sage/pull/42437, landed in 10.10.beta5
+    (fetchpatch2 {
+      name = "numpy-2.5-update.patch";
+      url = "https://github.com/sagemath/sage/commit/3e709448881442c133047f2993db39d855c70bd8.patch?full_index=1";
+      hash = "sha256-8vxIYG6yhCBML9vioJhAjBgTeCCGmdfk7qAtEEQnK/g=";
+    })
+
+    # https://github.com/sagemath/sage/pull/42465, landed in 10.10.beta5
+    (fetchpatch2 {
+      name = "scipy-1.18-update.patch";
+      url = "https://github.com/sagemath/sage/commit/926f32aab22f81ddb9fda874a20fee84c7bfacc3.patch?full_index=1";
+      hash = "sha256-EMn/fr5WlRQtFj5GHo02kczasmKaiqFfRSVZo2uvOPI=";
+    })
+
+    # work around https://github.com/ipython/ipython/issues/15207, which
+    # will likely be properly fixed in IPython 9.16.
+    ./patches/ipython-9_15-workaround.patch
+
+    # work around https://github.com/scipy/scipy/issues/25471, which is
+    # fixed as part of SciPy 1.18.1.
+    ./patches/scipy-1_18-workaround.patch
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

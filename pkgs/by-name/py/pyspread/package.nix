@@ -1,7 +1,7 @@
 {
   lib,
   python3Packages,
-  fetchPypi,
+  fetchFromGitLab,
   qt6,
   R,
   copyDesktopItems,
@@ -10,14 +10,19 @@
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pyspread";
   version = "2.4.5";
+  pyproject = true;
+  __structuredAttrs = true;
 
-  src = fetchPypi {
-    pname = "pyspread";
-    inherit (finalAttrs) version;
-    hash = "sha256-7Nurn9OmK6LEz5TT543JUYKc/LjpkwfN/7r0ebS1PfY=";
+  src = fetchFromGitLab {
+    owner = "pyspread";
+    repo = "pyspread";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3DAoRIzwFxOEIXSCO+MyCAZ92Y57AD9Z9oq6ps1Ck0k=";
   };
 
-  pyproject = true;
+  build-system = with python3Packages; [
+    setuptools
+  ];
 
   nativeBuildInputs = [
     R
@@ -67,7 +72,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
     })
   ];
 
-  makeWrapperArgs = [ "--set R_HOME ${lib.getLib R}/lib/R" ];
+  makeWrapperArgs = [
+    "--set"
+    "R_HOME"
+    "${lib.getLib R}/lib/R"
+  ];
 
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
@@ -86,7 +95,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       that can be accessed from other cells. These objects can represent
       anything including lists or matrices.
     '';
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     mainProgram = "pyspread";
     maintainers = with lib.maintainers; [ Merikei ];
     platforms = lib.platforms.linux;

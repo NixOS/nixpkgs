@@ -16,7 +16,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "moyopy";
-  version = "0.14.0";
+  version = "0.15.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -24,7 +24,7 @@ buildPythonPackage (finalAttrs: {
     owner = "spglib";
     repo = "moyo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xDgkKwWZovHgkJH3Jcp7/Yz8oAySdDVEbrOCGIpdI4c=";
+    hash = "sha256-JtuezfTh7fkHW97t8BiBVi1a3vrc2+9qKjGYc0FgkAc=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/moyopy";
@@ -47,7 +47,7 @@ buildPythonPackage (finalAttrs: {
       sourceRoot
       cargoRoot
       ;
-    hash = "sha256-xivPb07t7MPK09SCeXQqyycrI0WB+LgOB15pIA6cAkE=";
+    hash = "sha256-l9fi5XMX4Ut6LmnKt+HAA55QRQtZKAx544Xa5a3RqHY=";
   };
 
   build-system = [

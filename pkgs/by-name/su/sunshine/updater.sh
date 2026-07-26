@@ -96,7 +96,6 @@ ffmpeg_url() {
 declare -A ffmpeg_arch=(
     [x86_64-linux]=Linux-x86_64
     [aarch64-linux]=Linux-aarch64
-    [x86_64-darwin]=Darwin-x86_64
     [aarch64-darwin]=Darwin-arm64
 )
 

@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "imap-mailstat-exporter";
-  version = "0.0.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "bt909";
     repo = "imap-mailstat-exporter";
-    tag = "v${version}";
-    hash = "sha256-aR/94C9SI+FPs3zg3bpexmgGYrhxghyHwpXj25x0yuw=";
+    tag = "${version}";
+    hash = "sha256-Q+Q7Q9zjJlp83FQ65yqi8eWO02+VkCXlYFRA66yptiE=";
   };
 
-  vendorHash = "sha256-M5Ho4CiO5DC6mWzenXEo2pu0WLHj5S8AV3oEFwD31Sw=";
+  vendorHash = "sha256-9rxlXhlQ269E6xtreMrDphqscaZj+IrfsNmssF/C78U=";
 
   nativeBuildInputs = [ installShellFiles ];
 

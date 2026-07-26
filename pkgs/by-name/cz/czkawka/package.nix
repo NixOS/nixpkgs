@@ -15,6 +15,7 @@
   libxi,
   libxkbcommon,
   libxrandr,
+  lld,
   pango,
   pkg-config,
   rustPlatform,
@@ -44,6 +45,9 @@ let
       gobject-introspection
       pkg-config
       wrapGAppsHook4
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      lld # ld crashes
     ];
 
     buildInputs = [
@@ -126,7 +130,7 @@ let
       homepage = "https://github.com/qarmin/czkawka";
       description = "Simple, fast and easy to use app to remove unnecessary files from your computer";
       changelog = "https://github.com/qarmin/czkawka/raw/${self.version}/Changelog.md";
-      license = with lib.licenses; [ mit ];
+      license = lib.licenses.mit;
       mainProgram = "czkawka_gui";
       maintainers = with lib.maintainers; [
         yanganto

@@ -119,6 +119,8 @@ stdenvNoCC.mkDerivation (
         --script ./anchor-use.js \
         --sidebar-depth 3 \
         --nav ./nav.json \
+        --header ${./header.html}\
+        --no-navheader \
         manual.md \
         out/index.html
 

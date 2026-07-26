@@ -49,8 +49,21 @@ cat > "$SOURCE_NIX" <<-EOF
 }
 EOF
 
-VENDOR_HASH=$(extractHash prometheus.goModules)
+# Resolve pnpm hash first: the Go integration pulls in the assets, so a fake
+# pnpmDepsHash makes that stage fail.
 PNPM_DEPS_HASH=$(extractHash prometheus.assets.pnpmDeps)
+
+cat > "$SOURCE_NIX" <<-EOF
+{
+  version = "$TARGET_VERSION";
+  hash = "$PREFETCH_HASH";
+  pnpmDepsHash = "$PNPM_DEPS_HASH";
+  vendorHash = "$FAKE_HASH";
+}
+EOF
+
+# Now do the Go module fetch.
+VENDOR_HASH=$(extractHash prometheus.goModules)
 
 cat > "$SOURCE_NIX" <<-EOF
 {

@@ -1,6 +1,6 @@
 {
   lib,
-  mkCoqDerivation,
+  mkRocqDerivation,
   dune,
   coq,
   stdlib,
@@ -38,8 +38,13 @@ let
           "Coq tactic and verified tool for proving tautologies using Stålmarck's algorithm"
         else
           "A two-level approach to prove tautologies using Stålmarck's algorithm in Coq.";
+      duneOverride = lib.optionalAttrs (version == "8.20.0" || defaultVersion == "8.20.0") {
+        dune = dune.override { version = "3.21.1"; };
+      };
     in
-    mkCoqDerivation.override { dune = dune.override { version = "3.21.1"; }; } {
+    mkRocqDerivation.override duneOverride {
+      useCoq = true;
+      namePrefix = [ "coq" ];
       inherit
         version
         pname

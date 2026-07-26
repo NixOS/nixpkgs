@@ -37,7 +37,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-core";
-  version = "1.4.8";
+  version = "1.4.9";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -45,7 +45,7 @@ buildPythonPackage (finalAttrs: {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-core==${finalAttrs.version}";
-    hash = "sha256-fJKr1NlpCujGoVxxqjaEXGOVZO5NH9+71dWHyMuQ2jw=";
+    hash = "sha256-yOsft14mHlIaDQj2bhBAUISZCVXsyEtyNC9B7+5F0Oo=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/core";
@@ -92,6 +92,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-core==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

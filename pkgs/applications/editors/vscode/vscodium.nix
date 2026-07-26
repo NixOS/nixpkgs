@@ -15,10 +15,8 @@ let
   plat =
     {
       x86_64-linux = "linux-x64";
-      x86_64-darwin = "darwin-x64";
       aarch64-linux = "linux-arm64";
       aarch64-darwin = "darwin-arm64";
-      armv7l-linux = "linux-armhf";
       loongarch64-linux = "linux-loong64";
     }
     .${system} or throwSystem;
@@ -27,12 +25,10 @@ let
 
   hash =
     {
-      x86_64-linux = "sha256-LJsGc11MH6zlcJNfSWjTWPn2Jp9dkjeBPQuCXH1woUM=";
-      x86_64-darwin = "sha256-bC7AfH2eKmmsWIOHifNGKD/kVQCYyuMfU3SUil0DXkM=";
-      aarch64-linux = "sha256-mT5dvw8GOZ0GnZaKRS/TAzQDEEYDOgcj6w6lNLy5kQ0=";
-      aarch64-darwin = "sha256-c8K17XKpRG1ji2mUfoyg2+cRF+qc1KVMYVkaQoUIz7Y=";
-      armv7l-linux = "sha256-91ZHhEUDVoDiRBLwMHVLhzKmb9gWcPBUsVRZVLhCA4M=";
-      loongarch64-linux = "sha256-7iUdsIyJkIi40Xn+/PWdCVgahQxbZtiMw0QLMisN+sg=";
+      x86_64-linux = "sha256-rfNUjfBV0Y5HbN7oh0iLp0hrh5rZmjGlRsa1xf8pbCQ=";
+      aarch64-linux = "sha256-c9h9RtTcII/hLASX3GB6qwpuK/My9UoLaCajoaoyvDQ=";
+      aarch64-darwin = "sha256-8h7lJinrXjnAVdrqcBGLemBVxjmuzz2tBeGZeprYOsA=";
+      loongarch64-linux = "sha256-p8hwOg5BbVvJGeQoBrgtd4gHsYmwEhsF/I+bk8gzIo4=";
     }
     .${system} or throwSystem;
 
@@ -43,8 +39,8 @@ buildVscode rec {
 
   # Please backport all compatible updates to the stable release.
   # This is important for the extension ecosystem.
-  version = "1.121.03429";
-  vscodeVersion = "1.121.0";
+  version = "1.126.04524";
+  vscodeVersion = "1.126.0";
   pname = "vscodium";
 
   executableName = "codium";
@@ -88,10 +84,8 @@ buildVscode rec {
     mainProgram = "codium";
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
       "aarch64-linux"
       "aarch64-darwin"
-      "armv7l-linux"
       "loongarch64-linux"
     ];
     # requires libc.so.6 and other glibc specifics

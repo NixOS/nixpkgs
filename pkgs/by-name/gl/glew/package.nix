@@ -21,6 +21,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-tkeQ+UuSas1+j4TF1gAKhstDlnvR5oiwMIkHl5nJ6Ik=";
   };
 
+  patches = [
+    # Allow a single GLEW build to support both EGL and GLX.
+    #
+    # Originally developed for the AUR glew-egl-glx package and later adopted by
+    # Arch Linux. Carry an updated copy in-tree after it was removed from Arch's
+    # packaging repository.
+    ./patches/egl+glx.patch
+  ];
+
   outputs = [
     "bin"
     "out"

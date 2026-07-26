@@ -22,13 +22,13 @@ let
   pnpm = pnpm_11;
 
   pname = "backrest";
-  version = "1.13.0";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "garethgeorge";
     repo = "backrest";
     tag = "v${version}";
-    hash = "sha256-JcrHQDjoaaK6BONEcn6XKsjhGlth4SaZKqfxa3cD0gY=";
+    hash = "sha256-RxjPjvnKy8UM1OXRklJF/HSZ6FMiHWYQBsZ6owMJMF0=";
     leaveDotGit = true;
     postFetch = ''
       cd "$out"
@@ -62,7 +62,7 @@ let
       inherit pnpm;
       sourceRoot = "${finalAttrs.src.name}/webui";
       fetcherVersion = 4;
-      hash = "sha256-xPZg7kYRlqdO/EfZr+m+IVhDcyYegQ6v8ZAF2EjrKjU=";
+      hash = "sha256-y6NYFPepibiTuvPMwyc5cN3TwAc2W7RtPbCmzWDozNQ=";
     };
 
     postPatch = ''
@@ -99,6 +99,15 @@ buildGoModule (finalAttrs: {
   __structuredAttrs = true;
   strictDeps = true;
 
+  patches = [
+    # https://github.com/garethgeorge/backrest/pull/1293
+    ./0001-fix-rm-deprecated-import-github.com-ncruces-go-sqlit.patch
+    # https://github.com/garethgeorge/backrest/pull/1294
+    ./0002-fix-exit-after-printing-version.patch
+    # https://github.com/garethgeorge/backrest/pull/1295
+    ./0003-fix-quit-tray-on-graceful-shutdown.patch
+  ];
+
   postPatch = ''
     sed -i -e \
       '/func installRestic(targetPath string) error {/a\
@@ -107,7 +116,7 @@ buildGoModule (finalAttrs: {
   '';
 
   proxyVendor = true;
-  vendorHash = "sha256-1PecXGXdSu4FzOKVZ15lTLLPy3VlLiGvGeTUDzqe9sc=";
+  vendorHash = "sha256-yadRulgtcDPthWLeTydcMol/vwriflKvDu7zgoehZCM=";
 
   subPackages = [ "cmd/backrest" ];
 
@@ -115,6 +124,8 @@ buildGoModule (finalAttrs: {
     gzip
     makeBinaryWrapper
   ];
+
+  tags = [ "tray" ];
 
   ldflags = [
     "-s"
@@ -164,6 +175,8 @@ buildGoModule (finalAttrs: {
   postInstall = ''
     wrapProgram $out/bin/backrest \
       --set-default BACKREST_RESTIC_COMMAND "${lib.getExe restic}"
+    makeBinaryWrapper $out/bin/backrest $out/bin/backrest-tray \
+      --add-flags "-tray"
   '';
 
   doInstallCheck = true;

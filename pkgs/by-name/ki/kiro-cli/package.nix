@@ -3,10 +3,17 @@
   stdenv,
   fetchurl,
   autoPatchelfHook,
+  makeBinaryWrapper,
   undmg,
   versionCheckHook,
   xz,
   bzip2,
+  wl-clipboard,
+  # On Wayland, kiro-cli shells out to wl-clipboard (wl-copy/wl-paste) for
+  # clipboard access. Enabling this puts wl-clipboard on the runtime PATH so
+  # clipboard support works out of the box under Wayland sessions. Has no
+  # effect on Darwin.
+  waylandSupport ? stdenv.hostPlatform.isLinux,
 }:
 
 let
@@ -14,26 +21,22 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "kiro-cli";
-  version = "2.10.0";
+  version = "2.13.0";
 
   src =
-    let
-      darwinDmg = fetchurl {
-        url = "https://desktop-release.q.us-east-1.amazonaws.com/${finalAttrs.version}/Kiro%20CLI.dmg";
-        hash = "sha256-NDeyXQO9NBsK3xqAEcO1gGn9ta+ZVQ1GNwZ4hbGUe3Q=";
-      };
-    in
     {
       x86_64-linux = fetchurl {
         url = "https://desktop-release.q.us-east-1.amazonaws.com/${finalAttrs.version}/kirocli-x86_64-linux.tar.gz";
-        hash = "sha256-cJl6CyYCzbLpB6m+W9Tx7enaPzijgjOBjdmG6CPMM8k=";
+        hash = "sha256-8qEnlNv8lQK3SCjYJ/AdfWB/RELpjLI0VQ7n4vKA7DI=";
       };
       aarch64-linux = fetchurl {
         url = "https://desktop-release.q.us-east-1.amazonaws.com/${finalAttrs.version}/kirocli-aarch64-linux.tar.gz";
-        hash = "sha256-39hKSRi1l5ruSqObViksJkufiCOvLTaIkQzT3sNQFQQ=";
+        hash = "sha256-uKR5ZxuijDgfIJ4DmDVhN5XGHDyOyiRkLcTie2iuzZU=";
       };
-      x86_64-darwin = darwinDmg;
-      aarch64-darwin = darwinDmg;
+      aarch64-darwin = fetchurl {
+        url = "https://desktop-release.q.us-east-1.amazonaws.com/${finalAttrs.version}/Kiro%20CLI.dmg";
+        hash = "sha256-GAK8+adzrEc1kXtHVCNC1aU09C86D9mroSQv7dXvbfo=";
+      };
     }
     .${system} or (throw "Unsupported system: ${system}");
 
@@ -44,6 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
       autoPatchelfHook
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && waylandSupport) [
+      makeBinaryWrapper
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       undmg
@@ -68,6 +74,12 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm755 bin/kiro-cli -t $out/bin
     install -Dm755 bin/kiro-cli-chat $out/bin/kiro-cli-chat
     install -Dm755 bin/kiro-cli-term $out/bin/kiro-cli-term
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isLinux && waylandSupport) ''
+    for bin in kiro-cli kiro-cli-chat kiro-cli-term; do
+      wrapProgram $out/bin/$bin \
+        --suffix PATH : ${lib.makeBinPath [ wl-clipboard ]}
+    done
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/bin $out/Applications
@@ -98,7 +110,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

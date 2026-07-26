@@ -347,7 +347,7 @@ def config_entry(levels: int, bootspec: BootSpec, label: str, time: str) -> str:
             os.path.basename(bootspec.toplevel) + "-secrets"
         )
 
-        if os.system(bootspec.initrdSecrets + " " + initrd_secrets_path_temp) != 0:
+        if subprocess.run([bootspec.initrdSecrets, initrd_secrets_path_temp]).returncode != 0:
             print(
                 f'warning: failed to create initrd secrets for "{label}"',
                 file=sys.stderr,

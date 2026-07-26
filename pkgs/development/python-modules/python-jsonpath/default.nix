@@ -9,7 +9,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-jsonpath";
-  version = "2.1.0";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -17,7 +17,7 @@ buildPythonPackage (finalAttrs: {
     repo = "python-jsonpath";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-2AV+X3Vs+pYi3Iv7zy9/nXna5PgrofHmrH0xyaumZWk=";
+    hash = "sha256-7kXDGm+pV0daeMEGW/hVb/U69svLFgZfZKklVgV+EJ4=";
   };
 
   build-system = [ hatchling ];

@@ -61,7 +61,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "azahar";
-  version = "2125.1.2";
+  version = "2125.1.3";
 
   src = fetchFromGitHub {
     owner = "azahar-emu";
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
       echo "${finalAttrs.version}" > "$out/GIT-TAG"
       git -C "$out" rev-parse HEAD > "$out/GIT-COMMIT"
     '';
-    hash = "sha256-B3mReLoVqFCqUeunst95AX0veGlZJNyeBBdDIFbf4HI=";
+    hash = "sha256-jn5Ib5jM/6zHuCjWoMkTvs0nR29mAbTlvID5aYZLw5o=";
   };
 
   strictDeps = true;

@@ -4,56 +4,63 @@
   buildNpmPackage,
   fetchFromGitHub,
   electron_41,
-  dart-sass,
   mpv-unwrapped,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_11,
+  nodejs-slim_latest,
   darwin,
   actool,
   copyDesktopItems,
   makeDesktopItem,
   nix-update-script,
+  webVersion ? false,
 }:
 let
   pname = "feishin";
-  version = "1.13.0";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = "feishin";
     tag = "v${version}";
-    hash = "sha256-v6dWzEB1+IK4bHmDo8Rr5e0Xi3OWKcm+UPBmBiSfdZ0=";
+    hash = "sha256-2UKJBUZNUpUUZIG1JFXok7YJdzqt+Ge0ykHUm8BeNcw=";
   };
 
   electron = electron_41;
+
+  # Fix pnpm issue on darwin https://github.com/NixOS/nixpkgs/issues/525627
+  pnpm = pnpm_11.override { nodejs-slim = nodejs-slim_latest; };
 in
 buildNpmPackage {
   inherit pname version;
 
   inherit src;
 
+  __structuredAttrs = true;
+
   npmConfigHook = pnpmConfigHook;
+  npmBuildScript = if webVersion then "build:web" else "build";
 
   npmDeps = null;
   pnpmDeps = fetchPnpmDeps {
     inherit
       pname
+      pnpm
       version
       src
       ;
-    pnpm = pnpm_10;
-    fetcherVersion = 3;
-    hash = "sha256-zNOGJ24G0xcgsGK4DmbBm7d1PHTp7IJS+RTALGRtfDg=";
+    fetcherVersion = 4;
+    hash = "sha256-9uG0AxIBAmuIPywg3p9fFCXmRvM9zDLhWfluSLRnUXY=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   nativeBuildInputs = [
-    pnpm_10
+    pnpm
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux) [ copyDesktopItems ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && !webVersion) [ copyDesktopItems ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && !webVersion) [
     darwin.autoSignDarwinBinariesHook
     actool
   ];
@@ -64,16 +71,7 @@ buildNpmPackage {
       --replace-fail '"postinstall": "electron-builder install-app-deps",' ""
   '';
 
-  preBuild = ''
-    rm -r node_modules/.pnpm/sass-embedded-*
-
-    test -d node_modules/.pnpm/sass-embedded@*
-    dir="$(echo node_modules/.pnpm/sass-embedded@*)/node_modules/sass-embedded/dist/lib/src/vendor/dart-sass"
-    mkdir -p "$dir"
-    ln -s ${dart-sass}/bin/dart-sass "$dir"/sass
-  '';
-
-  postBuild = ''
+  postBuild = lib.optionalString (!webVersion) ''
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
 
@@ -88,14 +86,18 @@ buildNpmPackage {
   installPhase = ''
     runHook preInstall
   ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  + lib.optionalString webVersion ''
+    mkdir -p $out
+    cp -r out/web/* $out
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin && !webVersion) ''
     mkdir -p $out/{Applications,bin}
     cp -r dist/**/Feishin.app $out/Applications/
     makeWrapper $out/Applications/Feishin.app/Contents/MacOS/Feishin $out/bin/feishin \
       --prefix PATH : "${lib.makeBinPath [ mpv-unwrapped ]}" \
       --set DISABLE_AUTO_UPDATES 1
   ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
+  + lib.optionalString (stdenv.hostPlatform.isLinux && !webVersion) ''
     mkdir -p $out/share/feishin
 
     pushd dist/*-unpacked/
@@ -126,7 +128,7 @@ buildNpmPackage {
     runHook postInstall
   '';
 
-  desktopItems = [
+  desktopItems = lib.optionals (!webVersion) [
     (makeDesktopItem {
       name = "feishin";
       desktopName = "Feishin";
@@ -152,11 +154,11 @@ buildNpmPackage {
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
-    mainProgram = "feishin";
     maintainers = with lib.maintainers; [
       BatteredBunny
       onny
       jlbribeiro
     ];
-  };
+  }
+  // lib.optionalAttrs (!webVersion) { mainProgram = "feishin"; };
 }

@@ -74,6 +74,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-anthropic==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

@@ -12,7 +12,6 @@ platforms = {
     "x86_64-linux": "linux_x86_64",
     "aarch64-linux": "linux_aarch64",
     "aarch64-darwin": "mac_universal",
-    "x86_64-darwin": "mac_universal",
 }
 
 if __name__ == "__main__":

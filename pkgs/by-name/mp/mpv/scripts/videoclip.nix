@@ -10,13 +10,13 @@
 }:
 buildLua {
   pname = "videoclip";
-  version = "0.2-unstable-2026-05-31";
+  version = "0.2-unstable-2026-07-07";
 
   src = fetchFromGitHub {
     owner = "Ajatt-Tools";
     repo = "videoclip";
-    rev = "d9a3e0966b238b824b86767956eb44a11ac367c6";
-    hash = "sha256-NZaflGehxoIf9eY3/p9WrKXXQj3x6GDZ6iMLeu5BhPc=";
+    rev = "979bae398da7ccd70cb2fb305c371b7af9259b10";
+    hash = "sha256-k3fxSeAjRZg4J5x5IQhKGYtUqfBE4heR1KNurGTElGs=";
   };
 
   patchPhase = ''

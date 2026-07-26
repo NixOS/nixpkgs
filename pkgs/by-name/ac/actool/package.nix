@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Apple's actool reimplementation";
     homepage = "https://github.com/viraptor/actool";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     mainProgram = "actool";
     maintainers = [ lib.maintainers.viraptor ];
   };

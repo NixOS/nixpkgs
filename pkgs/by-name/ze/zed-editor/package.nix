@@ -98,7 +98,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "1.9.0";
+  version = "1.12.0";
 
   outputs = [
     "out"
@@ -111,7 +111,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jD77wB/86DsZKO6Qh7pyszK4QgkzfgJthdQhbPVKeh0=";
+    hash = "sha256-IflRqX8Byi22ZSaOIk9Gl/KOVFnC9A3z9e16eK8JikA=";
   };
 
   postPatch = ''
@@ -134,7 +134,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail 'builder.include(&glib_path_config);' 'builder.include("${lib.getLib glib}/lib/glib-2.0/include");'
   '';
 
-  cargoHash = "sha256-sISPA9qZriyN2po3LM5n/YCdosQBgNnA4n9tmq/UC7w=";
+  cargoHash = "sha256-zXMY3xmcW/PYd+b0A2HkU6W2nYSEO3Uj5w8nOhU/Riw=";
 
   __structuredAttrs = true;
 
@@ -171,6 +171,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libGL
     libx11
     libxext
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # required by installPhase
+    git
   ];
 
   cargoBuildFlags = [

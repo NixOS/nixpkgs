@@ -26,7 +26,7 @@ from .models import (
     Profile,
     Remote,
 )
-from .process import SSH_DEFAULT_OPTS, run_wrapper
+from .process import run_wrapper, ssh_default_opts
 from .utils import Args, dict_to_flags
 
 FLAKE_FLAGS: Final = ["--extra-experimental-features", "nix-command flakes"]
@@ -193,7 +193,7 @@ def copy_closure(
     Also supports copying a closure from a remote to another remote."""
 
     sshopts = os.getenv("NIX_SSHOPTS", "")
-    env = {"NIX_SSHOPTS": " ".join(filter(lambda x: x, [sshopts, *SSH_DEFAULT_OPTS]))}
+    env = {"NIX_SSHOPTS": " ".join(filter(lambda x: x, [sshopts, *ssh_default_opts()]))}
 
     def nix_copy_closure(host: Remote, to: bool) -> None:
         run_wrapper(

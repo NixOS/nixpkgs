@@ -4,6 +4,7 @@
   fetchFromGitHub,
   hatchling,
   paho-mqtt,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
@@ -12,18 +13,22 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "victron-mqtt";
-  version = "2026.6.8";
+  version = "2026.7.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tomer-w";
     repo = "victron_mqtt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zwdSpfI1UtH9ZDYXk/0jozt9qTs5ZaMrg5c60HBnOWo=";
+    hash = "sha256-nFsv8fij2kqzpGwflWPfN29Tt8lbHS2EvLqljWHHOwE=";
   };
 
   build-system = [
     hatchling
+  ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
   ];
 
   dependencies = [

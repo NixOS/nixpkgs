@@ -1,39 +1,44 @@
 {
   lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  uv-build,
   accelerate,
   bitsandbytes,
-  buildPythonPackage,
   datasets,
-  fetchFromGitHub,
-  # geom-median,
   hf-transfer,
   huggingface-hub,
   imageio,
+  immutabledict,
   kernels,
+  langdetect,
+  lm-eval,
   matplotlib,
   numpy,
   optuna,
-  # pacmap,
   peft,
   psutil,
+  py-cpuinfo,
   pydantic-settings,
   questionary,
   rich,
   scikit-learn,
+  tomli-w,
   transformers,
-  uv-build,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "heretic-llm";
-  version = "1.2.0";
+  version = "1.4.0";
   pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "p-e-w";
     repo = "heretic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KmqbOAOII1SP7wpdvGxtzQJt5NmlnF/o99NuZ21vO0s=";
+    hash = "sha256-jIWvHRsRo4wtos+2oNA8n0kz0GPLb03qEFsOQKTuMo8=";
   };
 
   postPatch = ''
@@ -42,7 +47,11 @@ buildPythonPackage (finalAttrs: {
   '';
 
   pythonRelaxDeps = [
+    "datasets"
     "huggingface-hub"
+    "peft"
+    "pydantic-settings"
+    "rich"
     "transformers"
   ];
 
@@ -54,13 +63,18 @@ buildPythonPackage (finalAttrs: {
     datasets
     hf-transfer
     huggingface-hub
+    immutabledict
     kernels
+    langdetect
+    lm-eval
     optuna
     peft
     psutil
+    py-cpuinfo
     pydantic-settings
     questionary
     rich
+    tomli-w
     transformers
   ];
 

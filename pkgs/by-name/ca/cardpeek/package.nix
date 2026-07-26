@@ -52,6 +52,13 @@ stdenv.mkDerivation {
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux pcsclite;
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # macOS iconv implementation is slightly broken since Sonoma
+    # https://github.com/Homebrew/homebrew-core/pull/199639
+    # https://savannah.gnu.org/bugs/index.php?66541
+    am_cv_func_iconv_works = "yes";
+  };
+
   enableParallelBuilding = true;
 
   meta = {

@@ -202,6 +202,8 @@ rec {
           --script ./anchor.min.js \
           --script ./anchor-use.js \
           --sidebar-depth 2 \
+          --header ${./header.html}\
+          --no-navheader \
           ./manual.md \
           $dst/${common.indexPath}
 

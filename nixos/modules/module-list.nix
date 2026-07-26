@@ -268,6 +268,7 @@
   ./programs/mininet.nix
   ./programs/minipro.nix
   ./programs/miriway.nix
+  ./programs/moonlight-qt.nix
   ./programs/mosh.nix
   ./programs/mouse-actions.nix
   ./programs/msmtp.nix
@@ -295,6 +296,7 @@
   ./programs/opengamepadui.nix
   ./programs/openvpn3.nix
   ./programs/partition-manager.nix
+  ./programs/passless.nix
   ./programs/pay-respects.nix
   ./programs/plotinus.nix
   ./programs/pmount.nix
@@ -353,9 +355,10 @@
   ./programs/wayland/hyprland.nix
   ./programs/wayland/hyprlock.nix
   ./programs/wayland/labwc.nix
-  ./programs/wayland/mangowc.nix
+  ./programs/wayland/mango.nix
   ./programs/wayland/miracle-wm.nix
   ./programs/wayland/niri.nix
+  ./programs/wayland/pinnacle.nix
   ./programs/wayland/river.nix
   ./programs/wayland/sway.nix
   ./programs/wayland/uwsm.nix
@@ -593,6 +596,7 @@
   ./services/desktops/linyaps.nix
   ./services/desktops/malcontent.nix
   ./services/desktops/neard.nix
+  ./services/desktops/oo7.nix
   ./services/desktops/pipewire/pipewire.nix
   ./services/desktops/pipewire/wireplumber.nix
   ./services/desktops/playerctld.nix
@@ -728,6 +732,7 @@
   ./services/hardware/usbmuxd.nix
   ./services/hardware/usbrelayd.nix
   ./services/hardware/vdr.nix
+  ./services/hardware/watt.nix
   ./services/home-automation/deye-dummycloud.nix
   ./services/home-automation/ebusd.nix
   ./services/home-automation/esphome.nix
@@ -801,7 +806,6 @@
   ./services/mail/sympa.nix
   ./services/mail/tlsrpt.nix
   ./services/mail/zeyple.nix
-  ./services/matrix/appservice-discord.nix
   ./services/matrix/appservice-irc.nix
   ./services/matrix/conduit.nix
   ./services/matrix/continuwuity.nix
@@ -820,6 +824,7 @@
   ./services/matrix/mautrix-whatsapp.nix
   ./services/matrix/mjolnir.nix
   ./services/matrix/pantalaimon.nix
+  ./services/matrix/rust-federation-tester.nix
   ./services/matrix/synapse-auto-compressor.nix
   ./services/matrix/synapse.nix
   ./services/matrix/tuwunel.nix
@@ -933,7 +938,6 @@
   ./services/misc/open-webui.nix
   ./services/misc/orthanc.nix
   ./services/misc/osrm.nix
-  ./services/misc/overseerr.nix
   ./services/misc/owncast.nix
   ./services/misc/packagekit.nix
   ./services/misc/paisa.nix
@@ -982,6 +986,7 @@
   ./services/misc/spice-webdavd.nix
   ./services/misc/spoolman.nix
   ./services/misc/sssd.nix
+  ./services/misc/stash-clipboard.nix
   ./services/misc/subsonic.nix
   ./services/misc/sundtek.nix
   ./services/misc/svnserve.nix
@@ -1284,6 +1289,7 @@
   ./services/networking/logmein-hamachi.nix
   ./services/networking/lokinet.nix
   ./services/networking/lxd-image-server.nix
+  ./services/networking/lxmd.nix
   ./services/networking/magic-wormhole-mailbox-server.nix
   ./services/networking/matterbridge.nix
   ./services/networking/meshtasticd.nix
@@ -1338,6 +1344,7 @@
   ./services/networking/nncp.nix
   ./services/networking/nntp-proxy.nix
   ./services/networking/nomad.nix
+  ./services/networking/nordvpn.nix
   ./services/networking/nsd.nix
   ./services/networking/ntopng.nix
   ./services/networking/ntp/chrony.nix
@@ -1380,6 +1387,7 @@
   ./services/networking/redsocks.nix
   ./services/networking/reframe.nix
   ./services/networking/resilio.nix
+  ./services/networking/rnsd.nix
   ./services/networking/robustirc-bridge.nix
   ./services/networking/rosenpass.nix
   ./services/networking/routedns.nix
@@ -1854,6 +1862,7 @@
   ./services/web-servers/nginx/tailscale-auth.nix
   ./services/web-servers/phpfpm/default.nix
   ./services/web-servers/pomerium.nix
+  ./services/web-servers/rustfs.nix
   ./services/web-servers/rustus.nix
   ./services/web-servers/send.nix
   ./services/web-servers/stargazer.nix
@@ -2044,6 +2053,7 @@
   ./virtualisation/openvswitch.nix
   ./virtualisation/parallels-guest.nix
   ./virtualisation/podman/default.nix
+  ./virtualisation/qemu-firmware.nix
   ./virtualisation/qemu-guest-agent.nix
   ./virtualisation/rosetta.nix
   ./virtualisation/spice-usb-redirection.nix

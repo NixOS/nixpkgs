@@ -16,11 +16,11 @@
   socat,
   versionCheckHook,
   writableTmpDirAsHomeHook,
+  manifest ? lib.importJSON ./manifest.json,
 }:
 let
   stdenv = stdenvNoCC;
   baseUrl = "https://downloads.claude.ai/claude-code-releases";
-  manifest = lib.importJSON ./manifest.json;
   platformKey = "${stdenv.hostPlatform.node.platform}-${stdenv.hostPlatform.node.arch}";
   platformManifestEntry = manifest.platforms.${platformKey};
 in
@@ -97,7 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [
       "aarch64-darwin"
-      "x86_64-darwin"
       "aarch64-linux"
       "x86_64-linux"
     ];

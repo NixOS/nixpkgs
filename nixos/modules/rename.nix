@@ -277,6 +277,13 @@ in
       "services"
       "marathon"
     ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule
+      [
+        "services"
+        "matrix-appservice-discord"
+      ]
+      "The matrix-appservice-discord package has been removed as it is no longer actively maintained upstream. Use `services.mautrix-discord` instead."
+    )
     (mkRemovedOptionModule [ "services" "mathics" ] "The Mathics module has been removed")
     (mkRemovedOptionModule [ "services" "matrix-sliding-sync" ]
       "The matrix-sliding-sync package has been removed, since matrix-synapse incorporated its functionality. Remove `services.sliding-sync` from your NixOS Configuration, and the `.well-known` record for `org.matrix.msc3575.proxy` from your webserver"
@@ -396,6 +403,11 @@ in
       as the underlying package isn't being maintained. Working alternatives are
       libinput and synaptics.
     '')
+    (mkRemovedOptionModule [ "services" "xserver" "windowManager" "afterstep" ] ''
+      The services.xserver.windowManager.afterstep module and the corresponding
+      package have been removed from Nixpkgs because they were unmaintained
+      upstream.
+    '')
     (mkRemovedOptionModule [ "services" "xserver" "windowManager" "ragnarwm" ] ''
       The services.xserver.windowManager.ragnarwm module has been removed
       because the corresponding package was removed from nixpkgs.
@@ -504,7 +516,7 @@ in
       services.simplesamlphp has been vulnerable and unmaintained in nixpkgs.
     '')
     (mkRemovedOptionModule [ "security" "pam" "enableEcryptfs" ] ''
-      security.pam.enableFscrypt was removed since it was unmaintained in nixpkgs.
+      security.pam.enableEcryptfs was removed since it was unmaintained in nixpkgs.
     '')
     (mkRemovedOptionModule [ "security" "rngd" ] ''
       rngd is not necessary for any device that the kernel recognises
@@ -527,6 +539,13 @@ in
     (mkRemovedOptionModule [ "services" "xserver" "cmt" ] ''
       services.xserver.cmt has been removed as it was broken and unmaintained upstream
     '')
+    (mkRemovedOptionModule
+      [
+        "services"
+        "overseerr"
+      ]
+      "`services.overseerr` has been replaced by `services.seerr` as the project has been merged with Jellyseerr under Seerr."
+    )
     # Do NOT add any option renames here, see top of the file
   ];
 }

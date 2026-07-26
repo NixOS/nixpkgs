@@ -10,6 +10,7 @@
   makeWrapper,
   procps,
   qemu,
+  docker,
   testers,
   colima,
 }:
@@ -66,6 +67,7 @@ buildGoModule (finalAttrs: {
             # Suppress warning on `colima start`: https://github.com/abiosoft/colima/issues/1333
             lima-full
             qemu
+            docker
           ]
           ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform krunkit) krunkit
         )

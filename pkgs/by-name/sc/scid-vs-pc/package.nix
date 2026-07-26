@@ -16,7 +16,7 @@ tcl.mkTclDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/scidvspc/scid_vs_pc-${version}.tgz";
-    hash = "sha256-DivCF3yCHmGyps7PTU1xKcdG+oBegD/ntMst9rOr0TU=";
+    hash = "sha256-aWN1w46dOW7VMACs8huvUsACtk3ggIS6BZ51BM9k+VM=";
   };
 
   postPatch = ''

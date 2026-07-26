@@ -18,6 +18,7 @@
   useBoehmgc ? false,
   boehmgc,
   sbcl,
+  fixDarwinDylibNames,
 }:
 
 let
@@ -38,7 +39,11 @@ stdenv.mkDerivation rec {
     automake
     texinfo
     makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
   ];
+
   propagatedBuildInputs = [
     libffi
     gmp

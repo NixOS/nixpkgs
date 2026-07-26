@@ -6,10 +6,11 @@
   freetype,
   gettext,
   glib,
-  gtk2,
   libGL,
   libGLU,
   libmpeg2,
+  libx11,
+  libxi,
   lua,
   openal,
   pkg-config,
@@ -21,7 +22,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "fs-uae";
+  pname = "fsuae";
   version = "3.2.35";
 
   src = fetchFromGitHub {
@@ -30,6 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-e+Q+PC6Kpq3OBKsgoRvmu2p9dQfJeRCdFO1agXIGcU8=";
   };
+
+  enableParallelBuilding = true;
 
   nativeBuildInputs = [
     autoreconfHook
@@ -43,10 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     gettext
     glib
-    gtk2
     libGL
     libGLU
     libmpeg2
+    libx11
+    libxi
     lua
     openal
     zlib

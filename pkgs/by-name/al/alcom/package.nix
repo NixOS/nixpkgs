@@ -21,12 +21,12 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alcom";
-  version = "1.1.6";
+  version = "1.1.8";
   src = fetchFromGitHub {
     owner = "vrc-get";
     repo = "vrc-get";
     tag = "gui-v${finalAttrs.version}";
-    hash = "sha256-TpVHE3e3dMdBOtPVKomKvg5tQf42QWik18k5oVD2Hms=";
+    hash = "sha256-86oR2+qKCmgkQMROq/RZDsSYINzdG5U08dmPznzMSzg=";
   };
 
   nativeBuildInputs = [
@@ -48,15 +48,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
     webkitgtk_4_1
   ];
 
-  cargoHash = "sha256-J8vCr+B4J3ZqxkkNk+x0jr52qNJJYfBJe2oyLf0GLsc=";
+  cargoHash = "sha256-z3VLIRTyS127TS+jdGTdlt1xmMHdwFAsMzkkuVc78lU=";
   buildFeatures = [ "no-self-updater" ];
   buildAndTestSubdir = subdir;
+
+  postInstall = ''
+    install -Dm644 ${subdir}/icons/icon.png $out/share/icons/hicolor/512x512/apps/ALCOM.png
+    for size in 32x32 64x64 128x128 128x128@2x; do
+      install -Dm644 ${subdir}/icons/$size.png $out/share/icons/hicolor/''${size%x}/apps/ALCOM.png
+    done
+  '';
 
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/${subdir}";
-    hash = "sha256-VyA2c2659Kg1DjLmmtvSAivltdraSBNArIu1XGENGmQ=";
+    hash = "sha256-flWM2ctaGak/KaTZ5sCj3Z28vIqOeiX8VJMTaIxg2fw=";
   };
   npmRoot = subdir;
 

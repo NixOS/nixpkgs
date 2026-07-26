@@ -13,8 +13,8 @@
   openssl,
   cmake,
   cacert,
+  tzdata,
   usage,
-  mise,
   testers,
   runCommand,
   jq,
@@ -22,16 +22,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mise";
-  version = "2026.7.2";
+  version = "2026.7.10";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Jjvg2PBxeW2kKqVA3GoKpMXcEXTMh4g2J+cby6av45s=";
+    hash = "sha256-klEexXMGaGM0YkcSDaHa8lD1jdwAfCcms7soRKy3r3w=";
   };
 
-  cargoHash = "sha256-JoXbR4gcca4Zk1KwVwE3qc+TqRTMZyFaTrEd4bzRTJY=";
+  cargoHash = "sha256-O32fVQGb8+ECopUPeU9Pm8xKP4Aj494MtyHYwR3wFnM=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -69,8 +69,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rustPlatform.bindgenHook
   ];
 
-  # disable warnings as errors for aws-lc-sys in checkPhase
-  env.NIX_CFLAGS_COMPILE = "-Wno-error";
+  env = {
+    # disable warnings as errors for aws-lc-sys in checkPhase
+    NIX_CFLAGS_COMPILE = "-Wno-error";
+    # tera date helper tests look up timezone data via TZDIR.
+    TZDIR = "${tzdata}/share/zoneinfo";
+  };
 
   checkFlags = [
     # last_modified will always be different in nix
@@ -113,7 +117,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ];
     };
     tests = {
-      version = (testers.testVersion { package = mise; }).overrideAttrs (old: {
+      version = (testers.testVersion { package = finalAttrs.finalPackage; }).overrideAttrs (old: {
         nativeBuildInputs = old.nativeBuildInputs ++ [ cacert ];
       });
       usageCompat =
@@ -121,7 +125,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         runCommand "mise-usage-compatibility"
           {
             nativeBuildInputs = [
-              mise
+              finalAttrs.finalPackage
               usage
               jq
             ];

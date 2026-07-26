@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "setuptools";
-  version = "82.0.1";
+  version = "83.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "setuptools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-M4fB+R4UNla2VlcWNhfDLvExQMpjLkPkgVsU4vg6ImU=";
+    hash = "sha256-Gn2gH2LnsgeX1MvDRBbnFnI6WjkjBFItU4SelowkjBc=";
   };
 
   patches = [
@@ -49,7 +49,7 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://setuptools.pypa.io/en/stable/history.html#v${
       lib.replaceString "." "-" finalAttrs.version
     }";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     platforms = python.meta.platforms;
     teams = [ lib.teams.python ];
   };

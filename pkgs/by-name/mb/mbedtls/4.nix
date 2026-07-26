@@ -1,4 +1,8 @@
-{ callPackage, fetchurl }:
+{
+  lib,
+  stdenv,
+  callPackage,
+}:
 
 callPackage ./generic.nix {
   version = "4.1.0";
@@ -11,5 +15,11 @@ callPackage ./generic.nix {
     # * <https://github.com/openwrt/openwrt/pull/15479>
     # * <https://github.com/Mbed-TLS/mbedtls/issues/9003>
     ./0001-fix-gcc14-build.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.is32bit [
+    # Fixes build with GCC 15.3 on 32-bit platforms.
+    # See: https://github.com/Mbed-TLS/mbedtls/pull/10793
+    # Manually forward-ported to v4
+    ./fix-gcc153-32bit-v4.patch
   ];
 }

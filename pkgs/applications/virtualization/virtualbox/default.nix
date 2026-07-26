@@ -72,9 +72,9 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  virtualboxVersion = "7.2.10";
+  virtualboxVersion = "7.2.12";
   virtualboxSubVersion = "";
-  virtualboxSha256 = "203a02e3c33ed02fdd75211a58bc9e77c9a8042ad4fa91ddc2914afbd2d67125";
+  virtualboxSha256 = "64a4843677e42010e7799e951883fbbefc56bf2bc162e4970edea04f142f8b25";
 
   kvmPatchVboxVersion = "7.2.6";
   kvmPatchVersion = "20260201";

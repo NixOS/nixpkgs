@@ -23,14 +23,14 @@ body {
 @media screen and (min-width: 992px) {
   .book,
   .appendix {
-    max-width: 60rem;
+    max-width: 55rem;
   }
 }
 
 @media screen and (min-width: 1200px) {
   .book,
   .appendix {
-    max-width: 73rem;
+    max-width: 55rem;
   }
 }
 
@@ -114,7 +114,7 @@ html {
 body {
   font-size: 1rem;
   font-family: "Roboto", sans-serif;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--main-text-color);
   background-color: var(--background);
   min-height: 100vh;
@@ -156,8 +156,7 @@ body {
 }
 
 a {
-  text-decoration: none;
-  border-bottom: 1px solid;
+  text-decoration: underline;
   color: var(--link-color);
 }
 
@@ -184,59 +183,52 @@ hr {
   margin-bottom: 1rem;
 }
 
-h1 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 800;
-  line-height: 110%;
-  font-size: 200%;
-  margin-bottom: 1rem;
+  line-height: 1.1;
+  margin: 1.5rem 0 0.5rem;
+}
+
+/*
+  Major-second scale see: https://typescale.com/
+  rounded to .025rem (0.4px)
+*/
+h1 {
+  font-size: 2rem;
   color: var(--heading-color);
 }
 
 h2 {
-  font-weight: 800;
-  line-height: 110%;
-  font-size: 170%;
-  margin-bottom: 0.625rem;
+  font-size: 1.8rem;
   color: var(--heading-color);
-}
-
-h2:not(:first-child) {
-  margin-top: 1rem;
 }
 
 h3 {
-  font-weight: 800;
-  line-height: 110%;
-  margin-bottom: 1rem;
-  font-size: 150%;
+  font-size: 1.6rem;
   color: var(--heading-color);
 }
 
-:is(.note, .tip, .warning, .caution, .important) h3 {
-  font-size: 120%;
-}
-
 h4 {
-  font-weight: 800;
-  line-height: 110%;
-  margin-bottom: 1rem;
-  font-size: 140%;
+  font-size: 1.425rem;
   color: var(--heading-color);
 }
 
 h5 {
-  font-weight: 800;
-  line-height: 110%;
-  margin-bottom: 1rem;
-  font-size: 130%;
+  font-size: 1.275rem;
   color: var(--small-heading-color);
 }
 
 h6 {
-  font-weight: 800;
-  line-height: 110%;
-  margin-bottom: 1rem;
-  font-size: 120%;
+  font-size: 1.125rem;
+}
+
+:is(.note, .tip, .warning, .caution, .important) h3 {
+  font-size: 1.425rem;
 }
 
 strong {
@@ -264,13 +256,9 @@ code {
 }
 
 code {
-  color: #ff8657;
-  background: #f4f4f4;
-  display: inline-block;
-  padding: 0 0.5rem;
-  border: 1px solid #d8d8d8;
-  border-radius: 0.5rem;
-  line-height: 1.57777778;
+  padding: 0.2em 0.4em;
+  background: var(--inline-code-background);
+  border-radius: 0.375rem;
 }
 
 div.book .programlisting,
@@ -330,11 +318,6 @@ div.appendix .programlisting {
   background: var(--caution-background);
 }
 
-div.book .section,
-div.appendix .section {
-  margin-top: 2em;
-}
-
 div.book div.example,
 div.appendix div.example {
   margin-top: 1.5em;
@@ -378,11 +361,6 @@ div.appendix dt {
 
 div.book code,
 div.appendix code {
-  padding: 0;
-  border: 0;
-  background-color: inherit;
-  color: inherit;
-  font-size: 100%;
   -webkit-hyphens: none;
   -moz-hyphens: none;
   hyphens: none;
@@ -419,6 +397,7 @@ div.appendix .variablelist .term {
 
 :root {
   --sidebar-width: 20rem;
+  --header-height: 3rem;
   --background: #fff;
   --main-text-color: #000;
   --link-color: #405d99;
@@ -441,6 +420,7 @@ div.appendix .variablelist .term {
   --caution-background: #ffebe8;
   --codeblock-background: #f2f8fd;
   --codeblock-text-color: #000;
+  --inline-code-background: #818b981f;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -466,6 +446,7 @@ div.appendix .variablelist .term {
     --caution-background: #422522;
     --codeblock-background: #393939;
     --codeblock-text-color: #fff;
+    --inline-code-background: #656c7633;
   }
 
   :is(.note, .tip, .warning, .caution, .important) {
@@ -476,7 +457,12 @@ div.appendix .variablelist .term {
 
 @font-face {
   font-family: Roboto;
-  src: url(Roboto.ttf);
+  src:
+    url(Roboto.ttf) format("truetype") tech(variations),
+    url(Roboto.ttf) format("truetype-variations");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
 }
 
 .chapter {
@@ -493,6 +479,8 @@ div.appendix .variablelist .term {
 nav.toc-sidebar {
   height: 100%;
   padding: 0 1rem 2rem;
+  background-color: var(--background);
+  color: var(--main-text-color);
 }
 
 /* menu button, shown on mobile, hidden on desktop */
@@ -534,6 +522,59 @@ nav.toc-sidebar li {
 
 nav.toc-sidebar summary {
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  list-style: none;
+}
+
+nav.toc-sidebar summary::before {
+  content: "▸";
+  flex: none;
+  font-size: 0.75em;
+}
+nav.toc-sidebar details[open] > summary::before {
+  content: "▾";
+}
+
+nav.toc-sidebar a {
+  display: block;
+  width: 100%;
+  padding: 3px 8px;
+  border-left: 3px solid transparent;
+  border-radius: 3px;
+  color: inherit;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease;
+}
+nav.toc-sidebar a:hover {
+  background-color: #f2f2f2 !important;
+}
+
+nav.toc-sidebar a.active {
+  background-color: #d8d8d8;
+  border-left-color: #444;
+  font-weight: 600;
+}
+nav.toc-sidebar a.active-trail {
+  border-left-color: #bbb;
+  background-color: #e8e8e8;
+}
+
+@media (prefers-color-scheme: dark) {
+  nav.toc-sidebar a:hover {
+    /* hover should win over scroll selectors despite beeing less specific */
+    background-color: #606060 !important;
+  }
+  nav.toc-sidebar a.active {
+    background-color: #373737;
+    border-left-color: #eee;
+    font-weight: 600;
+  }
+  nav.toc-sidebar a.active-trail {
+    border-left-color: #eee;
+    background-color: #323232;
+  }
 }
 
 @media screen and (min-width: 768px) {
@@ -542,7 +583,7 @@ nav.toc-sidebar summary {
     min-height: 0;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-rows: var(--header-height) auto minmax(0, 1fr);
   }
 
   body:has(> nav.toc-sidebar) {
@@ -551,7 +592,7 @@ nav.toc-sidebar summary {
 
   .navheader {
     grid-column: 1 / -1;
-    grid-row: 1;
+    grid-row: 2;
   }
 
   nav.toc-sidebar {
@@ -562,11 +603,10 @@ nav.toc-sidebar summary {
     /*  */
     margin: 0;
     grid-column: 1;
-    grid-row: 2;
+    grid-row: 3;
     max-height: none;
     overflow-y: auto;
     border: none;
-    border-right: 0.0625rem solid #d8d8d8;
   }
 
   /* Hide the toggle button on desktop */
@@ -576,12 +616,82 @@ nav.toc-sidebar summary {
 
   main.content {
     grid-column: 1 / -1;
-    grid-row: 2;
+    grid-row: 3;
     overflow-y: auto;
     padding: 0 1rem;
   }
 
   body:has(> nav.toc-sidebar) main.content {
     grid-column: 2;
+  }
+}
+
+.manual-header {
+  background-color: var(--background);
+  border-bottom: 0.0625rem solid #d8d8d8;
+  display: flex;
+  flex-direction: column;
+}
+
+.manual-header--title {
+  order: -1;
+  padding: 0.5rem 1rem 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--small-heading-color);
+  text-align: center;
+}
+
+.manual-header--tabs {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-around;
+  margin: 0;
+  padding: 0;
+}
+
+.manual-header--tab {
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--main-text-color);
+  text-decoration: none;
+  border-bottom: 0.1875rem solid transparent;
+  border-top: 0.1875rem solid transparent;
+  transition: border-bottom-color 0.15s ease;
+}
+
+.manual-header--tab:hover {
+  border-bottom-color: var(--heading-color);
+  color: var(--main-text-color);
+}
+
+.manual-header--tab-active {
+  border-bottom-color: var(--heading-color);
+  color: var(--heading-color);
+  font-weight: 700;
+}
+
+@media screen and (min-width: 768px) {
+  .manual-header {
+    height: var(--header-height);
+    flex-direction: row;
+    align-items: stretch;
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .manual-header--title {
+    order: 0;
+    margin-left: auto;
+    padding: 0 1rem;
+    align-self: center;
+  }
+
+  .manual-header--tabs {
+    justify-content: flex-start;
+    padding: 0 1rem;
   }
 }

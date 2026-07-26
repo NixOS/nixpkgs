@@ -27,10 +27,6 @@ let
       url = "https://tetr.io/about/desktop/builds/${version}/TETR.IO%20Setup%20arm64.dmg";
       hash = "sha256-PbK9XEynpii35p6DQYiPbaRM4guPazWd5N4Dr2O4H24=";
     };
-    x86_64-darwin = fetchurl {
-      url = "https://tetr.io/about/desktop/builds/${version}/TETR.IO%20Setup%20x86.dmg";
-      hash = "sha256-I4Mj6YY7KwpLk2tZ02EdqUxnxSW/3vCM4J7YFzCLEuM=";
-    };
   };
 in
 stdenv.mkDerivation {

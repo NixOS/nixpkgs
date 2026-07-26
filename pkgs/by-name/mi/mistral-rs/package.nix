@@ -34,6 +34,7 @@
 
 let
   inherit (stdenv) hostPlatform;
+  rustc = rustPlatform.callPackage ({ rustc }: rustc) { };
 
   accelIsValid = builtins.elem acceleration [
     null
@@ -94,6 +95,26 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --replace-fail \
           "lto = true" \
           "lto = false"
+
+    ''
+    # LLVM 21 cannot select the VPDPBUSD intrinsic because its argument types are incorrect.
+    # Fixed by https://github.com/rust-lang/llvm-project/commit/94e2c19f86a699d7a19ff0f4130b696699189c8d.
+    + lib.optionalString (hostPlatform.isx86_64 && lib.versionOlder rustc.llvm.version "22") ''
+      substituteInPlace "$cargoDepsCopy/source-git-0/candle-core-0.11.0/src/quantized/mod.rs" \
+        --replace-fail \
+          '#[cfg(target_arch = "x86_64")]' \
+          '#[cfg(any())]' \
+        --replace-fail \
+          '#[cfg(not(any(target_arch = "aarch64", target_arch = "x86_64")))]' \
+          '#[cfg(not(target_arch = "aarch64"))]'
+
+      substituteInPlace "$cargoDepsCopy/source-git-0/candle-core-0.11.0/src/quantized/repack.rs" \
+        --replace-fail \
+          '#[cfg(target_arch = "x86_64")]' \
+          '#[cfg(any())]' \
+        --replace-fail \
+          '#[cfg(not(any(target_arch = "aarch64", target_arch = "x86_64")))]' \
+          '#[cfg(not(target_arch = "aarch64"))]'
     ''
     # Prevent build scripts from attempting to clone cutlass (which would fail in the sandbox anyway).
     # Instead, we provide cutlass in buildInputs.

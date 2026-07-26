@@ -60,10 +60,6 @@ stdenv.mkDerivation (
         url = "https://github.com/verifast/verifast/releases/download/${finalAttrs.version}/${pname}-${finalAttrs.version}-macos-aarch.tar.gz";
         hash = "sha256-/UicTlA4lFRk3OBgcsiS8YtDGmb7R7d6zeVLZo49HV8=";
       };
-      x86_64-darwin = fetchurl {
-        url = "https://github.com/verifast/verifast/releases/download/${finalAttrs.version}/${pname}-${finalAttrs.version}-macos.tar.gz";
-        hash = "sha256-EVYPcnPsERfs2bqVQMbdR6TAv/ChQDrmCZNRl2Qs1Qw=";
-      };
     };
   in
   {

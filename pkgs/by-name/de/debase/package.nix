@@ -77,7 +77,6 @@ stdenv.mkDerivation rec {
     platforms = [
       # Only these systems are supported by Makefile
       "x86_64-linux"
-      "x86_64-darwin"
       "aarch64-linux"
       "aarch64-darwin"
     ];

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   fetchurl,
   zlib,
   libtiff,
@@ -23,9 +24,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-JUF3IX0LOtpeAJPuTbAJo79sCuPuhh7KNIuQJfcFN/A=";
   };
 
-  # The following patches are taken from the Debian package
-  # See https://salsa.debian.org/med-team/dcmtk
   patches = [
+    # Remove when updating past 3.7.0.
+    (fetchpatch {
+      name = "CVE-2026-5663.patch";
+      url = "https://github.com/DCMTK/dcmtk/commit/edbb085e45788dccaf0e64d71534cfca925784b8.patch";
+      hash = "sha256-aSK/G5zI1Zyz0aonxnbWP/W5Ra6xCBYGxgPhM+05LXs=";
+    })
+    # The following patches are taken from the Debian package
+    # See https://salsa.debian.org/med-team/dcmtk
     (fetchurl {
       url = "https://salsa.debian.org/med-team/dcmtk/-/raw/debian/3.6.9-4/debian/patches/01_dcmtk_3.6.0-1.patch";
       hash = "sha256-kDEZvPqcF8+PYID24srMoPSBPltmnGiJ67LHsLVcPYM=";

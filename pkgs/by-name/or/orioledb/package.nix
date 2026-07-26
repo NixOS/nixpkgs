@@ -1,20 +1,20 @@
 {
   fetchFromGitHub,
   lib,
-  postgresql_17,
+  postgresql_18,
 }:
 
 let
-  orioledb-postgres = postgresql_17.overrideAttrs (
+  orioledb-postgres = postgresql_18.overrideAttrs (
     finalAttrs: oldAttrs: {
       pname = "orioledb-postgres";
-      version = "17.20";
+      version = "18.1";
 
       src = fetchFromGitHub {
         owner = "orioledb";
         repo = "postgres";
-        tag = "patches17_20";
-        hash = "sha256-3dC00fFpD8fJDKed37oQvILMtA3GKBsWo1GEdUQzXzQ=";
+        tag = "patches18_1";
+        hash = "sha256-TCpmTa9R+a+rrTRSNkfhBDaVto1RtKf1R+qnepw9bV0=";
       };
 
       # Configure extracts the patch version from the git tag. This

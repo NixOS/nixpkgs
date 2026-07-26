@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "marge-bot";
-  version = "1.1.0";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "marge-org";
     repo = "marge-bot";
     rev = finalAttrs.version;
-    hash = "sha256-nTVfsprCTa2S/F8GDdDw5SwQw+OrGkHrX/QwU1FZDsw=";
+    hash = "sha256-Wg+yWkHkCbry13SRaEvULF4jjCaBI524FsVfcP/+u/k=";
   };
 
   build-system = with python3Packages; [

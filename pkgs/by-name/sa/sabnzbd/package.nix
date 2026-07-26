@@ -24,11 +24,11 @@ let
       babelfish
       cffi
       chardet
-      cheetah3
       cheroot
       cherrypy
       configobj
       cryptography
+      ct3
       feedparser
       guessit
       jaraco-classes

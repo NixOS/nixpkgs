@@ -145,7 +145,13 @@ in
   ),
   overrideCC,
   buildPackages,
-  pgoSupport ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform == stdenv.buildPlatform),
+  # PGO merges profile data with a 32-bit llvm-profdata, which runs out of
+  # address space on the huge libxul profile, so disable it on 32-bit.
+  pgoSupport ? (
+    stdenv.hostPlatform.isLinux
+    && stdenv.hostPlatform == stdenv.buildPlatform
+    && stdenv.hostPlatform.is64bit
+  ),
   xvfb-run,
   elfhackSupport ?
     isElfhackPlatform stdenv && !(stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isAarch64),
@@ -303,6 +309,9 @@ buildStdenv.mkDerivation {
   version = packageVersion;
 
   inherit src unpackPhase;
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   meta =
     meta

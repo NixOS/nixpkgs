@@ -99,7 +99,6 @@ python3Packages.buildPythonPackage rec {
     license = lib.licenses.gpl3;
     mainProgram = "umu-run";
     maintainers = with lib.maintainers; [
-      diniamo
       MattSturgeon
       fuzen
     ];

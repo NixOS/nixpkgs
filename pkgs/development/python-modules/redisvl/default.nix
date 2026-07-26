@@ -27,6 +27,8 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ hatchling ];
 
+  pythonRelaxDeps = [ "redis" ];
+
   dependencies = [
     numpy
     pyyaml

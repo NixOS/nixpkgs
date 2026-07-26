@@ -10,6 +10,16 @@
       "source": "hosted",
       "version": "93.0.0"
     },
+    "analysis_server_plugin": {
+      "dependency": "transitive",
+      "description": {
+        "name": "analysis_server_plugin",
+        "sha256": "5f3920acbd5765764ec9ef6c5bbdd102015424281232ee4fb4f5431c87abb4eb",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.3.7"
+    },
     "analyzer": {
       "dependency": "transitive",
       "description": {
@@ -108,12 +118,12 @@
       "dependency": "direct main",
       "description": {
         "path": ".",
-        "ref": "b4d36f88bb365faaf308ff26be7ade49bbaec859",
-        "resolved-ref": "b4d36f88bb365faaf308ff26be7ade49bbaec859",
+        "ref": "021e2075260e324b7440a5c81b57bf0242d35020",
+        "resolved-ref": "021e2075260e324b7440a5c81b57bf0242d35020",
         "url": "https://github.com/edde746/background_downloader"
       },
       "source": "git",
-      "version": "9.5.4"
+      "version": "9.5.5"
     },
     "boolean_selector": {
       "dependency": "transitive",
@@ -299,12 +309,12 @@
       "dependency": "direct main",
       "description": {
         "path": "packages/connectivity_plus/connectivity_plus",
-        "ref": "2b614414ce95d920880765d07cbb9759699a4563",
-        "resolved-ref": "2b614414ce95d920880765d07cbb9759699a4563",
-        "url": "https://github.com/edde746/plus_plugins"
+        "ref": "bf04cdf66598dc3fca274b8b1db2b92b0bf6b73e",
+        "resolved-ref": "bf04cdf66598dc3fca274b8b1db2b92b0bf6b73e",
+        "url": "https://github.com/fluttercommunity/plus_plugins"
       },
       "source": "git",
-      "version": "7.1.1"
+      "version": "7.2.0"
     },
     "connectivity_plus_platform_interface": {
       "dependency": "transitive",
@@ -390,11 +400,11 @@
       "dependency": "direct dev",
       "description": {
         "name": "dart_code_linter",
-        "sha256": "8ece88f710621ca1c40b6c344b316d78bb2269d728d37d2a44f19a81d9d2cb93",
+        "sha256": "44cce8527a2094201067b50aed97778930638cc43e8bb3cb0b40a90c36fb9c84",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "4.0.2"
+      "version": "4.1.6"
     },
     "dart_discord_presence": {
       "dependency": "direct main",
@@ -873,13 +883,12 @@
     "material_symbols_icons": {
       "dependency": "direct main",
       "description": {
-        "path": ".",
-        "ref": "1d8cd83",
-        "resolved-ref": "1d8cd8325db29691a01738a25f220dd3515bd1e2",
-        "url": "https://github.com/edde746/material_symbols_icons"
+        "name": "material_symbols_icons",
+        "sha256": "49c532dd0b74544e9d8d93ec0f821d52ec532e7c9263c889ebe71b1be4f34ba7",
+        "url": "https://pub.dev"
       },
-      "source": "git",
-      "version": "4.2906.0"
+      "source": "hosted",
+      "version": "4.2951.0"
     },
     "meta": {
       "dependency": "transitive",
@@ -955,12 +964,12 @@
       "dependency": "direct main",
       "description": {
         "path": ".",
-        "ref": "f51c805ebc15bf7a2f49a74174aeb470d3c4c78e",
-        "resolved-ref": "f51c805ebc15bf7a2f49a74174aeb470d3c4c78e",
+        "ref": "75556a968a4a1ebc42fbb8c31942c2418d4326e1",
+        "resolved-ref": "75556a968a4a1ebc42fbb8c31942c2418d4326e1",
         "url": "https://github.com/edde746/media_controls"
       },
       "source": "git",
-      "version": "0.2.4"
+      "version": "0.3.0"
     },
     "package_config": {
       "dependency": "transitive",
@@ -1225,12 +1234,11 @@
     "saf_util": {
       "dependency": "direct main",
       "description": {
-        "name": "saf_util",
-        "sha256": "0cf5fc462fc7e466e1d5608dd5a331d88d6dd6c7b01f62a305aaf469bf3309ea",
-        "url": "https://pub.dev"
+        "path": "packages/saf_util",
+        "relative": true
       },
-      "source": "hosted",
-      "version": "2.0.0"
+      "source": "path",
+      "version": "3.1.0"
     },
     "screen_retriever": {
       "dependency": "transitive",
@@ -1286,11 +1294,11 @@
       "dependency": "transitive",
       "description": {
         "name": "sentry",
-        "sha256": "288aee3d35f252ac0dc3a4b0accbbe7212fa2867604027f2cc5bc65334afd743",
+        "sha256": "09c573f98ff6c5e98d527f351f037eb8ea9ff684a6e9e84b2e91357144016254",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "9.16.0"
+      "version": "9.24.0"
     },
     "sentry_dart_plugin": {
       "dependency": "direct dev",
@@ -1306,11 +1314,11 @@
       "dependency": "direct main",
       "description": {
         "name": "sentry_flutter",
-        "sha256": "f9e87d5895cc437902aa2b081727ee7e46524fe7cc2e1910f535480a3eeb8bed",
+        "sha256": "4a04b7e1901b8128df783b6d36d48706b07b0cd055e621517c998de87f5dafb9",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "9.16.0"
+      "version": "9.24.0"
     },
     "serial_csv": {
       "dependency": "transitive",
@@ -1751,13 +1759,11 @@
     "wakelock_plus": {
       "dependency": "direct main",
       "description": {
-        "path": "wakelock_plus",
-        "ref": "8595fee595c952b73d430f2eab05f2e0d858290e",
-        "resolved-ref": "8595fee595c952b73d430f2eab05f2e0d858290e",
-        "url": "https://github.com/edde746/wakelock_plus"
+        "path": "packages/wakelock_plus",
+        "relative": true
       },
-      "source": "git",
-      "version": "1.4.0"
+      "source": "path",
+      "version": "1.5.2"
     },
     "wakelock_plus_platform_interface": {
       "dependency": "transitive",
@@ -1833,11 +1839,11 @@
       "dependency": "direct main",
       "description": {
         "name": "win_http",
-        "sha256": "a50a14f1bf32bc5c9b39add9baa01658b97146b21de25237810ca6b850a6704e",
+        "sha256": "ebc4d37e2c0e6800cc200e40d289d3bac22fc17d40fce3ae7909d49a20da77bc",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.2.1"
+      "version": "0.2.2"
     },
     "window_manager": {
       "dependency": "direct main",
@@ -1878,6 +1884,16 @@
       },
       "source": "hosted",
       "version": "3.1.3"
+    },
+    "yaml_edit": {
+      "dependency": "transitive",
+      "description": {
+        "name": "yaml_edit",
+        "sha256": "07c9e63ba42519745182b88ca12264a7ba2484d8239958778dfe4d44fe760488",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.2.4"
     }
   },
   "sdks": {

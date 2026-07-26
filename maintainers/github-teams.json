@@ -151,6 +151,7 @@
       "samuela": 226872
     },
     "members": {
+      "ethancedwards8": 60861925,
       "prusnak": 42201
     },
     "name": "cuda-maintainers"
@@ -365,10 +366,10 @@
   "freedesktop": {
     "description": "Maintain Freedesktop.org packages for graphical desktop.",
     "id": 3806136,
-    "maintainers": {},
-    "members": {
+    "maintainers": {
       "jtojnar": 705123
     },
+    "members": {},
     "name": "Freedesktop"
   },
   "geospatial": {

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   aiohttp,
   hatchling,
+  pyprojectVersionPatchHook,
   pytz,
   pytestCheckHook,
   pytest-asyncio,
@@ -20,6 +21,10 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-Ia5J7dGbcfEa6rEKyJzEnzVnMC3HyI7l5g20v7d7Gjo=";
   };
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ hatchling ];
 

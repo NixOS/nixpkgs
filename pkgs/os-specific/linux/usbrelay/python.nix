@@ -1,9 +1,15 @@
-{ buildPythonPackage, usbrelay }:
+{
+  buildPythonPackage,
+  setuptools,
+  usbrelay,
+}:
 
 buildPythonPackage {
-  format = "setuptools";
   pname = "usbrelay_py";
+  pyproject = true;
   inherit (usbrelay) version src;
+
+  build-system = [ setuptools ];
 
   preConfigure = ''
     cd usbrelay_py

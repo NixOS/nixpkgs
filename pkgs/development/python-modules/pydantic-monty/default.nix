@@ -47,6 +47,7 @@ buildPythonPackage (finalAttrs: {
   pytestFlags = [
     "--config-file"
     "crates/monty-python/pyproject.toml"
+    "-Wignore::pytest.PytestRemovedIn10Warning"
   ];
 
   disabledTests = [

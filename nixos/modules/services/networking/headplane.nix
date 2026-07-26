@@ -44,7 +44,7 @@ in
     settings = mkOption {
       description = ''
         Headplane configuration options. Generates a YAML config file.
-        See: https://github.com/tale/headplane/blob/main/config.example.yaml
+        See <https://github.com/tale/headplane/blob/main/config.example.yaml>.
       '';
       type = types.submodule {
         options = {
@@ -129,6 +129,16 @@ in
           headscale = mkOption {
             type = types.submodule {
               options = {
+                api_key_path = mkOption {
+                  type = types.nullOr types.path;
+                  default = null;
+                  description = ''
+                    Path to a file containing a Headscale API key.
+                    This is required for OIDC authentication aswell for the Headplane agent.
+                  '';
+                  example = lib.literalExpression "config.sops.secrets.headplane_pre_authkey.path";
+                };
+
                 url = mkOption {
                   type = types.str;
                   default = "http://127.0.0.1:${toString config.services.headscale.port}";
@@ -211,15 +221,6 @@ in
                           '';
                         };
 
-                        pre_authkey_path = mkOption {
-                          type = types.nullOr types.path;
-                          default = null;
-                          description = ''
-                            Path to a file containing a Headscale pre-auth key for the agent.
-                          '';
-                          example = lib.literalExpression "config.sops.secrets.headplane_pre_authkey.path";
-                        };
-
                         executable_path = mkOption {
                           type = types.path;
                           readOnly = true;
@@ -237,18 +238,12 @@ in
                         };
 
                         cache_ttl = mkOption {
-                          type = types.nullOr types.int;
-                          default = null;
+                          type = types.ints.positive;
+                          default = 180000;
                           description = ''
-                            Deprecated cache TTL for the agent. This option is accepted
-                            by Headplane 0.6.2 but has no effect.
+                            How long to cache agent information (in milliseconds).
+                            If you want data to update faster, reduce the TTL, but this will increase the frequency of requests to Headscale.
                           '';
-                        };
-
-                        cache_path = mkOption {
-                          type = types.path;
-                          default = "/var/lib/headplane/agent_cache.json";
-                          description = "The path to store the agent's cache.";
                         };
 
                         work_dir = mkOption {
@@ -325,16 +320,6 @@ in
                     example = lib.literalExpression "config.sops.secrets.oidc_client_secret.path";
                   };
 
-                  headscale_api_key_path = mkOption {
-                    type = types.nullOr types.path;
-                    default = null;
-                    description = ''
-                      Path to a file containing the Headscale API key.
-                      Required for OIDC authentication.
-                    '';
-                    example = lib.literalExpression "config.sops.secrets.headscale_api_key.path";
-                  };
-
                   disable_api_key_login = mkOption {
                     type = types.bool;
                     default = false;
@@ -363,25 +348,6 @@ in
                     description = ''
                       Whether to use PKCE when authenticating users.
                       Your OIDC provider must support PKCE and it must be enabled on the client.
-                    '';
-                  };
-
-                  redirect_uri = mkOption {
-                    type = types.nullOr types.str;
-                    default = null;
-                    description = ''
-                      Deprecated OIDC redirect URI. Use services.headplane.settings.server.base_url
-                      instead; Headplane derives the callback URL from it.
-                    '';
-                    example = "https://headplane.example.com/admin/oidc/callback";
-                  };
-
-                  strict_validation = mkOption {
-                    type = types.nullOr types.bool;
-                    default = null;
-                    description = ''
-                      Deprecated OIDC validation setting. This option is accepted
-                      by Headplane 0.6.2 but has no effect.
                     '';
                   };
 
@@ -429,16 +395,6 @@ in
                     description = "Custom userinfo endpoint URL.";
                     example = "https://provider.example.com/userinfo";
                   };
-
-                  user_storage_file = mkOption {
-                    type = types.nullOr types.path;
-                    default = null;
-                    description = ''
-                      Deprecated path to the pre-0.6.2 JSON user database.
-                      Headplane uses this once to migrate users into its internal database.
-                    '';
-                    example = "/var/lib/headplane/users.json";
-                  };
                 };
               }
             );
@@ -452,33 +408,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    warnings =
-      lib.optionals (cfg.settings.oidc != null && cfg.settings.oidc.redirect_uri != null) [
-        ''
-          services.headplane.settings.oidc.redirect_uri is deprecated by Headplane 0.6.2.
-          Use services.headplane.settings.server.base_url instead; Headplane derives
-          the OIDC callback URL from it.
-        ''
-      ]
-      ++ lib.optionals (cfg.settings.oidc != null && cfg.settings.oidc.strict_validation != null) [
-        ''
-          services.headplane.settings.oidc.strict_validation is deprecated and has no effect
-          in Headplane 0.6.2.
-        ''
-      ]
-      ++ lib.optionals (cfg.settings.oidc != null && cfg.settings.oidc.user_storage_file != null) [
-        ''
-          services.headplane.settings.oidc.user_storage_file is deprecated. Headplane 0.6.2
-          uses it only to migrate the pre-0.6.2 JSON user database into the internal database.
-        ''
-      ]
-      ++ lib.optionals (agentSettings != null && agentSettings.cache_ttl != null) [
-        ''
-          services.headplane.settings.integration.agent.cache_ttl is deprecated and has no
-          effect in Headplane 0.6.2.
-        ''
-      ];
-
     assertions = [
       {
         assertion = config.services.headscale.enable;
@@ -502,26 +431,25 @@ in
         '';
       }
       {
-        assertion = cfg.settings.oidc == null || cfg.settings.oidc.headscale_api_key_path != null;
+        assertion = cfg.settings.oidc == null || cfg.settings.headscale.api_key_path != null;
         message = ''
-          services.headplane.settings.oidc.headscale_api_key_path must be set
-          when services.headplane.settings.oidc is non-null. Headplane's OIDC
-          flow requires a Headscale API key to mint sessions.
+          services.headplane.settings.headscale.api_key_path must be set
+          when services.headplane.settings.oidc is non-null.
+          Headplane's OIDC flow requires a Headscale API key to mint sessions.
         '';
       }
       {
         assertion =
-          agentSettings == null || !agentSettings.enabled || agentSettings.pre_authkey_path != null;
+          agentSettings == null || !agentSettings.enabled || cfg.settings.headscale.api_key_path != null;
         message = ''
-          services.headplane.settings.integration.agent.pre_authkey_path must be set
-          when the agent is enabled.
+          services.headplane.settings.headscale.api_key_path must be set when the agent is enabled.
         '';
       }
     ];
 
     environment = {
       systemPackages = [ cfg.package ];
-      etc."headplane/config.yaml".source = "${settingsFile}";
+      etc."headplane/config.yaml".source = settingsFile;
     };
 
     systemd.services.headplane = {
@@ -534,6 +462,7 @@ in
         config.systemd.services.headscale.name
       ];
       requires = [ config.systemd.services.headscale.name ];
+      restartTriggers = [ settingsFile ];
 
       environment = {
         HEADPLANE_DEBUG_LOG = toString cfg.debug;

@@ -97,6 +97,9 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace node_modules/@electron/packager/dist/packager.js \
       --replace-fail 'await this.getElectronZipPath(downloadOpts)' '"electron.zip"'
 
+    # electron-forge's console output is squeezed into one narrow column if unset
+    export CI="1";
+
     yarn run package
 
     runHook postBuild

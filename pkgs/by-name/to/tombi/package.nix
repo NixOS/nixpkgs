@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tombi";
-  version = "1.1.7";
+  version = "1.2.4";
 
   __structuredAttrs = true;
 
@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "tombi-toml";
     repo = "tombi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Pm+OMtVd0zSPiE56N5WjpF8mM5pft+jVEQJufqiTkG8=";
+    hash = "sha256-XusEBLWK9yd1FLlfPY+lNPeBN1Q50RV5wrTMz+C6TZ8=";
   };
 
   # Tests relies on the presence of network
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--package"
     "tombi-cli"
   ];
-  cargoHash = "sha256-IgtFNjp8fql01KGCR6h4+QtEm3AxJxsq900ZEwhRWhg=";
+  cargoHash = "sha256-d7IJAPiLpQbmuJ7m7bQ5zSTdfnrIJB/dZwZFaXN9ikA=";
 
   postPatch = ''
     substituteInPlace Cargo.toml \

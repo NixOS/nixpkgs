@@ -29,8 +29,8 @@ let
     inherit version src;
   };
 
-  python = python313Packages.python.override {
-    packageOverrides = self: super: {
+  python3Packages = python313Packages.overrideScope (
+    self: super: {
       joserfc = super.joserfc.overridePythonAttrs (oldAttrs: {
         version = "1.1.0";
         src = fetchFromGitHub {
@@ -43,9 +43,10 @@ let
 
       huggingface-hub = super.huggingface-hub_0;
       transformers = super.transformers_4;
-    };
-  };
-  python3Packages = python.pkgs;
+    }
+  );
+
+  inherit (python3Packages) python;
 
   # Tensorflow audio model
   # https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/Dockerfile#L125
@@ -101,6 +102,9 @@ python3Packages.buildPythonApplication rec {
     # Fix excessive trailing whitespaces in process commandlines
     # https://github.com/blakeblackshear/frigate/pull/22089
     ./proc-cmdline-strip.patch
+
+    # Fix more granular dtype resultion in Pandas 3.0
+    ./pandas3-compat.patch
   ];
 
   postPatch = ''

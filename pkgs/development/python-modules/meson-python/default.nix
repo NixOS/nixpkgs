@@ -69,7 +69,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/mesonbuild/meson-python/blob/${version}/CHANGELOG.rst";
     description = "Meson Python build backend (PEP 517)";
     homepage = "https://github.com/mesonbuild/meson-python";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
     teams = [ lib.teams.python ];
   };

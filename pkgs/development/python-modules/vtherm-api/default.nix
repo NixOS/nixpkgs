@@ -3,9 +3,9 @@
   buildPythonPackage,
   fetchFromGitHub,
   home-assistant,
-  pythonOlder,
   pytest-asyncio,
   pytestCheckHook,
+  python,
   setuptools,
 }:
 
@@ -14,7 +14,7 @@ buildPythonPackage (finalAttrs: {
   version = "0.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.14";
+  disabled = python.version != home-assistant.python3Packages.python.version;
 
   src = fetchFromGitHub {
     owner = "jmcollin78";
@@ -25,9 +25,8 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
-  dependencies = [ home-assistant ];
-
   nativeCheckInputs = [
+    home-assistant
     pytest-asyncio
     pytestCheckHook
   ];

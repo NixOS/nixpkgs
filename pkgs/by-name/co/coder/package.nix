@@ -15,21 +15,19 @@ let
 
   channels = {
     stable = {
-      version = "2.33.9";
+      version = "2.33.11";
       hash = {
-        x86_64-linux = "sha256-/X1/1xlPV/86MyAXv7MJU8YtEemRNYdasBP6lH586DM=";
-        x86_64-darwin = "sha256-9ns+EzDMgyo+zgfQ3867AhTQ1qENPjtHXCYWtmP00mU=";
-        aarch64-linux = "sha256-4hrV9va+c3VvQXIQ2j6CGZ19ZFCFDEsHhfZu/kQfhwA=";
-        aarch64-darwin = "sha256-5k15Rf09/n/eKvVD0VxDWWWgJK7U0DDNAf0p923BGLs=";
+        x86_64-linux = "sha256-NY9xyLc6Pr1wWPnr4fLo6t+7B7Gin/BlTH3tdxQk30k=";
+        aarch64-linux = "sha256-Wc9hhotJKcb1fdjfh9pWxVs/e4YpBua1PyAhMRJbUAY=";
+        aarch64-darwin = "sha256-7A6BxOg4A3Ua5SXjnh5gtG/LE94iGuRQPe/S9UjX/oc=";
       };
     };
     mainline = {
-      version = "2.34.3";
+      version = "2.34.5";
       hash = {
-        x86_64-linux = "sha256-j7r5qupAsjkA11KJpdTIVtogWvSxz59nMKtTS92NMDk=";
-        x86_64-darwin = "sha256-MJJK0NeXHfd/ipmPUrdhrcCOArafYH3sq+MW7GiLVnY=";
-        aarch64-linux = "sha256-avDUA/3RLcoyt6QZ3CllvjNp8O65g+0CkAJjMOOVKLg=";
-        aarch64-darwin = "sha256-qCHsK0zOqJO/ECb9afaEwNia9R/AJMgtRpIFUfZeY1Y=";
+        x86_64-linux = "sha256-B0roCJqTu6o89nHbVA3b9eHKj/VmJ9i1j4blF1I76yU=";
+        aarch64-linux = "sha256-UDyEhBAlvgSHWLPtbNXHj6X2gle1Y3fjQLSKHzwc/XI=";
+        aarch64-darwin = "sha256-VhliikNdqi7AauYlKQvMroEjR3jZZnhNw0HTtJFw5zg=";
       };
     };
   };
@@ -46,7 +44,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           {
             x86_64-linux = "linux_amd64";
             aarch64-linux = "linux_arm64";
-            x86_64-darwin = "darwin_amd64";
             aarch64-darwin = "darwin_arm64";
           }
           .${system};
@@ -55,7 +52,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           {
             x86_64-linux = "tar.gz";
             aarch64-linux = "tar.gz";
-            x86_64-darwin = "zip";
             aarch64-darwin = "zip";
           }
           .${system};
@@ -104,7 +100,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       bpmct
       developmentcats
-      ghuntley
       kylecarbs
       phorcys420
     ];

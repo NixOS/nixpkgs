@@ -12,21 +12,22 @@ let
 in
 python.pkgs.buildPythonPackage (finalAttrs: {
   pname = "pdfding";
-  version = "1.9.0";
+  version = "1.10.0";
   src = fetchFromGitHub {
     owner = "mrmn2";
     repo = "PdfDing";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-r3hO92iriQ/0KDl+D/0j5RoneTTCDmt8m4e7ugzyOPs=";
+    hash = "sha256-C1osj8V9+z3ahl4+zUtyI22GMtSgNLzfdGttL7gPDvY=";
   };
   pyproject = true;
 
   strictDeps = true;
   __structuredAttrs = true;
 
-  # remove supervisor from dependencies
+  # remove supervisor from dependencies and fix version
   postPatch = ''
     sed -i 's/supervisor.*$//' pyproject.toml
+    sed -i 's/^version = .*$/version = "${finalAttrs.version}"/' pyproject.toml
   '';
 
   dependencies =
@@ -132,11 +133,11 @@ python.pkgs.buildPythonPackage (finalAttrs: {
   '';
 
   pythonRelaxDeps = [
+    "django"
     "gunicorn"
     "huey"
     "nh3"
     "psycopg2-binary"
-    "pypdf"
     "pypdfium2"
   ];
 
