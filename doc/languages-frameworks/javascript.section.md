@@ -46,16 +46,16 @@ These files are fairly large, so when packaging for nixpkgs, this approach does 
 
 Exceptions to this rule are:
 
-- When you encounter one of the bugs from a Nix tool. In each of the tool-specific instructions, known problems are detailed. If you have a problem with a particular tool, then it's best to try another tool, even if this means you have to re-create a lock file and commit it to Nixpkgs.
+- When you encounter one of the bugs from a Nix tool. In each of the tool-specific instructions, known problems are detailed. If a tool has a problem, try another. You may have to re-create a lock file and commit it to Nixpkgs.
 - Some lock files contain particular version of a package that has been pulled off npm for some reason. In that case, you can recreate upstream lock (by removing the original and `npm install`, `yarn`, ...) and commit this to nixpkgs.
 
 ### Use upstream `package.json` {#javascript-upstream-package-json}
 
 Exceptions to this rule are:
 
-- Sometimes the upstream repo assumes some dependencies should be installed globally. In that case, you can add them manually to the upstream `package.json` (`yarn add xxx` or `npm install xxx`, ...). Dependencies that are installed locally can be executed with `npx` for CLI tools (e.g. `npx postcss ...`, this is how you can call those dependencies in the phases).
+- Sometimes upstream assumes some dependencies are installed globally. Add them to the upstream `package.json` manually (`yarn add xxx` or `npm install xxx`). Run locally installed CLI tools with `npx`, for example `npx postcss`. That is how you call them in the phases.
 - Sometimes there is a version conflict between some dependency requirements. In that case you can fix a version by removing the `^`.
-- Sometimes the script defined in the package.json does not work as is. Some scripts for example use CLI tools that might not be available, or cd in directory with a different package.json (for workspaces notably). In that case, it's perfectly fine to look at what the particular script is doing and break this down in the phases. In the build script you can see `build:*` calling in turns several other build scripts like `build:ui` or `build:server`. If one of those fails, you can try to separate those into,
+- Sometimes a script in `package.json` does not work as is. It might call a CLI tool that is not available, or `cd` into a directory with a different `package.json`, which is common with workspaces. Read what the script does. Reproduce it in the build phases. For example, a `build` script may call `build:ui` and `build:server` in turn. If one fails, split them into separate steps.
 
   ```sh
   yarn build:ui
@@ -92,7 +92,7 @@ Then when building the frontend you can symlink the node_modules directory.
 ### buildNpmPackage {#javascript-buildNpmPackage}
 
 `buildNpmPackage` packages npm-based projects in Nixpkgs without the use of an auto-generated dependencies file.
-It works by utilizing npm's cache functionality -- creating a reproducible cache that contains the dependencies of a project, and pointing npm to it.
+It uses npm's cache. It builds a reproducible cache of the project's dependencies and points npm at it.
 
 Here's an example:
 
@@ -302,7 +302,7 @@ This package puts the corepack wrappers for pnpm and yarn in your PATH, and they
 
 pnpm is available as the top-level package `pnpm`. Additionally, there are variants pinned to certain major versions, like `pnpm_9`, `pnpm_10`, `pnpm_10_29_2` and `pnpm_11`, which support different sets of lock file versions.
 
-When packaging an application that includes a `pnpm-lock.yaml`, you need to fetch the pnpm store for that project using a fixed-output-derivation. The function `fetchPnpmDeps` can create this pnpm store derivation. In conjunction, the setup hook `pnpmConfigHook` prepares the build environment to install the pre-fetched dependencies store. Here is an example for a package that contains `package.json` and a `pnpm-lock.yaml` files using the fetcher and setup hook above:
+When packaging an application that includes a `pnpm-lock.yaml`, you need to fetch the pnpm store for that project using a fixed-output-derivation. The function `fetchPnpmDeps` can create this pnpm store derivation. In conjunction, the setup hook `pnpmConfigHook` prepares the build environment to install the pre-fetched dependencies store. The example below uses the fetcher and setup hook for a package that has `package.json` and `pnpm-lock.yaml`:
 
 There is also the [`pnpmBuildHook`](#pnpm-build-hook) for building packages with `pnpm`, as seen in [](#ex-pnpm-build-hook).
 
@@ -345,7 +345,7 @@ stdenv.mkDerivation (finalAttrs: {
 })
 ```
 
-Use a pinned version of pnpm (for example `pnpm_9` or `pnpm_10`) to increase reproducibility. An older version may be required if the package needs a certain lock file version. To do so, you can pass the `pnpm` argument to `fetchPnpmDeps` and override the `pnpm` arg in `pnpmConfigHook`. Here are the changes in the example above to use a pinned pnpm version:
+Use a pinned version of pnpm (for example `pnpm_9` or `pnpm_10`) to increase reproducibility. An older version may be required if the package needs a certain lock file version. To do so, pass the `pnpm` argument to `fetchPnpmDeps`. Then override the `pnpm` arg in `pnpmConfigHook`. Here are the changes in the example above to use a pinned pnpm version:
 
 <!-- TODO: Does splicing still work when overriding in nativeBuildInputs here? -->
 
@@ -436,8 +436,7 @@ Assuming the directory structure below, you can define `sourceRoot` and `pnpmRoo
 
 #### pnpm workspaces {#javascript-pnpm-workspaces}
 
-If you need to use a PNPM workspace for your project, then set `pnpmWorkspaces = [ "<workspace project name 1>" "<workspace project name 2>" ]`, etc, in your `fetchPnpmDeps` call,
-which makes pnpm install only the dependencies for those workspace packages.
+For a pnpm workspace, set `pnpmWorkspaces = [ "<workspace project name 1>" "<workspace project name 2>" ]` in your `fetchPnpmDeps` call. pnpm then installs only the dependencies for those workspace packages.
 
 For example:
 
@@ -455,7 +454,7 @@ For example:
 The above would make `fetchPnpmDeps` call only install dependencies for the `@astrojs/language-server` workspace package.
 You do not need to set `sourceRoot` to make this work.
 
-Usually, in such cases, you'd want to use `pnpm --filter=<pnpm workspace name> build` to build your project, as `npmHooks.npmBuildHook` probably won't work. A `buildPhase` based on the following example will probably fit most workspace projects:
+For these projects, build with `pnpm --filter=<pnpm workspace name> build`, because `npmHooks.npmBuildHook` may not work. The example below fits most workspace projects:
 
 ```nix
 {
