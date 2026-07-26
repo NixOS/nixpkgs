@@ -318,6 +318,7 @@ mapAliases {
   jfx-bridge = throw "'jfx-bridge' has been removed as it was unmaintained upstream"; # Added 2026-04-05
   jinja2_pluralize = throw "'jinja2_pluralize' has been renamed to/replaced by 'jinja2-pluralize'"; # Converted to throw 2025-10-29
   jinja2_time = throw "'jinja2_time' has been renamed to/replaced by 'jinja2-time'"; # Converted to throw 2025-10-29
+  jobspy = warnAlias "'jobspy' has been renamed to 'python-jobspy'" python-jobspy; # Added 2026-07-26
   JPype1 = throw "'JPype1' has been renamed to/replaced by 'jpype1'"; # Converted to throw 2025-10-29
   jsonfield = throw "'jsonfield' has been removed as it was broken and deprecated upstream. Consider using Django's native `JSONField` instead."; # Added 2025-11-08
   jsonpath_rw = throw "'jsonpath_rw' has been renamed to/replaced by 'jsonpath-rw'"; # Converted to throw 2025-10-29

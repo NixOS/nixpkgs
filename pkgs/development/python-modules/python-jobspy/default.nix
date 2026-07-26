@@ -14,7 +14,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "jobspy";
+  pname = "python-jobspy";
   version = "1.1.82";
   pyproject = true;
 
@@ -27,6 +27,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "numpy"
+    "pandas"
     "markdownify"
     "regex"
   ];
