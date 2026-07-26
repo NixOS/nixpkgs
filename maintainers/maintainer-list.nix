@@ -2930,6 +2930,12 @@
     githubId = 135230;
     name = "Aycan iRiCAN";
   };
+  aykhans = {
+    email = "aykhan.shahs@gmail.com";
+    github = "aykhans";
+    githubId = 88669260;
+    name = "Aykhan Shahsuvarov";
+  };
   aynish = {
     github = "Chickensoupwithrice";
     githubId = 22575913;
