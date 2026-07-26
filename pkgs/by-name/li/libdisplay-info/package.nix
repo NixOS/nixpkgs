@@ -13,14 +13,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdisplay-info";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "emersion";
     repo = "libdisplay-info";
     rev = finalAttrs.version;
-    sha256 = "sha256-nXf2KGovNKvcchlHlzKBkAOeySMJXgxMpbi5z9gLrdc=";
+    sha256 = "sha256-5wd7UUYfhlvhAGfWWa/O14Did7pEmhwSMeXiYoYx1vU=";
   };
 
   depsBuildBuild = [ pkg-config ];
