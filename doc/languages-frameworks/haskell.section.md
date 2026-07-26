@@ -83,12 +83,11 @@ default version for that package.](https://github.com/NixOS/nixpkgs/blob/haskell
 overrides to set the default version to a version older than the newest on
 Hackage.](https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/configuration-hackage2nix/main.yaml)
 4. For all packages, for which the newest Hackage version is not the default
-version, there will also be a `haskellPackages.foo_x_y_z` package with the
+version, there is also a `haskellPackages.foo_x_y_z` package with the
 newest version. The `x_y_z` part encodes the version with dots replaced by
 underscores. When the newest version changes by a new release to Hackage the
-old package will disappear under that name and be replaced by a newer one under
-the name with the new version. The package name including the version will
-also disappear when the default version e.g. from Stackage catches up with the
+old package disappears under that name and is replaced by a newer one under
+the name with the new version. The package name including the version also disappears when the default version e.g. from Stackage catches up with the
 newest version from Hackage. E.g. if `haskellPackages.foo` gets updated from
 1.0.0 to 1.1.0 the package `haskellPackages.foo_1_1_0` becomes obsolete and
 gets dropped.
@@ -109,20 +108,20 @@ files to loosen this a bit.
 ### Dependency resolution {#haskell-dependency-resolution}
 
 Normally when you build Haskell packages with `cabal-install`, `cabal-install`
-does dependency resolution. It will look at all Haskell package versions known
-on Hackage and try to pick for every (transitive) dependency of your build
+does dependency resolution. It looks at all Haskell package versions known
+on Hackage and tries to pick for every (transitive) dependency of your build
 exactly one version. Those versions need to satisfy all the version constraints
 given in the `.cabal` file of your package and all its dependencies.
 
 The [Haskell builder in Nixpkgs](#haskell-mkderivation) does no such thing.
-It will take as input packages with names of the desired dependencies
-and check whether they fulfill the version bounds and fail if they don’t
+It takes as input packages with names of the desired dependencies
+and checks whether they fulfill the version bounds and fails if they don’t
 (by default, see `jailbreak` to circumvent this).
 
 The `haskellPackages.callPackage` function does the package resolution.
-It will, e.g., use `haskellPackages.aeson`which has the default version as
+It uses, e.g., `haskellPackages.aeson`which has the default version as
 described above for a package input of name `aeson`. (More general:
-`<packages>.callPackage f` will call `f` with named inputs provided from the
+`<packages>.callPackage f` calls `f` with named inputs provided from the
 package set `<packages>`.)
 While this is the default behavior, it is possible to override the dependencies
 for a specific package, see
@@ -140,7 +139,7 @@ restrictions of Nixpkgs, partially in the name of maintainability:
 * As described above we only build one version of most packages.
 
 The experience using an older or newer packaged compiler or using different
-versions may be worse, because builds will not be cached on `cache.nixos.org`
+versions may be worse, because builds are not cached on `cache.nixos.org`
 or may fail.
 
 Thus, to get the best experience, make sure that your project can be compiled
@@ -176,9 +175,9 @@ Older GHC versions might be kept longer, if there are in-tree consumers. We will
 
 #### Minor GHC versions {#minor-ghc-deprecation}
 
-Every major version has a default minor version. The default minor version will be updated as soon as viable without breakage.
+Every major version has a default minor version. The default minor version updates as soon as viable without breakage.
 
-Older minor versions for a supported major version will only be kept, if they are the last supported version of a major Stackage LTS release.
+Older minor versions for a supported major version are kept only if they are the last supported version of a major Stackage LTS release.
 
 <!-- Policy introduced here: https://discourse.nixos.org/t/nixpkgs-ghc-deprecation-policy-user-feedback-necessary/64153 -->
 
@@ -225,7 +224,7 @@ If `null` (which is the default value), the one included in `src` is used.
 
 `env`
 : Extra environment variables to set during the build.
-These will also be set inside the [development environment defined by the `passthru.env` attribute in the returned derivation](#haskell-development-environments), but will not be set inside a development environment built with [](#haskell-shellFor) that includes this package.
+These are also set inside the [development environment defined by the `passthru.env` attribute in the returned derivation](#haskell-development-environments), but are not set inside a development environment built with [](#haskell-shellFor) that includes this package.
 
 `configureFlags`
 : Extra flags passed when executing the `configure` command of `Setup.hs`.
@@ -331,7 +330,7 @@ Defaults to `false`.
 Defaults to `true` if supported.
 
 `testTargets`
-: Names of the test suites to build and run. If unset, all test suites will be executed.
+: Names of the test suites to build and run. If unset, all test suites are executed.
 
 `preCompileBuildDriver`
 : Shell code to run before compiling `Setup.hs`.
@@ -506,7 +505,7 @@ and `previousIntermediates` arguments.
 The basic idea is to first perform a full build of the package in question,
 save its intermediate build products for later, and then copy those build
 products into the build directory of an incremental build performed later.
-Then, GHC will use those build artifacts to avoid recompiling unchanged
+Then GHC uses those build artifacts to avoid recompiling unchanged
 modules.
 
 For more detail on how to store and use incremental build products, see
@@ -525,18 +524,18 @@ let
   # Incremental builds work with GHC >=9.4.
   turtle = haskell.packages.ghc948.turtle;
 
-  # This will do a full build of `turtle`, while writing the intermediate build products
+  # This does a full build of `turtle`, while writing the intermediate build products
   # (compiled modules, etc.) to the `intermediates` output.
   turtle-full-build-with-incremental-output = overrideCabal (drv: {
     doInstallIntermediates = true;
     enableSeparateIntermediatesOutput = true;
   }) turtle;
 
-  # This will do an incremental build of `turtle` by copying the previously
+  # This does an incremental build of `turtle` by copying the previously
   # compiled modules and intermediate build products into the source tree
   # before running the build.
   #
-  # GHC will then naturally pick up and reuse these products, making this build
+  # GHC then picks up and reuses these products, making this build
   # complete much more quickly than the previous one.
   turtle-incremental-build = overrideCabal (drv: {
     previousIntermediates = turtle-full-build-with-incremental-output.intermediates;
@@ -582,22 +581,20 @@ dependencies of `random`. Note that this environment does not mirror
 the environment used to build the package, but is intended as a convenient
 tool for development and simple debugging. `env` relies on the `ghcWithPackages`
 wrapper which automatically injects a pre-populated package-db into every
-GHC invocation. In contrast, using `nix-shell -A haskellPackages.random` will
-not result in an environment in which the dependencies are in GHCs package
-database. Instead, the Haskell builder will pass in all dependencies explicitly
+GHC invocation. In contrast, using `nix-shell -A haskellPackages.random` does not result in an environment in which the dependencies are in GHCs package
+database. Instead, the Haskell builder passes in all dependencies explicitly
 via configure flags.
 
 `env` mirrors the normal derivation environment in one aspect: It does not include
 familiar development tools like `cabal-install`, since we rely on plain `Setup.hs`
-to build all packages. However, `cabal-install` will work as expected if in
+to build all packages. However, `cabal-install` works as expected if in
 `PATH` (e.g. when installed globally and using a `nix-shell` without `--pure`).
 A declarative and pure way of adding arbitrary development tools is provided
 via [](#haskell-shellFor).
 
 When using `cabal-install` for dependency resolution you need to be a bit
-careful to achieve build purity. `cabal-install` will find and use all
-dependencies installed from the packages `env` via Nix, but it will also
-consult Hackage to potentially download and compile dependencies if it can’t
+careful to achieve build purity. `cabal-install` finds and uses all
+dependencies installed from the packages `env` via Nix, but it also consults Hackage to potentially download and compile dependencies if it can’t
 find a valid build plan locally. To prevent this you can either never run
 `cabal update`, remove the cabal database from your `~/.cabal` folder or run
 `cabal` with `--offline`. Note though, that for some usecases `cabal2nix` needs
@@ -644,7 +641,7 @@ development environment inside `nix-shell`:
 `packages`
 : This argument is used to select the packages for which to build the
 development environment. This is a function that takes a Haskell package
-set and returns a list of packages. `shellFor` will pass the used package set to
+set and returns a list of packages. `shellFor` passes the used package set to
 this function and include all dependencies of the returned package in the build
 environment. This means you can reuse Nix expressions of packages included in
 nixpkgs, but also use local Nix expressions like this: `hpkgs: [
@@ -668,8 +665,8 @@ dependencies as well. Defaults to `[]`. (see also
 [](#haskell-derivation-deps))
 
 `withHoogle`
-: If this is true, `hoogle` will be added to `nativeBuildInputs`.
-Additionally, its database will be populated with all included dependencies,
+: If this is true, `hoogle` is added to `nativeBuildInputs`.
+Additionally, its database is populated with all included dependencies,
 so you'll be able search through the documentation of your dependencies.
 Defaults to `false`.
 
@@ -681,7 +678,7 @@ dependencies. Defaults to `lib.id`.
 
 `doBenchmark`
 : This is a shortcut for enabling `doBenchmark` via `genericBuilderArgsModifier`.
-Setting it to `true` will cause the development environment to include all
+Setting it to `true` causes the development environment to include all
 benchmark dependencies which would be excluded by default. Defaults to `false`.
 
 One neat property of `shellFor` is that it allows you to work on multiple
@@ -752,14 +749,14 @@ pkgs.haskell-language-server.override {
 Where all strings `version` are allowed such that
 `haskell.packages.ghc${version}` is an existing package set.
 
-When you run `haskell-language-server-wrapper` it will detect the GHC
+When you run `haskell-language-server-wrapper` it detects the GHC
 version used by the project you are working on (by asking e.g. cabal or
-stack) and pick the appropriate versioned binary from your path.
+stack) and picks the appropriate versioned binary from your path.
 
 Be careful when installing HLS globally and using a pinned nixpkgs for a
 Haskell project in a `nix-shell`. If the Nixpkgs versions deviate to much
 (e.g., use different `glibc` versions) the `haskell-language-server-?.?.?`
-executable will try to detect these situations and refuse to start. It is
+executable tries to detect these situations and refuses to start. It is
 recommended to obtain HLS via `nix-shell` from the Nixpkgs version pinned in
 there instead.
 
@@ -907,7 +904,7 @@ for this to work.
   that may refer to other Haskell packages' store paths (like libraries and
   documentation). This dramatically reduces the closure size of the resulting
   derivation. Note that the executables are only statically linked against their
-  Haskell dependencies, but will still link dynamically against libc, GMP and
+  Haskell dependencies, but still link dynamically against libc, GMP and
   other system library dependencies.
 
   If a library or its dependencies use their Cabal-generated
@@ -969,7 +966,7 @@ much smaller closure size.
 : Set the `broken` flag to `false` for `drv`.
 
 `doDistribute drv`
-: Updates `hydraPlatforms` so that Hydra will build `drv`. This is
+: Updates `hydraPlatforms` so that Hydra builds `drv`. This is
 sometimes necessary when working with versioned packages in
 `haskellPackages` which are not built by default.
 
@@ -1156,7 +1153,7 @@ requires executing the binaries in question.
 
 [`cabal2nix`][cabal2nix] can generate Nix package definitions for arbitrary
 Haskell packages using [import from derivation][import-from-derivation].
-`cabal2nix` will generate Nix expressions that look like this:
+`cabal2nix` generates Nix expressions that look like this:
 
 ```nix
 # cabal get mtl-2.2.1 && cd mtl-2.2.1 && cabal2nix .
@@ -1180,8 +1177,8 @@ mkDerivation {
 }
 ```
 
-This expression should be called with `haskellPackages.callPackage`, which will
-supply [`haskellPackages.mkDerivation`](#haskell-mkderivation) and the Haskell
+This expression should be called with `haskellPackages.callPackage`, which
+supplies [`haskellPackages.mkDerivation`](#haskell-mkderivation) and the Haskell
 dependencies as arguments.
 
 `callCabal2nix name src args`
@@ -1195,7 +1192,7 @@ dependencies as arguments.
   `cabal2nix`.
 
   `opts` are extra options for calling `cabal2nix`. If `opts` is a string, it
-  will be used as extra command line arguments for `cabal2nix`, e.g. `--subpath
+  is used as extra command line arguments for `cabal2nix`, e.g. `--subpath
   path/to/dir/containing/cabal-file`. Otherwise, `opts` should be an AttrSet
   which can contain the following attributes:
 
@@ -1206,7 +1203,7 @@ dependencies as arguments.
   : A function which is used to modify the given `src` instead of the default
     filter.
 
-    The default source filter will remove all files from `src` except for
+    The default source filter removes all files from `src` except for
     `.cabal` files and `package.yaml` files.
 
 <!--
@@ -1277,7 +1274,7 @@ over output size. You may want to…
 ::: {.note}
 The method described below affects the build of all libraries in the
 respective Haskell package set as well as GHC. If your choices differ from
-Nixpkgs' default for your (host) platform, you will lose the ability to
+Nixpkgs' default for your (host) platform, you lose the ability to
 substitute from the official binary cache.
 
 If you are concerned about build times and thus want to disable profiling, it
