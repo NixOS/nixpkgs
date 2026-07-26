@@ -1667,8 +1667,6 @@ with pkgs;
 
   binlore = callPackage ../development/tools/analysis/binlore { };
 
-  bzip2 = callPackage ../tools/compression/bzip2 { };
-
   davix-copy = davix.override { enableThirdPartyCopy = true; };
 
   libceph = ceph.lib;
