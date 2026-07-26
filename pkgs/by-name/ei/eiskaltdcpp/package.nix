@@ -9,7 +9,7 @@
   libx11,
   libsForQt5,
   libiconv,
-  pcre-cpp,
+  pcre2,
   libidn,
   lua5,
   miniupnpc,
@@ -34,6 +34,10 @@ stdenv.mkDerivation rec {
       url = "https://github.com/eiskaltdcpp/eiskaltdcpp/commit/5ab5e1137a46864b6ecd1ca302756da8b833f754.patch?full_index=1";
       hash = "sha256-GIdcIHKXNSbHxbiMGRPgfq2w/zNSfR/FhyyXayFWfg8=";
     })
+    (fetchpatch2 {
+      url = "https://github.com/eiskaltdcpp/eiskaltdcpp/commit/39f27cdbaefb3d0c18e6d33f340ef31c9061dc84.patch?full_index=1";
+      hash = "sha256-yxIdJSPtn3HDS5kXqpVLkDavUBhpdywm+X4M7B9g6Vo=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -48,7 +52,7 @@ stdenv.mkDerivation rec {
     libsForQt5.qtscript
     bzip2
     libx11
-    pcre-cpp
+    pcre2
     libidn
     lua5
     miniupnpc
