@@ -324,6 +324,10 @@ with haskellLib;
   # https://github.com/nomeata/cabal-plan-bounds/pull/29
   cabal-plan-bounds = doJailbreak super.cabal-plan-bounds;
 
+  # 2026-07-26: Allow Cabal-syntax 3.16, containers 0.8 and base 4.22.
+  # https://codeberg.org/fgaz/changelog-d/pulls/27
+  changelog-d = doJailbreak super.changelog-d;
+
   # network < 3.2.8
   # bound only required when running under WINE: https://github.com/haskell/network/issues/604
   iserv-proxy = doJailbreak super.iserv-proxy;
