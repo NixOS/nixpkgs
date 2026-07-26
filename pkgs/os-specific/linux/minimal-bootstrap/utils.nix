@@ -60,6 +60,36 @@ rec {
   writeTextFile =
     let
       PATH = lib.makeBinPath [ mescc-tools-extra ];
+      builders = builtins.mapAttrs (_: builtins.toFile "write-text-file.kaem") {
+        emptyDestinationExecutable = ''
+          target=''${out}''${destination}
+          mkdir -p ''${out}''${destinationDir}
+          cp ''${textPath} ''${target}
+          chmod 555 ''${target}
+        '';
+        emptyDestinationNonExecutable = ''
+          target=''${out}''${destination}
+          mkdir -p ''${out}''${destinationDir}
+          cp ''${textPath} ''${target}
+        '';
+        nonEmptyDestinationExecutable = ''
+          target=''${out}''${destination}
+          cp ''${textPath} ''${target}
+          chmod 555 ''${target}
+        '';
+        nonEmptyDestinationNonExecutable = ''
+          target=''${out}''${destination}
+          cp ''${textPath} ''${target}
+        '';
+      };
+      getWriteTextFileBuilder =
+        destinationEmpty: executable:
+        if destinationEmpty then
+          if executable then builders.emptyDestinationExecutable else builders.emptyDestinationNonExecutable
+        else if executable then
+          builders.nonEmptyDestinationExecutable
+        else
+          builders.nonEmptyDestinationNonExecutable;
     in
     {
       name, # the name of the derivation
@@ -76,20 +106,7 @@ rec {
         "--verbose"
         "--strict"
         "--file"
-        (builtins.toFile "write-text-file.kaem" (
-          ''
-            target=''${out}''${destination}
-          ''
-          + lib.optionalString (destination == "") ''
-            mkdir -p ''${out}''${destinationDir}
-          ''
-          + ''
-            cp ''${textPath} ''${target}
-          ''
-          + lib.optionalString executable ''
-            chmod 555 ''${target}
-          ''
-        ))
+        (getWriteTextFileBuilder (destination == "") executable)
       ];
 
       inherit PATH;
