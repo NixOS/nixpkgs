@@ -8,18 +8,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nix-store-veritysetup-generator";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "nikstur";
     repo = "nix-store-veritysetup-generator";
     rev = finalAttrs.version;
-    hash = "sha256-RTGdcLn4zuZAcC1Td4gJcywIerCYyaD0JYz8g5ybmho=";
+    hash = "sha256-4VIPyhvPKRlEgX7roUMIyhSBqfrWPbbsdhyccxH8EIM=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/rust";
 
-  cargoHash = "sha256-9DwED8X/RHjBCInm+VbzoeVSb28U+XIE2IjNAGon6+E=";
+  cargoHash = "sha256-nL9GiluLV12J/Kwkq2gAYmOWtPr6sG4ELoLj3UCgDtg=";
 
   env = {
     SYSTEMD_VERITYSETUP_PATH = "${systemd}/lib/systemd/systemd-veritysetup";

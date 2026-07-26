@@ -118,6 +118,8 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     mainProgram = "valgrind";
 
+    maintainers = with lib.maintainers; [ albfsg ];
+
     platforms =
       with lib.platforms;
       lib.intersectLists (x86 ++ power ++ s390x ++ armv7 ++ aarch64 ++ mips ++ riscv64) (

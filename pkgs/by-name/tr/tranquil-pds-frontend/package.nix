@@ -10,12 +10,12 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tranquil-frontend";
-  version = "0.6.5";
+  version = "0.6.6";
 
   src = fetchgit {
     url = "https://tangled.org/tranquil.farm/tranquil-pds";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kBy982B9ZY5W02hmdKqlR86ynJAUD98b4UgaYIPaFzM=";
+    hash = "sha256-cfTsjmK/IMqT5kMKOGpwwWbBlvtrCDOerUJJ8AVI3kY=";
   };
   sourceRoot = "${finalAttrs.src.name}/frontend";
 

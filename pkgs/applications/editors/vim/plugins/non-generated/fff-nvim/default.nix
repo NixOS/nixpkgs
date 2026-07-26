@@ -74,6 +74,9 @@ let
     ];
 
     env = {
+      # Build zlob for a portable CPU baseline (https://github.com/dmtrKovalenko/fff/issues/705)
+      CI = "1";
+
       OPENSSL_NO_VENDOR = true;
 
       # Allow undefined symbols on Darwin - they will be provided by Neovim's LuaJIT runtime

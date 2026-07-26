@@ -24,6 +24,7 @@
   einops,
   numpy,
   nvidia-ml-py,
+  requests,
   tabulate,
   torch,
   tqdm,
@@ -92,6 +93,7 @@ buildPythonPackage (finalAttrs: {
     einops
     numpy
     nvidia-ml-py
+    requests
     tabulate
     torch
     tqdm
