@@ -2328,8 +2328,6 @@ with pkgs;
   };
   kakouneUtils = callPackage ../applications/editors/kakoune/plugins/kakoune-utils.nix { };
 
-  keybase = callPackage ../tools/security/keybase { };
-
   kbdVlock = callPackage ../by-name/kb/kbd/package.nix { withVlock = true; };
 
   keycloakPlugins = recurseIntoAttrs keycloak.plugins;
