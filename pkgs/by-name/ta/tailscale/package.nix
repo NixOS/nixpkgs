@@ -26,6 +26,8 @@ buildGoModule (finalAttrs: {
   pname = "tailscale";
   version = "1.98.9";
 
+  __structuredAttrs = true;
+
   outputs = [
     "out"
     "derper"
@@ -64,7 +66,6 @@ buildGoModule (finalAttrs: {
   ];
 
   ldflags = [
-    "-w"
     "-s"
     "-X tailscale.com/version.longStamp=${finalAttrs.version}"
     "-X tailscale.com/version.shortStamp=${finalAttrs.version}"
