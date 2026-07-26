@@ -10,19 +10,19 @@ Package JavaScript applications with the tools below.
 
 The principles below are ordered by importance.
 
-### Use the same Node.js version as upstream {#javascript-upstream-node-version}
+### Use the project's Node.js version {#javascript-upstream-node-version}
 
-It is often not documented which Node.js version is used upstream, but if it is, use the same version when packaging.
+It is often not documented which Node.js version the project uses, but if it is, use the same version when packaging.
 
-This can be a problem if upstream is using the latest and greatest and you are trying to use an earlier version of Node.js.
+This can be a problem if the project uses the latest and greatest and you are trying to use an earlier version of Node.js.
 Some cryptic errors regarding V8 may appear.
 
-### Use upstream's package manager and lock file {#javascript-upstream-package-manager}
+### Use the project's package manager and lock file {#javascript-upstream-package-manager}
 
 A lock file (package-lock.json, yarn.lock...) is supposed to make reproducible installations of `node_modules` for each tool.
 
 Package manager guidelines recommend committing those lock files to the repository.
-If a particular lock file is present, it is a strong indication of which package manager is used upstream.
+If a particular lock file is present, it is a strong indication of which package manager the project uses.
 
 Use a Nix tool that understands the lock file.
 Using a different tool might give you a hard-to-understand error because different packages have been installed.
@@ -33,13 +33,13 @@ These files are fairly large, so when packaging for nixpkgs, this approach does 
 Exceptions to this rule are:
 
 - When you encounter one of the bugs from a Nix tool. In each of the tool-specific instructions, known problems are detailed. If a tool has a problem, try another. You may have to re-create a lock file and commit it to Nixpkgs.
-- Some lock files contain a particular version of a package that has been pulled off npm for some reason. In that case, you can recreate the upstream lock (by removing the original and running `npm install`, `yarn`, etc.) and commit this to Nixpkgs.
+- Some lock files contain a particular version of a package that has been pulled off npm for some reason. In that case, you can recreate the lock file (by removing the original and running `npm install`, `yarn`, etc.) and commit this to Nixpkgs.
 
-### Use upstream `package.json` {#javascript-upstream-package-json}
+### Use the project's `package.json` {#javascript-upstream-package-json}
 
 Exceptions to this rule are:
 
-- Sometimes upstream assumes some dependencies are installed globally. Add them to the upstream `package.json` manually (`yarn add xxx` or `npm install xxx`). Run locally installed CLI tools with `npx`, for example `npx postcss`. That is how you call them in the phases.
+- Sometimes the project assumes some dependencies are installed globally. Add them to the `package.json` manually (`yarn add xxx` or `npm install xxx`). Run locally installed CLI tools with `npx`, for example `npx postcss`. That is how you call them in the phases.
 - Sometimes there is a version conflict between some dependency requirements. In that case you can fix a version by removing the `^`.
 - Sometimes a script in `package.json` does not work as is. It might call a CLI tool that is not available, or `cd` into a directory with a different `package.json`, which is common with workspaces. Read what the script does. Reproduce it in the build phases. For example, a `build` script may call `build:ui` and `build:server` in turn. If one fails, split them into separate steps.
 
@@ -51,7 +51,7 @@ Exceptions to this rule are:
   npm run build:server
   ```
 
-  When you need to override `package.json`, it is best to use the one from the upstream source and make explicit overrides. Here is an example:
+  When you need to override `package.json`, it is best to use the one from the project and make explicit overrides. Here is an example:
 
   ```nix
   {
@@ -116,7 +116,7 @@ buildNpmPackage (finalAttrs: {
 })
 ```
 
-In the default `installPhase` set by `buildNpmPackage`, it uses `npm pack --json --dry-run` to decide what files to install in `$out/lib/node_modules/$name/`, where `$name` is the `name` string defined in the package's `package.json`.
+In the default `installPhase` set by `buildNpmPackage`, it uses `npm pack --json --dry-run` to decide what files to install. They go in `$out/lib/node_modules/$name/`, where `$name` is the `name` string in the package's `package.json`.
 Additionally, the `bin` and `man` keys in the source's `package.json` are used to decide what binaries and manpages are supposed to be installed.
 If these are not defined, `npm pack` may miss some files, and no binaries are produced.
 
@@ -649,8 +649,8 @@ This prints the hash to stdout. Use it in update scripts to recalculate the hash
 
 Internally, this uses a patched version of Yarn to ensure git dependencies are re-packed and any attempted downloads fail immediately.
 
-##### Patching upstream `package.json` or `yarn.lock` files {#javascript-yarnBerry-patching}
-In case patching the upstream `package.json` or `yarn.lock` is needed, it's important to pass `finalAttrs.patches` to `fetchYarnBerryDeps` as well, so the patched variants are picked up (i.e., `inherit (finalAttrs) patches`).
+##### Patching the project's `package.json` or `yarn.lock` files {#javascript-yarnBerry-patching}
+In case patching the project's `package.json` or `yarn.lock` is needed, it's important to pass `finalAttrs.patches` to `fetchYarnBerryDeps` as well, so the patched variants are picked up (i.e., `inherit (finalAttrs) patches`).
 
 ##### Missing hashes in the `yarn.lock` file {#javascript-yarnBerry-missing-hashes}
 Unfortunately, `yarn.lock` files do not include hashes for optional/platform-specific dependencies. This is [by design](https://github.com/yarnpkg/berry/issues/6759).
