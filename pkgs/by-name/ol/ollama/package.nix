@@ -6,7 +6,6 @@
   makeBinaryWrapper,
   stdenv,
   addDriverRunpath,
-  nix-update-script,
 
   cmake,
   gitMinimal,
@@ -95,7 +94,7 @@ let
 
   cudaToolkit = buildEnv {
     # ollama hardcodes the major version in the Makefile to support different variants.
-    # - https://github.com/ollama/ollama/blob/v0.21.1/CMakePresets.json#L21-L47
+    # - https://github.com/ollama/ollama/blob/v0.31.1/CMakePresets.json#L21-L47
     name = "cuda-merged-${cudaMajorVersion}";
     paths = map lib.getLib cudaLibs ++ [
       (lib.getOutput "static" cudaPackages.cuda_cudart)
@@ -112,11 +111,12 @@ let
   # vendored in-tree. Pre-stage the pin (tracks upstream's
   # `LLAMA_CPP_VERSION` file) so the FetchContent step uses our copy
   # instead of trying to clone over the network in the sandbox.
+  llamaCppVersion = "b10091";
   llamaCppSrc = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
-    tag = "b9509";
-    hash = "sha256-bO1ucb/+vidj/EYzNCssotjte9NlVLdjC794jToNNeM=";
+    tag = llamaCppVersion;
+    hash = "sha256-ZHQ9hBnE9GayZRt0jgO4svzaAUfhRUg6cFu5dSe8J1w=";
   };
 
   wrapperOptions = [
@@ -152,16 +152,16 @@ let
 in
 goBuild (finalAttrs: {
   pname = "ollama";
-  version = "0.30.6";
+  version = "0.32.3";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qO+Tsjg64QekGHNNiNy5YGSDoToGSnqiN5hN+0LCp4Q=";
+    hash = "sha256-TGbNdLYRzty6IQJptatQqAUAAp6cfh+OFbO6BdxC6H0=";
   };
 
-  vendorHash = "sha256-lZdGzGb9xRjTm1Rm7/wHjqM490gLznLEndmb4mNbCX0=";
+  vendorHash = "sha256-HMwoaFBMbpoy8f0I+O+i7kIa9BslLu3FcVWeaIOkpvs=";
   proxyVendor = true;
 
   env =
@@ -302,6 +302,7 @@ goBuild (finalAttrs: {
         -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON \
         -DFETCHCONTENT_SOURCE_DIR_LLAMA_CPP="$TMPDIR/llama-cpp-src" \
         -DOLLAMA_MLX_BACKENDS="" \
+        $cmakeFlags \
         ${cmakeFlagsCudaArchitectures} \
         ${cmakeFlagsRocmTargets} \
         ${cmakeFlagsBackend}
@@ -322,7 +323,7 @@ goBuild (finalAttrs: {
   '';
 
   # ollama looks for acceleration libs in ../lib/ollama/ (now also for CPU-only with arch specific optimizations)
-  # https://github.com/ollama/ollama/blob/v0.21.1/docs/development.md#library-detection
+  # https://github.com/ollama/ollama/blob/v0.31.1/docs/development.md#library-detection
   postInstall = ''
     mkdir -p $out/lib
     cp -r build/lib/ollama $out/lib/
@@ -365,6 +366,7 @@ goBuild (finalAttrs: {
   versionCheckKeepEnvironment = "HOME";
 
   passthru = {
+    inherit llamaCppSrc llamaCppVersion;
     tests = {
       inherit ollama;
     }
@@ -376,7 +378,7 @@ goBuild (finalAttrs: {
       service-vulkan = nixosTests.ollama-vulkan;
     };
   }
-  // lib.optionalAttrs (!enableRocm && !enableCuda) { updateScript = nix-update-script { }; };
+  // lib.optionalAttrs (!enableRocm && !enableCuda && !enableVulkan) { updateScript = ./update.sh; };
 
   meta = {
     description =
@@ -393,5 +395,7 @@ goBuild (finalAttrs: {
     maintainers = with maintainers; [
       prusnak
     ];
+    # install TARGETS RUNTIME_DEPENDENCIES is not supported when cross-compiling.
+    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 })
