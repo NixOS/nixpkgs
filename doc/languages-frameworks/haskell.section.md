@@ -161,7 +161,7 @@ completely incompatible with packages from `haskellPackages`.
 
 <!-- TODO(@maralorn) Link to package set generation docs in the contributors guide below. -->
 
-### GHC Deprecation Policy {#ghc-deprecation-policy}
+### GHC deprecation policy {#ghc-deprecation-policy}
 
 We remove GHC versions according to the following policy:
 
@@ -890,7 +890,7 @@ following overview. Refer to the
 [documentation of `haskellPackages.mkDerivation`](#haskell-mkderivation)
 for a more detailed description of the effects of the respective arguments.
 
-##### Packaging Helpers {#haskell-packaging-helpers}
+##### Packaging helpers {#haskell-packaging-helpers}
 
 `overrideSrc { src, version } drv`
 : Replace the source used for building `drv` with the path or derivation given
@@ -982,7 +982,7 @@ sometimes necessary when working with versioned packages in
 altogether. Useful if it fails to evaluate cleanly and is causing
 noise in the evaluation errors tab on Hydra.
 
-##### Development Helpers {#haskell-development-helpers}
+##### Development helpers {#haskell-development-helpers}
 
 `sdistTarball drv`
 : Create a source distribution tarball like those found on Hackage
@@ -1020,7 +1020,7 @@ for debugging with e.g. `gdb`.
 
 <!-- TODO(@sternenseemann): shellAware -->
 
-##### Trivial Helpers {#haskell-trivial-helpers}
+##### Trivial helpers {#haskell-trivial-helpers}
 
 `doJailbreak drv`
 : Sets the `jailbreak` argument to `true` for `drv`.
