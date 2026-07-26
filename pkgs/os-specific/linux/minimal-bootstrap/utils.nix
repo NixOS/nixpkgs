@@ -77,7 +77,7 @@ rec {
           ''
             target=''${out}''${destination}
           ''
-          + lib.optionalString (dirOf destination == ".") ''
+          + lib.optionalString (destination == "") ''
             mkdir -p ''${out}''${destinationDir}
           ''
           + ''
