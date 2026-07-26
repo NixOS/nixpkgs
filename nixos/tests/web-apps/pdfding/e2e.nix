@@ -8,7 +8,7 @@
 
   nodes = {
     machine =
-      { ... }:
+      _:
       {
         environment.systemPackages = [
           (pkgs.writeShellScriptBin "tests_e2e" (

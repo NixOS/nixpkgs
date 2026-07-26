@@ -8,11 +8,9 @@ let
 
   cfg = config.services.jupyterhub;
 
-  kernels = (
-    pkgs.jupyter-kernel.create {
+  kernels = pkgs.jupyter-kernel.create {
       definitions = if cfg.kernels != null then cfg.kernels else pkgs.jupyter-kernel.default;
-    }
-  );
+    };
 
   jupyterhubConfig = pkgs.writeText "jupyterhub_config.py" ''
     c.JupyterHub.bind_url = "http://${cfg.host}:${toString cfg.port}"

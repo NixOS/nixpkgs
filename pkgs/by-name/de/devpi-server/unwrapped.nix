@@ -124,7 +124,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   passthru.tests = {
-    devpi-server = nixosTests.devpi-server;
+    inherit (nixosTests) devpi-server;
     version = testers.testVersion {
       package = devpi-server;
     };

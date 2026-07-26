@@ -24,7 +24,7 @@ let
     # This corresponds to Alice's key
     PrivateKey =
       "a867f9e078e4ce58d310cf5acd4622d759e2a21df07e1d6fc380a2a26489480d" + aliceKeys.PublicKey;
-    PublicKey = aliceKeys.PublicKey;
+    inherit (aliceKeys) PublicKey;
   };
   bobIp6 = "202:a483:73a4:9f2d:a559:4a19:bc9:8458";
   bobPrefix = "302:a483:73a4:9f2d";
@@ -58,7 +58,7 @@ in
     # but has multicast peering disabled.  Alice has part of her
     # yggdrasil config in Nix and part of it in a file.
     alice =
-      { ... }:
+      _:
       {
         networking = {
           interfaces.eth1.ipv4.addresses = [
@@ -80,7 +80,7 @@ in
           settings = {
             Listen = [ "tcp://0.0.0.0:12345" ];
             MulticastInterfaces = [ ];
-            PrivateKeyPath = "${pkgs.writeText "private" (privateKeys.alice)}";
+            PrivateKeyPath = "${pkgs.writeText "private" privateKeys.alice}";
           }
           // aliceKeys;
         };
@@ -89,14 +89,14 @@ in
     # Bob is set up to peer with Alice, and also to do local multicast
     # peering.  Bob's yggdrasil config is in a file.
     bob =
-      { ... }:
+      _:
       {
         networking.firewall.allowedTCPPorts = [ 54321 ];
         services.yggdrasil = {
           enable = true;
           openMulticastPort = true;
           settings = bobConfig // {
-            PrivateKeyPath = pkgs.writeText "private" (privateKeys.bob);
+            PrivateKeyPath = pkgs.writeText "private" privateKeys.bob;
           };
         };
 
@@ -144,7 +144,7 @@ in
 
     # Carol only does local peering.  Carol's yggdrasil config is all Nix.
     carol =
-      { ... }:
+      _:
       {
         networking.firewall.allowedTCPPorts = [ 43210 ];
         services.yggdrasil = {
@@ -170,7 +170,7 @@ in
 
     # Eve uses persistentKeys for automatic key generation.
     eve =
-      { ... }:
+      _:
       {
         networking.firewall.allowedTCPPorts = [ 43211 ];
         services.yggdrasil = {

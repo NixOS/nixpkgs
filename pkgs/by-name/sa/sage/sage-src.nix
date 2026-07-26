@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
       hash = "sha256-j5evAmOtKEG4OVFb/w/SVY2vvP5BSkqHBDmnroh8XY0=";
     })
   ]
-  ++ lib.optionals (stdenv.cc.isClang) [
+  ++ lib.optionals stdenv.cc.isClang [
     # https://github.com/NixOS/nixpkgs/pull/264126
     # Dead links in python sysconfig cause LLVM linker warnings, leading to cython doctest failures.
     ./patches/silence-linker.patch

@@ -33,15 +33,13 @@ let
   # because that sorts the sections by name.  Instead, we serialize it
   # on its own first.
   genericSection = {
-    generic = (
-      cfg.server.extraOptions
+    generic = cfg.server.extraOptions
       // {
         port = cfg.server.listenPort;
       }
       // (optionalAttrs (cfg.server.listenAddress != null) {
         listenaddr = cfg.server.listenAddress;
-      })
-    );
+      });
   };
   exportSections = lib.mapAttrs (
     _:

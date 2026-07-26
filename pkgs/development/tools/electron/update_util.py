@@ -13,6 +13,7 @@ JSON_INDENT = 4
 
 releases_json = None
 
+
 # Releases that have reached end-of-life no longer receive any updates
 # and it is rather pointless trying to update those.
 #
@@ -38,6 +39,7 @@ def supported_version_range() -> range:
         max(supported_releases) + 2,  # excl.
         1,
     )
+
 
 def get_latest_version(major_version: str) -> Tuple[str, str]:
     """Returns the latest version for a given major version"""

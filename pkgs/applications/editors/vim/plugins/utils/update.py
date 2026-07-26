@@ -86,9 +86,7 @@ class VimEditor(nixpkgs_plugin_update.Editor):
         with open(outfile, "w+") as f:
             log.debug("Writing to %s", outfile)
             f.write(HEADER)
-            f.write(
-                textwrap.dedent(
-                    """
+            f.write(textwrap.dedent("""
                 {
                   lib,
                   buildVimPlugin,
@@ -100,9 +98,7 @@ class VimEditor(nixpkgs_plugin_update.Editor):
                   inherit (lib.meta) getLicenseFromSpdxId;
                 in
                 final: prev: {
-                """
-                )
-            )
+                """))
             for pdesc, plugin in plugins:
                 content = self.plugin2nix(pdesc, plugin, _isNeovimPlugin(plugin))
                 f.write(content)

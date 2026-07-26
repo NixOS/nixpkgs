@@ -232,7 +232,7 @@ let
   grubPkgs = if config.boot.loader.grub.forcei686 then pkgs.pkgsi686Linux else pkgs;
 
   grubMenuCfg = ''
-    set textmode=${lib.boolToString (config.isoImage.forceTextMode)}
+    set textmode=${lib.boolToString config.isoImage.forceTextMode}
 
     #
     # Menu configuration
@@ -876,7 +876,7 @@ in
     environment.systemPackages = [
       grubPkgs.grub2
     ]
-    ++ lib.optional (config.isoImage.makeBiosBootable) pkgs.syslinux;
+    ++ lib.optional config.isoImage.makeBiosBootable pkgs.syslinux;
     system.extraDependencies = [ grubPkgs.grub2_efi ];
 
     # In stage 1 of the boot, mount the CD as the root FS by label so
@@ -978,7 +978,7 @@ in
         }
       ]
       ++ lib.unique (cfgFiles config)
-      ++ lib.optionals (config.isoImage.makeBiosBootable) [
+      ++ lib.optionals config.isoImage.makeBiosBootable [
         {
           source = config.isoImage.splashImage;
           target = "/isolinux/background.png";

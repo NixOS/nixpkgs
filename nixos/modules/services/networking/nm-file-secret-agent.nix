@@ -14,8 +14,8 @@ let
     entry = map (
       i:
       {
-        key = i.key;
-        file = i.file;
+        inherit (i) key;
+        inherit (i) file;
       }
       // lib.optionalAttrs (i.matchId != null) { match_id = i.matchId; }
       // lib.optionalAttrs (i.matchUuid != null) { match_uuid = i.matchUuid; }
@@ -24,7 +24,7 @@ let
       // lib.optionalAttrs (i.matchSetting != null) {
         match_setting = i.matchSetting;
       }
-      // lib.optionalAttrs (i.trim != null) { trim = i.trim; }
+      // lib.optionalAttrs (i.trim != null) { inherit (i) trim; }
     ) cfg.ensureProfiles.secrets.entries;
   };
   nmFileSecretAgentConfigFile = toml.generate "config.toml" nmFileSecretAgentConfig;

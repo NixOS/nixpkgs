@@ -6,7 +6,7 @@
 
   nodes = {
     bird =
-      { ... }:
+      _:
       {
         networking.firewall.allowedTCPPorts = [ 179 ];
         services.bird = {
@@ -27,7 +27,7 @@
         };
       };
     fnm =
-      { ... }:
+      _:
       {
         networking.firewall.allowedTCPPorts = [ 179 ];
         services.fastnetmon-advanced = {

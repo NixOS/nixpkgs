@@ -28,12 +28,14 @@ def main() -> None:
         if not any(
             pkg["name"] == package_pubspec["name"] for pkg in package_config["packages"]
         ):
-            package_config["packages"].append({
-                "name": package_pubspec["name"],
-                "rootUri": Path(package_path).resolve().as_uri(),
-                "packageUri": "lib/",
-                "languageVersion": languageVersion,
-            })
+            package_config["packages"].append(
+                {
+                    "name": package_pubspec["name"],
+                    "rootUri": Path(package_path).resolve().as_uri(),
+                    "packageUri": "lib/",
+                    "languageVersion": languageVersion,
+                }
+            )
     with Path(".dart_tool/package_config.json").open("w", encoding="utf-8") as f:
         json.dump(package_config, f, sort_keys=True, indent=4)
 

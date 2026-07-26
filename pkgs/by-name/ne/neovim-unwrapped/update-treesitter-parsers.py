@@ -36,11 +36,9 @@ for line in open(f"{src}/cmake.deps/deps.txt"):
 with open(dir / "treesitter-parsers.nix", "w") as f:
     f.write("{ fetchurl }:\n\n{\n")
     for lang, src in parsers.items():
-        f.write(
-            f"""  {lang}.src = fetchurl {{
+        f.write(f"""  {lang}.src = fetchurl {{
     url = "{src["URL"]}";
     hash = "sha256:{src["SHA256"]}";
   }};
-"""
-        )
+""")
     f.write("}\n")

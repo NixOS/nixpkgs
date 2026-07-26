@@ -14,7 +14,7 @@ buildPythonPackage (finalAttrs: {
 
   __structuredAttrs = true;
 
-  disabled = (!isPy3k); # uses python3 specific file io in setup.py
+  disabled = !isPy3k; # uses python3 specific file io in setup.py
 
   src = fetchPypi {
     pname = "BabelGladeExtractor";

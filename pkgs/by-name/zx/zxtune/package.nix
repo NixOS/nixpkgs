@@ -33,15 +33,14 @@
 }:
 let
   dlopenBuildInputs =
-    [ ]
-    ++ lib.optional withMp3 lame
+    lib.optional withMp3 lame
     ++ lib.optional withOgg libvorbis
     ++ lib.optional withFlac flac
     ++ lib.optional withOpenal openal
     ++ lib.optional withSDL SDL
     ++ lib.optional withAlsa alsa-lib
     ++ lib.optional withPulse libpulseaudio;
-  supportWayland = (!stdenv.hostPlatform.isDarwin);
+  supportWayland = !stdenv.hostPlatform.isDarwin;
   platformName = "linux";
   staticBuildInputs = [
     boost

@@ -87,7 +87,7 @@ let
     pkg: lib.lists.any (l: l.redistributable or false) (lib.lists.toList (pkg.meta.license or [ ]));
 
   isSource =
-    pkg: !lib.lists.any (x: !(x.isSource)) (lib.lists.toList (pkg.meta.sourceProvenance or [ ]));
+    pkg: !lib.lists.any (x: !x.isSource) (lib.lists.toList (pkg.meta.sourceProvenance or [ ]));
 
   isNotLinuxKernel =
     attrPath: !(lib.hasPrefix "linuxKernel" attrPath || lib.hasPrefix "linuxPackages" attrPath);

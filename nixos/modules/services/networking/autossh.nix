@@ -89,7 +89,7 @@ in
         // {
           "autossh-${s.name}" =
             let
-              mport = if s ? monitoringPort then s.monitoringPort else 0;
+              mport = s.monitoringPort or (0);
             in
             {
               description = "AutoSSH session (" + s.name + ")";

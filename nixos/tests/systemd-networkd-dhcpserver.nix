@@ -111,7 +111,7 @@
       };
   };
   testScript =
-    { ... }:
+    _:
     ''
       start_all()
 

@@ -78,5 +78,5 @@ buildFHSEnv {
     ln -s ${workspacesclient}/share $out/
   '';
 
-  meta = workspacesclient.meta;
+  inherit (workspacesclient) meta;
 }

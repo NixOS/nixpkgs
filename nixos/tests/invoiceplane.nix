@@ -10,7 +10,7 @@
 
   nodes = {
     invoiceplane_caddy =
-      { ... }:
+      _:
       {
         services.invoiceplane.webserver = "caddy";
         services.invoiceplane.sites = {
@@ -44,7 +44,7 @@
       };
 
     invoiceplane_nginx =
-      { ... }:
+      _:
       {
         services.invoiceplane.webserver = "nginx";
         services.invoiceplane.sites = {

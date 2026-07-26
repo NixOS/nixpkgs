@@ -7,11 +7,11 @@ import requests
 import subprocess
 from bs4 import BeautifulSoup
 
-VERSION_PATTERN = re.compile(r'^steam_(?P<ver>(\d+\.)+)tar.gz$')
+VERSION_PATTERN = re.compile(r"^steam_(?P<ver>(\d+\.)+)tar.gz$")
 
 found_versions = []
 response = requests.get("https://repo.steampowered.com/steam/archive/stable/")
-soup = BeautifulSoup (response.text, "html.parser")
+soup = BeautifulSoup(response.text, "html.parser")
 for a in soup.find_all("a"):
     href = a["href"]
     if not href.endswith(".tar.gz"):

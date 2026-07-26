@@ -14,9 +14,7 @@ let
     mkdir -p $out
     # since we are mounting the addons to the addon manager, they need to be copied
     ${lib.concatMapStringsSep ";" (a: "cp -v ${a}/* $out/") (
-      lib.mapAttrsToList (name: addon: pkgs.writeTextDir "${name}.json" (builtins.toJSON addon)) (
-        cfg.addons
-      )
+      lib.mapAttrsToList (name: addon: pkgs.writeTextDir "${name}.json" (builtins.toJSON addon)) cfg.addons
     )}
   '';
 in

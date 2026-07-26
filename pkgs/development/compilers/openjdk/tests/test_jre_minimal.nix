@@ -7,7 +7,7 @@
 
 let
   hello = callPackage ./hello.nix {
-    jdk = jdk;
+    inherit jdk;
     jre = jre_minimal;
   };
 in

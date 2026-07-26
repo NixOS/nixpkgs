@@ -6,7 +6,7 @@
 
   nodes = {
     agorakit =
-      { ... }:
+      _:
       {
         services.agorakit = {
           enable = true;

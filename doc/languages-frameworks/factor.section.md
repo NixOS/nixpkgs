@@ -26,6 +26,7 @@ Lastly, `extraVocabs` is passed through as is for stacked composition, and the f
 This makes it easier for external plugins (e.g. for editors and IDEs) to refer to the Factor vocabulary roots.
 
 `factorPackages` provides pre-configured Factor packages:
+
 - `factorPackages.factor-lang` is the default package with GUI support and several default library bindings (e.g. openssl, openal etc.).
 - `factorPackages.factor-no-gui` turns off GUI support while maintaining default library bindings.
 - `factorPackages.factor-minimal` comes with practically no additional library bindings and binaries and no GUI support.
@@ -62,6 +63,7 @@ All extra Factor vocabularies are registered in `pkgs/top-level/factor-packages.
 Package a vocabulary using the `buildFactorVocab` function.
 Its default `installPhase` takes care of installing it under `out/lib/factor`.
 It also understands the following special attributes:
+
 - `vocabName` is the path to the vocabulary to be installed.
   Defaults to `pname`.
 - `vocabRoot` is the vocabulary root to install the vocabulary under.
@@ -73,15 +75,17 @@ It also understands the following special attributes:
   When building factor-lang packages and Factor applications that use this respective vocabulary, these variables are evaluated and their paths added to the runtime environment.
 
 The function understands several forms of source directory trees:
+
 1. Simple single-vocab projects with their Factor and supplementary files directly in the project root.
    All `.factor` and `.txt` files are copied to `out/lib/factor/<vocabRoot>/<vocabName>`.
-2. More complex projects with several vocabularies next to each other, e.g. `./<vocabName>` and `./<otherVocab>`.
+1. More complex projects with several vocabularies next to each other, e.g. `./<vocabName>` and `./<otherVocab>`.
    All directories except `bin`, `doc` and `lib` are copied to `out/lib/factor/<vocabRoot>`.
-3. Even more complex projects that touch multiple vocabulary roots.
+1. Even more complex projects that touch multiple vocabulary roots.
    Vocabularies must reside under `lib/factor/<root>/<vocab>` with the name-giving vocabulary being in `lib/factor/<vocabRoot>/<vocabName>`.
    All directories in `lib/factor` are copied to `out/`.
 
 For instance, packaging the Bresenham algorithm for line interpolation looks like this, see `pkgs/development/compilers/factor-lang/vocabs/bresenham` for the complete file:
+
 ```nix
 { factorPackages, fetchFromGitHub }:
 
@@ -112,6 +116,7 @@ Factor applications are built using Factor's `deploy` facility with the help of 
 
 When packaging a Factor application with [`buildFactorApplication`](#ssec-factor-buildFactorApplication-func), its [`override`](#sec-pkg-override) interface should contain the `factorPackages` argument.
 For example:
+
 ```nix
 {
   lib,
@@ -130,6 +135,7 @@ factorPackages.buildFactorApplication (finalAttrs: {
 ```
 
 The `buildFactorApplication` function expects the following source structure for a package `foo-1.0` and produces a `/bin/foo` application:
+
 ```
 foo-1.0/
   foo/
@@ -145,6 +151,7 @@ Use the `preInstall` or `postInstall` hooks to copy additional files and directo
 The function itself only builds the application in `/lib/factor/` and a wrapper in `/bin/`.
 
 A more complex example shows how to specify runtime dependencies and additional Factor vocabularies at the example of the `painter` Factor application:
+
 ```nix
 {
   lib,
@@ -189,42 +196,42 @@ Additional attributes that are understood by `buildFactorApplication`:
 
 : A build description similar to `stdenv.mkDerivation` with the following attributes:
 
-  `vocabName` (String; _optional_)
+`vocabName` (String; _optional_)
 
-  : is the path to the vocabulary to be deployed relative to the source root.
-    So, directory `foo/` from the example above could be `extra/deep/down/foo`.
-    This allows you to maintain Factor's vocabulary hierarchy and distribute the same source tree as a stand-alone application and as a library in the Factor development environment via the `extraVocabs` attribute.
+: is the path to the vocabulary to be deployed relative to the source root.
+So, directory `foo/` from the example above could be `extra/deep/down/foo`.
+This allows you to maintain Factor's vocabulary hierarchy and distribute the same source tree as a stand-alone application and as a library in the Factor development environment via the `extraVocabs` attribute.
 
-  `binName` (String; _optional_)
+`binName` (String; _optional_)
 
-  : is the name of the resulting binary in `/bin/`.
-    It defaults to the last directory component in `vocabName`.
-    It is also added as the `meta.mainProgram` attribute to facilitate `nix run`.
+: is the name of the resulting binary in `/bin/`.
+It defaults to the last directory component in `vocabName`.
+It is also added as the `meta.mainProgram` attribute to facilitate `nix run`.
 
-  `enableUI` (Boolean; _optional_)
+`enableUI` (Boolean; _optional_)
 
-  : is `false` by default.
-    Set this to `true` when you ship a graphical application.
+: is `false` by default.
+Set this to `true` when you ship a graphical application.
 
-  `extraLibs` (List; _optional_)
+`extraLibs` (List; _optional_)
 
-  : adds additional libraries as runtime dependencies.
-    Defaults to `[]` and is concatenated with `runtimeLibs` from the used factor-lang package.
-    Use `factor-minimal` to minimize the closure of runtime libraries.
+: adds additional libraries as runtime dependencies.
+Defaults to `[]` and is concatenated with `runtimeLibs` from the used factor-lang package.
+Use `factor-minimal` to minimize the closure of runtime libraries.
 
-  `extraPaths` (List; _optional_)
+`extraPaths` (List; _optional_)
 
-  : adds additional binaries to the runtime PATH environment variable (without adding their libraries, as well).
-    Defaults to `[]` and is concatenated with `defaultBins` and `binPackages` from the used factor-lang package.
-    Use `factor-minimal` to minimize the closure of runtime libraries.
+: adds additional binaries to the runtime PATH environment variable (without adding their libraries, as well).
+Defaults to `[]` and is concatenated with `defaultBins` and `binPackages` from the used factor-lang package.
+Use `factor-minimal` to minimize the closure of runtime libraries.
 
-  `deployScriptText` (String; _optional_)
+`deployScriptText` (String; _optional_)
 
-  : is the actual deploy Factor file that is executed to deploy the application.
-    You can change it if you need to perform additional computation during deployment.
+: is the actual deploy Factor file that is executed to deploy the application.
+You can change it if you need to perform additional computation during deployment.
 
-  `factor-lang` (Package; _optional_)
+`factor-lang` (Package; _optional_)
 
-  : overrides the Factor package to use to deploy this application, which also affects the default library bindings and programs in the runtime PATH.
-    It defaults to `factor-lang` when `enableUI` is turned on and `factor-no-gui` when it is turned off.
-    Applications that use only Factor libraries without external bindings or programs may set this to `factor-minimal` or `factor-minimal-gui`.
+: overrides the Factor package to use to deploy this application, which also affects the default library bindings and programs in the runtime PATH.
+It defaults to `factor-lang` when `enableUI` is turned on and `factor-no-gui` when it is turned off.
+Applications that use only Factor libraries without external bindings or programs may set this to `factor-minimal` or `factor-minimal-gui`.

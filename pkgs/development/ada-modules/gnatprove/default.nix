@@ -103,7 +103,7 @@ stdenv.mkDerivation {
   pname = "gnatprove";
   version = "fsf-${gnat_version}_${thisSpark.commit_date}";
 
-  src = thisSpark.src;
+  inherit (thisSpark) src;
 
   patches = thisSpark.patches or [ ];
 

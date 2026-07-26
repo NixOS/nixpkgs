@@ -199,7 +199,7 @@ in
         stateDir = "goethereum/${gethName}/${if (cfg.network == null) then "mainnet" else cfg.network}";
         dataDir = "/var/lib/${stateDir}";
       in
-      (lib.nameValuePair "geth-${gethName}" (
+      lib.nameValuePair "geth-${gethName}" (
         lib.mkIf cfg.enable {
           description = "Go Ethereum node (${gethName})";
           wantedBy = [ "multi-user.target" ];
@@ -255,7 +255,7 @@ in
             MemoryDenyWriteExecute = "true";
           };
         }
-      ))
+      )
     ) eachGeth;
 
   };

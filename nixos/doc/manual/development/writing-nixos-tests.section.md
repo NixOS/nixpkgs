@@ -161,9 +161,9 @@ machines in a NixOS test, whether they are virtual machines or containers:
 
 `virtualisation.vlans`
 
-:   The virtual networks to which the VM is connected. See
-    [`nat.nix`](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/nat.nix)
-    for an example.
+: The virtual networks to which the VM is connected. See
+[`nat.nix`](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/nat.nix)
+for an example.
 
 #### Configuring `systemd-nspawn` containers {#ssec-nixos-test-nspawn-containers}
 
@@ -171,10 +171,10 @@ Some options are specific to `systemd-nspawn` containers:
 
 `virtualisation.systemd-nspawn.options`
 
-:  A list of additional command-line options to pass to
-    `systemd-nspawn` when starting the container. For example, to
-    bind mount a directory from the host into the container, you could
-    use: `[ "--bind=/host/dir:/container/dir" ]`.
+: A list of additional command-line options to pass to
+`systemd-nspawn` when starting the container. For example, to
+bind mount a directory from the host into the container, you could
+use: `[ "--bind=/host/dir:/container/dir" ]`.
 
 For more options, see the module
 [`nspawn-container`](https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/virtualisation/nspawn-container/default.nix).
@@ -191,15 +191,14 @@ Some options are specific to QEMU virtual machines:
 
 `virtualisation.memorySize`
 
-:   The memory of the VM in MiB (1024×1024 bytes).
-
+: The memory of the VM in MiB (1024×1024 bytes).
 
 `virtualisation.writableStore`
 
-:   By default, the Nix store in the VM is not writable. If you enable
-    this option, a writable union file system is mounted on top of the
-    Nix store to make it appear writable. This is necessary for tests
-    that run Nix operations that modify the store.
+: By default, the Nix store in the VM is not writable. If you enable
+this option, a writable union file system is mounted on top of the
+Nix store to make it appear writable. This is necessary for tests
+that run Nix operations that modify the store.
 
 For more options, see the module
 [`qemu-vm.nix`](https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/virtualisation/qemu-vm.nix).
@@ -278,7 +277,7 @@ with foo_running:
 
 `seconds_interval`
 
-:   specifies how often the condition should be polled:
+: specifies how often the condition should be polled:
 
 ```py
 @polling_condition(seconds_interval=10)
@@ -288,7 +287,7 @@ def foo_running():
 
 `description`
 
-:   is used in the log when the condition is checked. If this is not provided, the description is pulled from the docstring of the function. These two are therefore equivalent:
+: is used in the log when the condition is checked. If this is not provided, the description is pulled from the docstring of the function. These two are therefore equivalent:
 
 ```py
 @polling_condition
@@ -387,56 +386,62 @@ way:
 The NixOS test framework returns tests with multiple overriding methods.
 
 `overrideTestDerivation` *function*
-:   Like applying `overrideAttrs` on the [test](#test-opt-test) derivation.
+: Like applying `overrideAttrs` on the [test](#test-opt-test) derivation.
 
-    This is a convenience for `extend` with an override on the [`rawTestDerivationArg`](#test-opt-rawTestDerivationArg) option.
+```
+This is a convenience for `extend` with an override on the [`rawTestDerivationArg`](#test-opt-rawTestDerivationArg) option.
 
-    *function*
-    :   An extension function, e.g. `finalAttrs: prevAttrs: { /* … */ }`, the result of which is passed to [`mkDerivation`](https://nixos.org/manual/nixpkgs/stable/#sec-using-stdenv).
-        Just as with `overrideAttrs`, an abbreviated form can be used, e.g. `prevAttrs: { /* … */ }` or even `{ /* … */ }`.
-        See [`lib.extends`](https://nixos.org/manual/nixpkgs/stable/#function-library-lib.fixedPoints.extends).
+*function*
+:   An extension function, e.g. `finalAttrs: prevAttrs: { /* … */ }`, the result of which is passed to [`mkDerivation`](https://nixos.org/manual/nixpkgs/stable/#sec-using-stdenv).
+    Just as with `overrideAttrs`, an abbreviated form can be used, e.g. `prevAttrs: { /* … */ }` or even `{ /* … */ }`.
+    See [`lib.extends`](https://nixos.org/manual/nixpkgs/stable/#function-library-lib.fixedPoints.extends).
+```
 
 `extendNixOS { module = ` *module* `; specialArgs = ` *specialArgs* `; }`
-:   Evaluates the test with additional NixOS modules and/or arguments.
+: Evaluates the test with additional NixOS modules and/or arguments.
 
-    `module`
-    :   A NixOS module to add to all the machines in the test. Sets test option [`extraBaseModules`](#test-opt-extraBaseModules).
+````
+`module`
+:   A NixOS module to add to all the machines in the test. Sets test option [`extraBaseModules`](#test-opt-extraBaseModules).
 
-    `specialArgs`
-    :   An attribute set of arguments to pass to all NixOS modules. These override the existing arguments, as well as any `_module.args.<name>` that the modules may define. Sets test option [`node.specialArgs`](#test-opt-node.specialArgs).
+`specialArgs`
+:   An attribute set of arguments to pass to all NixOS modules. These override the existing arguments, as well as any `_module.args.<name>` that the modules may define. Sets test option [`node.specialArgs`](#test-opt-node.specialArgs).
 
-    This is a convenience function for `extend` that overrides the aforementioned test options.
+This is a convenience function for `extend` that overrides the aforementioned test options.
 
-    :::{.example #ex-nixos-test-extendNixOS}
+:::{.example #ex-nixos-test-extendNixOS}
 
-    # Using extendNixOS in `passthru.tests` to make `(openssh.tests.overrideAttrs f).tests.nixos` coherent
+# Using extendNixOS in `passthru.tests` to make `(openssh.tests.overrideAttrs f).tests.nixos` coherent
 
-    ```nix
-    mkDerivation (finalAttrs: {
-      # …
-      passthru = {
-        tests = {
-          nixos = nixosTests.openssh.extendNixOS {
-            module = {
-              services.openssh.package = finalAttrs.finalPackage;
-            };
-          };
+```nix
+mkDerivation (finalAttrs: {
+  # …
+  passthru = {
+    tests = {
+      nixos = nixosTests.openssh.extendNixOS {
+        module = {
+          services.openssh.package = finalAttrs.finalPackage;
         };
       };
-    })
-    ```
-    :::
+    };
+  };
+})
+```
+:::
+````
 
 `extend { modules = ` *modules* `; specialArgs = ` *specialArgs* `; }`
-:   Adds new `nixosTest` modules and/or module arguments to the test, which are evaluated together with the existing modules and [built-in options](#sec-test-options-reference).
+: Adds new `nixosTest` modules and/or module arguments to the test, which are evaluated together with the existing modules and [built-in options](#sec-test-options-reference).
 
-    If you're only looking to extend the _NixOS_ configurations of the test, and not something else about the test, you may use the `extendNixOS` convenience function instead.
+```
+If you're only looking to extend the _NixOS_ configurations of the test, and not something else about the test, you may use the `extendNixOS` convenience function instead.
 
-    `modules`
-    :   A list of modules to add to the test. These are added to the existing modules and then [evaluated](https://nixos.org/manual/nixpkgs/stable/index.html#module-system-lib-evalModules) together.
+`modules`
+:   A list of modules to add to the test. These are added to the existing modules and then [evaluated](https://nixos.org/manual/nixpkgs/stable/index.html#module-system-lib-evalModules) together.
 
-    `specialArgs`
-    :   An attribute of arguments to pass to the test. These override the existing arguments, as well as any `_module.args.<name>` that the modules may define. See [`evalModules`/`specialArgs`](https://nixos.org/manual/nixpkgs/stable/#module-system-lib-evalModules-param-specialArgs).
+`specialArgs`
+:   An attribute of arguments to pass to the test. These override the existing arguments, as well as any `_module.args.<name>` that the modules may define. See [`evalModules`/`specialArgs`](https://nixos.org/manual/nixpkgs/stable/#module-system-lib-evalModules-param-specialArgs).
+```
 
 ## Test Options Reference {#sec-test-options-reference}
 
@@ -503,7 +508,6 @@ For debugging with SSH access into the machines, it's recommended to try using
 This feature is mostly intended to debug flaky test failures that aren't
 reproducible elsewhere.
 :::
-
 
 If you set the [`sshBackdoor.enable`](#test-opt-sshBackdoor.enable) option,
 QEMU virtual machines will open an SSH backdoor based on AF_VSOCK

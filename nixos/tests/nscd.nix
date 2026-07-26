@@ -43,12 +43,12 @@ in
 
       specialisation = {
         withGlibcNscd.configuration =
-          { ... }:
+          _:
           {
             services.nscd.enableNsncd = false;
           };
         withUnscd.configuration =
-          { ... }:
+          _:
           {
             services.nscd.enableNsncd = false;
             services.nscd.package = pkgs.unscd;

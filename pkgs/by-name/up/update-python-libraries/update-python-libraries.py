@@ -283,14 +283,21 @@ def _get_latest_version_github(attr_path, package, extension, current_version, t
     releases = list(filter(lambda x: not x["prerelease"], all_releases))
 
     if len(releases) == 0:
-        logging.warning(f"{homepage} does not contain any stable releases, looking for tags instead...")
+        logging.warning(
+            f"{homepage} does not contain any stable releases, looking for tags instead..."
+        )
         url = f"https://api.github.com/repos/{owner}/{repo}/tags"
         all_tags = _fetch_github(url)
         # Releases are used with a couple of fields that tags possess as well. We will fake these releases.
-        releases = [{'tag_name': tag['name'], 'tarball_url': tag['tarball_url']} for tag in all_tags]
+        releases = [
+            {"tag_name": tag["name"], "tarball_url": tag["tarball_url"]}
+            for tag in all_tags
+        ]
 
     if len(releases) == 0:
-        raise ValueError(f"{homepage} does not contain any stable releases neither tags, stopping now.")
+        raise ValueError(
+            f"{homepage} does not contain any stable releases neither tags, stopping now."
+        )
 
     versions = map(lambda x: strip_prefix(x["tag_name"]), releases)
     version = _determine_latest_version(current_version, target, versions)
@@ -512,7 +519,7 @@ def _update_package(path, target):
             text = text.replace('"${version}";', "version;")
 
             # update changelog to reference the src.tag
-            if result := re.search("changelog = \"[^\"]+\";", text):
+            if result := re.search('changelog = "[^"]+";', text):
                 cl_old = result[0]
                 cl_new = re.sub(r"v?\$\{(version|src.rev)\}", "${src.tag}", cl_old)
                 text = text.replace(cl_old, cl_new)

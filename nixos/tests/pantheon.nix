@@ -6,7 +6,7 @@
   meta.maintainers = lib.teams.pantheon.members;
 
   nodes.machine =
-    { ... }:
+    _:
 
     let
       videosAutostart = pkgs.writeTextFile {

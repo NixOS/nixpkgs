@@ -12,26 +12,31 @@ Note the `NIX_PYTHONPATH` environment variable is unset in order to prevent leak
 Similarly, this module listens to the environment variable `NIX_PYTHONEXECUTABLE`
 and sets `sys.executable` to its value.
 """
+
 import site
 import sys
 import os
 import functools
 
-paths = os.environ.pop('NIX_PYTHONPATH', None)
+paths = os.environ.pop("NIX_PYTHONPATH", None)
 if paths:
-    functools.reduce(lambda k, p: site.addsitedir(p, k), paths.split(':'), site._init_pathinfo())
+    functools.reduce(
+        lambda k, p: site.addsitedir(p, k), paths.split(":"), site._init_pathinfo()
+    )
 
 # Check whether we are in a venv or virtualenv.
 # For Python 3 we check whether our `base_prefix` is different from our current `prefix`.
 # For Python 2 we check whether the non-standard `real_prefix` is set.
 # https://stackoverflow.com/questions/1871549/determine-if-python-is-running-inside-virtualenv
-in_venv = (sys.version_info.major == 3 and sys.prefix != sys.base_prefix) or (sys.version_info.major == 2 and hasattr(sys, "real_prefix"))
+in_venv = (sys.version_info.major == 3 and sys.prefix != sys.base_prefix) or (
+    sys.version_info.major == 2 and hasattr(sys, "real_prefix")
+)
 
 if not in_venv:
-    executable = os.environ.pop('NIX_PYTHONEXECUTABLE', None)
-    prefix = os.environ.pop('NIX_PYTHONPREFIX', None)
+    executable = os.environ.pop("NIX_PYTHONEXECUTABLE", None)
+    prefix = os.environ.pop("NIX_PYTHONPREFIX", None)
 
-    if 'PYTHONEXECUTABLE' not in os.environ and executable is not None:
+    if "PYTHONEXECUTABLE" not in os.environ and executable is not None:
         sys.executable = executable
     if prefix is not None:
         # Sysconfig does not like it when sys.prefix is set to None

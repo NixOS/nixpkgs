@@ -257,7 +257,7 @@ in
         # late-enough for a user to `mkBefore` it.
         (lib.mkOrder 600 (defaultRule {
           groups = [ "wheel" ];
-          opts = (lib.optional (!cfg.wheelNeedsPassword) "NOPASSWD");
+          opts = lib.optional (!cfg.wheelNeedsPassword) "NOPASSWD";
         }))
       ];
 

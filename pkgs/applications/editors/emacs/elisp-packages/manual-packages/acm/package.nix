@@ -7,9 +7,9 @@
 
 melpaBuild {
   pname = "acm";
-  version = lsp-bridge.version;
+  inherit (lsp-bridge) version;
 
-  src = lsp-bridge.src;
+  inherit (lsp-bridge) src;
 
   packageRequires = [ yasnippet ];
 

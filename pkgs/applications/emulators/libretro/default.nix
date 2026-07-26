@@ -137,7 +137,7 @@ lib.makeScope newScope (self: {
   pcsx2 = self.callPackage ./cores/pcsx2.nix { };
 
   pcsx-rearmed = self.callPackage ./cores/pcsx-rearmed.nix { };
-  pcsx_rearmed = lib.lowPrio (self.pcsx-rearmed); # added 2024-11-20
+  pcsx_rearmed = lib.lowPrio self.pcsx-rearmed; # added 2024-11-20
 
   picodrive = self.callPackage ./cores/picodrive.nix { };
 

@@ -10,7 +10,7 @@ in
 
   nodes = {
     esphomeTcp =
-      { ... }:
+      _:
       {
         services.esphome = {
           enable = true;
@@ -21,7 +21,7 @@ in
       };
 
     esphomeUnix =
-      { ... }:
+      _:
       {
         services.esphome = {
           enable = true;

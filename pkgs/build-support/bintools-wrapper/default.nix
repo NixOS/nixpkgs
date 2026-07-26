@@ -450,7 +450,7 @@ stdenvNoCC.mkDerivation {
     # TODO(@sternenseemann): invent something cleaner than passing in "" in case of absence
     expandResponseParams = "${expand-response-params}/bin/expand-response-params";
     # TODO(@sternenseemann): rename env var via stdenv rebuild
-    shell = (getBin runtimeShell + runtimeShell.shellPath or "");
+    shell = getBin runtimeShell + runtimeShell.shellPath or "";
     gnugrep_bin = optionalString (!nativeTools) gnugrep;
     rm = if nativeTools then "rm" else lib.getExe' coreutils "rm";
     mktemp = if nativeTools then "mktemp" else lib.getExe' coreutils "mktemp";

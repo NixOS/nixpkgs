@@ -102,7 +102,7 @@ in
     users.users.${cfg.user} = {
       description = "Exim mail transfer agent user";
       uid = config.ids.uids.exim;
-      group = cfg.group;
+      inherit (cfg) group;
     };
 
     users.groups.${cfg.group} = {

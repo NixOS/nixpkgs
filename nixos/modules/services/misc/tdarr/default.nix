@@ -47,7 +47,7 @@ in
   config = lib.mkIf (cfg.enable || cfg.server.enable || cfg.nodes != { }) {
     users.users.tdarr = lib.mkIf (cfg.user == "tdarr") {
       isSystemUser = true;
-      group = cfg.group;
+      inherit (cfg) group;
       home = cfg.dataDir;
       createHome = true;
     };

@@ -219,7 +219,7 @@ in
 
     users.users = lib.mkIf (cfg.user == "plex") {
       plex = {
-        group = cfg.group;
+        inherit (cfg) group;
         uid = config.ids.uids.plex;
       };
     };

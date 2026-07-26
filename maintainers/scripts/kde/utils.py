@@ -7,6 +7,7 @@ import subprocess
 
 import yaml
 
+
 class DataclassEncoder(json.JSONEncoder):
     def default(self, it):
         if dataclasses.is_dataclass(it):
@@ -31,12 +32,16 @@ class Project:
             name=data["identifier"],
             description=data["description"],
             project_path=data["projectpath"],
-            repo_path=data["repopath"]
+            repo_path=data["repopath"],
         )
 
 
 def get_git_commit(path: pathlib.Path):
-    return subprocess.check_output(["git", "-C", path, "rev-parse", "--short", "HEAD"]).decode().strip()
+    return (
+        subprocess.check_output(["git", "-C", path, "rev-parse", "--short", "HEAD"])
+        .decode()
+        .strip()
+    )
 
 
 def validate_unique(projects: list[Project], attr: str):
@@ -74,7 +79,7 @@ IGNORE = {
     "kdesupport/phonon-mplayer",
     "kdesupport/phonon-quicktime",
     "kdesupport/phonon-waveout",
-    "kdesupport/phonon-xine"
+    "kdesupport/phonon-xine",
 }
 
 WARNED = set()
@@ -157,11 +162,25 @@ class KDERepoMetadata:
         root.mkdir(parents=True, exist_ok=True)
 
         with (root / "projects.json").open("w") as fd:
-            json.dump(self.projects_by_name, fd, cls=DataclassEncoder, sort_keys=True, indent=2)
+            json.dump(
+                self.projects_by_name,
+                fd,
+                cls=DataclassEncoder,
+                sort_keys=True,
+                indent=2,
+            )
 
         with (root / "dependencies.json").open("w") as fd:
-            deps = {k.name: sorted(dep.name for dep in v) for k, v in self.dep_graph.items()}
-            json.dump({"version": self.version, "dependencies": deps}, fd, cls=DataclassEncoder, sort_keys=True, indent=2)
+            deps = {
+                k.name: sorted(dep.name for dep in v) for k, v in self.dep_graph.items()
+            }
+            json.dump(
+                {"version": self.version, "dependencies": deps},
+                fd,
+                cls=DataclassEncoder,
+                sort_keys=True,
+                indent=2,
+            )
 
     @classmethod
     def from_json(cls, root: pathlib.Path):
@@ -179,7 +198,9 @@ class KDERepoMetadata:
         dep_graph = collections.defaultdict(set)
         for dependent, dependencies in deps["dependencies"].items():
             for dependency in dependencies:
-                dep_graph[self.projects_by_name[dependent]].add(self.projects_by_name[dependency])
+                dep_graph[self.projects_by_name[dependent]].add(
+                    self.projects_by_name[dependency]
+                )
 
         self.dep_graph = dep_graph
         return self

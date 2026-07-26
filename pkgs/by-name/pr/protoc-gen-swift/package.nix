@@ -7,7 +7,7 @@
   nix-update-script,
 }:
 let
-  stdenv = swiftPackages.stdenv;
+  inherit (swiftPackages) stdenv;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "protoc-gen-swift";

@@ -6,7 +6,7 @@
   };
 
   nodes.machine =
-    { ... }:
+    _:
     {
       virtualisation.useBootLoader = true;
       virtualisation.useEFIBoot = true;

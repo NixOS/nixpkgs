@@ -9,7 +9,7 @@ with lib;
 
 let
   cfg = config.services.pdnsd;
-  pdnsd = pkgs.pdnsd;
+  inherit (pkgs) pdnsd;
   pdnsdUser = "pdnsd";
   pdnsdGroup = "pdnsd";
   pdnsdConf = pkgs.writeText "pdnsd.conf" ''

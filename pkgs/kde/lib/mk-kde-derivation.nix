@@ -11,7 +11,7 @@ self:
   jq,
 }:
 let
-  dependencies = (lib.importJSON ../generated/dependencies.json).dependencies;
+  inherit ((lib.importJSON ../generated/dependencies.json)) dependencies;
   projectInfo = lib.importJSON ../generated/projects.json;
 
   licenseInfo = lib.importJSON ../generated/licenses.json;

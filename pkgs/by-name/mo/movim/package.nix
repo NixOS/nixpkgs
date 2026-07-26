@@ -56,8 +56,7 @@ php.buildComposerProject2 (finalAttrs: {
 
   php = php.buildEnv (
     {
-      extensions = (
-        { all, enabled }:
+      extensions = { all, enabled }:
         enabled
         ++ [
           all.curl
@@ -76,8 +75,7 @@ php.buildComposerProject2 (finalAttrs: {
           all.mysqli
           all.mysqlnd
           all.pdo_mysql
-        ]
-      );
+        ];
     }
     // lib.optionalAttrs (phpCfg != null) {
       extraConfig = phpCfg;

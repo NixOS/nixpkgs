@@ -82,7 +82,7 @@ in
 
     users.users = mkIf (cfg.user == "sniproxy") {
       sniproxy = {
-        group = cfg.group;
+        inherit (cfg) group;
         uid = config.ids.uids.sniproxy;
       };
     };

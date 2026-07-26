@@ -262,7 +262,7 @@ buildPythonPackage {
     transformers
   ];
 
-  optional-dependencies = optional-dependencies;
+  inherit optional-dependencies;
 
   # The Python imports check runs huggingface-hub which needs a writable directory.
   #  `pythonImportsCheck` runs in the installPhase (before checkPhase).

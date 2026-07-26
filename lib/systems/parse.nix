@@ -1024,10 +1024,10 @@ rec {
               gnuabielfv2 = abis.musl;
               gnuabielfv1 = abis.musl;
               # The following entries ensure that this function is idempotent.
-              musleabi = abis.musleabi;
-              musleabihf = abis.musleabihf;
-              muslabin32 = abis.muslabin32;
-              muslabi64 = abis.muslabi64;
+              inherit (abis) musleabi;
+              inherit (abis) musleabihf;
+              inherit (abis) muslabin32;
+              inherit (abis) muslabi64;
             }
             .${parsed.abi.name} or abis.musl;
         }

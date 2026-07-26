@@ -6,6 +6,7 @@ modern and open source discussion platform.
 ## Basic usage {#module-services-discourse-basic-usage}
 
 A minimal configuration using Let's Encrypt for TLS certificates looks like this:
+
 ```nix
 {
   services.discourse = {
@@ -168,6 +169,7 @@ The following example sets the title and description of the
 Discourse instance and enables
 GitHub login in the site settings,
 and changes a few request limits in the backend settings:
+
 ```nix
 {
   services.discourse = {
@@ -246,6 +248,7 @@ Much of the packaging can be done automatically by the
 script - just add the plugin to the `plugins`
 list in the `update_plugins` function and run
 the script:
+
 ```bash
 ./update.py update-plugins
 ```

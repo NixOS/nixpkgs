@@ -370,11 +370,10 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    services.sympa.settings = (
-      lib.mapAttrs (_: v: lib.mkDefault v) {
+    services.sympa.settings = lib.mapAttrs (_: v: lib.mkDefault v) {
         domain = if cfg.mainDomain != null then cfg.mainDomain else lib.head fqdns;
         listmaster = lib.concatStringsSep "," cfg.listMasters;
-        lang = cfg.lang;
+        inherit (cfg) lang;
 
         home = "${dataDir}/list_data";
         arc_path = "${dataDir}/arc";
@@ -408,8 +407,7 @@ in
         css_path = "${dataDir}/static_content/css";
         pictures_path = "${dataDir}/static_content/pictures";
         mhonarc = "${pkgs.perlPackages.MHonArc}/bin/mhonarc";
-      })
-    );
+      });
 
     services.sympa.settingsFile = {
       "virtual.sympa" = lib.mkDefault { source = virtual; };
@@ -427,7 +425,7 @@ in
 
     users.users.${user} = {
       description = "Sympa mailing list manager user";
-      group = group;
+      inherit group;
       home = dataDir;
       createHome = false;
       isSystemUser = true;

@@ -2,7 +2,7 @@
 
 let
   certs = import ../common/acme/server/snakeoil-certs.nix;
-  domain = certs.domain;
+  inherit (certs) domain;
 in
 {
   security.pki.certificateFiles = [ certs.ca.cert ];

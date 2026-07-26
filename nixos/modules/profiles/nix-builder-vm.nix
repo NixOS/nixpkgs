@@ -141,9 +141,9 @@ in
     system.systemBuilderArgs.allowSubstitutes = true;
 
     nix.settings = {
-      min-free = cfg.min-free;
+      inherit (cfg) min-free;
 
-      max-free = cfg.max-free;
+      inherit (cfg) max-free;
 
       trusted-users = [ user ];
     };
@@ -271,9 +271,9 @@ in
     '';
 
     virtualisation = {
-      diskSize = cfg.diskSize;
+      inherit (cfg) diskSize;
 
-      memorySize = cfg.memorySize;
+      inherit (cfg) memorySize;
 
       forwardPorts = [
         {

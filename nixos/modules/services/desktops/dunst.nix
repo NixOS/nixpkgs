@@ -22,7 +22,7 @@ in
     };
 
     settings = lib.mkOption {
-      type = gitIni.type;
+      inherit (gitIni) type;
       default = { };
       description = "Dunst configuration, see dunst(5)";
       example = lib.literalExpression ''

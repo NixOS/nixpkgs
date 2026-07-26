@@ -50,12 +50,15 @@ import json
 import os
 import sys
 
+
 def layer_count(layer_split):
     return len(set(layer_split.values()))
 
+
 def path_key(path):
-    hash, name = path.split('-', 1)
+    hash, name = path.split("-", 1)
     return name, hash
+
 
 def closure(*todo, key):
     """
@@ -70,11 +73,13 @@ def closure(*todo, key):
             todo.update(key(x))
     return done
 
+
 def dependencies(*todo, key):
     """
     Find all dependencies of the arguments excluding the arguments themselves.
     """
     return closure(*todo, key=key) - set(todo)
+
 
 def minimal_cover(paths, key):
     """
@@ -84,6 +89,7 @@ def minimal_cover(paths, key):
     paths = set(paths)
     paths_deps = set.union(*(dependencies(d, key=key) for d in paths))
     return paths - paths_deps
+
 
 def auto_layer(graph, ignore_paths, layer_limit):
     # Compute all direct users of each path
@@ -145,19 +151,20 @@ def auto_layer(graph, ignore_paths, layer_limit):
         nonlocal nodes
         nonlocal layer_split
         # The full set of paths in this layer is all the paths that were assigned to it.
-        paths = {path
-                 for path, layer_id_2 in layer_split.items()
-                 if layer_id == layer_id_2}
+        paths = {
+            path for path, layer_id_2 in layer_split.items() if layer_id == layer_id_2
+        }
         layerSize = sum(nodes[path]["narSize"] for path in paths)
         return {
             "usedBy": sorted(layer_id, key=path_key),
             "paths": sorted(paths, key=path_key),
             "layerSize": layerSize,
-            "closureSize": sum(nodes[path]["narSize"] for path in closure(*paths, key=node_deps)),
+            "closureSize": sum(
+                nodes[path]["narSize"] for path in closure(*paths, key=node_deps)
+            ),
         }
 
-    layers = {layer_id: layer_info(layer_id)
-              for layer_id in set(layer_split.values())}
+    layers = {layer_id: layer_info(layer_id) for layer_id in set(layer_split.values())}
 
     # The layer order doesn't actually matter for docker but it's still kind of neat to have layers come
     # after all of their dependencies. The easiest way to do that is to order by closure size since a
@@ -173,22 +180,22 @@ def auto_layer(graph, ignore_paths, layer_limit):
     assert total_layer_size == total_nar_size, (total_layer_size, total_nar_size)
 
     # Format as a list of layers, each defined as a list of store paths.
-    return [[path
-             for path in layer["paths"]
-             if path not in ignore_paths]
-            for layer in layer_order
-            if set(layer["paths"]) - ignore_paths]
+    return [
+        [path for path in layer["paths"] if path not in ignore_paths]
+        for layer in layer_order
+        if set(layer["paths"]) - ignore_paths
+    ]
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(
-        prog='auto-layer',
-        description='Split store paths into docker layers.'
+        prog="auto-layer", description="Split store paths into docker layers."
     )
-    parser.add_argument('graph_file')
-    parser.add_argument('ignore_file', default="/dev/null")
-    parser.add_argument('layer_limit', type=int, default=100)
+    parser.add_argument("graph_file")
+    parser.add_argument("ignore_file", default="/dev/null")
+    parser.add_argument("layer_limit", type=int, default=100)
     args = parser.parse_args()
 
     with open(args.graph_file) as f:

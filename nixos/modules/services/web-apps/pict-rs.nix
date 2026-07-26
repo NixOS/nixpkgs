@@ -27,7 +27,7 @@ in
     };
 
     repoPath = mkOption {
-      type = types.nullOr (types.path);
+      type = types.nullOr types.path;
       default = null;
       description = ''
         The directory where to store the database.
@@ -36,7 +36,7 @@ in
     };
 
     storePath = mkOption {
-      type = types.nullOr (types.path);
+      type = types.nullOr types.path;
       default = null;
       description = ''
         The directory where to store the uploaded images.

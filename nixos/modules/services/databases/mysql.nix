@@ -108,9 +108,7 @@ in
 
       dataDir = lib.mkOption {
         type = lib.types.path;
-        default = (
-          if lib.versionAtLeast config.system.stateVersion "17.09" then "/var/lib/mysql" else "/var/mysql"
-        );
+        default = if lib.versionAtLeast config.system.stateVersion "17.09" then "/var/lib/mysql" else "/var/mysql";
         example = "/var/lib/mysql";
         description = ''
           The data directory for MySQL.
@@ -145,7 +143,7 @@ in
       };
 
       settings = lib.mkOption {
-        type = format.type;
+        inherit (format) type;
         default = { };
         description = ''
           MySQL configuration. Refer to
@@ -505,7 +503,7 @@ in
     users.users = lib.optionalAttrs (cfg.user == "mysql") {
       mysql = {
         description = "MySQL server user";
-        group = cfg.group;
+        inherit (cfg) group;
         uid = config.ids.uids.mysql;
       };
     };

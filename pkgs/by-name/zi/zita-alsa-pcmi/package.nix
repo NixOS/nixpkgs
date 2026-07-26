@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Successor of clalsadrv, provides easy access to ALSA PCM devices";
-    version = finalAttrs.version;
+    inherit (finalAttrs) version;
     homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/index.html";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.magnetophon ];

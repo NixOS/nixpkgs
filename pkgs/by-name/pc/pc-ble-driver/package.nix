@@ -53,10 +53,7 @@ stdenv.mkDerivation rec {
     spdlog
   ];
 
-  propagatedBuildInputs = [
-
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     udev
   ];
 

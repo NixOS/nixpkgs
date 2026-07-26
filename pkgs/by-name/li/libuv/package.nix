@@ -149,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
       ];
       tdRegexp = lib.concatStringsSep "\\|" toDisable;
     in
-    lib.optionalString (finalAttrs.finalPackage.doCheck) ''
+    lib.optionalString finalAttrs.finalPackage.doCheck ''
       sed '/${tdRegexp}/d' -i test/test-list.h
       # https://github.com/libuv/libuv/issues/4794
       substituteInPlace Makefile.am --replace-fail -lutil "-lutil -lm"

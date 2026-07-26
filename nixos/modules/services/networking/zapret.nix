@@ -195,10 +195,10 @@ in
           ''
             ip46tables -t mangle -I POSTROUTING -p tcp --dport 443 -m connbytes --connbytes-dir=original --connbytes-mode=packets --connbytes 1:6 -m mark ! --mark 0x40000000/0x40000000 -j NFQUEUE --queue-num ${qnum} --queue-bypass
           ''
-          + lib.optionalString (cfg.httpSupport) ''
+          + lib.optionalString cfg.httpSupport ''
             ip46tables -t mangle -I POSTROUTING -p tcp --dport 80 ${httpParams} -m mark ! --mark 0x40000000/0x40000000 -j NFQUEUE --queue-num ${qnum} --queue-bypass
           ''
-          + lib.optionalString (cfg.udpSupport) ''
+          + lib.optionalString cfg.udpSupport ''
             ip46tables -t mangle -A POSTROUTING -p udp -m multiport --dports ${udpPorts} -m mark ! --mark 0x40000000/0x40000000 -j NFQUEUE --queue-num ${qnum} --queue-bypass
           '';
       })

@@ -34,7 +34,7 @@ in
 makeScope newScope (
   self:
   let
-    callPackage = self.callPackage;
+    inherit (self) callPackage;
 
     buildOctavePackage = callPackage ../development/interpreters/octave/build-octave-package.nix {
       inherit lib stdenv;
@@ -107,7 +107,7 @@ makeScope newScope (
     ga = callPackage ../development/octave-modules/ga { };
 
     general = callPackage ../development/octave-modules/general {
-      nettle = pkgs.nettle;
+      inherit (pkgs) nettle;
     };
 
     generate_html = callPackage ../development/octave-modules/generate_html { };

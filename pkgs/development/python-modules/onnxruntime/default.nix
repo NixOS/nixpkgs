@@ -97,5 +97,5 @@ buildPythonPackage {
         "onnxruntime"
       ];
 
-  meta = onnxruntime.meta;
+  inherit (onnxruntime) meta;
 }

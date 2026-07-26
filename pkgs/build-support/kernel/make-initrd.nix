@@ -94,7 +94,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   # !!! should use XML.
   objects = map (x: x.object) contents;
   symlinks = map (x: x.symlink) contents;
-  suffices = map (x: if x ? suffix then x.suffix else "none") contents;
+  suffices = map (x: x.suffix or "none") contents;
 
   closureInfo = "${pkgsBuildHost.closureInfo { rootPaths = finalAttrs.objects; }}";
 

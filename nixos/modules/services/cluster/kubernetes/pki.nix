@@ -143,7 +143,7 @@ in
     in
     {
 
-      services.cfssl = mkIf (top.apiserver.enable) {
+      services.cfssl = mkIf top.apiserver.enable {
         enable = true;
         address = "0.0.0.0";
         tlsCert = cfsslCert;
@@ -174,7 +174,7 @@ in
       systemd.services.cfssl.preStart =
         with pkgs;
         with config.services.cfssl;
-        mkIf (top.apiserver.enable) (
+        mkIf top.apiserver.enable (
           concatStringsSep "\n" [
             "set -e"
             (optionalString cfg.genCfsslCACert ''
@@ -219,7 +219,7 @@ in
               install -m 600 /dev/null "${certmgrAPITokenPath}"
             fi
           ''
-          (optionalString (cfg.pkiTrustOnBootstrap) ''
+          (optionalString cfg.pkiTrustOnBootstrap ''
             if [ ! -f "${top.caFile}" ] || [ $(cat "${top.caFile}" | wc -c) -lt 1 ]; then
               ${pkgs.curl}/bin/curl --fail-early -f -kd '{}' ${remote}/api/v1/cfssl/info | \
                 ${pkgs.cfssl}/bin/cfssljson -stdout >${top.caFile}
@@ -365,7 +365,7 @@ in
         keyFile = mkDefault key;
         trustedCaFile = mkDefault caCert;
       };
-      networking.extraHosts = mkIf (config.services.etcd.enable) ''
+      networking.extraHosts = mkIf config.services.etcd.enable ''
         127.0.0.1 etcd.${top.addons.dns.clusterDomain} etcd.local
       '';
 

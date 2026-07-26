@@ -11,7 +11,7 @@
 
 let
   inherit (stdenv) hostPlatform;
-  information = (lib.importJSON ./information.json);
+  information = lib.importJSON ./information.json;
   source =
     information.sources."${hostPlatform.system}"
       or (throw "antigravity-ide: unsupported system ${hostPlatform.system}");

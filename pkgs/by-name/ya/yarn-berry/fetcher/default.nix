@@ -26,7 +26,7 @@ let
       libzip =
         (libzip.override {
           # Known good version: 1.3.1
-          zlib = zlib;
+          inherit zlib;
         }).overrideAttrs
           (old: {
             patches = (old.patches or [ ]) ++ [
@@ -88,8 +88,7 @@ makeScopeWithSplicing' {
       '';
       variantOverlay = (variantOverlays.${berryVersion} or err) final;
     in
-    (
-      {
+    {
         inherit yarn-berry berryVersion;
 
         yarn-berry-offline = final.yarn-berry.overrideAttrs (old: {
@@ -101,6 +100,5 @@ makeScopeWithSplicing' {
         fetchYarnBerryDeps = final.callPackage ./fetch-yarn-berry-deps.nix { };
         yarnBerryConfigHook = final.callPackage ./yarn-berry-config-hook.nix { };
       }
-      // variantOverlay
-    );
+      // variantOverlay;
 }

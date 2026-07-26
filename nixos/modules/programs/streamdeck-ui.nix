@@ -30,7 +30,7 @@ in
       (lib.mkIf cfg.autoStart (
         pkgs.makeAutostartItem {
           name = "streamdeck-ui-noui";
-          package = cfg.package;
+          inherit (cfg) package;
         }
       ))
     ];

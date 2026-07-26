@@ -44,7 +44,6 @@ The general requirements of a description are:
 - Provide factual information.
   - Avoid subjective language.
 
-
 Wrong: `"libpng is a library that allows you to decode PNG images."`
 
 Right: `"Library for decoding PNG images"`
@@ -190,6 +189,7 @@ This makes `broken` strictly more powerful than `meta.badPlatforms`.
 However `meta.availableOn` currently examines only `meta.platforms` and `meta.badPlatforms`, so `meta.broken` does not influence the default values for optional dependencies.
 
 Underneath, `meta.broken = true;` is the same as
+
 ```nix
 {
   meta.problems.broken.message = "This package is broken.";
@@ -273,8 +273,9 @@ Code which is intentionally obfuscated by a third party, for example by using a 
 ## Software identifiers {#sec-meta-identifiers}
 
 Package's `meta.identifiers` attribute specifies information about software identifiers associated with this package. Software identifiers are used, for example:
-* to generate Software Bill of Materials (SBOM) that lists all components used to build the software, which can later be used to perform vulnerability or license analysis of the resulting software;
-* to lookup software in different vulnerability databases or report new vulnerabilities to them.
+
+- to generate Software Bill of Materials (SBOM) that lists all components used to build the software, which can later be used to perform vulnerability or license analysis of the resulting software;
+- to lookup software in different vulnerability databases or report new vulnerabilities to them.
 
 Overriding the default `meta.identifiers` attribute is optional, but it is recommended to fill in pieces to help tools mentioned above get precise data.
 For example, we could get automatic notifications about potential vulnerabilities for users in the future.
@@ -294,20 +295,20 @@ cpe:2.3:a:<vendor>:<product>:<version>:<update>:<edition>:<language>:<sw_edition
 
 Some of them are as follows:
 
-* *CPE version* - current version of CPE is `2.3`
-* *part* - usually in Nixpkgs `a` for "application", can also be `o` for "operating system" or `h` for "hardware"
-* *vendor* - can point to the source of the package, or to Nixpkgs itself
-* *product* - name of the package
-* *version* - version of the package
-* *update* - vendor-specific string part of the version string of the latest update (e.g. `rc1`, `beta`, etc...)
-* *edition* - deprecated and should be set to `*`
+- *CPE version* - current version of CPE is `2.3`
+- *part* - usually in Nixpkgs `a` for "application", can also be `o` for "operating system" or `h` for "hardware"
+- *vendor* - can point to the source of the package, or to Nixpkgs itself
+- *product* - name of the package
+- *version* - version of the package
+- *update* - vendor-specific string part of the version string of the latest update (e.g. `rc1`, `beta`, etc...)
+- *edition* - deprecated and should be set to `*`
 
 You can find information about all of these attributes in the [official specification](https://csrc.nist.gov/projects/security-content-automation-protocol/specifications/cpe/naming) (heading 5.3.3, pages 11-13).
 
 Any fields that don't have a value are set to either:
 
-* `*` (ANY) when the field can match any value
-* `-` (NA) when the value is not meaningful or not used in the description
+- `*` (ANY) when the field can match any value
+- `-` (NA) when the value is not meaningful or not used in the description
 
 For example, for glibc 2.40.1 CPE would be `cpe:2.3:a:gnu:glibc:2.40.1:*:*:*:*:*:*:*`.
 
@@ -315,16 +316,16 @@ For example, for glibc 2.40.1 CPE would be `cpe:2.3:a:gnu:glibc:2.40.1:*:*:*:*:*
 
 This attribute contains an attribute set of all parts of the CPE for this package. Most of the parts default to `*` (match any value), with some exceptions:
 
-* `part` defaults to `a` (application), can also be set to `o` for operating systems, for example, Linux kernel, or to `h` for hardware
-* `vendor` cannot be deduced from other sources, so it must be specified by the package author
-* `product` defaults to provided derivation's `pname` attribute and must be provided explicitly if `pname` is missing
-* `version` and `update` have no defaults and should be specified explicitly or using helper functions, when missing, `cpe` attribute will be empty, and all possible guesses using helper functions will be in `possibleCPEs` attribute.
+- `part` defaults to `a` (application), can also be set to `o` for operating systems, for example, Linux kernel, or to `h` for hardware
+- `vendor` cannot be deduced from other sources, so it must be specified by the package author
+- `product` defaults to provided derivation's `pname` attribute and must be provided explicitly if `pname` is missing
+- `version` and `update` have no defaults and should be specified explicitly or using helper functions, when missing, `cpe` attribute will be empty, and all possible guesses using helper functions will be in `possibleCPEs` attribute.
 
 It is up to the package author to make sure all parts are correct and match expected values in [NVD dictionary](https://nvd.nist.gov/products/cpe). Unknown values can be skipped, which would leave them with the default value of `*`.
 
 Following functions help with filling out `version` and `update` fields:
 
-* [`lib.meta.cpeFullVersionWithVendor`](#function-library-lib.meta.cpeFullVersionWithVendor)
+- [`lib.meta.cpeFullVersionWithVendor`](#function-library-lib.meta.cpeFullVersionWithVendor)
 
 For many packages to make CPE available it should be enough to specify only:
 
@@ -353,8 +354,8 @@ Package-URLs shall default to the `mkDerivation.src`, as the original consumed s
 
 This attribute contains an attribute set of all parts of the PURL for this package.
 
-* `type` mandatory [type](https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/docs/standard/summary.md) which needs to be provided
-* `spec` specify the PURL in accordance with the [purl-spec](https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/purl-specification.md)
+- `type` mandatory [type](https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/docs/standard/summary.md) which needs to be provided
+- `spec` specify the PURL in accordance with the [purl-spec](https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/purl-specification.md)
 
 #### `meta.identifiers.purl` {#var-meta-identifiers-purl}
 

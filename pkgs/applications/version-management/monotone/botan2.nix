@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.cc.isClang [
     "--cc=clang"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isMinGW) [
+  ++ lib.optionals stdenv.hostPlatform.isMinGW [
     "--os=mingw"
   ];
 

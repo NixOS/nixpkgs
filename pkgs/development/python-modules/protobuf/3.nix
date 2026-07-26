@@ -15,7 +15,7 @@ assert lib.versionAtLeast protobuf.version "3.21" -> throw "Protobuf 3.20 or old
 buildPythonPackage {
   inherit (protobuf) pname src;
 
-  version = protobuf.version;
+  inherit (protobuf) version;
   format = "setuptools";
 
   sourceRoot = "${protobuf.src.name}/python";

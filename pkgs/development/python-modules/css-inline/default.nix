@@ -67,7 +67,7 @@ buildPythonPackage rec {
     "test_cache"
     "test_remote_stylesheet"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # pyo3_runtime.PanicException: event loop thread panicked
     "test_invalid_href"
   ];

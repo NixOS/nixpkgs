@@ -59,7 +59,7 @@ stdenv.mkDerivation {
   '';
 
   passthru.tests = {
-    tinydns = nixosTests.tinydns;
+    inherit (nixosTests) tinydns;
   };
 
   meta = {

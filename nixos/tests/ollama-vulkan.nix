@@ -4,7 +4,7 @@
   meta.maintainers = [ ];
 
   nodes.vulkan =
-    { ... }:
+    _:
     {
       services.ollama.enable = true;
       services.ollama.package = pkgs.ollama-vulkan;

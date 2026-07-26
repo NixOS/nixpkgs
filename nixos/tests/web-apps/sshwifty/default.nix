@@ -3,7 +3,7 @@
   name = "sshwifty";
 
   nodes.machine =
-    { ... }:
+    _:
     {
       services.sshwifty = {
         enable = true;

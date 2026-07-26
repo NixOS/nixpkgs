@@ -18,7 +18,7 @@ let
 in
 rustPlatform.buildRustPackage {
   pname = "turnon";
-  version = version;
+  inherit version;
 
   src = fetchFromCodeberg {
     owner = "swsnr";

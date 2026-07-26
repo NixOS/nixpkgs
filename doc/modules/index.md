@@ -8,5 +8,5 @@ The following sections are organized by [module class].
 generic.chapter.md
 ```
 
-[Module System]: https://nixos.org/manual/nixpkgs/unstable/#module-system
 [module class]: https://nixos.org/manual/nixpkgs/unstable/#module-system-lib-evalModules-param-class
+[module system]: https://nixos.org/manual/nixpkgs/unstable/#module-system

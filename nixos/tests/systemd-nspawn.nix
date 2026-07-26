@@ -2,8 +2,7 @@
 let
   gpgKeyring = import ./common/gpg-keyring.nix { inherit pkgs; };
 
-  nspawnImages = (
-    pkgs.runCommand "localhost"
+  nspawnImages = pkgs.runCommand "localhost"
       {
         buildInputs = [
           pkgs.coreutils
@@ -25,8 +24,7 @@ let
         export GNUPGHOME="$(mktemp -d)"
         cp -R ${gpgKeyring}/* $GNUPGHOME
         gpg --batch --sign --detach-sign --output SHA256SUMS.gpg SHA256SUMS
-      ''
-  );
+      '';
 in
 {
   name = "systemd-nspawn";

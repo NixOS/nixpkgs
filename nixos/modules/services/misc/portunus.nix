@@ -297,7 +297,7 @@ in
       })
       (lib.mkIf (cfg.user == "portunus") {
         portunus = {
-          group = cfg.group;
+          inherit (cfg) group;
           isSystemUser = true;
         };
       })

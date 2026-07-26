@@ -63,7 +63,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     pkg-config
   ]
   ++ optionals cudaSupport [
-    (cudaPackages.cuda_nvcc)
+    cudaPackages.cuda_nvcc
     autoAddDriverRunpath
   ];
 

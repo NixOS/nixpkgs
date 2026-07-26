@@ -72,16 +72,14 @@ let
           # document.
           specialisationInjector =
             let
-              specialisationLoader = (
-                lib.mapAttrsToList (
+              specialisationLoader = lib.mapAttrsToList (
                   childName: childToplevel:
                   lib.escapeShellArgs [
                     "--slurpfile"
                     childName
                     "${childToplevel}/${filename}"
                   ]
-                ) children
-              );
+                ) children;
             in
             lib.escapeShellArgs [
               "${pkgs.buildPackages.jq}/bin/jq"

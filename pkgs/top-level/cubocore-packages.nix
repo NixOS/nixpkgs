@@ -79,7 +79,7 @@ let
       };
 
       coreterminal = callPackage ../applications/misc/cubocore-packages/coreterminal {
-        qtermwidget = lxqt.qtermwidget;
+        inherit (lxqt) qtermwidget;
         inherit libcprime libcsys;
       };
 

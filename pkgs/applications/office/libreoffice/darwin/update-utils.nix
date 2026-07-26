@@ -25,7 +25,7 @@ let
   extractSha256FromHtml =
     htmlString:
     let
-      sha256 = (builtins.match ".*([0-9a-fA-F]{64}).*" htmlString);
+      sha256 = builtins.match ".*([0-9a-fA-F]{64}).*" htmlString;
     in
     if sha256 == [ ] then abort "Failed to extract sha256 from html." else builtins.head sha256;
 

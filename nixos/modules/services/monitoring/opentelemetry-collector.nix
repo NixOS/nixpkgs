@@ -42,7 +42,7 @@ in
     package = mkPackageOption pkgs "opentelemetry-collector" { };
 
     settings = mkOption {
-      type = settingsFormat.type;
+      inherit (settingsFormat) type;
       default = { };
       description = ''
         Specify the configuration for Opentelemetry Collector in Nix.
@@ -68,7 +68,7 @@ in
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = ((cfg.settings == { }) != (cfg.configFile == null));
+        assertion = (cfg.settings == { }) != (cfg.configFile == null);
         message = ''
           Please specify a configuration for Opentelemetry Collector with either
           'services.opentelemetry-collector.settings' or

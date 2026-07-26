@@ -51,7 +51,7 @@ in
     };
 
     settings = lib.mkOption {
-      type = ini.type;
+      inherit (ini) type;
       default = { };
       description = ''
         Zeyple configuration. refer to
@@ -77,7 +77,7 @@ in
     users.users = lib.optionalAttrs (cfg.user == "zeyple") {
       "${cfg.user}" = {
         isSystemUser = true;
-        group = cfg.group;
+        inherit (cfg) group;
       };
     };
 

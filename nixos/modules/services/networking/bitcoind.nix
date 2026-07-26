@@ -269,7 +269,7 @@ in
       bitcoindName: cfg:
       (nameValuePair "bitcoind-${bitcoindName}" {
         name = cfg.user;
-        group = cfg.group;
+        inherit (cfg) group;
         description = "Bitcoin daemon user";
         home = cfg.dataDir;
         isSystemUser = true;

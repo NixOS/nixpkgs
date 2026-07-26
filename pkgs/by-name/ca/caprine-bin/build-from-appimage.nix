@@ -16,7 +16,7 @@ let
   };
   extracted = appimageTools.extractType2 { inherit pname version src; };
 in
-(appimageTools.wrapType2 {
+appimageTools.wrapType2 {
   inherit pname version src;
 
   passthru = {
@@ -40,4 +40,4 @@ in
   meta = metaCommon // {
     platforms = [ "x86_64-linux" ];
   };
-})
+}

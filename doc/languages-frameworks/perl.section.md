@@ -71,8 +71,8 @@ To install it with `nix-env` instead: `nix-env -f. -iA perlPackages.ClassC3`.
 So what does `buildPerlPackage` do? It does the following:
 
 1. In the configure phase, it calls `perl Makefile.PL` to generate a Makefile. You can set the variable `makeMakerFlags` to pass flags to `Makefile.PL`
-2. It adds the contents of the `PERL5LIB` environment variable to a use lib statement at the start of Perl scripts. This ensures that a script can find its dependencies.
-3. In the fixup phase, it writes the propagated build inputs (`propagatedBuildInputs`) to the file `$out/nix-support/propagated-user-env-packages`. `nix-env` recursively installs all packages listed in this file when you install a package that has it. This ensures that a Perl package can find its dependencies.
+1. It adds the contents of the `PERL5LIB` environment variable to a use lib statement at the start of Perl scripts. This ensures that a script can find its dependencies.
+1. In the fixup phase, it writes the propagated build inputs (`propagatedBuildInputs`) to the file `$out/nix-support/propagated-user-env-packages`. `nix-env` recursively installs all packages listed in this file when you install a package that has it. This ensures that a Perl package can find its dependencies.
 
 `buildPerlPackage` is built on top of `stdenv`, so everything can be customised in the usual way. For instance, the `BerkeleyDB` module has a `preConfigure` hook to generate a configuration file used by `Makefile.PL`:
 

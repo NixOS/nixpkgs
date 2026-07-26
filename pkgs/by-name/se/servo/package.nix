@@ -55,7 +55,7 @@ let
     ]
   );
   runtimePaths = lib.makeLibraryPath (
-    lib.optionals (stdenv.hostPlatform.isLinux) [
+    lib.optionals stdenv.hostPlatform.isLinux [
       libxcursor
       libxrandr
       libxi

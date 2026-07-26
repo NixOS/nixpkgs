@@ -3,7 +3,7 @@
   name = "phylactery";
 
   nodes.machine =
-    { ... }:
+    _:
     {
       services.phylactery = {
         enable = true;

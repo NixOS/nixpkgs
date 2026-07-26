@@ -84,7 +84,7 @@ runCommand "${wrappedPkgName}-with-extensions-${wrappedPkgVersion}"
     buildInputs = [ vscode ];
     dontPatchELF = true;
     dontStrip = true;
-    meta = vscode.meta;
+    inherit (vscode) meta;
   }
   (
     if stdenv.hostPlatform.isDarwin then

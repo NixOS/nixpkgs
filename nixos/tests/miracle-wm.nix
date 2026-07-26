@@ -97,7 +97,7 @@
   enableOCR = true;
 
   testScript =
-    { ... }:
+    _:
     ''
       start_all()
       machine.wait_for_unit("multi-user.target")

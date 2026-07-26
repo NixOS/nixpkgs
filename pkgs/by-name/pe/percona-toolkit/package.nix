@@ -11,7 +11,7 @@ in
 
 stdenv.mkDerivation {
   pname = perconaToolkit.name;
-  version = perconaToolkit.version;
+  inherit (perconaToolkit) version;
 
   nativeBuildInputs = [ makeWrapper ];
 

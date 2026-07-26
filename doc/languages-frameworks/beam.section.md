@@ -70,14 +70,17 @@ There is also a `buildMix` helper, whose behavior is closer to that of `buildErl
 To use any of these builders in your environment, refer to them by their attribute path under `beamPackages` (or another BEAM package set), e.g. `beamPackages.rebar3`:
 
 ::: {.example #ex-beam-ephemeral-shell}
+
 # Ephemeral shell
 
 ```ShellSession
 $ nix-shell -p beamPackages.rebar3
 ```
+
 :::
 
 ::: {.example #ex-beam-declarative-shell}
+
 # Declarative shell
 
 ```nix
@@ -89,6 +92,7 @@ let
 in
 pkgs.mkShell { packages = [ pkgs.beamPackages.rebar3 ]; }
 ```
+
 :::
 
 ## Packaging BEAM Applications {#packaging-beam-applications}

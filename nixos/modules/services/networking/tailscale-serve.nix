@@ -16,7 +16,7 @@ let
       name: serviceCfg:
       lib.nameValuePair "svc:${name}" (
         {
-          endpoints = serviceCfg.endpoints;
+          inherit (serviceCfg) endpoints;
         }
         // lib.optionalAttrs (serviceCfg.advertised != null) {
           inherit (serviceCfg) advertised;

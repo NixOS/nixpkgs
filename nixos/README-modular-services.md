@@ -1,4 +1,3 @@
-
 # Writing and Reviewing Modular Services
 
 ## Status
@@ -79,6 +78,7 @@ Otherwise, since some packages are *defined* by an override, the modular service
 Example:
 
 `package.nix`
+
 ```nix
 {
   stdenv,

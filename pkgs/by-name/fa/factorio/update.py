@@ -13,7 +13,6 @@ from absl import flags
 from absl import logging
 import requests
 
-
 FACTORIO_RELEASES = "https://factorio.com/api/latest-releases"
 FACTORIO_HASHES = "https://factorio.com/download/sha256sums/"
 
@@ -154,9 +153,9 @@ def generate_our_versions(factorio_versions: FactorioVersionsJSON) -> OurVersion
                     ],
                     "tarDirectory": system.tar_name,
                 }
-                output[system.nix_name][release_type.name][release_channel.name] = (
-                    this_release
-                )
+                output[system.nix_name][release_type.name][
+                    release_channel.name
+                ] = this_release
     return output
 
 

@@ -20,13 +20,12 @@ let
   # qt6 set should not be pre-spliced to prevent spliced packages being a part of an unspliced set
   # 'pkgsCross.aarch64-multiplatform.pkgsBuildTarget.targetPackages.qt6Packages.qtbase' should not have a `__spliced` but if qt6 is pre-spliced then it will have one.
   # pkgsHostTarget == pkgs
-  qt6 = pkgsHostTarget.qt6;
+  inherit (pkgsHostTarget) qt6;
 in
 
 makeScopeWithSplicing' {
   otherSplices = generateSplicesForMkScope "qt6Packages";
-  f = (
-    self:
+  f = self:
     let
       inherit (self) callPackage;
       noExtraAttrs =
@@ -169,6 +168,5 @@ makeScopeWithSplicing' {
         'qt6Packages.waylib' has been removed because it has been merged into treeland upstream.
         The upstream no longer provides it as a standalone development library.
       ''; # Added 2025-02-07
-    }
-  );
+    };
 }

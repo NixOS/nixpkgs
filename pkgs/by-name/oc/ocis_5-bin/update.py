@@ -9,6 +9,7 @@ for fetching the HTML content and the built-in html.parser for parsing the HTML.
 standard library modules, we avoid dependencies on third-party libraries, which simplifies deployment
 and improves portability.
 """
+
 import urllib.request
 import os
 import subprocess
@@ -23,6 +24,7 @@ GITHUB_TOKEN = os.getenv("GITHUB_TOKEN", None)
 
 MAJOR_VERSION = 5
 PKG_NAME = f"ocis_{MAJOR_VERSION}-5"
+
 
 class TableParser(HTMLParser):
     def __init__(self, version):

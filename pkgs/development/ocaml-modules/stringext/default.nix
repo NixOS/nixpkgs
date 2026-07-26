@@ -15,7 +15,7 @@ in
 
 buildDunePackage {
   pname = "stringext";
-  version = version;
+  inherit version;
   duneVersion = "3";
   src = fetchurl {
     url = "https://github.com/rgrinberg/stringext/releases/download/${version}/stringext-${version}.tbz";

@@ -27,7 +27,7 @@ in
 stdenv.mkDerivation {
   src = fetchurl {
     url = "http://www.sundtek.de/media/netinst/${platform}/installer.tar.gz";
-    sha256 = sha256;
+    inherit sha256;
   };
   pname = "sundtek";
   inherit version;

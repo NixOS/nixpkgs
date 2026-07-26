@@ -6,9 +6,9 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qrcodegencpp";
-  version = qrcodegen.version;
+  inherit (qrcodegen) version;
 
-  src = qrcodegen.src;
+  inherit (qrcodegen) src;
 
   sourceRoot = "${finalAttrs.src.name}/cpp";
 

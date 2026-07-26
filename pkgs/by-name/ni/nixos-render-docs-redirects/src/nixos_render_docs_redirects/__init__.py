@@ -4,7 +4,9 @@ import sys
 from pathlib import Path
 
 
-def add_content(redirects: dict[str, list[str]], identifier: str, path: str) -> dict[str, list[str]]:
+def add_content(
+    redirects: dict[str, list[str]], identifier: str, path: str
+) -> dict[str, list[str]]:
     if identifier in redirects:
         raise IdentifierExists(identifier)
 
@@ -20,7 +22,9 @@ def add_content(redirects: dict[str, list[str]], identifier: str, path: str) -> 
     return dict(new_redirects)
 
 
-def move_content(redirects: dict[str, list[str]], identifier: str, path: str) -> dict[str, list[str]]:
+def move_content(
+    redirects: dict[str, list[str]], identifier: str, path: str
+) -> dict[str, list[str]]:
     if identifier not in redirects:
         raise IdentifierNotFound(identifier)
     redirects[identifier].insert(0, f"{path}#{identifier}")
@@ -28,9 +32,7 @@ def move_content(redirects: dict[str, list[str]], identifier: str, path: str) ->
 
 
 def rename_identifier(
-    redirects: dict[str, list[str]],
-    old_identifier: str,
-    new_identifier: str
+    redirects: dict[str, list[str]], old_identifier: str, new_identifier: str
 ) -> dict[str, list[str]]:
     if old_identifier not in redirects:
         raise IdentifierNotFound(old_identifier)
@@ -44,7 +46,7 @@ def rename_identifier(
     for key, value in redirects.items():
         if key == old_identifier:
             new_redirects[new_identifier] = value
-            current_path = value[0].split('#')[0]
+            current_path = value[0].split("#")[0]
             continue
         new_redirects[key] = value
     new_redirects[new_identifier].insert(0, f"{current_path}#{new_identifier}")
@@ -52,9 +54,7 @@ def rename_identifier(
 
 
 def remove_and_redirect(
-    redirects: dict[str, list[str]],
-    old_identifier: str,
-    new_identifier: str
+    redirects: dict[str, list[str]], old_identifier: str, new_identifier: str
 ) -> dict[str, list[str]]:
     if old_identifier not in redirects:
         raise IdentifierNotFound(old_identifier)
@@ -65,7 +65,9 @@ def remove_and_redirect(
 
 
 def main():
-    parser = argparse.ArgumentParser(description="redirects manipulation for nixos manuals")
+    parser = argparse.ArgumentParser(
+        description="redirects manipulation for nixos manuals"
+    )
     commands = parser.add_subparsers(dest="command", required=True)
     parser.add_argument("-f", "--file", type=Path, required=True)
 
@@ -100,12 +102,20 @@ def main():
             print(f"Moved '{args.identifier}' to the new path: {args.path}")
 
         elif args.command == "rename-identifier":
-            redirects = rename_identifier(redirects, args.old_identifier, args.new_identifier)
-            print(f"Renamed identifier from {args.old_identifier} to {args.new_identifier}")
+            redirects = rename_identifier(
+                redirects, args.old_identifier, args.new_identifier
+            )
+            print(
+                f"Renamed identifier from {args.old_identifier} to {args.new_identifier}"
+            )
 
         elif args.command == "remove-and-redirect":
-            redirects = remove_and_redirect(redirects, args.identifier, args.target_identifier)
-            print(f"Redirect from '{args.identifier}' to '{args.target_identifier}' added.")
+            redirects = remove_and_redirect(
+                redirects, args.identifier, args.target_identifier
+            )
+            print(
+                f"Redirect from '{args.identifier}' to '{args.target_identifier}' added."
+            )
     except Exception as error:
         print(error, file=sys.stderr)
     else:

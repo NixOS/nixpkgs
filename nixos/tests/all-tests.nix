@@ -160,9 +160,8 @@ in
     driver-timeout =
       pkgs.runCommand "ensure-timeout-induced-failure"
         {
-          failed = pkgs.testers.testBuildFailure (
-            (runTest ./nixos-test-driver/timeout.nix).config.rawTestDerivation
-          );
+          failed = pkgs.testers.testBuildFailure (runTest ./nixos-test-driver/timeout.nix)
+            .config.rawTestDerivation;
         }
         ''
           grep -F "timeout reached; test terminating" $failed/testBuildFailure.log
@@ -866,6 +865,7 @@ in
   jibri = runTest ./jibri.nix;
   jirafeau = runTest ./jirafeau.nix;
   jitsi-meet = runTest ./jitsi-meet.nix;
+  joplin-server = runTestOn [ "x86_64-linux" ] ./joplin-server.nix;
   jool = import ./jool.nix { inherit pkgs runTest; };
   jotta-cli = runTest ./jotta-cli.nix;
   k3s = import ./rancher {
@@ -1351,7 +1351,7 @@ in
   photoprism = runTest ./photoprism.nix;
   php = import ./php/default.nix {
     inherit runTest;
-    php = pkgs.php;
+    inherit (pkgs) php;
   };
   php82 = import ./php/default.nix {
     inherit runTest;

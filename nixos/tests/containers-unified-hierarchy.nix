@@ -6,7 +6,7 @@
   };
 
   nodes.machine =
-    { ... }:
+    _:
     {
       containers = {
         test-container = {

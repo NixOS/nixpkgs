@@ -318,8 +318,8 @@ in
       groups."bird-lg" = lib.mkIf (cfg.group == "bird-lg") { };
       users."bird-lg" = lib.mkIf (cfg.user == "bird-lg") {
         description = "Bird Looking Glass user";
-        extraGroups = lib.optionals (config.services.bird.enable) [ "bird" ];
-        group = cfg.group;
+        extraGroups = lib.optionals config.services.bird.enable [ "bird" ];
+        inherit (cfg) group;
         isSystemUser = true;
       };
     };

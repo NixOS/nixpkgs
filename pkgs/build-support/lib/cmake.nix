@@ -13,7 +13,7 @@ let
       "-DCMAKE_SYSTEM_NAME=${
         findFirst isString "Generic" (
           # uname -s is CYGWIN_NT[...] on cygwin, but cmake expects CYGWIN
-          optional (stdenv.hostPlatform.isCygwin) "CYGWIN"
+          optional stdenv.hostPlatform.isCygwin "CYGWIN"
           ++ optional (!stdenv.hostPlatform.isRedox) stdenv.hostPlatform.uname.system
         )
       }"
@@ -24,7 +24,7 @@ let
     ++ optionals (stdenv.hostPlatform.uname.release != null) [
       "-DCMAKE_SYSTEM_VERSION=${stdenv.hostPlatform.uname.release}"
     ]
-    ++ optionals (stdenv.hostPlatform.isDarwin) [
+    ++ optionals stdenv.hostPlatform.isDarwin [
       "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
     ]
     ++ optionals (stdenv.buildPlatform.uname.system != null) [
@@ -39,7 +39,7 @@ let
     ++ optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
       "-DCMAKE_CROSSCOMPILING_EMULATOR=env"
     ]
-    ++ optionals (stdenv.hostPlatform.isNone) [
+    ++ optionals stdenv.hostPlatform.isNone [
       "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY"
     ]
     ++ optionals stdenv.hostPlatform.isStatic [

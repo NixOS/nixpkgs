@@ -1,9 +1,10 @@
 # Intel GPU Support in k3s
 
 This article makes the following assumptions:
+
 1. `services.k3s.enable` is already set to true
-2. The Linux kernel running is modern enough to support your GPU out of the box
-3. The desired driver is `i915` -- modify as needed for other drivers
+1. The Linux kernel running is modern enough to support your GPU out of the box
+1. The desired driver is `i915` -- modify as needed for other drivers
 
 > Note: at the time of writing, the author was using an Intel Arc A770 in k3s. The majority of this guide should work on other Kubernetes distributions, and will likely work identically for integrated graphics capabilities.
 

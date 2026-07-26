@@ -299,7 +299,7 @@ stdenv.mkDerivation rec {
         "idfrect"
       ];
     in
-    (concatStringsSep "\n" (flatten [
+    concatStringsSep "\n" (flatten [
       "runHook preInstall"
 
       (optionalString withScripting ''buildPythonPath "${base} ''${pythonPath[*]}"'')
@@ -316,7 +316,7 @@ stdenv.mkDerivation rec {
       (map (util: "ln -s ${base}/${bin}/${util} $out/bin/${util}") utils)
 
       "runHook postInstall"
-    ]));
+    ]);
 
   postInstall = ''
     mkdir -p $out/share

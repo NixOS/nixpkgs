@@ -60,7 +60,7 @@ buildGoModule rec {
     $out/bin/linkerd version --client | grep ${src.rev} > /dev/null
   '';
 
-  passthru.updateScript = (./. + "/update-${channel}.sh");
+  passthru.updateScript = ./. + "/update-${channel}.sh";
 
   meta = {
     description = "Simple Kubernetes service mesh that improves security, observability and reliability";

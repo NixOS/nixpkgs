@@ -96,7 +96,7 @@ in
       after = [ "network-online.target" ] ++ lib.optional cfg.database.createLocally "postgresql.target";
       requires = lib.optional cfg.database.createLocally "postgresql.target";
 
-      environment = lib.mapAttrs (_: value: toString value) cfg.settings;
+      environment = lib.mapAttrs (_: toString) cfg.settings;
 
       serviceConfig = {
         User = "zipline";

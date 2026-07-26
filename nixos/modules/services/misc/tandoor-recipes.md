@@ -15,11 +15,11 @@ for some background.
 The issue is only present when `MEDIA_ROOT` is the same as the data directory. Moving it into a subdirectory of `/var/lib/tandoor-recipes` remediates this and any similar issues in the future.
 
 1. Stop the currently running service: `systemctl stop tandoor-recipes.service`
-2. Create a media folder. NixOS `26.05` creates the media path at `/var/lib/tandoor-recipes/media` by default, but you may choose any other path as well. `mkdir -p /var/lib/tandoor-recipes/media`
-3. Move existing media to the new path: `mv /var/lib/tandoor-recipes/{files,recipes} /var/lib/tandoor-recipes/media`
-4. Set `services.tandoor-recipes.extraConfig.MEDIA_ROOT = "/var/lib/tandoor-recipes/media";` in your NixOS configuration (not needed if `system.stateVersion >= 26.05`).
-5. If not using `GUNICORN_MEDIA`, update your reverse proxy / web server configuration accordingly.
-6. Rebuild and switch!
+1. Create a media folder. NixOS `26.05` creates the media path at `/var/lib/tandoor-recipes/media` by default, but you may choose any other path as well. `mkdir -p /var/lib/tandoor-recipes/media`
+1. Move existing media to the new path: `mv /var/lib/tandoor-recipes/{files,recipes} /var/lib/tandoor-recipes/media`
+1. Set `services.tandoor-recipes.extraConfig.MEDIA_ROOT = "/var/lib/tandoor-recipes/media";` in your NixOS configuration (not needed if `system.stateVersion >= 26.05`).
+1. If not using `GUNICORN_MEDIA`, update your reverse proxy / web server configuration accordingly.
+1. Rebuild and switch!
 
 These changes can be reverted by moving the files back into the state directory.
 

@@ -6,7 +6,7 @@
   };
 
   containers.machine =
-    { ... }:
+    _:
     {
       services.telegraf.enable = true;
       services.telegraf.environmentFiles = [

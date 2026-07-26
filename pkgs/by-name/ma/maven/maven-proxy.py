@@ -20,11 +20,11 @@ def parse_proxy_url(url):
         return None
 
     return {
-        'protocol': parsed.scheme or 'http',
-        'host': parsed.hostname,
-        'port': parsed.port or (443 if parsed.scheme == 'https' else 80),
-        'username': parsed.username,
-        'password': parsed.password
+        "protocol": parsed.scheme or "http",
+        "host": parsed.hostname,
+        "port": parsed.port or (443 if parsed.scheme == "https" else 80),
+        "username": parsed.username,
+        "password": parsed.password,
     }
 
 
@@ -56,13 +56,9 @@ def main(output_path):
     proxy_blocks = []
 
     if http_proxy:
-        proxy_blocks.append(
-          format_proxy_block(http_proxy, "http", non_proxy_hosts)
-        )
+        proxy_blocks.append(format_proxy_block(http_proxy, "http", non_proxy_hosts))
     if https_proxy and https_proxy != http_proxy:
-        proxy_blocks.append(
-          format_proxy_block(https_proxy, "https", non_proxy_hosts)
-        )
+        proxy_blocks.append(format_proxy_block(https_proxy, "https", non_proxy_hosts))
 
     settings_xml = f"""<?xml version="1.0" encoding="UTF-8"?>
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"

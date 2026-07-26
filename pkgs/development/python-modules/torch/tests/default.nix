@@ -38,8 +38,7 @@ let
       libraries = ps: [ ps.torchWithRocm ];
     };
   };
-in
-let
+
   tester-compileCpu = callPackage ./mk-torch-compile-check.nix {
     feature = null;
     libraries = ps: [ ps.torch ];

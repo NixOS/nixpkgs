@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   desktopItem = makeDesktopItem {
     name = "stretchly";
     exec = "stretchly";
-    icon = finalAttrs.icon;
+    inherit (finalAttrs) icon;
     desktopName = "Stretchly";
     genericName = "Stretchly";
     categories = [ "Utility" ];

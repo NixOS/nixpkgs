@@ -22,10 +22,11 @@ And do `sudo nixos-rebuild test -I nixpkgs=<path to your local nixpkgs folder> -
 
   Examples:
 
-  * nixos/hydra: add bazBaz option
+  - nixos/hydra: add bazBaz option
 
     Dual baz behavior is needed to do foo.
-  * nixos/nginx: refactor config generation
+
+  - nixos/nginx: refactor config generation
 
     The old config generation system used impure shell scripts and could break in specific circumstances (see #1234).
 
@@ -33,7 +34,7 @@ And do `sudo nixos-rebuild test -I nixpkgs=<path to your local nixpkgs folder> -
 
 When changing the bootloader installation process, extra care must be taken.
 Grub installations cannot be rolled back, hence changes may break people’s installations forever.
-For any non-trivial change to the bootloader please file a PR asking for review, especially from \@edolstra.
+For any non-trivial change to the bootloader please file a PR asking for review, especially from @edolstra.
 
 ### Module updates
 
@@ -89,7 +90,7 @@ Reviewing process:
   - Description, default and example should be provided.
     - Defaults may only be omitted if both:
       1. The user is required to set the default in order to properly use the service.
-      2. The lack of a default does not break evaluation when the module is not enabled.
+      1. The lack of a default does not break evaluation when the module is not enabled.
 - Ensure that module `meta` field is present
   - Maintainers should be declared in `meta.maintainers`.
   - Module documentation should be declared with `meta.doc`.

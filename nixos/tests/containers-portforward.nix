@@ -28,8 +28,8 @@ in
         forwardPorts = [
           {
             protocol = "tcp";
-            hostPort = hostPort;
-            containerPort = containerPort;
+            inherit hostPort;
+            inherit containerPort;
           }
         ];
         config = {

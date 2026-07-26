@@ -37,7 +37,7 @@ let
           (concatTextFile {
             name = "setup-hook.sh";
             files = [
-              (mitm-cache.setupHook)
+              mitm-cache.setupHook
               (replaceVars ./setup-hook.sh {
                 # jdk used for keytool
                 inherit (gradle) jdk;

@@ -82,7 +82,7 @@ in
       };
 
       settings = mkOption {
-        type = format.type;
+        inherit (format) type;
         default = { };
         description = ''
           Configuration for Nomad. See the [documentation](https://www.nomadproject.io/docs/configuration)

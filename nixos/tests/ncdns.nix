@@ -29,7 +29,7 @@ in
   };
 
   nodes.server =
-    { ... }:
+    _:
     {
       networking.nameservers = [ "::1" ];
 

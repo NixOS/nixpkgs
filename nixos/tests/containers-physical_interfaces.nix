@@ -6,7 +6,7 @@
 
   nodes = {
     server =
-      { ... }:
+      _:
       {
         virtualisation.vlans = [ 1 ];
 
@@ -26,7 +26,7 @@
         };
       };
     autoStart =
-      { ... }:
+      _:
       {
         virtualisation.vlans = [ 1 ];
 
@@ -48,7 +48,7 @@
         };
       };
     bridged =
-      { ... }:
+      _:
       {
         virtualisation.vlans = [ 1 ];
 
@@ -70,7 +70,7 @@
       };
 
     bonded =
-      { ... }:
+      _:
       {
         virtualisation.vlans = [ 1 ];
 
@@ -95,7 +95,7 @@
       };
 
     bridgedbond =
-      { ... }:
+      _:
       {
         virtualisation.vlans = [ 1 ];
 

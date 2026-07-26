@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withGnuTLS gnutls
   ++ lib.optional withJSON json_c;
 
-  configureFlags = [ ] ++ lib.optional withGnuTLS "--with-tls=gnutls";
+  configureFlags = lib.optional withGnuTLS "--with-tls=gnutls";
 
   doCheck = true;
   enableParallelBuilding = true;

@@ -16,7 +16,7 @@ in
       package = lib.mkPackageOption pkgs "alice-lg" { };
 
       settings = lib.mkOption {
-        type = settingsFormat.type;
+        inherit (settingsFormat) type;
         default = { };
         description = ''
           alice-lg configuration, for configuration options see the example on [github](https://github.com/alice-lg/alice-lg/blob/main/etc/alice-lg/alice.example.conf)

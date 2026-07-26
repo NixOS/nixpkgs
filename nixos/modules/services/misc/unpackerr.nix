@@ -25,7 +25,7 @@ in
       enable = mkEnableOption "Unpackerr";
 
       settings = mkOption {
-        type = configFormat.type;
+        inherit (configFormat) type;
         default = { };
         example = {
           radarr = [

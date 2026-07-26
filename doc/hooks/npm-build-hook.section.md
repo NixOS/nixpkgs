@@ -66,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 })
 ```
+
 :::
 
 ## Variables controlling `npmBuildHook` {#npm-build-hook-variables}

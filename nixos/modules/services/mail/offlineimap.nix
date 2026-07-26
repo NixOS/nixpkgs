@@ -54,7 +54,7 @@ in
         ExecStart = "${cfg.package}/bin/offlineimap -u syslog -o -1";
         TimeoutStartSec = cfg.timeoutStartSec;
       };
-      path = cfg.path;
+      inherit (cfg) path;
     };
     environment.systemPackages = [ cfg.package ];
     systemd.user.timers.offlineimap = {

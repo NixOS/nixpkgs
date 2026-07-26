@@ -12,9 +12,9 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mirrord";
-  version = manifest.version;
+  inherit (manifest) version;
 
-  src = fetchurl (manifest.assets.${stdenv.hostPlatform.system});
+  src = fetchurl manifest.assets.${stdenv.hostPlatform.system};
 
   dontUnpack = true;
   dontConfigure = true;

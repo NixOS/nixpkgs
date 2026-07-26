@@ -23,7 +23,7 @@ stdenv.mkDerivation {
         -e "s|ubox_include_dir libubox/ustream.h|ubox_include_dir libubox/ustream.h HINTS ${libubox-nossl}/include|g" \
         -e "s|ubox_library NAMES ubox|ubox_library NAMES ubox HINTS ${libubox-nossl}/lib|g" \
         -e "s|^  FIND_LIBRARY\((.+)\)|  FIND_LIBRARY\(\1 HINTS ${
-          if ssl_implementation ? lib then ssl_implementation.lib else ssl_implementation.out
+          ssl_implementation.lib or ssl_implementation.out
         }\)|g" \
         -i CMakeLists.txt
   '';

@@ -11,6 +11,7 @@ import os
 
 test_interactive = eval(os.getenv("QGIS_TEST_INTERACTIVE", "False"))
 
+
 def test(test_interactive=False):
 
     import osgeo  # just to check if geo python modules are available
@@ -31,7 +32,7 @@ def test(test_interactive=False):
      )
     """
 
-    layer = QgsVectorLayer('Polygon?crs=epsg:3857', 'QGIS-on-Nix', 'memory')
+    layer = QgsVectorLayer("Polygon?crs=epsg:3857", "QGIS-on-Nix", "memory")
     provider = layer.dataProvider()
 
     polygon = QgsFeature()
@@ -49,6 +50,7 @@ def test(test_interactive=False):
         QgsProject.instance().removeMapLayer(layer)
         QgsProject.instance().clear()
 
+
 try:
     test(test_interactive=test_interactive)
 
@@ -61,4 +63,3 @@ except Exception as e:
         print("QGIS test script has failed.")
         print("Error message: {}".format(e))
         os._exit(1)
-

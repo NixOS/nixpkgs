@@ -60,12 +60,10 @@
 }:
 
 let
-  introduction_list = (
-    replaceVars ./introduction.list {
+  introduction_list = replaceVars ./introduction.list {
       budgie_desktop = budgie-desktop;
       inherit wdisplays;
-    }
-  );
+    };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-control-center";

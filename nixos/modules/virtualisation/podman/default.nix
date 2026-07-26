@@ -201,7 +201,7 @@ in
       };
 
     defaultNetwork.settings = lib.mkOption {
-      type = json.type;
+      inherit (json) type;
       default = { };
       example = lib.literalExpression "{ dns_enabled = true; }";
       description = ''
@@ -213,8 +213,7 @@ in
 
   config =
     let
-      networkConfig = (
-        {
+      networkConfig = {
           dns_enabled = false;
           driver = "bridge";
           id = "0000000000000000000000000000000000000000000000000000000000000000";
@@ -232,8 +231,7 @@ in
             }
           ];
         }
-        // cfg.defaultNetwork.settings
-      );
+        // cfg.defaultNetwork.settings;
       inherit (networkConfig) dns_enabled network_interface;
     in
     lib.mkIf cfg.enable {
@@ -314,7 +312,7 @@ in
         # it and let the systemd socket logic take care of it.
         (pkgs.runCommand "podman-tmpfiles-nixos"
           {
-            package = cfg.package;
+            inherit (cfg) package;
             preferLocalBuild = true;
           }
           ''

@@ -7,7 +7,7 @@
   ];
 
   nodes.machine =
-    { ... }:
+    _:
     {
       environment.systemPackages = with pkgs; [
         nebula

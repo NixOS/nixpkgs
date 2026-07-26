@@ -38,7 +38,7 @@
     };
 
   nodes.custom_cache_dir =
-    { ... }:
+    _:
     {
       systemd.tmpfiles.settings = {
         "10-gonic" = {

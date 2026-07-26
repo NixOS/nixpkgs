@@ -42,7 +42,7 @@
 
   # Client running connman, connected to VLAN 1
   nodes.client =
-    { ... }:
+    _:
     {
       virtualisation.vlans = [ 1 ];
 

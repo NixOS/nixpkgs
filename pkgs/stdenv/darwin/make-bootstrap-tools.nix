@@ -18,10 +18,10 @@ let
           args:
           let
             args' = args // {
-              bootstrapFiles = bootstrapFiles;
+              inherit bootstrapFiles;
             };
           in
-          (import "${pkgspath}/pkgs/stdenv/darwin" args');
+          import "${pkgspath}/pkgs/stdenv/darwin" args';
       }
     else
       { };
@@ -50,7 +50,7 @@ let
           inherit (build) bootstrapFiles;
         };
       in
-      (import (test-pkgspath + "/pkgs/stdenv/darwin") args');
+      import (test-pkgspath + "/pkgs/stdenv/darwin") args';
   };
 in
 {

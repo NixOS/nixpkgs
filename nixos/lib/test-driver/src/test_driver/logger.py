@@ -240,7 +240,10 @@ class TerminalLogger(AbstractLogger):
     def nested(self, message: str, attributes: dict[str, str] = {}) -> Iterator[None]:
         self._eprint(
             self.maybe_prefix(
-                Style.BRIGHT + Fore.GREEN + message + Style.RESET_ALL,  # ty: ignore[unsupported-operator]
+                Style.BRIGHT
+                + Fore.GREEN
+                + message
+                + Style.RESET_ALL,  # ty: ignore[unsupported-operator]
                 attributes,
             )
         )
@@ -253,7 +256,9 @@ class TerminalLogger(AbstractLogger):
     def debug(self, *args, **kwargs) -> None:
         if self._log_level <= LogLevel.DEBUG:
             self._eprint(
-                Style.DIM + self.maybe_prefix(args[0], kwargs) + Style.RESET_ALL  # ty: ignore[unsupported-operator]
+                Style.DIM
+                + self.maybe_prefix(args[0], kwargs)
+                + Style.RESET_ALL  # ty: ignore[unsupported-operator]
             )
 
     def info(self, *args, **kwargs) -> None:
@@ -277,7 +282,9 @@ class TerminalLogger(AbstractLogger):
         if not self._print_serial_logs:
             return
 
-        self._eprint(Style.DIM + f"{machine} # {message}" + Style.RESET_ALL)  # ty: ignore[unsupported-operator]
+        self._eprint(
+            Style.DIM + f"{machine} # {message}" + Style.RESET_ALL
+        )  # ty: ignore[unsupported-operator]
 
     def log_test_error(self, *args, **kwargs) -> None:
         prefix = Fore.RED + "!!! " + Style.RESET_ALL  # ty: ignore[unsupported-operator]

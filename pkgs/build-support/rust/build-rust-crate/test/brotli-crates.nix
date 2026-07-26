@@ -24,7 +24,7 @@ let
     builtins.deepSeq f (
       lib.lists.foldl' (features: fun: fun features) (lib.attrsets.recursiveUpdate f up) functions
     );
-  mapFeatures = features: map (fun: fun { features = features; });
+  mapFeatures = features: map (fun: fun { inherit features; });
   mkFeatures =
     feat:
     lib.lists.foldl (
@@ -91,7 +91,7 @@ rec {
   alloc_no_stdlib_1_3_0_features =
     f:
     updateFeatures f {
-      alloc_no_stdlib_1_3_0.default = (f.alloc_no_stdlib_1_3_0.default or true);
+      alloc_no_stdlib_1_3_0.default = f.alloc_no_stdlib_1_3_0.default or true;
     } [ ];
   brotli_2_5_0 =
     {
@@ -113,7 +113,7 @@ rec {
           || (brotli_2_5_0.no-stdlib or false)
           || (f.brotli_2_5_0.no-stdlib or false);
         alloc_no_stdlib_1_3_0.default = true;
-        brotli_2_5_0.default = (f.brotli_2_5_0.default or true);
+        brotli_2_5_0.default = f.brotli_2_5_0.default or true;
         brotli_decompressor_1_3_1.disable-timer =
           (f.brotli_decompressor_1_3_1.disable-timer or false)
           || (brotli_2_5_0.disable-timer or false)
@@ -156,6 +156,6 @@ rec {
         (f.alloc_no_stdlib_1_3_0.unsafe or false)
         || (brotli_decompressor_1_3_1.unsafe or false)
         || (f.brotli_decompressor_1_3_1.unsafe or false);
-      brotli_decompressor_1_3_1.default = (f.brotli_decompressor_1_3_1.default or true);
+      brotli_decompressor_1_3_1.default = f.brotli_decompressor_1_3_1.default or true;
     } [ alloc_no_stdlib_1_3_0_features ];
 }

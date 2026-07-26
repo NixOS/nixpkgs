@@ -17,7 +17,7 @@ postgresqlBuildExtension (finalAttrs: {
     hash = "sha256-7lQrNrWpgvW98MomZ0xu3PYf0dnMlvLP3W1e9l49cBI=";
   };
 
-  buildInputs = postgresql.buildInputs;
+  inherit (postgresql) buildInputs;
 
   meta = {
     description = "Run PostgreSQL Commands in Background Workers";

@@ -1,4 +1,5 @@
 # Using resholve's Nix API
+
 resholve replaces bare references (subject to a PATH search at runtime) to external commands and scripts with absolute paths.
 
 This small super-power helps ensure script dependencies are declared, present, and don't unexpectedly shift when the PATH changes.
@@ -9,6 +10,7 @@ resholve is developed to enable the Nix package manager to package and integrate
 
 This will hopefully make its way into the Nixpkgs manual soon, but
 until then I'll outline how to use the functions:
+
 - `resholve.mkDerivation` (formerly `resholvePackage`)
 - `resholve.writeScript` (formerly `resholveScript`)
 - `resholve.writeScriptBin` (formerly `resholveScriptBin`)
@@ -25,6 +27,7 @@ is the `solutions` attrset, which describes which scripts to resolve and how.
 Each "solution" (k=v pair) in this attrset describes one resholve invocation.
 
 > NOTE: For most shell packages, one invocation will probably be enough:
+>
 > - Packages with a single script will only need one solution.
 > - Packages with multiple scripts can still use one solution if the scripts
 >   don't require conflicting directives.
@@ -94,11 +97,11 @@ resholve.mkDerivation rec {
 }
 ```
 
-
 ## Basic `resholve.writeScript` and `resholve.writeScriptBin` examples
 
 Both of these functions have the same basic API. The examples are a little
 trivial, so I'll also link to some real-world examples:
+
 - [shell.nix from abathur/tdverpy](https://github.com/abathur/tdverpy/blob/e1f956df3ed1c7097a5164e0c85b178772e277f5/shell.nix#L6-L13)
 
 ```nix
@@ -125,7 +128,6 @@ trivial, so I'll also link to some real-world examples:
       '';
 }
 ```
-
 
 ## Basic `resholve.phraseSolution` example
 
@@ -162,7 +164,6 @@ stdenv.mkDerivation {
 }
 ```
 
-
 ## Options
 
 `resholve.mkDerivation` maps Nix types/idioms into the flags and environment variables
@@ -189,13 +190,14 @@ that the `resholve` CLI expects. Here's an overview:
 In order to resolve a script, resholve will make you disambiguate how it should
 handle any potential problems it encounters with directives. There are currently
 3 types:
+
 1. `fake` directives tell resholve to pretend it knows about an identifier
    such as a function, builtin, external command, etc. if there's a good reason
    it doesn't already know about it. Common examples:
    - builtins for a non-bash shell
    - loadable builtins
    - platform-specific external commands in cross-platform conditionals
-2. `fix` directives give resholve permission to fix something that it can't
+1. `fix` directives give resholve permission to fix something that it can't
    safely fix automatically. Common examples:
    - resolving commands in aliases (this is appropriate for standalone scripts
      that use aliases non-interactively--but it would prevent profile/rc
@@ -203,7 +205,7 @@ handle any potential problems it encounters with directives. There are currently
    - resolve commands in a variable definition
    - resolve an absolute command path from inputs as if it were a bare reference
    - force resholve to resolve known security wrappers
-3. `keep` directives tell resholve not to raise an error (i.e., ignore)
+1. `keep` directives tell resholve not to raise an error (i.e., ignore)
    something it would usually object to. Common examples:
    - variables used as/within the first word of a command
    - pre-existing absolute or user-relative (~) command paths
@@ -214,8 +216,10 @@ handle any potential problems it encounters with directives. There are currently
 
 Each of these 3 types is represented by its own attrset, where you can think
 of the key as a scope. The value should be:
+
 - `true` for any directives that the resholve CLI accepts as a single word
 - a list of strings for all other options
+
 <!--
 TODO: these should be fully-documented here, but I'm already maintaining
 more copies of their specification/behavior than I like, and continuing to
@@ -260,7 +264,6 @@ from the manpage, and the Nix equivalents:
 }
 ```
 
-
 > **Note:** For now, at least, you'll need to reference the manpage to completely understand these examples.
 
 ## Controlling nested resolution with lore
@@ -276,6 +279,7 @@ some of the more common commands.
 
 - "execer" lore identifies whether an executable can, cannot,
   or might execute its arguments. Every "can" or "might" verdict requires:
+
   - an update to the matching rules in [binlore](https://github.com/abathur/binlore)
     if there's absolutely no exec in the executable and binlore just lacks
     rules for understanding this
@@ -330,7 +334,6 @@ do it piecemeal:
   ];
 }
 ```
-
 
 The format is fairly simple to generate--you can script your own generator if
 you need to modify the lore.

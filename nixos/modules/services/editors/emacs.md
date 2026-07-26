@@ -37,16 +37,16 @@ Emacs can be installed in the normal way for Nix (see
 Nixpkgs defines several basic Emacs packages.
 The following are attributes belonging to the {var}`pkgs` set:
 
-  {var}`emacs`
-  : The latest stable version of Emacs using the [GTK 2](http://www.gtk.org)
-    widget toolkit.
+{var}`emacs`
+: The latest stable version of Emacs using the [GTK 2](http://www.gtk.org)
+widget toolkit.
 
-  {var}`emacs-nox`
-  : Emacs built without any dependency on X11 libraries.
+{var}`emacs-nox`
+: Emacs built without any dependency on X11 libraries.
 
-  {var}`emacsMacport`
-  : Emacs with the "Mac port" patches, providing a more native look and
-    feel under macOS.
+{var}`emacsMacport`
+: Emacs with the "Mac port" patches, providing a more native look and
+feel under macOS.
 
 If those aren't suitable, then the following imitation Emacs editors are
 also available in Nixpkgs:
@@ -81,6 +81,7 @@ installation is to create a dedicated derivation. This can be done in a
 dedicated {file}`emacs.nix` file such as:
 
 ::: {.example #ex-emacsNix}
+
 ### Nix expression to build Emacs with packages (`emacs.nix`)
 
 ```nix
@@ -142,6 +143,7 @@ emacsWithPackages (
   ]
 )
 ```
+
 :::
 
 The result of this configuration will be an {command}`emacs`
@@ -149,10 +151,12 @@ command which launches Emacs with all of your chosen packages in the
 {var}`load-path`.
 
 You can check that it works by executing this in a terminal:
+
 ```ShellSession
 $ nix-build emacs.nix
 $ ./result/bin/emacs -q
 ```
+
 and then typing `M-x package-initialize`. Check that you
 can use all the packages you want in this Emacs instance. For example, try
 switching to the zerodark theme through `M-x load-theme <RET> zerodark <RET> y`.
@@ -166,6 +170,7 @@ and yasnippet.
 The list of available packages in the various ELPA repositories can be seen
 with the following commands:
 ::: {.example #module-services-emacs-querying-packages}
+
 ### Querying Emacs packages
 
 ```
@@ -174,6 +179,7 @@ nix-env -f "<nixpkgs>" -qaP -A emacs.pkgs.melpaPackages
 nix-env -f "<nixpkgs>" -qaP -A emacs.pkgs.melpaStablePackages
 nix-env -f "<nixpkgs>" -qaP -A emacs.pkgs.orgPackages
 ```
+
 :::
 
 If you are on NixOS, you can install this particular Emacs for all users by
@@ -181,6 +187,7 @@ putting the `emacs.nix` file in `/etc/nixos` and adding it to the list of
 system packages (see [](#sec-declarative-package-mgmt)). Simply modify your
 file {file}`configuration.nix` to make it contain:
 ::: {.example #module-services-emacs-configuration-nix}
+
 ### Custom Emacs in `configuration.nix`
 
 ```nix
@@ -191,6 +198,7 @@ file {file}`configuration.nix` to make it contain:
   ];
 }
 ```
+
 :::
 
 In this case, the next {command}`nixos-rebuild switch` will take
@@ -206,6 +214,7 @@ yourself, you can do so by putting `emacs.nix` in `~/.config/nixpkgs` and
 adding it to your {file}`~/.config/nixpkgs/config.nix` (see
 [Nixpkgs manual](https://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides)):
 ::: {.example #module-services-emacs-config-nix}
+
 ### Custom Emacs in `~/.config/nixpkgs/config.nix`
 
 ```nix
@@ -220,10 +229,10 @@ adding it to your {file}`~/.config/nixpkgs/config.nix` (see
     };
 }
 ```
+
 :::
 
-In this case, the next `nix-env -f '<nixpkgs>' -iA
-myemacs` will take care of adding your emacs to the
+In this case, the next `nix-env -f '<nixpkgs>' -iA myemacs` will take care of adding your emacs to the
 {var}`PATH` environment variable.
 
 ### Advanced Emacs Configuration {#module-services-emacs-advanced}
@@ -236,6 +245,7 @@ only use {command}`emacsclient`), you can change your file
 {file}`emacs.nix` in this way:
 
 ::: {.example #ex-emacsGtk3Nix}
+
 ### Custom Emacs build
 
 ```nix
@@ -261,6 +271,7 @@ in
   # ...
 ]
 ```
+
 :::
 
 After building this file as shown in [](#ex-emacsNix), you
@@ -279,6 +290,7 @@ with the user's login session.
 
 To install and enable the {command}`systemd` user service for Emacs
 daemon, add the following to your {file}`configuration.nix`:
+
 ```nix
 { services.emacs.enable = true; }
 ```
@@ -293,11 +305,13 @@ variable, or by adding `(server-start)` to
 {file}`~/.emacs.d/init.el`.
 
 To start the daemon, execute the following:
+
 ```ShellSession
 $ nixos-rebuild switch  # to activate the new configuration.nix
 $ systemctl --user daemon-reload        # to force systemd reload
 $ systemctl --user start emacs.service  # to start the Emacs daemon
 ```
+
 The server should now be ready to serve Emacs clients.
 
 ### Starting the client {#module-services-emacs-starting-client}
@@ -307,6 +321,7 @@ Ensure that the Emacs server is enabled, either by customizing the
 `(server-start)` to {file}`~/.emacs`.
 
 To connect to the Emacs daemon, run one of the following:
+
 ```
 emacsclient FILENAME
 emacsclient --create-frame  # opens a new frame (window)
@@ -330,6 +345,7 @@ existing {var}`EDITOR` assignment from
 
 If you have formed certain bad habits when editing files, these can be
 corrected with a shell alias to the wrapper script:
+
 ```
 alias vi=$EDITOR
 ```
@@ -340,6 +356,7 @@ In general, {command}`systemd` user services are globally enabled
 by symlinks in {file}`/etc/systemd/user`. In the case where
 Emacs daemon is not wanted for all users, it is possible to install the
 service but not globally enable it:
+
 ```nix
 {
   services.emacs.enable = false;
@@ -349,9 +366,11 @@ service but not globally enable it:
 
 To enable the {command}`systemd` user service for just the
 currently logged in user, run:
+
 ```
 systemctl --user enable emacs
 ```
+
 This will add the symlink
 {file}`~/.config/systemd/user/emacs.service`.
 
@@ -380,4 +399,3 @@ convenient if you regularly edit Nix files.
 
 You can use `woman` to get completion of all available
 man pages. For example, type `M-x woman <RET> nixos-rebuild <RET>.`
-

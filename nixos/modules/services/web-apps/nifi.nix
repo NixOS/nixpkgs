@@ -326,7 +326,7 @@ in
     users.users = lib.mkMerge [
       (lib.mkIf (cfg.user == "nifi") {
         nifi = {
-          group = cfg.group;
+          inherit (cfg) group;
           isSystemUser = true;
           home = cfg.package;
         };

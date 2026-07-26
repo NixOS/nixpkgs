@@ -96,7 +96,7 @@ in
     };
 
     settings = lib.mkOption {
-      type = format.type;
+      inherit (format) type;
       description = ''
         The ASF.json file, all the options are documented [here](https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Configuration#global-config).
         Do note that `AutoRestart`  and `UpdateChannel` is always to `false` respectively `0` because NixOS takes care of updating everything.
@@ -116,7 +116,7 @@ in
     };
 
     ipcSettings = lib.mkOption {
-      type = format.type;
+      inherit (format) type;
       description = ''
         Settings to write to IPC.config.
         All options can be found [here](https://github.com/JustArchiNET/ArchiSteamFarm/wiki/IPC#custom-configuration).

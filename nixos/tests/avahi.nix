@@ -13,7 +13,7 @@
   nodes =
     let
       cfg =
-        { ... }:
+        _:
         {
           services.avahi = {
             enable = true;

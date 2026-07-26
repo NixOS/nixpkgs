@@ -267,7 +267,7 @@ rec {
 
         passthru = unresholved.passthru // {
           # retain a reference to the base
-          unresholved = unresholved;
+          inherit unresholved;
           # fallback attr for update bot to query our src
           originalSrc = unresholved.src;
         };

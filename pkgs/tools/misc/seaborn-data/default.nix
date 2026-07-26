@@ -31,7 +31,7 @@ let
       base
       // {
         inherit pname src;
-        version = base.version;
+        inherit (base) version;
         installPhase = ''
           runHook preInstall
 

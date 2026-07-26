@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsndfile
     libsamplerate
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio
     alsa-lib
     udev

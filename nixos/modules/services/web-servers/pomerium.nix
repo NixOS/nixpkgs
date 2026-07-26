@@ -47,7 +47,7 @@ in
         here.
       '';
       default = { };
-      type = format.type;
+      inherit (format) type;
     };
 
     secretsFile = mkOption {

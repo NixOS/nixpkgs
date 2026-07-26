@@ -242,7 +242,7 @@ in
       };
 
       settings = mkOption {
-        type = iniFmt.type;
+        inherit (iniFmt) type;
         default = { };
         example = {
           Autologin = {

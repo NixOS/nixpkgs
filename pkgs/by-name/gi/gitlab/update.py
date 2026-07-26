@@ -77,7 +77,9 @@ class GitLabRepo:
                 .strip()
             )
             return (
-                subprocess.check_output(["nix-hash", "--type", "sha256", "--to-sri", hash])
+                subprocess.check_output(
+                    ["nix-hash", "--type", "sha256", "--to-sri", hash]
+                )
                 .decode("utf-8")
                 .strip()
             )
@@ -123,7 +125,9 @@ class GitLabRepo:
             version=self.rev2version(rev),
             repo_hash=self.get_git_hash(rev),
             yarn_hash=self.get_yarn_hash(rev),
-            frontend_islands_yarn_hash=self.get_yarn_hash(rev, "/ee/frontend_islands/yarn.lock"),
+            frontend_islands_yarn_hash=self.get_yarn_hash(
+                rev, "/ee/frontend_islands/yarn.lock"
+            ),
             owner=self.owner,
             repo=self.repo,
             rev=rev,
@@ -188,7 +192,12 @@ def update_rubyenv():
 
     # update to 1.2.9 to include https://gitlab.com/gitlab-org/ruby/gems/prometheus-client-mmap/-/commit/5d77f3f3e048834250589b416c6b3d4bba65a570
     subprocess.check_output(
-        ["sed", "-i", "s:'prometheus-client-mmap', '~> 1.2.8':'prometheus-client-mmap', '~> 1.2.9':g", "Gemfile"],
+        [
+            "sed",
+            "-i",
+            "s:'prometheus-client-mmap', '~> 1.2.8':'prometheus-client-mmap', '~> 1.2.9':g",
+            "Gemfile",
+        ],
         cwd=rubyenv_dir,
     )
 
@@ -239,7 +248,9 @@ def update_rubyenv():
     subprocess.check_output(["rm", "-rf", "vendor", "gems"], cwd=rubyenv_dir)
 
     # Reformat gemset.nix
-    subprocess.check_output(["nix-shell", "--run", "treefmt pkgs/by-name/gi/gitlab"], cwd=NIXPKGS_PATH)
+    subprocess.check_output(
+        ["nix-shell", "--run", "treefmt pkgs/by-name/gi/gitlab"], cwd=NIXPKGS_PATH
+    )
 
 
 @cli.command("update-gitaly")
@@ -247,13 +258,19 @@ def update_gitaly():
     """Update gitaly"""
     logger.info("Updating gitaly")
     data = _get_data_json()
-    gitaly_server_version = data['passthru']['GITALY_SERVER_VERSION']
+    gitaly_server_version = data["passthru"]["GITALY_SERVER_VERSION"]
     repo = GitLabRepo(repo="gitaly")
 
     makefile = repo.get_file("Makefile", f"v{gitaly_server_version}")
     makefile += "\nprint-%:;@echo $($*)\n"
 
-    git_rev = subprocess.run(["make", "-f", "-", "print-GIT_VERSION"], check=True, input=makefile, text=True, capture_output=True).stdout.strip()
+    git_rev = subprocess.run(
+        ["make", "-f", "-", "print-GIT_VERSION"],
+        check=True,
+        input=makefile,
+        text=True,
+        capture_output=True,
+    ).stdout.strip()
     _call_nix_update("gitaly", gitaly_server_version)
 
     # Gitaly Git currently uses just a commit without any tag making nix-update impossible to use.
@@ -262,12 +279,14 @@ def update_gitaly():
     git_major_minor = None
     for line in git_version_generator.splitlines():
         if line.startswith("DEF_VER="):
-           git_major_minor = line.strip("DEF_VER=v").split(".GIT")[0]
-           break
+            git_major_minor = line.strip("DEF_VER=v").split(".GIT")[0]
+            break
     if not git_major_minor:
         raise RuntimeError("Could not find gitaly's git version.")
 
-    git_data_file_path = NIXPKGS_PATH / "pkgs" / "by-name" / "gi" / "gitaly" / "git-data.json"
+    git_data_file_path = (
+        NIXPKGS_PATH / "pkgs" / "by-name" / "gi" / "gitaly" / "git-data.json"
+    )
 
     git_repo_hash = (
         subprocess.check_output(
@@ -282,7 +301,7 @@ def update_gitaly():
                 "fetchSubmodules",
                 "true",
                 "https://gitlab.com/gitlab-org/git",
-                git_rev
+                git_rev,
             ]
         )
         .decode("utf-8")
@@ -294,12 +313,11 @@ def update_gitaly():
         # considers this git version stable.
         "version": f"{git_major_minor}-{git_rev[:8]}",
         "rev": git_rev,
-        "hash": git_repo_hash
+        "hash": git_repo_hash,
     }
     with open(git_data_file_path.as_posix(), "w") as f:
         json.dump(git_data, f, indent=2)
         f.write("\n")
-
 
 
 @cli.command("update-gitlab-pages")
@@ -378,21 +396,29 @@ def update_gitlab_container_registry(rev: str, commit: bool):
         )
 
 
-@cli.command('update-gitlab-elasticsearch-indexer')
+@cli.command("update-gitlab-elasticsearch-indexer")
 def update_gitlab_elasticsearch_indexer():
     """Update gitlab-elasticsearch-indexer"""
     data = _get_data_json()
-    gitlab_elasticsearch_indexer_version = data['passthru']['GITLAB_ELASTICSEARCH_INDEXER_VERSION']
-    _call_nix_update('gitlab-elasticsearch-indexer', gitlab_elasticsearch_indexer_version)
+    gitlab_elasticsearch_indexer_version = data["passthru"][
+        "GITLAB_ELASTICSEARCH_INDEXER_VERSION"
+    ]
+    _call_nix_update(
+        "gitlab-elasticsearch-indexer", gitlab_elasticsearch_indexer_version
+    )
     # Update the dependency gitlab-code-parser
-    src_workdir = subprocess.check_output(
-        [
-            "nix-build",
-            "-A",
-            "gitlab-elasticsearch-indexer.src",
-        ],
-        cwd=NIXPKGS_PATH,
-    ).decode("utf-8").strip()
+    src_workdir = (
+        subprocess.check_output(
+            [
+                "nix-build",
+                "-A",
+                "gitlab-elasticsearch-indexer.src",
+            ],
+            cwd=NIXPKGS_PATH,
+        )
+        .decode("utf-8")
+        .strip()
+    )
     codeparser_module = json.loads(
         subprocess.check_output(
             [
@@ -400,13 +426,17 @@ def update_gitlab_elasticsearch_indexer():
                 "list",
                 "-m",
                 "-json",
-                "gitlab.com/gitlab-org/rust/gitlab-code-parser/bindings/go"
+                "gitlab.com/gitlab-org/rust/gitlab-code-parser/bindings/go",
             ],
-            cwd=src_workdir
-        ).decode("utf-8").strip()
+            cwd=src_workdir,
+        )
+        .decode("utf-8")
+        .strip()
     )
     codeparser_version = codeparser_module["Version"].replace("v", "")
-    _call_nix_update('gitlab-elasticsearch-indexer.codeParserBindings', codeparser_version)
+    _call_nix_update(
+        "gitlab-elasticsearch-indexer.codeParserBindings", codeparser_version
+    )
 
 
 @cli.command("update-all")
@@ -472,11 +502,7 @@ def commit_gitlab(old_version: str, new_version: str, new_rev: str) -> None:
 def commit_container_registry(old_version: str, new_version: str) -> None:
     """Commits the gitlab-container-registry changes for you"""
     subprocess.run(
-        [
-            "git",
-            "add",
-            "pkgs/by-name/gi/gitlab-container-registry"
-        ],
+        ["git", "add", "pkgs/by-name/gi/gitlab-container-registry"],
         cwd=NIXPKGS_PATH,
     )
     subprocess.run(

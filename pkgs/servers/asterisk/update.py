@@ -11,7 +11,11 @@ URL = "https://downloads.asterisk.org/pub/telephony/asterisk/"
 
 page = requests.get(URL)
 changelog = re.compile(r"^ChangeLog-\d+\.\d+\.\d+\.md$")
-changelogs = [a.get_text() for a in BeautifulSoup(page.text, 'html.parser').find_all('a') if changelog.match(a.get_text())]
+changelogs = [
+    a.get_text()
+    for a in BeautifulSoup(page.text, "html.parser").find_all("a")
+    if changelog.match(a.get_text())
+]
 major_versions = {}
 for changelog in changelogs:
     v = version.parse(changelog.removeprefix("ChangeLog-").removesuffix(".md"))
@@ -21,10 +25,7 @@ out = {}
 for mv in major_versions.keys():
     v = max(major_versions[mv])
     sha = requests.get(f"{URL}/asterisk-{v}.sha256").text.split()[0]
-    out["asterisk_" + str(mv)] = {
-        "version": str(v),
-        "sha256": sha
-    }
+    out["asterisk_" + str(mv)] = {"version": str(v), "sha256": sha}
 
 versions_path = Path(sys.argv[0]).parent / "versions.json"
 

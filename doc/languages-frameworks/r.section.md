@@ -52,13 +52,14 @@ with import <nixpkgs> { };
   };
 }
 ```
+
 and then run `nix-shell .` to be dropped into a shell with those packages
 available.
 
 ## RStudio {#rstudio}
 
 RStudio uses a standard set of packages and ignores any custom R
-environments or installed packages you may have.  To create a custom
+environments or installed packages you may have. To create a custom
 environment, see `rstudioWrapper`, which functions similarly to
 `rWrapper`:
 
@@ -129,7 +130,7 @@ Rscript generate-r-packages.R bioc-experiment > bioc-experiment-packages.json.ne
 mv bioc-experiment-packages.json.new bioc-experiment-packages.json
 ```
 
-`generate-r-packages.R <repo>` reads  `<repo>-packages.json`, therefore
+`generate-r-packages.R <repo>` reads `<repo>-packages.json`, therefore
 the renaming.
 
 The contents of a generated `*-packages.json` file will be used to

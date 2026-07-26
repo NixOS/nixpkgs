@@ -418,7 +418,7 @@ in
               Restart = "always";
               RestartSec = "3";
               ExecReload = mkIf (versionAtLeast version "1.1pre") "${data.package}/bin/tinc -n ${network} reload";
-              ExecStart = "${data.package}/bin/tincd -D -U tinc-${network} -n ${network} ${optionalString (data.chroot) "-R"} --pidfile /run/tinc.${network}.pid -d ${toString data.debugLevel}";
+              ExecStart = "${data.package}/bin/tincd -D -U tinc-${network} -n ${network} ${optionalString data.chroot "-R"} --pidfile /run/tinc.${network}.pid -d ${toString data.debugLevel}";
             };
             preStart = ''
               install -d -o tinc-${network} /etc/tinc/${network} /etc/tinc/${network}/hosts /etc/tinc/${network}/invitations

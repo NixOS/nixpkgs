@@ -67,6 +67,7 @@ lib.extendMkDerivation {
     };
 }
 ```
+
 :::
 
 To apply extra changes to the result derivation, pass `transformDrv` to `lib.extendMkDerivation`:
@@ -143,4 +144,5 @@ lib.extendMkDerivation {
     });
 }
 ```
+
 :::

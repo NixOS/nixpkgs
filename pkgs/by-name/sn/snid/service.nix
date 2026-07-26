@@ -1,5 +1,5 @@
 # Non-module dependencies (`importApply`)
-{ }:
+_:
 
 # Service module
 {

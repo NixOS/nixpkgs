@@ -137,7 +137,7 @@ let
               };
 
               settings = mkDefaultOption "policy.settings" {
-                type = jsonFormat.type;
+                inherit (jsonFormat) type;
                 default = { };
                 example = lib.literalExpression ''
                   {

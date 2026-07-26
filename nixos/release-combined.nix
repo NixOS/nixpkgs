@@ -29,7 +29,7 @@ let
       if (set.type or "") == "derivation" then
         set // { meta = removeAttrs (set.meta or { }) [ "maintainers" ]; }
       else
-        lib.mapAttrs (n: v: removeMaintainers v) set
+        lib.mapAttrs (n: removeMaintainers) set
     else
       set;
 

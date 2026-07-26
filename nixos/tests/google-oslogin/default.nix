@@ -27,7 +27,7 @@ in
     # the server provides both the the mocked google metadata server and the ssh server
     server = ./server.nix;
 
-    client = { ... }: { };
+    client = _: { };
   };
   testScript = ''
     MOCKUSER = "mockuser_nixos_org"

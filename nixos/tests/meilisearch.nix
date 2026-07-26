@@ -14,7 +14,7 @@ in
   name = "meilisearch";
 
   nodes.machine =
-    { ... }:
+    _:
     {
       environment.systemPackages = with pkgs; [
         curl

@@ -8,6 +8,7 @@ It resolves chromium's DEPS file recursively when called with
 a working depot_tools checkout and a ref to fetch and prints
 the result as JSON to stdout.
 """
+
 import base64
 import json
 from typing import Optional
@@ -49,7 +50,11 @@ class Repo:
             vars_override=repo_vars,
             # KeyError: "host_cpu was used as a variable, but was not declared in the vars dict (file 'DEPS', line 114)"
             # https://chromium.googlesource.com/webpagereplay.git/+/b2b856131e36c99e9de9c419fe8ca02f857082ba/DEPS#114
-            builtin_vars= {"host_cpu": "*host_cpu_placeholder*"} if path == "src/third_party/webpagereplay" else None,
+            builtin_vars=(
+                {"host_cpu": "*host_cpu_placeholder*"}
+                if path == "src/third_party/webpagereplay"
+                else None
+            ),
         )
 
         repo_vars = dict(evaluated.get("vars", {})) | repo_vars
@@ -111,17 +116,30 @@ def repo_from_dep(dep: dict) -> Optional[Repo]:
         return None
 
 
-
-chromium = GitilesRepo("https://chromium.googlesource.com/chromium/src.git", chromium_version)
+chromium = GitilesRepo(
+    "https://chromium.googlesource.com/chromium/src.git", chromium_version
+)
 chromium.get_deps(
     {
         **{
-        f"checkout_{platform}": platform == "linux" or platform == "x64" or platform == "arm64" or platform == "arm"
-        for platform in ["ios", "chromeos", "android", "mac", "win", "linux"]
+            f"checkout_{platform}": platform == "linux"
+            or platform == "x64"
+            or platform == "arm64"
+            or platform == "arm"
+            for platform in ["ios", "chromeos", "android", "mac", "win", "linux"]
         },
         **{
-        f"checkout_{arch}": True
-        for arch in ["x64", "arm64", "arm", "x86", "mips", "mips64", "ppc", "riscv64"]
+            f"checkout_{arch}": True
+            for arch in [
+                "x64",
+                "arm64",
+                "arm",
+                "x86",
+                "mips",
+                "mips64",
+                "ppc",
+                "riscv64",
+            ]
         },
     },
     "",

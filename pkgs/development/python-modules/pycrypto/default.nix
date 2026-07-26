@@ -5,7 +5,7 @@
 
 buildPythonPackage rec {
   pname = "pycrypto";
-  version = pycryptodome.version;
+  inherit (pycryptodome) version;
   format = "setuptools";
 
   # Cannot build wheel otherwise (zip 1980 issue)

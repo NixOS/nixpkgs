@@ -52,7 +52,7 @@ in
   nodes = {
 
     lighthouse =
-      { ... }@args:
+      args:
       makeNebulaNode args "lighthouse" {
         networking.firewall.allowedUDPPorts = [ 53 ];
         networking.interfaces.eth1 = {
@@ -100,7 +100,7 @@ in
       };
 
     allowAny =
-      { ... }@args:
+      args:
       makeNebulaNode args "allowAny" {
         networking.interfaces.eth1 = {
           ipv4.addresses = lib.mkForce [
@@ -147,7 +147,7 @@ in
       };
 
     allowFromLighthouse =
-      { ... }@args:
+      args:
       makeNebulaNode args "allowFromLighthouse" {
         networking.interfaces.eth1 = {
           ipv6.addresses = lib.mkForce [
@@ -188,7 +188,7 @@ in
       };
 
     allowToLighthouse =
-      { ... }@args:
+      args:
       makeNebulaNode args "allowToLighthouse" {
         networking.interfaces.eth1.ipv4.addresses = lib.mkForce [
           {
@@ -228,7 +228,7 @@ in
       };
 
     disabled =
-      { ... }@args:
+      args:
       makeNebulaNode args "disabled" {
         networking.interfaces.eth1.ipv4.addresses = lib.mkForce [
           {

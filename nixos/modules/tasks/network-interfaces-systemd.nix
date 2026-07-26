@@ -358,7 +358,7 @@ in
                       # we simply take the first set kernel bond option
                       # (one option has multiple names, which is silly)
                       head (
-                        map (optN: valTransform (do.${optN}))
+                        map (optN: valTransform do.${optN})
                           # only map those that exist
                           (filter (o: do ? ${o}) optNames)
                       )

@@ -23,7 +23,7 @@ let
         meta.maintainers = with lib.maintainers; [ euxane ];
 
         nodes.machine =
-          { ... }:
+          _:
           {
             systemd.tmpfiles.rules = [
               "d /var/cache/wals 0750 postgres postgres - -"

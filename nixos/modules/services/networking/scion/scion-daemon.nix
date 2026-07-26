@@ -34,7 +34,7 @@ in
     enable = mkEnableOption "the scion-daemon service";
     settings = mkOption {
       default = { };
-      type = toml.type;
+      inherit (toml) type;
       example = literalExpression ''
         {
           path_db = {

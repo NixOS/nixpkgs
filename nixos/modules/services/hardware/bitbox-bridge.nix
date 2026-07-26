@@ -37,7 +37,7 @@ in
     services.udev.packages = [
       cfg.package
     ]
-    ++ lib.optionals (cfg.runOnMount) [
+    ++ lib.optionals cfg.runOnMount [
       (pkgs.writeTextFile {
         name = "bitbox-bridge-run-on-mount-udev-rules";
         destination = "/etc/udev/rules.d/99-bitbox-bridge-run-on-mount.rules";
@@ -51,7 +51,7 @@ in
       description = "BitBox Bridge";
       wantedBy = [ "multi-user.target" ];
 
-      bindsTo = lib.optionals (cfg.runOnMount) [ "dev-bitbox02.device" ];
+      bindsTo = lib.optionals cfg.runOnMount [ "dev-bitbox02.device" ];
       after = [ "network.target" ];
 
       serviceConfig = {

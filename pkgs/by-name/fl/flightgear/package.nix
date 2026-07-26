@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     openal
     plib
-    (simgear.override { openscenegraph = openscenegraph; })
+    (simgear.override { inherit openscenegraph; })
     zlib
     boost
     libpng

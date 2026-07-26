@@ -47,7 +47,7 @@ in
   };
 
   testScript =
-    { ... }:
+    _:
     ''
       SSH_PORT = ${toString sshPort}
       HTTP_PORT = ${toString httpPort}

@@ -6,7 +6,7 @@
 
   nodes = {
     one =
-      { ... }:
+      _:
       {
         services.influxdb.enable = true;
         environment.systemPackages = [ pkgs.httpie ];

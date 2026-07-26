@@ -9,8 +9,8 @@ It should be stressed here that slow release pacing is not a bad thing!
 If you are looking at this page because a change in, let's say Python packaging, broke the build of *qemu_full*, then if you are not actually using Ceph for anything[^krbd] it may be easier to mask out Ceph from your build[^mask].
 One common way that Ceph is being pulled in for users who do not actually use it is due to the `enableCephFS` flag of *samba4Full*.
 
-[^krbd]: Or are only using implicit *krbd* which lives in the kernel and thus doesn't require this package.
-[^mask]: You can achieve this using several ways, including an overlay setting *ceph* to *null*, or something like `qemu_full.override { cephSupport = false; }`.
+\[^krbd\]: Or are only using implicit *krbd* which lives in the kernel and thus doesn't require this package.
+\[^mask\]: You can achieve this using several ways, including an overlay setting *ceph* to *null*, or something like `qemu_full.override { cephSupport = false; }`.
 
 ## Patches
 
@@ -72,4 +72,3 @@ However the *cephadm* MGR module is enabled by default, and it is not been patch
 Similarly *diskprediction_local* will attempt to load Numpy/SciPy, leading to PyO3 errors.
 These errors are not fatal, however they do render the modules unusable.
 You can disable the modules using `ceph mgr module disable` to silence the errors.
-

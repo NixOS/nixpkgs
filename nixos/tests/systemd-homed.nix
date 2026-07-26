@@ -9,7 +9,7 @@ in
 
   nodes = {
     machine =
-      { ... }:
+      _:
       {
         services = {
           homed.enable = true;

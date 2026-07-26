@@ -174,7 +174,7 @@ in
           {
             script =
               let
-                username = lib.optionalString (cfg.redis.user != null) (cfg.redis.user);
+                username = lib.optionalString (cfg.redis.user != null) cfg.redis.user;
                 host = cfg.redis.host;
                 port = toString cfg.redis.port;
                 protocol = if cfg.redis.useSSL then "rediss" else "redis";
@@ -191,7 +191,7 @@ in
       (lib.mkIf (cfg.user == "db-rest") {
         db-rest = {
           isSystemUser = true;
-          group = cfg.group;
+          inherit (cfg) group;
         };
       })
       (lib.mkIf cfg.redis.createLocally { ${cfg.user}.extraGroups = [ "redis-db-rest" ]; })

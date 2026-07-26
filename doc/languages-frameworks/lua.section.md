@@ -42,6 +42,7 @@ and install it in your profile with
 ```shell
 nix-env -if build.nix
 ```
+
 Now you can use the Lua interpreter, as well as the extra packages (`busted`,
 `luafilesystem`) that you added to the environment.
 
@@ -71,6 +72,7 @@ and install it in your profile with
 ```shell
 nix-env -iA nixpkgs.myLuaEnv
 ```
+
 The environment is installed by referring to the attribute, and considering
 the `nixpkgs` channel was used.
 
@@ -116,7 +118,6 @@ final: prev: {
 
 ### Temporary Lua environment with `nix-shell` {#temporary-lua-environment-with-nix-shell}
 
-
 There are two methods for loading a shell with Lua packages. The first and recommended method
 is to create an environment with `lua.buildEnv` or `lua.withPackages` and load that. E.g.
 
@@ -135,9 +136,9 @@ The other method, which is not recommended, does not create an environment and r
 ```sh
 $ nix-shell -p lua.pkgs.busted lua.pkgs.luafilesystem
 ```
+
 Again, it is possible to launch the interpreter from the shell.
 The Lua interpreter has the attribute `pkgs` which contains all Lua libraries for that specific interpreter.
-
 
 ## Developing with lua {#lua-developing}
 
@@ -219,6 +220,7 @@ Each interpreter has the following attributes:
 
 The `buildLuarocksPackage` function is implemented in `pkgs/development/interpreters/lua-5/build-luarocks-package.nix`
 The following is an example:
+
 ```nix
 {
   luaposix = buildLuarocksPackage {
@@ -251,20 +253,20 @@ The following is an example:
 
 The `buildLuarocksPackage` delegates most tasks to luarocks:
 
-* it adds `luarocks` as an unpacker for `src.rock` files (zip files really).
-* `configurePhase` writes a temporary luarocks configuration file which location
-is exported via the environment variable `LUAROCKS_CONFIG`.
-* the `buildPhase` does nothing.
-* `installPhase` calls `luarocks make --deps-mode=none --tree $out` to build and
-install the package
-* In the `postFixup` phase, the `wrapLuaPrograms` bash function is called to
+- it adds `luarocks` as an unpacker for `src.rock` files (zip files really).
+- `configurePhase` writes a temporary luarocks configuration file which location
+  is exported via the environment variable `LUAROCKS_CONFIG`.
+- the `buildPhase` does nothing.
+- `installPhase` calls `luarocks make --deps-mode=none --tree $out` to build and
+  install the package
+- In the `postFixup` phase, the `wrapLuaPrograms` bash function is called to
   wrap all programs in the `$out/bin/*` directory to include `$PATH`
   environment variable and add dependent libraries to script's `LUA_PATH` and
   `LUA_CPATH`.
 
 It accepts as arguments:
 
-* 'luarocksConfig': a nix value that directly maps to the luarocks config used during
+- 'luarocksConfig': a nix value that directly maps to the luarocks config used during
   the installation
 
 By default `meta.platforms` is set to the same value as the interpreter unless overridden otherwise.
@@ -297,4 +299,4 @@ Now, `ps` is set to `lua5_1.pkgs`, matching the version of the interpreter.
 
 Following rules should be respected:
 
-* Commit names of Lua libraries should reflect that they are Lua libraries, so write for example `luaPackages.luafilesystem: 1.11 -> 1.12`.
+- Commit names of Lua libraries should reflect that they are Lua libraries, so write for example `luaPackages.luafilesystem: 1.11 -> 1.12`.

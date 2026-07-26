@@ -7,7 +7,7 @@
 with import ../../lib/testing-python.nix { inherit system pkgs; };
 
 let
-  lib = pkgs.lib;
+  inherit (pkgs) lib;
 
   # Generate EAP certificates on the fly (CA, server, and client certs)
   eapCerts = pkgs.runCommand "eap-certs" { buildInputs = [ pkgs.openssl ]; } ''

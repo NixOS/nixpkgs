@@ -22,7 +22,7 @@ let
       in
       {
         expr =
-          (builtins.tryEval (nixos.config.systemd.services.systemd-test-nixos.serviceConfig.StateDirectory))
+          (builtins.tryEval nixos.config.systemd.services.systemd-test-nixos.serviceConfig.StateDirectory)
           .success;
         expected = false;
       };

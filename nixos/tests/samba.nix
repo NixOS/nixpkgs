@@ -6,7 +6,7 @@
 
   nodes = {
     client =
-      { ... }:
+      _:
       {
         virtualisation.fileSystems = {
           "/public" = {
@@ -18,7 +18,7 @@
       };
 
     server =
-      { ... }:
+      _:
       {
         services.samba = {
           enable = true;

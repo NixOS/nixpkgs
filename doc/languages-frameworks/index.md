@@ -28,6 +28,7 @@ Each supported language or software ecosystem has its own package set named `<la
   javaPackages.mavenfod               javaPackages.openjfx19              javaPackages.override
   javaPackages.openjfx11              javaPackages.openjfx20              javaPackages.overrideDerivation
   ```
+
   :::
 
 - List all derivations on the command line with [`nix-env --query`](https://nixos.org/manual/nix/stable/command-ref/nix-env/query).
@@ -52,6 +53,7 @@ Each supported language or software ecosystem has its own package set named `<la
   pythonPackages.cbeams                                                 cbeams-1.0.3
   …
   ```
+
   :::
 
 ```{=include=} sections

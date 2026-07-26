@@ -69,7 +69,7 @@ in
     users.users = lib.mkIf (cfg.user == defaultUser) {
       ${defaultUser} = {
         description = "User that runs `nordvpnd`.";
-        group = cfg.group;
+        inherit (cfg) group;
         isSystemUser = true;
       };
     };
@@ -102,8 +102,7 @@ in
     systemd.services.nordvpnd = {
       after = [ "network-online.target" ];
       description = "NordVPN daemon.";
-      path = (
-        with pkgs;
+      path = with pkgs;
         [
           e2fsprogs
           iproute2
@@ -112,8 +111,7 @@ in
           procps
           wireguard-tools
         ]
-        ++ [ nordvpn ]
-      );
+        ++ [ nordvpn ];
       serviceConfig = {
         # nordvpnd needs CAP_NET_ADMIN to configure network interfaces
         AmbientCapabilities = "CAP_NET_ADMIN";

@@ -9,7 +9,7 @@
   };
   nodes = {
     machine =
-      { ... }:
+      _:
       {
         services.trezord.enable = true;
         services.trezord.emulator.enable = true;

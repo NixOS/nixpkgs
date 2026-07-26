@@ -74,10 +74,8 @@ buildPythonPackage {
   pyproject = false;
   __structuredAttrs = true;
 
-  src = (
-    srcs."${python.pythonVersion}-${stdenv.hostPlatform.system}"
-      or (throw "python${python.pythonVersion}Packages.jax-cuda12-plugin is not supported on ${stdenv.hostPlatform.system}")
-  );
+  src = srcs."${python.pythonVersion}-${stdenv.hostPlatform.system}"
+      or (throw "python${python.pythonVersion}Packages.jax-cuda12-plugin is not supported on ${stdenv.hostPlatform.system}");
 
   nativeBuildInputs = [
     autoPatchelfHook

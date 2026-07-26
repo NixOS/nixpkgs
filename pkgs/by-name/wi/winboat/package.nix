@@ -49,7 +49,7 @@ buildNpmPackage (finalAttrs: {
 
   guest-server = pkgsCross.mingwW64.callPackage ./guest-server.nix { };
   passthru = {
-    guest-server = finalAttrs.guest-server;
+    inherit (finalAttrs) guest-server;
     updateScript = nix-update-script {
       extraArgs = [
         "--subpackage"

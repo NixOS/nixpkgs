@@ -34,7 +34,7 @@
   make-symlinks-relative =
     (derivation {
       name = "test-make-symlinks-relative";
-      system = stdenv.system;
+      inherit (stdenv) system;
       builder = "${initialBash}/bin/bash";
       inherit initialPath;
       outputs = [

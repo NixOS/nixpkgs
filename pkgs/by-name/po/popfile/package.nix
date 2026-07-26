@@ -17,8 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = (
-    with perlPackages;
+  buildInputs = with perlPackages;
     [
       ## These are all taken from the popfile documentation as applicable to Linux
       ## https://getpopfile.org/docs/howtos:allplatformsrequireperl
@@ -33,8 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
       IOSocketSSL
       NetSSLeay
       SOAPLite
-    ]
-  );
+    ];
 
   installPhase = ''
     mkdir -p $out/bin

@@ -36,7 +36,7 @@ let
   // lib.optionalAttrs (cfg.settings.PAPERLESS_ENABLE_NLTK or true) {
     PAPERLESS_NLTK_DIR = cfg.package.nltkDataDir;
   }
-  // lib.optionalAttrs (cfg.openMPThreadingWorkaround) {
+  // lib.optionalAttrs cfg.openMPThreadingWorkaround {
     OMP_NUM_THREADS = "1";
   }
   // (lib.mapAttrs (

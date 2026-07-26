@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
-  doCheck = (!stdenv.hostPlatform.isDarwin); # times out
+  doCheck = !stdenv.hostPlatform.isDarwin; # times out
   enableParallelChecking = false;
 
   meta = {

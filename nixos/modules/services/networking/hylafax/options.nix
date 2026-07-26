@@ -391,7 +391,7 @@ in
 
   };
 
-  config.services.hylafax = mkIf (config.services.hylafax.enable) (mkMerge [
+  config.services.hylafax = mkIf config.services.hylafax.enable (mkMerge [
     defaultConfig
     localConfig
   ]);

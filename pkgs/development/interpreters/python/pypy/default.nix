@@ -223,7 +223,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup =
-    lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
       install_name_tool -change @rpath/lib${executable}-c.dylib $out/lib/lib${executable}-c.dylib $out/bin/${executable}
     ''
     # Create platform specific _sysconfigdata__*.py (eg: _sysconfigdata__linux_x86_64-linux-gnu.py)

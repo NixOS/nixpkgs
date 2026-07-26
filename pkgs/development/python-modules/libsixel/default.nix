@@ -6,11 +6,11 @@
 }:
 
 buildPythonPackage rec {
-  version = libsixel.version;
+  inherit (libsixel) version;
   format = "setuptools";
   pname = "libsixel";
 
-  src = libsixel.src;
+  inherit (libsixel) src;
   sourceRoot = "${src.name}/python";
 
   prePatch = ''

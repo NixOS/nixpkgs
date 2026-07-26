@@ -63,7 +63,7 @@ let
       inherit (rxvt-unicode-unwrapped) meta version;
 
       passthru = {
-        plugins = plugins;
+        inherit plugins;
         tests.test = nixosTests.terminal-emulators.urxvt;
       };
     };

@@ -1,4 +1,4 @@
-{ ... }:
+_:
 {
   name = "swap-random-encryption";
 

@@ -3,7 +3,7 @@
 ## buildHomeAssistantComponent
 
 Custom components should be packaged using the
- `buildHomeAssistantComponent` function that is provided at top-level.
+`buildHomeAssistantComponent` function that is provided at top-level.
 It builds upon `buildPythonPackage` but uses a custom install and check
 phase.
 
@@ -14,7 +14,6 @@ be available to Home Assistant.
 Out-of-tree components need to use Python packages from
 `home-assistant.python3Pacakges` as to not introduce conflicting package
 versions into the Python environment.
-
 
 **Example Boilerplate:**
 

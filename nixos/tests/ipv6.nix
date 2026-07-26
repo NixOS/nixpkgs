@@ -44,7 +44,7 @@
     };
 
     router =
-      { ... }:
+      _:
       {
         services.radvd.enable = true;
         services.radvd.config = ''

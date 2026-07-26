@@ -190,7 +190,7 @@ in
       let
         rules = {
           mode = "0755";
-          user = cfg.user;
+          inherit (cfg) user;
           group = config.users.users.${cfg.user}.group;
         };
       in
@@ -294,7 +294,7 @@ in
       ];
     };
     # for nginx to access gancio socket
-    users.users."${config.services.nginx.user}" = lib.mkIf (config.services.nginx.enable) {
+    users.users."${config.services.nginx.user}" = lib.mkIf config.services.nginx.enable {
       extraGroups = [ config.users.users.${cfg.user}.group ];
     };
   };

@@ -1,6 +1,6 @@
 let
   certs = import ./common/acme/server/snakeoil-certs.nix;
-  domain = certs.domain;
+  inherit (certs) domain;
 in
 import ./make-test-python.nix {
   name = "postfix";

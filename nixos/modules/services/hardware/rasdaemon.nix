@@ -107,7 +107,7 @@ in
     environment.systemPackages = [
       cfg.package
     ]
-    ++ lib.optionals (cfg.testing) (
+    ++ lib.optionals cfg.testing (
       with pkgs.error-inject;
       [
         edac-inject
@@ -118,7 +118,7 @@ in
 
     boot.initrd.kernelModules =
       cfg.extraModules
-      ++ lib.optionals (cfg.testing) [
+      ++ lib.optionals cfg.testing [
         # edac_core and amd64_edac should get loaded automatically
         # i7core_edac may not be, and may not be required, but should load successfully
         "edac_core"
@@ -128,7 +128,7 @@ in
         "aer-inject"
       ];
 
-    boot.kernelPatches = lib.optionals (cfg.testing) [
+    boot.kernelPatches = lib.optionals cfg.testing [
       {
         name = "rasdaemon-tests";
         patch = null;
@@ -155,10 +155,10 @@ in
         wantedBy = [ "multi-user.target" ];
 
         serviceConfig = {
-          StateDirectory = lib.optionalString (cfg.record) "rasdaemon";
+          StateDirectory = lib.optionalString cfg.record "rasdaemon";
 
           ExecStart =
-            "${cfg.package}/bin/rasdaemon --foreground" + lib.optionalString (cfg.record) " --record";
+            "${cfg.package}/bin/rasdaemon --foreground" + lib.optionalString cfg.record " --record";
           ExecStop = "${cfg.package}/bin/rasdaemon --disable";
           Restart = "on-abort";
 

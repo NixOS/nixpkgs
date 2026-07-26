@@ -7,7 +7,7 @@
 stdenv.mkDerivation (finalAttrs: {
   name = "${finalAttrs.version}-${finalAttrs.version}-${kernel.version}";
   pname = "ajantv2-module";
-  version = libajantv2.version;
+  inherit (libajantv2) version;
 
   inherit (libajantv2) src;
   sourceRoot = "${libajantv2.src.name}/driver/linux";

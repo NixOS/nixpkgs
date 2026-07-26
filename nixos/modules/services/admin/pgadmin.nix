@@ -34,9 +34,7 @@ let
     value:
     if builtins.isString value then
       builtins.toJSON value
-    else if value ? _expr then
-      value._expr
-    else if builtins.isInt value then
+    else value._expr or (if builtins.isInt value then
       toString value
     else if builtins.isBool value then
       (if value then "True" else "False")
@@ -45,7 +43,7 @@ let
     else if builtins.isList value then
       "[${lib.concatStringsSep "\n" (map (v: "${formatPyValue v},") value)}]"
     else
-      throw "Unrecognized type";
+      throw "Unrecognized type");
 
   formatPy =
     attrs:
@@ -140,8 +138,8 @@ in
     };
   };
 
-  config = lib.mkIf (cfg.enable) {
-    networking.firewall.allowedTCPPorts = lib.mkIf (cfg.openFirewall) [ cfg.port ];
+  config = lib.mkIf cfg.enable {
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
 
     services.pgadmin.settings = {
       DEFAULT_SERVER_PORT = cfg.port;

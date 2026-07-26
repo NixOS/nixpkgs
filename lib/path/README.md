@@ -6,18 +6,18 @@ The purpose of this library is to process [filesystem paths].
 It does not read files from the filesystem.
 It exists to support the native Nix [path value type] with extra functionality.
 
-[filesystem paths]: https://en.m.wikipedia.org/wiki/Path_(computing)
-[path value type]: https://nixos.org/manual/nix/stable/language/values.html#type-path
-
 As an extension of the path value type, it inherits the same intended use cases and limitations:
+
 - Only use paths to access files at evaluation time, such as the local project source.
 - Paths cannot point to derivations, so they are unfit to represent dependencies.
 - A path implicitly imports the referenced files into the Nix store when interpolated to a string.
   Therefore paths are not suitable to access files at build- or run-time, as you risk importing the path from the evaluation system instead.
 
 Overall, this library works with two types of paths:
+
 - Absolute paths are represented with the Nix [path value type].
   Nix automatically normalises these paths.
+
 - Subpaths are represented with the [string value type] since path value types don't support relative paths.
   This library normalises these paths as safely as possible.
   Absolute paths in strings are not supported.
@@ -25,14 +25,13 @@ Overall, this library works with two types of paths:
   A subpath refers to a specific file or directory within an absolute base directory.
   It is a stricter form of a relative path, notably [without support for `..` components][parents] since those could escape the base directory.
 
-[string value type]: https://nixos.org/manual/nix/stable/language/values.html#type-string
-
 This library is designed to be as safe and intuitive as possible, throwing errors when operations are attempted that would produce surprising results, and giving the expected result otherwise.
 
 This library is designed to work well as a dependency for the `lib.filesystem` and `lib.sources` library components.
 Contrary to these library components, `lib.path` does not read any paths from the filesystem.
 
 This library makes only these assumptions about paths and no others:
+
 - `dirOf path` returns the path to the parent directory of `path`, unless `path` is the filesystem root, in which case `path` is returned.
   - There can be multiple filesystem roots: `p == dirOf p` and `q == dirOf q` does not imply `p == q`.
     - While there's only a single filesystem root in stable Nix, the [lazy trees feature](https://github.com/NixOS/nix/pull/6530) introduces [additional filesystem roots](https://github.com/NixOS/nix/pull/6530#discussion_r1041442173).
@@ -48,7 +47,6 @@ Notably we do not make the assumption that we can turn paths into strings using 
 Each subsection here contains a decision along with arguments and counter-arguments for (+) and against (-) that decision.
 
 ### Leading dots for relative paths
-[leading-dots]: #leading-dots-for-relative-paths
 
 Observing: Since subpaths are a form of relative paths, they can have a leading `./` to indicate it being a relative path, this is generally not necessary for tools though.
 
@@ -83,7 +81,6 @@ Decision: Returned subpaths should always have a leading `./`.
 </details>
 
 ### Representation of the current directory
-[curdir]: #representation-of-the-current-directory
 
 Observing: The subpath that produces the base directory can be represented with `.` or `./` or `./.`.
 
@@ -109,9 +106,9 @@ Decision: It should be `./.`.
 </details>
 
 ### Subpath representation
-[relrepr]: #subpath-representation
 
 Observing: Subpaths such as `foo/bar` can be represented in various ways:
+
 - string: `"foo/bar"`
 - list with all the components: `[ "foo" "bar" ]`
 - attribute set: `{ type = "relative-path"; components = [ "foo" "bar" ]; }`
@@ -135,7 +132,6 @@ Decision: Paths are represented as strings.
 </details>
 
 ### Parent directory
-[parents]: #parent-directory
 
 Observing: Relative paths can have `..` components, which refer to the parent directory.
 
@@ -172,7 +168,6 @@ Hence, string paths are called subpaths, rather than relative paths.
 </details>
 
 ### Trailing slashes
-[trailing-slashes]: #trailing-slashes
 
 Observing: Subpaths can contain trailing slashes, like `foo/`, indicating that the path points to a directory and not a file.
 
@@ -209,7 +204,6 @@ Decision: All functions remove trailing slashes in their results.
 </details>
 
 ### Prefer returning subpaths over components
-[subpath-preference]: #prefer-returning-subpaths-over-components
 
 Observing: Functions could return subpaths or lists of path component strings.
 
@@ -229,6 +223,7 @@ Decision: Subpaths should be preferred over list of path component strings.
   Only `lib.path.subpath.components` can be used to get a list of components.
   And once we have a list of component strings, `lib.lists` and `lib.strings` can be used to operate on them.
   For completeness, `lib.path.subpath.join` allows converting the list of components back to a subpath.
+
 </details>
 
 ## Other implementations and references
@@ -238,3 +233,10 @@ Decision: Subpaths should be preferred over list of path component strings.
 - [Haskell](https://hackage.haskell.org/package/filepath-1.4.100.0/docs/System-FilePath.html)
 - [Nodejs](https://nodejs.org/api/path.html)
 - [POSIX.1-2017](https://pubs.opengroup.org/onlinepubs/9699919799/nframe.html)
+
+[filesystem paths]: https://en.m.wikipedia.org/wiki/Path_(computing)
+[leading-dots]: #leading-dots-for-relative-paths
+[parents]: #parent-directory
+[path value type]: https://nixos.org/manual/nix/stable/language/values.html#type-path
+[string value type]: https://nixos.org/manual/nix/stable/language/values.html#type-string
+[trailing-slashes]: #trailing-slashes

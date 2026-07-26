@@ -230,7 +230,7 @@ in
     services.gnome.gnome-keyring.enable = mkDefault true;
     services.gvfs.enable = true;
     services.tumbler.enable = true;
-    services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
+    services.system-config-printer.enable = mkIf config.services.printing.enable (mkDefault true);
     services.libinput.enable = mkDefault true; # used in xfce4-settings-manager
     services.colord.enable = mkDefault true;
 

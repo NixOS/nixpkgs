@@ -89,15 +89,13 @@ def test_register_runner(name: str, tokenFile: str):
     runnerConfigs[r.name] = r
 
     print(f"==> Create Runner '{r.name}'")
-    resp = vms.gitlab.execute(
-        f"""
+    resp = vms.gitlab.execute(f"""
     curl -s -X POST \
         -H 'Content-Type: application/json' \
         -H @/tmp/headers \
         -d @{nix.create_runner_payload_file} \
         http://gitlab/api/v4/user/runners
-    """
-    )[1]
+    """)[1]
     obj = json.loads(resp)
     r.id = obj["id"]
     r.token = obj["token"]
@@ -134,13 +132,11 @@ def test_runner_registered(r: Runner):
 
     print(f"==> Check that runner '{r.name}' is registered.")
 
-    resp = vms.gitlab.execute(
-        f"""
+    resp = vms.gitlab.execute(f"""
         curl -s -X GET \
         -H 'Content-Type: application/json' \
         -H @/tmp/headers \
-        http://gitlab/api/v4/runners/{r.id}"""
-    )[1]
+        http://gitlab/api/v4/runners/{r.id}""")[1]
     runnerStatus = json.loads(resp)
 
     if not runnerStatus["active"]:

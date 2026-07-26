@@ -11,8 +11,8 @@ class RandomProvider(ResourceProvider):
 
 
 class Random(Resource):
-    def __init__(self, name, opts = None):
-         super().__init__(RandomProvider(), name, {}, opts)
+    def __init__(self, name, opts=None):
+        super().__init__(RandomProvider(), name, {}, opts)
 
 
 export("out", Random(name="random_test").id)

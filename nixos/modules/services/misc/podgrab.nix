@@ -78,7 +78,7 @@ in
 
     users.users.podgrab = lib.mkIf (cfg.user == "podgrab") {
       isSystemUser = true;
-      group = cfg.group;
+      inherit (cfg) group;
     };
 
     users.groups.podgrab = lib.mkIf (cfg.group == "podgrab") { };

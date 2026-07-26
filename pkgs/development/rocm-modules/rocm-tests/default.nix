@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     };
     rocmPackagesDerivations = linkFarm "rocmPackagesDerivations" (
       map (x: {
-        name = x.name;
+        inherit (x) name;
         path = x.value;
       }) availableRocmDrvs
     );

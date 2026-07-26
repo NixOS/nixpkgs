@@ -28,7 +28,7 @@ let
     };
   };
 
-  configFile = cfg.configFile;
+  inherit (cfg) configFile;
 in
 {
   options.services.dockerRegistry = {

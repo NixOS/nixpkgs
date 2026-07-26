@@ -83,7 +83,7 @@ in
         logFilePath = "/var/log/davmail/davmail.log";
         logFileSize = "1MB";
         mode = "auto";
-        url = cfg.url;
+        inherit (cfg) url;
         caldavPort = 1080;
         imapPort = 1143;
         ldapPort = 1389;

@@ -24,7 +24,7 @@ in
     package = mkPackageOption pkgs "g3proxy" { };
 
     settings = mkOption {
-      type = settingsFormat.type;
+      inherit (settingsFormat) type;
       default = { };
       example = literalExpression ''
         {

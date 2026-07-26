@@ -5,8 +5,8 @@
 }:
 melpaBuild {
   pname = "texpresso";
-  version = texpresso.version;
-  src = texpresso.src;
+  inherit (texpresso) version;
+  inherit (texpresso) src;
 
   files = ''("emacs/*.el")'';
 

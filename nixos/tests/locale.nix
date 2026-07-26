@@ -1,11 +1,11 @@
-{ ... }:
+_:
 {
   name = "imperative-locale";
   meta.maintainers = [ ];
 
   nodes = {
     node_static =
-      { ... }:
+      _:
       {
         i18n = {
           defaultLocale = "lt_LT.UTF-8";
@@ -14,7 +14,7 @@
       };
 
     node_imperative =
-      { ... }:
+      _:
       {
         i18n = {
           defaultLocale = "lt_LT.UTF-8";
@@ -25,7 +25,7 @@
   };
 
   testScript =
-    { ... }:
+    _:
     ''
       node_static.wait_for_unit("dbus.socket")
 

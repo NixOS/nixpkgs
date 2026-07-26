@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    systemd-networkd-batadv = nixosTests.systemd-networkd-batadv;
+    inherit (nixosTests) systemd-networkd-batadv;
   };
 
   meta = {

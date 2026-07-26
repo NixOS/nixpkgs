@@ -32,7 +32,7 @@
 }:
 
 let
-  apple-sdk = (if (lib.versionAtLeast version "140") then apple-sdk_15 else apple-sdk_14);
+  apple-sdk = if (lib.versionAtLeast version "140") then apple-sdk_15 else apple-sdk_14;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "spidermonkey";
@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1957023
     "--includedir=${placeholder "dev"}/include"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--with-macos-sdk=${apple-sdk.sdkroot}"
   ]
   ++ [

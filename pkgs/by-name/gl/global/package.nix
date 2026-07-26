@@ -14,7 +14,7 @@
 }:
 
 let
-  pygments = python3Packages.pygments;
+  inherit (python3Packages) pygments;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "global";

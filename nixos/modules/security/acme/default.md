@@ -249,8 +249,7 @@ Nix config. Instead, generate them one time with a systemd service:
 ```
 
 Now you're all set to generate certs! You should monitor the first invocation
-by running `systemctl start acme-example.com.service &
-journalctl -fu acme-example.com.service` and watching its log output.
+by running `systemctl start acme-example.com.service & journalctl -fu acme-example.com.service` and watching its log output.
 
 ## Using DNS validation with web server virtual hosts {#module-security-acme-config-dns-with-vhosts}
 
@@ -383,4 +382,4 @@ Services that depend on ACME certificates and need to be reloaded can use one of
 
 1. **Using the `security.acme.certs.<name>.reloadServices` option**: This will cause `systemctl try-reload-or-restart` to be run for the listed services.
 
-2. **Using a separate reload unit**: if you need perform more complex actions you can implement a separate reload unit but need to ensure that it lists the `acme-renew-<name>.service` unit both as `wantedBy` AND `after`. See the nginx module implementation with its `nginx-config-reload` service.
+1. **Using a separate reload unit**: if you need perform more complex actions you can implement a separate reload unit but need to ensure that it lists the `acme-renew-<name>.service` unit both as `wantedBy` AND `after`. See the nginx module implementation with its `nginx-config-reload` service.

@@ -23,7 +23,7 @@ in
       };
 
       settings = lib.mkOption {
-        type = format.type;
+        inherit (format) type;
         description = ''
           Configuration for lxd-image-server.
 
@@ -44,10 +44,10 @@ in
   };
 
   config = lib.mkMerge [
-    (lib.mkIf (cfg.enable) {
+    (lib.mkIf cfg.enable {
       users.users.lxd-image-server = {
         isSystemUser = true;
-        group = cfg.group;
+        inherit (cfg) group;
       };
       users.groups.${cfg.group} = { };
 
@@ -89,7 +89,7 @@ in
       };
     })
     # this is separate so it can be enabled on mirrored hosts
-    (lib.mkIf (cfg.nginx.enable) {
+    (lib.mkIf cfg.nginx.enable {
       # https://github.com/Avature/lxd-image-server/blob/master/resources/nginx/includes/lxd-image-server.pkg.conf
       services.nginx.virtualHosts = {
         "${cfg.nginx.domain}" = {

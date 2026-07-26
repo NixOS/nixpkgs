@@ -33,7 +33,7 @@ in
       };
 
       settings = lib.mkOption {
-        type = (pkgs.formats.yaml { }).type;
+        inherit ((pkgs.formats.yaml { })) type;
         description = ''
           Ergo IRC daemon configuration file.
           https://raw.githubusercontent.com/ergochat/ergo/master/default.yaml

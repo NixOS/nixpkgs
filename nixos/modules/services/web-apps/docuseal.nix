@@ -13,7 +13,7 @@ let
     NODE_ENV = "production";
     WORKDIR = "/var/lib/docuseal";
 
-    PORT = toString (cfg.port);
+    PORT = toString cfg.port;
     HOST = cfg.host;
 
     REDIS_URL = "redis://${cfg.redis.host}:${toString cfg.redis.port}";
@@ -157,7 +157,7 @@ in
         ProtectHome = true;
         PrivateTmp = true;
         PrivateDevices = true;
-        PrivateUsers = (cfg.port >= 1024);
+        PrivateUsers = cfg.port >= 1024;
         ProtectClock = true;
         ProtectHostname = true;
         ProtectKernelLogs = true;

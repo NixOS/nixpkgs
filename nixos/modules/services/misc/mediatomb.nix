@@ -399,7 +399,7 @@ in
       users.users = lib.optionalAttrs (cfg.user == "mediatomb") {
         mediatomb = {
           isSystemUser = true;
-          group = cfg.group;
+          inherit (cfg) group;
           home = cfg.dataDir;
           createHome = true;
           description = "${name} DLNA Server User";

@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   passthru.tests = {
-    grav = nixosTests.grav;
+    inherit (nixosTests) grav;
   };
 
   meta = {

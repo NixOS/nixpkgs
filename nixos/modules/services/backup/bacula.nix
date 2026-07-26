@@ -33,7 +33,7 @@ let
         ++ optional (tls_cfg.verifyPeer != null) "TLS Verify Peer = ${boolToYesNo tls_cfg.verifyPeer};"
         ++ optional (
           tls_cfg.allowedCN != [ ]
-        ) "TLS Allowed CN = ${concatStringsSep " " (tls_cfg.allowedCN)};"
+        ) "TLS Allowed CN = ${concatStringsSep " " tls_cfg.allowedCN};"
         ++ optional (
           tls_cfg.caCertificateFile != null
         ) ''TLS CA Certificate File = "${tls_cfg.caCertificateFile}";''
@@ -157,7 +157,7 @@ let
 
   tlsOptions =
     submodulePath:
-    { ... }:
+    _:
     {
       options = {
         enable = mkOption {
@@ -242,7 +242,7 @@ let
 
   directorOptions =
     submodulePath:
-    { ... }:
+    _:
     {
       options = {
         password = mkOption {
@@ -294,7 +294,7 @@ let
     };
 
   autochangerOptions =
-    { ... }:
+    _:
     {
       options = {
         changerDevice = mkOption {
@@ -358,7 +358,7 @@ let
     };
 
   deviceOptions =
-    { ... }:
+    _:
     {
       options = {
         archiveDevice = mkOption {

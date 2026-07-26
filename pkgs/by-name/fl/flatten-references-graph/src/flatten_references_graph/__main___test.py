@@ -13,16 +13,14 @@ class TestMain(unittest.TestCase):
     def test_main_impl(self):
 
         file_path = path_relative_to_file(
-            __file__,
-            "__test_fixtures/flatten-references-graph-main-input.json"
+            __file__, "__test_fixtures/flatten-references-graph-main-input.json"
         )
 
         result = main_impl(file_path)
 
         self.assertEqual(
             result,
-            inspect.cleandoc(
-                """
+            inspect.cleandoc("""
                 [
                   [
                     "B"
@@ -34,19 +32,15 @@ class TestMain(unittest.TestCase):
                     "A"
                   ]
                 ]
-                """
-            )
+                """),
         )
 
     def test_main_impl2(self):
         file_path = path_relative_to_file(
             __file__,
-            "__test_fixtures/flatten-references-graph-main-input-no-paths.json"
+            "__test_fixtures/flatten-references-graph-main-input-no-paths.json",
         )
 
         result = main_impl(file_path)
 
-        self.assertEqual(
-            result,
-            inspect.cleandoc("[]")
-        )
+        self.assertEqual(result, inspect.cleandoc("[]"))

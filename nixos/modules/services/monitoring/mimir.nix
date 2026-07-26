@@ -24,7 +24,7 @@ in
     enable = mkEnableOption "mimir";
 
     configuration = mkOption {
-      type = (pkgs.formats.json { }).type;
+      inherit ((pkgs.formats.json { })) type;
       default = { };
       description = ''
         Specify the configuration for Mimir in Nix.
@@ -58,10 +58,8 @@ in
 
     assertions = [
       {
-        assertion = (
-          (cfg.configuration == { } -> cfg.configFile != null)
-          && (cfg.configFile != null -> cfg.configuration == { })
-        );
+        assertion = (cfg.configuration == { } -> cfg.configFile != null)
+          && (cfg.configFile != null -> cfg.configuration == { });
         message = ''
           Please specify either
           'services.mimir.configuration' or

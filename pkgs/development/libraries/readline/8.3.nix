@@ -32,8 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patchFlags = [ "-p0" ];
 
-  upstreamPatches = (
-    let
+  upstreamPatches = let
       patch =
         nr: sha256:
         fetchurl {
@@ -41,8 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
           inherit sha256;
         };
     in
-    import ./readline-8.3-patches.nix patch
-  );
+    import ./readline-8.3-patches.nix patch;
 
   patches =
     lib.optionals (curses-library.pname == "ncurses") [

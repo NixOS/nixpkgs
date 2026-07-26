@@ -66,9 +66,9 @@ in
       ];
       restartIfChanged = false;
 
-      environment = cfg.environment;
+      inherit (cfg) environment;
 
-      preStart = cfg.preStart;
+      inherit (cfg) preStart;
       script = cfg.execCmd;
 
       # Stop restarting if the display manager stops (crashes) 2 times

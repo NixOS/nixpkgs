@@ -176,7 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   npmDeps = lib.optionalDrvAttr npmToolingUsed (fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
-    src = finalAttrs.src;
+    inherit (finalAttrs) src;
     hash = "sha256-MTyoc8ozrCi3W0CXmxyLpyU8v+vlUjcbLnv/1ev/Qqo=";
   });
 

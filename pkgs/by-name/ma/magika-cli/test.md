@@ -1,3 +1,3 @@
 fn main() {
-    println!("This is a code example");
+println!("This is a code example");
 }

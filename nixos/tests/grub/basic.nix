@@ -7,7 +7,7 @@
   };
 
   nodes.machine =
-    { ... }:
+    _:
     {
       virtualisation.useBootLoader = true;
 

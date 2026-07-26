@@ -105,12 +105,12 @@ will not be able to use the broker.
 Every listener has an instance of the Mosquitto `acl-file` plugin attached to it. This ACL is
 configured via two attributes of the config:
 
-  * the `acl` attribute of the listener configures pattern ACL entries and topic ACL entries
-    for anonymous users. Each entry must be prefixed with `pattern` or `topic` to distinguish
-    between these two cases.
-  * the `acl` attribute of every user configures in the listener configured the ACL for that
-    given user. Only topic ACLs are supported by Mosquitto in this setting, so no prefix is
-    required or allowed.
+- the `acl` attribute of the listener configures pattern ACL entries and topic ACL entries
+  for anonymous users. Each entry must be prefixed with `pattern` or `topic` to distinguish
+  between these two cases.
+- the `acl` attribute of every user configures in the listener configured the ACL for that
+  given user. Only topic ACLs are supported by Mosquitto in this setting, so no prefix is
+  required or allowed.
 
 The default ACL for a listener is empty, disallowing all accesses from all clients. To configure
 a completely open ACL, set `acl = [ "pattern readwrite #" ]` in the listener.

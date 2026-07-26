@@ -18,7 +18,7 @@
 
     services.odoo = {
       enable = true;
-      package = package;
+      inherit package;
       autoInit = true;
       autoInitExtraFlags = [ "--without-demo=all" ];
       domain = "localhost";

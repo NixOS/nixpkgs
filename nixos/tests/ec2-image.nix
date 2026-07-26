@@ -71,9 +71,9 @@ in
     timeout = 600;
   };
   nodes = {
-    machine = { ... }: { }; # Dummy node for network config - won't be launched
+    machine = _: { }; # Dummy node for network config - won't be launched
     client =
-      { ... }:
+      _:
       {
         # Configure SSH client for non-interactive, strict authentication
         programs.ssh.extraConfig = ''

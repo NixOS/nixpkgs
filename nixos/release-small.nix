@@ -25,7 +25,7 @@ let
 
   pkgs = import ./.. { system = "x86_64-linux"; };
 
-  lib = pkgs.lib;
+  inherit (pkgs) lib;
 
   nixos' = import ./release.nix {
     inherit stableBranch supportedSystems;

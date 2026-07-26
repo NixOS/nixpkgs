@@ -386,7 +386,7 @@ in
 
       users.users = lib.optionalAttrs (cfg.user == "openldap") {
         openldap = {
-          group = cfg.group;
+          inherit (cfg) group;
           isSystemUser = true;
         };
       };

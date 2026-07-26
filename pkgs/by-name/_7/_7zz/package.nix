@@ -112,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   # it's the compression code with the restriction, see DOC/License.txt
   ++ lib.optionals (!enableUnfree) [ "DISABLE_RAR_COMPRESS=true" ]
-  ++ lib.optionals (stdenv.hostPlatform.isMinGW) [
+  ++ lib.optionals stdenv.hostPlatform.isMinGW [
     "IS_MINGW=1"
     "MSYSTEM=1"
   ];

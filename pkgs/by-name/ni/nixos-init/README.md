@@ -62,9 +62,9 @@ closure. Currently nixos-init comes in at ~500 KiB.
 Current usages of `activationScripts`:
 
 1. Initialization of the system
-  1.1. In initrd
-  1.2. As PID 1 if there is no initrd (e.g. for containers or cloud VMs).
-2. Re-activation of the system via switch-to-configuration.
-3. Installation of a system with `nixos-enter` (chroot).
+   1.1. In initrd
+   1.2. As PID 1 if there is no initrd (e.g. for containers or cloud VMs).
+1. Re-activation of the system via switch-to-configuration.
+1. Installation of a system with `nixos-enter` (chroot).
 
 Currently, `nixos-init` only addresses 1.1. At least 1.2 is also in scope.

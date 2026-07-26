@@ -6,7 +6,7 @@
 
   nodes = {
     vikunjaSqlite =
-      { ... }:
+      _:
       {
         services.vikunja = {
           enable = true;

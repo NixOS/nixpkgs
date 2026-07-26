@@ -11,8 +11,8 @@ let
   pname = "geogebra";
   version = "6-0-794-0";
 
-  srcIcon = geogebra.srcIcon;
-  desktopItem = geogebra.desktopItem;
+  inherit (geogebra) srcIcon;
+  inherit (geogebra) desktopItem;
 
   meta = {
     description = "Dynamic mathematics software with graphics, algebra and spreadsheets";

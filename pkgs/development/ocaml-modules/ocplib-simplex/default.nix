@@ -20,12 +20,10 @@ buildDunePackage (finalAttrs: {
 
   # Fix tests with dune 3.17.0
   # See https://github.com/OCamlPro/ocplib-simplex/issues/35
-  patches = (
-    fetchpatch {
+  patches = fetchpatch {
       url = "https://github.com/OCamlPro/ocplib-simplex/commit/456a744bddd397daade7959d4a49cfadafdadd33.patch";
       hash = "sha256-tQUXOoRGe1AIzHcm6j2MopROxn75OE9YUP+CwcKUbVg=";
-    }
-  );
+    };
 
   propagatedBuildInputs = [
     logs

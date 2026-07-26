@@ -151,7 +151,7 @@ in
       phpfpm.pools.part-db = {
         user = "part-db";
         group = "part-db";
-        phpPackage = cfg.phpPackage;
+        inherit (cfg) phpPackage;
         phpOptions = ''
           log_errors = on
         '';

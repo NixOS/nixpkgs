@@ -42,7 +42,7 @@ in
   name = "nextflow";
 
   nodes.machine =
-    { ... }:
+    _:
     {
       environment.systemPackages = [
         run-nextflow-pipeline

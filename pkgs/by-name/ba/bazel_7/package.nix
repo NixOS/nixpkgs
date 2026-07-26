@@ -191,7 +191,7 @@ let
         runJdk
         bazelForDeps
       ]
-      ++ lib.optional (stdenv.hostPlatform.isDarwin) libtool;
+      ++ lib.optional stdenv.hostPlatform.isDarwin libtool;
       configurePhase = ''
         runHook preConfigure
 
@@ -566,7 +566,7 @@ stdenv.mkDerivation rec {
     zip
     python3.pkgs.absl-py # Needed to build fish completion
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
   ];
 

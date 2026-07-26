@@ -353,7 +353,7 @@ rec {
               loc: defs: arg:
               anything.merge (loc ++ [ "<function body>" ]) (
                 map (def: {
-                  file = def.file;
+                  inherit (def) file;
                   value = def.value arg;
                 }) defs
               );
@@ -664,13 +664,11 @@ rec {
     else
       mkOptionType {
         name = "path";
-        description = (
-          (if absolute == null then "" else (if absolute then "absolute " else "relative "))
+        description = (if absolute == null then "" else (if absolute then "absolute " else "relative "))
           + "path"
           + (
             if inStore == null then "" else (if inStore then " in the Nix store" else " not in the Nix store")
-          )
-        );
+          );
         descriptionClass = "noun";
 
         merge = mergeEqualOption;
@@ -692,9 +690,7 @@ rec {
                 /. + builtins.unsafeDiscardStringContext x
             );
             isAbsolute = substring 0 1 (toString x) == "/";
-            isExpectedType = (
-              if inStore == null || inStore then isStringLike x else isString x # Do not allow a true path, which could be copied to the store later on.
-            );
+            isExpectedType = if inStore == null || inStore then isStringLike x else isString x;
           in
           isExpectedType
           && (inStore == null || inStore == isInStore)
@@ -747,7 +743,7 @@ rec {
         value = [ ];
       };
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ [ "*" ]);
-      getSubModules = elemType.getSubModules;
+      inherit (elemType) getSubModules;
       substSubModules = m: listOf (elemType.substSubModules m);
       functor = (elemTypeFunctor name { inherit elemType; }) // {
         type = payload: lib.types.listOf payload.elemType;
@@ -929,7 +925,7 @@ rec {
         value = if asAttrs then { } else [ ];
       };
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ [ "*" ]);
-      getSubModules = elemType.getSubModules;
+      inherit (elemType) getSubModules;
       substSubModules =
         m:
         attrListWith {
@@ -1036,7 +1032,7 @@ rec {
         value = { };
       };
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ [ "<${placeholder}>" ]);
-      getSubModules = elemType.getSubModules;
+      inherit (elemType) getSubModules;
       substSubModules =
         m:
         attrsWith {
@@ -1219,9 +1215,9 @@ rec {
         inherit message;
         inherit (type) merge;
       };
-      emptyValue = type.emptyValue;
-      getSubOptions = type.getSubOptions;
-      getSubModules = type.getSubModules;
+      inherit (type) emptyValue;
+      inherit (type) getSubOptions;
+      inherit (type) getSubModules;
       substSubModules = m: uniq (type.substSubModules m);
       functor = elemTypeFunctor name { elemType = type; } // {
         type = payload: lib.types.unique { inherit message; } payload.elemType;
@@ -1253,8 +1249,8 @@ rec {
       emptyValue = {
         value = null;
       };
-      getSubOptions = elemType.getSubOptions;
-      getSubModules = elemType.getSubModules;
+      inherit (elemType) getSubOptions;
+      inherit (elemType) getSubModules;
       substSubModules = m: nullOr (elemType.substSubModules m);
       functor = (elemTypeFunctor name { inherit elemType; }) // {
         type = payload: lib.types.nullOr payload.elemType;
@@ -1284,7 +1280,7 @@ rec {
           )).mergedValue;
       };
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ [ "<function body>" ]);
-      getSubModules = elemType.getSubModules;
+      inherit (elemType) getSubModules;
       substSubModules = m: functionTo (elemType.substSubModules m);
       functor = (elemTypeFunctor "functionTo" { inherit elemType; }) // {
         type = payload: lib.types.functionTo payload.elemType;
@@ -1487,12 +1483,10 @@ rec {
       getSubOptions =
         prefix:
         let
-          docsEval = (
-            base.extendModules {
+          docsEval = base.extendModules {
               inherit prefix;
               modules = [ noCheckForDocsModule ];
-            }
-          );
+            };
           # Intentionally shadow the freeformType from the possibly *checked*
           # configuration. See `noCheckForDocsModule` comment.
           inherit (docsEval._module) freeformType;
@@ -1514,7 +1508,7 @@ rec {
           }
         );
       nestedTypes = lib.optionalAttrs (freeformType != null) {
-        freeformType = freeformType;
+        inherit freeformType;
       };
       functor = defaultFunctor name // {
         type = lib.types.submoduleWith;
@@ -1768,8 +1762,7 @@ rec {
         v2 =
           { loc, defs }:
           let
-            finalDefs = (
-              map (
+            finalDefs = map (
                 def:
                 def
                 // {
@@ -1789,8 +1782,7 @@ rec {
                     else
                       def.value;
                 }
-              ) defs
-            );
+              ) defs;
           in
           if finalType.merge ? v2 then
             checkV2MergeCoherence loc finalType (
@@ -1806,9 +1798,9 @@ rec {
               headError = checkDefsForError check loc defs;
             };
       };
-      emptyValue = finalType.emptyValue;
-      getSubOptions = finalType.getSubOptions;
-      getSubModules = finalType.getSubModules;
+      inherit (finalType) emptyValue;
+      inherit (finalType) getSubOptions;
+      inherit (finalType) getSubModules;
       substSubModules = m: coercedTo coercedType coerceFunc (finalType.substSubModules m);
       typeMerge = t: null;
       functor = defaultFunctor name;
@@ -1902,5 +1894,5 @@ rec {
 
   # TODO: Migrate usage of lib.types.types in nixpkgs
   # Then add a deprecation warning
-  types = lib.types;
+  inherit (lib) types;
 }

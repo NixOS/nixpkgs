@@ -38,18 +38,16 @@ let
   foldArgs =
     merger: f: init: x:
     let
-      arg = (merger init (defaultMergeArg init x));
+      arg = merger init (defaultMergeArg init x);
       # now add the function with composed args already applied to the final attrs
-      base = (
-        setAttrMerge "passthru" { } (f arg) (
+      base = setAttrMerge "passthru" { } (f arg) (
           z:
           z
           // {
             function = foldArgs merger f arg;
             args = (attrByPath [ "passthru" "args" ] { } z) // x;
           }
-        )
-      );
+        );
       withStdOverrides = base // {
         override = base.passthru.function;
       };
@@ -116,21 +114,19 @@ let
       map (
         x:
         let
-          name = (head x);
+          name = head x;
         in
 
-        (
-          (checkFlag attrSet name)
+        (checkFlag attrSet name)
           -> (foldr and true (
             map (
               y:
               let
-                val = (getValue attrSet argList y);
+                val = getValue attrSet argList y;
               in
               (val != null) && (val != false)
             ) (tail x)
           ))
-        )
       ) condList
     ));
 
@@ -171,7 +167,7 @@ let
       in
       uniqListExt {
         outputList = newOutputList;
-        inputList = (tail inputList);
+        inputList = tail inputList;
         inherit getter compare;
       };
 
@@ -194,7 +190,7 @@ let
         else
           let
             x = head list;
-            key = x.key;
+            inherit (x) key;
           in
           if elem key doneKeys then
             work (tail list) doneKeys result
@@ -231,7 +227,7 @@ let
           acc = acc';
         });
 
-  closePropagationSlow = list: (uniqList { inputList = (innerClosePropagation [ ] list); });
+  closePropagationSlow = list: (uniqList { inputList = innerClosePropagation [ ] list; });
 
   # This is an optimisation of closePropagation which avoids the O(n^2) behavior
   # Using a list of derivations, it generates the full closure of the propagatedXXXBuildInputs

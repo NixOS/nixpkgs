@@ -463,7 +463,7 @@ stdenv.mkDerivation (
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       export NIX_LDFLAGS+=" -no_dtrace_dof"
     ''
-    + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
 
       # GHC tries the host xattr /usr/bin/xattr by default which fails since it expects python to be 2.7
       export XATTR=${lib.getBin xattr}/bin/xattr

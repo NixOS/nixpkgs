@@ -177,7 +177,7 @@ rec {
     if license.licenseType == "simple" then
       license.spdxId or "LicenseRef-nixos-${license.shortName}"
     else if license.licenseType == "compound" then
-      lib.concatMapStringsSep " ${license.operator} " (x: mkBracket x) license.licenses
+      lib.concatMapStringsSep " ${license.operator} " mkBracket license.licenses
     else if license.licenseType == "exception" then
       "${mkBracket license.license} ${license.operator} ${mkBracket license.exception}"
     else if license.licenseType == "plus" then

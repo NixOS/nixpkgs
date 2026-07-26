@@ -29,38 +29,36 @@ The function `mkOption` accepts the following arguments.
 
 `type`
 
-:   The type of the option (see [](#sec-option-types)). This
-    argument is mandatory for nixpkgs modules. Setting this is highly
-    recommended for the sake of documentation and type checking. In case it is
-    not set, a fallback type with unspecified behavior is used.
+: The type of the option (see [](#sec-option-types)). This
+argument is mandatory for nixpkgs modules. Setting this is highly
+recommended for the sake of documentation and type checking. In case it is
+not set, a fallback type with unspecified behavior is used.
 
 `default`
 
-:   The default value used if no value is defined by any module. A
-    default is not required; but if a default is not given, then users
-    of the module will have to define the value of the option, otherwise
-    an error will be thrown.
+: The default value used if no value is defined by any module. A
+default is not required; but if a default is not given, then users
+of the module will have to define the value of the option, otherwise
+an error will be thrown.
 
 `defaultText`
 
-:   A textual representation of the default value to be rendered verbatim in
-    the manual. Useful if the default value is a complex expression or depends
-    on other values or packages.
-    Use `lib.literalExpression` for a Nix expression, `lib.literalMD` for
-    a plain English description in [Nixpkgs-flavored Markdown](
-    https://nixos.org/nixpkgs/manual/#sec-contributing-markup) format.
+: A textual representation of the default value to be rendered verbatim in
+the manual. Useful if the default value is a complex expression or depends
+on other values or packages.
+Use `lib.literalExpression` for a Nix expression, `lib.literalMD` for
+a plain English description in [Nixpkgs-flavored Markdown](https://nixos.org/nixpkgs/manual/#sec-contributing-markup) format.
 
 `example`
 
-:   An example value that will be shown in the NixOS manual.
-    You can use `lib.literalExpression` and `lib.literalMD` in the same way
-    as in `defaultText`.
+: An example value that will be shown in the NixOS manual.
+You can use `lib.literalExpression` and `lib.literalMD` in the same way
+as in `defaultText`.
 
 `description`
 
-:   A textual description of the option in [Nixpkgs-flavored Markdown](
-    https://nixos.org/nixpkgs/manual/#sec-contributing-markup) format that will be
-    included in the NixOS manual.
+: A textual description of the option in [Nixpkgs-flavored Markdown](https://nixos.org/nixpkgs/manual/#sec-contributing-markup) format that will be
+included in the NixOS manual.
 
 ## Utility functions for common option patterns {#sec-option-declarations-util}
 
@@ -71,12 +69,14 @@ option to be toggled on or off.
 
 This function takes a single string argument, the name of the thing to be toggled.
 
-The option's description is "Whether to enable \<name\>.".
+The option's description is "Whether to enable \<name>.".
 
 For example:
 
 ::: {#ex-options-declarations-util-mkEnableOption-magic .example}
+
 ### `mkEnableOption` usage
+
 ```nix
 lib.mkEnableOption "magic"
   # is like
@@ -88,6 +88,7 @@ lib.mkEnableOption "magic"
     description = "Whether to enable magic.";
   }
 ```
+
 :::
 
 ### `mkPackageOption` {#sec-option-declarations-util-mkPackageOption}
@@ -132,7 +133,9 @@ If you wish to explicitly provide no default, pass `null` as `default`.
 Examples:
 
 ::: {#ex-options-declarations-util-mkPackageOption-hello .example}
+
 ### Simple `mkPackageOption` usage
+
 ```nix
 lib.mkPackageOption pkgs "hello" { }
   # is like
@@ -144,10 +147,13 @@ lib.mkPackageOption pkgs "hello" { }
     description = "The hello package to use.";
   }
 ```
+
 :::
 
 ::: {#ex-options-declarations-util-mkPackageOption-ghc .example}
+
 ### `mkPackageOption` with explicit default and example
+
 ```nix
 lib.mkPackageOption pkgs "GHC"
   {
@@ -164,10 +170,13 @@ lib.mkPackageOption pkgs "GHC"
     description = "The GHC package to use.";
   }
 ```
+
 :::
 
 ::: {#ex-options-declarations-util-mkPackageOption-extraDescription .example}
+
 ### `mkPackageOption` with additional description text
+
 ```nix
 mkPackageOption pkgs [ "python312Packages" "torch" ]
   {
@@ -182,6 +191,7 @@ mkPackageOption pkgs [ "python312Packages" "torch" ]
     description = "The pytorch package to use. This is an example and doesn't actually do anything.";
   }
 ```
+
 :::
 
 ## Extensible Option Types {#sec-option-declarations-eot}
@@ -200,11 +210,11 @@ module file per display manager backend (sddm, gdm ...).
 
 There are two approaches we could take with this module structure:
 
--   Configuring the display managers independently by adding an enable
-    option to every display manager module backend. (NixOS)
+- Configuring the display managers independently by adding an enable
+  option to every display manager module backend. (NixOS)
 
--   Configuring the display managers in the central module by adding
-    an option to select which display manager backend to use.
+- Configuring the display managers in the central module by adding
+  an option to select which display manager backend to use.
 
 Both approaches have problems.
 
@@ -231,7 +241,9 @@ changing the main service module file and the type system automatically
 enforces that there can only be a single display manager enabled.
 
 ::: {#ex-option-declaration-eot-service .example}
+
 ### Extensible type placeholder in the service module
+
 ```nix
 {
   services.xserver.displayManager.enable = mkOption {
@@ -240,24 +252,31 @@ enforces that there can only be a single display manager enabled.
   };
 }
 ```
+
 :::
 
 ::: {#ex-option-declaration-eot-backend-gdm .example}
+
 ### Extending `services.xserver.displayManager.enable` in the `gdm` module
+
 ```nix
 {
   services.xserver.displayManager.enable = mkOption { type = with types; nullOr (enum [ "gdm" ]); };
 }
 ```
+
 :::
 
 ::: {#ex-option-declaration-eot-backend-sddm .example}
+
 ### Extending `services.xserver.displayManager.enable` in the `sddm` module
+
 ```nix
 {
   services.xserver.displayManager.enable = mkOption { type = with types; nullOr (enum [ "sddm" ]); };
 }
 ```
+
 :::
 
 The placeholder declaration is a standard `mkOption` declaration, but it
@@ -265,5 +284,4 @@ is important that extensible option declarations only use the `type`
 argument.
 
 Extensible option types work with any of the composed variants of `enum`
-such as `with types; nullOr (enum [ "foo" "bar" ])` or `with types;
-listOf (enum [ "foo" "bar" ])`.
+such as `with types; nullOr (enum [ "foo" "bar" ])` or `with types; listOf (enum [ "foo" "bar" ])`.

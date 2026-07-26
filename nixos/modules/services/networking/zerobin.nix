@@ -78,10 +78,10 @@ in
     };
   };
 
-  config = mkIf (cfg.enable) {
+  config = mkIf cfg.enable {
     users.users.${cfg.user} = optionalAttrs (cfg.user == "zerobin") {
       isSystemUser = true;
-      group = cfg.group;
+      inherit (cfg) group;
       home = cfg.dataDir;
       createHome = true;
     };

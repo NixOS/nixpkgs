@@ -44,7 +44,7 @@ in
       section = mkTemplateOption "section template";
     };
     settings = mkOption {
-      type = format.type;
+      inherit (format) type;
       default = { };
       description = ''
         Configuration for Hebbot, see, for examples:

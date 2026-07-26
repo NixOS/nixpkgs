@@ -19,7 +19,7 @@ let
 in
 
 assert lib.assertMsg (
-  isFunction libraries || all (python3Packages.hasPythonModule) libraries
+  isFunction libraries || all python3Packages.hasPythonModule libraries
 ) "writeGpuTestPython was passed `libraries` from the wrong python release";
 
 content:

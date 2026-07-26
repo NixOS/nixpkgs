@@ -32,7 +32,7 @@ let
 
   mkNode =
     webserver:
-    { ... }:
+    _:
     {
       services.dokuwiki = {
         inherit webserver;

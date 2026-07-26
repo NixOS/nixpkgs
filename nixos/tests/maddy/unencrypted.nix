@@ -8,7 +8,7 @@ import ../make-test-python.nix (
 
     nodes = {
       server =
-        { ... }:
+        _:
         {
           services.maddy = {
             enable = true;
@@ -25,7 +25,7 @@ import ../make-test-python.nix (
         };
 
       client =
-        { ... }:
+        _:
         {
           environment.systemPackages = [
             (pkgs.writers.writePython3Bin "send-testmail" { } ''

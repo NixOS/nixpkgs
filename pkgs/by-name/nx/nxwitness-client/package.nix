@@ -104,12 +104,10 @@ in
 # only runs in an FHS env for some reason
 buildFHSEnv {
   inherit (nxwitness_client) pname version meta;
-  targetPkgs = (
-    pkgs:
+  targetPkgs = pkgs:
     [
       nxwitness_client
     ]
-    ++ buildInputs
-  );
+    ++ buildInputs;
   runScript = "nxwitness_client";
 }

@@ -34,15 +34,13 @@ let
       let
         name = platform.parsed.cpu.name;
       in
-      (
-        {
+      {
           "x86_64" = "x64";
           "i686" = "x86";
           "arm" = "arm";
           "aarch64" = "arm64";
         }
-        .${name} or (throw "no chromium Rosetta Stone entry for cpu: ${name}")
-      );
+        .${name} or (throw "no chromium Rosetta Stone entry for cpu: ${name}");
   };
 in
 stdenv.mkDerivation (finalAttrs: {

@@ -238,7 +238,7 @@ let
                       };
                     }
                     // lib.optionalAttrs (value.host != null) {
-                      host = value.host;
+                      inherit (value) host;
                     };
 
                     # QUIC, if used, will duplicate the TLS over TCP directive, but
@@ -317,7 +317,7 @@ in
       defaultTLSRecommendations = tlsRecommendationsOption;
 
       settings = mkOption {
-        type = settingsFormat.type;
+        inherit (settingsFormat) type;
         default = { };
         description = "Configuration for H2O (see <https://h2o.examp1e.net/configure.html>)";
         example =
@@ -423,7 +423,7 @@ in
 
     users = {
       users.${cfg.user} = {
-        group = cfg.group;
+        inherit (cfg) group;
       }
       // lib.optionalAttrs (cfg.user == "h2o") {
         isSystemUser = true;

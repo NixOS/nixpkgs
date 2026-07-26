@@ -11,8 +11,8 @@
 The common setup is to enable the bridge, point it at your homeserver, and set the permissions you want to allow:
 
 1. Set `services.mautrix-discord.enable` to `true`.
-2. Set `services.mautrix-discord.settings.homeserver.address` and `services.mautrix-discord.settings.homeserver.domain`.
-3. Override `services.mautrix-discord.settings.bridge.permissions` if the default relay permissions do not fit your deployment.
+1. Set `services.mautrix-discord.settings.homeserver.address` and `services.mautrix-discord.settings.homeserver.domain`.
+1. Override `services.mautrix-discord.settings.bridge.permissions` if the default relay permissions do not fit your deployment.
 
 The module provides sensible defaults for the appservice listener, registration tokens, and relay permissions.
 
@@ -133,7 +133,9 @@ Encryption needs additional bridge-side setup. See the [bridge encryption docume
   };
 }
 ```
-where  `/run/secrets/mautrix-discord-env` contains
+
+where `/run/secrets/mautrix-discord-env` contains
+
 ```
 SHARED_SECRET=aProtectedSecret
 ```

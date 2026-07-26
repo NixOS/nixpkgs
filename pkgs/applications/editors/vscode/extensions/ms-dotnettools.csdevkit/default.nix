@@ -12,8 +12,7 @@
   patchelf,
 }:
 let
-  extInfo = (
-    {
+  extInfo = {
       x86_64-linux = {
         arch = "linux-x64";
         hash = "sha256-N3W/cvqAzf7Z9jMjiHN9zWrHXZjIqD1RnuZbZ/yQx8g=";
@@ -27,8 +26,7 @@ let
         hash = "sha256-F4CsyiX46SpjilJNV+qYps1JAw09pVruLmW+muN9/B4=";
       };
     }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
-  );
+    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 in
 vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {

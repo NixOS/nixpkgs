@@ -685,5 +685,5 @@ allPkgLists
   inherit schemes;
 
   # convenience alias
-  withPackages = (buildTeXEnv { }).withPackages;
+  inherit ((buildTeXEnv { })) withPackages;
 }

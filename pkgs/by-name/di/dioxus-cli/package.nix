@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   src = fetchCrate {
     pname = "dioxus-cli";
-    version = finalAttrs.version;
+    inherit (finalAttrs) version;
     hash = "sha256-tLMtUlohSJt3okdJh+ARweQNGmzj/vYiNl8iZhDbSAc=";
   };
 

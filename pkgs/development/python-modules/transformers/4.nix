@@ -169,7 +169,7 @@ buildPythonPackage (finalAttrs: {
         fastapi
         starlette
       ];
-      audio = audio;
+      inherit audio;
       speech = [ torchaudio ] ++ audio;
       torch-speech = [ torchaudio ] ++ audio;
       tf-speech = audio;

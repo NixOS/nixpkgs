@@ -1,7 +1,7 @@
 let
   nginxRoot = "/run/nginx";
 in
-{ ... }:
+_:
 {
   name = "nghttpx";
   nodes = {

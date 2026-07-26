@@ -129,7 +129,7 @@ rec {
         type = "derivation";
         bundledByPath = true;
         name = gemName;
-        version = version;
+        inherit version;
         outPath = "${path}";
         outputs = [ "out" ];
         out = res;

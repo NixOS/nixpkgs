@@ -54,7 +54,7 @@ in
       nixPackage
       pkgs.nix-info
     ]
-    ++ lib.optional (config.programs.bash.completion.enable) pkgs.nix-bash-completions;
+    ++ lib.optional config.programs.bash.completion.enable pkgs.nix-bash-completions;
 
     systemd.packages = [ nixPackage ];
 

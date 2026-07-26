@@ -81,7 +81,7 @@ in
       };
 
       settings = lib.mkOption {
-        type = format.type;
+        inherit (format) type;
         default = { };
         example = {
           authorization = {
@@ -117,8 +117,7 @@ in
 
   config = lib.mkIf cfg.enable {
     warnings =
-      [ ]
-      ++ (lib.optional (lib.head (cfg.settings.update_manager.enable_system_updates or [ false ])) ''
+      (lib.optional (lib.head (cfg.settings.update_manager.enable_system_updates or [ false ])) ''
         Enabling system updates is not supported on NixOS and will lead to non-removable warnings in some clients.
       '')
       ++ (lib.optional (cfg.configDir != null) ''
@@ -141,7 +140,7 @@ in
 
     users.users = lib.optionalAttrs (cfg.user == "moonraker") {
       moonraker = {
-        group = cfg.group;
+        inherit (cfg) group;
         uid = config.ids.uids.moonraker;
       };
     };
@@ -155,7 +154,7 @@ in
         forcedConfig = {
           server = {
             host = cfg.address;
-            port = cfg.port;
+            inherit (cfg) port;
             klippy_uds_address = cfg.klipperSocket;
           };
           machine = {
@@ -219,7 +218,7 @@ in
       file_manager.check_klipper_config_path = lib.mkIf (!config.services.klipper.mutableConfig) false;
 
       # enable analysis with our own klipper-estimator, disable updating it
-      analysis = lib.mkIf (cfg.analysis.enable) {
+      analysis = lib.mkIf cfg.analysis.enable {
         platform = "linux";
         enable_estimator_updates = false;
       };

@@ -124,7 +124,7 @@ lib.extendMkDerivation {
       cargoPgrxFlags' = lib.escapeShellArgs cargoPgrxFlags;
     in
     {
-      buildInputs = (args.buildInputs or [ ]);
+      buildInputs = args.buildInputs or [ ];
 
       nativeBuildInputs =
         (args.nativeBuildInputs or [ ])

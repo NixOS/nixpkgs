@@ -25,7 +25,7 @@ let
   '';
 
   bindingCfg =
-    { ... }:
+    _:
     {
       options = {
 

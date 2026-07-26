@@ -65,7 +65,7 @@ rec {
   */
   minimal-bootstrap-sources = derivation {
     inherit name;
-    system = hostPlatform.system;
+    inherit (hostPlatform) system;
     outputHashMode = "recursive";
     inherit outputHashAlgo outputHash;
 

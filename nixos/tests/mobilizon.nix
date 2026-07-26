@@ -13,7 +13,7 @@ in
   ];
 
   nodes.server =
-    { ... }:
+    _:
     {
       services.mobilizon = {
         enable = true;

@@ -9,6 +9,7 @@ an existing, securely configured Postfix setup, as it does not automatically con
 ## Basic usage with Postfix {#module-services-mailman-basic-usage}
 
 For a basic configuration with Postfix as the MTA, the following settings are suggested:
+
 ```nix
 { config, ... }:
 {
@@ -42,8 +43,8 @@ For a basic configuration with Postfix as the MTA, the following settings are su
 
 DNS records will also be required:
 
-  - `AAAA` and `A` records pointing to the host in question, in order for browsers to be able to discover the address of the web server;
-  - An `MX` record pointing to a domain name at which the host is reachable, in order for other mail servers to be able to deliver emails to the mailing lists it hosts.
+- `AAAA` and `A` records pointing to the host in question, in order for browsers to be able to discover the address of the web server;
+- An `MX` record pointing to a domain name at which the host is reachable, in order for other mail servers to be able to deliver emails to the mailing lists it hosts.
 
 After this has been done and appropriate DNS records have been
 set up, the Postorius mailing list manager and the Hyperkitty
@@ -57,6 +58,7 @@ necessary, but outside the scope of the Mailman module.
 ## Using with other MTAs {#module-services-mailman-other-mtas}
 
 Mailman also supports other MTA, though with a little bit more configuration. For example, to use Mailman with Exim, you can use the following settings:
+
 ```nix
 { config, ... }:
 {

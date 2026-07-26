@@ -784,8 +784,7 @@ rec {
   etc =
     let
       inherit (pkgs) lib;
-      nixosCore = (
-        evalMinimalConfig (
+      nixosCore = evalMinimalConfig (
           { config, ... }:
           {
             imports = [
@@ -801,8 +800,7 @@ rec {
               # mode = "0755";
             };
           }
-        )
-      );
+        );
       etcCmd = pkgs.writeScript "etc-cmd" ''
         #!${pkgs.busybox}/bin/sh
         ${pkgs.busybox}/bin/cat /etc/some-config-file

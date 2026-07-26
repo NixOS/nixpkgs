@@ -288,7 +288,7 @@ let
   _bazel-build = buildBazelPackage.override { inherit stdenv; } {
     inherit pname version;
     #bazel = bazel_5;
-    bazel = bazel;
+    inherit bazel;
 
     src = fetchFromGitHub {
       owner = "tensorflow";
@@ -461,8 +461,7 @@ let
     preConfigure =
       let
         opt_flags =
-          [ ]
-          ++ lib.optionals sse42Support [ "-msse4.2" ]
+          lib.optionals sse42Support [ "-msse4.2" ]
           ++ lib.optionals avx2Support [ "-mavx2" ]
           ++ lib.optionals fmaSupport [ "-mfma" ];
       in
@@ -703,7 +702,7 @@ buildPythonPackage {
   # Regression test for #77626 removed because not more `tensorflow.contrib`.
 
   passthru = {
-    deps = bazel-build.deps;
+    inherit (bazel-build) deps;
     libtensorflow = bazel-build.out;
   };
 

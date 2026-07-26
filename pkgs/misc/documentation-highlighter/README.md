@@ -14,7 +14,7 @@ https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@latest/build/
 **If you just want a single .js file with the common languages built-in:**
 <https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@latest/build/highlight.min.js>
 
----
+______________________________________________________________________
 
 ## Highlight.js
 

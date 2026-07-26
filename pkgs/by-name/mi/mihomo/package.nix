@@ -35,7 +35,7 @@ buildGoModule rec {
   doCheck = false;
 
   passthru.tests = {
-    mihomo = nixosTests.mihomo;
+    inherit (nixosTests) mihomo;
   };
 
   meta = {

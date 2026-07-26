@@ -59,7 +59,7 @@ buildGoModule (finalAttrs: {
     tests.versionTest = testers.testVersion {
       package = immich-go;
       command = "immich-go --version";
-      version = finalAttrs.version;
+      inherit (finalAttrs) version;
     };
   };
 

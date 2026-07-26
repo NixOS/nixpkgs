@@ -60,7 +60,7 @@ in
     let
       listenConfig = {
         listen = {
-          port = cfg.port;
+          inherit (cfg) port;
           address = cfg.listenAddress;
           metrics_endpoint = cfg.metricsEndpoint;
         };

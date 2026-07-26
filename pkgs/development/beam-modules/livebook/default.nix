@@ -119,7 +119,7 @@ beamPackages.mixRelease rec {
   passthru = {
     updateScript = nix-update-script { };
     tests = {
-      livebook-service = nixosTests.livebook-service;
+      inherit (nixosTests) livebook-service;
     };
   };
 

@@ -155,8 +155,8 @@ in
     systemd.tmpfiles.settings.tinyauth = {
       "${cfg.dataDir}".d = {
         mode = "0750";
-        user = cfg.user;
-        group = cfg.group;
+        inherit (cfg) user;
+        inherit (cfg) group;
       };
     };
 
@@ -231,7 +231,7 @@ in
     users.users = optionalAttrs (cfg.user == "tinyauth") {
       tinyauth = {
         isSystemUser = true;
-        group = cfg.group;
+        inherit (cfg) group;
         description = "Tinyauth user";
         home = cfg.dataDir;
       };

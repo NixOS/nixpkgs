@@ -81,7 +81,7 @@ in
 
   config =
     let
-      localProvider = (cfg.provider == "local");
+      localProvider = cfg.provider == "local";
       stateDirectory = "/var/lib/transfer.sh";
     in
     mkIf cfg.enable {

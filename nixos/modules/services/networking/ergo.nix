@@ -150,7 +150,7 @@ in
 
     users.users.${cfg.user} = {
       name = cfg.user;
-      group = cfg.group;
+      inherit (cfg) group;
       description = "Ergo daemon user";
       home = cfg.dataDir;
       isSystemUser = true;

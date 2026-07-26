@@ -1329,11 +1329,11 @@ self: super: with self; {
 
   arris-tg2492lg = callPackage ../development/python-modules/arris-tg2492lg { };
 
-  arro3-compute = (callPackage ../development/python-modules/arro3 { }).arro3-compute;
+  inherit ((callPackage ../development/python-modules/arro3 { })) arro3-compute;
 
-  arro3-core = (callPackage ../development/python-modules/arro3 { }).arro3-core;
+  inherit ((callPackage ../development/python-modules/arro3 { })) arro3-core;
 
-  arro3-io = (callPackage ../development/python-modules/arro3 { }).arro3-io;
+  inherit ((callPackage ../development/python-modules/arro3 { })) arro3-io;
 
   arrow = callPackage ../development/python-modules/arrow { };
 
@@ -2328,7 +2328,7 @@ self: super: with self; {
   bencoder = callPackage ../development/python-modules/bencoder { };
 
   bencodetools = callPackage ../development/python-modules/bencodetools {
-    bencodetools = pkgs.bencodetools;
+    inherit (pkgs) bencodetools;
   };
 
   beniget = callPackage ../development/python-modules/beniget { };
@@ -12485,7 +12485,7 @@ self: super: with self; {
 
   opentypespec = callPackage ../development/python-modules/opentypespec { };
 
-  openusd = callPackage ../development/python-modules/openusd { alembic = pkgs.alembic; };
+  openusd = callPackage ../development/python-modules/openusd { inherit (pkgs) alembic; };
 
   openvino = callPackage ../development/python-modules/openvino {
     openvino-native = pkgs.openvino.override { python3Packages = self; };
@@ -17215,7 +17215,7 @@ self: super: with self; {
 
   qdrant-client = callPackage ../development/python-modules/qdrant-client { };
 
-  qemu = callPackage ../development/python-modules/qemu { qemu = pkgs.qemu; };
+  qemu = callPackage ../development/python-modules/qemu { inherit (pkgs) qemu; };
 
   qemu-qmp = callPackage ../development/python-modules/qemu-qmp { };
 
@@ -17253,7 +17253,7 @@ self: super: with self; {
 
   qrcode-terminal = callPackage ../development/python-modules/qrcode-terminal { };
 
-  qrcodegen = callPackage ../development/python-modules/qrcodegen { qrcodegen = pkgs.qrcodegen; };
+  qrcodegen = callPackage ../development/python-modules/qrcodegen { inherit (pkgs) qrcodegen; };
 
   qreactor = callPackage ../development/python-modules/qreactor { };
 
@@ -19089,7 +19089,7 @@ self: super: with self; {
   sphinx-autodoc2 = callPackage ../development/python-modules/sphinx-autodoc2 { };
 
   sphinx-automodapi = callPackage ../development/python-modules/sphinx-automodapi {
-    graphviz = pkgs.graphviz;
+    inherit (pkgs) graphviz;
   };
 
   sphinx-basic-ng = callPackage ../development/python-modules/sphinx-basic-ng { };
@@ -20183,7 +20183,7 @@ self: super: with self; {
   textile = callPackage ../development/python-modules/textile { };
 
   textnets = callPackage ../development/python-modules/textnets {
-    en_core_web_sm = spacy-models.en_core_web_sm;
+    inherit (spacy-models) en_core_web_sm;
   };
 
   textparser = callPackage ../development/python-modules/textparser { };

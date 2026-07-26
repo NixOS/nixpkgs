@@ -311,7 +311,7 @@ in
     package = lib.mkPackageOption pkgs "invidious" { };
 
     settings = lib.mkOption {
-      type = settingsFormat.type;
+      inherit (settingsFormat) type;
       default = { };
       description = ''
         The settings Invidious should use.

@@ -16,31 +16,31 @@ Go only ever has two supported toolchains. With a new minor release, the second 
 Based on this, we align on the following policy for toolchain/builder upgrades for the unstable release:
 
 1. Default toolchain (the `go` package) and builder (`buildGoModule`) are upgraded to the latest minor release of Go as soon as it is released.
-  As it is a mass rebuild, this package will be made against the `staging` branch.
+   As it is a mass rebuild, this package will be made against the `staging` branch.
 
-2. The `go_latest` toolchain and the `buildGoLatestModule` are also bumped directly after release, but the update goes to the `master` branch.
+1. The `go_latest` toolchain and the `buildGoLatestModule` are also bumped directly after release, but the update goes to the `master` branch.
 
-    Packages in `toolchain-latest` SHOULD use `go_latest`/`buildGoLatestModule`.
-    Packages in nixpkgs MUST only use this toolchain/builder if they have a good reason to do so.
-    A comment MUST be added explaining why this is the case for a certain package.
-    It is important to keep the number of packages using this builder within nixpkgs low, so the bump won't cause a mass rebuild.
+   Packages in `toolchain-latest` SHOULD use `go_latest`/`buildGoLatestModule`.
+   Packages in nixpkgs MUST only use this toolchain/builder if they have a good reason to do so.
+   A comment MUST be added explaining why this is the case for a certain package.
+   It is important to keep the number of packages using this builder within nixpkgs low, so the bump won't cause a mass rebuild.
 
-    `go_latest` MUST not point to release candidates of Go.
+   `go_latest` MUST not point to release candidates of Go.
 
-    Consumers outside of nixpkgs on the other hand MAY rely on this toolchain/builder if they prefer being upgraded earlier to the newest toolchain minor version.
+   Consumers outside of nixpkgs on the other hand MAY rely on this toolchain/builder if they prefer being upgraded earlier to the newest toolchain minor version.
 
-3. Packages in `toolchain-breaking` SHOULD pin a toolchain version by using a builder with a fixed Go version (`buildGo1xxModule`).
-  The use of `buildGo1xxModule` MUST be accompanied with a comment explaining why this has a dependency on a specific Go version.
-  The comment should target the Go team in nixpkgs and ease their work in case they have to touch the package (see 5.).
+1. Packages in `toolchain-breaking` SHOULD pin a toolchain version by using a builder with a fixed Go version (`buildGo1xxModule`).
+   The use of `buildGo1xxModule` MUST be accompanied with a comment explaining why this has a dependency on a specific Go version.
+   The comment should target the Go team in nixpkgs and ease their work in case they have to touch the package (see 5.).
 
-4. The builder SHOULD be directly used as package input, not by overriding `buildGoModule` in all-packages.nix, to make this dependency explicit.
+1. The builder SHOULD be directly used as package input, not by overriding `buildGoModule` in all-packages.nix, to make this dependency explicit.
 
-5. Go toolchains MUST be removed soon after they reach end of life, latest with the next security update that won't target them anymore.
+1. Go toolchains MUST be removed soon after they reach end of life, latest with the next security update that won't target them anymore.
 
-    When an end-of-life toolchain is removed, builders that pin the EOL version (according to 3.) will automatically be bumped to the then oldest pinned builder (e.g. Go 1.22 is EOL, `buildGo122Module` is bumped to `buildGo123Module`).
+   When an end-of-life toolchain is removed, builders that pin the EOL version (according to 3.) will automatically be bumped to the then oldest pinned builder (e.g. Go 1.22 is EOL, `buildGo122Module` is bumped to `buildGo123Module`).
 
-    If the package won't build with that builder anymore, the package is marked broken.
-    It is the package maintainer's responsibility to fix the package and get it working with a supported Go toolchain.
+   If the package won't build with that builder anymore, the package is marked broken.
+   It is the package maintainer's responsibility to fix the package and get it working with a supported Go toolchain.
 
 For the stable release, we recognize that (1) removing a Go version, or updating the `go_latest` or `go` packages to a new Go minor release, would be a breaking change, and (2) some packages will need backports (e.g. for security reasons) that require the latest Go version.
 Therefore, on the stable release, new Go versions will be backported to the `release-2x.xx` branch, but the old versions will remain, and `go`, `buildGoModule`, `go_latest`, and `buildGoLatestModule` will remain unchanged.

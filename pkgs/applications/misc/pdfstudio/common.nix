@@ -38,7 +38,7 @@ let
     desktopItems = [
       (makeDesktopItem {
         name = "${pname}";
-        desktopName = desktopName;
+        inherit desktopName;
         genericName = "View and edit PDF files";
         exec = "${pname} %f";
         icon = "${pname}";
@@ -92,7 +92,7 @@ buildFHSEnv {
     inherit broken;
     homepage = "https://www.qoppa.com/${pname}/";
     description = "Easy to use, full-featured PDF editing software";
-    longDescription = longDescription;
+    inherit longDescription;
     sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode

@@ -16,10 +16,10 @@ let
 
   # build nsd with the options needed for the given config
   nsdPkg = pkgs.nsd.override {
-    bind8Stats = cfg.bind8Stats;
-    ipv6 = cfg.ipv6;
+    inherit (cfg) bind8Stats;
+    inherit (cfg) ipv6;
     ratelimit = cfg.ratelimit.enable;
-    rootServer = cfg.rootServer;
+    inherit (cfg) rootServer;
     zoneStats = length (collect (x: (x.zoneStats or null) != null) cfg.zones) > 0;
   };
 
@@ -488,7 +488,7 @@ let
     };
   };
 
-  dnssecZones = (filterAttrs (n: v: if v ? dnssec then v.dnssec else false) zoneConfigs);
+  dnssecZones = filterAttrs (n: v: v.dnssec or false) zoneConfigs;
 
   dnssec = dnssecZones != { };
 

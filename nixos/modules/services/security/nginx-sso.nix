@@ -20,7 +20,7 @@ in
     package = lib.mkPackageOption pkgs "nginx-sso" { };
 
     configuration = lib.mkOption {
-      type = format.type;
+      inherit (format) type;
       default = { };
       example = lib.literalExpression ''
         {

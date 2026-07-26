@@ -13,7 +13,7 @@
         networking.firewall.allowedTCPPorts = [ 80 ];
       };
     service =
-      { ... }:
+      _:
       {
         services.ghostunnel.enable = true;
         services.ghostunnel.servers."plain-old" = {

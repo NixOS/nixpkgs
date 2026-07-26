@@ -25,7 +25,7 @@
     in
     stdenv.mkDerivation (finalAttrs: {
       pname = finalAttrs.meta.mainProgram + "-with-plugins";
-      version = ide.version;
+      inherit (ide) version;
       src = ide;
       dontInstall = true;
       dontStrip = true;

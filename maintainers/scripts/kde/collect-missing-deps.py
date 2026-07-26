@@ -4,18 +4,18 @@ import pathlib
 
 OK_MISSING = {
     # we don't use precompiled QML
-    'Qt6QuickCompiler',
-    'Qt6QmlCompilerPlusPrivate',
+    "Qt6QuickCompiler",
+    "Qt6QmlCompilerPlusPrivate",
     # usually used for version numbers
-    'Git',
+    "Git",
     # useless by itself, will warn if something else is not found
-    'PkgConfig',
+    "PkgConfig",
     # license verification
-    'ReuseTool',
+    "ReuseTool",
     # dev only
-    'ClangFormat',
+    "ClangFormat",
     # doesn't exist
-    'Qt6X11Extras',
+    "Qt6X11Extras",
 }
 
 OK_MISSING_BY_PACKAGE = {
@@ -36,7 +36,7 @@ OK_MISSING_BY_PACKAGE = {
     },
     "extra-cmake-modules": {
         "Sphinx",  # only used for docs, bloats closure size
-        "QCollectionGenerator"
+        "QCollectionGenerator",
     },
     "gwenview": {
         "Tiff",  # duplicate?
@@ -118,8 +118,9 @@ OK_MISSING_BY_PACKAGE = {
     },
     "syntax-highlighting": {
         "XercesC",  # only used for extra validation at build time
-    }
+    },
 }
+
 
 def main():
     here = pathlib.Path(__file__).parent.parent.parent.parent
@@ -134,9 +135,15 @@ def main():
             for line in fd:
                 line = line.strip()
                 if line.startswith("--   No package '"):
-                    package = line.removeprefix("--   No package '").removesuffix("' found")
+                    package = line.removeprefix("--   No package '").removesuffix(
+                        "' found"
+                    )
                     missing.append(package)
-                if line == "-- The following OPTIONAL packages have not been found:" or line == "-- The following RECOMMENDED packages have not been found:":
+                if (
+                    line == "-- The following OPTIONAL packages have not been found:"
+                    or line
+                    == "-- The following RECOMMENDED packages have not been found:"
+                ):
                     is_in_block = True
                 elif line.startswith("--") and is_in_block:
                     is_in_block = False
@@ -147,7 +154,10 @@ def main():
         missing = {
             package
             for package in missing
-            if not any(package.startswith(i) for i in OK_MISSING | OK_MISSING_BY_PACKAGE.get(pname, set()))
+            if not any(
+                package.startswith(i)
+                for i in OK_MISSING | OK_MISSING_BY_PACKAGE.get(pname, set())
+            )
         }
 
         if missing:
@@ -156,5 +166,6 @@ def main():
                 print("  -", line)
             print()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

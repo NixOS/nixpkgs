@@ -48,9 +48,7 @@ let
   applicationAttr = head applicationList;
   applicationPackage = mkIf applicationCheck applicationAttr;
   applicationPackageExe = getExe applicationAttr;
-  serverPackageExe = (
-    if cfg.highPriority then "${config.security.wrapperDir}/wivrn-server" else getExe cfg.package
-  );
+  serverPackageExe = if cfg.highPriority then "${config.security.wrapperDir}/wivrn-server" else getExe cfg.package;
 
   # Manage strings
   applicationStrings = tail applicationList;
@@ -131,7 +129,7 @@ in
       config = {
         enable = mkEnableOption "configuration for WiVRn";
         json = mkOption {
-          type = configFormat.type;
+          inherit (configFormat) type;
           description = ''
             Configuration for WiVRn. The attributes are serialized to JSON in config.json. The server will fallback to default values for any missing attributes.
 
@@ -203,8 +201,7 @@ in
           enableDefaultPath = false;
 
           unitConfig.ConditionUser = "!@system";
-          serviceConfig = (
-            if cfg.highPriority then
+          serviceConfig = if cfg.highPriority then
               {
                 ExecStart = serverExec;
               }
@@ -228,8 +225,7 @@ in
                 RemoveIPC = true;
                 RestrictNamespaces = true;
                 RestrictSUIDSGID = true;
-              }
-          );
+              };
           wantedBy = mkIf cfg.autoStart [ "default.target" ];
           restartTriggers = [
             cfg.package

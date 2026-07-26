@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     version = testers.testVersion {
       package = libtree;
       command = "libtree --version";
-      version = finalAttrs.version;
+      inherit (finalAttrs) version;
     };
     checkCoreUtils =
       runCommand "${finalAttrs.pname}-ls-test"

@@ -641,7 +641,7 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   ];
 
   propagatedCxxBuildInputs =
-    [ ] ++ lib.optionals MPISupport [ mpi ] ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
+    lib.optionals MPISupport [ mpi ] ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
 
   # Tests take a long time and may be flaky, so just sanity-check imports
   doCheck = false;

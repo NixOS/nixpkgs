@@ -1,4 +1,4 @@
-{ }:
+_:
 
 self: super: {
   buildPhase = ''

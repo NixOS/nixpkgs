@@ -281,8 +281,8 @@ While the monolithic CUDA Toolkit runfile installer is no longer provided, [`cud
 Whenever a new version of a redistributable manifest is made available:
 
 1. Check the corresponding README.md in `pkgs/development/cuda-modules/_cuda/manifests` for the URL to use when vendoring manifests.
-2. Update the manifest version used in construction of each CUDA package set in `pkgs/top-level/cuda-packages.nix`.
-3. Update package expressions in `pkgs/development/cuda-modules/packages`.
+1. Update the manifest version used in construction of each CUDA package set in `pkgs/top-level/cuda-packages.nix`.
+1. Update package expressions in `pkgs/development/cuda-modules/packages`.
 
 Updating package expressions amounts to:
 
@@ -293,7 +293,7 @@ Updating package expressions amounts to:
 #### Updating supported compilers and GPUs {#cuda-updating-supported-compilers-and-gpus}
 
 1. Update `nvccCompatibilities` in `pkgs/development/cuda-modules/_cuda/db/bootstrap/nvcc.nix` to include the newest release of NVCC, as well as any newly supported host compilers.
-2. Update `cudaCapabilityToInfo` in `pkgs/development/cuda-modules/_cuda/db/bootstrap/cuda.nix` to include any new GPUs supported by the new release of CUDA.
+1. Update `cudaCapabilityToInfo` in `pkgs/development/cuda-modules/_cuda/db/bootstrap/cuda.nix` to include any new GPUs supported by the new release of CUDA.
 
 #### Updating the CUDA package set {#cuda-updating-the-cuda-package-set}
 
@@ -306,26 +306,26 @@ As described in [Using `cudaPackages.pkgs`](#cuda-using-cudapackages-pkgs), the 
 :::
 
 1. Include a new `cudaPackages_<major>_<minor>` package set in `pkgs/top-level/cuda-packages.nix` and inherit it in `pkgs/top-level/all-packages.nix`.
-2. Successfully build the closure of the new package set, updating expressions in `pkgs/development/cuda-modules/packages` as needed. Below are some common failures:
+1. Successfully build the closure of the new package set, updating expressions in `pkgs/development/cuda-modules/packages` as needed. Below are some common failures:
 
-| Unable to ...  | During ...                       | Reason                                           | Solution                   | Note                                                         |
+| Unable to ... | During ... | Reason | Solution | Note |
 | -------------- | -------------------------------- | ------------------------------------------------ | -------------------------- | ------------------------------------------------------------ |
-| Find headers   | `configurePhase` or `buildPhase` | Missing dependency on a `dev` output             | Add the missing dependency | The `dev` output typically contains the headers               |
-| Find libraries | `configurePhase`                 | Missing dependency on a `dev` output             | Add the missing dependency | The `dev` output typically contains CMake configuration files |
-| Find libraries | `buildPhase` or `patchelf`       | Missing dependency on a `lib` or `static` output | Add the missing dependency | The `lib` or `static` output typically contains the libraries |
+| Find headers | `configurePhase` or `buildPhase` | Missing dependency on a `dev` output | Add the missing dependency | The `dev` output typically contains the headers |
+| Find libraries | `configurePhase` | Missing dependency on a `dev` output | Add the missing dependency | The `dev` output typically contains CMake configuration files |
+| Find libraries | `buildPhase` or `patchelf` | Missing dependency on a `lib` or `static` output | Add the missing dependency | The `lib` or `static` output typically contains the libraries |
 
 ::: {.note}
 Two utility derivations ease testing updates to the package set:
 
 - `cudaPackages.tests.redists-unpacked`: the `src` of each redistributable package unpacked and `symlinkJoin`-ed
 - `cudaPackages.tests.redists-installed`: each output of each redistributable package `symlinkJoin`-ed
-:::
+  :::
 
 Failure to run the resulting binary is typically the most challenging to diagnose, as it may involve a combination of the aforementioned issues. This type of failure typically occurs when a library attempts to load or open a library it depends on that it does not declare in its `DT_NEEDED` section. Try the following debugging steps:
 
 1. First ensure that dependencies are patched with [`autoAddDriverRunpath`](https://search.nixos.org/packages?channel=unstable&type=packages&query=autoAddDriverRunpath).
-2. Failing that, try running the application with [`nixGL`](https://github.com/guibou/nixGL) or a similar wrapper tool.
-3. If that works, it likely means that the application is attempting to load a library that is not in the `RPATH` or `RUNPATH` of the binary.
+1. Failing that, try running the application with [`nixGL`](https://github.com/guibou/nixGL) or a similar wrapper tool.
+1. If that works, it likely means that the application is attempting to load a library that is not in the `RPATH` or `RUNPATH` of the binary.
 
 ### Writing tests {#cuda-writing-tests}
 

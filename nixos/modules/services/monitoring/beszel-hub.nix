@@ -66,7 +66,7 @@ in
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
-      environment = cfg.environment;
+      inherit (cfg) environment;
 
       serviceConfig = {
         ExecStartPre = [

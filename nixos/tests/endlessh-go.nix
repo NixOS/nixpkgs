@@ -5,7 +5,7 @@
 
   nodes = {
     server =
-      { ... }:
+      _:
       {
         services.endlessh-go = {
           enable = true;

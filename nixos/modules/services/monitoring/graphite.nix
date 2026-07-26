@@ -10,7 +10,7 @@ let
   opt = options.services.graphite;
   writeTextOrNull = f: t: lib.mapNullable (pkgs.writeTextDir f) t;
 
-  dataDir = cfg.dataDir;
+  inherit (cfg) dataDir;
   staticDir = cfg.dataDir + "/static";
 
   graphiteLocalSettingsDir =

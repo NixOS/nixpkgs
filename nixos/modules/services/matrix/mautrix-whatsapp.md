@@ -6,7 +6,7 @@
 
 1. Set [](#opt-services.mautrix-whatsapp.enable) to `true`. The service will use
    SQLite by default.
-2. To create your configuration check the default configuration for
+1. To create your configuration check the default configuration for
    [](#opt-services.mautrix-whatsapp.settings). To obtain the complete default
    configuration, run
    `nix-shell -p mautrix-whatsapp --run "mautrix-whatsapp -c default.yaml -e"`.

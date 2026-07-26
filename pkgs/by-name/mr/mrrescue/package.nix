@@ -20,7 +20,7 @@ let
   desktopItem = makeDesktopItem {
     name = "mrrescue";
     exec = "mrrescue";
-    icon = icon;
+    inherit icon;
     comment = "Arcade-style fire fighting game";
     desktopName = "Mr. Rescue";
     genericName = "mrrescue";

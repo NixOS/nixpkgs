@@ -559,8 +559,8 @@ in
     };
 
     services.phpfpm.pools.librenms = lib.mkIf (!cfg.distributedPoller.enable) {
-      user = cfg.user;
-      group = cfg.group;
+      inherit (cfg) user;
+      inherit (cfg) group;
       inherit (package) phpPackage;
       phpOptions = toKeyValue cfg.phpOptions;
       settings = {

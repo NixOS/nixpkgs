@@ -6,7 +6,7 @@
 
   nodes = {
     peerflix =
-      { ... }:
+      _:
       {
         services.peerflix.enable = true;
       };

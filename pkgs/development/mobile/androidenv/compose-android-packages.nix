@@ -43,15 +43,13 @@ in
             addons ? [ ],
           }:
           let
-            mkRepoRuby = (
-              ruby.withPackages (
+            mkRepoRuby = ruby.withPackages (
                 pkgs: with pkgs; [
                   slop
                   curb
                   nokogiri
                 ]
-              )
-            );
+              );
             mkRepoRubyArguments = lib.lists.flatten [
               (map (package: [
                 "--packages"
@@ -217,7 +215,7 @@ let
                   finalAttrs: previousAttrs: {
                     # fetchurl prioritize `pname` and `version` over the specified `name`,
                     # so specify custom `name` in an override.
-                    name = baseNameOf (lib.head (finalAttrs.urls));
+                    name = baseNameOf (lib.head finalAttrs.urls);
                   }
                 )
             ) validArchives
@@ -430,8 +428,7 @@ lib.recurseIntoAttrs rec {
       ;
   };
 
-  deployAndroidPackage = (
-    {
+  deployAndroidPackage = {
       package,
       buildInputs ? [ ],
       patchInstructions ? "",
@@ -456,8 +453,7 @@ lib.recurseIntoAttrs rec {
         };
       }
       // extraParams
-    )
-  );
+    );
 
   all = allPackages;
 
@@ -589,7 +585,7 @@ lib.recurseIntoAttrs rec {
 
           instructions = lib.listToAttrs (
             map (package: {
-              name = package.name;
+              inherit (package) name;
               value = lib.optionalString (lib.hasPrefix "google_apis" type) ''
                 # Patch 'google_apis' system images so they're recognized by the sdk.
                 # Without this, `android list targets` shows 'Tag/ABIs : no ABIs' instead
@@ -765,7 +761,7 @@ lib.recurseIntoAttrs rec {
             identifier:
             let
               package = allArchives.extras.${identifier};
-              path = package.path;
+              inherit (package) path;
               extras = callPackage ./extras.nix {
                 inherit
                   deployAndroidPackage

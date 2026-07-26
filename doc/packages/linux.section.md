@@ -118,18 +118,18 @@ $ pkgs/os-specific/linux/kernel/update.sh
 
 The change gets submitted like this:
 
-* File a PR against `staging-nixos`.
-  * Add a `backport staging-nixos-XX.XX` label for an automated backport.
+- File a PR against `staging-nixos`.
+  - Add a `backport staging-nixos-XX.XX` label for an automated backport.
     By using an additional PR, we get the automatic backport against stable without manual cherry-picks.
-* Merge into `staging-nixos` or `staging-nixos-XX.XX`.
-* File as PR from `staging-nixos` against `master` or `staging-nixos-XX.XX` against `release-xx.xx`.
-* When all status checks are green, merge.
+- Merge into `staging-nixos` or `staging-nixos-XX.XX`.
+- File as PR from `staging-nixos` against `master` or `staging-nixos-XX.XX` against `release-xx.xx`.
+- When all status checks are green, merge.
 
 ### Add a new (major) version of the Linux kernel {#sec-linux-add-new-kernel-version}
 
-* When running `./pkgs/os-specific/linux/kernel/update.sh`, new kernel majors get discovered automatically.
-* Prepare all Nix expressions for the new kernel
-  * Instantiate the new kernel in `pkgs/top-level/linux-kernels.nix` in the `kernels`-section.
+- When running `./pkgs/os-specific/linux/kernel/update.sh`, new kernel majors get discovered automatically.
+- Prepare all Nix expressions for the new kernel
+  - Instantiate the new kernel in `pkgs/top-level/linux-kernels.nix` in the `kernels`-section.
     ```nix
     {
       linux_X_Y = callPackage ../os-specific/linux/kernel/mainline.nix {
@@ -140,14 +140,14 @@ The change gets submitted like this:
       };
     }
     ```
-  * Instantiate the package-set in `vanillaPackages`:
+  - Instantiate the package-set in `vanillaPackages`:
     ```nix
     {
       linux_X_Y = recurseIntoAttrs (packagesFor kernels.linux_X_Y);
     }
     ```
-  * Update `linux_latest` to the new attribute.
-* __SQUASH__ the changes into the `linux: init at …` commit.
+  - Update `linux_latest` to the new attribute.
+- __SQUASH__ the changes into the `linux: init at …` commit.
 
 ### Policy for accepting new kernel flavours {#sec-linux-new-kernels}
 

@@ -6,7 +6,7 @@ in
   imports = [
     # Module A
     (
-      { ... }:
+      _:
       {
         options.mergedName = mkOption {
           default = { };
@@ -24,7 +24,7 @@ in
     )
     # Module B
     (
-      { ... }:
+      _:
       {
         options.mergedName = mkOption {
           type = types.attrsWith {

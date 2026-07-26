@@ -106,7 +106,7 @@ in
 
     users.users = mkIf (cfg.user == "rtorrent") {
       rtorrent = {
-        group = cfg.group;
+        inherit (cfg) group;
         shell = pkgs.bashInteractive;
         home = cfg.dataDir;
         description = "rtorrent Daemon user";
@@ -114,7 +114,7 @@ in
       };
     };
 
-    networking.firewall.allowedTCPPorts = mkIf (cfg.openFirewall) [ cfg.port ];
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
 
     services.rtorrent.configText = mkBefore ''
       # Instance layout (base paths)

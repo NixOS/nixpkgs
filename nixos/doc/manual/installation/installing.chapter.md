@@ -4,119 +4,119 @@
 
 To begin the installation, you have to boot your computer from the install drive.
 
-1.   Plug in the install drive. Then turn on or restart your computer.
+1. Plug in the install drive. Then turn on or restart your computer.
 
-2.   Open the boot menu by pressing the appropriate key, which is usually shown
-     on the display on early boot.
-     Select the USB flash drive (the option usually contains the word "USB").
-     If you choose the incorrect drive, your computer will likely continue to
-     boot as normal. In that case restart your computer and pick a
-     different drive.
+1. Open the boot menu by pressing the appropriate key, which is usually shown
+   on the display on early boot.
+   Select the USB flash drive (the option usually contains the word "USB").
+   If you choose the incorrect drive, your computer will likely continue to
+   boot as normal. In that case restart your computer and pick a
+   different drive.
 
-     ::: {.note}
-     The key to open the boot menu is different across computer brands and even
-     models. It can be [F12]{.keycap}, but also [F1]{.keycap},
-     [F9]{.keycap}, [F10]{.keycap}, [Enter]{.keycap}, [Del]{.keycap},
-     [Esc]{.keycap} or another function key. If you are unsure and don't see
-     it on the early boot screen, you can search online for your computers
-     brand, model followed by "boot from usb".
-     The computer might not even have that feature, so you have to go into the
-     BIOS/UEFI settings to change the boot order. Again, search online for
-     details about your specific computer model.
+   ::: {.note}
+   The key to open the boot menu is different across computer brands and even
+   models. It can be [F12]{.keycap}, but also [F1]{.keycap},
+   [F9]{.keycap}, [F10]{.keycap}, [Enter]{.keycap}, [Del]{.keycap},
+   [Esc]{.keycap} or another function key. If you are unsure and don't see
+   it on the early boot screen, you can search online for your computers
+   brand, model followed by "boot from usb".
+   The computer might not even have that feature, so you have to go into the
+   BIOS/UEFI settings to change the boot order. Again, search online for
+   details about your specific computer model.
 
-     For Apple computers with Intel processors press and hold the [⌥]{.keycap}
-     (Option or Alt) key until you see the boot menu. On Apple silicon press
-     and hold the power button.
-     :::
+   For Apple computers with Intel processors press and hold the [⌥]{.keycap}
+   (Option or Alt) key until you see the boot menu. On Apple silicon press
+   and hold the power button.
+   :::
 
-     ::: {.note}
-     If your computer supports both BIOS and UEFI boot, choose the UEFI option.
-     You will likely need to disable "Secure Boot" to use the UEFI option. The exact steps vary by device manufacturer but generally "Secure Boot" will be listed under "Boot", "Security" or "Advanced" in the BIOS/UEFI menu.
-     :::
+   ::: {.note}
+   If your computer supports both BIOS and UEFI boot, choose the UEFI option.
+   You will likely need to disable "Secure Boot" to use the UEFI option. The exact steps vary by device manufacturer but generally "Secure Boot" will be listed under "Boot", "Security" or "Advanced" in the BIOS/UEFI menu.
+   :::
 
-     ::: {.note}
-     If you use a CD for the installation, the computer will probably boot from
-     it automatically. If not, choose the option containing the word "CD" from
-     the boot menu.
-     :::
+   ::: {.note}
+   If you use a CD for the installation, the computer will probably boot from
+   it automatically. If not, choose the option containing the word "CD" from
+   the boot menu.
+   :::
 
-3.   Shortly after selecting the appropriate boot drive, you should be
-     presented with a menu with different installer options. Leave the default
-     and wait (or press [Enter]{.keycap} to speed up).
+1. Shortly after selecting the appropriate boot drive, you should be
+   presented with a menu with different installer options. Leave the default
+   and wait (or press [Enter]{.keycap} to speed up).
 
-4.   The graphical images will start their corresponding desktop environment
-     and the graphical installer, which can take some time. The minimal images
-     will boot to a command line. You have to follow the instructions in
-     [](#sec-installation-manual) there.
+1. The graphical images will start their corresponding desktop environment
+   and the graphical installer, which can take some time. The minimal images
+   will boot to a command line. You have to follow the instructions in
+   [](#sec-installation-manual) there.
 
 ## Graphical Installation {#sec-installation-graphical}
 
 The graphical installer is recommended for desktop users and will guide you
 through the installation.
 
-1.   In the "Welcome" screen, you can select the language of the Installer and
-     the installed system.
+1. In the "Welcome" screen, you can select the language of the Installer and
+   the installed system.
 
-     ::: {.tip}
-     Leaving the language as "American English" will make it easier to search for
-     error messages in a search engine or to report an issue.
-     :::
+   ::: {.tip}
+   Leaving the language as "American English" will make it easier to search for
+   error messages in a search engine or to report an issue.
+   :::
 
-2.   Next you should choose your location to have the timezone set correctly.
-     You can actually click on the map!
+1. Next you should choose your location to have the timezone set correctly.
+   You can actually click on the map!
 
-     ::: {.note}
-     The installer will use an online service to guess your location based on
-     your public IP address.
-     :::
+   ::: {.note}
+   The installer will use an online service to guess your location based on
+   your public IP address.
+   :::
 
-3.   Then you can select the keyboard layout. The default keyboard model should
-     work well with most desktop keyboards. If you have a special keyboard or
-     notebook, your model might be in the list. Select the language you are most
-     comfortable typing in.
+1. Then you can select the keyboard layout. The default keyboard model should
+   work well with most desktop keyboards. If you have a special keyboard or
+   notebook, your model might be in the list. Select the language you are most
+   comfortable typing in.
 
-4.   On the "Users" screen, you have to type in your display name, login name
-     and password. You can also enable an option to automatically login to the
-     desktop.
+1. On the "Users" screen, you have to type in your display name, login name
+   and password. You can also enable an option to automatically login to the
+   desktop.
 
-5.   Then you have the option to choose a desktop environment. If you want to
-     create a custom setup with a window manager, you can select "No desktop".
+1. Then you have the option to choose a desktop environment. If you want to
+   create a custom setup with a window manager, you can select "No desktop".
 
-     ::: {.tip}
-     If you don't have a favorite desktop and don't know which one to choose,
-     you can stick to either GNOME or Plasma. They have a quite different
-     design, so you should choose whichever you like better.
-     They are both popular choices and well tested on NixOS.
-     :::
+   ::: {.tip}
+   If you don't have a favorite desktop and don't know which one to choose,
+   you can stick to either GNOME or Plasma. They have a quite different
+   design, so you should choose whichever you like better.
+   They are both popular choices and well tested on NixOS.
+   :::
 
-6.   You have the option to allow unfree software in the next screen.
+1. You have the option to allow unfree software in the next screen.
 
-7.   The easiest option in the "Partitioning" screen is "Erase disk", which will
-     delete all data from the selected disk and install the system on it.
-     Also select "Swap (with Hibernation)" in the dropdown below it.
-     You have the option to encrypt the whole disk with LUKS.
+1. The easiest option in the "Partitioning" screen is "Erase disk", which will
+   delete all data from the selected disk and install the system on it.
+   Also select "Swap (with Hibernation)" in the dropdown below it.
+   You have the option to encrypt the whole disk with LUKS.
 
-     ::: {.note}
-     At the top left you see if the Installer was booted with BIOS or UEFI. If
-     you know your system supports UEFI and it shows "BIOS", reboot with the
-     correct option.
-     :::
+   ::: {.note}
+   At the top left you see if the Installer was booted with BIOS or UEFI. If
+   you know your system supports UEFI and it shows "BIOS", reboot with the
+   correct option.
+   :::
 
-     ::: {.warning}
-     Make sure you have selected the correct disk at the top and that no
-     valuable data is still on the disk! It will be deleted when
-     formatting the disk.
-     :::
+   ::: {.warning}
+   Make sure you have selected the correct disk at the top and that no
+   valuable data is still on the disk! It will be deleted when
+   formatting the disk.
+   :::
 
-8.   Check the choices you made in the "Summary" and click "Install".
+1. Check the choices you made in the "Summary" and click "Install".
 
-     ::: {.note}
-     The installation takes about 15 minutes. The time varies based on the
-     selected desktop environment, internet connection speed and disk write speed.
-     :::
+   ::: {.note}
+   The installation takes about 15 minutes. The time varies based on the
+   selected desktop environment, internet connection speed and disk write speed.
+   :::
 
-9.  When the install is complete, remove the USB flash drive and
-    reboot into your new system!
+1. When the install is complete, remove the USB flash drive and
+   reboot into your new system!
 
 ## Manual Installation {#sec-installation-manual}
 
@@ -148,17 +148,17 @@ To install over a serial port connect with `115200n8` (e.g.
 entries, select the serial console boot entry.
 
 ### Networking in the installer {#sec-installation-manual-networking}
+
 []{#sec-installation-booting-networking} <!-- legacy anchor -->
 
-The boot process should have brought up networking (check `ip
-a`). Networking is necessary for the installer, since it will
+The boot process should have brought up networking (check `ip a`). Networking is necessary for the installer, since it will
 download lots of stuff (such as source tarballs or Nixpkgs channel
 binaries). It's best if you have a DHCP server on your network.
 Otherwise configure networking manually using `ip`.
 
 You can configure the network, Wi-Fi included, through NetworkManager.
 Using the `nmtui` program, you can do so even in a non-graphical session.
- If you prefer to configure the network manually, disable NetworkManager with
+If you prefer to configure the network manually, disable NetworkManager with
 `systemctl stop NetworkManager`.
 
 If you would like to continue the installation from a different machine
@@ -171,6 +171,7 @@ must set a password for either `root` or `nixos` with `passwd` to be
 able to login.
 
 ### Partitioning and formatting {#sec-installation-manual-partitioning}
+
 []{#sec-installation-partitioning} <!-- legacy anchor -->
 
 The NixOS installer doesn't do any partitioning or formatting, so you
@@ -186,6 +187,7 @@ The recommended partition scheme differs depending if the computer uses
 *Legacy Boot* or *UEFI*.
 
 #### UEFI (GPT) {#sec-installation-manual-partitioning-UEFI}
+
 []{#sec-installation-partitioning-UEFI} <!-- legacy anchor -->
 
 Here's an example partition scheme for UEFI, using `/dev/sda` as the
@@ -196,48 +198,50 @@ You can safely ignore `parted`'s informational message about needing to
 update /etc/fstab.
 :::
 
-1.  Create a *GPT* partition table.
+1. Create a *GPT* partition table.
 
-    ```ShellSession
-    # parted /dev/sda -- mklabel gpt
-    ```
+   ```ShellSession
+   # parted /dev/sda -- mklabel gpt
+   ```
 
-2.  Add the *root* partition. This will fill the disk except for the end
-    part, where the swap will live, and the space left in front (512MiB)
-    which will be used by the boot partition.
+1. Add the *root* partition. This will fill the disk except for the end
+   part, where the swap will live, and the space left in front (512MiB)
+   which will be used by the boot partition.
 
-    ```ShellSession
-    # parted /dev/sda -- mkpart root ext4 512MB -8GB
-    ```
+   ```ShellSession
+   # parted /dev/sda -- mkpart root ext4 512MB -8GB
+   ```
 
-3.  Next, add a *swap* partition. The size required will vary according
-    to needs, here a 8GB one is created.
+1. Next, add a *swap* partition. The size required will vary according
+   to needs, here a 8GB one is created.
 
-    ```ShellSession
-    # parted /dev/sda -- mkpart swap linux-swap -8GB 100%
-    ```
+   ```ShellSession
+   # parted /dev/sda -- mkpart swap linux-swap -8GB 100%
+   ```
 
-    ::: {.note}
-    The swap partition size rules are no different than for other Linux
-    distributions.
-    :::
+   ::: {.note}
+   The swap partition size rules are no different than for other Linux
+   distributions.
+   :::
 
-4.  Finally, the *boot* partition. NixOS by default uses the ESP (EFI
-    system partition) as its */boot* partition. It uses the initially
-    reserved 512MiB at the start of the disk.
+1. Finally, the *boot* partition. NixOS by default uses the ESP (EFI
+   system partition) as its */boot* partition. It uses the initially
+   reserved 512MiB at the start of the disk.
 
-    ```ShellSession
-    # parted /dev/sda -- mkpart ESP fat32 1MB 512MB
-    # parted /dev/sda -- set 3 esp on
-    ```
-    ::: {.note}
-    In case you decided to not create a swap partition, replace `3` by `2`. To be sure of the id number of ESP, run `parted --list`.
-    :::
+   ```ShellSession
+   # parted /dev/sda -- mkpart ESP fat32 1MB 512MB
+   # parted /dev/sda -- set 3 esp on
+   ```
+
+   ::: {.note}
+   In case you decided to not create a swap partition, replace `3` by `2`. To be sure of the id number of ESP, run `parted --list`.
+   :::
 
 Once complete, you can follow with
 [](#sec-installation-manual-partitioning-formatting).
 
 #### Legacy Boot (MBR) {#sec-installation-manual-partitioning-MBR}
+
 []{#sec-installation-partitioning-MBR} <!-- legacy anchor -->
 
 Here's an example partition scheme for Legacy Boot, using `/dev/sda` as
@@ -248,264 +252,271 @@ You can safely ignore `parted`'s informational message about needing to
 update /etc/fstab.
 :::
 
-1.  Create a *MBR* partition table.
+1. Create a *MBR* partition table.
 
-    ```ShellSession
-    # parted /dev/sda -- mklabel msdos
-    ```
+   ```ShellSession
+   # parted /dev/sda -- mklabel msdos
+   ```
 
-2.  Add the *root* partition. This will fill the disk except for the
-    end part, where the swap will live.
+1. Add the *root* partition. This will fill the disk except for the
+   end part, where the swap will live.
 
-    ```ShellSession
-    # parted /dev/sda -- mkpart primary 1MB -8GB
-    ```
+   ```ShellSession
+   # parted /dev/sda -- mkpart primary 1MB -8GB
+   ```
 
-3.  Set the root partition's boot flag to on. This allows the disk to be booted from.
+1. Set the root partition's boot flag to on. This allows the disk to be booted from.
 
-    ```ShellSession
-    # parted /dev/sda -- set 1 boot on
-    ```
+   ```ShellSession
+   # parted /dev/sda -- set 1 boot on
+   ```
 
-4.  Finally, add a *swap* partition. The size required will vary
-    according to needs, here a 8GB one is created.
+1. Finally, add a *swap* partition. The size required will vary
+   according to needs, here a 8GB one is created.
 
-    ```ShellSession
-    # parted /dev/sda -- mkpart primary linux-swap -8GB 100%
-    ```
+   ```ShellSession
+   # parted /dev/sda -- mkpart primary linux-swap -8GB 100%
+   ```
 
-    ::: {.note}
-    The swap partition size rules are no different than for other Linux
-    distributions.
-    :::
+   ::: {.note}
+   The swap partition size rules are no different than for other Linux
+   distributions.
+   :::
 
 Once complete, you can follow with
 [](#sec-installation-manual-partitioning-formatting).
 
 #### Formatting {#sec-installation-manual-partitioning-formatting}
+
 []{#sec-installation-partitioning-formatting} <!-- legacy anchor -->
 
 Use the following commands:
 
--   For initialising Ext4 partitions: `mkfs.ext4`. It is recommended
-    that you assign a unique symbolic label to the file system using the
-    option `-L label`, since this makes the file system configuration
-    independent from device changes. For example:
+- For initialising Ext4 partitions: `mkfs.ext4`. It is recommended
+  that you assign a unique symbolic label to the file system using the
+  option `-L label`, since this makes the file system configuration
+  independent from device changes. For example:
 
-    ```ShellSession
-    # mkfs.ext4 -L nixos /dev/sda1
-    ```
+  ```ShellSession
+  # mkfs.ext4 -L nixos /dev/sda1
+  ```
 
--   For creating swap partitions: `mkswap`. Again it's recommended to
-    assign a label to the swap partition: `-L label`. For example:
+- For creating swap partitions: `mkswap`. Again it's recommended to
+  assign a label to the swap partition: `-L label`. For example:
 
-    ```ShellSession
-    # mkswap -L swap /dev/sda2
-    ```
+  ```ShellSession
+  # mkswap -L swap /dev/sda2
+  ```
 
--   **UEFI systems**
+- **UEFI systems**
 
-    For creating boot partitions: `mkfs.fat`. Again it's recommended
-    to assign a label to the boot partition: `-n label`. For
-    example:
+  For creating boot partitions: `mkfs.fat`. Again it's recommended
+  to assign a label to the boot partition: `-n label`. For
+  example:
 
-    ```ShellSession
-    # mkfs.fat -F 32 -n boot /dev/sda3
-    ```
+  ```ShellSession
+  # mkfs.fat -F 32 -n boot /dev/sda3
+  ```
 
--   For creating LVM volumes, the LVM commands, e.g., `pvcreate`,
-    `vgcreate`, and `lvcreate`.
+- For creating LVM volumes, the LVM commands, e.g., `pvcreate`,
+  `vgcreate`, and `lvcreate`.
 
--   For creating software RAID devices, use `mdadm`.
+- For creating software RAID devices, use `mdadm`.
 
 ### Installing {#sec-installation-manual-installing}
+
 []{#sec-installation-installing} <!-- legacy anchor -->
 
-1.  Mount the target file system on which NixOS should be installed on
-    `/mnt`, e.g.
+1. Mount the target file system on which NixOS should be installed on
+   `/mnt`, e.g.
 
-    ```ShellSession
-    # mount /dev/disk/by-label/nixos /mnt
-    ```
+   ```ShellSession
+   # mount /dev/disk/by-label/nixos /mnt
+   ```
 
-2.  **UEFI systems**
+1. **UEFI systems**
 
-    Mount the boot file system on `/mnt/boot`, e.g.
+   Mount the boot file system on `/mnt/boot`, e.g.
 
-    ```ShellSession
-    # mkdir -p /mnt/boot
-    # mount -o umask=077 /dev/disk/by-label/boot /mnt/boot
-    ```
+   ```ShellSession
+   # mkdir -p /mnt/boot
+   # mount -o umask=077 /dev/disk/by-label/boot /mnt/boot
+   ```
 
-3.  If your machine has a limited amount of memory, you may want to
-    activate swap devices now (`swapon device`).
-    The installer (or rather, the build actions that it
-    may spawn) may need quite a bit of RAM, depending on your
-    configuration.
+1. If your machine has a limited amount of memory, you may want to
+   activate swap devices now (`swapon device`).
+   The installer (or rather, the build actions that it
+   may spawn) may need quite a bit of RAM, depending on your
+   configuration.
 
-    ```ShellSession
-    # swapon /dev/sda2
-    ```
+   ```ShellSession
+   # swapon /dev/sda2
+   ```
 
-4.  You now need to create a file `/mnt/etc/nixos/configuration.nix`
-    that specifies the intended configuration of the system. This is
-    because NixOS has a *declarative* configuration model: you create or
-    edit a description of the desired configuration of your system, and
-    then NixOS takes care of making it happen. The syntax of the NixOS
-    configuration file is described in [](#sec-configuration-syntax),
-    while a list of available configuration options appears in
-    [](#ch-options). A minimal example is shown in
-    [Example: NixOS Configuration](#ex-config).
+1. You now need to create a file `/mnt/etc/nixos/configuration.nix`
+   that specifies the intended configuration of the system. This is
+   because NixOS has a *declarative* configuration model: you create or
+   edit a description of the desired configuration of your system, and
+   then NixOS takes care of making it happen. The syntax of the NixOS
+   configuration file is described in [](#sec-configuration-syntax),
+   while a list of available configuration options appears in
+   [](#ch-options). A minimal example is shown in
+   [Example: NixOS Configuration](#ex-config).
 
-    This command accepts an optional `--flake` option, to also generate a
-    `flake.nix` file, if you want to set up a flake-based configuration.
+   This command accepts an optional `--flake` option, to also generate a
+   `flake.nix` file, if you want to set up a flake-based configuration.
 
-    The command `nixos-generate-config` can generate an initial
-    configuration file for you:
+   The command `nixos-generate-config` can generate an initial
+   configuration file for you:
 
-    ```ShellSession
-    # nixos-generate-config --root /mnt
-    ```
+   ```ShellSession
+   # nixos-generate-config --root /mnt
+   ```
 
-    You should then edit `/mnt/etc/nixos/configuration.nix` to suit your
-    needs:
+   You should then edit `/mnt/etc/nixos/configuration.nix` to suit your
+   needs:
 
-    ```ShellSession
-    # nano /mnt/etc/nixos/configuration.nix
-    ```
+   ```ShellSession
+   # nano /mnt/etc/nixos/configuration.nix
+   ```
 
-    If you're using the graphical ISO image, other editors may be
-    available (such as `vim`). If you have network access, you can also
-    install other editors -- for instance, you can install Emacs by
-    running `nix-env -f '<nixpkgs>' -iA emacs`.
+   If you're using the graphical ISO image, other editors may be
+   available (such as `vim`). If you have network access, you can also
+   install other editors -- for instance, you can install Emacs by
+   running `nix-env -f '<nixpkgs>' -iA emacs`.
 
-    BIOS systems
+   BIOS systems
 
-    :   You *must* set the option [](#opt-boot.loader.grub.device) to
-        specify on which disk the GRUB boot loader is to be installed.
-        Without it, NixOS cannot boot.
+   : You *must* set the option [](#opt-boot.loader.grub.device) to
+   specify on which disk the GRUB boot loader is to be installed.
+   Without it, NixOS cannot boot.
 
-        If there are other operating systems running on the machine before
-        installing NixOS, the [](#opt-boot.loader.grub.useOSProber)
-        option can be set to `true` to automatically add them to the grub
-        menu.
+   ```
+   If there are other operating systems running on the machine before
+   installing NixOS, the [](#opt-boot.loader.grub.useOSProber)
+   option can be set to `true` to automatically add them to the grub
+   menu.
+   ```
 
-    UEFI systems
+   UEFI systems
 
-    :   You must select a boot-loader, either systemd-boot or GRUB. The recommended
-        option is systemd-boot: set the option [](#opt-boot.loader.systemd-boot.enable)
-        to `true`. `nixos-generate-config` should do this automatically
-        for new configurations when booted in UEFI mode.
+   : You must select a boot-loader, either systemd-boot or GRUB. The recommended
+   option is systemd-boot: set the option [](#opt-boot.loader.systemd-boot.enable)
+   to `true`. `nixos-generate-config` should do this automatically
+   for new configurations when booted in UEFI mode.
 
-        You may want to look at the options starting with
-        [`boot.loader.efi`](#opt-boot.loader.efi.canTouchEfiVariables) and
-        [`boot.loader.systemd-boot`](#opt-boot.loader.systemd-boot.enable)
-        as well.
+   ```
+   You may want to look at the options starting with
+   [`boot.loader.efi`](#opt-boot.loader.efi.canTouchEfiVariables) and
+   [`boot.loader.systemd-boot`](#opt-boot.loader.systemd-boot.enable)
+   as well.
 
-        If you want to use GRUB, set [](#opt-boot.loader.grub.device) to `nodev` and
-        [](#opt-boot.loader.grub.efiSupport) to `true`.
+   If you want to use GRUB, set [](#opt-boot.loader.grub.device) to `nodev` and
+   [](#opt-boot.loader.grub.efiSupport) to `true`.
 
-        With systemd-boot, you should not need any special configuration to detect
-        other installed systems. With GRUB, set [](#opt-boot.loader.grub.useOSProber)
-        to `true`, but this will only detect windows partitions, not other Linux
-        distributions. If you dual boot another Linux distribution, use systemd-boot
-        instead.
+   With systemd-boot, you should not need any special configuration to detect
+   other installed systems. With GRUB, set [](#opt-boot.loader.grub.useOSProber)
+   to `true`, but this will only detect windows partitions, not other Linux
+   distributions. If you dual boot another Linux distribution, use systemd-boot
+   instead.
+   ```
 
-    If you need to configure networking for your machine the
-    configuration options are described in [](#sec-networking). In
-    particular, while wifi is supported on the installation image, it is
-    not enabled by default in the configuration generated by
-    `nixos-generate-config`.
+   If you need to configure networking for your machine the
+   configuration options are described in [](#sec-networking). In
+   particular, while wifi is supported on the installation image, it is
+   not enabled by default in the configuration generated by
+   `nixos-generate-config`.
 
-    Another critical option is `fileSystems`, specifying the file
-    systems that need to be mounted by NixOS. However, you typically
-    don't need to set it yourself, because `nixos-generate-config` sets
-    it automatically in `/mnt/etc/nixos/hardware-configuration.nix` from
-    your currently mounted file systems. (The configuration file
-    `hardware-configuration.nix` is included from `configuration.nix`
-    and will be overwritten by future invocations of
-    `nixos-generate-config`; thus, you generally should not modify it.)
-    Additionally, you may want to look at [Hardware configuration for
-    known-hardware](https://github.com/NixOS/nixos-hardware) at this
-    point or after installation.
+   Another critical option is `fileSystems`, specifying the file
+   systems that need to be mounted by NixOS. However, you typically
+   don't need to set it yourself, because `nixos-generate-config` sets
+   it automatically in `/mnt/etc/nixos/hardware-configuration.nix` from
+   your currently mounted file systems. (The configuration file
+   `hardware-configuration.nix` is included from `configuration.nix`
+   and will be overwritten by future invocations of
+   `nixos-generate-config`; thus, you generally should not modify it.)
+   Additionally, you may want to look at [Hardware configuration for
+   known-hardware](https://github.com/NixOS/nixos-hardware) at this
+   point or after installation.
 
-    ::: {.note}
-    Depending on your hardware configuration or type of file system, you
-    may need to set the option `boot.initrd.kernelModules` to include
-    the kernel modules that are necessary for mounting the root file
-    system, otherwise the installed system will not be able to boot. (If
-    this happens, boot from the installation media again, mount the
-    target file system on `/mnt`, fix `/mnt/etc/nixos/configuration.nix`
-    and rerun `nixos-install`.) In most cases, `nixos-generate-config`
-    will figure out the required modules.
-    :::
+   ::: {.note}
+   Depending on your hardware configuration or type of file system, you
+   may need to set the option `boot.initrd.kernelModules` to include
+   the kernel modules that are necessary for mounting the root file
+   system, otherwise the installed system will not be able to boot. (If
+   this happens, boot from the installation media again, mount the
+   target file system on `/mnt`, fix `/mnt/etc/nixos/configuration.nix`
+   and rerun `nixos-install`.) In most cases, `nixos-generate-config`
+   will figure out the required modules.
+   :::
 
-5.  Do the installation:
+1. Do the installation:
 
-    ```ShellSession
-    # nixos-install
-    ```
+   ```ShellSession
+   # nixos-install
+   ```
 
-    This will install your system based on the configuration you
-    provided. If anything fails due to a configuration problem or any
-    other issue (such as a network outage while downloading binaries
-    from the NixOS binary cache), you can re-run `nixos-install` after
-    fixing your `configuration.nix`.
+   This will install your system based on the configuration you
+   provided. If anything fails due to a configuration problem or any
+   other issue (such as a network outage while downloading binaries
+   from the NixOS binary cache), you can re-run `nixos-install` after
+   fixing your `configuration.nix`.
 
-    If you opted for a flake-based configuration, you will need to pass the
-    `--flake` here as well and specify the name of the configuration as used in
-    the `flake.nix` file. For the default generated flake, this is `nixos`.
+   If you opted for a flake-based configuration, you will need to pass the
+   `--flake` here as well and specify the name of the configuration as used in
+   the `flake.nix` file. For the default generated flake, this is `nixos`.
 
-    ```ShellSession
-    # nixos-install --flake 'path/to/flake.nix#nixos'
-    ```
+   ```ShellSession
+   # nixos-install --flake 'path/to/flake.nix#nixos'
+   ```
 
-    As the last step, `nixos-install` will ask you to set the password
-    for the `root` user, e.g.
+   As the last step, `nixos-install` will ask you to set the password
+   for the `root` user, e.g.
 
-    ```plain
-    setting root password...
-    New password: ***
-    Retype new password: ***
-    ```
+   ```plain
+   setting root password...
+   New password: ***
+   Retype new password: ***
+   ```
 
-    If you have a user account declared in your `configuration.nix` and plan to log in using this user, set a password before rebooting, e.g. for the `alice` user:
+   If you have a user account declared in your `configuration.nix` and plan to log in using this user, set a password before rebooting, e.g. for the `alice` user:
 
-    ```ShellSession
-    # nixos-enter --root /mnt -c 'passwd alice'
-    ```
+   ```ShellSession
+   # nixos-enter --root /mnt -c 'passwd alice'
+   ```
 
-    ::: {.note}
-    For unattended installations, it is possible to use
-    `nixos-install --no-root-passwd` in order to disable the password
-    prompt entirely.
-    :::
+   ::: {.note}
+   For unattended installations, it is possible to use
+   `nixos-install --no-root-passwd` in order to disable the password
+   prompt entirely.
+   :::
 
-6.  If everything went well:
+1. If everything went well:
 
-    ```ShellSession
-    # reboot
-    ```
+   ```ShellSession
+   # reboot
+   ```
 
-7.  You should now be able to boot into the installed NixOS. The GRUB
-    boot menu shows a list of *available configurations* (initially just
-    one). Every time you change the NixOS configuration (see [Changing
-    Configuration](#sec-changing-config)), a new item is added to the
-    menu. This allows you to easily roll back to a previous
-    configuration if something goes wrong.
+1. You should now be able to boot into the installed NixOS. The GRUB
+   boot menu shows a list of *available configurations* (initially just
+   one). Every time you change the NixOS configuration (see [Changing
+   Configuration](#sec-changing-config)), a new item is added to the
+   menu. This allows you to easily roll back to a previous
+   configuration if something goes wrong.
 
-    Use your declared user account to log in.
-    If you didn’t declare one, you should still be able to log in using the `root` user.
+   Use your declared user account to log in.
+   If you didn’t declare one, you should still be able to log in using the `root` user.
 
-    ::: {.note}
-    Some graphical display managers such as SDDM do not allow `root` login by default, so you might need to switch to TTY.
-    Refer to [](#sec-user-management) for details on declaring user accounts.
-    :::
+   ::: {.note}
+   Some graphical display managers such as SDDM do not allow `root` login by default, so you might need to switch to TTY.
+   Refer to [](#sec-user-management) for details on declaring user accounts.
+   :::
 
-    You may also want to install some software. This will be covered in
-    [](#sec-package-management).
+   You may also want to install some software. This will be covered in
+   [](#sec-package-management).
 
 ### Installation summary {#sec-installation-manual-summary}
+
 []{#sec-installation-summary} <!-- legacy anchor -->
 
 To summarise, [Example: Commands for Installing NixOS on `/dev/sda`](#ex-install-sequence)
@@ -514,16 +525,21 @@ drive (here `/dev/sda`). [Example: NixOS Configuration](#ex-config) shows a
 corresponding configuration Nix expression.
 
 ::: {#ex-partition-scheme-MBR .example}
+
 ### Example partition schemes for NixOS on `/dev/sda` (MBR)
+
 ```ShellSession
 # parted /dev/sda -- mklabel msdos
 # parted /dev/sda -- mkpart primary 1MB -8GB
 # parted /dev/sda -- mkpart primary linux-swap -8GB 100%
 ```
+
 :::
 
 ::: {#ex-partition-scheme-UEFI .example}
+
 ### Example partition schemes for NixOS on `/dev/sda` (UEFI)
+
 ```ShellSession
 # parted /dev/sda -- mklabel gpt
 # parted /dev/sda -- mkpart root ext4 512MB -8GB
@@ -531,9 +547,11 @@ corresponding configuration Nix expression.
 # parted /dev/sda -- mkpart ESP fat32 1MB 512MB
 # parted /dev/sda -- set 3 esp on
 ```
+
 :::
 
 ::: {#ex-install-sequence .example}
+
 ### Commands for Installing NixOS on `/dev/sda`
 
 With a partitioned disk.
@@ -551,10 +569,13 @@ With a partitioned disk.
 # nixos-install
 # reboot
 ```
+
 :::
 
 ::: {#ex-config .example}
+
 ### Example: NixOS Configuration
+
 ```ShellSession
 { config, pkgs, ... }: {
   imports = [
@@ -574,6 +595,7 @@ With a partitioned disk.
   services.sshd.enable = true;
 }
 ```
+
 :::
 
 ## Additional installation notes {#sec-installation-additional-notes}

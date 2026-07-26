@@ -24,7 +24,7 @@
           ];
         };
       };
-    client = { ... }: { };
+    client = _: { };
   };
 
   testScript = ''

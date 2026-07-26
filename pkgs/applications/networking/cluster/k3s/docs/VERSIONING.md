@@ -33,14 +33,14 @@ To be able to achieve the goal above, the k3s maintainers would backport `k3s_1_
 
 Using the above as the example, a three NixOS release example would look like:
 
-* NixOS 23.11
-  * k3s/k3s_1_27 (Release Version, patches backported)
-  * k3s_1_28 (Backported)
-  * k3s_1_29 (Backported)
-  * k3s_1_30 (Backported)
-* NixOS 24.05
-  * k3s/k3s_1_30 (Release Version, patches backported)
-  * k3s_1_31 (Backported)
-  * k3s_1_32 (Backported)
-* NixOS 24.11
-  * k3s/k3s_1_32 (Release Version, patches backported)
+- NixOS 23.11
+  - k3s/k3s_1_27 (Release Version, patches backported)
+  - k3s_1_28 (Backported)
+  - k3s_1_29 (Backported)
+  - k3s_1_30 (Backported)
+- NixOS 24.05
+  - k3s/k3s_1_30 (Release Version, patches backported)
+  - k3s_1_31 (Backported)
+  - k3s_1_32 (Backported)
+- NixOS 24.11
+  - k3s/k3s_1_32 (Release Version, patches backported)

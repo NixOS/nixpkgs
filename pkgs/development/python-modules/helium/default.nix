@@ -39,7 +39,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   # helium doesn't support testing on all platforms
-  doCheck = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64);
+  doCheck = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64;
 
   # Selenium setup
   preCheck = ''

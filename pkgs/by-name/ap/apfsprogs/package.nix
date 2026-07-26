@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
       versionTests = lib.mergeAttrsList versionTestList;
     in
     {
-      apfs = nixosTests.apfs;
+      inherit (nixosTests) apfs;
     }
     // versionTests;
 

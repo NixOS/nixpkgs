@@ -16,7 +16,7 @@ let
     lib.mapAttrsToList (k: v: "--${k}=${toString v}") (
       lib.filterAttrs (name: value: value != null) {
         listen-on = cfg.host;
-        port = cfg.port;
+        inherit (cfg) port;
         auth-mode = cfg.auth.mode;
         userdb = cfg.auth.userDb;
       }
@@ -162,7 +162,7 @@ in
         home = "/var/lib/calibre-server";
         createHome = true;
         uid = config.ids.uids.calibre-server;
-        group = cfg.group;
+        inherit (cfg) group;
       };
     };
 

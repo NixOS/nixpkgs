@@ -58,7 +58,7 @@ in
   nodes = {
 
     server =
-      { ... }:
+      _:
       {
         services.gitolite = {
           enable = true;

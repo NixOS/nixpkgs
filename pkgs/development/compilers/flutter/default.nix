@@ -56,8 +56,7 @@ let
               dartHash.${stdenv.hostPlatform.system}
                 or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
           in
-          (
-            if lib.versionAtLeast version "3.41" then
+          if lib.versionAtLeast version "3.41" then
               (dart-bin.overrideAttrs (oldAttrs: {
                 version = dartVersion;
                 src = oldAttrs.src.overrideAttrs (_: {
@@ -75,8 +74,7 @@ let
                     inherit (oldAttrs.src) url;
                     inherit hash;
                   };
-                })
-          );
+                });
         src =
           let
             source = fetchFromGitHub {
@@ -86,8 +84,7 @@ let
               hash = flutterHash;
             };
           in
-          (
-            if lib.versionAtLeast version "3.32" then
+          if lib.versionAtLeast version "3.32" then
               # # Could not determine engine revision
               (runCommand source.name { } ''
                 cp --recursive ${source} $out
@@ -97,8 +94,7 @@ let
                 touch $out/bin/cache/engine.realm
               '')
             else
-              source
-          );
+              source;
       };
     in
     (mkCustomFlutter args).overrideAttrs (

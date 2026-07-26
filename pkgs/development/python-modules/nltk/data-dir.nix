@@ -4,7 +4,7 @@
   python3Packages,
 }:
 lib.makeOverridable (
-  { ... }@nltkDataPkgs:
+  nltkDataPkgs:
   f:
   pkgs.symlinkJoin {
     inherit (python3Packages.nltk) meta;

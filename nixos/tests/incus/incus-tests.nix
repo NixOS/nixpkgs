@@ -50,7 +50,7 @@ in
 
       incus = {
         enable = true;
-        package = cfg.package;
+        inherit (cfg) package;
 
         preseed = {
           networks = [
@@ -114,7 +114,7 @@ in
     networking.nftables.enable = true;
 
     security.apparmor.enable = cfg.appArmor;
-    services.dbus.apparmor = (if cfg.appArmor then "enabled" else "disabled");
+    services.dbus.apparmor = if cfg.appArmor then "enabled" else "disabled";
 
     services.lvm = {
       boot.thin.enable = cfg.storage.lvm;

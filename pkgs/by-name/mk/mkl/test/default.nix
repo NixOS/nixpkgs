@@ -12,7 +12,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "mkl-test";
-  version = mkl.version;
+  inherit (mkl) version;
 
   unpackPhase = ''
     cp ${./test.c} test.c

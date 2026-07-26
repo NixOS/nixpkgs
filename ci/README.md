@@ -29,6 +29,7 @@ Following [RFC 172], the merge bot was originally implemented as a [python webap
 ### Using the merge bot
 
 To merge a PR, maintainers can simply comment:
+
 ```gfm
 @NixOS/nixpkgs-merge-bot merge
 ```
@@ -45,13 +46,13 @@ To ensure security and a focused utility, the bot adheres to specific limitation
 - The PR targets one of the [development branches](#branch-classification).
 - The PR only touches files of packages located under `pkgs/by-name/*`.
 - The PR is either:
-  - approved by a [committer][@NixOS/nixpkgs-committers].
+  - approved by a [committer][@nixos/nixpkgs-committers].
   - backported via label.
-  - opened by a [committer][@NixOS/nixpkgs-committers].
+  - opened by a [committer][@nixos/nixpkgs-committers].
   - opened by [@r-ryantm](https://nix-community.github.io/nixpkgs-update/r-ryantm/).
 - The user attempting to merge is a member of [@NixOS/nixpkgs-maintainers].
 - The user attempting to merge is a maintainer of all packages touched by the PR.
-- No [committer][@NixOS/nixpkgs-committers] has an outstanding "changes requested" review.
+- No [committer][@nixos/nixpkgs-committers] has an outstanding "changes requested" review.
   These block both the merge queue and auto-merge, so the bot refuses to merge until the review is addressed or dismissed.
 
 Once these constraints are met, the bot picks a merge strategy based on the `no PR failures` commit status:
@@ -108,10 +109,9 @@ Some branches also have a version component, which is either `unstable` or `YY.M
 This classification will then be used to skip certain jobs.
 This script can also be run locally to print basic test cases.
 
-
-[@NixOS/nixpkgs-maintainers]: https://github.com/orgs/NixOS/teams/nixpkgs-maintainers
-[@NixOS/nixpkgs-committers]: https://github.com/orgs/NixOS/teams/nixpkgs-committers
-[@NixOS/nixpkgs-ci]: https://github.com/orgs/NixOS/teams/nixpkgs-ci
-[@NixOS/nixpkgs-core]: https://github.com/orgs/NixOS/teams/nixpkgs-core
-[RFC 172]: https://github.com/NixOS/rfcs/pull/172
-[Auto Merge]: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/automatically-merging-a-pull-request
+[@nixos/nixpkgs-ci]: https://github.com/orgs/NixOS/teams/nixpkgs-ci
+[@nixos/nixpkgs-committers]: https://github.com/orgs/NixOS/teams/nixpkgs-committers
+[@nixos/nixpkgs-core]: https://github.com/orgs/NixOS/teams/nixpkgs-core
+[@nixos/nixpkgs-maintainers]: https://github.com/orgs/NixOS/teams/nixpkgs-maintainers
+[auto merge]: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/automatically-merging-a-pull-request
+[rfc 172]: https://github.com/NixOS/rfcs/pull/172

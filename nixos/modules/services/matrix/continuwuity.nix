@@ -210,7 +210,7 @@ in
 
     users.users = lib.mkIf (cfg.user == defaultUser) {
       ${defaultUser} = {
-        group = cfg.group;
+        inherit (cfg) group;
         home = cfg.settings.global.database_path;
         isSystemUser = true;
       };

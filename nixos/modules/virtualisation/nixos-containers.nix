@@ -21,11 +21,9 @@ let
 
   # The container's init script, a small wrapper around the regular
   # NixOS stage-2 init script.
-  containerInit = (
-    cfg:
+  containerInit = cfg:
     let
-      renderExtraVeth = (
-        name: cfg: ''
+      renderExtraVeth = name: cfg: ''
           echo "Bringing ${name} up"
           ip link set dev ${name} up
           ${optionalString (cfg.localAddress != null) ''
@@ -44,8 +42,7 @@ let
             echo "Setting route6 to host for ${name}"
             ip -6 route add ${cfg.hostAddress6} dev ${name}
           ''}
-        ''
-      );
+        '';
     in
     pkgs.writeScript "container-init" ''
       #! ${pkgs.runtimeShell} -e
@@ -89,10 +86,9 @@ let
       # does not execute ExecStop* commands.
       set +e
       . "$1"
-    ''
-  );
+    '';
 
-  nspawnExtraVethArgs = (name: cfg: "--network-veth-extra=${name}");
+  nspawnExtraVethArgs = name: cfg: "--network-veth-extra=${name}";
 
   startScript = cfg: ''
     # Declare root explicitly to avoid shellcheck warnings, it comes from the env
@@ -246,8 +242,7 @@ let
     )}
   '';
 
-  postStartScript = (
-    cfg:
+  postStartScript = cfg:
     let
       ipcall =
         cfg: ipcmd: variable: attribute:
@@ -299,8 +294,7 @@ let
         fi
       fi
       ${concatStringsSep "\n" (mapAttrsToList renderExtraVeth cfg.extraVeths)}
-    ''
-  );
+    '';
 
   serviceDirectives = cfg: {
     ExecReload = pkgs.writeScript "reload-container" ''
@@ -373,7 +367,7 @@ let
     };
 
   allowedDeviceOpts =
-    { ... }:
+    _:
     {
       options = {
         node = mkOption {
@@ -999,7 +993,7 @@ in
         mkMerge (mapAttrsToList mapper config.containers);
     }
 
-    (mkIf (config.boot.enableContainers) (
+    (mkIf config.boot.enableContainers (
       let
         unit = {
           description = "Container '%i'";
@@ -1030,13 +1024,11 @@ in
         };
       in
       {
-        warnings = (
-          optional
+        warnings = optional
             (config.virtualisation.containers.enable && versionOlder config.system.stateVersion "22.05")
             ''
               Enabling both boot.enableContainers & virtualisation.containers on system.stateVersion < 22.05 is unsupported.
-            ''
-        );
+            '';
 
         systemd.targets.multi-user.wants = [ "machines.target" ];
 
@@ -1108,7 +1100,7 @@ in
                     containerConfig.path
                     config.environment.etc."${configurationDirectoryName}/${name}.conf".source
                   ];
-                  restartIfChanged = containerConfig.restartIfChanged;
+                  inherit (containerConfig) restartIfChanged;
                 })
               )
             ) config.containers)

@@ -34,8 +34,7 @@ perlPackages.buildPerlPackage rec {
 
   buildTools = [ ];
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = (
-    with perlPackages;
+  buildInputs = with perlPackages;
     [
       CGI
       DataStructureUtil
@@ -56,8 +55,7 @@ perlPackages.buildPerlPackage rec {
       TestMockModule
       TestMockObject
       TestNoWarnings
-    ]
-  );
+    ];
   propagatedBuildInputs = with perlPackages; [
     FileWhich
     LWP

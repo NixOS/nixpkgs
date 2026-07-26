@@ -26,7 +26,7 @@ let
   testFileList = lib.concatStringsSep " " (map relpathToArg files);
 in
 stdenv.mkDerivation {
-  version = src.version;
+  inherit (src) version;
   pname = "sage-tests";
   inherit src;
 

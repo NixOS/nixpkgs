@@ -144,7 +144,7 @@ in
     services.ocis.package = lib.mkDefault pkgs.ocis_5-bin;
 
     users.users.${defaultUser} = lib.mkIf (cfg.user == defaultUser) {
-      group = cfg.group;
+      inherit (cfg) group;
       home = cfg.stateDir;
       isSystemUser = true;
       createHome = true;

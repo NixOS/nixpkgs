@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  env = lib.optionalAttrs (stdenv.hostPlatform.useLLVM) {
+  env = lib.optionalAttrs stdenv.hostPlatform.useLLVM {
     NIX_LDFLAGS = "--undefined-version";
   };
 

@@ -10,7 +10,7 @@ mkDerivation rec {
   path = "...";
 
   pname = "iwlwifi-firmware";
-  version = linux-firmware.version;
+  inherit (linux-firmware) version;
 
   # Upstream FreeBSD doesn't wrap wifi firmware, only gpu firmware.
   # We have to write our own build scripts for this.

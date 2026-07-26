@@ -7,11 +7,13 @@ has a simple, fully translatable admin interface for sabre/dav based on Symfony
 ## Basic Usage {#module-services-davis-basic-usage}
 
 At first, an application secret is needed, this can be generated with:
+
 ```ShellSession
 $ cat /dev/urandom | tr -dc a-zA-Z0-9 | fold -w 48 | head -n 1
 ```
 
 After that, `davis` can be deployed like this:
+
 ```
 {
   services.davis = {

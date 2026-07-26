@@ -15,8 +15,7 @@ let
     args:
     testers.invalidateFetcherByDrvHash
       (fetchurl.override (previousArgs: {
-        curl = (
-          writeShellScriptBin "curl" ''
+        curl = writeShellScriptBin "curl" ''
             set -eu -o pipefail
             hasFoo=
             hasBar=
@@ -48,8 +47,7 @@ let
             else
               exit 1
             fi
-          ''
-        );
+          '';
       }))
       (
         {

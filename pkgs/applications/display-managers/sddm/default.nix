@@ -21,7 +21,7 @@ runCommand "sddm-wrapped"
       inherit (sddm-unwrapped.passthru) tests;
     };
 
-    meta = sddm-unwrapped.meta;
+    inherit (sddm-unwrapped) meta;
   }
   ''
     mkdir -p $out/bin

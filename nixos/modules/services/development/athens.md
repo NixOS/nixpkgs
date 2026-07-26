@@ -18,6 +18,7 @@ A complete list of options for the Athens module may be found
 ## Basic usage for a caching proxy configuration {#opt-services-development-athens-caching-proxy}
 
 A very basic configuration for Athens that acts as a caching and forwarding HTTP proxy is:
+
 ```nix
 {
   services.athens = {

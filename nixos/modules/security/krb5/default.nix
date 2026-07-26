@@ -53,7 +53,7 @@ in
 
       settings = mkOption {
         default = { };
-        type = format.type;
+        inherit (format) type;
         description = ''
           Structured contents of the {file}`krb5.conf` file. See
           {manpage}`krb5.conf(5)` for details about configuration.

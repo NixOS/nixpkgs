@@ -50,7 +50,7 @@ in
       };
 
     router1 =
-      { ... }:
+      _:
       {
         virtualisation.vlans = [
           1
@@ -69,7 +69,7 @@ in
       };
 
     router2 =
-      { ... }:
+      _:
       {
         virtualisation.vlans = [
           3

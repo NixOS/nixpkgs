@@ -1,4 +1,3 @@
-
 # Modular Services {#modular-services}
 
 Status: in development. This functionality is new in NixOS 25.11, and significant changes should be expected. We'd love to hear your feedback in <https://github.com/NixOS/nixpkgs/pull/372170>
@@ -21,14 +20,18 @@ NixOS provides two options into which such modules can be plugged:
 
 Crucially, these options have the type [`attrsOf`] [`submodule`].
 The name of the service is the attribute name corresponding to `attrsOf`.
+
 <!-- ^ This is how composition is *always* provided, instead of a difficult thing (but this is reference docs, not a changelog) -->
+
 The `submodule` is pre-loaded with two modules:
+
 - a generic module that is intended to be portable
 - a module with systemd-specific options, whose values or defaults derive from the generic module's option values.
 
 So note that the default value of `system.services.<name>` is not a complete service. It requires that the user provide a value, and this is typically done by importing a module. For example:
 
 <!-- Not using typical example syntax, because reading this is *not* optional, and should it should not be folded closed. -->
+
 ```nix
 {
   system.services.my-service-instance = {
@@ -70,8 +73,9 @@ Similarly, other configuration managers can declare their own options for servic
 Compared to traditional services, modular services are inherently more composable, by virtue of being modules and receiving a user-provided name when imported.
 However, composition can not end there, because services need to be able to interact with each other.
 This can be achieved in two ways:
+
 1. Users can link services together by providing the necessary NixOS configuration.
-2. Services can be compositions of other services.
+1. Services can be compositions of other services.
 
 These aren't mutually exclusive. In fact, it is a good practice when developing services to first write them as individual services, and then compose them into a higher-level composition. Each of these services is a valid modular service, including their composition.
 
@@ -105,7 +109,8 @@ list-id: systemd-service-options
 source: @SYSTEMD_SERVICE_OPTIONS@
 ```
 
-[module]: https://nixos.org/manual/nixpkgs/stable/index.html#module-system
 <!-- TODO: more anchors -->
-[`attrsOf`]: #sec-option-types-composed
+
+[module]: https://nixos.org/manual/nixpkgs/stable/index.html#module-system
+[`attrsof`]: #sec-option-types-composed
 [`submodule`]: #sec-option-types-submodule

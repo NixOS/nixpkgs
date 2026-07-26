@@ -252,7 +252,7 @@ in
     (lib.mkIf cfg.enable {
       users.users = lib.optionalAttrs (cfg.user == "postsrsd") {
         postsrsd = {
-          group = cfg.group;
+          inherit (cfg) group;
           uid = config.ids.uids.postsrsd;
         };
       };

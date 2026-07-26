@@ -110,7 +110,7 @@ let
         }:
         mkWordpressDerivation {
           inherit type pname license;
-          version = data.version;
+          inherit (data) version;
 
           src = fetchWordpress type data;
         }

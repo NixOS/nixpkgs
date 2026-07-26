@@ -43,6 +43,7 @@ synapse server for the `example.org` domain, served from
 the host `myhostname.example.org`. For more information,
 please refer to the
 [installation instructions of Synapse](https://element-hq.github.io/synapse/latest/setup/installation.html) .
+
 ```nix
 {
   pkgs,
@@ -157,6 +158,7 @@ Otherwise, or you can generate a registration secret with
 To create a new user or admin from the terminal your client listener
 must be configured to use TCP sockets. Then you can run the following
 after you have set the secret and have rebuilt NixOS:
+
 ```ShellSession
 $ nix-shell -p matrix-synapse
 $ register_new_matrix_user -k your-registration-shared-secret http://localhost:8008
@@ -166,6 +168,7 @@ Confirm password:
 Make admin [no]:
 Success!
 ```
+
 In the example, this would create a user with the Matrix Identifier
 `@your-username:example.org`.
 
@@ -174,23 +177,26 @@ When using [](#opt-services.matrix-synapse.settings.registration_shared_secret),
 will end up in the world-readable store. Instead it's recommended to deploy the secret
 in an additional file like this:
 
-  - Create a file with the following contents:
+- Create a file with the following contents:
 
-    ```
-    registration_shared_secret: your-very-secret-secret
-    ```
-  - Deploy the file with a secret-manager such as
-    [{option}`deployment.keys`](https://nixops.readthedocs.io/en/latest/overview.html#managing-keys)
-    from {manpage}`nixops(1)` or [sops-nix](https://github.com/Mic92/sops-nix/) to
-    e.g. {file}`/run/secrets/matrix-shared-secret` and ensure that it's readable
-    by `matrix-synapse`.
-  - Include the file like this in your configuration:
+  ```
+  registration_shared_secret: your-very-secret-secret
+  ```
 
-    ```nix
-    {
-      services.matrix-synapse.extraConfigFiles = [ "/run/secrets/matrix-shared-secret" ];
-    }
-    ```
+- Deploy the file with a secret-manager such as
+  [{option}`deployment.keys`](https://nixops.readthedocs.io/en/latest/overview.html#managing-keys)
+  from {manpage}`nixops(1)` or [sops-nix](https://github.com/Mic92/sops-nix/) to
+  e.g. {file}`/run/secrets/matrix-shared-secret` and ensure that it's readable
+  by `matrix-synapse`.
+
+- Include the file like this in your configuration:
+
+  ```nix
+  {
+    services.matrix-synapse.extraConfigFiles = [ "/run/secrets/matrix-shared-secret" ];
+  }
+  ```
+
 :::
 
 ::: {.note}
@@ -216,6 +222,7 @@ fill in the required connection details automatically when you enter your
 Matrix Identifier. See
 [Try Matrix Now!](https://matrix.org/docs/projects/try-matrix-now.html)
 for a list of existing clients and their supported featureset.
+
 ```nix
 {
   services.nginx.virtualHosts."element.${fqdn}" = {

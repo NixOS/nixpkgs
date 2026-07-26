@@ -51,7 +51,7 @@ in
             # config for extended tests using SmolLM2
             else
               let
-                llama-cpp = pkgs.llama-cpp;
+                inherit (pkgs) llama-cpp;
                 llama-server = lib.getExe' llama-cpp "llama-server";
               in
               {

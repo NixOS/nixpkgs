@@ -140,7 +140,7 @@ in
         deps = [
           "network.target"
         ]
-        ++ optional (cfg.settings.useLocalTailscaled) "tailscaled.service";
+        ++ optional cfg.settings.useLocalTailscaled "tailscaled.service";
       in
       {
         description = "tsidp";
@@ -184,11 +184,11 @@ in
           DynamicUser = true;
           StateDirectory = baseNameOf stateDir;
           WorkingDirectory = stateDir;
-          ReadWritePaths = mkIf (cfg.settings.useLocalTailscaled) [
+          ReadWritePaths = mkIf cfg.settings.useLocalTailscaled [
             "/var/run/tailscale" # needed due to `ProtectSystem = "strict";`
             "/var/lib/tailscale"
           ];
-          BindPaths = mkIf (cfg.settings.useLocalTailscaled) [
+          BindPaths = mkIf cfg.settings.useLocalTailscaled [
             "/var/run/tailscale:/var/run/tailscale"
           ];
 

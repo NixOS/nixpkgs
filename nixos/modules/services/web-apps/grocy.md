@@ -6,6 +6,7 @@
 ## Basic usage {#module-services-grocy-basic-usage}
 
 A very basic configuration may look like this:
+
 ```nix
 { pkgs, ... }:
 {
@@ -15,6 +16,7 @@ A very basic configuration may look like this:
   };
 }
 ```
+
 This configures a simple vhost using [nginx](#opt-services.nginx.enable)
 which listens to `grocy.tld` with fully configured ACME/LE (this can be
 disabled by setting [services.grocy.nginx.enableSSL](#opt-services.grocy.nginx.enableSSL)
@@ -29,6 +31,7 @@ of the application.
 
 The configuration for `grocy` is located at `/etc/grocy/config.php`.
 By default, the following settings can be defined in the NixOS-configuration:
+
 ```nix
 { pkgs, ... }:
 {
@@ -56,6 +59,7 @@ By default, the following settings can be defined in the NixOS-configuration:
 
 If you want to alter the configuration file on your own, you can do this manually with
 an expression like this:
+
 ```nix
 { lib, ... }:
 {

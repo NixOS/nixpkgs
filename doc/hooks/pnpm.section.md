@@ -5,6 +5,7 @@
 The `pnpmBuildHook` in Nixpkgs overrides the default build phase for building packages that use pnpm.
 
 :::{.example #ex-pnpm-build-hook}
+
 ## pnpmBuildHook example code snippet {#pnpm-build-hook-code-snippet}
 
 ```nix
@@ -72,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 })
 ```
+
 :::
 
 ## Variables controlling pnpmBuildHook {#pnpm-build-hook-variables}
@@ -138,5 +140,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
 The following variables are honored by `pnpmBuildHook`.
 
-* [`pnpmRoot`](#javascript-pnpm-sourceRoot)
-* [`pnpmWorkspaces`](#javascript-pnpm-workspaces)
+- [`pnpmRoot`](#javascript-pnpm-sourceRoot)
+- [`pnpmWorkspaces`](#javascript-pnpm-workspaces)

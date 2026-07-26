@@ -171,7 +171,7 @@ in
 
     settings = lib.mkOption {
       default = { };
-      type = (pkgs.formats.yaml { }).type;
+      inherit ((pkgs.formats.yaml { })) type;
       example = lib.literalExpression ''
         {
           autojoinOnlyIfManager = true;
@@ -215,11 +215,11 @@ in
       wants = [
         "network-online.target"
       ]
-      ++ lib.optionals (cfg.pantalaimon.enable) [ "pantalaimon-mjolnir.service" ];
+      ++ lib.optionals cfg.pantalaimon.enable [ "pantalaimon-mjolnir.service" ];
       after = [
         "network-online.target"
       ]
-      ++ lib.optionals (cfg.pantalaimon.enable) [ "pantalaimon-mjolnir.service" ];
+      ++ lib.optionals cfg.pantalaimon.enable [ "pantalaimon-mjolnir.service" ];
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {

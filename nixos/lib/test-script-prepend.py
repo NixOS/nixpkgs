@@ -13,7 +13,6 @@ from typing_extensions import Protocol
 from test_driver.machine import BaseMachine, NspawnMachine, QemuMachine
 from test_driver.vlan import VLan
 
-
 # Protocols
 
 

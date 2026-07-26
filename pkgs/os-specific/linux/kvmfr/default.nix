@@ -8,9 +8,9 @@
 
 stdenv.mkDerivation {
   pname = "kvmfr";
-  version = looking-glass-client.version;
+  inherit (looking-glass-client) version;
 
-  src = looking-glass-client.src;
+  inherit (looking-glass-client) src;
   sourceRoot = "${looking-glass-client.src.name}/module";
   hardeningDisable = [
     "pic"

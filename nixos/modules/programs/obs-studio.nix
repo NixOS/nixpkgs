@@ -48,7 +48,7 @@ in
     };
 
     programs.obs-studio.finalPackage = lib.mapNullable (
-      obs-studio: pkgs.wrapOBS.override { inherit obs-studio; } { plugins = cfg.plugins; }
+      obs-studio: pkgs.wrapOBS.override { inherit obs-studio; } { inherit (cfg) plugins; }
     ) cfg.package;
 
     environment.systemPackages = lib.optional (cfg.finalPackage != null) cfg.finalPackage;

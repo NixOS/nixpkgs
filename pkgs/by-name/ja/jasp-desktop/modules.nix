@@ -213,8 +213,8 @@ let
         name = "${info.pname}-${info.version}-source";
         owner = "jasp-stats-modules";
         repo = info.pname;
-        tag = info.tag;
-        hash = info.hash;
+        inherit (info) tag;
+        inherit (info) hash;
       };
       propagatedBuildInputs = moduleDeps.${info.pname};
 

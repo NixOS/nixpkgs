@@ -13,6 +13,7 @@ By default, the module will execute strfry:
   services.strfry.enable = true;
 }
 ```
+
 It runs in the systemd service named `strfry`.
 
 ## Reverse Proxy {#module-services-strfry-reverse-proxy}

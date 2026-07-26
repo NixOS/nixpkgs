@@ -17,7 +17,7 @@ let
     __structuredAttrs = true;
 
     pname = "godot-export-templates${lib.optionalString withMono "-mono"}-bin";
-    version = version;
+    inherit version;
 
     src = fetchurl {
       url = "https://github.com/godotengine/godot/releases/download/${version}/Godot_v${version}${lib.optionalString withMono "_mono"}_export_templates.tpz";

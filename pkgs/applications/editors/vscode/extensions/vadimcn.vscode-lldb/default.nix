@@ -29,13 +29,12 @@ let
     hash = "sha256-7//+y02rfDloeNADpoM8tist7fPstBZ2Eqt4dM5dCaE=";
   };
 
-  lldb = llvmPackages_19.lldb;
+  inherit (llvmPackages_19) lldb;
   stdenv = llvmPackages_19.libcxxStdenv;
 
   cargoHash = "sha256-fuUTLdavMiYfpyxctXes2GJCsNZd5g1d4B/v+W/Rnu8=";
 
-  adapter = (
-    callPackage ./adapter.nix {
+  adapter = callPackage ./adapter.nix {
       # The adapter is meant to be compiled with clang++,
       # based on the provided CMake toolchain files.
       # <https://github.com/vadimcn/codelldb/tree/master/cmake>
@@ -51,21 +50,17 @@ let
         cargoHash
         codelldb-launch
         ;
-    }
-  );
+    };
 
-  nodeDeps = (
-    callPackage ./node_deps.nix {
+  nodeDeps = callPackage ./node_deps.nix {
       inherit
         pname
         src
         version
         ;
-    }
-  );
+    };
 
-  codelldb-types = (
-    callPackage ./codelldb-types.nix {
+  codelldb-types = callPackage ./codelldb-types.nix {
       rustPlatform = makeRustPlatform {
         inherit stdenv cargo rustc;
       };
@@ -76,11 +71,9 @@ let
         version
         cargoHash
         ;
-    }
-  );
+    };
 
-  codelldb-launch = (
-    callPackage ./codelldb-launch.nix {
+  codelldb-launch = callPackage ./codelldb-launch.nix {
       rustPlatform = makeRustPlatform {
         inherit stdenv cargo rustc;
       };
@@ -91,8 +84,7 @@ let
         version
         cargoHash
         ;
-    }
-  );
+    };
 
 in
 stdenv.mkDerivation {

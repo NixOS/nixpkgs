@@ -140,6 +140,6 @@ drv:
 }:
 compressDrv drv {
   formats = formats ++ extraFormats;
-  compressors = compressors;
+  inherit compressors;
   inherit extraFindOperands;
 }

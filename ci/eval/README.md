@@ -9,6 +9,7 @@ nix-build ci -A eval.baseline
 ```
 
 The two most important arguments are:
+
 - `--arg evalSystems`: The set of systems for which `nixpkgs` should be evaluated.
   Defaults to the [supported systems](../../pkgs/top-level/release-supported-systems.json) for the branch.
   Example: `--arg evalSystems '["x86_64-linux" "aarch64-darwin"]'`
@@ -16,6 +17,7 @@ The two most important arguments are:
   Example: `--arg quickTest true`
 
 The following arguments can be used to fine-tune performance:
+
 - `--max-jobs`: The maximum number of derivations to run at the same time.
   Only each supported system gets a separate derivation, so it doesn't make sense to set this higher than that number.
 - `--cores`: The number of cores to use for each job.

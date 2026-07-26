@@ -72,8 +72,7 @@ let
         echo "all:" > all/Makefile
         echo "install:" >> all/Makefile
       '';
-      derivation = (
-        mkCoqDerivation (
+      derivation = mkCoqDerivation (
           {
             inherit
               version
@@ -121,8 +120,7 @@ let
           // lib.optionalAttrs (package != "single") {
             passthru = lib.mapAttrs (package: deps: typedextraction_ package) packages;
           }
-        )
-      );
+        );
     in
     derivation;
 in

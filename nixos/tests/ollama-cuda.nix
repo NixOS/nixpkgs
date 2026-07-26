@@ -4,7 +4,7 @@
   meta.maintainers = [ ];
 
   nodes.cuda =
-    { ... }:
+    _:
     {
       services.ollama.enable = true;
       services.ollama.package = pkgs.ollama-cuda;

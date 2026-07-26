@@ -18,38 +18,38 @@ It also implements [NixOS](https://nixos.org/nixos/), a purely-functional Linux 
 
 # Manuals
 
-* [NixOS Manual](https://nixos.org/nixos/manual) - how to install, configure, and maintain a purely-functional Linux distribution
-* [Nixpkgs Manual](https://nixos.org/nixpkgs/manual/) - contributing to Nixpkgs and using programming-language-specific Nix expressions
-* [Nix Package Manager Manual](https://nixos.org/nix/manual) - how to write Nix expressions (programs), and how to use Nix command line tools
+- [NixOS Manual](https://nixos.org/nixos/manual) - how to install, configure, and maintain a purely-functional Linux distribution
+- [Nixpkgs Manual](https://nixos.org/nixpkgs/manual/) - contributing to Nixpkgs and using programming-language-specific Nix expressions
+- [Nix Package Manager Manual](https://nixos.org/nix/manual) - how to write Nix expressions (programs), and how to use Nix command line tools
 
 # Community
 
-* [Discourse Forum](https://discourse.nixos.org/)
-* [Matrix Chat](https://matrix.to/#/#space:nixos.org)
-* [Official wiki](https://wiki.nixos.org/)
-* [Community-maintained list of ways to get in touch](https://wiki.nixos.org/wiki/Get_In_Touch#Chat) (Discord, Telegram, IRC, etc.)
+- [Discourse Forum](https://discourse.nixos.org/)
+- [Matrix Chat](https://matrix.to/#/#space:nixos.org)
+- [Official wiki](https://wiki.nixos.org/)
+- [Community-maintained list of ways to get in touch](https://wiki.nixos.org/wiki/Get_In_Touch#Chat) (Discord, Telegram, IRC, etc.)
 
 # Other Project Repositories
 
 The sources of all official Nix-related projects are in the [NixOS organization on GitHub](https://github.com/NixOS/).
 Here are some of the main ones:
 
-* [Nix](https://github.com/NixOS/nix) - the purely functional package manager
-* [NixOps](https://github.com/NixOS/nixops) - the tool to remotely deploy NixOS machines
-* [nixos-hardware](https://github.com/NixOS/nixos-hardware) - NixOS profiles to optimize settings for different hardware
-* [Nix RFCs](https://github.com/NixOS/rfcs) - the formal process for making substantial changes to the community
-* [NixOS homepage](https://github.com/NixOS/nixos-homepage) - the [NixOS.org](https://nixos.org) website
-* [hydra](https://github.com/NixOS/hydra) - our continuous integration system
-* [NixOS Branding](https://github.com/NixOS/branding) - NixOS branding
+- [Nix](https://github.com/NixOS/nix) - the purely functional package manager
+- [NixOps](https://github.com/NixOS/nixops) - the tool to remotely deploy NixOS machines
+- [nixos-hardware](https://github.com/NixOS/nixos-hardware) - NixOS profiles to optimize settings for different hardware
+- [Nix RFCs](https://github.com/NixOS/rfcs) - the formal process for making substantial changes to the community
+- [NixOS homepage](https://github.com/NixOS/nixos-homepage) - the [NixOS.org](https://nixos.org) website
+- [hydra](https://github.com/NixOS/hydra) - our continuous integration system
+- [NixOS Branding](https://github.com/NixOS/branding) - NixOS branding
 
 # Continuous Integration and Distribution
 
 Nixpkgs and NixOS are built and tested by our continuous integration system, [Hydra](https://hydra.nixos.org/).
 
-* [Continuous package builds for unstable/master](https://hydra.nixos.org/jobset/nixos/trunk-combined)
-* [Continuous package builds for the NixOS 26.05 release](https://hydra.nixos.org/jobset/nixos/release-26.05)
-* [Tests for unstable/master](https://hydra.nixos.org/job/nixos/trunk-combined/tested#tabs-constituents)
-* [Tests for the NixOS 26.05 release](https://hydra.nixos.org/job/nixos/release-26.05/tested#tabs-constituents)
+- [Continuous package builds for unstable/master](https://hydra.nixos.org/jobset/nixos/trunk-combined)
+- [Continuous package builds for the NixOS 26.05 release](https://hydra.nixos.org/jobset/nixos/release-26.05)
+- [Tests for unstable/master](https://hydra.nixos.org/job/nixos/trunk-combined/tested#tabs-constituents)
+- [Tests for the NixOS 26.05 release](https://hydra.nixos.org/job/nixos/release-26.05/tested#tabs-constituents)
 
 Artifacts successfully built with Hydra are published to cache at https://cache.nixos.org/.
 When successful build and test criteria are met, the Nixpkgs expressions are distributed via [Nix channels](https://nix.dev/manual/nix/stable/command-ref/nix-channel.html).
@@ -80,5 +80,5 @@ Nixpkgs is licensed under the [MIT License](COPYING).
 
 > [!Note]
 > MIT license does not apply to the packages built by Nixpkgs, merely to the files in this repository (the Nix expressions, build scripts, NixOS modules, etc.).
-It also might not apply to patches included in Nixpkgs, which may be derivative works of the packages to which they apply.
-The aforementioned artifacts are all covered by the licenses of the respective packages.
+> It also might not apply to patches included in Nixpkgs, which may be derivative works of the packages to which they apply.
+> The aforementioned artifacts are all covered by the licenses of the respective packages.

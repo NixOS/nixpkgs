@@ -8,7 +8,7 @@ let
 
   cfg = config.services.dspam;
 
-  dspam = pkgs.dspam;
+  inherit (pkgs) dspam;
 
   defaultSock = "/run/dspam/dspam.sock";
 
@@ -91,7 +91,7 @@ in
       {
         users.users = lib.optionalAttrs (cfg.user == "dspam") {
           dspam = {
-            group = cfg.group;
+            inherit (cfg) group;
             uid = config.ids.uids.dspam;
           };
         };

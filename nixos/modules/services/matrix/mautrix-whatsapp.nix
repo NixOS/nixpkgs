@@ -76,7 +76,7 @@ in
 
     settings = lib.mkOption {
       apply = lib.recursiveUpdate defaultConfig;
-      type = settingsFormat.type;
+      inherit (settingsFormat) type;
       default = defaultConfig;
       description = ''
         {file}`config.yaml` configuration as a Nix attribute set.

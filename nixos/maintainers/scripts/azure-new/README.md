@@ -12,6 +12,7 @@ includes a built-in test user account, which by default uses your
 `~/.ssh/id_ed25519.pub` as an `authorized_key`.
 
 Build and upload the image
+
 ```shell
 $ ./upload-image.sh ./examples/basic/image.nix
 

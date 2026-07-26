@@ -10,8 +10,8 @@ let
   name = "anki-sync-server";
   specEscape = replaceStrings [ "%" ] [ "%%" ];
   usersWithIndexes = lists.imap1 (i: user: {
-    i = i;
-    user = user;
+    inherit i;
+    inherit user;
   }) cfg.users;
   usersWithIndexesFile = filter (x: x.user.passwordFile != null) usersWithIndexes;
   usersWithIndexesNoFile = filter (

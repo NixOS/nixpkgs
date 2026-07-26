@@ -10,10 +10,10 @@
 
 python3Packages.buildPythonApplication {
   pname = "zenmap";
-  version = nmap.version;
+  inherit (nmap) version;
   pyproject = true;
 
-  src = nmap.src;
+  inherit (nmap) src;
 
   prePatch = ''
     cd zenmap

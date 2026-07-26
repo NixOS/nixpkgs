@@ -342,7 +342,7 @@ in
     users = {
       users = lib.mkIf (cfg.user == "syncoid") {
         syncoid = {
-          group = cfg.group;
+          inherit (cfg) group;
           isSystemUser = true;
           # For syncoid to be able to create /var/lib/syncoid/.ssh/
           # and to use custom ssh_config or known_hosts.

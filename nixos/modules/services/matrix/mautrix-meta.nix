@@ -403,7 +403,7 @@ in
         members = lib.lists.optional config.services.matrix-synapse.enable "matrix-synapse";
       };
 
-      services.matrix-synapse = lib.mkIf (config.services.matrix-synapse.enable) (
+      services.matrix-synapse = lib.mkIf config.services.matrix-synapse.enable (
         let
           registrationFiles = lib.attrValues (
             lib.mapAttrs (name: cfg: cfg.registrationFile) registerToSynapseInstances
@@ -416,7 +416,7 @@ in
 
       systemd.services = lib.mkMerge [
         {
-          matrix-synapse = lib.mkIf (config.services.matrix-synapse.enable) (
+          matrix-synapse = lib.mkIf config.services.matrix-synapse.enable (
             let
               registrationServices = lib.attrValues (
                 lib.mapAttrs (name: cfg: cfg.registrationServiceUnit) registerToSynapseInstances

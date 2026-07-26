@@ -68,7 +68,7 @@ let
   sshKeys = import ./ssh-keys.nix pkgs;
   snakeOilPrivateKey = sshKeys.snakeOilPrivateKey.text;
   snakeOilPrivateKeyFile = pkgs.writeText "private-key" snakeOilPrivateKey;
-  snakeOilPublicKey = sshKeys.snakeOilPublicKey;
+  inherit (sshKeys) snakeOilPublicKey;
 
 in
 {

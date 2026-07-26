@@ -1,4 +1,4 @@
-{ ... }:
+_:
 {
   name = "tuptime";
   meta = {

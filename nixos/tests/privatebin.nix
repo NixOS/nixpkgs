@@ -5,7 +5,7 @@
   meta.maintainers = [ lib.maintainers.savyajha ];
 
   nodes.dataImporter =
-    { ... }:
+    _:
     {
       services.privatebin = {
         enable = true;

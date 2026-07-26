@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   passthru.tests = {
-    nginx-modsecurity = nixosTests.nginx-modsecurity;
+    inherit (nixosTests) nginx-modsecurity;
   };
 
   meta = {

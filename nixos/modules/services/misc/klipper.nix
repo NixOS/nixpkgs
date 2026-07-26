@@ -95,7 +95,7 @@ let
               mcu = lib.strings.sanitizeDerivationName mcu;
               flashDevice = subcfg.serial;
               canbusDevice = subcfg.canbus_uuid;
-              canbusNetwork = subcfg.canbusNetwork;
+              inherit (subcfg) canbusNetwork;
               firmwareConfig = subcfg.configFile;
             }
           else

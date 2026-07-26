@@ -70,7 +70,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru.tests.version = testers.testVersion {
     package = shadcn;
     command = "shadcn --version";
-    version = finalAttrs.version;
+    inherit (finalAttrs) version;
   };
 
   meta = {

@@ -68,7 +68,7 @@ account named `alice`:
 
 To make all nix tools available to this new user use \`su - USER\` which
 opens a login shell (==shell that loads the profile) for given user.
-This will create the \~/.nix-defexpr symlink. So run:
+This will create the ~/.nix-defexpr symlink. So run:
 
 ```ShellSession
 # su - alice -c "true"
@@ -123,9 +123,9 @@ Like systemd-sysusers, Userborn doesn't depend on Perl but offers some more
 advantages over systemd-sysusers:
 
 1. It can create "normal" users (with a GID >= 1000).
-2. It can update some information about users. Most notably it can update their
+1. It can update some information about users. Most notably it can update their
    passwords.
-3. It will warn when users use an insecure or unsupported password hashing
+1. It will warn when users use an insecure or unsupported password hashing
    scheme.
 
 Userborn is the recommended way to manage users if you don't want to rely on

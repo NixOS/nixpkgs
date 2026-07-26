@@ -13,7 +13,7 @@ let
   evalSystemServices =
     services:
     evalSystem (
-      { ... }:
+      _:
       {
         system.services = services;
         system.stateVersion = "25.05";
@@ -24,8 +24,7 @@ let
         boot.loader.grub.enable = false;
       }
     );
-in
-let
+
   suite = pkgs.testers.modularServiceCompliance {
     inherit sharedDir;
     namePrefix = "system-services-compliance";

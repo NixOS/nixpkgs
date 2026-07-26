@@ -19,6 +19,7 @@ By default, the module will execute Suwayomi-Server backend and web UI:
 It runs in the systemd service named `suwayomi-server` in the data directory `/var/lib/suwayomi-server`.
 
 You can change the default parameters with some other parameters:
+
 ```nix
 { ... }:
 

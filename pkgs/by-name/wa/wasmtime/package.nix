@@ -29,20 +29,20 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasmtime";
-  version = source.version;
+  inherit (source) version;
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wasmtime";
     tag = "v${finalAttrs.version}";
-    hash = source.hash;
+    inherit (source) hash;
     fetchSubmodules = true;
   };
 
   # Disable cargo-auditable until https://github.com/rust-secure-code/cargo-auditable/issues/124 is solved.
   auditable = false;
 
-  cargoHash = source.cargoHash;
+  inherit (source) cargoHash;
   cargoBuildFlags = [
     "--package"
     "wasmtime-cli"

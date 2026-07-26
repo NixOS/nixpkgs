@@ -5,7 +5,7 @@
   meta.maintainers = with lib.maintainers; [ danielfullmer ];
 
   nodes.machine =
-    { ... }:
+    _:
     {
       services.zoneminder = {
         enable = true;

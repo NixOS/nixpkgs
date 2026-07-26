@@ -28,7 +28,7 @@ let
 in
 buildFHSEnv {
   pname = "bigpemu";
-  version = bigpemu-unwrapped.version;
+  inherit (bigpemu-unwrapped) version;
   targetPkgs = pkgs: [
     glui
     libGL

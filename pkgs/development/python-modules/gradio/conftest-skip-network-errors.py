@@ -3,9 +3,11 @@
 
 from _pytest.runner import pytest_runtest_makereport as orig_pytest_runtest_makereport
 
+
 # We use BaseException to minimize the chance it gets caught and 'pass'ed
 class NixNetworkAccessDeniedError(BaseException):
     pass
+
 
 def pytest_runtest_makereport(item, call):
     """
@@ -27,19 +29,22 @@ def pytest_runtest_makereport(item, call):
     if call.excinfo is not None:
         for exc in iterate_exc_chain(call.excinfo.value):
             if isinstance(exc, NixNetworkAccessDeniedError):
-                tr.outcome, tr.wasxfail = 'skipped', "reason: Requires network access."
+                tr.outcome, tr.wasxfail = "skipped", "reason: Requires network access."
             if isinstance(exc, socket.gaierror):
-                tr.outcome, tr.wasxfail = 'skipped', "reason: Requires network access."
+                tr.outcome, tr.wasxfail = "skipped", "reason: Requires network access."
             if isinstance(exc, httpx.ConnectError):
-                tr.outcome, tr.wasxfail = 'skipped', "reason: Requires network access."
+                tr.outcome, tr.wasxfail = "skipped", "reason: Requires network access."
             if isinstance(exc, FileNotFoundError):  # gradio specific
-                tr.outcome, tr.wasxfail = 'skipped', "reason: Pypi dist bad."
+                tr.outcome, tr.wasxfail = "skipped", "reason: Pypi dist bad."
     return tr
+
 
 # replace network access with exception
 
+
 def deny_network_access(*a, **kw):
     raise NixNetworkAccessDeniedError
+
 
 import httpx
 import requests

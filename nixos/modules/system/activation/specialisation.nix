@@ -55,7 +55,7 @@ in
       '';
       type = types.attrsOf (
         types.submodule (
-          local@{ ... }:
+          local:
           let
             extend = if local.config.inheritParentConfig then extendModules else noUserModules.extendModules;
           in

@@ -16,7 +16,7 @@ testing.makeTest {
   meta.broken = pkgs.stdenv.hostPlatform.isAarch64;
 
   nodes.machine =
-    { ... }:
+    _:
     {
       virtualisation.useBootLoader = true;
 

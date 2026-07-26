@@ -62,16 +62,17 @@ All of the other libraries or programs that work with TPM all use ESAPI under th
 #### Higher Level Interfaces {#module-security-tpm2-introduction-hli}
 
 As alluded to previously, there are a number of ways of speaking the client side TCTI that all amount to wrappers around ESAPI. They include:
-* FAPI - a C library with an easier API for managing cryptographic algorithms and keys, contained in the `tpm2-tss` package.
-* pytss - a python library that wraps ESAPI and FAPI. Contained in the `tpm2-pytss` package.
-* tpm2 tools - a command line interface exposed through the programs `tpm2`, which roughly corresponds to the ESAPI, and `tss2` which roughly corresponds to FAPI. Contained in the `tpm2-tools` package.
-* pkcs11 - libraries that wrap TPM functionality into a pkcs11 interface. There are variants for the ESAPI, and the FAPI. See the `tpm2-pkcs11`, `tpm2-pkcs11-esapi` and `tpm2-pkcs11-fapi` packages.
-* TPM2 OpenSSL - an OpenSSL provider allowing openssl to use the TPM as its cryptographic engine.
 
+- FAPI - a C library with an easier API for managing cryptographic algorithms and keys, contained in the `tpm2-tss` package.
+- pytss - a python library that wraps ESAPI and FAPI. Contained in the `tpm2-pytss` package.
+- tpm2 tools - a command line interface exposed through the programs `tpm2`, which roughly corresponds to the ESAPI, and `tss2` which roughly corresponds to FAPI. Contained in the `tpm2-tools` package.
+- pkcs11 - libraries that wrap TPM functionality into a pkcs11 interface. There are variants for the ESAPI, and the FAPI. See the `tpm2-pkcs11`, `tpm2-pkcs11-esapi` and `tpm2-pkcs11-fapi` packages.
+- TPM2 OpenSSL - an OpenSSL provider allowing openssl to use the TPM as its cryptographic engine.
 
 ## Using the tpm2 NixOS module {#module-security-tpm2-nixosmodule}
 
 A typical configuration is:
+
 ```
 security.tpm2 = {
     enable = true;
@@ -82,6 +83,7 @@ security.tpm2 = {
     tctiEnvironment.interface = "tabrmd";
 }
 ```
+
 `enable = true;` is required for any tpm functionality other than the raw character device and kernel resource manager to be available.
 
 `abrmd.enable = true;` causes the tpm2-abrmd program (the user-space resource manager) to run as a systemd service.

@@ -29,55 +29,55 @@ However, each new package comes with a cost for the maintainers, Continuous Inte
 
 Before adding a new package, please consider the following questions:
 
-* Is the package ready for general use?
+- Is the package ready for general use?
   We don't want to include projects that are too immature or are going to be abandoned immediately.
   In case of doubt, check with upstream.
-* Does the project have a clear license statement?
+- Does the project have a clear license statement?
   Remember that software is unfree by default (all rights reserved), and merely providing access to the source code does not imply its redistribution.
   In case of doubt, ask upstream.
-* How realistic is it that it will be used by other people?
+- How realistic is it that it will be used by other people?
   It's good that nixpkgs caters to various niches, but if it's a niche of 5 people it's probably too small.
   A good estimate is checking upstream issues and pull requests, or other software repositories.
-    * Library packages should have at least one dependent.
-      If possible, that dependent should be packaged in the same PR the library is added in, as a sanity check.
-      If it is not possible to package the dependent, a minimal test program should be added to `passthru.tests`.
-* Is the software actively maintained upstream?
+  - Library packages should have at least one dependent.
+    If possible, that dependent should be packaged in the same PR the library is added in, as a sanity check.
+    If it is not possible to package the dependent, a minimal test program should be added to `passthru.tests`.
+- Is the software actively maintained upstream?
   Especially packages that are security-critical, rely on fast-moving dependencies, or affect data integrity should see regular maintenance.
-* Are you willing to maintain the package?
+- Are you willing to maintain the package?
   You should care enough about the package to be willing to keep it up and running for at least one complete Nixpkgs' release life-cycle.
-  * In case you are not able to maintain the package you wrote, you can seek someone to fill that role, effectively adopting the package.
+  - In case you are not able to maintain the package you wrote, you can seek someone to fill that role, effectively adopting the package.
 
 If any of these questions' answer is no, then you should probably not add the package.
 
 Special care has to be taken with security-critical software components.
 Because entries in the Nix store are inert and do nothing by themselves, packages should be considered by their intended use, e.g. when used together with a NixOS module.
 
-* Any package that immediately would need to be tagged with `meta.knownVulnerabilities` is unlikely to be fit for nixpkgs.
-* Any package depending on a known-vulnerable library should be considered carefully.
-* Packages typically used with untrusted data should have a maintained and responsible upstream.
+- Any package that immediately would need to be tagged with `meta.knownVulnerabilities` is unlikely to be fit for nixpkgs.
+- Any package depending on a known-vulnerable library should be considered carefully.
+- Packages typically used with untrusted data should have a maintained and responsible upstream.
   For example:
-  * Any package which does not follow upstream security policies should be considered vulnerable.
+  - Any package which does not follow upstream security policies should be considered vulnerable.
     In particular, packages that vendor or fork web engines like Blink, Gecko or Webkit need to keep up with the frequent updates of those projects.
-  * Any security-critical fast-moving package such as Chrome or Firefox (or their forks) must have at least one committer among the maintainers, who actively reviews, merges and backports updates.
+  - Any security-critical fast-moving package such as Chrome or Firefox (or their forks) must have at least one committer among the maintainers, who actively reviews, merges and backports updates.
     This ensures no critical fixes are delayed unnecessarily, endangering unsuspecting users.
-  * Services which typically work on web traffic are working on untrusted input.
-  * Data (such as archives or rich documents) commonly shared over untrusted channels (e.g. email) is untrusted.
-* Applications in the Unix authentication stack such as PAM/D-Bus modules or SUID binaries should be considered carefully, and should have a maintained and responsible upstream.
-* Encryption libraries should have a maintained and responsible upstream.
-* Security-critical components that are part of larger packages should be unvendored (=use the nixpkgs package as dependency, instead of vendored and pinned sources).
-* A "responsible upstream" includes various aspects, such as:
-  * channels to disclose security concerns
-  * being responsive to security concerns, providing fixes or workarounds
-  * transparent public disclosure of security issues when they are found or fixed
-  * These aspects are sometimes hard to verify, in which case an upstream that is not known to be irresponsible should be considered as responsible.
-* Source-available software should be built from source where possible.
+  - Services which typically work on web traffic are working on untrusted input.
+  - Data (such as archives or rich documents) commonly shared over untrusted channels (e.g. email) is untrusted.
+- Applications in the Unix authentication stack such as PAM/D-Bus modules or SUID binaries should be considered carefully, and should have a maintained and responsible upstream.
+- Encryption libraries should have a maintained and responsible upstream.
+- Security-critical components that are part of larger packages should be unvendored (=use the nixpkgs package as dependency, instead of vendored and pinned sources).
+- A "responsible upstream" includes various aspects, such as:
+  - channels to disclose security concerns
+  - being responsive to security concerns, providing fixes or workarounds
+  - transparent public disclosure of security issues when they are found or fixed
+  - These aspects are sometimes hard to verify, in which case an upstream that is not known to be irresponsible should be considered as responsible.
+- Source-available software should be built from source where possible.
   Binary blobs risk supply chain attacks and vendored outdated libraries.
 
 This section describes a general framework of understanding and exceptions might apply.
 
 Luckily it's pretty easy to maintain your own package set with Nix, which can then be added to the [Nix User Repository](https://github.com/nix-community/nur) project or included in [search.nixos.org's list of indexed 3rd-party flakes](https://github.com/NixOS/nixos-search/blob/main/flakes/manual.toml)
 
----
+______________________________________________________________________
 
 Now that this is out of the way.
 To add a package to Nixpkgs:
@@ -89,7 +89,7 @@ To add a package to Nixpkgs:
    $ cd nixpkgs
    ```
 
-2. Create a package directory `pkgs/by-name/so/some-package` where `some-package` is the package name and `so` is the lowercased 2-letter prefix of the package name:
+1. Create a package directory `pkgs/by-name/so/some-package` where `some-package` is the package name and `so` is the lowercased 2-letter prefix of the package name:
 
    ```ShellSession
    $ mkdir -p pkgs/by-name/so/some-package
@@ -97,7 +97,7 @@ To add a package to Nixpkgs:
 
    For more detailed information, see [here](./by-name/README.md).
 
-3. Create a `package.nix` file in the package directory, containing a Nix expression — a piece of code that describes how to build the package.
+1. Create a `package.nix` file in the package directory, containing a Nix expression — a piece of code that describes how to build the package.
    In this case, it should be a _function_ that is called with the package dependencies as arguments, and returns a build of the package in the Nix store.
 
    ```ShellSession
@@ -150,7 +150,7 @@ To add a package to Nixpkgs:
 
    - The exact syntax and semantics of the Nix expression language, including the built-in functions, can be found in the [Nix language reference](https://nixos.org/manual/nix/stable/language/).
 
-5. To test whether the package builds, run the following command from the root of the nixpkgs source tree:
+1. To test whether the package builds, run the following command from the root of the nixpkgs source tree:
 
    ```ShellSession
    $ nix-build -A some-package
@@ -160,13 +160,13 @@ To add a package to Nixpkgs:
    You may want to add the flag `-K` to keep the temporary build directory in case something fails.
    If the build succeeds, a symlink `./result` to the package in the Nix store is created.
 
-6. If you want to install the package into your profile (optional), do
+1. If you want to install the package into your profile (optional), do
 
    ```ShellSession
    $ nix-env -f . -iA libfoo
    ```
 
-7. Optionally commit the new package and open a pull request [to nixpkgs](https://github.com/NixOS/nixpkgs/pulls), or use [the Patches category](https://discourse.nixos.org/t/about-the-patches-category/477) on Discourse for sending a patch without a GitHub account.
+1. Optionally commit the new package and open a pull request [to nixpkgs](https://github.com/NixOS/nixpkgs/pulls), or use [the Patches category](https://discourse.nixos.org/t/about-the-patches-category/477) on Discourse for sending a patch without a GitHub account.
 
 ## Commit conventions
 
@@ -182,9 +182,11 @@ To add a package to Nixpkgs:
 
   Examples:
 
-  * nginx: init at 2.0.1
-  * qt6Packages.qtdeclarative: fix build
-  * firefox: 54.0.1 -> 55.0
+  - nginx: init at 2.0.1
+
+  - qt6Packages.qtdeclarative: fix build
+
+  - firefox: 54.0.1 -> 55.0
 
     https://www.mozilla.org/en-US/firefox/55.0/releasenotes/
 
@@ -198,12 +200,12 @@ unless the change is specific to one version.
 Using the `(pkg-name):` prefix is important beyond just being a convention: it queues automatic builds by CI.
 More sophisticated prefixes are also possible:
 
-| Message                                                                  | Automatic Builds                                           |
+| Message | Automatic Builds |
 |--------------------------------------------------------------------------|------------------------------------------------------------|
-| `vim: 1.0.0 -> 2.0.0`                                                    | `vim`                                                      |
-| `vagrant: fix dependencies for version 2.0.2`                            | `vagrant`                                                  |
-| `python3Packages.requests: 1.0.0 -> 2.0.0`                               | `python3Packages.requests`                                 |
-| `python3Packagess.{numpy,scipy}: fix build`                              | `python3Packages.numpy` , `python3Packages.scipy`          |
+| `vim: 1.0.0 -> 2.0.0` | `vim` |
+| `vagrant: fix dependencies for version 2.0.2` | `vagrant` |
+| `python3Packages.requests: 1.0.0 -> 2.0.0` | `python3Packages.requests` |
+| `python3Packagess.{numpy,scipy}: fix build` | `python3Packages.numpy` , `python3Packages.scipy` |
 
 When opening a PR with multiple commits, CI creates a single build job for all detected packages.
 If `passthru.tests` attributes are available, these will be built as well.
@@ -217,7 +219,6 @@ For PRs with multiple commits, the PR title should be a general summary of these
 > Marking a PR as a draft does not prevent automatic builds.
 
 ## Category Hierarchy
-[categories]: #category-hierarchy
 
 Most top-level packages are organised in a loosely-categorised directory hierarchy in this directory.
 See the [overview](#overview) for which directories are part of this.
@@ -457,10 +458,9 @@ Follow these guidelines:
 
     Example: `json-c = json-c_0_9;`
 
-    See also [versioning][versioning].
+    See also [versioning].
 
 ## Versioning
-[versioning]: #versioning
 
 These are the guidelines for the `version` attribute of a package:
 
@@ -491,29 +491,29 @@ See also [`pkgs/by-name/README.md`'s section on this topic](https://github.com/N
 
 The `meta` attribute set should always be placed last in the derivation and any other "meta"-like attribute sets like `passthru` should be written before it.
 
-* `meta.description` must:
-  * Be short, just one sentence.
-  * Be capitalized.
-  * Not start with the definite or an indefinite article.
-  * Not start with the package name.
-    * More generally, it should not refer to the package name.
-  * Not end with a period (or any punctuation for that matter).
-  * Provide factual information.
-    * Avoid subjective language.
-* `meta.license` must be set and match the upstream license.
-  * If there is no upstream license, `meta.license` should default to `lib.licenses.unfree`.
-  * If in doubt, try to contact the upstream developers for clarification.
-* `meta.sourceProvenance` must be set if the package is not built from source.
-  * If you are repackaging a `.deb`, `.rpm`, `.whl`, or any other format provided by your upstream, this should almost always be set to `lib.sourceTypes.binaryNativeCode`.
-* `meta.mainProgram` must be set to the name of the executable which facilitates the primary function or purpose of the package, if there is such an executable in `$bin/bin/` (or `$out/bin/`, if there is no `"bin"` output).
-  * Packages that only have a single executable in the applicable directory above should set `meta.mainProgram`.
+- `meta.description` must:
+  - Be short, just one sentence.
+  - Be capitalized.
+  - Not start with the definite or an indefinite article.
+  - Not start with the package name.
+    - More generally, it should not refer to the package name.
+  - Not end with a period (or any punctuation for that matter).
+  - Provide factual information.
+    - Avoid subjective language.
+- `meta.license` must be set and match the upstream license.
+  - If there is no upstream license, `meta.license` should default to `lib.licenses.unfree`.
+  - If in doubt, try to contact the upstream developers for clarification.
+- `meta.sourceProvenance` must be set if the package is not built from source.
+  - If you are repackaging a `.deb`, `.rpm`, `.whl`, or any other format provided by your upstream, this should almost always be set to `lib.sourceTypes.binaryNativeCode`.
+- `meta.mainProgram` must be set to the name of the executable which facilitates the primary function or purpose of the package, if there is such an executable in `$bin/bin/` (or `$out/bin/`, if there is no `"bin"` output).
+  - Packages that only have a single executable in the applicable directory above should set `meta.mainProgram`.
     For example, the package `ripgrep` only has a single executable `rg` under `$out/bin/`, so `ripgrep.meta.mainProgram` is set to `"rg"`.
-  * Packages like `polkit_gnome` that have no executables in the applicable directory should not set `meta.mainProgram`.
-  * Packages like `e2fsprogs` that have multiple executables, none of which can be considered the main program, should not set `meta.mainProgram`.
-  * Packages which are not primarily used for a single executable do not need to set `meta.mainProgram`.
-  * Always prefer using a hardcoded string (don't use `pname`, for example).
-  * When in doubt, ask for reviewer input.
-* `meta.maintainers` must be set for new packages.
+  - Packages like `polkit_gnome` that have no executables in the applicable directory should not set `meta.mainProgram`.
+  - Packages like `e2fsprogs` that have multiple executables, none of which can be considered the main program, should not set `meta.mainProgram`.
+  - Packages which are not primarily used for a single executable do not need to set `meta.mainProgram`.
+  - Always prefer using a hardcoded string (don't use `pname`, for example).
+  - When in doubt, ask for reviewer input.
+- `meta.maintainers` must be set for new packages.
 
 See the Nixpkgs manual for more details on [standard meta-attributes](https://nixos.org/nixpkgs/manual/#sec-standard-meta-attributes).
 
@@ -530,11 +530,11 @@ Please do not introduce new uses of `overrideAttrs` or `overridePythonAttrs` in 
 These functions are useful for out-of-tree code because they allow easy overriding a package without changing its source in Nixpkgs, but when contributing to Nixpkgs you *can* change the source of other packages. So instead of using the escape hatch that is overriding, you should try to provide proper support for the functionality you need, in ways that are visible and can be understood and accounted for by the maintainers of the patched package.
 Using `overrideAttrs` and `overridePythonAttrs` in Nixpkgs causes maintainability problems:
 
-* It's easy for multiple packages to end up duplicating basically the same override without noticing.
-* It's not clear when working on an overridden package that it's being overridden elsewhere in Nixpkgs, so `overrideAttrs` and `overridePythonAttrs` are fragile and can break accidentally when the overridden package is changed.
-* Package maintainers will not be requested for review of overrides, even though they are likely to have important knowledge about the package.
-* It is easy for overridden packages to be forgotten and remain around long after they are no longer necessary.
-* Dependency closures end up being bigger than necessary due to unnecessarily including multiple versions of the same package.
+- It's easy for multiple packages to end up duplicating basically the same override without noticing.
+- It's not clear when working on an overridden package that it's being overridden elsewhere in Nixpkgs, so `overrideAttrs` and `overridePythonAttrs` are fragile and can break accidentally when the overridden package is changed.
+- Package maintainers will not be requested for review of overrides, even though they are likely to have important knowledge about the package.
+- It is easy for overridden packages to be forgotten and remain around long after they are no longer necessary.
+- Dependency closures end up being bigger than necessary due to unnecessarily including multiple versions of the same package.
 
 Instead, keep all instances of the same package next to each other, and try to minimize how many different instances of a package are in Nixpkgs.
 If you need a patch applied to a dependency, discuss with the maintainer of that dependency whether it would be acceptable to apply to the main version of the package.
@@ -661,24 +661,24 @@ If you do need to create this sort of patch file, one way to do so is with git:
 
 1. Move to the root directory of the source code you're patching.
 
-    ```ShellSession
-    $ cd the/program/source
-    ```
+   ```ShellSession
+   $ cd the/program/source
+   ```
 
-2. If a git repository is not already present, create one and stage all of the source files.
+1. If a git repository is not already present, create one and stage all of the source files.
 
-    ```ShellSession
-    $ git init
-    $ git add -A
-    ```
+   ```ShellSession
+   $ git init
+   $ git add -A
+   ```
 
-3. Edit some files to make whatever changes need to be included in the patch.
+1. Edit some files to make whatever changes need to be included in the patch.
 
-4. Use git to create a diff, and pipe the output to a patch file:
+1. Use git to create a diff, and pipe the output to a patch file:
 
-    ```ShellSession
-    $ git diff -a > nixpkgs/pkgs/the/package/0001-changes.patch
-    ```
+   ```ShellSession
+   $ git diff -a > nixpkgs/pkgs/the/package/0001-changes.patch
+   ```
 
 ## Deprecating/removing packages
 
@@ -691,44 +691,50 @@ Before removing a package, one should try to find a new maintainer or fix smalle
 We use jbidwatcher as an example for a discontinued project here.
 
 1. Have Nixpkgs checked out locally and up to date.
+
 1. Create a new branch for your change, e.g. `git checkout -b jbidwatcher`
+
 1. Remove the actual package including its directory, e.g. `git rm -rf pkgs/applications/misc/jbidwatcher`
+
 1. Remove the package from the list of all packages (`pkgs/top-level/all-packages.nix`).
+
 1. Add an alias for the package name in `pkgs/top-level/aliases.nix` (There is also `pkgs/applications/editors/vim/plugins/aliases.nix`.
    Package sets typically do not have aliases, so we can't add them there.)
 
-    For example in this case:
+   For example in this case:
 
-    ```nix
-    {
-      jbidwatcher = throw "jbidwatcher was discontinued in march 2021"; # added 2021-03-15
-    }
-    ```
+   ```nix
+   {
+     jbidwatcher = throw "jbidwatcher was discontinued in march 2021"; # added 2021-03-15
+   }
+   ```
 
-    The throw message should explain in short why the package was removed for users that still have it installed.
+   The throw message should explain in short why the package was removed for users that still have it installed.
 
 1. Test if the changes introduced any issues by running `nix-env -qaP -f . --show-trace`.
    It should show the list of packages without errors.
+
 1. Commit the changes.
    Explain again why the package was removed.
    If it was declared discontinued upstream, add a link to the source.
 
-    ```ShellSession
-    $ git add pkgs/applications/misc/jbidwatcher/default.nix pkgs/top-level/all-packages.nix pkgs/top-level/aliases.nix
-    $ git commit
-    ```
+   ```ShellSession
+   $ git add pkgs/applications/misc/jbidwatcher/default.nix pkgs/top-level/all-packages.nix pkgs/top-level/aliases.nix
+   $ git commit
+   ```
 
-    Example commit message:
+   Example commit message:
 
-    ```
-    jbidwatcher: remove
+   ```
+   jbidwatcher: remove
 
-    project was discontinued in march 2021. the program does not work anymore because ebay changed the login.
+   project was discontinued in march 2021. the program does not work anymore because ebay changed the login.
 
-    https://web.archive.org/web/20210315205723/http://www.jbidwatcher.com/
-    ```
+   https://web.archive.org/web/20210315205723/http://www.jbidwatcher.com/
+   ```
 
 1. Push changes to your GitHub fork with `git push`
+
 1. Create a pull request against Nixpkgs.
    Mention the package maintainer.
 
@@ -747,12 +753,12 @@ Tests are important to ensure quality and make reviews and automatic updates eas
 
 The following types of tests exist:
 
-* [NixOS **module tests**](https://nixos.org/manual/nixos/stable/#sec-nixos-tests), which spawn one or more NixOS VMs.
+- [NixOS **module tests**](https://nixos.org/manual/nixos/stable/#sec-nixos-tests), which spawn one or more NixOS VMs.
   They exercise both NixOS modules and the packaged programs used within them.
   For example, a NixOS module test can start a web server VM running the `nginx` module, and a client VM running `curl` or a graphical `firefox`, and test that they can talk to each other and display the correct content.
-* Nix **package tests** are a lightweight alternative to NixOS module tests.
+- Nix **package tests** are a lightweight alternative to NixOS module tests.
   They should be used to create simple integration tests for packages, but cannot test NixOS services, and some programs with graphical user interfaces may also be difficult to test with them.
-* The **`checkPhase` of a package**, which should execute the unit tests that are included in the source code of a package.
+- The **`checkPhase` of a package**, which should execute the unit tests that are included in the source code of a package.
 
 Here in the nixpkgs manual we describe mostly _package tests_; for _module tests_ head over to the corresponding [section in the NixOS manual](https://nixos.org/manual/nixos/stable/#sec-nixos-tests).
 
@@ -815,7 +821,6 @@ runCommand "my-package-test"
 ```
 
 ### Writing larger package tests
-[larger-package-tests]: #writing-larger-package-tests
 
 This is an example using the `phoronix-test-suite` package with the current best practices.
 
@@ -910,7 +915,6 @@ stdenv.mkDerivation {
 ```
 
 ## Automatic package updates
-[automatic-package-updates]: #automatic-package-updates
 
 The [community bot `r-ryantm`](https://nix-community.org/update-bot/), periodically tries to update all packages in Nixpkgs.
 `r-ryantm` runs the program [`nixpkgs-update`](https://nix-community.github.io/nixpkgs-update/) to find new versions of packages.
@@ -931,8 +935,8 @@ To learn more about the default update procedures, read their [FAQ for Nixpkgs m
 >
 > `nix-update` is a little bit more flexible than `nixpkgs-update` in performing updates, so it can be useful for cases such as:
 >
->  - A `nix-update` CLI flag like `--version branch` or `--version-regex` are needed to make the update work.
->  - You don't want to rely upon new versions to be listed in [Repology](https://repology.org/), and `nix-update` finds new versions easily (e.g GitLab projects).
+> - A `nix-update` CLI flag like `--version branch` or `--version-regex` are needed to make the update work.
+> - You don't want to rely upon new versions to be listed in [Repology](https://repology.org/), and `nix-update` finds new versions easily (e.g GitLab projects).
 
 The `passthru.updateScript` attribute can contain one of the following:
 
@@ -979,6 +983,7 @@ The `passthru.updateScript` attribute can contain one of the following:
   ```
 
 - an attribute set containing:
+
   - `command`
 
     A string or list in the [format expected by `passthru.updateScript`][automatic-package-updates]
@@ -1020,10 +1025,10 @@ You can run `nix-shell maintainers/scripts/update.nix` in the root of Nixpkgs re
 Update scripts will be run inside the [Nixpkgs development shell](../shell.nix), providing access to some useful tools for CI.
 Furthermore each update script will be passed the following environment variables:
 
-- [`UPDATE_NIX_NAME`] – content of the `name` attribute of the updated package
-- [`UPDATE_NIX_PNAME`] – content of the `pname` attribute of the updated package
-- [`UPDATE_NIX_OLD_VERSION`] – content of the `version` attribute of the updated package
-- [`UPDATE_NIX_ATTR_PATH`] – attribute path the `update.nix` discovered the package on (or the package's specified `attrPath` when available).
+- \[`UPDATE_NIX_NAME`\] – content of the `name` attribute of the updated package
+- \[`UPDATE_NIX_PNAME`\] – content of the `pname` attribute of the updated package
+- \[`UPDATE_NIX_OLD_VERSION`\] – content of the `version` attribute of the updated package
+- \[`UPDATE_NIX_ATTR_PATH`\] – attribute path the `update.nix` discovered the package on (or the package's specified `attrPath` when available).
   Example: `pantheon.elementary-terminal`
 
 > [!Note]
@@ -1034,7 +1039,6 @@ While update scripts should not create commits themselves, `update.nix` supports
 If you need to customize commit message, you can have the update script implement the `commit` feature.
 
 ### Supported features
-[update-script-supported-features]: #supported-features
 
 - `commit`
 
@@ -1055,6 +1059,7 @@ If you need to customize commit message, you can have the update script implemen
     }
   ]
   ```
+
   :::
 
   When `update.nix` is run with `--arg commit true`, it will create a separate commit for each of the objects.
@@ -1101,6 +1106,7 @@ Reviewing process:
 - Ensure that the code contains no typos.
 - Build the package locally.
   - Pull requests are often targeted to the master or staging branch, and building the pull request locally when it is submitted can trigger many source builds.
+
   - It is possible to rebase the changes on nixos-unstable or nixpkgs-unstable for easier review by running the following commands from a nixpkgs clone.
 
     ```ShellSession
@@ -1112,6 +1118,7 @@ Reviewing process:
     - The first command fetches the nixos-unstable branch.
     - The second command fetches the pull request changes, `PRNUMBER` is the number at the end of the pull request title and `BASEBRANCH` the base branch of the pull request.
     - The third command rebases the pull request changes to the nixos-unstable branch.
+
   - The [nixpkgs-review](https://github.com/Mic92/nixpkgs-review) tool can be used to review a pull request content in a single command.
     `PRNUMBER` should be replaced by the number at the end of the pull request title.
     You can also provide the full github pull request url.
@@ -1203,11 +1210,11 @@ Sample template for a new package review is provided below.
 ## Security
 
 ### Submitting security fixes
-[security-fixes]: #submitting-security-fixes
 
 Security fixes are submitted in the same way as other changes and thus the same guidelines apply.
 
 - If a new version fixing the vulnerability has been released, update the package;
+
 - If the security fix comes in the form of a patch and a CVE is available, then add the patch to the Nixpkgs tree, and apply it to the package.
   The name of the patch should be the CVE identifier, so e.g. `CVE-2019-13636.patch`; If a patch is fetched the name needs to be set as well, e.g.:
 
@@ -1238,7 +1245,6 @@ Each issue corresponds to a vulnerable version of a package; as a consequence:
 - One CVE can be shared across several issues;
 - A single package can be concerned by several issues.
 
-
 A "Vulnerability roundup" issue usually respects the following format:
 
 ```txt
@@ -1252,7 +1258,6 @@ A "Vulnerability roundup" issue usually respects the following format:
 ```
 
 Note that there can be an extra comment containing links to previously reported (and still open) issues for the same package.
-
 
 #### Triaging and Fixing
 
@@ -1268,3 +1273,9 @@ If you are investigating a "true positive":
     - Once the fix is merged into `master`, [submit the change to the vulnerable release branch(es)](../CONTRIBUTING.md#how-to-backport-pull-requests);
   - **Yes**: [Backport the change to the vulnerable release branch(es)](../CONTRIBUTING.md#how-to-backport-pull-requests).
 - When the patch has made it into all the relevant branches (`master`, and the vulnerable releases), close the relevant issue(s).
+
+[automatic-package-updates]: #automatic-package-updates
+[categories]: #category-hierarchy
+[larger-package-tests]: #writing-larger-package-tests
+[security-fixes]: #submitting-security-fixes
+[versioning]: #versioning

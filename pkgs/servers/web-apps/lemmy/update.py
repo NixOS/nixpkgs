@@ -13,7 +13,6 @@ from typing import (
 import json
 import os
 
-
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 NIXPKGS = os.path.abspath(os.path.join(SCRIPT_DIR, "../../../../"))
 

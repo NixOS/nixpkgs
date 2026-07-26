@@ -18,7 +18,7 @@ let
 in
 stdenvNoCC.mkDerivation {
   pname = if "${version-channel}" == "main" then "upbound-main" else "upbound";
-  version = sources.version;
+  inherit (sources) version;
   srcs = [
     (fetchurl {
       url = sources.fetchurlAttrSet.docker-credential-up.${system}.url;

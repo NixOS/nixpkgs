@@ -35,8 +35,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ which ];
 
-  buildInputs = (
-    lib.optionals cudaSupport (
+  buildInputs = lib.optionals cudaSupport (
       with cudaPackages;
       [
         cuda_cudart # cuda_runtime.h, -lcudart
@@ -46,8 +45,7 @@ buildPythonPackage rec {
         cuda_nvcc
         libcublas
       ]
-    )
-  );
+    );
 
   dependencies = [
     causal-conv1d

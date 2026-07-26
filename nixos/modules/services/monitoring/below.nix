@@ -28,8 +28,8 @@ let
     lib.mkOption (
       x
       // {
-        description = x.description;
-        type = (lib.types.nullOr ty);
+        inherit (x) description;
+        type = lib.types.nullOr ty;
         default = null;
       }
     );

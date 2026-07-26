@@ -12,7 +12,7 @@ in
 
     # fun.<function-body>.a
     (
-      { ... }:
+      _:
       {
         options = {
           fun = lib.mkOption {
@@ -28,7 +28,7 @@ in
 
     # fun.<function-body>.b
     (
-      { ... }:
+      _:
       {
         options = {
           fun = lib.mkOption {

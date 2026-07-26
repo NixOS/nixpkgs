@@ -172,7 +172,7 @@ in
         ) cfg.clients
       )
       // {
-        iodined = lib.mkIf (cfg.server.enable) {
+        iodined = lib.mkIf cfg.server.enable {
           description = "iodine, ip over dns server daemon";
           after = [ "network.target" ];
           wantedBy = [ "multi-user.target" ];

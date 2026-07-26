@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru.tests = {
-    stunnel = nixosTests.stunnel;
+    inherit (nixosTests) stunnel;
   };
 
   meta = {

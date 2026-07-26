@@ -13,7 +13,7 @@ let
   nodeConfigFiles = lib.mapAttrs (
     nodeId: nodeCfg:
     pkgs.writeText "Tdarr_Node_Config_${nodeId}.json" (
-      builtins.toJSON { pathTranslators = nodeCfg.pathTranslators; }
+      builtins.toJSON { inherit (nodeCfg) pathTranslators; }
     )
   ) enabledNodes;
 in
@@ -197,10 +197,10 @@ in
         wantedBy = [ "multi-user.target" ];
         environment = {
           nodeName = nodeCfg.name;
-          serverURL = nodeCfg.serverURL;
+          inherit (nodeCfg) serverURL;
           nodeType = nodeCfg.type;
           priority = toString nodeCfg.priority;
-          cronPluginUpdate = nodeCfg.cronPluginUpdate;
+          inherit (nodeCfg) cronPluginUpdate;
           maxLogSizeMB = toString nodeCfg.maxLogSizeMB;
           pollInterval = toString nodeCfg.pollInterval;
           startPaused = lib.boolToString nodeCfg.startPaused;

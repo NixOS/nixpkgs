@@ -256,7 +256,7 @@ let
       # It could theoretically be replaced with its body,
       # but such a binding is avoided to allow for earlier grabage collection.
       doCollect =
-        { }:
+        _:
         collectModules class (specialArgs.modulesPath or "") (regularModules ++ [ internalModule ]) (
           {
             inherit
@@ -285,7 +285,7 @@ let
           freeformConfig =
             let
               defs = map (def: {
-                file = def.file;
+                inherit (def) file;
                 value = setAttrByPath def.prefix def.value;
               }) merged.unmatchedDefns;
             in
@@ -399,7 +399,7 @@ let
         _type = "configuration";
         options = checked options;
         config = checked (removeAttrs config [ "_module" ]);
-        _module = checked (config._module);
+        _module = checked config._module;
         inherit (doCollect { }) graph;
         inherit extendModules type class;
       };
@@ -429,7 +429,7 @@ let
               messages.not_a_module {
                 inherit fallbackFile;
                 value = m;
-                _type = m._type;
+                inherit (m) _type;
                 expectedClass = class;
                 prefix = args._prefix;
               }
@@ -483,13 +483,10 @@ let
               else
                 toString m
 
-            else if m ? key then
-              m.key
-
-            else if isAttrs m then
+            else m.key or (if isAttrs m then
               throw "Module `${file}` contains a disabledModules item that is an attribute set, presumably a module, that does not have a `key` attribute. This means that the module system doesn't have any means to identify the module that should be disabled. Make sure that you've put the correct value in disabledModules: a string path relative to modulesPath, a path value, or an attribute set with a `key` attribute."
             else
-              throw "Each disabledModules item must be a path, string, or a attribute set with a key attribute, or a value supported by toString. However, one of the disabledModules items in `${toString file}` is none of that, but is of type ${typeOf m}.";
+              throw "Each disabledModules item must be a path, string, or a attribute set with a key attribute, or a value supported by toString. However, one of the disabledModules items in `${toString file}` is none of that, but is of type ${typeOf m}.");
 
           disabledKeys = concatMap ({ file, disabled }: map (moduleKey file) disabled) disabledList;
         in
@@ -536,9 +533,9 @@ let
               collectedImports = collectStructuredModules module._file module.key module.imports args;
             in
             {
-              key = module.key;
-              module = module;
-              modules = collectedImports.modules;
+              inherit (module) key;
+              inherit module;
+              inherit (collectedImports) modules;
               disabled =
                 (
                   if module.disabledModules != [ ] then
@@ -638,7 +635,7 @@ let
         if m ? meta then
           mkMerge [
             config
-            { meta = m.meta; }
+            { inherit (m) meta; }
           ]
         else
           config;
@@ -863,7 +860,7 @@ let
           // {
             options = mkOption {
               type = types.submoduleWith {
-                modules = [ { options = decl.options; } ];
+                modules = [ { inherit (decl) options; } ];
                 # `null` is not intended for use by modules. It is an internal
                 # value that means "whatever the user has declared elsewhere".
                 # This might become obsolete with https://github.com/NixOS/nixpkgs/issues/162398
@@ -1259,13 +1256,8 @@ let
             allInvalid = filter (def: !type.check def.value) defsFinal;
           in
           throw "A definition for option `${showOption loc}' is not of type `${type.description}'. Definition values:${showDefs allInvalid}"
-      else if type.emptyValue ? value then
-        type.emptyValue.value
-      else
-        # (nixos-option detects this specific error message and gives it special
-        # handling.  If changed here, please change it there too.)
-        throw
-          "The option `${showOption loc}' was accessed but has no value defined. Try setting the option.";
+      else type.emptyValue.value or (throw
+          "The option `${showOption loc}' was accessed but has no value defined. Try setting the option.");
 
     checkedAndMerged =
       (

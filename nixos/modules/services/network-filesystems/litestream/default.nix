@@ -18,7 +18,7 @@ in
       description = ''
         See the [documentation](https://litestream.io/reference/config/).
       '';
-      type = settingsFormat.type;
+      inherit (settingsFormat) type;
       example = {
         dbs = [
           {

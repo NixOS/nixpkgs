@@ -12,7 +12,7 @@ in
 # luaPackages
 {
   # the lua derivation to convert into a neovim plugin
-  luaAttr ? (lua.pkgs.${normalizeName attrs.pname}),
+  luaAttr ? lua.pkgs.${normalizeName attrs.pname},
   ...
 }@attrs:
 let
@@ -27,7 +27,7 @@ let
   luaDrv = originalLuaDrv.overrideAttrs (old: {
     version = attrs.version or old.version;
     __intentionallyOverridingVersion = true;
-    rockspecVersion = old.rockspecVersion;
+    inherit (old) rockspecVersion;
     luarocksConfig = (old.luarocksConfig or { }) // {
       # to create a flat hierarchy
       lua_modules_path = "lua";

@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ unixodbc ];
 
   cmakeFlags =
-    if (stdenv.hostPlatform.isStatic) then
+    if stdenv.hostPlatform.isStatic then
       [ "-DBUILD_STATIC_LIBS=ON" ]
     else
       [ "-DBUILD_SHARED_LIBS=ON" ];

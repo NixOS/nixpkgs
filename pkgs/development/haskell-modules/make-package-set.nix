@@ -307,7 +307,7 @@ package-set { inherit pkgs lib callPackage; } self
       }) args;
     in
     overrideCabal (orig: {
-      revision = rev.revision;
+      inherit (rev) revision;
       editedCabalFile = rev.sha256;
     }) firstRevision;
 
@@ -726,7 +726,7 @@ package-set { inherit pkgs lib callPackage; } self
       (
         haskellLib.overrideSrc {
           src = self.cabalSdist { src = pkgs.srcOnly pkg; };
-          version = pkg.version;
+          inherit (pkg) version;
         } pkg
       );
 

@@ -15,7 +15,7 @@ let
 
   rulesDir = pkgs.symlinkJoin {
     name = "logcheck-rules-dir";
-    paths = ([ defaultRules ] ++ cfg.extraRulesDirs);
+    paths = [ defaultRules ] ++ cfg.extraRulesDirs;
   };
 
   configFile = pkgs.writeText "logcheck.conf" cfg.config;
@@ -119,7 +119,7 @@ let
 
       timeArgs = lib.mkOption {
         default = null;
-        type = lib.types.nullOr (lib.types.str);
+        type = lib.types.nullOr lib.types.str;
         example = "02 06 * * *";
         description = ''
           "min hr dom mon dow" crontab time args, to auto-create a cronjob too.
@@ -243,7 +243,7 @@ in
         isSystemUser = true;
         shell = "/bin/sh";
         description = "Logcheck user account";
-        extraGroups = cfg.extraGroups;
+        inherit (cfg) extraGroups;
       };
     };
     users.groups = lib.optionalAttrs (cfg.user == "logcheck") {

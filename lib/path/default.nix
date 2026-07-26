@@ -436,7 +436,7 @@ in
       deconstructed = deconstructPath path;
     in
     {
-      root = deconstructed.root;
+      inherit (deconstructed) root;
       subpath = joinRelPath deconstructed.components;
     };
 

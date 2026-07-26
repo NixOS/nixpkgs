@@ -19,7 +19,7 @@ in
       package = lib.mkPackageOption pkgs "soft-serve" { };
 
       settings = lib.mkOption {
-        type = format.type;
+        inherit (format) type;
         default = { };
         description = ''
           The contents of the configuration file for soft-serve.

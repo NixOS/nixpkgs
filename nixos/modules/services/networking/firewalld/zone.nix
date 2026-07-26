@@ -220,7 +220,7 @@ in
           default = [ ];
         };
         rules = mkOption {
-          type = listOf (format.type);
+          type = listOf format.type;
           description = "Rich rules for the zone.";
           default = [ ];
         };

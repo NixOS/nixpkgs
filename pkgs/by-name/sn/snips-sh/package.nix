@@ -19,7 +19,7 @@ buildGoModule (finalAttrs: {
     hash = "sha256-bwnn+kl8uv7ln5mjlq5I+QM5wJbLFdZJAyQIvwG6kAI=";
   };
 
-  tags = (lib.optional (!withTensorflow) "noguesser");
+  tags = lib.optional (!withTensorflow) "noguesser";
 
   buildInputs = [ sqlite ] ++ (lib.optional withTensorflow libtensorflow);
 

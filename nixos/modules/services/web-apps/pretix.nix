@@ -31,7 +31,7 @@ let
   filterRecursiveNull =
     o:
     if isAttrs o then
-      mapAttrs (_: v: filterRecursiveNull v) (filterAttrs (_: v: v != null) o)
+      mapAttrs (_: filterRecursiveNull) (filterAttrs (_: v: v != null) o)
     else if isList o then
       map filterRecursiveNull (filter (v: v != null) o)
     else

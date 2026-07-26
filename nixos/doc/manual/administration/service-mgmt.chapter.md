@@ -152,6 +152,7 @@ for template-specific overrides. A service needs to be defined twice, once
 for the base unit and once for the instance. All instances must include
 `overrideStrategy = "asDropin"` for the change detection to work. This
 example illustrates this:
+
 ```nix
 {
   systemd.services = {

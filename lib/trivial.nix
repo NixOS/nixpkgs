@@ -1104,7 +1104,7 @@ in
   */
   functionArgs =
     let
-      functionArgs = builtins.functionArgs;
+      inherit (builtins) functionArgs;
     in
     f: if f ? __functor then f.__functionArgs or (functionArgs (f.__functor f)) else functionArgs f;
 
@@ -1126,7 +1126,7 @@ in
   */
   isFunction =
     let
-      isFunction = builtins.isFunction;
+      inherit (builtins) isFunction;
     in
     f: isFunction f || (f ? __functor && isFunction (f.__functor f));
 

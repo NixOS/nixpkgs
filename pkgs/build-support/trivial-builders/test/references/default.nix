@@ -51,7 +51,7 @@ let
     );
 
   closures = lib.mapAttrs (n: v: writeClosure [ v ]) samples;
-  directReferences = lib.mapAttrs (n: v: writeDirectReferencesToFile v) samples;
+  directReferences = lib.mapAttrs (n: writeDirectReferencesToFile) samples;
   collectiveClosure = writeClosure (lib.attrValues samples);
 
   testScriptBin = stdenvNoCC.mkDerivation (finalAttrs: {

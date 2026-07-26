@@ -111,14 +111,14 @@ stubs
   ### C ###
 
   Csu = throw "darwin.Csu has been removed, as it was only used on `x86_64-darwin`, which is no longer supported"; # added 2026-06-26
-  cctools = pkgs.cctools; # added 2024-07-17
+  inherit (pkgs) cctools; # added 2024-07-17
   cctools-apple = pkgs.cctools; # added 2024-07-01
   cctools-llvm = pkgs.cctools; # added 2024-07-01
   cctools-port = pkgs.cctools; # added 2024-07-17
 
   ### D ###
 
-  discrete-scroll = pkgs.discrete-scroll; # added 2024-11-27
+  inherit (pkgs) discrete-scroll; # added 2024-11-27
   ditto = throw "'darwin.ditto' has been removed, because it was impure and unused"; # added 2025-10-18
 
   ### I ###
@@ -131,17 +131,17 @@ stubs
 
   libauto = throw "'darwin.libauto' has been removed, as it was broken and unmaintained"; # added 2024-05-10
   libresolvHeaders = throw "darwin.libresolvHeaders has been removed; use `lib.getInclude darwin.libresolv`"; # converted to throw 2025-07-29
-  libtapi = pkgs.libtapi; # 2024-08-16
+  inherit (pkgs) libtapi; # 2024-08-16
   libutilHeaders = throw "darwin.libutilHeaders has been removed; use `lib.getInclude darwin.libutil`"; # converted to throw 2025-07-29
 
   ### M ###
 
-  moltenvk = pkgs.moltenvk; # 2024-10-06
+  inherit (pkgs) moltenvk; # 2024-10-06
 
   ### O ###
 
-  opencflite = pkgs.opencflite; # added 2024-05-02
-  openwith = pkgs.openwith; # added 2025-11-28
+  inherit (pkgs) opencflite; # added 2024-05-02
+  inherit (pkgs) openwith; # added 2025-11-28
 
   ### P ###
   postLinkSignHook = throw "'darwin.postLinkSignHook' has been removed because it is obsolete"; # added 2025-02-23

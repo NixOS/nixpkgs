@@ -82,7 +82,7 @@ let
   latestSdkVersion = lib.foldl' (
     s: x: if lib.strings.compareVersions (toString x) s > 0 then toString x else s
   ) "0" androidComposition.platformVersions;
-  jdk = pkgs.jdk;
+  inherit (pkgs) jdk;
 in
 pkgs.mkShell rec {
   name = "androidenv-demo";

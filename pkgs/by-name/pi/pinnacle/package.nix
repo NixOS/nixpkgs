@@ -170,7 +170,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     );
     inherit buildRustConfig;
     providedSessions = [ "pinnacle" ];
-    lua-client-api = lua-client-api;
+    inherit lua-client-api;
   };
   __structuredAttrs = true;
 })

@@ -15,11 +15,11 @@ listToAttrs (
     inherit (v) name;
     value = fetchFromGitHub {
       pname = v.name;
-      version = v.version;
+      inherit (v) version;
       owner = "DFgraphics";
       repo = v.name;
       rev = v.version;
-      sha256 = v.sha256;
+      inherit (v) sha256;
       meta = {
         platforms = platforms.all;
         maintainers = [

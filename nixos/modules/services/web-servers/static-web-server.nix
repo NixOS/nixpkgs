@@ -32,7 +32,7 @@ in
       };
       configuration = lib.mkOption {
         default = { };
-        type = toml.type;
+        inherit (toml) type;
         example = {
           general = {
             log-level = "error";

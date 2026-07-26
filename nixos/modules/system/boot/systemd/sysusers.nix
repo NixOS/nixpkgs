@@ -108,7 +108,7 @@ in
           d = {
             mode = opts.homeMode;
             user = username;
-            group = opts.group;
+            inherit (opts) group;
           };
         }
       ) (lib.filterAttrs (_username: opts: opts.home != "/var/empty") systemUsers);

@@ -112,7 +112,7 @@ in
           "source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
         ]
         ++ lib.optional (
-          builtins.length (cfg.highlighters) > 0
+          builtins.length cfg.highlighters > 0
         ) "ZSH_HIGHLIGHT_HIGHLIGHTERS=(${builtins.concatStringsSep " " cfg.highlighters})"
         ++ lib.optionals (builtins.length (builtins.attrNames cfg.patterns) > 0) (
           lib.mapAttrsToList (

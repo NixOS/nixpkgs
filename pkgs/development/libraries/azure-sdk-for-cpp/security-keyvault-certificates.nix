@@ -60,11 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 
-  meta = (
-    meta
+  meta = meta
     // {
       description = "Azure Key Vault Certificates client library for C++";
       changelog = "https://github.com/Azure/azure-sdk-for-cpp/blob/main/sdk/keyvault/azure-security-keyvault-certificates/CHANGELOG.md";
-    }
-  );
+    };
 })

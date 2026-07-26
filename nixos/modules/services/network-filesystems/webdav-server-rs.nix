@@ -36,7 +36,7 @@ in
       };
 
       settings = lib.mkOption {
-        type = format.type;
+        inherit (format) type;
         default = { };
         description = ''
           Attrset that is converted and passed as config file. Available
@@ -105,7 +105,7 @@ in
     users.users = lib.optionalAttrs (cfg.user == "webdav") {
       webdav = {
         description = "WebDAV user";
-        group = cfg.group;
+        inherit (cfg) group;
         uid = config.ids.uids.webdav;
       };
     };

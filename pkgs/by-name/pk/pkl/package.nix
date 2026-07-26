@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   # On aarch64-darwin, no artifact for idea:ideaIC:2025.2.3 is available
-  doCheck = !(stdenv.hostPlatform.isDarwin) && !(stdenv.hostPlatform.isAarch64);
+  doCheck = !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64;
 
   # build only the cli binary to work around this issue:
   # "Failed to query the value of task ':pkl-internal-intellij-plugin:initializeIntellijPlatformPlugin' property 'latestPluginVersion'."

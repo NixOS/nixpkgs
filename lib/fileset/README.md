@@ -7,6 +7,7 @@ The user documentation is [in the Nixpkgs manual](https://nixos.org/manual/nixpk
 
 The main goal of the file set library is to be able to select local files that should be added to the Nix store.
 It should have the following properties:
+
 - Easy:
   The functions should have obvious semantics, be low in number and be composable.
 - Safe:
@@ -15,12 +16,14 @@ It should have the following properties:
   Only compute values when necessary.
 
 Non-goals are:
+
 - Efficient:
   If the abstraction proves itself worthwhile but too slow, it can still be optimized further.
 
 ## Tests
 
 Tests are declared in [`tests.sh`](./tests.sh) and can be run using
+
 ```
 ./tests.sh
 ```
@@ -28,6 +31,7 @@ Tests are declared in [`tests.sh`](./tests.sh) and can be run using
 ## Benchmark
 
 A simple benchmark against the HEAD commit can be run using
+
 ```
 ./benchmark.sh HEAD
 ```
@@ -106,6 +110,7 @@ This section justifies API design decisions.
 The representation of the file set data type is internal and can be changed over time.
 
 Arguments:
+
 - (+) The point of this library is to provide high-level functions, users don't need to be concerned with how it's implemented
 - (+) It allows adjustments to the representation, which is especially useful in the early days of the library.
 - (+) It still allows the representation to be stabilized later if necessary and if it has proven itself
@@ -118,6 +123,7 @@ For example, even with `dir/file.txt` being the only file in `./.`, `toSource { 
 This is because `fileset` may as well be the result of filtering `./.` in a way that excludes `dir`.
 
 Arguments:
+
 - (+) This gives us the guarantee that adding new files to a project never breaks a file set expression.
   This is also true in a lesser form for removed files:
   only removing files explicitly referenced by paths can break a file set expression.
@@ -130,6 +136,7 @@ There is a special representation for an empty file set without a base path.
 This is used for return values that should be empty but when there's no base path that would make sense.
 
 Arguments:
+
 - Alternative: This could also be represented using `_internalBase = /.` and `_internalTree = null`.
   - (+) Removes the need for a special representation.
   - (-) Due to [influence tracking](#influence-tracking),
@@ -149,6 +156,7 @@ Arguments:
 While there is `intersection a b`, there is no function `intersections [ a b c ]`.
 
 Arguments:
+
 - (+) There is no known use case for such a function, it can be added later if a use case arises
 - (+) There is no suitable return value for `intersections [ ]`, see also "Nullary intersections" [here](https://en.wikipedia.org/w/index.php?title=List_of_set_identities_and_relations&oldid=1177174035#Definitions)
   - (-) Could throw an error for that case
@@ -165,6 +173,7 @@ E.g. the base path of `intersection ./foo ./foo/bar` is `./foo/bar`.
 Meanwhile `intersection ./foo ./bar` returns the empty file set without a base path.
 
 Arguments:
+
 - Alternative: Use the common prefix of all base paths as the resulting base path
   - (-) This is unnecessarily strict, because the purpose of the base path is to track the directory under which files _could_ be in the file set.
     It should be as long as possible.
@@ -178,6 +187,7 @@ File sets can only represent a _set_ of local files.
 Directories on their own are not representable.
 
 Arguments:
+
 - (+) There does not seem to be a sensible set of combinators when directories can be represented on their own.
   Here's some possibilities:
   - `./.` represents the files in `./.` _and_ the directory itself including its subdirectories, meaning that even if there's no files, the entire structure of `./.` is preserved
@@ -205,10 +215,14 @@ Arguments:
 File sets do not support Nix store paths in strings such as `"/nix/store/...-source"`.
 
 Arguments:
+
 - (+) Such paths are usually produced by derivations, which means `toSource` would either:
+
   - Require [Import From Derivation](https://nixos.org/manual/nix/unstable/language/import-from-derivation) (IFD) if `builtins.path` is used as the underlying primitive
   - Require importing the entire `root` into the store such that derivations can be used to do the filtering
+
 - (+) The convenient path coercion like `union ./foo ./bar` wouldn't work for absolute paths, requiring more verbose alternate interfaces:
+
   - `let root = "/nix/store/...-source"; in union "${root}/foo" "${root}/bar"`
 
     Verbose and dangerous because if `root` was a path, the entire path would get imported into the store.
@@ -226,6 +240,7 @@ Arguments:
   This use case makes little sense for files that are already in the store.
   This should be a separate abstraction as e.g. `pkgs.drvLayout` instead, which could have a similar interface but be specific to derivations.
   Additional capabilities could be supported that can't be done at evaluation time, such as renaming files, creating new directories, setting executable bits, etc.
+
 - (+) An API for filtering/transforming Nix store paths could be much more powerful,
   because it's not limited to just what is possible at evaluation time with `builtins.path`.
   Operations such as moving and adding files would be supported.
@@ -235,6 +250,7 @@ Arguments:
 File sets cannot add single files to the store, they can only import files under directories.
 
 Arguments:
+
 - (+) There's no point in using this library for a single file, since you can't do anything other than add it to the store or not.
   And it would be unclear how the library should behave if the one file wouldn't be added to the store:
   `toSource { root = ./file.nix; fileset = <empty>; }` has no reasonable result because returning an empty store path wouldn't match the file type, and there's no way to have an empty file store path, whatever that would mean.

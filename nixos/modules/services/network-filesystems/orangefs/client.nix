@@ -39,7 +39,7 @@ in
           with lib.types;
           listOf (
             submodule (
-              { ... }:
+              _:
               {
                 options = {
 

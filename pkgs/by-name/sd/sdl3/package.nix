@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch =
-    lib.optionalString (finalAttrs.finalPackage.doCheck) ''
+    lib.optionalString finalAttrs.finalPackage.doCheck ''
       # Tests timeout on Darwin
       substituteInPlace test/CMakeLists.txt \
         --replace-fail 'set(noninteractive_timeout 10)' 'set(noninteractive_timeout 30)'

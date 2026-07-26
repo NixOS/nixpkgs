@@ -42,7 +42,7 @@ in
     };
 
     containersConf.settings = mkOption {
-      type = toml.type;
+      inherit (toml) type;
       default = { };
       description = "containers.conf configuration";
     };
@@ -65,7 +65,7 @@ in
     };
 
     storage.settings = mkOption {
-      type = toml.type;
+      inherit (toml) type;
       description = "storage.conf configuration";
     };
 
@@ -105,7 +105,7 @@ in
       };
 
       settings = mkOption {
-        type = toml.type;
+        inherit (toml) type;
         default = {
           registry = [
             { location = "docker.io"; }

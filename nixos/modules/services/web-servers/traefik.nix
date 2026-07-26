@@ -49,7 +49,7 @@ in
       description = ''
         Static configuration for Traefik.
       '';
-      type = format.type;
+      inherit (format) type;
       default = {
         entryPoints.http.address = ":80";
       };
@@ -75,7 +75,7 @@ in
       description = ''
         Dynamic configuration for Traefik.
       '';
-      type = format.type;
+      inherit (format) type;
       default = { };
       example = {
         http.routers.router1 = {

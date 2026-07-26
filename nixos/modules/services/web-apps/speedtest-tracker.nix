@@ -8,8 +8,8 @@
 let
   cfg = config.services.speedtest-tracker;
 
-  user = cfg.user;
-  group = cfg.group;
+  inherit (cfg) user;
+  inherit (cfg) group;
 
   defaultUser = "speedtest-tracker";
   defaultGroup = "speedtest-tracker";
@@ -98,7 +98,7 @@ in
         apply =
           speedtest-tracker:
           speedtest-tracker.override (prev: {
-            dataDir = cfg.dataDir;
+            inherit (cfg) dataDir;
           });
       };
 

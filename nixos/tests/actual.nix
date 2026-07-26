@@ -4,13 +4,13 @@
   meta.maintainers = [ lib.maintainers.oddlama ];
 
   nodes.machine =
-    { ... }:
+    _:
     {
       services.actual.enable = true;
     };
 
   nodes.machine2 =
-    { ... }:
+    _:
     {
       services.actual = {
         enable = true;

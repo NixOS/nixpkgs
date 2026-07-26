@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests = {
-    os-prober = nixosTests.os-prober;
+    inherit (nixosTests) os-prober;
   };
   meta = {
     description = "Utility to detect other OSs on a set of drives";

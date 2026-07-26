@@ -47,9 +47,8 @@ in
     services.hddfancontrol.settings = lib.mkOption {
       type = lib.types.attrsWith {
         placeholder = "drive-bay-name";
-        elemType = (
-          lib.types.submodule (
-            { ... }:
+        elemType = lib.types.submodule (
+            _:
             {
               options = {
                 disks = lib.mkOption {
@@ -106,8 +105,7 @@ in
                 };
               };
             }
-          )
-        );
+          );
       };
       default = { };
       description = ''

@@ -35,7 +35,7 @@ in
     package = mkPackageOption pkgs "dnsproxy" { };
 
     settings = mkOption {
-      type = yaml.type;
+      inherit (yaml) type;
       default = { };
       example = literalExpression ''
         {

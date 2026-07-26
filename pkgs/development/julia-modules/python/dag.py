@@ -1,8 +1,8 @@
-
 # This file based on a ChatGPT reponse for the following prompt:
 # "can you write code in python to build up a DAG representing
 # a dependency tree, and then a function that can return all the
 # dependencies of a given node?"
+
 
 class Node:
     def __init__(self, name):
@@ -29,7 +29,9 @@ class DAG:
             raise ValueError(f"Node '{node_name}' does not exist in the graph.")
 
         if dependency_name not in self.nodes:
-            raise ValueError(f"Dependency '{dependency_name}' does not exist in the graph.")
+            raise ValueError(
+                f"Dependency '{dependency_name}' does not exist in the graph."
+            )
 
         self.nodes[node_name].dependencies.add(dependency_name)
 
@@ -44,7 +46,7 @@ class DAG:
             for dependency in current_node.dependencies:
                 dependencies.add(dependency)
                 if dependency in self.nodes:
-                  traverse_dependencies(self.nodes[dependency])
+                    traverse_dependencies(self.nodes[dependency])
 
         traverse_dependencies(node)
         return dependencies

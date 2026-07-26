@@ -6,6 +6,7 @@ This directory contains the implementation, documentation and tests for the Nixp
 
 The evaluation entry point for `lib` is [`default.nix`](default.nix).
 This file evaluates to an attribute set containing two separate kinds of attributes:
+
 - Sub-libraries:
   Attribute sets grouping together similar functionality.
   Each sub-library is defined in a separate file usually matching its attribute name.
@@ -19,6 +20,7 @@ This file evaluates to an attribute set containing two separate kinds of attribu
   Example: `lib.take` is an alias for `lib.lists.take`.
 
 Most files in this directory are definitions of sub-libraries, but there are a few others:
+
 - [`minfeatures.nix`](minfeatures.nix): A list of conditions for the used Nix version to match that are required to evaluate Nixpkgs.
 - [`tests`](tests): Tests, see [Running tests](#running-tests)
   - [`release.nix`](tests/release.nix): A derivation aggregating all tests
@@ -32,6 +34,7 @@ Most files in this directory are definitions of sub-libraries, but there are a f
 ### Module system
 
 The [module system](https://nixos.org/manual/nixpkgs/#module-system) spans multiple sub-libraries:
+
 - [`modules.nix`](modules.nix): `lib.modules` for the core functions and anything not relating to option definitions
 - [`options.nix`](options.nix): `lib.options` for anything relating to option definitions
 - [`types.nix`](types.nix): `lib.types` for module system types
@@ -76,8 +79,11 @@ Be generous with links to related functionality.
 Add good test coverage for the change, including:
 
 - Tests for edge cases, such as empty values or lists.
+
 - Tests for tricky inputs, such as a string with string context or a path that doesn't exist.
+
 - Test all code paths, such as `if-then-else` branches and returned attributes.
+
 - If the tests for the sub-library are written in bash,
   test messages of custom errors, such as `throw` or `abortMsg`,
 
@@ -152,8 +158,8 @@ fileset/tests.sh
 
   Examples:
 
-  * lib.getExe': check arguments
-  * lib.fileset: Add an additional argument in the design docs
+  - lib.getExe': check arguments
+
+  - lib.fileset: Add an additional argument in the design docs
 
     Closes #264537
-

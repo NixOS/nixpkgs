@@ -19,6 +19,7 @@ $ sudo ./result/bin/nixos-test-driver
 [...]
 >>>
 ```
+
 :::
 
 ::: {.note}

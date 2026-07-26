@@ -6,7 +6,7 @@
   meta.maintainers = [ ];
 
   nodes.machine =
-    { ... }:
+    _:
     {
       services.loki = {
         enable = true;

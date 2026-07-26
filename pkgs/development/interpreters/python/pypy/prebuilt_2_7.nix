@@ -116,13 +116,13 @@ stdenv.mkDerivation {
   '';
 
   preFixup =
-    lib.optionalString (stdenv.hostPlatform.isLinux) ''
+    lib.optionalString stdenv.hostPlatform.isLinux ''
       find $out/{lib,lib_pypy*} -name "*.so" \
         -exec patchelf \
           --replace-needed libtinfow.so.6 libncursesw.so.6 \
           --replace-needed libgdbm.so.4 libgdbm_compat.so.4 {} \;
     ''
-    + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       install_name_tool \
         -change \
           @rpath/lib${executable}-c.dylib \

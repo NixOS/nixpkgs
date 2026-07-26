@@ -973,16 +973,14 @@ rec {
     makeScriptWriter (
       (removeAttrs args [ "libraries" ])
       // {
-        interpreter = lua.interpreter;
+        inherit (lua) interpreter;
         # if libraries == []
         # then lua.interpreter
         # else (lua.withPackages (ps: libraries)).interpreter
         # This should support packages! I just cant figure out why some dependency collision happens whenever I try to run this.
-        check = (
-          writeDash "luacheck.sh" ''
+        check = writeDash "luacheck.sh" ''
             exec ${buildLuaPackages.luacheck}/bin/luacheck "$1"
-          ''
-        );
+          '';
       }
     ) name;
 

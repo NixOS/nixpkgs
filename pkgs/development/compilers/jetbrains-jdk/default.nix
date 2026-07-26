@@ -21,7 +21,7 @@ let
     fetchurl {
       # We only need the wayland protocols file
       url = "https://raw.githubusercontent.com/GNOME/gtk/${rev}/gdk/wayland/protocol/gtk-shell.xml";
-      hash = hash;
+      inherit hash;
     };
   # To get the new tag:
   # git clone https://github.com/jetbrains/jetbrainsruntime

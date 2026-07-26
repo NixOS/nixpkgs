@@ -154,7 +154,7 @@ let
   gatewayCoerce = address: { inherit address; };
 
   gatewayOpts =
-    { ... }:
+    _:
     {
 
       options = {
@@ -318,7 +318,7 @@ let
         macAddress = mkOption {
           default = null;
           example = "00:11:22:33:44:55";
-          type = types.nullOr (types.str);
+          type = types.nullOr types.str;
           description = ''
             MAC address of the interface. Leave empty to use the default.
           '';
@@ -454,7 +454,7 @@ let
               with cfg;
               optional (defined ipAddress && defined prefixLength) {
                 address = ipAddress;
-                prefixLength = prefixLength;
+                inherit prefixLength;
               }
             )
           )
@@ -1765,8 +1765,7 @@ in
       ];
 
     boot.kernelModules =
-      [ ]
-      ++ optional hasVirtuals "tun"
+      optional hasVirtuals "tun"
       ++ optional hasSits "sit"
       ++ optional hasGres "gre"
       ++ optional hasBonds "bonding"
@@ -1836,7 +1835,7 @@ in
 
     systemd.services = {
       network-local-commands = {
-        enable = (cfg.localCommands != "");
+        enable = cfg.localCommands != "";
         description = "Extra networking commands.";
         before = [ "network.target" ];
         wantedBy = [ "network.target" ];
@@ -1915,7 +1914,7 @@ in
                   allDevices = unique (mapAttrsToList (_: v: v.device) cfg.wlanInterfaces);
                   interfacesOfDevice = d: filterAttrs (_: v: v.device == d) cfg.wlanInterfaces;
                 in
-                genAttrs allDevices (d: interfacesOfDevice d);
+                genAttrs allDevices interfacesOfDevice;
 
               # Convert device:interface key:value pairs into a list, and if it exists,
               # place the interface which is named after the device at the beginning.

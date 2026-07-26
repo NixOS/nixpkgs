@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
+    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
     homepage = "https://github.com/gak/gravit";
     description = "Beautiful OpenGL-based gravity simulator";
     mainProgram = "gravit";

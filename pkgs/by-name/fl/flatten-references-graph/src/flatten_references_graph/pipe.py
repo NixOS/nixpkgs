@@ -9,33 +9,26 @@ from .split_paths import split_paths
 from .lib import (
     # references_graph_to_igraph
     debug,
-    pick_attrs
+    pick_attrs,
 )
 
 funcs = tlz.merge(
     pick_attrs(
-        [
-            "flatten",
-            "over",
-            "split_every",
-            "limit_layers",
-            "remove_paths",
-            "reverse"
-        ],
-        lib
+        ["flatten", "over", "split_every", "limit_layers", "remove_paths", "reverse"],
+        lib,
     ),
     pick_attrs(
         [
             "subcomponent_in",
             "subcomponent_out",
         ],
-        subcomponent
+        subcomponent,
     ),
     {
         "split_paths": split_paths,
         "popularity_contest": popularity_contest,
-        "map": tlz.map
-    }
+        "map": tlz.map,
+    },
 )
 
 
@@ -70,11 +63,8 @@ def preapply_func(func_call_data):
 def pipe(pipeline, data):
     debug("pipeline", pipeline)
     partial_funcs = list(tlz.map(preapply_func, pipeline))
-    debug('partial_funcs', partial_funcs)
-    return tlz.pipe(
-        data,
-        *partial_funcs
-    )
+    debug("partial_funcs", partial_funcs)
+    return tlz.pipe(data, *partial_funcs)
 
 
 funcs["pipe"] = pipe

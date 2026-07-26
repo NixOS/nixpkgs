@@ -38,8 +38,7 @@ let
       x86_64-linux = "sha256-tZzUxeXxbYP8YfIQLbiSyihPcjZM9cd2Ad8gGCSvdGk=";
     };
   };
-in
-let
+
   bolt = stdenv.mkDerivation (finalAttrs: {
     pname = "bolt-launcher";
     version = "0.22.0";
@@ -74,7 +73,7 @@ let
     cmakeFlags = [
       "-G Ninja"
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isAarch64) [
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       (lib.cmakeFeature "PROJECT_ARCH" "arm64")
     ];
 

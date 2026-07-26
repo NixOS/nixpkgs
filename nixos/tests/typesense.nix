@@ -7,7 +7,7 @@ in
   meta.maintainers = with pkgs.lib.maintainers; [ oddlama ];
 
   nodes.machine =
-    { ... }:
+    _:
     {
       services.typesense = {
         enable = true;

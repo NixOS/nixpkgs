@@ -3,6 +3,7 @@ import time
 
 TOTAL_RETRIES = 20
 
+
 # BackoffTracker provides a robust system for handling test retries
 class BackoffTracker:
     delay = 1
@@ -34,15 +35,18 @@ class BackoffTracker:
 
 backoff = BackoffTracker()
 
+
 def run(node, cmd, fail=False):
     if fail:
         return node.fail(cmd)
     else:
         return node.succeed(cmd)
 
+
 # Waits for the system to finish booting or switching configuration
 def wait_for_running(node):
     node.succeed("systemctl is-system-running --wait")
+
 
 # On first switch, this will create a symlink to the current system so that we can
 # quickly switch between derivations
@@ -65,6 +69,7 @@ def switch_to(node, name, fail=False) -> None:
     if not fail:
         wait_for_running(node)
 
+
 # Ensures the issuer of our cert matches the chain
 # and matches the issuer we expect it to be.
 # It's a good validation to ensure the cert.pem and fullchain.pem
@@ -79,15 +84,18 @@ def check_issuer(node, cert_name, issuer) -> None:
             issuer.lower() in actual_issuer.lower()
         ), f"{fname} issuer mismatch. Expected {issuer} got {actual_issuer}"
 
+
 # Ensures the provided domain matches with the given cert
 def check_domain(node, cert_name, domain, fail=False) -> None:
     cmd = f"openssl x509 -noout -checkhost '{domain}' -in /var/lib/acme/{cert_name}/cert.pem"
     run(node, cmd, fail=fail)
 
+
 # Ensures the provided ip address matches with the given cert
 def check_ip(node, cert_name, ip_address, fail=False) -> None:
     cmd = f"openssl x509 -noout -checkip '{ip_address}' -in /var/lib/acme/{cert_name}/cert.pem"
     run(node, cmd, fail=fail)
+
 
 # Ensures the required values for OCSP stapling are present
 # Pebble doesn't provide a full OCSP responder, so just checks the URL
@@ -104,6 +112,7 @@ def check_stapling(node, cert_name, ca_domain, fail=False):
         fail=fail,
     )
 
+
 # Checks the keyType by validating the number of bits
 def check_key_bits(node, cert_name, bits, fail=False):
     run(
@@ -113,6 +122,7 @@ def check_key_bits(node, cert_name, bits, fail=False):
         fail=fail,
     )
 
+
 # Ensure cert comes before chain in fullchain.pem
 def check_fullchain(node, cert_name):
     cert_file = f"/var/lib/acme/{cert_name}/fullchain.pem"
@@ -120,8 +130,7 @@ def check_fullchain(node, cert_name):
     assert len(num_certs.strip().split("\n")) > 1, "Insufficient certs in fullchain.pem"
 
     first_cert_data = node.succeed(
-        f"grep -m1 -B50 'END CERTIFICATE' {cert_file}"
-        " | openssl x509 -noout -text"
+        f"grep -m1 -B50 'END CERTIFICATE' {cert_file}" " | openssl x509 -noout -text"
     )
     for line in first_cert_data.lower().split("\n"):
         if "dns:" in line:
@@ -130,6 +139,7 @@ def check_fullchain(node, cert_name):
             return
 
     assert False
+
 
 # Checks the permissions in the cert directories are as expected
 def check_permissions(node, cert_name, group):
@@ -164,7 +174,8 @@ def check_connection(node, domain, fail=False, minica=False):
     cafile = "/tmp/ca.crt"
     if minica:
         cafile = "/var/lib/acme/.minica/cert.pem"
-    run(node,
+    run(
+        node,
         f"openssl s_client -brief -CAfile {cafile}"
         f" -verify 2 -verify_return_error -verify_hostname {domain}"
         f" -servername {domain} -connect {domain}:443 < /dev/null",

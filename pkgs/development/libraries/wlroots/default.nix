@@ -129,7 +129,7 @@ let
 
       # Test via TinyWL (the "minimum viable product" Wayland compositor based on wlroots):
       passthru.tests = {
-        tinywl = nixosTests.tinywl;
+        inherit (nixosTests) tinywl;
         pkg-config = testers.hasPkgConfigModules {
           package = finalAttrs.finalPackage;
         };

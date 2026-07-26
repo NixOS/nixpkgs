@@ -31,7 +31,6 @@ for each one of them, for example:
 
 results in `wpa_supplicant-wlan0.service` and `wpa_supplicant-wlan1.service`.
 
-
 ## Declarative configuration {#sec-wireless-declarative}
 
 NixOS lets you specify networks declaratively:
@@ -83,6 +82,7 @@ network={
 
 Other wpa_supplicant configuration can be set using the {option}`extraConfig`
 option, either globally or per-network. For example:
+
 ```
 {
   networking.wireless.extraConfig = ''
@@ -103,7 +103,6 @@ option, either globally or per-network. For example:
 The generated wpa_supplicant configuration file is linked to
 `/etc/wpa_supplicant/nixos.conf` for easier inspection.
 :::
-
 
 Be aware that in the previous examples the keys would be written to the Nix
 store in plain text and readable to every local user.
@@ -139,8 +138,7 @@ the `wpa_supplicant` user. Only certain fields support the `ext:` syntax,
 for example `psk`, `sae_password` and `password`, but not `ssid`.
 :::
 
-
-## Imperative configuration  {#sec-wireless-imperative}
+## Imperative configuration {#sec-wireless-imperative}
 
 It can be useful to add a new network without rebuilding the NixOS
 configuration, particularly if you don't yet have Internet access.
@@ -148,6 +146,7 @@ Setting [](#opt-networking.wireless.userControlled) to `true` will allow users
 of the `wpa_supplicant` group to configure wpa_supplicant imperatively.
 
 For example, using `wpa_cli` you can add a new network and connect to it as:
+
 ```console
 # wpa_cli
 Selected interface 'wlan0'
@@ -173,16 +172,19 @@ file `/etc/wpa_supplicant/imperative.conf`.
 ::: {.note}
 Remember that after manually editing `imperative.conf` the wpa_supplicant daemon
 needs to be restarted:
+
 ```console
 # systemctl restart wpa_supplicant.service
 ```
+
 or
+
 ```console
 # systemctl restart wpa_supplicant-<interface>.service
 ```
+
 if [](#opt-networking.wireless.interfaces) has been set.
 :::
-
 
 ## Enterprise networks {#sec-wireless-enterprise}
 
@@ -204,7 +206,7 @@ using the free-form `auth` option, for example:
 ```
 
 For examples and a list of available options, see the
-[wpa_supplicant.conf(5)](man:wpa_supplicant.conf(5)) man page.
+[wpa_supplicant.conf(5)](<man:wpa_supplicant.conf(5)>) man page.
 
 ::: {.warning}
 By default, security hardening measures that limit access to files, devices and
@@ -216,6 +218,7 @@ Certificates and other files supplied here need to be readable by the
 
 If your network authentication protocol requires write access to files, smart
 cards or TPM devices, you may have to disable security hardening with
+
 ```nix
 { networking.wireless.enableHardening = false; }
 ```

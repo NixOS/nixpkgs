@@ -21,13 +21,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ndi-6";
-  version = versionJSON.version;
+  inherit (versionJSON) version;
   majorVersion = lib.versions.major version;
   installerName = "Install_NDI_SDK_v${majorVersion}_Linux";
 
   src = fetchurl {
     url = "https://downloads.ndi.tv/SDK/NDI_SDK_Linux/${installerName}.tar.gz";
-    hash = versionJSON.hash;
+    inherit (versionJSON) hash;
   };
 
   unpackPhase = ''

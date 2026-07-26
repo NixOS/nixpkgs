@@ -38,10 +38,10 @@ let
           ;
       };
 
-      export-template = godot.export-template;
+      inherit (godot) export-template;
       export-template-mono = godot-mono.export-template;
 
-      export-templates-bin = godot.export-templates-bin;
+      inherit (godot) export-templates-bin;
       export-templates-mono-bin = godot-mono.export-templates-bin;
     };
 in
@@ -83,7 +83,7 @@ rec {
   godot_4 = godotPackages_4.godot;
   godot_4-mono = godotPackages_4.godot-mono;
   godot_4-export-templates-bin = godotPackages_4.export-templates-bin;
-  godot = godotPackages.godot;
-  godot-mono = godotPackages.godot-mono;
+  inherit (godotPackages) godot;
+  inherit (godotPackages) godot-mono;
   godot-export-templates-bin = godotPackages.export-templates-bin;
 }

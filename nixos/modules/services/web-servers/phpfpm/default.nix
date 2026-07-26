@@ -171,8 +171,8 @@ let
 
         settings = mapAttrs (name: mkDefault) {
           listen = poolOpts.socket;
-          user = poolOpts.user;
-          group = poolOpts.group;
+          inherit (poolOpts) user;
+          inherit (poolOpts) group;
         };
       };
     };

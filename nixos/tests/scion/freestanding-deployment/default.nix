@@ -38,16 +38,16 @@ in
   name = "scion-test";
   nodes = {
     scion01 = {
-      imports = (imports 1);
+      imports = imports 1;
     };
     scion02 = {
-      imports = (imports 2);
+      imports = imports 2;
     };
     scion03 = {
-      imports = (imports 3);
+      imports = imports 3;
     };
     scion04 = {
-      imports = (imports 4);
+      imports = imports 4;
       networking.interfaces."lo".ipv4.addresses = [
         {
           address = "172.16.1.1";
@@ -74,7 +74,7 @@ in
       };
     };
     scion05 = {
-      imports = (imports 5);
+      imports = imports 5;
       networking.interfaces."lo".ipv4.addresses = [
         {
           address = "172.16.100.1";

@@ -178,8 +178,7 @@
     in
     lib.mkMerge [
       (lib.mkIf cfg.enable {
-        services.udev.extraRules = (
-          builtins.concatStringsSep ", " [
+        services.udev.extraRules = builtins.concatStringsSep ", " [
             "ACTION==\"add|change\""
             "SUBSYSTEM==\"input\""
             "ATTR{name}==\"${cfg.device}\""
@@ -197,8 +196,7 @@
             "ATTR{device/ext_dev}=\"${boolToStr cfg.ext_dev}\""
             "ATTR{device/press_to_select}=\"${boolToStr cfg.press_to_select}\""
             "ATTR{device/drift_time}=\"${toString cfg.drift_time}\""
-          ]
-        );
+          ];
 
         systemd.services.trackpoint = {
           wantedBy = [ "sysinit.target" ];
@@ -216,7 +214,7 @@
         };
       })
 
-      (lib.mkIf (cfg.emulateWheel) {
+      (lib.mkIf cfg.emulateWheel {
         services.xserver.inputClassSections = [
           ''
             Identifier "Trackpoint Wheel Emulation"

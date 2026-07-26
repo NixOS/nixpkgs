@@ -111,7 +111,7 @@ let
   # Include cmake4 patch
   # Remove when yaml-cpp.src is updated to include it
   yaml-patched = applyPatches {
-    src = yaml-cpp.src;
+    inherit (yaml-cpp) src;
     patches = [
       (fetchpatch {
         name = "yaml-cpp-fix-cmake-4.patch";

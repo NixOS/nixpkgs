@@ -54,7 +54,7 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
-  disabled = (!pythonOlder "3.14");
+  disabled = !pythonOlder "3.14";
 
   meta = {
     description = "Python binding for Eclipse Cyclone DDS";

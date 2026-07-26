@@ -8,27 +8,27 @@ passed and a selection of packages has been built successfully
 (see `nixos/release-combined.nix` and `nixos/release-small.nix`).
 These channels are:
 
--   *Stable channels*, such as [`nixos-26.05`](https://channels.nixos.org/nixos-26.05).
-    These only get conservative bug fixes and package upgrades. For
-    instance, a channel update may cause the Linux kernel on your system
-    to be upgraded from 4.19.34 to 4.19.38 (a minor bug fix), but not
-    from 4.19.x to 4.20.x (a major change that has the potential to break things).
-    Stable channels are generally maintained until the next stable
-    branch is created.
+- *Stable channels*, such as [`nixos-26.05`](https://channels.nixos.org/nixos-26.05).
+  These only get conservative bug fixes and package upgrades. For
+  instance, a channel update may cause the Linux kernel on your system
+  to be upgraded from 4.19.34 to 4.19.38 (a minor bug fix), but not
+  from 4.19.x to 4.20.x (a major change that has the potential to break things).
+  Stable channels are generally maintained until the next stable
+  branch is created.
 
--   The *unstable channel*, [`nixos-unstable`](https://channels.nixos.org/nixos-unstable).
-    This corresponds to NixOS's main development branch, and may thus see
-    radical changes between channel updates. It's not recommended for
-    production systems.
+- The *unstable channel*, [`nixos-unstable`](https://channels.nixos.org/nixos-unstable).
+  This corresponds to NixOS's main development branch, and may thus see
+  radical changes between channel updates. It's not recommended for
+  production systems.
 
--   *Small channels*, such as [`nixos-26.05-small`](https://channels.nixos.org/nixos-26.05-small)
-    or [`nixos-unstable-small`](https://channels.nixos.org/nixos-unstable-small).
-    These are identical to the stable and unstable channels described above,
-    except that they contain fewer binary packages. This means they get updated
-    faster than the regular channels (for instance, when a critical security patch
-    is committed to NixOS's source tree), but may require more packages to be
-    built from source than usual. They're mostly intended for server environments
-    and as such contain few GUI applications.
+- *Small channels*, such as [`nixos-26.05-small`](https://channels.nixos.org/nixos-26.05-small)
+  or [`nixos-unstable-small`](https://channels.nixos.org/nixos-unstable-small).
+  These are identical to the stable and unstable channels described above,
+  except that they contain fewer binary packages. This means they get updated
+  faster than the regular channels (for instance, when a critical security patch
+  is committed to NixOS's source tree), but may require more packages to be
+  built from source than usual. They're mostly intended for server environments
+  and as such contain few GUI applications.
 
 To see what channels are available, go to <https://channels.nixos.org>.
 (Note that the URIs of the various channels redirect to a directory that

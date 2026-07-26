@@ -9,7 +9,7 @@ with lib;
 
 let
   cfg = config.services.mirakurun;
-  mirakurun = pkgs.mirakurun;
+  inherit (pkgs) mirakurun;
   username = config.users.users.mirakurun.name;
   groupname = config.users.users.mirakurun.group;
   settingsFmt = pkgs.formats.yaml { };
@@ -73,7 +73,7 @@ in
       };
 
       serverSettings = mkOption {
-        type = settingsFmt.type;
+        inherit (settingsFmt) type;
         default = { };
         example = literalExpression ''
           {
@@ -210,7 +210,7 @@ in
           ++ optional (cfg.tunerSettings != null) "tuners"
           ++ optional (cfg.channelSettings != null) "channels";
         in
-        (map getconf targets);
+        map getconf targets;
     };
   };
 }

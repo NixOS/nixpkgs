@@ -45,7 +45,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "infisical";
-  version = version;
+  inherit version;
   inherit src;
 
   nativeBuildInputs = [ installShellFiles ];

@@ -133,6 +133,7 @@ phases="${preConfigurePhases[*]:-} configurePhase ${preBuildPhases[*]:-} buildPh
 ```
 
 Use this command to run all install phases:
+
 ```bash
 phases="${preInstallPhases[*]:-} installPhase ${preFixupPhases[*]:-} fixupPhase installCheckPhase" genericBuild
 ```
@@ -198,11 +199,13 @@ A full reference of the different kinds of dependencies is provided in [](#ssec-
 It should cover most use cases.
 
 Add dependencies to `nativeBuildInputs` if they are executed during the build:
+
 - those which are needed on `$PATH` during the build, for example `cmake` and `pkg-config`
 - [setup hooks](#ssec-setup-hooks), for example [`makeWrapper`](#fun-makeWrapper)
 - interpreters needed by [`patchShebangs`](#patch-shebangs.sh) for build scripts (with the `--build` flag), which can be the case for e.g. `perl`
 
 Add dependencies to `buildInputs` if they will end up copied or linked into the final output or otherwise used at runtime:
+
 - libraries used by compilers, for example `zlib`,
 - interpreters needed by [`patchShebangs`](#patch-shebangs.sh) for scripts which are installed, which can be the case for e.g. `perl`
 
@@ -214,6 +217,7 @@ But it also executes the `wayland-scanner` program as part of the build to gener
 :::
 
 Dependencies needed only to run tests are similarly classified between native (executed during build) and non-native (executed at runtime):
+
 - `nativeCheckInputs` for test tools needed on `$PATH` (such as `ctest`) and [setup hooks](#ssec-setup-hooks) (for example [`pytestCheckHook`](#python))
 - `checkInputs` for libraries linked into test executables (for example the `qcheck` OCaml package)
 
@@ -222,6 +226,7 @@ These dependencies are only injected when [`doCheck`](#var-stdenv-doCheck) is se
 #### Example {#ssec-stdenv-dependencies-overview-example}
 
 Consider for example this simplified derivation for `solo5`, a sandboxing tool:
+
 ```nix
 stdenv.mkDerivation (finalAttrs: {
   pname = "solo5";
@@ -273,8 +278,8 @@ stdenv.mkDerivation (finalAttrs: {
   As it is used at runtime, it must be added to `buildInputs`.
 - Tests need `qemu` and `getopt` (from `util-linux`) on `$PATH`, these must be added to `nativeCheckInputs`.
 - Some dependencies are injected directly in the shell code of phases: `syslinux`, `dosfstools`, `mtools`, and `parted`.
-In this specific case, they will end up in the output of the derivation (`$out` here).
-As Nix marks dependencies whose absolute path is present in the output as runtime dependencies, adding them to `buildInputs` is not required.
+  In this specific case, they will end up in the output of the derivation (`$out` here).
+  As Nix marks dependencies whose absolute path is present in the output as runtime dependencies, adding them to `buildInputs` is not required.
 
 For more complex cases, like libraries linked into an executable which is then executed as part of the build system, see [](#ssec-stdenv-dependencies-reference).
 
@@ -284,7 +289,7 @@ As described in the Nix manual, almost any `*.drv` store path in a derivation’
 
 Dependencies can be broken down along these axes: their host and target platforms relative to the new derivation’s. The platform distinctions are motivated by cross compilation; see [](#chap-cross) for exactly what each platform means. [^footnote-stdenv-ignored-build-platform] But even if one is not cross compiling, the platforms imply whether a dependency is needed at run-time or build-time.
 
-The extension of `PATH` with dependencies, alluded to above, proceeds according to the relative platforms alone. The process is carried out only for dependencies whose host platform matches the new derivation’s build platform i.e. dependencies which run on the platform where the new derivation will be built. [^footnote-stdenv-native-dependencies-in-path] For each dependency \<dep\> of those dependencies, `dep/bin`, if present, is added to the `PATH` environment variable.
+The extension of `PATH` with dependencies, alluded to above, proceeds according to the relative platforms alone. The process is carried out only for dependencies whose host platform matches the new derivation’s build platform i.e. dependencies which run on the platform where the new derivation will be built. [^footnote-stdenv-native-dependencies-in-path] For each dependency \<dep> of those dependencies, `dep/bin`, if present, is added to the `PATH` environment variable.
 
 ### Dependency propagation {#ssec-stdenv-dependencies-propagated}
 
@@ -298,6 +303,7 @@ This can lead to conflicting dependencies that cannot easily be resolved.
 :::
 
 :::{.example}
+
 # A propagated dependency
 
 ```nix
@@ -321,20 +327,21 @@ let
 in
 foo
 ```
+
 :::
 
 Dependency propagation takes cross compilation into account, meaning that dependencies that cross platform boundaries are properly adjusted.
 
 To determine the exact rules for dependency propagation, we start by assigning to each dependency a couple of ternary numbers (`-1` for `build`, `0` for `host`, and `1` for `target`) representing its [dependency type](#possible-dependency-types), which captures how its host and target platforms are each "offset" from the depending derivation’s host and target platforms. The following table summarize the different combinations that can be obtained:
 
-| Dependency type   | attribute name      | offset   | typical purpose                               |
+| Dependency type | attribute name | offset | typical purpose |
 | ----------------- | ------------------- | -------- | --------------------------------------------- |
-| `build → build`   | `depsBuildBuild`    | `-1, -1` | compilers for build helpers                   |
-| `build → host`    | `nativeBuildInputs` | `-1, 0`  | build tools, compilers, setup hooks           |
-| `build → target`  | `depsBuildTarget`   | `-1, 1`  | compilers to build stdlibs to run on target   |
-| `host → host`     | `depsHostHost`      | `0, 0`   | compilers to build C code at runtime (rare)   |
-| `host → target`   | `buildInputs`       | `0, 1`   | libraries                                     |
-| `target → target` | `depsTargetTarget`  | `1, 1`   | stdlibs to run on target                      |
+| `build → build` | `depsBuildBuild` | `-1, -1` | compilers for build helpers |
+| `build → host` | `nativeBuildInputs` | `-1, 0` | build tools, compilers, setup hooks |
+| `build → target` | `depsBuildTarget` | `-1, 1` | compilers to build stdlibs to run on target |
+| `host → host` | `depsHostHost` | `0, 0` | compilers to build C code at runtime (rare) |
+| `host → target` | `buildInputs` | `0, 1` | libraries |
+| `target → target` | `depsTargetTarget` | `1, 1` | stdlibs to run on target |
 
 Algorithmically, we traverse propagated inputs, accumulating every propagated dependency’s propagated dependencies and adjusting them to account for the “shift in perspective” described by the current dependency’s platform offsets. This results in a sort of transitive closure of the dependency relation, with the offsets being approximately summed when two dependency links are combined. We also prune transitive dependencies whose combined offsets go out-of-bounds, which can be viewed as a filter over that transitive closure removing dependencies that are blatantly absurd.
 
@@ -343,20 +350,24 @@ We can define the process precisely with [Natural Deduction](https://en.wikipedi
 **Definitions:**
 
 `dep(h_offset, t_offset, X, Y)`
-:    Package X has a direct dependency on Y in a position with host offset `h_offset` and target offset `t_offset`.
+: Package X has a direct dependency on Y in a position with host offset `h_offset` and target offset `t_offset`.
 
-     For example, `nativeBuildInputs = [ Y ]` means `dep(-1, 0, X, Y)`.
+```
+ For example, `nativeBuildInputs = [ Y ]` means `dep(-1, 0, X, Y)`.
+```
 
 `propagated-dep(h_offset, t_offset, X, Y)`
-:    Package X has a propagated dependency on Y in a position with host offset `h_offset` and target offset `t_offset`.
+: Package X has a propagated dependency on Y in a position with host offset `h_offset` and target offset `t_offset`.
 
-     For example, `depsBuildTargetPropagated = [ Y ]` means `propagated-dep(-1, 1, X, Y)`.
+```
+ For example, `depsBuildTargetPropagated = [ Y ]` means `propagated-dep(-1, 1, X, Y)`.
+```
 
 `mapOffset(h, t, i) = offs`
-:    In a package X with a dependency on Y in a position with host offset `h` and target offset `t`, Y's transitive dependency Z in a position with offset `i` is mapped to offset `offs` in X.
-
+: In a package X with a dependency on Y in a position with host offset `h` and target offset `t`, Y's transitive dependency Z in a position with offset `i` is mapped to offset `offs` in X.
 
 ::: {.example}
+
 # Truth table of `mapOffset(h, t, i)`
 
 `x` means that the dependency was discarded because `h + i ∉ {-1, 0, 1}`.
@@ -425,7 +436,7 @@ In the former case, the motivation for `mapOffset` is that since its host and ta
 
 In the other case, `h + 1` (0) is skipped over between the host (-1) and target (1) offsets. Instead of squashing the offsets, we need to “rip” them apart so no transitive dependency’s offset is 0.
 
-Overall, the unifying theme here is that propagation shouldn’t be introducing transitive dependencies involving platforms the depending package is unaware of. \[One can imagine the depending package asking for dependencies with the platforms it knows about; other platforms it doesn’t know how to ask for. The platform description in that scenario is a kind of unforgeable capability.\] The offset bounds checking and definition of `mapOffset` together ensure that this is the case. Discovering a new offset is discovering a new platform, and since those platforms weren’t in the derivation “spec” of the needing package, they cannot be relevant. From a capability perspective, we can imagine that the host and target platforms of a package are the capabilities a package requires, and the depending package must provide the capability to the dependency.
+Overall, the unifying theme here is that propagation shouldn’t be introducing transitive dependencies involving platforms the depending package is unaware of. [One can imagine the depending package asking for dependencies with the platforms it knows about; other platforms it doesn’t know how to ask for. The platform description in that scenario is a kind of unforgeable capability.] The offset bounds checking and definition of `mapOffset` together ensure that this is the case. Discovering a new offset is discovering a new platform, and since those platforms weren’t in the derivation “spec” of the needing package, they cannot be relevant. From a capability perspective, we can imagine that the host and target platforms of a package are the capabilities a package requires, and the depending package must provide the capability to the dependency.
 
 #### Variables specifying dependencies {#variables-specifying-dependencies}
 
@@ -461,11 +472,11 @@ These are often programs and libraries used by the new derivation at *run*-time,
 
 ##### `depsTargetTarget` {#var-stdenv-depsTargetTarget}
 
-A list of dependencies whose host platform matches the new derivation’s target platform. These are packages that run on the target platform, e.g. the standard library or run-time deps of standard library that a compiler insists on knowing about. It’s poor form in almost all cases for a package to depend on another from a future stage \[future stage corresponding to positive offset\]. Do not use this attribute unless you are packaging a compiler and are sure it is needed.
+A list of dependencies whose host platform matches the new derivation’s target platform. These are packages that run on the target platform, e.g. the standard library or run-time deps of standard library that a compiler insists on knowing about. It’s poor form in almost all cases for a package to depend on another from a future stage [future stage corresponding to positive offset]. Do not use this attribute unless you are packaging a compiler and are sure it is needed.
 
 ##### `depsBuildBuildPropagated` {#var-stdenv-depsBuildBuildPropagated}
 
-The propagated equivalent of `depsBuildBuild`. This perhaps never ought to be used, but it is included for consistency \[see below for the others\].
+The propagated equivalent of `depsBuildBuild`. This perhaps never ought to be used, but it is included for consistency [see below for the others].
 
 ##### `propagatedNativeBuildInputs` {#var-stdenv-propagatedNativeBuildInputs}
 
@@ -511,7 +522,7 @@ If set to `true`, `stdenv` will pass specific flags to `make` and other build to
 
 Unless set to `false`, some build systems with good support for parallel building including `cmake`, `meson`, and `qmake` will set it to `true`.
 
-#### `__structuredAttrs` {#var-stdenv-__structuredAttrs}
+#### `__structuredAttrs` {#var-stdenv-\_\_structuredAttrs}
 
 `__structuredAttrs` defines how derivation attributes are passed to the builder.
 
@@ -531,9 +542,10 @@ All new top level packages must enable `__structuredAttrs`.
 :::
 
 See the upstream nix documentation for more detail:
-  - [Advanced Derivation Attributes](https://nix.dev/manual/nix/2.34/language/advanced-attributes.html#adv-attr-structuredAttrs)
-  - [Builder Execution](https://nix.dev/manual/nix/2.34/store/building.html#builder-execution)
-  - [Structured Attributes](https://nix.dev/manual/nix/2.34/store/derivation/#structured-attrs)
+
+- [Advanced Derivation Attributes](https://nix.dev/manual/nix/2.34/language/advanced-attributes.html#adv-attr-structuredAttrs)
+- [Builder Execution](https://nix.dev/manual/nix/2.34/store/building.html#builder-execution)
+- [Structured Attributes](https://nix.dev/manual/nix/2.34/store/derivation/#structured-attrs)
 
 ### Fixed-point arguments of `mkDerivation` {#mkderivation-recursive-attributes}
 
@@ -667,7 +679,7 @@ Additional file types can be supported by setting the `unpackCmd` variable (see 
 
 The list of source files or directories to be unpacked or copied. One of these must be set. Note that if you use `srcs`, you should also set `sourceRoot` or `setSourceRoot`.
 
-These should ideally actually be sources and licensed under a FLOSS license.  If you have to use a binary upstream release or package non-free software, make sure you correctly mark your derivation as such in the [`sourceProvenance`](#var-meta-sourceProvenance) and [`license`](#sec-meta-license) fields of the [`meta`](#chap-meta) section.
+These should ideally actually be sources and licensed under a FLOSS license. If you have to use a binary upstream release or package non-free software, make sure you correctly mark your derivation as such in the [`sourceProvenance`](#var-meta-sourceProvenance) and [`license`](#sec-meta-license) fields of the [`meta`](#chap-meta) section.
 
 ##### `sourceRoot` {#var-stdenv-sourceRoot}
 
@@ -782,7 +794,7 @@ By default, the configure phase applies some special hackery to all files called
 
 By default, when the configure script has `--enable-static`, the option `--disable-static` is added to the configure flags.
 
-If this is undesirable, set this variable to true.  It is automatically set to true when building statically, for example through `pkgsStatic`.
+If this is undesirable, set this variable to true. It is automatically set to true when building statically, for example through `pkgsStatic`.
 
 ##### `configurePlatforms` {#var-stdenv-configurePlatforms}
 
@@ -1040,7 +1052,7 @@ Hook executed at the end of the fixup phase.
 
 ##### `separateDebugInfo` {#stdenv-separateDebugInfo}
 
-If set to `true`, the standard environment will enable debug information in C/C++ builds. After installation, the debug information will be separated from the executables and stored in the output named `debug`. (This output is enabled automatically; you don’t need to set the `outputs` attribute explicitly.) To be precise, the debug information is stored in `debug/lib/debug/.build-id/XX/YYYY…`, where \<XXYYYY…\> is the \<build ID\> of the binary — a SHA-1 hash of the contents of the binary. Debuggers like GDB use the build ID to look up the separated debug information.
+If set to `true`, the standard environment will enable debug information in C/C++ builds. After installation, the debug information will be separated from the executables and stored in the output named `debug`. (This output is enabled automatically; you don’t need to set the `outputs` attribute explicitly.) To be precise, the debug information is stored in `debug/lib/debug/.build-id/XX/YYYY…`, where \<XXYYYY…> is the \<build ID> of the binary — a SHA-1 hash of the contents of the binary. Debuggers like GDB use the build ID to look up the separated debug information.
 
 :::{.example #ex-gdb-debug-symbols-socat}
 
@@ -1080,6 +1092,7 @@ pkgs.mkShell {
 ```
 
 This setup works as follows:
+
 - Add [`overlays`](#chap-overlays) to the package set, since debug symbols are disabled for `ncurses` and `readline` by default.
 - Set the environment variable `NIX_DEBUG_INFO_DIRS` in the shell. Nixpkgs patches `gdb` to use this variable for looking up debug symbols.
   [`lib.makeSearchPathOutput`](#function-library-lib.strings.makeSearchPathOutput) constructs a colon-separated search path, pointing to the directories containing the debug symbols of the listed packages.
@@ -1168,7 +1181,7 @@ Hook executed at the end of the distribution phase.
 
 The standard environment provides a number of useful functions.
 
-### `makeWrapper` \<executable\> \<wrapperfile\> \<args\> {#fun-makeWrapper}
+### `makeWrapper` \<executable> \<wrapperfile> \<args> {#fun-makeWrapper}
 
 Constructs a wrapper for a program with various possible arguments. It is defined as part of 2 setup-hooks named `makeWrapper` and `makeBinaryWrapper` that implement the same bash functions. Hence, to use it you have to add `makeWrapper` to your `nativeBuildInputs`. Here's an example usage:
 
@@ -1206,13 +1219,14 @@ Using the `makeBinaryWrapper` implementation is usually preferred, as it creates
 However, `makeWrapper` is more flexible and implements more arguments.
 Use `makeWrapper` if you need the wrapper to use shell features (e.g. look up environment variables) at runtime.
 
-### `remove-references-to -t` \<storepath\> [ `-t` \<storepath\> ... ] \<file\> ... {#fun-remove-references-to}
+### `remove-references-to -t` \<storepath> \[ `-t` \<storepath> ... \] \<file> ... {#fun-remove-references-to}
 
 Removes the references of the specified files to the specified store files. This is done without changing the size of the file by replacing the hash by `eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`, and should work on compiled executables. This is meant to be used to remove the dependency of the output on inputs that are known to be unnecessary at runtime. Of course, reckless usage will break the patched programs.
 To use this, add `removeReferencesTo` to `nativeBuildInputs`.
 
 As `remove-references-to` is an actual executable and not a shell function, it can be used with `find`.
 Example removing all references to the compiler in the output:
+
 ```nix
 {
   postInstall = ''
@@ -1221,38 +1235,38 @@ Example removing all references to the compiler in the output:
 }
 ```
 
-### `runHook` \<hook\> {#fun-runHook}
+### `runHook` \<hook> {#fun-runHook}
 
-Execute \<hook\> and the values in the array associated with it. The array's name is determined by removing `Hook` from the end of \<hook\> and appending `Hooks`.
+Execute \<hook> and the values in the array associated with it. The array's name is determined by removing `Hook` from the end of \<hook> and appending `Hooks`.
 
 For example, `runHook postHook` would run the hook `postHook` and all of the values contained in the `postHooks` array, if it exists.
 
-### `substitute` \<infile\> \<outfile\> \<subs\> {#fun-substitute}
+### `substitute` \<infile> \<outfile> \<subs> {#fun-substitute}
 
-Performs string substitution on the contents of \<infile\>, writing the result to \<outfile\>. The substitutions in \<subs\> are of the following form:
+Performs string substitution on the contents of \<infile>, writing the result to \<outfile>. The substitutions in \<subs> are of the following form:
 
-#### `--replace-fail` \<s1\> \<s2\> {#fun-substitute-replace-fail}
+#### `--replace-fail` \<s1> \<s2> {#fun-substitute-replace-fail}
 
-Replace every occurrence of the string \<s1\> by \<s2\>.
+Replace every occurrence of the string \<s1> by \<s2>.
 Will error if no change is made.
 
-#### `--replace-warn` \<s1\> \<s2\> {#fun-substitute-replace-warn}
+#### `--replace-warn` \<s1> \<s2> {#fun-substitute-replace-warn}
 
-Replace every occurrence of the string \<s1\> by \<s2\>.
+Replace every occurrence of the string \<s1> by \<s2>.
 Will print a warning if no change is made.
 
-#### `--replace-quiet` \<s1\> \<s2\> {#fun-substitute-replace-quiet}
+#### `--replace-quiet` \<s1> \<s2> {#fun-substitute-replace-quiet}
 
-Replace every occurrence of the string \<s1\> by \<s2\>.
+Replace every occurrence of the string \<s1> by \<s2>.
 Will do nothing if no change can be made.
 
-#### `--subst-var` \<varName\> {#fun-substitute-subst-var}
+#### `--subst-var` \<varName> {#fun-substitute-subst-var}
 
-Replace every occurrence of `@varName@` by the contents of the environment variable \<varName\>. This is useful for generating files from templates, using `@...@` in the template as placeholders.
+Replace every occurrence of `@varName@` by the contents of the environment variable \<varName>. This is useful for generating files from templates, using `@...@` in the template as placeholders.
 
-#### `--subst-var-by` \<varName\> \<s\> {#fun-substitute-subst-var-by}
+#### `--subst-var-by` \<varName> \<s> {#fun-substitute-subst-var-by}
 
-Replace every occurrence of `@varName@` by the string \<s\>.
+Replace every occurrence of `@varName@` by the string \<s>.
 
 Example:
 
@@ -1263,13 +1277,13 @@ substitute ./foo.in ./foo.out \
     --subst-var someVar
 ```
 
-### `substituteInPlace` \<multiple files\> \<subs\> {#fun-substituteInPlace}
+### `substituteInPlace` \<multiple files> \<subs> {#fun-substituteInPlace}
 
 Like `substitute`, but performs the substitutions in place on the files passed.
 
-### `substituteAll` \<infile\> \<outfile\> {#fun-substituteAll}
+### `substituteAll` \<infile> \<outfile> {#fun-substituteAll}
 
-Replaces every occurrence of `@varName@`, where \<varName\> is any environment variable, in \<infile\>, writing the result to \<outfile\>. For instance, if \<infile\> has the contents
+Replaces every occurrence of `@varName@`, where \<varName> is any environment variable, in \<infile>, writing the result to \<outfile>. For instance, if \<infile> has the contents
 
 ```bash
 #! @bash@/bin/sh
@@ -1289,11 +1303,11 @@ That is, no substitution is performed for undefined variables.
 
 Environment variables that start with an uppercase letter or an underscore are filtered out, to prevent global variables (like `HOME`) or private variables (like `__ETC_PROFILE_DONE`) from accidentally getting substituted. The variables also have to be valid bash "names", as defined in the bash manpage (alphanumeric or `_`, must not start with a number).
 
-### `substituteAllInPlace` \<file\> {#fun-substituteAllInPlace}
+### `substituteAllInPlace` \<file> {#fun-substituteAllInPlace}
 
-Like `substituteAll`, but performs the substitutions in place on the file \<file\>.
+Like `substituteAll`, but performs the substitutions in place on the file \<file>.
 
-### `stripHash` \<path\> {#fun-stripHash}
+### `stripHash` \<path> {#fun-stripHash}
 
 Strips the directory and hash part of a store path, outputting the name part to `stdout`. For example:
 
@@ -1309,13 +1323,13 @@ name="/nix/store/9s9r019176g7cvn2nvcw41gsp862y6b4-coreutils-8.24"
 someVar=$(stripHash $name)
 ```
 
-### `wrapProgram` \<executable\> \<makeWrapperArgs\> {#fun-wrapProgram}
+### `wrapProgram` \<executable> \<makeWrapperArgs> {#fun-wrapProgram}
 
 Convenience function for `makeWrapper` that replaces `<executable>` with a wrapper that executes the original program. It takes all the same arguments as `makeWrapper`, except for `--inherit-argv0` (used by the `makeBinaryWrapper` implementation) and `--argv0` (used by both `makeWrapper` and `makeBinaryWrapper` wrapper implementations).
 
 If you will apply it multiple times, it will overwrite the wrapper file and you will end up with double wrapping, which should be avoided.
 
-### `prependToVar` \<variableName\> \<elements...\> {#fun-prependToVar}
+### `prependToVar` \<variableName> \<elements...> {#fun-prependToVar}
 
 Prepend elements to a variable.
 
@@ -1328,7 +1342,7 @@ $ echo $configureFlags
 --disable-dependency-tracking --enable-foo --disable-static
 ```
 
-### `appendToVar` \<variableName\> \<elements...\> {#fun-appendToVar}
+### `appendToVar` \<variableName> \<elements...> {#fun-appendToVar}
 
 Append elements to a variable.
 
@@ -1345,7 +1359,7 @@ $ echo $configureFlags
 
 Nix itself considers a build-time dependency as merely something that should previously be built and accessible at build time—packages themselves are on their own to perform any additional setup. In most cases, that is fine, and the downstream derivation can deal with its own dependencies. But for a few common tasks, that would result in almost every package doing the same sort of setup work—depending not on the package itself, but entirely on which dependencies were used.
 
-To alleviate this burden, the setup hook mechanism was written, where any package can include a shell script that \[by convention rather than enforcement by Nix\], any downstream reverse-dependency will source as part of its build process. That allows the downstream dependency to merely specify its dependencies, and lets those dependencies effectively initialize themselves. No boilerplate mirroring the list of dependencies is needed.
+To alleviate this burden, the setup hook mechanism was written, where any package can include a shell script that [by convention rather than enforcement by Nix], any downstream reverse-dependency will source as part of its build process. That allows the downstream dependency to merely specify its dependencies, and lets those dependencies effectively initialize themselves. No boilerplate mirroring the list of dependencies is needed.
 
 The setup hook mechanism is a bit of a sledgehammer though: a powerful feature with a broad and indiscriminate area of effect. The combination of its power and implicit use may be expedient, but isn’t without costs. Nix itself is unchanged, but the spirit of added dependencies being effect-free is violated even if the latter isn’t. For example, if a derivation path is mentioned more than once, Nix itself doesn’t care and makes sure the dependency derivation is already built just the same—depending is just needing something to exist, and needing is idempotent. However, a dependency specified twice will have its setup hook run twice, and that could easily change the build environment (though a well-written setup hook will therefore strive to be idempotent so this is in fact not observable). More broadly, setup hooks are anti-modular in that multiple dependencies, whether the same or different, should not interfere and yet their setup hooks may well do so.
 
@@ -1375,13 +1389,11 @@ This runs the strip command on installed binaries and libraries. This removes un
 
 ### `patch-shebangs.sh` {#patch-shebangs.sh}
 
-This setup hook patches installed scripts to add Nix store paths to their shebang interpreter as found in the build environment. The [shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)) line tells a Unix-like operating system which interpreter to use to execute the script's contents.
+This setup hook patches installed scripts to add Nix store paths to their shebang interpreter as found in the build environment. The [shebang](<https://en.wikipedia.org/wiki/Shebang_(Unix)>) line tells a Unix-like operating system which interpreter to use to execute the script's contents.
 
 ::: {.note}
 The [generic builder][generic-builder] populates `PATH` from inputs of the derivation.
 :::
-
-[generic-builder]: https://github.com/NixOS/nixpkgs/blob/19d4f7dc485f74109bd66ef74231285ff797a823/pkgs/stdenv/generic/builder.sh
 
 #### Invocation {#patch-shebangs.sh-invocation}
 
@@ -1432,13 +1444,9 @@ stdenv.mkDerivation {
 }
 ```
 
-The file [`patch-shebangs.sh`][patch-shebangs.sh] defines the [`patchShebangs`][patchShebangs] function. It is used to implement [`patchShebangsAuto`][patchShebangsAuto], the [setup hook](#ssec-setup-hooks) that is registered to run during the [fixup phase](#ssec-fixup-phase) by default.
+The file [`patch-shebangs.sh`][patch-shebangs.sh] defines the [`patchShebangs`][patchshebangs] function. It is used to implement [`patchShebangsAuto`][patchshebangsauto], the [setup hook](#ssec-setup-hooks) that is registered to run during the [fixup phase](#ssec-fixup-phase) by default.
 
 If you need to run `patchShebangs` at build time, it must be called explicitly within [one of the build phases](#sec-stdenv-phases).
-
-[patch-shebangs.sh]: https://github.com/NixOS/nixpkgs/blob/19d4f7dc485f74109bd66ef74231285ff797a823/pkgs/build-support/setup-hooks/patch-shebangs.sh
-[patchShebangs]: https://github.com/NixOS/nixpkgs/blob/19d4f7dc485f74109bd66ef74231285ff797a823/pkgs/build-support/setup-hooks/patch-shebangs.sh#L24-L105
-[patchShebangsAuto]: https://github.com/NixOS/nixpkgs/blob/19d4f7dc485f74109bd66ef74231285ff797a823/pkgs/build-support/setup-hooks/patch-shebangs.sh#L107-L119
 
 ### `audit-tmpdir.sh` {#audit-tmpdir.sh}
 
@@ -1506,7 +1514,7 @@ packages that attempt to write to the home directory.
 
 ### Bintools Wrapper and hook {#bintools-wrapper}
 
-The Bintools Wrapper wraps the binary utilities for a bunch of miscellaneous purposes. These are GNU Binutils when targeting Linux, and a mix of cctools and GNU binutils for Darwin. \[The “Bintools” name is supposed to be a compromise between “Binutils” and “cctools” not denoting any specific implementation.\] Specifically, the underlying bintools package, and a C standard library (glibc or Darwin’s libSystem, just for the dynamic loader) are all fed in, and dependency finding, hardening (see below), and purity checks for each are handled by the Bintools Wrapper. Packages typically depend on CC Wrapper, which in turn (at run time) depends on the Bintools Wrapper.
+The Bintools Wrapper wraps the binary utilities for a bunch of miscellaneous purposes. These are GNU Binutils when targeting Linux, and a mix of cctools and GNU binutils for Darwin. [The “Bintools” name is supposed to be a compromise between “Binutils” and “cctools” not denoting any specific implementation.] Specifically, the underlying bintools package, and a C standard library (glibc or Darwin’s libSystem, just for the dynamic loader) are all fed in, and dependency finding, hardening (see below), and purity checks for each are handled by the Bintools Wrapper. Packages typically depend on CC Wrapper, which in turn (at run time) depends on the Bintools Wrapper.
 
 The Bintools Wrapper was only just recently split off from CC Wrapper, so the division of labor is still being worked out. For example, it shouldn’t care about the C standard library, but just take a derivation with the dynamic loader (which happens to be the glibc on linux). Dependency finding however is a task both wrappers will continue to need to share, and probably the most important to understand. It is currently accomplished by collecting directories of host-platform dependencies (i.e. `buildInputs` and `nativeBuildInputs`) in environment variables. The Bintools Wrapper’s setup hook causes any `lib` and `lib64` subdirectories to be added to `NIX_LDFLAGS`. Since the CC Wrapper and the Bintools Wrapper use the same strategy, most of the Bintools Wrapper code is sparsely commented and refers to the CC Wrapper. But the CC Wrapper’s code, by contrast, has quite lengthy comments. The Bintools Wrapper merely cites those, rather than repeating them, to avoid falling out of sync.
 
@@ -1727,10 +1735,15 @@ This may cause problems with code that does advanced stack manipulation, and deb
 
 Pre-ARM v8.3 processors will ignore Pointer Authentication instructions, so code built with this flag will continue to work on older processors, though without any of the intended protections. If enabling this flag, it is recommended to ensure the resultant packages are tested against an ARM v8.3+ linux system with known-working Pointer Authentication support so that any breakage caused by this feature is actually detected.
 
-[^footnote-stdenv-ignored-build-platform]: The build platform is ignored because it is a mere implementation detail of the package satisfying the dependency: As a general programming principle, dependencies are always *specified* as interfaces, not concrete implementation.
-[^footnote-stdenv-native-dependencies-in-path]: Currently, this means for native builds all dependencies are put on the `PATH`. But in the future that may not be the case for sake of matching cross: the platforms would be assumed to be unique for native and cross builds alike, so only the `depsBuild*` and `nativeBuildInputs` would be added to the `PATH`.
-[^footnote-stdenv-propagated-dependencies]: Nix itself already takes a package’s transitive dependencies into account, but this propagation ensures nixpkgs-specific infrastructure like [setup hooks](#ssec-setup-hooks) also are run as if it were a propagated dependency.
-[^footnote-stdenv-find-inputs-location]: The `findInputs` function, currently residing in `pkgs/stdenv/generic/setup.sh`, implements the propagation logic.
-[^footnote-stdenv-sys-lib-search-path]: It clears the `sys_lib_*search_path` variables in the Libtool script to prevent Libtool from using libraries in `/usr/lib` and such.
-[^footnote-stdenv-build-time-guessing-impurity]: Eventually these will be passed building natively as well, to improve determinism: build-time guessing, as is done today, is a risk of impurity.
-[^footnote-stdenv-per-platform-wrapper]: Each wrapper targets a single platform, so if binaries for multiple platforms are needed, the underlying binaries must be wrapped multiple times. As this is a property of the wrapper itself, the multiple wrappings are needed whether or not the same underlying binaries can target multiple platforms.
+\[^footnote-stdenv-ignored-build-platform\]: The build platform is ignored because it is a mere implementation detail of the package satisfying the dependency: As a general programming principle, dependencies are always *specified* as interfaces, not concrete implementation.
+\[^footnote-stdenv-native-dependencies-in-path\]: Currently, this means for native builds all dependencies are put on the `PATH`. But in the future that may not be the case for sake of matching cross: the platforms would be assumed to be unique for native and cross builds alike, so only the `depsBuild*` and `nativeBuildInputs` would be added to the `PATH`.
+\[^footnote-stdenv-propagated-dependencies\]: Nix itself already takes a package’s transitive dependencies into account, but this propagation ensures nixpkgs-specific infrastructure like [setup hooks](#ssec-setup-hooks) also are run as if it were a propagated dependency.
+\[^footnote-stdenv-find-inputs-location\]: The `findInputs` function, currently residing in `pkgs/stdenv/generic/setup.sh`, implements the propagation logic.
+\[^footnote-stdenv-sys-lib-search-path\]: It clears the `sys_lib_*search_path` variables in the Libtool script to prevent Libtool from using libraries in `/usr/lib` and such.
+\[^footnote-stdenv-build-time-guessing-impurity\]: Eventually these will be passed building natively as well, to improve determinism: build-time guessing, as is done today, is a risk of impurity.
+\[^footnote-stdenv-per-platform-wrapper\]: Each wrapper targets a single platform, so if binaries for multiple platforms are needed, the underlying binaries must be wrapped multiple times. As this is a property of the wrapper itself, the multiple wrappings are needed whether or not the same underlying binaries can target multiple platforms.
+
+[generic-builder]: https://github.com/NixOS/nixpkgs/blob/19d4f7dc485f74109bd66ef74231285ff797a823/pkgs/stdenv/generic/builder.sh
+[patch-shebangs.sh]: https://github.com/NixOS/nixpkgs/blob/19d4f7dc485f74109bd66ef74231285ff797a823/pkgs/build-support/setup-hooks/patch-shebangs.sh
+[patchshebangs]: https://github.com/NixOS/nixpkgs/blob/19d4f7dc485f74109bd66ef74231285ff797a823/pkgs/build-support/setup-hooks/patch-shebangs.sh#L24-L105
+[patchshebangsauto]: https://github.com/NixOS/nixpkgs/blob/19d4f7dc485f74109bd66ef74231285ff797a823/pkgs/build-support/setup-hooks/patch-shebangs.sh#L107-L119

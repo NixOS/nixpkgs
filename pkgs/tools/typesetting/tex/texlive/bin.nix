@@ -60,7 +60,7 @@
 let
   withSystemLibs = map (libname: "--with-system-${libname}");
 
-  year = toString ((import ./tlpdb.nix)."00texlive.config").year;
+  year = toString (import ./tlpdb.nix)."00texlive.config".year;
   version = year; # keep names simple for now
 
   # detect and stop redundant rebuilds that may occur when building new fixed hashes

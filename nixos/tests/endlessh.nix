@@ -5,7 +5,7 @@
 
   nodes = {
     server =
-      { ... }:
+      _:
       {
         services.endlessh = {
           enable = true;

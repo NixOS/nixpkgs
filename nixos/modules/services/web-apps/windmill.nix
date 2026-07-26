@@ -103,7 +103,7 @@ in
       }
     ];
 
-    services.postgresql = lib.optionalAttrs (cfg.database.createLocally) {
+    services.postgresql = lib.optionalAttrs cfg.database.createLocally {
       enable = lib.mkDefault true;
 
       ensureDatabases = [ cfg.database.name ];
@@ -119,8 +119,7 @@ in
       description = "Windmill";
       wantedBy = [ "multi-user.target" ];
       requires =
-        [ ]
-        ++ (lib.optionals config.systemd.services.windmill-server.enable [ "windmill-server.service" ])
+        (lib.optionals config.systemd.services.windmill-server.enable [ "windmill-server.service" ])
         ++ (lib.optionals config.systemd.services.windmill-worker.enable [ "windmill-worker.service" ])
         ++ (lib.optionals config.systemd.services.windmill-worker-native.enable [
           "windmill-worker-native.service"
@@ -129,7 +128,7 @@ in
 
     systemd.services =
       let
-        useUrlPath = (cfg.database.urlPath != null);
+        useUrlPath = cfg.database.urlPath != null;
         serviceConfig = {
           DynamicUser = true;
           # using the same user to simplify db connection
@@ -156,15 +155,13 @@ in
           requires = [ "postgresql.target" ];
           after = [ "postgresql.target" ];
           requiredBy =
-            [ ]
-            ++ (lib.optionals config.systemd.services.windmill-server.enable [ "windmill-server.service" ])
+            (lib.optionals config.systemd.services.windmill-server.enable [ "windmill-server.service" ])
             ++ (lib.optionals config.systemd.services.windmill-worker.enable [ "windmill-worker.service" ])
             ++ (lib.optionals config.systemd.services.windmill-worker-native.enable [
               "windmill-worker-native.service"
             ]);
           before =
-            [ ]
-            ++ (lib.optionals config.systemd.services.windmill-server.enable [ "windmill-server.service" ])
+            (lib.optionals config.systemd.services.windmill-server.enable [ "windmill-server.service" ])
             ++ (lib.optionals config.systemd.services.windmill-worker.enable [ "windmill-worker.service" ])
             ++ (lib.optionals config.systemd.services.windmill-worker-native.enable [
               "windmill-worker-native.service"

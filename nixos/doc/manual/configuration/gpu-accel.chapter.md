@@ -76,7 +76,7 @@ configuration can be used:
 
 ## Vulkan {#sec-gpu-accel-vulkan}
 
-[Vulkan](https://en.wikipedia.org/wiki/Vulkan_(API)) is a graphics and
+[Vulkan](<https://en.wikipedia.org/wiki/Vulkan_(API)>) is a graphics and
 compute API for GPUs. It is used directly by games or indirectly though
 compatibility layers like
 [DXVK](https://github.com/doitsujin/dxvk/wiki).

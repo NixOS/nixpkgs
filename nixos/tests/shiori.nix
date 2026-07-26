@@ -5,7 +5,7 @@
   meta.maintainers = with lib.maintainers; [ minijackson ];
 
   nodes.machine =
-    { ... }:
+    _:
     {
       services.shiori.enable = true;
     };

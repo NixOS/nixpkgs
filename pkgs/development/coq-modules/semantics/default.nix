@@ -45,8 +45,8 @@ mkCoqDerivation {
     ] null;
 
   mlPlugin = true;
-  nativeBuildInputs = (with coq.ocamlPackages; [ ocamlbuild ]);
-  propagatedBuildInputs = (with coq.ocamlPackages; [ num ]);
+  nativeBuildInputs = with coq.ocamlPackages; [ ocamlbuild ];
+  propagatedBuildInputs = with coq.ocamlPackages; [ num ];
 
   postPatch = ''
     for p in Make Makefile.coq.local

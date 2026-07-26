@@ -211,7 +211,7 @@ stdenv.mkDerivation (finalAttrs: {
     # required to support pthread_cancel()
     NIX_LDFLAGS =
       lib.optionalString (stdenv.cc.isGNU && stdenv.hostPlatform.libc == "glibc") "-lgcc_s"
-      + lib.optionalString (stdenv.hostPlatform.isFreeBSD) "-lthr";
+      + lib.optionalString stdenv.hostPlatform.isFreeBSD "-lthr";
   }
   // lib.attrsets.optionalAttrs (rustSupport && (stdenv.buildPlatform != stdenv.hostPlatform)) {
     # Rust cross-compilation

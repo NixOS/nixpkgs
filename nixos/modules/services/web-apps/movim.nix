@@ -593,7 +593,7 @@ in
       users = {
         movim = mkIf (cfg.user == "movim") {
           isSystemUser = true;
-          group = cfg.group;
+          inherit (cfg) group;
         };
       }
       // lib.optionalAttrs (cfg.h2o != null) {
@@ -782,10 +782,10 @@ in
             }
           ];
         }
-        // lib.optionalAttrs (cfg.precompressStaticFiles.gzip.enable) {
+        // lib.optionalAttrs cfg.precompressStaticFiles.gzip.enable {
           recommendedGzipSettings = mkDefault true;
         }
-        // lib.optionalAttrs (cfg.precompressStaticFiles.brotli.enable) {
+        // lib.optionalAttrs cfg.precompressStaticFiles.brotli.enable {
           recommendedBrotliSettings = mkDefault true;
         }
       );
@@ -818,8 +818,8 @@ in
 
       phpfpm.pools.${pool} = {
         phpPackage = package.php;
-        user = cfg.user;
-        group = cfg.group;
+        inherit (cfg) user;
+        inherit (cfg) group;
 
         phpOptions = ''
           error_log = 'stderr'

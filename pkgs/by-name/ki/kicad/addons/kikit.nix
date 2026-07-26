@@ -55,6 +55,6 @@ stdenv.mkDerivation {
   '';
 
   meta = kikit-module.meta // {
-    description = targetSpec.description;
+    inherit (targetSpec) description;
   };
 }

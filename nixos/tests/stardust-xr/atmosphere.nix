@@ -1,4 +1,4 @@
-{ ... }:
+_:
 {
   name = "stardust-xr-atmosphere";
 

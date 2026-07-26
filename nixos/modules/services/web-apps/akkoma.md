@@ -17,7 +17,6 @@ referenced file does not exist during startup, unless disabled through
 The following configuration binds Akkoma to the Unix socket `/run/akkoma/socket`, expecting to
 be run behind a HTTP proxy on `fediverse.example.com`.
 
-
 ```nix
 {
   services.akkoma.enable = true;
@@ -212,7 +211,6 @@ which allows limiting federation based on instance hostnames.
 This configuration snippet provides an example on how these can be used. Choosing an adequate
 federation policy is not trivial and entails finding a balance between connectivity to the rest
 of the fediverse and providing a pleasant experience to the users of an instance.
-
 
 ```nix
 {

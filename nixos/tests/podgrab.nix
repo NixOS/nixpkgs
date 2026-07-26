@@ -8,13 +8,13 @@ in
 
   nodes = {
     default =
-      { ... }:
+      _:
       {
         services.podgrab.enable = true;
       };
 
     customized =
-      { ... }:
+      _:
       {
         services.podgrab = {
           enable = true;

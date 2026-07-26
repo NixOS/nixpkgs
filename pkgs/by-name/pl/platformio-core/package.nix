@@ -56,7 +56,7 @@ buildPythonApplication rec {
 
   patches = [
     (replaceVars ./interpreter.patch {
-      interpreter = (python3Packages.python.withPackages (_: dependencies)).interpreter;
+      inherit ((python3Packages.python.withPackages (_: dependencies))) interpreter;
     })
     (replaceVars ./use-local-spdx-license-list.patch {
       spdx_license_list_data = spdx-license-list-data.json;
@@ -243,7 +243,7 @@ buildPythonApplication rec {
   ];
 
   passthru = {
-    python = python3Packages.python;
+    inherit (python3Packages) python;
   };
 
   meta = {

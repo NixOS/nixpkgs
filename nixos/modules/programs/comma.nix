@@ -41,9 +41,9 @@ in
         cfg.enableBashIntegration || cfg.enableZshIntegration || cfg.enableFishIntegration
       ) (lib.mkDefault false);
       nix-index = {
-        enableBashIntegration = lib.mkIf (cfg.enableBashIntegration) (lib.mkDefault false);
-        enableZshIntegration = lib.mkIf (cfg.enableZshIntegration) (lib.mkDefault false);
-        enableFishIntegration = lib.mkIf (cfg.enableFishIntegration) (lib.mkDefault false);
+        enableBashIntegration = lib.mkIf cfg.enableBashIntegration (lib.mkDefault false);
+        enableZshIntegration = lib.mkIf cfg.enableZshIntegration (lib.mkDefault false);
+        enableFishIntegration = lib.mkIf cfg.enableFishIntegration (lib.mkDefault false);
       };
     };
   };

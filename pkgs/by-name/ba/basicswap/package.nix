@@ -51,7 +51,7 @@ let
       bitcoin = bitcoind;
       namecoin = namecoind;
       monero = monero-cli;
-      wownero = wownero;
+      inherit wownero;
       #TODO: add pivx after it's not broken
     }
   );

@@ -185,8 +185,8 @@ let
   cudaPackages =
     lib.makeScopeWithSplicing'
       {
-        splicePackages = pkgs'.splicePackages;
-        newScope = pkgs'.newScope;
+        inherit (pkgs') splicePackages;
+        inherit (pkgs') newScope;
       }
       {
         # In pkgs', the default CUDA package set is always the one we've constructed here.

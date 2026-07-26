@@ -7,7 +7,6 @@ import subprocess
 
 import httpx
 
-
 URL = "https://api.github.com/repos/grpc/grpc-go/git/matching-refs/tags/cmd/protoc-gen-go-grpc/v"
 TAG_RE = re.compile(r"^refs/tags/(cmd/protoc-gen-go-grpc/v(\d+)\.(\d+)\.(\d+))$")
 

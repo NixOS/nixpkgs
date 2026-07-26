@@ -9,7 +9,7 @@
 }).overrideAttrs
   {
     pname = "syncthing-relay";
-    postInstall = lib.optionalString (stdenv.hostPlatform.isLinux) ''
+    postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
       mkdir -p $out/lib/systemd/system
 
       substitute cmd/strelaysrv/etc/linux-systemd/strelaysrv.service \

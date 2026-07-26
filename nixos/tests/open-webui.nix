@@ -16,7 +16,7 @@ in
 
   nodes = {
     machine =
-      { ... }:
+      _:
       {
         services.open-webui = {
           enable = true;

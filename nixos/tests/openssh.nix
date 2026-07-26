@@ -17,7 +17,7 @@ in
   nodes = {
 
     server =
-      { ... }:
+      _:
 
       {
         services.openssh.enable = true;
@@ -35,7 +35,7 @@ in
       };
 
     server-allowed-users =
-      { ... }:
+      _:
 
       {
         services.openssh = {
@@ -70,7 +70,7 @@ in
       };
 
     server-lazy =
-      { ... }:
+      _:
 
       {
         services.openssh = {
@@ -109,7 +109,7 @@ in
     };
 
     server-localhost-only =
-      { ... }:
+      _:
 
       {
         services.openssh = {
@@ -124,7 +124,7 @@ in
       };
 
     server-localhost-only-lazy =
-      { ... }:
+      _:
 
       {
         services.openssh = {
@@ -140,7 +140,7 @@ in
       };
 
     server-match-rule =
-      { ... }:
+      _:
 
       {
         services.openssh = {
@@ -180,7 +180,7 @@ in
       };
 
     server-no-openssl =
-      { ... }:
+      _:
       {
         services.openssh = {
           enable = true;
@@ -202,7 +202,7 @@ in
       };
 
     server-default-algorithms =
-      { ... }:
+      _:
       {
         services.openssh = {
           enable = true;
@@ -214,7 +214,7 @@ in
       };
 
     server-null-algorithms =
-      { ... }:
+      _:
       {
         services.openssh = {
           enable = true;
@@ -299,7 +299,7 @@ in
       };
 
     client =
-      { ... }:
+      _:
       {
         virtualisation.vlans = [
           1

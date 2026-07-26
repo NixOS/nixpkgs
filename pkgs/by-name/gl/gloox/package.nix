@@ -27,8 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildInputs =
-    [ ]
-    ++ lib.optional zlibSupport zlib
+    lib.optional zlibSupport zlib
     ++ lib.optional sslSupport openssl
     ++ lib.optional idnSupport libidn;
 

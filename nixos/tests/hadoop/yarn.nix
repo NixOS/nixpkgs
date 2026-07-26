@@ -6,7 +6,7 @@ import ../make-test-python.nix (
 
     nodes = {
       resourcemanager =
-        { ... }:
+        _:
         {
           services.hadoop = {
             inherit package;

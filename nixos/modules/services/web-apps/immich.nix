@@ -443,8 +443,8 @@ in
         # fixes those installs.
         "${cfg.mediaLocation}" = {
           e = {
-            user = cfg.user;
-            group = cfg.group;
+            inherit (cfg) user;
+            inherit (cfg) group;
             mode = "0700";
           };
         };
@@ -454,7 +454,7 @@ in
     users.users = mkIf (cfg.user == "immich") {
       immich = {
         name = "immich";
-        group = cfg.group;
+        inherit (cfg) group;
         isSystemUser = true;
       };
     };

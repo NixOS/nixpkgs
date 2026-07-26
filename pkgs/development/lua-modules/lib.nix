@@ -134,23 +134,20 @@ rec {
       # example externalDeps': [ { name = "CRYPTO"; dep = pkgs.openssl; } ]
       externalDeps' = lib.filter (dep: !lib.isDerivation dep) externalDeps;
 
-      externalDepsDirs = map (x: toString x) (lib.filter (lib.isDerivation) externalDeps);
+      externalDepsDirs = map toString (lib.filter lib.isDerivation externalDeps);
 
-      generatedConfig = (
-        {
+      generatedConfig = {
 
           # first tree is the default target where new rocks are installed,
           # any other trees in the list are treated as additional sources of installed rocks for matching dependencies.
-          rocks_trees = (
-            [
+          rocks_trees = [
               {
                 name = "current";
                 root = "${placeholder "out"}";
                 rocks_dir = "current";
               }
             ]
-            ++ rocksTrees
-          );
+            ++ rocksTrees;
         }
         // lib.optionalAttrs lua.pkgs.isLuaJIT {
           # Luajit provides some additional functionality built-in; this exposes
@@ -172,8 +169,7 @@ rec {
         // removeAttrs args [
           "requiredLuaRocks"
           "externalDeps"
-        ]
-      );
+        ];
     in
     generatedConfig;
 }

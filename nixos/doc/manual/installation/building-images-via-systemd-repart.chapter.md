@@ -1,10 +1,8 @@
 # Building Images via `systemd-repart` {#sec-image-repart}
 
 You can build disk images in NixOS with the `image.repart` option provided by
-the module [image/repart.nix][]. This module uses `systemd-repart` to build the
+the module [image/repart.nix]. This module uses `systemd-repart` to build the
 images and exposes it's entire interface via the `repartConfig` option.
-
-[image/repart.nix]: https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/image/repart.nix
 
 An example of how to build an image:
 
@@ -110,9 +108,7 @@ Nix store and mount it on `/nix/store`:
 ## Appliance Image {#sec-image-repart-appliance}
 
 The `image/repart.nix` module can also be used to build self-contained [software
-appliances][].
-
-[software appliances]: https://en.wikipedia.org/wiki/Software_appliance
+appliances][software appliances].
 
 The generation based update mechanism of NixOS is not suited for appliances.
 Updates of appliances are usually either performed by replacing the entire
@@ -121,9 +117,6 @@ image with a new one or by updating partitions via an A/B scheme. See the
 this. The appliance image built in the following example does not contain a
 `configuration.nix` and thus you will not be able to call `nixos-rebuild` from
 this system. Furthermore, it uses a [Unified Kernel Image][unified-kernel-image].
-
-[chrome-os-update]: https://chromium.googlesource.com/aosp/platform/system/update_engine/+/HEAD/README.md
-[unified-kernel-image]: https://uapi-group.org/specifications/specs/unified_kernel_image/
 
 ```nix
 let
@@ -180,3 +173,8 @@ in
   )
 ]).image
 ```
+
+[chrome-os-update]: https://chromium.googlesource.com/aosp/platform/system/update_engine/+/HEAD/README.md
+[image/repart.nix]: https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/image/repart.nix
+[software appliances]: https://en.wikipedia.org/wiki/Software_appliance
+[unified-kernel-image]: https://uapi-group.org/specifications/specs/unified_kernel_image/

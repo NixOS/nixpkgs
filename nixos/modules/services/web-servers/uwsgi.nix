@@ -119,7 +119,7 @@ in
                 (mkOptionType {
                   name = "function";
                   description = "function";
-                  check = x: isFunction x;
+                  check = isFunction;
                   merge = mergeOneOption;
                 })
               ])
@@ -230,7 +230,7 @@ in
 
     users.users = optionalAttrs (cfg.user == "uwsgi") {
       uwsgi = {
-        group = cfg.group;
+        inherit (cfg) group;
         uid = config.ids.uids.uwsgi;
       };
     };

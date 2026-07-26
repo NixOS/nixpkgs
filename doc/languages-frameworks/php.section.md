@@ -236,10 +236,10 @@ Internally, the helper operates in three stages:
    a custom
    [Composer plugin](https://github.com/nix-community/composer-local-repo-plugin) to
    generate the repository.
-2. The resulting `composerRepository` derivation is then used by the
+1. The resulting `composerRepository` derivation is then used by the
    `php.composerHooks.composerInstallHook` hook, which is responsible for
    creating the final `vendor` directory.
-3. Any "binary" specified in the `composer.json` are linked and made accessible
+1. Any "binary" specified in the `composer.json` are linked and made accessible
    in the derivation.
 
 As the autoloader optimization can be activated directly within the

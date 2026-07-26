@@ -16,7 +16,7 @@ let
     list:
     builtins.listToAttrs (
       lib.forEach list (zone: {
-        name = zone.name;
+        inherit (zone) name;
         value = zone;
       })
     );

@@ -139,10 +139,7 @@ buildPythonPackage (finalAttrs: {
       datasets
     ];
     sagemaker = [ sagemaker ];
-    deepspeed = [
-      # deepspeed
-    ]
-    ++ self.accelerate;
+    deepspeed = self.accelerate;
     optuna = [ optuna ];
     ray = [ ray ] ++ ray.optional-dependencies.tune;
     kernels = [ kernels ];

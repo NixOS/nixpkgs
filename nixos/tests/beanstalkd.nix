@@ -29,7 +29,7 @@ in
   meta.maintainers = [ lib.maintainers.aanderse ];
 
   nodes.machine =
-    { ... }:
+    _:
     {
       services.beanstalkd.enable = true;
     };

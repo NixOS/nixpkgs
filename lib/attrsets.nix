@@ -555,7 +555,7 @@ rec {
 
     :::
   */
-  attrValues = builtins.attrValues;
+  inherit (builtins) attrValues;
 
   /**
     Given a set of attribute names, return the set of the corresponding
@@ -621,7 +621,7 @@ rec {
 
     :::
   */
-  catAttrs = builtins.catAttrs;
+  inherit (builtins) catAttrs;
 
   /**
     Filter an attribute set by removing all attributes for which the
@@ -1017,7 +1017,7 @@ rec {
 
     :::
   */
-  mapAttrs = builtins.mapAttrs;
+  inherit (builtins) mapAttrs;
 
   /**
     Like `mapAttrs`, but allows the name of each attribute to be

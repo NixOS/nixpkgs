@@ -8,12 +8,12 @@ than there are keys on the keyboard.
 
 The following input methods are available in NixOS:
 
-  - IBus: The intelligent input bus.
-  - Fcitx5: The next generation of fcitx, addons (including engines, dictionaries, skins) can be added using `i18n.inputMethod.fcitx5.addons`.
-  - Nabi: A Korean input method based on XIM.
-  - Uim: The universal input method, is a library with a XIM bridge.
-  - Hime: An extremely easy-to-use input method framework.
-  - Kime: Korean IME
+- IBus: The intelligent input bus.
+- Fcitx5: The next generation of fcitx, addons (including engines, dictionaries, skins) can be added using `i18n.inputMethod.fcitx5.addons`.
+- Nabi: A Korean input method based on XIM.
+- Uim: The universal input method, is a library with a XIM bridge.
+- Hime: An extremely easy-to-use input method framework.
+- Kime: Korean IME
 
 ## IBus {#module-services-input-methods-ibus}
 
@@ -41,29 +41,35 @@ to add extra IBus engines.
 
 Available extra IBus engines are:
 
-  - Anthy (`ibus-engines.anthy`): Anthy is a system for
-    Japanese input method. It converts Hiragana text to Kana Kanji mixed text.
-  - Hangul (`ibus-engines.hangul`): Korean input method.
-  - libpinyin (`ibus-engines.libpinyin`): A Chinese input method.
-  - m17n (`ibus-engines.m17n`): m17n is an input method that
-    uses input methods and corresponding icons in the m17n database.
-  - mozc (`ibus-engines.mozc`): A Japanese input method from
-    Google.
-  - Table (`ibus-engines.table`): An input method that load
-    tables of input methods.
-  - table-others (`ibus-engines.table-others`): Various
-    table-based input methods. To use this, and any other table-based input
-    methods, it must appear in the list of engines along with
-    `table`. For example:
+- Anthy (`ibus-engines.anthy`): Anthy is a system for
+  Japanese input method. It converts Hiragana text to Kana Kanji mixed text.
 
-    ```nix
-    {
-      ibus.engines = with pkgs.ibus-engines; [
-        table
-        table-others
-      ];
-    }
-    ```
+- Hangul (`ibus-engines.hangul`): Korean input method.
+
+- libpinyin (`ibus-engines.libpinyin`): A Chinese input method.
+
+- m17n (`ibus-engines.m17n`): m17n is an input method that
+  uses input methods and corresponding icons in the m17n database.
+
+- mozc (`ibus-engines.mozc`): A Japanese input method from
+  Google.
+
+- Table (`ibus-engines.table`): An input method that load
+  tables of input methods.
+
+- table-others (`ibus-engines.table-others`): Various
+  table-based input methods. To use this, and any other table-based input
+  methods, it must appear in the list of engines along with
+  `table`. For example:
+
+  ```nix
+  {
+    ibus.engines = with pkgs.ibus-engines; [
+      table
+      table-others
+    ];
+  }
+  ```
 
 To use any input method, the package must be added in the configuration, as
 shown above, and also (after running `nixos-rebuild`) the
@@ -106,23 +112,23 @@ used to add extra Fcitx5 addons.
 
 Available extra Fcitx5 addons are:
 
-  - Anthy (`fcitx5-anthy`): Anthy is a system for
-    Japanese input method. It converts Hiragana text to Kana Kanji mixed text.
-  - Array (`fcitx5-array`): Array is a Chinese shape-based input method that
-    uses a grid of 30 keys.
-  - Chewing (`fcitx5-chewing`): Chewing is an
-    intelligent Zhuyin input method. It is one of the most popular input
-    methods among Traditional Chinese Unix users.
-  - Hangul (`fcitx5-hangul`): Korean input method.
-  - Unikey (`fcitx5-unikey`): Vietnamese input method.
-  - m17n (`fcitx5-m17n`): m17n is an input method that
-    uses input methods and corresponding icons in the m17n database.
-  - mozc (`fcitx5-mozc`): A Japanese input method from
-    Google.
-  - table-others (`fcitx5-table-other`): Various
-    table-based input methods.
-  - chinese-addons (`fcitx5-chinese-addons`): Various chinese input methods.
-  - rime (`fcitx5-rime`): RIME support for fcitx5.
+- Anthy (`fcitx5-anthy`): Anthy is a system for
+  Japanese input method. It converts Hiragana text to Kana Kanji mixed text.
+- Array (`fcitx5-array`): Array is a Chinese shape-based input method that
+  uses a grid of 30 keys.
+- Chewing (`fcitx5-chewing`): Chewing is an
+  intelligent Zhuyin input method. It is one of the most popular input
+  methods among Traditional Chinese Unix users.
+- Hangul (`fcitx5-hangul`): Korean input method.
+- Unikey (`fcitx5-unikey`): Vietnamese input method.
+- m17n (`fcitx5-m17n`): m17n is an input method that
+  uses input methods and corresponding icons in the m17n database.
+- mozc (`fcitx5-mozc`): A Japanese input method from
+  Google.
+- table-others (`fcitx5-table-other`): Various
+  table-based input methods.
+- chinese-addons (`fcitx5-chinese-addons`): Various chinese input methods.
+- rime (`fcitx5-rime`): RIME support for fcitx5.
 
 ## Nabi {#module-services-input-methods-nabi}
 

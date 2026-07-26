@@ -512,7 +512,7 @@ in
               service = "next-service";
               entryPoints = [ "websecure" ];
               tls =
-                lib.optionalAttrs (finalSettings.domains.domain1.prefer_wildcard_cert) {
+                lib.optionalAttrs finalSettings.domains.domain1.prefer_wildcard_cert {
                   domains = [
                     { main = cfg.baseDomain; }
                     { sans = "*.${cfg.baseDomain}"; }
@@ -564,7 +564,7 @@ in
                 { url = "http://localhost:${toString finalSettings.server.external_port}"; }
               ];
             }
-            (lib.mkIf (finalSettings.flags.enable_integration_api) {
+            (lib.mkIf finalSettings.flags.enable_integration_api {
               # Integration API server
               int-api-service.loadBalancer.servers = [
                 { url = "http://localhost:${toString finalSettings.server.integration_port}"; }

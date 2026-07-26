@@ -68,9 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableJava [
     openjdk
   ];
-  buildInputs = [
-  ]
-  ++ lib.optionals enableJupyter [
+  buildInputs = lib.optionals enableJupyter [
     boost
     jsoncpp
     openssl

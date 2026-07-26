@@ -28,7 +28,7 @@ import ../make-test-python.nix (
 
         # Minimal test case to check a successful boot, even with invalid config
         minimalboot =
-          { ... }:
+          _:
           {
             boot.initrd.systemd.enable = systemdStage1;
             boot.initrd.network = {
@@ -42,7 +42,7 @@ import ../make-test-python.nix (
 
         # initrd VPN client
         ovpnclient =
-          { ... }:
+          _:
           {
             virtualisation.useBootLoader = true;
             virtualisation.vlans = [ 1 ];
@@ -85,7 +85,7 @@ import ../make-test-python.nix (
 
         # VPN server and gateway for ovpnclient between vlan 1 and 2
         ovpnserver =
-          { ... }:
+          _:
           {
             virtualisation.vlans = [
               1
@@ -124,7 +124,7 @@ import ../make-test-python.nix (
 
         # Client that resides in the "external" VLAN
         testclient =
-          { ... }:
+          _:
           {
             virtualisation.vlans = [ 2 ];
           };

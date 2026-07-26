@@ -125,8 +125,7 @@ buildPythonPackage rec {
   ]
   ++ (
     with pkgsBuildTarget.targetPackages.libsForQt5;
-    [ ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ qmake ]
+    lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ qmake ]
     ++ [
       qtbase
       qtsvg

@@ -212,7 +212,7 @@ let
           ++ (optionals (proto ? outproxyPort) (optionalNullInt "outproxyport" proto.outproxyPort))
           ++ (optionals (proto ? outproxyEnable) (optionalNullBool "outproxy.enabled" proto.outproxyEnable));
         in
-        (lib.concatStringsSep "\n" protoOpts)
+        lib.concatStringsSep "\n" protoOpts
       ));
     in
     pkgs.writeText "i2pd.conf" (lib.concatStringsSep "\n" opts);

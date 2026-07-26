@@ -127,7 +127,7 @@ buildDotnetModule (finalAttrs: {
       let
         with-sdk =
           sdk:
-          runCommand "with-${if sdk ? version then sdk.version else "no"}-sdk"
+          runCommand "with-${sdk.version or "no"}-sdk"
             {
               nativeBuildInputs = [
                 finalAttrs.finalPackage

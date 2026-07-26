@@ -3,7 +3,7 @@
 }:
 let
   pkgs = import ../../../. { config.allowAliases = false; };
-  lib = pkgs.lib;
+  inherit (pkgs) lib;
   optionalsWithSuccess =
     toTry: next:
     let

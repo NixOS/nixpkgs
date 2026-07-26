@@ -6,7 +6,7 @@
 
 1. Set [](#opt-services.mautrix-signal.enable) to `true`. The service will use
    SQLite by default.
-2. To create your configuration check the default configuration for
+1. To create your configuration check the default configuration for
    [](#opt-services.mautrix-signal.settings). To obtain the complete default
    configuration, run
    `nix-shell -p mautrix-signal --run "mautrix-signal -c default.yaml -e"`.

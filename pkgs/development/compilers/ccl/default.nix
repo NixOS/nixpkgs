@@ -20,7 +20,7 @@ let
     };
     i686-linux = {
       arch = "linuxx86";
-      hash = x86_64-linux.hash;
+      inherit (x86_64-linux) hash;
       runtime = "lx86cl";
       kernel = "linuxx8632";
     };
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/Clozure/ccl/releases/download/v${finalAttrs.version}/ccl-${finalAttrs.version}-${cfg.arch}.tar.gz";
-    hash = cfg.hash;
+    inherit (cfg) hash;
   };
 
   buildInputs =

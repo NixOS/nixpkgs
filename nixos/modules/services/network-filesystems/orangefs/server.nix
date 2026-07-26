@@ -164,7 +164,7 @@ in
           with lib.types;
           attrsOf (
             submodule (
-              { ... }:
+              _:
               {
                 options = {
                   id = lib.mkOption {

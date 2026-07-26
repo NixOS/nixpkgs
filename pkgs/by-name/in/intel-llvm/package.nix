@@ -159,7 +159,7 @@ let
 
       passthru = self.unwrapped.passthru // {
         inherit (self) stdenv;
-        unwrapped = self.unwrapped;
+        inherit (self) unwrapped;
         tests = callPackage ./tests.nix { inherit (self) stdenv; };
 
         overrideScope = newF: (self.overrideScope newF).merged;

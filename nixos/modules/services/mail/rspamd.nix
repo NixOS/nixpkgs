@@ -118,7 +118,7 @@ let
                   {
                     socket = each;
                     owner = cfg.user;
-                    group = cfg.group;
+                    inherit (cfg) group;
                     mode = "0644";
                     rawEntry = "${each}";
                   }
@@ -162,7 +162,7 @@ let
                   mode = "0660";
                   socket = "/run/rspamd/${name}.sock";
                   owner = cfg.user;
-                  group = cfg.group;
+                  inherit (cfg) group;
                 };
               in
               mkDefault (
@@ -450,7 +450,7 @@ in
             mode = "0660";
             socket = "/run/rspamd/rspamd-milter.sock";
             owner = cfg.user;
-            group = postfixCfg.group;
+            inherit (postfixCfg) group;
           }
         ];
         extraConfig = ''
@@ -473,7 +473,7 @@ in
     users.users.${cfg.user} = {
       description = "rspamd daemon";
       uid = config.ids.uids.rspamd;
-      group = cfg.group;
+      inherit (cfg) group;
     };
 
     users.groups.${cfg.group} = {

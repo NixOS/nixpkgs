@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "natecraddock";
     repo = "zf";
-    rev = finalAttrs.rev;
+    inherit (finalAttrs) rev;
     hash = "sha256-BfAZILill3I/nBf1oWwol77N34Jcpm4hudC+XSeMgZY=";
   };
 

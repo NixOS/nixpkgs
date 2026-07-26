@@ -10,7 +10,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "blucontrol-with-packages";
-  version = blucontrolEnv.version;
+  inherit (blucontrolEnv) version;
 
   nativeBuildInputs = [ makeWrapper ];
 

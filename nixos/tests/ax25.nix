@@ -72,7 +72,7 @@ in
     node3 = createAX25Node 3;
   };
   testScript =
-    { ... }:
+    _:
     ''
       def wait_for_machine(m):
         m.succeed("lsmod | grep ax25")

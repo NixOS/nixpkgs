@@ -44,6 +44,7 @@ stdenv.mkDerivation {
 You can also split up the package definition into more files in the same directory if necessary.
 
 Once defined, the package can be built from the Nixpkgs root directory using:
+
 ```
 nix-build -A some-package
 ```
@@ -53,6 +54,7 @@ See the [general package conventions](../README.md#conventions) for more informa
 ### Changing implicit attribute defaults
 
 The above expression is called using these arguments by default:
+
 ```nix
 {
   lib = pkgs.lib;
@@ -112,6 +114,7 @@ There are some limitations as to which packages can be defined using this struct
   This excludes packages defined using `pkgs.python3Packages.callPackage ...`.
 
   Instead:
+
   - Either change the package definition to work with `pkgs.callPackage`.
   - Or use the [category hierarchy](../README.md#category-hierarchy).
 
@@ -134,8 +137,9 @@ $ ./ci/nixpkgs-vet.sh master
 ## Recommendation for new packages with multiple versions
 
 These checks of the `pkgs/by-name` structure can cause problems in combination:
+
 1. New top-level packages using `callPackage` must be defined via `pkgs/by-name`.
-2. Packages in `pkgs/by-name` cannot refer to files outside their own directory.
+1. Packages in `pkgs/by-name` cannot refer to files outside their own directory.
 
 This means that outside `pkgs/by-name`, multiple already-present top-level packages can refer to some common file.
 If you open a PR to another instance of such a package, CI will fail check 1,
@@ -152,6 +156,7 @@ This is often the case for packages with multiple versions, such as
 
 The best way to resolve this is to not use `callPackage` directly, such that check 1 doesn't trigger.
 This can be done by using `inherit` on a local package set:
+
 ```nix
 {
   inherit

@@ -100,6 +100,7 @@ In any manpage, commands, flags and arguments to the *current* executable should
 - Mutually exclusive groups of arguments should be enclosed in curly brackets, preferably created with `Bro`/`Brc` blocks.
 
 When an argument is used in an example it should be marked up with `Ar` again to differentiate it from a constant. For example, a command with a `--host name` option that calls ssh to retrieve the host's local time would signify this thusly:
+
 ```
 This will run
 .Ic ssh Ar name Ic time
@@ -112,8 +113,8 @@ Constant paths should be marked with `Pa`, NixOS options with `Va`, and environm
 
 Generated paths, e.g. `result/bin/run-hostname-vm` (where `hostname` is a variable or arguments) should be marked as `Ql` inline literals with their variable components marked appropriately.
 
- - When `hostname` refers to an argument, it becomes `.Ql result/bin/run- Ns Ar hostname Ns -vm`
- - When `hostname` refers to a variable, it becomes `.Ql result/bin/run- Ns Va hostname Ns -vm`
+- When `hostname` refers to an argument, it becomes `.Ql result/bin/run- Ns Ar hostname Ns -vm`
+- When `hostname` refers to a variable, it becomes `.Ql result/bin/run- Ns Va hostname Ns -vm`
 
 ### Code examples and other commands {#ssec-contributing-nixos-tools-code-examples}
 

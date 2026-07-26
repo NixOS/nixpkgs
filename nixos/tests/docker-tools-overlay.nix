@@ -10,7 +10,7 @@
 
   nodes = {
     docker =
-      { ... }:
+      _:
       {
         virtualisation.docker.enable = true;
         virtualisation.docker.storageDriver = "overlay2";

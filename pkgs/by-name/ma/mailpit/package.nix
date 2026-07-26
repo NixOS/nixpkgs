@@ -28,7 +28,7 @@ let
     owner = "axllent";
     repo = "mailpit";
     rev = "v${version}";
-    hash = source.hash;
+    inherit (source) hash;
   };
 
   libtool' = if stdenv.hostPlatform.isDarwin then cctools else libtool;

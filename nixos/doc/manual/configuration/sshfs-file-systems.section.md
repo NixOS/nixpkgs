@@ -1,19 +1,19 @@
 # SSHFS File Systems {#sec-sshfs-file-systems}
 
-[SSHFS][sshfs] is a [FUSE][fuse] filesystem that allows easy access to directories on a remote machine using the SSH File Transfer Protocol (SFTP).
+[SSHFS] is a [FUSE] filesystem that allows easy access to directories on a remote machine using the SSH File Transfer Protocol (SFTP).
 It means that if you have SSH access to a machine, no additional setup is needed to mount a directory.
-
-[sshfs]: https://github.com/libfuse/sshfs
-[fuse]: https://en.wikipedia.org/wiki/Filesystem_in_Userspace
 
 ## Interactive mounting {#sec-sshfs-interactive}
 
 In NixOS, SSHFS is packaged as `sshfs`.
 Once installed, mounting a directory interactively is simple as running:
+
 ```ShellSession
 $ sshfs my-user@example.com:/my-dir /mnt/my-dir
 ```
+
 Like any other FUSE file system, the directory is unmounted using:
+
 ```ShellSession
 $ fusermount -u /mnt/my-dir
 ```
@@ -23,6 +23,7 @@ $ fusermount -u /mnt/my-dir
 Mounting non-interactively requires some precautions because `sshfs` will run at boot and under a different user (root).
 For obvious reason, you can't input a password, so public key authentication using an unencrypted key is needed.
 To create a new key without a passphrase you can do:
+
 ```ShellSession
 $ ssh-keygen -t ed25519 -P '' -f example-key
 Generating public/private ed25519 key pair.
@@ -31,11 +32,13 @@ Your public key has been saved in example-key.pub
 The key fingerprint is:
 SHA256:yjxl3UbTn31fLWeyLYTAKYJPRmzknjQZoyG8gSNEoIE my-user@workstation
 ```
+
 To keep the key safe, change the ownership to `root:root` and make sure the permissions are `600`:
 OpenSSH normally refuses to use the key if it's not well-protected.
 
 The file system can be configured in NixOS via the usual [fileSystems](#opt-fileSystems) option.
 Here's a typical setup:
+
 ```nix
 {
   fileSystems."/mnt/my-dir" = {
@@ -55,7 +58,9 @@ Here's a typical setup:
   };
 }
 ```
+
 More options from `ssh_config(5)` can be given as well, for example you can change the default SSH port or specify a jump proxy:
+
 ```nix
 {
   options = [
@@ -64,8 +69,10 @@ More options from `ssh_config(5)` can be given as well, for example you can chan
   ];
 }
 ```
+
 It's also possible to change the `ssh` command used by SSHFS to connect to the server.
 For example:
+
 ```nix
 {
   options = [
@@ -85,6 +92,7 @@ The escaping of spaces is needed because every option is written to the `/etc/fs
 
 If you're having a hard time figuring out why mounting is failing, you can add the option `"debug"`.
 This enables a verbose log in SSHFS that you can access via:
+
 ```ShellSession
 $ journalctl -u $(systemd-escape -p /mnt/my-dir/).mount
 Jun 22 11:41:18 workstation mount[87790]: SSHFS version 3.7.1
@@ -101,3 +109,6 @@ Jun 22 11:41:19 workstation systemd[1]: mnt-my\x2ddir.mount: Consumed 54ms CPU t
 If the mount point contains special characters it needs to be escaped using `systemd-escape`.
 This is due to the way systemd converts paths into unit names.
 :::
+
+[fuse]: https://en.wikipedia.org/wiki/Filesystem_in_Userspace
+[sshfs]: https://github.com/libfuse/sshfs

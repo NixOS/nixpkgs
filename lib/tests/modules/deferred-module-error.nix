@@ -20,7 +20,7 @@ in
   };
   config = {
     deferred =
-      { ... }:
+      _:
       # this should be an attrset, so this fails
       true;
   };

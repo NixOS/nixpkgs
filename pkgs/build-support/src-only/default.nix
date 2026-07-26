@@ -86,7 +86,7 @@ in
 # that drvAttrs is equivalent to the arguments passed to mkDerivation.
 # See https://github.com/NixOS/nixpkgs/issues/269539.
 if lib.isDerivation attrs && attrs ? overrideAttrs then
-  attrs.overrideAttrs (_finalAttrs: prevAttrs: argsToOverride prevAttrs)
+  attrs.overrideAttrs (_finalAttrs: argsToOverride)
 else
   let
     # If we don't have overrideAttrs, it is extremely unlikely that we are seeing

@@ -233,7 +233,7 @@ in
     users.users.${cfg.user} = {
       description = "Cloudflare DDNS service user";
       isSystemUser = true;
-      group = cfg.group;
+      inherit (cfg) group;
       home = "/var/lib/${cfg.user}";
     };
 
@@ -242,8 +242,8 @@ in
     systemd.tmpfiles.settings."cloudflare-ddns" = {
       "/var/lib/${cfg.user}".d = {
         mode = "0750";
-        user = cfg.user;
-        group = cfg.group;
+        inherit (cfg) user;
+        inherit (cfg) group;
       };
     };
 

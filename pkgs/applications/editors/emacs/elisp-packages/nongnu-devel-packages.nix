@@ -55,8 +55,7 @@ let
         # keep-sorted end
       };
 
-    in
-    let
+    
       super' = super // (commonOverrides self super);
     in
     super' // (overrides self super')

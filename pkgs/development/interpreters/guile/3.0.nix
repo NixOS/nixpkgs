@@ -124,7 +124,7 @@ builder rec {
   ]
   # At least on x86_64-darwin '-flto' autodetection is not correct:
   #  https://github.com/NixOS/nixpkgs/pull/160051#issuecomment-1046193028
-  ++ lib.optional (stdenv.hostPlatform.isDarwin) "--disable-lto";
+  ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-lto";
 
   postInstall = ''
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"

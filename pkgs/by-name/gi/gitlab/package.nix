@@ -41,11 +41,11 @@
 let
   data = lib.importJSON ./data.json;
 
-  version = data.version;
+  inherit (data) version;
   src = fetchFromGitLab {
-    owner = data.owner;
-    repo = data.repo;
-    rev = data.rev;
+    inherit (data) owner;
+    inherit (data) repo;
+    inherit (data) rev;
     hash = data.repo_hash;
   };
 

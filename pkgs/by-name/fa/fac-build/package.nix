@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   meta = {
-    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
+    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
     description = ''
       A build system that uses ptrace to handle dependencies automatically
     '';

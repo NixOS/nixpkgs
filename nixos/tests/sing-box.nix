@@ -513,7 +513,7 @@ in
       };
 
     empty_settings =
-      { ... }:
+      _:
       {
         environment.etc."sing-box/config.json".text = builtins.toJSON {
           inbounds = [

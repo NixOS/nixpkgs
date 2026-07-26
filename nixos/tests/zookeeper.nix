@@ -14,7 +14,7 @@ in
 
   nodes = {
     server =
-      { ... }:
+      _:
       {
         services.zookeeper = {
           enable = true;

@@ -22,8 +22,8 @@ in
 bash-build.runCommand "${pname}-${gcc-unwrapped.version}"
   {
     inherit pname;
-    version = gcc-unwrapped.version;
-    meta = gcc-unwrapped.meta;
+    inherit (gcc-unwrapped) version;
+    inherit (gcc-unwrapped) meta;
     nativeBuildInputs = [ gnused ];
     passthru.unwrapped = gcc-unwrapped;
   }

@@ -50,7 +50,7 @@ let
         };
       }
       args.version;
-  version = fetched.version;
+  inherit (fetched) version;
   rocq-version =
     args.rocq-version or (if version != "dev" then lib.versions.majorMinor version else "dev");
   csdpPatch = lib.optionalString (csdp != null) ''

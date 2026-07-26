@@ -38,7 +38,7 @@ in
     };
   };
 
-  config = lib.mkIf (cfg.install) {
+  config = lib.mkIf cfg.install {
     systemd.user.services.bloop = {
       description = "Bloop Scala build server";
 
