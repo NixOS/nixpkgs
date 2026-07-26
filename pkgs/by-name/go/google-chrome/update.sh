@@ -27,8 +27,10 @@ update_linux() {
     local version_info
     local version
     local current_version
+    local arch
+    local download_url
     local new_hash
-    local new_sri_hash
+    local -A new_hashes
 
     read -ra version_info <<< "$(get_version_info "linux" "linux = stdenvNoCC.mkDerivation" "});")"
     version="${version_info[0]}"
@@ -39,14 +41,18 @@ update_linux() {
         return 0
     fi
 
-    local download_url="https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${version}-1_amd64.deb"
-    new_hash="$(nix-prefetch-url "$download_url" 2>/dev/null)"
-    new_sri_hash="$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri "$new_hash")"
+    for arch in amd64 arm64; do
+        download_url="https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${version}-1_${arch}.deb"
+        new_hash="$(nix-prefetch-url "$download_url" 2>/dev/null)"
+        new_hashes["$arch"]="$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri "$new_hash")"
+    done
 
     sed -i "/^  linux = stdenvNoCC.mkDerivation/,/^  });/s/version = \".*\"/version = \"$version\"/" "$DEFAULT_NIX"
-    sed -i "/^  linux = stdenvNoCC.mkDerivation/,/^  });/s|hash = \".*\"|hash = \"$new_sri_hash\"|" "$DEFAULT_NIX"
 
-    echo "[Nix] Linux google-chrome: $current_version -> $version with hash $new_hash"
+    for arch in amd64 arm64; do
+        sed -i "/^  linux = stdenvNoCC.mkDerivation/,/^  });/s|^\([[:space:]]*\)${arch} = \".*\";|\1${arch} = \"${new_hashes[$arch]}\";|" "$DEFAULT_NIX"
+        echo "[Nix] Linux ${arch} google-chrome: $current_version -> $version with hash ${new_hashes[$arch]}"
+    done
 }
 
 update_darwin() {
