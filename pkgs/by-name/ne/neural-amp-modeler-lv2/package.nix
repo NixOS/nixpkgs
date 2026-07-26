@@ -4,7 +4,6 @@
   fetchFromGitHub,
   cmake,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "neural-amp-modeler-lv2";
   version = "0.2.3";
@@ -22,7 +21,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    maintainers = [ lib.maintainers.viraptor ];
+    maintainers = [
+      lib.maintainers.viraptor
+      lib.maintainers.gabyx
+    ];
     description = "Neural Amp Modeler LV2 plugin implementation";
     homepage = finalAttrs.src.meta.homepage;
     license = [ lib.licenses.gpl3 ];
