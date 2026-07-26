@@ -3087,13 +3087,13 @@ with haskellLib;
     amazonkaSrc = pkgs.fetchFromGitHub {
       owner = "brendanhay";
       repo = "amazonka";
-      rev = "c87e5cbb67d8116c8829c9f84db4f8da92734830";
-      sha256 = "sha256-mO9kbooiReW1cdnrG9t4yjAsm/qVQKhEN8CmCiEfJgY=";
+      rev = "b562aa3f24845e34b95748daae671860017426be";
+      sha256 = "sha256-zeA69byUJv59avBMfstNuHzeG8V09o87Fp9N98aioII=";
     };
     setAmazonkaSourceRoot =
       dir: drv:
       (overrideSrc {
-        version = "2.0-unstable-2026-05-20";
+        version = "2.0-unstable-2026-06-10";
         src = amazonkaSrc + "/${dir}";
       })
         drv;
@@ -3455,7 +3455,7 @@ with haskellLib;
   in
   amazonkaServiceOverrides
   // {
-    amazonka-core = lib.pipe super.amazonka-core [
+    amazonka-core = lib.pipe (super.amazonka-core.override { memory = self.ram; }) [
       (warnAfterVersion "2.0")
       (setAmazonkaSourceRoot "lib/amazonka-core")
       (addBuildDepends [
@@ -3472,6 +3472,11 @@ with haskellLib;
       ])
       (warnAfterVersion "2.0")
     ];
+    amazonka-s3-encryption = warnAfterVersion "2.0" (
+      setAmazonkaSourceRoot "lib/amazonka-s3-encryption" (
+        super.amazonka-s3-encryption.override { memory = self.ram; }
+      )
+    );
     amazonka-test = warnAfterVersion "2.0" (
       setAmazonkaSourceRoot "lib/amazonka-test" (doJailbreak super.amazonka-test)
     );
