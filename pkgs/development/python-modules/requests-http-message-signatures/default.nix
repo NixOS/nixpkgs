@@ -1,9 +1,10 @@
 {
   lib,
   buildPythonPackage,
+  cryptography,
   fetchFromGitLab,
   poetry-core,
-  cryptography,
+  pyprojectVersionPatchHook,
   requests,
 }:
 
@@ -21,6 +22,8 @@ buildPythonPackage rec {
   };
 
   build-system = [ poetry-core ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     cryptography
