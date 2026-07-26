@@ -79,6 +79,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       _0b11stan
       charB66
       macbucheron
+      tristanqtn
     ];
   };
 })
