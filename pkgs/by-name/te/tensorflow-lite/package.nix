@@ -16,11 +16,11 @@ let
   );
   bazelDepsSha256ByBuildAndHost = {
     x86_64-linux = {
-      x86_64-linux = "sha256-61qmnAB80syYhURWYJOiOnoGOtNa1pPkxfznrFScPAo=";
-      aarch64-linux = "sha256-sOIYpp98wJRz3RGvPasyNEJ05W29913Lsm+oi/aq/Ag=";
+      x86_64-linux = "sha256-vf7lvxiCUK8mnm+pFj1h30MYiyMTDQ9eGBVrsLa27aM=";
+      aarch64-linux = "sha256-J/WgmhmjB98JrQS0us8zIP34YqaSRZ2fwKISGJud148=";
     };
     aarch64-linux = {
-      aarch64-linux = "sha256-MJU4y9Dt9xJWKgw7iKW+9Ur856rMIHeFD5u05s+Q7rQ=";
+      aarch64-linux = "sha256-J/WgmhmjB98JrQS0us8zIP34YqaSRZ2fwKISGJud148=";
     };
   };
   bazelHostConfigName.aarch64-linux = "elinux_aarch64";
@@ -33,17 +33,16 @@ let
 in
 buildBazelPackage rec {
   name = "tensorflow-lite";
-  version = "2.13.0";
+  version = "2.21.0";
 
   src = fetchFromGitHub {
     owner = "tensorflow";
     repo = "tensorflow";
     rev = "v${version}";
-    hash = "sha256-Rq5pAVmxlWBVnph20fkAwbfy+iuBNlfFy14poDPd5h0=";
+    hash = "sha256-Hs3g80wSHex1ejz7H8eu6MJMzwthx58sPGDh/dG66FQ=";
   };
 
-  #bazel = buildPackages.bazel_5;
-  bazel = buildPackages.bazel;
+  bazel = buildPackages.bazel_7; # from .bazelversion
 
   nativeBuildInputs = [
     pythonEnv
@@ -67,6 +66,26 @@ buildBazelPackage rec {
   bazelBuildFlags = [ "--cxxopt=--std=c++17" ];
 
   buildAttrs = {
+    preConfigure =
+      # Fix #!/usr/bin/env shebangs in rules_python -- Bazel-generated Python
+      # stubs use #!/usr/bin/env which doesn't exist in the nix sandbox
+      ''
+        substituteInPlace $bazelOut/external/rules_python/python/private/py_runtime_info.bzl \
+          --replace-fail '"#!/usr/bin/env python3"' '"#!${pythonEnv}/bin/python3"'
+        substituteInPlace $bazelOut/external/rules_python/python/private/runtime_env_toolchain.bzl \
+          --replace-fail '"#!/usr/bin/env python3"' '"#!${pythonEnv}/bin/python3"'
+      ''
+      # Re-patchelf hermetic Python binary with the nix dynamic linker
+      # (was normalized in fetchAttrs for reproducibility)
+      + ''
+        for py_dir in $bazelOut/external/python_3_*; do
+          if [ -d "$py_dir" ]; then
+            find "$py_dir" -type f -executable -exec \
+              patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} {} \; 2>/dev/null || true
+          fi
+        done
+      '';
+
     installPhase = ''
       mkdir -p $out/{bin,lib}
 
@@ -86,20 +105,52 @@ buildBazelPackage rec {
     '';
   };
 
-  fetchAttrs.sha256 = bazelDepsSha256;
+  fetchAttrs = {
+    sha256 = bazelDepsSha256;
 
-  env.PYTHON_BIN_PATH = pythonEnv.interpreter;
+    preInstall =
+      # Note: $bazelOut/external is the entire contents of the deps archive (see
+      # `deps.installPhase` in buildBazelPackage).
+      ''
+        chmod -R u+w $bazelOut/external
+      ''
+      # Remove local_config_sh* that contains hardcoded paths to /nix/store
+      + ''
+        rm -rf $bazelOut/external/{local_config_shell,local_config_sh}
+      ''
+      # Delete non-deterministic Python bytecode (contains timestamps)
+      + ''
+        find $bazelOut/external -name '*.pyc' -delete
+      '';
+  };
+
+  env = {
+    PYTHON_BIN_PATH = pythonEnv.interpreter;
+    HERMETIC_PYTHON_VERSION = "3.13";
+    TF_NEED_CLANG = "0";
+    TF_NEED_CUDA = "0";
+    TF_NEED_ROCM = "0";
+    TF_SET_ANDROID_WORKSPACE = "0";
+  };
 
   dontAddBazelOpts = true;
   removeRulesCC = false;
 
-  postPatch = ''
-    rm .bazelversion
+  # tf_workspace0 loads @local_config_android//:android.bzl, so the local_*
+  # repositories have to survive into the build phase.
+  removeLocal = false;
 
-    # Fix gcc-13 build failure by including missing include headers
-    sed -e '1i #include <cstdint>' -i \
-      tensorflow/lite/kernels/internal/spectrogram.cc
-  '';
+  postPatch =
+    # Remove the .bazelversion file to allow our Bazel version
+    ''
+      rm .bazelversion
+    ''
+    # Remove rules_ml_toolchain's hermetic CC toolchain registrations.
+    # These try to lazily download LLVM binaries during analysis, which
+    # fails in the sandboxed build phase. We use our own compiler from nixpkgs instead.
+    + ''
+      sed -i '/^register_toolchains("@rules_ml_toolchain/d' WORKSPACE
+    '';
 
   preConfigure = ''
     patchShebangs configure
@@ -121,7 +172,5 @@ buildBazelPackage rec {
       "x86_64-linux"
       "aarch64-linux"
     ];
-    # Bazel 5 was removed.
-    broken = true;
   };
 }
