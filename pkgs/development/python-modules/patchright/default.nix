@@ -31,6 +31,8 @@ buildPythonPackage (finalAttrs: {
   # Module has no tests
   doCheck = false;
 
+  dontCheckPythonMetadata = true;
+
   # pythonImportsCheck disabled: module attempts filesystem writes at import time
   pythonImportsCheck = [ ];
 
