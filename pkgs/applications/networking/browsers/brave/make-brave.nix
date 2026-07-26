@@ -1,4 +1,25 @@
 {
+  pname,
+  version,
+  # Map from Nix system strings ("x86_64-linux", "aarch64-darwin", ...) to
+  # the corresponding upstream `{ url, hash }` record. Encoding the per-system
+  # sources as data rather than positional arguments lets channel-specific
+  # package.nix files drop platforms that upstream hasn't published yet.
+  archives,
+  # Upstream product flavor: "browser" (the regular Brave) or "origin" (the
+  # stripped-down Brave Origin).
+  flavor ? "browser",
+  # Flavor-specific paths supplied by the caller (default.nix).
+  optStem,
+  fileStem,
+  appIdStem,
+  darwinStem,
+  changelogFile,
+  homepage,
+  innerBinary,
+}:
+
+{
   lib,
   stdenv,
   fetchurl,
@@ -67,27 +88,6 @@
   vulkanSupport ? false,
   addDriverRunpath,
   enableVulkan ? vulkanSupport,
-}:
-
-{
-  pname,
-  version,
-  # Map from Nix system strings ("x86_64-linux", "aarch64-darwin", ...) to
-  # the corresponding upstream `{ url, hash }` record. Encoding the per-system
-  # sources as data rather than positional arguments lets channel-specific
-  # package.nix files drop platforms that upstream hasn't published yet.
-  archives,
-  # Upstream product flavor: "browser" (the regular Brave) or "origin" (the
-  # stripped-down Brave Origin).
-  flavor ? "browser",
-  # Flavor-specific paths supplied by the caller (default.nix).
-  optStem,
-  fileStem,
-  appIdStem,
-  darwinStem,
-  changelogFile,
-  homepage,
-  innerBinary,
 }:
 
 let

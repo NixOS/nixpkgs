@@ -28,7 +28,7 @@ let
       pkg = import release;
       fd = flavorData.${pkg.flavor or "browser"};
     in
-    callPackage ./make-brave.nix { } (pkg // fd);
+    callPackage ((import ./make-brave.nix) (pkg // fd)) { };
 
 in
 {
