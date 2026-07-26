@@ -913,31 +913,9 @@ stdenv.mkDerivation {
 [automatic-package-updates]: #automatic-package-updates
 
 The [community bot `r-ryantm`](https://nix-community.org/update-bot/), periodically tries to update all packages in Nixpkgs.
-`r-ryantm` runs the program [`nixpkgs-update`](https://nix-community.github.io/nixpkgs-update/) to find new versions of packages.
-In most cases, `nixpkgs-update` will be capable of finding new versions and perform the update with out any special instructions.
-Putting a `passthru.updateScript` attribute sets an explicit update procedure for `nixpkgs-update`, but this is not required for most cases.
-To learn more about the default update procedures, read their [FAQ for Nixpkgs maintainers](https://nix-community.github.io/nixpkgs-update/nixpkgs-maintainer-faq/).
-
-> [!Note]
-> A common pattern is to use the [`nix-update-script`](../pkgs/by-name/ni/nix-update/nix-update-script.nix) function provided in Nixpkgs, which makes automatic updates use [`nix-update`](https://github.com/Mic92/nix-update):
->
-> ```nix
-> {
-    stdenv,
-    nix-update-script,
-  }:
->
-> stdenv.mkDerivation (finalAttrs: {
->   # ...
->   passthru.updateScript = nix-update-script { };
->   # ...
-> })
-> ```
->
-> `nix-update` is a little bit more flexible than `nixpkgs-update` in performing updates, so it can be useful for cases such as:
->
->  - A `nix-update` CLI flag like `--version branch` or `--version-regex` are needed to make the update work.
->  - You don't want to rely upon new versions to be listed in [Repology](https://repology.org/), and `nix-update` finds new versions easily (e.g GitLab projects).
+It runs the program [`nixpkgs-update`](https://nix-community.github.io/nixpkgs-update/) which finds new versions of packages, modifies the relevant files, and opens a Nixpkgs PR.
+`nixpkgs-update` has a specific set of capabilities of finding new versions for a package, and updating Nix files accordingly (see their [FAQ](https://nix-community.github.io/nixpkgs-update/nixpkgs-maintainer-faq/)).
+However, setting a `passthru.updateScript` for a package, sets an explicit update procedure for `nixpkgs-update`, that can find the latest version more reliably than `nixpkgs-update`, and modify the necessary files more correctly.
 
 ### Valid `passthru.updateScript` values
 
@@ -1078,6 +1056,73 @@ The commit object contains the following values:
 - `commitMessage` (optional) – a string to use instead of the default commit message
 
 If the returned list contains exactly one object (e.g. `[{}]`), all values are optional and will be determined automatically.
+
+### General Purpose Update Scripts
+
+For most software distributed by Nixpkgs, you don't have to write a custom `passthru.updateScript`.
+Nixpkgs provides a few general purpose Nix functions that can be used instead, described below.
+
+#### `nix-update-script`
+
+The program [`nix-update`](https://github.com/Mic92/nix-update) is a Python utility that is capable of finding new versions from numerous repositories and updating the Nix files accordingly.
+Below is an example usage of it as a `passthru.updateScript`.
+
+```nix
+{
+  stdenv,
+  # ...
+  nix-update-script,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  # ...
+  passthru.updateScript = nix-update-script { };
+  # ...
+})
+```
+
+Adding a `nix-update` CLI flag like `--version branch` or `--version-regex` can be done with e.g:
+
+```nix
+nix-update-script {
+  extraArgs = [
+    "--version-regex"
+    "release-(.*)"
+  ];
+}
+```
+
+The main `nix-update` argument - the attribute path, can be controlled via the `attrPath` Nix argument:
+
+```nix
+nix-update-script {
+  attrPath = "my-attr";
+}
+```
+
+#### `genericUpdater`
+
+Used to implement other updaters. `gitUpdater`, `directoryListingUpdater` and more are implemented via it.
+
+#### `gitUpdater`
+
+Used to update `src` attributes to new Git tags, for fetchers like `fetchgit`, `fetchFromGitHub`, `fetchFromGitLab` and alike. Accepted arguments:
+
+TODO...
+
+#### `unstableGitUpdater`
+
+Similar to `gitUpdater`, but updates the `rev` and `version` attribute per [Nixpkgs versioning conventions](#versioning) to the latest untagged revision.
+
+<!-- TODO: Describe `httpTwoLevelsUpdater`? -->
+
+#### `directoryListingUpdater`
+
+TODO...
+
+#### `_experimental-update-script-combinators`
+
+TODO...
 
 ### How are update scripts executed?
 
