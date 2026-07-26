@@ -27696,6 +27696,12 @@
     githubId = 51232929;
     name = "Taito Horiuchi";
   };
+  tallesCoelho = {
+    email = "talles.hoc@gmail.com";
+    github = "tallesCoelho";
+    githubId = 7442204;
+    name = "Talles Coelho";
+  };
   talyz = {
     email = "kim.lindberger@gmail.com";
     matrix = "@talyz:matrix.org";
