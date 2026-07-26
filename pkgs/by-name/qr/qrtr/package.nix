@@ -3,21 +3,21 @@
   lib,
   fetchFromGitHub,
   meson,
-  cmake,
   pkg-config,
   systemd,
   ninja,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qrtr";
-  version = "0-unstable-2025-03-01";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "linux-msm";
     repo = "qrtr";
-    rev = "5923eea97377f4a3ed9121b358fd919e3659db7b";
-    hash = "sha256-iHjF/2SQsvB/qC/UykNITH/apcYSVD+n4xA0S/rIfnM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-plVPR3BKtMLSVgTK8TPFbt5vuo9ZovEGz6qJzUZ33G4=";
   };
 
   nativeBuildInputs = [
@@ -29,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ systemd ];
 
   installFlags = [ "prefix=$(out)" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     maintainers = with lib.maintainers; [ matthewcroughan ];
