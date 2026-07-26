@@ -70,6 +70,7 @@ stdenv.mkDerivation {
     ];
 
   installPhase = ''
+    runHook preInstall
     installManPage drawterm.1
   ''
   + lib.optionalString withWayland ''
@@ -79,13 +80,16 @@ stdenv.mkDerivation {
     # wrapping the oss output with pulse seems to be the easiest
     mv drawterm drawterm.bin
     install -Dm755 -t $out/bin/ drawterm.bin
-    makeWrapper ${pulseaudio}/bin/padsp $out/bin/drawterm --add-flags $out/bin/drawterm.bin
+    makeWrapper ${lib.getExe' pulseaudio "padsp"} $out/bin/drawterm --add-flags $out/bin/drawterm.bin
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,bin}
     mv gui-cocoa/drawterm.app $out/Applications/
     mv drawterm $out/Applications/drawterm.app/
     ln -s $out/Applications/drawterm.app/drawterm $out/bin/
+  ''
+  + ''
+    runHook postInstall
   '';
 
   passthru = {
