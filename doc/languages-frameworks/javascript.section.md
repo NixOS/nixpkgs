@@ -26,7 +26,7 @@ The principles below are ordered by importance.
 
 ### Use the same Node.js version as upstream {#javascript-upstream-node-version}
 
-It is often not documented which Node.js version is used upstream, but if it is, try to use the same version when packaging.
+It is often not documented which Node.js version is used upstream, but if it is, use the same version when packaging.
 
 This can be a problem if upstream is using the latest and greatest and you are trying to use an earlier version of Node.js.
 Some cryptic errors regarding V8 may appear.
@@ -38,7 +38,7 @@ A lock file (package-lock.json, yarn.lock...) is supposed to make reproducible i
 Guidelines of package managers, recommend to commit those lock files to the repos.
 If a particular lock file is present, it is a strong indication of which package manager is used upstream.
 
-It's better to try to use a Nix tool that understands the lock file.
+Use a Nix tool that understands the lock file.
 Using a different tool might give you a hard-to-understand error because different packages have been installed.
 
 Using a different tool forces you to commit a lock file to the repository.
@@ -289,7 +289,7 @@ will create a development shell where a `node_modules` directory is created & pa
 Commands like `npm install` and `npm add` that write packages and executables need to be used with `--package-lock-only`.
 
 This means `npm` installs dependencies by writing into `package-lock.json` without modifying the `node_modules` folder. It installs by reloading the devShell.
-This might be best practice since it gives the `nix shell` virtually exclusive ownership over your `node_modules` folder.
+This gives the `nix shell` near-exclusive ownership over your `node_modules` folder.
 
 It's recommended to set `package-lock-only = true` in your project-local [`.npmrc`](https://docs.npmjs.com/cli/v11/configuring-npm/npmrc).
 :::
@@ -345,7 +345,7 @@ stdenv.mkDerivation (finalAttrs: {
 })
 ```
 
-It is highly recommended to use a pinned version of pnpm (i.e., `pnpm_9` or `pnpm_10`), to increase future reproducibility. It might also be required to use an older version if the package needs support for a certain lock file version. To do so, you can pass the `pnpm` argument to `fetchPnpmDeps` and override the `pnpm` arg in `pnpmConfigHook`. Here are the changes in the example above to use a pinned pnpm version:
+Use a pinned version of pnpm (for example `pnpm_9` or `pnpm_10`) to increase reproducibility. An older version may be required if the package needs a certain lock file version. To do so, you can pass the `pnpm` argument to `fetchPnpmDeps` and override the `pnpm` arg in `pnpmConfigHook`. Here are the changes in the example above to use a pinned pnpm version:
 
 <!-- TODO: Does splicing still work when overriding in nativeBuildInputs here? -->
 
@@ -670,7 +670,7 @@ In case patching the upstream `package.json` or `yarn.lock` is needed, it's impo
 ##### Missing hashes in the `yarn.lock` file {#javascript-yarnBerry-missing-hashes}
 Unfortunately, `yarn.lock` files do not include hashes for optional/platform-specific dependencies. This is [by design](https://github.com/yarnpkg/berry/issues/6759).
 
-To compensate for this, the `yarn-berry-fetcher missing-hashes` subcommand can be used to produce all missing hashes. These are usually stored in a `missing-hashes.json` file, which needs to be passed to both the build itself, as well as the `fetchYarnBerryDeps` helper:
+To compensate for this, the `yarn-berry-fetcher missing-hashes` subcommand can be used to produce all missing hashes. These are stored in a `missing-hashes.json` file, which needs to be passed to both the build itself, as well as the `fetchYarnBerryDeps` helper:
 
 ```nix
 {
