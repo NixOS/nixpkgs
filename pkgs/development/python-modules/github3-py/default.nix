@@ -25,6 +25,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-iaI9FqsPGM5R7JGoG+qRdQygMzbYUDX28j1S/IeLfrA=";
   };
 
+  patches = [
+    # https://github.com/sigmavirus24/github3.py/pull/1359
+    ./0001-fix-tests-with-requests-2.34.patch
+  ];
+
   build-system = [ hatchling ];
 
   dependencies = [
