@@ -449,10 +449,12 @@ buildPythonPackage (finalAttrs: {
     );
 
     tests = {
+      # overridePythonAttrs does not exist for finalAttrs.finalPackage
       reflex-no-checks = finalAttrs.finalPackage.overrideAttrs (old: {
-        pname = "${old.pname}-sans-checks-phase";
+        pname = "${old.pname}-sans-check-phase";
         doCheck = false;
-        nativeCheckInputs = [ ];
+        doInstallCheck = false;
+        dontCheckPythonMetadata = true;
       });
     }
     // finalAttrs.passthru.subPkgs;
