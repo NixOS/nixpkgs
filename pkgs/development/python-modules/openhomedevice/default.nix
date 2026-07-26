@@ -21,6 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-u05aciRFCnqMJRClUMApAPDLpXOKn4wUTLgvR7BVZTA=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "version = '2.2.1'," "version = '${version}',"
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [
