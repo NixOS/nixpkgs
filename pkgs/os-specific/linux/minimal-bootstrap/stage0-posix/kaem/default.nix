@@ -36,6 +36,7 @@ derivationWithMeta {
         mescc-tools-extra
       ];
       defaultBinPath = lib.makeBinPath defaultBuildInputs;
+      removedAttributeNames = [ "nativeBuildInputs" ];
     in
     name: env: buildCommand:
     derivationWithMeta (
@@ -56,7 +57,7 @@ derivationWithMeta {
           else
             lib.makeBinPath (env.nativeBuildInputs ++ defaultBuildInputs);
       }
-      // (removeAttrs env [ "nativeBuildInputs" ])
+      // (removeAttrs env removedAttributeNames)
     );
 
   meta = {
