@@ -312,6 +312,10 @@ with haskellLib;
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
   ###########################################
 
+  # 2026-07-26: Allow http-client-tls 0.4
+  # https://github.com/berberman/arch-web/pull/20
+  arch-web = doJailbreak super.arch-web;
+
   # network < 3.2.8
   # bound only required when running under WINE: https://github.com/haskell/network/issues/604
   iserv-proxy = doJailbreak super.iserv-proxy;
