@@ -72,6 +72,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     "django-formset-js-improved"
     "django-formtools"
     "django-i18nfield"
+    "django-scopes"
     "djangorestframework"
     "markdown"
     "pillow"

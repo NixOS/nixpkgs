@@ -5,12 +5,13 @@
   django,
   pytestCheckHook,
   pytest-django,
+  setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "django-scopes";
   version = "2.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "raphaelm";
@@ -19,7 +20,9 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-VtZfwWS6qcY1kthJ6qXf/nwxZpJxu5x41xjjR58wCM0=";
   };
 
-  propagatedBuildInputs = [ django ];
+  build-system = [ setuptools ];
+
+  dependencies = [ django ];
 
   nativeCheckInputs = [
     pytest-django
