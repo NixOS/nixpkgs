@@ -7,7 +7,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "password-entropy";
+  pname = "data-password-entropy";
   version = "1.0";
   pyproject = true;
 
