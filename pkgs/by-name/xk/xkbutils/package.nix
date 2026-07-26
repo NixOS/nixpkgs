@@ -11,11 +11,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xkbutils";
-  version = "1.0.6";
+  version = "1.0.7";
 
   src = fetchurl {
     url = "mirror://xorg/individual/app/xkbutils-${finalAttrs.version}.tar.xz";
-    hash = "sha256-MaK77h4JzLoB3pKJe49UC1Rd6BLzGNMd4HvTpade4l4=";
+    hash = "sha256-Xze+DuMa2hFEFXgMViY4obTwOzheVkSZJ78NVmV4eiY=";
   };
 
   strictDeps = true;
