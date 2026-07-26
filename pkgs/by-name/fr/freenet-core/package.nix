@@ -47,7 +47,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     donationPage = "https://freenet.org/donate/";
     changelog = "https://github.com/freenet/freenet-core/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
-    maintainers = [ lib.maintainers.skyesoss ];
+    maintainers = [
+      lib.maintainers.skyesoss
+      lib.maintainers.LisaScheers
+    ];
     mainProgram = "freenet";
     inherit (rustc.meta) platforms;
   };
