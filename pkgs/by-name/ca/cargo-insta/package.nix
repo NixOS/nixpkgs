@@ -2,21 +2,27 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  git,
   runtimeShell,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-insta";
-  version = "1.47.2";
+  version = "1.48.0";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "insta";
     tag = finalAttrs.version;
-    hash = "sha256-BQuc/YCUM61Lq0hPF4foETUCC/oTSVwTY4RK+WuRnac=";
+    hash = "sha256-xIveukm1BsvY6z6bCsV4L9RZGIalspFEYFthE4hCaH8=";
   };
 
-  cargoHash = "sha256-5YnsLfCM64gPlQu9qr7daCdFSZA80PpQVfYE9h237h4=";
+  cargoHash = "sha256-OlCNm4N+cLreN7iR25cD06vsGnE+IWo5T15h3I6tCa8=";
+
+  nativeCheckInputs = [
+    # used by test_binary_accept_missing_old_binary
+    git
+  ];
 
   postPatch = ''
     substituteInPlace cargo-insta/tests/functional/test_runner_fallback.rs \
