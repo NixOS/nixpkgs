@@ -36,7 +36,7 @@ you need to take care when handling attribute names like `3dmodels`.
 
 For packages that are part of [Stackage] (a curated set of known to be
 compatible packages), Nixpkgs uses the version prescribed by a Stackage snapshot
-(usually the current LTS one) as the default version. For all other packages Nixpkgs uses the latest version from [Hackage](https://hackage.org) (the repository of
+(usually the current LTS snapshot) as the default version. For all other packages Nixpkgs uses the latest version from [Hackage](https://hackage.org) (the repository of
 all open source Haskell packages). See [](#haskell-available-versions) for a few more details on this.
 
 Roughly half of the 16K packages contained in `haskellPackages` don’t actually
@@ -102,7 +102,7 @@ them to the docs. -->
 
 All `haskell.packages.*` package sets use the same package descriptions and the same sets
 of versions by default. There are however GHC version specific override `.nix`
-files to loosen this a bit.
+files to loosen this.
 
 ### Dependency resolution {#haskell-dependency-resolution}
 
@@ -144,9 +144,7 @@ or may fail.
 Thus, to get the best experience, make sure that your project can be compiled
 using the default compiler of Nixpkgs and recent versions of its dependencies.
 
-A result of this setup is, that getting a valid build plan for a given
-package can sometimes be quite painful, and in fact this is where most of the
-maintenance work for `haskellPackages` is required. Besides that, it is not
+Producing a valid build plan for a given package is sometimes painful. That is where most of the maintenance work on `haskellPackages` goes. Besides that, it is not
 possible to get the dependencies of a legacy project from Nixpkgs or to use a
 specific stack solver for compiling a project.
 
@@ -501,10 +499,9 @@ arguments which are transparently set in `meta` of the resulting derivation. See
 newer with the `doInstallIntermediates`, `enableSeparateIntermediatesOutput`,
 and `previousIntermediates` arguments.
 
-The basic idea is to first perform a full build of the package in question,
-save its intermediate build products for later, and then copy those build
-products into the build directory of an incremental build performed later.
-Then GHC uses those build artifacts to avoid recompiling unchanged
+First perform a full build of the package and save its intermediate build
+products. Then copy those products into the build directory of a later build.
+GHC uses those build artifacts to avoid recompiling unchanged
 modules.
 
 For more detail on how to store and use incremental build products, see
@@ -547,8 +544,7 @@ turtle-incremental-build
 
 In addition to building and installing Haskell software, Nixpkgs can also
 provide development environments for Haskell projects. This has the advantage that you benefit from `cache.nixos.org` and no longer need to compile
-all project dependencies yourself. While it is often very useful, this is not
-the primary use case of the package set. Check [](#haskell-available-versions) and [](#haskell-limitations) to judge whether a `haskellPackages`-based development environment for your project is feasible.
+all project dependencies yourself. Development is not the primary use case of the package set. Check [](#haskell-available-versions) and [](#haskell-limitations) to judge whether a `haskellPackages`-based development environment for your project is feasible.
 
 By default, every derivation built using
 [`haskellPackages.mkDerivation`](#haskell-mkderivation) exposes an environment
@@ -586,18 +582,15 @@ to build all packages. However, `cabal-install` works as expected if in
 A declarative and pure way of adding arbitrary development tools is provided
 via [](#haskell-shellFor).
 
-When using `cabal-install` for dependency resolution you need to be a bit
-careful to achieve build purity. `cabal-install` finds and uses all
-dependencies installed from the packages `env` via Nix, but it also consults Hackage to potentially download and compile dependencies if it can’t
-find a valid build plan locally. To prevent this you can either never run
+When using `cabal-install` for dependency resolution, take care to achieve build purity. `cabal-install` finds and uses all
+dependencies installed from the packages `env` via Nix. It may also consult Hackage to download and compile dependencies if it cannot find a valid build plan locally. To prevent this you can either never run
 `cabal update`, remove the cabal database from your `~/.cabal` folder or run
 `cabal` with `--offline`. Note though, that for some usecases `cabal2nix` needs
 the local Hackage db.
 
 Often you won't work on a package that is already part of `haskellPackages` or
 Hackage, so you first need to write a Nix expression to obtain the development
-environment from. You can generate one from an already
-existing cabal file using `cabal2nix`:
+environment from. You can generate a Nix expression from an existing cabal file using `cabal2nix`:
 
 ```console
 $ ls
@@ -814,7 +807,7 @@ haskell.lib.compose.overrideCabal (drv: {
     ${drv.postInstall or ""}
     install -Dm644 man/pnbackup.1 -t $out/share/man/man1
   '';
-}) haskellPackages.pnbackup
+}) haskellPackages.pinboard-notes-backup
 ```
 
 `overrideCabal` takes two arguments:
@@ -836,7 +829,7 @@ let
   });
 
 in
-installManPage haskellPackages.pnbackup
+installManPage haskellPackages.pinboard-notes-backup
 ```
 
 In fact, `haskell.lib.compose` already provides lots of useful helpers for common
@@ -871,8 +864,8 @@ Ideally this section would be generated from the latter in the future.
 -->
 
 All other helper functions are implemented in terms of `overrideCabal` and make
-common overrides shorter and more complicate ones trivial. The simple overrides
-which only change a single argument are only described very briefly in the
+common overrides shorter and more complicated ones trivial. The simple overrides
+which only change a single argument are described briefly in the
 following overview. Refer to the
 [documentation of `haskellPackages.mkDerivation`](#haskell-mkderivation)
 for a more detailed description of the effects of the respective arguments.
