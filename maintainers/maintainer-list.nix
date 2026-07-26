@@ -16267,6 +16267,12 @@
     githubId = 72424138;
     name = "Lisanna Dettwyler";
   };
+  LisaScheers = {
+    email = "lisa@scheers.tech";
+    github = "LisaScheers";
+    githubId = 34404302;
+    name = "Lisa Scheers";
+  };
   litchipi = {
     email = "litchi.pi@proton.me";
     github = "litchipi";
