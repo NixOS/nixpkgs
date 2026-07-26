@@ -320,6 +320,10 @@ with haskellLib;
   # https://github.com/raehik/bytezap/pull/4
   bytezap = doJailbreak super.bytezap;
 
+  # 2026-07-26: Allow Cabal-syntax 3.16, optparse-applicative 0.19, containers 0.8 and base 4.22.
+  # https://github.com/nomeata/cabal-plan-bounds/pull/29
+  cabal-plan-bounds = doJailbreak super.cabal-plan-bounds;
+
   # network < 3.2.8
   # bound only required when running under WINE: https://github.com/haskell/network/issues/604
   iserv-proxy = doJailbreak super.iserv-proxy;
