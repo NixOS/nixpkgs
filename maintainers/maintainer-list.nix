@@ -25353,6 +25353,11 @@
     name = "Ryota";
     keys = [ { fingerprint = "2FAC 1A25 5175 125E F60B  BC04 B89E C8B6 EE43 39C4"; } ];
   };
+  ryuryu333 = {
+    name = "ryu";
+    github = "ryuryu333";
+    githubId = 135518701;
+  };
   ryze = {
     name = "Ryze";
     github = "ryze312";
