@@ -50,8 +50,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonImportsCheck = [ "exegol" ];
 
-  # No relevant python tests nor --version flag
-  doCheck = false;
+  doCheck = true;
 
   meta = {
     description = "Fully featured and community-driven hacking environment";
