@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -18,6 +19,8 @@ buildPythonPackage (finalAttrs: {
   };
 
   build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "translationstring" ];
 
