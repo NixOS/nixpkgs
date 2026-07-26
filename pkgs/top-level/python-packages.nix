@@ -21413,6 +21413,8 @@ self: super: with self; {
 
   udatetime = callPackage ../development/python-modules/udatetime { };
 
+  udsoncan = callPackage ../development/python-modules/udsoncan { };
+
   udtools = callPackage ../development/python-modules/udtools { };
 
   ueagle = callPackage ../development/python-modules/ueagle { };
