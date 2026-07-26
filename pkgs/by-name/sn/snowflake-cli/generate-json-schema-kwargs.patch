@@ -1,0 +1,15 @@
+snowflake-cli is subclassing pydantic's GenerateJsonSchema without passing on unrecognized kwargs to the superclass, this broke when nixpkgs's pydanctic moved to 2.12 which added "union_format" as new input arg
+Due to various flaws in the python ecosystem nixpkgs cannot reuse uv or other python lockfiles and has to approximate dependencies. This patch decouples the code more from minor changes between pydantic versions
+--- a/src/snowflake/cli/_app/dev/docs/project_definition_generate_json_schema.py
++++ b/src/snowflake/cli/_app/dev/docs/project_definition_generate_json_schema.py
+@@ -38,8 +38,8 @@ class ProjectDefinitionProperty:
+
+
+ class ProjectDefinitionGenerateJsonSchema(GenerateJsonSchema):
+-    def __init__(self, by_alias: bool = False, ref_template: str = ""):
+-        super().__init__(by_alias, "{model}")
++    def __init__(self, by_alias: bool = False, ref_template: str = "",**kwargs):
++        super().__init__(by_alias, "{model}",**kwargs)
+         self._remapped_definitions: Dict[str, Any] = {}
+
+     def generate(self, schema, mode="validation"):

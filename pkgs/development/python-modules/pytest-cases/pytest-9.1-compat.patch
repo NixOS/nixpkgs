@@ -1,0 +1,74 @@
+From 37c72c1350899d45bc80e92b4b4168b5f7a7af7c Mon Sep 17 00:00:00 2001
+From: "a.berod" <a.berod@sim-and-cure.com>
+Date: Thu, 9 Jul 2026 10:43:44 +0200
+Subject: [PATCH] Fix compatiblity with pytest 9.1+
+
+---
+ src/pytest_cases/common_pytest.py       | 17 ++++++++++++-----
+ src/pytest_cases/common_pytest_marks.py |  1 +
+ 2 files changed, 13 insertions(+), 5 deletions(-)
+
+diff --git a/src/pytest_cases/common_pytest.py b/src/pytest_cases/common_pytest.py
+index afad9d39..4a2b6b71 100644
+--- a/src/pytest_cases/common_pytest.py
++++ b/src/pytest_cases/common_pytest.py
+@@ -31,7 +31,7 @@
+ from .common_pytest_marks import make_marked_parameter_value, get_param_argnames_as_list, \
+     get_pytest_parametrize_marks, get_pytest_usefixture_marks, PYTEST3_OR_GREATER, PYTEST6_OR_GREATER, \
+     PYTEST38_OR_GREATER, PYTEST34_OR_GREATER, PYTEST33_OR_GREATER, PYTEST32_OR_GREATER, PYTEST71_OR_GREATER, \
+-    PYTEST8_OR_GREATER, PYTEST84_OR_GREATER
++    PYTEST8_OR_GREATER, PYTEST84_OR_GREATER, PYTEST91_OR_GREATER
+ from .common_pytest_lazy_values import is_lazy_value, is_lazy
+ 
+ 
+@@ -641,7 +641,12 @@ def in_callspec_explicit_args(
+ if PYTEST71_OR_GREATER:
+     from _pytest.python import IdMaker  # noqa
+ 
+-    _idval = IdMaker([], [], None, None, None, None, None)._idval
++    args = [[], [], None, None, None, None, None]
++    if PYTEST91_OR_GREATER:
++        # func_name removed in https://github.com/pytest-dev/pytest/pull/13976
++        del args[-1]
++
++    _idval = IdMaker(*args)._idval
+     _idval_kwargs = dict()
+ else:
+     from _pytest.python import _idval  # noqa
+@@ -738,10 +743,12 @@ def getfuncargnames(function, cls=None):
+ 
+ 
+ class FakeSession(object):
+-    __slots__ = ('_fixturemanager',)
++    __slots__ = ("_fixturemanager", "config", "nodeid")
+ 
+-    def __init__(self):
++    def __init__(self, nodeid):
+         self._fixturemanager = None
++        self.config = None
++        self.nodeid = nodeid
+ 
+ 
+ class MiniFuncDef(object):
+@@ -750,7 +757,7 @@ class MiniFuncDef(object):
+     def __init__(self, nodeid):
+         self.nodeid = nodeid
+         if PYTEST8_OR_GREATER:
+-            self.session = FakeSession()
++            self.session = FakeSession(nodeid=nodeid)
+ 
+ 
+ class MiniMetafunc(Metafunc):
+diff --git a/src/pytest_cases/common_pytest_marks.py b/src/pytest_cases/common_pytest_marks.py
+index 6fa33b32..0c6030df 100644
+--- a/src/pytest_cases/common_pytest_marks.py
++++ b/src/pytest_cases/common_pytest_marks.py
+@@ -47,6 +47,7 @@
+ PYTEST81_OR_GREATER = PYTEST_VERSION >= Version('8.1.0')
+ PYTEST84_OR_GREATER = PYTEST_VERSION >= Version('8.4.0')
+ PYTEST9_OR_GREATER = PYTEST_VERSION >= Version('9.0.0')
++PYTEST91_OR_GREATER = PYTEST_VERSION >= Version('9.1.0')
+ 
+ 
+ def get_param_argnames_as_list(argnames):
+

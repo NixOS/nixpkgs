@@ -1,0 +1,76 @@
+{
+  "version": "2.1.219",
+  "commit": "7006c4c3acac98e554d3997baeda6a7fa4d1ff7c",
+  "buildDate": "2026-07-24T03:34:26Z",
+  "platforms": {
+    "darwin-arm64": {
+      "binary": "claude",
+      "checksum": "a8e806faaefac53c7a0f26523d8a45c60dbef3407b14ef990c75765d08febc82",
+      "size": 256908272
+    },
+    "darwin-x64": {
+      "binary": "claude",
+      "checksum": "03be9f988ed88391b4a5f08e4c5dc317ce2fffa4a9dc66c01106326e7698ee76",
+      "size": 266381200
+    },
+    "linux-arm64": {
+      "binary": "claude",
+      "checksum": "1f834b322ba9d1291cc7ffeff16a6795a59145bda279dbd59cd7ecebc7b7f15a",
+      "size": 271825824
+    },
+    "linux-x64": {
+      "binary": "claude",
+      "checksum": "22cfd6f5b3061c0391ba84e9cf8c9deaa37783aac18b004d42ec061e98f00691",
+      "size": 275004400
+    },
+    "linux-arm64-musl": {
+      "binary": "claude",
+      "checksum": "22b2c2e0f41ab0b7c7b8845be9c49fe6f27e4c344aab1bd174bdf84a4e6b0570",
+      "size": 265074024
+    },
+    "linux-x64-musl": {
+      "binary": "claude",
+      "checksum": "487008769dd69599adb779205b6b371de27b4245f0ad2ad70f15baf4eac5f81e",
+      "size": 269627984
+    },
+    "win32-x64": {
+      "binary": "claude.exe",
+      "checksum": "10f4c1f85b07f3cf6b8fff930fd26ecd475bd146a378acfafa559a6db9d89637",
+      "size": 265714848
+    },
+    "win32-arm64": {
+      "binary": "claude.exe",
+      "checksum": "6a1db10161b93e81ac55537feeae8a299f0bf67601c1c0f2016e79c850302baa",
+      "size": 260090016
+    }
+  },
+  "sdkCompat": {
+    "testedWrapperVersions": [
+      "0.3.181",
+      "0.3.182",
+      "0.3.183",
+      "0.3.185",
+      "0.3.186",
+      "0.3.187",
+      "0.3.190",
+      "0.3.191",
+      "0.3.195",
+      "0.3.196",
+      "0.3.197",
+      "0.3.198",
+      "0.3.199",
+      "0.3.200",
+      "0.3.201",
+      "0.3.202",
+      "0.3.204",
+      "0.3.205",
+      "0.3.207",
+      "0.3.208",
+      "0.3.209",
+      "0.3.215",
+      "0.3.217",
+      "0.3.218"
+    ],
+    "harnessSchema": 1
+  }
+}

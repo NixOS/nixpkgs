@@ -1,0 +1,98 @@
+diff -Naur ttf2pt1-3.4.4-orig/Makefile ttf2pt1-3.4.4/Makefile
+--- ttf2pt1-3.4.4-orig/Makefile	2007-07-15 20:06:50.000000000 -0600
++++ ttf2pt1-3.4.4/Makefile	2007-07-15 20:12:40.000000000 -0600
+@@ -9,7 +9,7 @@
+ #
+ # Use GNU C even if it's not the default compiler
+ #
+-#CC=gcc
++CC=gcc
+ #
+ # Use the standard ANSI C compiler on HP-UX even if it's not default
+ #
+@@ -60,18 +60,18 @@
+ # (if the include and lib directory do not match your installation,
+ # modify them), also uncomment LIBS_FT
+ #
+-#CFLAGS_FT = -DUSE_FREETYPE -I/usr/local/include/freetype2 -I/usr/local/include
++CFLAGS_FT = -DUSE_FREETYPE -I/usr/include/freetype2 -I/usr/include
+ 
+ # 
+ # The FreeType-2 library flags (disabled by default)
+ 
+-LIBS_FT=
++#LIBS_FT=
+ 
+ # To enable use of the FreeType-2 library
+ # (if the include and lib directory do not match your installation,
+ # modify them), also uncomment CFLAGS_FT
+ #
+-#LIBS_FT= -L/usr/local/lib -lfreetype
++LIBS_FT= -L/usr/lib -lfreetype
+ 
+ #
+ # The flags for C compiler for the Autotrace library (disabled by default). 
+@@ -120,18 +120,18 @@
+ # Installation-related stuff
+ # 
+ # The base dir for installation and subdirs in it
+-INSTDIR = /usr/local
++INSTDIR = /usr
+ # for binaries
+ BINDIR = $(INSTDIR)/bin
+ # for binaries of little general interest
+ LIBXDIR = $(INSTDIR)/libexec/ttf2pt1
+ # for scripts, maps/encodings etc.
+ SHAREDIR = $(INSTDIR)/share/ttf2pt1
+-MANDIR = $(INSTDIR)/man
++MANDIR = $(INSTDIR)/share/man
+ 
+ # owner and group of installed files
+ OWNER = root
+-GROUP = bin
++GROUP = root
+ 
+ # After you have configured the Makefile, comment out the following
+ # definition:
+@@ -244,17 +244,19 @@
+ 	chmod -R go-w $(SHAREDIR)
+ 	scripts/inst_file ttf2pt1 $(BINDIR)/ttf2pt1 $(OWNER) $(GROUP) 0755
+ 	[ -f $(BINDIR)/t1asm ] || scripts/inst_file t1asm $(LIBXDIR)/t1asm $(OWNER) $(GROUP) 0755
+-	sed 's|^TTF2PT1_BINDIR=$$|TTF2PT1_BINDIR=$(BINDIR)|;\
+-		s|^TTF2PT1_LIBXDIR=$$|TTF2PT1_LIBXDIR=$(LIBXDIR)|;\
+-		s|^TTF2PT1_SHAREDIR=$$|TTF2PT1_SHAREDIR=$(SHAREDIR)|;' <scripts/convert >cvt.tmp
++	sed -e 's|^TTF2PT1_BINDIR=$$|TTF2PT1_BINDIR=$(BINDIR)|' \
++		-e 's|^TTF2PT1_LIBXDIR=$$|TTF2PT1_LIBXDIR=$(LIBXDIR)|' \
++		-e 's|^TTF2PT1_SHAREDIR=$$|TTF2PT1_SHAREDIR=$(SHAREDIR)|' \
++		<scripts/convert >cvt.tmp
+ 	scripts/inst_file cvt.tmp $(BINDIR)/ttf2pt1_convert $(OWNER) $(GROUP) 0755
+ 	scripts/inst_file cvt.tmp $(SHAREDIR)/scripts/convert $(OWNER) $(GROUP) 0755
+ 	rm cvt.tmp
+ 	scripts/inst_file scripts/x2gs $(BINDIR)/ttf2pt1_x2gs $(OWNER) $(GROUP) 0755
+ 	for i in $(MANS1); do { \
+-		sed 's|TTF2PT1_BINDIR|$(BINDIR)|;\
+-			s|TTF2PT1_LIBXDIR|$(LIBXDIR)|;\
+-			s|TTF2PT1_SHAREDIR|$(SHAREDIR)|;' <$$i >$(MANDIR)/man1/$$i \
++		sed -e 's|TTF2PT1_BINDIR|$(BINDIR)|' \
++			-e 's|TTF2PT1_LIBXDIR|$(LIBXDIR)|' \
++			-e 's|TTF2PT1_SHAREDIR|$(SHAREDIR)|' \
++			<$$i >$(MANDIR)/man1/$$i \
+ 		&& chown $(OWNER) $(MANDIR)/man1/$$i \
+ 		&& chgrp $(GROUP) $(MANDIR)/man1/$$i \
+ 		&& chmod 0644 $(MANDIR)/man1/$$i \
+
+
+
+
+
+diff -Naur ttf2pt1-3.4.4-orig/ft.c ttf2pt1-3.4.4/ft.c
+--- ttf2pt1-3.4.4-orig/ft.c	2007-07-15 20:23:43.000000000 -0600
++++ ttf2pt1-3.4.4/ft.c	2007-07-15 20:24:02.000000000 -0600
+@@ -12,6 +12,7 @@
+ #include <stdlib.h>
+ #include <ctype.h>
+ #include <sys/types.h>
++#include <ft2build.h>
+ #include <freetype/freetype.h>
+ #include <freetype/ftglyph.h>
+ #include <freetype/ftsnames.h>

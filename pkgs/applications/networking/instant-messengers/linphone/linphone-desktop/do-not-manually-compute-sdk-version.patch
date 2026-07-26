@@ -1,0 +1,20 @@
+diff --git a/Linphone/CMakeLists.txt b/Linphone/CMakeLists.txt
+index 776fd415a..8fa2d3ab6 100644
+--- a/Linphone/CMakeLists.txt
++++ b/Linphone/CMakeLists.txt
+@@ -71,14 +71,6 @@ execute_process(
+     OUTPUT_STRIP_TRAILING_WHITESPACE
+ )
+ 
+-set(LINPHONESDK_VERSION)
+-execute_process(
+-    COMMAND git describe
+-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/external/linphone-sdk
+-    OUTPUT_VARIABLE LINPHONESDK_VERSION
+-    OUTPUT_STRIP_TRAILING_WHITESPACE
+-)
+-
+ include(application_info.cmake)
+ string(TIMESTAMP CURRENT_YEAR "%Y")
+ if(NOT APPLICATION_START_LICENCE OR "${CURRENT_YEAR}" STREQUAL "${APPLICATION_START_LICENCE}")
+
