@@ -3,10 +3,11 @@
   stdenv,
   fetchurl,
   fetchpatch,
+  pkgs,
   perlPackages,
+  imagemagickBig,
   gettext,
   makeWrapper,
-  ImageMagick,
   which,
   highlight,
   gitUpdater,
@@ -28,6 +29,16 @@
   mercurial,
   extraUtils ? [ ],
 }:
+
+let
+  # Build the Image::Magick perl module against imagemagickBig instead of the default imagemagick.
+  ImageMagick =
+    (perlPackages.override {
+      pkgs = pkgs // {
+        imagemagick = imagemagickBig;
+      };
+    }).ImageMagick;
+in
 
 stdenv.mkDerivation rec {
   pname = "ikiwiki";
