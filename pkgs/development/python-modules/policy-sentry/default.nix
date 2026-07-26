@@ -6,6 +6,7 @@
   fetchFromGitHub,
   hatchling,
   orjson,
+  pyprojectVersionPatchHook,
   pytestCheckHook,
   pyyaml,
   requests,
@@ -27,6 +28,8 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "beautifulsoup4" ];
 
   build-system = [ hatchling ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     beautifulsoup4
