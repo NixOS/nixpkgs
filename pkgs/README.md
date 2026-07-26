@@ -922,11 +922,16 @@ To learn more about the default update procedures, read their [FAQ for Nixpkgs m
 > A common pattern is to use the [`nix-update-script`](../pkgs/by-name/ni/nix-update/nix-update-script.nix) function provided in Nixpkgs, which makes automatic updates use [`nix-update`](https://github.com/Mic92/nix-update):
 >
 > ```nix
-> { stdenv, nix-update-script }:
-> stdenv.mkDerivation {
+> {
+    stdenv,
+    nix-update-script,
+  }:
+>
+> stdenv.mkDerivation (finalAttrs: {
 >   # ...
 >   passthru.updateScript = nix-update-script { };
-> }
+>   # ...
+> })
 > ```
 >
 > `nix-update` is a little bit more flexible than `nixpkgs-update` in performing updates, so it can be useful for cases such as:
@@ -939,17 +944,27 @@ The `passthru.updateScript` attribute can contain one of the following:
 - an executable file, either on the file system:
 
   ```nix
-  { stdenv }:
+  {
+    # ...
+    stdenv,
+    # ...
+  }:
   stdenv.mkDerivation {
     # ...
     passthru.updateScript = ./update.sh;
+    # ...
   }
   ```
 
   or inside the expression itself:
 
   ```nix
-  { stdenv, writeScript }:
+  {
+    # ...
+    stdenv,
+    # ...
+    writeScript,
+  }:
   stdenv.mkDerivation {
     # ...
     passthru.updateScript = writeScript "update-zoom-us" ''
@@ -961,21 +976,27 @@ The `passthru.updateScript` attribute can contain one of the following:
       version="$(curl -sI https://zoom.us/client/latest/zoom_x86_64.tar.xz | grep -Fi 'Location:' | pcre2grep -o1 '/(([0-9]\.?)+)/')"
       update-source-version zoom-us "$version"
     '';
+    # ...
   }
   ```
 
 - a list, a script file followed by arguments to be passed to it:
 
   ```nix
-  { stdenv }:
-  stdenv.mkDerivation {
+  {
+    # ...
+    stdenv,
+    # ...
+  }:
+  stdenv.mkDerivation (finalAttrs: {
     # ...
     passthru.updateScript = [
       ../../update.sh
-      pname
+      finalAttrs.pname
       "--requested-release=unstable"
     ];
-  }
+    # ...
+  })
   ```
 
 - an attribute set containing:
@@ -994,21 +1015,24 @@ The `passthru.updateScript` attribute can contain one of the following:
     A list of the [extra features the script supports][supported-features].
 
     ```nix
-    { stdenv }:
-    stdenv.mkDerivation rec {
-      pname = "my-package";
+    {
+      # ...
+      stdenv,
+      # ...
+    }:
+    stdenv.mkDerivation (finalAttrs: {
       # ...
       passthru.updateScript = {
         command = [
           ../../update.sh
-          pname
+          finalAttrs.pname
         ];
-        attrPath = pname;
+        attrPath = finalAttrs.pname;
         supportedFeatures = [
           # ...
         ];
       };
-    }
+    })
     ```
 
 ### How are update scripts executed?
