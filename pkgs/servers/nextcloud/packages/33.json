@@ -50,9 +50,9 @@
     ]
   },
   "cookbook": {
-    "hash": "sha256-eOB04pPqR5rthxK+yrpxuxgZes9chxjRKhy2yd+kIME=",
-    "url": "https://github.com/christianlupus-nextcloud/cookbook-releases/releases/download/v0.11.8/cookbook-0.11.8.tar.gz",
-    "version": "0.11.8",
+    "hash": "sha256-AX48RNDRiIkl4OZU58S/jtMWBPkZuOPTLajs0PVjm4A=",
+    "url": "https://github.com/christianlupus-nextcloud/cookbook-releases/releases/download/v0.11.9/cookbook-0.11.9.tar.gz",
+    "version": "0.11.9",
     "description": "A library for all your recipes. It uses JSON files following the schema.org recipe format. To add a recipe to the collection, you can paste in the URL of the recipe, and the provided web page will be parsed and downloaded to whichever folder you specify in the app settings.",
     "homepage": "https://github.com/nextcloud/cookbook/",
     "licenses": [
@@ -90,9 +90,9 @@
     ]
   },
   "drawio": {
-    "hash": "sha256-nVcO2V0zo7VdL/o8c6IRbiIqFnGBH7NdqL/eefQ/ip0=",
-    "url": "https://github.com/arnowelzel/drawio-nextcloud/releases/download/v4.3.0/drawio-v4.3.0.tar.gz",
-    "version": "4.3.0",
+    "hash": "sha256-VLG6dA0WwnImhNA+JtsS+NLVFxyD7UcxEdCu/zjNjtM=",
+    "url": "https://github.com/arnowelzel/drawio-nextcloud/releases/download/v4.3.5/drawio-v4.3.5.tar.gz",
+    "version": "4.3.5",
     "description": "Integrates the diagrams.net diagram editor with Nextcloud. Users can create and edit .drawio diagrams and .dwb whiteboards directly within the Nextcloud file manager.\n\n**Features:**\n\n- Create and edit diagrams and whiteboards from the Nextcloud \"+\" menu\n- Click any .drawio or .dwb file to open the editor inline\n- Autosave with optimistic conflict detection\n- Inline diagram previews in Text, Collectives, Talk, Notes, and Deck\n- Supports public share links (read-only and editable)\n- Offline mode for privacy-sensitive deployments\n- Configurable editor URL for self-hosted diagrams.net instances",
     "homepage": "https://github.com/arnowelzel/drawio-nextcloud",
     "licenses": [
@@ -120,9 +120,9 @@
     ]
   },
   "files_linkeditor": {
-    "hash": "sha256-WIOLA1J2aqMr5v3bZB3pRnF9bH1V0asGsMNTcetRsx8=",
-    "url": "https://github.com/te-online/nextcloud-app-releases/raw/main/files_linkeditor/v1.1.25/files_linkeditor.tar.gz",
-    "version": "1.1.25",
+    "hash": "sha256-C0JWqDDnaG9eYOzaTGeEk6gIhOlXhc1A9dH0uFNo5uA=",
+    "url": "https://github.com/te-online/nextcloud-app-releases/raw/main/files_linkeditor/v1.1.26/files_linkeditor.tar.gz",
+    "version": "1.1.26",
     "description": "### External web links in Nextcloud!\n* ✍️ **create and edit** .URL and .webloc links in the file view\n* 🌍 **open links** by clicking them and confirming you want to go to the external site\n* 📤 **works in public shares** so you can share links easily with others\n* 🔄 **sync your links** as .URL and .webloc are web links as created on most operating systems.\n\n_[View changelog](https://github.com/te-online/files_linkeditor/blob/main/CHANGELOG.md)_",
     "homepage": "https://github.com/te-online/files_linkeditor",
     "licenses": [
@@ -140,9 +140,9 @@
     ]
   },
   "forms": {
-    "hash": "sha256-vd6qwBAGUtm+Fbfc/Ei1mtmENX5Zvz5ZlW1MGggytJ0=",
-    "url": "https://github.com/nextcloud-releases/forms/releases/download/v5.3.4/forms-v5.3.4.tar.gz",
-    "version": "5.3.4",
+    "hash": "sha256-ismV8Hv6XrOF3ukbcewpOwZXo+nFFnS2tCdw0foUC8M=",
+    "url": "https://github.com/nextcloud-releases/forms/releases/download/v5.3.5/forms-v5.3.5.tar.gz",
+    "version": "5.3.5",
     "description": "**Simple surveys and questionnaires, self-hosted!**\n\n- **📝 Simple design:** No mass of options, only the essentials. Works well on mobile of course.\n- **📊 View & export results:** Results are visualized and can also be exported as CSV in the same format used by Google Forms.\n- **🔒 Data under your control!** Unlike in Google Forms, Typeform, Doodle and others, the survey info and responses are kept private on your instance.\n- **🧑‍💻 Connect to your software:** Easily integrate Forms into your service with our full-fledged [REST-API](https://github.com/nextcloud/forms/blob/main/docs/API_v3.md).\n- **🙋 Get involved!** We have lots of stuff planned like more question types, collaboration on forms, [and much more](https://github.com/nextcloud/forms/milestones)!",
     "homepage": "https://github.com/nextcloud/forms",
     "licenses": [
@@ -160,9 +160,9 @@
     ]
   },
   "groupfolders": {
-    "hash": "sha256-elHsIh1LD/5c1BT/+YLMSMLtMXdLacTPpU4SSORdjw0=",
-    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v21.0.10/groupfolders-v21.0.10.tar.gz",
-    "version": "21.0.10",
+    "hash": "sha256-rFboyIuU8HO5KImbbgYFRfa8YTOLS3SLXh4/cxCnSCE=",
+    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v21.0.12/groupfolders-v21.0.12.tar.gz",
+    "version": "21.0.12",
     "description": "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared\nfolders for selected teams within Nextcloud.\n\nAdmins can grant one or more teams access to a folder, configure permissions (such as read,\nwrite, and sharing rights), and assign storage quotas from the Team Folders section (under\nadmin settings). The app also supports advanced permissions and integration with Nextcloud’s\ntrash and versioning systems.\n\nAs of Hub 10 / Nextcloud 31, admins must be members of a team to assign that team to a Team\nFolder.",
     "homepage": "https://github.com/nextcloud/groupfolders",
     "licenses": [
@@ -220,9 +220,9 @@
     ]
   },
   "mail": {
-    "hash": "sha256-r7x9WkBAYw2KJ6D2FcLqbKHTHpVUP/z2eLjy4QorL7k=",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v5.10.8/mail-v5.10.8.tar.gz",
-    "version": "5.10.8",
+    "hash": "sha256-XZlufroUCP7zmatKi6/lnaJ88lLIZlxQJi/bCeZLHM8=",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v5.10.9/mail-v5.10.9.tar.gz",
+    "version": "5.10.9",
     "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://www.horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!\n\n## Ethical AI Rating\n\n### Priority Inbox\n\nPositive:\n* The software for training and inferencing of this model is open source.\n* The model is created and trained on-premises based on the user's own data.\n* The training data is accessible to the user, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n### Thread Summaries (opt-in)\n\n**Rating:** 🟢/🟡/🟠/🔴\n\nThe rating depends on the installed text processing backend. See [the rating overview](https://docs.nextcloud.com/server/latest/admin_manual/ai/index.html) for details.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [
@@ -310,9 +310,9 @@
     ]
   },
   "phonetrack": {
-    "hash": "sha256-d6vPKCJ1Us0zQIFkIlSQ5cmEgO1zXGtdDniIjfqGh28=",
-    "url": "https://github.com/julien-nc/phonetrack/releases/download/v1.2.0/phonetrack-1.2.0.tar.gz",
-    "version": "1.2.0",
+    "hash": "sha256-bt/R1kZiTa9pWruKsAU01ni1d0AIy7vAOvIF8zwRhhw=",
+    "url": "https://github.com/julien-nc/phonetrack/releases/download/v1.3.1/phonetrack-1.3.1.tar.gz",
+    "version": "1.3.1",
     "description": "# PhoneTrack Nextcloud application\n\n📱 PhoneTrack is a Nextcloud application to track and store mobile device's locations.\n\n🗺 It receives information from mobile phone's logging apps and displays it dynamically on a map.\n\n🌍 Help us to translate this app on [PhoneTrack Crowdin project](https://crowdin.com/project/phonetrack).\n\n⚒ Check out other ways to help in the [contribution guidelines](https://gitlab.com/eneiluj/phonetrack-oc/blob/master/CONTRIBUTING.md).\n\nHow to use PhoneTrack :\n\n- Create a tracking session.\n- Give the logging link\\* to the mobile devices. Choose the [logging method](https://github.com/julien-nc/phonetrack/blob/main/doc/user.md#logging-methods) you prefer.\n- Watch the session's devices location in real time (or not) in PhoneTrack or share it with public pages.\n\n(\\*) Don't forget to set the device name in the link (rather than in the logging app settings). Replace \"yourname\" with the desired device name.\nSetting the device name in logging app settings only works with Owntracks, Traccar and OpenGTS.\n\nOn PhoneTrack main page, while watching a session, you can :\n\n- 📍 Display location history\n- ⛛ Filter points\n- ✎ Manually edit/add/delete points\n- ✎ Edit devices (rename, change colour/shape, move to another session)\n- ⛶ Define geofencing zones for devices\n- ⚇ Define proximity alerts for device pairs\n- 🖧 Share a session to other Nextcloud users or with a public link (read-only)\n- 🔗 Generate public share links with optional restrictions (filters, device name, last positions only, geofencing simplification)\n- 🖫 Import/export a session in GPX format (one file with one track per device or one file per device)\n- 🗠 Display sessions statistics\n- 🔒 [Reserve a device name](https://github.com/julien-nc/phonetrack/blob/main/doc/user.md#device-name-reservation) to make sure only authorized user can log with this name\n- 🗓 Toggle session auto export and auto purge (daily/weekly/monthly)\n- ◔ Choose what to do when point number quota is reached (block logging or delete oldest point)\n\nPublic page and public filtered page work like main page except there is only one session displayed, everything is read-only and there is no need to be logged in.\n\nThis app is under development.\n\n## Install\n\nSee the [AdminDoc](https://gitlab.com/eneiluj/phonetrack-oc/wikis/admindoc) for installation details.\n\nCheck [CHANGELOG](https://gitlab.com/eneiluj/phonetrack-oc/blob/master/CHANGELOG.md#change-log) file to see what's new and what's coming in next release.\n\nCheck [AUTHORS](https://gitlab.com/eneiluj/phonetrack-oc/blob/master/AUTHORS.md#authors) file to see complete list of authors.\n\n## Known issues\n\n- PhoneTrack **now works** with Nextcloud group restriction activated. See [admindoc](https://github.com/julien-nc/phonetrack/blob/main/doc/admin.md#issue-with-phonetrack-restricted-to-some-groups-in-nextcloud).\n\nAny feedback will be appreciated.\n\n\n\n## Donation\n\nI develop this app during my free time.\n\n* [Donate with Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=66PALMY8SF5JE) (you don't need a paypal account)\n* [Donate with Liberapay : ![Donate using Liberapay](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/eneiluj/donate)",
     "homepage": "https://github.com/julien-nc/phonetrack",
     "licenses": [
@@ -380,9 +380,9 @@
     ]
   },
   "richdocuments": {
-    "hash": "sha256-MfqxhuPGUiKBP8a8yrzFWORaMxyOWRhkYPCPFDh2K/A=",
-    "url": "https://github.com/nextcloud-releases/richdocuments/releases/download/v10.2.1/richdocuments-v10.2.1.tar.gz",
-    "version": "10.2.1",
+    "hash": "sha256-HAAbZuG6okWnNuqO6p+fD0bdnGv0wU3O73aHC6SEepE=",
+    "url": "https://github.com/nextcloud-releases/richdocuments/releases/download/v10.3.0/richdocuments-v10.3.0.tar.gz",
+    "version": "10.3.0",
     "description": "This application can connect to a Collabora Online (or other) server (WOPI-like Client). Nextcloud is the WOPI Host. Please read the documentation to learn more about that.\n\nYou can also edit your documents off-line with the Collabora Office app from the **[Android](https://play.google.com/store/apps/details?id=com.collabora.libreoffice)** and **[iOS](https://apps.apple.com/us/app/collabora-office/id1440482071)** store.",
     "homepage": "https://collaboraoffice.com/",
     "licenses": [
@@ -390,9 +390,9 @@
     ]
   },
   "sociallogin": {
-    "hash": "sha256-/mnpEUfyhjGG31TKzFEfKUuzflPL+pGcf6PRbNnkaUE=",
-    "url": "https://github.com/zorn-v/nextcloud-social-login/releases/download/v6.5.3/release.tar.gz",
-    "version": "6.5.3",
+    "hash": "sha256-cLD6xYC3RJu2VmKjqsSA4YtFJZpORv1HpymFz0knkP8=",
+    "url": "https://github.com/zorn-v/nextcloud-social-login/releases/download/v6.5.4/release.tar.gz",
+    "version": "6.5.4",
     "description": "# Social Login\n\nMake it possible to create users and log in via Telegram, OAuth, or OpenID.\n\nFor OAuth, you must create an app with certain providers. Login buttons will appear on the login page if an app ID is specified. Settings are located in the \"Social login\" section of the settings page.\n\n## Installation\n\nLog in to your Nextcloud installation as an administrator. Under \"Apps\", click \"Download and enable\" next to the \"Social Login\" app.\n\nSee below for setup and configuration instructions.\n\n## Custom OAuth2/OIDC Groups\n\nYou can use groups from your custom provider. For this, specify the \"Groups claim\" in the custom OAuth2/OIDC provider settings. This claim should be returned from the provider in the `id_token` or at the user info endpoint. Multiple claims (comma separated) also supported - groups will be merged.\nThe format should be an `array` or a comma-separated string. E.g., (with a claim named `roles`):\n\n```json\n{\"roles\": [\"admin\", \"user\"]}\n```\nor\n```json\n{\"roles\": \"admin,user\"}\n```\n\nNested claims are also supported. For example, `resource_access.client-id.roles` for:\n\n```json\n\"resource_access\": {\n   \"client-id\": {\n     \"roles\": [\n       \"client-role-1\",\n       \"client-role-2\"\n     ]\n   }\n}\n```\n\n**DisplayName** support is also available:\n```json\n{\"roles\": [{\"gid\": 1, \"displayName\": \"admin\"}, {\"gid\": 2, \"displayName\": \"user\"}]}\n```\n\nYou can use provider groups in two ways:\n\n1. Map provider groups to existing Nextcloud groups.\n2. Create provider groups in Nextcloud and associate them with users (if the appropriate option is enabled).\n\nTo sync groups on every login, ensure the \"Update user profile every login\" setting is checked.\n\n## Examples for Groups\n\n* Configure WSO2IS to return a roles claim with OIDC [here](https://medium.com/@dewni.matheesha/claim-mapping-and-retrieving-end-user-information-in-wso2is-cffd5f3937ff).\n* [GitLab OIDC configuration to allow specific GitLab groups](https://github.com/zorn-v/nextcloud-social-login/blob/master/docs/sso/gitlab.md).\n\n## Built-in OAuth Providers\n\nCopy the link from a specific login button to get the correct \"redirect URL\" for OAuth app settings.\n\n* [Amazon](https://developer.amazon.com/loginwithamazon/console/site/lwa/overview.html)\n* [Apple](https://github.com/zorn-v/nextcloud-social-login/blob/master/docs/sso/apple.md)\n* [Codeberg](https://github.com/zorn-v/nextcloud-social-login/blob/master/docs/sso/codeberg.md)\n* [Discord](#configure-discord)\n* [Facebook](https://github.com/zorn-v/nextcloud-social-login/blob/master/docs/sso/facebook.md)\n* [GitHub](https://github.com/settings/developers)\n* [GitLab](https://github.com/zorn-v/nextcloud-social-login/blob/master/docs/sso/gitlab.md)\n* [Google](https://github.com/zorn-v/nextcloud-social-login/blob/master/docs/sso/google.md)\n* [Keycloak](https://github.com/zorn-v/nextcloud-social-login/blob/master/docs/sso/keycloak.md)\n* [Mail.ru](https://github.com/zorn-v/nextcloud-social-login/blob/master/docs/sso/mailru.md)\n* **PlexTv**: Use any title as the app ID.\n* [Telegram](https://github.com/zorn-v/nextcloud-social-login/blob/master/docs/sso/telegram.md)\n* [Twitter](https://github.com/zorn-v/nextcloud-social-login/blob/master/docs/sso/twitter.md)\n\nFor details about Google's \"Allow login only from specified domain\" setting, see [#44](https://github.com/zorn-v/nextcloud-social-login/issues/44). Use a comma-separated list for multiple domains.\n\n## Configuration\n\nAdd `'social_login_auto_redirect' => true` to `config.php` to automatically redirect unauthorized users to social login if only one provider is configured. To temporarily disable this (e.g., for local admin login), add `noredir=1` to the login URL: `https://cloud.domain.com/login?noredir=1`.\n\nConfigure HTTP client options using:\n```php\n  'social_login_http_client' => [\n    'timeout' => 45,\n    'proxy' => 'socks4://127.0.0.1:9050', // See <https://curl.se/libcurl/c/CURLOPT_PROXY.html> for allowed formats\n  ],\n```\nin `config.php`.\n\n### Configure a Provider via CLI\n\nUse the `occ` utility to configure providers via the command line. Replace variables and URLs with your deployment values:\n```bash\nphp occ config:app:set sociallogin custom_providers --value='{\"custom_oidc\": [{\"name\": \"gitlab_oidc\", \"title\": \"Gitlab\", \"authorizeUrl\": \"https://gitlab.my-domain.org/oauth/authorize\", \"tokenUrl\": \"https://gitlab.my-domain.org/oauth/token\", \"userInfoUrl\": \"https://gitlab.my-domain.org/oauth/userinfo\", \"logoutUrl\": \"\", \"clientId\": \"$my_application_id\", \"clientSecret\": \"$my_super_secret_secret\", \"scope\": \"openid\", \"groupsClaim\": \"groups\", \"style\": \"gitlab\", \"defaultGroup\": \"\"}]}'\n```\nFor Docker, prepend `docker exec -t -uwww-data CONTAINER_NAME` to the command or run interactively via `docker exec -it -uwww-data CONTAINER_NAME sh`.\n\nTo inspect configurations:\n```sql\nmysql -u nextcloud -p nextcloud\nPassword: <yourpassword>\n\n> SELECT * FROM oc_appconfig WHERE appid='sociallogin';\n```\nOr run:\n```bash\ndocker exec -t -uwww-data CONTAINER_NAME php occ config:app:get sociallogin custom_providers\n```\n\n### Configure Discord\n\n1. Create a Discord application at [Discord Developer Portal](https://discord.com/developers/applications).\n2. Navigate to `Settings > OAuth2 > General`. Add a redirect URL: `https://nextcloud.mydomain.com/apps/sociallogin/oauth/discord`.\n3. Copy the `CLIENT ID` and generate a `CLIENT SECRET`.\n4. In Nextcloud, go to `Settings > Social Login`. Paste the `CLIENT ID` into \"App id\" and `CLIENT SECRET` into \"Secret\".\n5. Select a default group for new users.\n6. For group mapping, see [#395](https://github.com/zorn-v/nextcloud-social-login/pull/395).\n\n## Hint\n\n### Callback (Reply) URL\nCopy the link from a login button on the Nextcloud login page and use it as the callback URL on your provider's site. To make the button visible temporarily, fill provider settings with placeholder data and update later.\n\nIf you encounter callback URL errors despite correct settings, ensure your Nextcloud server generates HTTPS URLs by adding `'overwriteprotocol' => 'https'` to `config.php`.",
     "homepage": "https://github.com/zorn-v/nextcloud-social-login",
     "licenses": [
@@ -400,9 +400,9 @@
     ]
   },
   "spreed": {
-    "hash": "sha256-/katcYNLcsdnjHA+4ES+kdvhzuPNdDSv5Ann7X0+5xI=",
-    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v23.0.8/spreed-v23.0.8.tar.gz",
-    "version": "23.0.8",
+    "hash": "sha256-4wltvkDx1Dnt5ybKj850+dqr4jqkB0Jt3IU75dpirCA=",
+    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v23.0.9/spreed-v23.0.9.tar.gz",
+    "version": "23.0.9",
     "description": "Chat, video & audio-conferencing using WebRTC\n\n* 💬 **Chat** Nextcloud Talk comes with a simple text chat, allowing you to share or upload files from your Nextcloud Files app or local device and mention other participants.\n* 👥 **Private, group, public and password protected calls!** Invite someone, a whole group or send a public link to invite to a call.\n* 🌐 **Federated chats** Chat with other Nextcloud users on their servers\n* 💻 **Screen sharing!** Share your screen with the participants of your call.\n* 🚀 **Integration with other Nextcloud apps** like Files, Calendar, User status, Dashboard, Flow, Maps, Smart picker, Contacts, Deck, and many more.\n* 🌉 **Sync with other chat solutions** With [Matterbridge](https://github.com/42wim/matterbridge/) being integrated in Talk, you can easily sync a lot of other chat solutions to Nextcloud Talk and vice-versa.",
     "homepage": "https://github.com/nextcloud/spreed",
     "licenses": [
@@ -410,9 +410,9 @@
     ]
   },
   "tables": {
-    "hash": "sha256-ZAvytGd4S5dMNLbWi2bURaBOZRGNk5F+vjqKmRfYSL0=",
-    "url": "https://github.com/nextcloud-releases/tables/releases/download/v2.2.0/tables-v2.2.0.tar.gz",
-    "version": "2.2.0",
+    "hash": "sha256-C4dCB4TV30L6KmD8oiMsblMibQEF5HbBVrRhCWuerEU=",
+    "url": "https://github.com/nextcloud-releases/tables/releases/download/v2.2.1/tables-v2.2.1.tar.gz",
+    "version": "2.2.1",
     "description": "Manage data the way you need it.\n\nWith this app you are able to create your own tables with individual columns. You can start with a template or from scratch and add your wanted columns.\nYou can choose from the following column types:\n- Text line or rich text\n- Link to urls or other nextcloud resources\n- Numbers\n- Progress bar\n- Stars rating\n- Yes/No tick\n- Date and/or time\n- (Multi) selection\n- Users, groups and teams\n\nShare your tables and views with users and groups within your cloud.\n\nHave a good time and manage whatever you want.",
     "homepage": "https://github.com/nextcloud/tables",
     "licenses": [
@@ -430,9 +430,9 @@
     ]
   },
   "theming_customcss": {
-    "hash": "sha256-Fgu31s+K4MFUgvNe9mAVHi9C0iJnv40v1onUMk+lFZk=",
-    "url": "https://github.com/nextcloud/theming_customcss/releases/download/v1.20.0/theming_customcss.tar.gz",
-    "version": "1.20.0",
+    "hash": "sha256-gJcQJv0tD7lykS+26cLr5zlujJjajNqITWmTv0ki2T0=",
+    "url": "https://github.com/nextcloud-releases/theming_customcss/releases/download/v1.21.0/theming_customcss-v1.21.0.tar.gz",
+    "version": "1.21.0",
     "description": "This app allows admins to customize the appearance of their Nextcloud instance by adding their own CSS rules.\n\nThe rules can be added in the admin settings in the \"Theming\" section. This allows you to easily adjust the look and feel of your Nextcloud instance without having to modify any files on the server.",
     "homepage": "",
     "licenses": [
