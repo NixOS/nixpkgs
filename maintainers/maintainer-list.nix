@@ -2128,6 +2128,12 @@
     name = "Austin Lund";
     keys = [ { fingerprint = "7083 E268 4BFD 845F 2B84  9E74 B695 8918 ED23 32CE"; } ];
   };
+  Apollo-sudo767 = {
+    email = "fireshifter767@gmail.com";
+    github = "Apollo-sudo767";
+    githubId = 179651890;
+    name = "Apollo";
+  };
   aporro = {
     email = "git@aporro.dev";
     github = "aporro1";
