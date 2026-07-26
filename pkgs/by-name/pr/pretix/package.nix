@@ -208,6 +208,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "django-i18nfield"
     "django-localflavor"
     "django-phonenumber-field"
+    "django-scopes"
     "dnspython"
     "drf_ujson2"
     "importlib_metadata"
