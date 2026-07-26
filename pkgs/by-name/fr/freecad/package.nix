@@ -209,6 +209,7 @@ freecad-utils.makeCustomizable (
       maintainers = with lib.maintainers; [
         srounce
         grimmauld
+        acuteaangle
       ];
       platforms = lib.platforms.linux;
       mainProgram = "freecad";
