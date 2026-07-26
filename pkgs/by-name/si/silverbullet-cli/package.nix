@@ -2,7 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  testers,
+  versionCheckHook,
 }:
 buildGoModule (finalAttrs: {
   pname = "silverbullet-cli";
@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "silverbulletmd";
     repo = "silverbullet";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-vHRLOYsFsQjpDu3mlbJxWq+P07JnHdO54myFb2Rm18s=";
   };
 
@@ -22,6 +22,7 @@ buildGoModule (finalAttrs: {
   env.CGO_ENABLED = 0;
 
   ldflags = [
+    "-s"
     "-X main.version=${finalAttrs.version}"
   ];
 
@@ -29,15 +30,15 @@ buildGoModule (finalAttrs: {
     mv $out/bin/cli $out/bin/silverbullet-cli
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    command = "silverbullet-cli version";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
 
   meta = {
     changelog = "https://github.com/silverbulletmd/silverbullet/blob/${finalAttrs.version}/website/CHANGELOG.md";
     description = "CLI for SilverBullet, an open-source, self-hosted, offline-capable Personal Knowledge Management (PKM) web application";
     homepage = "https://silverbullet.md";
+    downloadPage = "https://github.com/silverbulletmd/silverbullet";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       aorith
