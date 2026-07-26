@@ -2792,6 +2792,13 @@ let
       };
     });
 
+    rstanarm = old.rstanarm.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        # needed to avoid "log limit exceeded" on Hydra
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -Wno-ignored-attributes";
+      };
+    });
+
     rvisidata = old.rvisidata.overrideAttrs (attrs: {
       postPatch = ''
         substituteInPlace R/main.r --replace-fail \
