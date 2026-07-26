@@ -103,6 +103,7 @@ kaem.runCommand "${pname}-${version}"
           mescc-tools-extra
         ];
         defaultBinPath = lib.makeBinPath defaultBuildInputs;
+        removedAttributeNames = [ "nativeBuildInputs" ];
       in
       name: env: buildCommand:
       derivationWithMeta (
@@ -122,7 +123,7 @@ kaem.runCommand "${pname}-${version}"
             else
               lib.makeBinPath (env.nativeBuildInputs ++ defaultBuildInputs);
         }
-        // (removeAttrs env [ "nativeBuildInputs" ])
+        // (removeAttrs env removedAttributeNames)
       );
 
     passthru.tests.get-version =
