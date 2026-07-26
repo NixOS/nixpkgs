@@ -6,15 +6,17 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "data-password-entropy";
   version = "1.0";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "alistratov";
     repo = "password-entropy-py";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-w721Y/zRMH3fsU0XtaGSDoj1GKqOW/IOGUfimoq4r2E=";
   };
 
@@ -36,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
   };
-}
+})
