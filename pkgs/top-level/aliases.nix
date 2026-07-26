@@ -290,6 +290,7 @@ mapAliases {
   AMB-plugins = amb-plugins; # Added 2026-02-08
   amdvlk = throw "'amdvlk' has been removed since it was deprecated by AMD. Its replacement, RADV, is enabled by default."; # Added 2025-09-20
   ams-lv2 = throw "'ams-lv2' has been removed due to being archived upstream."; # Added 2025-10-26
+  ananicy = throw "'ananicy' has been removed due to being archived upstream. Use ananicy-cpp instead."; # Added 2026-07-14
   android-udev-rules = throw "'android-udev-rules' has been removed due to being superseded by built-in systemd uaccess rules."; # Added 2025-10-21
   androidndkPkgs_21 = throw "androidndkPkgs_21 has been removed, as it is EOL"; # Added 2025-08-09
   androidndkPkgs_23 = throw "androidndkPkgs_23 has been removed, as it is EOL"; # Added 2025-08-09
@@ -2408,6 +2409,7 @@ mapAliases {
   wakatime = throw "'wakatime' has been renamed to/replaced by 'wakatime-cli'"; # Converted to throw 2025-10-27
   wapp = throw "'wapp' has been renamed to/replaced by 'tclPackages.wapp'"; # Converted to throw 2025-10-27
   warmux = throw "'warmux' has been removed as it is unmaintained and broken"; # Added 2025-11-03
+  warp-plus = throw "'warp-plus' has been removed as it is unmaintained and broken"; # Added 2026-07-05
   warsow = throw "'warsow' has been removed as it is unmaintained and is broken"; # Added 2025-10-09
   warsow-engine = throw "'warsow-engine' has been removed as it is unmaintained and is broken"; # Added 2025-10-09
   wasistlos = throw "'wasistlos' has been removed because it was unmaintained and archived upstream. Consider using 'karere' instead"; # Added 2026-04-13
@@ -2864,6 +2866,7 @@ mapAliases {
   zotero_7 = throw "'zotero_7' has been renamed to/replaced by 'zotero'"; # Added 2025-12-09
   zotify = throw "zotify has been removed due to lack of upstream maintenance"; # Added 2025-09-26
   zq = throw "zq has been replaced by zed"; # Converted to throw 2025-10-26
+  zscroll = throw "zscroll has been removed due to lack of maintenance."; # Added 2026-05-29
   zsh-git-prompt = throw "zsh-git-prompt was removed as it is unmaintained upstream"; # Added 2025-08-28
   zulu23 = throw "Zulu OpenJDK 23 was removed as it has reached its end of life"; # Added 2025-11-14
   zulu24 = throw "Zulu OpenJDK 24 was removed as it has reached its end of life"; # Added 2025-11-14
