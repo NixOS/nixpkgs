@@ -42,6 +42,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/schedkit";
     license = lib.licenses.asl20;
     mainProgram = "schedctl";
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       koalalorenzo
     ];
