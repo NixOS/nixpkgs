@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
     owner = "vksarchy";
     repo = "risp";
     rev = "v${version}";
-    hash = "sha256-l7wGc6OKt0UvreH84+hRA6FLZguYjidV3hxpRWd1dvo=";
+    hash = "sha256-U62Hm1Po6m41+T0b2xvKqMQnQFEkcIAAUlcANRjplz8=";
   };
 
   build-system = with python3Packages; [
