@@ -23,7 +23,10 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  # upstream mixes the `*_test.py` and `*_tests.py` suffixes
+  pytestFlags = [ "-opython_files=*_test.py *_tests.py" ];
 
   pythonImportsCheck = [ "tlv8" ];
 
