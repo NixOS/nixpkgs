@@ -104,9 +104,6 @@ self: super: {
     ++ drv.testFlags or [ ];
   }) (doJailbreak super.hpack);
 
-  # Later versions require unix >= 2.8 which is tricky to provide with GHC 9.4
-  crypton-x509-store = doDistribute self.crypton-x509-store_1_6_11;
-
   # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
   hiedb = dontCheck super.hiedb;
 
@@ -176,4 +173,5 @@ self: super: {
 
   # Too strict lower bound on base
   primitive-addr = doJailbreak super.primitive-addr;
+  base64 = doJailbreak super.base64;
 }
