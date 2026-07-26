@@ -6,17 +6,21 @@
 }:
 
 let
-  cfg = config.programs.mangowc;
+  cfg = config.programs.mango;
 in
 {
-  options.programs.mangowc = {
-    enable = lib.mkEnableOption "MangoWC, a Wayland compositor based on dwl and scenefx";
+  options.programs.mango = {
+    enable = lib.mkEnableOption "Mango, a Wayland compositor based on dwl and scenefx";
 
-    package = lib.mkPackageOption pkgs "mangowc" {
-      default = [ "mangowc" ];
-      example = "pkgs.mangowc.override { enableXWayland = false; }";
+    package = lib.mkPackageOption pkgs "mango" {
+      default = [ "mango" ];
+      example = "pkgs.mango.override { enableXWayland = false; }";
     };
   };
+
+  imports = [
+    (lib.mkRenamedOptionModule [ "programs" "mangowc" ] [ "programs" "mango" ])
+  ];
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
