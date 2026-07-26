@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pulsectl-asyncio";
   version = "1.3.2";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mhthies";
     repo = "pulsectl-asyncio";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-SbNDX5tcNSfifT1Bpv5haKrPtkupH+bwM8Yc4jNbnz8=";
   };
 
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings library for PulseAudio";
     homepage = "https://github.com/mhthies/pulsectl-asyncio";
-    changelog = "https://github.com/mhthies/pulsectl-asyncio/releases/tag/v${src.tag}";
+    changelog = "https://github.com/mhthies/pulsectl-asyncio/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
