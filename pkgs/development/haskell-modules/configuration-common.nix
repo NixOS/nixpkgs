@@ -316,6 +316,10 @@ with haskellLib;
   # https://github.com/berberman/arch-web/pull/20
   arch-web = doJailbreak super.arch-web;
 
+  # 2026-07-26: Allow base 4.22
+  # https://github.com/raehik/bytezap/pull/4
+  bytezap = doJailbreak super.bytezap;
+
   # network < 3.2.8
   # bound only required when running under WINE: https://github.com/haskell/network/issues/604
   iserv-proxy = doJailbreak super.iserv-proxy;
