@@ -14,6 +14,7 @@
   wayland-protocols,
   libxkbcommon,
   libdecor,
+  llvmPackages,
   pulseaudio,
   nixosTests,
   withWayland ? false,
@@ -38,6 +39,9 @@ stdenv.mkDerivation {
     installShellFiles
     makeWrapper
   ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.lld
+  ]
   ++ lib.optionals withWayland [
     pkg-config
     wayland-scanner
@@ -56,6 +60,7 @@ stdenv.mkDerivation {
       libxt
     ];
 
+  env.NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isDarwin "-fuse-ld=lld";
   makeFlags =
     lib.optional withWayland "CONF=linux"
     ++ lib.optional (!(withWayland || stdenv.hostPlatform.isDarwin)) "CONF=unix"
