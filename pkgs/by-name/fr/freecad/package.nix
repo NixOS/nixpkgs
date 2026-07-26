@@ -202,6 +202,7 @@ freecad-utils.makeCustomizable (
         grimmauld
       ];
       platforms = lib.platforms.linux;
+      mainProgram = "freecad";
     };
   })
 )
