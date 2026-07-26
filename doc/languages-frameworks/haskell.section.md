@@ -35,9 +35,8 @@ Hackage. Since Hackage allows names that are not valid Nix without escaping,
 you need to take care when handling attribute names like `3dmodels`.
 
 For packages that are part of [Stackage] (a curated set of known to be
-compatible packages), we use the version prescribed by a Stackage snapshot
-(usually the current LTS one) as the default version. For all other packages we
-use the latest version from [Hackage](https://hackage.org) (the repository of
+compatible packages), Nixpkgs uses the version prescribed by a Stackage snapshot
+(usually the current LTS one) as the default version. For all other packages Nixpkgs uses the latest version from [Hackage](https://hackage.org) (the repository of
 all open source Haskell packages). See [](#haskell-available-versions) for a few more details on this.
 
 Roughly half of the 16K packages contained in `haskellPackages` don’t actually
@@ -51,7 +50,7 @@ How you can help with that is
 described in [Fixing a broken package](#haskell-fixing-a-broken-package).
 -->
 
-`haskellPackages` is built with our default compiler, but we also provide other releases of GHC and package sets built with them.
+`haskellPackages` is built with the default compiler, but Nixpkgs also provides other releases of GHC and package sets built with them.
 Available compilers are collected under `haskell.compiler`.
 
 Each of those compiler versions has a corresponding attribute set `packages` built with
@@ -64,22 +63,22 @@ Every package set also re-exposes the GHC used to build its packages as `haskell
 
 ### Available package versions {#haskell-available-versions}
 
-We aim for a “blessed” package set which only contains one version of each
+Nixpkgs aims for a “blessed” package set which only contains one version of each
 package, like [Stackage], which is a curated set of known to be compatible
-packages. We use the version information from Stackage snapshots and extend it
+packages. Nixpkgs uses the version information from Stackage snapshots and extends it
 with more packages. Normally in Nixpkgs the number of building Haskell packages
 is roughly two to three times the size of Stackage. For choosing the version to
-use for a certain package we use the following rules:
+use for a certain package Nixpkgs uses the following rules:
 
 1. By default, for `haskellPackages.foo` is the newest version of the package
 `foo` found on [Hackage](https://hackage.org), which is the central registry
 of all open source Haskell packages. Nixpkgs contains a reference to a pinned
-Hackage snapshot, thus we use the state of Hackage as of the last time we
+Hackage snapshot, thus Nixpkgs uses the state of Hackage as of the last time it
 updated this pin.
-2. If the [Stackage] snapshot that we use (usually the newest LTS snapshot)
-contains a package, [we use instead the version in the Stackage snapshot as
+2. If the [Stackage] snapshot that Nixpkgs uses (usually the newest LTS snapshot)
+contains a package, [Nixpkgs uses the version in the Stackage snapshot as the
 default version for that package.](https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/configuration-hackage2nix/stackage.yaml)
-3. For some packages, which are not on Stackage, we have if necessary [manual
+3. For some packages that are not on Stackage, Nixpkgs has [manual
 overrides to set the default version to a version older than the newest on
 Hackage.](https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/configuration-hackage2nix/main.yaml)
 4. For all packages, for which the newest Hackage version is not the default
@@ -91,7 +90,7 @@ the name with the new version. The package name including the version also disap
 newest version from Hackage. E.g. if `haskellPackages.foo` gets updated from
 1.0.0 to 1.1.0 the package `haskellPackages.foo_1_1_0` becomes obsolete and
 gets dropped.
-5. For some packages, we also [manually add other `haskellPackages.foo_x_y_z`
+5. For some packages, Nixpkgs also [manually adds other `haskellPackages.foo_x_y_z`
 versions](https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/configuration-hackage2nix/main.yaml),
 if they are required for a certain build.
 
@@ -136,7 +135,7 @@ restrictions of Nixpkgs, partially in the name of maintainability:
 * Only the packages built with the default compiler see extensive testing of the
   whole package set. For other GHC versions only a few essential packages are
   tested and cached.
-* As described above we only build one version of most packages.
+* As described above, Nixpkgs builds only one version of most packages.
 
 The experience using an older or newer packaged compiler or using different
 versions may be worse, because builds are not cached on `cache.nixos.org`
@@ -151,7 +150,7 @@ maintenance work for `haskellPackages` is required. Besides that, it is not
 possible to get the dependencies of a legacy project from Nixpkgs or to use a
 specific stack solver for compiling a project.
 
-Even though we couldn’t use them directly in Nixpkgs, it would be desirable
+Even though Nixpkgs cannot use them directly, it would be desirable
 to have tooling to generate working Nix package sets from build plans generated
 by `cabal-install` or a specific Stackage snapshot via import-from-derivation.
 Sadly we currently don’t have tooling for this. For this you might be
@@ -162,16 +161,16 @@ completely incompatible with packages from `haskellPackages`.
 
 ### GHC deprecation policy {#ghc-deprecation-policy}
 
-We remove GHC versions according to the following policy:
+Nixpkgs removes GHC versions according to the following policy:
 
 #### Major GHC versions {#major-ghc-deprecation}
 
-We keep the following GHC major versions:
+Nixpkgs keeps the following GHC major versions:
 1. The current Stackage LTS as the default and all later major versions.
-2. The two latest major versions older than our default.
+2. The two latest major versions older than the default.
 3. The currently recommended GHCup version and all later major versions.
 
-Older GHC versions might be kept longer, if there are in-tree consumers. We will coordinate with the maintainers of those dependencies to find a way forward.
+Older GHC versions might be kept longer, if there are in-tree consumers. Nixpkgs coordinates with the maintainers of those dependencies to find a way forward.
 
 #### Minor GHC versions {#minor-ghc-deprecation}
 
@@ -282,8 +281,8 @@ package. Disabled by default.
 : Whether to link executables dynamically. By default, executables are linked statically.
 
 `enableSharedLibraries`
-: Whether to build shared Haskell libraries. This is enabled by default unless we are using
-`pkgsStatic` or shared libraries have been disabled in GHC.
+: Whether to build shared Haskell libraries. This is enabled by default unless
+`pkgsStatic` is in use or shared libraries have been disabled in GHC.
 
 `enableStaticLibraries`
 : Whether to build static libraries. Enabled by default if supported.
@@ -413,7 +412,7 @@ included if `doBenchmark == false`.
 The other categorization relates to the way the package depends on the dependency:
 
 `*ToolDepends`
-: Tools we need to run as part of the build process.
+: Tools that run as part of the build process.
 They are added to the derivation's `nativeBuildInputs`.
 
 `*HaskellDepends`
@@ -549,7 +548,7 @@ turtle-incremental-build
 In addition to building and installing Haskell software, Nixpkgs can also
 provide development environments for Haskell projects. This has the advantage that you benefit from `cache.nixos.org` and no longer need to compile
 all project dependencies yourself. While it is often very useful, this is not
-the primary use case of our package set. Have a look at the section
+the primary use case of the package set. Have a look at the section
 [](#haskell-available-versions) to learn which
 versions of packages we provide and the section
 [](#haskell-limitations), to judge whether a `haskellPackages`
@@ -586,7 +585,7 @@ database. Instead, the Haskell builder passes in all dependencies explicitly
 via configure flags.
 
 `env` mirrors the normal derivation environment in one aspect: It does not include
-familiar development tools like `cabal-install`, since we rely on plain `Setup.hs`
+familiar development tools like `cabal-install`, since Nixpkgs relies on plain `Setup.hs`
 to build all packages. However, `cabal-install` works as expected if in
 `PATH` (e.g. when installed globally and using a `nix-shell` without `--pure`).
 A declarative and pure way of adding arbitrary development tools is provided
@@ -601,8 +600,8 @@ find a valid build plan locally. To prevent this you can either never run
 the local Hackage db.
 
 Often you won't work on a package that is already part of `haskellPackages` or
-Hackage, so we first need to write a Nix expression to obtain the development
-environment from. We can generate one from an already
+Hackage, so you first need to write a Nix expression to obtain the development
+environment from. You can generate one from an already
 existing cabal file using `cabal2nix`:
 
 ```console
@@ -612,7 +611,7 @@ $ cabal2nix ./. > my-project.nix
 ```
 
 The generated Nix expression evaluates to a function ready to be
-`callPackage`-ed. For now, we can add a minimal `default.nix` that does this:
+`callPackage`-ed. You can add a minimal `default.nix` that does this:
 
 ```nix
 # Retrieve nixpkgs impurely from NIX_PATH. You can pin it instead.
@@ -624,7 +623,7 @@ The generated Nix expression evaluates to a function ready to be
 pkgs.haskellPackages.callPackage ./my-project.nix { }
 ```
 
-Using `nix-build default.nix` we can now build our project, but we can also
+Using `nix-build default.nix` you can now build your project, but you can also
 enter a shell with all the package's dependencies available using `nix-shell
 -A env default.nix`. If you have `cabal-install` installed globally, it'll work
 inside the shell as expected.
@@ -684,8 +683,8 @@ benchmark dependencies which would be excluded by default. Defaults to `false`.
 One neat property of `shellFor` is that it allows you to work on multiple
 packages using the same environment in conjunction with
 [cabal.project files][cabal-project-files].
-Say our example above depends on `distribution-nixpkgs` and we have a project
-file set up for both, we can add the following `shell.nix` expression:
+Say your example above depends on `distribution-nixpkgs` and you have a project
+file set up for both, you can add the following `shell.nix` expression:
 
 ```nix
 {
@@ -1133,7 +1132,7 @@ in this section. <!-- TODO(@sternenseemann): note about ifd section -->
 `cabalSdist { src, name ? ... }`
 : Generates the Cabal sdist tarball for `src`, suitable for uploading to Hackage.
 Contrary to `haskell.lib.compose.sdistTarball`, it uses `cabal-install` over `Setup.hs`,
-so it is usually faster: No build dependencies need to be downloaded, and we can
+so it is usually faster: No build dependencies need to be downloaded, and it can
 skip compiling `Setup.hs`.
 
 `buildFromCabalSdist drv`
@@ -1177,7 +1176,7 @@ mkDerivation {
 }
 ```
 
-This expression should be called with `haskellPackages.callPackage`, which
+Call this expression with `haskellPackages.callPackage`, which
 supplies [`haskellPackages.mkDerivation`](#haskell-mkderivation) and the Haskell
 dependencies as arguments.
 
@@ -1249,7 +1248,7 @@ it does for the unstable branches.
 
 ### Why is topic X not covered in this section? Why is section Y missing? {#haskell-why-not-covered}
 
-We have been working on [moving the Nixpkgs Haskell documentation back into the
+Nixpkgs is [moving the Nixpkgs Haskell documentation back into the
 nixpkgs manual](https://github.com/NixOS/nixpkgs/issues/121403). <!-- krank:ignore-line -->
 Since this process has not been completed yet, you may find some topics missing here
 covered in the old [haskell4nix docs](https://haskell4nix.readthedocs.io/).
@@ -1283,12 +1282,12 @@ prefer `haskell.lib.compose.disableLibraryProfiling` (see
 continuing to substitute their dependencies and GHC.
 :::
 
-Since we need to change the profiling settings for the desired Haskell package
+Because you need to change the profiling settings for the desired Haskell package
 set _and_ GHC (as the core libraries like `base`, `filepath` etc. are bundled
 with GHC), it is recommended to use overlays for Nixpkgs to change them.
 Since the interrelated parts, i.e. the package set and GHC, are connected
-via the Nixpkgs fixpoint, we need to modify them both in a way that preserves
-their connection (or else we'd have to wire it up again manually). This is
+via the Nixpkgs fixpoint, you need to modify them both in a way that preserves
+their connection (or else you'd have to wire it up again manually). This is
 achieved by changing GHC and the package set in separate overlays to prevent
 the package set from pulling in GHC from `prev`.
 
