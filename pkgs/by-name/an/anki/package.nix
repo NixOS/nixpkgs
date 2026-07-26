@@ -37,12 +37,12 @@ let
   yarn-berry = yarn-berry_4;
 
   pname = "anki";
-  version = "25.09.4";
-  rev = "d52ca669f6deac5966b1c5035bc2dc77c78d3260";
+  version = "26.05";
+  rev = "e64c6b1aee3e8d668fb8bbe084beada8e070d985";
 
-  srcHash = "sha256-brwJjsqjiCd+QDZoB9Pv3TJxTTAfDm8KtYFvJhJpELk=";
-  cargoHash = "sha256-qcB+r9VzBz6ACZaXPL26MOxxtb/h2OIuxyc54vUgfPM=";
-  yarnHash = "sha256-wi8e9B0EtRMoyH6KhRBNDHM/ffJ+/0Y4f4AZ7eUcXmA=";
+  srcHash = "sha256-LJNDJsRhyvngtcmKzHJ6VFFQirCZRqwuKTcSThu+1mk=";
+  cargoHash = "sha256-A5bxKStcuK7Ic8g4uueE5ipSttYvOctaUamEwwqVvJw=";
+  yarnHash = "sha256-fVsKXY8wCFdtUIjVg4zOLtdsTh1C3k5MbY6VKN4QnrU=";
   pythonDeps =
     with python3Packages;
     [
@@ -59,11 +59,11 @@ let
       beautifulsoup4
       flask
       jsonschema
-      pip-system-certs
       pyqt6
       pyqt6-sip
       pyqt6-webengine
       send2trash
+      truststore
       waitress
 
       # build-system deps (needed by uv for editable installs)
@@ -93,7 +93,6 @@ let
       soupsieve
       urllib3
       werkzeug
-      wrapt
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       anki-audio
@@ -196,6 +195,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = with python3Packages; [
     pytest
+    pytest-mock
     mock
     astroid
   ];
@@ -276,6 +276,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   '';
 
   # mimic https://github.com/ankitects/anki/blob/76d8807315fcc2675e7fa44d9ddf3d4608efc487/build/ninja_gen/src/python.rs#L232-L250
+  # TODO: switch to pytestCheckHook. see also https://github.com/attoknot/nixpkgs/tree/anki-pytestCheckHook
   checkPhase =
     let
       disabledTestsString =
@@ -289,6 +290,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
             (lib.concatStringsSep " and ")
             lib.escapeShellArg
           ];
+      # qt/tests/test_installer.py is for the installer.
+      # those tests use the package `briefcase` which isn't on nixpkgs yet
+      # and isn't included in this derivation, so they fail
 
     in
     ''
@@ -297,7 +301,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       HOME=$TMP ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib \
         pytest -p no:cacheprovider pylib/tests -k ${disabledTestsString}
       HOME=$TMP ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib:$PWD/pylib:$PWD/out/qt \
-        pytest -p no:cacheprovider qt/tests -k ${disabledTestsString}
+        pytest -p no:cacheprovider qt/tests -k ${disabledTestsString} --ignore qt/tests/test_installer.py
       runHook postCheck
     '';
 
