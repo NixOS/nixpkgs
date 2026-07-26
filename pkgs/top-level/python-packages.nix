@@ -2443,8 +2443,6 @@ self: super: with self; {
 
   bittensor-core = callPackage ../development/python-modules/bittensor-core { };
 
-  bittensor-drand = callPackage ../development/python-modules/bittensor-drand { };
-
   bitvavo-aio = callPackage ../development/python-modules/bitvavo-aio { };
 
   bitvector-for-humans = callPackage ../development/python-modules/bitvector-for-humans { };
