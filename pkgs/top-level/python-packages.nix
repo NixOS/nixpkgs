@@ -10302,6 +10302,8 @@ self: super: with self; {
 
   mahotas = callPackage ../development/python-modules/mahotas { };
 
+  maia3 = callPackage ../development/python-modules/maia3 { };
+
   mail-parser = callPackage ../development/python-modules/mail-parser { };
 
   mailbits = callPackage ../development/python-modules/mailbits { };
