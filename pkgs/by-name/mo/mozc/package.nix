@@ -77,7 +77,6 @@ let
       "--action_env=LIBRARY_PATH=${libraryPath}"
       "gui/tool:mozc_tool"
       "server:mozc_server"
-      "unix/emacs:mozc_emacs_helper"
     ]
     ++ lib.optionals (vendor || withIbus) [
       "renderer/qt:mozc_renderer"
@@ -234,8 +233,6 @@ stdenv.mkDerivation {
 
     install -Dm555 bazel-bin/server/mozc_server "$out/lib/mozc/mozc_server"
     install -Dm555 bazel-bin/gui/tool/mozc_tool "$out/lib/mozc/mozc_tool"
-    install -Dm555 bazel-bin/unix/emacs/mozc_emacs_helper "$out/bin/mozc_emacs_helper"
-    install -Dm444 unix/emacs/mozc.el "$out/share/emacs/site-lisp/emacs-mozc/mozc.el"
   ''
   + lib.optionalString withIbus ''
     install -Dm555 bazel-bin/renderer/qt/mozc_renderer "$out/lib/mozc/mozc_renderer"
@@ -280,7 +277,6 @@ stdenv.mkDerivation {
   meta = {
     isIbusEngine = withIbus;
     description = "Japanese input method from Google";
-    mainProgram = "mozc_emacs_helper";
     homepage = "https://github.com/google/mozc";
     changelog = "https://github.com/google/mozc/releases/tag/${version}";
     license = lib.licenses.free;
