@@ -4,7 +4,7 @@
 # and validity checks are done by CI on PRs.
 
 # Type: Path -> Overlay
-baseDirectory:
+
 let
   # Because of Nix's import-value cache, importing lib is free
   lib = import ../../lib;
@@ -22,13 +22,19 @@ let
   inherit (lib.trivial)
     flip
     ;
-
+in
+baseDirectory:
+let
   # Package files for a single shard
   # Type: String -> String -> AttrsOf Path
   namesForShard =
     shard: type:
-    if type != "directory" then
-      # Ignore all non-directories. Technically only README.md is allowed as a file in the base directory, so we could alternatively:
+    let
+      result = readDir (baseDirectory + "/${shard}");
+    in
+    if type != "directory" || result == { } then
+      # Ignore all non-directories and empty directories
+      # Technically only README.md is allowed as a file in the base directory, so we could alternatively:
       # - Assume that README.md is the only file and change the condition to `shard == "README.md"` for a minor performance improvement.
       #   This would however cause very poor error messages if there's other files.
       # - Ensure that README.md is the only file, throwing a better error message if that's not the case.
@@ -36,9 +42,7 @@ let
       # Additionally in either of those alternatives, we would have to duplicate the hardcoding of "README.md"
       { }
     else
-      mapAttrs (name: _: baseDirectory + "/${shard}/${name}/package.nix") (
-        readDir (baseDirectory + "/${shard}")
-      );
+      mapAttrs (name: _: baseDirectory + "/${shard}/${name}/package.nix") result;
 
   # The attribute set mapping names to the package files defining them
   # This is defined up here in order to allow reuse of the value (it's kind of expensive to compute)
@@ -46,13 +50,8 @@ let
   packageFiles = mergeAttrsList (mapAttrsToList namesForShard (readDir baseDirectory));
 in
 self: super:
-{
-  # This attribute is necessary to allow CI to ensure that all packages defined in `pkgs/by-name`
-  # don't have an overriding definition in `all-packages.nix` with an empty (`{ }`) second `callPackage` argument.
-  # It achieves that with an overlay that modifies both `callPackage` and this attribute to signal whether `callPackage` is used
-  # and whether it's defined by this file here or `all-packages.nix`.
-  # TODO: This can be removed once `pkgs/by-name` can handle custom `callPackage` arguments without `all-packages.nix` (or any other way of achieving the same result).
-  # Because at that point the code in ./stage.nix can be changed to not allow definitions in `all-packages.nix` to override ones from `pkgs/by-name` anymore and throw an error if that happens instead.
-  _internalCallByNamePackageFile = flip self.callPackage { };
-}
-// mapAttrs (name: self._internalCallByNamePackageFile) packageFiles
+let
+  # Avoid allocating `{ }` for every package.
+  flippedCallPackage = flip self.callPackage { };
+in
+mapAttrs (_attrName: flippedCallPackage) packageFiles
