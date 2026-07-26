@@ -4,20 +4,13 @@
   qt6,
   pkg-config,
   bazel_9,
-  ibus,
-  unzip,
   xdg-utils,
   python3,
   libglvnd,
   libxcrypt-legacy,
-  glib,
   stdenv,
   writableTmpDirAsHomeHook,
   lndir,
-  makeDesktopItem,
-  copyDesktopItems,
-
-  withIbus ? false,
 
   dictionaries ? [ ],
   merge-ut-dictionaries,
@@ -27,7 +20,7 @@ let
 
   ut-dictionary = merge-ut-dictionaries.override { inherit dictionaries; };
 
-  pname = "mozc";
+  pname = "mozc-server";
   version = "3.34.6239";
 
   src = fetchFromGitHub {
@@ -40,18 +33,14 @@ let
 
   nativeBuildInputs = [
     bazel
-    copyDesktopItems
     lndir
     pkg-config
     python3
     qt6.wrapQtAppsHook
-    unzip
     writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
-    glib
-    ibus
     libglvnd
     libxcrypt-legacy
     qt6.qtbase
@@ -68,20 +57,13 @@ let
     "--@com_google_protobuf//bazel/flags:prefer_prebuilt_protoc=false"
   ];
 
-  bazelArgs =
-    vendor:
-    bazelCommonArgs
-    ++ [
-      "--action_env=C_INCLUDE_PATH=${includePath}"
-      "--action_env=CPLUS_INCLUDE_PATH=${includePath}"
-      "--action_env=LIBRARY_PATH=${libraryPath}"
-      "gui/tool:mozc_tool"
-      "server:mozc_server"
-    ]
-    ++ lib.optionals (vendor || withIbus) [
-      "renderer/qt:mozc_renderer"
-      "unix/ibus:ibus_mozc"
-    ];
+  bazelArgs = bazelCommonArgs ++ [
+    "--action_env=C_INCLUDE_PATH=${includePath}"
+    "--action_env=CPLUS_INCLUDE_PATH=${includePath}"
+    "--action_env=LIBRARY_PATH=${libraryPath}"
+    "gui/tool:mozc_tool"
+    "server:mozc_server"
+  ];
 
   bazelPythonConfig = ''
     local_runtime_repo = use_repo_rule(
@@ -188,9 +170,9 @@ let
       version
       nativeBuildInputs
       buildInputs
+      bazelArgs
       ;
-    bazelArgs = bazelArgs true;
-    hash = "sha256-PDpQgTHcs9YE/HpSkMEsUPdQT3mxun058bVghjccAZ4=";
+    hash = "sha256-SK87zyhYbdARJk1qSUURYdm2FMB/KIXEAtdwVDLqirI=";
   };
 in
 stdenv.mkDerivation {
@@ -223,7 +205,7 @@ stdenv.mkDerivation {
   buildPhase = ''
     runHook preBuild
 
-    bazel build --lockfile_mode=error --vendor_dir=vendor_dir ${lib.escapeShellArgs (bazelArgs false)}
+    bazel build --lockfile_mode=error --vendor_dir=vendor_dir ${lib.escapeShellArgs bazelArgs}
 
     runHook postBuild
   '';
@@ -233,36 +215,9 @@ stdenv.mkDerivation {
 
     install -Dm555 bazel-bin/server/mozc_server "$out/lib/mozc/mozc_server"
     install -Dm555 bazel-bin/gui/tool/mozc_tool "$out/lib/mozc/mozc_tool"
-  ''
-  + lib.optionalString withIbus ''
-    install -Dm555 bazel-bin/renderer/qt/mozc_renderer "$out/lib/mozc/mozc_renderer"
-    install -Dm555 bazel-bin/unix/ibus/ibus_mozc "$out/lib/ibus-mozc/ibus-engine-mozc"
-    install -Dm555 bazel-bin/unix/ibus/mozc.xml "$out/share/ibus/component/mozc.xml"
-
-    unzip bazel-bin/unix/icons.zip -d "$out/share/ibus-mozc/"
-    install -Dm444 data/images/product_icon_32bpp-128.png "$out/share/ibus-mozc/product_icon.png"
-    install -Dm444 data/images/icon.svg "$out/share/ibus-mozc/product_icon.svg"
-  ''
-  + ''
     install -Dm444 ../LICENSE "$out/share/licenses/$pname/LICENSE"
 
     runHook postInstall
-  '';
-
-  desktopItems = lib.optionals withIbus [
-    (makeDesktopItem {
-      name = "ibus-setup-mozc-jp";
-      desktopName = "Mozc Setup";
-      exec = "@out@/lib/mozc/mozc_tool --mode=config_dialog";
-      type = "Application";
-      startupNotify = true;
-      noDisplay = true;
-    })
-  ];
-
-  postFixup = lib.optionalString withIbus ''
-    substituteInPlace "$out/share/applications/ibus-setup-mozc-jp.desktop" \
-      --subst-var out
   '';
 
   passthru = {
@@ -275,7 +230,6 @@ stdenv.mkDerivation {
       ;
   };
   meta = {
-    isIbusEngine = withIbus;
     description = "Japanese input method from Google";
     homepage = "https://github.com/google/mozc";
     changelog = "https://github.com/google/mozc/releases/tag/${version}";
