@@ -4,20 +4,6 @@
 
 Package JavaScript applications with the tools below.
 
-## Getting unstuck / finding code examples {#javascript-finding-examples}
-
-The links below help you find existing packages to learn from.
-
-### GitHub {#javascript-finding-examples-github}
-
-- Searching Nix files for `yarnConfigHook`: <https://github.com/search?q=yarnConfigHook+language%3ANix&type=code>
-- Searching `flake.nix` files for `yarnConfigHook`: <https://github.com/search?q=yarnConfigHook+path%3A**%2Fflake.nix&type=code>
-
-### GitLab {#javascript-finding-examples-gitlab}
-
-- Searching Nix files for `yarnConfigHook`: <https://gitlab.com/search?scope=blobs&search=yarnConfigHook+extension%3Anix>
-- Searching `flake.nix` files for `yarnConfigHook`: <https://gitlab.com/search?scope=blobs&search=yarnConfigHook+filename%3Aflake.nix>
-
 ## Tools overview {#javascript-tools-overview}
 
 ## General principles {#javascript-general-principles}
