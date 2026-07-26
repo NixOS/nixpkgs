@@ -73,6 +73,8 @@ extra-packages:
   - Cabal == 3.14.*
   - Cabal == 3.16.*                     # version required for cabal-install and other packages
   - cabal-add == 0.1                    # 2025-09-09: Only needed for hls 2.11 can be removed once we are past it.
+  - cabal-install == 3.14.*             # 2026-07-26: required to match Cabal used when building HLS
+  - cabal-install-solver == 3.14.*      # 2026-07-26: required to build cabal-install 3.14
   - Cabal-syntax == 3.6.*               # required for the GHC 9.0.2 package set
   - Cabal-syntax == 3.10.*
   - Cabal-syntax == 3.12.*
@@ -116,6 +118,7 @@ extra-packages:
   - ormolu == 0.7.4.0                   # 2023-09-21: for ghc-lib-parser 9.8 compat
   - path == 0.9.5                       # 2025-09-21: Pin for hls on ghc 9.4
   - postgresql-binary < 0.14            # 2025-01-19: Needed for building postgrest
+  - semaphore-compat == 1.0.*           # 2026-07-26: required to build cabal-install 3.14
   - shake-cabal < 0.2.2.3               # 2023-07-01: last version to support Cabal 3.6.*
   - ShellCheck == 0.10.0                # 2026-05-30: pinned by haskell-ci
   - simple-get-opt < 0.5                # 2025-05-01: for crux-0.7.2

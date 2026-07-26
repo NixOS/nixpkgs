@@ -128323,6 +128323,161 @@ self: {
     }
   ) { };
 
+  cabal-install_3_14_2_0 =
+    callPackage
+      (
+        {
+          mkDerivation,
+          array,
+          async,
+          base,
+          base16-bytestring,
+          binary,
+          bytestring,
+          Cabal,
+          Cabal-described,
+          cabal-install-solver,
+          Cabal-QuickCheck,
+          Cabal-syntax,
+          Cabal-tests,
+          Cabal-tree-diff,
+          containers,
+          cryptohash-sha256,
+          directory,
+          echo,
+          edit-distance,
+          exceptions,
+          filepath,
+          hackage-security,
+          HTTP,
+          lukko,
+          mtl,
+          network-uri,
+          open-browser,
+          parsec,
+          pretty,
+          pretty-show,
+          process,
+          QuickCheck,
+          random,
+          regex-base,
+          regex-posix,
+          resolv,
+          safe-exceptions,
+          semaphore-compat,
+          stm,
+          tagged,
+          tar,
+          tasty,
+          tasty-expected-failure,
+          tasty-golden,
+          tasty-hunit,
+          tasty-quickcheck,
+          text,
+          time,
+          tree-diff,
+          unix,
+          zlib,
+        }:
+        mkDerivation {
+          pname = "cabal-install";
+          version = "3.14.2.0";
+          sha256 = "1nvv3h9kq92ifyqqma88538579v7898pd9b52hras2h489skv8g8";
+          revision = "6";
+          editedCabalFile = "1c87f3lnz94x7fnb8km35dbgnb0idwca16yhnr3h2g6jgfxq7v0y";
+          isLibrary = true;
+          isExecutable = true;
+          libraryHaskellDepends = [
+            array
+            async
+            base
+            base16-bytestring
+            binary
+            bytestring
+            Cabal
+            cabal-install-solver
+            Cabal-syntax
+            containers
+            cryptohash-sha256
+            directory
+            echo
+            edit-distance
+            exceptions
+            filepath
+            hackage-security
+            HTTP
+            lukko
+            mtl
+            network-uri
+            open-browser
+            parsec
+            pretty
+            process
+            random
+            regex-base
+            regex-posix
+            resolv
+            safe-exceptions
+            semaphore-compat
+            stm
+            tar
+            text
+            time
+            unix
+            zlib
+          ];
+          executableHaskellDepends = [ base ];
+          testHaskellDepends = [
+            array
+            base
+            bytestring
+            Cabal
+            Cabal-described
+            cabal-install-solver
+            Cabal-QuickCheck
+            Cabal-syntax
+            Cabal-tests
+            Cabal-tree-diff
+            containers
+            directory
+            filepath
+            mtl
+            network-uri
+            pretty-show
+            process
+            QuickCheck
+            random
+            tagged
+            tar
+            tasty
+            tasty-expected-failure
+            tasty-golden
+            tasty-hunit
+            tasty-quickcheck
+            time
+            tree-diff
+            zlib
+          ];
+          doCheck = false;
+          postInstall = ''
+            mkdir -p $out/share/bash-completion
+            mv bash-completion $out/share/bash-completion/completions
+          '';
+          description = "The command-line interface for Cabal and Hackage";
+          license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+          hydraPlatforms = lib.platforms.none;
+          mainProgram = "cabal";
+          maintainers = [ lib.maintainers.sternenseemann ];
+          broken = true;
+        }
+      )
+      {
+        Cabal-QuickCheck = null;
+        Cabal-described = null;
+        Cabal-tests = null;
+        Cabal-tree-diff = null;
+      };
+
   cabal-install =
     callPackage
       (
@@ -128707,6 +128862,62 @@ self: {
       ];
       description = "Utilities to work with cabal-install files";
       license = "GPL-2.0-or-later AND BSD-3-Clause";
+    }
+  ) { };
+
+  cabal-install-solver_3_14_2_0 = callPackage (
+    {
+      mkDerivation,
+      array,
+      base,
+      bytestring,
+      Cabal,
+      Cabal-syntax,
+      containers,
+      directory,
+      edit-distance,
+      filepath,
+      mtl,
+      network-uri,
+      pretty,
+      tasty,
+      tasty-hunit,
+      tasty-quickcheck,
+      text,
+      transformers,
+    }:
+    mkDerivation {
+      pname = "cabal-install-solver";
+      version = "3.14.2.0";
+      sha256 = "0551cvrkbnjfqjd3byq7pczlwjdb0n1jrfsrb0j8axagylbif7g1";
+      revision = "1";
+      editedCabalFile = "14jrs9q52vp9slb5pm66a9xrjdgkjypwssnnjc5pamlykakrjqa1";
+      libraryHaskellDepends = [
+        array
+        base
+        bytestring
+        Cabal
+        Cabal-syntax
+        containers
+        directory
+        edit-distance
+        filepath
+        mtl
+        network-uri
+        pretty
+        text
+        transformers
+      ];
+      testHaskellDepends = [
+        base
+        Cabal-syntax
+        tasty
+        tasty-hunit
+        tasty-quickcheck
+      ];
+      description = "The solver component of cabal-install";
+      license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -621186,6 +621397,30 @@ self: {
       ];
       description = "Semantic Version";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
+    }
+  ) { };
+
+  semaphore-compat_1_0_0 = callPackage (
+    {
+      mkDerivation,
+      base,
+      exceptions,
+      unix,
+    }:
+    mkDerivation {
+      pname = "semaphore-compat";
+      version = "1.0.0";
+      sha256 = "1qnrdqayrdazmsflh37p1igd25nh1cfgn4k1v3jwwb0w0amnyvhw";
+      revision = "4";
+      editedCabalFile = "1sgk940k24ig1r50ycz4w79591hqjys4sdmfifgsr6zcq3183zrd";
+      libraryHaskellDepends = [
+        base
+        exceptions
+        unix
+      ];
+      description = "Cross-platform abstraction for system semaphores";
+      license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
       hydraPlatforms = lib.platforms.none;
     }
   ) { };

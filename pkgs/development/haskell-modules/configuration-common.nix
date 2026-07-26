@@ -89,6 +89,15 @@ with haskellLib;
     Cabal = self.Cabal_3_14_2_0;
   };
 
+  cabal-install_3_14_2_0 = unmarkBroken (
+    doDistribute (
+      super.cabal-install_3_14_2_0.override {
+        cabal-install-solver = self.cabal-install-solver_3_14_2_0;
+        semaphore-compat = self.semaphore-compat_1_0_0;
+      }
+    )
+  );
+
   # cabal-install needs most recent versions of Cabal and Cabal-syntax,
   # so we need to put some extra work for non-latest GHCs
   inherit
@@ -211,8 +220,7 @@ with haskellLib;
         hls_overlay = lself: lsuper: {
           Cabal-syntax = lself.Cabal-syntax_3_14_2_0;
           Cabal = lself.Cabal_3_14_2_0;
-          # Jailbreaking cabal-install-parsers to make it pick Cabal 3.14 instead of 3.12.
-          cabal-install-parsers = doJailbreak lsuper.cabal-install-parsers;
+          cabal-install = lself.cabal-install_3_14_2_0;
           # Need a newer version of extensions to be compatible with the newer Cabal
           extensions = doJailbreak lself.extensions_0_1_1_0;
           # For most ghc versions, we overrideScope Cabal in the configuration-ghc-???.nix,
