@@ -29898,6 +29898,13 @@
     githubId = 1595132;
     name = "Kranium Gikos Mendoza";
   };
+  WOnder93 = {
+    email = "omosnacek@gmail.com";
+    github = "WOnder93";
+    githubId = 3041388;
+    matrix = "@omos:fedora.im";
+    name = "Ondrej Mosnáček";
+  };
   workflow = {
     email = "4farlion@gmail.com";
     github = "workflow";
