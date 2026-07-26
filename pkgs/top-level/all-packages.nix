@@ -5257,8 +5257,6 @@ with pkgs;
 
   pgcli = with pkgs.python3Packages; toPythonApplication pgcli;
 
-  pkgconf-unwrapped = libpkgconf;
-
   pkgconf = callPackage ../build-support/pkg-config-wrapper {
     pkg-config = pkgconf-unwrapped;
     baseBinName = "pkgconf";
