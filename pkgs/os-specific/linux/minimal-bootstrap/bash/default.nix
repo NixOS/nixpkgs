@@ -55,6 +55,7 @@ bootBash.runCommand "${pname}-${version}"
           bash
           coreutils
         ];
+        defaultBinPath = lib.makeBinPath defaultBuildInputs;
       in
       name: env: buildCommand:
       derivationWithMeta (
@@ -82,7 +83,11 @@ bootBash.runCommand "${pname}-${version}"
           passAsFile = [ "buildCommand" ];
 
           SHELL = "${bash}/bin/bash";
-          PATH = lib.makeBinPath ((env.nativeBuildInputs or [ ]) ++ defaultBuildInputs);
+          PATH =
+            if !env ? nativeBuildInputs then
+              defaultBinPath
+            else
+              lib.makeBinPath (env.nativeBuildInputs ++ defaultBuildInputs);
           passthru = (env.passthru or { }) // {
             isFromMinBootstrap = true;
           };
