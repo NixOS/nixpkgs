@@ -125,6 +125,12 @@ in
     systemd.services.tailscale-serve = {
       description = "Tailscale Serve Configuration";
 
+      path = [
+        config.services.tailscale.package
+        pkgs.coreutils
+        pkgs.jq
+      ];
+
       after = [
         "tailscaled.service"
         "tailscaled-autoconnect.service"
@@ -134,6 +140,13 @@ in
       wantedBy = [ "multi-user.target" ];
 
       restartTriggers = [ configFile ];
+
+      preStart = ''
+        until tailscale status --json --peers=false \
+          | jq --exit-status '.BackendState == "Running"' > /dev/null; do
+          sleep 0.5
+        done
+      '';
 
       serviceConfig = {
         Type = "oneshot";
