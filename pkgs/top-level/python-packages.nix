@@ -2441,6 +2441,8 @@ self: super: with self; {
 
   bittensor = callPackage ../development/python-modules/bittensor { };
 
+  bittensor-core = callPackage ../development/python-modules/bittensor-core { };
+
   bittensor-cli = callPackage ../development/python-modules/bittensor-cli { };
 
   bittensor-drand = callPackage ../development/python-modules/bittensor-drand { };
