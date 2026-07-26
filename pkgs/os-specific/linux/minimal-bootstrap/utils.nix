@@ -38,10 +38,13 @@ rec {
         ])
       );
       passthru' =
-        passthru
-        // lib.optionalAttrs (passthru ? tests) {
-          tests = lib.mapAttrs (_: f: f baseDrv) passthru.tests;
-        };
+        if passthru ? tests then
+          passthru
+          // {
+            tests = lib.mapAttrs (_: f: f baseDrv) passthru.tests;
+          }
+        else
+          passthru;
     in
     lib.extendDerivation validity.handled (
       {
