@@ -2220,8 +2220,6 @@ with pkgs;
 
   lagrange-tui = lagrange.override { enableTUI = true; };
 
-  kzipmix = pkgsi686Linux.callPackage ../tools/compression/kzipmix { };
-
   matrix-synapse-plugins = recurseIntoAttrs matrix-synapse-unwrapped.plugins;
 
   md2gemini = with python3.pkgs; toPythonApplication md2gemini;
