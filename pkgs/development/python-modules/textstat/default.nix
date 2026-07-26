@@ -6,7 +6,6 @@
   setuptools,
   pyphen,
   pytestCheckHook,
-  pytest,
 }:
 buildPythonPackage (finalAttrs: {
   version = "0.7.13";
@@ -34,21 +33,15 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest
   ];
 
   dependencies = [
-    setuptools
     pyphen
     nltk
   ];
 
   pythonImportsCheck = [
     "textstat"
-  ];
-
-  enabledTestPaths = [
-    "tests/"
   ];
 
   env.NLTK_DATA = nltk.data.cmudict;
