@@ -153,7 +153,7 @@ specific stack solver for compiling a project.
 Even though Nixpkgs cannot use them directly, it would be desirable
 to have tooling to generate working Nix package sets from build plans generated
 by `cabal-install` or a specific Stackage snapshot via import-from-derivation.
-Sadly we currently don’t have tooling for this. For this you might be
+Nixpkgs currently doesn’t have tooling for this. For this you might be
 interested in the alternative [haskell.nix] framework, which, be warned, is
 completely incompatible with packages from `haskellPackages`.
 
@@ -548,11 +548,7 @@ turtle-incremental-build
 In addition to building and installing Haskell software, Nixpkgs can also
 provide development environments for Haskell projects. This has the advantage that you benefit from `cache.nixos.org` and no longer need to compile
 all project dependencies yourself. While it is often very useful, this is not
-the primary use case of the package set. Have a look at the section
-[](#haskell-available-versions) to learn which
-versions of packages we provide and the section
-[](#haskell-limitations), to judge whether a `haskellPackages`
-based development environment for your project is feasible.
+the primary use case of the package set. Check [](#haskell-available-versions) and [](#haskell-limitations) to judge whether a `haskellPackages`-based development environment for your project is feasible.
 
 By default, every derivation built using
 [`haskellPackages.mkDerivation`](#haskell-mkderivation) exposes an environment
@@ -575,8 +571,8 @@ $ nix-shell -A haskellPackages.random.env '<nixpkgs>'
     …
 ```
 
-As you can see, the environment contains a GHC which is set up so it finds all
-dependencies of `random`. Note that this environment does not mirror
+The environment contains a GHC which is set up so it finds all
+dependencies of `random`. This environment does not mirror
 the environment used to build the package, but is intended as a convenient
 tool for development and simple debugging. `env` relies on the `ghcWithPackages`
 wrapper which automatically injects a pre-populated package-db into every
