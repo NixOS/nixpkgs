@@ -8,7 +8,7 @@ The secondary purpose is to provide support for Haskell development environments
 including prebuilt Haskell libraries. However, in this area sacrifices have been
 made due to self-imposed restrictions in Nixpkgs, to lessen the maintenance
 effort and to improve performance. (More details in the subsection
-[Limitations.](#haskell-limitations))
+[](#haskell-limitations))
 
 ## Available packages {#haskell-available-packages}
 
@@ -38,7 +38,7 @@ For packages that are part of [Stackage] (a curated set of known to be
 compatible packages), we use the version prescribed by a Stackage snapshot
 (usually the current LTS one) as the default version. For all other packages we
 use the latest version from [Hackage](https://hackage.org) (the repository of
-basically all open source Haskell packages). See [below](#haskell-available-versions) for a few more details on this.
+basically all open source Haskell packages). See [](#haskell-available-versions) for a few more details on this.
 
 Roughly half of the 16K packages contained in `haskellPackages` don’t actually
 build and are [marked as broken semi-automatically](https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/configuration-hackage2nix/broken.yaml).
@@ -186,7 +186,7 @@ Older minor versions for a supported major version will only be kept, if they ar
 
 Every Haskell package set has its own Haskell-aware `mkDerivation` which is used
 to build its packages. Generally you won't have to interact with this builder
-since [cabal2nix](#haskell-cabal2nix) can generate packages
+since [](#haskell-cabal2nix) can generate packages
 using it for an arbitrary cabal package definition. Still it is useful to know
 the parameters it takes when you need to
 [override](#haskell-overriding-haskell-packages) a generated Nix expression.
@@ -225,7 +225,7 @@ If `null` (which is the default value), the one included in `src` is used.
 
 `env`
 : Extra environment variables to set during the build.
-These will also be set inside the [development environment defined by the `passthru.env` attribute in the returned derivation](#haskell-development-environments), but will not be set inside a development environment built with [`shellFor`](#haskell-shellFor) that includes this package.
+These will also be set inside the [development environment defined by the `passthru.env` attribute in the returned derivation](#haskell-development-environments), but will not be set inside a development environment built with [](#haskell-shellFor) that includes this package.
 
 `configureFlags`
 : Extra flags passed when executing the `configure` command of `Setup.hs`.
@@ -485,8 +485,7 @@ recommended to use the more accurate ones listed above when possible.
 ### Meta attributes {#haskell-derivation-meta}
 
 `haskellPackages.mkDerivation` accepts the following attributes as direct
-arguments which are transparently set in `meta` of the resulting derivation. See
-the [Meta-attributes section](#chap-meta) for their documentation.
+arguments which are transparently set in `meta` of the resulting derivation. See [](#chap-meta) for their documentation.
 
 * These attributes are populated with a default value if omitted:
     * `homepage`: defaults to the Hackage page for `pname`.
@@ -554,9 +553,9 @@ provide development environments for Haskell projects. This has the obvious
 advantage that you benefit from `cache.nixos.org` and no longer need to compile
 all project dependencies yourself. While it is often very useful, this is not
 the primary use case of our package set. Have a look at the section
-[available package versions](#haskell-available-versions) to learn which
+[](#haskell-available-versions) to learn which
 versions of packages we provide and the section
-[limitations](#haskell-limitations), to judge whether a `haskellPackages`
+[](#haskell-limitations), to judge whether a `haskellPackages`
 based development environment for your project is feasible.
 
 By default, every derivation built using
@@ -595,7 +594,7 @@ familiar development tools like `cabal-install`, since we rely on plain `Setup.h
 to build all packages. However, `cabal-install` will work as expected if in
 `PATH` (e.g. when installed globally and using a `nix-shell` without `--pure`).
 A declarative and pure way of adding arbitrary development tools is provided
-via [`shellFor`](#haskell-shellFor).
+via [](#haskell-shellFor).
 
 When using `cabal-install` for dependency resolution you need to be a bit
 careful to achieve build purity. `cabal-install` will find and use all
@@ -669,7 +668,7 @@ Defaults to `[]`.
 : Expects a list of derivations to add as library dependencies, like `openssl`.
 This is rarely necessary as the haskell package expressions usually track system
 dependencies as well. Defaults to `[]`. (see also
-[derivation dependencies](#haskell-derivation-deps))
+[](#haskell-derivation-deps))
 
 `withHoogle`
 : If this is true, `hoogle` will be added to `nativeBuildInputs`.
