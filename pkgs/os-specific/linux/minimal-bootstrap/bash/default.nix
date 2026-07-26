@@ -56,6 +56,10 @@ bootBash.runCommand "${pname}-${version}"
           coreutils
         ];
         defaultBinPath = lib.makeBinPath defaultBuildInputs;
+        removedAttributeNames = [
+          "nativeBuildInputs"
+          "passthru"
+        ];
       in
       name: env: buildCommand:
       derivationWithMeta (
@@ -92,10 +96,7 @@ bootBash.runCommand "${pname}-${version}"
             isFromMinBootstrap = true;
           };
         }
-        // (removeAttrs env [
-          "nativeBuildInputs"
-          "passthru"
-        ])
+        // (removeAttrs env removedAttributeNames)
       );
     passthru.tests.get-version =
       result:
