@@ -3,9 +3,10 @@
   fetchFromGitHub,
   stdenv,
   zig_0_15,
-  callPackage,
 }:
-
+let
+  zig = zig_0_15;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "flow-control";
   version = "0.7.2";
@@ -17,18 +18,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-5+F0DKb4LXtcMXNutUSJuIe7cdBoFUoJhCs8vbm20jg=";
   };
 
-  deps = callPackage ./build.zig.zon.nix {
-    zig = zig_0_15;
+  zigDeps = zig.fetchDeps {
+    inherit (finalAttrs) src pname version;
+    fetchAll = true;
+    hash = "sha256-+07sJAnfB+mKziC5j8QfbL/YzjvRLxqRvpuxGKK7/nA=";
   };
 
-  nativeBuildInputs = [ zig_0_15 ];
+  nativeBuildInputs = [ zig ];
 
   passthru.updateScript = ./update.sh;
 
   dontSetZigDefaultFlags = true;
   zigBuildFlags = [
     "--system"
-    "${finalAttrs.deps}"
+    "${finalAttrs.zigDeps}"
     "-Dcpu=baseline"
     "-Doptimize=ReleaseFast"
   ];
