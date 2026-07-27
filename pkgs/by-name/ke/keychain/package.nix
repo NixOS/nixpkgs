@@ -1,55 +1,25 @@
 {
   lib,
-  stdenv,
+  python3Packages,
   fetchFromGitHub,
-  installShellFiles,
-  makeWrapper,
-  coreutils,
-  openssh,
-  gnupg,
-  perl,
-  procps,
-  gnugrep,
-  gawk,
-  findutils,
-  gnused,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "keychain";
-  version = "2.9.8";
+  version = "3.0.4";
+
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "danielrobbins";
     repo = "keychain";
-    rev = finalAttrs.version;
-    sha256 = "sha256-xk3ooFhBkgv93Po5oC4TZRmMhJJXDv7yekoE102FQd8=";
+    tag = finalAttrs.version;
+    hash = "sha256-1cIrbMj+Y94PuDapZVk2buVolAKisaQghWdyPD5xCMQ=";
   };
 
-  nativeBuildInputs = [
-    installShellFiles
-    makeWrapper
+  build-system = with python3Packages; [
+    setuptools
   ];
-  buildInputs = [ perl ];
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp keychain $out/bin/keychain
-    installManPage keychain.1
-    wrapProgram $out/bin/keychain \
-      --prefix PATH ":" "${
-        lib.makeBinPath [
-          coreutils
-          findutils
-          gawk
-          gnupg
-          gnugrep
-          gnused
-          openssh
-          procps
-        ]
-      }"
-  '';
 
   meta = {
     description = "Manage SSH and GPG keys in a convenient and secure manner";
@@ -66,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
       process, allowing your scripts to take advantage of key-based logins.
     '';
     homepage = "https://kernel-seeds.org/projects/keychain/";
-    license = lib.licenses.gpl2Only;
+    license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ sigma ];
     mainProgram = "keychain";
