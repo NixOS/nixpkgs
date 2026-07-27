@@ -133,6 +133,7 @@ stdenv.mkDerivation {
       bjornfor
       kwohlfahrt
       zainkergaye
+      doronbehar
     ];
   };
 }
