@@ -9762,11 +9762,11 @@ with pkgs;
     inherit (haskellPackages) ghcWithPackages;
   };
 
-  xmonad_log_applet_mate = xmonad_log_applet.override {
+  xmonad-log-applet-mate = xmonad-log-applet.override {
     desktopSupport = "mate";
   };
 
-  xmonad_log_applet_xfce = xmonad_log_applet.override {
+  xmonad-log-applet-xfce = xmonad-log-applet.override {
     desktopSupport = "xfce4";
   };
 
