@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "stringzilla";
-  version = "4.6.2";
+  version = "5.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ashvardanian";
     repo = "stringzilla";
     tag = "v${version}";
-    hash = "sha256-PAs5j+J3BH23Yk2K0tYvCmz7cTU4djePzUpjsCk8YZs=";
+    hash = "sha256-W8h+PzOY0AhVTG7myBo5IgoL4+XnsLExRkxHNr4CpWQ=";
   };
 
   build-system = [
@@ -32,7 +32,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  enabledTestPaths = [ "scripts/test_stringzilla.py" ];
+  disabledTestPaths = [
+    # ignored in .github/workflows/prerelease.yml
+    "test/stringzillas.py"
+    "test/similarities.py"
+    "test/fingerprints.py"
+    "test/szs_helpers.py"
+  ];
 
   meta = {
     changelog = "https://github.com/ashvardanian/StringZilla/releases/tag/${src.tag}";
