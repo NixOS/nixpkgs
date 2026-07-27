@@ -4456,18 +4456,18 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "lyaml";
-      version = "6.2.8-1";
+      version = "6.2.9-2";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/lyaml-6.2.8-1.rockspec";
-          sha256 = "0d0h70kjl5fkq589y1sx8qy8as002dhcf88pf60pghvch002ryi1";
+          url = "mirror://luarocks/lyaml-6.2.9-2.rockspec";
+          sha256 = "0i2q30zc7h3iaydwkcslkda5rryh6y0c4m4zcfxr9lr54cvs6vsl";
         }).outPath;
       src = fetchzip {
-        url = "http://github.com/gvvaughan/lyaml/archive/v6.2.8.zip";
-        sha256 = "0r3jjsd8x2fs1aanki0s1mvpznl16f32c1qfgmicy0icgy5xfch0";
+        url = "http://github.com/gvvaughan/lyaml/archive/v6.2.9.zip";
+        sha256 = "1hijc4jp6g10cg6ib10xghv6x22r58lbkd6ch6piilpqafr3bzl7";
       };
 
-      disabled = luaOlder "5.1" || luaAtLeast "5.5";
+      disabled = luaOlder "5.1" || luaAtLeast "5.6";
 
       meta = {
         homepage = "http://github.com/gvvaughan/lyaml";
