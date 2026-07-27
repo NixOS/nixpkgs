@@ -83,6 +83,8 @@ buildPythonPackage (finalAttrs: {
 
   env = {
     USE_SYSTEM_LIBS = true;
+    # if this is unset, build script will append '+git' to the version number
+    VERSION_SUFFIX = "";
   };
 
   # Otherwise, the tests are loading the python module from the source instead of the installed one

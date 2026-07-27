@@ -13,7 +13,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "parselmouth";
+  pname = "praat-parselmouth";
   version = "0.4.7";
   pyproject = true;
 

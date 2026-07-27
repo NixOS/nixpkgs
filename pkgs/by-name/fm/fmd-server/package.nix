@@ -5,7 +5,7 @@
   fetchPnpmDeps,
   nix-update-script,
   nodejs,
-  pnpm_10,
+  pnpm_11,
   pnpmConfigHook,
   stdenv,
   versionCheckHook,
@@ -27,10 +27,10 @@ buildGoModule (
 
     pnpmDeps = fetchPnpmDeps {
       inherit (ui) pname src;
-      inherit pnpm_10;
+      pnpm = pnpm_11;
       sourceRoot = "${finalAttrs.src.name}/${ui.pnpmRoot}";
-      fetcherVersion = 3;
-      hash = "sha256-vKSKPwOkb7TwDUlkl8lUvO6tLKp2NyBQ0BGxThUN2P8=";
+      fetcherVersion = 4;
+      hash = "sha256-RdCB43NIu+LmVti3g+gBTAGeYgCtVXr6q3lCh5UCdMg=";
     };
 
     vendorHash = "sha256-cFIg9mOSQbrYHW4kg4aTeTaF+gy1jNpAlg8qepb81Jc=";
@@ -55,7 +55,7 @@ buildGoModule (
       nativeBuildInputs = [
         nodejs
         pnpmConfigHook
-        pnpm_10
+        pnpm_11
       ];
 
       buildPhase = ''
@@ -86,6 +86,7 @@ buildGoModule (
       maintainers = with lib.maintainers; [
         j0hax
         jthulhu
+        kybe236
       ];
       teams = [ lib.teams.ngi ];
       mainProgram = "fmd-server";

@@ -8,15 +8,17 @@
   python3-application,
 }:
 
-buildPythonPackage rec {
-  pname = "otr";
+buildPythonPackage (finalAttrs: {
+  pname = "python3-otr";
   version = "2.1.0";
   pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "AGProjects";
     repo = "python3-otr";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-jCyPEdWDEW1x0Id//yM67SvKvYpdyIfPmcCWiRgwvb0=";
   };
 
@@ -46,4 +48,4 @@ buildPythonPackage rec {
       lib.teams.ngi
     ];
   };
-}
+})
