@@ -74,7 +74,14 @@ buildFHSEnv (finalAttrs: {
     pkgs:
     with pkgs;
     let
-      # This seems ugly - can we override `libpng = libpng12` for all `pkgs`?
+      # NOTE: Not using `pkgs.extend` here on purpose: `pkgs` here is
+      # `pkgsi686Linux`, a spliced package set (see the "splicing code does not
+      # handle `pkgsi686Linux` well" comment in buildFHSEnv.nix), and `.extend`
+      # rebuilds the whole fixed point instead of overriding a single
+      # derivation. That drops the splice, so every package pulled from this
+      # set below (not just the ones touching `libpng`) ends up rebuilt from an
+      # independent, non-spliced i686 bootstrap instead of sharing store paths
+      # with the rest of the closure.
       freetype = pkgs.freetype.override { libpng = libpng12; };
       fontconfig = pkgs.fontconfig.override { inherit freetype; };
       libxft = pkgs.libxft.override { inherit freetype fontconfig; };
@@ -93,6 +100,11 @@ buildFHSEnv (finalAttrs: {
       libxrender
       libxcrypt-legacy
     ];
+
+  # See above NOTE regarding libpng
+  disallowedReferences = [
+    pkgsi686Linux.libpng
+  ];
 
   extraInstallCommands = ''
     mkdir -p $out/share/applications $out/share/icons/hicolor/64x64/apps
