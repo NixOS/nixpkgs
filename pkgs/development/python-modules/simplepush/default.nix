@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "simplepush";
   version = "2.2.5";
   pyproject = true;
@@ -16,13 +16,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simplepush";
     repo = "simplepush-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/qjGJgoyI54rP+sD/Dqr1lFh8cFRboW91GYDCZgMIlM=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     cryptography
     requests
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
