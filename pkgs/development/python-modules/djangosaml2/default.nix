@@ -10,13 +10,16 @@
 
 buildPythonPackage rec {
   pname = "djangosaml2";
-  version = "1.11.1-1";
+  version = "1.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "IdentityPython";
     repo = "djangosaml2";
-    tag = "v${version}";
+    # Upstream re-released 1.11.1 as the tag v1.11.1-1 (one packaging commit on
+    # top) without bumping setup.py, which still says version="1.11.1". Using
+    # the tag as the derivation version makes pythonMetadataCheckPhase fail.
+    tag = "v${version}-1";
     hash = "sha256-f7VgysfGpwt4opmXXaigRsOBS506XB/jZV1zRiYwZig=";
   };
 
