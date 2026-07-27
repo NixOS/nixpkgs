@@ -42,6 +42,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit # or
       asl20
     ];
-    maintainers = with lib.maintainers; [ traxys ];
+    maintainers = with lib.maintainers; [
+      traxys
+      anish
+    ];
   };
 })
