@@ -3,6 +3,7 @@
   fetchFromGitHub,
   stdenv,
   zig_0_15,
+  nix-update-script,
 }:
 let
   zig = zig_0_15;
@@ -26,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ zig ];
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   dontSetZigDefaultFlags = true;
   zigBuildFlags = [
