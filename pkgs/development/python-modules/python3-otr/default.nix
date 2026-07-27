@@ -9,7 +9,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "otr";
+  pname = "python3-otr";
   version = "2.1.0";
   pyproject = true;
 
