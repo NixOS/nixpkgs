@@ -15,13 +15,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "anubis";
-  version = "1.26.0";
+  version = "1.26.2";
 
   src = fetchFromGitHub {
     owner = "TecharoHQ";
     repo = "anubis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0ceF4Te0H5edBhvGJgGc/NLJxEAcDVGnnKlqHKnpW60=";
+    hash = "sha256-yY8dwWyQy/N3A32MYtxLWAJCmR9rtSyzaYUHBNXRm/0=";
   };
 
   vendorHash = "sha256-+NPwL4p0p/s74m1Ld0z2GEcsWk5FqhcLbHrTNP3yEzk=";
@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
   npmDeps = fetchNpmDeps {
     name = "anubis-npm-deps";
     inherit (finalAttrs) src;
-    hash = "sha256-6sj9C8GHm+RzFl/X5HIPhIDl5l8muBzDSXSRCHumGBs=";
+    hash = "sha256-SPoI66jy2XS4FM6BaJPt18dV1QM12nIOdeD5sAMaOzQ=";
   };
 
   nativeBuildInputs = [
@@ -58,7 +58,10 @@ buildGoModule (finalAttrs: {
   '';
 
   postPatch = ''
-    patchShebangs ./web/build.sh ./lib/challenge/preact/build.sh
+    patchShebangs \
+      ./web/build.sh \
+      ./lib/challenge/preact/build.sh \
+      ./lib/challenge/proofofwork/build.sh
   '';
 
   preBuild = ''
