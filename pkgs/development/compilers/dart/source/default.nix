@@ -7,6 +7,7 @@
   dart-bin,
   debug ? false,
   fetchurl,
+  fetchpatch,
   gn,
   gitMinimal,
   gitSetupHook,
@@ -144,6 +145,28 @@ dart-bin.overrideAttrs (oldAttrs: {
     ./gcc13.patch
     ./zlib-not-found.patch
     ./custom-flags.patch
+
+    # GCC 16 triggers various build warnings (made errors by -Werror) in the
+    # Dart SDK. These have been fixed upstream, either by correcting the
+    # problematic code or silencing the relevant warnings. Until they have
+    # been released, we fetch the patches here.
+    # Remove when upgrading to Dart 3.13:
+    (fetchpatch {
+      name = "dart-fix-gcc-build.patch";
+      url = "https://github.com/dart-lang/sdk/commit/b2911c0bf1dab671ee4008e05b0d71441a522d84.patch";
+      hash = "sha256-RuS4NuOofg0VjhkwN2oFE1iYjMnCdFtoNZnZLzCDJaU=";
+    })
+    (fetchpatch {
+      name = "dart-fix-gcc16-build.patch";
+      url = "https://github.com/dart-lang/sdk/commit/2f2a523818bf64e23657d1bf9da901d7f58c67aa.patch";
+      hash = "sha256-NQd9YcaFKUXDcG2IdBSTnkJAIqs+3/ahN82gWPnOeQo=";
+    })
+    # Remove when upgrading to Dart 3.14:
+    (fetchpatch {
+      name = "dart-ignore-binaryen-warnings.patch";
+      url = "https://github.com/dart-lang/sdk/commit/963b46dfebad01cab9e063fc8b508df227154a31.patch";
+      hash = "sha256-+JY97WFq+UWNoGikXfHIPxBwPdCWV1HYHjhi9pzqVCo=";
+    })
   ]
   ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
     ./unbundle.patch
