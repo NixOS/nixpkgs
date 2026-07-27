@@ -337,6 +337,7 @@ let
   compiler =
     let
       objs = filter isString (split " " mes_SOURCES);
+      removeSrcPrefix = lib.removePrefix "src/";
     in
     kaem.runCommand "${pname}-${version}"
       {
@@ -360,7 +361,7 @@ let
             -I ${srcPrefix}/include/linux/${arch} \
             -I ${srcPost}/mes-${version}/src \
             -c \
-            -o ${lib.removePrefix "src/" obj}.o \
+            -o ${removeSrcPrefix obj}.o \
             ${srcPost}/mes-${version}/${obj}
         '') objs}
 
@@ -373,7 +374,7 @@ let
           -nostdlib \
           -o ''${out}/bin/mes \
           ${libs}/lib/${arch}-mes/crt1.o \
-          ${lib.concatMapStringsSep " " (obj: "${lib.removePrefix "src/" obj}.o") objs}
+          ${lib.concatMapStringsSep " " (obj: "${removeSrcPrefix obj}.o") objs}
       '';
 in
 {

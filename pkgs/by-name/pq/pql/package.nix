@@ -8,10 +8,12 @@ buildGoModule (finalAttrs: {
   pname = "pql";
   version = "0.2.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "runreveal";
     repo = "pql";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/112LQfIkya/9hzq3nxtpdSarHIshPw4mezNcKm4xyI=";
   };
 
@@ -19,7 +21,6 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-w"
   ];
 
   meta = {

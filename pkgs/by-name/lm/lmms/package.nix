@@ -81,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     fftwFloat
     qt5.qtbase
     qt5.qtsvg
+    qt5.qtwayland
     qt5.qtx11extras
     libsamplerate
     libsndfile
