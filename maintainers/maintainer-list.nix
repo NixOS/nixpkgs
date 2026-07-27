@@ -12385,6 +12385,12 @@
     githubId = 10690970;
     name = "James Duff";
   };
+  jagu-sayan = {
+    name = "Jacob Zak";
+    github = "jagu-sayan";
+    githubId = 1262860;
+    email = "dv64dq9qc@mozmail.com";
+  };
   jakecleary = {
     email = "shout@jakecleary.net";
     github = "jakecleary";
