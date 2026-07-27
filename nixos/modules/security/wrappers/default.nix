@@ -361,7 +361,7 @@ in
 
     ###### wrappers consistency checks
     system.checks = lib.singleton (
-      pkgs.runCommand "ensure-all-wrappers-paths-exist"
+      pkgs.runCommandLocal "ensure-all-wrappers-paths-exist"
         {
           preferLocalBuild = true;
         }
