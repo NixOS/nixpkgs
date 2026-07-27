@@ -359,7 +359,6 @@ lib.extendMkDerivation {
             && isPythonModule finalAttrs.passthru
             # METADATA is unlikely to be correct if pyproject is false or null.
             && pyproject == true
-            && !lib.hasInfix "unstable-" finalAttrs.version
             && !isBootstrapPackage
           )
           [
