@@ -7,20 +7,21 @@ pythonMetadataCheckPhase() {
   echo "Executing pythonMetadataCheckPhase"
 
   # shellcheck disable=SC2154
-  pythonMetadataCheckOutput="$out"
+  local pythonMetadataCheckOutput="$out"
   if [[ -n "${python-}" ]]; then
     echo "Using python specific output \$python for metadata check"
     pythonMetadataCheckOutput=$python
   fi
   # shellcheck disable=SC2154
-  derivationPname="$pname"
+  local derivationPname="$pname"
   # shellcheck disable=SC2154
-  derivationVersion="$version"
+  local derivationVersion="$version"
   # `python -P` avoids picking up egg-info dirs in $PWD
+  local metadataVersion
   metadataVersion="$(PYTHONPATH="$pythonMetadataCheckOutput/@pythonSitePackages@:$PYTHONPATH" \
     @pythonInterpreter@ -P -c 'from importlib.metadata import version; import sys; print(version(sys.argv[1]))' "$derivationPname")"
 
-  # chethat both versions can be parsed
+  # check that both versions can be parsed
   @pythonWithPackaging@ -c "from packaging.version import Version; from sys import argv; Version(argv[1]); Version(argv[2])" "$derivationVersion" "$metadataVersion"
 
   if @pythonWithPackaging@ -c "from packaging.version import Version; from sys import argv, exit; exit(Version(argv[1]) == Version(argv[2]))" "$derivationVersion" "$metadataVersion"; then
