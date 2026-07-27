@@ -12649,8 +12649,6 @@ self: super: with self; {
 
   otpauth = callPackage ../development/python-modules/otpauth { };
 
-  otr = callPackage ../development/python-modules/otr { };
-
   ots-python = callPackage ../development/python-modules/ots-python { };
 
   otter-grader = callPackage ../development/python-modules/otter-grader { };
@@ -16891,6 +16889,8 @@ self: super: with self; {
   python3-nmap = callPackage ../development/python-modules/python3-nmap { };
 
   python3-openid = callPackage ../development/python-modules/python3-openid { };
+
+  python3-otr = callPackage ../development/python-modules/python3-otr { };
 
   python3-saml = callPackage ../development/python-modules/python3-saml { };
 
