@@ -3,12 +3,9 @@
   stdenv,
   fetchFromGitHub,
   wrapGAppsHook3,
-  autoconf,
-  autoconf-archive,
-  automake,
+  cmake,
   gettext,
   intltool,
-  libtool,
   pkg-config,
   libice,
   libsm,
@@ -28,31 +25,34 @@
   gst_all_1,
   libsigcxx,
   boost,
+  fmt,
+  spdlog,
+  pulseaudio,
+  wayland-scanner,
   python3Packages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "workrave";
-  version = "1.10.54";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     repo = "workrave";
     owner = "rcaelers";
     rev = "v" + lib.concatStringsSep "_" (lib.splitVersion finalAttrs.version);
-    sha256 = "sha256-pbMkzwxgKc4vjFhBeOf513hFytYiTPST19L8Nq4CVTg=";
+    sha256 = "sha256-NfGgcJyTKokcAIffO7YrW3Zs8AHFJGyRaXOvw+n5KZk=";
   };
 
   nativeBuildInputs = [
-    autoconf
-    autoconf-archive
-    automake
+    cmake
     gettext
     intltool
-    libtool
     pkg-config
     wrapGAppsHook3
     python3Packages.jinja2
     gobject-introspection
+    wayland-scanner
+    spdlog
   ];
 
   buildInputs = [
@@ -75,9 +75,9 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-good
     libsigcxx
     boost
+    fmt
+    pulseaudio
   ];
-
-  preConfigure = "./autogen.sh";
 
   enableParallelBuilding = true;
 
