@@ -18,10 +18,10 @@
 
 assert desktopSupport == "gnomeflashback" || desktopSupport == "mate" || desktopSupport == "xfce4";
 
-stdenv.mkDerivation rec {
-  version = "unstable-2017-09-15";
+stdenv.mkDerivation (finalAttrs: {
+  version = "2.1.0-unstable-2017-09-15";
   pname = "xmonad-log-applet";
-  name = "xmonad-log-applet-${desktopSupport}-${version}";
+  name = "xmonad-log-applet-${desktopSupport}-${finalAttrs.version}";
 
   src = fetchFromGitHub {
     owner = "kalj";
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})
