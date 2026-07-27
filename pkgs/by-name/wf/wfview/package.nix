@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch2,
   eigen,
   hidapi,
   libopus,
@@ -27,6 +28,12 @@ stdenv.mkDerivation (finalAttrs: {
     # Remove syscalls during build to make it reproducible
     # We also need to adjust some header paths for darwin
     ./remove-hard-encodings.patch
+
+    # Fix build with Qt 6.11.1, https://gitlab.com/eliggett/wfview/-/merge_requests/51
+    (fetchpatch2 {
+      url = "https://gitlab.com/Cryolitia/wfview/-/commit/b26c898c219df8935dcb85969465ed995f64d875.patch";
+      hash = "sha256-KXWz6gdaPewq+RLhhkZT3CYz6yqbVXMubAUfabhgqX0=";
+    })
   ];
 
   buildInputs = [
