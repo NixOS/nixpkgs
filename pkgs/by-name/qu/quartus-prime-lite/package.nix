@@ -144,6 +144,9 @@ buildFHSEnv (finalAttrs: {
                 ;;
         esac
         echo "export NIXPKGS_QUARTUS_THIS_PROG_SUPPORTS_FIXED_CLOCK=$NIXPKGS_QUARTUS_THIS_PROG_SUPPORTS_FIXED_CLOCK" >> "$wrapped"
+        # If a Wayland user has QT_QPA_PLATFORM=wayland, Quartus executables
+        # that use Qt won't work, so let's be explicit.
+        echo "export QT_QPA_PLATFORM=xcb" >> "$wrapped"
         echo "exec $wrapper $prog \"\$@\"" >> "$wrapped"
     done
 
