@@ -22,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "iocsearcher";
-  version = "2.8.3";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "malicialab";
     repo = "iocsearcher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jNITY4X6ywlkjzS5Udpd46JG7PoycXyy0uJ7+UqjuF4=";
+    hash = "sha256-93pHjm8FZ4qZMLQ5SftUamRMJJFhU8uHNacOPEAZcT4=";
   };
 
   build-system = [ setuptools ];
