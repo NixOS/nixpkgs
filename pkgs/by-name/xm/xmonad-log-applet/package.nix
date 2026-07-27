@@ -23,6 +23,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "xmonad-log-applet";
   name = "xmonad-log-applet-${desktopSupport}-${finalAttrs.version}";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "kalj";
     repo = "xmonad-log-applet";
