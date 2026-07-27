@@ -1,6 +1,7 @@
 # hunspell dictionaries
 
 {
+  config,
   lib,
   stdenv,
   fetchurl,
@@ -643,22 +644,9 @@ rec {
     dictFileName = "fr-classique";
     shortDescription = "French (classic)";
     longDescription = ''
-      Ce dictionnaire est une extension du dictionnaire «Moderne» et propose
-      en sus des graphies alternatives, parfois encore très usitées, parfois
-      tombées en désuétude.
+      Ce dictionnaire propose l’orthographe usuelle du français, avec en sus
+      quelques graphies nouvelles rectifiant les incohérences passées.
     '';
-  };
-
-  fr-moderne = mkDictFromGrammalecte {
-    shortName = "fr-moderne";
-    dictFileName = "fr-moderne";
-    shortDescription = "French (modern)";
-    longDescription = ''
-      Ce dictionnaire propose une sélection des graphies classiques et
-      réformées, suivant la lente évolution de l’orthographe actuelle. Ce
-      dictionnaire contient les graphies les moins polémiques de la réforme.
-    '';
-    isDefault = true;
   };
 
   fr-reforme1990 = mkDictFromGrammalecte {
@@ -1304,4 +1292,7 @@ rec {
       ];
     };
   };
+}
+// lib.optionalAttrs config.allowAliases {
+  fr-moderne = throw "'fr-moderne' was removed because it doesn't exist upstream anymore"; # Added 2026-07-27
 }
