@@ -410,6 +410,7 @@ mapAliases {
   ninja-python = throw "'ninja-python' has been renamed to/replaced by 'ninja'"; # Converted to throw 2025-10-29
   nitpick = throw "'nitpick' has been removed because it was unmaintained upstream since 2017 and using python2"; # added 2025-08-25
   nixpkgs = throw "nixpkgs has been removed as its dependency pythonix was removed"; # added 2025-07-24
+  nominatim = warnAlias "'nominatim' has been renamed to 'nominatim-api'" nominatim-api; # Added 2026-07-27
   nonbloat-db = throw "nonbloat-db has been removed because the upstream project was archived."; # added 2025-05-16
   Nuitka = throw "'Nuitka' has been renamed to/replaced by 'nuitka'"; # Converted to throw 2025-10-29
   oauth2 = throw "oauth2 has been removed as it is unmaintained"; # added 2025-05-16
@@ -499,6 +500,7 @@ mapAliases {
   pymyq = throw "'pymyq' has been renamed to/replaced by 'python-myq'"; # Converted to throw 2025-10-29
   pymystem3 = throw "'pymystem3' has been removed because it is broken and unmaintained"; # Added 2026-04-19
   pyobject = throw "'pyobject' has been removed because it was only supporting python 2"; # Added 2026-01-24
+  pyosmium = warnAlias "'pyosmium' has been renamed to 'osmium'" osmium; # Added 2026-07-27
   pyownet = throw "pyownet was removed because Home Assistant switched to aio-ownet"; # added 2025-10-31
   pypcap = throw "pypcap has been removed because it is broken and unmaintained upstream."; # added 2025-06-18
   pyqldb = throw "pyqldb has been removed, because the underlying service is reaching end of support"; # added 2025-07-30

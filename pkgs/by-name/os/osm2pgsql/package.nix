@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     (python3.withPackages (
       p: with p; [
         psycopg2
-        pyosmium
+        osmium
       ]
     ))
     zlib

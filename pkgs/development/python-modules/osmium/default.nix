@@ -21,7 +21,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pyosmium";
+  pname = "osmium";
   version = "4.3.1";
   pyproject = true;
 
