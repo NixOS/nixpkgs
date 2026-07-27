@@ -6,7 +6,6 @@
   runtimeShell,
   runCommand,
   unstick,
-  quartus-prime-lite,
   libfaketime,
   pkgsi686Linux,
   withQuesta ? true,
@@ -33,7 +32,7 @@ let
   };
 in
 # I think questa_fse/linux/vlm checksums itself, so use FHSUserEnv instead of `patchelf`
-buildFHSEnv rec {
+buildFHSEnv (finalAttrs: {
   pname = "quartus-prime-lite"; # wrapped
   inherit (unwrapped) version;
 
@@ -183,7 +182,7 @@ buildFHSEnv rec {
       buildSof =
         runCommand "quartus-prime-lite-test-build-sof"
           {
-            nativeBuildInputs = [ quartus-prime-lite ];
+            nativeBuildInputs = [ finalAttrs.finalPackage ];
             env.NIXPKGS_QUARTUS_REPRODUCIBLE_BUILD = "1";
           }
           ''
@@ -220,11 +219,11 @@ buildFHSEnv rec {
             env.NIXPKGS_QUARTUS_REPRODUCIBLE_BUILD = "1";
           }
           ''
-            "${quartus-prime-lite}/bin/vlog" "${quartus-prime-lite.unwrapped}/questa_fse/intel/verilog/src/arriav_atoms_ncrypt.v"
+            "${finalAttrs.finalPackage}/bin/vlog" "${finalAttrs.passthru.unwrapped}/questa_fse/intel/verilog/src/arriav_atoms_ncrypt.v"
             touch "$out"
           '';
     };
   };
 
   inherit (unwrapped) meta;
-}
+})
