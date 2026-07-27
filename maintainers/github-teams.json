@@ -65,6 +65,17 @@
     },
     "name": "Beam"
   },
+  "boot-security": {
+    "description": "Maintain support for boot security technologies like Secure Boot",
+    "id": 18686947,
+    "maintainers": {
+      "emilazy": 18535642
+    },
+    "members": {
+      "ElvishJerricco": 1365692
+    },
+    "name": "Boot security"
+  },
   "bootstrapping": {
     "description": "coordinates efforts towards bootstrappable builds (see https://bootstrappable.org/)",
     "id": 9141350,
@@ -369,7 +380,9 @@
     "maintainers": {
       "jtojnar": 705123
     },
-    "members": {},
+    "members": {
+      "Hythera": 87016780
+    },
     "name": "Freedesktop"
   },
   "geospatial": {
