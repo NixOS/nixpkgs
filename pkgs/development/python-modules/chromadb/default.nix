@@ -112,6 +112,10 @@ buildPythonPackage (finalAttrs: {
       sed -i '1i #![recursion_limit = "256"]' rust/segment/src/lib.rs
     '';
 
+  pythonRemoveDeps = [
+    "build"
+  ];
+
   pythonRelaxDeps = [
     "fastapi"
     "posthog"
@@ -134,7 +138,6 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     bcrypt
-    build
     fastapi
     grpcio
     httpx
