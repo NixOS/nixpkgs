@@ -25,7 +25,7 @@ let
 in
 {
   name = "hockeypuck";
-  meta.maintainers = [ ];
+  meta.maintainers = lib.teams.ngi.members;
 
   nodes.machine =
     { ... }:

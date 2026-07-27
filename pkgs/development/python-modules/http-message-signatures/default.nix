@@ -7,6 +7,7 @@
   hatchling,
   pytestCheckHook,
   requests,
+  typing-extensions,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -31,6 +32,7 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytestCheckHook
     requests
+    typing-extensions
   ];
 
   enabledTestPaths = [ "test/test.py" ];

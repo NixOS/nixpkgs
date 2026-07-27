@@ -447,7 +447,9 @@ in
           })
           (lib.mkIf cfg.configureTika {
             PAPERLESS_GOTENBERG_ENABLED = true;
+            PAPERLESS_TIKA_GOTENBERG_ENDPOINT = "http://${config.services.gotenberg.bindIP}:${toString config.services.gotenberg.port}";
             PAPERLESS_TIKA_ENABLED = true;
+            PAPERLESS_TIKA_ENDPOINT = "http://${config.services.tika.listenAddress}:${toString config.services.tika.port}";
           })
         ];
 
