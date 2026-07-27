@@ -30,6 +30,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "http://jikasei.me/font/rounded-mgenplus/";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ mnacamura ];
+    maintainers = with lib.maintainers; [
+      mnacamura
+      shadowrz
+    ];
   };
 })
