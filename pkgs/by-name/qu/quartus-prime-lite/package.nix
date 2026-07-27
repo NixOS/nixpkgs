@@ -107,7 +107,7 @@ buildFHSEnv rec {
       "${unwrapped}"/questa_fse/linux_x86_64/lmutil
     )
 
-    wrapper=$out/bin/${pname}
+    wrapper=$out/bin/quartus-prime-lite
     progs_wrapped=()
     for prog in ''${progs_to_wrap[@]}; do
         relname="''${prog#"${unwrapped}/"}"
