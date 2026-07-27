@@ -12,6 +12,8 @@
   nixosTests,
   nix-update-script,
   versionCheckHook,
+  navidrome,
+  pkgsCross,
 }:
 
 buildGo127Module (finalAttrs: {
@@ -90,6 +92,12 @@ buildGo127Module (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
+    withPlugins =
+      f:
+      navidrome.override {
+        navidrome-unwrapped = finalAttrs.finalPackage;
+        wasmPlugins = f pkgsCross.wasi32.navidromePlugins;
+      };
     tests.navidrome = nixosTests.navidrome;
     updateScript = nix-update-script { };
   };
