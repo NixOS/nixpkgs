@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
       for remote cron jobs to securely "hook in" to a long-running ssh-agent
       process, allowing your scripts to take advantage of key-based logins.
     '';
-    homepage = "https://www.funtoo.org/Keychain";
+    homepage = "https://kernel-seeds.org/projects/keychain/";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ sigma ];
