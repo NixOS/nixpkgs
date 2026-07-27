@@ -5,6 +5,7 @@
   fetchFromGitHub,
   hatchling,
   lib,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
@@ -23,10 +24,9 @@ buildPythonPackage rec {
     hash = "sha256-G40x/3bb3h49eynwYCoJPeBLmX1Ty+mq3AGQoBAiZOA=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
-  '';
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ hatchling ];
 
