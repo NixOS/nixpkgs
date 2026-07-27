@@ -1,30 +1,32 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
   gradle,
-  jdk,
   jre,
   makeWrapper,
-  testers,
+  nix-update-script,
   runCommand,
+  versionCheckHook,
   writeText,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "smithy-cli";
-  version = "1.68.0";
+  version = "1.72.1";
 
   src = fetchFromGitHub {
     owner = "smithy-lang";
     repo = "smithy";
     tag = finalAttrs.version;
-    hash = "sha256-jME/yF6i+hQFMr8lseRKS8uSv0s6HNWqBfsRuSSzonI=";
+    hash = "sha256-IBqh2ATKi5MfaCjvXz7KE2p3lGJa8Sn3YhOuwaW1/sk=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     gradle
-    jdk
     makeWrapper
   ];
 
@@ -49,32 +51,30 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/smithy-cli/lib $out/bin
+    mkdir -p $out/{bin,share/smithy-cli/lib}
 
-    # Install the shadow JAR and the Smithy dependency JARs that it
-    # deliberately excludes (they are expected on the classpath separately)
-    cp smithy-cli/build/libs/smithy-cli-${finalAttrs.version}.jar $out/share/smithy-cli/lib/
-    for proj in smithy-utils smithy-model smithy-build smithy-diff; do
+    # Install the shadow JAR along with the Smithy dependency JARs that it
+    # deliberately excludes (they are expected on the classpath separately).
+    # smithy-syntax uses the shadow plugin too, so its shaded JAR also replaces
+    # the plain one rather than gaining a classifier.
+    for proj in smithy-cli smithy-utils smithy-model smithy-build smithy-diff smithy-syntax; do
       cp $proj/build/libs/$proj-${finalAttrs.version}.jar $out/share/smithy-cli/lib/
     done
-    # smithy-syntax uses the shadow plugin too, so its JAR has no classifier
-    cp smithy-syntax/build/libs/smithy-syntax-${finalAttrs.version}.jar $out/share/smithy-cli/lib/
 
-    # Create wrapper that puts all JARs on the classpath.
-    # Java's -cp wildcard syntax requires a literal '*' (not shell-expanded),
-    # so we construct the classpath explicitly.
-    classpath=$(find $out/share/smithy-cli/lib -name '*.jar' | tr '\n' ':' | sed 's/:$//')
     makeWrapper ${lib.getExe jre} $out/bin/smithy \
-      --add-flags "-cp $classpath software.amazon.smithy.cli.SmithyCli"
+      --set CLASSPATH "$out/share/smithy-cli/lib/*" \
+      --add-flags "software.amazon.smithy.cli.SmithyCli"
 
     runHook postInstall
   '';
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-    };
-    validate = runCommand "smithy-cli-validate-test" { } ''
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+
+    tests.validate = runCommand "smithy-cli-validate-test" { } ''
       ${lib.getExe finalAttrs.finalPackage} validate ${writeText "example.smithy" ''
         $version: "2.0"
         namespace example
@@ -110,6 +110,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     mainProgram = "smithy";
     maintainers = [ lib.maintainers.joshgodsiff ];
-    platforms = lib.platforms.unix;
+    inherit (jre.meta) platforms;
   };
 })
