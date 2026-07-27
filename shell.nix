@@ -13,15 +13,10 @@
 #
 {
   system ? builtins.currentSystem,
-  nixpkgs ? null,
-}:
-let
-  version = builtins.readFile ./.version;
-
-  # On 26.05 we need a CI-pinned Nixpkgs revision that supports x86_64-darwin.
-  # TODO: remove after 26.05 support ends.
-  nixpkgs' =
-    if nixpkgs == null && system == "x86_64-darwin" && version == "26.05" then
+  nixpkgs ? (
+    # On 26.05 we need a CI-pinned Nixpkgs revision that supports x86_64-darwin.
+    # TODO: remove after 26.05 support ends.
+    if system == "x86_64-darwin" && (builtins.readFile ./.version) == "26.05" then
       let
         pinned = (builtins.fromJSON (builtins.readFile ./ci/pinned.json)).pins;
         warn = builtins.warn or (import ./lib).warn;
@@ -44,16 +39,11 @@ let
         sha256 = hash;
       }
     else
-      nixpkgs;
-
-  inherit
-    (import ./ci {
-      inherit system;
-      nixpkgs = nixpkgs';
-    })
-    pkgs
-    fmt
-    ;
+      null
+  ),
+}:
+let
+  inherit (import ./ci { inherit nixpkgs system; }) pkgs fmt;
 
   # For `nix-shell -A hello`
   curPkgs = removeAttrs (import ./. { inherit system; }) [
