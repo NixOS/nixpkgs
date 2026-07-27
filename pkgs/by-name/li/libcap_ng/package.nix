@@ -66,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
     tests = {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      python = python3Packages.libcap_ng;
     };
   };
 
