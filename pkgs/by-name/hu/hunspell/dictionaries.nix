@@ -1293,6 +1293,3 @@ rec {
     };
   };
 }
-// lib.optionalAttrs config.allowAliases {
-  fr-moderne = throw "'fr-moderne' was removed because it doesn't exist upstream anymore"; # Added 2026-07-27
-}
