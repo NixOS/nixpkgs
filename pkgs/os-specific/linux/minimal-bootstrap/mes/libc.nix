@@ -8,7 +8,6 @@ in
   ln-boot,
   mes,
   buildPlatform,
-  fetchurl,
 }:
 let
   pname = "mes-libc";
@@ -24,18 +23,16 @@ let
   sources = sourcesJson."${arch}.linux.gcc";
   inherit (sources) libtcc1_SOURCES libc_gnu1_SOURCES libc_gnu2_SOURCES;
 
-  ldexpl = fetchurl {
-    url = "https://gitlab.com/janneke/mes/-/raw/c837abed8edb341d4e56913729fbe9803b4de47c/lib/math/ldexpl.c";
-    hash = "sha256-3QoFZZIqVmlMUosEqOdYIMEHzYgQ7GJ7Hz0Bf/1iIig=";
-  };
-
   # Concatenate all source files into a convenient bundle
   # "gcc" variants of source files (eg. "lib/linux/x86-mes-gcc") can also be
   # compiled by tinycc
   #
   # Passing this many arguments is too much for kaem so we need to split
   # the operation in two
-  firstLibc = libc_gnu1_SOURCES + " ${ldexpl}";
+  #
+  # We also vendor a copy of ldexpl. We do not `fetchurl` it as the mes GitLab
+  # often has force pushes and links are thus unstable.
+  firstLibc = libc_gnu1_SOURCES + " " + ./ldexpl.c;
   lastLibc = libc_gnu2_SOURCES;
 in
 kaem.runCommand "${pname}-${version}"

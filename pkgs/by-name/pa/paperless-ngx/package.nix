@@ -124,6 +124,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "scikit-learn"
     "tika-client"
     "tqdm"
+    "zxing-cpp"
     # requested by maintainer
     "imap-tools"
     "ocrmypdf"

@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yara";
-  version = "4.5.6";
+  version = "4.5.7";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vzYH56BC0Stb2I4U5VzxA0xG46xZkWmbTIC6BtzeNQ8=";
+    hash = "sha256-4PK/GU02mcgMSkFllqGZ7zmswQb8b6bkfEWLoCGHo3E=";
   };
 
   nativeBuildInputs = [

@@ -9210,6 +9210,19 @@ self: super: with self; {
 
   libbs = callPackage ../development/python-modules/libbs { };
 
+  libcap_ng = callPackage (
+    {
+      python,
+      pythonImportsCheckHook,
+    }@python3Packages:
+    toPythonModule (
+      pkgs.libcap_ng.override {
+        withPython = true;
+        inherit python3Packages;
+      }
+    )
+  ) { };
+
   libcloud = callPackage ../development/python-modules/libcloud { };
 
   libcomps = lib.pipe pkgs.libcomps [

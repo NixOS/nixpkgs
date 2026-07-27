@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libssh";
-  version = "0.12.0";
+  version = "0.12.1";
 
   src = fetchurl {
     url = "https://www.libssh.org/files/${lib.versions.majorMinor finalAttrs.version}/libssh-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Gmr0JNgyfl7t705f5/W5JCJt1hesnz3oDyF9gqNqcSE=";
+    hash = "sha256-05Qa8KLXjV2C7Xo2mI6RM5lDEvA1uWWabkP42zloeEw=";
   };
 
   outputs = [

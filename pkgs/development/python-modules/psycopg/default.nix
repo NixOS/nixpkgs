@@ -4,6 +4,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchurl,
+  nukeReferences,
+  python,
   replaceVars,
 
   # build
@@ -78,11 +80,16 @@ let
 
     nativeBuildInputs = [
       libpq.pg_config
+      nukeReferences
     ];
 
     buildInputs = [
       libpq
     ];
+
+    postInstall = ''
+      nuke-refs $out/${python.sitePackages}/psycopg_c/{pq.c,_psycopg.c}
+    '';
 
     # tested in psycopg
     doCheck = false;

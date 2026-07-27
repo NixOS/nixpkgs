@@ -1,0 +1,57 @@
+diff --git a/lib/tests/test_regexranges_main.cpp b/lib/tests/test_regexranges_main.cpp
+index 567d79230c..e28bba47e5 100644
+--- a/lib/tests/test_regexranges_main.cpp
++++ b/lib/tests/test_regexranges_main.cpp
+@@ -12,26 +12,26 @@
+ using namespace std;
+ using namespace srchilite;
+ 
+-RegexRanges ranges;
++RegexRanges regexRanges;
+ 
+ void check_range_regex(const string &s, bool expectedTrue = true) {
+     cout << "checking " << s << endl;
+     if (expectedTrue)
+-        assertTrue(ranges.addRegexRange(s));
++        assertTrue(regexRanges.addRegexRange(s));
+     else
+-        assertFalse(ranges.addRegexRange(s));
++        assertFalse(regexRanges.addRegexRange(s));
+ }
+ 
+ void check_match(const string &line, const string &expected = "") {
+     cout << "searching inside " << line;
+     const boost::regex *matched = 0;
+     if (expected != "") {
+-        matched = ranges.matches(line);
++        matched = regexRanges.matches(line);
+         assertTrue(matched != 0);
+         assertEquals(expected, matched->str());
+         cout << " found " << *matched << endl;
+     } else {
+-        assertTrue(ranges.matches(line) == 0);
++        assertTrue(regexRanges.matches(line) == 0);
+         cout << " not found" << endl;
+     }
+ }
+@@ -39,9 +39,9 @@
+ void check_in_range(const string &s, bool expectedTrue = true) {
+     cout << "checking " << s << "... ";
+     if (expectedTrue) {
+-        assertTrue(ranges.isInRange(s));
++        assertTrue(regexRanges.isInRange(s));
+     } else {
+-        assertFalse(ranges.isInRange(s));
++        assertFalse(regexRanges.isInRange(s));
+     }
+     cout << expectedTrue << endl;
+ }
+@@ -57,7 +57,7 @@
+     check_range_regex("{notclosed");
+ 
+     // reset regular expressions
+-    ranges.clear();
++    regexRanges.clear();
+ 
+     check_range_regex("/// foo");
+     check_range_regex("/// bar");
