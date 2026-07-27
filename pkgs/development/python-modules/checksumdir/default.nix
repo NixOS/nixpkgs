@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +17,18 @@ buildPythonPackage rec {
     hash = "sha256-rOHRJAK+Or8bwAtzpbINdnEjK3WQcU+4sEZI91tMvAk=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  # pyproject.toml specifies `[tool.poetry]` but doesn't specify `[build-system]`
+  postPatch = ''
+    cat >>pyproject.toml <<EOF
+
+    [build-system]
+    requires = ["poetry-core"]
+    build-backend = "poetry.core.masonry.api"
+
+    EOF
+  '';
+
+  build-system = [ poetry-core ];
 
   doCheck = false; # Package does not contain tests
   pythonImportsCheck = [ "checksumdir" ];
