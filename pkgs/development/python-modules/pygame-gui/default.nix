@@ -17,20 +17,19 @@
   writableTmpDirAsHomeHook,
 
   # passthru
-  nix-update-script,
+  writeScript,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pygame-gui";
-  version = "0614";
+  version = "0.6.14";
   pyproject = true;
   __structuredAttrs = true;
-  # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "MyreMylar";
     repo = "pygame_gui";
-    tag = "v_${finalAttrs.version}";
+    tag = "v_${lib.replaceString "." "" finalAttrs.version}";
     hash = "sha256-wLvWaJuXMXk7zOaSZfIpsXhQt+eCjOtlh8IRuKbR75o=";
   };
 
@@ -93,12 +92,14 @@ buildPythonPackage (finalAttrs: {
 
   disabledTestPaths = [ "tests/test_performance/test_text_performance.py" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "v_(.*)"
-    ];
-  };
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell --pure -i bash -p curl cacert jq nix-update git
+    set -xeuo pipefail
+
+    version=$(curl -s https://pypi.org/pypi/pygame-gui/json | jq -r '.info.version')
+    nix-update --version "$version" python3Packages.pygame-gui
+  '';
 
   meta = {
     description = "GUI system for pygame";
