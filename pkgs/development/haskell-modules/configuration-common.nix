@@ -295,8 +295,8 @@ with haskellLib;
   cabal-add = appendPatches [
     (pkgs.fetchpatch {
       name = "cabal-add-absolute-build-tool-paths.patch";
-      url = "https://github.com/Bodigrim/cabal-add/commit/3b94b0175c294c2d0a30b6d8da3f56189216816c.patch";
-      hash = "sha256-4Nbro9Gl+RC78yprO8fYG/IWS7QvJPd0dKqSZb5jq9k=";
+      url = "https://github.com/Bodigrim/cabal-add/commit/24c3a08cedf68a4f66e1265c7bde55043b859321.patch";
+      hash = "sha256-iJjbEGTL+QcV05UZMSKpGjeEbC5w53Vq9Cuhw5QscO0=";
     })
   ] super.cabal-add;
 
