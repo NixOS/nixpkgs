@@ -341,7 +341,7 @@ in
                             "$out/share/applications/${mkBin "netbird"}.desktop" \
                           --replace-fail 'Name=Netbird' "Name=NetBird @ ${client.service.name}" \
                           --replace-fail 'Icon=netbird' "Icon=${cfg.ui.package}/share/icons/hicolor/256x256/apps/netbird.png" \
-                          --replace-fail 'Exec=netbird-ui' "Exec=${mkBin "netbird-ui"}"
+                          --replace-fail 'netbird-ui' "${mkBin "netbird-ui"}"
                       '')
                     ];
                   };

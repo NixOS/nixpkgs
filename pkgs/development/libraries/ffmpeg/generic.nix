@@ -59,7 +59,12 @@
   withChromaprint ? withFullDeps, # Audio fingerprinting
   withCodec2 ? withFullDeps, # codec2 en/decoding
   withCuda ? withFullDeps && withNvcodec,
-  withCudaLLVM ? withHeadlessDeps && !stdenv.hostPlatform.isDarwin, # Cuda isn’t supported on Darwin
+  withCudaLLVM ?
+    withHeadlessDeps
+    # Cuda isn’t supported on Darwin
+    && !stdenv.hostPlatform.isDarwin
+    # Clang for our ppc64 targets needs cc-wrapper to work
+    && !(stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isBigEndian),
   withCudaNVCC ? withFullDeps && withUnfree && config.cudaSupport,
   withCuvid ? withHeadlessDeps && withNvcodec,
   withDav1d ? withHeadlessDeps, # AV1 decoder (focused on speed and correctness)

@@ -17,10 +17,13 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "clfft";
   version = "2.12.2";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "clMathLibraries";
     repo = "clFFT";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yp7u6qhpPYQpBw3d+VLg0GgMyZONVII8BsBCEoRZm4w=";
   };
 
