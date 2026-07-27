@@ -28,7 +28,6 @@
   gst_all_1,
   libgudev,
   umockdev,
-  zynaddsubfx,
   replaceVars,
   enableGeoLocation ? true,
   enableSystemd ? true,
