@@ -1,0 +1,467 @@
+From 82d4d8c458b9f18a14e83a3f5181ec8237c47790 Mon Sep 17 00:00:00 2001
+From: Sebastian Wick <sebastian.wick@redhat.com>
+Date: Mon, 6 Jul 2026 17:24:50 +0200
+Subject: [PATCH 1/5] Revert "portal: Clear the environment via flatpak
+ arguments"
+
+This reverts commit a57f6bc3721059e48060e102de3367c6297e9e51.
+
+The run-environ from the calling instance is a host-like environment
+(e.g. on NixOS it contains /nix/store paths). Passing it via --env
+injects it into the sandbox payload environment where those paths don't
+exist.
+
+Revert the commit, so we pass run-environ as the envp for spawning
+flatpak run again to let it make host-level decisions (DISPLAY,
+FLATPAK_GL_DRIVERS, XDG_RUNTIME_DIR, etc.) without leaking into the
+sandbox.
+
+It also passes --clear-env unconditionally, because we'd build up the
+environment, but the wrong one. We will implement --clear-env properly
+again in the next few commits.
+
+Closes: #6717
+Fixes: a57f6bc3 ("portal: Clear the environment via flatpak arguments")
+---
+ portal/flatpak-portal.c | 54 +++++++++++++++++++++--------------------
+ 1 file changed, 28 insertions(+), 26 deletions(-)
+
+diff --git a/portal/flatpak-portal.c b/portal/flatpak-portal.c
+index f9304464a6..ddf4996e16 100644
+--- a/portal/flatpak-portal.c
++++ b/portal/flatpak-portal.c
+@@ -64,6 +64,7 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC (PortalFlatpakUpdateMonitorSkeleton, g_object_unre
+ /* Should be roughly 2 seconds */
+ #define CHILD_STATUS_CHECK_ATTEMPTS 20
+ 
++static GStrv original_environ = NULL;
+ static GHashTable *client_pid_data_hash = NULL;
+ static GDBusConnection *session_bus = NULL;
+ static GNetworkMonitor *network_monitor = NULL;
+@@ -907,22 +908,17 @@ handle_spawn (PortalFlatpak         *object,
+       return G_DBUS_METHOD_INVOCATION_HANDLED;
+     }
+ 
+-  if ((flatpak = g_getenv ("FLATPAK_PORTAL_MOCK_FLATPAK")) != NULL)
+-    g_ptr_array_add (flatpak_argv, g_strdup (flatpak));
+-  else if ((flatpak = g_getenv ("FLATPAK")) != NULL)
+-    g_ptr_array_add (flatpak_argv, g_strdup (flatpak));
++  /* TODO: Ideally we should let `flatpak run` inherit the run environment
++   * of the instance, in case e.g. a LD_LIBRARY_PATH is needed to be able
++   * to run `flatpak run`, but tell it to start from a blank environment
++   * when running the Flatpak app; but this isn't currently possible, so
++   * for now we preserve existing behaviour. */
++  if (arg_flags & FLATPAK_SPAWN_FLAGS_CLEAR_ENV)
++    {
++      char *empty[] = { NULL };
++      env = g_strdupv (empty);
++    }
+   else
+-    g_ptr_array_add (flatpak_argv, g_strdup (FLATPAK_BINDIR "/flatpak"));
+-
+-  g_ptr_array_add (flatpak_argv, g_strdup ("run"));
+-
+-  /* If we don't clear the env, the flatpak portal service environment would
+-   * leak into the flatpak instance. By default we reuse the environment of
+-   * the calling instance by passing it as arguments after the --clear-env.
+-   */
+-  g_ptr_array_add (flatpak_argv, g_strdup ("--clear-env"));
+-
+-  if (!(arg_flags & FLATPAK_SPAWN_FLAGS_CLEAR_ENV))
+     {
+       static const char * const mock_run_environ[] = { "FOO=bar", NULL };
+ 
+@@ -935,8 +931,8 @@ handle_spawn (PortalFlatpak         *object,
+         {
+           if (g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
+             {
+-              g_warning ("Environment for \"flatpak run\" was not found, "
+-                         "falling back to a clean environment");
++              g_warning ("Environment for \"flatpak run\" was not found, falling back to current environment");
++              env = g_strdupv (original_environ);
+             }
+           else
+             {
+@@ -947,16 +943,17 @@ handle_spawn (PortalFlatpak         *object,
+               return G_DBUS_METHOD_INVOCATION_HANDLED;
+             }
+         }
+-      else
+-        {
+-          for (i = 0; env != NULL && env[i] != NULL; i++)
+-            {
+-              g_string_append (env_string, env[i]);
+-              g_string_append_c (env_string, '\0');
+-            }
+-        }
+     }
+ 
++  if ((flatpak = g_getenv ("FLATPAK_PORTAL_MOCK_FLATPAK")) != NULL)
++    g_ptr_array_add (flatpak_argv, g_strdup (flatpak));
++  else if ((flatpak = g_getenv ("FLATPAK")) != NULL)
++    g_ptr_array_add (flatpak_argv, g_strdup (flatpak));
++  else
++    g_ptr_array_add (flatpak_argv, g_strdup (FLATPAK_BINDIR "/flatpak"));
++
++  g_ptr_array_add (flatpak_argv, g_strdup ("run"));
++
+   sandboxed = (arg_flags & FLATPAK_SPAWN_FLAGS_SANDBOX) != 0;
+ 
+   if (sandboxed)
+@@ -1507,7 +1504,7 @@ handle_spawn (PortalFlatpak         *object,
+    * to work around a deadlock in GLib < 2.60 */
+   if (!g_spawn_async_with_pipes (NULL,
+                                  (char **) flatpak_argv->pdata,
+-                                 NULL,
++                                 env,
+                                  G_SPAWN_SEARCH_PATH | G_SPAWN_DO_NOT_REAP_CHILD | G_SPAWN_LEAVE_DESCRIPTORS_OPEN,
+                                  child_setup_func, &child_setup_data,
+                                  &pid,
+@@ -3017,6 +3014,10 @@ main (int    argc,
+     { NULL }
+   };
+ 
++  /* Save the enviroment before changing anything, so that subprocesses
++   * can get the unchanged version */
++  original_environ = g_get_environ ();
++
+   setlocale (LC_ALL, "");
+ 
+   g_setenv ("GIO_USE_VFS", "local", TRUE);
+@@ -3119,5 +3120,6 @@ main (int    argc,
+   main_loop = g_main_loop_new (NULL, FALSE);
+   g_main_loop_run (main_loop);
+ 
++  g_strfreev (original_environ);
+   return 0;
+ }
+
+From 08bb74fde8d53fef1b236454c673c70f6d78bea4 Mon Sep 17 00:00:00 2001
+From: Sebastian Wick <sebastian.wick@redhat.com>
+Date: Mon, 6 Jul 2026 17:36:13 +0200
+Subject: [PATCH 2/5] portal: Clear error after warning to avoid issues on the
+ next error
+
+---
+ portal/flatpak-portal.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/portal/flatpak-portal.c b/portal/flatpak-portal.c
+index ddf4996e16..d59b3d6265 100644
+--- a/portal/flatpak-portal.c
++++ b/portal/flatpak-portal.c
+@@ -942,6 +942,8 @@ handle_spawn (PortalFlatpak         *object,
+                                                      error->message);
+               return G_DBUS_METHOD_INVOCATION_HANDLED;
+             }
++
++          g_clear_error (&error);
+         }
+     }
+ 
+
+From 700f17e94c4e26cfea051c0fdc82314d8d10d009 Mon Sep 17 00:00:00 2001
+From: Sebastian Wick <sebastian.wick@redhat.com>
+Date: Mon, 6 Jul 2026 17:36:41 +0200
+Subject: [PATCH 3/5] portal: Pass run-environ to the spawned flatpak process,
+ not the sandbox
+
+Instead of modifying the host-like run environment to clear the sandbox
+environment, we'll use the new --clear-env flag which does the correct
+thing.
+
+Assisted-by: Claude:opus-4.6
+Closes: #5271
+---
+ portal/flatpak-portal.c | 14 +++-----------
+ 1 file changed, 3 insertions(+), 11 deletions(-)
+
+diff --git a/portal/flatpak-portal.c b/portal/flatpak-portal.c
+index d59b3d6265..5cd2e98bff 100644
+--- a/portal/flatpak-portal.c
++++ b/portal/flatpak-portal.c
+@@ -908,17 +908,6 @@ handle_spawn (PortalFlatpak         *object,
+       return G_DBUS_METHOD_INVOCATION_HANDLED;
+     }
+ 
+-  /* TODO: Ideally we should let `flatpak run` inherit the run environment
+-   * of the instance, in case e.g. a LD_LIBRARY_PATH is needed to be able
+-   * to run `flatpak run`, but tell it to start from a blank environment
+-   * when running the Flatpak app; but this isn't currently possible, so
+-   * for now we preserve existing behaviour. */
+-  if (arg_flags & FLATPAK_SPAWN_FLAGS_CLEAR_ENV)
+-    {
+-      char *empty[] = { NULL };
+-      env = g_strdupv (empty);
+-    }
+-  else
+     {
+       static const char * const mock_run_environ[] = { "FOO=bar", NULL };
+ 
+@@ -956,6 +945,9 @@ handle_spawn (PortalFlatpak         *object,
+ 
+   g_ptr_array_add (flatpak_argv, g_strdup ("run"));
+ 
++  if (arg_flags & FLATPAK_SPAWN_FLAGS_CLEAR_ENV)
++    g_ptr_array_add (flatpak_argv, g_strdup ("--clear-env"));
++
+   sandboxed = (arg_flags & FLATPAK_SPAWN_FLAGS_SANDBOX) != 0;
+ 
+   if (sandboxed)
+
+From 04aa33fbb0f207aae43ef90c38d5b6bbaff0df62 Mon Sep 17 00:00:00 2001
+From: Sebastian Wick <sebastian.wick@redhat.com>
+Date: Mon, 6 Jul 2026 17:40:49 +0200
+Subject: [PATCH 4/5] portal: Cleanup getting the host-like environment for
+ flatpak-run
+
+---
+ portal/flatpak-portal.c | 58 ++++++++++++++++++++++-------------------
+ 1 file changed, 31 insertions(+), 27 deletions(-)
+
+diff --git a/portal/flatpak-portal.c b/portal/flatpak-portal.c
+index 5cd2e98bff..183d3fe477 100644
+--- a/portal/flatpak-portal.c
++++ b/portal/flatpak-portal.c
+@@ -908,33 +908,37 @@ handle_spawn (PortalFlatpak         *object,
+       return G_DBUS_METHOD_INVOCATION_HANDLED;
+     }
+ 
+-    {
+-      static const char * const mock_run_environ[] = { "FOO=bar", NULL };
+-
+-      if (testing)
+-        env = g_strdupv ((GStrv) mock_run_environ);
+-      else
+-        env = flatpak_instance_get_run_environ (instance, &error);
+-
+-      if (env == NULL)
+-        {
+-          if (g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
+-            {
+-              g_warning ("Environment for \"flatpak run\" was not found, falling back to current environment");
+-              env = g_strdupv (original_environ);
+-            }
+-          else
+-            {
+-              g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR,
+-                                                     G_DBUS_ERROR_INVALID_ARGS,
+-                                                     "Could not load environment for \"flatpak run\": %s",
+-                                                     error->message);
+-              return G_DBUS_METHOD_INVOCATION_HANDLED;
+-            }
+-
+-          g_clear_error (&error);
+-        }
+-    }
++  /* Pass the calling instance's run-environ as the envp for spawning
++   * flatpak run, so it can make host-level decisions (DISPLAY, GL drivers,
++   * XDG_RUNTIME_DIR, etc.) based on the original environment. This must NOT
++   * go into --env-fd, because run-environ is host-like and --env-fd injects
++   * into the sandbox payload environment.
++   */
++  {
++    static const char * const mock_run_environ[] = { "FOO=bar", NULL };
++
++    if (testing)
++      env = g_strdupv ((GStrv) mock_run_environ);
++    else
++      env = flatpak_instance_get_run_environ (instance, &error);
++
++    if (env == NULL)
++      {
++        if (!g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
++          {
++            g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR,
++                                                   G_DBUS_ERROR_INVALID_ARGS,
++                                                   "Could not load environment for \"flatpak run\": %s",
++                                                   error->message);
++            return G_DBUS_METHOD_INVOCATION_HANDLED;
++          }
++
++        g_clear_error (&error);
++        g_warning ("Environment for \"flatpak run\" was not found, "
++                   "falling back to current environment");
++        env = g_strdupv (original_environ);
++      }
++  }
+ 
+   if ((flatpak = g_getenv ("FLATPAK_PORTAL_MOCK_FLATPAK")) != NULL)
+     g_ptr_array_add (flatpak_argv, g_strdup (flatpak));
+
+From 254b24275567178626b5efb5d6ead2b0c2483cb7 Mon Sep 17 00:00:00 2001
+From: Sebastian Wick <sebastian.wick@redhat.com>
+Date: Mon, 29 Jun 2026 15:11:26 +0200
+Subject: [PATCH 5/5] portal: Test that the different envs get created as
+ expected
+
+Assisted-by: Claude:opus-4.6
+---
+ tests/mock-flatpak.c |  15 +++++-
+ tests/test-portal.c  | 113 +++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 127 insertions(+), 1 deletion(-)
+
+diff --git a/tests/mock-flatpak.c b/tests/mock-flatpak.c
+index c340c781c9..ac27c4d031 100644
+--- a/tests/mock-flatpak.c
++++ b/tests/mock-flatpak.c
+@@ -28,7 +28,8 @@
+ 
+ int
+ main (int argc,
+-      char **argv)
++      char **argv,
++      char **envp)
+ {
+   int i;
+ 
+@@ -37,6 +38,18 @@ main (int argc,
+   for (i = 0; i < argc; i++)
+     g_print ("argv[%d] = %s\n", i, argv[i]);
+ 
++  for (i = 0; envp != NULL && envp[i] != NULL; i++)
++    {
++      const char *eq = strchr (envp[i], '=');
++
++      if (eq != NULL)
++        {
++          g_autofree char *key = g_strndup (envp[i], eq - envp[i]);
++
++          g_print ("inherited[%s] = %s\n", key, eq + 1);
++        }
++    }
++
+   for (i = 0; i < argc; i++)
+     {
+       if (g_str_has_prefix (argv[i], "--env-fd="))
+diff --git a/tests/test-portal.c b/tests/test-portal.c
+index 4d9e6385b8..40df8241a7 100644
+--- a/tests/test-portal.c
++++ b/tests/test-portal.c
+@@ -422,6 +422,118 @@ test_fd_passing (Fixture *f,
+     }
+ }
+ 
++static char *
++spawn_and_capture_output (Fixture *f,
++                          guint flags,
++                          GVariant *envs)
++{
++  g_autoptr(GError) error = NULL;
++  g_autoptr(GUnixFDList) fds_in = g_unix_fd_list_new ();
++  g_autoptr(GUnixFDList) fds_out = NULL;
++  g_auto(GVariantBuilder) fd_map_builder = {};
++  g_autofree char *stdout_path = NULL;
++  glnx_autofd int stdout_fd = -1;
++  guint pid;
++  gboolean ok;
++  const char * const argv[] = { "hello", NULL };
++  gsize times_exited = 0;
++  gulong handler_id;
++  char *output;
++  int handle;
++
++  stdout_path = g_strdup ("/tmp/flatpak-portal-test.XXXXXX");
++  stdout_fd = g_mkstemp (stdout_path);
++  g_assert_no_errno (stdout_fd);
++  g_assert_no_errno (unlink (stdout_path));
++
++  g_variant_builder_init (&fd_map_builder, G_VARIANT_TYPE ("a{uh}"));
++
++  handle = g_unix_fd_list_append (fds_in, stdout_fd, &error);
++  g_assert_no_error (error);
++  g_variant_builder_add (&fd_map_builder, "{uh}",
++                         (guint32) STDOUT_FILENO, (gint32) handle);
++
++  handler_id = g_signal_connect (f->proxy, "spawn-exited",
++                                 G_CALLBACK (count_successful_exit_cb),
++                                 &times_exited);
++
++  ok = portal_flatpak_call_spawn_sync (f->proxy,
++                                       "/",
++                                       argv,
++                                       g_variant_builder_end (&fd_map_builder),
++                                       envs,
++                                       flags,
++                                       g_variant_new ("a{sv}", NULL),
++                                       fds_in,
++                                       &pid,
++                                       &fds_out,
++                                       NULL,
++                                       &error);
++  g_assert_no_error (error);
++  g_assert_true (ok);
++
++  while (times_exited == 0)
++    g_main_context_iteration (NULL, TRUE);
++
++  g_signal_handler_disconnect (f->proxy, handler_id);
++
++  g_assert_no_errno (lseek (stdout_fd, 0, SEEK_SET));
++  output = glnx_fd_readall_utf8 (stdout_fd, NULL, NULL, &error);
++  g_assert_no_error (error);
++  g_assert_nonnull (output);
++
++  return output;
++}
++
++static void
++test_spawn_env (Fixture *f,
++                gconstpointer context G_GNUC_UNUSED)
++{
++  g_autofree char *output = NULL;
++
++  fixture_start_portal (f);
++
++  /* The mock run-environ (FOO=bar) should be in the spawned process
++   * environment, not injected into the sandbox via --env-fd */
++  output = spawn_and_capture_output (f, FLATPAK_SPAWN_FLAGS_NONE,
++                                     g_variant_new ("a{ss}", NULL));
++  g_test_message ("Output (default): %s", output);
++  g_assert_nonnull (strstr (output, "inherited[FOO] = bar"));
++  g_assert_null (strstr (output, "env[FOO] = bar"));
++  g_assert_null (strstr (output, "--clear-env"));
++  g_clear_pointer (&output, g_free);
++
++  /* With CLEAR_ENV, --clear-env should be passed to flatpak run, but
++   * the run-environ should still be in the spawned process environment */
++  output = spawn_and_capture_output (f, FLATPAK_SPAWN_FLAGS_CLEAR_ENV,
++                                     g_variant_new ("a{ss}", NULL));
++  g_test_message ("Output (clear-env): %s", output);
++  g_assert_nonnull (strstr (output, "inherited[FOO] = bar"));
++  g_assert_null (strstr (output, "env[FOO] = bar"));
++  g_assert_nonnull (strstr (output, "--clear-env"));
++  g_clear_pointer (&output, g_free);
++
++  /* Env vars passed explicitly via D-Bus arg_envs should end up in
++   * --env-fd (sandbox payload), not in the process environment */
++  {
++    g_auto(GVariantBuilder) env_builder = {};
++
++    g_variant_builder_init (&env_builder, G_VARIANT_TYPE ("a{ss}"));
++    g_variant_builder_add (&env_builder, "{ss}", "BAZ", "qux");
++
++    output = spawn_and_capture_output (f, FLATPAK_SPAWN_FLAGS_NONE,
++                                       g_variant_builder_end (&env_builder));
++    g_test_message ("Output (with arg_envs): %s", output);
++    g_assert_nonnull (strstr (output, "env[BAZ] = qux"));
++    g_assert_null (strstr (output, "inherited[BAZ] = qux"));
++    g_assert_nonnull (strstr (output, "inherited[FOO] = bar"));
++    g_clear_pointer (&output, g_free);
++  }
++
++  g_subprocess_send_signal (f->portal, SIGTERM);
++  g_subprocess_wait (f->portal, NULL, NULL);
++}
++
+ static void
+ test_replace (Fixture *f,
+               gconstpointer context G_GNUC_UNUSED)
+@@ -478,6 +590,7 @@ main (int argc,
+   g_test_add ("/help", Fixture, NULL, setup, test_help, teardown);
+   g_test_add ("/basic", Fixture, NULL, setup, test_basic, teardown);
+   g_test_add ("/fd-passing", Fixture, NULL, setup, test_fd_passing, teardown);
++  g_test_add ("/spawn-env", Fixture, NULL, setup, test_spawn_env, teardown);
+   g_test_add ("/replace", Fixture, NULL, setup, test_replace, teardown);
+ 
+   return g_test_run ();
