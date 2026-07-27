@@ -95,6 +95,26 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./souploader.diff {
       nixLibSoup3Path = "${lib.getLib libsoup_3}/lib";
     })
+    # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/11262
+    (fetchpatch {
+      name = "GStreamer-SA-2026-0021-1.patch";
+      url = "https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/35a905a92f4cfc85941c6c820009ac9219f755b2.patch";
+      sha256 = "sha256-1SgQo+wb2Adcgrz3zn6/qn248vnBdPuk2oJ1v9+Dbzo=";
+      stripLen = 2;
+    })
+    (fetchpatch {
+      name = "GStreamer-SA-2026-0021-2.patch";
+      url = "https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/0d819ceb654b06bbdd54381da5363c16751758a2.patch";
+      sha256 = "sha256-a8P1YxLNMkYka01+8MhBO+uSzGbR186sumlQk5LuGfY=";
+      stripLen = 2;
+    })
+    # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/11263
+    (fetchpatch {
+      name = "GStreamer-SA-2026-0022.patch";
+      url = "https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/6db6dd058ebc3607452311b7dc47b0359b40b293.patch";
+      sha256 = "sha256-gaBUpEdZB0PrnI1IR53jtM0kecHpUIzavUdADN1NNlQ=";
+      stripLen = 2;
+    })
   ];
 
   strictDeps = true;
