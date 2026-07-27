@@ -4929,8 +4929,8 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "leafo";
         repo = "moonscript";
-        rev = "402be8a6df8ff57c4183db44e0c130d14d69bf87";
-        hash = "sha256-rIkq6rk5A9yYbRcFLJ9wE+PQKGvpOB+7iTDbq9T/1OM=";
+        rev = "d2f397e9401f7d6939dc640c578d124db336e491";
+        hash = "sha256-ot2hqTbYDEU1Dz1str/JiiBcNBdDxl8kpbB+qn8rj+8=";
       };
 
       disabled = luaOlder "5.1";
