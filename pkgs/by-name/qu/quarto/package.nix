@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir bin/tools/aarch64
     mkdir bin/tools/x86_64
 
-    ln -s ${lib.makeBinPath [ pandoc ]}/pandoc bin/tools/x86_64/pandoc
+    ln -s ${lib.getExe pandoc} bin/tools/x86_64/pandoc
     ln -s ${lib.makeBinPath [ pandoc ]}/pandoc bin/tools/aarch64/pandoc
 
 
