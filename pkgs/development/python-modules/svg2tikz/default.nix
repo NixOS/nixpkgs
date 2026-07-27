@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "svg2tikz";
   version = "3.3.6";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xyz2tex";
     repo = "svg2tikz";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-0Bp+nr/jlu9eJqMQOlBwsmr468qUgxJqgLK2VDNT9yY=";
   };
 
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "svg2tikz" ];
 
   meta = {
-    changelog = "https://github.com/xyz2tex/svg2tikz/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/xyz2tex/svg2tikz/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     homepage = "https://github.com/xyz2tex/svg2tikz";
     description = "Set of tools for converting SVG graphics to TikZ/PGF code";
     license = lib.licenses.gpl2Plus;
@@ -52,4 +52,4 @@ buildPythonPackage rec {
       gal_bolle
     ];
   };
-}
+})
