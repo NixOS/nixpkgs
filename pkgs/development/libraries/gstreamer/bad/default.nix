@@ -112,8 +112,6 @@
   guiSupport ? false,
   gst-plugins-bad,
   apple-sdk_gstreamer,
-  # TODO: Clean up on `staging`.
-  llvmPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -158,10 +156,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (gst-plugins-base.waylandEnabled && stdenv.hostPlatform.isLinux) [
     wayland-scanner
-  ]
-  # TODO: Clean up on `staging`.
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    llvmPackages.lld
   ];
 
   buildInputs = [
@@ -413,9 +407,6 @@ stdenv.mkDerivation (finalAttrs: {
   # This package has some `_("string literal")` string formats
   # that trip up clang with format security enabled.
   hardeningDisable = [ "format" ];
-
-  # TODO: Clean up on `staging`.
-  env.NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isDarwin "-fuse-ld=lld";
 
   doCheck = false; # fails 20 out of 58 tests, expensive
 
