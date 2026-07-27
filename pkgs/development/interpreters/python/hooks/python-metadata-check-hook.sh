@@ -19,7 +19,7 @@ pythonMetadataCheckPhase() {
   # `python -P` avoids picking up egg-info dirs in $PWD
   local metadataVersion
   metadataVersion="$(PYTHONPATH="$pythonMetadataCheckOutput/@pythonSitePackages@:$PYTHONPATH" \
-    @pythonInterpreter@ -P -c 'from importlib.metadata import version; import sys; print(version(sys.argv[1]))' "$derivationPname")"
+    @pythonInterpreter@ -P @retrieveMetadata@ "$derivationPname")"
 
   # check that both versions can be parsed
   @pythonWithPackaging@ -c "from packaging.version import Version; from sys import argv; Version(argv[1]); Version(argv[2])" "$derivationVersion" "$metadataVersion"
