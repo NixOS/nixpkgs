@@ -269,23 +269,6 @@
         nvidia-container-toolkit.mounts =
           let
             nvidia-driver = config.hardware.nvidia.package;
-            egl-vendor-manifest = pkgs.writeText "nvidia-egl-vendor.json" (
-              builtins.toJSON {
-                file_format_version = "1.0.0";
-                ICD.library_path = "libEGL_nvidia.so.0";
-              }
-            );
-            # api_version is required by the Vulkan loader but its value is
-            # ignored, as the loader queries the driver directly.
-            vulkan-icd-manifest = pkgs.writeText "nvidia-icd.json" (
-              builtins.toJSON {
-                file_format_version = "1.0.0";
-                ICD = {
-                  library_path = "libGLX_nvidia.so.0";
-                  api_version = "1.3.0";
-                };
-              }
-            );
           in
           (lib.mkMerge [
             [
@@ -344,11 +327,11 @@
             ])
             (lib.mkIf config.hardware.nvidia-container-toolkit.mount-nvidia-graphics-config [
               {
-                hostPath = "${egl-vendor-manifest}";
+                hostPath = "${lib.getLib nvidia-driver}/share/glvnd/egl_vendor.d/10_nvidia.json";
                 containerPath = "/usr/share/glvnd/egl_vendor.d/10_nvidia.json";
               }
               {
-                hostPath = "${vulkan-icd-manifest}";
+                hostPath = "${lib.getLib nvidia-driver}/share/vulkan/icd.d/nvidia_icd.json";
                 containerPath = "/usr/share/vulkan/icd.d/nvidia_icd.json";
               }
             ])

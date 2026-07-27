@@ -134,6 +134,12 @@ in
         }
       ];
     };
+
+    one-gpu-userspace-driver =
+      { config, ... }:
+      {
+        hardware.nvidia.package = lib.mkForce config.boot.kernelPackages.nvidiaPackages.stable;
+      };
   };
   testScript = ''
     start_all()
@@ -149,8 +155,9 @@ in
       one_gpu.succeed("podman run --pull=never --device=nvidia.com/gpu=all -v /run/opengl-driver:/run/opengl-driver:ro cdi-test:latest")
 
     with subtest("The generated CDI spec exposes the Nvidia EGL and Vulkan loader manifests"):
-      one_gpu.succeed("grep -q /usr/share/glvnd/egl_vendor.d/10_nvidia.json /var/run/cdi/nvidia-container-toolkit.json")
-      one_gpu.succeed("grep -q /usr/share/vulkan/icd.d/nvidia_icd.json /var/run/cdi/nvidia-container-toolkit.json")
+      one_gpu_userspace_driver.wait_for_unit("nvidia-container-toolkit-cdi-generator.service")
+      one_gpu_userspace_driver.succeed("jq -e --arg p /usr/share/glvnd/egl_vendor.d/10_nvidia.json '.containerEdits.mounts[] | select(.containerPath == $p)' /var/run/cdi/nvidia-container-toolkit.json")
+      one_gpu_userspace_driver.succeed("jq -e --arg p /usr/share/vulkan/icd.d/nvidia_icd.json '.containerEdits.mounts[] | select(.containerPath == $p)' /var/run/cdi/nvidia-container-toolkit.json")
 
     # Issue: https://github.com/NixOS/nixpkgs/issues/319201
     with subtest("The generated CDI spec skips specified non-existant paths in the host"):
