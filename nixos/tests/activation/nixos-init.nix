@@ -35,6 +35,12 @@
 
       with subtest("activation"):
         t.assertEqual("${nodes.machine.system.build.toplevel}", machine.succeed("readlink /run/current-system").strip())
+
+        # Verify journal priority prefixes are emitted (and parsed) when stderr
+        # is the journal: the message should be at info level (6) and the
+        # message text should not contain a literal "<6>".
+        machine.succeed("journalctl -b -p info..info -o cat | grep -F 'Setting up /run/current-system'")
+        machine.fail("journalctl -b -o cat | grep -F '<6>Setting up'")
         t.assertEqual("${nodes.machine.hardware.firmware}/lib/firmware", machine.succeed("cat /sys/module/firmware_class/parameters/path").strip())
         t.assertEqual("${pkgs.kmod}/bin/modprobe", machine.succeed("cat /proc/sys/kernel/modprobe").strip())
         t.assertEqual("${nodes.machine.environment.usrbinenv}", machine.succeed("readlink /usr/bin/env").strip())

@@ -1,8 +1,14 @@
-use std::{fs, os::unix::fs::PermissionsExt, path::Path, process::Command};
+use std::{fs, os::unix::fs::PermissionsExt, path::Path};
 
 use anyhow::{Context, Result};
+use rustix::mount::{MountFlags, mount_bind, mount_remount};
 
-use crate::{activate::activate, config::Config, fs::atomic_symlink, proc_mounts::Mounts};
+use crate::{
+    activate::activate,
+    config::Config,
+    fs::{atomic_symlink, split_mount_opts},
+    proc_mounts::Mounts,
+};
 
 const NIX_STORE_PATH: &str = "/nix/store";
 
@@ -77,29 +83,14 @@ fn remount_nix_store(prefix: &str, nix_store_mount_opts: &[String]) -> Result<()
     if !missing_opts.is_empty() {
         log::info!("Remounting /nix/store with {}...", missing_opts.join(","));
 
-        mount(&["--bind", &nix_store_path, &nix_store_path])?;
-        mount(&[
-            "-o",
-            &format!("remount,bind,{}", missing_opts.join(",")),
-            &nix_store_path,
-        ])?;
-    }
+        mount_bind(&nix_store_path, &nix_store_path)
+            .with_context(|| format!("Failed to bind-mount {nix_store_path}"))?;
 
-    Ok(())
-}
-
-/// Call `mount` with the provided `args`.
-fn mount(args: &[&str]) -> Result<()> {
-    let output = Command::new("mount")
-        .args(args)
-        .output()
-        .context("Failed to run mount. Most likely, the binary is not on PATH")?;
-
-    if !output.status.success() {
-        return Err(anyhow::anyhow!(
-            "mount executed unsuccessfully: {}",
-            String::from_utf8_lossy(&output.stdout)
-        ));
+        // MS_REMOUNT|MS_BIND sets the per-mount flags to exactly what is
+        // passed; any flag not included here is cleared.
+        let (flags, data) = split_mount_opts(nix_store_mount_opts);
+        mount_remount(&nix_store_path, MountFlags::BIND | flags, data.as_c_str())
+            .with_context(|| format!("Failed to remount {nix_store_path}"))?;
     }
 
     Ok(())
