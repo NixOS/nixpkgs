@@ -146,7 +146,6 @@ in
             };
 
             global = {
-              # TODO speed units
               upload = {
                 slots = mkOption {
                   type = ints.unsigned;
@@ -154,7 +153,7 @@ in
                 };
                 speed_limit = mkOption {
                   type = ints.unsigned;
-                  description = "Total upload speed limit.";
+                  description = "Total upload speed limit in kibibytes per second.";
                 };
               };
               download = {
@@ -164,8 +163,8 @@ in
                 };
                 speed_limit = mkOption {
                   type = ints.unsigned;
-                  description = "Total upload download limit";
-                };
+                  description = "Total download speed limit in kibibytes per second."; 
+                 };
               };
             };
 
