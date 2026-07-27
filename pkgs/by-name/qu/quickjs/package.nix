@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quickjs";
-  version = "2025-09-13-2";
+  version = "2026-06-04";
 
   src = fetchurl {
     url = "https://bellard.org/quickjs/quickjs-${finalAttrs.version}.tar.xz";
-    hash = "sha256-mWxrUBj8lVrU0GQm0OnLcTaFoAyCWqXAQYvVP334sLQ=";
+    hash = "sha256-s3boObMil4MT2Sn9IGY7EbpYt131pGwSbdGeovpwrSo=";
   };
 
   outputs = [
@@ -121,11 +121,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     mainProgram = "qjs";
     platforms = lib.platforms.all;
-    # Pending upstream fix: https://github.com/bellard/quickjs/pull/483
-    knownVulnerabilities = [
-      "CVE-2026-1144"
-      "CVE-2026-1145"
-      "CVE-2026-3979"
-    ];
   };
 })
