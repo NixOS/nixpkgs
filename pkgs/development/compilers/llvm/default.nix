@@ -36,9 +36,9 @@ let
       name = "23";
     };
     "24.0.0-git".gitRelease = {
-      rev = "a64f7412551ae63a49dd8617f93ab89878288879";
-      rev-version = "24.0.0-unstable-2026-07-19";
-      sha256 = "sha256-51tlsUW4cObqyCGsrvzFoisNtN9S8Qk7iCDbg6/awVI=";
+      rev = "43a704b657423a0eead02e64911b413c4afca73f";
+      rev-version = "24.0.0-unstable-2026-07-26";
+      sha256 = "sha256-wXhYrz3g5F7iwVqgIVryfRtkQ+3lKIKRDd9D8X18dEE=";
     };
   }
   // llvmVersions;
