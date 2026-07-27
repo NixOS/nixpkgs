@@ -39,6 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.VERSION = finalAttrs.version;
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   meta = {
     description = "Programmer's text editor";
     homepage = "https://github.com/neurocyte/flow";
