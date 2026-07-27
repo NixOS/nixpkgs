@@ -298,9 +298,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ''
       runHook preCheck
       export PYTHONPATH=$PYTHONPATH:$PWD/out/pyenv/${python3.sitePackages}
-      HOME=$TMP ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib \
+      ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib \
         pytest -p no:cacheprovider pylib/tests -k ${disabledTestsString}
-      HOME=$TMP ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib:$PWD/pylib:$PWD/out/qt \
+      ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib:$PWD/pylib:$PWD/out/qt \
         pytest -p no:cacheprovider qt/tests -k ${disabledTestsString} --ignore qt/tests/test_installer.py
       runHook postCheck
     '';
