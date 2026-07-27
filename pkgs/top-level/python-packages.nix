@@ -12823,8 +12823,6 @@ self: super: with self; {
 
   parsel = callPackage ../development/python-modules/parsel { };
 
-  parselmouth = callPackage ../development/python-modules/parselmouth { };
-
   parsimonious = callPackage ../development/python-modules/parsimonious { };
 
   parsley = callPackage ../development/python-modules/parsley { };
@@ -13537,6 +13535,8 @@ self: super: with self; {
   ppscore = callPackage ../development/python-modules/ppscore { };
 
   pq = callPackage ../development/python-modules/pq { };
+
+  praat-parselmouth = callPackage ../development/python-modules/praat-parselmouth { };
 
   prana-api-client = callPackage ../development/python-modules/prana-api-client { };
 
