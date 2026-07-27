@@ -1,6 +1,5 @@
 {
   buildGo127Module,
-  buildPackages,
   fetchFromGitHub,
   fetchNpmDeps,
   lib,
@@ -8,14 +7,11 @@
   npmHooks,
   pkg-config,
   stdenv,
-  ffmpeg-headless,
   taglib,
   zlib,
   nixosTests,
   nix-update-script,
-  ffmpegSupport ? true,
   versionCheckHook,
-  plugins ? [ ],
 }:
 
 buildGo127Module (finalAttrs: {
@@ -52,8 +48,6 @@ buildGo127Module (finalAttrs: {
     pkg-config
   ];
 
-  runtimeInputs = plugins;
-
   overrideModAttrs = oldAttrs: {
     nativeBuildInputs = lib.filter (drv: drv != npmHooks.npmConfigHook) oldAttrs.nativeBuildInputs;
     preBuild = null;
@@ -87,13 +81,6 @@ buildGo127Module (finalAttrs: {
     make buildjs
   '';
 
-  postInstall = ''
-    mkdir -p $out/share/plugins/
-    ${lib.concatMapStringsSep "\n" (plugin: ''
-      ln -s ${plugin}/share/${plugin.pname}.ndp $out/share/plugins/
-    '') plugins}
-  '';
-
   tags = [
     "netgo"
     "sqlite_fts5"
@@ -102,13 +89,7 @@ buildGo127Module (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  postFixup = lib.optionalString ffmpegSupport ''
-    wrapProgram $out/bin/navidrome \
-      --prefix PATH : ${lib.makeBinPath [ ffmpeg-headless ]}
-  '';
-
   passthru = {
-    inherit plugins;
     tests.navidrome = nixosTests.navidrome;
     updateScript = nix-update-script { };
   };
