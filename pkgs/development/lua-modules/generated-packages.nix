@@ -5060,15 +5060,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "neotest";
-      version = "5.19.2-1";
+      version = "5.20.0-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/neotest-5.19.2-1.rockspec";
-          sha256 = "01dlqkl877z7b4rvxbrw56z7804lwdy9k7vzy0zld7lvbhhxi3ha";
+          url = "mirror://luarocks/neotest-5.20.0-1.rockspec";
+          sha256 = "1kk5vnmq0ri2gglmls4ry76pg9yq21qdw9zgwfdy5j4frk299krp";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/nvim-neotest/neotest/archive/4e2cd42c4252ee9d2435571d9adcdbc1d47931fe.zip";
-        sha256 = "01n0fr2k5fqj3xj0gng81d7abjr64b1ad0f0fp5qpc8wxnjk5agj";
+        url = "https://github.com/nvim-neotest/neotest/archive/1c529a1ef9c82e8131e872368415cecc2bb86ea2.zip";
+        sha256 = "0702apmnhc0mmixmwadz68drwmwdm2rb4ydmmynvalmdqgycc3ik";
       };
 
       disabled = luaOlder "5.1";
