@@ -95,9 +95,21 @@ buildPythonApplication (finalAttrs: {
   ];
 
   # Recreate _version.py, deleted at fetch time due to non-reproducibility.
-  # should be done in postInstall to overwrite what versioneer generates again during the build phase
-  postInstall = ''
-    echo 'def get_versions(): return {"version": "${finalAttrs.version}"}' > $out/${python.sitePackages}/kikit/_version.py
+  # Must include version_json block because versioneer uses regex parsing on this file.
+  postPatch = ''
+    cat > kikit/_version.py <<'EOF'
+    # DO NOT EDIT! nixpkgs GENERATED FILE
+    import json
+
+    version_json = ''''
+    {
+     "version": "${finalAttrs.version}"
+    }
+    ''''  # END VERSION_JSON
+
+    def get_versions():
+        return json.loads(version_json)
+    EOF
   '';
 
   preCheck = ''

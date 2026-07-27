@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pygsl";
-  version = "2.6.4";
+  version = "2.6.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pygsl";
     repo = "pygsl";
     tag = "v${version}";
-    hash = "sha256-dZIWOwRRrF1bux9UTIxN31/S380wPT4gpQ/gYbUO4FQ=";
+    hash = "sha256-o1bJUebv9nP7oMI/UscLe7Bya82wwl3NPr8WerZ1K9I=";
   };
 
   nativeBuildInputs = [

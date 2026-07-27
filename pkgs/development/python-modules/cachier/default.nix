@@ -96,6 +96,9 @@ buildPythonPackage rec {
     export HOME="$(mktemp -d)"
   '';
 
+  # removes .dev0 from the METADATA version
+  env.RELEASING_PROCESS = "1";
+
   pythonImportsCheck = [ "cachier" ];
 
   meta = {
