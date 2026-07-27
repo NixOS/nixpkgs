@@ -121,14 +121,14 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = fetchgit {
-    url = "https://https.git.savannah.gnu.org/git/grub.git";
+    url = "https://gitlab.freedesktop.org/gnu-grub/grub.git";
     tag = "grub-${version}";
     hash = "sha256-Gkpde5CeJOQ+0p5WGwXZ2P881jxrWkuFw3Fh4lul/so=";
   };
 
   patches =
     let
-      grubPatch = commit: "https://cgit.git.savannah.gnu.org/cgit/grub.git/patch/?id=${commit}";
+      grubPatch = commit: "https://gitlab.freedesktop.org/gnu-grub/grub/-/commit/${commit}.patch";
     in
     [
       ./fix-bash-completion.patch
@@ -136,18 +136,14 @@ stdenv.mkDerivation rec {
       ./bootstrap-po-downloads.patch
 
       /*
-        Restore gfxterm_menu (and cmdline_cat). The NixOS installer uses it.
-
-        I want to mention that dead code gets automatically removed by the bootstrapper.
-        This would include files like `grub-core/tests/gfxterm_menu.c`.
-
-        Luckily for us, it doesn't have to be this way. We can re-run `autogen.sh`.
+        Fix parallel `msgmerge` race on de.po.
+        See https://gitlab.freedesktop.org/gnu-grub/grub/-/work_items/18
+        See https://github.com/NixOS/nixpkgs/pull/248747#issuecomment-1676301670
       */
       (fetchpatch {
-        name = "03_restore_gfxterm_menu.patch";
-        url = grubPatch "ca2a91f43bf6e1df23a07c295534f871ddf2d401";
-        revert = true;
-        hash = "sha256-nFOoIyJqORY3I/mFGB9rcdpsnUcoUwfsQ7F+TQr4Aps=";
+        name = "02_fix_msmerge.patch";
+        url = grubPatch "c2a215245e2e7d61da4f41945222bd761679ae11";
+        hash = "sha256-vBCDej/5DVX1NQMR05kNunxbmfyKywyYQtu4tg3Q2Cs=";
       })
 
       /*
@@ -157,15 +153,8 @@ stdenv.mkDerivation rec {
       */
       (fetchpatch {
         name = "01_fix_kernel-img_load_offset.patch";
-        url = grubPatch "1a5417f39a0ccefcdd5440f2a67f84d2d2e26960";
-        revert = true;
-        hash = "sha256-mHaVrzGs7uqYqSSAHOw1qgZSHLWG3CmVcZWrSLvVOy8=";
-      })
-      (fetchpatch {
-        name = "00_fix_kernel-img_load_offset.patch";
-        url = grubPatch "ac042f3f58d33ce9cd5ff61750f06da1a1d7b0eb";
-        revert = true;
-        hash = "sha256-uYlS4r0frL62H35Bts+W9l4MOHCcoBGOhbCQtxU363s=";
+        url = grubPatch "1dc2986c7e8480d955f87d276d31400116a21fac";
+        hash = "sha256-T1V7Rklc7RNsKTwk2gLoWHxoXUlCM0/mxcnymqUcyRg=";
       })
 
       # Required to build grub2_efi with GCC 16, or fails with "error: 'regparm' attribute ignored [-Werror=attributes]"
@@ -234,6 +223,9 @@ stdenv.mkDerivation rec {
   separateDebugInfo = !xenSupport;
 
   preConfigure = ''
+    # Trust me, it's NEVER missing.
+    substituteInPlace configure.ac --replace-fail 'm4_ifndef([AX_CHECK_LINK_FLAG], [m4_fatal([autoconf-archive is missing. You must install it to generate the configure script.])])' ' '
+
     for i in "tests/util/"*.in
     do
       sed -i "$i" -e's|/bin/bash|${stdenv.shell}|g'
@@ -312,6 +304,8 @@ stdenv.mkDerivation rec {
       "${efiSystemsInstall.${stdenv.hostPlatform.system}.target}-efi"
     else if ieee1275Support then
       "${ieee1275SystemsBuild.${stdenv.hostPlatform.system}.target}-ieee1275"
+    else if corebootSupport then
+      "i386"
     else
       lib.optionalString inPCSystems "${pcSystems.${stdenv.hostPlatform.system}.target}-pc";
 
@@ -319,11 +313,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''
-    ## Although usually referencing store paths is a bad idea, the reference to `gcc` inside grub_target_cppflags seems to be completely harmless.
-    #
-    ## I am still unsure about the functionality of modinfo.sh, but from what I can tell, it's just metadata.
+    # We have to do this or else closure size balloons up
 
     patchShebangs $out/lib/grub/*/modinfo.sh
+    sed -i $out/lib/grub/*/modinfo.sh -e "/grub_target_cppflags=/ s|'.*'|' '|"
   '';
 
   passthru.tests = {
