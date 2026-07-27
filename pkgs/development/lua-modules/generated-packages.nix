@@ -6054,18 +6054,18 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "std._debug";
-      version = "1.0.1-1";
+      version = "1.1.0-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/std._debug-1.0.1-1.rockspec";
-          sha256 = "0mr9hgzfr9v37da9rfys2wjq48hi3lv27i3g38433dlgbxipsbc4";
+          url = "mirror://luarocks/std._debug-1.1.0-1.rockspec";
+          sha256 = "14dv8qq00w0ri87yaaqjfgllc6q87067h7wjrniryg008vmcli4l";
         }).outPath;
       src = fetchzip {
-        url = "http://github.com/lua-stdlib/_debug/archive/v1.0.1.zip";
-        sha256 = "19vfpv389q79vgxwhhr09l6l6hf6h2yjp09zvnp0l07ar4v660pv";
+        url = "http://github.com/lua-stdlib/_debug/archive/v1.1.0.zip";
+        sha256 = "1sy10l61m228l6c80wrh8hsjvlgahlcdmg09p1n0m940wamf9zp5";
       };
 
-      disabled = luaOlder "5.1" || luaAtLeast "5.5";
+      disabled = luaOlder "5.1" || luaAtLeast "5.6";
 
       meta = {
         homepage = "http://lua-stdlib.github.io/_debug";
