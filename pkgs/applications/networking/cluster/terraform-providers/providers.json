@@ -319,11 +319,11 @@
     "vendorHash": null
   },
   "digitalocean_digitalocean": {
-    "hash": "sha256-r+Bi8F603JE9K4hZDFwuhYtfg3FKYNPP1A7lpvvrZQg=",
+    "hash": "sha256-1fTDTVbBiv0VKD73KFjBqqFSgZv/WZa/tQHNijanYXg=",
     "homepage": "https://registry.terraform.io/providers/digitalocean/digitalocean",
     "owner": "digitalocean",
     "repo": "terraform-provider-digitalocean",
-    "rev": "v2.95.0",
+    "rev": "v2.96.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -517,13 +517,13 @@
     "vendorHash": "sha256-/6esBCIsNXUmx38NXUk/d3Td4uSgwZXvkETQhaERwLQ="
   },
   "hashicorp_awscc": {
-    "hash": "sha256-SziDO4K6qv62zolBKdrhXIyaEOMM5hJ0h6ros1wC2l0=",
+    "hash": "sha256-dH3By6QoAYQCGOpg14wdW4WaIjoBB1c/AGBXDtOrl20=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/awscc",
     "owner": "hashicorp",
     "repo": "terraform-provider-awscc",
-    "rev": "v1.93.0",
+    "rev": "v1.94.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-dGxUV7gK4Af4O6FnZ2Pm6OKX0/xVU9+8nfUd0R/ot+Y="
+    "vendorHash": "sha256-g6Cl8TZq8W1pRq+PYcN4QPl7m0X2nhQgFhGJnIGn9oM="
   },
   "hashicorp_azuread": {
     "hash": "sha256-mEYEZIztDjyqWSJFoJPXtV0E9YikumtwGVtZA4Jfw3U=",

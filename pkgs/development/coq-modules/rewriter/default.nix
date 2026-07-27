@@ -12,13 +12,11 @@ mkCoqDerivation {
   inherit version;
   defaultVersion =
     let
-      inherit (lib.versions) range;
+      case = case: out: { inherit case out; };
     in
+    with lib.versions;
     lib.switch coq.coq-version [
-      {
-        case = range "8.17" "9.2";
-        out = "0.0.15";
-      }
+      (case (range "8.17" "9.2") "0.0.15")
     ] null;
   release = {
     "0.0.15".hash = "sha256-zxNIMppFXUKShOXLbdZphy0Je5ii6cjcWUUcQMTcaHk=";
