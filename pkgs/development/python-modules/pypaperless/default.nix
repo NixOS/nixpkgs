@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pypaperless";
-  version = "5.2.2";
+  version = "5.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tb1337";
     repo = "paperless-api";
     tag = "v${version}";
-    hash = "sha256-hlXoV7eusK3Zl8VVP7U6RIHWj2pisLMCasqECXmi3Qk=";
+    hash = "sha256-G40x/3bb3h49eynwYCoJPeBLmX1Ty+mq3AGQoBAiZOA=";
   };
 
   postPatch = ''
