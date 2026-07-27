@@ -81,10 +81,12 @@ let
     meta = {
       homepage = "https://gmplib.org/";
       description = "GNU multiple precision arithmetic library";
-      license = with lib.licenses; [
-        lgpl3Only
-        gpl2Only
-      ];
+      license =
+        with lib.licenses;
+        OR [
+          lgpl3Plus
+          gpl2Plus
+        ];
 
       longDescription = ''
         GMP is a free library for arbitrary precision arithmetic, operating
