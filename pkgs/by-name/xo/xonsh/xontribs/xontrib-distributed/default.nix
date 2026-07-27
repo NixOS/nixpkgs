@@ -51,6 +51,9 @@ buildPythonPackage rec {
     description = "Dask Distributed integration for Xonsh";
     homepage = "https://github.com/xonsh/xontrib-distributed";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ greg ];
+    maintainers = with lib.maintainers; [
+      greg
+      infinidoge
+    ];
   };
 }
