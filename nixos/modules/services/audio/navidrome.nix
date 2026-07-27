@@ -8,7 +8,6 @@
 let
   inherit (lib)
     literalExpression
-    mkDefault
     mkEnableOption
     mkPackageOption
     mkOption
@@ -60,13 +59,9 @@ in
       finalPackage = mkOption {
         type = package;
         readOnly = true;
-        default = cfg.package.override {
-          inherit (cfg) plugins;
-        };
+        default = cfg.package.withPlugins (_: cfg.plugins);
         defaultText = literalExpression ''
-          config.services.navidrome.package.override {
-            inherit (config.services.navidrome) plugins;
-          }
+          config.services.navidrome.package.withPlugins (_: config.services.navidrome.wasmPlugins);
         '';
         description = "The final navidrome package including all selected plugins.";
       };
