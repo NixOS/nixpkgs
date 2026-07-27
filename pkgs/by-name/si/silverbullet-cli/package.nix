@@ -6,17 +6,17 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "silverbullet-cli";
-  version = "2.6.1";
+  version = "2.9.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "silverbulletmd";
     repo = "silverbullet";
     rev = finalAttrs.version;
-    hash = "sha256-vHRLOYsFsQjpDu3mlbJxWq+P07JnHdO54myFb2Rm18s=";
+    hash = "sha256-XQ0OKkiQrrmwmdGXk3dcim/2qosenF3EG2lkglQQ/iY=";
   };
 
-  vendorHash = "sha256-SvMPyJbSVrj+lwXrNh2WEYNI41oqlzchFxCtXvIl4/4=";
+  vendorHash = "sha256-8zZlhVptJq8y3k2DBghJ0lPNcIcaZYkrxN67b6dNBPs=";
   subPackages = [ "cmd/cli" ];
 
   env.CGO_ENABLED = 0;
