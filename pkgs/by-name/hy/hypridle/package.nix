@@ -18,13 +18,13 @@
 
 gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hypridle";
-  version = "0.1.7";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hypridle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YzRWE3rCnsY0WDRJcn4KvyWUoe+5zdkUYNIaHGP9BZ4=";
+    hash = "sha256-Wi8kgoWStgYopfjEmHZWsAG7Gkghr9RGFjYLVmxSKpQ=";
   };
 
   nativeBuildInputs = [

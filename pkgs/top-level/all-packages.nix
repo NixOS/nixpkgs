@@ -1505,10 +1505,6 @@ with pkgs;
 
   datasette = with python3Packages; toPythonApplication datasette;
 
-  diagrams-builder = callPackage ../tools/graphics/diagrams-builder {
-    inherit (haskellPackages) ghcWithPackages diagrams-builder;
-  };
-
   discourse = callPackage ../servers/web-apps/discourse { };
 
   discourseAllPlugins = discourse.override {
