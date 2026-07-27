@@ -23322,6 +23322,12 @@
     githubId = 20760527;
     name = "Madelyn";
   };
+  r4nmaru314 = {
+    email = "niklas.lehmann314@gmail.com";
+    github = "R4nmaru314";
+    githubId = 64467664;
+    name = "Niklas Lehmann";
+  };
   r4v3n6101 = {
     name = "r4v3n6101";
     email = "raven6107@gmail.com";
