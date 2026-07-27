@@ -42,6 +42,8 @@ let
   enable32BitAlsaPlugins =
     cfg.alsa.support32Bit && pkgs.stdenv.hostPlatform.isx86_64 && pkgs.pkgsi686Linux.pipewire != null;
 
+  inPipewireDirectory = hasPrefix "pipewire/";
+
   # The package doesn't output to $out/lib/pipewire directly so that the
   # overlays can use the outputs to replace the originals in FHS environments.
   #
@@ -383,7 +385,7 @@ in
         assertion =
           length (
             attrNames (
-              filterAttrs (name: value: hasPrefix "pipewire/" name || name == "pipewire") config.environment.etc
+              filterAttrs (name: value: inPipewireDirectory name || name == "pipewire") config.environment.etc
             )
           ) == 1;
         message = "Using `environment.etc.\"pipewire<...>\"` directly is no longer supported. Use `services.pipewire.extraConfig` or `services.pipewire.configPackages` instead.";

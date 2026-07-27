@@ -3962,6 +3962,8 @@ self: super: with self; {
 
   data-grand-lyon-ha = callPackage ../development/python-modules/data-grand-lyon-ha { };
 
+  data-password-entropy = callPackage ../development/python-modules/data-password-entropy { };
+
   databackend = callPackage ../development/python-modules/databackend { };
 
   databases = callPackage ../development/python-modules/databases { };
@@ -8444,8 +8446,6 @@ self: super: with self; {
 
   joblib = callPackage ../development/python-modules/joblib { };
 
-  jobspy = callPackage ../development/python-modules/jobspy { };
-
   johnnycanencrypt = callPackage ../development/python-modules/johnnycanencrypt { };
 
   josepy = callPackage ../development/python-modules/josepy { };
@@ -12851,8 +12851,6 @@ self: super: with self; {
 
   passlib = callPackage ../development/python-modules/passlib { };
 
-  password-entropy = callPackage ../development/python-modules/password-entropy { };
-
   paste = callPackage ../development/python-modules/paste { };
 
   pastedeploy = callPackage ../development/python-modules/pastedeploy { };
@@ -16547,6 +16545,8 @@ self: super: with self; {
   python-izone = callPackage ../development/python-modules/python-izone { };
 
   python-jenkins = callPackage ../development/python-modules/python-jenkins { };
+
+  python-jobspy = callPackage ../development/python-modules/python-jobspy { };
 
   python-join-api = callPackage ../development/python-modules/python-join-api { };
 
