@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netcat-openbsd";
-  version = "1.234-2";
+  version = "1.238-1";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "debian";
     repo = "netcat-openbsd";
     tag = "debian/${finalAttrs.version}";
-    hash = "sha256-kA9QzEI4nutQrKonHw+SxWYbuBLtn91edMAk8JBdAhU=";
+    hash = "sha256-CCxPZmZlTRNcQ985zf1RVYE4m3OHTM8FFWol1g8Osjc=";
   };
 
   postPatch = ''
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs debian/tests/client-server debian/checks/netcat
 
     # normally built by debian/rules
-    $CC -shared -o debian/checks/readpassphrase.so debian/checks/readpassphrase.c
+    $CC -shared -o debian/checks/readpassphrase${stdenv.hostPlatform.extensions.sharedLibrary} debian/checks/readpassphrase.c
     $CC -o debian/checks/sun_path-size debian/checks/sun_path-size.c
 
     # name resolution does not really exists in sandbox
