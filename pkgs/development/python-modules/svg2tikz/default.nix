@@ -5,12 +5,13 @@
   poetry-core,
   inkex,
   lxml,
+  pygobject3,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "svg2tikz";
-  version = "3.3.4";
+  version = "3.3.6";
 
   pyproject = true;
 
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = "xyz2tex";
     repo = "svg2tikz";
     tag = "v${version}";
-    hash = "sha256-hIVxrUqT9g3e8eKdz1xPqRBiN62BPLav+xPHm6WCAqw=";
+    hash = "sha256-0Bp+nr/jlu9eJqMQOlBwsmr468qUgxJqgLK2VDNT9yY=";
   };
 
   build-system = [
@@ -28,11 +29,13 @@ buildPythonPackage rec {
   dependencies = [
     inkex
     lxml
+    pygobject3
   ];
 
   pythonRelaxDeps = [
     "inkex"
     "lxml"
+    "pygobject"
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
