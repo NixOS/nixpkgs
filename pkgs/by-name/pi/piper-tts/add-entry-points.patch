@@ -1,0 +1,83 @@
+diff --git a/setup.py b/setup.py
+index d6f988f..7aeba9f 100644
+--- a/setup.py
++++ b/setup.py
+@@ -128,6 +128,9 @@ setup(
+     entry_points={
+         "console_scripts": [
+             "piper = piper.__main__:main",
++            "piper-train = piper.train.__main__:main",
++            "piper-server = piper.http_server:main",
++            "piper-alignment = piper.patch_voice_with_alignment:main",
+         ]
+     },
+ )
+diff --git a/src/piper/http_server.py b/src/piper/http_server.py
+index 901d6ae..513015b 100644
+--- a/src/piper/http_server.py
++++ b/src/piper/http_server.py
+@@ -10,8 +10,6 @@ from pathlib import Path
+ from typing import Any, Dict, List, Optional
+ from urllib.request import urlopen
+ 
+-from flask import Flask, render_template, request
+-
+ from . import PiperVoice, SynthesisConfig
+ from .download_voices import VOICES_JSON, download_voice
+ 
+@@ -20,6 +18,15 @@ _LOGGER = logging.getLogger()
+ 
+ def main() -> None:
+     """Run HTTP server."""
++
++    try:
++        from flask import Flask, render_template, request
++    except ImportError as e:
++        raise SystemExit(
++            "The HTTP server requires additional dependencies. "
++            "Install with: pip install piper-tts[http]"
++        ) from e
++
+     parser = argparse.ArgumentParser()
+     parser.add_argument("--host", default="0.0.0.0", help="HTTP server host")
+     parser.add_argument("--port", type=int, default=5000, help="HTTP server port")
+diff --git a/src/piper/train/__main__.py b/src/piper/train/__main__.py
+index e07c799..86edf23 100644
+--- a/src/piper/train/__main__.py
++++ b/src/piper/train/__main__.py
+@@ -1,8 +1,14 @@
+ import logging
+ 
+-import torch
+-from lightning.pytorch.callbacks import ModelCheckpoint
+-from lightning.pytorch.cli import LightningCLI
++try:
++    import torch
++    from lightning.pytorch.callbacks import ModelCheckpoint
++    from lightning.pytorch.cli import LightningCLI
++except ImportError as e:
++    raise SystemExit(
++        "Training requires additional dependencies. "
++        "Install with: pip install piper-tts[train]"
++    ) from e
+ 
+ from .vits.dataset import VitsDataModule
+ from .vits.lightning import VitsModel
+diff --git a/src/piper/patch_voice_with_alignment.py b/src/piper/patch_voice_with_alignment.py
+index 6487a9b..fc7d5ea 100644
+--- a/src/piper/patch_voice_with_alignment.py
++++ b/src/piper/patch_voice_with_alignment.py
+@@ -7,7 +7,13 @@ import argparse
+ import logging
+ from typing import Optional, Set
+ 
+-import onnx
++try:
++    import onnx
++except ImportError as e:
++    raise SystemExit(
++        "Alignment requires additional dependencies. "
++        "Install with: pip install piper-tts[alignment]"
++    ) from e
+ 
+ _LOGGER = logging.getLogger(__name__)

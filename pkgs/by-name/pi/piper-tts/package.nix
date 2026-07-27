@@ -73,6 +73,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # Add extra models flag to give extra non-voice modesl like g2pW
     # https://github.com/OHF-Voice/piper1-gpl/pull/245
     ./add-extra-models-flag.patch
+
+    # Add train, server, and alignment entry points
+    # https://github.com/OHF-Voice/piper1-gpl/pull/246
+    ./add-entry-points.patch
   ];
 
   build-system =
@@ -195,9 +199,20 @@ python3Packages.buildPythonApplication (finalAttrs: {
     train=$out/${python3Packages.python.sitePackages}/piper/train/vits
     rm -v src/piper/train/vits/monotonic_align/{Makefile,setup.py,core.c,core.pyx}
     cp -Rv src/piper/train/vits $train/
+  ''
+  + lib.optionalString (!withTrain) ''
+    rm $out/bin/piper-train
+  ''
+  + lib.optionalString (!withHTTP) ''
+    rm $out/bin/piper-server
+  ''
+  + lib.optionalString (!withAlignment) ''
+    rm $out/bin/piper-alignment
   '';
 
   passthru = {
+    inherit withTrain withHTTP withAlignment;
+
     tests = {
       version = testers.testVersion {
         package = finalAttrs.finalPackage;

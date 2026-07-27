@@ -36,5 +36,10 @@ symlinkJoin {
     wrapProgram $out/bin/piper \
       --add-flags "--data-dir $out/share/piper-voices" \
       --add-flags "--extra-models-dir $out/share/piper-extra-models-dir"
+  ''
+  + lib.optionalString piper-tts'.withHTTP ''
+    wrapProgram $out/bin/piper-server \
+      --add-flags "--data-dir $out/share/piper-voices" \
+      --add-flags "--extra-models-dir $out/share/piper-extra-models-dir"
   '';
 }
