@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -16,6 +17,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-IgGuWIsDsiMqscO4B876iTCdrR+nI9bpTQOyxjCtjMk=";
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Find and remove unused code in .nix source files";
