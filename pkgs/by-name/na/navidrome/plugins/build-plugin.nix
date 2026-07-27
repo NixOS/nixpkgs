@@ -25,6 +25,12 @@ lib.extendMkDerivation {
       ...
     }@args:
     {
+      __structuredAttrs = true;
+
+      nativeBuildInputs = [
+        zip
+      ];
+
       env = {
         CGO_ENABLED = "0";
       }
@@ -35,20 +41,21 @@ lib.extendMkDerivation {
         GOARCH=wasm \
         go build \
           -buildmode=c-shared \
-          -o "$GOPATH/bin/plugin.wasm" .
+          -o "./plugin.wasm" .
       '';
 
       installPhase = ''
         runHook preInstall
 
         mkdir -p "$out/share"
+        buildDir="$(mktemp -d)"
 
-        pushd $(mktemp -d)
-        cp "$GOPATH/bin/plugin.wasm" .
-        cp ${finalAttrs.src}/manifest.json .
+        cp "./plugin.wasm" "$buildDir"
+        cp manifest.json "$buildDir"
 
-        ${lib.getExe zip} \
-          "$out/share/${finalAttrs.pname}.ndp" \
+        pushd "$buildDir"
+
+        zip "$out/share/${finalAttrs.pname}.ndp" \
           plugin.wasm \
           manifest.json
 
