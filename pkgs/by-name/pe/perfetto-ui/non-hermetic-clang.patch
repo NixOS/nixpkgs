@@ -1,0 +1,21 @@
+From: nixpkgs
+Subject: [PATCH] ui/build: build wasm host tools with the non-hermetic (system) clang
+
+Perfetto's wasm build compiles a few host-side tools with the bundled
+hermetic clang, which on NixOS cannot find the C library headers
+(features.h, assert.h). Build them with the clang provided in the build
+environment instead, and skip building the bundled libc++.
+
+diff --git a/ui/build.mjs b/ui/build.mjs
+index 5fbdeaa2..e6297927 100644
+--- a/ui/build.mjs
++++ b/ui/build.mjs
+@@ -654,7 +654,7 @@ function updateSymlinks() {
+ function buildWasm(skipWasmBuild) {
+   if (!skipWasmBuild) {
+     if (!cfg.noOverrideGnArgs) {
+-      let gnVars = `is_debug=${cfg.debug}`;
++      let gnVars = `is_debug=${cfg.debug} is_hermetic_clang=false use_custom_libcxx=false skip_buildtools_check=true`;
+       if (childProcess.spawnSync('which', ['ccache']).status === 0) {
+         gnVars += ` cc_wrapper="ccache"`;
+       }
