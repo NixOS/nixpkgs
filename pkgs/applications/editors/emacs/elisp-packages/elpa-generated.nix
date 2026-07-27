@@ -6648,7 +6648,7 @@
       version = "9.8.7";
       src = fetchurl {
         url = "https://elpa.gnu.org/packages/org-9.8.7.tar";
-        sha256 = "1y7sf3p9jqkfw8k6wddy2p9hfskiq4a5hkx8sq39dgb4sri6v03d";
+        sha256 = "1pxljdl67f3lajsafrwb46dc4wgy3kd6x3g4n2hkdab915xkqlnr";
       };
       packageRequires = [ ];
       meta = {

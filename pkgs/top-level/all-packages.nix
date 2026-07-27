@@ -5989,6 +5989,9 @@ with pkgs;
   libdbusmenu-gtk2 = libdbusmenu.override { gtkVersion = "2"; };
   libdbusmenu-gtk3 = libdbusmenu.override { gtkVersion = "3"; };
 
+  libdisplay-info_0_2 = callPackage ../by-name/li/libdisplay-info/0.2.nix { };
+  libdisplay-info_0_3 = callPackage ../by-name/li/libdisplay-info/0.3.nix { };
+
   dwarfdump = libdwarf.bin;
 
   libfm-extra = libfm.override {
@@ -8846,6 +8849,11 @@ with pkgs;
   inherit (callPackages ../development/libraries/wlroots { })
     wlroots_0_19
     wlroots_0_20
+    ;
+
+  inherit (callPackages ../development/libraries/scenefx { })
+    scenefx_0_4
+    scenefx_0_5
     ;
 
   sway-contrib = recurseIntoAttrs (callPackages ../applications/misc/sway-contrib { });

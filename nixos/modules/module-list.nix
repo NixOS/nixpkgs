@@ -14,6 +14,7 @@
   ./config/iproute2.nix
   ./config/ldap.nix
   ./config/ldso.nix
+  ./config/lix-remote-build.nix
   ./config/locale.nix
   ./config/malloc.nix
   ./config/mysql.nix
@@ -1289,6 +1290,7 @@
   ./services/networking/logmein-hamachi.nix
   ./services/networking/lokinet.nix
   ./services/networking/lxd-image-server.nix
+  ./services/networking/lxmd.nix
   ./services/networking/magic-wormhole-mailbox-server.nix
   ./services/networking/matterbridge.nix
   ./services/networking/meshtasticd.nix
@@ -1386,6 +1388,7 @@
   ./services/networking/redsocks.nix
   ./services/networking/reframe.nix
   ./services/networking/resilio.nix
+  ./services/networking/rnsd.nix
   ./services/networking/robustirc-bridge.nix
   ./services/networking/rosenpass.nix
   ./services/networking/routedns.nix

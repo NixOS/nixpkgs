@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "whenever";
-  version = "0.10.2";
+  version = "0.10.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ariebovenberg";
     repo = "whenever";
     tag = version;
-    hash = "sha256-D3jNrxNTBbSheymnI72xAhdvvRzsbjIk+Gp82X7AkdU=";
+    hash = "sha256-CBNk69vS4BqavwatOoA312/6M3EnARIzL7C62KrIvXY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {

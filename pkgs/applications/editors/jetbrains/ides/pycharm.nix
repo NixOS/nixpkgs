@@ -13,16 +13,16 @@ let
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/python/pycharm-2026.1.4.tar.gz";
-      hash = "sha256-RIufgZhg/n+D1uEdcDyYRjTDfh8Jicyz4h0B1kTbVXs=";
+      url = "https://download.jetbrains.com/python/pycharm-2026.2.tar.gz";
+      hash = "sha256-rDb3wHQ0ZSFb+CJwebdycpRTOMSFwdprkk5WRoBGvVo=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/python/pycharm-2026.1.4-aarch64.tar.gz";
-      hash = "sha256-71FbYpN0seJ5k/yZA7aoXgU4W/N1BhjtKl7W7Hic9UE=";
+      url = "https://download.jetbrains.com/python/pycharm-2026.2-aarch64.tar.gz";
+      hash = "sha256-O2PS9JDBTFQcmK/YUfIYBpo8iFzq7dm9sA5aByhc+AI=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/python/pycharm-2026.1.4-aarch64.dmg";
-      hash = "sha256-qxSgp8r4S0KXjCCTIoAiEZFCn3uBE/0pWLLA6td0Fq0=";
+      url = "https://download.jetbrains.com/python/pycharm-2026.2-aarch64.dmg";
+      hash = "sha256-wiOQISfsvBnlpjeyzAPXUJfXOwYwrZ8nGoiRRvQ4YUY=";
     };
   };
   # update-script-end: urls
@@ -36,8 +36,8 @@ in
   product = "PyCharm";
 
   # update-script-start: version
-  version = "2026.1.4";
-  buildNumber = "261.26222.68";
+  version = "2026.2";
+  buildNumber = "262.8665.309";
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));

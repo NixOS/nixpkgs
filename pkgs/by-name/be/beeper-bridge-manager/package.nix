@@ -8,20 +8,20 @@
 
 buildGoModule (finalAttrs: {
   pname = "bbctl";
-  version = "0.14.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "beeper";
     repo = "bridge-manager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sajgG0Ep6CDlAQRNzgRFHDMX3N1PyCZr6DI+3EkZxzg=";
+    hash = "sha256-3vfZmnjPAdTNejlNE0m2Kd63ZRCtsZgTpz5YEBVkC3I=";
   };
 
   nativeBuildInputs = [
     makeWrapper
   ];
 
-  vendorHash = "sha256-U3RwcMAeLVob4K5YAM5w4rqNA2hSX1uIXwFmpYKxzIU=";
+  vendorHash = "sha256-X4DbDfiu1VAhFAUT+VH5T4GpeofjhLDdoKwyNVBA9A4=";
 
   postInstall = ''
     wrapProgram $out/bin/bbctl \
