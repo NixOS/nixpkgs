@@ -35,20 +35,26 @@ lib.extendMkDerivation {
         GOARCH=wasm \
         go build \
           -buildmode=c-shared \
-          -o $GOPATH/bin/plugin.wasm .
+          -o "$GOPATH/bin/plugin.wasm" .
       '';
 
-      postInstall = ''
-        mkdir $out/share
+      installPhase = ''
+        runHook preInstall
+
+        mkdir -p "$out/share"
+
         pushd $(mktemp -d)
-        cp $GOPATH/bin/plugin.wasm .
+        cp "$GOPATH/bin/plugin.wasm" .
         cp ${finalAttrs.src}/manifest.json .
+
         ${lib.getExe zip} \
-          $out/share/${finalAttrs.pname}.ndp \
+          "$out/share/${finalAttrs.pname}.ndp" \
           plugin.wasm \
           manifest.json
+
         popd
-        rm -r $out/bin
+
+        runHook postInstall
       '';
 
       passthru = {
