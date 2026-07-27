@@ -300,7 +300,7 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     "lib" # output libtorch libraries
     "cxxdev" # propagated deps for the cmake consumers of torch
   ];
-  cudaPropagateToOutput = "cxxdev";
+  cudaPropagateDependenciesToOutput = "cxxdev";
 
   src = callPackage ./src.nix {
     inherit

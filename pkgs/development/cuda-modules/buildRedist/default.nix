@@ -6,13 +6,13 @@
   autoAddDriverRunpath,
   autoPatchelfHook,
   backendStdenv,
+  cudaComponentHook,
   cudaMajorMinorVersion,
   cudaMajorVersion,
   cudaNamePrefix,
   fetchurl,
   lib,
   manifests,
-  markForCudatoolkitRootHook,
   removeStubsFromRunpathHook,
   srcOnly,
   stdenv,
@@ -132,6 +132,12 @@ extendMkDerivation {
       nativeBuildInputs ? [ ],
       propagatedBuildInputs ? [ ],
       buildInputs ? [ ],
+
+      # CUDA component metadata
+      cudaComponentName ? finalAttrs.pname,
+      cudaComponentVersion ? finalAttrs.version,
+      cudaCompilerExecutable ? "",
+      cudaHostCompiler ? "",
 
       # Checking
       doInstallCheck ? true,
@@ -259,8 +265,17 @@ extendMkDerivation {
         }
       ) (getPreferredRelease finalAttrs.passthru.supportedReleases);
 
-      # Required for the hook.
-      inherit cudaMajorMinorVersion cudaMajorVersion;
+      # Publish every redistributable output as an independently versioned CUDA
+      # component. Compiler providers may add compiler-specific metadata.
+      inherit
+        cudaComponentName
+        cudaComponentVersion
+        cudaCompilerExecutable
+        cudaHostCompiler
+        cudaMajorMinorVersion
+        cudaMajorVersion
+        ;
+      cudaPublishComponent = true;
 
       # We do need some other phases, like configurePhase, so the multiple-output setup hook works.
       dontBuild = true;
@@ -276,7 +291,7 @@ extendMkDerivation {
         # allowing autoPatchelf to find and link against the stub files and rely on removeStubsFromRunpathHook to
         # automatically find and replace those references with ones to the driver link lib directory.
         autoAddDriverRunpath
-        markForCudatoolkitRootHook
+        cudaComponentHook
       ]
       # autoAddCudaCompatRunpath depends on cuda_compat and would cause
       # infinite recursion if applied to `cuda_compat` itself (beside the fact

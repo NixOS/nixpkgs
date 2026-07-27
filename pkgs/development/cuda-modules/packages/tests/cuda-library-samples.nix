@@ -13,7 +13,6 @@
   fetchFromGitHub,
   lib,
   libcusparse,
-  setupCudaHook,
 }:
 let
   base = backendStdenv.mkDerivation (finalAttrs: {

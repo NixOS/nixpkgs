@@ -2,7 +2,6 @@
   _cuda,
   backendStdenv,
   buildRedist,
-  setupCudaHook,
   cudaAtLeast,
   cudaOlder,
   cccl,
@@ -28,8 +27,8 @@ buildRedist (finalAttrs: {
     makeBinaryWrapper
   ];
 
-  # Entries here will be in nativeBuildInputs when cuda_nvcc is in nativeBuildInputs
-  propagatedBuildInputs = [ setupCudaHook ];
+  cudaCompilerExecutable = "bin/nvcc";
+  cudaHostCompiler = "${backendStdenv.cc}/bin/${backendStdenv.cc.targetPrefix}c++";
 
   # Patch the nvcc.profile.
   # Syntax:

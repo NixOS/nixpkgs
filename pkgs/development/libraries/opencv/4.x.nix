@@ -290,7 +290,7 @@ effectiveStdenv.mkDerivation {
   ++ optionals (runAccuracyTests || runPerformanceTests) [
     "package_tests"
   ];
-  cudaPropagateToOutput = "cxxdev";
+  cudaPropagateDependenciesToOutput = "cxxdev";
 
   postUnpack = optionalString buildContrib ''
     cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/${src.name}/opencv_contrib"

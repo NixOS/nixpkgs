@@ -61,19 +61,36 @@ let
   ];
 
   # This assumes we put `cudatoolkit` in `buildInputs` instead of `nativeBuildInputs`:
-  allPackages = (map (p: p.__spliced.buildHost or p) hostPackages) ++ targetPackages;
+  hostPackagesForBuild = map (p: p.__spliced.buildHost or p) hostPackages;
+  allPackages = hostPackagesForBuild ++ targetPackages;
+  hostComponents = builtins.concatMap getAllOutputs hostPackagesForBuild;
+  targetComponents = builtins.concatMap getAllOutputs targetPackages;
+
+  # A symlinkJoin cannot merge the per-output nix-support files: each path has
+  # the same file names, so lndir keeps whichever one it sees first. Replace
+  # those collisions with propagation of the actual component outputs.
+  propagateComponents = nativeComponents: buildComponents: ''
+    rm -rf "$out/nix-support"
+    mkdir -p "$out/nix-support"
+    printWords ${lib.escapeShellArgs nativeComponents} \
+      >"$out/nix-support/propagated-native-build-inputs"
+    printWords ${lib.escapeShellArgs buildComponents} \
+      >"$out/nix-support/propagated-build-inputs"
+  '';
 in
 symlinkJoin rec {
   pname = "cuda-merged";
   version = cudaMajorMinorVersion;
 
-  paths = builtins.concatMap getAllOutputs allPackages;
+  paths = hostComponents ++ targetComponents;
+  postBuild = propagateComponents hostComponents targetComponents;
 
   passthru = {
     cc = lib.warn "cudaPackages.cudatoolkit is deprecated, refer to the manual and use splayed packages instead" backendStdenv.cc;
     lib = symlinkJoin {
       inherit pname version;
       paths = map (p: lib.getLib p) allPackages;
+      postBuild = propagateComponents [ ] (map (p: lib.getLib p) allPackages);
     };
   };
 

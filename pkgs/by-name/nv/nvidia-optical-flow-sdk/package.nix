@@ -23,12 +23,12 @@ stdenv.mkDerivation {
     cp -R * $out/include
   '';
 
-  # Makes setupCudaHook propagate nvidia-optical-flow-sdk together with cuda
-  # packages. Currently used by opencv4.cxxdev, hopefully can be removed in the
-  # future
+  # Publish these headers as a CUDA component so OpenCV's cxxdev output can
+  # propagate them together with its other CUDA dependencies.
   nativeBuildInputs = [
-    cudaPackages.markForCudatoolkitRootHook
+    cudaPackages.cudaComponentHook
   ];
+  cudaPublishComponent = true;
 
   meta = {
     description = "Nvidia optical flow headers for computing the relative motion of pixels between images";

@@ -145,11 +145,11 @@ let
         inherit (finalCudaPackages)
           autoAddCudaCompatRunpath
           backendStdenv
+          cudaComponentHook
           cudaMajorMinorVersion
           cudaMajorVersion
           cudaNamePrefix
           manifests
-          markForCudatoolkitRootHook
           removeStubsFromRunpathHook
           ;
       };
