@@ -5105,8 +5105,8 @@ let
         mktplcRef = {
           name = "vscode-vlang";
           publisher = "vlanguage";
-          version = "0.1.14";
-          hash = "sha256-hlBALxBs5wZZFk4lgAkdkGs731Xuc2p0qxffOW6mMWQ=";
+          version = "0.2.0";
+          hash = "sha256-4hRkbAgUWVdpVKX9XIeYUQr8FDz6033BY8JayAbjqT0=";
         };
         meta = {
           description = "V language support (syntax highlighting, formatter, snippets) for Visual Studio Code";
