@@ -27,6 +27,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/astro/deadnix";
     license = lib.licenses.gpl3Only;
     mainProgram = "deadnix";
-    maintainers = with lib.maintainers; [ astro ];
+    maintainers = with lib.maintainers; [
+      astro
+      diogotcorreia
+    ];
   };
 })
