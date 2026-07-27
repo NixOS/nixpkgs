@@ -12,7 +12,7 @@ let
     url = "https://update-desktop.redact.dev/build/Redact-${version}.AppImage";
     hash = "sha256-NnOQIVv/Y4C+qR5TsXh7rQq/WOYd7Vdtfru4x78djZA=";
   };
-  appimageContents = appimageTools.extractType2 { inherit pname src version; };
+  appimageContents = appimageTools.extract { inherit pname src version; };
 in
 appimageTools.wrapType2 {
   inherit pname version src;

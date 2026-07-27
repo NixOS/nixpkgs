@@ -17,7 +17,7 @@ let
       }
     else
       throw "${pname}-${version} is not supported on ${stdenv.hostPlatform.system}";
-  appimageContents = appimageTools.extractType2 {
+  appimageContents = appimageTools.extract {
     inherit pname version src;
     postExtract = ''
       substituteInPlace $out/gdevelop.desktop --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=gdevelop'

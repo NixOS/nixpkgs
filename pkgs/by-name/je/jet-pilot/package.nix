@@ -13,7 +13,7 @@ appimageTools.wrapType2 rec {
     hash = "sha256-W1VRV29ZV8nD3wAcSNAsWguN8s+zio0lsVaZwAnCOwE=";
   };
 
-  appimageContents = appimageTools.extractType2 { inherit pname version src; };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 
   meta = {
     description = "Open-source Kubernetes desktop client that focuses on less clutter, speed and good looks";

@@ -11,7 +11,7 @@ let
     url = "https://github.com/listen1/listen1_desktop/releases/download/v${version}/listen1_${version}_linux_x86_64.AppImage";
     hash = "sha256-RMpusz9bNrHpN23HrncjteiIGkLJgsP7FS2t7zD1Ud0=";
   };
-  appimageContents = appimageTools.extractType2 { inherit pname version src; };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 in
 appimageTools.wrapType2 {
   inherit pname version src;

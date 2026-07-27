@@ -50,7 +50,7 @@ let
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 
-  appimageContents = appimageTools.extractType2 { inherit pname version src; };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 
   linux = appimageTools.wrapType2 {
     inherit

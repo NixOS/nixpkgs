@@ -55,9 +55,9 @@ rec {
       '';
 
   # for compatibility, deprecated
-  extractType1 = extract;
-  extractType2 = extract;
-  wrapType1 = wrapType2;
+  extractType1 = lib.warn "'appimageTools.extractType1' is deprecated, use 'appimageTools.extract' instead" extract;
+  extractType2 = lib.warn "'appimageTools.extractType2' is deprecated, use 'appimageTools.extract' instead" extract;
+  wrapType1 = lib.warn "'appimageTools.wrapType1' is deprecated, use 'appimageTools.wrapType2' instead" wrapType2;
 
   wrapAppImage = lib.extendMkDerivation {
     constructDrv = buildFHSEnv;

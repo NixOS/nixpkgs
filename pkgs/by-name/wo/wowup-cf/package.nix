@@ -13,9 +13,9 @@ let
     hash = "sha256-596j+i2TTbzpGfdWwzzoQKpB6AD2rqT0hvF4nvbD32A=";
   };
 
-  appimageContents = appimageTools.extractType1 { inherit pname version src; };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 in
-appimageTools.wrapType1 {
+appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''

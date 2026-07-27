@@ -39,7 +39,7 @@ let
   };
 in
 let
-  appimageContents = appimageTools.extractType2 { inherit pname src version; };
+  appimageContents = appimageTools.extract { inherit pname src version; };
 in
 appimageTools.wrapType2 {
   inherit

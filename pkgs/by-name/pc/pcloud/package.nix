@@ -54,7 +54,7 @@ in
 stdenv.mkDerivation {
   inherit pname version;
 
-  src = appimageTools.extractType2 {
+  src = appimageTools.extract {
     inherit pname version;
 
     src = "${src}/pCloud.AppImage";
