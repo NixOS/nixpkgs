@@ -16,11 +16,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-zapXno3UPgUMsohUxXpldBPScyqYhesR6/9dTXbFsUA=";
   };
 
+  cargoHash = "sha256-sSXa4hOzhnQD1rFvqsGrev7v0P9MUgEoIo0bRoZx7tM=";
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ];
-
-  cargoHash = "sha256-sSXa4hOzhnQD1rFvqsGrev7v0P9MUgEoIo0bRoZx7tM=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
@@ -34,6 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "sea-orm-cli";
     homepage = "https://www.sea-ql.org/SeaORM";
     description = "Command line utility for SeaORM";
+    changelog = "https://github.com/SeaQL/sea-orm/releases/tag/sea-orm-cli%40${finalAttrs.version}";
     license = with lib.licenses; [
       mit # or
       asl20
