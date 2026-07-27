@@ -11,13 +11,13 @@
   writeShellApplication,
 }:
 let
-  version = "0.1.7";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "expert-lsp";
     repo = "expert";
     tag = "v${version}";
-    hash = "sha256-f7ygwpc3S/n+1LvqNO4D6z5Wl4VaoS/IAldeHUndK/4=";
+    hash = "sha256-2dZ3ve1ksdI1atjA6mxipwPYOr0yEZeKWhteSfMeL48=";
   };
 
   engineDeps = fetchMixDeps {
