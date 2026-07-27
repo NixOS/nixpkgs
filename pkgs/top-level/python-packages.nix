@@ -13922,6 +13922,8 @@ self: super: with self; {
 
   py-nightscout = callPackage ../development/python-modules/py-nightscout { };
 
+  py-notifier = callPackage ../development/python-modules/py-notifier { };
+
   py-nymta = callPackage ../development/python-modules/py-nymta { };
 
   py-ocsf-models = callPackage ../development/python-modules/py-ocsf-models { };
@@ -15198,8 +15200,6 @@ self: super: with self; {
   pynobo = callPackage ../development/python-modules/pynobo { };
 
   pynordpool = callPackage ../development/python-modules/pynordpool { };
-
-  pynotifier = callPackage ../development/python-modules/pynotifier { };
 
   pynput = callPackage ../development/python-modules/pynput { };
 
