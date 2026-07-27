@@ -7,6 +7,9 @@
   swig,
   testers,
   nix-update-script,
+  linuxHeaders,
+  python3Packages,
+  withPython ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,6 +38,17 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     pkg-config
     swig
+  ]
+  ++ lib.optionals withPython [
+    python3Packages.python # m4
+  ];
+
+  buildInputs = lib.optionals withPython [
+    python3Packages.python
+  ];
+
+  nativeCheckInputs = lib.optionals withPython [
+    python3Packages.pythonImportsCheckHook
   ];
 
   outputs = [
@@ -44,7 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   configureFlags = [
-    "--without-python"
+    (lib.withFeature withPython "python")
+    "--with-capability_header='${linuxHeaders}/include/linux/capability.h'" # required to link bindings
   ];
 
   passthru = {
@@ -58,7 +73,18 @@ stdenv.mkDerivation (finalAttrs: {
   # see https://github.com/stevegrubb/libcap-ng?tab=readme-ov-file#note-to-distributions
   doCheck = true;
 
+  pythonImportsCheck = [
+    "capng"
+  ];
+
+  preCheck = ''
+    patchShebangs bindings/test bindings/python3/test
+  '';
+
   meta = {
+    broken =
+      # m4 python include script fails if cpu bit depth is different across build/host architectures
+      withPython && (stdenv.hostPlatform.parsed.cpu.bits != stdenv.buildPlatform.parsed.cpu.bits);
     changelog = "https://people.redhat.com/sgrubb/libcap-ng/ChangeLog";
     description = "Library for working with POSIX capabilities";
     homepage = "https://people.redhat.com/sgrubb/libcap-ng/";
