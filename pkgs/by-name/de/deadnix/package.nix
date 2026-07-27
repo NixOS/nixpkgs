@@ -3,6 +3,7 @@
   fetchFromGitHub,
   rustPlatform,
   nix-update-script,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -17,6 +18,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-MX4McxCeUQ1stk33BSm/zITHaXqOJUwNMfMVISgfMFA=";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru = {
     updateScript = nix-update-script { };
