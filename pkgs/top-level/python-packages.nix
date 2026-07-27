@@ -7718,6 +7718,8 @@ self: super: with self; {
     }
   );
 
+  hpp-doc = toPythonModule (pkgs.hpp-doc.override { python3Packages = self; });
+
   hpp-environments = toPythonModule (
     pkgs.hpp-environments.override {
       pythonSupport = true;
