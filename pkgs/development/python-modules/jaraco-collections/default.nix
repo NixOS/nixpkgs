@@ -6,6 +6,7 @@
   setuptools-scm,
   jaraco-classes,
   jaraco-text,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -35,7 +36,7 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "jaraco" ];
 
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "jaraco.collections" ];
 
