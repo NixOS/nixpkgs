@@ -5,6 +5,8 @@
   makeDesktopItem,
   runtimeShell,
   runCommand,
+  writeShellScriptBin,
+  xdg-utils,
   unstick,
   libfaketime,
   pkgsi686Linux,
@@ -30,6 +32,20 @@ let
     genericName = "Quartus Prime";
     categories = [ "Development" ];
   };
+  # Quartus's own launcher (quartus/adm/qenv.sh) prepends quartus/linux64
+  # (which bundles an older libstdc++.so.6) to LD_LIBRARY_PATH for its whole
+  # session. When a user clicks a web link, Quartus execs `xdg-open` (found
+  # via $PATH) to open it, and that process inherits the polluted
+  # LD_LIBRARY_PATH, causing the browser it eventually launches to pick up
+  # Quartus's outdated libstdc++ instead of its own and fail to start. Shadow
+  # `xdg-open` on $PATH with a wrapper that restores the environment's
+  # original LD_LIBRARY_PATH (conveniently saved by qenv.sh as
+  # $QUARTUS_ORIG_LIBPATH) before delegating to nixpkgs' own xdg-utils
+  # xdg-open.
+  xdgOpenWrapper = writeShellScriptBin "xdg-open" ''
+    export LD_LIBRARY_PATH=$QUARTUS_ORIG_LIBPATH
+    exec ${lib.getExe' xdg-utils "xdg-open"} "$@"
+  '';
 in
 # I think questa_fse/linux/vlm checksums itself, so use FHSUserEnv instead of `patchelf`
 buildFHSEnv (finalAttrs: {
@@ -147,6 +163,8 @@ buildFHSEnv (finalAttrs: {
         # If a Wayland user has QT_QPA_PLATFORM=wayland, Quartus executables
         # that use Qt won't work, so let's be explicit.
         echo "export QT_QPA_PLATFORM=xcb" >> "$wrapped"
+        # See above NOTE regarding `xdgOpenWrapper`
+        echo "export PATH=${xdgOpenWrapper}/bin:\$PATH" >> "$wrapped"
         echo "exec $wrapper $prog \"\$@\"" >> "$wrapped"
     done
 
