@@ -38,6 +38,9 @@ buildPythonPackage rec {
     description = "Additional keyboard navigation for interactive xonsh shells";
     homepage = "https://github.com/xonsh/xontrib-whole-word-jumping";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ greg ];
+    maintainers = with lib.maintainers; [
+      greg
+      infinidoge
+    ];
   };
 }

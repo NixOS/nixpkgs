@@ -40,6 +40,9 @@ buildPythonPackage rec {
     description = "Populate rich completions using fish and remove the default bash based completer";
     homepage = "https://github.com/xonsh/xontrib-fish-completer";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ greg ];
+    maintainers = with lib.maintainers; [
+      greg
+      infinidoge
+    ];
   };
 }
