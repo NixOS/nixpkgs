@@ -4,6 +4,7 @@
 
 (require 'ert)
 (eval-when-compile (require 'cl-lib))
+(require 'server)
 
 ;; Try to make tests cause no side-effects.
 
@@ -66,22 +67,15 @@ loading of early-default.el and default.el files, we launch a non-batch Emacs,
 run non-batch tests on it and collect test results from it.")
 
 (defun with-packages--run-non-batch-test (test-name)
-  "Run non-batch test named TEST-NAME.
+  "Run non-batch test named TEST-NAME, a symbol.
 Return t if the test passes.  Otherwise, return nil."
-  (cl-flet* ((eval-in-non-batch-emacs (form)
-               (cl-check-type form string)
-               (with-temp-buffer
-                 (call-process "emacsclient" nil t nil
-                               "--socket-name" with-packages-non-batch-emacs-socket
-                               "--eval" form)
-                 (string-trim (buffer-substring-no-properties (point-min) (point-max)))))
-             (funcall-in-non-batch-emacs (function-name)
-               (eval-in-non-batch-emacs (format "(%s)" function-name))))
+  (cl-check-type test-name symbol)
+  (cl-flet ((eval-in-non-batch-emacs (form)
+              (server-eval-at with-packages-non-batch-emacs-socket form)))
     ;; Test test-name is defined in with-packages so we load it in the non-batch Emacs.
-    (eval-in-non-batch-emacs "(require 'with-packages)")
-    (not (string= (format "%s" nil)
-                  ;; Run the non-batch test.  Return non-nil, as string, if it passes.
-                  (funcall-in-non-batch-emacs test-name)))))
+    (eval-in-non-batch-emacs '(require 'with-packages))
+    ;; Run the non-batch test.  Return non-nil if it passes.
+    (eval-in-non-batch-emacs `(,test-name))))
 
 (defmacro define-with-packages-non-batch-ert-test (test-name)
   "See `with-packages--run-non-batch-test' for how the test is run."
@@ -90,7 +84,7 @@ Return t if the test passes.  Otherwise, return nil."
   `(ert-deftest ,test-name ()
      (should (stringp with-packages-non-batch-emacs-socket))
      (should (file-readable-p with-packages-non-batch-emacs-socket))
-     (should (with-packages--run-non-batch-test ,(symbol-name test-name)))))
+     (should (with-packages--run-non-batch-test (quote ,test-name)))))
 
 (defmacro define-with-packages-non-batch-ert-tests (&rest test-names)
   "See also `define-with-packages-non-batch-ert-test'."
