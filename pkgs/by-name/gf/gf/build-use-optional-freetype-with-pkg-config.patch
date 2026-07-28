@@ -1,0 +1,13 @@
+diff --git a/build.sh b/build.sh
+index e471563..32bdfab 100755
+--- a/build.sh
++++ b/build.sh
+@@ -5,7 +5,7 @@ gdb --version > /dev/null 2>&1 || printf "\033[0;31mWarning\033[0m: GDB not dete
+ echo q | gdb | grep "(gdb)" > /dev/null 2>&1 || printf "\033[0;31mWarning\033[0m: Your copy of GDB appears to be non-standard or has been heavily reconfigured with .gdbinit.\nIf you are using GDB plugins like 'GDB Dashboard' you must remove them,\nas otherwise gf will be unable to communicate with GDB.\n"
+ 
+ # Check if FreeType is available.
+-if [ -d /usr/include/freetype2 ]; then extra_flags="$extra_flags -lfreetype -D UI_FREETYPE -I /usr/include/freetype2"; 
++if pkg-config --cflags freetype2 > /dev/null; then extra_flags="$extra_flags -D UI_FREETYPE $(pkg-config --cflags --libs freetype2)";
+ else printf "\033[0;31mWarning\033[0m: FreeType could not be found. The fallback font will be used.\n"; fi
+ 
+ # Check if SSE2 is available.

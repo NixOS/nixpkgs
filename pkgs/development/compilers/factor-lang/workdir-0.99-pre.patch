@@ -1,0 +1,13 @@
+diff --git a/core/io/pathnames/pathnames.factor b/core/io/pathnames/pathnames.factor
+index a172fe4..40858bc 100644
+--- a/core/io/pathnames/pathnames.factor
++++ b/core/io/pathnames/pathnames.factor
+@@ -166,6 +166,8 @@ GENERIC: absolute-path ( path -- path' )
+
+ M: string absolute-path
+     {
++        { [ "resource:work" ?head ]
++          [ trim-head-separators "/var/lib/factor" prepend-path absolute-path ] }
+         { [ "resource:" ?head ] [ trim-head-separators resource-path absolute-path ] }
+         { [ "vocab:" ?head ] [ trim-head-separators vocab-path absolute-path ] }
+         { [ "~" ?head ] [ trim-head-separators home prepend-path absolute-path ] }

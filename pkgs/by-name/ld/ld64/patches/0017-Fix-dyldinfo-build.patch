@@ -1,0 +1,37 @@
+From 477911db0045e8b1925fcd5db523aab2888fdcc9 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sun, 17 Nov 2024 10:02:34 -0500
+Subject: [PATCH 17/18] Fix dyldinfo build
+
+`isSubType` was removed in 907, but the fix is simple. This mirrors the
+changes that were made in that update to other parts of ld64.
+---
+ src/other/dyldinfo.cpp | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/src/other/dyldinfo.cpp b/src/other/dyldinfo.cpp
+index dbfd0de..96aa109 100644
+--- a/src/other/dyldinfo.cpp
++++ b/src/other/dyldinfo.cpp
+@@ -427,7 +427,7 @@ DyldInfoPrinter<A>::DyldInfoPrinter(const uint8_t* fileContent, uint32_t fileLen
+ 	if ( printArch ) {
+ 		for (const ArchInfo* t=archInfoArray; t->archName != NULL; ++t) {
+ 			if ( (cpu_type_t)fHeader->cputype() == t->cpuType ) {
+-				if ( t->isSubType && ((cpu_subtype_t)fHeader->cpusubtype() != t->cpuSubType) )
++				if ( ((cpu_subtype_t)fHeader->cpusubtype() != t->cpuSubType) )
+ 					continue;
+ 				printf("for arch %s:\n", t->archName);
+ 			}
+@@ -2801,8 +2801,7 @@ int main(int argc, const char* argv[])
+ 						for (const ArchInfo* t=archInfoArray; t->archName != NULL; ++t) {
+ 							if ( strcmp(t->archName,arch) == 0 ) {
+ 								sPreferredArch = t->cpuType;
+-								if ( t->isSubType )
+-									sPreferredSubArch = t->cpuSubType;
++								sPreferredSubArch = t->cpuSubType;
+ 								found = true;
+ 								break;
+ 							}
+-- 
+2.47.2
+

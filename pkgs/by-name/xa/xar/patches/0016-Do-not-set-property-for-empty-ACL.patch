@@ -1,0 +1,90 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Ivan Trubach <mr.trubach@icloud.com>
+Date: Sun, 28 Jul 2024 12:00:01 +0300
+Subject: [PATCH 16/19] Do not set property for empty ACL
+
+On Linux, acl_get_file helpfully converts file mode bits to ACL if no
+extended attribute is set. See
+https://git.savannah.nongnu.org/cgit/acl.git/tree/libacl/acl_get_file.c?id=d9bb1759d4dad2f28a6dcc8c1742ff75d16dd10d#n83
+
+At the same time, Nix sandbox does not filter getxattr syscalls to
+return ENOTSUP, but does filter setxattr. So we are in a intricate
+situation where acl library thinks that EAs/ACLs are supported and
+returns meaningful values for reads, so xar archives files with acl
+property, but extraction fails because of the syscall filter.
+
+As a workaround, we add acl_extended_file check that actually returns
+whether the file is associated with ACLs (internally represented as
+extended attributes).
+---
+ xar/configure.ac        | 5 ++---
+ xar/include/config.h.in | 2 ++
+ xar/lib/stat.c          | 9 +++++++++
+ 3 files changed, 13 insertions(+), 3 deletions(-)
+
+diff --git a/xar/configure.ac b/xar/configure.ac
+index e466ee0..c3d9ff7 100644
+--- a/xar/configure.ac
++++ b/xar/configure.ac
+@@ -180,9 +180,8 @@ fi
+ )
+ AC_SUBST([enable_autogen])
+ 
+-AC_TRY_COMPILE([#include <sys/types.h> 
+-#include <sys/acl.h>], [acl_t a], [AC_DEFINE([HAVE_SYS_ACL_H],[1], [define if you have sys/acl.h and it has a working acl_t type])])
+-AC_CHECK_HEADERS(ext2fs/ext2_fs.h sys/statfs.h sys/vfs.h sys/xattr.h sys/param.h sys/extattr.h libutil.h)
++AC_CHECK_HEADERS(sys/acl.h acl/libacl.h ext2fs/ext2_fs.h sys/statfs.h sys/vfs.h sys/xattr.h sys/param.h sys/extattr.h libutil.h)
++AC_CHECK_DECLS([acl_extended_file], [], [], [[#include <acl/libacl.h>]])
+ AC_CHECK_FUNCS(lgetxattr)
+ AC_CHECK_FUNCS(lsetxattr)
+ AC_CHECK_FUNCS(getxattr)
+diff --git a/xar/include/config.h.in b/xar/include/config.h.in
+index 16c72d3..779f5aa 100644
+--- a/xar/include/config.h.in
++++ b/xar/include/config.h.in
+@@ -3,6 +3,7 @@
+ #undef HAVE_SYS_XATTR_H
+ #undef HAVE_SYS_EXTATTR_H
+ #undef HAVE_SYS_PARAM_H
++#undef HAVE_DECL_ACL_EXTENDED_FILE
+ #undef HAVE_LGETXATTR
+ #undef HAVE_LSETXATTR
+ #undef HAVE_GETXATTR
+@@ -12,6 +13,7 @@
+ #undef HAVE_CHFLAGS
+ #undef HAVE_STATVFS
+ #undef HAVE_STATFS
++#undef HAVE_ACL_LIBACL_H
+ #undef HAVE_EXT2FS_EXT2_FS_H
+ #undef HAVE_STRUCT_STAT_ST_FLAGS
+ #undef HAVE_STRUCT_STATVFS_F_FSTYPENAME
+diff --git a/xar/lib/stat.c b/xar/lib/stat.c
+index b0cce7c..81771dc 100644
+--- a/xar/lib/stat.c
++++ b/xar/lib/stat.c
+@@ -66,6 +66,9 @@
+ #ifdef HAVE_SYS_ACL_H
+ #include <sys/acl.h>
+ #endif
++#ifdef HAVE_ACL_LIBACL_H
++#include <acl/libacl.h>
++#endif
+ #include "xar.h"
+ #include "arcmod.h"
+ #include "archive.h"
+@@ -131,6 +134,12 @@ static int32_t aacls(xar_t x, xar_file_t f, const char *file) {
+ 	if( !xar_check_prop(x, "acl") )
+ 		return 0;
+ 
++#ifdef HAVE_DECL_ACL_EXTENDED_FILE
++	/* Do nothing if the file is not associated with ACL. */
++	if( !acl_extended_file(file) )
++		return 0;
++#endif
++
+ 	a = acl_get_file(file, ACL_TYPE_DEFAULT);
+ 	if( a ) {
+ 		char *t;
+-- 
+2.44.1
+

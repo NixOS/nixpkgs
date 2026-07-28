@@ -1,0 +1,65 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    addressable (2.6.0)
+      public_suffix (>= 2.0.2, < 4.0)
+    buftok (0.2.0)
+    domain_name (0.5.20180417)
+      unf (>= 0.0.5, < 1.0.0)
+    equalizer (0.0.11)
+    faraday (0.11.0)
+      multipart-post (>= 1.2, < 3)
+    geokit (1.13.1)
+    htmlentities (4.3.4)
+    http (2.2.2)
+      addressable (~> 2.3)
+      http-cookie (~> 1.0)
+      http-form_data (~> 1.0.1)
+      http_parser.rb (~> 0.6.0)
+    http-cookie (1.0.3)
+      domain_name (~> 0.5)
+    http-form_data (1.0.3)
+    http_parser.rb (0.6.0)
+    launchy (2.4.3)
+      addressable (~> 2.3)
+    memoizable (0.4.2)
+      thread_safe (~> 0.3, >= 0.3.1)
+    multipart-post (2.0.0)
+    naught (1.1.0)
+    oauth (0.5.4)
+    public_suffix (3.0.3)
+    retryable (2.0.4)
+    simple_oauth (0.3.1)
+    t (3.1.0)
+      geokit (~> 1.9)
+      htmlentities (~> 4.3)
+      launchy (~> 2.4)
+      oauth (~> 0.5.1)
+      retryable (~> 2.0)
+      thor (>= 0.19.1, < 2)
+      twitter (~> 6.0)
+    thor (0.20.3)
+    thread_safe (0.3.6)
+    twitter (6.1.0)
+      addressable (~> 2.5)
+      buftok (~> 0.2.0)
+      equalizer (= 0.0.11)
+      faraday (~> 0.11.0)
+      http (~> 2.1)
+      http_parser.rb (~> 0.6.0)
+      memoizable (~> 0.4.2)
+      naught (~> 1.1)
+      simple_oauth (~> 0.3.1)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.6)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  t
+  twitter (~> 6.1.0)
+
+BUNDLED WITH
+   2.1.4

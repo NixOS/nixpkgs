@@ -1,0 +1,247 @@
+diff --git a/src/fnlo-tk-statunc.cc b/src/fnlo-tk-statunc.cc
+index 62d1eec..ad62cac 100644
+--- a/src/fnlo-tk-statunc.cc
++++ b/src/fnlo-tk-statunc.cc
+@@ -30,7 +30,16 @@
+ #include "fastnlotk/fastNLOLHAPDF.h"
+ #include "fastnlotk/speaker.h"
+ #ifdef WITH_YODA
++#if defined __has_include
++#if !__has_include("YODA/WriterAIDA.h")
++#define WITH_YODA2
++#endif
++#endif
++#ifdef WITH_YODA2
++#include "YODA/Scatter.h"
++#else
+ #include "YODA/Scatter2D.h"
++#endif
+ #include "YODA/WriterYODA.h"
+ #endif
+ 
+@@ -493,28 +502,25 @@ int main(int argc, char** argv) {
+ 
+    //! --- 1D
+    if (NDim == 1) {
+-      //! Vectors to fill 2D scatter plot
+-      vector < double > x;
+-      vector < double > y;
+-      vector < double > exminus;
+-      vector < double > explus;
+-      vector < double > eyminus;
+-      vector < double > eyplus;
++      //! Vector to fill 2D scatter plot
++      vector<YODA::Point2D> points;
+       //! Loop over bins in outer (1st) dimension
+       for (unsigned int k =0 ; k<NDimBins[0] ; k++) {
+-         x.push_back((bins[iobs].second + bins[iobs].first)/2.0);
+-         explus.push_back((bins[iobs].second - bins[iobs].first)/2.0);
+-         exminus.push_back((bins[iobs].second - bins[iobs].first)/2.0);
+-         y.push_back(xs[iobs]);
+-         eyplus.push_back(dxsu[iobs]);
+-         eyminus.push_back(std::abs(dxsl[iobs]));
++         points.emplace_back(
++            (bins[iobs].second + bins[iobs].first)/2.0,
++            xs[iobs],
++            (bins[iobs].second - bins[iobs].first)/2.0,
++            (bins[iobs].second - bins[iobs].first)/2.0,
++            std::abs(dxsl[iobs]),
++            dxsu[iobs]
++         );
+          iobs++;
+       }
+       stringstream plotno;                                                                         // To make i+1 from int
+       plotno << offset;                                                                            // to a string for the naming
+       //      RivetId.replace( capital_pos +3 - plotno.str().size(), plotno.str().size(), plotno.str());   // Next plot name
+       // Pointer in order not to be deleted after we exit the loop, so we can then save them into the yoda file
+-      YODA::Scatter2D * plot = new YODA::Scatter2D(x,y,exminus,explus,eyminus,eyplus,"/" + RivetId,LineName);
++      YODA::Scatter2D * plot = new YODA::Scatter2D(points, "/" + RivetId, LineName);
+       // Insert the plot pointer into the vector of analysis object pointers
+       aos.push_back(plot);
+    }
+@@ -522,29 +528,26 @@ int main(int argc, char** argv) {
+    else if (NDim == 2) {
+       //! Loop over bins in outer (1st) dimension
+       for (unsigned int j=0; j<NDimBins[0]; j++) {
+-         //! Vectors to fill 2D scatter plot
+-         vector < double > x;
+-         vector < double > y;
+-         vector < double > exminus;
+-         vector < double > explus;
+-         vector < double > eyminus;
+-         vector < double > eyplus;
++         //! Vector to fill 2D scatter plot
++         vector<YODA::Point2D> points;
+          //! Loop over bins in inner (2nd) dimension
+          NDimBins[1] = fnlo.GetNDim1Bins(j);
+          for (unsigned int k = 0; k<NDimBins[1]; k++) {
+-            x.push_back((bins[iobs].second + bins[iobs].first)/2.0);
+-            explus.push_back((bins[iobs].second - bins[iobs].first)/2.0);
+-            exminus.push_back((bins[iobs].second - bins[iobs].first)/2.0);
+-            y.push_back(xs[iobs]);
+-            eyplus.push_back(dxsu[iobs]);
+-            eyminus.push_back(std::abs(dxsl[iobs]));
++            points.emplace_back(
++               (bins[iobs].second + bins[iobs].first)/2.0,
++               xs[iobs],
++               (bins[iobs].second - bins[iobs].first)/2.0,
++               (bins[iobs].second - bins[iobs].first)/2.0,
++               std::abs(dxsl[iobs]),
++               dxsu[iobs]
++            );
+             iobs++;
+          }
+          stringstream plotno;                                                                         // To make i+1 from int
+          plotno << offset+j;                                                                          // to a string for the naming
+          RivetId.replace( capital_pos +3 - plotno.str().size(), plotno.str().size(), plotno.str());   // Next plot name
+          // Pointer in order not to be deleted after we exit the loop, so we can then save them into the yoda file
+-         YODA::Scatter2D * plot = new YODA::Scatter2D(x,y,exminus,explus,eyminus,eyplus,"/" + RivetId,LineName);
++         YODA::Scatter2D * plot = new YODA::Scatter2D(points, "/" + RivetId, LineName);
+          // Insert the plot pointer into the vector of analysis object pointers
+          aos.push_back(plot);
+       }
+diff --git a/src/fnlo-tk-yodaout.cc b/src/fnlo-tk-yodaout.cc
+index 9aa8ac3..dabe924 100644
+--- a/src/fnlo-tk-yodaout.cc
++++ b/src/fnlo-tk-yodaout.cc
+@@ -25,7 +25,16 @@
+ #include "fastnlotk/fastNLOTools.h"
+ #include "fastnlotk/speaker.h"
+ #ifdef WITH_YODA
++#if defined __has_include
++#if !__has_include("YODA/WriterAIDA.h")
++#define WITH_YODA2
++#endif
++#endif
++#ifdef WITH_YODA2
++#include "YODA/Scatter.h"
++#else
+ #include "YODA/Scatter2D.h"
++#endif
+ #include "YODA/WriterYODA.h"
+ #endif
+ 
+@@ -548,26 +557,23 @@ int main(int argc, char** argv) {
+ 
+    //! --- 1D
+    if (NDim == 1) {
+-      //! Vectors to fill 2D scatter plot
+-      vector < double > x;
+-      vector < double > y;
+-      vector < double > exminus;
+-      vector < double > explus;
+-      vector < double > eyminus;
+-      vector < double > eyplus;
++      //! Vector to fill 2D scatter plot
++      vector < YODA::Point2D > points;
+       //! Loop over bins in outer (1st) dimension
+       for (unsigned int k =0 ; k<NDimBins[0] ; k++) {
+-         x.push_back((bins[iobs].second + bins[iobs].first)/2.0);
+-         explus.push_back((bins[iobs].second - bins[iobs].first)/2.0);
+-         exminus.push_back((bins[iobs].second - bins[iobs].first)/2.0);
+-         y.push_back(xs[iobs]);
+-         eyplus.push_back(dxsu[iobs]);
+-         eyminus.push_back(std::abs(dxsl[iobs]));
++         points.emplace_back(
++           (bins[iobs].second + bins[iobs].first)/2.0,
++           xs[iobs],
++           (bins[iobs].second - bins[iobs].first)/2.0,
++           (bins[iobs].second - bins[iobs].first)/2.0,
++           std::abs(dxsl[iobs]),
++           dxsu[iobs]
++         );
+          iobs++;
+       }
+ #ifdef WITH_YODA
+       /// Pointer in order not to be deleted after we exit the loop, so we can then save them into the yoda file
+-      YODA::Scatter2D * plot = new YODA::Scatter2D(x,y,exminus,explus,eyminus,eyplus,"/" + RivetId,LineName);
++      YODA::Scatter2D * plot = new YODA::Scatter2D(points, "/" + RivetId, LineName);
+       /// Insert the plot pointer into the vector of analysis object pointers
+       aos.push_back(plot);
+ #endif
+@@ -577,23 +583,20 @@ int main(int argc, char** argv) {
+       //! Loop over bins in outer (1st) dimension
+       int nhist = 0;
+       for (unsigned int j=0; j<NDimBins[0]; j++) {
+-         //! Vectors to fill 2D scatter plot
++         //! Vector to fill 2D scatter plot
+          nhist++;
+-         vector < double > x;
+-         vector < double > y;
+-         vector < double > exminus;
+-         vector < double > explus;
+-         vector < double > eyminus;
+-         vector < double > eyplus;
++         vector < YODA::Point2D > points;
+          //! Loop over bins in inner (2nd) dimension
+          NDimBins[1] = fnlo->GetNDim1Bins(j);
+          for (unsigned int k = 0; k<NDimBins[1]; k++) {
+-            x.push_back((bins[iobs].second + bins[iobs].first)/2.0);
+-            explus.push_back((bins[iobs].second - bins[iobs].first)/2.0);
+-            exminus.push_back((bins[iobs].second - bins[iobs].first)/2.0);
+-            y.push_back(xs[iobs]);
+-            eyplus.push_back(dxsu[iobs]);
+-            eyminus.push_back(std::abs(dxsl[iobs]));
++            points.emplace_back(
++              (bins[iobs].second + bins[iobs].first)/2.0,
++              xs[iobs],
++              (bins[iobs].second - bins[iobs].first)/2.0,
++              (bins[iobs].second - bins[iobs].first)/2.0,
++              std::abs(dxsl[iobs]),
++              dxsu[iobs]
++            );
+             iobs++;
+          }
+          /// Derive histogram counter
+@@ -610,7 +613,7 @@ int main(int argc, char** argv) {
+          RivetId.replace(capital_pos +3 - histno.str().size(), histno.str().size(), histno.str());
+ #ifdef WITH_YODA
+          /// Pointer in order not to be deleted after we exit the loop, so we can then save the plots into the yoda file
+-         YODA::Scatter2D * plot = new YODA::Scatter2D(x,y,exminus,explus,eyminus,eyplus,"/" + RivetId,LineName);
++         YODA::Scatter2D * plot = new YODA::Scatter2D(points, "/" + RivetId, LineName);
+          /// Insert the plot pointer into the vector of analysis object pointers
+          aos.push_back(plot);
+ #endif
+@@ -624,23 +627,20 @@ int main(int argc, char** argv) {
+          //! Loop over bins in middle (2nd) dimension
+          NDimBins[1] = fnlo->GetNDim1Bins(j);
+          for (unsigned int k = 0; k<NDimBins[1]; k++) {
+-            //! Vectors to fill 2D scatter plot
++            //! Vector to fill 2D scatter plot
+             nhist++;
+-            vector < double > x;
+-            vector < double > y;
+-            vector < double > exminus;
+-            vector < double > explus;
+-            vector < double > eyminus;
+-            vector < double > eyplus;
++            vector < YODA::Point2D > points;
+             //! Loop over bins in inner (3rd) dimension
+             NDimBins[2] = fnlo->GetNDim2Bins(j,k);
+             for (unsigned int l = 0; l<NDimBins[2]; l++) {
+-               x.push_back((bins[iobs].second + bins[iobs].first)/2.0);
+-               explus.push_back((bins[iobs].second - bins[iobs].first)/2.0);
+-               exminus.push_back((bins[iobs].second - bins[iobs].first)/2.0);
+-               y.push_back(xs[iobs]);
+-               eyplus.push_back(dxsu[iobs]);
+-               eyminus.push_back(std::abs(dxsl[iobs]));
++               points.emplace_back(
++                  (bins[iobs].second + bins[iobs].first)/2.0,
++                  xs[iobs],
++                  (bins[iobs].second - bins[iobs].first)/2.0,
++                  (bins[iobs].second - bins[iobs].first)/2.0,
++                  std::abs(dxsl[iobs]),
++                  dxsu[iobs]
++               );
+                iobs++;
+             }
+             /// Derive histogram counter
+@@ -657,7 +657,7 @@ int main(int argc, char** argv) {
+             RivetId.replace(capital_pos +3 - histno.str().size(), histno.str().size(), histno.str());
+ #ifdef WITH_YODA
+             /// Pointer in order not to be deleted after we exit the loop, so we can then save the plots into the yoda file
+-            YODA::Scatter2D * plot = new YODA::Scatter2D(x,y,exminus,explus,eyminus,eyplus,"/" + RivetId,LineName);
++            YODA::Scatter2D * plot = new YODA::Scatter2D(points, "/" + RivetId, LineName);
+             /// Insert the plot pointer into the vector of analysis object pointers
+             aos.push_back(plot);
+ #endif

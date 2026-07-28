@@ -1,0 +1,14 @@
+diff --git a/bin/nexus b/bin/nexus
+index e7ed3fb..8db766b 100755
+--- a/bin/nexus
++++ b/bin/nexus
+@@ -440,7 +440,8 @@ add_class_path "$app_home/lib/boot/org.apache.karaf.diagnostic.boot-4.0.9.jar"
+ add_class_path "$app_home/lib/boot/org.apache.karaf.jaas.boot-4.0.9.jar"
+ 
+ vmoptions_val=""
+-read_vmoptions "$prg_dir/$progname.vmoptions"
++VM_OPTS=${VM_OPTS_FILE:-"$prg_dir/$progname.vmoptions"}
++read_vmoptions "$VM_OPTS"
+ INSTALL4J_ADD_VM_PARAMS="$INSTALL4J_ADD_VM_PARAMS $vmoptions_val"
+ 
+ 

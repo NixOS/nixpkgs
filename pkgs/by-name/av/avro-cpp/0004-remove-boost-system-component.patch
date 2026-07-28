@@ -1,0 +1,15 @@
+Remove boost_system component from find_package
+
+Boost 1.89.0 removed the separate boost_system compiled library.
+The boost::system headers are still available through the core Boost package.
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -79,7 +79,7 @@ endif ()
+
+
+ find_package (Boost 1.38 REQUIRED
+-    COMPONENTS filesystem iostreams program_options regex system)
++    COMPONENTS filesystem iostreams program_options regex)
+
+ include(FetchContent)
+ FetchContent_Declare(

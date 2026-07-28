@@ -1,0 +1,22 @@
+diff --git a/font-patcher b/font-patcher
+index c48039f2c..e776adfbc 100755
+--- a/font-patcher
++++ b/font-patcher
+@@ -38,7 +38,7 @@ except ImportError:
+         )
+     )
+ 
+-sys.path.insert(0, os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'bin', 'scripts', 'name_parser'))
++sys.path.insert(0, os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), '..', 'lib', 'name_parser'))
+ try:
+     from FontnameParser import FontnameParser
+     from FontnameTools import FontnameTools
+@@ -2075,7 +2075,7 @@ def setup_arguments():
+     expert_group.add_argument('--configfile',                              dest='configfile',       default=False, type=str,            help='Specify a file path for configuration file (see sample: src/config.sample.cfg)')
+     expert_group.add_argument('--custom',                                  dest='custom',           default=False, type=str,            help='Specify a custom symbol font, all glyphs will be copied; absolute path suggested')
+     expert_group.add_argument('--dry',                                     dest='dry_run',          default=False, action='store_true', help='Do neither patch nor store the font, to check naming')
+-    expert_group.add_argument('--glyphdir',                                dest='glyphdir',         default=__dir__ + "/src/glyphs/", type=str, help='Path to glyphs to be used for patching')
++    expert_group.add_argument('--glyphdir',                                dest='glyphdir',         default=__dir__ + "/../share/glyphs/", type=str, help='Path to glyphs to be used for patching')
+     expert_group.add_argument('--has-no-italic',                           dest='noitalic',         default=False, action='store_true', help='Font family does not have Italic (but Oblique), to help create correct RIBBI set')
+     expert_group.add_argument('--metrics',                                 dest='metrics',          default=None, choices=get_metrics_names(), help='Select vertical metrics source (for problematic cases)')
+     expert_group.add_argument('--name',                                    dest='force_name',       default=None, type=str,             help='Specify naming source (\'full\', \'postscript\', \'filename\', or concrete free name-string)')

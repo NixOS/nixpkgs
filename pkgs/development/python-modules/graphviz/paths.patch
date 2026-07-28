@@ -1,0 +1,79 @@
+diff --git a/graphviz/backend/dot_command.py b/graphviz/backend/dot_command.py
+index 3a62a85..a38bb9b 100644
+--- a/graphviz/backend/dot_command.py
++++ b/graphviz/backend/dot_command.py
+@@ -9,7 +9,7 @@ from .. import parameters
+ 
+ __all__ = ['DOT_BINARY', 'command']
+ 
+-DOT_BINARY = pathlib.Path('dot')
++DOT_BINARY = pathlib.Path('@graphviz@/bin/dot')
+ 
+ 
+ def command(engine: str, format_: str, *,
+diff --git a/graphviz/backend/unflattening.py b/graphviz/backend/unflattening.py
+index a386b8c..883cdc6 100644
+--- a/graphviz/backend/unflattening.py
++++ b/graphviz/backend/unflattening.py
+@@ -11,7 +11,7 @@ from . import execute
+ 
+ __all__ = ['UNFLATTEN_BINARY', 'unflatten']
+ 
+-UNFLATTEN_BINARY = pathlib.Path('unflatten')
++UNFLATTEN_BINARY = pathlib.Path('@graphviz@/bin/unflatten')
+ 
+ 
+ @_tools.deprecate_positional_args(supported_number=1)
+diff --git a/graphviz/backend/viewing.py b/graphviz/backend/viewing.py
+index fde74a6..6f29b68 100644
+--- a/graphviz/backend/viewing.py
++++ b/graphviz/backend/viewing.py
+@@ -55,7 +55,7 @@ def view_darwin(filepath: typing.Union[os.PathLike, str], *,
+ def view_unixoid(filepath: typing.Union[os.PathLike, str], *,
+                  quiet: bool) -> None:
+     """Open filepath in the user's preferred application (linux, freebsd)."""
+-    cmd = ['xdg-open', filepath]
++    cmd = ['@xdgutils@/bin/xdg-open', filepath]
+     log.debug('view: %r', cmd)
+     kwargs = {'stderr': subprocess.DEVNULL} if quiet else {}
+     subprocess.Popen(cmd, **kwargs)
+diff --git a/tests/_common.py b/tests/_common.py
+index edc1309..42d730c 100644
+--- a/tests/_common.py
++++ b/tests/_common.py
+@@ -14,9 +14,9 @@ __all__ = ['EXPECTED_DOT_BINARY',
+            'as_cwd',
+            'check_startupinfo', 'StartupinfoMatcher']
+ 
+-EXPECTED_DOT_BINARY = pathlib.Path('dot')
++EXPECTED_DOT_BINARY = pathlib.Path('@graphviz@/bin/dot')
+ 
+-EXPECTED_UNFLATTEN_BINARY = pathlib.Path('unflatten')
++EXPECTED_UNFLATTEN_BINARY = pathlib.Path('@graphviz@/bin/unflatten')
+ 
+ EXPECTED_DEFAULT_ENGINE = 'dot'
+ 
+diff --git a/tests/backend/test_execute.py b/tests/backend/test_execute.py
+index 2cb853a..8093dfe 100644
+--- a/tests/backend/test_execute.py
++++ b/tests/backend/test_execute.py
+@@ -15,6 +15,7 @@ def empty_path(monkeypatch):
+     monkeypatch.setenv('PATH', '')
+ 
+ 
++@pytest.mark.skip(reason='empty $PATH has no effect')
+ @pytest.mark.usefixtures('empty_path')
+ @pytest.mark.parametrize(
+     'func, args',
+diff --git a/tests/backend/test_viewing.py b/tests/backend/test_viewing.py
+index 59a23d5..f73f905 100644
+--- a/tests/backend/test_viewing.py
++++ b/tests/backend/test_viewing.py
+@@ -26,6 +26,6 @@ def test_view_mocked(mocker, mock_platform, mock_popen, mock_startfile, quiet):
+     if mock_platform == 'darwin':
+         mock_popen.assert_called_once_with(['open', 'nonfilepath'], **kwargs)
+     elif mock_platform in ('linux', 'freebsd'):
+-        mock_popen.assert_called_once_with(['xdg-open', 'nonfilepath'], **kwargs)
++        mock_popen.assert_called_once_with(['@xdgutils@/bin/xdg-open', 'nonfilepath'], **kwargs)
+     else:
+         raise RuntimeError

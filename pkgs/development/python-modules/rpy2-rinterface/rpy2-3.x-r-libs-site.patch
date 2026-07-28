@@ -1,0 +1,19 @@
+diff --git a/src/rpy2/rinterface_lib/embedded.py b/src/rpy2/rinterface_lib/embedded.py
+index cc9f7da1..10626f13 100644
+--- a/src/rpy2/rinterface_lib/embedded.py b/src/rpy2/rinterface_lib/embedded.py
+@@ -328,6 +328,15 @@ def _initr(
+             _setinitialized()
+             return None
+ 
++        # path to libraries
++        existing = os.environ.get('R_LIBS_SITE')
++        if existing is not None:
++            prefix = existing + ':'
++        else:
++            prefix = ''
++        additional = '@NIX_R_LIBS_SITE@'
++        os.environ['R_LIBS_SITE'] = prefix + additional
++
+         # TODO: Setting LD_LIBRARY_PATH after the process has started
+         # is too late. Because of this, the line below does not help
+         # address issues where calling R from the command line is working

@@ -1,0 +1,11 @@
+diff --git a/core/include/prometheus/family.h b/core/include/prometheus/family.h
+index 1c625c1..a3d0e85 100644
+--- a/core/include/prometheus/family.h
++++ b/core/include/prometheus/family.h
+@@ -1,5 +1,6 @@
+ #pragma once
+ 
++#include <stdexcept>
+ #include <cstddef>
+ #include <map>
+ #include <memory>

@@ -1,0 +1,11 @@
+--- vim-grammarous-51ef519.org/autoload/grammarous.vim	1970-01-01 01:00:01.000000000 +0100
++++ vim-grammarous-51ef519/autoload/grammarous.vim	2017-11-21 16:33:27.473403322 +0000
+@@ -22,7 +22,7 @@
+ let g:grammarous#enable_spell_check              = get(g:, 'grammarous#enable_spell_check', 0)
+ let g:grammarous#move_to_first_error             = get(g:, 'grammarous#move_to_first_error', 1)
+ let g:grammarous#hooks                           = get(g:, 'grammarous#hooks', {})
+-let g:grammarous#languagetool_cmd                = get(g:, 'grammarous#languagetool_cmd', '')
++let g:grammarous#languagetool_cmd                = get(g:, 'grammarous#languagetool_cmd', '@languagetool@/bin/languagetool-commandline')
+ let g:grammarous#show_first_error                = get(g:, 'grammarous#show_first_error', 0)
+ 
+ highlight default link GrammarousError SpellBad

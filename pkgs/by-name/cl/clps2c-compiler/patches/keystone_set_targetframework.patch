@@ -1,0 +1,13 @@
+diff --git a/bindings/csharp/Keystone.Net/Keystone.Net.csproj b/bindings/csharp/Keystone.Net/Keystone.Net.csproj
+index 04801b4..4c6fe15 100644
+--- a/keystone/bindings/csharp/Keystone.Net/Keystone.Net.csproj
++++ b/keystone/bindings/csharp/Keystone.Net/Keystone.Net.csproj
+@@ -1,7 +1,7 @@
+ <Project Sdk="Microsoft.NET.Sdk">
+
+   <PropertyGroup>
+-    <TargetFramework>netstandard2.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+     <RootNamespace>Keystone</RootNamespace>
+
+     <Version>1.1.0</Version>

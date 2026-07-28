@@ -1,0 +1,14 @@
+{
+  "aarch64-darwin": {
+    "version": "3.5.17",
+    "vscodeVersion": "1.110.1",
+    "url": "https://windsurf-stable.codeiumdata.com/darwin-arm64/stable/2c489dfc762456657db8662309c0d5e76e886397/Devin-darwin-arm64-3.5.17.zip",
+    "sha256": "bca8cc6154f99f5153cd5b508899d8db64be795a96856a14f1d052b7d8091edd"
+  },
+  "x86_64-linux": {
+    "version": "3.5.17",
+    "vscodeVersion": "1.110.1",
+    "url": "https://windsurf-stable.codeiumdata.com/linux-x64/stable/2c489dfc762456657db8662309c0d5e76e886397/Devin-linux-x64-3.5.17.tar.gz",
+    "sha256": "e7ce36c4baacc617a4d89b0e2fb4403f83b328fefd897aec1be5e31038be4e91"
+  }
+}

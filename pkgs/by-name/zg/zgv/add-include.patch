@@ -1,0 +1,11 @@
+diff --git a/src/modesel.c b/src/modesel.c
+--- src/modesel.c
++++ src/modesel.c
+@@ -6,6 +6,7 @@
+  */
+ 
+ #include <stdio.h>
++#include <stdlib.h>
+ #include "zgv_io.h"
+ #include "readnbkey.h"
+ #include "modesel.h"

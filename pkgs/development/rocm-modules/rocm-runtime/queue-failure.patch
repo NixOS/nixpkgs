@@ -1,0 +1,71 @@
+From b7717446c85d08b2d7c0c60ba3ac0eff11ee6120 Mon Sep 17 00:00:00 2001
+From: Luna Nova <git@lunnova.dev>
+Date: Tue, 20 Jan 2026 12:55:45 -0800
+Subject: [PATCH 1/2] rocm-runtime: fix crash in QueueCreate due to trying to
+ free non allocated scratch
+
+if (scratch.main_queue_base != nullptr) before calling ReleaseQueueMainScratch
+because ReleaseQueueMainScratch is only valid if main_queue_base is set
+and the scope guard can fire for an error allocating the queue.
+---
+ .../runtime/hsa-runtime/core/runtime/amd_gpu_agent.cpp        | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/runtime/hsa-runtime/core/runtime/amd_gpu_agent.cpp b/runtime/hsa-runtime/core/runtime/amd_gpu_agent.cpp
+index 01b01fe869..83db40dacc 100644
+--- a/runtime/hsa-runtime/core/runtime/amd_gpu_agent.cpp
++++ b/runtime/hsa-runtime/core/runtime/amd_gpu_agent.cpp
+@@ -1792,7 +1792,9 @@ hsa_status_t GpuAgent::QueueCreate(size_t size, hsa_queue_type32_t queue_type, u
+   scratch.main_queue_base = nullptr;
+   scratch.main_queue_process_offset = 0;
+ 
+-  MAKE_NAMED_SCOPE_GUARD(scratchGuard, [&]() { ReleaseQueueMainScratch(scratch); });
++  MAKE_NAMED_SCOPE_GUARD(scratchGuard, [&]() {
++    if (scratch.main_queue_base != nullptr) ReleaseQueueMainScratch(scratch);
++  });
+ 
+   if (scratch.main_size != 0) {
+     AcquireQueueMainScratch(scratch);
+-- 
+2.52.0
+
+
+From 9c1746cd76a703e4d2321dc2ffe85fc61bfd2f21 Mon Sep 17 00:00:00 2001
+From: Luna Nova <git@lunnova.dev>
+Date: Tue, 20 Jan 2026 13:00:32 -0800
+Subject: [PATCH 2/2] rocm-runtime: log for errors in QueueCreate
+
+---
+ .../runtime/hsa-runtime/core/runtime/amd_gpu_agent.cpp   | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/runtime/hsa-runtime/core/runtime/amd_gpu_agent.cpp b/runtime/hsa-runtime/core/runtime/amd_gpu_agent.cpp
+index 83db40dacc..ae68732eb5 100644
+--- a/runtime/hsa-runtime/core/runtime/amd_gpu_agent.cpp
++++ b/runtime/hsa-runtime/core/runtime/amd_gpu_agent.cpp
+@@ -1799,6 +1799,9 @@ hsa_status_t GpuAgent::QueueCreate(size_t size, hsa_queue_type32_t queue_type, u
+   if (scratch.main_size != 0) {
+     AcquireQueueMainScratch(scratch);
+     if (scratch.main_queue_base == nullptr) {
++      LogPrint(HSA_AMD_LOG_FLAG_INFO,
++               "Failed to allocate scratch memory for queue, size=%zu, node=%u",
++               scratch.main_size, node_id());
+       return HSA_STATUS_ERROR_OUT_OF_RESOURCES;
+     }
+   }
+@@ -1827,7 +1830,11 @@ hsa_status_t GpuAgent::QueueCreate(size_t size, hsa_queue_type32_t queue_type, u
+             node_id()));
+   }
+ 
+-  if (!shared_queue) return HSA_STATUS_ERROR_OUT_OF_RESOURCES;
++  if (!shared_queue) {
++    LogPrint(HSA_AMD_LOG_FLAG_INFO,
++             "Failed to allocate shared queue descriptor memory, node=%u", node_id());
++    return HSA_STATUS_ERROR_OUT_OF_RESOURCES;
++  }
+ 
+   auto aql_queue = new AqlQueue(shared_queue, this, size, node_id(), scratch, event_callback, data,
+                                 flags);
+-- 
+2.52.0
+

@@ -1,0 +1,11 @@
+prefix=@out@
+includedir=${prefix}/include
+libdir=@nvidia_x11@/lib
+
+Name: nvenc
+Description: NVENC
+Version: 10
+Requires:
+Conflicts:
+Libs: -L${libdir} -lnvidia-encode
+Cflags: -I${includedir}

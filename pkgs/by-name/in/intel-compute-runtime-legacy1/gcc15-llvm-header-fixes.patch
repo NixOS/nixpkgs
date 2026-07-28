@@ -1,0 +1,13 @@
+diff --git a/llvm-project/llvm/include/llvm/Support/Threading.h b/llvm-project/llvm/include/llvm/Support/Threading.h
+index ba6c531ab4..78aa5e7be5 100644
+--- a/llvm-project/llvm/include/llvm/Support/Threading.h
++++ b/llvm-project/llvm/include/llvm/Support/Threading.h
+@@ -18,7 +18,7 @@
+ #include "llvm/ADT/StringRef.h"
+ #include "llvm/Config/llvm-config.h" // for LLVM_ON_UNIX
+ #include "llvm/Support/Compiler.h"
+-#include <ciso646> // So we can check the C++ standard lib macros.
++#include <version> // So we can check the C++ standard lib macros.
+ #include <optional>
+ 
+ #if defined(_MSC_VER)

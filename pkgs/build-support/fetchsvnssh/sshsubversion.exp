@@ -1,0 +1,22 @@
+#!/nix/var/nix/profiles/default/bin/expect -f
+
+# Set variables
+set username [lindex $argv 0]
+set password [lindex $argv 1]
+set rev [lindex $argv 2]
+set url [lindex $argv 3]
+set out [lindex $argv 4]
+set timeout -1
+
+spawn svn export -r$rev svn+ssh://$username@$url $out
+match_max 100000
+
+expect "*continue connecting*" { send -- "yes\r"; expect "*?assword:*"; send -- "$password\r" } \
+       "*?assword:*" { send -- "$password\r" }
+
+expect "*?assword:*"
+send -- "$password\r"
+
+# Send blank line
+send -- "\r"
+expect eof

@@ -1,0 +1,342 @@
+diff --git a/src/c++/lib/tools/Roc.cpp b/src/c++/lib/tools/Roc.cpp
+index fabe2be..2c6bb49 100644
+--- a/src/c++/lib/tools/Roc.cpp
++++ b/src/c++/lib/tools/Roc.cpp
+@@ -34,6 +34,9 @@
+  */
+ 
+ #include "helpers/Roc.hh"
++#include <stdexcept>
++#include <limits>
++
+ 
+ #include <algorithm>
+ #include <cmath>
+diff --git a/src/cmake/cxx.cmake b/src/cmake/cxx.cmake
+old mode 100755
+new mode 100644
+diff --git a/src/python/Haplo/happyroc.py b/src/python/Haplo/happyroc.py
+index 152bd18..e439957 100644
+--- a/src/python/Haplo/happyroc.py
++++ b/src/python/Haplo/happyroc.py
+@@ -97,7 +97,7 @@ def roc(roc_table, output_path,
+                 header = l.split("\t")
+             else:
+                 rec = {}
+-                for k, v in itertools.izip(header, l.split("\t")):
++                for k, v in zip(header, l.split("\t")):
+                     rec[k] = v
+ 
+                 if filter_handling:
+@@ -160,11 +160,11 @@ def roc(roc_table, output_path,
+ 
+     if "all" not in result:
+         # minimal empty DF
+-        minidata = [{"Type": "SNP", "Subtype": "*", "Filter": "ALL", "Genotype": "*", "Subset": "*", "QQ": "*"} for _ in xrange(2)]
++        minidata = [{"Type": "SNP", "Subtype": "*", "Filter": "ALL", "Genotype": "*", "Subset": "*", "QQ": "*"} for _ in range(2)]
+         minidata[1]["Type"] = "INDEL"
+         result["all"] = pandas.DataFrame(minidata, columns=RESULT_ALLCOLUMNS)
+         for i, c in enumerate(RESULT_ALLCOLUMNS):
+-            result["all"][c] = result["all"][c].astype(RESULT_ALLDTYPES[i], raise_on_error=False)
++            result["all"][c] = result["all"][c].astype(RESULT_ALLDTYPES[i], errors="ignore")
+ 
+     for k, v in result.items():
+         result[k] = _postprocessRocData(pandas.DataFrame(v, columns=RESULT_ALLCOLUMNS))
+diff --git a/src/python/Haplo/partialcredit.py b/src/python/Haplo/partialcredit.py
+index d9e22bb..0f2b2cf 100644
+--- a/src/python/Haplo/partialcredit.py
++++ b/src/python/Haplo/partialcredit.py
+@@ -202,7 +202,7 @@ def partialCredit(vcfname,
+     try:
+         res = runParallel(pool,
+                           preprocessWrapper,
+-                          itertools.izip(itertools.repeat(vcfname), locations),
++                          zip(itertools.repeat(vcfname), locations),
+                           {"reference": reference,
+                            "decompose": decompose,
+                            "leftshift": leftshift,
+diff --git a/src/python/Haplo/quantify.py b/src/python/Haplo/quantify.py
+index 042d13e..b1d362e 100755
+--- a/src/python/Haplo/quantify.py
++++ b/src/python/Haplo/quantify.py
+@@ -152,7 +152,7 @@ def run_quantify(filename,
+         run_str += " -v %s" % pipes.quote(write_vcf)
+ 
+     if regions:
+-        for k, v in regions.iteritems():
++        for k, v in regions.items():
+             run_str += " -R '%s:%s'" % (k, v)
+ 
+     if roc_regions:
+diff --git a/src/python/Somatic/Mutect.py b/src/python/Somatic/Mutect.py
+index 7ac923c..81f08b5 100755
+--- a/src/python/Somatic/Mutect.py
++++ b/src/python/Somatic/Mutect.py
+@@ -148,7 +148,7 @@ def extractMutectSNVFeatures(vcfname, tag, avg_depth=None):
+                 n_allele_alt_count = 0
+             else:
+                 n_allele_alt_count = 0
+-                for a in xrange(0, len(alleles_alt)):
++                for a in range(0, len(alleles_alt)):
+                     n_allele_alt_count += float(rec[n_sample + "AD"][a + 1])
+ 
+             if n_allele_alt_count + n_allele_ref_count == 0:
+@@ -163,7 +163,7 @@ def extractMutectSNVFeatures(vcfname, tag, avg_depth=None):
+                 t_allele_alt_count = 0
+             else:
+                 t_allele_alt_count = 0
+-                for a in xrange(0, len(alleles_alt)):
++                for a in range(0, len(alleles_alt)):
+                     t_allele_alt_count += float(rec[t_sample + "AD"][a + 1])
+ 
+             if t_allele_alt_count + t_allele_ref_count == 0:
+@@ -344,7 +344,7 @@ def extractMutectIndelFeatures(vcfname, tag, avg_depth=None):
+                 n_allele_alt_count = 0
+             else:
+                 n_allele_alt_count = 0
+-                for a in xrange(0, len(alleles_alt)):
++                for a in range(0, len(alleles_alt)):
+                     n_allele_alt_count += float(rec[n_sample + "AD"][a + 1])
+ 
+             if n_allele_alt_count + n_allele_ref_count == 0:
+@@ -359,7 +359,7 @@ def extractMutectIndelFeatures(vcfname, tag, avg_depth=None):
+                 t_allele_alt_count = 0
+             else:
+                 t_allele_alt_count = 0
+-                for a in xrange(0, len(alleles_alt)):
++                for a in range(0, len(alleles_alt)):
+                     t_allele_alt_count += float(rec[t_sample + "AD"][a + 1])
+ 
+             if t_allele_alt_count + t_allele_ref_count == 0:
+diff --git a/src/python/Tools/bcftools.py b/src/python/Tools/bcftools.py
+index 6146b7a..6d80d14 100755
+--- a/src/python/Tools/bcftools.py
++++ b/src/python/Tools/bcftools.py
+@@ -128,8 +128,8 @@ def concatenateParts(output, *args):
+             to_delete.append(tf2.name)
+             to_delete.append(tf1.name + ".csi")
+             to_delete.append(tf2.name + ".csi")
+-            half1 = [tf1.name] + list(args[:len(args)/2])
+-            half2 = [tf2.name] + list(args[len(args)/2:])
++            half1 = [tf1.name] + list(args[:len(args)//2])
++            half2 = [tf2.name] + list(args[len(args)//2:])
+             concatenateParts(*half1)
+             runBcftools("index", tf1.name)
+             concatenateParts(*half2)
+diff --git a/src/python/Tools/metric.py b/src/python/Tools/metric.py
+index 71ccc99..372626d 100755
+--- a/src/python/Tools/metric.py
++++ b/src/python/Tools/metric.py
+@@ -115,7 +115,7 @@ def replaceNaNs(xobject):
+             if type(xobject[k]) is dict or type(xobject[k]) is list or type(xobject[k]) is float:
+                 xobject[k] = replaceNaNs(xobject[k])
+     elif type(xobject) is list:
+-        for k in xrange(0, len(xobject)):
++        for k in range(0, len(xobject)):
+             if type(xobject[k]) is dict or type(xobject[k]) is list or type(xobject[k]) is float:
+                 xobject[k] = replaceNaNs(xobject[k])
+     elif type(xobject) is float:
+diff --git a/src/python/Tools/parallel.py b/src/python/Tools/parallel.py
+index 9d49760..5fcb37e 100755
+--- a/src/python/Tools/parallel.py
++++ b/src/python/Tools/parallel.py
+@@ -17,9 +17,9 @@ import logging
+ import traceback
+ import subprocess
+ import multiprocessing
+-import cPickle
++import pickle
+ import tempfile
+-from itertools import islice, izip, repeat
++from itertools import islice, repeat
+ 
+ from . import LoggingWriter
+ 
+@@ -93,7 +93,7 @@ def runParallel(pool, fun, par, *args, **kwargs):
+ 
+     """
+     if pool:
+-        result = pool.map(parMapper, izip(par, repeat( { "fun": fun, "args": args, "kwargs": kwargs } )))
++        result = pool.map(parMapper, zip(par, repeat( { "fun": fun, "args": args, "kwargs": kwargs } )))
+     else:
+         result = []
+         for c in par:
+diff --git a/src/python/Tools/sessioninfo.py b/src/python/Tools/sessioninfo.py
+index 75650ec..b49bf59 100644
+--- a/src/python/Tools/sessioninfo.py
++++ b/src/python/Tools/sessioninfo.py
+@@ -34,7 +34,6 @@ def sessionInfo():
+               'version': version,
+               'runInfo': [{"key": "commandline", "value": " ".join(sys.argv)}],
+               'uname': " / ".join(platform.uname()),
+-              'dist': " / ".join(platform.dist()),
+               'mac_ver': " / ".join([platform.mac_ver()[0], platform.mac_ver()[2]]),
+               'python_implementation': platform.python_implementation(),
+               'python_version': platform.python_version(),
+diff --git a/src/python/Tools/vcfcallerinfo.py b/src/python/Tools/vcfcallerinfo.py
+index eb7e86e..947f2c4 100755
+--- a/src/python/Tools/vcfcallerinfo.py
++++ b/src/python/Tools/vcfcallerinfo.py
+@@ -33,8 +33,8 @@ class CallerInfo(object):
+ 
+     def asDict(self):
+         kvd = ["name", "version", "parameters"]
+-        return {"aligners": [dict(y for y in itertools.izip(kvd, x)) for x in self.aligners],
+-                "callers": [dict(y for y in itertools.izip(kvd, x)) for x in self.callers]}
++        return {"aligners": [dict(y for y in zip(kvd, x)) for x in self.aligners],
++                "callers": [dict(y for y in zip(kvd, x)) for x in self.callers]}
+ 
+     def addVCF(self, vcfname):
+         """ Add caller versions from a VCF
+diff --git a/src/python/hap.py b/src/python/hap.py
+index 8045936..93279a4 100755
+--- a/src/python/hap.py
++++ b/src/python/hap.py
+@@ -188,7 +188,7 @@ def main():
+         parser.print_help()
+         exit(1)
+ 
+-    print "Hap.py %s" % Tools.version        
++    print("Hap.py %s" % Tools.version)
+     if args.version:
+         exit(0)
+ 
+diff --git a/src/python/ovc.py b/src/python/ovc.py
+index 2837255..20b4442 100755
+--- a/src/python/ovc.py
++++ b/src/python/ovc.py
+@@ -34,7 +34,7 @@ lines = 1
+ for line in f:
+ 	l = line.split("\t")
+ 	if len(l) > 3 and (last-1) > int(l[1]):
+-		print "Overlap at %s:%i (line %i)" % (l[0], int(l[1]), lines)
++		print(Overlap at %s:%i (line %i)) % (l[0], int(l[1]), lines)
+ 		exit(1)
+ 	elif len(l) > 3:
+ 		last = int(l[2])
+diff --git a/src/python/pre.py b/src/python/pre.py
+index 5ca1644..a37a4b2 100755
+--- a/src/python/pre.py
++++ b/src/python/pre.py
+@@ -47,8 +47,8 @@ import Haplo.partialcredit
+ def hasChrPrefix(chrlist):
+     """ returns if list of chr names has a chr prefix or not """
+ 
+-    noprefix = map(str, range(23)) + ["X", "Y", "MT"]
+-    withprefix = ["chr" + x for x in map(str, range(23)) + ["X", "Y", "M"]]
++    noprefix = [str(x) for x in range(23)] + ["X", "Y", "MT"]
++    withprefix = ["chr" + str(x) for x in range(23)] + ["X", "Y", "M"]
+ 
+     count_noprefix = len(list(set(noprefix) & set(chrlist)))
+     count_prefix = len(list(set(withprefix) & set(chrlist)))
+@@ -126,7 +126,7 @@ def preprocess(vcf_input,
+ 
+         if gender == "auto":
+             logging.info(mf)
+-            if "female" in mf:
++            if b"female" in mf:
+                 gender = "female"
+             else:
+                 gender = "male"
+@@ -392,7 +392,7 @@ def main():
+         exit(0)
+ 
+     if args.version:
+-        print "pre.py %s" % Tools.version  # noqa:E999
++        print(pre.py %s) % Tools.version  # noqa:E999
+         exit(0)
+ 
+     args.input = args.input[0]
+diff --git a/src/python/qfy.py b/src/python/qfy.py
+index 4f247ee..59ed68a 100755
+--- a/src/python/qfy.py
++++ b/src/python/qfy.py
+@@ -203,8 +203,8 @@ def quantify(args):
+ 
+     # in default mode, print result summary to stdout
+     if not args.quiet and not args.verbose:
+-        print "Benchmarking Summary:"
+-        print essential_numbers.to_string(index=False)
++        print("Benchmarking Summary:")
++        print(essential_numbers.to_string(index=False))
+ 
+     # keep this for verbose output
+     if not args.verbose:
+@@ -213,12 +213,12 @@ def quantify(args):
+         except:
+             pass
+ 
+-    for t in res.iterkeys():
++    for t in res.keys():
+         metrics_output["metrics"].append(dataframeToMetricsTable("roc." + t, res[t]))
+ 
+     # gzip JSON output
+     if args.write_json:
+         with gzip.open(args.reports_prefix + ".metrics.json.gz", "w") as fp:
+-            json.dump(metrics_output, fp)
++            fp.write(json.dumps(metrics_output, default=np_encoder).encode('ascii'))
+ 
+ 
+@@ -362,7 +363,7 @@ def main():
+         exit(0)
+ 
+     if args.version:
+-        print "qfy.py %s" % Tools.version
++        print(qfy.py %s) % Tools.version
+         exit(0)
+ 
+     if args.fp_bedfile and args.preprocessing_truth_confregions:
+diff --git a/src/python/som.py b/src/python/som.py
+index e942351..c01d522 100755
+--- a/src/python/som.py
++++ b/src/python/som.py
+@@ -640,7 +640,7 @@ def main():
+                              "overlap):\n" + ambie.to_string(index=False))
+                 # in default mode, print result summary to stdout
+                 if not args.quiet and not args.verbose:
+-                    print "FP/ambiguity classes with info (multiple classes can " \
++                    print(FP/ambiguity classes with info (multiple classes can ) \
+                           "overlap):\n" + ambie.to_string(index=False)
+                 ambie.to_csv(args.output + ".ambiclasses.csv")
+                 metrics_output["metrics"].append(dataframeToMetricsTable("ambiclasses", ambie))
+@@ -659,7 +659,7 @@ def main():
+                     formatters={'reason': '{{:<{}s}}'.format(ambie['reason'].str.len().max()).format}, index=False))
+                 # in default mode, print result summary to stdout
+                 if not args.quiet and not args.verbose:
+-                    print "Reasons for defining as ambiguous (multiple reasons can overlap):\n" + ambie.to_string(
++                    print(Reasons for defining as ambiguous (multiple reasons can overlap):\n) + ambie.to_string(
+                         formatters={'reason': '{{:<{}s}}'.format(ambie['reason'].str.len().max()).format}, index=False)
+                 ambie.to_csv(args.output + ".ambireasons.csv")
+                 metrics_output["metrics"].append(dataframeToMetricsTable("ambireasons", ambie))
+@@ -936,7 +936,7 @@ def main():
+         logging.info("\n" + res.to_string())
+         # in default mode, print result summary to stdout
+         if not args.quiet and not args.verbose:
+-            print "\n" + res.to_string()
++            print(\n) + res.to_string()
+ 
+         res["sompyversion"] = vstring
+ 
+diff --git a/src/python/qfy.py b/src/python/qfy.py
+index 59ed68a..be8d7e1 100755
+--- a/src/python/qfy.py
++++ b/src/python/qfy.py
+@@ -33,6 +33,7 @@ import pandas
+ import json
+ import tempfile
+ import gzip
++import numpy as np
+ 
+ scriptDir = os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
+ sys.path.append(os.path.abspath(os.path.join(scriptDir, '..', 'lib', 'python27')))
+@@ -45,6 +46,10 @@ import Haplo.happyroc
+ import Haplo.gvcf2bed
+ from Tools import fastasize
+ 
++# Cannot convert data to json without a custom enconder
++def np_encoder(object):
++    if isinstance(object, np.generic):
++        return object.item()
+ 
+ def quantify(args):
+     """ Run quantify and write tables """

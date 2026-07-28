@@ -1,0 +1,84 @@
+*** /dev/null	Wed Jan  7 11:47:26 2015
+--- tradcpp-0.4/Makefile.in	Wed Jan  7 11:43:15 2015
+***************
+*** 0 ****
+--- 1,64 ----
++ SHELL = /bin/sh
++ 
++ ### Filled in by `configure' ###
++ srcdir = @srcdir@
++ VPATH = @srcdir@
++ CC = @CC@
++ CFLAGS = @CFLAGS@
++ CPPFLAGS = @CPPFLAGS@
++ 
++ LDFLAGS = @LDFLAGS@
++ 
++ prefix = @prefix@
++ exec_prefix = @exec_prefix@
++ 
++ bindir = @bindir@
++ libdir = @libdir@
++ incdir = @includedir@
++ manext = 1
++ mandir = @mandir@/man$(manext)
++ docdir = @docdir@
++ datarootdir = @datarootdir@
++ datadir = @datadir@
++ 
++ OBJS=	main.o \
++ 	files.o directive.o eval.o macro.o output.o \
++ 	place.o array.o utils.o
++ 
++ .PHONY: all clean install man doc dist
++ 
++ default: all
++ 
++ all: tradcpp
++ 
++ tradcpp: $(OBJS)
++ 	$(CC) $(LDFLAGS) $(CFLAGS) $(CPPFLAGS) -o $@ $(OBJS)
++ 
++ clean:
++ 	rm -f *.o
++ 
++ distclean: clean
++ 	rm -f Makefile config.log config.status config-cache
++ 
++ install: tradcpp
++ 	mkdir -p $(DESTDIR)$(mandir)
++ 	install tradcpp.1 $(DESTDIR)$(mandir)
++ 	mkdir -p $(DESTDIR)$(bindir)
++ 	install tradcpp $(DESTDIR)$(bindir)
++ 
++ .c.o:
++ 	$(CC) -c $(CPPFLAGS) $(CFLAGS) -o $@ $<
++ 
++ array.o: array.c array.h inlinedefs.h utils.h
++ directive.o: directive.c utils.h mode.h place.h files.h directive.h \
++  macro.h eval.h output.h
++ eval.o: eval.c utils.h array.h inlinedefs.h mode.h place.h eval.h
++ files.o: files.c array.h inlinedefs.h utils.h mode.h place.h files.h \
++  directive.h
++ macro.o: macro.c array.h inlinedefs.h utils.h mode.h place.h macro.h \
++  output.h
++ main.o: main.c version.h config.h utils.h array.h inlinedefs.h mode.h \
++  place.h files.h directive.h macro.h
++ output.o: output.c utils.h mode.h place.h output.h
++ place.o: place.c utils.h array.h inlinedefs.h place.h
++ utils.o: utils.c utils.h
+*** /dev/null	Wed Jan  7 11:47:26 2015
+--- tradcpp-0.4/configure.ac	Wed Jan  7 11:22:18 2015
+***************
+*** 0 ****
+--- 1,10 ----
++ AC_PREREQ([2.60])dnl
++ AC_INIT(main.c)
++ AC_PROG_CC
++ AC_LANG(C)
++ AC_SUBST(CC)
++ AC_SUBST(CFLAGS)
++ AC_SUBST(CPPFLAGS)
++ AC_SUBST(LDFLAGS)
++ AC_SUBST(LD)
++ AC_OUTPUT(Makefile)

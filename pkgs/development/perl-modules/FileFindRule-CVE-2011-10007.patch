@@ -1,0 +1,25 @@
+From ca70a73bb147549e62e74751d924b1dbb59d1707 Mon Sep 17 00:00:00 2001
+From: Stig Palmquist <stig@stig.io>
+Date: Thu, 5 Jun 2025 03:45:50 +0200
+Subject: [PATCH] Fix CVE-2011-10007
+
+---
+ lib/File/Find/Rule.pm | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/File/Find/Rule.pm b/lib/File/Find/Rule.pm
+index feccc76..d4dc475 100644
+--- a/lib/File/Find/Rule.pm
++++ b/lib/File/Find/Rule.pm
+@@ -420,7 +420,7 @@ sub grep {
+ 
+     $self->exec( sub {
+         local *FILE;
+-        open FILE, $_ or return;
++        open FILE, '<', $_ or return;
+         local ($_, $.);
+         while (<FILE>) {
+             for my $p (@pattern) {
+-- 
+2.49.0
+

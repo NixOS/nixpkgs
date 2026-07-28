@@ -1,0 +1,13 @@
+diff --git a/scripts/msmtpq/msmtpq b/scripts/msmtpq/msmtpq
+index bcb384e..9622e47 100755
+--- a/scripts/msmtpq/msmtpq
++++ b/scripts/msmtpq/msmtpq
+@@ -60,8 +60,6 @@ err() { dsp '' "$@" '' ; exit 1 ; }
+ ##   export the location of the msmtp executable before running this script  (no quotes !!)
+ ##   e.g. ( export MSMTP=/path/to/msmtp )
+ MSMTP="${MSMTP:-msmtp}"
+-"$MSMTP" --version >/dev/null 2>&1 || \
+-  log_later -e 1 "msmtpq : can't run the msmtp executable [ $MSMTP ]"   # if not found - complain ; quit
+ ##
+ ## set the queue var to the location of the msmtp queue directory
+ ##   if the queue dir doesn't yet exist, create it (0700)

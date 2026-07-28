@@ -1,0 +1,69 @@
+diff --git a/filterpy/kalman/EKF.py b/filterpy/kalman/EKF.py
+index 5e83aec..06e9c42 100644
+--- a/filterpy/kalman/EKF.py
++++ b/filterpy/kalman/EKF.py
+@@ -406,7 +406,8 @@ class ExtendedKalmanFilter(object):
+         mahalanobis : float
+         """
+         if self._mahalanobis is None:
+-            self._mahalanobis = sqrt(float(dot(dot(self.y.T, self.SI), self.y)))
++            d2 = self.y.T @ self.SI @ self.y
++            self._mahalanobis = sqrt(np.asarray(d2).item())
+         return self._mahalanobis
+ 
+     def __repr__(self):
+diff --git a/filterpy/kalman/fading_memory.py b/filterpy/kalman/fading_memory.py
+index 36c9dcc..2c4d582 100644
+--- a/filterpy/kalman/fading_memory.py
++++ b/filterpy/kalman/fading_memory.py
+@@ -438,7 +438,7 @@ class FadingKalmanFilter(object):
+         mahalanobis : float
+         """
+         if self._mahalanobis is None:
+-            self._mahalanobis = sqrt(float(dot(dot(self.y.T, self.SI), self.y)))
++            self._mahalanobis = sqrt((self.y.T @ self.SI @ self.y).item())
+         return self._mahalanobis
+ 
+     def __repr__(self):
+diff --git a/filterpy/kalman/kalman_filter.py b/filterpy/kalman/kalman_filter.py
+index 994b596..0f72d85 100644
+--- a/filterpy/kalman/kalman_filter.py
++++ b/filterpy/kalman/kalman_filter.py
+@@ -1235,7 +1235,8 @@ class KalmanFilter(object):
+         mahalanobis : float
+         """
+         if self._mahalanobis is None:
+-            self._mahalanobis = sqrt(float(dot(dot(self.y.T, self.SI), self.y)))
++            d2 = dot(dot(self.y.T, self.SI), self.y)
++            self._mahalanobis = sqrt(np.asarray(d2).item())
+         return self._mahalanobis
+ 
+     @property
+diff --git a/filterpy/kalman/tests/test_imm.py b/filterpy/kalman/tests/test_imm.py
+index aa71fc2..ec2fdc1 100644
+--- a/filterpy/kalman/tests/test_imm.py
++++ b/filterpy/kalman/tests/test_imm.py
+@@ -176,8 +176,8 @@ def test_imm():
+ 
+     zs = np.zeros((N, 2))
+     for i in range(len(zs)):
+-        zs[i, 0] = simxs[i, 0] + randn()*r
+-        zs[i, 1] = simxs[i, 2] + randn()*r
++        zs[i, 0] = simxs[i, 0, 0] + randn()*r
++        zs[i, 1] = simxs[i, 2, 0] + randn()*r
+ 
+     '''
+     try:
+diff --git a/filterpy/leastsq/least_squares.py b/filterpy/leastsq/least_squares.py
+index 2610b14..6c5eb8f 100644
+--- a/filterpy/leastsq/least_squares.py
++++ b/filterpy/leastsq/least_squares.py
+@@ -129,7 +129,7 @@ class LeastSquaresFilter(object):
+ 
+         if self._order == 0:
+             K[0] = 1. / n
+-            y = z - x
++            y = z - x[0]
+             x[0] += K[0] * y
+ 
+         elif self._order == 1:

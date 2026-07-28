@@ -1,0 +1,23 @@
+From ad9c7f8ddf0907d408b3d2fbf4d00ecb55af8d13 Mon Sep 17 00:00:00 2001
+From: Hugh McMaster <hugh.mcmaster@outlook.com>
+Date: Mon, 29 Jul 2024 23:13:16 +1000
+Subject: [PATCH] src/scan.c: Declare "AVCodec" to be "const AVCodec"
+
+This fixes compilation with GCC-14.
+---
+ src/scan.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/scan.c b/src/scan.c
+index 85b36b3..e02ed86 100644
+--- a/src/scan.c
++++ b/src/scan.c
+@@ -115,7 +115,7 @@ int scan_file(const char *file, unsigned index) {
+ 
+ 	AVFormatContext *container = NULL;
+ 
+-	AVCodec *codec;
++	const AVCodec *codec;
+ 	AVCodecContext *ctx;
+ 
+ 	AVFrame *frame;

@@ -1,0 +1,39 @@
+diff --git a/Linphone/model/call/CallModel.cpp b/Linphone/model/call/CallModel.cpp
+index 366bbe86f..7bac43ad5 100644
+--- a/Linphone/model/call/CallModel.cpp
++++ b/Linphone/model/call/CallModel.cpp
+@@ -56,7 +56,7 @@ void CallModel::accept(bool withVideo) {
+ 	params->setRecordFile(
+ 	    Paths::getCapturesDirPath()
+ 	        .append(Utils::generateSavedFilename(QString::fromStdString(mMonitor->getToAddress()->getUsername()), ""))
+-	        .append(".mkv")
++	        .append(".wav")
+ 	        .toStdString());
+ 	// Answer with local call address.
+ 	auto localAddress = mMonitor->getCallLog()->getLocalAddress();
+diff --git a/Linphone/model/recorder/RecorderModel.cpp b/Linphone/model/recorder/RecorderModel.cpp
+index 7883ed150..1b1820620 100644
+--- a/Linphone/model/recorder/RecorderModel.cpp
++++ b/Linphone/model/recorder/RecorderModel.cpp
+@@ -82,7 +82,7 @@ void RecorderModel::start() {
+ 	mustBeInLinphoneThread(log().arg(Q_FUNC_INFO));
+ 	bool soFarSoGood;
+ 	QString filename =
+-	    QStringLiteral("vocal_%1.mka").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss-zzz"));
++	    QStringLiteral("vocal_%1.wav").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss-zzz"));
+ 	const QString safeFilePath = Utils::getSafeFilePath(
+ 	    QStringLiteral("%1%2").arg(SettingsModel::getInstance()->getSavedCallsFolder()).arg(filename), &soFarSoGood);
+ 
+diff --git a/Linphone/model/tool/ToolModel.cpp b/Linphone/model/tool/ToolModel.cpp
+index 18edeca7c..70c88516f 100644
+--- a/Linphone/model/tool/ToolModel.cpp
++++ b/Linphone/model/tool/ToolModel.cpp
+@@ -353,7 +353,7 @@ bool ToolModel::createCall(const QString &sipAddress,
+ 		params->setRecordFile(
+ 		    Paths::getCapturesDirPath()
+ 		        .append(Utils::generateSavedFilename(QString::fromStdString(address->getUsername()), ""))
+-		        .append(".mkv")
++		        .append(".wav")
+ 		        .toStdString());
+ 	}
+ 

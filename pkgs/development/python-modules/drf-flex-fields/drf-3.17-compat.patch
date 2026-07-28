@@ -1,0 +1,23 @@
+Upstream-Status: Submitted [https://github.com/rsinger86/drf-flex-fields/pull/146]
+
+diff --git a/rest_flex_fields/filter_backends.py b/rest_flex_fields/filter_backends.py
+index 5eba44d..1f6461c 100644
+--- a/rest_flex_fields/filter_backends.py
++++ b/rest_flex_fields/filter_backends.py
+@@ -4,7 +4,16 @@ from django.core.exceptions import FieldDoesNotExist
+ from django.db import models
+ from django.db.models import QuerySet
+-from rest_framework.compat import coreapi, coreschema
++try:
++    from rest_framework.compat import coreapi, coreschema
++except ImportError:
++    try:
++        import coreapi
++        import coreschema
++    except ImportError:
++        coreapi = None
++        coreschema = None
++
+ from rest_framework.filters import BaseFilterBackend
+ from rest_framework.request import Request
+ from rest_framework.viewsets import GenericViewSet

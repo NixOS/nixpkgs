@@ -1,0 +1,170 @@
+{
+    "optifine_1_21_4": {
+        "version": "1.21.4_HD_U_J3",
+        "sha256": "1lz1gc2f4l5fzy4zgi1i279v7gccqwjswsbviyp8jgybir81r2nv"
+    },
+    "optifine_1_21_3": {
+        "version": "1.21.3_HD_U_J2",
+        "sha256": "0yv6f6vaxsqxkc4hh4kvfdr7gxi197gzv82w7pwi927xyvgsl5ir"
+    },
+    "optifine_1_21_1": {
+        "version": "1.21.1_HD_U_J1",
+        "sha256": "10lhnxang1zpvc30brg8ansm5b2snmf8x14g5pmbs280vca2svfv"
+    },
+    "optifine_1_20_4": {
+        "version": "1.20.4_HD_U_I7",
+        "sha256": "1zgz5cd2v299hayk5qx639nknd3mcz58y59rpik8srx48da8jw14"
+    },
+    "optifine_1_20_1": {
+        "version": "1.20.1_HD_U_I6",
+        "sha256": "0l66pz4hy42qxv9a2jlq1hd7jiiysnv54g9gk1dfbwpd19kwnrqb"
+    },
+    "optifine_1_19_4": {
+        "version": "1.19.4_HD_U_I4",
+        "sha256": "0smgr2mxk8p7v7xzklj34kzqs36bl1kbb94lq41i1ks1wg50n09c"
+    },
+    "optifine_1_19_3": {
+        "version": "1.19.3_HD_U_I3",
+        "sha256": "15xgw12sacq6bqssm1szmmg5gac24rsah2plwky67hi67bj894iv"
+    },
+    "optifine_1_19_2": {
+        "version": "1.19.2_HD_U_I2",
+        "sha256": "0klhhzmr4l5alkyq8q1ishzach2jip5y6d6d4jk9whcbhia33sxg"
+    },
+    "optifine_1_19_1": {
+        "version": "1.19.1_HD_U_H9",
+        "sha256": "1p5a3i383ca2l3snsm36dyngfz9a1f9xffaxk439149h0i2d0nlj"
+    },
+    "optifine_1_19": {
+        "version": "1.19_HD_U_H9",
+        "sha256": "19zjvwg0sr6279plj5qxj7hdlw9w8q3qd78dg6911m356z6g87ah"
+    },
+    "optifine_1_18_2": {
+        "version": "1.18.2_HD_U_H9",
+        "sha256": "0lf16i7hjyral3704kzyhbhrc01crbpzaicsl4cyj6qx15z0lwxx"
+    },
+    "optifine_1_18_1": {
+        "version": "1.18.1_HD_U_H6",
+        "sha256": "0nh8ls306rs1qcbyibb6idapws4z5cyaqrgh9ipvm1vcwvxxj9ys"
+    },
+    "optifine_1_18": {
+        "version": "1.18_HD_U_H3",
+        "sha256": "11zqiwmqj4ja6l87acwzs7cnabsgn2x36510hap8gj139l3vbrvb"
+    },
+    "optifine_1_17_1": {
+        "version": "1.17.1_HD_U_H1",
+        "sha256": "14zp7jq0g9krq4ma4s5an2ncpyc2ipcxfcfhb0zqc7f8nvipnyqw"
+    },
+    "optifine_1_16_5": {
+        "version": "1.16.5_HD_U_G8",
+        "sha256": "0ks91d6n4vkgb5ykdrc67br2c69nqjr0xhp7rrkybg24xn8bqxiw"
+    },
+    "optifine_1_16_4": {
+        "version": "1.16.4_HD_U_G7",
+        "sha256": "063zdfmhzq5jgfdy27c8b0008sribl8rbvfxa7nkk86qwpvz6v8h"
+    },
+    "optifine_1_16_3": {
+        "version": "1.16.3_HD_U_G5",
+        "sha256": "0pipr77jrva5wrllil40myansyrxxvcckxlvf4k2vhqf2g1mfigl"
+    },
+    "optifine_1_16_2": {
+        "version": "1.16.2_HD_U_G5",
+        "sha256": "1iav08qqk7wb43ars9nilbgm4ybdi02pd0ahb0xy7clkxvlnjcx2"
+    },
+    "optifine_1_16_1": {
+        "version": "1.16.1_HD_U_G2",
+        "sha256": "1gwbxv3dx82lxkbp9gaf1nqczkcxdzlfsspxlrv6gcn7w8vvwf5v"
+    },
+    "optifine_1_15_2": {
+        "version": "1.15.2_HD_U_G6",
+        "sha256": "10qz6y3h80s56wsk3f5wwg52d0d7mkklhhhvgp6y84zlzq6xdbq4"
+    },
+    "optifine_1_14_4": {
+        "version": "1.14.4_HD_U_G5",
+        "sha256": "1fw9adbixl7942mkr48hl0aar2fwzgsh2js68c06xj5s0fyvkvi3"
+    },
+    "optifine_1_14_3": {
+        "version": "1.14.3_HD_U_F2",
+        "sha256": "00wys29pmgfsc4j2jy2mpfl493vy52jdxprxl92hcg2xz77ipqjh"
+    },
+    "optifine_1_14_2": {
+        "version": "1.14.2_HD_U_F1",
+        "sha256": "0645d38z8llnnv546zfkflqp441kxvf8vd0l3zjsls81w3bpc6n8"
+    },
+    "optifine_1_13_2": {
+        "version": "1.13.2_HD_U_G5",
+        "sha256": "0wdvaxpvbnpfpqgb8v1r8br56pkcn7kvgsi29vcxcg8zvyi10ddj"
+    },
+    "optifine_1_13_1": {
+        "version": "1.13.1_HD_U_E4",
+        "sha256": "0r5x703pgwi8vakii0nhlij7j24zkq1xvyscqd8lv6w3yq7xd5b3"
+    },
+    "optifine_1_13": {
+        "version": "1.13_HD_U_E4",
+        "sha256": "0x8ynnm9dglzrajb3ffmvmwkx6ipzs306qadwhcp0ah148wiz1l3"
+    },
+    "optifine_1_12_2": {
+        "version": "1.12.2_HD_U_G5",
+        "sha256": "07i7p8wsh22xx31g22kk5vxwwy4sgjp0ha8d5mzvkzkifxwhc01v"
+    },
+    "optifine_1_12_1": {
+        "version": "1.12.1_HD_U_G5",
+        "sha256": "1jn02mknpf622q6i942v63x3kzs9q7n394x188nfh508rn9fpipn"
+    },
+    "optifine_1_12": {
+        "version": "1.12_HD_U_G5",
+        "sha256": "1slbz0ss670gwlzv4dw362cc5wlpxjv81004n04vcsip8l491pdb"
+    },
+    "optifine_1_11_2": {
+        "version": "1.11.2_HD_U_G5",
+        "sha256": "1zlap4j3qzb00a9qxk9ww1cgmqaiznblahj19p1r4yrrsc3d9hnn"
+    },
+    "optifine_1_11": {
+        "version": "1.11_HD_U_G5",
+        "sha256": "1azgnsqbl71087i83dn6wyb7qdz2wa42f04cabnlhmdcmdd4kcsj"
+    },
+    "optifine_1_10_2": {
+        "version": "1.10.2_HD_U_I5",
+        "sha256": "0m05xqcmh8kaqvlb57yz0mslf22wr89wamlf1q1cma4fn385i57f"
+    },
+    "optifine_1_10": {
+        "version": "1.10_HD_U_I5",
+        "sha256": "1kd502h6ikxmyj99bj7d41j7z237yipn1hxhb3hsff37s5lar8x0"
+    },
+    "optifine_1_9_4": {
+        "version": "1.9.4_HD_U_I5",
+        "sha256": "08pb3x0c898pgsciigvy0q9j25arlyqzira4qmcz75qkzlhv3qxp"
+    },
+    "optifine_1_9_2": {
+        "version": "1.9.2_HD_U_E3",
+        "sha256": "1bgyxhs554wswavidsnmm6mahngndd5bc98jma6wgi7g5qrngcrp"
+    },
+    "optifine_1_9_0": {
+        "version": "1.9.0_HD_U_I5",
+        "sha256": "1nyiv91hm9765244xa6mh9cf62l329ppm8rdib35lb3ghgasid9n"
+    },
+    "optifine_1_8_9": {
+        "version": "1.8.9_HD_U_M5",
+        "sha256": "1i5j4jvsd1zkly6pf8zs71gga61z533bq5y8gmfax9pwf057cf97"
+    },
+    "optifine_1_8_8": {
+        "version": "1.8.8_HD_U_I7",
+        "sha256": "0x4aambs2kww9lanm4kp2jw4h3cwk25fa6xwsm9r7a1jv42jlyay"
+    },
+    "optifine_1_8_0": {
+        "version": "1.8.0_HD_U_I7",
+        "sha256": "1ig013l61f7yj061ncnvmjsp9j2nd8fy8j03f8ry045d0s7idnfk"
+    },
+    "optifine_1_7_10": {
+        "version": "1.7.10_HD_U_E7",
+        "sha256": "1d7s8ip697xnlpap89qrr794f307kwv5y44qyj8ha6h0vs1rvkcb"
+    },
+    "optifine_1_7_2": {
+        "version": "1.7.2_HD_U_F7",
+        "sha256": "18lzyh639mi7r2hzwnmxv0a6v1ay7dk9bzasvwff82dxq0y9zi7m"
+    },
+    "optifine-latest": {
+        "version": "1.21.4_HD_U_J3",
+        "sha256": "1lz1gc2f4l5fzy4zgi1i279v7gccqwjswsbviyp8jgybir81r2nv"
+    }
+}

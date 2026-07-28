@@ -1,0 +1,72 @@
+[
+  {
+    "pname": "Microsoft.CodeAnalysis.Analyzers",
+    "version": "3.0.0-beta2.20059.3",
+    "hash": "sha256-A62m36Ra9xx6qdU8t5ie7hIBcU+uCZUJUU4Smto90xM="
+  },
+  {
+    "pname": "Microsoft.CodeAnalysis.Common",
+    "version": "3.5.0",
+    "hash": "sha256-k6PiYI8QqWXWxUL4oSbvPHVBFRolS1ZApphnSQW+ITg="
+  },
+  {
+    "pname": "Microsoft.CodeAnalysis.CSharp",
+    "version": "3.5.0",
+    "hash": "sha256-D/1EQqFrTiwACdknW0fpodraz9JaA+ebIrQVLMw8pc8="
+  },
+  {
+    "pname": "Microsoft.NETCore.Platforms",
+    "version": "2.1.2",
+    "hash": "sha256-gYQQO7zsqG+OtN4ywYQyfsiggS2zmxw4+cPXlK+FB5Q="
+  },
+  {
+    "pname": "Newtonsoft.Json",
+    "version": "13.0.1",
+    "hash": "sha256-K2tSVW4n4beRPzPu3rlVaBEMdGvWSv/3Q1fxaDh4Mjo="
+  },
+  {
+    "pname": "System.Collections.Immutable",
+    "version": "1.5.0",
+    "hash": "sha256-BliqYlL9ntbMXo5d7NUrKXwYN+PqdyqDIS5bp4qVr7Q="
+  },
+  {
+    "pname": "System.CommandLine",
+    "version": "2.0.0-beta4.22272.1",
+    "hash": "sha256-zSO+CYnMH8deBHDI9DHhCPj79Ce3GOzHCyH1/TiHxcc="
+  },
+  {
+    "pname": "System.Memory",
+    "version": "4.5.3",
+    "hash": "sha256-Cvl7RbRbRu9qKzeRBWjavUkseT2jhZBUWV1SPipUWFk="
+  },
+  {
+    "pname": "System.Reflection.Metadata",
+    "version": "1.6.0",
+    "hash": "sha256-JJfgaPav7UfEh4yRAQdGhLZF1brr0tUWPl6qmfNWq/E="
+  },
+  {
+    "pname": "System.Runtime.CompilerServices.Unsafe",
+    "version": "4.5.2",
+    "hash": "sha256-8eUXXGWO2LL7uATMZye2iCpQOETn2jCcjUhG6coR5O8="
+  },
+  {
+    "pname": "System.Runtime.CompilerServices.Unsafe",
+    "version": "4.6.0",
+    "hash": "sha256-FTjQeMuvqnKxpoVsVh/OlQ21NMaZiFtOdv7VdZ+Iv3Y="
+  },
+  {
+    "pname": "System.Text.Encoding.CodePages",
+    "version": "4.5.1",
+    "hash": "sha256-PIhkv59IXjyiuefdhKxS9hQfEwO9YWRuNudpo53HQfw="
+  },
+  {
+    "pname": "System.Threading.Tasks.Extensions",
+    "version": "4.5.3",
+    "hash": "sha256-8TglbC6KBHlDeSfgr6d5dGn7wu8td4XERl2JUyo0+Tw="
+  },
+  {
+    "pname": "YamlDotNet",
+    "version": "8.1.1",
+    "hash": "sha256-B6yNYjnIAGI31fTiTlfZ4eXU3l9qYFgm0Q0ALBNmPTw="
+  }
+]

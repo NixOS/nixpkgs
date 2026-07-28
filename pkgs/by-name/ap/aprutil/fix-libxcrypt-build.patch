@@ -1,0 +1,14 @@
+diff --git a/crypto/apr_passwd.c b/crypto/apr_passwd.c
+index c961de2..a397f27 100644
+--- a/crypto/apr_passwd.c
++++ b/crypto/apr_passwd.c
+@@ -24,9 +24,7 @@
+ #if APR_HAVE_STRING_H
+ #include <string.h>
+ #endif
+-#if APR_HAVE_CRYPT_H
+ #include <crypt.h>
+-#endif
+ #if APR_HAVE_UNISTD_H
+ #include <unistd.h>
+ #endif
