@@ -85,6 +85,7 @@ fn run() -> Result<()> {
     create_dir_recursive(&args.directory, 0o755)?;
 
     import_ids(&args)?;
+    import_subids(&args)?;
 
     // Creating userborn's state directory marks the import as done. Only
     // create it after a successful import so failed runs are retried on
@@ -281,6 +282,45 @@ fn import_ids(args: &Args) -> Result<()> {
     Ok(())
 }
 
+/// Seed sub{u,g}id from `/var/lib/nixos/auto-subuid-map`, so ranges
+/// allocated by the perl script are reused instead of reallocated.
+fn import_subids(args: &Args) -> Result<()> {
+    let auto_map = load_id_map(&Path::new(LEGACY).join("auto-subuid-map"))?;
+    if auto_map.is_empty() {
+        return Ok(());
+    }
+
+    for fname in ["subuid", "subgid"] {
+        seed_subid_file(&args.directory.join(fname), &auto_map)?;
+    }
+
+    Ok(())
+}
+
+/// Append an auto-style range for every name in `auto_map` that has no
+/// entry in `path` yet.
+fn seed_subid_file(path: &Path, auto_map: &BTreeMap<String, u32>) -> Result<()> {
+    touch(path, 0o644)?;
+
+    let text = fs::read_to_string(path).with_context(|| format!("reading {}", path.display()))?;
+    let seen: HashSet<&str> = text
+        .lines()
+        .filter_map(|line| line.split(':').next())
+        .filter(|name| !name.is_empty())
+        .collect();
+
+    let mut new_lines = Vec::new();
+    for (name, &start) in auto_map {
+        if seen.contains(name.as_str()) {
+            continue;
+        }
+        let line = format!("{name}:{start}:65536");
+        info(&format!("seeding {}: {line}", path.display()));
+        new_lines.push(line);
+    }
+    append_lines(path, &new_lines)
+}
+
 /// Populate `previous-userborn.json` from `declarative-{users,groups}`.
 ///
 /// Under `mutableUsers`, userborn diffs the current config against the
@@ -373,6 +413,19 @@ mod tests {
         assert_eq!(
             fs::read_to_string(&p).unwrap(),
             "a:!:1::::::\nb:!*:1::::::\n"
+        );
+    }
+
+    #[test]
+    fn seed_subid_skips_existing_names() {
+        let dir = tempdir();
+        let p = dir.join("subuid");
+        fs::write(&p, "carol:100000:65536\n").unwrap();
+        let map = BTreeMap::from([("carol".into(), 424242), ("dave".into(), 165536)]);
+        seed_subid_file(&p, &map).unwrap();
+        assert_eq!(
+            fs::read_to_string(&p).unwrap(),
+            "carol:100000:65536\ndave:165536:65536\n"
         );
     }
 
