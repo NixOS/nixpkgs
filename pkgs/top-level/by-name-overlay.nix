@@ -49,9 +49,9 @@ let
   # if the overlay has to be applied multiple times
   packageFiles = mergeAttrsList (mapAttrsToList namesForShard (readDir baseDirectory));
 in
-self: super:
+self:
 let
   # Avoid allocating `{ }` for every package.
   flippedCallPackage = flip self.callPackage { };
 in
-mapAttrs (_attrName: flippedCallPackage) packageFiles
+super: mapAttrs (_attrName: flippedCallPackage) packageFiles
