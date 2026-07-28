@@ -96,13 +96,13 @@
   },
   {
     "pname": "DialogHost.Avalonia",
-    "version": "0.12.2",
-    "hash": "sha256-5TYE2iosoba00U8GdCK6nKqOI7gOUZGBpo1XVqdwuLw="
+    "version": "0.12.3",
+    "hash": "sha256-n0ZL4JZttOG6fLQHd2uPsmgUUZzafL9cPYWIlpvNT4o="
   },
   {
     "pname": "Downloader",
-    "version": "5.9.4",
-    "hash": "sha256-SmtRs8nD1sHYARc6jF05f/fmtrg+6T7DAa9h26sorDE="
+    "version": "5.9.5",
+    "hash": "sha256-BK1zCLASa7MCn2WhZbMNo90TpMHWlgRqpE7+VM4dwf4="
   },
   {
     "pname": "DynamicData",
@@ -216,8 +216,8 @@
   },
   {
     "pname": "Repobot.SQLite.Unofficial",
-    "version": "3.53.3",
-    "hash": "sha256-ZY6v7neAiys8ZPgVku9gTM0RaYe/Cx8Ik6dH/eUFUGU="
+    "version": "3.53.3.10",
+    "hash": "sha256-oliqMA1sdGPcmm9R2DYZzjtkMC8AamkPFu53wx2Sx6g="
   },
   {
     "pname": "Semi.Avalonia",
