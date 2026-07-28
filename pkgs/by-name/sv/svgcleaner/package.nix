@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "SVGCleaner";
-  version = "unstable-2021-08-30";
+  version = "0.9.5-unstable-2021-08-30";
 
   src = fetchFromGitHub {
     owner = "RazrFalcon";
