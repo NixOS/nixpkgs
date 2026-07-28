@@ -98,9 +98,13 @@ stdenv.mkDerivation {
     mkdir -p $out/share/netcoredbg $out/bin
     cp ${unmanaged}/* $out/share/netcoredbg
     cp ./lib/netcoredbg/* $out/share/netcoredbg
+    ln -s $out/share/netcoredbg/netcoredbg "$out/bin/"
+  ''
+  +
     # darwin won't work unless we link all files
-    ln -s $out/share/netcoredbg/* "$out/bin/"
-  '';
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      ln -s $out/share/netcoredbg/* "$out/bin/"
+    '';
 
   passthru = {
     inherit (managed) fetch-deps;
