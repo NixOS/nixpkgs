@@ -83,7 +83,10 @@ buildGoModule (finalAttrs: {
   postInstall = ''
     mkdir -p $out/share/plugins/
     ${lib.concatMapStringsSep "\n" (plugin: ''
-      ln -s ${plugin}/share/${plugin.pname}.ndp $out/share/plugins/
+      find ${plugin}/share/ \
+        -type f \
+        -name "*.ndp" \
+        -exec ln -s {} $out/share/plugins/${plugin.bundleName or plugin.pname}.ndp \;
     '') plugins}
   '';
 

@@ -45,7 +45,7 @@ in
         default = [ ];
         description = "List of Navidrome plugins";
         example = literalExpression ''
-          with pkgs.navidromePlugins; [
+          with pkgs.pkgsCross.wasi32.navidromePlugins; [
             listenbrainz-daily-playlist
           ];
         '';
