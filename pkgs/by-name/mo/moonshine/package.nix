@@ -122,7 +122,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/hgaiser/moonshine";
     changelog = "https://github.com/hgaiser/moonshine/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ neobrain ];
+    maintainers = with lib.maintainers; [
+      neobrain
+      anish
+    ];
     mainProgram = "moonshine";
     platforms = lib.platforms.linux;
   };
