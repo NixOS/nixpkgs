@@ -18,6 +18,9 @@ buildGo126Module (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   nativeBuildInputs = [ findutils ];
 
   prePatch = ''
@@ -52,6 +55,7 @@ buildGo126Module (finalAttrs: {
   meta = {
     description = "Type aware linting for oxlint";
     homepage = "https://github.com/oxc-project/tsgolint";
+    changelog = "https://github.com/oxc-project/tsgolint/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jnsgruk ];
     mainProgram = "tsgolint";
