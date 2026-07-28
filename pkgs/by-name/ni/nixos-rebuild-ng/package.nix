@@ -4,11 +4,13 @@
   installShellFiles,
   mkShell,
   nix,
+  nix-output-monitor,
   python3,
   python3Packages,
   runCommand,
   scdoc,
   withShellFiles ? true,
+  useNom ? false,
   # passthru.tests
   nixosTests,
 }:
@@ -41,12 +43,16 @@ python3Packages.buildPythonApplication rec {
     # next reboot.
     # The binary will be included in the wrapper for Python.
     (lib.getBin nix)
-  ];
+  ]
+  # For the same reason, pin nix-output-monitor when its use is enabled at
+  # build time, instead of picking up an ambient one from the PATH.
+  ++ lib.optionals useNom [ (lib.getBin nix-output-monitor) ];
 
   postPatch = ''
     substituteInPlace nixos_rebuild/constants.py \
       --subst-var-by executable ${executable} \
-      --subst-var-by withShellFiles ${lib.boolToString withShellFiles}
+      --subst-var-by withShellFiles ${lib.boolToString withShellFiles} \
+      --subst-var-by useNom ${lib.boolToString useNom}
   '';
 
   postInstall = lib.optionalString withShellFiles ''

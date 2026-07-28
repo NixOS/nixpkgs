@@ -344,9 +344,9 @@ def test_execute_nix_build(mock_run: Mock, tmp_path: Path) -> None:
             call(
                 [
                     "nix",
+                    "build",
                     "--extra-experimental-features",
                     "nix-command flakes",
-                    "build",
                     "--print-out-paths",
                     '/path/to/config#nixosConfigurations."hostname".config.system.build.toplevel',
                     "--no-link",
@@ -476,9 +476,9 @@ def test_execute_nix_build_image_flake(mock_run: Mock, tmp_path: Path) -> None:
             call(
                 [
                     "nix",
+                    "build",
                     "--extra-experimental-features",
                     "nix-command flakes",
-                    "build",
                     "--print-out-paths",
                     '/path/to/config#nixosConfigurations."hostname".config.system.build.images.azure',
                 ],
@@ -552,9 +552,9 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
             call(
                 [
                     "nix",
+                    "build",
                     "--extra-experimental-features",
                     "nix-command flakes",
-                    "build",
                     "--print-out-paths",
                     '/path/to/config#nixosConfigurations."hostname".config.system.build.toplevel',
                     "--no-link",
@@ -901,9 +901,9 @@ def test_execute_nix_switch_flake_target_host(
             call(
                 [
                     "nix",
+                    "build",
                     "--extra-experimental-features",
                     "nix-command flakes",
-                    "build",
                     "--print-out-paths",
                     '/path/to/config#nixosConfigurations."hostname".config.system.build.toplevel',
                     "--no-link",
@@ -1341,9 +1341,9 @@ def test_execute_test_flake(mock_run: Mock, tmp_path: Path) -> None:
             call(
                 [
                     "nix",
+                    "build",
                     "--extra-experimental-features",
                     "nix-command flakes",
-                    "build",
                     "--print-out-paths",
                     'github:user/repo#nixosConfigurations."hostname".config.system.build.toplevel',
                     "--no-link",

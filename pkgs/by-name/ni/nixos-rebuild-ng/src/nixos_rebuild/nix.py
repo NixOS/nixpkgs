@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import shutil
 import sys
 import textwrap
 import uuid
@@ -51,17 +52,31 @@ SWITCH_TO_CONFIGURATION_CMD_PREFIX: Final = [
 logger: Final = logging.getLogger(__name__)
 
 
+def use_nix_or_nom(nix_cmd: str, nom_cmd: str, use_nom: bool) -> str:
+    """Select between plain Nix and nix-output-monitor for a build.
+
+    nix-output-monitor is never a dependency of this package; even when its
+    use is enabled, it is only picked up when it is already in PATH, and only
+    when stderr is a terminal (it draws its build tree there).
+    """
+    if use_nom and sys.stderr.isatty() and shutil.which(nom_cmd) is not None:
+        logger.debug("using %s from PATH to monitor the build", nom_cmd)
+        return nom_cmd
+    return nix_cmd
+
+
 def build(
     attr: str,
     build_attr: BuildAttr,
     build_flags: Args | None = None,
+    use_nom: bool = False,
 ) -> Path:
     """Build NixOS attribute using classic Nix.
 
     Returns the built attribute as path.
     """
     run_args = [
-        "nix-build",
+        use_nix_or_nom("nix-build", "nom-build", use_nom),
         build_attr.path,
         "--attr",
         build_attr.to_attr(attr),
@@ -75,15 +90,16 @@ def build_flake(
     attr: str,
     flake: Flake,
     flake_build_flags: Args | None = None,
+    use_nom: bool = False,
 ) -> Path:
     """Build NixOS attribute using Flakes.
 
     Returns the built attribute as path.
     """
     run_args = [
-        "nix",
-        *FLAKE_FLAGS,
+        use_nix_or_nom("nix", "nom", use_nom),
         "build",
+        *FLAKE_FLAGS,
         "--print-out-paths",
         flake.to_attr(attr),
         *dict_to_flags(flake_build_flags),

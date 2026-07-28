@@ -19,6 +19,78 @@ from .helpers import get_qualified_name
 SUDO = e.SudoElevator()
 
 
+@patch("shutil.which", autospec=True)
+def test_use_nix_or_nom(mock_which: Mock, monkeypatch: MonkeyPatch) -> None:
+    mock_stderr = Mock(spec=sys.stderr)
+    monkeypatch.setattr(sys, "stderr", mock_stderr)
+
+    mock_stderr.isatty.return_value = True
+    mock_which.return_value = "/path/to/nom-build"
+    assert n.use_nix_or_nom("nix-build", "nom-build", use_nom=True) == "nom-build"
+    assert n.use_nix_or_nom("nix-build", "nom-build", use_nom=False) == "nix-build"
+
+    # fall back to plain Nix when nom is not in PATH
+    mock_which.return_value = None
+    assert n.use_nix_or_nom("nix-build", "nom-build", use_nom=True) == "nix-build"
+
+    # fall back to plain Nix when stderr is not a terminal
+    mock_stderr.isatty.return_value = False
+    mock_which.return_value = "/path/to/nom-build"
+    assert n.use_nix_or_nom("nix-build", "nom-build", use_nom=True) == "nix-build"
+
+
+@patch("sys.stderr.isatty", return_value=True)
+@patch("shutil.which", autospec=True, return_value="/path/to/nom-build")
+@patch(
+    get_qualified_name(n.run_wrapper, n),
+    autospec=True,
+    return_value=CompletedProcess([], 0, stdout=" \n/path/to/file\n "),
+)
+def test_build_with_nom(mock_run: Mock, mock_which: Mock, mock_isatty: Mock) -> None:
+    assert n.build(
+        "config.system.build.attr",
+        m.BuildAttr("<nixpkgs/nixos>", None),
+        use_nom=True,
+    ) == Path("/path/to/file")
+    mock_run.assert_called_with(
+        ["nom-build", "<nixpkgs/nixos>", "--attr", "config.system.build.attr"],
+        stdout=PIPE,
+    )
+
+
+@patch("sys.stderr.isatty", return_value=True)
+@patch("shutil.which", autospec=True, return_value="/path/to/nom")
+@patch(
+    get_qualified_name(n.run_wrapper, n),
+    autospec=True,
+    return_value=CompletedProcess([], 0, stdout=" \n/path/to/file\n "),
+)
+def test_build_flake_with_nom(
+    mock_run: Mock,
+    mock_which: Mock,
+    mock_isatty: Mock,
+    monkeypatch: MonkeyPatch,
+    tmpdir: Path,
+) -> None:
+    monkeypatch.chdir(tmpdir)
+    flake = m.Flake.parse("/flake.nix#hostname")
+
+    assert n.build_flake("config.system.build.toplevel", flake, use_nom=True) == Path(
+        "/path/to/file"
+    )
+    mock_run.assert_called_with(
+        [
+            "nom",
+            "build",
+            "--extra-experimental-features",
+            "nix-command flakes",
+            "--print-out-paths",
+            '/flake.nix#nixosConfigurations."hostname".config.system.build.toplevel',
+        ],
+        stdout=PIPE,
+    )
+
+
 @patch(
     get_qualified_name(n.run_wrapper, n),
     autospec=True,
@@ -68,9 +140,9 @@ def test_build_flake(mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path) -> 
     mock_run.assert_called_with(
         [
             "nix",
+            "build",
             "--extra-experimental-features",
             "nix-command flakes",
-            "build",
             "--print-out-paths",
             '/flake.nix#nixosConfigurations."hostname".config.system.build.toplevel',
             "--no-link",
