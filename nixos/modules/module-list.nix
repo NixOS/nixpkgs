@@ -1025,7 +1025,6 @@
   ./services/monitoring/below.nix
   ./services/monitoring/beszel-agent.nix
   ./services/monitoring/beszel-hub.nix
-  ./services/monitoring/bosun.nix
   ./services/monitoring/cadvisor.nix
   ./services/monitoring/certspotter.nix
   ./services/monitoring/cockpit.nix

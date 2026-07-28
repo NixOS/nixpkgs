@@ -419,6 +419,7 @@ mapAliases {
   bob = throw "'bob' has been removed as it is unmaintained upstream and has vulnerable dependencies."; # Added 2025-12-29
   bodyclose = throw "'bodyclose' has been removed because it was broken for an entire release cycle."; # Added 2026-05-31
   boost177 = throw "Boost 1.77 has been removed as it is obsolete and no longer used by anything in Nixpkgs"; # Added 2026-04-20
+  bosun = throw "bosun has been removed as upstream stopped maintenance"; # Added 2026-07-16
   botamusique = throw "botamusique has been removed as upstream stopped maintenance"; # Added 2026-06-28
   botan2 = throw "botan2 has been removed as it is EOL"; # Added 2025-10-20
   bower2nix = throw "bower2nix has been removed as bower was removed. It is recommended to migrate to yarn."; # Added 2025-09-17
@@ -2311,6 +2312,7 @@ mapAliases {
   tor-browser-bundle-bin = throw "'tor-browser-bundle-bin' has been renamed to/replaced by 'tor-browser'"; # Converted to throw 2025-10-27
   tora = throw "'tora' has been removed due to outdated KF5 dependencies."; # Added 2026-05-01
   torrent7z = throw "torrent7z is unmaintained and used a p7zip version from 2009. Consider using p7zip with the arguments to remove entropy instead"; # added 2026-05-09
+  tpm-luks = throw "'tpm-luks' has been removed due to a lack of maintenance"; # Added 2026-07-27
   tracker = throw "'tracker' has been renamed to/replaced by 'tinysparql'"; # Converted to throw 2025-10-27
   tracker-miners = throw "'tracker-miners' has been renamed to/replaced by 'localsearch'"; # Converted to throw 2025-10-27
   transfig = throw "'transfig' has been renamed to/replaced by 'fig2dev'"; # Converted to throw 2025-10-27

@@ -5773,6 +5773,43 @@ final: prev: {
     }
   ) { };
 
+  rocks-lazy-nvim = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchurl,
+      fetchzip,
+      luaOlder,
+      lz-n,
+      rocks-nvim,
+    }:
+    buildLuarocksPackage {
+      pname = "rocks-lazy.nvim";
+      version = "1.2.1-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/rocks-lazy.nvim-1.2.1-1.rockspec";
+          sha256 = "11xd46bf2zmd8x5xdkp0j4x1n2g20wczzq29sb90wp1vk6srmpgh";
+        }).outPath;
+      src = fetchzip {
+        url = "https://github.com/nvim-neorocks/rocks-lazy.nvim/archive/v1.2.1.zip";
+        sha256 = "0cccxaqfr943qw06491f799q5czb2rhjcy9swf9zmv9s26zl19bw";
+      };
+
+      disabled = luaOlder "5.1";
+      propagatedBuildInputs = [
+        lz-n
+        rocks-nvim
+      ];
+
+      meta = {
+        homepage = "https://github.com/nvim-neorocks/rocks-lazy.nvim";
+        maintainers = with lib.maintainers; [ teto ];
+        license = lib.licenses.gpl3Only;
+        description = ":sloth: A lazy-loading module for rocks.nvim";
+      };
+    }
+  ) { };
+
   rocks-nvim = callPackage (
     {
       buildLuarocksPackage,

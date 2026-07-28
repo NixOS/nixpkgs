@@ -156,6 +156,7 @@ rest.nvim,,,,,5.1,teto
 rocks-config.nvim,,,,,5.1,mrcjkb
 rocks-dev.nvim,,,,,5.1,mrcjkb
 rocks-git.nvim,,,,,5.1,mrcjkb
+rocks-lazy.nvim,,,,,,teto
 rocks.nvim,,,,,5.1,mrcjkb
 rtp.nvim,,,,,5.1,mrcjkb
 rustaceanvim,,,,,5.1,mrcjkb

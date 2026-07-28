@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "fake-gcs-server";
-  version = "1.55.0";
+  version = "1.55.1";
 
   src = fetchFromGitHub {
     owner = "fsouza";
     repo = "fake-gcs-server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XbwiPWhudTUhiCA91n8av7oQ0USPA/vXHePfS7/jnOg=";
+    hash = "sha256-Wb5BSyGGnS3fvPmNgfrMrXMX+YtRKXY6oFUIWyXQqmo=";
   };
 
   vendorHash = "sha256-9zovcKQ3eiYWHCxUBXI39kgnjD4mR/4GGAZz65f7Of4=";

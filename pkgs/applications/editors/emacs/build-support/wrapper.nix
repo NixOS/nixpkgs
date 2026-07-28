@@ -167,16 +167,10 @@ runCommand (lib.appendToName "with-packages" emacs).name
           # Begin the new site-start.el by loading the original, which sets some
           # NixOS-specific paths. Paths are searched in the reverse of the order
           # they are specified in, so user and system profile paths are searched last.
-          #
-          # NOTE: Avoid displaying messages early at startup by binding
-          # inhibit-message to t. This would prevent the Emacs GUI from showing up
-          # prematurely. The messages would still be logged to the *Messages*
-          # buffer.
           rm -f $siteStart $siteStartByteCompiled $subdirs $subdirsByteCompiled
           cat >"$siteStart" <<EOF
           ;;; -*- lexical-binding: t -*-
-          (let ((inhibit-message t))
-            (load "$emacs/share/emacs/site-lisp/site-start"))
+          (load "$emacs/share/emacs/site-lisp/site-start" nil t)
           ;; "$out/share/emacs/site-lisp" is added to load-path in wrapper.sh
           ;; "$out/share/emacs/native-lisp" is added to native-comp-eln-load-path in wrapper.sh
           (add-to-list 'exec-path "$out/bin")

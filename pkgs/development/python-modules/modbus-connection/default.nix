@@ -12,7 +12,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "modbus-connection";
-  version = "3.8.1";
+  version = "3.9.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
     owner = "home-assistant-libs";
     repo = "modbus-connection";
     tag = finalAttrs.version;
-    hash = "sha256-2XuOrouOnK6MyhX8Pf7RSma49/V8/5ZlHRqYZl0JY90=";
+    hash = "sha256-WmPjIAxC9e6tYxPJSQpvdhUNj2tbYim5e1RP5MIiL9M=";
   };
 
   nativeBuildInputs = [
@@ -39,8 +39,7 @@ buildPythonPackage (finalAttrs: {
     tmodbus = [
       tmodbus
     ]
-    ++ tmodbus.optional-dependencies.async-serial
-    ++ tmodbus.optional-dependencies.smart;
+    ++ tmodbus.optional-dependencies.async-serial;
   };
 
   nativeCheckInputs = [
