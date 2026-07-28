@@ -94,6 +94,16 @@ let
     "wheel"
   ];
 
+  bootstrappedPypaBuildHook = pypaBuildHook.override {
+    inherit (python.pythonOnBuildForHost.pkgs.bootstrap) build;
+    wheel = null;
+  };
+  bootstrappedPypaInstallHook = pypaInstallHook.override {
+    inherit (python.pythonOnBuildForHost.pkgs.bootstrap) installer;
+  };
+  bootstrappedRuntimeDepsCheckHook = pythonRuntimeDepsCheckHook.override {
+    inherit (python.pythonOnBuildForHost.pkgs.bootstrap) packaging;
+  };
 in
 
 lib.extendMkDerivation {
@@ -282,13 +292,7 @@ lib.extendMkDerivation {
       name = namePrefix + attrs.name or "${finalAttrs.pname}-${finalAttrs.version}";
 
       runtimeDepsCheckHook =
-        if isBootstrapPackage then
-          pythonRuntimeDepsCheckHook.override {
-            inherit (python.pythonOnBuildForHost.pkgs.bootstrap) packaging;
-          }
-        else
-          pythonRuntimeDepsCheckHook;
-
+        if isBootstrapPackage then bootstrappedRuntimeDepsCheckHook else pythonRuntimeDepsCheckHook;
     in
     {
       inherit name;
@@ -327,15 +331,7 @@ lib.extendMkDerivation {
         setuptoolsBuildHook
       ]
       ++ optionals (format' == "pyproject") [
-        (
-          if isBootstrapPackage then
-            pypaBuildHook.override {
-              inherit (python.pythonOnBuildForHost.pkgs.bootstrap) build;
-              wheel = null;
-            }
-          else
-            pypaBuildHook
-        )
+        (if isBootstrapPackage then bootstrappedPypaBuildHook else pypaBuildHook)
         runtimeDepsCheckHook
       ]
       ++ optionals (format' == "wheel") [
@@ -348,14 +344,7 @@ lib.extendMkDerivation {
         eggInstallHook
       ]
       ++ optionals (format' != "other") [
-        (
-          if isBootstrapInstallPackage then
-            pypaInstallHook.override {
-              inherit (python.pythonOnBuildForHost.pkgs.bootstrap) installer;
-            }
-          else
-            pypaInstallHook
-        )
+        (if isBootstrapInstallPackage then bootstrappedPypaInstallHook else pypaInstallHook)
       ]
       ++ optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
         # This is a test, however, it should be ran independent of the checkPhase and checkInputs

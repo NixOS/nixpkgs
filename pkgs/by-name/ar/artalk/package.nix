@@ -1,87 +1,42 @@
 {
   lib,
   buildGoModule,
+  callPackage,
   fetchFromGitHub,
-  nodejs,
-  pnpm_10,
-  fetchPnpmDeps,
-  pnpmConfigHook,
   installShellFiles,
-  versionCheckHook,
   stdenv,
   nixosTests,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-let
+buildGoModule (finalAttrs: {
   pname = "artalk";
-  version = "2.9.1";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "ArtalkJS";
     repo = "artalk";
-    tag = "v${version}";
-    hash = "sha256-gzagE3muNpX/dwF45p11JAN9ElsGXNFQ3fCvF1QhvdU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gtWnXRDGFjpw9W1ze6fBn/WXMQStqeyQpQHTr3wu5AU=";
   };
 
-  frontend = stdenv.mkDerivation (finalAttrs: {
-    pname = "${pname}-frontend";
-
-    inherit src version;
-
-    nativeBuildInputs = [
-      nodejs
-      pnpmConfigHook
-      pnpm_10
-    ];
-
-    pnpmDeps = fetchPnpmDeps {
-      inherit (finalAttrs) pname version src;
-      pnpm = pnpm_10;
-      fetcherVersion = 4;
-      hash = "sha256-RSz/bx8/BAqLZH3/yQ6/H/nnwGvcCg8EzIEJ4/xkQgQ=";
-    };
-
-    buildPhase = ''
-      runHook preBuild
-
-      pnpm build:all
-      pnpm build:auth
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/{dist/{i18n,plugins},sidebar}
-
-      # dist
-      cp ./ui/artalk/dist/{Artalk,ArtalkLite}.{css,js} $out/dist
-      cp ./ui/artalk/dist/i18n/*.js $out/dist/i18n
-      cp ./ui/plugin-*/dist/*.js $out/dist/plugins
-
-      # sidebar
-      cp -r ./ui/artalk-sidebar/dist/* $out/sidebar
-
-      runHook postInstall
-    '';
-  });
-in
-buildGoModule {
-  inherit src pname version;
-
-  vendorHash = "sha256-oAqYQzOUjly97H5L5PQ9I2SO2KqiUVxdJA+eoPrHD6Q=";
+  vendorHash = "sha256-xSIkJKlWGbdBlez7jPaoeHuYbyO+2237sZ/yxjUcHf8=";
 
   ldflags = [
     "-s"
-    "-w"
   ];
 
-  preBuild = ''
-    cp -r ${frontend}/* ./public
+  preConfigure = ''
+    cp -r ${finalAttrs.passthru.frontend}/* ./public
   '';
 
+  env.CGO_ENABLED = 0;
+
   nativeBuildInputs = [ installShellFiles ];
+
+  # TestAuthSSOExchange
+  __darwinAllowLocalNetworking = true;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd artalk \
@@ -92,18 +47,24 @@ buildGoModule {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "-v";
+  versionCheckProgramArg = "version";
+  versionCheckKeepEnvironment = [ "XDG_DATA_HOME" ];
+  preVersionCheck = "XDG_DATA_HOME=$TMPDIR";
 
-  passthru.tests = {
-    inherit (nixosTests) artalk;
+  passthru = {
+    tests = {
+      inherit (nixosTests) artalk;
+    };
+    frontend = callPackage ./frontend.nix { artalk = finalAttrs.finalPackage; };
+    updateScript = nix-update-script { extraArgs = [ "--subpackage=frontend" ]; };
   };
 
   meta = {
     description = "Self-hosted comment system";
     homepage = "https://github.com/ArtalkJS/Artalk";
-    changelog = "https://github.com/ArtalkJS/Artalk/releases/tag/v${version}";
+    changelog = "https://github.com/ArtalkJS/Artalk/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "artalk";
   };
-}
+})

@@ -64,6 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
       "-DENABLE_IBUS=YES"
     ];
 
+  patches = [
+    ./0001-skip-enable-language-rust.patch
+  ];
+
   cargoRoot = "src/engine/riti";
   postPatch = ''
     cp ${./Cargo.lock} ${finalAttrs.cargoRoot}/Cargo.lock

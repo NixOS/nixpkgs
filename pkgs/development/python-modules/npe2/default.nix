@@ -33,7 +33,7 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "napari-npe2";
+  pname = "npe2";
   version = "0.8.1";
   pyproject = true;
 
