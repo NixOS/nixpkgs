@@ -62,7 +62,13 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     which
-  ];
+  ]
+  ++ lib.optionals withPython (
+    with python3Packages;
+    [
+      python
+    ]
+  );
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
