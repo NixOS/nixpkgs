@@ -1,6 +1,7 @@
 {
   callPackage,
   fetchFromCodeberg,
+  fetchpatch,
   lib,
   libGL,
   libevdev,
@@ -38,6 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-+Geq3AetoiHB8xkMGf9nsYq8Mse2fZ5Edg1iOZ30f1A=";
     tag = "v${finalAttrs.version}";
   };
+
+  # this fixes aarch64 build, remove on next update
+  patches = [
+    (fetchpatch {
+      url = "https://codeberg.org/river/river-classic/commit/b1af960e1bea8506c25179775c18f902a5cb8c87.diff";
+      hash = "sha256-7X7/ZNLLGlkxr6y3bw/INIRSCXrn3ach7V319nHLIQ8=";
+    })
+  ];
 
   deps = callPackage ./build.zig.zon.nix { };
 
@@ -104,9 +113,5 @@ stdenv.mkDerivation (finalAttrs: {
       rodrgz
     ];
     platforms = lib.platforms.linux;
-    badPlatforms = [
-      # Runs out of memory (using > 100GiB) while building
-      "aarch64-linux"
-    ];
   };
 })
