@@ -2,10 +2,22 @@
 
 self: super:
 
-with haskellLib;
-
 let
   inherit (pkgs) lib;
+
+  inherit (haskellLib)
+    addBuildDepend
+    addBuildDepends
+    appendConfigureFlag
+    appendPatch
+    appendPatches
+    doDistribute
+    doJailbreak
+    dontCheck
+    markUnbroken
+    overrideCabal
+    unmarkBroken
+    ;
 
   warnAfterVersion =
     ver: pkg:

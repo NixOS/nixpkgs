@@ -2,9 +2,13 @@
 
 let
   inherit (pkgs) fetchpatch lib;
-in
 
-with haskellLib;
+  inherit (haskellLib)
+    addBuildDepends
+    appendConfigureFlag
+    appendPatch
+    ;
+in
 
 (self: super: {
   # cabal2nix doesn't properly add dependencies conditional on os(windows)

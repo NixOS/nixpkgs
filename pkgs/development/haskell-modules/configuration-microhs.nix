@@ -1,7 +1,13 @@
 { pkgs, haskellLib }:
 
-with haskellLib;
-
+let
+  inherit (haskellLib)
+    addBuildDepends
+    markUnbroken
+    doDistribute
+    markBroken
+    ;
+in
 self: super: {
   # Disable MicroHs core libraries
   base = null;

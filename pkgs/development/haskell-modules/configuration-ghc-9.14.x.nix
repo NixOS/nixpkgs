@@ -5,6 +5,15 @@ self: super:
 let
   inherit (pkgs) lib;
 
+  inherit (haskellLib)
+    addBuildDepends
+    appendPatches
+    doDistribute
+    doJailbreak
+    dontCheck
+    unmarkBroken
+    ;
+
   warnAfterVersion =
     ver: pkg:
     lib.warnIf (lib.versionOlder ver
@@ -12,9 +21,6 @@ let
     ) "override for haskell.packages.ghc912.${pkg.pname} may no longer be needed" pkg;
 
 in
-
-with haskellLib;
-
 {
   # Disable GHC core libraries
   array = null;

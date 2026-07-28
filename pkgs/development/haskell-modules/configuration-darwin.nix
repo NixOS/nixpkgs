@@ -3,11 +3,18 @@
 { pkgs, haskellLib }:
 
 let
-  inherit (pkgs) lib darwin;
+  inherit (pkgs) lib;
+  inherit (haskellLib)
+    addBuildDepend
+    addExtraLibrary
+    addTestToolDepends
+    appendConfigureFlag
+    appendPatch
+    disableCabalFlag
+    dontCheck
+    overrideCabal
+    ;
 in
-
-with haskellLib;
-
 self: super:
 (
   {

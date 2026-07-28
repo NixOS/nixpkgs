@@ -1,7 +1,8 @@
 { pkgs, haskellLib }:
 
-with haskellLib;
-
+let
+  inherit (haskellLib) overrideCabal;
+in
 self: super:
 let
   # This contains updates to the dependencies, without which it would

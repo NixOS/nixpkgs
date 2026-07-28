@@ -30,10 +30,36 @@
 let
   inherit (pkgs) lib;
   canExecute = pkgs.stdenv.buildPlatform.canExecute pkgs.stdenv.hostPlatform;
+
+  inherit (haskellLib)
+    addBuildDepend
+    addBuildDepends
+    addBuildTool
+    addBuildTools
+    addExtraLibraries
+    addExtraLibrary
+    addPkgconfigDepend
+    addPkgconfigDepends
+    addTestToolDepend
+    addTestToolDepends
+    appendConfigureFlag
+    appendConfigureFlags
+    appendPatch
+    disableCabalFlag
+    disableHardening
+    doDistribute
+    doJailbreak
+    dontCheck
+    dontCheckIf
+    dontDistribute
+    enableCabalFlag
+    enableSeparateBinOutput
+    justStaticExecutables
+    overrideCabal
+    overrideSrc
+    unmarkBroken
+    ;
 in
-
-with haskellLib;
-
 # All of the overrides in this set should look like:
 #
 #   foo = ... something involving super.foo ...

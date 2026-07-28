@@ -23,9 +23,13 @@
 
 let
   inherit (pkgs) lib;
+  inherit (haskellLib)
+    dontCheck
+    dontHaddock
+    overrideCabal
+    unmarkBroken
+    ;
 in
-
-with haskellLib;
 
 self: super:
 {

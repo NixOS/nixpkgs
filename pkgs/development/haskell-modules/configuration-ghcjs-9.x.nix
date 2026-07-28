@@ -1,10 +1,14 @@
 { pkgs, haskellLib }:
 
 let
-  inherit (pkgs) lib;
+  inherit (haskellLib)
+    addBuildDepend
+    addBuildDepends
+    appendPatch
+    doDistribute
+    overrideCabal
+    ;
 in
-
-with haskellLib;
 
 # cabal2nix doesn't properly add dependencies conditional on arch(javascript)
 

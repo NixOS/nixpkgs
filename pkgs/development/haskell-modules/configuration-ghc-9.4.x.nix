@@ -1,10 +1,21 @@
 { pkgs, haskellLib }:
 
 let
-  inherit (pkgs) fetchpatch lib;
+  inherit (pkgs) lib;
+
+  inherit (haskellLib)
+    addBuildDepend
+    addBuildDepends
+    doDistribute
+    doJailbreak
+    dontCheck
+    dontHaddock
+    markBroken
+    overrideCabal
+    unmarkBroken
+    ;
 in
 
-with haskellLib;
 self: super: {
   # Disable GHC core libraries.
   array = null;

@@ -15,7 +15,34 @@ self: super:
 
 let
   inherit (pkgs) fetchpatch lib;
-  inherit (lib) throwIfNot versionOlder;
+  inherit (lib) versionOlder;
+
+  inherit (haskellLib)
+    addBuildDepend
+    addBuildDepends
+    addBuildTool
+    addBuildTools
+    addExtraLibrary
+    addTestToolDepends
+    appendConfigureFlag
+    appendConfigureFlags
+    appendPatch
+    appendPatches
+    disableCabalFlag
+    disableHardening
+    disableLibraryProfiling
+    disableParallelBuilding
+    doDistribute
+    doJailbreak
+    dontCheck
+    dontCheckIf
+    dontDistribute
+    enableCabalFlag
+    markBroken
+    overrideCabal
+    overrideSrc
+    unmarkBroken
+    ;
 
   warnAfterVersion =
     ver: pkg:
@@ -24,8 +51,6 @@ let
     ) "override for haskellPackages.${pkg.pname} may no longer be needed" pkg;
 
 in
-
-with haskellLib;
 
 # To avoid merge conflicts, consider adding your item at an arbitrary place in the list instead.
 {
