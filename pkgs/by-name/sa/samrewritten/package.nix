@@ -64,7 +64,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/PaulCombal/SamRewritten";
     changelog = "https://github.com/PaulCombal/SamRewritten/releases";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ludovicopiero ];
+    maintainers = with lib.maintainers; [ ludovicopiero keksnino ];
     platforms = [ "x86_64-linux" ];
   };
 })
