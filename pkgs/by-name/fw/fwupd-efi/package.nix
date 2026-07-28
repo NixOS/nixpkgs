@@ -53,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
+    description = "EFI Application used by uefi-capsule plugin in fwupd";
     inherit (fwupd.meta)
       homepage
       maintainers
