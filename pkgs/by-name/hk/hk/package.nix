@@ -10,6 +10,7 @@
   libgit2,
   openssl,
   usage,
+  gitMinimal,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -37,6 +38,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libgit2
     openssl
   ];
+
+  # Some tests build fixture repositories by shelling out to git.
+  nativeCheckInputs = [ gitMinimal ];
 
   # These tests require external dependencies and are fragile -- skipping.
   checkFlags = [
@@ -77,6 +81,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       typedrat
       Br1ght0ne
+      sshine
     ];
     mainProgram = "hk";
   };
