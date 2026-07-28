@@ -12466,6 +12466,12 @@
     github = "james-atkins";
     githubId = 9221409;
   };
+  jamesbrink = {
+    email = "dev.urandom.io@gmail.com";
+    name = "James Brink";
+    github = "jamesbrink";
+    githubId = 646361;
+  };
   jamespeapen = {
     name = "James Eapen";
     email = "james.eapen@vai.org";
@@ -14770,6 +14776,11 @@
     github = "kirillrdy";
     githubId = 12160;
     name = "Kirill Radzikhovskyy";
+  };
+  kiryuulight = {
+    github = "KiryuuLight";
+    githubId = 70501251;
+    name = "Luis Ortiz";
   };
   kiskae = {
     github = "Kiskae";

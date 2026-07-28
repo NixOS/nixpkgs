@@ -33,14 +33,14 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "n8n-io";
     repo = "n8n";
     tag = "n8n@${finalAttrs.version}";
-    hash = "sha256-xll2dZon+WyJUXaCoel0htwgOGUqzpZvef/tDLTomZQ=";
+    hash = "sha256-lmkCT1o5LSC1ORd+Jozr9hkJu2znMpFO97jTWYOnga0=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 4;
-    hash = "sha256-uitkmRccuj+exZF0hM8tsVozGtxiTVN+V5hIzHs8Es8=";
+    hash = "sha256-ejJ0ihsLdIXbNllDtoi7Yd1u4x61Czxm6d8zJ9Fj7p8=";
   };
 
   nativeBuildInputs = [
