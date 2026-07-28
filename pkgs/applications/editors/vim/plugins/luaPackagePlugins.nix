@@ -43,6 +43,7 @@ let
     "rocks-config-nvim"
     "rocks-dev-nvim"
     "rocks-git-nvim"
+    "rocks-lazy-nvim"
     "rocks-nvim"
     "rtp-nvim"
     "rustaceanvim"

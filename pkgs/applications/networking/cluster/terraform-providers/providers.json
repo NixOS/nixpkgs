@@ -472,13 +472,13 @@
     "vendorHash": "sha256-/8h2bmesnFz3tav3+iDelZSjp1Z9lreexwcw0WdYekA="
   },
   "goharbor_harbor": {
-    "hash": "sha256-P7xfHqXZAdXIQPzfWh+PU/gx1XgGP+q/YT28PSErZ+I=",
+    "hash": "sha256-+HtvOLOD8PEYky+ws/deCcX8Tea5pR/77eb7LXJhseg=",
     "homepage": "https://registry.terraform.io/providers/goharbor/harbor",
     "owner": "goharbor",
     "repo": "terraform-provider-harbor",
-    "rev": "v3.12.1",
+    "rev": "v3.12.3",
     "spdx": "MIT",
-    "vendorHash": "sha256-N0AYv7XGmo7D1gcDGsmO9JoBGRiJWj10OZptWgO7NPs="
+    "vendorHash": "sha256-Zie1NyDPnk+UX2UBxGlpJaok9PeRyu0/tuMQS7WCvZI="
   },
   "grafana_grafana": {
     "hash": "sha256-ZZpk0I9MIiGpS354rER+HZNsB5S0U+fQaaCu5Lu5BL4=",
@@ -1040,13 +1040,13 @@
     "vendorHash": "sha256-ofzbDmivXgH1i1Gjhpyp0bk3FDs5SnxwoRuNAWyMqyI="
   },
   "opentelekomcloud_opentelekomcloud": {
-    "hash": "sha256-4ldbcTTm5mV1/OQ+Y1WGZP8MzLooxc+JrPj2WtHC0Tw=",
+    "hash": "sha256-y93dmo0xNnDo7s7QbjlDUwUBA1Vw3ICiXnhqGnucd8s=",
     "homepage": "https://registry.terraform.io/providers/opentelekomcloud/opentelekomcloud",
     "owner": "opentelekomcloud",
     "repo": "terraform-provider-opentelekomcloud",
-    "rev": "v1.37.1",
+    "rev": "v1.37.2",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-EUIYUJ92IScZL1Xst5HWGgJS9aH9Zugwk17WR7w+lKs="
+    "vendorHash": "sha256-gKzqrzslA9zvzRk63ZBGGYoKJzTjWl0xWveSmMujCAo="
   },
   "opsgenie_opsgenie": {
     "hash": "sha256-Y67kcg/ovvZc22l1CBz0Mqu7DAIit5F0jQNfQrl2EGI=",

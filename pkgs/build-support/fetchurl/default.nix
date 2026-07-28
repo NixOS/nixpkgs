@@ -92,10 +92,10 @@ let
       map (mirror: mirror + elemAt mirrorSplit 1) mirrorList;
 
   rewriteAllUrls =
-    urls:
     if rewriteURL == null then
-      urls
+      urls: urls
     else
+      urls:
       let
         u = concatMap (
           url:
@@ -223,12 +223,12 @@ lib.extendMkDerivation {
 
     let
       preRewriteUrls =
-        if urls != [ ] && url == "" then
-          (if isList urls then urls else throw "`urls` is not a list: ${lib.generators.toPretty { } urls}")
-        else if urls == [ ] && url != "" then
+        if urls == [ ] && url != "" then
           (
             if isString url then [ url ] else throw "`url` is not a string: ${lib.generators.toPretty { } urls}"
           )
+        else if urls != [ ] && url == "" then
+          (if isList urls then urls else throw "`urls` is not a list: ${lib.generators.toPretty { } urls}")
         else
           throw "fetchurl requires either `url` or `urls` to be set: ${lib.generators.toPretty { } args}";
 

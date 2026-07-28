@@ -21,20 +21,16 @@ evalConfigArgs@{
   #     of inheritParentConfig.
   baseModules ? import ../modules/module-list.nix,
   # !!! See comment about args in lib/modules.nix
-  extraArgs ? { },
-  # !!! See comment about args in lib/modules.nix
   specialArgs ? { },
   modules,
   modulesLocation ? (builtins.unsafeGetAttrPos "modules" evalConfigArgs).file or null,
-  # !!! See comment about check in lib/modules.nix
-  check ? true,
   prefix ? [ ],
   lib ? import ../../lib,
   extraModules ? [ ],
 }:
 
 let
-  inherit (lib) optional;
+  inherit (lib) optional warn;
 
   evalModulesMinimal =
     (import ./default.nix {
@@ -62,15 +58,8 @@ let
   };
 
   withWarnings =
-    x:
-    lib.warnIf (evalConfigArgs ? extraArgs)
-      "The extraArgs argument to eval-config.nix is deprecated. Please set config._module.args instead."
-      lib.warnIf
-      (evalConfigArgs ? check)
-      "The check argument to eval-config.nix is deprecated. Please set config._module.check instead."
-      lib.warnIf
-      (specialArgs ? pkgs)
-      ''
+    if specialArgs ? pkgs then
+      warn ''
         You have set specialArgs.pkgs, which means that options like nixpkgs.config
         and nixpkgs.overlays will be ignored. If you wish to reuse an already created
         pkgs, which you know is configured correctly for this NixOS configuration,
@@ -78,31 +67,16 @@ let
         `(modulesPath + "/misc/nixpkgs/read-only.nix"), and set `{ nixpkgs.pkgs = <your pkgs>; }`.
         This properly disables the ignored options to prevent future surprises.
       ''
-      x;
+    else
+      x: x;
 
-  legacyModules =
-    lib.optional (evalConfigArgs ? extraArgs) {
-      config = {
-        _module.args = extraArgs;
-      };
-    }
-    ++ lib.optional (evalConfigArgs ? check) {
-      config = {
-        _module.check = lib.mkDefault check;
-      };
-    };
-
-  allUserModules =
-    let
-      # Add the invoking file (or specified modulesLocation) as error message location
-      # for modules that don't have their own locations; presumably inline modules.
-      locatedModules =
-        if modulesLocation == null then
-          modules
-        else
-          map (lib.setDefaultModuleLocation modulesLocation) modules;
-    in
-    locatedModules ++ legacyModules;
+  userModules =
+    # Add the invoking file (or specified modulesLocation) as error message location
+    # for modules that don't have their own locations; presumably inline modules.
+    if modulesLocation == null then
+      modules
+    else
+      map (lib.setDefaultModuleLocation modulesLocation) modules;
 
   noUserModules = evalModulesMinimal {
     inherit prefix specialArgs;
@@ -129,13 +103,12 @@ let
     };
   };
 
-  nixosWithUserModules = noUserModules.extendModules { modules = allUserModules; };
+  nixosWithUserModules = noUserModules.extendModules { modules = userModules; };
 
   withExtraAttrs =
     configuration:
     configuration
     // {
-      inherit extraArgs;
       inherit (configuration._module.args) pkgs;
       inherit lib;
       extendModules = args: withExtraAttrs (configuration.extendModules args);

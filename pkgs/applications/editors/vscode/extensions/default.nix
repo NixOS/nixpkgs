@@ -773,8 +773,8 @@ let
         mktplcRef = {
           name = "vscode-tailwindcss";
           publisher = "bradlc";
-          version = "0.14.29";
-          hash = "sha256-58/yM4xP8ewpegNlVSWnyFIoAmEd7E/CigQgae7OgZY=";
+          version = "0.16.0";
+          hash = "sha256-1adOWrj7/YAG+8y82NR9RM33lqU6xEkfP8pMc5ctF5c=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/bradlc.vscode-tailwindcss/changelog";
@@ -1174,8 +1174,8 @@ let
         mktplcRef = {
           publisher = "DanielSanMedium";
           name = "dscodegpt";
-          version = "3.24.12";
-          hash = "sha256-2vpFCxF65Y/VfyTHDO0wLAe0+m/lc0+iloEI//FdaQg=";
+          version = "3.24.29";
+          hash = "sha256-E/B1YiTc2RR/dh3QpYTO/bgzFldYQfuM/tZ650nJYJA=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DanielSanMedium.dscodegpt/changelog";
@@ -1760,8 +1760,8 @@ let
         mktplcRef = {
           name = "foam-vscode";
           publisher = "foam";
-          version = "0.44.2";
-          hash = "sha256-jz1j8KzD5PDZ+P5V7yLo1BEmcW+q+D2nYKzYEf7Sg2w=";
+          version = "0.44.4";
+          hash = "sha256-YMNYT/QDcg25fG2fidbFOU41RBIk/l49Se5ca4AyMe8=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/foam.foam-vscode/changelog";
@@ -2596,8 +2596,8 @@ let
         mktplcRef = {
           publisher = "jnoortheen";
           name = "nix-ide";
-          version = "0.5.10";
-          hash = "sha256-5rNqQRFLryzeIezUiqgvSY8Vz5n48367RHQrFDxpoD8=";
+          version = "0.5.13";
+          hash = "sha256-0pMMnYFX+Ghs42Tvfcv9QqwhrEhCjIa7+6xJ51Fa0Dk=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/jnoortheen.nix-ide/changelog";
@@ -5285,8 +5285,8 @@ let
         mktplcRef = {
           name = "csharp-ls";
           publisher = "vytautassurvila";
-          version = "0.0.33";
-          hash = "sha256-VsNjdPmnstXgmgxzbC7+IGFggfLtYlQFsH3tGWjdUhM=";
+          version = "0.0.34";
+          hash = "sha256-wlBa9Fv1sIu4On2za+gzzS9vULDaAVidRKZ1UbyaJTA=";
         };
         meta = {
           changelog = "https://github.com/vytautassurvila/vscode-csharp-ls/blob/master/CHANGELOG.md";
