@@ -30,6 +30,7 @@ mkNginxPlugin (finalAttrs: {
   ];
 
   meta = {
+    broken = true; # overridden arpa2common package fails to build
     description = "Integrate ARPA2 Resource ACLs into nginx";
     homepage = "https://gitlab.com/arpa2/nginx-auth-a2aclr";
     license = lib.licenses.isc;
