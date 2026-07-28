@@ -1,0 +1,377 @@
+diff --git a/elf/dl-load.c b/elf/dl-load.c
+index 00b9da9e..8fb0c2fa 100644
+--- a/elf/dl-load.c
++++ b/elf/dl-load.c
+@@ -1920,6 +1920,220 @@ _dl_lookup_map (Lmid_t nsid, const char *name)
+   return NULL;
+ }
+ 
++/* A binary patched with "patchelf --build-resolution-cache" carries a PT_NOTE
++   (NT_NIXOS_LD_CACHE) whose descriptor packs one or more string pairs
++
++       <needed> '\0' <path-list> '\0'
++
++   back to back, followed by one extra NUL byte.  patchelf only emits pairs
++   whose two strings are nonempty (when it has nothing to record it writes
++   no note at all), so a zero-length string where the next needed name
++   would start is unambiguous: it terminates the sequence, the same
++   double-NUL convention as an environment block.  A path-list is a
++   ':'-separated list whose elements are either "=<absolute-path>" (open it
++   directly) or "?<dir>" (search that directory at run time, e.g. a
++   $ORIGIN-relative or glibc-hwcaps entry).  Consulting the note lets
++   _dl_map_new_object resolve a binary's direct dependencies without
++   walking every DT_RUNPATH directory, avoiding the storm of failing
++   openat()/stat() syscalls that slows /nix/store startup.  The reader
++   nevertheless assumes nothing about the writer: _dl_find_nixos_cache
++   admits exactly the descriptors it can prove safe to walk,
++   _dl_lookup_nixos_cache stops trusting a note whose content violates the
++   grammar, and in either case the object falls back to the stock search
++   order.  */
++
++static const char *
++_dl_find_nixos_cache (struct link_map *loader)
++{
++  const ElfW(Phdr) *phdr = loader->l_phdr;
++  const ElfW(Phdr) *pend = phdr + loader->l_phnum;
++  for (; phdr != pend; phdr++)
++    {
++      if (phdr->p_type != PT_NOTE)
++        continue;
++
++      /* Only PT_LOAD segments are mapped, so a PT_NOTE not fully covered by
++         one (spec-legal, e.g. produced by post-processing tools) would point
++         at unmapped memory.  Stock loaders never dereference such segments
++         (the generic _dl_process_pt_note is empty and the x86 property
++         reader has its own gates); skip them rather than fault.  The
++         comparisons are written subtraction-style so an inconsistent header
++         cannot wrap the address arithmetic.  */
++      bool covered = false;
++      for (const ElfW(Phdr) *ld = loader->l_phdr; ld != pend; ld++)
++        if (ld->p_type == PT_LOAD
++            && phdr->p_vaddr >= ld->p_vaddr
++            && phdr->p_memsz <= ld->p_memsz
++            && phdr->p_vaddr - ld->p_vaddr <= ld->p_memsz - phdr->p_memsz)
++          {
++            covered = true;
++            break;
++          }
++      if (!covered)
++        continue;
++
++      /* Walk using the segment's own p_align.  A fixed alignment desyncs on
++         segments whose p_align differs (e.g. an 8-byte-aligned
++         .note.gnu.property).  Validate every offset before using it: unlike
++         the property-note reader, this parser can encounter arbitrary notes,
++         including malformed values that would overflow ALIGN_UP.  */
++      const char *notes = (const void *) (phdr->p_vaddr + loader->l_addr);
++      const ElfW(Addr) size = phdr->p_memsz;
++      ElfW(Addr) align = phdr->p_align;
++      /* ELF permits zero or one to mean no alignment constraint.  Notes
++         themselves are at least 4-byte aligned.  All other values must be
++         powers of two for the offset calculations below.  */
++      if (align < 4)
++        align = 4;
++      else if (!powerof2 (align))
++        continue;
++
++      ElfW(Addr) offset = 0;
++      while (offset <= size && sizeof (ElfW(Nhdr)) <= size - offset)
++        {
++          const ElfW(Nhdr) *note = (const void *) (notes + offset);
++          const ElfW(Addr) remaining = size - offset;
++
++          /* Compute both aligned ends without overflowing.  The padding
++             expression is safe because ALIGN is a validated power of two;
++             every addition is first bounded by REMAINING.  */
++          ElfW(Addr) desc_off = sizeof *note;
++          if (note->n_namesz > remaining - desc_off)
++            break;
++          desc_off += note->n_namesz;
++          ElfW(Addr) padding = (-desc_off) & (align - 1);
++          if (padding > remaining - desc_off)
++            break;
++          desc_off += padding;
++          if (note->n_descsz > remaining - desc_off)
++            break;
++          ElfW(Addr) next_off = desc_off + note->n_descsz;
++
++          /* Bound the name read against the segment before memcmp: a
++             truncated final note could otherwise claim a 6-byte name that
++             runs past the mapping.  && short-circuits, so the memcmp only
++             runs once the 6 bytes are known to be in bounds.  */
++          if (note->n_namesz == sizeof ELF_NOTE_NIXOS
++              && note->n_type == NT_NIXOS_LD_CACHE
++              && memcmp (note + 1, ELF_NOTE_NIXOS, sizeof ELF_NOTE_NIXOS) == 0)
++            {
++              const char *desc = (const char *) note + desc_off;
++              /* The descriptor must lie within the segment and end with two
++                 NUL bytes; a conforming descriptor always does (the final
++                 path-list's terminator plus the end-of-sequence NUL).
++                 n_descsz >= 2 makes the two byte reads below themselves
++                 valid, and the two trailing NULs are the complete in-bounds
++                 invariant for the walk in _dl_lookup_nixos_cache: any
++                 non-NUL byte then sits at index n_descsz - 3 or lower, so
++                 every strlen there stops by index n_descsz - 2, and every
++                 advance past a string lands at most on the final NUL, where
++                 the walk either terminates or trips the malformed check.
++                 Nothing stricter is needed: the minimal descriptor "\0\0"
++                 reads as an empty sequence, every lookup misses, and the
++                 object falls back to the normal search, exactly as if the
++                 note were absent or rejected here.  The bounds above use
++                 offsets rather than "desc + n_descsz <= notes + size": on
++                 a 32-bit target ElfW(Addr) is only 32 bits, and adding the
++                 untrusted size straight to a pointer can wrap into range.  */
++              if (note->n_descsz >= 2
++                  && desc[note->n_descsz - 2] == '\0'
++                  && desc[note->n_descsz - 1] == '\0')
++                return desc;
++              return (const char *) -1;
++            }
++
++          padding = (-next_off) & (align - 1);
++          if (padding > remaining - next_off)
++            break;
++          next_off += padding;
++          if (next_off == 0)
++            break;
++          offset += next_off;
++        }
++    }
++
++  return (const char *) -1;
++}
++
++/* Look NAME up in LOADER's resolution cache.  On a hit, return a pointer
++   to the recorded path list inside the mapped note (valid for the object's
++   lifetime, nothing is allocated); otherwise return NULL.  */
++static const char *
++_dl_lookup_nixos_cache (struct link_map *loader, const char *name)
++{
++  if (loader == NULL)
++    return NULL;
++
++  if (loader->l_nixos_resolve_cache == NULL)
++    loader->l_nixos_resolve_cache = _dl_find_nixos_cache (loader);
++
++  if (loader->l_nixos_resolve_cache == (const char *) -1)
++    return NULL;
++
++  /* The walk below stays within the descriptor because _dl_find_nixos_cache
++     validated that it lies within the note segment and ends in two NULs: the
++     final NUL backstops every strlen, and the epath[0] check rejects a
++     dangling needed-string, so entries never advances past that last NUL.  */
++  const char *entries = loader->l_nixos_resolve_cache;
++  while (entries[0] != '\0')
++    {
++      const char *ename = entries;
++      const char *epath = ename + strlen (ename) + 1;
++      if (epath[0] == '\0')
++        {
++          /* Malformed cache; stop trusting it.  */
++          loader->l_nixos_resolve_cache = (const char *) -1;
++          return NULL;
++        }
++      if (strcmp (name, ename) == 0)
++        return epath;
++      entries = epath + strlen (epath) + 1;
++    }
++
++  return NULL;
++}
++
++/* Return true if LOADER's RUNPATH is stable enough for the resolution cache
++   to replace the normal directory walk.  Only directories in the immutable
++   Nix store qualify.  Empty, relative, and other absolute components can
++   resolve differently at run time; a recorded later hit must not bypass
++   them merely because the directory existed when the note was generated.
++   The verdict is a pure function of the object's RUNPATH, so it is computed
++   once and cached on the link map: re-deriving it later would wrongly flip
++   to unstable after open_path marks a fully-nonexistent l_runpath_dirs dead
++   with (void *) -1, permanently disabling the note for that object.  */
++static bool
++_dl_nixos_cache_runpath_stable (struct link_map *loader)
++{
++  if (loader == NULL)
++    return true;
++
++  if (loader->l_nixos_runpath_stable == 0)
++    {
++      signed char stable = 1;
++      if (loader->l_info[DT_RUNPATH] != NULL)
++        {
++          if (!cache_rpath (loader, &loader->l_runpath_dirs, DT_RUNPATH,
++                            "RUNPATH"))
++            stable = -1;
++          else
++            for (struct r_search_path_elem **dirs
++                   = loader->l_runpath_dirs.dirs;
++                 *dirs != NULL; ++dirs)
++              if ((*dirs)->dirnamelen < sizeof "/nix/store/"
++                  || memcmp ((*dirs)->dirname, "/nix/store/",
++                             sizeof "/nix/store/" - 1) != 0)
++                {
++                  stable = -1;
++                  break;
++                }
++        }
++      loader->l_nixos_runpath_stable = stable;
++    }
++
++  return loader->l_nixos_runpath_stable > 0;
++}
++
+ /* Map in the shared object file NAME.  */
+ 
+ struct link_map *
+@@ -1930,6 +2144,7 @@ _dl_map_new_object (struct link_map *loader, const char *name,
+   const char *origname = NULL;
+   char *realname;
+   char *name_copy;
++  const char *rescache;
+   struct link_map *l;
+   struct filebuf fb;
+ 
+@@ -2030,6 +2245,92 @@ _dl_map_new_object (struct link_map *loader, const char *name,
+ 			loader ?: GL(dl_ns)[LM_ID_BASE]._ns_loaded,
+ 			LA_SER_LIBPATH, &found_other_class);
+ 
++      /* Try the DT_NEEDED resolution cache written by patchelf
++         --build-resolution-cache.  Consulted after LD_LIBRARY_PATH so that
++         overrides keep working.  If RUNPATH contains runtime-dependent
++         components (empty or relative entries), skip the hint: such
++         components must be searched at execution time before any recorded
++         later hit can be trusted.  */
++      if (fd == -1
++          && _dl_nixos_cache_runpath_stable (loader)
++          && (rescache = _dl_lookup_nixos_cache (loader, name)) != NULL)
++        {
++          /* Walk the ':'-separated path list in place: it lives in the
++             loader's mapped note, and open_verify and decompose_rpath can
++             signal errors (longjmp) past this frame, so no heap may be
++             held across them.  Each element is copied into a stack buffer
++             only to NUL-terminate it; an element longer than any openable
++             path cannot resolve and is skipped.  */
++          const char *entry = rescache;
++          while (entry[0] != '\0' && fd == -1)
++            {
++              const char *end = strchr (entry, ':');
++              size_t len = end != NULL ? (size_t) (end - entry)
++                                       : strlen (entry);
++              char buf[4096];
++              if (len > 0 && len < sizeof buf)
++                {
++                  memcpy (buf, entry, len);
++                  buf[len] = '\0';
++                  if (buf[0] == '?')
++                    {
++                      /* A directory the loader must still search itself.  */
++                      struct r_search_path_struct sp;
++                      sp.dirs = NULL;
++                      if (decompose_rpath (&sp, buf + 1, loader, "RESCACHE"))
++                        {
++                          fd = open_path (name, namelen, mode, &sp, &realname,
++                                          &fb, loader, LA_SER_RUNPATH,
++                                          &found_other_class);
++                          if (sp.dirs != (void *) -1)
++                            free (sp.dirs);
++                        }
++                    }
++                  else if (buf[0] == '=')
++                    {
++                      /* An exact path; open it directly, duplicating the
++                         name only after success like the ld.so.cache path
++                         does: open_verify signals on a fatally malformed
++                         file, and a preallocated copy would leak.  */
++                      if (__glibc_unlikely (GLRO(dl_debug_mask)
++                                            & DL_DEBUG_LIBS))
++                        _dl_debug_printf ("  trying cached file=%s\n",
++                                          buf + 1);
++                      fd = open_verify (buf + 1, -1, &fb,
++                                        loader ?: GL(dl_ns)[nsid]._ns_loaded,
++                                        LA_SER_RUNPATH, mode,
++                                        &found_other_class, false);
++                      if (fd != -1
++                          && __glibc_unlikely (mode & __RTLD_SECURE)
++                          && __libc_enable_secure)
++                        {
++                          /* Match open_path's additional validation for bare
++                             secure LD_PRELOAD/LD_AUDIT names.  An exact hint
++                             must not bypass the S_ISUID requirement.  */
++                          struct __stat64_t64 st;
++                          if (__fstat64_time64 (fd, &st) != 0
++                              || (st.st_mode & S_ISUID) == 0)
++                            {
++                              __close_nocancel (fd);
++                              fd = -1;
++                              errno = ENOENT;
++                            }
++                        }
++                      if (fd != -1)
++                        {
++                          realname = __strdup (buf + 1);
++                          if (realname == NULL)
++                            {
++                              __close_nocancel (fd);
++                              fd = -1;
++                            }
++                        }
++                    }
++                }
++              entry = end != NULL ? end + 1 : entry + len;
++            }
++        }
++
+       /* Look at the RUNPATH information for this binary.  */
+       if (fd == -1 && loader != NULL
+ 	  && cache_rpath (loader, &loader->l_runpath_dirs,
+diff --git a/elf/elf.h b/elf/elf.h
+index 2f29a47c..10e4ea94 100644
+--- a/elf/elf.h
++++ b/elf/elf.h
+@@ -1303,12 +1303,24 @@ typedef struct
+ /* Note entries for freedesktop.org have this name.  */
+ #define ELF_NOTE_FDO		"FDO"
+ 
++/* Note entries for Nixpkgs/NixOS have this name.  */
++#define ELF_NOTE_NIXOS	"NixOS"
++
+ /* Defined types of notes for Solaris.  */
+ 
+ /* Value of descriptor (one word) is desired pagesize for the binary.  */
+ #define ELF_NOTE_PAGESIZE_HINT	1
+ 
+ 
++/* Defined note types for Nixpkgs/NixOS systems.  */
++
++/* Linker resolution cache.  The descriptor is a sequence of NUL-terminated
++   (needed, path-list) string pairs written by patchelf
++   --build-resolution-cache; the loader uses it to resolve DT_NEEDED entries
++   without searching DT_RUNPATH.  */
++#define NT_NIXOS_LD_CACHE	0x63a86cb6
++
++
+ /* Defined note types for GNU systems.  */
+ 
+ /* ABI information.  The descriptor consists of words:
+diff --git a/include/link.h b/include/link.h
+index 41e5e54a..cef48898 100644
+--- a/include/link.h
++++ b/include/link.h
+@@ -346,6 +346,17 @@ struct link_map
+     size_t l_relro_size;
+ 
+     unsigned long long int l_serial;
++
++    /* Cached pointer into this object's NixOS linker resolution note
++       (NT_NIXOS_LD_CACHE), or (const char *) -1 once known to be absent.  */
++    const char *l_nixos_resolve_cache;
++
++    /* Whether this object's DT_RUNPATH contains only immutable Nix store
++       directories, so the resolution note may replace the directory walk:
++       0 = not yet determined, 1 = stable, -1 = unstable.  Cached because
++       the verdict must survive open_path later marking a fully-nonexistent
++       l_runpath_dirs dead with (void *) -1.  */
++    signed char l_nixos_runpath_stable;
+   };
+ 
+ #include <dl-relocate-ld.h>

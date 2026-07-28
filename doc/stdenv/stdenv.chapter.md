@@ -1010,6 +1010,10 @@ stdenv.mkDerivation {
 }
 ```
 
+##### `dontGenerateLDCache` {#var-stdenv-dontGenerateLDCache}
+
+If set, the fixup phase does not write the `.note.nixos.ldcache` resolution-cache note into the package's ELF files. The note records, per binary, where each `DT_NEEDED` library resolved at build time, letting the patched glibc loader skip the run-path directory walk at program startup. Set this for binaries that must not be rewritten after the build, for example ones that verify their own bytes at run time. Only applies to Linux hosts using glibc.
+
 ##### `dontPatchELF` {#var-stdenv-dontPatchELF}
 
 If set, the `patchelf` command is not used to remove unnecessary `RPATH` entries. Only applies to Linux.

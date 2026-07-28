@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchurl,
+  # Tests
+  patchelf,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -11,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "patchelf";
-  version = "0.15.2";
+  version = "0.19.1";
 
   src = fetchurl {
     url = "https://github.com/NixOS/${pname}/releases/download/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-F3RfVkFZyOIo/EEtplogSLhGxLa0Igt3y/IkFuAvLXw=";
+    sha256 = "sha256-LM4B3pNlOCn2q2iiDC7CdeHACpRhEHBKJ+ko0ubohxY=";
   };
 
   strictDeps = true;
@@ -24,8 +26,21 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # fails 8 out of 24 tests, problems when loading libc.so.6
-  doCheck = stdenv.name == "stdenv-linux";
+  # patchelf is part of the stdenv bootstrap, so enabling checks here would run
+  # the test suite on the critical path that every build depends on. Keep it off
+  # and run the suite out-of-band: passthru.tests rebuilds patchelf with checks
+  # enabled, so CI still exercises them without slowing the bootstrap.
+  doCheck = false;
+
+  # The suite is ELF-specific and fails outside Linux, so gate on the platform
+  # rather than on stdenv.name as the old doCheck did: pkgs.patchelf is pinned
+  # to the bootstrap stdenv, which never carried that name, so the old
+  # condition silently disabled the tests everywhere. Cross needs no gate of
+  # its own, since mkDerivation already forces doCheck off when the host cannot
+  # execute on the builder.
+  passthru.tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    makecheck = patchelf.overrideAttrs { doCheck = true; };
+  };
 
   meta = {
     homepage = "https://github.com/NixOS/patchelf";

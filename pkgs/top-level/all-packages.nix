@@ -306,6 +306,22 @@ with pkgs;
     meta.license = lib.licenses.mit;
   } ../build-support/setup-hooks/update-autotools-gnu-config-scripts.sh;
 
+  # Fixup hook (added to the final stdenv) that writes the .note.nixos.ldcache
+  # resolution cache into every output's ELF files; the patched glibc reads it.
+  # It runs the default patchelf, which carries `--build-resolution-cache` as of
+  # 0.19.0.
+  generateLdCacheHook =
+    makeSetupHook
+      {
+        name = "generate-ld-cache-hook";
+        __structuredAttrs = true;
+      }
+      (
+        replaceVars ../build-support/setup-hooks/generate-ld-cache.sh {
+          patchelf = "${patchelf}/bin/patchelf";
+        }
+      );
+
   buildEnv = callPackage ../build-support/buildenv { }; # not actually a package
 
   buildFHSEnv = buildFHSEnvBubblewrap;

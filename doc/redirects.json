@@ -1365,6 +1365,9 @@
   "var-stdenv-stripExclude": [
     "index.html#var-stdenv-stripExclude"
   ],
+  "var-stdenv-dontGenerateLDCache": [
+    "index.html#var-stdenv-dontGenerateLDCache"
+  ],
   "var-stdenv-dontPatchELF": [
     "index.html#var-stdenv-dontPatchELF"
   ],
