@@ -12,13 +12,13 @@
 
 mkNginxPlugin (finalAttrs: {
   pname = "vod";
-  version = "1.7.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "dio-az";
     repo = "nginx-vod-module";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IcXbbmAs16F9qOEJWgH6XqP5sBMYszclGByVghj0eBM=";
+    hash = "sha256-18LA3Thiz4EnVkRp6j5BuTyIcd0zXgyyvW6yuzm7vRs=";
   };
 
   postPatch = ''
@@ -34,9 +34,10 @@ mkNginxPlugin (finalAttrs: {
     libiconv
   ];
 
-  passthru.tests = nixosTests.frigate;
+  passthru.tests = { inherit (nixosTests) frigate; };
 
   meta = {
+    changelog = "https://github.com/dio-az/nginx-vod-module/releases/tag/${finalAttrs.src.tag}";
     description = "VOD packager";
     homepage = "https://github.com/dio-az/nginx-vod-module";
     license = lib.licenses.agpl3Only;
