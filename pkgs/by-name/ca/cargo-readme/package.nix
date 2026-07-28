@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-readme";
-  version = "3.3.3";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "webern";
     repo = "cargo-readme";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Urp5OvM6LzLb8SY49u2Dc57NFJtyxpMkvCbb6hTUDMs=";
+    sha256 = "sha256-v158zqrbnrOVTHlOgLuq7fnTDUxrjeY0MskFbB3re90=";
   };
 
-  cargoHash = "sha256-CmYJ8acmcaWregM0zroaTFaPFV6cnS2KWf5Y4LXMcyk=";
+  cargoHash = "sha256-SJw/gKUhJ4lgMqj0eOx2LMhoSAcEAVjFMA2TzFoEnd0=";
 
   # disable doc tests
   cargoTestFlags = [
