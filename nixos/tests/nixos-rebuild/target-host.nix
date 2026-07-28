@@ -10,10 +10,10 @@
     deployer =
       { lib, pkgs, ... }:
       let
-        inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
+        inherit (import ../ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
       in
       {
-        imports = [ ../modules/profiles/installation-device.nix ];
+        imports = [ ../../modules/profiles/installation-device.nix ];
 
         nix.settings = {
           substituters = lib.mkForce [ ];
@@ -77,7 +77,7 @@
         };
       in
       {
-        imports = [ ./common/user-account.nix ];
+        imports = [ ../common/user-account.nix ];
 
         config = lib.mkMerge [
           targetConfig
