@@ -108,6 +108,18 @@ optionals noSysDirs (
 
 ## 2. Patches relevant on specific platforms ####################################
 
+## Linux
+
+# Linux 7.1 removed `linux/scc.h`.
+# For GCC 14 and higher, there have already been releases with the fix.
+++ optional (is13 && targetPlatform.isLinux) (fetchpatch {
+  name = "libsanitizer-fix-with-linux-7.1-headers.patch";
+  url = "https://github.com/llvm/llvm-project/commit/3dc4fd6dd41100f051a63642f449b16324389c96.patch";
+  relative = "compiler-rt/lib";
+  extraPrefix = "libsanitizer/";
+  hash = "sha256-UYekGGOkYdBNJEp48QFPFadf3wPFJZL2t3D+iwUeGJA=";
+})
+
 ## Darwin
 
 # Here we apply patches by Iains (https://github.com/iains)
