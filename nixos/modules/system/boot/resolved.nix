@@ -46,7 +46,7 @@ let
         concatStringsSep " " value
       else
         value
-    ) settings;
+    ) (lib.filterAttrs (key: value: value != null) settings);
 
   resolvedConf = settingsToSections { Resolve = transformSettings cfg.settings.Resolve; };
 in
