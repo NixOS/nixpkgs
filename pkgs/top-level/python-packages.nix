@@ -19697,6 +19697,8 @@ self: super: with self; {
 
   subprocess4 = callPackage ../development/python-modules/subprocess4 { };
 
+  subtitle-parser = callPackage ../development/python-modules/subtitle-parser { };
+
   subzerod = callPackage ../development/python-modules/subzerod { };
 
   succulent = callPackage ../development/python-modules/succulent { };
