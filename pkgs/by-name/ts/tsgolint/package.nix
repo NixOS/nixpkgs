@@ -57,7 +57,10 @@ buildGo126Module (finalAttrs: {
     homepage = "https://github.com/oxc-project/tsgolint";
     changelog = "https://github.com/oxc-project/tsgolint/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [
+      jnsgruk
+      anish
+    ];
     mainProgram = "tsgolint";
   };
 })
