@@ -1,6 +1,6 @@
 # vim: set syntax=nix:
 let
-  flake = builtins.getFlake ''${flake_path}'';
+  flake = builtins.getFlake ''${flake_resolved}'';
   configuration = flake.${flake_attr};
   motd = ''
     $${"\n"}
