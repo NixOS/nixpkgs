@@ -1292,13 +1292,15 @@ let
         KEXEC_HANDOVER = whenAtLeast "6.16" (option yes);
         LIVEUPDATE = whenAtLeast "6.19" (option yes);
 
-        PARTITION_ADVANCED = yes; # Needed for LDM_PARTITION
+        PARTITION_ADVANCED = yes; # Needed for LDM_PARTITION and BSD_DISKLABEL
         # Windows Logical Disk Manager (Dynamic Disk) support
         LDM_PARTITION = yes;
         LOGIRUMBLEPAD2_FF = yes; # Logitech Rumblepad 2 force feedback
         LOGO = no; # not needed
         MEDIA_ATTACH = yes;
         MEGARAID_NEWGEN = yes;
+
+        BSD_DISKLABEL = yes;
 
         MLX5_CORE_EN = option yes;
 
