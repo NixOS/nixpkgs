@@ -1,11 +1,17 @@
 {
   lib,
   ocaml,
-  version ? if lib.versionAtLeast ocaml.version "5.1" then "2.14.0" else "0.9",
+  version ?
+    if lib.versionAtLeast ocaml.version "5.2" then
+      "2.15.0"
+    else if lib.versionAtLeast ocaml.version "5.1" then
+      "2.14.0"
+    else
+      "0.9",
   fetchurl,
+  pkg-config,
   buildDunePackage,
   cstruct,
-  pkg-config,
   dune-configurator,
   fmt,
   optint,
@@ -22,6 +28,10 @@ let
       "2.14.0" = {
         minimalOCamlVersion = "5.1.0";
         hash = "sha256-U6B3/ExryC7WLYj1iIUHoXZQluFE56Rf3dwOpux/qIE=";
+      };
+      "2.15.0" = {
+        minimalOCamlVersion = "5.2.0";
+        hash = "sha256-MK1F5tTbvZT5MkyZrz28+nj4+Yo8VxdxCBDHghUdMYY=";
       };
     }
     .${version};
