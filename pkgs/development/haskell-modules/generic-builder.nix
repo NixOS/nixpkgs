@@ -520,7 +520,7 @@ let
   # derivation as if they were propagated from their dependencies which allows
   # pkg-config --static to work in most cases.
   allPkgconfigDepends =
-    if __propagatePkgConfigDepends then
+    if __propagatePkgConfigDepends && allPkgconfigDepends' != [ ] then
       let
         # If __onlyPropagateKnownPkgConfigModules is set, packages without
         # meta.pkgConfigModules will be filtered out, otherwise all packages in
