@@ -8756,7 +8756,6 @@ with pkgs;
     recurseIntoAttrs (
       callPackages ../applications/editors/jetbrains {
         vmopts = config.jetbrains.vmopts or null;
-        jdk = jetbrains.jdk;
       }
     )
     // {
