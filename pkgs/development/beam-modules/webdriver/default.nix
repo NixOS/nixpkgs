@@ -18,7 +18,7 @@ let
     self:
     stdenv.mkDerivation {
       pname = "webdriver";
-      version = "0.pre+unstable=2015-02-08";
+      version = "0-unstable-2015-02-08";
 
       src = fetchFromGitHub {
         owner = "Quviq";
