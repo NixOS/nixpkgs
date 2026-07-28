@@ -14180,12 +14180,12 @@ final: prev: {
 
   obsidian-nvim = buildVimPlugin {
     pname = "obsidian.nvim";
-    version = "3.16.5";
+    version = "3.16.6";
     src = fetchFromGitHub {
       owner = "obsidian-nvim";
       repo = "obsidian.nvim";
-      tag = "v3.16.5";
-      hash = "sha256-jSaAT7DCGsgzNJCd+ey3My2zqQ7kDcRm5ALDTOJKmJM=";
+      tag = "v3.16.6";
+      hash = "sha256-qzyKkzlrQcgwVnaOleZf5xSOREHbg2Qc/sYPR9MkVsY=";
     };
     meta.homepage = "https://github.com/obsidian-nvim/obsidian.nvim/";
     meta.license = getLicenseFromSpdxId "Apache-2.0";
