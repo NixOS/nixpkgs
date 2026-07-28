@@ -96,6 +96,7 @@ flutter344.buildFlutterApplication (
     ];
 
     __structuredAttrs = true;
+    strictDeps = true;
 
     # buildDartApplication passes the pubspec lock via passAsFile, which Nix
     # ignores under structured attrs, leaving $pubspecLockFilePath empty.
