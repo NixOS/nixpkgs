@@ -1,0 +1,104 @@
+[
+  {
+    "repository": "Nexus-Mods/7z-bin",
+    "revision": "3298c42e69e3220dc39694bc2f610c077c3e213a",
+    "url": "https://codeload.github.com/Nexus-Mods/7z-bin/tar.gz/3298c42e69e3220dc39694bc2f610c077c3e213a",
+    "hash": "sha256-HuodRQNR/gk2fLwpR2jCUyZ04Vphyyqu9eGrjCURb1Q="
+  },
+  {
+    "repository": "Nexus-Mods/modmeta-db",
+    "revision": "daa8935b6e38e255ec192c908adfce35d47c0336",
+    "url": "https://codeload.github.com/Nexus-Mods/modmeta-db/tar.gz/daa8935b6e38e255ec192c908adfce35d47c0336",
+    "hash": "sha256-c5cdf4NjVjS80YPy3PgOL3bGx3o1zq4002FbzDUmg6w="
+  },
+  {
+    "repository": "Nexus-Mods/node-7z",
+    "revision": "b75def8d0d7d81a03f4526c52b8ada9a34a06479",
+    "url": "https://codeload.github.com/Nexus-Mods/node-7z/tar.gz/b75def8d0d7d81a03f4526c52b8ada9a34a06479",
+    "hash": "sha256-FuW4hYtlikimOenyfGQTH+SJGiZHz4Jqo9lvRW17vjo="
+  },
+  {
+    "repository": "Nexus-Mods/node-bsatk",
+    "revision": "5a3d15fae2177bfb0a42b794d3afb21eda563c59",
+    "url": "https://codeload.github.com/Nexus-Mods/node-bsatk/tar.gz/5a3d15fae2177bfb0a42b794d3afb21eda563c59",
+    "hash": "sha256-4P+1q4VzlZjYp7kZAap7dNWD5uYJZDdXVE5oPJ9Glv4="
+  },
+  {
+    "repository": "Nexus-Mods/node-loot",
+    "revision": "7b6028fb2caeb3a2af6a0c3d68630c033cc01e8d",
+    "url": "https://codeload.github.com/Nexus-Mods/node-loot/tar.gz/7b6028fb2caeb3a2af6a0c3d68630c033cc01e8d",
+    "hash": "sha256-urVFBjm5XqTZwK6INn0se5sLYWHX92HkSQoloOlzSk4="
+  },
+  {
+    "repository": "Nexus-Mods/node-nexus-api",
+    "revision": "97ad222d2d7aca05e581390eb85be9af22833fba",
+    "url": "https://codeload.github.com/Nexus-Mods/node-nexus-api/tar.gz/97ad222d2d7aca05e581390eb85be9af22833fba",
+    "hash": "sha256-kPj+n6aWLV3JSxiO9aY98UJ+QWeaj6Ft41yCfrvsQVE="
+  },
+  {
+    "repository": "Nexus-Mods/node-permissions",
+    "revision": "7c1b6f1d6437f2238be51316de823b0fbd63e4c0",
+    "url": "https://codeload.github.com/Nexus-Mods/node-permissions/tar.gz/7c1b6f1d6437f2238be51316de823b0fbd63e4c0",
+    "hash": "sha256-/nn4Oqyjb44Xcrn9aXP7nzWqbOJFBLajr43uvgDNZMY="
+  },
+  {
+    "repository": "Nexus-Mods/node-turbowalk",
+    "revision": "3502f6ffc3f9eb55fe1c9c097b4e4772edce0c0f",
+    "url": "https://codeload.github.com/Nexus-Mods/node-turbowalk/tar.gz/3502f6ffc3f9eb55fe1c9c097b4e4772edce0c0f",
+    "hash": "sha256-WGBjYDSPSWCXumCLEucsSkP1KDlpyfWSbZLHCRQ5rlg="
+  },
+  {
+    "repository": "Nexus-Mods/node-wholocks",
+    "revision": "28da3bcf312312e577d7c636799a59011998b4af",
+    "url": "https://codeload.github.com/Nexus-Mods/node-wholocks/tar.gz/28da3bcf312312e577d7c636799a59011998b4af",
+    "hash": "sha256-91HdT9u4HFPfMQ4XIFIdLwwpqX1/w5RP+PS2Fn0TnNo="
+  },
+  {
+    "repository": "Nexus-Mods/node-winapi-bindings",
+    "revision": "faa92afe3320731e98abc15b3f5f19c60896d7c1",
+    "url": "https://codeload.github.com/Nexus-Mods/node-winapi-bindings/tar.gz/faa92afe3320731e98abc15b3f5f19c60896d7c1",
+    "hash": "sha256-WlxKvxhD4AnyIXBLFI+a0jSQfixZcd9LfMIAqhkaXFQ="
+  },
+  {
+    "repository": "Nexus-Mods/vdf-parser",
+    "revision": "df279ff89cb480597544d3029e12f90cb8c79464",
+    "url": "https://codeload.github.com/Nexus-Mods/vdf-parser/tar.gz/df279ff89cb480597544d3029e12f90cb8c79464",
+    "hash": "sha256-5sqqSD31iyw4Bszja60rBgu9GRy3jqzwLYmxxdRHFQs="
+  },
+  {
+    "repository": "Nexus-Mods/vortex-parse-ini",
+    "revision": "2425af99d1cff2331ccf3aacfa892c314e99e18d",
+    "url": "https://codeload.github.com/Nexus-Mods/vortex-parse-ini/tar.gz/2425af99d1cff2331ccf3aacfa892c314e99e18d",
+    "hash": "sha256-UiHVe8JABfoFHS55dpa/bczKeRhJA3w53oPQSCzDIqM="
+  },
+  {
+    "repository": "TanninOne/bbcode-to-react",
+    "revision": "c67356006470e5066ea447e04a3968dca367339d",
+    "url": "https://codeload.github.com/TanninOne/bbcode-to-react/tar.gz/c67356006470e5066ea447e04a3968dca367339d",
+    "hash": "sha256-O2Ci2XoOEeKIfdhx3xwT8/N0Pvj5GoodLlUzyLJYDyk="
+  },
+  {
+    "repository": "TanninOne/drivelist",
+    "revision": "720d1890db11482ec05fc0f6aa176cfa6e6844dd",
+    "url": "https://codeload.github.com/TanninOne/drivelist/tar.gz/720d1890db11482ec05fc0f6aa176cfa6e6844dd",
+    "hash": "sha256-AqIpcybiGYo9MZT/VRah0YqB2cslp5elgyLWisEBTUQ="
+  },
+  {
+    "repository": "TanninOne/electron-redux",
+    "revision": "66bbd9d389579806e8c4ebd87bd513a668cc64a8",
+    "url": "https://codeload.github.com/TanninOne/electron-redux/tar.gz/66bbd9d389579806e8c4ebd87bd513a668cc64a8",
+    "hash": "sha256-2aSewOSJbBw/JiJ0rlbVkZlGioJaQoDssCnrz3oyYzY="
+  },
+  {
+    "repository": "TanninOne/rimraf",
+    "revision": "7b8b70d4e8783cd233fca3283cf1f930af4e39c2",
+    "url": "https://codeload.github.com/TanninOne/rimraf/tar.gz/7b8b70d4e8783cd233fca3283cf1f930af4e39c2",
+    "hash": "sha256-G2qc0YFw/zBg5lFD/bWCtVu+KU49JvWSIQFRtako7U8="
+  },
+  {
+    "repository": "foi/node-json-socket",
+    "revision": "d56c8e2938fa4284c4001b815d9b6e4a92b5c07b",
+    "url": "https://codeload.github.com/foi/node-json-socket/tar.gz/d56c8e2938fa4284c4001b815d9b6e4a92b5c07b",
+    "hash": "sha256-4UVoPGNh1lH2FVa5yFhkgdjzUhWcejWYfhYfBCrlY8s="
+  }
+]
