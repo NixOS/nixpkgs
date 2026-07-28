@@ -89,6 +89,14 @@ let
       "${both}/bin/iserv-wrapper";
   };
 
+  isHaLVM = ghc.isHaLVM or false;
+
+  # GHC used for building Setup.hs
+  #
+  # Same as our GHC, unless we're cross, in which case it is native GHC with the
+  # same version.
+  nativeGhc = buildHaskellPackages.ghc;
+
   # Pass the "wrong" C compiler rather than none at all so packages that just
   # use the C preproccessor still work, see
   # https://github.com/haskell/cabal/issues/6466 for details.
@@ -108,8 +116,100 @@ let
     emscripten
     ;
 
-in
+  defaultSetupHs = toFile "Setup.hs" ''
+    import Distribution.Simple
+    main = defaultMain
+  '';
 
+  # This awk expression transforms a package conf file like
+  #
+  #   author:               John Doe <john-doe@example.com>
+  #   description:
+  #       The purpose of this library is to do
+  #       foo and bar among other things
+  #
+  # into a more easily processeable form:
+  #
+  #   author: John Doe <john-doe@example.com>
+  #   description: The purpose of this library is to do foo and bar among other things
+  unprettyConf = toFile "unpretty-cabal-conf.awk" ''
+    /^[^ ]+:/ {
+      # When the line starts with a new field, terminate the previous one with a newline
+      if (started == 1) print ""
+      # to strip leading spaces
+      $1=$1
+      printf "%s", $0
+      started=1
+    }
+
+    /^ +/ {
+      # to strip leading spaces
+      $1=$1
+      printf " %s", $0
+    }
+
+    # Terminate the final field with a newline
+    END { print "" }
+  '';
+
+  makeGhcOptions = opts: concatStringsSep " " (map (opt: "--ghc-option=${opt}") opts);
+
+  isHaskellPkg = x: x ? isHaskellLibrary;
+
+  setupCommand = "./Setup";
+
+  ghcCommand' = "ghc";
+  ghcCommand = "${ghc.targetPrefix}${ghcCommand'}";
+  ghcCommandCaps = toUpper ghcCommand';
+
+  ghcNameWithPrefix = "${ghc.targetPrefix}${ghc.haskellCompilerName}";
+  mkGhcLibdir =
+    ghc: "lib/${ghc.targetPrefix}${ghc.haskellCompilerName}" + optionalString (ghc ? hadrian) "/lib";
+  ghcLibdir = mkGhcLibdir ghc;
+
+  nativeGhcCommand = "${nativeGhc.targetPrefix}ghc";
+
+  buildPkgDb = thisGhc: packageConfDir: ''
+    # If this dependency has a package database, then copy the contents of it,
+    # unless it is one of our GHCs. These can appear in our dependencies when
+    # we are doing native builds, and they have package databases in them, but
+    # we do not want to copy them over.
+    #
+    # We don't need to, since those packages will be provided by the GHC when
+    # we compile with it, and doing so can result in having multiple copies of
+    # e.g. Cabal in the database with the same name and version, which is
+    # ambiguous.
+    if [ -d "$p/${mkGhcLibdir thisGhc}/package.conf.d" ] && [ "$p" != "${ghc}" ] && [ "$p" != "${nativeGhc}" ]; then
+      cp -f "$p/${mkGhcLibdir thisGhc}/package.conf.d/"*.conf ${packageConfDir}/
+      continue
+    fi
+  '';
+
+  # This is a script suitable for --test-wrapper of Setup.hs' test command
+  # (https://cabal.readthedocs.io/en/3.12/setup-commands.html#cmdoption-runhaskell-Setup.hs-test-test-wrapper).
+  # We use it to set some environment variables that the test suite may need,
+  # e.g. GHC_PACKAGE_PATH to invoke GHC(i) at runtime with build dependencies
+  # available. See the comment accompanying checkPhase below on how to customize
+  # this behavior. We need to use a wrapper script since Cabal forbids setting
+  # certain environment variables since they can alter GHC's behavior (e.g.
+  # GHC_PACKAGE_PATH) and cause failures. While building, Cabal will set
+  # GHC_ENVIRONMENT to make the packages picked at configure time available to
+  # GHC, but unfortunately not at test time. The test wrapper script will be
+  # executed after such environment checks, so we can take some liberties which
+  # is unproblematic since we know our synthetic package db matches what Cabal
+  # will see at configure time exactly. See also
+  # <https://github.com/haskell/cabal/issues/7792>.
+  testWrapperScript = buildPackages.writeShellScript "haskell-generic-builder-test-wrapper.sh" ''
+    set -eu
+
+    # We expect this to be either empty or set by checkPhase
+    if [[ -n "''${NIX_GHC_PACKAGE_PATH_FOR_TEST}" ]]; then
+      export GHC_PACKAGE_PATH="''${NIX_GHC_PACKAGE_PATH_FOR_TEST}"
+    fi
+
+    exec "$@"
+  '';
+in
 {
   pname,
   dontStrip ? stdenv.hostPlatform.isGhcjs,
@@ -294,14 +394,6 @@ assert stdenv.hostPlatform.isWindows -> enableStaticLibraries == false;
 assert stdenv.hostPlatform.isWasm -> enableStaticLibraries == false;
 
 let
-  isHaLVM = ghc.isHaLVM or false;
-
-  # GHC used for building Setup.hs
-  #
-  # Same as our GHC, unless we're cross, in which case it is native GHC with the
-  # same version.
-  nativeGhc = buildHaskellPackages.ghc;
-
   # the target dir for haddock documentation
   docdir = docoutput: docoutput + "/share/doc/" + pname + "-" + version;
 
@@ -313,42 +405,6 @@ let
     sha256 = editedCabalFile;
     name = "${pname}-${version}-r${revision}.cabal";
   };
-
-  defaultSetupHs = toFile "Setup.hs" ''
-    import Distribution.Simple
-    main = defaultMain
-  '';
-
-  # This awk expression transforms a package conf file like
-  #
-  #   author:               John Doe <john-doe@example.com>
-  #   description:
-  #       The purpose of this library is to do
-  #       foo and bar among other things
-  #
-  # into a more easily processeable form:
-  #
-  #   author: John Doe <john-doe@example.com>
-  #   description: The purpose of this library is to do foo and bar among other things
-  unprettyConf = toFile "unpretty-cabal-conf.awk" ''
-    /^[^ ]+:/ {
-      # When the line starts with a new field, terminate the previous one with a newline
-      if (started == 1) print ""
-      # to strip leading spaces
-      $1=$1
-      printf "%s", $0
-      started=1
-    }
-
-    /^ +/ {
-      # to strip leading spaces
-      $1=$1
-      printf " %s", $0
-    }
-
-    # Terminate the final field with a newline
-    END { print "" }
-  '';
 
   crossCabalFlags = [
     "--with-ghc=${ghcCommand}"
@@ -381,8 +437,6 @@ let
       ]
     )
   );
-
-  makeGhcOptions = opts: concatStringsSep " " (map (opt: "--ghc-option=${opt}") opts);
 
   defaultConfigureFlags = [
     "--verbose"
@@ -458,8 +512,6 @@ let
     "-threaded" # https://github.com/haskell/cabal/issues/2398
   ];
 
-  isHaskellPkg = x: x ? isHaskellLibrary;
-
   # Work around a Cabal bug requiring pkg-config --static --libs to work even
   # when linking dynamically, affecting Cabal 3.8 and 3.9.
   # https://github.com/haskell/cabal/issues/8455
@@ -468,41 +520,40 @@ let
   # derivation as if they were propagated from their dependencies which allows
   # pkg-config --static to work in most cases.
   allPkgconfigDepends =
-    let
-      # If __onlyPropagateKnownPkgConfigModules is set, packages without
-      # meta.pkgConfigModules will be filtered out, otherwise all packages in
-      # buildInputs and propagatePlainBuildInputs are propagated.
-      propagateValue =
-        drv: isDerivation drv && (__onlyPropagateKnownPkgConfigModules -> drv ? meta.pkgConfigModules);
-
-      # Take list of derivations and return list of the transitive dependency
-      # closure, only taking into account buildInputs. Loosely based on
-      # closePropagationFast.
-      propagatePlainBuildInputs =
-        drvs:
-        map (i: i.val) (genericClosure {
-          startSet = map (drv: {
-            key = drv.outPath;
-            val = drv;
-          }) (filter propagateValue drvs);
-          operator =
-            { val, ... }:
-            concatMap (
-              drv:
-              if propagateValue drv then
-                [
-                  {
-                    key = drv.outPath;
-                    val = drv;
-                  }
-                ]
-              else
-                [ ]
-            ) (val.buildInputs or [ ] ++ val.propagatedBuildInputs or [ ]);
-        });
-    in
-
     if __propagatePkgConfigDepends then
+      let
+        # If __onlyPropagateKnownPkgConfigModules is set, packages without
+        # meta.pkgConfigModules will be filtered out, otherwise all packages in
+        # buildInputs and propagatePlainBuildInputs are propagated.
+        propagateValue =
+          drv: isDerivation drv && (__onlyPropagateKnownPkgConfigModules -> drv ? meta.pkgConfigModules);
+
+        # Take list of derivations and return list of the transitive dependency
+        # closure, only taking into account buildInputs. Loosely based on
+        # closePropagationFast.
+        propagatePlainBuildInputs =
+          drvs:
+          map (i: i.val) (genericClosure {
+            startSet = map (drv: {
+              key = drv.outPath;
+              val = drv;
+            }) (filter propagateValue drvs);
+            operator =
+              { val, ... }:
+              concatMap (
+                drv:
+                if propagateValue drv then
+                  [
+                    {
+                      key = drv.outPath;
+                      val = drv;
+                    }
+                  ]
+                else
+                  [ ]
+              ) (val.buildInputs or [ ] ++ val.propagatedBuildInputs or [ ]);
+          });
+      in
       propagatePlainBuildInputs allPkgconfigDepends'
     else
       allPkgconfigDepends';
@@ -563,34 +614,6 @@ let
       benchmarkDepends ++ benchmarkHaskellDepends ++ benchmarkSystemDepends ++ benchmarkFrameworkDepends
     );
 
-  setupCommand = "./Setup";
-
-  ghcCommand' = "ghc";
-  ghcCommand = "${ghc.targetPrefix}${ghcCommand'}";
-
-  ghcNameWithPrefix = "${ghc.targetPrefix}${ghc.haskellCompilerName}";
-  mkGhcLibdir =
-    ghc: "lib/${ghc.targetPrefix}${ghc.haskellCompilerName}" + optionalString (ghc ? hadrian) "/lib";
-  ghcLibdir = mkGhcLibdir ghc;
-
-  nativeGhcCommand = "${nativeGhc.targetPrefix}ghc";
-
-  buildPkgDb = thisGhc: packageConfDir: ''
-    # If this dependency has a package database, then copy the contents of it,
-    # unless it is one of our GHCs. These can appear in our dependencies when
-    # we are doing native builds, and they have package databases in them, but
-    # we do not want to copy them over.
-    #
-    # We don't need to, since those packages will be provided by the GHC when
-    # we compile with it, and doing so can result in having multiple copies of
-    # e.g. Cabal in the database with the same name and version, which is
-    # ambiguous.
-    if [ -d "$p/${mkGhcLibdir thisGhc}/package.conf.d" ] && [ "$p" != "${ghc}" ] && [ "$p" != "${nativeGhc}" ]; then
-      cp -f "$p/${mkGhcLibdir thisGhc}/package.conf.d/"*.conf ${packageConfDir}/
-      continue
-    fi
-  '';
-
   intermediatesDir = "share/haskell/${ghc.version}/${pname}-${version}/dist";
 
   jsexe = rec {
@@ -598,31 +621,6 @@ let
     shouldCopy = shouldAdd && !doInstallIntermediates;
     shouldSymlink = shouldAdd && doInstallIntermediates;
   };
-
-  # This is a script suitable for --test-wrapper of Setup.hs' test command
-  # (https://cabal.readthedocs.io/en/3.12/setup-commands.html#cmdoption-runhaskell-Setup.hs-test-test-wrapper).
-  # We use it to set some environment variables that the test suite may need,
-  # e.g. GHC_PACKAGE_PATH to invoke GHC(i) at runtime with build dependencies
-  # available. See the comment accompanying checkPhase below on how to customize
-  # this behavior. We need to use a wrapper script since Cabal forbids setting
-  # certain environment variables since they can alter GHC's behavior (e.g.
-  # GHC_PACKAGE_PATH) and cause failures. While building, Cabal will set
-  # GHC_ENVIRONMENT to make the packages picked at configure time available to
-  # GHC, but unfortunately not at test time. The test wrapper script will be
-  # executed after such environment checks, so we can take some liberties which
-  # is unproblematic since we know our synthetic package db matches what Cabal
-  # will see at configure time exactly. See also
-  # <https://github.com/haskell/cabal/issues/7792>.
-  testWrapperScript = buildPackages.writeShellScript "haskell-generic-builder-test-wrapper.sh" ''
-    set -eu
-
-    # We expect this to be either empty or set by checkPhase
-    if [[ -n "''${NIX_GHC_PACKAGE_PATH_FOR_TEST}" ]]; then
-      export GHC_PACKAGE_PATH="''${NIX_GHC_PACKAGE_PATH_FOR_TEST}"
-    fi
-
-    exec "$@"
-  '';
 
   testTargetsString =
     warnIf (testTarget != "")
@@ -642,7 +640,6 @@ let
       "-Wno-error=int-conversion"
       + optionalString (env ? NIX_CFLAGS_COMPILE) (" " + env.NIX_CFLAGS_COMPILE);
   };
-
 in
 fix (
   drv:
@@ -1068,8 +1065,6 @@ fix (
             ghcEnv = withPackages (
               _: otherBuildInputsHaskell ++ propagatedBuildInputs ++ optionals (!isCross) setupHaskellDepends
             );
-
-            ghcCommandCaps = toUpper ghcCommand';
           in
           runCommandCC name {
             inherit shellHook;
