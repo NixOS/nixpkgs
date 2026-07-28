@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xdg-base-dirs";
   version = "6.0.2";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "srstevenson";
     repo = "xdg-base-dirs";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-iXK9WURTfmpl5vd7RsT0ptwfrb5UQQFqMMCu3+vL+EY=";
   };
 
@@ -32,8 +32,8 @@ buildPythonPackage rec {
   meta = {
     description = "Implementation of the XDG Base Directory Specification in Python";
     homepage = "https://github.com/srstevenson/xdg-base-dirs";
-    changelog = "https://github.com/srstevenson/xdg-base-dirs/releases/tag/${version}";
+    changelog = "https://github.com/srstevenson/xdg-base-dirs/releases/tag/${finalAttrs.version}";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ sandarukasa ];
   };
-}
+})
