@@ -10,6 +10,7 @@
   pcre2,
   libiconv,
   lynx,
+  withLynx ? false,
   which,
   libxcrypt,
   buildPackages,
@@ -82,7 +83,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i config.layout -e "s|installbuilddir:.*|installbuilddir: $dev/share/build|"
     sed -i configure -e 's|perlbin=.*|perlbin="/usr/bin/env perl"|'
-    sed -i support/apachectl.in -e 's|@LYNX_PATH@|${lynx}/bin/lynx|'
+    ${lib.optionalString withLynx "sed -i support/apachectl.in -e 's|@LYNX_PATH@|${lynx}/bin/lynx|'"}
   '';
 
   # Required for ‘pthread_cancel’.
