@@ -95,6 +95,30 @@ flutter344.buildFlutterApplication (
       "--dart-define=AUTHPASS_PACKAGE_NAME=design.codeux.authpass"
     ];
 
+    __structuredAttrs = true;
+
+    # buildDartApplication passes the pubspec lock via passAsFile, which Nix
+    # ignores under structured attrs, leaving $pubspecLockFilePath empty.
+    # Materialize it from .attrs.json instead; this runs before the
+    # `ln -sf "$pubspecLockFilePath" pubspec.lock` appended by the builder.
+    preConfigure = ''
+      jq -r '.pubspecLockFile' "$NIX_ATTRS_JSON_FILE" > "$NIX_BUILD_TOP/pubspec-lock.json"
+      pubspecLockFilePath="$NIX_BUILD_TOP/pubspec-lock.json"
+    '';
+
+    # buildFlutterApplication's default buildPhase expands $flutterBuildFlags
+    # unquoted, which under structured attrs yields only the first list
+    # element and would silently drop the -t entrypoint flag above.
+    buildPhase = ''
+      runHook preBuild
+
+      mkdir -p build/flutter_assets/fonts
+
+      flutter build linux -v --split-debug-info="$debug" "''${flutterBuildFlags[@]}"
+
+      runHook postBuild
+    '';
+
     nativeBuildInputs = [ pkg-config ];
 
     buildInputs = [
