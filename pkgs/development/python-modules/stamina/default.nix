@@ -9,7 +9,6 @@
   hatchling,
   pytestCheckHook,
   tenacity,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -32,7 +31,6 @@ buildPythonPackage rec {
 
   dependencies = [
     tenacity
-    typing-extensions
   ];
 
   nativeCheckInputs = [
