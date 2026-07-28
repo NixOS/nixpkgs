@@ -26050,6 +26050,13 @@
     githubId = 819413;
     name = "Benedict Aas";
   };
+  showhyt = {
+    email = "mirantuten@yandex.com";
+    github = "ShowhyT";
+    githubId = 109768004;
+    keys = [ { fingerprint = "94AD E7C4 73B5 3DC7 7615  D946 3E76 7D8C 58D4 8C78"; } ];
+    name = "Miran Tuten";
+  };
   shunueda = {
     name = "Shun Ueda";
     github = "shunueda";
