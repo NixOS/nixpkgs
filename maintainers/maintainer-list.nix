@@ -22885,6 +22885,12 @@
     matrix = "@pschmitt:one.ems.host";
     keys = [ { fingerprint = "9FBF 2ABF FB37 F7F3 F502  44E5 DC43 9C47 EACB 17F9"; } ];
   };
+  pseb = {
+    email = "sebastien.pose@gmail.com";
+    github = "pseb";
+    githubId = 983165;
+    name = "Sébastien Posé";
+  };
   pseudocc = {
     email = "pseudoc@163.com";
     github = "pseudocc";
