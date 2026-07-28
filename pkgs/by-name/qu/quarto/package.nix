@@ -69,6 +69,19 @@ stdenv.mkDerivation (finalAttrs: {
       ) "--set-default RETICULATE_PYTHON ${pythonWithPackages.interpreter}"}
   '';
 
+  # This patches quarto to be compatible with pandoc <3.8
+  # When pandoc updates, this fix will not be needed, and will probably break
+  postFixup = ''
+    substituteInPlace $out/bin/quarto.js \
+      --replace-fail 'kSyntaxHighlighting = "syntax-highlighting"' 'kSyntaxHighlighting = "highlight-style"' \
+      --replace-fail '"--syntax-highlighting"' '"--highlight-style"'
+    substituteInPlace $out/share/filters/modules/jog.lua \
+      --replace-fail "elseif tp == 'pandoc TableHead' or tp == 'pandoc TableFoot' or" "elseif tp == 'pandoc TableBody' or tp == 'TableBody' then
+          element.head = jogger(element.head)
+          element.body = jogger(element.body)
+        elseif tp == 'pandoc TableHead' or tp == 'pandoc TableFoot' or"
+  '';
+
   installPhase = ''
     runHook preInstall
 
@@ -80,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir bin/tools/x86_64
 
     ln -s ${lib.getExe pandoc} bin/tools/x86_64/pandoc
-    ln -s ${lib.makeBinPath [ pandoc ]}/pandoc bin/tools/aarch64/pandoc
+    ln -s ${lib.getExe pandoc} bin/tools/aarch64/pandoc
 
 
     mv bin/* $out/bin
