@@ -28,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Micro (GNU) Emacs-like text editor";
     homepage = "https://github.com/troglobit/mg";
+    maintainers = with lib.maintainers; [ cve ];
     license = lib.licenses.publicDomain;
     mainProgram = "mg";
     platforms = lib.platforms.all;
