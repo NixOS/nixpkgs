@@ -3778,7 +3778,10 @@
     "index.html#language-javascript"
   ],
   "javascript-introduction": [
-    "index.html#javascript-introduction"
+    "index.html#javascript-introduction",
+    "index.html#javascript-finding-examples",
+    "index.html#javascript-finding-examples-github",
+    "index.html#javascript-finding-examples-gitlab"
   ],
   "javascript-tools-overview": [
     "index.html#javascript-tools-overview"
