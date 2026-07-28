@@ -354,6 +354,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       or even practicing guitar chords!
     '';
     homepage = "https://apps.ankiweb.net";
+    changelog = "https://github.com/ankitects/anki/releases/tag/${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
     inherit (mesa.meta) platforms;
     maintainers = with lib.maintainers; [
