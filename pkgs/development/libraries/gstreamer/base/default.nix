@@ -17,7 +17,7 @@
   isocodes,
   libjpeg,
   libpng,
-  tremor, # provides 'virbisidec'
+  libvorbis,
   libGL,
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     isocodes
     libpng
     libjpeg
-    tremor
+    libvorbis
     pango
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
@@ -143,6 +143,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "introspection" withIntrospection)
     (lib.mesonEnable "doc" enableDocumentation)
     (lib.mesonEnable "libvisual" false)
+    (lib.mesonEnable "tremor" false) # unmaintained in nixpkgs, just use regular libvorbis instead
+    (lib.mesonEnable "vorbis" true)
   ]
   ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "-Dtests=disabled"
