@@ -24,3 +24,8 @@ makes the documentation of a particular plugin easier to follow.
 
 This builder uses the standard `buildGoModule` under the hood (from within the
 wasi arch's `callPackage`).
+
+### `buildNavidromeRustPlugin`
+
+This builder uses the standard `buildRustPackage` under the hood (from within the
+wasi arch's `callPackage`).

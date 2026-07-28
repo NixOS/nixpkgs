@@ -2312,6 +2312,8 @@ with pkgs;
 
   buildNavidromeGoPlugin = callPackage ../by-name/na/navidrome/plugins/build-go-plugin.nix { };
 
+  buildNavidromeRustPlugin = callPackage ../by-name/na/navidrome/plugins/build-rust-plugin.nix { };
+
   navidromePlugins = recurseIntoAttrs (
     lib.makeExtensible (
       self:
