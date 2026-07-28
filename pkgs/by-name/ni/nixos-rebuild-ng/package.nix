@@ -98,6 +98,7 @@ python3Packages.buildPythonApplication rec {
           nixos-rebuild-specialisations
           nixos-rebuild-store-path
           nixos-rebuild-target-host
+          nixos-rebuild-use-nom
           ;
         repl = callPackage ./tests/repl.nix { };
         # NOTE: this is a passthru test rather than a build-time test because we

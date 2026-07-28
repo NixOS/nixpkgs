@@ -75,6 +75,7 @@ let
   nixos-install = pkgs.nixos-install.override { };
   nixos-rebuild-ng = pkgs.nixos-rebuild-ng.override {
     nix = config.nix.package;
+    useNom = config.system.tools.nixos-rebuild.useNom;
   };
 
   defaultFlakeTemplate = ''
@@ -322,6 +323,12 @@ in
       (
         { config, ... }:
         {
+          options.system.tools.nixos-rebuild.useNom = lib.mkEnableOption ''
+            using nix-output-monitor (nom) to display local builds in
+            nixos-rebuild. A pinned nom is added to nixos-rebuild's
+            wrapper, and used whenever stderr is a terminal
+          '';
+
           options.system.tools.nixos-rebuild.enableRun0Elevation = lib.mkEnableOption ''
             support for being targeted by `nixos-rebuild --elevate=run0
             --ask-elevate-password`.
