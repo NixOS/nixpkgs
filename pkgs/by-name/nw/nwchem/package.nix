@@ -20,7 +20,6 @@
   autoconf,
   libtool,
   makeWrapper,
-  mpich,
 }:
 
 assert blas-ilp64.isILP64 == lapack-ilp64.isILP64;
@@ -76,9 +75,9 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     gfortran
     which
-    mpich
     python3
     openssh
+    mpi
   ];
   buildInputs = [
     tcsh
