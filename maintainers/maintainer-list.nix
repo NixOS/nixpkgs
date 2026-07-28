@@ -19518,8 +19518,9 @@
     keys = [ { fingerprint = "086E EF20 D54E D348 E5BA  6263 16E9 43E6 596F FB4E"; } ];
   };
   myul = {
-    github = "myul";
-    githubId = 27887735;
+    email = "hdx0729@gmail.com";
+    github = "mtul0729";
+    githubId = 52401682;
     name = "myul";
   };
   myypo = {
