@@ -72,10 +72,11 @@ Return t if the test passes.  Otherwise, return nil."
   (cl-check-type test-name symbol)
   (cl-flet ((eval-in-non-batch-emacs (form)
               (server-eval-at with-packages-non-batch-emacs-socket form)))
-    ;; Test test-name is defined in with-packages so we load it in the non-batch Emacs.
-    (eval-in-non-batch-emacs '(require 'with-packages))
-    ;; Run the non-batch test.  Return non-nil if it passes.
-    (eval-in-non-batch-emacs `(,test-name))))
+    (and
+     ;; Test test-name is defined in with-packages so we load it in the non-batch Emacs.
+     (eval-in-non-batch-emacs '(require 'with-packages))
+     ;; Run the non-batch test.  Return non-nil if it passes.
+     (eval-in-non-batch-emacs `(,test-name)))))
 
 (defmacro define-with-packages-non-batch-ert-test (test-name)
   "See `with-packages--run-non-batch-test' for how the test is run."
