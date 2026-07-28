@@ -38,7 +38,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://nxv.urandom.io";
     changelog = "https://github.com/utensils/nxv/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ yiyu ];
+    maintainers = with lib.maintainers; [
+      yiyu
+      jamesbrink
+    ];
     mainProgram = "nxv";
   };
 })
