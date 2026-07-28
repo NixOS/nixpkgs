@@ -46,6 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     autoreconfHook
     makeWrapper
+    # configure.ac does AC_CHECK_PROG([OPENSSL_CLITOOL], [openssl], ...) and
+    # errors out when the tool is not on PATH. openssl is in buildInputs for
+    # the library, which puts its bin dir on PATH only when build == host, so
+    # the check fails when cross-compiling.
+    openssl
   ];
 
   nativeCheckInputs = [
