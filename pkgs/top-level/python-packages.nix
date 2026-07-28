@@ -4034,8 +4034,6 @@ self: super: with self; {
 
   datastar-py = callPackage ../development/python-modules/datastar-py { };
 
-  datauri = callPackage ../development/python-modules/datauri { };
-
   datefinder = callPackage ../development/python-modules/datefinder { };
 
   dateparser = callPackage ../development/python-modules/dateparser { };
@@ -16417,6 +16415,8 @@ self: super: with self; {
   python-daemon = callPackage ../development/python-modules/python-daemon { };
 
   python-dali = callPackage ../development/python-modules/python-dali { };
+
+  python-datauri = callPackage ../development/python-modules/datauri { };
 
   python-datemath = callPackage ../development/python-modules/python-datemath { };
 
