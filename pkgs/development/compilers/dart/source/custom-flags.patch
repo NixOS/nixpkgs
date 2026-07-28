@@ -1,0 +1,15 @@
+diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
+index b041a075..27dc22ed 100644
+--- a/build/config/compiler/BUILD.gn
++++ b/build/config/compiler/BUILD.gn
+@@ -430,6 +430,10 @@ config("compiler") {
+     }
+   }
+ 
++  cflags_c += string_split(getenv("CFLAGS"), " ")
++  cflags_cc += string_split(getenv("CXXFLAGS"), " ")
++  ldflags += string_split(getenv("LDFLAGS"), " ")
++
+   # Assign any flags set for the C compiler to asmflags so that they are sent
+   # to the assembler. The Windows assembler takes different types of flags
+   # so only do so for posix platforms.

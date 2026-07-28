@@ -1,0 +1,22 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 336dff9..8b8a853 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,5 +1,5 @@
++cmake_minimum_required( VERSION 3.10 )
+ project( tint2 )
+-cmake_minimum_required( VERSION 2.8.5 )
+ 
+ option( ENABLE_BATTERY "Enable battery status plugin" ON )
+ option( ENABLE_TINT2CONF "Enable tint2conf build, a GTK+3 theme configurator for tint2" ON )
+diff --git a/src/tint2conf/CMakeLists.txt b/src/tint2conf/CMakeLists.txt
+index 747b9ac..cbe13bb 100644
+--- a/src/tint2conf/CMakeLists.txt
++++ b/src/tint2conf/CMakeLists.txt
+@@ -1,5 +1,5 @@
++cmake_minimum_required(VERSION 3.10)
+ project(tint2conf)
+-cmake_minimum_required(VERSION 2.6)
+ 
+ include( FindPkgConfig )
+ pkg_check_modules( X11_T2C REQUIRED x11 xcomposite xdamage xinerama xrender xrandr>=1.3 )

@@ -1,0 +1,48 @@
+diff --git a/build.gradle b/build.gradle
+index 897ab9d0a..ff84824f9 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -10,7 +10,7 @@ buildscript {
+ }
+ 
+ plugins {
+-  id 'nebula.ospackage' version '9.1.1'
++  id 'com.netflix.nebula.ospackage' version '12.3.0'
+ }
+ 
+ String runGit(List<String> args, String fallback) {
+@@ -376,7 +376,6 @@ sourceSets {
+             ]
+             exclude '**/*.ump', '**/.git*'
+         }
+-        java.outputDir = file(rootProject.ext.classfileOutputDir)
+     }
+     test {
+         compileClasspath = files(
+@@ -394,10 +393,16 @@ sourceSets {
+             ]
+             exclude '**/*.ump', '**/.git*'
+         }
+-        java.outputDir = file(rootProject.ext.testClassfileOutputDir)
+     }
+ }
+ 
++tasks.named("compileJava") {
++    destinationDirectory.set(file(rootProject.ext.classfileOutputDir))
++}
++
++tasks.named("compileTestJava") {
++    destinationDirectory.set(file(rootProject.ext.testClassfileOutputDir))
++}
+ 
+ // ===============
+ //  Jar packaging
+@@ -2011,7 +2016,7 @@ task executeDocJar (type: JavaExec){
+     def drop = fileTree ("${rootProject.ext.umpleoscripts}/dropbox") {
+       include '*.js'
+     }
+-   files = files (
++   files = project.files (
+      'umpleonline/scripts/prototype.js',
+      'umpleonline/scripts/dom.js',
+      'umpleonline/scripts/ajax.js', 

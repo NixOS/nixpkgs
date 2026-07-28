@@ -1,0 +1,36 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools_80,
+  pytestCheckHook,
+}:
+
+buildPythonPackage rec {
+  pname = "morfessor";
+  version = "2.0.6";
+  pyproject = true;
+
+  src = fetchPypi {
+    pname = "Morfessor";
+    inherit version;
+    sha256 = "bb3beac234341724c5f640f65803071f62373a50dba854d5a398567f9aefbab2";
+  };
+
+  build-system = [ setuptools_80 ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  enabledTestPaths = [
+    "morfessor/test/*"
+  ];
+
+  pythonImportsCheck = [ "morfessor" ];
+
+  meta = {
+    description = "Tool for unsupervised and semi-supervised morphological segmentation";
+    homepage = "https://github.com/aalto-speech/morfessor";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ misuzu ];
+  };
+}

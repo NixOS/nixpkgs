@@ -1,0 +1,33 @@
+--- a/irc/tests/test_client_aio.py
++++ b/irc/tests/test_client_aio.py
+@@ -1,6 +1,4 @@
+ import asyncio
+-import contextlib
+-import warnings
+ from unittest.mock import MagicMock
+
+ from irc import client_aio
+@@ -13,21 +11,14 @@ async def mock_create_connection(*args, **kwargs):
+     return mock_create_connection
+
+
+-@contextlib.contextmanager
+-def suppress_issue_197():
+-    with warnings.catch_warnings():
+-        warnings.filterwarnings('ignore', 'There is no current event loop')
+-        yield
+-
+-
+ def test_privmsg_sends_msg():
+     # create dummy transport, protocol
+     mock_transport = MagicMock()
+     mock_protocol = MagicMock()
+
+     # connect to dummy server
+-    with suppress_issue_197():
+-        loop = asyncio.get_event_loop()
++    loop = asyncio.new_event_loop()
++    asyncio.set_event_loop(loop)
+     loop.create_connection = make_mocked_create_connection(
+         mock_transport, mock_protocol
+     )

@@ -1,0 +1,31 @@
+diff --git a/manuf/manuf.py b/manuf/manuf.py
+index e5e9193..09e9687 100755
+--- a/manuf/manuf.py
++++ b/manuf/manuf.py
+@@ -65,8 +65,14 @@ class MacParser(object):
+     WFA_URL = "https://gitlab.com/wireshark/wireshark/raw/master/wka"
+ 
+     def  __init__(self, manuf_name=None, update=False):
+-        self._manuf_name = manuf_name or self.get_packaged_manuf_file_path()
+-        if update:
++        if manuf_name is not None:
++            self._manuf_name = manuf_name
++            self.external_db = True
++        else:
++            self._manuf_name = self.get_packaged_manuf_file_path()
++            self.external_db = False
++
++        if update and self.external_db:
+             self.update()
+         else:
+             self.refresh()
+@@ -134,6 +140,9 @@ class MacParser(object):
+             URLError: If the download fails
+ 
+         """
++        if manuf_url is None and not self.external_db:
++            return
++
+         if not manuf_url:
+             manuf_url = self.MANUF_URL
+         if not manuf_name:

@@ -1,0 +1,35 @@
+diff --git a/fuse-ext2/Makefile.am b/fuse-ext2/Makefile.am
+index 9d3a065..0bb4341 100644
+--- a/fuse-ext2/Makefile.am
++++ b/fuse-ext2/Makefile.am
+@@ -17,8 +17,7 @@ fuse_ext2_probe_SOURCES = \
+ 
+ fuse_ext2_probe_CFLAGS = \
+ 	-Wall \
+-	-DHAVE_CONFIG_H \
+-	-I/usr/local/include
++	-DHAVE_CONFIG_H
+ 
+ fuse_ext2_SOURCES =	\
+ 	fuse-ext2.h \
+@@ -98,9 +97,7 @@ umfuseext2_la_CFLAGS = \
+ 	-Wall \
+ 	-DHAVE_CONFIG_H \
+ 	-D_GNU_SOURCE \
+-	$(DEVELFLAGS) \
+-	-I$(includedir)/umview \
+-	-I/usr/local/include
++	$(DEVELFLAGS)
+ 
+ umfuseext2_la_LDFLAGS = \
+ 	-module \
+@@ -110,8 +107,7 @@ umfuseext2_la_LDFLAGS = \
+ 
+ fuse_ext2_CFLAGS = \
+ 	-Wall \
+-	-DHAVE_CONFIG_H \
+-	-I/usr/local/include
++	-DHAVE_CONFIG_H
+ 
+ if DARWIN
+ bin_PROGRAMS += \

@@ -1,0 +1,35 @@
+diff --git a/cmake/FindPyQt6.cmake b/cmake/FindPyQt6.cmake
+index a938417a03f..b3a2d3cf091 100644
+--- a/cmake/FindPyQt6.cmake
++++ b/cmake/FindPyQt6.cmake
+@@ -25,7 +25,7 @@ ELSE(EXISTS PYQT6_VERSION_STR)
+   IF(SIP_BUILD_EXECUTABLE)
+     # SIP >= 5.0 path
+
+-    FILE(GLOB _pyqt6_metadata "${Python_SITEARCH}/PyQt6-*.dist-info/METADATA")
++    FILE(GLOB _pyqt6_metadata "@pyQt6PackageDir@/PyQt6-*.dist-info/METADATA")
+     IF(_pyqt6_metadata)
+       FILE(READ ${_pyqt6_metadata} _pyqt6_metadata_contents)
+       STRING(REGEX REPLACE ".*\nVersion: ([^\n]+).*$" "\\1" PYQT6_VERSION_STR ${_pyqt6_metadata_contents})
+
+diff --git a/cmake/FindQsci.cmake b/cmake/FindQsci.cmake
+index f6a06ebd5b4..ca502d60fbd 100644
+--- a/cmake/FindQsci.cmake
++++ b/cmake/FindQsci.cmake
+@@ -24,7 +24,7 @@ ELSE(QSCI_MOD_VERSION_STR)
+   IF(SIP_BUILD_EXECUTABLE)
+     # SIP >= 5.0 path
+
+-    FILE(GLOB _qsci_metadata "${Python_SITEARCH}/QScintilla*.dist-info/METADATA")
++    FILE(GLOB _qsci_metadata "@qsciPackageDir@/QScintilla*.dist-info/METADATA")
+     IF(_qsci_metadata)
+       FILE(READ ${_qsci_metadata} _qsci_metadata_contents)
+       STRING(REGEX REPLACE ".*\nVersion: ([^\n]+).*$" "\\1" QSCI_MOD_VERSION_STR ${_qsci_metadata_contents})
+@@ -33,7 +33,7 @@ ELSE(QSCI_MOD_VERSION_STR)
+     ENDIF(_qsci_metadata)
+
+     IF(QSCI_MOD_VERSION_STR)
+-      SET(QSCI_SIP_DIR "${PYQT_SIP_DIR}")
++      SET(QSCI_SIP_DIR "@qsciPackageDir@/PyQt6/bindings")
+       SET(QSCI_FOUND TRUE)
+     ENDIF(QSCI_MOD_VERSION_STR)

@@ -1,0 +1,260 @@
+diff --git a/tests.json b/tests.json
+index 891271c..c8606b0 100644
+--- a/tests.json
++++ b/tests.json
+@@ -473,12 +473,27 @@
+                 "https://example.com/#%2e%61%13%Fa"
+             ]
+         },
++        "excludes": ["uppercase-hex"],
+         "expected": {
+             "stdout": "https://example.com/#.a%13%fa\n",
+             "stderr": "",
+             "returncode": 0
+         }
+     },
++    {
++        "input": {
++            "arguments": [
++                "--url",
++                "https://example.com/#%2e%61%13%Fa"
++            ]
++        },
++        "required": ["uppercase-hex"],
++        "expected": {
++            "stdout": "https://example.com/#.a%13%FA\n",
++            "stderr": "",
++            "returncode": 0
++        }
++    },
+     {
+         "input": {
+             "arguments": [
+@@ -749,12 +764,29 @@
+                 "query=user=me"
+             ]
+         },
++        "excludes": ["uppercase-hex"],
+         "expected": {
+             "stdout": "https://curl.se/hello?user%3dme\n",
+             "stderr": "",
+             "returncode": 0
+         }
+     },
++    {
++        "input": {
++            "arguments": [
++                "--url",
++                "https://curl.se/hello",
++                "--set",
++                "query=user=me"
++            ]
++        },
++        "required": ["uppercase-hex"],
++        "expected": {
++            "stdout": "https://curl.se/hello?user%3Dme\n",
++            "stderr": "",
++            "returncode": 0
++        }
++    },
+     {
+         "input": {
+             "arguments": [
+@@ -2132,12 +2164,33 @@
+                 "query:=a&b&a%26b"
+             ]
+         },
++        "excludes": ["uppercase-hex"],
+         "expected": {
+             "stdout": "http://localhost/ABC%5c%5c?a&b&a%26b\n",
+             "returncode": 0,
+             "stderr": ""
+         }
+     },
++    {
++        "input": {
++            "arguments": [
++                "-s",
++                "scheme:=http",
++                "-s",
++                "host:=localhost",
++                "-s",
++                "path:=/ABC%5C%5C",
++                "-s",
++                "query:=a&b&a%26b"
++            ]
++        },
++        "required": ["uppercase-hex"],
++        "expected": {
++            "stdout": "http://localhost/ABC%5C%5C?a&b&a%26b\n",
++            "returncode": 0,
++            "stderr": ""
++        }
++    },
+     {
+         "input": {
+             "arguments": [
+@@ -2811,12 +2864,26 @@
+                 "https://example.com/one/t%61o/%2F%42/"
+             ]
+         },
++        "excludes": ["uppercase-hex"],
+         "expected": {
+             "stdout": "https://example.com/one/tao/%2fB/\n",
+             "stderr": "",
+             "returncode": 0
+         }
+     },
++    {
++        "input": {
++            "arguments": [
++                "https://example.com/one/t%61o/%2F%42/"
++            ]
++        },
++        "required": ["uppercase-hex"],
++        "expected": {
++            "stdout": "https://example.com/one/tao/%2FB/\n",
++            "stderr": "",
++            "returncode": 0
++        }
++    },
+     {
+         "input": {
+             "arguments": [
+@@ -2825,12 +2892,28 @@
+                 "path=%61"
+             ]
+         },
++        "excludes": ["uppercase-hex"],
+         "expected": {
+             "stdout": "https://example.com/one/tao/%2fB/%2561\n",
+             "stderr": "",
+             "returncode": 0
+         }
+     },
++    {
++        "input": {
++            "arguments": [
++                "https://example.com/one/t%61o/%2F%42/",
++                "--append",
++                "path=%61"
++            ]
++        },
++        "required": ["uppercase-hex"],
++        "expected": {
++            "stdout": "https://example.com/one/tao/%2FB/%2561\n",
++            "stderr": "",
++            "returncode": 0
++        }
++    },
+     {
+         "input": {
+             "arguments": [
+@@ -2991,36 +3074,78 @@
+                 "http://example.com/?a=%5D"
+             ]
+         },
++        "excludes": ["uppercase-hex"],
+         "expected": {
+             "stdout": "http://example.com/?a=%5d\n",
+             "stderr": "",
+             "returncode": 0
+         }
+     },
++    {
++        "input": {
++            "arguments": [
++                "http://example.com/?a=%5D"
++            ]
++        },
++        "required": ["uppercase-hex"],
++        "expected": {
++            "stdout": "http://example.com/?a=%5D\n",
++            "stderr": "",
++            "returncode": 0
++        }
++    },
+     {
+         "input": {
+             "arguments": [
+                 "http://example.com/?a=%5D&b=%5D"
+             ]
+         },
++        "excludes": ["uppercase-hex"],
+         "expected": {
+             "stdout": "http://example.com/?a=%5d&b=%5d\n",
+             "stderr": "",
+             "returncode": 0
+         }
+     },
++    {
++        "input": {
++            "arguments": [
++                "http://example.com/?a=%5D&b=%5D"
++            ]
++        },
++        "required": ["uppercase-hex"],
++        "expected": {
++            "stdout": "http://example.com/?a=%5D&b=%5D\n",
++            "stderr": "",
++            "returncode": 0
++        }
++    },
+     {
+         "input": {
+             "arguments": [
+                 "sftp://us%65r:pwd;giraffe@odd"
+             ]
+         },
++        "excludes": ["uppercase-hex"],
+         "expected": {
+             "stdout": "sftp://user:pwd%3bgiraffe@odd/\n",
+             "stderr": "",
+             "returncode": 0
+         }
+     },
++    {
++        "input": {
++            "arguments": [
++                "sftp://us%65r:pwd;giraffe@odd"
++            ]
++        },
++        "required": ["uppercase-hex"],
++        "expected": {
++            "stdout": "sftp://user:pwd%3Bgiraffe@odd/\n",
++            "stderr": "",
++            "returncode": 0
++        }
++    },
+     {
+         "input": {
+             "arguments": [
+@@ -3055,12 +3180,28 @@
+                 "[:password]"
+             ]
+         },
++        "excludes": ["uppercase-hex"],
+         "expected": {
+             "stdout": "pwd%3bgiraffe\n",
+             "stderr": "",
+             "returncode": 0
+         }
+     },
++    {
++        "input": {
++            "arguments": [
++                "sftp://us%65r:pwd;giraffe@odd",
++                "--get",
++                "[:password]"
++            ]
++        },
++        "required": ["uppercase-hex"],
++        "expected": {
++            "stdout": "pwd%3Bgiraffe\n",
++            "stderr": "",
++            "returncode": 0
++        }
++    },
+     {
+         "input": {
+             "arguments": [

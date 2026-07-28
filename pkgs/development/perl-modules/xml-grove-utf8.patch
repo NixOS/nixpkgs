@@ -1,0 +1,10 @@
+--- XML-Grove-0.46alpha/t/grove.t	2008-07-22 14:47:27.000000000 +0200
++++ XML-Grove-0.46alpha/t/grove.t	2008-07-22 14:46:42.000000000 +0200
+@@ -13,6 +13,7 @@ use XML::Parser::PerlSAX;
+ use XML::Grove::Builder;
+ use XML::Grove::AsString;
+ use XML::Grove::AsCanonXML;
++use utf8;
+ 
+ $loaded = 1;
+ print "ok 1\n";
