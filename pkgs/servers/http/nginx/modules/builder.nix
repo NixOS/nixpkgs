@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  nix-update-script,
 }:
 
 # This builder provides a thin facade that wraps the fod into a derivation
@@ -25,6 +26,13 @@ lib.extendMkDerivation {
         "$out"
       runHook postInstall
     '';
+
+    passthru = args.passthru or { } // {
+      updateScript =
+        args.passthru.updateScript or (nix-update-script {
+          extraArgs = [ "--version=stable" ];
+        });
+    };
 
     meta = (
       args.meta or { }
