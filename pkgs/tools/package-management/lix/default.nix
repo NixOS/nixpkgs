@@ -29,6 +29,7 @@
   colmena,
   nix-update,
   nix-init,
+  npb,
   nurl,
 
   storeDir ? "/nix/store",
@@ -162,6 +163,11 @@ let
           nix-init = nix-init.override {
             nix = self.lix;
             inherit (self) nurl;
+          };
+
+          npb = npb.override {
+            nix = self.lix;
+            inherit (self) nix-eval-jobs;
           };
 
           nurl = nurl.override {
