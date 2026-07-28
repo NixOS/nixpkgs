@@ -1104,6 +1104,7 @@ mapAliases {
   itktcl = throw "'itktcl' has been renamed to/replaced by 'tclPackages.itktcl'"; # Converted to throw 2025-10-27
   itm-tools = throw "'itm-tools' has been removed because it was deprecated and archived upstream."; # Added 2026-01-15
   itpp = throw "itpp has been removed, as it was broken"; # Added 2025-08-25
+  ivette = warnAlias "'ivette' has been renamed to 'frama-c-gui'" frama-c-gui; # Added 2026-07-28
   jack_rack = throw "'jack_rack' has been removed due to lack of maintenance upstream."; # Added 2025-06-10
   jami-client = throw "'jami-client' has been renamed to/replaced by 'jami'"; # Converted to throw 2025-10-27
   jami-client-qt = throw "'jami-client-qt' has been renamed to/replaced by 'jami-client'"; # Converted to throw 2025-10-27
