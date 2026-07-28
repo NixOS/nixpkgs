@@ -20,6 +20,12 @@ buildPythonPackage rec {
     hash = "sha256-XH3Y2kbsJFR202F8bmcd3IWpgHS36W+ylDObtBFNFFg=";
   };
 
+  # https://github.com/anthonyharrison/lib4vex/pull/7
+  postPatch = ''
+    substituteInPlace lib4vex/version.py \
+      --replace-fail '"0.2.2"' '"0.2.3"'
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [
