@@ -71,8 +71,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     zstd
   ];
 
-  # uses zlib-ng but can't dynamically link yet
-  # https://github.com/rust-lang/libz-sys/issues/158
   nativeBuildInputs = [
     rustPlatform.bindgenHook
     # for tomlq to adjust Cargo.toml
@@ -97,9 +95,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Disable the default feature `upgrade` (which controls the self-update subcommand and update checks)
   buildNoDefaultFeatures = true;
-  buildFeatures = [
-    "__vendored_zlib_ng"
-  ];
 
   # work around "error: unknown warning group '-Wunused-but-set-parameter'"
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unknown-warning-option";
