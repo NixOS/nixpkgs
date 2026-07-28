@@ -26,7 +26,7 @@ in
     };
 
     package = lib.mkPackageOption pkgs.python3Packages "nominatim-api" { };
-    cliPackage = lib.mkPackageOption pkgs "nominatim" { };
+    cli.package = lib.mkPackageOption pkgs "nominatim" { };
 
     hostName = lib.mkOption {
       type = lib.types.str;
@@ -265,7 +265,7 @@ in
     in
     lib.mkIf cfg.enable {
       # CLI package
-      environment.systemPackages = [ cfg.cliPackage ];
+      environment.systemPackages = [ cfg.cli.package ];
 
       # Database
       users.users.${cfg.database.superUser} = lib.mkIf localDb {
@@ -304,7 +304,7 @@ in
           db_exists=$(${pkgs.postgresql}/bin/psql --dbname postgres -tAc "$sql")
 
           if [ "$db_exists" == "0" ]; then
-            ${lib.getExe cfg.cliPackage} import --prepare-database
+            ${lib.getExe cfg.cli.package} import --prepare-database
           else
             echo "Database ${cfg.database.dbname} already exists. Skipping ..."
           fi
@@ -435,7 +435,7 @@ in
             ) 9>"$STATE_DIRECTORY/update-lock"
           '';
         path = [
-          cfg.cliPackage
+          cfg.cli.package
           pkgs.curl
           config.services.postgresql.package
           pkgs.flock
@@ -472,7 +472,7 @@ in
           ) 9>"$STATE_DIRECTORY/update-lock"
         '';
         path = [
-          cfg.cliPackage
+          cfg.cli.package
           pkgs.curl
           config.services.postgresql.package
           pkgs.flock
