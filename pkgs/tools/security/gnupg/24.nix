@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   version = "2.4.9";
 
   src = fetchurl {
-    url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
+    url = "mirror://gnupg/gnupg/gnupg-${version}.tar.bz2";
     hash = "sha256-3RerLpoE/XnTnYU/WZy8hSBi3bmrUqTd60F2/YswKWQ=";
   };
 
@@ -206,7 +206,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://gnupg.org";
-    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=${pname}.git;a=blob;f=NEWS;hb=refs/tags/${pname}-${version}";
+    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gnupg.git;a=blob;f=NEWS;hb=refs/tags/gnupg-${version}";
     description = "Modern release of the GNU Privacy Guard, a GPL OpenPGP implementation";
     license = lib.licenses.gpl3Plus;
     longDescription = ''
