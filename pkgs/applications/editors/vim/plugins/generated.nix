@@ -11527,12 +11527,12 @@ final: prev: {
 
   neotest-java = buildVimPlugin {
     pname = "neotest-java";
-    version = "0.38.0";
+    version = "0.38.1";
     src = fetchFromGitHub {
       owner = "rcasia";
       repo = "neotest-java";
-      tag = "v0.38.0";
-      hash = "sha256-R24mbFbYTH166gq8EZOuLDZ7dA2Yhjmrc77K2os5jtE=";
+      tag = "v0.38.1";
+      hash = "sha256-3fJyHajINLocJRlUOR5vQSex4wMIzkH4pfbRhe7YFpc=";
     };
     meta.homepage = "https://github.com/rcasia/neotest-java/";
     meta.license = getLicenseFromSpdxId "MIT";
