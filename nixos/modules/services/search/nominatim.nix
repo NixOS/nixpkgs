@@ -380,8 +380,8 @@ in
               }:
               lib.optionalString enable ''
                 cd "$STATE_DIRECTORY"
-                mkdir -p "${mapName}"
-                cd "${mapName}"
+                mkdir -p "import-map-data/${mapName}"
+                cd "import-map-data/${mapName}"
                 export NOMINATIM_REPLICATION_URL="${replicationUrl}"
 
                 if [[ ! -f ./initial-setup-done ]]; then
@@ -459,9 +459,12 @@ in
 
           (flock -n 9 || ( echo "failed to acquire lock" && exit 1 ) # Don't try to update map data and importance files at the same time
 
+            mkdir -p "$STATE_DIRECTORY/import-importance-data"
+            cd "$STATE_DIRECTORY/import-importance-data"
+
             echo ">>> downloading wikimedia importance files"
-            curl --silent -L -A "Wget/1.21.2" ${cfg.importanceData.url} -o "$STATE_DIRECTORY/wikimedia-importance.sql.gz"
-            curl --silent -L -A "Wget/1.21.2" ${cfg.importanceData.secondaryUrl} -o "$STATE_DIRECTORY/secondary_importance.sql.gz"
+            curl --silent -L -A "Wget/1.21.2" ${cfg.importanceData.url} -o "wikimedia-importance.sql.gz"
+            curl --silent -L -A "Wget/1.21.2" ${cfg.importanceData.secondaryUrl} -o "secondary_importance.sql.gz"
 
             echo ">>> Refresh data"
             nominatim refresh --wiki-data --secondary-importance --importance --project-dir "$STATE_DIRECTORY"
