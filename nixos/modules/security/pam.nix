@@ -606,6 +606,18 @@ let
             description = "Whether to update {file}`/var/log/wtmp`.";
           };
 
+          require = lib.mkOption {
+            default = false;
+            example = true;
+            type = lib.types.bool;
+            description = ''
+              Whether to require login auditing. By default this is false,
+              because a full disk or other scenario in which writing to the
+              database fails will cause the system to deny all logins. If this
+              behaviour is instead desired, set this option to true.
+            '';
+          };
+
           silent = lib.mkOption {
             default = true;
             example = false;
@@ -1560,7 +1572,7 @@ let
               {
                 name = "lastlog";
                 enable = cfg.lastlog.enable;
-                control = "required";
+                control = if cfg.lastlog.require then "required" else "optional";
                 modulePath = "${pkgs.util-linux.lastlog}/lib/security/pam_lastlog2.so";
                 settings = {
                   inherit (cfg.lastlog) silent;
