@@ -9,6 +9,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "courier-prime";
   version = "0-unstable-2019-11-20";
 
+  __structuredAttrs = true;
+  strictDeps = true;
   src = fetchFromGitHub {
     owner = "quotunquoteapps";
     repo = "CourierPrime";
