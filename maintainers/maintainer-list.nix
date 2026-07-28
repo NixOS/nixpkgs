@@ -14777,6 +14777,11 @@
     githubId = 12160;
     name = "Kirill Radzikhovskyy";
   };
+  kiryuulight = {
+    github = "KiryuuLight";
+    githubId = 70501251;
+    name = "Luis Ortiz";
+  };
   kiskae = {
     github = "Kiskae";
     githubId = 546681;
