@@ -175049,55 +175049,6 @@ self: {
     }
   ) { };
 
-  crypton-x509-store_1_6_11 = callPackage (
-    {
-      mkDerivation,
-      asn1-encoding,
-      asn1-types,
-      base,
-      bytestring,
-      containers,
-      crypton,
-      crypton-x509,
-      directory,
-      filepath,
-      mtl,
-      pem,
-      tasty,
-      tasty-hunit,
-    }:
-    mkDerivation {
-      pname = "crypton-x509-store";
-      version = "1.6.11";
-      sha256 = "07vq7f883cm5krqz2kc0qkh9ks54jknrwdqvfqsk91s12b693a83";
-      revision = "1";
-      editedCabalFile = "02cjsx9pijk2wlhk2i977dr1ak647yywl71fcw1b6j54k1swafm6";
-      libraryHaskellDepends = [
-        asn1-encoding
-        asn1-types
-        base
-        bytestring
-        containers
-        crypton
-        crypton-x509
-        directory
-        filepath
-        mtl
-        pem
-      ];
-      testHaskellDepends = [
-        base
-        bytestring
-        crypton-x509
-        tasty
-        tasty-hunit
-      ];
-      description = "X.509 collection accessing and storing methods";
-      license = lib.licenses.bsd3;
-      hydraPlatforms = lib.platforms.none;
-    }
-  ) { };
-
   crypton-x509-store = callPackage (
     {
       mkDerivation,
