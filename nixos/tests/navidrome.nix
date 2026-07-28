@@ -1,15 +1,21 @@
-{ pkgs, ... }:
+{ ... }:
 {
   name = "navidrome";
 
   nodes.machine =
-    { ... }:
+    { pkgs, ... }:
     {
       services.navidrome = {
         enable = true;
-        plugins = with pkgs.navidromePlugins; [
+        plugins = with pkgs.pkgsCross.wasi32.navidromePlugins; [
           listenbrainz-daily-playlist
+          # uses bundleName instead of pname
+          apple-music
         ];
+        settings = {
+          # Disables all external network connections
+          EnableExternalServices = "false";
+        };
       };
     };
 
