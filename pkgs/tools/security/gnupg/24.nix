@@ -35,7 +35,7 @@
 assert guiSupport -> !enableMinimal;
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "gnupg";
+  pname = "gnupg" + lib.optionalString enableMinimal "-minimal";
   version = "2.4.9";
 
   src = fetchurl {
