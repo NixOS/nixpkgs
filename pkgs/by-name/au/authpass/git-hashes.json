@@ -1,0 +1,9 @@
+{
+  "argon2_ffi": "sha256-yxD6r8kdXxsXzmkKfK/whcuuRJ95bPSMTm/Igtaf0/M=",
+  "flutter_windowmanager": "sha256-DRkZxE0NGvkuBkBrfhoHydeEG7pmTN1PKikNGhA/Slo=",
+  "oauth2": "sha256-2iSmWdX9ch4VFrxgpo88fzwdekMM+z9jl5gxKqnR0SE=",
+  "otpauth_migration": "sha256-YjTpSelFimoC4PnIAsNHtwJcZmhXs8dccpE44e4kBbE=",
+  "tinycolor": "sha256-UodpbvMMvMUJ32MSBwFf+h0ttQRao7P2FqTzFJ0NEKo=",
+  "window_manager": "sha256-j2MX1eG1v6J1cmjU5+yXmylb1G7BdT12cu01GYdZnTs=",
+  "winsparkle_flutter": "sha256-GPh830+7aZMNxQz/WjwvA/OiHQTMbZvuFXfhW/AOD+M="
+}
