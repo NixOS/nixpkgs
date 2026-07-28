@@ -1,19 +1,7 @@
 {
   "version": "3.44.4",
   "engineVersion": "a10d8ac38de835021c8d2f920dbf50a920ccc030",
-  "engineSwiftShaderHash": "sha256-qbtCl2nTpmtp9dnaoXc7rF3RqLnAZEmzw1BzPoCRWrc=",
-  "engineSwiftShaderRev": "794b0cfce1d828d187637e6d932bae484fbe0976",
   "channel": "stable",
-  "engineHashes": {
-    "aarch64-linux": {
-      "aarch64-linux": "sha256-R9xvuvdeoHLX4K52S7lAQW8iA7DIuIMjjntk1RcMVR8=",
-      "x86_64-linux": "sha256-R9xvuvdeoHLX4K52S7lAQW8iA7DIuIMjjntk1RcMVR8="
-    },
-    "x86_64-linux": {
-      "aarch64-linux": "sha256-zEbGTWZbsRG91YgHsyDU3wbXCLM0nk5TdbOAyjq1uMM=",
-      "x86_64-linux": "sha256-zEbGTWZbsRG91YgHsyDU3wbXCLM0nk5TdbOAyjq1uMM="
-    }
-  },
   "dartVersion": "3.12.2",
   "dartHash": {
     "x86_64-linux": "sha256-KOR7RM8HXzZ3EEbAaLsNF0IBz5x2CHRK7RzCMgQpnC0=",

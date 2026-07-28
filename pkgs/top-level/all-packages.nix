@@ -3239,9 +3239,6 @@ with pkgs;
   filecheck = with python3Packages; toPythonApplication filecheck;
 
   flutterPackages-bin = recurseIntoAttrs (callPackage ../development/compilers/flutter { });
-  flutterPackages-source = recurseIntoAttrs (
-    callPackage ../development/compilers/flutter { useNixpkgsEngine = true; }
-  );
   flutterPackages = flutterPackages-bin;
   flutter = flutterPackages.stable;
   flutter344 = flutterPackages.v3_44;

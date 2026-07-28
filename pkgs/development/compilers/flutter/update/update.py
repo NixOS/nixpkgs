@@ -16,9 +16,8 @@ import yaml
 FAKE_HASH = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
 
 NIXPKGS_ROOT = (
-    subprocess.Popen(
-        ["git", "rev-parse", "--show-toplevel"], stdout=subprocess.PIPE, text=True
-    )
+    subprocess
+    .Popen(["git", "rev-parse", "--show-toplevel"], stdout=subprocess.PIPE, text=True)
     .communicate()[0]
     .strip()
 )
@@ -93,35 +92,6 @@ def nix_build_to_fail(code):
     process.wait()
     Path(temp_name).unlink()  # Clean up the temporary file
     return stderr
-
-
-def get_engine_hashes(engine_version, flutter_version):
-    code = load_code(
-        "get-engine-hashes.nix",
-        nixpkgs_root=NIXPKGS_ROOT,
-        flutter_version=flutter_version,
-        engine_version=engine_version,
-    )
-
-    stderr = nix_build_to_fail(code)
-
-    pattern = re.compile(
-        rf"/nix/store/.*-flutter-engine-source-{engine_version}-(.+?-.+?)-(.+?-.+?).drv':\n\s+specified: .*\n\s+got:\s+(.+?)\n"
-    )
-    matches = pattern.findall(stderr)
-    result_dict = {}
-
-    for match in matches:
-        flutter_platform, architecture, got = match
-        result_dict.setdefault(flutter_platform, {})[architecture] = got
-
-    def sort_dict_recursive(d):
-        return {
-            k: sort_dict_recursive(v) if isinstance(v, dict) else v
-            for k, v in sorted(d.items())
-        }
-
-    return sort_dict_recursive(result_dict)
 
 
 def get_artifact_hashes(flutter_compact_version):
@@ -210,37 +180,11 @@ def get_pubspec_lock(flutter_compact_version, flutter_src):
     return yaml.safe_load(pubspec_lock_yaml)
 
 
-def get_engine_swiftshader_rev(engine_version):
-    with urllib.request.urlopen(
-        f"https://github.com/flutter/flutter/raw/{engine_version}/DEPS"
-    ) as f:
-        deps = f.read().decode("utf-8")
-        pattern = re.compile(
-            r"Var\('swiftshader_git'\) \+ '\/SwiftShader\.git' \+ '@' \+ \'([0-9a-fA-F]{40})\'\,"
-        )
-        return pattern.findall(deps)[0]
-
-
-def get_engine_swiftshader_hash(engine_swiftshader_rev):
-    code = load_code(
-        "get-engine-swiftshader.nix",
-        engine_swiftshader_rev=engine_swiftshader_rev,
-        hash="",
-    )
-
-    stderr = nix_build_to_fail(code)
-    pattern = re.compile(r"got:\s+(.+?)\n")
-    return pattern.findall(stderr)[0]
-
-
 def write_data(
     nixpkgs_flutter_version_directory,
     flutter_version,
     channel,
     engine_hash,
-    engine_hashes,
-    engine_swiftshader_hash,
-    engine_swiftshader_rev,
     dart_version,
     dart_hash,
     flutter_hash,
@@ -255,10 +199,7 @@ def write_data(
                 {
                     "version": flutter_version,
                     "engineVersion": engine_hash,
-                    "engineSwiftShaderHash": engine_swiftshader_hash,
-                    "engineSwiftShaderRev": engine_swiftshader_rev,
                     "channel": channel,
-                    "engineHashes": engine_hashes,
                     "dartVersion": dart_version,
                     "dartHash": dart_hash,
                     "flutterHash": flutter_hash,
@@ -282,9 +223,6 @@ def update_all_packages():
 
     new_content = [
         "flutterPackages-bin = recurseIntoAttrs (callPackage ../development/compilers/flutter { });",
-        "flutterPackages-source = recurseIntoAttrs (",
-        "  callPackage ../development/compilers/flutter { useNixpkgsEngine = true; }",
-        ");",
         "flutterPackages = flutterPackages-bin;",
         "flutter = flutterPackages.stable;",
     ] + [
@@ -319,11 +257,10 @@ def update_all_packages():
         file.write("".join(lines))
 
 
-# Finds Flutter version, Dart version, and Engine hash.
+# Finds Flutter version, and Dart version.
 # If the Flutter version is given, it uses that. Otherwise finds the
 # latest stable Flutter version.
 def find_versions(flutter_version=None, channel=None):
-    engine_hash = None
     dart_version = None
 
     releases = json.load(
@@ -345,7 +282,8 @@ def find_versions(flutter_version=None, channel=None):
         flutter_version = release["version"]
 
     tags = (
-        subprocess.Popen(
+        subprocess
+        .Popen(
             ["git", "ls-remote", "--tags", "https://github.com/flutter/flutter.git"],
             stdout=subprocess.PIPE,
             text=True,
@@ -353,29 +291,6 @@ def find_versions(flutter_version=None, channel=None):
         .communicate()[0]
         .strip()
     )
-
-    try:
-        flutter_hash = (
-            next(
-                filter(
-                    lambda line: line.endswith(f"refs/tags/{flutter_version}"),
-                    tags.splitlines(),
-                )
-            )
-            .split("refs")[0]
-            .strip()
-        )
-
-        engine_hash = (
-            urllib.request.urlopen(
-                f"https://github.com/flutter/flutter/raw/{flutter_hash}/bin/internal/engine.version"
-            )
-            .read()
-            .decode("utf-8")
-            .strip()
-        )
-    except StopIteration:
-        sys.exit(f"Couldn't find Engine hash for Flutter version: {flutter_version}")
 
     try:
         dart_version = next(
@@ -390,7 +305,7 @@ def find_versions(flutter_version=None, channel=None):
     except StopIteration:
         sys.exit(f"Couldn't find Dart version for Flutter version: {flutter_version}")
 
-    return (flutter_version, engine_hash, dart_version, channel)
+    return (flutter_version, dart_version, channel)
 
 
 def main():
@@ -402,9 +317,7 @@ def main():
     )
     args = parser.parse_args()
 
-    (flutter_version, engine_hash, dart_version, channel) = find_versions(
-        args.version, args.channel
-    )
+    (flutter_version, dart_version, channel) = find_versions(args.version, args.channel)
 
     flutter_compact_version = "_".join(flutter_version.split(".")[:2])
 
@@ -418,7 +331,6 @@ def main():
     print(
         f"Flutter version: {flutter_version} ({flutter_compact_version}) on ({channel})"
     )
-    print(f"Engine hash: {engine_hash}")
     print(f"Dart version: {dart_version}")
 
     dart_hash = get_dart_hashes(dart_version, channel)
@@ -437,7 +349,6 @@ def main():
         "flutter_version": flutter_version,
         "channel": channel,
         "dart_version": dart_version,
-        "engine_hash": engine_hash,
         "flutter_hash": flutter_hash,
         "dart_hash": dart_hash,
     }
@@ -445,9 +356,6 @@ def main():
     write_data(
         pubspec_lock={},
         artifact_hashes={},
-        engine_hashes={},
-        engine_swiftshader_hash=FAKE_HASH,
-        engine_swiftshader_rev="0",
         **common_data_args,
     )
 
@@ -456,9 +364,6 @@ def main():
     write_data(
         pubspec_lock=pubspec_lock,
         artifact_hashes={},
-        engine_hashes={},
-        engine_swiftshader_hash=FAKE_HASH,
-        engine_swiftshader_rev="0",
         **common_data_args,
     )
 
@@ -467,32 +372,18 @@ def main():
     write_data(
         pubspec_lock=pubspec_lock,
         artifact_hashes=artifact_hashes,
-        engine_hashes={},
-        engine_swiftshader_hash=FAKE_HASH,
-        engine_swiftshader_rev="0",
         **common_data_args,
     )
-
-    engine_hashes = get_engine_hashes(engine_hash, flutter_version)
 
     write_data(
         pubspec_lock=pubspec_lock,
         artifact_hashes=artifact_hashes,
-        engine_hashes=engine_hashes,
-        engine_swiftshader_hash=FAKE_HASH,
-        engine_swiftshader_rev="0",
         **common_data_args,
     )
-
-    engine_swiftshader_rev = get_engine_swiftshader_rev(engine_hash)
-    engine_swiftshader_hash = get_engine_swiftshader_hash(engine_swiftshader_rev)
 
     write_data(
         pubspec_lock=pubspec_lock,
         artifact_hashes=artifact_hashes,
-        engine_hashes=engine_hashes,
-        engine_swiftshader_hash=engine_swiftshader_hash,
-        engine_swiftshader_rev=engine_swiftshader_rev,
         **common_data_args,
     )
 
