@@ -8,6 +8,7 @@
   gnu-efi,
   python3,
   python3Packages,
+  fwupd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -52,10 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    homepage = "https://fwupd.org/";
-    maintainers = [ ];
+    inherit (fwupd.meta)
+      homepage
+      maintainers
+      license
+      platforms
+      ;
     teams = [ lib.teams.boot-security ];
-    license = lib.licenses.lgpl21Plus;
-    platforms = lib.platforms.linux;
   };
 })
