@@ -17,7 +17,7 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "arc_unpacker";
+  pname = "arc-unpacker";
   version = "0.11-unstable-2021-09-06";
 
   strictDeps = true;
