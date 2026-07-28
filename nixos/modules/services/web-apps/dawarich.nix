@@ -131,15 +131,7 @@ let
 
   defaultSecretKeyBaseFile = "${dataDir}/secrets/secret-key-base";
   needsGenCredentialsUnit = cfg.secretKeyBaseFile == null;
-  credentials = {
-    SECRET_KEY_BASE = lib.defaultTo defaultSecretKeyBaseFile cfg.secretKeyBaseFile;
-  }
-  // lib.optionalAttrs (cfg.database.passwordFile != null) {
-    DATABASE_PASSWORD = cfg.database.passwordFile;
-  }
-  // lib.optionalAttrs (cfg.smtp.passwordFile != null) {
-    SMTP_PASSWORD = cfg.smtp.passwordFile;
-  };
+  credentials = cfg.environmentSecrets;
   loadCredentialsIntoEnv = lib.concatMapAttrsStringSep "\n" (
     name: _: ''export ${name}="$(systemd-creds cat ${name})"''
   ) credentials;
@@ -497,6 +489,17 @@ in
         '';
       };
 
+      environmentSecrets = lib.mkOption {
+        type = with lib.types; attrsOf path;
+        default = { };
+        description = ''
+          Extra environment variables to pass to all dawarich services, loaded from the given file via systemd credentials.
+        '';
+        example = {
+          OIDC_CLIENT_SECRET = "/run/keys/dawarich-oidc-client-secret";
+        };
+      };
+
       extraEnvFiles = lib.mkOption {
         type = with lib.types; listOf path;
         default = [ ];
@@ -525,6 +528,18 @@ in
             '';
           }
         ];
+
+        services.dawarich = {
+          environmentSecrets = {
+            SECRET_KEY_BASE = lib.defaultTo defaultSecretKeyBaseFile cfg.secretKeyBaseFile;
+          }
+          // lib.optionalAttrs (cfg.database.passwordFile != null) {
+            DATABASE_PASSWORD = cfg.database.passwordFile;
+          }
+          // lib.optionalAttrs (cfg.smtp.passwordFile != null) {
+            SMTP_PASSWORD = cfg.smtp.passwordFile;
+          };
+        };
 
         environment.systemPackages = [
           dawarichConsole
