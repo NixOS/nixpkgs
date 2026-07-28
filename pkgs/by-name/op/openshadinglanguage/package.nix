@@ -31,6 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-edtYKN2obQexQtclrIUflm3upc14MhHQ7eLvit5Hqq0=";
   };
 
+  patches = [ ./libclang-no-shared.patch ];
+
   cmakeFlags = [
     (lib.cmakeBool "LLVM_STATIC" true)
     (lib.cmakeBool "USE_QT" false)
