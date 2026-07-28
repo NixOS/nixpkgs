@@ -18,10 +18,10 @@ let
     getExe
     hasAttr
     hasPrefix
+    head
     listToAttrs
     mapAttrs'
     match
-    optionalAttrs
     optionalString
     readFile
     removePrefix
@@ -44,10 +44,11 @@ let
       null
     else
       {
-        url = elemAt parts 0;
+        url = head parts;
         sha = elemAt parts 4;
-      }
-      // optionalAttrs (type != null) { inherit type value; };
+        ${if type == null then null else "type"} = type;
+        ${if type == null then null else "value"} = value;
+      };
 
   nameGitSha =
     pkg:
