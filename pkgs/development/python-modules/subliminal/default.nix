@@ -55,7 +55,7 @@ buildPythonPackage rec {
     hatch-vcs
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     babelfish
     beautifulsoup4
     chardet
