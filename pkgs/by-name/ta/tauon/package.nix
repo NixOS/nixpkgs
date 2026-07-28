@@ -28,12 +28,12 @@
   withDiscordRPC ? true,
 }:
 let
-  version = "10.0.1";
+  version = "11.1.1";
   src = fetchFromGitHub {
     owner = "Taiko2k";
     repo = "Tauon";
     tag = "v${version}";
-    hash = "sha256-atLyNePy3pc3xJFliy5hITC5R0VU6jfHYqfq8RxqGoM=";
+    hash = "sha256-/E8+c8FX8JnSaYgaXRKE2u6eIWjkL4yGU1WQTluGWjY=";
   };
 
   lrclib-solver = rustPlatform.buildRustPackage {
@@ -126,6 +126,7 @@ python3Packages.buildPythonApplication {
       pygobject3
       pyopengl
       pysdl3
+      rapidfuzz
       requests
       send2trash
       setproctitle
