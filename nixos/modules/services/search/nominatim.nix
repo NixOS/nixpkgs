@@ -389,10 +389,14 @@ in
 
                   echo ">>> ${mapName}: Downloading the initial map (this can take some time)"
                   curl --silent --show-error -L -o map.osm.pbf "${mapUrl}"
+                  trap 'rm -rf map.osm.pbf' EXIT
 
                   echo ">>> ${mapName}: Importing the initial map (this can take a lot of time!)"
                   nominatim import --continue import-from-file --project-dir "$STATE_DIRECTORY" --osm-file map.osm.pbf
+
                   rm map.osm.pbf
+                  trap - EXIT
+
                   nominatim replication --verbose --project-dir "$STATE_DIRECTORY" --init
 
                   touch ./initial-setup-done
@@ -460,6 +464,9 @@ in
           (flock -n 9 || ( echo "failed to acquire lock" && exit 1 ) # Don't try to update map data and importance files at the same time
 
             mkdir -p "$STATE_DIRECTORY/import-importance-data"
+
+            TRAP 'rm -rf $STATE_DIRECTORY/import-importance-data/*' EXIT
+
             cd "$STATE_DIRECTORY/import-importance-data"
 
             echo ">>> downloading wikimedia importance files"
@@ -468,9 +475,6 @@ in
 
             echo ">>> Refresh data"
             nominatim refresh --wiki-data --secondary-importance --importance --project-dir "$STATE_DIRECTORY"
-
-            rm "$STATE_DIRECTORY/wikimedia-importance.sql.gz"
-            rm "$STATE_DIRECTORY/secondary_importance.sql.gz"
 
           ) 9>"$STATE_DIRECTORY/update-lock"
         '';
