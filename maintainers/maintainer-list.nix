@@ -31255,6 +31255,11 @@
     githubId = 33605526;
     name = "Yash Garg";
   };
+  yasunori0418 = {
+    github = "yasunori0418";
+    githubId = 74786563;
+    name = "yasunori0418";
+  };
   yavko = {
     name = "Yavor Kolev";
     email = "yavornkolev@gmail.com";
