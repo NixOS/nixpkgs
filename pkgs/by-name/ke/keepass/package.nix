@@ -14,7 +14,6 @@
   coreutils,
   unixtools,
   glib,
-  gtk2,
   makeDesktopItem,
   plugins ? [ ],
 }:
@@ -60,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   sourceRoot = ".";
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     unzip
@@ -119,8 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
   # buildEnv in the plugin derivation. Wrapper below makes sure it
   # is found and does not pollute output path.
   binPaths = lib.concatStringsSep ":" (map (x: x + "/bin") plugins);
-
-  dynlibPath = lib.makeLibraryPath [ gtk2 ];
 
   installPhase = ''
     runHook preInstall
