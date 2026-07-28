@@ -77,7 +77,7 @@ Return t if the test passes.  Otherwise, return nil."
                  (string-trim (buffer-substring-no-properties (point-min) (point-max)))))
              (funcall-in-non-batch-emacs (function-name)
                (eval-in-non-batch-emacs (format "(%s)" function-name))))
-    ;; Load with-packages in the non-batch Emacs in case needed.
+    ;; Test test-name is defined in with-packages so we load it in the non-batch Emacs.
     (eval-in-non-batch-emacs "(require 'with-packages)")
     (not (string= (format "%s" nil)
                   ;; Run the non-batch test.  Return non-nil, as string, if it passes.
