@@ -47,6 +47,10 @@ buildPythonPackage (finalAttrs: {
       ];
       hash = "sha256-zVVJY4+f8A+GBxiHZL8OzLWUUmX9uY25tUoLCkzEHh8=";
     })
+    # Fixes test errors with beets 2.13. Upstream PR is
+    # https://github.com/gtronset/beets-filetote/pull/351 . It is not merged and not even
+    # commented by upstream, so we vendor it instead.
+    ./beets2.13.patch
   ];
 
   # https://github.com/gtronset/beets-filetote/issues/328
