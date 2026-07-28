@@ -1,7 +1,9 @@
 {
   lib,
+  fetchpatch2,
   bundlerApp,
   bundlerUpdateScript,
+  defaultGemConfig,
 }:
 
 bundlerApp {
@@ -15,6 +17,19 @@ bundlerApp {
     "aurora_mqtt_bridge"
     "web_aid_tool"
   ];
+
+  gemConfig = defaultGemConfig // {
+    ccutrer-serialport = attrs: {
+      dontBuild = false;
+      patches = [
+        (fetchpatch2 {
+          name = "use-numeric-baud-rates.patch";
+          url = "https://github.com/ccutrer/ccutrer-serialport/commit/52f5c1cba94fe9453444baa79dd7c08b2efab8bf.patch?full_index=1";
+          hash = "sha256-KKH/RXhql/3jl3/xheZmQ16Rv1w0/AWV7WfCZQb1Xlk=";
+        })
+      ];
+    };
+  };
 
   passthru.updateScript = bundlerUpdateScript "waterfurnace_aurora";
 
