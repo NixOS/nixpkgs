@@ -18,11 +18,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cider-2";
-  version = "4.0.9.1";
+  version = "4.0.9";
 
   src = fetchurl {
     url = "https://repo.cider.sh/apt/pool/main/cider-v${finalAttrs.version}-linux-x64.deb";
-    hash = "sha256-MsA6lK3PsyOEx938FgJFx8l9oqwoM3FzIK5goF73lTs=";
+    hash = "sha256-JyWEqlG+fLlMu2Bph1571DO50LQyXb1wfTOVio8Jc1U=";
   };
 
   nativeBuildInputs = [
