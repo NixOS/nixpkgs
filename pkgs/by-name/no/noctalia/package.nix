@@ -10,6 +10,7 @@
   pkg-config,
   wayland-scanner,
   makeBinaryWrapper,
+  autoAddDriverRunpath,
 
   # libraries
   cairo,
@@ -79,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     wayland-scanner
     makeBinaryWrapper
+    autoAddDriverRunpath
   ];
 
   buildInputs = [

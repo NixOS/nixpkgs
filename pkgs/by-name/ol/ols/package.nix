@@ -8,20 +8,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ols";
-  version = "dev-2026-05";
+  version = "dev-2026-06";
 
   src = fetchFromGitHub {
     owner = "DanielGavin";
     repo = "ols";
     tag = finalAttrs.version;
-    hash = "sha256-9tQVyauvXGTkKnQUSYKAhjL5ZZbhglqdcxdcs27P2k4=";
+    hash = "sha256-BqLaPVntNzK5N3lffjn4umLhqSM0bOcAVgzk+f13BKM=";
   };
-
-  patches = [
-    # Since Odin removed Haiku support in dev-2026-06 and there is still no update
-    # for ols we're removing the haiku parts so that this builds again
-    ./remove-haiku.patch
-  ];
 
   postPatch = ''
     substituteInPlace build.sh \

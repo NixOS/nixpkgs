@@ -5,12 +5,16 @@
   ...
 }:
 let
-  cfg = config.programs.regreet;
+  cfg = config.services.displayManager.regreet;
   settingsFormat = pkgs.formats.toml { };
   user = config.services.greetd.settings.default_session.user;
 in
 {
-  options.programs.regreet = {
+  imports = [
+    (lib.mkRenamedOptionModule [ "programs" "regreet" ] [ "services" "displayManager" "regreet" ])
+  ];
+
+  options.services.displayManager.regreet = {
     enable = lib.mkEnableOption null // {
       description = ''
         Enable ReGreet, a clean and customizable greeter for greetd.
@@ -144,7 +148,7 @@ in
 
     fonts.packages = [ cfg.font.package ];
 
-    programs.regreet.settings.GTK = {
+    services.displayManager.regreet.settings.GTK = {
       cursor_theme_name = cfg.cursorTheme.name;
       font_name = "${cfg.font.name} ${toString cfg.font.size}";
       icon_theme_name = cfg.iconTheme.name;

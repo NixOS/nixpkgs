@@ -11472,8 +11472,6 @@ self: super: with self; {
 
   napari-nifti = callPackage ../development/python-modules/napari-nifti { };
 
-  napari-npe2 = callPackage ../development/python-modules/napari-npe2 { };
-
   napari-plugin-engine = callPackage ../development/python-modules/napari-plugin-engine { };
 
   napari-svg = callPackage ../development/python-modules/napari-svg { };
@@ -11858,6 +11856,8 @@ self: super: with self; {
   notus-scanner = callPackage ../development/python-modules/notus-scanner { };
 
   nox = callPackage ../development/python-modules/nox { };
+
+  npe2 = callPackage ../development/python-modules/npe2 { };
 
   nplusone = callPackage ../development/python-modules/nplusone { };
 
