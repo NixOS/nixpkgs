@@ -244,6 +244,15 @@
   "module-virtualisation-xen-introduction": [
     "index.html#module-virtualisation-xen-introduction"
   ],
+  "module-pelican-wings": [
+    "index.html#module-pelican-wings"
+  ],
+  "module-pelican-wings-setup": [
+    "index.html#module-pelican-wings-setup"
+  ],
+  "module-pelican-wings-traefik": [
+    "index.html#module-pelican-wings-traefik"
+  ],
   "sec-boot-problems-scripted-stage-1": [
     "index.html#sec-boot-problems-scripted-stage-1"
   ],
