@@ -8,13 +8,13 @@
 buildHomeAssistantComponent (finalAttrs: {
   owner = "geappliances";
   domain = "smarthq";
-  version = "1.2.3";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "geappliances";
     repo = "geappliances-smarthq-integration";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OiEUrYR4J+AUDDQN7BkGZPuBSG5lry7OB0sh7CsShtI=";
+    hash = "sha256-Yu5A4DveMGRabmeMcqXpPU94bmIh/dIp0WIKWfSUWi4=";
   };
 
   dependencies = [
