@@ -11,7 +11,7 @@ from pathlib import Path
 from string import Template
 from subprocess import PIPE, CalledProcessError
 from textwrap import dedent
-from typing import Final, Literal
+from typing import Any, Final, Literal
 
 from . import tmpdir
 from .elevate import NO_ELEVATOR, PRESERVE_ENV, Elevator
@@ -432,11 +432,22 @@ def get_generations(profile: Profile) -> list[Generation]:
     if not profile.path.exists():
         raise NixOSRebuildError(f"no profile '{profile.name}' found")
 
+    def btime_or_ctime(path: Path) -> float:
+        # https://github.com/NixOS/nixpkgs/issues/435555
+        statx: Any = getattr(os, "statx", None)
+        statx_btime: int | None = getattr(os, "STATX_BTIME", None)
+
+        if statx and statx_btime:
+            result = statx(path, mask=statx_btime)
+            return float(result.stx_btime)
+
+        return os.stat(path).st_ctime
+
     def parse_path(path: Path, profile: Profile) -> Generation:
         entry_id = path.name.split("-")[1]
         current = path.name == profile.path.readlink().name
         timestamp = datetime.fromtimestamp(
-            timestamp=path.stat().st_ctime,
+            timestamp=btime_or_ctime(path),
             tz=local_tz,
         ).strftime("%Y-%m-%d %H:%M:%S")
 
