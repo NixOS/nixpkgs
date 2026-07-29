@@ -1,5 +1,6 @@
 {
   stdenvNoLibc,
+  buildPackages,
   fetchFromGitHub,
   lib,
   meson,
@@ -111,6 +112,10 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
     hash = "sha256-djOZKkinsaaYD4tUEA6mKdo+5em0GP1/+rI0mIm7Vs8=";
   };
 
+  depsBuildBuild = lib.optionals canExecute [
+    buildPackages.stdenv.cc
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -187,6 +192,8 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals finalAttrs.finalPackage.doCheck [
     (mesonBool "tests" true)
+    (mesonBool "native-tests" canExecute)
+    (mesonBool "native-math-tests" canExecute)
     # Something is broken with this and I'm not sure what.
     (mesonOption "tests-cdefs" "false")
   ];
