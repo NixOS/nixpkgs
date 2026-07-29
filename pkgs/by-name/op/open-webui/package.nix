@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.9.6";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-0d9GfBQY6YtsUbHeO6NTFPFHV6WE51D4fq+NfsM7J5g=";
+    hash = "sha256-SP5Huefj35PHvVzqS8R/DGSBci/hCHoueEb5RupGVqY=";
   };
 
   frontend = buildNpmPackage rec {
@@ -23,14 +23,14 @@ let
     inherit version src;
 
     # the backend for run-on-client-browser python execution
-    # must match lock file in open-webui
-    pyodideVersion = "0.28.3";
+    # must match the version that is locked in package-lock.json
+    pyodideVersion = "314.0.3";
     pyodide = fetchurl {
-      hash = "sha256-fcqubT8VmGoJ8PnmxHE6DA8kv/DJDHToWoFyPxvGCUA=";
+      hash = "sha256-oCgELZDbqedP377PNuqn1X6IvwrWGNnFBZ6xBAqnYSo=";
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-NhDsqfP95RAbSarM07OSII8vbPYWScRMxtWt+gRQ/4c=";
+    npmDepsHash = "sha256-9Wa6gP0asGPCoBJh8ufpweOg4zNf7onzBu08iQwgqis=";
 
     npmFlags = [ "--force" ];
 
@@ -84,6 +84,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     [
       accelerate
       aiocache
+      aiodns
       aiofiles
       aiohttp
       aiosqlite
@@ -121,14 +122,17 @@ python3Packages.buildPythonApplication (finalAttrs: {
       google-cloud-storage
       google-genai
       googleapis-common-protos
+      hiredis
       httpx
       itsdangerous
+      joserfc
       langchain
       langchain-classic
       langchain-community
       langchain-text-splitters
       ldap3
       loguru
+      lxml
       markdown
       mcp
       msoffcrypto-tool
@@ -149,14 +153,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
       opentelemetry-sdk
       openpyxl
       opensearch-py
+      orjson
       pandas
-      peewee
-      peewee-migrate
       pillow
       psutil
       psycopg
       pyarrow
       pycrdt
+      pydantic
       pydub
       pyjwt
       pymdown-extensions
@@ -164,7 +168,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       pypandoc
       pypdf
       python-dotenv
-      python-jose
       python-mimeparse
       python-multipart
       python-pptx
@@ -173,8 +176,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
       pytz
       pyxlsb
       rank-bm25
-      rapidocr-onnxruntime
+      rapidocr
       redis
+      regex
       requests
       restrictedpython
       sentence-transformers
@@ -190,6 +194,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
       xlrd
       youtube-transcript-api
     ]
+    ++ (with httpx.optional-dependencies; brotli ++ cli ++ http2 ++ socks ++ zstd)
+    ++ uvicorn.optional-dependencies.standard
     ++ psycopg.optional-dependencies.c
     ++ pyjwt.optional-dependencies.crypto
     ++ sqlalchemy.optional-dependencies.asyncio
@@ -213,7 +219,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       azure-search-documents
       colbert-ai
       elasticsearch
-      gcp-storage-emulator
       moto
       oracledb
       pinecone-client
