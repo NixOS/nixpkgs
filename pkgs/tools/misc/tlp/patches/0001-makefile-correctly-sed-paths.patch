@@ -1,7 +1,7 @@
-From 6500d02a70572f94e7b7df4d70b391ac27ac8bcb Mon Sep 17 00:00:00 2001
+From e2954dbd55a72a3c946ba09fd5dc41d1d2ee079c Mon Sep 17 00:00:00 2001
 From: Bernardo Meurer <bernardo@meurer.org>
 Date: Fri, 15 Oct 2021 23:22:50 -0700
-Subject: [PATCH 1/2] makefile: correctly sed paths
+Subject: [PATCH] makefile: correctly sed paths
 
 The default Makefile for tlp makes a mess with catenating `DESTDIR` to
 everything, but then not actualy using the catenated (_ prefixed)
@@ -14,15 +14,22 @@ not where it doesn't (/etc/tlp.conf should be just that).
 The reason DESTDIR is used at all, as opposed to the more appropriate
 PREFIX, is covered in the nix formula, and is (also) due to the Makefile
 being a bit "different."
+
+===
+IogaMaster <iogamastercode+nixpkgs@gmail.com>
+This patch was not applying correctly, so I applied to the base repo and
+fixed merge conflicts.
+That is the new patch that is below!
+
 ---
- Makefile | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ Makefile | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 41eb38d..df3abb7 100644
+index fd1844d..1e005e2 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -57,17 +57,17 @@ _VAR     = $(DESTDIR)$(TLP_VAR)
+@@ -72,16 +72,17 @@ _VAR     = $(DESTDIR)$(TLP_VAR)
  
  SED = sed \
  	-e "s|@TLPVER@|$(TLPVER)|g" \
@@ -41,14 +48,12 @@ index 41eb38d..df3abb7 100644
 -	-e "s|@TLP_CONFDEF@|$(TLP_CONFDEF)|g" \
 -	-e "s|@TLP_CONFREN@|$(TLP_CONFREN)|g" \
 -	-e "s|@TLP_CONFDPR@|$(TLP_CONFDPR)|g" \
--	-e "s|@TLP_CONF@|$(TLP_CONF)|g" \
 +	-e "s|@TLP_CONFDEF@|$(_CONFDEF)|g" \
 +	-e "s|@TLP_CONFREN@|$(_CONFREN)|g" \
 +	-e "s|@TLP_CONFDPR@|$(_CONFDPR)|g" \
 +	-e "s|@TLP_CONF@|$(_CONF)|g" \
+ 	-e "s|@TLP_SDSL@|$(TLP_SDSL)|g" \
  	-e "s|@TLP_RUN@|$(TLP_RUN)|g"   \
  	-e "s|@TLP_VAR@|$(TLP_VAR)|g"
- 
 -- 
-2.44.1
-
+2.54.0
