@@ -36,7 +36,7 @@
               };
             };
 
-            # OOMs randomly otherwise. ✨️AI✨️ or something idk.
+            # OOMs randomly otherwise
             virtualisation.memorySize = 2048;
           };
         postgres = {
