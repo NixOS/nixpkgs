@@ -58,13 +58,13 @@ in
 melpaBuild (finalAttrs: {
   pname = "ghostel";
 
-  version = "0.47.0";
+  version = "0.48.0";
 
   src = fetchFromGitHub {
     owner = "dakra";
     repo = "ghostel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/58tIIzE+5an5Iv5DgFpeKWoM6hq9idf1LhP2iFYv9w=";
+    hash = "sha256-upIcL4wf2zAc3/3QeERF619nSDml2wEZCOl6/XOaT3E=";
   };
 
   # this can be put into mkModule, but we put it here to ease user overrideAttrs
