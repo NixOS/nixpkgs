@@ -22,6 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   enableParallelBuilding = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
