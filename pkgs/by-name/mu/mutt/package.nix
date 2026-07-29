@@ -115,13 +115,13 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = writeScript "update-mutt" ''
       #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl pcre common-updater-scripts
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
       set -euo pipefail
 
       # Expect the text in format of "The current stable public release version is 2.2.6."
       new_version="$(curl -s http://www.mutt.org/download.html |
-          pcregrep -o1 'The current stable public release version is ([0-9.]+).')"
+          pcre2grep -o1 'The current stable public release version is ([0-9.]+).')"
       update-source-version ${pname} "$new_version"
     '';
   };
