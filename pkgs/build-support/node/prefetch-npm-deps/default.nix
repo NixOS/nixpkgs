@@ -227,111 +227,115 @@
     };
   };
 
-  fetchNpmDeps =
-    {
-      name ? "npm-deps",
-      hash ? "",
-      forceGitDeps ? false,
-      forceEmptyCache ? false,
-      nativeBuildInputs ? [ ],
-      # A string with a JSON attrset specifying registry mirrors, for example
-      #   {"registry.example.org": "my-mirror.local/registry.example.org"}
-      npmRegistryOverridesString ? config.npmRegistryOverridesString,
-      # Fetcher format version. Bump this to invalidate all existing hashes.
-      # Version 1: original format (tarballs only)
-      # Version 2: includes packuments for workspace support
-      fetcherVersion ? 1,
-      ...
-    }@args:
-    let
-      hash_ =
-        if hash != "" then
-          {
-            outputHash = hash;
-          }
-        else
-          {
-            outputHash = "";
-            outputHashAlgo = "sha256";
-          };
+  fetchNpmDeps = lib.makeOverridable (
+    lib.extendMkDerivation {
+      constructDrv = stdenvNoCC.mkDerivation;
 
-      forceGitDeps_ = lib.optionalAttrs forceGitDeps { FORCE_GIT_DEPS = true; };
-      forceEmptyCache_ = lib.optionalAttrs forceEmptyCache { FORCE_EMPTY_CACHE = true; };
-    in
-    stdenvNoCC.mkDerivation (
-      args
-      // {
-        inherit name;
-
-        nativeBuildInputs = nativeBuildInputs ++ [ prefetch-npm-deps ];
-
-        buildPhase = ''
-          runHook preBuild
-
-          if [[ -f npm-shrinkwrap.json ]]; then
-            local -r srcLockfile="npm-shrinkwrap.json"
-          elif [[ -f package-lock.json ]]; then
-            local -r srcLockfile="package-lock.json"
-          else
-            echo
-            echo "ERROR: No lock file!"
-            echo
-            echo "package-lock.json or npm-shrinkwrap.json is required to make sure"
-            echo "that npmDepsHash doesn't change when packages are updated on npm."
-            echo
-            echo "Hint: You can copy a vendored package-lock.json file via postPatch."
-            echo
-
-            exit 1
-          fi
-
-          outputHash="${hash_.outputHash}" prefetch-npm-deps $srcLockfile $out
-
-          runHook postBuild
-        '';
-
-        dontInstall = true;
-
-        # NIX_NPM_TOKENS environment variable should be a JSON mapping in the shape of:
-        # `{ "registry.example.com": "example-registry-bearer-token", ... }`
-        impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [ "NIX_NPM_TOKENS" ];
-
-        env = {
-          NIX_NPM_REGISTRY_OVERRIDES = npmRegistryOverridesString;
-
-          # Fetcher version controls which features are enabled in prefetch-npm-deps
-          NPM_FETCHER_VERSION =
-            let
-              # Increment when we introduce a new version.
-              validFetcherVersions = [
-                1 # Initial version
-                2 # enables packument fetching for workspace support
-              ];
-            in
-            assert lib.assertMsg (lib.elem fetcherVersion validFetcherVersions)
-              "fetchNpmDeps: fetcher version must be one of: ${
-                lib.concatMapStringsSep ", " toString validFetcherVersions
-              }.";
-            (toString fetcherVersion);
-
-          SSL_CERT_FILE =
-            if
-              (
-                hash_.outputHash == ""
-                || hash_.outputHash == lib.fakeSha256
-                || hash_.outputHash == lib.fakeSha512
-                || hash_.outputHash == lib.fakeHash
-              )
-            then
-              "${cacert}/etc/ssl/certs/ca-bundle.crt"
+      extendDrvArgs =
+        finalAttrs:
+        {
+          name ? "npm-deps",
+          hash ? "",
+          forceGitDeps ? false,
+          forceEmptyCache ? false,
+          nativeBuildInputs ? [ ],
+          # A string with a JSON attrset specifying registry mirrors, for example
+          #   {"registry.example.org": "my-mirror.local/registry.example.org"}
+          npmRegistryOverridesString ? config.npmRegistryOverridesString,
+          # Fetcher format version. Bump this to invalidate all existing hashes.
+          # Version 1: original format (tarballs only)
+          # Version 2: includes packuments for workspace support
+          fetcherVersion ? 1,
+          ...
+        }:
+        let
+          hash_ =
+            if hash != "" then
+              {
+                outputHash = hash;
+              }
             else
-              "/no-cert-file.crt";
-        }
-        // forceGitDeps_
-        // forceEmptyCache_;
+              {
+                outputHash = "";
+                outputHashAlgo = "sha256";
+              };
 
-        outputHashMode = "recursive";
-      }
-      // hash_
-    );
+          forceGitDeps_ = lib.optionalAttrs forceGitDeps { FORCE_GIT_DEPS = true; };
+          forceEmptyCache_ = lib.optionalAttrs forceEmptyCache { FORCE_EMPTY_CACHE = true; };
+        in
+        {
+          inherit name;
+
+          nativeBuildInputs = nativeBuildInputs ++ [ prefetch-npm-deps ];
+
+          buildPhase = ''
+            runHook preBuild
+
+            if [[ -f npm-shrinkwrap.json ]]; then
+              local -r srcLockfile="npm-shrinkwrap.json"
+            elif [[ -f package-lock.json ]]; then
+              local -r srcLockfile="package-lock.json"
+            else
+              echo
+              echo "ERROR: No lock file!"
+              echo
+              echo "package-lock.json or npm-shrinkwrap.json is required to make sure"
+              echo "that npmDepsHash doesn't change when packages are updated on npm."
+              echo
+              echo "Hint: You can copy a vendored package-lock.json file via postPatch."
+              echo
+
+              exit 1
+            fi
+
+            outputHash="${hash_.outputHash}" prefetch-npm-deps $srcLockfile $out
+
+            runHook postBuild
+          '';
+
+          dontInstall = true;
+
+          # NIX_NPM_TOKENS environment variable should be a JSON mapping in the shape of:
+          # `{ "registry.example.com": "example-registry-bearer-token", ... }`
+          impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [ "NIX_NPM_TOKENS" ];
+
+          env = {
+            NIX_NPM_REGISTRY_OVERRIDES = npmRegistryOverridesString;
+
+            # Fetcher version controls which features are enabled in prefetch-npm-deps
+            NPM_FETCHER_VERSION =
+              let
+                # Increment when we introduce a new version.
+                validFetcherVersions = [
+                  1 # Initial version
+                  2 # enables packument fetching for workspace support
+                ];
+              in
+              assert lib.assertMsg (lib.elem fetcherVersion validFetcherVersions)
+                "fetchNpmDeps: fetcher version must be one of: ${
+                  lib.concatMapStringsSep ", " toString validFetcherVersions
+                }.";
+              (toString fetcherVersion);
+
+            SSL_CERT_FILE =
+              if
+                (
+                  hash_.outputHash == ""
+                  || hash_.outputHash == lib.fakeSha256
+                  || hash_.outputHash == lib.fakeSha512
+                  || hash_.outputHash == lib.fakeHash
+                )
+              then
+                "${cacert}/etc/ssl/certs/ca-bundle.crt"
+              else
+                "/no-cert-file.crt";
+          }
+          // forceGitDeps_
+          // forceEmptyCache_;
+
+          outputHashMode = "recursive";
+        }
+        // hash_;
+    }
+  );
 }
