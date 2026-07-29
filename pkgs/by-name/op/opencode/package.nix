@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "1.18.4";
+  version = "1.18.9";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "anomalyco";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tGMO5JktINO8kXAHFQftn+JCrzwvpmNipTa8V0aIfNI=";
+    hash = "sha256-uvKzjPquhjm5OdDdoqexJQfDkN0OOXOW8RbdSka12NQ=";
   };
 
   node_modules = stdenv.mkDerivation {
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     # NOTE: Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash = "sha256-jMZSDlqNObSmWJZ0Xn0IwfYC2+mBbRYorfgD5Y2sHWs=";
+    outputHash = "sha256-cXA4umq5rPApiQdpFGB8jGmFB+e1+WkoFZUXKak1za0=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
