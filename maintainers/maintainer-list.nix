@@ -4605,7 +4605,6 @@
   cbarrete = {
     github = "cbarrete";
     githubId = 62146989;
-    matrix = "@cedric:cbarrete.com";
     name = "Cédric Barreteau";
   };
   cbleslie = {
@@ -16076,6 +16075,11 @@
     github = "lu1a";
     githubId = 83420438;
     name = "Lewis";
+  };
+  lubsch = {
+    github = "lubsch";
+    githubId = 33580245;
+    name = "Benjamin Lohmar";
   };
   luc65r = {
     email = "lucas@ransan.fr";
