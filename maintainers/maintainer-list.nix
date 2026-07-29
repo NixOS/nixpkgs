@@ -14619,6 +14619,12 @@
     githubId = 59027018;
     name = "Andrey Khorokhorin";
   };
+  khitboksy = {
+    email = "khitboksy@proton.me";
+    github = "khitboksy";
+    githubId = 58287028;
+    name = "Taylor Hendrix";
+  };
   khumba = {
     email = "bog@khumba.net";
     github = "khumba";
