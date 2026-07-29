@@ -142,9 +142,7 @@ let
 
     text =
       let
-        sourceExtraEnv = lib.concatMapStrings (p: "source ${p}\n") cfg.extraEnvFiles;
         command = pkgs.writeShellScript "dawarich-rails-unwrapped" ''
-          ${sourceExtraEnv}
           ${loadCredentialsIntoEnv}
           export RAILS_ROOT="${cfg.package}"
           exec ${lib.getExe' cfg.package "rails"} "$@"
@@ -159,6 +157,7 @@ let
           ${
             lib.escapeShellArgs (map (credential: "--property=LoadCredential=${credential}") loadCredentials)
           } \
+          ${lib.escapeShellArgs (map (file: "--property=EnvironmentFile=${file}") cfg.extraEnvFiles)} \
           ${
             lib.escapeShellArgs (lib.mapAttrsToList (name: value: "--setenv=${name}=${toString value}") env')
           } \
