@@ -601,9 +601,8 @@ def repl_flake(flake: Flake, flake_flags: Args | None = None) -> None:
         files(__package__).joinpath(FLAKE_REPL_TEMPLATE).read_text()
     ).substitute(
         flake=flake,
-        flake_path=flake.resolve_path_if_exists(),
         # Normalize flake url to respect VSC if present:
-        flake_resolved=get_flake_metadata(flake, flake_flags)["resolvedUrl"],
+        flake_path=get_flake_metadata(flake, flake_flags)["resolvedUrl"],
         flake_attr=flake.attr,
         bold="\033[1m",
         blue="\033[34;1m",
