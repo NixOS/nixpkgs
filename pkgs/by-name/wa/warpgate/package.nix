@@ -7,6 +7,7 @@
   buildNpmPackage,
   openapi-generator-cli,
   nixosTests,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage (
   finalAttrs:
@@ -67,8 +68,14 @@ rustPlatform.buildRustPackage (
     # skip check, project included tests require python stuff and docker
     doCheck = false;
 
-    passthru.tests = {
-      inherit (nixosTests) warpgate;
+    passthru = {
+      inherit warpgate-web;
+      tests = {
+        inherit (nixosTests) warpgate;
+      };
+      updateScript = nix-update-script {
+        extraArgs = [ "--subpackage=warpgate-web" ];
+      };
     };
 
     meta = {
