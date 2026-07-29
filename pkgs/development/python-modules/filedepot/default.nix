@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "filedepot";
-  version = "0.11.0";
+  version = "0.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "amol-";
     repo = "depot";
     tag = version;
-    hash = "sha256-693H/u+Wg2G9sdoUkC6DQo9WkmIlKnh8NKv3ufK/eyQ=";
+    hash = "sha256-oDnGA2prxYUkC90ewryeJXTXED59vcZGHU9D0QiopFM=";
   };
 
   build-system = [ setuptools ];
