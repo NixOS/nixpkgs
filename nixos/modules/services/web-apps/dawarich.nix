@@ -14,47 +14,6 @@ let
 
   isRedisUnixSocket = lib.hasPrefix "/" cfg.redis.host;
 
-  redisEnv =
-    if isRedisUnixSocket then
-      {
-        REDIS_URL = "unix://${config.services.redis.servers.dawarich.unixSocket}";
-      }
-    else
-      {
-        # Does not support passwords, but upstream does not provide an adequate env variable
-        # Perhaps patch or make a PR upstream in the future
-        REDIS_URL = "redis://${cfg.redis.host}:${toString cfg.redis.port}";
-      };
-
-  env = {
-    RAILS_ENV = "production";
-    NODE_ENV = "production";
-    BUNDLE_USER_HOME = "/tmp/bundle"; # will use private tmp inside systemd unit
-
-    SELF_HOSTED = "true";
-    STORE_GEODATA = "true";
-    APPLICATION_PROTOCOL = "http";
-    TIME_ZONE = config.time.timeZone; # otherwise upstream forces it to Europe/London
-    DOMAIN = cfg.localDomain;
-    APPLICATION_HOSTS = "127.0.0.1,::1,${cfg.localDomain}";
-
-    BOOTSNAP_CACHE_DIR = "/var/cache/dawarich/precompile";
-    LD_PRELOAD = "${lib.getLib pkgs.jemalloc}/lib/libjemalloc.so";
-
-    DATABASE_USER = cfg.database.user;
-    DATABASE_HOST = cfg.database.host;
-    DATABASE_NAME = cfg.database.name;
-    DATABASE_PORT = toString cfg.database.port;
-
-    SMTP_SERVER = cfg.smtp.host;
-    SMTP_PORT = toString cfg.smtp.port;
-    SMTP_FROM = cfg.smtp.fromAddress;
-    SMTP_USERNAME = cfg.smtp.user;
-    PORT = toString cfg.webPort;
-  }
-  // redisEnv
-  // cfg.environment;
-
   systemCallFilter =
     let
       allowedSystemCalls = [
@@ -147,7 +106,7 @@ let
           export RAILS_ROOT="${cfg.package}"
           exec ${lib.getExe' cfg.package "rails"} "$@"
         '';
-        env' = lib.filterAttrs (_: value: value != null) env;
+        env' = lib.filterAttrs (_: value: value != null) cfg.environment;
         supplementaryGroups = lib.optionalString (cfg.redis.createLocally && isRedisUnixSocket) (
           lib.escapeShellArg "--property=SupplementaryGroups=${config.services.redis.servers.dawarich.group}"
         );
@@ -198,7 +157,7 @@ let
         requires = lib.optional needsGenCredentialsUnit "dawarich-init-credentials.service" ++ commonUnits;
         description = "Dawarich sidekiq${jobClassLabel}";
         wantedBy = [ "dawarich.target" ];
-        environment = env // {
+        environment = cfg.environment // {
           RAILS_MAX_THREADS = threads;
         };
         script = ''
@@ -529,6 +488,42 @@ in
         ];
 
         services.dawarich = {
+          environment = {
+            RAILS_ENV = "production";
+            NODE_ENV = "production";
+            BUNDLE_USER_HOME = "/tmp/bundle"; # will use private tmp inside systemd unit
+
+            SELF_HOSTED = "true";
+            STORE_GEODATA = "true";
+            APPLICATION_PROTOCOL = "http";
+            TIME_ZONE = config.time.timeZone; # otherwise upstream forces it to Europe/London
+            DOMAIN = cfg.localDomain;
+            APPLICATION_HOSTS = "127.0.0.1,::1,${cfg.localDomain}";
+
+            BOOTSNAP_CACHE_DIR = "/var/cache/dawarich/precompile";
+            LD_PRELOAD = "${lib.getLib pkgs.jemalloc}/lib/libjemalloc.so";
+
+            DATABASE_USER = cfg.database.user;
+            DATABASE_HOST = cfg.database.host;
+            DATABASE_NAME = cfg.database.name;
+            DATABASE_PORT = toString cfg.database.port;
+
+            SMTP_SERVER = cfg.smtp.host;
+            SMTP_PORT = toString cfg.smtp.port;
+            SMTP_FROM = cfg.smtp.fromAddress;
+            SMTP_USERNAME = cfg.smtp.user;
+
+            PORT = toString cfg.webPort;
+
+            REDIS_URL =
+              if isRedisUnixSocket then
+                "unix://${config.services.redis.servers.dawarich.unixSocket}"
+              else
+                # Does not support passwords, but upstream does not provide an adequate env variable
+                # Perhaps patch or make a PR upstream in the future
+                "redis://${cfg.redis.host}:${toString cfg.redis.port}";
+          };
+
           environmentSecrets = {
             SECRET_KEY_BASE = lib.defaultTo defaultSecretKeyBaseFile cfg.secretKeyBaseFile;
           }
@@ -562,7 +557,7 @@ in
             fi
           '';
 
-          environment = env;
+          environment = cfg.environment;
           serviceConfig = {
             Type = "oneshot";
             SyslogIdentifier = "dawarich-init-dirs";
@@ -590,7 +585,7 @@ in
             rails db:seed
           '';
           path = [ cfg.package ];
-          environment = env;
+          environment = cfg.environment;
           serviceConfig = {
             Type = "oneshot";
             LoadCredential = loadCredentials;
@@ -622,7 +617,7 @@ in
           requires = lib.optional needsGenCredentialsUnit "dawarich-init-credentials.service" ++ commonUnits;
           wantedBy = [ "dawarich.target" ];
           description = "Dawarich web";
-          environment = env;
+          environment = cfg.environment;
           script = ''
             ${loadCredentialsIntoEnv}
 
