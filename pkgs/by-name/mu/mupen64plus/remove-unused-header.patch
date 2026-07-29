@@ -1,0 +1,21 @@
+From d737386a5422f798dcb196bc58a99808a0843317 Mon Sep 17 00:00:00 2001
+From: Marcin Serwin <marcin@serwin.dev>
+Date: Sun, 20 Apr 2025 21:33:00 +0200
+Subject: [PATCH] Remove unused SDL_syswm header
+
+---
+ src/main/eventloop.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/source/mupen64plus-core/src/main/eventloop.c b/source/mupen64plus-core/src/main/eventloop.c
+index 6625638b4..eb0fd1919 100644
+--- a/source/mupen64plus-core/src/main/eventloop.c
++++ b/source/mupen64plus-core/src/main/eventloop.c
+@@ -21,7 +21,6 @@
+  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ 
+ #include <SDL.h>
+-#include <SDL_syswm.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>

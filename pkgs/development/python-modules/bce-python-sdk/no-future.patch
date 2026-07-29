@@ -1,0 +1,348 @@
+commit 4e5538e58bd330c609bc196b55f2936f8e8676ea
+Author: Doron Behar <doron.behar@gmail.com>
+Date:   Tue Dec 30 14:21:20 2025 +0200
+
+    Remove future per CVE-2025-50817
+    
+    Fix #14 .
+
+diff --git a/baidubce/auth/bce_v1_signer.py b/baidubce/auth/bce_v1_signer.py
+index 35c4557..62937e8 100644
+--- a/baidubce/auth/bce_v1_signer.py
++++ b/baidubce/auth/bce_v1_signer.py
+@@ -13,7 +13,6 @@
+ """
+ This module provides authentication functions for bce services.
+ """
+-from __future__ import absolute_import
+ import hashlib
+ import hmac
+ import logging
+diff --git a/baidubce/bce_base_client.py b/baidubce/bce_base_client.py
+index 6905d0f..02976da 100644
+--- a/baidubce/bce_base_client.py
++++ b/baidubce/bce_base_client.py
+@@ -13,9 +13,7 @@
+ """
+ This module provide base class for BCE service clients.
+ """
+-from __future__ import absolute_import
+ import copy
+-from builtins import str, bytes
+ 
+ import baidubce
+ from baidubce import bce_client_configuration
+diff --git a/baidubce/bce_client_configuration.py b/baidubce/bce_client_configuration.py
+index 8d4d834..c3e01d3 100644
+--- a/baidubce/bce_client_configuration.py
++++ b/baidubce/bce_client_configuration.py
+@@ -14,9 +14,6 @@
+ This module defines a common configuration class for BCE.
+ """
+ 
+-from future.utils import iteritems
+-from builtins import str
+-from builtins import bytes
+ import baidubce.protocol
+ import baidubce.region
+ from baidubce.retry.retry_policy import BackOffRetryPolicy
+@@ -70,7 +67,7 @@ class BceClientConfiguration(object):
+         :param other:
+         :return:
+         """
+-        for k, v in iteritems(other.__dict__):
++        for k, v in other.__dict__.items():
+             if v is not None:
+                 self.__dict__[k] = v
+ 
+diff --git a/baidubce/bce_response.py b/baidubce/bce_response.py
+index d55447b..1db49dd 100644
+--- a/baidubce/bce_response.py
++++ b/baidubce/bce_response.py
+@@ -13,9 +13,6 @@
+ """
+ This module provides a general response class for BCE services.
+ """
+-from future.utils import iteritems
+-from builtins import str
+-from builtins import bytes
+ from baidubce import utils
+ from baidubce import compat
+ from baidubce.http import http_headers
+@@ -34,7 +31,7 @@ class BceResponse(object):
+         :param headers:
+         :return:
+         """
+-        for k, v in iteritems(headers):
++        for k, v in headers.items():
+             if k.startswith(compat.convert_to_string(http_headers.BCE_PREFIX)):
+                 k = 'bce_' + k[len(compat.convert_to_string(http_headers.BCE_PREFIX)):]
+             k = utils.pythonize_name(k.replace('-', '_'))
+@@ -48,7 +45,7 @@ class BceResponse(object):
+         :param headers:
+         :return:
+         """
+-        for k, v in iteritems(headers):
++        for k, v in headers.items():
+             if k.lower() == compat.convert_to_string(http_headers.ETAG.lower()):
+                 v = v.strip('"')
+             setattr(self.metadata, k, v)
+diff --git a/baidubce/http/bce_http_client.py b/baidubce/http/bce_http_client.py
+index 7c5e4bf..fb1e881 100644
+--- a/baidubce/http/bce_http_client.py
++++ b/baidubce/http/bce_http_client.py
+@@ -13,8 +13,6 @@
+ """
+ This module provide http request function for bce services.
+ """
+-from future.utils import iteritems, iterkeys, itervalues
+-from builtins import str, bytes
+ import logging
+ import http.client
+ import sys
+@@ -77,7 +75,7 @@ def _send_http_request(conn, http_method, uri, headers, body, send_buf_size):
+     uri = compat.convert_to_string(uri)
+     conn.putrequest(http_method, uri, skip_host=True, skip_accept_encoding=True)
+ 
+-    for k, v in iteritems(headers):
++    for k, v in headers.items():
+         k = utils.convert_to_standard_string(k)
+         v = utils.convert_to_standard_string(v)
+         conn.putheader(k, v)
+@@ -110,7 +108,7 @@ def check_headers(headers):
+     :param headers:
+     :return:
+     """
+-    for k, v in iteritems(headers):
++    for k, v in headers.items():
+         if isinstance(v, (bytes, str)) and \
+                 b'\n' in compat.convert_to_bytes(v):
+             raise BceClientError(r'There should not be any "\n" in header[%s]:%s' % (k, v))
+diff --git a/baidubce/services/bcc/bcc_client.py b/baidubce/services/bcc/bcc_client.py
+index fd09356..66ffa9c 100644
+--- a/baidubce/services/bcc/bcc_client.py
++++ b/baidubce/services/bcc/bcc_client.py
+@@ -15,8 +15,6 @@
+ This module provides a client class for BCC.
+ """
+ 
+-from __future__ import unicode_literals
+-
+ import copy
+ import json
+ import logging
+diff --git a/baidubce/services/bos/bos_client.py b/baidubce/services/bos/bos_client.py
+index f759114..c5bbc0b 100644
+--- a/baidubce/services/bos/bos_client.py
++++ b/baidubce/services/bos/bos_client.py
+@@ -22,9 +22,6 @@ import json
+ import logging
+ import shutil
+ import struct
+-from builtins import str
+-from builtins import bytes
+-from future.utils import iteritems, iterkeys, itervalues
+ from concurrent.futures import ThreadPoolExecutor, wait, ALL_COMPLETED, FIRST_COMPLETED
+ import threading
+ import functools
+@@ -174,7 +171,7 @@ class BosClient(BceBaseClient):
+     @staticmethod
+     def _dump_acl_object(acl):
+         result = {}
+-        for k, v in iteritems(acl.__dict__):
++        for k, v in acl.__dict__.items():
+             if not k.startswith('_'):
+                 result[k] = v
+         return result
+@@ -2851,7 +2848,7 @@ class BosClient(BceBaseClient):
+             meta_data_set = set()
+             if not isinstance(user_metadata, dict):
+                 raise TypeError('user_metadata should be of type dict.')
+-            for k, v in iteritems(user_metadata):
++            for k, v in user_metadata.items():
+                 meta_data_set.add(k.lower())
+                 k = utils.convert_to_standard_string(k)
+                 v = utils.convert_to_standard_string(v)
+@@ -2911,7 +2908,7 @@ class BosClient(BceBaseClient):
+                                     http_headers.BCE_COPY_SOURCE_IF_UNMODIFIED_SINCE,
+                                     http_headers.BCE_COPY_SOURCE_IF_MODIFIED_SINCE]))
+ 
+-        for k, v in iteritems(user_headers):
++        for k, v in user_headers.items():
+             k = utils.convert_to_standard_string(k)
+             if k != http_headers.BOS_OBJECT_EXPIRES:
+                 v = utils.convert_to_standard_string(v)
+diff --git a/baidubce/services/cert/cert_client.py b/baidubce/services/cert/cert_client.py
+index 9b005b4..1cfe55f 100644
+--- a/baidubce/services/cert/cert_client.py
++++ b/baidubce/services/cert/cert_client.py
+@@ -14,8 +14,6 @@
+ This module provides a client class for CERT.
+ """
+ 
+-from __future__ import unicode_literals
+-
+ import copy
+ import json
+ import logging
+diff --git a/baidubce/services/esg/esg_client.py b/baidubce/services/esg/esg_client.py
+index e0827f4..fcedd7e 100644
+--- a/baidubce/services/esg/esg_client.py
++++ b/baidubce/services/esg/esg_client.py
+@@ -13,7 +13,6 @@
+ """
+ This module provides a client class for esg.
+ """
+-from __future__ import unicode_literals
+ 
+ import copy
+ import json
+diff --git a/baidubce/services/iam/iam_client.py b/baidubce/services/iam/iam_client.py
+index ee804ca..d2ce54e 100644
+--- a/baidubce/services/iam/iam_client.py
++++ b/baidubce/services/iam/iam_client.py
+@@ -18,8 +18,6 @@ import copy
+ import json
+ import logging
+ 
+-from future.utils import iteritems
+-
+ from baidubce.auth import bce_v1_signer
+ from baidubce.bce_base_client import BceBaseClient
+ from baidubce.http import bce_http_client
+diff --git a/baidubce/services/rds/rds_client.py b/baidubce/services/rds/rds_client.py
+index 71e058b..a055986 100644
+--- a/baidubce/services/rds/rds_client.py
++++ b/baidubce/services/rds/rds_client.py
+@@ -14,8 +14,6 @@
+ This module provides a client class for RDS.
+ """
+ 
+-from __future__ import unicode_literals
+-
+ import copy
+ import json
+ import logging
+diff --git a/baidubce/services/scs/scs_client.py b/baidubce/services/scs/scs_client.py
+index c4c1631..c20d593 100644
+--- a/baidubce/services/scs/scs_client.py
++++ b/baidubce/services/scs/scs_client.py
+@@ -16,7 +16,6 @@
+ """
+ This module provides a client class for SCS.
+ """
+-from __future__ import unicode_literals
+ 
+ import copy
+ import json
+diff --git a/baidubce/services/sts/sts_client.py b/baidubce/services/sts/sts_client.py
+index 9aba0e3..22ee710 100644
+--- a/baidubce/services/sts/sts_client.py
++++ b/baidubce/services/sts/sts_client.py
+@@ -14,7 +14,6 @@
+ This module provides a client for STS.
+ """
+ 
+-from future.utils import iteritems
+ import copy
+ import http.client
+ import os
+@@ -94,7 +93,7 @@ class StsClient(BceBaseClient):
+     @staticmethod
+     def _dump_acl_object(acl):
+         result = {}
+-        for k, v in iteritems(acl.__dict__):
++        for k, v in acl.__dict__.items():
+             if not k.startswith('_'):
+                 result[k] = v
+         return result
+diff --git a/baidubce/utils.py b/baidubce/utils.py
+index 1318bbf..3295abf 100644
+--- a/baidubce/utils.py
++++ b/baidubce/utils.py
+@@ -13,11 +13,6 @@
+ """
+ This module provide some tools for bce client.
+ """
+-# str() generator unicode,bytes() for ASCII
+-from __future__ import print_function
+-from __future__ import absolute_import
+-from builtins import str, bytes
+-from future.utils import iteritems, iterkeys, itervalues
+ from baidubce import compat
+ 
+ import os
+@@ -175,7 +170,7 @@ def safe_get_element(name, container):
+     :return:
+         **Value**
+     """
+-    for k, v in iteritems(container):
++    for k, v in container.items():
+         if k.strip().lower() == name.strip().lower():
+             return v
+     return ""
+@@ -320,7 +315,7 @@ def guess_content_type_by_file_name(file_name):
+         file_name = compat.convert_to_string(file_name)
+         name = os.path.basename(file_name.lower())
+         suffix = name.split('.')[-1]
+-        if suffix in iterkeys(mime_map):
++        if suffix in mime_map.keys():
+             mime_type = mime_map[suffix]
+         else:
+             import mimetypes
+@@ -368,7 +363,7 @@ def get_canonical_querystring(params, for_signature):
+     if params is None:
+         return ''
+     result = []
+-    for k, v in iteritems(params):
++    for k, v in params.items():
+         if not for_signature or k.lower != http_headers.AUTHORIZATION.lower():
+             if v is None:
+                 v = ''
+@@ -384,7 +379,7 @@ def print_object(obj):
+     :return:
+     """
+     tmp = []
+-    for k, v in iteritems(obj.__dict__):
++    for k, v in obj.__dict__.items():
+         if not k.startswith('__') and k != "raw_data":
+             if isinstance(v, bytes):
+                 tmp.append("%s:'%s'" % (k, v))
+@@ -419,7 +414,7 @@ def dict_to_python_object(d):
+     :return:
+     """
+     attr = {}
+-    for k, v in iteritems(d):
++    for k, v in d.items():
+         if not isinstance(k, compat.string_types):
+             k = compat.convert_to_string(k)
+         k = pythonize_name(k)
+@@ -445,7 +440,7 @@ def required(**types):
+                                         (f.__code__.co_varnames[i],
+                                          v,
+                                          types[f.__code__.co_varnames[i]]))
+-            for k, v in iteritems(kwds):
++            for k, v in kwds.items():
+                 if k in types:
+                     if v is None:
+                         raise ValueError('arg "%s" should not be None' % k)
+diff --git a/setup.py b/setup.py
+index 54ca7b6..281de62 100644
+--- a/setup.py
++++ b/setup.py
+@@ -13,7 +13,6 @@
+ """
+ The setup script to install BCE SDK for python
+ """
+-from __future__ import absolute_import
+ import io
+ import os
+ import re
+@@ -30,7 +29,6 @@ setup(
+     name='bce-python-sdk',
+     version=SDK_VERSION,
+     install_requires=['pycryptodome>=3.8.0',
+-                      'future>=0.6.0',
+                       'six>=1.4.0'],
+     python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, <4',
+     packages=['baidubce',

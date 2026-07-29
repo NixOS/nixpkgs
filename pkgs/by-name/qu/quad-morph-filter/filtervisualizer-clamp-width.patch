@@ -1,0 +1,38 @@
+diff --git a/Source/UI/FilterVisualizer.cpp b/Source/UI/FilterVisualizer.cpp
+index 103da54..c96a62a 100644
+--- a/Source/UI/FilterVisualizer.cpp
++++ b/Source/UI/FilterVisualizer.cpp
+@@ -151,9 +151,15 @@ void FilterVisualizer::paint(juce::Graphics& g)
+ 
+     wA = wMixArr[0]; wB = wMixArr[1]; wC = wMixArr[2]; wD = wMixArr[3];
+     // ----- 周波数応答の計算 -----
+-    int wInt = (int)w;
++    // The standalone window is resizable, and on HiDPI / large / tiled displays
++    // the visualizer is far wider than the design's assumed ~700px. Clamp the
++    // working width to the rawMag capacity: an unclamped px loop writes past the
++    // end of rawMag and corrupts the adjacent editor members (the next member,
++    // groupA.enableButton, is child #2 of the editor), which later crashes in
++    // Component::paintComponentAndChildren via a dangling affineTransform.
++    const int wInt = juce::jmin ((int) w, (int) rawMag.size() - 1);
+     // rawMag はメンバー変数 (paint()内allocを回避)。使用範囲だけゼロクリア。
+-    std::fill(rawMag.begin(), rawMag.begin() + juce::jmin(wInt + 2, 1024), 0.0f);
++    std::fill(rawMag.begin(), rawMag.begin() + juce::jmin(wInt + 2, (int) rawMag.size()), 0.0f);
+     for (int px = 0; px <= wInt; ++px)
+     {
+         float freq = 20.0f * std::pow(1000.0f, (float)px / w);
+diff --git a/Source/UI/FilterVisualizer.h b/Source/UI/FilterVisualizer.h
+index 05a193b..4854851 100644
+--- a/Source/UI/FilterVisualizer.h
++++ b/Source/UI/FilterVisualizer.h
+@@ -25,8 +25,9 @@ private:
+     QuadMorphFilterAudioProcessorEditor* editor = nullptr;
+ 
+     // paint() 内アロケーション禁止 (CLAUDE.md §4) のためメンバーに移行。
+-    // FilterVisualizer の幅は最大 ~700px なので 1024 で十分。
+-    std::array<float, 1024> rawMag {};
++    // Sized to cover wide / HiDPI windows; paint() additionally clamps the
++    // working width to this capacity so the buffer can never be overrun.
++    std::array<float, 4096> rawMag {};
+ 
+     // Background color randomization
+     juce::Colour bgColour = juce::Colour(0xff2a2a2a);  // Default dark color

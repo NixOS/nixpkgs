@@ -1,0 +1,13 @@
+Submodule build contains modified content
+diff --git a/build/rust/allocator/lib.rs b/build/rust/allocator/lib.rs
+index 4b834e322..1970d664e 100644
+--- a/build/rust/allocator/lib.rs
++++ b/build/rust/allocator/lib.rs
+@@ -87,7 +87,6 @@ mod both_allocators {
+     /// rustc-generated shims we must define this symbol, since we are opting in
+     /// to unstable functionality. See https://github.com/rust-lang/rust/issues/123015
+     #[rustc_std_internal_symbol]
+-    #[linkage = "weak"]
+     fn __rust_no_alloc_shim_is_unstable_v2() {}
+ 
+     #[cfg(not(RUST_ALLOCATOR_NIGHTLY_CAPABILITY))]
