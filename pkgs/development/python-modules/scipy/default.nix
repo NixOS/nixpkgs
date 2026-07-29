@@ -134,6 +134,11 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals (python.isPy311) [
     # https://github.com/scipy/scipy/issues/22789 Observed only with Python 3.11
     "test_funcs"
+  ] ++ lib.optionals (python.isPy312) [
+    # occasional failure caused by the non-deterministic (across python version
+    # and implementation detail) RNG
+    # https://github.com/NixOS/nixpkgs/issues/547063
+    "test_support_moments_sample"
   ];
 
   doCheck = !(stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin);
