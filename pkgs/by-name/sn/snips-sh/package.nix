@@ -9,14 +9,14 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "snips-sh";
-  version = "0.11.0";
-  vendorHash = "sha256-ZMzlqUyNmp0zR5KC8yB7zuqTAjE6C3kIhdgz9nin5sA=";
+  version = "0.12.0";
+  vendorHash = "sha256-BSPvvVH0nalkHZUJ0iLfHI00nJ4teJ9f+Qr4oKaoLSg=";
 
   src = fetchFromGitHub {
     owner = "robherley";
     repo = "snips.sh";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bwnn+kl8uv7ln5mjlq5I+QM5wJbLFdZJAyQIvwG6kAI=";
+    hash = "sha256-71YEkCUZqX/Hyq8wzj5Lf+ydDO708F+44ILLKrTpHF0=";
   };
 
   tags = (lib.optional (!withTensorflow) "noguesser");
