@@ -40,6 +40,7 @@
   cups-filters,
   gdal,
   gegl,
+  gtk3,
   inkscape,
   scribus,
   vips,
@@ -195,9 +196,17 @@ stdenv.mkDerivation (finalAttrs: {
       gdal = gdal.override { usePoppler = true; };
       python-poppler-qt5 = python3.pkgs.poppler-qt5;
 
-      pkg-config = testers.hasPkgConfigModules {
-        package = finalAttrs.finalPackage;
-      };
+      pkg-config =
+        testers.hasPkgConfigModules {
+          package = finalAttrs.finalPackage;
+        }
+        // lib.optionalAttrs (!minimal) {
+          # Poppler skips tests unless GTK3 is detected; add to closure
+          poppler-with-gtk-tests = finalAttrs.finalPackage.overrideAttrs (old: {
+            pname = "${old.pname}-gtk-tests";
+            buildInputs = old.buildInputs ++ [ gtk3 ];
+          });
+        };
     };
   };
 
