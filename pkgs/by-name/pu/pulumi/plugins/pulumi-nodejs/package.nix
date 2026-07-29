@@ -51,9 +51,6 @@ buildGoModule (finalAttrs: {
     description = "Language host for Pulumi programs written in TypeScript & JavaScript (Node.js)";
     license = lib.licenses.asl20;
     mainProgram = "pulumi-language-nodejs";
-    maintainers = with lib.maintainers; [
-      tie
-      untio11
-    ];
+    maintainers = lib.teams.pulumi.members;
   };
 })

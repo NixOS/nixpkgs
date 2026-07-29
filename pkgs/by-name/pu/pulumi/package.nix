@@ -240,11 +240,6 @@ buildGoModule (finalAttrs: {
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.asl20;
     mainProgram = "pulumi";
-    maintainers = with lib.maintainers; [
-      nicoo
-      tie
-      untio11
-      veehaitch
-    ];
+    maintainers = lib.teams.pulumi.members;
   };
 })
