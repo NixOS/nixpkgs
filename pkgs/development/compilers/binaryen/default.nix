@@ -20,13 +20,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "binaryen";
-  version = "129";
+  version = "130";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "binaryen";
     rev = "version_${version}";
-    hash = "sha256-rmCNBrKHVozjzyWPAD4pZw0uViMMRRQsZALm4jbYIJk=";
+    hash = "sha256-vwnW/5sKcVR20ys8V8ag66CUBcCjcufnn/ChxDFxd4k=";
   };
 
   nativeBuildInputs = [
@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
       sed -i '/gtest/d' third_party/CMakeLists.txt
       rmdir test/spec/testsuite
       ln -s ${testsuite} test/spec/testsuite
-      # scripts/test/lld.py checks `'64' in input_path` to enable the
+      # scripts/test/finalize.py checks `'64' in input_path` to enable the
       # memory64/bigint flags; the full Nix build path leaks digits that
       # can accidentally contain "64", wrongly triggering those flags for
       # non-memory64 tests (e.g. duplicate_imports.wat). Match on basename.
-      substituteInPlace scripts/test/lld.py \
+      substituteInPlace scripts/test/finalize.py \
         --replace-fail "'64' in input_path" "'64' in os.path.basename(input_path)"
     else
       cmakeFlagsArray=($cmakeFlagsArray -DBUILD_TESTS=0)
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     "wasm-metadce"
     "wasm-reduce"
     "spec"
-    "lld"
+    "finalize"
     "wasm2js"
     # "unit" # fails on test.unit.test_cluster_fuzz.ClusterFuzz
     # "binaryenjs" "binaryenjs_wasm" # not building this
