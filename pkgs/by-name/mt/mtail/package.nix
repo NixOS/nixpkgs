@@ -9,6 +9,7 @@
 buildGoModule (finalAttrs: {
   pname = "mtail";
   version = "3.4.6";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jaqx0r";
