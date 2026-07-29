@@ -253,6 +253,18 @@
   "module-pelican-wings-traefik": [
     "index.html#module-pelican-wings-traefik"
   ],
+  "module-pelican-panel": [
+    "index.html#module-pelican-panel"
+  ],
+  "module-pelican-panel-traefik": [
+    "index.html#module-pelican-panel-traefik"
+  ],
+  "module-pelican-panel-basic-usage": [
+    "index.html#module-pelican-panel-basic-usage"
+  ],
+  "module-pelican-panel-environment": [
+    "index.html#module-pelican-panel-environment"
+  ],
   "sec-boot-problems-scripted-stage-1": [
     "index.html#sec-boot-problems-scripted-stage-1"
   ],
