@@ -19,8 +19,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/utensils/mcp-nixos/commit/0ef99b6a5674e60ca315dc55a0f458673bb1e4fa.patch";
-      sha256 = "sha256-f57qS6V8mSv2kLKiudSG2enAofeUZwKvjfdowmGRIxw=";
+      url = "https://github.com/utensils/mcp-nixos/commit/86f8936f0c257153f8fba10cf8cba7fede6d2f30.patch";
+      sha256 = "sha256-55rQhE9CfTW1KQzUNM86U4S4Efu4yCN+1tZvdOz12oc=";
     })
   ];
 
