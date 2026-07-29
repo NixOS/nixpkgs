@@ -30,6 +30,8 @@
   enableN320 ? true,
   enableE300 ? true,
   enableE320 ? true,
+  # passthru.tests
+  soapyuhd,
 }:
 
 let
@@ -223,6 +225,8 @@ stdenv.mkDerivation (finalAttrs: {
   disallowedReferences = optionals (!enablePythonApi && !enableUtils) [
     python3
   ];
+
+  passthru.tests = { inherit soapyuhd; };
 
   meta = {
     description = "USRP Hardware Driver (for Software Defined Radio)";
