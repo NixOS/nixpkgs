@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  callPackage,
   fetchFromCodeberg,
   fetchpatch,
   libGL,
@@ -9,6 +8,7 @@
   libevdev,
   libinput,
   libxkbcommon,
+  nix-update-script,
   pixman,
   pkg-config,
   scdoc,
@@ -29,6 +29,7 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "river";
   version = "0.4.5";
+  __structuredAttrs = true;
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
 
@@ -49,7 +50,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  deps = callPackage ./build.zig.zon.nix { };
+  zigDeps = zig.fetchDeps {
+    inherit (finalAttrs) src pname version;
+    fetchAll = true;
+    hash = "sha256-MVFoc361EKGhz5V/9tAOc8lldAi45o592oyOfHX1vTM=";
+  };
+
+  postConfigure = ''
+    ln -s ${finalAttrs.zigDeps} "$ZIG_GLOBAL_CACHE_DIR/p"
+  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -75,12 +84,13 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
   ];
 
-  zigBuildFlags = [
-    "--system"
-    "${finalAttrs.deps}"
-  ]
-  ++ lib.optional withManpages "-Dman-pages"
-  ++ lib.optional xwaylandSupport "-Dxwayland";
+  zigBuildFlags =
+    lib.optionals withManpages [
+      "-Dman-pages"
+    ]
+    ++ lib.optionals xwaylandSupport [
+      "-Dxwayland"
+    ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -92,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     providedSessions = [ "river" ];
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
   };
 
   meta = {
