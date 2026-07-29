@@ -2,6 +2,7 @@
   appimageTools,
   fetchurl,
   lib,
+  python3,
 }:
 
 let
@@ -24,7 +25,12 @@ appimageTools.wrapType2 {
     substituteInPlace $out/share/applications/arduino-ide.desktop --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=arduino-ide %U'
   '';
 
-  extraPkgs = pkgs: [ pkgs.libsecret ];
+  extraPkgs = pkgs: [
+    pkgs.libsecret
+    (python3.withPackages (ps: [
+      ps.pyserial # for esptool
+    ]))
+  ];
 
   meta = {
     description = "Open-source electronics prototyping platform";
