@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-arc";
-  version = "0.2.2";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "seflue";
     repo = "cargo-arc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ph4awBUWkcpSlZZKAZ0WU05lTip1QIMIErOhBeE3KI4=";
+    hash = "sha256-Jf23dACQW2LbfINWq98wNf1rwqueM4bPFFwQIdDT+3Y=";
   };
 
-  cargoHash = "sha256-eCYFz8pZ9gh/sYOlMGhQFjcd5FxWVGoWYcrM7u13dRc=";
+  cargoHash = "sha256-kKAL5ZgOZOt7Lmu2Epe7B9/FrayGAUguUcb9HPi3gj0=";
 
   checkFlags = [
     # Tries to create temp dir
