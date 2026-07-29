@@ -22684,6 +22684,11 @@
     github = "potb";
     githubId = 10779093;
   };
+  potoo0 = {
+    name = "potoo0";
+    github = "potoo0";
+    githubId = 34411681;
+  };
   pouya = {
     email = "me@pouyacode.net";
     github = "pouya-abbassi";
