@@ -49,6 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-Wno-error=deprecated-declarations"
   ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   meta = {
     description = "Probabilistic, flexible, and compact 3D mapping library for robotic systems";
     homepage = "https://octomap.github.io/";
