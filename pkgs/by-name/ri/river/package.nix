@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromCodeberg,
-  fetchpatch,
   libGL,
   libx11,
   libevdev,
@@ -28,7 +27,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "river";
-  version = "0.4.5";
+  version = "0.4.6";
   __structuredAttrs = true;
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
@@ -37,16 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "river";
     repo = "river";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-q4JAlr9/ex+BEgktBmFwOvZzQEAGvxXPD1QyKqyha4g=";
+    hash = "sha256-zSXiniROSgkLeFUQJY/8XbOWZ/lvnV4ZF/cEhzNpYsQ=";
   };
-
-  # this fixes aarch64 build, remove on next update
-  patches = [
-    (fetchpatch {
-      url = "https://codeberg.org/river/river/commit/8a1afd94ca477045f39bf91ac9ec31da9e9f932a.diff";
-      hash = "sha256-oBbM1meVAFb6j+qIFeG8Ol+FVFllrvFSKtvcY2q3ESs=";
-    })
-  ];
 
   strictDeps = true;
 
