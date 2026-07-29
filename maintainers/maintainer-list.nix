@@ -30851,6 +30851,13 @@
     github = "xanderio";
     githubId = 6298052;
   };
+  Xatra1 = {
+    name = "solarfire";
+    github = "Xatra1";
+    githubId = 124910045;
+    email = "xatra169@gmail.com";
+    keys = [ { fingerprint = "D91D 3C69 66B4 437A 519F  3247 1BA5 8E9D 05F4 AC54"; } ];
+  };
   xaverdh = {
     email = "hoe.dom@gmx.de";
     github = "xaverdh";
