@@ -291,8 +291,8 @@ let
         mktplcRef = {
           publisher = "antfu";
           name = "slidev";
-          version = "52.15.0";
-          hash = "sha256-iCOLP2ZOm/kwmNFrmc9NJi1nU+301y2Jgnj9FbUSbm0=";
+          version = "52.18.0";
+          hash = "sha256-T+g8hXu0j8myRVYRHknYUhFyeo4Jl/9LLVIm3Tkq96o=";
         };
         meta = {
           license = lib.licenses.mit;
