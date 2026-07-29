@@ -30,6 +30,8 @@
   withTpm2Tss ? !stdenv.hostPlatform.isDarwin && !enableMinimal,
   tpm2-tss,
   nixosTests,
+  runtimeShell,
+  gawk,
 }:
 
 assert guiSupport -> !enableMinimal;
@@ -143,6 +145,17 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail "hkps://keyserver.ubuntu.com"  "hkps://keys.openpgp.org"
       substituteInPlace doc/gnupg.info-1 doc/dirmngr.texi \
         --replace-fail "https://keyserver.ubuntu.com" "https://keys.openpgp.org"
+      # Patch executables' paths in services
+      substituteInPlace doc/examples/systemd-user/*.service \
+        --replace-fail "/usr/bin" "$out/bin"
+      substituteInPlace doc/examples/systemd-user/keyboxd.service \
+        --replace-fail "/usr/lib/gnupg" "$out/libexec"
+      substituteInPlace doc/examples/systemd-user/gpg-agent-ssh.socket \
+        --replace-fail "=sh" "=${runtimeShell}" \
+        --replace-fail "gpgconf" "$out/bin/gpgconf" \
+        --replace-fail "awk" "${lib.getExe gawk}"
+      substituteInPlace doc/examples/systemd-user/gpg-agent.service \
+        --replace-fail "gpg-agent.socket" "sockets.target"
     ''
     + lib.optionalString (stdenv.hostPlatform.isLinux && withPcsc) ''
       sed -i 's,"libpcsclite\.so[^"]*","${lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
@@ -192,6 +205,8 @@ stdenv.mkDerivation (finalAttrs: {
           if [[ "$(basename $f)" == "gpg-wks-client" ]]; then continue; fi
           ln -s $f $out/bin/$(basename $f)
         done
+
+        install -Dm644 -t $out/lib/systemd/user doc/examples/systemd-user/*.{service,socket}
       '';
 
   enableParallelBuilding = true;
