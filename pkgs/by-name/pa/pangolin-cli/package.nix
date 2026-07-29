@@ -10,20 +10,20 @@
 
 buildGoModule (finalAttrs: {
   pname = "pangolin-cli";
-  version = "0.14.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "cli";
     tag = finalAttrs.version;
-    hash = "sha256-YST8NQWUNd0nkaKF4K+tgXUMI1FcoceQyO6Kisf3WDc=";
+    hash = "sha256-F3bRjy/QzZGJSPzvYylKe2z+RVZ4lMt2lu+p6y53ZWw=";
   };
 
   ldflags = [
     "-X github.com/fosrl/cli/internal/version.Version=${finalAttrs.version}"
   ];
 
-  vendorHash = "sha256-yHU/xfO+I5YncycGkPkpKGUM11YyMrAkS17N/nAmUc0=";
+  vendorHash = "sha256-S4di9hVoExIgtlTpV9cEHI2Ah6GGSTmsojFE+tPfCb0=";
 
   nativeBuildInputs = [ installShellFiles ];
 

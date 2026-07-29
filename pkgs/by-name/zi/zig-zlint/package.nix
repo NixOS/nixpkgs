@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  callPackage,
   zig_0_16,
   versionCheckHook,
 }:
@@ -13,6 +12,8 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zig-zlint";
   version = "0.9.1";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     name = "zlint"; # tests expect this
@@ -22,14 +23,22 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-EUTShGGp1M4ZckLgQJSXzGJQqFMx2r4zwt+mkRIPzPE=";
   };
 
+  zigDeps = zig.fetchDeps {
+    inherit (finalAttrs) src pname version;
+    fetchAll = true;
+    hash = "sha256-H4fqly0jojU0cFVkGtqZinTI7p0cRoBFKTJtSNF/+Xk=";
+  };
+
+  postConfigure = ''
+    ln -s ${finalAttrs.zigDeps} "$ZIG_GLOBAL_CACHE_DIR/p"
+  '';
+
   nativeBuildInputs = [
     zig
   ];
 
   zigBuildFlags = [
     "-Dversion=v${finalAttrs.version}"
-    "--system"
-    (callPackage ./build.zig.zon.nix { })
   ];
 
   doCheck = true;

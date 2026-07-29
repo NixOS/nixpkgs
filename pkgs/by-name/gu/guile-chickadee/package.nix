@@ -59,7 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     wrapProgram $out/bin/chickadee \
       --prefix GUILE_LOAD_PATH : "$out/${guile.siteDir}:$GUILE_LOAD_PATH" \
-      --prefix GUILE_LOAD_COMPILED_PATH : "$out/${guile.siteCcacheDir}:$GUILE_LOAD_COMPILED_PATH"
+      --prefix GUILE_LOAD_COMPILED_PATH : "$out/${guile.siteCcacheDir}:$GUILE_LOAD_COMPILED_PATH" \
+      --prefix LD_LIBRARY_PATH : "${lib.strings.makeLibraryPath finalAttrs.buildInputs}"
   '';
 
   passthru.tests.version = testers.testVersion {
