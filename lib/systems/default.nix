@@ -245,7 +245,7 @@ let
               netbsd = "NetBSD";
               freebsd = "FreeBSD";
               openbsd = "OpenBSD";
-              wasi = "Wasi";
+              wasip1 = "WasiP1";
               redox = "Redox";
               genode = "Genode";
             }
@@ -470,6 +470,8 @@ let
                   rust.platform.os or "none"
                 else if final.isDarwin then
                   "macos"
+                else if final.isWasi then
+                  "wasi"
                 else if final.isWasm && !final.isWasi then
                   "unknown" # Needed for {wasm32,wasm64}-unknown-unknown.
                 else
@@ -528,11 +530,7 @@ let
                   abi.name;
 
               inferred =
-                if final.isWasi then
-                  # Rust uses `wasm32-wasip?` rather than `wasm32-unknown-wasi`.
-                  # We cannot know which subversion does the user want, and
-                  # currently use WASI 0.1 as default for compatibility. Custom
-                  # users can set `rust.rustcTargetSpec` to override it.
+                if final.isWasiP1 then
                   "${cpu_}-wasip1"
                 else
                   "${cpu_}-${vendor_}-${kernel.name}${optionalString (abi.name != "unknown") "-${abi_}"}";
@@ -595,7 +593,7 @@ let
               "wasm32" = "wasm";
             }
             .${final.parsed.cpu.name} or null;
-          GOOS = if final.isWasi then "wasip1" else final.parsed.kernel.name;
+          GOOS = if final.isWasiP1 then "wasip1" else final.parsed.kernel.name;
 
           # See https://go.dev/wiki/GoArm
           GOARM = toString (lib.intersectLists [ (final.parsed.cpu.version or "") ] [ "5" "6" "7" ]);

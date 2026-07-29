@@ -120,7 +120,7 @@ rec {
         "riscv64-netbsd"
         "riscv32-none"
         "x86_64-redox"
-        "wasm32-wasi"
+        "wasm32-wasip1"
       ];
       badTargetPlatforms = [
         # Rust is currently unable to target the n32 ABI

@@ -145,6 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
       thoughtpolice
       lf-
       _9999years
+      cbarrete
     ];
     platforms = [
       "x86_64-linux"

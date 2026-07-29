@@ -2,18 +2,21 @@
   lib,
   fetchurl,
   buildDunePackage,
+  alcotest,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "spdx_licenses";
-  version = "1.4.0";
-
-  minimalOCamlVersion = "4.08";
+  version = "1.5.0";
 
   src = fetchurl {
-    url = "https://github.com/kit-ty-kate/spdx_licenses/releases/download/v${version}/spdx_licenses-${version}.tar.gz";
-    hash = "sha256-slXewgDbf1US8kk/NaxOoicnkwdliUOq+SemkjvyUis=";
+    url = "https://github.com/kit-ty-kate/spdx_licenses/releases/download/v${finalAttrs.version}/spdx_licenses-${finalAttrs.version}.tar.gz";
+    hash = "sha256-Q+z+B/2yHiiulK/FY75fd4+Lyt5fTcJgZwBWdzgy4EQ=";
   };
+
+  doCheck = true;
+
+  checkInputs = [ alcotest ];
 
   meta = {
     homepage = "https://github.com/kit-ty-kate/spdx_licenses";
@@ -21,4 +24,4 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

@@ -10,14 +10,15 @@
   cassava,
   containers,
   directory,
+  doctest-parallel,
   extra,
   fetchzip,
   filelock,
   filepath,
+  fsnotify,
   hermes-json,
   HUnit,
   lib,
-  MemoTrie,
   nix-derivation,
   optics,
   random,
@@ -27,7 +28,6 @@
   stm,
   streamly-core,
   strict,
-  strict-types,
   terminal-size,
   text,
   time,
@@ -38,11 +38,12 @@
 }:
 mkDerivation {
   pname = "nix-output-monitor";
-  version = "2.1.8";
+  version = "2.2.0";
   src = fetchzip {
-    url = "https://code.maralorn.de/maralorn/nix-output-monitor/archive/v2.1.8.tar.gz";
-    sha256 = "09zpz9dbllaqngkg6hz0vl4sx3kbvlp4cdk6lqa0kgszrwsdwl9r";
+    url = "https://code.maralorn.de/maralorn/nix-output-monitor/archive/v2.2.0.tar.gz";
+    sha256 = "14qlawcwi4zq586rq75msxh19nkwh3zigzl41g7gdj7fzg030rnl";
   };
+  postUnpack = "sourceRoot+=/nix-output-monitor; echo source root reset to $sourceRoot";
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [
@@ -57,8 +58,8 @@ mkDerivation {
     extra
     filelock
     filepath
+    fsnotify
     hermes-json
-    MemoTrie
     nix-derivation
     optics
     relude
@@ -67,7 +68,6 @@ mkDerivation {
     stm
     streamly-core
     strict
-    strict-types
     terminal-size
     text
     time
@@ -86,8 +86,8 @@ mkDerivation {
     extra
     filelock
     filepath
+    fsnotify
     hermes-json
-    MemoTrie
     nix-derivation
     optics
     relude
@@ -96,7 +96,6 @@ mkDerivation {
     stm
     streamly-core
     strict
-    strict-types
     terminal-size
     text
     time
@@ -114,12 +113,13 @@ mkDerivation {
     cassava
     containers
     directory
+    doctest-parallel
     extra
     filelock
     filepath
+    fsnotify
     hermes-json
     HUnit
-    MemoTrie
     nix-derivation
     optics
     random
@@ -129,7 +129,6 @@ mkDerivation {
     stm
     streamly-core
     strict
-    strict-types
     terminal-size
     text
     time
@@ -139,7 +138,7 @@ mkDerivation {
   ];
   homepage = "https://code.maralorn.de/maralorn/nix-output-monitor";
   description = "Processes output of Nix commands to show helpful and pretty information";
-  license = lib.licenses.agpl3Plus;
+  license = lib.meta.getLicenseFromSpdxId "EUPL-1.2";
   mainProgram = "nom";
   maintainers = [ lib.maintainers.maralorn ];
 }

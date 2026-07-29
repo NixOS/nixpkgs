@@ -1,24 +1,27 @@
 {
   lib,
   stdenvNoCC,
-  fetchzip,
+  fetchFromGitHub,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "courier-prime";
-  version = "unstable-2019-12-05";
+  version = "0-unstable-2019-11-20";
 
-  src = fetchzip {
-    url = "https://github.com/quoteunquoteapps/CourierPrime/archive/7f6d46a766acd9391d899090de467c53fd9c9cb0/courier-prime-${version}.zip";
+  __structuredAttrs = true;
+  strictDeps = true;
+  src = fetchFromGitHub {
+    owner = "quotunquoteapps";
+    repo = "CourierPrime";
+    rev = "7f6d46a766acd9391d899090de467c53fd9c9cb0";
     hash = "sha256-pMFZpytNtgoZrBj2Gj8SgJ0Lab8uVY5aQtcO2lFbHj4=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    install -m444 -Dt $out/share/fonts/truetype fonts/ttf/*.ttf
-
-    runHook postInstall
+  postInstall = ''
+    installFonts ttf $out/share/fonts/truetype
   '';
 
   meta = {
@@ -28,4 +31,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ lib.maintainers.austinbutler ];
     platforms = lib.platforms.all;
   };
-}
+})
