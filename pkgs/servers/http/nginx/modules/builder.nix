@@ -2,6 +2,7 @@
   lib,
   stdenv,
   nix-update-script,
+  nginx,
 }:
 
 # This builder provides a thin facade that wraps the fod into a derivation
@@ -32,6 +33,12 @@ lib.extendMkDerivation {
         args.passthru.updateScript or (nix-update-script {
           extraArgs = [ "--version=stable" ];
         });
+      tests = {
+        nginx = nginx.override {
+          modules = [ finalAttrs.finalPackage ];
+        };
+      }
+      // args.passthru.tests or { };
     };
 
     meta = (
