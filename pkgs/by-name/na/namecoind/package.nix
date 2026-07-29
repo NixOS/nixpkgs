@@ -21,14 +21,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "namecoind";
-  version = "31.0";
+  version = "31.1";
 
   src = fetchFromGitHub {
     owner = "namecoin";
     repo = "namecoin-core";
     tag = "nc${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-jgkyLWJr7+wFTOazxkS8fJV4544dyIOAZf2zorL7KXY=";
+    hash = "sha256-FeFo8KqsJ/uP2IIIHlAU5IXibFiXtKAsfeDmO49wCH0=";
   };
 
   nativeBuildInputs = [
