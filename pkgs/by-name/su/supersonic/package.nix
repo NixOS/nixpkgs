@@ -24,16 +24,20 @@
 
 buildGoModule (finalAttrs: {
   pname = "supersonic" + lib.optionalString waylandSupport "-wayland";
-  version = "0.21.1";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "dweymouth";
     repo = "supersonic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jKmkj7Y3D2Af7XNOkLY3sknOelvId649NZXpu/fU7ko=";
+    hash = "sha256-Ynw/NLDk2AVmn30llFtt/A9hEheUZ+/VZqXOIdiUSxQ=";
   };
 
-  vendorHash = "sha256-Qg5OWg+iFcGuD8E3/7YwmmciiRGdUFNSHLrEAaqRmnQ=";
+  vendorHash = "sha256-W5Uwma72lqJB+QHkSasi7WArsYlfXLVPph9TlDSxFEk=";
+
+  # "go mod vendor" fails to build; go-gl/glfw fails with an error like:
+  # xdg-shell-client-protocol.h: No such file or directory
+  proxyVendor = true;
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -43,8 +47,8 @@ buildGoModule (finalAttrs: {
     desktopToDarwinBundle
   ];
 
-  # go-glfw doesn't support both X11 and Wayland in single build
-  tags = [ "migrated_fynedo" ] ++ lib.optionals waylandSupport [ "wayland" ];
+  # we could omit the "wayland" and "x11" tags if we wanted to support both X11 and Wayland in single build.
+  tags = [ "migrated_fynedo" ] ++ (if waylandSupport then [ "wayland" ] else [ "x11" ]);
 
   buildInputs = [
     libglvnd
