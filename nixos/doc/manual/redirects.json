@@ -65,6 +65,21 @@
   "module-services-keycloak-unix-socket": [
     "index.html#module-services-keycloak-unix-socket"
   ],
+  "module-services-navidrome": [
+    "index.html#module-services-navidrome"
+  ],
+  "module-services-navidrome-basic-usage": [
+    "index.html#module-services-navidrome-basic-usage"
+  ],
+  "module-services-navidrome-configuration-options": [
+    "index.html#module-services-navidrome-configuration-options"
+  ],
+  "module-services-navidrome-plugins": [
+    "index.html#module-services-navidrome-plugins"
+  ],
+  "module-services-navidrome-secrets": [
+    "index.html#module-services-navidrome-secrets"
+  ],
   "module-services-tandoor-recipes-migrating-media-option-move": [
     "index.html#module-services-tandoor-recipes-migrating-media-option-move",
     "index.html#module-services-tandoor-recipes-migrating-media-option-1"
