@@ -167,8 +167,7 @@ stdenv.mkDerivation {
   ++ lib.optional (
     stdenv.buildPlatform != stdenv.hostPlatform
   ) "--crossbuild=${stdenv.hostPlatform.uname.system}::${stdenv.hostPlatform.uname.processor}"
-  ++ configureFlags
-  ++ map (mod: "--add-module=${mod}") modules;
+  ++ configureFlags;
 
   env = {
     NIX_CFLAGS_COMPILE = toString (
@@ -208,6 +207,15 @@ stdenv.mkDerivation {
   # which breaks build, since nginx does not actually use autoconf.
   preConfigure = ''
     setOutputFlags=
+  ''
+  # Make all modules source trees writable
+  + ''
+    for module in ${toString modules}; do
+      dst="$NIX_BUILD_TOP/$(basename "$module")"
+      cp --recursive "$module" "$dst"
+      chmod --recursive +w "$dst"
+      appendToVar configureFlags "--add-module=$dst"
+    done
   ''
   + preConfigure
   + lib.concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules;

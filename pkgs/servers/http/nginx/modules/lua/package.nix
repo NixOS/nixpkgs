@@ -21,13 +21,6 @@ mkNginxPlugin (finalAttrs: {
   preConfigure = ''
     export LUAJIT_LIB="${luajit_openresty}/lib"
     export LUAJIT_INC="$(realpath ${luajit_openresty}/include/luajit-*)"
-
-    # make source directory writable to allow generating src/ngx_http_lua_autoconf.h
-    lua_src=$TMPDIR/lua-src
-    cp -r "${finalAttrs.src}/" "$lua_src"
-    chmod -R +w "$lua_src"
-    export configureFlags="''${configureFlags//"${finalAttrs.src}"/"$lua_src"}"
-    unset lua_src
   '';
 
   allowMemoryWriteExecute = true;
