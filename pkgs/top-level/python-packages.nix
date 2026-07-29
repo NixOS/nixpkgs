@@ -15990,6 +15990,8 @@ self: super: with self; {
 
   pytaglib = callPackage ../development/python-modules/pytaglib { };
 
+  pytango = callPackage ../development/python-modules/pytango { };
+
   pytankerkoenig = callPackage ../development/python-modules/pytankerkoenig { };
 
   pytap2 = callPackage ../development/python-modules/pytap2 { };
