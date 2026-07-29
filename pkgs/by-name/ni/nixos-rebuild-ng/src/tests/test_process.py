@@ -29,8 +29,10 @@ def test_remote_env_shell_argv() -> None:
         "sudo",
         "/bin/sh",
         "-c",
-        """exec /usr/bin/env -i PATH="${PATH-}" LOCALE_ARCHIVE="${LOCALE_ARCHIVE-}" """
-        '''NIXOS_NO_CHECK="${NIXOS_NO_CHECK-}" NIXOS_INSTALL_BOOTLOADER=0 "$@"''',
+        (
+            """exec /usr/bin/env -i PATH="${PATH-}" LOCALE_ARCHIVE="${LOCALE_ARCHIVE-}" """
+            '''NIXOS_NO_CHECK="${NIXOS_NO_CHECK-}" NIXOS_INSTALL_BOOTLOADER=0 "$@"'''
+        ),
         "sh",
         "cmd",
         "arg",
