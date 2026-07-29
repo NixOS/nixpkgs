@@ -4,6 +4,7 @@
 
 (require 'ert)
 (eval-when-compile (require 'cl-lib))
+(require 'server)
 
 ;; Try to make tests cause no side-effects.
 
@@ -47,7 +48,7 @@
   (declare (indent 1) (debug (symbolp)))
   (cl-check-type test-name symbol)
   `(defun ,test-name ()
-     (bound-and-true-p ,test-name)))
+     (list (bound-and-true-p ,test-name))))
 
 (defmacro define-with-packages-non-batch-tests-via-bound-and-true-p (&rest test-names)
   "See also `define-with-packages-non-batch-test-via-bound-and-true-p'."
@@ -66,22 +67,16 @@ loading of early-default.el and default.el files, we launch a non-batch Emacs,
 run non-batch tests on it and collect test results from it.")
 
 (defun with-packages--run-non-batch-test (test-name)
-  "Run non-batch test named TEST-NAME.
-Return t if the test passes.  Otherwise, return nil."
-  (cl-flet* ((eval-in-non-batch-emacs (form)
-               (cl-check-type form string)
-               (with-temp-buffer
-                 (call-process "emacsclient" nil t nil
-                               "--socket-name" with-packages-non-batch-emacs-socket
-                               "--eval" form)
-                 (string-trim (buffer-substring-no-properties (point-min) (point-max)))))
-             (funcall-in-non-batch-emacs (function-name)
-               (eval-in-non-batch-emacs (format "(%s)" function-name))))
-    ;; Load with-packages in the non-batch Emacs in case needed.
-    (eval-in-non-batch-emacs "(require 'with-packages)")
-    (not (string= (format "%s" nil)
-                  ;; Run the non-batch test.  Return non-nil, as string, if it passes.
-                  (funcall-in-non-batch-emacs test-name)))))
+  "Run non-batch test named TEST-NAME, a symbol.
+Return test result, a list of values.  Each is non-nil if the test passes."
+  (cl-check-type test-name symbol)
+  (cl-flet ((eval-in-non-batch-emacs (form)
+              (server-eval-at with-packages-non-batch-emacs-socket form)))
+    (and
+     ;; Test test-name is defined in with-packages so we load it in the non-batch Emacs.
+     (eval-in-non-batch-emacs '(require 'with-packages))
+     ;; Run the non-batch test and return test result.
+     (eval-in-non-batch-emacs `(,test-name)))))
 
 (defmacro define-with-packages-non-batch-ert-test (test-name)
   "See `with-packages--run-non-batch-test' for how the test is run."
@@ -90,7 +85,12 @@ Return t if the test passes.  Otherwise, return nil."
   `(ert-deftest ,test-name ()
      (should (stringp with-packages-non-batch-emacs-socket))
      (should (file-readable-p with-packages-non-batch-emacs-socket))
-     (should (with-packages--run-non-batch-test ,(symbol-name test-name)))))
+     (let ((test-result (with-packages--run-non-batch-test (quote ,test-name))))
+       (should (consp test-result))
+       ;; Make it easier to find out which condition fails in non-batch tests.
+       (should (equal test-result
+                      (cl-loop for item in test-result
+                               collect (if item item t)))))))
 
 (defmacro define-with-packages-non-batch-ert-tests (&rest test-names)
   "See also `define-with-packages-non-batch-ert-test'."
@@ -107,30 +107,30 @@ Return t if the test passes.  Otherwise, return nil."
   with-packages-early-default-is-loaded-before-default)
 
 (defun with-packages-unwrapped-site-start-is-loaded-quietly ()
-  (and (with-packages-unwrapped-site-start-is-loaded)
-       (not (save-excursion
-              (with-current-buffer "*Messages*"
-                (goto-char (point-min))
-                (save-match-data
-                  (re-search-forward (rx line-start
-                                         "Loading"
-                                         (zero-or-more not-newline)
-                                         "site-start")
-                                     nil
-                                     t)))))))
+  (list (with-packages-unwrapped-site-start-is-loaded)
+        (not (save-excursion
+               (with-current-buffer "*Messages*"
+                 (goto-char (point-min))
+                 (save-match-data
+                   (re-search-forward (rx line-start
+                                          "Loading"
+                                          (zero-or-more not-newline)
+                                          "site-start")
+                                      nil
+                                      t)))))))
 
 (defun with-packages-no-jit-native-comp ()
   "Test no JIT native-comp is triggered during non-batch tests.
 This is a regression test for URL `https://github.com/NixOS/nixpkgs/pull/538964'."
   ;; Give Emacs some time to generate JIT native-comp results.
   (sleep-for 2.5)
-  (and (not (cl-loop for buffer being each buffer
-                     thereis (string= (buffer-name buffer)
-                                      "*Async-native-compile-log*")))
-       (let ((eln-dir (car native-comp-eln-load-path)))
-         (or (directory-empty-p eln-dir)
-             (and (not (file-exists-p eln-dir))
-                  (file-exists-p (file-name-parent-directory eln-dir)))))))
+  (list (not (cl-loop for buffer being each buffer
+                      thereis (string= (buffer-name buffer)
+                                       "*Async-native-compile-log*")))
+        (let ((eln-dir (car native-comp-eln-load-path)))
+          (or (directory-empty-p eln-dir)
+              (and (not (file-exists-p eln-dir))
+                   (file-exists-p (file-name-parent-directory eln-dir)))))))
 
 (define-with-packages-non-batch-ert-tests
   with-packages-early-default-is-loaded

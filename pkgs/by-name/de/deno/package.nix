@@ -13,6 +13,9 @@
   librusty_v8 ? callPackage ./rusty-v8 { },
   libffi,
   sqlite,
+  pkg-config,
+  zstd,
+  lcms2,
   lld,
   writableTmpDirAsHomeHook,
 
@@ -65,16 +68,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     libffi
     sqlite
+    zstd
   ];
 
-  # uses zlib-ng but can't dynamically link yet
-  # https://github.com/rust-lang/libz-sys/issues/158
   nativeBuildInputs = [
     rustPlatform.bindgenHook
     # for tomlq to adjust Cargo.toml
     yq
     # required by libz-ng-sys crate
     cmake
+    # required to de-vendor zstd
+    pkg-config
     # required by deno_kv crate
     protobuf
     installShellFiles
@@ -91,15 +95,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Disable the default feature `upgrade` (which controls the self-update subcommand and update checks)
   buildNoDefaultFeatures = true;
-  buildFeatures = [
-    "__vendored_zlib_ng"
-  ];
 
   # work around "error: unknown warning group '-Wunused-but-set-parameter'"
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unknown-warning-option";
   # The v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
   # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE
   env.RUSTY_V8_ARCHIVE = librusty_v8;
+
+  # de-vendor SQLite
+  env.LIBSQLITE3_SYS_USE_PKG_CONFIG = true;
+  # de-vendor zstd
+  env.ZSTD_SYS_USE_PKG_CONFIG = true;
+  # de-vendor lcms2
+  env.LCMS2_LIB_DIR = lib.makeLibraryPath [ lcms2 ];
 
   # Don't run checks on hydra as they've been observed to be flakey for us and
   # other distros CI: https://gitlab.alpinelinux.org/alpine/aports/-/blob/bec8b026686323b496365b825ad14fdf4473adf2/community/deno/APKBUILD#L79

@@ -17,16 +17,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gleam";
-  version = "1.17.0";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "gleam-lang";
     repo = "gleam";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lW57+JvinIHWhXuKagDcrfNDOUurIC53TjAxqrHN11I=";
+    hash = "sha256-Qq55vu/urXMKzDwJMvGMA6qIyYeMxhFGV03oijUBVNk=";
   };
 
-  cargoHash = "sha256-Wbmi/GyoflpDEnFC+1FicxqFJgOa8O2iUHwB7JcDuyU=";
+  cargoHash = "sha256-ZBpnRZo13f2UGbIfOC/S6yzVOoJf+t4ID5b8RleYf0g=";
 
   nativeBuildInputs = [
     pkg-config
@@ -49,6 +49,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # These tests make network requests
     "--skip=tests::echo::echo_dict"
     "--skip=tests::escript_success_with_dependency"
+    # checks files that would be gitignored, but we're not in a git repo
+    "--skip=tests::all_files_have_copyright_notice"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # Snapshot tests fail because a warning is shown on stdout

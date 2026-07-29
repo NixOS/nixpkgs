@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "2.0.2-unstable-2025-01-15";
+  version = "2.0.2-unstable-2026-07-22";
 in
 rustPlatform.buildRustPackage {
   pname = "system76-scheduler";
@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "system76-scheduler";
-    rev = "b0b7e98b0dbd2cd05e9fe80829e7083048202da7";
-    hash = "sha256-I+LN7Q5/VQ203Vk0eKM4HZw8oSS0bkcY/wIWbu4hPnI=";
+    rev = "8651bbf74bcfc8a46443b30199b380e12defa97e";
+    hash = "sha256-V8NGJzlWvhnd5LPCjOfaB/eIXGFJDZWYhQYov1RDxkw=";
   };
 
-  cargoHash = "sha256-rTe016jxRdL3xOw6yHz8btyfnecGuPTIashKQustYP0=";
+  cargoHash = "sha256-+heUUihZaETojlyrl+nul3/KuXG88WxRzNXVgsVvaFA=";
 
   nativeBuildInputs = [
     pkg-config
