@@ -25265,6 +25265,12 @@
     githubId = 12877905;
     name = "Roman Volosatovs";
   };
+  rvveber = {
+    email = "robin@we8.dev";
+    github = "rvveber";
+    githubId = 8644906;
+    name = "Robin Weber";
+  };
   rwxd = {
     email = "git@rwxd.de";
     github = "rwxd";
