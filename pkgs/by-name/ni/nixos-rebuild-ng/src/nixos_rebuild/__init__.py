@@ -86,7 +86,7 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
 
     main_parser = argparse.ArgumentParser(
         prog="nixos-rebuild",
-        parents=list(sub_parsers.values()),
+        parents=sub_parsers.values(),
         description="Reconfigure a NixOS machine",
         add_help=False,
         allow_abbrev=False,
@@ -260,7 +260,6 @@ def parse_args(
     if args.v or args.debug:
         logger.setLevel(logging.DEBUG)
 
-    # https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/linux/nixos-rebuild/nixos-rebuild.sh#L56
     if args.action == Action.DRY_RUN.value:
         args.action = Action.DRY_BUILD.value
 
