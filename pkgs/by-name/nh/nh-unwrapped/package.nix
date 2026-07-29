@@ -12,6 +12,7 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nh-unwrapped";
   version = "4.4.2";
+
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nh";
@@ -19,7 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-6wwzxJNcArC4i1vH3xJlT9wVUw7vQ+q1u11h3tRu/X4=";
   };
 
-  strictDeps = true;
+  __structuredAttrs = true;
 
   cargoBuildFlags = [
     "-p"
