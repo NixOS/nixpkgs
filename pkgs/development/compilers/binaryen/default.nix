@@ -62,6 +62,14 @@ stdenv.mkDerivation rec {
     LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib python3 ../check.py $tests
   '';
 
+  # bin/binaryen-unittests is absent on cross builds which don't have doCheck,
+  # so delete it on non-cross builds too (thus removing gtest from the closure).
+  postInstall = ''
+    if [ -n "$doCheck" ]; then
+      rm "$out/bin/binaryen-unittests"
+    fi
+  '';
+
   tests = [
     "version"
     "wasm-opt"
