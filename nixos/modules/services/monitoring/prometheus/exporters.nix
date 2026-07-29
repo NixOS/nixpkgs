@@ -135,6 +135,7 @@ let
         "varnish"
         "wireguard"
         "xray"
+        "yace"
         "zfs-siebenmann"
         "zfs"
       ]
