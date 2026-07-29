@@ -8,7 +8,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pynotifier";
+  pname = "py-notifier";
   version = "0.5.0";
   pyproject = true;
 
