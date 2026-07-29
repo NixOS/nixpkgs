@@ -2333,6 +2333,8 @@ with pkgs;
 
   keybase-gui = callPackage ../tools/security/keybase/gui.nix { };
 
+  keycloakPlugins = recurseIntoAttrs keycloak.plugins;
+
   limine-full = limine.override { enableAll = true; };
 
   logstash7 = callPackage ../tools/misc/logstash/7.x.nix {
@@ -5745,6 +5747,8 @@ with pkgs;
       relibc
     else if libc == "llvm" then
       llvmPackages_20.libc
+    else if libc == "picolibc" then
+      picolibc
     else
       throw "Unknown libc ${libc}";
 

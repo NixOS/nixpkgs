@@ -15,13 +15,13 @@
 
 buildDotnetModule rec {
   pname = "naps2";
-  version = "8.2.1";
+  version = "8.3.2";
 
   src = fetchFromGitHub {
     owner = "cyanfish";
     repo = "naps2";
     tag = "v${version}";
-    hash = "sha256-1OPFWmy9eDRnMJjYdzYubgfde7MNix8ZsSuN2ZHsvco=";
+    hash = "sha256-LGnrQc8/iO/uThiB2M9nx3dJHLXb6Kf3koByUIl7Uxk=";
   };
 
   patches = [
@@ -32,14 +32,10 @@ buildDotnetModule rec {
   projectFile = "NAPS2.App.Gtk/NAPS2.App.Gtk.csproj";
   nugetDeps = ./deps.json;
 
-  dotnetFlags = [
-    "-p:TargetFrameworks=net9"
-  ];
-
   executables = [ "naps2" ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
-  dotnet-runtime = dotnetCorePackages.runtime_9_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   nativeBuildInputs = [ wrapGAppsHook3 ];
 
@@ -76,7 +72,10 @@ buildDotnetModule rec {
     homepage = "https://www.naps2.com";
     changelog = "https://github.com/cyanfish/naps2/blob/master/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ eliandoran ];
+    maintainers = with lib.maintainers; [
+      eliandoran
+      magicquark
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "naps2";
   };
