@@ -81,6 +81,7 @@ rustPlatform.buildRustPackage (
     meta = {
       description = "Smart SSH, HTTPS, MySQL and Postgres bastion that requires no additional client-side software";
       homepage = "https://warpgate.null.page";
+      changelog = "https://github.com/warp-tech/warpgate/releases/tag/v${finalAttrs.version}";
       license = lib.licenses.asl20;
       platforms = lib.platforms.linux ++ lib.platforms.darwin;
       mainProgram = "warpgate";
