@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
-  gitUpdater,
+  nix-update-script,
   nixosTests,
 }:
 
@@ -21,10 +21,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gitUpdater {
-      url = "https://gerrit.googlesource.com/gerrit";
-      rev-prefix = "v";
-      allowedVersions = "^[0-9\\.]+$";
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--url=https://github.com/GerritCodeReview/gerrit"
+        "--version-regex=v([0-9\\.]+)"
+      ];
     };
     # A list of plugins that are part of the gerrit.war file.
     # Use `java -jar gerrit.war ls | grep plugins/` to generate that list.
