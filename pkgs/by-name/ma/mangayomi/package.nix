@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  flutter341,
+  flutter344,
   rustPlatform,
   fetchFromGitHub,
   copyDesktopItems,
@@ -14,13 +14,13 @@
 
 let
   pname = "mangayomi";
-  version = "0.7.2";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "kodjodevf";
     repo = "mangayomi";
     tag = "v${version}";
-    hash = "sha256-p2PjylbwOSCtJlPhT7sf1VOZfJx6y0CkNY6xIo2ij5I=";
+    hash = "sha256-xdspJrqlTj+D5S69Y2dLcAZ0wfyTbpNytC8mY1fXnqo=";
   };
 
   metaCommon = {
@@ -37,14 +37,14 @@ let
 
     sourceRoot = "${src.name}/rust";
 
-    cargoHash = "sha256-lKEkTHLTX6RdTxC8bU3GQm0RD2RBy4rDHzBHIiks4eg=";
+    cargoHash = "sha256-0XsGqhmTLe0y4TJCpU65Ewwgo0MNUp8EPPJ6Hv7Hci8=";
 
     passthru.libraryPath = "lib/librust_lib_mangayomi.so";
 
     meta = metaCommon;
   };
 in
-flutter341.buildFlutterApplication {
+flutter344.buildFlutterApplication {
   inherit pname version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -86,7 +86,7 @@ flutter341.buildFlutterApplication {
 
           buildAndTestSubdir = "rust";
 
-          cargoHash = "sha256-oJOM/Tb4QrezdtU8YTyr57JZp5FkDewgwXrBqwp6cp8=";
+          cargoHash = "sha256-8pCwqYWPS098kQGl2BqRfkq9ZF0KIlfzuPqzuQeictM=";
 
           passthru.libraryPath = "lib/libflutter_discord_rpc_fork.so";
         };
