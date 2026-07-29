@@ -20,7 +20,6 @@
   withTcb ? lib.meta.availableOn stdenv.hostPlatform tcb,
   tcb,
   cmocka,
-  fetchpatch,
 }:
 let
   glibc' =
@@ -34,13 +33,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shadow";
-  version = "4.19.4";
+  version = "4.20.0";
 
   src = fetchFromGitHub {
     owner = "shadow-maint";
     repo = "shadow";
     tag = finalAttrs.version;
-    hash = "sha256-vR6dwB3EttGY2DgQ20nOr9kNhF+nsAaBEyklcJAZ20Y=";
+    hash = "sha256-UafTyfK+pmW2wyAQnvHov9KIorf1HSc6haskfv7auHs=";
   };
 
   outputs = [
@@ -150,36 +149,6 @@ stdenv.mkDerivation (finalAttrs: {
         cp -r . $out/
       '';
       dontBuild = true;
-      patches = [
-        # tests: update useradd tests to expect ID 1001
-        (fetchpatch {
-          name = "update-useradd-tests.patch";
-          url = "https://github.com/shadow-maint/shadow/commit/59fbe8415dab17f1e702fbdee96956886c86c737.patch";
-          hash = "sha256-U0+NSCd4AfTuHMddTx9+wNtpdJt9t8+D5ApW0OCNgsY=";
-          stripLen = 2;
-        })
-        # tests: update usermod tests to expect ID 1001
-        (fetchpatch {
-          name = "update-usermod-tests.patch";
-          url = "https://github.com/shadow-maint/shadow/commit/91c2ad44ababca2e32cdb71152b0f7f2a7c546be.patch";
-          hash = "sha256-v1EEvMfUYoE/ZnBM0k/+kUBK3W1dXr588OQzvFmnXLI=";
-          stripLen = 2;
-        })
-        # tests: update groupadd tests to expect GID 1001
-        (fetchpatch {
-          name = "update-groupadd-tests.patch";
-          url = "https://github.com/shadow-maint/shadow/commit/60568eaec13d1e417f56f0e59ac9573c0e3b9a83.patch";
-          hash = "sha256-tLmGeW4Y7UcZqMhW3IXgygKPhCmbZkkW5XTJ7CFz9vg=";
-          stripLen = 2;
-        })
-        # tests: update newgrp tests to expect GID 1002
-        (fetchpatch {
-          name = "update-newgrp-tests.patch";
-          url = "https://github.com/shadow-maint/shadow/commit/49ff9bf33a7b6af57cb26688c3139f014302c9d9.patch";
-          hash = "sha256-1760t4Ezd5Ke4PFZ70Njb+k+1kp17aT/7uqu1PswVss=";
-          stripLen = 2;
-        })
-      ];
       postPatch = ''
         # Replace the gshadow existence check in the test framework with a more NixOS-friendly one, since NixOS does not have /etc/gshadow as a regular file
         substituteInPlace framework/hosts/shadow.py \
