@@ -4,7 +4,6 @@
   stdenv,
   rustPlatform,
   makeBinaryWrapper,
-  pop-gtk-theme,
   adw-gtk3,
   pkg-config,
   libpulseaudio,
@@ -31,8 +30,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   postPatch = ''
-    substituteInPlace src/battery.rs \
-      --replace-fail '/usr/share/sounds/Pop/' '${pop-gtk-theme}/share/sounds/Pop/'
     substituteInPlace src/theme.rs \
       --replace-fail '/usr/share/themes/adw-gtk3' '${adw-gtk3}/share/themes/adw-gtk3'
   '';
