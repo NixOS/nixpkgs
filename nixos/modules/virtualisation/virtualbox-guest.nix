@@ -133,14 +133,19 @@ in
 
         users.groups.vboxuserdev = { };
 
-        services.udev.extraRules = ''
-          # /dev/vboxuser is necessary for VBoxClient to work.  Maybe we
-          # should restrict this to logged-in users.
-          KERNEL=="vboxuser",  OWNER="root", GROUP="vboxuserdev", MODE="0660", TAG+="uaccess"
+        services.udev.packages = lib.singleton (
+          pkgs.writeTextFile {
+            name = "virtualboxGuestAdditions";
+            text = ''
+              # /dev/vboxuser is necessary for VBoxClient to work
+              KERNEL=="vboxuser", OWNER="root", GROUP="vboxuserdev", MODE="0660", TAG+="uaccess"
 
-          # Allow systemd dependencies on vboxguest.
-          SUBSYSTEM=="misc", KERNEL=="vboxguest", TAG+="systemd"
-        '';
+              # Allow systemd dependencies on vboxguest.
+              SUBSYSTEM=="misc", KERNEL=="vboxguest", TAG+="systemd"
+            '';
+            destination = "/etc/udev/rules.d/70-virtualboxGuestAdditions.rules";
+          }
+        );
 
         systemd.user.services.virtualboxClientVmsvga = mkVirtualBoxUserService "--vmsvga-session" cfg.verbose;
       }
