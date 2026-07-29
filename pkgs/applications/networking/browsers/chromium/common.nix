@@ -17,6 +17,7 @@
   # Native build inputs:
   ninja,
   bashInteractive,
+  go,
   pkg-config,
   python3,
   perl,
@@ -314,6 +315,9 @@ let
     ++ lib.optionals (!isElectron) [
       nodejs
       npmHooks.npmConfigHook
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "151") [
+      go # third_party/dawn/tools/generate-sources-gn.py
     ];
 
     depsBuildBuild = [
@@ -585,6 +589,17 @@ let
         hash = "sha256-jR0G9z2R8VGl2tkB3u0368RyWM1J6qYXqNWwKkYd5zU=";
       })
     ]
+    ++ lib.optionals (chromiumVersionAtLeast "151" && lib.versionOlder llvmVersion "23") [
+      # Revert CL 7911761 to help the patch below to apply cleanly.
+      (fetchpatch {
+        name = "chromium-151-revert-Fix-is_wasm-compile-for-supersize.patch";
+        # https://chromium-review.googlesource.com/c/chromium/src/+/7911761
+        url = "https://chromium.googlesource.com/chromium/src/+/160ccfd3b5a2dbab95516928716ae586e17de84b^!?format=TEXT";
+        decode = "base64 -d";
+        revert = true;
+        hash = "sha256-musbcTi2XMnJXW79gG+kr9qcYJZ25fv6MeIeId/nAwI=";
+      })
+    ]
     ++ lib.optionals (chromiumVersionAtLeast "149" && lib.versionOlder llvmVersion "23") [
       # clang++: error: unknown argument: '-fdiagnostics-show-inlining-chain'
       # clang++: error: unknown argument: '-fsanitize-ignore-for-ubsan-feature=array-bounds'
@@ -621,6 +636,26 @@ let
         decode = "base64 -d";
         hash = "sha256-MryWxSwBxSIONhl3X1cDxTWwNWy8a4yt/sqkrueSUNs=";
       })
+    ]
+    ++ lib.optionals (versionRange "151" "152") [
+      # ERROR Unresolved dependencies.
+      # //tools/metrics:metrics_metadata(//build/toolchain/linux/unbundle:default)
+      #   needs //tools/metrics:histograms_xml(//build/toolchain/linux/unbundle:default)
+      (fetchpatch {
+        name = "chromium-151-backport-don't-depends-on-histograms.xml-if-it-is-not-git-checkout.patch";
+        # https://chromium-review.googlesource.com/c/chromium/src/+/8019063
+        url = "https://chromium.googlesource.com/chromium/src/+/27f8690db999f6e56f0af7a9ea3d28a019ed72ca^!?format=TEXT";
+        decode = "base64 -d";
+        hash = "sha256-nKu1NEuBWYCmHC2P33BqULVU6uK//kBIEOx+fXIwsuQ=";
+      })
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "151") [
+      # third_party/dawn/tools/generate-sources-gn.py expects a Go binary in
+      # third_party/dawn/tools/golang/linux-amd64/bin/go for x86_64 and
+      # third_party/dawn/tools/golang/linux-arm64/bin/go for aarch64,
+      # which is annoying, so let's make it use Go from $PATH for
+      # both (all) architectures instead.
+      ./patches/chromium-151-dawn-use-Go-from-PATH.patch
     ];
 
     postPatch =
