@@ -236,6 +236,8 @@ in
 
       networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.Port ];
     };
+
+  meta.doc = ./navidrome.md;
   meta.maintainers = with maintainers; [
     fsnkty
     tebriel
