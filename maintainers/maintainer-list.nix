@@ -31388,6 +31388,12 @@
     githubId = 8006928;
     name = "Yuannan (Brandon) Lin";
   };
+  yueyinqiu = {
+    email = "yueyinqiu@outlook.com";
+    github = "yueyinqiu";
+    githubId = 18749772;
+    name = "yueyinqiu";
+  };
   yujonpradhananga = {
     email = "yujonpradhan123@gmail.com";
     github = "Yujonpradhananga";
