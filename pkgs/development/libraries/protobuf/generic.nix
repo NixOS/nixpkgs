@@ -73,6 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://github.com/protocolbuffers/protobuf/commit/8282f0f8ecf8b847e5964a308e041ba3b049811c.patch";
         hash = "sha256-4c/yLuAd29Cxrz6I9F2Lj02lW2bazIcGb+86uxZY7qA=";
       })
+    ]
+    ++ lib.optionals ((lib.versionAtLeast version "33") && (lib.versionOlder version "36")) [
       # Fix packed enum decoding on big-endian platforms
       # https://github.com/protocolbuffers/protobuf/pull/25683
       ./fix-upb-packed-enum-be.patch
@@ -83,6 +85,10 @@ stdenv.mkDerivation (finalAttrs: {
       # entries in `linkarr_upb_AllExts` during test builds.
       # Context: https://github.com/protocolbuffers/protobuf/issues/21021
       ./fix-upb-linkarr-sentinel-init.patch
+
+      # Fix BoolKeys test on big-endian
+      # https://github.com/protocolbuffers/protobuf/pull/25862
+      ./fix-BoolKeys-test-on-be.patch
     ];
 
   postPatch =
