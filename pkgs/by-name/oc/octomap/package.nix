@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "OctoMap";
     repo = "octomap";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QxQHxxFciR6cvB/b8i0mr1hqGxOXhXmB4zgdsD977Mw=";
   };
 
@@ -53,10 +53,14 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   meta = {
+    changelog = "https://github.com/OctoMap/octomap/releases/tag/${finalAttrs.src.tag}";
     description = "Probabilistic, flexible, and compact 3D mapping library for robotic systems";
     homepage = "https://octomap.github.io/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ lopsided98 ];
-    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      lopsided98
+      nim65s
+    ];
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 })
