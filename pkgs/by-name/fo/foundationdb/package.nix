@@ -18,6 +18,7 @@
   zlib,
 }:
 let
+  dylib_suffix = stdenv.hostPlatform.extensions.sharedLibrary;
   boost = boost186;
   # Only even numbered versions compile on aarch64; odd numbered versions have avx enabled.
   avxEnabled =
@@ -27,6 +28,11 @@ let
       patch = lib.toInt (lib.versions.patch version);
     in
     isOdd patch;
+
+  # LTO requires llvm-ar/gcc-ar to be present in PATH.
+  useLto = stdenv.cc.isGNU;
+  # Gold linker is Linux-only, part of GNU binutils.
+  useGold = stdenv.cc.isGNU;
 in
 stdenv.mkDerivation rec {
   pname = "foundationdb";
@@ -69,11 +75,35 @@ stdenv.mkDerivation rec {
     substituteInPlace bindings/c/test/unit/third_party/CMakeLists.txt \
       --replace-fail '/opt/doctest_proj_2.4.8' '${doctest}/include'
 
+    # Fix implib-gen.py to use full paths for binutils tools, which is
+    # required on Darwin where stdenv binutils lacks ELF utilities.
+    substituteInPlace contrib/Implib.so/implib-gen.py \
+      --replace-fail \
+        'run(["readelf"' \
+        'run(["${stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}readelf"' \
+      --replace-fail \
+        'run(["c++filt"' \
+        'run(["${stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}c++filt"'
+
+    # Fix strip_debug_symbols() to use proper CMAKE_STRIP for cross-compilation.
+    substituteInPlace cmake/FlowCommands.cmake \
+      --replace-fail \
+        'set(strip_command strip)' \
+        'set(strip_command ''${CMAKE_STRIP})'
+
     # Upstream upgraded to Boost 1.86 with no code changes; see:
     # <https://github.com/apple/foundationdb/pull/11788>
     substituteInPlace cmake/CompileBoost.cmake \
       --replace-fail 'find_package(Boost 1.78.0 EXACT ' 'find_package(Boost '
-  '';
+  ''
+  + (lib.optionalString stdenv.cc.isClang ''
+      # Clang 21+ has stricter constant-expression evaluation that rejects
+      # fmt's format_string_checker pointer arithmetic.
+    substituteInPlace contrib/fmt-8.1.1/include/fmt/core.h \
+      --replace-fail \
+        '#    define FMT_CONSTEVAL consteval' \
+        '#    define FMT_CONSTEVAL /* disabled: broken with Clang 21+ */'
+  '');
 
   buildInputs = [
     boost
@@ -117,16 +147,16 @@ stdenv.mkDerivation rec {
 
     # LTO brings up overall build time, but results in much smaller
     # binaries for all users and the cache.
-    "-DUSE_LTO=ON"
+    (if useLto then "-DUSE_LTO=ON" else "-DUSE_LTO=OFF")
 
     # Gold helps alleviate the link time, especially when LTO is
     # enabled. But even then, it still takes a majority of the time.
-    "-DUSE_LD=GOLD"
+    (if useGold then "-DUSE_LD=GOLD" else "-DUSE_LD=DEFAULT")
 
     # FIXME: why can't openssl be found automatically?
     "-DOPENSSL_USE_STATIC_LIBS=FALSE"
-    "-DOPENSSL_CRYPTO_LIBRARY=${openssl.out}/lib/libcrypto.so"
-    "-DOPENSSL_SSL_LIBRARY=${openssl.out}/lib/libssl.so"
+    "-DOPENSSL_CRYPTO_LIBRARY=${openssl.out}/lib/libcrypto${dylib_suffix}"
+    "-DOPENSSL_SSL_LIBRARY=${openssl.out}/lib/libssl${dylib_suffix}"
   ];
 
   # the install phase for cmake is pretty wonky right now since it's not designed to
@@ -173,7 +203,13 @@ stdenv.mkDerivation rec {
     description = "Open source, distributed, transactional key-value store";
     homepage = "https://www.foundationdb.org";
     license = lib.licenses.asl20;
-    platforms = [ "x86_64-linux" ] ++ lib.optionals (!(avxEnabled version)) [ "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+    ]
+    ++ lib.optionals (!(avxEnabled version)) [
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
     # Fails when cross-compiling with "/bin/sh: gcc-ar: not found"
     broken = stdenv.buildPlatform != stdenv.hostPlatform;
     maintainers = with lib.maintainers; [
