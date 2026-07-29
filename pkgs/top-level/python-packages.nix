@@ -17297,6 +17297,8 @@ self: super: with self; {
 
   quandl = callPackage ../development/python-modules/quandl { };
 
+  quango = callPackage ../development/python-modules/quango { };
+
   quantile-forest = callPackage ../development/python-modules/quantile-forest { };
 
   quantile-python = callPackage ../development/python-modules/quantile-python { };
