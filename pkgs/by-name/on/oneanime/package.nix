@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildGoModule,
-  flutter338,
+  flutter344,
   fetchFromGitHub,
   autoPatchelfHook,
   desktop-file-utils,
@@ -57,16 +57,16 @@ let
     };
   });
 
-  version = "1.4.5";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "Predidit";
     repo = "oneAnime";
     tag = version;
-    hash = "sha256-kVg6lqJF8kT2TgwiK8aKUWW6yEdQUrJKzw2h4DHN+iw=";
+    hash = "sha256-nckvd3TaV2jl7UE5m7VVofyeUt11zHwf76iVfSy5jZk=";
   };
 in
-flutter338.buildFlutterApplication {
+flutter344.buildFlutterApplication {
   pname = "oneanime";
   inherit version src;
 
