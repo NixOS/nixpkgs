@@ -2947,22 +2947,11 @@ with haskellLib;
   # 2025-04-13: jailbreak to allow hedgehog >= 1.5
   hw-bits = warnAfterVersion "0.7.2.2" (doJailbreak super.hw-bits);
 
-  monad-bayes =
-    # Floating point precision issues. Test suite is only checked on x86_64.
-    # https://github.com/tweag/monad-bayes/issues/368
-    dontCheckIf
-      (
-        let
-          inherit (pkgs.stdenv) hostPlatform;
-        in
-        !hostPlatform.isx86_64
-        # Presumably because we emulate x86_64-darwin via Rosetta, x86_64-darwin
-        # also fails on Hydra
-        || hostPlatform.isDarwin
-      )
-      # Too strict bounds on brick (<2.6), vty (<6.3)
-      # https://github.com/tweag/monad-bayes/issues/378
-      (doJailbreak super.monad-bayes);
+  # Test suite is brittle, dependent on the random number generator
+  # implementation and architecture. See:
+  # * https://github.com/tweag/monad-bayes/pull/389
+  # * https://github.com/tweag/monad-bayes/issues/368
+  monad-bayes = dontCheck (doJailbreak super.monad-bayes);
 
   # 2025-04-13: jailbreak to allow th-abstraction >= 0.7
   crucible = doJailbreak super.crucible;
