@@ -1,7 +1,6 @@
 {
   lib,
   replaceVars,
-  fetchurl,
   fetchFromGitHub,
   rustPlatform,
   buildNpmPackage,
