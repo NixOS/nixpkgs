@@ -11,17 +11,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-monitor";
-  version = "1.4.0";
+  version = "1.5.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-monitor";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-EIxdQo80yAjb2rgEsbTPiLuPcyRoJCPe6uDqPeaSCHQ=";
+    hash = "sha256-blv+znOdRkQE/yHRMwNcCw2fIztXHQYmWbQEoIME3jo=";
   };
 
-  cargoHash = "sha256-VAVvkBLB45NntP/YahrCzuaRjKw8h2pZd/T5+7fsH6U=";
+  cargoHash = "sha256-Pu+xC8tLOFy6SBWaMe/Q/q87HhVzO4Rgzs0aufKAJUg=";
 
   separateDebugInfo = true;
   __structuredAttrs = true;
