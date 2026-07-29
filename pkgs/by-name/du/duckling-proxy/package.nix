@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "duckling-proxy";
-  version = "2021-07-23-unstable";
+  version = "0.2.1-unstable-2021-07-23";
 
   src = fetchFromGitHub {
     owner = "LukeEmmet";
