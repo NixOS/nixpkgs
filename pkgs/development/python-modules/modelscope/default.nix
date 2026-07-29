@@ -4,6 +4,7 @@
   fetchFromGitHub,
   setuptools,
   filelock,
+  modelscope-hub,
   packaging,
   requests,
   tqdm,
@@ -11,20 +12,21 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "modelscope";
-  version = "1.37.1";
+  version = "1.38.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "modelscope";
     repo = "modelscope";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LNg2JtqqID6RKuFi+j29NfOWuNZhkkTIdKmL9bXzAvs=";
+    hash = "sha256-BTiK6rk9j5Wh6DZZ8eufzAyP8wWCEfIzQKeJ3fJzsjg=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     filelock
+    modelscope-hub
     packaging
     requests
     setuptools
