@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation {
   pname = "dee";
-  version = "unstable-2017-06-16";
+  version = "1.2.7-unstable-2017-06-16";
 
   outputs = [
     "out"
