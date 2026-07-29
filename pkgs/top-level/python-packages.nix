@@ -13397,6 +13397,8 @@ self: super: with self; {
 
   pluthon = callPackage ../development/python-modules/pluthon { };
 
+  pluto = callPackage ../development/python-modules/pluto { };
+
   plux = callPackage ../development/python-modules/plux { };
 
   ply = callPackage ../development/python-modules/ply { };
