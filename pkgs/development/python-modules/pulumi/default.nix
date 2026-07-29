@@ -77,7 +77,7 @@ buildPythonPackage {
   ];
 
   disabledTestPaths = [
-    # Fail due to missing `pytest.mark.asyncio`, as of v3.253.0
+    # To be removed in v3.255.0; see https://github.com/pulumi/pulumi/issues/24048#issuecomment-5077378071
     "lib/test/test_deprecated.py::DeprecatedTests::test_non_deprecated_can_be_called"
     "lib/test/test_deprecated.py::DeprecatedTests::test_deprecated_can_be_called"
     "lib/test/test_deprecated.py::DeprecatedTests::test_deprecated_can_passthrough"
