@@ -18,14 +18,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xdg-desktop-portal-cosmic";
-  version = "1.4.0";
+  version = "1.5.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "xdg-desktop-portal-cosmic";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-8CpDyKq24PL89oky1NnfNa1W0c3A5gzv+sHk27zB5+Y=";
+    hash = "sha256-Q4m5PVF8vC4Z2+06EYqMcoDoVogcA33OF4IaAlDStzM=";
   };
 
   cargoHash = "sha256-Z5rszmonDnoplysE86ipNDWfh3QFW05sJsNxDbPi5Q8=";
