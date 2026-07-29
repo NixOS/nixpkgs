@@ -8,14 +8,14 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "periphery";
-  version = "3.7.4";
+  version = "3.8.0";
 
   __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchzip {
     url = "https://github.com/peripheryapp/periphery/releases/download/${finalAttrs.version}/periphery-${finalAttrs.version}.zip";
-    hash = "sha256-p40+MvqHczG3iuWU+l0uOS96Zkxv/p88CBhs90b3168=";
+    hash = "sha256-WyuSYzFFUesHSmvZUa8Iw6f5BECKFJ0PVBylcq2uxz8=";
     stripRoot = false;
   };
 
