@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  gnome-icon-theme,
   adwaita-icon-theme,
   gtk-engine-murrine,
   gtk3,
@@ -26,7 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
-    gnome-icon-theme
     adwaita-icon-theme
     humanity-icon-theme
     hicolor-icon-theme

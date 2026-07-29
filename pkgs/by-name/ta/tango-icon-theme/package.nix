@@ -8,7 +8,6 @@
   imagemagick,
   librsvg,
   gtk3, # any version
-  gnome-icon-theme,
   hicolor-icon-theme,
 }:
 
@@ -33,12 +32,10 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
     imagemagick
     iconnamingutils
-    gnome-icon-theme
     hicolor-icon-theme
   ];
 
   propagatedBuildInputs = [
-    gnome-icon-theme
     hicolor-icon-theme
   ];
   # still missing parent icon themes: cristalsvg
