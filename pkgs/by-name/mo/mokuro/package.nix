@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mokuro";
-  version = "0.2.4";
+  version = "0.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kha-white";
     repo = "mokuro";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sd149KFgKuh7vyrtULrY+DKvvCC3+glifvSG2cgnz4w=";
+    hash = "sha256-p+xyYaYGg2G6LD2NfUJqGyYgAr2LZRCGjsTZPoX9Kuc=";
     fetchSubmodules = true;
   };
 
