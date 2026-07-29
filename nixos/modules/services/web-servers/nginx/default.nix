@@ -48,8 +48,11 @@ let
     "application/ld+json"
     "application/manifest+json"
     "application/rdf+xml"
+    "application/rss+xml" # What the default (mailcap) mime.types maps ".rss" to
+    "application/vnd.api+json"
     "application/vnd.ms-fontobject"
     "application/wasm"
+    "application/x-javascript" # Legacy alias of "application/javascript", still emitted by some upstreams
     "application/x-rss+xml"
     "application/x-web-app-manifest+json"
     "application/xhtml+xml"
@@ -61,6 +64,8 @@ let
     "image/bmp"
     "image/svg+xml"
     "image/vnd.microsoft.icon"
+    "image/x-icon" # What nginx's own mime.types maps ".ico" to, see services.nginx.defaultMimeTypes
+    "image/x-ms-bmp" # What nginx's own mime.types maps ".bmp" to, see services.nginx.defaultMimeTypes
     "text/cache-manifest"
     "text/calendar"
     "text/css"
@@ -72,6 +77,7 @@ let
     "text/vnd.rim.location.xloc"
     "text/vtt"
     "text/x-component"
+    "text/x-cross-domain-policy"
     "text/xml"
   ];
 
