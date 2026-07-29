@@ -42,7 +42,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lancedb";
-  version = "0.32.0";
+  version = "0.36.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -50,14 +50,14 @@ buildPythonPackage (finalAttrs: {
     owner = "lancedb";
     repo = "lancedb";
     tag = "python-v${finalAttrs.version}";
-    hash = "sha256-OIoQCk0YlWpaaau4AiWxarvH4oy1rAjaS9yvs3mIzzo=";
+    hash = "sha256-JOUrLHoVBZs4B8UGYFZIs00kzBnxFFAkTXFIz2bOZ7w=";
   };
 
   buildAndTestSubdir = "python";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-rfAhvC6byg134NF21CR5n0A0DL42CLGy7VvHi9aZUrw=";
+    hash = "sha256-KEczUf/e3+Eb53pouOzajp+yVjWctDUNbdVEgQVoCZE=";
   };
 
   # `lance-linalg`'s AVX-512 VNNI u8-distance kernels call `_mm512_dpbusd_epi32` /
@@ -130,7 +130,7 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Requires internet access
     # RuntimeError: lance error: LanceError(IO): Generic S3 error
-    "test_bucket_without_dots_passes"
+    "test_bucket_without_dots_is_not_rejected"
 
     # lance_namespace.errors.UnsupportedOperationError: Not supported: create_empty_table
     "TestAsyncNamespaceConnection"
