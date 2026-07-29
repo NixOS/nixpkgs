@@ -89,8 +89,8 @@ let
         mktplcRef = {
           publisher = "42Crunch";
           name = "vscode-openapi";
-          version = "4.40.0";
-          hash = "sha256-nV7RZpDd+15YmINKrFSIlFurC955bnE4A8esrKWYVnE=";
+          version = "5.6.0";
+          hash = "sha256-ISrCEZukzXsQFCn0fAvG9Fuf8ReO/gkn3FX5/G6DRak=";
         };
         meta = {
           changelog = "https://github.com/42Crunch/vscode-openapi/blob/v${mktplcRef.version}/CHANGELOG.md";
@@ -291,8 +291,8 @@ let
         mktplcRef = {
           publisher = "antfu";
           name = "slidev";
-          version = "52.15.0";
-          hash = "sha256-iCOLP2ZOm/kwmNFrmc9NJi1nU+301y2Jgnj9FbUSbm0=";
+          version = "52.18.0";
+          hash = "sha256-T+g8hXu0j8myRVYRHknYUhFyeo4Jl/9LLVIm3Tkq96o=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1204,8 +1204,8 @@ let
         mktplcRef = {
           name = "dart-code";
           publisher = "dart-code";
-          version = "3.136.1";
-          hash = "sha256-z9DPxEtQwjx9xk5ucHKfX2BYRij5UA253oPuHpD0jdU=";
+          version = "3.138.0";
+          hash = "sha256-5RBxwQpuQQreBJXBP8+XcK8RQupKIBaS7f2q8drFWBo=";
         };
 
         meta.license = lib.licenses.mit;
@@ -2003,8 +2003,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "vscode-pull-request-github";
-          version = "0.138.0";
-          hash = "sha256-tOqBBgA6HxBc5TT4/A3OWKxDvaoqw8zXCtMa+K3Ku1E=";
+          version = "0.158.0";
+          hash = "sha256-8wQRoWtVj3S/Dsc4IY1iThA4Jy96X3e0z/J8WzlliSQ=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -2346,8 +2346,8 @@ let
         mktplcRef = {
           name = "vscode-vibrancy-continued";
           publisher = "illixion";
-          version = "1.1.85";
-          hash = "sha256-hHbBg7h8iab8ArbiuEx+a5zqr02hIu8DGHnvh0XwH9g=";
+          version = "1.1.86";
+          hash = "sha256-iTBCkNJ2iO/9bILGn+B4eYNlJ3JwDBIOxJiklsBQvW8=";
         };
         meta = {
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=illixion.vscode-vibrancy-continued";
@@ -2781,8 +2781,8 @@ let
           mktplcRef = {
             name = "vscode-cfn-lint";
             publisher = "kddejong";
-            version = "0.26.6";
-            hash = "sha256-83hvz4nqpOxou5tFmiXyuUgWjRnTrOu42R+pRJdNbwU=";
+            version = "0.27.0";
+            hash = "sha256-wxjqyGIDnYML3jYugRTO+mf4tEC5aFj0SX5cB7GSnlQ=";
           };
 
           nativeBuildInputs = [
@@ -3266,8 +3266,8 @@ let
         mktplcRef = {
           name = "datawrangler";
           publisher = "ms-toolsai";
-          version = "1.24.0";
-          hash = "sha256-FWzrxf5uaPcbu1JCiYxsbkju1mY3n3F2vGLvfMuZxlc=";
+          version = "1.24.2";
+          hash = "sha256-mQGb+usJpu0v9FjtiW9srhljYFVzSVsO8REy3WHjnTI=";
         };
 
         meta = {
@@ -3453,8 +3453,8 @@ let
         mktplcRef = {
           name = "remote-containers";
           publisher = "ms-vscode-remote";
-          version = "0.459.1";
-          hash = "sha256-e5azL+9hluC/YyWb9uQxrr9p/9K2cYcUhalc9nZlOEg=";
+          version = "0.466.0";
+          hash = "sha256-s2Ks5vhH9q7Io0jmTVGQ9jffy618W5WT1hghQCqoP5M=";
         };
         meta = {
           description = "Open any folder or repository inside a Docker container";
