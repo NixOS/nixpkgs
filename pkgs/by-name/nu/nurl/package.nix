@@ -7,16 +7,19 @@
   gitMinimal,
   mercurial,
   nix,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nurl";
   version = "0.4.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nurl";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BxtvT2k4mErYPU9lNpZlat9ULI2wKXQToic7+PgkCSk=";
   };
 
@@ -49,6 +52,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env = {
     GEN_ARTIFACTS = "artifacts";
   };
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Command-line tool to generate Nix fetcher calls from repository URLs";
