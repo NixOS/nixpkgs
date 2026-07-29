@@ -86,6 +86,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       siriobalmelli
       DuskyElf
+      yzx9
     ];
   };
 })
