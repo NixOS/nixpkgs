@@ -80,6 +80,18 @@ buildPythonPackage {
     ++ lib.optionals stdenv.hostPlatform.isLinux [ openvino ]
   );
 
+  # dlopen'ed by libonnxruntime_providers_cuda.so since 1.31.0
+  # (`runtimeDependencies` only applies to executables)
+  appendRunpaths = lib.optionals onnxruntime.passthru.cudaSupport (
+    map (pkg: "${lib.getLib pkg}/lib") (
+      with onnxruntime.passthru.cudaPackages;
+      [
+        cudnn
+        libcufft
+      ]
+    )
+  );
+
   dependencies = [
     coloredlogs
     numpy
