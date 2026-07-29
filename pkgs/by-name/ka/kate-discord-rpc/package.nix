@@ -25,8 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
+  buildInputs = [
     kdePackages.extra-cmake-modules
     kdePackages.kcoreaddons
     kdePackages.kconfig
@@ -35,6 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.qtbase
     qt6.wrapQtAppsHook
     rapidjson
+  ];
+
+  nativeBuildInputs = [
+    cmake
   ];
 
   passthru.updateScript = unstableGitUpdater { };
