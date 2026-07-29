@@ -455,6 +455,7 @@ def commit_gitlab(old_version: str, new_version: str, new_rev: str) -> None:
             "pkgs/by-name/gi/gitlab-kas",
             "pkgs/by-name/gi/gitlab-pages",
             "pkgs/by-name/gi/gitlab-shell",
+            "pkgs/by-name/gi/gitlab-workhorse",
         ],
         cwd=NIXPKGS_PATH,
     )
