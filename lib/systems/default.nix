@@ -170,6 +170,8 @@ let
             "relibc"
           else if final.isMusl then
             "musl"
+          else if final.isPicolibc then
+            "picolibc"
           else if final.isUClibc then
             "uclibc"
           else if final.isAndroid then
