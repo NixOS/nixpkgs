@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dmsdos";
-  version = "unstable-2021-02-06";
+  version = "0.9.2.3-unstable-2021-02-06";
 
   src = fetchFromGitHub {
     owner = "sandsmark";
