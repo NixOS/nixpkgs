@@ -1,8 +1,9 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -12,16 +13,21 @@ buildPythonPackage (finalAttrs: {
 
   __structuredAttrs = true;
 
-  src = fetchPypi {
-    pname = "udatetime";
-    inherit (finalAttrs) version;
-    hash = "sha256-sQvFVwaZpDinLitaZOdr2MKO4779FvIJOHpVB/oLgwE=";
+  src = fetchFromGitHub {
+    owner = "freach";
+    repo = "udatetime";
+    tag = finalAttrs.version;
+    hash = "sha256-1TGLdw8yq+FmdfKin2e9SKJTA1TDNmLXmKRWcq0qTnw=";
   };
 
   build-system = [ setuptools ];
 
-  # tests not included on pypi
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  # shadows the installed package holding the compiled extension
+  preCheck = ''
+    rm -r udatetime
+  '';
 
   pythonImportsCheck = [ "udatetime" ];
 
