@@ -1060,6 +1060,38 @@ in
         '';
       };
 
+      sidekiq.queueGroups = mkOption {
+        type = types.attrsOf types.int;
+        default = {
+          "*" = 1;
+        };
+        example = {
+          "default" = 3;
+          "global_search,mailers" = 1;
+        };
+        description = ''
+          The queues that are created processes for on the sidekiq node.
+          By default, sidekiq runs on a single process and a number of
+          sidekiq.concurrency threads. This single process serves all queues
+          ("*").
+
+          You specify how many of each queues you want by first specifying which
+          queue you want, e.g. "default" or "*" and then how many processes for this
+          queue ought to be spawned.
+
+          Each of the processes will be assigned a number of os threads as specified
+          in sidekiq.concurrency.
+
+          Mind that too many processes and threads will ultimately reduce the throughput
+          since they're bound by the amount of connections that can be processed by the
+          redis instance.
+
+          See <https://docs.gitlab.com/administration/sidekiq/extra_sidekiq_processes> for
+          details and e.g. <https://docs.gitlab.com/integration/advanced_search/elasticsearch/#enable-advanced-search>
+          for motivation.
+        '';
+      };
+
       logrotate = {
         enable = mkOption {
           type = types.bool;
@@ -1646,8 +1678,8 @@ in
         ExecStart = utils.escapeSystemdExecArgs (
           [
             "${cfg.packages.gitlab}/share/gitlab/bin/sidekiq-cluster"
-            "*" # all queue groups
           ]
+          ++ lib.concatLists (lib.mapAttrsToList (k: v: lib.replicate v k) cfg.sidekiq.queueGroups)
           ++ lib.optionals (cfg.sidekiq.concurrency != null) [
             "--concurrency"
             (toString cfg.sidekiq.concurrency)
