@@ -181,10 +181,6 @@ in
       config.boot.kernelPackages.nxp-pn5xx
     ];
 
-    boot.kernelModules = [
-      "nxp-pn5xx"
-    ];
-
     # libnfc-nci calls sched_setscheduler via pthread_setschedparam, which would be blocked by upstream SystemCallFilter=~@resources
     systemd.services.pcscd.serviceConfig.SystemCallFilter = lib.mkIf cfg.enableIFD [
       "sched_setscheduler"

@@ -7,8 +7,7 @@
   callPackage,
   nixosTests,
   gettext,
-  # tests fail and eventually lock up on 3.14
-  python313Packages,
+  python3Packages,
   ghostscript_headless,
   imagemagickBig,
   jbig2enc,
@@ -32,7 +31,7 @@ let
     ocrmypdf = prev.ocrmypdf.override { tesseract = tesseract5; };
   };
 
-  pythonPackages = python313Packages.overrideScope (
+  pythonPackages = python3Packages.overrideScope (
     final: prev:
     lib.composeManyExtensions [ defaultPythonPackageOverrides extraPythonPackageOverrides ] final prev
   );
