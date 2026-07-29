@@ -10,29 +10,25 @@
   pytestCheckHook,
   pyyaml,
 
-  # Disable checks by default, as checks require pytest, which eventually
-  # depends on hatchling, which depends on tomlkit, leading to infinite
-  # recursion.
-  doCheck ? false,
-
-  # self-reference for tests, since finalAttrs.finalPackage exposes neither
-  # `override` nor `overridePythonAttrs`.
+  # passthru.tests
+  remarshal,
   tomlkit,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "tomlkit";
-  version = "0.15.0";
+  version = "0.15.1";
   pyproject = true;
 
+  # github fetcher causes infinite recursion via gtk-doc
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-fRqey6MIZjghGxOBTqeckN1U3RGZNWQ3bzqpInH1x6M=";
+    hash = "sha256-4lu/OIQwBSRiEKEpgndvJ/mcub5nFg4UQ00MDSHuHpc=";
   };
 
   build-system = [ poetry-core ];
 
-  inherit doCheck;
+  doCheck = false; # infinite recursion via pytest
 
   nativeCheckInputs = [
     pyyaml
@@ -41,15 +37,19 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "tomlkit" ];
 
-  # In passthru.tests, build with the check phase enabled, since that'll be
-  # outside the bootstrap dependency chain.
-  passthru.tests.withChecks = tomlkit.override { doCheck = true; };
+  passthru.tests = {
+    inherit remarshal;
+    pytest = tomlkit.override { doCheck = true; };
+  };
 
   meta = {
-    homepage = "https://github.com/sdispater/tomlkit";
-    changelog = "https://github.com/sdispater/tomlkit/blob/${finalAttrs.version}/CHANGELOG.md";
+    homepage = "https://github.com/python-poetry/tomlkit";
+    changelog = "https://github.com/python-poetry/tomlkit/blob/${finalAttrs.version}/CHANGELOG.md";
     description = "Style-preserving TOML library for Python";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jakewaksbaum ];
+    maintainers = with lib.maintainers; [
+      dotlambda
+      jakewaksbaum
+    ];
   };
 })
