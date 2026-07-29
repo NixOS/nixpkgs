@@ -4,18 +4,24 @@
   rustPlatform,
   fetchFromGitHub,
   makeWrapper,
-  bento4,
   protobuf,
+  bento4,
   ffmpeg,
   gpac,
   libxslt,
   shaka-packager,
   nix-update-script,
+  replaceVars,
   runCommand,
   versionCheckHook,
 }:
 
 let
+  # Patch the dash-mpd crate to allow access to the Nix store in the sandbox.
+  dash-mpd-patch = replaceVars ./dash-mpd-rs-nix-sandbox.patch {
+    storeDir = builtins.storeDir;
+  };
+
   # dash-mpd-cli looks for a binary named `shaka-packager`, while
   # shaka-packager provides `packager`.
   shaka-packager-wrapped = runCommand "shaka-packager-wrapped" { } ''
@@ -37,6 +43,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-MmZwiH1Qzb5MiwhEYsCVo4xD5YmJ+mObpkgc6J0sfuw=";
 
   __structuredAttrs = true;
+
+  postPatch = ''
+    patch -d $cargoDepsCopy/*/dash-mpd-* -i ${dash-mpd-patch} -p 1
+  '';
+
+  buildFeatures = lib.optionals stdenvNoCC.hostPlatform.isLinux [ "sandbox" ];
 
   nativeBuildInputs = [
     makeWrapper
