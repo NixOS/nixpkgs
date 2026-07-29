@@ -153,7 +153,7 @@ let
           ''
           + lib.optionalString (package == "all") pkgallMake;
 
-          useCoqifVersion = lib.versions.isLt "2.4.0";
+          useCoqifVersion = v: v != null && v != "dev" && lib.versions.isLt "2.4.0" v;
 
           meta = {
             homepage = "https://math-comp.github.io/";
