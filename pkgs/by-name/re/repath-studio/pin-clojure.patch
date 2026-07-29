@@ -1,5 +1,5 @@
 diff --git a/deps.edn b/deps.edn
-index 6abd18c..d2f8e14 100644
+index 44a1116..d9944dd 100644
 --- a/deps.edn
 +++ b/deps.edn
 @@ -1,5 +1,6 @@
