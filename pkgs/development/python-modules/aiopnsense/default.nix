@@ -15,7 +15,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiopnsense";
-  version = "1.1.3";
+  version = "1.1.5";
   pyproject = true;
 
   disabled = pythonOlder "3.14";
@@ -24,7 +24,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Snuffy2";
     repo = "aiopnsense";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XzRc7g+t8ylOVyjwnNbKFulPAj7HrVZVMvi+ea717CM=";
+    hash = "sha256-amXqUp77L72fv6xxz4Nm7fMj4xxWaYrsy1EPxccKm+Q=";
   };
 
   build-system = [ setuptools ];
