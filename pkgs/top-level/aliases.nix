@@ -2201,6 +2201,7 @@ mapAliases {
   steamPackages.steamcmd = throw "'steamPackages.steamcmd' has been renamed to/replaced by 'steamcmd'"; # Converted to throw 2025-10-27
   storeBackup = storebackup; # Added 2026-07-05
   StormLib = throw "'StormLib' has been renamed to/replaced by 'stormlib'"; # Converted to throw 2025-10-27
+  stract = throw "'stract' has been removed because the upstream project was archived on 2026-04-02"; # Added 2026-07-28
   strawberry-qt5 = throw "strawberry-qt5 has been replaced by strawberry"; # Converted to throw 2025-07-19
   strawberry-qt6 = throw "strawberry-qt6 has been replaced by strawberry"; # Added 2025-07-19
   stremio = throw "'stremio' has been removed as it depended on the vulnerable and outdated qt5 webengine. On Linux, consider using 'stremio-linux-shell' instead."; # Added 2026-02-11
