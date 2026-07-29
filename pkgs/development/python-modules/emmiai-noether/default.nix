@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -43,6 +44,17 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-ySQxI0n4mPKio7tlRkRRdSq/ieIigznur2CZhJfbyLs=";
   };
+
+  patches = [
+    # Use the correct version in pyproject.toml
+    # Can be removed in the next release
+    # See https://github.com/Emmi-AI/noether/pull/205
+    (fetchpatch {
+      name = "fix-pyproject-version.patch";
+      url = "https://github.com/Emmi-AI/noether/commit/bb86d54755e01de8131b0742c3ce9d5f417d6b84.patch";
+      hash = "sha256-M96WQdyEe629IxLHOKVHYiBMFWx1dZ+ZU7w5I8IxAwg=";
+    })
+  ];
 
   build-system = [
     setuptools
