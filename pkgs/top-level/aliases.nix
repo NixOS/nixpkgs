@@ -586,6 +586,7 @@ mapAliases {
   copilot-language-server-fhs = warnAlias "The package set `copilot-language-server-fhs` has been renamed to `copilot-language-server`." copilot-language-server; # Added 2025-09-07
   copper = throw "'copper' has been removed, as it was broken since 22.11"; # Added 2025-08-22
   cordless = throw "'cordless' has been removed due to being archived upstream. Consider using 'discordo' instead."; # Added 2025-06-07
+  coreboot-configurator = throw "'coreboot-configurator' has been removed because it was discontinued.  All settings are now found in BIOS."; # Added 2026-07-28
   corepack_20 = nodejs_20;
   corepack_latest = throw "'corepack_latest' has been removed, use 'corepack.override { nodejs-slim = pkgs.nodejs-slim_latest; }' instead"; # Added 2025-10-25
   coreth = throw "'coreth' has been moved to 'avalanchego' by upstream"; # Added 2026-01-15
