@@ -1,0 +1,354 @@
+diff --git a/cmake/external/cuda_configuration.cmake b/cmake/external/cuda_configuration.cmake
+index 47d6eef453..0df9c7975e 100644
+--- a/cmake/external/cuda_configuration.cmake
++++ b/cmake/external/cuda_configuration.cmake
+@@ -90,6 +90,68 @@ function(ort_patch_cuda_12_9_clusterlaunchcontrol_header src dst)
+   endif()
+ endfunction()
+ 
++# Parse one CUDA architecture entry of the form <cc>[a|f][-real|-virtual] (for example "121a",
++# "120f-real" or "90-virtual") and set, in the caller's scope:
++#   <PREFIX>_CC       the numeric compute capability (e.g. "121"), or "" if ARCH is not of that form
++#   <PREFIX>_SUFFIX   "a" (arch-specific), "f" (family-specific) or ""
++#   <PREFIX>_VIRTUAL  TRUE for a -virtual entry (PTX only, no SASS), FALSE otherwise
++function(onnxruntime_parse_cuda_arch ARCH PREFIX)
++  if(ARCH MATCHES "^([1-9][0-9]+)([af]?)(-real|-virtual)?$")
++    set(${PREFIX}_CC "${CMAKE_MATCH_1}" PARENT_SCOPE)
++    set(${PREFIX}_SUFFIX "${CMAKE_MATCH_2}" PARENT_SCOPE)
++    if(CMAKE_MATCH_3 STREQUAL "-virtual")
++      set(${PREFIX}_VIRTUAL TRUE PARENT_SCOPE)
++    else()
++      set(${PREFIX}_VIRTUAL FALSE PARENT_SCOPE)
++    endif()
++  else()
++    set(${PREFIX}_CC "" PARENT_SCOPE)
++    set(${PREFIX}_SUFFIX "" PARENT_SCOPE)
++    set(${PREFIX}_VIRTUAL FALSE PARENT_SCOPE)
++  endif()
++endfunction()
++
++# Set OUTPUT_VAR to ON if any architecture in ARGN generates SASS for a compute capability in
++# [MIN_CC, MAX_CC], and to OFF otherwise. Architectures are compared by compute capability, so
++# every spelling of one matches: "121", "121a", "121f", "121-real", "121a-real" and "121f-real".
++# -virtual entries never match: they embed only PTX, which provides no native kernels, and the
++# features gated on this (TMA/WGMMA, block-scaled MMA) need arch- or family-specific SASS.
++#
++# Usage:
++#   onnxruntime_cuda_archs_have_sass(<output_var> <min_cc> <max_cc> <arch>...)
++function(onnxruntime_cuda_archs_have_sass OUTPUT_VAR MIN_CC MAX_CC)
++  set(_result OFF)
++  foreach(_arch IN LISTS ARGN)
++    onnxruntime_parse_cuda_arch("${_arch}" _parsed)
++    if(NOT _parsed_CC STREQUAL "" AND NOT _parsed_VIRTUAL AND
++       _parsed_CC GREATER_EQUAL MIN_CC AND _parsed_CC LESS_EQUAL MAX_CC)
++      set(_result ON)
++      break()
++    endif()
++  endforeach()
++  set(${OUTPUT_VAR} ${_result} PARENT_SCOPE)
++endfunction()
++
++# Set OUTPUT_VAR to ON if any architecture in ARGN generates code, SASS or PTX, for a compute
++# capability of at least MIN_CC, and to OFF otherwise. Unlike onnxruntime_cuda_archs_have_sass,
++# -virtual entries count: the driver JIT-compiles PTX for compute_<cc> on GPUs of compute
++# capability <cc> or later (within the architecture or family for an "a" or "f" suffix), so
++# kernels that use no architecture-specific features are reachable from PTX as well.
++#
++# Usage:
++#   onnxruntime_cuda_archs_have_code(<output_var> <min_cc> <arch>...)
++function(onnxruntime_cuda_archs_have_code OUTPUT_VAR MIN_CC)
++  set(_result OFF)
++  foreach(_arch IN LISTS ARGN)
++    onnxruntime_parse_cuda_arch("${_arch}" _parsed)
++    if(NOT _parsed_CC STREQUAL "" AND _parsed_CC GREATER_EQUAL MIN_CC)
++      set(_result ON)
++      break()
++    endif()
++  endforeach()
++  set(${OUTPUT_VAR} ${_result} PARENT_SCOPE)
++endfunction()
++
+ macro(setup_cuda_architectures)
+   # cmake-format: off
+   # Initialize and normalize CMAKE_CUDA_ARCHITECTURES before enabling CUDA.
+@@ -100,6 +162,8 @@ macro(setup_cuda_architectures)
+   #  * For `-virtual` architectures, the last one is kept as it is, and the others are ignored.
+   #  * `-real` suffix is automatically added for other cases.
+   #  * Always use accelerated (`-a` suffix) target for supported real architectures.
++  #  * An explicit `a` or `f` suffix is kept. Family-specific (`f`) entries are kept as given:
++  #    `<cc>f` generates SASS and PTX, `<cc>f-real` SASS only.
+   # cmake-format: on
+ 
+   # Allow override via CUDAARCHS environment variable (standard CMake variable)
+@@ -163,7 +227,11 @@ macro(setup_cuda_architectures)
+ 
+     if(CUDA_ARCH MATCHES "^([1-9])([0-9])+[af]?-virtual$")
+       set(CMAKE_CUDA_ARCHITECTURES_LAST_VIRTUAL ${CUDA_ARCH})
+-    elseif(CUDA_ARCH MATCHES "^(([1-9])([0-9])+)[af]?-real$")
++    elseif(CUDA_ARCH MATCHES "^[1-9][0-9]+f-real$")
++      # Family-specific SASS only. Keep it verbatim: without the "f" it would become "<cc>a-real"
++      # below, and sm_120a code runs only on 12.0, while sm_120f code runs on 12.0 and 12.1.
++      list(APPEND CMAKE_CUDA_ARCHITECTURES_CLEAN ${CUDA_ARCH})
++    elseif(CUDA_ARCH MATCHES "^(([1-9])([0-9])+[af]?)-real$")
+       list(APPEND CMAKE_CUDA_ARCHITECTURES_CLEAN ${CMAKE_MATCH_1})
+     elseif(CUDA_ARCH MATCHES "^(([1-9])([0-9])+)([af]?)$")
+       list(APPEND CMAKE_CUDA_ARCHITECTURES_CLEAN ${CMAKE_MATCH_1}${CMAKE_MATCH_4})
+@@ -175,6 +243,7 @@ macro(setup_cuda_architectures)
+   set(CMAKE_CUDA_ARCHITECTURES ${CMAKE_CUDA_ARCHITECTURES_CLEAN})
+ 
+   # CMAKE_CUDA_ARCHITECTURES_ORIG contains all architectures enabled, without automatically added -real or -a suffix.
++  # A "<cc>f-real" entry keeps its -real suffix to tell it apart from "<cc>f" (SASS and PTX).
+   set(CMAKE_CUDA_ARCHITECTURES_ORIG "${CMAKE_CUDA_ARCHITECTURES}")
+   message(STATUS "GPU architectures: ${CMAKE_CUDA_ARCHITECTURES_ORIG}")
+ 
+@@ -182,7 +251,9 @@ macro(setup_cuda_architectures)
+   unset(ORT_HAS_SM90_OR_LATER)
+   unset(ORT_HAS_SM100_OR_LATER)
+   unset(ORT_HAS_SM120_OR_LATER)
+-  foreach(CUDA_ARCH IN LISTS CMAKE_CUDA_ARCHITECTURES_ORIG)
++  # Include the -virtual entry, which _ORIG omits: PTX for compute_<cc> is device code for <cc> too,
++  # and e.g. the XQA kernels rely on HAS_SM80_OR_LATER to emit their host stubs (xqa_impl_gen.cuh).
++  foreach(CUDA_ARCH IN LISTS CMAKE_CUDA_ARCHITECTURES_ORIG CMAKE_CUDA_ARCHITECTURES_LAST_VIRTUAL)
+     if(CUDA_ARCH MATCHES "^([0-9]+)")
+       if(CMAKE_MATCH_1 GREATER_EQUAL 80)
+         set(ORT_HAS_SM80_OR_LATER ON)
+@@ -211,27 +282,12 @@ macro(setup_cuda_architectures)
+     add_definitions("-DHAS_SM120_OR_LATER")
+   endif()
+ 
+-  set(ARCHITECTURES_WITH_KERNELS "80" "86" "89" "90" "100" "110" "120")
+-  foreach(CUDA_ARCH IN LISTS ARCHITECTURES_WITH_KERNELS)
+-    unset(HAS_CUDA_ARCH)
+-    foreach(CUDA_ARCH_ORIG IN LISTS CMAKE_CUDA_ARCHITECTURES_ORIG)
+-      if(CUDA_ARCH_ORIG MATCHES "^${CUDA_ARCH}([af])?$")
+-        set(HAS_CUDA_ARCH ON)
+-        break()
+-      endif()
+-    endforeach()
+-    if(NOT HAS_CUDA_ARCH)
+-      add_definitions("-DEXCLUDE_SM_${CUDA_ARCH}")
+-      message(STATUS "Excluding SM ${CUDA_ARCH}")
+-    endif()
+-  endforeach()
+-
+   # Enable accelerated features (like WGMMA, TMA and setmaxnreg) for SM >= 90.
+   set(ARCHITECTURES_WITH_ACCEL "90" "100" "103" "110" "120" "121")
+   unset(CMAKE_CUDA_ARCHITECTURES_NORMALIZED)
+   foreach(CUDA_ARCH IN LISTS CMAKE_CUDA_ARCHITECTURES)
+-    if(CUDA_ARCH MATCHES "^([0-9]+)f$")
+-      # Family code, no -real suffix
++    if(CUDA_ARCH MATCHES "^([0-9]+)f(-real)?$")
++      # Family code, kept as given: "<cc>f" (SASS and PTX) or "<cc>f-real" (SASS only)
+       list(APPEND CMAKE_CUDA_ARCHITECTURES_NORMALIZED "${CUDA_ARCH}")
+     elseif("${CUDA_ARCH}" IN_LIST ARCHITECTURES_WITH_ACCEL)
+       list(APPEND CMAKE_CUDA_ARCHITECTURES_NORMALIZED "${CUDA_ARCH}a-real")
+@@ -244,7 +300,54 @@ macro(setup_cuda_architectures)
+     list(APPEND CMAKE_CUDA_ARCHITECTURES_NORMALIZED "${CMAKE_CUDA_ARCHITECTURES_LAST_VIRTUAL}")
+   endif()
+ 
++  list(REMOVE_DUPLICATES CMAKE_CUDA_ARCHITECTURES_NORMALIZED)
++
+   set(CMAKE_CUDA_ARCHITECTURES ${CMAKE_CUDA_ARCHITECTURES_NORMALIZED})
+ 
++  # The gates below are derived from the normalized list, in which every entry states what nvcc
++  # generates ("<cc>[a|f]-real": SASS, "<cc>[a|f]-virtual": PTX, "<cc>f": both). Unlike
++  # CMAKE_CUDA_ARCHITECTURES_ORIG, it also contains the -virtual entry.
++
++  # ORT_HAS_SM12X: native code for SM120 or SM121 (compute capability 12.0/12.1) is requested,
++  # in any spelling ("120", "121a", "120f", "121a-real", ...). Gates the SM120 TMA grouped GEMM
++  # and block-scaled FP4 kernels, which are compiled for the requested 12.x architectures.
++  onnxruntime_cuda_archs_have_sass(ORT_HAS_SM12X 120 121 ${CMAKE_CUDA_ARCHITECTURES})
++
++  # ORT_HAS_SM90: native code for SM90 (Hopper) itself is requested. The Hopper TMA/WGMMA kernels
++  # and DeepGEMM are compiled only for sm_90a, which runs on compute capability 9.0 and nothing
++  # else (not SM100/SM120), so they are dead code unless SM90 is targeted.
++  onnxruntime_cuda_archs_have_sass(ORT_HAS_SM90 90 90 ${CMAKE_CUDA_ARCHITECTURES})
++
++  # EXCLUDE_SM_<sm> compiles out the kernels instantiated for <sm> (the #ifndef EXCLUDE_SM_<sm>
++  # guards under contrib_ops/cuda/llm). It may only be defined when no GPU that this build has
++  # code for can dispatch to those kernels; otherwise the dispatcher throws at run time.
++  #  * 80, 86, 89: CUTLASS 2.x / CuTe SM80-style kernels (mma.sync, cp.async). They use no
++  #    architecture-specific features, are compiled for every requested architecture, and are
++  #    dispatched on every GPU of at least that compute capability: MoeGemmRunner::dispatchToArch
++  #    uses the SM80 fused MoE GEMM on SM80-SM89 and as the fallback on SM90 and later, which is
++  #    the only path for unquantized FP16/BF16 MoE on SM100 and SM12x. Keep them if any requested
++  #    architecture, SASS or PTX, has at least that compute capability.
++  #  * 90: sm_90a kernels, which run on compute capability 9.0 only.
++  #  * 100, 110, 120: architecture- or family-specific kernels, compiled for the requested
++  #    architectures of that family. Keep them if SASS for any member of the family is requested.
++  #    Members per the family-specific compatibility table of the CUDA C++ Programming Guide:
++  #    compute_100f covers 10.0, 10.3 and 10.7, compute_110f covers 11.0, and compute_120f covers
++  #    12.0 and 12.1.
++  onnxruntime_cuda_archs_have_code(_ort_keep_sm80 80 ${CMAKE_CUDA_ARCHITECTURES})
++  onnxruntime_cuda_archs_have_code(_ort_keep_sm86 86 ${CMAKE_CUDA_ARCHITECTURES})
++  onnxruntime_cuda_archs_have_code(_ort_keep_sm89 89 ${CMAKE_CUDA_ARCHITECTURES})
++  set(_ort_keep_sm90 ${ORT_HAS_SM90})
++  onnxruntime_cuda_archs_have_sass(_ort_keep_sm100 100 107 ${CMAKE_CUDA_ARCHITECTURES})
++  onnxruntime_cuda_archs_have_sass(_ort_keep_sm110 110 110 ${CMAKE_CUDA_ARCHITECTURES})
++  set(_ort_keep_sm120 ${ORT_HAS_SM12X})
++  foreach(_ort_sm IN ITEMS 80 86 89 90 100 110 120)
++    if(NOT _ort_keep_sm${_ort_sm})
++      add_definitions("-DEXCLUDE_SM_${_ort_sm}")
++      message(STATUS "Excluding SM ${_ort_sm}")
++    endif()
++    unset(_ort_keep_sm${_ort_sm})
++  endforeach()
++  unset(_ort_sm)
++
+   message(STATUS "CMAKE_CUDA_ARCHITECTURES: ${CMAKE_CUDA_ARCHITECTURES}")
+ endmacro()
+diff --git a/cmake/onnxruntime_cuda_source_filters.cmake b/cmake/onnxruntime_cuda_source_filters.cmake
+index a47d540a37..1d7c19045f 100644
+--- a/cmake/onnxruntime_cuda_source_filters.cmake
++++ b/cmake/onnxruntime_cuda_source_filters.cmake
+@@ -95,7 +95,7 @@ function(onnxruntime_extract_sm_specific_cuda_sources CU_SRC_LIST)
+ 
+   # Extract SM120 TMA WS generated files
+   set(_sm120_srcs)
+-  if("120" IN_LIST CMAKE_CUDA_ARCHITECTURES_ORIG OR "121" IN_LIST CMAKE_CUDA_ARCHITECTURES_ORIG)
++  if(ORT_HAS_SM12X)
+     if(_matmul_block_scaled_fp4_sm120_srcs)
+       list(APPEND _sm120_srcs ${_matmul_block_scaled_fp4_sm120_srcs})
+     endif()
+@@ -252,17 +252,20 @@ function(onnxruntime_filter_cuda_archs OUTPUT_VAR)
+ 
+   set(_filtered)
+   foreach(_arch IN LISTS CMAKE_CUDA_ARCHITECTURES)
+-    string(REGEX MATCH "^([0-9]+)" _arch_num "${_arch}")
+-    if(_arch_num GREATER_EQUAL "${_FCA_MIN_SM}")
+-      if(_FCA_REPLACE_SM120_REAL_WITH_VIRTUAL AND _arch_num GREATER_EQUAL 120 AND _arch MATCHES "-real$")
+-        list(APPEND _filtered "${_arch_num}-virtual")
++    onnxruntime_parse_cuda_arch("${_arch}" _fca_arch)
++    if(NOT _fca_arch_CC STREQUAL "" AND _fca_arch_CC GREATER_EQUAL "${_FCA_MIN_SM}")
++      # Any non-virtual entry generates SASS: "120a-real", but also a family code such as "120f",
++      # which is kept without the -real suffix (it generates both SASS and PTX).
++      if(_FCA_REPLACE_SM120_REAL_WITH_VIRTUAL AND _fca_arch_CC GREATER_EQUAL 120 AND NOT _fca_arch_VIRTUAL)
++        list(APPEND _filtered "${_fca_arch_CC}-virtual")
+         continue()
+-      elseif(_FCA_EXCLUDE_SM120_REAL AND _arch_num GREATER_EQUAL 120 AND _arch MATCHES "-real$")
++      elseif(_FCA_EXCLUDE_SM120_REAL AND _fca_arch_CC GREATER_EQUAL 120 AND NOT _fca_arch_VIRTUAL)
+         continue()
+       endif()
+       list(APPEND _filtered "${_arch}")
+     endif()
+   endforeach()
++  list(REMOVE_DUPLICATES _filtered)
+   set("${OUTPUT_VAR}" "${_filtered}" PARENT_SCOPE)
+ endfunction()
+ 
+diff --git a/cmake/onnxruntime_providers_cuda.cmake b/cmake/onnxruntime_providers_cuda.cmake
+index c38138c94a..7ec9685c54 100644
+--- a/cmake/onnxruntime_providers_cuda.cmake
++++ b/cmake/onnxruntime_providers_cuda.cmake
+@@ -405,7 +405,7 @@
+ 
+     include(cutlass)
+     target_include_directories(${target} PRIVATE ${cutlass_SOURCE_DIR}/include ${cutlass_SOURCE_DIR}/examples ${cutlass_SOURCE_DIR}/tools/util/include)
+-    if(ORT_HAS_SM90_OR_LATER AND NOT WIN32 AND NOT onnxruntime_CUDA_MINIMAL AND NOT onnxruntime_DISABLE_CONTRIB_OPS)
++    if(ORT_HAS_SM90 AND NOT WIN32 AND NOT onnxruntime_CUDA_MINIMAL AND NOT onnxruntime_DISABLE_CONTRIB_OPS)
+       include(deep_gemm)
+       target_include_directories(${target} PRIVATE ${deep_gemm_SOURCE_DIR}/deep_gemm/include)
+       target_compile_definitions(${target} PRIVATE USE_DEEP_GEMM)
+@@ -422,7 +422,7 @@
+     if(ORT_HAS_SM90_OR_LATER)
+       target_compile_options(${target} PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:-Xptxas=-w>)
+       target_compile_options(${target} PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:-DCUTLASS_ENABLE_GDC_FOR_SM90=1>)
+-      if(NOT MSVC)
++      if(NOT MSVC AND ORT_HAS_SM90)
+         # The native SM90 (Hopper) TMA/WGMMA launchers pass CUTLASS TMA descriptor types through
+         # NVCC-generated host stubs. With CUDA 13 + MSVC those stubs contain 128-byte over-aligned
+         # by-value formal parameters, which triggers MSVC C2719 ("formal parameter with requested
+@@ -439,8 +439,7 @@
+       endif()
+     endif()
+ 
+-    if(("120" IN_LIST CMAKE_CUDA_ARCHITECTURES_ORIG OR "121" IN_LIST CMAKE_CUDA_ARCHITECTURES_ORIG) AND
+-       (NOT MSVC OR onnxruntime_USE_FP4_QMOE))
++    if(ORT_HAS_SM12X AND (NOT MSVC OR onnxruntime_USE_FP4_QMOE))
+       target_compile_definitions(${target} PRIVATE COMPILE_BLACKWELL_SM120_TMA_GROUPED_GEMMS)
+     endif()
+ 
+@@ -567,7 +566,10 @@
+       if(onnxruntime_cuda_sm90_tma_srcs OR onnxruntime_cuda_llm_sm90_srcs)
+         set(_ort_sm90_all_srcs ${onnxruntime_cuda_sm90_tma_srcs} ${onnxruntime_cuda_llm_sm90_srcs})
+         onnxruntime_filter_cuda_archs(_ort_sm90_check MIN_SM 90)
+-        if(_ort_sm90_check)
++        # Nothing references these sources unless SM90 is targeted: COMPILE_HOPPER_TMA_* and
++        # USE_DEEP_GEMM are only defined then, and the fpA_intB SM90 launchers are compiled out
++        # by EXCLUDE_SM_90 otherwise.
++        if(_ort_sm90_check AND ORT_HAS_SM90)
+           onnxruntime_add_cuda_object_library(
+             NAME onnxruntime_providers_cuda_sm90_tma
+             PARENT onnxruntime_providers_cuda
+diff --git a/cmake/onnxruntime_providers_cuda_plugin.cmake b/cmake/onnxruntime_providers_cuda_plugin.cmake
+index 465799f0bc..9b37b58ae8 100644
+--- a/cmake/onnxruntime_providers_cuda_plugin.cmake
++++ b/cmake/onnxruntime_providers_cuda_plugin.cmake
+@@ -301,7 +301,7 @@ endif()
+ 
+ include(cudnn_frontend)
+ include(cutlass)
+-if(ORT_HAS_SM90_OR_LATER AND NOT WIN32 AND NOT onnxruntime_DISABLE_CONTRIB_OPS)
++if(ORT_HAS_SM90 AND NOT WIN32 AND NOT onnxruntime_DISABLE_CONTRIB_OPS)
+   include(deep_gemm)
+   target_include_directories(onnxruntime_providers_cuda_plugin PRIVATE ${deep_gemm_SOURCE_DIR}/deep_gemm/include)
+   target_compile_definitions(onnxruntime_providers_cuda_plugin PRIVATE USE_DEEP_GEMM)
+@@ -312,7 +312,7 @@ if(ORT_HAS_SM90_OR_LATER)
+   list(APPEND _cuda_plugin_shared_compile_options
+     "$<$<COMPILE_LANGUAGE:CUDA>:-Xptxas=-w>"
+     "$<$<COMPILE_LANGUAGE:CUDA>:-DCUTLASS_ENABLE_GDC_FOR_SM90=1>")
+-  if(NOT MSVC)
++  if(NOT MSVC AND ORT_HAS_SM90)
+     # The native SM90 (Hopper) TMA/WGMMA launchers pass CUTLASS TMA descriptor types through
+     # NVCC-generated host stubs. With CUDA 13 + MSVC those stubs contain 128-byte over-aligned
+     # by-value formal parameters, which triggers MSVC C2719 ("formal parameter with requested
+@@ -324,8 +324,7 @@ if(ORT_HAS_SM90_OR_LATER)
+     target_compile_definitions(onnxruntime_providers_cuda_plugin PRIVATE COMPILE_HOPPER_TMA_GROUPED_GEMMS)
+   endif()
+ endif()
+-if(("120" IN_LIST CMAKE_CUDA_ARCHITECTURES_ORIG OR "121" IN_LIST CMAKE_CUDA_ARCHITECTURES_ORIG) AND
+-   (NOT MSVC OR onnxruntime_USE_FP4_QMOE))
++if(ORT_HAS_SM12X AND (NOT MSVC OR onnxruntime_USE_FP4_QMOE))
+   target_compile_definitions(onnxruntime_providers_cuda_plugin PRIVATE COMPILE_BLACKWELL_SM120_TMA_GROUPED_GEMMS)
+ endif()
+ 
+@@ -385,11 +384,12 @@ endif()
+ 
+ if(NOT onnxruntime_DISABLE_CONTRIB_OPS)
+   # SM90 TMA warp-specialized files use SM90-specific collective operations.
++  # sm_90a code runs only on SM90, so skip the library unless SM90 is targeted.
+   # Also includes fpA_intB SM90 launchers (guarded by #ifndef EXCLUDE_SM_90).
+   if(_cuda_plugin_sm90_tma_srcs OR _cuda_plugin_llm_sm90_srcs)
+     set(_plugin_sm90_all_srcs ${_cuda_plugin_sm90_tma_srcs} ${_cuda_plugin_llm_sm90_srcs})
+     onnxruntime_filter_cuda_archs(_plugin_sm90_check MIN_SM 90)
+-    if(_plugin_sm90_check)
++    if(_plugin_sm90_check AND ORT_HAS_SM90)
+       onnxruntime_add_cuda_plugin_object_library(
+         NAME onnxruntime_providers_cuda_plugin_sm90_tma
+         PARENT onnxruntime_providers_cuda_plugin
+diff --git a/onnxruntime/contrib_ops/cuda/bert/xqa/mha_impl.cuh b/onnxruntime/contrib_ops/cuda/bert/xqa/mha_impl.cuh
+index f587bc8bee..5571ea720c 100644
+--- a/onnxruntime/contrib_ops/cuda/bert/xqa/mha_impl.cuh
++++ b/onnxruntime/contrib_ops/cuda/bert/xqa/mha_impl.cuh
+@@ -89,7 +89,7 @@ constexpr uint32_t cvtExpansion = exactDiv(inputElemSize, cacheElemSize);
+ constexpr uint32_t preferedKHeadPartBytes = 64;
+ __constant__ constexpr uint32_t cacheVTileSeqLen = 32;
+ #else
+-#if __CUDA_ARCH__ == 860 || __CUDA_ARCH__ == 890 || __CUDA_ARCH__ == 1200
++#if __CUDA_ARCH__ == 860 || __CUDA_ARCH__ == 890 || __CUDA_ARCH__ == 1200 || __CUDA_ARCH__ == 1210
+ constexpr uint32_t preferedKHeadPartBytes = 64;
+ __constant__ constexpr uint32_t cacheVTileSeqLen = 32;
+ #elif __CUDA_ARCH__ == 800 || __CUDA_ARCH__ == 870 || __CUDA_ARCH__ == 900
+diff --git a/onnxruntime/contrib_ops/cuda/bert/xqa/utils.cuh b/onnxruntime/contrib_ops/cuda/bert/xqa/utils.cuh
+index cca2042ef3..e18cb2c6f1 100644
+--- a/onnxruntime/contrib_ops/cuda/bert/xqa/utils.cuh
++++ b/onnxruntime/contrib_ops/cuda/bert/xqa/utils.cuh
+@@ -53,7 +53,7 @@ __constant__ constexpr int32_t kBAD_PAGE_INDEX = -1;
+ __constant__ constexpr float kE4M3_MAX = 448.F;
+ 
+ #ifdef __CUDA_ARCH__
+-#if __CUDA_ARCH__ == 860 || __CUDA_ARCH__ == 890 || __CUDA_ARCH__ == 1200
++#if __CUDA_ARCH__ == 860 || __CUDA_ARCH__ == 890 || __CUDA_ARCH__ == 1200 || __CUDA_ARCH__ == 1210
+ constexpr uint32_t kMAX_SMEM_SIZE = (99u << 10);
+ #elif __CUDA_ARCH__ == 800 || __CUDA_ARCH__ == 870
+ constexpr uint32_t kMAX_SMEM_SIZE = (163u << 10);
