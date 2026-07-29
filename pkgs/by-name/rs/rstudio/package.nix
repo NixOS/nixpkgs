@@ -351,7 +351,7 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString (!server && stdenv.hostPlatform.isLinux) ''
     # remove unneeded electron files, since we'll wrap the app with our own electron
     shopt -s extglob
-    rm -r $out/lib/rstudio/!(locales|resources|resources.pak)
+    rm -r $out/lib/rstudio/!(resources)
 
     makeWrapper ${lib.getExe electron} "$out/bin/rstudio" \
       --add-flags "$out/lib/rstudio/resources/app/" \

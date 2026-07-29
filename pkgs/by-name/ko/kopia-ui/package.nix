@@ -57,7 +57,7 @@ buildNpmPackage {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/kopia
-    cp -r ../dist/kopia-ui/*-unpacked/{locales,resources{,.pak}} $out/share/kopia
+    cp -r ../dist/kopia-ui/*-unpacked/resources $out/share/kopia
     install -Dm644 $src/icons/kopia.svg $out/share/icons/hicolor/scalable/apps/kopia.svg
     makeWrapper ${lib.getExe electron} $out/bin/kopia-ui \
       --prefix PATH : ${lib.makeBinPath [ kopia ]} \

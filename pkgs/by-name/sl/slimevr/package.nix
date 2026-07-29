@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/share/slimevr
-    cp -r gui/dist/artifacts/*/*-unpacked/{locales,resources{,.pak}} $out/share/slimevr/
+    cp -r gui/dist/artifacts/*/*-unpacked/resources $out/share/slimevr/
     # `JAVA_HOME`, `JAVA_TOOL_OPTIONS`, and `--path` are so the GUI can
     # launch the server.
     makeWrapper ${lib.getExe electron} $out/bin/slimevr \

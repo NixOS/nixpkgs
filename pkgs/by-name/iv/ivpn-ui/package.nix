@@ -49,7 +49,7 @@ buildNpmPackage (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/share/ivpn-ui
-    cp -r dist/*-unpacked/{locales,resources{,.pak}} $out/share/ivpn-ui
+    cp -r dist/*-unpacked/resources $out/share/ivpn-ui
 
     install -Dm644 $src/ui/References/Linux/ui/ivpnicon.svg $out/share/icons/hicolor/scalable/apps/ivpn-ui.svg
 

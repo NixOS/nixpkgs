@@ -74,7 +74,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
     mkdir -p $out/share/freetube
-    cp -r build/*-unpacked/{locales,resources{,.pak}} -t $out/share/freetube
+    cp -r build/*-unpacked/resources -t $out/share/freetube
 
     makeWrapper ${lib.getExe electron} $out/bin/freetube \
       --add-flags "$out/share/freetube/resources/app.asar" \

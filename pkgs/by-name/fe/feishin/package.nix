@@ -99,10 +99,7 @@ buildNpmPackage {
   ''
   + lib.optionalString (stdenv.hostPlatform.isLinux && !webVersion) ''
     mkdir -p $out/share/feishin
-
-    pushd dist/*-unpacked/
-    cp -r locales resources{,.pak} $out/share/feishin
-    popd
+    cp -r dist/*-unpacked/resources $out/share/feishin
 
     # Code relies on checking app.isPackaged, which returns false if the executable is electron.
     # Set ELECTRON_FORCE_IS_PACKAGED=1.

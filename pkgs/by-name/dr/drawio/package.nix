@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mkdir -p "$out/share/lib/drawio"
-    cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/drawio"
+    cp -r dist/*-unpacked/resources "$out/share/lib/drawio"
 
     install -Dm644 build/icon.svg "$out/share/icons/hicolor/scalable/apps/drawio.svg"
 

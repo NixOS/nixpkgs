@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString stdenv.hostPlatform.isLinux ''
 
     mkdir -p "$out"/share/ytmdesktop
-    cp -r out/*/{locales,resources{,.pak}} "$out"/share/ytmdesktop
+    cp -r out/*/resources "$out"/share/ytmdesktop
 
     install -Dm644 src/assets/icons/ytmd.png "$out"/share/pixmaps/ytmdesktop.png
 

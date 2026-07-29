@@ -76,10 +76,8 @@ buildNpmPackage rec {
     runHook preInstall
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
-    unpacked="release/linux-${lib.optionalString stdenv.hostPlatform.isAarch64 "arm64-"}unpacked"
-
     mkdir -p "$out/share/lib/breaktimer"
-    cp -r "$unpacked"/{locales,resources{,.pak}} "$out/share/lib/breaktimer"
+    cp -r release/*-unpacked/resources "$out/share/lib/breaktimer"
 
     makeWrapper '${lib.getExe electron}' "$out/bin/breaktimer" \
       --add-flags "$out/share/lib/breaktimer/resources/app.asar" \

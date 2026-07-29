@@ -106,7 +106,7 @@ buildNpmPackage.override { inherit nodejs; } rec {
 
     ${lib.optionalString stdenv.hostPlatform.isLinux ''
       mkdir -p $out/share/kando
-      cp -r out/*/{locales,resources{,.pak}} $out/share/kando
+      cp -r out/*/resources $out/share/kando
 
       install -Dm644 assets/icons/icon.svg $out/share/icons/hicolor/scalable/apps/kando.svg
 

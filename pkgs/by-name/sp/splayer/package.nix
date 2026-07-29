@@ -123,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p "$out/share/splayer"
-    cp -Pr --no-preserve=ownership dist/*-unpacked/{locales,resources{,.pak}} $out/share/splayer
+    cp -Pr --no-preserve=ownership dist/*-unpacked/resources $out/share/splayer
 
     _icon_sizes=(16x16 32x32 96x96 192x192 256x256 512x512)
     for _icons in "''${_icon_sizes[@]}";do

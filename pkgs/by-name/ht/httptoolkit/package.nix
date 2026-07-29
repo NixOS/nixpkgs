@@ -72,7 +72,7 @@ buildNpmPackage rec {
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/share/httptoolkit
-    cp -r dist/*-unpacked/{locales,resources{,.pak}} $out/share/httptoolkit
+    cp -r dist/*-unpacked/resources $out/share/httptoolkit
 
     ln -s ${httptoolkit-server} $out/share/httptoolkit/resources/httptoolkit-server
 

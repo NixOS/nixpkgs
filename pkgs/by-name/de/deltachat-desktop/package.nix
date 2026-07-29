@@ -112,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/opt/DeltaChat
-    cp -r packages/target-electron/dist/*-unpacked/{locales,resources{,.pak}} $out/opt/DeltaChat
+    cp -r packages/target-electron/dist/*-unpacked/resources $out/opt/DeltaChat
 
     makeWrapper ${lib.getExe electron} $out/bin/${finalAttrs.meta.mainProgram} \
       --add-flags $out/opt/DeltaChat/resources/app.asar \

@@ -118,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
       find out/*/resources/app/node_modules -type f -executable -exec remove-references-to -t ${nodejs} '{}' \;
 
       mkdir -p "$out/share/stoat-desktop"
-      cp -r out/*/resources{,.pak} "$out/share/stoat-desktop"
+      cp -r out/*/resources "$out/share/stoat-desktop"
 
       makeWrapper ${lib.getExe electron} "$out/bin/stoat-desktop" \
         --add-flag $out/share/stoat-desktop/resources/app.asar \

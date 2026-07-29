@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
       else
         ''
           mkdir -p $out/share/gitify
-          cp -r dist/*-unpacked/{locales,resources{,.pak}} $out/share/gitify
+          cp -r dist/*-unpacked/resources $out/share/gitify
 
           mkdir -p $out/share/icons/hicolor/256x256/apps
           magick assets/images/app-icon.ico $out/share/icons/hicolor/256x256/apps/gitify.png

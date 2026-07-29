@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     ${lib.optionalString stdenv.hostPlatform.isLinux ''
       mkdir -p "$out/share/lib/vikunja-desktop"
-      cp -r ./dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/vikunja-desktop"
+      cp -r ./dist/*-unpacked/resources "$out/share/lib/vikunja-desktop"
       cp -r ./node_modules "$out/share/lib/vikunja-desktop/resources"
 
       install -Dm644 "build/icon.png" "$out/share/icons/hicolor/256x256/apps/vikunja-desktop.png"

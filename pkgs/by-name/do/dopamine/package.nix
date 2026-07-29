@@ -103,7 +103,7 @@ buildNpmPackage (finalAttrs: {
       else
         ''
           mkdir -p $out/share/dopamine
-          cp -r release/linux*unpacked/{locales,resources{,.pak}} $out/share/dopamine
+          cp -r release/*-unpacked/resources $out/share/dopamine
 
           makeWrapper ${lib.getExe electron} $out/bin/dopamine \
             --add-flags $out/share/dopamine/resources/app.asar \
