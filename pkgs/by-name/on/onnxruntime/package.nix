@@ -112,14 +112,14 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "onnxruntime";
-  version = "1.27.1";
+  version = "1.28.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxruntime";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-i2u/JnfbJ/srsZY3ATb2YsBBXEhTGhatsr3+9eHVV3M=";
+    hash = "sha256-ATVwrWZFv7+inhDG7MbN9XJTRBtiGhjmqY5ar4+pCHs=";
   };
 
   patches = [
