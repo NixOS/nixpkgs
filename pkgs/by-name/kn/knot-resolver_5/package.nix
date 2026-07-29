@@ -38,7 +38,7 @@ let
     version = "5.7.7";
 
     src = fetchurl {
-      url = "https://secure.nic.cz/files/knot-resolver/knot-resolver-${finalAttrs.version}.tar.xz";
+      url = "https://knot-resolver.nic.cz/release/knot-resolver-${finalAttrs.version}.tar.xz";
       sha256 = "481d2a6eb8690023895d389601e56fffbaeba3cc18cc1de5a5f177df9d0f9530";
     };
 

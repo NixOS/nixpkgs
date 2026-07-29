@@ -39,7 +39,7 @@ let
     version = "6.4.1";
 
     src = fetchurl {
-      url = "https://secure.nic.cz/files/knot-resolver/knot-resolver-${finalAttrs.version}.tar.xz";
+      url = "https://knot-resolver.nic.cz/release/knot-resolver-${finalAttrs.version}.tar.xz";
       hash = "sha256-GqTClyHAm86amfPVZXIjEQNj1ms1ytSYm5Wyr9qTeag=";
     };
 
