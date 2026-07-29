@@ -63,12 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     which
   ]
-  ++ lib.optionals withPython (
-    with python3Packages;
-    [
-      python
-    ]
-  );
+  ++ lib.optional withPython python3Packages.python;
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
