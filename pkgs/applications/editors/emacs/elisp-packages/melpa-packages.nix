@@ -416,7 +416,11 @@ let
             '';
           });
 
-          magit = buildWithGit super.magit;
+          magit = (buildWithGit super.magit).overrideAttrs (old: {
+            meta = old.meta // {
+              hydraPlatforms = [ "x86_64-linux" ];
+            };
+          });
 
           magit-find-file = buildWithGit super.magit-find-file;
 
