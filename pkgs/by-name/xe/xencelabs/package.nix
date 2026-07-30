@@ -14,11 +14,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "xencelabs";
-  version = "1.3.4-26";
+  version = "1.3.5-33";
 
   src = fetchzip {
-    url = "https://download01.xencelabs.com/file/20241225/Xencelabslinux_${version}.zip";
-    sha256 = "sha256-FSxR7SekHqvvRXkNMcSpGumw8TTnRWGPP/N/rya1VOk=";
+    url = "https://download01.xencelabs.com/file/20250804/Linux${version}.zip";
+    sha256 = "sha256-VruYul1HTwg3rSmRwDbPi8PVBUjaGHXTzKEGhGk0nPw=";
   };
 
   nativeBuildInputs = [
