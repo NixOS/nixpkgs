@@ -3062,10 +3062,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0i24prs7yy1p1zdps2x1ksb7lmvbn2f0llxwdjdw3z2ksddx136b";
+      sha256 = "1px886qvws5zvqphy5cysj8vg01lym0w7vs9wq1h41pk1pjlxaln";
       type = "gem";
     };
-    version = "0.5.12";
+    version = "0.6.6";
   };
   net-pop = {
     dependencies = [ "net-protocol" ];
