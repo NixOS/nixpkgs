@@ -4,9 +4,14 @@
   fetchFromGitHub,
   cmake,
   boost,
+  bzip2,
   libxml2,
   minizip,
+  pkg-config,
+  pcre-cpp,
   readline,
+  uriparser,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,13 +32,20 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/include/*/* $out/include
   '';
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs = [
     boost
+    bzip2
     libxml2
     minizip
+    pcre-cpp
     readline
+    uriparser
+    zlib
   ];
 
   meta = {
