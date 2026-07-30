@@ -323,23 +323,12 @@ in
                 # shellcheck disable=SC2064
                 trap "rm -f '$storeImageTmp'" EXIT
 
-                ${hostPkgs.gnutar}/bin/tar --create \
-                  --absolute-names \
-                  --verbatim-files-from \
-                  --transform 'flags=rSh;s|/nix/store/||' \
-                  --transform 'flags=rSh;s|~nix~case~hack~[[:digit:]]\+||g' \
-                  --files-from ${storeClosureInfo}/store-paths \
-                  | ${hostPkgs.erofs-utils}/bin/mkfs.erofs \
-                    --quiet \
-                    --force-uid=0 \
-                    --force-gid=0 \
-                    -L nix-store \
-                    -U eb176051-bd15-49b7-9e6b-462e0b467019 \
-                    -T 0 \
-                    --hard-dereference \
-                    --tar=f \
-                    "$storeImageTmp"
-
+                ${import ../../lib/erofs-store-image.nix {
+                  inherit hostPkgs;
+                  storePaths = "${storeClosureInfo}/store-paths";
+                  label = "nix-store";
+                  destination = ''"$storeImageTmp"'';
+                }}
                 mv "$storeImageTmp" "$storeImage"
                 trap - EXIT
 
