@@ -1090,8 +1090,8 @@ in
       "sha256-11kfuBIlPjrL6NdBeo+23xYQfL9eeu+C7Gfi2aorNDI=";
 
   mypy-boto3-redshift =
-    buildMypyBoto3Package "redshift" "1.43.50"
-      "sha256-S122NUgI3c1ne3XjPlP3SUWVSPJoV4sHhE4V4HS145o=";
+    buildMypyBoto3Package "redshift" "1.43.53"
+      "sha256-2/74JuGL951aTIggrp5nLVT8nP3aigA0kI06e1wfows=";
 
   mypy-boto3-redshift-data =
     buildMypyBoto3Package "redshift-data" "1.43.0"
