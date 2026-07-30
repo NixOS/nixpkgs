@@ -74,7 +74,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/tsoding/eepers";
     changelog = "https://github.com/tsoding/eepers/blob/${finalAttrs.src.rev}/CHANGELOG.txt";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      zinzilulo
+    ];
     mainProgram = "eepers";
     platforms = lib.platforms.all;
   };
