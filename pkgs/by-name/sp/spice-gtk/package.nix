@@ -1,15 +1,15 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
   acl,
+  buildPackages,
   cyrus_sasl,
-  docbook_xsl,
   libepoxy,
   gettext,
+  gi-docgen,
   gobject-introspection,
   gst_all_1,
-  gtk-doc,
   gtk3,
   hwdata,
   json-glib,
@@ -38,6 +38,9 @@
   wayland-scanner,
   zlib,
   wrapGAppsHook3,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
   withPolkit ? stdenv.hostPlatform.isLinux,
 }:
 
@@ -64,37 +67,39 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spice-gtk";
-  version = "0.42";
+  version = "0.43";
 
   outputs = [
     "out"
     "dev"
-    "devdoc"
     "man"
   ];
 
-  src = fetchurl {
-    url = "https://www.spice-space.org/download/gtk/spice-gtk-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-k4ARfxgRrR+qGBLLZgJHm2KQ1KDYzEQtREJ/f2wOelg=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "spice";
+    repo = "spice-gtk";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-e0B3shnXDwKMPvy1nyz/iNPPRGJbnygh0bqIufq/93g=";
+    fetchSubmodules = true;
   };
+  # Required since we strip .git
+  postUnpack = ''
+    echo "${finalAttrs.version}" > source/.tarball-version
+  '';
 
   depsBuildBuild = [
     pkg-config
   ];
 
   nativeBuildInputs = [
-    docbook_xsl
     gettext
-    gobject-introspection
-    gtk-doc
     meson
     ninja
     perl
     pkg-config
     python3
     python3.pkgs.pyparsing
-    python3.pkgs.six
-    vala
     wrapGAppsHook3
   ]
   ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
@@ -102,6 +107,11 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland-scanner
+  ]
+  ++ lib.optionals withIntrospection [
+    gi-docgen
+    gobject-introspection
+    vala
   ];
 
   buildInputs = [
@@ -122,7 +132,6 @@ stdenv.mkDerivation (finalAttrs: {
     pixman
     spice-protocol
     usbredir
-    vala
     zlib
   ]
   ++ lib.optionals withPolkit [
@@ -140,6 +149,8 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Dusb-acl-helper-dir=${placeholder "out"}/bin"
     "-Dusb-ids-path=${hwdata}/share/hwdata/usb.ids"
+    (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonEnable "vapi" withIntrospection)
   ]
   ++ lib.optionals (!withPolkit) [
     "-Dpolkit=disabled"
