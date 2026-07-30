@@ -1,0 +1,22 @@
+From b1fa212d0bc29dcc72107ad67fb99d4ef573942a Mon Sep 17 00:00:00 2001
+From: Shyim <github@shyim.de>
+Date: Thu, 28 Dec 2023 10:28:21 +0100
+Subject: [PATCH] php: skip epoll1 test on darwin
+
+---
+ tests/grpc-set-ini.phpt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/grpc-set-ini.phpt b/tests/grpc-set-ini.phpt
+index 55c18ee526e24..b39348ea2e685 100644
+--- a/tests/grpc-set-ini.phpt
++++ b/tests/grpc-set-ini.phpt
+@@ -1,7 +1,7 @@
+ --TEST--
+ Ensure ini settings are handled
+ --SKIPIF--
+-<?php if (!extension_loaded("grpc")) print "skip"; ?>
++<?php if (!extension_loaded("grpc") || PHP_OS === "Darwin") print "skip"; ?>
+ --INI--
+ grpc.enable_fork_support = 1
+ grpc.poll_strategy = epoll1

@@ -1,0 +1,26 @@
+Subject: [PATCH] Fix for toolchain with npm_path
+
+When specifying a toolchain with a npm_path, transitive_launcher_files
+is None which leads to an error here.
+
+Instead, don't set transitive_files at all.
+
+---
+ js/private/js_binary.bzl | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/js/private/js_binary.bzl b/js/private/js_binary.bzl
+index 37627809..29e3bf62 100644
+--- a/js/private/js_binary.bzl
++++ b/js/private/js_binary.bzl
+@@ -555,7 +555,6 @@ def _create_launcher(ctx, log_prefix_rule_set, log_prefix_rule, fixed_args = [],
+         include_npm_sources = ctx.attr.include_npm_sources,
+     ).merge(ctx.runfiles(
+         files = launcher_files,
+-        transitive_files = transitive_launcher_files,
+     ))
+ 
+     return struct(
+-- 
+2.53.0
+

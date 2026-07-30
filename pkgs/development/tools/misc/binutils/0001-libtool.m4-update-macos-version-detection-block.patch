@@ -1,0 +1,24 @@
+From 368f26bfece3899a8c992cfec66427266918ab80 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Thu, 4 Jul 2024 12:20:34 -0400
+Subject: [PATCH] libtool.m4: update macos version detection block
+
+---
+ libtool.m4 | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/libtool.m4 b/libtool.m4
+index e36fdd3c0e2..dd4725f8cd1 100644
+--- a/libtool.m4
++++ b/libtool.m4
+@@ -1011,6 +1011,7 @@ _LT_EOF
+ 	  _lt_dar_allow_undefined='${wl}-flat_namespace ${wl}-undefined ${wl}suppress'
+ 	  ;;
+ 	*)
++	  _lt_dar_allow_undefined='${wl}-flat_namespace ${wl}-undefined ${wl}dynamic_lookup'
+ 	  ;;
+      esac
+     ;;
+-- 
+2.45.1
+

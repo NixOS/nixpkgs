@@ -1,0 +1,116 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  python3,
+  zlib,
+  libssh2,
+  openssl,
+  pcre2,
+  libiconv,
+  staticBuild ? stdenv.hostPlatform.isStatic,
+  # for passthru.tests
+  libgit2-glib,
+  python3Packages,
+  gitstatus,
+  llhttp,
+  withGssapi ? false,
+  withExperimentalSha256 ? false,
+  krb5,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "libgit2";
+  version = "1.9.4";
+  # also check the following packages for updates: python3Packages.pygit2 and libgit2-glib
+
+  outputs = [
+    "lib"
+    "dev"
+    "out"
+  ];
+
+  src = fetchFromGitHub {
+    owner = "libgit2";
+    repo = "libgit2";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZKUiz3pdFE2SKxh53X2oyr7hs32Njj5YVA0OXDXz7h0=";
+  };
+
+  cmakeFlags = [
+    "-DREGEX_BACKEND=pcre2"
+    "-DUSE_HTTP_PARSER=llhttp"
+    "-DUSE_SSH=ON"
+    (lib.cmakeBool "USE_GSSAPI" withGssapi)
+    (lib.cmakeBool "EXPERIMENTAL_SHA256" withExperimentalSha256)
+    "-DBUILD_SHARED_LIBS=${if staticBuild then "OFF" else "ON"}"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isWindows [
+    "-DDLLTOOL=${stdenv.cc.bintools.targetPrefix}dlltool"
+    # For ws2_32, referred to by a `*.pc` file
+    "-DCMAKE_LIBRARY_PATH=${stdenv.cc.libc}/lib"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isOpenBSD [
+    # openbsd headers fail with default c90
+    "-DCMAKE_C_STANDARD=99"
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    python3
+    pkg-config
+  ];
+
+  buildInputs = [
+    zlib
+    libssh2
+    openssl
+    pcre2
+    llhttp
+  ]
+  ++ lib.optional withGssapi krb5;
+
+  propagatedBuildInputs = lib.optional (!stdenv.hostPlatform.isLinux) libiconv;
+
+  doCheck = true;
+  checkPhase = ''
+    testArgs=(-v -xonline)
+
+    # slow
+    testArgs+=(-xclone::nonetwork::bad_urls)
+
+    # failed to set permissions on ...: Operation not permitted
+    testArgs+=(-xrepo::init::extended_1)
+    testArgs+=(-xrepo::template::extended_with_template_and_shared_mode)
+
+    (
+      set -x
+      ./libgit2_tests ''${testArgs[@]}
+    )
+  '';
+
+  postInstall = lib.optionalString withExperimentalSha256 ''
+    # Downstream Rust bindings (git2-rs / git2-sys) expect experimental headers
+    # to be located at 'git2/experimental.h', but upstream libgit2 installs them
+    # into 'git2-experimental/' when EXPERIMENTAL_SHA256 is enabled.
+    ln -s git2-experimental $dev/include/git2
+  '';
+
+  passthru.tests = lib.mapAttrs (_: v: v.override { libgit2 = finalAttrs.finalPackage; }) {
+    inherit libgit2-glib;
+    inherit (python3Packages) pygit2;
+    inherit (gitstatus) romkatv_libgit2;
+  };
+
+  meta = {
+    changelog = "https://github.com/libgit2/libgit2/releases/tag/${finalAttrs.src.tag}";
+    description = "Linkable library implementation of Git that you can use in your application";
+    mainProgram = "git2";
+    homepage = "https://libgit2.org/";
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+  };
+})

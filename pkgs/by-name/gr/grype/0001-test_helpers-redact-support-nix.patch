@@ -1,0 +1,35 @@
+diff --git a/grype/presenter/internal/test_helpers.go b/grype/presenter/internal/test_helpers.go
+index 2bfafbc2..6e70ed87 100644
+--- a/grype/presenter/internal/test_helpers.go
++++ b/grype/presenter/internal/test_helpers.go
+@@ -1,6 +1,7 @@
+ package internal
+ 
+ import (
++	"os"
+ 	"regexp"
+ 	"testing"
+ 
+@@ -92,8 +93,21 @@ func Redact(s []byte) []byte {
+ 	cycloneDxBomRefPattern := regexp.MustCompile(`[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}`)
+ 	tempDirPattern := regexp.MustCompile(`/tmp/[^"]+`)
+ 	macTempDirPattern := regexp.MustCompile(`/var/folders/[^"]+`)
++	// nix build dir isn't always /build so we'll identify it by $TMP
++	nixDir := os.Getenv("TMP")
++	if nixDir == "" {
++		panic("missing $TMP for identifying nix build dir")
++	}
++	end := regexp.QuoteMeta(nixDir)
++	pattern := `[^"]+`
++	// add slash prefix to pattern only if required
++	// don't use strings lib to reduce chance of merge conflicts above
++	if end[len(end)-1] != '/' {
++		pattern = "/" + pattern
++	}
++	nixBuildDirPattern := regexp.MustCompile(end + pattern)
+ 
+-	for _, pattern := range []*regexp.Regexp{serialPattern, rfc3339Pattern, refPattern, uuidPattern, cycloneDxBomRefPattern, tempDirPattern, macTempDirPattern} {
++	for _, pattern := range []*regexp.Regexp{serialPattern, rfc3339Pattern, refPattern, uuidPattern, cycloneDxBomRefPattern, tempDirPattern, macTempDirPattern, nixBuildDirPattern} {
+ 		s = pattern.ReplaceAll(s, []byte(""))
+ 	}
+ 	return s

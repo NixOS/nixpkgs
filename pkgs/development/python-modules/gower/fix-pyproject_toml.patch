@@ -1,0 +1,11 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index dc396ba..d12ba41 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -18,4 +18,5 @@ classifiers = [
+     "License :: OSI Approved :: MIT License",
+     "Operating System :: OS Independent",
+ ]
++dynamic = ["license", "dependencies"]
+ 
+ [project.urls]

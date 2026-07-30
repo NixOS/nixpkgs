@@ -1,0 +1,18 @@
+diff --git a/etc/MAKEDEV.common b/etc/MAKEDEV.common
+index 1e7bb3d235a..1cc64a38985 100644
+--- a/etc/MAKEDEV.common
++++ b/etc/MAKEDEV.common
+@@ -315,10 +315,10 @@ _mkdev(pty, pty*, {-if [ $U -gt 15 ]; then
+ 		echo bad unit for pty in: $i
+ 		continue
+ 	fi
+-	set -A letters p q r s t u v w x y z P Q R S T
+-	set -A suffixes 0 1 2 3 4 5 6 7 8 9 a b c d e f g h i j k l m n o p q \
++	letters=(p q r s t u v w x y z P Q R S T)
++	suffixes=(0 1 2 3 4 5 6 7 8 9 a b c d e f g h i j k l m n o p q \
+ 	    r s t u v w x y z A B C D E F G H I J K L M N O P Q R S T U V W X \
+-	    Y Z
++	    Y Z)
+ 
+ 	name=${letters[$U]}
+ 	n=0

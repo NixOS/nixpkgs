@@ -1,0 +1,162 @@
+From 4b97c8cc49ee2068198bbfaa7eacb17cf1cf067c Mon Sep 17 00:00:00 2001
+From: Eric Helgeson <erichelgeson@gmail.com>
+Date: Fri, 22 Aug 2025 10:05:56 -0500
+Subject: [PATCH] Retarget to .NET 8
+
+---
+ AppCommon/AppCommon.csproj                | 2 +-
+ CommonUtil/CommonUtil.csproj              | 2 +-
+ DiskArc/DiskArc.csproj                    | 2 +-
+ DiskArcTests/DiskArcTests.csproj          | 2 +-
+ Examples/AddFile/AddFile.csproj           | 2 +-
+ Examples/ListContents/ListContents.csproj | 2 +-
+ FileConv/FileConv.csproj                  | 2 +-
+ FileConvTests/FileConvTests.csproj        | 2 +-
+ MakeDist/MakeDist.csproj                  | 2 +-
+ cp2/cp2.csproj                            | 2 +-
+ cp2_wpf/cp2_wpf.csproj                    | 2 +-
+ 11 files changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/AppCommon/AppCommon.csproj b/AppCommon/AppCommon.csproj
+index 48e8e5c..1e58dc6 100644
+--- a/AppCommon/AppCommon.csproj
++++ b/AppCommon/AppCommon.csproj
+@@ -1,7 +1,7 @@
+ <Project Sdk="Microsoft.NET.Sdk">
+ 
+   <PropertyGroup>
+-    <TargetFramework>net6.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+     <ImplicitUsings>enable</ImplicitUsings>
+     <Nullable>enable</Nullable>
+   </PropertyGroup>
+diff --git a/CommonUtil/CommonUtil.csproj b/CommonUtil/CommonUtil.csproj
+index 132c02c..30402ac 100644
+--- a/CommonUtil/CommonUtil.csproj
++++ b/CommonUtil/CommonUtil.csproj
+@@ -1,7 +1,7 @@
+ <Project Sdk="Microsoft.NET.Sdk">
+ 
+   <PropertyGroup>
+-    <TargetFramework>net6.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+     <ImplicitUsings>enable</ImplicitUsings>
+     <Nullable>enable</Nullable>
+   </PropertyGroup>
+diff --git a/DiskArc/DiskArc.csproj b/DiskArc/DiskArc.csproj
+index a1c95f7..cc0baef 100644
+--- a/DiskArc/DiskArc.csproj
++++ b/DiskArc/DiskArc.csproj
+@@ -1,7 +1,7 @@
+ ﻿<Project Sdk="Microsoft.NET.Sdk">
+ 
+   <PropertyGroup>
+-    <TargetFramework>net6.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+     <ImplicitUsings>enable</ImplicitUsings>
+     <Nullable>enable</Nullable>
+   </PropertyGroup>
+diff --git a/DiskArcTests/DiskArcTests.csproj b/DiskArcTests/DiskArcTests.csproj
+index 521776e..40db439 100644
+--- a/DiskArcTests/DiskArcTests.csproj
++++ b/DiskArcTests/DiskArcTests.csproj
+@@ -1,7 +1,7 @@
+ <Project Sdk="Microsoft.NET.Sdk">
+ 
+   <PropertyGroup>
+-    <TargetFramework>net6.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+     <ImplicitUsings>enable</ImplicitUsings>
+     <Nullable>enable</Nullable>
+   </PropertyGroup>
+diff --git a/Examples/AddFile/AddFile.csproj b/Examples/AddFile/AddFile.csproj
+index 09d4137..690e75b 100644
+--- a/Examples/AddFile/AddFile.csproj
++++ b/Examples/AddFile/AddFile.csproj
+@@ -2,7 +2,7 @@
+ 
+   <PropertyGroup>
+     <OutputType>Exe</OutputType>
+-    <TargetFramework>net6.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+     <ImplicitUsings>enable</ImplicitUsings>
+     <Nullable>enable</Nullable>
+   </PropertyGroup>
+diff --git a/Examples/ListContents/ListContents.csproj b/Examples/ListContents/ListContents.csproj
+index 1e27d16..ea1a510 100644
+--- a/Examples/ListContents/ListContents.csproj
++++ b/Examples/ListContents/ListContents.csproj
+@@ -2,7 +2,7 @@
+ 
+   <PropertyGroup>
+     <OutputType>Exe</OutputType>
+-    <TargetFramework>net6.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+     <ImplicitUsings>enable</ImplicitUsings>
+     <Nullable>enable</Nullable>
+   </PropertyGroup>
+diff --git a/FileConv/FileConv.csproj b/FileConv/FileConv.csproj
+index 4c2e0e7..f44d628 100644
+--- a/FileConv/FileConv.csproj
++++ b/FileConv/FileConv.csproj
+@@ -1,7 +1,7 @@
+ ﻿<Project Sdk="Microsoft.NET.Sdk">
+ 
+   <PropertyGroup>
+-    <TargetFramework>net6.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+     <ImplicitUsings>enable</ImplicitUsings>
+     <Nullable>enable</Nullable>
+   </PropertyGroup>
+diff --git a/FileConvTests/FileConvTests.csproj b/FileConvTests/FileConvTests.csproj
+index 48e8e5c..1e58dc6 100644
+--- a/FileConvTests/FileConvTests.csproj
++++ b/FileConvTests/FileConvTests.csproj
+@@ -1,7 +1,7 @@
+ <Project Sdk="Microsoft.NET.Sdk">
+ 
+   <PropertyGroup>
+-    <TargetFramework>net6.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+     <ImplicitUsings>enable</ImplicitUsings>
+     <Nullable>enable</Nullable>
+   </PropertyGroup>
+diff --git a/MakeDist/MakeDist.csproj b/MakeDist/MakeDist.csproj
+index 7bcab19..69753a9 100644
+--- a/MakeDist/MakeDist.csproj
++++ b/MakeDist/MakeDist.csproj
+@@ -2,7 +2,7 @@
+ 
+   <PropertyGroup>
+     <OutputType>Exe</OutputType>
+-    <TargetFramework>net6.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+     <ImplicitUsings>enable</ImplicitUsings>
+     <Nullable>enable</Nullable>
+   </PropertyGroup>
+diff --git a/cp2/cp2.csproj b/cp2/cp2.csproj
+index cdcac51..45234aa 100644
+--- a/cp2/cp2.csproj
++++ b/cp2/cp2.csproj
+@@ -2,7 +2,7 @@
+ 
+   <PropertyGroup>
+     <OutputType>Exe</OutputType>
+-    <TargetFramework>net6.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+     <ImplicitUsings>enable</ImplicitUsings>
+     <Nullable>enable</Nullable>
+     <StartupObject>cp2.CP2Main</StartupObject>
+diff --git a/cp2_wpf/cp2_wpf.csproj b/cp2_wpf/cp2_wpf.csproj
+index bdfe5cc..9f5ed90 100644
+--- a/cp2_wpf/cp2_wpf.csproj
++++ b/cp2_wpf/cp2_wpf.csproj
+@@ -2,7 +2,7 @@
+ 
+   <PropertyGroup>
+     <OutputType>WinExe</OutputType>
+-    <TargetFramework>net6.0-windows</TargetFramework>
++    <TargetFramework>net8.0-windows</TargetFramework>
+     <Nullable>enable</Nullable>
+     <UseWPF>true</UseWPF>
+     <AssemblyName>CiderPress2</AssemblyName>

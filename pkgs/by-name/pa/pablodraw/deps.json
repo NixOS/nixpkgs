@@ -1,0 +1,77 @@
+[
+  {
+    "pname": "AtkSharp",
+    "version": "3.24.24.95",
+    "hash": "sha256-NgdWbXToBHhEVbvPrFcwXeit5iaqbBmNPQiC0jPKlnQ="
+  },
+  {
+    "pname": "CairoSharp",
+    "version": "3.24.24.95",
+    "hash": "sha256-ycdgmQyQ1uSshI/9uMaqn5OBxRF8RADf4Tn/TptE2BU="
+  },
+  {
+    "pname": "dotnet-outdated-tool",
+    "version": "4.1.0",
+    "hash": "sha256-DJTAzwv8472qfj4F9/Oj415M/rbv8e/HpV9j4iwUccQ="
+  },
+  {
+    "pname": "Eto.Forms",
+    "version": "2.9.0",
+    "hash": "sha256-ByMWsnu3LS1Q35glUOopUS2H5bRkJo7hpS6ublyqpxU="
+  },
+  {
+    "pname": "Eto.Platform.Gtk",
+    "version": "2.9.0",
+    "hash": "sha256-4t0DpPfr8VGtC0N7v5CrTxfIOagHchF7LhUY8yCH9Aw="
+  },
+  {
+    "pname": "GdkSharp",
+    "version": "3.24.24.95",
+    "hash": "sha256-NYjADgZG9TUQDIZiSSXDAxj5PyX/B7oKRo9f8Oyb4vI="
+  },
+  {
+    "pname": "GioSharp",
+    "version": "3.24.24.95",
+    "hash": "sha256-5THx4af5PghPnQxXdnsC+wtVcoslh+0636WkB1FaPYg="
+  },
+  {
+    "pname": "GLibSharp",
+    "version": "3.24.24.95",
+    "hash": "sha256-1pDRkKoUI9fLJBcTA2DBlpVccJl2GyAdL+VKjsFbttA="
+  },
+  {
+    "pname": "GtkSharp",
+    "version": "3.24.24.95",
+    "hash": "sha256-sBvk5Ecf2i6c2fYVjMBVoXz0I6IlucOWeE2czZH9QHg="
+  },
+  {
+    "pname": "Lidgren.Network",
+    "version": "1.0.2",
+    "hash": "sha256-LsJWQ9QVG3teOJL2dlitp6TtTKmhlGBbaBwY4D3fQE0="
+  },
+  {
+    "pname": "Mono.Nat",
+    "version": "3.0.4",
+    "hash": "sha256-NdOquU2NaKtCv0p1+eY6awjOBwwzf92CwAJ4Dgz2+4M="
+  },
+  {
+    "pname": "Newtonsoft.Json",
+    "version": "13.0.3",
+    "hash": "sha256-hy/BieY4qxBWVVsDqqOPaLy1QobiIapkbrESm6v2PHc="
+  },
+  {
+    "pname": "PangoSharp",
+    "version": "3.24.24.95",
+    "hash": "sha256-YhltIz1jisJqR2ZxvbYy0ybi4oGw6qR2SkjF/2aWiBQ="
+  },
+  {
+    "pname": "SharpCompress",
+    "version": "0.32.2",
+    "hash": "sha256-9QaWG8N0IwoIddpqcoo2P/shmbrSG0tcTkhFBOhCKdw="
+  },
+  {
+    "pname": "System.Text.Encoding.CodePages",
+    "version": "9.0.0",
+    "hash": "sha256-OvtGrWDjuXdcIuMV504IDiBq9g8vtRIcn5w25x4W9HE="
+  }
+]

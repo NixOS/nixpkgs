@@ -1,0 +1,66 @@
+From db03b44068e71f5266b720eb68ecae50e3e14303 Mon Sep 17 00:00:00 2001
+From: Ewerton Silva <ewertoncom297@gmail.com>
+Date: Sat, 11 Jul 2026 23:50:58 -0300
+Subject: [PATCH] fix: do not commit inside the content_hash embeddings
+ migration
+
+---
+ llm/embeddings_migrations.py | 21 ++++++++++-----------
+ tests/test_migrate.py        | 12 ++++++++++++
+ 2 files changed, 22 insertions(+), 11 deletions(-)
+
+diff --git a/llm/embeddings_migrations.py b/llm/embeddings_migrations.py
+index 96444bd65..595a692d9 100644
+--- a/llm/embeddings_migrations.py
++++ b/llm/embeddings_migrations.py
+@@ -62,17 +62,16 @@ def random_md5():
+     db.conn.create_function("temp_md5", 1, md5)
+     db.conn.create_function("temp_random_md5", 0, random_md5)
+ 
+-    with db.conn:
+-        db.execute("""
+-            update embeddings
+-            set content_hash = temp_md5(content)
+-            where content is not null
+-        """)
+-        db.execute("""
+-            update embeddings
+-            set content_hash = temp_random_md5()
+-            where content is null
+-        """)
++    db.execute("""
++        update embeddings
++        set content_hash = temp_md5(content)
++        where content is not null
++    """)
++    db.execute("""
++        update embeddings
++        set content_hash = temp_random_md5()
++        where content is null
++    """)
+ 
+     db["embeddings"].create_index(["content_hash"])
+ 
+diff --git a/tests/test_migrate.py b/tests/test_migrate.py
+index 705021100..e74b1554b 100644
+--- a/tests/test_migrate.py
++++ b/tests/test_migrate.py
+@@ -117,6 +117,18 @@ def test_migrations_for_embeddings():
+     assert db["embeddings"].foreign_keys[0].other_table == "collections"
+ 
+ 
++@pytest.mark.skipif(
++    not hasattr(sqlite_utils.Database, "atomic"),
++    reason="sqlite-utils 4 and higher run each migration inside a transaction",
++)
++def test_embeddings_migrations_do_not_commit():
++    # https://github.com/simonw/llm/issues/1523
++    db = sqlite_utils.Database(memory=True)
++    for migration in embeddings_migrations.pending(db):
++        with db.atomic():
++            migration.fn(db)
++
++
+ def test_backfill_content_hash():
+     db = sqlite_utils.Database(memory=True)
+     # Run migrations up to but not including m004_store_content_hash

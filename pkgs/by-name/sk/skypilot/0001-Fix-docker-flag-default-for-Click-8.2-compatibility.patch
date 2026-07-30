@@ -1,0 +1,31 @@
+From 6a2202baf3edff90aea6b66996a8e11e4e7c133e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ak=E1=B9=A3aya=20=C5=9Ar=C4=ABniv=C4=81san?=
+ <akssri@vakra.xyz>
+Date: Wed, 13 May 2026 13:31:19 +0530
+Subject: [PATCH] Fix --docker flag default for Click >= 8.2 compatibility
+
+Click 8.2 changed flag_value option handling: default=False is no longer
+normalised to None before the 'is None' guard. Change to default=None so
+sky launch works with Click >= 8.2 (e.g. nixpkgs).
+
+Upstream constrains click<8.2; this makes the code robust to newer versions.
+---
+ sky/client/cli/command.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sky/client/cli/command.py b/sky/client/cli/command.py
+index 6ee1102d0..15a5057d6 100644
+--- a/sky/client/cli/command.py
++++ b/sky/client/cli/command.py
+@@ -1072,7 +1072,7 @@ def _handle_infra_cloud_region_zone_options(infra: Optional[str],
+ @click.option('--docker',
+               'backend_name',
+               flag_value=backends.LocalDockerBackend.NAME,
+-              default=False,
++              default=None,
+               hidden=True,
+               help=('(Deprecated) Local docker support is deprecated. '
+                     'To run locally, create a local Kubernetes cluster with '
+-- 
+2.53.0
+

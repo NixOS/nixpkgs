@@ -1,0 +1,85 @@
+diff --git a/cask-bootstrap.el b/cask-bootstrap.el
+--- a/cask-bootstrap.el
++++ b/cask-bootstrap.el
+@@ -27,41 +27,18 @@
+ 
+ ;;; Code:
+ 
+-(require 'package)
++;; Add nix store paths for dependencies to the load-path.
++(let ((paths '(@loadPaths@)))
++  (dolist (path paths)
++    (push path load-path)))
+ 
+-(defvar cask-directory)
++(let ((paths '(@nativeLoadPaths@)))
++  (dolist (path paths)
++    (push path native-comp-eln-load-path)))
+ 
+-(defconst cask-bootstrap-dir
+-  (expand-file-name
+-   (locate-user-emacs-file
+-    (format ".cask/%s.%s/bootstrap" emacs-major-version emacs-minor-version)))
+-  "Path to Cask bootstrap directory.")
+-
+-;; Restore several package- variables and `load-path` after let-scope.
+-(let (package-alist
+-      package-archive-contents
+-      package--initialized
+-      (load-path (add-to-list
+-                  'load-path (expand-file-name "package-build" cask-directory)))
+-      (package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+-                          ("melpa" . "https://melpa.org/packages/")))
+-      (package-user-dir cask-bootstrap-dir)
+-      (deps '(s f commander git epl shut-up cl-lib cl-generic eieio ansi)))
+-  (package-initialize)
+-  (setq package-archive-contents nil) ;; force refresh, cask#573, cask#559
+-  (unless (package-installed-p 'cl-lib)
+-    ;; package-build depends on cl-lib
+-    (unless package-archive-contents
+-      (package-refresh-contents))
+-    (package-install 'cl-lib))
+-  (require 'package-build)
++(let ((deps '(@depsMod@)))
+   (dolist (pkg deps)
+-    (unless (featurep pkg)
+-      (unless (package-installed-p pkg)
+-        (unless package-archive-contents
+-          (package-refresh-contents))
+-        (package-install pkg))
+-      (require pkg))))
++    (require pkg)))
+ 
+ (provide 'cask-bootstrap)
+ 
+diff --git a/cask-cli.el b/cask-cli.el
+--- a/cask-cli.el
++++ b/cask-cli.el
+@@ -129,25 +129,8 @@ already is installed, it will not be installed again."
+     (cask-install (cask-cli--bundle))))
+ 
+ (defun cask-cli/upgrade-cask ()
+-  "Upgrade Cask itself and its dependencies.
+-
+-This command requires that Cask is installed using Git and that
+-Git is available in `exec-path'."
+-  (unless (f-exists? (f-expand ".no-upgrade" cask-directory))
+-    (unwind-protect
+-        (progn
+-          (epl-change-package-dir cask-bootstrap-dir)
+-          (epl-initialize)
+-          (epl-add-archive "gnu" "https://elpa.gnu.org/packages/")
+-          (epl-add-archive "melpa" "https://melpa.org/packages/")
+-          (epl-refresh)
+-          (epl-upgrade))
+-      (epl-reset))
+-    (require 'git)
+-    (let ((git-repo cask-directory))
+-      (if (s-present? (git-run "status" "--porcelain"))
+-          (error "Cannot update Cask because of dirty tree")
+-        (git-pull)))))
++  "Disabled in Nixpkgs as this function requires that Cask is installed using Git."
++  (princ "Upgrade not available when installed via Nixpkgs.\n"))
+ 
+ (defun cask-cli/exec (&rest _args)
+   "Execute ARGS with correct `exec-path' and `load-path'.")

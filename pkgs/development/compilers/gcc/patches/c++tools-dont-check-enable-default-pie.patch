@@ -1,0 +1,80 @@
+From 3f1f99ef82a65d66e3aaa429bf4fb746b93da0db Mon Sep 17 00:00:00 2001
+From: Kito Cheng <kito.cheng@sifive.com>
+Date: Tue, 27 May 2025 10:10:15 +0800
+Subject: [PATCH] c++tools: Don't check --enable-default-pie.
+
+`--enable-default-pie` is an option to specify whether to enable
+position-independent executables by default for `target`.
+
+However c++tools is build for `host`, so it should just follow
+`--enable-host-pie` option to determine whether to build with
+position-independent executables or not.
+
+NOTE:
+
+I checked PR 98324 and build with same configure option
+(`--enable-default-pie` and lto bootstrap) on x86-64 linux to make sure
+it won't cause same problem.
+
+c++tools/ChangeLog:
+
+	* configure.ac: Don't check `--enable-default-pie`.
+	* configure: Regen.
+---
+ c++tools/configure    | 11 -----------
+ c++tools/configure.ac |  6 ------
+ 2 files changed, 17 deletions(-)
+
+diff --git a/c++tools/configure b/c++tools/configure
+index 1353479becaf4..6df4a2f0dfaed 100755
+--- a/c++tools/configure
++++ b/c++tools/configure
+@@ -700,7 +700,6 @@ enable_option_checking
+ enable_c___tools
+ enable_maintainer_mode
+ enable_checking
+-enable_default_pie
+ enable_host_pie
+ enable_host_bind_now
+ with_gcc_major_version_only
+@@ -1335,7 +1334,6 @@ Optional Features:
+                           enable expensive run-time checks. With LIST, enable
+                           only specific categories of checks. Categories are:
+                           yes,no,all,none,release.
+-  --enable-default-pie    enable Position Independent Executable as default
+   --enable-host-pie       build host code as PIE
+   --enable-host-bind-now  link host code as BIND_NOW
+ 
+@@ -2946,15 +2944,6 @@ $as_echo "#define ENABLE_ASSERT_CHECKING 1" >>confdefs.h
+ 
+ fi
+ 
+-# Check whether --enable-default-pie was given.
+-# Check whether --enable-default-pie was given.
+-if test "${enable_default_pie+set}" = set; then :
+-  enableval=$enable_default_pie; PICFLAG=-fPIE
+-else
+-  PICFLAG=
+-fi
+-
+-
+ # Enable --enable-host-pie
+ # Check whether --enable-host-pie was given.
+ if test "${enable_host_pie+set}" = set; then :
+diff --git a/c++tools/configure.ac b/c++tools/configure.ac
+index db34ee678e033..8c4b72a8023a8 100644
+--- a/c++tools/configure.ac
++++ b/c++tools/configure.ac
+@@ -97,12 +97,6 @@ if test x$ac_assert_checking != x ; then
+ [Define if you want assertions enabled.  This is a cheap check.])
+ fi
+ 
+-# Check whether --enable-default-pie was given.
+-AC_ARG_ENABLE(default-pie,
+-[AS_HELP_STRING([--enable-default-pie],
+-		  [enable Position Independent Executable as default])],
+-[PICFLAG=-fPIE], [PICFLAG=])
+-
+ # Enable --enable-host-pie
+ AC_ARG_ENABLE(host-pie,
+ [AS_HELP_STRING([--enable-host-pie],

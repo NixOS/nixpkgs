@@ -1,0 +1,6 @@
+{
+  "launch_at_startup": "sha256-vr679QsLuIYyW9gaAHA4Uya4f6spWHViijDJSEnfrPw=",
+  "tray_manager": "sha256-0BGLObYc17BsQbuOaDLC9zN0d6f/l7tRZfEljixF4aU=",
+  "window_manager": "sha256-5gVHmQNMSQ2/bD5rNqBREDv71IviWgH8LZMqhUcIYN0=",
+  "yaml_writer": "sha256-QWi019rnHrFYN0uSCQeDzoPDs0hyf21Xx4o2XgUfcqg="
+}

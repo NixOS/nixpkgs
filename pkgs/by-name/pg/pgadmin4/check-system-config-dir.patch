@@ -1,0 +1,15 @@
+--- a/web/pgadmin/evaluate_config.py      2023-04-11 17:36:46.000000000 +0200
++++ b/web/pgadmin/evaluate_config.py    2023-04-14 09:54:33.496434314 +0200
+@@ -76,6 +76,12 @@
+         custom_config_settings.update(config_system_settings)
+     except ImportError:
+         pass
++    except PermissionError:
++        print(f"Permission denied to open {str(system_config_dir + '/config_system.py')}. \n \
++              If you are running pgadmin4-desktopmode please make sure you disable  \n \
++              the pgadmin NixOS module first. If you rely on settings in \n \
++              {str(system_config_dir + '/config_system.py')}, please check the correct permissions.")
++        pass
+
+
+ def evaluate_and_patch_config(config: dict) -> dict:

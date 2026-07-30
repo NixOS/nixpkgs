@@ -1,0 +1,20 @@
+From: Andreas Schwab <schwab@linux-m68k.org>
+Subject: Initialize the symlink flag
+Bug-Debian: https://bugs.debian.org/717029
+X-Debian-version: 6.0-10
+
+--- a/process.c
++++ b/process.c
+@@ -1758,6 +1758,12 @@
+         = (G.crec.general_purpose_bit_flag & (1 << 11)) == (1 << 11);
+ #endif
+ 
++#ifdef SYMLINKS
++    /* Initialize the symlink flag, may be set by the platform-specific
++       mapattr function.  */
++    G.pInfo->symlink = 0;
++#endif
++
+     return PK_COOL;
+ 
+ } /* end function process_cdir_file_hdr() */

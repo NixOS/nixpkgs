@@ -1,0 +1,46 @@
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  zig_0_15,
+  callPackage,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "flow-control";
+  version = "0.7.2";
+
+  src = fetchFromGitHub {
+    owner = "neurocyte";
+    repo = "flow";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5+F0DKb4LXtcMXNutUSJuIe7cdBoFUoJhCs8vbm20jg=";
+  };
+
+  deps = callPackage ./build.zig.zon.nix {
+    zig = zig_0_15;
+  };
+
+  nativeBuildInputs = [ zig_0_15 ];
+
+  passthru.updateScript = ./update.sh;
+
+  dontSetZigDefaultFlags = true;
+  zigBuildFlags = [
+    "--system"
+    "${finalAttrs.deps}"
+    "-Dcpu=baseline"
+    "-Doptimize=ReleaseFast"
+  ];
+
+  env.VERSION = finalAttrs.version;
+
+  meta = {
+    description = "Programmer's text editor";
+    homepage = "https://github.com/neurocyte/flow";
+    changelog = "https://github.com/neurocyte/flow/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ genga898 ];
+    mainProgram = "flow";
+  };
+})

@@ -1,0 +1,45 @@
+diff --git a/CMake/DependenciesConfig.cmake b/CMake/DependenciesConfig.cmake
+index aca28ea..76f4186 100644
+--- a/CMake/DependenciesConfig.cmake
++++ b/CMake/DependenciesConfig.cmake
+@@ -7,11 +7,14 @@ find_package(Bullet REQUIRED)
+ find_package(enet REQUIRED)
+ find_package(MyGUI REQUIRED)
+ find_package(Ogg REQUIRED)
+-find_package(OGRE REQUIRED)
++find_package(PkgConfig REQUIRED)
++pkg_check_modules(OGRE REQUIRED IMPORTED_TARGET GLOBAL OGRE)
++pkg_check_modules(OGRE-Hlms REQUIRED IMPORTED_TARGET GLOBAL OGRE-Hlms)
++pkg_check_modules(OGRE-Overlay REQUIRED IMPORTED_TARGET GLOBAL OGRE-Overlay)
+ find_package(OpenAL REQUIRED)
+ find_package(RapidJSON REQUIRED)
+ find_package(SDL2 REQUIRED)
+ find_package(tinyxml2 REQUIRED)
+ find_package(Vorbis REQUIRED)
+ 
+-include(AddMissingTargets)
+\ No newline at end of file
++include(AddMissingTargets)
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d84ae0c..22c367d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -175,14 +175,16 @@ foreach( EXE ${EXE_LIST} )
+     endif ()
+ 
+     target_link_libraries(
+-            ${EXE} 
++            ${EXE}
+             PRIVATE
+             boost::boost
+             Bullet::Bullet
+             enet::enet
+             MyGUI::MyGUI
+             Ogg::ogg
+-            OGRE::OGRE
++            PkgConfig::OGRE
++            PkgConfig::OGRE-Hlms
++            PkgConfig::OGRE-Overlay
+             OpenAL::OpenAL
+             rapidjson
+             SDL2::SDL2

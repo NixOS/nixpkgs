@@ -1,0 +1,19 @@
+diff --git a/src/lib/otoml_base.ml b/src/lib/otoml_base.ml
+index 191de16..6dc9a6f 100644
+--- a/src/lib/otoml_base.ml
++++ b/src/lib/otoml_base.ml
+@@ -594,12 +594,8 @@ module Make (N: TomlNumber) (D: TomlDate) = struct
+ 
+     module MI = Toml_parser.MenhirInterpreter
+ 
+-    let get_parse_error env =
+-      match MI.stack env with
+-      | lazy Nil -> "Invalid syntax"
+-      | lazy (Cons (MI.Element (state, _, _, _), _)) ->
+-	  try (String.trim (Toml_parser_messages.message (MI.number state))) with
+-	  | Not_found -> "invalid syntax (no specific message for this error)"
++    let get_parse_error _env =
++	  "invalid syntax (no specific message for this error)"
+ 
+     let rec _parse state lexbuf (checkpoint : (node list) MI.checkpoint ) =
+       match checkpoint with

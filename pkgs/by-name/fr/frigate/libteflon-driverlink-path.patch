@@ -1,0 +1,13 @@
+diff --git a/frigate/detectors/plugins/teflon_tfl.py b/frigate/detectors/plugins/teflon_tfl.py
+index 7e29d6630..98e446d84 100644
+--- a/frigate/detectors/plugins/teflon_tfl.py
++++ b/frigate/detectors/plugins/teflon_tfl.py
+@@ -26,7 +26,7 @@ class TeflonTfl(DetectionApi):
+ 
+     def __init__(self, detector_config: TeflonDetectorConfig):
+         # Location in Debian's mesa-teflon-delegate
+-        delegate_library = "/usr/lib/teflon/libteflon.so"
++        delegate_library = "@driverLink@/lib/libteflon.so"
+         device_config = {}
+ 
+         interpreter = tflite_load_delegate_interpreter(

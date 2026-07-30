@@ -1,0 +1,31 @@
+diff --git a/Makefile b/Makefile
+index b0b682cb..513822d9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -58,17 +58,14 @@ endif
+ 
+ INCDIRS =										\
+ 	-isystem ./lib/ncurses/include				\
+-	-iquote ./lib/libgit2/include				\
+ 	-iquote ./src								\
+ 	-iquote .
+ 
+ LIBDIRS =										\
+-	-L./lib/libgit2/build-$(PLATFORM)			\
+ 	-L./lib/ncurses/build-$(PLATFORM)
+ 
+ LIBS =											\
+ 	-lgit2										\
+-	-lz											\
+ 	-lpthread									\
+ 	-lformw										\
+ 	-lmenuw										\
+@@ -102,7 +99,7 @@ $(OBJS): | lib $(GITHASHHEADER)
+ # Libs: execute make from `lib` directory
+ .PHONY: lib
+ lib:
+-	$(MAKE) -C $@
++	$(MAKE) -C $@ ncurses/$(BUILDROOT)
+ 
+ # C rule
+ $(BUILDDIR)/%.o: %.c

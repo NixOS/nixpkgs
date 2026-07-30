@@ -1,0 +1,21 @@
+Fixes:
+
+  CMake Error at src/runtime/eng/native/functions.cmake:668 (add_executable):
+    Feature 'RESCAN', specified through generator-expression '$<LINK_GROUP>' to
+    link target 'ilasm', is not supported for the 'CXX' link language.
+  Call Stack (most recent call first):
+    ilasm/CMakeLists.txt:73 (add_executable_clr)
+
+diff --git a/src/runtime/eng/native/configurecompiler.cmake b/src/runtime/eng/native/configurecompiler.cmake
+index 8f3d6ad671d..f43a4a7a5f3 100644
+--- a/src/runtime/eng/native/configurecompiler.cmake
++++ b/src/runtime/eng/native/configurecompiler.cmake
+@@ -34,7 +34,7 @@ if (CLR_CMAKE_HOST_UNIX)
+     endif()
+ endif()
+ 
+-if (CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
++if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+     # enable $<LINK_GROUP:RESCAN> on AppleClang as a no-op
+     set(CMAKE_LINK_GROUP_USING_RESCAN "" "")
+     set(CMAKE_LINK_GROUP_USING_RESCAN_SUPPORTED ON)

@@ -1,0 +1,10 @@
+--- a/bash/euktopdf
++++ b/bash/euktopdf
+@@ -55,6 +55,6 @@ do
+     exit 1
+   fi
+   dvips -q -E -o $base.eps $base.dvi &&
+-  epstopdf $base.eps &&
++  epstopdf --gsopt=-dALLOWPSTRANSPARENCY $base.eps &&
+   rm -f $base.{tex,log,dvi,eps}
+ done

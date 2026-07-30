@@ -1,0 +1,29 @@
+From bc1c899fa1b6746d430f7b3d7ee288506d50441a Mon Sep 17 00:00:00 2001
+From: Alyssa Ross <hi@alyssa.is>
+Date: Mon, 11 May 2026 08:51:29 +0200
+Subject: [PATCH] Fix buffer overrun in t85 tests
+
+The variable length tests involve reading an extra row from
+test_image, which would previously read past the end of test_image.
+
+Identified with fortify-headers.
+---
+ tests/t85_tests.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/t85_tests.c b/tests/t85_tests.c
+index 436dfca..671ee6c 100644
+--- a/tests/t85_tests.c
++++ b/tests/t85_tests.c
+@@ -55,7 +55,7 @@ in ITU specifications T.85.
+ #include "spandsp.h"
+ 
+ #define TESTBUF_SIZE        400000
+-#define TEST_IMAGE_SIZE     (1951*1960/8)
++#define TEST_IMAGE_SIZE     (1952*1960/8)
+ 
+ uint8_t testbuf[TESTBUF_SIZE];
+ uint8_t test_image[TEST_IMAGE_SIZE];
+-- 
+2.53.0
+

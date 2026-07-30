@@ -1,0 +1,11 @@
+--- a/hints/darwin.sh	2013-05-08 11:13:45.000000000 -0600
++++ b/hints/darwin.sh	2013-05-08 11:15:04.000000000 -0600
+@@ -129,7 +129,7 @@
+ 
+ # Avoid Apple's cpp precompiler, better for extensions
+ if [ "X`echo | ${cc} -no-cpp-precomp -E - 2>&1 >/dev/null`" = "X" ]; then
+-    cppflags="${cppflags} -no-cpp-precomp"
++    #cppflags="${cppflags} -no-cpp-precomp"
+ 
+     # This is necessary because perl's build system doesn't
+     # apply cppflags to cc compile lines as it should.

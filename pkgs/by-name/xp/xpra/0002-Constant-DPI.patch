@@ -1,0 +1,96 @@
+--- a/src/dummy.h	2016-12-17 23:02:53.396287041 +0100
++++ b/src/dummy.h	2016-12-17 23:03:30.319616550 +0100
+@@ -51,6 +51,7 @@
+     /* options */
+     OptionInfoPtr Options;
+     Bool swCursor;
++    Bool constantDPI;
+     /* proc pointer */
+     CloseScreenProcPtr CloseScreen;
+     xf86CursorInfoPtr CursorInfo;
+--- a/src/dummy_driver.c	2016-12-14 21:54:20.000000000 +0100
++++ b/src/dummy_driver.c	2016-12-17 23:04:59.916416126 +0100
+@@ -17,6 +17,12 @@
+ /* All drivers using the mi colormap manipulation need this */
+ #include "micmap.h"
+ 
++#ifdef RANDR
++#include "randrstr.h"
++#endif
++
++#include "windowstr.h"
++
+ /* identifying atom needed by magnifiers */
+ #include <X11/Xatom.h>
+ #include "property.h"
+@@ -115,11 +121,15 @@
+ };
+ 
+ typedef enum {
+-    OPTION_SW_CURSOR
++    OPTION_SW_CURSOR,
++    OPTION_CONSTANT_DPI
+ } DUMMYOpts;
+ 
+ static const OptionInfoRec DUMMYOptions[] = {
+     { OPTION_SW_CURSOR,	"SWcursor",	OPTV_BOOLEAN,	{0}, FALSE },
++#ifdef RANDR
++    { OPTION_CONSTANT_DPI,	"ConstantDPI",	OPTV_BOOLEAN,	{0}, FALSE },
++#endif
+     { -1,                  NULL,           OPTV_NONE,	{0}, FALSE }
+ };
+ 
+@@ -359,6 +369,7 @@
+     xf86ProcessOptions(pScrn->scrnIndex, pScrn->options, dPtr->Options);
+ 
+     xf86GetOptValBool(dPtr->Options, OPTION_SW_CURSOR,&dPtr->swCursor);
++    xf86GetOptValBool(dPtr->Options, OPTION_CONSTANT_DPI, &dPtr->constantDPI);
+ 
+     if (device->videoRam != 0) {
+ 	pScrn->videoRam = device->videoRam;
+@@ -639,10 +650,45 @@
+     return TRUE;
+ }
+ 
++const char *XDPY_PROPERTY = "dummy-constant-xdpi";
++const char *YDPY_PROPERTY = "dummy-constant-ydpi";
++static int get_dpi_value(WindowPtr root, const char *property_name, int default_dpi)
++{
++    PropertyPtr prop;
++    Atom type_atom = MakeAtom("CARDINAL", 8, TRUE);
++    Atom prop_atom = MakeAtom(property_name, strlen(property_name), FALSE);
++
++    for (prop = wUserProps(root); prop; prop = prop->next) {
++       if (prop->propertyName == prop_atom && prop->type == type_atom && prop->data) {
++           int v = (int) (*((CARD32 *) prop->data));
++           if ((v>0) && (v<4096)) {
++               xf86DrvMsg(0, X_INFO, "get_constant_dpi_value() found property \"%s\" with value=%i\n", property_name, (int) v);
++               return (int) v;
++           }
++           break;
++       }
++    }
++    return default_dpi;
++}
++
+ /* Mandatory */
+ Bool
+ DUMMYSwitchMode(SWITCH_MODE_ARGS_DECL)
+ {
++    SCRN_INFO_PTR(arg);
++#ifdef RANDR
++    DUMMYPtr dPtr = DUMMYPTR(pScrn);
++    if (dPtr->constantDPI) {
++        int xDpi = get_dpi_value(pScrn->pScreen->root, XDPY_PROPERTY, pScrn->xDpi);
++        int yDpi = get_dpi_value(pScrn->pScreen->root, YDPY_PROPERTY, pScrn->yDpi);
++        //25.4 mm per inch: (254/10)
++        pScrn->pScreen->mmWidth = mode->HDisplay * 254 / xDpi / 10;
++        pScrn->pScreen->mmHeight = mode->VDisplay * 254 / yDpi / 10;
++        xf86DrvMsg(pScrn->scrnIndex, X_INFO, "mm(dpi %ix%i)=%ix%i\n", xDpi, yDpi, pScrn->pScreen->mmWidth, pScrn->pScreen->mmHeight);
++        RRScreenSizeNotify(pScrn->pScreen);
++        RRTellChanged(pScrn->pScreen);
++    }
++#endif
+     return TRUE;
+ }
+ 

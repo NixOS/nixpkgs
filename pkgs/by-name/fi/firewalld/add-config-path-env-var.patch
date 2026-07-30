@@ -1,0 +1,12 @@
+--- a/src/firewall/config/__init__.py.in
++++ b/src/firewall/config/__init__.py.in
+@@ -80,7 +80,8 @@
+     FIREWALLD_POLICIES = path + "/policies"
+ 
+ 
+-set_default_config_paths("/usr/lib/firewalld")
++import os
++set_default_config_paths(os.environ.get("NIX_FIREWALLD_CONFIG_PATH", "/usr/lib/firewalld"))
+ 
+ FIREWALLD_LOGFILE = "/var/log/firewalld"
+ 

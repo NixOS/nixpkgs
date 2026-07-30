@@ -1,0 +1,11 @@
+diff --git a/com32/include/stddef.h b/com32/include/stddef.h
+index f52d62f3..437b11f2 100644
+--- a/com32/include/stddef.h
++++ b/com32/include/stddef.h
+@@ -29,4 +29,6 @@
+  */
+ #define container_of(p, c, m) ((c *)((char *)(p) - offsetof(c,m)))
+ 
++typedef short wchar_t;
++
+ #endif /* _STDDEF_H */

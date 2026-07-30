@@ -1,0 +1,12 @@
+diff --git a/build.gradle b/build.gradle
+index af8962dc9..43d70bc66 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -76,7 +76,6 @@ allprojects {
+ tasks.register('writeVersion', WriteProperties) {
+     destinationFile = layout.projectDirectory.file('app/common/src/main/resources/version.properties')
+     println "Writing version.properties to ${destinationFile.get().asFile.path}"
+-    comment = "${new Date()}"
+     property 'version', project.provider { project.version.toString() }
+ }
+ 

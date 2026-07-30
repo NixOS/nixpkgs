@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index 1fe4c41..2c69558 100644
+--- a/Makefile
++++ b/Makefile
+@@ -16,7 +16,7 @@ LIBS =	-lutil
+ PREFIX = /usr/local
+ 
+ all:
+-	${CC} ${CFLAGS} -Wall ${LIBS} -o empty empty.c
++	${CC} ${CFLAGS} -Wall -o empty empty.c ${LIBS}
+ 
+ FreeBSD:	all
+ NetBSD:		all

@@ -1,0 +1,21 @@
+--- a/cephes.asd
++++ b/cephes.asd
+@@ -16,7 +16,7 @@
+   (defclass makefile (source-file) ((type :initform "m")))
+   (defmethod perform ((o load-op) (c makefile)) t)
+   (defmethod perform ((o compile-op) (c makefile))
+-    (let* ((lib-dir (system-relative-pathname "cephes" "scipy-cephes/"))
++    (let* ((lib-dir #P"@out@/scipy-cephes/")
+            (lib (make-pathname :directory (pathname-directory lib-dir)
+                                :name #+(or (and unix (not darwin)) windows win32) "libmd"
+ 			       #+(and darwin arm64) "libmd-arm64"
+@@ -30,7 +30,7 @@
+ 	  (format *error-output* "Library ~S exists, skipping build" lib)
+ 	  (format *error-output* "Building ~S~%" lib))
+       (unless built
+-	(chdir (native-namestring lib-dir))
++	(chdir "scipy-cephes")
+ 	(run-program "make" :output t)))))
+ 
+ (defsystem "cephes"
+

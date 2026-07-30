@@ -1,0 +1,13 @@
+diff --git a/packages/flutter_tools/lib/src/base/platform.dart b/packages/flutter_tools/lib/src/base/platform.dart
+index 45da89ad4c..2d79dbaece 100644
+--- a/packages/flutter_tools/lib/src/base/platform.dart
++++ b/packages/flutter_tools/lib/src/base/platform.dart
+@@ -132,7 +132,7 @@ class LocalPlatform extends Platform {
+   String get pathSeparator => io.Platform.pathSeparator;
+
+   @override
+-  String get operatingSystem => io.Platform.operatingSystem;
++  String get operatingSystem => io.Platform.environment['NIX_FLUTTER_OPERATING_SYSTEM'] ?? io.Platform.operatingSystem;
+
+   @override
+   String get operatingSystemVersion => io.Platform.operatingSystemVersion;

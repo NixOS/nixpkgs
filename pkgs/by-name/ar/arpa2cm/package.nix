@@ -1,0 +1,45 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cmake,
+  nix-update-script,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "arpa2cm";
+  version = "1.0.7";
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  src = fetchFromGitLab {
+    owner = "arpa2";
+    repo = "arpa2cm";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JkMZUXqmrVzURVi8BJRsHprD4Jz6l83qhPxnOfq4KE4=";
+  };
+
+  nativeBuildInputs = [ cmake ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "CMake Module library for the ARPA2 project";
+    longDescription = ''
+      The CMake module library for the ARPA2 project, including the LillyDAP,
+      TLSPool and IdentityHub software stacks. Like the KDE Extra CMake Modules (ECM)
+      which is a large-ish collection of curated CMake modules of particular
+      interest to Qt-based and KDE Frameworks-based applications, the ARPA2
+      CMake Modules (ARPA2CM) is a collection of modules for the software
+      stack from the ARPA2 project. This is largely oriented towards
+      TLS, SSL, X509, DER and LDAP technologies. The ARPA2 CMake Modules
+      also include modules used for product release and deployment of
+      the ARPA2 software stack.
+    '';
+    homepage = "https://gitlab.com/arpa2/arpa2cm";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fufexan ];
+    teams = [ lib.teams.ngi ];
+  };
+})

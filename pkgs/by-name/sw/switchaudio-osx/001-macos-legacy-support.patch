@@ -1,0 +1,25 @@
+From 02803f510bae37eac88b0168ff887bdf7d71a7f0 Mon Sep 17 00:00:00 2001
+From: James Woglom <j@wogloms.net>
+Date: Wed, 1 May 2024 00:36:14 -0400
+Subject: [PATCH] Fix build when run on pre-macOS Monterey
+
+---
+ audio_switch.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/audio_switch.c b/audio_switch.c
+index 814edce..a064c3e 100644
+--- a/audio_switch.c
++++ b/audio_switch.c
+@@ -715,7 +715,11 @@ OSStatus setMute(ASDeviceType typeRequested, ASMuteType muteRequested) {
+     AudioObjectPropertyAddress propertyAddress = {
+         .mSelector  = kAudioDevicePropertyMute,
+         .mScope     = scope,
++        #ifndef MAC_OS_VERSION_12_0
++        .mElement   = kAudioObjectPropertyElementMaster,
++        #else
+         .mElement   = kAudioObjectPropertyElementMain,
++        #endif
+     };
+ 
+     UInt32 muted = (UInt32)muteRequested;

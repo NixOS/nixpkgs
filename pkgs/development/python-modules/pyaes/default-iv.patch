@@ -1,0 +1,51 @@
+From 034c7eea63a155582109233d2fc1de8e14121908 Mon Sep 17 00:00:00 2001
+From: Martin Weinelt <hexa@darmstadt.ccc.de>
+Date: Mon, 2 Mar 2026 12:55:44 +0100
+Subject: [PATCH] Raise on default IV
+
+This disables the static default IV for CBC, CFB and OFB by raising when
+not IV gets passed. We make sure not to break the API contract this way,
+so that existing consumers who rely on the default IV get a useful
+exception message instead of an API break, which could be done in a
+future version.
+
+In CBC mode an IV cannot be predictable or it breaks IND-CPA, this is
+also described as CWE-329.
+
+In CFB and OFB mode an IV still requires to be unique, which does not
+really hold when initializing it statically.
+---
+ pyaes/aes.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/pyaes/aes.py b/pyaes/aes.py
+index c6e8bc0..fd25547 100644
+--- a/pyaes/aes.py
++++ b/pyaes/aes.py
+@@ -376,7 +376,7 @@ class AESModeOfOperationCBC(AESBlockModeOfOperation):
+ 
+     def __init__(self, key, iv = None):
+         if iv is None:
+-            self._last_cipherblock = [ 0 ] * 16
++            raise ValueError("Missing IV parameter. This is a security problem, see https://github.com/ricmoo/pyaes/issues/56.")
+         elif len(iv) != 16:
+             raise ValueError('initialization vector must be 16 bytes')
+         else:
+@@ -423,7 +423,7 @@ def __init__(self, key, iv, segment_size = 1):
+         if segment_size == 0: segment_size = 1
+ 
+         if iv is None:
+-            self._shift_register = [ 0 ] * 16
++            raise ValueError("Missing IV parameter. This is a security problem, see https://github.com/ricmoo/pyaes/issues/56.")
+         elif len(iv) != 16:
+             raise ValueError('initialization vector must be 16 bytes')
+         else:
+@@ -495,7 +495,7 @@ class AESModeOfOperationOFB(AESStreamModeOfOperation):
+ 
+     def __init__(self, key, iv = None):
+         if iv is None:
+-            self._last_precipherblock = [ 0 ] * 16
++            raise ValueError("Missing IV parameter. This is a security problem, see https://github.com/ricmoo/pyaes/issues/56.")
+         elif len(iv) != 16:
+             raise ValueError('initialization vector must be 16 bytes')
+         else:

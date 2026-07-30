@@ -1,0 +1,22 @@
+diff --git a/lib/table.c b/lib/table.c
+index befe696..cc08415 100644
+--- a/lib/table.c
++++ b/lib/table.c
+@@ -297,10 +297,11 @@ check_dclick(int x, int y, int t)
+ }
+ 
+ int help_is_showing = 0;
+-static void help_nothing() { help_is_showing = 0; }
++static void help_nothing(void) { help_is_showing = 0; }
++static void help_nothing_args(int a, int b, int c) { help_is_showing = 0; }
+ void (*help_redraw)(void) = help_nothing;
+-void (*help_click)(int x, int y, int b) = help_nothing;
+-void (*help_key)(int c, int x, int y) = help_nothing;
++void (*help_click)(int x, int y, int b) = help_nothing_args;
++void (*help_key)(int c, int x, int y) = help_nothing_args;
+ 
+ static int no_resize = 0;
+ void
+-- 
+2.51.2
+
