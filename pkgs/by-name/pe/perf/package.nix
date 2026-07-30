@@ -28,8 +28,6 @@
   numactl,
   zlib,
   babeltrace,
-  withGtk ? false,
-  gtk2,
   withZstd ? true,
   zstd,
   withLibcap ? true,
@@ -87,7 +85,6 @@ stdenv.mkDerivation {
     "ARCH=${stdenv.hostPlatform.linuxArch}"
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ]
-  ++ lib.optional (!withGtk) "NO_GTK2=1"
   ++ lib.optional (!withZstd) "NO_LIBZSTD=1"
   ++ lib.optional (!withLibcap) "NO_LIBCAP=1"
   ++ lib.optional (!withPython) "NO_LIBPYTHON=1";
@@ -124,7 +121,6 @@ stdenv.mkDerivation {
     libpfm
   ]
   ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform systemtap-unwrapped) systemtap-unwrapped
-  ++ lib.optional withGtk gtk2
   ++ lib.optional withZstd zstd
   ++ lib.optional withLibcap libcap
   ++ lib.optionals withPython [
