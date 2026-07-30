@@ -7,6 +7,7 @@
   pkg-config,
   electron,
   chromium,
+  libicns,
   cacert,
   clojure,
   git,
@@ -34,6 +35,7 @@ buildNpmPackage (finalAttrs: {
     # outputHash of clojureHome changes each time `clojure` is updated
     # https://github.com/ngi-nix/ngipkgs/pull/1727#discussion_r2470180998
     ./pin-clojure.patch
+    ./0001-disable-auto-update-check.patch
   ];
 
   makeCacheWritable = true;
@@ -45,6 +47,9 @@ buildNpmPackage (finalAttrs: {
     makeWrapper
     copyDesktopItems
     pkg-config # sharp
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libicns
   ];
 
   # For 'sharp' dependency, otherwise it will try to build it
@@ -53,6 +58,10 @@ buildNpmPackage (finalAttrs: {
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = true;
     PUPPETEER_SKIP_DOWNLOAD = true;
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Prevent "unable to get local issuer certificate" error
+    NODE_EXTRA_CA_CERTS = "${cacert}/etc/ssl/certs/ca-bundle.crt";
   };
 
   postPatch = ''
@@ -68,9 +77,15 @@ buildNpmPackage (finalAttrs: {
     chmod -R u+w "$electron_dist"
 
     npm run build
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p build
+      png2icns build/icon.icns resources/public/img/icon.png
+    ''}
     npm exec electron-builder -- --dir \
       -c.electronDist="$electron_dist" \
-      -c.electronVersion=${electron.version}
+      -c.electronVersion=${electron.version} \
+      -c.mac.identity=null \
+      ${lib.optionalString stdenv.hostPlatform.isDarwin "-c.mac.icon=build/icon.icns"}
 
     runHook postBuild
   '';
@@ -106,7 +121,7 @@ buildNpmPackage (finalAttrs: {
 
   # chromium package not available for darwin
   doCheck = stdenv.hostPlatform.isLinux;
-  checkPhase = ''
+  checkPhase = lib.optionalString (stdenv.hostPlatform.isLinux) /* sh */ ''
     runHook preCheck
     export ELECTRON_OVERRIDE_DIST_PATH="$electron_dist"
     export PUPPETEER_EXECUTABLE_PATH=${chromium}/bin/chromium
