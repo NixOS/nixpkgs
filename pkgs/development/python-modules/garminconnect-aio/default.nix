@@ -5,12 +5,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   yarl,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "garminconnect-aio";
   version = "0.1.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cyberjunky";
@@ -19,7 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-GWY2kTG2D+wOJqM/22pNV5rLvWjAd4jxVGlHBou/T2g=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     brotlipy
     yarl
