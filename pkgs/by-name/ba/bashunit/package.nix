@@ -2,7 +2,7 @@
   stdenvNoCC,
   lib,
   fetchFromGitHub,
-  bash,
+  bashInteractive,
   bc,
   gitMinimal,
   gnugrep,
@@ -17,27 +17,32 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bashunit";
-  version = "0.40.0";
+  version = "0.44.0";
 
   src = fetchFromGitHub {
     owner = "TypedDevs";
     repo = "bashunit";
     tag = finalAttrs.version;
-    hash = "sha256-7KH0zcoRPbY56h8FtJ0WbCqM2dSn/bklAPIthnktkpI=";
+    hash = "sha256-5GsSJKgMxzy4tAMtecwF1aopDsXOsOT0KTykHuTGHm4=";
     forceFetchGit = true; # needed to include the tests directory for the check phase
   };
 
-  nativeBuildInputs = [ makeBinaryWrapper ];
-
-  postConfigure = ''
-    patchShebangs tests build.sh bashunit
-    substituteInPlace Makefile \
-      --replace-fail "SHELL=/bin/bash" "SHELL=${lib.getExe bash}"
+  postPatch = ''
+    patchShebangs bashunit build.sh tests
+    # Tests emit scripts with #!/usr/bin/env bash at runtime; patch the literals
+    substituteInPlace tests/unit/build_test.sh \
+      --replace-fail "#!/usr/bin/env bash" "#!${lib.getExe bashInteractive}"
   '';
+
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    bashInteractive # needed for compgen in checkPhase
+  ];
 
   buildPhase = ''
     runHook preBuild
     ./build.sh
+    patchShebangs bin/bashunit
     runHook postBuild
   '';
 
@@ -54,16 +59,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     jq
     which
   ];
+
   checkPhase = ''
     runHook preCheck
-    patchShebangs bin/bashunit
-  ''
-  # Disabling a failing test on Darwin platforms only
-  + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
-    rm tests/unit/console_results_test.sh
-  ''
-  + ''
-    make test
+    make test/parallel
     runHook postCheck
   '';
 
@@ -82,9 +81,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
+
   doInstallCheck = true;
+
   versionCheckKeepEnvironment = [
     "HOME"
+    "PATH"
   ];
 
   passthru.updateScript = nix-update-script { };
