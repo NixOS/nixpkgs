@@ -37,6 +37,7 @@ buildPythonPackage (finalAttrs: {
   pname = "dm-haiku";
   version = "0.0.16";
   pyproject = true;
+  __srtructuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "deepmind";
