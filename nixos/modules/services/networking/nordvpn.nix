@@ -99,6 +99,11 @@ in
       nordvpn
     ];
 
+    boot.kernelModules = [
+      "tun" # needed by openvpn
+      "wireguard" # needed by nordlynx
+    ];
+
     systemd.services.nordvpnd = {
       after = [ "network-online.target" ];
       description = "NordVPN daemon.";
@@ -115,21 +120,40 @@ in
         ++ [ nordvpn ]
       );
       serviceConfig = {
-        # nordvpnd needs CAP_NET_ADMIN to configure network interfaces
-        AmbientCapabilities = "CAP_NET_ADMIN";
-        CapabilityBoundingSet = "CAP_NET_ADMIN";
+        # nordvpnd needs CAP_NET_ADMIN to configure network interfaces.
+        AmbientCapabilities = [
+          "CAP_NET_ADMIN"
+        ];
+        CapabilityBoundingSet = [
+          "CAP_NET_ADMIN"
+        ];
+        DeviceAllow = [
+          "/dev/net/tun rw"
+        ];
         ExecStart = lib.getExe' nordvpn "nordvpnd";
         Group = cfg.group;
         KillMode = "process";
+        NoNewPrivileges = "yes";
         NonBlocking = true;
+        ProtectControlGroups = true;
+        ProtectSystem = "strict";
+        ReadWritePaths = "/tmp/";
         Requires = "nordvpnd.socket";
         Restart = "on-failure";
         RestartSec = 5;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_NETLINK"
+          "AF_UNIX"
+        ];
+        RestrictNamespaces = "yes";
         RuntimeDirectory = "nordvpn";
         RuntimeDirectoryMode = "0750";
         StateDirectory = "nordvpn";
         StateDirectoryMode = "0750";
         User = cfg.user;
+        WorkingDirectory = "/var/lib/nordvpn";
       };
       wantedBy = [ "default.target" ];
       wants = [ "network-online.target" ];
@@ -143,7 +167,7 @@ in
         DirectoryMode = "0750";
         NoDelay = true;
         SocketGroup = cfg.group;
-        SocketMode = "0770";
+        SocketMode = "0660";
         SocketUser = cfg.user;
       };
       wantedBy = [ "sockets.target" ];
@@ -158,10 +182,9 @@ in
         Restart = "on-failure";
         RestartSec = 5;
       };
-      wantedBy = [ "graphical-session.target" ];
+      wantedBy = [ "default.target" ];
       wants = [ "network-online.target" ];
     };
-
   };
 
   meta = {
