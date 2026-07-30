@@ -48,9 +48,14 @@ let
       version = "11.22.0";
       hash = "sha256-V6l+byOj+v/AMVOk74x3CgVSYSuGQK6+Ob/dV1TQ69w=";
     };
+    "12" = {
+      version = "12.3.1";
+      srcHash = "sha256-VmcAkKGFcQDPcy6Nqu3ljOFaTJJg9pAenjl0IjVMPC4=";
+      cargoHash = "sha256-FhHeKs4QRfi2RK6T9moKOutMYczPuDEN0N8252rJ3Us=";
+    };
   };
 
-  callPnpm =
+  callPnpmNode =
     variant:
     callPackage ./generic.nix (
       variant
@@ -59,6 +64,10 @@ let
         nodejs = null; # Passing null to detect out-of-tree overrides
       }
     );
+
+  callPnpmRust = callPackage ./generic-rust.nix;
+
+  callPnpm = variant: if variant ? cargoHash then callPnpmRust variant else callPnpmNode variant;
 
   mkPnpm = versionSuffix: variant: nameValuePair "pnpm_${versionSuffix}" (callPnpm variant);
 in
