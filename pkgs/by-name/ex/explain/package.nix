@@ -22,6 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-KIY7ZezMdJNOI3ysQTZMs8GALDbJ4jGO0EF0YP7oP4A=";
   };
 
+  enableParallelBuilding = true;
+
   patches =
     let
       debian-src = "https://sources.debian.org/data/main";
