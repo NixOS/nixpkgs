@@ -60,6 +60,9 @@ buildPythonPackage (finalAttrs: {
     versioneer
   ];
 
+  pythonRelaxDeps = [
+    "numba"
+  ];
   dependencies = [
     cons
     etuples
