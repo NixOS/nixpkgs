@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   preConfigure = ''
-    if [ $doCheck -eq 1 ]; then
+    if [ -n "$doCheck" ]; then
       sed -i '/gtest/d' third_party/CMakeLists.txt
       rmdir test/spec/testsuite
       ln -s ${testsuite} test/spec/testsuite
