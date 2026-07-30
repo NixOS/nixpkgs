@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pystalk";
   version = "0.8.1";
   pyproject = true;
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ jbcrail ];
   };
-}
+})
