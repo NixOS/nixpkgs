@@ -419,6 +419,7 @@ let
           magit = (buildWithGit super.magit).overrideAttrs (old: {
             meta = old.meta // {
               hydraPlatforms = [ "x86_64-linux" ];
+              maintainers = [ lib.maintainers.linj ];
             };
           });
 
