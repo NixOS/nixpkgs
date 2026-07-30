@@ -15,6 +15,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     "webfont"
   ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "evilmartians";
     repo = "mono";
