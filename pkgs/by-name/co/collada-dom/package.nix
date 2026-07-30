@@ -48,6 +48,12 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
+  cmakeFlags = [
+    (lib.cmakeBool "OPT_COMPILE_TESTS" finalAttrs.doCheck)
+  ];
+
+  doCheck = true;
+
   meta = {
     description = "API that provides a C++ object representation of a COLLADA XML instance document";
     longDescription = "This is a fork of [rdiankov/collada-dom](https://github.com/rdiankov/collada-dom) which has been unmaintained for six years.";
