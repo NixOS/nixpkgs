@@ -53,9 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     # This might be a problem with our Clang, as it does not reproduce
     # with Xcode, but we just work around it by silencing the warning.
     NIX_CFLAGS_COMPILE = lib.join " " (
-      [
-        "-Wno-error=c2y-extensions"
-      ]
+      lib.optional stdenv.cc.isClang "-Wno-error=c2y-extensions"
       ++ lib.optional stdenv.cc.isClang "-Wno-c++17-attribute-extensions"
     );
   }
