@@ -2288,12 +2288,6 @@
     githubId = 225423001;
     name = "Argos Nothing";
   };
-  argrat = {
-    email = "n.bertazzo@protonmail.com";
-    github = "brtz-cs";
-    githubId = 98821629;
-    name = "Nicolò Bertazzo";
-  };
   arian-d = {
     email = "arianxdehghani@gmail.com";
     github = "Arian-D";
