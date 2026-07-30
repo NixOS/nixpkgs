@@ -20,7 +20,7 @@ let
     with pkgs;
     [
       cosmic-applets
-      cosmic-app-library
+      cosmic-applibrary
       cosmic-bg
       cosmic-comp
       cosmic-files
