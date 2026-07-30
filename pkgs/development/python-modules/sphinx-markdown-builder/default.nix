@@ -6,7 +6,6 @@
 
   # build system
   setuptools,
-  wheel,
 
   # deps
   docutils,
@@ -15,36 +14,23 @@
 
   # tests
   pytestCheckHook,
-
-  # optional deps
-  black,
-  bumpver,
-  coveralls,
-  flake8,
-  isort,
-  pip-tools,
-  pylint,
-  pytest,
-  pytest-cov,
   sphinxcontrib-httpdomain,
-  sphinxcontrib-plantuml,
 }:
 
 buildPythonPackage rec {
   pname = "sphinx-markdown-builder";
-  version = "0.6.9";
+  version = "0.6.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "liran-funaro";
     repo = "sphinx-markdown-builder";
     tag = version;
-    hash = "sha256-DTc+yVFOGLXFyrgkwfgY3X60chyU3UDs0GwuPCzff28=";
+    hash = "sha256-97mlVD1MCtSw8AYyGc38auOrHU/vKH2aQJa4YIRQcBk=";
   };
 
   build-system = [
     setuptools
-    wheel
   ];
 
   dependencies = [
@@ -53,34 +39,14 @@ buildPythonPackage rec {
     tabulate
   ];
 
-  optional-dependencies = {
-    dev = [
-      black
-      bumpver
-      coveralls
-      flake8
-      isort
-      pip-tools
-      pylint
-      pytest
-      pytest-cov
-      sphinx
-      sphinxcontrib-httpdomain
-      sphinxcontrib-plantuml
-    ];
-  };
-
   pythonImportsCheck = [
     "sphinx_markdown_builder"
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    sphinxcontrib-httpdomain
   ];
-
-  # NOTE: not sure why, but a `Missing dependencies: wheel` error happens when
-  # `black` is included here, with python3.13
-  checkInputs = lib.remove black optional-dependencies.dev;
 
   passthru.updateScript = nix-update-script { };
 

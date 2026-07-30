@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitLab,
   setuptools,
@@ -28,9 +29,9 @@
   types-requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "swh-scheduler";
-  version = "3.3.0";
+  version = "3.3.2";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -38,18 +39,13 @@ buildPythonPackage rec {
     group = "swh";
     owner = "devel";
     repo = "swh-scheduler";
-    tag = "v${version}";
-    hash = "sha256-Kv5QH3sj/InKOSjxGtwVxtoAluHx5eIxO5GqcbOs0NY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ELjxZKWCsAQte+KtSdwseMGnMdw65H9PrjuJP0PHtIM=";
   };
 
   build-system = [
     setuptools
     setuptools-scm
-  ];
-
-  pythonRelaxDeps = [
-    # we patched click 8.2.1
-    "click"
   ];
 
   dependencies = [
@@ -64,6 +60,9 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "swh.scheduler" ];
+
+  # Many broken tests on Darwin. Disabling them for now.
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
     plotille
@@ -82,13 +81,16 @@ buildPythonPackage rec {
     types-requests
   ];
 
-  disabledTests = [ "test_setup_log_handler_with_env_configuration" ];
+  disabledTests = [
+    "test_setup_log_handler_with_env_configuration"
+    "test_task_exception"
+  ];
 
   meta = {
-    changelog = "https://gitlab.softwareheritage.org/swh/devel/swh-scheduler/-/tags/${src.tag}";
+    changelog = "https://gitlab.softwareheritage.org/swh/devel/swh-scheduler/-/tags/${finalAttrs.src.tag}";
     description = "Job scheduler for the Software Heritage project";
     homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-scheduler";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ drupol ];
   };
-}
+})

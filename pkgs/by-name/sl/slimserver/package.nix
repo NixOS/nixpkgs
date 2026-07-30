@@ -6,6 +6,7 @@
   lib,
   makeWrapper,
   monkeys-audio,
+  nix-update-script,
   nixosTests,
   perlPackages,
   sox,
@@ -34,13 +35,13 @@ let
 in
 perlPackages.buildPerlPackage rec {
   pname = "slimserver";
-  version = "9.1.0";
+  version = "9.1.1";
 
   src = fetchFromGitHub {
     owner = "LMS-Community";
     repo = "slimserver";
     tag = version;
-    hash = "sha256-Df7v1oxc1NYiVApU5p1CzB0UxlLqia1RtytgttKdSJo=";
+    hash = "sha256-+GvP4+DdJs7NLB/V2uLq28Pa3K3M9u1Ni86k+PYECOo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -128,7 +129,12 @@ perlPackages.buildPerlPackage rec {
       inherit (nixosTests) slimserver;
     };
 
-    updateScript = ./update.nu;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "(9\\.[0-9.]+)"
+      ];
+    };
   };
 
   meta = {
@@ -143,7 +149,6 @@ perlPackages.buildPerlPackage rec {
       adamcstephens
       jecaro
     ];
-    platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
+    platforms = lib.platforms.linux;
   };
 }

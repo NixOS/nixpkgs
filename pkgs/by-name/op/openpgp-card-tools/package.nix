@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "openpgp-card-tools";
-  version = "0.11.11";
+  version = "0.11.13";
 
   src = fetchFromCodeberg {
     owner = "openpgp-card";
     repo = "openpgp-card-tools";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-4kmBWbfB9A36359zhR5fz0XFcN839gTtJFRFhJL1lL0=";
+    hash = "sha256-1O0MI74aqVcbL1c+PL1a8f/t8pc2LIlQwL5IPFTihdk=";
   };
 
-  cargoHash = "sha256-kXBPDwHkoB/W2sSIjChf4VnoNykvIKSSIv8YsW3iu1Y=";
+  cargoHash = "sha256-uoZ3V9j1dJsGTq1t1aYqMlWB2D2ZW+enDgXQCb4NzFE=";
 
   nativeBuildInputs = [
     installShellFiles

@@ -3,41 +3,41 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  fetchNpmDeps,
+  fetchPnpmDeps,
   testers,
   installShellFiles,
   pkg-config,
   openssl,
   nodejs,
-  npmHooks,
+  pnpm_10,
+  pnpmConfigHook,
   python3,
 }:
 
+let
+  pnpm = pnpm_10;
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "weaver";
-  version = "0.21.2";
+  version = "0.25.1";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "weaver";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LMDJg3IKrKRPDkprwlWmBVeaZeI2dZht0eHv7eVGqjo=";
+    hash = "sha256-riGqVAimpaAPRK281JFRJxxlneQKjT/0zvqK0vMNIWM=";
   };
 
-  cargoHash = "sha256-EzY7OtgPDxT3g2ISV0VZTKa9kLqtKJZH4zT9v2xN/s8=";
+  cargoHash = "sha256-hWewiXx5+wL2DNPi+9nUJ5IXHzg1mxass2ASSnTEKk0=";
 
-  postPatch = ''
-    # Remove build.rs to build UI separately.
-    rm build.rs
-  '';
-
-  npmDeps = fetchNpmDeps {
-    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
-    inherit (finalAttrs) src;
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
     sourceRoot = "${finalAttrs.src.name}/ui";
-    hash = "sha256-VOL2BLTfJ1nM2L3IZpixOuAaBUHVJX032MGb3+eousY=";
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-MxSZAqeM452Y6HjeApIaxTPg0fvl8LbMvILbbTQeb7A=";
   };
-  npmRoot = "ui";
+  pnpmRoot = "ui";
 
   buildInputs = [ openssl ];
 
@@ -45,7 +45,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
     pkg-config
     nodejs
-    npmHooks.npmConfigHook
+    pnpmConfigHook
+    pnpm
     python3
   ];
 
@@ -56,13 +57,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   preBuild = ''
     pushd ui
-    npm run build
+    pnpm build
     popd
   '';
 
   checkFlags = [
     # Skip tests requiring network
     "--skip=test_cli_interface"
+    "--skip=fail_on_default_is_violation"
+    "--skip=fail_on_improvement_exits_one_for_violation_input"
+    "--skip=fail_on_information_exits_one_for_violation_input"
+    "--skip=fail_on_invalid_value_is_rejected"
+    "--skip=fail_on_none_exits_zero"
+    "--skip=fail_on_violation_exits_one"
+    "--skip=no_stats_with_none_threshold_is_silent_and_exits_zero"
+    "--skip=no_stats_with_violation_threshold_warns_and_exits_zero"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

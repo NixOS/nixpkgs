@@ -12,11 +12,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xsetroot";
-  version = "1.1.3";
+  version = "1.1.4";
 
   src = fetchurl {
     url = "mirror://xorg/individual/app/xsetroot-${finalAttrs.version}.tar.xz";
-    hash = "sha256-YIG0Wp60Qm4EXSWdHhRLMkF/tjXluWqpBkc2WslmONE=";
+    hash = "sha256-ExWj9+mr4GNXNjuTRh4nJgH2ciXOC8B1xDDM41BzNis=";
   };
 
   strictDeps = true;
@@ -47,7 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.freedesktop.org/xorg/app/xsetroot";
     license = lib.licenses.mitOpenGroup;
     mainProgram = "xsetroot";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      nick-linux
+    ];
     platforms = lib.platforms.unix;
   };
 })

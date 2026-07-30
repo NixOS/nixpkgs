@@ -1,31 +1,31 @@
 {
   lib,
   fetchFromGitHub,
-  buildGoModule,
-  unixODBC,
+  buildGo126Module,
+  unixodbc,
   icu,
   nix-update-script,
   testers,
   usql,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "usql";
-  version = "0.20.8";
+  version = "0.21.4";
 
   src = fetchFromGitHub {
     owner = "xo";
     repo = "usql";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oaimplnmNpr3nMGNmiXmE9L03SfifjfncI9ZPiJg6JI=";
+    hash = "sha256-8T3/IuTf7ui/yj9yy/HIOD5/8IQx1Zoodd7nmmGhla8=";
   };
 
   buildInputs = [
-    unixODBC
+    unixodbc
     icu
   ];
 
-  vendorHash = "sha256-bu9vU7rpq8sg5zHcmbOhdOkO18ci4dUErsLwip0j3Jo=";
+  vendorHash = "sha256-GxU3NLLUJgMTrdtnlyDGivKdf8xjRekpz5gHm7CrWqY=";
   proxyVendor = true;
 
   # Exclude drivers from the bad group

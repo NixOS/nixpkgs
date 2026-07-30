@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "dyff";
-  version = "1.11.2";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "homeport";
     repo = "dyff";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-+z9AaoSu7FNRI+jPwW6s0qRHz2roPXq4/CTNDOQW77Y=";
+    sha256 = "sha256-4d6FP6k1atqCRw4rB1l1N9x8G1MFJiNCfyun85KY4FI=";
   };
 
-  vendorHash = "sha256-vpmgSQKmnvaos4ZVuk4R419doAdULjtg95y5ORRwhZg=";
+  vendorHash = "sha256-NJ/ekcYUT2DUdQygg41tnPRMWtZwNGrZDxbsp2tih9w=";
 
   subPackages = [
     "cmd/dyff"

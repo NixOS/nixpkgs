@@ -33,7 +33,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/nanovms/ops";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     mainProgram = "ops";
   };
 })

@@ -13,7 +13,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "solo-python";
   version = "0.1.1";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "solokeys";
     repo = "solo-python";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-XVPYr7JwxeZfZ68+vQ7a7MNiAfJ2bvMbM3R1ryVJ+OU=";
   };
 
@@ -62,4 +62,4 @@ buildPythonPackage rec {
     # https://github.com/solokeys/solo1-cli/issues/157
     broken = lib.versionAtLeast fido2.version "1.0.0";
   };
-}
+})

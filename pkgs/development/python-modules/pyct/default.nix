@@ -17,13 +17,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyct";
   version = "0.6.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-1OUTss81thZWBa5fzl8qSZhbxnRzxXnehRNLjHHTdKg=";
   };
 
@@ -53,8 +53,8 @@ buildPythonPackage rec {
     description = "ClI for Python common tasks for users";
     mainProgram = "pyct";
     homepage = "https://github.com/pyviz/pyct";
-    changelog = "https://github.com/pyviz-dev/pyct/releases/tag/v${version}";
+    changelog = "https://github.com/pyviz-dev/pyct/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

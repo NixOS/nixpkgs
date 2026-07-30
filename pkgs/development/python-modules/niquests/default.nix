@@ -1,4 +1,5 @@
 {
+  aiofiles,
   buildPythonPackage,
   charset-normalizer,
   cryptography,
@@ -17,21 +18,17 @@
 
 buildPythonPackage rec {
   pname = "niquests";
-  version = "3.17.0";
+  version = "3.20.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jawah";
     repo = "niquests";
     tag = "v${version}";
-    hash = "sha256-HGczeExOoZMBiPS//B/gu56Wnpzz55oawhTT67ekuOs=";
+    hash = "sha256-ux0Nypp3gvf//vNyTt/BygkneEfX2Z3wHaLpbb3TGyI=";
   };
 
   build-system = [ hatchling ];
-
-  pythonRelaxDeps = [
-    "wassima"
-  ];
 
   dependencies = [
     charset-normalizer
@@ -66,6 +63,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "niquests" ];
 
   nativeCheckInputs = [
+    aiofiles
     cryptography
     fastapi
     pytest-asyncio
@@ -83,6 +81,11 @@ buildPythonPackage rec {
     "tests/test_rate_limiters.py"
     "tests/test_lowlevel.py"
     "tests/test_testserver.py"
+    # ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1032)
+    "tests/test_crl.py"
+    "tests/test_live.py"
+    "tests/test_ocsp.py"
+    "tests/test_sse.py"
   ];
 
   disabledTests =

@@ -3,6 +3,9 @@
   buildPythonPackage,
   fetchFromGitHub,
 
+  # build-system
+  setuptools,
+
   # dependencies
   pyyaml,
   torch,
@@ -26,6 +29,10 @@ buildPythonPackage (finalAttrs: {
     rev = "3a7314ac44f8479a3368a69ac4c7938e40e6104c";
     hash = "sha256-qLyPzdwIIXHUDeP226w4yo2B1fqOKZ3yeSXrG3pNQyk=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   dependencies = [
     pyyaml

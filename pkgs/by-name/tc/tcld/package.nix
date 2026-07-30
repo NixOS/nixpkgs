@@ -10,12 +10,12 @@
 
 buildGoModule (finalAttrs: {
   pname = "tcld";
-  version = "0.41.0";
+  version = "0.55.0";
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "tcld";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Jnm6l9Jj1mi9esDS6teKTEMhq7V1QD/dTl3qFhKsW4o=";
+    hash = "sha256-VbhjfcGSXMJr/oaSDA7s8EuJhmyCdFfyix4T0bTfNE0=";
     # Populate values from the git repository; by doing this in 'postFetch' we
     # can delete '.git' afterwards and the 'src' should stay reproducible.
     leaveDotGit = true;

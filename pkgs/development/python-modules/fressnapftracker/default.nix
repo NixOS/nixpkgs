@@ -5,6 +5,7 @@
   hatchling,
   httpx,
   pydantic,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytest-mock,
@@ -23,6 +24,10 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-gJsE/1HnUXEDa5Y7eLtHexx+G00MGQDZJu3pui9OeMM=";
   };
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ hatchling ];
 

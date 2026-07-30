@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.3.0";
 
   src = fetchFromGitHub {
-    owner = "jakcron";
+    owner = "3DSGuy";
     repo = "Project_CTR";
     rev = "ctrtool-v${finalAttrs.version}";
     sha256 = "GvEzv97DqCsaDWVqDpajQRWYe+WM8xCYmGE0D3UcSrM=";
@@ -37,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     license = lib.licenses.mit;
     description = "Tool to extract data from a 3ds rom";
+    homepage = "https://github.com/3DSGuy/Project_CTR";
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [ marius851000 ];
     mainProgram = "ctrtool";

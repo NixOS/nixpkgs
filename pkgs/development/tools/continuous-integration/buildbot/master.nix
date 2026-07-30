@@ -85,14 +85,13 @@ buildPythonApplication rec {
     hash = "sha256-yUtOJRI04/clCMImh5sokpj6MeBIXjEAdf9xnToqJZs=";
   };
 
-  build-system = [
-  ];
+  build-system = [ setuptools ];
 
   pythonRelaxDeps = [
     "twisted"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     # core
     twisted
     jinja2
@@ -105,7 +104,6 @@ buildPythonApplication rec {
     autobahn
     pyjwt
     pyyaml
-    setuptools
     croniter
     importlib-resources
     packaging

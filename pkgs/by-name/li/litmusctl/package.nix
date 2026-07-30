@@ -9,7 +9,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "litmusctl";
-  version = "1.23.0";
+  version = "1.27.0";
 
   nativeBuildInputs = [
     installShellFiles
@@ -23,10 +23,10 @@ buildGoModule (finalAttrs: {
     owner = "litmuschaos";
     repo = "litmusctl";
     rev = "${finalAttrs.version}";
-    hash = "sha256-F0WRA9wDvUibJQdBTXz0Vhw1m0B0cuwG2e1l6kpolkE=";
+    hash = "sha256-jVbWgwW7qkGLY2T0SbK0Y/GItLj1BfLn1cloPyItpvI=";
   };
 
-  vendorHash = "sha256-7FYOQ89aUFPX+5NCPYKg+YGCXstQ6j9DK4V2mCgklu0=";
+  vendorHash = "sha256-Lkvc8dBr/nvKczx83/KXKLe5FskGpI/17GIrl2y/E1I=";
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd litmusctl \

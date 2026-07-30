@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mkdocs-custom-tags-attributes";
-  version = "0.3.2";
+  version = "0.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Mara-Li";
     repo = "mkdocs-custom-tags-attributes";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oP2yfq16gc+0aA7GOcXKZ2x4n5AakWMHy3RO3o0MaqI=";
+    hash = "sha256-AtjUMk7v3+QI76nnPslqW/8LO11ld0YLSacHI6eaurs=";
   };
 
   build-system = [

@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "kubectl-images";
-  version = "0.6.3";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "chenjiandongx";
     repo = "kubectl-images";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-FHfj2qRypqQA0Vj9Hq7wuYd0xmpD+IZj3MkwKljQio0=";
+    sha256 = "sha256-WExe0RNLHd9W7Xmzsw8CHJAgjgWpO5Guobg5OxOzQqo=";
   };
 
   vendorHash = "sha256-8zV2iZ10H5X6fkRqElfc7lOf3FhmDzR2lb3Jgyhjyio=";

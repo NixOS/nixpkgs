@@ -59,7 +59,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/MestreLion/git-tools/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/MestreLion/git-tools/releases/tag/${finalAttrs.src.tag}";
     description = "Assorted git tools, including git-restore-mtime";
     homepage = "https://github.com/MestreLion/git-tools";
     license = lib.licenses.gpl3Only;

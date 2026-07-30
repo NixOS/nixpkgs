@@ -59,6 +59,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit hash;
   };
 
+  __structuredAttrs = true;
+
   env.KANIDM_BUILD_PROFILE = "release_nixpkgs_${arch}";
 
   patches =
@@ -105,13 +107,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    openssl
     sqlite
     pam
     rust-jemalloc-sys
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     udev
+  ]
+  ++ lib.optionals (lib.versionOlder finalAttrs.version "1.10") [
+    openssl
   ];
 
   # The UI needs to be in place before the tests are run.
@@ -132,6 +136,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--config"
     ''profile.release.lto="off"''
   ];
+
+  # A bunch of the tests break due to the sandboxing.
+  doCheck = false;
 
   preFixup = ''
     installShellCompletion \

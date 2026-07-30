@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "11.6.0";
 
   src = fetchurl {
-    url = "http://www.shoup.net/ntl/ntl-${finalAttrs.version}.tar.gz";
+    url = "https://www.shoup.net/ntl/ntl-${finalAttrs.version}.tar.gz";
     hash = "sha256-vA75rOsHWmoGc6yNj0fV+EWMcv6AbkRo+9XT2v8FYYI=";
   };
 

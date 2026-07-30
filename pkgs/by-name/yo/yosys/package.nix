@@ -5,12 +5,15 @@
 
   # nativeBuildInputs
   bison,
+  cmake,
   flex,
+  ninja,
   pkg-config,
-
-  # propagatedBuildInputs
-  libffi,
   python3,
+
+  # buildInputs
+  gtest,
+  libffi,
   readline,
   tcl,
   zlib,
@@ -50,6 +53,7 @@ let
       postBuild = ''
         wrapProgram $out/bin/yosys \
           --set YOSYS_PATH $out/share/yosys \
+          --set YOSYS_PLUGIN_PATH ${pluginPath} \
           ${module_flags}
       '';
       meta.mainProgram = "yosys";
@@ -61,84 +65,70 @@ let
   }
   // yosys-symbiflow;
 
+  pythonEnv = python3.withPackages (
+    pp:
+    with pp;
+    [ click ]
+    ++ lib.optionals enablePython [
+      pybind11
+      cxxheaderparser
+    ]
+  );
+
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "yosys";
-  version = "0.62";
+  version = "0.67";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo = "yosys";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FzvdjdAURB5iCkGwsYY6A2wP/Je/IW4AOd4kVOEOeVc=";
+    hash = "sha256-sJaekoBnLEn7j56duQOFMkT4fELHNgkYCbcY6E8hgyA=";
     fetchSubmodules = true;
   };
+
+  postPatch = ''
+    patchShebangs tests
+    substituteInPlace tests/aiger/generate_mk.py \
+      --replace-fail 'SHELL := /usr/bin/env bash' 'SHELL := ${stdenv.shell}'
+    # these plugin tests only work against the installed output, so skip them.
+    rm tests/various/plugin.sh tests/various/ezcmdline_plugin.sh
+  '';
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
     bison
+    cmake
     flex
+    ninja
     pkg-config
+    pythonEnv
   ];
 
-  propagatedBuildInputs = [
+  buildInputs = [
+    gtest
     libffi
     readline
     tcl
     zlib
-    (python3.withPackages (
-      pp: with pp; [
-        click
-        cxxheaderparser
-        pybind11
-      ]
-    ))
   ]
   ++ lib.optionals enablePython [
-    python3.pkgs.boost
+    python3
   ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-    "YOSYS_VER=${finalAttrs.version}"
+  cmakeFlags = [
+    (lib.cmakeBool "YOSYS_SKIP_ABC_SUBMODULE_CHECK" true)
+    (lib.cmakeFeature "YOSYS_CHECKOUT_INFO" "v${finalAttrs.version}")
+    # slang is not packaged yet.
+    (lib.cmakeBool "YOSYS_WITHOUT_SLANG" true)
+    (lib.cmakeBool "YOSYS_WITH_PYTHON" enablePython)
+  ]
+  ++ lib.optionals enablePython [
+    (lib.cmakeBool "YOSYS_INSTALL_PYTHON" true)
+    (lib.cmakeFeature "YOSYS_INSTALL_PYTHON_SITEDIR" "${placeholder "out"}/${python3.sitePackages}")
   ];
-
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace-fail 'GIT_REV := $(shell GIT_DIR=$(YOSYS_SRC)/.git git rev-parse --short=9 HEAD || echo UNKNOWN)' 'GIT_REV := v${finalAttrs.version}' \
-      --replace-fail 'GIT_DIRTY := $(shell GIT_DIR=$(YOSYS_SRC)/.git git diff --exit-code --quiet 2>/dev/null; if [ $$? -ne 0 ]; then echo "-dirty"; fi)' 'GIT_DIRTY := ""'
-
-    substituteInPlace Makefile \
-      --replace-fail "| check-git-abc" ""
-
-    substituteInPlace Makefile \
-      --replace-fail 'new=$$(cd abc 2>/dev/null && git rev-parse HEAD 2>/dev/null || echo none)' 'new=none'
-
-    sed -i 's/^YOSYS_VER :=.*/YOSYS_VER := ${finalAttrs.version}/' Makefile
-
-    patchShebangs tests ./misc/yosys-config.in
-  '';
-
-  preBuild = ''
-    chmod -R u+w .
-    make config-${if stdenv.cc.isClang or false then "clang" else "gcc"}
-
-    if ! grep -q "YOSYS_VER := ${finalAttrs.version}" Makefile; then
-      echo "ERROR: yosys version in Makefile isn't equivalent to version of the nix package, failing."
-      exit 1
-    fi
-  ''
-  + lib.optionalString enablePython ''
-    echo "PYOSYS_USE_UV := 0" >> Makefile.conf
-    echo "ENABLE_PYOSYS := 1" >> Makefile.conf
-    echo "PYTHON_DESTDIR := $out/${python3.sitePackages}" >> Makefile.conf
-    echo "BOOST_PYTHON_LIB := -lboost_python${lib.versions.major python3.version}${lib.versions.minor python3.version}" >> Makefile.conf
-  '';
-
-  preCheck = ''
-    tests/tools/autotest.sh
-  '';
 
   checkTarget = "test";
   doCheck = true;

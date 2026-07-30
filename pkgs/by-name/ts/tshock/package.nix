@@ -4,16 +4,17 @@
   buildDotnetModule,
   dotnet-sdk_9,
   dotnet-runtime_9,
+  nix-update-script,
 }:
 buildDotnetModule rec {
   pname = "tshock";
-  version = "6.0.0-pre1";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "Pryaxis";
     repo = "TShock";
     rev = "v${version}";
-    hash = "sha256-nMCtOSfhneE4q/bqZcLVkfxObOpCEgNpSODMErKuTYw=";
+    hash = "sha256-s6v/OUZmU0/kOH83N7xnurXdAtf49q/X69XWcKrKi/c=";
     fetchSubmodules = true;
   };
 
@@ -33,6 +34,8 @@ buildDotnetModule rec {
 
   nugetSource = "https://api.nuget.org/v3/index.json";
   nugetDeps = ./deps.json;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/Pryaxis/TShock";

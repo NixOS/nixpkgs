@@ -54,6 +54,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ callahad ];
+    maintainers = [ ];
   };
 }

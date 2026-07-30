@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.3.8";
 
   src = fetchFromGitHub {
-    owner = "UnknownShadow200";
+    owner = "ClassiCube";
     repo = "ClassiCube";
     tag = finalAttrs.version;
     hash = "sha256-AF4cr3ZXCixwiihS+2ayrzVH5eYShkjlfF0myb2PbHM=";

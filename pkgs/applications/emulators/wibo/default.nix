@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
         meta.license = lib.licenses.unfree;
       };
     in
-    lib.optionalString finalAttrs.doCheck ''
+    lib.optionalString finalAttrs.finalPackage.doCheck ''
       MWCIncludes=../test ./wibo ${gc}/GC/2.7/mwcceppc.exe -c ../test/test.c
       file test.o | grep "ELF 32-bit"
     '';

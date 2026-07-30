@@ -5,6 +5,7 @@
   libtorrent-rasterbar,
   python3Packages,
   gtk3,
+  libappindicator-gtk3,
   glib,
   gobject-introspection,
   librsvg,
@@ -47,13 +48,14 @@ let
           six
           zope-interface
           dbus-python
-          pycairo
-          librsvg
         ]
         ++ optionals withGUI [
+          pycairo
+          librsvg
           gtk3
           gobject-introspection
           pygobject3
+          libappindicator-gtk3
         ];
 
       nativeBuildInputs = [

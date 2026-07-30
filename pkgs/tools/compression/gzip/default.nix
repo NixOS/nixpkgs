@@ -25,6 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Aae4gb0iC/32Ffl7hxj4C9/T9q3ThbmT3Pbv0U6MCsY=";
   };
 
+  patches = [
+    ./CVE-2026-41991.patch
+    ./CVE-2026-41992.patch
+  ];
+
   outputs = [
     "out"
     "man"

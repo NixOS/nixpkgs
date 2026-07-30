@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "qiskit";
-    repo = pname;
+    repo = "qiskit-machine-learning";
     tag = version;
     hash = "sha256-l7lzdGSarj1DiC0igeyr6kP+GYYE+eGKdW9+IN+2uh8=";
   };

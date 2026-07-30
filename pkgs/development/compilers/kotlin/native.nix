@@ -15,7 +15,6 @@ stdenv.mkDerivation rec {
       getArch =
         {
           "aarch64-darwin" = "macos-aarch64";
-          "x86_64-darwin" = "macos-x86_64";
           "x86_64-linux" = "linux-x86_64";
         }
         .${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");

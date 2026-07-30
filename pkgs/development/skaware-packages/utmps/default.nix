@@ -2,8 +2,8 @@
 
 skawarePackages.buildPackage {
   pname = "utmps";
-  version = "0.1.3.2";
-  sha256 = "sha256-sRTVauysicBctMDtM8Y4igIRSwnenM44Srm4qTRphmg=";
+  version = "0.1.3.4";
+  sha256 = "sha256-EtzBAq1qyB+BrsxJUHM9uU81CBlHBUubFHPKxckIELw=";
 
   description = "Secure utmpx and wtmp implementation";
 

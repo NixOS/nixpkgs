@@ -1,48 +1,44 @@
 {
   stdenvNoCC,
   openbao,
-  yarn-berry_3,
-  nodejs_22,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpmBuildHook,
+  pnpm_10,
+  # https://github.com/openbao/openbao/issues/731
+  nodejs-slim_22,
 }:
 let
-
-  yarn = yarn-berry_3.override { nodejs = nodejs_22; };
-
+  nodejs-slim = nodejs-slim_22;
+  pnpm = pnpm_10.override { inherit nodejs-slim; };
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = openbao.pname + "-ui";
   inherit (openbao) version src;
   sourceRoot = "${finalAttrs.src.name}/ui";
 
-  offlineCache = yarn.fetchYarnBerryDeps {
-    inherit (finalAttrs) src sourceRoot;
-    hash = "sha256-XK3ZVnzOTbFzrpPgaz1cx7okTycLhrvBHk9P2Nwv1cg=";
-  };
-
   nativeBuildInputs = [
-    yarn.yarnBerryConfigHook
-    nodejs_22
-    yarn
+    pnpmConfigHook
+    pnpmBuildHook
+    pnpm
+    nodejs-slim
   ];
 
-  env.YARN_ENABLE_SCRIPTS = 0;
-
-  preConfigure = ''
-    printYarnErrors() {
-      cat /build/*.log
-    }
-    failureHooks+=(printYarnErrors)
-  '';
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      sourceRoot
+      ;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-9Q5celZSwMgSS8qcj8sDH/JLv48lgDMOylANvXSnhsU=";
+  };
 
   postConfigure = ''
     substituteInPlace .ember-cli \
       --replace-fail "../http/web_ui" "$out"
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-    yarn run ember build --environment=production
-    runHook postBuild
   '';
 
   dontInstall = true;

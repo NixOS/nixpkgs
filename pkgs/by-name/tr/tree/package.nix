@@ -25,13 +25,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tree";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitLab {
     owner = "OldManProgrammer";
     repo = "unix-tree";
     rev = finalAttrs.version;
-    hash = "sha256-ks3bj916tDdizywQnZKNSAfA2AzWh3np2F6QN5eOzIc=";
+    hash = "sha256-hmnBG96qQXvTulPnUYyliqidfKC+Wvky+d7xzYrCdTw=";
   };
 
   preConfigure = ''

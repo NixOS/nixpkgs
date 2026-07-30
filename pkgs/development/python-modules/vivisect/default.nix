@@ -8,7 +8,7 @@
   pyasn1-modules,
   pycparser,
   pyqt5,
-  pyqtwebengine,
+  # pyqtwebengine, # removed
   withGui ? false,
   wrapQtAppsHook,
   setuptools,
@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "vivisect";
-  version = "1.3.0";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sI/xlbodbud5GJ3s9atmDS1KOD7VYs7B3OdYCx1NgE4=";
+    hash = "sha256-UQryZ4aGVEr5vRLElmTwRNtgi3h6CPzzq5n+E58tuo8=";
   };
 
   pythonRelaxDeps = [
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  nativeBuildInputs = [
+  nativeBuildInputs = lib.optionals withGui [
     wrapQtAppsHook
   ];
 
@@ -48,10 +48,10 @@ buildPythonPackage rec {
 
   optional-dependencies.gui = [
     pyqt5
-    pyqtwebengine
+    # pyqtwebengine
   ];
 
-  postFixup = ''
+  postFixup = lib.optionalString withGui ''
     wrapQtApp $out/bin/vivbin
   '';
 
@@ -66,5 +66,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/vivisect/vivisect/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    broken = withGui; # https://github.com/vivisect/vivisect/issues/683
   };
 }

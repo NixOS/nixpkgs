@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "morse";
-  version = "2.6";
+  version = "2.7";
 
   src = fetchFromGitLab {
     owner = "esr";
     repo = "morse-classic";
     tag = finalAttrs.version;
-    hash = "sha256-wk/Jcp2YWUlecV3OMELD6IWrlj3IC8kh0U4geMxG4fw=";
+    hash = "sha256-KIFvOPPIpjRsXQDgaQuAFmYDcCwp9rOm9yxTFPOtf3E=";
   };
 
   buildInputs = [

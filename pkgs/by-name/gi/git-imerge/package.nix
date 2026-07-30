@@ -1,19 +1,23 @@
 {
   lib,
   python3Packages,
-  fetchPypi,
+  fetchFromGitHub,
   installShellFiles,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "git-imerge";
   version = "1.2.0";
-  format = "setuptools";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    sha256 = "df5818f40164b916eb089a004a47e5b8febae2b4471a827e3aaa4ebec3831a3f";
+  src = fetchFromGitHub {
+    owner = "mhagger";
+    repo = "git-imerge";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-17xUe1N4igx5HOZBU+q7UQxkpHOFQozhR18hUYuPVuo=";
   };
+
+  build-system = [ python3Packages.setuptools ];
 
   nativeBuildInputs = [ installShellFiles ];
 

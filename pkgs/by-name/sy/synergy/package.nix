@@ -6,7 +6,6 @@
 
   cmake,
   openssl,
-  pcre,
   util-linux,
   libselinux,
   libsepol,
@@ -69,7 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libsForQt5.qttools # Used for translations even when not building the GUI
     openssl
-    pcre
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     util-linux

@@ -6,6 +6,7 @@
   p7zip,
   parted,
   grub2,
+  ntfs3g,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -35,6 +36,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
           p7zip
           parted
           grub2
+          ntfs3g
         ]
       }"
     )

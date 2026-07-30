@@ -5,6 +5,7 @@
   fetchFromGitHub,
   fetchzip,
   makeBinaryWrapper,
+  nix-update-script,
 
   makeDesktopItem,
   copyDesktopItems,
@@ -16,13 +17,13 @@
 }:
 let
   pname = "rimsort";
-  version = "1.0.47";
+  version = "1.0.76";
 
   src = fetchFromGitHub {
     owner = "RimSort";
     repo = "RimSort";
-    rev = "v${version}";
-    hash = "sha256-1wn3WIflrhH3IMBeGFwcHi0zOREakuk/5gqwPY720eA=";
+    tag = "v${version}";
+    hash = "sha256-EO1j4GPRQSB+QEF4tB87x4nCUKpdWU9aGlDFghwxar0=";
     fetchSubmodules = true;
   };
 
@@ -49,14 +50,15 @@ let
     }).run;
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname;
   inherit version;
+  inherit src;
 
   unpackPhase = ''
     runHook preUnpack
 
-    cp -r ${src} source
+    cp -r ${finalAttrs.src} source
     chmod -R 755 source
     cp ${steamworksSrc}/redistributable_bin/linux64/libsteam_api.so source/
 
@@ -111,10 +113,14 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   nativeCheckInputs = with python3Packages; [
+    aiohttp
+    pytest-asyncio
     pytestCheckHook
     pytest-cov-stub
+    pytest-mock
     pytest-qt
     pytest-xvfb
+    rapidfuzz
   ];
 
   doCheck = true;
@@ -126,7 +132,7 @@ stdenv.mkDerivation {
   '';
 
   disabledTestPaths = [
-    # requires network
+    # requires network (clones GitHub: Community-Rules-Database, Steam-Workshop-Database)
     "tests/models/metadata/test_metadata_factory.py"
   ];
 
@@ -164,6 +170,14 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      # To skip checking the pre-release 'Edge' release as 'vEdge'.
+      "--version-regex"
+      "v([0-9.]+)"
+    ];
+  };
+
   meta = {
     description = "Open source mod manager for the video game RimWorld";
     homepage = "https://github.com/RimSort/RimSort";
@@ -182,4 +196,4 @@ stdenv.mkDerivation {
     # steamworksSrc is x86_64-linux only
     platforms = [ "x86_64-linux" ];
   };
-}
+})

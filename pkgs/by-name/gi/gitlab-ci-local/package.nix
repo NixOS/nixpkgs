@@ -1,45 +1,114 @@
 {
   stdenv,
-  buildNpmPackage,
+  bun,
+  nodejs-slim,
   fetchFromGitHub,
   lib,
   nix-update-script,
-  gitlab-ci-local,
-  testers,
-  makeBinaryWrapper,
+  makeWrapper,
+  installShellFiles,
+  writableTmpDirAsHomeHook,
+  versionCheckHook,
   rsync,
   gitMinimal,
 }:
 
-buildNpmPackage rec {
+let
   pname = "gitlab-ci-local";
-  version = "4.64.1";
+  version = "4.73.0";
 
   src = fetchFromGitHub {
     owner = "firecow";
     repo = "gitlab-ci-local";
     rev = version;
-    hash = "sha256-scZ6KqpO/E3Ycu6Nn5o/4LaEpSAOWim8mOqpByjZlZE=";
+    hash = "sha256-gwjTnDc/JI645lLuaAz0gjIsBIxLFzJTMCsmrUKIz6U=";
   };
 
-  npmDepsHash = "sha256-IoycsUU+7o4A3d+pGQvyBvaIqg7fdvwS8Pay9MmRqM4=";
+  node_modules = stdenv.mkDerivation {
+    pname = "${pname}-node_modules";
+    inherit version src;
+
+    nativeBuildInputs = [
+      bun
+      writableTmpDirAsHomeHook
+    ];
+
+    strictDeps = true;
+    __structuredAttrs = true;
+
+    dontConfigure = true;
+    dontFixup = true;
+
+    buildPhase = ''
+      runHook preBuild
+
+      export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+      bun install --frozen-lockfile --ignore-scripts --no-progress --cpu="*" --os="*"
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/node_modules
+      cp -R ./node_modules $out
+
+      runHook postInstall
+    '';
+
+    outputHash = "sha256-EDGVXMyfPVoAxpMndHI3en6R6Wz/wJ9aKmuvAVg44ww=";
+
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
+  };
+in
+stdenv.mkDerivation {
+  inherit pname version src;
 
   nativeBuildInputs = [
-    makeBinaryWrapper
+    bun
+    makeWrapper
+    installShellFiles
   ];
 
-  postPatch = ''
-    # remove cleanup which runs git commands
-    substituteInPlace package.json \
-      --replace-fail "npm run cleanup" "true"
+  strictDeps = true;
+  __structuredAttrs = true;
 
-    # set a script name to avoid yargs using index.js as $0
-    substituteInPlace src/handler.ts src/index.ts \
+  postPatch = ''
+    # set version during build
+    substituteInPlace package.json \
+      --replace-fail "0.0.0" "${version}"
+
+    # set a script name to avoid yargs using the script path as $0
+    substituteInPlace src/index.ts \
       --replace-fail 'yargs(process.argv.slice(2))' 'yargs(process.argv.slice(2)).scriptName("gitlab-ci-local")'
   '';
 
-  postInstall = ''
-    wrapProgram $out/bin/gitlab-ci-local \
+  configurePhase = ''
+    runHook preConfigure
+
+    cp -R ${node_modules}/node_modules .
+    patchShebangs node_modules
+
+    runHook postConfigure
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    bun run build:node
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    install -D dist/index.js $out/lib/gitlab-ci-local/index.js
+
+    makeWrapper ${lib.getExe nodejs-slim} $out/bin/gitlab-ci-local \
+      --add-flags "$out/lib/gitlab-ci-local/index.js" \
       --prefix PATH : "${
         lib.makeBinPath [
           rsync
@@ -51,12 +120,21 @@ buildNpmPackage rec {
     installShellCompletion --cmd gitlab-ci-local \
       --bash <(SHELL=bash $out/bin/gitlab-ci-local --completion) \
       --zsh <(SHELL=zsh $out/bin/gitlab-ci-local --completion)
+  ''
+  + ''
+    runHook postInstall
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
-    updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = gitlab-ci-local;
+    inherit node_modules;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--custom-dep"
+        "node_modules"
+      ];
     };
   };
 

@@ -10,13 +10,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "check-sieve";
-  version = "0.11";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "dburkart";
     repo = "check-sieve";
-    tag = "check-sieve-${finalAttrs.version}";
-    hash = "sha256-vmfHXjcZ5J/+kO3/a0p8krLOuC67+q8SxcPJgW+UaTw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-kNHRid87RW+tm3nmMEe8Y5dcgLZMHICzY2rgWlK3h0M=";
   };
 
   nativeBuildInputs = [
@@ -28,8 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
     (python3.withPackages (p: [ p.setuptools ]))
   ];
 
-  # https://github.com/dburkart/check-sieve/issues/67
-  # Remove after the next (>0.10) release
   env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-result";
 
   installPhase = ''
@@ -39,17 +37,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preCheck = ''
-    substituteInPlace test/AST/util.py \
+    substituteInPlace test/{AST,simulate}/util.py \
       --replace-fail "/usr/bin/diff" "${diffutils}/bin/diff"
-    # Disable flaky tests: https://github.com/dburkart/check-sieve/issues/68
-    # Remove after the next (>0.10) release
-    rm -rf test/{6785,7352}
   '';
 
   doCheck = true;
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex=check-sieve-(.*)" ];
+    extraArgs = [ "--version-regex=v(.*)" ];
   };
 
   meta = {

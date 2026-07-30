@@ -2,13 +2,13 @@ diff --git a/apps/web/.next/standalone/node_modules/next/dist/server/image-optim
 index cba8876..c3d7c43 100644
 --- a/apps/web/.next/standalone/node_modules/next/dist/server/image-optimizer.js
 +++ b/apps/web/.next/standalone/node_modules/next/dist/server/image-optimizer.js
-@@ -409,7 +409,8 @@ class ImageOptimizerCache {
+@@ -495,7 +495,8 @@ class ImageOptimizerCache {
          ]);
      }
      constructor({ distDir, nextConfig }){
--        this.cacheDir = (0, _path.join)(distDir, "cache", "images");
-+        const cacheDir = process.env["NEXT_CACHE_DIR"] || (0, _path.join)(distDir, "cache");
-+        this.cacheDir = (0, _path.join)(cacheDir, "images");
+-        this.cacheDir = (0, _path.join)(distDir, 'cache', 'images');
++        const cacheDir = process.env['NEXT_CACHE_DIR'] || (0, _path.join)(distDir, 'cache');
++        this.cacheDir = (0, _path.join)(cacheDir, 'images');
          this.nextConfig = nextConfig;
      }
      async get(cacheKey) {

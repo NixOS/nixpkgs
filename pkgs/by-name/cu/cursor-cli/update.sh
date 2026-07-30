@@ -22,7 +22,7 @@ if [[ "$latestVersion" == "$currentVersion" ]]; then
   exit 0
 fi
 
-declare -A platforms=( [x86_64-linux]="linux/x64" [aarch64-linux]="linux/arm64" [x86_64-darwin]="darwin/x64" [aarch64-darwin]="darwin/arm64" )
+declare -A platforms=( [x86_64-linux]="linux/x64" [aarch64-linux]="linux/arm64" [aarch64-darwin]="darwin/arm64" )
 
 for platform in "${!platforms[@]}"; do
   url="https://downloads.cursor.com/lab/$release/${platforms[$platform]}/agent-cli-package.tar.gz"

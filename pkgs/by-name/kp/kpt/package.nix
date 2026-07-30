@@ -30,6 +30,6 @@ buildGoModule (finalAttrs: {
     mainProgram = "kpt";
     homepage = "https://github.com/kptdev/kpt";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ mikefaille ];
+    maintainers = [ ];
   };
 })

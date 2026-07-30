@@ -65,7 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/jovanlanik/gtklock";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      dit7ya
       aleksana
     ];
     platforms = lib.platforms.linux;

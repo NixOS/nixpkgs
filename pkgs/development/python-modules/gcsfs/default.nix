@@ -2,33 +2,42 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+
+  # build-system
+  hatchling,
+  hatch-vcs,
+
+  # dependencies
+  aiohttp,
+  decorator,
+  fsspec,
   google-auth,
   google-auth-oauthlib,
   google-cloud-storage,
   google-cloud-storage-control,
   requests,
-  decorator,
-  fsspec,
+
+  # optional-dependencies
   fusepy,
-  aiohttp,
   crcmod,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gcsfs";
-  version = "2026.1.0";
+  version = "2026.7.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = "gcsfs";
-    tag = version;
-    hash = "sha256-WAHRaLsb6znzfuTOtulDhI0rQOOmmcgv9UEEMujPgkE=";
+    tag = finalAttrs.version;
+    hash = "sha256-Q+aqlFyNiGj0alOrnyjV9ILSSv6jRp+2DjDF/+f65po=";
   };
 
   build-system = [
-    setuptools
+    hatchling
+    hatch-vcs
   ];
 
   dependencies = [
@@ -55,8 +64,8 @@ buildPythonPackage rec {
   meta = {
     description = "Convenient Filesystem interface over GCS";
     homepage = "https://github.com/fsspec/gcsfs";
-    changelog = "https://github.com/fsspec/gcsfs/raw/${src.tag}/docs/source/changelog.rst";
+    changelog = "https://github.com/fsspec/gcsfs/raw/${finalAttrs.src.tag}/docs/source/changelog.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nbren12 ];
   };
-}
+})

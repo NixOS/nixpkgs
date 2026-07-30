@@ -5,20 +5,24 @@
   asciidoctor,
   gawk,
   gnused,
+  coreutils,
   runtimeShell,
   binlore,
-  esh,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "esh";
   version = "0.1.1";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "jirutka";
     repo = "esh";
-    rev = "v${finalAttrs.version}";
-    sha256 = "1ddaji5nplf1dyvgkrhqjy8m5djaycqcfhjv30yprj1avjymlj6w";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3EhavdwqyHw9GFtCxzDzSrZSkZcY5vm2b8HRa0uUqrU=";
   };
 
   nativeBuildInputs = [ asciidoctor ];
@@ -36,11 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs .
     substituteInPlace esh \
-        --replace '"/bin/sh"' '"${runtimeShell}"' \
-        --replace '"awk"' '"${gawk}/bin/awk"' \
-        --replace 'sed' '${gnused}/bin/sed'
+        --replace-fail '"/bin/sh"' '"${runtimeShell}"' \
+        --replace-fail '"awk"' '"${gawk}/bin/awk"' \
+        --replace-fail 'sed' '${gnused}/bin/sed' \
+        --replace-fail 'cat' '${coreutils}/bin/cat'
     substituteInPlace tests/test-dump.exp \
-        --replace '#!/bin/sh' '#!${runtimeShell}'
+        --replace-fail '#!/bin/sh' '#!${runtimeShell}'
   '';
 
   doCheck = true;
@@ -50,9 +55,13 @@ stdenv.mkDerivation (finalAttrs: {
   # file 5.41-5.43 but regressed in 5.44+
   # see https://bugs.astron.com/view.php?id=276
   # "can" verdict because of `-s SHELL` arg
-  passthru.binlore.out = binlore.synthesize esh ''
+  passthru.binlore.out = binlore.synthesize finalAttrs.finalPackage ''
     execer can bin/esh
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-V";
+  doInstallCheck = true;
 
   meta = {
     description = "Simple templating engine based on shell";

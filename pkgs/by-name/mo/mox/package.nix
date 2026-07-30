@@ -36,7 +36,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/mjl-/mox";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      dit7ya
       kotatsuyaki
     ];
     teams = with lib.teams; [ ngi ];

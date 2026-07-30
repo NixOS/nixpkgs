@@ -3,35 +3,33 @@
   aiohttp,
   beautifulsoup4,
   buildPythonPackage,
-  colorlog,
   cryptography,
   fetchFromGitHub,
   orjson,
-  poetry-core,
   pycryptodome,
   pytest-cov-stub,
   pytestCheckHook,
   segno,
+  setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "aiovodafone";
-  version = "3.1.3";
+  version = "3.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chemelli74";
     repo = "aiovodafone";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wgoPL/G9wPshhydHSFpSAFKiiFy/UacVbQ7mdcEuit0=";
+    hash = "sha256-ubXJyHCUOWV1xXzfuEZ2DRe90OWycsSolr4fVQMbXu8=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
     beautifulsoup4
-    colorlog
     cryptography
     orjson
     pycryptodome

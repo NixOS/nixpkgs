@@ -1,0 +1,15 @@
+diff --git a/tools/profiler/rust-api/build.rs b/tools/profiler/rust-api/build.rs
+index 9bb27eb83e5e..3f09f7f01bcb 100644
+--- a/tools/profiler/rust-api/build.rs
++++ b/tools/profiler/rust-api/build.rs
+@@ -88,6 +88,10 @@ fn generate_bindings() {
+         // successfully. Otherwise, it fails to build because MarkerSchema has
+         // some std::strings as its fields.
+         .opaque_type("std::string")
++        .blocklist_type(".*basic_string_view.*")
++        .opaque_type(".*basic_string_view.*")
++        .blocklist_type(".*basic_string___self_view.*")
++        .opaque_type(".*basic_string___self_view.*")
+         // std::vector needs to be converted to an opaque type because, if it's
+         // not an opaque type, bindgen can't find its size properly and
+         // MarkerSchema's total size reduces. That causes a heap buffer overflow.

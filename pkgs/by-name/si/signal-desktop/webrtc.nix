@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  fetchpatch,
   buildPackages,
   ninja,
   gn,
@@ -53,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Chromium's Darwin toolchain defines _LIBCPP_HARDENING_MODE itself; keep
   # cc-wrapper from injecting a conflicting default.
-  hardeningDisable = lib.optionals stdenv.isDarwin [
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin [
     "libcxxhardeningfast"
     "libcxxhardeningextensive"
   ];
@@ -69,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     gclient2nix.gclientUnpackHook
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk
     xcodebuild
   ];
@@ -78,11 +79,50 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     pulseaudio
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     llvmPackages.compiler-rt
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
+  ];
+
+  patches = [
+    # https://github.com/NixOS/nixpkgs/blob/8e689a91c5b4e47b57dee488dd7e319cc704eb9d/pkgs/applications/networking/browsers/chromium/common.nix#L604-L612
+    # clang++: error: unknown argument: '-fsanitize-ignore-for-ubsan-feature=array-bounds'
+    (fetchpatch {
+      name = "chromium-146-revert-Update-fsanitizer=array-bounds-config.patch";
+      # https://chromium-review.googlesource.com/c/chromium/src/+/7539408
+      url = "https://chromium.googlesource.com/chromium/src/+/acb47d9a6b56c4889a2ed4216e9968cfc740086c^!?format=TEXT";
+      decode = "base64 -d";
+      revert = true;
+      hash = "sha256-WZsN2qm6lX121bDf7SoN75flXtCTmPPpwtHK0ayjkPc=";
+    })
+
+    # https://github.com/NixOS/nixpkgs/blob/8e689a91c5b4e47b57dee488dd7e319cc704eb9d/pkgs/applications/networking/browsers/chromium/common.nix#L620-L623
+    # clang++: error: unknown argument: '-fno-lifetime-dse'
+    ./chromium-147-llvm-22.patch
+
+    # https://github.com/NixOS/nixpkgs/blob/8e689a91c5b4e47b57dee488dd7e319cc704eb9d/pkgs/applications/networking/browsers/chromium/common.nix#L624-L644
+    # clang++: error: unknown argument: '-fsanitize-ignore-for-ubsan-feature=return'
+    (fetchpatch {
+      name = "chromium-148-revert-build-Add--fsanitizer=return-config.patch";
+      # https://chromium-review.googlesource.com/c/chromium/src/+/7629257
+      url = "https://chromium.googlesource.com/chromium/src/+/99ba1f5302f9433efdb4df302cb7b7de56c72e4c^!?format=TEXT";
+      decode = "base64 -d";
+      revert = true;
+      hash = "sha256-/qzzxwTdPMwIdsqD/G02S7kKHCj3QxECL+g1WYEaWmU=";
+    })
+    # ERROR Unresolved dependencies.
+    # //apps:apps(//build/toolchain/linux/unbundle:default)
+    #   needs //build/config/compiler:sanitize_return(//build/toolchain/linux/unbundle:default)
+    (fetchpatch {
+      name = "chromium-148-revert-build-Enable--fsanitizer=return-config.patch";
+      # https://chromium-review.googlesource.com/c/chromium/src/+/7629258
+      url = "https://chromium.googlesource.com/chromium/src/+/9357bfbea03753fe52264c9ec36abe74f48cfef5^!?format=TEXT";
+      decode = "base64 -d";
+      revert = true;
+      hash = "sha256-14fTHNh3vGsf4KgeH8uLX+aK3lrjK0VKd1dfK1g7r0I=";
+    })
   ];
 
   postPatch = ''
@@ -92,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace modules/audio_device/linux/pulseaudiosymboltable_linux.cc \
       --replace-fail "libpulse.so.0" "${pulseaudio}/lib/libpulse.so.0"
   ''
-  + lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Fix Darwin Python script shebangs for sandbox builds
     patchShebangs build/mac/should_use_hermetic_xcode.py build/toolchain/apple/linker_driver.py
 
@@ -105,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace build/config/mac/BUILD.gn \
       --replace-fail "apple-macos" "apple-darwin"
   ''
-  + lib.optionalString stdenv.isLinux ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace modules/audio_device/linux/alsasymboltable_linux.cc \
       --replace-fail "libasound.so.2" "${alsa-lib}/lib/libasound.so.2"
   '';
@@ -116,7 +156,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   gnFlags =
-    lib.optionals stdenv.isLinux [
+    lib.optionals stdenv.hostPlatform.isLinux [
       # webrtc uses chromium's `src/build/BUILDCONFIG.gn`. many of these flags
       # are copied from pkgs/applications/networking/browsers/chromium/common.nix.
       ''target_os="linux"''
@@ -133,7 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
       ''custom_toolchain="//build/toolchain/linux/unbundle:default"''
       ''host_toolchain="//build/toolchain/linux/unbundle:default"''
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       ''target_os="mac"''
       ''mac_deployment_target="${stdenv.hostPlatform.darwinMinVersion}"''
       "use_sysroot=true"
@@ -164,7 +204,7 @@ stdenv.mkDerivation (finalAttrs: {
       "use_custom_libcxx=false"
       ''rust_sysroot_absolute="${buildPackages.rustc}"''
     ]
-    ++ lib.optionals (stdenv.isLinux && stdenv.buildPlatform != stdenv.hostPlatform) [
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.buildPlatform != stdenv.hostPlatform) [
       ''host_toolchain="//build/toolchain/linux/unbundle:host"''
       ''v8_snapshot_toolchain="//build/toolchain/linux/unbundle:host"''
     ];
@@ -182,7 +222,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "WebRTC library used by Signal";
     homepage = "https://github.com/SignalApp/webrtc";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

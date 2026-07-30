@@ -6,14 +6,13 @@
   lib,
   stdenv,
   writableTmpDirAsHomeHook,
-  go_1_26,
 }:
 
 let
-  version = "2.8.1";
-  srcHash = "sha256-TuXkG54ohsfHMw1VXsYnepZkMx1ZbMHaog+XPxN5F+8=";
-  vendorHash = "sha256-nzNVH4Vm1p7PwtOqej+RfgjpONpxCrZdqjY6x3f/uog=";
-  manifestsHash = "sha256-qo0szujGP2eL48KYjnft2Iu95Y/uH2/bSNETvnpVGYE=";
+  version = "2.9.3";
+  srcHash = "sha256-xu+9Ks+Jrzxk+D2GUmw68/mprNf8ynQZiCmMNpVkR4M=";
+  vendorHash = "sha256-h5APVAwqyodfaoNq5SqHF/3Vu3O2XfdlZ9O/apA49pc=";
+  manifestsHash = "sha256-L1dSNLFKtAGS7A+vvz7t68YifOxWoFxPTmNB31iaGoo=";
 
   manifests = fetchzip {
     url = "https://github.com/fluxcd/flux2/releases/download/v${version}/manifests.tar.gz";
@@ -22,7 +21,7 @@ let
   };
 in
 
-buildGoModule.override { go = go_1_26; } rec {
+buildGoModule rec {
   pname = "fluxcd";
   inherit vendorHash version;
 
@@ -39,6 +38,8 @@ buildGoModule.override { go = go_1_26; } rec {
     # disable tests that require network access
     rm source/cmd/flux/create_secret_git_test.go
   '';
+
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"
@@ -83,6 +84,7 @@ buildGoModule.override { go = go_1_26; } rec {
       jlesquembre
       ryan4yin
       SchahinRohani
+      stealthybox
     ];
     mainProgram = "flux";
   };

@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation {
   pname = "raylib-games";
-  version = "2022-10-24";
+  version = "2026-05-07";
 
   src = fetchFromGitHub {
     owner = "raysan5";
     repo = "raylib-games";
-    rev = "e00d77cf96ba63472e8316ae95a23c624045dcbe";
-    hash = "sha256-N9ip8yFUqXmNMKcvQuOyxDI4yF/w1YaoIh0prvS4Xr4=";
+    rev = "2175f1fe857aa91a749b66482359545f28cc596f";
+    hash = "sha256-gmCbBcS5tlq6jySvDPUqZz4ONyDkSeUdgAd20c5sUls=";
   };
 
   buildInputs = [ raylib ];

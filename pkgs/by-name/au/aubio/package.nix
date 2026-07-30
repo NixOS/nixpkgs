@@ -27,11 +27,13 @@ stdenv.mkDerivation (finalAttrs: {
     wafHook
   ];
   buildInputs = [
-    alsa-lib
     fftw
     libjack2
     libsamplerate
     libsndfile
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
   ];
 
   strictDeps = true;
@@ -49,9 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://aubio.org/";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [
-      marcweber
       fpletz
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

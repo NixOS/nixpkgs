@@ -2,18 +2,19 @@
   lib,
   python3,
   fetchFromGitHub,
+  writableTmpDirAsHomeHook,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "taskhound";
-  version = "1.0.0";
+  version = "1.1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "1r0BIT";
     repo = "TaskHound";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qQ1OpJCgMcRKGkZCRjLiUO+u4SSIA/qExzq2K7m7BD8=";
+    hash = "sha256-OVCHdhfMkeFUgdvVY6uMBqWpJNIHE4cHFzy1XstvnyU=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -26,11 +27,20 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     neo4j
     pycryptodome
     requests
+    rich
+    rich-argparse
   ];
 
   nativeCheckInputs = with python3.pkgs; [
     pytest-cov-stub
     pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  disabledTests = [
+    # Flaky timing-dependent test
+    "test_rate_limit_accuracy"
+    "test_parallel_mode"
   ];
 
   pythonImportsCheck = [ "taskhound" ];

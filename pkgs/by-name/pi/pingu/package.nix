@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "pingu";
-  version = "0.0.6";
+  version = "0.0.7";
 
   src = fetchFromGitHub {
     owner = "CactiChameleon9";
     repo = "pingu";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-pXC/y+piLhSWIcJ1/+UaC3sjHPKG3XvTuHzWENsXME0=";
+    sha256 = "sha256-KiJRr06N5zOq2vov+iKf5omrzxORxIUaEjM+rXfaoR0=";
     # Get values that require us to use git, then delete .git
     leaveDotGit = true;
     postFetch = ''
@@ -22,7 +22,7 @@ buildGoModule (finalAttrs: {
     '';
   };
 
-  vendorHash = "sha256-8d0pKweumnJH49HSBCfEF8cwEXLGMAk2WbhS10T/Cmc=";
+  vendorHash = "sha256-+2YyJo4RFJXTt7foDrEoLeCcbkRqQ+boFaKioUtcZsM=";
   ldflags = [
     "-w"
     "-s"

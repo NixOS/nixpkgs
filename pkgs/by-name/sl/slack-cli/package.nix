@@ -59,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    homepage = "https://github.com/rockymadden/slack-cli";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "slack";

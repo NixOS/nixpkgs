@@ -1,6 +1,7 @@
 {
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   lib,
   elfutils,
   vendorCertFile ? null,
@@ -30,6 +31,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-qHZfr7ncJOsb1Cijlp6eJSMzxa34H1h4lACqceOzg+s=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Fix build with binutils 2.46.
+    (fetchpatch2 {
+      url = "https://github.com/rhboot/shim/commit/c4665d282072df2ed8ab6ae1d5fa0de41e5db02f.patch?full_index=1";
+      hash = "sha256-0QGqEo5qu3TrG9yqwQLZGuKhgoeReF+RrJzlOVQYDmA=";
+    })
+  ];
 
   buildInputs = [ elfutils ];
 
@@ -64,7 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       baloo
-      raitobezarius
     ];
   };
 })

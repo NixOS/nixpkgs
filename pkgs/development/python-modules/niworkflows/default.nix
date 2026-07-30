@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -27,6 +28,7 @@
   scipy,
   seaborn,
   svgutils,
+  sysctl,
   templateflow,
   traits,
   transforms3d,
@@ -49,6 +51,9 @@ buildPythonPackage (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-AMUOiIL33kcJtlKT+L5QwcUh8mBBkf80uzOQZFKDauo=";
   };
+
+  # fails to determine the version automatically
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
 
   pythonRelaxDeps = [ "traits" ];
 
@@ -82,13 +87,15 @@ buildPythonPackage (finalAttrs: {
     transforms3d
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
-
   nativeCheckInputs = [
     pytest-cov-stub
     pytest-env
     pytestCheckHook
     writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Needed for tests that read the system memory usage on Darwin
+    sysctl
   ];
 
   enabledTestPaths = [ "niworkflows" ];

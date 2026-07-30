@@ -323,8 +323,5 @@ in
       '';
   });
 
-  # native-ice https://github.com/mattiase/xr/issues/9
-  xr = ignoreCompilationError super.xr;
-
   # keep-sorted end
 }

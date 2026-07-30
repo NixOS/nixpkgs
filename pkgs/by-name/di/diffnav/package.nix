@@ -10,20 +10,21 @@
 
 buildGoModule (finalAttrs: {
   pname = "diffnav";
-  version = "0.10.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "dlvhdr";
     repo = "diffnav";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hoikRqhVjbd7hH4H+f5OGq0KdIX1etAJhrRL+QsAkx8=";
+    hash = "sha256-DrEbo9YYg4FCXQXuIkbPxO5Z3ZOPZJYeGoLoP/vT0Y0=";
   };
 
-  vendorHash = "sha256-VNpmcniSpeocl9B+aNwLh4XPyPnYC8SXowJPYWHyzWs=";
+  vendorHash = "sha256-2OzHyBPsylQVXhPlqk2owEhiibFi3H1UENvGGDdzGss=";
 
   ldflags = [
     "-s"
     "-w"
+    "-X github.com/dlvhdr/diffnav/pkg/version.Version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [
@@ -47,7 +48,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/dlvhdr/diffnav";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      amesgen
       matthiasbeyer
     ];
     mainProgram = "diffnav";

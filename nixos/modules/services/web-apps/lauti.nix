@@ -17,8 +17,6 @@ in
 {
 
   imports = [
-    # since 0.12.0 (2025-05-26) release, upstream re-branded project to 'stalwart' due to inclusion of collaboration features (CalDAV, CardDAV, and WebDAV)
-    #  https://github.com/stalwartlabs/stalwart/releases/tag/v0.12.0
     (lib.mkRenamedOptionModule [ "services" "eintopf" ] [ "services" "lauti" ])
   ];
 
@@ -74,7 +72,7 @@ in
         ExecStart = lib.getExe pkgs.lauti;
         WorkingDirectory = cfg.dataDir;
         StateDirectory = default;
-        EnvironmentFile = [ cfg.secrets ];
+        EnvironmentFile = cfg.secrets;
 
         # hardening
         AmbientCapabilities = "";

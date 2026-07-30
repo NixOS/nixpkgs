@@ -2,7 +2,7 @@ import ../make-test-python.nix (
   { lib, pkgs, ... }:
 
   let
-    inherit (lib) mkMerge nameValuePair maintainers;
+    inherit (lib) mkMerge;
 
     baseGrafanaConf = {
       services.grafana = {
@@ -84,7 +84,7 @@ import ../make-test-python.nix (
       };
     };
 
-    nodes = builtins.mapAttrs (
+    containers = builtins.mapAttrs (
       _: val:
       mkMerge [
         val
@@ -97,7 +97,7 @@ import ../make-test-python.nix (
 
     meta.maintainers = [ ];
 
-    inherit nodes;
+    inherit containers;
 
     testScript = ''
       start_all()

@@ -4,6 +4,7 @@ let
     "bat"
     "bottom"
     "btop"
+    "delta"
     "element"
     "grub"
     "hyprland"
@@ -19,6 +20,7 @@ let
     "starship"
     "thunderbird"
     "waybar"
+    "whoogle"
   ];
 in
 {
@@ -89,6 +91,14 @@ let
       hash = "sha256-mEGZwScVPWGu+Vbtddc/sJ+mNdD2kKienGZVUcTSl+c=";
     };
 
+    delta = fetchFromGitHub {
+      name = "delta";
+      owner = "catppuccin";
+      repo = "delta";
+      rev = "011516f5d14f66b771b3e716f29c77231e008c74";
+      hash = "sha256-lztkxX9O41YossvRzpR7tqxMhDNT1Efy2JvkCwtsiXQ=";
+    };
+
     element = fetchFromGitHub {
       name = "element";
       owner = "catppuccin";
@@ -125,8 +135,8 @@ let
       name = "kvantum";
       owner = "catppuccin";
       repo = "Kvantum";
-      rev = "c7cb144b041395e83e4f510a62526b7adfb79911";
-      hash = "sha256-YNUkri+no+rNLTJHf6cPdy4AmQLzPiRK1Jbp2o8e1LE=";
+      rev = "71105d224fef95dd023691303477ce3eea487457";
+      hash = "sha256-gcvCVZjVbj5fRZWaM+mZTwH/g158MH36JmMuMgCBuqQ=";
     };
 
     lazygit = fetchFromGitHub {
@@ -149,16 +159,16 @@ let
       name = "palette";
       owner = "catppuccin";
       repo = "palette";
-      rev = "0df7db6fe201b437d91e7288fa22807bb0e44701";
-      hash = "sha256-R52Q1FVAclvBk7xNgj/Jl+GPCIbORNf6YbJ1nxH3Gzs=";
+      rev = "07d02aa110ef9eb7e7427afca5c73ba9cf7f8ebd";
+      hash = "sha256-hsy+GhuM4MSjnwGq1YJSLBFIbVm67SSdPRgObP00mxw=";
     };
 
     plymouth = fetchFromGitHub {
       name = "plymouth";
       owner = "catppuccin";
       repo = "plymouth";
-      rev = "e0f58d6fcf3dbc2d35dfc4fec394217fbfa92666";
-      hash = "sha256-He6ER1QNrJCUthFoBBGHBINouW/tozxQy3R79F5tsuo=";
+      rev = "da38011d25f6f36152f2409372dfadb11c8f047c";
+      hash = "sha256-3JK4lX2ZmxysITDEEkhBLkyINUeCzvu5nUgrpvWZ+ZE=";
     };
 
     qt5ct = fetchFromGitHub {
@@ -208,6 +218,14 @@ let
       rev = "ee8ed32b4f63e9c417249c109818dcc05a2e25da";
       hash = "sha256-za0y6hcN2rvN6Xjf31xLRe4PP0YyHu2i454ZPjr+lWA=";
     };
+
+    whoogle = fetchFromGitHub {
+      name = "whoogle";
+      owner = "catppuccin";
+      repo = "whoogle";
+      rev = "9d961dc6e2ac405fee18ee1da9a14db1f139db39";
+      hash = "sha256-GyJD/xAF481ZMHOEfwW1SrWW6LT8ARRFizbfjl526XE=";
+    };
   };
 in
 lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListOfEnum
@@ -222,7 +240,7 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
   stdenvNoCC.mkDerivation
   {
     inherit pname;
-    version = "unstable-2025-10-07";
+    version = "0-unstable-2026-03-24";
 
     srcs = selectedSources;
 
@@ -258,6 +276,11 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
     + lib.optionalString (lib.elem "bottom" themeList) ''
       mkdir -p "$out/bottom"
       cp "${sources.bottom}/themes/${variant}.toml" "$out/bottom"
+
+    ''
+    + lib.optionalString (lib.elem "delta" themeList) ''
+      mkdir -p "$out/delta"
+      cp "${sources.delta}/catppuccin.gitconfig" "$out/delta"
 
     ''
     + lib.optionalString (lib.elem "element" themeList) ''
@@ -337,6 +360,11 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
     + lib.optionalString (lib.elem "waybar" themeList) ''
       mkdir -p "$out/waybar"
       cp "${sources.waybar}/themes/${variant}.css" "$out/waybar"
+
+    ''
+    + lib.optionalString (lib.elem "whoogle" themeList) ''
+      mkdir -p "$out/whoogle"
+      cp "${sources.whoogle}/css/${variant}.css" "$out/whoogle"
 
     ''
     + ''

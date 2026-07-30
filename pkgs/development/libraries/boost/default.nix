@@ -20,7 +20,6 @@ let
     );
 in
 {
-  boost177 = makeBoost ./1.77.nix;
   boost178 = makeBoost ./1.78.nix;
   boost179 = makeBoost ./1.79.nix;
   boost180 = makeBoost ./1.80.nix;
@@ -32,4 +31,5 @@ in
   boost188 = makeBoost ./1.88.nix;
   boost189 = makeBoost ./1.89.nix;
   boost190 = makeBoost ./1.90.nix;
+  boost191 = makeBoost ./1.91.nix;
 }

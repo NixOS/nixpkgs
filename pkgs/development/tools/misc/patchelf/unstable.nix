@@ -26,7 +26,6 @@ stdenv.mkDerivation {
   setupHook = [ ./setup-hook.sh ];
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 

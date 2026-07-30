@@ -5,17 +5,16 @@
   fetchPypi,
   jsbeautifier,
   setuptools,
-  six,
 }:
 
 buildPythonPackage rec {
   pname = "cssbeautifier";
-  version = "1.15.4";
+  version = "2.0.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-m7CNw/ZMEBoBZ38Sis8BkFkUz0Brr4dDTc3gW3TArPU=";
+    hash = "sha256-LC/RKTQlYQKd6GsXRO+iMcn6/iYCPbyYih3rDKD1yEU=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -23,7 +22,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     editorconfig
     jsbeautifier
-    six
   ];
 
   # Module has no tests

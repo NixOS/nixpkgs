@@ -12,14 +12,14 @@
 
 let
   pname = "mochi";
-  version = "1.20.10";
+  version = "1.21.17";
 
   linux = appimageTools.wrapType2 rec {
     inherit pname version meta;
 
     src = fetchurl {
       url = "https://download.mochi.cards/releases/Mochi-${version}.AppImage";
-      hash = "sha256-oC53TXgK6UUgsHbLo0Ri/+2/UajYwpoXxHwqO1xY91U=";
+      hash = "sha256-QYBh9ZvmJse3ZimvpU+9ky6ml0pCSZ3mVrYtWtMQGA0=";
     };
 
     appimageContents = appimageTools.extractType2 { inherit pname version src; };
@@ -41,12 +41,8 @@ let
     inherit pname version meta;
 
     src = fetchurl {
-      url = "https://download.mochi.cards/releases/Mochi-${version}${lib.optionalString stdenv.hostPlatform.isAarch64 "-arm64"}.dmg";
-      hash =
-        if stdenv.hostPlatform.isAarch64 then
-          "sha256-nLz73G6vthiXex7+y6bLVhe/RvK3fE3UHuzHf8lcilE="
-        else
-          "sha256-MuvzijF2eDELcSfOyqffKk5tx2a51vU8cGV2/ShSfTg=";
+      url = "https://download.mochi.cards/releases/Mochi-${version}-arm64.dmg";
+      hash = "sha256-2NADaVzkibWjxBymeF1McGEQH6xHaqDMBg080kCI0F8=";
     };
 
     sourceRoot = ".";
@@ -74,7 +70,10 @@ let
     license = lib.licenses.unfree;
     mainProgram = "mochi";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ poopsicles ];
+    maintainers = with lib.maintainers; [
+      piotrkwiecinski
+      poopsicles
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 in

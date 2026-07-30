@@ -12,13 +12,6 @@ let
   python = python3.override {
     self = python;
     packageOverrides = _: super: {
-      resolvelib = super.resolvelib.overridePythonAttrs (old: rec {
-        version = "1.1.0";
-        src = old.src.override {
-          tag = version;
-          hash = "sha256-UBdgFN+fvbjz+rp8+rog8FW2jwO/jCfUPV7UehJKiV8=";
-        };
-      });
       # pdm requires ...... -> ghostscript-with-X which is AGPL only
       matplotlib = super.matplotlib.override { enableTk = false; };
       # pdm requires ...... -> jbig2dec which is AGPL only
@@ -30,14 +23,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "pdm";
-  version = "2.26.6";
+  version = "2.27.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pdm-project";
     repo = "pdm";
     tag = version;
-    hash = "sha256-khgaI9ivwF6i2zlW57vQtBwQpk5mzYVCV4lMOio7ibw=";
+    hash = "sha256-Ju1UoyThWoPnU9HJzdgA9ry+G1pXOhXmPIoydTg7VXo=";
   };
 
   pythonRelaxDeps = [ "hishel" ];

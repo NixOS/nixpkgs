@@ -26,16 +26,17 @@ let
   inherit (torch) cudaCapabilities cudaPackages cudaSupport;
 
 in
-buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
+buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "torchvision";
-  version = "0.25.0";
+  version = "0.27.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "vision";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oktJHcT6T4f58pUO+HSBpbyS1ISH3zDlTsXQh6PcMy4=";
+    hash = "sha256-HOTD45xY7Gye1GI1+AsF3KmMUTAp1QlzHOUeBHvzv0A=";
   };
 
   nativeBuildInputs = [
@@ -83,7 +84,8 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
 
   meta = {
     description = "PyTorch vision library";
-    homepage = "https://pytorch.org/";
+    homepage = "https://pytorch.org/vision";
+    downloadPage = "https://github.com/pytorch/vision";
     changelog = "https://github.com/pytorch/vision/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     platforms = with lib.platforms; linux ++ lib.optionals (!cudaSupport) darwin;

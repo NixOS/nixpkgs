@@ -13,6 +13,8 @@
 buildPythonPackage (finalAttrs: {
   pname = "mypy-protobuf";
   version = "3.6.0";
+  # nixpkgs-update: no auto update
+  # this is a pinned version
   pyproject = true;
 
   src = fetchFromGitHub {

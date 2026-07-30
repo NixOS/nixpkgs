@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
+  fetchpatch,
   toolz,
   multipledispatch,
   py,
@@ -13,7 +13,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "logical-unification";
   version = "0.4.7";
   pyproject = true;
@@ -21,9 +21,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pythological";
     repo = "unification";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-m1wB7WOGb/io4Z7Zfl/rckh08j6IKSiiwFKMvl5UzHg=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/pythological/unification/pull/49.patch";
+      hash = "sha256-0y1DHxxjQ19upOlstf/zihP1b6iQ4A/WqyWNpirW/kg=";
+    })
+  ];
 
   build-system = [
     setuptools
@@ -42,11 +49,6 @@ buildPythonPackage rec {
     pytest-benchmark # Needed for the `--benchmark-skip` flag
   ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.12") [
-    # Failed: DID NOT RAISE <class 'RecursionError'>
-    "test_reify_recursion_limit"
-  ];
-
   pytestFlags = [
     "--benchmark-skip"
     "--html=testing-report.html"
@@ -62,4 +64,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ Etjean ];
   };
-}
+})

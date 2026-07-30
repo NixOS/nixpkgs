@@ -3,18 +3,15 @@
   fetchFromGitHub,
   buildDartApplication,
 }:
-let
-  version = "7.3.0";
+buildDartApplication (finalAttrs: {
+  pname = "melos";
+  version = "8.2.2";
   src = fetchFromGitHub {
     owner = "invertase";
     repo = "melos";
-    tag = "melos-v${version}";
-    hash = "sha256-XTEhH8F54BoXJ1QNhUIZszHQoDwP0Za1LPQ6Dv9sR08=";
+    tag = "melos-v${finalAttrs.version}";
+    hash = "sha256-BIRk1VX8e3CEbnv5S55DsNIFWsGvSVvq53k0cKtqGKE=";
   };
-in
-buildDartApplication {
-  pname = "melos";
-  inherit version src;
 
   patches = [
     # Patch melos entrypoint to bypass cli_launcher which throws because it does not find melos in the "classic" folders eg : .dart_tool or pub cache.
@@ -30,9 +27,21 @@ buildDartApplication {
       --replace-fail "final melosPackageFileUri = await Isolate.resolvePackageUri(melosPackageUri);" "return \"$out\";"
     substituteInPlace packages/melos/lib/src/common/utils.dart \
       --replace-fail "return p.normalize('\''${melosPackageFileUri!.toFilePath()}/../..');" " "
+    substituteInPlace packages/melos/bin/melos.dart \
+      --replace-fail "__NIX_MELOS_PACKAGE_ROOT__" "$out"
     mkdir --parents $out
     cp --recursive packages/melos/templates $out/
   '';
+
+  passthru = {
+    updateScript = {
+      command = [
+        ./update.sh
+        ./.
+      ];
+      supportedFeatures = [ "commit" ];
+    };
+  };
 
   meta = {
     homepage = "https://github.com/invertase/melos";
@@ -41,4 +50,4 @@ buildDartApplication {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.eymeric ];
   };
-}
+})

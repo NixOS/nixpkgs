@@ -22,18 +22,24 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "databricks-sdk";
-  version = "0.96.0";
+  version = "0.121.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "databricks-sdk-py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cwZrewypNltMyr2RPMeyAKJYzy+iwdnfoW/M7uecPaA=";
+    hash = "sha256-EvTh2zxQE7xSzxaipI8qeG0tK/Bnk8bDKbWKdMDO0F4=";
   };
 
   build-system = [
     setuptools
+  ];
+
+  pythonRelaxDeps = [
+    # For protobuf 7
+    "protobuf"
   ];
 
   dependencies = [

@@ -2,22 +2,29 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "peco";
-  version = "0.5.11";
+  version = "0.6.0";
 
   subPackages = [ "cmd/peco" ];
 
   src = fetchFromGitHub {
     owner = "peco";
     repo = "peco";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-OVUfeNpnmuJsgD//JTn6n9n4oOBxep69LhIpHX+ru2w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jvjqk1t2mTxkcGFWpynf3/J5VR3G1lhOBpIFqh6OoS0=";
   };
 
-  vendorHash = "sha256-+HQz7UUgATdgSWlI1dg2DdQRUSke9MyAtXgLikFhF90=";
+  vendorHash = "sha256-EvLi1v3c1Myx9GVvenXiZb2V5foloQzPc35VVjVLuiU=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installManPage contrib/man/peco.1
+  '';
 
   meta = {
     description = "Simplistic interactive filtering tool";

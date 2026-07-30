@@ -4,29 +4,30 @@
   fetchFromGitHub,
   setuptools,
   filelock,
+  modelscope-hub,
+  packaging,
   requests,
   tqdm,
 }:
 
-let
-  version = "1.34.0";
-in
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "modelscope";
-  inherit version;
+  version = "1.38.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "modelscope";
     repo = "modelscope";
-    tag = "v${version}";
-    hash = "sha256-Uq8qmU8ZmNRegaWHn1hlDDpRjWjgfecBvJklmhW36eM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BTiK6rk9j5Wh6DZZ8eufzAyP8wWCEfIzQKeJ3fJzsjg=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     filelock
+    modelscope-hub
+    packaging
     requests
     setuptools
     tqdm
@@ -44,6 +45,7 @@ buildPythonPackage {
     maintainers = with lib.maintainers; [
       kyehn
       doronbehar
+      ryan4yin
     ];
   };
-}
+})

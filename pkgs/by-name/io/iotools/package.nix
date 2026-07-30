@@ -6,7 +6,9 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "iotools";
-  version = "unstable-2017-12-11";
+  version = "1.6-unstable-2017-12-11";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "adurbin";

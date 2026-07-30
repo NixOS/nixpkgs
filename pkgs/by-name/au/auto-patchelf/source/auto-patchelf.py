@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import errno
 import os
 import pprint
 import subprocess
@@ -195,6 +196,12 @@ def populate_cache(initial: list[Path], recursive: bool =False) -> None:
             except ELFError:
                 # Not an ELF file in the right format
                 pass
+            except OSError as e:
+                if e.errno == errno.EINVAL:
+                    # pyelftools can raise EINVAL for certain compressed sections.
+                    pass
+                else:
+                    raise
 
 
 def find_dependency(soname: str, soarch: str, soabi: str) -> Optional[Path]:
@@ -343,6 +350,10 @@ def auto_patchelf_file(logger: Logger, path: Path, runtime_deps: list[Path], app
 
     except ELFError:
         return []
+    except OSError as e:
+        if e.errno == errno.EINVAL:
+            return []
+        raise
 
     # these platforms are packaged in nixpkgs with ld.so in a separate derivation
     # than libc.so and friends. keep_libc is mandatory.

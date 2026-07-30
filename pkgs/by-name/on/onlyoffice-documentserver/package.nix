@@ -1,6 +1,7 @@
 {
   buildFHSEnv,
   buildNpmPackage,
+  callPackage,
   dpkg,
   fetchFromGitHub,
   fetchurl,
@@ -13,18 +14,32 @@
   stdenv,
   vips,
   writeScript,
-  x2t,
 
   extra-fonts ? [ ],
 }:
 
 let
-  version = "9.2.1";
+  version = "9.3.1";
+  x2t = callPackage ./x2t.nix { };
   server-src = fetchFromGitHub {
     owner = "ONLYOFFICE";
     repo = "server";
-    tag = "v9.2.1.1";
-    hash = "sha256-McG+PGL+ZmmnInuBhqVqMeX0o36/LbC0C5vQA1TDjO8=";
+    tag = "v9.3.1.1";
+    hash = "sha256-uN1L/4I7wrg0BqAAu3zdn8LqtdfJDAHnAMbCvzQnOvI=";
+  };
+  # This is required but not included in the submodules for some reason.
+  # https://github.com/ONLYOFFICE/server/blob/34adaeeb4cc1e032a5cf188924880a25546dc67c/Makefile#L81-L83
+  document-templates-src = fetchFromGitHub {
+    owner = "ONLYOFFICE";
+    repo = "document-templates";
+    tag = "v9.3.1.1";
+    hash = "sha256-+52+MK/8DARJrQRbIpN5nk3j3J9cy6Wd1FDMnCVZKRE=";
+  };
+  document-formats-src = fetchFromGitHub {
+    owner = "ONLYOFFICE";
+    repo = "document-formats";
+    tag = "v9.3.1.1";
+    hash = "sha256-HpGhV+PGbQ5hHH6mPQTAdFpBT3nUni4VtDxTExJypAc=";
   };
   common = buildNpmPackage (finalAttrs: {
     name = "onlyoffice-server-Common";
@@ -50,7 +65,7 @@ let
     buildInputs = [
       vips.dev
     ];
-    npmDepsHash = "sha256-4t3wrO+Tt3bTRzmvB+tbVr5D3fXpn7CCU7+dNRc7xEo=";
+    npmDepsHash = "sha256-eD7hyeIcSL0nLcmBE5+gDJcjT+LdUaqIZ+g5sPcn8HQ=";
     npmFlags = [ "--loglevel=verbose" ];
     dontNpmBuild = true;
     postInstall = ''
@@ -67,7 +82,7 @@ let
 
     sourceRoot = "${finalAttrs.src.name}/FileConverter";
 
-    npmDepsHash = "sha256-JKZqbpVBNe6dwxsTg8WqlJAlAqOYmqm+LyWgIxpRb8k=";
+    npmDepsHash = "sha256-zGLZBbQYV2z0HgQKISKVhclRKbMB8RYEX13H0mB6qJw=";
 
     dontNpmBuild = true;
 
@@ -132,13 +147,13 @@ let
   # var/www/onlyoffice/documentserver/server/DocService/docservice
   onlyoffice-documentserver = stdenv.mkDerivation {
     pname = "onlyoffice-documentserver";
-    version = "9.2.1";
+    version = "9.3.1";
 
     src = fetchFromGitHub {
       owner = "ONLYOFFICE";
       repo = "document-server-package";
-      tag = "v9.2.1.13";
-      hash = "sha256-jyXSYkWu63vdeWsRm1Pl/3p3jRjasj0whzN0CytdHks=";
+      tag = "v9.3.1.11";
+      hash = "sha256-AUXOiI6yRjbkSyCFbqMchGba5wiwQOVl1ciFXuWUOd4=";
     };
 
     buildPhase = ''
@@ -180,6 +195,9 @@ let
       mkdir -p $out/var/www/onlyoffice/documentserver/server/schema
       cp -r ${server-src}/schema/* $out/var/www/onlyoffice/documentserver/server/schema
 
+      ln -s ${document-templates-src} $out/var/www/onlyoffice/documentserver/document-templates
+      ln -s ${document-formats-src} $out/var/www/onlyoffice/documentserver/document-formats
+
       ## required for bwrap --bind
       chmod u+w $out/var
       mkdir -p $out/var/lib/onlyoffice
@@ -190,12 +208,16 @@ let
 
     passthru = {
       inherit
+        x2t
         x2t-with-fonts-and-themes
         common
         docservice
         fileconverter
         ;
-      tests = nixosTests.onlyoffice;
+      tests = {
+        nixosTest = nixosTests.onlyoffice;
+      }
+      // x2t.tests;
       fhs = buildFHSEnv {
         name = "onlyoffice-wrapper";
 

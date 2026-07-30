@@ -322,6 +322,14 @@ have a predefined type and string generator already declared under
 
     The attribute `lib.type.atom` contains the used INI atom.
 
+`pkgs.formats.configobj` { }
+
+:   A function taking an attribute set with values
+
+    It returns a set with [ConfigObj](https://pypi.org/project/configobj/)-specific attributes `type` and `generate` as specified [below](#pkgs-formats-result).
+    The type of the input is an attribute mapping supporting both atoms and nested attribute sets (sections/subsections), as supported by ConfigObj.
+    The renderer is based on Python's `configobj` module.
+
 `pkgs.formats.iniWithGlobalSection` { *`listsAsDuplicateKeys`* ? false, *`listToValue`* ? null, \.\.\. }
 
 :   A function taking an attribute set with values
@@ -553,7 +561,7 @@ in
       default = { };
       description = ''
         Configuration for foo, see
-        <link xlink:href="https://example.com/docs/foo"/>
+        <https://example.com/docs/foo/>
         for supported settings.
       '';
     };
@@ -628,7 +636,7 @@ up in the manual.
     default = { };
     description = ''
       Configuration for Foo, see
-      <link xlink:href="https://example.com/docs/foo"/>
+      <https://example.com/docs/foo>
       for supported values.
     '';
   };

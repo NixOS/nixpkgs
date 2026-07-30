@@ -109,7 +109,6 @@ rustPlatform.buildRustPackage rec {
   passthru = {
     tests = {
       inherit (nixosTests) quickwit;
-      inherit (nixosTests.vector) syslog-quickwit;
     };
     updateScript = nix-update-script { };
   };

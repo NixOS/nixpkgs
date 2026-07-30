@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "patch2pr";
-  version = "0.43.0";
+  version = "0.46.0";
 
   src = fetchFromGitHub {
     owner = "bluekeyes";
     repo = "patch2pr";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Jv2tGdziPLKy5vNUgwnB8ern3IYS+D+N5LMrsGIqTMI=";
+    hash = "sha256-SMMqLW9Gvrc+lt/AhGD+RRE+dC/6CxSKmUtJJ3SXtLo=";
   };
 
-  vendorHash = "sha256-tM4Y/dPn5ZCP5NJl+nOPulY3hKWzI/l8c+Ku+dxtWwI=";
+  vendorHash = "sha256-XVEqnYzlm9l2e/grLwopEZlPSTY64po7veL8JqL9S7Y=";
 
   ldflags = [
     "-X main.version=${finalAttrs.version}"

@@ -11,9 +11,9 @@ in
 
 buildDotnetGlobalTool (finalAttrs: {
   pname = "csharp-ls";
-  version = "0.22.0";
+  version = "0.26.0";
 
-  nugetHash = "sha256-11ysfIiYnQG1vpfvmUWHuCR//rOLfYVRoQWedThojqc=";
+  nugetHash = "sha256-KwOYeu8Hu3CL/lanv7NwNkx8ggPmmqZ3o3WUu+IaFbA=";
 
   inherit dotnet-sdk;
   dotnet-runtime = dotnet-sdk;
@@ -29,7 +29,7 @@ buildDotnetGlobalTool (finalAttrs: {
     description = "Roslyn-based LSP language server for C#";
     mainProgram = "csharp-ls";
     homepage = "https://github.com/razzmatazz/csharp-language-server";
-    changelog = "https://github.com/razzmatazz/csharp-language-server/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/razzmatazz/csharp-language-server/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ GaetanLepage ];

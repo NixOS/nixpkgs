@@ -5,13 +5,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "inotify-info";
-  version = "0.0.3";
+  version = "0.0.4";
 
   src = fetchFromGitHub {
     owner = "mikesart";
     repo = "inotify-info";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mxZpJMmSCgm5uV5/wknVb1PdxRIF/b2k+6rdOh4b8zA=";
+    hash = "sha256-+snfRRdlQ1ODDD74FIDFiau2WPAtAP2fGLjS61GbRcY=";
   };
 
   buildFlags = [ "INOTIFYINFO_VERSION=v${finalAttrs.version}" ];

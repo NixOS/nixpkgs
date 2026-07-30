@@ -2,7 +2,7 @@
   lib,
   aiounittest,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   freezegun,
   google-api-core,
   google-cloud-core,
@@ -16,18 +16,22 @@
   pythonOlder,
   pyyaml,
   setuptools,
+  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-firestore";
-  version = "2.23.0";
+  version = "2.28.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "google_cloud_firestore";
-    inherit (finalAttrs) version;
-    hash = "sha256-qc/7p83GEBER1tVM3iLVIcmPnn1BXmdIaxN/oW8GqgM=";
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "google-cloud-python";
+    tag = "google-cloud-firestore-v${finalAttrs.version}";
+    hash = "sha256-dct5yBerIMNQgVIvOWdO9yTxSrH1JDUen6I7CYHftC0=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/packages/google-cloud-firestore";
 
   build-system = [ setuptools ];
 
@@ -38,6 +42,8 @@ buildPythonPackage (finalAttrs: {
     protobuf
   ]
   ++ google-api-core.optional-dependencies.grpc;
+
+  pythonRelaxDeps = [ "protobuf" ];
 
   nativeCheckInputs = [
     freezegun
@@ -65,6 +71,11 @@ buildPythonPackage (finalAttrs: {
     # Test requires credentials
     "tests/system/test_pipeline_acceptance.py"
   ]
+  ++ lib.optionals (pythonOlder "3.14") [
+    # RuntimeError: There is no current event loop in thread 'MainThread'.
+    "tests/unit/v1/test_base_client.py::test_baseclient__emulator_channel"
+    "tests/unit/v1/test_bundle.py::TestAsyncBundle::test_async_query"
+  ]
   ++ lib.optionals (pythonAtLeast "3.14") [
     # RuntimeError: There is no current event loop in thread 'MainThread'
     # due to eliding aiounittest
@@ -76,10 +87,17 @@ buildPythonPackage (finalAttrs: {
     "google.cloud.firestore_admin_v1"
   ];
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "google-cloud-firestore-v(.*)"
+    ];
+  };
+
   meta = {
     description = "Google Cloud Firestore API client library";
-    homepage = "https://github.com/googleapis/python-firestore";
-    changelog = "https://github.com/googleapis/python-firestore/blob/v${finalAttrs.version}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-firestore";
+    changelog = "https://github.com/googleapis/google-cloud-python/tree/${finalAttrs.src.tag}/packages/google-cloud-firestore/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sarahec ];
   };

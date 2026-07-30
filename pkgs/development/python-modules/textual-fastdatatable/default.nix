@@ -50,6 +50,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "numpy"
+    "pandas"
     "pyarrow"
   ];
 

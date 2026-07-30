@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "hacompanion";
-  version = "1.0.25";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "tobias-kuendig";
     repo = "hacompanion";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-CkJ648rYlSzWH0K7vGcxYKiVEsVj+y+p+2bsV7VOi6I=";
+    hash = "sha256-WwzfRsRfDMiK7V9XH/G86+illsbQdTw+MEXNmW5MLLg=";
   };
 
-  vendorHash = "sha256-y2eSuMCDZTGdCs70zYdA8NKbuPPN5xmnRfMNK+AE/q8=";
+  vendorHash = "sha256-SohjueM0DwSuh7XVClYiWA/5d0V6x2vmp5aPxgmIJYY=";
 
   passthru.updateScript = nix-update-script { };
 

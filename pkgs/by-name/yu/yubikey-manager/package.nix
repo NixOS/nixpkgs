@@ -11,14 +11,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "yubikey-manager";
-  version = "5.9.0";
+  version = "5.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubikey-manager";
     tag = version;
-    hash = "sha256-8SWuhuFeMRIskJRxeb67gA3gdhSDf/vnrYHra6t71Bc=";
+    hash = "sha256-9ngsjXkQ3YUc5nCgG1i592LoVERr4jRSKi8POBaP/aw=";
   };
 
   postPatch = ''
@@ -41,6 +41,10 @@ python3Packages.buildPythonPackage rec {
     keyring
     pyscard
     python-pskc
+  ];
+
+  pythonRelaxDeps = [
+    "cryptography"
   ];
 
   postInstall = ''

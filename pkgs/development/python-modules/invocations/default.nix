@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  build,
   blessed,
   fetchFromGitHub,
   invoke,
@@ -13,13 +14,14 @@
   pytest-relaxed,
   pytest-mock,
   icecream,
+  setuptools,
   pip,
 }:
 
 buildPythonPackage rec {
   pname = "invocations";
   version = "4.0.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyinvoke";
@@ -31,11 +33,14 @@ buildPythonPackage rec {
   patches = [ ./replace-blessings-with-blessed.patch ];
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "semantic_version>=2.4,<2.7" "semantic_version"
+    substituteInPlace pyproject.toml \
+      --replace-fail "semantic_version>=2.4,<2.7" "semantic_version"
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
+    build
     blessed
     invoke
     releases

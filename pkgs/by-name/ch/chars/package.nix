@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.7.0";
 
   src = fetchFromGitHub {
-    owner = "antifuchs";
+    owner = "boinkor-net";
     repo = "chars";
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-mBtwdPzIc6RgEFTyReStFlhS4UhhRWjBTKT6gD3tzpQ=";
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Commandline tool to display information about unicode characters";
     mainProgram = "chars";
-    homepage = "https://github.com/antifuchs/chars";
+    homepage = "https://github.com/boinkor-net/chars";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bbigras ];
   };

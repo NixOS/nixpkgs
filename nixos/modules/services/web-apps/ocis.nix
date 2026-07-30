@@ -202,7 +202,6 @@ in
 
   meta.maintainers = with lib.maintainers; [
     bhankas
-    danth
     ramblurr
   ];
 }

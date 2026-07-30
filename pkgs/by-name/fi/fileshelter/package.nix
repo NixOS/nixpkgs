@@ -24,6 +24,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     sed -i '1i #include <algorithm>' src/fileshelter/ui/ShareCreateFormView.cpp
+
+    # boost 1.89 removed the boost_system stub library
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'find_package(Boost REQUIRED COMPONENTS system program_options)' \
+      'find_package(Boost REQUIRED COMPONENTS program_options)'
   '';
 
   enableParallelBuilding = true;

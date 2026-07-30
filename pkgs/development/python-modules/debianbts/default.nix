@@ -7,13 +7,13 @@
   distutils,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-debianbts";
   version = "4.1.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "python_debianbts";
     hash = "sha256-9EOxjOJBGzcxA3hHFeZwffA09I2te+OHppF7FuFU15M=";
   };
@@ -39,8 +39,8 @@ buildPythonPackage rec {
     mainProgram = "debianbts";
     homepage = "https://github.com/venthur/python-debianbts";
     downloadPage = "https://pypi.org/project/python-debianbts/";
-    changelog = "https://github.com/venthur/python-debianbts/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/venthur/python-debianbts/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nicoo ];
   };
-}
+})

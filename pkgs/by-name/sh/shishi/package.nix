@@ -30,15 +30,24 @@ stdenv.mkDerivation (finalAttrs: {
 
   separateDebugInfo = true;
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    libgcrypt
+    pkg-config
+  ];
+
   buildInputs = [
     libgcrypt
     libgpg-error
     libtasn1
-    # TODO use lib.optional instead of setting packages to null
-    (if usePam then pam else null)
-    (if useLibidn then libidn else null)
-    (if useGnutls then gnutls else null)
+  ]
+  ++ lib.optionals usePam [
+    pam
+  ]
+  ++ lib.optionals useLibidn [
+    libidn
+  ]
+  ++ lib.optionals useGnutls [
+    gnutls
   ];
 
   configureFlags = [
@@ -78,6 +87,8 @@ stdenv.mkDerivation (finalAttrs: {
     -e 's,\(-lgpg-error\),-L${libgpg-error.out}/lib \1,' \
     -e 's,\(-ltasn1\),-L${libtasn1.out}/lib \1,'
   '';
+
+  strictDeps = true;
 
   meta = {
     homepage = "https://www.gnu.org/software/shishi/";

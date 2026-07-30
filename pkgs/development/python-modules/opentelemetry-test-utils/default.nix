@@ -5,6 +5,7 @@
   opentelemetry-api,
   opentelemetry-instrumentation,
   opentelemetry-sdk,
+  requests,
 }:
 
 buildPythonPackage {
@@ -23,6 +24,7 @@ buildPythonPackage {
     asgiref
     opentelemetry-api
     opentelemetry-sdk
+    requests
   ];
 
   pythonImportsCheck = [ "opentelemetry.test" ];

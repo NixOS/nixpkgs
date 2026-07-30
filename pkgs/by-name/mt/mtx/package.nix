@@ -13,6 +13,13 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "0261c5e90b98b6138cd23dadecbc7bc6e2830235145ed2740290e1f35672d843";
   };
 
+  postPatch = ''
+    substituteInPlace mtx.h                     \
+      --replace-fail                            \
+        "typedef enum { false, true } boolean;" \
+        "typedef bool boolean;"
+  '';
+
   doCheck = false;
 
   meta = {

@@ -38,6 +38,8 @@ buildPythonPackage rec {
     requests
   ];
 
+  pythonRelaxDeps = [ "protobuf" ];
+
   optional-dependencies = {
     async_rest = [ google-auth ] ++ google-auth.optional-dependencies.aiohttp;
     grpc = [
@@ -52,6 +54,10 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-mock
     pytestCheckHook
+  ];
+
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn10Warning"
   ];
 
   # prevent google directory from shadowing google imports

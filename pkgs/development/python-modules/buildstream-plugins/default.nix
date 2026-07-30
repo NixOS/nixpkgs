@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "buildstream-plugins";
-  version = "2.5.0";
+  version = "2.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "buildstream-plugins";
     tag = version;
-    hash = "sha256-nWs18iYXRcEIWVvIC3pnbhczK7Fxf2Jqk4GT7Dv0EXs=";
+    hash = "sha256-vbHfceMdaedAg0fVt8pBF+S7yPYhfQlgEYvb48ym+4I=";
   };
 
   build-system = [

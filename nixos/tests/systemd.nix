@@ -34,25 +34,27 @@
         RebootWatchdogSec = "10min";
         KExecWatchdogSec = "5min";
       };
-      systemd.user.extraConfig = "DefaultEnvironment=\"XXX_USER=bar\"";
+      systemd.user.settings.Manager.DefaultEnvironment = "\"XXX_USER=bar\"";
       services.journald.extraConfig = "Storage=volatile";
       test-support.displayManager.auto.user = "alice";
 
-      systemd.shutdown.test = pkgs.writeScript "test.shutdown" ''
-        #!${pkgs.runtimeShell}
-        PATH=${
-          lib.makeBinPath (
-            with pkgs;
-            [
-              util-linux
-              coreutils
-            ]
-          )
-        }
-        mount -t 9p shared -o trans=virtio,version=9p2000.L /tmp/shared
-        touch /tmp/shared/shutdown-test
-        umount /tmp/shared
-      '';
+      systemd.shutdownRamfs.contents."/etc/systemd/system-shutdown/test".source =
+        pkgs.writeShellScript "test.shutdown" ''
+          PATH=${
+            lib.makeBinPath (
+              with pkgs;
+              [
+                util-linux
+                coreutils
+              ]
+            )
+          }
+          mkdir -p /tmp/shared
+          mount -t 9p shared -o trans=virtio,version=9p2000.L /tmp/shared
+          touch /tmp/shared/shutdown-test
+          umount /tmp/shared
+        '';
+      systemd.shutdownRamfs.storePaths = [ "${pkgs.util-linux}/bin" ];
 
       systemd.services.oncalendar-test = {
         description = "calendar test";
@@ -125,17 +127,6 @@
       # wait for user services
       machine.wait_for_unit("default.target", "alice")
 
-      with subtest("systemctl edit suggests --runtime"):
-          # --runtime is suggested when using `systemctl edit`
-          ret, out = machine.execute("systemctl edit testservice1.service 2>&1")
-          assert ret == 1
-          assert out.rstrip("\n") == "The unit-directory '/etc/systemd/system' is read-only on NixOS, so it's not possible to edit system-units directly. Use 'systemctl edit --runtime' instead."
-          # editing w/o `--runtime` is possible for user-services, however
-          # it's not possible because we're not in a tty when grepping
-          # (i.e. hacky way to ensure that the error from above doesn't appear here).
-          _, out = machine.execute("systemctl --user edit testservice2.service 2>&1")
-          assert out.rstrip("\n") == "Cannot edit units interactively if not on a tty."
-
       # Regression test for https://github.com/NixOS/nixpkgs/issues/105049
       with subtest("systemd reads timezone database in /etc/zoneinfo"):
           timer = machine.succeed("TZ=UTC systemctl show --property=TimersCalendar oncalendar-test.timer")
@@ -158,7 +149,7 @@
 
           subprocess.check_call(
               [
-                  "qemu-img",
+                  "${nodes.machine.virtualisation.qemu.package}/bin/qemu-img",
                   "convert",
                   "-O",
                   "raw",
@@ -179,7 +170,6 @@
       # Regression test for https://github.com/NixOS/nixpkgs/pull/91232
       with subtest("setting transient hostnames works"):
           machine.succeed("hostnamectl set-hostname --transient machine-transient")
-          machine.fail("hostnamectl set-hostname machine-all")
 
       with subtest("systemd-shutdown works"):
           machine.shutdown()

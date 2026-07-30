@@ -2,11 +2,17 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "zilla-slab";
   version = "1.002";
+
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
   src = fetchzip {
     url = "https://github.com/mozilla/zilla-slab/releases/download/v${version}/Zilla-Slab-Fonts-v${version}.zip";
@@ -14,14 +20,7 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-yOHu+dSWlyI7w1N1teED9R1Fphso2bKAlYDC1KdqBCc=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/fonts/truetype
-    cp -v zilla-slab/ttf/*.ttf $out/share/fonts/truetype/
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     homepage = "https://github.com/mozilla/zilla-slab";

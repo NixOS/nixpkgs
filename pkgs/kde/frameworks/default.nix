@@ -40,6 +40,7 @@
   kitemmodels = callPackage ./kitemmodels { };
   kitemviews = callPackage ./kitemviews { };
   kjobwidgets = callPackage ./kjobwidgets { };
+  kmime = callPackage ./kmime { };
   knewstuff = callPackage ./knewstuff { };
   knotifications = callPackage ./knotifications { };
   knotifyconfig = callPackage ./knotifyconfig { };
@@ -64,6 +65,7 @@
   kxmlgui = callPackage ./kxmlgui { };
   modemmanager-qt = callPackage ./modemmanager-qt { };
   networkmanager-qt = callPackage ./networkmanager-qt { };
+  oxygen-icons = callPackage ./oxygen-icons { };
   prison = callPackage ./prison { };
   purpose = callPackage ./purpose { };
   qqc2-desktop-style = callPackage ./qqc2-desktop-style { };

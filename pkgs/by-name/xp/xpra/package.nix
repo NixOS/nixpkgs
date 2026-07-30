@@ -55,7 +55,7 @@
   xorgproto,
   libxkbfile,
   xorg-server,
-  xxHash,
+  xxhash,
   clang,
   withHtml ? true,
   xpra-html5,
@@ -104,14 +104,14 @@ let
 in
 effectiveBuildPythonApplication rec {
   pname = "xpra";
-  version = "6.3.6";
+  version = "6.4.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Xpra-org";
     repo = "xpra";
     tag = "v${version}";
-    hash = "sha256-kXe/Pyjzf6CxYtsYP15hgYnj+qricrlXGqi/G3uQMFM=";
+    hash = "sha256-zDI6xksviTjsfsh5OJdkif24BGPW9zfDsxATC98eeX0=";
   };
 
   patches = [
@@ -135,6 +135,7 @@ effectiveBuildPythonApplication rec {
 
   nativeBuildInputs = [
     clang
+    cython
     gobject-introspection
     pkg-config
     wrapGAppsHook3
@@ -158,7 +159,6 @@ effectiveBuildPythonApplication rec {
   ]
   ++ (with gst_all_1; [
     gst-libav
-    gst-vaapi
     gst-plugins-ugly
     gst-plugins-bad
     gst-plugins-base
@@ -168,7 +168,6 @@ effectiveBuildPythonApplication rec {
   ++ [
     atk.out
     cairo
-    cython
     ffmpeg
     gdk-pixbuf
     glib
@@ -185,10 +184,10 @@ effectiveBuildPythonApplication rec {
     libavif
     openh264
     libyuv
-    xxHash
+    xxhash
     systemd
   ]
-  ++ lib.optional withNvenc [
+  ++ lib.optionals withNvenc [
     nvencHeaders
     nvjpegHeaders
   ];
@@ -304,7 +303,6 @@ effectiveBuildPythonApplication rec {
     maintainers = with lib.maintainers; [
       numinit
       mvnetbiz
-      lucasew
     ];
   };
 }

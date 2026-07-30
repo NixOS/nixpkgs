@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation {
   version = "0-unstable-2024-01-28";
 
   src = fetchFromGitHub {
-    owner = "ch3n9w";
+    owner = "ch4xer";
     repo = "fcitx5-Tokyonight";
     rev = "f7454ab387d6b071ee12ff7ee819f0c7030fdf2c";
     hash = "sha256-swOy0kDZUdqtC2sPSZEBLnHSs8dpQ/QfFMObI6BARfo=";
@@ -36,7 +36,7 @@ stdenvNoCC.mkDerivation {
 
   meta = {
     description = "Fcitx5 theme based on Tokyo Night color";
-    homepage = "https://github.com/ch3n9w/fcitx5-Tokyonight";
+    homepage = "https://github.com/ch4xer/fcitx5-Tokyonight";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ Guanran928 ];
     platforms = lib.platforms.all;

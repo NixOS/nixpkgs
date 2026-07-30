@@ -12,24 +12,29 @@ let
   cliArgs = lib.cli.toCommandLineShellGNU { } {
     inherit (cfg) output;
     # "-3" specifies the file descriptor from the .socket unit.
-    "listen-${cfg.listen}" = "-3";
+    "listen-http" = "-3";
   };
+
+  tlsOptionRemovedMessage = ''
+    systemd in Nixpkgs is built without GnuTLS, so systemd-journal-remote
+    cannot accept HTTPS connections or validate client certificates. Use a
+    reverse proxy (such as nginx) to terminate TLS in front of journal-remote
+    if you need encrypted ingestion.
+  '';
 in
 {
-  meta.maintainers = [ lib.maintainers.raitobezarius ];
+  meta.maintainers = [ ];
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "journald"
+      "remote"
+      "listen"
+    ] tlsOptionRemovedMessage)
+  ];
+
   options.services.journald.remote = {
     enable = lib.mkEnableOption "receiving systemd journals from the network";
-
-    listen = lib.mkOption {
-      default = "https";
-      type = lib.types.enum [
-        "https"
-        "http"
-      ];
-      description = ''
-        Which protocol to listen to.
-      '';
-    };
 
     output = lib.mkOption {
       default = "/var/log/journal/remote/";
@@ -50,10 +55,6 @@ in
       type = lib.types.port;
       description = ''
         The port to listen to.
-
-        Note that this option is used only if
-        {option}`services.journald.upload.listen` is configured to be either
-        "https" or "http".
       '';
     };
 
@@ -92,55 +93,28 @@ in
               one output journal file is used.
             '';
           };
-
-          ServerKeyFile = lib.mkOption {
-            default = "/etc/ssl/private/journal-remote.pem";
-            type = lib.types.str;
-            description = ''
-              A path to a SSL secret key file in PEM format.
-
-              Note that due to security reasons, `systemd-journal-remote` will
-              refuse files from the world-readable `/nix/store`. This file
-              should be readable by the "" user.
-
-              This option can be used with `listen = "https"`. If the path
-              refers to an `AF_UNIX` stream socket in the file system a
-              connection is made to it and the key read from it.
-            '';
-          };
-
-          ServerCertificateFile = lib.mkOption {
-            default = "/etc/ssl/certs/journal-remote.pem";
-            type = lib.types.str;
-            description = ''
-              A path to a SSL certificate file in PEM format.
-
-              This option can be used with `listen = "https"`. If the path
-              refers to an `AF_UNIX` stream socket in the file system a
-              connection is made to it and the certificate read from it.
-            '';
-          };
-
-          TrustedCertificateFile = lib.mkOption {
-            default = "/etc/ssl/ca/trusted.pem";
-            type = lib.types.str;
-            description = ''
-              A path to a SSL CA certificate file in PEM format, or `all`.
-
-              If `all` is set, then client certificate checking will be
-              disabled.
-
-              This option can be used with `listen = "https"`. If the path
-              refers to an `AF_UNIX` stream socket in the file system a
-              connection is made to it and the certificate read from it.
-            '';
-          };
         };
       };
     };
   };
 
   config = lib.mkIf cfg.enable {
+    assertions =
+      map
+        (key: {
+          assertion = !(cfg.settings ? Remote.${key});
+          message = ''
+            The option definition `services.journald.remote.settings.Remote.${key}'
+            no longer has any effect; please remove it.
+            ${tlsOptionRemovedMessage}
+          '';
+        })
+        [
+          "ServerKeyFile"
+          "ServerCertificateFile"
+          "TrustedCertificateFile"
+        ];
+
     systemd.additionalUpstreamSystemUnits = [
       "systemd-journal-remote.service"
       "systemd-journal-remote.socket"

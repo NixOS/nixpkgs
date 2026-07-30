@@ -1,4 +1,4 @@
-{ runTest, ... }@testArgs:
+{ runTest, ... }:
 {
   apiIntegration = runTest ./api-integration.nix;
 }

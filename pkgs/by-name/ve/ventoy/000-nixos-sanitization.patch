@@ -7,9 +7,9 @@ change has been made to the scripts meant to be patched.
 If you're updating the patch, ventoy-x.x.xx-old and new are based on the ventoy repo
 INSTALL directory.
 
-diff -Naur ventoy-1.1.10-old/CreatePersistentImg.sh ventoy-1.1.10-new/CreatePersistentImg.sh
---- ventoy-1.1.10-old/CreatePersistentImg.sh	2026-03-03 16:17:02.368587084 +0000
-+++ ventoy-1.1.10-new/CreatePersistentImg.sh	2026-03-03 16:21:52.272094662 +0000
+diff --color -Naur ventoy-1.1.12-old/CreatePersistentImg.sh ventoy-1.1.12-new/CreatePersistentImg.sh
+--- ventoy-1.1.12-old/CreatePersistentImg.sh	2026-04-24 18:49:51.361292687 +0100
++++ ventoy-1.1.12-new/CreatePersistentImg.sh	2026-04-24 19:04:58.496998056 +0100
 @@ -119,17 +119,13 @@
  sync
  
@@ -23,7 +23,7 @@ diff -Naur ventoy-1.1.10-old/CreatePersistentImg.sh ventoy-1.1.10-new/CreatePers
 -        echo '/ union' > ./persist_tmp_mnt/$config
 +    path_to_persist_mnt="`mktemp -d`"
 +    if mount $freeloop "$path_to_persist_mnt"; then
-+	echo '/ union' > "$path_to_persist_mnt"/$config
++        echo '/ union' > "$path_to_persist_mnt"/$config
          sync
 -        umount ./persist_tmp_mnt
 +        umount "$path_to_persist_mnt"
@@ -33,18 +33,18 @@ diff -Naur ventoy-1.1.10-old/CreatePersistentImg.sh ventoy-1.1.10-new/CreatePers
  fi
  
  if [ ! -z "$passphrase" ]; then
-diff -Naur ventoy-1.1.10-old/tool/ventoy_lib.sh ventoy-1.1.10-new/tool/ventoy_lib.sh
---- ventoy-1.1.10-old/tool/ventoy_lib.sh	2026-03-03 16:17:02.423110021 +0000
-+++ ventoy-1.1.10-new/tool/ventoy_lib.sh	2026-03-03 16:42:27.917098949 +0000
-@@ -6,6 +6,8 @@
+diff --color -Naur ventoy-1.1.12-old/tool/ventoy_lib.sh ventoy-1.1.12-new/tool/ventoy_lib.sh
+--- ventoy-1.1.12-old/tool/ventoy_lib.sh	2026-04-24 18:49:51.411033394 +0100
++++ ventoy-1.1.12-new/tool/ventoy_lib.sh	2026-04-24 18:58:48.286466989 +0100
+@@ -5,6 +5,8 @@
+ VENTOY_PART_SIZE_MB=32
  VENTOY_SECTOR_SIZE=512
  VENTOY_SECTOR_NUM=65536
- 
 +LOGFILE="/var/log/ventoy.log"
 +
+ 
  ventoy_false() {
      [ "1" = "2" ]
- }
 @@ -29,7 +31,7 @@
  }
  
@@ -54,7 +54,7 @@ diff -Naur ventoy-1.1.10-old/tool/ventoy_lib.sh ventoy-1.1.10-new/tool/ventoy_li
  }
  
  vtoy_gen_uuid() {
-@@ -51,31 +53,7 @@
+@@ -51,31 +53,6 @@
  }
  
  check_tool_work_ok() {
@@ -67,7 +67,7 @@ diff -Naur ventoy-1.1.10-old/tool/ventoy_lib.sh ventoy-1.1.10-new/tool/ventoy_li
 -        return
 -    fi
 -   
--    if mkexfatfs -V > /dev/null; then
+-    if mkexfatfs -V > /dev/null; then        
 -        vtdebug "mkexfatfs test ok ..."
 -    else
 -        vtdebug "mkexfatfs test fail ..."
@@ -83,11 +83,10 @@ diff -Naur ventoy-1.1.10-old/tool/ventoy_lib.sh ventoy-1.1.10-new/tool/ventoy_li
 -        return
 -    fi
 -    
-+
      vtdebug "tool check success ..."
      ventoy_true
  }
-@@ -315,7 +293,7 @@
+@@ -315,7 +292,7 @@
      else
      vtdebug "format disk by fdisk ..."
      
@@ -96,9 +95,9 @@ diff -Naur ventoy-1.1.10-old/tool/ventoy_lib.sh ventoy-1.1.10-new/tool/ventoy_li
  o
  n
  p
-diff -Naur ventoy-1.1.10-old/tool/VentoyWorker.sh ventoy-1.1.10-new/tool/VentoyWorker.sh
---- ventoy-1.1.10-old/tool/VentoyWorker.sh	2026-03-03 16:17:02.419287102 +0000
-+++ ventoy-1.1.10-new/tool/VentoyWorker.sh	2026-03-03 16:33:54.178992873 +0000
+diff --color -Naur ventoy-1.1.12-old/tool/VentoyWorker.sh ventoy-1.1.12-new/tool/VentoyWorker.sh
+--- ventoy-1.1.12-old/tool/VentoyWorker.sh	2026-04-24 18:49:51.407567635 +0100
++++ ventoy-1.1.12-new/tool/VentoyWorker.sh	2026-04-24 19:07:55.381417420 +0100
 @@ -106,7 +106,7 @@
  if check_tool_work_ok; then
      vtdebug "check tool work ok"
@@ -162,10 +161,10 @@ diff -Naur ventoy-1.1.10-old/tool/VentoyWorker.sh ventoy-1.1.10-new/tool/VentoyW
  
      check_umount_disk "$DISK"
      
-diff -Naur ventoy-1.1.10-old/Ventoy2Disk.sh ventoy-1.1.10-new/Ventoy2Disk.sh
---- ventoy-1.1.10-old/Ventoy2Disk.sh	2026-03-03 16:17:02.373290887 +0000
-+++ ventoy-1.1.10-new/Ventoy2Disk.sh	2026-03-03 16:35:41.510486932 +0000
-@@ -32,56 +32,4 @@
+diff --color -Naur ventoy-1.1.12-old/Ventoy2Disk.sh ventoy-1.1.12-new/Ventoy2Disk.sh
+--- ventoy-1.1.12-old/Ventoy2Disk.sh	2026-04-24 18:49:51.366082120 +0100
++++ ventoy-1.1.12-new/Ventoy2Disk.sh	2026-04-24 20:19:55.219025537 +0100
+@@ -32,66 +32,4 @@
  echo '**********************************************'
  echo ''
  
@@ -203,6 +202,16 @@ diff -Naur ventoy-1.1.10-old/Ventoy2Disk.sh ventoy-1.1.10-new/Ventoy2Disk.sh
 -    if ldd --version 2>&1 | grep -qi musl; then
 -        mv mkexfatfs mkexfatfs_shared
 -        mv mkexfatfs_static mkexfatfs
+-    else
+-        if ./mkexfatfs -V > /dev/null 2>&1; then
+-            echo "mkexfatfs can not run, check static version" >> ./log.txt
+-        else
+-            if ./mkexfatfs_static -V > /dev/null 2>&1; then
+-                echo "Use static version of mkexfatfs" >> ./log.txt
+-                mv mkexfatfs mkexfatfs_shared
+-                mv mkexfatfs_static mkexfatfs
+-            fi
+-        fi
 -    fi
 -fi
 -
@@ -223,9 +232,9 @@ diff -Naur ventoy-1.1.10-old/Ventoy2Disk.sh ventoy-1.1.10-new/Ventoy2Disk.sh
 -    fi
 -fi
 +./tool/VentoyWorker.sh $*
-diff -Naur ventoy-1.1.10-old/VentoyPlugson.sh ventoy-1.1.10-new/VentoyPlugson.sh
---- ventoy-1.1.10-old/VentoyPlugson.sh	2026-03-03 16:17:02.374195975 +0000
-+++ ventoy-1.1.10-new/VentoyPlugson.sh	2026-03-03 16:37:42.662416899 +0000
+diff --color -Naur ventoy-1.1.12-old/VentoyPlugson.sh ventoy-1.1.12-new/VentoyPlugson.sh
+--- ventoy-1.1.12-old/VentoyPlugson.sh	2026-04-24 18:49:51.367031295 +0100
++++ ventoy-1.1.12-new/VentoyPlugson.sh	2026-04-24 19:08:41.624869288 +0100
 @@ -43,39 +43,6 @@
      exit 1
  fi
@@ -278,9 +287,9 @@ diff -Naur ventoy-1.1.10-old/VentoyPlugson.sh ventoy-1.1.10-new/VentoyPlugson.sh
 -        cd "$OLDDIR"
 -    fi
 -fi
-diff -Naur ventoy-1.1.10-old/VentoyWeb.sh ventoy-1.1.10-new/VentoyWeb.sh
---- ventoy-1.1.10-old/VentoyWeb.sh	2026-03-03 16:17:02.374230398 +0000
-+++ ventoy-1.1.10-new/VentoyWeb.sh	2026-03-03 16:39:37.047028579 +0000
+diff --color -Naur ventoy-1.1.12-old/VentoyWeb.sh ventoy-1.1.12-new/VentoyWeb.sh
+--- ventoy-1.1.12-old/VentoyWeb.sh	2026-04-24 18:49:51.367070384 +0100
++++ ventoy-1.1.12-new/VentoyWeb.sh	2026-04-24 19:09:55.231705458 +0100
 @@ -15,12 +15,6 @@
      echo ""
  }

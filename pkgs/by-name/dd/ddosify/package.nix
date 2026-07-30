@@ -10,8 +10,8 @@ buildGoModule (finalAttrs: {
   version = "2.6.0";
 
   src = fetchFromGitHub {
-    owner = "ddosify";
-    repo = "ddosify";
+    owner = "getanteon";
+    repo = "anteon";
     tag = "selfhosted-${finalAttrs.version}";
     hash = "sha256-EPbpBCSaUVVhxGlj7gRqwHLuj5p6563iiARqkEjA6Rk=";
   };
@@ -41,7 +41,7 @@ buildGoModule (finalAttrs: {
     description = "High-performance load testing tool, written in Golang";
     mainProgram = "ddosify";
     homepage = "https://ddosify.com/";
-    changelog = "https://github.com/ddosify/ddosify/releases/tag/selfhosted-${finalAttrs.version}";
+    changelog = "https://github.com/getanteon/anteon/releases/tag/selfhosted-${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
     maintainers = [ ];
   };

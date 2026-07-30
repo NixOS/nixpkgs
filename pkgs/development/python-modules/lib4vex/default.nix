@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "lib4vex";
-  version = "0.2.2";
+  version = "0.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anthonyharrison";
     repo = "lib4vex";
     tag = "v${version}";
-    hash = "sha256-VKNoCZwowWogn78MAF1YPNwofUAmaZrMJo3lZQaAjK8=";
+    hash = "sha256-XH3Y2kbsJFR202F8bmcd3IWpgHS36W+ylDObtBFNFFg=";
   };
 
   build-system = [ setuptools ];

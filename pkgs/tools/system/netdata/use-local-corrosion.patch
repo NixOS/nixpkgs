@@ -1,11 +1,11 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 414a3c54b..cf1fcb7b4 100644
+index 3fa051e07..7dffb90aa 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -230,13 +230,8 @@ cmake_dependent_option(ENABLE_NETDATA_JOURNAL_FILE_READER "Enable netdata's jour
+@@ -195,13 +195,7 @@ cmake_dependent_option(ENABLE_NETDATA_JOURNAL_FILE_READER "Enable netdata's jour
 
  # Setup Rust/Corrosion for plugins that need it
- if(ENABLE_NETDATA_JOURNAL_FILE_READER OR ENABLE_PLUGIN_OTEL)
+ if(ENABLE_NETDATA_JOURNAL_FILE_READER OR ENABLE_PLUGIN_OTEL OR ENABLE_PLUGIN_OTEL_SIGNAL_VIEWER)
 -    include(FetchContent)
 -    FetchContent_Declare(
 -        Corrosion
@@ -14,7 +14,6 @@ index 414a3c54b..cf1fcb7b4 100644
 -    )
 -    FetchContent_MakeAvailable(Corrosion)
 +    find_package(Corrosion REQUIRED)
-+
-     corrosion_import_crate(MANIFEST_PATH src/crates/jf/Cargo.toml
-                            CRATES journal_reader_ffi otel-plugin)
- endif()
+
+     if(ENABLE_NETDATA_JOURNAL_FILE_READER)
+         corrosion_import_crate(MANIFEST_PATH src/crates/jf/Cargo.toml

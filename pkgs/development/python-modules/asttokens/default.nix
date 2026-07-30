@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "asttokens";
-  version = "3.0.1";
+  version = "3.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gristlabs";
     repo = "asttokens";
     tag = "v${version}";
-    hash = "sha256-1qkkNpjX89TmGD0z0KA2y+UbiHuEOaXzZ6hs9nw7EeM=";
+    hash = "sha256-qdjfhcU1Of07hEY9HZ8qUofPoYBixE4RnIohYMQWsqU=";
   };
 
   build-system = [ setuptools-scm ];

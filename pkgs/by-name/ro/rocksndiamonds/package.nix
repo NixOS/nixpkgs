@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocksndiamonds";
-  version = "4.4.1.3";
+  version = "4.4.2.2";
 
   src = fetchurl {
     url = "https://www.artsoft.org/RELEASES/linux/rocksndiamonds/rocksndiamonds-${finalAttrs.version}-linux.tar.gz";
-    hash = "sha256-EbwjhGu9bbMXLk8I6SiAp1jKY/CCozVTrYw49OsvkHc=";
+    hash = "sha256-S6sjyykHdefJt6vXMw0TIqL0O0BOT8OhcqNCglBpsDM=";
   };
 
   desktopItems = [

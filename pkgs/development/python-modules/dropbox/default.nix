@@ -4,7 +4,6 @@
   fetchFromGitHub,
   setuptools,
   requests,
-  six,
   stone,
   mock,
   pytest-mock,
@@ -13,9 +12,9 @@
   sphinx-rtd-theme,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dropbox";
-  version = "12.0.2";
+  version = "12.2.0";
   pyproject = true;
 
   outputs = [
@@ -26,15 +25,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dropbox";
     repo = "dropbox-sdk-python";
-    tag = "v${version}";
-    hash = "sha256-9Fsh06V226vIyJhrlLkh9Xr4UGoEIISnIFCtuKqI218=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Hkfv9+nofc9PMCw7crF3bw4bOFlzbJCHTW8hGxc91Pc=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     requests
-    six
     stone
   ];
 
@@ -44,11 +42,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "'pytest-runner==5.2.0'," ""
-  '';
-
   pythonImportsCheck = [ "dropbox" ];
 
   nativeBuildInputs = [
@@ -56,17 +49,11 @@ buildPythonPackage rec {
     sphinx-rtd-theme
   ];
 
-  # Version 12.0.0 re-introduced Python 2 support and set some very restrictive version bounds
-  # https://github.com/dropbox/dropbox-sdk-python/commit/75596daf316b4a806f18057e2797a15bdf83cf6d
-  # This will be the last major version to support Python 2, so version bounds might be more reasonable again in the future.
-  pythonRelaxDeps = [
-    "stone"
-  ];
-
   # Set SCOPED_USER_DROPBOX_TOKEN environment variable to a valid value.
   disabledTests = [
-    "test_default_oauth2_urls"
     "test_bad_auth"
+    "test_bad_pins"
+    "test_bad_pins_session"
     "test_multi_auth"
     "test_refresh"
     "test_app_auth"
@@ -83,15 +70,14 @@ buildPythonPackage rec {
     "test_as_user"
     "test_as_admin"
     "test_clone_when_team_linked"
-    "test_bad_pins"
-    "test_bad_pins_session"
+    "test_upload_auto_content_hash"
   ];
 
   meta = {
     description = "Python library for Dropbox's HTTP-based Core and Datastore APIs";
     homepage = "https://github.com/dropbox/dropbox-sdk-python";
-    changelog = "https://github.com/dropbox/dropbox-sdk-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/dropbox/dropbox-sdk-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sfrijters ];
   };
-}
+})

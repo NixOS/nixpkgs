@@ -1,5 +1,6 @@
 {
   buildPythonPackage,
+  cacert,
   fetchPypi,
   hypothesis,
   lib,
@@ -10,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "jsonschema-rs";
-  version = "0.39.0";
+  version = "0.46.5";
 
   pyproject = true;
 
@@ -18,12 +19,12 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "jsonschema_rs";
-    hash = "sha256-K+7QayZF5O6cO6fl23CnYCi6jJl4plSwdl5nji1sbfM=";
+    hash = "sha256-hX434HWi2fbyPepYpVmlW2Y9OHmiUhcABLVpBz2rHvM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-2YNunqzejzDCj7mv9S8g/kY+t39YtQQ2jMeeTwc+NCs=";
+    hash = "sha256-HnrbyfuKIaYKs3ux8Du/PabPNpNu1v37Qm/5gJM6arw=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -36,7 +37,22 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  preCheck = ''
+    # reqwest fails to build its HTTP client on Linux without a CA bundle
+    # ("No CA certificates were loaded from the system").
+    export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
+  '';
+
+  # Need the official JSON Schema Test Suite, which is fetched as a git
+  # submodule and not bundled in the sdist.
+  disabledTestPaths = [
+    "crates/jsonschema-py/tests-py/test_annotation_suite.py"
+    "crates/jsonschema-py/tests-py/test_suite.py"
+  ];
+
   pythonImportsCheck = [ "jsonschema_rs" ];
+
+  __darwinAllowLocalNetworking = true;
 
   passthru.updateScript = nix-update-script { };
 

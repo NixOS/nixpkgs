@@ -22,7 +22,6 @@ let
     ;
   inherit (lib)
     attrValues
-    concatMapStringsSep
     getName
     literalExpression
     optional

@@ -66,8 +66,10 @@ in
             checkConf = {
               su = "root utmp";
               createolddir = "0750 root utmp";
+              "createolddir " = "0750";
               create = "root utmp";
               "create " = "0750 root utmp";
+              "create  " = "0750";
             };
             # multiple paths should be aggregated
             multipath = {

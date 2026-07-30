@@ -2091,7 +2091,7 @@ in
         set -o errexit -o pipefail -o nounset -o errtrace
         shopt -s inherit_errexit
 
-        exec ${cfg.package}/bin/grafana server -homepath ${cfg.dataDir} -config ${configFile}
+        exec ${lib.getExe cfg.package} server -homepath ${cfg.dataDir} -config ${configFile}
       '';
       serviceConfig = {
         WorkingDirectory = cfg.dataDir;

@@ -12,7 +12,7 @@ let
   p = python3.pkgs;
   self = p.buildPythonApplication rec {
     pname = "backgroundremover";
-    version = "0.3.4";
+    version = "0.4.4";
     pyproject = true;
 
     build-system = [
@@ -23,7 +23,7 @@ let
       owner = "nadermx";
       repo = "backgroundremover";
       tag = "v${version}";
-      hash = "sha256-7C31wlokX3M4csZ4ZbOqxowQvh8DMQJJcENKgQWNTa8=";
+      hash = "sha256-S6irFkNw+5HHr3ziMRxaeg3QoXWe1qqf10CGTTHKpb4=";
     };
 
     models = runCommand "background-remover-models" { } ''
@@ -51,12 +51,14 @@ let
       p.ffmpeg-python
       p.filelock
       p.filetype
+      p.flask
       p.hsh
       p.idna
       p.more-itertools
       p.moviepy
       p.numpy
       p.pillow
+      p.pillow-heif
       p.pymatting
       p.pysocks
       p.requests
@@ -107,7 +109,7 @@ let
       homepage = "https://BackgroundRemoverAI.com";
       downloadPage = "https://github.com/nadermx/backgroundremover/releases";
       license = lib.licenses.mit;
-      maintainers = [ lib.maintainers.lucasew ];
+      maintainers = [ ];
     };
   };
 in

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   meson,
   ninja,
   go-md2man,
@@ -27,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.0.8";
 
   src = fetchFromGitHub {
-    owner = "containers";
+    owner = "composefs";
     repo = "composefs";
     tag = "v${finalAttrs.version}";
     hash = "sha256-nuQ3R/0eDS58HmN+0iXcYT5EtkY3J257EdtLir5vm4c=";
@@ -38,6 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "lib"
     "dev"
+  ];
+
+  patches = [
+    # "tests: ignore EOPNOTSUPP in in fsverity tests" https://github.com/composefs/composefs/pull/415
+    (fetchpatch {
+      url = "https://github.com/composefs/composefs/commit/b3cb176a771386081c993e29ae42e77dabe5a577.patch";
+      hash = "sha256-nzUENLM24G6NezhPywVsRzRgWmL1VZdMfZTsXNorJl8=";
+    })
   ];
 
   postPatch =
@@ -96,8 +105,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "File system for mounting container images";
-    homepage = "https://github.com/containers/composefs";
-    changelog = "https://github.com/containers/composefs/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/composefs/composefs";
+    changelog = "https://github.com/composefs/composefs/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       gpl2Only
       asl20

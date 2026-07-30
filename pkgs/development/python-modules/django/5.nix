@@ -41,14 +41,14 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "5.2.11";
+  version = "5.2.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django";
     repo = "django";
     tag = version;
-    hash = "sha256-Ldscb87ts0CPbt5uBiL3DK3qhU6SzTmsEUl90Afko84=";
+    hash = "sha256-DZa3OkqnrgXp1A/HerKYdUdanvi5jxHndo1DV4RVs0M=";
   };
 
   patches = [

@@ -14,6 +14,9 @@ let
       flutter.sdk
     ];
 
+    strictDeps = true;
+    __structuredAttrs = true;
+
     nativeBuildInputs = [ makeWrapper ];
     postBuild = ''
       wrapProgram "$out/bin/flutter" \

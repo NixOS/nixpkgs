@@ -1,5 +1,5 @@
 diff --git a/playwright/_impl/_driver.py b/playwright/_impl/_driver.py
-index 22b53b8..2d86626 100644
+index 22b53b8..43fdbd5 100644
 --- a/playwright/_impl/_driver.py
 +++ b/playwright/_impl/_driver.py
 @@ -23,14 +23,7 @@ from playwright._repo_version import version
@@ -14,7 +14,7 @@ index 22b53b8..2d86626 100644
 -            cli_path,
 -        )
 -    return (os.getenv("PLAYWRIGHT_NODEJS_PATH", str(driver_path / "node")), cli_path)
-+    return "@node@", "@driver@"
++    return "@nodejs@", "@driver@"
  
  
  def get_driver_env() -> dict:

@@ -185,7 +185,9 @@ let
       cl-ana_dot_hdf-cffi = super.cl-ana_dot_hdf-cffi.overrideLispAttrs (o: {
         nativeBuildInputs = [ pkgs.hdf5 ];
         nativeLibs = [ pkgs.hdf5 ];
-        NIX_LDFLAGS = [ "-lhdf5" ];
+        env = o.env or { } // {
+          NIX_LDFLAGS = toString [ "-lhdf5" ];
+        };
       });
       # The antik source archive contains a broken documentation.pdf symlink
       # pointing to documentation/build/latex/Antik.pdf which doesn't exist.

@@ -22,8 +22,6 @@
 }:
 
 let
-  inherit (cudaPackages) cudnn;
-
   shouldUsePkg = lib.mapNullable (pkg: if pkg.meta.available or true then pkg else null);
 
   # some packages are not available on all platforms
@@ -34,7 +32,7 @@ let
   outpaths = lib.filter (outpath: outpath != null) (
     with cudaPackages;
     [
-      cuda_cccl # <nv/target>
+      cccl # <nv/target>
       cuda_cudart
       cuda_nvcc # <crt/host_defines.h>
       cuda_nvprof
@@ -106,7 +104,6 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
 
   buildInputs = [
     cudatoolkit-joined
-    cudnn
     libcutensor
     nccl
   ];

@@ -24,13 +24,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "peazip";
-  version = "10.9.0";
+  version = "11.2.0";
 
   src = fetchFromGitHub {
     owner = "peazip";
     repo = "peazip";
     rev = finalAttrs.version;
-    hash = "sha256-o1gIXq+8qpQcPYcC0py1aB4uWXqBYwU8MRgEFsFS948=";
+    hash = "sha256-zaadYVbeNhlHl/2g7yldG4ZlyL2DEyzwODvomuCBSkE=";
   };
   sourceRoot = "${finalAttrs.src.name}/peazip-sources";
 
@@ -135,7 +135,10 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     homepage = "https://peazip.github.io";
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ annaaurora ];
+    maintainers = with lib.maintainers; [
+      annaaurora
+      ProxyVT
+    ];
     mainProgram = "peazip";
   };
 })

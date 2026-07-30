@@ -10,7 +10,7 @@
 }:
 
 let
-  zlib' = zlib.override { static = false; };
+  zlib' = zlib.override { splitStaticOutput = false; };
 in
 stdenv.mkDerivation {
   pname = "undmg";
@@ -41,8 +41,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/matthewbauer/undmg";
     license = lib.licenses.gpl3;
     mainProgram = "undmg";
-    maintainers = with lib.maintainers; [
-      lnl7
+    maintainers = [
     ];
     platforms = lib.platforms.all;
   };

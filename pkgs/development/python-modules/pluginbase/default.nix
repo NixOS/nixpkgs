@@ -25,7 +25,6 @@ buildPythonPackage rec {
   meta = {
     description = "Support library for building plugins systems in Python";
     homepage = "https://github.com/mitsuhiko/pluginbase";
-    changelog = "https://github.com/mitsuhiko/pluginbase/releases/tag/${version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };

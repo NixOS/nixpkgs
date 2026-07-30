@@ -40,13 +40,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "grass";
-  version = "8.4.2";
+  version = "8.5.0";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "grass";
     rev = finalAttrs.version;
-    hash = "sha256-DEbJZlnq9o+5BYQBXL6wJIVJ9c7HOBLQDMrsiMcaPgk=";
+    hash = "sha256-rQnJrL4ol5yb/egxlpzzyS3JovNq/irIhmJoxZI8uSg=";
   };
 
   nativeBuildInputs = [

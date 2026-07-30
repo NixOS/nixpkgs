@@ -49,7 +49,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     (lib.enableFeature withMan "maintainer-mode")
+    "CFLAGS=-std=gnu17"
   ];
+
+  # autoconf 2.73's AM_ICONV "working iconv" runtime probe reports "no" on
+  # Darwin's libiconv; skip it via the cache variable. Refs #511329.
+  preConfigure = ''
+    export am_cv_func_iconv_works=yes
+  '';
 
   nativeBuildInputs = [
     pkg-config

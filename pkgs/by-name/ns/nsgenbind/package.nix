@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.9";
 
   src = fetchurl {
-    url = "http://download.netsurf-browser.org/libs/releases/nsgenbind-${finalAttrs.version}-src.tar.gz";
+    url = "https://download.netsurf-browser.org/libs/releases/nsgenbind-${finalAttrs.version}-src.tar.gz";
     hash = "sha256-Iyzg9my8LD7tYoiuJt4sVnu/u8Adiw9vxsHBZJ1LOF0=";
   };
 

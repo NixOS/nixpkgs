@@ -12,13 +12,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "speedtest-tracker";
-  version = "1.13.10";
+  version = "1.14.6";
 
   src = fetchFromGitHub {
     owner = "alexjustesen";
     repo = "speedtest-tracker";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-X/ShdTGAb7qPqYlZ71rxGzAetPRexlaDQ4AYvwouddc=";
+    hash = "sha256-mqZz1/dJIpWK+w5h7YQiRcIY8MCBchhDI2omDqNs99Q=";
   };
 
   buildInputs = [ php84 ];
@@ -35,13 +35,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     composerNoScripts = true;
     composerStrictValidation = false;
     strictDeps = true;
-    vendorHash = "sha256-fS0Wstv6uHOE5WaDWSL4nbgpHCLM442zmPoER7ZRhfg=";
+    vendorHash = "sha256-a8y0W8kTzvR3wdqiUfzVt2ui5jksneggRqsMsex0Vrc=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
     name = "${finalAttrs.pname}-npm-deps";
-    hash = "sha256-qWBVonPKqyB6OrDkR1ihtVac/b0Qd++Q/W4nk/VPm9E=";
+    hash = "sha256-JjHtsW1lfI4xp6qw7ZMCWLF953lKB5bDlBVq4G/Wrz0=";
   };
 
   preInstall = ''

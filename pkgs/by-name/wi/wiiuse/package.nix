@@ -46,6 +46,15 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ [ (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic)) ];
 
+  # On Darwin (and Windows), upstream's CMakeLists.txt forcibly overrides
+  # CMAKE_INSTALL_LIBDIR to "lib", ignoring the value passed by the cmake
+  # setup hook, so the libraries end up in $out/lib instead of $lib/lib.
+  # Move them into the lib output manually.
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $lib/lib
+    mv $out/lib/libwiiuse* $lib/lib/
+  '';
+
   meta = {
     description = "Feature complete cross-platform Wii Remote access library";
     mainProgram = "wiiuseexample";

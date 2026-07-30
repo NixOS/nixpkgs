@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -14,15 +15,11 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-rdzt51wY4b7HEr7W/0Ar/FB0zMyf+nKLsOT+CRSEP3o=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    mkdir -p $out/share/fonts/truetype
+  postInstall = ''
     mkdir -p $out/share/doc/go-font
-    mv *.ttf $out/share/fonts/truetype
-    mv README $out/share/doc/go-font/LICENSE
-
-    runHook postInstall
+    cp $src/README $out/share/doc/go-font/LICENSE
   '';
 
   meta = {

@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "firefox-sync-client";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "Mikescher";
     repo = "firefox-sync-client";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-tzYuYSifV/a9SPb5KyabhQ29ByXuAgQgi3t0VMHVSH8=";
+    hash = "sha256-hZ6sd/IM/X8WWNc1ca7w1R4fsixo5VMGEujmPJvEMQc=";
   };
 
-  vendorHash = "sha256-kDh/5SOwKPYl9sC9W17bnzG73fGI5iX6lSjcB3IjOss=";
+  vendorHash = "sha256-NQKF5LugGh2wNWf6M3uUhS2YOTuv2/K56gWUv5ACwEU=";
 
   meta = {
     description = "Commandline-utility to list/view/edit/delete entries in a firefox-sync account";

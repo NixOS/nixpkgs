@@ -14,22 +14,14 @@
 
 stdenv.mkDerivation rec {
   pname = "unfs3";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "unfs3";
     repo = "unfs3";
     tag = "unfs3-${version}";
-    hash = "sha256-5iAriIutBhwyZVS7AG2fnkrHOI7pNAKfYv062Cy0WXw=";
+    hash = "sha256-0IHpHW9lCPSltfl+VrS25tB9csISvTwCpD1oqwXpBwU=";
   };
-
-  patches = [
-    # Fix implicit declaration warning with GCC 14
-    (fetchpatch2 {
-      url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/152dc14a65a89f253294cc5b4c96cf0d6658711a/main/unfs3/implicit.patch";
-      hash = "sha256-zrF87fJhc8mDgIs0vsMoqIHYQPtKWn2XMBSePvHOByA=";
-    })
-  ];
 
   nativeBuildInputs = [
     flex
@@ -70,16 +62,12 @@ stdenv.mkDerivation rec {
       server.
     '';
 
-    # The old http://unfs3.sourceforge.net/ has a <meta>
-    # http-equiv="refresh" pointing here, so we can assume that
-    # whoever controls the old URL approves of the "unfs3" github
-    # account.
     homepage = "https://unfs3.github.io/";
     changelog = "https://raw.githubusercontent.com/unfs3/unfs3/unfs3-${version}/NEWS";
     mainProgram = "unfsd";
 
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tbutter ];
   };
 }

@@ -24,6 +24,7 @@
   einops,
   numpy,
   nvidia-ml-py,
+  requests,
   tabulate,
   torch,
   tqdm,
@@ -56,7 +57,7 @@ buildPythonPackage (finalAttrs: {
   dontUseCmakeConfigure = true;
 
   buildInputs = with cudaPackages; [
-    cuda_cccl
+    cccl
     cuda_cudart
     libcublas
     libcurand
@@ -92,6 +93,7 @@ buildPythonPackage (finalAttrs: {
     einops
     numpy
     nvidia-ml-py
+    requests
     tabulate
     torch
     tqdm

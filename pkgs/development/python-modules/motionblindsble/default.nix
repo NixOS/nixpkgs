@@ -22,6 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-1dA3YTjoAhe+p5vk6Xb42a+rE63m2mn5iHhVV/6tlQ0=";
   };
 
+  patches = [
+    # https://github.com/LennP/motionblindsble/pull/3
+    ./asyncio-compat.patch
+  ];
+
   postPatch = ''
     substituteInPlace setup.py \
       --replace-fail "{{VERSION_PLACEHOLDER}}" "${version}"

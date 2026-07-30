@@ -8,6 +8,7 @@
   nodejs,
   electron,
   python3,
+  node-gyp,
   libx11,
   xorgproto,
   libxkbfile,
@@ -51,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     (python3.withPackages (ps: with ps; [ packaging ]))
     pkg-config
     nodejs
+    node-gyp
     node-gyp-build
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -171,7 +173,6 @@ stdenv.mkDerivation (finalAttrs: {
       bot-wxt1221
     ];
     badPlatforms = [
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     platforms = lib.platforms.unix;

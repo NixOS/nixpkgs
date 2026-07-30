@@ -125,7 +125,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      joshuafern
       Zaechus
     ];
     platforms = lib.platforms.unix;

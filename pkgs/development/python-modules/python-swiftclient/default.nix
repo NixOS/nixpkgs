@@ -13,7 +13,6 @@
   stestrCheckHook,
   versionCheckHook,
   hacking,
-  coverage,
   keystoneauth1,
   stestr,
   openstacksdk,
@@ -60,7 +59,6 @@ buildPythonPackage (finalAttrs: {
     stestrCheckHook
     openstacksdk
     hacking
-    coverage
     keystoneauth1
     stestr
     openstacksdk

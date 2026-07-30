@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchDebianPatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,6 +20,13 @@ stdenv.mkDerivation (finalAttrs: {
     ./20_maxpathlen.patch
     ./30_conf.patch
     ./40_dectalk_extended_chars.patch
+    (fetchDebianPatch {
+      pname = "yasr";
+      version = "0.6.9";
+      debianRevision = "12";
+      patch = "gcc-15";
+      hash = "sha256-KraGxm1RegJpDGQMlo7OaLFBf8l+V8VO65ftjGDOJeg=";
+    })
   ]; # taken from the debian yasr package
 
   meta = {

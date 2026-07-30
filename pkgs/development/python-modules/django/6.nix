@@ -42,7 +42,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "django";
-  version = "6.0.3";
+  version = "6.0.7";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -51,7 +51,7 @@ buildPythonPackage (finalAttrs: {
     owner = "django";
     repo = "django";
     tag = finalAttrs.version;
-    hash = "sha256-FXaK9e2/grRH0c4r/t+Sm9uyYHlSUx6S0klnYTW/8KQ=";
+    hash = "sha256-B28twwEGLcXV0TlQxgRhNBiKhwJd+5f7sL35SkHAkRY=";
   };
 
   patches = [
@@ -62,6 +62,9 @@ buildPythonPackage (finalAttrs: {
     ./6.x/pythonpath.patch
     # test_incorrect_timezone should raise but doesn't
     ./6.x/disable-failing-test.patch
+    # https://code.djangoproject.com/ticket/36997
+    # https://github.com/django/django/pull/21019
+    ./6.x/invalidate-importlib-cache.patch
   ]
   ++ lib.optionals withGdal [
     (replaceVars ./6.x/gdal.patch {

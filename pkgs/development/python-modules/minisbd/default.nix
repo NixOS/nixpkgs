@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   # build-system
@@ -29,9 +30,11 @@ buildPythonPackage (finalAttrs: {
     onnxruntime
   ];
 
-  pythonImportsCheck = [
-    "minisbd"
-  ];
+  # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
+  # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
+  pythonImportsCheck = lib.optionals (
+    !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64)
+  ) [ "minisbd" ];
 
   meta = {
     description = "Free and open source library for fast sentence boundary detection";

@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mssql-jdbc";
-  version = "13.2.1";
+  version = "13.4.0";
 
   src = fetchurl {
     url = "https://github.com/Microsoft/mssql-jdbc/releases/download/v${version}/mssql-jdbc-${version}.jre8.jar";
-    sha256 = "sha256-dgOW6pYXDM7p60FoQjFBdbZUoUhDmjSmH+0Ud2SFsBk=";
+    sha256 = "sha256-gba5hgxxO1PCN70x9tZQJRUXgYqD2T5emf3/JQol+NM=";
   };
 
   dontUnpack = true;

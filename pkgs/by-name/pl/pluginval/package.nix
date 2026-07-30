@@ -15,7 +15,7 @@
   libxinerama,
   libxrandr,
   libxtst,
-  ladspaH,
+  ladspa-header,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxinerama
     libxrandr
     libxtst
-    ladspaH
+    ladspa-header
   ];
 
   cmakeFlags = [

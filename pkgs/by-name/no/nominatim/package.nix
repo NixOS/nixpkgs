@@ -21,14 +21,14 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nominatim";
-  version = "5.2.0";
+  version = "5.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "osm-search";
     repo = "Nominatim";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ao4oEPz5rtRQtPC2UcIHH1M+o914JraASf+hcB2SDKA=";
+    hash = "sha256-jP/OkEuFdVdvA8Uztv/49FXm9dsExVDjw2l2gyMOSsg=";
   };
 
   postPatch = ''
@@ -57,6 +57,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pyicu
     python-dotenv
     pyyaml
+    mwparserfromhell
   ];
 
   propagatedBuildInputs = [

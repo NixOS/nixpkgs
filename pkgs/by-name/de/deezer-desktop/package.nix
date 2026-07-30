@@ -4,18 +4,19 @@
   fetchurl,
   makeWrapper,
   electron,
+  writeScript,
 }:
 
 let
-  version = "7.1.100";
+  version = "7.1.230";
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://github.com/aunetx/deezer-linux/releases/download/v${version}/deezer-desktop-${version}-x64.tar.xz";
-      hash = "sha256-KU7dmXXJGLVoDf/iHP3LBcbc/+ldTdYsRD3LyGvbvZc=";
+      hash = "sha256-OP5ceyGQQFRgW1GZPElxdjkYikNVMkvomkXCr9dD67Y=";
     };
     aarch64-linux = fetchurl {
       url = "https://github.com/aunetx/deezer-linux/releases/download/v${version}/deezer-desktop-${version}-arm64.tar.xz";
-      hash = "sha256-sLso74DJaJK/o8cYYHEI/XNXjcl1MgfkegsCEOw+79Y=";
+      hash = "sha256-IiUZgMHdhkU0B5uDLARHpcCUxlsZ4+rj5sAKJXZpcBw=";
     };
   };
 
@@ -61,6 +62,25 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru = {
+    inherit srcs;
+    updateScript = writeScript "update-deezer-desktop" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl jq common-updater-scripts
+      set -eu -o pipefail
+
+      latest_version="$(
+        curl --fail --silent --show-error --location \
+          'https://api.github.com/repos/aunetx/deezer-linux/releases/latest' |
+          jq -r '.tag_name | ltrimstr("v")'
+      )"
+
+      for platform in ${lib.escapeShellArgs (lib.attrNames srcs)}; do
+        update-source-version "${finalAttrs.pname}" "$latest_version" --ignore-same-version --source-key="passthru.srcs.$platform"
+      done
+    '';
+  };
 
   meta = {
     description = "Unofficial Linux port of the music streaming application";

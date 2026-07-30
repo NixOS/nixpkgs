@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "x42-gmsynth";
-  version = "0.6.3";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "x42";
     repo = "gmsynth.lv2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-js7c8d+yOjrRBs/xtHNfhXAcbiPX1PKFjHsThtEgzPQ=";
+    hash = "sha256-PDuvVNw9hxJVJwEYGeBJDKAt9ogHHJWELw/8LT+ZnVQ=";
   };
 
   nativeBuildInputs = [ pkg-config ];

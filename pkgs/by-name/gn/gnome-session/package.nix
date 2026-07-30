@@ -8,33 +8,26 @@
   pkg-config,
   gnome,
   gobject-introspection,
-  adwaita-icon-theme,
   glib,
-  gtk4,
   gsettings-desktop-schemas,
   gnome-desktop,
   gnome-settings-daemon,
   gnome-shell,
   dbus,
-  json-glib,
-  libice,
   xmlto,
   docbook_xsl,
   docbook_xml_dtd_45,
-  python3,
   libxslt,
   gettext,
   systemd,
-  xtrans,
-  libepoxy,
   gnome-session-ctl,
-  wrapGAppsHook4,
+  wrapGAppsNoGuiHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-session";
   # Also bump ./ctl.nix when bumping major version.
-  version = "49.2";
+  version = "50.1";
 
   outputs = [
     "out"
@@ -43,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-session/${lib.versions.major finalAttrs.version}/gnome-session-${finalAttrs.version}.tar.xz";
-    hash = "sha256-/NtPRdamDYTp7K4eN0C6tuVbqwy0ng+zgoDps486hIU=";
+    hash = "sha256-Yom2r6RNPkyZnOV2H/iywQujCfVflCXysT+YIIyB9vs=";
   };
 
   patches = [
@@ -61,29 +54,19 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt
     docbook_xsl
     docbook_xml_dtd_45
-    python3
     dbus # for DTD
-    wrapGAppsHook4
+    wrapGAppsNoGuiHook
   ];
 
   buildInputs = [
     glib
-    gtk4
-    libice
     gnome-desktop
-    json-glib
-    xtrans
-    adwaita-icon-theme
     gnome-settings-daemon
     gsettings-desktop-schemas
     systemd
-    libepoxy
   ];
 
   postPatch = ''
-    chmod +x meson_post_install.py # patchShebangs requires executable file
-    patchShebangs meson_post_install.py
-
     # Use our provided `gnome-session-ctl`
     original="@libexecdir@/gnome-session-ctl"
     replacement="${gnome-session-ctl}/libexec/gnome-session-ctl"
@@ -99,7 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     mkdir $sessions
     moveToOutput share/wayland-sessions "$sessions"
-    moveToOutput share/xsessions "$sessions"
 
     # Our provided one is being used
     rm -rf $out/libexec/gnome-session-ctl

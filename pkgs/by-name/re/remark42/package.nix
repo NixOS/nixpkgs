@@ -3,21 +3,22 @@
   stdenv,
   fetchFromGitHub,
   buildGoModule,
-  nodejs_22,
-  pnpm_8,
+  nodejs-slim_22,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   testers,
 }:
 
 let
-  version = "1.15.0";
+  pnpm = pnpm_10.override { nodejs-slim = nodejs-slim_22; };
+  version = "1.16.4";
 
   src = fetchFromGitHub {
     owner = "umputun";
     repo = "remark42";
     tag = "v${version}";
-    hash = "sha256-yd/qTRSZj0nZpgK77xP+XHyHcVXlNpyMzdfj6EbVcXQ=";
+    hash = "sha256-VCFpN/8GRziD7sKVw7jK33llo0AGqygW4ghHZxrluJc=";
   };
 
   remark42-web = stdenv.mkDerivation (finalAttrs: {
@@ -26,34 +27,40 @@ let
 
     strictDeps = true;
 
-    pnpmRoot = "frontend";
+    sourceRoot = "${src.name}/frontend";
 
     nativeBuildInputs = [
-      nodejs_22
-      pnpm_8
+      nodejs-slim_22
+      pnpm
       pnpmConfigHook
     ];
 
     pnpmDeps = fetchPnpmDeps {
-      inherit (finalAttrs) pname version src;
-      sourceRoot = "${finalAttrs.src.name}/frontend";
-      pnpm = pnpm_8;
-      fetcherVersion = 3;
-      hash = "sha256-E2tUZXhcufuztXS+Z//uZk9omvaPrevNbGqVd41Lwhw=";
+      inherit (finalAttrs)
+        pname
+        version
+        src
+        sourceRoot
+        ;
+      inherit pnpm;
+      fetcherVersion = 4;
+      hash = "sha256-PInNiI8hcXzQoYWtHUy6BTQKgII7rHzlbSGFc+ixz7k=";
     };
 
     buildPhase = ''
       runHook preBuild
-      pushd "$pnpmRoot"
+
       pnpm --filter ./apps/remark42 --fail-if-no-match run build
-      popd
+
       runHook postBuild
     '';
 
     installPhase = ''
       runHook preInstall
+
       mkdir -p $out/web
-      cp -r "$pnpmRoot/apps/remark42/public/." $out/web/
+      cp -r "apps/remark42/public/." $out/web/
+
       runHook postInstall
     '';
   });

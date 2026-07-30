@@ -36,11 +36,6 @@
   # optional-dependencies
   netcdf4,
   ase,
-  pytest,
-  pytest-cov,
-  invoke,
-  sphinx,
-  sphinx-rtd-theme,
   numba,
   vtk,
 
@@ -97,17 +92,6 @@ buildPythonPackage rec {
   optional-dependencies = {
     abinit = [ netcdf4 ];
     ase = [ ase ];
-    ci = [
-      pytest
-      pytest-cov
-      # pytest-split
-    ];
-    docs = [
-      invoke
-      sphinx
-      # sphinx_markdown_builder
-      sphinx-rtd-theme
-    ];
     electronic_structure = [
       # fdint
     ];

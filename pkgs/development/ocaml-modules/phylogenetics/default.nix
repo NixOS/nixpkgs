@@ -14,12 +14,12 @@
   printbox-text,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "phylogenetics";
   version = "0.3.0";
 
   src = fetchurl {
-    url = "https://github.com/biocaml/phylogenetics/releases/download/v${version}/phylogenetics-${version}.tbz";
+    url = "https://github.com/biocaml/phylogenetics/releases/download/v${finalAttrs.version}/phylogenetics-${finalAttrs.version}.tbz";
     hash = "sha256-3oZ9fMAXqOQ02rQ+8W8PZJWXOJLNe2qERrGOeTk3BKg=";
   };
 
@@ -52,4 +52,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.bcdarwin ];
     mainProgram = "phylosim";
   };
-}
+})

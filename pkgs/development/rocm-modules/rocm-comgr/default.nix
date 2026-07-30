@@ -45,10 +45,19 @@ stdenv.mkDerivation (finalAttrs: {
     ./fix-ccob-compat-output-filename.patch
   ];
 
-  postPatch = ''
-    substituteInPlace cmake/opencl_header.cmake \
-      --replace-fail "\''${CLANG_CMAKE_DIR}/../../../" "${llvm.clang-unwrapped.lib}"
-  '';
+  postPatch =
+    # Fix relative path assumption for libllvm
+    ''
+      substituteInPlace cmake/opencl_header.cmake \
+        --replace-fail "\''${CLANG_CMAKE_DIR}/../../../" "${llvm.clang-unwrapped.lib}"
+    ''
+    # Bake LLVM root for cfg/includes or HIPRTC can't find C++ stdlib headers (e.g. <type_traits>).
+    + ''
+      substituteInPlace src/comgr-env.cpp \
+        --replace-fail \
+          'return EnvLLVMPath;' \
+          'return EnvLLVMPath ? EnvLLVMPath : "${llvm.rocm-toolchain}";'
+    '';
 
   nativeBuildInputs = [
     cmake

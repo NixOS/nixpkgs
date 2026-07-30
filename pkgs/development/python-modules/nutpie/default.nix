@@ -14,6 +14,7 @@
   arviz,
   obstore,
   pandas,
+  platformdirs,
   pyarrow,
   xarray,
   zarr,
@@ -34,19 +35,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nutpie";
-  version = "0.16.7";
+  version = "0.16.11";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "nutpie";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pZlUS8Rd8uNAau7q3yogtdRUvDkN8MiTWj+3lZolBSY=";
+    hash = "sha256-ZakNyVW06QONdBSZFonOc585ZPLHsIjbFlBnX+Kg2kc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-F9WuFPyJd7IVaboUHnFpf3GiLB5AWap8RBScuqlZB3s=";
+    hash = "sha256-n61ZrJtJFQ0G/7X59pKI8QNnOZPvDWiPmGC3tW3NQkk=";
   };
 
   build-system = [
@@ -76,6 +78,7 @@ buildPythonPackage (finalAttrs: {
     numba
     jax
     jaxlib
+    platformdirs
     pymc
     pytest-timeout
     pytestCheckHook

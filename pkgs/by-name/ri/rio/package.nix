@@ -11,6 +11,7 @@
   cmake,
   ncurses,
   scdoc,
+  shaderc,
   pkg-config,
   gcc-unwrapped,
   fontconfig,
@@ -50,16 +51,24 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rio";
-  version = "0.2.37";
+  version = "0.4.7";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5otVXZf8C1yGpfJ8EC5cs8a97KB3+EOI8ulnCI1dspU=";
+    hash = "sha256-vlNt8hBb1fhO5tEAID5WXMc7I0k9vn6/L45nkTXS6Qg=";
   };
 
-  cargoHash = "sha256-MGCH3l37ldBYygRv7IMDV5Coy1kjMi1a7ihjRS63ESA=";
+  cargoHash = "sha256-8qVS9wINEBLKKWbylG3sHO+oqnLvsa1wgN0OOHFzOBM=";
+
+  # The 0.4.7 "update to rust 1.96" bump (raphamorim/rio@6a11aa33c7) only made
+  # clippy-style refactors that build on older rustc; the MSRV pin is cosmetic.
+  # Lower it so nixpkgs' rustc (1.95) can build rio.
+  postPatch = ''
+    substituteInPlace Cargo.toml \
+      --replace-fail 'rust-version = "1.96.0"' 'rust-version = "1.95.0"'
+  '';
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -71,6 +80,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cmake
     pkg-config
     autoPatchelfHook
+    shaderc
   ];
 
   runtimeDependencies = rlinkLibs;

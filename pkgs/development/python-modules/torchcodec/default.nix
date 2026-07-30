@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  config,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -10,7 +9,6 @@
 
   # buildInputs
   ffmpeg,
-  cudaPackages,
 
   # build-system
   cmake,
@@ -21,19 +19,24 @@
   pytestCheckHook,
   torchvision,
 
-  cudaSupport ? config.cudaSupport,
+  cudaSupport ? torch.cudaSupport,
+  rocmSupport ? torch.rocmSupport,
 }:
 
-buildPythonPackage (finalAttrs: {
+let
+  inherit (torch) cudaCapabilities cudaPackages;
+in
+buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "torchcodec";
-  version = "0.10.0";
+  version = "0.14.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "meta-pytorch";
     repo = "torchcodec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2uo2HtA5hh8s7F1Z8SS78bMwyOvw2H2j4p0Znan552I=";
+    hash = "sha256-eGof2Rk/dGYPlKVRSuJ+ZeeMh2u4K6/qXmROo187HTA=";
   };
 
   postPatch = ''
@@ -60,6 +63,9 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
+  ]
+  ++ lib.optionals rocmSupport [
+    torch.rocmPackages.clr
   ];
 
   buildInputs = [
@@ -94,6 +100,15 @@ buildPythonPackage (finalAttrs: {
     I_CONFIRM_THIS_IS_NOT_A_LICENSE_VIOLATION = true;
 
     ENABLE_CUDA = cudaSupport;
+  }
+  // lib.optionalAttrs cudaSupport {
+    TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" cudaCapabilities}";
+  }
+  // lib.optionalAttrs rocmSupport {
+    ROCM_PATH = torch.rocmtoolkit_joined;
+    ROCM_SOURCE_DIR = torch.rocmtoolkit_joined;
+    PYTORCH_ROCM_ARCH = torch.gpuTargetString;
+    CMAKE_CXX_FLAGS = "-I${torch.rocmtoolkit_joined}/include";
   };
 
   pythonImportsCheck = [ "torchcodec" ];
@@ -104,7 +119,15 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests =
-    lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    lib.optionals rocmSupport [
+      # HSA runtime logs topology error in sandbox breaking test that asserts no output
+      "test_python_logger"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      # Fails in the sandbox:
+      # Error in cpuinfo: failed to parse the list of possible processors in /sys/devices/system/cpu/possible
+      "test_python_logger"
+
       # AssertionError: index 0
       "test_get_frames_played_at"
 
@@ -167,6 +190,9 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/meta-pytorch/torchcodec";
     changelog = "https://github.com/meta-pytorch/torchcodec/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      caniko
+    ];
   };
 })

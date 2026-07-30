@@ -9,22 +9,26 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ttl";
-  version = "0.18.0";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "lance0";
     repo = "ttl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1E6Y4HYJmOj/9j4llA0iwIWW7pSofIDCWvg9Aka9URI=";
+    hash = "sha256-bna3zD1RI2eSYX+IyDxi8IB/gys8PDDRThDdcUfcHR0=";
   };
 
-  cargoHash = "sha256-3N9pJUU0dmzE5v7wz8eypVbxrLGrKQUyBhSLQgi9yJ0=";
+  cargoHash = "sha256-VLNDcP7LjClYEqew0xDQdevMM0LKJJnUXxh6tBtx6lw=";
 
   nativeBuildInputs = [
     installShellFiles
     versionCheckHook
   ];
+
   doInstallCheck = true;
+
+  # opt ouf of default features to deselect the update-check feature
+  buildNoDefaultFeatures = true;
 
   postInstall = ''
     installShellCompletion --cmd ttl \
@@ -47,7 +51,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "ttl";
     homepage = "https://github.com/lance0/ttl";
     changelog = "https://github.com/lance0/ttl/releases/tag/v${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ vincentbernat ];
+    maintainers = with lib.maintainers; [
+      vincentbernat
+      herbetom
+    ];
     license = with lib.licenses; [
       asl20
       mit

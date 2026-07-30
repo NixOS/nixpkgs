@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "catch2";
-  version = "3.12.0";
+  version = "3.15.2";
 
   src = fetchFromGitHub {
     owner = "catchorg";
     repo = "Catch2";
     tag = "v${version}";
-    hash = "sha256-M1n2jWiA0hNCNqO3zSXRANiaMVCebn7/VU/4FfcjoA8=";
+    hash = "sha256-Fb8dnuaKQwLxYmGDZy38ZsCKk6RwE4PSidD1xmnb1rU=";
   };
 
   patches = lib.optionals stdenv.cc.isClang [

@@ -1,7 +1,7 @@
 {
   buildDunePackage,
   ocsipersist,
-  lwt_log,
+  logs,
   pgocaml,
   xml-light,
 }:
@@ -11,7 +11,7 @@ buildDunePackage {
   inherit (ocsipersist) version src;
 
   propagatedBuildInputs = [
-    lwt_log
+    logs
     ocsipersist
     pgocaml
   ];

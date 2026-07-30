@@ -68,13 +68,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ausaxs";
-  version = "1.2.0";
+  version = "1.2.8";
 
   src = fetchFromGitHub {
     owner = "AUSAXS";
     repo = "AUSAXS";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vTuQsg76p0WHPadwqBdDGBSNgNmr5TxuwlNj47P+sa8=";
+    hash = "sha256-elzkFzLyECiDuA8TokA8/wUYBZisKY1IRxQmikMn2f4=";
   };
 
   patches = [ ./cmake-no-fetchcontent.patch ];
@@ -88,10 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
     cp --recursive --no-preserve=mode ${asio} asio
     cp --recursive --no-preserve=mode ${cycfi_infra} cycfi_infra
     patch -p1 -d elements < ${./elements-cmake-no-fetchcontent.patch}
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "-mavx" "${
-        lib.optionalString (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isLinux) "-msse3"
-      }"
   '';
 
   nativeBuildInputs = [

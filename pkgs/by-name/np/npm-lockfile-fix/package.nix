@@ -35,7 +35,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     mainProgram = "npm-lockfile-fix";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      lucasew
       felschr
     ];
   };

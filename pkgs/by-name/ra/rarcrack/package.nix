@@ -34,6 +34,8 @@ stdenv.mkDerivation {
     substituteInPlace rarcrack.c --replace "file -i" "${file}/bin/file -i"
   '';
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   preInstall = ''
     mkdir -p $out/bin
   '';

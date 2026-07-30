@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "chainsaw";
-  version = "2.14.1";
+  version = "2.16.2";
 
   src = fetchFromGitHub {
     owner = "WithSecureLabs";
     repo = "chainsaw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-M+gHsh4u5CEZndMn5sUFk/69ojyaL2AftF8Ao0mKmtY=";
+    hash = "sha256-EKL2MTo5qirpY4TCWwBptpRWJRd6Yp/dLz/5sIsdsbg=";
   };
 
-  cargoHash = "sha256-NFyo6elDsqjFI4Kr9BG2ppM8DXictY+N+D3G5+89TJU=";
+  cargoHash = "sha256-bbgRqp3bNw2U69aVqwvJNWOKgW0YhR8SlqzH9jdrHZU=";
 
   ldflags = [
     "-w"

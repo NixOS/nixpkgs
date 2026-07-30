@@ -16,23 +16,21 @@
   mpv-unwrapped,
 }:
 let
-  version = "0.3.21";
+  version = "0.3.22";
   url_base = "https://github.com/alexmercerind2/harmonoid-releases/releases/download/v${version}";
   url =
-    rec {
+    {
       x86_64-linux = "${url_base}/harmonoid-linux-x86_64.tar.gz";
       aarch64-linux = "${url_base}/harmonoid-linux-aarch64.tar.gz";
-      x86_64-darwin = "${url_base}/harmonoid-macos-universal.dmg";
-      aarch64-darwin = x86_64-darwin;
+      aarch64-darwin = "${url_base}/harmonoid-macos-universal.dmg";
     }
     .${stdenv.hostPlatform.system}
       or (throw "${stdenv.hostPlatform.system} is an unsupported platform");
   hash =
-    rec {
-      x86_64-linux = "sha256-RZDRb/afXbalNbLBGaQgx5Qd4UEbNrvIsa3h+e6osJE=";
-      aarch64-linux = "sha256-1ys7uyCjXe4IBeXRk8mFjqmP9OottNefQrrtTkxq/qU=";
-      x86_64-darwin = "sha256-mo7Rj6c89KZrsL29i99x4E7b6soWlGUsC6KpSB7y5iY=";
-      aarch64-darwin = x86_64-darwin;
+    {
+      x86_64-linux = "sha256-+fEx30uu0rZiORrtE00xG2piJzpFbfxSZw3OjrhLJyg=";
+      aarch64-linux = "sha256-jXN5i+LudsODNZUzb5SXClqgQxYzanrbZCqB8X0pJRQ=";
+      aarch64-darwin = "sha256-YYMKrb7ZilfEztL2JTxSdeoDd8xQMrHFtN9N9fmsm3w=";
     }
     .${stdenv.hostPlatform.system};
 in
@@ -43,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     inherit url hash;
   };
+
+  passthru.updateScript = ./update.sh;
 
   nativeBuildInputs = [
     makeWrapper
@@ -93,7 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     license = {

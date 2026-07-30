@@ -10,7 +10,6 @@
   freetype,
   libx11,
   gtk3,
-  pcre,
   libpthread-stubs,
   libxdmcp,
   libxkbcommon,
@@ -58,7 +57,6 @@ stdenv.mkDerivation rec {
     freetype
     libx11
     gtk3
-    pcre
     libpthread-stubs
     libxdmcp
     libxkbcommon

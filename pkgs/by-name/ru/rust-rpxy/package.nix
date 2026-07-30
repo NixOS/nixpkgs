@@ -5,17 +5,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rust-rpxy";
-  version = "0.11.0";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "junkurihara";
     repo = "rust-rpxy";
     tag = finalAttrs.version;
-    hash = "sha256-TKaOHJSvio1WrrNI9fe9/q32JOCfz764z1Q9emWUgLg=";
+    hash = "sha256-fdpr6HWMuMT0nXj7V5JQbiLVOGoWaTsX1OI+yCEErDA=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-j5Z0Pvj/v9LfKeDgnP0hGXJcuCXJjCco3Vy0YeFSTzs=";
+  cargoHash = "sha256-WsK7eQffO+Ehx6H2Jj99XWON1Wc3Ud5Yaq1Nyz/oeSY=";
 
   meta = {
     description = "Http reverse proxy serving multiple domain names and terminating TLS for http/1.1, 2 and 3, written in Rust";

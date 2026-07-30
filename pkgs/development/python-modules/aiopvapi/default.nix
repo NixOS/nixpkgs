@@ -19,6 +19,11 @@ buildPythonPackage rec {
     hash = "sha256-yystaH2HRsJoYh2aTpOBA7DLiC2xwpBUccHwmJ0FlaY=";
   };
 
+  patches = [
+    # https://github.com/sander76/aio-powerview-api/pull/46
+    ./fix-tests.patch
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [ aiohttp ];
@@ -26,11 +31,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "aiopvapi" ];
-
-  disabledTests = [
-    # AssertionError
-    "test_remove_shade_from_scene"
-  ];
 
   meta = {
     description = "Python API for the PowerView API";

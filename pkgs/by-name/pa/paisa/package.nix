@@ -4,7 +4,7 @@
   buildGoModule,
   buildNpmPackage,
   fetchFromGitHub,
-  nodejs_20,
+  nodejs_22,
   versionCheckHook,
   node-gyp,
   python3,
@@ -20,10 +20,7 @@
 }:
 
 let
-  # paisa docker builds with nodejs 22, but we need node 20 so we can build
-  # node-canvas from source (which currently fails with nodejs 22 due to some
-  # deprecations in the v8 javascript engine and nan c++
-  buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_20; };
+  buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_22; };
 in
 buildGoModule (finalAttrs: {
   pname = "paisa";
@@ -44,6 +41,12 @@ buildGoModule (finalAttrs: {
     inherit (finalAttrs) version src;
 
     npmDepsHash = "sha256-86LvGTSs2PaxrYMGaU7yOUGiAMZY1MfFIexpYVNwvZ8=";
+
+    # canvas fails to build with Node 22 (upstream nan/V8 incompatibility).
+    # It is only used client-side via pdf-js, so the native binding is never
+    # loaded. Other install scripts in this tree are no-ops or re-run during
+    # `vite build`. See Automattic/node-canvas#2448.
+    npmFlags = [ "--ignore-scripts" ];
 
     buildInputs = [
       # needed for building node-canvas from source which is a dependency of
@@ -92,11 +95,6 @@ buildGoModule (finalAttrs: {
   };
 
   meta = {
-    # package is marked as broken on darwin, because due to upgrades to the
-    # darwin clang compiler the native node-addon-api cannot be built anymore.
-    # this can only be fixed by upstream upgrading dependencies (especially
-    # node-gyp and node-addon-api).
-    broken = stdenv.isDarwin;
     homepage = "https://paisa.fyi/";
     changelog = "https://github.com/ananthakumaran/paisa/releases/tag/v${finalAttrs.version}";
     description = "Personal finance manager, building on top of the ledger double entry accounting tool";

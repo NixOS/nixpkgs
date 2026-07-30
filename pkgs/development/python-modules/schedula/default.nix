@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  pythonAtLeast,
   fetchFromGitHub,
 
   # build-system
@@ -79,6 +80,21 @@ buildPythonPackage rec {
     # ERROR tests/utils/test_form.py::TestDispatcherForm::test_form1 - ModuleNotFoundError: No module named 'chromedriver_autoinstaller'
     # ERROR tests/utils/test_form.py::TestDispatcherForm::test_form_stripe - ModuleNotFoundError: No module named 'chromedriver_autoinstaller'
     "tests/utils/test_form.py"
+    # requires schedula[form] extras
+    "tests/utils/test_form_items.py"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # itertools iterators no longer picklable in 3.14 (cpython#101588)
+    "tests/test_dispatcher.py::TestAsyncParallel"
+    "tests/test_dispatcher.py::TestCopyDispatcher::test_copy"
+    "tests/utils/test_blue.py::TestBlueDispatcher::test_blue_io"
+    "tests/utils/test_io.py::TestReadWrite::test_load_dispatcher"
+    "tests/utils/test_io.py::TestReadWrite::test_save_dispatcher"
+    # exception repr format changed in 3.14
+    "tests/test_dispatcher.py::TestDispatch::test_raises"
+    # doctest output drift on 3.14
+    "tests/test_dispatcher.py::TestDoctest::runTest"
+    "tests/utils/test_io.py::TestDoctest::runTest"
   ];
 
   pythonImportsCheck = [ "schedula" ];

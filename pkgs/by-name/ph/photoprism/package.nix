@@ -17,14 +17,14 @@
 }:
 
 let
-  version = "251130-b3068414c";
+  version = "260601-a7d098548";
   pname = "photoprism";
 
   src = fetchFromGitHub {
     owner = "photoprism";
     repo = "photoprism";
     rev = version;
-    hash = "sha256-8yg5CtvBtSKRaOUj9f+Db7rruXIVuF2cR50vZ+WUU6A=";
+    hash = "sha256-6zE9bqHFF9ifcqbvA0yjSF69+BA/M2U6ABnPta4dpl4=";
   };
 
   backend = callPackage ./backend.nix { inherit src version; };
@@ -103,7 +103,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://photoprism.app";
     description = "Personal Photo Management powered by Go and Google TensorFlow";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ benesim ];
+    maintainers = with lib.maintainers; [
+      ipetkov
+    ];
     mainProgram = "photoprism";
   };
 })

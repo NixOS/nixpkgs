@@ -3,49 +3,50 @@
   stdenv,
   fetchurl,
   unzip,
+  cmake,
   doxygen,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bliss";
-  version = "0.73";
+  version = "0.77";
+
+  __structuredAttrs = true;
 
   src = fetchurl {
-    url = "http://www.tcs.hut.fi/Software/bliss/bliss-${finalAttrs.version}.zip";
-    sha256 = "f57bf32804140cad58b1240b804e0dbd68f7e6bf67eba8e0c0fa3a62fd7f0f84";
+    url = "https://users.aalto.fi/~tjunttil/bliss/downloads/bliss-${finalAttrs.version}.zip";
+    hash = "sha256-rMi5gDTzD60kyJfzZavYZsE9nxuyB+OY0MrxNodZcqQ=";
   };
 
-  patches = fetchurl {
-    url = "http://scip.zib.de/download/bugfixes/scip-5.0.1/bliss-0.73.patch";
-    sha256 = "815868d6586bcd49ff3c28e14ccb536d38b2661151088fe08187c13909c5dab0";
-  };
+  patches = [
+    (fetchurl {
+      url = "https://github.com/sagemath/sage/raw/0fc563cc566ac4e9d0b713195d0a4fb138abca06/build/pkgs/bliss/patches/bliss-0.77-install.patch";
+      hash = "sha256-x2xTfR98eipLxskqHEwFBT9xciwFOFpeJWfg4IcepKQ=";
+    })
+  ];
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     unzip
+    cmake
     doxygen
   ];
 
-  preBuild = ''
-    doxygen Doxyfile
+  postBuild = ''
+    doxygen ../Doxyfile
   '';
 
-  installPhase = ''
-    mkdir -p $out/bin $out/share/doc/bliss $out/lib $out/include/bliss
-    mv bliss $out/bin
-    mv html/* COPYING* $out/share/doc/bliss
-    mv *.a $out/lib
-    mv *.h *.hh $out/include/bliss
+  postInstall = ''
+    mkdir -p $out/share/doc/bliss
+    mv html/* ../COPYING* $out/share/doc/bliss
   '';
 
   meta = {
-    description = "Open source tool for computing automorphism groups and canonical forms of graphs. It has both a command line user interface as well as C++ and C programming language APIs";
+    description = "Open source tool for computing automorphism groups and canonical forms of graphs";
     mainProgram = "bliss";
-    homepage = "http://www.tcs.hut.fi/Software/bliss/";
-    license = lib.licenses.lgpl3;
-    platforms = [
-      "i686-linux"
-      "x86_64-linux"
-      "aarch64-linux"
-    ];
+    homepage = "https://users.aalto.fi/~tjunttil/bliss/";
+    license = lib.licenses.lgpl3Only;
+    platforms = lib.platforms.all;
   };
 })

@@ -18,6 +18,6 @@ buildPythonPackage rec {
     description = "Library to parse and apply unified diffs";
     homepage = "https://github.com/conan-io/python-patch";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ HaoZeke ];
+    maintainers = [ ];
   };
 }

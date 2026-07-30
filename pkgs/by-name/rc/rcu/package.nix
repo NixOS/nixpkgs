@@ -9,22 +9,17 @@
   coreutils,
   desktopToDarwinBundle,
   gnutar,
-  libsForQt5,
+  qt6,
   makeDesktopItem,
   net-tools,
   protobuf,
-  python312Packages,
+  python3Packages,
   system-config-printer,
   wget,
 }:
-
-let
-  # shiboken2 is broken on Python > 3.12
-  python3Packages = python312Packages;
-in
 python3Packages.buildPythonApplication rec {
   pname = "rcu";
-  version = "4.0.33";
+  version = "5.1.0";
 
   pyproject = false;
 
@@ -32,8 +27,12 @@ python3Packages.buildPythonApplication rec {
     let
       src-tarball = requireFile {
         name = "rcu-${version}-source.tar.gz";
-        hash = "sha256-ezbG3qUfUyr9JEXyKTrULYCVm4hA4+nvcHPzJpdLaWY=";
+        hash = "sha256-s5cqUu2hJEHpLVUwTbNYLQCNXMjv0vFGzQb041+XEqA=";
         url = "https://www.davisr.me/projects/rcu/";
+        meta = {
+          # `requireFile` sets `lib.licenses.unfree` by default
+          inherit (meta) license;
+        };
       };
     in
     runCommand "${src-tarball.name}-unpacked" { } ''
@@ -65,15 +64,16 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     copyDesktopItems
     protobuf
-    libsForQt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     desktopToDarwinBundle
   ];
 
   buildInputs = [
-    libsForQt5.qtbase
-    libsForQt5.qtwayland
+    qt6.qtbase
+    qt6.qtwayland
+    qt6.qtsvg
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -84,7 +84,7 @@ python3Packages.buildPythonApplication rec {
     pikepdf
     pillow
     python3Packages.protobuf # otherwise it picks up protobuf from function args
-    pyside2
+    pyside6
   ];
 
   desktopItems = [
@@ -175,13 +175,6 @@ python3Packages.buildPythonApplication rec {
   passthru = {
     tests.version = testers.testVersion {
       package = rcu;
-      version =
-        let
-          versionSuffixPos = (lib.strings.stringLength rcu.version) - 1;
-        in
-        "d${lib.strings.substring 0 versionSuffixPos rcu.version}(${
-          lib.strings.substring versionSuffixPos 1 rcu.version
-        })";
     };
 
     # Python stuff automatically adds an updateScript that just fails
@@ -194,7 +187,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "http://www.davisr.me/projects/rcu/";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
-      OPNA2608
       m0streng0
     ];
     hydraPlatforms = [ ]; # requireFile used as src

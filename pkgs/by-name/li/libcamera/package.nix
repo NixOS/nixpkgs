@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
     # we can disable it here.
     "-Ddocumentation=disabled"
   ]
-  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+  ++ lib.optionals stdenv.hostPlatform.isAarch [
     # we don't have tensorflow-lite to build this
     "-Drpi-awb-nn=disabled"
   ];

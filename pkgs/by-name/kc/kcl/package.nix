@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kcl";
-  version = "0.12.3";
+  version = "0.12.7";
 
   src = fetchFromGitHub {
     owner = "kcl-lang";
     repo = "cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-vOdL+It8wY+U0Jt68KPAxMe3th0muaCXlEkuEphCVVY=";
+    hash = "sha256-HPydO/gBJkMsqR3Eb3ymKprm5x7tr9//IKT052hiDNA=";
   };
 
-  vendorHash = "sha256-NfRVgGtm8w/K0utb3/AlBfT71txpmJlOaFrdqGC8Dkg=";
+  vendorHash = "sha256-46qLRdB0epfZPuvNVYaLIAiTkI9kbAS6OM9OYC8cmmE=";
 
   subPackages = [ "cmd/kcl" ];
 
@@ -51,7 +51,7 @@ buildGoModule (finalAttrs: {
     runHook preInstallCheck
     set -o pipefail
     $out/bin/kcl --version | grep $version
-    $out/bin/kcl <(echo 'hello = "KCL"') | grep "hello: KCL"
+    $out/bin/kcl run <(echo 'hello = "KCL"') | grep "hello: KCL"
     runHook postInstallCheck
   '';
 
@@ -60,7 +60,7 @@ buildGoModule (finalAttrs: {
 
   doCheck = true;
 
-  updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Command line interface for KCL programming language";

@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hail";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromCodeberg {
     owner = "periwinkle";
     repo = "hail";
     tag = finalAttrs.version;
-    hash = "sha256-PpZfOC4M6XNcdAWd2E8ONruOq9yOTRutjKi86mmoxAo=";
+    hash = "sha256-pPhbeZKNH5iKv4y34zKRmDIwLhmogaHIJJ00sZvHzHs=";
   };
 
-  cargoHash = "sha256-+zxoICy3lrS+7fZU0yD1C4uKRj/JtDvizKla1xmz+PY=";
+  cargoHash = "sha256-TlxNHIpweWqRtoCblwUBS3RJM7vItORV8uYr4T3U37k=";
 
   nativeBuildInputs = [ pkg-config ];
 

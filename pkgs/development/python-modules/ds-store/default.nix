@@ -19,9 +19,14 @@ buildPythonPackage rec {
     hash = "sha256-UqBZ6w9y+eOQ+OdhXJReT4GwaxEbrGFvmUQMrNyBdjU=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools==80.9.0" "setuptools"
+  '';
 
-  propagatedBuildInputs = [ mac-alias ];
+  build-system = [ setuptools ];
+
+  dependencies = [ mac-alias ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

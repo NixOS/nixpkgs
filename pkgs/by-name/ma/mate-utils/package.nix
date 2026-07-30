@@ -1,9 +1,12 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   pkg-config,
+  autoconf-archive,
+  autoreconfHook,
   gettext,
+  gtk-doc,
   itstool,
   glib,
   gtk-layer-shell,
@@ -13,33 +16,43 @@
   libcanberra-gtk3,
   inkscape,
   udisks,
+  mate-common,
   mate-desktop,
   mate-panel,
   hicolor-icon-theme,
   wayland,
   wrapGAppsHook3,
+  yelp-tools,
   gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mate-utils";
-  version = "1.28.0";
+  version = "1.28.1";
   outputs = [
     "out"
     "man"
   ];
 
-  src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/mate-utils-${finalAttrs.version}.tar.xz";
-    sha256 = "WESdeg0dkA/wO3jKn36Ywh6X9H/Ca+5/8cYYNPIviNM=";
+  src = fetchFromGitHub {
+    owner = "mate-desktop";
+    repo = "mate-utils";
+    tag = "v${finalAttrs.version}";
+    fetchSubmodules = true;
+    hash = "sha256-0G25g4vpfufbvUYjCRJVBv9r5t/gnkDzWGKTf8N5MFQ=";
   };
 
   nativeBuildInputs = [
+    autoconf-archive
+    autoreconfHook
     pkg-config
     gettext
+    gtk-doc
     itstool
     inkscape
+    mate-common # mate-common.m4 macros
     wrapGAppsHook3
+    yelp-tools
   ];
 
   buildInputs = [
@@ -58,9 +71,14 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # Workaround undefined version requirements
     # https://github.com/mate-desktop/mate-utils/issues/361
-    substituteInPlace configure \
+    substituteInPlace configure.ac \
       --replace-fail '>= $GTK_LAYER_SHELL_REQUIRED_VERSION' "" \
       --replace-fail '>= $GDK_WAYLAND_REQUIRED_VERSION' ""
+
+    # Do not build gsearchtool help translations
+    # https://github.com/mate-desktop/mate-utils/issues/210
+    substituteInPlace gsearchtool/help/Makefile.am \
+      --replace 'if USE_NLS' 'if FALSE'
   '';
 
   configureFlags = [ "--enable-wayland" ];
@@ -70,7 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   passthru.updateScript = gitUpdater {
-    url = "https://git.mate-desktop.org/mate-utils";
     odd-unstable = true;
     rev-prefix = "v";
   };

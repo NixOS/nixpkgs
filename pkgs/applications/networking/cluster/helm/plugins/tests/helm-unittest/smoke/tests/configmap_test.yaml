@@ -1,0 +1,11 @@
+suite: configmap
+templates:
+  - templates/configmap.yaml
+tests:
+  - it: renders the configured value
+    set:
+      value: ok
+    asserts:
+      - equal:
+          path: data.value
+          value: ok

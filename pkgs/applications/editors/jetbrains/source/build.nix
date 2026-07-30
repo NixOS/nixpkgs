@@ -45,7 +45,7 @@ let
     };
   });
 
-  jbr = jetbrains.jdk-no-jcef;
+  jbr = jetbrains.jdk-no-jcef-21;
 
   ideaSrc = fetchFromGitHub {
     owner = "jetbrains";

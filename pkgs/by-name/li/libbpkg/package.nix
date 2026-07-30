@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libbpkg";
-  version = "0.17.0";
+  version = "0.18.0";
   outputs = [
     "out"
     "dev"
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://pkg.cppget.org/1/alpha/build2/libbpkg-${finalAttrs.version}.tar.gz";
-    hash = "sha256-4P4+uJGWB3iblYPuErJNr8c7/pS2UhN6LXr7MY2rWDY=";
+    hash = "sha256-ROaIgIql1oXOqiwz8giTcz0landh6rITyzX3WxR16L4=";
   };
 
   nativeBuildInputs = [

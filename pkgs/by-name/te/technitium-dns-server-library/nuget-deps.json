@@ -11,8 +11,8 @@
   },
   {
     "pname": "QRCoder",
-    "version": "1.7.0",
-    "hash": "sha256-sssSQBTHf1cUWNQYFEEJ8PRLs486ciDsXtrwL+ozZIU="
+    "version": "1.8.0",
+    "hash": "sha256-UvOeFFxUZ/bddmDs6IamiYGDIfgxybE/CSpPyy5DMxI="
   },
   {
     "pname": "System.Drawing.Common",

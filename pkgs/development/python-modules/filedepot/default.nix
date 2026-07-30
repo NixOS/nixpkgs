@@ -16,16 +16,16 @@
   sqlalchemy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "filedepot";
-  version = "0.11.0";
+  version = "0.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "amol-";
     repo = "depot";
-    tag = version;
-    hash = "sha256-693H/u+Wg2G9sdoUkC6DQo9WkmIlKnh8NKv3ufK/eyQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-oDnGA2prxYUkC90ewryeJXTXED59vcZGHU9D0QiopFM=";
   };
 
   build-system = [ setuptools ];
@@ -63,8 +63,8 @@ buildPythonPackage rec {
   meta = {
     description = "Toolkit for storing files and attachments in web applications";
     homepage = "https://github.com/amol-/depot";
-    changelog = "https://github.com/amol-/depot/releases/tag/${version}";
+    changelog = "https://github.com/amol-/depot/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

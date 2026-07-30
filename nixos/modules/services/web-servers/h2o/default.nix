@@ -84,8 +84,8 @@ let
         # other settings with the tests @
         # `nixos/tests/web-servers/h2o/tls-recommendations.nix`
         # & run with `nix-build -A nixosTests.h2o.tls-recommendations`
-        version = "5.7";
-        git_tag = "v5.7.1";
+        version = "6.0";
+        git_tag = "v6.0";
         guidelinesJSON =
           lib.pipe
             {
@@ -93,7 +93,7 @@ let
                 "https://ssl-config.mozilla.org/guidelines/${version}.json"
                 "https://raw.githubusercontent.com/mozilla/ssl-config-generator/refs/tags/${git_tag}/src/static/guidelines/${version}.json"
               ];
-              sha256 = "sha256:1mj2pcb1hg7q2wpgdq3ac8pc2q64wvwvwlkb9xjmdd9jm4hiyny7";
+              sha256 = "sha256-aHdzLNPo4c6jlbS+Fg3R0X5VcdPKtUky0oX5Q7Y94SQ=";
             }
             [
               pkgs.fetchurl

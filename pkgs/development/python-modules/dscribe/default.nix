@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   pybind11,
@@ -33,6 +34,15 @@ buildPythonPackage rec {
     fetchSubmodules = true; # Bundles a specific version of Eigen
     hash = "sha256-2JY24cR2ie4+4svVWC4rm3Iy6Wfg0n2vkINz032kPWc=";
   };
+
+  patches = [
+    # Fixes numpy compatibility
+    (fetchpatch {
+      name = "dscribe-numpy-compatibility";
+      url = "https://github.com/SINGROUP/dscribe/pull/162.patch";
+      hash = "sha256-mSKIerAIqdRp6b/ylqcYr8VwLCGxw5fz/5foo0ZQqgk=";
+    })
+  ];
 
   build-system = [
     pybind11

@@ -4,18 +4,19 @@
   fetchFromGitHub,
   hatchling,
   mslex,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "oslex";
-  version = "0.1.3";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "petamas";
     repo = "oslex";
-    tag = "release/v${version}";
-    hash = "sha256-OcmBtxGS1Cq2kEcxF0Il62LUGbAAcG4lieokr/nK2/4=";
+    tag = "release/v${finalAttrs.version}";
+    hash = "sha256-BTyLL3tb1P8VMGvTgoHGmwvFqf3gOyXOI+YmHuEjrKc=";
   };
 
   build-system = [
@@ -24,6 +25,10 @@ buildPythonPackage rec {
 
   dependencies = [
     mslex
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
@@ -36,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yzx9 ];
   };
-}
+})

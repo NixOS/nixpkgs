@@ -1,63 +1,62 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   fetchpatch,
+  meson,
+  ninja,
   pkg-config,
   mono,
   glib,
   pango,
   gtk3,
-  libxml2,
-  monoDLLFixer,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk-sharp";
-  version = "2.99.3";
+  version = "3.22.2";
 
-  builder = ./builder.sh;
-  src = fetchurl {
-    url = "mirror://gnome/sources/gtk-sharp/${lib.versions.majorMinor finalAttrs.version}/gtk-sharp-${finalAttrs.version}.tar.xz";
-    sha256 = "18n3l9zcldyvn4lwi8izd62307mkhz873039nl6awrv285qzah34";
+  src = fetchFromGitHub {
+    owner = "GLibSharp";
+    repo = "GtkSharp";
+    tag = finalAttrs.version;
+    hash = "sha256-I15XpW2NotOK1gExCNgJOHd6QVGW9mGkWfeHfJGdLwI=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
+
+  mesonFlags = [
+    "-Dinstall=true"
+  ];
+
   buildInputs = [
     mono
     glib
     pango
     gtk3
-    libxml2
-  ];
-
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
-
-  patches = [
-    # Fixes MONO_PROFILE_ENTER_LEAVE undeclared when compiling against newer versions of mono.
-    # @see https://github.com/mono/gtk-sharp/pull/266
-    (fetchpatch {
-      name = "MONO_PROFILE_ENTER_LEAVE.patch";
-      url = "https://github.com/mono/gtk-sharp/commit/401df51bc461de93c1a78b6a7a0d5adc63cf186c.patch";
-      sha256 = "0hrkcr5a7wkixnyp60v4d6j3arsb63h54rd30lc5ajfjb3p92kcf";
-    })
-    # @see https://github.com/mono/gtk-sharp/pull/263
-    (fetchpatch {
-      name = "disambiguate_Gtk.Range.patch";
-      url = "https://github.com/mono/gtk-sharp/commit/a00552ad68ae349e89e440dca21b86dbd6bccd30.patch";
-      sha256 = "1ylplr9g9x7ybsgrydsgr6p3g7w6i46yng1hnl3afgn4vj45rag2";
-    })
   ];
 
   dontStrip = true;
 
-  inherit monoDLLFixer;
+  patches = [
+    (fetchpatch {
+      name = "fix-unknown-variable-gdk_api_includes.patch";
+      url = "https://github.com/GLibSharp/GtkSharp/commit/a1ffef907e06303bbd2787ced5c82a8bf6a7eef1.patch";
+      hash = "sha256-w3BbnEU6ye9WsNBNiELbbGOkXYsE3SACopRF0Dbfr3k=";
+    })
+  ];
 
   passthru = {
     inherit gtk3;
   };
 
   meta = {
+    homepage = "https://github.com/GLibSharp/GtkSharp";
+    license = lib.licenses.lgpl2Only;
     platforms = lib.platforms.linux;
   };
 })

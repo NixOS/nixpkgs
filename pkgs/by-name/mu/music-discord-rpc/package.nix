@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "music-discord-rpc";
-  version = "0.6.3";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "patryk-ku";
     repo = "music-discord-rpc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HZh7rwZR/9dccNyQV2BEyQF2vtoH+L/lW4L4hu9RJTI=";
+    hash = "sha256-X2PIXP5W42ihT50BLApfULQxeUOAqDaNzn9tdxFir3A=";
   };
 
-  cargoHash = "sha256-vCqjeY07R/AuNruBYS3sc7n9kN/Y4IwvvpSooWTu7Oc=";
+  cargoHash = "sha256-ROzRR1wQQNpweFcPzRnOMKjb6HTmViVbFR/zWugSYrU=";
 
   nativeBuildInputs = [
     pkg-config

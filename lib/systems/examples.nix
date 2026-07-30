@@ -40,10 +40,9 @@ rec {
     rust.rustcTarget = "powerpc-unknown-linux-gnu";
   };
 
-  sheevaplug = {
+  armv5tel-multiplatform = {
     config = "armv5tel-unknown-linux-gnueabi";
-  }
-  // platforms.sheevaplug;
+  };
 
   raspberryPi = {
     config = "armv6l-unknown-linux-gnueabihf";
@@ -99,11 +98,6 @@ rec {
     useLLVM = true;
   };
 
-  pogoplug4 = {
-    config = "armv5tel-unknown-linux-gnueabi";
-  }
-  // platforms.pogoplug4;
-
   ben-nanonote = {
     config = "mipsel-unknown-linux-uclibc";
   }
@@ -155,7 +149,6 @@ rec {
   gnu64 = {
     config = "x86_64-unknown-linux-gnu";
   };
-  gnu64_simplekernel = gnu64 // platforms.pc_simplekernel; # see test/cross/default.nix
   gnu32 = {
     config = "i686-unknown-linux-gnu";
   };
@@ -237,6 +230,14 @@ rec {
 
   m68k = {
     config = "m68k-unknown-linux-gnu";
+  };
+
+  arc = {
+    config = "arc-unknown-linux-gnu";
+  };
+
+  sh4 = {
+    config = "sh4-unknown-linux-gnu";
   };
 
   s390 = {
@@ -327,12 +328,6 @@ rec {
 
   aarch64-darwin = {
     config = "arm64-apple-darwin";
-    xcodePlatform = "MacOSX";
-    platform = { };
-  };
-
-  x86_64-darwin = {
-    config = "x86_64-apple-darwin";
     xcodePlatform = "MacOSX";
     platform = { };
   };
@@ -448,8 +443,14 @@ rec {
   # WASM
   #
 
+  wasm32-wasip1 = {
+    config = "wasm32-unknown-wasip1";
+    useLLVM = true;
+  };
+
+  # Historical-reasons alias for wasm32-wasip1.
   wasi32 = {
-    config = "wasm32-unknown-wasi";
+    config = "wasm32-unknown-wasip1";
     useLLVM = true;
   };
 

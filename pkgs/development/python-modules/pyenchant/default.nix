@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  isPy27,
   fetchPypi,
   enchant_2,
 }:
@@ -11,7 +10,6 @@ buildPythonPackage rec {
   pname = "pyenchant";
   version = "3.3.0";
   format = "setuptools";
-  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

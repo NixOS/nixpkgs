@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gex";
-  version = "0.6.4";
+  version = "0.6.7";
 
   src = fetchFromCodeberg {
     owner = "Piturnah";
     repo = "gex";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Xer7a3UtFIv3idchI7DfZ5u6qgDW/XFWi5ihtcREXqo=";
+    hash = "sha256-L8AHJ7h2lNx04nJ//2DjH3CdnuQGMqcta0+XzJjRNb4=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -33,11 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     LIBGIT2_NO_VENDOR = 1;
   };
 
-  cargoPatches = [
-    ./patch-libgit2.patch
-  ];
-
-  cargoHash = "sha256-4ejtMCuJOwT5bJQZaPQ1OjrB5O70we77yEXk9RmhywE=";
+  cargoHash = "sha256-FdxBYDgDxpZqqYzjX+lWP+uP2jUD3Y5Rzyx+JasAgIY=";
 
   meta = {
     description = "Git Explorer: cross-platform git workflow improvement tool inspired by Magit";

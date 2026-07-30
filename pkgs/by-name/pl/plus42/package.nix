@@ -11,11 +11,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "plus42";
-  version = "1.3.13";
+  version = "1.3.15";
 
   src = fetchurl {
     url = "https://thomasokken.com/plus42/upstream/plus42-upstream-${finalAttrs.version}.tgz";
-    hash = "sha256-I5SAR6vEufzT2Cgs4RQk8AWDZWm+QOLtHRqaED2DQtA=";
+    hash = "sha256-qJteqxEDVdqgPdIQCOsNvdPS7S7pq/nVfavfXdOrnAQ=";
   };
 
   nativeBuildInputs = [
@@ -112,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://thomasokken.com/plus42/";
     changelog = "https://thomasokken.com/plus42/history.html";
     description = "Software clone of the HP-42S calculator (enhanced version)";
-    license = with lib.licenses; [ gpl2Only ];
+    license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ elfenermarcell ];
     mainProgram = "plus42dec";
     platforms = with lib.platforms; unix;

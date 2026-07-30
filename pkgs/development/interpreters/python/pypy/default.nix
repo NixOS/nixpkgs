@@ -390,15 +390,14 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://www.pypy.org/";
-    changelog = "https://doc.pypy.org/en/stable/release-v${version}.html";
+    changelog = "https://doc.pypy.org/release-v${version}.html";
     description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
-    mainProgram = "pypy";
+    mainProgram = executable;
     license = lib.licenses.mit;
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
     broken = optimizationLevel == "0"; # generates invalid code
     maintainers = with lib.maintainers; [

@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "View and analyse contents of music audio files";
     homepage = "https://www.sonicvisualiser.org/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ marcweber ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "sonic-visualiser";
   };

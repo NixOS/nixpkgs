@@ -40,11 +40,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nfs-utils";
-  version = "2.8.6";
+  version = "2.9.1";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/nfs-utils/${finalAttrs.version}/nfs-utils-${finalAttrs.version}.tar.xz";
-    hash = "sha256-K9ezToCafv8vS8X8X9luvNZqVFi0caJwy9LcFpsBFVA=";
+    hash = "sha256-MChGNDv1Cfj4hMI729D+hTt/fLtlcgYKkIInnROyGiw=";
   };
 
   # libnfsidmap is built together with nfs-utils from the same source,

@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://bitbucket.org/piciji/denise";
     downloadPage = "https://sourceforge.net/projects/deniseemu/";
     description = "C64 / Amiga Emulator";
-    license = [ lib.licenses.gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.matthewcroughan ];
     platforms = lib.platforms.linux;
   };

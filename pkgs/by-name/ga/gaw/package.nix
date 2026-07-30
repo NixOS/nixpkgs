@@ -78,6 +78,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ gtk3 ];
 
+  # K&R-style function declarations break under gcc 15's C23 default.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   meta = {
     description = "Gtk Analog Wave viewer";
     mainProgram = "gaw";

@@ -108,11 +108,12 @@ stdenv.mkDerivation (
         ++ [ "runHook postConfigure" ]
       ));
 
-    env = args.env or { } // {
+    env = {
       CRFLAGS = lib.concatStringsSep " " defaultOptions;
 
       PREFIX = placeholder "out";
-    };
+    }
+    // (args.env or { });
 
     inherit enableParallelBuilding;
     strictDeps = true;
@@ -197,16 +198,21 @@ stdenv.mkDerivation (
 
     installCheckPhase =
       args.installCheckPhase or ''
+        runHook preInstallCheck
+
         for f in $out/bin/*; do
-          if [ $f == $out/bin/*.dwarf ]; then
+          if [[ $f == *.dwarf ]]; then
             continue
           fi
           $f --help > /dev/null
         done
+
+        runHook postInstallCheck
       '';
 
-    meta = args.meta or { } // {
-      platforms = args.meta.platforms or crystal.meta.platforms;
-    };
+    meta = {
+      platforms = crystal.meta.platforms;
+    }
+    // (args.meta or { });
   }
 )

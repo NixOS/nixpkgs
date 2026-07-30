@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kiwix";
-  version = "2.4.1";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "kiwix";
     repo = "kiwix-desktop";
     rev = version;
-    hash = "sha256-B3RcYr/b8pZTJV35BWuqmWbq+C2WkkcwBR0oNaUXPRw=";
+    hash = "sha256-oF2bXmb6oBXNUj91WtuDTWGrwB5JCuzBtuhfDBHIIKA=";
   };
 
   patches = [

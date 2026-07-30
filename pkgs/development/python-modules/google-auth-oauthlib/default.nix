@@ -7,21 +7,23 @@
   google-auth,
   requests-oauthlib,
   click,
-  mock,
   pytestCheckHook,
+  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "google-auth-oauthlib";
-  version = "1.2.4";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
-    repo = "google-auth-library-python-oauthlib";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-itnkKMHTpJNjMVvpXYq9V/ybaE/Ekt3uED1IoVebRcg=";
+    repo = "google-cloud-python";
+    tag = "google-auth-oauthlib-v${finalAttrs.version}";
+    hash = "sha256-KJviH4dofYSvZu9S7VMBSnGjH66xMUEvhcmZN7GJ4Iw=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/packages/google-auth-oauthlib";
 
   build-system = [ setuptools ];
 
@@ -35,7 +37,6 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeCheckInputs = [
-    mock
     pytestCheckHook
   ]
   ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
@@ -53,10 +54,20 @@ buildPythonPackage (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
+  # The ATOM feed loses this update most of the time due to a high update volume,
+  # so query github directly.
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "google-auth-oauthlib-v([0-9.]+)"
+      "--use-github-releases"
+    ];
+  };
+
   meta = {
     description = "Google Authentication Library: oauthlib integration";
-    homepage = "https://github.com/GoogleCloudPlatform/google-auth-library-python-oauthlib";
-    changelog = "https://github.com/googleapis/google-auth-library-python-oauthlib/blob/v${finalAttrs.version}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-auth-oauthlib";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/${finalAttrs.src.tag}/packages/google-auth-oauthlib/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       sarahec

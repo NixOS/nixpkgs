@@ -5,13 +5,13 @@
 }:
 mkLibretroCore {
   core = "mednafen-lynx";
-  version = "0-unstable-2025-05-10";
+  version = "0-unstable-2026-04-20";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "beetle-lynx-libretro";
-    rev = "efd1797c7aa5a83c354507b1b61ac24222ebaa58";
-    hash = "sha256-K+VZYqNl3G1eE7dSlfmZFCoS5bKIyGSNNu2i737bKnM=";
+    rev = "fcdefcfb3c11d6d2e71be076a5d3df2e88ab73ed";
+    hash = "sha256-yucZWgJiqlfsgd/gQSPxSdZjt+9UfJe1Jq4vMLypDhg=";
   };
 
   makefile = "Makefile";

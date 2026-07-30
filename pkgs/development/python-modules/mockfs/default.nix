@@ -20,10 +20,6 @@ buildPythonPackage rec {
     hash = "sha256-fTN9HLzlVCn0O8nYy4UUM+JIsYJ3qDPw3h41yhcilJ8=";
   };
 
-  postPatch = ''
-    sed -i '/addopts/d' pytest.ini
-  '';
-
   nativeBuildInputs = [
     setuptools
     setuptools-scm

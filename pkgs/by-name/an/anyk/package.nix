@@ -36,7 +36,7 @@ let
 
     src = lib.sources.sourceFilesBySuffices ./. [ "pom.xml" ];
 
-    mvnHash = "sha256-4keHPzS8pbIIwODmBUMofJt27n5WqYh+IGqE6d9od7k=";
+    mvnHash = "sha256-6pezqcTIPR5NYFQUmLZ5Y3TOd+XRcB/eRmNSAEoBmls=";
 
     installPhase = ''
       mkdir -p $out/share/java

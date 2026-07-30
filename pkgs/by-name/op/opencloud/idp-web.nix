@@ -2,62 +2,45 @@
   stdenvNoCC,
   lib,
   opencloud,
-  applyPatches,
-  fetchpatch,
-  pnpm_10,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
+  pnpmBuildHook,
   nodejs,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencloud-idp-web";
 
-  inherit (opencloud) version;
-
-  src = applyPatches {
-    src = opencloud.src;
-    patches = [
-      # Fixes broken kopano tarball, remove in next version
-      (fetchpatch {
-        url = "https://github.com/opencloud-eu/opencloud/commit/212846f2f4e23e89ed675e5a689d87ba1de55b70.patch";
-        hash = "sha256-i+fkWTY4nrZ5fVGlQhhamxy9yrBL9OtDdm7CfV13oak=";
-      })
-    ];
-  };
+  inherit (opencloud) src version;
 
   pnpmRoot = "services/idp";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
+    pnpm = pnpm_11;
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.pnpmRoot}";
-    fetcherVersion = 3;
-    hash = "sha256-W5odz//dONpBg4eRQQoVrBMVsEQVkkP89hzMdIXxG7w=";
+    fetcherVersion = 4;
+    hash = "sha256-buDYvRw4NTLxFSdDRZHiuXMVe9fJbe2iu5hr+zh6KLs=";
   };
 
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_10
+    pnpmBuildHook
+    pnpm_11
   ];
 
-  buildPhase = ''
-    runHook preBuild
-
-    cd $pnpmRoot
-    pnpm build
-    mkdir -p assets/identifier/static
-    cp -v src/images/favicon.svg assets/identifier/static/favicon.svg
-    cp -v src/images/icon-lilac.svg assets/identifier/static/icon-lilac.svg
-
-    runHook postBuild
+  postBuild = ''
+    mkdir -p services/idp/assets/identifier/static
+    cp -v services/idp/src/images/favicon.svg services/idp/assets/identifier/static/favicon.svg
+    cp -v services/idp/src/images/icon-lilac.svg services/idp/assets/identifier/static/icon-lilac.svg
   '';
 
   installPhase = ''
     runHook preInstall
 
     mkdir $out
-    cp -r assets $out
+    cp -r services/idp/assets $out
 
     runHook postInstall
   '';

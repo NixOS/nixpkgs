@@ -2,11 +2,13 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
 
   # build-system
   hatchling,
 
   # dependencies
+  aiofiles,
   aiosqlite,
   appdirs,
   chromadb,
@@ -54,14 +56,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "crewai";
-  version = "1.10.0";
+  version = "1.14.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "crewAIInc";
     repo = "crewAI";
     tag = finalAttrs.version;
-    hash = "sha256-oHDGn77rmjKKH4t+5xSy+r6m/GaI+q6RDwrTpWfIrxs=";
+    hash = "sha256-QrJM2oVoqos8GMhrn9E6i1m1O1guP/q+51b8NYtJA5Q=";
   };
 
   postPatch = ''
@@ -82,6 +84,7 @@ buildPythonPackage (finalAttrs: {
   build-system = [ hatchling ];
 
   pythonRelaxDeps = [
+    "aiofiles"
     "chromadb"
     "click"
     "json-repair"
@@ -107,6 +110,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
+    aiofiles
     aiosqlite
     appdirs
     chromadb
@@ -201,7 +205,10 @@ buildPythonPackage (finalAttrs: {
     "test_agent_execute_task_with_context"
     "test_agent_execute_task_with_custom_llm"
     "test_agent_execute_task_with_ollama"
+    "test_agent_execute_task_with_planning"
+    "test_agent_execute_task_with_planning_refine"
     "test_agent_execute_task_with_tool"
+    "test_agent_execute_task_without_planning"
     "test_agent_execution"
     "test_agent_execution_with_specific_tools"
     "test_agent_execution_with_tools"
@@ -209,6 +216,12 @@ buildPythonPackage (finalAttrs: {
     "test_agent_from_repository_override_attributes"
     "test_agent_from_repository_with_invalid_tools"
     "test_agent_function_calling_llm"
+    "test_agent_kickoff_multi_step_task_with_planning"
+    "test_agent_kickoff_with_planning"
+    "test_agent_kickoff_with_planning_disabled"
+    "test_agent_kickoff_with_planning_stores_plan_in_state"
+    "test_agent_kickoff_without_planning"
+    "test_agent_kickoff_without_planning_skips_plan_generation"
     "test_agent_knowledege_with_crewai_knowledge"
     "test_agent_moved_on_after_max_iterations"
     "test_agent_powered_by_new_o_model_family_that_allows_skipping_tool"
@@ -231,16 +244,25 @@ buildPythonPackage (finalAttrs: {
     "test_disabling_cache_for_agent"
     "test_do_not_allow_crewai_trigger_context_for_first_task_hierarchical"
     "test_ensure_first_task_allow_crewai_trigger_context_is_false_does_not_inject"
+    "test_executor_state_contains_plan_after_planning"
     "test_first_task_auto_inject_trigger"
     "test_first_time_user_trace_collection_user_accepts"
     "test_first_time_user_trace_collection_with_timeout"
     "test_first_time_user_trace_consolidation_logic"
     "test_get_knowledge_search_query"
     "test_handle_context_length_exceeds_limit_cli_no"
+    "test_kickoff_no_response_format_returns_raw_text"
+    "test_kickoff_response_format_with_planning_and_tools"
+    "test_kickoff_response_format_without_planning"
     "test_llm_call"
     "test_llm_call_with_all_attributes"
     "test_llm_call_with_ollama_llama3"
     "test_logging_tool_usage"
+    "test_planning_creates_minimal_steps_for_multi_step_task"
+    "test_planning_disabled_skips_planning"
+    "test_planning_handles_sequential_dependency_task"
+    "test_reasoning_effort_high_runs_full_observation_pipeline"
+    "test_reasoning_effort_low_skips_decide_and_replan"
     "test_task_allow_crewai_trigger_context"
     "test_task_allow_crewai_trigger_context_no_payload"
     "test_task_without_allow_crewai_trigger_context"
@@ -268,6 +290,8 @@ buildPythonPackage (finalAttrs: {
     "test_docling_source"
     "test_multiple_docling_sources"
     "test_excel_knowledge_source"
+    # azure-ai-inference
+    "test_azure_research_workflow_generates_steps"
 
     # Test telemetry
     "test_telemetry_fails_due_connect_timeout"
@@ -324,24 +348,27 @@ buildPythonPackage (finalAttrs: {
     "test_create_crew"
 
     # Tests LLM - require API keys
-    "test_llm_callback_replacement"
+    "test_anthropic_research_workflow_generates_steps"
     "test_gemini_models"
-    "test_llm_call_with_message_list"
-    "test_gpt_4_1"
-    "test_o3_mini_reasoning_effort_low"
-    "test_handle_streaming_tool_calls"
-    "test_llm_call_with_string_input"
-    "test_llm_call_with_tool_and_string_input"
-    "test_llm_call_with_string_input_and_callbacks"
-    "test_llm_call_when_stop_is_unsupported"
-    "test_handle_streaming_tool_calls_with_error"
-    "test_o3_mini_reasoning_effort_medium"
-    "test_llm_call_with_tool_and_message_list"
+    "test_gemini_research_workflow_generates_steps"
     "test_gemma3"
-    "test_llm_call_when_stop_is_unsupported_when_additional_drop_params_is_provided"
-    "test_o3_mini_reasoning_effort_high"
+    "test_gpt_4_1"
+    "test_handle_streaming_tool_calls"
     "test_handle_streaming_tool_calls_no_available_functions"
     "test_handle_streaming_tool_calls_no_tools"
+    "test_handle_streaming_tool_calls_with_error"
+    "test_llm_call_when_stop_is_unsupported"
+    "test_llm_call_when_stop_is_unsupported_when_additional_drop_params_is_provided"
+    "test_llm_call_with_message_list"
+    "test_llm_call_with_string_input"
+    "test_llm_call_with_string_input_and_callbacks"
+    "test_llm_call_with_tool_and_message_list"
+    "test_llm_call_with_tool_and_string_input"
+    "test_llm_callback_replacement"
+    "test_o3_mini_reasoning_effort_high"
+    "test_o3_mini_reasoning_effort_low"
+    "test_o3_mini_reasoning_effort_medium"
+    "test_openai_research_workflow_generates_steps"
 
     # Test main - require git
     "test_publish_when_not_in_sync"
@@ -508,6 +535,9 @@ buildPythonPackage (finalAttrs: {
     "test_azure_agent_with_native_tool_calling"
     "test_azure_agent_kickoff_with_tools_mocked"
     "test_azure_streaming_emits_tool_call_events"
+
+    # Tests time dependent
+    "test_older_than"
   ];
 
   nativeCheckInputs = [
@@ -526,9 +556,16 @@ buildPythonPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--override-ini=addopts="
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^([0-9]+\\.[0-9]+\\.[0-9]+)$"
+    ];
+  };
 
   meta = {
     description = "Framework for orchestrating role-playing, autonomous AI agents";

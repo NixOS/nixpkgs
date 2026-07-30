@@ -6,8 +6,8 @@
 
 skawarePackages.buildPackage {
   pname = "mdevd";
-  version = "0.1.8.1";
-  sha256 = "sha256-k9K7pymf87G58kmSjC6E4jpa89gp69lnfqRFNcWFqoI=";
+  version = "0.1.8.2";
+  sha256 = "sha256-zhrgFJtqV6NPYIIY/WGBqmqmgTXKwvTZMbW0F7By4kQ=";
 
   description = "mdev-compatible Linux hotplug manager daemon";
   platforms = lib.platforms.linux;

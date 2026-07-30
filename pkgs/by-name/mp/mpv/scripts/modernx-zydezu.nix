@@ -4,18 +4,19 @@
   fetchFromGitHub,
   installFonts,
   makeFontsConf,
+  mpvScripts,
   nix-update-script,
 }:
 buildLua (finalAttrs: {
   pname = "modernx-zydezu";
-  version = "0.4.5";
+  version = "0.4.6";
 
   scriptPath = "modernx.lua";
   src = fetchFromGitHub {
     owner = "zydezu";
     repo = "ModernX";
     rev = finalAttrs.version;
-    hash = "sha256-a+StfEYQwt5NuELvanvZllrD2RQ0g9JBpCznMdSDM5Y=";
+    hash = "sha256-jK35LmihSCF789AJhKlySg6fXurAe5uuHNsgFjt0+iY=";
   };
 
   nativeBuildInputs = [ installFonts ];
@@ -29,6 +30,9 @@ buildLua (finalAttrs: {
   ];
 
   passthru.updateScript = nix-update-script { };
+
+  # FIXME?: collides with mpvScripts.modernx
+  passthru.dontCollideCheck = lib.hasAttr "modernx" mpvScripts;
 
   meta = {
     description = "Modern OSC UI replacement for MPV that retains the functionality of the default OSC";

@@ -5,13 +5,13 @@
 }:
 mkLibretroCore {
   core = "mednafen-supafaust";
-  version = "0-unstable-2024-09-30";
+  version = "0-unstable-2026-07-22";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "supafaust";
-    rev = "e25f66765938d33f9ad5850e8d6cd597e55b7299";
-    hash = "sha256-ZgOXHhEHt54J2B1q6uA8v6uOK53g7idJlgoC4guTGow=";
+    rev = "d6187e5337e6c2646d003db3ab1936727ca75301";
+    hash = "sha256-r9sZGTpJo+jiEDZnzSgcwzBerI4BHL2p/WvJQpdW31g=";
   };
 
   makefile = "Makefile";

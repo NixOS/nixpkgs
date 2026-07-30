@@ -43,7 +43,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   dependencies = with python3Packages; [
     babel
     psutil
-    xlib
+    python-xlib
     pygobject3
     dbus-python
     packaging

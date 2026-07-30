@@ -138,10 +138,6 @@ in
     #
     # TODO(winter): Move to qemu-vm? Trying it here for now as a
     # low impact change that'll probably improve people's experience.
-    #
-    # (I have no clue what is going on in https://github.com/nix-darwin/nix-darwin/issues/1081
-    # though, as this fix would only apply to one person in that thread... hopefully someone
-    # comes across with a reproducer if this doesn't do it.)
     system.systemBuilderArgs.allowSubstitutes = true;
 
     nix.settings = {
@@ -218,31 +214,41 @@ in
           KEYS="$(${hostPkgs.nix}/bin/nix-store --add "$KEYS")" ${lib.getExe config.system.build.vm}
         '';
 
-        script = hostPkgs.writeShellScriptBin "create-builder" ''
+      in
+      hostPkgs.writeTextFile {
+        name = "create-builder";
+        executable = true;
+        destination = "/bin/create-builder";
+        text = ''
+          #!${hostPkgs.runtimeShell}
           set -euo pipefail
           export KEYS="''${KEYS:-./keys}"
           ${lib.getExe add-keys}
           ${lib.getExe run-builder}
         '';
-
-      in
-      script.overrideAttrs (old: {
-        pos = __curPos; # sets meta.position to point here; see script binding above for package definition
-        meta = (old.meta or { }) // {
+        checkPhase = ''
+          ${hostPkgs.stdenv.shellDryRun} "$target"
+        '';
+        meta = {
+          mainProgram = "create-builder";
+          description = "Create a Linux builder VM for macOS";
           platforms = lib.platforms.darwin;
         };
-        passthru = (old.passthru or { }) // {
+        passthru = {
           # Let users in the repl inspect the config
           nixosConfig = config;
           nixosOptions = options;
 
           inherit add-keys run-builder;
         };
-      });
+      };
 
     system = {
       # To prevent gratuitous rebuilds on each change to Nixpkgs
       nixos.revision = null;
+
+      # To prevent channels and Git checkouts resulting in different system drvs
+      nixos.versionSuffix = "";
 
       # to be updated by module maintainers, see nixpkgs#325610
       stateVersion = "24.05";

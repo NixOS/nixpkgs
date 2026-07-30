@@ -7,19 +7,19 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "diun";
-  version = "4.31.0";
+  version = "4.33.0";
 
   src = fetchFromGitHub {
     owner = "crazy-max";
     repo = "diun";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-H05yZSH2rUrwM+ZR/PDCxXmrDkZ/Gd4RrpywGk5eW2A=";
+    hash = "sha256-EVIT6au5B3wzb5xTc2o/sY7p3+tT5lWjlzQX5HdQNkA=";
   };
   vendorHash = null;
 
   # upstream disable CGO in release build
   # https://github.com/crazy-max/diun/blob/76c0fe99212adc58d6a3433bbcde1ffa9fb879c4/Dockerfile#L11
-  env.CGO_ENABLED = false;
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"

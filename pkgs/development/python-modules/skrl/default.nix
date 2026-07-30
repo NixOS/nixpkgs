@@ -17,6 +17,7 @@
 
   # tests
   flax,
+  hypothesis,
   jax,
   optax,
   pettingzoo,
@@ -29,6 +30,7 @@ buildPythonPackage (finalAttrs: {
   pname = "skrl";
   version = "1.4.3";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Toni-SM";
@@ -36,6 +38,23 @@ buildPythonPackage (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-5lkoYAmMIWqK3+E3WxXMWS9zal2DhZkfl30EkrHKpdI=";
   };
+
+  # Fix Jax 0.10.0 compatibility
+  # TypeError: clip() got an unexpected keyword argument 'a_min'
+  postPatch = ''
+    substituteInPlace skrl/models/jax/gaussian.py \
+      --replace-fail \
+        "jnp.clip(log_std, a_min=log_std_min, a_max=log_std_max)" \
+        "jnp.clip(log_std, min=log_std_min, max=log_std_max)" \
+      --replace-fail \
+        "jnp.clip(actions, a_min=clip_actions_min, a_max=clip_actions_max)" \
+        "jnp.clip(actions, min=clip_actions_min, max=clip_actions_max)"
+
+    substituteInPlace skrl/models/jax/deterministic.py \
+      --replace-fail \
+        "jnp.clip(actions, a_min=self._d_clip_actions_min, a_max=self._d_clip_actions_max)" \
+        "jnp.clip(actions, min=self._d_clip_actions_min, max=self._d_clip_actions_max)"
+  '';
 
   build-system = [ setuptools ];
 
@@ -53,6 +72,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     flax
+    hypothesis
     jax
     optax
     pettingzoo

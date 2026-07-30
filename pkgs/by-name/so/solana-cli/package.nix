@@ -3,6 +3,7 @@
   fetchFromGitHub,
   lib,
   rustPlatform,
+  darwin,
   udev,
   protobuf,
   installShellFiles,
@@ -12,20 +13,15 @@
   versionCheckHook,
   clang,
   libclang,
+  libusb1,
   rocksdb,
-  # Taken from https://github.com/anza-xyz/agave/blob/master/scripts/cargo-install-all.sh#L84
+  # Taken from https://github.com/anza-xyz/agave/blob/master/scripts/agave-build-lists.sh
   solanaPkgs ? [
-    "cargo-build-sbf"
-    "cargo-test-sbf"
     "solana"
-    "solana-bench-tps"
     "solana-faucet"
     "solana-gossip"
     "agave-install"
     "solana-keygen"
-    "agave-ledger-tool"
-    "solana-dos"
-    "solana-net-shaper"
     "agave-validator"
     "solana-test-validator"
     "agave-watchtower"
@@ -37,8 +33,8 @@
   ],
 }:
 let
-  version = "3.0.12";
-  hash = "sha256-Zubu7cTSJrJFSuguCo3msdas/QshFpo1+T6DVQyqrhY=";
+  version = "4.0.3";
+  hash = "sha256-lbkuywAuLeTIoe/5zbKmxCbnNcEx96BiX6ftNJHutZE=";
 in
 rustPlatform.buildRustPackage rec {
   pname = "solana-cli";
@@ -51,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     inherit hash;
   };
 
-  cargoHash = "sha256-qnZbFkyzE2hdy/ynZQZmCs5kCeTUMci9f/pVKID/mRQ=";
+  cargoHash = "sha256-lQl8q0xMpXOmUirqL3Eyb4JcmYGSZK6pPMxQHOav9Zk=";
 
   strictDeps = true;
   cargoBuildFlags = map (n: "--bin=${n}") solanaPkgs;
@@ -84,11 +80,14 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
     protobuf
     pkg-config
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
+
   buildInputs = [
     openssl
     clang
     libclang
+    libusb1
     rustPlatform.bindgenHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ];

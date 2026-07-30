@@ -6,16 +6,23 @@
   fetchFromGitHub,
   fetchpatch,
   gcc,
-  glibcLocales,
+  glibcLocalesUtf8,
   gtk3-x11,
   gtk3,
   lib,
-  mono,
-  nix-update-script,
-  python3Packages,
+  python313Packages,
+  stdenv,
 }:
 
 let
+  hostArch =
+    if stdenv.hostPlatform.isx86 then
+      "i386"
+    else if stdenv.hostPlatform.isAarch64 then
+      "aarch64"
+    else
+      throw "renode: unsupported host architecture ${stdenv.hostPlatform.system}";
+
   resources = fetchFromGitHub {
     owner = "renode";
     repo = "renode-resources";
@@ -24,7 +31,7 @@ let
   };
 
   pythonLibs =
-    with python3Packages;
+    with python313Packages;
     makePythonPath [
       construct
       psutil
@@ -38,7 +45,8 @@ let
       # from tools/execution_tracer/requirements.txt
       pyelftools
 
-      (robotframework.overrideDerivation (oldAttrs: {
+      (robotframework.overridePythonAttrs (oldAttrs: {
+        version = "6.1";
         src = fetchFromGitHub {
           owner = "robotframework";
           repo = "robotframework";
@@ -59,25 +67,32 @@ let
 in
 buildDotnetModule rec {
   pname = "renode";
-  version = "1.16.0";
+  version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "renode";
     repo = "renode";
-    rev = "20ad06d9379997829df309c5724be94ba4effedd";
-    hash = "sha256-I/W3OAzHCN8rEIlDyBwI1ZDvKfHYYBDiqE9XkWHxo7o=";
+    rev = "d66b0c2aa3d420408eccecfd1d3bab0fd702a6db";
+    hash = "sha256-HQaMo3qsZvD4uBIsGzyKpTO7gaxjVvurI91pm1UXvjc=";
     fetchSubmodules = true;
   };
 
+  disallowedReferences = [
+    cmake
+    gcc
+    dotnet-sdk
+  ];
+
   projectFile = "Renode_NET.sln";
 
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   nugetDeps = ./deps.json;
 
   patches = [ ./renode-test.patch ];
 
-  dotnetFlags = [ "-p:TargetFrameworks=net9.0" ];
+  dotnetFlags = [ "-p:TargetFrameworks=net10.0" ];
 
   prePatch = ''
     sed -i 's/AssemblyVersion("%VERSION%.*")/AssemblyVersion("${version}.0")/g' src/Renode/Properties/AssemblyInfo.template
@@ -101,17 +116,12 @@ buildDotnetModule rec {
     sed -i 's/AssemblyVersion("1.0.*")/AssemblyVersion("1.0.0.0")/g' lib/AntShell/AntShell/Properties/AssemblyInfo.cs lib/CxxDemangler/CxxDemangler/Properties/AssemblyInfo.cs
   '';
 
-  # https://github.com/NixOS/nixpkgs/issues/38991
-  # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
-  env.LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
-
   nativeBuildInputs = [
     cmake
     gcc
   ];
   runtimeDeps = [
     gtk3
-    mono
   ];
 
   dontUseCmakeConfigure = true;
@@ -151,7 +161,7 @@ buildDotnetModule rec {
           CMAKE_CONF_FLAGS+=" -DTARGET_WORDS_BIGENDIAN=1"
       fi
 
-      cmake $CMAKE_CONF_FLAGS -DHOST_ARCH=i386 $SOURCE
+      cmake $CMAKE_CONF_FLAGS -DHOST_ARCH=${hostArch} $SOURCE
       cmake --build . -j$NIX_BUILD_CORES
       popd
     done
@@ -160,18 +170,20 @@ buildDotnetModule rec {
     ln -s $out/lib/*.so src/Infrastructure/src/Emulator/Cores/bin/Release/lib
   '';
 
-  dotnetInstallFlags = [ "-p:TargetFramework=net9.0" ];
+  dotnetInstallFlags = [ "-p:TargetFramework=net10.0" ];
 
   postInstall = ''
+    rm -rf build output/properties.csproj
+    find . -type d -name obj -exec rm -rf {} +
     mkdir -p $out/lib/renode
     mv * .renode-root $out/lib/renode
 
     makeWrapper "$out/lib/renode/renode-test" "$out/bin/renode-test" \
-      --prefix PATH : "$out/lib/renode:${lib.makeBinPath [ dotnet-sdk ]}" \
+      --prefix PATH : "$out/lib/renode:${lib.makeBinPath [ dotnet-runtime ]}" \
       --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules" \
       --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ gtk3-x11 ]}" \
       --prefix PYTHONPATH : "${pythonLibs}" \
-      --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive" \
+      --set LOCALE_ARCHIVE "${glibcLocalesUtf8}/lib/locale/locale-archive"
   '';
 
   postFixup = ''
@@ -180,7 +192,7 @@ buildDotnetModule rec {
 
   executables = [ "Renode" ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     changelog = "https://github.com/renode/renode/blob/${version}/CHANGELOG.rst";
@@ -192,6 +204,9 @@ buildDotnetModule rec {
       otavio
       znaniye
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 }

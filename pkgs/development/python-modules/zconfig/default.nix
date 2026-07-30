@@ -23,6 +23,11 @@ buildPythonPackage rec {
 
   patches = lib.optional stdenv.hostPlatform.isMusl ./remove-setlocale-test.patch;
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools >= 78.1.1,< 81" setuptools
+  '';
+
   build-system = [ setuptools ];
 
   buildInputs = [

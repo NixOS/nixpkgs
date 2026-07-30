@@ -4,6 +4,7 @@
   fetchFromGitHub,
   bundlerEnv,
   ruby_3_4,
+  versionCheckHook,
   withMongo ? false,
   withRchardet ? false,
 }:
@@ -52,13 +53,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "whatweb";
-  version = "0.6.2";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "urbanadventurer";
     repo = "whatweb";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-EFQ4RHI1+kmlz/Bm+9KXbmY0iEBJnKfdQL5YGDWCfJQ=";
+    sha256 = "sha256-0oU3DAAwJRGUrrzxZUm8TZ1dlsufzTlonkgdVYsh4mQ=";
   };
 
   prePatch = ''
@@ -70,6 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ gems ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   installPhase = ''
     runHook preInstall
 
@@ -77,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm $out/bin/whatweb
     cat << EOF >> $out/bin/whatweb
     #!/bin/sh -e
-    export GEM_PATH="${gems}/lib/ruby/gems/3.3.0"
+    export GEM_PATH="${gems}/lib/ruby/gems/3.4.0"
     export RUBYOPT="-W0"
     exec ${ruby_3_4}/bin/ruby "$raw" "\$@"
     EOF
@@ -90,6 +93,8 @@ stdenv.mkDerivation (finalAttrs: {
     withMongo = withMongo;
     withRchardet = withRchardet;
   };
+
+  doInstallCheck = true;
 
   meta = {
     description = "Next generation web scanner";

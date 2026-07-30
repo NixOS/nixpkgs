@@ -102,28 +102,6 @@ let
           }
         ];
       };
-      x86_64-darwin = {
-        variantSuffix = "";
-        src = {
-          url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
-          sha256 = "de7baacfb1513ab0e4ccf8911045cceee84bc8a4e39b89bd975ed3135e5f7d96";
-        };
-        exePathForLibraryCheck = null; # we don't have a library check for darwin yet
-        archSpecificLibraries = [
-          {
-            nixPackage = gmp;
-            fileToCheckFor = null;
-          }
-          {
-            nixPackage = ncurses6;
-            fileToCheckFor = null;
-          }
-          {
-            nixPackage = libiconv;
-            fileToCheckFor = null;
-          }
-        ];
-      };
       aarch64-darwin = {
         variantSuffix = "";
         src = {
@@ -320,6 +298,18 @@ stdenv.mkDerivation {
 
   # fix for `configure: error: Your linker is affected by binutils #16177`
   preConfigure = lib.optionalString stdenv.targetPlatform.isAarch32 "LD=ld.gold";
+
+  # Patch shebangs in mk/ scripts that are executed during install.
+  # Without this, they may invoke the host /bin/sh, which is impurely
+  # mounted into the build environment by Nix.
+  #
+  # When /bin/sh is pulled from the host, its entire runtime closure is used.
+  # If that shell was built against an older glibc than the one in the sandbox,
+  # LD_LIBRARY_PATH can cause it to load incompatible libraries, resulting in
+  # glibc version mismatches
+  postConfigure = ''
+    patchShebangs mk/
+  '';
 
   # GHC has a patched config.sub and bindists' platforms should always work
   dontUpdateAutotoolsGnuConfigScripts = true;

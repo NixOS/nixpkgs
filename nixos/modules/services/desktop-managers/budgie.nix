@@ -61,7 +61,7 @@ let
   notExcluded = pkg: utils.disablePackageByName pkg config.environment.budgie.excludePackages;
 in
 {
-  meta.maintainers = lib.teams.budgie.members;
+  meta.teams = [ lib.teams.budgie ];
 
   imports = [
     (lib.mkRenamedOptionModule
@@ -243,6 +243,8 @@ in
 
     # Required by Budgie's Polkit Dialog.
     security.polkit.enable = mkDefault true;
+    # Required by Budige's Control Center and Desktop
+    security.polkit.enablePkexecWrapper = mkDefault true;
 
     # Required by Budgie Panel plugins and/or Budgie Control Center panels.
     networking.networkmanager.enable = mkDefault true; # for BCC's Network panel.

@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fdkaac";
-  version = "1.0.6";
+  version = "1.0.8";
 
   src = fetchFromGitHub {
     owner = "nu774";
     repo = "fdkaac";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-nVVeYk7t4+n/BsOKs744stsvgJd+zNnbASk3bAgFTpk=";
+    hash = "sha256-8fI3mbHPb6E5YXl4RaqU8P0ALldkOh+RKfecDX87m/s=";
   };
 
   nativeBuildInputs = [

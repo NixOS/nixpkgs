@@ -26,12 +26,12 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  dependencies = lib.optionals (stdenv.isDarwin) [
+  dependencies = lib.optionals (stdenv.hostPlatform.isDarwin) [
     pyobjc-framework-Cocoa
     cython
   ];
 
-  postPatch = lib.optionalString (stdenv.isLinux) ''
+  postPatch = lib.optionalString (stdenv.hostPlatform.isLinux) ''
     substituteInPlace screeninfo/enumerators/xinerama.py \
       --replace 'load_library("X11")' 'ctypes.cdll.LoadLibrary("${libx11}/lib/libX11.so")' \
       --replace 'load_library("Xinerama")' 'ctypes.cdll.LoadLibrary("${libxinerama}/lib/libXinerama.so")'

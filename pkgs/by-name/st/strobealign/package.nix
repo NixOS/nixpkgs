@@ -18,6 +18,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ah21ptyfZbgdJrtCCftYhGh1hfcJ9JpXNsXUp8pZDJw=";
   };
 
+  patches = [
+    ./include-cstdint.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config

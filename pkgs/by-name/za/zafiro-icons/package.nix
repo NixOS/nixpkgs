@@ -3,8 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   gtk3,
-  libsForQt5,
-  gnome-icon-theme,
+  kdePackages,
   numix-icon-theme,
   numix-icon-theme-circle,
   hicolor-icon-theme,
@@ -29,8 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
-    libsForQt5.breeze-icons
-    gnome-icon-theme
+    kdePackages.breeze-icons
     numix-icon-theme
     numix-icon-theme-circle
     hicolor-icon-theme
@@ -38,6 +36,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   dontDropIconThemeCache = true;
+  dontWrapQtApps = true;
 
   dontPatchELF = true;
   dontRewriteSymlinks = true;

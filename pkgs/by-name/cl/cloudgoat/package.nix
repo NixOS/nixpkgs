@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "cloudgoat";
-  version = "2.4.0";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RhinoSecurityLabs";
     repo = "cloudgoat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y41Q6mVt0XY8nZnRGTXdc0HaQapd55FUe8mhwU0NKrM=";
+    hash = "sha256-36GgGni4Zds4wZ8PQbrDD7SXwkKYQfcUi7Z//5j9NWU=";
   };
 
   build-system = with python3.pkgs; [ poetry-core ];

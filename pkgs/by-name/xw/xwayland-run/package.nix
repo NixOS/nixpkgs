@@ -31,14 +31,14 @@ let
 in
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "xwayland-run";
-  version = "0.0.5";
+  version = "0.0.6";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "ofourdan";
     repo = "xwayland-run";
     rev = finalAttrs.version;
-    hash = "sha256-TVoMbFQ5OIJkTX3/tuwylW+Bdx/gl1omObj0c3JjICM=";
+    hash = "sha256-zrm8uEy7DduOYPrpHrynZgYwEkZr3pbDsJHdWKOUzY0=";
   };
 
   pyproject = false;

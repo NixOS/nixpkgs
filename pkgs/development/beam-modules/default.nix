@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   pkgs,
   erlang,
@@ -71,16 +72,6 @@ let
         debugInfo = true;
       };
 
-      elixir_1_16 = callPackage ../interpreters/elixir/1.16.nix {
-        inherit erlang;
-        debugInfo = true;
-      };
-
-      elixir_1_15 = callPackage ../interpreters/elixir/1.15.nix {
-        inherit erlang;
-        debugInfo = true;
-      };
-
       # Remove old versions of elixir, when the supports fades out:
       # https://hexdocs.pm/elixir/compatibility-and-deprecations.html
 
@@ -98,7 +89,6 @@ let
       # Non hex packages. Examples how to build Rebar/Mix packages with and
       # without helper functions buildRebar3 and buildMix.
       hex = callPackage ./hex { };
-      webdriver = callPackage ./webdriver { };
 
       inherit (callPackages ./hooks { })
         beamCopySourceHook
@@ -109,6 +99,10 @@ let
         rebar3CompileHook
         rebarDevendorPatchHook
         ;
+
+    }
+    // lib.optionalAttrs config.allowAliases {
+      webdriver = throw "'beamPackages.webdriver' has been removed."; # added 2026-07-29
     };
 in
 makeExtensible packages

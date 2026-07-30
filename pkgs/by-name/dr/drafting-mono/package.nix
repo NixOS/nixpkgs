@@ -2,10 +2,17 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
+
 stdenvNoCC.mkDerivation {
   pname = "drafting-mono";
   version = "1.1-unstable-2024-06-04";
+
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
   src = fetchFromGitHub {
     owner = "indestructible-type";
@@ -14,14 +21,7 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-J64mmDOzTV4MRuZO3MB2SSX5agCRjLDjXAPXuDfdlOM=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/fonts/truetype
-    cp fonts/*/*.otf $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     homepage = "https://indestructibletype.com/Drafting/";

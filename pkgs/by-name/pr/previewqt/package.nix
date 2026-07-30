@@ -2,7 +2,6 @@
   lib,
   cmake,
   exiv2,
-  extra-cmake-modules,
   fetchFromGitLab,
   imagemagick,
   libarchive,
@@ -30,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     pkg-config
     qt6Packages.wrapQtAppsHook
   ];

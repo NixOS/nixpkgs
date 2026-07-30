@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libopenmpt";
-  version = "0.8.4";
+  version = "0.8.7";
 
   outputs = [
     "out"
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://lib.openmpt.org/files/libopenmpt/src/libopenmpt-${finalAttrs.version}+release.autotools.tar.gz";
-    hash = "sha256-Yn+b8RqsrmFaHyyYLH6IyyHxGy1vAmeUb3yCxerklDs=";
+    hash = "sha256-J1wp70e+mZL2KjX8yW98oFwG0v0FySmLje6fdD91sIk=";
   };
 
   enableParallelBuilding = true;

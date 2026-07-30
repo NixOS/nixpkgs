@@ -35,16 +35,21 @@
 let
 
   pname = "hplip";
-  version = "3.25.2";
+  version = "3.26.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/hplip/${pname}-${version}.tar.gz";
-    hash = "sha256-6HL/KOslF3Balfbhg576HlCnejOq6JBSeN8r2CCRllM=";
+    url = "mirror://sourceforge/hplip/hplip-${version}.tar.gz";
+    hash = "sha256-ucYSUnVPNbSiNzlsqJYeez4MVtt21mpnEre/PjDmlGM=";
   };
 
   plugin = fetchurl {
-    url = "https://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${pname}-${version}-plugin.run";
-    hash = "sha256-miz41WYehGVI27tZUjGlRIpctjcpzJPfjR9lLf0WelQ=";
+    url = "https://developers.hp.com/sites/default/files/2026-05/hplip-${version}-plugin.run";
+    # HTTP 403 otherwise
+    curlOptsList = [
+      "--user-agent"
+      "Mozilla/5.0 Gecko/20100101 Firefox/150.0"
+    ];
+    hash = "sha256-GZ94+K9/NolNcYDpCQljziVQp17HAfikujdmWpdG/fA=";
   };
 
   hplipState = replaceVars ./hplip.state {
@@ -85,7 +90,7 @@ python3Packages.buildPythonApplication {
     sh "$curSrc" --noexec --keep
   '';
 
-  sourceRoot = "${pname}-${version}";
+  sourceRoot = "hplip-${version}";
 
   buildInputs = [
     libjpeg
@@ -358,6 +363,6 @@ python3Packages.buildPythonApplication {
           gpl2Plus
         ];
     platforms = lib.attrNames hplipPlatforms;
-    maintainers = with lib.maintainers; [ ttuegel ];
+    maintainers = [ ];
   };
 }

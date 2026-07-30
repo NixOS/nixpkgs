@@ -64,7 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "tpc";
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
     ];
     homepage = "https://github.com/CordyJ/Open-TuringPlus";
     downloadPage = "https://github.com/CordyJ/Open-TuringPlus/releases";

@@ -18,21 +18,21 @@
   websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "simplisafe-python";
-  version = "2024.01.0";
+  version = "2026.06.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = "simplisafe-python";
-    tag = version;
-    hash = "sha256-ewbR2FI0t2F8HF0ZL5omsclB9OPAjHygGLPtSkVlvgM=";
+    tag = finalAttrs.version;
+    hash = "sha256-e59h4zX0AuzNlR1sovw4QJ6zXxksElY5emEM9eTfjwI=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     backoff
     beautifulsoup4
@@ -69,10 +69,10 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    changelog = "https://github.com/bachya/simplisafe-python/releases/tag/${version}";
     description = "Python library the SimpliSafe API";
     homepage = "https://simplisafe-python.readthedocs.io/";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/bachya/simplisafe-python/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

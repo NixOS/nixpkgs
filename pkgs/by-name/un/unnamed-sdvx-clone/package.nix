@@ -103,6 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Game based on K-Shoot MANIA and Sound Voltex";
+    homepage = "https://github.com/Drewol/unnamed-sdvx-clone";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sako ];
     platforms = lib.platforms.linux;

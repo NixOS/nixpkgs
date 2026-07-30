@@ -11,16 +11,16 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "gridtracker2";
-  version = "2.260111.0";
+  version = "2.260723.0";
 
   src = fetchFromGitLab {
     owner = "gridtracker.org";
     repo = "gridtracker2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LcaIOzCMtJxeMs7kEqTYmgMlrV62+HOXmG5wk67NUoE=";
+    hash = "sha256-BfUJhkw242Gu8gxCeDiIzpTiuToBSlKlI5+Z5Ae1kdE=";
   };
 
-  npmDepsHash = "sha256-8bhOfLLsNSK+/mXku5ukLr65bfk+RwC3SyOGRHndqVQ=";
+  npmDepsHash = "sha256-5h3bswjVf/8JHhwHRFTUfydN7XXtWbxNHTZ0mLL7RT8=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -50,28 +50,20 @@ buildNpmPackage (finalAttrs: {
 
   buildPhase = ''
     runHook preBuild
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # electronDist needs to be modifiable on Darwin
-    cp -r ${electron.dist} electron-dist
-    chmod -R u+w electron-dist
 
-    # Disable code signing during build on macOS.
-    # https://github.com/electron-userland/electron-builder/blob/fa6fc16/docs/code-signing.md#how-to-disable-code-signing-during-the-build-process-on-macos
-    export CSC_IDENTITY_AUTO_DISCOVERY=false
+    # the electronDist directory needs to be outside of the working directory
+    # otherwise the electron-builder config accidentally includes it inside the .asar file
+    electron_dist="$(mktemp -d)"
+    cp -r ${electron.dist}/. "$electron_dist"
+    chmod -R u+w "$electron_dist"
 
     npm exec electron-builder -- \
       --dir \
-      -c.electronDist=electron-dist \
-      -c.electronVersion=${electron.version}
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    npm exec electron-builder -- \
-      --dir \
-      -c.electronDist=${electron.dist} \
-      -c.electronVersion=${electron.version}
-  ''
-  + ''
+      -c.electronDist="$electron_dist" \
+      -c.electronVersion=${electron.version} \
+      -c.mac.identity=null
+    # ^ disable codesigning on Darwin
+
     runHook postBuild
   '';
 

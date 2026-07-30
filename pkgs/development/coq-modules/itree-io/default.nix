@@ -22,7 +22,7 @@ mkCoqDerivation {
       (case (range "8.12" "8.19") "0.1.1")
     ] null;
   release = {
-    "0.1.1".sha256 = "sha256-IFwIj8dxW4jm2gvuUJ8LKZFSJeljp0bsn8fezxY6t2o=";
+    "0.1.1".hash = "sha256-IFwIj8dxW4jm2gvuUJ8LKZFSJeljp0bsn8fezxY6t2o=";
   };
   releaseRev = v: "v${v}";
 

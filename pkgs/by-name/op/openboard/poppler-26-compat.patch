@@ -1,0 +1,69 @@
+diff --git a/src/pdf/PDFRenderer.h b/src/pdf/PDFRenderer.h
+index 8f0cb93e03c9fe03414e394a91ec7ec73a542739..a5e872611e2060ee84a7a8382297af1e81dff7da 100644
+--- a/src/pdf/PDFRenderer.h
++++ b/src/pdf/PDFRenderer.h
+@@ -58,8 +58,6 @@ class PDFRenderer : public QObject
+ 
+         virtual QSizeF pointSizeF(int pageNumber) const = 0;
+ 
+-        virtual QString title() const = 0;
+-
+         void attach();
+         void detach();
+ 
+diff --git a/src/pdf/XPDFRenderer.cpp b/src/pdf/XPDFRenderer.cpp
+index 8e361430c031e21fdde6faa23594ee561aedf21a..bb4bca36cec30f6992181d59f8417b4ffb442594 100644
+--- a/src/pdf/XPDFRenderer.cpp
++++ b/src/pdf/XPDFRenderer.cpp
+@@ -157,39 +157,6 @@ int XPDFRenderer::pageCount() const
+         return 0;
+ }
+ 
+-QString XPDFRenderer::title() const
+-{
+-    if (isValid())
+-    {
+-#if POPPLER_VERSION_MAJOR > 0 || POPPLER_VERSION_MINOR >= 55
+-        Object pdfInfo = mDocument->getDocInfo();
+-#else
+-        Object pdfInfo;
+-        mDocument->getDocInfo(&pdfInfo);
+-#endif
+-        if (pdfInfo.isDict())
+-        {
+-            Dict *infoDict = pdfInfo.getDict();
+-#if POPPLER_VERSION_MAJOR > 0 || POPPLER_VERSION_MINOR >= 55
+-            Object title = infoDict->lookup((char*)"Title");
+-#else
+-            Object title;
+-            infoDict->lookup((char*)"Title", &title);
+-#endif
+-            if (title.isString())
+-            {
+-#if POPPLER_VERSION_MAJOR > 0 || POPPLER_VERSION_MINOR >= 72
+-                return QString(title.getString()->c_str());
+-#else
+-                return QString(title.getString()->getCString());
+-#endif
+-            }
+-        }
+-    }
+-
+-    return QString();
+-}
+-
+ 
+ QSizeF XPDFRenderer::pageSizeF(int pageNumber) const
+ {
+diff --git a/src/pdf/XPDFRenderer.h b/src/pdf/XPDFRenderer.h
+index 6264ae1b087fefe82fa7ec8291a52ead657b3697..7a9bdf7777aa6cbc1b823a7a6adf52e837a7fc59 100644
+--- a/src/pdf/XPDFRenderer.h
++++ b/src/pdf/XPDFRenderer.h
+@@ -73,7 +73,6 @@ class XPDFRenderer : public PDFRenderer
+         virtual QSizeF pageSizeF(int pageNumber) const override;
+         virtual int pageRotation(int pageNumber) const override;
+         virtual QSizeF pointSizeF(int pageNumber) const override;
+-        virtual QString title() const override;
+         virtual void render(QPainter *p, int pageNumber, const bool cacheAllowed, const QRectF &bounds = QRectF()) override;
+ 
+     signals:

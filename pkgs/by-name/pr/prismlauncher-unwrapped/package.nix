@@ -3,8 +3,8 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  pkg-config,
   cmark,
-  extra-cmake-modules,
   gamemode,
   jdk17,
   kdePackages,
@@ -14,6 +14,7 @@
   qrencode,
   stripJavaArchivesHook,
   tomlplusplus,
+  vulkan-headers,
   zlib,
   msaClientID ? null,
 }:
@@ -21,19 +22,19 @@ let
   libnbtplusplus = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "libnbtplusplus";
-    rev = "531449ba1c930c98e0bcf5d332b237a8566f9d78";
-    hash = "sha256-qhmjaRkt+O7A+gu6HjUkl7QzOEb4r8y8vWZMG2R/C6o=";
+    rev = "3538933614059f0f44388a2b16f3db25ce42285b";
+    hash = "sha256-6/8clF2yNhfonV16cfIkxVIzuB9i9ThxoLMxAo/fDuY=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prismlauncher-unwrapped";
-  version = "10.0.5";
+  version = "11.0.3";
 
   src = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "PrismLauncher";
     tag = finalAttrs.version;
-    hash = "sha256-cQBOdF3HP4CFOSfWyVXGQBs42V/A4w6R2UwelQTE3dQ=";
+    hash = "sha256-0o31pLKnYY0mulLrZKzZtaTPzCviGsgCnEcBt0Y/aG4=";
   };
 
   postUnpack = ''
@@ -41,10 +42,17 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${libnbtplusplus} source/libraries/libnbtplusplus
   '';
 
+  # Ensure that instance shortucts point to our final wrapper, rather than this unwrapped version
+  postPatch = ''
+    substituteInPlace launcher/minecraft/ShortcutUtils.cpp \
+      --replace-fail 'QApplication::applicationFilePath()' 'QProcessEnvironment::systemEnvironment().value("NIX_LAUNCHER_WRAPPER", "${placeholder "out"}/bin/prismlauncher")'
+  '';
+
   nativeBuildInputs = [
     cmake
+    pkg-config
     ninja
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     jdk17
     stripJavaArchivesHook
   ];
@@ -56,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     libarchive
     qrencode
     tomlplusplus
+    vulkan-headers
     zlib
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux gamemode;

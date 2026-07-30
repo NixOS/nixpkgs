@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "tftpy";
-  version = "0.8.6";
+  version = "0.8.7";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9hb2pDo21IHCZlc2CFl7ndPHxjgYQV1yqgTx0XlUgOo=";
+    hash = "sha256-6KWqCS2rLhy7m5Q5IDaCe4CNw362zxsaszyBlXs/X+I=";
   };
 
   nativeBuildInputs = [ setuptools ];

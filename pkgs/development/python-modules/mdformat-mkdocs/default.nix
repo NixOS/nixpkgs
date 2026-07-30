@@ -20,14 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mdformat-mkdocs";
-  version = "5.1.4";
+  version = "5.2.0b0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KyleKing";
     repo = "mdformat-mkdocs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Li+nXYs+JZHgV/RBMpxJGP1P7sXp9E7xqSvjHZRlev4=";
+    hash = "sha256-d91XskyUFi7e/soC2fYN6FJUzOP8bZ+ZguLNNAxJC9c=";
   };
 
   postPatch = ''

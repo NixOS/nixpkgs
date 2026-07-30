@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation {
   pname = "redo";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "jdebp";
     repo = "redo";
-    rev = "91f5462339ef6373f9ac80902cfae2b614e2902b";
-    hash = "sha256-cA8UN4aQnJ8VyMW3mDOIPna4Ucw1kp8CirZTDhSoCpU=";
+    rev = "fb5088e1cc588134fd653809be038a4dbffe8f74";
+    hash = "sha256-QFdTpSF0IdqkBtL0SRmKS9OetEk2UNeJlotw8IwMx48=";
   };
 
   nativeBuildInputs = [
@@ -21,18 +21,29 @@ stdenv.mkDerivation {
   ];
 
   buildPhase = ''
+    runHook preBuild
     package/compile
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     package/export $out/
+    runHook postInstall
   '';
 
   meta = {
     homepage = "https://github.com/jdebp/redo";
     description = "System for building target files from source files";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ momeemt ];
+    # https://github.com/jdebp/redo/blob/trunk/source/COPYING
+    license =
+      with lib.licenses;
+      OR [
+        bsd2 # for some reason BSD-2-Clause and FreeBSD, despite being synonyms, are listed separately
+        isc
+        mit
+      ];
+    maintainers = [ ];
     mainProgram = "redo";
     platforms = lib.platforms.unix;
   };

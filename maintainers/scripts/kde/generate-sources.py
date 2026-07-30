@@ -37,6 +37,7 @@ PROJECTS_WITH_RUST = {
     "akonadi-search",
     "angelfish",
     "kdepim-addons",
+    "kdeplasma-addons",
 }
 
 def to_sri(hash):

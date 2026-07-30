@@ -28,13 +28,13 @@ assert blas.isILP64 == scalapack.isILP64;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "elpa";
-  version = "2025.06.002";
+  version = "2026.02.002";
 
   passthru = { inherit (blas) isILP64; };
 
   src = fetchurl {
     url = "https://elpa.mpcdf.mpg.de/software/tarball-archive/Releases/${finalAttrs.version}/elpa-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-3jGAwG4rDbtWk56ErRpf0WhEZb04rSGWeS0PQCiTf9o=";
+    sha256 = "sha256-AuPFn+xTzY62akzBX6T78ZDPllQiciP7itVXE+lCeTI=";
   };
 
   patches = [
@@ -115,9 +115,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [ mpiCheckPhaseHook ];
   preCheck = ''
     #patchShebangs ./
-
-    # Run dual threaded
-    export OMP_NUM_THREADS=2
 
     # Reduce test problem sizes
     export TEST_FLAGS="1500 50 16"

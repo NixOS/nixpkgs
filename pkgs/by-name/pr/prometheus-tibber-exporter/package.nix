@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "prometheus-tibber-exporter";
-  version = "3.10.0";
+  version = "3.10.2";
 
   src = fetchFromGitHub {
     owner = "terjesannum";
     repo = "tibber-exporter";
     tag = "tibber-exporter-${finalAttrs.version}";
-    hash = "sha256-Ndg2BxWdL5DKa2eHjY0rIdrfJ+SJlzvOUZDtWUBSR6g=";
+    hash = "sha256-by7/c2a/8jM4ShoeQnYC+L+EVLk2NwQoRTAMiZZcMn0=";
     leaveDotGit = true;
     postFetch = ''
       cd "$out"
@@ -37,9 +37,14 @@ buildGoModule (finalAttrs: {
     "-X github.com/prometheus/common/version.BuildUser=nix@nixpkgs"
   ];
 
-  vendorHash = "sha256-JTJTapsqBj0FO2Gcx8O1eWJf9hMbeWzjtO0HYcDdzQo=";
+  vendorHash = "sha256-rjM2M9auiyFvGcq/D8N5YPoFOPeC9r1Y1JPssT7nvew=";
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "tibber-exporter-(.*)"
+    ];
+  };
 
   nativeInstallCheckInputs = [
     versionCheckHook

@@ -23,14 +23,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jupyter-collaboration";
-  version = "4.2.1";
+  version = "4.4.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jupyterlab";
     repo = "jupyter-collaboration";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-09fJT81nWGvUME3QU5hk2886y93ssl3IlVSIblxqJ78=";
+    hash = "sha256-6FF4KtQSIrB0LeJDNMWWpRIAxRkFMzz566WB6H5ePXs=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/projects/jupyter-collaboration";

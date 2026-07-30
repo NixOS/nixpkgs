@@ -200,8 +200,8 @@ in
           List of packages that provide WirePlumber configuration, in the form of
           `share/wireplumber/*/*.conf` files.
 
-          LV2 dependencies will be picked up from config packages automatically
-          via `passthru.requiredLv2Packages`.
+          LV2/LADSPA dependencies will be picked up from config packages automatically
+          via `passthru.requiredLv2Packages`/`passthru.requiredLadspaPackages`.
         '';
       };
 
@@ -216,6 +216,22 @@ in
           Config packages have their required LV2 plugins added automatically,
           so they don't need to be specified here. Config packages need to set
           `passthru.requiredLv2Packages` for this to work.
+
+          [wiki-filter-chain]: https://docs.pipewire.org/page_module_filter_chain.html
+        '';
+      };
+
+      extraLadspaPackages = mkOption {
+        type = listOf package;
+        default = [ ];
+        example = literalExpression "[ pkgs.noisetorch-ladspa ]";
+        description = ''
+          List of packages that provide LADSPA plugins in `lib/ladspa` that should
+          be made available to WirePlumber for [filter chains][wiki-filter-chain].
+
+          Config packages have their required LADSPA plugins added automatically,
+          so they don't need to be specified here. Config packages need to set
+          `passthru.requiredLadspaPackages` for this to work.
 
           [wiki-filter-chain]: https://docs.pipewire.org/page_module_filter_chain.html
         '';
@@ -270,6 +286,25 @@ in
         paths = cfg.extraLv2Packages ++ requiredLv2Packages;
         pathsToLink = [ "/lib/lv2" ];
       };
+
+      requiredLadspaPackages = flatten (
+        concatMap (p: attrByPath [ "passthru" "requiredLadspaPackages" ] [ ] p) configPackages
+      );
+
+      ladspaPlugins = pkgs.buildEnv {
+        name = "pipewire-ladspa-plugins";
+        paths = cfg.extraLadspaPackages ++ requiredLadspaPackages;
+        pathsToLink = [ "/lib/ladspa" ];
+      };
+
+      pluginsEnv = {
+        XDG_DATA_DIRS = makeSearchPath "share" [
+          configs
+          cfg.package
+        ];
+        LV2_PATH = "${lv2Plugins}/lib/lv2";
+        LADSPA_PATH = "${ladspaPlugins}/lib/ladspa";
+      };
     in
     mkIf cfg.enable {
       assertions = [
@@ -289,25 +324,14 @@ in
       systemd.services.wireplumber.wantedBy = [ "pipewire.service" ];
       systemd.user.services.wireplumber.wantedBy = [ "pipewire.service" ];
 
-      systemd.services.wireplumber.environment = mkIf pwCfg.systemWide {
-        # Force WirePlumber to use system dbus.
-        DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/dbus/system_bus_socket";
+      systemd.services.wireplumber.environment = mkIf pwCfg.systemWide (
+        pluginsEnv
+        // {
+          # Force WirePlumber to use system dbus.
+          DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/dbus/system_bus_socket";
+        }
+      );
 
-        # Make WirePlumber find our config/script files and lv2 plugins required by those
-        # (but also the configs/scripts shipped with WirePlumber)
-        XDG_DATA_DIRS = makeSearchPath "share" [
-          configs
-          cfg.package
-        ];
-        LV2_PATH = "${lv2Plugins}/lib/lv2";
-      };
-
-      systemd.user.services.wireplumber.environment = mkIf (!pwCfg.systemWide) {
-        XDG_DATA_DIRS = makeSearchPath "share" [
-          configs
-          cfg.package
-        ];
-        LV2_PATH = "${lv2Plugins}/lib/lv2";
-      };
+      systemd.user.services.wireplumber.environment = mkIf (!pwCfg.systemWide) pluginsEnv;
     };
 }

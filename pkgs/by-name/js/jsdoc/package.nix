@@ -45,6 +45,6 @@ buildNpmPackage (finalAttrs: {
     description = "API documentation generator for JavaScript";
     homepage = "https://jsdoc.app";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

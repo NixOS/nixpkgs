@@ -9,21 +9,21 @@
 }:
 
 let
-  commitHash = "1ebda7ab9c9796369af484fccf4d3c54e7c97f5d"; # matches tag release
+  commitHash = "b3e6599f43beff698f471c6f46888045453fa030"; # matches tag release
   shortCommitHash = builtins.substring 0 7 commitHash;
 in
 buildGoModule (finalAttrs: {
   pname = "copywrite";
-  version = "0.25.1";
+  version = "0.25.3";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "copywrite";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IRmcR2wQFoI7jDNY64ioRpTFNpyVKJlDq++DTeMNkMI=";
+    hash = "sha256-/ltP6ySkmeRQSmgTtF2Fa1RFbhFqiK9iI6ttKirweBk=";
   };
 
-  vendorHash = "sha256-+wgUT72LzGrn+rnEfRtJ9J0oLodhR52zbQ8sAd2BQvg=";
+  vendorHash = "sha256-tMKJGEAry9eL87y+yyEEQD4ZaDM573srNvAmAd59VwY=";
 
   ldflags = [
     "-s"
@@ -35,7 +35,7 @@ buildGoModule (finalAttrs: {
   env.CGO_ENABLED = 0;
 
   checkFlags = [
-    "-skip=Test_FormatCopyrightYears_AutoDetect" # depends on git metadata
+    "-skip=Test_FormatCopyrightYears_AutoDetect|Test_FormatCopyrightYearsForNewHeaders_AutoDetect" # depends on git metadata
   ];
 
   nativeBuildInputs = [ installShellFiles ];

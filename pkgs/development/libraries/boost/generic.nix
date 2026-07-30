@@ -74,6 +74,7 @@ let
 
   needUserConfig =
     stdenv.hostPlatform != stdenv.buildPlatform
+    || enablePython
     || useMpi
     || (stdenv.hostPlatform.isDarwin && enableShared);
 
@@ -255,7 +256,13 @@ stdenv.mkDerivation {
         extraPrefix = "libs/context/";
         hash = "sha256-Z8uw2+4IEybqVcU25i/0XJKS16hi/+3MXUxs53ghjL0=";
       })
-    ];
+    ]
+    ++ lib.optional (
+      stdenv.hostPlatform.isCygwin && lib.versionAtLeast version "1.87" && lib.versionOlder version "1.88"
+    ) ./Fix-cygwin-build-187.patch
+    ++ lib.optional (
+      stdenv.hostPlatform.isCygwin && lib.versionAtLeast version "1.89" && lib.versionOlder version "1.90"
+    ) ./Fix-cygwin-build-189.patch;
 
   meta = {
     homepage = "http://boost.org/";
@@ -416,6 +423,8 @@ stdenv.mkDerivation {
     "dev"
   ];
   setOutputFlags = false;
+
+  strictDeps = true;
 
   __structuredAttrs = true;
 }

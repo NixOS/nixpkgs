@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     mkdir -p $out/bin
     makeWrapper ${jdk}/bin/java $out/bin/rascal \
-      --add-flags "-jar ${finalAttrs.src}" \
+      --add-flags "-jar ${finalAttrs.src}"
   '';
 
   meta = {

@@ -8,6 +8,11 @@ let
   cfg = config.services.part-db;
   pkg = cfg.package;
 
+  envFile = pkgs.writeText "part-db-env" (
+    lib.concatStringsSep "\n" (lib.mapAttrsToList (key: value: "${key}=\"${value}\"") cfg.settings)
+    + "\n"
+  );
+
   inherit (lib)
     mkEnableOption
     mkPackageOption
@@ -59,6 +64,17 @@ in
       default = "localhost";
       description = ''
         The virtualHost at which you wish part-db to be served.
+      '';
+    };
+
+    environmentFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = "/run/secrets/part-db.env";
+      description = ''
+        Path to a file containing extra Part-DB environment variables in dotenv
+        format. This can be used for secrets such as `APP_SECRET` without
+        putting them in the Nix store.
       '';
     };
 
@@ -176,18 +192,34 @@ in
           root = "${pkg}/public";
           locations = {
             "/" = {
-              tryFiles = "$uri $uri/ /index.php?$query_string";
+              tryFiles = "$uri $uri/ /index.php$is_args$args";
               index = "index.php";
               extraConfig = ''
+                add_header Content-Security-Policy "default-src 'self'; script-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; sandbox;" always;
+                add_header X-Content-Type-Options "nosniff" always;
                 sendfile off;
               '';
             };
-            "~ \\.php$" = {
+            "= /index.php" = {
               extraConfig = ''
-                include ${config.services.nginx.package}/conf/fastcgi_params ;
-                fastcgi_param SCRIPT_FILENAME $request_filename;
-                fastcgi_param modHeadersAvailable true; #Avoid sending the security headers twice
+                include ${config.services.nginx.package}/conf/fastcgi_params;
+                fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+                fastcgi_param DOCUMENT_ROOT $realpath_root;
+                fastcgi_param modHeadersAvailable true; # Avoid sending the security headers twice
                 fastcgi_pass unix:${config.services.phpfpm.pools.part-db.socket};
+                internal;
+              '';
+            };
+            "~ \\.php$" = {
+              return = "404";
+            };
+            "~* ^/media/.*\\.(php[3-8]?|phar|phtml|pht|phps)$" = {
+              return = "403";
+            };
+            "~* \\.svg$" = {
+              extraConfig = ''
+                add_header Content-Security-Policy "default-src 'self'; script-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none'; sandbox;" always;
+                add_header X-Content-Type-Options "nosniff" always;
               '';
             };
           };
@@ -197,10 +229,32 @@ in
 
     systemd = {
       services = {
+        part-db-setup = {
+          before = [ "part-db-migrate.service" ];
+          wantedBy = [ "multi-user.target" ];
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+          };
+          restartTriggers = [ envFile ];
+          script = ''
+            install -Dm0600 -o part-db -g part-db ${envFile} /var/lib/part-db/env.local
+          ''
+          + lib.optionalString (cfg.environmentFile != null) ''
+            cat ${lib.escapeShellArg cfg.environmentFile} >> /var/lib/part-db/env.local
+          '';
+        };
+
         part-db-migrate = {
           before = [ "phpfpm-part-db.service" ];
-          after = [ "postgresql.target" ];
-          requires = [ "postgresql.target" ];
+          after = [
+            "postgresql.target"
+            "part-db-setup.service"
+          ];
+          requires = [
+            "postgresql.target"
+            "part-db-setup.service"
+          ];
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
             Type = "oneshot";
@@ -235,10 +289,30 @@ in
           user = "part-db";
           group = "part-db";
         };
-        "/var/lib/part-db/env.local"."L+" = {
-          argument = "${pkgs.writeText "part-db-env" (
-            lib.concatStringsSep "\n" (lib.mapAttrsToList (key: value: "${key}=\"${value}\"") cfg.settings)
-          )}";
+        "/var/lib/part-db/".d = {
+          mode = "0755";
+          user = "part-db";
+          group = "part-db";
+        };
+        "/var/lib/part-db/public/".d = {
+          mode = "0755";
+          user = "part-db";
+          group = "part-db";
+        };
+        "/var/lib/part-db/public/media/".d = {
+          mode = "0755";
+          user = "part-db";
+          group = "part-db";
+        };
+        "/var/lib/part-db/uploads/".d = {
+          mode = "0750";
+          user = "part-db";
+          group = "part-db";
+        };
+        "/var/lib/part-db/share/".d = {
+          mode = "0750";
+          user = "part-db";
+          group = "part-db";
         };
         "/var/log/part-db/".d = {
           mode = "0750";

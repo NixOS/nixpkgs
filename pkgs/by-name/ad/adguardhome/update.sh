@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell --pure -I nixpkgs=. -i bash -p bash cacert common-updater-scripts curl gnugrep jq nix nix-prefetch nix-update
+#!nix-shell --pure -I nixpkgs=. -i bash -p bash cacert common-updater-scripts curl git gnugrep jq nix nix-prefetch nix-update
 
 # This file is based on /pkgs/servers/gotify/update.sh
 

@@ -222,7 +222,35 @@ stdenv.mkDerivation (
               hash = "sha256-3hkbYPUVRAtWpo5qBmc2jLZLivURMx8T0GQomvNZesc=";
               stripLen = 1;
             }
-          );
+          )
+      ++ lib.optionals (lib.versions.major release_version == "21") [
+        # Several LLVM versions have a bug in SelectionDAG that causes
+        # miscompilations around conditional poisions. This was exposed due to
+        # Rust 1.97.0 exercising the involved code path heavily and generating
+        # segfaulting code. The patch was made to LLVM 23, but the tests have
+        # many conflicts, so we vendor a version-specific modified version.
+        #
+        # This should be backported to older LLVM versions as well, but this
+        # has not yet been done in order to ship the more important fixes
+        # quickly.
+        #
+        # Rust issue: https://github.com/rust-lang/rust/issues/159035
+        # LLVM issue: https://github.com/llvm/llvm-project/issues/208611
+        # LLVM PR: https://github.com/llvm/llvm-project/pull/208683
+        (getVersionFile "llvm/sdag-freeze-condition-in-select-of-load-fold.patch")
+      ]
+      ++ lib.optionals (lib.versions.major release_version == "22") [
+        # Same issue and fix as above, for LLVM 22. While LLVM 22 was EOL at
+        # the time of the LLVM PR, and was thus not backported upstream, the
+        # backport was made to Rust's LLVM fork on LLVM 22.1. Accordingly, we
+        # fetch the patch from there.
+        (fetchpatch {
+          name = "llvm-22-sdag-freeze-condition-in-select-of-load-fold.patch";
+          url = "https://github.com/rust-lang/llvm-project/commit/abcef279cd33492fe8301c8873fc535fa4dbf0d5.patch";
+          stripLen = 1;
+          hash = "sha256-HHVMVL7ZWiZkbfnD37zYxFWnfvI3LNS0Z2oFHhOaZsU=";
+        })
+      ];
 
     nativeBuildInputs = [
       cmake
@@ -351,10 +379,13 @@ stdenv.mkDerivation (
         rm test/tools/llvm-objcopy/MachO/universal-object.test
       ''
       +
-        # Seems to require certain floating point hardware (NEON?)
-        optionalString (stdenv.hostPlatform.system == "armv6l-linux") ''
-          rm test/ExecutionEngine/frem.ll
-        ''
+        # Seems to require certain floating point hardware (NEON?). Tests were
+        # reorganized in LLVM 20.
+        optionalString
+          (stdenv.hostPlatform.system == "armv6l-linux" && lib.versionOlder release_version "20")
+          ''
+            rm test/ExecutionEngine/frem.ll
+          ''
       +
         # 1. TODO: Why does this test fail on FreeBSD?
         # It seems to reference /usr/local/lib/libfile.a, which is clearly a problem.
@@ -419,10 +450,23 @@ stdenv.mkDerivation (
         check_version patch ${patch}
       '';
 
-    # E.g. Mesa uses the build-id as a cache key (see #93946):
-    env = lib.optionalAttrs (enableSharedLibraries && !stdenv.hostPlatform.isDarwin) {
-      LDFLAGS = "-Wl,--build-id=sha1";
-    };
+    env =
+      # E.g. Mesa uses the build-id as a cache key (see #93946):
+      lib.optionalAttrs (enableSharedLibraries && !stdenv.hostPlatform.isDarwin) {
+        LDFLAGS = "-Wl,--build-id=sha1";
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+        # This test was introduced by https://github.com/llvm/llvm-project/pull/158719 to check
+        # for a Windows-specific quirk.
+        # It is also unconditionally run on other platforms because running binaries
+        # without any environment variables should work, but as the test binaries link against
+        # our libLLVM.dylib that has not been installed at this point, and the `DYLD_LIBRARY_PATH`
+        # we set for tests to work around this issue is cleared away by the test itself,
+        # it will fail.
+        # Unfortunately "fixing" the test to pass just `DYLD_LIBRARY_PATH` would void the purpose
+        # of the test itself, so we skip it instead.
+        GTEST_FILTER = "-ProgramEnvTest.TestExecuteEmptyEnvironment";
+      };
 
     cmakeBuildType = "Release";
 
@@ -610,6 +654,7 @@ stdenv.mkDerivation (
 
     meta = llvm_meta // {
       description = "man pages for LLVM ${version}";
+      homepage = "https://github.com/llvm/llvm-project";
     };
   }
 )

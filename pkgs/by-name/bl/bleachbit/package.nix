@@ -12,13 +12,13 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "bleachbit";
-  version = "5.0.2";
+  version = "6.0.0";
 
   pyproject = false;
 
   src = fetchurl {
     url = "mirror://sourceforge/bleachbit/bleachbit-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-q3iRdrqsR7U+O2LUaf5qDv4DVNsTOcnf9Po+pewzwMs=";
+    sha256 = "sha256-ixQQirPj2zPEt6wBtFGlok60BsQlHJy8yp1QMonWX/c=";
   };
 
   nativeBuildInputs = [

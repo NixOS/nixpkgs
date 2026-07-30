@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildPhase = ''
     runHook preBuild
-    ${topkg.buildPhase} --with-cmdliner false --tests ${lib.boolToString finalAttrs.doCheck}
+    ${topkg.buildPhase} --with-cmdliner false --tests ${lib.boolToString finalAttrs.finalPackage.doCheck}
     runHook postBuild
   '';
 

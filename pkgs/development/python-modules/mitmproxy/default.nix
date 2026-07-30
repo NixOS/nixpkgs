@@ -40,29 +40,18 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "12.2.1";
+  version = "12.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy";
     tag = "v${version}";
-    hash = "sha256-z3JJOql4JacXSeo6dRbKOaL+kLlSnpKQkeXzZdzLQJo=";
+    hash = "sha256-YgM8GjWmWKxOZcahR3+9XO2Xyfu9v8rNgxKn/2oL35Y=";
   };
 
-  pythonRelaxDeps = [
-    # requested by maintainer
-    "brotli"
-    # just keep those
-    "typing-extensions"
-
-    "urwid"
-    "asgiref"
-    "pyparsing"
-    "ruamel.yaml"
-    "tornado"
-    "wsproto"
-  ];
+  # pins many dependencies way to strict
+  pythonRelaxDeps = true;
 
   build-system = [ setuptools ];
 

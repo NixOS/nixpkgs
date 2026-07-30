@@ -36,7 +36,7 @@ popd
 # Use friendlier hashes
 yarn_hash=$(nix --extra-experimental-features nix-command hash to-sri --type sha256 "$yarn_hash")
 
-common="./pkgs/applications/misc/tandoor-recipes/common.nix"
+common="./pkgs/by-name/ta/tandoor-recipes/common.nix"
 sed -i -E -e "s#version = \".*\"#version = \"$version\"#" $common
 sed -i -E -e "s#hash = \".*\"#hash = \"$src_hash\"#" $common
 sed -i -E -e "s#yarnHash = \".*\"#yarnHash = \"$yarn_hash\"#" $common

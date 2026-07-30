@@ -3,7 +3,6 @@
   fetchpatch,
   fetchFromGitHub,
   ocamlPackages,
-  opam,
   makeBinaryWrapper,
   writableTmpDirAsHomeHook,
   unstableGitUpdater,
@@ -95,7 +94,9 @@ ocamlPackages.buildDunePackage (finalAttrs: {
   installCheckPhase = ''
     runHook preInstallCheck
 
+    # Bypass `dune exec` so its stderr warnings don't pollute test output.
     PATH="$out/bin":$PATH
+    export WITH_CERB=cerberus
 
     patchShebangs --build tests
 

@@ -1,17 +1,12 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+
+  # build-system
   flit-core,
 
-  # tests
-  chex,
-  jaxlib,
-  pytest-xdist,
-  pytestCheckHook,
-  yapf,
-
-  # optional
+  # optional-dependencies
   jupyter,
   mediapy,
   numpy,
@@ -29,35 +24,41 @@
   dm-tree,
   jax,
   tensorflow,
+
+  # tests
+  chex,
+  ffmpeg,
+  jaxlib,
+  optree,
+  pydantic,
+  pytest-xdist,
+  pytestCheckHook,
+  torch,
+  yapf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "etils";
-  version = "1.13.0";
+  version = "1.14.0";
   pyproject = true;
+  __structuredAttrs = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-pbYMcflbzS1D1On7PcOHkSDB9gRyu1zhn3qGCx1E9gc=";
+  src = fetchFromGitHub {
+    owner = "google";
+    repo = "etils";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gjWA+y1dXihmOBzCxfgUZJLvtSHzpRLQIhNxzk+y11M=";
   };
-
-  postPatch = ''
-    # https://github.com/google/etils/pull/722
-    substituteInPlace etils/epath/resource_utils.py \
-      --replace-fail importlib_resources importlib.resources
-    substituteInPlace pyproject.toml \
-      --replace-fail '"importlib_resources",' ""
-  '';
 
   build-system = [ flit-core ];
 
-  optional-dependencies = rec {
-    array-types = enp;
+  optional-dependencies = lib.fix (self: {
+    array-types = self.enp;
     eapp = [
       absl-py
       simple-parsing
     ]
-    ++ epy;
+    ++ self.epy;
     ecolab = [
       jupyter
       numpy
@@ -65,73 +66,94 @@ buildPythonPackage rec {
       packaging
       protobuf
     ]
-    ++ enp
-    ++ epy
-    ++ etree;
-    edc = epy;
+    ++ self.enp
+    ++ self.epy
+    ++ self.etree;
+    edc = self.epy;
     enp = [
       numpy
       einops
     ]
-    ++ epy;
+    ++ self.epy;
     epath = [
       fsspec
       typing-extensions
       zipp
     ]
-    ++ epy;
-    epath-gcs = [ gcsfs ] ++ epath;
-    epath-s3 = [ s3fs ] ++ epath;
+    ++ self.epy;
+    epath-gcs = [ gcsfs ] ++ self.epath;
+    epath-s3 = [ s3fs ] ++ self.epath;
     epy = [ typing-extensions ];
     etqdm = [
       absl-py
       tqdm
     ]
-    ++ epy;
-    etree = array-types ++ epy ++ enp ++ etqdm;
-    etree-dm = [ dm-tree ] ++ etree;
-    etree-jax = [ jax ] ++ etree;
-    etree-tf = [ tensorflow ] ++ etree;
-    lazy-imports = ecolab;
+    ++ self.epy;
+    etree = self.array-types ++ self.epy ++ self.enp ++ self.etqdm;
+    etree-dm = [ dm-tree ] ++ self.etree;
+    etree-jax = [ jax ] ++ self.etree;
+    etree-tf = [ tensorflow ] ++ self.etree;
+    lazy-imports = self.ecolab;
     all =
-      array-types
-      ++ eapp
-      ++ ecolab
-      ++ edc
-      ++ enp
-      ++ epath
-      ++ epath-gcs
-      ++ epath-s3
-      ++ epy
-      ++ etqdm
-      ++ etree
-      ++ etree-dm
-      ++ etree-jax
-      ++ etree-tf;
-  };
+      self.array-types
+      ++ self.eapp
+      ++ self.ecolab
+      ++ self.edc
+      ++ self.enp
+      ++ self.epath
+      ++ self.epath-gcs
+      ++ self.epath-s3
+      ++ self.epy
+      ++ self.etqdm
+      ++ self.etree
+      ++ self.etree-dm
+      ++ self.etree-jax
+      ++ self.etree-tf;
+  });
 
   pythonImportsCheck = [ "etils" ];
 
   nativeCheckInputs = [
     chex
+    optree
+    ffmpeg
     jaxlib
+    torch
+    pydantic
     pytest-xdist
     pytestCheckHook
     yapf
   ]
-  ++ optional-dependencies.all;
+  ++ finalAttrs.passthru.optional-dependencies.all;
+
+  # enabledTestPaths = [ ];
 
   disabledTests = [
-    "test_public_access" # requires network access
+    # Requires network access
+    "test_public_access"
+
+    # AttributeError: module 'jax._src' has no attribute 'prng'
+    "test_array_spec_is_fake"
+    "test_array_spec_repr"
+    "test_array_spec_tensors"
+    "test_array_spec_valid"
+    "test_obj"
+    "test_spec_like"
   ];
 
-  doCheck = false; # error: infinite recursion encountered
+  disabledTestPaths = [
+    # Circular dependency with tensorflow-datasets
+    "etils/epy/lazy_imports_utils_test.py"
+
+    # Requires unpackaged fiddle
+    "etils/epy/text_utils_test.py"
+  ];
 
   meta = {
-    changelog = "https://github.com/google/etils/blob/v${version}/CHANGELOG.md";
     description = "Collection of eclectic utils";
     homepage = "https://github.com/google/etils";
+    changelog = "https://github.com/google/etils/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mcwitt ];
   };
-}
+})

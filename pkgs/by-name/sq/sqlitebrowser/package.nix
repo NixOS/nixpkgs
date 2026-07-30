@@ -87,7 +87,10 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "sqlitebrowser";
     homepage = "https://sqlitebrowser.org/";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ peterhoeg ];
+    maintainers = with lib.maintainers; [
+      peterhoeg
+      savtrip
+    ];
     platforms = lib.platforms.unix;
   };
 })

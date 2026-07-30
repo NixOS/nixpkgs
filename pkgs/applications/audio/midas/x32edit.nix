@@ -6,8 +6,8 @@ callPackage ./generic.nix (
     brand = "Behringer";
     type = "X32";
     version = "4.4.1";
-    url = "https://cdn.mediavalet.com/aunsw/musictribe/6-vOpP2lRkyNSDXgZEUbQA/FyIw4jc3bk60nseai05MBQ/Original/${type}-Edit_LINUX_${version}.tar.gz";
+    url = "https://cdn-media.empowertribe.com/23b991ede2e6473d916c7ac56f53d71d/${type}-Edit_LINUX_${version}.tar.gz";
     hash = "sha256-HrSPDWnWF2s1U8Khj6VnLptPdcMVyTivewWAIIdArMc=";
-    homepage = "https://www.behringer.com/product.html?modelCode=0603-ACE";
+    homepage = "https://www.behringer.com/en/products/0603-ACE";
   }
 )

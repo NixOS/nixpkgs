@@ -6,6 +6,7 @@
   makeBinaryWrapper,
   mkNugetDeps,
   mkNugetSource,
+  nginx-config-formatter,
   pkgs,
   stdenv,
 }:
@@ -17,6 +18,7 @@ let
     last
     optionalString
     strings
+    toFunction
     types
     ;
 in
@@ -751,7 +753,7 @@ rec {
     ## `pkgs.writers.writeHaskell` usage example
 
     ```nix
-    writeHaskell "missiles" { libraries = [ pkgs.haskellPackages.acme-missiles ]; } ''
+    writeHaskell "missiles" { libraries = hpkgs: [ hpkgs.acme-missiles ]; } ''
       import Acme.Missiles
 
       main = launchMissiles
@@ -777,7 +779,7 @@ rec {
     makeBinWriter {
       compileScript = ''
         cp $contentPath tmp.hs
-        ${(ghc.withPackages (_: libraries))}/bin/ghc ${lib.escapeShellArgs ghcArgs'} tmp.hs
+        ${(ghc.withPackages (toFunction libraries))}/bin/ghc ${lib.escapeShellArgs ghcArgs'} tmp.hs
         mv tmp $out
       '';
       inherit makeWrapperArgs strip;
@@ -797,7 +799,7 @@ rec {
     ## `pkgs.writers.writeNim` usage example
 
     ```nix
-      writeNim "hello-nim" { nim = pkgs.nim2; } ''
+      writeNim "hello-nim" { nim = pkgs.nim; } ''
         echo "hello nim"
       '';
     ```
@@ -807,7 +809,7 @@ rec {
     name:
     {
       makeWrapperArgs ? [ ],
-      nim ? pkgs.nim2,
+      nim ? pkgs.nim,
       nimCompileOptions ? { },
       strip ? true,
     }:
@@ -1094,25 +1096,20 @@ rec {
   */
   writeJSBin = name: writeJS "/bin/${name}";
 
-  awkFormatNginx = builtins.toFile "awkFormat-nginx.awk" ''
-    awk -f
-    {sub(/^[ \t]+/,"");idx=0}
-    /\{/{ctx++;idx=1}
-    /\}/{ctx--}
-    {id="";for(i=idx;i<ctx;i++)id=sprintf("%s%s", id, "\t");printf "%s%s\n", id, $0}
-  '';
-
   writeNginxConfig =
     name: text:
     pkgs.runCommandLocal name
       {
         inherit text;
-        passAsFile = [ "text" ];
-        nativeBuildInputs = [ gixy ];
+        __structuredAttrs = true;
+        nativeBuildInputs = [
+          gixy
+          nginx-config-formatter
+        ];
       } # sh
       ''
-        # nginx-config-formatter has an error - https://github.com/1connect/nginx-config-formatter/issues/16
-        awk -f ${awkFormatNginx} "$textPath" | sed '/^\s*$/d' > $out
+        printf "%s" "$text" | nginxfmt --max-empty-lines 0 - > $out
+        sed -i 's/ ;/;/g' $out
         gixy $out || (echo "\n\nThis can be caused by combining multiple incompatible services on the same hostname.\n\nFull merged config:\n\n"; cat $out; exit 1)
       '';
 
@@ -1199,15 +1196,12 @@ rec {
       ])
       // {
         interpreter =
-          if pythonPackages != pkgs.pypy2Packages || pythonPackages != pkgs.pypy3Packages then
-            if libraries == [ ] then
-              python.interpreter
-            else if (lib.isFunction libraries) then
-              (python.withPackages libraries).interpreter
-            else
-              (python.withPackages (ps: libraries)).interpreter
+          if libraries == [ ] then
+            python.interpreter
+          else if (lib.isFunction libraries) then
+            (python.withPackages libraries).interpreter
           else
-            python.interpreter;
+            (python.withPackages (ps: libraries)).interpreter;
         check = optionalString (python.isPy3k && doCheck) (
           writeDash "pythoncheck.sh" ''
             exec ${buildPythonPackages.flake8}/bin/flake8 --show-source ${ignoreAttribute} "$1"

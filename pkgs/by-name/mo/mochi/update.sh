@@ -17,10 +17,8 @@ fi
 # Update version and hash for x86_64-linux (AppImage)
 update-source-version mochi "$latestVersion" --system=x86_64-linux
 
-# Update hashes for darwin systems
-for system in x86_64-darwin aarch64-darwin; do
-    url=$(nix-instantiate --eval --json -E "with import ./. { system = \"$system\"; }; mochi.src.url" | tr -d '"')
-    hash=$(nix-prefetch-url "$url")
-    sriHash=$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri "$hash")
-    update-source-version mochi "$latestVersion" "$sriHash" --system="$system" --ignore-same-version
-done
+# Update hash for aarch64-darwin
+url=$(nix-instantiate --eval --json -E "with import ./. { system = \"aarch64-darwin\"; }; mochi.src.url" | tr -d '"')
+hash=$(nix-prefetch-url "$url")
+sriHash=$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri "$hash")
+update-source-version mochi "$latestVersion" "$sriHash" --system=aarch64-darwin  --ignore-same-version

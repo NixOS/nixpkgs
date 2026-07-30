@@ -12,10 +12,7 @@ let
 
 in
 {
-  meta.maintainers = with lib.maintainers; [
-    sweber
-    hexa
-  ];
+  meta.maintainers = with lib.maintainers; [ hexa ];
 
   imports = [
     (lib.mkRemovedOptionModule [
@@ -87,6 +84,7 @@ in
         StateDirectory = "zigbee2mqtt";
         StateDirectoryMode = "0700";
         Restart = "on-failure";
+        RestartSec = 10;
 
         # Hardening
         CapabilityBoundingSet = "";
@@ -116,6 +114,7 @@ in
           "AF_INET"
           "AF_INET6"
           "AF_NETLINK"
+          "AF_UNIX"
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;

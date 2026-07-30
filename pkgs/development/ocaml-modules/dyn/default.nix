@@ -1,19 +1,22 @@
 {
   buildDunePackage,
-  dune_3,
+  dune,
   ordering,
+  pp,
 }:
 
 buildDunePackage {
   pname = "dyn";
-  inherit (dune_3) version src;
-  duneVersion = "3";
+  inherit (dune) version src;
 
   dontAddPrefix = true;
 
-  propagatedBuildInputs = [ ordering ];
+  propagatedBuildInputs = [
+    ordering
+    pp
+  ];
 
-  meta = dune_3.meta // {
+  meta = dune.meta // {
     description = "Dynamic type";
   };
 }

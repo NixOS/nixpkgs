@@ -16,13 +16,13 @@
 }:
 
 let
-  version = "2.0.11";
+  version = "2.0.13";
 
   src = fetchFromGitHub {
     owner = "Card-Forge";
     repo = "forge";
     rev = "forge-${version}";
-    hash = "sha256-72BeLmX6TDz/Z3LwnKsEEK4BntE4dp9DsbsrAkh1K2U=";
+    hash = "sha256-BU2RkXE3oMVLlCqebQwidH/ZtHKrrD47PAQhMnF/8pU=";
   };
 
   # launch4j downloads and runs a native binary during the package phase.
@@ -33,7 +33,7 @@ maven.buildMavenPackage {
   pname = "forge-mtg";
   inherit version src patches;
 
-  mvnHash = "sha256-OnxgoJhpJndYpkSmFdM+aniwrArPjPtn2E/4McU6J2k=";
+  mvnHash = "sha256-OmjrAwYzvW8ejR3/bUVQhy05vACVTG19Bznpl1SbaYs=";
 
   doCheck = false; # Needs a running Xorg
 
@@ -140,7 +140,6 @@ maven.buildMavenPackage {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       dyegoaurelio
-      eigengrau
     ];
   };
 }

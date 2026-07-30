@@ -9,23 +9,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nasm";
-  version = "3.01";
+  version = "3.02";
 
   src = fetchurl {
     url = "https://www.nasm.us/pub/nasm/releasebuilds/${finalAttrs.version}/nasm-${finalAttrs.version}.tar.xz";
-    hash = "sha256-tzJMvobnZ7ZfJvRn7YsSrYDhJOPMuJB2hVyY5Dqe3dQ=";
+    hash = "sha256-hzNuulO0rP6RdCSrXVANKwBU2fUUjTXCJzzPLPtxLw0=";
   };
 
   patches = [
-    # Backport patches fixing nasm with gcc 15 and musl (and other?) platforms
-    # https://github.com/netwide-assembler/nasm/issues/169
+    # Backport the fix for https://github.com/netwide-assembler/nasm/issues/203
+    # buffer overflow.
     (fetchpatch {
-      url = "https://github.com/netwide-assembler/nasm/commit/44e89ba9b650b5e1533bca43682e167f51a3511f.patch";
-      hash = "sha256-zVeMFhoSY/HGYr4meIWBgt5Unq1fA8lM6h1Cl5fpbxo=";
-    })
-    (fetchpatch {
-      url = "https://github.com/netwide-assembler/nasm/commit/746e7c9efa37cec9a44d84a1e96b8c38f385cc1f.patch";
-      hash = "sha256-aXVS70O/wUkW8xtkwF7uwrQfTgGcNvxHrtGC0sjIPto=";
+      name = "output-oob-fix.patch";
+      url = "https://github.com/netwide-assembler/nasm/commit/8890d723d0aa9ed1a790e2ce1c55eee8dfa0cf94.patch";
+      hash = "sha256-m03+bhKTgKlqeRLGZIy6GO5BTPIJ3r398VQrtN4waaw=";
     })
   ];
 

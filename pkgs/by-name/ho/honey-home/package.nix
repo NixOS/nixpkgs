@@ -27,10 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-m8dyCoudTJDfP0KGcoA0Xj5LmRwN/8YOfEwiwCa8sOE=";
       fetchSubmodules = true;
     }).overrideAttrs
-      (_: {
-        GIT_CONFIG_COUNT = 1;
-        GIT_CONFIG_KEY_0 = "url.https://github.com/.insteadOf";
-        GIT_CONFIG_VALUE_0 = "git@github.com:";
+      (oldAttrs: {
+        env = oldAttrs.env or { } // {
+          GIT_CONFIG_COUNT = 1;
+          GIT_CONFIG_KEY_0 = "url.https://github.com/.insteadOf";
+          GIT_CONFIG_VALUE_0 = "git@github.com:";
+        };
       });
 
   patches = [
@@ -75,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     zip -9 -r honey-home.love ./*
     strip-nondeterminism --type zip honey-home.love
     install -Dm444 -t $out/share/games/lovegames/ honey-home.love
-    makeWrapper ${love}/bin/love $out/bin/honey-home \
+    makeWrapper ${lib.getExe love} $out/bin/honey-home \
       --add-flags $out/share/games/lovegames/honey-home.love
     runHook postInstall
   '';

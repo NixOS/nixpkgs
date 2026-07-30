@@ -21,20 +21,20 @@
   tblib,
   toolz,
   tornado,
-  urllib3,
   zict,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "distributed";
-  version = "2026.1.2";
+  version = "2026.7.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "distributed";
     tag = finalAttrs.version;
-    hash = "sha256-VkZ9rd+eVyfwfRMSAqriR8UjdlqsqHYCkCHZJnk0VOU=";
+    hash = "sha256-JwN+Ey+Ii8mELa6oVS+SDiOPYyMcKdaiSjjMqDze+kc=";
   };
 
   build-system = [
@@ -58,7 +58,6 @@ buildPythonPackage (finalAttrs: {
     tblib
     toolz
     tornado
-    urllib3
     zict
   ];
 

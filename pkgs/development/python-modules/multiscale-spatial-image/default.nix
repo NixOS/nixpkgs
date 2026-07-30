@@ -1,26 +1,23 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
+  dask-image,
   dask,
+  fetchFromGitHub,
+  fsspec,
+  hatch-vcs,
+  hatchling,
+  ngff-zarr,
   numpy,
   python-dateutil,
   spatial-image,
-  xarray,
+  writableTmpDirAsHomeHook,
   xarray-dataclass,
+  xarray,
   zarr,
-  dask-image,
-  fsspec,
-  jsonschema,
-  nbmake,
-  pooch,
-  pytestCheckHook,
-  pytest-mypy,
-  urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "multiscale-spatial-image";
   version = "2.1.0";
   pyproject = true;
@@ -28,14 +25,24 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "spatial-image";
     repo = "multiscale-spatial-image";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-uF9ZccLvP1ref6qn3l6EpedsoK29Q8lAdr68JjsYMis=";
   };
 
-  build-system = [ hatchling ];
+  pythonRelaxDeps = [
+    "dask"
+    "ngff-zarr"
+    "xarray"
+  ];
+
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
 
   dependencies = [
     dask
+    ngff-zarr
     numpy
     python-dateutil
     spatial-image
@@ -49,20 +56,9 @@ buildPythonPackage rec {
     #itk = [
     #  itk-filtering # not in nixpkgs yet
     #];
-    test = [
-      dask-image
-      fsspec
-      #ipfsspec # not in nixpkgs
-      #itk-filtering # not in nixpkgs
-      jsonschema
-      nbmake
-      pooch
-      pytest-mypy
-      urllib3
-    ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.test;
+  nativeBuildInputs = [ writableTmpDirAsHomeHook ];
 
   doCheck = false; # all test files try to download data
 
@@ -71,8 +67,8 @@ buildPythonPackage rec {
   meta = {
     description = "Generate a multiscale, chunked, multi-dimensional spatial image data structure that can serialized to OME-NGFF";
     homepage = "https://github.com/spatial-image/multiscale-spatial-image";
-    changelog = "https://github.com/spatial-image/multiscale-spatial-image/releases/tag/${src.tag}";
+    changelog = "https://github.com/spatial-image/multiscale-spatial-image/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

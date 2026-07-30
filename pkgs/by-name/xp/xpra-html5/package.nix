@@ -37,8 +37,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     changelog = "https://github.com/Xpra-org/xpra-html5/releases/tag/v${finalAttrs.version}";
     platforms = lib.platforms.linux;
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [
-      lucasew
-    ];
+    maintainers = [ ];
   };
 })

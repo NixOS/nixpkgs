@@ -12,6 +12,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "devemio";
     repo = "docker-color-output";
+    # Warning: tag names are inconsistent: some have the 'v' prefix, some don't.
     tag = "v${finalAttrs.version}";
     hash = "sha256-Rpym9YckgJ583zgPpC/mQW1IGgQUppemFhAecgy3M8A=";
   };
@@ -31,7 +32,9 @@ buildGoModule (finalAttrs: {
     mainProgram = "docker-color-output";
     license = lib.licenses.mit;
     homepage = "https://github.com/devemio/docker-color-output";
-    changelog = "https://github.com/devemio/docker-color-output/releases/tag/${finalAttrs.version}";
+    # Note that due to inconsistent tag names (see above comment),
+    # we might want to check the URL before committing.
+    changelog = "https://github.com/devemio/docker-color-output/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ sguimmara ];
   };
 })

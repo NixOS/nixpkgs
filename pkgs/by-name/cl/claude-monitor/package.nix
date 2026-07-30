@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "claude-monitor";
-  version = "3.1.0";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Maciek-roboblog";
     repo = "Claude-Code-Usage-Monitor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-v5ooniaN1iVerBW77/00SpghIVE1j8cl2WENcPnS66M=";
+    hash = "sha256-f/g8OygQYYfZqboTNePwCW3OxcH/wlvsHvL8Cv+iyCU=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -25,6 +25,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pyyaml
     pytz
     rich
+    wcwidth
   ];
 
   # Tests require Claude API access and local data files
@@ -39,7 +40,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       and get intelligent predictions about session limits.
     '';
     homepage = "https://github.com/Maciek-roboblog/Claude-Code-Usage-Monitor";
-    changelog = "https://github.com/Maciek-roboblog/Claude-Code-Usage-Monitor/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/Maciek-roboblog/Claude-Code-Usage-Monitor/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ iamanaws ];
     mainProgram = "claude-monitor";

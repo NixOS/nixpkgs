@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
-    install -Dm644 ${./gnujump.xpm} $out/share/pixmaps/gnujump.xpm
+    install -Dm644 ${./gnujump.png} $out/share/icons/hicolor/32x32/apps/gnujump.png
   '';
 
   meta = {

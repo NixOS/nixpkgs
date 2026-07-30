@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "alire";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "alire-project";
     repo = "alire";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DfzCQu9xOe9JgX6RTrYOGTIS6EcPimLnd5pfXMtfRss=";
+    hash = "sha256-YOUFTKbqbFfdYNWcGCvtFCDCW2tH8E3YuRQrV522Px4=";
 
     fetchSubmodules = true;
   };

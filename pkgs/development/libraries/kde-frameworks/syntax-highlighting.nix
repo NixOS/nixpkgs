@@ -1,5 +1,6 @@
 {
   mkDerivation,
+  cmake,
   extra-cmake-modules,
   perl,
   qtbase,
@@ -9,6 +10,7 @@
 mkDerivation {
   pname = "syntax-highlighting";
   nativeBuildInputs = [
+    cmake
     extra-cmake-modules
     perl
   ];

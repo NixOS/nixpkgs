@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pgpool";
-  version = "4.7.1";
+  version = "4.7.2";
 
   outputs = [
     "out"
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pgpool";
     repo = "pgpool2";
     tag = "V${lib.replaceString "." "_" finalAttrs.version}";
-    hash = "sha256-npH4rhRToPVfKk7XyGGzdRSZMQ+APM8MBKHmd0rzlDw=";
+    hash = "sha256-gURWz9NeiHLL5DbUP7WnByHzCrLaI/8HWTRU9xO22EY=";
   };
 
   patches = [

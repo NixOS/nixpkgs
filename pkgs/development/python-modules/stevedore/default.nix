@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "stevedore";
-  version = "5.6.0";
+  version = "5.9.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8i0VxurUDFu/qcpUqn57SgfVmzauA+0SztGlTPC1GUU=";
+    hash = "sha256-q70K96OKi7sdat6i41sXYJzwBOqsMj6IqNiWNkDdKzw=";
   };
 
   build-system = [

@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "trajan";
-  version = "1.0.0";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "praetorian-inc";
     repo = "trajan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ji4IkImpDRQr8BuJCIqRfxyEWFD3Ux99D5lP3ALt+OQ=";
+    hash = "sha256-qLGu3Q509rC0flwXogruN2SzoRPbDsHia7nDaZr3ck4=";
   };
 
-  vendorHash = "sha256-Vr9MkEJZOIrryhGOWrUq76J8B7+2bzf5BOV4omVDIY8=";
+  vendorHash = "sha256-hfOd2Us4vyEA7P4mDHCn1zsJr2o5Kxw2MG/B0zvivHs=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 

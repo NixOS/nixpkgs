@@ -4,21 +4,22 @@
   fetchFromGitHub,
   pkg-config,
   oniguruma,
+  openssl,
   stdenv,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rucola";
-  version = "0.5.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "Linus-Mussmaecher";
     repo = "rucola";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-vBY6tkzLgZuSU5AqH3uzDwjPl/ayWY0S8uRvlgE/Wmw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dE2XlO+CwC78GblNoyv7oA5d/GezzuiuOwcQjsm7Pns=";
   };
 
-  cargoHash = "sha256-a1f+WSXMNaZCKc7bScknW9WW+Qi1CZIuNLdJseem11I=";
+  cargoHash = "sha256-yhBY/6NLn1aIRZLLpHrEsMo/yzSnKzsvrIiJFCRcYMc=";
 
   nativeBuildInputs = [
     pkg-config
@@ -26,6 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     oniguruma
+    openssl
   ];
 
   env = {

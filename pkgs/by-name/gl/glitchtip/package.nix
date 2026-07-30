@@ -1,8 +1,7 @@
 {
   lib,
-  python313,
+  python314,
   fetchFromGitLab,
-  fetchPypi,
   callPackage,
   stdenv,
   makeWrapper,
@@ -10,22 +9,11 @@
 }:
 
 let
-  python = python313.override {
+  python = python314.override {
     self = python;
     packageOverrides = final: prev: {
-      django = final.django_5;
-      django-csp = prev.django-csp.overridePythonAttrs rec {
-        version = "4.0";
-        src = fetchPypi {
-          inherit version;
-          pname = "django_csp";
-          hash = "sha256-snAQu3Ausgo9rTKReN8rYaK4LTOLcPvcE8OjvShxKDM=";
-        };
-      };
-      django-ninja-cursor-pagination = prev.django-ninja-cursor-pagination.overridePythonAttrs {
-        # checks are failing with django 5
-        doCheck = false;
-      };
+      django = final.django_6;
+      glitchtip-rust = final.callPackage ./glitchtip-rust.nix { };
     };
   };
 
@@ -34,16 +22,15 @@ let
     [
       aiohttp
       anonymizeip
+      arro3-core
+      arro3-io
       boto3
-      brotli
-      celery
-      celery-batches
       cxxfilt
       django
       django-allauth
       django-anymail
+      django-async-backend
       django-cors-headers
-      django-csp
       django-environ
       django-extensions
       django-import-export
@@ -54,32 +41,35 @@ let
       django-postgres-partition
       django-prometheus
       django-storages
-      django-valkey
+      django-vcache
+      django-vtasks
+      duckdb
       google-cloud-logging
       granian
-      gunicorn
+      glitchtip-rust
+      mcp
+      minidump
+      opentelemetry-proto
       orjson
       psycopg
       pydantic
       sentry-sdk
       symbolic
       user-agents
-      uvicorn
+      uuid6
       uwsgi-chunked
       whitenoise
     ]
-    ++ celery.optional-dependencies.redis
-    ++ celery.optional-dependencies.sqlalchemy
     ++ django-allauth.optional-dependencies.headless-spec
     ++ django-allauth.optional-dependencies.mfa
     ++ django-allauth.optional-dependencies.socialaccount
     ++ django-storages.optional-dependencies.boto3
     ++ django-storages.optional-dependencies.azure
     ++ django-storages.optional-dependencies.google
-    ++ django-valkey.optional-dependencies.libvalkey
-    ++ django-valkey.optional-dependencies.lz4
+    ++ django-vtasks.optional-dependencies.valkey
     ++ granian.optional-dependencies.reload
     ++ granian.optional-dependencies.uvloop
+    ++ mcp.optional-dependencies.cli
     ++ psycopg.optional-dependencies.c
     ++ psycopg.optional-dependencies.pool
     ++ pydantic.optional-dependencies.email;
@@ -89,15 +79,23 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glitchtip";
-  version = "5.2.1";
+  version = "6.2.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "glitchtip-backend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FxkIbSrIyvLnD9n/Cb2udOhsnoC/bwGAfCRB1L/fhwo=";
+    hash = "sha256-E1YwJwfL5+Q68xRfnoi2Sg+vAZxGQa0IKfOSVuLVnK0=";
   };
+
+  postPatch = ''
+    echo 'import os
+    ALLAUTH_TRUSTED_CLIENT_IP_HEADER = os.getenv(
+        "ALLAUTH_TRUSTED_CLIENT_IP_HEADER",
+        None
+    )' >> glitchtip/settings.py
+  '';
 
   propagatedBuildInputs = pythonPackages;
 
@@ -132,6 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit frontend python;
+    inherit (python.pkgs) glitchtip-rust;
     tests = { inherit (nixosTests) glitchtip; };
     updateScript = ./update.sh;
   };

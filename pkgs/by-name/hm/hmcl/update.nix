@@ -18,19 +18,22 @@ writeShellApplication {
   ];
 
   text = ''
-    # get old info
-    oldVersion=$(nix-instantiate --eval --strict -A "hmcl.version" | jq -e -r)
-
     get_latest_release() {
-        curl --fail ''${GITHUB_TOKEN:+ -H "Authorization: bearer $GITHUB_TOKEN"} \
-             -s "https://api.github.com/repos/HMCL-dev/HMCL/releases/latest" | jq -r ".tag_name"
+        curl -fsSL ''${GITHUB_TOKEN:+ -H "Authorization: bearer $GITHUB_TOKEN"} \
+             "https://api.github.com/repos/HMCL-dev/HMCL/releases" | \
+        jq -r 'map(select(.tag_name | test("^v\\d+\\.\\d+\\.\\d+$")))[0].tag_name'
     }
 
     version=$(get_latest_release)
-    version="''${version#v-}"
+    version="''${version#v}"
 
-    if [[ "$oldVersion" == "$version" ]]; then
+    if [[ "$UPDATE_NIX_OLD_VERSION" == "$version" ]]; then
         echo "Already up to date!"
+        exit 0
+    fi
+
+    if ! curl -fsSL "https://docs.hmcl.net/changelog/stable.html" | grep -q "HMCL $version"; then
+        echo "Version $version found on GitHub but not yet listed in stable changelog. Skipping."
         exit 0
     fi
 

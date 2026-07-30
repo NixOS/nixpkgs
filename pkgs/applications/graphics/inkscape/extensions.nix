@@ -5,7 +5,7 @@
   runCommand,
   inkcut,
   callPackage,
-  texlive,
+  texliveBasic,
 }:
 
 {
@@ -51,7 +51,7 @@
   inkstitch = callPackage ./extensions/inkstitch { };
   silhouette = callPackage ./extensions/silhouette { };
   textext = callPackage ./extensions/textext {
-    pdflatex = texlive.combined.scheme-basic;
-    lualatex = texlive.combined.scheme-basic;
+    pdflatex = texliveBasic;
+    lualatex = texliveBasic;
   };
 }

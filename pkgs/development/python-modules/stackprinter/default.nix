@@ -10,14 +10,14 @@
 }:
 buildPythonPackage rec {
   pname = "stackprinter";
-  version = "0.2.12";
+  version = "0.2.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cknd";
     repo = "stackprinter";
     tag = version;
-    hash = "sha256-Offow68i2Nh65sh5ZowlSdV1SKF2RIfwlRv4z1bCu+k=";
+    hash = "sha256-R6s1YBbb52oK1zIQtRR80W+6Ca/gATtC6S3rUEC4Mes=";
   };
 
   build-system = [

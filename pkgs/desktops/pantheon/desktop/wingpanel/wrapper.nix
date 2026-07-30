@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     wrapGAppsHook3
   ];
 
-  buildInputs = lib.forEach selectedIndicators (x: x.buildInputs) ++ selectedIndicators;
+  buildInputs = lib.concatMap (x: x.buildInputs) selectedIndicators ++ selectedIndicators;
 
   dontUnpack = true;
   dontConfigure = true;

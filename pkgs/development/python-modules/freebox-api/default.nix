@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "freebox-api";
-  version = "1.3.0";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hacf-fr";
     repo = "freebox-api";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3rmOIHneGUtaLw+0Z0UTKoCSoJs70KKLjDPi0gOtV6I=";
+    hash = "sha256-3M29mboTZMG9lZSt816PvAXzl2DaqiC2nhikcpn+gqU=";
   };
 
   build-system = [ poetry-core ];
@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python module to interact with the Freebox OS API";
     homepage = "https://github.com/hacf-fr/freebox-api";
-    changelog = "https://github.com/hacf-fr/freebox-api/releases/tag/v${finalAttrs.src.tag}";
+    changelog = "https://github.com/hacf-fr/freebox-api/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "freebox_api";

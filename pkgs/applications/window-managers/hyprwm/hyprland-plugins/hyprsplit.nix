@@ -8,13 +8,13 @@
 }:
 mkHyprlandPlugin (finalAttrs: {
   pluginName = "hyprsplit";
-  version = "0.53.1";
+  version = "0.54.3-unstable-2026-06-11";
 
   src = fetchFromGitHub {
     owner = "shezdy";
     repo = "hyprsplit";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-seA9mz0Yej4yYZVgzd7yKoHwuueKhfQPu0CyB7EL8No=";
+    rev = "6b00b677d8905fb38779c91e12d6294e0e586a44";
+    hash = "sha256-PaoUtmk+qIP/ESdxkxnY7mUMpMHjix88qu22R5GLQqE=";
   };
 
   nativeBuildInputs = [
@@ -22,7 +22,7 @@ mkHyprlandPlugin (finalAttrs: {
     ninja
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     homepage = "https://github.com/shezdy/hyprsplit";
@@ -30,6 +30,7 @@ mkHyprlandPlugin (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       aacebedo
+      mrdev023
     ];
   };
 })

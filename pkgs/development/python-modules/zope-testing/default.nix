@@ -19,6 +19,11 @@ buildPythonPackage rec {
     hash = "sha256-dAUiG8DxlhQKMBXh49P0CDC9UjqAYjB+2vVCTI36cgc=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools >= 78.1.1,< 81" setuptools
+  '';
+
   build-system = [ setuptools ];
 
   doCheck = !isPyPy;

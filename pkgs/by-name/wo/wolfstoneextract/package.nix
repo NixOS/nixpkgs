@@ -1,34 +1,44 @@
 {
   lib,
   stdenv,
-  fetchFromBitbucket,
+  fetchFromGitHub,
   cmake,
+  nix-update-script,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wolfstoneextract";
   version = "1.2";
 
-  src = fetchFromBitbucket {
-    owner = "ecwolf";
-    repo = "wolfstoneextract";
-    rev = finalAttrs.version;
+  src = fetchFromGitHub {
+    owner = "ECWolfEngine";
+    repo = "WolfstoneExtract";
+    tag = finalAttrs.version;
     hash = "sha256-yrYLP2ewOtiry+EgH1IEaxz2Q55mqQ6mRGSxzVUnJ8Q=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
   ];
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = [ "--help" ];
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Utility to extract Wolfstone data from Wolfenstein II";
-    mainProgram = "wolfstoneextract";
-    homepage = "https://bitbucket.org/ecwolf/wolfstoneextract/src/master/";
-    platforms = [ "x86_64-linux" ];
-    license = with lib.licenses; [
-      gpl3Only
-      bsd3
-    ];
+    homepage = "https://github.com/ECWolfEngine/WolfstoneExtract";
+    changelog = "https://github.com/ECWolfEngine/WolfstoneExtract/blob/${finalAttrs.src.rev}/changelog";
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ keenanweaver ];
+    mainProgram = "wolfstoneextract";
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    platforms = [ "x86_64-linux" ];
   };
 })

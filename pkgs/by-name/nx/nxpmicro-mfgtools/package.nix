@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   bzip2,
@@ -10,27 +9,20 @@
   libusb1,
   libzip,
   openssl,
+  tinyxml-2,
   zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nxpmicro-mfgtools";
-  version = "1.5.139";
+  version = "1.5.243";
 
   src = fetchFromGitHub {
     owner = "nxp-imx";
     repo = "mfgtools";
     rev = "uuu_${finalAttrs.version}";
-    sha256 = "sha256-t5usUGbcdLQlqPpZkNDeGncka9VfkpO7U933Kw/Sm7U=";
+    sha256 = "sha256-+m3r/QxOnTjemqIaZ/2cxDHtHlw7qxu9PbTsQYyMaEY=";
   };
-
-  patches = [
-    # build: support cmake 4.0
-    (fetchpatch {
-      url = "https://github.com/nxp-imx/mfgtools/commit/311ee9b3cca0275fbb5eb5228c56edbb518afd67.patch?full_index=1";
-      hash = "sha256-o4cPfXsPxk88zy5lARX8rcmQncsAkZegOxlAIyoFUpQ=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -43,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     libusb1
     libzip
     openssl
+    tinyxml-2
     zstd
   ];
 

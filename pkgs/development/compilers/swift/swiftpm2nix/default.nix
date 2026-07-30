@@ -22,7 +22,7 @@ stdenv.mkDerivation {
           jq
           nurl
         ]
-      } \
+      }
   '';
 
   preferLocalBuild = true;

@@ -6,15 +6,15 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uesave";
-  version = "0.7.0";
+  version = "0.7.1";
   src = fetchFromGitHub {
     owner = "trumank";
     repo = "uesave-rs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Wn7/Ik8F3+gA66CpGZGwUer3zArCx7fx1IS6DGvqJDI=";
+    hash = "sha256-lGtRe3AYJ59CwRaDznO6RNqVFCSKJPWVDhj0tnY5xcs=";
   };
 
-  cargoHash = "sha256-Ccggso8rD6qxe3W3ztzcdJINSqVF5HU9BKZiO8tM+wo=";
+  cargoHash = "sha256-6VTy/KHk2mSDfRonxyen4kRMvwBS3uZjsZqMhBJ+boM=";
 
   nativeInstallCheckInputs = [
     versionCheckHook

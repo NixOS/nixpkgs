@@ -19,14 +19,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.18.1";
+  version = "1.18.2";
   pname = "chafa";
 
   src = fetchFromGitHub {
     owner = "hpjansson";
     repo = "chafa";
     tag = finalAttrs.version;
-    hash = "sha256-Is7N5WUjYVDFz1VKrKQqa7n48gXf2JtvDHB5vXMjoZg=";
+    hash = "sha256-M4TTLpaIV7H3aLj7/C7FHT0GNCxN9SRZ81FtxuWNzjo=";
   };
 
   outputs = [
@@ -77,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Terminal graphics for the 21st century";
     homepage = "https://hpjansson.org/chafa/";
+    changelog = "https://github.com/hpjansson/chafa/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [

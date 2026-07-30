@@ -25,6 +25,8 @@ let
     " "
     "\\"
   ];
+  hasTmpfilesPrefix = lib.hasPrefix "tmpfiles.d/";
+  removeTmpFilesPrefix = lib.removePrefix "tmpfiles.d/";
 
   settingsOption = {
     description = ''
@@ -299,8 +301,8 @@ in
           ''
           + concatMapStrings (
             name:
-            optionalString (hasPrefix "tmpfiles.d/" name) ''
-              rm -f $out/${removePrefix "tmpfiles.d/" name}
+            optionalString (hasTmpfilesPrefix name) ''
+              rm -f $out/${removeTmpFilesPrefix name}
             ''
           ) config.system.build.etc.passthru.targets;
         })
@@ -317,6 +319,7 @@ in
         mkdir -p $out/lib/tmpfiles.d
         cd $out/lib/tmpfiles.d
 
+        ln -s "${systemd}/example/tmpfiles.d/credstore.conf"
         ln -s "${systemd}/example/tmpfiles.d/home.conf"
         ln -s "${systemd}/example/tmpfiles.d/journal-nocow.conf"
         ln -s "${systemd}/example/tmpfiles.d/portables.conf"
@@ -350,19 +353,11 @@ in
       "d  /var/db                            0755 root root - -"
       "L  /var/lock                          -    -    -    - ../run/lock"
     ]
-    ++ lib.optionals config.nix.enable [
-      "d  /nix/var                           0755 root root - -"
-      "L+ /nix/var/nix/gcroots/booted-system 0755 root root - /run/booted-system"
-    ]
     # Boot-time cleanup
     ++ [
       "R! /etc/group.lock                    -    -    -    - -"
       "R! /etc/passwd.lock                   -    -    -    - -"
       "R! /etc/shadow.lock                   -    -    -    - -"
-    ]
-    ++ lib.optionals config.nix.enable [
-      "R! /nix/var/nix/gcroots/tmp           -    -    -    - -"
-      "R! /nix/var/nix/temproots             -    -    -    - -"
     ];
 
     boot.initrd.systemd = {

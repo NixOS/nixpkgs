@@ -63,6 +63,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DENABLE_TEST:BOOL=ON"
   ];
 
+  # Mismatched arg counts in tests break under gcc 15's C23 default.
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-std=gnu17";
+  };
+
   postInstall = ''
     mkdir -p $test/share
     cp ./uiohook_tests $test/share

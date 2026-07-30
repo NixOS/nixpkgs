@@ -25,14 +25,16 @@ let
     in
     attrsOf (either valueType (listOf valueType));
 
+  mkCliVal = value: if isPath value then "${value}" else toString value;
+
   mkLine =
     key: value:
     if value == true then
       "-${key}"
     else if isList value then
-      concatMapStringsSep " " (v: "-${key}=${escapeShellArg (toString v)}") value
+      concatMapStringsSep " " (v: "-${key}=${escapeShellArg (mkCliVal v)}") value
     else
-      "-${key}=${escapeShellArg (toString value)}";
+      "-${key}=${escapeShellArg (mkCliVal value)}";
 
   vmalertName = name: "vmalert" + lib.optionalString (name != "") ("-" + name);
   enabledInstances = lib.filterAttrs (name: conf: conf.enable) config.services.vmalert.instances;

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pretix-worldlinedirect";
-  version = "1.1.0";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix-worldlinedirect";
     rev = "v${version}";
-    hash = "sha256-ofDGbRYTA2GTnVexn0dE6Iftq6+MkigOXWVR4kPUJzY=";
+    hash = "sha256-SqXXnYetz52OFPKM61mANA71hrCEK7FgsdEoxskR5bk=";
   };
 
   build-system = [

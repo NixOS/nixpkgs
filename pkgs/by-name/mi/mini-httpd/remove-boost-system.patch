@@ -1,0 +1,13 @@
+diff --git a/configure.ac b/configure.ac
+index fd06d1a..337178c 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -14,8 +14,6 @@ AC_PROG_RANLIB
+ AC_LANG([C++])
+ AC_CHECK_HEADER(boost/spirit.hpp, :,
+     AC_MSG_ERROR([Cannot find the Boost library headers! See the README for details.]))
+-AC_CHECK_LIB([boost_system], [main], [LIBS="-lboost_system"],
+-    [AC_MSG_ERROR([cannot link required boost.system library])])
+ gl_INIT
+ AC_SYS_LARGEFILE
+ 

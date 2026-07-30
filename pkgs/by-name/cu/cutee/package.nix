@@ -9,7 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.4.2";
 
   src = fetchurl {
-    url = "http://www.codesink.org/download/cutee-${finalAttrs.version}.tar.gz";
+    url = "https://www.codesink.org/download/cutee-${finalAttrs.version}.tar.gz";
     sha256 = "18bzvhzx8k24mpcim5669n3wg9hd0sfsxj8zjpbr24hywrlppgc2";
   };
 

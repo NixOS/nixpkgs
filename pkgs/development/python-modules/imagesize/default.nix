@@ -6,17 +6,17 @@
 
 buildPythonPackage rec {
   pname = "imagesize";
-  version = "1.4.1";
+  version = "2.0.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aRUERK/7nLDVzFqSs2dvCy+3zZrjnpR6XhGja0SXzUo=";
+    hash = "sha256-joNYxKBcME8fzPf/lvA25yQ6GJ6eQukIUZk8VYz+nuM=";
   };
 
   meta = {
     description = "Getting image size from png/jpeg/jpeg2000/gif file";
     homepage = "https://github.com/shibukawa/imagesize_py";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
   };
 }

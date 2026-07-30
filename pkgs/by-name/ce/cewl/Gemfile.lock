@@ -6,19 +6,19 @@ GEM
     mime-types (3.7.0)
       logger
       mime-types-data (~> 3.2025, >= 3.2025.0507)
-    mime-types-data (3.2025.0924)
+    mime-types-data (3.2026.0414)
     mini_exiftool (2.14.0)
       ostruct (>= 0.6.0)
       pstore (>= 0.1.3)
     mini_portile2 (2.8.9)
-    nokogiri (1.18.10)
+    nokogiri (1.19.3)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     ostruct (0.6.3)
-    pstore (0.2.0)
+    pstore (0.2.1)
     racc (1.8.1)
     rexml (3.4.4)
-    rubyzip (3.2.2)
+    rubyzip (3.4.0)
     spider (0.7.0)
 
 PLATFORMS

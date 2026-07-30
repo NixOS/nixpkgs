@@ -26,7 +26,7 @@
   libsndfile,
   libebur128,
   rnnoise,
-  boost,
+  boost187,
   dbus,
   fftwFloat,
   calf,
@@ -88,7 +88,7 @@ stdenv.mkDerivation {
     libsamplerate
     libsndfile
     rnnoise
-    boost
+    boost187
     dbus
     fftwFloat
     zita-convolver

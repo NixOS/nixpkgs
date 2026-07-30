@@ -3,6 +3,8 @@
   rustPlatform,
   fetchFromGitHub,
   cmake,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -20,6 +22,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Cross platform, fast, compression and decompression tool";
     homepage = "https://github.com/sstadick/crabz";
@@ -28,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       unlicense # or
       mit
     ];
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "crabz";
   };
 })

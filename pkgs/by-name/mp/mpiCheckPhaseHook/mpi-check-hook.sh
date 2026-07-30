@@ -72,8 +72,5 @@ setupMpiCheck() {
       export HWLOC_XMLFILE="@topology@"
       ;;
   esac
-
-  # Limit number of OpenMP threads. Default is "all cores".
-  export OMP_NUM_THREADS=1
 }
 

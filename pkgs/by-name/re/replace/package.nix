@@ -38,5 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://replace.richardlloyd.org.uk/";
     mainProgram = "replace-literal";
     platforms = lib.platforms.unix;
+    license = lib.licenses.unfree;
   };
 })

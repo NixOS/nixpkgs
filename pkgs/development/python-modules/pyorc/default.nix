@@ -71,7 +71,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/noirello/pyorc/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/noirello/pyorc/blob/v${version}/CHANGELOG.rst";
     description = "Python module for Apache ORC file format";
     homepage = "https://github.com/noirello/pyorc";
     license = lib.licenses.asl20;

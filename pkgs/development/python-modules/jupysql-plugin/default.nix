@@ -9,7 +9,7 @@
   ploomber-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupysql-plugin";
   version = "0.4.5";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   # using pypi archive which includes pre-built assets
   src = fetchPypi {
     pname = "jupysql_plugin";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-cIXheImO4BL00zn101ZDIzKl2qkIDsTNswZOCs54lNY=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "Better SQL in Jupyter";
     homepage = "https://github.com/ploomber/jupysql-plugin";
-    changelog = "https://github.com/ploomber/jupysql-plugin/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/ploomber/jupysql-plugin/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ euxane ];
   };
-}
+})

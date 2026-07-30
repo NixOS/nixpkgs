@@ -62,10 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Dynamic tracing in Linux";
     mainProgram = "ply";
     homepage = "https://wkz.github.io/ply/";
-    license = [ lib.licenses.gpl2Only ];
+    license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       mic92
-      mbbx6spp
       snu
     ];
     platforms = lib.platforms.linux;

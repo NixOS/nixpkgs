@@ -42,14 +42,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-classic";
-  version = "1.0.2";
+  version = "1.0.8";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-classic==${finalAttrs.version}";
-    hash = "sha256-NH2l2Htt5nAzzvwKUgQNwvQBLxZKhOLxnxthvK/Yh4I=";
+    hash = "sha256-Xskg6bPmRv7iLjppUF11rqmHg2YJWETVT1EMhzK7Svo=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/langchain";
@@ -98,6 +99,8 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Network access (web.example.com)
     "test_socket_disabled"
+    # Fails due to JSON formatting differences
+    "test_configurable"
   ];
 
   # Bulk updater selects wrong tag
@@ -105,6 +108,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-classic==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

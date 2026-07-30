@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "celluloid";
-  version = "0.29";
+  version = "0.30";
 
   src = fetchFromGitHub {
     owner = "celluloid-player";
     repo = "celluloid";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-p4jMEM+ikcyVIi7cHm7u0wk9PKD8YJyhRXABgsh/SJc=";
+    hash = "sha256-UIjbEVV1VHySaJ0QIbCcdVyXd96XeE5ks5Z0NVMJ5hU=";
   };
 
   nativeBuildInputs = [

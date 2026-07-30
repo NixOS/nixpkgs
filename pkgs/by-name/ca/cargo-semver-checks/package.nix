@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-semver-checks";
-  version = "0.47.0";
+  version = "0.49.0";
 
   src = fetchFromGitHub {
     owner = "obi1kenobi";
     repo = "cargo-semver-checks";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1D6WFsiMOl/bJr0J+mmvLlgnRSKN6rPhDSnDsdLTC9E=";
+    hash = "sha256-dTfcpUVR3zDtNLTKG/Oj1dxVEzLuCYR3tFlCIapYJp8=";
   };
 
-  cargoHash = "sha256-YbtYIHj899eJSrp5n5jODgTkL9L26EnruzECwBrBF00=";
+  cargoHash = "sha256-VZxaEwQqHt8LKXp/SzOUAxT6e8jvCnS7OlyxTI1rg6c=";
 
   nativeBuildInputs = [
     cmake
@@ -34,8 +34,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # requires internet access
     "--skip=detects_target_dependencies"
     "--skip=query::tests_lints::feature_missing"
-    # platform specific tests
-    "--skip=target_feature"
   ];
 
   preCheck = ''

@@ -1,9 +1,12 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+
   # build-system
   setuptools,
+
   # dependencies
   ctranslate2,
   ctranslate2-cpp,
@@ -12,6 +15,7 @@
   sentencepiece,
   spacy,
   stanza,
+
   # tests
   pytestCheckHook,
   writableTmpDirAsHomeHook,
@@ -24,6 +28,9 @@ let
       withOpenblas = false;
     };
   };
+
+  inherit (stdenv.hostPlatform) isDarwin isLinux isAarch64;
+  isAarch64Linux = isLinux && isAarch64;
 in
 buildPythonPackage (finalAttrs: {
   pname = "argostranslate";
@@ -39,6 +46,9 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "stanza"
+  ];
   dependencies = [
     ctranslate2OneDNN
     minisbd
@@ -53,14 +63,13 @@ buildPythonPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  pythonRelaxDeps = [
-    "stanza"
-  ];
-
-  pythonImportsCheck = [
+  # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
+  # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
+  pythonImportsCheck = lib.optionals (!isAarch64Linux) [
     "argostranslate"
     "argostranslate.translate"
   ];
+  doCheck = !isAarch64Linux;
 
   meta = {
     description = "Open-source offline translation library written in Python";

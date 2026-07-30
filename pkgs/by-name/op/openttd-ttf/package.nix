@@ -50,7 +50,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/zephyris/openttd-ttf";
     changelog = "https://github.com/zephyris/openttd-ttf/releases/tag/${finalAttrs.version}";
     description = "TrueType typefaces for text in a pixel art style, designed for use in OpenTTD";
-    license = [ lib.licenses.gpl2 ];
+    license = lib.licenses.gpl2;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.sfrijters ];
   };

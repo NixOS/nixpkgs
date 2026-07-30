@@ -10,13 +10,13 @@
 buildHomeAssistantComponent rec {
   owner = "thomasloven";
   domain = "browser_mod";
-  version = "2.7.4";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "hass-browser_mod";
     tag = "v${version}";
-    hash = "sha256-UFHdoIfmN0BUBRAze3mC3mgbV00rrjmKlAiBc4FuiZA=";
+    hash = "sha256-L/dqeKzctCVa25BrnNmK5v5Rl9/6B17hSirMQOBhvMg=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,7 @@ buildHomeAssistantComponent rec {
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-gvONQGQ91XZAygXDZnu7R/BPKa9T9l3f3EE6o39t0G0=";
+    hash = "sha256-+q7qaSRXEw4duURO/sIuIYqPy8nXLQjUpZMLM+O+9Wg=";
   };
 
   npmBuildScript = "build";
@@ -35,7 +35,7 @@ buildHomeAssistantComponent rec {
   meta = {
     description = "Home Assistant integration to turn your browser into a controllable entity and media player";
     homepage = "https://github.com/thomasloven/hass-browser_mod";
-    changelog = "https://github.com/thomasloven/hass-browser_mod/releases/tag/${src.tag}";
+    changelog = "https://github.com/thomasloven/hass-browser_mod/blob/${src.tag}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     license = lib.licenses.mit;
   };

@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Unofficial CLI client for Put.io";
     homepage = "https://kaput.sh/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "kaput";
   };
 })

@@ -4,7 +4,8 @@
   fetchurl,
   fetchFromGitHub,
   cmake,
-  extra-cmake-modules,
+  pkg-config,
+  kdePackages,
   boost,
   python3,
   fcitx5,
@@ -30,13 +31,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libime";
-  version = "1.1.12";
+  version = "1.1.14";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "libime";
     tag = finalAttrs.version;
-    hash = "sha256-LqbwXpmqUCbaKHaaE9pOrHb1Qdp20/S3QEf9F4/3oiE=";
+    hash = "sha256-q9OSY1q4MNlFqw6lRMrHO6QT9xP8Czz4b4M0BuIkp34=";
     fetchSubmodules = true;
   };
 
@@ -48,7 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    pkg-config
+    kdePackages.extra-cmake-modules
     python3
   ];
 

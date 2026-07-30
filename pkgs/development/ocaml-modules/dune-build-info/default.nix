@@ -6,7 +6,7 @@
 
 buildDunePackage {
   pname = "dune-build-info";
-  inherit (dune-action-plugin) src version preBuild;
+  inherit (dune-action-plugin) src version;
 
   dontAddPrefix = true;
 

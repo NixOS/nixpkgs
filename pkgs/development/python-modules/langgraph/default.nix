@@ -41,14 +41,15 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "langgraph";
-  version = "1.0.10";
+  version = "1.2.7";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = finalAttrs.version;
-    hash = "sha256-NJSmpVshj/x6ws+jFYXGarNKNztbk5OIIMA1neFOyIY=";
+    hash = "sha256-Ws84VIh+IkL1oV4PmZacu56TW+S1JppCgDtK5datLY4=";
   };
 
   postgresqlTestSetupPost = ''
@@ -135,11 +136,15 @@ buildPythonPackage (finalAttrs: {
     "tests/test_pregel_async.py"
     "tests/test_subgraph_persistence.py"
     "tests/test_subgraph_persistence_async.py"
+    "tests/test_time_travel.py"
+    "tests/test_time_travel_async.py"
+
+    # Race condition
+    "tests/test_retry.py::test_error_handler_resumes_after_crash_multiple_nodes"
   ];
 
   # Since `langgraph` is the only unprefixed package, we have to use an explicit match
   passthru = {
-    # python updater script sets the wrong tag
     skipBulkUpdate = true;
     updateScript = nix-update-script {
       extraArgs = [

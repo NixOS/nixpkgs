@@ -43,11 +43,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-settings-daemon";
-  version = "49.1";
+  version = "50.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-settings-daemon/${lib.versions.major finalAttrs.version}/gnome-settings-daemon-${finalAttrs.version}.tar.xz";
-    hash = "sha256-KplX/E+Rw7kSe0lIQXm+9IUSDZwcII5E1E5qdG5swcE=";
+    hash = "sha256-3SyXMJFPDs7KAindiowpQKV93rCAJDRVjUsWTXnP4Fw=";
   };
 
   patches = [
@@ -56,15 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     (replaceVars ./fix-paths.patch {
       inherit tzdata;
-    })
-
-    # Fix crash when switching to hands-free mode on a bluetooth headset
-    (fetchpatch {
-      name = "fix-bluetooth-handsfree-crash.patch";
-      url = "https://gitlab.gnome.org/GNOME/libgnome-volume-control/-/merge_requests/31.patch";
-      hash = "sha256-jFbItlXT05nnp825R/HvsWDFxAMzL4z36CsxhQ2sEIY=";
-      stripLen = 1;
-      extraPrefix = "subprojects/gvc/";
     })
   ];
 

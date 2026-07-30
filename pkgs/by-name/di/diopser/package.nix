@@ -29,7 +29,7 @@ let
   };
 
   juce = {
-    version = "unstable-2021-04-07";
+    version = "6.0.8-unstable-2021-04-08";
     src = fetchFromGitHub {
       owner = "juce-framework";
       repo = "JUCE";
@@ -41,7 +41,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "diopser";
-  version = "unstable-2021-5-13";
+  version = "0-unstable-2021-04-13";
 
   src = fetchFromGitHub {
     owner = "robbert-vdh";

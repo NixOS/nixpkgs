@@ -35,7 +35,7 @@
     ''
       start_all()
 
-      harmonia.wait_for_unit("harmonia.service")
+      harmonia.wait_for_unit("harmonia.socket")
 
       client01.wait_until_succeeds("curl -f http://harmonia:5000/nix-cache-info | grep '${toString nodes.harmonia.services.harmonia.cache.settings.priority}' >&2")
       client01.succeed("curl -f http://harmonia:5000/version | grep '${nodes.harmonia.services.harmonia.package.version}' >&2")

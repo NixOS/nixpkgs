@@ -13,16 +13,19 @@
   # broken on i686-linux https://github.com/tmux/tmux/issues/4597
   withUtf8proc ? !(stdenv.hostPlatform.is32bit),
   utf8proc, # gets Unicode updates faster than glibc
-  withUtempter ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl,
+  withUtempter ? stdenv.hostPlatform.isLinux,
   libutempter,
   withSixel ? true,
   versionCheckHook,
-  nix-update-script,
+  common-updater-scripts,
+  writeShellScript,
+  curl,
+  jq,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tmux";
-  version = "3.6a";
+  version = "3.7b";
 
   outputs = [
     "out"
@@ -33,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "tmux";
     repo = "tmux";
     tag = finalAttrs.version;
-    hash = "sha256-VwOyR9YYhA/uyVRJbspNrKkJWJGYFFktwPnnwnIJ97s=";
+    hash = "sha256-CTq06XP997M0ODxQihTq34dI9H6jSRLUXLYuTWOwDpc=";
   };
 
   nativeBuildInputs = [
@@ -87,7 +90,10 @@ stdenv.mkDerivation (finalAttrs: {
           ln -sv ${ncurses}/share/terminfo/t/{tmux,tmux-256color,tmux-direct} $out/share/terminfo/t
         ''
     );
-    updateScript = nix-update-script { };
+    updateScript = writeShellScript "update-tmux" ''
+      latest=$(${lib.getExe curl} --silent ''${GITHUB_TOKEN:+--header "Authorization: Bearer $GITHUB_TOKEN"} https://api.github.com/repos/tmux/tmux/releases/latest | ${lib.getExe jq} -r .tag_name)
+      ${lib.getExe' common-updater-scripts "update-source-version"} tmux "$latest"
+    '';
   };
 
   meta = {

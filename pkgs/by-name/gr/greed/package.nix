@@ -9,22 +9,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "greed";
-  version = "4.3";
+  version = "4.5";
 
   src = fetchFromGitLab {
     owner = "esr";
     repo = "greed";
     tag = finalAttrs.version;
-    hash = "sha256-NmX0hYHODe55N0edhdfdm0a/Yqm/UwkU/RREjYl3ePc=";
+    hash = "sha256-S2K6nn4WS1gOvhlYK/UH1hfA0pzij4w5SeP004WVZik=";
   };
 
   postPatch = ''
     substituteInPlace Makefile \
       --replace-fail "-lcurses" "-lncurses" \
-      --replace-fail "BIN=/usr/games" "BIN=$out/bin" \
-      --replace-fail "/usr/share" "$out/share" \
       --replace-fail "/usr/games/lib/greed.hs" "/var/lib/greed/greed.hs"
   '';
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   buildInputs = [
     ncurses
@@ -33,11 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     asciidoctor
   ];
-
-  preInstall = ''
-    mkdir -p $out/bin
-    mkdir -p $out/share/man/man6
-  '';
 
   passthru = {
     updateScript = gitUpdater { };

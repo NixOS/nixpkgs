@@ -52,7 +52,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   propagatedBuildInputs = with python3.pkgs; [
     dbus-python
-    gpgme
+    gpg
     magic-wormhole
     pygobject3
     pybluez

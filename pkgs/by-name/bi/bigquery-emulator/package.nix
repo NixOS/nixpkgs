@@ -34,7 +34,7 @@ buildGoModule.override
     meta = {
       description = "BigQuery emulator server implemented in Go";
       homepage = "https://github.com/goccy/bigquery-emulator";
-      changelog = "https://github.com/goccy/pname/releases/tag/v${finalAttrs.version}";
+      changelog = "https://github.com/goccy/bigquery-emulator/releases/tag/v${finalAttrs.version}";
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ tarantoj ];
       mainProgram = "bigquery-emulator";

@@ -25,6 +25,13 @@
   toml,
   fastai,
   fastcore,
+  # gradio
+  gradio,
+  requests,
+  # oauth
+  authlib,
+  fastapi,
+  itsdangerous,
   # mcp
   mcp,
 
@@ -34,14 +41,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "huggingface-hub";
-  version = "1.5.0";
+  version = "1.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "huggingface_hub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XuqZvTu3DuncGpRWXipxtDLY2alY7QVm89ZmpgTdfVo=";
+    hash = "sha256-GuTsoz7ow3A/PJyU3L/xLp56r3RVx5O1YH3nr3T4u7U=";
   };
 
   build-system = [ setuptools ];
@@ -62,15 +69,14 @@ buildPythonPackage (finalAttrs: {
     all = [
 
     ];
-    torch = [
-      torch
-      safetensors
-    ]
-    ++ safetensors.optional-dependencies.torch;
     fastai = [
       toml
       fastai
       fastcore
+    ];
+    gradio = [
+      gradio
+      requests
     ];
     hf_xet = [
       hf-xet
@@ -78,6 +84,17 @@ buildPythonPackage (finalAttrs: {
     mcp = [
       mcp
     ];
+    oauth = [
+      authlib
+      fastapi
+      httpx
+      itsdangerous
+    ];
+    torch = [
+      torch
+      safetensors
+    ]
+    ++ safetensors.optional-dependencies.torch;
   };
 
   nativeCheckInputs = [

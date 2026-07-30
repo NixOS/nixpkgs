@@ -2,11 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  bleach,
+  html5lib,
   nbconvert,
   pytestCheckHook,
   requests,
   responses,
   setuptools,
+  traitlets,
   versioneer,
 }:
 
@@ -28,8 +31,11 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    bleach
+    html5lib
     nbconvert
     requests
+    traitlets
   ];
 
   nativeCheckInputs = [
@@ -58,6 +64,6 @@ buildPythonPackage rec {
     mainProgram = "nbconflux";
     homepage = "https://github.com/Valassis-Digital-Media/nbconflux";
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.arnoldfarkas ];
+    maintainers = [ ];
   };
 }

@@ -27,15 +27,18 @@
   wrapQtAppsHook,
 }:
 
+let
+  withQt6 = lib.versions.major qtbase.version == "6";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mediascanner2";
-  version = "0.200";
+  version = "0.201";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/mediascanner2";
     tag = finalAttrs.version;
-    hash = "sha256-tTEbH5gXK+0y3r1LCxsZ6vr1FVyXWZaNAXaR6jcIP0Y=";
+    hash = "sha256-Z57ptFR+/W80sPquM5hgaqnCjd9pWYheq2VnkR+fGSY=";
   };
 
   outputs = [
@@ -46,12 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace src/qml/MediaScanner.*/CMakeLists.txt \
       --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
-  ''
-  # https://gitlab.com/ubports/development/core/mediascanner2/-/commit/4268b8c0a7e99c1d12f43599b1ae76b5b27572ec
-  # Remove when version > 0.200
-  + ''
-    substituteInPlace src/extractor/CMakeLists.txt src/qml/MediaScanner.0.1/CMakeLists.txt \
-      --replace-fail 'msg(' 'message('
   '';
 
   strictDeps = true;
@@ -86,10 +83,12 @@ stdenv.mkDerivation (finalAttrs: {
     gst-plugins-good
   ]);
 
+  nativeCheckInputs = [ dbus ];
+
   checkInputs = [ gtest ];
 
   cmakeFlags = [
-    (lib.cmakeBool "ENABLE_QT6" (lib.strings.versionAtLeast qtbase.version "6"))
+    (lib.cmakeBool "ENABLE_QT6" withQt6)
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
@@ -97,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preCheck = ''
     export QT_PLUGIN_PATH=${lib.getBin qtbase}/${qtbase.qtPluginPrefix}
+    export QML2_IMPORT_PATH=${lib.getBin qtdeclarative}/${qtbase.qtQmlPrefix}
     export XDG_DATA_DIRS=${shared-mime-info}/share:$XDG_DATA_DIRS
   '';
 
@@ -109,10 +109,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    }
+    // lib.optionalAttrs (!withQt6) {
       # music app needs mediascanner to work properly, so it can find files
       music-app = nixosTests.lomiri-music-app;
-
-      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
     updateScript = gitUpdater { };
   };

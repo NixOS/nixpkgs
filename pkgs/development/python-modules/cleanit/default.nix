@@ -43,10 +43,7 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  pythonRelaxDeps = [
-    "click"
-    "jsonschema"
-  ];
+  pythonRelaxDeps = [ "chardet" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

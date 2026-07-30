@@ -71,7 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = [ ];
     platforms = [
-      "x86_64-darwin"
       "x86_64-linux"
     ];
   };

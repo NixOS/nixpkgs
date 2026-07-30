@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "createrepo_c";
-  version = "1.2.1";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = "createrepo_c";
     tag = finalAttrs.version;
-    hash = "sha256-2mvU2F9rvG4FtDgq+M9VXWg+c+AsW/+tDPaEj7zVmQ0=";
+    hash = "sha256-0+TnRLrQM3/rfLTkj5zHlXRXq/4n4OvkZgIRC5+XGS4=";
   };
 
   postPatch = ''
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "EXECUTE_PROCESS(COMMAND \''${PYTHON_EXECUTABLE} -c \"from sys import stdout; from sysconfig import get_path; stdout.write(get_path('platlib'))\" OUTPUT_VARIABLE PYTHON_INSTALL_DIR)" "SET(PYTHON_INSTALL_DIR \"$out/${python3.sitePackages}\")"
 
     substituteInPlace CMakeLists.txt \
-      --replace-fail "CMAKE_MINIMUM_REQUIRED (VERSION 2.8.12)" "cmake_minimum_required(VERSION 3.10)"
+      --replace-fail "CMAKE_MINIMUM_REQUIRED (VERSION 3.7)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   nativeBuildInputs = [
@@ -48,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     rpm
     bash-completion
+    python3.pkgs.setuptools
   ];
 
   buildInputs = [

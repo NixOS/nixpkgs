@@ -19,5 +19,6 @@ buildPythonPackage rec {
 
   meta = {
     maintainers = [ ];
+    license = lib.licenses.mit;
   };
 }

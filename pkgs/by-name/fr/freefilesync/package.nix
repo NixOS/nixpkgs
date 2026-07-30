@@ -22,13 +22,13 @@
 let
   wxwidgets_3_3_1 = wxwidgets_3_3.overrideAttrs (
     finalAttrs: previousAttrs: {
-      version = "3.3.1";
+      version = "3.3.2";
       src = fetchFromGitHub {
         owner = "wxWidgets";
         repo = "wxWidgets";
         tag = "v${finalAttrs.version}";
         fetchSubmodules = true;
-        hash = "sha256-eYmZrh9lvDnJ3VAS+TllT21emtKBPAOhqIULw1dTPhk=";
+        hash = "sha256-UL1NuByKFGMQ/dhjuWRdnWTgdy4+1cD9pSls3e1mur8=";
       };
       patches = [
         ./wxcolorhook.patch
@@ -38,7 +38,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freefilesync";
-  version = "14.8";
+  version = "14.10";
 
   src = fetchurl {
     url = "https://freefilesync.org/download/FreeFileSync_${finalAttrs.version}_Source.zip";
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       rm -f "$out"
       tryDownload "$url" "$out"
     '';
-    hash = "sha256-vIvM6j4gDQcsRjgczQqxbV4XvDQECCLvuTflkebMFU8=";
+    hash = "sha256-tjyJ4+sc4nZxP7NQnBlISODsqDHKSKfpw8P8RixZj80=";
   };
 
   sourceRoot = ".";

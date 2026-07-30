@@ -7,7 +7,7 @@
   meson,
   ninja,
   withJava ? false,
-  jdk21_headless,
+  jdk21,
   jre21_minimal, # Newer JDK's depend on a release with a fix for https://code.videolan.org/videolan/libbluray/-/issues/46
   ant,
   stripJavaArchivesHook,
@@ -31,16 +31,16 @@ let
       "java.rmi"
       "java.xml"
     ];
-    jdk = jdk21_headless;
+    jdk = jdk21;
   };
 in
 stdenv.mkDerivation rec {
   pname = "libbluray";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchurl {
     url = "https://get.videolan.org/libbluray/${version}/libbluray-${version}.tar.xz";
-    hash = "sha256-d5N7rwfq3aSysxHPOvTFAmnS6jFlBB9YQ9lkdsTJJ3c=";
+    hash = "sha256-drXcQAl/KNyk67AJyY7VEyGyknRT91zHLPdKzQm59Ek=";
   };
 
   postPatch =
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ]
   ++ lib.optionals withJava [
-    jdk21_headless
+    jdk21
     ant
     stripJavaArchivesHook
   ];

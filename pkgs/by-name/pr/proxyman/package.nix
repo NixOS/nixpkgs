@@ -3,14 +3,15 @@
   appimageTools,
   fetchurl,
   asar,
+  nix-update-script,
 }:
 let
   pname = "proxyman";
-  version = "3.9.0";
+  version = "3.11.0";
 
   src = fetchurl {
     url = "https://github.com/ProxymanApp/proxyman-windows-linux/releases/download/${version}/Proxyman-${version}.AppImage";
-    hash = "sha256-hv0TYlCHoiWrMRLcPrruI09SC24Pafo9B5kkUpFDyKI=";
+    hash = "sha256-hzpSei0gR9apcJ6AVNoiqSUJLMvP0V/6STmGKeUg5vI=";
   };
 
   appimageContents = appimageTools.extract {
@@ -41,6 +42,11 @@ appimageTools.wrapAppImage {
     substituteInPlace $out/share/applications/proxyman.desktop \
       --replace-fail "Exec=AppRun" "Exec=proxyman --"
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+    inherit src; # needed for nix-update to find the GitHub URL
+  };
 
   meta = {
     description = "Capture, inspect, and manipulate HTTP(s) requests/responses with ease";

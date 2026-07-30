@@ -11,24 +11,25 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "backblaze-b2";
-  version = "4.6.0";
+  version = "4.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Backblaze";
     repo = "B2_Command_Line_Tool";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/JCvCydW+oaPSs94Crfia9VFNSuHO02j6n+CFnxMKDE=";
+    hash = "sha256-canG8uEgPukNJiFk+SoSANkKvOBFBZ8lV3lH0tnEzrY=";
   };
-
-  patches = [ ./0001-fix-error-with-pytest-4.0.patch ];
 
   nativeBuildInputs = with python3Packages; [
     installShellFiles
     argcomplete
   ];
 
-  build-system = with python3Packages; [ pdm-backend ];
+  build-system = with python3Packages; [
+    hatchling
+    hatch-vcs
+  ];
 
   dependencies = with python3Packages; [
     argcomplete
@@ -42,7 +43,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     tqdm
   ];
 
-  pythonRelaxDeps = [ "docutils" ];
+  pythonRelaxDeps = [
+    "docutils"
+    "tabulate"
+  ];
 
   nativeCheckInputs = with python3Packages; [
     backoff
@@ -101,6 +105,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Command-line tool for accessing the Backblaze B2 storage service";
     homepage = "https://github.com/Backblaze/B2_Command_Line_Tool";
+    maintainers = with lib.maintainers; [ phaer ];
     changelog = "https://github.com/Backblaze/B2_Command_Line_Tool/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "backblaze-b2";

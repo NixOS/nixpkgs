@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "django-markdownx";
-  version = "4.0.9";
+  version = "4.0.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "neutronX";
     repo = "django-markdownx";
     tag = "v${version}";
-    hash = "sha256-il9bXi8URq7mQMCyKl5ikHT4nH2R9ixMDHSpH8gfnVU=";
+    hash = "sha256-dTNWTXHj5Tk77/XdIgfFGLir0JhlhwcWAIKDax8qM9M=";
   };
 
   nativeBuildInputs = [ setuptools ];

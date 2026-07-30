@@ -104,6 +104,7 @@ sed -r \
     -e '/ hledger-lib /d' \
     -e '/ hledger-ui /d' \
     -e '/ hledger-web /d' \
+    -e '/ spacecookie /d' \
     < "${tmpfile_new}" >> $stackage_config
 # Explanations:
 # cabal2nix, distribution-nixpkgs, jailbreak-cabal, language-nix: These are our packages and we know what we are doing.

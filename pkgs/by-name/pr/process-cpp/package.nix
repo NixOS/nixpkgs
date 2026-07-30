@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "process-cpp";
-  version = "3.0.3";
+  version = "3.1.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lib-cpp/process-cpp";
     rev = finalAttrs.version;
-    hash = "sha256-PmlgzCEvBPC0k/pU6xneKINOGAas+hDWIrWUEkj+rDU=";
+    hash = "sha256-hS9V1SLO1eaIFz6ppF87c0kXHHQq6ZPOxfr00XuvWhQ=";
   };
 
   outputs = [

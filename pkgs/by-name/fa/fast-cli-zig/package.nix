@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  zig,
+  zig_0_15,
 }:
 stdenv.mkDerivation (finalAttrs: {
   # fast-cli existed, was removed as noted in aliasses.nix on 2025-11-17. Consider to rename this package after 1 to 2 releases of nixos
@@ -16,12 +16,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-KKjxKQHiSYMaGCfX1+h6DQ809xHh9Yfv8B4PXvr3CwQ=";
   };
 
-  zigDeps = zig.fetchDeps {
+  zigDeps = zig_0_15.fetchDeps {
     inherit (finalAttrs) src pname version;
     hash = "sha256-89ig8lO5Yb9qFlJ1yL3NDDfKeZDl/CeM6qFxT40eOf8=";
   };
 
-  nativeBuildInputs = [ zig.hook ];
+  nativeBuildInputs = [ zig_0_15.hook ];
 
   postConfigure = ''
     ln -s ${finalAttrs.zigDeps} "$ZIG_GLOBAL_CACHE_DIR/p"
@@ -37,6 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dwt ];
     mainProgram = "fast-cli";
-    inherit (zig.meta) platforms;
+    inherit (zig_0_15.meta) platforms;
   };
 })

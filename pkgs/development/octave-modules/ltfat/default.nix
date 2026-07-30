@@ -36,7 +36,7 @@ buildOctavePackage rec {
     name = "The Large Time-Frequency Analysis Toolbox";
     homepage = "https://gnu-octave.github.io/packages/ltfat/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ ravenjoad ];
     description = "Toolbox for working with time-frequency analysis, wavelets and signal processing";
     longDescription = ''
       The Large Time/Frequency Analysis Toolbox (LTFAT) is a Matlab/Octave

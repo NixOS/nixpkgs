@@ -7,7 +7,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "clipnotify";
-  version = "unstable-2018-02-20";
+  version = "0-unstable-2018-02-20";
 
   src = fetchFromGitHub {
     owner = "cdown";

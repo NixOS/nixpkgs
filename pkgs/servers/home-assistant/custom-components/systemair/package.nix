@@ -5,29 +5,43 @@
   fetchFromGitHub,
   async-timeout,
   aiohttp,
+  websocket-client,
+  beautifulsoup4,
+  pytest9_0CheckHook,
+  pytest-homeassistant-custom-component,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "AN3Orik";
   domain = "systemair";
-  version = "1.0.22";
+  version = "1.0.36";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "systemair";
     tag = "v${version}";
-    hash = "sha256-GzIIjaRFeZAo065Dn0fpU4Ou5+8wIVQ7ImLmukjTxOQ=";
+    hash = "sha256-QL3R9mDPaQrFneBKSP8arZL1xxqmz7vp1zGn0eYBrj4=";
   };
 
-  postPatch = ''
-    substituteInPlace custom_components/systemair/manifest.json \
-      --replace-fail "pymodbus==" "pymodbus>=" \
-  '';
+  ignoreVersionRequirement = [
+    "pymodbus"
+  ];
 
   dependencies = [
     pymodbus
     async-timeout
     aiohttp
+    websocket-client
+    beautifulsoup4
+  ];
+
+  nativeCheckInputs = [
+    pytest9_0CheckHook
+    pytest-homeassistant-custom-component
+  ];
+
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn9Warning"
   ];
 
   meta = {

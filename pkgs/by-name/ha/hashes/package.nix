@@ -19,7 +19,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "hashes";
-  version = "1.1.2";
+  version = "1.1.4";
 
   pyproject = false;
 
@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "zefr0x";
     repo = "hashes";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Nyf7jED6LnsFu86zWhRh05sdGKwVAybVsGLGFFsz6eA=";
+    hash = "sha256-PbS0WOrolPz67kdx+wnyp8owBEwvRYXfqYQZcEmKZZQ=";
   };
 
   nativeBuildInputs = [

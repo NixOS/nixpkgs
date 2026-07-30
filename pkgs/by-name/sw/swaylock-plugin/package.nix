@@ -23,12 +23,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swaylock-plugin";
-  version = "1.8.5";
+  version = "1.8.7";
   src = fetchFromGitHub {
     owner = "mstoeckl";
     repo = "swaylock-plugin";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-CdxOOfKqPm/rWuZjaLOGcFaJpvdjT7GIhx24etPHH5I=";
+    hash = "sha256-JWZ8aZeS8XXjRPhwyJXptwdMU2y/uFG1KlZh+v92/0c=";
   };
 
   strictDeps = true;

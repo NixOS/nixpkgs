@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/jeffpc/guilt";
     maintainers = with lib.maintainers; [ javimerino ];
-    license = [ lib.licenses.gpl2 ];
+    license = lib.licenses.gpl2;
     platforms = lib.platforms.all;
     mainProgram = "guilt";
   };

@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "derrod";
+    owner = "legendary-gl";
     repo = "legendary";
     rev = "56d439ed2d3d9f34e2b08fa23e627c23a487b8d6";
     hash = "sha256-yCHeeEGw+9gtRMGyIhbStxJhmSM/1Fqly7HSRDkZILQ=";
@@ -35,7 +35,7 @@ python3Packages.buildPythonApplication {
 
   meta = {
     description = "Free and open-source Epic Games Launcher alternative";
-    homepage = "https://github.com/derrod/legendary";
+    homepage = "https://github.com/legendary-gl/legendary";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ equirosa ];
     mainProgram = "legendary";

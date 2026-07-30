@@ -65,8 +65,8 @@
   libxcb-wm,
   zlib,
   at-spi2-core,
-  unixODBC,
-  unixODBCDrivers,
+  unixodbc,
+  unixodbcDrivers,
   libGL,
   # darwin
   moltenvk,
@@ -88,6 +88,7 @@
   wayland-scanner,
   # options
   qttranslations ? null,
+  fetchpatch,
 }:
 
 let
@@ -127,11 +128,11 @@ stdenv.mkDerivation {
     libproxy
     dbus
     glib
-    # unixODBC drivers
-    unixODBC
-    unixODBCDrivers.psql
-    unixODBCDrivers.sqlite
-    unixODBCDrivers.mariadb
+    # unixodbc drivers
+    unixodbc
+    unixodbcDrivers.psql
+    unixodbcDrivers.sqlite
+    unixodbcDrivers.mariadb
   ]
   ++ lib.optionals systemdSupport [
     systemd
@@ -244,6 +245,12 @@ stdenv.mkDerivation {
     ./qmlimportscanner-import-path.patch
     # don't pass qtbase's QML directory to qmlimportscanner if it's empty
     ./skip-missing-qml-directory.patch
+
+    # another crash fix
+    (fetchpatch {
+      url = "https://github.com/qt/qtbase/commit/515cbbacfba9f4259c9c3b0714a31222c2b4c879.diff";
+      hash = "sha256-93tzp4O7dZxRZv7ilN/gbQSVmaeOGmxpYgM7aomN0n8=";
+    })
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -262,6 +269,13 @@ stdenv.mkDerivation {
         --replace-quiet /usr/bin/xcode-select '${lib.getExe' xcbuild "xcode-select"}' \
         --replace-quiet /usr/libexec/PlistBuddy '${lib.getExe' xcbuild "PlistBuddy"}'
     done
+
+    # Unlike Apple's PlistBuddy, xcbuild's only accepts capitalized commands,
+    # so the usage-description probe in permissions.prf always fails and the
+    # darwin permission plugins (Bluetooth, camera, ...) are silently never
+    # linked into qmake-built apps.
+    substituteInPlace mkspecs/features/permissions.prf \
+      --replace-fail "-c 'print " "-c 'Print "
 
     substituteInPlace mkspecs/common/macx.conf \
       --replace-fail 'CONFIG += ' 'CONFIG += no_default_rpath '
@@ -320,7 +334,19 @@ stdenv.mkDerivation {
   postFixup = ''
     moveToOutput      "mkspecs/modules" "$dev"
     fixQtModulePaths  "$dev/mkspecs/modules"
-    fixQtBuiltinPaths "$out" '*.pr?'
+    # fixQtBuiltinPaths reads qtPluginPrefix/qtQmlPrefix from the environment,
+    # but the setup hook only exports them for downstream packages; without
+    # them e.g. $$[QT_INSTALL_PLUGINS] in qt.prf is rewritten to "$out/"
+    # instead of "$out/${qtPluginPrefix}", breaking static plugin linking.
+    qtPluginPrefix=${qtPluginPrefix} qtQmlPrefix=${qtQmlPrefix} \
+      fixQtBuiltinPaths "$out" '*.pr?'
+
+    # @out@ would be automagically replaced inside makeSetupHook by the output of that derivation,
+    # but we need it to be the output of this derivation.
+    # Use a different placeholder and explicitly substitute this
+    # to keep compatibility with __structuredAttrs and avoid substituteAll.
+    substituteInPlace "''${!outputDev}/nix-support/setup-hook" \
+      --replace-fail "@qtbaseOut@" $out
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     # FIXME: not sure why this isn't added automatically?
@@ -342,6 +368,7 @@ stdenv.mkDerivation {
             qtQmlPrefix
             ;
         };
+        meta.license = lib.licenses.mit;
       } ../../hooks/qtbase-setup-hook.sh;
     in
     "${hook}/nix-support/setup-hook";

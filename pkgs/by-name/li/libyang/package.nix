@@ -9,7 +9,7 @@
 
   # dependencies
   pcre2,
-  xxHash,
+  xxhash,
 
   # update script
   gitUpdater,
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    xxHash
+    xxhash
   ];
 
   propagatedBuildInputs = [
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
       sysrepo or FRRouting projects.
     '';
     homepage = "https://github.com/CESNET/libyang";
-    license = with lib.licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ woffs ];
   };

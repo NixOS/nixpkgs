@@ -95,6 +95,9 @@ buildPythonPackage rec {
   disabledTests = [
     # ValueError: Exceeds the limit (4300) for integer string conversion
     "test_roundtrips"
+    # benchmark multi-top-level cbor/json fixtures mismatch upstream
+    "multiple_top_level_object_cbor"
+    "multiple_top_level_object_json"
   ];
 
   disabledTestPaths = [

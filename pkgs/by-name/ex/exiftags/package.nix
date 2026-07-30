@@ -15,6 +15,12 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     sed -i -e s@/usr/local@$out@ Makefile
+
+    substituteInPlace makers.h \
+      --replace-fail "void (*propfun)();" "void (*propfun)(struct exifprop *, struct exiftags *);" \
+      --replace-fail "struct ifd *(*ifdfun)();" "struct ifd *(*ifdfun)(u_int32_t, struct tiffmeta *);"
+    substituteInPlace canon.c \
+      --replace-fail "int (*valfun)()" "int (*valfun)(struct exifprop *, struct exifprop *, unsigned char *, struct exiftags *)"
   '';
 
   preInstall = ''

@@ -1,0 +1,49 @@
+From fcdff46a3203400e08a2264c34b3c7fb62bf6969 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=2E=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Date: Thu, 24 Oct 2024 01:19:30 +0200
+Subject: statx: add Linux 6.11 fields/constants
+
+As of Linux 6.11, these fields and mask macros have been added to
+include/uapi/linux/stat.h.
+---
+ include/sys/stat.h | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/include/sys/stat.h b/include/sys/stat.h
+index c924ce2f..4f7dc2b1 100644
+--- a/include/sys/stat.h
++++ b/include/sys/stat.h
+@@ -123,6 +123,8 @@ int lchmod(const char *, mode_t);
+ #define STATX_MNT_ID 0x1000U
+ #define STATX_DIOALIGN 0x2000U
+ #define STATX_MNT_ID_UNIQUE 0x4000U
++#define STATX_SUBVOL 0x8000U
++#define STATX_WRITE_ATOMIC 0x10000U
+ 
+ #define STATX_ATTR_COMPRESSED 0x4
+ #define STATX_ATTR_IMMUTABLE 0x10
+@@ -133,6 +135,7 @@ int lchmod(const char *, mode_t);
+ #define STATX_ATTR_MOUNT_ROOT 0x2000
+ #define STATX_ATTR_VERITY 0x100000
+ #define STATX_ATTR_DAX 0x200000
++#define STATX_ATTR_WRITE_ATOMIC 0x400000
+ 
+ struct statx_timestamp {
+ 	int64_t tv_sec;
+@@ -164,7 +167,12 @@ struct statx {
+ 	uint32_t stx_dio_mem_align;
+ 	uint32_t stx_dio_offset_align;
+ 	uint64_t stx_subvol;
+-	uint64_t __pad1[11];
++	uint32_t stx_atomic_write_unit_min;
++	uint32_t stx_atomic_write_unit_max;
++	uint32_t stx_atomic_write_segments_max;
++	uint32_t __pad1[1];
++	uint64_t __pad2[9];
++
+ };
+ 
+ int statx(int, const char *__restrict, int, unsigned, struct statx *__restrict);
+-- 
+cgit v1.2.1
+

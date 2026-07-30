@@ -10,7 +10,10 @@
   pycron,
   pytestCheckHook,
   schema,
-  setuptools,
+  hatchling,
+  click,
+  influxdb3-python,
+  pydantic,
 }:
 
 buildPythonPackage rec {
@@ -25,12 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-DS1k3JcTUK0yXRkJSFMeIZHSXpiIgSXJPZb3+72Wqko=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "find_version('mqtt2influxdb', '__init__.py')," "'${version}',"
-  '';
-
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     influxdb
@@ -40,13 +38,14 @@ buildPythonPackage rec {
     pyaml
     pycron
     schema
+    click
+    influxdb3-python
+    pydantic
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "mqtt2influxdb" ];
-
-  enabledTestPaths = [ "tests/test.py" ];
 
   meta = {
     description = "Flexible MQTT to InfluxDB Bridge";

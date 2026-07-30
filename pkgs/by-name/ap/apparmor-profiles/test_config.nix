@@ -36,11 +36,11 @@
         ${bashInteractive}/bin/sh = icnu
         ${bashInteractive}/bin/bash = icnu
     '';
-    passAsFile = [ "header" ];
+    __structuredAttrs = true;
   }
   ''
     mkdir $out
-    cp $headerPath $out/logprof.conf
+    printf "%s" "$header" > $out/logprof.conf
     ln -s ${libapparmor.src}/utils/severity.db $out/severity.db
     sed '1,/\[qualifiers\]/d' ${libapparmor.src}/utils/logprof.conf >> $out/logprof.conf
   ''

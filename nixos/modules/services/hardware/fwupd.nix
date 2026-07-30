@@ -35,7 +35,7 @@ let
     lib.listToAttrs (map mkEtcFile cfg.package.filesInstalledToEtc);
   extraTrustedKeys =
     let
-      mkName = p: "pki/fwupd/${baseNameOf (toString p)}";
+      mkName = p: "pki/fwupd/${baseNameOf p}";
       mkEtcFile = p: lib.nameValuePair (mkName p) { source = p; };
     in
     lib.listToAttrs (map mkEtcFile cfg.extraTrustedKeys);
@@ -202,8 +202,8 @@ in
     systemd = {
       packages = [ cfg.package ];
 
-      # fwupd-refresh expects a user that we do not create, so just run with DynamicUser
-      # instead and ensure we take ownership of /var/lib/fwupd
+      # The upstream unit runs as User=fwupd-refresh; ensure it can take
+      # ownership of /var/lib/fwupd.
       services.fwupd-refresh.serviceConfig = {
         StateDirectory = "fwupd";
         # Better for debugging, upstream sets stderr to null for some reason..
@@ -219,7 +219,21 @@ in
     };
     users.groups.fwupd-refresh = { };
 
-    security.polkit.enable = true;
+    security.polkit = {
+      enable = true;
+      # fwupd-refresh.service has no seat, so polkit denies these actions.
+      # Upstream's TrustedUids needs a static uid which we only allocate at
+      # activation time, so grant access via a rule on the user name instead.
+      extraConfig = ''
+        polkit.addRule(function(action, subject) {
+          if ((action.id == "org.freedesktop.fwupd.get-remotes" ||
+               action.id == "org.freedesktop.fwupd.refresh-remote") &&
+              subject.user == "fwupd-refresh") {
+            return polkit.Result.YES;
+          }
+        });
+      '';
+    };
   };
 
   meta = {

@@ -35,9 +35,11 @@ Make sure that your local files aren't added to Git history by adding the follow
 /**/.direnv
 ```
 
-### `devmode` {#sec-contributing-devmode}
+### Live preview {#sec-contributing-devmode}
 
-Use [`devmode`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/de/devmode/README.md) for a live preview when editing the manual.
+Run [`devmode`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/de/devmode/README.md) for a live preview while editing the manual: it rebuilds on every change and reloads the page in your browser automatically.
+
+Changes to the renderer 'pkgs/by-name/ni/nixos-render-docs' need a manual restart. Run: `devmode` again.
 
 ## Testing redirects {#sec-contributing-redirects}
 

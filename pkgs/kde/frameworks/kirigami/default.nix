@@ -19,6 +19,7 @@ let
     pname = "kirigami";
 
     patches = [
+      # upstream PR: https://invent.kde.org/frameworks/kirigami/-/merge_requests/1991
       ./rb-templates.patch
     ];
 

@@ -25,7 +25,10 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  pythonRelaxDeps = [ "lxml" ];
+  pythonRelaxDeps = [
+    "chardet"
+    "lxml"
+  ];
 
   dependencies = [
     chardet

@@ -1,6 +1,5 @@
 {
   fetchurl,
-  fetchpatch,
   stdenv,
   lib,
   gfortran,
@@ -22,23 +21,15 @@ assert lib.elem precision [
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fftw-${precision}";
-  version = "3.3.10";
+  version = "3.3.11";
 
   src = fetchurl {
     urls = [
       "https://fftw.org/fftw-${finalAttrs.version}.tar.gz"
       "ftp://ftp.fftw.org/pub/fftw/fftw-${finalAttrs.version}.tar.gz"
     ];
-    hash = "sha256-VskyVJhSzdz6/as4ILAgDHdCZ1vpIXnlnmIVs0DiZGc=";
+    hash = "sha256-VjDCTN6zOxMWEvfrSxqZNCNHVPnziP+GF0WNC+byOaE=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "remove_missing_FFTW3LibraryDepends.patch";
-      url = "https://github.com/FFTW/fftw3/pull/338/commits/f69fef7aa546d4477a2a3fd7f13fa8b2f6c54af7.patch";
-      hash = "sha256-lzX9kAHDMY4A3Td8necXwYLcN6j8Wcegi3A7OIECKeU=";
-    })
-  ];
 
   outputs = [
     "out"
@@ -107,6 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   meta = {
+    changelog = "https://github.com/FFTW/fftw3/blob/fftw-${finalAttrs.version}/NEWS";
     description = "Fastest Fourier Transform in the West library";
     homepage = "https://www.fftw.org/";
     license = lib.licenses.gpl2Plus;

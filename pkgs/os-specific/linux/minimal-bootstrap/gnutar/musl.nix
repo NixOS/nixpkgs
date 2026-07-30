@@ -4,6 +4,7 @@
   hostPlatform,
   fetchurl,
   bash,
+  coreutils,
   tinycc,
   gnumake,
   gnugrep,
@@ -26,6 +27,7 @@ bash.runCommand "${pname}-${version}"
     inherit pname version meta;
 
     nativeBuildInputs = [
+      coreutils
       tinycc.compiler
       gnumake
       gnused
@@ -46,6 +48,14 @@ bash.runCommand "${pname}-${version}"
     rm tar.tar
     cd tar-${version}
 
+    # untar drops mtimes and +x on autotools helpers, restore them so
+    # parallel builds don't trip into automake regeneration.
+    touch Makefile.in Makefile aclocal.m4 config.h.in configure 2>/dev/null || true
+    for f in */Makefile.in; do touch "$f" 2>/dev/null || true; done
+    chmod +x configure config.guess config.sub install-sh missing compile \
+      depcomp mkinstalldirs help2man 2>/dev/null || true
+    [ -d build-aux ] && chmod +x build-aux/* 2>/dev/null || true
+
     # Configure
     export CC="tcc -B ${tinycc.libs}/lib"
     export LD=tcc
@@ -60,6 +70,7 @@ bash.runCommand "${pname}-${version}"
       --disable-nls
 
     # Build
+    # NOTE: parallel build (-j) under tcc-musl is unstable; keep serial.
     make AR="tcc -ar"
 
     # Install

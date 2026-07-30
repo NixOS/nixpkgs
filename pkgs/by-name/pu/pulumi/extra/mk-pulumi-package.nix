@@ -80,6 +80,19 @@ let
                  -e 's/^PLUGIN_VERSION = .*/PLUGIN_VERSION = "${version}"/g' \
                  setup.py
             fi
+
+            # Pulumi Python SDKs use `pkg_resources` to find their current version at
+            # runtime. However, `pkg_resources` has been deprecated from `setuptools`
+            # since v82.0.0 (https://setuptools.pypa.io/en/stable/history.html#v82-0-0).
+            #
+            # Bypass this problem by:
+            # - removing the `pkg_resources` import and,
+            # - patching the plugin `version` string as a literal instead of requesting
+            #   it via `pkg_resources`.
+            find . -name "_utilities.py" -exec sed -i \
+              -e 's/import pkg_resources//g' \
+              -e 's/pkg_resources.require(root_package)\[0\].version/"${version}"/g' \
+              {} +
           '';
 
           # Auto-generated; upstream does not have any tests.

@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pwkit";
-  version = "1.2.2";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pkgw";
     repo = "pwkit";
     tag = "pwkit@${version}";
-    hash = "sha256-FEMPHdXj2XCV5fCcdJsVpDMsJntP6zp1yFkjv1ov478=";
+    hash = "sha256-lEa1AWBhevCOBiAJd0Q0VWDtjSK5O89LYTNnLxKfD8U=";
   };
 
   build-system = [ setuptools ];

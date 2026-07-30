@@ -12,19 +12,19 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "commitizen";
-  version = "4.13.9";
+  version = "4.16.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = "commitizen";
     tag = "v${version}";
-    hash = "sha256-bT154qRnZCf3StYs+acv4Be/SUCA5ovGjY/j2EDmUEc=";
+    hash = "sha256-OIaQcdkvLKUgHvlqsVTk9DaIAQUUZiP8BP9z5Xprdfc=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build >= 0.9.17, <0.10.0" "uv-build"
+      --replace-fail "uv_build >= 0.9.17, <0.12" "uv-build"
   '';
 
   pythonRelaxDeps = [
@@ -52,6 +52,13 @@ python3Packages.buildPythonPackage rec {
     questionary
     termcolor
     tomlkit
+  ];
+
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ gitMinimal ])
   ];
 
   nativeCheckInputs = [

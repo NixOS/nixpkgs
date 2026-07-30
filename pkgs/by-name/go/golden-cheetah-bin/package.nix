@@ -12,7 +12,6 @@ let
     description = "Performance software for cyclists, runners and triathletes. This version includes the API Tokens for e.g. Strava";
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     maintainers = with lib.maintainers; [

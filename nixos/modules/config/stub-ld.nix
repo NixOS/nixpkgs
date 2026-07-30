@@ -7,7 +7,6 @@
 
 let
   inherit (lib)
-    optionalString
     mkOption
     types
     mkIf

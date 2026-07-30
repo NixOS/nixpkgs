@@ -28,11 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
     "PREFIX=${placeholder "out"}"
     "DESTDIR="
   ]
-  ++ lib.optional stdenv.isDarwin "PLATFORM=mac";
+  ++ lib.optional stdenv.hostPlatform.isDarwin "PLATFORM=mac";
 
   # Even with PLATFORM=mac, the Makefile specifies some GCC-specific CFLAGS that
   # are not supported by modern Clang on macOS
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Makefile \
       --replace-fail "-funswitch-loops" "" \
       --replace-fail "-fgcse-after-reload" ""

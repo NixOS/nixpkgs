@@ -6,21 +6,21 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "theharvester";
-  version = "4.10.0";
+  version = "4.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "laramies";
     repo = "theharvester";
     tag = finalAttrs.version;
-    hash = "sha256-PDFKDm1amqmdYo/avxudWZ9Xhp16Cw4ejmUAQ+BlvC0=";
+    hash = "sha256-/tXRqlM4m46R+iy5Dfmwn0ulJbgmpYTTRHRzyoUKa9A=";
   };
 
   pythonRelaxDeps = true;
 
   pythonRemoveDeps = [ "winloop" ];
 
-  build-system = with python3.pkgs; [ setuptools ];
+  build-system = with python3.pkgs; [ flit-core ];
 
   dependencies = with python3.pkgs; [
     aiodns

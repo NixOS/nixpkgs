@@ -21,7 +21,6 @@
   libarchive,
   libass,
   libbluray,
-  libbs2b,
   libcaca,
   libcdio,
   libcdio-paranoia,
@@ -66,7 +65,6 @@
   alsaSupport ? stdenv.hostPlatform.isLinux,
   archiveSupport ? true,
   bluraySupport ? true,
-  bs2bSupport ? true,
   cacaSupport ? true,
   cddaSupport ? false,
   cmsSupport ? true,
@@ -180,7 +178,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals alsaSupport [ alsa-lib ]
   ++ lib.optionals archiveSupport [ libarchive ]
   ++ lib.optionals bluraySupport [ libbluray ]
-  ++ lib.optionals bs2bSupport [ libbs2b ]
   ++ lib.optionals cacaSupport [ libcaca ]
   ++ lib.optionals cddaSupport [
     libcdio
@@ -287,6 +284,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   doInstallCheck = true;
 
+  # On macOS, mpv --version initializes the full Cocoa app framework and
+  # connects to the window server, which hangs in a headless build environment
+  dontVersionCheck = stdenv.hostPlatform.isDarwin;
+
   passthru = {
     inherit
       # The wrapper consults luaEnv and lua.version
@@ -299,10 +300,6 @@ stdenv.mkDerivation (finalAttrs: {
       vapoursynthSupport
       vapoursynth
       ;
-
-    # Should be removed in the future. These can't be added to `pkgs/top-level/aliases.nix`.
-    scripts = throw "'mpv-unwrapped.scripts' has been removed. Please use 'mpvScripts' instead."; # Added 2025-12-29
-    wrapper = throw "'mpv-unwrapped.wrapper' has been removed. Please use 'mpv.override' instead."; # Added 2025-12-29
 
     tests = {
       inherit (nixosTests) mpv;

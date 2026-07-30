@@ -1,41 +1,34 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   python3Packages,
   withTeXLive ? true,
   texliveSmall,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cgt-calc";
-  # Includes updates to use pyrate-limiter v4 that are not released yet
-  # unfortunately.
-  version = "1.14.0-unstable-2026-02-23";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KapJI";
     repo = "capital-gains-calculator";
-    rev = "3326514c8e99904eeeda676948c4404da6fe1adc";
-    hash = "sha256-6iOlDNlpfCrbRCxEJsRYw6zqOehv/buVN+iU6J6CtIk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KPzADW+n82X08IMfSIl5JyYPm8fxbbowud8sBdUxRgA=";
   };
 
-  pythonRelaxDeps = [
-    # The built wheel holds an upper bound requirement for the version of these
-    # dependenceis, while pyproject.toml doesn't. Upstream's `uv.lock` even
-    # uses yfinance 1.2.0 . See:
-    # https://github.com/KapJI/capital-gains-calculator/pull/744
-    "defusedxml"
-    "yfinance"
-  ];
-  pythonRemoveDeps = [
-    # Upstream's uv.lock doesn't reference this dependency, and lists
-    # pyrate-limiter instead. The built wheel from some reason requests it
-    # never the less.
-    "requests-ratelimiter"
+  patches = [
+    (fetchpatch {
+      # https://github.com/KapJI/capital-gains-calculator/pull/781
+      name = "update uv-build requirement.patch";
+      url = "https://github.com/KapJI/capital-gains-calculator/commit/0222eafdcf1911f3e2fd781697dc53311f529f62.patch";
+      hash = "sha256-L8jgrdA9t3x8mdaLmAuW6vFhHCLGA+0gQ/8j9EcYKhE=";
+    })
   ];
 
   build-system = with python3Packages; [
-    poetry-core
+    uv-build
   ];
 
   dependencies = with python3Packages; [
@@ -46,6 +39,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pyrate-limiter
     types-requests
     yfinance
+    colorama
   ];
 
   makeWrapperArgs = lib.optionals withTeXLive [

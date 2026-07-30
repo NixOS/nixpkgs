@@ -55,7 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Status monitor for window managers that use WM_NAME like dwm";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [
-      oxzi
       qusic
     ];
     platforms = lib.platforms.linux;

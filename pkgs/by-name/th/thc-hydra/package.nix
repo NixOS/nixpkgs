@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "thc-hydra";
-  version = "9.6";
+  version = "9.7";
 
   src = fetchFromGitHub {
     owner = "vanhauser-thc";
     repo = "thc-hydra";
     rev = "v${version}";
-    sha256 = "sha256-DS3Fh4a6OtqZRHubgJewB7qnJXm10sYv85R6o/NePoU=";
+    sha256 = "sha256-6YNHy9k/NJkZYj0TjciPMOXMq/McGQnmj7HWk6KbgI4=";
   };
 
   postPatch =

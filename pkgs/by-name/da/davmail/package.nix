@@ -12,22 +12,24 @@
   libxtst,
   coreutils,
   gnugrep,
+  zulu,
   preferGtk3 ? true,
+  preferZulu ? false,
 }:
 
 let
-  jre' = jdk.override { enableJavaFX = true; };
+  jre' = (if preferZulu then zulu else jdk).override { enableJavaFX = true; };
   gtk' = if preferGtk3 then gtk3 else gtk2;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "davmail";
-  version = "6.5.1";
+  version = "6.8.1";
 
   src = fetchFromGitHub {
     owner = "mguessan";
     repo = "davmail";
     tag = finalAttrs.version;
-    hash = "sha256-D/MEWq696PFXlarQZdSrTS9VFODg7u7yhUsbCwHV9qs=";
+    hash = "sha256-kIDAMVenUzc7tIC49yzc1MzqNa9B7nNlX1bzwpG8Vp0=";
   };
 
   buildPhase = ''
@@ -80,7 +82,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Java application which presents a Microsoft Exchange server as local CALDAV, IMAP and SMTP servers";
     homepage = "https://davmail.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ peterhoeg ];
+    maintainers = with lib.maintainers; [
+      peterhoeg
+      doronbehar
+      shymega
+    ];
     platforms = lib.platforms.all;
     mainProgram = "davmail";
   };

@@ -24,20 +24,22 @@
 
   # tests
   geopandas,
+  imagecodecs,
   matplotlib,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "odc-geo";
-  version = "0.5.0";
+  version = "0.5.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "opendatacube";
     repo = "odc-geo";
-    tag = "v${version}";
-    hash = "sha256-qFHFT68hJKCBcYKZypSoQufHYXVm3LiD7mn5eQtYYO8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-iubxn3ysx7aIMSrlrPPnfKYI8K7wSugM0/Zp2YIXeIg=";
   };
 
   build-system = [
@@ -77,27 +79,23 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     geopandas
+    imagecodecs
     matplotlib
     pytestCheckHook
   ]
-  ++ optional-dependencies.all;
+  ++ finalAttrs.passthru.optional-dependencies.all;
 
   disabledTestMarks = [ "network" ];
 
   disabledTests = [
-    # AttributeError (fixes: https://github.com/opendatacube/odc-geo/pull/202)
-    "test_azure_multipart_upload"
-    # network access
-    "test_empty_cog"
-    # urllib url open error
+    # Require internet access
     "test_country_geom"
     "test_from_geopandas"
     "test_geoboxtiles_intersect"
     "test_warp_nan"
-    # requires imagecodecs package (currently not available on nixpkgs)
+
+    # imagecodecs.ImcdError: imcd_byteshuffle returned IMCD_VALUE_ERROR
     "test_cog_with_dask_smoke_test"
-    # xarray compat issue
-    "test_xr_reproject"
   ];
 
   pythonImportsCheck = [
@@ -113,8 +111,8 @@ buildPythonPackage rec {
       with geospatial metadata and geo-registered `xarray` rasters.
     '';
     homepage = "https://github.com/opendatacube/odc-geo/";
-    changelog = "https://github.com/opendatacube/odc-geo/releases/tag/${src.tag}";
+    changelog = "https://github.com/opendatacube/odc-geo/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ daspk04 ];
   };
-}
+})

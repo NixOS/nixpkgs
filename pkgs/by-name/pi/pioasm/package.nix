@@ -2,32 +2,21 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   ninja,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pioasm";
-  version = "2.1.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "pico-sdk";
-    rev = finalAttrs.version;
-    hash = "sha256-epO7yw6/21/ess3vMCkXvXEqAn6/4613zmH/hbaBbUw=";
+    tag = finalAttrs.version;
+    hash = "sha256-hQdEZD84/cnLSzP5Xr9vbOGROQz4BjeVOnvbyhe6rfM=";
   };
-
-  patches = [
-    # Pull upstream fix for gcc-15:
-    #   https://github.com/raspberrypi/pico-sdk/pull/2468
-    (fetchpatch {
-      name = "gcc-15.patch";
-      url = "https://github.com/raspberrypi/pico-sdk/commit/66540fe88e86a9f324422b7451a3b5dff4c0449f.patch";
-      hash = "sha256-KwTED7/IWorgRTw1XMU2ILJhf6DAioGuVIunlC1QdNE=";
-      stripLen = 2;
-    })
-  ];
 
   sourceRoot = "${finalAttrs.src.name}/tools/pioasm";
 
@@ -36,17 +25,16 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
-  installPhase = ''
-    runHook preInstall
+  cmakeFlags = [
+    (lib.cmakeFeature "PIOASM_VERSION_STRING" finalAttrs.version)
+  ];
 
-    install -D pioasm $out/bin/pioasm
-
-    runHook postInstall
-  '';
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Assemble PIO programs for Raspberry Pi Pico";
     homepage = "https://github.com/raspberrypi/pico-sdk";
+    changelog = "https://github.com/raspberrypi/pico-sdk/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ emilytrau ];
     platforms = lib.platforms.unix;

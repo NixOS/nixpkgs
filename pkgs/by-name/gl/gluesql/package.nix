@@ -3,20 +3,40 @@
   fetchFromGitHub,
   rustPlatform,
   nix-update-script,
+  python3,
+  gitMinimal,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gluesql";
-  version = "0.14.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "gluesql";
     repo = "gluesql";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-z2fpyPJfyPtO13Ly7XRmMW3rp6G3jNLsMMFz83Wmr0E=";
+    hash = "sha256-/Yb6ksHxFscB/t7fID11fNHldJ0lDmN9DXbiaG+mUwY=";
   };
 
-  cargoHash = "sha256-QITNkSB/IneKj0w12FCKV1Y0vRAlOfENs8BpFbDpK2M=";
+  nativeBuildInputs = [
+    python3
+  ];
+
+  nativeCheckInputs = [
+    gitMinimal
+  ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+    git config --global user.name "Nixpkgs Test"
+    git config --global user.email "nobody@example.com"
+  '';
+
+  cargoHash = "sha256-P2YH3mf1Olrjzwl6ldwzO0xMC0yccqA7T2mrWZ5qSKM=";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 

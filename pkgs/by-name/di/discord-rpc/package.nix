@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "3.4.0";
 
   src = fetchFromGitHub {
-    owner = "discordapp";
+    owner = "discord";
     repo = "discord-rpc";
     rev = "v${finalAttrs.version}";
     sha256 = "04cxhqdv5r92lrpnhxf8702a8iackdf3sfk1050z7pijbijiql2a";
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Official library to interface with the Discord client";
-    homepage = "https://github.com/discordapp/discord-rpc";
+    homepage = "https://github.com/discord/discord-rpc";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.all;

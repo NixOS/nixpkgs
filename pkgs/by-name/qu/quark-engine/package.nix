@@ -11,7 +11,6 @@ let
       pytest-randomly = super.pytest-randomly.overridePythonAttrs {
         doCheck = false;
       };
-      sqlalchemy = self.sqlalchemy_1_4;
     }
   );
 in
@@ -59,7 +58,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     description = "Android malware (analysis and scoring) system";
     homepage = "https://quark-engine.readthedocs.io/";
     changelog = "https://github.com/quark-engine/quark-engine/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ gpl3Only ];
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

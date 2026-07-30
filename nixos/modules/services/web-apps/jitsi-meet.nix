@@ -651,19 +651,17 @@ in
       };
     };
 
-    services.jitsi-meet.config =
-      recursiveUpdate
-        (mkIf cfg.excalidraw.enable {
-          whiteboard = {
-            enabled = true;
-            collabServerBaseUrl = "https://${cfg.hostName}";
-          };
-        })
-        (
-          mkIf cfg.secureDomain.enable {
-            hosts.anonymousdomain = "guest.${cfg.hostName}";
-          }
-        );
+    services.jitsi-meet.config = mkMerge [
+      (mkIf cfg.excalidraw.enable {
+        whiteboard = {
+          enabled = true;
+          collabServerBaseUrl = "https://${cfg.hostName}";
+        };
+      })
+      (mkIf cfg.secureDomain.enable {
+        hosts.anonymousdomain = "guest.${cfg.hostName}";
+      })
+    ];
 
     services.jitsi-videobridge = mkIf cfg.videobridge.enable {
       enable = true;
@@ -756,5 +754,5 @@ in
   };
 
   meta.doc = ./jitsi-meet.md;
-  meta.maintainers = lib.teams.jitsi.members;
+  meta.teams = [ lib.teams.jitsi ];
 }

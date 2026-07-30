@@ -46,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-wzeWLwwsZXtrKsmlglZG7YvIki/ba7IwsDBq+40ltcg=";
   };
 
+  patches = [ ./0001-fix-cross-compilation-with-capnproto.patch ];
+
   postPatch = ''
     substituteInPlace tiledb/sm/misc/test/unit_parse_argument.cc \
       --replace-fail '"catch.hpp"' '<catch2/catch_all.hpp>'
@@ -66,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (!useAVX2) "-DCOMPILER_SUPPORTS_AVX2=FALSE";
 
   nativeBuildInputs = [
+    capnproto
     clang-tools
     cmake
     python3
@@ -92,6 +95,10 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
   ];
 
+  preBuild = ''
+    cmake --build . --target update-serialization
+  '';
+
   nativeCheckInputs = [
     gtest
   ];
@@ -116,10 +123,6 @@ stdenv.mkDerivation (finalAttrs: {
     "install-tiledb"
     "doc"
   ];
-
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    install_name_tool -add_rpath ${onetbb}/lib $out/lib/libtiledb.dylib
-  '';
 
   meta = {
     description = "Allows you to manage massive dense and sparse multi-dimensional array data";

@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "7/3.1";
 
   src = fetchurl {
-    url = "http://mirror.ifarchive.org/if-archive/infocom/tools/ztools/ztools731.tar.gz";
+    url = "https://mirror.ifarchive.org/if-archive/infocom/tools/ztools/ztools731.tar.gz";
     hash = "sha256-vlQX0/fCAr88KJwMnYUSROFOg9tfVK5Hz58AUDuhNXg=";
   };
 

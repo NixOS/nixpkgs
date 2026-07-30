@@ -25,15 +25,21 @@ let
     hash = "sha256-e9PLgkqWBNLBw7uuNpPluOQ6+aGLYQLyTzcLa+LMOzs=";
   };
 
+  patches = [
+    ./dont-use-initial-releases-json.patch
+    ./dont-fetch-contributors.patch
+
+    # zip extraction fails on newer nodejs versions without this fix
+    ./bump-yauzl.patch
+  ];
+
   unwrapped = stdenvNoCC.mkDerivation {
     pname = "${pname}-unwrapped";
-    inherit version src;
-
-    patches = [ ./dont-use-initial-releases-json.patch ];
+    inherit version src patches;
 
     offlineCache = fetchYarnDeps {
-      inherit src;
-      hash = "sha256-mB8WG6tX204u6AJ8qLbWrA+pSN3oDihHqj0t3bWcuAI=";
+      inherit src patches;
+      hash = "sha256-5yUsjXQ3OHwEGFgMTUJAXAuTdAl4zkb8zxTs5OT6sw4=";
     };
 
     nativeBuildInputs = [
@@ -60,6 +66,9 @@ let
       substituteInPlace node_modules/@electron/packager/dist/packager.js \
         --replace-fail 'await this.getElectronZipPath(downloadOpts)' '"electron.zip"'
     '';
+
+    # electron-forge's console output is squeezed into one narrow column if unset
+    env.CI = "1";
 
     yarnBuildScript = "package";
 
@@ -95,6 +104,8 @@ in
 buildFHSEnv {
   inherit pname version;
   runScript = "${lib.getExe electron} ${unwrapped}/lib/electron-fiddle/resources/app.asar";
+
+  passthru = { inherit unwrapped; };
 
   extraInstallCommands = ''
     mkdir -p "$out/share/icons/hicolor/scalable/apps"

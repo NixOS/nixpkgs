@@ -120,8 +120,9 @@ stdenv.mkDerivation (finalAttrs: {
     libsForQt5.qmake
     libsForQt5.wrapQtAppsHook
     wrapGAppsHook3
-    versionCheckHook
-  ];
+  ]
+  # versionCheckHook doesn't detect any output on darwin, even though the binary works.
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) versionCheckHook;
 
   buildInputs = [
     eigen

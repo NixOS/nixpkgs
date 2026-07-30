@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "warmup-s3-archives";
-  version = "1.0.0";
+  version = "1.2.2";
 
   src = fetchFromGitLab {
     owner = "philipmw";
     repo = "warmup-s3-archives";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TJluuylxxFc66NidXCHxZdQN2VNv2QjFodUDXIQolZQ=";
+    hash = "sha256-B/8OSqKA3tJhjdShiqAqJrTOc8OuSBLfZ1U9xvvP6vQ=";
   };
 
-  cargoHash = "sha256-cPjjSYDsMsZO3Wj9wbAhSACbJGDINrE70cj+Lj4QYQE=";
+  cargoHash = "sha256-31p6IfX5VFSz4tNrjgFigsuTsPA3iO6m3QV6KOb2GKQ=";
 
   passthru.updateScript = nix-update-script { };
 

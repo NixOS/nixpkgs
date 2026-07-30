@@ -80,7 +80,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flatpak";
-  version = "1.16.3";
+  version = "1.18.0";
 
   # TODO: split out lib once we figure out what to do with triggerdir
   outputs = [
@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${finalAttrs.version}/flatpak-${finalAttrs.version}.tar.xz";
-    hash = "sha256-PWvT9fiUDoDAhyhso+QhgvxjDXgIlFNlEfzSz/wSz1s=";
+    hash = "sha256-pYV6ZsQDndoF2SvcsrAz14jNJYlhAWfw7F8OyNT6xvI=";
   };
 
   patches = [
@@ -115,11 +115,15 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/NixOS/nixpkgs/issues/53441
     ./unset-env-vars.patch
 
+    # Fix portal flatpak-spawn environment handling regression
+    # https://github.com/flatpak/flatpak/pull/6721
+    ./flatpak-spawn-env.patch
+
     # The icon validator needs to access the gdk-pixbuf loaders in the Nix store
     # and cannot bind FHS paths since those are not available on NixOS.
     finalAttrs.passthru.icon-validator-patch
   ]
-  ++ lib.optionals finalAttrs.doCheck [
+  ++ lib.optionals finalAttrs.finalPackage.doCheck [
     # Hardcode paths used by tests and change test runtime generation to use files from Nix store.
     # https://github.com/flatpak/flatpak/issues/1460
     (replaceVars ./fix-test-paths.patch {

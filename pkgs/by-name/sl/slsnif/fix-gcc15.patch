@@ -1,0 +1,26 @@
+diff --git a/src/rcfile.h b/src/rcfile.h
+index 0fcb4d8..84f77f2 100644
+--- a/src/rcfile.h
++++ b/src/rcfile.h
+@@ -24,7 +24,7 @@
+ 
+ typedef struct _rc_struct {
+     char *name;
+-    void (*fn)();
++    void (*fn)(tty_struct *, char *);
+ } rc_struct;
+ 
+ /* external functions */
+diff --git a/src/slsnif.c b/src/slsnif.c
+index 1341f59..e17f288 100644
+--- a/src/slsnif.c
++++ b/src/slsnif.c
+@@ -549,7 +549,7 @@ int main(int argc, char *argv[]) {
+         close(tty_data.portpipefd[1]);
+         signal(SIGINT, sigintC);
+         signal(SIGHUP, sighupC);
+-        pipeReader(&tty_data);
++        pipeReader();
+         break;
+     case -1:
+         /* fork() failed */

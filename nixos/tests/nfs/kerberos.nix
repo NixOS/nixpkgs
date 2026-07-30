@@ -83,9 +83,16 @@ import ../make-test-python.nix (
 
           services.nfs.server.enable = true;
           services.nfs.server.createMountPoints = true;
-          services.nfs.server.exports = ''
-            /data *(rw,no_root_squash,fsid=0,sec=krb5p)
-          '';
+          services.nfs.server.exports = {
+            "/data" = {
+              "*" = [
+                "rw"
+                "no_root_squash"
+                "fsid=0"
+                "sec=krb5p"
+              ];
+            };
+          };
         };
     };
 

@@ -36,6 +36,6 @@ elif [[ $0 != *cpp ]]; then
     fi
 fi
 
-if [[ "@darwinMinVersion@" ]]; then
+if [[ "@darwinMinVersion@" ]] && [ "@isFlang@" != 1 ]; then
     extraBefore+=(-Werror=unguarded-availability)
 fi

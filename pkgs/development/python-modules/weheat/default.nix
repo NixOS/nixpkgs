@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "weheat";
-  version = "2026.2.28";
+  version = "2026.4.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wefabricate";
     repo = "wh-python";
     tag = finalAttrs.version;
-    hash = "sha256-V29B30LztIHFbTRTqppR3kvVNwDoK4BPq5fK1blJUrU=";
+    hash = "sha256-AJaGedI0ctp0TCgfjB9AkM+VH9zqTqosgWq4nskOMSo=";
   };
 
   build-system = [ setuptools ];
