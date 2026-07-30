@@ -192,7 +192,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     homepage = "https://www.spice-space.org/";
     license = lib.licenses.lgpl21;
-    maintainers = [ lib.maintainers.xeji ];
+    maintainers = [
+      lib.maintainers.xeji
+      lib.maintainers.theCapypara
+    ];
     platforms = lib.platforms.unix;
   };
 })
