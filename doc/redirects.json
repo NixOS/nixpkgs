@@ -2062,6 +2062,12 @@
   "fetchfromgithub": [
     "index.html#fetchfromgithub"
   ],
+  "fetchfromhuggingface": [
+    "index.html#fetchfromhuggingface"
+  ],
+  "ex-fetchfromhuggingface": [
+    "index.html#ex-fetchfromhuggingface"
+  ],
   "fetchfromgitlab": [
     "index.html#fetchfromgitlab"
   ],

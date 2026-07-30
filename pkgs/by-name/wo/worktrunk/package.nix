@@ -54,6 +54,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=output::commit_generation::tests::test_command_exists_known_command"
     # Integration tests use insta snapshots with environment-specific paths
     "--skip=integration_tests::"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # These tests probe the live process table — on macOS that means libproc
+    # (`proc_listallpids` / `proc_pidinfo`). Inside the Nix darwin sandbox,
+    # those calls are denied. The build process can't even read its own pid
+    # from the table, so two tests panic:
+    "--skip=shell::utils::tests::test_process_name_and_ppid_self"
+    "--skip=shell::utils::tests::test_probe_reports_invoked_name_for_sh"
   ];
 
   doInstallCheck = true;
@@ -78,6 +86,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       siriobalmelli
       DuskyElf
+      yzx9
     ];
   };
 })

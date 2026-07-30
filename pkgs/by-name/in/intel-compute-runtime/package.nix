@@ -42,6 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
     # disable spectre mitigations (already mitigated in the kernel)
     # https://bugs.launchpad.net/ubuntu/+source/intel-compute-runtime/+bug/2110131
     (lib.cmakeBool "NEO_DISABLE_MITIGATIONS" true)
+    # install ocloc without a version suffix
+    (lib.cmakeBool "NEO_BUILD_UNVERSIONED_OCLOC" true)
   ];
 
   outputs = [
