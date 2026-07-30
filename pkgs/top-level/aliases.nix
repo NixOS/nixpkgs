@@ -618,6 +618,7 @@ mapAliases {
   criticality-score = throw "'criticality-score' has been removed, as it is unmaintained upstream"; # Added 2026-02-18
   cromfs = throw "'cromfs' has been removed due to lack of fuse 3 support. You can try replacing it with dwarfs: https://github.com/mhx/dwarfs#with-cromfs"; # Added 2026-06-05
   cromite = throw "'cromite' has been removed from nixpkgs due to it not being maintained"; # Added 2025-06-12
+  crossfire-client = throw "'crossfire-client' has been removed as it depended on the deprecated GTK2 engine."; # Added 2026-07-30
   crossLibcStdenv = throw "'crossLibcStdenv' has been renamed to/replaced by 'stdenvNoLibc'"; # Converted to throw 2025-10-27
   cryfs = throw "'cryfs' has been removed as versions <2.x depend on FUSE 2, which is deprecated and is no longer available in Nixpkgs. 'cryfs' may be added again in the future once version 2.0.0 is stabilised. In the meantime, consider using 'gocryptfs'."; # Added 2026-07-12
   crystal_1_11 = throw "'crystal_1_11' has been removed as it is obsolete and no longer used in the tree. Consider using 'crystal' instead"; # Added 2025-09-04
