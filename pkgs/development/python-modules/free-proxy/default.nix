@@ -3,7 +3,6 @@
   fetchFromGitHub,
   buildPythonPackage,
   setuptools,
-  pip-chill,
   lxml,
   requests,
 }:
@@ -23,9 +22,12 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    pip-chill
     lxml
     requests
+  ];
+
+  pythonRemoveDeps = [
+    "pip-chill"
   ];
 
   meta = {
