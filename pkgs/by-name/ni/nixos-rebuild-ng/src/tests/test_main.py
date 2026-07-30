@@ -993,9 +993,9 @@ def test_execute_nix_switch_flake_build_host(
     config_path.touch()
 
     def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
-        if args[0] == "nix" and "eval" in args:
-            return CompletedProcess([], 0, str(config_path))
-        elif args[0] == "ssh" and "nix" in args:
+        if (args[0] == "nix" and "eval" in args) or (
+            args[0] == "ssh" and "nix" in args
+        ):
             return CompletedProcess([], 0, str(config_path))
         elif args[0] == "nix-instantiate":
             return CompletedProcess([], 1)
@@ -1316,9 +1316,7 @@ def test_execute_test_flake(mock_run: Mock, tmp_path: Path) -> None:
     def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
         if args[0] == "nix":
             return CompletedProcess([], 0, str(config_path))
-        elif args[0] == "nix-instantiate":
-            return CompletedProcess([], 1)
-        elif args[0] == "test":
+        elif args[0] == "nix-instantiate" or args[0] == "test":
             return CompletedProcess([], 1)
         else:
             return CompletedProcess([], 0)
@@ -1386,9 +1384,9 @@ def test_execute_test_rollback(
                 2084   2024-11-07 23:54:17   (current)
                 """),
             )
-        elif args[0] == "nix-instantiate" and "nixos-system" in args:
-            return CompletedProcess([], 1)
-        elif args[0] == "test":
+        elif (args[0] == "nix-instantiate" and "nixos-system" in args) or args[
+            0
+        ] == "test":
             return CompletedProcess([], 1)
         else:
             return CompletedProcess([], 0)
