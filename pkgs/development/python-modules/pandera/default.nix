@@ -17,6 +17,9 @@
   typing-extensions,
   typing-inspect,
 
+  narwhals,
+  xarray,
+
   # optional-dependencies
   black,
   dask,
@@ -44,14 +47,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pandera";
-  version = "0.30.1";
+  version = "0.32.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "unionai-oss";
     repo = "pandera";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JmD8p0Syt/Tgf9LiMWeug1dSPp4cyd7BtBfo6yi08xg=";
+    hash = "sha256-6xLrLPFjU3BMw/G8T4O48S8Ntx8EN29OQvSv2pCjIJg=";
   };
 
   build-system = [
@@ -65,6 +68,8 @@ buildPythonPackage (finalAttrs: {
     typeguard
     typing-extensions
     typing-inspect
+    narwhals
+    xarray
   ];
 
   optional-dependencies =
