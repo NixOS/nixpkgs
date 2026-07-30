@@ -31,6 +31,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-zcZjjAPiIfkbU1nKhjdxyWP6PvkLEUCNYwFzIzRXArE=";
 
+  # Upstream sets this in build.sh; needed to make ARM
+  # binary portable for 16K and 64K page sizes.
+  env = lib.optionalAttrs (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) {
+    JEMALLOC_SYS_WITH_LG_PAGE = 16;
+  };
+
   cargoBuildFlags =
     let
       makeTargets =
