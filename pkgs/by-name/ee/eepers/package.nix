@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
       -Wall \
       -Wextra \
       -gnat2012 \
-      -o eepers-linux eepers.adb \
+      -o eepers eepers.adb \
       -bargs \
       -largs -lraylib -lm \
       -pthread
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.isLinux ''
     patchelf $out/bin/eepers \
       --add-needed libwayland-client.so \
       --add-needed libwayland-cursor.so \
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/bin
-    cp ./eepers-linux $out/bin/eepers
+    cp ./eepers $out/bin/eepers
 
     cp -r ./assets $out/
 
