@@ -69,6 +69,9 @@ lib.extendMkDerivation {
       meta = {
         broken = false;
         platforms = emacs.meta.platforms;
+        # Do not build on hydra to avoid going through staging cycles.
+        # In the future, we may consider selectively building a few of them on hydra.
+        hydraPlatforms = [ ];
       }
       // optionalAttrs ((args.src.meta.homepage or "") != "") {
         homepage = args.src.meta.homepage;

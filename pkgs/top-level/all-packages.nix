@@ -8553,11 +8553,9 @@ with pkgs;
       pkgs' = pkgs; # default pkgs used for bootstrapping the emacs package set
     };
 
-  # We want emacsPackages to be visible in search but not be build on hydra
-  emacsPackages = recurseIntoAttrsWith {
-    hydra = false;
-    eval = false;
-  } emacs.pkgs;
+  # We want emacsPackages to be visible in search.
+  # They are not built on hydra because we set their meta.hydraPlatforms to [ ].
+  emacsPackages = recurseIntoAttrs emacs.pkgs;
 
   espeak = espeak-ng;
 
