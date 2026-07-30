@@ -115,6 +115,12 @@ buildPythonPackage (finalAttrs: {
     "test_get_timeline_plot_with_killed_running_trials"
     # times out under load
     "test_optimize_with_progbar_timeout"
+
+    # pytest >= 9 leaves its logging handlers (including duplicate LogCaptureHandlers) attached to
+    # the `optuna` logger, breaking these assertions on handler state
+    "test_default_handler"
+    "test_filter_inf_trials_message"
+    "test_propagation"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # ValueError: Failed to start Kaleido subprocess. Error stream

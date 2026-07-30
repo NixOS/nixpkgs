@@ -10754,6 +10754,8 @@ self: super: with self; {
 
   modelscope = callPackage ../development/python-modules/modelscope { };
 
+  modelscope-hub = callPackage ../development/python-modules/modelscope-hub { };
+
   modelsearch = callPackage ../development/python-modules/modelsearch { };
 
   modern-colorthief = callPackage ../development/python-modules/modern-colorthief { };
@@ -20446,6 +20448,8 @@ self: super: with self; {
   tomli-w = callPackage ../development/python-modules/tomli-w { };
 
   tomlkit = callPackage ../development/python-modules/tomlkit { };
+
+  tomlrt = callPackage ../development/python-modules/tomlrt { };
 
   toolz = callPackage ../development/python-modules/toolz { };
 
