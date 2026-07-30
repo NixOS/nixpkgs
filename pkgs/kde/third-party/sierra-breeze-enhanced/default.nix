@@ -1,14 +1,13 @@
 {
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  extra-cmake-modules,
-  wrapQtAppsHook,
-  kwin,
   lib,
+  mkKdeDerivation,
+  fetchFromGitHub,
+  extra-cmake-modules,
+  kwin,
   fetchpatch2,
 }:
-stdenv.mkDerivation rec {
+
+mkKdeDerivation rec {
   pname = "sierra-breeze-enhanced";
   version = "2.1.1";
 
@@ -26,10 +25,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [
-    cmake
+  extraNativeBuildInputs = [
     extra-cmake-modules
-    wrapQtAppsHook
   ];
   buildInputs = [ kwin ];
 
