@@ -12,16 +12,16 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rstcheck-core";
-  version = "1.3.0";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rstcheck";
     repo = "rstcheck-core";
-    tag = "v${version}";
-    hash = "sha256-ZQgbraIQgfhJM4JYfZjPZcMswOddGQb8pdHjTBo53jk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4NvaBG2LQqHJgDLcUpjVjknkc0unVyAM8d5Z8SlZ2jw=";
   };
 
   build-system = [
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for checking syntax of reStructuredText";
     homepage = "https://github.com/rstcheck/rstcheck-core";
-    changelog = "https://github.com/rstcheck/rstcheck-core/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/rstcheck/rstcheck-core/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
