@@ -10,6 +10,7 @@ buildPythonPackage (finalAttrs: {
   pname = "css-parser";
   version = "1.0.10";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
