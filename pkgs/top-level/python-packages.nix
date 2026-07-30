@@ -22643,6 +22643,8 @@ self: super: with self; {
 
   zinvolt = callPackage ../development/python-modules/zinvolt { };
 
+  zipfile-inflate64 = callPackage ../development/python-modules/zipfile-inflate64 { };
+
   zipfile2 = callPackage ../development/python-modules/zipfile2 { };
 
   zipp = callPackage ../development/python-modules/zipp { };
