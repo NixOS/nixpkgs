@@ -24,6 +24,8 @@ let
     GRANIAN_HOST = cfg.address;
     GRANIAN_PORT = toString cfg.port;
     GRANIAN_WORKERS_KILL_TIMEOUT = "60";
+    # django-allauth uses python requests, which doesn't use the systems CA bundle by default: https://requests.readthedocs.io/en/latest/user/advanced/#ca-certificates
+    REQUESTS_CA_BUNDLE = config.security.pki.caBundle;
   }
   // lib.optionalAttrs (config.time.timeZone != null) {
     PAPERLESS_TIME_ZONE = config.time.timeZone;
@@ -445,7 +447,9 @@ in
           })
           (lib.mkIf cfg.configureTika {
             PAPERLESS_GOTENBERG_ENABLED = true;
+            PAPERLESS_TIKA_GOTENBERG_ENDPOINT = "http://${config.services.gotenberg.bindIP}:${toString config.services.gotenberg.port}";
             PAPERLESS_TIKA_ENABLED = true;
+            PAPERLESS_TIKA_ENDPOINT = "http://${config.services.tika.listenAddress}:${toString config.services.tika.port}";
           })
         ];
 
