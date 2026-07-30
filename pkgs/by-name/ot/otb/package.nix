@@ -1,5 +1,6 @@
 {
   cmake,
+  fetchFromGitLab,
   fetchFromGitHub,
   fetchpatch,
   makeWrapper,
@@ -227,13 +228,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "otb";
-  version = "10.0-unstable-2025-12-11";
+  version = "10.0-unstable-2026-07-15";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitLab {
+    domain = "gitlab.orfeo-toolbox.org";
     owner = "orfeotoolbox";
     repo = "otb";
-    rev = "2dd72c102a0a95794c0cc3e7da1843bc67537f6e";
-    hash = "sha256-dLphF4h/QkO/lSVEmVUPuRRGDU5SRhNLoxXxHWpINbU=";
+    rev = "daf49d0c7c986836e81f773d4eda02c4ef3221e8";
+    hash = "sha256-gJGputmmWGgPf1kyMTZ3p953IxhZg8AtNQVdqPMbZMY=";
   };
 
   patches = [
