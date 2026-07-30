@@ -82,7 +82,7 @@ let
 
   removeTreesitterPrefix = lib.strings.removePrefix "tree-sitter-";
   removeGrammarSuffix = lib.strings.removeSuffix "-grammar";
-  replaceHyphens = lib.strings.replaceStrings [ "-" ] "_";
+  replaceHyphens = lib.strings.replaceStrings [ "-" ] [ "_" ];
 
   mkGrammarLinkFarm =
     grammars:
