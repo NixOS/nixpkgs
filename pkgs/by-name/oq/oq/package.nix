@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   crystal,
   jq,
   libxml2,
@@ -17,6 +18,13 @@ crystal.buildCrystalPackage rec {
     tag = "v${version}";
     sha256 = "sha256-AgUVHlk39J1V1Vv91FjglT4mSbP4IHiRlTrlfmrJxfY=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/Blacksmoke16/oq/commit/151b5b1d60ed1cafa9fc2a1ec175dcd1732a3961.diff";
+      hash = "sha256-xWZ1U2A1ClwviSdGMvBeBgA16qKLuUzdBRmJblM7DAc=";
+    })
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ libxml2 ];
