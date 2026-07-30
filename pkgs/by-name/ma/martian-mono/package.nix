@@ -46,7 +46,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/evilmartians/mono";
     changelog = "https://github.com/evilmartians/mono/raw/${finalAttrs.src.tag}/Changelog.md";
     license = lib.licenses.ofl;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ pancaek ];
     platforms = lib.platforms.all;
   };
 })
