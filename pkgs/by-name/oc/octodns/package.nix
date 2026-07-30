@@ -3,6 +3,7 @@
   fetchFromGitHub,
   python3,
   runCommand,
+  versionCheckHook,
 
   # passthru
   octodns,
@@ -49,6 +50,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonImportsCheck = [ "octodns" ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
     providers = lib.recurseIntoAttrs (
       lib.packagesFromDirectoryRecursive {
@@ -73,6 +77,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/octodns/octodns";
     changelog = "https://github.com/octodns/octodns/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
+    mainProgram = "octodns-sync";
     teams = [ lib.teams.octodns ];
   };
 })
