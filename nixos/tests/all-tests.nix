@@ -857,6 +857,7 @@ in
   irqbalance = runTest ./irqbalance.nix;
   iscsi-multipath-root = runTest ./iscsi-multipath-root.nix;
   iscsi-root = runTest ./iscsi-root.nix;
+  iscsi-root-systemd = runTest ./iscsi-root-systemd.nix;
   isolate = runTest ./isolate.nix;
   isso = runTest ./isso.nix;
   jackett = runTest ./jackett.nix;
