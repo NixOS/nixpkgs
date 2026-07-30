@@ -3,7 +3,6 @@
   stdenv,
 
   fetchFromGitHub,
-  fetchpatch,
 
   cmake,
   ninja,
@@ -25,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fbthrift";
-  version = "2026.01.19.00";
+  version = "2026.07.27.00";
 
   outputs = [
     # Trying to split this up further into `bin`, `out`, and `dev`
@@ -39,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "fbthrift";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jx2jSMeoRBYG7xCWKTzaIpNjrGnbPLiR9vQVO7m3if0=";
+    hash = "sha256-bzi4DRGOQy8HXLQa6roMY3CRqteoJxz2Xo6SsLfOdhY=";
   };
 
   patches = [
@@ -51,7 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
     # incorrect path concatenation.
     ./remove-cmake-install-rpath.patch
 
-    ./glog-0.7.patch
+    # On some machines (potentially those with low parallelism), this build
+    # seems to have a missing dependency and seems to fail with:
+    # "/build/source/build/thrift/lib/thrift/gen-cpp2/any_rep_types.h:12:10:
+    # fatal error: thrift/lib/thrift/gen-cpp2/type_types.h: No such file or
+    # directory"
+    # https://github.com/facebook/fbthrift/pull/709
+    ./thriftmetadata-dependency-type-cpp2-target.patch
   ];
 
   nativeBuildInputs = [
@@ -94,14 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
     # it. I don’t know, either. It scares me.
     (lib.cmakeFeature "CMAKE_SHARED_LINKER_FLAGS" "-Wl,-undefined,dynamic_lookup")
   ];
-
-  # Fix a typo introduced by the following commit that causes hundreds
-  # of pointless rebuilds when installing:
-  # <https://github.com/facebook/fbthrift/commit/58038399cefc0c2256ce4ef5444dee37147cbf07>
-  postPatch = ''
-    substituteInPlace ThriftLibrary.cmake \
-      --replace-fail .tcch .tcc
-  '';
 
   # Copied from Homebrew; fixes the following build error:
   #
