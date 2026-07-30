@@ -15041,8 +15041,6 @@ self: super: with self; {
 
   pymediaroom = callPackage ../development/python-modules/pymediaroom { };
 
-  pymedio = callPackage ../development/python-modules/pymedio { };
-
   pymee = callPackage ../development/python-modules/pymee { };
 
   pymeeus = callPackage ../development/python-modules/pymeeus { };
