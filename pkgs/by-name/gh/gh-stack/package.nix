@@ -41,7 +41,10 @@ buildGoModule (finalAttrs: {
     downloadPage = "https://github.com/github/gh-stack/";
     changelog = "https://github.com/github/gh-stack/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ethancedwards8 ];
+    maintainers = with lib.maintainers; [
+      antoineco
+      ethancedwards8
+    ];
     mainProgram = "gh-stack";
   };
 })
