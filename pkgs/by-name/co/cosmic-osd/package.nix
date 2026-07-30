@@ -30,6 +30,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   separateDebugInfo = true;
   __structuredAttrs = true;
 
+  env.POLKIT_AGENT_HELPER_1 = "/run/wrappers/bin/polkit-agent-helper-1";
+
   nativeBuildInputs = [
     just
     libcosmicAppHook
@@ -54,8 +56,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "cargo-target-dir"
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
-
-  env.POLKIT_AGENT_HELPER_1 = "/run/wrappers/bin/polkit-agent-helper-1";
 
   passthru = {
     tests = {

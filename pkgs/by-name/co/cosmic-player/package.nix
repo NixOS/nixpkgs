@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: Lily Foster <lily@lily.flowers>
+# Portions of this code are adapted from nixos-cosmic
+# https://github.com/lilyinstarlight/nixos-cosmic
 {
   lib,
   stdenv,
@@ -40,9 +44,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rustPlatform.bindgenHook
   ];
 
-  # Largely based on lilyinstarlight's work linked below
-  # https://github.com/lilyinstarlight/nixos-cosmic/blob/main/pkgs/cosmic-player/package.nix
-
   buildInputs = [
     alsa-lib
     ffmpeg
@@ -67,7 +68,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
-  postInstall = ''
+  preFixup = ''
     libcosmicAppWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
 

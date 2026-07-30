@@ -19,10 +19,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-m2cYppfitpBDKK8CC9i/lUrC9rfSYTuqUSZSyIKKGyg=";
   };
 
-  makeFlags = [ "prefix=${placeholder "out"}" ];
-
   __structuredAttrs = true;
   strictDeps = true;
+
+  makeFlags = [ "prefix=${placeholder "out"}" ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
