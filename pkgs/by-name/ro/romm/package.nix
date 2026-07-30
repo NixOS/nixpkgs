@@ -5,6 +5,7 @@
   buildNpmPackage,
   makeWrapper,
   nix-update-script,
+  nixosTests,
   p7zip,
   python3,
   runtimeShell,
@@ -160,6 +161,10 @@ stdenvNoCC.mkDerivation (
           cp -r assets/. $out/assets/
           runHook postInstall
         '';
+      };
+
+      tests = {
+        inherit (nixosTests) romm;
       };
 
       updateScript = nix-update-script {
