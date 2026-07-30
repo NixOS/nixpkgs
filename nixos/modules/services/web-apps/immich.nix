@@ -227,7 +227,7 @@ in
         // {
           default = true;
         };
-      createDB = mkEnableOption "the automatic creation of the database for immich." // {
+      createDB = mkEnableOption "the automatic creation of the database for immich" // {
         default = true;
       };
       name = mkOption {
