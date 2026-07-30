@@ -53,13 +53,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cockpit";
-  version = "364";
+  version = "365";
 
   src = fetchFromGitHub {
     owner = "cockpit-project";
     repo = "cockpit";
     tag = finalAttrs.version;
-    hash = "sha256-TAX0N6ZQWGr17GpyJS23Q5ES3USU2hxSiI867n6G17I=";
+    hash = "sha256-xOIv+NAO3xs74YQpnyQlU6HyptQ4ZmCt4M92195zI6M=";
     fetchSubmodules = true;
   };
 
