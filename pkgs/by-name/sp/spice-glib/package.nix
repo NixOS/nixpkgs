@@ -15,7 +15,6 @@
   json-glib,
   libcacard,
   libcap_ng,
-  libdrm,
   libjpeg_turbo,
   libopus,
   libsoup_3,
@@ -38,9 +37,11 @@
   wayland-scanner,
   zlib,
   wrapGAppsHook3,
+  wrapGAppsNoGuiHook,
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  withGtk ? false,
   withPolkit ? stdenv.hostPlatform.isLinux,
 }:
 
@@ -50,7 +51,7 @@
 # then adds a device acl entry for that user.
 # Example NixOS config to create a setuid wrapper for the helper:
 # security.wrappers.spice-client-glib-usb-acl-helper.source =
-#   "${pkgs.spice-gtk}/bin/spice-client-glib-usb-acl-helper";
+#   "${pkgs.spice-glib}/bin/spice-client-glib-usb-acl-helper";
 # On non-NixOS installations, make a setuid copy of the helper
 # outside the store and adjust PATH to find the setuid version.
 
@@ -66,7 +67,10 @@
 #  '';
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "spice-gtk";
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  pname = if withGtk then "spice-gtk" else "spice-glib";
   version = "0.43";
 
   outputs = [
@@ -100,26 +104,33 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     python3.pkgs.pyparsing
-    wrapGAppsHook3
   ]
   ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     mesonEmulatorHook
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    wayland-scanner
   ]
   ++ lib.optionals withIntrospection [
     gi-docgen
     gobject-introspection
     vala
-  ];
+  ]
+  ++ (
+    if withGtk then
+      [
+        wrapGAppsHook3
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        wayland-scanner
+      ]
+    else
+      [
+        wrapGAppsNoGuiHook
+      ]
+  );
 
   buildInputs = [
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
     cyrus_sasl
-    libepoxy
-    gtk3
     json-glib
     libcacard
     libjpeg_turbo
@@ -140,7 +151,12 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap_ng
-    libdrm
+    libepoxy
+  ]
+  ++ lib.optionals withGtk [
+    gtk3
+  ]
+  ++ lib.optionals (withGtk && stdenv.hostPlatform.isLinux) [
     wayland-protocols
   ];
 
@@ -151,13 +167,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dusb-ids-path=${hwdata}/share/hwdata/usb.ids"
     (lib.mesonEnable "introspection" withIntrospection)
     (lib.mesonEnable "vapi" withIntrospection)
-  ]
-  ++ lib.optionals (!withPolkit) [
-    "-Dpolkit=disabled"
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
-    "-Dlibcap-ng=disabled"
-    "-Degl=disabled"
+    (lib.mesonEnable "polkit" withPolkit)
+    (lib.mesonEnable "libcap-ng" stdenv.hostPlatform.isLinux)
+    (lib.mesonEnable "egl" stdenv.hostPlatform.isLinux)
+    (lib.mesonEnable "gtk" withGtk)
   ]
   ++ lib.optionals stdenv.hostPlatform.isMusl [
     "-Dcoroutine=gthread" # Fixes "Function missing:makecontext"
@@ -182,14 +195,24 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "GTK 3 SPICE widget";
-    longDescription = ''
-      spice-gtk is a GTK 3 SPICE widget. It features glib-based
-      objects for SPICE protocol parsing and a gtk widget for embedding
-      the SPICE display into other applications such as virt-manager.
-      Python bindings are available too.
-    '';
-
+    description = "SPICE Glib client library" + lib.optionalString withGtk " with GTK+3 widget";
+    longDescription =
+      if withGtk then
+        ''
+          spice-glib provides support for Glib apps to interact with the SPICE
+          protocol and spice-gtk itself provides a GTK 3 SPICE widget.
+          The package features glib-based objects for SPICE protocol parsing and a GTK widget
+          for embedding the SPICE display into other applications such as virt-manager.
+          Python bindings are available too.
+          This package is also available without the GTK+3 widget, use 'spice-glib' for this.
+        ''
+      else
+        ''
+          spice-glib provides support for Glib apps to interact with the SPICE
+          protocol. It features glib-based objects for SPICE protocol parsing.
+          Python bindings are available too.
+          This package is also available with a GTK+3 widget, use 'spice-gtk' for this.
+        '';
     homepage = "https://www.spice-space.org/";
     license = lib.licenses.lgpl21;
     maintainers = [

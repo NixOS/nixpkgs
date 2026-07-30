@@ -2861,6 +2861,8 @@ with pkgs;
     inherit (llvmPackages) openmp;
   };
 
+  spice-gtk = callPackage ../by-name/sp/spice-glib/package.nix { withGtk = true; };
+
   # to match naming of other package repositories
   spire-agent = spire.agent;
   spire-server = spire.server;
