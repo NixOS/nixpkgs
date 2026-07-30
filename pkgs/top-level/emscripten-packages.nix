@@ -92,7 +92,7 @@ rec {
 
   xmlmirror = pkgs.buildEmscriptenPackage rec {
     pname = "xmlmirror";
-    version = "unstable-2016-06-05";
+    version = "0-unstable-2016-06-05";
 
     buildInputs = [
       libtool
@@ -109,10 +109,11 @@ rec {
       automake
     ];
 
-    src = pkgs.fetchgit {
-      url = "https://gitlab.com/odfplugfest/xmlmirror.git";
+    src = pkgs.fetchFromGitLab {
+      owner = "odfplugfest";
+      repo = "xmlmirror";
       rev = "4fd7e86f7c9526b8f4c1733e5c8b45175860a8fd";
-      sha256 = "1jasdqnbdnb83wbcnyrp32f36w3xwhwp0wq8lwwmhqagxrij1r4b";
+      hash = "sha256-i+QgY+5PYVg5pwhzcDnkfXAznBg3e8sWH2jZtixuWsk=";
     };
 
     configurePhase = ''
