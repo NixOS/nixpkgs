@@ -61,9 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [ ncurses ];
 
-  # Stop build scripts from searching global include paths
-  env.LSOF_INCLUDE = "${lib.getInclude stdenv.cc.libc}/include";
-
   configurePhase =
     let
       toVar = name: value: "${name}=\"${value}\"";
