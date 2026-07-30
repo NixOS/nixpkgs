@@ -66,7 +66,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Application Template for the COSMIC Desktop Environment";
     license = lib.licenses.gpl3Only;
     teams = [ lib.teams.cosmic ];
-    platforms = lib.platforms.linux;
+    platforms = [ ];
     mainProgram = "cosmic-app-library";
   };
 })
