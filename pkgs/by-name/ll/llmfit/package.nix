@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "llmfit";
-  version = "1.1.3";
+  version = "1.1.6";
 
   src = fetchFromGitHub {
     owner = "AlexsJones";
     repo = "llmfit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-y+1BhtxClXAUkPXsLZ0uHHk230Lcn2UdO4DVm/JWpFA=";
+    hash = "sha256-960EP+2kuC1lV3VCjNVsIU5DC3FHT87cOc8SC+dQWE4=";
   };
 
-  cargoHash = "sha256-9HorFfdvPgUAkorDvZmZAsLSgejQEuGTFZu0A/ueoZE=";
+  cargoHash = "sha256-WXPAnFBlP2kAPtVdzbBToNOBYqN62Lf4eKJVd3Wbx+Q=";
 
   passthru.updateScript = nix-update-script { };
 

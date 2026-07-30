@@ -4,7 +4,6 @@
   fetchFromGitHub,
   gtk3,
   adwaita-icon-theme,
-  gnome-icon-theme,
   hicolor-icon-theme,
   gitUpdater,
   kdePackages,
@@ -28,7 +27,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     adwaita-icon-theme
     kdePackages.breeze-icons
-    gnome-icon-theme
     hicolor-icon-theme
   ];
 
