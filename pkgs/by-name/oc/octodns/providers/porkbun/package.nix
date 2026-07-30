@@ -2,9 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  uv-build,
   octodns,
   oinker,
+  pytest-cov-stub,
+  pytest-randomly,
+  pytestCheckHook,
+  uv-build,
 }:
 buildPythonPackage (finalAttrs: {
   pname = "octodns-porkbun";
@@ -23,6 +26,12 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     octodns
     oinker
+  ];
+
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytest-randomly
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "octodns_porkbun" ];
