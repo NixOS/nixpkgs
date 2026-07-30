@@ -10741,6 +10741,8 @@ self: super: with self; {
 
   modelscope = callPackage ../development/python-modules/modelscope { };
 
+  modelscope-hub = callPackage ../development/python-modules/modelscope-hub { };
+
   modelsearch = callPackage ../development/python-modules/modelsearch { };
 
   modern-colorthief = callPackage ../development/python-modules/modern-colorthief { };
