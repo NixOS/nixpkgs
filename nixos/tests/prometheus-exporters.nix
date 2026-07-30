@@ -490,6 +490,22 @@ let
         '';
       };
 
+    fastcom =
+      { ... }:
+      {
+        exporterConfig = {
+          enable = true;
+          debug = true;
+          refreshInterval = "1h";
+        };
+
+        exporterTest = ''
+          wait_for_unit("prometheus-fastcom-exporter.service")
+          wait_for_open_port(9877)
+          succeed("curl -sSf http://localhost:9877")
+        '';
+      };
+
     fastly =
       { pkgs, ... }:
       {
