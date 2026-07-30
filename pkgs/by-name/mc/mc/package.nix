@@ -92,12 +92,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = writeScript "update-mc" ''
     #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl pcre common-updater-scripts
+    #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
     set -eu -o pipefail
 
     # Expect the text in format of "Current version is: 4.8.27; ...".
-    new_version="$(curl -s https://midnight-commander.org/ | pcregrep -o1 'Current version is: (([0-9]+\.?)+);')"
+    new_version="$(curl -s https://midnight-commander.org/ | pcre2grep -o1 'Current version is: (([0-9]+\.?)+);')"
     update-source-version mc "$new_version"
   '';
 

@@ -7,14 +7,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "tt-topology";
-  version = "1.2.19";
+  version = "1.2.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tenstorrent";
     repo = "tt-topology";
     tag = "v${version}";
-    hash = "sha256-M12MdXyEwyvXscp7roE19mWZ4+/miTAyzUH3SUtOohE=";
+    hash = "sha256-oPhzNnlZszcXLSy29xfbhU5ML+twgeu2U794zdqSssI=";
   };
 
   build-system = with python3Packages; [
