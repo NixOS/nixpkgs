@@ -1,17 +1,17 @@
 {
-  "version": "19.0.4",
-  "repo_hash": "sha256-qDHaYzy+GfaGPsshIUq9AO5VSZzTErruy9YCUlgLBYs=",
-  "yarn_hash": "sha256-maKKpsAgbpVEB9DBkpe/ipGvK+5l1/gSRsNccK61iy8=",
+  "version": "19.2.2",
+  "repo_hash": "sha256-3JyP5xRjYegkjD3y8dVjMQ7zwLi+46GNKVcMb5bZGG4=",
+  "yarn_hash": "sha256-UJS0ZX8d6iIRNa/LQLQTSNZDtjKNm9e35RKqvsXxv3c=",
   "frontend_islands_yarn_hash": "sha256-EvGQin+5DqqIgM36jlVkVI49WcJzVvceYnkSS9ybfcY=",
   "owner": "gitlab-org",
   "repo": "gitlab",
-  "rev": "v19.0.4-ee",
+  "rev": "v19.2.2-ee",
   "passthru": {
-    "GITALY_SERVER_VERSION": "19.0.4",
-    "GITLAB_KAS_VERSION": "19.0.4",
-    "GITLAB_PAGES_VERSION": "19.0.4",
-    "GITLAB_SHELL_VERSION": "14.51.0",
+    "GITALY_SERVER_VERSION": "19.2.2",
+    "GITLAB_KAS_VERSION": "19.2.2",
+    "GITLAB_PAGES_VERSION": "19.2.2",
+    "GITLAB_SHELL_VERSION": "14.56.1",
     "GITLAB_ELASTICSEARCH_INDEXER_VERSION": "5.14.7",
-    "GITLAB_WORKHORSE_VERSION": "19.0.4"
+    "GITLAB_WORKHORSE_VERSION": "19.2.2"
   }
 }
