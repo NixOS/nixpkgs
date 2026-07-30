@@ -37,8 +37,8 @@ in
       {
         host.address = "127.0.0.1";
         host.port = cfg.hostPort;
-        # Must track the port the guest serves SSH on, or the host forwards nowhere.
-        guest.port = config.virtualisation.vz.vsockSSH.port;
+        # `systemd-ssh-generator` serves SSH on vsock port 22 in the guest.
+        guest.port = 22;
       }
     ];
 
@@ -71,8 +71,11 @@ in
     };
 
     # The dependency belongs on the per-connection service, not on the socket.
-    systemd.services."vzvm-ssh@" = {
+    systemd.services."sshd-vsock@" = {
+      overrideStrategy = "asDropin";
       requires = [ "copy-builder-keys.service" ];
+      # ssh works before DHCP finishes
+      # don't accept build requests when substitution would still fail
       wants = [ "network-online.target" ];
       after = [
         "copy-builder-keys.service"

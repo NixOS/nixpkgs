@@ -179,28 +179,6 @@ in
       '';
     };
 
-    virtualisation.vz.vsockSSH = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = config.services.openssh.enable;
-        defaultText = lib.literalExpression "config.services.openssh.enable";
-        description = ''
-          Serve SSH on a vsock port in addition to any TCP listeners.
-
-          Inbound connections arrive over vsock rather than TCP because NAT
-          networking gives the guest no stable inbound address. Each connection
-          is handed to its own `sshd -i`, same way a socket-activated `sshd`
-          works over TCP.
-        '';
-      };
-
-      port = lib.mkOption {
-        type = lib.types.port;
-        default = 22;
-        description = "vsock port that SSH is served on.";
-      };
-    };
-
     virtualisation.vz.extraConfig = lib.mkOption {
       type = lib.types.attrs;
       default = { };
@@ -248,8 +226,8 @@ in
         "overlay"
       ];
 
-      # All inbound connections go via vsock
-      boot.kernelModules = [ "vmw_vsock_virtio_transport" ];
+      # Inbound connections go via vsock; loaded in the initrd so `systemd-ssh-generator` finds `/dev/vsock`.
+      boot.initrd.kernelModules = [ "vmw_vsock_virtio_transport" ];
 
       boot.initrd.systemd.enable = lib.mkDefault true;
 
@@ -401,43 +379,31 @@ in
           '';
     }
 
-    (lib.mkIf vzCfg.vsockSSH.enable {
-      # sshd has no vsock listener, so systemd owns the socket and hands it each connection.
-      systemd.sockets.vzvm-ssh = {
-        description = "SSH vsock socket";
-        wantedBy = [ "sockets.target" ];
+    (lib.mkIf config.services.openssh.enable {
+      # `systemd-ssh-generator` serves SSH on vsock:22; retune its socket for `ssh-ng://` build traffic.
+      systemd.sockets.sshd-vsock = {
+        overrideStrategy = "asDropin";
         socketConfig = {
-          ListenStream = "vsock::${toString vzCfg.vsockSSH.port}";
-          Accept = true;
-
-          # The default 64 suits interactive logins, not `ssh-ng://`; past the limit systemd
-          # stops accepting and connections hang without a banner or a log line anywhere.
+          # past the default 64 concurrent connections, systemd stops accepting and ssh hangs silently
           MaxConnections = 512;
 
-          # stop the socket unit outright once exceeded
+          # don't stop the socket unit outright when connections arrive in bursts
           TriggerLimitIntervalSec = 0;
         };
+      };
+
+      systemd.services."sshd-vsock@" = {
+        overrideStrategy = "asDropin";
+        # don't race host key generation on first boot
+        wants = [ "sshd-keygen.service" ];
+        after = [ "sshd-keygen.service" ];
+        serviceConfig.TimeoutStopSec = 10;
       };
 
       # vsock delivers no RST, so without keepalives a session whose peer vanished never dies.
       services.openssh.settings = {
         ClientAliveInterval = lib.mkDefault 60;
         ClientAliveCountMax = lib.mkDefault 3;
-      };
-
-      systemd.services."vzvm-ssh@" = {
-        description = "SSH per-connection daemon (vsock)";
-        after = [ "sshd-keygen.service" ];
-        serviceConfig = {
-          ExecStart = "-${lib.getExe' config.services.openssh.package "sshd"} -i -f /etc/ssh/sshd_config";
-          StandardInput = "socket";
-          StandardOutput = "socket";
-          StandardError = "journal";
-
-          # Not `KillMode = "process"`: sshd's `nix-daemon` child would outlive the connection
-          # and leak instances against MaxConnections until the guest stops accepting SSH.
-          TimeoutStopSec = 10;
-        };
       };
     })
 
