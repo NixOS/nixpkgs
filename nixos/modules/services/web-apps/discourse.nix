@@ -641,6 +641,8 @@ in
       s3_http_continue_timeout = null;
       s3_install_cors_rule = null;
       s3_asset_cdn_url = null;
+      s3_role_arn = null;
+      s3_role_session_name = null;
 
       max_user_api_reqs_per_minute = 20;
       max_user_api_reqs_per_day = 2880;
@@ -667,7 +669,6 @@ in
       compress_anon_cache = false;
       anon_cache_store_threshold = 2;
       allowed_theme_repos = null;
-      enable_email_sync_demon = false;
       max_digests_enqueued_per_30_mins_per_site = 10000;
       cluster_name = null;
       multisite_config_path = "config/multisite.yml";
@@ -681,6 +682,10 @@ in
       allow_impersonation = true;
       log_line_max_chars = 160000;
       yjit_enabled = false;
+      # this option is set to `true` in discourse's defaults.
+      # however, having this option enabled appears to cause a segfault in mini_racer
+      # see https://github.com/rubyjs/mini_racer/issues/422
+      mini_racer_single_threaded = false;
     };
 
     services.redis.servers.discourse =
@@ -951,27 +956,35 @@ in
               # asset pipeline enables this
               brotli_static on;
               gzip_static on;
+              add_header Access-Control-Allow-Origin *;
             '';
             "~ ^/plugins/".extraConfig = cache_1y;
             "~ /images/emoji/".extraConfig = cache_1y;
             "~ ^/uploads/" = proxy {
-              extraConfig = cache_1y + ''
+              extraConfig = ''
                 proxy_set_header X-Sendfile-Type X-Accel-Redirect;
                 proxy_set_header X-Accel-Mapping ${cfg.package}/share/discourse/public/=/downloads/;
 
                 # custom CSS
                 location ~ /stylesheet-cache/ {
+                    ${cache_1y}
                     try_files $uri =404;
                 }
                 # this allows us to bypass rails
                 location ~* \.(gif|png|jpg|jpeg|bmp|tif|tiff|ico|webp)$ {
+                    ${cache_1y}
                     try_files $uri =404;
                 }
-                # SVG needs an extra header attached
+                # force attachment so SVGs can't render as a document on direct navigation
                 location ~* \.(svg)$ {
+                    ${cache_1y}
+                    add_header Access-Control-Allow-Origin *;
+                    add_header Content-Disposition attachment;
+                    try_files $uri =404;
                 }
                 # thumbnails & optimized images
                 location ~ /_?optimized/ {
+                    ${cache_1y}
                     try_files $uri =404;
                 }
               '';
