@@ -13,6 +13,7 @@
   autoPatchelfHook,
   pipewire,
   libpulseaudio,
+  jq,
   nix-update-script,
 }:
 let
@@ -40,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     # legcord uses venmic, which is a shipped as a prebuilt node module
     # and needs to be patched
     autoPatchelfHook
+    jq
   ];
 
   buildInputs = [
@@ -56,6 +58,15 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   preBuild = ''
+    # Validate electron version matches upstream package.json
+    expectedMajor="$(jq -r '.devDependencies.electron | ltrimstr("^") | split(".") | .[0]' < package.json)"
+    actualMajor="${lib.versions.major electron.version}"
+    if [ "$actualMajor" != "$expectedMajor" ] 2>/dev/null; then
+      echo "ERROR: electron version mismatch between package.json (major $expectedMajor) and nixpkgs (major $actualMajor)"
+      exit 1
+    fi
+
+    # electron builds must be writable
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
   '';
