@@ -212,8 +212,6 @@ def run(
         )
         print(
             f"systemd-nspawn's PID is {cp.pid}",
-            # Need to flush stdout before systemd-nspawn gets exec-ed.
-            flush=True,
         )
 
         try:
