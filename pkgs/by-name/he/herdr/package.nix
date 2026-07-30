@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   postInstall = ''
-    install -Dm444 SKILL.md -t $out/share/herdr/skills/herdr
+    install -Dm444 SKILL.md -t $out/share/$pname/skills/$pname
   ''
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd herdr \
