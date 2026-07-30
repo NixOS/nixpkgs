@@ -63,19 +63,6 @@ index af622be19cb..40e4eba171e 100644
  
  project(KrnToHex_IGA)
  
-diff --git a/cmrtlib/CMakeLists.txt b/cmrtlib/CMakeLists.txt
-index 9ecb1e4e10a..54f907b3772 100644
---- a/cmrtlib/CMakeLists.txt
-+++ b/cmrtlib/CMakeLists.txt
-@@ -19,7 +19,7 @@
- # OTHER DEALINGS IN THE SOFTWARE.
- 
- set(BUILD_ALL $ENV{BUILD_ALL})
--cmake_minimum_required(VERSION 2.8)
-+cmake_minimum_required(VERSION 3.5)
- project(CM_RT)
- add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/linux)
- 
 diff --git a/cmrtlib/linux/CMakeLists.txt b/cmrtlib/linux/CMakeLists.txt
 index b066138d9df..df02bab2a69 100644
 --- a/cmrtlib/linux/CMakeLists.txt
@@ -141,16 +128,3 @@ index 6b1f7433596..bba044a97d8 100644
  
  project(devult)
  
-diff --git a/os_release_info.cmake b/os_release_info.cmake
-index b4a84e2c5cb..a3b879d8545 100644
---- a/os_release_info.cmake
-+++ b/os_release_info.cmake
-@@ -29,7 +29,7 @@ set(_os_release_info TRUE)
- # of the local cmake environment.
- 
- # Set cmake policies for at least this level:
--cmake_minimum_required(VERSION 2.8.12)
-+cmake_minimum_required(VERSION 3.5)
- 
- 
- # Function get_os_release_info - Determine and return OS name and version
