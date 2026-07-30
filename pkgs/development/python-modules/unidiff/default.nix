@@ -8,12 +8,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "unidiff";
-  version = "0.7.5";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    sha256 = "2e5f0162052248946b9f0970a40e9e124236bf86c82b70821143a6fc1dea2574";
+    sha256 = "sha256-Xl1c+rLcmL6Bm3R0erfZ9a+GlTaeyHELk/mrDwrmpEk=";
   };
 
   build-system = [ setuptools ];
