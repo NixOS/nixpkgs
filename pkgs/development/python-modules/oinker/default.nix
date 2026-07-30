@@ -3,6 +3,9 @@
   buildPythonPackage,
   fetchFromGitHub,
   httpx,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
   uv-build,
 }:
 buildPythonPackage (finalAttrs: {
@@ -20,6 +23,12 @@ buildPythonPackage (finalAttrs: {
   build-system = [ uv-build ];
 
   dependencies = [ httpx ];
+
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "oinker" ];
 
