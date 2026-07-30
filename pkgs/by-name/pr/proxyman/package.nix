@@ -7,11 +7,11 @@
 }:
 let
   pname = "proxyman";
-  version = "3.11.0";
+  version = "3.16.1";
 
   src = fetchurl {
     url = "https://github.com/ProxymanApp/proxyman-windows-linux/releases/download/${version}/Proxyman-${version}.AppImage";
-    hash = "sha256-hzpSei0gR9apcJ6AVNoiqSUJLMvP0V/6STmGKeUg5vI=";
+    hash = "sha256-rykOZVrh3MATFDzwLS7gEj5sMD9udsWAi+68Quqzk0c=";
   };
 
   appimageContents = appimageTools.extract {
@@ -20,7 +20,9 @@ let
       ${asar}/bin/asar extract $out/resources/app.asar app
 
       # This will fix the issue with Proxyman not detecting NixOS as a valid Linux environment
-      substituteInPlace app/dist/main/main.js --replace-fail "/etc/ca-certificates/trust-source/anchors/" "/etc/ssl/certs/"
+      substituteInPlace app/dist/main/main.js \
+        --replace-fail 'systemTrustFilename:"/etc/ca-certificates/trust-source/anchors/%s.crt",trustCommands:["update-ca-trust extract"]' 'systemTrustFilename:"/etc/ssl/certs/%s.crt",trustCommands:[]' \
+        --replace-fail '{path:"/etc/ca-certificates/trust-source/anchors/",distroFamily:"arch"}' '{path:"/etc/ssl/certs/",distroFamily:"arch"}'
 
       # This will permanently mark the certificate as installed, as this should be done through Nix config rather than
       # placing / editing a file in /etc like Proxyman would expect.
