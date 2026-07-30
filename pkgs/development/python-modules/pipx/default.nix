@@ -117,6 +117,8 @@ buildPythonPackage (finalAttrs: {
       --fish <(register-python-argcomplete pipx --shell fish)
   '';
 
+  patches = [ ./fix-pytest-parametrize.patch ];
+
   pythonImportsCheck = [ "pipx" ];
 
   __structuredAttrs = true;

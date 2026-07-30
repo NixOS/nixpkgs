@@ -1,0 +1,31 @@
+diff --git a/tests/test_inject.py b/tests/test_inject.py
+index b477886..0110545 100755
+--- a/tests/test_inject.py
++++ b/tests/test_inject.py
+@@ -10,7 +10,7 @@ from package_info import PKG
+ 
+ # Note that this also checks that packages used in other tests can be injected individually
+ @pytest.mark.parametrize(
+-    "pkg_spec,",
++    "pkg_spec",
+     [
+         PKG["black"]["spec"],
+         PKG["nox"]["spec"],
+@@ -51,7 +51,7 @@ def test_inject_simple_legacy_venv(pipx_temp_env, capsys, metadata_version):
+         assert "Please uninstall and install" in capsys.readouterr().err
+ 
+ 
+-@pytest.mark.parametrize("with_suffix,", [(False,), (True,)])
++@pytest.mark.parametrize("with_suffix", [(False,), (True,)])
+ def test_inject_include_apps(pipx_temp_env, capsys, with_suffix):
+     install_args = []
+     suffix = ""
+@@ -70,7 +70,7 @@ def test_inject_include_apps(pipx_temp_env, capsys, with_suffix):
+ 
+ 
+ @pytest.mark.parametrize(
+-    "with_packages,",
++    "with_packages",
+     [
+         (),  # no extra packages
+         ("black",),  # duplicate from requirements file
