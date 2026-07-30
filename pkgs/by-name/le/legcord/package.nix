@@ -6,7 +6,7 @@
   pnpmConfigHook,
   pnpm_10,
   nodejs,
-  electron,
+  electron_43,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
@@ -15,15 +15,18 @@
   libpulseaudio,
   nix-update-script,
 }:
+let
+  electron = electron_43;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "legcord";
-  version = "1.2.4";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "Legcord";
     repo = "Legcord";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nai8lcimEts/E3bwUyQufLYIHhUK83IH431PUQFtQJI=";
+    hash = "sha256-Mjub2OFb5RN4yBwdUk8v6uo/dUeYZ5nELmpPzEFmx2c=";
   };
 
   nativeBuildInputs = [
@@ -49,8 +52,13 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 4;
-    hash = "sha256-a0FvNwEAEAltQltgUf4tX0IGSdcYHkSodx4b9v5QQcg=";
+    hash = "sha256-xBW7D/3Nz/h7VqLqTiVL9dTjXLdNOqfdIlj66iYwuhM=";
   };
+
+  preBuild = ''
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
+  '';
 
   buildPhase = ''
     runHook preBuild
@@ -76,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm exec electron-builder \
       --dir \
       -c.asarUnpack="**/*.node" \
-      -c.electronDist="${electron.dist}" \
+      -c.electronDist=electron-dist \
       -c.electronVersion="${electron.version}"
 
     runHook postBuild
