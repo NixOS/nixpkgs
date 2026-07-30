@@ -21,20 +21,20 @@
   # To get the latest revision go to the rule-set branch and get the revision of the last commit
   # Link: https://github.com/throneproj/routeprofiles/tree/rule-set
   throne-srslist-info ? {
-    rev = "eb0476e5362638b33254b3793958026bd47eef9f";
-    hash = "sha256-qqeD56cOjn3qxu/Fi6zJ4Sn5RRS+RpgMQKL2s+eRiLM=";
+    rev = "ef80dfa41c3ba2d32c9c79b8ac930c4962cb589d";
+    hash = "sha256-GKlrla/Zy+IE+V5zwDHw6oqzWBND/w7uUntnuJx5BJg=";
   },
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "throne";
-  version = "1.1.6";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "throneproj";
     repo = "Throne";
     tag = finalAttrs.version;
-    hash = "sha256-qzQWUG4pAnNAtF/FmboNvj/XULCn+ww2ImG/d5DbR5w=";
+    hash = "sha256-b0iLGQjG+Iz9ZQeR1El907SPIzXiwrgJt8oZHIDhABc=";
   };
 
   strictDeps = true;
@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
       ./dont-check-parent.patch
     ];
 
-    vendorHash = "sha256-1yVQspaI0wLLJ6IrGABTpF3YSL3uhJTbapo1A0hAPZo=";
+    vendorHash = "sha256-oJE3xrFKBOtdFcZgpJNTe2xiAJfmiJTfnxaYZKM9a+w=";
 
     nativeBuildInputs = [
       protobuf
