@@ -653,6 +653,16 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  pulumi = {
+    scope = "Maintains the Pulumi IaC tool and its language-specific SDKs";
+    shortName = "Pulumi";
+    members = [
+      nicoo
+      tie
+      untio11
+    ];
+  };
+
   python = {
     members = [
       hexa

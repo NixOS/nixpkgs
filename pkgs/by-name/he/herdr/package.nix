@@ -55,7 +55,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     chmod -R u+w "$ZIG_GLOBAL_CACHE_DIR/p"
   '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
+    install -Dm444 SKILL.md -t $out/share/herdr/skills/herdr
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd herdr \
       --bash <("$out/bin/herdr" completion bash) \
       --fish <("$out/bin/herdr" completion fish) \

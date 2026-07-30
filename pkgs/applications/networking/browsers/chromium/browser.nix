@@ -65,13 +65,21 @@ mkChromiumDerivation (base: rec {
       --replace-fail "@@MENUNAME" "Chromium" \
       --replace-fail "@@PACKAGE" "chromium" \
       --replace-fail "/usr/bin/@@usr_bin_symlink_name" "chromium" \
-      --replace-fail "@@uri_scheme" "x-scheme-handler/chromium;" \
+      --replace-fail "@@uri_scheme" "x-scheme-handler/chromium;" \${
+        # https://issues.chromium.org/issues/517981275
+        lib.optionalString (chromiumVersionAtLeast "151")
+          ''''\n  --replace-fail "@@startup_wm_class" "chromium-browser" \''
+      }
       --replace-fail "@@extra_desktop_entries" ""
 
+  ''
+  + lib.optionalString (!chromiumVersionAtLeast "151") ''
     # See https://github.com/NixOS/nixpkgs/issues/12433
     substituteInPlace $out/share/applications/chromium-browser.desktop \
       --replace-fail "[Desktop Entry]" "[Desktop Entry]''\nStartupWMClass=chromium-browser"
 
+  ''
+  + ''
     if grep -F '@@' $out/share/applications/chromium-browser.desktop ; then
       echo "error: chromium-browser.desktop contains unsubstituted placeholders" >&2
       exit 1
