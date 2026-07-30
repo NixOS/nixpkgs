@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -53,6 +54,14 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-BoRy5LSzMl9w5KS9BW1uHUTcEj1ZyYp4nWykPgq6ckI=";
   };
+
+  patches = [
+    # Fix test for pytest logger behavior changes
+    (fetchpatch {
+      url = "https://github.com/optuna/optuna/commit/ba57cff4a1990f3943cf250edc32d34e6ddd436d.patch";
+      hash = "sha256-SGsZcl+F62JN7LEAfmyanswl/tUZfZv4doh3lS5JSkQ=";
+    })
+  ];
 
   build-system = [
     setuptools
