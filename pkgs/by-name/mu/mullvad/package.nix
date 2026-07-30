@@ -11,6 +11,7 @@
   libnftnl,
   pkg-config,
   protobuf,
+  rust-jemalloc-sys,
   versionCheckHook,
 }:
 
@@ -70,15 +71,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     protobuf
   ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      dbus.dev
-      libmnl
-      libnftnl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.libpcap
-    ];
+  buildInputs = [
+    rust-jemalloc-sys
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    dbus.dev
+    libmnl
+    libnftnl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.libpcap
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     compdir=$(mktemp -d)
