@@ -19677,6 +19677,8 @@ self: super: with self; {
 
   strpdatetime = callPackage ../development/python-modules/strpdatetime { };
 
+  strsimpy = callPackage ../development/python-modules/strsimpy { };
+
   structlog = callPackage ../development/python-modules/structlog { };
 
   stubserver = callPackage ../development/python-modules/stubserver { };
