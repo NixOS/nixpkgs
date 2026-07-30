@@ -8,7 +8,6 @@
   libtool,
   cmake,
   pkg-config,
-  python3,
   macdylibbundler,
   makeWrapper,
   darwin,
@@ -20,24 +19,20 @@
   portaudio,
   speexdsp,
   hamlib_4,
-  wxGTK32,
+  wxwidgets_3_2,
   dbus,
   apple-sdk_15,
   nix-update-script,
+  wget,
 }:
 
 let
+  codec2' = codec2.override { freedvSupport = true; };
   ebur128Src = fetchFromGitHub {
     owner = "jiixyj";
     repo = "libebur128";
     rev = "v1.2.6";
     hash = "sha256-UKO2k+kKH/dwt2xfaYMrH/GXjEkIrnxh1kGG/3P5d3Y=";
-  };
-  mimallocSrc = fetchFromGitHub {
-    owner = "microsoft";
-    repo = "mimalloc";
-    tag = "v2.2.4";
-    hash = "sha256-+8xZT+mVEqlqabQc+1buVH/X6FZxvCd0rWMyjPu9i4o=";
   };
   opusSrc = fetchFromGitHub {
     owner = "xiph";
@@ -54,43 +49,54 @@ let
     hash = "sha256-P84gjnuiQQBVBExJBY3sUbwo00lXY6HB+AMpx/oovRg=";
   };
   radaeSrc = fetchFromGitHub {
-    owner = "drowe67";
-    repo = "radae";
-    rev = "0f26661b26d02e6963353dce7ad1bbe3f4791ab2";
-    hash = "sha256-0pCH+oyVChWdOL5o6Uhb9DDSw4AqCfcsEKw2SZs3K4w=";
+    owner = "peterbmarks";
+    repo = "radae_nopy";
+    rev = "d72ec84e795493249db44d5939eb9b05438f956a";
+    hash = "sha256-ziEhYZarzQtQ1akAxF54kcX6o38gJeUJ08jipSWXnxQ=";
+  };
+  rnnoiseSrc = fetchFromGitHub {
+    owner = "xiph";
+    repo = "rnnoise";
+    rev = "70f1d256acd4b34a572f999a05c87bf00b67730d";
+    nativeBuildInputs = [ wget ];
+    postFetch = ''
+      cd $out
+      export NIX_SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
+      export SSL_CERT_FILE=$NIX_SSL_CERT_FILE
+      ./download_model.sh
+      substituteInPlace autogen.sh \
+        --replace-fail "./download_model.sh" ""
+    '';
+    hash = "sha256-t/AwOCuHb5Oahy1fDI3Sc9M08Xz3dSAavhYatRC1OIk=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freedv";
-  version = "2.1.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "freedv-gui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3nLO0UHoIjPN5liz3XJ7r9/Qo+a64ewqvzWPZuFG2SY=";
+    hash = "sha256-TjE/iYg+VFvbZH7/1q1V4t0SgcS44pLVet4Pgt6L5HA=";
   };
-
-  patches = [
-    ./no-framework.patch
-  ];
 
   postPatch = ''
     cp -R ${ebur128Src} ebur128
-    cp -R ${mimallocSrc} mimalloc
     cp -R ${radaeSrc} radae
-    chmod -R u+w ebur128 mimalloc radae
+    cp -R ${rnnoiseSrc} rnnoise
+    chmod -R u+w ebur128 radae rnnoise
     substituteInPlace cmake/BuildEbur128.cmake \
       --replace-fail "GIT_REPOSITORY https://github.com/jiixyj/libebur128.git" "URL $(realpath ebur128)" \
       --replace-fail 'GIT_TAG "v''${EBUR128_VERSION}"' "" \
       --replace-fail "git apply" "patch -p1 <"
-    substituteInPlace cmake/BuildMimalloc.cmake \
-      --replace-fail "GIT_REPOSITORY https://github.com/microsoft/mimalloc.git" "URL $(realpath mimalloc)" \
-      --replace-fail "GIT_TAG        v2.2.4" ""
     substituteInPlace cmake/BuildRADE.cmake \
       --replace-fail "https://github.com/xiph/opus/archive/940d4e5af64351ca8ba8390df3f555484c567fbb.zip" "${opusSrc}" \
-      --replace-fail "GIT_REPOSITORY https://github.com/drowe67/radae.git" "URL $(realpath radae)" \
-      --replace-fail "GIT_TAG ms-disable-python-gc" ""
+      --replace-fail "GIT_REPOSITORY https://github.com/peterbmarks/radae_nopy/" "URL $(realpath radae)" \
+      --replace-fail "GIT_TAG main" ""
+    substituteInPlace cmake/BuildRNNoise.cmake \
+      --replace-fail "GIT_REPOSITORY \''${RNNOISE_REPO}" "URL $(realpath rnnoise)" \
+      --replace-fail "GIT_TAG main" ""
     patchShebangs test/test_*.sh
     substituteInPlace cmake/CheckGit.cmake \
       --replace-fail "git describe --abbrev=4 --always HEAD" "echo v${finalAttrs.version}"
@@ -109,7 +115,6 @@ stdenv.mkDerivation (finalAttrs: {
     libtool
     cmake
     pkg-config
-    python3
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (macdylibbundler.overrideAttrs {
@@ -125,14 +130,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    codec2
+    codec2'
     libsamplerate
     libsndfile
     lpcnet
     speexdsp
     hamlib_4
-    wxGTK32
-    python3.pkgs.numpy
+    wxwidgets_3_2
   ]
   ++ (
     if stdenv.hostPlatform.isLinux then
@@ -157,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_NATIVE_AUDIO" (with stdenv.hostPlatform; isLinux || isDarwin))
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${codec2.src}/src";
+  env.NIX_CFLAGS_COMPILE = "-I${codec2'.src}/src";
 
   doCheck = false;
 

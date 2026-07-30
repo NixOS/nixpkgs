@@ -16,7 +16,7 @@
   desktop-file-utils,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "whatip";
   version = "1.2";
 
@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     domain = "gitlab.gnome.org";
     owner = "GabMus";
     repo = "whatip";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-gt/NKgnCpRoVmLvEJJq2geng4miM2g+YhXYEOm5pPTA=";
   };
 
@@ -62,4 +62,4 @@ python3.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ zendo ];
   };
-}
+})

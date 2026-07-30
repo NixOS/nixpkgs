@@ -39,7 +39,7 @@ in
       config = lib.mkOption {
         type = lib.types.lines;
         description = ''
-          Verbatim `inspircd.conf` file.
+          Verbatim {file}`inspircd.conf` file.
           For a list of options, consult the
           [InspIRCd documentation](https://docs.inspircd.org/3/configuration/), the
           [Module documentation](https://docs.inspircd.org/3/modules/)

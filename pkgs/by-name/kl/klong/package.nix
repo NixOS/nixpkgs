@@ -8,12 +8,12 @@
   gv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "klong";
   version = "20221212";
 
   src = fetchurl {
-    url = "https://t3x.org/klong/klong${version}.tgz";
+    url = "https://t3x.org/klong/klong${finalAttrs.version}.tgz";
     hash = "sha256-XhpIdyKKPGQ6mdv9LXPmC8P6hW4mFawv54yANw5/lrQ=";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
       cc0
     ];
   };
-}
+})

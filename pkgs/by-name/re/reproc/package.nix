@@ -6,14 +6,14 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "reproc";
   version = "14.2.4";
 
   src = fetchFromGitHub {
     owner = "DaanDeMeyer";
     repo = "reproc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-LWzBeKhE7cSiZsK8xWzoTdrOcPiU/zEkmi40WiFytic=";
   };
 
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
   };
-}
+})

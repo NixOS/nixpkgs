@@ -9,13 +9,13 @@
   pkg-config,
   nix-update-script,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "free42";
-  version = "3.3.10";
+  version = "3.3.12";
 
   src = fetchurl {
-    url = "https://thomasokken.com/free42/upstream/free42-nologo-${version}.tgz";
-    hash = "sha256-Vh+Sh3oX1ICy0R6R4zu9Df2+ba2mM33qHtifINNpn7Y=";
+    url = "https://thomasokken.com/free42/upstream/free42-nologo-${finalAttrs.version}.tgz";
+    hash = "sha256-Ybr5IwqYBIXGWcLBM2drKuN2NDBta299X/3hvzvGPeU=";
   };
 
   nativeBuildInputs = [
@@ -112,9 +112,9 @@ stdenv.mkDerivation rec {
     homepage = "https://thomasokken.com/free42/";
     changelog = "https://thomasokken.com/free42/history.html";
     description = "Software clone of the HP-42S calculator";
-    license = with lib.licenses; [ gpl2Only ];
+    license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ elfenermarcell ];
     mainProgram = "free42dec";
     platforms = with lib.platforms; unix;
   };
-}
+})

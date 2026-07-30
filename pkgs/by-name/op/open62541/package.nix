@@ -33,13 +33,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "open62541";
-  version = "1.4.14";
+  version = "1.4.17";
 
   src = fetchFromGitHub {
     owner = "open62541";
     repo = "open62541";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+gE1wlxAyUVgHnDhkHEu9IwCCIKDuAHUzkThuDgdzdE=";
+    hash = "sha256-EUQ/wXv1dON7MzOKmnyNUY0mTC64qUEF1++YzPC2xIo=";
     fetchSubmodules = true;
   };
 
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     with python3Packages;
     [
       sphinx
-      sphinx_rtd_theme
+      sphinx-rtd-theme
       graphviz-nox
     ]
   );

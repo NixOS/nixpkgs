@@ -16,23 +16,54 @@
   libxkbcommon,
   makeWrapper,
   openssl,
+  perl,
   stdenv,
-  xorg,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libxcb-cursor,
+  libxrender,
+  libxi,
+  libxext,
+  libxau,
+  libx11,
+  libsm,
+  libice,
+  libxcb,
   zlib,
+  hexPatches ? [ ],
+  # hexPatches: hex patterns to substitute in specified files immediately after
+  # install. Can be used, for example, to replace the embedded SSL certificates
+  # for compatibility with a self-hosted Lumina server.
+  # Since IDA is distributed as a binary, such patching is the only recourse
+  # available to us for interoperability purposes.
 }:
-stdenv.mkDerivation (finalAttrs: rec {
+let
+  patchScript = lib.concatMapStringsSep "\n" (
+    p:
+    let
+      forcecntDecl = lib.optionalString (p ? assertCount) "my $forcecnt = ${toString p.assertCount};";
+    in
+    ''
+      perl -0777 -pi -e '${forcecntDecl} my $cnt = (s/\Q''${\pack("H*","${p.from}")}\E/''${\pack("H*","${p.to}")}/g) || 0; die "Expected $forcecnt substitutions, did $cnt\n" if defined $forcecnt && $cnt != $forcecnt' "$IDADIR/${p.filename}"
+    ''
+  ) hexPatches;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "ida-free";
-  version = "9.2";
+  version = "9.3";
 
   src = requireFile {
-    name = "ida-free-pc_${lib.replaceStrings [ "." ] [ "" ] version}_x64linux.run";
-    url = "https://my.hex-rays.com/dashboard/download-center/installers/release/${version}/ida-free";
-    hash = "sha256-CQm9phkqLXhht4UQxooKmhmiGuW3lV8RIJuDrm52aNw=";
+    name = "ida-free-pc_${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}_x64linux.run";
+    url = "https://my.hex-rays.com/dashboard/download-center/installers/release/${finalAttrs.version}/ida-free";
+    hash = "sha256-eSX6/nT9joEMs48qFq92qT8Qr25B38xy4FxxaPIOwLw=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     autoPatchelfHook
+    perl
   ];
 
   # We just get a runfile in $src, so no need to unpack it.
@@ -54,28 +85,29 @@ stdenv.mkDerivation (finalAttrs: rec {
     libxkbcommon
     openssl
     stdenv.cc.cc
-    xorg.libICE
-    xorg.libSM
-    xorg.libX11
-    xorg.libXau
-    xorg.libxcb
-    xorg.libXext
-    xorg.libXi
-    xorg.libXrender
-    xorg.xcbutilimage
-    xorg.xcbutilkeysyms
-    xorg.xcbutilrenderutil
-    xorg.xcbutilwm
-    xorg.xcbutilcursor
+    libice
+    libsm
+    libx11
+    libxau
+    libxcb
+    libxext
+    libxi
+    libxrender
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
+    libxcb-wm
+    libxcb-cursor
     zlib
   ];
-  buildInputs = runtimeDependencies;
+  buildInputs = finalAttrs.runtimeDependencies;
 
   # IDA comes with its own Qt6, some dependencies are missing in the installer.
   autoPatchelfIgnoreMissingDeps = [
     "libQt6Network.so.6"
     "libQt6EglFSDeviceIntegration.so.6"
     "libQt6WaylandEglClientHwIntegration.so.6"
+    "libQt6WaylandCompositor.so.6"
     "libQt6WlShellIntegration.so.6"
   ];
 
@@ -97,6 +129,8 @@ stdenv.mkDerivation (finalAttrs: rec {
     # to copy it to fix permissions and patch the executable.
     $(cat $NIX_CC/nix-support/dynamic-linker) $src \
       --mode unattended --prefix $IDADIR
+
+    ${patchScript}
 
     # Copy the exported libraries to the output.
     cp $IDADIR/libida.so $out/lib

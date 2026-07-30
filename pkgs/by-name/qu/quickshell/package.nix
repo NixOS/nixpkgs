@@ -7,22 +7,25 @@
   cmake,
   ninja,
   spirv-tools,
+  vulkan-headers,
   qt6,
-  breakpad,
+  cpptrace,
   jemalloc,
   cli11,
   wayland,
   wayland-protocols,
   wayland-scanner,
-  xorg,
+  libxcb,
   libdrm,
   libgbm,
   pipewire,
   pam,
+  glib,
+  polkit,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "quickshell";
-  version = "0.2.1";
+  version = "0.3.0";
 
   # github mirror: https://github.com/quickshell-mirror/quickshell
   src = fetchFromGitea {
@@ -30,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "quickshell";
     repo = "quickshell";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e++Ogy91Sv7gGLMdAqZaBzbH/UmPWZ4GAt7VDCA66aU=";
+    hash = "sha256-gU+VGpwGJ2vvg0mtYqVvj5u+2LteuHlpokH6JSAtueY=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     qt6.qtshadertools
     spirv-tools
+    vulkan-headers
     wayland-scanner
     qt6.wrapQtAppsHook
     pkg-config
@@ -53,16 +57,17 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
     libdrm
     libgbm
-    breakpad
+    cpptrace
     jemalloc
-    xorg.libxcb
+    libxcb
     pam
     pipewire
+    glib
+    polkit
   ];
 
   cmakeFlags = [
     (lib.cmakeFeature "DISTRIBUTOR" "Nixpkgs")
-    (lib.cmakeBool "DISTRIBUTOR_DEBUGINFO_AVAILABLE" true)
     (lib.cmakeFeature "INSTALL_QML_PREFIX" qt6.qtbase.qtQmlPrefix)
     (lib.cmakeFeature "GIT_REVISION" "tag-v${finalAttrs.version}")
   ];

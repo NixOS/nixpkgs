@@ -39,6 +39,8 @@ let
 
       checkFlags = [
         # requires pgrx to be properly initialized with cargo pgrx init
+        "--skip=object_utils::tests::parses_managed_postmasters"
+        # test name in versions < 0.18
         "--skip=command::schema::tests::test_parse_managed_postmasters"
       ];
 
@@ -60,9 +62,9 @@ in
   # Not to be used with buildPgrxExtension, where it should be pinned.
   # When you make an extension use the latest version, *copy* this to a separate pinned attribute.
   cargo-pgrx = generic {
-    version = "0.16.1";
-    hash = "sha256-AjoBr+/sEPdzbD0wLUNVm2syCySkGaFOFQ70TST1U9w=";
-    cargoHash = "sha256-95DHq5GLnAqb3bbKwwaeBeKEmkfRh81ZTRaJ7L59DAg=";
+    version = "0.18.1";
+    hash = "sha256-4/FKpiMm3MedrmJwXf9NMkzTGQyZuU2GYQ4ZIif3YDE=";
+    cargoHash = "sha256-4hQL06ZRykZDeVJMYeBSw50jUPlBVh+J5FfyF1hTlNc=";
   };
 }
 // lib.mapAttrs (_: generic) (import ./pinned.nix)

@@ -17,13 +17,13 @@
 buildHomeAssistantComponent rec {
   owner = "bramstroker";
   domain = "powercalc";
-  version = "1.20.2";
+  version = "1.23.0";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "homeassistant-powercalc";
     tag = "v${version}";
-    hash = "sha256-NzWivgvDUv41fSA/6g4mYIuoUCobVUdf3bbfmKl0kWg=";
+    hash = "sha256-WmbmKYcGwuny6Z2WLNZOACNs1jjKKlL9Dwvvd0Q2ass=";
   };
 
   dependencies = [ numpy ];
@@ -34,12 +34,17 @@ buildHomeAssistantComponent rec {
     aioresponses
     pytest-freezegun
   ]
-  ++ home-assistant.getPackages "camera" home-assistant.python.pkgs;
+  ++ home-assistant.getPackages "camera" home-assistant.python3Packages;
 
   preCheck = ''
     patchShebangs --build tests/setup.sh
     tests/setup.sh
   '';
+
+  disabledTests = [
+    # test contacts api.powercalc.nl
+    "test_exception_is_raised_on_github_resource_unavailable"
+  ];
 
   meta = {
     changelog = "https://github.com/bramstroker/homeassistant-powercalc/releases/tag/${src.tag}";

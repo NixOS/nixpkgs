@@ -10,36 +10,44 @@
 
 buildGoModule (finalAttrs: {
   pname = "sing-box";
-  version = "1.12.16";
+  version = "1.13.14";
 
   src = fetchFromGitHub {
     owner = "SagerNet";
     repo = "sing-box";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-enmT6BnGzEpk9BPB9IZWJctMoe/FiNqYmkiq0d9/m2k=";
+    hash = "sha256-ODQ1i2lOuQLb3LDq6ONqHJQ7sT7dXICCJoyW/I9zF38=";
   };
 
-  vendorHash = "sha256-rs5Jxj75qU47zEH0gbYy0/QUSq3sektaITcefg2Qb78=";
+  vendorHash = "sha256-Znk4bsm9TUseEuCQszs9rvVx8TDu+cwEVfVOhw7exYA=";
 
   tags = [
+    "with_gvisor"
     "with_quic"
     "with_dhcp"
     "with_wireguard"
     "with_utls"
     "with_acme"
     "with_clash_api"
-    "with_gvisor"
     "with_tailscale"
+    "with_ccm"
+    "with_ocm"
+    "badlinkname"
+    "tfogo_checklinkname0"
   ];
 
   subPackages = [
     "cmd/sing-box"
   ];
 
+  env.CGO_ENABLED = 0;
+
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-X=github.com/sagernet/sing-box/constant.Version=${finalAttrs.version}"
+    "-X=internal/godebug.defaultGODEBUG=multipathtcp=0"
+    "-checklinkname=0"
   ];
 
   postInstall = ''

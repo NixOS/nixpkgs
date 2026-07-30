@@ -4,14 +4,14 @@
   fetchFromGitHub,
   cmake,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libacars";
   version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "szpajder";
     repo = "libacars";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2n1tuKti8Zn5UzQHmRdvW5Q+x4CXS9QuPHFQ+DFriiE=";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.mafo ];
   };
-}
+})

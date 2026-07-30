@@ -1,20 +1,19 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   rustPlatform,
   makeWrapper,
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "meme-bingo-web";
   version = "1.2.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "annaaurora";
     repo = "meme-bingo-web";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-0ahyyuihpwmAmaBwZv7lNmjuy8UsAm1a9XUhWcYq76w=";
   };
 
@@ -40,4 +39,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ annaaurora ];
   };
-}
+})

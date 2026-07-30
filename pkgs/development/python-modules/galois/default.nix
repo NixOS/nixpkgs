@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "galois";
-  version = "0.4.7";
+  version = "0.4.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mhostetter";
     repo = "galois";
     tag = "v${version}";
-    hash = "sha256-YVAmjmkAhU518x+eCCgA6RY99XPQ5s+xvonkaoc5t8A=";
+    hash = "sha256-iTxPsuWmaQ4L19ND0UeRLKrdM++M8UnT3I06z+E8jjc=";
   };
 
   pythonRelaxDeps = [

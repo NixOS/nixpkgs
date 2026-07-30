@@ -2,18 +2,29 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  makeWrapper,
+  coreutils,
+  cryptsetup,
+  eject,
+  gnugrep,
+  gnused,
+  less,
+  udisks,
+  util-linux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bashmount";
   version = "4.3.2";
 
   src = fetchFromGitHub {
     owner = "jamielinux";
     repo = "bashmount";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "1irw47s6i1qwxd20cymzlfw5sv579cw877l27j3p66qfhgadwxrl";
   };
+
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -31,6 +42,22 @@ stdenv.mkDerivation rec {
     cp NEWS    $out/share/doc/bashmount
   '';
 
+  postFixup = ''
+    wrapProgram $out/bin/bashmount \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          cryptsetup
+          eject
+          gnugrep
+          gnused
+          less
+          udisks
+          util-linux
+        ]
+      }
+  '';
+
   meta = {
     homepage = "https://github.com/jamielinux/bashmount";
     description = "Menu-driven bash script for the management of removable media with udisks";
@@ -39,4 +66,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.all;
   };
-}
+})

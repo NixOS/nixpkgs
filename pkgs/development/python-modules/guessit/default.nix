@@ -5,8 +5,6 @@
   python-dateutil,
   babelfish,
   rebulk,
-  pythonOlder,
-  importlib-resources,
   py,
   pytestCheckHook,
   pytest-mock,
@@ -28,8 +26,7 @@ buildPythonPackage rec {
     rebulk
     babelfish
     python-dateutil
-  ]
-  ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  ];
 
   nativeCheckInputs = [
     py

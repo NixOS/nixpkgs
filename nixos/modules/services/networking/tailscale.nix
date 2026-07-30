@@ -147,7 +147,7 @@ in
       after = lib.mkIf (config.networking.networkmanager.enable) [ "NetworkManager-wait-online.service" ];
       wantedBy = [ "multi-user.target" ];
       path = [
-        (builtins.dirOf config.security.wrapperDir) # for `su` to use taildrive with correct access rights
+        (dirOf config.security.wrapperDir) # for `su` to use taildrive with correct access rights
         pkgs.procps # for collecting running services (opt-in feature)
         pkgs.getent # for `getent` to look up user shells
         pkgs.kmod # required to pass tailscale's v6nat check

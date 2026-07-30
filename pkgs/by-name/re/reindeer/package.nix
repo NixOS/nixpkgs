@@ -7,18 +7,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "reindeer";
-  version = "2026.01.05.00";
+  version = "2026.05.04.00";
 
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = "reindeer";
-    tag = "v${version}";
-    hash = "sha256-QbpNbiRWKbJlA3qM7RBjmjQb3Jrlwcpakb+bSdl4jA4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-m27zMZbDv/2bXhb16rFxUUokEn0bxyrhpxlOSZvVcfk=";
   };
 
-  cargoHash = "sha256-GeRXwE6QqWaPxRTMIIvcIGE1NdWVSSjfxy6wq3pKieM=";
+  cargoHash = "sha256-nJU9ClYxRkAfFkOq1V7k34pjdqJntDr3gJekUibq304=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     description = "Generate Buck build rules from Rust Cargo dependencies";
     mainProgram = "reindeer";
     homepage = "https://github.com/facebookincubator/reindeer";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ nickgerace ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ amaanq ];
   };
-}
+})

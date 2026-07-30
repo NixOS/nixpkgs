@@ -9,14 +9,14 @@
   pango,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wlr-which-key";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "MaxVerevkin";
     repo = "wlr-which-key";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-2dVTN5aaXeGBUKhsuUyDfELyL4AcKoaPXD0gN7ydL/Y=";
   };
 
@@ -41,4 +41,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "wlr-which-key";
   };
-}
+})

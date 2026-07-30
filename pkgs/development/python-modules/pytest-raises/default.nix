@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-raises";
   version = "0.11";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Lemmons";
     repo = "pytest-raises";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-wmtWPWwe1sFbWSYxs5ZXDUZM1qvjRGMudWdjQeskaz0=";
   };
 
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   meta = {
     description = "Implementation of pytest.raises as a pytest.mark fixture";
     homepage = "https://github.com/Lemmons/pytest-raises";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -6,14 +6,14 @@
   lib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nix-ld";
   version = "2.0.6";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-ld";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-I9cEWy07pUNsOfBPG7qMYHx/YmE1uxaadP3ObHu7ALQ=";
   };
 
@@ -53,4 +53,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ mic92 ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -3,7 +3,7 @@
   stdenv,
   gcc13Stdenv,
   fetchFromGitHub,
-  xorg,
+  libx11,
   xorgproto,
   cairo,
   lv2,
@@ -27,7 +27,7 @@ buildStdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    xorg.libX11
+    libx11
     xorgproto
     cairo
     lv2

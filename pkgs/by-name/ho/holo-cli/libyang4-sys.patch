@@ -1,0 +1,12 @@
+--- a/build.rs
++++ b/build.rs
+@@ -62,6 +62,9 @@
+         cmake_config.define("ENABLE_BUILD_TESTS", "OFF");
+         cmake_config.define("CMAKE_BUILD_TYPE", "Release");
+         cmake_config.define("CMAKE_POSITION_INDEPENDENT_CODE", "ON");
++        // https://github.com/CESNET/libyang/blob/3d07c3a71534a580c3960907da17568eff7e5c64/CMakeModules/FindPCRE2.cmake#L9
++        cmake_config.define("PCRE2_INCLUDE_DIRS", "@PCRE2_INCLUDE_DIRS@");
++        cmake_config.define("PCRE2_LIBRARIES", "@PCRE2_LIBRARIES@");
+         let cmake_dst = cmake_config.build();
+         println!("cargo:root={}", env::var("OUT_DIR").unwrap());
+         println!("cargo:rustc-link-search=native={}/lib", cmake_dst.display());

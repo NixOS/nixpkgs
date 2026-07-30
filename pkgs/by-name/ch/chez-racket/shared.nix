@@ -8,7 +8,7 @@ args:
   darwin,
   ncurses,
   libiconv,
-  libX11,
+  libx11,
   zlib,
   lz4,
 }:
@@ -41,7 +41,7 @@ stdenv.mkDerivation (
     ];
     buildInputs = [
       libiconv
-      libX11
+      libx11
       lz4
       ncurses
       zlib
@@ -56,7 +56,9 @@ stdenv.mkDerivation (
       homepage = "https://github.com/racket/ChezScheme";
       license = lib.licenses.asl20;
       maintainers = [ ];
-      platforms = lib.platforms.unix;
+      platforms = lib.intersectLists lib.platforms.unix (
+        lib.platforms.x86 ++ lib.platforms.aarch64 ++ lib.platforms.arm ++ lib.platforms.power
+      );
     };
   }
 )

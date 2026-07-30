@@ -8,7 +8,7 @@
   gsettings-desktop-schemas,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "trelby";
   version = "2.4.16.2";
   pyproject = true;
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "trelby";
     repo = "trelby";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-YblilPQXjlSgkBstewfiuW0DZCnJw4dk6vZfEhdBGbk=";
   };
 
@@ -58,4 +58,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ isotoxal ];
   };
-}
+})

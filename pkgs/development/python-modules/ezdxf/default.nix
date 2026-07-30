@@ -22,7 +22,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.4.3";
+  version = "1.4.4";
   pname = "ezdxf";
 
   pyproject = true;
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "mozman";
     repo = "ezdxf";
     tag = "v${version}";
-    hash = "sha256-v/xW/Tg3OgzwvSNy3cfkxzf6R33ZvW4VE8k7MB+rM+w=";
+    hash = "sha256-P/bwNEgtrZ4FzVx+xaYzbZfRxrWYguNYBvDdsp+tH7E=";
   };
 
   nativeBuildInputs = lib.optionals withGui [ qt6.wrapQtAppsHook ];
@@ -100,7 +100,7 @@ buildPythonPackage rec {
     homepage = "https://ezdxf.mozman.at/";
     changelog = "https://github.com/mozman/ezdxf/blob/${src.rev}/notes/pages/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ hodapp ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

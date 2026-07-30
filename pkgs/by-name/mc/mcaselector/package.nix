@@ -13,11 +13,11 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mcaselector";
-  version = "2.6.1";
+  version = "2.8";
 
   src = fetchurl {
     url = "https://github.com/Querz/mcaselector/releases/download/${finalAttrs.version}/mcaselector-${finalAttrs.version}.jar";
-    hash = "sha256-yDTXD0CKjCi2DuJHmMuypeAY3sm3tJOmu2OWt4p+czM=";
+    hash = "sha256-ZFBfOe35ybXUfmZpgfgePDqInU8SKzBlr34mn0jlNCM=";
   };
 
   dontUnpack = true;

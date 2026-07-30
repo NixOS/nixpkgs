@@ -10,12 +10,12 @@
   uri,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "dream-pure";
   version = "1.0.0-alpha8";
 
   src = fetchurl {
-    url = "https://github.com/aantron/dream/releases/download/${version}/dream-${version}.tar.gz";
+    url = "https://github.com/aantron/dream/releases/download/${finalAttrs.version}/dream-${finalAttrs.version}.tar.gz";
     hash = "sha256-I+2BKJDAP+XJl0pJYano5iEmvte8fX0UQLhGUslc8pY=";
   };
 
@@ -35,4 +35,4 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

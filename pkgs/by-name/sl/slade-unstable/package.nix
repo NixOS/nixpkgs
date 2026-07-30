@@ -6,7 +6,7 @@
   pkg-config,
   which,
   zip,
-  wxGTK32,
+  wxwidgets_3_2,
   gtk3,
   sfml_2,
   fluidsynth,
@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation {
   pname = "slade";
-  version = "3.2.10-unstable-2026-01-06";
+  version = "3.2.12-unstable-2026-06-08";
 
   src = fetchFromGitHub {
     owner = "sirjuddington";
     repo = "SLADE";
-    rev = "41967633f73a507181b44a1b52694547dcd534d5";
-    hash = "sha256-6HnhsO9EuZia2ox7edVIade1RZ4ES6zWZkLNwA0PqZ0=";
+    rev = "46fc51ac57f4fe54caf036b3d1e9b028a120be27";
+    hash = "sha256-mSddQstwZYkTzeA9fHswfuIUaoQlqXT+zTXWp20jgDc=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    wxGTK32
+    wxwidgets_3_2
     gtk3
     sfml_2
     fluidsynth
@@ -53,8 +53,8 @@ stdenv.mkDerivation {
   ];
 
   cmakeFlags = [
-    "-DwxWidgets_LIBRARIES=${wxGTK32}/lib"
-    (lib.cmakeFeature "CL_WX_CONFIG" (lib.getExe' (lib.getDev wxGTK32) "wx-config"))
+    "-DwxWidgets_LIBRARIES=${wxwidgets_3_2}/lib"
+    (lib.cmakeFeature "CL_WX_CONFIG" (lib.getExe' (lib.getDev wxwidgets_3_2) "wx-config"))
   ];
 
   env.NIX_CFLAGS_COMPILE = "-Wno-narrowing";

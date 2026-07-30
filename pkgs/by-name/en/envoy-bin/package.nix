@@ -1,15 +1,14 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   autoPatchelfHook,
   fetchurl,
-  makeWrapper,
   nixosTests,
   versionCheckHook,
 }:
 let
-  version = "1.36.4";
-  inherit (stdenv.hostPlatform) system;
+  version = "1.39.0";
+  inherit (stdenvNoCC.hostPlatform) system;
   throwSystem = throw "envoy-bin is not available for ${system}.";
 
   plat =
@@ -21,12 +20,12 @@ let
 
   hash =
     {
-      aarch64-linux = "sha256-RVUeO6MbI2j7gM9MEkshhXxU4Oga7jtwjr17C6P3VbE=";
-      x86_64-linux = "sha256-WjmAldjB3TY+zBC2udvYIVSo+7XrFVENX7fL250LDlk=";
+      aarch64-linux = "sha256-7lOk9TdVZvFZRNycsDr7H8Io3zj2FzfGd/E5ITIVr88=";
+      x86_64-linux = "sha256-RAna3IeTHY+GdjFMvYMHHLZRJftP6sP2M1gAWA36khg=";
     }
     .${system} or throwSystem;
 in
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "envoy-bin";
   inherit version;
 
@@ -36,21 +35,24 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ autoPatchelfHook ];
-  buildInputs = [ makeWrapper ];
+
+  strictDeps = true;
 
   dontUnpack = true;
+  dontConfigure = true;
   dontBuild = true;
 
   installPhase = ''
     runHook preInstall
+
     mkdir -p $out/bin
     install -m755 $src $out/bin/envoy
+
     runHook postInstall
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/envoy";
 
   passthru = {
     tests.envoy-bin = nixosTests.envoy-bin;
@@ -64,7 +66,9 @@ stdenv.mkDerivation {
     description = "Cloud-native edge and service proxy";
     license = lib.licenses.asl20;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    maintainers = with lib.maintainers; [ katexochen ];
+    maintainers = with lib.maintainers; [
+      charludo
+    ];
     mainProgram = "envoy";
     platforms = [
       "x86_64-linux"

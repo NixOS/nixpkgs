@@ -7,9 +7,7 @@
   psutil,
   pytestCheckHook,
   python-gnupg,
-  pythonOlder,
   sentry-sdk,
-  tomli,
 }:
 
 buildPythonPackage rec {
@@ -37,8 +35,7 @@ buildPythonPackage rec {
     psutil
     python-gnupg
     sentry-sdk
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -48,7 +45,7 @@ buildPythonPackage rec {
     description = "Helper to create results from local security checks";
     homepage = "https://github.com/greenbone/notus-scanner";
     changelog = "https://github.com/greenbone/notus-scanner/releases/tag/${src.tag}";
-    license = with lib.licenses; [ agpl3Plus ];
+    license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

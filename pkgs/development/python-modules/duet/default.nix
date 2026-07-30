@@ -36,5 +36,6 @@ buildPythonPackage rec {
     description = "Simple future-based async library for python";
     homepage = "https://github.com/google/duet";
     maintainers = [ ];
+    license = lib.licenses.asl20;
   };
 }

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "epr";
   version = "2.4.13";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "wustho";
     repo = "epr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-1qsqYlqGlCRhl7HINrcTDt5bGlb7g5PmaERylT+UvEg=";
   };
 
@@ -27,4 +27,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
   };
-}
+})

@@ -5,27 +5,31 @@
   nix-update-script,
   websockets,
   # Test dependencies
-  pytestCheckHook,
+  pytest9_0CheckHook,
   pytest-homeassistant-custom-component,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "JeffSteinbok";
   domain = "dreo";
-  version = "1.6.3";
+  version = "1.10.6";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "hass-dreo";
     tag = "v${version}";
-    hash = "sha256-zVE3vAJb72TDDUK6kpTeIGD/0FHeJxprXW8aijqgG1g=";
+    hash = "sha256-vfp5b5g9Rin0zN/eGhFNdxc77ulVKA8QnQNV70BvIy8=";
   };
 
   dependencies = [ websockets ];
 
   nativeCheckInputs = [
     pytest-homeassistant-custom-component
-    pytestCheckHook
+    pytest9_0CheckHook
+  ];
+
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn9Warning"
   ];
 
   passthru.updateScript = nix-update-script { };

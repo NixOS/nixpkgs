@@ -56,7 +56,6 @@ stdenv.mkDerivation rec {
       lgpl21
     ];
     maintainers = with lib.maintainers; [
-      lovek323
       raskin
     ];
     platforms = lib.platforms.unix;

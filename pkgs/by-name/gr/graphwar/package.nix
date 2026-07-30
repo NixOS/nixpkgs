@@ -8,14 +8,14 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "graphwar";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "catabriga";
     repo = "graphwar";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-t3Y576dXWp2Mj6OSQN5cm9FuNBWNqKq6xxkVRbjIBgE=";
   };
 
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     platforms = jdk.meta.platforms;
     maintainers = with lib.maintainers; [ yrd ];
   };
-}
+})

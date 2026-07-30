@@ -13,37 +13,43 @@ let
             {
               imports = [ ./common/user-account.nix ];
               services.espanso.enable = true;
-              system.activationScripts.espanso-config = {
-                deps = [ "users" ];
-                text =
-                  let
-                    confdir = "${config.users.users.alice.home}/.config/espanso";
-                    espanso_conf =
-                      let
-                        settingsFormat = pkgs.formats.yaml { };
-                      in
-                      settingsFormat.generate "base.yaml" {
-                        matches = [
-                          {
-                            trigger = ":nixostest";
-                            replace = "My NixOS Test Passed!";
-                          }
-                        ];
-                      };
-                  in
-                  ''
-                    mkdir -p ${confdir}/{config,match}
-                    touch ${confdir}/config/default.yml
-                    cp ${espanso_conf} ${confdir}/match/base.yml
-                    chown -R ${config.users.users.alice.name} ${confdir}
-                  '';
-              };
+              systemd.tmpfiles.settings.espanso =
+                let
+                  confdir = "${config.users.users.alice.home}/.config/espanso";
+                  mode = "0755";
+                  user = config.users.users.alice.name;
+                  group = config.users.users.alice.group;
+                in
+                {
+                  "${config.users.users.alice.home}/.config".d = { inherit mode user group; };
+                  "${confdir}".d = { inherit mode user group; };
+                  "${confdir}/config".d = { inherit mode user group; };
+                  "${confdir}/match".d = { inherit mode user group; };
+                  "${confdir}/config/default.yml".f = {
+                    mode = "0644";
+                    inherit user group;
+                  };
+                  "${confdir}/match/base.yml".f = {
+                    mode = "0644";
+                    inherit user group;
+                    argument = lib.toJSON {
+                      matches = [
+                        {
+                          trigger = ":nixostest";
+                          replace = "My NixOS Test Passed!";
+                        }
+                      ];
+                    };
+                  };
+                };
             };
         in
-        lib.mkMerge [
-          base
-          conf
-        ];
+        {
+          imports = [
+            base
+            conf
+          ];
+        };
 
       enableOCR = true;
       testScript = ''

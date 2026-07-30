@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   requests,
   setuptools,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "sensoterra";
   version = "2.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;

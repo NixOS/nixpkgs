@@ -4,17 +4,14 @@
   fetchFromGitHub,
 }:
 
-let
+buildGoModule (finalAttrs: {
   pname = "pdfannots2json";
   version = "1.0.16";
-in
-buildGoModule {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "mgmeyers";
     repo = "pdfannots2json";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-qk4OSws/6SevN/Q0lsyxw+fZkm2uy1WwOYYL7CB7QUk=";
   };
 
@@ -27,4 +24,4 @@ buildGoModule {
     mainProgram = "pdfannots2json";
     maintainers = with lib.maintainers; [ _0nyr ];
   };
-}
+})

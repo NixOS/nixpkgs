@@ -4,7 +4,6 @@
   fetchFromGitHub,
   cachetools,
   numpy,
-  pythonOlder,
   redis,
   redis-om,
   requests,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "gptcache";
   version = "0.1.44";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8.1";
 
   src = fetchFromGitHub {
     owner = "zilliztech";

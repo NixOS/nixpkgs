@@ -9,13 +9,13 @@
   elfutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "strace";
-  version = "6.18";
+  version = "7.1";
 
   src = fetchurl {
-    url = "https://strace.io/files/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-CtXcupc6aed5ZQ7xyzNbEu5gcW/HMmYJiVvTPm0qcyU=";
+    url = "https://strace.io/files/${finalAttrs.version}/strace-${finalAttrs.version}.tar.xz";
+    hash = "sha256-gXQ+zypbRBhrL1A4r9yL7aflxwrtFbT7+8xuns4kSQ8=";
   };
 
   separateDebugInfo = true;
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "strace";
   };
-}
+})

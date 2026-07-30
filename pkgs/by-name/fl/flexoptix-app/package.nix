@@ -7,12 +7,12 @@
 }:
 let
   pname = "flexoptix-app";
-  version = "5.54.0-latest";
+  version = "5.57.0-latest";
 
   src = fetchurl {
     name = "${pname}-${version}.AppImage";
     url = "https://flexbox.reconfigure.me/download/electron/linux/x64/FLEXOPTIX%20App.${version}.AppImage";
-    hash = "sha256-RTzVtAd134cKIlHWgP9Yyhu3FgdDSe1fKDGMsctO3x8=";
+    hash = "sha256-wTrvteIXiCMk4y2JnXodn5o89XJrLGHxOpHmma4SQXY=";
   };
 
   udevRules = fetchurl {
@@ -70,7 +70,10 @@ appimageTools.wrapAppImage {
     homepage = "https://www.flexoptix.net";
     changelog = "https://www.flexoptix.net/en/flexoptix-app/?os=linux#flexapp__modal__changelog";
     license = lib.licenses.unfree;
-    teams = [ lib.teams.helsinki-systems ];
+    maintainers = with lib.maintainers; [
+      das_j
+      helsinki-Jo
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }

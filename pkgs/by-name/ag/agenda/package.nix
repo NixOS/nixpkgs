@@ -16,14 +16,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "agenda";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "dahenson";
     repo = "agenda";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-CjlGkG43FFDdKGuwevBeCCazOzLcH114bqihMWTykC8=";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     mainProgram = "com.github.dahenson.agenda";
   };
-}
+})

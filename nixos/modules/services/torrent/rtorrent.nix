@@ -149,13 +149,6 @@ in
 
       protocol.encryption.set = allow_incoming,try_outgoing,enable_retry
 
-      # Limits for file handle resources, this is optimized for
-      # an `ulimit` of 1024 (a common default). You MUST leave
-      # a ceiling of handles reserved for rTorrent's internal needs!
-      network.http.max_open.set = 50
-      network.max_open_files.set = 600
-      network.max_open_sockets.set = 3000
-
       # Memory resource usage (increase if you have a large number of items loaded,
       # and/or the available resources to spend)
       pieces.memory.max.set = 1800M
@@ -169,15 +162,14 @@ in
       execute.nothrow = sh, -c, (cat, "echo >", (session.path), "rtorrent.pid", " ", (system.pid))
 
       # Other operational settings (check & adapt)
-      encoding.add = utf8
       system.umask.set = 0027
       system.cwd.set = (cfg.basedir)
       network.http.dns_cache_timeout.set = 25
-      schedule2 = monitor_diskspace, 15, 60, ((close_low_diskspace, 1000M))
+      schedule = monitor_diskspace, 15, 60, ((close_low_diskspace, 1000M))
 
       # Watch directories (add more as you like, but use unique schedule names)
-      #schedule2 = watch_start, 10, 10, ((load.start, (cat, (cfg.watch), "start/*.torrent")))
-      #schedule2 = watch_load, 11, 10, ((load.normal, (cat, (cfg.watch), "load/*.torrent")))
+      #schedule = watch_start, 10, 10, ((load.start, (cat, (cfg.watch), "start/*.torrent")))
+      #schedule = watch_load, 11, 10, ((load.normal, (cat, (cfg.watch), "load/*.torrent")))
 
       # Logging:
       #   Levels = critical error warn notice info debug
@@ -217,6 +209,10 @@ in
               ExecStart = "${cfg.package}/bin/rtorrent -n -o system.daemon.set=true -o import=${rtorrentConfigFile}";
               RuntimeDirectory = "rtorrent";
               RuntimeDirectoryMode = 750;
+
+              # rtorrent derives socket limits from this value since 0.16.15; see table in
+              # https://github.com/rakshasa/rtorrent/wiki/Socket-Manager-and-Resource-Allocation
+              LimitNOFILE = lib.mkDefault 16384;
 
               CapabilityBoundingSet = [ "" ];
               LockPersonality = true;

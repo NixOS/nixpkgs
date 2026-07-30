@@ -23,6 +23,7 @@
         };
         environment = {
           NEXTAUTH_URL = "http://localhost:3000/api/v1/auth";
+          ALLOW_PRIVATE_NETWORK_ACCESS = "true"; # otherwise we cannot archive localhost
         };
       };
 

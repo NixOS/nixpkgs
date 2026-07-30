@@ -60,7 +60,7 @@ fn remount_nix_store(prefix: &str, nix_store_mount_opts: &[String]) -> Result<()
     if let Some(last_nix_store_mount) = mounts.find_mountpoint(&nix_store_path) {
         for opt in nix_store_mount_opts {
             if !last_nix_store_mount.mntopts.contains(opt) {
-                missing_opts.push(opt.to_string());
+                missing_opts.push(opt.clone());
             }
         }
         if !missing_opts.is_empty() {

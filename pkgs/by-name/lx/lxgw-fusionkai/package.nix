@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   stdenvNoCC,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -15,13 +16,7 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-pEISoFEsv8SJOGa2ud/nV1yvl8T9kakfKENu3mfYA5A=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm644 *.ttf -t $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     homepage = "https://github.com/lxgw/FusionKai";

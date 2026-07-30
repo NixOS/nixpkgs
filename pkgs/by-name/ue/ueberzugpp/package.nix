@@ -23,25 +23,26 @@
   enableOpencv ? stdenv.hostPlatform.isLinux,
   opencv,
   enableWayland ? stdenv.hostPlatform.isLinux,
-  extra-cmake-modules,
+  kdePackages,
   wayland,
   wayland-protocols,
   wayland-scanner,
   enableX11 ? stdenv.hostPlatform.isLinux,
-  xorg,
+  libxcb-image,
+  libx11,
   cudaSupport ? config.cudaSupport,
   cudaPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ueberzugpp";
-  version = "2.9.8";
+  version = "2.9.10";
 
   src = fetchFromGitHub {
     owner = "jstkdng";
     repo = "ueberzugpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BTOuOS0zCdYTTc47UHaGI6wqFEv6e71cD2XBZtnKGLU=";
+    hash = "sha256-YrMFSbNQLamqT7asVxDz8JYgjYNdbdbR7axeopgWTMk=";
   };
 
   strictDeps = true;
@@ -79,13 +80,13 @@ stdenv.mkDerivation (finalAttrs: {
     opencv
   ]
   ++ lib.optionals enableWayland [
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     wayland
     wayland-protocols
   ]
   ++ lib.optionals enableX11 [
-    xorg.libX11
-    xorg.xcbutilimage
+    libx11
+    libxcb-image
   ]
   # Required by opencv when cudaSupport is enabled
   ++ lib.optionals cudaSupport [

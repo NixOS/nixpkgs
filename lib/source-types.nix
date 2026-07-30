@@ -17,4 +17,6 @@ lib.mapAttrs (tname: tset: defaultSourceType tname // tset) {
   binaryBytecode = { };
 
   binaryFirmware = { };
+
+  obfuscatedCode = { };
 }

@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonAtLeast,
-  pythonOlder,
 
   # buildtime
   hatchling,
@@ -12,7 +11,6 @@
   # runtime deps
   click,
   ghp-import,
-  importlib-metadata,
   jinja2,
   markdown,
   markupsafe,
@@ -72,8 +70,7 @@ buildPythonPackage rec {
     pyyaml
     pyyaml-env-tag
     watchdog
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ];
 
   optional-dependencies = {
     i18n = [ babel ];

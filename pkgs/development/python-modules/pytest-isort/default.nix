@@ -2,12 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  importlib-metadata,
   isort,
   poetry-core,
   pytest,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -26,7 +24,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [ isort ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  propagatedBuildInputs = [ isort ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

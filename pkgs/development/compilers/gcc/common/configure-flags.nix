@@ -8,7 +8,9 @@
   threadsCross,
   version,
 
-  apple-sdk,
+  is13,
+  apple-sdk_14,
+  apple-sdk_15,
   binutils,
   gmp,
   mpfr,
@@ -32,7 +34,8 @@
   langObjCpp,
   langJit,
   langRust ? false,
-  disableBootstrap ? (!lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform),
+  hostIsTarget,
+  disableBootstrap ? (!hostIsTarget),
 }:
 
 assert !enablePlugin -> disableGdbPlugin;
@@ -48,17 +51,17 @@ assert !enablePlugin -> disableGdbPlugin;
 
 let
   inherit (stdenv)
-    buildPlatform
     hostPlatform
     targetPlatform
     ;
 
+  appleSdk = if langAda && !is13 then apple-sdk_15 else apple-sdk_14;
+
   # See https://github.com/NixOS/nixpkgs/pull/209870#issuecomment-1500550903
   disableBootstrap' = disableBootstrap && !langFortran && !langGo;
 
-  crossMingw = (!lib.systems.equals targetPlatform hostPlatform) && targetPlatform.isMinGW;
-  crossDarwin =
-    (!lib.systems.equals targetPlatform hostPlatform) && targetPlatform.libc == "libSystem";
+  crossMingw = !hostIsTarget && targetPlatform.isMinGW;
+  crossDarwin = !hostIsTarget && targetPlatform.libc == "libSystem";
 
   crossConfigureFlags =
     # Ensure that -print-prog-name is able to find the correct programs.
@@ -160,12 +163,11 @@ let
       # gcc builds for cross-compilers (build != host) or cross-built
       # gcc (host != target) always apply the offset prefix to disentangle
       # target headers from build or host headers:
-      #     ${with_build_sysroot}${native_system_header_dir}
-      #  or ${test_exec_prefix}/${target_noncanonical}/sys-include
-      #  or ${with_sysroot}${native_system_header_dir}
+      #        ${with_sysroot}${native_system_header_dir}
+      #    and ${with_build_sysroot}${native_system_header_dir}
       # While native build (build == host == target) uses passed headers
       # path as is:
-      #    ${with_build_sysroot}${native_system_header_dir}
+      #    ${with_sysroot}${native_system_header_dir}
       #
       # Nixpkgs uses flat directory structure for both native and cross
       # cases. As a result libc headers don't get found for cross case
@@ -176,9 +178,13 @@ let
       # We pick "/" path to effectively avoid sysroot offset and make it work
       # as a native case.
       # Darwin requires using the SDK as the sysroot for `SDKROOT` to work correctly.
-      "--with-build-sysroot=${if targetPlatform.isDarwin then apple-sdk.sdkroot else "/"}"
+      "--with-build-sysroot=${if targetPlatform.isDarwin then appleSdk.sdkroot else "/"}"
       # Same with the stdlibc++ headers embedded in the gcc output
       "--with-gxx-include-dir=${placeholder "out"}/include/c++/${version}/"
+    ]
+    ++ lib.optionals (!withoutTargetLibc && targetPlatform.isDarwin && !crossDarwin) [
+      # Building on Darwin often requires --with-sysroot.
+      "--with-sysroot=${appleSdk.sdkroot}"
     ]
 
     # Basic configuration
@@ -227,6 +233,9 @@ let
         ]
       else
         [ "--disable-multilib" ]
+        # SH targets need m4 and m4-nofpu variants (the kernel uses -m4-nofpu).
+        # An empty list disables -m4-nofpu entirely.
+        ++ lib.optional targetPlatform.isSh4 "--with-multilib-list=m4,m4-nofpu"
     )
     ++ lib.optional (!enableShared) "--disable-shared"
     ++ lib.singleton (lib.enableFeature enablePlugin "plugin")
@@ -244,20 +253,18 @@ let
     ++ lib.optional (isl != null) "--with-isl=${isl}"
 
     # Ada options, gcc can't build the runtime library for a cross compiler
-    ++ lib.optional langAda (
-      if lib.systems.equals hostPlatform targetPlatform then "--enable-libada" else "--disable-libada"
-    )
+    ++ lib.optional langAda (if hostIsTarget then "--enable-libada" else "--disable-libada")
 
     ++ import ../common/platform-flags.nix {
       inherit (stdenv) targetPlatform;
       inherit lib;
     }
-    ++ lib.optionals (!lib.systems.equals targetPlatform hostPlatform) crossConfigureFlags
+    ++ lib.optionals (!hostIsTarget) crossConfigureFlags
     ++ lib.optional disableBootstrap' "--disable-bootstrap"
 
     # Platform-specific flags
     ++ lib.optional (
-      lib.systems.equals targetPlatform hostPlatform && targetPlatform.isx86_32
+      hostIsTarget && targetPlatform.isx86_32
     ) "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
     ++ lib.optional (targetPlatform.isNetBSD || targetPlatform.isCygwin) "--disable-libssp" # Provided by libc.
     ++ lib.optionals hostPlatform.isSunOS [
@@ -274,7 +281,7 @@ let
       lib.optional (targetPlatform.libc == "musl")
         # musl at least, disable: https://git.buildroot.net/buildroot/commit/?id=873d4019f7fb00f6a80592224236b3ba7d657865
         "--disable-libmpx"
-    ++ lib.optionals (lib.systems.equals targetPlatform hostPlatform && targetPlatform.libc == "musl") [
+    ++ lib.optionals (hostIsTarget && targetPlatform.libc == "musl") [
       "--disable-libsanitizer"
       "--disable-symvers"
       "libat_cv_have_ifunc=no"

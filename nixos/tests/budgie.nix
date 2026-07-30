@@ -29,37 +29,38 @@
           pkgs.budgie-analogue-clock-applet
         ];
       };
+
+      environment.systemPackages = [ pkgs.wlrctl ];
     };
+
+  enableOCR = true;
 
   testScript =
     { nodes, ... }:
     let
       user = nodes.machine.users.users.alice;
-      env = "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/${toString user.uid}/bus DISPLAY=:0";
-      su = command: "su - ${user.name} -c '${env} ${command}'";
+      env = "XDG_RUNTIME_DIR=/run/user/${toString user.uid}";
     in
     ''
       with subtest("Wait for login"):
-          machine.wait_for_x()
+          machine.wait_for_unit("display-manager.service")
+          machine.wait_for_file("/run/user/${toString user.uid}/wayland-0")
           machine.wait_until_succeeds('journalctl -t budgie-session-binary --grep "Entering running state"')
-          machine.wait_for_file("${user.home}/.Xauthority")
-          machine.succeed("xauth merge ${user.home}/.Xauthority")
+          machine.wait_until_succeeds('journalctl --grep "Compositor is fully initialized"')
 
       with subtest("Check that logging in has given the user ownership of devices"):
           # Change back to /dev/snd/timer after systemd-258.1
           machine.succeed("getfacl -p /dev/dri/card0 | grep -q ${user.name}")
 
       with subtest("Check if Budgie session components actually start"):
-          for i in ["budgie-daemon", "budgie-panel", "budgie-wm", "bsd-media-keys", "gsd-xsettings"]:
+          for i in ["budgie-daemon", "budgie-panel", "labwc", "budgie-session", "swaybg", "swayidle"]:
               machine.wait_until_succeeds(f"pgrep {i}")
+          machine.wait_until_succeeds("pgrep -xf ${pkgs.gnome-settings-daemon}/libexec/gsd-sound")
+          machine.wait_until_succeeds("pgrep -xf ${pkgs.budgie-desktop-services}/bin/org.buddiesofbudgie.Services")
           machine.wait_until_succeeds("pgrep -xf /run/current-system/sw/bin/org.buddiesofbudgie.budgie-desktop-view")
-          # We don't check xwininfo for budgie-wm.
-          # See https://github.com/NixOS/nixpkgs/pull/216737#discussion_r1155312754
-          machine.wait_for_window("budgie-daemon")
-          machine.wait_for_window("budgie-panel")
 
       with subtest("Check if various environment variables are set"):
-          cmd = "xargs --null --max-args=1 echo < /proc/$(pgrep -xf /run/current-system/sw/bin/budgie-wm)/environ"
+          cmd = "xargs --null --max-args=1 echo < /proc/$(pgrep -xf /run/current-system/sw/bin/budgie-panel)/environ"
           machine.succeed(f"{cmd} | grep 'XDG_CURRENT_DESKTOP' | grep 'Budgie'")
           machine.succeed(f"{cmd} | grep 'BUDGIE_PLUGIN_DATADIR' | grep '${pkgs.budgie-desktop-with-plugins.pname}'")
           # From the nixos/budgie module
@@ -67,28 +68,22 @@
 
       with subtest("Open run dialog"):
           machine.send_key("alt-f2")
-          machine.wait_for_window("budgie-run-dialog")
+          machine.wait_until_succeeds("pgrep -xf budgie-run-dialog")
           machine.sleep(2)
           machine.screenshot("run_dialog")
           machine.send_key("esc")
 
       with subtest("Open Budgie Control Center"):
-          machine.succeed("${su "budgie-control-center >&2 &"}")
-          machine.wait_for_window("Budgie Control Center")
-
-      with subtest("Lock the screen"):
-          machine.succeed("${su "budgie-screensaver-command -l >&2 &"}")
-          machine.wait_until_succeeds("${su "budgie-screensaver-command -q"} | grep 'The screensaver is active'")
-          machine.sleep(2)
-          machine.send_chars("${user.password}", delay=0.5)
-          machine.screenshot("budgie_screensaver")
-          machine.send_chars("\n")
-          machine.wait_until_succeeds("${su "budgie-screensaver-command -q"} | grep 'The screensaver is inactive'")
-          machine.sleep(2)
+          machine.succeed("su - ${user.name} -c '${env} budgie-control-center >&2 &'")
+          machine.wait_until_succeeds("su - ${user.name} -c '${env} wlrctl toplevel list | grep org.buddiesofbudgie.ControlCenter'")
+          machine.wait_for_text("Network|Ethernet|Control|Connected")
 
       with subtest("Open GNOME terminal"):
-          machine.succeed("${su "gnome-terminal"}")
-          machine.wait_for_window("${user.name}@machine: ~")
+          machine.succeed("su - ${user.name} -c '${env} gnome-terminal >&2 &'")
+          machine.wait_until_succeeds("su - ${user.name} -c '${env} wlrctl toplevel list | grep ${user.name}@machine'")
+
+      with subtest("Check if labwc bridge is working"):
+          machine.wait_until_succeeds("cat /home/${user.name}/.config/budgie-desktop/labwc/rc.xml | grep Qogir")
 
       with subtest("Check if Budgie has ever coredumped"):
           machine.fail("coredumpctl --json=short | grep budgie")

@@ -2,27 +2,27 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
   cairo,
   lv2,
   pkg-config,
   libsndfile,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bjumblr";
   version = "1.6.8";
 
   src = fetchFromGitHub {
     owner = "sjaehn";
     repo = "BJumblr";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-qSoGmWUGaMjx/bkiCJ/qb4LBbuFPXXlJ0e9hrFBXzwE=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libX11
+    libx11
     cairo
     lv2
     libsndfile
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3;
   };
-}
+})

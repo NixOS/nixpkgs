@@ -5,7 +5,7 @@
   cinnamon-translations,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "nemo-emblems";
   version = "6.6.0";
   pyproject = true;
@@ -14,11 +14,11 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "nemo-extensions";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-tXeMkaCYnWzg+6ng8Tyg4Ms1aUeE3xiEkQ3tKEX6Vv8=";
   };
 
-  sourceRoot = "${src.name}/nemo-emblems";
+  sourceRoot = "${finalAttrs.src.name}/nemo-emblems";
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -41,4 +41,4 @@ python3.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
   };
-}
+})

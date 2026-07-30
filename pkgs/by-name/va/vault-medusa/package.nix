@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "vault-medusa";
   version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "jonasvinther";
     repo = "medusa";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-pMCkJMY5KFkNsmv/LFYZrDmrq2G7fw1fl9HEYGAKuIM=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

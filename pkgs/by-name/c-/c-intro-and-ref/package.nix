@@ -60,7 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.gnu.org/software/c-intro-and-ref/";
     license = lib.licenses.fdl13Plus;
     maintainers = with lib.maintainers; [
-      normalcea
       rc-zb
     ];
     platforms = lib.platforms.all;

@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = {
-    description = ''Typeface designed to mimic the national park service signs that are carved using a router bit'';
+    description = "Typeface designed to mimic the national park service signs that are carved using a router bit";
     homepage = "https://nationalparktypeface.com/";
     license = lib.licenses.ofl;
     maintainers = [ ];

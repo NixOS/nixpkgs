@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.0.5";
   pname = "liblaxjson";
 
   src = fetchFromGitHub {
     owner = "andrewrk";
     repo = "liblaxjson";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "01iqbpbhnqfifhv82m6hi8190w5sdim4qyrkss7z1zyv3gpchc5s";
   };
 
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
-    maintainers = [ lib.maintainers.andrewrk ];
+    maintainers = [ ];
   };
-}
+})

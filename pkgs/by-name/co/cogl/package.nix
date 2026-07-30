@@ -6,7 +6,10 @@
   libGL,
   glib,
   gdk-pixbuf,
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxdamage,
+  libxcomposite,
   libintl,
   pangoSupport ? true,
   pango,
@@ -28,7 +31,7 @@ stdenv.mkDerivation rec {
   version = "1.22.8";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/cogl-${version}.tar.xz";
+    url = "mirror://gnome/sources/cogl/${lib.versions.majorMinor version}/cogl-${version}.tar.xz";
     sha256 = "0nfph4ai60ncdx7hy6hl1i1cmp761jgnyjfhagzi0iqq36qb41d8";
   };
 
@@ -87,10 +90,10 @@ stdenv.mkDerivation rec {
     libgbm
     mesa-gl-headers
     libGL
-    xorg.libXrandr
-    xorg.libXfixes
-    xorg.libXcomposite
-    xorg.libXdamage
+    libxrandr
+    libxfixes
+    libxcomposite
+    libxdamage
   ]
   ++ lib.optionals gstreamerSupport [
     gst_all_1.gstreamer
@@ -134,7 +137,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Small open source library for using 3D graphics hardware for rendering";
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = [ ];
 
     longDescription = ''
       Cogl is a small open source library for using 3D graphics hardware for

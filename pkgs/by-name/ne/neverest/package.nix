@@ -12,7 +12,7 @@
   buildFeatures ? [ ],
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   # Learn more about available cargo features at:
   #  - <https://pimalaya.org/neverest/cli/latest/installation.html#cargo>
   #  - <https://git.sr.ht/~soywod/neverest-cli/tree/master/item/Cargo.toml#L18>
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "pimalaya";
     repo = "neverest";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-3PSJyhxrOCiuHUeVHO77+NecnI5fN5EZfPhYizuYvtE=";
   };
 
@@ -57,9 +57,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "CLI to synchronize, backup and restore emails";
     mainProgram = "neverest";
-    homepage = "https://pimalaya.org/neverest/cli/v${version}/";
-    changelog = "https://git.sr.ht/~soywod/neverest-cli/tree/v${version}/item/CHANGELOG.md";
+    homepage = "https://pimalaya.org/neverest/cli/v${finalAttrs.version}/";
+    changelog = "https://git.sr.ht/~soywod/neverest-cli/tree/v${finalAttrs.version}/item/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ soywod ];
   };
-}
+})

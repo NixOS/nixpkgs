@@ -5,7 +5,7 @@
 
   # nativeBuildInputs
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   gettext,
   gphoto2,
   libgphoto2,
@@ -17,7 +17,6 @@
 
   # buildInputs
   guvcview,
-  pcre,
   v4l-utils,
 
   ffmpeg,
@@ -36,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     gettext
     gphoto2
     libgphoto2
@@ -59,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     libsForQt5.qtxmlpatterns
     libsForQt5.qwt
     libv4l
-    pcre
     v4l-utils
   ];
 

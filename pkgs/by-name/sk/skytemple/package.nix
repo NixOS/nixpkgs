@@ -8,7 +8,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "skytemple";
   version = "1.8.4";
   pyproject = true;
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = "skytemple";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-jdiZLDQEfYESgpe7F5X/odkgXnvjhvfFArrpt4bpPbo=";
   };
 
@@ -74,4 +74,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ marius851000 ];
   };
-}
+})

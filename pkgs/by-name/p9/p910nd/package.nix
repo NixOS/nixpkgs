@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "p910nd";
   version = "0.97";
 
   src = fetchFromGitHub {
     owner = "kenyapcomau";
     repo = "p910nd";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-MM4o7d3L3XIRYWJ/KPM2OltlVfVA/BgMuyhJMm/BS3c=";
   };
 
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "p910nd";
   };
-}
+})

@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation {
   pname = "finalmouse-udev-rules";
-  version = "0-unstable-2025-08-15";
+  version = "0-unstable-2026-01-27";
 
   src = fetchFromGitHub {
     owner = "teamfinalmouse";
     repo = "xpanel-linux-permissions";
-    rev = "6b200ec39f1fa31edf6648f5ec3d5738c3770530";
-    hash = "sha256-Bo8XBvrUlZe0eVQlNQGb0xuTb+wecipsHwLdZpK0dUQ=";
+    rev = "49ba1bf19e7d1f05306baaf72e4514c1f12f139a";
+    hash = "sha256-+tStBzGrPop0zKNf0qIp2PCrVRy2CcFpIrvgft9YkbE=";
   };
 
   dontUnpack = true;
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    install -Dpm644 $src/99-finalmouse.rules $out/lib/udev/rules.d/70-finalmouse.rules
+    install -Dpm644 $src/70-finalmouse.rules $out/lib/udev/rules.d/70-finalmouse.rules
 
     runHook postInstall
   '';

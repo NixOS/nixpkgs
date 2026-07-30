@@ -1,5 +1,8 @@
-{ buildPecl, lib }:
-
+{
+  buildPecl,
+  lib,
+  php,
+}:
 buildPecl {
   pname = "igbinary";
   version = "3.2.14";
@@ -17,5 +20,6 @@ buildPecl {
     homepage = "https://github.com/igbinary/igbinary/";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.php ];
+    broken = lib.versionAtLeast php.version "8.5";
   };
 }

@@ -23,10 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
           url = "https://github.com/microsoft/pgsql-tools/releases/download/v${finalAttrs.version}/pgsqltoolsservice-linux-arm64.tar.gz";
           hash = "sha256-rD8jymGdM1RDGDbrKu6E7xoWtSMRNuc2ngCmR+sHgQI=";
         };
-        x86_64-darwin = {
-          url = "https://github.com/microsoft/pgsql-tools/releases/download/v${finalAttrs.version}/pgsqltoolsservice-osx-x86.tar.gz";
-          hash = "sha256-KLl7HPChurzB6QYV6AqAP3g1J3VKl61+we3opzJQwG0=";
-        };
         aarch64-darwin = {
           url = "https://github.com/microsoft/pgsql-tools/releases/download/v${finalAttrs.version}/pgsqltoolsservice-osx-arm64.tar.gz";
           hash = "sha256-tpabEKB1kqse7D58FsP/9jywk+vgAAvptL9MadwxWg8=";
@@ -39,11 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeBinaryWrapper
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libxcrypt-legacy
     (lib.getLib stdenv.cc.cc)
   ];
@@ -59,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r _internal $out/lib/pgsql-tools/
 
     makeBinaryWrapper $out/lib/pgsql-tools/ossdbtoolsservice_main $out/bin/ossdbtoolsservice_main \
-      ${lib.optionalString stdenv.isLinux ''--prefix LD_LIBRARY_PATH : "${
+      ${lib.optionalString stdenv.hostPlatform.isLinux ''--prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
           libxcrypt-legacy
           (lib.getLib stdenv.cc.cc)

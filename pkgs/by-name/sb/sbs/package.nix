@@ -2,20 +2,20 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
   imlib2,
-  libXinerama,
+  libxinerama,
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sbs";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "onur-ozkan";
     repo = "sbs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Zgu9W/3LwHF/fyaPlxmV/2LdxilO1tU0JY/esLnJVGY=";
   };
 
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     imlib2
-    libX11
-    libXinerama
+    libx11
+    libxinerama
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ onur-ozkan ];
     mainProgram = "sbs";
   };
-}
+})

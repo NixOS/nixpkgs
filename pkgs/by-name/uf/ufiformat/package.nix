@@ -5,7 +5,7 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ufiformat";
   version = "0.9.9";
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "tedigh";
     repo = "ufiformat";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "heFETZj9migz2s9kvmw0ZQ1ieNpU4V4Lwfp91ek2cS4=";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     mainProgram = "ufiformat";
   };
-}
+})

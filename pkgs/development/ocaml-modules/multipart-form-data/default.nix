@@ -8,14 +8,14 @@
   alcotest,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "multipart-form-data";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "cryptosense";
-    repo = pname;
-    rev = version;
+    repo = "multipart-form-data";
+    rev = finalAttrs.version;
     hash = "sha256-3MYJDvVbPIv/JDiB9nKcLRFC5Qa0afyEfz7hk8MWRII=";
   };
 
@@ -36,4 +36,4 @@ buildDunePackage rec {
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

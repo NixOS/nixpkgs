@@ -2,6 +2,7 @@
   lib,
   aioconsole,
   aiohttp,
+  aiointercept,
   aioresponses,
   async-timeout,
   buildPythonPackage,
@@ -13,16 +14,16 @@
   websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "whirlpool-sixth-sense";
-  version = "1.0.3";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "abmantis";
     repo = "whirlpool-sixth-sense";
-    tag = version;
-    hash = "sha256-SXa5Ccnng1McWgSWy85xCEr7odtBSJtJhjZoC/JfI/A=";
+    tag = finalAttrs.version;
+    hash = "sha256-zqdgZw3PAZ0tONwkdR5jgZNvSc8IiGj0Zr855ewsPpI=";
   };
 
   build-system = [ setuptools ];
@@ -36,6 +37,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aioresponses
+    aiointercept
     pytest-asyncio
     pytest-mock
     pytestCheckHook
@@ -46,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for Whirlpool 6th Sense appliances";
     homepage = "https://github.com/abmantis/whirlpool-sixth-sense/";
-    changelog = "https://github.com/abmantis/whirlpool-sixth-sense/releases/tag/${src.tag}";
+    changelog = "https://github.com/abmantis/whirlpool-sixth-sense/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

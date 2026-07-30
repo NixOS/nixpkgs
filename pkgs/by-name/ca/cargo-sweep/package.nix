@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-sweep";
   version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "holmgr";
     repo = "cargo-sweep";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-/a7quBIX3gr9vVwQfDHdfkt4Xt7UYpjMNiyqivhOvBQ=";
   };
 
@@ -19,9 +19,9 @@ rustPlatform.buildRustPackage rec {
 
   checkFlags = [
     # Requires a rustup toolchain to be installed.
-    "--skip check_toolchain_listing_on_multiple_projects"
+    "--skip=check_toolchain_listing_on_multiple_projects"
     # Does not work with a `--target` build in the environment
-    "--skip empty_project_output"
+    "--skip=empty_project_output"
   ];
 
   meta = {
@@ -34,4 +34,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})

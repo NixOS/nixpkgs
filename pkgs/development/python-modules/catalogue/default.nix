@@ -3,10 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
-  typing-extensions,
-  zipp,
 }:
 
 buildPythonPackage rec {
@@ -20,11 +17,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-    zipp
-  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

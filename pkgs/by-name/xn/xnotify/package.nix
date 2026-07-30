@@ -5,29 +5,29 @@
   writeText,
   fontconfig,
   imlib2,
-  libX11,
-  libXft,
-  libXinerama,
+  libx11,
+  libxft,
+  libxinerama,
   conf ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xnotify";
   version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "phillbush";
     repo = "xnotify";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-RfnmiAEFTPqQZursyVPDIZ6J3KBouvaaxyhTc1liqBc=";
   };
 
   buildInputs = [
     fontconfig
     imlib2
-    libX11
-    libXft
-    libXinerama
+    libx11
+    libxft
+    libxinerama
   ];
 
   postPatch =
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "xnotify";
   };
-}
+})

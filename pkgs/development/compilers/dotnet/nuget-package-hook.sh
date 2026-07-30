@@ -1,5 +1,12 @@
 # shellcheck shell=bash disable=SC2154
 
+createNupkgMetadata() {
+  # since sdk 11, contentHash is required to avoid:
+  # NuGet.targets(198,5): error : Error parsing nupkg metadata file [...]/.nupkg.metadata : \
+  # JSON deserialization for type 'NuGet.Packaging.NupkgMetadataFile' was missing required properties including: 'contentHash'.
+  echo '{ "contentHash": "" }' > "$1"/.nupkg.metadata
+}
+
 unpackNupkg() {
     local -r nupkg="$1" unpacked="$2"
     local nuspec nuspec_l
@@ -14,7 +21,7 @@ unpackNupkg() {
         mv "$nuspec" "$nuspec".tmp
         mv "$nuspec".tmp "$nuspec_l"
     fi
-    echo {} > .nupkg.metadata
+    createNupkgMetadata .
     cd - >/dev/null
 }
 

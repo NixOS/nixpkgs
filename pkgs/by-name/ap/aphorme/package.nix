@@ -11,18 +11,18 @@
   autoPatchelfHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "aphorme";
-  version = "0.1.19";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "Iaphetes";
     repo = "aphorme_launcher";
-    tag = "v${version}";
-    hash = "sha256-p1ZIMMDyQWVzoeyHb3sbeV6XQwbIDoQwJU8ynI8hGUI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-eSJlWInGMFnn+16um7j8Dp92LYdNsfAdLJQSQIDAlaA=";
   };
 
-  cargoHash = "sha256-knxFQ9hBBc8zATwf4ntbbmT2a+33uYcqax8AAFsj/NM=";
+  cargoHash = "sha256-CRDVIY5HVMFme+fOf9tdoT+VVy5z2+s5opw/KH25YOw=";
 
   # No tests exist
   doCheck = false;
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
   passthru.tests.version = testers.testVersion {
     package = aphorme;
     command = "aphorme --version";
-    version = "aphorme ${version}";
+    version = "aphorme ${finalAttrs.version}";
   };
 
   meta = {
@@ -50,4 +50,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ anytimetraveler ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "snapper";
-  version = "0.13.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "snapper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8rIjfulMuh4HzZv08bX7gveJAo2X2GvswmBD3Ziu0NM=";
+    hash = "sha256-oPIIEReHWkWSj4K/mi1VD3Ukaltquzqh8UVBPc4q+vw=";
   };
 
   strictDeps = true;
@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://snapper.io";
     license = lib.licenses.gpl2Only;
     mainProgram = "snapper";
-    maintainers = with lib.maintainers; [ markuskowa ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

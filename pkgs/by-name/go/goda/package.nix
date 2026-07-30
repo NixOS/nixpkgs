@@ -5,18 +5,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "goda";
-  version = "0.7.1";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "loov";
     repo = "goda";
-    rev = "v${version}";
-    hash = "sha256-byRficALfYADK2lXskAvYeLxwrzOQXACTLlDRrMoHrw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ARiI5varW7p7eX58N8mtS6yeXeTlZfiiTFgI8pcDD6M=";
   };
 
-  vendorHash = "sha256-AkO3Ag2FiAC46ZXmG3mVhhWpcaw/Z3oik2cyGmoJFpc=";
+  vendorHash = "sha256-jtri/73UnpI5oyykW2DYiH0vra62+jk8VIHhcWT2oJA=";
 
   passthru.updateScript = nix-update-script { };
 
@@ -27,4 +27,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     mainProgram = "goda";
   };
-}
+})

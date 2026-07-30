@@ -82,6 +82,6 @@ buildGoModule {
     homepage = "https://github.com/SmilyOrg/photofield";
     license = lib.licenses.mit;
     mainProgram = "photofield";
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
   };
 }

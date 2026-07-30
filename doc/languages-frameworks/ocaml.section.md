@@ -116,14 +116,14 @@ Here is a second example, this time using a source archive generated with `dune-
   buildDunePackage,
 }:
 
-buildDunePackage (finalAtts: {
+buildDunePackage (finalAttrs: {
   pname = "wtf8";
   version = "1.0.2";
 
   minimalOCamlVersion = "4.02";
 
   src = fetchurl {
-    url = "https://github.com/flowtype/ocaml-wtf8/releases/download/v${finalAtts.version}/wtf8-v${finalAtts.version}.tbz";
+    url = "https://github.com/flowtype/ocaml-wtf8/releases/download/v${finalAttrs.version}/wtf8-v${finalAttrs.version}.tbz";
     hash = "sha256-d5/3KUBAWRj8tntr4RkJ74KWW7wvn/B/m1nx0npnzyc=";
   };
 

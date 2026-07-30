@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   hatchling,
@@ -11,26 +11,48 @@
   donfig,
   numpy,
   numcodecs,
+  google-crc32c,
   packaging,
   typing-extensions,
 
-  # tests
+  # optional-dependencies
+  # remote
+  fsspec,
+  obstore ? null, # TODO: Package
+  # gpu
+  cupy,
+  # cli
+  typer,
+  # optional
+  rich,
+  universal-pathlib,
+
+  # test
   hypothesis,
+  numpydoc,
   pytest-asyncio,
-  pytest-xdist,
   pytestCheckHook,
   tomlkit,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zarr";
-  version = "3.1.1";
+  version = "3.2.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-F9ty838kiUUtITesiRxBM7j5dvkYnY79PnXzs63YTow=";
+  src = fetchFromGitHub {
+    owner = "zarr-developers";
+    repo = "zarr-python";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WExQT/Je+esq0dv9HtPxGt7ioJgIwW8cGNuPwM+ANEc=";
   };
+
+  # Avoid requiring pytest-benchmark - we don't care about these
+  preBuild = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"--benchmark-columns", "min,mean,stddev,outliers,rounds,iterations",' "" \
+      --replace-fail '"--benchmark-disable",' "" \
+  '';
 
   build-system = [
     hatchling
@@ -40,35 +62,56 @@ buildPythonPackage rec {
   dependencies = [
     donfig
     numcodecs
+    google-crc32c
     numpy
     packaging
     typing-extensions
-  ]
-  ++ numcodecs.optional-dependencies.crc32c;
+  ];
+
+  passthru = {
+    optional-dependencies = {
+      remote = [
+        fsspec
+        obstore
+      ];
+      gpu = [
+        cupy
+      ];
+      cli = [
+        typer
+      ];
+      optional = [
+        rich
+        universal-pathlib
+      ];
+    };
+  };
 
   nativeCheckInputs = [
     hypothesis
+    numpydoc
     pytest-asyncio
-    pytest-xdist
     pytestCheckHook
     tomlkit
-  ];
+  ]
+  ++ finalAttrs.finalPackage.passthru.optional-dependencies.cli;
 
   disabledTestPaths = [
     # requires uv and then fails at setting up python envs
-    "tests/test_examples.py"
+    "tests/test_examples.py::test_scripts_can_run[script_path0]"
+    # Requires zarr==2.x to generate zarr stores for the tests
+    "tests/test_regression"
+    # See also preBuild above.
+    "tests/benchmarks/"
   ];
 
   pythonImportsCheck = [ "zarr" ];
 
-  # FIXME remove once zarr's reverse dependencies support v3
-  passthru.skipBulkUpdate = true;
-
   meta = {
     description = "Implementation of chunked, compressed, N-dimensional arrays for Python";
     homepage = "https://github.com/zarr-developers/zarr";
-    changelog = "https://github.com/zarr-developers/zarr-python/releases/tag/v${version}";
+    changelog = "https://github.com/zarr-developers/zarr-python/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

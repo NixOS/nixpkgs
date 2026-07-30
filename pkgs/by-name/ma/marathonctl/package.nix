@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "marathonctl";
   version = "0.0.7";
 
   src = fetchFromGitHub {
     owner = "shoenig";
     repo = "marathonctl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-MigmvOwYa0uYPexchS4MP74I1Tp6QHYuQVSOh1+FrMg=";
   };
 
@@ -26,7 +26,6 @@ buildGoModule rec {
     homepage = "https://github.com/shoenig/marathonctl";
     description = "CLI tool for Marathon";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ manveru ];
     mainProgram = "marathonctl";
   };
-}
+})

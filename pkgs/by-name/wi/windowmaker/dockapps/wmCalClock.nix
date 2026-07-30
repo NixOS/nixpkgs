@@ -2,9 +2,9 @@
   lib,
   stdenv,
   dockapps-sources,
-  libX11,
-  libXext,
-  libXpm,
+  libx11,
+  libxext,
+  libxpm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,16 +15,16 @@ stdenv.mkDerivation (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/wmCalClock";
 
   buildInputs = [
-    libX11
-    libXpm
-    libXext
+    libx11
+    libxpm
+    libxext
   ];
 
   preBuild = ''
     makeFlagsArray+=(
       CC="cc"
-      INCDIR="-I${libX11.dev}/include -I${libXext.dev}/include -I${libXpm.dev}/include"
-      LIBDIR="-I${libX11}/lib -I${libXext}/lib -I${libXpm}/lib"
+      INCDIR="-I${libx11.dev}/include -I${libxext.dev}/include -I${libxpm.dev}/include"
+      LIBDIR="-I${libx11}/lib -I${libxext}/lib -I${libxpm}/lib"
     )
   '';
 

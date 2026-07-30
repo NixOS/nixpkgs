@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "torctl";
   version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "BlackArch";
     repo = "torctl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-rTJR+9pbK/sWMqdHyIqJgASgCGtGtpUPoHmYZJ7COFQ=";
   };
 
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     mainProgram = "torctl";
     platforms = lib.platforms.all;
   };
-}
+})

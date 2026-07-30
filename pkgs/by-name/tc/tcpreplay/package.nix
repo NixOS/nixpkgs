@@ -6,12 +6,12 @@
   tcpdump,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tcpreplay";
   version = "4.5.2";
 
   src = fetchurl {
-    url = "https://github.com/appneta/tcpreplay/releases/download/v${version}/tcpreplay-${version}.tar.gz";
+    url = "https://github.com/appneta/tcpreplay/releases/download/v${finalAttrs.version}/tcpreplay-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-zP87spRpoEzMIO0LUY4+Q8Sntah2M52UNb/Z23/l0PE=";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ eleanor ];
     platforms = lib.platforms.unix;
   };
-}
+})

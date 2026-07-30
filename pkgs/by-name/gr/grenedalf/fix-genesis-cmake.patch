@@ -1,0 +1,16 @@
+diff --git a/libs/genesis/lib/genesis/CMakeLists.txt b/libs/genesis/lib/genesis/CMakeLists.txt
+index 8660c78..caa7618 100644
+--- a/libs/genesis/lib/genesis/CMakeLists.txt
++++ b/libs/genesis/lib/genesis/CMakeLists.txt
+@@ -66,11 +66,6 @@ if(${CMAKE_VERSION} VERSION_GREATER "3.9.0")
+     endif()
+ endif()
+ 
+-# Add htslib as a dependency, so that CMake realizes that it has to be built.
+-IF(GENESIS_USE_HTSLIB)
+-    add_dependencies( genesis_lib_obj htslib )
+-ENDIF()
+-
+ # Same for samtools. Not used at the moment though.
+ # IF(GENESIS_USE_SAMTOOLS)
+ #     add_dependencies( genesis_lib_obj samtools )

@@ -1,26 +1,21 @@
 {
   lib,
   python3Packages,
-  fetchPypi,
+  fetchFromGitHub,
   addBinToPathHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "eliot-tree";
-  version = "21.0.0";
+  version = "24.0.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-hTl+r+QJPPQ7ss73lty3Wm7DLy2SKGmmgIuJx38ilO8=";
+  src = fetchFromGitHub {
+    owner = "jonathanj";
+    repo = "eliottree";
+    tag = finalAttrs.version;
+    hash = "sha256-4P6eAhX7XBuxu8r/7xvm07u4PZzKP3YLj/5kekgYXG8=";
   };
-
-  # Patch Python 3.12 incompatibilities in versioneer.py.
-  postPatch = ''
-    substituteInPlace versioneer.py \
-      --replace-fail SafeConfigParser ConfigParser \
-      --replace-fail readfp read_file
-  '';
 
   build-system = with python3Packages; [ setuptools ];
 
@@ -29,6 +24,7 @@ python3Packages.buildPythonApplication rec {
     eliot
     iso8601
     jmespath
+    six
     toolz
   ];
 
@@ -42,9 +38,9 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     homepage = "https://github.com/jonathanj/eliottree";
-    changelog = "https://github.com/jonathanj/eliottree/blob/${version}/NEWS.rst";
+    changelog = "https://github.com/jonathanj/eliottree/blob/${finalAttrs.version}/NEWS.rst";
     description = "Render Eliot logs as an ASCII tree";
     mainProgram = "eliot-tree";
     license = lib.licenses.mit;
   };
-}
+})

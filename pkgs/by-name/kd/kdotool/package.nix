@@ -1,23 +1,24 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   rustPlatform,
   pkg-config,
   dbus,
 }:
 
-rustPlatform.buildRustPackage rec {
-  version = "0.2.2-pre";
+rustPlatform.buildRustPackage (finalAttrs: {
+  version = "0.2.3";
   pname = "kdotool";
 
   src = fetchFromGitHub {
     owner = "jinliu";
     repo = "kdotool";
-    rev = "v${version}";
-    hash = "sha256-qx4bWAFQcoLM/r4aNzmoZdjclw8ccAW8lKLda6ON1aQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-8lN85DPw3FUPS1k0Ktcp8Xf1DAdj6Hd6PqlKmhFCP+o=";
   };
 
-  cargoHash = "sha256-ASR2zMwVCKeEZPYQNoO54J00eZyTn1i6FE0NBCJWSCs=";
+  cargoHash = "sha256-8WkLgTg+ndMtAh0W0efvRCDEgvhmKBcN0e0Jxn4hgH8=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus ];
@@ -28,4 +29,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ kotatsuyaki ];
   };
-}
+})

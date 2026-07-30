@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tpnote";
-  version = "1.25.17";
+  version = "1.26.7";
 
   src = fetchFromGitHub {
     owner = "getreu";
     repo = "tp-note";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XOoqPhWS50kj2n48A0SyOuUZHsoP7YxMrWpzgpTr/DY=";
+    hash = "sha256-dg6IFozGnvCOHbqZ9p0Eu7CPAv7W1Yf+MqAAFxghBEg=";
   };
 
-  cargoHash = "sha256-4e06W8Q+pJTcUgfDSHU1ZTMG/55mYvJ6DAX3QeAa9TI=";
+  cargoHash = "sha256-Lu4NBYxplYk5Y3IbfiCv61whW9Dk6fIScZUIB5yBdCk=";
 
   nativeBuildInputs = [
     cmake
@@ -48,11 +48,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installManPage docs/build/man/man1/tpnote.1
   '';
 
-  RUSTONIG_SYSTEM_LIBONIG = true;
+  env.RUSTONIG_SYSTEM_LIBONIG = true;
 
   # The `tpnote` crate has no unit tests. All tests are in `tpnote-lib`.
   checkType = "debug";
-  cargoTestFlags = "--package tpnote-lib";
+  cargoTestFlags = [
+    "--package"
+    "tpnote-lib"
+  ];
   doCheck = true;
 
   nativeInstallCheckInputs = [

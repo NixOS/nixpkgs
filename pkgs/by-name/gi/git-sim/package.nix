@@ -11,15 +11,9 @@
   packageOverrides ? self: super: { },
 }:
 let
-  defaultOverrides = [
-    (self: super: {
-      av = self.av_13;
-    })
-  ];
-
   python = python3.override {
     self = python;
-    packageOverrides = lib.composeManyExtensions (defaultOverrides ++ [ packageOverrides ]);
+    packageOverrides = lib.composeManyExtensions [ packageOverrides ];
   };
 
   version = "0.3.5";

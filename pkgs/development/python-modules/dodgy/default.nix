@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "landscapeio";
+    owner = "prospector-dev";
     repo = "dodgy";
     rev = version;
     sha256 = "0ywwjpz0p6ls3hp1lndjr9ql6s5lkj7dgpll1h87w04kwan70j0x";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   meta = {
     description = "Looks at Python code to search for things which look \"dodgy\" such as passwords or diffs";
     mainProgram = "dodgy";
-    homepage = "https://github.com/landscapeio/dodgy";
+    homepage = "https://github.com/prospector-dev/dodgy";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kamadorueda ];
   };

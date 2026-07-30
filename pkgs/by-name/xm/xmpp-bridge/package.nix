@@ -7,14 +7,14 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xmpp-bridge";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "majewsky";
     repo = "xmpp-bridge";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-JXhVi2AiV/PmWPfoQJl/N92GAZQ9UxReAiCkiDxgdFY=";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

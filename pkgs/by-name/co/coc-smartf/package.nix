@@ -66,6 +66,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Make jump to character easier";
     homepage = "https://github.com/neoclide/coc-smartf";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

@@ -2,25 +2,27 @@
   lib,
   stdenv,
   fetchurl,
-  xorg,
+  libxres,
+  libxext,
+  libx11,
   pkg-config,
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xrestop";
   version = "0.6";
 
   src = fetchurl {
-    url = "https://xorg.freedesktop.org/archive/individual/app/xrestop-${version}.tar.xz";
+    url = "https://xorg.freedesktop.org/archive/individual/app/xrestop-${finalAttrs.version}.tar.xz";
     hash = "sha256-Li7BEcSyeYtdwtwrPsevT2smGUbpA7jhTbBGgx0gOyk=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    xorg.libX11
-    xorg.libXres
-    xorg.libXext
+    libx11
+    libxres
+    libxext
     ncurses
   ];
 
@@ -32,4 +34,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     mainProgram = "xrestop";
   };
-}
+})

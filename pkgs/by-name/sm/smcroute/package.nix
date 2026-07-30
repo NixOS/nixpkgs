@@ -7,14 +7,14 @@
   libcap,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "smcroute";
   version = "2.5.7";
 
   src = fetchFromGitHub {
     owner = "troglobit";
     repo = "smcroute";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-b1FsaDw5wAZkOwc6Y7TsMwyfxIRQ2rNUTK+knEzOn7w=";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ fpletz ];
     platforms = with lib.platforms; (linux ++ freebsd ++ netbsd ++ openbsd);
   };
-}
+})

@@ -36,8 +36,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doCheck = true;
   # Requires network access
   checkFlags = [
-    "--skip verify_compiles"
-    "--skip verify_deterministic"
+    "--skip=verify_compiles"
+    "--skip=verify_deterministic"
   ];
 
   doInstallCheck = true;
@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       lib.licenses.mit
       lib.licenses.asl20
     ];
-    maintainers = with lib.maintainers; [ RossSmyth ];
+    maintainers = [ ];
     platforms = with lib.platforms; linux ++ darwin ++ windows;
   };
 })

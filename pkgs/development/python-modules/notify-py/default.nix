@@ -13,6 +13,7 @@
   pytest,
   dbus,
   coreutils,
+  pyprojectVersionPatchHook,
 }:
 
 buildPythonPackage rec {
@@ -43,6 +44,10 @@ buildPythonPackage rec {
     ];
 
   nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
+
+  build-system = [
     poetry-core
   ];
 

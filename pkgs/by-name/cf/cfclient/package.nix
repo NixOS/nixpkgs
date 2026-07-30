@@ -5,16 +5,16 @@
   qt6,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cfclient";
-  version = "2025.2";
+  version = "2025.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bitcraze";
     repo = "crazyflie-clients-python";
-    tag = version;
-    hash = "sha256-LCGTMLIfGH59KFwQACyuEQTh/zkGgzXd3e6MkFTgKhA=";
+    tag = finalAttrs.version;
+    hash = "sha256-+3RZRShELL2iXxz95eRhK5UPp5NZ1yJO4NDlZ7cDTjI=";
   };
 
   strictDeps = true;
@@ -72,9 +72,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Host applications and library for Crazyflie drones written in Python";
     homepage = "https://github.com/bitcraze/crazyflie-clients-python";
-    changelog = "https://github.com/bitcraze/crazyflie-clients-python/releases/tag/${version}";
+    changelog = "https://github.com/bitcraze/crazyflie-clients-python/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.brianmcgillion ];
     platforms = lib.platforms.linux;
   };
-}
+})

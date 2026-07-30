@@ -7,7 +7,6 @@
 }:
 
 let
-  name = "legends-browser-${version}";
   version = "1.19.2";
 
   jar = fetchurl {
@@ -29,7 +28,8 @@ let
 in
 
 buildEnv {
-  inherit name;
+  inherit version;
+  pname = "legends-browser";
   paths = [ script ];
 
   meta = {

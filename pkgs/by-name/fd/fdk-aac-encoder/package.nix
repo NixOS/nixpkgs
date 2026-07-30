@@ -7,15 +7,15 @@
   fdk_aac,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fdkaac";
-  version = "1.0.6";
+  version = "1.0.8";
 
   src = fetchFromGitHub {
     owner = "nu774";
     repo = "fdkaac";
-    rev = "v${version}";
-    hash = "sha256-nVVeYk7t4+n/BsOKs744stsvgJd+zNnbASk3bAgFTpk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-8fI3mbHPb6E5YXl4RaqU8P0ALldkOh+RKfecDX87m/s=";
   };
 
   nativeBuildInputs = [
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.lunik1 ];
   };
-}
+})

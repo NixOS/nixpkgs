@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "xcrawl3r";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "hueristiq";
     repo = "xcrawl3r";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-alrsEJZ7lyf7emYfJArn4VOnmLQFbWxL2eslEw+v4rY=";
   };
 
@@ -25,9 +25,9 @@ buildGoModule rec {
   meta = {
     description = "CLI utility to recursively crawl webpages";
     homepage = "https://github.com/hueristiq/xcrawl3r";
-    changelog = "https://github.com/hueristiq/xcrawl3r/releases/tag/${version}";
+    changelog = "https://github.com/hueristiq/xcrawl3r/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "xcrawl3r";
   };
-}
+})

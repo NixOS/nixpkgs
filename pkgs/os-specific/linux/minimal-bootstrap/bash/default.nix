@@ -20,11 +20,11 @@
 let
   inherit (import ./common.nix { inherit lib; }) meta;
   pname = "bash";
-  version = "5.2.37";
+  version = "5.3";
 
   src = fetchurl {
     url = "mirror://gnu/bash/bash-${version}.tar.gz";
-    hash = "sha256-lZmyLs0dV4etfTt78MWfMSszltHigRdd0fikAU2mIf8=";
+    hash = "sha256-DVzYaWX4aaJs9k9Lcb57lvkKO6iz104n6OnZ1VUPMbo=";
   };
 
   patches = [
@@ -50,6 +50,17 @@ bootBash.runCommand "${pname}-${version}"
     ];
 
     passthru.runCommand =
+      let
+        defaultBuildInputs = [
+          bash
+          coreutils
+        ];
+        defaultBinPath = lib.makeBinPath defaultBuildInputs;
+        removedAttributeNames = [
+          "nativeBuildInputs"
+          "passthru"
+        ];
+      in
       name: env: buildCommand:
       derivationWithMeta (
         {
@@ -76,15 +87,16 @@ bootBash.runCommand "${pname}-${version}"
           passAsFile = [ "buildCommand" ];
 
           SHELL = "${bash}/bin/bash";
-          PATH = lib.makeBinPath (
-            (env.nativeBuildInputs or [ ])
-            ++ [
-              bash
-              coreutils
-            ]
-          );
+          PATH =
+            if !env ? nativeBuildInputs then
+              defaultBinPath
+            else
+              lib.makeBinPath (env.nativeBuildInputs ++ defaultBuildInputs);
+          passthru = (env.passthru or { }) // {
+            isFromMinBootstrap = true;
+          };
         }
-        // (removeAttrs env [ "nativeBuildInputs" ])
+        // (removeAttrs env removedAttributeNames)
       );
     passthru.tests.get-version =
       result:
@@ -109,6 +121,7 @@ bootBash.runCommand "${pname}-${version}"
       --prefix=$out \
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
+      --disable-dependency-tracking \
       --without-bash-malloc
 
     # Build

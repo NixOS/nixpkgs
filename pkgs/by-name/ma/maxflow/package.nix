@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "maxflow";
   version = "3.0.5";
 
   src = fetchFromGitHub {
     owner = "gerddie";
     repo = "maxflow";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-a84SxGMnfBEaoMEeeIFffTOtErSN5yzZBrAUDjkalGY=";
   };
 
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.tadfisher ];
   };
-}
+})

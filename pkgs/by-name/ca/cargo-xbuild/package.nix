@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-xbuild";
   version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "rust-osdev";
     repo = "cargo-xbuild";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-29rCjmzxxIjR5nBN2J3xxP+r8NnPIJV90FkSQQEBbo4=";
   };
 
@@ -29,4 +29,4 @@ rustPlatform.buildRustPackage rec {
       xrelkd
     ];
   };
-}
+})

@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ginko";
   version = "0.0.8";
 
   src = fetchFromGitHub {
     owner = "Schottkyc137";
     repo = "ginko";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-lk+iZclni6jAkvN5/62YobFBAdwTUOfd5v7Fs8M6MQo=";
   };
 
@@ -22,6 +22,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.fredeb ];
     license = lib.licenses.mit;
     homepage = "https://github.com/Schottkyc137/ginko";
-    changelog = "https://github.com/Schottkyc137/ginko/releases/tag/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Schottkyc137/ginko/releases/tag/v${finalAttrs.version}/CHANGELOG.md";
   };
-}
+})

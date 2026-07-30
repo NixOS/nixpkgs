@@ -14,24 +14,33 @@
   libkrb5,
   libmongocrypt,
   libpq,
+  sqlite,
+  dart-sass,
   makeWrapper,
 }:
+let
+  python = python3.withPackages (
+    ps: with ps; [
+      websockets
+    ]
+  );
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "2.3.0";
+  version = "2.31.4";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     tag = "n8n@${finalAttrs.version}";
-    hash = "sha256-6VfoT8Rw2c46ugSpW1IHJPSHTWnphNn0MG1XDhrPeBg=";
+    hash = "sha256-lmkCT1o5LSC1ORd+Jozr9hkJu2znMpFO97jTWYOnga0=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
-    fetcherVersion = 3;
-    hash = "sha256-wSKxoxWys3gf++yTDr/XBadW9bq/w/NKPGUZpbAPe+I=";
+    fetcherVersion = 4;
+    hash = "sha256-ejJ0ihsLdIXbNllDtoi7Yd1u4x61Czxm6d8zJ9Fj7p8=";
   };
 
   nativeBuildInputs = [
@@ -40,8 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
     python3 # required to build sqlite3 bindings
     node-gyp # required to build sqlite3 bindings
     makeWrapper
+    dart-sass
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
     xcbuild
   ];
@@ -51,13 +61,18 @@ stdenv.mkDerivation (finalAttrs: {
     libkrb5
     libmongocrypt
     libpq
+    sqlite
   ];
 
   buildPhase = ''
     runHook preBuild
 
-    pushd node_modules/sqlite3
-    node-gyp rebuild
+    # Force sass-embedded npm package to use our dart-sass instead of bundled binaries
+    substituteInPlace packages/frontend/editor-ui/node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+      --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
+
+    pushd packages/cli/node_modules/sqlite3
+    npm_config_sqlite=${lib.getDev sqlite} node-gyp rebuild
     popd
 
     # TODO: use deploy after resolved https://github.com/pnpm/pnpm/issues/5315
@@ -87,10 +102,21 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/{bin,lib/n8n}
-    mv {packages,node_modules} $out/lib/n8n
+    cp -r {packages,node_modules} $out/lib/n8n
 
     makeWrapper $out/lib/n8n/packages/cli/bin/n8n $out/bin/n8n \
       --set N8N_RELEASE_TYPE "stable"
+
+    # JavaScript runner
+    makeWrapper ${nodejs}/bin/node $out/bin/n8n-task-runner \
+      --add-flags "$out/lib/n8n/packages/@n8n/task-runner/dist/start.js"
+
+    # Python runner
+    mkdir -p $out/lib/n8n-task-runner-python
+    cp -r packages/@n8n/task-runner-python/* $out/lib/n8n-task-runner-python/
+    makeWrapper ${python}/bin/python $out/bin/n8n-task-runner-python \
+      --add-flags "$out/lib/n8n-task-runner-python/src/main.py" \
+      --prefix PYTHONPATH : "$out/lib/n8n-task-runner-python"
 
     runHook postInstall
   '';
@@ -117,6 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
       gepbird
       AdrienLemaire
       sweenu
+      wrbbz
     ];
     license = lib.licenses.sustainableUse;
     mainProgram = "n8n";

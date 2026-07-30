@@ -6,14 +6,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmysofa";
   version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "hoene";
     repo = "libmysofa";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jvib1hGPJEY2w/KjlD7iTtRy1s8LFG+Qhb2d6xdpUyc=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

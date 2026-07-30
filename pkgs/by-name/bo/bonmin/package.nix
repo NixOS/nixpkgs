@@ -21,14 +21,14 @@
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bonmin";
   version = "1.8.9";
 
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = "Bonmin";
-    rev = "releases/${version}";
+    rev = "releases/${finalAttrs.version}";
     sha256 = "sha256-nqjAQ1NdNJ/T4p8YljEWRt/uy2aDwyBeAsag0TmRc5Q=";
   };
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   # Fix doc install. Should not be necessary after next release
   # ref https://github.com/coin-or/Bonmin/commit/4f665bc9e489a73cb867472be9aea518976ecd28
-  sourceRoot = "${src.name}/Bonmin";
+  sourceRoot = "${finalAttrs.src.name}/Bonmin";
 
   # Fontconfig error: Cannot load default config file: No such file: (null)
   env.FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
@@ -88,4 +88,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ aanderse ];
   };
-}
+})

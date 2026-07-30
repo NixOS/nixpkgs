@@ -59,7 +59,7 @@ maven.buildMavenPackage rec {
     install -Dm644 sportstracker/target/sportstracker-*.jar $out/share/sportstracker/sportstracker.jar
     install -Dm644 sportstracker/target/lib/*.jar -t $out/share/sportstracker/lib
     install -Dm644 sportstracker/docs/* -t $out/share/doc/sportstracker
-    install -Dm644 st-packager/icons/linux/SportsTracker.png -t $out/share/pixmaps
+    install -Dm644 st-packager/icons/linux/SportsTracker.png -t $out/share/icons/hicolor/128x128/apps
 
     runHook postInstall
   '';

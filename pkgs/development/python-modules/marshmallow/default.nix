@@ -3,14 +3,9 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   flit-core,
-
-  # dependencies
-  backports-datetime-fromisoformat,
-  typing-extensions,
 
   # tests
   pytestCheckHook,
@@ -19,22 +14,17 @@
 
 buildPythonPackage rec {
   pname = "marshmallow";
-  version = "4.1.2";
+  version = "4.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "marshmallow-code";
     repo = "marshmallow";
     tag = version;
-    hash = "sha256-qEjq1tEWoYqlN7L/cECnpFGPinSdZXexJHZfXreLAZc=";
+    hash = "sha256-KNxR8AiEJ9S15G5l3rB48BvLdgB5s6q6L1I83V7iMv0=";
   };
 
   build-system = [ flit-core ];
-
-  dependencies = lib.optionals (pythonOlder "3.11") [
-    backports-datetime-fromisoformat
-    typing-extensions
-  ];
 
   nativeCheckInputs = [
     pytestCheckHook

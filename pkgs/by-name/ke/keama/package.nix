@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "keama";
   version = "4.4.3-P1";
 
   src = fetchurl {
-    url = "https://ftp.isc.org/isc/dhcp/${version}/dhcp-${version}.tar.gz";
+    url = "https://ftp.isc.org/isc/dhcp/${finalAttrs.version}/dhcp-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-CsQWu1WZfKhjIXT9EHN/1hzbjbonUhYKM1d1vCHcc8c=";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ blitz ];
     mainProgram = "keama";
   };
-}
+})

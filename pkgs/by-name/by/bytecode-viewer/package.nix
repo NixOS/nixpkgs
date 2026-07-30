@@ -73,13 +73,12 @@ maven.buildMavenPackage rec {
     mainProgram = "bytecode-viewer";
     maintainers = with lib.maintainers; [
       shard7
-      d3vil0p3r
     ];
     platforms = lib.platforms.unix;
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # deps
     ];
-    license = with lib.licenses; [ gpl3Only ];
+    license = lib.licenses.gpl3Only;
   };
 }

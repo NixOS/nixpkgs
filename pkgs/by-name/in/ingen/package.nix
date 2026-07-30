@@ -61,7 +61,7 @@ stdenv.mkDerivation {
   ];
 
   postInstall = ''
-    wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/bin" "$out ''${pythonPath[*]}"
     wrapProgram "$out/bin/ingen" --set INGEN_UI_PATH "$out/share/ingen/ingen_gui.ui"
   '';
 

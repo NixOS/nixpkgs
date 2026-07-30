@@ -55,7 +55,15 @@ buildPythonPackage rec {
     syrupy
   ];
 
+  disabledTests = [
+    # url encoding mismatch, probably yarl bump
+    "test_streams_add_list"
+    "test_streams_add_str"
+  ];
+
   pythonImportsCheck = [ "go2rtc_client" ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Module for interacting with go2rtc";

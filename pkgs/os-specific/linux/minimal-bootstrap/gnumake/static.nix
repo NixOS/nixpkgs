@@ -5,7 +5,6 @@
   fetchurl,
   bash,
   gcc,
-  musl,
   binutils,
   gnumake,
   gnupatch,
@@ -42,7 +41,6 @@ bash.runCommand "${pname}-${version}"
 
     nativeBuildInputs = [
       gcc
-      musl
       binutils
       gnumake
       gnupatch
@@ -71,16 +69,23 @@ bash.runCommand "${pname}-${version}"
     ${lib.concatMapStringsSep "\n" (f: "patch -Np1 -i ${f}") patches}
 
     # Configure
+    #
+    # Use std=gnu17 to avoid issue GCC 15.3.0 incompatibility.
+    # There is no newer release of gnumake available right now.
     bash ./configure \
       --prefix=$out \
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
-      CC=musl-gcc \
-      CFLAGS=-static
+      --disable-dependency-tracking \
+      --disable-nls \
+      CFLAGS="-std=gnu17"
 
     # Build
     make -j $NIX_BUILD_CORES
 
     # Install
-    make -j $NIX_BUILD_CORES install
+    make -j $NIX_BUILD_CORES install-strip
+
+    # Remove files not needed to execute make in the bootstrap chain.
+    rm -rf $out/include $out/share
   ''

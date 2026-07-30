@@ -2,27 +2,21 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "b612";
   version = "1.008";
 
   src = fetchFromGitHub {
     owner = "polarsys";
     repo = "b612";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-uyBC8UNOwztCHXhR9XZuWDwrty0eClbo0E+gI1PmjEg=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/fonts/truetype
-    mv fonts/ttf/*.ttf $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     homepage = "https://b612-font.com/";
@@ -49,4 +43,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ sternenseemann ];
     platforms = lib.platforms.all;
   };
-}
+})

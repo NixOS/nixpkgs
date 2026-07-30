@@ -16,12 +16,12 @@ let
     }
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "autopsy";
   version = "4.22.1";
 
   src = fetchzip {
-    url = "https://github.com/sleuthkit/autopsy/releases/download/autopsy-${version}/autopsy-${version}_v2.zip";
+    url = "https://github.com/sleuthkit/autopsy/releases/download/autopsy-${finalAttrs.version}/autopsy-${finalAttrs.version}_v2.zip";
     hash = "sha256-IHpUzwSXoghjixsPwpj3lMwHIby3+zx7BjzGRlAVcVs=";
   };
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Graphical interface to The Sleuth Kit and other open source digital forensics tools";
     homepage = "https://www.sleuthkit.org/autopsy";
-    changelog = "https://github.com/sleuthkit/autopsy/releases/tag/autopsy-${version}";
+    changelog = "https://github.com/sleuthkit/autopsy/releases/tag/autopsy-${finalAttrs.version}";
     # Autopsy brings a lot of vendored dependencies
     license = with lib.licenses; [
       asl20
@@ -85,4 +85,4 @@ stdenv.mkDerivation rec {
     # Autopsy theoretically also supports darwin
     platforms = lib.platforms.x86_64;
   };
-}
+})

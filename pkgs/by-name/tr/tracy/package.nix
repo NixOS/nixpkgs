@@ -2,7 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchFromGitLab,
+  fetchurl,
+  callPackage,
 
+  coreutils,
   cmake,
   ninja,
   pkg-config,
@@ -22,109 +26,54 @@
   libxkbcommon,
   wayland,
   wayland-protocols,
+  libffi,
+
+  md4c,
+  pugixml,
+  curl,
+  zstd,
+  nlohmann_json,
+  nativefiledialog-extended,
+  html-tidy,
 }:
 
-assert withGtkFileSelector -> stdenv.hostPlatform.isLinux;
+(import ./package-versions.nix {
+  inherit
+    lib
+    stdenv
+    fetchFromGitHub
+    fetchFromGitLab
+    fetchurl
+    callPackage
 
-stdenv.mkDerivation rec {
-  pname = if withWayland then "tracy-wayland" else "tracy-glfw";
-  version = "0.11.1";
-
-  src = fetchFromGitHub {
-    owner = "wolfpld";
-    repo = "tracy";
-    rev = "v${version}";
-    hash = "sha256-HofqYJT1srDJ6Y1f18h7xtAbI/Gvvz0t9f0wBNnOZK8=";
-  };
-
-  patches = lib.optional (
-    stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11"
-  ) ./dont-use-the-uniformtypeidentifiers-framework.patch;
-
-  nativeBuildInputs = [
+    coreutils
     cmake
     ninja
     pkg-config
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ wayland-scanner ]
-  ++ lib.optionals stdenv.cc.isClang [ stdenv.cc.cc.libllvm ];
+    wayland-scanner
 
-  buildInputs = [
     capstone
+    dbus
     freetype
+    glfw
     onetbb
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && withGtkFileSelector) [ gtk3 ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && !withGtkFileSelector) [ dbus ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && withWayland) [
+
+    withGtkFileSelector
+    gtk3
+
+    withWayland
     libglvnd
     libxkbcommon
     wayland
     wayland-protocols
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.isLinux && !withWayland)) [
-    glfw
-  ];
+    libffi
 
-  cmakeFlags = [
-    "-DDOWNLOAD_CAPSTONE=off"
-    "-DTRACY_STATIC=off"
-  ]
-  ++ lib.optional (stdenv.hostPlatform.isLinux && withGtkFileSelector) "-DGTK_FILESELECTOR=ON"
-  ++ lib.optional (stdenv.hostPlatform.isLinux && !withWayland) "-DLEGACY=on";
-
-  env.NIX_CFLAGS_COMPILE = toString (
-    [ ]
-    ++ lib.optional stdenv.hostPlatform.isLinux "-ltbb"
-    # Workaround for https://github.com/NixOS/nixpkgs/issues/19098
-    ++ lib.optional (stdenv.cc.isClang && stdenv.hostPlatform.isDarwin) "-fno-lto"
-  );
-
-  dontUseCmakeBuildDir = true;
-
-  postConfigure = ''
-    cmake -B capture/build -S capture $cmakeFlags
-    cmake -B csvexport/build -S csvexport $cmakeFlags
-    cmake -B import/build -S import $cmakeFlags
-    cmake -B profiler/build -S profiler $cmakeFlags
-    cmake -B update/build -S update $cmakeFlags
-  '';
-
-  postBuild = ''
-    ninja -C capture/build
-    ninja -C csvexport/build
-    ninja -C import/build
-    ninja -C profiler/build
-    ninja -C update/build
-  '';
-
-  postInstall = ''
-    install -D -m 0555 capture/build/tracy-capture -t $out/bin
-    install -D -m 0555 csvexport/build/tracy-csvexport $out/bin
-    install -D -m 0555 import/build/{tracy-import-chrome,tracy-import-fuchsia} -t $out/bin
-    install -D -m 0555 profiler/build/tracy-profiler $out/bin/tracy
-    install -D -m 0555 update/build/tracy-update -t $out/bin
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace extra/desktop/tracy.desktop \
-      --replace-fail Exec=/usr/bin/tracy Exec=tracy
-
-    install -D -m 0444 extra/desktop/application-tracy.xml $out/share/mime/packages/application-tracy.xml
-    install -D -m 0444 extra/desktop/tracy.desktop $out/share/applications/tracy.desktop
-    install -D -m 0444 icon/application-tracy.svg $out/share/icons/hicolor/scalable/apps/application-tracy.svg
-    install -D -m 0444 icon/icon.png $out/share/icons/hicolor/256x256/apps/tracy.png
-    install -D -m 0444 icon/icon.svg $out/share/icons/hicolor/scalable/apps/tracy.svg
-  '';
-
-  meta = {
-    description = "Real time, nanosecond resolution, remote telemetry frame profiler for games and other applications";
-    homepage = "https://github.com/wolfpld/tracy";
-    license = lib.licenses.bsd3;
-    mainProgram = "tracy";
-    maintainers = with lib.maintainers; [
-      mpickering
-      nagisa
-    ];
-    platforms = lib.platforms.linux ++ lib.optionals (!withWayland) lib.platforms.darwin;
-  };
-}
+    md4c
+    pugixml
+    curl
+    zstd
+    nlohmann_json
+    nativefiledialog-extended
+    html-tidy
+    ;
+}).tracy_latest

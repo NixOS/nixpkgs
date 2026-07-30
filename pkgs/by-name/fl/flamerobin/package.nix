@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  wxGTK32,
+  wxwidgets_3_2,
   boost,
   firebird,
 }:
@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "mariuz";
     repo = "flamerobin";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-IwJEFF3vP0BC9PoMoY+XPLT+ygXnFXP/TWaqjdQWs8s=";
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    wxGTK32
+    wxwidgets_3_2
     boost
     firebird
   ];

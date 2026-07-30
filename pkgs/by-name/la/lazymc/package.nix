@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lazymc";
   version = "0.2.11";
 
   src = fetchFromGitHub {
     owner = "timvisee";
     repo = "lazymc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-uMjM3w78qWnB/sNXRcxl30KJRm0I3BPEOr5IRU8FI0s=";
   };
 
@@ -31,4 +31,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.unix;
     mainProgram = "lazymc";
   };
-}
+})

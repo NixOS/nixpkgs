@@ -13,14 +13,14 @@
   doxygen,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libsmbios";
   version = "2.4.3";
 
   src = fetchFromGitHub {
     owner = "dell";
     repo = "libsmbios";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0krwwydyvb9224r884y1mlmzyxhlfrcqw73vi1j8787rl0gl5a2i";
   };
 
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
     ];
   };
-}
+})

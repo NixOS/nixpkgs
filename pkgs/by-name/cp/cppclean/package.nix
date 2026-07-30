@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cppclean";
   version = "0.13";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "myint";
     repo = "cppclean";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "081bw7kkl7mh3vwyrmdfrk3fgq8k5laacx7hz8fjpchrvdrkqph0";
   };
 
@@ -36,4 +36,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ nthorne ];
     platforms = lib.platforms.linux;
   };
-}
+})

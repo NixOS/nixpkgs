@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   flit-core,
@@ -13,13 +12,11 @@
   click,
   flask,
   hypercorn,
-  importlib-metadata,
   itsdangerous,
   jinja2,
   markupsafe,
   pydata-sphinx-theme,
   python-dotenv,
-  typing-extensions,
   werkzeug,
 
   # tests
@@ -33,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "quart";
-  version = "0.20.0";
+  version = "0.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "quart";
     tag = version;
-    hash = "sha256-NApev3nRBS4QDMGq8++rSmK5YgeljkaVAsdezsTbZr4=";
+    hash = "sha256-BrZtknO8Xne5r4CENF0Uz8NVc8Zc+Yu35spvPw7qZ/w=";
   };
 
   build-system = [ flit-core ];
@@ -57,10 +54,6 @@ buildPythonPackage rec {
     pydata-sphinx-theme
     python-dotenv
     werkzeug
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-    typing-extensions
   ];
 
   pythonImportsCheck = [ "quart" ];
@@ -78,7 +71,7 @@ buildPythonPackage rec {
     description = "Async Python micro framework for building web applications";
     mainProgram = "quart";
     homepage = "https://github.com/pallets/quart/";
-    changelog = "https://github.com/pallets/quart/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/pallets/quart/blob/${src.tag}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };

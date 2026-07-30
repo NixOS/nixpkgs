@@ -2,14 +2,15 @@
   lib,
   fetchFromGitLab,
   cmake,
-  extra-cmake-modules,
-  ffmpeg_6,
+  pkg-config,
+  ffmpeg_7,
   openal,
   stdenv,
-  libsForQt5,
+  qt6,
+  kdePackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "subtitlecomposer";
   version = "0.8.2";
 
@@ -17,20 +18,27 @@ stdenv.mkDerivation rec {
     domain = "invent.kde.org";
     owner = "multimedia";
     repo = "subtitlecomposer";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-zGbI960NerlOEUvhOLm+lEJdbhj8VFUfm8pkOYGRcGw=";
   };
 
+  cmakeFlags = [
+    "-DQT_MAJOR_VERSION=6"
+    "-DQT_FIND_PRIVATE_MODULES=ON"
+  ];
+
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
-    libsForQt5.wrapQtAppsHook
+    kdePackages.extra-cmake-modules
+    pkg-config
+    qt6.wrapQtAppsHook
   ];
   buildInputs = [
-    ffmpeg_6
+    ffmpeg_7
     openal
+    qt6.qt5compat
   ]
-  ++ (with libsForQt5; [
+  ++ (with kdePackages; [
     kcodecs
     kconfig
     kconfigwidgets
@@ -57,4 +65,4 @@ stdenv.mkDerivation rec {
     mainProgram = "subtitlecomposer";
     platforms = with lib.platforms; linux ++ freebsd ++ windows;
   };
-}
+})

@@ -13,20 +13,16 @@ let
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/python/pycharm-2025.3.1.tar.gz";
-      hash = "sha256-kz/ULXzCp2rUuiP5ESKU5N8BP6TDNiQ1oeM2gFHAc5E=";
+      url = "https://download.jetbrains.com/python/pycharm-2026.2.tar.gz";
+      hash = "sha256-rDb3wHQ0ZSFb+CJwebdycpRTOMSFwdprkk5WRoBGvVo=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/python/pycharm-2025.3.1-aarch64.tar.gz";
-      hash = "sha256-K29aQwEydz6nyvMEb3dj6noDHb+rbhvnK9yG88x6dYs=";
-    };
-    x86_64-darwin = {
-      url = "https://download.jetbrains.com/python/pycharm-2025.3.1.dmg";
-      hash = "sha256-WGye7WfaYJ/B5WWov8NusVWyPlSD1dxunc+LVUD0f6U=";
+      url = "https://download.jetbrains.com/python/pycharm-2026.2-aarch64.tar.gz";
+      hash = "sha256-O2PS9JDBTFQcmK/YUfIYBpo8iFzq7dm9sA5aByhc+AI=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/python/pycharm-2025.3.1-aarch64.dmg";
-      hash = "sha256-7I6XhW8A2pAgIMcrDwecwQmD3mu0Q4KS6l+qHlsMuTU=";
+      url = "https://download.jetbrains.com/python/pycharm-2026.2-aarch64.dmg";
+      hash = "sha256-wiOQISfsvBnlpjeyzAPXUJfXOwYwrZ8nGoiRRvQ4YUY=";
     };
   };
   # update-script-end: urls
@@ -40,13 +36,13 @@ in
   product = "PyCharm";
 
   # update-script-start: version
-  version = "2025.3.1";
-  buildNumber = "253.29346.142";
+  version = "2026.2";
+  buildNumber = "262.8665.309";
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     musl
   ];
 

@@ -2,7 +2,13 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
+  pythonAtLeast,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
   dacite,
   filetype,
   imagehash,
@@ -14,32 +20,36 @@
   numpy,
   pandas,
   phik,
-  pyarrow,
   pydantic,
   pyyaml,
   requests,
   scipy,
-  setuptools,
-  setuptools-scm,
   seaborn,
   statsmodels,
   tqdm,
   typeguard,
   visions,
   wordcloud,
+
+  # tests
+  pyarrow,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ydata-profiling";
-  version = "4.18.0";
+  version = "4.18.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ydataai";
     repo = "ydata-profiling";
-    tag = "v${version}";
-    hash = "sha256-fzHKIojgFlyYH27z0NwCkf0nIkoIyGj5IoKIdy82Da4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-CNeHsOpFkKvcCWGEholabcsqXJzINUUxFZ7I5bPBoYM=";
   };
+
+  # pydantic.v1.errors.ConfigError: unable to infer type for attribute "sortby"
+  disabled = pythonAtLeast "3.14";
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -48,7 +58,7 @@ buildPythonPackage rec {
   '';
 
   preBuild = ''
-    echo ${version} > VERSION
+    echo ${finalAttrs.version} > VERSION
   '';
 
   build-system = [
@@ -119,9 +129,9 @@ buildPythonPackage rec {
   meta = {
     description = "Create HTML profiling reports from Pandas DataFrames";
     homepage = "https://ydata-profiling.ydata.ai";
-    changelog = "https://github.com/ydataai/ydata-profiling/releases/tag/v${version}";
+    changelog = "https://github.com/ydataai/ydata-profiling/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
     mainProgram = "ydata_profiling";
   };
-}
+})

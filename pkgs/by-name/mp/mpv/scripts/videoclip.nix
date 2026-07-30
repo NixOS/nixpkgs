@@ -10,13 +10,13 @@
 }:
 buildLua {
   pname = "videoclip";
-  version = "0-unstable-2025-11-20";
+  version = "0.2-unstable-2026-07-07";
 
   src = fetchFromGitHub {
     owner = "Ajatt-Tools";
     repo = "videoclip";
-    rev = "1c6531b649d3ee526cc7aa360e726aeedf43beb9";
-    hash = "sha256-lBXlvFrDC1Drz5JIiI6488UoFsXz18LAxqRpQmy1G0k=";
+    rev = "979bae398da7ccd70cb2fb305c371b7af9259b10";
+    hash = "sha256-k3fxSeAjRZg4J5x5IQhKGYtUqfBE4heR1KNurGTElGs=";
   };
 
   patchPhase = ''
@@ -31,7 +31,7 @@ buildLua {
   scriptPath = ".";
   passthru.scriptName = "videoclip";
   passthru.updateScript = unstableGitUpdater {
-    hardcodeZeroVersion = true;
+    tagPrefix = "v";
   };
 
   meta = {

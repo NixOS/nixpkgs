@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "confluencepot";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "SIFalcon";
     repo = "confluencePot";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jIbL6prOUII8o9FghIYa80BytJ9SSuyj/TZmAxwAbJk=";
   };
 
@@ -39,8 +39,8 @@ buildGoModule rec {
       ConfluencePot is a simple honeypot for the Atlassian Confluence unauthenticated
       and remote OGNL injection vulnerability (CVE-2022-26134).
     '';
-    license = with lib.licenses; [ agpl3Plus ];
+    license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "confluencepot";
   };
-}
+})

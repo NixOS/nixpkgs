@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gyb";
   version = "1.95";
   pyproject = false;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "GAM-team";
     repo = "got-your-back";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WCM+8Qvu8EF5gC5BSEbkqcyITIiHELFp1RP+Oko4MRE=";
   };
 
@@ -52,4 +52,4 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "gyb";
     maintainers = with lib.maintainers; [ austinbutler ];
   };
-}
+})

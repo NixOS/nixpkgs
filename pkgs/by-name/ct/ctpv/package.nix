@@ -8,6 +8,7 @@
   atool,
   bat,
   chafa,
+  coreutils,
   delta,
   ffmpeg,
   ffmpegthumbnailer,
@@ -16,17 +17,17 @@
   imagemagick,
   jq,
   poppler-utils,
-  ueberzug,
+  ueberzugpp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ctpv";
   version = "1.1";
 
   src = fetchFromGitHub {
     owner = "NikitaIvanovV";
     repo = "ctpv";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-3BQi4m44hBmPkJBFNCg6d9YKRbDZwLxdzBb/NDWTQP4=";
   };
 
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
           atool # for archive files
           bat
           chafa # for image files on Wayland
+          coreutils
           delta # for diff files
           ffmpeg
           ffmpegthumbnailer
@@ -54,7 +56,7 @@ stdenv.mkDerivation rec {
           imagemagick
           jq # for json files
           poppler-utils # for pdf files
-          ueberzug # for image files on X11
+          ueberzugpp # for image files on X11
         ]
       }";
   '';
@@ -69,4 +71,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.wesleyjrz ];
   };
-}
+})

@@ -8,7 +8,7 @@
 
   meta.maintainers = with lib.maintainers; [ ethancedwards8 ];
 
-  nodes.machine = {
+  containers.machine = {
     environment.systemPackages = with pkgs; [ slipshow ];
 
     environment.etc."slipshow".source = pkgs.fetchFromGitHub {

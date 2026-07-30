@@ -13,14 +13,20 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "peacock";
-  version = "8.3.0";
+  version = "8.8.1";
 
   src = fetchFromGitHub {
     owner = "thepeacockproject";
     repo = "Peacock";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AegJ5h2sxs8iheBLbIBwZXjjZLk5GdcDVLbF4ldcmZ0=";
+    hash = "sha256-OeROaz2Uvg3nsB0R9Ojo65a+zhnw/QmYaagcBrnIdIk=";
   };
+
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/thepeacockproject/Peacock/blob/master/package.json#L109
+    ./yarn-4.14-support.patch
+  ];
 
   nativeBuildInputs = [
     nodejs
@@ -75,8 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes;
-    hash = "sha256-sB0oag0sheimho8pn25HSc8GMeuS1RTmHLZUPiSSDqE=";
+    inherit (finalAttrs) src missingHashes patches;
+    hash = "sha256-9u/w/zy4f51uPFfkzf0fDZlsj8GFXAfw7RGR9owo5n8=";
   };
 
   meta = {

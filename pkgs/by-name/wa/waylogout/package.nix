@@ -45,7 +45,7 @@ stdenv.mkDerivation {
     description = "Graphical logout/suspend/reboot/shutdown dialog for wayland";
     homepage = "https://github.com/loserMcloser/waylogout";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "waylogout";
   };

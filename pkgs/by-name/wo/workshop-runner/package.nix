@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "workshop-runner";
   version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "mainmatter";
     repo = "rust-workshop-runner";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-vaCMnytN3GidEzn3r0zDyD2uBTLaLSnaho/j1Ti3yHE=";
   };
 
@@ -28,4 +28,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ RaghavSood ];
     mainProgram = "wr";
   };
-}
+})

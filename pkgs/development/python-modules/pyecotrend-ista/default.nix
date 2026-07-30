@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   dataclasses-json,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "pyecotrend-ista";
   version = "3.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Ludy87";
@@ -46,6 +43,10 @@ buildPythonPackage rec {
     pytest-xdist
     requests-mock
     syrupy
+  ];
+
+  pytestFlags = [
+    "--snapshot-warn-unused"
   ];
 
   pythonImportsCheck = [ "pyecotrend_ista" ];

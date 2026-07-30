@@ -2,12 +2,15 @@
   lib,
   stdenv,
   altair,
+  anyio,
   blinker,
   buildPythonPackage,
   cachetools,
   click,
   fetchPypi,
   gitpython,
+  httptools,
+  itsdangerous,
   numpy,
   packaging,
   pandas,
@@ -15,51 +18,63 @@
   protobuf,
   pyarrow,
   pydeck,
-  setuptools,
+  python-multipart,
   requests,
   rich,
+  setuptools,
+  starlette,
   tenacity,
   toml,
   tornado,
   typing-extensions,
+  uvicorn,
   watchdog,
+  websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "streamlit";
-  version = "1.52.2";
+  version = "1.60.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ZKTdqLxc3Te/1JDpO7U9o1qu+Ub8/Cg6eYDazfFlEIs=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-CfL90qq707NWCVN5VoHdZ11UeayCwh/C3Ora+b1ITqM=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  pythonRelaxDeps = [ "packaging" ];
+  pythonRelaxDeps = [
+    "packaging"
+    "protobuf"
+  ];
 
   dependencies = [
     altair
+    anyio
     blinker
     cachetools
     click
+    gitpython
+    httptools
+    itsdangerous
     numpy
     packaging
     pandas
     pillow
     protobuf
     pyarrow
+    pydeck
+    python-multipart
     requests
     rich
+    starlette
     tenacity
     toml
-    typing-extensions
-    gitpython
-    pydeck
     tornado
+    typing-extensions
+    uvicorn
+    websockets
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ watchdog ];
 
@@ -68,13 +83,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "streamlit" ];
 
-  postInstall = ''
-    rm $out/bin/streamlit.cmd # remove windows helper
-  '';
-
   meta = {
     homepage = "https://streamlit.io/";
-    changelog = "https://github.com/streamlit/streamlit/releases/tag/${version}";
+    changelog = "https://github.com/streamlit/streamlit/releases/tag/${finalAttrs.version}";
     description = "Fastest way to build custom ML tools";
     mainProgram = "streamlit";
     maintainers = with lib.maintainers; [
@@ -83,4 +94,4 @@ buildPythonPackage rec {
     ];
     license = lib.licenses.asl20;
   };
-}
+})

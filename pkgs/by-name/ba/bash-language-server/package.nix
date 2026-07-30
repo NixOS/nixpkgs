@@ -5,7 +5,7 @@
   pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
-  nodejs,
+  nodejs-slim,
   makeBinaryWrapper,
   shellcheck,
   versionCheckHook,
@@ -35,7 +35,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    nodejs
+    nodejs-slim
     pnpmConfigHook
     pnpm_10
     makeBinaryWrapper
@@ -69,7 +69,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -r {node_modules,server} $out/lib/bash-language-server/
 
     # Create the executable, based upon what happens in npmHooks.npmInstallHook
-    makeWrapper ${lib.getExe nodejs} $out/bin/bash-language-server \
+    makeWrapper ${lib.getExe nodejs-slim} $out/bin/bash-language-server \
       --suffix PATH : ${lib.makeBinPath [ shellcheck ]} \
       --inherit-argv0 \
       --add-flags $out/lib/bash-language-server/server/out/cli.js

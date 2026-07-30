@@ -20,7 +20,7 @@
       ];
       test-support.displayManager.auto.user = user.name;
       environment = {
-        variables.DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/user/${builtins.toString user.uid}/bus";
+        variables.DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/user/${toString user.uid}/bus";
       };
     };
   nodes.pam =

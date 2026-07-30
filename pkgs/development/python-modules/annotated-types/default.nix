@@ -3,9 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
-  typing-extensions,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -21,8 +19,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ hatchling ];
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.9") [ typing-extensions ];
 
   pythonImportsCheck = [ "annotated_types" ];
 

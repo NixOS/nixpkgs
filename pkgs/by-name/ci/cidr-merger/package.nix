@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cidr-merger";
   version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "zhanhb";
     repo = "cidr-merger";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Kb+89VP7JhBrTE4MM3H/dqoIBgDLnVhKqkgHdymYCgk=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cyounkins ];
   };
-}
+})

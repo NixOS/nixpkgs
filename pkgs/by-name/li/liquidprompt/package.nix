@@ -5,14 +5,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liquidprompt";
   version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "liquidprompt";
     repo = "liquidprompt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ZVzFGe3ItWsN23iyGpxZEN2KtviYKI8x/sDa2MRio/Y=";
   };
 
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ gerschtli ];
   };
-}
+})

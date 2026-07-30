@@ -10,16 +10,16 @@
   liblo,
   lv2,
   qt6,
-  xorg,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "drumkv1";
-  version = "1.3.2";
+  version = "1.4.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/drumkv1/drumkv1-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Z9F9lbLSAJRlVh7tnSMNTlK7FiZhhlVfeHPlbbVuWXk=";
+    hash = "sha256-jTOTOziCrycFyMe6wIfUnw7d6p+gNZfO7Q9BcZOyOME=";
   };
 
   buildInputs = [
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsndfile
     liblo
     lv2
-    xorg.libX11
+    libx11
     qt6.qtbase
     qt6.qtwayland
     qt6.qtsvg

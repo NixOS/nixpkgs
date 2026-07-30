@@ -24,6 +24,7 @@ pkgs.releaseTools.sourceTarball {
     jq
     lib-tests
     brotli
+    zstd
   ];
 
   configurePhase = ''
@@ -63,10 +64,30 @@ pkgs.releaseTools.sourceTarball {
   #   Some context: https://github.com/NixOS/infra/issues/438
   distPhase = ''
     mkdir -p $out/tarballs
+
+    # The compression tasks are shortlived; use all available CPUs (-T0) to
+    # prioritize fast channel advancement.
     XZ_OPT="-T0" tar \
       --create \
       --xz \
       --file=$out/tarballs/$releaseName.tar.xz \
+      --absolute-names \
+      --transform="s|^$src|$releaseName|g" \
+      --transform="s|^$(pwd)|$releaseName|g" \
+      --owner=0 \
+      --group=0 \
+      --numeric-owner \
+      --format=gnu \
+      --sort=name \
+      --mtime="@$SOURCE_DATE_EPOCH" \
+      --mode=ug+w \
+      --hard-dereference \
+      $src $(pwd)/{.version-suffix,.git-revision}
+
+    tar \
+      --create \
+      --use-compress-program="zstd -19 -T0" \
+      --file=$out/tarballs/$releaseName.tar.zst \
       --absolute-names \
       --transform="s|^$src|$releaseName|g" \
       --transform="s|^$(pwd)|$releaseName|g" \

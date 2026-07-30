@@ -43,12 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libuuid
-    gperftools
     uhdm
     capnproto
     antlr4.runtime.cpp
     nlohmann_json
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ gperftools ];
 
   cmakeFlags = [
     "-DSURELOG_USE_HOST_CAPNP=On"
@@ -57,7 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSURELOG_USE_HOST_ANTLR=On"
     "-DSURELOG_USE_HOST_JSON=On"
     "-DANTLR_JAR_LOCATION=${antlr4.jarLocation}"
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DSURELOG_WITH_TCMALLOC=Off" ];
 
   doCheck = true;
   checkPhase = ''

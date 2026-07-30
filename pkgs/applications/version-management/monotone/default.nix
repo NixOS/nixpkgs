@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
       {} +
   '';
 
-  CXXFLAGS = " --std=c++11 ";
+  env.CXXFLAGS = " --std=c++11 ";
 
   nativeBuildInputs = [
     pkg-config
@@ -109,6 +109,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Free distributed version control system";
+    homepage = "https://github.com/7c6f434c/monotone-mirror";
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;

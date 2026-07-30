@@ -7,14 +7,14 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "timewarrior";
   version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "timewarrior";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wwuyXcLCrNvpDIQvoBt/OQlwoTMhPzGZ+WrZdTo6IPo=";
     fetchSubmodules = true;
   };
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     mainProgram = "timew";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

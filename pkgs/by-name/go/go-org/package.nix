@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-org";
   version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "niklasfasching";
     repo = "go-org";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-BPCQxl0aJ9PrEC5o5dc5uBbX8eYAxqB+qMLXo1LwCoA=";
   };
 
@@ -28,4 +28,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ bhankas ];
     mainProgram = "go-org";
   };
-}
+})

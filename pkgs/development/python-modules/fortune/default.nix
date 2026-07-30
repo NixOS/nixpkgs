@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitea,
+  fetchFromCodeberg,
   setuptools,
 }:
 let
@@ -12,8 +12,7 @@ buildPythonPackage {
   inherit version;
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "jamesansley";
     repo = "fortune";
     tag = "v${version}";
@@ -27,6 +26,6 @@ buildPythonPackage {
     mainProgram = "fortune";
     homepage = "https://codeberg.org/jamesansley/fortune";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ arthsmn ];
+    maintainers = [ ];
   };
 }

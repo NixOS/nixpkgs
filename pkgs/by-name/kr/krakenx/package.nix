@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "krakenx";
   version = "0.0.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "1khw1rxra5hn7hwp16i6kgj89znq8vjsyly3r2dxx2z2bddil000";
   };
 
@@ -29,4 +29,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

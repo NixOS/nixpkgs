@@ -14,15 +14,15 @@
   gtksourceview5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "folio";
-  version = "25.02";
+  version = "26.01";
 
   src = fetchFromGitHub {
     owner = "toolstack";
     repo = "Folio";
-    tag = version;
-    hash = "sha256-u7HieTsbSohCjpLNyeY/ZZdmpQWulZaCkxOV5a5QyBY=";
+    tag = finalAttrs.version;
+    hash = "sha256-ctBLTGJ0cixqHHOrHmkN1+NyuVr6dcNNtVmquGgMdWE=";
   };
 
   nativeBuildInputs = [
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "shfm";
   version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "dylanaraps";
     repo = "shfm";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ilVrUFfyzOZgjbBTqlHA9hLaTHw1xHFo1Y/tjXygNEs=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "shfm";
   };
-}
+})

@@ -40,6 +40,20 @@
   /**
     Wrap treefmt, configured using structured settings.
 
+    # Check
+
+    The resulting package has a `check` attribute of type `Path -> Derivation`.
+    The derivation returned will only build if the path supplied is already formatted correctly.
+
+    ```
+    { pkgs }:
+    let
+      myTreefmt = pkgs.treefmt.withConfig ./treefmt-config.nix;
+      project = ../.;
+    in
+    myTreefmt.check project
+    ```
+
     # Type
 
     ```

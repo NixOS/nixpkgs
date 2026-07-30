@@ -6,14 +6,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nftrace";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "aojea";
     repo = "nftrace";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-MTLl3XLDIjcK5GymW7D3B8+/A6W+kQ4cz5bbrfo6fQc=";
   };
 
@@ -31,9 +31,9 @@ buildGoModule rec {
   meta = {
     description = "Commodity tool to use nftables trace functionality";
     homepage = "https://github.com/aojea/nftrace";
-    changelog = "https://github.com/aojea/nftrace/releases/tag/v${version}";
+    changelog = "https://github.com/aojea/nftrace/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.jmbaur ];
     mainProgram = "nftrace";
   };
-}
+})

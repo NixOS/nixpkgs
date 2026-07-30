@@ -283,7 +283,7 @@ lib.extendMkDerivation {
 
               exclude='\(/_\|examples\|Godeps\|testdata'
               if [[ -n "$excludedPackages" ]]; then
-                IFS=' ' read -r -a excludedArr <<<$excludedPackages
+                IFS=' ' read -r -a excludedArr <<<"''${excludedPackages[@]}"
                 printf -v excludedAlternates '%s\\|' "''${excludedArr[@]}"
                 excludedAlternates=''${excludedAlternates%\\|} # drop final \| added by printf
                 exclude+='\|'"$excludedAlternates"
@@ -320,10 +320,15 @@ lib.extendMkDerivation {
               }
 
               getGoDirs() {
-                local type;
-                type="$1"
-                if [ -n "$subPackages" ]; then
-                  echo "$subPackages" | sed "s,\(^\| \),\1./,g"
+                local -r type="$1"
+
+                # Support strucuredAttrs, they are not space seperated
+                local -a subPackagesArray
+                concatTo subPackagesArray subPackages
+
+                # Outputs each element prefixed with './' if the array is not empty
+                if [[ ''${#subPackagesArray[@]} -gt 0 ]]; then
+                  echo "''${subPackagesArray[*]/#/./}"
                 else
                   find . -type f -name \*$type.go -exec dirname {} \; | grep -v "/vendor/" | sort --unique | grep -v "$exclude"
                 fi

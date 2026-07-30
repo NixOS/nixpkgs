@@ -14,29 +14,27 @@ let
     {
       x86_64-linux = "linux-amd64";
       aarch64-linux = "linux-aarch64";
-      x86_64-darwin = "macos-amd64";
       aarch64-darwin = "macos-aarch64";
     }
     .${system} or (throw "Unsupported system: ${system}");
 
   packageHashes = {
-    x86_64-linux = "sha256-TWWT60H8KtZlJTRY+RnS2pP7r0eKBDzGVm890uGdtHU=";
-    aarch64-linux = "sha256-MBZ/AgUz5dg8tFj4q+alnwlHu3d6/rfYZk9B1jYnGbw=";
-    x86_64-darwin = "sha256-F2wgyyf0L2Ci5MV0VQD5CnjckudbgvQEpNbZUIkw9Gc=";
-    aarch64-darwin = "sha256-9Onvzsc2UInjgX9AeWMFNvpUv2Y4i5wUR6z3Igyrzy0=";
+    x86_64-linux = "sha256-eVI8/JNCTVVbNJPH6gfg+0guH9mXLymoO+oLp9dkvwA=";
+    aarch64-linux = "sha256-84ESEqr07JxqcxxRWrUFKmS+Uvws3RsVtC9EgXqCqdw=";
+    aarch64-darwin = "sha256-0WpDjZJhw/jB55G5IUdgvwOaYlqRCY5itk5sVjogYn4=";
   };
 
   packageHash = packageHashes.${system} or (throw "Unsupported system: ${system}");
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fermyon-spin";
-  version = "3.5.0";
+  version = "4.0.2";
 
   # Use fetchurl rather than fetchzip as these tarballs are built by the project
   # and not by GitHub (and thus are stable) - this simplifies the update script
   # by allowing it to use the output of `nix store prefetch-file`.
   src = fetchurl {
-    url = "https://github.com/spinframework/spin/releases/download/v${version}/spin-v${version}-${platform}.tar.gz";
+    url = "https://github.com/spinframework/spin/releases/download/v${finalAttrs.version}/spin-v${finalAttrs.version}-${platform}.tar.gz";
     hash = packageHash;
   };
 
@@ -69,9 +67,9 @@ stdenv.mkDerivation rec {
     description = "Framework for building, deploying, and running fast, secure, and composable cloud microservices with WebAssembly";
     homepage = "https://github.com/spinframework/spin";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     mainProgram = "spin";
     maintainers = [ ];
     platforms = builtins.attrNames packageHashes;
   };
-}
+})

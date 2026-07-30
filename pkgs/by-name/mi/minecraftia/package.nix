@@ -2,6 +2,7 @@
   lib,
   fetchzip,
   stdenvNoCC,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -14,13 +15,7 @@ stdenvNoCC.mkDerivation {
     stripRoot = false;
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -D -m444 -t $out/share/fonts/truetype $src/Minecraftia.ttf
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     homepage = "https://fontlibrary.org/en/font/minecraftia";

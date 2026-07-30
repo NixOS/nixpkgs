@@ -13,7 +13,10 @@
   libunwind,
   openssl,
   xinput,
-  xorg,
+  libxi,
+  libx11,
+  libsm,
+  libice,
 }:
 buildDotnetModule rec {
   pname = "opentracker";
@@ -52,13 +55,11 @@ buildDotnetModule rec {
     gtk3
     openssl
     xinput
-  ]
-  ++ (with xorg; [
-    libICE
-    libSM
-    libX11
-    libXi
-  ]);
+    libice
+    libsm
+    libx11
+    libxi
+  ];
 
   autoPatchelfIgnoreMissingDeps = [
     "libc.musl-x86_64.so.1"

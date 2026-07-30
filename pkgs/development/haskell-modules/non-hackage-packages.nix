@@ -41,6 +41,8 @@ self: super:
 
   ghc-settings-edit = self.callPackage ../tools/haskell/ghc-settings-edit { };
 
+  iserv-proxy = self.callPackage ../tools/haskell/iserv-proxy { };
+
   # Upstream won't upload vaultenv to Hackage:
   # https://github.com/channable/vaultenv/issues/1 krank:ignore-line
   vaultenv = self.callPackage ../tools/haskell/vaultenv { };

@@ -23,14 +23,14 @@ let
     xclip
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.0.0";
   pname = "imgur-screenshot";
 
   src = fetchFromGitHub {
     owner = "jomo";
     repo = "imgur-screenshot";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0fkhvfraijbrw806pgij41bn1hc3r7l7l3snkicmshxj83lmsd5k";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "imgur-screenshot";
   };
-}
+})

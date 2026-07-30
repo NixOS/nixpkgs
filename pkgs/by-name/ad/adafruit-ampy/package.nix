@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "adafruit-ampy";
   version = "1.1.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "f4cba36f564096f2aafd173f7fbabb845365cc3bb3f41c37541edf98b58d3976";
   };
 
@@ -34,4 +34,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = [ ];
     mainProgram = "ampy";
   };
-}
+})

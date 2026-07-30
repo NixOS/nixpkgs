@@ -6,14 +6,14 @@
   rpm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "epm";
   version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "jimjag";
     repo = "epm";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-o4B5lWBeve+U70FDgF1DrtNrXxaEY4etkPpwbqF7fmc=";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ pSub ];
     platforms = lib.platforms.unix;
   };
-}
+})

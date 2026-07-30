@@ -6,14 +6,14 @@
   libusb1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libuldaq";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "mccdaq";
     repo = "uldaq";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-DA1mxu94z5xDpGK9OBwD02HXlOATv/slqZ4lz5GM7QM=";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.simonkampe ];
   };
-}
+})

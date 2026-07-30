@@ -7,14 +7,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libucontext";
   version = "1.5";
 
   src = fetchFromGitHub {
     owner = "kaniini";
     repo = "libucontext";
-    rev = "libucontext-${version}";
+    rev = "libucontext-${finalAttrs.version}";
     hash = "sha256-asT0pV3s4L4zB2qtDJ+2XYxEP6agIEo1LtCuFeOjpRA=";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.lix ];
   };
-}
+})

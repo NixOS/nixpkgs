@@ -29,6 +29,6 @@ buildGoModule {
     description = "Self-hosted file/code/media sharing website";
     homepage = "https://put.icu";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ urandom ];
+    maintainers = [ ];
   };
 }

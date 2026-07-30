@@ -1,7 +1,7 @@
 {
   buildDunePackage,
   ocsipersist,
-  lwt_log,
+  logs,
   ocaml_sqlite3,
   ocsigen_server,
 }:
@@ -11,7 +11,7 @@ buildDunePackage {
   inherit (ocsipersist) version src;
 
   propagatedBuildInputs = [
-    lwt_log
+    logs
     ocaml_sqlite3
     ocsipersist
   ];

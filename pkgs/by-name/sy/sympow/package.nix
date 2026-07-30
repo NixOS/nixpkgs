@@ -10,7 +10,7 @@
   pari,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.023.7";
   pname = "sympow";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     group = "rezozer";
     owner = "forks";
     repo = "sympow";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-sex8gRiBdTcVMV3nSeiTYamAjPoXQdiiZwjRmeKA+mc=";
   };
 
@@ -72,6 +72,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Compute special values of symmetric power elliptic curve L-functions";
+    homepage = "https://gitlab.com/rezozer/forks/sympow";
     mainProgram = "sympow";
     license = {
       shortName = "sympow";
@@ -81,4 +82,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.unix;
   };
-}
+})

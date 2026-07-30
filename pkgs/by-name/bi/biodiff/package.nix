@@ -5,14 +5,14 @@
   wfa2-lib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "biodiff";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "8051Enthusiast";
     repo = "biodiff";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZLxjOV08sC5dKICvRUyL6FLMORkxwdLgNq7L45CDwa4=";
     fetchSubmodules = true;
   };
@@ -28,8 +28,8 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Hex diff viewer using alignment algorithms from biology";
     homepage = "https://github.com/8051Enthusiast/biodiff";
-    changelog = "https://github.com/8051Enthusiast/biodiff/blob/v${version}/CHANGELOG";
+    changelog = "https://github.com/8051Enthusiast/biodiff/blob/v${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ newam ];
   };
-}
+})

@@ -59,7 +59,7 @@ buildNpmPackage (finalAttrs: {
       basename="$(basename "$icon")"
       size="''${basename%.png}"
 
-      install -Dm444 "$icon" -T "$out/share/icons/hicolor/$size/figma-linux.png"
+      install -Dm444 "$icon" -T "$out/share/icons/hicolor/$size/apps/figma-linux.png"
     done
 
     cp -r dist $out/share/figma-linux/resources/app

@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   # This prevents huge numbers of rebuilds for pandoc / haskell-updates.
   # It also enables manpages for platforms where pandoc is not available.
   src = fetchurl {
-    url = "http://downloads.xiph.org/releases/flac/flac-${finalAttrs.version}.tar.xz";
+    url = "https://downloads.xiph.org/releases/flac/flac-${finalAttrs.version}.tar.xz";
     hash = "sha256-8sHHZZKoL//4QTujxKEpm2x6sGxzTe4D/YhjBIXCuSA=";
   };
 
@@ -38,11 +38,13 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_SHARED_LIBS=ON"
   ];
 
-  CFLAGS = [
-    "-O3"
-    "-funroll-loops"
-  ];
-  CXXFLAGS = [ "-O3" ];
+  env = {
+    CFLAGS = toString [
+      "-O3"
+      "-funroll-loops"
+    ];
+    CXXFLAGS = toString [ "-O3" ];
+  };
 
   patches = [ ./package.patch ];
   doCheck = true;

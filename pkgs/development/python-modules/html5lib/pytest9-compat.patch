@@ -1,0 +1,48 @@
+From b502a5e2b3048a996ada4c4246aafad99d3dd14c Mon Sep 17 00:00:00 2001
+From: Steve Kowalik <steven@wedontsleep.org>
+Date: Thu, 27 Nov 2025 10:44:40 +1100
+Subject: [PATCH] Support pytest 9 changes
+
+The old py.path arguments to the hook functions have been removed as of
+pytest 9, switch to the shiny new pathlib ones.
+---
+ html5lib/tests/conftest.py | 18 +++++++++---------
+ requirements-test.txt      |  2 +-
+ 2 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/html5lib/tests/conftest.py b/html5lib/tests/conftest.py
+index fffeb50c..4a97dc21 100644
+--- a/html5lib/tests/conftest.py
++++ b/html5lib/tests/conftest.py
+@@ -90,22 +90,22 @@ def pytest_configure(config):
+         pytest.exit("\n".join(msgs))
+ 
+ 
+-def pytest_collect_file(path, parent):
+-    dir = os.path.abspath(path.dirname)
++def pytest_collect_file(file_path, parent):
++    dir = file_path.parent
+     dir_and_parents = set()
+     while dir not in dir_and_parents:
+         dir_and_parents.add(dir)
+-        dir = os.path.dirname(dir)
++        dir = dir.parent
+ 
+     if _tree_construction in dir_and_parents:
+-        if path.ext == ".dat":
+-            return TreeConstructionFile.from_parent(parent, fspath=path)
++        if file_path.suffix == ".dat":
++            return TreeConstructionFile.from_parent(parent, path=file_path)
+     elif _tokenizer in dir_and_parents:
+-        if path.ext == ".test":
+-            return TokenizerFile.from_parent(parent, fspath=path)
++        if file_path.suffix == ".test":
++            return TokenizerFile.from_parent(parent, path=file_path)
+     elif _sanitizer_testdata in dir_and_parents:
+-        if path.ext == ".dat":
+-            return SanitizerFile.from_parent(parent, fspath=path)
++        if file_path.suffix == ".dat":
++            return SanitizerFile.from_parent(parent, path=file_path)
+ 
+ 
+ # Tiny wrapper to allow .from_parent constructors on older pytest for PY27

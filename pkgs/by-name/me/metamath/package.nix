@@ -5,7 +5,7 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "metamath";
   version = "0.198";
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "metamath";
     repo = "metamath-exe";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Cg1dgz+uphDlGhKH3mTywtAccWinC5+pwNv4TB3YAnI=";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.taneb ];
     platforms = lib.platforms.all;
   };
-}
+})

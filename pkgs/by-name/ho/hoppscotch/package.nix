@@ -8,22 +8,18 @@
 
 let
   pname = "hoppscotch";
-  version = "25.12.1-0";
+  version = "26.5.0-0";
 
   src =
     fetchurl
       {
         aarch64-darwin = {
           url = "https://github.com/hoppscotch/releases/releases/download/v${version}/Hoppscotch_mac_aarch64.dmg";
-          hash = "sha256-wz2CpBfLuma4CoPbBC7dROxaXZSvivdHn/TX40FakOU=";
-        };
-        x86_64-darwin = {
-          url = "https://github.com/hoppscotch/releases/releases/download/v${version}/Hoppscotch_mac_x64.dmg";
-          hash = "sha256-Bsn0PmmpiDbwtPq1WUsrbkn+MQ3BFZTnorukO0RpnzQ=";
+          hash = "sha256-RnLMpXkDAk89T5ogNiVz8zMMdLtXTlAg5nu+sjyczEk=";
         };
         x86_64-linux = {
           url = "https://github.com/hoppscotch/releases/releases/download/v${version}/Hoppscotch_linux_x64.AppImage";
-          hash = "sha256-kCwlQdVpCRFPp1kcVaLLa6WHrrbuMo0JcqoCMBgtUGo=";
+          hash = "sha256-irPI613Y1l0j5F+Nzm9v/JXsiJY35D8dQpmMcPMYvmU=";
         };
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -46,7 +42,6 @@ let
     mainProgram = "hoppscotch";
     platforms = [
       "aarch64-darwin"
-      "x86_64-darwin"
       "x86_64-linux"
     ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
@@ -92,7 +87,7 @@ else
       ''
         # Install .desktop files
         install -Dm444 ${appimageContents}/Hoppscotch.desktop $out/share/applications/hoppscotch.desktop
-        install -Dm444 ${appimageContents}/Hoppscotch.png $out/share/pixmaps/hoppscotch.png
+        install -Dm444 ${appimageContents}/Hoppscotch.png $out/share/icons/hicolor/256x256/apps/hoppscotch.png
         substituteInPlace $out/share/applications/hoppscotch.desktop \
           --replace-fail "hoppscotch-desktop" "hoppscotch"
       '';

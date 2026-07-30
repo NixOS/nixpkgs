@@ -8,14 +8,14 @@
 let
   config-module = "git-get/pkg/cfg";
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "git-get";
   version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "grdl";
     repo = "git-get";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xnmFqNIabiTyf9ZPKlm5S42rfFUXnTp/jLDDY51eoMw=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
@@ -41,7 +41,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X ${config-module}.version=v${version}"
+    "-X ${config-module}.version=v${finalAttrs.version}"
   ];
 
   preInstall = ''
@@ -58,4 +58,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ sumnerevans ];
     mainProgram = "git-get";
   };
-}
+})

@@ -18,7 +18,7 @@
   wrapGAppsHook3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "recapp";
   version = "1.1.1";
 
@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "amikha1lov";
     repo = "RecApp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "08bpfcqgw0lj6j7y5b2i18kffawlzp6pfk4wdpmk29vwmgk9s9yc";
   };
 
@@ -85,4 +85,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ dotlambda ];
     mainProgram = "recapp";
   };
-}
+})

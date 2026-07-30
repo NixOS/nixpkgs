@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   fetchpatch2,
   poetry-core,
@@ -38,7 +37,7 @@ buildPythonPackage rec {
       --replace 'version = "0.0.0-dev"' 'version = "${version}"'
   '';
 
-  propagatedBuildInputs = [ snowballstemmer ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  propagatedBuildInputs = [ snowballstemmer ];
 
   optional-dependencies.toml = [ tomli ];
 

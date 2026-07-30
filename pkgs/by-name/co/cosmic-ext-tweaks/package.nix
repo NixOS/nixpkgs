@@ -12,18 +12,23 @@
   openssl,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-ext-tweaks";
-  version = "0.2.0";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "cosmic-utils";
     repo = "tweaks";
-    tag = version;
-    hash = "sha256-0P/KtfNUlS6E68aR3uLHJ2D4aMAdc05Svl6xSEG8XJA=";
+    tag = finalAttrs.version;
+    hash = "sha256-kREYDT42Xh/APrZAs3uho6Mw2MNEGeG0jc00I2yQemI=";
   };
 
-  cargoHash = "sha256-Zl7c/3q5J+9y1vRJdR77NJ6y62bV1bxaVMuiyxDbLX4=";
+  cargoHash = "sha256-mC19GLLHrjqYXl052HoNFscz9zzQWVBBm0OxzXoUd8U=";
+
+  separateDebugInfo = true;
+  __structuredAttrs = true;
+
+  env.VERGEN_GIT_SHA = finalAttrs.src.tag;
 
   nativeBuildInputs = [
     libcosmicAppHook
@@ -47,7 +52,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/cosmic-utils/tweaks/releases/tag/${version}";
+    changelog = "https://github.com/cosmic-utils/tweaks/releases/tag/${finalAttrs.version}";
     description = "Tweaking tool for the COSMIC Desktop Environment";
     homepage = "https://github.com/cosmic-utils/tweaks";
     license = lib.licenses.gpl3Only;
@@ -56,4 +61,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
   };
-}
+})

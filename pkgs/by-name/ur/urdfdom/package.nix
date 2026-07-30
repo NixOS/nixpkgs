@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "urdfdom";
-  version = "5.0.3";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "ros";
     repo = "urdfdom";
     tag = finalAttrs.version;
-    hash = "sha256-WZA3rzulPO1Si/kFqGF+8si2kRC8xOhlparoO8CvN0g=";
+    hash = "sha256-7ExQaz1/QshWwX8C3F2ZY4/Ty8U3/dXnBfwjGYB0SRg=";
   };
 
   patches = [

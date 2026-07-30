@@ -7,14 +7,14 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sampler";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "sqshq";
     repo = "sampler";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-H7QllAqPp35wHeJ405YSfPX3S4lH0/hdQ8Ja2OGLVtE=";
   };
 
@@ -41,4 +41,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ uvnikita ];
     mainProgram = "sampler";
   };
-}
+})

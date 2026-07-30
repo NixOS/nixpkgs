@@ -23,13 +23,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}${lib.optionalString withGnome "-gnome"}-${version}";
   pname = "NetworkManager-l2tp";
-  version = "1.20.22";
+  version = "1.52.0";
 
   src = fetchFromGitHub {
     owner = "nm-l2tp";
-    repo = "network-manager-l2tp";
+    repo = "NetworkManager-l2tp";
     rev = version;
-    hash = "sha256-TuYLNjogR3psb1B9zonHzRQext0ROS4ueD2WcWkseJk=";
+    hash = "sha256-5EIG/5fexhrcOOQE+31+TJKMtINGVL+EI32m9tEhYVo=";
   };
 
   patches = [
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "L2TP plugin for NetworkManager";
     inherit (networkmanager.meta) platforms;
-    homepage = "https://github.com/nm-l2tp/network-manager-l2tp";
+    homepage = "https://github.com/nm-l2tp/NetworkManager-l2tp";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       obadz

@@ -1,5 +1,6 @@
 {
   mkDerivation,
+  cmake,
   extra-cmake-modules,
   qttools,
   attica,
@@ -17,7 +18,14 @@
 
 mkDerivation {
   pname = "kxmlgui";
-  nativeBuildInputs = [ extra-cmake-modules ];
+  outputs = [
+    "out"
+    "dev"
+  ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
   buildInputs = [
     attica
     kglobalaccel

@@ -16,14 +16,14 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "nautilus-open-any-terminal";
-  version = "0.7.0";
+  version = "0.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Stunkymonkey";
     repo = "nautilus-open-any-terminal";
     tag = version;
-    hash = "sha256-+qBgTjVJ6gMFtkbqaF9bDYgoJYpM570Vpg+DLRBaFX0=";
+    hash = "sha256-SqkvQZZXSFC5WRjOn/6uPx+bDWFCz1g6OtCatUM9+0U=";
   };
 
   patches = [ ./hardcode-gsettings.patch ];

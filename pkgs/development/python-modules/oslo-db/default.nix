@@ -22,13 +22,13 @@
 
 buildPythonPackage rec {
   pname = "oslo-db";
-  version = "17.4.0";
+  version = "18.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "oslo_db";
     inherit version;
-    hash = "sha256-FLYvWMQWMwy7GIpTKbFNlQF2Ye+K6h1yoP+STuz5EKk=";
+    hash = "sha256-B16GziPAwh2x01CR8dyyGwVEnInDpDJtpPLT+4MwIj8=";
   };
 
   build-system = [
@@ -44,7 +44,8 @@ buildPythonPackage rec {
     oslo-utils
     sqlalchemy
     stevedore
-  ];
+  ]
+  ++ sqlalchemy.optional-dependencies.asyncio;
 
   nativeCheckInputs = [
     aiosqlite

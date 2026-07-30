@@ -5,7 +5,7 @@ set -eu -o pipefail
 
 source_file=pkgs/development/python-modules/types-aiobotocore-packages/default.nix
 
-nix-update python313Packages.types-aiobotocore --commit --build
+#nix-update python3Packages.types-aiobotocore --commit --build
 
 packages=(
   types-aiobotocore-accessanalyzer
@@ -73,7 +73,7 @@ packages=(
   types-aiobotocore-codeguru-security
   types-aiobotocore-codeguruprofiler
   types-aiobotocore-codepipeline
-  types-aiobotocore-codestar
+  # types-aiobotocore-codestar
   types-aiobotocore-codestar-connections
   types-aiobotocore-codestar-notifications
   types-aiobotocore-cognito-identity
@@ -124,7 +124,7 @@ packages=(
   types-aiobotocore-eks
   types-aiobotocore-elasticache
   types-aiobotocore-elasticbeanstalk
-  types-aiobotocore-elastictranscoder
+  # types-aiobotocore-elastictranscoder
   types-aiobotocore-elb
   types-aiobotocore-elbv2
   types-aiobotocore-emr
@@ -133,7 +133,7 @@ packages=(
   types-aiobotocore-entityresolution
   types-aiobotocore-es
   types-aiobotocore-events
-  types-aiobotocore-evidently
+  # types-aiobotocore-evidently
   types-aiobotocore-finspace
   types-aiobotocore-finspace-data
   types-aiobotocore-firehose
@@ -165,7 +165,7 @@ packages=(
   types-aiobotocore-iot
   types-aiobotocore-iot-data
   types-aiobotocore-iot-jobs-data
-  types-aiobotocore-iotanalytics
+  # types-aiobotocore-iotanalytics
   types-aiobotocore-iotdeviceadvisor
   types-aiobotocore-iotevents
   types-aiobotocore-iotevents-data
@@ -263,9 +263,10 @@ packages=(
   types-aiobotocore-qapps
   types-aiobotocore-qbusiness
   types-aiobotocore-qconnect
-  types-aiobotocore-qldb
-  types-aiobotocore-qldb-session
-  types-aiobotocore-quicksight  types-aiobotocore-ram
+  # types-aiobotocore-qldb
+  # types-aiobotocore-qldb-session
+  types-aiobotocore-quicksight
+  types-aiobotocore-ram
   types-aiobotocore-rbin
   types-aiobotocore-rds
   types-aiobotocore-rds-data

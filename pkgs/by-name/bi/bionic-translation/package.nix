@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  mesa,
   wayland,
   libglvnd,
   libbsd,
@@ -15,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bionic-translation";
-  version = "0-unstable-2025-07-07";
+  version = "0-unstable-2025-11-25";
 
   src = fetchFromGitLab {
     owner = "android_translation_layer";
     repo = "bionic_translation";
-    rev = "18c65637bf02dba86415dd009036b72f62cbb37d";
-    hash = "sha256-cqmWT9mbYJRLaX1Ey0lDfRFYM7JXuwayDN4o2WJIAVc=";
+    rev = "5c31d4366fbb0af70690e72e5a861e7b44ffb1ef";
+    hash = "sha256-dlHjx6+yymvIjDEs2TZexZUIUz32iKD0r+H4AJ89xig=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     libelf
     libglvnd
     libunwind
-    mesa
     wayland
   ];
 

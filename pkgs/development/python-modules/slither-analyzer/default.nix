@@ -1,52 +1,62 @@
 {
   lib,
-  nix-update-script,
   buildPythonPackage,
-  crytic-compile,
   fetchFromGitHub,
+
+  # build-system
+  hatchling,
+
+  # nativeBuildInputs
   makeWrapper,
+
+  # dependencies
+  crytic-compile,
   packaging,
   prettytable,
-  setuptools-scm,
-  solc,
   web3,
+
+  # tests
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
+
+  # postFixup
+  solc,
+
   withSolc ? false,
-  testers,
-  slither-analyzer,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "slither-analyzer";
-  version = "0.11.3";
+  version = "0.11.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "slither";
-    tag = version;
-    hash = "sha256-HgPQPyxDvKrmqGiHjiVGxEguYUcaNYwK1gZoMMkQWhM=";
+    tag = finalAttrs.version;
+    hash = "sha256-sy1vE9XniwyvvZRFnnKhPfmYh2auHHcMel9sZx2YK3c=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-    setuptools-scm
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [ makeWrapper ];
+
+  dependencies = [
     crytic-compile
     packaging
     prettytable
     web3
   ];
 
+  nativeCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+
   postFixup = lib.optionalString withSolc ''
     wrapProgram $out/bin/slither \
       --prefix PATH : "${lib.makeBinPath [ solc ]}"
-  '';
-
-  # required for pythonImportsCheck
-  postInstall = ''
-    export HOME="$TEMP"
   '';
 
   pythonImportsCheck = [
@@ -66,23 +76,6 @@ buildPythonPackage rec {
     "slither.vyper_parsing"
   ];
 
-  # Test if the binary works during the build phase.
-  checkPhase = ''
-    runHook preCheck
-
-    HOME="$TEMP" $out/bin/slither --version
-
-    runHook postCheck
-  '';
-
-  passthru.tests.version = testers.testVersion {
-    package = slither-analyzer;
-    command = "HOME=$TMPDIR slither --version";
-    version = "${version}";
-  };
-
-  passthru.updateScript = nix-update-script { };
-
   meta = {
     description = "Static Analyzer for Solidity";
     longDescription = ''
@@ -91,7 +84,7 @@ buildPythonPackage rec {
       contract details, and provides an API to easily write custom analyses.
     '';
     homepage = "https://github.com/trailofbits/slither";
-    changelog = "https://github.com/crytic/slither/releases/tag/${version}";
+    changelog = "https://github.com/crytic/slither/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Plus;
     mainProgram = "slither";
     maintainers = with lib.maintainers; [
@@ -100,4 +93,4 @@ buildPythonPackage rec {
       hellwolf
     ];
   };
-}
+})

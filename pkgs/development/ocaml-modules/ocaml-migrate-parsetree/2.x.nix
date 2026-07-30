@@ -5,14 +5,14 @@
   ocaml,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ocaml-migrate-parsetree";
   version = "2.4.0";
 
   minimalOCamlVersion = "4.02";
 
   src = fetchurl {
-    url = "https://github.com/ocaml-ppx/${pname}/releases/download/${version}/${pname}-${version}.tbz";
+    url = "https://github.com/ocaml-ppx/ocaml-migrate-parsetree/releases/download/${finalAttrs.version}/ocaml-migrate-parsetree-${finalAttrs.version}.tbz";
     sha256 = "sha256-7EnEUtwzemIFVqtoK/AZi/UBglULUC2PsjClkSYKpqQ=";
   };
 
@@ -26,4 +26,4 @@ buildDunePackage rec {
     homepage = "https://github.com/ocaml-ppx/ocaml-migrate-parsetree";
     broken = lib.versionAtLeast ocaml.version "5.1";
   };
-}
+})

@@ -39,11 +39,11 @@
   buildRubyGem,
   rustc,
   cargo,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   svgo,
-  nodejs_22,
+  nodejs-slim_22,
   jq,
   moreutils,
   terser,
@@ -53,14 +53,16 @@
 }:
 
 let
-  version = "2025.12.0";
+  version = "2026.1.4";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-zURRueaYWl1FqOI12H+S/ssMhN38nDuWRBqb579w6HQ=";
+    sha256 = "sha256-kQYDKZIMsWByuCZQfUlwhoIew5QykVylRMh6xvrHIBY=";
   };
+
+  pnpm = pnpm_10;
 
   ruby = ruby_3_3;
 
@@ -72,7 +74,7 @@ let
     gnutar
     git
     brotli
-    nodejs_22
+    nodejs-slim_22
 
     # Misc required system utils
     which
@@ -193,9 +195,9 @@ let
             cd ../..
 
             mkdir -p vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/
-            ln -s "${nodejs_22.libv8}/lib/libv8.a" vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/libv8_monolith.a
+            ln -s "${nodejs-slim_22.libv8}/lib/libv8.a" vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/libv8_monolith.a
 
-            ln -s ${nodejs_22.libv8}/include vendor/v8/include
+            ln -s ${nodejs-slim_22.libv8}/include vendor/v8/include
 
             mkdir -p ext/libv8-node
             echo '--- !ruby/object:Libv8::Node::Location::Vendor {}' >ext/libv8-node/.location.yml
@@ -303,10 +305,9 @@ let
 
     pnpmDeps = fetchPnpmDeps {
       pname = "discourse-assets";
-      inherit version src;
-      pnpm = pnpm_9;
-      fetcherVersion = 1;
-      hash = "sha256-/GJQqbmBXn5SSdxQ3TBQEUGe6Qm7aJ1ogoYqOFD5Pm0=";
+      inherit version src pnpm;
+      fetcherVersion = 3;
+      hash = "sha256-xft/2x0iti0yJ53uI9q2+FSvKgWWfKQzlMlPFz3RZsE=";
     };
 
     nativeBuildInputs = runtimeDeps ++ [
@@ -318,9 +319,9 @@ let
       terser
       jq
       moreutils
-      nodejs_22
+      nodejs-slim_22
       pnpmConfigHook
-      pnpm_9
+      pnpm
     ];
 
     outputs = [
@@ -534,7 +535,10 @@ let
     meta = {
       homepage = "https://www.discourse.org/";
       platforms = lib.platforms.linux;
-      maintainers = with lib.maintainers; [ talyz ];
+      maintainers = with lib.maintainers; [
+        leona
+        talyz
+      ];
       license = lib.licenses.gpl2Plus;
       description = "Open source discussion platform";
     };

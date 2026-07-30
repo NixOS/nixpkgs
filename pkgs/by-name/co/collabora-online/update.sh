@@ -9,12 +9,16 @@ cd "$PACKAGE_DIR/.."
 while ! test -f default.nix; do cd .. ; done
 NIXPKGS_DIR="$PWD"
 
-new_version="$(
-  list-git-tags --url=https://github.com/CollaboraOnline/online \
-  | grep --perl-regex --only-matching '^cp-\K[0-9.-]+$' \
-  | sort --version-sort \
-  | tail -n1
-)"
+if [ "$1" ]; then
+  new_version=$1
+else
+  new_version="$(
+    list-git-tags --url=https://github.com/CollaboraOnline/online \
+    | grep --perl-regex --only-matching '^cp-\K[0-9.-]+$' \
+    | sort --version-sort \
+    | tail -n1
+  )"
+fi
 
 cd "$NIXPKGS_DIR"
 update-source-version collabora-online "$new_version"

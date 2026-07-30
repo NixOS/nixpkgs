@@ -4,7 +4,7 @@
   fetchFromGitHub,
   setuptools,
 
-  xlib,
+  python-xlib,
   typing-extensions,
 }:
 
@@ -16,14 +16,14 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Kalmat";
     repo = "EWMHlib";
-    tag = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NELOgUV8KuN+CqmoSbLYImguHlp8dyhGmJtoxJjOBkA=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    xlib
+    python-xlib
     typing-extensions
   ];
 

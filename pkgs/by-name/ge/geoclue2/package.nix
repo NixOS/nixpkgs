@@ -41,13 +41,15 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.freedesktop.org";
     owner = "geoclue";
     repo = "geoclue";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-LwL1WtCdHb/NwPr3/OLISwaAwplhJwiZT9vUdX29Bbs=";
   };
 
   patches = [
     ./add-option-for-installation-sysconfdir.patch
   ];
+
+  separateDebugInfo = true;
 
   nativeBuildInputs = [
     pkg-config

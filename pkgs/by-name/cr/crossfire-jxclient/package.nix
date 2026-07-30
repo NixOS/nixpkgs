@@ -9,7 +9,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "crossfire-jxclient";
+  pname = "crossfire-jxclient";
   version = "2025-01";
 
   src = fetchgit {
@@ -68,6 +68,6 @@ stdenv.mkDerivation rec {
     homepage = "http://crossfire.real-time.com/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ToxicFrog ];
+    maintainers = [ ];
   };
 }

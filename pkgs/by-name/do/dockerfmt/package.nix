@@ -9,16 +9,24 @@
 
 buildGoModule (finalAttrs: {
   pname = "dockerfmt";
-  version = "0.3.9";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "reteps";
     repo = "dockerfmt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eTsYL2UAVW2M1aQGc5X1gT5cXpXKgshLmN+U5Qro/Qw=";
+    hash = "sha256-j6Y0L6tr7BSoC1RWPE0vzUrIND7CBg3RuGoHzuvJHXI=";
   };
 
-  vendorHash = "sha256-fLGgvAxSAiVSrsnF7r7EpPKCOOD9jzUsXxVQNWjYq80=";
+  vendorHash = "sha256-r8vmbZ4oyplqIU6R/6hhcyjoR3E/mOFrB69TrfPYxRI=";
+
+  subPackages = [ "." ];
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/reteps/dockerfmt/cmd.Version=${finalAttrs.version}"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

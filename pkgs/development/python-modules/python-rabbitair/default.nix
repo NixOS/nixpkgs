@@ -5,9 +5,7 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
-  typing-extensions,
   zeroconf,
 }:
 
@@ -28,8 +26,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cryptography
     zeroconf
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -53,7 +50,7 @@ buildPythonPackage rec {
   meta = {
     description = "Module for the control of Rabbit Air air purifiers";
     homepage = "https://github.com/rabbit-air/python-rabbitair";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -13,12 +13,12 @@
   gnused,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fig2dev";
   version = "3.2.9a";
 
   src = fetchurl {
-    url = "mirror://sourceforge/mcj/fig2dev-${version}.tar.xz";
+    url = "mirror://sourceforge/mcj/fig2dev-${finalAttrs.version}.tar.xz";
     hash = "sha256-YeGFOTF2hS8DuQGzsFsZ+8Wtglj/FC89pucLG4NRMyY=";
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ libpng ];
 
-  GSEXE = "${ghostscript}/bin/gs";
+  env.GSEXE = "${ghostscript}/bin/gs";
 
   configureFlags = [ "--enable-transfig" ];
 
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ lesuisse ];
   };
-}
+})

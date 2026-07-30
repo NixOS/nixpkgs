@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://oclero.github.io/qlementine/";
     changelog = "https://github.com/oclero/qlementine/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ normalcea ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

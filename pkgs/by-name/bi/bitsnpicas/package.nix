@@ -13,13 +13,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bitsnpicas";
-  version = "2.1.1";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner = "kreativekorp";
     repo = "bitsnpicas";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eE1wxtZrv5G+8luMj6E1vpM+49mGnaMyEfzmbpVUdZE=";
+    hash = "sha256-TIpnefPLHgKXJfBhrYbYG+/kpHjWpk/VrJvu1LKHf4o=";
   };
 
   nativeBuildInputs = [

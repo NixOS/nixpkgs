@@ -3,17 +3,15 @@
   rustPlatform,
   fetchFromGitHub,
 }:
-let
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jwtinfo";
   version = "0.6.1";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "lmammino";
     repo = "jwtinfo";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-o2SbPTnYSqsjpTl1Z8uSZZLeHx4lxunwDdig4UuVFKg=";
   };
 
@@ -22,9 +20,9 @@ rustPlatform.buildRustPackage {
   meta = {
     description = "Command-line tool to get information about JWTs";
     homepage = "https://github.com/lmammino/jwtinfo";
-    changelog = "https://github.com/lmammino/jwtinfo/releases/tag/v${version}";
+    changelog = "https://github.com/lmammino/jwtinfo/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
     mainProgram = "jwtinfo";
   };
-}
+})

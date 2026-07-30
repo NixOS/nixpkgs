@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   cmake,
   llvmPackages,
   xcbuild,
@@ -22,8 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "zig";
   inherit version;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "ziglang";
     repo = "zig";
     rev = finalAttrs.version;
@@ -67,6 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+
+  __structuredAttrs = true;
 
   # On Darwin, Zig calls std.zig.system.darwin.macos.detect during the build,
   # which parses /System/Library/CoreServices/SystemVersion.plist and
@@ -175,8 +176,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "General-purpose programming language and toolchain for maintaining robust, optimal, and reusable software";
     homepage = "https://ziglang.org/";
     changelog = "https://ziglang.org/download/${finalAttrs.version}/release-notes.html";
+    donationPage = "https://ziglang.org/zsf/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ andrewrk ];
+    maintainers = [ ];
     teams = [ lib.teams.zig ];
     mainProgram = "zig";
     platforms = lib.platforms.unix;

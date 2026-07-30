@@ -1,8 +1,8 @@
 diff --git a/Cargo.lock b/Cargo.lock
-index 839cdbc..9622d04 100644
+index 7f0f5c9..4eb062f 100644
 --- a/Cargo.lock
 +++ b/Cargo.lock
-@@ -2819,6 +2819,7 @@ dependencies = [
+@@ -2595,6 +2595,7 @@ dependencies = [
   "tokei",
   "typetag",
   "winres",
@@ -11,14 +11,14 @@ index 839cdbc..9622d04 100644
  
  [[package]]
 diff --git a/Cargo.toml b/Cargo.toml
-index 79cbb8c..410a969 100644
+index 99340b3..75957a3 100644
 --- a/Cargo.toml
 +++ b/Cargo.toml
-@@ -68,6 +68,7 @@ time = { version = "0.3.37", features = ["formatting"] }
+@@ -58,6 +58,7 @@ time = { version = "0.3.47", features = ["formatting"] }
  time-humanize = { version = "0.1.3", features = ["time"] }
- tokei = "13.0.0-alpha.7"
- typetag = "0.2"
+ tokei = "14.0.0"
+ typetag = "0.2.21"
 +zstd = { version = "*", features = ["pkg-config"] }
  
  [dev-dependencies]
- criterion = "0.5.1"
+ criterion = "0.8.2"

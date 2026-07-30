@@ -1,28 +1,28 @@
 {
   lib,
-  stdenv,
+  clangStdenv,
   fetchFromGitHub,
+  makeWrapper,
 
   nixosTests,
   alsa-lib,
   boost,
+  cli11,
   cmake,
   cryptopp,
-  game-music-emu,
-  glslang,
   ffmpeg,
-  flac,
-  fluidsynth,
   fmt,
   half,
   jack2,
   libdecor,
-  libGL,
+  libpng,
   libpulseaudio,
   libunwind,
   libusb1,
-  libvorbis,
-  libxmp,
+  magic-enum,
+  minimp3,
+  miniz,
+  nlohmann_json,
   libgbm,
   libx11,
   libxcb,
@@ -32,14 +32,14 @@
   libxrandr,
   libxscrnsaver,
   libxtst,
-  magic-enum,
-  mpg123,
   pipewire,
   pkg-config,
   pugixml,
   rapidjson,
   renderdoc,
   robin-map,
+  sdl3,
+  sdl3-mixer,
   sndio,
   stb,
   toml11,
@@ -48,29 +48,42 @@
   vulkan-loader,
   vulkan-memory-allocator,
   xbyak,
-  xxHash,
-  zlib-ng,
-  zydis,
+  xxhash,
+  zlib,
   nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "shadps4";
-  version = "0.13.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadPS4";
     tag = "v.${finalAttrs.version}";
-    hash = "sha256-zc3zhFTphty/vwioFEOfhgXttpD9MG2F7+YJYcW0H2w=";
-    fetchSubmodules = true;
+    hash = "sha256-SavSUHtnJeRi2mzIyUhLfLk37Y/PSuI3bbbqWA7qVbg=";
 
-    leaveDotGit = true;
-    postFetch = ''
+    postCheckout = ''
       cd "$out"
+
       git rev-parse --short=8 HEAD > $out/COMMIT
       date -u -d "@$(git log -1 --pretty=%ct)" "+%Y-%m-%dT%H:%M:%SZ" > $out/SOURCE_DATE_EPOCH
-      find "$out" -name .git -print0 | xargs -0 rm -rf
+
+      git -C externals submodule update --init --recursive \
+        glslang \
+        zydis \
+        sirit \
+        tracy \
+        libusb \
+        discord-rpc \
+        hwinfo \
+        openal-soft \
+        dear_imgui \
+        LibAtrac9 \
+        aacdec/fdk-aac \
+        spdlog \
+        libressl \
+        ImGuiFileDialog
     '';
   };
 
@@ -86,22 +99,17 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     alsa-lib
     boost
+    cli11
     cryptopp
-    game-music-emu
-    glslang
     ffmpeg
-    flac
-    fluidsynth
     fmt
     half
     jack2
     libdecor
-    libGL
+    libpng
     libpulseaudio
     libunwind
     libusb1
-    libvorbis
-    libxmp
     libx11
     libxcb
     libxcursor
@@ -110,14 +118,18 @@ stdenv.mkDerivation (finalAttrs: {
     libxrandr
     libxscrnsaver
     libxtst
-    libgbm
     magic-enum
-    mpg123
+    minimp3
+    miniz
+    libgbm
+    nlohmann_json
     pipewire
     pugixml
     rapidjson
     renderdoc
     robin-map
+    sdl3
+    sdl3-mixer
     sndio
     stb
     toml11
@@ -126,14 +138,14 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-loader
     vulkan-memory-allocator
     xbyak
-    xxHash
-    zlib-ng
-    zydis
+    xxhash
+    zlib
   ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    makeWrapper
   ];
 
   cmakeFlags = [
@@ -144,15 +156,14 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeBuildType = "RelWithDebugInfo";
   dontStrip = true;
 
-  installPhase = ''
-    runHook preInstall
-
-    install -D -t $out/bin shadps4
-    install -Dm644 $src/.github/shadps4.png $out/share/icons/hicolor/512x512/apps/net.shadps4.shadPS4.png
-    install -Dm644 -t $out/share/applications $src/dist/net.shadps4.shadPS4.desktop
-    install -Dm644 -t $out/share/metainfo $src/dist/net.shadps4.shadPS4.metainfo.xml
-
-    runHook postInstall
+  postInstall = ''
+    wrapProgram $out/bin/shadps4 \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          libpulseaudio
+          pipewire
+        ]
+      }
   '';
 
   runtimeDependencies = [

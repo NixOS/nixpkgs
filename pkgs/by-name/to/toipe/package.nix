@@ -4,12 +4,12 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "toipe";
   version = "0.5.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-L4JemOxpynGYsA8FgHnMv/hrogLSRaaiIzDjxzZDqjM=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
       samyak
     ];
   };
-}
+})

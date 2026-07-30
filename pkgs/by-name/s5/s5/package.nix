@@ -5,14 +5,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "s5";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "mvisonneau";
     repo = "s5";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-aNNf7ntGg2A84jD6UeoF4gFv8S/FonbIhV3ZOd/P4bw=";
   };
 
@@ -21,7 +21,7 @@ buildGoModule rec {
   subPackages = [ "cmd/s5" ];
 
   ldflags = [
-    "-X github.com/mvisonneau/s5/internal/app.Version=v${version}"
+    "-X github.com/mvisonneau/s5/internal/app.Version=v${finalAttrs.version}"
   ];
 
   doCheck = true;
@@ -38,4 +38,4 @@ buildGoModule rec {
     platforms = lib.platforms.unix ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ mvisonneau ];
   };
-}
+})

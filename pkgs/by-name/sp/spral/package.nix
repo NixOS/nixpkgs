@@ -67,7 +67,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [ (lib.mesonBool "tests" true) ];
 
-  LDFLAGS = lib.optionals stdenv.hostPlatform.isDarwin [ "-lomp" ];
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    LDFLAGS = "-lomp";
+  };
 
   doCheck = true;
 

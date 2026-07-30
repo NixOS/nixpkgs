@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dynamic-colors";
   version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "peterhoeg";
     repo = "dynamic-colors";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-jSdwq9WwYZP8MK6z7zJa0q93xfanr6iuvAt8YQkQxxE=";
   };
 
-  PREFIX = placeholder "out";
+  env.PREFIX = placeholder "out";
 
   postPatch = ''
     substituteInPlace bin/dynamic-colors \
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "dynamic-colors";
   };
-}
+})

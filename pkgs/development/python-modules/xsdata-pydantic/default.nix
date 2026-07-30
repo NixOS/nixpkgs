@@ -2,18 +2,24 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   setuptools,
-  pytestCheckHook,
-  xsdata,
+
+  # dependencies
   pydantic,
+  xsdata,
+
+  # tests
   click,
   click-default-group,
-  jinja2,
   docformatter,
+  jinja2,
+  pytestCheckHook,
   toposort,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xsdata-pydantic";
   version = "24.5";
   pyproject = true;
@@ -21,15 +27,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tefra";
     repo = "xsdata-pydantic";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ExgAXQRNfGQRSZdMuWc8ldJPqz+3c4Imgu75KXLXHNk=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    xsdata
     pydantic
+    xsdata
   ];
 
   nativeCheckInputs = [
@@ -37,19 +43,23 @@ buildPythonPackage rec {
     click-default-group
     docformatter
     jinja2
-    toposort
     pytestCheckHook
+    toposort
   ];
 
-  pythonImportsCheck = [
-    "xsdata_pydantic"
+  pythonImportsCheck = [ "xsdata_pydantic" ];
+
+  disabledTests = [
+    # AssertionError: SystemExit(2) is not None
+    "test_complete"
   ];
 
   meta = {
-    description = "Naive XML & JSON Bindings for python pydantic classes!";
+    description = "Naive XML & JSON Bindings for python pydantic classes";
     homepage = "https://github.com/tefra/xsdata-pydantic";
+    changelog = "https://github.com/tefra/xsdata-pydantic/blob/${finalAttrs.src.tag}/CHANGES.md";
     maintainers = with lib.maintainers; [ berrij ];
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
   };
-}
+})

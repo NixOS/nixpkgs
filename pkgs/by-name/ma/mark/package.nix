@@ -6,23 +6,23 @@
 
 # Tests with go 1.24 do not work. For now
 # https://github.com/kovetskiy/mark/pull/581#issuecomment-2797872996
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mark";
-  version = "15.2.0";
+  version = "16.6.0";
 
   src = fetchFromGitHub {
     owner = "kovetskiy";
     repo = "mark";
-    rev = "v${version}";
-    sha256 = "sha256-ZvFaSoD9nQtxc5ONWneVgpAfX3f7sS0lBSMXqhABn8o=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-kpWY+8r6ILHmZr1VWO+4rj8tLqzyucsDNPnoPaF1IkU=";
   };
 
-  vendorHash = "sha256-3hfeh7PRzsPfQ+aLPV44ExXum6lG6Huvc7itRIn8mNo=";
+  vendorHash = "sha256-vJn/bFhbnDY0OfuD9swvt/X5Pb0nWpaoHc1iwWCVwpg=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   checkFlags =
@@ -47,4 +47,4 @@ buildGoModule rec {
       wrbbz
     ];
   };
-}
+})

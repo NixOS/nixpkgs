@@ -29,7 +29,7 @@ which is read-only and accessible without authentication:
       "public" = {
         "path" = "/public";
         "read only" = "yes";
-        "browseable" = "yes";
+        "browsable" = "yes";
         "guest ok" = "yes";
         "comment" = "Public samba share.";
       };

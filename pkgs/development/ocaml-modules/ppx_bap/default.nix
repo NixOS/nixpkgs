@@ -16,7 +16,7 @@
   ppx_sexp_value ? null,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ppx_bap";
   version = "0.14";
 
@@ -24,8 +24,8 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "BinaryAnalysisPlatform";
-    repo = pname;
-    rev = "v${version}";
+    repo = "ppx_bap";
+    rev = "v${finalAttrs.version}";
     sha256 = "1c6rcdp8bicdiwqc2mb59cl9l2vxlp3y8hmnr9x924fq7acly248";
   };
 
@@ -54,9 +54,9 @@ buildDunePackage rec {
 
   meta = {
     description = "Set of ppx rewriters for BAP";
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
     mainProgram = "ppx-bap";
   };
-}
+})

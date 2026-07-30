@@ -5,18 +5,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "algia";
-  version = "0.0.98";
+  version = "0.0.132";
 
   src = fetchFromGitHub {
     owner = "mattn";
     repo = "algia";
-    tag = "v${version}";
-    hash = "sha256-Xd0WhXvEPt1VLIdsswk91hTb2UK6ikqhKMR3l/D0/jk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4D11W/aHB5hdqftAyGvT6HN66qfS184+3FvV/Mn1hY4=";
   };
 
-  vendorHash = "sha256-JTTWVs0KwceiLy6tpyd48zORiXLc18zwgG1c+ceivKU=";
+  vendorHash = "sha256-mim8EImPFHF2vf1vCi9jgECbVAOB32oXxsPMgUwYDBA=";
 
   meta = {
     description = "CLI application for nostr";
@@ -25,4 +25,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ haruki7049 ];
     mainProgram = "algia";
   };
-}
+})

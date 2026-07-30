@@ -6,16 +6,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "tsidp";
-  version = "0.0.9";
+  version = "0.0.14";
 
   src = fetchFromGitHub {
     owner = "tailscale";
     repo = "tsidp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ClN3aZ0mLmb4UPSW+oQSrKPar56wbHp+NXOzGA6GpCQ=";
+    hash = "sha256-AZ0fAQag+pY5uYq2loQClkk0BqvC7e5C+KcI6J9g8Pw=";
   };
 
-  vendorHash = "sha256-iBy+osK+2LdkTzXhrkSaB6nWpUCpr8VkxJTtcfVCFuw=";
+  vendorHash = "sha256-sycTIr6cRY2BLve23vvpk7mhiV/jrP26SoLHxY7tznw=";
 
   passthru.updateScript = nix-update-script { };
 

@@ -7,18 +7,18 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "julefmt";
-  version = "0.0.0-unstable-2025-09-08";
+  version = "0.0.0-unstable-2026-05-02";
 
   src = fetchFromGitHub {
     owner = "julelang";
     repo = "julefmt";
-    rev = "cc30781206d3d7b88599cc51b3f9d7d7936de527";
-    hash = "sha256-g3vN2Hz4BA5c0KqIbNKHg0W77xKGZQFHUIKWjg5/UTM=";
+    rev = "7ac9b383013d13a03bc06f90f0b86f4fca11a4a8";
+    hash = "sha256-q90B0rYaUN/gQ3TUNcPS+SqIQefam1Qmzx6jUBe+c0g=";
   };
 
   nativeBuildInputs = [ julec.hook ];
 
-  JULE_OUT_NAME = "julefmt";
+  env.JULE_OUT_NAME = "julefmt";
 
   meta = {
     description = "Official formatter tool for the Jule programming language";

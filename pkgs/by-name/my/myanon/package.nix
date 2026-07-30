@@ -5,23 +5,25 @@
   autoreconfHook,
   flex,
   bison,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "myanon";
-  version = "0.7";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "ppomes";
     repo = "myanon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pbClzLj9b4ZsehjSXwJjPlxpT6tlKcsZfEEfXVstlnA=";
+    hash = "sha256-5JwD1vPAKZlgnl6vfmqgl/jJBHWi8OGsVFJM4ofe6DM=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     flex
     bison
+    pkg-config
   ];
 
   meta = {

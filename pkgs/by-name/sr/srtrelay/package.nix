@@ -6,14 +6,14 @@
   ffmpeg,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "srtrelay";
   version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "voc";
     repo = "srtrelay";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-idWAJD6dvvM5OHox5+MI8q3knyl2ANqBiXfQ0VlF67Q=";
   };
 
@@ -29,4 +29,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ fpletz ];
     mainProgram = "srtrelay";
   };
-}
+})

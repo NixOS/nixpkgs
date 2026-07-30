@@ -5,8 +5,8 @@
   buildNpmPackage,
   makeWrapper,
   formats,
-  inter,
   databaseType ? "sqlite",
+  edition ? "oss",
   environmentVariables ? { },
   nixosTests,
 }:
@@ -14,6 +14,12 @@
 assert lib.assertOneOf "databaseType" databaseType [
   "sqlite"
   "pg"
+];
+
+assert lib.assertOneOf "edition" edition [
+  "enterprise"
+  "oss"
+  "saas"
 ];
 
 let
@@ -29,46 +35,49 @@ in
 
 buildNpmPackage (finalAttrs: {
   pname = "pangolin";
-  version = "1.13.1";
+  version = "1.21.0";
+
+  __structuredAttrs = true;
+  enableParallelBuilding = true;
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "pangolin";
     tag = finalAttrs.version;
-    hash = "sha256-rDysze915lmgbl/nz2NaPrFgNHAVOYRY4sVMnoYB3xE=";
+    hash = "sha256-LR4UO2xrTLKmemDVsJWtEQoV2bDy6U2ahxTtA+SDymI=";
   };
 
-  npmDepsHash = "sha256-mSSzrkGZ0ZPYINRahzrbrO6oLDhmu8HWHfHzZKMroCg=";
+  npmDepsFetcherVersion = 2;
+  npmDepsHash = "sha256-EBectG1zNdUb30SlhAzy9rCwF/mYHAV4HZTRbk2CbDY=";
 
   nativeBuildInputs = [
     esbuild
     makeWrapper
   ];
 
-  # Replace the googleapis.com Inter font with a local copy from Nixpkgs.
-  # Based on pkgs.nextjs-ollama-llm-ui.
+  # remove the proprietary code
+  postUnpack = lib.optionalString (edition == "oss") ''
+    rm -rf server/private
+  '';
+
+  # upstream inconsistently updates this
+  # so leaving this here in case it's needed
   postPatch = ''
-    substituteInPlace src/app/layout.tsx --replace-fail \
-      "{ Inter } from \"next/font/google\"" \
-      "localFont from \"next/font/local\""
-
-    substituteInPlace src/app/layout.tsx --replace-fail \
-      "Inter({ subsets: [\"latin\"] })" \
-      "localFont({ src: './Inter.ttf' })"
-
-    cp "${inter}/share/fonts/truetype/InterVariable.ttf" src/app/Inter.ttf
+    substituteInPlace server/lib/consts.ts --replace-fail \
+      'export const APP_VERSION = "${lib.versions.majorMinor finalAttrs.version + ".0"}";' \
+      'export const APP_VERSION = "${finalAttrs.version}";'
   '';
 
   preBuild = ''
-    npm run set:oss
-    npm run set:${db true}
-    npx drizzle-kit generate --dialect ${db true} --schema ./server/db/${db false}/schema/ --name migration --out init
+    npm run set:${db false}
+    npm run set:${edition}
+    npm run db:generate
   '';
 
   buildPhase = ''
     runHook preBuild
 
-    npm run build:${db false}
+    npm run build
     npm run build:cli
 
     runHook postBuild
@@ -79,18 +88,18 @@ buildNpmPackage (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    cp -r node_modules $out/share/pangolin
-
-    cp -r .next/standalone/.next $out/share/pangolin
-    cp .next/standalone/package.json $out/share/pangolin
-
+    cp -r node_modules $out/share/pangolin/node_modules
+    cp -r .next/standalone/. $out/share/pangolin
     cp -r .next/static $out/share/pangolin/.next/static
-    cp -r public $out/share/pangolin/public
-
     cp -r dist $out/share/pangolin/dist
-    cp -r init $out/share/pangolin/dist/init
+    cp -r server/migrations $out/share/pangolin/dist/init
+    cp package.json $out/share/pangolin/package.json
 
     cp server/db/names.json $out/share/pangolin/dist/names.json
+    cp server/db/ios_models.json $out/share/pangolin/dist/ios_models.json
+    cp server/db/mac_models.json $out/share/pangolin/dist/mac_models.json
+
+    cp -r public $out/share/pangolin/public
 
     runHook postInstall
   '';
@@ -164,10 +173,9 @@ buildNpmPackage (finalAttrs: {
     description = "Tunneled reverse proxy server with identity and access control";
     homepage = "https://github.com/fosrl/pangolin";
     changelog = "https://github.com/fosrl/pangolin/releases/tag/${finalAttrs.version}";
-    license = lib.licenses.agpl3Only;
+    license = [ lib.licenses.agpl3Only ] ++ lib.optional (edition != "oss") lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       jackr
-      sigmasquadron
       water-sucks
     ];
     platforms = lib.platforms.linux;

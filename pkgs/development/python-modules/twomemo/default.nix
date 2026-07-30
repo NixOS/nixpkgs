@@ -13,14 +13,14 @@
 }:
 buildPythonPackage rec {
   pname = "twomemo";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Syndace";
     repo = "python-twomemo";
     tag = "v${version}";
-    hash = "sha256-TNM7CLxo4C55APuL5BAts8kTyCl2SDajqwkaXxwK19E=";
+    hash = "sha256-OVZmssJuufKwyEd8q25h9AcDprZZPm588khncBqTaJA=";
   };
 
   strictDeps = true;

@@ -32,6 +32,10 @@ stdenv.mkDerivation {
     expat
   ];
 
+  configureFlags = [
+    "CFLAGS=-std=gnu17"
+  ];
+
   meta = {
     homepage = "https://www.unidata.ucar.edu/software/udunits/";
     description = "C-based package for the programatic handling of units of physical quantities";

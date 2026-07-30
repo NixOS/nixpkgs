@@ -13,7 +13,11 @@
   libffi,
   wayland,
   egl-wayland,
-  xorg,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxcursor,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,11 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
     libffi # needed for wayland
     wayland
     egl-wayland
-    xorg.libX11
-    xorg.libXrandr
-    xorg.libXinerama
-    xorg.libXcursor
-    xorg.libXi
+    libx11
+    libxrandr
+    libxinerama
+    libxcursor
+    libxi
   ];
 
   cmakeFlags = [

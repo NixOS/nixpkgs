@@ -7,7 +7,6 @@
   numpy,
   pytest-lazy-fixture,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   tritonclient,
   typeguard,

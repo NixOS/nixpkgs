@@ -4,14 +4,14 @@
   lib,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cf-tool";
   version = "202405140250";
 
   src = fetchFromGitHub {
     owner = "sempr";
     repo = "cf-tool";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-D+mJJw1+ImCrFpsv8HmaAwWqjYvUWouh8mgQ7hJxMrc=";
   };
 
@@ -28,4 +28,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
     mainProgram = "cf";
   };
-}
+})

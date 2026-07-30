@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.6.0";
   pname = "arduino-mk";
 
   src = fetchFromGitHub {
     owner = "sudar";
     repo = "Arduino-Makefile";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "0flpl97d2231gp51n3y4qvf3y1l8xzafi1sgpwc305vwc2h4dl2x";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.eyjhb ];
     platforms = lib.platforms.unix;
   };
-}
+})

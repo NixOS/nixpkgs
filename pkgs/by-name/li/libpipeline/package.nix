@@ -5,12 +5,12 @@
   updateAutotoolsGnuConfigScriptsHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libpipeline";
   version = "1.5.8";
 
   src = fetchurl {
-    url = "mirror://savannah/libpipeline/libpipeline-${version}.tar.gz";
+    url = "mirror://savannah/libpipeline/libpipeline-${finalAttrs.version}.tar.gz";
     hash = "sha256-GxIDyhUszWOYPD8hEvf+b6Wv1FMhjt5RU9GzHhG7hAU=";
   };
 
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3;
   };
-}
+})

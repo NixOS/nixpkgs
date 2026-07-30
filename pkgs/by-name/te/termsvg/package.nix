@@ -4,24 +4,24 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "termsvg";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "MrMarble";
     repo = "termsvg";
-    rev = "v${version}";
-    hash = "sha256-tNvr8ptMortP7iI6GwT4AGbqTvNFposca8I2JribGnk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-wV5b0HXf+DVSn5FbPU9/AXTaNKyenbxEGB9yI29e/cc=";
   };
 
-  vendorHash = "sha256-BoXRLWhQmfvMIN658MiXGCFMbnvuXfv/H/jCE6h4aWk=";
+  vendorHash = "sha256-6cXckWJFc/nYlz0HeLHXaXWNFR7HLEfU10gd2K2zgq0=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
-    "-X=main.commit=${src.rev}"
+    "-X=main.version=${finalAttrs.version}"
+    "-X=main.commit=${finalAttrs.src.rev}"
     "-X=main.date=1970-01-01T00:00:00Z"
   ];
 
@@ -32,4 +32,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ pbsds ];
     mainProgram = "termsvg";
   };
-}
+})

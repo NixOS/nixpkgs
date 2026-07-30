@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kafkactl";
-  version = "5.17.0";
+  version = "5.18.0";
 
   src = fetchFromGitHub {
     owner = "deviceinsight";
     repo = "kafkactl";
-    tag = "v${version}";
-    hash = "sha256-nZkIAlvQ3jsXWJXLYbaZWJYOgxF7okRY//BZdGPNU0s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-M2G01xCrOOCpcCpZ7TxoVfYLouNtOC8/xQPZADi8GRg=";
   };
 
   vendorHash = "sha256-oiN1nMln8oXy/e7gt0JtynCQxcxi0rwcdVthaWhjBWQ=";
@@ -21,7 +21,7 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://github.com/deviceinsight/kafkactl";
-    changelog = "https://github.com/deviceinsight/kafkactl/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/deviceinsight/kafkactl/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Command Line Tool for managing Apache Kafka";
     mainProgram = "kafkactl";
     longDescription = ''
@@ -35,4 +35,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 
   cython,
   geos,
@@ -18,7 +17,6 @@ buildPythonPackage rec {
   pname = "shapely";
   version = "2.1.2";
   pyproject = true;
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "shapely";

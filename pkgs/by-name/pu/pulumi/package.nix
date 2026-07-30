@@ -15,22 +15,22 @@
   nix-update-script,
   _experimental-update-script-combinators,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pulumi";
-  version = "3.192.0";
+  version = "3.253.0";
 
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "pulumi";
-    tag = "v${version}";
-    hash = "sha256-rcDXC+xlUa67afuXvmEv8UNsYWBvQQ0P4httdtdcrh4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZwK9IXuKD583MJ+6VG9CsrEIwh4aJGBlCXys/TYfrmg=";
     # Some tests rely on checkout directory name
     name = "pulumi";
   };
 
-  vendorHash = "sha256-BaFw8EnPd2GPA/p9wm8XpVy/iE8gqbteRnMQC8Z4NHQ=";
+  vendorHash = "sha256-5HYYesdKfZqCqDNrD2LZc25hxrczxRV/jsMXWeFT6fc=";
 
-  sourceRoot = "${src.name}/pkg";
+  sourceRoot = "${finalAttrs.src.name}/pkg";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -41,7 +41,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/pulumi/pulumi/sdk/v3/go/common/version.Version=v${version}"
+    "-X=github.com/pulumi/pulumi/sdk/v3/go/common/version.Version=v${finalAttrs.version}"
   ];
 
   excludedPackages = [
@@ -60,22 +60,16 @@ buildGoModule rec {
     # Skip tests that fail in Nix sandbox.
     "-skip=^${
       lib.concatStringsSep "$|^" [
-        # Concurrent map modification in test case.
-        # TODO: remove after the fix is merged and released.
-        # https://github.com/pulumi/pulumi/pull/19200
-        "TestGetDocLinkForPulumiType"
-
         # Seems to require TTY.
         "TestProgressEvents"
-
-        # Flaky; upstream “fixed” it by increasing timeout.
-        # https://github.com/pulumi/pulumi/pull/20116
-        "TestAnalyzerCancellation"
+        "TestInfoXTerm"
+        "TestInfoVT102"
 
         # Tries to clone repo: https://github.com/pulumi/test-repo.git
         "TestValidateRelativeDirectory"
         "TestRepoLookup"
         "TestDSConfigureGit"
+        "TestResolvePackage"
 
         # Tries to clone repo: github.com/pulumi/templates.git
         "TestGenerateOnlyProjectCheck"
@@ -89,6 +83,9 @@ buildGoModule rec {
         "TestPulumiNewWithRegistryTemplates"
         "TestRunNewYesNoTemplate"
         "TestRunNewYesWithTemplate"
+        "TestNewCmdYesWritesMinimalPulumiYAMLWithExplicitName"
+        "TestNewCmdYesSanitizesDefaultDirectoryName"
+        "TestNewCmdYesUsesCurrentDirectoryNameByDefault"
 
         # Connects to https://api.pulumi.com/…
         "TestGetLatestPluginIncludedVersion"
@@ -108,6 +105,10 @@ buildGoModule rec {
         # Downloads pulumi-resource-random from Pulumi plugin registry.
         "TestPluginInstallCancellation"
 
+        # Fails to create/run test-plugin.
+        "TestPluginRunCommand"
+        "TestPluginRunCommandError"
+
         # Requires language-specific tooling and/or Internet access.
         "TestGenerateProgram"
         "TestGenerateProgramVersionSelection"
@@ -117,6 +118,44 @@ buildGoModule rec {
         "TestGeneratePackageTwo"
         "TestParseAndRenderDocs"
         "TestImportResourceRef"
+        "TestImportPathPattern"
+        "TestL2ResourceAssetArchive"
+
+        # Require reading from a local credential file.
+        "TestAuthRequiredMessageChecksClaimWhenTokenLocallyValidButRejected"
+        "TestAuthRequiredMessageFallsBackToLocalClaimWhenValidationFails"
+        "TestAuthRequiredMessageOmitsClaimURLWhenClaimIsNotClaimable"
+        "TestAuthRequiredMessagePrintsClaimInstructionWhenTokenExpiredButClaimValid"
+        "TestAuthRequiredMessageSkipsValidationWhenClaimMarkedUnavailable"
+        "TestCurrentEnvTokenFailsWithInaccessibleExplicitPath"
+        "TestCurrentEnvTokenStoresInDefaultPathWhenWritable"
+        "TestCurrentInvalidAgentCredentialsWithActiveClaimDoesNotSignup"
+        "TestCurrentRejectedAgentCredentialsWithUnexpiredTokenDoesNotSignup"
+        "TestCurrentSignupAgentAccountStoresClaimTokenURL"
+        "TestCurrentSignupAgentAccountStoresRefreshToken"
+        "TestCurrentSignupAgentAccountWithoutRefreshTokenLeavesAccountEmpty"
+        "TestCurrentValidAgentCredentialsWithExpiredClaimDoesNotSignup"
+        "TestGetBackendAccountDoesNotFallbackToAgentCredentialsWithExplicitPath"
+        "TestGetCurrentCloudURLFallsBackToAgentCredentials"
+        "TestLoginUsesAgentSignupInNonInteractiveAgentMode"
+        "TestMaybePrintClaimWarningPrintsForUsedAgentCredentials"
+        "TestMaybePrintClaimWarningRequiresAgentCredentialsUsed"
+        "TestProcessCmdErrorsDoesNotPrintAgentAuthRequiredInstructionForAPINonUnauthorized"
+        "TestProcessCmdErrorsDoesNotPrintClaimURLForUnauthorizedClaimedAccount"
+        "TestProcessCmdErrorsPrintsAgentAuthRequiredInstruction"
+        "TestProcessCmdErrorsPrintsAgentAuthRequiredInstructionForAPIUnauthorized"
+        "TestProcessCmdErrorsPrintsAgentClaimWarningForNonLoginError"
+        "TestRetrievePrivatePulumiCloudTemplateFallsBackToAgentCredentials"
+
+        # Probably flaky.
+        "TestTokenSourceWithClient"
+
+        # Requires invoking pulumi binary.
+        "TestDecryptEncryptedLog"
+        "TestDecryptGzipLog"
+
+        # Requires unavailable access token.
+        "TestRunNewYesWithAILanguage"
       ]
     }$"
   ];
@@ -144,6 +183,10 @@ buildGoModule rec {
     updateScript = _experimental-update-script-combinators.sequence [
       (nix-update-script { })
       (nix-update-script {
+        attrPath = "pulumiPackages.pulumi-bun";
+        extraArgs = [ "--version=skip" ];
+      })
+      (nix-update-script {
         attrPath = "pulumiPackages.pulumi-go";
         extraArgs = [ "--version=skip" ];
       })
@@ -159,12 +202,17 @@ buildGoModule rec {
     tests = {
       version = testers.testVersion {
         package = pulumi;
-        version = "v${version}";
+        version = "v${finalAttrs.version}";
         command = "PULUMI_SKIP_UPDATE_CHECK=1 pulumi version";
       };
 
       # Test building packages that reuse our version and src.
-      inherit (pulumiPackages) pulumi-go pulumi-nodejs pulumi-python;
+      inherit (pulumiPackages)
+        pulumi-bun
+        pulumi-go
+        pulumi-nodejs
+        pulumi-python
+        ;
       pythonPackage = python3Packages.pulumi;
       pythonPackageProtobuf5 =
         (python3Packages.overrideScope (
@@ -187,8 +235,10 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     mainProgram = "pulumi";
     maintainers = with lib.maintainers; [
-      veehaitch
+      nicoo
       tie
+      untio11
+      veehaitch
     ];
   };
-}
+})

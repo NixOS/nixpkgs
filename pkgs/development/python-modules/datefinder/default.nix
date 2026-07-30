@@ -2,25 +2,30 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
   python-dateutil,
   pytz,
   regex,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "datefinder";
   version = "0.7.3";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "akoumjian";
     repo = "datefinder";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-uOSwS+mHgbvEL+rTfs4Ax9NvJnhYemxFVqqDssy2i7g=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     regex
     pytz
     python-dateutil
@@ -34,6 +39,9 @@ buildPythonPackage rec {
     description = "Extract datetime objects from strings";
     homepage = "https://github.com/akoumjian/datefinder";
     license = lib.licenses.mit;
-    teams = [ lib.teams.deshaw ];
+    maintainers = with lib.maintainers; [
+      de11n
+      despsyched
+    ];
   };
-}
+})

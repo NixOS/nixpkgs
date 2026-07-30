@@ -7,23 +7,25 @@
   bash,
   boost,
   cmake,
+  dbus,
   inotify-tools,
   pkg-config,
   mir,
   libxkbcommon,
   swaybg,
+  systemd,
   wayland,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miriway";
-  version = "25.13";
+  version = "26.06.3";
 
   src = fetchFromGitHub {
     owner = "Miriway";
     repo = "Miriway";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-W05XAhZwdqotlDSklnw4Yh3k8VJNQJzHCJsMQn1p5rQ=";
+    hash = "sha256-q1CYySy5lB1bMZYdakHintRH2ZAinThm9rk7WkyY39U=";
   };
 
   postPatch = ''
@@ -41,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     bash
     boost
+    dbus
     mir
     libxkbcommon
     wayland # wayland-server.pc, for mirwayland.pc
@@ -52,6 +55,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace $out/bin/miriway-run \
       --replace-fail 'inotifywait -qq' '${lib.getExe' inotify-tools "inotifywait"} -qq'
+
+    substituteInPlace $out/libexec/miriway-session-startup \
+      --replace-fail 'dbus-update-activation-environment' '${lib.getExe' dbus "dbus-update-activation-environment"}'
   '';
 
   passthru = {

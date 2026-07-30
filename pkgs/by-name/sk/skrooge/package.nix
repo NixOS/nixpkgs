@@ -11,12 +11,12 @@
   kdePackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "skrooge";
   version = "25.10.0";
 
   src = fetchurl {
-    url = "mirror://kde/stable/skrooge/skrooge-${version}.tar.xz";
+    url = "mirror://kde/stable/skrooge/skrooge-${finalAttrs.version}.tar.xz";
     hash = "sha256-kECWi5/q2reBOs9DrubOz5Vol3AkA7lXzOLtbgx2HlE=";
   };
 
@@ -64,8 +64,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Personal finances manager, powered by KDE";
-    license = with lib.licenses; [ gpl3 ];
+    license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ joko ];
     homepage = "https://skrooge.org/";
   };
-}
+})

@@ -10,12 +10,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gvpe";
   version = "3.1";
 
   src = fetchurl {
-    url = "https://ftp.gnu.org/gnu/gvpe/gvpe-${version}.tar.gz";
+    url = "https://ftp.gnu.org/gnu/gvpe/gvpe-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-8evVctclu5QOCAdxocEIZ8NQnc2DFvYRSBRQPcux6LM=";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux ++ freebsd;
     license = lib.licenses.gpl2Plus;
   };
-}
+})

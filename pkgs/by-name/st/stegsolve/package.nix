@@ -1,24 +1,50 @@
 {
   lib,
-  stdenvNoCC,
-  fetchurl,
-  jre,
+  stdenv,
+  fetchFromGitHub,
+  jdk,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stegsolve";
-  version = "1.3";
+  version = "1.3.1";
 
-  src = fetchurl {
-    # No versioned binary is published :(
-    url = "https://web.archive.org/web/20230319054116if_/http://www.caesum.com/handbook/Stegsolve.jar";
-    sha256 = "0np5zb28sg6yzkp1vic80pm8iiaamvjpbf5dxmi9kwvqcrh4jyq0";
+  src = fetchFromGitHub {
+    owner = "fee1-dead";
+    repo = "Stegsolve";
+    rev = finalAttrs.version;
+    hash = "sha256-WiIZymeYnub0JilWGLXKhQKEoO1hce5DarbEjp+rTGQ==";
   };
 
-  dontUnpack = true;
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+  ];
+  buildInputs = [ jdk ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    mkdir -p out/
+    javac -d out/ -sourcepath src/ -classpath out/ -encoding utf8 src/**/*.java
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/lib/
+    mv out $out/lib/stegsolve
+
+    makeWrapper ${jdk}/bin/java $out/bin/stegsolve \
+      --add-flags "-classpath $out/lib/stegsolve stegsolve.StegSolve"
+
+    runHook postInstall
+  '';
 
   desktopItems = [
     (makeDesktopItem {
@@ -31,33 +57,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs = [
-    makeWrapper
-    copyDesktopItems
-  ];
-
-  installPhase = ''
-    runHook preInstall
-
-    export JAR=$out/share/java/stegsolve/stegsolve.jar
-    install -D $src $JAR
-    makeWrapper ${jre}/bin/java $out/bin/stegsolve \
-      --add-flags "-jar $JAR"
-
-    runHook postInstall
-  '';
-
   meta = {
     description = "Steganographic image analyzer, solver and data extractor for challanges";
     homepage = "https://www.wechall.net/forum/show/thread/527/Stegsolve_1.3/";
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = {
-      fullName = "Cronos License";
-      url = "http://www.caesum.com/legal.php";
-      free = false;
-      redistributable = true;
-    };
-    maintainers = with lib.maintainers; [ emilytrau ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      emilytrau
+      fee1-dead
+    ];
     platforms = lib.platforms.all;
     mainProgram = "stegsolve";
   };

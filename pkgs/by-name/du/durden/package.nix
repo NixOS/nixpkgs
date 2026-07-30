@@ -1,15 +1,14 @@
 {
   lib,
   stdenvNoCC,
-  fetchFromGitea,
+  fetchFromCodeberg,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "durden";
   version = "0.6.3";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "letoram";
     repo = "durden";
     tag = finalAttrs.version;
@@ -38,7 +37,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       features in Arcan, and as a very competent entry to the advanced-user side
       of the desktop environment spectrum.
     '';
-    license = with lib.licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
     maintainers = [ ];
     platforms = lib.platforms.all;
   };

@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  fetchpatch,
 }:
 
 buildGoModule (finalAttrs: {
@@ -16,6 +17,14 @@ buildGoModule (finalAttrs: {
   };
 
   vendorHash = "sha256-Bks47kusGgVsbNiLq3QxP/dhIp72HGYeMhdifFwY340=";
+
+  patches = [
+    (fetchpatch {
+      name = "go-1.26.patch";
+      url = "https://github.com/mvdan/xurls/commit/6fcda1fd6decab4a6bc49ced3b36d666cc57b7cf.patch";
+      hash = "sha256-5X2mK9Xfjmu1kaZPeut4RE3r4ku6jRDwidtzRpF5Qis=";
+    })
+  ];
 
   ldflags = [
     "-s"

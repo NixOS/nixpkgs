@@ -3,7 +3,9 @@
   lib,
   fetchFromGitHub,
   motif,
-  xorg,
+  libxt,
+  libxext,
+  libx11,
   withAudioTracking ? false,
   libpulseaudio,
   aubio,
@@ -34,9 +36,9 @@ stdenv.mkDerivation {
 
   buildInputs = [
     motif
-    xorg.libX11
-    xorg.libXext
-    xorg.libXt
+    libx11
+    libxext
+    libxt
   ]
   ++ lib.optionals withAudioTracking [
     libpulseaudio

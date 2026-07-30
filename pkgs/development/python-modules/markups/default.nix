@@ -3,12 +3,10 @@
   buildPythonPackage,
   docutils,
   fetchFromGitHub,
-  importlib-metadata,
   markdown,
   pygments,
   pytestCheckHook,
   python-markdown-math,
-  pythonOlder,
   pyyaml,
   setuptools,
   textile,
@@ -35,8 +33,7 @@ buildPythonPackage rec {
     python-markdown-math
     pyyaml
     textile
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

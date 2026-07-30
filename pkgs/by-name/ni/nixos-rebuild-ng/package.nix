@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   callPackage,
   installShellFiles,
   mkShell,
@@ -10,9 +9,6 @@
   runCommand,
   scdoc,
   withShellFiles ? true,
-  # Very long tmp dirs lead to "too long for Unix domain socket"
-  # SSH ControlPath errors. Especially macOS sets long TMPDIR paths.
-  withTmpdir ? if stdenv.hostPlatform.isDarwin then "/tmp" else null,
   # passthru.tests
   nixosTests,
 }:
@@ -68,10 +64,6 @@ python3Packages.buildPythonApplication rec {
 
   pytestFlags = [ "-vv" ];
 
-  makeWrapperArgs = lib.optionals (withTmpdir != null) [
-    "--set TMPDIR ${withTmpdir}"
-  ];
-
   passthru =
     let
       python-with-pkgs = python3.withPackages (
@@ -98,6 +90,7 @@ python3Packages.buildPythonApplication rec {
           # FIXME: this test is disabled since it times out in @ofborg
           # nixos-rebuild-install-bootloader
           nixos-rebuild-specialisations
+          nixos-rebuild-store-path
           nixos-rebuild-target-host
           ;
         repl = callPackage ./tests/repl.nix { };

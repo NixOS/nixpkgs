@@ -3,34 +3,45 @@
   rustPlatform,
   fetchFromGitHub,
   versionCheckHook,
+  _experimental-update-script-combinators,
   nix-update-script,
+  vscode-extension-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasm-language-tools";
-  version = "0.8.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "g-plane";
     repo = "wasm-language-tools";
-    tag = "v${version}";
-    hash = "sha256-4PnagT1pufsEy1ROvhYYtkuSsU+irGpYV9iffwIQPmk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XyVWNhVDo190/hnKj6A5dDYnlO9/WI0GYJIrkyfUkTw=";
   };
 
-  cargoHash = "sha256-h+HEOzS93XFuDm5luODAzzGtxxaxTTdxTWIKm41Sw6s=";
+  cargoHash = "sha256-VoApXHdD8SF8ZqnDVynxunjVoZ5WKai2Xzw0UYy7hSg=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/wat_server";
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script { })
+    (vscode-extension-update-script {
+      attrPath = "vscode-extensions.gplane.wasm-language-tools";
+      extraArgs = [
+        "--override-filename"
+        "pkgs/applications/editors/vscode/extensions/gplane.wasm-language-tools/default.nix"
+      ];
+    })
+  ];
 
   meta = {
     description = "Language server and other tools for WebAssembly";
     homepage = "https://github.com/g-plane/wasm-language-tools/";
-    changelog = "https://github.com/g-plane/wasm-language-tools/releases/tag/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/g-plane/wasm-language-tools/releases/tag/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
     mainProgram = "wat_server";
   };
-}
+})

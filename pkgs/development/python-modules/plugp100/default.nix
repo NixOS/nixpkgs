@@ -15,7 +15,7 @@
   pytest-asyncio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "plugp100";
   version = "5.1.5";
   format = "setuptools";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "petretiandrea";
     repo = "plugp100";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-bPjgyScHxiUke/M5S6BOw7df7wbNuSy5ouVIK5guWxw=";
   };
 
@@ -57,4 +57,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ pyle ];
   };
-}
+})

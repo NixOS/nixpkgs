@@ -5,12 +5,12 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubespy";
   version = "0.6.3";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     owner = "pulumi";
     repo = "kubespy";
     sha256 = "sha256-l/vOIFvCQHq+gOr38SpVZ8ShZdI1bP4G5PY4hKhkCU0=";
@@ -24,7 +24,7 @@ buildGoModule rec {
 
   ldflags = [
     "-X"
-    "github.com/pulumi/kubespy/version.Version=${version}"
+    "github.com/pulumi/kubespy/version.Version=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -41,4 +41,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

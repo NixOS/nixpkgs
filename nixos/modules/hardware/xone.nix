@@ -20,7 +20,7 @@ in
       ];
       extraModulePackages = with config.boot.kernelPackages; [ xone ];
     };
-    hardware.firmware = [ pkgs.xow_dongle-firmware ];
+    hardware.firmware = [ pkgs.xone-dongle-firmware ];
     hardware.xpad-noone.enable = lib.mkDefault true;
   };
 

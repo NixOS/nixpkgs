@@ -1,0 +1,47 @@
+diff --git a/app-server/src/application.js b/app-server/src/application.js
+index a2c065f..2d594bf 100644
+--- a/app-server/src/application.js
++++ b/app-server/src/application.js
+@@ -26,7 +26,7 @@ module.exports = new class Application {
+ 
+   userOptions() {
+     if (this._userOptions === null) {
+-      this._userOptions = new UserOptions('../../config/config.local.js');
++      this._userOptions = new UserOptions(process.env.NIX_SCANSERVJS_CONFIG_PATH);
+     }
+     return this._userOptions;
+   }
+diff --git a/app-server/src/classes/user-options.js b/app-server/src/classes/user-options.js
+index f129e3c..c71e754 100644
+--- a/app-server/src/classes/user-options.js
++++ b/app-server/src/classes/user-options.js
+@@ -4,7 +4,7 @@ const path = require('path');
+ module.exports = class UserOptions {
+   constructor(localConfigPath) {
+     if (localConfigPath) {
+-      const localPath = path.join(__dirname, localConfigPath);
++      const localPath = localConfigPath;
+       if (fs.existsSync(localPath)) {
+         this.local = require(localPath);
+       }
+diff --git a/app-server/src/express-configurer.js b/app-server/src/express-configurer.js
+index 945dae2..1b456cc 100644
+--- a/app-server/src/express-configurer.js
++++ b/app-server/src/express-configurer.js
+@@ -166,6 +166,7 @@ module.exports = class ExpressConfigurer {
+ 
+     try {
+       fs.mkdirSync(config.outputDirectory, { recursive: true });
++      fs.mkdirSync(config.previewDirectory, { recursive: true });
+       fs.mkdirSync(config.thumbnailDirectory, { recursive: true });
+       fs.mkdirSync(config.tempDirectory, { recursive: true });
+     } catch (exception) {
+@@ -220,7 +221,7 @@ module.exports = class ExpressConfigurer {
+    * @returns {ExpressConfigurer}
+    */
+   statics() {
+-    this.app.use(express.static('client'));
++    this.app.use(express.static('@client@'));
+     return this;
+   }
+ 

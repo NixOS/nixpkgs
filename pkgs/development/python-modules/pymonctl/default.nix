@@ -6,7 +6,7 @@
   setuptools,
 
   ewmhlib,
-  xlib,
+  python-xlib,
   typing-extensions,
 }:
 
@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Kalmat";
     repo = "PyMonCtl";
-    tag = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-eFB+HqYBud836VNEA8q8o1KQKA+GHwSC0YfU1KCbDXw=";
   };
 
@@ -26,7 +26,7 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     ewmhlib
-    xlib
+    python-xlib
     typing-extensions
   ];
 

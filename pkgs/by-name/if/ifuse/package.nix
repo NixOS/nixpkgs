@@ -4,20 +4,24 @@
   fetchFromGitHub,
   autoreconfHook,
   pkg-config,
-  fuse,
+  fuse3,
   usbmuxd,
   libimobiledevice,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ifuse";
-  version = "1.1.4+date=2022-04-04";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = "ifuse";
-    rev = "6f5b8e410f9615b3369ca5eb5367745e13d83b92";
-    hash = "sha256-KbuJLS2BWua9DnhLv2KtsQObin0PQwXQwEdgi3lSAPk=";
+    tag = finalAttrs.version;
+    hash = "sha256-STMELfxbWf2W6NKKqBxgbQLZpYXv9N0cDLgHho5PRYM=";
+  };
+
+  env = {
+    VER = finalAttrs.version;
   };
 
   nativeBuildInputs = [
@@ -26,7 +30,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    fuse
+    fuse3
     usbmuxd
     libimobiledevice
   ];
@@ -45,4 +49,4 @@ stdenv.mkDerivation {
     maintainers = [ ];
     mainProgram = "ifuse";
   };
-}
+})

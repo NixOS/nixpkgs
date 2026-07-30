@@ -6,29 +6,24 @@
   pytest-timeout,
   pytestCheckHook,
   setuptools,
-  wheel,
+  setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "busypie";
-  version = "0.5.1";
+  version = "0.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rockem";
     repo = "busypie";
-    tag = "v${version}";
-    hash = "sha256-dw0Sc/a27/EYY7LVMQqDkYuxrUFYK+N6XLk6A7A/eS8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MIwME5QM0BDpYP9frraJP/1v0lTZpPzgbqAawpGAcU0=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pytest-runner" ""
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    wheel
+    setuptools-scm
   ];
 
   nativeCheckInputs = [
@@ -42,8 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "Expressive busy wait for Python";
     homepage = "https://github.com/rockem/busypie";
-    changelog = "https://github.com/rockem/busypie/releases/tag/v${version}";
+    changelog = "https://github.com/rockem/busypie/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

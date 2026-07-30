@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation {
   pname = "xcursor-viewer";
-  version = "0-unstable-2026-01-05";
+  version = "0-unstable-2026-01-27";
 
   src = fetchFromGitHub {
     owner = "drizt";
     repo = "xcursor-viewer";
-    rev = "216ed3b6b4694f75fc424862874dc5e2b66fb685";
-    hash = "sha256-faQuxHrUAqqSODDKZrRlMnWRj0NeM8hSHSbec7KSo50=";
+    rev = "f53e1d261458e84b0f76fb587af560841c413087";
+    hash = "sha256-fWkjcXmtU51AQOTK1nLx7Kw9kQtQhUz9EVtAAVX0WEg=";
   };
 
   nativeBuildInputs = [

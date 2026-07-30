@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "csvkit";
   version = "2.2.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-FHMYqNuuwHwLu5KRwUt43l+jLtPUpcI5blKoPAow32s=";
   };
 
@@ -36,8 +36,8 @@ python3Packages.buildPythonApplication rec {
   meta = {
     homepage = "https://github.com/wireservice/csvkit";
     description = "Suite of command-line tools for converting to and working with CSV";
-    changelog = "https://github.com/wireservice/csvkit/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/wireservice/csvkit/blob/${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -5,20 +5,20 @@
   alsa-lib,
   libjack2,
   pkg-config,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   xorgproto,
   libpulseaudio,
   copyDesktopItems,
   makeDesktopItem,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bristol";
   version = "0.60.11";
 
   src = fetchurl {
-    url = "mirror://sourceforge/bristol/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/bristol/bristol-${finalAttrs.version}.tar.gz";
     hash = "sha256-fR8LvQ19MD/HfGuVSbYXCNeoO03AB4GAEbH1XR+pIro=";
   };
 
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
     alsa-lib
     libjack2
     libpulseaudio
-    libX11
-    libXext
+    libx11
+    libxext
     xorgproto
   ];
 
@@ -46,11 +46,17 @@ stdenv.mkDerivation rec {
     "--enable-jack-default-midi"
   ];
 
-  # Workaround build failure on -fno-common toolchains like upstream
-  # gcc-10. Otherwise build fails as:
-  #  ld: brightonCLI.o:/build/bristol-0.60.11/brighton/brightonCLI.c:139: multiple definition of
-  #    `event'; brightonMixerMenu.o:/build/bristol-0.60.11/brighton/brightonMixerMenu.c:1182: first defined here
-  env.NIX_CFLAGS_COMPILE = "-fcommon -Wno-implicit-int";
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Workaround build failure on -fno-common toolchains like upstream
+    # gcc-10. Otherwise build fails as:
+    #  ld: brightonCLI.o:/build/bristol-0.60.11/brighton/brightonCLI.c:139: multiple definition of
+    #    `event'; brightonMixerMenu.o:/build/bristol-0.60.11/brighton/brightonMixerMenu.c:1182: first defined here
+    "-fcommon"
+    # gcc14
+    "-Wno-implicit-int"
+    # gcc15
+    "-std=gnu17"
+  ];
 
   preInstall = ''
     sed -e "s@\`which bristol\`@$out/bin/bristol@g" -i bin/startBristol
@@ -83,4 +89,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = [ ];
   };
-}
+})

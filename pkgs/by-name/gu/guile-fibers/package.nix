@@ -9,14 +9,14 @@
   texinfo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guile-fibers";
   version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "wingo";
     repo = "fibers";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jJKA5JEHsmqQ/IKb1aNmOtoVaGKNjcgTKyo5VCiJbXM=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = guile.meta.platforms;
   };
-}
+})

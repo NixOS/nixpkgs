@@ -35,7 +35,6 @@
   lvm2,
   nilfs-utils,
   ntfs3g,
-  reiserfsprogs,
   udftools,
   xfsprogs,
   xfsdump,
@@ -43,11 +42,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gparted";
-  version = "1.7.0";
+  version = "1.8.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/gparted/gparted-${finalAttrs.version}.tar.gz";
-    hash = "sha256-hK47mXPkQ6IXXweqDcKs7q2xUB4PiVPOyDsOwzR7fVI=";
+    hash = "sha256-ZziKxAX5/pKkBjbLA7Dh4LtkA62JzMF0sv8ZDvbzI0k=";
   };
 
   # Tries to run `pkexec --version` to get version.
@@ -97,7 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
     lvm2
     nilfs-utils
     ntfs3g
-    reiserfsprogs
     udftools
     xfsprogs
     xfsdump

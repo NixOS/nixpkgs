@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pystiebeleltron";
-  version = "0.2.5";
+  version = "0.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ThyMYthOS";
     repo = "python-stiebel-eltron";
     tag = "v${version}";
-    hash = "sha256-irZmtsGcbmr5+aniBofDg0fhkP646h3mpRyTdWndOyY=";
+    hash = "sha256-ApFhqJsYC/Kym1ITq5dn0/OQ6++led6RbG97DGvno0k=";
   };
 
   build-system = [ hatchling ];
@@ -29,6 +29,11 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-asyncio
     pytest-mock
+  ];
+
+  disabledTestPaths = [
+    # mock server is not compatible with pymodbus 3.13
+    "test/test_pystiebeleltron.py"
   ];
 
   pythonImportsCheck = [ "pystiebeleltron" ];

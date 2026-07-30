@@ -26,10 +26,10 @@
   makeWrapper,
   glib,
   libbsd,
-  libX11,
-  xorgserver,
+  libx11,
+  xorg-server,
   kmod,
-  xf86videonouveau,
+  xf86-video-nouveau,
   nvidia_x11 ? linuxPackages.nvidia_x11,
   linuxPackages,
   pkgsi686Linux,
@@ -65,12 +65,12 @@ let
 
   bbdPath = lib.makeBinPath [
     kmod
-    xorgserver
+    xorg-server
   ];
 
   xmodules = lib.concatStringsSep "," (
     map (x: "${x.out or x}/lib/xorg/modules") (
-      [ xorgserver ] ++ lib.optional (!useNvidia) xf86videonouveau
+      [ xorg-server ] ++ lib.optional (!useNvidia) xf86-video-nouveau
     )
   );
 
@@ -135,7 +135,7 @@ stdenv.mkDerivation rec {
   # Build-time dependencies of bumblebeed and optirun.
   # Note that it has several runtime dependencies.
   buildInputs = [
-    libX11
+    libx11
     glib
     libbsd
     kmod
@@ -159,14 +159,14 @@ stdenv.mkDerivation rec {
     # Don't use a special group, just reuse wheel.
     "CONF_GID=wheel"
     # see #10282
-    #"CONF_PRIMUS_LD_PATH=${primusLibs}"
+    #"CONF_PRIMUS_LD_PATH=${primus-lib}"
   ]
   ++ lib.optionals useNvidia [
     "CONF_LDPATH_NVIDIA=${nvidiaLibs}"
     "CONF_MODPATH_NVIDIA=${nvidia_x11.bin}/lib/xorg/modules"
   ];
 
-  CFLAGS = [
+  env.CFLAGS = toString [
     "-DX_MODULE_APPENDS=\\\"${xmodules}\\\""
   ];
 

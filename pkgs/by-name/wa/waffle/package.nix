@@ -13,7 +13,7 @@
   python3,
   x11Support ? true,
   libxcb,
-  libX11,
+  libx11,
   waylandSupport ? true,
   wayland,
   wayland-protocols,
@@ -23,16 +23,16 @@
   udev,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "waffle";
-  version = "1.8.1";
+  version = "1.8.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "Mesa";
     repo = "waffle";
-    rev = "v${version}";
-    sha256 = "sha256-Y7GRYLqSO572qA1eZ3jS8QlZ1X9xKpDtScaySTuPK/U=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-VvkSZOddxTPukyPpngi4vxni/OqmMGJV7voiiM0uHXo=";
   };
 
   buildInputs = [
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     libglvnd
   ]
   ++ lib.optionals x11Support [
-    libX11
+    libx11
     libxcb
   ]
   ++ lib.optionals waylandSupport [
@@ -91,4 +91,4 @@ stdenv.mkDerivation rec {
     inherit (libgbm.meta) platforms;
     maintainers = with lib.maintainers; [ Flakebi ];
   };
-}
+})

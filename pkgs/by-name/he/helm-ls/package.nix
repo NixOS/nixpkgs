@@ -8,14 +8,14 @@
   helm-ls,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "helm-ls";
   version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "mrjosh";
     repo = "helm-ls";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-4M2o/M8mnO+9QwsjsGahY3i/pwtsNdCMCn5oCFGm0aI=";
   };
 
@@ -26,7 +26,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -44,10 +44,10 @@ buildGoModule rec {
 
   meta = {
     description = "Language server for Helm";
-    changelog = "https://github.com/mrjosh/helm-ls/releases/tag/v${version}";
+    changelog = "https://github.com/mrjosh/helm-ls/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/mrjosh/helm-ls";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ stehessel ];
     mainProgram = "helm_ls";
   };
-}
+})

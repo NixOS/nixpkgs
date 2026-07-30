@@ -155,8 +155,12 @@ in
 
     wideArea = lib.mkOption {
       type = lib.types.bool;
-      default = true;
-      description = "Whether to enable wide-area service discovery.";
+      default = false;
+      description = ''
+        Whether to enable wide-area service discovery.
+
+        It is recommended to keep this options disabled as it exposes the system to `CVE-2024-52615`/`GHSA-x6vp-f33h-h32g`.
+      '';
     };
 
     reflector = lib.mkOption {
@@ -258,6 +262,28 @@ in
       '';
     };
 
+    nssmdnsFull = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Whether to enable the full mDNS NSS (Name Service Switch) plug-in.
+
+        By default, only the minimal module is enabled. The minimal module
+        will only resolve `.local` domains and only perform reverse hostname
+        lookups for `169.254.0.0/16`. The full module will use mDNS to resolve any
+        domain allowed by [`/etc/mdns.allow`][1] and will perform reverse hostname
+        lookups for any IP address.
+
+        [1]: https://github.com/avahi/nss-mdns/tree/master#etcmdnsallow
+
+        ::: {.note}
+        Enabling this option will introduce a 5 second delay to failed reverse
+        hostname lookups. For example, this will often add a 5 second delay to
+        ping.
+        :::
+      '';
+    };
+
     cacheEntriesMax = lib.mkOption {
       type = lib.types.nullOr lib.types.int;
       default = null;
@@ -279,6 +305,19 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    warnings = [
+      (lib.mkIf cfg.wideArea "Enabling `services.avahi.wideArea` exposes this system to `CVE-2024-52615`.")
+    ];
+
+    assertions = [
+      {
+        assertion = cfg.nssmdnsFull -> (cfg.nssmdns4 || cfg.nssmdns6);
+        message = ''
+          `services.avahi.nssmdnsFull` requires one or both of `services.avahi.nssmdns4` and/or `services.avahi.nssmdns6` to be enabled.
+        '';
+      }
+    ];
+
     users.users.avahi = {
       description = "avahi-daemon privilege separation user";
       home = "/var/empty";
@@ -304,7 +343,7 @@ in
       lib.optionals (cfg.nssmdns4 || cfg.nssmdns6) (
         lib.mkMerge [
           (lib.mkBefore [ "${mdns}_minimal [NOTFOUND=return]" ]) # before resolve
-          (lib.mkAfter [ "${mdns}" ]) # after dns
+          (lib.mkAfter (lib.optional cfg.nssmdnsFull "${mdns}")) # after dns
         ]
       );
 

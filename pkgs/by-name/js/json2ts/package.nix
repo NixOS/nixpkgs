@@ -5,7 +5,7 @@
   jq,
 }:
 buildNpmPackage {
-  name = "json2ts";
+  pname = "json2ts";
   version = "15.0.2";
   src = fetchFromGitHub {
     owner = "bcherny";

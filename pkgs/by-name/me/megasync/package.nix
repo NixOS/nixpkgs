@@ -27,20 +27,20 @@
   readline,
   sqlite,
   wget,
-  xorg,
+  xrdb,
   zlib,
 
   nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "megasync";
-  version = "5.16.0.2";
+  version = "6.4.0.2";
 
   src = fetchFromGitHub rec {
     owner = "meganz";
     repo = "MEGAsync";
     tag = "v${finalAttrs.version}_Linux";
-    hash = "sha256-Bkye2Is3GbdnYYaS//AkNfrt8ppWP9zE58obcmUm0wE=";
+    hash = "sha256-PgIRIr3+XRwv48EpREL56yzuqI8Ws72V4o3pTSR1ZfA=";
     fetchSubmodules = false; # DesignTokensImporter cannot be fetched, see #1010 in github:meganz/megasync
     leaveDotGit = true;
     postFetch = ''
@@ -131,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   preFixup = ''
-    qtWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ xorg.xrdb ]})
+    qtWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ xrdb ]})
   '';
 
   passthru = {
@@ -152,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
       "i686-linux"
       "x86_64-linux"
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tallesCoelho ];
     mainProgram = "megasync";
   };
 })

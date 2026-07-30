@@ -11,14 +11,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "munge";
-  version = "0.5.17";
+  version = "0.5.18";
 
   src = fetchFromGitHub {
     owner = "dun";
     repo = "munge";
     rev = "munge-${finalAttrs.version}";
-    sha256 = "sha256-MfxED81P4ipdP4fuxwmpNrAeej3ZH+qiHIt5bSrct1o=";
+    sha256 = "sha256-Hoaldm55E0HC3qqqBS5uZvlgcWepnVLyJNQMB2P/t9Q=";
   };
+
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -69,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = ''
       An authentication service for creating and validating credentials
     '';
+    homepage = "https://github.com/dun/munge";
     license = [
       # MUNGE
       lib.licenses.gpl3Plus

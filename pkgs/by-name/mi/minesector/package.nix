@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.1.5";
 
   src = fetchFromGitHub {
-    owner = "grassdne";
+    owner = "ruuzia";
     repo = "minesector";
     tag = finalAttrs.version;
     hash = "sha256-VMTXZ4CIk9RpE4R9shHPl0R/T7mJUKY2b8Zi0DPW0/Q=";
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     mainProgram = "minesector";
     description = "Snazzy Minesweeper-based game built with SDL2";
-    homepage = "https://github.com/grassdne/minesector";
+    homepage = "https://github.com/ruuzia/minesector";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = [ ];

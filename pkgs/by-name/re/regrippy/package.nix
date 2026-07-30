@@ -4,16 +4,13 @@
   fetchPypi,
 }:
 
-let
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "regrippy";
   version = "2.0.2";
-in
-python3Packages.buildPythonApplication {
-  inherit pname version;
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-43Wh5iQE1ihD8aGxDmmwKDkPeMfySP0mdk0XhrVefyc=";
   };
 
@@ -35,4 +32,4 @@ python3Packages.buildPythonApplication {
     maintainers = with lib.maintainers; [ mikehorn ];
     mainProgram = "regrippy";
   };
-}
+})

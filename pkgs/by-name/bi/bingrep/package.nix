@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bingrep";
   version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "m4b";
     repo = "bingrep";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-1GSAYhxFg5nXR8+vWBN10JLV7qUIxT1hYNXdnpE5Uag=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ minijackson ];
   };
-}
+})

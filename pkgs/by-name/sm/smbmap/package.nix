@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "smbmap";
   version = "1.10.8";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ShawnDEvans";
     repo = "smbmap";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jJDDrHBZWlDOQ/gI6x2Vy+ljXm+9lcBIt8XG/npNa6M=";
   };
 
@@ -34,9 +34,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "SMB enumeration tool";
     homepage = "https://github.com/ShawnDEvans/smbmap";
-    changelog = "https://github.com/ShawnDEvans/smbmap/releases/tag/v${version}";
+    changelog = "https://github.com/ShawnDEvans/smbmap/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "smbmap";
   };
-}
+})

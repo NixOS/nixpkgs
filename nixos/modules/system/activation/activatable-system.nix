@@ -49,20 +49,22 @@ in
   config =
     let
       activationScript = lib.getExe (
-        pkgs.writeShellApplication {
+        (pkgs.writeShellApplication {
           name = "activate";
           text = config.system.activationScripts.script;
           checkPhase = "";
           bashOptions = [ ];
-        }
+        }).overrideAttrs
+          { preferLocalBuild = true; }
       );
       dryActivationScript = lib.getExe (
-        pkgs.writeShellApplication {
+        (pkgs.writeShellApplication {
           name = "dry-activate";
           text = config.system.dryActivationScript;
           checkPhase = "";
           bashOptions = [ ];
-        }
+        }).overrideAttrs
+          { preferLocalBuild = true; }
       );
     in
     {

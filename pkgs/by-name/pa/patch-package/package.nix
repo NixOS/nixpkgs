@@ -40,6 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "patch-package";
     homepage = "https://github.com/ds300/patch-package";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

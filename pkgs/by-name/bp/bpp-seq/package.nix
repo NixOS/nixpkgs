@@ -5,7 +5,7 @@
   bpp-core,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bpp-seq";
 
   inherit (bpp-core) version postPatch;
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "BioPP";
     repo = "bpp-seq";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1mc09g8jswzsa4wgrfv59jxn15ys3q8s0227p1j838wkphlwn2qk";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/BioPP/bpp-seq";
     changelog = "https://github.com/BioPP/bpp-seq/blob/master/ChangeLog";
   };
-}
+})

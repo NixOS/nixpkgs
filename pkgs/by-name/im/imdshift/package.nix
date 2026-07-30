@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "imdshift";
   version = "1.0.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ayushpriya10";
     repo = "IMDShift";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Uoa0uNOhCkT622Yy8GEg8jz9k5zmtXwGmvdb3MVTLX8=";
   };
 
@@ -38,8 +38,8 @@ python3.pkgs.buildPythonApplication rec {
     description = "Tool to migrate workloads to IMDSv2";
     mainProgram = "imdshift";
     homepage = "https://github.com/ayushpriya10/IMDShift";
-    changelog = "https://github.com/ayushpriya10/IMDShift/releases/tag/v${version}";
+    changelog = "https://github.com/ayushpriya10/IMDShift/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

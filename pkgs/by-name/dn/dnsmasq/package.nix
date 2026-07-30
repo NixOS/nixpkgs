@@ -4,7 +4,7 @@
   fetchurl,
   pkg-config,
   nettle,
-  libidn,
+  libidn2,
   libnetfilter_conntrack,
   nftables,
   buildPackages,
@@ -16,7 +16,7 @@
 let
   copts = lib.concatStringsSep " " (
     [
-      "-DHAVE_IDN"
+      "-DHAVE_LIBIDN2"
       "-DHAVE_DNSSEC"
     ]
     ++ lib.optionals dbusSupport [
@@ -28,13 +28,13 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dnsmasq";
-  version = "2.91";
+  version = "2.93";
 
   src = fetchurl {
-    url = "https://www.thekelleys.org.uk/dnsmasq/${pname}-${version}.tar.xz";
-    hash = "sha256-9iJoKEizNnetsratCCZGGKKuCgHaSGqT/YzZEYaz0VM=";
+    url = "https://www.thekelleys.org.uk/dnsmasq/dnsmasq-${finalAttrs.version}.tar.xz";
+    hash = "sha256-DADU5cl8gwbl+5MrNIs0JpycKaDn3w6OgpWLQHCSvBk=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     nettle
-    libidn
+    libidn2
   ]
   ++ lib.optionals dbusSupport [ dbus ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -119,4 +119,4 @@ stdenv.mkDerivation rec {
       fpletz
     ];
   };
-}
+})

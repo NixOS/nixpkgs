@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  pythonAtLeast,
   setuptools,
   pytestCheckHook,
   regex,
@@ -16,6 +17,8 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-UXDhvNT8y1K9vf8wCxS2hzBIO8RvaiqJ964rsCTk0Tk=";
   };
+
+  disabled = pythonAtLeast "3.14";
 
   build-system = [
     setuptools

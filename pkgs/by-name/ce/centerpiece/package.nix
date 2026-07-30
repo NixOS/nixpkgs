@@ -10,17 +10,20 @@
   libxkbcommon,
   wayland,
   enableX11 ? true,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "centerpiece";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "friedow";
     repo = "centerpiece";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-tZNwMPL1ITWVvoywojsd5j0GIVQt6pOKFLwi7jwqLKg=";
   };
 
@@ -34,15 +37,12 @@ rustPlatform.buildRustPackage rec {
     vulkan-loader
     wayland
   ]
-  ++ lib.optionals enableX11 (
-    with xorg;
-    [
-      libX11
-      libXcursor
-      libXi
-      libXrandr
-    ]
-  );
+  ++ lib.optionals enableX11 [
+    libx11
+    libxcursor
+    libxi
+    libxrandr
+  ];
 
   postFixup = lib.optional stdenv.hostPlatform.isLinux ''
     rpath=$(patchelf --print-rpath $out/bin/centerpiece)
@@ -67,4 +67,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "centerpiece";
   };
-}
+})

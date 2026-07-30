@@ -8,7 +8,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dvc-hdfs";
   version = "3.0.0";
   pyproject = true;
@@ -16,16 +16,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "dvc-hdfs";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Bo8+El5GC7iyT8SxaJquWFG29BOeilmEMDtTG+RkDGI=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dvc
     fsspec
   ]
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "HDFS/WebHDFS plugin for dvc";
     homepage = "https://github.com/iterative/dvc-hdfs";
-    changelog = "https://github.com/iterative/dvc-hdfs/releases/tag/${version}";
+    changelog = "https://github.com/iterative/dvc-hdfs/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

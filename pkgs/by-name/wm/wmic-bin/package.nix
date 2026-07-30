@@ -7,14 +7,14 @@
   libxcrypt-legacy,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wmic-bin";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "R-Vision";
     repo = "wmi-client";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1w1mdbiwz37wzry1q38h8dyjaa6iggmsb9wcyhhlawwm1vj50w48";
   };
 
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ peterhoeg ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

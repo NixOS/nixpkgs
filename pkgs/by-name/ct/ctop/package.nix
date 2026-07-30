@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ctop";
   version = "0.7.7";
 
   src = fetchFromGitHub {
     owner = "bcicen";
     repo = "ctop";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-tojSzgpoGQg6MwV/MVpQpCA5w6bZO+9IOvfkw0Ydr6c=";
   };
 
@@ -20,8 +20,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
-    "-X main.build=v${version}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.build=v${finalAttrs.version}"
   ];
 
   meta = {
@@ -31,4 +31,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ apeyroux ];
     mainProgram = "ctop";
   };
-}
+})

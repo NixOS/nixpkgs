@@ -4,6 +4,7 @@
   buildRedist,
   lib,
   libcublas,
+  cuda_nvrtc,
   patchelf,
   zlib,
 }:
@@ -41,6 +42,12 @@ buildRedist (
       ${lib.getExe patchelf} ''${!outputLib:?}/lib/libcudnn.so --add-needed libcudnn_cnn_infer.so
       ${lib.getExe patchelf} ''${!outputLib:?}/lib/libcudnn_ops_infer.so --add-needed libcublas.so --add-needed libcublasLt.so
     '';
+
+    # CuDNN depends on libnvrtc.so at runtime, as mentioned here in one small error description
+    # https://docs.nvidia.com/deeplearning/cudnn/backend/latest/api/cudnn-graph-library.html
+    appendRunpaths = [
+      "${lib.getLib cuda_nvrtc}/lib"
+    ];
 
     # NOTE:
     #   With cuDNN forward compatiblity, all non-natively supported compute capabilities JIT compile PTX kernels.

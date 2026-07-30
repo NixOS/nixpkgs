@@ -12,13 +12,13 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libabw";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchurl {
-    url = "https://dev-www.libreoffice.org/src/libabw/${pname}-${version}.tar.xz";
-    sha256 = "1vbfrmnvib3cym0yyyabnd8xpx4f7wp20vnn09s6dln347fajqz7";
+    url = "https://dev-www.libreoffice.org/src/libabw/libabw-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-+iaFo0QNpuA6Zqd4SA2Ty5X2Bk5FQeWONzl2gHYP1qA=";
   };
 
   # Boost 1.59 compatibility fix
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.mpl20;
   };
-}
+})

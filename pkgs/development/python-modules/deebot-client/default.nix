@@ -10,6 +10,7 @@
   orjson,
   pkg-config,
   pycountry,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-codspeed,
   pytestCheckHook,
@@ -20,31 +21,28 @@
   xz,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "deebot-client";
-  version = "17.0.1";
+  version = "18.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.13";
+  disabled = pythonOlder "3.14";
 
   src = fetchFromGitHub {
     owner = "DeebotUniverse";
     repo = "client.py";
-    tag = version;
-    hash = "sha256-evd0wqID9kEBzhJgRSpcd95ALp9LPSb5RM3wEIKuY0Y=";
+    tag = finalAttrs.version;
+    hash = "sha256-SFOwIK1rjvbLw5W0d6vzXVUDlUOlBYOu/GMvlwwFDs0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-cLNFUDT74NrBgUL6vGC6lbFy2A2W1jYF7A8H3BQ/s8A=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-mvHHwfeP7k8bvOMFcNTn7wZlumMJ8wx7H+p8SNreIuE=";
   };
-
-  pythonRelaxDeps = [
-    "aiohttp"
-  ];
 
   nativeBuildInputs = [
     pkg-config
+    pyprojectVersionPatchHook
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
   ];
@@ -93,8 +91,8 @@ buildPythonPackage rec {
   meta = {
     description = "Deebot client library";
     homepage = "https://github.com/DeebotUniverse/client.py";
-    changelog = "https://github.com/DeebotUniverse/client.py/releases/tag/${version}";
+    changelog = "https://github.com/DeebotUniverse/client.py/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -13,11 +13,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gsm";
-  version = "1.0.23";
+  version = "1.0.24";
 
   src = fetchurl {
-    url = "https://www.quut.com/gsm/${pname}-${version}.tar.gz";
-    sha256 = "sha256-i3WRqFrJrc6FjyBTAF5rLrIMI7i4qGjf+ylpZF+jI8A=";
+    url = "https://www.quut.com/gsm/gsm-${version}.tar.gz";
+    sha256 = "sha256-o8QMZHGSg4P0q/yy6PJAEqH1Yr4vF7jWchRdWYZoGpI=";
   };
 
   patchPhase = ''
@@ -63,7 +63,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.quut.com/gsm/";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
-      codyopel
       raskin
     ];
     platforms = lib.platforms.unix;

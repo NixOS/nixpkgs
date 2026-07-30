@@ -7,12 +7,12 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-rail";
   version = "0.7.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-L8yh47lYvXVGOr8jDZ4Gk2rIfUnr88q9OR5/iDrJua0=";
   };
 
@@ -60,9 +60,9 @@ rustPlatform.buildRustPackage rec {
     description = "Graph-aware monorepo orchestration for Rust workspaces";
     mainProgram = "cargo-rail";
     homepage = "https://github.com/loadingalias/cargo-rail";
-    changelog = "https://github.com/loadingalias/cargo-rail/releases/tag/v${version}";
+    changelog = "https://github.com/loadingalias/cargo-rail/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
-}
+})

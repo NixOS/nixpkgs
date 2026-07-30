@@ -4,16 +4,16 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
-  version = "1.5.0";
+python3Packages.buildPythonApplication (finalAttrs: {
+  version = "1.6.0";
   pname = "podman-compose";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "podman-compose";
     owner = "containers";
-    tag = "v${version}";
-    hash = "sha256-AEnq0wsDHaCxefaEX4lB+pCAIKzN0oyaBNm7t7tK/yI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zkXLZfYWpIaQYoUU7GcGnkuTBmhzpJkyojbzFuTR5FI=";
   };
 
   build-system = [
@@ -47,4 +47,4 @@ python3Packages.buildPythonApplication rec {
     teams = [ lib.teams.podman ];
     mainProgram = "podman-compose";
   };
-}
+})

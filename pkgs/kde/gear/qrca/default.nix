@@ -2,7 +2,6 @@
   mkKdeDerivation,
   pkg-config,
   qtmultimedia,
-  kirigami-addons,
 }:
 mkKdeDerivation {
   pname = "qrca";
@@ -10,6 +9,5 @@ mkKdeDerivation {
   extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
     qtmultimedia
-    kirigami-addons
   ];
 }

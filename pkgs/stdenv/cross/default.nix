@@ -4,7 +4,7 @@
   crossSystem,
   config,
   overlays,
-  crossOverlays ? [ ],
+  crossOverlays,
 }:
 
 let
@@ -83,7 +83,10 @@ lib.init bootStages
                   || p.isGenode;
               in
               f hostPlatform && !(f buildPlatform)
-            ) buildPackages.updateAutotoolsGnuConfigScriptsHook;
+            ) buildPackages.updateAutotoolsGnuConfigScriptsHook
+            ++ lib.optional (
+              hostPlatform.isCygwin && !buildPlatform.isCygwin
+            ) buildPackages.cygwin.cygwinDllLinkHook;
         })
       );
     in

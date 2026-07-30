@@ -9,14 +9,14 @@
   gd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.2.15";
   pname = "brial";
 
   src = fetchFromGitHub {
     owner = "BRiAl";
     repo = "BRiAl";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-I8p2jdc2/oq9piy1QvNl+N0+MHDE5Xv1kawkRTjrWSU=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.unix;
   };
-}
+})

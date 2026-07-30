@@ -26,6 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = hashes.${finalAttrs.version};
   };
 
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+
   patches = [
     ./nix-store-date.patch
   ]
@@ -55,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     PREFIX = placeholder "out";
     LIBDIRNAME = "/lib";
-    NIX_CFLAGS_COMPILE = toString (
+    CFLAGS = toString (
       lib.optionals stdenv.cc.isClang [
         "-Wno-error=cast-function-type"
         "-Wno-error=format-truncation"
@@ -72,6 +78,8 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   __structuredAttrs = true;
+  strictDeps = true;
+  enableParallelBuilding = true;
 
   meta = {
     description = "Report faked system time to programs without having to change the system-wide time";

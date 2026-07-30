@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nullidentdmod";
   version = "1.3";
 
   src = fetchFromGitHub {
     owner = "Ranthrall";
     repo = "nullidentdmod";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1ahwm5pyidc6m07rh5ls2lc25kafrj233nnbcybprgl7bqdq1b0k";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ das_j ];
     platforms = lib.platforms.linux; # Must be run by systemd
   };
-}
+})

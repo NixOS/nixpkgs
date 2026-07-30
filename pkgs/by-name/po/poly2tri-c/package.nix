@@ -7,7 +7,7 @@
   glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "poly2tri-c";
   version = "0.1.0";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "jtojnar";
     repo = "poly2tri-c";
-    rev = "p2tc-${version}";
+    rev = "p2tc-${finalAttrs.version}";
     sha256 = "158vm3wqfxs22b74kqc4prlvjny38qqm3kz5wrgasmx0qciwh0g8";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jtojnar ];
     platforms = lib.platforms.unix;
   };
-}
+})

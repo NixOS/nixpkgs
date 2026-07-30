@@ -18,7 +18,7 @@ let
 
   pluginOptions = lib.types.submodule {
     options = {
-      active = lib.mkEnableOption "Whether to enable this plugin";
+      active = lib.mkEnableOption "this plugin";
       direction = lib.mkOption {
         type = lib.types.enum [
           "in"
@@ -90,7 +90,7 @@ let
     else if lib.isList v then
       lib.concatStringsSep " " (map prepareConfigValue v)
     else
-      builtins.toString v;
+      toString v;
   prepareConfigText =
     conf:
     lib.concatLines (

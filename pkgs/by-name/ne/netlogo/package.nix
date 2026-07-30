@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper ${jre}/bin/java $out/bin/netlogo \
       --chdir $out/opt/netlogo \
       --add-flags "-jar netlogo-${finalAttrs.version}.jar"
-    install -Dm644 ${desktopicon} $out/share/pixmaps/netlogo.png
+    install -Dm644 ${desktopicon} $out/share/icons/hicolor/256x256/apps/netlogo.png
 
     runHook postInstall
   '';

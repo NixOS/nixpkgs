@@ -8,19 +8,20 @@
   makeBinaryWrapper,
   nix-eval-jobs,
   nix,
-  colmena,
-  testers,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "colmena";
   version = "0.4.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
-    owner = "zhaofengli";
+    owner = "nix-community";
     repo = "colmena";
-    rev = "v${version}";
-    sha256 = "sha256-01bfuSY4gnshhtqA1EJCw2CMsKkAx+dHS+sEpQ2+EAQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-01bfuSY4gnshhtqA1EJCw2CMsKkAx+dHS+sEpQ2+EAQ=";
   };
 
   cargoHash = "sha256-2OLApLD/04etEeTxv03p0cx8O4O51iGiBQTIG/iOIkU=";
@@ -32,13 +33,13 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ nix-eval-jobs ];
 
-  NIX_EVAL_JOBS = "${nix-eval-jobs}/bin/nix-eval-jobs";
+  env.NIX_EVAL_JOBS = "${nix-eval-jobs}/bin/nix-eval-jobs";
 
   patches = [
-    # Fixes nix 2.24 compat: https://github.com/zhaofengli/colmena/pull/236
+    # Fixes nix 2.24 compat: https://github.com/zhaofengli/colmena/pull/233
     (fetchpatch {
-      url = "https://github.com/zhaofengli/colmena/commit/36382ee2bef95983848435065f7422500c7923a8.patch";
-      sha256 = "sha256-5cQ2u3eTzhzjPN+rc6xWIskHNtheVXXvlSeJ1G/lz+E=";
+      url = "https://github.com/nix-community/colmena/commit/00fd486d49170b1304c67381b3096e55d4cdc76f.patch";
+      hash = "sha256-uwL3u0gO708bzV2NV8sTt10WHaCL3HykJNqSZNp9EtA=";
     })
   ];
 
@@ -52,22 +53,25 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH ":" "${lib.makeBinPath [ nix ]}"
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   # Recursive Nix is not stable yet
   doCheck = false;
 
   passthru = {
     # We guarantee CLI and Nix API stability for the same minor version
-    apiVersion = builtins.concatStringsSep "." (lib.take 2 (lib.splitVersion version));
-
-    tests.version = testers.testVersion { package = colmena; };
+    apiVersion = builtins.concatStringsSep "." (lib.take 2 (lib.splitVersion finalAttrs.version));
   };
 
   meta = {
     description = "Simple, stateless NixOS deployment tool";
-    homepage = "https://colmena.cli.rs/${passthru.apiVersion}";
+    homepage = "https://colmena.cli.rs/${finalAttrs.passthru.apiVersion}";
+    downloadPage = "https://github.com/nix-community/colmena/";
+    changelog = "https://github.com/nix-community/colmena/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ zhaofengli ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "colmena";
   };
-}
+})

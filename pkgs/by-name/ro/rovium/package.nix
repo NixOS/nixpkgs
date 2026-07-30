@@ -7,8 +7,8 @@
   wrapGAppsHook3,
   dpkg,
   alsa-lib,
-  mesa,
   gtk3,
+  libgbm,
   nss,
   libxkbfile,
   libsecret,
@@ -35,8 +35,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   buildInputs = [
     alsa-lib
-    mesa
     gtk3
+    libgbm
     nss
     libxkbfile
     libsecret

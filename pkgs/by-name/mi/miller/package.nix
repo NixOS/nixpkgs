@@ -4,15 +4,15 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "miller";
-  version = "6.15.0";
+  version = "6.20.2";
 
   src = fetchFromGitHub {
     owner = "johnkerl";
     repo = "miller";
-    rev = "v${version}";
-    sha256 = "sha256-r+eayyxI+qFypDHavv9fOAl3rjjKeQxy8tXetmh/ZAI=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-unzjbPuOmppEY56JnV+A3TZuaHMLNeZS3n7tKpudCXk=";
   };
 
   outputs = [
@@ -20,7 +20,7 @@ buildGoModule rec {
     "man"
   ];
 
-  vendorHash = "sha256-siLrJOMvsv8MkDVVK8xPn4tpyYSqoYT2Iku7ZP0NCk0=";
+  vendorHash = "sha256-ZA9ueehDXsRI3eEE44hJziWKAAsZXkF77hBkYvX2k+U=";
 
   postInstall = ''
     mkdir -p $man/share/man/man1
@@ -37,4 +37,4 @@ buildGoModule rec {
     mainProgram = "mlr";
     platforms = lib.platforms.all;
   };
-}
+})

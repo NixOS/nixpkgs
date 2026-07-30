@@ -5,25 +5,27 @@
   pam,
   bison,
   flex,
+  enablePam ? lib.meta.availableOn stdenv.hostPlatform pam,
   enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   systemdLibs,
   musl-fts,
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcgroup";
   version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "libcgroup";
     repo = "libcgroup";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-kWW9ID/eYZH0O/Ge8pf3Cso4yu644R5EiQFYfZMcizs=";
   };
 
   configureFlags = [
+    (lib.enableFeature enablePam "pam")
     (lib.enableFeature enableSystemd "systemd")
   ]
   # implicit declaration of function 'rpl_malloc', ; did you mean 'realloc'
@@ -40,11 +42,10 @@ stdenv.mkDerivation rec {
     bison
     flex
   ];
-  buildInputs = [
-    pam
-  ]
-  ++ lib.optional enableSystemd systemdLibs
-  ++ lib.optional stdenv.hostPlatform.isMusl musl-fts;
+  buildInputs =
+    lib.optional enablePam pam
+    ++ lib.optional enableSystemd systemdLibs
+    ++ lib.optional stdenv.hostPlatform.isMusl musl-fts;
 
   postPatch = ''
     substituteInPlace src/tools/Makefile.am \
@@ -58,4 +59,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.thoughtpolice ];
   };
-}
+})

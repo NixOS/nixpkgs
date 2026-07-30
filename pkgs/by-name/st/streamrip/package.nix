@@ -6,16 +6,16 @@
   ffmpeg,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "streamrip";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nathom";
     repo = "streamrip";
-    rev = "v${version}";
-    hash = "sha256-Klrkz0U36EIGO2sNxTnKPACvvqu1sslLFFrQRjFdxiE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-OeU1KBGcmpryOlDmW1aFNAgSP484ZAcc4CVsgfrsKVI=";
   };
 
   patches = [
@@ -69,4 +69,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ ];
     mainProgram = "rip";
   };
-}
+})

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   gitUpdater,
   unstableGitUpdater,
   cctools,
@@ -20,7 +21,6 @@
   nghttp2,
   openjpeg,
   libcaca,
-  mesa,
   mesa_glu,
   xvidcore,
   openssl,
@@ -29,7 +29,9 @@
   pulseaudio,
   SDL2,
   curl,
-  xorg,
+  libxv,
+  libx11,
+  xorgproto,
 
   withFullDeps ? false,
   withFfmpeg ? withFullDeps,
@@ -38,42 +40,30 @@
 
 let
   stable = rec {
-    version = "2.4.0"; # See below TODO.
+    version = "26.02.0";
     src = fetchFromGitHub {
       owner = "gpac";
       repo = "gpac";
       rev = "v${version}";
-      hash = "sha256-RADDqc5RxNV2EfRTzJP/yz66p0riyn81zvwU3r9xncM=";
+      hash = "sha256-UtL+KG3dsp6dD7cfTK7e17ngt/RHKJL0s5IopTM3VOk=";
     };
     updateScript = gitUpdater {
-      odd-unstable = true;
       rev-prefix = "v";
       ignoredVersions = "^(abi|test)";
     };
-  }
-  // {
-    # ffmpeg 7.0.2 works, but 7.1.1 (which is packaged in nixpkgs) doesn't
-    # because v2.4.0 of this package relies on internal private ffmpeg fields.
-    # TODO: remove this, and switch to simply using ffmpeg-headless,
-    #       when updating stable to 2.6
-    ffmpeg-headless = ffmpeg-headless.override {
-      version = "7.0.2";
-      hash = "sha256-6bcTxMt0rH/Nso3X7zhrFNkkmWYtxsbUqVQKh25R1Fs=";
-    };
   };
   unstable = {
-    version = "2.4.0-unstable-2025-12-23";
+    version = "26.02.0-unstable-2026-04-29";
     src = fetchFromGitHub {
       owner = "gpac";
       repo = "gpac";
-      rev = "035540740e7a9901cd5f5b08ff5df4f31ac28ec2";
-      hash = "sha256-CAP6NYSU+ctjl9BMD22rybNcWVm3eAVDAiZKfp8/xDc=";
+      rev = "525bf1af642c30af04e4df5345e6d798c0a4d8a1";
+      hash = "sha256-G/4gefsS2hUKo8VEt80YZOaGJSjrzXFrdHO/u33BiDw=";
     };
     updateScript = unstableGitUpdater {
       tagFormat = "v*";
       tagPrefix = "v";
     };
-    inherit ffmpeg-headless;
   };
   channelToUse = if releaseChannel == "unstable" then unstable else stable;
 in
@@ -88,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     cctools
   ]
   ++ lib.optionals withFfmpeg [
-    channelToUse.ffmpeg-headless
+    ffmpeg-headless
   ];
 
   # ref: https://wiki.gpac.io/Build/build/GPAC-Build-Guide-for-Linux/#gpac-easy-build-recommended-for-most-users
@@ -108,10 +98,9 @@ stdenv.mkDerivation (finalAttrs: {
     nghttp2
     openjpeg
     libcaca
-    xorg.libX11
-    xorg.libXv
-    xorg.xorgproto
-    mesa
+    libx11
+    libxv
+    xorgproto
     mesa_glu
     xvidcore
     openssl
@@ -120,6 +109,14 @@ stdenv.mkDerivation (finalAttrs: {
     pulseaudio
     SDL2
     curl
+  ];
+
+  patches = lib.optionals (releaseChannel == "stable") [
+    (fetchpatch2 {
+      # CVE-2026-7135 fix
+      url = "https://github.com/gpac/gpac/commit/cf6ac48c972eaaee2af270adc3f36615325deb3e.patch?full_index=1";
+      hash = "sha256-JaJiQAQvzdB74ag2/aZTiQa2NqlgqgMYS1tsk/R+wiI=";
+    })
   ];
 
   enableParallelBuilding = true;

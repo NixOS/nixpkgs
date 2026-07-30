@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruplacer";
   version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "TankerHQ";
     repo = "ruplacer";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Zvbb9pQpxbJZi0qcDU6f2jEgavl9cA7gIYU7NRXZ9fc=";
   };
 
@@ -23,4 +23,4 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/TankerHQ/ruplacer";
     license = lib.licenses.bsd3;
   };
-}
+})

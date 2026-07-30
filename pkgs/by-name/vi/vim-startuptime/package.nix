@@ -4,12 +4,11 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-let
+
+buildGoModule (finalAttrs: {
   pname = "vim-startuptime";
   version = "1.3.2";
-in
-buildGoModule {
-  inherit pname version;
+
   ldflags = [
     "-s"
     "-w"
@@ -18,7 +17,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "rhysd";
     repo = "vim-startuptime";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-d6AXTWTUawkBCXCvMs3C937qoRUZmy0qCFdSLcWh0BE=";
   };
 
@@ -32,8 +31,8 @@ buildGoModule {
   meta = {
     homepage = "https://github.com/rhysd/vim-startuptime";
     description = "Small Go program for better `vim --startuptime` alternative";
-    maintainers = with lib.maintainers; [ _9yokuro ];
+    maintainers = [ ];
     license = lib.licenses.mit;
     mainProgram = "vim-startuptime";
   };
-}
+})

@@ -7,12 +7,12 @@
   libdvdread,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ogmtools";
   version = "1.5";
 
   src = fetchurl {
-    url = "https://www.bunkus.org/videotools/ogmtools/ogmtools-${version}.tar.bz2";
+    url = "https://www.bunkus.org/videotools/ogmtools/ogmtools-${finalAttrs.version}.tar.bz2";
     sha256 = "1spx81p5wf59ksl3r3gvf78d77sh7gj8a6lw773iv67bphfivmn8";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
   };
-}
+})

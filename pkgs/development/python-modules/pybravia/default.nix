@@ -4,19 +4,22 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
+  pyprojectVersionPatchHook,
 }:
 
 buildPythonPackage rec {
   pname = "pybravia";
-  version = "0.4.1";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Drafteed";
     repo = "pybravia";
     tag = "v${version}";
-    hash = "sha256-VNdjdNmWcl8s1jRlA40DHlku3CPL59nJ4pZklZ452FU=";
+    hash = "sha256-Wx+YEEVZB0aGhgaQiC04GKwTY4yV0wj86b/8EJBs5yc=";
   };
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   build-system = [ hatchling ];
 

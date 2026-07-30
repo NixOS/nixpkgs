@@ -4,7 +4,15 @@
   fetchFromGitHub,
   libjack2,
   libsndfile,
-  xorg,
+  libxcb-util,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libxcb-cursor,
+  libxdmcp,
+  libxau,
+  libx11,
+  libxcb,
   freetype,
   libxkbcommon,
   cairo,
@@ -45,15 +53,15 @@ stdenv.mkDerivation (finalAttrs: {
     libvorbis
     libxkbcommon
     pango
-    xorg.libX11
-    xorg.libXau
-    xorg.libxcb
-    xorg.libXdmcp
-    xorg.xcbutil
-    xorg.xcbutilcursor
-    xorg.xcbutilimage
-    xorg.xcbutilkeysyms
-    xorg.xcbutilrenderutil
+    libx11
+    libxau
+    libxcb
+    libxdmcp
+    libxcb-util
+    libxcb-cursor
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
     zenity
   ];
 

@@ -58,7 +58,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = "${pkgs.fusionInventory}/bin/fusioninventory-agent --conf-file=${configFile} --daemon --no-fork";
+        ExecStart = "${pkgs.fusioninventory-agent}/bin/fusioninventory-agent --conf-file=${configFile} --daemon --no-fork";
       };
     };
   };

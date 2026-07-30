@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ccd2iso";
   version = "0.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ccd2iso/ccd2iso-${version}.tar.gz";
+    url = "mirror://sourceforge/ccd2iso/ccd2iso-${finalAttrs.version}.tar.gz";
     sha256 = "1z000zi7hpr2h9cabj6hzf3n6a6gd6glmm8nn36v4b8i4vzbhx7q";
   };
 
@@ -25,4 +25,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "ccd2iso";
   };
-}
+})

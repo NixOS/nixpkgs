@@ -5,14 +5,16 @@
 }:
 buildGhidraExtension (finalAttrs: {
   pname = "Ghidra-GolangAnalyzerExtension";
-  version = "1.2.4";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "mooncat-greenpy";
     repo = "Ghidra_GolangAnalyzerExtension";
     rev = finalAttrs.version;
-    hash = "sha256-uxozIJ+BLcP1vBnLOCZD9ueY10hd37fON/Miii3zabo=";
+    hash = "sha256-bd0NmIql4OHxaWtSvNvbJZLiJUjaRKgkA+nCSiVo478=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/GolangAnalyzerExtension";
 
   meta = {
     description = "Facilitates the analysis of Golang binaries using Ghidra";

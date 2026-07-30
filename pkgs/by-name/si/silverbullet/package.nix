@@ -1,68 +1,74 @@
 {
-  autoPatchelfHook,
-  fetchzip,
   lib,
-  nixosTests,
-  stdenv,
-  stdenvNoCC,
+  fetchFromGitHub,
+  buildNpmPackage,
+  buildGoModule,
+  replaceVars,
 }:
-let
-  platformMap = {
-    "x86_64-linux" = {
-      os = "linux";
-      arch = "x86_64";
-      hash = "sha256-IGks7vmJd/xuJzqhogR5aLVM6eUUe6bACe5VuAWJOWA=";
-    };
-    "aarch64-linux" = {
-      os = "linux";
-      arch = "aarch64";
-      hash = "sha256-brqotISLIwD1t/2E2oyI7HSkfPpVgUODaNZJcc9o6zI=";
-    };
-    "x86_64-darwin" = {
-      os = "darwin";
-      arch = "x86_64";
-      hash = "sha256-n8GN2ZmeYEpZ0DB7zwEkXnSUZkAySNAGVn5BLw46fZI=";
-    };
-    "aarch64-darwin" = {
-      os = "darwin";
-      arch = "aarch64";
-      hash = "sha256-BISrkxLuxlo7KQiW9cUipJpEhOm94gL3GvyivO6LaBU=";
-    };
-  };
-  platform = platformMap.${stdenvNoCC.hostPlatform.system};
-in
-stdenvNoCC.mkDerivation (finalAttrs: {
+
+buildGoModule (finalAttrs: {
   pname = "silverbullet";
-  version = "2.3.0";
+  version = "2.9.0";
 
-  src = fetchzip {
-    url = "https://github.com/silverbulletmd/silverbullet/releases/download/${finalAttrs.version}/silverbullet-server-${platform.os}-${platform.arch}.zip";
-    hash = platform.hash;
-    stripRoot = false;
+  src = fetchFromGitHub {
+    owner = "silverbulletmd";
+    repo = "silverbullet";
+    rev = finalAttrs.version;
+    hash = "sha256-XQ0OKkiQrrmwmdGXk3dcim/2qosenF3EG2lkglQQ/iY=";
   };
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  vendorHash = "sha256-8zZlhVptJq8y3k2DBghJ0lPNcIcaZYkrxN67b6dNBPs=";
 
-  buildInputs = [ stdenv.cc.cc.lib ];
+  subPackages = [ "." ];
+
+  frontend = buildNpmPackage {
+    pname = "silverbullet-frontend";
+    inherit (finalAttrs) version src;
+
+    npmDepsHash = "sha256-Twcv3I3scF09onJQdYsc1zOFzMFPOEyPF7VPYa7LBko=";
+
+    patches = [
+      (replaceVars ./override-public-version.patch { inherit (finalAttrs) version; })
+    ];
+
+    postBuild = ''
+      npm run build:plug-compile
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out
+      cp -r client_bundle public_version.ts $out/
+
+      runHook postInstall
+    '';
+  };
+
+  preBuild = ''
+    cp -r ${finalAttrs.frontend}/client_bundle .
+    cp ${finalAttrs.frontend}/public_version.ts .
+  '';
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin
-    cp $src/silverbullet $out/bin/
+
+    install -Dm755 "$GOPATH/bin/silverbullet" $out/bin/silverbullet
+
     runHook postInstall
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) silverbullet;
-  };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     changelog = "https://github.com/silverbulletmd/silverbullet/blob/${finalAttrs.version}/website/CHANGELOG.md";
     description = "Open-source, self-hosted, offline-capable Personal Knowledge Management (PKM) web application";
     homepage = "https://silverbullet.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ aorith ];
+    maintainers = with lib.maintainers; [
+      aorith
+      CnTeng
+    ];
     mainProgram = "silverbullet";
-    platforms = builtins.attrNames platformMap;
   };
 })

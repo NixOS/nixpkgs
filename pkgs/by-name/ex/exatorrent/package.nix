@@ -63,6 +63,11 @@ buildGoModule (finalAttrs: {
     "-extldflags '-static'"
   ];
 
+  # Fix build with GCC 15
+  # from vendor/github.com/anacrolix/go-libutp/callbacks.go:4:
+  # ./utp_types.h:120:15: error: two or more data types in declaration specifiers
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   buildInputs = lib.optionals stdenv.hostPlatform.isGnu [
     stdenv.cc.libc.static
   ];

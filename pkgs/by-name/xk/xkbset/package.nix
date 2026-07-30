@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   perl,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     perl
-    libX11
+    libx11
   ];
 
   makeFlags = [ "X11PREFIX=${placeholder "out"}" ];

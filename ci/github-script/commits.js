@@ -3,6 +3,7 @@ module.exports = async ({ github, context, core, dry, cherryPicks }) => {
   const { classify } = require('../supportedBranches.js')
   const withRateLimit = require('./withRateLimit.js')
   const { dismissReviews, postReview } = require('./reviews.js')
+  const reviewKey = 'check-commits'
 
   await withRateLimit({ github, core }, async (stats) => {
     stats.prs = 1
@@ -193,7 +194,7 @@ module.exports = async ({ github, context, core, dry, cherryPicks }) => {
     // An empty results array will always trigger this condition, which is helpful
     // to clean up reviews created by the prepare step when on the wrong branch.
     if (results.every(({ severity }) => severity === 'info')) {
-      await dismissReviews({ github, context, dry })
+      await dismissReviews({ github, context, dry, reviewKey })
       return
     }
 
@@ -316,6 +317,6 @@ module.exports = async ({ github, context, core, dry, cherryPicks }) => {
     // Posting a review could fail for very long comments. This can only happen with
     // multiple commits all hitting the truncation limit for the diff. If you ever hit
     // this case, consider just splitting up those commits into multiple PRs.
-    await postReview({ github, context, core, dry, body })
+    await postReview({ github, context, core, dry, body, reviewKey })
   })
 }

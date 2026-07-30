@@ -7,14 +7,14 @@
   alsa-lib,
   copyDesktopItems,
   makeDesktopItem,
-  libX11,
-  libXcomposite,
-  libXcursor,
-  libXinerama,
-  libXrandr,
-  libXtst,
-  libXdmcp,
-  libXext,
+  libx11,
+  libxcomposite,
+  libxcursor,
+  libxinerama,
+  libxrandr,
+  libxtst,
+  libxdmcp,
+  libxext,
   xvfb,
   freetype,
   fontconfig,
@@ -29,7 +29,7 @@
   enableVST2 ? false,
 }:
 let
-  version = "1.1.1";
+  version = "1.1.5";
 in
 stdenv.mkDerivation {
   pname = "socalabs-sn76489";
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     owner = "FigBug";
     repo = "SN76489";
     tag = "v${version}";
-    hash = "sha256-Dzv9qtUtuiQa2pc1TN9qyQWHP2pBU7bGXHZgALjKr3U=";
+    hash = "sha256-dQ697B0mhdIC0ltdY2EnErLNAGRKA6ARONX/kR3OLyI=";
     fetchSubmodules = true;
     preFetch = ''
       # can't clone using ssh
@@ -74,14 +74,14 @@ stdenv.mkDerivation {
 
   buildInputs = [
     alsa-lib
-    libX11
-    libXcomposite
-    libXcursor
-    libXinerama
-    libXrandr
-    libXtst
-    libXdmcp
-    libXext
+    libx11
+    libxcomposite
+    libxcursor
+    libxinerama
+    libxrandr
+    libxtst
+    libxdmcp
+    libxext
     xvfb
     libGL
     libjack2
@@ -127,18 +127,16 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  NIX_LDFLAGS = (
-    toString [
-      "-lX11"
-      "-lXext"
-      "-lXcomposite"
-      "-lXcursor"
-      "-lXinerama"
-      "-lXrandr"
-      "-lXtst"
-      "-lXdmcp"
-    ]
-  );
+  env.NIX_LDFLAGS = toString [
+    "-lX11"
+    "-lXext"
+    "-lXcomposite"
+    "-lXcursor"
+    "-lXinerama"
+    "-lXrandr"
+    "-lXtst"
+    "-lXdmcp"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

@@ -57,17 +57,17 @@ in
         with subtest("galene starts"):
             # Starts?
             machine.wait_for_unit("galene")
-            machine.wait_for_open_port(${builtins.toString galenePort})
+            machine.wait_for_open_port(${toString galenePort})
 
             # Reponds fine?
-            machine.succeed("curl -s -D - -o /dev/null 'http://localhost:${builtins.toString galenePort}' >&2")
+            machine.succeed("curl -s -D - -o /dev/null 'http://localhost:${toString galenePort}' >&2")
 
         machine.succeed("cp -v /etc/${galeneTestGroupFile} ${galeneTestGroupsDir}/test.json >&2")
-        machine.wait_until_succeeds("curl -s -D - -o /dev/null 'http://localhost:${builtins.toString galenePort}/group/test/' >&2")
+        machine.wait_until_succeeds("curl -s -D - -o /dev/null 'http://localhost:${toString galenePort}/group/test/' >&2")
 
         with subtest("galene can join group"):
             # Open site
-            machine.succeed("firefox --new-window 'http://localhost:${builtins.toString galenePort}/group/test/' >&2 &")
+            machine.succeed("firefox --new-window 'http://localhost:${toString galenePort}/group/test/' >&2 &")
             # Note: Firefox doesn't use a regular "-" in the window title, but "—" (Hex: 0xe2 0x80 0x94)
             machine.wait_for_window("Test — Mozilla Firefox")
             machine.send_key("ctrl-minus")
@@ -141,17 +141,17 @@ in
         with subtest("galene starts"):
             # Starts?
             machine.wait_for_unit("galene")
-            machine.wait_for_open_port(${builtins.toString galenePort})
+            machine.wait_for_open_port(${toString galenePort})
 
             # Reponds fine?
-            machine.succeed("curl -s -D - -o /dev/null 'http://localhost:${builtins.toString galenePort}' >&2")
+            machine.succeed("curl -s -D - -o /dev/null 'http://localhost:${toString galenePort}' >&2")
 
         machine.succeed("cp -v /etc/${galeneTestGroupFile} ${galeneTestGroupsDir}/test.json >&2")
-        machine.wait_until_succeeds("curl -s -D - -o /dev/null 'http://localhost:${builtins.toString galenePort}/group/test/' >&2")
+        machine.wait_until_succeeds("curl -s -D - -o /dev/null 'http://localhost:${toString galenePort}/group/test/' >&2")
 
         with subtest("galene can join group"):
             # Open site
-            machine.succeed("firefox --new-window 'http://localhost:${builtins.toString galenePort}/group/test/' >&2 &")
+            machine.succeed("firefox --new-window 'http://localhost:${toString galenePort}/group/test/' >&2 &")
             # Note: Firefox doesn't use a regular "-" in the window title, but "—" (Hex: 0xe2 0x80 0x94)
             machine.wait_for_window("Test — Mozilla Firefox")
             machine.send_key("ctrl-minus")
@@ -176,7 +176,7 @@ in
             machine.succeed(
                 "galene-file-transfer "
                 + "-to '${galeneTestGroupAdminName}' "
-                + "-insecure 'http://localhost:${builtins.toString galenePort}/group/test/' "
+                + "-insecure 'http://localhost:${toString galenePort}/group/test/' "
                 + "${galeneTestGroupsDir}/test.json " # just try sending the groups file
                 + " >&2 &"
             )
@@ -276,20 +276,20 @@ in
         with subtest("galene starts"):
             # Starts?
             machine.wait_for_unit("galene")
-            machine.wait_for_open_port(${builtins.toString galenePort})
+            machine.wait_for_open_port(${toString galenePort})
 
             # Reponds fine?
-            machine.succeed("curl -s -D - -o /dev/null 'http://localhost:${builtins.toString galenePort}' >&2")
+            machine.succeed("curl -s -D - -o /dev/null 'http://localhost:${toString galenePort}' >&2")
 
         machine.succeed("cp -v /etc/${galeneTestGroupFile} ${galeneTestGroupsDir}/test.json >&2")
-        machine.wait_until_succeeds("curl -s -D - -o /dev/null 'http://localhost:${builtins.toString galenePort}/group/test/' >&2")
+        machine.wait_until_succeeds("curl -s -D - -o /dev/null 'http://localhost:${toString galenePort}/group/test/' >&2")
 
         with subtest("galene-stream works"):
             # Start interface for stream data
             machine.succeed(
                 "galene-stream "
-                + "--input 'srt://localhost:${builtins.toString galeneStreamSrtPort}?mode=listener' "
-                + "--insecure --output 'http://localhost:${builtins.toString galenePort}/group/test/' "
+                + "--input 'srt://localhost:${toString galeneStreamSrtPort}?mode=listener' "
+                + "--insecure --output 'http://localhost:${toString galenePort}/group/test/' "
                 + "--username ${galeneTestGroupBotName} --password ${galeneTestGroupBotPassword} "
                 + ">&2 &"
             )
@@ -304,13 +304,13 @@ in
                 + "-c:a mp2 " # stream audio codec
                 + "-c:v libx264 -pix_fmt yuv420p " # stream video codec
                 + "-f mpegts " # stream format
-                + "'srt://localhost:${builtins.toString galeneStreamSrtPort}' "
+                + "'srt://localhost:${toString galeneStreamSrtPort}' "
                 + ">/dev/null 2>&1 &"
             )
             machine.wait_for_console_text("Setting remote session description")
 
             # Open site
-            machine.succeed("firefox --new-window 'http://localhost:${builtins.toString galenePort}/group/test/' >&2 &")
+            machine.succeed("firefox --new-window 'http://localhost:${toString galenePort}/group/test/' >&2 &")
             # Note: Firefox doesn't use a regular "-" in the window title, but "—" (Hex: 0xe2 0x80 0x94)
             machine.wait_for_window("Test — Mozilla Firefox")
             machine.send_key("ctrl-minus")

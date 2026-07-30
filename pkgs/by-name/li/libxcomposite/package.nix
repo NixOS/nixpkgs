@@ -11,7 +11,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxcomposite";
-  version = "0.4.6";
+  version = "0.4.7";
 
   outputs = [
     "out"
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://xorg/individual/lib/libXcomposite-${finalAttrs.version}.tar.xz";
-    hash = "sha256-/kC88K4aCQcOuiQIil65gQ7+V0U3eeweIKVQgMbcLIc=";
+    hash = "sha256-i98xCWf0hFA/pRcUz5e/8HI9m2c+Duy/krP5fAYMjMs=";
   };
 
   strictDeps = true;

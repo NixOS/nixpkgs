@@ -29,6 +29,6 @@ buildNpmPackage (finalAttrs: {
     description = "bash-language-server for coc.nvim";
     homepage = "https://github.com/josa42/coc-sh";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

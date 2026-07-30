@@ -6,16 +6,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "terraform-mcp-server";
-  version = "0.3.3";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "terraform-mcp-server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DPm5kmlQNsE+C/CUzPML6HG32E5UZOacQw91lAuECOs=";
+    hash = "sha256-SFCvVPohsFbodUbsjWhvmpp3DuzrR+f7M298QX4tOVc=";
   };
 
-  vendorHash = "sha256-n5mneP4S8TZClaaVEykuAzcSDj0Y4YSl/o5ril3+hNo=";
+  vendorHash = "sha256-zHcu4zntwPDs+bBTFNZxCDwn/mfBgrACEsElTTGPssA=";
 
   ldflags = [
     "-X main.version=${finalAttrs.version}"

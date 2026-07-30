@@ -72,6 +72,7 @@ in
         KillSignal = "SIGINT";
         SuccessExitStatus = "0 156";
       };
+      unitConfig.RequiresMountsFor = [ cfg.dataDir ];
     };
 
     networking.firewall = lib.mkIf cfg.openFirewall {

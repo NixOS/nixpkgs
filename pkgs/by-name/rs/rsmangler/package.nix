@@ -40,7 +40,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/digininja/RSMangler";
     license = lib.licenses.cc-by-sa-20;
     mainProgram = "rsmangler";
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    maintainers = [ ];
     platforms = ruby.meta.platforms;
   };
 })

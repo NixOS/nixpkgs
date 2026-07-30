@@ -105,7 +105,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/NickvisionApps/Parabolic";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
-      normalcea
       getchoo
     ];
     mainProgram = "org.nickvision.tubeconverter";

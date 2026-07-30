@@ -3,14 +3,14 @@
   fetchFromGitHub,
   lib,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "protoc-gen-go-vtproto";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "planetscale";
     repo = "vtprotobuf";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-ji6elc0hN49A4Ov/ckd8chPR4/8ZX11THzVz9HJGui4=";
   };
 
@@ -25,4 +25,4 @@ buildGoModule rec {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.zane ];
   };
-}
+})

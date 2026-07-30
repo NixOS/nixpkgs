@@ -16,7 +16,6 @@
   phonemizer,
   pip,
   pypinyin,
-  pythonOlder,
   regex,
   replaceVars,
   spacy-curated-transformers,

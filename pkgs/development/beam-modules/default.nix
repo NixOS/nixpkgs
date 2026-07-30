@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   pkgs,
   erlang,
@@ -11,6 +12,9 @@ let
   callPackageWithScope =
     scope: drv: args:
     lib.callPackageWith scope drv args;
+  callPackagesWithScope =
+    scope: drv: args:
+    lib.callPackagesWith scope drv args;
   mkScope = scope: pkgs // scope;
 
   packages =
@@ -18,6 +22,7 @@ let
     let
       defaultScope = mkScope self;
       callPackage = drv: args: callPackageWithScope defaultScope drv args;
+      callPackages = drv: args: callPackagesWithScope defaultScope drv args;
     in
     rec {
       inherit callPackage erlang;
@@ -36,7 +41,6 @@ let
       rebar3Relx = callPackage ./rebar3-release.nix { };
 
       buildRebar3 = callPackage ./build-rebar3.nix { };
-      buildHex = callPackage ./build-hex.nix { };
       buildErlangMk = callPackage ./build-erlang-mk.nix { };
       buildMix = callPackage ./build-mix.nix { };
       fetchMixDeps = callPackage ./fetch-mix-deps.nix { };
@@ -68,16 +72,6 @@ let
         debugInfo = true;
       };
 
-      elixir_1_16 = callPackage ../interpreters/elixir/1.16.nix {
-        inherit erlang;
-        debugInfo = true;
-      };
-
-      elixir_1_15 = callPackage ../interpreters/elixir/1.15.nix {
-        inherit erlang;
-        debugInfo = true;
-      };
-
       # Remove old versions of elixir, when the supports fades out:
       # https://hexdocs.pm/elixir/compatibility-and-deprecations.html
 
@@ -86,15 +80,29 @@ let
       };
 
       elixir-ls = callPackage ./elixir-ls { inherit elixir; };
+      expert = callPackage ./expert { };
 
-      lfe = callPackage ../interpreters/lfe { inherit erlang buildRebar3 buildHex; };
+      lfe = callPackage ../interpreters/lfe { inherit erlang buildRebar3 fetchHex; };
 
       livebook = callPackage ./livebook { inherit beamPackages; };
 
       # Non hex packages. Examples how to build Rebar/Mix packages with and
       # without helper functions buildRebar3 and buildMix.
       hex = callPackage ./hex { };
-      webdriver = callPackage ./webdriver { };
+
+      inherit (callPackages ./hooks { })
+        beamCopySourceHook
+        beamModuleInstallHook
+        mixBuildDirHook
+        mixCompileHook
+        mixAppConfigPatchHook
+        rebar3CompileHook
+        rebarDevendorPatchHook
+        ;
+
+    }
+    // lib.optionalAttrs config.allowAliases {
+      webdriver = throw "'beamPackages.webdriver' has been removed."; # added 2026-07-29
     };
 in
 makeExtensible packages

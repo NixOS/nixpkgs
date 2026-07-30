@@ -6,7 +6,6 @@
   libpcap,
   pkgconfig,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -36,7 +35,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pcapy" ];
 
-  doCheck = pythonOlder "3.10";
+  doCheck = false;
 
   enabledTestPaths = [ "pcapytests.py" ];
 

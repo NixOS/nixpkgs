@@ -6,13 +6,13 @@
   cups,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "magicard-cups-driver";
   version = "1.4.0";
 
   src = fetchzip {
     # https://support.magicard.com/solution/linux-driver/
-    url = "https://f08ddbe93aa02eaf9a6c-f08cd513e3a8c914f4f8f62af1786149.ssl.cf3.rackcdn.com/magicard_ltd-linux_driver-${version}.tar.gz";
+    url = "https://f08ddbe93aa02eaf9a6c-f08cd513e3a8c914f4f8f62af1786149.ssl.cf3.rackcdn.com/magicard_ltd-linux_driver-${finalAttrs.version}.tar.gz";
     hash = "sha256-1k2Twn1JBizw/tzQ0xF1uJIecblRd6VurB7FAUop5F0=";
   };
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   # Replace the supplied cmake generated makefile (which is useless on a different machine)
   # with the CMakeLists.txt taken from v1.3.4 of the driver and patch it to make it compatible with v1.4.0
   prePatch = ''
-    cp ${src_v1_3_4}/CMakeLists.txt CMakeLists.txt
+    cp ${finalAttrs.src_v1_3_4}/CMakeLists.txt CMakeLists.txt
     rm makefile
   '';
 
@@ -75,4 +75,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ _0x3f ];
   };
-}
+})

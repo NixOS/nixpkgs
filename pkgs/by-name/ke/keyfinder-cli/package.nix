@@ -5,18 +5,25 @@
   ffmpeg,
   libkeyfinder,
   fftw,
+  cmake,
+  pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "keyfinder-cli";
-  version = "1.1.2";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     repo = "keyfinder-cli";
     owner = "EvanPurkhiser";
-    rev = "v${version}";
-    hash = "sha256-9/+wzPTaQ5PfPiqTZ5EuHdswXJgfgnvAul/FeeDbbJA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-WdZ5jiq5bfwiq1RK4XDRhqh2gAukq3hLCA56K/f+84g=";
   };
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs = [
     ffmpeg
@@ -24,12 +31,8 @@ stdenv.mkDerivation rec {
     fftw
   ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
-
-  enableParallelBuilding = true;
-
   meta = {
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     description = "Musical key detection for digital audio (command-line tool)";
     longDescription = ''
       This small utility is the automation-oriented DJ's best friend. By making
@@ -40,4 +43,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "keyfinder-cli";
   };
-}
+})

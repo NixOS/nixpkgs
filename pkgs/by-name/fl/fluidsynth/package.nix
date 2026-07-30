@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fluidsynth";
-  version = "2.5.1";
+  version = "2.5.5";
 
   src = fetchFromGitHub {
     owner = "FluidSynth";
     repo = "fluidsynth";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gTkW2X7fcmxJwYf13Yma6cBigz4sbsb99dBSYTDlcyY=";
+    hash = "sha256-WEzOYHtPIUkPZu3v4dWcCh3dOJUyG1xRxDuoSXqiGbk=";
     fetchSubmodules = true;
   };
 
@@ -56,7 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.fluidsynth.org";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [
-      lovek323
       guylamar2006
     ];
     platforms = lib.platforms.unix;

@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "simplotask";
-  version = "1.19.2";
+  version = "1.20.1";
 
   src = fetchFromGitHub {
     owner = "umputun";
     repo = "spot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UFuHcva5+0KMaIas6N+Ny1Ego6ZI+J8gd+91EisRlXM=";
+    hash = "sha256-VZXtteRXzjxXtAOYXZHBXknOyegbaCAPPXyRtig3PIs=";
   };
 
   vendorHash = null;
@@ -30,6 +30,7 @@ buildGoModule (finalAttrs: {
   postInstall = ''
     mv $out/bin/{secrets,spot-secrets}
     installManPage *.1
+    installShellCompletion completions/*
   '';
 
   meta = {

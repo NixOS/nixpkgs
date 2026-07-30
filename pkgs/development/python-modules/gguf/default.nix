@@ -2,56 +2,72 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
 
   # build-system
   poetry-core,
+  pyprojectVersionPatchHook,
 
   # dependencies
   numpy,
   pyside6,
   pyyaml,
-  sentencepiece,
+  requests,
   tqdm,
 
-  # check inputs
+  # tests
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gguf";
-  version = "0.17.1";
+  version = "9967";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
-    tag = "gguf-v${version}";
-    hash = "sha256-XjDMDca4pyc72WQee4h3R6Iq9M0LzO+6ukV6CBWQO1M=";
+    tag = "b${finalAttrs.version}";
+    hash = "sha256-HgptebnnT3xOU26/UJCqQ6FSrhcoybju7SKUy4pLOKA=";
   };
 
-  sourceRoot = "${src.name}/gguf-py";
+  sourceRoot = "${finalAttrs.src.name}/gguf-py";
 
   build-system = [ poetry-core ];
 
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
+
   dependencies = [
     numpy
-    pyside6
     pyyaml
-    sentencepiece
+    requests
     tqdm
   ];
+
+  optional-dependencies = {
+    gui = [ pyside6 ];
+  };
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "gguf" ];
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "b(.*)"
+    ];
+  };
+
   meta = {
     description = "Module for writing binary files in the GGUF format";
     homepage = "https://ggml.ai/";
+    downloadPage = "https://github.com/ggml-org/llama.cpp/releases";
+    changelog = "https://github.com/ggml-org/llama.cpp/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       mitchmindtree
       sarahec
     ];
   };
-}
+})

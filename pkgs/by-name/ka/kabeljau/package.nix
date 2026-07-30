@@ -1,7 +1,7 @@
 {
   stdenvNoCC,
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   just,
   imagemagick,
   makeWrapper,
@@ -13,8 +13,7 @@ stdenvNoCC.mkDerivation rec {
   pname = "kabeljau";
   version = "2.1.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "annaaurora";
     repo = "kabeljau";
     rev = "v${version}";

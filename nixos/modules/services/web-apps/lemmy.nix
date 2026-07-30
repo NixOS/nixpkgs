@@ -377,7 +377,7 @@ in
         serviceConfig = {
           DynamicUser = true;
           WorkingDirectory = "${cfg.ui.package}";
-          ExecStart = "${pkgs.nodejs}/bin/node ${cfg.ui.package}/dist/js/server.js";
+          ExecStart = "${pkgs.lib.getExe pkgs.nodejs-slim} ${cfg.ui.package}/dist/js/server.js";
         };
       };
     };

@@ -4,7 +4,7 @@
   fetchMavenArtifact,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liquibase-redshift-extension";
   version = "4.8.0";
 
@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
     artifactId = "liquibase-redshift";
     groupId = "org.liquibase.ext";
     sha256 = "sha256-jZdDKAC4Cvmkih8VH84Z3Q8BzsqGO55Uefr8vOlbDAk=";
-    inherit version;
+    inherit (finalAttrs) version;
   };
 
   installPhase = ''
     runHook preInstall
-    install -m444 -D $src/share/java/liquibase-redshift-${version}.jar $out/share/java/liquibase-redshift.jar
+    install -m444 -D $src/share/java/liquibase-redshift-${finalAttrs.version}.jar $out/share/java/liquibase-redshift.jar
     runHook postInstall
   '';
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ sir4ur0n ];
   };
-}
+})

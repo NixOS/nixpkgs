@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnused";
-  version = "4.9";
+  version = "4.10";
 
   src = fetchurl {
     url = "mirror://gnu/sed/sed-${version}.tar.xz";
-    sha256 = "sha256-biJrcy4c1zlGStaGK9Ghq6QteYKSLaelNRljHSSXUYE=";
+    sha256 = "sha256-uOchgrLslqNXTimYxHt6qmTMIM4ADY6awxPMB87PKMc=";
   };
 
   outputs = [
@@ -27,7 +27,9 @@ stdenv.mkDerivation rec {
   preConfigure = "patchShebangs ./build-aux/help2man";
 
   # Prevents attempts of running 'help2man' on cross-built binaries.
-  PERL = if stdenv.hostPlatform == stdenv.buildPlatform then null else "missing";
+  env = lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
+    PERL = "missing";
+  };
 
   meta = {
     homepage = "https://www.gnu.org/software/sed/";

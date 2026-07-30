@@ -24,6 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ nlohmann_json ];
   nativeBuildInputs = [ cmake ];
 
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+  ];
+
   meta = {
     description = "JSON schema validator for JSON for Modern C++";
     homepage = "https://github.com/pboettch/json-schema-validator";

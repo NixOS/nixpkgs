@@ -19,8 +19,9 @@
   gspell,
   gtk-mac-integration,
   gtkmm3,
+  gtksourceview4,
   gdk-pixbuf,
-  imagemagick,
+  graphicsmagick,
   lcms,
   lib2geom,
   libcdr,
@@ -31,9 +32,10 @@
   libsigcxx,
   libvisio,
   libwpg,
-  libXft,
+  libxft,
   libxml2,
   libxslt,
+  readline,
   ninja,
   perlPackages,
   pkg-config,
@@ -74,7 +76,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "inkscape";
-  version = "1.4.3";
+  version = "1.4.4";
   outputs = [
     "out"
     "man"
@@ -82,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://inkscape.org/release/inkscape-${finalAttrs.version}/source/archive/xz/dl/inkscape-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-6DosPbVwtsWh/w/M/nCYg3s/a9dLEzVnk3yKkXEO0dE=";
+    sha256 = "sha256-u85XU6Hgi4caXPFsZl6wYHAKqrmmo3ncY/TE2bO4hW4=";
   };
 
   # Inkscape hits the ARGMAX when linking on macOS. It appears to be
@@ -101,6 +103,14 @@ stdenv.mkDerivation (finalAttrs: {
       # Fix path to ps2pdf binary
       inherit ghostscript;
     })
+    # https://gitlab.com/inkscape/inkscape/-/merge_requests/7919
+    (fetchpatch {
+      name = "fix-build-poppler-26.05.0";
+      url = "https://gitlab.com/inkscape/inkscape/-/commit/98828255aa0c1212329236b3ff4ac7f41efb4a67.patch";
+      hash = "sha256-ujUl0SxZyb/TyJRmq1ETNn5W8lDDNn3JqHQQQPU5klA=";
+    })
+    # https://gitlab.com/inkscape/inkscape/-/merge_requests/7968
+    ./fix-build-poppler-26.06.0.patch
   ];
 
   postPatch = ''
@@ -146,7 +156,8 @@ stdenv.mkDerivation (finalAttrs: {
     glibmm
     gsl
     gtkmm3
-    imagemagick
+    gtksourceview4
+    graphicsmagick
     lcms
     lib2geom
     libcdr
@@ -157,9 +168,10 @@ stdenv.mkDerivation (finalAttrs: {
     libsigcxx
     libvisio
     libwpg
-    libXft
+    libxft
     libxml2
     libxslt
+    readline
     perlPackages.perl
     poppler
     popt

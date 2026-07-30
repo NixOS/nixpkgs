@@ -4,7 +4,7 @@
   makeWrapper,
   makeDesktopItem,
   fetchurl,
-  openjdk17-bootstrap,
+  jdk25,
   jdk11,
   jdk8,
   writeScript,
@@ -31,7 +31,7 @@ let
         desktopName = "Charles";
         exec = "charles %F";
         genericName = "Web Debugging Proxy";
-        icon = "charles-proxy";
+        icon = "charles-proxy" + lib.optionalString (lib.versionAtLeast version "5.0") "5";
         mimeTypes = [
           "application/x-charles-savedsession"
           "application/x-charles-savedsession+xml"
@@ -73,8 +73,24 @@ let
         mkdir -p $out/share/applications
         ln -s ${desktopItem}/share/applications/* $out/share/applications/
 
-        mkdir -p $out/share/icons
-        cp -r icon $out/share/icons/hicolor
+        ${
+          if lib.versionOlder version "4.0" then
+            ''
+              for size in 16 32 48 64 128 256 512; do
+                install -Dm644 icon/charles_icon$size.png $out/share/icons/hicolor/''${size}x''${size}/apps/charles-proxy.png
+              done
+              install -Dm644 icon/charles_icon.svg $out/share/icons/hicolor/scalable/apps/charles-proxy.svg
+            ''
+          else
+            ''
+              mkdir -p $out/share/icons
+              cp -r icon $out/share/icons/hicolor
+              if [ -d "etc/mime" ]; then
+                mkdir -p $out/share/mime/packages
+                cp etc/mime/*.xml $out/share/mime/packages/
+              fi
+            ''
+        }
 
         runHook postInstall
       '';
@@ -98,10 +114,10 @@ in
 {
   charles5 = (
     generic {
-      version = "5.0.3";
-      hash = "sha256-SiZ15ekuAW7AyXBHN5Zel4ZFL/4oNy1td64NQ0GNUhE=";
+      version = "5.1";
+      hash = "sha256-gExmuh1A21QGkfcmcwPPgk51Ag7Ced9kPTHha2ofbKg=";
       platform = "_x86_64";
-      jdk = openjdk17-bootstrap;
+      jdk = jdk25;
 
       updateScript = writeScript "update-charles" ''
         #!/usr/bin/env nix-shell

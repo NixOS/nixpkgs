@@ -6,25 +6,27 @@
   bash,
   python3,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pulumi-python";
   inherit (pulumi) version src;
 
-  sourceRoot = "${src.name}/sdk/python/cmd/pulumi-language-python";
+  sourceRoot = "${finalAttrs.src.name}/sdk/python/cmd/pulumi-language-python";
 
-  vendorHash = "sha256-BfkjDesPdPDV2uILYaMJFIvaEBKT15ukwaReAL3yziw=";
+  vendorHash = "sha256-JlfRmBrowYYcKG+lkG6DCxWIibb0V1NVbpgPT86iRFU=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/pulumi/pulumi/sdk/v3/go/common/version.Version=${version}"
+    "-X=github.com/pulumi/pulumi/sdk/v3/go/common/version.Version=${finalAttrs.version}"
   ];
 
   checkFlags = [
     "-skip=^${
       lib.concatStringsSep "$|^" [
-        "TestLanguage"
-        "TestDeterminePulumiPackages"
+        "TestLanguageDefault"
+        "TestLanguageTOML"
+        "TestLanguageClasses"
+        "TestListPulumiPackageInfos"
       ]
     }$"
   ];
@@ -42,8 +44,7 @@ buildGoModule rec {
   postInstall = ''
     cp -t "$out/bin" \
       ../pulumi-language-python-exec \
-      ../../dist/pulumi-resource-pulumi-python \
-      ../../dist/pulumi-analyzer-policy-python
+      ../../dist/pulumi-resource-pulumi-python
   '';
 
   passthru.tests.smokeTest = callPackage ./smoke-test/default.nix { };
@@ -54,7 +55,9 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     mainProgram = "pulumi-language-python";
     maintainers = with lib.maintainers; [
+      nicoo
       tie
+      untio11
     ];
   };
-}
+})

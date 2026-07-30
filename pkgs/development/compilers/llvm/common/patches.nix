@@ -22,7 +22,12 @@
   ];
   "llvm/gnu-install-dirs.patch" = [
     {
+      after = "23";
+      path = ../23;
+    }
+    {
       after = "22";
+      before = "23";
       path = ../22;
     }
     {
@@ -136,6 +141,26 @@
       after = "19";
       before = "20";
       path = ../19;
+    }
+  ];
+  "flang/warn-on-fbuiltin-and-fno-builtin.patch" = [
+    {
+      after = "20";
+      before = "22";
+      path = ../21;
+    }
+  ];
+  "flang/accept-and-ignore-some-gfortran-optimization-flags.patch" = [
+    {
+      after = "20";
+      before = "22";
+      path = ../21;
+    }
+  ];
+  "flang/use-xflang-in-diagnostics.patch" = [
+    {
+      after = "20";
+      path = ../21;
     }
   ];
 }

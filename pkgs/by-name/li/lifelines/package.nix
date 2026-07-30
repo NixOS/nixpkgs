@@ -32,11 +32,14 @@ stdenv.mkDerivation {
     bison
   ];
 
+  postPatch = ''
+    mkdir -p m4
+  '';
+
   meta = {
     description = "Genealogy tool with ncurses interface";
     homepage = "https://lifelines.github.io/lifelines/";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.disassembler ];
     platforms = lib.platforms.linux;
   };
 }

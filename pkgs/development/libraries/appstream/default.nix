@@ -4,7 +4,6 @@
   buildPackages,
   replaceVars,
   fetchFromGitHub,
-  fetchpatch,
   meson,
   mesonEmulatorHook,
   appstream,
@@ -13,15 +12,16 @@
   cmake,
   gettext,
   xmlto,
-  docbook-xsl-nons,
+  docbook-xsl-ns,
   docbook_xml_dtd_45,
+  libblake3,
   libxslt,
   libstemmer,
   glib,
   xapian,
   libxml2,
   libxmlb,
-  libyaml,
+  libfyaml,
   gobject-introspection,
   itstool,
   gperf,
@@ -31,6 +31,7 @@
   gdk-pixbuf,
   pango,
   librsvg,
+  bash-completion,
   systemd,
   nixosTests,
   testers,
@@ -42,7 +43,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "appstream";
-  version = "1.0.4";
+  version = "1.1.3";
 
   outputs = [
     "out"
@@ -54,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ximion";
     repo = "appstream";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-UnSJcXH0yWK/dPKgbOx9x3iJjKcKNYFkD2Qs5c3FtM8=";
+    hash = "sha256-z9HmTYOjglki+ID7GPMf3jGLOAkxLqJd4+GsIR3W3u4=";
   };
 
   patches = [
@@ -65,12 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Allow installing installed tests to a separate output.
     ./installed-tests-path.patch
-
-    (fetchpatch {
-      name = "static.patch";
-      url = "https://github.com/ximion/appstream/commit/90675d8853188f65897d2453346cb0acd531b58f.patch";
-      hash = "sha256-d3h5h7B/MP3Sun5YwYCqMHcw4PMMwg1YS/S9vsMzkQ4=";
-    })
   ];
 
   strictDeps = true;
@@ -87,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     libxslt
     xmlto
-    docbook-xsl-nons
+    docbook-xsl-ns
     docbook_xml_dtd_45
     glib
     itstool
@@ -105,17 +100,19 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    libblake3
     libstemmer
     glib
     xapian
     libxml2
     libxmlb
-    libyaml
+    libfyaml
     curl
     cairo
     gdk-pixbuf
     pango
     librsvg
+    bash-completion
   ]
   ++ lib.optionals withSystemd [
     systemd

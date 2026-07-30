@@ -10,6 +10,8 @@
   nix-store-test-support,
   sqlite,
 
+  openssl,
+
   rapidcheck,
   gtest,
   runCommand,
@@ -60,7 +62,10 @@ mkMesonExecutable (finalAttrs: {
         runCommand "${finalAttrs.pname}-run"
           {
             meta.broken = !stdenv.hostPlatform.emulatorAvailable buildPackages;
-            buildInputs = [ writableTmpDirAsHomeHook ];
+            nativeBuildInputs = [
+              writableTmpDirAsHomeHook
+            ]
+            ++ lib.optional (lib.versionAtLeast version "2.34pre") (lib.getBin openssl);
           }
           ''
             export _NIX_TEST_UNIT_DATA=${data + "/src/libstore-tests/data"}

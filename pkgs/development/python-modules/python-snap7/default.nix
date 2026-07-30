@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "python-snap7";
-  version = "2.0.2";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gijzelaerr";
     repo = "python-snap7";
     tag = version;
-    hash = "sha256-mcdzgR0z2P5inK9Q+ZQhP5H8vZSaPbRCSEnt+wzG+ro=";
+    hash = "sha256-l7nLW7qrIloa6JlQTubXnISljsC7jkdAjye9AAUTDrw=";
   };
 
   prePatch = ''

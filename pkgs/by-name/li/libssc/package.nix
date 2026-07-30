@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   meson,
   ninja,
   glib,
@@ -11,16 +11,15 @@
   protobuf,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libssc";
-  version = "0.2.2";
+  version = "0.4.4";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "DylanVanAssche";
     repo = "libssc";
-    tag = "v${version}";
-    hash = "sha256-vc3phLAURKXAVD/o4uiGkBtJ3wsbLEfkwygMltEhqug=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-C9A0NtkGztSJQIkv4diGAPhZMUiIUszRNYif2yZL8nI=";
   };
 
   buildInputs = [
@@ -50,4 +49,4 @@ stdenv.mkDerivation rec {
     mainProgram = "libssc";
     platforms = lib.platforms.all;
   };
-}
+})

@@ -7,15 +7,15 @@
   neo4j,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llama-index-graph-stores-neo4j";
-  version = "0.5.1";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_graph_stores_neo4j";
-    inherit version;
-    hash = "sha256-P3EzR6piD49dFQY26LuV4/gZpOsFe5Hfp87BFiwo1Xg=";
+    inherit (finalAttrs) version;
+    hash = "sha256-q+S7NIxlIAXR75cN7IUS2uZYLFDYO7r1nOLVMDHmYSA=";
   };
 
   pythonRelaxDeps = [ "neo4j" ];
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

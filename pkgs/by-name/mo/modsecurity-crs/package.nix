@@ -4,24 +4,24 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "3.3.4";
   pname = "modsecurity-crs";
 
   src = fetchFromGitHub {
     owner = "coreruleset";
     repo = "coreruleset";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-WDJW4K85YdHrw9cys3LrnZUoTxc0WhiuCW6CiC1cAbk=";
   };
 
   installPhase = ''
-    install -D -m444 -t $out/rules ${src}/rules/*.conf
-    install -D -m444 -t $out/rules ${src}/rules/*.data
-    install -D -m444 -t $out/share/doc/modsecurity-crs ${src}/*.md
-    install -D -m444 -t $out/share/doc/modsecurity-crs ${src}/{CHANGES,INSTALL,LICENSE}
-    install -D -m444 -t $out/share/modsecurity-crs ${src}/rules/*.example
-    install -D -m444 -t $out/share/modsecurity-crs ${src}/crs-setup.conf.example
+    install -D -m444 -t $out/rules ${finalAttrs.src}/rules/*.conf
+    install -D -m444 -t $out/rules ${finalAttrs.src}/rules/*.data
+    install -D -m444 -t $out/share/doc/modsecurity-crs ${finalAttrs.src}/*.md
+    install -D -m444 -t $out/share/doc/modsecurity-crs ${finalAttrs.src}/{CHANGES,INSTALL,LICENSE}
+    install -D -m444 -t $out/share/modsecurity-crs ${finalAttrs.src}/rules/*.example
+    install -D -m444 -t $out/share/modsecurity-crs ${finalAttrs.src}/crs-setup.conf.example
     cat > $out/share/modsecurity-crs/modsecurity-crs.load.example <<EOF
     ##
     ## This is a sample file for loading OWASP CRS's rules.
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ izorkin ];
   };
-}
+})

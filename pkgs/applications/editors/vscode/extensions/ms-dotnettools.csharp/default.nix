@@ -18,19 +18,15 @@ let
     {
       x86_64-linux = {
         arch = "linux-x64";
-        hash = "sha256-gey2F+TrWJFbcyDHwwSUijt4mJZSZND+0WUyVFF3eUg=";
+        hash = "sha256-FTS8cK9ovmxGLnywOGTIP7oUOHZ4RLE5t7lfhltdmIc=";
       };
       aarch64-linux = {
         arch = "linux-arm64";
-        hash = "sha256-RxUEzWX4NPZZegdwMa+cLBZAdTNIrwHdsmyZQQ7ike4=";
-      };
-      x86_64-darwin = {
-        arch = "darwin-x64";
-        hash = "sha256-o2MOxeDUnXkS6RaG3RajP1Mzi+2gKLFlb+WiRPG4R1s=";
+        hash = "sha256-EV3745OXbwrRmc8P5e13DZbomyJGcYQUF07WflRWU1Q=";
       };
       aarch64-darwin = {
         arch = "darwin-arm64";
-        hash = "sha256-XgM+0q5BoLORDVQueLABJP5X31iTB7lLv2o7FZH+DFk=";
+        hash = "sha256-KCIkjBmYZPiuFmQ3/aDycARYIHPyDTmMkoGcuG5DQX8=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
@@ -41,10 +37,12 @@ let
   #       ideally should be done at the vscode-extensions level for
   #       everyone to reuse.
   roslyn-copilot = fetchzip {
-    url = "https://roslyn.blob.core.windows.net/releases/Microsoft.VisualStudio.Copilot.Roslyn.LanguageServer-18.0.479-alpha.zip";
-    hash = "sha256-xq66gY3N3/R9bG6XWqLy53T/ExzGdZi3ZBNEzYAeqM8=";
+    url = "https://roslyn.blob.core.windows.net/releases/Microsoft.VisualStudio.Copilot.Roslyn.LanguageServer-18.3.72-alpha.zip";
+    hash = "sha256-vzowJOPp/VVeWkPihvWX2jvTrbFMZMtgX03eLezdanE=";
+    # Must be written to $out: fetchzip runs postFetch with cwd = $TMPDIR/unpack,
+    # which stripRoot has already emptied by moving the payload to $out.
     postFetch = ''
-      touch install.Lock
+      touch "$out/install.Lock"
     '';
   };
 in
@@ -52,7 +50,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "csharp";
     publisher = "ms-dotnettools";
-    version = "2.93.22";
+    version = "2.140.8";
     inherit (extInfo) hash arch;
   };
 
@@ -155,11 +153,10 @@ vscode-utils.buildVscodeMarketplaceExtension {
     description = "Official C# support for Visual Studio Code";
     homepage = "https://github.com/dotnet/vscode-csharp";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ ggg ];
+    maintainers = [ ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

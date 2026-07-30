@@ -51,7 +51,7 @@ in
     };
   };
 
-  config = lib.mkIf (config.hardware.facter.reportPath != null) {
+  config = lib.mkIf config.hardware.facter.enable {
 
     # KVM support
     boot.kernelModules =
@@ -105,7 +105,7 @@ in
     # parallels
     hardware.parallels.enable = lib.mkIf cfg.parallels.enable (lib.mkDefault true);
     nixpkgs.config = lib.mkIf (!options.nixpkgs.pkgs.isDefined && cfg.parallels.enable) {
-      allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ "prl-tools" ];
+      allowUnfreePackages = [ "prl-tools" ];
     };
   };
 }

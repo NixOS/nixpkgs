@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  uv-build,
 
   # runtime
   click,
@@ -17,21 +17,24 @@
 
 buildPythonPackage rec {
   pname = "peewee-migrate";
-  version = "1.13.0";
+  version = "1.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "klen";
     repo = "peewee_migrate";
     tag = version;
-    hash = "sha256-sC63WH/4EmoQYfvl3HyBHDzT/jMZW/G7mTC138+ZHHU=";
+    hash = "sha256-AFZW4vVHAuvdjA3t37YcOqVmwhZ1sU25L+YVP7BvMhQ=";
   };
 
   postPatch = ''
     sed -i '/addopts/d' pyproject.toml
+
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.10.2,<0.11.0" uv_build
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [ uv-build ];
 
   propagatedBuildInputs = [
     peewee
@@ -43,11 +46,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     psycopg2
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    #  sqlite3.OperationalError: error in table order after drop column...
-    "test_migrator"
   ];
 
   meta = {

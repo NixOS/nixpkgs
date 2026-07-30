@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage {
       lib.maintainers.qyriad
       lib.maintainers.philiptaron
     ];
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     platforms = lib.platforms.all;
     mainProgram = "git-point";

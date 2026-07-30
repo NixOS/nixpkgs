@@ -36,15 +36,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "librosa";
   version = "0.11.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "librosa";
     repo = "librosa";
-    tag = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true; # for test data
     hash = "sha256-T58J/Gi3tHzelr4enbYJi1KmO46QxE5Zlhkc0+EgvRg=";
   };
@@ -89,7 +90,7 @@ buildPythonPackage rec {
     samplerate
     writableTmpDirAsHomeHook
   ]
-  ++ optional-dependencies.matplotlib;
+  ++ finalAttrs.passthru.optional-dependencies.matplotlib;
 
   disabledTests = [
     # requires network access
@@ -111,6 +112,11 @@ buildPythonPackage rec {
     "test_unknown_axis"
     "test_axis_bound_warning"
     "test_auto_aspect"
+
+    # audioread.exceptions.NoBackendError
+    "test_get_duration_audioread"
+    "test_get_samplerate_audioread"
+    "test_load_force_audioread"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     # AssertionError (numerical comparison fails)
@@ -127,13 +133,19 @@ buildPythonPackage rec {
     "test_istft_multi"
     "test_pitch_shift_multi"
     "test_time_stretch_multi"
+    "test_resample_multichannel"
+  ];
+
+  disabledTestPaths = [
+    # matplotlib 3.11 exceeds tolerances for image comparison
+    "tests/test_display.py"
   ];
 
   meta = {
     description = "Python library for audio and music analysis";
     homepage = "https://github.com/librosa/librosa";
-    changelog = "https://github.com/librosa/librosa/releases/tag/${version}";
+    changelog = "https://github.com/librosa/librosa/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ carlthome ];
   };
-}
+})

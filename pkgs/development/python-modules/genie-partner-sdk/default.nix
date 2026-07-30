@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   hatchling,
   aiohttp,
   fetchPypi,
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "genie-partner-sdk";
   version = "1.0.11";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit version;

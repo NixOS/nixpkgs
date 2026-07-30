@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "verlib2";
-  version = "0.3.1";
+  version = "26.2";
   pyproject = true;
 
   # This tarball doesn't include tests unfortunately, and the GitHub tarball
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   # should work for us as well.
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KGLxlSjbQA0TAlOitxx8NhbuFOHVS/aDO8CSnSzd0UE=";
+    hash = "sha256-B0Cjs1dVqdjruTP/zpifN3YRP+MZq2LfX6IPfBQ0PVg=";
   };
 
   nativeBuildInputs = [

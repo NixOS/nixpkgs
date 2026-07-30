@@ -11,7 +11,7 @@
   jupyter-core,
   jupyter-client,
   pygments,
-  pyqt5,
+  pyqt6,
   qtpy,
   traitlets,
 
@@ -19,16 +19,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qtconsole";
-  version = "5.7.0";
+  version = "5.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "qtconsole";
-    tag = version;
-    hash = "sha256-UbtPVVWehb30lidBNrmsQATEd0DBfn8xCPB9ALzDjiI=";
+    tag = finalAttrs.version;
+    hash = "sha256-GL6CAXijlgc/3nj9KaJJgK+AIq6wHdEf0kpgryJ3KuQ=";
   };
 
   build-system = [ setuptools ];
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     jupyter-core
     jupyter-client
     pygments
-    pyqt5
+    pyqt6
     qtpy
     traitlets
   ];
@@ -59,4 +59,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "span-lite";
   version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "martinmoene";
     repo = "span-lite";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-BYRSdGzIvrOjPXxeabMj4tPFmQ0wfq7y+zJf6BD/bTw=";
   };
 
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ icewind1991 ];
     platforms = lib.platforms.all;
   };
-}
+})

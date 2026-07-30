@@ -54,6 +54,5 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = [ ];
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86inputvoid.x86_64-darwin
   };
 })

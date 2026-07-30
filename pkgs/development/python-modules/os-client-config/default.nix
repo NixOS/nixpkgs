@@ -10,7 +10,7 @@
   python-glanceclient,
   setuptools,
   stestr,
-  subunit,
+  python-subunit,
   testscenarios,
   testtools,
 }:
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     fixtures
     jsonschema
-    subunit
+    python-subunit
     oslotest
     stestr
     testscenarios

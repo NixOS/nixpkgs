@@ -105,6 +105,10 @@ stdenv.mkDerivation (finalAttrs: {
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
 
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    makeWrapper "$out/Applications/nheko.app/Contents/MacOS/nheko" "$out/bin/nheko"
+  '';
+
   meta = {
     description = "Desktop client for the Matrix protocol";
     homepage = "https://github.com/Nheko-Reborn/nheko";

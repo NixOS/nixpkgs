@@ -25,7 +25,7 @@ in
 
   meta = {
     doc = ./pantheon.md;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 
   imports = [
@@ -208,6 +208,13 @@ in
         "org.gnome.SettingsDaemon.XSettings.service"
       ];
 
+      systemd.user.services."io.elementary.settings-daemon" = {
+        # https://github.com/NixOS/nixpkgs/issues/81138
+        wantedBy = [ "gnome-session-initialized.target" ];
+        # The daemon might launch external applications via g_app_info_launch.
+        environment.PATH = lib.mkForce null;
+      };
+
       # Global environment
       environment.systemPackages =
         (with pkgs.pantheon; [
@@ -269,8 +276,7 @@ in
         ++ (with pkgs.pantheon; [
           elementary-files
           elementary-settings-daemon
-          # https://github.com/elementary/portals/issues/157
-          # xdg-desktop-portal-pantheon
+          xdg-desktop-portal-pantheon
         ])
       ) config.environment.pantheon.excludePackages;
 

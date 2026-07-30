@@ -12,14 +12,14 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fsharp";
   version = "4.0.1.1";
 
   src = fetchFromGitHub {
     owner = "fsharp";
     repo = "fsharp";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-dgTEM2aL8lVjVMuW0+HLc+TUA39IiuBv/RfHYNURh5s=";
   };
 
@@ -68,4 +68,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = with lib.platforms; unix;
   };
-}
+})

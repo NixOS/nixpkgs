@@ -2,9 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   poetry-core,
-  importlib-metadata,
 }:
 
 buildPythonPackage rec {
@@ -18,8 +16,6 @@ buildPythonPackage rec {
   };
 
   build-system = [ poetry-core ];
-
-  dependencies = lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   # no tests executed
   doCheck = false;

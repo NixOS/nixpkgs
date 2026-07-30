@@ -24,14 +24,14 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dduper";
   version = "0.04";
 
   src = fetchFromGitHub {
     owner = "lakshmipathi";
     repo = "dduper";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "09ncdawxkffldadqhfblqlkdl05q2qmywxyg6p61fv3dr2f2v5wm";
   };
 
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ thesola10 ];
     platforms = lib.platforms.linux;
   };
-}
+})

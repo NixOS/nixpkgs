@@ -126,7 +126,7 @@ in
     services.zram-generator.enable = true;
 
     services.zram-generator.settings = lib.listToAttrs (
-      builtins.map (dev: {
+      map (dev: {
         name = dev;
         value =
           let

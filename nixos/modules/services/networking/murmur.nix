@@ -7,6 +7,8 @@
 
 let
   cfg = config.services.murmur;
+  acmeHostDir = config.security.acme.certs."${cfg.tls.useACMEHost}".directory;
+
   forking = cfg.logToFile;
   configFile = pkgs.writeText "murmurd.ini" ''
     database=${cfg.stateDir}/murmur.sqlite
@@ -41,9 +43,9 @@ let
     ${lib.optionalString (cfg.registerHostname != "") "registerHostname=${cfg.registerHostname}"}
 
     certrequired=${lib.boolToString cfg.clientCertRequired}
-    ${lib.optionalString (cfg.sslCert != null) "sslCert=${cfg.sslCert}"}
-    ${lib.optionalString (cfg.sslKey != null) "sslKey=${cfg.sslKey}"}
-    ${lib.optionalString (cfg.sslCa != null) "sslCA=${cfg.sslCa}"}
+    ${lib.optionalString (cfg.tls.certPath != null) "sslCert=${cfg.tls.certPath}"}
+    ${lib.optionalString (cfg.tls.keyPath != null) "sslKey=${cfg.tls.keyPath}"}
+    ${lib.optionalString (cfg.tls.caPath != null) "sslCA=${cfg.tls.caPath}"}
 
     ${lib.optionalString (cfg.dbus != null) "dbus=${cfg.dbus}"}
 
@@ -58,6 +60,12 @@ in
       "murmur"
       "logFile"
     ] "This option has been superseded by services.murmur.logToFile")
+    (lib.mkRenamedOptionModule [ "services" "murmur" "sslCa" ] [ "services" "murmur" "tls" "caPath" ])
+    (lib.mkRenamedOptionModule [ "services" "murmur" "sslKey" ] [ "services" "murmur" "tls" "keyPath" ])
+    (lib.mkRenamedOptionModule
+      [ "services" "murmur" "sslCert" ]
+      [ "services" "murmur" "tls" "certPath" ]
+    )
   ];
 
   options = {
@@ -237,22 +245,41 @@ in
 
       clientCertRequired = lib.mkEnableOption "requiring clients to authenticate via certificates";
 
-      sslCert = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
-        default = null;
-        description = "Path to your SSL certificate.";
-      };
+      tls = {
+        certPath = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
+          default = if (cfg.tls.useACMEHost != null) then "${acmeHostDir}/cert.pem" else null;
+          defaultText = lib.literalMD "If {option}`services.murmur.tls.useACMEHost` is set, defaults to what's provided by the ACME module.";
+          description = "Path to your TLS certificate.";
+        };
 
-      sslKey = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
-        default = null;
-        description = "Path to your SSL key.";
-      };
+        keyPath = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
+          default = if (cfg.tls.useACMEHost != null) then "${acmeHostDir}/key.pem" else null;
+          defaultText = lib.literalMD "If {option}`services.murmur.tls.useACMEHost` is set, defaults to what's provided by the ACME module.";
+          description = "Path to your TLS key.";
+        };
 
-      sslCa = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
-        default = null;
-        description = "Path to your SSL CA certificate.";
+        caPath = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
+          default = if (cfg.tls.useACMEHost != null) then "${acmeHostDir}/chain.pem" else null;
+          defaultText = lib.literalMD "If {option}`services.murmur.tls.useACMEHost` is set, defaults to what's provided by the ACME module.";
+          description = "Path to your TLS CA certificate.";
+        };
+
+        useACMEHost = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          example = "mumble.example.com";
+          description = ''
+            Host of an existing Let's Encrypt certificate to use for TLS.
+            Make sure that the certificate directory is readable by the
+            `murmur` user or group. *Note that this option does not
+            create any certificates and it doesn't add subdomains to
+            existing ones – you will need to create them manually using
+            {option}`security.acme.certs`.*
+          '';
+        };
       };
 
       extraConfig = lib.mkOption {
@@ -316,10 +343,18 @@ in
       allowedUDPPorts = [ cfg.port ];
     };
 
+    security.acme.certs = lib.mkIf (cfg.tls.useACMEHost != null) {
+      "${cfg.tls.useACMEHost}".reloadServices = [ "murmur.service" ];
+    };
+
     systemd.services.murmur = {
       description = "Murmur Chat Service";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      after = [
+        "network.target"
+      ]
+      ++ lib.optional (cfg.tls.useACMEHost != null) "acme-${cfg.tls.useACMEHost}.service";
+      wants = lib.mkIf (cfg.tls.useACMEHost != null) [ "acme-${cfg.tls.useACMEHost}.service" ];
       preStart = ''
         ${pkgs.envsubst}/bin/envsubst \
           -o /run/murmur/murmurd.ini \
@@ -422,14 +457,14 @@ in
         ${lib.optionalString cfg.logToFile ''
           /var/log/murmur/murmurd.log rw,
         ''}
-        ${lib.optionalString (cfg.sslCert != null) ''
-          ${cfg.sslCert} r,
+        ${lib.optionalString (cfg.tls.certPath != null) ''
+          ${cfg.tls.certPath} r,
         ''}
-        ${lib.optionalString (cfg.sslKey != null) ''
-          ${cfg.sslKey} r,
+        ${lib.optionalString (cfg.tls.keyPath != null) ''
+          ${cfg.tls.keyPath} r,
         ''}
-        ${lib.optionalString (cfg.sslCa != null) ''
-          ${cfg.sslCa} r,
+        ${lib.optionalString (cfg.tls.caPath != null) ''
+          ${cfg.tls.caPath} r,
         ''}
         ${lib.optionalString (cfg.dbus != null) ''
           dbus bus=${cfg.dbus},

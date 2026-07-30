@@ -16,22 +16,17 @@
   pytestCheckHook,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "signalkraft";
   domain = "mypyllant";
-  version = "0.9.9";
+  version = "0.9.19";
 
   src = fetchFromGitHub {
     owner = "signalkraft";
     repo = "mypyllant-component";
-    tag = "v${version}";
-    hash = "sha256-6T8SGAP2535VqZmvSeITpMIa0SBJhnWsOKM1Y66WhHE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7+KHmsgfGPIIWu+TTumswcaEoyQF9KvBVAKNGtNhZuQ=";
   };
-
-  patches = [
-    # Migrates tests to the new version of `pytest-homeassistant-custom-component` (see https://github.com/signalkraft/mypyllant-component/pull/394).
-    ./migrate-to-new-pytest-homeassistant-custom-component.patch
-  ];
 
   dependencies = [
     mypyllant
@@ -49,9 +44,9 @@ buildHomeAssistantComponent rec {
 
   meta = {
     description = "Unofficial Home Assistant integration for interacting with myVAILLANT";
-    changelog = "https://github.com/signalkraft/mypyllant-component/releases/tag/${src.tag}";
+    changelog = "https://github.com/signalkraft/mypyllant-component/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/signalkraft/mypyllant-component";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ urbas ];
   };
-}
+})

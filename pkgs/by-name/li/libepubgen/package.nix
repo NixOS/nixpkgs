@@ -10,13 +10,13 @@
   libxml2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libepubgen";
   version = "0.1.1";
 
   src = fetchgit {
     url = "https://git.code.sf.net/p/libepubgen/code";
-    rev = "libepubgen-${version}";
+    rev = "libepubgen-${finalAttrs.version}";
     hash = "sha256-wPpU8Sfhx9GIgDmT/otT5yV4iQKm9QPZqgSBTfFcbbg=";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

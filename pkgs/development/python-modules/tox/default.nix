@@ -2,11 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   packaging,
   pluggy,
   virtualenv,
-  tomli,
   filelock,
   hatchling,
   hatch-vcs,
@@ -17,19 +15,18 @@
   cachetools,
   testers,
   tox,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "tox";
-  version = "4.32.0";
+  version = "4.34.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "tox";
     tag = version;
-    hash = "sha256-n2tKjT0t8bm6iatukKKcGw0PC+5EJrQEABMIAumRaqE=";
+    hash = "sha256-pfftPTY7n47tCQFGCZRwsq0vCWZUeukFZO99gj5mTeo=";
   };
 
   build-system = [
@@ -47,10 +44,6 @@ buildPythonPackage rec {
     pluggy
     pyproject-api
     virtualenv
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-    typing-extensions
   ];
 
   doCheck = false; # infinite recursion via devpi-client

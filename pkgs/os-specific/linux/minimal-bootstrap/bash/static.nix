@@ -4,8 +4,8 @@
   hostPlatform,
   fetchurl,
   bash,
+  gcc-buildbuild,
   gcc,
-  musl,
   binutils,
   gnumake,
   gnused,
@@ -19,12 +19,16 @@
 let
   inherit (import ./common.nix { inherit lib; }) meta;
   pname = "bash-static";
-  version = "5.2.15";
+  version = "5.3";
 
   src = fetchurl {
     url = "mirror://gnu/bash/bash-${version}.tar.gz";
-    sha256 = "132qng0jy600mv1fs95ylnlisx2wavkkgpb19c6kmz7lnmjhjwhk";
+    sha256 = "sha256-DVzYaWX4aaJs9k9Lcb57lvkKO6iz104n6OnZ1VUPMbo=";
   };
+
+  binutilsTargetPrefix = lib.optionalString (
+    hostPlatform.config != buildPlatform.config
+  ) "${hostPlatform.config}-";
 in
 bash.runCommand "${pname}-${version}"
   {
@@ -32,7 +36,6 @@ bash.runCommand "${pname}-${version}"
 
     nativeBuildInputs = [
       gcc
-      musl
       binutils
       gnumake
       gnused
@@ -56,15 +59,20 @@ bash.runCommand "${pname}-${version}"
     tar xf ${src}
     cd bash-${version}
 
+    export AR="${binutilsTargetPrefix}ar"
+    export STRIP="${binutilsTargetPrefix}strip"
+    export STRIPPROG="$STRIP"
+
     # Configure
     bash ./configure \
       --prefix=$out \
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
       --without-bash-malloc \
+      --disable-dependency-tracking \
+      --disable-nls \
       --enable-static-link \
-      bash_cv_func_strtoimax=y \
-      CC=musl-gcc
+      CC_FOR_BUILD=${gcc-buildbuild}/bin/gcc
 
     # Build
     make -j $NIX_BUILD_CORES
@@ -72,4 +80,6 @@ bash.runCommand "${pname}-${version}"
     # Install
     make -j $NIX_BUILD_CORES install-strip
     rm $out/bin/bashbug
+    rm -rf $out/share
+    ln -s $out/bin/bash $out/bin/sh
   ''

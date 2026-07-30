@@ -24,7 +24,6 @@
   psycopg2,
   pytest-django,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   setuptools,
   uritemplate,
@@ -32,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "drf-spectacular";
-  version = "0.29.0";
+  version = "0.30.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tfranzel";
     repo = "drf-spectacular";
     tag = version;
-    hash = "sha256-7Eq0Z/BR/tvGS6RRRoy3jOyBQkc58QETHWy47S6tSD8=";
+    hash = "sha256-CuN3ZmFQBLUlRteXVcWF/oE9vvLcaFAoEbkF3hHQLgQ=";
   };
 
   build-system = [ setuptools ];

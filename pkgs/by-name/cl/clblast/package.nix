@@ -9,14 +9,14 @@
   ocl-icd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clblast";
   version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "CNugteren";
     repo = "CLBlast";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-fzenYFCAQ0B2NQgh5OaErv/yNEzjznB6ogRapqfL6P4=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ Tungsten842 ];
     platforms = lib.platforms.linux;
   };
-}
+})

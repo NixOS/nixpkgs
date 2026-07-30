@@ -24,6 +24,8 @@ buildPythonPackage {
     hash = "sha256-KuuVu0tqrmQuNKYmDmdy+TU6BnnhDxh4G8n9BGzjGag=";
   };
 
+  patches = [ ./numpy-2.4-compat.patch ];
+
   build-system = [ setuptools ];
 
   dependencies = [

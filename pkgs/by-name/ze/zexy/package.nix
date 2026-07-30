@@ -5,16 +5,16 @@
   puredata,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zexy";
-  version = "2.4.3";
+  version = "2.4.4";
 
   src = fetchFromGitLab {
     domain = "git.iem.at";
     owner = "pd";
     repo = "zexy";
-    tag = "v${version}";
-    hash = "sha256-9f0uYBDBq5lcN/N0uJwC/HBEFcj9b8ZtBHnPAce2s/A=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9+kWnfYLSOI2PaFQVzlaq1EjzUeOZvVRomGfWSLNXCw=";
   };
 
   buildInputs = [ puredata ];
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
   };
-}
+})

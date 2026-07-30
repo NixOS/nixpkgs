@@ -44,7 +44,7 @@ buildPythonPackage rec {
     export DJANGO_SETTINGS_MODULE=settings
   '';
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "testapp/tests.py"
   ];
 

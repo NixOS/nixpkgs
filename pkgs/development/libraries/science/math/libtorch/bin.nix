@@ -3,15 +3,17 @@
   stdenv,
   fetchzip,
   lib,
-  libcxx,
   llvmPackages,
   config,
 
-  addDriverRunpath,
+  autoAddDriverRunpath,
+  autoPatchelfHook,
   patchelf,
   fixDarwinDylibNames,
 
   cudaSupport ? config.cudaSupport,
+  cudaPackages_13,
+  libz,
 }:
 
 let
@@ -35,7 +37,11 @@ stdenv.mkDerivation {
     if stdenv.hostPlatform.isDarwin then
       [ fixDarwinDylibNames ]
     else
-      [ patchelf ] ++ lib.optionals cudaSupport [ addDriverRunpath ];
+      [
+        patchelf
+        autoPatchelfHook
+      ]
+      ++ lib.optionals cudaSupport [ autoAddDriverRunpath ];
 
   dontBuild = true;
   dontConfigure = true;
@@ -58,12 +64,22 @@ stdenv.mkDerivation {
 
     substituteInPlace \
       $dev/share/cmake/Caffe2/Caffe2Targets-release.cmake \
-      --replace \''${_IMPORT_PREFIX}/lib "$out/lib" \
+      --replace \''${_IMPORT_PREFIX}/lib "$out/lib"
   '';
 
   postFixup =
     let
-      rpath = lib.makeLibraryPath [ stdenv.cc.cc ];
+      rpath = lib.makeLibraryPath (
+        [ stdenv.cc.cc ]
+        ++ lib.optionals cudaSupport [
+          cudaPackages_13.cuda_cudart # libcuda.so
+          cudaPackages_13.libcufft
+          cudaPackages_13.libcurand
+          cudaPackages_13.libcusolver
+          cudaPackages_13.libcusparse
+          libz
+        ]
+      );
     in
     lib.optionalString stdenv.hostPlatform.isLinux ''
       find $out/lib -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do

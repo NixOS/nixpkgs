@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   pkg-config,
   libxml2,
   glibmm,
@@ -9,13 +9,15 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libxmlxx5";
-  version = "5.4";
+  version = "5.6.1";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/libxml++/${version}/libxml++-${lib.versions.pad 3 version}.tar.xz";
-    hash = "sha256-6aI8Q2aGqUaY0hOOa8uvhJEh1jv6D1DcNP77/XlWaEg=";
+  src = fetchFromGitHub {
+    owner = "libxmlplusplus";
+    repo = "libxmlplusplus";
+    tag = finalAttrs.version;
+    hash = "sha256-f8R2T5A7C/HqydhZOlbWIKj6Q9oc97f2PfV8ef70G0I=";
   };
 
   nativeBuildInputs = [
@@ -31,10 +33,11 @@ stdenv.mkDerivation rec {
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   meta = {
+    changelog = "https://github.com/libxmlplusplus/libxmlplusplus/blob/${finalAttrs.src.tag}/NEWS";
     description = "C++ wrapper for the libxml2 XML parser library";
-    homepage = "https://libxmlplusplus.sourceforge.net/";
-    license = lib.licenses.lgpl2Plus;
-    maintainers = [ lib.maintainers.normalcea ];
+    homepage = "https://libxmlplusplus.github.io/libxmlplusplus";
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

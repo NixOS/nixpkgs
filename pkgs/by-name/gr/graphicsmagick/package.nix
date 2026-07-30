@@ -8,14 +8,14 @@
   freetype,
   ghostscript,
   graphviz,
-  libX11,
+  libx11,
   libjpeg,
+  libjxl,
   libpng,
   libtiff,
   libtool,
   libwebp,
   libxml2,
-  libheifSupport ? true,
   libheif,
   nukeReferences,
   pkg-config,
@@ -28,11 +28,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "graphicsmagick";
-  version = "1.3.46";
+  version = "1.3.48";
 
   src = fetchurl {
     url = "mirror://sourceforge/graphicsmagick/GraphicsMagick-${finalAttrs.version}.tar.xz";
-    hash = "sha256-x8cGpQXpxsN2QVa7lKDJZE15ExeF3xWonJ+HIdGr0GE=";
+    hash = "sha256-khjreBeREPkTcQZqt1yztN0DS5u0ZLKc6bq3oRl5Iys=";
   };
 
   outputs = [
@@ -45,16 +45,17 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     ghostscript
     graphviz
-    libX11
+    libx11
     libjpeg
+    libjxl
+    libheif
     libpng
     libtiff
     libtool
     libwebp
     libxml2
     zlib
-  ]
-  ++ lib.optionals libheifSupport [ libheif ];
+  ];
 
   nativeBuildInputs = [
     nukeReferences
@@ -110,8 +111,8 @@ stdenv.mkDerivation (finalAttrs: {
       including important formats like DPX, GIF, JPEG, JPEG-2000, JXL, PNG, PDF,
       PNM, TIFF, and WebP.
     '';
-    license = with lib.licenses; [ mit ];
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ambossmann ];
     mainProgram = "gm";
     platforms = lib.platforms.all;
   };

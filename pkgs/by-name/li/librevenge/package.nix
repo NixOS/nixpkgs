@@ -8,13 +8,13 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "librevenge";
-  version = "0.0.5";
+  version = "0.0.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/libwpd/librevenge/librevenge-${version}/librevenge-${version}.tar.xz";
-    sha256 = "sha256-EG0MRLtkCLE0i54EZWZvqDuBYXdmWiLNAX6IbBqu6zQ=";
+    url = "mirror://sourceforge/project/libwpd/librevenge/librevenge-${finalAttrs.version}/librevenge-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-GerPXOVdf+apkKRRQlic332gx7aHAXl/EzSCy0Txifo=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.unix;
   };
-}
+})

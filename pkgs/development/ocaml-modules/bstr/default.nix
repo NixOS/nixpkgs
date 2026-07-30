@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "bstr";
   version = "0.0.2";
 
   minimalOCamlVersion = "4.13";
 
   src = fetchurl {
-    url = "https://github.com/robur-coop/bstr/releases/download/v${version}/bstr-${version}.tbz";
+    url = "https://github.com/robur-coop/bstr/releases/download/v${finalAttrs.version}/bstr-${finalAttrs.version}.tbz";
     hash = "sha256-/zvzCBzT014OesTmxGBDB98ZRU++YNDLUZ8uaDK3keM=";
   };
 
@@ -21,4 +21,4 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

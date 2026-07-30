@@ -7,14 +7,14 @@
   systemd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "beefi";
   version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "jfeick";
     repo = "beefi";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "1180avalbw414q1gnfqdgc9zg3k9y0401kw9qvcn51qph81d04v5";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ tu-maurice ];
     homepage = "https://github.com/jfeick/beefi";
   };
-}
+})

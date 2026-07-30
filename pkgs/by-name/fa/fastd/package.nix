@@ -14,14 +14,14 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fastd";
   version = "23";
 
   src = fetchFromGitHub {
     owner = "neocturne";
     repo = "fastd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Sz6VEjKziL/w2a4VWFfMPDYvm7UZh5A/NmzP10rJ2r8=";
   };
 
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "fastd";
   };
-}
+})

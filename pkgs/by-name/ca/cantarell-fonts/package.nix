@@ -1,56 +1,44 @@
 {
   stdenv,
   lib,
-  fetchurl,
+  fetchFromGitLab,
   meson,
   ninja,
   python3,
   gettext,
-  appstream-glib,
-  gnome,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "cantarell-fonts";
-  version = "0.303.1";
+  version = "0.311";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "+UY6BlnGPlfjgf3XU88ZKSJTlcW0kTWYlCR2GDBTBBE=";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "cantarell-fonts";
+    tag = version;
+    hash = "sha256-FR53OZxJ7WRUDqMB2GriQ3UOxozWwbFiz3/9VaUWYrc=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
-    python3
-    python3.pkgs.psautohint
+    python3.pkgs.afdko # for otfautohint
     python3.pkgs.cffsubr
-    python3.pkgs.statmake
     python3.pkgs.ufo2ft
-    python3.pkgs.setuptools
-    python3.pkgs.ufolib2
+    python3.pkgs.uharfbuzz
     gettext
-    appstream-glib
   ];
 
-  # ad-hoc fix for https://github.com/NixOS/nixpkgs/issues/50855
-  # until we fix gettext's envHook
-  preBuild = ''
-    export GETTEXTDATADIRS="$GETTEXTDATADIRS_FOR_BUILD"
-  '';
-
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = "sha256-OjHj4h3n+/ozbrLaiH4bGppQ+2LA2RB/sZQVO9EPOEw=";
-
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
-    };
+    updateScript = gitUpdater { };
   };
 
   meta = {
+    changelog = "https://gitlab.gnome.org/GNOME/cantarell-fonts/-/blob/${src.tag}/NEWS";
     description = "Default typeface used in the user interface of GNOME since version 3.0";
+    homepage = "https://cantarell.gnome.org/";
     platforms = lib.platforms.all;
     license = lib.licenses.ofl;
     maintainers = [ ];

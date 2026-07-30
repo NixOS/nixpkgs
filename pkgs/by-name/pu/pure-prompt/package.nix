@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pure-prompt";
-  version = "1.26.0";
+  version = "1.28.1";
 
   src = fetchFromGitHub {
     owner = "sindresorhus";
     repo = "pure";
-    rev = "v${version}";
-    sha256 = "sha256-AZSxP2g6BWoxyiSQH7yzbbbfGcwD8jgnXPPfcYwJUL0=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-UQ0hP3qJd4Qxiw1LXPdb9d0Dc4OSD3HJpgYzaCfujno=";
   };
 
   strictDeps = true;
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
       pablovsky
     ];
   };
-}
+})

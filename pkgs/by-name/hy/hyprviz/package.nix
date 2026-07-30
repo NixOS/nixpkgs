@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hyprviz";
-  version = "0.7.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "timasoft";
     repo = "hyprviz";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ar1O/Em9AcPPfbuT4xnyOwBX1IClJlFYfdPQbU/5vTk=";
+    hash = "sha256-d1JNCCzCpJw646VrwSdrj175F4w4AsAfvGv4CnCEEv4=";
   };
 
-  cargoHash = "sha256-BICF6nZcn/7t5X4Dj18fPD2RpEz7U1Zytt9sfHe7Xnw=";
+  cargoHash = "sha256-Wjk1nqSoqeHvdTRzoRl3NTJIB5Chp14Cm/6weniVwiI=";
 
   nativeBuildInputs = [
     pkg-config
@@ -35,7 +35,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   postInstall = ''
-    install -Dm644 hyprviz.desktop -t $out/share/applications
+    install -Dm644 assets/hyprviz.desktop -t $out/share/applications
+    install -Dm644 assets/hyprviz.svg -t $out/share/icons/hicolor/scalable/apps
+    install -Dm644 assets/hyprviz.png -t $out/share/icons/hicolor/256x256/apps
   '';
 
   meta = {

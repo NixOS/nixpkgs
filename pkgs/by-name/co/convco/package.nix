@@ -9,18 +9,18 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "convco";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "convco";
     repo = "convco";
-    rev = "v${version}";
-    hash = "sha256-giVaDOYYH3YE9Gy0byt92vGEfyM4rTjpHDsKm5lqlP4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-fJrP4XtlUX0RvH8T76YxqUCM/R+QvUpsaumn3Z1SOh0=";
   };
 
-  cargoHash = "sha256-DTeZDpS3OaGcem9AaAPFN+2AWuqWSGfk2KknbcgFzi0=";
+  cargoHash = "sha256-ySTXy8Jqw/EZl/olbWjMaDD8dryUFyWFvyapfvglFHI=";
 
   nativeBuildInputs = [
     cmake
@@ -45,10 +45,10 @@ rustPlatform.buildRustPackage rec {
     description = "Conventional commit cli";
     mainProgram = "convco";
     homepage = "https://github.com/convco/convco";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       hoverbear
       cafkafk
     ];
   };
-}
+})

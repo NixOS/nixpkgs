@@ -211,7 +211,6 @@ sub pciCheck {
         ($device eq "0xfd3e" || $device eq "0x7d1d" || $device eq "0xad1d" ||
          $device eq "0x643e" || $device eq "0xb03e"))
     {
-        push @imports, "(modulesPath + \"/hardware/cpu/intel-npu.nix\")";
         push @attrs, "hardware.cpu.intel.npu.enable = true;";
     }
 
@@ -300,7 +299,7 @@ if ($virt eq "oracle") {
 # It is blocked by https://github.com/systemd/systemd/pull/23859
 if ($virt eq "parallels") {
     push @attrs, "hardware.parallels.enable = true;";
-    push @attrs, "nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ \"prl-tools\" ];";
+    push @attrs, "nixpkgs.config.allowUnfreePackages = [ \"prl-tools\" ];";
 }
 
 # Likewise for QEMU.
@@ -506,7 +505,7 @@ EOF
     # This should work for single and multi-device systems.
     # still needs subvolume support
     if ($fsType eq "bcachefs") {
-        my ($status, @info) = runCommand("bcachefs fs usage $rootDir$mountPoint");
+        my ($status, @info) = runCommand("@bcachefs@ fs usage $rootDir$mountPoint");
         my $UUID = $info[0];
 
         if ($status == 0 && $UUID =~ /^Filesystem:[ \t\n]*([0-9a-z-]+)/) {

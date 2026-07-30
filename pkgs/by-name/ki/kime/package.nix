@@ -7,13 +7,13 @@
   fetchFromGitHub,
   pkg-config,
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   withWayland ? true,
   withIndicator ? true,
   dbus,
   libdbusmenu,
   withXim ? true,
-  xorg,
+  libxcb,
   cairo,
   withGtk3 ? true,
   gtk3,
@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
       libdbusmenu
     ]
     ++ lib.optionals withXim [
-      xorg.libxcb
+      libxcb
       cairo
     ]
     ++ lib.optionals withGtk3 [ gtk3 ]
@@ -121,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     rustPlatform.bindgenHook
     rustPlatform.cargoSetupHook
     rustc

@@ -36,19 +36,19 @@ Dart supports multiple [outputs types](https://dart.dev/tools/dart-compile#types
   fetchFromGitHub,
 }:
 
-buildDartApplication rec {
+buildDartApplication (finalAttrs: {
   pname = "dart-sass";
   version = "1.62.1";
 
   src = fetchFromGitHub {
     owner = "sass";
     repo = "dart-sass";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-U6enz8yJcc4Wf8m54eYIAnVg/jsGi247Wy8lp1r1wg4=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
-}
+})
 ```
 
 ### Patching dependencies {#ssec-dart-applications-patching-dependencies}
@@ -102,14 +102,14 @@ The function `buildFlutterApplication` builds Flutter applications.
 
 See the [Dart documentation](#ssec-dart-applications) for more details on required files and arguments.
 
-`flutter` in Nixpkgs always points to `flutterPackages.stable`, which is the latest packaged version. To avoid unforeseen breakage during upgrade, packages in Nixpkgs should use a specific flutter version, such as `flutter319` and `flutter322`, instead of using `flutter` directly.
+`flutter` in Nixpkgs always points to `flutterPackages.stable`, which is the latest packaged version. To avoid unforeseen breakage during upgrade, packages in Nixpkgs should use a specific flutter version, such as `flutter335` and `flutter338`, instead of using `flutter` directly.
 
 ```nix
-{ flutter322, fetchFromGitHub }:
+{ flutter335, fetchFromGitHub }:
 
-flutter322.buildFlutterApplication {
+flutter335.buildFlutterApplication (finalAttrs: {
   pname = "firmware-updater";
-  version = "0-unstable-2023-04-30";
+  version = "0-unstable-2025-09-09";
 
   # To build for the Web, use the targetFlutterPlatform argument.
   # targetFlutterPlatform = "web";
@@ -117,13 +117,17 @@ flutter322.buildFlutterApplication {
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "firmware-updater";
-    rev = "6e7dbdb64e344633ea62874b54ff3990bd3b8440";
-    hash = "sha256-s5mwtr5MSPqLMN+k851+pFIFFPa0N1hqz97ys050tFA=";
+    rev = "402e97254b9d63c8d962c46724995e377ff922c8";
+    hash = "sha256-nQn5mlgNj157h++67+mhez/F1ALz4yY+bxiGsi0/xX8=";
     fetchSubmodules = true;
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
-}
+
+  sourceRoot = "${finalAttrs.src.name}/apps/firmware_updater";
+
+  gitHashes.fwupd = "sha256-l/+HrrJk1mE2Mrau+NmoQ7bu9qhHU6wX68+m++9Hjd4=";
+})
 ```
 
 ### Usage with nix-shell {#ssec-dart-flutter-nix-shell}

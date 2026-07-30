@@ -9,12 +9,12 @@
 
 assert guileSupport -> (pkg-config != null && guile != null);
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnumake";
   version = "4.2.1";
 
   src = fetchurl {
-    url = "mirror://gnu/make/make-${version}.tar.bz2";
+    url = "mirror://gnu/make/make-${finalAttrs.version}.tar.bz2";
     sha256 = "12f5zzyq2w56g95nni65hc0g5p7154033y2f3qmjvd016szn5qnn";
   };
 
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     mainProgram = "make";
     platforms = lib.platforms.all;
   };
-}
+})

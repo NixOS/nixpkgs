@@ -9,21 +9,21 @@
   nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "migrate-to-uv";
-  version = "0.8.0";
+  version = "0.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "mkniewallner";
+    owner = "osprey-oss";
     repo = "migrate-to-uv";
-    tag = version;
-    hash = "sha256-l8YJVOWNtvN13fEZp6L0fwmUu12jV7xxQBp3Glr+Df4=";
+    tag = finalAttrs.version;
+    hash = "sha256-+UXPgFYgTlLmUYpE2aWsO2OdelP9dCZsB3cWjG4negA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src pname version;
-    hash = "sha256-35BBfNz3h/KpchCcUnoHN46znkQ7UuhhliWdgCYPw20=";
+    inherit (finalAttrs) src pname version;
+    hash = "sha256-evsc5uOZnN6+tRXmN1SQD5Iqnm4Y+TjmBzWaGQQj2UQ=";
   };
 
   build-system = [
@@ -39,10 +39,10 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = {
     description = "Migrate a project from Poetry/Pipenv/pip-tools/pip to uv package manager";
-    homepage = "https://mkniewallner.github.io/migrate-to-uv/";
-    changelog = "https://github.com/mkniewallner/migrate-to-uv/blob/${src.tag}/CHANGELOG.md";
+    homepage = "https://osprey-oss.github.io/migrate-to-uv/";
+    changelog = "https://osprey-oss.github.io/migrate-to-uv/CHANGELOG/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ malik ];
     mainProgram = "migrate-to-uv";
   };
-}
+})

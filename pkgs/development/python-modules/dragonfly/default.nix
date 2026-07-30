@@ -19,7 +19,7 @@
   werkzeug,
   wmctrl,
   xdotool,
-  xorg,
+  xprop,
 }:
 
 buildPythonPackage rec {
@@ -39,7 +39,7 @@ buildPythonPackage rec {
       --replace-fail 'xdotool = "xdotool"'${" "}'xdotool = "${xdotool}/bin/xdotool"'
     substituteInPlace dragonfly/windows/x11_window.py \
       --replace-fail 'xdotool = "xdotool"'${" "}'xdotool = "${xdotool}/bin/xdotool"' \
-      --replace-fail 'xprop = "xprop"'${" "}'xprop = "${xorg.xprop}/bin/xprop"' \
+      --replace-fail 'xprop = "xprop"'${" "}'xprop = "${xprop}/bin/xprop"' \
       --replace-fail 'wmctrl = "wmctrl"'${" "}'wmctrl = "${wmctrl}/bin/wmctrl"'
   '';
 

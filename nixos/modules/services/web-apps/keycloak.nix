@@ -701,7 +701,7 @@ in
           mkTarget =
             file:
             let
-              baseName = builtins.baseNameOf file;
+              baseName = baseNameOf file;
               name = if lib.hasSuffix ".json" baseName then baseName else "${baseName}.json";
             in
             "/run/keycloak/data/import/${name}";
@@ -802,7 +802,7 @@ in
       services.mysql.enable = mkDefault createLocalMySQL;
       services.mysql.package =
         let
-          dbPkg = if cfg.database.type == "mariadb" then pkgs.mariadb else pkgs.mysql80;
+          dbPkg = if cfg.database.type == "mariadb" then pkgs.mariadb else pkgs.mysql84;
         in
         mkIf createLocalMySQL (mkDefault dbPkg);
     };

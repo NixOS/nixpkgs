@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tsid";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
     repo = "tsid";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-enSYneV/Av7lF8ADdLqU1Wj2z8/ePocgecFtOBXS0EY=";
+    hash = "sha256-f/SecQfEmrlelVR5584KIHFwwrp5Cy2aBMKI/rxuPmc=";
   };
 
   cmakeFlags = [
@@ -48,6 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   meta = {
     description = "Efficient Task Space Inverse Dynamics (TSID) based on Pinocchio";

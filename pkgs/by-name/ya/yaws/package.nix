@@ -2,20 +2,20 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  erlang,
+  beamPackages,
   pam,
   perl,
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yaws";
   version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "erlyaws";
     repo = "yaws";
-    rev = "yaws-${version}";
+    rev = "yaws-${finalAttrs.version}";
     hash = "sha256-acO8Vc8sZJl22HUml2kTxVswLEirqMbqHQdRIbkkcvs=";
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [
-    erlang
+    beamPackages.erlang
     pam
     perl
   ];
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
   };
 
-}
+})

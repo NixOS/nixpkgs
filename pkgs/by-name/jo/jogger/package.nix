@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   rustPlatform,
   meson,
   ninja,
@@ -23,11 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "jogger";
   version = "1.2.5";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "baarkerlounger";
     repo = "jogger";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-bju9XXMT6HRHG9QViO+FQCYQ+llrC+GP/AlIha0mxkM=";
   };
 

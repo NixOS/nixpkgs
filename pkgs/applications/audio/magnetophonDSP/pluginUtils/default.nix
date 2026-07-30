@@ -5,14 +5,14 @@
   faust2jaqt,
   faust2lv2,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pluginUtils";
   version = "1.1";
 
   src = fetchFromGitHub {
     owner = "magnetophon";
     repo = "pluginUtils";
-    rev = "V${version}";
+    rev = "V${finalAttrs.version}";
     sha256 = "1hnr5sp7k6ypf4ks61lnyqx44dkv35yllf3a3xcbrw7yqzagwr1c";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.magnetophon ];
   };
-}
+})

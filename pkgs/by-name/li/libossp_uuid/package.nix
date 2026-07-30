@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libossp-uuid";
   version = "1.6.2";
 
   src = fetchurl {
-    url = "ftp://ftp.ossp.org/pkg/lib/uuid/uuid-${version}.tar.gz";
+    url = "ftp://ftp.ossp.org/pkg/lib/uuid/uuid-${finalAttrs.version}.tar.gz";
     sha256 = "11a615225baa5f8bb686824423f50e4427acd3f70d394765bdff32801f0fd5b0";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
   };
-}
+})

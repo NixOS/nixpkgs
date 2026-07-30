@@ -21,6 +21,12 @@ stdenv.mkDerivation {
     sha256 = "sha256-3cNFP/k4JsgLyUQHWU10Htl2Rh0staAcA3R4piD6hDE=";
   };
 
+  # yosys >=0.67 headers require C++20; the Makefile otherwise pins c++17.
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail '-std=c++17' '-std=c++20'
+  '';
+
   buildInputs = [
     yosys
     readline
@@ -38,6 +44,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Bluespec plugin for Yosys";
+    homepage = "https://github.com/thoughtpolice/yosys-bluespec";
     license = lib.licenses.isc;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ thoughtpolice ];

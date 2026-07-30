@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libfolia";
-  version = "2.21.1";
+  version = "2.22";
 
   src = fetchFromGitHub {
     owner = "LanguageMachines";
     repo = "libfolia";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-p1caLiYcmokrjiDXLEkPpTOIPIR8Ofv/JsRkHs4PsPE=";
+    hash = "sha256-D7iA40E0dkkLCqjLUcUd5UvoQJnIzdXAPdXPyeozrow=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # compat with icu61+ https://github.com/unicode-org/icu/blob/release-64-2/icu4c/readme.html#L554
-  CXXFLAGS = [ "-DU_USING_ICU_NAMESPACE=1" ];
+  env.CXXFLAGS = toString [ "-DU_USING_ICU_NAMESPACE=1" ];
 
   passthru = {
     updateScript = gitUpdater { rev-prefix = "v"; };

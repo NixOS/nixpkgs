@@ -103,6 +103,7 @@ in
           ExecStart = "${cfg.package}/bin/ntfy serve -c ${configuration}";
           User = cfg.user;
           StateDirectory = "ntfy-sh";
+          RuntimeDirectory = "ntfy-sh";
 
           DynamicUser = true;
           AmbientCapabilities = "CAP_NET_BIND_SERVICE";

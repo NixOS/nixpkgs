@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "pylode";
-  version = "3.2.1";
+  version = "3.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RDFLib";
     repo = "pylode";
     tag = finalAttrs.version;
-    hash = "sha256-X12rcXvFvMB5tZ3WtfCE+yb8mhed9FnscjiTmMcSyV4=";
+    hash = "sha256-b1asjzkatSbe5HRqGPf808wjnJTwOaYKABPyO+jSd8c=";
   };
 
   pythonRelaxDeps = [ "rdflib" ];

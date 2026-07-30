@@ -5,13 +5,13 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "courier-unicode";
-  version = "2.4.0";
+  version = "2.6.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/courier/courier-unicode/${version}/courier-unicode-${version}.tar.bz2";
-    hash = "sha256-6Ay88OOmzC56Z+waGDDWxOiqD/aXcy7B0R5UTg5kVw8=";
+    url = "mirror://sourceforge/courier/courier-unicode/${finalAttrs.version}/courier-unicode-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-Cu0jScW2LeDTPM+MI1J6rkHa+VoDyAVMiN5Prvjaigg=";
   };
 
   nativeBuildInputs = [
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
   };
-}
+})

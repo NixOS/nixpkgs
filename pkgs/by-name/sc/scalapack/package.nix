@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   gfortran,
   mpiCheckPhaseHook,
@@ -16,13 +15,13 @@ assert blas.isILP64 == lapack.isILP64;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "scalapack";
-  version = "2.2.2";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "Reference-ScaLAPACK";
     repo = "scalapack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KDMW/D7ubGaD2L7eTwULJ04fAYDPAKl8xKPZGZMkeik=";
+    hash = "sha256-cUdHC9DfJBSrxFVyCSSj9qxE5a+JFkI1W671iT7DP1M=";
   };
 
   passthru = {
@@ -34,36 +33,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
 
-  patches = [
-    (fetchpatch {
-      name = "version-string";
-      url = "https://github.com/Reference-ScaLAPACK/scalapack/commit/76cc1ed3032e9a4158a4513c9047c3746b269f04.patch";
-      hash = "sha256-kmllLa9GUeTrHRYeS0yIk9I8LwaIoEytdyQGRuinn3A=";
-    })
-
-    (fetchpatch {
-      name = "scalapack-fix-cmake-4.patch";
-      url = "https://github.com/Reference-ScaLAPACK/scalapack/commit/c3d6b22b0032fd2b8772d99c2239c18473e197a7.patch";
-      hash = "sha256-935KtaqPO2cghbD9Z8YMxGGOQJo1D1LqTje6/IL4bGI=";
-    })
-
-    # Fix build with gcc15
-    # https://github.com/Reference-ScaLAPACK/scalapack/pull/139
-    (fetchpatch {
-      name = "scalapack-fix-function-declaration-arguments.patch";
-      url = "https://github.com/Reference-ScaLAPACK/scalapack/commit/0cd017afa3eefd0597cfe71b7bcfd6356a258da2.patch";
-      hash = "sha256-uUdazKplDt8K5yuVaHX5pLFqDMh0F7eBBGEHfxOiM0Y=";
-    })
-  ];
+  # The xssep, xsgsep, and xsyevr tests need to be disabled for ILP64
+  patches = lib.optional finalAttrs.passthru.isILP64 ./disable-tests-ilp64.patch;
 
   # Required to activate ILP64.
   # See https://github.com/Reference-ScaLAPACK/scalapack/pull/19
   postPatch = lib.optionalString finalAttrs.passthru.isILP64 ''
-    sed -i 's/INTSZ = 4/INTSZ = 8/g'   TESTING/EIG/* TESTING/LIN/*
-    sed -i 's/INTGSZ = 4/INTGSZ = 8/g' TESTING/EIG/* TESTING/LIN/*
-
-    # These tests are not adapted to ILP64
-    sed -i '/xssep/d;/xsgsep/d;/xssyevr/d' TESTING/CMakeLists.txt
+    sed -i 's/INTSZ = 4/INTSZ = 8/g'   TESTING/traditional/EIG/* TESTING/traditional/LIN/*
+    sed -i 's/INTGSZ = 4/INTGSZ = 8/g' TESTING/traditional/EIG/* TESTING/traditional/LIN/*
   '';
 
   outputs = [
@@ -84,9 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     mpi
   ];
 
-  # xslu and xsllt tests seem to time out on x86_64-darwin.
-  # this line is left so those who force installation on x86_64-darwin can still build
-  doCheck = !(stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin);
+  doCheck = true;
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
@@ -105,14 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
   # sometimes fail due to this
   checkFlags = [ "ARGS=--timeout 10000" ];
 
-  postFixup = ''
-    # _IMPORT_PREFIX, used to point to lib, points to dev output. Every package using the generated
-    # cmake file will thus look for the library in the dev output instead of out.
-    # Use the absolute path to $out instead to fix the issue.
-    substituteInPlace  $dev/lib/cmake/scalapack-${finalAttrs.version}/scalapack-targets-release.cmake \
-      --replace-fail "\''${_IMPORT_PREFIX}" "$out"
-  '';
-
   meta = {
     homepage = "http://www.netlib.org/scalapack/";
     description = "Library of high-performance linear algebra routines for parallel distributed memory machines";
@@ -124,7 +91,5 @@ stdenv.mkDerivation (finalAttrs: {
       markuskowa
       gdinh
     ];
-    # xslu and xsllt tests fail on x86 darwin
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 })

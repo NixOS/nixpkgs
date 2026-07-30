@@ -20,14 +20,15 @@
   libinput,
   gdk-pixbuf,
   librsvg,
-  wlroots,
+  wlroots_0_20,
   wayland-protocols,
   libdrm,
+  evdev-proto,
   nixosTests,
   # Used by the NixOS module:
   isNixOS ? false,
   enableXWayland ? true,
-  xorg,
+  libxcb-wm,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
   trayEnabled ? systemdSupport,
@@ -35,7 +36,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sway-unwrapped";
-  version = "1.11";
+  version = "1.12";
 
   inherit
     enableXWayland
@@ -47,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "swaywm";
     repo = "sway";
     rev = finalAttrs.version;
-    hash = "sha256-xMrexVDpgkGnvAAglshsh7HjvcbU2/Q6JLUd5J487qg=";
+    hash = "sha256-OcF7jOOHhFPhM5APn5riy8S5jsEr9jALCVh9nBtD7Nk=";
   };
 
   patches = [
@@ -95,10 +96,13 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
     wayland-protocols
     libdrm
-    (wlroots.override { inherit (finalAttrs) enableXWayland; })
+    (wlroots_0_20.override { inherit (finalAttrs) enableXWayland; })
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    evdev-proto
   ]
   ++ lib.optionals finalAttrs.enableXWayland [
-    xorg.xcbutilwm
+    libxcb-wm
   ];
 
   mesonFlags =
@@ -134,10 +138,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://swaywm.org";
     changelog = "https://github.com/swaywm/sway/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
-      synthetica
-    ];
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+    maintainers = with lib.maintainers; [ c6rg0 ];
     mainProgram = "sway";
   };
 })

@@ -13,26 +13,22 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tantivy";
-  version = "0.25.1";
+  version = "0.26.0";
   pyproject = true;
+  __structuredAttrs = true;
 
-  # # Python sources are not on the main GitHub repo
-  # src = fetchPypi {
-  #   inherit pname version;
-  #   hash = "sha256-aKMxRpmn0Y/PM4tSuujORql93hEoo+R+M/pNt/cfJl4=";
-  # };
   src = fetchFromGitHub {
     owner = "quickwit-oss";
     repo = "tantivy-py";
-    tag = version;
-    hash = "sha256-rayr38TfBYCKDddJabhC+r/jIyqJtpKct81h1z8YPFw=";
+    tag = finalAttrs.version;
+    hash = "sha256-VmymAxkGPFwqmsy5Y9d1/vBGUUU3xeSEteJLQIMt0FY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-xJdAD/E17mzTkRq5wwNxYtNtv386U1xD4mJhY0LiZFE=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-RXpwDEd7RmsSySMHZJy0wH56cp+tNgimjMNSNE55Zv4=";
   };
 
   nativeBuildInputs = [
@@ -62,8 +58,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Official Python bindings for the Tantivy search engine";
-    homepage = "https://pypi.org/project/tantivy/";
+    homepage = "https://pypi.org/project/tantivy";
+    changelog = "https://github.com/quickwit-oss/tantivy-py/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

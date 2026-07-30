@@ -18,6 +18,7 @@
   pkgsBuildBuild,
   readline,
   writeScript,
+  pkgsStatic,
 }:
 
 let
@@ -26,11 +27,11 @@ let
 in
 builder rec {
   pname = "guile";
-  version = "3.0.10";
+  version = "3.0.11";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-vXFoUX/VJjM0RtT3q4FlJ5JWNAlPvTcyLhfiuNjnY4g=";
+    sha256 = "sha256-gYx50jZlen+pb7NkE3zHtBs73uDWXGF0ygN2lVlXlGA=";
   };
 
   outputs = [
@@ -88,23 +89,22 @@ builder rec {
   patches = [
     ./eai_system.patch
   ]
-  # Fix cross-compilation, can be removed at next release (as well as the autoreconfHook)
-  # Include this only conditionally so we don't have to run the autoreconfHook for the native build.
-  ++ lib.optional (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) (fetchpatch {
-    url = "https://cgit.git.savannah.gnu.org/cgit/guile.git/patch/?id=c117f8edc471d3362043d88959d73c6a37e7e1e9";
-    hash = "sha256-GFwJiwuU8lT1fNueMOcvHh8yvA4HYHcmPml2fY/HSjw=";
-  })
   ++ lib.optional (coverageAnalysis != null) ./gcov-file-name.patch
   ++ lib.optional stdenv.hostPlatform.isDarwin (fetchpatch {
     url = "https://gitlab.gnome.org/GNOME/gtk-osx/raw/52898977f165777ad9ef169f7d4818f2d4c9b731/patches/guile-clocktime.patch";
     sha256 = "12wvwdna9j8795x59ldryv9d84c1j3qdk2iskw09306idfsis207";
   });
 
-  # Explicitly link against libgcc_s, to work around the infamous
-  # "libgcc_s.so.1 must be installed for pthread_cancel to work".
-
-  # don't have "libgcc_s.so.1" on clang
-  LDFLAGS = lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) "-lgcc_s";
+  env = {
+    # Fix build with gcc15
+    NIX_CFLAGS_COMPILE = toString [ "-std=gnu17" ];
+  }
+  // lib.optionalAttrs (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) {
+    # Explicitly link against libgcc_s, to work around the infamous
+    # "libgcc_s.so.1 must be installed for pthread_cancel to work".
+    # don't have "libgcc_s.so.1" on clang
+    LDFLAGS = "-lgcc_s";
+  };
 
   configureFlags = [
     "--with-libreadline-prefix=${lib.getDev readline}"
@@ -125,9 +125,6 @@ builder rec {
   # At least on x86_64-darwin '-flto' autodetection is not correct:
   #  https://github.com/NixOS/nixpkgs/pull/160051#issuecomment-1046193028
   ++ lib.optional (stdenv.hostPlatform.isDarwin) "--disable-lto";
-
-  # Fix build with gcc15
-  env.NIX_CFLAGS_COMPILE = toString [ "-std=gnu17" ];
 
   postInstall = ''
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
@@ -160,19 +157,21 @@ builder rec {
   setupHook = ./setup-hook-3.0.sh;
 
   passthru = rec {
+    tests.static = pkgsStatic.guile;
+
     effectiveVersion = lib.versions.majorMinor version;
     siteCcacheDir = "lib/guile/${effectiveVersion}/site-ccache";
     siteDir = "share/guile/site/${effectiveVersion}";
 
     updateScript = writeScript "update-guile-3" ''
       #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl pcre common-updater-scripts
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
       set -eu -o pipefail
 
       # Expect the text in format of '"https://ftp.gnu.org/gnu/guile/guile-3.0.8.tar.gz"'
       new_version="$(curl -s https://www.gnu.org/software/guile/download/ |
-          pcregrep -o1 '"https://ftp.gnu.org/gnu/guile/guile-(3[.0-9]+).tar.gz"')"
+          pcre2grep -o1 '"https://ftp.gnu.org/gnu/guile/guile-(3[.0-9]+).tar.gz"')"
       update-source-version guile_3_0 "$new_version"
     '';
   };
@@ -188,8 +187,10 @@ builder rec {
       system calls, networking support, multiple threads, dynamic linking, a
       foreign function call interface, and powerful string processing.
     '';
+    broken = stdenv.hostPlatform.isStatic && stdenv.hostPlatform.isDarwin;
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.all;
+    mainProgram = "guile";
   };
 }

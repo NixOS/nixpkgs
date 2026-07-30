@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
   pyrate-limiter,
   pytestCheckHook,
   requests-mock,
@@ -10,19 +10,19 @@
   requests-cache,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "requests-ratelimiter";
-  version = "0.7.0";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JWCook";
     repo = "requests-ratelimiter";
-    tag = "v${version}";
-    hash = "sha256-DS4BzS8AD4axniyV6jVYXWZ6cQLvMPp8tdGoBhYu51o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-P6tDx/jzGEyFC10WIyHQZIFMSEmtMnHjl+jEih987j8=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     pyrate-limiter
@@ -38,12 +38,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "requests_ratelimiter" ];
 
   meta = {
-    # https://github.com/JWCook/requests-ratelimiter/issues/78
-    broken = lib.versionAtLeast pyrate-limiter.version "3";
     description = "Module for rate-limiting for requests";
     homepage = "https://github.com/JWCook/requests-ratelimiter";
-    changelog = "https://github.com/JWCook/requests-ratelimiter/blob/${src.rev}/HISTORY.md";
+    changelog = "https://github.com/JWCook/requests-ratelimiter/blob/${finalAttrs.src.tag}/HISTORY.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

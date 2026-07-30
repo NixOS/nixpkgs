@@ -26,7 +26,7 @@
         insecureAdminAccess = false;
         user = "alice";
       };
-      guiPasswordFile = (pkgs.writeText "syncthing-password-file" ''alice_password'').outPath;
+      guiPasswordFile = (pkgs.writeText "syncthing-password-file" "alice_password").outPath;
     };
   };
 

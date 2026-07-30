@@ -9,14 +9,14 @@
   mirage-net,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ethernet";
   version = "3.2.0";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-${version}.tbz";
+    url = "https://github.com/mirage/ethernet/releases/download/v${finalAttrs.version}/ethernet-${finalAttrs.version}.tbz";
     hash = "sha256-TB2nAhQiHZ1Dk6n/3i49s9HKNH92yNUl3xl94hByrAk=";
   };
 
@@ -34,4 +34,4 @@ buildDunePackage rec {
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.sternenseemann ];
   };
-}
+})

@@ -58,11 +58,11 @@
   typer,
   uvicorn,
   wrapt,
-# , flair
-# , setfit
-# , spacy-huggingface-hub
-# , span_marker
-# , trl
+  # , flair
+  # , setfit
+  # , spacy-huggingface-hub
+  # , span_marker
+  # , trl
 }:
 
 buildPythonPackage rec {

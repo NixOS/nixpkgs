@@ -32,8 +32,8 @@ bundlerApp {
     maintainers = with lib.maintainers; [
       nicknovitski
       liberodark
+      johannwagner
     ];
-    teams = with lib.teams; [ wdz ];
     platforms = lib.platforms.linux;
   };
 }

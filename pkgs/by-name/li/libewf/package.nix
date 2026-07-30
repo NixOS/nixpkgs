@@ -9,12 +9,12 @@
   bzip2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "20231119";
   pname = "libewf";
 
   src = fetchurl {
-    url = "https://github.com/libyal/libewf/releases/download/${version}/libewf-experimental-${version}.tar.gz";
+    url = "https://github.com/libyal/libewf/releases/download/${finalAttrs.version}/libewf-experimental-${finalAttrs.version}.tar.gz";
     hash = "sha256-7AjUEaXasOzJV9ErZK2a4HMTaqhcBbLKd8M+A5SbKrc=";
   };
 
@@ -31,6 +31,13 @@ stdenv.mkDerivation rec {
     "ac_cv_openssl_xts_duplicate_keys=yes"
   ];
 
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "man"
+  ];
+
   meta = {
     description = "Library for support of the Expert Witness Compression Format";
     homepage = "https://sourceforge.net/projects/libewf/";
@@ -38,4 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
   };
-}
+})

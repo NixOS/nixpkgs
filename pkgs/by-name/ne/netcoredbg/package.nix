@@ -7,35 +7,46 @@
   fetchFromGitHub,
   dotnetCorePackages,
   buildDotnetModule,
+  makeWrapper,
   netcoredbg,
   testers,
 }:
 let
   pname = "netcoredbg";
-  build = "1054";
-  release = "3.1.2";
+  build = "1062";
+  release = "3.1.3";
   version = "${release}-${build}";
-  hash = "sha256-WORGZXbq6d3sxGqyG8oZSwcBoVaD3D56t9K6PJoKFsM=";
+  hash = "sha256-Ci4GwHYTCn7BoEG73WsjxyplCCThSF5uVi39lLVZDXY=";
 
-  coreclr-version = "v8.0.16";
+  coreclr-version = "v10.0.1";
+  coreclr-hash = "sha256-pVcLvew3THRqXgKMVO6jTZyPP06R46KZPMpYdiM3yXU=";
   coreclr-src = fetchFromGitHub {
     owner = "dotnet";
     repo = "runtime";
     rev = coreclr-version;
-    hash = "sha256-/fSKCIugR3UhqxBxtQRw+Bw+UpaSjB4xj0iBiXJaiR4=";
+    hash = coreclr-hash;
+    name = "coreclr";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
 
   src = fetchFromGitHub {
     owner = "Samsung";
     repo = "netcoredbg";
     rev = version;
+    name = pname;
     inherit hash;
   };
 
   unmanaged = clangStdenv.mkDerivation {
-    inherit src pname version;
+    inherit pname version;
+
+    srcs = [
+      src
+      coreclr-src
+    ];
+
+    sourceRoot = pname;
 
     nativeBuildInputs = [
       cmake
@@ -44,24 +55,16 @@ let
 
     hardeningDisable = [ "strictoverflow" ];
 
-    postPatch = ''
-      substituteInPlace CMakeLists.txt --replace-fail \
-        "cmake_minimum_required(VERSION 2.8.12.2)" \
-        "cmake_minimum_required(VERSION 3.10)"
-      substituteInPlace third_party/linenoise-ng/CMakeLists.txt --replace-fail \
-        "cmake_minimum_required(VERSION 2.6)" \
-        "cmake_minimum_required(VERSION 3.10)"
-    '';
-
     preConfigure = ''
       export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
-    '';
 
-    cmakeFlags = [
-      "-DCORECLR_DIR=${coreclr-src}/src/coreclr"
-      "-DDOTNET_DIR=${dotnet-sdk}/share/dotnet"
-      "-DBUILD_MANAGED=0"
-    ];
+      chmod -R u+w ../coreclr
+      cmakeFlagsArray+=(
+        "-DCORECLR_DIR=''${NIX_BUILD_TOP}/coreclr/src/coreclr"
+        "-DDOTNET_DIR=${dotnet-sdk}/share/dotnet"
+        "-DBUILD_MANAGED=0"
+      )
+    '';
   };
 
   managed = buildDotnetModule {
@@ -91,18 +94,29 @@ stdenv.mkDerivation {
   # include source here so that autoPatchelfHook can do it's job
   src = managed;
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = [
+    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ (lib.getLib stdenv.cc.cc) ];
   installPhase = ''
-    mkdir -p $out/share/netcoredbg $out/bin
-    cp ${unmanaged}/* $out/share/netcoredbg
-    cp ./lib/netcoredbg/* $out/share/netcoredbg
-    # darwin won't work unless we link all files
-    ln -s $out/share/netcoredbg/* "$out/bin/"
+    runHook preInstall
+
+    mkdir -p $out/libexec/netcoredbg
+    cp ${unmanaged}/* $out/libexec/netcoredbg
+    cp ./lib/netcoredbg/* $out/libexec/netcoredbg
+
+    # netcoredbg loads libdbgshim and ManagedPart.dll from the directory of its own
+    # executable. Use a wrapper: exec'ing the real path keeps the lookup inside
+    # $out/libexec/netcoredbg on both platforms.
+    makeWrapper $out/libexec/netcoredbg/netcoredbg $out/bin/netcoredbg
+
+    runHook postInstall
   '';
 
   passthru = {
     inherit (managed) fetch-deps;
+    updateScript = ./update.sh;
     tests.version = testers.testVersion {
       package = netcoredbg;
       command = "netcoredbg --version";

@@ -47,7 +47,7 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
-  CXXFLAGS = [
+  env.CXXFLAGS = toString [
     "-DCOMPILE_WITH_LZFSE=1"
     "-llzfse"
   ];

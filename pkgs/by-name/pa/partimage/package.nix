@@ -12,14 +12,14 @@
   libxcrypt,
   autoreconfHook,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "partimage";
   version = "0.6.9";
 
   enableParallelBuilding = true;
 
   src = fetchurl {
-    url = "mirror://sourceforge/partimage/partimage-${version}.tar.bz2";
+    url = "mirror://sourceforge/partimage/partimage-${finalAttrs.version}.tar.bz2";
     sha256 = "0db6xiphk6xnlpbxraiy31c5xzj0ql6k4rfkmqzh665yyj0nqfkm";
   };
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     description = "Opensource disk backup software";
     homepage = "https://www.partimage.org";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.marcweber ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

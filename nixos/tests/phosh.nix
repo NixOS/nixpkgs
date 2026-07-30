@@ -54,11 +54,16 @@ in
     import time
 
     start_all()
+
+    # Prevent the RTC from setting the time to an undesired value after we already set it to a different value
+    phone.wait_for_file("/dev/rtc0")
+    phone.succeed("hwclock --set --date '2022-01-01 07:00'")
+
     phone.wait_for_unit("phosh.service")
 
     with subtest("Check that we can see the lock screen info page"):
         # Saturday, January 1
-        phone.succeed("timedatectl set-time '2022-01-01 07:00'")
+        phone.succeed("date -s '2022-01-01 07:00'")
 
         phone.wait_for_text("Saturday")
         phone.screenshot("01lockinfo")
@@ -73,14 +78,10 @@ in
         phone.wait_for_text("All Apps")
         phone.screenshot("03launcher")
 
-    with subtest("Check the on-screen keyboard shows"):
-        phone.send_chars("mobile setting", delay=0.2)
-        phone.wait_for_text("123") # A button on the OSK
-        phone.screenshot("04osk")
-
     with subtest("Check mobile-phosh-settings starts"):
+       phone.send_chars("mobile setting", delay=0.2)
        phone.send_chars("\n")
        phone.wait_for_text("Tweak advanced mobile settings");
-       phone.screenshot("05settings")
+       phone.screenshot("04settings")
   '';
 }

@@ -25,6 +25,6 @@ python3Packages.buildPythonApplication {
     homepage = "https://github.com/psypanda/hashID";
     mainProgram = "hashid";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    maintainers = [ ];
   };
 }

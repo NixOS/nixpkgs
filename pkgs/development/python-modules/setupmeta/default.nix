@@ -11,20 +11,20 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "setupmeta";
-  version = "3.8.0";
+  version = "3.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "codrsquad";
     repo = "setupmeta";
-    tag = "v${version}";
-    hash = "sha256-2SKiIkwfmXVOQBKBNUmw4SjiVpyLjIMpSHNA9IQxqwY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ONl+hFvMkUmPbzbeduCrqidGrKZvbWE0wTvaZMhs64w=";
   };
 
   preBuild = ''
-    export PYGRADLE_PROJECT_VERSION=${version};
+    export PYGRADLE_PROJECT_VERSION=${finalAttrs.version};
   '';
 
   build-system = [ setuptools ];
@@ -61,4 +61,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

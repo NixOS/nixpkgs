@@ -23,6 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-s5HjxaQ00fURiiVhUAHbyPZpz0EKtn0ExNTgfFVIHDc=";
   };
 
+  postPatch = ''
+    # specifies a string for addopts, but must be a list since pytest9
+    sed -i '/addopts/d' pyproject.toml
+  '';
+
   nativeBuildInputs = [
     setuptools
     setuptools-scm

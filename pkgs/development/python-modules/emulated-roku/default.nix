@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "emulated-roku";
-  version = "0.4.0";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mindigmarton";
     repo = "emulated_roku";
     tag = version;
-    hash = "sha256-lPe0mXtl1IQx//IydnmddpV11CpOi/MKq9TUOAKuoeU=";
+    hash = "sha256-KwDEajkrEEgobORetM/rROMDLZvw9AJmmr1jmXAJJbk=";
   };
 
   build-system = [ setuptools ];

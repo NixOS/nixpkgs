@@ -4,13 +4,13 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "melody";
   version = "0.20.0";
 
   src = fetchCrate {
     pname = "melody_cli";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-u+d16jc7GqT2aK2HzP+OXFUBkVodwcW+20sKqmxzYhk=";
   };
 
@@ -23,4 +23,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     mainProgram = "melody";
   };
-}
+})

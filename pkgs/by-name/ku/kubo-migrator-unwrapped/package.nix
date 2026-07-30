@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubo-migrator";
   version = "2.0.2-unstable-2024-08-02";
 
@@ -16,7 +16,7 @@ buildGoModule rec {
     sparseCheckout = [ "fs-repo-migrations" ];
   };
 
-  sourceRoot = "${src.name}/fs-repo-migrations";
+  sourceRoot = "${finalAttrs.src.name}/fs-repo-migrations";
 
   vendorHash = "sha256-/DqkBBtR/nU8gk3TFqNKY5zQU6BFMc3N8Ti+38mi/jk=";
 
@@ -29,8 +29,7 @@ buildGoModule rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       Luflosi
-      elitak
     ];
     mainProgram = "fs-repo-migrations";
   };
-}
+})

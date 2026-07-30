@@ -9,13 +9,13 @@
   pkg-config,
   nix-update-script,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "plus42";
-  version = "1.3.12";
+  version = "1.3.15";
 
   src = fetchurl {
-    url = "https://thomasokken.com/plus42/upstream/plus42-upstream-${version}.tgz";
-    hash = "sha256-IBXQu1hI0bJZISL9wInAzf2z8zbynXXP15oG/od+MC8=";
+    url = "https://thomasokken.com/plus42/upstream/plus42-upstream-${finalAttrs.version}.tgz";
+    hash = "sha256-qJteqxEDVdqgPdIQCOsNvdPS7S7pq/nVfavfXdOrnAQ=";
   };
 
   nativeBuildInputs = [
@@ -112,9 +112,9 @@ stdenv.mkDerivation rec {
     homepage = "https://thomasokken.com/plus42/";
     changelog = "https://thomasokken.com/plus42/history.html";
     description = "Software clone of the HP-42S calculator (enhanced version)";
-    license = with lib.licenses; [ gpl2Only ];
+    license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ elfenermarcell ];
     mainProgram = "plus42dec";
     platforms = with lib.platforms; unix;
   };
-}
+})

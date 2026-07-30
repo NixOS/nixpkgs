@@ -7,14 +7,14 @@
   asciidoctor,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pistol";
   version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "doronbehar";
     repo = "pistol";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-cL9hHehajqMIpdD10KYIbNkBt2fiRQkx81m9H3Yd1UY=";
   };
 
@@ -39,7 +39,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   meta = {
@@ -49,4 +49,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ doronbehar ];
     mainProgram = "pistol";
   };
-}
+})

@@ -19,12 +19,12 @@ let
       };
 in
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "easy-format";
   inherit (params) version;
 
   src = fetchurl {
-    url = "https://github.com/ocaml-community/easy-format/releases/download/${version}/easy-format-${version}.tbz";
+    url = "https://github.com/ocaml-community/easy-format/releases/download/${finalAttrs.version}/easy-format-${finalAttrs.version}.tbz";
     inherit (params) hash;
   };
 
@@ -55,4 +55,4 @@ buildDunePackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ vbgl ];
   };
-}
+})

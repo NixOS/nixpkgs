@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   buildNpmPackage,
   writeText,
   # https://codeberg.org/emersion/gamja/src/branch/master/doc/config-file.md
@@ -10,8 +10,7 @@ buildNpmPackage rec {
   pname = "gamja";
   version = "1.0.0-beta.11";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "emersion";
     repo = "gamja";
     rev = "v${version}";

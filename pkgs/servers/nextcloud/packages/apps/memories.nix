@@ -12,12 +12,17 @@
 }:
 let
   latestVersionForNc = {
-    "31" = {
-      version = "7.7.0";
-      appHash = "sha256-ORv+6XkN+qTk5bXMFKv2Mv/jU+7F12IbWE9JjV2ot9o=";
-      srcHash = "sha256-hiYAQshi84oOw1qfNECWAssbln8UPwD+8Hfb2pKw8no=";
+    "32" = {
+      version = "7.8.2";
+      appHash = "sha256-O59G5kUkYlYxr8p/vEqs3LqLRKJZbeEgDhdY5eHfnZg=";
+      srcHash = "sha256-KyUfrKHnRO3lMin0seSNFRnRRTPo12NbbvbkSpxSMQE=";
     };
-    "32" = latestVersionForNc."31";
+    "33" = {
+      version = "8.1.0";
+      appHash = "sha256-SQ1gPdfICFqNBJM0dJOfKIJ/E1tBBcBQOjRdb/mKb04=";
+      srcHash = "sha256-T0oz5d4kPX/Pm06vKGTrltUFd1pKccsz5IDjv/Vmuz0=";
+    };
+    "34" = latestVersionForNc."33";
   };
   currentVersionInfo =
     latestVersionForNc.${ncVersion}

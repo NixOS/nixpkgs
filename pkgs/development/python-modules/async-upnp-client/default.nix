@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "async-upnp-client";
-  version = "0.46.1";
+  version = "0.46.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "StevenLooman";
     repo = "async_upnp_client";
     tag = version;
-    hash = "sha256-Ez7UnZjSA0JYrqY5SV4q9myrbXCQzg/plrQ9P941b6E=";
+    hash = "sha256-KJiEfu+JKDycBT14gFK4sBFCG3TN61DZEDth9y6CHp4=";
   };
 
   build-system = [ setuptools ];

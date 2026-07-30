@@ -12,14 +12,14 @@
   docbook_xml_dtd_45,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "icecream";
   version = "1.4";
 
   src = fetchFromGitHub {
     owner = "icecc";
     repo = "icecream";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-nBdUbWNmTxKpkgFM3qbooNQISItt5eNKtnnzpBGVbd4=";
   };
   enableParallelBuilding = true;
@@ -39,9 +39,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Distributed compiler with a central scheduler to share build load";
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ emantor ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

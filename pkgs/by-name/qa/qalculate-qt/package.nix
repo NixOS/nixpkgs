@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  intltool,
   pkg-config,
   qt6,
   libqalculate,
@@ -10,18 +9,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qalculate-qt";
-  version = "5.8.2";
+  version = "5.12.0";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "qalculate-qt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+5LEXc5B2Kt5UifIV2owSsp7Yd412gppMeHs2YLdGYg=";
+    hash = "sha256-zeHpTe4DlurFqdsrJBlXSl+vXCOdhJRCjHLDpFf2u1o=";
   };
+
+  __structuredAttrs = true;
 
   nativeBuildInputs = with qt6; [
     qmake
-    intltool
     pkg-config
     qttools
     wrapQtAppsHook
@@ -49,7 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Ultimate desktop calculator";
     homepage = "http://qalculate.github.io";
-    maintainers = [ ];
+    maintainers = [
+      lib.maintainers.magicquark
+    ];
     license = lib.licenses.gpl2Plus;
     mainProgram = "qalculate-qt";
     platforms = lib.platforms.unix;

@@ -8,16 +8,20 @@
 
 buildDotnetModule rec {
   pname = "inklecate";
-  version = "1.1.1";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "inkle";
     repo = "ink";
     rev = "v${version}";
-    hash = "sha512-aUjjT5Qf64wrKRn1vkwJadMOBWMkvsXUjtZ7S3/ZWAh1CCDkQNO84mSbtbVc9ny0fKeJEqaDX2tJNwq7pYqAbA==";
+    hash = "sha256-IEYn7GHUTLABGVZH2AYUpbGeuZvUPbwHz5GcuMrRem8=";
   };
 
-  patches = [ ./dotnet-8-upgrade.patch ];
+  postPatch = ''
+    find . -name "*.csproj" -exec sed -i 's/net6.0/net8.0/g' {} +
+    find . -name "*.csproj" -exec sed -i 's/netstandard2.0/net8.0/g' {} +
+    find . -name "*.csproj" -exec sed -i 's/netstandard1.0;//g' {} +
+  '';
 
   buildInputs = [ (lib.getLib stdenv.cc.cc) ];
 
@@ -39,6 +43,6 @@ buildDotnetModule rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     badPlatforms = lib.platforms.aarch64;
-    maintainers = with lib.maintainers; [ shreerammodi ];
+    maintainers = [ ];
   };
 }

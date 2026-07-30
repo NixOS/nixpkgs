@@ -62,6 +62,7 @@ buildPythonPackage rec {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-chroma==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

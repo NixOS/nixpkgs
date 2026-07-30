@@ -7,34 +7,41 @@
   nix-update-script,
 
   # tests
+  lua,
   nodejs,
-  python3,
   php,
+  python3,
   ruby,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mask";
-  version = "0.11.6";
+  version = "0.11.7";
 
   src = fetchFromGitHub {
     owner = "jacobdeichert";
     repo = "mask";
     tag = "mask/${finalAttrs.version}";
-    hash = "sha256-xGD23pso5iS+9dmfTMNtR6YqUqKnzJTzMl+OnRGpL3g=";
+    hash = "sha256-jz2x3Do+fqDHS7vNdnZsNOj36dRFt/khFaF/ztyKji8=";
   };
 
-  cargoHash = "sha256-JaYr6J3NOwVIHzGO4wLkke5O/T/9WUDENPgLP5Fwyhg=";
+  cargoHash = "sha256-HnRNg1/ZVWr6JRIsBf2kH9Xys7Hth4fMI12dClsPKv0=";
 
   preCheck = ''
     export PATH=$PATH:$PWD/target/${stdenv.hostPlatform.rust.rustcTarget}/$cargoBuildType
   '';
 
   nativeCheckInputs = [
+    lua
     nodejs
-    python3
     php
+    python3
     ruby
+  ];
+
+  checkFlags = [
+    # requires swift which currently fails to build
+    "--skip=swift"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -48,8 +55,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/jacobdeichert/mask";
     changelog = "https://github.com/jacobdeichert/mask/blob/mask/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      defelo
-    ];
+    maintainers = with lib.maintainers; [ defelo ];
   };
 })

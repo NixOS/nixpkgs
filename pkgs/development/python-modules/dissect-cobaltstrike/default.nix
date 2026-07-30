@@ -80,7 +80,7 @@ buildPythonPackage rec {
     description = "Dissect module implementing a parser for Cobalt Strike related data";
     homepage = "https://github.com/fox-it/dissect.cobaltstrike";
     changelog = "https://github.com/fox-it/dissect.cobaltstrike/releases/tag/${src.tag}";
-    license = lib.licenses.agpl3Only;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

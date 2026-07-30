@@ -6,14 +6,14 @@
   smartmontools,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "smartctl_exporter";
   version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "prometheus-community";
     repo = "smartctl_exporter";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9woQgqkPYKMu8p35aeSv3ua1l35BuMzFT4oCVpmyG2E=";
   };
 
@@ -25,7 +25,7 @@ buildGoModule rec {
   '';
 
   ldflags = [
-    "-X github.com/prometheus/common/version.Version=${version}"
+    "-X github.com/prometheus/common/version.Version=${finalAttrs.version}"
   ];
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) smartctl; };
@@ -41,4 +41,4 @@ buildGoModule rec {
       Frostman
     ];
   };
-}
+})

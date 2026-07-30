@@ -6,6 +6,7 @@
   autoreconfHook,
   # Build binaries
   pkg-config,
+  wrapGAppsHook3,
   # Build libraries
   gtk3,
   portaudio,
@@ -30,9 +31,19 @@ stdenv.mkDerivation (finalAttrs: {
     ./audio.patch
   ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
+    wrapGAppsHook3
     autoreconfHook
     pkg-config
+    (python3.pythonOnBuildForHost.withPackages (p: [
+      p.numpy
+      p.matplotlib
+      p.libtfr
+      p.scipy
+    ]))
   ];
 
   buildInputs = [
@@ -40,12 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     portaudio
     fftwFloat
     libjack2
-    (python3.withPackages (p: [
-      p.numpy
-      p.matplotlib
-      p.libtfr
-      p.scipy
-    ]))
   ];
 
   enableParallelBuilding = true;
@@ -68,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/xyzzy42/tg";
     changelog = "https://github.com/xyzzy42/tg/releases/tag/v${finalAttrs.version}-tpiepho";
     license = lib.licenses.gpl2Plus;
-    mainProgram = "tg";
+    mainProgram = "tg-timer";
     maintainers = with lib.maintainers; [ RossSmyth ];
   };
 })

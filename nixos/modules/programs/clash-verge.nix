@@ -21,8 +21,27 @@
       defaultText = lib.literalExpression "pkgs.clash-verge-rev";
     };
     serviceMode = lib.mkEnableOption "Service Mode";
-    tunMode = lib.mkEnableOption "Setcap for TUN Mode. DNS settings won't work on this way";
+    tunMode = lib.mkEnableOption "" // {
+      description = ''
+        Whether to set the capabilities required for TUN mode.
+
+        Without these capabilities, Clash Verge's DNS settings will not work in TUN mode.
+
+        When enabled, reverse path filtering will be set to loose instead of strict.
+      '';
+    };
     autoStart = lib.mkEnableOption "Clash Verge auto launch";
+    group = lib.mkOption {
+      type = lib.types.str;
+      example = "wheel";
+      default = "users";
+      description = ''
+        The group to grant access to clash-verge-rev's service socket.
+
+        For better security, you should set a group that only contains
+        users who need to access clash-verge-rev's service socket.
+      '';
+    };
   };
 
   config =
@@ -48,12 +67,29 @@
         source = "${lib.getExe cfg.package}";
       };
 
+      assertions = [
+        {
+          assertion =
+            cfg.tunMode
+            ->
+              config.networking.firewall.checkReversePath != true
+              && config.networking.firewall.checkReversePath != "strict";
+          message = ''
+            {option}`programs.clash-verge.tunMode` requires {option}`networking.firewall.checkReversePath`
+            to be set to `false` or `"loose"`.
+          '';
+        }
+      ];
+
+      networking.firewall.checkReversePath = lib.mkIf cfg.tunMode (lib.mkDefault "loose");
+
       systemd.services.clash-verge = lib.mkIf cfg.serviceMode {
         enable = true;
         description = "Clash Verge Service Mode";
         serviceConfig = {
           ExecStart = "${cfg.package}/bin/clash-verge-service";
           Restart = "on-failure";
+          Group = cfg.group;
           ProtectSystem = "strict";
           NoNewPrivileges = true;
           ProtectHostname = true;
@@ -69,6 +105,7 @@
           LockPersonality = true;
           RestrictRealtime = true;
           RuntimeDirectory = "clash-verge-rev";
+          StateDirectory = "clash-verge-service";
           ProtectClock = true;
           MemoryDenyWriteExecute = true;
           RestrictSUIDSGID = true;
@@ -88,8 +125,5 @@
       };
     };
 
-  meta.maintainers = with lib.maintainers; [
-    bot-wxt1221
-    Guanran928
-  ];
+  meta.maintainers = pkgs.clash-verge-rev.meta.maintainers;
 }

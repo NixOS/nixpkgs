@@ -54,11 +54,11 @@ mkCoqDerivation {
       null;
 
   release = {
-    "8.12.0".sha256 = "sha256-ul1IhxFwhLTy3+rmo3gvjHI3Z8A8avN0Rzq0YDy2bjs=";
-    "8.11.0".sha256 = "sha256-RI3KdSEYxUbjfZWKO7atGdEqDU8WmLJSFeF6TLlgUFc=";
-    "8.10.0".sha256 = "sha256-qpHh/iz2fFtGwUedjJ6fuOh8uq1mlL4ETxc9zDJ6800=";
-    "8.9.0".sha256 = "sha256-dE9O94DvcF93TUTU7ky9pvGZgTtPZWz6826b6Js/nHc=";
-    "8.8.0".sha256 = "sha256-Iq3KfESMnZF8hhGKuvZHx+hAMEaoCP7MhhQEI6xfoO8=";
+    "8.12.0".hash = "sha256-ul1IhxFwhLTy3+rmo3gvjHI3Z8A8avN0Rzq0YDy2bjs=";
+    "8.11.0".hash = "sha256-RI3KdSEYxUbjfZWKO7atGdEqDU8WmLJSFeF6TLlgUFc=";
+    "8.10.0".hash = "sha256-qpHh/iz2fFtGwUedjJ6fuOh8uq1mlL4ETxc9zDJ6800=";
+    "8.9.0".hash = "sha256-dE9O94DvcF93TUTU7ky9pvGZgTtPZWz6826b6Js/nHc=";
+    "8.8.0".hash = "sha256-Iq3KfESMnZF8hhGKuvZHx+hAMEaoCP7MhhQEI6xfoO8=";
   };
   releaseRev = v: "v${v}";
 

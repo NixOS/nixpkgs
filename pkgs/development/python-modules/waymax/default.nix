@@ -72,5 +72,6 @@ buildPythonPackage {
     homepage = "https://github.com/waymo-research/waymax";
     changelog = "https://github.com/waymo-research/waymax/blob/main/CHANGELOG.md";
     maintainers = with lib.maintainers; [ samuela ];
+    license = lib.licenses.unfree;
   };
 }

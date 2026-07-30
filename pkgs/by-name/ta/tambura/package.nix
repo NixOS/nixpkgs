@@ -5,14 +5,14 @@
   faust2jaqt,
   faust2lv2,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "Tambura";
   version = "1.0";
 
   src = fetchFromGitHub {
     owner = "olilarkin";
     repo = "Tambura";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1w80cmiyzca1wirf5gypg3hcix1ky777id8wnd3k92mn1jf4a24y";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.magnetophon ];
   };
-}
+})

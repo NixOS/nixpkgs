@@ -28,29 +28,16 @@
   runtimeShell,
 }:
 
-let
-
-  # downgrade dpdk because spdk refuses newer versions at runtime
-  # url: https://github.com/spdk/spdk/blob/3e3577a090ed9a084b5909aadcc8bc5fe93c0017/lib/env_dpdk/pci_dpdk.c#L77
-  dpdk' = dpdk.overrideAttrs (oldAttrs: rec {
-    version = "25.03";
-    src = fetchurl {
-      url = "https://fast.dpdk.org/rel/dpdk-${version}.tar.xz";
-      sha256 = "sha256-akCnMTKChuvXloWxj/pZkua3cME4Q9Zf0NEVfPzP9j0=";
-    };
-  });
-
-in
 stdenv.mkDerivation rec {
   pname = "spdk";
 
-  version = "25.05";
+  version = "26.01";
 
   src = fetchFromGitHub {
     owner = "spdk";
     repo = "spdk";
     tag = "v${version}";
-    hash = "sha256-Js78FLkLN4GpJlgO+h4jIiEdThciBugbLTB6elFi2TI=";
+    hash = "sha256-E52VozjnoGnIC7viXrsualaaKXiUU9Fx8zGylTjBzX0=";
     fetchSubmodules = true;
   };
 
@@ -66,7 +53,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cunit
-    dpdk'
+    dpdk
     fuse3
     jansson
     libaio
@@ -90,24 +77,12 @@ stdenv.mkDerivation rec {
     python3.pkgs.configshell-fb
   ];
 
-  patches = [
-    # Otherwise the DPDK version is not detected correctly
-    # Fix already upstream: https://github.com/spdk/spdk/commit/c3618c42ac3f6fdfcc9c04e29953fd6cf4f71c11
-    ./patches/configure.patch
-  ];
-
   postPatch = ''
     patchShebangs .
-    # Override pip install command to use hatchling directly without downloading dependencies
+    # Override uv pip install command to use hatchling directly without downloading dependencies
     substituteInPlace python/Makefile \
-      --replace-fail "setup_cmd = pip install --prefix=\$(CONFIG_PREFIX)" \
-                     "setup_cmd = python3 -m pip install --no-deps --no-build-isolation --prefix=\$(CONFIG_PREFIX)"
-
-    # The nasm detection in the vendored version of isa-l_crypto is broken
-    # Upstream fix: https://github.com/intel/isa-l_crypto/commit/0850c01cc03e45f77d5883372dd6be983ba163ce
-    substituteInPlace isa-l-crypto/configure.ac \
-      --replace-fail "AC_LANG_CONFTEST([AC_LANG_SOURCE([[vpcompressb zmm0, k1, zmm1;]])])" \
-                     "AC_LANG_CONFTEST([AC_LANG_SOURCE([[vpcompressb zmm0 {k1}, zmm1;]])])"
+      --replace-fail "uv pip install --prefix=\$(CONFIG_PREFIX)" \
+                     "python3 -m pip install --no-deps --no-build-isolation --prefix=\$(CONFIG_PREFIX)"
   '';
 
   enableParallelBuilding = true;
@@ -118,7 +93,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--with-dpdk=${dpdk'}"
+    "--with-dpdk=${dpdk}"
     "--with-crypto"
   ]
   ++ lib.optional (!stdenv.hostPlatform.isStatic) "--with-shared";
@@ -166,13 +141,11 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-mssse3"; # Necessary to compile.
 
-  passthru.dpdk = dpdk';
-
   meta = {
     description = "Set of libraries for fast user-mode storage";
     homepage = "https://spdk.io/";
     license = lib.licenses.bsd3;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ ths-on ];
   };
 }

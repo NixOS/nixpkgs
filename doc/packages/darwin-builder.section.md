@@ -89,7 +89,7 @@ Note that if the builder is running and you have created the above ssh conf file
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-22.11-darwin";
-    darwin.url = "github:lnl7/nix-darwin/master";
+    darwin.url = "github:nix-darwin/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
   };
 

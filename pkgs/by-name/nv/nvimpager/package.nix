@@ -4,22 +4,22 @@
   stdenv,
   bash,
   ncurses,
-  neovim,
+  neovim-unwrapped,
   procps,
   scdoc,
   lua51Packages,
   util-linux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nvimpager";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "lucc";
     repo = "nvimpager";
-    rev = "v${version}";
-    sha256 = "sha256-Au9rRZMZfU4qHi/ng6JO8FnMpySKDbKzr75SBPY3QiA=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-hwUI0DlkXveE+m4BkO8xEF/IARqSVk2E6tw07+UtnbA=";
   };
 
   buildInputs = [
@@ -36,14 +36,14 @@ stdenv.mkDerivation rec {
   ];
   preBuild = ''
     patchShebangs nvimpager
-    substituteInPlace nvimpager --replace-fail ':-nvim' ':-${lib.getExe neovim}'
+    substituteInPlace nvimpager --replace-fail ':-nvim' ':-${lib.getExe neovim-unwrapped}'
   '';
 
   doCheck = true;
   nativeCheckInputs = [
     lua51Packages.busted
     ncurses # for tput
-    neovim
+    neovim-unwrapped
     procps # for nvim_get_proc() which uses ps(1)
     util-linux
   ];
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.lucc ];
     mainProgram = "nvimpager";
   };
-}
+})

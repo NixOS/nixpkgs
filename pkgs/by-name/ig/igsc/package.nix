@@ -9,12 +9,12 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "igsc";
-  version = "0.9.6";
+  version = "1.3.1";
   src = fetchFromGitHub {
     owner = "intel";
     repo = "igsc";
     tag = "V${finalAttrs.version}";
-    hash = "sha256-ecjcDYirbJC2s48+SOwFuJAJQ6eaabTrmgTjgb+dXrA=";
+    hash = "sha256-NSNLiUMJBGtnfWUDIPIukyjgcI1YX9cfDDWphW8uSWs=";
   };
 
   buildInputs = [

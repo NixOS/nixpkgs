@@ -3,10 +3,9 @@
   stdenvNoCC,
   fetchurl,
   nixosTests,
-  cacert,
-  caBundle ? "${cacert}/etc/ssl/certs/ca-bundle.crt",
-  nextcloud31Packages,
   nextcloud32Packages,
+  nextcloud33Packages,
+  nextcloud34Packages,
 }:
 
 let
@@ -22,21 +21,13 @@ let
       pname = "nextcloud";
       inherit version;
 
+      __structuredAttrs = true;
+      strictDeps = true;
+
       src = fetchurl {
         url = "https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2";
         inherit hash;
       };
-
-      passthru = {
-        tests = lib.filterAttrs (
-          key: _: (lib.hasSuffix (lib.versions.major version) key)
-        ) nixosTests.nextcloud;
-        inherit packages;
-      };
-
-      postPatch = ''
-        cp ${caBundle} resources/config/ca-bundle.crt
-      '';
 
       installPhase = ''
         runHook preInstall
@@ -44,6 +35,13 @@ let
         cp -R . $out/
         runHook postInstall
       '';
+
+      passthru = {
+        tests = lib.filterAttrs (
+          key: _: (lib.hasSuffix (lib.versions.major version) key)
+        ) nixosTests.nextcloud;
+        inherit packages;
+      };
 
       meta = {
         changelog = "https://nextcloud.com/changelog/#${lib.replaceStrings [ "." ] [ "-" ] version}";
@@ -58,16 +56,22 @@ let
     };
 in
 {
-  nextcloud31 = generic {
-    version = "31.0.12";
-    hash = "sha256-spCJ0KvDkY9z8r4tdWhbjXALj9i+9BYpfyVDQyXwnDY=";
-    packages = nextcloud31Packages;
+  nextcloud32 = generic {
+    version = "32.0.13";
+    hash = "sha256-7rAaOJp2z+RfweD2GhW1x0vkDNKciuT1TNa0J817nvA=";
+    packages = nextcloud32Packages;
   };
 
-  nextcloud32 = generic {
-    version = "32.0.3";
-    hash = "sha256-m3GslskQtKNQ2Ya9OpLqBvAqFh+lhjNLVth9isr8YtQ=";
-    packages = nextcloud32Packages;
+  nextcloud33 = generic {
+    version = "33.0.7";
+    hash = "sha256-uuGoL8u/TWmZTS1Y1OgVFm+/T+1a06VRIfOM4H7emRM=";
+    packages = nextcloud33Packages;
+  };
+
+  nextcloud34 = generic {
+    version = "34.0.2";
+    hash = "sha256-Qc4x3xLMgQkMPQf+DouQveYckrGK6A5NZIutQ9eZEQE=";
+    packages = nextcloud34Packages;
   };
 
   # tip: get the sha with:

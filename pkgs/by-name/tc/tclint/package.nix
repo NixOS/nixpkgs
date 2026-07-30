@@ -14,16 +14,16 @@ let
     }
   );
 in
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "tclint";
-  version = "0.7.0";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nmoroze";
     repo = "tclint";
-    tag = "v${version}";
-    hash = "sha256-GkWQlOmPh/IpkdcNKkaHJoVDD2r5wCSFeMZA96dxiXM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HEmNdDq8xeGHCLJRvGGa13KaX7iLyyNkv3nYcJsZjrw=";
   };
 
   build-system = with pythonPackages; [
@@ -34,6 +34,7 @@ pythonPackages.buildPythonApplication rec {
   pythonRelaxDeps = [
     "importlib-metadata"
     "pathspec"
+    "voluptuous"
   ];
   dependencies = with pythonPackages; [
     importlib-metadata
@@ -64,9 +65,9 @@ pythonPackages.buildPythonApplication rec {
   meta = {
     description = "Modern dev tools for Tcl. Includes a linter, formatter, and editor integration";
     homepage = "https://github.com/nmoroze/tclint";
-    changelog = "https://github.com/nmoroze/tclint/releases/tag/${src.tag}";
+    changelog = "https://github.com/nmoroze/tclint/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "tclint";
   };
-}
+})

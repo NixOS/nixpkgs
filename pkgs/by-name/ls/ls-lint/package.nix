@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ls-lint";
   version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "loeffel-io";
     repo = "ls-lint";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-kwZvpZaiS58UFE+qncQ370E8bnEuzQACK0FOAYlJwV0=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ flokli ];
   };
-}
+})

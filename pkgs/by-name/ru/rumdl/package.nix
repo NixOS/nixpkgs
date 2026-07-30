@@ -2,48 +2,58 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  stdenvNoCC,
+  installShellFiles,
   gitMinimal,
+  stdenv,
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rumdl";
-  version = "0.0.216";
+  version = "0.2.45";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rvben";
     repo = "rumdl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aHgaqsU6cvAfWF4q1aynE9H+Ok46Tld9ukRvS0urfRU=";
+    hash = "sha256-ZTvnRu/umgGTk8EmMbdfd5qP+Iqt0+hsl+W+A5NQ6Tg=";
   };
 
-  cargoHash = "sha256-G7++F3Av56KVan6PTsqI0AjSlKLTY7Ypk9mZBrhqevI=";
+  cargoHash = "sha256-lYVbKzVQBSjoPK3ZRMOUuDDvK32sHrBzq6gHbmNUalc=";
 
   cargoBuildFlags = [
     "--bin=rumdl"
   ];
 
-  # Non-specific tests often fail on Darwin (especially aarch64-darwin),
-  # on both Hydra and GitHub-hosted runners, even with __darwinAllowLocalNetworking enabled.
-  doCheck = !stdenvNoCC.hostPlatform.isDarwin;
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   nativeCheckInputs = [
     gitMinimal
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   useNextest = true;
 
   cargoTestFlags = [
-    "--profile ci"
+    "--lib"
+
+    # Prefer the "smoke" profile over "ci" to exclude flaky tests: https://github.com/rvben/rumdl/pull/341
+    "--profile"
+    "smoke"
   ];
 
-  checkFlags = [
-    # Skip Windows tests
-    "--skip comprehensive_windows_tests"
-    "--skip windows_vscode_tests"
-  ];
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd rumdl \
+      --bash <("$out/bin/rumdl" completions bash) \
+      --fish <("$out/bin/rumdl" completions fish) \
+      --zsh <("$out/bin/rumdl" completions zsh)
+  '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [
@@ -66,6 +76,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       kachick
       hasnep
+      faukah
     ];
     mainProgram = "rumdl";
     platforms = with lib.platforms; unix ++ windows;

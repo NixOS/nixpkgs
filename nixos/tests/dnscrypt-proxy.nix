@@ -4,7 +4,7 @@ let
 in
 {
   name = "dnscrypt-proxy";
-  meta.maintainers = with lib.maintainers; [ joachifm ];
+  meta.maintainers = [ ];
 
   nodes = {
     # A client running the recommended setup: DNSCrypt proxy as a forwarder

@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-OjTwAQzKUuXfwZXLsL9XjrJc/0be38CmAGG+CoCeNwk=";
   };
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=format-truncation"
     "-Wno-error=format-overflow"
     "-Wno-error=deprecated-declarations"

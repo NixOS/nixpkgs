@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Python library for interacting with Aprilaire thermostats";
     homepage = "https://github.com/chamberlain2007/pyaprilaire";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 }

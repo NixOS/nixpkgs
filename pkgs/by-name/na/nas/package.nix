@@ -6,12 +6,12 @@
   flex,
   gccmakedep,
   imake,
-  libXau,
-  libXaw,
-  libXext,
-  libXpm,
-  libXt,
-  xorgcffiles,
+  libxau,
+  libxaw,
+  libxext,
+  libxpm,
+  libxt,
+  xorg-cf-files,
   xorgproto,
 }:
 
@@ -32,11 +32,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libXau
-    libXaw
-    libXext
-    libXpm
-    libXt
+    libxau
+    libxaw
+    libxext
+    libxpm
+    libxt
     xorgproto
   ];
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
-    mv $out/${xorgcffiles}/* $out
+    mv $out/${xorg-cf-files}/* $out
     rm -fr $out/nix
   '';
 

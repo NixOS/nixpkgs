@@ -13,7 +13,7 @@
   libpng,
   pngpp,
   libwebp,
-  libX11,
+  libx11,
 }:
 
 let
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     libwebp
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
+    libx11
   ];
   strictDeps = true;
 

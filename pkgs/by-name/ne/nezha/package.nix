@@ -7,6 +7,7 @@
   dbip-country-lite,
   formats,
   nix-update-script,
+  nixosTests,
   nezha-theme-admin,
   nezha-theme-user,
   withThemes ? [ ],
@@ -48,13 +49,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "nezha";
-  version = "1.14.12";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "nezhahq";
     repo = "nezha";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gNXbg5JaHHogJaRGmAjOXskrbkSRu1fnIqQMu8U3lzk=";
+    hash = "sha256-wlGDNsh67pAuPPgae56bXrtDsgwuviLxiaZ6CrOi3go=";
   };
 
   proxyVendor = true;
@@ -90,17 +91,18 @@ buildGoModule (finalAttrs: {
   nativeBuildInputs = [ go-swag ];
 
   # Generate code for Swagger documentation endpoints (see cmd/dashboard/docs).
-  preBuild = ''
-    GOROOT=''${GOROOT-$(go env GOROOT)} swag init --pd -d . -g ./cmd/dashboard/main.go -o ./cmd/dashboard/docs --parseGoList=false
+  postConfigure = ''
+    GOROOT=''${GOROOT-$(go env GOROOT)} swag init --pd -d cmd/dashboard -g main.go -o cmd/dashboard/docs
   '';
 
-  vendorHash = "sha256-9vJzQqXkoENRapcHp/afSCcdOrt8bxrIyJT/cBeas+A=";
+  vendorHash = "sha256-U2rZVluYM+XcI8e9TBXAlb9sKz4IL+FMEj1CTDcH6qM=";
 
   ldflags = [
     "-s"
     "-X github.com/nezhahq/nezha/service/singleton.Version=${finalAttrs.version}"
   ];
 
+  __darwinAllowLocalNetworking = true; # TestOptionalAuth_PATWithoutScopeIsDenied
   checkFlags = "-skip=^TestSplitDomainSOA$";
 
   postInstall = ''
@@ -113,6 +115,9 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) nezha;
+    };
   };
 
   meta = {

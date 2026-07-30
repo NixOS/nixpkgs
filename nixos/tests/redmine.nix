@@ -46,4 +46,30 @@ in
     name = "pgsql";
     type = "postgresql";
   };
+
+  restart = makeTest {
+    name = "redmine-restart";
+    nodes.machine =
+      { config, pkgs, ... }:
+      {
+        services.redmine = {
+          enable = true;
+          package = pkgs.redmine;
+        };
+      };
+
+    testScript = ''
+      start_all()
+      machine.wait_for_unit("redmine.service")
+      machine.wait_for_open_port(3000)
+      machine.succeed("curl --fail http://localhost:3000/")
+
+      machine.systemctl("stop redmine.service")
+      machine.systemctl("start redmine.service")
+
+      machine.wait_for_unit("redmine.service")
+      machine.wait_for_open_port(3000)
+      machine.succeed("curl --fail http://localhost:3000/")
+    '';
+  };
 }

@@ -8,11 +8,11 @@
   python3,
   glslang,
   libffi,
-  libX11,
-  libXau,
+  libx11,
+  libxau,
   libxcb,
-  libXdmcp,
-  libXrandr,
+  libxdmcp,
+  libxrandr,
   vulkan-headers,
   vulkan-loader,
   vulkan-volk,
@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools";
-  version = "1.4.335";
+  version = "1.4.350.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Tools";
     rev = "vulkan-sdk-${version}";
-    hash = "sha256-C/wzLLiG7DrLyP3YRKhjawNoEOCCogXkrFeBczeVZR0=";
+    hash = "sha256-qtEq1ZQT5JXE4bXzy8W053CRF/dOFVV7d7NE9uNYssI=";
   };
 
   patches = [ ./wayland-scanner.patch ];
@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libffi
-    libX11
-    libXau
+    libx11
+    libxau
     libxcb
-    libXdmcp
-    libXrandr
+    libxdmcp
+    libxrandr
     wayland
     wayland-protocols
   ]

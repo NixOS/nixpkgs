@@ -7,7 +7,7 @@
   libxslt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kpack";
 
   version = "1.1.1";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KnightOS";
     repo = "kpack";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1l6bm2j45946i80qgwhrixg9sckazwb5x4051s76d3mapq9bara8";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ siraben ];
     platforms = lib.platforms.unix;
   };
-}
+})

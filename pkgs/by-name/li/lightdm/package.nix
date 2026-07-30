@@ -13,7 +13,7 @@
   libtool,
   libxcb,
   glib,
-  libXdmcp,
+  libxdmcp,
   itstool,
   intltool,
   libxklavier,
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "canonical";
+    owner = "ubuntu";
     repo = "lightdm";
     tag = finalAttrs.version;
     sha256 = "sha256-ttNlhWD0Ran4d3QvZ+PxbFbSUGMkfrRm+hJdQxIDJvM=";
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     accountsservice
     audit
     glib
-    libXdmcp
+    libxdmcp
     libgcrypt
     libxcb
     libxklavier
@@ -129,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    homepage = "https://github.com/canonical/lightdm";
+    homepage = "https://github.com/ubuntu/lightdm";
     description = "Cross-desktop display manager";
     platforms = lib.platforms.linux;
     license = with lib.licenses; [

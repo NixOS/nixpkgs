@@ -1,4 +1,5 @@
 {
+  lib,
   mkKdeDerivation,
   qtdeclarative,
   qttools,
@@ -12,5 +13,8 @@ mkKdeDerivation {
     qttools
     perl
   ];
-  meta.mainProgram = "ksyntaxhighlighter6";
+  meta = {
+    mainProgram = "ksyntaxhighlighter6";
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd ++ lib.platforms.darwin;
+  };
 }

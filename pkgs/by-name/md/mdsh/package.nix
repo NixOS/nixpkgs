@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdsh";
   version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "zimbatm";
     repo = "mdsh";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-DQdm6911SNzVxUXpZ4mMumjonThhhEJnM/3GjbCjyuY=";
   };
 
@@ -20,8 +20,8 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Markdown shell pre-processor";
     homepage = "https://github.com/zimbatm/mdsh";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ zimbatm ];
     mainProgram = "mdsh";
   };
-}
+})

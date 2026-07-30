@@ -7,7 +7,7 @@
   makeWrapper,
 }:
 let
-  version = "4.1.18";
+  version = "4.3.3";
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "tailwindcss has not been packaged for ${system} yet.";
 
@@ -15,17 +15,15 @@ let
     {
       aarch64-darwin = "macos-arm64";
       aarch64-linux = "linux-arm64";
-      x86_64-darwin = "macos-x64";
       x86_64-linux = "linux-x64";
     }
     .${system} or throwSystem;
 
   hash =
     {
-      aarch64-darwin = "sha256-fydxHc6sGlgLatWN2sRuWSAshabBby8I9v3N7iYQCOE=";
-      aarch64-linux = "sha256-encC22yTcYqbZlXUVTBO3aGGAPWk8ZUkI0LtO1tw6+g=";
-      x86_64-darwin = "sha256-Hop3/XlqOkqj2HJ4h96SbvnThHeroRP9fDLA0xoyo6s=";
-      x86_64-linux = "sha256-c3vs+NStERXqmN9p+pQCbUAsqP65EwagNbWwBBZ9qN0=";
+      aarch64-darwin = "sha256-zfZGcCmHp0NGTf9NnGD9RIDRwec92Bmppn8QeIFdzp0=";
+      aarch64-linux = "sha256-Vf0LJBIU7/PeHo7k8ieWZi8tLnpJvPynR3z9C6w5gZU=";
+      x86_64-linux = "sha256-3GGzrGuMnKh0wMxMV7JAl5GmTFVAQEyl9TZzYLq8MTo=";
     }
     .${system} or throwSystem;
 in
@@ -72,7 +70,6 @@ stdenv.mkDerivation {
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     maintainers = with lib.maintainers; [
       adamcstephens
-      adamjhf
     ];
     mainProgram = "tailwindcss";
     platforms = lib.platforms.darwin ++ lib.platforms.linux;

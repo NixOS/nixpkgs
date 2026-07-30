@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   fontforge,
-  xorg,
+  mkfontscale,
 }:
 
 let
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     fontforge
-    xorg.mkfontscale
+    mkfontscale
   ];
 
   unpackPhase = ''

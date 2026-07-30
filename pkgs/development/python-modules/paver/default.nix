@@ -46,6 +46,6 @@ buildPythonPackage rec {
     mainProgram = "paver";
     homepage = "https://github.com/paver/paver";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = [ ];
   };
 }

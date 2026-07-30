@@ -4,7 +4,7 @@
   stdenv,
   fetchurl,
   autoPatchelfHook,
-  undmg,
+  _7zz,
   zstd,
   alsa-lib,
   curl,
@@ -14,7 +14,11 @@
   vulkan-loader,
   wayland,
   xdg-utils,
-  xorg,
+  libxi,
+  libxcursor,
+  libx11,
+  libxcb,
+  xz, # liblzma
   zlib,
   makeWrapper,
   waylandSupport ? false,
@@ -54,6 +58,7 @@ let
       fontconfig
       (lib.getLib stdenv.cc.cc) # libstdc++.so libgcc_s.so
       zlib
+      xz
     ];
 
     runtimeDependencies = [
@@ -62,10 +67,10 @@ let
       stdenv.cc.libc
       vulkan-loader
       xdg-utils
-      xorg.libX11
-      xorg.libxcb
-      xorg.libXcursor
-      xorg.libXi
+      libx11
+      libxcb
+      libxcursor
+      libxi
     ]
     ++ lib.optionals waylandSupport [ wayland ];
 
@@ -102,7 +107,8 @@ let
 
     sourceRoot = ".";
 
-    nativeBuildInputs = [ undmg ];
+    # Warp.dmg is APFS formatted, which is unsupported by undmg
+    nativeBuildInputs = [ _7zz ];
 
     installPhase = ''
       runHook preInstall
@@ -120,8 +126,7 @@ let
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [
-      imadnyc
-      FlameFlag
+      _4evy
       johnrtitor
       logger
     ];

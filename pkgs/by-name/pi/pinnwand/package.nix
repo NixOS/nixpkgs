@@ -1,24 +1,24 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
   nixosTests,
 }:
 
-with python3.pkgs;
-buildPythonApplication rec {
+with python3Packages;
+buildPythonApplication (finalAttrs: {
   pname = "pinnwand";
-  version = "1.6.0";
+  version = "1.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "supakeen";
     repo = "pinnwand";
-    tag = "v${version}";
-    hash = "sha256-oB7Dd1iVzGqr+5nG7BfZuwOQUgUnmg6ptQDZPGH7P5E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Abj68lJn2qjL1jb+cVzkoc/RYKA6d5tYOPlEwqST0tY=";
   };
 
-  build-system = [ pdm-pep517 ];
+  build-system = [ pdm-backend ];
 
   dependencies = [
     click
@@ -27,6 +27,7 @@ buildPythonApplication rec {
     pygments-better-html
     python-dotenv
     sqlalchemy
+    sqlalchemy-utc
     token-bucket
     tomli
     tornado
@@ -39,7 +40,7 @@ buildPythonApplication rec {
     pytest-html
     pytest-playwright
     pytestCheckHook
-    toml
+    tomli-w
     urllib3
   ];
 
@@ -55,7 +56,7 @@ buildPythonApplication rec {
   passthru.tests = nixosTests.pinnwand;
 
   meta = {
-    changelog = "https://github.com/supakeen/pinnwand/releases/tag/v${version}";
+    changelog = "https://github.com/supakeen/pinnwand/releases/tag/v${finalAttrs.version}";
     description = "Python pastebin that tries to keep it simple";
     homepage = "https://github.com/supakeen/pinnwand";
     license = lib.licenses.mit;
@@ -63,4 +64,4 @@ buildPythonApplication rec {
     mainProgram = "pinnwand";
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -11,7 +11,6 @@
   gettext,
   gtk3,
   libmpdclient,
-  libsoup_2_4,
   libxml2,
   taglib,
   wrapGAppsHook3,
@@ -40,7 +39,6 @@ stdenv.mkDerivation rec {
     dbus-glib
     gtk3
     libmpdclient
-    libsoup_2_4
     libxml2
     taglib
   ];

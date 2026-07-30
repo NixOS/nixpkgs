@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "host-spawn";
   version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "1player";
     repo = "host-spawn";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-bCEyoHsISZ2K7fOsOOAhZRv/a6RptVDlwSspomacb/0=";
   };
 
@@ -25,4 +25,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ garrison ];
     mainProgram = "host-spawn";
   };
-}
+})

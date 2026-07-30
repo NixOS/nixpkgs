@@ -13,19 +13,18 @@
   glib,
   libnl,
   udev,
-  libXau,
-  libXdmcp,
+  libxau,
+  libxdmcp,
   pcre2,
-  pcre,
   util-linux,
   libselinux,
   libsepol,
   lua5,
   docutils,
   libxcb,
-  libX11,
-  xcbutil,
-  xcbutilwm,
+  libx11,
+  libxcb-util,
+  libxcb-wm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,11 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libxcb
-    libX11
-    xcbutil
-    xcbutilwm
-    libXdmcp
-    libXau
+    libx11
+    libxcb-util
+    libxcb-wm
+    libxdmcp
+    libxau
     libpulseaudio
     libnl
     libselinux
@@ -61,7 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     udev
     pcre2
-    pcre
     util-linux
     lua5
     docutils
@@ -86,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Universal status bar content generator";
     homepage = "https://github.com/shdown/luastatus";
-    changelog = "https://github.com/shdown/luastatus/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/shdown/luastatus/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ kashw2 ];
     platforms = lib.platforms.linux;

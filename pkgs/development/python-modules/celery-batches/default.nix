@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "celery-batches";
-  version = "0.10";
+  version = "0.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "clokep";
     repo = "celery-batches";
     tag = "v${version}";
-    hash = "sha256-9RpM2aC3F88fJBoW8FDd6IN8KlZN+6ESrZFak9j0eNk=";
+    hash = "sha256-+1cpauali+MjDox0esw0+bveOEroIQ0DkuHQuwm/i4Q=";
   };
 
   build-system = [ setuptools ];

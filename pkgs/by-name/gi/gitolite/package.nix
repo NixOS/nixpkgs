@@ -1,7 +1,7 @@
 {
   stdenv,
   coreutils,
-  fetchFromGitea,
+  fetchFromCodeberg,
   git,
   lib,
   makeWrapper,
@@ -14,8 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "gitolite";
   version = "3.6.14";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "sitaramc";
     repo = "gitolite";
     tag = "v${finalAttrs.version}";

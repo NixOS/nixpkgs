@@ -12,13 +12,13 @@
 # nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio-channelz";
-  version = "1.76.0";
+  version = "1.82.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "grpcio_channelz";
     inherit version;
-    hash = "sha256-KrFe97IlKpujHfUAu+KVzlMQqLAepvbWehcXLZFKQag=";
+    hash = "sha256-/Q6lQDfasOu4BAaiqH6AmyTUEKLp209mL6IqKZ8AUOs=";
   };
 
   build-system = [ setuptools ];
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = {
     description = "Channel Level Live Debug Information Service for gRPC";
     homepage = "https://pypi.org/project/grpcio-channelz";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
   };
 }

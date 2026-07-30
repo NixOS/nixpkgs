@@ -1,14 +1,12 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
   poetry-core,
 
   # propagates
-  importlib-resources,
   jsonschema,
   jsonschema-path,
   lazy-object-proxy,
@@ -21,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "openapi-spec-validator";
-  version = "0.7.2";
+  version = "0.8.4";
   pyproject = true;
 
   # no tests via pypi sdist
@@ -29,18 +27,21 @@ buildPythonPackage rec {
     owner = "python-openapi";
     repo = "openapi-spec-validator";
     tag = version;
-    hash = "sha256-APEx7+vc824DLmdzLvhfFVrcjPxVwwUwxkh19gjXEvc=";
+    hash = "sha256-KY9mDnF/R2UO8WZ0WyBzpZQsVBxzxnTK6zyqvUb+hVw=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "jsonschema"
+  ];
+
+  dependencies = [
     jsonschema
     jsonschema-path
     lazy-object-proxy
     openapi-schema-validator
-  ]
-  ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

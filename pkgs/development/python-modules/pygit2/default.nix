@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "pygit2";
-  version = "1.19.0";
+  version = "1.19.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yl2285WnQWagGdd3iV+WvLIR7mDOC+QTKxOWA+AGbYM=";
+    hash = "sha256-pUPm1Ou0OCVWSTV1jcI053ABb+1nO4Q3DUaulYBViDE=";
   };
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -50,7 +50,7 @@ buildPythonPackage rec {
 
   # Tests require certificates
   # https://github.com/NixOS/nixpkgs/pull/72544#issuecomment-582674047
-  SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   pythonImportsCheck = [ "pygit2" ];
 

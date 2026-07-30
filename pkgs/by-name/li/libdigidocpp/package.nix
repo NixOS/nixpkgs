@@ -15,15 +15,15 @@
   xxd,
 }:
 
-stdenv.mkDerivation rec {
-  version = "4.3.0";
+stdenv.mkDerivation (finalAttrs: {
+  version = "4.4.0";
   pname = "libdigidocpp";
 
   src = fetchFromGitHub {
     owner = "open-eid";
     repo = "libdigidocpp";
-    tag = "v${version}";
-    hash = "sha256-f5wU3C6NC4op+9Wy+khwNJ6slFyPhq7hZl1Tj5hnYc8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Rf4ex9UT+Bspkf+WNNpYpdIt7y+QjAZ+eg786FZ0ZsA=";
   };
 
   nativeBuildInputs = [
@@ -76,4 +76,4 @@ stdenv.mkDerivation rec {
       lib.maintainers.flokli
     ];
   };
-}
+})

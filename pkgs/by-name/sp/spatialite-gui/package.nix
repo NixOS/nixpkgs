@@ -20,7 +20,7 @@
   proj,
   sqlite,
   virtualpg,
-  wxGTK32,
+  wxwidgets_3_2,
   xz,
   zstd,
 }:
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     proj
     sqlite
     virtualpg
-    wxGTK32
+    wxwidgets_3_2
     xz
     zstd
   ];

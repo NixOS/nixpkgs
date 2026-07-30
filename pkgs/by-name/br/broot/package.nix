@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "broot";
-  version = "1.54.0";
+  version = "1.58.0";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "broot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c7q6VTXoToUSx8gsOLcsLUvriZYYyYwGAjO8VTF3JFk=";
+    hash = "sha256-cvrqIgxR96GVD5HpDTjswnuiwuzfJNW0evJIwYTI2lQ=";
   };
 
-  cargoHash = "sha256-jErnCexuu8PPUugsI+fRqWpqtpspDiVjnfn3it5jeK4=";
+  cargoHash = "sha256-eel+0H5wYk4j/yB3E0M4+iqQXF7tLXm6gxv59rW2e1o=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -87,7 +87,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://dystroy.org/broot/";
     changelog = "https://github.com/Canop/broot/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ dywedir ];
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     mainProgram = "broot";
   };
 })

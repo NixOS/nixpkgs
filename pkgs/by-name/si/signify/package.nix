@@ -6,14 +6,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "signify";
   version = "32";
 
   src = fetchFromGitHub {
     owner = "aperezdc";
     repo = "signify";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-y2A+Szt451CmaWOc2Y2vBSwSgziJsSnTjNClbdyxG2U=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.rlupton20 ];
     platforms = lib.platforms.linux;
   };
-}
+})

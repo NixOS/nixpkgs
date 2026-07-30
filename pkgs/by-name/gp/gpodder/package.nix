@@ -11,7 +11,7 @@
   xdg-utils,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gpodder";
   version = "3.11.5";
   pyproject = false;
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "gpodder";
     repo = "gpodder";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Hhk9JeHMg+FrekiNXP6Q8loCtst+FHT4EJTnh64VOhc=";
   };
 
@@ -99,4 +99,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ mic92 ];
   };
-}
+})

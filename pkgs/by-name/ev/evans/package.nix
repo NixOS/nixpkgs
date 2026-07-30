@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "evans";
   version = "0.10.11";
 
   src = fetchFromGitHub {
     owner = "ktr0731";
     repo = "evans";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-V5M7vXlBSQFX2YZ+Vjt63hLziWy0yuAbCMmSZFEO0OA=";
   };
 
@@ -23,7 +23,7 @@ buildGoModule rec {
     description = "More expressive universal gRPC client";
     mainProgram = "evans";
     homepage = "https://evans.syfm.me/";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ diogox ];
   };
-}
+})

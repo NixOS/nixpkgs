@@ -4,10 +4,10 @@
   fetchzip,
   pkg-config,
   writeText,
-  libX11,
+  libx11,
   libxcb,
-  libXau,
-  libXdmcp,
+  libxau,
+  libxdmcp,
   config,
   conf ? config.slstatus.conf or null,
   patches ? config.slstatus.patches or [ ],
@@ -39,10 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libX11
+    libx11
     libxcb
-    libXau
-    libXdmcp
+    libxau
+    libxdmcp
   ]
   ++ extraLibs;
 
@@ -55,7 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Status monitor for window managers that use WM_NAME like dwm";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [
-      oxzi
       qusic
     ];
     platforms = lib.platforms.linux;

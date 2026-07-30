@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   meson,
   ninja,
 }:
@@ -10,8 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "tllist";
   version = "1.1.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "dnkl";
     repo = "tllist";
     rev = finalAttrs.version;

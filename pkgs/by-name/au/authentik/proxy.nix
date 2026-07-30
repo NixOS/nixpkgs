@@ -1,6 +1,7 @@
 {
   buildGoModule,
   authentik,
+  apiGoVendorHook,
   vendorHash,
 }:
 
@@ -8,6 +9,8 @@ buildGoModule {
   pname = "authentik-proxy-outpost";
   inherit (authentik) version src;
   inherit vendorHash;
+
+  nativeBuildInputs = [ apiGoVendorHook ];
 
   env.CGO_ENABLED = 0;
 

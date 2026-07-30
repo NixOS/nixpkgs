@@ -13,36 +13,38 @@
   wrapGAppsHook4,
   gdk-pixbuf,
   clapper-unwrapped,
+  glycin-loaders,
   gtk4,
+  gtksourceview5,
   libadwaita,
+  libglycin,
   libxml2,
   openssl,
   sqlite,
   webkitgtk_6_0,
   glib-networking,
-  librsvg,
   gst_all_1,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "newsflash";
-  version = "4.2.1";
+  version = "5.2.4";
 
   src = fetchFromGitLab {
     owner = "news-flash";
     repo = "news_flash_gtk";
     tag = "v.${finalAttrs.version}";
-    hash = "sha256-me9/2sA1Thne10+JrSMvicDRxXuevCnM8Tb+kwXzNDI=";
+    hash = "sha256-8Gs87eqcs/7SWNlv4pI4Y78bZb/gGhx0DtPzyZhe1Ew=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-cgu1zP85UCb/6gYNcj/khc6u1kSwX0UZ2oIjM2UUBOA=";
+    hash = "sha256-rklPsg9rYXkC29kSyST4JrrsPlL7FEx+wOuFypqWc7I=";
   };
 
   postPatch = ''
-    patchShebangs build-aux/cargo.sh
+    patchShebangs --build build-aux/cargo.sh
     meson rewrite kwargs set project / version '${finalAttrs.version}'
     substituteInPlace src/meson.build --replace-fail \
       "'src' / rust_target / 'news_flash_gtk'" \
@@ -55,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     blueprint-compiler
     cargo
     desktop-file-utils
+    libglycin.patchVendorHook
     meson
     ninja
     pkg-config
@@ -69,8 +72,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     clapper-unwrapped
+    glycin-loaders
     gtk4
+    gtksourceview5
     libadwaita
+    libglycin
     libxml2
     openssl
     sqlite
@@ -78,9 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # TLS support for loading external content in webkitgtk WebView
     glib-networking
-
-    # SVG support for gdk-pixbuf
-    librsvg
   ]
   ++ (with gst_all_1; [
     # Audio & video support for webkitgtk WebView

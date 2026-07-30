@@ -3,9 +3,6 @@
 { pkgs, ... }:
 {
   name = "peerflix";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ offline ];
-  };
 
   nodes = {
     peerflix =

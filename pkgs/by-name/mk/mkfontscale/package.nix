@@ -11,11 +11,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mkfontscale";
-  version = "1.2.3";
+  version = "1.2.4";
 
   src = fetchurl {
     url = "mirror://xorg/individual/app/mkfontscale-${finalAttrs.version}.tar.xz";
-    hash = "sha256-KSHNw0TxrO4EvNbqHilWXBMIJjAG4TSp7jjPnJ1v514=";
+    hash = "sha256-oBSSoXqbbA7j+S7leIUOMFMVufKY2l8AahzUtR2wGl4=";
   };
 
   strictDeps = true;

@@ -14,12 +14,12 @@
   libtool,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "herwig";
   version = "7.3.0";
 
   src = fetchurl {
-    url = "https://www.hepforge.org/archive/herwig/Herwig-${version}.tar.bz2";
+    url = "https://www.hepforge.org/archive/herwig/Herwig-${finalAttrs.version}.tar.bz2";
     hash = "sha256-JiSBnS3/EFupUuobXPEutvSSbUlRd0pBkHaZ4vVnaGw=";
   };
 
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isAarch64; # doesn't compile: ignoring return value of 'FILE* freopen...
   };
-}
+})

@@ -1,12 +1,10 @@
-diff --git a/installed-tests/js/meson.build b/installed-tests/js/meson.build
-index 07759690..43c87c59 100644
 --- a/installed-tests/js/meson.build
 +++ b/installed-tests/js/meson.build
-@@ -34,7 +34,6 @@ jasmine_tests = [
+@@ -37,7 +37,6 @@ jasmine_tests = [
+     'GObjectInterface',
+     'GObjectValue',
      'GTypeClass',
-     'Importer',
-     'Importer2',
 -    'Introspection',
-     'Lang',
-     'LegacyByteArray',
-     'LegacyClass',
+     'Namespace',
+     'ParamSpec',
+     'Print',

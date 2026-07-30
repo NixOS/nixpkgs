@@ -8,13 +8,13 @@
 
 buildLua {
   pname = "mpv-playlistmanager";
-  version = "0-unstable-2025-12-17";
+  version = "0-unstable-2026-03-16";
 
   src = fetchFromGitHub {
     owner = "jonniek";
     repo = "mpv-playlistmanager";
-    rev = "75caa611c9dab164e74a04a62abfbf508e51d71e";
-    hash = "sha256-wSyxcR+qIWozbDjrZT+B6SgFaigSWofExdsZ2fF7/uY=";
+    rev = "2eb09e1e7a2f66549145b728d570fda83703ed86";
+    hash = "sha256-NZ6tRq0DLzg1NlpIwbMZPoWQmJZ0cynDuyF5TGazOfc=";
   };
   passthru.updateScript = unstableGitUpdater { };
 

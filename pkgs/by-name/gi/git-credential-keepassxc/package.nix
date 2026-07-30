@@ -8,18 +8,18 @@
   withAll ? false,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-credential-keepassxc";
-  version = "0.14.1";
+  version = "0.14.3";
 
   src = fetchFromGitHub {
     owner = "Frederick888";
     repo = "git-credential-keepassxc";
-    rev = "v${version}";
-    hash = "sha256-qxNzWuuIoK9BJLVcWtrER+MyA5cyd03xAwGljh8DZC4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-rgYwcfglyutHIZrENFlYUHFeobMoLU6BwkdsaWqDkWE=";
   };
 
-  cargoHash = "sha256-jjexSzxRhnNPW+urG7KpZBWfGcy06Cg4lXlQogF3L/A=";
+  cargoHash = "sha256-zHSMbfP9ge3JYGyUI2XMGtQwQnsDPkWDnm0F3WWwfNc=";
 
   buildFeatures =
     [ ]
@@ -41,4 +41,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ fgaz ];
     mainProgram = "git-credential-keepassxc";
   };
-}
+})

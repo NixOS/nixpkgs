@@ -9,19 +9,19 @@
 
 buildPythonPackage rec {
   pname = "zope-testing";
-  version = "6.0";
+  version = "6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.testing";
     tag = version;
-    hash = "sha256-px1+lS1U0lmmQrXJuxFTsX3N8e2mj5Yhckfis5++EX8=";
+    hash = "sha256-dAUiG8DxlhQKMBXh49P0CDC9UjqAYjB+2vVCTI36cgc=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools ==" "setuptools >="
+      --replace-fail "setuptools >= 78.1.1,< 81" setuptools
   '';
 
   build-system = [ setuptools ];
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = {
     description = "Zope testing helpers";
     homepage = "https://github.com/zopefoundation/zope.testing";
-    changelog = "https://github.com/zopefoundation/zope.testing/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/zopefoundation/zope.testing/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.zpl21;
     maintainers = [ ];
   };

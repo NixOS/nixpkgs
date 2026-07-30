@@ -10,6 +10,7 @@
 
   # dependencies
   huggingface-hub,
+  numpy,
   scikit-learn,
   scipy,
   torch,
@@ -31,22 +32,23 @@
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sentence-transformers";
-  version = "5.2.0";
+  version = "5.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "sentence-transformers";
-    tag = "v${version}";
-    hash = "sha256-WD5uTfAbDYYeSXlgznSs4XyN1fAILxILmmSHmLosmV4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VZu50DVuU0P7o3+iKVWougui7nWSrnP/eza0Rqtt7ZU=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     huggingface-hub
+    numpy
     scikit-learn
     scipy
     torch
@@ -56,9 +58,11 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    image = [
-      pillow
-    ];
+    image = transformers.optional-dependencies.vision;
+    inherit (transformers.optional-dependencies)
+      audio
+      video
+      ;
     train = [
       accelerate
       datasets
@@ -72,7 +76,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "sentence_transformers" ];
 
@@ -98,7 +102,9 @@ buildPythonPackage rec {
     "test_mse_loss_matryoshka"
     "test_nanobeir_evaluator"
     "test_negative_dimension_raises_error"
+    "test_pairwise_angle_sim_even_and_odd_sparse_embeddings"
     "test_paraphrase_mining"
+    "test_pooling_prompt_attention_mask_respects_include_prompt"
     "test_pretrained_model"
     "test_router_as_middle_module"
     "test_router_backwards_compatibility"
@@ -111,12 +117,14 @@ buildPythonPackage rec {
     "test_router_with_trainer"
     "test_router_with_trainer_without_router_mapping"
     "test_save_and_load"
+    "test_simple"
     "test_simple_encode"
     "test_tokenize"
     "test_train_stsb"
     "test_trainer"
     "test_trainer_invalid_column_names"
     "test_trainer_multi_dataset_errors"
+    "test_unsupported_modality"
     "test_valid_initialization_no_warnings"
     "test_valid_initialization_with_weights"
     "test_weights_length_mismatch_raises_error"
@@ -148,33 +156,31 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Tests require network access
-    "tests/cross_encoder/test_cross_encoder.py"
+    "tests/base/modules/"
+    "tests/base/test_model.py"
+    "tests/base/test_model_card.py"
+    "tests/cross_encoder/evaluation/test_reranking.py"
+    "tests/cross_encoder/test_model.py"
+    "tests/cross_encoder/test_model_card.py"
     "tests/cross_encoder/test_train_stsb.py"
-    "tests/evaluation/test_information_retrieval_evaluator.py"
-    "tests/sparse_encoder/models/test_csr.py"
-    "tests/sparse_encoder/models/test_sparse_static_embedding.py"
+    "tests/sentence_transformer/test_compute_embeddings.py"
+    "tests/sentence_transformer/test_model.py"
+    "tests/sentence_transformer/test_model_card.py"
+    "tests/sentence_transformer/test_model_card_data.py"
+    "tests/sparse_encoder/modules/test_csr.py"
+    "tests/sparse_encoder/modules/test_sparse_static_embedding.py"
+    "tests/sparse_encoder/test_model.py"
+    "tests/sparse_encoder/test_model_card.py"
     "tests/sparse_encoder/test_opensearch_models.py"
     "tests/sparse_encoder/test_pretrained.py"
-    "tests/sparse_encoder/test_sparse_encoder.py"
-    "tests/test_compute_embeddings.py"
-    "tests/test_model_card_data.py"
-    "tests/test_multi_process.py"
-    "tests/test_pretrained_stsb.py"
-    "tests/test_sentence_transformer.py"
-    "tests/test_train_stsb.py"
     "tests/util/test_hard_negatives.py"
   ];
-
-  # Sentence-transformer needs a writable hf_home cache
-  postInstall = ''
-    export HF_HOME=$(mktemp -d)
-  '';
 
   meta = {
     description = "Multilingual Sentence & Image Embeddings with BERT";
     homepage = "https://github.com/huggingface/sentence-transformers";
-    changelog = "https://github.com/huggingface/sentence-transformers/releases/tag/${src.tag}";
+    changelog = "https://github.com/huggingface/sentence-transformers/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
   };
-}
+})

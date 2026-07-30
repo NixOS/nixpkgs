@@ -6,22 +6,20 @@
   kernelModuleMakeFlags,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lttng-modules-${kernel.version}";
-  version = "2.13.22";
+  version = "2.14.3";
 
   src = fetchFromGitHub {
     owner = "lttng";
     repo = "lttng-modules";
-    rev = "v${version}";
-    hash = "sha256-0fHjJBG/nTjXX8MVArvKDvn2ho9GLEodqAv/DcHLWis=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-W9mfCMboVkImqBtUlTxoBkn3IHjjfbZiSaeoeFX5IcM=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
-
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
 
   makeFlags = kernelModuleMakeFlags ++ [
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
@@ -46,4 +44,4 @@ stdenv.mkDerivation rec {
       (lib.versions.majorMinor kernel.modDirVersion) == "5.10"
       || (lib.versions.majorMinor kernel.modDirVersion) == "5.4";
   };
-}
+})

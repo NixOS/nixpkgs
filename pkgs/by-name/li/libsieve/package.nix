@@ -3,12 +3,12 @@
   stdenv,
   fetchurl,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.3.1";
   pname = "libsieve";
 
   src = fetchurl {
-    url = "https://github.com/downloads/sodabrew/libsieve/libsieve-${version}.tar.gz";
+    url = "https://github.com/downloads/sodabrew/libsieve/libsieve-${finalAttrs.version}.tar.gz";
     sha256 = "1gllhl9hbmc86dq3k98d4kjs5bwk0p2rlk7ywqj3fjn7jw6mbhcj";
   };
 
@@ -18,4 +18,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.unix;
   };
-}
+})

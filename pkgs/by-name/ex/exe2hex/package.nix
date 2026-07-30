@@ -35,6 +35,6 @@ python3Packages.buildPythonApplication {
     homepage = "https://github.com/g0tmi1k/exe2hex";
     mainProgram = "exe2hex";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    maintainers = [ ];
   };
 }

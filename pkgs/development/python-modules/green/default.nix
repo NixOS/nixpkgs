@@ -36,7 +36,7 @@ buildPythonPackage rec {
   checkPhase = ''
     $out/bin/green -tvvv \
       green.test.test_version \
-      green.test.test_cmdline \
+      green.test.test_cmdline
   '';
 
   pythonImportsCheck = [ "green" ];

@@ -5,7 +5,7 @@
   libarchive,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "stacs";
   version = "0.5.1";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "stacscan";
     repo = "stacs";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-u0yFzId5RAOnJfTDPRUc8E624zIWyCDe3/WlrJ5iuxA=";
   };
 
@@ -54,7 +54,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Static token and credential scanner";
     mainProgram = "stacs";
     homepage = "https://github.com/stacscan/stacs";
-    license = with lib.licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

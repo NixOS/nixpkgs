@@ -20,8 +20,6 @@ buildPythonPackage rec {
     hash = "sha256-B2wtLurzgk59kTooH51a2dewK7aEyA0dAm64Wp+tqhM=";
   };
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     flit-scm
     setuptools-scm

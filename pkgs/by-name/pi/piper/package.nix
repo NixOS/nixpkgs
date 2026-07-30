@@ -16,7 +16,7 @@
   librsvg,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "piper";
   version = "0.8";
 
@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "libratbag";
     repo = "piper";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-j58fL6jJAzeagy5/1FmygUhdBm+PAlIkw22Rl/fLff4=";
   };
 
@@ -69,4 +69,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ mvnetbiz ];
     platforms = lib.platforms.linux;
   };
-}
+})

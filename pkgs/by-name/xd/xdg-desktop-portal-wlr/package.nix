@@ -16,19 +16,19 @@
   pipewire,
   scdoc,
   slurp,
-  systemd,
+  systemdLibs,
   wayland,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-wlr";
-  version = "0.8.1";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = "xdg-desktop-portal-wlr";
-    rev = "v${version}";
-    sha256 = "sha256-FltwfZtxKdbJuDYVQJTTtEE/WHV5AaDnwPnAkN76qTY=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-MBPHRVw1J+z8V8V9v06L9QJl2jM6P3GxXuQ8XDOdah0=";
   };
 
   strictDeps = true;
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     libdrm
     libgbm
     pipewire
-    systemd
+    systemdLibs
     wayland
     wayland-protocols
   ];
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
   };
-}
+})

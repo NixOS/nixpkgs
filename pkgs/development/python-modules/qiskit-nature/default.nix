@@ -30,8 +30,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "Qiskit";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "qiskit-nature";
+    tag = version;
     hash = "sha256-SVzg3McB885RMyAp90Kr6/iVKw3Su9ucTob2jBckBo0=";
   };
 

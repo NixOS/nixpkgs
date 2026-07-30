@@ -20,11 +20,11 @@
 }:
 let
   pname = "glibc";
-  version = "2.38";
+  version = "2.42";
 
   src = fetchurl {
     url = "mirror://gnu/libc/glibc-${version}.tar.xz";
-    hash = "sha256-+4KZiZiyspllRnvBtp0VLpwwfSzzAcnq+0VVt3DvP9I=";
+    hash = "sha256-0XdeMuRijmTvkw9DW2e7Y691may2viszW58Z8WUJ8X8=";
   };
 
   linkerFile =
@@ -33,6 +33,7 @@ let
       i686-linux = "ld-linux";
     }
     .${buildPlatform.system};
+
 in
 bash.runCommand "${pname}-${version}"
   {
@@ -97,11 +98,18 @@ bash.runCommand "${pname}-${version}"
     cd build
     # libstdc++.so is built against musl and fails to link
     export CXX=false
+    export CFLAGS="-O1"
     bash ../configure \
       --prefix=$out \
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
-      --with-headers=${linux-headers}/include
+      --with-headers=${linux-headers}/include \
+      --disable-dependency-tracking \
+      --disable-nscd \
+      --disable-build-nscd \
+      --disable-profile \
+      --disable-timezone-tools \
+      --disable-mathvec
 
     # Build
     make -j $NIX_BUILD_CORES
@@ -110,4 +118,8 @@ bash.runCommand "${pname}-${version}"
     make -j $NIX_BUILD_CORES INSTALL_UNCOMPRESSED=yes install
     ln -s $(ls -d ${linux-headers}/include/* | grep -v scsi\$) $out/include/
     find $out/{bin,sbin,lib,libexec} -type f -exec strip --strip-unneeded {} + || true
+
+    # localedef + iconv() are never invoked downstream of this glibc
+    rm -rf $out/share/i18n $out/lib/gconv $out/share/locale
+    rm -rf $out/bin $out/sbin
   ''

@@ -42,7 +42,7 @@
   z3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ocaml${ocaml.version}-bap";
   version = "2.5.0+pr1621";
   src = fetchFromGitHub {
@@ -53,15 +53,15 @@ stdenv.mkDerivation rec {
   };
 
   sigs = fetchurl {
-    url = "https://github.com/BinaryAnalysisPlatform/bap/releases/download/v${version}/sigs.zip";
+    url = "https://github.com/BinaryAnalysisPlatform/bap/releases/download/v${finalAttrs.version}/sigs.zip";
     sha256 = "0d69jd28z4g64mglq94kj5imhmk5f6sgcsh9q2nij3b0arpcliwk";
   };
 
   createFindlibDestdir = true;
 
   setupHook = writeText "setupHook.sh" ''
-    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/ocaml${ocaml.version}-bap-${version}/"
-    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/ocaml${ocaml.version}-bap-${version}-llvm-plugins/"
+    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/ocaml${ocaml.version}-bap-${finalAttrs.version}/"
+    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/ocaml${ocaml.version}-bap-${finalAttrs.version}-llvm-plugins/"
   '';
 
   nativeBuildInputs = [
@@ -134,7 +134,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--enable-everything ${disableIda} ${disableGhidra}"
+    "--enable-everything ${finalAttrs.disableIda} ${finalAttrs.disableGhidra}"
     "--with-llvm-config=${llvm.dev}/bin/llvm-config"
   ];
 
@@ -146,4 +146,4 @@ stdenv.mkDerivation rec {
     mainProgram = "bap";
     broken = lib.versionOlder ocaml.version "4.08";
   };
-}
+})

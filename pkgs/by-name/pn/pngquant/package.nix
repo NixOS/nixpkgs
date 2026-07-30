@@ -8,7 +8,7 @@
   lcms2,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pngquant";
   version = "3.0.3";
 
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "kornelski";
     repo = "pngquant";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-u2zEp9Llo+c/+1QGW4V4r40KQn/ATHCTEsrpy7bRf/I=";
     fetchSubmodules = true;
   };
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     homepage = "https://pngquant.org/";
     description = "Tool to convert 24/32-bit RGBA PNGs to 8-bit palette with alpha channel preserved";
-    changelog = "https://github.com/kornelski/pngquant/raw/${version}/CHANGELOG";
+    changelog = "https://github.com/kornelski/pngquant/raw/${finalAttrs.version}/CHANGELOG";
     platforms = lib.platforms.unix;
     license = with lib.licenses; [
       gpl3Plus
@@ -57,4 +57,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "pngquant";
     maintainers = [ ];
   };
-}
+})

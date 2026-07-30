@@ -10,18 +10,21 @@
   fontconfig,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wgpu-utils";
-  version = "25.0.2";
+  version = "29.0.1";
 
   src = fetchFromGitHub {
     owner = "gfx-rs";
     repo = "wgpu";
-    tag = "wgpu-v${version}";
-    hash = "sha256-Na8UWMEzY0mvw8YERZ86PH79Z5YlXITPdOYha7Ahn7k=";
+    tag = "wgpu-v${finalAttrs.version}";
+    hash = "sha256-BLw1HnB0DghtWAe8jo6GPO54U3qNNO4yprArme1CdeE=";
   };
 
-  cargoHash = "sha256-9o1Tb0pVTc3iWPjNlAPBQX72djcx3EPJhxuUW6xZfCs=";
+  # cargo-auditable fails on wgpu's dep:-based feature wiring.
+  auditable = false;
+
+  cargoHash = "sha256-QMH5GHjOHbzYdFUQxJ6aEQ+rX6Okl1HYog0hMh6bc8w=";
 
   nativeBuildInputs = [
     pkg-config
@@ -52,4 +55,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ erictapen ];
     mainProgram = "wgpu-info";
   };
-}
+})

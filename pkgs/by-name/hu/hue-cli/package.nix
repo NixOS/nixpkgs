@@ -17,7 +17,6 @@ bundlerApp {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
-      manveru
       nicknovitski
     ];
     mainProgram = "hue";

@@ -10,6 +10,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "yetris";
   version = "2.3.0";
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   src = fetchFromGitHub {
     owner = "alexdantas";
     repo = "yetris";

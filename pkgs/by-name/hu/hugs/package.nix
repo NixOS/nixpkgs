@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ bison ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=implicit-int"
     "-Wno-error=implicit-function-declaration"
   ];
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
     mainProgram = "hugs";
     homepage = "https://www.haskell.org/hugs";
     description = "Haskell interpreter";
-    maintainers = with lib.maintainers; [ joachifm ];
+    maintainers = [ ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
   };

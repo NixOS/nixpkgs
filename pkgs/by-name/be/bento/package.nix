@@ -6,19 +6,19 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bento";
-  version = "1.14.0";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "warpstreamlabs";
     repo = "bento";
-    tag = "v${version}";
-    hash = "sha256-60hWz6DgJk5PJR/W19lFVxIubZBPLZ3SENc/3bpA9hs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3ZISLZzh8FYAE9riZ5Ya5h3LhwzHK4a5jJl8jeHiNoA=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-G9slXTly5cJT93wQrD8eITsF0rVdrpRW4r/YTYqW/Mc=";
+  vendorHash = "sha256-h9bH5aewbDAuOVAps3TMihjCITFiBT/bbqNJCUT0NN8=";
 
   subPackages = [
     "cmd/bento"
@@ -28,8 +28,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/warpstreamlabs/bento/internal/cli.Version=${version}"
-    "-X main.Version=${version}"
+    "-X github.com/warpstreamlabs/bento/internal/cli.Version=${finalAttrs.version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -40,9 +40,9 @@ buildGoModule rec {
   meta = {
     description = "High performance and resilient stream processor";
     homepage = "https://warpstreamlabs.github.io/bento/";
-    changelog = "https://github.com/warpstreamlabs/bento/releases/tag/v${version}";
+    changelog = "https://github.com/warpstreamlabs/bento/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ genga898 ];
     mainProgram = "bento";
   };
-}
+})

@@ -5,9 +5,9 @@
   fltk,
   alsa-lib,
   freetype,
-  libXrandr,
-  libXinerama,
-  libXcursor,
+  libxrandr,
+  libxinerama,
+  libxcursor,
   lv2,
   libjack2,
   cmake,
@@ -41,9 +41,9 @@ stdenv.mkDerivation {
     fltk
     alsa-lib
     freetype
-    libXrandr
-    libXinerama
-    libXcursor
+    libxrandr
+    libxinerama
+    libxcursor
     lv2
     libjack2
   ];

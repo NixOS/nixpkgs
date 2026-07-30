@@ -6,14 +6,19 @@
   fetchpatch2,
   openssl,
   python3,
-  enableNpm ? true,
 }:
 
 let
-  buildNodejs = callPackage ./nodejs.nix {
-    inherit openssl;
-    python = python3;
-  };
+  buildNodejs = callPackage ./nodejs.nix (
+    {
+      inherit openssl;
+      python = python3;
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      # libcxx21 makes FD tracking unreliable on Darwin. Pinning to libcxx20:
+      stdenv = buildPackages.llvmPackages_20.libcxxStdenv;
+    }
+  );
 
   gypPatches =
     if stdenv.buildPlatform.isDarwin then
@@ -24,9 +29,8 @@ let
       [ ];
 in
 buildNodejs {
-  inherit enableNpm;
-  version = "24.12.0";
-  sha256 = "6d3e891a016b90f6c6a19ea5cbc9c90c57eef9198670ba93f04fa82af02574ae";
+  version = "24.18.0";
+  sha256 = "e94afde24db08e0c564ee7110a2d5aab51ee0059382c9fd8233c54eec47b28f9";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -68,10 +72,8 @@ buildNodejs {
         revert = true;
       })
     ]
-    ++ lib.optionals stdenv.is32bit [
+    ++ lib.optionals stdenv.hostPlatform.is32bit [
       # see: https://github.com/nodejs/node/issues/58458
       ./v24-32bit.patch
-      # see: https://github.com/nodejs/node/issues/61025
-      ./sab-test-32bit.patch
     ];
 }

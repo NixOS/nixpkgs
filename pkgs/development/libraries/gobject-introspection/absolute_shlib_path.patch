@@ -2,15 +2,12 @@ diff --git a/giscanner/scannermain.py b/giscanner/scannermain.py
 index 64575557..1eb0a2b4 100644
 --- a/giscanner/scannermain.py
 +++ b/giscanner/scannermain.py
-@@ -95,6 +95,39 @@ def get_windows_option_group(parser):
+@@ -95,6 +95,36 @@ def get_windows_option_group(parser):
      return group
  
  
 +def _get_default_fallback_libpath():
-+    # Newer multiple-output-optimized stdenv has an environment variable
-+    # $outputLib which in turn specifies another variable which then is used as
-+    # the destination for the library contents (${!outputLib}/lib).
-+    store_path = os.environ.get(os.environ.get("outputLib")) if "outputLib" in os.environ else None
++    store_path = os.environ.get("NIX_GOBJECT_INTROSPECTION_DEFAULT_FALLBACK_LIBPATH")
 +    if store_path is None:
 +        outputs = os.environ.get("outputs", "out").split()
 +        if "lib" in outputs:

@@ -10,14 +10,14 @@
   libexif,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "epeg";
   version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "mattes";
     repo = "epeg";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-lttqarR8gScNIlSrc5uU3FLfvwxxJ2A1S4oESUW7oIw=";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ nh2 ];
     mainProgram = "epeg";
   };
-}
+})

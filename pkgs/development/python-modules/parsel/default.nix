@@ -3,26 +3,27 @@
   buildPythonPackage,
   cssselect,
   fetchPypi,
+  hatchling,
   jmespath,
   lxml,
   packaging,
   psutil,
   pytestCheckHook,
-  setuptools,
+  sybil,
   w3lib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "parsel";
-  version = "1.10.0";
+  version = "1.11.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-FPF9uVWfUbQzV7nf5DzshwqO+16khXq7Yk7G/4DYoIA=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-WSX+CH6xb8QEp+2R4x4sHiqbIw2ktk802BNYwNDifog=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     cssselect
@@ -35,6 +36,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     psutil
     pytestCheckHook
+    sybil
   ];
 
   pythonImportsCheck = [ "parsel" ];
@@ -47,8 +49,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to extract data from HTML and XML using XPath and CSS selectors";
     homepage = "https://github.com/scrapy/parsel";
-    changelog = "https://github.com/scrapy/parsel/blob/v${version}/NEWS";
+    changelog = "https://github.com/scrapy/parsel/blob/v${finalAttrs.version}/NEWS";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -5,7 +5,7 @@
   ocaml,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "bigstring";
   version = "0.3";
 
@@ -20,7 +20,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = "ocaml-bigstring";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0bkxwdcswy80f6rmx5wjza92xzq4rdqsb4a9fm8aav8bdqx021n8";
   };
 
@@ -31,6 +31,6 @@ buildDunePackage rec {
     homepage = "https://github.com/c-cube/ocaml-bigstring";
     description = "Bigstring built on top of bigarrays, and convenient functions";
     license = lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.alexfmpe ];
+    maintainers = [ ];
   };
-}
+})

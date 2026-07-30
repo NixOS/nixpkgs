@@ -1,6 +1,6 @@
 {
   lib,
-  flutter338,
+  flutter341,
   fetchFromGitHub,
   runCommand,
   yq-go,
@@ -10,16 +10,16 @@
 }:
 
 let
-  version = "2.4.2";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "LinwoodDev";
     repo = "Butterfly";
     tag = "v${version}";
-    hash = "sha256-81YuOqq8CZMn9zf1jG5tF3Spv6AI3XUr1qgaN8P8IJM=";
+    hash = "sha256-XyBiEXL/hLKwsV/Lc5SFaeqHlJxGgwET0PIy2Bu8t4A=";
   };
 in
-flutter338.buildFlutterApplication {
+flutter341.buildFlutterApplication {
   pname = "butterfly";
   inherit version src;
 

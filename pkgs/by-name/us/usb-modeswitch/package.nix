@@ -16,11 +16,14 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.6.2";
 
   src = fetchurl {
-    url = "http://www.draisberghof.de/usb_modeswitch/usb-modeswitch-${finalAttrs.version}.tar.bz2";
+    url = "https://www.draisberghof.de/usb_modeswitch/usb-modeswitch-${finalAttrs.version}.tar.bz2";
     hash = "sha256-96vTN3hKnRvTnLilh1GK/28qQ9kWFF6v2Asbi3FG22Y=";
   };
 
-  patches = [ ./pkg-config.patch ];
+  patches = [
+    ./configurable-usb-modeswitch.patch
+    ./pkg-config.patch
+  ];
 
   # Remove attempts to write to /etc and /var/lib.
   postPatch = ''
@@ -64,7 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Mode switching tool for controlling 'multi-mode' USB devices";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [
-      marcweber
       peterhoeg
     ];
     platforms = lib.platforms.linux;

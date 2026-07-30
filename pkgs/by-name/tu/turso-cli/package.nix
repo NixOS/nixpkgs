@@ -6,23 +6,23 @@
   installShellFiles,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "turso-cli";
-  version = "1.0.15";
+  version = "1.0.30";
 
   src = fetchFromGitHub {
     owner = "tursodatabase";
     repo = "turso-cli";
-    rev = "v${version}";
-    hash = "sha256-c4RtEqMCpRgr4p6STWrRv7+UIA11WySTNhyvkLgzRso=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-oV4lc4lbFM0G5d20P3xp2JwYOWRUc8o/v+ZTg30XL14=";
   };
 
-  vendorHash = "sha256-tBO21IgUczwMgrEyV7scV3YTY898lYHASaLeXqvBopU=";
+  vendorHash = "sha256-4OIJVL3N2mWOw7ZDP4xFCxa9zmUTPCA8N79TVoi1lys=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
-    "-X github.com/tursodatabase/turso-cli/internal/cmd.version=v${version}"
+    "-X github.com/tursodatabase/turso-cli/internal/cmd.version=v${finalAttrs.version}"
   ];
 
   preCheck = ''
@@ -49,4 +49,4 @@ buildGoModule rec {
       fryuni
     ];
   };
-}
+})

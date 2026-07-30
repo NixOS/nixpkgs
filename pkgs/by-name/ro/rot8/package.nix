@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rot8";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "efernau";
     repo = "rot8";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dHx3vFY0ztyTIlzUi22TYphPD5hvgfHrWaaeoGxnvW0=";
   };
 
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "rot8";
     platforms = lib.platforms.linux;
   };
-}
+})

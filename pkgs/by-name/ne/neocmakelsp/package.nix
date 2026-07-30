@@ -5,18 +5,18 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "neocmakelsp";
-  version = "0.9.1";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
-    owner = "Decodetalkers";
+    owner = "neocmakelsp";
     repo = "neocmakelsp";
-    rev = "v${version}";
-    hash = "sha256-4KgkI3wHBee4CAC5rQUV2YTckXfNz6nEZW9PvRygPKM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-OQ8DAM610YxilThJaAZ26NwOP6r/1k8Gzc0BEiCus+Q=";
   };
 
-  cargoHash = "sha256-cVl/UqD/8LhTCiy7ttIDcxfJQrKxGhzdLfh/disX+4c=";
+  cargoHash = "sha256-UbvabrM+rWAX80RjHW7uZJ8k4veAhp2LSX71ygvEjF8=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "CMake lsp based on tower-lsp and treesitter";
-    homepage = "https://github.com/Decodetalkers/neocmakelsp";
+    homepage = "https://github.com/neocmakelsp/neocmakelsp";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
@@ -39,4 +39,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "neocmakelsp";
   };
-}
+})

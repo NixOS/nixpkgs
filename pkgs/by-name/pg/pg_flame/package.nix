@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pg_flame";
   version = "1.2";
 
   src = fetchFromGitHub {
     owner = "mgartner";
     repo = "pg_flame";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-glvIv9GHIbp6IZUvZo9fyvkJ6QR03nMlrAOpZ3HfA6g=";
   };
 
@@ -23,4 +23,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     mainProgram = "pg_flame";
   };
-}
+})

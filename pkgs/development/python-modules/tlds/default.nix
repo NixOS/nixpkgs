@@ -6,16 +6,16 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tlds";
-  version = "2025102200";
+  version = "2026072401";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kichik";
     repo = "tlds";
-    tag = version;
-    hash = "sha256-rulYXgVjzPcb5cBi57u4uzR6KDCp+NUaUMzi1o/SrN4=";
+    tag = finalAttrs.version;
+    hash = "sha256-vG3t9Qt0iX1gRH3cGf0Prtfzu7kqAJNNjjAyHGRhdpQ=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

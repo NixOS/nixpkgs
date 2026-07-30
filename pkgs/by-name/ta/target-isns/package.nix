@@ -6,14 +6,14 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "target-isns";
   version = "0.6.8";
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
     repo = "target-isns";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1b6jjalvvkkjyjbg1pcgk8vmvc6xzzksyjnh2pfi45bbpya4zxim";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
   };
-}
+})

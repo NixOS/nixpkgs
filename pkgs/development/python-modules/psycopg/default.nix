@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchurl,
-  pythonOlder,
   replaceVars,
 
   # build
@@ -16,7 +15,6 @@
 
   # psycopg-c
   cython,
-  tomli,
 
   # docs
   furo,
@@ -34,14 +32,14 @@
 
 let
   pname = "psycopg";
-  version = "3.3.2";
+  version = "3.3.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = "psycopg";
     tag = version;
-    hash = "sha256-ynzXQkTnCCkJK3EZrGHSpzgMeeX92U6+08m8QtNfAc4=";
+    hash = "sha256-hHgswbqaoQRQrUxhNFG6tfmlap1mVUo/OkNsWF686U4=";
   };
 
   patches = [
@@ -76,9 +74,6 @@ let
     build-system = [
       cython
       setuptools
-    ]
-    ++ lib.optional (pythonOlder "3.11") [
-      tomli
     ];
 
     nativeBuildInputs = [
@@ -113,6 +108,9 @@ let
 
     dependencies = [ typing-extensions ];
 
+    # the psycopg-pool version isn't updated in tandem with psycopg
+    dontCheckPythonMetadata = true;
+
     # tested in psycopg
     doCheck = false;
 
@@ -138,12 +136,6 @@ buildPythonPackage rec {
   ];
 
   sphinxRoot = "../docs";
-
-  # Introduce this file necessary for the docs build via environment var
-  LIBPQ_DOCS_FILE = fetchurl {
-    url = "https://raw.githubusercontent.com/postgres/postgres/496a1dc44bf1261053da9b3f7e430769754298b4/doc/src/sgml/libpq.sgml";
-    hash = "sha256-JwtCngkoi9pb0pqIdNgukY8GbG5pUDZvrGAHZqjFOw4";
-  };
 
   inherit patches;
 
@@ -190,6 +182,11 @@ buildPythonPackage rec {
   ++ optional-dependencies.pool;
 
   env = {
+    # Introduce this file necessary for the docs build via environment var
+    LIBPQ_DOCS_FILE = fetchurl {
+      url = "https://raw.githubusercontent.com/postgres/postgres/496a1dc44bf1261053da9b3f7e430769754298b4/doc/src/sgml/libpq.sgml";
+      hash = "sha256-JwtCngkoi9pb0pqIdNgukY8GbG5pUDZvrGAHZqjFOw4";
+    };
     postgresqlEnableTCP = 1;
     PGUSER = "psycopg";
     PGDATABASE = "psycopg";
@@ -231,6 +228,7 @@ buildPythonPackage rec {
     "refcount"
     "timing"
     "flakey"
+    "slow"
   ];
 
   postCheck = ''

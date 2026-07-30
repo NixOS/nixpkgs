@@ -6,12 +6,12 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libunarr";
   version = "1.1.1";
 
   src = fetchurl {
-    url = "https://github.com/selmf/unarr/releases/download/v${version}/unarr-${version}.tar.xz";
+    url = "https://github.com/selmf/unarr/releases/download/v${finalAttrs.version}/unarr-${finalAttrs.version}.tar.xz";
     hash = "sha256-Mo76BOqZbdOJFrEkeozxdqwpuFyvkhdONNMZmN5BdNI=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.unix;
   };
-}
+})

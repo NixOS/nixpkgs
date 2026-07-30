@@ -14,7 +14,7 @@
   nixosTests,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "terminator";
   version = "2.1.5";
   pyproject = true;
@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "gnome-terminator";
     repo = "terminator";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RM/7jUWGDV0EdMyMeLsCrvevH+5hZSJVAKmtalxNKG8=";
   };
 
@@ -83,10 +83,10 @@ python3.pkgs.buildPythonApplication rec {
       quadkonsole, etc. in that the main focus is arranging terminals in grids
       (tabs is the most common default method, which Terminator also supports).
     '';
-    changelog = "https://github.com/gnome-terminator/terminator/releases/tag/${src.tag}";
+    changelog = "https://github.com/gnome-terminator/terminator/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/gnome-terminator/terminator";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ bjornfor ];
     platforms = lib.platforms.linux;
   };
-}
+})

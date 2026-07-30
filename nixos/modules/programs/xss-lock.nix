@@ -41,7 +41,7 @@ in
           "${pkgs.xss-lock}/bin/xss-lock"
           "--session \${XDG_SESSION_ID}"
         ]
-        ++ (builtins.map lib.escapeShellArg cfg.extraOptions)
+        ++ (map lib.escapeShellArg cfg.extraOptions)
         ++ [
           "--"
           cfg.lockerCommand

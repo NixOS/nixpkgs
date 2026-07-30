@@ -26,6 +26,9 @@ stdenv.mkDerivation {
     # Fix the build against gcc-14:
     # https://github.com/scheme/scsh/pull/51
     ./gcc-14-p2.patch
+    # Fix the build against gcc-15:
+    # https://github.com/scheme/scsh/pull/52
+    ./gcc-15.patch
   ];
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -41,7 +44,7 @@ stdenv.mkDerivation {
     description = "Scheme shell";
     homepage = "http://www.scsh.net/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ joachifm ];
+    maintainers = [ ];
     platforms = with lib.platforms; unix;
     mainProgram = "scsh";
   };

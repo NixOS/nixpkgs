@@ -34,6 +34,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/LaunchPlatform/wtforms-bootstrap5";
     changelog = "https://github.com/LaunchPlatform/wtforms-bootstrap5/releases/tag/${version}";
     license = lib.licenses.mit;
-    teams = [ lib.teams.wdz ];
   };
 }

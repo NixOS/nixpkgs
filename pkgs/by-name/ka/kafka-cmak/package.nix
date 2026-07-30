@@ -8,7 +8,7 @@
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
-  name = "CMAK";
+  pname = "kafka-cmak";
   version = "3.0.0.6";
 
   src = fetchzip {

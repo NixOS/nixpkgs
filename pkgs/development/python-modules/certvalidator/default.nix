@@ -2,24 +2,29 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   asn1crypto,
   oscrypto,
   cacert,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "certvalidator";
   version = "0.11.1";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "wbond";
     repo = "certvalidator";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-yVF7t4FuU3C9fDg67JeM7LWZZh/mv5F4EKmjlO4AuBY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     asn1crypto
     oscrypto
   ];
@@ -39,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ baloo ];
   };
-}
+})

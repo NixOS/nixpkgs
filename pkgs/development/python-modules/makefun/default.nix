@@ -4,11 +4,11 @@
   buildPythonPackage,
 
   # build-system
-  setuptools,
+  setuptools_80,
   setuptools-scm,
 
   # tests
-  pytest7CheckHook,
+  pytest8_3CheckHook,
 }:
 
 buildPythonPackage rec {
@@ -27,11 +27,13 @@ buildPythonPackage rec {
   '';
 
   build-system = [
-    setuptools
+    setuptools_80
     setuptools-scm
   ];
 
-  nativeCheckInputs = [ pytest7CheckHook ];
+  nativeCheckInputs = [
+    pytest8_3CheckHook
+  ];
 
   pythonImportsCheck = [ "makefun" ];
 

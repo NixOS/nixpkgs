@@ -4,13 +4,13 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rsass";
   version = "0.29.0";
 
   src = fetchCrate {
     pname = "rsass-cli";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-3Xi+8TKmlZJYsZogzezce0KvasqTRfh04SmeC1UbJQ0=";
   };
 
@@ -20,11 +20,11 @@ rustPlatform.buildRustPackage rec {
     description = "Sass reimplemented in rust with nom";
     mainProgram = "rsass";
     homepage = "https://github.com/kaj/rsass";
-    changelog = "https://github.com/kaj/rsass/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/kaj/rsass/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       mit # or
       asl20
     ];
     maintainers = [ ];
   };
-}
+})

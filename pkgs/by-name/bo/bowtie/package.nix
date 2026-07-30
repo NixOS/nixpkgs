@@ -6,14 +6,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bowtie";
   version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "BenLangmead";
     repo = "bowtie";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-mWItmrTMPst/NnzSpxxTHcBztDqHPCza9yOsZPwp7G4=";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ prusnak ];
     platforms = lib.platforms.all;
   };
-}
+})

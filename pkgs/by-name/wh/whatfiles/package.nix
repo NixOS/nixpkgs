@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "whatfiles";
   version = "1.0";
 
   src = fetchFromGitHub {
     owner = "spieglt";
     repo = "whatfiles";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-5Ju9g7/B9uxLkQzV/MN3vBkjve4EAMseO6K4HTAoS/o=";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "whatfiles";
   };
-}
+})

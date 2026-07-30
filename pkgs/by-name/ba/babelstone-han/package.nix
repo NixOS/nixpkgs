@@ -2,29 +2,19 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
-let
-  version = "16.0.3";
-in
-
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "babelstone-han";
-  inherit version;
+  version = "16.0.3";
 
   src = fetchzip {
-    url = "https://babelstone.co.uk/Fonts/Download/BabelStoneHan-${version}.zip";
+    url = "https://babelstone.co.uk/Fonts/Download/BabelStoneHan-${finalAttrs.version}.zip";
     hash = "sha256-HmmRJLs51hoHoKQYdjbiivnJl+RhcBwzkng+5PoqX10=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/fonts/truetype
-    cp *.ttf $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Unicode CJK font with over 36000 Han characters";
@@ -34,4 +24,4 @@ stdenvNoCC.mkDerivation {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ emily ];
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "versus";
   version = "1.0";
 
   src = fetchFromGitHub {
     owner = "INFURA";
     repo = "versus";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jX2HRdrLwDjnrUofRzmsSFLMbiPh0a1DPv1tzl+StUg=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ mmahut ];
     mainProgram = "versus";
   };
-}
+})

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "1.9.8";
 
   src = fetchurl {
-    url = "http://download.camlcity.org/download/findlib-${version}.tar.gz";
+    url = "https://download.camlcity.org/download/findlib-${version}.tar.gz";
     hash = "sha256-ZiyRD3dOn+46GcTgV/OAWBqy/E7lLaR2EwSsnDG4hp0=";
   };
 
@@ -90,9 +90,7 @@ stdenv.mkDerivation rec {
     description = "O'Caml library manager";
     homepage = "http://projects.camlcity.org/projects/findlib.html";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      vbmithr
-    ];
+    maintainers = [ ];
     mainProgram = "ocamlfind";
     platforms = ocaml.meta.platforms or [ ];
   };

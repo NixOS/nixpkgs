@@ -9,7 +9,7 @@
   SDL,
   jack2,
   audiofile,
-  goocanvas, # graphical envelope editing
+  goocanvas_1, # graphical envelope editing
   libxml2,
   libsndfile,
   libpulseaudio,
@@ -55,6 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-alsa"
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   enableParallelBuilding = true;
 
   strictDeps = true;
@@ -74,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL # found by AM_PATH_SDL
     jack2
     audiofile
-    goocanvas
+    goocanvas_1
     libxml2 # found by PKG_CHECK_MODULES
     libsndfile
   ]

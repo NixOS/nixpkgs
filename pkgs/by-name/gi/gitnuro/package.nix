@@ -9,19 +9,19 @@
   libGL,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gitnuro";
   version = "1.5.0";
 
   src = fetchurl (
     if stdenv.hostPlatform.system == "x86_64-linux" then
       {
-        url = "https://github.com/JetpackDuba/Gitnuro/releases/download/v${version}/Gitnuro-linux-x86_64-${version}.jar";
+        url = "https://github.com/JetpackDuba/Gitnuro/releases/download/v${finalAttrs.version}/Gitnuro-linux-x86_64-${finalAttrs.version}.jar";
         hash = "sha256-EoBjw98O5gO2wTO34KMiFeteryYapZC83MUfIqxtbmQ=";
       }
     else if stdenv.hostPlatform.system == "aarch64-linux" then
       {
-        url = "https://github.com/JetpackDuba/Gitnuro/releases/download/v${version}/Gitnuro-linux-arm_aarch64-${version}.jar";
+        url = "https://github.com/JetpackDuba/Gitnuro/releases/download/v${finalAttrs.version}/Gitnuro-linux-arm_aarch64-${finalAttrs.version}.jar";
         hash = "sha256-oAmCapu9xFS1LMasj21q39Q/4yjLh6MZx79tC8Yjlec=";
       }
     else
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       icon = "com.jetpackduba.Gitnuro";
       desktopName = "Gitnuro";
       categories = [ "Development" ];
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
     })
   ];
 
@@ -75,4 +75,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ zendo ];
     mainProgram = "gitnuro";
   };
-}
+})

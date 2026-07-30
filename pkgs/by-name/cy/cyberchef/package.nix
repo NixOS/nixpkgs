@@ -21,15 +21,16 @@ let
       categories = [ "Development" ];
     }
   );
-  version = "10.19.4";
+  version = "11.2.0";
+  commit = "d358d82cbcb269d764a2deb598a37043bd054f45";
 in
 stdenv.mkDerivation {
   pname = "cyberchef";
   inherit version;
 
   src = fetchzip {
-    url = "https://github.com/gchq/CyberChef/releases/download/v${version}/CyberChef_v${version}.zip";
-    hash = "sha256-eOMo7kdxC5HfmMrKUhGZU3vnBXibO2Fz1ftIS9RAbjY=";
+    url = "https://github.com/gchq/CyberChef/releases/download/v${version}/CyberChef_${commit}.zip";
+    hash = "sha256-3DXIrxCefiEYqZOPs8pO5jWdHFj7cPGgrwZcwE4ESPg=";
     stripRoot = false;
   };
 

@@ -5,24 +5,37 @@
   versionCheckHook,
   installShellFiles,
   nix-update-script,
+  pkg-config,
+  libgit2,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "teamtype";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "teamtype";
     repo = "teamtype";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-B/4xR16cEG90fK12XQqjlpWzd6tyUVYXOBXK0j5fvNU=";
+    hash = "sha256-74MufpLTACkPevzOyaXw2Rr7S7VvaFEYHEyTQYwKVT8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/daemon";
 
-  cargoHash = "sha256-yuAk4SqYzNK1gD6lqVVDOyAJNq/NIf44DWdZ3aM/Q8s=";
+  cargoHash = "sha256-OIOffnCC9PlT/SXPOuTnKx3feZnkHP+jzbQIJWX0tzk=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
+
+  buildInputs = [
+    libgit2
+  ];
+
+  env = {
+    LIBGIT2_NO_VENDOR = 1;
+  };
 
   postInstall = ''
     installManPage \
@@ -50,8 +63,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "teamtype";
     teams = [ lib.teams.ngi ];
     maintainers = with lib.maintainers; [
-      prince213
+      alerque
       ethancedwards8
+      prince213
     ];
   };
 })

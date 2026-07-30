@@ -8,14 +8,14 @@
   html-tidy,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "html-tidy";
   version = "5.8.0";
 
   src = fetchFromGitHub {
     owner = "htacg";
     repo = "tidy-html5";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-vzVWQodwzi3GvC9IcSQniYBsbkJV20iZanF33A0Gpe0=";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ edwtjo ];
     mainProgram = "tidy";
   };
-}
+})

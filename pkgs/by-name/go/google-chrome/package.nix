@@ -25,20 +25,20 @@
   libdrm,
   libglvnd,
   libkrb5,
-  libX11,
+  libx11,
   libxcb,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
   libxkbcommon,
-  libXrandr,
-  libXrender,
-  libXScrnSaver,
+  libxrandr,
+  libxrender,
+  libxscrnsaver,
   libxshmfence,
-  libXtst,
+  libxtst,
   libgbm,
   nspr,
   nss,
@@ -94,8 +94,13 @@
   addDriverRunpath,
   undmg,
 
-  # For QT support
+  # Enables Chrome's "Use QT" appearance to introspect the user's Plasma theme
+  plasmaSupport ? false,
   qt6,
+  kdePackages,
+
+  # Create a symlink at $out/bin/google-chrome
+  withSymlink ? true,
 }:
 
 let
@@ -130,20 +135,20 @@ let
     libglvnd
     libkrb5
     libpng
-    libX11
+    libx11
     libxcb
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
     libxkbcommon
-    libXrandr
-    libXrender
-    libXScrnSaver
+    libxrandr
+    libxrender
+    libxscrnsaver
     libxshmfence
-    libXtst
+    libxtst
     libgbm
     nspr
     nss
@@ -164,18 +169,36 @@ let
   ++ [
     gtk3
     gtk4
+  ]
+  ++ lib.optionals plasmaSupport [
     qt6.qtbase
     qt6.qtwayland
+    kdePackages.plasma-integration
+    kdePackages.breeze
   ];
 
   linux = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "143.0.7499.192";
+    version = "150.0.7871.186";
 
-    src = fetchurl {
-      url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${finalAttrs.version}-1_amd64.deb";
-      hash = "sha256-ZITChtyAifDrQdEkuW4+9MTLD/KJ3A+GmOHxuFH7yDQ=";
-    };
+    src =
+      let
+        debArch =
+          {
+            aarch64-linux = "arm64";
+            x86_64-linux = "amd64";
+          }
+          .${stdenvNoCC.hostPlatform.system};
+      in
+      fetchurl {
+        url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${finalAttrs.version}-1_${debArch}.deb";
+        hash =
+          {
+            amd64 = "sha256-QZPgC21dWWnuY/emlZaGj1RqoOjLB3s+C/nMHixxnQA=";
+            arm64 = "sha256-AllqLQfbFu7EJCK5Xeo3TuItGMnOqunpMBKY4OJnj7M=";
+          }
+          .${debArch};
+      };
 
     # With strictDeps on, some shebangs were not being patched correctly
     # ie, $out/share/google/chrome/google-chrome
@@ -246,9 +269,13 @@ let
 
       # "--simulate-outdated-no-au" disables auto updates and browser outdated popup
       makeWrapper "$out/share/google/$appname/google-$appname" "$exe" \
-        --prefix QT_PLUGIN_PATH  : "${qt6.qtbase}/lib/qt-6/plugins" \
-        --prefix QT_PLUGIN_PATH  : "${qt6.qtwayland}/lib/qt-6/plugins" \
-        --prefix NIXPKGS_QT6_QML_IMPORT_PATH : "${qt6.qtwayland}/lib/qt-6/qml" \
+        ${lib.optionalString plasmaSupport ''
+          --prefix QT_PLUGIN_PATH  : "${qt6.qtbase}/lib/qt-6/plugins" \
+          --prefix QT_PLUGIN_PATH  : "${qt6.qtwayland}/lib/qt-6/plugins" \
+          --prefix QT_PLUGIN_PATH  : "${kdePackages.plasma-integration}/lib/qt-6/plugins" \
+          --prefix QT_PLUGIN_PATH  : "${kdePackages.breeze}/lib/qt-6/plugins" \
+          --prefix NIXPKGS_QT6_QML_IMPORT_PATH : "${qt6.qtwayland}/lib/qt-6/qml" \
+        ''} \
         --prefix LD_LIBRARY_PATH : "$rpath" \
         --prefix PATH            : "$binpath" \
         --suffix PATH            : "${lib.makeBinPath [ xdg-utils ]}" \
@@ -268,15 +295,19 @@ let
 
       runHook postInstall
     '';
+
+    postInstall = lib.optionalString withSymlink ''
+      ln -s $out/bin/google-chrome-stable $out/bin/google-chrome
+    '';
   });
 
   darwin = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "143.0.7499.193";
+    version = "150.0.7871.187";
 
     src = fetchurl {
-      url = "http://dl.google.com/release2/chrome/negywdvxiridhsd2tz7neakcju_143.0.7499.193/GoogleChrome-143.0.7499.193.dmg";
-      hash = "sha256-Sl32kUBXkiQzhw7rga8+nGp9WDddxD3NuZBwMTfYZFo=";
+      url = "http://dl.google.com/release2/chrome/ecziwrw2etq4lm3vlbpv5wzvce_150.0.7871.187/GoogleChrome-150.0.7871.187.dmg";
+      hash = "sha256-I1a+wR5zNfOSYyns2ehDek5DP1xccRQvmBLymxB/R7A=";
     };
 
     dontPatch = true;
@@ -305,20 +336,26 @@ let
         --add-flags ${lib.escapeShellArg commandLineArgs}
       runHook postInstall
     '';
+
+    postInstall = lib.optionalString withSymlink ''
+      ln -s $out/bin/google-chrome-stable $out/bin/google-chrome
+    '';
   });
 
   passthru.updateScript = ./update.sh;
 
   meta = {
-    changelog = "https://chromereleases.googleblog.com/";
     description = "Freeware web browser developed by Google";
     homepage = "https://www.google.com/chrome/browser/";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
-      johnrtitor
+      iedame
       mdaniels5757
     ];
-    platforms = lib.platforms.darwin ++ [ "x86_64-linux" ];
+    platforms = lib.platforms.darwin ++ [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "google-chrome-stable";
   };

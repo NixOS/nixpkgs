@@ -7,11 +7,11 @@
 
 let
   pname = "cables";
-  version = "0.9.0";
+  version = "0.10.2";
 
   src = fetchurl {
     url = "https://github.com/cables-gl/cables_electron/releases/download/v${version}/cables-${version}-linux-x64.AppImage";
-    sha256 = "sha256-UkvTPAb1etZt1PUTaTN1LdvF3XzO3RynSUY6ZElirZE=";
+    sha256 = "sha256-pUwvUeHXXfa5sOhbL5oiVyotskul6v1c0GryjW1Jof0=";
   };
 
   appimageContents = appimageTools.extract {

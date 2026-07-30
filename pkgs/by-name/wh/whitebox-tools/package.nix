@@ -11,14 +11,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "whitebox_tools";
   version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "jblindsay";
     repo = "whitebox-tools";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-kvtfEEydwonoDux1VbAxqrF/Hf8Qh8mhprYnROGOC6g=";
   };
 
@@ -47,4 +47,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ mpickering ];
     teams = [ lib.teams.geospatial ];
   };
-}
+})

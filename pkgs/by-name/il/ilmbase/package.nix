@@ -38,6 +38,6 @@ stdenv.mkDerivation {
     homepage = "https://www.openexr.com/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
-    insecure = true;
+    inherit (openexr_2.meta) knownVulnerabilities;
   };
 }

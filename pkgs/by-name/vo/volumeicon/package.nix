@@ -10,14 +10,14 @@
   gettext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "volumeicon";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "Maato";
     repo = "volumeicon";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-zYKC7rOoLf08rV4B43TrGNBcXfSBFxWZCe9bQD9JzaA";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     mainProgram = "volumeicon";
   };
-}
+})

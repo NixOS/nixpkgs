@@ -17,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "usort";
-  version = "1.1.1";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "usort";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sSc6TpsErz+93+dlKk+RZnyZFAp7qjpNYMVCEW9lXds=";
+    hash = "sha256-hoBk8KAml/YOscno9605I3t4z10vQPlh22wH1XHcQqY=";
   };
 
   build-system = [

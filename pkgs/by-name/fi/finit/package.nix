@@ -7,17 +7,21 @@
   libcap,
   libite,
   libuev,
+  shadow,
+  sysctl,
+  plymouth,
+  plymouthSupport ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "finit";
-  version = "4.15";
+  version = "4.17";
 
   src = fetchFromGitHub {
     owner = "finit-project";
     repo = "finit";
     tag = finalAttrs.version;
-    hash = "sha256-HZQHWJODWbMGH1m/P6teo0j9BDwWmKKHIa7YN0vA+c4=";
+    hash = "sha256-sH4xZNMEuIS+r6rVQAKnsHtSyTe2B6gdYcmH9J8eSZ0=";
   };
 
   postPatch = ''
@@ -57,12 +61,21 @@ stdenv.mkDerivation (finalAttrs: {
 
     # monitor kernel events, like ac power status
     "--with-keventd"
+  ]
+  ++ lib.optionals plymouthSupport [
+    "--enable-plymouth-plugin=yes"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-D_PATH_LOGIN=\"/run/current-system/sw/bin/login\""
-    "-DSYSCTL_PATH=\"/run/current-system/sw/bin/sysctl\""
-  ];
+  env.NIX_CFLAGS_COMPILE = toString (
+    [
+      "-D_PATH_LOGIN=\"${shadow}/bin/login\""
+      "-DSYSCTL_PATH=\"${sysctl}/bin/sysctl\""
+    ]
+    ++ lib.optionals plymouthSupport [
+      "-DPLYMOUTH_PATH=\"${plymouth}/bin/plymouth\""
+      "-DPLYMOUTHD_PATH=\"${plymouth}/bin/plymouthd\""
+    ]
+  );
 
   meta = {
     description = "Fast init for Linux";

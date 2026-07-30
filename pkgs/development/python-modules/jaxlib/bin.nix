@@ -18,7 +18,7 @@
 }:
 
 let
-  version = "0.8.2";
+  version = "0.11.0";
   inherit (python) pythonVersion;
 
   # As of 2023-06-06, google/jax upstream is no longer publishing CPU-only wheels to their GCS bucket. Instead the
@@ -46,68 +46,52 @@ let
         };
     in
     {
-      "3.11-x86_64-linux" = getSrcFromPypi {
-        platform = "manylinux_2_27_x86_64";
-        dist = "cp311";
-        hash = "sha256-zPd9qReiCTUkfJkGkd7Py90Gwl7wrJTZFKBKrbIvcUw=";
-      };
-      "3.11-aarch64-linux" = getSrcFromPypi {
-        platform = "manylinux_2_27_aarch64";
-        dist = "cp311";
-        hash = "sha256-u4m+RSsbgI0/iPwBxBWzZKJgvkzHrBIMA4AJ9hUKMtw=";
-      };
-      "3.11-aarch64-darwin" = getSrcFromPypi {
-        platform = "macosx_11_0_arm64";
-        dist = "cp311";
-        hash = "sha256-SQvwywKcc8ZclDESS4bNyVCC28H7dvxUnSTXXaM+VFQ=";
-      };
-
       "3.12-x86_64-linux" = getSrcFromPypi {
         platform = "manylinux_2_27_x86_64";
         dist = "cp312";
-        hash = "sha256-K5eJvQj4sMxaXBKuiW/kMtWULjLkFwkbi1qWqab9XPE=";
+        hash = "sha256-fqncBtlPU23qvPMEUTFDvIn1EXPd/XhtRPisMD799kM=";
       };
       "3.12-aarch64-linux" = getSrcFromPypi {
         platform = "manylinux_2_27_aarch64";
         dist = "cp312";
-        hash = "sha256-OxblDFtzDJ3QpJ5V8az6pyKwCxrwUipZFVjcwEZCUvI=";
+        hash = "sha256-G3Z8TXrU38Y1gxO2OubYPDVx086WbeBNiq8p60RjN4Y=";
       };
       "3.12-aarch64-darwin" = getSrcFromPypi {
         platform = "macosx_11_0_arm64";
         dist = "cp312";
-        hash = "sha256-Aj3m8/Vtoq9wN5cJllAFhjMf21C1MOy7VLlmbaYzvQA=";
+        hash = "sha256-9b8LO/wu9HeFgARzidrLUa4ADlDGs7b5jRB4iScGbJc=";
       };
 
       "3.13-x86_64-linux" = getSrcFromPypi {
         platform = "manylinux_2_27_x86_64";
         dist = "cp313";
-        hash = "sha256-G/vPbD3iIXhPpM22dloJ1xy0KYsVYms9BAmz382Khmc=";
+        hash = "sha256-M92UBcqwXuTz7MOpEokyPpvS8I0lmQ5dRf+4Uk9RlQY=";
       };
       "3.13-aarch64-linux" = getSrcFromPypi {
         platform = "manylinux_2_27_aarch64";
         dist = "cp313";
-        hash = "sha256-fDBPOgFpZbnR9SOaigOZpzkl9WBP6RTFymbs9zS/ZCI=";
+        hash = "sha256-ESoBxYRwen0OhjT9Vd1+//6BKWbmDC06yE6MJORXEzY=";
       };
       "3.13-aarch64-darwin" = getSrcFromPypi {
         platform = "macosx_11_0_arm64";
         dist = "cp313";
-        hash = "sha256-TQBtuWvgIMgWUhKhIWNy+KysT/T4+wZ3Q9aU7yswGs4=";
+        hash = "sha256-iLNJqpXkUsqjCmcjMg6T7HvRqySenwvykADaG1765zM=";
       };
 
       "3.14-x86_64-linux" = getSrcFromPypi {
         platform = "manylinux_2_27_x86_64";
         dist = "cp314";
-        hash = "sha256-5ql9+wIy7tmiu244KOT2gtusGn/qhAv9pXTK4tv1+vk=";
+        hash = "sha256-YSXahTJhBkG30+p5JiF82rUtzLKU72YVRV4rbsueLuY=";
       };
       "3.14-aarch64-linux" = getSrcFromPypi {
         platform = "manylinux_2_27_aarch64";
         dist = "cp314";
-        hash = "sha256-aBCN/w3nStxGgBa+mhn4Dv5IxmDA1aEiKHCUtEsJKvw=";
+        hash = "sha256-SDQpzH+n/Wogy1D2ZsjS1Jnvt+m6MWOBHAHwUa1gV8Q=";
       };
       "3.14-aarch64-darwin" = getSrcFromPypi {
         platform = "macosx_11_0_arm64";
         dist = "cp314";
-        hash = "sha256-vv+wBOfutcmvskQ54rLPRaTuPj6K30XjVe3yr2Ks+Lg=";
+        hash = "sha256-fmwOI3SUO6cZH+GW4iBnt4mJTFjPbd0kyZca5kLeWO4=";
       };
     };
 in
@@ -115,6 +99,8 @@ buildPythonPackage {
   pname = "jaxlib";
   inherit version;
   format = "wheel";
+
+  __structuredAttrs = true;
 
   # See https://discourse.nixos.org/t/ofborg-does-not-respect-meta-platforms/27019/6.
   src = (
@@ -143,12 +129,5 @@ buildPythonPackage {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ samuela ];
-    badPlatforms = [
-      # Fails at pythonImportsCheckPhase:
-      # ...-python-imports-check-hook.sh/nix-support/setup-hook: line 10: 28017 Illegal instruction: 4
-      # /nix/store/5qpssbvkzfh73xih07xgmpkj5r565975-python3-3.11.9/bin/python3.11 -c
-      # 'import os; import importlib; list(map(lambda mod: importlib.import_module(mod), os.environ["pythonImportsCheck"].split()))'
-      "x86_64-darwin"
-    ];
   };
 }

@@ -1,11 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  isPy27,
   fetchPypi,
-  pythonOlder,
   setuptools,
-  importlib-metadata,
   pytestCheckHook,
 }:
 
@@ -14,8 +11,6 @@ buildPythonPackage rec {
   version = "0.9.0";
   pyproject = true;
 
-  disabled = isPy27;
-
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
@@ -23,8 +18,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

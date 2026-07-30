@@ -2,28 +2,28 @@
   lib,
   stdenv,
   fetchurl,
-  libX11,
-  libXext,
-  libXrandr,
-  libXrender,
+  libx11,
+  libxext,
+  libxrandr,
+  libxrender,
   xorgproto,
   patches ? [ ],
 }:
 
 stdenv.mkDerivation rec {
   pname = "evilwm";
-  version = "1.4.3";
+  version = "1.5";
 
   src = fetchurl {
-    url = "http://www.6809.org.uk/evilwm/evilwm-${version}.tar.gz";
-    sha256 = "sha256-1ZRbILEskdskEvrA29o/ucPsjeu44bEJg4mSsrG75dQ=";
+    url = "https://www.6809.org.uk/evilwm/evilwm-${version}.tar.gz";
+    sha256 = "sha256-YQSFJBPm1QZpNh3K3aWiXTnisrDJWmOEAiyQWVeidA8=";
   };
 
   buildInputs = [
-    libX11
-    libXext
-    libXrandr
-    libXrender
+    libx11
+    libxext
+    libxrandr
+    libxrender
     xorgproto
   ];
 
@@ -42,10 +42,10 @@ stdenv.mkDerivation rec {
     license = {
       shortName = "evilwm";
       fullName = "Custom, inherited from aewm and 9wm";
-      url = "http://www.6809.org.uk/evilwm/";
+      url = "https://www.6809.org.uk/evilwm/";
       free = true;
     }; # like BSD/MIT, but Share-Alike'y; See README.
-    maintainers = with lib.maintainers; [ amiloradovsky ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "evilwm";
   };

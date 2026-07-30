@@ -9,14 +9,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libscfg";
   version = "0.1.1";
 
   src = fetchFromSourcehut {
     owner = "~emersion";
     repo = "libscfg";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-aTcvs7QuDOx17U/yP37LhvIGxmm2WR/6qFYRtfjRN6w=";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ michaeladler ];
     platforms = lib.platforms.linux;
   };
-}
+})

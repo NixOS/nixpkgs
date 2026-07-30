@@ -6,18 +6,18 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rabbitmqadmin-ng";
-  version = "2.17.0";
+  version = "2.32.0";
 
   src = fetchFromGitHub {
     owner = "rabbitmq";
     repo = "rabbitmqadmin-ng";
-    tag = "v${version}";
-    hash = "sha256-Qz6wfATt7BU1IlrThQpu3UetUWuLz/Y1WKBvsqisUxY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RCDjMOKPRRm1l9hcLPyxa6Qzf7fHXe1898SLqwZ+n7I=";
   };
 
-  cargoHash = "sha256-spGJUY99jF/aZPDxoplPJ+1XHIreqDzxzlD0Ti4IZ68=";
+  cargoHash = "sha256-VO7Kwm2mtED4/eirL6lsYSFMsyE8A2LdAFkXIjHFgUE=";
 
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];
@@ -42,4 +42,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "rabbitmqadmin";
   };
-}
+})

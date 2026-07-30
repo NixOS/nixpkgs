@@ -31,7 +31,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-app-launch";
-  version = "0.1.12";
+  version = "0.2.0";
 
   outputs = [
     "out"
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ubports";
     repo = "development/core/lomiri-app-launch";
     tag = finalAttrs.version;
-    hash = "sha256-vlSlQJysKmoGNmRtJ34FCI3p5bL7GDc8TjOljnKSiAE=";
+    hash = "sha256-MPBgqui3RIOdiK/lmslhg23RlMqDAjYaTQAJ53+93sU=";
   };
 
   patches = [

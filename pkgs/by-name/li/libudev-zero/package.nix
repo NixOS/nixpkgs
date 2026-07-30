@@ -2,23 +2,25 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  hwdata,
   testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libudev-zero";
-  version = "1.0.3";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "illiliti";
     repo = "libudev-zero";
     rev = finalAttrs.version;
-    sha256 = "sha256-NXDof1tfr66ywYhCBDlPa+8DUfFj6YH0dvSaxHFqsXI=";
+    sha256 = "sha256-uKOfN9oJBFkR5n92bQ8RxVxfNaE2EKajrQseDkH5q+k=";
   };
 
   makeFlags = [
     "PREFIX=$(out)"
     "AR=${stdenv.cc.targetPrefix}ar"
+    "USB_IDS_PATH=${hwdata}/share/hwdata/usb.ids"
   ];
 
   # Just let the installPhase build stuff, because there's no
@@ -37,7 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/illiliti/libudev-zero/releases/tag/${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       qyliss
-      shamilton
     ];
     license = lib.licenses.isc;
     pkgConfigModules = [ "libudev" ];

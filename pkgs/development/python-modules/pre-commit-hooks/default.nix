@@ -5,10 +5,8 @@
   fetchFromGitHub,
   gitMinimal,
   pytestCheckHook,
-  pythonOlder,
   ruamel-yaml,
   setuptools,
-  tomli,
 }:
 
 buildPythonPackage rec {
@@ -25,7 +23,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [ ruamel-yaml ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  dependencies = [ ruamel-yaml ];
 
   nativeCheckInputs = [
     gitMinimal

@@ -13,25 +13,25 @@
   openssl,
   cmake,
   cacert,
+  tzdata,
   usage,
-  mise,
   testers,
   runCommand,
   jq,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mise";
-  version = "2026.1.2";
+  version = "2026.7.10";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
-    rev = "v${version}";
-    hash = "sha256-CMDspsChrfGcraITzjoBbtMYy9MrGgLL62JtM46s0no=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-klEexXMGaGM0YkcSDaHa8lD1jdwAfCcms7soRKy3r3w=";
   };
 
-  cargoHash = "sha256-HJ/tm3FPtuPkUzvkureXVFhUWc5qPqq1BAPtOCl7R5E=";
+  cargoHash = "sha256-O32fVQGb8+ECopUPeU9Pm8xKP4Aj494MtyHYwR3wFnM=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -64,18 +64,24 @@ rustPlatform.buildRustPackage rec {
   nativeCheckInputs = [
     cacert
     cmake
+    # gix spawns git-upload-pack by name in file:// clone tests.
+    git
     rustPlatform.bindgenHook
   ];
 
-  # disable warnings as errors for aws-lc-sys in checkPhase
-  env.NIX_CFLAGS_COMPILE = "-Wno-error";
+  env = {
+    # disable warnings as errors for aws-lc-sys in checkPhase
+    NIX_CFLAGS_COMPILE = "-Wno-error";
+    # tera date helper tests look up timezone data via TZDIR.
+    TZDIR = "${tzdata}/share/zoneinfo";
+  };
 
   checkFlags = [
     # last_modified will always be different in nix
     "--skip=tera::tests::test_last_modified"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-darwin") [
-    # started failing mid-April 2025
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    # x86_64-darwin started failing mid-April 2025; aarch64 in Feb 2026
     "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_with_cache"
     "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_without_cache"
   ];
@@ -83,6 +89,9 @@ rustPlatform.buildRustPackage rec {
   cargoTestFlags = [ "--all-features" ];
   # some tests access the same folders, don't test in parallel to avoid race conditions
   dontUseCargoParallelTests = true;
+
+  # HTTP tests use mock servers that bind to localhost. Without this, darwin builds fail.
+  __darwinAllowLocalNetworking = true;
 
   postInstall = ''
     installManPage ./man/man1/mise.1
@@ -104,11 +113,11 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script {
       extraArgs = [
         # Ignore subcrate releases (fox, aqua-registry)
-        "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9])$"
+        "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9]+)$"
       ];
     };
     tests = {
-      version = (testers.testVersion { package = mise; }).overrideAttrs (old: {
+      version = (testers.testVersion { package = finalAttrs.finalPackage; }).overrideAttrs (old: {
         nativeBuildInputs = old.nativeBuildInputs ++ [ cacert ];
       });
       usageCompat =
@@ -116,7 +125,7 @@ rustPlatform.buildRustPackage rec {
         runCommand "mise-usage-compatibility"
           {
             nativeBuildInputs = [
-              mise
+              finalAttrs.finalPackage
               usage
               jq
             ];
@@ -137,9 +146,12 @@ rustPlatform.buildRustPackage rec {
   meta = {
     homepage = "https://mise.jdx.dev";
     description = "Front-end to your dev env";
-    changelog = "https://github.com/jdx/mise/releases/tag/v${version}";
+    changelog = "https://github.com/jdx/mise/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ konradmalik ];
+    maintainers = with lib.maintainers; [
+      konradmalik
+      Br1ght0ne
+    ];
     mainProgram = "mise";
   };
-}
+})

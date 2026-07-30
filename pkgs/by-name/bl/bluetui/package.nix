@@ -6,18 +6,18 @@
   dbus,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bluetui";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "pythops";
     repo = "bluetui";
-    rev = "v${version}";
-    hash = "sha256-8X1kr0GPY/DqGZb1hJ52OkmgtYk0giwTeoqWTN0ZEbI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-K+QAU9/XdGZonsKjBXbPbpJhWIHyaqxP6eb670n81LU=";
   };
 
-  cargoHash = "sha256-CQFjauJ/y7XWZob/8gRQszKjBbkSdIt5l5OlSKVKoMw=";
+  cargoHash = "sha256-i77j7hKtVxDDiHEBz5E7iwGXWYg0f/NfwFnN71QfgPU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -26,10 +26,6 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     dbus
   ];
-
-  postInstall = ''
-    install -Dm444 bluetui.desktop -t $out/share/applications
-  '';
 
   meta = {
     description = "TUI for managing bluetooth on Linux";
@@ -42,4 +38,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "bluetui";
     platforms = lib.platforms.linux;
   };
-}
+})

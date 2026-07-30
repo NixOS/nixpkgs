@@ -4,21 +4,27 @@
   fetchPypi,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "bbot";
-  version = "2.7.2";
+  version = "2.8.6";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-vpKezG1nJVxQE4Qijf8feeRFD4hjy98HznVDXL+MBkE=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-u8F995BD1l6nPWYckMIYSgErSO3fBcU2IyBFU1WZjF8=";
   };
 
   pythonRelaxDeps = [
     "dnspython"
+    "idna"
+    "lxml"
     "radixtarget"
     "regex"
     "tabulate"
+    "websockets"
+    "yara-python"
+    "pyjwt"
+    "cloudcheck"
   ];
 
   build-system = with python3.pkgs; [
@@ -59,7 +65,8 @@ python3.pkgs.buildPythonApplication rec {
     xmltojson
     xxhash
     yara-python
-
+    starlette
+    tornado
   ];
 
   # Project has no tests
@@ -69,7 +76,10 @@ python3.pkgs.buildPythonApplication rec {
     description = "OSINT automation for hackers";
     homepage = "https://pypi.org/project/bbot/";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [
+      fab
+      robsliwi
+    ];
     mainProgram = "bbot";
   };
-}
+})

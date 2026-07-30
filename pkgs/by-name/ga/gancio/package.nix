@@ -4,10 +4,11 @@
   fetchFromGitLab,
   fetchYarnDeps,
 
+  yarn,
   yarnConfigHook,
   yarnBuildHook,
   yarnInstallHook,
-  nodejs,
+  nodejs-slim_22,
   pkg-config,
 
   vips,
@@ -16,6 +17,15 @@
   nixosTests,
   nix-update-script,
 }:
+
+let
+  # The latest nodejs is always used in yarn, leading to build issues when it's
+  # different from the pinned one.
+  nodejs = nodejs-slim_22;
+  yarnConfigHook' = yarnConfigHook.override {
+    yarn = yarn.override { inherit nodejs; };
+  };
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gancio";
@@ -35,10 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    yarnConfigHook
+    yarnConfigHook'
     yarnBuildHook
     yarnInstallHook
     nodejs
+    nodejs.npm
     (nodejs.python.withPackages (ps: [ ps.setuptools ]))
     pkg-config
   ];

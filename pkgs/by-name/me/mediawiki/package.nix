@@ -7,11 +7,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "mediawiki";
-  version = "1.45.0";
+  version = "1.45.4";
 
   src = fetchurl {
     url = "https://releases.wikimedia.org/mediawiki/${lib.versions.majorMinor version}/mediawiki-${version}.tar.gz";
-    hash = "sha256-1Jm8frPXGDXCvsHJyu2IoDCK7DfwcmTnURDSor7wJTQ=";
+    hash = "sha256-y3yCRGjrWlEacvCOYpHQncivEuCg/9wlMu4/drsMrXw=";
   };
 
   postPatch = ''
@@ -40,6 +40,9 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     homepage = "https://www.mediawiki.org/";
     platforms = lib.platforms.all;
-    teams = with lib.maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [
+      # for the C3D2
+      SuperSandro2000
+    ];
   };
 }

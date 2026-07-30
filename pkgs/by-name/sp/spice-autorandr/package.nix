@@ -4,8 +4,8 @@
   fetchFromGitHub,
   pkg-config,
   autoreconfHook,
-  libX11,
-  libXrandr,
+  libx11,
+  libxrandr,
 }:
 
 stdenv.mkDerivation {
@@ -24,8 +24,8 @@ stdenv.mkDerivation {
     pkg-config
   ];
   buildInputs = [
-    libX11
-    libXrandr
+    libx11
+    libxrandr
   ];
 
   installPhase = ''

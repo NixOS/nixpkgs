@@ -1,5 +1,6 @@
 {
   lib,
+  fetchpatch,
   fetchFromGitHub,
   armadillo,
   cmake,
@@ -38,6 +39,10 @@ gnuradio.pkgs.mkDerivation rec {
     # cpu_features which is bundled in the source. NOTE: Perhaps this patch
     # should be sent upstream.
     ./fix_libcpu_features_install_path.patch
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/g/gnss-sdr/0.0.20-2/debian/patches/boost1.90.diff";
+      hash = "sha256-IeLV0DIVzw+Nix9RmrqrbGDEjquvSws114UsdYphV58=";
+    })
   ];
 
   nativeBuildInputs = [

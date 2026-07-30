@@ -4,8 +4,8 @@ stdenv.mkDerivation {
   # !!! For now, the name has to be exactly as long as the original
   # name due to the sed hackery below.  Once patchelf 0.4 is in the
   # tree, we can do this properly.
-  #name = "${klibc.name}-shrunk";
-  name = klibc.name;
+  #pname = "${klibc.pname}-shrunk";
+  inherit (klibc) pname version;
   buildCommand = ''
     mkdir -p $out/lib
     cp -prd ${klibc.out}/lib/klibc/bin $out/

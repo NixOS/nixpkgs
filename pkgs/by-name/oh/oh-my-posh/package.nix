@@ -4,25 +4,24 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "oh-my-posh";
-  version = "26.23.6";
+  version = "29.37.0";
 
   src = fetchFromGitHub {
     owner = "jandedobbeleer";
     repo = "oh-my-posh";
-    tag = "v${version}";
-    hash = "sha256-4Po4QKPetRmTfmgq7lTK300h1Nn7spxNxRB9q58yrzo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ydUheYGG/7G1om/h7HGxA4uFW4/KYy0E/9OONT+P+os=";
   };
 
-  vendorHash = "sha256-R1MNLBATbivhP27VfWLGNnZ8uJWzKhx4XhNILc7FCmE=";
+  vendorHash = "sha256-2BlJ6un86mqPAH9DsugZV96bnHN8fByypaqYsrTwaPk=";
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   ldflags = [
     "-s"
-    "-w"
-    "-X github.com/jandedobbeleer/oh-my-posh/src/build.Version=${version}"
+    "-X github.com/jandedobbeleer/oh-my-posh/src/build.Version=${finalAttrs.version}"
     "-X github.com/jandedobbeleer/oh-my-posh/src/build.Date=1970-01-01T00:00:00Z"
   ];
 
@@ -49,11 +48,11 @@ buildGoModule rec {
     description = "Prompt theme engine for any shell";
     mainProgram = "oh-my-posh";
     homepage = "https://ohmyposh.dev";
-    changelog = "https://github.com/JanDeDobbeleer/oh-my-posh/releases/tag/v${version}";
+    changelog = "https://github.com/JanDeDobbeleer/oh-my-posh/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       lucperkins
-      urandom
+      olillin
     ];
   };
-}
+})

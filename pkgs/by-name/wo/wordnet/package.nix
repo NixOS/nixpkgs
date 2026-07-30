@@ -7,11 +7,11 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "3.0";
   pname = "wordnet";
   src = fetchurl {
-    url = "http://wordnetcode.princeton.edu/${version}/WordNet-${version}.tar.bz2";
+    url = "https://wordnetcode.princeton.edu/${finalAttrs.version}/WordNet-${finalAttrs.version}.tar.bz2";
     sha256 = "08pgjvd2vvmqk3h641x63nxp7wqimb9r30889mkyfh2agc62sjbc";
   };
 
@@ -55,12 +55,9 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://wordnet.princeton.edu/";
-    license = {
-      fullName = "WordNet 3.0 license";
-      url = "https://wordnet.princeton.edu/license-and-commercial-use";
-    };
+    license = lib.licenses.wordnet;
     maintainers = [ ];
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "wn";
   };
-}
+})

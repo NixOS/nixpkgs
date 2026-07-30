@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libqb";
-  version = "2.0.9";
+  version = "2.0.10";
 
   src = fetchFromGitHub {
     owner = "ClusterLabs";
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail "AC_INIT([libqb]," "AC_INIT([libqb], ${finalAttrs.version},"
       sed -i '/m4_esyscmd(\[build-aux\/git-version-gen/ , /\]),/ d' $out/configure.ac
     '';
-    hash = "sha256-LhB7Q78heCmcgtcHqL+uEv0O2s4mXyfdTzmoCVqC0x0=";
+    hash = "sha256-raKu1JgaHvi2MHzSkS41UxwOV85RP4sgqBS9WtmX6iI=";
   };
 
   nativeBuildInputs = [

@@ -4,7 +4,8 @@
   fetchurl,
   fetchFromGitHub,
   cmake,
-  extra-cmake-modules,
+  pkg-config,
+  kdePackages,
   boost,
   python3,
   fcitx5,
@@ -28,15 +29,15 @@ let
     hash = "sha256-fKa+R1TA1MJ7p3AsDc5lFlm9LKH6pcvyhI2BoAU8jBM=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libime";
-  version = "1.1.12";
+  version = "1.1.14";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "libime";
-    tag = version;
-    hash = "sha256-LqbwXpmqUCbaKHaaE9pOrHb1Qdp20/S3QEf9F4/3oiE=";
+    tag = finalAttrs.version;
+    hash = "sha256-q9OSY1q4MNlFqw6lRMrHO6QT9xP8Czz4b4M0BuIkp34=";
     fetchSubmodules = true;
   };
 
@@ -48,7 +49,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    pkg-config
+    kdePackages.extra-cmake-modules
     python3
   ];
 
@@ -65,4 +67,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ poscat ];
     platforms = lib.platforms.linux;
   };
-}
+})

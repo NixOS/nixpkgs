@@ -35,16 +35,16 @@ let
 in
 maven.buildMavenPackage rec {
   pname = "nzbhydra2";
-  version = "8.2.2";
+  version = "8.9.0";
 
   src = fetchFromGitHub {
     owner = "theotherp";
-    repo = pname;
+    repo = "nzbhydra2";
     tag = "v${version}";
-    hash = "sha256-aUaPzfP4PPX08DZxbDhy7U/qH37ddR9jWtt+pt7BqCI=";
+    hash = "sha256-c8rQ53YROPx+YZo/YdaKs/51ZZQpwwbSLk/bMGY0m2c=";
   };
 
-  mvnHash = "sha256-02Fj7Rv0kGmO7ysHWMjE7qlwFY3G+hQzjXvrvRG/2M8=";
+  mvnHash = "sha256-Z+Y97yd9TQMuTyqtWOOZZ52rgp4KomID/ns0gGG5rvg=";
 
   mvnFetchExtraArgs.preBuild = ''
     mvn -nsu "${timestampParameter}" --projects org.nzbhydra:github-release-plugin "-Dmaven.repo.local=$out/.m2" clean install
@@ -90,7 +90,8 @@ maven.buildMavenPackage rec {
   meta = {
     description = "Usenet meta search";
     homepage = "https://github.com/theotherp/nzbhydra2";
-    license = lib.licenses.asl20;
+    changelog = "https://github.com/theotherp/nzbhydra2/releases/tag/v${version}";
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       matteopacini
       tmarkus

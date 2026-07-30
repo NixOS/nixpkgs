@@ -6,14 +6,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "aoc-cli";
   version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "scarvalhojr";
     repo = "aoc-cli";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-UdeCKhEWr1BjQ6OMLP19OLWPlvvP7FGAO+mi+bQUPQA=";
   };
 
@@ -30,4 +30,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ jordanisaacs ];
     mainProgram = "aoc";
   };
-}
+})

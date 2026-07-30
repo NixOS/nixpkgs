@@ -6,12 +6,12 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cauwugo";
   version = "0.1.0";
 
   src = fetchCrate {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "bpaf_cauwugo";
     hash = "sha256-9gWUu2qbscKlbWZlRbOn+rrmizegkHxPnwnAmpaV1Ww=";
   };
@@ -37,4 +37,4 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = [ ];
   };
-}
+})

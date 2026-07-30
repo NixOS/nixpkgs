@@ -18,6 +18,13 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '/usr/bin/sg_' "$out/bin/sg_"
   '';
 
+  outputs = [
+    "out"
+    "man"
+    "dev"
+    "lib"
+  ];
+
   meta = {
     homepage = "https://sg.danny.cz/sg/";
     changelog = "https://sg.danny.cz/sg/p/sg3_utils.ChangeLog";

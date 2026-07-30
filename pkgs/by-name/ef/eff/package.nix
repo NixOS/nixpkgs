@@ -1,11 +1,11 @@
 {
   lib,
   fetchFromGitHub,
-  ocamlPackages,
+  ocaml-ng,
 }:
 
 let
-  inherit (ocamlPackages) buildDunePackage js_of_ocaml menhir;
+  inherit (ocaml-ng.ocamlPackages_5_2) buildDunePackage js_of_ocaml menhir;
 in
 
 buildDunePackage rec {
@@ -18,6 +18,9 @@ buildDunePackage rec {
     rev = "v${version}";
     hash = "sha256-0U61y41CA0YaoNk9Hsj7j6eb2V6Ku3MAjW9lMEimiC0=";
   };
+
+  # Compatibility with menhir ≥ 20260203
+  patches = [ ./menhir.patch ];
 
   nativeBuildInputs = [ menhir ];
 

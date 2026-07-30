@@ -50,6 +50,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/vmagamedov/grpclib";
     changelog = "https://github.com/vmagamedov/grpclib/blob/v${version}/docs/changelog/index.rst";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ nikstur ];
   };
 }

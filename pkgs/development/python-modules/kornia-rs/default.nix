@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "kornia-rs";
-  version = "0.1.10";
+  version = "0.1.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kornia";
     repo = "kornia-rs";
     tag = "v${version}";
-    hash = "sha256-rC5NqyQah3D4tGLefS4cSIXA3+gQ0+4RNcXOcEYxryg=";
+    hash = "sha256-xzJkuWhSQe5V+I4dKNoGflbt7cARewtEbTdJ3YY+cm8=";
   };
 
   nativeBuildInputs = [
@@ -33,14 +33,14 @@ buildPythonPackage rec {
     nasm # Only for dependencies.
   ];
 
-  cargoRoot = "kornia-py";
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit
+      pname
+      version
+      src
+      ;
+    hash = "sha256-hnvPKm0ul1IXKFtVe1j0D6ogXQ44wpDFpeWn/p5ZKeA=";
   };
-
-  postPatch = ''
-    ln -s ${./Cargo.lock} kornia-py/Cargo.lock
-  '';
 
   maturinBuildFlags = [
     "-m"
@@ -55,16 +55,16 @@ buildPythonPackage rec {
     torch
   ];
 
+  disabledTests = [
+    # requires apriltag-imgs submodule
+    "test_apriltag_decoder"
+  ];
+
   meta = {
     homepage = "https://github.com/kornia/kornia-rs";
     description = "Python bindings to Low-level Computer Vision library in Rust";
     changelog = "https://github.com/kornia/kornia-rs/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ chpatrick ];
-    badPlatforms = [
-      # error: could not compile `kornia-3d` (lib)
-      # error: rustc interrupted by SIGSEGV
-      "aarch64-linux"
-    ];
   };
 }

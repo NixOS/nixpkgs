@@ -5,15 +5,15 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pcm";
-  version = "202509";
+  version = "202604";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "pcm";
-    rev = version;
-    hash = "sha256-RIpyh4JN1/ePoSLQPyB3pgx6ifBcpJK+1d9YQcGZed4=";
+    rev = finalAttrs.version;
+    hash = "sha256-TWE/5rsCCfoKDAy9i9YDRiUXVnqAX7I08Oq6QgCbzaY=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ roosemberth ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

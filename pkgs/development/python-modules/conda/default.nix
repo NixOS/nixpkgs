@@ -28,7 +28,7 @@
 buildPythonPackage rec {
   __structuredAttrs = true;
   pname = "conda";
-  version = "25.11.1";
+  version = "26.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -36,13 +36,15 @@ buildPythonPackage rec {
     owner = "conda";
     repo = "conda";
     tag = version;
-    hash = "sha256-Jp7C7rwgzVGjNBRwViyDIBom67VevYG5e46/wpAWJX4=";
+    hash = "sha256-hiH25EcybtyEuks496VgiP4TPwNKI3x1URfwuefJRls=";
   };
 
   build-system = [
     hatchling
     hatch-vcs
   ];
+
+  pythonRelaxDeps = [ "ruamel-yaml" ];
 
   dependencies = [
     archspec

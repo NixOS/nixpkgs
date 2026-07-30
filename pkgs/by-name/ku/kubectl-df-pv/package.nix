@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubectl-df-pv";
   version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "yashbhutwala";
     repo = "kubectl-df-pv";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-dGWGPamVD/26iEgKQcWGKpFIMMlDivFpD/XzmjCr8pQ=";
   };
 
@@ -21,8 +21,8 @@ buildGoModule rec {
     description = "df-like utility for persistent volumes on Kubernetes";
     mainProgram = "df-pv";
     homepage = "https://github.com/yashbhutwala/kubectl-df-pv";
-    changelog = "https://github.com/yashbhutwala/kubectl-df-pv/releases/tag/v${version}";
+    changelog = "https://github.com/yashbhutwala/kubectl-df-pv/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jemand771 ];
   };
-}
+})

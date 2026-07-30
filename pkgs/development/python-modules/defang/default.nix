@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromBitbucket {
     owner = "johannestaas";
     repo = "defang";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-OJfayJeVf2H1/jg7/fu2NiHhRHNCaLGI29SY8BnJyxI=";
   };
 

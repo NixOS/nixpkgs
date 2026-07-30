@@ -31,7 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-DFMI_VERSION=${toString FMIVersion}"
     (lib.cmakeBool "WITH_FMUSIM" false)
   ];
-  CFLAGS = lib.optionalString (FMIVersion == 3) "-Wno-stringop-truncation";
+
+  env = lib.optionalAttrs (FMIVersion == 3) {
+    CFLAGS = "-Wno-stringop-truncation";
+  };
 
   meta = {
     # CMakeLists.txt explicitly states support for aarch64-darwin, but

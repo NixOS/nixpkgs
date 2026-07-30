@@ -3,20 +3,23 @@
   stdenv,
   fetchFromGitHub,
   fetchPnpmDeps,
-  pnpm,
+  pnpm_10,
   nodejs,
   pnpmConfigHook,
   nix-update-script,
 }:
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "slidev-cli";
-  version = "52.11.2";
+  version = "52.15.2";
 
   src = fetchFromGitHub {
     owner = "slidevjs";
     repo = "slidev";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dAGHcnHNSYtIQvcrn/jRbA2GF7YBJkYXbQbjkGtTUa0=";
+    hash = "sha256-h9gVfGMLTm8NDSAR/OKl5XJRBduAPHQ9mp+jtNYtxFI=";
   };
 
   pnpmWorkspaces = [ "@slidev/cli..." ];
@@ -28,8 +31,9 @@ stdenv.mkDerivation (finalAttrs: {
       src
       pnpmWorkspaces
       ;
+    inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-rHqrtK6eIqQ6SoZA1CtuUwDbHSZ9HSHikMdNrTtojHs=";
+    hash = "sha256-DGDzNvau1XjPjkGZqcFZGkjYd3cneXO/gCdnwjjkQDY=";
   };
 
   nativeBuildInputs = [

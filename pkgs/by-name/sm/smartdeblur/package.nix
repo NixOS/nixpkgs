@@ -6,7 +6,7 @@
   libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "smartdeblur";
   version = "0-unstable-2018-10-29";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "151vdd5ld0clw0vgp0fvp2gp2ybwpx9g43dad9fvbvwkg60izs87";
   };
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   nativeBuildInputs = [
     libsForQt5.qmake
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

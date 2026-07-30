@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dms";
   version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "anacrolix";
     repo = "dms";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-C1XcaPQp+T0scrCBsvqjJrmUR0N7mJOQC9Z2TxvtYc8=";
   };
 
@@ -25,4 +25,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     mainProgram = "dms";
   };
-}
+})

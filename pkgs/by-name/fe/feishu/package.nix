@@ -20,17 +20,17 @@
   gtk3,
   lib,
   libGL,
-  libX11,
-  libXScrnSaver,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXtst,
+  libx11,
+  libxscrnsaver,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxtst,
   libappindicator-gtk3,
   libcxx,
   libdbusmenu,
@@ -65,12 +65,12 @@
 let
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/e91d15e2/Feishu-linux_x64-7.50.14.deb";
-      sha256 = "sha256-Ywlf3qi4q5nT3gC9r4ymtFYIrg8xmxapIfO2oQoBdC8=";
+      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/289abaac/Feishu-linux_x64-7.66.10.deb";
+      sha256 = "sha256-68WKfT4dblQOQDd51n90nyAzOxrkBESR0pqbjbwrOso=";
     };
     aarch64-linux = fetchurl {
-      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/f247fca9/Feishu-linux_arm64-7.50.14.deb";
-      sha256 = "sha256-ecpaw0n6jRq1hdDY3rTzRiN8Ck3BTLt+K1DcxrPI4TE=";
+      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/382a3d72/Feishu-linux_arm64-7.66.10.deb";
+      sha256 = "sha256-Beh0dYJ96BuwJwTMPF61H6R9u99Jcg4pzEF1rFOj9WA=";
     };
   };
 
@@ -95,17 +95,17 @@ let
     glibc
     gnutls
     libGL
-    libX11
-    libXScrnSaver
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libXtst
+    libx11
+    libxscrnsaver
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxtst
     libappindicator-gtk3
     libcxx
     libdbusmenu
@@ -133,7 +133,7 @@ let
   ];
 in
 stdenv.mkDerivation {
-  version = "7.50.14";
+  version = "7.66.10";
   pname = "feishu";
 
   src =
@@ -152,8 +152,8 @@ stdenv.mkDerivation {
     # for autopatchelf
     alsa-lib
     cups
-    libXdamage
-    libXtst
+    libxdamage
+    libxtst
     libdrm
     libgcrypt
     libpulseaudio

@@ -6,12 +6,12 @@
   ronn,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "termimage";
   version = "1.2.1";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-1FOPe466GqQfiIpsQT9DJn+FupI2vy9b4+7p31ceY6M=";
   };
 
@@ -32,9 +32,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Display images in your terminal";
     homepage = "https://github.com/nabijaczleweli/termimage";
-    changelog = "https://github.com/nabijaczleweli/termimage/releases/tag/v${version}";
+    changelog = "https://github.com/nabijaczleweli/termimage/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "termimage";
   };
-}
+})

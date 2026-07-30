@@ -8,12 +8,15 @@
   writeScript,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wordpress";
   inherit version;
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchurl {
-    url = "https://wordpress.org/${pname}-${version}.tar.gz";
+    url = "https://wordpress.org/wordpress-${finalAttrs.version}.tar.gz";
     inherit hash;
   };
 
@@ -50,8 +53,11 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://wordpress.org";
     description = "Open source software you can use to create a beautiful website, blog, or app";
-    license = [ lib.licenses.gpl2Plus ];
-    maintainers = [ lib.maintainers.basvandijk ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      bartoostveen
+      basvandijk
+    ];
     platforms = lib.platforms.all;
   };
-}
+})

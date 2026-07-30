@@ -7,16 +7,16 @@
   sigi,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sigi";
-  version = "3.7.1";
+  version = "3.8.0";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-Tsrfan7aejP2oy9x9VoTIq0ba0s0tnx1RTlAB0v6eis=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-O/M0NBES215xLwktgOTVIKeXpDXQHDJcJKV3ej5ILEw=";
   };
 
-  cargoHash = "sha256-SFT0quq5e37tFa07sCFjb8u8scZLjhICBvKdQOR8s14=";
+  cargoHash = "sha256-0jB/eMXEMNEapqwSeFD6aHsYhzHTEYxL3usFrCCZ4uI=";
   nativeBuildInputs = [ installShellFiles ];
 
   # In case anything goes wrong.
@@ -30,9 +30,9 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Organizing CLI for people who don't love organizing";
-    homepage = "https://github.com/sigi-cli/sigi";
+    homepage = "https://github.com/so-dang-cool/sigi";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ booniepepper ];
     mainProgram = "sigi";
   };
-}
+})

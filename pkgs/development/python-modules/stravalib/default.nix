@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "stravalib";
-  version = "2.4";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stravalib";
     repo = "stravalib";
     tag = "v${version}";
-    hash = "sha256-RMvahoUOy4RnSu0O7dBpYylaQ8nPfMiivx8k1XBeEGA=";
+    hash = "sha256-3xmWg20fbp2tbwPNcxLtWSVajgeyDoZfRTQbwROEGVE=";
   };
 
   build-system = [

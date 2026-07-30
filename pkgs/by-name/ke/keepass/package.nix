@@ -5,10 +5,11 @@
   unzip,
   mono,
   makeWrapper,
+  writeText,
   icoutils,
   replaceVars,
   xsel,
-  xorg,
+  xprop,
   xdotool,
   coreutils,
   unixtools,
@@ -17,36 +18,7 @@
   makeDesktopItem,
   plugins ? [ ],
 }:
-
-stdenv.mkDerivation (finalAttrs: {
-  pname = "keepass";
-  version = "2.60";
-
-  src = fetchurl {
-    url = "mirror://sourceforge/keepass/KeePass-${finalAttrs.version}-Source.zip";
-    hash = "sha256-AraAdneAkLTS1wZ7pWC0Mm51m50s2hCy6wN74nlUtxo=";
-  };
-
-  sourceRoot = ".";
-
-  nativeBuildInputs = [
-    unzip
-    mono
-    makeWrapper
-  ];
-  buildInputs = [ icoutils ];
-
-  patches = [
-    (replaceVars ./fix-paths.patch {
-      xsel = "${xsel}/bin/xsel";
-      xprop = "${xorg.xprop}/bin/xprop";
-      xdotool = "${xdotool}/bin/xdotool";
-      uname = "${coreutils}/bin/uname";
-      whereis = "${unixtools.whereis}/bin/whereis";
-      gsettings = "${glib}/bin/gsettings";
-    })
-  ];
-
+let
   # KeePass looks for plugins in under directory in which KeePass.exe is
   # located. It follows symlinks where looking for that directory, so
   # buildEnv is not enough to bring KeePass and plugins together.
@@ -74,12 +46,42 @@ stdenv.mkDerivation (finalAttrs: {
         ) plugins
       );
     in
-    replaceStrings [ "$OUTPUT_LC$" "$DO_LOADS$" ] [ outputLc loads ] patchTemplate;
+    writeText "load-paths.patch" (
+      replaceStrings [ "$OUTPUT_LC$" "$DO_LOADS$" ] [ outputLc loads ] patchTemplate
+    );
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "keepass";
+  version = "2.60";
 
-  passAsFile = [ "pluginLoadPathsPatch" ];
+  src = fetchurl {
+    url = "mirror://sourceforge/keepass/KeePass-${finalAttrs.version}-Source.zip";
+    hash = "sha256-AraAdneAkLTS1wZ7pWC0Mm51m50s2hCy6wN74nlUtxo=";
+  };
+
+  sourceRoot = ".";
+
+  nativeBuildInputs = [
+    unzip
+    mono
+    makeWrapper
+  ];
+  buildInputs = [ icoutils ];
+
+  patches = [
+    (replaceVars ./fix-paths.patch {
+      xsel = "${xsel}/bin/xsel";
+      xprop = "${xprop}/bin/xprop";
+      xdotool = "${xdotool}/bin/xdotool";
+      uname = "${coreutils}/bin/uname";
+      whereis = "${unixtools.whereis}/bin/whereis";
+      gsettings = "${glib}/bin/gsettings";
+    })
+  ];
+
   postPatch = ''
     sed -i 's/\r*$//' KeePass/Forms/MainForm.cs
-    patch -p1 <$pluginLoadPathsPatchPath
+    patch -p1 <${pluginLoadPathsPatch}
   '';
 
   configurePhase = ''

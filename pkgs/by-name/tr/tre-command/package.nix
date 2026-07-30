@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tre-command";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "dduan";
     repo = "tre";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-JlkONhXMWLzxAf3SYoLkSvXw4bFYBnsCyyj0TUsezwg=";
   };
 
@@ -39,4 +39,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.dduan ];
     mainProgram = "tre";
   };
-}
+})

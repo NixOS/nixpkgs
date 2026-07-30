@@ -1,6 +1,7 @@
 {
   lib,
   fetchurl,
+  ocaml,
   buildDunePackage,
   ounit,
   ppx_deriving,
@@ -53,5 +54,6 @@ buildDunePackage {
     description = "Syntax extension for importing declarations from interface files";
     license = lib.licenses.mit;
     homepage = "https://github.com/ocaml-ppx/ppx_import";
+    broken = lib.versionAtLeast ocaml.version "5.5";
   };
 }

@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "webtest";
-  version = "3.0.6";
+  version = "3.0.7";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Qlb9UkJEj1bFdby5r+J14wWm8HI8SwFDjb3U3VNElEs=";
+    hash = "sha256-euq1D5cNRsBo56Nt0WLLJCWR7fcqHQTv0hN0dyuTF0E=";
   };
 
   build-system = [ setuptools ];

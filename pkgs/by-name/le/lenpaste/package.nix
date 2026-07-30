@@ -4,7 +4,7 @@
   fetchFromGitea,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lenpaste";
   version = "1.3";
 
@@ -12,7 +12,7 @@ buildGoModule rec {
     domain = "git.lcomrade.su";
     owner = "root";
     repo = "lenpaste";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-d+FjfEbInlxUllWIoVLwQRdRWjxBLTpNHYn+oYU3fBc=";
   };
 
@@ -21,7 +21,7 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   subPackages = [ "cmd" ];
@@ -37,4 +37,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "lenpaste";
   };
-}
+})

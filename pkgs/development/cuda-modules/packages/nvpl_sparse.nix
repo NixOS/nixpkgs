@@ -1,6 +1,6 @@
 { buildRedist }:
 buildRedist {
-  redistName = "cuda";
+  redistName = "nvpl";
   pname = "nvpl_sparse";
 
   outputs = [
@@ -8,7 +8,6 @@ buildRedist {
     "dev"
     "include"
     "lib"
-    "static"
   ];
 
   meta = {

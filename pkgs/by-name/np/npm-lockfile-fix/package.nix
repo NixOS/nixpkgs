@@ -5,7 +5,7 @@
   nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "npm-lockfile-fix";
   version = "0.1.1";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jeslie0";
     repo = "npm-lockfile-fix";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-P93OowrVkkOfX5XKsRsg0c4dZLVn2ZOonJazPmHdD7g=";
   };
 
@@ -35,8 +35,7 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "npm-lockfile-fix";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      lucasew
       felschr
     ];
   };
-}
+})

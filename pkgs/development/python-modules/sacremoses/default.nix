@@ -1,38 +1,44 @@
 {
-  buildPythonPackage,
   lib,
+  buildPythonPackage,
   fetchFromGitHub,
+  # build-system
+  setuptools,
+  # dependencies
   click,
-  six,
-  tqdm,
   joblib,
-  pytest,
+  regex,
+  tqdm,
+  # tests
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sacremoses";
-  version = "0.0.35";
-  format = "setuptools";
+  version = "0.1.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "alvations";
+    owner = "hplt-project";
     repo = "sacremoses";
-    rev = version;
-    sha256 = "1gzr56w8yx82mn08wax5m0xyg15ym4ri5l80gmagp8r53443j770";
+    tag = finalAttrs.version;
+    sha256 = "sha256-ked6/8oaGJwVW1jvpjrWtJYfr0GKUHdJyaEuzid/S3M=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     click
-    six
-    tqdm
     joblib
+    regex
+    tqdm
   ];
 
-  nativeCheckInputs = [ pytest ];
+  nativeCheckInputs = [ pytestCheckHook ];
   # ignore tests which call to remote host
-  checkPhase = ''
-    pytest -k 'not truecase'
-  '';
+  disabledTestPaths = [
+    "sacremoses/test/test_truecaser.py::TestTruecaser"
+  ];
 
   meta = {
     homepage = "https://github.com/alvations/sacremoses";
@@ -42,4 +48,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ pashashocky ];
   };
-}
+})

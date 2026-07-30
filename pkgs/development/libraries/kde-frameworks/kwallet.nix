@@ -1,5 +1,6 @@
 {
   mkDerivation,
+  cmake,
   extra-cmake-modules,
   kdoctools,
   kconfig,
@@ -21,6 +22,7 @@
 mkDerivation {
   pname = "kwallet";
   nativeBuildInputs = [
+    cmake
     extra-cmake-modules
     kdoctools
   ];

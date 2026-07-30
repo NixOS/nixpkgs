@@ -57,7 +57,6 @@ let
       attrs
       // {
 
-        name = "${pname}-${version}";
         inherit version pname;
 
         buildInputs =
@@ -74,7 +73,9 @@ let
 
         inherit src;
 
-        REBAR_IGNORE_DEPS = beamDeps != [ ];
+        env = (attrs.env or { }) // {
+          REBAR_IGNORE_DEPS = beamDeps != [ ];
+        };
 
         configurePhase = ''
           runHook preConfigure

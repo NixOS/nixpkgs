@@ -6,14 +6,12 @@
   cryptography,
   dnspython,
   fetchFromGitHub,
-  importlib-metadata,
   localzone,
   oci,
   poetry-core,
   pyotp,
   pytest-vcr,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   softlayer,
@@ -50,8 +48,7 @@ buildPythonPackage rec {
     pyyaml
     requests
     tldextract
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ];
 
   optional-dependencies = {
     route53 = [ boto3 ];
@@ -102,7 +99,7 @@ buildPythonPackage rec {
     mainProgram = "lexicon";
     homepage = "https://github.com/AnalogJ/lexicon";
     changelog = "https://github.com/AnalogJ/lexicon/blob/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aviallon ];
   };
 }

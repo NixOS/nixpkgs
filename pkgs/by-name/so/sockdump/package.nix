@@ -5,7 +5,7 @@
   bcc,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "sockdump";
   version = "0-unstable-2023-12-11";
 
@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
 
   installPhase = "install -D sockdump.py $out/bin/sockdump";
 
-  meta = src.meta // {
+  meta = finalAttrs.src.meta // {
     description = "Dump unix domain socket traffic with bpf";
     mainProgram = "sockdump";
     license = lib.licenses.unlicense;
@@ -30,4 +30,4 @@ python3.pkgs.buildPythonApplication rec {
       picnoir
     ];
   };
-}
+})

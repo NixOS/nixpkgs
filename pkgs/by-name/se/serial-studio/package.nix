@@ -4,29 +4,34 @@
   fetchFromGitHub,
   cmake,
   qt6,
+  expat,
+  zlib,
   pkg-config,
+  wrapGAppsHook3,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "serial-studio";
-  version = "3.1.10-unstable-2025-12-12";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = "Serial-Studio";
     repo = "Serial-Studio";
-    rev = "b2e8b5430da59969dd697636677873f3f6c10c7c";
-    hash = "sha256-O/KAYKpVGn2Q0CPaReh564P5l+ilHuQYRJ4w5aFKZmg=";
-    fetchSubmodules = true;
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KY7ePFeO29jKnaFbP5IJo1Z/OqldTvmZUGuzZ+yqyK8=";
   };
 
   nativeBuildInputs = [
     cmake
     qt6.wrapQtAppsHook
     pkg-config
+    wrapGAppsHook3 # required for FileChooser
   ];
 
   buildInputs = [
+    expat
+    zlib
     qt6.qtbase
     qt6.qtdeclarative
     qt6.qtsvg
@@ -39,12 +44,23 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qt5compat
   ];
 
+  cmakeFlags = [
+    (lib.cmakeBool "USE_SYSTEM_ZLIB" true)
+    (lib.cmakeBool "USE_SYSTEM_EXPAT" true)
+  ];
+
   patches = [ ./0001-CMake-Deploy-Fix.patch ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,bin}
     mv $out/Serial-Studio-GPL3.app $out/Applications
-    ln --symbolic $out/Applications/Serial-Studio-GPL3.app/Contents/MacOS/Serial-Studio-GPL3 $out/bin/serial-studio
+    ln -s $out/Applications/Serial-Studio-GPL3.app/Contents/MacOS/Serial-Studio-GPL3 $out/bin/serial-studio-gpl3
+  '';
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   passthru.updateScript = nix-update-script {
@@ -53,8 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Multi-purpose serial data visualization & processing program";
-    mainProgram = "serial-studio";
-    homepage = "https://serial-studio.github.io/";
+    mainProgram = "serial-studio-gpl3";
+    homepage = "https://serial-studio.com/";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.unix;

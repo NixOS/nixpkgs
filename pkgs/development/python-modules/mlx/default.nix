@@ -3,20 +3,16 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  replaceVars,
+  nanobind,
 
   # build-system
-  setuptools,
-
-  # nativeBuildInputs
   cmake,
+  setuptools,
+  typing-extensions,
 
   # buildInputs
-  apple-sdk,
   fmt,
-  nanobind,
   nlohmann_json,
-  pybind11,
   # linux-only
   openblas,
 
@@ -35,6 +31,7 @@ let
   gguf-tools = fetchFromGitHub {
     owner = "antirez";
     repo = "gguf-tools";
+    # Tag from https://github.com/ml-explore/mlx/blob/v0.31.1/mlx/io/CMakeLists.txt#L14
     rev = "8fa6eb65236618e28fd7710a0fba565f7faa1848";
     hash = "sha256-15FvyPOFqTOr5vdWQoPnZz+mYH919++EtghjozDlnSA=";
   };
@@ -42,26 +39,23 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "mlx";
-  version = "0.30.1";
+  version = "0.32.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ml-explore";
     repo = "mlx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Vt0RH+70VBwUjXSfPTsNdRS3g0ookJHhzf2kvgEtgH8=";
+    hash = "sha256-yHpTyRf9FOPbdyDWSM7b6VC72STnUpgCMLbDxLbdaqs=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isDarwin [
-    (replaceVars ./darwin-build-fixes.patch {
-      sdkVersion = apple-sdk.version;
-    })
+  patches = [
+    # Use nix packages instead of fetching their sources
+    ./dont-fetch-json.patch
   ];
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "nanobind==2.10.2" "nanobind"
-
     substituteInPlace mlx/backend/cpu/jit_compiler.cpp \
       --replace-fail "g++" "${lib.getExe' stdenv.cc "c++"}"
   '';
@@ -79,7 +73,7 @@ buildPythonPackage (finalAttrs: {
   passthru.skipBulkUpdate = true;
 
   env = {
-    DEV_RELEASE = 1;
+    PYPI_RELEASE = 1;
     CMAKE_ARGS = toString [
       # NOTE The `metal` command-line utility used to build the Metal kernels is not open-source.
       # To build mlx with Metal support in Nix, you'd need to use one of the sandbox escape
@@ -88,24 +82,20 @@ buildPythonPackage (finalAttrs: {
       (lib.cmakeBool "MLX_BUILD_METAL" false)
       (lib.cmakeBool "USE_SYSTEM_FMT" true)
       (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_GGUFLIB" "${gguf-tools}")
-      (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_JSON" "${nlohmann_json.src}")
+      (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_NANOBIND" "${nanobind.src}")
+      (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-I${lib.getDev nlohmann_json}/include/nlohmann")
     ];
   };
 
   build-system = [
-    setuptools
-  ];
-
-  nativeBuildInputs = [
     cmake
+    setuptools
+    typing-extensions
   ];
 
   buildInputs = [
     fmt
-    gguf-tools
-    nanobind
     nlohmann_json
-    pybind11
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     openblas
@@ -175,14 +165,9 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/ml-explore/mlx/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      Gabriella439
       booxter
       cameronyule
       viraptor
-    ];
-    badPlatforms = [
-      # Building for x86_64 on macOS is not supported
-      "x86_64-darwin"
     ];
   };
 })

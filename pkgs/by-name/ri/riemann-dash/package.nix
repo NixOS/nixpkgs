@@ -16,7 +16,6 @@ bundlerApp {
     homepage = "https://github.com/riemann/riemann-dash";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      manveru
       nicknovitski
     ];
     platforms = lib.platforms.unix;

@@ -5,7 +5,6 @@
   fetchurl,
   bash,
   gcc,
-  musl,
   binutils,
   gnumake,
   gnused,
@@ -18,11 +17,11 @@
 }:
 let
   pname = "findutils-static";
-  version = "4.9.0";
+  version = "4.10.0";
 
   src = fetchurl {
     url = "mirror://gnu/findutils/findutils-${version}.tar.xz";
-    hash = "sha256-or+4wJ1DZ3DtxZ9Q+kg+eFsWGjt7nVR1c8sIBl/UYv4=";
+    hash = "sha256-E4fgtn/yR9Kr3pmPkN+/cMFJE5Glnd/suK5ph4nwpPU=";
   };
 in
 bash.runCommand "${pname}-${version}"
@@ -31,7 +30,6 @@ bash.runCommand "${pname}-${version}"
 
     nativeBuildInputs = [
       gcc
-      musl
       binutils
       gnumake
       gnused
@@ -47,6 +45,7 @@ bash.runCommand "${pname}-${version}"
       result:
       bash.runCommand "${pname}-get-version-${version}" { } ''
         ${result}/bin/find --version
+        ${result}/bin/xargs --version
         mkdir $out
       '';
 
@@ -68,13 +67,16 @@ bash.runCommand "${pname}-${version}"
       --prefix=$out \
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
-      CC=musl-gcc \
-      CFLAGS=-static
+      --disable-dependency-tracking \
+      --disable-nls
 
     # Build
     make -j $NIX_BUILD_CORES
 
     # Install
-    make -j $NIX_BUILD_CORES install
-    rm $out/bin/updatedb
+    make -j $NIX_BUILD_CORES install-strip
+
+    # Keep only the bootstrap-relevant find/xargs tools.
+    rm -f $out/bin/locate $out/bin/updatedb
+    rm -rf $out/libexec $out/share $out/var
   ''

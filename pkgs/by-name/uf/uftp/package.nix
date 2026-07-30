@@ -5,12 +5,12 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uftp";
   version = "5.0.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/uftp-multicast/source-tar/uftp-${version}.tar.gz";
+    url = "mirror://sourceforge/uftp-multicast/source-tar/uftp-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-y4ZowZsfELxjoW/6iT4gXcPshjYQN9R32AAyYOvEAIA=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

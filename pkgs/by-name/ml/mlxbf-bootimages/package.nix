@@ -5,13 +5,13 @@
   dpkg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mlxbf-bootimages";
-  version = "4.11.0-13611";
+  version = "4.14.0-13878";
 
   src = fetchurl {
-    url = "https://linux.mellanox.com/public/repo/bluefield/${version}/bootimages/prod/${pname}-signed_${version}_arm64.deb";
-    hash = "sha256-bZpZ6qnC3Q/BuOngS4ZoU6vjeekPjVom0KdDoJF5iko=";
+    url = "https://linux.mellanox.com/public/repo/doca/3.3.0-${finalAttrs.version}/ubuntu24.04/arm64/mlxbf-bootimages-signed_${finalAttrs.version}_arm64.deb";
+    hash = "sha256-CeUjmyU1kfsQWNFm/EN3arF7t8lM1o7p9oF7DqeiCnk=";
   };
 
   nativeBuildInputs = [
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
       thillux
     ];
   };
-}
+})

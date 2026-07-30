@@ -1,6 +1,6 @@
 {
   lib,
-  gcc15Stdenv,
+  gcc16Stdenv,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -23,15 +23,15 @@
   wayland-protocols,
 }:
 
-gcc15Stdenv.mkDerivation (finalAttrs: {
+gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprtoolkit";
-  version = "0.5.2";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprtoolkit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AEnLjthDHNqD1uPBsVWdo7Pb+Xveh4DzwAPFM2stzNM=";
+    hash = "sha256-gJSBj4Pd4e9nERAKo/qiHqDMpS2hBfyOI0uGCbbiML4=";
   };
 
   nativeBuildInputs = [

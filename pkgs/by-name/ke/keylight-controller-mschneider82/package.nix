@@ -5,7 +5,14 @@
   libGL,
   nssmdns,
   pkg-config,
-  xorg,
+  libxxf86vm,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxext,
+  libxcursor,
+  libx11,
+  xinput,
 }:
 
 buildGoModule rec {
@@ -28,18 +35,16 @@ buildGoModule rec {
   buildInputs = [
     libGL
     nssmdns
-  ]
-  ++ (with xorg; [
-    libX11
-    libX11.dev
-    libXcursor
-    libXext
-    libXi
-    libXinerama
-    libXrandr
-    libXxf86vm
+    libx11
+    libx11.dev
+    libxcursor
+    libxext
+    libxi
+    libxinerama
+    libxrandr
+    libxxf86vm
     xinput
-  ]);
+  ];
 
   meta = {
     description = "Desktop application to control Elgato Keylights";

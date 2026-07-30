@@ -11,12 +11,8 @@ let
   defaultConfig = import ./default-config.nix;
   inherit (lib)
     mkIf
-    mkEnableOption
-    mkPackageOption
     mkOption
     getExe
-    literalExpression
-    types
     ;
 in
 {

@@ -85,7 +85,7 @@ stdenv.mkDerivation {
       --chdir "$out/share/domination" \
       --add-flags "-cp $out/share/domination/Domination.jar net.yura.domination.ui.swinggui.SwingGUIFrame"
 
-    install -Dm644 build/game/resources/icon.png $out/share/pixmaps/domination.png
+    install -Dm644 build/game/resources/icon.png $out/share/icons/hicolor/16x16/apps/domination.png
     runHook postInstall
   '';
 

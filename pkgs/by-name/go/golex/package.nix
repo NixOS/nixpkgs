@@ -5,14 +5,14 @@
   fetchpatch2,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "golex";
   version = "1.1.0";
 
   src = fetchFromGitLab {
     owner = "cznic";
     repo = "golex";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-0Z2oE00vGnH2BBNmKAjRhy//fEbT5AQ+CKLIUr+NPwY=";
   };
 
@@ -33,4 +33,4 @@ buildGoModule rec {
     mainProgram = "golex";
     maintainers = with lib.maintainers; [ aleksana ];
   };
-}
+})

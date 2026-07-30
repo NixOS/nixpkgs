@@ -25,12 +25,12 @@
   x264,
   gettext,
   openexr,
-  libXext,
-  libXxf86vm,
-  libXv,
-  libXi,
-  libX11,
-  libXft,
+  libxext,
+  libxxf86vm,
+  libxv,
+  libxi,
+  libx11,
+  libxft,
   xorgproto,
   libtheora,
   libpng,
@@ -96,12 +96,12 @@ stdenv.mkDerivation {
     x264
     gettext
     openexr
-    libXext
-    libXxf86vm
-    libXv
-    libXi
-    libX11
-    libXft
+    libxext
+    libxxf86vm
+    libxv
+    libxi
+    libx11
+    libxft
     xorgproto
     libtheora
     libpng
@@ -116,7 +116,7 @@ stdenv.mkDerivation {
     description = "Professional video editing and compositing environment (community version)";
     homepage = "http://cinelerra-cv.wikidot.com/";
     mainProgram = "cinelerracv";
-    maintainers = with lib.maintainers; [ marcweber ];
+    maintainers = [ ];
     license = lib.licenses.gpl2Only;
     # https://github.com/cinelerra-cv-team/cinelerra-cv/issues/3
     platforms = [ "x86_64-linux" ];

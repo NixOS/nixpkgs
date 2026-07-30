@@ -11,23 +11,15 @@
 stdenv.mkDerivation {
   inherit pname;
 
-  version = "1.2.78.418";
+  version = "1.2.94.583";
 
-  src =
-    # WARNING: This Wayback Machine URL redirects to the closest timestamp.
-    # Future maintainers must manually check the timestamp exists and exactly matches at:
-    # https://web.archive.org/web/*/https://download.scdn.co/SpotifyARM64.dmg
-    # https://web.archive.org/web/*/https://download.scdn.co/Spotify.dmg
-    if stdenv.hostPlatform.isAarch64 then
-      (fetchurl {
-        url = "https://web.archive.org/web/20251212105149/https://download.scdn.co/SpotifyARM64.dmg";
-        hash = "sha256-/rrThZOpjzaHPX1raDe5X8PqtJeTI4GDS5sXSfthXTQ=";
-      })
-    else
-      (fetchurl {
-        url = "https://web.archive.org/web/20251212105140/https://download.scdn.co/Spotify.dmg";
-        hash = "sha256-N2tQTS9vHp93cRI0c5riVZ/8FSaq3ovDqh5K9aU6jV0=";
-      });
+  # WARNING: This Wayback Machine URL redirects to the closest timestamp.
+  # Future maintainers must manually check the timestamp exists and exactly matches at:
+  # https://web.archive.org/web/*/https://download.scdn.co/SpotifyARM64.dmg
+  src = fetchurl {
+    url = "https://web.archive.org/web/20260712124054/https://download.scdn.co/SpotifyARM64.dmg";
+    hash = "sha256-euPw73U9VWSppHFoB8JPHqOFFop66S0bbcVaJty/gY4=";
+  };
 
   nativeBuildInputs = [ undmg ];
 

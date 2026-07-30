@@ -32,9 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/inotify-tools/inotify-tools/wiki";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      marcweber
       pSub
-      shamilton
     ];
     platforms = lib.platforms.linux;
   };

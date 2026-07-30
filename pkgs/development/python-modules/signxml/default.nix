@@ -11,16 +11,16 @@
   hatch-vcs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "signxml";
-  version = "4.2.0";
+  version = "4.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "XML-Security";
     repo = "signxml";
-    tag = "v${version}";
-    hash = "sha256-oyDhJZVn08rIcR3ti9jsYxyBPgz6VaJSbBVYrTQkbVU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0DzHw7E2sAJE3O7io++zjsi07FbkBD24EjGDOVo8/9s=";
   };
 
   build-system = [
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python XML Signature and XAdES library";
     homepage = "https://github.com/XML-Security/signxml";
-    changelog = "https://github.com/XML-Security/signxml/blob/${src.tag}/Changes.rst";
+    changelog = "https://github.com/XML-Security/signxml/blob/${finalAttrs.src.tag}/Changes.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

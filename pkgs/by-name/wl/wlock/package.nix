@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   wayland-scanner,
   wayland,
@@ -16,8 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "wlock";
   version = "1.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "sewn";
     repo = "wlock";
     tag = finalAttrs.version;

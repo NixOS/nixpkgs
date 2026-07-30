@@ -8,14 +8,14 @@
   net-tools,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mackerel-agent";
   version = "0.85.2";
 
   src = fetchFromGitHub {
     owner = "mackerelio";
     repo = "mackerel-agent";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-3A3x32JytJGXebgZeJcToHXNqRB+rbyziT5Zwgc9rEM=";
   };
 
@@ -28,13 +28,13 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   ldflags = [
-    "-X=main.version=${version}"
-    "-X=main.gitcommit=v${version}"
+    "-X=main.version=${finalAttrs.version}"
+    "-X=main.gitcommit=v${finalAttrs.version}"
   ];
 
   postInstall = ''
     wrapProgram $out/bin/mackerel-agent \
-      --prefix PATH : "${lib.makeBinPath buildInputs}"
+      --prefix PATH : "${lib.makeBinPath finalAttrs.buildInputs}"
   '';
 
   doCheck = true;
@@ -46,4 +46,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ midchildan ];
   };
-}
+})

@@ -8,12 +8,12 @@
   SDL_net,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "njam";
   version = "1.25";
 
   src = fetchurl {
-    url = "mirror://sourceforge/njam/njam-${version}-src.tar.gz";
+    url = "mirror://sourceforge/njam/njam-${finalAttrs.version}-src.tar.gz";
     sha256 = "0ysvqw017xkvddj957pdfmbmji7qi20nyr7f0zxvcvm6c7d3cc7s";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

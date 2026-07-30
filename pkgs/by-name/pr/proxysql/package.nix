@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  GIT_VERSION = finalAttrs.version;
+  env.GIT_VERSION = finalAttrs.version;
 
   dontConfigure = true;
 
@@ -226,7 +226,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "High-performance MySQL proxy";
     mainProgram = "proxysql";
     homepage = "https://proxysql.com/";
-    license = with lib.licenses; [ gpl3Only ];
+    license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
   };
 })

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mrbayes";
   version = "3.2.7a";
 
   src = fetchFromGitHub {
     owner = "NBISweden";
     repo = "MrBayes";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-pkkxZ6YHRn/I1SJpT9A+EK4S5hWGmFdcDBJS0zh5mLA=";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     homepage = "https://nbisweden.github.io/MrBayes/";
     platforms = lib.platforms.linux;
   };
-}
+})

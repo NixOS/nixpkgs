@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "play";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "paololazzari";
     repo = "play";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-0ew8iYpNzSsE4fhAIB7NZYDIJitmpS5npJ74Hp6l0E0=";
   };
 
@@ -34,9 +34,9 @@ buildGoModule rec {
   meta = {
     description = "TUI playground for programs like grep, sed and awk";
     homepage = "https://github.com/paololazzari/play";
-    changelog = "https://github.com/paololazzari/play/releases/tag/v${version}";
+    changelog = "https://github.com/paololazzari/play/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ liberodark ];
     mainProgram = "play";
   };
-}
+})

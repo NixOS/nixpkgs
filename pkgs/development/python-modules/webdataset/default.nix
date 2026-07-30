@@ -20,7 +20,7 @@
   torch,
   torchvision,
 }:
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "webdataset";
   version = "1.0.2";
   pyproject = true;
@@ -80,7 +80,6 @@ buildPythonPackage rec {
     description = "High-performance Python-based I/O system for large (and small) deep learning problems, with strong support for PyTorch";
     mainProgram = "widsindex";
     homepage = "https://github.com/webdataset/webdataset";
-    changelog = "https://github.com/webdataset/webdataset/releases/tag/${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ iynaix ];
   };

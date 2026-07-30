@@ -8,18 +8,20 @@
 
 buildGoModule (finalAttrs: {
   pname = "xc";
-  version = "0.8.6";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "joerdav";
     repo = "xc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Q17ldwHp1Wp/u0BkUZiA1pRJaFpo/5iDW011k9qkIEA=";
+    hash = "sha256-hOwRPTH7vE8/U8UuT1z0yyRZvCGvKSX/Ncs4lFwVGVU=";
   };
 
   vendorHash = "sha256-EbIuktQ2rExa2DawyCamTrKRC1yXXMleRB8/pcKFY5c=";
 
   subPackages = [ "cmd/xc" ];
+
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"

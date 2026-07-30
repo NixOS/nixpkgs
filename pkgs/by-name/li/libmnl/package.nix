@@ -13,6 +13,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-J0ubkZ7zFSv7PaOhPJUN1g1uK81UIw/+yimNA7QNBSU=";
   };
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   meta = {
     description = "Minimalistic user-space library oriented to Netlink developers";
     longDescription = ''

@@ -8,14 +8,14 @@
   libtool,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ctemplate";
   version = "2.4";
 
   src = fetchFromGitHub {
     owner = "OlafvdSpek";
     repo = "ctemplate";
-    rev = "ctemplate-${version}";
+    rev = "ctemplate-${finalAttrs.version}";
     sha256 = "1x0p5yym6vvcx70pm8ihnbxxrl2wnblfp72ih5vjyg8mzkc8cxrr";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/OlafvdSpek/ctemplate";
     license = lib.licenses.bsd3;
   };
-}
+})

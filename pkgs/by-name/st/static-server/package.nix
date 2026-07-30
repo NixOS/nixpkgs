@@ -9,14 +9,14 @@
   replaceVars,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "static-server";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "eliben";
     repo = "static-server";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-AZcNh/kF6IdAceA7qe+nhRlwU4yGh19av/S1Zt7iKIs=";
   };
 
@@ -25,7 +25,7 @@ buildGoModule rec {
   patches = [
     # patch out debug.ReadBuidlInfo since version information is not available with buildGoModule
     (replaceVars ./version.patch {
-      inherit version;
+      inherit (finalAttrs) version;
     })
   ];
 
@@ -56,4 +56,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "static-server";
   };
-}
+})

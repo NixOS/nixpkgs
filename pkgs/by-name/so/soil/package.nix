@@ -3,7 +3,7 @@
   lib,
   fetchzip,
   libGL,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation {
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libGL
-    libX11
+    libx11
   ];
 
   buildPhase = ''

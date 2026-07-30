@@ -6,25 +6,27 @@
   nodejs,
   python3,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pulumi-nodejs";
   inherit (pulumi) version src;
 
-  sourceRoot = "${src.name}/sdk/nodejs/cmd/pulumi-language-nodejs";
+  sourceRoot = "${finalAttrs.src.name}/sdk/nodejs/cmd/pulumi-language-nodejs";
 
-  vendorHash = "sha256-Q5Pk2f3EAiM4oit1vhc+PMEuMxdbrKAue3e0pnrZw2c=";
+  vendorHash = "sha256-q+7Qm3HL2avVtx29Cz066BOD7tgyukEwj1FinzmEdw8=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/pulumi/pulumi/sdk/v3/go/common/version.Version=${version}"
+    "-X=github.com/pulumi/pulumi/sdk/v3/go/common/version.Version=${finalAttrs.version}"
   ];
 
   checkFlags = [
     "-skip=^${
       lib.concatStringsSep "$|^" [
-        "TestLanguage"
         "TestGetProgramDependencies"
+        "TestLanguageTSC"
+        "TestLanguageTSNode"
+        "TestLanguageBun"
       ]
     }$"
   ];
@@ -41,8 +43,7 @@ buildGoModule rec {
 
   postInstall = ''
     cp -t "$out/bin" \
-      ../../dist/pulumi-resource-pulumi-nodejs \
-      ../../dist/pulumi-analyzer-policy
+      ../../dist/pulumi-resource-pulumi-nodejs
   '';
 
   meta = {
@@ -52,6 +53,7 @@ buildGoModule rec {
     mainProgram = "pulumi-language-nodejs";
     maintainers = with lib.maintainers; [
       tie
+      untio11
     ];
   };
-}
+})

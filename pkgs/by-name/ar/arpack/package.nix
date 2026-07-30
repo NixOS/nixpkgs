@@ -93,7 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Collection of Fortran77 subroutines to solve large scale eigenvalue problems";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
-      ttuegel
       dotlambda
     ];
     platforms = lib.platforms.unix;

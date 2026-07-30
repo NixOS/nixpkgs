@@ -12,20 +12,20 @@
 }:
 let
   pname = "dependabot-cli";
-  version = "1.81.0";
+  version = "1.91.0";
 
   # `tag` is what `dependabot` uses to find the relevant docker images.
   tag = "nixpkgs-dependabot-cli-${version}";
 
   # Get these hashes from
   # nix run nixpkgs#nix-prefetch-docker -- --image-name ghcr.io/github/dependabot-update-job-proxy/dependabot-update-job-proxy --image-tag latest --final-image-name dependabot-update-job-proxy --final-image-tag ${tag}
-  updateJobProxy.imageDigest = "sha256:d26fd269228ce287141aef81ef54e23a0001d2c6c6a3e16db286488c7d769c8c";
-  updateJobProxy.hash = "sha256-6mmiI2AjKxopeC5SfTa9XOR4hatxEu6M/28wycRnz2w=";
+  updateJobProxy.imageDigest = "sha256:70cf9a8f006db9cde732faf9e33a4f60af895532bbe803268fc8fd2f70aa3202";
+  updateJobProxy.hash = "sha256-IBUBBSXHwepTqvcWJyo5St+ceCc80ml0Arf6R9v54Eg=";
 
   # Get these hashes from
   # nix run nixpkgs#nix-prefetch-docker -- --image-name ghcr.io/dependabot/dependabot-updater-github-actions --image-tag latest --final-image-name dependabot-updater-github-actions --final-image-tag ${tag}
-  updaterGitHubActions.imageDigest = "sha256:5964979027fe1d6fc358e89774074bfe34fa89b2b53ce7d45b44b4ebf71b7953";
-  updaterGitHubActions.hash = "sha256-dmMq/T7DLomvzPtOGIBQnrv+k5/NpfxbcXFxxo5ij6o=";
+  updaterGitHubActions.imageDigest = "sha256:57b7da54e9ce0f360523f27b3536f38af1606bf6a0a74a906d39fb9fa5caf80a";
+  updaterGitHubActions.hash = "sha256-cuAlu1PovPztc3P79bz8ySRCCDKh3dbt2WA4/ws6In8=";
 in
 buildGoModule {
   inherit pname version;
@@ -34,10 +34,10 @@ buildGoModule {
     owner = "dependabot";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-9//TW+56UM/5J6psJWcS6lJqyKwQUEOWftTOJxEaCcQ=";
+    hash = "sha256-8wDP9NRsO/xbtbRTXY1BviEbZUEsiZBosJAni62uyFE=";
   };
 
-  vendorHash = "sha256-dD48OKpuGAJAro7qV4tqpf/uENV2X1VQ2kUvAuJLXc0=";
+  vendorHash = "sha256-mo/OOo+vw2jX0ggeEzNE8Qr5xXg0GEaTH6krdGQyeEE=";
 
   ldflags = [
     "-s"
@@ -60,6 +60,10 @@ buildGoModule {
   checkFlags = [
     "-skip=TestDependabot"
   ];
+
+  # Some tests fail on *-darwin because they require host port binding or a Docker environment.
+  # So, we skip the test entirely on *-darwin.
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   doInstallCheck = true;
   installCheckPhase = ''

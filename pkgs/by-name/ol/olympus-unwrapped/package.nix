@@ -15,36 +15,29 @@ let
   lua_cpath =
     with luajitPackages;
     lib.concatMapStringsSep ";" getLuaCPath [
-      (buildLuarocksPackage {
-        pname = "lsqlite3";
-        version = "0.9.6-1";
-        src = fetchzip {
-          url = "http://lua.sqlite.org/home/zip/lsqlite3_v096.zip";
-          hash = "sha256-Mq409A3X9/OS7IPI/KlULR6ZihqnYKk/mS/W/2yrGBg=";
-        };
-        buildInputs = [ sqlite.dev ];
-      })
-
+      lsqlite3
       lua-subprocess
       nfd
     ];
 
   phome = "$out/lib/olympus";
   # The following variables are to be updated by the update script.
-  version = "25.12.05.03";
-  buildId = "5357"; # IMPORTANT: This line is matched with regex in update.sh.
-  rev = "2959f60fc33a0bd5c3a6805f439bf69c02b3bbfe";
+  version = "26.07.12.04";
+  buildId = "5707"; # IMPORTANT: This line is matched with regex in update.sh.
+  rev = "e2fb5adc8c1b122b44f0d5aab84ef2d5d609812a";
 in
 buildDotnetModule {
   pname = "olympus-unwrapped";
   inherit version;
+
+  strictDeps = false;
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "EverestAPI";
     repo = "Olympus";
     fetchSubmodules = true; # Required. See upstream's README.
-    hash = "sha256-CMCFri8vfcgcU0Hy1KVTbYM7TLwLlHOJ6VSiEhKuWrA=";
+    hash = "sha256-0ChH9lm1RZU8MdNF12fZneAXHpKwr7j/0m42eBoqw0E=";
   };
 
   nativeBuildInputs = [

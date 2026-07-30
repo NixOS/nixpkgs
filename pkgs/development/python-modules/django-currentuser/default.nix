@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "django-currentuser";
-  version = "0.9.0";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zsoldosp";
     repo = "django-currentuser";
     tag = "v${version}";
-    hash = "sha256-pfgsVsWM/aehZZAQzjL1fdsqWlfnquOniu76UoLPREI=";
+    hash = "sha256-1fg1KRu685hnAyHCOKKqvwU/K8Sm4D7/TRKLBI2tBu0=";
   };
 
   build-system = [

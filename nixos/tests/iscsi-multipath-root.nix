@@ -5,9 +5,6 @@ let
 in
 {
   name = "iscsi";
-  meta = {
-    maintainers = pkgs.lib.teams.deshaw.members;
-  };
 
   nodes = {
     target =
@@ -129,7 +126,7 @@ in
         ];
 
         environment.etc."initiator-root-disk-closure".source =
-          nodes.initiatorRootDisk.config.system.build.toplevel;
+          nodes.initiatorRootDisk.system.build.toplevel;
 
         nix.settings = {
           substituters = lib.mkForce [ ];
@@ -189,6 +186,7 @@ in
         boot.initrd.extraFiles."etc/multipath/wwids".source =
           pkgs.writeText "wwids" "/3600140592b17c3f6b404168b082ceeb7/";
 
+        boot.initrd.systemd.enable = false;
         boot.iscsi-initiator = {
           discoverPortal = "target";
           name = initiatorName;

@@ -1,7 +1,7 @@
 {
   backendStdenv,
   cmake,
-  cuda_cccl,
+  cccl,
   cuda_cudart,
   cuda_nvcc,
   cudaNamePrefix,
@@ -26,7 +26,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    cuda_cccl
+    cccl
     cuda_cudart
     libcublas
   ];

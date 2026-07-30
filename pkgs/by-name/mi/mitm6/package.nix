@@ -4,20 +4,19 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "mitm6";
   version = "0.3.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-g+eFcJdgP7CQ6ntN17guJa4LdkGIb91mr/NKRPIukP8=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
-    future
     netifaces
     scapy
     twisted
@@ -35,4 +34,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "mitm6";
   };
-}
+})

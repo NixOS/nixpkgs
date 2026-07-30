@@ -6,14 +6,14 @@
   libiconv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uwuify";
   version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "Daniel-Liu-c0deb0t";
     repo = "uwu";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-MzXObbxccwEG7egmQMCdhUukGqZS+NgbYwZjTaqME7I=";
   };
 
@@ -28,4 +28,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ siraben ];
     mainProgram = "uwuify";
   };
-}
+})

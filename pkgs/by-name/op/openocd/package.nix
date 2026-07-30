@@ -17,16 +17,25 @@
   extraHardwareSupport ? [ ],
 }:
 let
-
   isWindows = stdenv.hostPlatform.isWindows;
   notWindows = !isWindows;
 
+  # OpenOCD needs JimTcl 0.82 and fails to build with the latest version (0.84).
+  # When updating OpenOCD, check which JimTcl version its jimtcl submodule uses.
+  jimtcl_0_82 = jimtcl.overrideAttrs (oldAttrs: rec {
+    version = "0.82";
+    src = oldAttrs.src.override {
+      rev = version;
+      sha256 = "sha256-CDjjrxpoTbLESAbCiCjQ8+E/oJP87gDv9SedQOzH3QY=";
+    };
+  });
+
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openocd";
   version = "0.12.0";
   src = fetchurl {
-    url = "mirror://sourceforge/project/${pname}/${pname}/${version}/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/project/openocd/openocd/${finalAttrs.version}/openocd-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-ryVHiL6Yhh8r2RA/5uYKd07Jaow3R0Tu+Rl/YEMHWvo=";
   };
 
@@ -40,7 +49,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals notWindows [
     hidapi
-    jimtcl
+    jimtcl_0_82
     libftdi1
     libjaylink
   ]
@@ -82,6 +91,9 @@ stdenv.mkDerivation rec {
     ln -s "$rules" "$out/etc/udev/rules.d/"
   '';
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   meta = {
     description = "Free and Open On-Chip Debugging, In-System Programming and Boundary-Scan Testing";
     mainProgram = "openocd";
@@ -102,4 +114,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
-}
+})

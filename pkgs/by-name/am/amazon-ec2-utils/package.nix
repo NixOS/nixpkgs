@@ -16,14 +16,14 @@
   util-linux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "amazon-ec2-utils";
   version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "amazonlinux";
     repo = "amazon-ec2-utils";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-plTBh2LAXkYVSxN0IZJQuPr7QxD7+OAqHl/Zl8JPCmg=";
   };
 
@@ -116,4 +116,4 @@ stdenv.mkDerivation rec {
       thefloweringash
     ];
   };
-}
+})

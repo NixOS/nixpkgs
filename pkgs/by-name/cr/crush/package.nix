@@ -1,28 +1,34 @@
 {
   lib,
-  buildGoModule,
+  stdenv,
+  buildGo126Module,
   fetchFromGitHub,
+  installShellFiles,
   nix-update-script,
   writableTmpDirAsHomeHook,
   versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "crush";
-  version = "0.22.1";
+  version = "0.86.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "crush";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WwakKR+JdlidfxXnKmAPVMxRs/TfNPOg43vQ9HrEqFY=";
+    hash = "sha256-dUeXU65A9/d365a9Z+eUoHOR0RnJV9SAYsks+Vtz9js=";
   };
 
-  vendorHash = "sha256-9WROtIp4Tt+9w+L+frLawwoyMCjuk41VIGYEi5oSHDk=";
+  vendorHash = "sha256-9WkkosPMwXsj32a5Zj4ZxphuB7aVteKq/YTzxP9Xmf0=";
 
   ldflags = [
     "-s"
     "-X=github.com/charmbracelet/crush/internal/version.Version=${finalAttrs.version}"
+  ];
+
+  nativeBuildInputs = [
+    installShellFiles
   ];
 
   checkFlags =
@@ -33,6 +39,7 @@ buildGoModule (finalAttrs: {
         "TestOpenAIClientStreamChoices"
         "TestGrepWithIgnoreFiles"
         "TestSearchImplementations"
+        "TestDispatch_BinaryPassthroughExecutes"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
@@ -44,14 +51,25 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  updateScript = nix-update-script { };
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd crush \
+      --bash <($out/bin/crush completion bash) \
+      --fish <($out/bin/crush completion fish) \
+      --zsh <($out/bin/crush completion zsh)
+  '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Glamourous AI coding agent for your favourite terminal";
     homepage = "https://github.com/charmbracelet/crush";
     changelog = "https://github.com/charmbracelet/crush/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.fsl11Mit;
-    maintainers = with lib.maintainers; [ x123 ];
+    maintainers = with lib.maintainers; [
+      x123
+      malik
+      davinci42
+    ];
     mainProgram = "crush";
   };
 })

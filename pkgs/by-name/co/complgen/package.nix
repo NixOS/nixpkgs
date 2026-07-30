@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "complgen";
-  version = "0.6.1";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "adaszko";
     repo = "complgen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fmnnRG3Vj7oFNJTsnK6KeFnimR9bJ0QDvrJI1Dg6V00=";
+    hash = "sha256-0oC/jpCKM2Y1yag+qIUu+b3sCIPmHs/GUBSPHi7KaVI=";
   };
 
-  cargoHash = "sha256-zueRWnIiANtlZvOwdh22zXumq4Bmq0/FN6vTU5w/XDk=";
+  cargoHash = "sha256-skdtXxNUuC7xLtZSol3b1prdN1YT62uvwo+F7rtFVVQ=";
 
   meta = {
     changelog = "https://github.com/adaszko/complgen/blob/v${finalAttrs.version}/CHANGELOG.md";

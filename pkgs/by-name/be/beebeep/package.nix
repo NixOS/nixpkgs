@@ -6,12 +6,12 @@
   qt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "beebeep";
   version = "5.8.6";
 
   src = fetchzip {
-    url = "https://netix.dl.sourceforge.net/project/beebeep/Linux/beebeep-${version}-qt5-amd64.tar.gz";
+    url = "https://netix.dl.sourceforge.net/project/beebeep/Linux/beebeep-${finalAttrs.version}-qt5-amd64.tar.gz";
     hash = "sha256-YDgFRXFBM1tjLP99mHYJadgccHJYYPAZ1kqR+FngLKU=";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     maintainers = [ ];
   };
-}
+})

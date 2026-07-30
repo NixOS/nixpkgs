@@ -12,16 +12,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-redis";
-  version = "2.19.0";
+  version = "2.22.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_redis";
     inherit version;
-    hash = "sha256-PG98eUvo/JnrbOPj7nxclqIKaIFO0LgzjidX8jJ0gNc=";
+    hash = "sha256-EFysFdIdh87u5BhHYY8A6mzKqjYLiws/0uQveaI9CGg=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core

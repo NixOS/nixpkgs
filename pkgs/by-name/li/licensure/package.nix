@@ -7,14 +7,14 @@
   git,
   gitls,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "licensure";
   version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "chasinglogic";
     repo = "licensure";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-3kZzYDKMLRdYzxa9+wVeTFJk186MJZfGfzRXgY9tI4Y=";
   };
 
@@ -40,4 +40,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.bpeetz ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

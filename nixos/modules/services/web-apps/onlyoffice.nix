@@ -50,12 +50,18 @@ in
 
     package = lib.mkPackageOption pkgs "onlyoffice-documentserver" { };
 
-    x2t = lib.mkPackageOption pkgs "x2t" { };
+    x2t = lib.mkPackageOption pkgs "onlyoffice-documentserver.passthru.x2t" { };
 
     port = lib.mkOption {
       type = lib.types.port;
       default = 8000;
       description = "Port the OnlyOffice document server should listen on.";
+    };
+
+    allowLocalConnections = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Whether to allow the document server to download files from private IP addresses.";
     };
 
     examplePort = lib.mkOption {
@@ -133,13 +139,6 @@ in
 
         virtualHosts.${cfg.hostname} = {
           locations = {
-            # resources that are generated and thus cannot be taken from the cfg.package yet:
-            "~ ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\w]+)?\\/(sdkjs/common/AllFonts.js)$".extraConfig = ''
-              proxy_pass http://onlyoffice-docservice/$2$3;
-            '';
-            "~ ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\w]+)?\\/(fonts/.*)$".extraConfig = ''
-              proxy_pass http://onlyoffice-docservice/$2$3;
-            '';
             # /etc/nginx/includes/ds-docservice.conf
             # disable caching for api.js
             "~ ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\w]+)?\\/(web-apps\\/apps\\/api\\/documents\\/api\\.js)$".extraConfig =
@@ -278,7 +277,7 @@ in
         serviceConfig = {
           # needs to be ran wrapped in FHS for now
           # because the default config refers to many FHS paths
-          ExecStart = "${cfg.package.fhs}/bin/onlyoffice-wrapper ${cfg.package.fileconverter}/bin/fileconverter /run/onlyoffice/config";
+          ExecStart = "${cfg.package.fhs}/bin/onlyoffice-wrapper ${cfg.package.fileconverter}/bin/fileconverter";
           Group = "onlyoffice";
           Restart = "always";
           RuntimeDirectory = "onlyoffice";
@@ -315,6 +314,10 @@ in
             # https://github.com/ONLYOFFICE/Docker-DocumentServer/blob/master/run-document-server.sh
             FS_SECRET_STRING=$(cut -d '"' -f 2 < ${cfg.securityNonceFile})
             jq '
+            ${lib.optionalString cfg.allowLocalConnections ''
+              .services.CoAuthoring."request-filtering-agent".allowPrivateIPAddress = true |
+              .services.CoAuthoring."request-filtering-agent".allowMetaIPAddress = true |
+            ''}
               .storage.fs.secretString = "'$FS_SECRET_STRING'" |
               .services.CoAuthoring.server.port = ${toString cfg.port} |
               .services.CoAuthoring.sql.dbHost = "${cfg.postgresHost}" |
@@ -336,8 +339,10 @@ in
               ' /run/onlyoffice/config/default.json | sponge /run/onlyoffice/config/default.json
 
             chmod u+w /run/onlyoffice/config/production-linux.json
-            jq '.FileConverter.converter.x2tPath = "${cfg.x2t}/bin/x2t"' \
-              /run/onlyoffice/config/production-linux.json | sponge /run/onlyoffice/config/production-linux.json
+            jq '
+              .log.filePath = "/run/onlyoffice/config/log4js/production.json" |
+              .FileConverter.converter.x2tPath = "${cfg.package.x2t-with-fonts-and-themes}/bin/x2t"
+              ' /run/onlyoffice/config/production-linux.json | sponge /run/onlyoffice/config/production-linux.json
 
             chmod u+w /run/onlyoffice/config/log4js/production.json
             jq '.categories.default.level = "${cfg.loglevel}"' \
@@ -360,8 +365,13 @@ in
           ];
           requires = [ "postgresql.target" ];
           wantedBy = [ "multi-user.target" ];
+          environment = {
+            NODE_CONFIG_DIR = "/run/onlyoffice/config";
+            NODE_DISABLE_COLORS = "1";
+            NODE_ENV = "production-linux";
+          };
           serviceConfig = {
-            ExecStart = "${cfg.package.fhs}/bin/onlyoffice-wrapper ${cfg.package.docservice}/bin/docservice /run/onlyoffice/config";
+            ExecStart = "${cfg.package.fhs}/bin/onlyoffice-wrapper ${cfg.package.docservice}/bin/docservice";
             ExecStartPre = [ onlyoffice-prestart ];
             Group = "onlyoffice";
             Restart = "always";

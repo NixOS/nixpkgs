@@ -7,14 +7,14 @@
   wdiff,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.8";
   pname = "pkgdiff";
 
   src = fetchFromGitHub {
     owner = "lvc";
     repo = "pkgdiff";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-/xhORi/ZHC4B2z6UYPOvDzfgov1DcozRjX0K1WYrqXM=";
   };
 
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
     description = "Tool for visualizing changes in Linux software packages";
     homepage = "https://lvc.github.io/pkgdiff/";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ sweber ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "pkgdiff";
   };
-}
+})

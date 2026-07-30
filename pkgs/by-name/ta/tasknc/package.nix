@@ -9,7 +9,7 @@
   taskwarrior2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2020-12-17";
   pname = "tasknc";
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  buildFlags = [ "VERSION=${version}" ];
+  buildFlags = [ "VERSION=${finalAttrs.version}" ];
 
   installPhase = ''
     mkdir -p $out/bin/
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux; # Cannot test others
     license = lib.licenses.mit;
   };
-}
+})

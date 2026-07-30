@@ -6,13 +6,13 @@
 }:
 mkLibretroCore {
   core = "bsnes-mercury-${withProfile}";
-  version = "0-unstable-2024-10-21";
+  version = "0-unstable-2026-07-26";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "bsnes-mercury";
-    rev = "0f35d044bf2f2b879018a0500e676447e93a1db1";
-    hash = "sha256-skVREKYITZn+gKKSZmwuBCWrG0jb/pifwIgat8VyQ8U=";
+    rev = "d83bf7ab607e09131731b3a81825f986f91c1f84";
+    hash = "sha256-VIjB3h8BKlq7Xx3xchgoKp1UxGuVXk7Ylix+hfiRR7A=";
   };
 
   makefile = "Makefile";

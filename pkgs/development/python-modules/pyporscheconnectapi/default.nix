@@ -1,5 +1,6 @@
 {
   lib,
+  aiofiles,
   beautifulsoup4,
   buildPythonPackage,
   fetchFromGitHub,
@@ -8,16 +9,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyporscheconnectapi";
-  version = "0.2.5";
+  version = "0.2.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CJNE";
     repo = "pyporscheconnectapi";
-    tag = version;
-    hash = "sha256-uB8dbAWoHUWuvWyUhPV1P2wPH/ZzVX22PJNEiDYoOA4=";
+    tag = finalAttrs.version;
+    hash = "sha256-c46XAWKf7LeQ9Nz1IumOIs/Z8DuCa2zaatBizFT+FMg=";
   };
 
   postPatch = ''
@@ -28,6 +29,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
+    aiofiles
     beautifulsoup4
     httpx
     rich
@@ -41,8 +43,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python client library for Porsche Connect API";
     homepage = "https://github.com/CJNE/pyporscheconnectapi";
-    changelog = "https://github.com/CJNE/pyporscheconnectapi/releases/tag/${src.tag}";
+    changelog = "https://github.com/CJNE/pyporscheconnectapi/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

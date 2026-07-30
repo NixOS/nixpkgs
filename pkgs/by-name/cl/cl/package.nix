@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  rebar,
-  erlang,
+  rebar3,
+  beamPackages,
   opencl-headers,
   ocl-icd,
 }:
@@ -22,18 +22,18 @@ stdenv.mkDerivation rec {
   # https://github.com/tonyrog/cl/issues/39
   postPatch = ''
     substituteInPlace c_src/Makefile \
-      --replace "-m64" ""
+      --replace-fail "-m64" ""
   '';
 
   buildInputs = [
-    erlang
-    rebar
+    beamPackages.erlang
+    rebar3
     opencl-headers
     ocl-icd
   ];
 
   buildPhase = ''
-    rebar compile
+    rebar3 compile
   '';
 
   # 'cp' line taken from Arch recipe

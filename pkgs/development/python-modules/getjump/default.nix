@@ -10,14 +10,14 @@
   uv-dynamic-versioning,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "getjump";
-  version = "2.8.0";
+  version = "2.10.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-FfAwPCbj+0wL+Lgk17peco/ogrsaa6Js+Ay5fqgPUPw=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-AX8WffzcqBYqo8DzXXbhfqOMd7U5VpWx4MTKhUXLJeQ=";
   };
 
   pythonRelaxDeps = [
@@ -45,9 +45,9 @@ buildPythonPackage rec {
   meta = {
     description = "Get and save images from jump web viewer";
     homepage = "https://github.com/eggplants/getjump";
-    changelog = "https://github.com/eggplants/getjump/releases/tag/v${version}";
+    changelog = "https://github.com/eggplants/getjump/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "jget";
   };
-}
+})

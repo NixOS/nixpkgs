@@ -21,13 +21,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "slepc";
-  version = "3.24.1";
+  version = "3.25.1";
 
   src = fetchFromGitLab {
     owner = "slepc";
     repo = "slepc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Eg0GLPM1AbgUl2/c2+F012LjZweuBNAWjY1WtlghjeY=";
+    hash = "sha256-CLZ3l9H41MrXa4IEkiiGS7VSs3ASNk5/DnLMmJ7NY5U=";
   };
 
   postPatch = ''

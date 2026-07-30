@@ -10,14 +10,14 @@
   texinfo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fswatch";
   version = "1.18.3";
 
   src = fetchFromGitHub {
     owner = "emcrisostomo";
     repo = "fswatch";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-C/NHDhhRTQppu8xRWe9fy1+KIutyoRbkkabUtGlJ1fE=";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ pSub ];
   };
-}
+})

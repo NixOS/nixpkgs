@@ -4,10 +4,10 @@
   fetchFromGitHub,
   patches,
   libxcb,
-  xcbutilkeysyms,
-  xcbutilwm,
-  libX11,
-  xcbutil,
+  libxcb-keysyms,
+  libxcb-wm,
+  libx11,
+  libxcb-util,
   xcbutilxrm,
 }:
 
@@ -25,12 +25,14 @@ stdenv.mkDerivation rec {
   # Allow users set their own list of patches
   inherit patches;
 
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   buildInputs = [
     libxcb
-    xcbutilkeysyms
-    xcbutilwm
-    libX11
-    xcbutil
+    libxcb-keysyms
+    libxcb-wm
+    libx11
+    libxcb-util
     xcbutilxrm
   ];
 

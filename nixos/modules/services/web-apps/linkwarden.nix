@@ -240,11 +240,11 @@ in
       requires = [
         "network-online.target"
       ]
-      ++ lib.optionals cfg.database.createLocally [ "postgresql.service" ];
+      ++ lib.optionals cfg.database.createLocally [ "postgresql.target" ];
       after = [
         "network-online.target"
       ]
-      ++ lib.optionals cfg.database.createLocally [ "postgresql.service" ];
+      ++ lib.optionals cfg.database.createLocally [ "postgresql.target" ];
       wantedBy = [ "multi-user.target" ];
       environment = cfg.environment // {
         # Required, otherwise chrome dumps core
@@ -262,12 +262,12 @@ in
         "network-online.target"
         "linkwarden.service"
       ]
-      ++ lib.optionals cfg.database.createLocally [ "postgresql.service" ];
+      ++ lib.optionals cfg.database.createLocally [ "postgresql.target" ];
       after = [
         "network-online.target"
         "linkwarden.service"
       ]
-      ++ lib.optionals cfg.database.createLocally [ "postgresql.service" ];
+      ++ lib.optionals cfg.database.createLocally [ "postgresql.target" ];
       wantedBy = [ "multi-user.target" ];
       environment = cfg.environment // {
         # Required, otherwise chrome dumps core

@@ -2,19 +2,20 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  git,
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jarl";
-  version = "0.3.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "etiennebacher";
     repo = "jarl";
     tag = finalAttrs.version;
-    hash = "sha256-bfN6HkrGzONbJJzJNDan+txh4eSqLDMJtlRutZHzcCs=";
+    hash = "sha256-MFP1xMNnJ9mfHuUu6hqE9B7nRgI2HfXBpblo3sFnAwo=";
   };
 
   postPatch = ''
@@ -24,14 +25,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
                    '(?:/nix)?/(?:build)/(?:nix[\-0-9]+/)?'
   '';
 
-  cargoHash = "sha256-4pXIbrwtSwRfBgS1XGj/X25bgrLuMTYqlFlhRPEw6o4=";
+  cargoHash = "sha256-Rhv9Wku/bRl28nrXYof+6VAgl2K4ysILRQa1v19r0pU=";
+
+  # integrations test require git at build time (jarl >= 0.5.0)
+  nativeBuildInputs = [ git ];
 
   # Don't run integration_tests for jarl-lsp, because it doesn't see
   # the CARGO_BIN_EXE_jarl env var even if exported in preCheck
   cargoTestFlags = [
     "--lib"
     "--bins"
-    "--test integration"
+    "--test"
+    "integration"
     # "--test integration_tests"
   ];
 

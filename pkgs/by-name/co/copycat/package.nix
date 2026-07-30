@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ccat";
   version = "004";
 
   src = fetchFromGitHub {
     owner = "DeeKahy";
     repo = "CopyCat";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-HLT88ghyT9AwvBTf7NrFkSPqMAh90GrBqZVXN5aaG3w=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.deekahy ];
     mainProgram = "ccat";
   };
-}
+})

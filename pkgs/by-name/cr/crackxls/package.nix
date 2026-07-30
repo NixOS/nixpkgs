@@ -10,14 +10,14 @@
   gmp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "crackxls";
   version = "1.0";
 
   src = fetchFromGitHub {
     owner = "GavinSmith0123";
     repo = "crackxls2003";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-CJFC4iKHHpSRQBdotmum7NjpPNUjbB6cSCs5HMXnjO8=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3;
   };
-}
+})

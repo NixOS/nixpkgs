@@ -45,10 +45,45 @@ let
       internal = true;
     };
 
+    # Should be replaced by importing <nixos/modules/misc/assertions.nix> in the future
+    # see also https://github.com/NixOS/nixpkgs/pull/207187
     warnings = mkOption {
       type = types.listOf types.str;
       default = [ ];
       internal = true;
+    };
+    assertions = mkOption {
+      type = types.listOf types.anything;
+      default = [ ];
+      internal = true;
+    };
+
+    attrPathsDisallowedForInternalUse = mkOption {
+      type = types.listOf (
+        types.submodule {
+          options.attrPath = lib.mkOption {
+            type = types.listOf types.str;
+            description = ''
+              Attribute path to disallow.
+            '';
+          };
+          options.reason = lib.mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = /* because */ "it's dangerous.";
+            description = ''
+              Reason for it being disallowed.
+            '';
+          };
+        }
+      );
+      internal = true;
+      default = [ ];
+      description = ''
+        List of attribute paths that may not be used by other packages in Nixpkgs.
+
+        Should usually only be defined by Nixpkgs CI.
+      '';
     };
 
     # Config options
@@ -142,7 +177,7 @@ let
     npmRegistryOverrides = mkOption {
       type = types.attrsOf types.str;
       description = ''
-        The default NPM registry overrides for all `fetchNpmDeps` calls, as an attribute set.
+        The default npm registry overrides for all `fetchNpmDeps` calls, as an attribute set.
 
         For each attribute, all files fetched from the host corresponding to the name will instead be fetched from the host (and sub-path) specified in the value.
 
@@ -165,7 +200,7 @@ let
         lib.isAttrs j && lib.all builtins.isString (builtins.attrValues j)
       );
       description = ''
-        A string containing a string with a JSON representation of NPM registry overrides for `fetchNpmDeps`.
+        A string containing a string with a JSON representation of npm registry overrides for `fetchNpmDeps`.
 
         This overrides the [`npmRegistryOverrides`](#opt-npmRegistryOverrides) option, see its documentation for more details.
       '';
@@ -226,6 +261,23 @@ let
       '';
     };
 
+    allowUnfreePackages = mkOption {
+      type = with lib.types; listOf str;
+      default = [ ];
+      example = [ "ut1999" ];
+      description = ''
+        Allows specific unfree packages to be used.
+
+        This option composes with `nixpkgs.config.allowUnfreePredicate` by also allowing the listed package names.
+
+        Unlike `nixpkgs.config.allowUnfreePredicate`, this option merges additively, similar to `environment.systemPackages`.
+        This enables defining allowed unfree packages in multiple modules, close to where they are used.
+
+        This avoids the need to centralize all unfree package declarations or globally enable unfree packages via
+        `nixpkgs.config.allowUnfree = true`.
+      '';
+    };
+
     allowBroken = mkOption {
       type = types.bool;
       default = false;
@@ -266,6 +318,38 @@ let
       feature = "build packages with CUDA support by default";
     };
 
+    cudaCapabilities = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      description = ''
+        A list of CUDA capabilities to build for.
+
+        Packages may use this option to control device code generation to
+        take advantage of architecture-specific functionality, speed up
+        compile times by producing less device code, or slim package closures.
+
+        For example, you can build for Ada Lovelace GPUs with
+        `cudaCapabilities = [ "8.9" ];`.
+
+        If not provided, the default value is calculated per-package set,
+        derived from a list of GPUs supported by that CUDA version.
+
+        See the [CUDA section](https://nixos.org/manual/nixpkgs/stable/#cuda) in
+        the Nixpkgs manual for more information.
+      '';
+    };
+
+    cudaForwardCompat = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to enable PTX support for future hardware.
+
+        When enabled, packages will include PTX code that can be JIT-compiled
+        for GPUs newer than those explicitly targeted by `cudaCapabilities`.
+      '';
+    };
+
     replaceBootstrapFiles = mkMassRebuild {
       type = types.functionTo (types.attrsOf types.package);
       default = lib.id;
@@ -292,6 +376,22 @@ let
         in
         builtins.mapAttrs (name: prev: replacements.''${prev.outputHash} or prev) prevFiles
       '';
+    };
+
+    replaceStdenv = mkMassRebuild {
+      type = types.nullOr (types.functionTo types.package);
+      default = null;
+      defaultText = literalExpression "null";
+      description = ''
+        A function to replace the standard environment (stdenv).
+
+        The function receives an attribute set with `pkgs` and should return
+        a stdenv derivation.
+
+        This can be used to globally replace the stdenv with a custom one,
+        for example to use ccache or distcc.
+      '';
+      example = literalExpression "{ pkgs }: pkgs.ccacheStdenv";
     };
 
     rocmSupport = mkMassRebuild {
@@ -321,6 +421,21 @@ let
       '';
     };
 
+    recursionMode = mkOption {
+      type = types.uniq (
+        types.enum [
+          "hydra"
+          "eval"
+          "search"
+        ]
+      );
+      default = "eval";
+      description = ''
+        In which way to recurse through Nixpkgs. In most cases you want keep this as the default.
+        You can use this to emulate how `hydra` and `search` are going through Nixpkgs.
+      '';
+    };
+
     hashedMirrors = mkOption {
       type = types.listOf types.str;
       default = [ "https://tarballs.nixos.org" ];
@@ -335,7 +450,7 @@ let
     };
 
     rewriteURL = mkOption {
-      type = types.functionTo (types.nullOr types.str);
+      type = types.nullOr (types.functionTo (types.nullOr types.str));
       description = ''
         A hook to rewrite/filter URLs before they are fetched.
 
@@ -345,8 +460,7 @@ let
 
         The intended use is to allow URL rewriting to insert company-internal mirrors, or work around company firewalls and similar network restrictions.
       '';
-      default = lib.id;
-      defaultText = literalExpression "(url: url)";
+      default = null;
       example = literalExpression ''
         {
           # Use Nix like it's 2024! ;-)
@@ -366,6 +480,25 @@ let
         Please read https://www.visualstudio.com/license-terms/mt644918/ and enable this config if you accept.
       '';
     };
+
+    allowDeprecatedx86_64Darwin = mkOption {
+      # `true` does nothing; it silenced the warning in 26.05.
+      type = types.either types.bool (types.enum [ "force" ]);
+      default = false;
+      description = ''
+        Set to `"force"` to allow evaluating for the `x86_64-darwin`
+        platform despite its deprecation in Nixpkgs 26.11.
+
+        This is not expected to function, and Hydra will not build
+        binaries for the platform. It is provided only as an escape
+        hatch for custom setups, and comes with no support.
+
+        See the [release notes](#x86_64-darwin-26.11) for more
+        information.
+      '';
+    };
+
+    problems = (import ../stdenv/generic/problems.nix { inherit lib; }).configOptions;
   };
 
 in
@@ -388,9 +521,39 @@ in
   inherit options;
 
   config = {
-    warnings = optionals config.warnUndeclaredOptions (
-      mapAttrsToList (k: v: "undeclared Nixpkgs option set: config.${k}") config._undeclared or { }
-    );
+    warnings =
+      optionals config.warnUndeclaredOptions (
+        mapAttrsToList (k: v: "undeclared Nixpkgs option set: config.${k}") config._undeclared or { }
+      )
+      ++ lib.optional (config.showDerivationWarnings != [ ]) ''
+        `config.showDerivationWarnings = [ "maintainerless" ]` is deprecated, use `config.problems` instead:
+
+          config.problems.matchers = [ { kind = "maintainerless"; handler = "warn"; } ];
+
+        See this page for more details: https://nixos.org/manual/nixpkgs/unstable#sec-problems
+      '';
+
+    assertions =
+      # Collect the assertions from the problems.matchers.* submodules, propagate them into here
+      lib.concatMap (matcher: matcher.assertions) config.problems.matchers;
+
+    # Put the default value for matchers in here (as in, not as an *actual* mkDefault default value),
+    # to force it being merged with any custom values instead of being overridden.
+    problems.matchers = [
+      {
+        kind = "broken";
+        handler = "error";
+      }
+      # Be loud and clear about package removals
+      {
+        kind = "removal";
+        handler = "warn";
+      }
+      (lib.mkIf (lib.elem "maintainerless" config.showDerivationWarnings) {
+        kind = "maintainerless";
+        handler = "warn";
+      })
+    ];
   };
 
 }

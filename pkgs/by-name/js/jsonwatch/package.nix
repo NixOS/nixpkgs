@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jsonwatch";
   version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "dbohdan";
     repo = "jsonwatch";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qhVqAhUAbLb5wHnLNHr6BxffyH1G5B09eOJQoqSzWEk=";
   };
 
@@ -27,9 +27,9 @@ rustPlatform.buildRustPackage rec {
       differences when the data changes.
     '';
     homepage = "https://github.com/dbohdan/jsonwatch";
-    changelog = "https://github.com/dbohdan/jsonwatch/releases/tag/${src.tag}";
+    changelog = "https://github.com/dbohdan/jsonwatch/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "jsonwatch";
   };
-}
+})

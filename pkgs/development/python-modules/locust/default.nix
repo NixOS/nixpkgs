@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "locust";
-  version = "2.42.2";
+  version = "2.43.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "locustio";
     repo = "locust";
     tag = version;
-    hash = "sha256-Myek56kHUX0rFNJcEhfMTSE7xwYhm4AmogxIcUNzrR0=";
+    hash = "sha256-+0B4S524UjvaYl7VTZ1IY7UuBuDjUBqOvjHu0UVOi6A=";
   };
 
   postPatch = ''

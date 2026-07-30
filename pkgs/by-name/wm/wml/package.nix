@@ -5,7 +5,7 @@
   lynx,
   makeBinaryWrapper,
   ncurses,
-  pcre,
+  pcre2,
   perl,
   perlPackages,
   stdenv,
@@ -31,22 +31,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "wml";
-  version = "2.32.0";
+  version = "2.32.0-unstable-2026-05-08";
 
   src = fetchFromGitHub {
     owner = "thewml";
     repo = "website-meta-language";
-    tag = "releases/wml-${finalAttrs.version}";
-    hash = "sha256-9ZiMGm0W2qS/7nL8NsmGBsuB5sNJvWuJaxE7CTdWo6s=";
+    rev = "673e78b37887f4d40c422759d634913c52e7334d";
+    hash = "sha256-rAxVha2Y16tEF+rLqebbAgBVPNrxYhNhvXnQ6/Oq1bg=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
-
-  # https://github.com/thewml/website-meta-language/commit/727806494dcb9d334ffb324aedbf6076e4796299
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'CMAKE_MINIMUM_REQUIRED(VERSION 3.0)' 'CMAKE_MINIMUM_REQUIRED(VERSION 3.15)'
-  '';
 
   nativeBuildInputs = [
     cmake
@@ -56,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = perlDeps ++ [
     ncurses
-    pcre
+    pcre2
     perl
   ];
 
@@ -77,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Offline HTML preprocessor";
     homepage = "https://www.shlomifish.org/open-source/projects/website-meta-language/";
     downloadPage = "https://github.com/thewml/website-meta-language/releases";
-    changelog = "https://github.com/thewml/website-meta-language/blob/${finalAttrs.src.tag}/src/ChangeLog";
+    changelog = "https://github.com/thewml/website-meta-language/blob/${finalAttrs.src.rev}/src/ChangeLog";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ prince213 ];
     mainProgram = "wml";

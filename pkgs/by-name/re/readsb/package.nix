@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "readsb";
-  version = "3.16.7";
+  version = "3.16.9";
 
   src = fetchFromGitHub {
     owner = "wiedehopf";
     repo = "readsb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-voBA1SaSbhm+CRiTBbKdf8NqJS5xano+c806+wqiMgE=";
+    hash = "sha256-jaC+OFhYvPFp3dZ2jfAL+1KT3pVQf5wcvcvX3c+BNsg=";
   };
 
   strictDeps = true;
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "ADS-B decoder swiss knife";
     homepage = "https://github.com/wiedehopf/readsb";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ wucke13 ];
     platforms = lib.platforms.linux; # uses epoll, hence its linux only
   };

@@ -54,5 +54,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/r0x0r/pywebview";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jojosch ];
+    # contains committed jar and dll files
+    sourceProvenance = with lib.sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
   };
 }

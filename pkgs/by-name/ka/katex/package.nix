@@ -2,32 +2,43 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  yarn-berry,
+  yarn-berry_4,
   nodejs,
+  nodejs_22,
   makeBinaryWrapper,
   nix-update-script,
 }:
 
+let
+  # rollup 2.x breaks on nodejs 24.15+ require.extensions regression. https://github.com/nodejs/node/issues/62786
+  yarn-berry = yarn-berry_4.override { nodejs = nodejs_22; };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "katex";
-  version = "0.16.27";
+  version = "0.16.28";
 
   src = fetchFromGitHub {
     owner = "katex";
     repo = "katex";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bw5W8TkM31aeqQ6eJae8voW75RvvUjeTdu7aPQ+lAa0=";
+    hash = "sha256-M9PqzSQkMcnfuL2n/eLwxnk3E9gSEVu0t6Tahiw7niI=";
   };
 
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/KaTeX/KaTeX/blob/main/package.json#L58
+    ./yarn-4.14-support.patch
+  ];
+
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src;
-    hash = "sha256-bRzYuiYDAz9LTcaUgI0dvfxU/eo0uTSz0pPP7dH5XW8=";
+    inherit (finalAttrs) src patches;
+    hash = "sha256-6DxF+TtUOqW14ivBHETUMXzDspP/54k1OzbKeIJqDAQ=";
   };
 
   nativeBuildInputs = [
     yarn-berry.yarnBerryConfigHook
     yarn-berry
-    nodejs
+    nodejs_22
     makeBinaryWrapper
   ];
 

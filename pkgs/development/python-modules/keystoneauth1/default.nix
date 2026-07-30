@@ -11,7 +11,6 @@
   os-service-types,
   oslo-config,
   oslo-utils,
-  pbr,
   pycodestyle,
   pyyaml,
   requests,
@@ -27,12 +26,12 @@
 
 buildPythonPackage rec {
   pname = "keystoneauth1";
-  version = "5.12.0";
+  version = "5.15.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3RE8Lz3LQY2fdhxzuM1DqW3fqKYStRxXaCI4HznKSug=";
+    hash = "sha256-ziys39Ao5lvSP/QD1lcuv6s7AG1tLd46qFwmNnWp+7U=";
   };
 
   build-system = [ setuptools ];
@@ -40,7 +39,6 @@ buildPythonPackage rec {
   dependencies = [
     iso8601
     os-service-types
-    pbr
     requests
     stevedore
     typing-extensions

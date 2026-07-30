@@ -11,9 +11,9 @@
   gtk2,
   alsa-lib,
   dbus-glib,
-  libXtst,
-  libXdamage,
-  libXScrnSaver,
+  libxtst,
+  libxdamage,
+  libxscrnsaver,
 }:
 
 let
@@ -46,9 +46,9 @@ let
       gtk2
       alsa-lib
       dbus-glib
-      libXtst
-      libXdamage
-      libXScrnSaver
+      libxtst
+      libxdamage
+      libxscrnsaver
     ];
 
     nativeBuildInputs = [

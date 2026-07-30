@@ -3,8 +3,6 @@
   fetchPypi,
   flit-core,
   lib,
-  pythonOlder,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -21,8 +19,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ flit-core ];
 
-  dependencies = lib.optionals (pythonOlder "3.10") [ typing-extensions ];
-
   # no test
   doCheck = false;
 
@@ -33,5 +29,13 @@ buildPythonPackage rec {
     homepage = "https://pypdf2.readthedocs.io/";
     changelog = "https://github.com/py-pdf/PyPDF2/raw/${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
+    knownVulnerabilities = [
+      "CVE-2026-27024"
+      "CVE-2026-27025"
+      "CVE-2026-27628"
+      "CVE-2026-27888"
+      "CVE-2026-28351"
+      "CVE-2026-33699"
+    ];
   };
 }

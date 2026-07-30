@@ -23,7 +23,8 @@
   libsepol,
   libthai,
   libdatrie,
-  xorg,
+  libxtst,
+  libxdmcp,
   lerc,
   libxkbcommon,
   libepoxy,
@@ -71,11 +72,11 @@ stdenv.mkDerivation (finalAttrs: {
     libsepol
     libthai
     libdatrie
-    xorg.libXdmcp
+    libxdmcp
     lerc
     libxkbcommon
     libepoxy
-    xorg.libXtst
+    libxtst
     sqlite
     git
     libdeflate

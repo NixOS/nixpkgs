@@ -3,15 +3,15 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "github-markdown-toc-go";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "ekalinin";
     repo = "github-markdown-toc.go";
-    rev = "v${version}";
-    hash = "sha256-hCkahhnTAF17ctJTL83wZxZiKGDzIKLwWKTTnwYQ3cs=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-sHXgtw+6LX7ryT8SWYWbEYu1iZCkeDZDP7houcsORJI=";
   };
 
   vendorHash = "sha256-K5yb7bnW6eS5UESK9wgNEUwGjB63eJk6+B0jFFiFero=";
@@ -23,4 +23,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ dannixon ];
     mainProgram = "gh-md-toc";
   };
-}
+})

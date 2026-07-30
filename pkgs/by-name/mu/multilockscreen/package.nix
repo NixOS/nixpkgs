@@ -36,14 +36,14 @@ let
     coreutils
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "multilockscreen";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "jeffmhubbard";
     repo = "multilockscreen";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1bfpbazvhaz9x356nsghz0czysh9b75g79cd9s35v0x0rrzdr9qj";
   };
 
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ kylesferrazza ];
   };
-}
+})

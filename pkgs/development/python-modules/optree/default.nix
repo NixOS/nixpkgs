@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "optree";
-  version = "0.17.0";
+  version = "0.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "metaopt";
     repo = "optree";
     tag = "v${version}";
-    hash = "sha256-4ZkUdGF+Fauy6KWbyrGQ684Ay5XlFT2S2I9lv/1KeWs=";
+    hash = "sha256-i/vn9Lo5UiY3+1Mh6FMSMjEyDcs8dtWSL3ESZ8CyHPw=";
   };
 
   dontUseCmakeConfigure = true;

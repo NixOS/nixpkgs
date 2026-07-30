@@ -4,7 +4,6 @@
   pkgs,
   ...
 }:
-
 let
   inherit (lib)
     types
@@ -12,8 +11,6 @@ let
     mkOption
     mkIf
     mkDefault
-    mkPackageOption
-    mkRemovedOptionModule
     literalExpression
     getExe
     makeBinPath
@@ -22,15 +19,31 @@ let
     ;
 
   cfg = config.services.displayManager.dms-greeter;
+  cfgDms = config.programs.dms-shell;
   cfgAutoLogin = config.services.displayManager.autoLogin;
+  sessionData = config.services.displayManager.sessionData;
 
+  # Miracle WM is nested under `programs.wayland.miracle-wm` unlike the rest
+  compositorOption =
+    if cfg.compositor.name == "miracle-wm" then "wayland.miracle-wm" else "${cfg.compositor.name}";
   cacheDir = "/var/lib/dms-greeter";
+
+  # Not all compositor packages match the name they use and Miracle does not have a package option
+  compositorPkg =
+    if cfg.compositor.name == "miracle-wm" then
+      pkgs.miracle-wm
+    else
+      lib.attrByPath [
+        "programs"
+        cfg.compositor.name
+        "package"
+      ] null config;
 
   greeterScript = pkgs.writeShellScriptBin "dms-greeter-start" ''
     export PATH=$PATH:${
       makeBinPath [
         cfg.quickshell.package
-        config.programs.${cfg.compositor.name}.package
+        compositorPkg
       ]
     }
     ${
@@ -53,6 +66,38 @@ let
     } ${optionalString cfg.logs.save "> ${cfg.logs.path} 2>&1"}
   '';
 
+  autoLoginCommand =
+    pkgs.runCommand "dms-greeter-autologin-command"
+      {
+        nativeBuildInputs = [
+          pkgs.gnugrep
+          pkgs.coreutils
+        ];
+      }
+      ''
+        set -euo pipefail
+
+        session="${sessionData.autologinSession}"
+        desktops="${sessionData.desktops}"
+
+        for sessionFile in \
+          "$desktops/share/wayland-sessions/$session.desktop" \
+          "$desktops/share/xsessions/$session.desktop"
+        do
+          if [ -f "$sessionFile" ]; then
+            command="$(grep -m1 '^Exec=' "$sessionFile" | cut -d= -f2- || true)"
+
+            if [ -n "$command" ]; then
+              printf '%s\n' "$command" > "$out"
+              exit 0
+            fi
+          fi
+        done
+
+        echo "dms-greeter autologin: could not resolve Exec for session '$session'" >&2
+        exit 1
+      '';
+
   jq = getExe pkgs.jq;
 
   configFilesFromHome =
@@ -69,7 +114,21 @@ in
   options.services.displayManager.dms-greeter = {
     enable = mkEnableOption "DankMaterialShell greeter";
 
-    package = mkPackageOption pkgs "dms-shell" { };
+    package = mkOption {
+      type = types.package;
+      default = if cfgDms.enable then cfgDms.package else pkgs.dms-shell;
+      defaultText = literalExpression ''
+        if config.programs.dms-shell.enable
+        then config.programs.dms-shell.package
+        else pkgs.dms-shell;
+      '';
+      description = ''
+        The DankMaterialShell package to use for the greeter.
+
+        Defaults to the package from `programs.dms-shell` if it is enabled,
+        otherwise defaults to `pkgs.dms-shell`.
+      '';
+    };
 
     compositor = {
       name = mkOption {
@@ -77,6 +136,9 @@ in
           "niri"
           "hyprland"
           "sway"
+          "mangowc"
+          "miracle-wm"
+          "labwc"
         ];
         example = "niri";
         description = ''
@@ -89,6 +151,9 @@ in
           - niri: A scrollable-tiling Wayland compositor
           - hyprland: A dynamic tiling Wayland compositor
           - sway: An i3-compatible Wayland compositor
+          - mango: A dwm-inspired Wayland compositor with modern config options and multiple layouts
+          - miracle-wm: A keyboard-driven Wayland compositor with smooth animations and extensibility
+          - labwc: Lightweight stacking Wayland compositor inspired by Openbox
         '';
       };
 
@@ -159,7 +224,21 @@ in
     };
 
     quickshell = {
-      package = mkPackageOption pkgs "quickshell" { };
+      package = mkOption {
+        type = types.package;
+        default = if cfgDms.enable then cfgDms.quickshell.package else pkgs.quickshell;
+        defaultText = literalExpression ''
+          if config.programs.dms-shell.enable
+          then config.programs.dms-shell.quickshell.package
+          else pkgs.quickshell;
+        '';
+        description = ''
+          The Quickshell package to use for the greeter.
+
+          Defaults to the quickshell package from `programs.dms-shell` if it is enabled,
+          otherwise defaults to `pkgs.quickshell`.
+        '';
+      };
     };
 
     logs = {
@@ -182,12 +261,23 @@ in
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = config.programs.${cfg.compositor.name}.enable or false;
+        assertion =
+          # Assemble the full attribute structure because miracle-wm is not nested in the same location as the others
+          lib.attrByPath (
+            [ "programs" ] ++ lib.splitString "." compositorOption ++ [ "enable" ]
+          ) false config;
         message = ''
           DankMaterialShell greeter: The compositor "${cfg.compositor.name}" is not enabled.
 
           Please enable the compositor via:
-            programs.${cfg.compositor.name}.enable = true;
+            programs.${compositorOption}.enable = true;
+        '';
+      }
+      {
+        assertion = cfgAutoLogin.enable -> sessionData.autologinSession != null;
+        message = ''
+          dms-greeter auto-login requires services.displayManager.defaultSession to be set,
+          or at least one session in services.displayManager.sessionPackages.
         '';
       }
     ];
@@ -200,7 +290,8 @@ in
           command = getExe greeterScript;
         };
         initial_session = mkIf (cfgAutoLogin.enable && (cfgAutoLogin.user != null)) {
-          inherit (cfgAutoLogin) user command;
+          inherit (cfgAutoLogin) user;
+          command = ''${getExe pkgs.bash} -lc "${pkgs.systemd}/bin/systemd-cat $(<${autoLoginCommand})"'';
         };
       };
     };
@@ -263,7 +354,9 @@ in
         fi
 
         if [ -f settings.json ]; then
-            if cp "$(${jq} -r '.customThemeFile' settings.json)" custom-theme.json; then
+            theme_file="$(${jq} -r '.customThemeFile // empty' settings.json)"
+            if [ -f "$theme_file" ] && [ -r "$theme_file" ]; then
+                cp "$theme_file" custom-theme.json
                 mv settings.json settings.orig.json
                 ${jq} '.customThemeFile = "${cacheDir}/custom-theme.json"' settings.orig.json > settings.json
             fi
@@ -294,5 +387,5 @@ in
     services.libinput.enable = mkDefault true;
   };
 
-  meta.maintainers = lib.teams.danklinux.maintainers;
+  meta.teams = [ lib.teams.danklinux ];
 }

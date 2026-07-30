@@ -9,7 +9,7 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libplist";
   version = "2.7.0";
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = "libplist";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Rc1KwJR+Pb2lN8019q5ywERrR7WA2LuLRiEvNsZSxXc=";
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   ];
 
   preAutoreconf = ''
-    export RELEASE_VERSION=${version}
+    export RELEASE_VERSION=${finalAttrs.version}
   '';
 
   configureFlags = [
@@ -48,7 +48,8 @@ stdenv.mkDerivation rec {
     "--without-cython"
   ];
 
-  doCheck = true;
+  # Tests segfault on aarch64-darwin: https://hydra.nixos.org/build/323410364
+  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
 
   postFixup = lib.optionalString enablePython ''
     moveToOutput "lib/${python3.libPrefix}" "$py"
@@ -62,4 +63,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "plistutil";
   };
-}
+})

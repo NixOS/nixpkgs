@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "terraform-iam-policy-validator";
   version = "0.0.9";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "terraform-iam-policy-validator";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RGZqnt2t+aSNGt8Ubi2dzZE04n9Zfkw+T3Zmol/FO+I=";
   };
 
@@ -41,9 +41,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "CLI tool that validates AWS IAM Policies in a Terraform template against AWS IAM best practices";
     homepage = "https://github.com/awslabs/terraform-iam-policy-validator";
-    changelog = "https://github.com/awslabs/terraform-iam-policy-validator/releases/tag/v${version}";
+    changelog = "https://github.com/awslabs/terraform-iam-policy-validator/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jherland ];
     mainProgram = "tf-policy-validator";
   };
-}
+})

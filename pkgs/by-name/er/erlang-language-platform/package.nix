@@ -3,7 +3,7 @@
   lib,
   fetchurl,
   autoPatchelfHook,
-  erlang,
+  beamPackages,
 }:
 let
   # erlang-language-platform supports multiple OTP versions.
@@ -15,7 +15,7 @@ let
       "elp-macos-${arch}-apple-darwin"
     else
       "elp-linux-${arch}-unknown-linux-gnu";
-  otp_version = "otp-${lib.versions.major erlang.version}";
+  otp_version = "otp-${lib.versions.major beamPackages.erlang.version}";
   release_major = "${platform}-${otp_version}";
 
   hashes = builtins.fromJSON (builtins.readFile ./hashes.json);
@@ -33,7 +33,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "erlang-language-platform";
-  version = "2025-07-21";
+  version = "2026-01-15";
 
   src = fetchurl {
     url = "https://github.com/WhatsApp/erlang-language-platform/releases/download/${version}/${release_name}.tar.gz";
@@ -65,7 +65,6 @@ stdenv.mkDerivation rec {
       "aarch64-linux"
       "x86_64-linux"
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
     maintainers = with lib.maintainers; [ offsetcyan ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];

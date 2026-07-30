@@ -5,34 +5,35 @@
   desktop-file-utils,
   fetchFromGitHub,
   python3,
-  python-qt,
   rtmidi,
-  libsForQt5,
+  qt6,
+  alsa-lib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "csound-qt";
-  version = "1.1.3";
+  version = "7.0.0-beta1";
 
   src = fetchFromGitHub {
     owner = "CsoundQt";
     repo = "CsoundQt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZdQwWRAr6AKLmZ/L0lSxIlvWRLoZIKinn7BAQiR+luk=";
+    hash = "sha256-R/rGbLVJBjMimne3yDoPJKwrXyRqhfepV3g0Uaj/dbY=";
   };
 
   patches = [
     ./rtmidipath.patch
   ];
 
-  nativeBuildInputs = with libsForQt5; [
+  nativeBuildInputs = with qt6; [
     qmake
     qtwebengine
-    qtxmlpatterns
+    qtdeclarative
     wrapQtAppsHook
   ];
 
   buildInputs = [
+    alsa-lib
     csound
     desktop-file-utils
     rtmidi
@@ -41,15 +42,11 @@ stdenv.mkDerivation (finalAttrs: {
   qmakeFlags = [
     "qcs.pro"
     "CONFIG+=rtmidi"
-    "CONFIG+=pythonqt"
     "CONFIG+=record_support"
     "CONFIG+=html_webengine"
     "CSOUND_INCLUDE_DIR=${csound}/include/csound"
     "CSOUND_LIBRARY_DIR=${csound}/lib"
     "RTMIDI_DIR=${rtmidi.src}"
-    "PYTHONQT_SRC_DIR=${python-qt.src}"
-    "PYTHONQT_LIB_DIR=${python-qt}/lib"
-    "LIBS+=-L${python-qt}/lib"
     "INSTALL_DIR=${placeholder "out"}"
     "SHARE_DIR=${placeholder "out"}/share"
     "PYTHON_DIR=${python3}"

@@ -8,14 +8,14 @@
   catch2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "seasocks";
   version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "mattgodbolt";
     repo = "seasocks";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-R1McxZm2qsUoggFGfL587g+8eQf7si56xVkR8B8nehQ=";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ fredeb ];
   };
-}
+})

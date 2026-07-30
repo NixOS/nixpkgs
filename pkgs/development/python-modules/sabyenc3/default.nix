@@ -23,6 +23,6 @@ buildPythonPackage rec {
     description = "yEnc Decoding for Python 3";
     homepage = "https://github.com/sabnzbd/sabyenc/";
     license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = [ ];
   };
 }

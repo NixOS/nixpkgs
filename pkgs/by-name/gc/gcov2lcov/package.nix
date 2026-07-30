@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gcov2lcov";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "jandelgado";
     repo = "gcov2lcov";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ifXpT5jGNaStqvzP5Rq6Hf6PFhpiKMRC+eSYOZfzt+s=";
   };
 
@@ -29,8 +29,8 @@ buildGoModule rec {
     description = "Convert go coverage files to lcov format";
     mainProgram = "gcov2lcov";
     homepage = "https://github.com/jandelgado/gcov2lcov";
-    changelog = "https://github.com/jandelgado/gcov2lcov/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/jandelgado/gcov2lcov/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ meain ];
   };
-}
+})

@@ -10,14 +10,14 @@
   getopt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fontpreview";
   version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "sdushantha";
     repo = "fontpreview";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0g3i2k6n2yhp88rrcf0hp6ils7836db7hx73hw9qnpcbmckz0i4w";
   };
 
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.erictapen ];
     mainProgram = "fontpreview";
   };
-}
+})

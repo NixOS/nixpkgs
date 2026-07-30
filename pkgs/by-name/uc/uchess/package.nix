@@ -6,7 +6,7 @@
   stockfish,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "uchess";
   version = "0.2.1";
 
@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "tmountain";
     repo = "uchess";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1njl3f41gshdpj431zkvpv2b7zmh4m2m5q6xsijb0c0058dk46mz";
   };
 
@@ -36,4 +36,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ tmountain ];
     license = lib.licenses.mit;
   };
-}
+})

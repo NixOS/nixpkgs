@@ -47,7 +47,7 @@ buildNpmPackage rec {
   ];
 
   postInstall = ''
-    install -Dm644 assets/icons/app/icon.png $out/share/pixmaps/fcast-receiver.png
+    install -Dm644 assets/icons/app/icon.png $out/share/icons/hicolor/512x512/apps/fcast-receiver.png
     ln -s $out/lib/node_modules/fcast-receiver/package.json $out/lib/node_modules/fcast-receiver/dist/package.json
 
     makeWrapper ${electron}/bin/electron $out/bin/fcast-receiver \

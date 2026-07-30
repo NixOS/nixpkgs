@@ -12,15 +12,15 @@
   spamassassin,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "re2c";
-  version = "4.3.1";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "skvadrik";
     repo = "re2c";
-    rev = version;
-    hash = "sha256-ihtAB6HLgYhX+FKPFy01RByy/M468YrHv2v5wB9bJws=";
+    rev = finalAttrs.version;
+    hash = "sha256-POdE8aKvQqfIPEIkUppZPV8t9ApT4R1AyfHXxrKvq88=";
   };
 
   nativeBuildInputs = [
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

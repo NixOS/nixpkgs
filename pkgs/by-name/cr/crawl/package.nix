@@ -4,7 +4,7 @@
   fetchFromGitHub,
   which,
   sqlite,
-  lua5_1,
+  lua5_4,
   perl,
   python3,
   zlib,
@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "crawl${lib.optionalString tileMode "-tiles"}";
-  version = "0.33.1";
+  version = "0.34.1";
 
   src = fetchFromGitHub {
     owner = "crawl";
     repo = "crawl";
     rev = version;
-    hash = "sha256-GXrYLGoQ1UwDHs+kLLcaBNpJ2BVMv4NhmpyfNFxPmg8=";
+    hash = "sha256-exntfZbGEDBwFA8AHhOoBPIXw/MDrHx5oxrxPDixpCc=";
   };
 
   # Patch hard-coded paths and remove force library builds
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   # Still unstable with luajit
   buildInputs = [
-    lua5_1
+    lua5_4
     zlib
     sqlite
     ncurses

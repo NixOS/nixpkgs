@@ -14,13 +14,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "prisma_6";
-  version = "6.19.1";
+  version = "6.19.3";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma";
     tag = finalAttrs.version;
-    hash = "sha256-73cnyg3NnQi2TLcGGhNYs95DRiVPz1LYStNsRw2EBNE=";
+    hash = "sha256-1U0eBCnvVj8IVIDgw7n/hAWOZatTjl+nrCJMbhgRSV4=";
   };
 
   nativeBuildInputs = [
@@ -35,8 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
-    fetcherVersion = 1;
-    hash = "sha256-y0gxeOeQNZZu3/UEI/DmdhVD8kSrUnK5G/n/WLhiLZ4=";
+    fetcherVersion = 3;
+    hash = "sha256-0aWIWXkQNkvJB2DZ9BP/Yrqsbrx4BdEAebRwoqLHPR8=";
   };
 
   patchPhase = ''
@@ -65,20 +65,29 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Fetch CLI workspace dependencies
     deps_json=$(pnpm list --filter ./packages/cli --prod --depth Infinity --json)
-    deps=$(jq -r '[.. | strings | select(startswith("link:../")) | sub("^link:../"; "")] | unique[]' <<< "$deps_json")
+    deps=$(jq -r '[del(.. | .unsavedDependencies?) | .. | strings | select(startswith("link:../")) | sub("^link:../"; "")] | unique[]' <<< "$deps_json")
 
     # Remove unnecessary external dependencies
     find . -name node_modules -type d -prune -exec rm -rf {} +
     pnpm install --offline --ignore-scripts --frozen-lockfile --prod
     cp -r node_modules $out/lib/prisma
 
+    # Resolve workspace references so pnpm pack works
+    for package in packages/*; do
+      jq --arg version $version '
+        def resolve_deps: with_entries(.value |= if . == "workspace:*" then $version else . end);
+        if has("dependencies") then .dependencies |= resolve_deps else . end
+        | if has("devDependencies") then .devDependencies |= resolve_deps else . end
+      ' $package/package.json | sponge $package/package.json
+    done
+
     # Only install cli and its workspace dependencies
     for package in cli $deps; do
-      filename=$(npm pack --json ./packages/$package | jq -r '.[].filename')
+      filename=$(cd packages/$package && pnpm pack | tail -1)
       mkdir -p $out/lib/prisma/packages/$package
       [ -d "packages/$package/node_modules" ] && \
         cp -r packages/$package/node_modules $out/lib/prisma/packages/$package
-      tar xf $filename --strip-components=1 -C $out/lib/prisma/packages/$package
+      tar xf "packages/$package/$filename" --strip-components=1 -C $out/lib/prisma/packages/$package
     done
 
     # Remove dangling symlinks to packages we didn't copy to $out

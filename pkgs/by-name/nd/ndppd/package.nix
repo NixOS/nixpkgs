@@ -6,15 +6,15 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ndppd";
-  version = "0.2.5";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "DanielAdolfsson";
     repo = "ndppd";
-    rev = version;
-    sha256 = "0niri5q9qyyyw5lmjpxk19pv3v4srjvmvyd5k6ks99mvqczjx9c0";
+    rev = finalAttrs.version;
+    sha256 = "sha256-FqOoN7MxewmOxd4SKnOx4W/c3X4Jso/kFdiTzIRqHaw=";
   };
 
   nativeBuildInputs = [ gzip ];
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "ndppd";
   };
-}
+})

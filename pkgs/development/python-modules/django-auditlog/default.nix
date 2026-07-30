@@ -16,22 +16,22 @@
 
 buildPythonPackage rec {
   pname = "django-auditlog";
-  version = "3.3.0";
+  version = "3.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-auditlog";
     tag = "v${version}";
-    hash = "sha256-ZOCLlS9SUY8W3jfA+51gy5yUchJr+rpBzH+Sx1G/kUM=";
+    hash = "sha256-/IOzMGRR8EP/AGP7fcqwP4GeSKXPwE6NF6AZmiF1+lA=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     django
     python-dateutil
   ];
@@ -66,6 +66,7 @@ buildPythonPackage rec {
   meta = {
     changelog = "https://github.com/jazzband/django-auditlog/blob/${src.tag}/CHANGELOG.md";
     description = "Django app that keeps a log of changes made to an object";
+    homepage = "https://github.com/jazzband/django-auditlog";
     downloadPage = "https://github.com/jazzband/django-auditlog";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ leona ];

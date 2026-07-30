@@ -3,14 +3,14 @@
   fetchFromGitHub,
   buildGoModule,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "juicity";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "juicity";
     repo = "juicity";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-CFytPXfmGNfKDbyYuMCr+4HiH37f28cTmng+XgnO6T0=";
   };
 
@@ -19,7 +19,7 @@ buildGoModule rec {
   proxyVendor = true;
 
   ldflags = [
-    "-X=github.com/juicity/juicity/config.Version=${version}"
+    "-X=github.com/juicity/juicity/config.Version=${finalAttrs.version}"
   ];
 
   subPackages = [
@@ -44,4 +44,4 @@ buildGoModule rec {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ oluceps ];
   };
-}
+})

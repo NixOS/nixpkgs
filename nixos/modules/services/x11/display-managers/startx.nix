@@ -77,7 +77,7 @@ in
 
     # Implement xserverArgs via xinit's system-wide xserverrc
     environment.etc."X11/xinit/xserverrc".source = pkgs.writeShellScript "xserverrc" ''
-      exec ${pkgs.xorg.xorgserver}/bin/X \
+      exec ${pkgs.xorg-server}/bin/X \
         ${toString config.services.xserver.displayManager.xserverArgs} "$@"
     '';
 
@@ -100,7 +100,7 @@ in
       '';
     };
 
-    environment.systemPackages = with pkgs; [ xorg.xinit ];
+    environment.systemPackages = with pkgs; [ xinit ];
 
   };
 

@@ -16,14 +16,14 @@
   libpcap,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scream";
   version = "4.0";
 
   src = fetchFromGitHub {
     owner = "duncanthrax";
     repo = "scream";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-lP5mdNhZjkEVjgQUEsisPy+KXUqsE6xj6dFWcgD+VGM=";
   };
 
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     mainProgram = "scream";
     maintainers = with lib.maintainers; [ arcnmx ];
   };
-}
+})

@@ -1,3 +1,4 @@
+import bisect
 import os
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -30,7 +31,7 @@ def add_entries(sources, targets, hashes):
         if path == target["@url"]:
             raise ValueError(f"Unexpected target path {path}")
 
-        hashes.append({"url": url, "hash": artefact["sha256sum"], "path": path})
+        bisect.insort(hashes, {"url": url, "hash": artefact["sha256sum"], "path": path}, key=lambda e: e["url"])
 
 
 def add_libraries(

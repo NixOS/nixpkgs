@@ -5,20 +5,20 @@
   openjdk,
   runtimeShell,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "leo3";
-  version = "1.2";
+  version = "1.7.18";
 
   src = fetchurl {
-    url = "https://github.com/leoprover/Leo-III/releases/download/v${version}/leo3.jar";
-    sha256 = "1lgwxbr1rnk72rnvc8raq5i1q71ckhn998pwd9xk6zf27wlzijk7";
+    url = "https://github.com/leoprover/Leo-III/releases/download/v${finalAttrs.version}/leo3-v${finalAttrs.version}.jar";
+    sha256 = "sha256-HEUi8Krxv9u9Rq/2Gu0Tts86sseaAZq+pccJ4Q5MRr0=";
   };
 
   dontUnpack = true;
 
   installPhase = ''
     mkdir -p "$out"/{bin,lib/java/leo3}
-    cp "${src}" "$out/lib/java/leo3/leo3.jar"
+    cp "${finalAttrs.src}" "$out/lib/java/leo3/leo3.jar"
     echo "#!${runtimeShell}" > "$out/bin/leo3"
     echo "'${openjdk}/bin/java' -jar '$out/lib/java/leo3/leo3.jar' \"\$@\""  >> "$out/bin/leo3"
     chmod a+x "$out/bin/leo3"
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     homepage = "https://page.mi.fu-berlin.de/lex/leo3/";
   };
-}
+})

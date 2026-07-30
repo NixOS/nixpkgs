@@ -69,7 +69,7 @@ in
           -jitter ${toString (cfg.threshold - 1)} \
           ${optionalString cfg.keystroke "-keystroke"} \
           ${concatMapStrings (x: " -" + x) cfg.extraOptions} \
-          -not ${concatStringsSep " " cfg.excluded} \
+          -not ${concatStringsSep " " cfg.excluded}
       '';
       serviceConfig.PassEnvironment = "DISPLAY";
       serviceConfig.RestartSec = 3;

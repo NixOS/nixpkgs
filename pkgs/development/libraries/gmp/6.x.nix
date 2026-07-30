@@ -109,7 +109,7 @@ let
       '';
 
       platforms = lib.platforms.all;
-      maintainers = [ ];
+      maintainers = with lib.maintainers; [ coolcuber ];
     };
   };
 in

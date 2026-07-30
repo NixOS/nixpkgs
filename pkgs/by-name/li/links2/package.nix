@@ -18,9 +18,9 @@
   enableDirectFB ? false,
   directfb,
   enableX11 ? (!stdenv.hostPlatform.isDarwin),
-  libX11,
-  libXt,
-  libXau, # GUI support
+  libx11,
+  libxt,
+  libxau, # GUI support
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "links2";
 
   src = fetchurl {
-    url = "http://links.twibright.com/download/links-${finalAttrs.version}.tar.bz2";
+    url = "https://links.twibright.com/download/links-${finalAttrs.version}.tar.bz2";
     hash = "sha256-xGMca1oRUnzcPLeHL8I7fyslwrAh1Za+QQ2ttAMV8WY=";
   };
 
@@ -46,9 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ gpm ]
   ++ lib.optionals enableX11 [
-    libX11
-    libXau
-    libXt
+    libx11
+    libxau
+    libxt
   ]
   ++ lib.optionals enableDirectFB [ directfb ];
 

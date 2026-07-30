@@ -14,16 +14,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-dlp";
-  version = "3.33.0";
+  version = "3.38.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_dlp";
     inherit version;
-    hash = "sha256-qRC+EY7DyImMOFIWENYvShbzM6Tesqvrdz5yD25fZ+M=";
+    hash = "sha256-BcdlhL62CzBcE9xRMhp9Aebj7DHd8QXxjVDy+DT3toQ=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core

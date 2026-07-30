@@ -7,14 +7,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.3";
   pname = "libsmf";
 
   src = fetchFromGitHub {
     owner = "stump";
     repo = "libsmf";
-    rev = "libsmf-${version}";
+    rev = "libsmf-${finalAttrs.version}";
     sha256 = "sha256-OJXJkXvbM2GQNInZXU2ldObquKHhqkdu1zqUDnVZN0Y=";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     mainProgram = "smfsh";
     platforms = lib.platforms.unix;
   };
-}
+})

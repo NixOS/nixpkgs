@@ -1,5 +1,5 @@
---- runit-2.1.2/src/print-ar.sh
-+++ runit-2.1.2/src/print-ar.sh
+--- a/src/print-ar.sh
++++ b/src/print-ar.sh
 @@ -1,7 +1,7 @@
  cat warn-auto.sh
  echo 'main="$1"; shift'

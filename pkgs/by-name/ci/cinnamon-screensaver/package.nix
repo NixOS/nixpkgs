@@ -22,18 +22,21 @@
   pam,
   cairo,
   xdotool,
-  xorg,
+  libxrandr,
+  libxinerama,
+  libxext,
+  libx11,
   iso-flags-png-320x240,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cinnamon-screensaver";
   version = "6.6.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-screensaver";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-NK33cIrcTicLs59eJ550FghjuWS93yD642ObAS55Dtk=";
   };
 
@@ -61,10 +64,10 @@ stdenv.mkDerivation rec {
     gtk3
     glib
 
-    xorg.libXext
-    xorg.libXinerama
-    xorg.libX11
-    xorg.libXrandr
+    libxext
+    libxinerama
+    libx11
+    libxrandr
 
     (python3.withPackages (
       pp: with pp; [
@@ -113,4 +116,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
   };
-}
+})

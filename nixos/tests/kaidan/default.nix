@@ -34,7 +34,7 @@
   };
 
   enableOCR = true;
-  interactive.sshBackdoor.enable = true; # ssh -o User=root vsock/3
+  interactive.sshBackdoor.enable = true;
 
   testScript =
     { nodes, ... }:

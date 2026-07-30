@@ -2,11 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   aiodns,
   aiohttp,
   aresponses,
   poetry-core,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytest-freezer,
@@ -17,21 +17,21 @@
 
 buildPythonPackage rec {
   pname = "forecast-solar";
-  version = "4.2.0";
+  version = "5.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "forecast_solar";
     tag = "v${version}";
-    hash = "sha256-ZBkuhONvn1/QpD+ml3HJinMIdg1HFpVj5KZAlUt/qR4=";
+    hash = "sha256-fvmi5kwVAScVlGpxutjH8nl0lJx/VnQEVoj9a1UY7r4=";
   };
 
   build-system = [ poetry-core ];
 
-  env.PACKAGE_VERSION = version;
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   dependencies = [
     aiodns

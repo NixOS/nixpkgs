@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "extrude";
   version = "0.0.12";
 
   src = fetchFromGitHub {
     owner = "liamg";
     repo = "extrude";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7gCEBhnNU5CqC5n0KP4Dd/fmddPRwNqyMFXTrRrJjfU=";
   };
 
@@ -21,7 +21,7 @@ buildGoModule rec {
     description = "Tool to analyse binaries for missing security features";
     mainProgram = "extrude";
     homepage = "https://github.com/liamg/extrude";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

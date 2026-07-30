@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "ygot";
-  version = "0.34.0";
+  version = "0.35.0";
 
   src = fetchFromGitHub {
     owner = "openconfig";
     repo = "ygot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/dE3IsooCuIi3e+1RRA50wKB2NE8ohf46wFqZcdFKq0=";
+    hash = "sha256-YEL0c3bd8HnpjSrnWduq9Qkrrq9x3bIcEMBUMFIM4ms=";
   };
 
-  vendorHash = "sha256-66hugAa31RWQxGNsVpfyLzZoXbW7KQ73ggvvInn8dw8=";
+  vendorHash = "sha256-WYlITTyY6hGKn+lyr8FRdo/c8kcOYd9qJb3pDKBqwak=";
 
   excludedPackages = [
     "demo/*"

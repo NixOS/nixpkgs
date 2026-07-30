@@ -21,14 +21,21 @@
   libGL,
   udev,
   systemdLibs,
-  xorg,
-  version ? "142.0.10",
-  gitRevision ? "29548e2",
-  chromiumVersion ? "142.0.7444.135",
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxshmfence,
+  libxcb,
+  version ? "149.0.5",
+  gitRevision ? "6770623",
+  chromiumVersion ? "149.0.7827.197",
   buildType ? "Release",
   srcHashes ? {
-    aarch64-linux = "sha256-wUCXk5Nqgzu0q0PvV8a2AKF3h4YxxTeaP2yVecrf0j8=";
-    x86_64-linux = "sha256-pFMHjj4MktjnX3g03sgLqgai4X/lF29Phmduf7a+KfM=";
+    aarch64-linux = "sha256-cBAvcvs1rAg5EKJkCt81RZYupCWpUNIC/nLt3PJow7Q=";
+    x86_64-linux = "sha256-OPGMBJmvvLiLdBDniBQwx7LmTGGI59AcesJdILSeqcs=";
   },
 }:
 
@@ -55,14 +62,14 @@ let
     libGL
     udev
     systemdLibs
-    xorg.libxcb
-    xorg.libX11
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrandr
-    xorg.libxshmfence
+    libxcb
+    libx11
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
+    libxshmfence
   ];
 
   selectSystem =

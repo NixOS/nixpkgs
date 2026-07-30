@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "ha-philipsjs";
-  version = "3.3.4";
+  version = "3.3.4"; # FIXME Can we check metadata again?
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -38,6 +38,9 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "haphilipsjs" ];
+
+  # the tag 3.3.4 actually corresponds to version 3.2.4
+  dontCheckPythonMetadata = true;
 
   meta = {
     description = "Library to interact with Philips TVs with jointSPACE API";

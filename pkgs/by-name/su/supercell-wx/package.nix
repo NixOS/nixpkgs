@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  gcc14Stdenv,
   fetchFromGitHub,
   replaceVars,
   tracy,
@@ -20,7 +21,7 @@
   glm,
   gtest,
   howard-hinnant-date,
-  libSM,
+  libsm,
   libcpr,
   libpng,
   onetbb,
@@ -33,6 +34,8 @@
   zlib,
 }:
 let
+  buildStdenv = if stdenv.cc.isGNU then gcc14Stdenv else stdenv;
+
   gtestSkip = [
     # Skip tests requiring network access
     "AwsLevel*DataProvider.FindKeyFixed"
@@ -54,7 +57,7 @@ let
     "MarkerModelTest.*"
   ];
 in
-stdenv.mkDerivation (finalAttrs: {
+buildStdenv.mkDerivation (finalAttrs: {
   pname = "supercell-wx";
   version = "0.5.3";
 
@@ -123,15 +126,12 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     bzip2
     geos
-    # FIXME: split outputs aren't working with find_package. Possibly related to nixpkgs/issues/144170 ?
-    (geographiclib.overrideAttrs {
-      outputs = [ "out" ];
-    })
+    geographiclib
     glew
     glm
     gtest
     howard-hinnant-date
-    libSM
+    libsm
     libcpr
     libpng
     onetbb

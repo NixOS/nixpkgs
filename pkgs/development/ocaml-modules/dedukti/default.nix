@@ -6,7 +6,7 @@
   menhir,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "dedukti";
   version = "2.7";
 
@@ -14,8 +14,8 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "Deducteam";
-    repo = pname;
-    rev = "v${version}";
+    repo = "dedukti";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-SFxbgq2znO+OCEFzuekVquvtOEuCQanseKy+iZAeWbc=";
   };
 
@@ -28,7 +28,7 @@ buildDunePackage rec {
     homepage = "https://deducteam.github.io";
     description = "Logical framework based on the λΠ-calculus modulo rewriting";
     license = lib.licenses.cecill-b;
-    changelog = "https://github.com/Deducteam/Dedukti/raw/${version}/CHANGELOG.md";
+    changelog = "https://github.com/Deducteam/Dedukti/raw/${finalAttrs.version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

@@ -3,8 +3,8 @@
   fetchurl,
   autoPatchelfHook,
   rpmextract,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   pname,
   version,
   meta,
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-linux" = fetchurl rec {
         name = "VNC-Viewer-${finalAttrs.version}-Linux-x64.rpm";
         url = "https://downloads.realvnc.com/download/file/viewer.files/${name}";
-        hash = "sha256-fwMfQdOyLnYVfdBj80JHWT+CnKpq/9oM5oNF3aP+jgo=";
+        hash = "sha256-rIOP7d8qrOeMgaQRYo+GRXT1fLnPegdpONT0p5aBCxM=";
       };
     }
     .${stdenv.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -28,8 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
     rpmextract
   ];
   buildInputs = [
-    libX11
-    libXext
+    libx11
+    libxext
     stdenv.cc.cc.libgcc or null
   ];
 

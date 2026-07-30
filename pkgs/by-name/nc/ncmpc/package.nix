@@ -15,14 +15,14 @@
   pcre2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ncmpc";
   version = "0.52";
 
   src = fetchFromGitHub {
     owner = "MusicPlayerDaemon";
     repo = "ncmpc";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-j/hZdKl1LQ/yEGDUv9k5PQJ6pngAl52mVCpfacWrRw0=";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ fpletz ];
     mainProgram = "ncmpc";
   };
-}
+})

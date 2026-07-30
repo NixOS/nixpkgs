@@ -18,23 +18,24 @@
   torchvision,
   tqdm,
 
-  # checks
-  pytestCheckHook,
+  # tests
   braceexpand,
   pandas,
+  pytestCheckHook,
+  requests,
   transformers,
   webdataset,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "open-clip-torch";
-  version = "3.2.0";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mlfoundations";
     repo = "open_clip";
-    tag = "v${version}";
-    hash = "sha256-k4/u0XtfBmPSVKfEK3wHqJXtKAuUNkUnk1TLG2S6PPs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rJT0LCIS0uChBUdZ6WTQv0npZ0Ae8veIXMgr6JTgUj4=";
   };
 
   build-system = [ pdm-backend ];
@@ -53,20 +54,23 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     braceexpand
     pandas
+    pytestCheckHook
+    requests
     transformers
     webdataset
   ];
 
   pythonImportsCheck = [ "open_clip" ];
 
-  # -> On Darwin:
-  # AttributeError: Can't pickle local object 'build_params.<locals>.<lambda>'
-  # -> On Linux:
-  # KeyError: Caught KeyError in DataLoader worker process 0
-  disabledTestPaths = [ "tests/test_wds.py" ];
+  disabledTestPaths = [
+    # -> On Darwin:
+    # AttributeError: Can't pickle local object 'build_params.<locals>.<lambda>'
+    # -> On Linux:
+    # KeyError: Caught KeyError in DataLoader worker process 0
+    "tests/test_wds.py"
+  ];
 
   disabledTests = [
     # requires network
@@ -86,9 +90,9 @@ buildPythonPackage rec {
   meta = {
     description = "Open source implementation of CLIP";
     homepage = "https://github.com/mlfoundations/open_clip";
-    changelog = "https://github.com/mlfoundations/open_clip/releases/tag/${src.tag}";
+    changelog = "https://github.com/mlfoundations/open_clip/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ iynaix ];
     mainProgram = "open-clip";
   };
-}
+})

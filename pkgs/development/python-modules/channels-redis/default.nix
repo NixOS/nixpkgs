@@ -46,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/django/channels_redis/";
     changelog = "https://github.com/django/channels_redis/blob/${src.tag}/CHANGELOG.txt";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ mmai ];
+    maintainers = [ ];
   };
 }

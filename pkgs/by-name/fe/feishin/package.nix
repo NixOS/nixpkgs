@@ -3,45 +3,55 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  electron_39,
-  dart-sass,
-  mpv,
+  electron_41,
+  mpv-unwrapped,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_11,
+  nodejs-slim_latest,
   darwin,
+  actool,
   copyDesktopItems,
   makeDesktopItem,
+  nix-update-script,
+  webVersion ? false,
 }:
 let
   pname = "feishin";
-  version = "1.2.0";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = "feishin";
     tag = "v${version}";
-    hash = "sha256-acNUXvmj964pO8h2fsGfex2BeIshExMWe0w/QmtikkM=";
+    hash = "sha256-2UKJBUZNUpUUZIG1JFXok7YJdzqt+Ge0ykHUm8BeNcw=";
   };
 
-  electron = electron_39;
+  electron = electron_41;
+
+  # Fix pnpm issue on darwin https://github.com/NixOS/nixpkgs/issues/525627
+  pnpm = pnpm_11.override { nodejs-slim = nodejs-slim_latest; };
 in
 buildNpmPackage {
   inherit pname version;
 
   inherit src;
 
+  __structuredAttrs = true;
+
   npmConfigHook = pnpmConfigHook;
+  npmBuildScript = if webVersion then "build:web" else "build";
 
   npmDeps = null;
   pnpmDeps = fetchPnpmDeps {
     inherit
       pname
+      pnpm
       version
       src
       ;
-    fetcherVersion = 3;
-    hash = "sha256-gQooubVt2kDOGq4GEZIT+pQcPnzss9QmqTO9kD5Kx58=";
+    fetcherVersion = 4;
+    hash = "sha256-9uG0AxIBAmuIPywg3p9fFCXmRvM9zDLhWfluSLRnUXY=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -49,59 +59,45 @@ buildNpmPackage {
   nativeBuildInputs = [
     pnpm
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux) [ copyDesktopItems ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.autoSignDarwinBinariesHook ];
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && !webVersion) [ copyDesktopItems ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && !webVersion) [
+    darwin.autoSignDarwinBinariesHook
+    actool
+  ];
 
   postPatch = ''
     # release/app dependencies are installed on preConfigure
     substituteInPlace package.json \
       --replace-fail '"postinstall": "electron-builder install-app-deps",' ""
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    # https://github.com/electron/electron/issues/31121
-    substituteInPlace src/main/index.ts \
-      --replace-fail "process.resourcesPath" "'$out/share/feishin/resources'"
   '';
 
-  preBuild = ''
-    rm -r node_modules/.pnpm/sass-embedded-*
+  postBuild = lib.optionalString (!webVersion) ''
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
 
-    test -d node_modules/.pnpm/sass-embedded@*
-    dir="$(echo node_modules/.pnpm/sass-embedded@*)/node_modules/sass-embedded/dist/lib/src/vendor/dart-sass"
-    mkdir -p "$dir"
-    ln -s ${dart-sass}/bin/dart-sass "$dir"/sass
+    npm exec electron-builder -- \
+      --dir \
+      -c.electronDist=electron-dist \
+      -c.electronVersion=${electron.version} \
+      -c.npmRebuild=false \
+      ${lib.optionalString stdenv.hostPlatform.isDarwin "-c.mac.identity=null"}
   '';
-
-  postBuild =
-    lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # electron-builder appears to build directly on top of Electron.app, by overwriting the files in the bundle.
-      cp -r ${electron.dist}/Electron.app ./
-      find ./Electron.app -name 'Info.plist' | xargs -d '\n' chmod +rw
-
-      # Disable code signing during build on macOS.
-      # https://github.com/electron-userland/electron-builder/blob/fa6fc16/docs/code-signing.md#how-to-disable-code-signing-during-the-build-process-on-macos
-      export CSC_IDENTITY_AUTO_DISCOVERY=false
-      sed -i "/afterSign/d" package.json
-    ''
-    + ''
-      npm exec electron-builder -- \
-        --dir \
-        -c.electronDist=${if stdenv.hostPlatform.isDarwin then "./" else electron.dist} \
-        -c.electronVersion=${electron.version} \
-        -c.npmRebuild=false
-    '';
 
   installPhase = ''
     runHook preInstall
   ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  + lib.optionalString webVersion ''
+    mkdir -p $out
+    cp -r out/web/* $out
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin && !webVersion) ''
     mkdir -p $out/{Applications,bin}
     cp -r dist/**/Feishin.app $out/Applications/
     makeWrapper $out/Applications/Feishin.app/Contents/MacOS/Feishin $out/bin/feishin \
-      --prefix PATH : "${lib.makeBinPath [ mpv ]}" \
+      --prefix PATH : "${lib.makeBinPath [ mpv-unwrapped ]}" \
       --set DISABLE_AUTO_UPDATES 1
   ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
+  + lib.optionalString (stdenv.hostPlatform.isLinux && !webVersion) ''
     mkdir -p $out/share/feishin
 
     pushd dist/*-unpacked/
@@ -112,12 +108,14 @@ buildNpmPackage {
     # Set ELECTRON_FORCE_IS_PACKAGED=1.
     # https://github.com/electron/electron/issues/35153#issuecomment-1202718531
     makeWrapper ${lib.getExe electron} $out/bin/feishin \
-      --prefix PATH : "${lib.makeBinPath [ mpv ]}" \
+      --prefix PATH : "${lib.makeBinPath [ mpv-unwrapped ]}" \
       --add-flags $out/share/feishin/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set ELECTRON_FORCE_IS_PACKAGED 1 \
       --set DISABLE_AUTO_UPDATES 1 \
       --inherit-argv0
+
+    install -Dm644 org.jeffvli.feishin.metainfo.xml $out/share/metainfo/org.jeffvli.feishin.metainfo.xml
 
     for size in 32 64 128 256 512 1024; do
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
@@ -130,7 +128,7 @@ buildNpmPackage {
     runHook postInstall
   '';
 
-  desktopItems = [
+  desktopItems = lib.optionals (!webVersion) [
     (makeDesktopItem {
       name = "feishin";
       desktopName = "Feishin";
@@ -147,6 +145,8 @@ buildNpmPackage {
     })
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Full-featured Jellyfin, Navidrome, and OpenSubsonic Compatible Music Player";
     homepage = "https://github.com/jeffvli/feishin";
@@ -154,11 +154,11 @@ buildNpmPackage {
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
-    mainProgram = "feishin";
     maintainers = with lib.maintainers; [
       BatteredBunny
       onny
       jlbribeiro
     ];
-  };
+  }
+  // lib.optionalAttrs (!webVersion) { mainProgram = "feishin"; };
 }

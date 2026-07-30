@@ -1,29 +1,31 @@
 {
   lib,
   fetchFromGitHub,
-  buildGo125Module,
+  buildGo127Module,
   stdenvNoCC,
   nodejs,
   pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
+  pnpmBuildHook,
   nixosTests,
   nix-update-script,
+  versionCheckHook,
 }:
-buildGo125Module (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "pocket-id";
-  version = "2.1.0";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tBjo5evQVRG0oembk1VfAfM3M/FJ4zPWV/9vgAWH9Kc=";
+    hash = "sha256-keib2ebju6hKlH1XJQRBmXwxBsUnVZOIs+djvYkXYqU=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/backend";
 
-  vendorHash = "sha256-hMhOG/2xnI/adjg8CnA0tRBD8/OFDsTloFXC8iwxlV0=";
+  vendorHash = "sha256-/5lXAnb2FHeGBgrpU4Jpt2KX+sgGyYH61odppTaulbs=";
 
   env.CGO_ENABLED = 0;
   ldflags = [
@@ -40,9 +42,16 @@ buildGo125Module (finalAttrs: {
     "-skip=TestOidcService_downloadAndSaveLogoFromURL"
   ];
 
+  # required for TestIsURLPrivate
+  __darwinAllowLocalNetworking = finalAttrs.finalPackage.doCheck;
+
   preFixup = ''
     mv $out/bin/cmd $out/bin/pocket-id
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "version";
 
   frontend = stdenvNoCC.mkDerivation {
     pname = "pocket-id-frontend";
@@ -51,24 +60,19 @@ buildGo125Module (finalAttrs: {
     nativeBuildInputs = [
       nodejs
       pnpmConfigHook
+      pnpmBuildHook
       pnpm_10
     ];
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       pnpm = pnpm_10;
-      fetcherVersion = 3;
-      hash = "sha256-jhlHrekVk0sNLwo8LFQY6bgX9Ic0xbczM6UTzmZTnPI=";
+      fetcherVersion = 4;
+      hash = "sha256-aJq5yLeeHY7zlOgSr1bOJCL8e1HBwCmoL7nTD2a06tg=";
     };
 
     env.BUILD_OUTPUT_PATH = "dist";
 
-    buildPhase = ''
-      runHook preBuild
-
-      pnpm --filter pocket-id-frontend build
-
-      runHook postBuild
-    '';
+    pnpmWorkspaces = [ "pocket-id-frontend" ];
 
     installPhase = ''
       runHook preInstall
@@ -101,6 +105,7 @@ buildGo125Module (finalAttrs: {
     maintainers = with lib.maintainers; [
       gepbird
       marcusramberg
+      tmarkus
       ymstnt
     ];
     platforms = lib.platforms.unix;

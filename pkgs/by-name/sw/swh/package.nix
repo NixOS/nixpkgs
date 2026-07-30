@@ -1,4 +1,5 @@
 {
+  lib,
   python3Packages,
   writeShellApplication,
   withSwhPythonPackages ? [
@@ -19,7 +20,7 @@ in
 writeShellApplication {
   name = "swh";
   text = ''
-    ${python3'}/bin/swh "$@"
+    ${lib.getExe' python3' "swh"} "$@"
   '';
   meta = {
     inherit (python3Packages.swh-core.meta) license mainProgram platforms;

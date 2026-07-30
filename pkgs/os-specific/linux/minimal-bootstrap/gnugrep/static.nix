@@ -5,7 +5,6 @@
   fetchurl,
   bash,
   gcc,
-  musl,
   binutils,
   gnumake,
   gnused,
@@ -18,11 +17,11 @@
 }:
 let
   pname = "gnugrep-static";
-  version = "3.11";
+  version = "3.12";
 
   src = fetchurl {
     url = "mirror://gnu/grep/grep-${version}.tar.xz";
-    hash = "sha256-HbKu3eidDepCsW2VKPiUyNFdrk4ZC1muzHj1qVEnbqs=";
+    hash = "sha256-JkmyfA6Q5jLq3NdXvgbG6aT0jZQd5R58D4P/dkCKB7k=";
   };
 in
 bash.runCommand "${pname}-${version}"
@@ -31,7 +30,6 @@ bash.runCommand "${pname}-${version}"
 
     nativeBuildInputs = [
       gcc
-      musl
       binutils
       gnumake
       gnused
@@ -69,13 +67,15 @@ bash.runCommand "${pname}-${version}"
       --prefix=$out \
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
-      CC=musl-gcc \
-      CFLAGS=-static
+      --disable-dependency-tracking \
+      --disable-nls
 
     # Build
     make -j $NIX_BUILD_CORES
 
     # Install
-    make -j $NIX_BUILD_CORES install
-    rm $out/bin/{egrep,fgrep}
+    make -j $NIX_BUILD_CORES install-strip
+
+    # Remove documentation not needed in the bootstrap chain.
+    rm -rf $out/share
   ''

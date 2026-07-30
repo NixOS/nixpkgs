@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     libsForQt5.qmake
     libsForQt5.wrapQtAppsHook
   ];
-  QT_PLUGIN_PATH = "${libsForQt5.qtbase}/${libsForQt5.qtbase.qtPluginPrefix}";
+  env.QT_PLUGIN_PATH = "${libsForQt5.qtbase}/${libsForQt5.qtbase.qtPluginPrefix}";
 
   buildInputs = [
     libsForQt5.qtbase

@@ -6,14 +6,14 @@
   testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "promscale";
   version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = "promscale";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-JizUI9XRzOEHF1kAblYQRYB11z9KWX7od3lPiRN+JNI=";
   };
 
@@ -22,8 +22,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/timescale/promscale/pkg/version.Version=${version}"
-    "-X github.com/timescale/promscale/pkg/version.CommitHash=${src.rev}"
+    "-X github.com/timescale/promscale/pkg/version.Version=${finalAttrs.version}"
+    "-X github.com/timescale/promscale/pkg/version.CommitHash=${finalAttrs.src.rev}"
   ];
   preBuild = ''
     # Without this build fails with
@@ -50,11 +50,11 @@ buildGoModule rec {
     description = "Open-source analytical platform for Prometheus metrics";
     mainProgram = "promscale";
     homepage = "https://github.com/timescale/promscale";
-    changelog = "https://github.com/timescale/promscale/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/timescale/promscale/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       _0x4A6F
       anpin
     ];
   };
-}
+})

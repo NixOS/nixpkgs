@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   pytestCheckHook,
   pytest-asyncio,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "async-stagger";
   version = "0.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "twisteroidambassador";

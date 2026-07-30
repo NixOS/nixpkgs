@@ -9,11 +9,11 @@
   cmake,
   fontconfig,
   pkg-config,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXext,
-  libXcursor,
+  libx11,
+  libxrandr,
+  libxinerama,
+  libxext,
+  libxcursor,
   freetype,
   alsa-lib,
 
@@ -69,11 +69,11 @@ let
   ];
 
   x11Libs = [
-    libX11
-    libXrandr
-    libXinerama
-    libXext
-    libXcursor
+    libx11
+    libxrandr
+    libxinerama
+    libxext
+    libxcursor
   ];
 in
 stdenv.mkDerivation (finalAttrs: {

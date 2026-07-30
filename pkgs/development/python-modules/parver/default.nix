@@ -2,14 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   attrs,
   pytestCheckHook,
   hypothesis,
   pretend,
   arpeggio,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -27,8 +25,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     attrs
     arpeggio
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

@@ -13,7 +13,7 @@
   libmicrohttpd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libjson-rpc-cpp";
   version = "1.4.1";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "cinemast";
     repo = "libjson-rpc-cpp";
     sha256 = "sha256-YCCZN4y88AixQeo24pk6YHfSCsJz8jJ97Dg40KM08cQ=";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
   };
 
   env.NIX_CFLAGS_COMPILE = "-I${catch2}/include/catch2";
@@ -54,6 +54,10 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt \
       --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)" \
       --replace-fail "cmake_policy(SET CMP0042 OLD)" ""
+
+    # jsoncpp 1.9.7 dropped char const*/String const& overloads in favor of std::string_view.
+    substituteInPlace cmake/CMakeCompilerSettings.cmake \
+      --replace-fail "-std=c++11" "-std=c++17"
   '';
 
   preConfigure = ''
@@ -110,4 +114,4 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     maintainers = with lib.maintainers; [ robertrichter ];
   };
-}
+})

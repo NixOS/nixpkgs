@@ -3,11 +3,11 @@
   stdenv,
   fetchFromGitHub,
   boost,
-  libX11,
+  libx11,
   libGL,
   liblo,
   libjack2,
-  ladspaH,
+  ladspa-header,
   lv2,
   pkg-config,
   rubberband,
@@ -16,26 +16,26 @@
   libsamplerate,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zam-plugins";
-  version = "4.4";
+  version = "4.5";
 
   src = fetchFromGitHub {
     owner = "zamaudio";
     repo = "zam-plugins";
-    tag = version;
-    hash = "sha256-pjnhDavKnyQjPF4nUO+j1J+Qtw8yIYMY9A5zBMb4zFU=";
+    tag = finalAttrs.version;
+    hash = "sha256-org2/YQooJoP/vQKaT0r7Kkpw+bGCfk2vKjl8HIYsag=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     boost
-    libX11
+    libx11
     libGL
     liblo
     libjack2
-    ladspaH
+    ladspa-header
     lv2
     rubberband
     libsndfile
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     # tries to run dpf/utils/lv2_ttl_generator (built for host)
     broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
-}
+})

@@ -4,14 +4,14 @@
   lib,
   stdenv,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zzz";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "jirutka";
     repo = "zzz";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gm/fzhgGM2kns051PKY223uesctvMj9LmLc4btUsTt8=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ aanderse ];
     platforms = lib.platforms.linux;
   };
-}
+})

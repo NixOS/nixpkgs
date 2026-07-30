@@ -7,7 +7,7 @@
   gfortran,
   tk,
   hdf5,
-  xorg,
+  libxmu,
   libGLU,
   withTools ? false,
   testers,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withTools [
     tk
-    xorg.libXmu
+    libxmu
     libGLU
   ];
 
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://cgns.github.io";
     downloadPage = "https://github.com/cgns/cgns";
     changelog = "https://github.com/cgns/cgns/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ zlib ];
+    license = lib.licenses.zlib;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ qbisi ];
   };

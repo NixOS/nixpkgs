@@ -7,14 +7,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "riff";
   version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "DeterminateSystems";
     repo = "riff";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ThHkEvu+lWojHmEgcrwdZDPROfxznB7vv78msyZf90A=";
   };
 
@@ -37,8 +37,8 @@ rustPlatform.buildRustPackage rec {
     description = "Tool that automatically provides external dependencies for software projects";
     mainProgram = "riff";
     homepage = "https://riff.sh";
-    changelog = "https://github.com/DeterminateSystems/riff/releases/tag/v${version}";
+    changelog = "https://github.com/DeterminateSystems/riff/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
     maintainers = [ ];
   };
-}
+})

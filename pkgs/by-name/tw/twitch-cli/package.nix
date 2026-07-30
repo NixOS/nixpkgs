@@ -8,14 +8,14 @@
   twitch-cli,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "twitch-cli";
   version = "1.1.25";
 
   src = fetchFromGitHub {
     owner = "twitchdev";
     repo = "twitch-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+6/o2vhj1iaT0hkyQRedn7ga1dhNZOupX4lOadnTDU0=";
   };
 
@@ -28,7 +28,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.buildVersion=${version}"
+    "-X=main.buildVersion=${finalAttrs.version}"
   ];
 
   preCheck = ''
@@ -52,7 +52,7 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = twitch-cli;
     command = "HOME=$(mktemp -d) twitch-cli version";
-    version = "twitch-cli/${version}";
+    version = "twitch-cli/${finalAttrs.version}";
   };
 
   meta = {
@@ -62,4 +62,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ benediktbroich ];
   };
-}
+})

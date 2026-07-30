@@ -2,21 +2,25 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  pkg-config,
+  openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "worker-build";
-  version = "0.7.2";
+  version = "0.8.5";
 
+  buildInputs = [ openssl ];
+  nativeBuildInputs = [ pkg-config ];
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "workers-rs";
-    tag = "v${version}";
-    hash = "sha256-qhqMGvjVFgTmYXXrsMF5pJJebARXPqD7q/KmUtG0zqQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-t+Hmgzc+xbOsEY7exHiR1dIuO8Fpb1wO613Dj2SZ6gI=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-YJHcziwrdK0mlmGS46IYIwVfy/DCsKgCB3/aq14brt4=";
+  cargoHash = "sha256-Iolcx7CcGSlHgnKjmiGdkd/NTAsma5bT/H0+7V3UR3Y=";
 
   buildAndTestSubdir = "worker-build";
 
@@ -30,4 +34,4 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})

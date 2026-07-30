@@ -15,19 +15,19 @@
   zlib,
 }:
 
-stdenv.mkDerivation (finalPackage: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tzpfms";
   version = "0.4.1";
 
   src = fetchFromSourcehut {
     owner = "~nabijaczleweli";
     repo = "tzpfms";
-    rev = "v${finalPackage.version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-DHmJpfURyFPeOWxIkfwn4f0n2WeDYErevC1gY2oM3Vg=";
   };
 
   env = {
-    TZPFMS_VERSION = ''"${finalPackage.version}"'';
+    TZPFMS_VERSION = ''"${finalAttrs.version}"'';
     TZPFMS_DATE = "January 1, 1980";
   };
 

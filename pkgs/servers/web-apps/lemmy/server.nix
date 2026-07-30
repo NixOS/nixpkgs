@@ -49,6 +49,9 @@ rustPlatform.buildRustPackage rec {
 
     PROTOC = "${protobuf}/bin/protoc";
     PROTOC_INCLUDE = "${protobuf}/include";
+
+    # #[deny(warnings)] trips on newer rustc
+    RUSTFLAGS = "--cap-lints warn";
   };
   nativeBuildInputs = [
     protobuf
@@ -63,6 +66,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=scheduled_tasks::tests::test_nodeinfo_mastodon_social"
     "--skip=scheduled_tasks::tests::test_nodeinfo_lemmy_ml"
   ];
+
+  # This gets installed automatically by cargoInstallHook,
+  # but we don't actually need it, and it leaks a reference to rustc.
+  postInstall = lib.optionals (!stdenv.hostPlatform.isDarwin) ''
+    rm $out/lib/libhtml2md.so
+  '';
 
   passthru.updateScript = ./update.py;
   passthru.tests.lemmy-server = nixosTests.lemmy;

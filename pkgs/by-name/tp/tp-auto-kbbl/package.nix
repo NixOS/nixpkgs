@@ -8,14 +8,14 @@
   libevdev,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tp-auto-kbbl";
   version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "saibotd";
     repo = "tp-auto-kbbl";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-fhBCsOjaQH2tRsBjMGiDmZSIkAgEVxxywVp8/0uAaTU=";
   };
 
@@ -36,4 +36,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "tp-auto-kbbl";
   };
-}
+})

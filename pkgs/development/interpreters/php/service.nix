@@ -84,7 +84,7 @@ in
     package = lib.mkOption {
       type = lib.types.package;
       description = "PHP package to use for php-fpm";
-      defaultText = lib.literalMD ''The PHP package that provided this module.'';
+      defaultText = lib.literalMD "The PHP package that provided this module.";
       example = lib.literalExpression ''
         php.buildEnv {
           extensions =

@@ -7,14 +7,14 @@
   flex,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "olsrd";
   version = "0.9.8";
 
   src = fetchFromGitHub {
     owner = "OLSR";
     repo = "olsrd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1xk355dm5pfjil1j4m724vkdnc178lv6hi6s1g0xgpd59avbx90j";
   };
 
@@ -26,6 +26,9 @@ stdenv.mkDerivation rec {
       sha256 = "04cl4b8dpr1yjs7wa94jcszmkdzpnrn719a5m9nhm7lvfrn1rzd0";
     })
   ];
+
+  # boolean type guards in olsr_types.h are incompatible with C23
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
   buildInputs = [
     bison
@@ -43,4 +46,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
-}
+})

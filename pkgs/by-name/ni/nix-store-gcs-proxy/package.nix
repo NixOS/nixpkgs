@@ -3,14 +3,14 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nix-store-gcs-proxy";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "nix-store-gcs-proxy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ljJrBNSGPZ9cV/+XcMNfMLT5le7tvtf/O42Tfou5BCA=";
   };
 
@@ -28,4 +28,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ zimbatm ];
   };
-}
+})

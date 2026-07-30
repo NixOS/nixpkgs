@@ -10,12 +10,12 @@
   texinfo,
   pkg-config,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guile-goblins";
   version = "0.17.0";
 
   src = fetchurl {
-    url = "https://spritely.institute/files/releases/guile-goblins/guile-goblins-${version}.tar.gz";
+    url = "https://spritely.institute/files/releases/guile-goblins/guile-goblins-${finalAttrs.version}.tar.gz";
     hash = "sha256-IFZEB/HbBx1EDAO8+0xB/UB3iyogyzKbE+pbfbWrU5o=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = guile.meta.platforms;
   };
-}
+})

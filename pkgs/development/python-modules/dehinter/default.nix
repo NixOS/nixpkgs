@@ -4,20 +4,23 @@
   fetchFromGitHub,
   fonttools,
   pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dehinter";
   version = "4.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   # PyPI source tarballs omit tests, fetch from Github instead
   src = fetchFromGitHub {
     owner = "source-foundry";
     repo = "dehinter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-l988SW6OWKXzJK0WGAJZR/QDFvgnSir+5TwMMvFcOxg=";
   };
+
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [ fonttools ];
 
@@ -30,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ danc86 ];
   };
-}
+})

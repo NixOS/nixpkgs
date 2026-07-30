@@ -6,14 +6,14 @@
   sshs,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sshs";
   version = "4.7.2";
 
   src = fetchFromGitHub {
     owner = "quantumsheep";
     repo = "sshs";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Xr1S6KSw3a/+TIrw2hUPpUOd22+49YMuGK2TVxfwPHU=";
   };
 
@@ -28,4 +28,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ not-my-segfault ];
     mainProgram = "sshs";
   };
-}
+})

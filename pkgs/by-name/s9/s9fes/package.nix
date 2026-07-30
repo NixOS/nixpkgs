@@ -10,12 +10,12 @@ let
   isCrossCompiling = stdenv.hostPlatform != stdenv.buildPlatform;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "s9fes";
   version = "20181205";
 
   src = fetchurl {
-    url = "https://www.t3x.org/s9fes/s9fes-${version}.tgz";
+    url = "https://www.t3x.org/s9fes/s9fes-${finalAttrs.version}.tgz";
     sha256 = "sha256-Lp/akaDy3q4FmIE6x0fj9ae/SOD7tdsmzy2xdcCh13o=";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ siraben ];
     platforms = lib.platforms.unix;
   };
-}
+})

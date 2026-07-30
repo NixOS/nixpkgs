@@ -8,14 +8,14 @@
   glibc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.1.5";
   pname = "longview";
 
   src = fetchFromGitHub {
     owner = "linode";
     repo = "longview";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1i9lli8iw8sb1bd633i82fzhx5gz85ma9d1hra41pkv2p3h823pa";
   };
 
@@ -75,10 +75,10 @@ stdenv.mkDerivation rec {
     mainProgram = "longview";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.rvl ];
-    inherit version;
+    inherit (finalAttrs) version;
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ];
   };
-}
+})

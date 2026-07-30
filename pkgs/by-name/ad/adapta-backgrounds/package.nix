@@ -8,14 +8,14 @@
   glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "adapta-backgrounds";
   version = "0.5.3.1";
 
   src = fetchFromGitHub {
     owner = "adapta-project";
     repo = "adapta-backgrounds";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "04hmbmzf97rsii8gpwy3wkljy5xhxmlsl34d63s6hfy05knclydj";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ romildo ];
   };
-}
+})

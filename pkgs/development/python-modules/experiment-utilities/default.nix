@@ -70,7 +70,11 @@ buildPythonPackage rec {
     torch
   ];
 
-  disabledTests = [ "test_experimentstarter" ];
+  disabledTests = [
+    "test_experimentstarter"
+    # https://github.com/ChrisReinke/exputils/issues/4
+    "test_different_datatypes"
+  ];
 
   pythonImportsCheck = [ "exputils" ];
 

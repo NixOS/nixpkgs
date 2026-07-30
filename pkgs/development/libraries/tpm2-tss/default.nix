@@ -115,6 +115,11 @@ stdenv.mkDerivation (finalAttrs: {
     done
     substituteInPlace src/tss2-fapi/ifapi_config.c \
       --replace-fail 'SYSCONFDIR' '"/etc"'
+
+    # https://github.com/tpm2-software/tpm2-tss/pull/3041
+    substituteInPlace test/unit/tcti-libtpms.c \
+      --replace-fail 'check_expected_ptr(st);' 'check_expected(st);' \
+      --replace-fail 'check_expected_ptr(buf_len);' 'check_expected(buf_len);'
   ''
   # tcti tests rely on mocking function calls, which appears not to be supported
   # on clang
@@ -146,6 +151,8 @@ stdenv.mkDerivation (finalAttrs: {
     # users/groups which aren't guaranteed to exist on the system.
     rm -R $out/lib/udev
 
+    mkdir -p $out/etc/tpm2-tss
+
     # write fapi-config suitable for testing
     cat > $out/etc/tpm2-tss/fapi-config-test.json <<EOF
     {
@@ -160,7 +167,9 @@ stdenv.mkDerivation (finalAttrs: {
     stdenv.buildPlatform.canExecute stdenv.hostPlatform
     && !stdenv.hostPlatform.isDarwin
     # Tests rely on mocking, which can't work with static libs.
-    && !stdenv.hostPlatform.isStatic;
+    && !stdenv.hostPlatform.isStatic
+    # swtpm does not build on 32-bit targets
+    && !stdenv.hostPlatform.is32bit;
   # Since we rewrote the load path in the dynamic loader for the TCTI
   # The various tcti implementation should be placed in their target directory
   # before we could run tests, so we make turn checkPhase into installCheckPhase

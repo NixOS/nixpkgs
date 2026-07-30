@@ -1,11 +1,11 @@
 {
   lib,
+  callPackage,
   stdenv,
   fetchFromGitHub,
   cmake,
   pkg-config,
   intel-gmmlib,
-  intel-graphics-compiler,
   level-zero,
   libva,
   gitUpdater,
@@ -13,8 +13,10 @@
 
 let
   inherit (lib) cmakeBool;
+  # intel-graphics-compiler >= 2.36 does no longer support 8th Gen
+  intel-graphics-compiler = callPackage ./intel-graphics-compiler.nix { };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   # https://github.com/intel/compute-runtime/blob/master/LEGACY_PLATFORMS.md
   pname = "intel-compute-runtime-legacy1";
   version = "24.35.30872.41"; # 24.35.30872.x is the last series to support Gen8, Gen9 and Gen11 GPU support
@@ -22,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "intel";
     repo = "compute-runtime";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-CnMIOAPnVhKVQxAcOZAuV5M4HJ2qftzEm9YdCuvkFbI=";
   };
 
@@ -88,9 +90,9 @@ stdenv.mkDerivation rec {
     description = "Intel Graphics Compute Runtime oneAPI Level Zero and OpenCL with support for Gen8, Gen9 and Gen11 GPUs";
     mainProgram = "ocloc";
     homepage = "https://github.com/intel/compute-runtime";
-    changelog = "https://github.com/intel/compute-runtime/releases/tag/${version}";
+    changelog = "https://github.com/intel/compute-runtime/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ fleaz ];
   };
-}
+})

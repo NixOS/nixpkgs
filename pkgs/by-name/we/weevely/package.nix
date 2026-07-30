@@ -7,7 +7,7 @@
   installShellFiles,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "weevely";
   version = "4.0.2-unstable-2024-04-29";
   pyproject = false;
@@ -41,7 +41,7 @@ python3Packages.buildPythonApplication rec {
     cp -a * $out/share/weevely/
     makeWrapper ${python3}/bin/python $out/bin/weevely \
       --add-flags "$out/share/weevely/weevely.py" \
-      --prefix PYTHONPATH : ${python3Packages.makePythonPath propagatedBuildInputs}
+      --prefix PYTHONPATH : ${python3Packages.makePythonPath finalAttrs.propagatedBuildInputs}
     runHook postInstall
   '';
 
@@ -51,6 +51,6 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "weevely";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    maintainers = [ ];
   };
-}
+})

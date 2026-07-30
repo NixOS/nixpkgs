@@ -6,15 +6,15 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ttyplot";
-  version = "1.7.4";
+  version = "1.7.5";
 
   src = fetchFromGitHub {
     owner = "tenox7";
     repo = "ttyplot";
-    rev = version;
-    hash = "sha256-hWjjl11NGhbv0VrLpdJ/W+a8tJPjg8OtUTKgDIqpsfs=";
+    rev = finalAttrs.version;
+    hash = "sha256-JXxJDFwbwnLc19qfKtHwsZDv3Un1ahCOZlAfQbBuCpc=";
   };
 
   nativeBuildInputs = [
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ lassulus ];
     mainProgram = "ttyplot";
   };
-}
+})

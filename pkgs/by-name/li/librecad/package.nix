@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "librecad";
-  version = "2.2.1.3";
+  version = "2.2.1.5";
 
   src = fetchFromGitHub {
     owner = "LibreCAD";
     repo = "LibreCAD";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pun0mMCIsL8XfFlP14EkpBitNHL4OKezPfAF17D9pLg=";
+    hash = "sha256-p2/mwFQq5VWNXvS8KsfvxYZP4mtJT/eWmQ6K+M+6TLQ=";
   };
 
   buildInputs = [
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     ${lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       install -Dm555 -t $out/bin                unix/{librecad,ttf2lff}
       install -Dm444 -t $out/share/applications desktop/librecad.desktop
-      install -Dm644 -t $out/share/pixmaps      librecad/res/main/librecad.png
+      install -Dm644 -t $out/share/icons/hicolor/128x128/apps librecad/res/main/librecad.png
       install -Dm444 desktop/librecad.sharedmimeinfo $out/share/mime/packages/librecad.xml
       install -Dm444 desktop/graphics_icons_and_splash/Icon\ LibreCAD/Icon_Librecad.svg \
         $out/share/icons/hicolor/scalable/apps/librecad.svg

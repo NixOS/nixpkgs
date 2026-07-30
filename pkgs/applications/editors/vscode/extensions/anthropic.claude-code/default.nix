@@ -1,21 +1,50 @@
 {
   lib,
-  claude-code,
+  stdenv,
+  stdenvNoCC,
+  autoPatchelfHook,
+  alsa-lib,
+  testers,
   vscode-utils,
 }:
 
-vscode-utils.buildVscodeMarketplaceExtension {
-  mktplcRef = {
-    name = "claude-code";
-    publisher = "anthropic";
-    version = "2.1.7";
-    hash = "sha256-Bj9VNhwgM0nO3b/Iptb70hkO2TjKxbEpxdYGyzFt3iA=";
-  };
+vscode-utils.buildVscodeMarketplaceExtension (finalAttrs: {
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  postInstall = ''
-    rm -f "$out/$installPrefix/resources/native-binary/claude"*
-    ln -s "${claude-code}/bin/claude" "$out/$installPrefix/resources/native-binary/claude"
-  '';
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    (lib.getLib stdenv.cc.cc)
+    alsa-lib
+  ];
+
+  mktplcRef =
+    let
+      sources = {
+        "x86_64-linux" = {
+          arch = "linux-x64";
+          hash = "sha256-GUuO8kJczyQOV/wIxFd8AJ5Td6kuSqPCxB/pPsbwxi4=";
+        };
+        "aarch64-linux" = {
+          arch = "linux-arm64";
+          hash = "sha256-EhN34a1o8qMPp8oOnoBfUQDTaibTQq5DlQo++kl/ugQ=";
+        };
+        "aarch64-darwin" = {
+          arch = "darwin-arm64";
+          hash = "sha256-5nHyEKub7LLHN+bpN+u36wAs7Q4iY+vgVgd4VPgzOXg=";
+        };
+      };
+    in
+    {
+      name = "claude-code";
+      publisher = "anthropic";
+      version = "2.1.220";
+    }
+    // sources.${stdenvNoCC.hostPlatform.system}
+      or (throw "Unsupported system ${stdenvNoCC.hostPlatform.system}");
+
+  passthru.tests.bundled-claude-runs = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    command = "${finalAttrs.finalPackage}/share/vscode/extensions/anthropic.claude-code/resources/native-binary/claude --version";
+  };
 
   meta = {
     description = "Harness the power of Claude Code without leaving your IDE";
@@ -24,5 +53,10 @@ vscode-utils.buildVscodeMarketplaceExtension {
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     maintainers = with lib.maintainers; [ xiaoxiangmoe ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
   };
-}
+})

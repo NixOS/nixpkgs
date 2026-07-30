@@ -308,14 +308,14 @@ broken XKB file can lead to the X session crashing at login. Therefore,
 you're strongly advised to **test your layout before applying it**:
 
 ```ShellSession
-$ nix-shell -p xorg.xkbcomp
+$ nix-shell -p xkbcomp
 $ setxkbmap -I/yourpath us-greek -print | xkbcomp -I/yourpath - $DISPLAY
 ```
 
 You can inspect the predefined XKB files for examples:
 
 ```ShellSession
-$ echo "$(nix-build --no-out-link '<nixpkgs>' -A xorg.xkeyboardconfig)/etc/X11/xkb/"
+$ echo "$(nix-build --no-out-link '<nixpkgs>' -A xkeyboard-config)/etc/X11/xkb/"
 ```
 
 Once the configuration is applied, and you did a logout/login cycle, the
@@ -328,7 +328,7 @@ A layout can have several other components besides `xkb_symbols`, for
 example we will define new keycodes for some multimedia key and bind
 these to some symbol.
 
-Use the *xev* utility from `pkgs.xorg.xev` to find the codes of the keys
+Use the *xev* utility from `pkgs.xev` to find the codes of the keys
 of interest, then create a `media-key` file to hold the keycodes
 definitions
 

@@ -4,7 +4,7 @@
   fetchgit,
   autoreconfHook,
   pkg-config,
-  fltk13,
+  fltk_1_3,
   gettext,
 }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    fltk13
+    fltk_1_3
   ];
 
   enableParallelBuilding = true;
@@ -36,7 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ stteague ];
     platforms = lib.platforms.unix;
-    broken = stdenv.system == "x86_64-darwin";
     mainProgram = "flamp";
   };
 })

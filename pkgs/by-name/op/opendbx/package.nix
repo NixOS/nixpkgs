@@ -12,12 +12,12 @@ let
   inherit (lib) getDev;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opendbx";
   version = "1.4.6";
 
   src = fetchurl {
-    url = "https://linuxnetworks.de/opendbx/download/opendbx-${version}.tar.gz";
+    url = "https://linuxnetworks.de/opendbx/download/opendbx-${finalAttrs.version}.tar.gz";
     sha256 = "0z29h6zx5f3gghkh1a0060w6wr572ci1rl2a3480znf728wa0ii2";
   };
 
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.all;
   };
-}
+})

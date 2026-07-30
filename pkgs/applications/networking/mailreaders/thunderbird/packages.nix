@@ -4,30 +4,11 @@
   buildMozillaMach,
   callPackage,
   fetchurl,
-  icu77,
-  icu78,
   fetchpatch2,
   config,
 }:
 
 let
-  patchICU =
-    icu:
-    icu.overrideAttrs (attrs: {
-      # standardize vtzone output
-      # Work around ICU-22132 https://unicode-org.atlassian.net/browse/ICU-22132
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1790071
-      patches = attrs.patches ++ [
-        (fetchpatch2 {
-          url = "https://hg.mozilla.org/mozilla-central/raw-file/fb8582f80c558000436922fb37572adcd4efeafc/intl/icu-patches/bug-1790071-ICU-22132-standardize-vtzone-output.diff";
-          stripLen = 3;
-          hash = "sha256-MGNnWix+kDNtLuACrrONDNcFxzjlUcLhesxwVZFzPAM=";
-        })
-      ];
-    });
-  icu77' = patchICU icu77;
-  icu78' = patchICU icu78;
-
   common =
     {
       version,
@@ -48,15 +29,23 @@ let
         # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
         (if lib.versionOlder version "140" then ./no-buildconfig.patch else ./no-buildconfig-tb140.patch)
       ];
-      extraPassthru = {
-        icu77 = icu77';
-        icu78 = icu78';
-      };
+      # FIXME: let's hope that upstream will fix this soon and we can drop this hack again.
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=2040877
+      extraPostPatch =
+        lib.optionalString (lib.versionAtLeast version "151" && lib.versionOlder version "152") ''
+          echo https://hg.mozilla.org/releases/comm-release/rev/becfb8fb2c70f1603882a2787e2170d5d8013949 >> sourcestamp.txt
+          echo https://hg.mozilla.org/releases/mozilla-release/rev/fc12dc911f904307729760a817deb829cbf8feb4 >> sourcestamp.txt
+        ''
+        # https://bugzilla.mozilla.org/show_bug.cgi?id=2006630
+        + lib.optionalString (lib.versionAtLeast version "140.8" && lib.versionOlder version "151") ''
+          find . -name .cargo-checksum.json | xargs sed 's/"[^"]*\.gitmodules":"[a-z0-9]*",//g' -i
+        '';
 
       meta = {
         changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
         description = "Full-featured e-mail client";
-        homepage = "https://thunderbird.net/";
+        homepage = "https://www.thunderbird.net/";
+        donationPage = "https://www.thunderbird.net/donate/";
         mainProgram = "thunderbird";
         maintainers = with lib.maintainers; [
           booxter # darwin
@@ -71,23 +60,26 @@ let
         license = lib.licenses.mpl20;
       };
     }).override
-      {
-        geolocationSupport = false;
-        webrtcSupport = false;
+      (
+        {
+          geolocationSupport = false;
+          webrtcSupport = false;
 
-        pgoSupport = false; # console.warn: feeds: "downloadFeed: network connection unavailable"
-
-        icu77 = icu77';
-        icu78 = icu78';
-      };
+          pgoSupport = false; # console.warn: feeds: "downloadFeed: network connection unavailable"
+        }
+        // lib.optionalAttrs (lib.versionAtLeast version "149") {
+          # https://bugzilla.mozilla.org/show_bug.cgi?id=2025767
+          crashreporterSupport = false;
+        }
+      );
 
 in
 rec {
   thunderbird = thunderbird-latest;
 
   thunderbird-latest = common {
-    version = "146.0.1";
-    sha512 = "8a3b2de246c7c597574fce596836c7ef7b24bd21573feb15c308003f34b82335ad865aa0f81b24d1669c8023c0448c0e273a63019aab13356b023c2e8adc2c47";
+    version = "153.0";
+    sha512 = "f77bde3dd0933dd35870a889386c41d55ff0cbe276ec3373b27e9885f7db7e35529e7ecc2fc149ae4f8c5ae53eddb3ad444e7499a850a59a82b8940c7a4c7747";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-latest";
@@ -97,11 +89,24 @@ rec {
   # Eventually, switch to an updateScript without versionPrefix hardcoded...
   thunderbird-esr = thunderbird-140;
 
+  thunderbird-153 = common {
+    applicationName = "Thunderbird ESR";
+
+    version = "153.0.1esr";
+    sha512 = "3773b49b69341aea108a627faa0dd5b7cfb52cdb4c37e625fbb8cbaef7f9166f925ecbc199173302d5bef7994e6bff3b56cd56a3a4c38a9d702cc3e5aeafcf7c";
+
+    updateScript = callPackage ./update.nix {
+      attrPath = "thunderbirdPackages.thunderbird-153";
+      versionPrefix = "153";
+      versionSuffix = "esr";
+    };
+  };
+
   thunderbird-140 = common {
     applicationName = "Thunderbird ESR";
 
-    version = "140.6.0esr";
-    sha512 = "817a807381fa0b5e5e2c3f961931855788649ed596b1c6773ec5b0d6715e90df137ab0f755408a9137b5573169c2e2040bf6a01c4ecdb9a8b010e6c43dbb6381";
+    version = "140.13.0esr";
+    sha512 = "778d2fc2837ba367e90c4336f3873da5a0823c182e2f50aa9373cd1ee9ee2b5310372ad9d33e1e11978791b67de4a6952d3036ff7d57b257a06f49c8cd4a830e";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-140";

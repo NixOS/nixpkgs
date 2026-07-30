@@ -4,12 +4,12 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bottom-rs";
   version = "1.2.0";
 
   src = fetchCrate {
-    inherit version;
+    inherit (finalAttrs) version;
     crateName = "bottomify";
     hash = "sha256-R1zj+TFXoolonIFa1zJDd7CdrORfzAPlxJoJVYe9xdc=";
   };
@@ -23,4 +23,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ winter ];
     mainProgram = "bottomify";
   };
-}
+})

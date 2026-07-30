@@ -11,14 +11,14 @@
   util-linux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "git-quick-stats";
   version = "2.8.0";
 
   src = fetchFromGitHub {
     repo = "git-quick-stats";
-    owner = "arzzen";
-    rev = version;
+    owner = "git-quick-stats";
+    rev = finalAttrs.version;
     sha256 = "sha256-YVvlrlNRDDci7fH9LW4NxZcIkakVgvKe9FhJ2gCfoXg=";
   };
 
@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
-    homepage = "https://github.com/arzzen/git-quick-stats";
+    homepage = "https://github.com/git-quick-stats/git-quick-stats";
     description = "Simple and efficient way to access various statistics in git repository";
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.kmein ];
     license = lib.licenses.mit;
     mainProgram = "git-quick-stats";
   };
-}
+})

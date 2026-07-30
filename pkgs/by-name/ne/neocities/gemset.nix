@@ -19,6 +19,16 @@
     };
     version = "2.8.5";
   };
+  mutex_m = {
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "0l875dw0lk7b2ywa54l0wjcggs94vb7gs8khfw9li75n2sn09jyg";
+      type = "gem";
+    };
+    version = "0.3.0";
+  };
   necromancer = {
     groups = [ "default" ];
     platforms = [ ];
@@ -36,15 +46,16 @@
       "rake"
       "tty-prompt"
       "tty-table"
+      "whirly"
     ];
     groups = [ "default" ];
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1hfvy4gc7rzxkgl2dbrjs2fqzi5mphmr22rjfhk6n0i3bd0wazbw";
+      sha256 = "17d5z0c04yx2a6g8bdkhiwyf5xvshdx4p07j2xlip8dnkkf9q4hw";
       type = "gem";
     };
-    version = "0.0.18";
+    version = "0.0.20";
   };
   pastel = {
     dependencies = [
@@ -177,6 +188,17 @@
       type = "gem";
     };
     version = "1.4.0";
+  };
+  whirly = {
+    dependencies = [ "unicode-display_width" ];
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "0dggm1jkk9hlwnh5la3zsmsh4qv7n1ycmsnakl0lgdmpzgj3w9zm";
+      type = "gem";
+    };
+    version = "0.3.0";
   };
   wisper = {
     groups = [ "default" ];

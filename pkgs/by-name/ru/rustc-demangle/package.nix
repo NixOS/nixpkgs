@@ -5,15 +5,15 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustc-demangle";
-  version = "0.1.26";
+  version = "0.1.28";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rustc-demangle";
-    tag = "rustc-demangle-v${version}";
-    hash = "sha256-4/x3kUIKi3xnDRznr+6xmPeWHmhlpbuwSNH3Ej6+Ifc=";
+    tag = "rustc-demangle-v${finalAttrs.version}";
+    hash = "sha256-Fu9Lvg2QRMQSBWXLZMIRBUoX2aJB4HirfnMe2v9x6Yc=";
   };
 
   cargoLock = {
@@ -44,6 +44,6 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ _1000teslas ];
+    maintainers = with lib.maintainers; [ sledgehammervampire ];
   };
-}
+})

@@ -46,6 +46,10 @@ buildPythonPackage rec {
   disabledTests = [
     #ValueError: Invalid modulus
     "test_modulus_verification"
+    # bcrypt 5.0 rejects test fixture password longer than 72 bytes
+    "test_compute_v"
+    "test_generate_v"
+    "test_srp"
   ];
 
   pythonImportsCheck = [ "proton" ];

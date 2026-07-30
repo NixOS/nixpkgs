@@ -26,6 +26,6 @@ buildNpmPackage (finalAttrs: {
     description = "JSON language extension for coc.nvim";
     homepage = "https://github.com/neoclide/coc-json";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

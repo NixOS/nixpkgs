@@ -3,14 +3,14 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ops";
   version = "0.1.32";
 
   src = fetchFromGitHub {
     owner = "nanovms";
     repo = "ops";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-ac+17hywzyK7ChCP/nhwTP1WEIZ89+BKX9/YmsPpfg8=";
   };
 
@@ -25,7 +25,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/nanovms/ops/lepton.Version=${version}"
+    "-X github.com/nanovms/ops/lepton.Version=${finalAttrs.version}"
   ];
 
   meta = {
@@ -33,7 +33,7 @@ buildGoModule rec {
     homepage = "https://github.com/nanovms/ops";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     mainProgram = "ops";
   };
-}
+})

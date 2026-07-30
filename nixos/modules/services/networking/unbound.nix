@@ -31,10 +31,10 @@ let
       throw (traceSeq v "services.unbound.settings: unexpected type");
 
   confNoServer = concatStringsSep "\n" (
-    (mapAttrsToList (toConf "") (builtins.removeAttrs cfg.settings [ "server" ])) ++ [ "" ]
+    (mapAttrsToList (toConf "") (removeAttrs cfg.settings [ "server" ])) ++ [ "" ]
   );
   confServer = concatStringsSep "\n" (
-    mapAttrsToList (toConf "  ") (builtins.removeAttrs cfg.settings.server [ "define-tag" ])
+    mapAttrsToList (toConf "  ") (removeAttrs cfg.settings.server [ "define-tag" ])
   );
 
   confFileUnchecked = pkgs.writeText "unbound.conf" ''
@@ -115,7 +115,7 @@ in
         default = true;
         description = ''
           Whether unbound should resolve local queries (i.e. add 127.0.0.1 to
-          /etc/resolv.conf).
+          /etc/resolv.conf and set name servers to localhost respectively).
         '';
       };
 
@@ -276,6 +276,7 @@ in
       resolvconf = {
         useLocalResolver = mkDefault true;
       };
+      nameservers = lib.mkBefore ([ "127.0.0.1" ] ++ (optional config.networking.enableIPv6 "::1"));
     };
 
     environment.etc."unbound/unbound.conf".source = confFile;

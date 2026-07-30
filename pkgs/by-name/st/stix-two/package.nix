@@ -2,11 +2,19 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "stix-two";
   version = "2.13";
+
+  outputs = [
+    "out"
+    "webfont"
+  ];
+
+  preInstall = "rm -r static_ttf_woff2/";
 
   src = fetchzip {
     url = "https://github.com/stipub/stixfonts/raw/v${version}/zipfiles/STIX${
@@ -16,14 +24,7 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-hfQmrw7HjlhQSA0rVTs84i3j3iMVR0k7tCRBcB6hEpU=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm644 */*.otf -t $out/share/fonts/opentype
-    install -Dm644 */*.ttf -t $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     homepage = "https://www.stixfonts.org/";

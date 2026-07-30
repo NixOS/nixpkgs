@@ -5,9 +5,10 @@
   pytestCheckHook,
   setuptools,
   pybind11,
+  unstableGitUpdater,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "libparse-python";
   version = "0-unstable-2025-08-30";
   pyproject = true;
@@ -38,6 +39,8 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "libparse" ];
 
+  passthru.updateScript = unstableGitUpdater { };
+
   meta = {
     description = "Python library for parsing Yosys output";
     homepage = "https://github.com/librelane/libparse-python";
@@ -45,4 +48,4 @@ buildPythonPackage {
     maintainers = with lib.maintainers; [ gonsolo ];
     platforms = lib.platforms.linux;
   };
-}
+})

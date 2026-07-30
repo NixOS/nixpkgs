@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   # Fix for 'ppdc: Unable to find include file "<font.defs>"', which blocks '*.ppd' generation.
   # Issue occurs in hermetic sandbox; this workaround is the current solution.
   # Source: https://github.com/NixOS/nixpkgs/blob/9997402000a82eda4327fde36291234118c7515e/pkgs/misc/drivers/hplip/default.nix#L160
-  CUPS_DATADIR = "${cups}/share/cups";
+  env.CUPS_DATADIR = "${cups}/share/cups";
 
   configurePhase = ''
     runHook preConfigure

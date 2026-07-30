@@ -11,15 +11,15 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pciutils";
-  version = "3.14.0"; # with release-date database
+  version = "3.15.0"; # with release-date database
 
   src = fetchFromGitHub {
     owner = "pciutils";
     repo = "pciutils";
-    rev = "v${version}";
-    hash = "sha256-8wSvu8BGzETD1RfwL6/DfSCZcmuj1I+zNH033f48qNQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-fPtOhUz8Hlo0ajCZbNOwT4fiuL8HlFQ7NGk+nQpmKZM=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -49,6 +49,15 @@ stdenv.mkDerivation rec {
     "install-lib"
   ];
 
+  # Since this package doesn't use an autotools generated configure script,
+  # splitting the dev or lib outputs produces incorrect files, evident by e.g
+  # pkg-config files which point to wrong paths. manual pages OTH are moved to
+  # the $man outputs naturally by stdenv.
+  outputs = [
+    "out"
+    "man"
+  ];
+
   postInstall = ''
     # Remove update-pciids as it won't work on nixos
     rm $out/sbin/update-pciids $out/man/man8/update-pciids.8
@@ -73,4 +82,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.vcunat ]; # not really, but someone should watch it
     mainProgram = "lspci";
   };
-}
+})

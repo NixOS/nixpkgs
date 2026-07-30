@@ -6,14 +6,14 @@
   gawk,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "goawk";
   version = "1.31.0";
 
   src = fetchFromGitHub {
     owner = "benhoyt";
     repo = "goawk";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Luz6boPGIJqF/PJHZmnu3zChT5g8Wt37eOMtFS7j2pI=";
   };
 
@@ -46,4 +46,4 @@ buildGoModule rec {
     mainProgram = "goawk";
     maintainers = with lib.maintainers; [ abbe ];
   };
-}
+})

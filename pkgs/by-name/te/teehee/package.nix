@@ -4,14 +4,16 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "teehee";
   version = "0.2.8";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Gskartwii";
     repo = "teehee";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yTterXAev6eOnUe1/MJV8s8dUYJcXHDKVJ6T0G/JHzI=";
   };
 
@@ -20,9 +22,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Modal terminal hex editor";
     homepage = "https://github.com/Gskartwii/teehee";
-    changelog = "https://github.com/Gskartwii/teehee/releases/tag/${src.rev}";
+    changelog = "https://github.com/Gskartwii/teehee/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "teehee";
   };
-}
+})

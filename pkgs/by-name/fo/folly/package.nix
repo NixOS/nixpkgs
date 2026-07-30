@@ -3,6 +3,7 @@
   stdenv,
 
   fetchFromGitHub,
+  fetchpatch2,
 
   cmake,
   ninja,
@@ -40,7 +41,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "folly";
-  version = "2025.10.13.00";
+  version = "2026.01.19.00";
 
   # split outputs to reduce downstream closure sizes
   outputs = [
@@ -52,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "folly";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-k7PGxYF3HlNc5nPBV+MkELya/4yllkaMA37vcfES4NE=";
+    hash = "sha256-gfmN/9LizPdacUd1eJxFx79I63SwqX0NaWFgbe6vbFk=";
   };
 
   nativeBuildInputs = [
@@ -140,19 +141,21 @@ stdenv.mkDerivation (finalAttrs: {
     # <https://github.com/facebook/folly/issues/2171>
     ./folly-fix-glog-0.7.patch
 
-    # Fix a GCC‐incompatible use of a private trait.
-    #
-    # Per Folly’s own documentation:
-    #
-    #     /// Under gcc, the builtin is available but does not mangle. Therefore, this
-    #     /// trait must not be used anywhere it might be subject to mangling, such as in
-    #     /// a return-type expression.
-    #
-    # See:
-    #
-    # * <https://github.com/facebook/folly/issues/2493>
-    # * <https://github.com/facebook/folly/pull/2499>
-    ./fix-__type_pack_element.patch
+    # https://github.com/facebook/folly/pull/2561
+    ./memset-memcpy-aarch64.patch
+
+    # `.align 64` is invalid on x86_64 Mach-O, where `.align` takes a
+    # power-of-two exponent (64 means 2^64). The guard only excluded
+    # aarch64, so add !__APPLE__ to also skip x86_64-darwin.
+    ./memset-benchmark-darwin.patch
+
+    # Use feature detection directly instead of private standard library
+    # macros to detect the presence of ASAN and otherwise fallback to
+    # _not_ having ASAN.
+    (fetchpatch2 {
+      url = "https://github.com/facebook/folly/commit/fdde9bc360d525a1b2889b9ba89d671c3a13e72e.patch?full_index=1";
+      hash = "sha256-+1XJRAl4o9YubjqdIgQZpyrMmcb2imBfQUmiHNmFMRE=";
+    })
   ];
 
   # https://github.com/NixOS/nixpkgs/issues/144170
@@ -164,6 +167,19 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail \
         ${lib.escapeShellArg "\${prefix}/@CMAKE_INSTALL_INCLUDEDIR@"} \
         '@CMAKE_INSTALL_FULL_INCLUDEDIR@'
+  ''
+  # Fix duplicate symbol errors on aarch64-linux caused by both
+  # memcpy_aarch64 and memcpy_aarch64-use (same for memset) being linked
+  # into libfolly.so. Add EXCLUDE_FROM_MONOLITH to -use variants.
+  # https://github.com/facebook/folly/pull/2562
+  + lib.optionalString stdenv.hostPlatform.isAarch64 ''
+    substituteInPlace folly/external/aor/CMakeLists.txt \
+      --replace-fail \
+        "NAME memcpy_aarch64-use" \
+        "NAME memcpy_aarch64-use EXCLUDE_FROM_MONOLITH" \
+      --replace-fail \
+        "NAME memset_aarch64-use" \
+        "NAME memset_aarch64-use EXCLUDE_FROM_MONOLITH"
   '';
 
   disabledTests = [
@@ -172,6 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
     "singleton_thread_local_test.SingletonThreadLocalDeathTest.Overload"
 
     # very strict timing constraints, will fail under load
+    "logging_async_file_writer_test.AsyncFileWriter.discard"
     "io_async_hh_wheel_timer_test.HHWheelTimerTest.CancelTimeout"
     "io_async_hh_wheel_timer_test.HHWheelTimerTest.DefaultTimeout"
     "io_async_hh_wheel_timer_test.HHWheelTimerTest.DeleteWheelInTimeout"
@@ -189,6 +206,12 @@ stdenv.mkDerivation (finalAttrs: {
     #     inlined from 'void folly::BitsAllUintsTest_GetBitAtLE_Test<gtest_TypeParam_>::TestBody() [with gtest_TypeParam_ = short unsigned int]' at /build/source/folly/lang/test/BitsTest.cpp:640:5:
     # /build/source/folly/lang/Bits.h:494:10: warning: 'in' is used uninitialized [-Wuninitialized]
     "lang_bits_test.BitsAllUintsTest/*.GetBitAtLE"
+
+    # times out under resource constraints
+    "futures_retrying_test.RetryingTest.largeRetries"
+
+    # fails in containerized environments due to fork behavior
+    "io_async_notification_queue_test.NotificationQueueTest.UseAfterFork"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     "concurrency_cache_locality_test.CacheLocality.BenchmarkSysfs"

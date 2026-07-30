@@ -5,14 +5,14 @@
   fetchpatch,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ffuf";
   version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "ffuf";
     repo = "ffuf";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+wcNqQHtB8yCLiJXMBxolCWsYZbBAsBGS1hs7j1lzUU=";
   };
 
@@ -41,8 +41,8 @@ buildGoModule rec {
       or web servers.
     '';
     homepage = "https://github.com/ffuf/ffuf";
-    changelog = "https://github.com/ffuf/ffuf/releases/tag/v${version}";
+    changelog = "https://github.com/ffuf/ffuf/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

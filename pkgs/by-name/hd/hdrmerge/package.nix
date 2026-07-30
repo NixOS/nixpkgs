@@ -13,7 +13,7 @@
   copyDesktopItems,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hdrmerge";
   version = "0.5.0-unstable-2025-04-26";
   src = fetchFromGitHub {
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       name = "HDRMerge";
       genericName = "HDR raw image merge";
       desktopName = "HDRMerge";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       icon = "hdrmerge";
       exec = "hdrmerge %F";
       categories = [ "Graphics" ];
@@ -78,4 +78,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.paperdigits ];
   };
-}
+})

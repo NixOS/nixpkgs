@@ -11,17 +11,17 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rust-analyzer-unwrapped";
-  version = "2026-01-05";
+  version = "2026-06-15";
 
-  cargoHash = "sha256-J1WMQHpY3DBkM86FbXVj9YvDCJtNfX/1hKQkWQyc8YE=";
+  cargoHash = "sha256-gVQGlbO6ylFNWt1JwGu8v4oLT7DBy23FGCnbP67Dj/0=";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rust-analyzer";
-    rev = version;
-    hash = "sha256-lcA/e3++3aZQSj6xCsBi2VpYyC3Q+oO/oukgfHiL+Ts=";
+    rev = finalAttrs.version;
+    hash = "sha256-+V3nK4pCngbmgyVGXY6Kkrlevp4ocPkJJLf2aqwkDNA=";
   };
 
   cargoBuildFlags = [
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = lib.optional useMimalloc "mimalloc";
 
-  env.CFG_RELEASE = version;
+  env.CFG_RELEASE = finalAttrs.version;
 
   inherit doCheck;
   preCheck = lib.optionalString doCheck ''
@@ -79,4 +79,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ oxalica ];
     mainProgram = "rust-analyzer";
   };
-}
+})

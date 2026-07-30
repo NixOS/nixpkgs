@@ -8,14 +8,14 @@
   pkg-config,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "yubikey-agent";
 
   version = "0.1.6";
   src = fetchFromGitHub {
     owner = "FiloSottile";
     repo = "yubikey-agent";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Knk1ipBOzjmjrS2OFUMuxi1TkyDcSYlVKezDWT//ERY=";
   };
 
@@ -36,7 +36,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -56,4 +56,4 @@ buildGoModule rec {
     ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
-}
+})

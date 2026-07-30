@@ -7,10 +7,8 @@
   fetchPypi,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   pyyaml,
   setuptools,
-  tomli,
 }:
 
 buildPythonPackage rec {
@@ -32,7 +30,6 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    toml = lib.optionals (pythonOlder "3.11") [ tomli ];
     yaml = [ pyyaml ];
   };
 

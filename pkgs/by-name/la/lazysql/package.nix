@@ -5,19 +5,19 @@
   fetchFromGitHub,
   testers,
   lazysql,
-  xorg ? null,
+  libx11,
   darwin ? null,
 }:
 
 buildGoModule rec {
   pname = "lazysql";
-  version = "0.4.6";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "jorgerojas26";
     repo = "lazysql";
     rev = "v${version}";
-    hash = "sha256-kEGUPlFCU2kKgVJHobVP+DFmAcMc/ZDP+u0w03DnhSo=";
+    hash = "sha256-Grr1R88XguW/jT5Vj/m11Cr+Im2+mnVZw23QrO1ZzMk=";
   };
 
   vendorHash = "sha256-FbAt/HsjoxqAKWQqqWN2xuyyTG2Ic4DcyEU4O0rjpQE=";
@@ -26,7 +26,7 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ xorg.libX11 ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libx11 ];
 
   passthru.tests.version = testers.testVersion {
     package = lazysql;

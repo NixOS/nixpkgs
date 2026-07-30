@@ -207,6 +207,10 @@ in
           AmbientCapabilities = "cap_net_bind_service";
         };
       };
+
+      services.fastnetmon-advanced.hostgroups = {
+        global = { };
+      };
     })
 
     (lib.mkIf (cfg.enable && cfg.enableAdvancedTrafficPersistence) {
@@ -245,5 +249,5 @@ in
     })
   ];
 
-  meta.maintainers = lib.teams.wdz.members;
+  meta.maintainers = with lib.maintainers; [ yureka-wdz ];
 }

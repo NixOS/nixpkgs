@@ -7,14 +7,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scheme-bytestructures";
   version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "TaylanUB";
     repo = "scheme-bytestructures";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-7FK1dXD1Qz6fFYjNUtHMaDGaezHLVaDvdgOboNNw0Lc=";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ethancedwards8 ];
     platforms = lib.platforms.unix;
   };
-}
+})

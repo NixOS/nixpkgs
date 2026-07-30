@@ -14,13 +14,13 @@
   enableX11 ? true,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mixxc";
   version = "0.2.5";
 
   src = fetchCrate {
     pname = "mixxc";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-YVh6SOXCf4GHqDduXP7QupC48hcIMQtjIdGJYXNXQ1E=";
   };
 
@@ -59,9 +59,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Minimalistic and customizable volume mixer";
     homepage = "https://github.com/Elvyria/mixxc";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ daru-san ];
     mainProgram = "mixxc";
     platforms = lib.platforms.linux;
   };
-}
+})

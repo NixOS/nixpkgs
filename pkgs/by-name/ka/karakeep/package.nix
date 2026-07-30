@@ -4,7 +4,6 @@
   fetchFromGitHub,
   nix-update-script,
   nixosTests,
-  testers,
   nodejs,
   node-gyp,
   gnutar,
@@ -15,16 +14,17 @@
   pnpm_9,
   fetchPnpmDeps,
   pnpmConfigHook,
+  versionCheckHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "karakeep";
-  version = "0.29.3";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
     owner = "karakeep-app";
     repo = "karakeep";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-MmurmQ/z8ME7Y6lpEWGaf7sFRSYhwd8flM4f0GBbUIM=";
+    tag = "cli/v${finalAttrs.version}";
+    hash = "sha256-P88DQi0T7tmBH7cjs8/Hz77bU0oG7u67XPoLsdePNhI=";
   };
 
   patches = [
@@ -52,20 +52,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version;
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      ;
     pnpm = pnpm_9;
-
-    # We need to pass the patched source code, so pnpm sees the patched version
-    src = stdenv.mkDerivation {
-      name = "${finalAttrs.pname}-patched-source";
-      inherit (finalAttrs) src patches;
-      installPhase = ''
-        cp -pr --reflink=auto -- . $out
-      '';
-    };
-
     fetcherVersion = 3;
-    hash = "sha256-LEdI9chVuOli4XiA0VRV9h8L3ho0IRbPsXtAyQM6Du8=";
+    hash = "sha256-aT4JPx3iYw4kw8GHXKWMnelSVT0q2S3PK8DgSCQCyKQ=";
   };
   buildPhase = ''
     runHook preBuild
@@ -94,6 +89,12 @@ stdenv.mkDerivation (finalAttrs: {
     popd
 
     runHook postBuild
+  '';
+
+  preInstall = ''
+    # provide a environment variable to override the cache directory
+    # https://github.com/vercel/next.js/discussions/58864
+    patch -p1 -i ${./patches/cache-from-env-not-nix-store.patch}
   '';
 
   installPhase = ''
@@ -143,21 +144,22 @@ stdenv.mkDerivation (finalAttrs: {
     find $out -type l ! -exec test -e {} \; -delete
   '';
 
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
   passthru = {
     tests = {
       inherit (nixosTests) karakeep;
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-        # remove hardcoded version if upstream syncs general version with cli
-        # version
-        version = "0.27.1";
-      };
     };
     updateScript = nix-update-script { };
   };
 
   meta = {
     homepage = "https://karakeep.app/";
+    changelog = "https://github.com/karakeep-app/karakeep/releases/tag/v${finalAttrs.version}";
     description = "Self-hostable bookmark-everything app (links, notes and images) with AI-based automatic tagging and full text search";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.three ];

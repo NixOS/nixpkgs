@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
 let
   homeserverUrl = "http://homeserver:8008";
 in
@@ -53,6 +53,7 @@ in
 
             appservice = {
               address = "http://homeserver:8009";
+              hostname = "0.0.0.0";
               port = 8009;
               id = "discord";
               bot = {
@@ -60,8 +61,6 @@ in
                 displayname = "Discord bridge bot";
                 avatar = "mxc://maunium.net/nIdEykemnwdisvHbpxflpDlC";
               };
-              # Don't override as_token/hs_token - let them use the default placeholder
-              # which will trigger automatic generation
 
               database = {
                 type = "sqlite3";
@@ -74,6 +73,17 @@ in
                 "@alice:homeserver" = "user";
                 "*" = "relay";
               };
+            };
+
+            logging = {
+              min_level = "info";
+              writers = [
+                {
+                  type = "stdout";
+                  format = "pretty-colored";
+                  time_format = " ";
+                }
+              ];
             };
           };
         };
@@ -156,6 +166,57 @@ in
 
     with subtest("verify registration file was created"):
         homeserver.wait_until_succeeds("test -f /var/lib/mautrix-discord/discord-registration.yaml")
+
+        # Verify the module wrote the expected bridge configuration.
+        config_homeserver_address = homeserver.succeed("yq -r '.homeserver.address' /var/lib/mautrix-discord/config.yaml").strip()
+        config_homeserver_domain = homeserver.succeed("yq -r '.homeserver.domain' /var/lib/mautrix-discord/config.yaml").strip()
+        config_appservice_address = homeserver.succeed("yq -r '.appservice.address' /var/lib/mautrix-discord/config.yaml").strip()
+        config_appservice_hostname = homeserver.succeed("yq -r '.appservice.hostname' /var/lib/mautrix-discord/config.yaml").strip()
+        config_appservice_port = homeserver.succeed("yq -r '.appservice.port' /var/lib/mautrix-discord/config.yaml").strip()
+        config_appservice_id = homeserver.succeed("yq -r '.appservice.id' /var/lib/mautrix-discord/config.yaml").strip()
+        config_bot_username = homeserver.succeed("yq -r '.appservice.bot.username' /var/lib/mautrix-discord/config.yaml").strip()
+        config_bot_displayname = homeserver.succeed("yq -r '.appservice.bot.displayname' /var/lib/mautrix-discord/config.yaml").strip()
+        config_bot_avatar = homeserver.succeed("yq -r '.appservice.bot.avatar' /var/lib/mautrix-discord/config.yaml").strip()
+        config_database_type = homeserver.succeed("yq -r '.appservice.database.type' /var/lib/mautrix-discord/config.yaml").strip()
+        config_database_uri = homeserver.succeed("yq -r '.appservice.database.uri' /var/lib/mautrix-discord/config.yaml").strip()
+        config_permission = homeserver.succeed("yq -r '.bridge.permissions[\"*\"]' /var/lib/mautrix-discord/config.yaml").strip()
+        config_logging_min_level = homeserver.succeed("yq -r '.logging.min_level' /var/lib/mautrix-discord/config.yaml").strip()
+        config_logging_writer_type = homeserver.succeed("yq -r '.logging.writers[0].type' /var/lib/mautrix-discord/config.yaml").strip()
+        config_logging_writer_format = homeserver.succeed("yq -r '.logging.writers[0].format' /var/lib/mautrix-discord/config.yaml").strip()
+        reg_rate_limited = homeserver.succeed("yq -r '.rate_limited' /var/lib/mautrix-discord/discord-registration.yaml").strip()
+
+        assert config_homeserver_address == "http://homeserver:8008", \
+          f"Unexpected homeserver address: {config_homeserver_address}"
+        assert config_homeserver_domain == "homeserver", \
+          f"Unexpected homeserver domain: {config_homeserver_domain}"
+        assert config_appservice_address == "http://homeserver:8009", \
+          f"Unexpected appservice address: {config_appservice_address}"
+        assert config_appservice_hostname == "0.0.0.0", \
+          f"Unexpected appservice hostname: {config_appservice_hostname}"
+        assert config_appservice_port == "8009", \
+          f"Unexpected appservice port: {config_appservice_port}"
+        assert config_appservice_id == "discord", \
+          f"Unexpected appservice id: {config_appservice_id}"
+        assert config_bot_username == "discordbot", \
+          f"Unexpected bot username: {config_bot_username}"
+        assert config_bot_displayname == "Discord bridge bot", \
+          f"Unexpected bot displayname: {config_bot_displayname}"
+        assert config_bot_avatar == "mxc://maunium.net/nIdEykemnwdisvHbpxflpDlC", \
+          f"Unexpected bot avatar: {config_bot_avatar}"
+        assert config_database_type == "sqlite3-fk-wal", \
+          f"Unexpected database type: {config_database_type}"
+        assert config_database_uri == "file:/var/lib/mautrix-discord/mautrix-discord.db?_txlock=immediate", \
+          f"Unexpected database uri: {config_database_uri}"
+        assert config_permission == "relay", \
+          f"Unexpected default permission mapping: {config_permission}"
+        assert config_logging_min_level == "info", \
+          f"Unexpected logging min_level: {config_logging_min_level}"
+        assert config_logging_writer_type == "stdout", \
+          f"Unexpected logging writer type: {config_logging_writer_type}"
+        assert config_logging_writer_format == "pretty-colored", \
+          f"Unexpected logging writer format: {config_logging_writer_format}"
+        assert reg_rate_limited == "false", \
+          f"Registration file should disable rate limiting by default, got: {reg_rate_limited}"
 
         # Verify tokens were generated and are not default values
         config_as_token = homeserver.succeed("yq -r '.appservice.as_token' /var/lib/mautrix-discord/config.yaml").strip()

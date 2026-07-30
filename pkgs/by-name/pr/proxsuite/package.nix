@@ -27,26 +27,19 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "proxsuite";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "simple-robotics";
     repo = "proxsuite";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-1+a5tFOlEwzhGZtll35EMFceD0iUOOQCbwJd9NcFDlk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qJZQV9vNLQ/rtPMRdAfjwrYExyyDC2OP8uVeywkQ56Y=";
   };
 
   patches = [
     # Set Python_VERSION to Python3_VERSION if not already set
     ./fix-cmake-python-version.patch
   ];
-
-  # ref. https://github.com/Simple-Robotics/proxsuite/pull/408 merged upstream
-  postPatch = ''
-    substituteInPlace CMakeLists.txt --replace-fail \
-      "cmake_minimum_required(VERSION 3.10)" \
-      "cmake_minimum_required(VERSION 3.22)"
-  '';
 
   outputs = [
     "doc"

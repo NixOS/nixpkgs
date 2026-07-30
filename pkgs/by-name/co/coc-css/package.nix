@@ -38,6 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Css language server extension for coc.nvim";
     homepage = "https://github.com/neoclide/coc-css";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

@@ -8,7 +8,7 @@
   openjdk21,
   gnused,
   autoPatchelfHook,
-  autoSignDarwinBinariesHook,
+  darwin,
   wrapGAppsHook3,
   gtk3,
   glib,
@@ -19,23 +19,21 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbeaver-bin";
-  version = "25.3.2";
+  version = "26.1.3";
 
   src =
     let
       inherit (stdenvNoCC.hostPlatform) system;
       selectSystem = attrs: attrs.${system} or (throw "Unsupported system: ${system}");
       suffix = selectSystem {
-        x86_64-linux = "linux.gtk.x86_64.tar.gz";
-        aarch64-linux = "linux.gtk.aarch64.tar.gz";
-        x86_64-darwin = "macos-x86_64.dmg";
+        x86_64-linux = "linux-x86_64.tar.gz";
+        aarch64-linux = "linux-aarch64.tar.gz";
         aarch64-darwin = "macos-aarch64.dmg";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-kOlQLHrE5QmrmtzyX9fDJ0tCZ21YPAO+jnR0B+kXSrA=";
-        aarch64-linux = "sha256-+GegQSZIUMqWsQJBVoC1xqEN9rQAXPh0ApKl2lDPpUA=";
-        x86_64-darwin = "sha256-eimRS96Mpej3BUU5O1XPS/oze0mGw3+4QV2DrRQy68U=";
-        aarch64-darwin = "sha256-S7sdXGfL16Q5hIXmkM22dbmfZeSHKEv3MthoQOYO6n0=";
+        x86_64-linux = "sha256-cPRmReV6F+pCkrbF7d1m+bQjOaJCCFndNSThMWPGrsY=";
+        aarch64-linux = "sha256-bT1bCKzeiAMJbPa6I6fqQq7OrbkKhgDYAUEKuURHP5g=";
+        aarch64-darwin = "sha256-NYX651gUpEDh2O720ZKl7fUTYLFKpTJzyC/YnN4Vnys=";
       };
     in
     fetchurl {
@@ -55,7 +53,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
     undmg
-    autoSignDarwinBinariesHook
+    darwin.autoSignDarwinBinariesHook
   ];
 
   dontConfigure = true;
@@ -144,10 +142,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.asl20;
-    platforms = with lib.platforms; linux ++ darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
       gepbird
       mkg20001
+      staticdev
       yzx9
     ];
     mainProgram = "dbeaver";

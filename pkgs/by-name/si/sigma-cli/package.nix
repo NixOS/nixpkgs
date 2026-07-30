@@ -5,16 +5,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "sigma-cli";
-  version = "2.0.1";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "sigma-cli";
-    tag = "v${version}";
-    hash = "sha256-ZYWkQguoTmGo+kuyPSByyukdA2EMdWKjHddYsML9JwA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-cr9MFKot/A08q0fg4RnSU1Rl7YAOvfoyIC8Loas/+X8=";
   };
 
   pythonRelaxDeps = [ "click" ];
@@ -45,9 +45,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Sigma command line interface";
     homepage = "https://github.com/SigmaHQ/sigma-cli";
-    changelog = "https://github.com/SigmaHQ/sigma-cli/releases/tag/${src.tag}";
+    changelog = "https://github.com/SigmaHQ/sigma-cli/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "sigma";
   };
-}
+})

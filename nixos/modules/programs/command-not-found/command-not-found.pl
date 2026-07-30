@@ -19,7 +19,7 @@ if (! -e $dbPath) {
     print STDERR "This tool requires nix-channels to generate the database for the `nixos` channel.\n";
     print STDERR "\n";
     print STDERR "If you are using nix-channels you can run:\n";
-    print STDERR "    sudo nix-channels --update\n";
+    print STDERR "    sudo nix-channel --update\n";
     print STDERR "\n";
     print STDERR "If you are using flakes, see nix-index and nix-index-database.\n";
     print STDERR "\n";
@@ -49,10 +49,10 @@ if ($len == 0) {
         if ($ENV{"NIX_AUTO_RUN_INTERACTIVE"} // "") {
             while (1) {
                 print STDERR "'$program' from package '$package' will be run, confirm? [yn]: ";
-                chomp(my $comfirm = <STDIN>);
-                if (lc $comfirm eq "n") {
+                chomp(my $confirm = <STDIN>);
+                if (lc $confirm eq "n") {
                     exit 0;
-                } elsif (lc $comfirm eq "y") {
+                } elsif (lc $confirm eq "y") {
                     last;
                 }
             }

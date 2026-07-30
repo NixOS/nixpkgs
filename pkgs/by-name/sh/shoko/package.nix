@@ -12,13 +12,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "shoko";
-  version = "5.1.0";
+  version = "5.3.3";
 
   src = fetchFromGitHub {
     owner = "ShokoAnime";
     repo = "ShokoServer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZO5S0zMwzr4giaO1bmQ4dLBIPrv6eZY7k9Os4GiO4C4=";
+    hash = "sha256-PJtjG4YJBgUrjBt/S2uWyKrCj1pW4N9wrLqoh2gHKcg=";
     fetchSubmodules = true;
   };
 
@@ -46,7 +46,7 @@ buildDotnetModule (finalAttrs: {
       ];
     };
 
-    tests.shoko = nixosTests.shoko;
+    tests = { inherit (nixosTests) shoko; };
   };
 
   meta = {
@@ -55,10 +55,7 @@ buildDotnetModule (finalAttrs: {
     description = "Backend for the Shoko anime management system";
     license = lib.licenses.mit;
     mainProgram = "Shoko.CLI";
-    maintainers = with lib.maintainers; [
-      diniamo
-      nanoyaki
-    ];
+    maintainers = with lib.maintainers; [ nanoyaki ];
     inherit (dotnet-sdk_8.meta) platforms;
   };
 })

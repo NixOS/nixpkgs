@@ -2,7 +2,7 @@ import ../make-test-python.nix (
   { pkgs, ... }:
   {
     name = "replace-dependencies";
-    meta.maintainers = with pkgs.lib.maintainers; [ alois31 ];
+    meta.maintainers = [ ];
 
     nodes.machine =
       { ... }:

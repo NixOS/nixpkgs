@@ -66,6 +66,6 @@ buildHomeAssistantComponent {
     homepage = "https://github.com/IATkachenko/HA-SleepAsAndroid";
     changelog = "https://github.com/IATkachenko/HA-SleepAsAndroid/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ blenderfreaky ];
+    maintainers = with lib.maintainers; [ kilyanni ];
   };
 }

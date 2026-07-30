@@ -7,14 +7,14 @@
   gnupg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pam_gnupg";
   version = "0.4";
 
   src = fetchFromGitHub {
     owner = "cruegge";
     repo = "pam-gnupg";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-6I9a841qohA42lhOgZf/hharnjkthuB8lRptPDxUgMI=";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = [ ];
   };
-}
+})

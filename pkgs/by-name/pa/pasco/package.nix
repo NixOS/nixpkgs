@@ -37,8 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Examine the contents of Internet Explorer's cache files for forensic purposes";
     mainProgram = "pasco";
     homepage = "https://sourceforge.net/projects/fast/files/Pasco/";
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
-    license = with lib.licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
   };
 })

@@ -127,7 +127,7 @@ in
             "log"
           ];
           description = ''
-            A list of modules to include in the `znc.conf` file.
+            A list of modules to include in the {file}`znc.conf` file.
           '';
         };
 
@@ -144,7 +144,7 @@ in
             "push"
           ];
           description = ''
-            A list of user modules to include in the `znc.conf` file.
+            A list of user modules to include in the {file}`znc.conf` file.
           '';
         };
 
@@ -233,7 +233,7 @@ in
           default = "";
           type = types.lines;
           description = ''
-            Extra config to `znc.conf` file.
+            Extra config to {file}`znc.conf` file.
           '';
         };
       };

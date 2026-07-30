@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cl-wordle";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "conradludgate";
     repo = "wordle";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-wFTvzAzboUFQg3fauIwIdRChK7rmLES92jK+8ff1D3s=";
   };
 
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     mainProgram = "wordle";
   };
-}
+})

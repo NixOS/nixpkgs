@@ -17,9 +17,7 @@
       let
         # Do not use this in production. This will make the secret world-readable
         # in the Nix store
-        secrets.glance-location.path = builtins.toString (
-          pkgs.writeText "location-secret" "Nivelles, Belgium"
-        );
+        secrets.glance-location.path = toString (pkgs.writeText "location-secret" "Nivelles, Belgium");
       in
       {
         services.glance = {

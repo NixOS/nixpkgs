@@ -7,14 +7,14 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "syndicate-server";
   version = "0.50.1";
   src = fetchFromGitea {
     domain = "git.syndicate-lang.org";
     owner = "syndicate-lang";
     repo = "syndicate-rs";
-    rev = "${pname}-v${version}";
+    rev = "syndicate-server-v${finalAttrs.version}";
     hash = "sha256-orQN83DE+ZNgdx2PVcYrte/rVDFFtuQuRDKzeumpsLo=";
   };
 
@@ -37,4 +37,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "syndicate-server";
     platforms = lib.platforms.linux;
   };
-}
+})

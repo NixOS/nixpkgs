@@ -5,15 +5,15 @@
   versionCheckHook,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "speedscope";
-  version = "1.24.0";
+  version = "1.25.0";
 
   src = fetchFromGitHub {
     owner = "jlfwong";
     repo = "speedscope";
-    tag = "v${version}";
-    hash = "sha256-QL+Hm3ujfZeKHMoNgQdxYStgWOIbxjDmXMHKnWddTfs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2kBgOMWSr3XEkcfzetA4njIE2co+mHoPPUFmKn0tMVk=";
 
     # scripts/prepack.sh wants to extract the git commit from .git
     # We don't want to keep .git for reproducibility reasons, so save the commit
@@ -25,7 +25,7 @@ buildNpmPackage rec {
     '';
   };
 
-  npmDepsHash = "sha256-MgCIiVeq9w5XRPIsZ/9AbZpVwRQdzZgK7VC5Gl7cn78=";
+  npmDepsHash = "sha256-hgvO5iU9lerTa9FJRHq9lm67lgrFSM5AR02GShsM3P8=";
 
   patches = [
     ./fix-shebang.patch
@@ -36,11 +36,6 @@ buildNpmPackage rec {
   '';
 
   dontNpmBuild = true;
-
-  postFixup = ''
-    # Remove some dangling symlinks
-    rm $out/lib/node_modules/speedscope/node_modules/.bin/sshpk*
-  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -55,4 +50,4 @@ buildNpmPackage rec {
     mainProgram = "speedscope";
     maintainers = with lib.maintainers; [ thomasjm ];
   };
-}
+})

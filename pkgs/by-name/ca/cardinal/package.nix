@@ -1,6 +1,7 @@
 {
   stdenv,
   fetchurl,
+  carla,
   cmake,
   dbus,
   fftwFloat,
@@ -9,10 +10,10 @@
   jansson,
   lib,
   libGL,
-  libX11,
-  libXcursor,
-  libXext,
-  libXrandr,
+  libx11,
+  libxcursor,
+  libxext,
+  libxrandr,
   libarchive,
   libjack2,
   liblo,
@@ -26,17 +27,25 @@
   headless ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cardinal";
-  version = "25.06";
+  version = "26.02";
 
   src = fetchurl {
-    url = "https://github.com/DISTRHO/Cardinal/releases/download/${version}/cardinal+deps-${version}.tar.xz";
-    hash = "sha256-siZbbYrMGjhiof2M2ZBl2gekePuwsKvR8uZCdjyywiE=";
+    url = "https://github.com/DISTRHO/Cardinal/releases/download/${finalAttrs.version}/cardinal+deps-${finalAttrs.version}.tar.xz";
+    hash = "sha256-4xjRCYN6Y7YtFc4gCd8F7CQxB02PLZQ6DN59rZVPYh0=";
   };
 
   prePatch = ''
     patchShebangs ./dpf/utils/generate-ttl.sh
+
+    substituteInPlace plugins/Cardinal/src/Carla.cpp \
+      --replace-fail "/usr/lib/carla" "${carla}/bin" \
+      --replace-fail "/usr/share/carla/resources" "${carla}/share"
+
+    substituteInPlace plugins/Cardinal/src/Ildaeil.cpp \
+      --replace-fail "/usr/lib/carla" "${carla}/bin" \
+      --replace-fail "/usr/share/carla/resources" "${carla}/share"
   '';
 
   dontUseCmakeConfigure = true;
@@ -57,10 +66,10 @@ stdenv.mkDerivation rec {
     freetype
     jansson
     libGL
-    libX11
-    libXcursor
-    libXext
-    libXrandr
+    libx11
+    libxcursor
+    libxext
+    libxrandr
     libarchive
     liblo
     libsamplerate
@@ -97,8 +106,6 @@ stdenv.mkDerivation rec {
       PowerUser64
     ];
     mainProgram = "Cardinal";
-    platforms = lib.platforms.all;
-    # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
-    broken = stdenv.hostPlatform.isDarwin;
+    platforms = lib.platforms.linux;
   };
-}
+})

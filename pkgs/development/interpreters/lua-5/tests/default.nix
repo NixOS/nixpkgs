@@ -47,9 +47,11 @@ let
       ";${lua}/share/lua/5.2/?.lua;${lua}/share/lua/5.2/?/init.lua;${lua}/lib/lua/5.2/?.lua;${lua}/lib/lua/5.2/?/init.lua;./?.lua;";
     "5.3" =
       ";${lua}/share/lua/5.3/?.lua;${lua}/share/lua/5.3/?/init.lua;${lua}/lib/lua/5.3/?.lua;${lua}/lib/lua/5.3/?/init.lua;./?.lua;./?/init.lua;";
-    # lua5.4 seems to be smarter about it and dont add the lua separators when nothing left or right
+    # lua > 5.4 seems to be smarter about it and dont add the lua separators when nothing left or right
     "5.4" =
       "${lua}/share/lua/5.4/?.lua;${lua}/share/lua/5.4/?/init.lua;${lua}/lib/lua/5.4/?.lua;${lua}/lib/lua/5.4/?/init.lua;./?.lua;./?/init.lua";
+    "5.5" =
+      "${lua}/share/lua/5.5/?.lua;${lua}/share/lua/5.5/?/init.lua;${lua}/lib/lua/5.5/?.lua;${lua}/lib/lua/5.5/?/init.lua;./?.lua;./?/init.lua";
 
     # luajit versions
     "2.0" =
@@ -80,19 +82,19 @@ lib.recurseIntoAttrs {
 
   # checks that lua's setup-hook adds dependencies to LUA_PATH
   # Prevents the following regressions
-  # $ env NIX_PATH=nixpkgs=. nix-shell --pure -Q -p luajitPackages.lua luajitPackages.http
+  # $ env NIX_PATH=nixpkgs=. nix-shell --pure -Q -p luajitPackages.lua luajitPackages.alt-getopt
   # nix-shell$ luajit
-  # > require('http.request')
-  # stdin:1: module 'http.request' not found:
+  # > require('alt-getopt')
+  # stdin:1: module 'alt-getopt' not found:
   checkSetupHook =
     pkgs.runCommandLocal "test-${lua.name}-setup-hook"
       {
         nativeBuildInputs = [ lua ];
-        buildInputs = [ lua.pkgs.http ];
+        buildInputs = [ lua.pkgs.alt-getopt ];
         meta.platforms = lua.meta.platforms;
       }
       ''
-        ${lua}/bin/lua -e "require'http.request'"
+        ${lua}/bin/lua -e "require'alt_getopt'"
         touch $out
       '';
 
@@ -115,11 +117,11 @@ lib.recurseIntoAttrs {
   checkPropagatedBuildInputs =
     pkgs.runCommandLocal "test-${lua.name}-setup-hook"
       {
-        buildInputs = [ lua.pkgs.rest-nvim ];
+        buildInputs = [ lua.pkgs.luacov ];
       }
-      # `xml2lua` is a propagatedBuildInput of rest-nvim
+      # `datafile` is a propagatedBuildInput of luacov
       ''
-        ${lua}/bin/lua -e "require'xml2lua'"
+        ${lua}/bin/lua -e "require'datafile'"
         touch $out
       '';
 

@@ -9,21 +9,21 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "iterfzf";
-  version = "1.8.0.62.0";
+  version = "1.9.0.67.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dahlia";
     repo = "iterfzf";
-    tag = version;
-    hash = "sha256-eLgF+9p+sqxWR1VkSoeL0NPDMamzUYbql4gMeG8fyNY=";
+    tag = finalAttrs.version;
+    hash = "sha256-Giw5d0X8/1PXK1j428LJjg+Gqadm93C51mLfrYc5J94=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"' \
+      --replace-fail 'dynamic = ["version"]' 'version = "${finalAttrs.version}"' \
       --replace-fail 'backend-path = ["."]' '# backend-path = ["."]' \
       --replace-fail 'build-backend = "build_dist"' '# build-backend = "build_dist"'
 
@@ -53,9 +53,9 @@ buildPythonPackage rec {
   meta = {
     description = "Pythonic interface to fzf, a CLI fuzzy finder";
     homepage = "https://github.com/dahlia/iterfzf";
-    changelog = "https://github.com/dahlia/iterfzf/releases/tag/${version}";
-    license = lib.licenses.gpl3Only;
+    changelog = "https://github.com/dahlia/iterfzf/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
     platforms = lib.platforms.unix;
   };
-}
+})

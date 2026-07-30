@@ -7,18 +7,18 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "krill";
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = "krill";
-    rev = "v${version}";
-    hash = "sha256-aYZZuEh9RpxGcZllc7usFrLXV8MD1SGrtnbZI7i1h8I=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Egy/knMiu+Pglx4v62lPZ87daRKida8W05qu+5yGt1g=";
   };
 
-  cargoHash = "sha256-WJqJkcAUJhPy0jbGit/nXmJPCU7dK8I8w3JCmTdzhhA=";
+  cargoHash = "sha256-2wbMcI+zS8e9DfVvVAOHxyuHKWFCls57yt8QRw8JJq0=";
 
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];
@@ -38,8 +38,8 @@ rustPlatform.buildRustPackage rec {
       Authorisations (ROAs) on your own servers or with a third party.
     '';
     homepage = "https://github.com/NLnetLabs/krill";
-    changelog = "https://github.com/NLnetLabs/krill/releases/tag/v${version}";
+    changelog = "https://github.com/NLnetLabs/krill/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ steamwalker ];
   };
-}
+})

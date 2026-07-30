@@ -5,12 +5,12 @@
   enableSigbusFix ? false, # required by kernels < 3.18.6
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libsigsegv";
   version = "2.15";
 
   src = fetchurl {
-    url = "mirror://gnu/libsigsegv/libsigsegv-${version}.tar.gz";
+    url = "mirror://gnu/libsigsegv/libsigsegv-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-A2hVZgIlyzgXoZD8AOZ2TOeDYFG6y0jTXiZES4wXKdk=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

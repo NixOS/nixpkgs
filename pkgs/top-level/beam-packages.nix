@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   beam,
   callPackage,
@@ -34,15 +35,15 @@ in
     #
     # Three versions are supported according to https://github.com/erlang/otp/security
 
+    erlang_29 = callErlang ../development/interpreters/erlang/29.nix {
+      inherit wxSupport systemdSupport;
+    };
+
     erlang_28 = callErlang ../development/interpreters/erlang/28.nix {
       inherit wxSupport systemdSupport;
     };
 
     erlang_27 = callErlang ../development/interpreters/erlang/27.nix {
-      inherit wxSupport systemdSupport;
-    };
-
-    erlang_26 = callErlang ../development/interpreters/erlang/26.nix {
       inherit wxSupport systemdSupport;
     };
 
@@ -55,11 +56,10 @@ in
       elixir_1_19
       elixir_1_18
       elixir_1_17
-      elixir_1_16
-      elixir_1_15
       elixir-ls
       lfe
       ;
+
   };
 
   # Helper function to generate package set with a specific Erlang version.
@@ -69,8 +69,17 @@ in
   # appropriate Erlang/OTP version.
   packages = {
     erlang = self.packages.${self.latestVersion};
+    erlang_29 = self.packagesWith self.interpreters.erlang_29;
     erlang_28 = self.packagesWith self.interpreters.erlang_28;
     erlang_27 = self.packagesWith self.interpreters.erlang_27;
-    erlang_26 = self.packagesWith self.interpreters.erlang_26;
+  }
+  // lib.optionalAttrs config.allowAliases {
+    erlang_26 = throw "'erlang_26' has been removed, as it is EOL"; # added 2026-04-01
   };
+}
+// lib.optionalAttrs config.allowAliases {
+  erlang_26 = throw "'erlang_26' has been removed, as it is EOL"; # added 2026-04-01
+
+  elixir_1_16 = throw "'elixir_1_16' has been removed, due to the removal of erlang_26 as EOL"; # added 2026-04-01
+  elixir_1_15 = throw "'elixir_1_15' has been removed, due to the removal of erlang_26 as EOL"; # added 2026-04-01
 }

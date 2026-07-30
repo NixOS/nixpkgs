@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gotests";
   version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "cweill";
     repo = "gotests";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-lx8gbVm4s4kmm252khoSukrlj5USQS+StGuJ+419QZw=";
   };
 
@@ -27,4 +27,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ vdemeester ];
     license = lib.licenses.asl20;
   };
-}
+})

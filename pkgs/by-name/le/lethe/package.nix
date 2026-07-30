@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lethe";
   version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "kostassoid";
     repo = "lethe";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-y2D/80pnpYpTl+q9COTQkvtj9lzBlOWuMcnn5WFnX8E=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "lethe";
   };
-}
+})

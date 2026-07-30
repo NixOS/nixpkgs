@@ -5,14 +5,14 @@
   gitUpdater,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "wal-listener";
   version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "ihippik";
     repo = "wal-listener";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-OqjCFIdU4wCiPGIMrlp+nGVr0XTNHTE8zB8/toZtM44=";
   };
 
@@ -26,4 +26,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bbigras ];
   };
-}
+})
