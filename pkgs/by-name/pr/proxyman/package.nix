@@ -55,7 +55,10 @@ let
     homepage = "https://proxyman.com";
     license = lib.licenses.unfree;
     mainProgram = "proxyman";
-    maintainers = with lib.maintainers; [ nilathedragon ];
+    maintainers = with lib.maintainers; [
+      nilathedragon
+      matteopacini
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 in
