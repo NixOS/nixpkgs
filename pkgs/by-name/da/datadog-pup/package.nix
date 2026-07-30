@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "datadog-pup";
-  version = "1.8.0";
+  version = "1.10.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -19,10 +19,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "DataDog";
     repo = "pup";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8leLUaoce3i4i2asd0tzhbM4mXAOkn/rdNIaGLLCfko=";
+    hash = "sha256-AmuTNMepJx5NQwkVkDrf0tQIssmUAHmlBF73WG1RJSY=";
   };
 
-  cargoHash = "sha256-+F5P2tOLGSjABD4B0MG84x1uVI4o06Kl1nZfOS7tP1Y=";
+  cargoHash = "sha256-vufZmhqXpaRD8AWAvFLolqeyPqBB1yD4oyZplWiJ5tA=";
 
   checkType = "debug";
   dontUseCargoParallelTests = true;
