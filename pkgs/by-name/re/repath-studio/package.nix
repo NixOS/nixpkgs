@@ -12,6 +12,7 @@
   clojure,
   git,
   vips,
+  python3,
 
   writeShellScriptBin,
   copyDesktopItems,
@@ -67,6 +68,10 @@ buildNpmPackage (finalAttrs: {
   postPatch = ''
     substituteInPlace shadow-cljs.edn \
       --replace-fail ":shadow-git-inject/version" '"v${finalAttrs.version}"'
+
+    substituteInPlace src/renderer/shell/impl/python.cljs \
+      --replace-fail '"/pyodide/pyodide.js"' '"pyodide/pyodide.js"' \
+      --replace-fail '(js/loadPyodide)' '(js/loadPyodide #js {:indexURL "pyodide/"})'
   '';
 
   buildPhase = ''
@@ -90,6 +95,7 @@ buildNpmPackage (finalAttrs: {
     runHook postBuild
   '';
 
+  # NOTE: use "--set-default ELECTRON_ENABLE_LOGGING 1" to debug
   installPhase = ''
     runHook preInstall
 
@@ -99,7 +105,8 @@ buildNpmPackage (finalAttrs: {
         ''
           mkdir -p $out/Applications
           cp -r "dist/mac"*"/Repath Studio.app" "$out/Applications"
-          makeWrapper "$out/Applications/Repath Studio.app/Contents/MacOS/Repath Studio" "$out/bin/repath-studio"
+          makeWrapper "$out/Applications/Repath Studio.app/Contents/MacOS/Repath Studio" "$out/bin/repath-studio" \
+            --prefix PATH : ${lib.makeBinPath [ python3 ]} \
         ''
       else
         # bash
@@ -112,6 +119,7 @@ buildNpmPackage (finalAttrs: {
             --add-flags "$out/share/repath-studio/app.asar" \
             --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
             --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
+            --prefix PATH : ${lib.makeBinPath [ python3 ]} \
             --inherit-argv0
         ''
     }
