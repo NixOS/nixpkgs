@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "worm-hole";
-  version = "4.1.1";
+  version = "4.2.0";
 
   __structuredAttrs = true;
 
@@ -14,10 +14,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "Rignchen";
     repo = "worm_hole";
     tag = finalAttrs.version;
-    hash = "sha256-f8+PYPWzVMtBovgComgpKaibQhbxhmQjK6RKFpWU0CA=";
+    hash = "sha256-PcyvmpiagjLSJgAr1NPI5WJu/00sq8QpP+xwCHisRTU=";
   };
 
-  cargoHash = "sha256-fCREYEFLkotyzaMv/ki/0Ht/TS1aXryaE5fapC3F5qs=";
+  cargoHash = "sha256-SJyDFdxVS9UivE/jhxD98wfQjMjWjnTDG62M1+iZr9A=";
 
   meta = {
     description = "CLI tool to easily jump between directories";
