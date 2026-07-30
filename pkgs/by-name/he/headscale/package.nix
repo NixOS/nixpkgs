@@ -11,13 +11,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "headscale";
-  version = "0.29.2";
+  version = "0.29.3";
 
   src = fetchFromGitHub {
     owner = "juanfont";
     repo = "headscale";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zQ3dmb96fLhFwZjZUiifI73F+CRvDz6aiVafHaTuU/c=";
+    hash = "sha256-ddJHSEqZd++JeG3UjUwzw7i45FlZYggUwhEG/tDkq0s=";
   };
 
   postPatch = ''

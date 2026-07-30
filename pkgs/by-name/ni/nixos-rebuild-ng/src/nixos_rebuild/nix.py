@@ -19,6 +19,7 @@ from .models import (
     Action,
     BuildAttr,
     Flake,
+    FlakeMetadataJson,
     Generation,
     GenerationJson,
     ImageVariants,
@@ -576,12 +577,32 @@ def repl(build_attr: BuildAttr, nix_flags: Args | None = None) -> None:
     run_wrapper([*run_args, *dict_to_flags(nix_flags)])
 
 
+def get_flake_metadata(
+    flake: Flake, flake_flags: Args | None = None
+) -> FlakeMetadataJson:
+    r = run_wrapper(
+        [
+            "nix",
+            *FLAKE_FLAGS,
+            "flake",
+            "metadata",
+            "--json",
+            flake.resolve_path_if_exists(),
+            *dict_to_flags(flake_flags),
+        ],
+        stdout=PIPE,
+    )
+    j: FlakeMetadataJson = json.loads(r.stdout.strip())
+    return j
+
+
 def repl_flake(flake: Flake, flake_flags: Args | None = None) -> None:
     expr = Template(
         files(__package__).joinpath(FLAKE_REPL_TEMPLATE).read_text()
     ).substitute(
         flake=flake,
-        flake_path=flake.resolve_path_if_exists(),
+        # Normalize flake url to respect VSC if present:
+        flake_path=get_flake_metadata(flake, flake_flags)["resolvedUrl"],
         flake_attr=flake.attr,
         bold="\033[1m",
         blue="\033[34;1m",

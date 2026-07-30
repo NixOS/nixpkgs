@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   libuuid,
   libsodium,
@@ -44,6 +45,15 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) src;
     hash = "sha256-F1+FeAlYSqOxeWJI8vHShpXrOZqYXjNGvty/s6f6u8w=";
   };
+
+  patches = [
+    # Fix compile-time assertion failure on big-endian
+    (fetchpatch {
+      name = "0001-bcachefs-tools-debug-copy-packed-bkey-fields-before-asserting.patch";
+      url = "https://evilpiepirate.org/git/bcachefs-tools.git/patch/?id=79f119c4cd6900ab9ea27b0aa671f68300d9d38e";
+      hash = "sha256-ACrpad93wrZOXhc73otnXBNQvyoDeZSfgtwze5nKaUE=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace Makefile \
