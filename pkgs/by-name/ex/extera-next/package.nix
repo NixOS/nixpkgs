@@ -15,6 +15,7 @@
   keybinder3,
   libsecret,
   patchelf,
+  copyDesktopItems,
 
   callPackage,
   # A web version will be prepared later
@@ -81,6 +82,7 @@ flutter341.buildFlutterApplication (
       pkg-config
       imagemagick
       patchelf
+      copyDesktopItems
     ];
 
     buildInputs = [
@@ -96,7 +98,7 @@ flutter341.buildFlutterApplication (
 
     desktopItems = [
       (makeDesktopItem {
-        name = "Extera Next";
+        name = "extera-next";
         exec = "extera-next";
         icon = "extera-next";
         desktopName = "Extera Next";
