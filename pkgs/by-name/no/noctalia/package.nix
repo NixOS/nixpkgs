@@ -20,10 +20,12 @@
   harfbuzz,
   jemalloc,
   libGL,
+  libical,
   libjxl,
   libqalculate,
   librsvg,
   libsecret,
+  libsndfile,
   libsodium,
   libwebp,
   libxkbcommon,
@@ -62,13 +64,13 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "noctalia";
-  version = "5.0.0-beta.6";
+  version = "5.0.0-beta.7";
 
   src = fetchFromGitHub {
     owner = "noctalia-dev";
     repo = "noctalia";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VJXqeaxCqyMOt/k7ePNoD4nAHdF1eTSuuddmrh/5O6Q=";
+    hash = "sha256-9RlJNIy2DFVm9SB2vwGEBsbHc1r3dIB+K+b+nd6Bdho=";
   };
 
   strictDeps = true;
@@ -90,10 +92,12 @@ stdenv.mkDerivation (finalAttrs: {
     harfbuzz
     jemalloc
     libGL
+    libical
     libjxl
     libqalculate
     librsvg
     libsecret
+    libsndfile
     libsodium
     libwebp
     libxkbcommon
