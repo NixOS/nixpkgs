@@ -21,22 +21,22 @@
   xcbuild,
   zip,
 
-  electron_39,
+  electron_41,
   git,
 }:
 
 let
-  electron = electron_39;
+  electron = electron_41;
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "logseq";
-  version = "0.10.15";
+  pname = "logseq-og";
+  version = "1.0.0-unstable-2026-05-28";
 
   src = fetchFromGitHub {
     owner = "logseq";
-    repo = "logseq";
-    tag = finalAttrs.version;
-    hash = "sha256-knosNA2Gqy10Kr9HWnBdYNlV51zzgFuL8cdioVlAk0Q=";
+    repo = "og";
+    rev = "6e7afa8eb040686ff057156ee877193b581dd369";
+    hash = "sha256-LJuZDyfGQW28ARn9RTqQ1bRI1htfoqt8zhb6UuJLek0=";
   };
 
   patches = [
@@ -55,16 +55,19 @@ stdenv.mkDerivation (finalAttrs: {
       };
     })
 
-    ./electron-forge-package-instead-of-make.patch
-    ./electron-forge-disable-signing.patch
+    # ./electron-forge-disable-signing.patch [FIXME]
 
     # bumps better-sqlite3 to work with electron 39+
     # also fixes outdated yarn.lock
-    ./bump-better-sqlite3.patch
+    # ./bump-better-sqlite3.patch [FIXME]
 
     # zip extraction fails on newer nodejs versions without this fix
-    ./bump-yauzl.patch
+    # ./bump-yauzl.patch [FIXME]
   ];
+
+  postPatch = ''
+    substituteInPlace resources/package.json --replace-fail '"electron:make": "electron-forge make",' '"electron:make": "electron-forge package",'
+  '';
 
   mavenRepo = stdenv.mkDerivation {
     name = "logseq-${finalAttrs.version}-maven-deps";
@@ -109,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
   yarnOfflineCacheRoot = fetchYarnDeps {
     name = "logseq-${finalAttrs.version}-yarn-deps-root";
     inherit (finalAttrs) src patches;
-    hash = "sha256-xfAJ38shd92KdRfh/P7BH4eolZHQmzl4raoH1aZpGRk=";
+    hash = "sha256-dYzozo2wo4lZRi3R7S/f5yqVlLlF/TmrwkD4/xsGQAE=";
   };
 
   # ./static and ./resources are combined into ./static by the build process
@@ -118,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     name = "logseq-${finalAttrs.version}-yarn-deps-static-resources";
     inherit (finalAttrs) src patches;
     postPatch = "cd ./static";
-    hash = "sha256-TFisR5GwcKmuddGhe0i6rAmr2wDWzed/mXnxVGARYK0=";
+    hash = "sha256-uQZ07miqXVX1loy3JrA3h64dfEhg5wtLmpzxFgMFVC0=";
   };
 
   yarnOfflineCacheAmplify = fetchYarnDeps {
@@ -282,8 +285,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "Logseq";
-      desktopName = "Logseq";
+      name = "Logseq OG";
+      desktopName = "Logseq OG";
       exec = "logseq %U";
       terminal = false;
       icon = "logseq";
@@ -296,7 +299,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Privacy-first, open-source platform for knowledge management and collaboration";
-    homepage = "https://github.com/logseq/logseq";
+    homepage = "https://github.com/logseq/logseq-og";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ tomasajt ];
     mainProgram = "logseq";
