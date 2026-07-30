@@ -37,13 +37,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "proxysql";
-  version = "3.0.2";
+  version = "3.0.9";
 
   src = fetchFromGitHub {
     owner = "sysown";
     repo = "proxysql";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kbfuUulEDPx/5tpp7uOkIXQuyaFYzos3crCvkWHSmHg=";
+    hash = "sha256-QDS4T0e0HZS3aTjpp/6RVdAor4UbI4yvXlx7UxkMfhE=";
   };
 
   patches = [
@@ -77,7 +77,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  env.GIT_VERSION = finalAttrs.version;
+  env = {
+    GIT_VERSION = finalAttrs.version;
+    # the makefile derives GIT_VERSION from GIT_VERSION_BASE and errors out
+    # when that is unset; there is no git in the build sandbox
+    GIT_VERSION_BASE = finalAttrs.version;
+  };
 
   dontConfigure = true;
 
@@ -197,8 +202,11 @@ stdenv.mkDerivation (finalAttrs: {
       autoreconf
       popd
 
+      # libconfig is built with cmake, so it needs no autoreconf, but its
+      # release tarball does not ship the lib/win32 directory that
+      # lib/CMakeLists.txt unconditionally lists as a source.
       pushd libconfig/libconfig
-      autoreconf
+      sed -i '\_^ *win32/stdint\.h$_d' lib/CMakeLists.txt
       popd
 
       pushd libdaemon/libdaemon
