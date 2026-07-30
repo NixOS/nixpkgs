@@ -4,20 +4,77 @@
   fetchurl,
   makeWrapper,
   jdk21_headless,
+  alsa-lib,
+  at-spi2-atk,
+  at-spi2-core,
+  cairo,
+  cups,
+  dbus,
+  expat,
+  fontconfig,
+  freetype,
+  glib,
+  gtk3,
+  libdrm,
+  libgbm,
+  libxkbcommon,
+  nspr,
+  nss,
+  pango,
+  libx11,
+  libxscrnsaver,
+  libxcomposite,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxrandr,
+  libxcb,
+  libxshmfence,
+  libxtst,
   nixosTests,
 }:
 
 let
   jdk = jdk21_headless;
+
+  cefRuntimeLibs = lib.makeLibraryPath [
+    alsa-lib
+    at-spi2-atk
+    at-spi2-core
+    cairo
+    cups
+    dbus
+    expat
+    fontconfig
+    freetype
+    glib
+    gtk3
+    libdrm
+    libgbm
+    libxkbcommon
+    nspr
+    nss
+    pango
+    libx11
+    libxscrnsaver
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
+    libxcb
+    libxshmfence
+    libxtst
+  ];
 in
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "suwayomi-server";
-  version = "2.1.1867";
+  version = "2.3.2243";
 
   src = fetchurl {
     url = "https://github.com/Suwayomi/Suwayomi-Server/releases/download/v${finalAttrs.version}/Suwayomi-Server-v${finalAttrs.version}.jar";
-    hash = "sha256-UeMHwlgeThoAKZGrPjp3UDyLB0xCaVmHqYSnOC0Kxa8=";
+    hash = "sha256-ghFBsy4XDUoC08vf7Vd+2PB70iOD/19BMuu1rkDpjdU=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +87,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preBuild
 
     makeWrapper ${jdk}/bin/java $out/bin/tachidesk-server \
+      --prefix LD_LIBRARY_PATH : ${cefRuntimeLibs} \
       --add-flags "-Dsuwayomi.tachidesk.config.server.initialOpenInBrowserEnabled=false -jar $src"
 
     runHook postBuild
