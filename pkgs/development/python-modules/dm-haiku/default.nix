@@ -35,7 +35,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "dm-haiku";
-  version = "0.0.16";
+  version = "0.0.17";
   pyproject = true;
   __srtructuredAttrs = true;
 
@@ -43,17 +43,16 @@ buildPythonPackage (finalAttrs: {
     owner = "deepmind";
     repo = "dm-haiku";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XugzzHapnqXD8w17k6HaNeqWcxRe49r7OIb8v5LI2NM=";
+    hash = "sha256-CXEMEuQY6VyQ3Ahn1vYYN6slyqABSbIBeJuxJTPapvw=";
   };
 
-  patches = [
-    # https://github.com/deepmind/dm-haiku/pull/672
-    (fetchpatch {
-      name = "fix-find-namespace-packages.patch";
-      url = "https://github.com/deepmind/dm-haiku/commit/728031721f77d9aaa260bba0eddd9200d107ba5d.patch";
-      hash = "sha256-qV94TdJnphlnpbq+B0G3KTx5CFGPno+8FvHyu/aZeQE=";
-    })
-  ];
+  # https://github.com/deepmind/dm-haiku/pull/672
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail \
+        "packages=find_namespace_packages(exclude=['*_test.py', 'examples'])," \
+        "packages=find_namespace_packages(exclude=['*_test.py', 'examples*', 'docs*']),"
+  '';
 
   build-system = [ setuptools ];
 
@@ -87,11 +86,16 @@ buildPythonPackage (finalAttrs: {
     optax
     pytest-xdist
     pytestCheckHook
-    # rlax (broken dependency tensorflow-probability)
+    rlax
     tensorflow
   ];
 
   disabledTests = [
+    # tensorflow.python.framework.errors_impl.InvalidArgumentError: Graph execution error:
+    # Cannot deserialize computation: UNKNOWN: <unknown>:0: error: loc("erf"):
+    # unregistered operation 'vhlo.composite_v2' found in dialect ('vhlo') that does not allow unknown operations
+    "JaxToTfTest"
+
     # See https://github.com/deepmind/dm-haiku/issues/366.
     "test_jit_Recurrent"
 
@@ -132,6 +136,9 @@ buildPythonPackage (finalAttrs: {
   passthru.tests.pytest = finalAttrs.finalPackage.overrideAttrs {
     pname = "${finalAttrs.pname}-tests";
     doInstallCheck = true;
+
+    # This is only a test derivation; its metadata still identifies the package as "dm-haiku"
+    dontCheckPythonMetadata = true;
   };
 
   meta = {
