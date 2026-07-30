@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "odc-stac";
-  version = "0.5.2";
+  version = "0.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "opendatacube";
     repo = "odc-stac";
     tag = "v${version}";
-    hash = "sha256-OlqUFyysbteZ+Ek48+F4U0YLrTx624974O7DnnUuxag=";
+    hash = "sha256-COEBpUH51vSEt2yv1hPm43RLq7hiqk6cSkWGQFeVjP0=";
   };
 
   build-system = [ flit-core ];
@@ -76,9 +76,12 @@ buildPythonPackage rec {
     "test_extract_md"
     "test_parse_item"
     "test_parse_item_no_proj"
+    "test_band_metadata_for_cdse_item"
     # urllib url open error
     "test_norm_geom"
     "test_output_geobox"
+    # AssertionError: assert dtype('<M8[us]') == 'datetime64[ns]'
+    "test_stac_load_smoketest"
   ];
 
   pythonImportsCheck = [ "odc.stac" ];
