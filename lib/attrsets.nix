@@ -832,9 +832,7 @@ rec {
   */
   foldAttrs =
     op: nul: list_of_attrs:
-    foldr (
-      n: a: foldr (name: o: o // { ${name} = op n.${name} (a.${name} or nul); }) a (attrNames n)
-    ) { } list_of_attrs;
+    mapAttrs (name: foldr op nul) (zipAttrs list_of_attrs);
 
   /**
     Recursively collect sets that verify a given predicate named `pred`
