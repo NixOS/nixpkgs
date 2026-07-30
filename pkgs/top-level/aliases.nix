@@ -1850,6 +1850,7 @@ mapAliases {
   pal = throw "pal has been removed, as it was broken"; # Added 2025-08-25
   pam_pgsql = pam-pgsql; # Added 2025-12-16
   pangolin = throw "pangolin has been removed due to lack of maintenance"; # Added 2025-11-17
+  paper-gtk-theme = throw "'paper-gtk-theme' has been removed because its source is no longer available"; # Added 2026-07-30
   paper-plane = throw "'paper-plane' has been removed as it is unmaintained upstream and depends on vulnerable tdlib version."; # Added 2026-02-26
   paperless-ng = throw "'paperless-ng' has been renamed to/replaced by 'paperless-ngx'"; # Converted to throw 2025-10-27
   parcellite = throw "'parcellite' was remove due to lack of maintenance and relying on gtk2"; # Added 2025-10-03
