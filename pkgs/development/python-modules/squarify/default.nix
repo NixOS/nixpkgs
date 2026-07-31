@@ -7,15 +7,17 @@
   matplotlib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "squarify";
   version = "0.4.3";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "laserson";
     repo = "squarify";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-zSv+6xT9H4WyShRnwjjcNMjY19AFlQ6bw9Mh9p2rL08=";
   };
 
@@ -33,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ veehaitch ];
   };
-}
+})
