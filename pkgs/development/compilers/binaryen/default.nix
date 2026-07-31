@@ -10,14 +10,6 @@
   nodejs,
   filecheck,
 }:
-let
-  testsuite = fetchFromGitHub {
-    owner = "WebAssembly";
-    repo = "testsuite";
-    rev = "4b24564c844e3d34bf46dfcb3c774ee5163e31cc";
-    hash = "sha256-8VirKLRro0iST58Rfg17u4tTO57KNC/7F/NB43dZ7w4=";
-  };
-in
 stdenv.mkDerivation rec {
   pname = "binaryen";
   version = "130";
@@ -26,7 +18,8 @@ stdenv.mkDerivation rec {
     owner = "WebAssembly";
     repo = "binaryen";
     rev = "version_${version}";
-    hash = "sha256-vwnW/5sKcVR20ys8V8ag66CUBcCjcufnn/ChxDFxd4k=";
+    fetchSubmodules = true;
+    hash = "sha256-1QPV7Btklq/2cOyMA8Z1EennQYvfZgqojiFbTjYo8iI=";
   };
 
   nativeBuildInputs = [
@@ -39,8 +32,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     if [ $doCheck -eq 1 ]; then
       sed -i '/gtest/d' third_party/CMakeLists.txt
-      rmdir test/spec/testsuite
-      ln -s ${testsuite} test/spec/testsuite
+      # prevent vendored headers from conflicting with the gtest from Nixpkgs
+      rm -rf third_party/googletest
       # scripts/test/finalize.py checks `'64' in input_path` to enable the
       # memory64/bigint flags; the full Nix build path leaks digits that
       # can accidentally contain "64", wrongly triggering those flags for
