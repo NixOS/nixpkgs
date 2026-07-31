@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   six,
   pytestCheckHook,
 }:
@@ -9,14 +10,16 @@
 buildPythonPackage (finalAttrs: {
   pname = "srptools";
   version = "1.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
     hash = "sha256-f6QzclahVC6PW7S+0Z4dmuqY/l/5uvdmkzQqHdasfJY=";
   };
 
-  propagatedBuildInputs = [ six ];
+  build-system = [ setuptools ];
+
+  dependencies = [ six ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
