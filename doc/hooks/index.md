@@ -21,11 +21,13 @@ gnome.section.md
 haredo.section.md
 installShellFiles.section.md
 installFonts.section.md
+juce.section.md
 julec.section.md
 just.section.md
 libglycin.section.md
 libiconv.section.md
 libxml2.section.md
+memcached-test-hook.section.md
 meson.section.md
 mpi-check-hook.section.md
 ninja.section.md
@@ -41,6 +43,7 @@ pnpm.section.md
 postgresql-test-hook.section.md
 premake.section.md
 python.section.md
+redis-test-hook.section.md
 scons.section.md
 tauri.section.md
 tetex-tex-live.section.md

@@ -24,10 +24,10 @@ stdenv.mkDerivation {
 
 ## Variables controlling `juce.projucerHook` {#juce-projucer-hook-variables}
 
-### `dontUseProjucerConfigure`
+### `dontUseProjucerConfigure` {#juce-dontuseprojucerconfigure}
 
 Disables `projucerConfigurePhase`
 
-### `dontUseProjucerInstall`
+### `dontUseProjucerInstall` {#juce-dontuseprojucerinstall}
 
 Disables `projucerInstallPhase`
