@@ -14479,8 +14479,6 @@ self: super: with self; {
 
   pyelftools = callPackage ../development/python-modules/pyelftools { };
 
-  pyembroidery = callPackage ../development/python-modules/pyembroidery { };
-
   pyemby = callPackage ../development/python-modules/pyemby { };
 
   pyemd = callPackage ../development/python-modules/pyemd { };

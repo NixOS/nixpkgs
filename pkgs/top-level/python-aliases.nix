@@ -480,6 +480,7 @@ mapAliases {
   pydns = throw "'pydns' has been renamed to/replaced by 'py3dns'"; # Converted to throw 2025-10-29
   pyechonest = throw "pyechonest was removed because it was broken and unmaintained"; # added 2025-08-26
   pyeiscp = throw "'pyeiscp' was removed because it was an unmaintained leaf package."; # added 2026-01-22
+  pyembroidery = throw "'pyembroidery' was removed because the only consumer Ink/Stitch switched to 'pystitch'"; # added 2026-09-19
   pyezviz = throw "pyeziz has been removed in favor of pyevizapi, where development continues"; # added 2025-06-11
   pyfantom = throw "pyfantom has been removed because it does not work with python3 and has not been updated for 12 years"; # added 2025-03-25
   pyflick = throw "pyflick was removed because Flick Electric no longer exists"; # added 2025-12-03
