@@ -20,11 +20,11 @@
 }:
 let
   pname = "glibc";
-  version = "2.42";
+  version = "2.44";
 
   src = fetchurl {
     url = "mirror://gnu/libc/glibc-${version}.tar.xz";
-    hash = "sha256-0XdeMuRijmTvkw9DW2e7Y691may2viszW58Z8WUJ8X8=";
+    hash = "sha256-N/YA8r7zxegwAUcFlWiyouQKetbMxlzpQlVtSUKcxmc=";
   };
 
   linkerFile =
