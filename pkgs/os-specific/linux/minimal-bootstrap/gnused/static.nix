@@ -13,16 +13,17 @@
   diffutils,
   findutils,
   gnutar,
+  linux-headers,
   xz,
 }:
 let
   inherit (import ./common.nix { inherit lib; }) meta;
   pname = "gnused-static";
-  version = "4.9";
+  version = "4.10";
 
   src = fetchurl {
     url = "mirror://gnu/sed/sed-${version}.tar.xz";
-    hash = "sha256-biJrcy4c1zlGStaGK9Ghq6QteYKSLaelNRljHSSXUYE=";
+    hash = "sha256-uOchgrLslqNXTimYxHt6qmTMIM4ADY6awxPMB87PKMc=";
   };
 in
 bash.runCommand "${pname}-${version}"
@@ -60,7 +61,8 @@ bash.runCommand "${pname}-${version}"
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
       --disable-dependency-tracking \
-      --disable-nls
+      --disable-nls \
+      CFLAGS="-I${linux-headers}/include"
 
     # Build
     make -j $NIX_BUILD_CORES
