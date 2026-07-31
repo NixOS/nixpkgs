@@ -17,6 +17,13 @@ npmConfigHook() {
     export forceGitDeps
     export prefetchNpmDeps="@prefetchNpmDeps@"
 
+    local -a nixNpmFlags=()
+    local -a nixNpmInstallFlags=()
+    local -a nixNpmRebuildFlags=()
+    concatTo nixNpmFlags npmFlags npmFlagsArray
+    concatTo nixNpmInstallFlags npmInstallFlags npmInstallFlagsArray
+    concatTo nixNpmRebuildFlags npmRebuildFlags npmRebuildFlagsArray
+
     if [ -n "${npmRoot-}" ]; then
       pushd "$npmRoot"
     fi
@@ -132,7 +139,9 @@ npmConfigHook() {
 
     echo "Installing dependencies"
 
-    if ! npm ci --ignore-scripts $npmInstallFlags "${npmInstallFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}"; then
+    echoCmd 'npmConfigHook ci flags' "${nixNpmInstallFlags[@]}" "${nixNpmFlags[@]}"
+
+    if ! npm ci --ignore-scripts "${nixNpmInstallFlags[@]}" "${nixNpmFlags[@]}"; then
         echo
         echo "ERROR: npm failed to install dependencies"
         echo
@@ -148,7 +157,9 @@ npmConfigHook() {
 
     patchShebangs node_modules
 
-    npm rebuild $npmRebuildFlags "${npmRebuildFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}"
+    echoCmd 'npmConfigHook rebuild flags' "${nixNpmRebuildFlags[@]}" "${nixNpmFlags[@]}"
+
+    npm rebuild "${nixNpmRebuildFlags[@]}" "${nixNpmFlags[@]}"
 
     patchShebangs node_modules
 
