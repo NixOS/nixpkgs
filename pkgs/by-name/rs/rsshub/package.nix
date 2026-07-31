@@ -12,26 +12,25 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "rsshub";
-  version = "0-unstable-2026-07-05";
+  version = "0-unstable-2026-08-17";
 
   src = fetchFromGitHub {
     owner = "DIYgod";
     repo = "RSSHub";
-    rev = "719cc1994b10bc96fcd17df6cf2046023d0cd9ba";
-    hash = "sha256-Db1nh42S2zrPheUT9nlHMRt7/qmKeMpHZ415rwWnedI=";
+    rev = "8f526ff403101fac7de18989b86453dbfac9ac9f";
+    hash = "sha256-36rzS07ET/uolH2Nupuf/fVPYQlN/0LU0KqkCxfbxmw=";
   };
 
   patches = [
     (replaceVars ./0001-fix-git-hash.patch {
       GIT_HASH = finalAttrs.src.rev;
     })
-    ./0002-fix-network-call.patch
   ];
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 3;
-    hash = "sha256-ykKWrU9NCOXBuFb+I3TG5XFO81W4K9Y7fZk/KjB+5JI=";
+    hash = "sha256-Jj8NW5bkWJletIjZyCZiZhgQH425XlJLZ/UK0BTDWzY=";
     pnpm = pnpm_10;
   };
 
@@ -44,10 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildPhase = ''
     runHook preBuild
-    # First build route metadata using directoryImport (avoids executing
-    # module-level code that would trigger network requests)
-    BUILD_ROUTES_MODE=1 pnpm run build:routes
-    # Then build the application
     pnpm run build
     runHook postBuild
   '';
