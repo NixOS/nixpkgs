@@ -2,6 +2,8 @@
   lib,
   fetchFromGitHub,
   mkNginxPlugin,
+  nginx,
+  nginxModules,
 }:
 
 mkNginxPlugin (finalAttrs: {
@@ -13,6 +15,13 @@ mkNginxPlugin (finalAttrs: {
     repo = "set-misc-nginx-module";
     tag = "v${finalAttrs.version}";
     hash = "sha256-jMMj3Ki1uSfQzagoB/O4NarxPjiaF9YRwjSKo+cgMxo=";
+  };
+
+  passthru.tests.nginx = nginx.override {
+    modules = [
+      nginxModules.develkit
+      finalAttrs.finalPackage
+    ];
   };
 
   meta = {
