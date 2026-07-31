@@ -2,20 +2,23 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   six,
 }:
 
 buildPythonPackage rec {
   pname = "srp";
   version = "1.0.22";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-8zDQ7HOH4qyFd0h7FkljFV1KAxvKbiAk8bCTDrkrql0=";
   };
 
-  propagatedBuildInputs = [ six ];
+  build-system = [ setuptools ];
+
+  dependencies = [ six ];
 
   # Tests ends up with libssl.so cannot load shared
   doCheck = false;
