@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Clientside editor for decentralised article publishing, annotations and social interactions";
-    homepage = "https://github.com/linkeddata/dokieli";
+    homepage = "https://github.com/dokieli/dokieli";
     license = with lib.licenses; [
       cc-by-40
       mit
