@@ -8,25 +8,41 @@
   pkg-config,
   wayland-scanner,
 
+  bashNonInteractive,
   cairo,
   fontconfig,
   freetype,
   glib,
-  gtk4,
   libGL,
   librsvg,
   libwebp,
   libxkbcommon,
+  nlohmann_json,
   pango,
+  stb,
+  tomlplusplus,
   wayland,
   wayland-protocols,
+  wlroots_0_20,
 
   nix-update-script,
 }:
 
+let
+  # nixpkgs stb doesn't have stb_image_resize2.h which noctalia-greeter needs
+  stb' = stb.overrideAttrs {
+    version = "0-unstable-2025-10-26";
+    src = fetchFromGitHub {
+      owner = "nothings";
+      repo = "stb";
+      rev = "f1c79c02822848a9bed4315b12c8c8f3761e1296";
+      hash = "sha256-BlyXJtAI7WqXCTT3ylww8zoG0hBxaojJnQDvdQOXJPE=";
+    };
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "noctalia-greeter";
-  version = "1.0.0";
+  version = "1.1.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -34,8 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "noctalia-dev";
     repo = "noctalia-greeter";
-    rev = "367ab83dcd9190010f093cfe0e123ba132a75b5a";
-    hash = "sha256-/jQ/lkgjaH5EOTZRXk4YZaFrjrKhq/fzZsU6nm7wPt0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3t/+o8Cbve8z43IekUNBj7Ecn/T+v7+p4Ivgs3IEQtk=";
   };
 
   nativeBuildInputs = [
@@ -46,18 +62,22 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    bashNonInteractive
     cairo
     fontconfig
     freetype
     glib
-    gtk4
     libGL
     librsvg
     libwebp
     libxkbcommon
+    nlohmann_json
     pango
+    stb'
+    tomlplusplus
     wayland
     wayland-protocols
+    wlroots_0_20
   ];
 
   passthru.updateScript = nix-update-script { };
@@ -65,10 +85,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "`greetd` greeter for Noctalia";
     homepage = "https://github.com/noctalia-dev/noctalia-greeter";
-    changelog = "https://github.com/noctalia-dev/noctalia-greeter/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       dtomvan
+      samiser
       spacedentist
     ];
     mainProgram = "noctalia-greeter-session";
