@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "atmos";
-  version = "1.220.0";
+  version = "1.224.1";
 
   src = fetchFromGitHub {
     owner = "cloudposse";
     repo = "atmos";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kUCSa6Kw8wfGfMi3swqwt9mT0ZmniQVE/h5XWkjh+SM=";
+    hash = "sha256-ew07sucTTLLUU2bdN3HKyJJ6i5z6jqgfYR3fHLnzcHA=";
   };
 
-  vendorHash = "sha256-X8R0hRTDKvKmBWgV4ujVQrHIE935wG6sogQAzv2fdTg=";
+  vendorHash = "sha256-MP30jhbhcf6+TWB0q/VLPY6DYd0TLUWZmg3D+d8IpXg=";
 
   env.CGO_ENABLED = 0; # Compiles a pure statically linked Go binary.
 
