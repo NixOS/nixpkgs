@@ -5,14 +5,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "stdiomask";
   version = "0.0.6";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "19m3p6i7fj7nmkbsjhiha3f2l7d05j9gf9ha2pd0pqfrx9lp1r61";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-weRwaerZ4QvaFQom95IsoB0q3FAwQqnXrPZId6K5o6Y=";
   };
 
   build-system = [ setuptools ];
@@ -27,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
