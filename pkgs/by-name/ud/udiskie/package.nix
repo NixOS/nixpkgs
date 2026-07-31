@@ -12,9 +12,8 @@
   python3Packages,
   stdenv,
   udisks,
+  versionCheckHook,
   wrapGAppsHook3,
-  testers,
-  udiskie,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -88,9 +87,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pytestCheckHook
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = udiskie;
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
   meta = {
     homepage = "https://github.com/coldfix/udiskie";
