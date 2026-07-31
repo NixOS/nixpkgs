@@ -3,20 +3,23 @@
   buildPythonPackage,
   decorator,
   fetchPypi,
+  setuptools,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "stashy";
   version = "0.7";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "1x89zazwxnsx6rdfw8nfr372hj4sk8nrcs5hsjxpcxcva0calrcr";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     decorator
     requests
   ];
