@@ -1,7 +1,7 @@
-From 64f735a58d3e5cc2344f823e73602eab638d7076 Mon Sep 17 00:00:00 2001
+From cc6a14c4959931464647fca1d7c715285a990be5 Mon Sep 17 00:00:00 2001
 From: tropf <tropf@noreply.codeberg.org>
-Date: Mon, 5 Aug 2024 21:25:33 +0200
-Subject: [PATCH 1/4] force frozen=true
+Date: Fri, 31 Jul 2026 13:15:38 +0200
+Subject: [PATCH 1/2] force frozen=True
 
 Enforce installation in frozen mode, i.e. as a packaged version where
 source can not be modified.
@@ -23,5 +23,5 @@ index efe6f6dec..be8ddf665 100644
  if not running_as_frozen:  # override running_as_frozen from DEBUG.toml - for testing
      if safe_get(ini, "DEBUG", "force_frozen", default=False):
 -- 
-2.49.0
+2.54.0
 
