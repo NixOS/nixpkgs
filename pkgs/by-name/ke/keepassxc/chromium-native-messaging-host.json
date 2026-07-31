@@ -3,7 +3,7 @@
     "description": "KeePassXC integration with native messaging support",
     "path": "@out@/bin/keepassxc-proxy",
     "type": "stdio",
-    "allowed_extensions": [
+    "allowed_origins": [
         "chrome-extension://iopaggbpplllidnfmcghoonnokmjoicf/",
         "chrome-extension://oboonakemofpalcgghocfoadofidjkkk/",
         "chrome-extension://pdffhmdngciaglkoonimfcmckehcpafo/"
