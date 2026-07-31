@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pygitguardian";
-  version = "1.32.0";
+  version = "1.33.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "py-gitguardian";
     tag = "v${version}";
-    hash = "sha256-f8DkRwgtwaB5R78zklAI0ZvA2gfSwsHFOS3IgDgcEEo=";
+    hash = "sha256-K0hsOfU0tCvjTjOFaDrYNATO31YgbfgAYkZh1DxQNIw=";
   };
 
   build-system = [ pdm-backend ];
