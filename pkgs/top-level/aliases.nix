@@ -427,6 +427,7 @@ mapAliases {
   bmap-tools = throw "'bmap-tools' has been renamed to/replaced by 'bmaptool'"; # Converted to throw 2025-10-27
   bob = throw "'bob' has been removed as it is unmaintained upstream and has vulnerable dependencies."; # Added 2025-12-29
   bodyclose = throw "'bodyclose' has been removed because it was broken for an entire release cycle."; # Added 2026-05-31
+  bombono = throw "'bombono' has been removed as it is abandoned upstream and depends on deprecated gtk2"; # Added 2026-07-31
   boost177 = throw "Boost 1.77 has been removed as it is obsolete and no longer used by anything in Nixpkgs"; # Added 2026-04-20
   bosun = throw "bosun has been removed as upstream stopped maintenance"; # Added 2026-07-16
   botamusique = throw "botamusique has been removed as upstream stopped maintenance"; # Added 2026-06-28

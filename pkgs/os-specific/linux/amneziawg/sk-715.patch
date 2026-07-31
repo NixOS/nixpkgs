@@ -1,15 +1,9 @@
-commit 9ec3a508c89a9929c0d6d7348402ec67a57593bf
-Author: K900 <me@0upti.me>
-Date:   2026-07-26 21:39:56 +0300
-
-    socket, compat: fix build with kernel 7.1.5+
-
 diff --git a/compat/compat.h b/compat/compat.h
-index e362198..8696643 100644
+index 3be1113..1e6a9f1 100644
 --- a/compat/compat.h
 +++ b/compat/compat.h
-@@ -1415,4 +1415,15 @@ static inline struct dst_entry *ip6_dst_lookup_flow(struct net *net, const struc
- }
+@@ -1444,4 +1444,15 @@ static inline void __compat_chacha20_crypt(struct chacha_state *state,
+ 
  #endif
  
 +/*
@@ -24,11 +18,37 @@ index e362198..8696643 100644
 +#endif
 +
  #endif /* _WG_COMPAT_H */
+diff --git a/netlink.c b/netlink.c
+index f2c79b6..1f18583 100644
+--- a/netlink.c
++++ b/netlink.c
+@@ -170,8 +170,8 @@ static inline int parse_ipv4_prefix(const char *prefix_str, struct ipv4_prefix *
+ 	if (slash - prefix_str >= INET_ADDRSTRLEN)
+ 		return -EINVAL;
+ 
+-	strncpy(addr_str, prefix_str, slash - prefix_str);
+-	addr_str[slash - prefix_str] = '\0';
++	// strscpy count includes null terminator
++	strscpy(addr_str, prefix_str, slash - prefix_str + 1);
+ 
+ 	ret = kstrtoint(slash + 1, 10, &prefix->prefix_len);
+ 	if (ret < 0)
+@@ -229,8 +229,8 @@ static inline int parse_ipv6_prefix(const char *prefix_str, struct ipv6_prefix *
+ 	if (slash - prefix_str >= INET6_ADDRSTRLEN)
+ 		return -EINVAL;
+ 
+-	strncpy(addr_str, prefix_str, slash - prefix_str);
+-	addr_str[slash - prefix_str] = '\0';
++	// strscpy count includes null terminator
++	strscpy(addr_str, prefix_str, slash - prefix_str + 1);
+ 
+ 	ret = kstrtoint(slash + 1, 10, &prefix->prefix_len);
+ 	if (ret < 0)
 diff --git a/socket.c b/socket.c
-index b4d38b1..0ce571c 100644
+index d069e10..f267362 100644
 --- a/socket.c
 +++ b/socket.c
-@@ -341,7 +341,7 @@ static void sock_free(struct sock *sock)
+@@ -349,7 +349,7 @@ static void sock_free(struct sock *sock)
  	if (unlikely(!sock))
  		return;
  	sk_clear_memalloc(sock);
@@ -37,7 +57,7 @@ index b4d38b1..0ce571c 100644
  }
  
  static void set_sock_opts(struct socket *sock)
-@@ -395,14 +395,14 @@ retry:
+@@ -403,14 +403,14 @@ retry:
  		goto out;
  	}
  	set_sock_opts(new4);
@@ -54,7 +74,7 @@ index b4d38b1..0ce571c 100644
  			if (ret == -EADDRINUSE && !port && retries++ < 100)
  				goto retry;
  			pr_err("%s: Could not create IPv6 socket\n",
-@@ -410,7 +410,7 @@ retry:
+@@ -418,7 +418,7 @@ retry:
  			goto out;
  		}
  		set_sock_opts(new6);
