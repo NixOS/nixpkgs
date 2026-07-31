@@ -11,6 +11,8 @@ buildPythonPackage (finalAttrs: {
   version = "1.2";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
     pname = "sre_yield";
     inherit (finalAttrs) version;
@@ -20,6 +22,8 @@ buildPythonPackage (finalAttrs: {
   build-system = [ setuptools ];
 
   nativeCheckInputs = [ unittestCheckHook ];
+
+  pythonImportsCheck = [ "sre_yield" ];
 
   meta = {
     description = "Python library to efficiently generate all values that can match a given regular expression";
