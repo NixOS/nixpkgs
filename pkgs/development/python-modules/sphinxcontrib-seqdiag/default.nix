@@ -3,6 +3,7 @@
   blockdiag,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   seqdiag,
   sphinx,
 }:
@@ -10,14 +11,16 @@
 buildPythonPackage rec {
   pname = "sphinxcontrib-seqdiag";
   version = "3.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-QH5IeXZz9x2Ujp/6BHFsrB2ZqeyPYW3jdk1C0DNBZXQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     blockdiag
     seqdiag
     sphinx
