@@ -1,12 +1,11 @@
 {
   lib,
   stdenv,
-  fetchzip,
   fetchYarnDeps,
   yarn,
   fixup-yarn-lock,
   yarnConfigHook,
-  nodejs_22,
+  nodejs_24,
   electron,
   frama-c,
   makeWrapper,
@@ -15,23 +14,16 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "ivette";
-  version = "32.1";
-  slang = "Germanium";
+  pname = "frama-c-gui";
+  inherit (frama-c) version slang src;
 
   __structuredAttrs = true;
-
-  # Not fetchurl, because we need it unzipped before fetchYarnDeps
-  src = fetchzip {
-    url = "https://frama-c.com/download/frama-c-${finalAttrs.version}-${finalAttrs.slang}.tar.gz";
-    hash = "sha256-D+OJy/pcOqSSexqHVsyCSLSHcMg8zbjKDfmqBZ8xvbk=";
-  };
 
   sourceRoot = "${finalAttrs.src.name}/ivette";
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/ivette/yarn.lock";
-    hash = "sha256-1NRSTJkXZ1jvkB/7xI0+u4PmrEzKc3VVBdwM50PtznI=";
+    hash = "sha256-fEwgsoJWQvzeDq3GTp0ngNu+oj1BogH1bwU5rMeRDjQ=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -40,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     yarnConfigHook
-    nodejs_22
+    nodejs_24
     yarn
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -60,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preBuild
 
     # From api.sh
-    ${lib.getExe frama-c} -server-tsc -server-tsc-out src
+    ${lib.getExe frama-c} -server-tsc src
 
     # Run configure.js and sandboxer.js
     make pkg
@@ -86,35 +78,35 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
-    mkdir -p "$out/share/lib/ivette"
-    cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/ivette"
+    mkdir -p "$out/share/lib/frama-c-gui"
+    cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/frama-c-gui"
 
-    install -Dm444 static/icon.png $out/share/icons/hicolor/512x512/apps/ivette.png
+    install -Dm444 static/icon.png $out/share/icons/hicolor/512x512/apps/frama-c-gui.png
 
-    makeWrapper '${electron}/bin/electron' "$out/bin/ivette" \
-      --add-flags "$out/share/lib/ivette/resources/app.asar" \
+    makeWrapper '${electron}/bin/electron' "$out/bin/frama-c-gui" \
+      --add-flags "$out/share/lib/frama-c-gui/resources/app.asar" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --add-flags "--no-sandbox" \
       --inherit-argv0
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
-    cp -r dist/mac*/Ivette.app "$out/Applications/Ivette.app"
-    makeWrapper "$out/Applications/Ivette.app/Contents/MacOS/Ivette" "$out/bin/ivette"
+    cp -r dist/mac*/'Frama-C GUI.app' "$out/Applications/Frama-C GUI.app"
+    makeWrapper "$out/Applications/Frama-C GUI.app/Contents/MacOS/Frama-C GUI" "$out/bin/frama-c-gui"
   ''
   + ''
     runHook postInstall
   '';
 
   desktopItems = lib.optional stdenv.hostPlatform.isLinux (makeDesktopItem {
-    name = "ivette";
-    exec = "ivette";
-    icon = "ivette";
-    desktopName = "Ivette";
+    name = "frama-c-gui";
+    exec = "frama-c-gui";
+    icon = "frama-c-gui";
+    desktopName = "Frama-C GUI";
     genericName = "Frama-C's GUI";
     comment = finalAttrs.meta.description;
     categories = [ "Development" ];
-    startupWMClass = "Ivette";
+    startupWMClass = "Frama-C GUI";
   });
 
   meta = {
@@ -132,6 +124,6 @@ stdenv.mkDerivation (finalAttrs: {
       luc65r
     ];
     platforms = lib.platforms.unix;
-    mainProgram = "ivette";
+    mainProgram = "frama-c-gui";
   };
 })

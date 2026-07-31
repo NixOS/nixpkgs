@@ -27,6 +27,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-MPVgETy2JNvCPtnN/aQpBYMMPdHzQHI2dGy65kTZ5Do=";
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   nativeBuildInputs = [
     makeWrapper
   ];
@@ -51,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,share/msf}
+    mkdir -p $out/share/msf
 
     cp -r * $out/share/msf
 

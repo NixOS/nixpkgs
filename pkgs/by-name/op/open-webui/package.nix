@@ -5,7 +5,6 @@
   python3Packages,
   nixosTests,
   fetchurl,
-  ffmpeg-headless,
 }:
 let
   pname = "open-webui";
@@ -40,10 +39,6 @@ let
       substituteInPlace package.json \
         --replace-fail "npm run pyodide:fetch && vite build" "vite build"
     '';
-
-    propagatedBuildInputs = [
-      ffmpeg-headless
-    ];
 
     env.CYPRESS_INSTALL_BINARY = "0"; # disallow cypress from downloading binaries in sandbox
     env.ONNXRUNTIME_NODE_INSTALL_CUDA = "skip";
