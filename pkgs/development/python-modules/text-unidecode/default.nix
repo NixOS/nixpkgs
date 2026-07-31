@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  pytest,
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -20,11 +20,7 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [ pytest ];
-
-  checkPhase = ''
-    py.test
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "text_unidecode" ];
 
