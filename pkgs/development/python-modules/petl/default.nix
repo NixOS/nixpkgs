@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "petl";
-  version = "1.7.19";
+  version = "1.7.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "petl-developers";
     repo = "petl";
     tag = "v${version}";
-    hash = "sha256-xRNQ4QwTw96kVYzfBiMZcsrPugGFiiRblV1nZ8pAFLY=";
+    hash = "sha256-SnkgazerZTlHFx70GcBvPzuWvKdlTCOreUEuZqxF52g=";
   };
 
   build-system = [

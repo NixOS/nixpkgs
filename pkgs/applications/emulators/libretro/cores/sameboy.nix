@@ -7,13 +7,13 @@
 }:
 mkLibretroCore {
   core = "sameboy";
-  version = "0-unstable-2026-04-20";
+  version = "0-unstable-2026-07-23";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "sameboy";
-    rev = "06c184f0b186f161bcdfec50ebd604fe789ed04a";
-    hash = "sha256-sGEISpIGTHsUr4/DxMf5qxyTVdjmvWfqa2hUhj05jBA=";
+    rev = "aa158a889a48b538a0302873704a34577c8eb67d";
+    hash = "sha256-XVIPZsT4E1CQJnDHc+K4gmO2XVOaUxsoiasStcrf3tA=";
   };
 
   extraNativeBuildInputs = [

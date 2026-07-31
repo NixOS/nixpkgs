@@ -20,13 +20,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "the-powder-toy";
-  version = "99.5.394";
+  version = "100.0.399";
 
   src = fetchFromGitHub {
     owner = "The-Powder-Toy";
     repo = "The-Powder-Toy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ejkWIxlS6J9DHw/XNmEC94oc0xmqvj+hFu3TBPyCqwg=";
+    hash = "sha256-1k2GFYQ6Jrs6+BlcKtLqSRClQAa0/YwWF1+9m7q/Nps=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  mesonFlags = [ "-Dworkaround_elusive_bzip2=false" ];
+  mesonFlags = [ "-Dworkaround_elusive_bzip2=none" ];
 
   installPhase = ''
     runHook preInstall
