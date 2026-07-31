@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "niquests";
-  version = "3.20.1";
+  version = "3.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jawah";
     repo = "niquests";
     tag = "v${version}";
-    hash = "sha256-ux0Nypp3gvf//vNyTt/BygkneEfX2Z3wHaLpbb3TGyI=";
+    hash = "sha256-oKxs1ivKzoCIqFnh81MwCbLfjH5JTKj/orTZNe7uiC4=";
   };
 
   build-system = [ hatchling ];
@@ -75,6 +75,8 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # tests connect to the internet
     "tests/test_requests.py"
+    # we don't care about coverage
+    "tests/wasi_guest/coverage_runner.py"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # NameResolutionError: Failed to resolve 'localhost'
