@@ -88,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       dtomvan
+      samiser
       spacedentist
     ];
     mainProgram = "noctalia-greeter-session";
