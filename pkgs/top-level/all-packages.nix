@@ -760,6 +760,9 @@ with pkgs;
   mkShellNoCC = mkShell.override { stdenv = stdenvNoCC; };
 
   mkSignedPackages = callPackage ../misc/signed-packages { };
+  testSignedPackages = recurseIntoAttrs (
+    callPackage ../misc/signed-packages/test-signed-packages.nix { }
+  );
 
   nixBufferBuilders = import ../applications/editors/emacs/build-support/buffer.nix {
     inherit lib writeText;
