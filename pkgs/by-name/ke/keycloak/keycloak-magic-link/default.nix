@@ -6,13 +6,13 @@
 }:
 maven.buildMavenPackage (finalAttrs: {
   pname = "keycloak-magic-link";
-  version = "0.74";
+  version = "0.75";
 
   src = fetchFromGitHub {
     owner = "p2-inc";
     repo = "keycloak-magic-link";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aOYtNqznubfCbErXaWq4vUDEN3Im+7aEtF/1hnAPA7M=";
+    hash = "sha256-k8+DRkMVhJyifXMdoxS3fPO7LPrfw2rUrZQ/zDBzLVo=";
   };
 
   mvnHash = "sha256-nSJvNSgo1gftGYmx0lFXHIeIhpZ+Ph1KvOHz8jF3voE=";
