@@ -56,6 +56,9 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl3Only
     ];
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ moni ];
+    maintainers = with lib.maintainers; [
+      mershl
+      moni
+    ];
   };
 })
