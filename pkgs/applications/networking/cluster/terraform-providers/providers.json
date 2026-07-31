@@ -463,13 +463,13 @@
     "vendorHash": "sha256-EiTWJ4bw8IwsRTD9Lt28Up2DXH0oVneO2IaO8VqWtkw="
   },
   "go-gitea_gitea": {
-    "hash": "sha256-A9jwUtLNT5ikB5iR5qaRHBiTXsmwvJXycpFxciZSeZg=",
+    "hash": "sha256-tQ9jUdP4QtYSFo3gRw4TDwVx17kPPcfFym82xXp6IWs=",
     "homepage": "https://registry.terraform.io/providers/go-gitea/gitea",
     "owner": "go-gitea",
     "repo": "terraform-provider-gitea",
-    "rev": "v0.7.0",
+    "rev": "v0.8.1",
     "spdx": "MIT",
-    "vendorHash": "sha256-/8h2bmesnFz3tav3+iDelZSjp1Z9lreexwcw0WdYekA="
+    "vendorHash": "sha256-xl92EeXmhKNEbdCmzfd0p8EVkCjLi2gM47A69IXXAyE="
   },
   "goharbor_harbor": {
     "hash": "sha256-+HtvOLOD8PEYky+ws/deCcX8Tea5pR/77eb7LXJhseg=",
