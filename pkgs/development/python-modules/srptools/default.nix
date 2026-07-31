@@ -12,8 +12,11 @@ buildPythonPackage (finalAttrs: {
   version = "1.0.1";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
+    pname = "srptools";
+    inherit (finalAttrs) version;
     hash = "sha256-f6QzclahVC6PW7S+0Z4dmuqY/l/5uvdmkzQqHdasfJY=";
   };
 
