@@ -8668,6 +8668,8 @@ self: super: with self; {
 
   jupyterlab-git = callPackage ../development/python-modules/jupyterlab-git { };
 
+  jupyterlab-git-core = callPackage ../development/python-modules/jupyterlab-git-core { };
+
   jupyterlab-lsp = callPackage ../development/python-modules/jupyterlab-lsp { };
 
   jupyterlab-pygments = callPackage ../development/python-modules/jupyterlab-pygments { };
