@@ -5,6 +5,16 @@ npmConfigHook() {
 
     # Use npm patches in the nodejs package
     export NIX_NODEJS_BUILDNPMPACKAGE=1
+
+    # Git dependencies with install scripts are prepared by a nested npm
+    # process (see node-npm-build-npm-package-logic.patch), which expects these
+    # from its environment. With `__structuredAttrs = true`, derivation
+    # attributes are shell variables instead of environment variables, so they
+    # need to be exported explicitly. Note that this exports them for every
+    # child process of the build, not just for npm; `prefetchNpmDeps` below has
+    # always been like this.
+    export stdenv
+    export forceGitDeps
     export prefetchNpmDeps="@prefetchNpmDeps@"
 
     if [ -n "${npmRoot-}" ]; then
