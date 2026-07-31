@@ -18,6 +18,12 @@ mkNginxPlugin (finalAttrs: {
     hash = "sha256-Ee55QKaeZ0mYGKUroKr/AYGoOCakEonU483qkhmZdzU=";
   };
 
+  preConfigure = ''
+    configureFlags="''${configureFlags/--add-module=*nginx-mod-${finalAttrs.pname}-${finalAttrs.version}/&/nginx}"
+
+    appendToVar configureFlags "--with-ld-opt=-lz"
+  '';
+
   buildInputs = [
     which
     zlib
