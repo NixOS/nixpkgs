@@ -1359,10 +1359,30 @@ in
     };
 
     # Ensure Docker Registry launches after the certificate generation job
-    systemd.services.docker-registry = optionalAttrs cfg.registry.enable {
-      wants = [ "gitlab-registry-cert.service" ];
-      after = [ "gitlab-registry-cert.service" ];
-    };
+    systemd.services.docker-registry =
+      let
+        registryCfg = config.services.dockerRegistry;
+        enableDatabase =
+          registryCfg.extraConfig.database.enabled == true
+          || registryCfg.extraConfig.database.enabled == "prefer";
+        enableDatabaseLocally = enableDatabase && registryCfg.extraConfig.database.host == "";
+      in
+      optionalAttrs (cfg.registry.enable) (
+        lib.mkMerge [
+          {
+            wants = [ "gitlab-registry-cert.service" ];
+            after = [ "gitlab-registry-cert.service" ];
+          }
+          (optionalAttrs enableDatabaseLocally {
+            after = [ "postgresql.target" ];
+            requires = [ "postgresql.target" ];
+          })
+          (optionalAttrs enableDatabase {
+            preStart = "${lib.getExe registryCfg.package} database migrate up --skip-post-deployment ${registryCfg.configFile}";
+            postStart = "${lib.getExe registryCfg.package} database migrate up ${registryCfg.configFile}";
+          })
+        ]
+      );
 
     # Enable Docker Registry, if GitLab-Container Registry is enabled
     services.dockerRegistry = optionalAttrs cfg.registry.enable {
@@ -1377,6 +1397,14 @@ in
           issuer = cfg.registry.issuer;
           rootcertbundle = cfg.registry.certFile;
         };
+        # This defaults to `true` since gitlab-contianer-registry 4.40 (primarily introduced with GitLab 19.0).
+        # We do not support the automatic database setup on NixOS 26.05 because of the difference of the system user
+        # GitLab Container Registry runs with.
+        # We also don't provide convinient database settings as the interfaces changes quite a lot with NixOS 26.11.
+        # However, we support enabling this option, set the correct systemd dependencies, but the user needs to to the
+        # DB setup themself.
+        # We cannot use lib.mkDefault here, because services.dockerRegistry.extraConfig is just an attrset
+        database.enabled = false;
       };
     };
 
