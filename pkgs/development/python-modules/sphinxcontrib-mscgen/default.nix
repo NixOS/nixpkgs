@@ -7,13 +7,15 @@
   mscgen,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinxcontrib-mscgen";
   version = "0.6";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-AXfSWRq3CepT/jNOgHxiYT7vkdKZejPu/LeUqxZ8T5A=";
   };
 
@@ -37,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.bola11;
     maintainers = [ ];
   };
-}
+})
