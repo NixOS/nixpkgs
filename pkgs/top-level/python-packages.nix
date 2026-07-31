@@ -9216,6 +9216,7 @@ self: super: with self; {
     {
       python,
       pythonImportsCheckHook,
+      libcap_ng, # for python3Packages.libcap_ng.tests.python passthru
     }@python3Packages:
     toPythonModule (
       pkgs.libcap_ng.override {
