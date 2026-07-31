@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     relative = "compiler-rt";
   })
   # Linux removed `linux/scc.h`, which breaks building compiler-rt. Upstream LLVM has fixed it in LLVM 22 and 23.
-  ++ lib.optional (lib.strings.versionOlder (lib.versions.major release_version) "22") (fetchpatch {
+  ++ lib.optional (lib.strings.versionOlder version "22.1.5") (fetchpatch {
     url = "https://github.com/llvm/llvm-project/commit/3dc4fd6dd41100f051a63642f449b16324389c96.patch?full_index=1";
     hash = "sha256-Av6CN95XjdUagIKh3AAjD0UK8r01fDz0cD0BLjZ70dg=";
     relative = "compiler-rt";
