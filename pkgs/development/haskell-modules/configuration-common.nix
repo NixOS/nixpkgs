@@ -2968,6 +2968,11 @@ with haskellLib;
   # once a release/Hackage revision with the relaxed bound reaches nixpkgs.
   rhine = dontCheck super.rhine;
 
+  # The warp test suite runs an HTTP server that needs the threaded RTS, but the
+  # test suite is missing `ghc-options: -threaded`. Fixed upstream in
+  # https://github.com/turion/essence-of-live-coding/pull/153; drop once released.
+  essence-of-live-coding-warp = dontCheck super.essence-of-live-coding-warp;
+
   # 2025-04-13: jailbreak to allow th-abstraction >= 0.7
   crucible = doJailbreak super.crucible;
 
