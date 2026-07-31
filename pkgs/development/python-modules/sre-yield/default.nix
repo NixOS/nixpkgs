@@ -9,7 +9,7 @@
 buildPythonPackage (finalAttrs: {
   pname = "sre-yield";
   version = "1.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "sre_yield";
@@ -17,7 +17,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-6U8aKjy6//4dzRXB1U5AGhUX4FKqZMfTFk+I3HYde4o=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 
