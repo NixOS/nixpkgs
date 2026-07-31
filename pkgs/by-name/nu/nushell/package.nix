@@ -17,6 +17,7 @@
   curlMinimal,
   versionCheckHook,
   writableTmpDirAsHomeHook,
+  callPackage,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -102,6 +103,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru = {
     shellPath = "/bin/nu";
     updateScript = nix-update-script { };
+
+    withPlugins = plugins: callPackage ./with-plugins.nix { inherit plugins; };
+    tests.withPlugins = callPackage ./plugins/test-with-plugins.nix { };
   };
 
   meta = {

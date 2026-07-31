@@ -24,7 +24,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "rlax";
-  version = "0.1.8";
+  version = "0.1.9";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -32,14 +32,8 @@ buildPythonPackage (finalAttrs: {
     owner = "google-deepmind";
     repo = "rlax";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-E/zYFd5bfx58FfA3uR7hzRAIs844QzJA8TZTwmwDByk=";
+    hash = "sha256-CDHoRY6QcgedudojID4Cxw7RWb/LCT5FvZ1dOVDWGMA=";
   };
-
-  # TypeError: clip() got an unexpected keyword argument 'a_min'
-  postPatch = ''
-    substituteInPlace rlax/_src/mpo_ops.py \
-      --replace-fail "a_min=" "min="
-  '';
 
   build-system = [
     flit-core
