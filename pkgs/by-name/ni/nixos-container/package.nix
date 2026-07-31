@@ -8,11 +8,9 @@
   stateDirectory ? "/var/lib/nixos-containers",
   nixosTests,
   path,
-  lib,
 }:
 replaceVarsWith {
-  pname = "nixos-container";
-  version = lib.trivial.release;
+  name = "nixos-container";
   dir = "bin";
   isExecutable = true;
   src = ./nixos-container.pl;
