@@ -2,13 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   sphinx,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "sphinxcontrib-log-cabinet";
   version = "1.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "davidism";
@@ -17,7 +18,9 @@ buildPythonPackage (finalAttrs: {
     sha256 = "03cxspgqsap9q74sqkdx6r6b4gs4hq6dpvx4j58hm50yfhs06wn1";
   };
 
-  propagatedBuildInputs = [ sphinx ];
+  build-system = [ setuptools ];
+
+  dependencies = [ sphinx ];
 
   pythonImportsCheck = [ "sphinxcontrib.log_cabinet" ];
 
