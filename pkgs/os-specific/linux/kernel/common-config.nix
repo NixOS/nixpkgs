@@ -303,6 +303,7 @@ let
       XDP_SOCKETS = yes;
       XDP_SOCKETS_DIAG = yes;
       WAN = yes;
+      TCP_AO = whenAtLeast "6.7" yes;
       TCP_CONG_ADVANCED = yes;
       TCP_CONG_CUBIC = yes; # This is the default congestion control algorithm since 2.6.19
       # Required by systemd per-cgroup firewalling
@@ -1181,6 +1182,7 @@ let
         ];
         MODULE_COMPRESS_ALL = whenAtLeast "6.12" yes;
         MODULE_COMPRESS_XZ = yes;
+        MODULE_DECOMPRESS = whenAtLeast "6.0" yes;
 
         SYSVIPC = yes; # System-V IPC
 
@@ -1291,13 +1293,15 @@ let
         KEXEC_HANDOVER = whenAtLeast "6.16" (option yes);
         LIVEUPDATE = whenAtLeast "6.19" (option yes);
 
-        PARTITION_ADVANCED = yes; # Needed for LDM_PARTITION
+        PARTITION_ADVANCED = yes; # Needed for LDM_PARTITION and BSD_DISKLABEL
         # Windows Logical Disk Manager (Dynamic Disk) support
         LDM_PARTITION = yes;
         LOGIRUMBLEPAD2_FF = yes; # Logitech Rumblepad 2 force feedback
         LOGO = no; # not needed
         MEDIA_ATTACH = yes;
         MEGARAID_NEWGEN = yes;
+
+        BSD_DISKLABEL = yes;
 
         MLX5_CORE_EN = option yes;
 

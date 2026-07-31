@@ -1,3 +1,4 @@
+import json
 import sys
 import textwrap
 import uuid
@@ -639,12 +640,18 @@ def test_repl(mock_run: Mock) -> None:
     mock_run.assert_called_with(["nix", "repl", "--file", Path("file.nix"), "myAttr"])
 
 
-@patch(get_qualified_name(n.run_wrapper, n), autospec=True)
+@patch(
+    get_qualified_name(n.run_wrapper, n),
+    autospec=True,
+    return_value=CompletedProcess(
+        [], 0, stdout=json.dumps({"resolvedUrl": "path:/flake.nix"})
+    ),
+)
 def test_repl_flake(mock_run: Mock) -> None:
     n.repl_flake(m.Flake("flake.nix", "myAttr"), {"nix_flag": True})
     # See nixos-rebuild-ng.tests.repl for a better test,
     # this is mostly for sanity check
-    assert mock_run.call_count == 1
+    assert mock_run.call_count == 2
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
