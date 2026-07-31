@@ -49,10 +49,8 @@ in
 
     dbPath = lib.mkOption {
       type = lib.types.path;
-      default = pkgs.path + "/programs.sqlite";
-      defaultText = lib.literalExpression ''
-        pkgs.path + "/programs.sqlite"
-      '';
+      default = "${pkgs.path}/programs.sqlite";
+      defaultText = lib.literalExpression "\${pkgs.path}/programs.sqlite";
       description = ''
         Absolute path to `programs.sqlite`, which contains mappings from binary names to package names.
 
