@@ -3,13 +3,14 @@
   attrs,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "sumtypes";
   version = "0.1a6";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "radix";
@@ -18,7 +19,9 @@ buildPythonPackage rec {
     hash = "sha256-qwQyFKVnGEqHUqFmUSnHVvedsp2peM6rJZcS90paLOo=";
   };
 
-  propagatedBuildInputs = [ attrs ];
+  build-system = [ setuptools ];
+
+  dependencies = [ attrs ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
