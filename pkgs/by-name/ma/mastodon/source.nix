@@ -2,6 +2,7 @@
 {
   fetchFromGitHub,
   applyPatches,
+  fetchpatch,
   patches ? [ ],
 }:
 let
@@ -19,5 +20,11 @@ applyPatches {
       yarnMissingHashes = ./missing-hashes.json;
     };
   };
-  patches = patches ++ [ ];
+  patches = patches ++ [
+    (fetchpatch {
+      name = "CVE-2026-66066.patch";
+      url = "https://github.com/mastodon/mastodon/commit/0aede8f7d799aff721a2b3e454163dfae25538b7.patch";
+      hash = "sha256-NSplnP+c8ZnTmmarZ/cplk5TZvxooKXfLnMDHcBSYY4=";
+    })
+  ];
 }

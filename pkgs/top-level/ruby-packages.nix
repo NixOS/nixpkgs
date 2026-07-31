@@ -914,10 +914,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1ipbrgvf0pp6zxdk5ascp6i29aybz2bx9wdrlchjmpx6mhvkwfw1";
+      sha256 = "sha256-svG+g26WjMx4zPzid+p5xyqIYz8iMGeCwW/yP7QV0eE=";
       type = "gem";
     };
-    version = "1.3.5";
+    version = "1.3.8";
   };
   connection_pool = {
     groups = [ "default" ];
