@@ -2,19 +2,22 @@
   lib,
   fetchPypi,
   buildPythonPackage,
+  setuptools,
   isPy3k,
 }:
 
 buildPythonPackage rec {
   pname = "sslib";
   version = "0.2.0";
-  format = "setuptools";
+  pyproject = true;
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "0b5zrjkvx4klmv57pzhcmvbkdlyn745mn02k7hp811hvjrhbz417";
   };
+
+  build-system = [ setuptools ];
 
   # No tests available
   doCheck = false;
