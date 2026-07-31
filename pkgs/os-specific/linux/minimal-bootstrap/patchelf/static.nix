@@ -17,11 +17,11 @@
 }:
 let
   pname = "patchelf-static";
-  version = "0.18.0";
+  version = "0.19.1";
 
   src = fetchurl {
     url = "https://github.com/NixOS/patchelf/releases/download/${version}/patchelf-${version}.tar.gz";
-    sha256 = "sha256-ZN4Q5Ma4uDedt+h/WAMPM26nR8BRXzgRMugQ2/hKhuc=";
+    sha256 = "sha256-SREIco8SDOBbU5k0tBp1AjUDGm34q8a0flev994VCU0=";
   };
 in
 bash.runCommand "${pname}-${version}"
