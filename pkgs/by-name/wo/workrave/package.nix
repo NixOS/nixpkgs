@@ -6,6 +6,7 @@
   cmake,
   gettext,
   intltool,
+  libtool,
   pkg-config,
   libice,
   libsm,
@@ -15,6 +16,7 @@
   glib,
   glibmm,
   gtkmm3,
+  gtk4,
   atk,
   pango,
   pangomm,
@@ -25,11 +27,12 @@
   gst_all_1,
   libsigcxx,
   boost,
+  python3Packages,
+  wayland,
+  wayland-scanner,
+  libayatana-appindicator,
   fmt,
   spdlog,
-  pulseaudio,
-  wayland-scanner,
-  python3Packages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     gettext
     intltool
+    libtool
     pkg-config
     wrapGAppsHook3
     python3Packages.jinja2
@@ -63,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     glibmm
     gtkmm3
+    gtk4
     atk
     pango
     pangomm
@@ -75,13 +80,35 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-good
     libsigcxx
     boost
+    wayland
+    libayatana-appindicator
     fmt
-    pulseaudio
   ];
+
+  cmakeFlags = [
+    "-DWITH_GNOME45=ON"
+    "-DHAVE_WAYLAND:BOOL=TRUE"
+    "-DLOCALINSTALL:BOOL=TRUE"
+    "-DGSETTINGS_COMPILE:BOOL=ON"
+  ];
+
+  patches = [ ./fix-workrave-paths.patch ];
+
+  postPatch = ''
+    substituteInPlace ui/applets/gnome-shell-45/src/extension.js \
+       ui/applets/gnome-shell-45/src/prelude_window.js \
+       --subst-var-by workrave_typelib_path "$out/lib/girepository-1.0"
+
+    substituteInPlace libs/config/src/GSettingsConfigurator.cc \
+       ui/applets/common/src/control.c \
+       ui/applets/common/src/timerbox.c \
+       ui/applets/indicator/src/indicator-workrave.c \
+       --subst-var-by workrave_schema_path ${glib.makeSchemaPath "$out" "${finalAttrs.pname}-${finalAttrs.version}"}
+  '';
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Program to help prevent Repetitive Strain Injury";
     mainProgram = "workrave";
     longDescription = ''
@@ -91,8 +118,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "http://www.workrave.org/";
     downloadPage = "https://github.com/rcaelers/workrave/releases";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ prikhi ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ prikhi ];
+    platforms = platforms.linux;
   };
 })
