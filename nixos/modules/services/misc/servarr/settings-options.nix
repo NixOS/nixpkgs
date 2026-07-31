@@ -85,4 +85,9 @@
       (lib.collect (x: lib.isString x.name or false && lib.isString x.value or false))
       lib.listToAttrs
     ];
+
+  commonDotnetEnvVars = {
+    # Disable debug socket: https://github.com/dotnet/docs/blob/6b96e8456f7eb67f7a4df6b25ad2d298fdc0989f/docs/core/diagnostics/diagnostic-port.md#security-considerations
+    DOTNET_EnableDiagnostics = "0";
+  };
 }
