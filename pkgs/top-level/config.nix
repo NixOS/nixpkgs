@@ -549,6 +549,11 @@ in
         kind = "removal";
         handler = "warn";
       }
+      # unsupported platforms should abort eval
+      {
+        kind = "unsupported";
+        handler = "error";
+      }
       (lib.mkIf (lib.elem "maintainerless" config.showDerivationWarnings) {
         kind = "maintainerless";
         handler = "warn";
