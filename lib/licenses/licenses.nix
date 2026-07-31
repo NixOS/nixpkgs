@@ -1371,6 +1371,12 @@ lib.mapAttrs mkLicense (
       fullName = "Ruby License";
     };
 
+    segv = {
+      fullName = "SEGV License";
+      free = false;
+      url = "https://xn--gckvb8fzb.com/segv/";
+    };
+
     sendmail = {
       spdxId = "Sendmail";
       fullName = "Sendmail License";
