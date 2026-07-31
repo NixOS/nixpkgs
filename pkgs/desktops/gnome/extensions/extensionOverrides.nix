@@ -54,6 +54,14 @@ in
 # the upstream repository's sources.
 super:
 lib.trivial.pipe super [
+  (patchExtension "appindicatorsupport@rgcjonas.gmail.com" (old: {
+    # gjs is not available on GNOME Shell's runtime PATH by default.
+    postPatch = ''
+      substituteInPlace statusNotifierWatcher.js \
+        --replace-fail "['gjs', '-m', busAnalyzer]" "['${lib.getExe gjs}', '-m', busAnalyzer]"
+    '';
+  }))
+
   (patchExtension "apps-menu@gnome-shell-extensions.gcampax.github.com" (old: {
     patches = [
       (replaceVars
