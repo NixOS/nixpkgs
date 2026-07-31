@@ -54,6 +54,7 @@
   withBs2b ? withFullDeps, # bs2b DSP library
   withBzlib ? withHeadlessDeps,
   withCaca ? withFullDeps, # Textual display (ASCII art)
+  withCairo ? withFullDeps && lib.versionAtLeast version "8.1", # drawing via vgs
   withCdio ? withFullDeps && withGPL, # Audio CD grabbing
   withCelt ? withFullDeps, # CELT decoder
   withChromaprint ? withFullDeps, # Audio fingerprinting
@@ -251,6 +252,7 @@
   aribb24,
   avisynthplus,
   bzip2,
+  cairo,
   celt,
   chromaprint,
   codec2,
@@ -609,6 +611,11 @@ stdenv.mkDerivation (
       (enableFeature withBs2b "libbs2b")
       (enableFeature withBzlib "bzlib")
       (enableFeature withCaca "libcaca")
+    ]
+    ++ optionals (versionAtLeast version "8.1") [
+      (enableFeature withCairo "cairo")
+    ]
+    ++ [
       (enableFeature withCdio "libcdio")
       (enableFeature withCelt "libcelt")
       (enableFeature withChromaprint "chromaprint")
@@ -855,6 +862,7 @@ stdenv.mkDerivation (
       ++ optionals withBs2b [ libbs2b ]
       ++ optionals withBzlib [ bzip2 ]
       ++ optionals withCaca [ libcaca ]
+      ++ optionals withCairo [ cairo ]
       ++ optionals withCdio [
         libcdio
         libcdio-paranoia
