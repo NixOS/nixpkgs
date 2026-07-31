@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   pillow,
   requests,
 }:
@@ -9,14 +10,16 @@
 buildPythonPackage rec {
   pname = "staticmap";
   version = "0.5.7";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-x6lrkCumEpLoGMILCBBhnWuBps21C8wauS1QrE2yCn8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     requests
     pillow
   ];
