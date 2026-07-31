@@ -30,18 +30,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "watchman";
-  version = "2026.01.19.00";
+  version = "2026.07.27.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "watchman";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Eh7IHYEavgVd2p+r1PzQrAdqPD5FlYiTp4TCon55byE=";
+    hash = "sha256-cfx0hRsWDq6NTr8QvnLt/LsZ4Ja8d3lejUSgzsockp4=";
   };
-
-  patches = [
-    ./glog-0.7.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -89,6 +85,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   doCheck = true;
+
+  # fmt v12.2.0 changed the definition of its fmt/core.h header to no longer
+  # include fmt/format.h, so we must pull that one in instead. vendored from
+  # https://github.com/facebook/watchman/pull/1348 with a small modification to
+  # the surrounding context in watchman/watcher/eden.cpp to avoid the changes
+  # in 542ccb794647fe7bdeb59db8f54cd434db42bd30.
+  patches = [ ./fmt-12.2.0-format-header.patch ];
 
   postPatch = ''
     patchShebangs .
