@@ -172,7 +172,12 @@ goBuild (finalAttrs: {
       CFLAGS = "-Wno-c++17-extensions -I${rocmPath}/include";
       CXXFLAGS = "-Wno-c++17-extensions -I${rocmPath}/include";
     }
-    // lib.optionalAttrs enableCuda { CUDA_PATH = cudaPath; }
+    // lib.optionalAttrs enableCuda {
+      CUDA_PATH = cudaPath;
+      # Nested llama.cpp builds require one toolkit root containing
+      # nvcc and the split CUDA libraries.
+      CUDAToolkit_ROOT = cudaToolkit;
+    }
     // lib.optionalAttrs enableVulkan { VULKAN_SDK = shaderc.bin; };
 
   nativeBuildInputs = [
