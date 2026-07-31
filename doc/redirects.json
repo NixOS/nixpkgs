@@ -2759,6 +2759,9 @@
   "desktop-file-utils": [
     "index.html#desktop-file-utils"
   ],
+  "diehook": [
+    "index.html#diehook"
+  ],
   "setup-hook-gdk-pixbuf": [
     "index.html#setup-hook-gdk-pixbuf"
   ],
