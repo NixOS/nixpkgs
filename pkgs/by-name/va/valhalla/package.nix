@@ -98,7 +98,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open Source Routing Engine for OpenStreetMap";
     homepage = "https://valhalla.readthedocs.io/";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.Thra11 ];
+    maintainers = with lib.maintainers; [
+      Thra11
+      karlbeecken
+    ];
     pkgConfigModules = [ "libvalhalla" ];
     platforms = lib.platforms.unix;
   };
