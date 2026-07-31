@@ -2,17 +2,20 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "stubserver";
   version = "1.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-j9R7wpvb07FuN5EhIpE7xTSf26AniQZN4iLpxMjNYKA=";
   };
+
+  build-system = [ setuptools ];
 
   # Tests are not shipped and the source not tagged
   doCheck = false;
