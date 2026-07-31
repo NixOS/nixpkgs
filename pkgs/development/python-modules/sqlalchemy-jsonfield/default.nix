@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "sqlalchemy-jsonfield";
   version = "1.0.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "penguinolog";
@@ -23,9 +23,12 @@ buildPythonPackage rec {
     hash = "sha256-4zLXB3UQh6pgQ80KrxkLeC5yiv1R8t2+JmSukmGXr7I=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     sqlalchemy
     setuptools
   ];
