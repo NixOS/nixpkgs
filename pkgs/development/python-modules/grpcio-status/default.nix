@@ -24,11 +24,6 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-XK8ounGEuB9hi19/CUhZ/SVBv0KdIYm7vNcVycLNzuI=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-warn 'protobuf>=4.21.6' 'protobuf'
-  '';
-
   build-system = [ setuptools ];
 
   dependencies = [
