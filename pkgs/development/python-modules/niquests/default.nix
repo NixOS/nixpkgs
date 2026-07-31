@@ -16,7 +16,7 @@
   wassima,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "niquests";
   version = "3.21.0";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jawah";
     repo = "niquests";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-oKxs1ivKzoCIqFnh81MwCbLfjH5JTKj/orTZNe7uiC4=";
   };
 
@@ -70,7 +70,7 @@ buildPythonPackage rec {
     pytest-httpbin
     pytestCheckHook
   ]
-  ++ optional-dependencies.socks;
+  ++ finalAttrs.passthru.optional-dependencies.socks;
 
   disabledTestPaths = [
     # tests connect to the internet
@@ -101,10 +101,10 @@ buildPythonPackage rec {
     ];
 
   meta = {
-    changelog = "https://github.com/jawah/niquests/blob/${src.tag}/HISTORY.md";
+    changelog = "https://github.com/jawah/niquests/blob/${finalAttrs.src.tag}/HISTORY.md";
     description = "Simple HTTP library that is a drop-in replacement for Requests";
     homepage = "https://github.com/jawah/niquests";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})
