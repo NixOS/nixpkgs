@@ -53,7 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
       betaboon
       cawilliamson
       fptje
-      sarahec
       brw
     ];
     platforms = [

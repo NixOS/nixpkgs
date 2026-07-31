@@ -78,7 +78,7 @@ let
     python-dateutil
     pytz
     pyyaml
-    qscintilla-qt6
+    pyqt6-qscintilla
     requests
     setuptools
     sip
@@ -163,7 +163,7 @@ stdenv.mkDerivation rec {
   patches = [
     (replaceVars ./set-pyqt6-package-dirs.patch {
       pyQt6PackageDir = "${py.pkgs.pyqt6}/${py.pkgs.python.sitePackages}";
-      qsciPackageDir = "${py.pkgs.qscintilla-qt6}/${py.pkgs.python.sitePackages}";
+      qsciPackageDir = "${py.pkgs.pyqt6-qscintilla}/${py.pkgs.python.sitePackages}";
     })
     (replaceVars ./spatialite-path.patch {
       spatialiteLib = "${libspatialite}/lib/mod_spatialite${stdenv.hostPlatform.extensions.sharedLibrary}";
