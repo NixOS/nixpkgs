@@ -2521,8 +2521,6 @@ with pkgs;
     docbook-xsl = docbook_xsl;
   };
 
-  metasploit = callPackage ../tools/security/metasploit { };
-
   mtr-gui = mtr.override { withGtk = true; };
 
   multitran = recurseIntoAttrs (
