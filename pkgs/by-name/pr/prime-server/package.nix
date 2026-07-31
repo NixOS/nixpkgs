@@ -8,6 +8,7 @@
   zeromq,
   czmq,
   libsodium,
+  runCommand,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,6 +33,24 @@ stdenv.mkDerivation (finalAttrs: {
     czmq
     zeromq
   ];
+
+  passthru.tests.simple =
+    runCommand "prime-server-test"
+      {
+        nativeBuildInputs = [
+          finalAttrs.finalPackage
+          curl
+        ];
+      }
+      ''
+        prime_serverd tcp://127.0.0.1:8001 1 0 &
+        pid=$!
+        trap 'kill $pid' EXIT
+
+        test "$(curl -fsS --retry 30 --retry-delay 1 --retry-connrefused 'http://127.0.0.1:8001/is_prime?possible_prime=17')" = 17
+
+        touch "$out"
+      '';
 
   meta = {
     description = "Non-blocking (web)server API for distributed computing and SOA based on zeromq";
