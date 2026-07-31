@@ -14,6 +14,7 @@
   callPackage,
   nixosTests,
   librsvg,
+  nix-update-script,
 }:
 
 let
@@ -56,7 +57,7 @@ let
   assets_path = "$out/share/photoprism";
 in
 stdenv.mkDerivation (finalAttrs: {
-  inherit pname version;
+  inherit pname version src;
 
   nativeBuildInputs = [
     makeWrapper
@@ -96,8 +97,23 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
-  passthru.tests.photoprism = nixosTests.photoprism;
+  passthru = {
+    inherit backend frontend;
+
+    tests = {
+      version = testers.testVersion { package = finalAttrs.finalPackage; };
+      photoprism = nixosTests.photoprism;
+    };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "backend"
+        "--subpackage"
+        "frontend"
+      ];
+    };
+  };
 
   meta = {
     homepage = "https://photoprism.app";

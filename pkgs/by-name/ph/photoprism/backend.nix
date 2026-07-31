@@ -8,6 +8,7 @@
   pkg-config,
   vips,
   symlinkJoin,
+  nix-update-script,
 }:
 
 let
@@ -56,6 +57,8 @@ buildGoModule {
   CGO_CFLAGS = "-Wno-return-local-addr -I${libtensorflow}/include";
 
   CGO_LDFLAGS = "-L${libtensorflow} -ltensorflow_framework";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://photoprism.app";

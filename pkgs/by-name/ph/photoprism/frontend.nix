@@ -3,6 +3,7 @@
   buildNpmPackage,
   src,
   version,
+  nix-update-script,
 }:
 
 buildNpmPackage {
@@ -21,6 +22,8 @@ buildNpmPackage {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://photoprism.app";
