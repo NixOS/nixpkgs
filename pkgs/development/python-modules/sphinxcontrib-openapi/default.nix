@@ -12,13 +12,15 @@
   sphinxcontrib-httpdomain,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinxcontrib-openapi";
   version = "0.8.4";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-34g4CKW15LQROtaXGFxDo/Qt89znBFOveLpwdpB+miA=";
   };
 
@@ -40,10 +42,12 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
+  pythonImportsCheck = [ "sphinxcontrib.openapi" ];
+
   meta = {
     homepage = "https://github.com/ikalnytskyi/sphinxcontrib-openapi";
     description = "OpenAPI (fka Swagger) spec renderer for Sphinx";
     license = lib.licenses.bsd0;
     maintainers = [ lib.maintainers.flokli ];
   };
-}
+})
