@@ -9,6 +9,7 @@
 
   # dependencies
   feedparser,
+  pythonRelaxDepsHook,
   requests,
 
   # tests
@@ -36,6 +37,13 @@ buildPythonPackage rec {
     feedparser
     requests
   ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  # Until upstream accepts requests >= 2.34
+  pythonRelaxDeps = [ "requests" ];
 
   nativeCheckInputs = [
     pytestCheckHook
