@@ -5,14 +5,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "spinners";
   version = "0.0.24";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "0zz2z6dpdjdq5z8m8w8dfi8by0ih1zrdq0caxm1anwhxg2saxdhy";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-HrautHgdcqtC7YoB3PIPMAK/UHQNcVTRL7jJdpv54n8=";
   };
 
   build-system = [ setuptools ];
@@ -27,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ urbas ];
   };
-}
+})
