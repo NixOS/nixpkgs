@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Python library for the StreamLabs API";
-    homepage = "https://github.com/streamlabswater/stream-python";
+    homepage = "https://github.com/cpopp/streamlabswater-python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
