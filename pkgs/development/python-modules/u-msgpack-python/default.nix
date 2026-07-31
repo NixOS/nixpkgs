@@ -23,9 +23,10 @@ buildPythonPackage (finalAttrs: {
 
   env.LC_ALL = "en_US.UTF-8";
 
-  buildInputs = [ glibcLocales ];
-
-  nativeCheckInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [
+    glibcLocales
+    unittestCheckHook
+  ];
 
   pythonImportsCheck = [ "umsgpack" ];
 
