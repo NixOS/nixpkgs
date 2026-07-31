@@ -6,6 +6,9 @@
   fetchPnpmDeps,
   writeShellScriptBin,
 
+  dune,
+  ocamlPackages,
+
   cacert,
   clang_20,
   clojure,
@@ -32,13 +35,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "logseq";
-  version = "2.0.0-unstable-2026-06-12";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "logseq";
     repo = "logseq";
-    rev = "80aeb07d1c0783578e234450e82414d7d3b4bb60";
-    hash = "sha256-31eJEzpLVxPqZQ2fqSJUP8sp5RsJyllOiXj+6B14cUg=";
+    tag = finalAttrs.version;
+    hash = "sha256-egierIhPRm3J8NL1gAcAMvynzFTzoSzpeGN6m0aOSSI=";
   };
 
   patches = [
@@ -51,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) src patches;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-r68qKxB3jwdMjBCZ7UWyTMoYoO+qaeRUJxhzGd3QtDw=";
+    hash = "sha256-vkR6AbgdYA3GFZ54/CtcWwMIx9LBTMaadEpzMn9vgiQ=";
   };
 
   uiPnpmDeps = fetchPnpmDeps {
@@ -63,13 +66,24 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-g6W7Gsj4EF8D5dAbckD9d9kPJnA3cO/p936gy3A228g=";
   };
 
+  cliPnpmDeps = fetchPnpmDeps {
+    pname = "${finalAttrs.pname}-${finalAttrs.version}-cli";
+    inherit (finalAttrs) src patches;
+    inherit pnpm;
+    postPatch = "cd cli";
+    pnpmInstallFlags = [ "--ignore-workspace" ];
+    fetcherVersion = 3;
+    hash = "sha256-i5zJ+lvhcBF1CA1hFY4SlEg4p6IEfFrNPYTEYiFviiE=";
+  };
+
   resourcesPnpmDeps = fetchPnpmDeps {
     pname = "${finalAttrs.pname}-${finalAttrs.version}-resources";
     inherit (finalAttrs) src patches;
     inherit pnpm;
     postPatch = "cd resources";
+    pnpmInstallFlags = [ "--ignore-workspace" ];
     fetcherVersion = 3;
-    hash = "sha256-81w9K18b0uYivYypPGTPkVmGPPlev9begSzTu25Mh3E=";
+    hash = "sha256-URY5YPQCh2ariqOtaa97IiL2iObrvkDh5wEuFgLqRRI=";
   };
 
   clojureHome = stdenv.mkDerivation {
@@ -147,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       # the build process runs `git describe --long --always --dirty`
       fakeGit = writeShellScriptBin "git" ''
-        echo "${finalAttrs.src.rev or finalAttrs.version}@nixpkgs"
+        echo "${finalAttrs.version}@nixpkgs"
       '';
     in
     [
@@ -162,6 +176,11 @@ stdenv.mkDerivation (finalAttrs: {
       pnpmConfigHook
       python3
       removeReferencesTo
+
+      dune
+      ocamlPackages.findlib
+      ocamlPackages.melange
+      ocamlPackages.ocaml
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       clang_20 # newer clang breaks node-addon-api on darwin
@@ -171,13 +190,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libsecret
+
+    ocamlPackages.melange
+    finalAttrs.passthru.humanize
+    finalAttrs.passthru.melange-edn-melange
+    finalAttrs.passthru.melange-transit-melange
+    finalAttrs.passthru.melange-fetch
+    finalAttrs.passthru.rrbvec
   ];
 
   env.LOGSEQ_BUILD_TIME = "1970-01-01T00:00:00Z";
 
   postConfigure = ''
     pnpmDeps=$uiPnpmDeps pnpmRoot=packages/ui pnpmConfigHook
-    pnpmDeps=$resourcesPnpmDeps pnpmRoot=resources pnpmConfigHook
+    pnpmDeps=$cliPnpmDeps pnpmRoot=cli pnpmInstallFlags="--ignore-workspace" pnpmConfigHook
+    pnpmDeps=$resourcesPnpmDeps pnpmRoot=resources pnpmInstallFlags="--ignore-workspace" pnpmConfigHook
+
+    # run dune directly instead of through opam
+    substituteInPlace cli/package.json \
+      --replace-fail 'opam exec -- dune' 'dune'
 
     # disable running electron-builder during the build, we'll run it manually later
     substituteInPlace resources/package.json \
@@ -261,6 +292,70 @@ stdenv.mkDerivation (finalAttrs: {
       categories = [ "Utility" ];
     })
   ];
+
+  passthru = {
+    humanize = ocamlPackages.buildDunePackage {
+      pname = "humanize";
+      version = "0-unstable-2026-06-06";
+      src = fetchFromGitHub {
+        owner = "RCmerci";
+        repo = "humanize";
+        rev = "747879af704dff4dd1897bc0f9a53a361071371c";
+        hash = "sha256-NalrZxGlcMAIAjX6x7fFLJFZKEcr8E3R83iM87TfyyE=";
+      };
+      nativeBuildInputs = [ ocamlPackages.melange ];
+    };
+    melange-edn-melange = ocamlPackages.buildDunePackage {
+      pname = "melange-edn-melange";
+      version = "0.5.0-unstable-2026-07-21";
+      src = fetchFromGitHub {
+        owner = "RCmerci";
+        repo = "melange-edn";
+        rev = "638b614d35d918a370643b43780c8e23ede96b41";
+        hash = "sha256-EUFORQk4GwqHBCBCwPrfhkNqBVlUyTjR+eymAgA9BeM=";
+      };
+      nativeBuildInputs = [ ocamlPackages.melange ];
+      propagatedBuildInputs = [ ocamlPackages.melange ];
+    };
+    melange-fetch = ocamlPackages.buildDunePackage {
+      pname = "melange-fetch";
+      version = "0.2.0";
+      src = fetchFromGitHub {
+        owner = "melange-community";
+        repo = "melange-fetch";
+        tag = "0.2.0";
+        hash = "sha256-B0D2SMwUMR64S0SQADZ7CHE+z7tUq9GW5yuzBhLwkzA=";
+      };
+      nativeBuildInputs = [ ocamlPackages.melange ];
+      propagatedBuildInputs = [ ocamlPackages.melange ];
+    };
+    melange-transit-melange = ocamlPackages.buildDunePackage {
+      pname = "melange-transit-melange";
+      version = "0.1.0-unstable-2026-06-28";
+      src = fetchFromGitHub {
+        owner = "RCmerci";
+        repo = "melange-transit";
+        rev = "99fb9f1c5bebf4ba5fa6d2378cfc97dbf14b5378";
+        hash = "sha256-RFUbOSFKR8VEqwpm70Aii5Qh4qq2eO7yt4WXW+z3rlc=";
+      };
+      nativeBuildInputs = [ ocamlPackages.melange ];
+      propagatedBuildInputs = [
+        ocamlPackages.melange
+        finalAttrs.passthru.melange-edn-melange
+      ];
+    };
+    rrbvec = ocamlPackages.buildDunePackage {
+      pname = "rrbvec";
+      version = "0-unstable-2026-07-12";
+      src = fetchFromGitHub {
+        owner = "RCmerci";
+        repo = "rrbvec";
+        rev = "dd5ce904f91d53235b5136f7a771f3f074c3971d";
+        hash = "sha256-zYT7cMMWJivVSB6H/vUDnaajvUOYddh0MF2Zu/wIGq0=";
+      };
+      nativeBuildInputs = [ ocamlPackages.melange ];
+    };
+  };
 
   meta = {
     description = "Privacy-first, open-source platform for knowledge management and collaboration";
