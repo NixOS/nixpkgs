@@ -7,16 +7,16 @@
 
 maven.buildMavenPackage (finalAttrs: {
   pname = "keycloak-restrict-client-auth";
-  version = "26.1.0";
+  version = "26.1.1";
 
   src = fetchFromGitHub {
     owner = "sventorben";
     repo = "keycloak-restrict-client-auth";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nQ2AwXhSUu5RY/BbxXE2OXgEb7Zf6FfrGP5tfbgAXk8=";
+    hash = "sha256-QqTeR3h4I4G6yNZKgU8gsA9GZVyKRJAXx5Boydor2U8=";
   };
 
-  mvnHash = "sha256-Q/UKZ4oe7T2pVRb8U0SoyvxUMgUn9grlDJPxlU9wLg4=";
+  mvnHash = "sha256-S3fNjak6WzoXqBBWigTx83HpF8NQs9mLXVlUn3wo9jM=";
 
   strictDeps = true;
   __structuredAttrs = true;

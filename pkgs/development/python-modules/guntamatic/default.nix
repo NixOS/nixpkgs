@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "guntamatic";
-  version = "1.9.2";
+  version = "1.9.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JensTimmerman";
     repo = "guntamatic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cm3aFIRnWFKgkaEYDQCGSREZRmGhv0ltKMpkWHu+ugI=";
+    hash = "sha256-ldR+cJA1AMcf8ZCY2K/Uok3ZlDCAoXFa0vU8PlSGy00=";
   };
 
   build-system = [ setuptools ];

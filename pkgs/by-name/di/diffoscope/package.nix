@@ -132,9 +132,6 @@ python.pkgs.buildPythonApplication rec {
   postPatch = ''
     # When generating manpage, use the installed version
     substituteInPlace doc/Makefile --replace-fail "../bin" "$out/bin"
-
-    substituteInPlace diffoscope/comparators/apk.py \
-      --replace-fail "from androguard.core.bytecodes import apk" "from androguard.core import apk"
   '';
 
   nativeBuildInputs = [
