@@ -8,16 +8,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "claude-agent-acp";
-  version = "0.60.0";
+  version = "0.64.0";
 
   src = fetchFromGitHub {
     owner = "agentclientprotocol";
     repo = "claude-agent-acp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-idyZcd8KD+bhAlKqqaTS6X8DcNjAzluln8it1V0vyUk=";
+    hash = "sha256-DBWsdGNbjkC1CzGwCpySOr07ruGkDdybfjkXI+3HXtA=";
   };
 
-  npmDepsHash = "sha256-dJeUPTcGN616YVKLcsiGgSn8wb7NhJZuZmPRHeUxR4U=";
+  npmDepsHash = "sha256-qx6IQzrndzPIcPhMZUOrZE8S3amfhoeMhg+gadZmHdk=";
 
   nativeBuildInputs = [ makeWrapper ];
 

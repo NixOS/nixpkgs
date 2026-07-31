@@ -40,7 +40,7 @@ assert
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "music-assistant";
-  version = "2.9.9";
+  version = "2.9.10";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -48,7 +48,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     owner = "music-assistant";
     repo = "server";
     tag = finalAttrs.version;
-    hash = "sha256-ooe+QW+7S5LCgpin5/2g4L8+UDtr4TGZRpeR5F/tqZo=";
+    hash = "sha256-v9xFW83/v8CjKa04oql1yGQKB58VQtFmXZTN/KMN/gM=";
   };
 
   patches = [
@@ -195,6 +195,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       "dlna"
       "fastmcp_server"
       "jellyfin"
+      "heos"
       "mpd"
       "msx_bridge"
       "opensubsonic"
