@@ -2,13 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "steamodd";
   version = "5.0";
 
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lagg";
@@ -16,6 +17,8 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-ySAyCOI1ISuBQ/5+UHSQVji76ZDRGjdVwlBAY9tnSmE=";
   };
+
+  build-system = [ setuptools ];
 
   # tests require API key
   doCheck = false;
