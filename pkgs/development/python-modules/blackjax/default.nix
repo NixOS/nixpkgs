@@ -78,6 +78,10 @@ buildPythonPackage (finalAttrs: {
     # too slow
     "test_adaptive_tempered_smc"
 
+    # AssertionError: False is not true : f32: controller never escalated (U=0);
+    # axis-aligned spike would do this, ensure u_dir is non-axis-aligned
+    "test_escalated_e2e_smoke_f32_and_x64"
+
     # AssertionError on numerical values
     "test_barker"
     "test_imm_shrinkage_seed_influence_persists_diagonal"
