@@ -34,7 +34,12 @@ npmConfigHook() {
 
     echo "Installing dependencies"
 
-    if ! npm install --ignore-scripts $npmInstallFlags "${npmInstallFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}"; then
+    local flagsArray=()
+    concatTo flagsArray npmInstallFlags npmInstallFlagsArray npmFlags npmFlagsArray
+
+    echoCmd 'npmConfigHook install flags' "${flagsArray[@]}"
+
+    if ! npm install --ignore-scripts "${flagsArray[@]}"; then
         echo
         echo "ERROR: npm failed to install dependencies"
         echo
@@ -47,7 +52,12 @@ npmConfigHook() {
 
     patchShebangs node_modules
 
-    npm rebuild $npmRebuildFlags "${npmRebuildFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}"
+    flagsArray=()
+    concatTo flagsArray npmRebuildFlags npmRebuildFlagsArray npmFlags npmFlagsArray
+
+    echoCmd 'npmConfigHook rebuild flags' "${flagsArray[@]}"
+
+    npm rebuild "${flagsArray[@]}"
 
     patchShebangs node_modules
 
