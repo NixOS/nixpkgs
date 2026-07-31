@@ -35,8 +35,26 @@ let
     { name, hash }:
     fetchzip {
       inherit hash;
-      url = "https://dl.photoprism.app/tensorflow/${name}.zip";
+      extension = "zip";
+      url = "https://dl.photoprism.app/tensorflow/${name}.zip?${version}";
       stripRoot = false;
+    };
+
+  # NB: needs to be a derivation with a src attribute so the update script
+  # can ensure that these hashes remain up to date
+  wrapModelForUpdate =
+    src:
+    stdenv.mkDerivation {
+      inherit pname version src;
+
+      dontUnpack = true;
+      dontBuild = true;
+
+      installPhase = ''
+        mkdir $out
+      '';
+
+      passthru.updateScript = nix-update-script { };
     };
 
   facenet = fetchModel {
@@ -100,6 +118,10 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit backend frontend;
 
+    facenet = wrapModelForUpdate facenet;
+    nasnet = wrapModelForUpdate nasnet;
+    nsfw = wrapModelForUpdate nsfw;
+
     tests = {
       version = testers.testVersion { package = finalAttrs.finalPackage; };
       photoprism = nixosTests.photoprism;
@@ -111,6 +133,12 @@ stdenv.mkDerivation (finalAttrs: {
         "backend"
         "--subpackage"
         "frontend"
+        "--subpackage"
+        "facenet"
+        "--subpackage"
+        "nasnet"
+        "--subpackage"
+        "nsfw"
       ];
     };
   };
