@@ -184,5 +184,7 @@ buildDotnetModule (finalAttrs: {
       "aarch64-linux"
       "aarch64-darwin"
     ];
+    # Temporary disable until the missing DeviceId.Mac missing dependecy get's solved
+    badPlatforms = [ "aarch64-darwin" ];
   };
 })
