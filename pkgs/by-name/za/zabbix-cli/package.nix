@@ -3,8 +3,8 @@
   stdenv,
   fetchFromGitHub,
   python3Packages,
-  testers,
-  zabbix-cli,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -67,14 +67,17 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonImportsCheck = [ "zabbix_cli" ];
 
-  passthru.tests.version = testers.testVersion {
-    package = zabbix-cli;
-    command = "HOME=$(mktemp -d) zabbix-cli --version";
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  doInstallCheck = true;
 
   meta = {
     description = "Command-line interface for Zabbix";
     homepage = "https://github.com/unioslo/zabbix-cli";
+    changelog = "https://github.com/unioslo/zabbix-cli/blob/${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.gpl3Plus;
     mainProgram = "zabbix-cli";
     maintainers = [ lib.maintainers.anthonyroussel ];
