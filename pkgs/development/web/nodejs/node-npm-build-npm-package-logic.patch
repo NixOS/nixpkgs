@@ -7,6 +7,8 @@ This introduces fixes for 4 issues:
 3. We get useless warnings that clog up logs when using a v1 lockfile, so we silence them.
 4. npm looks at a hidden lockfile to determine if files have binaries to link into `node_modules/.bin`. When using a v1 lockfile offline, this lockfile does not contain enough info, leading to binaries for packages such as Webpack not being available to scripts. We used to work around this by making npm ignore the hidden lockfile by creating a file, but now we just disable the code path entirely.
 
+The Git dependency fix above reads NIX_NPM_FLAGS, NIX_NPM_INSTALL_FLAGS and NIX_NPM_REBUILD_FLAGS from the environment. They are set by npmHooks.npmConfigHook and have to be kept in sync with it.
+
 To update:
 1. Run `git diff` from an npm checkout
 2. Run `fix-npm-patch-paths.sh`
@@ -42,14 +44,17 @@ diff --git a/deps/npm/node_modules/pacote/lib/git.js b/deps/npm/node_modules/pac
 index 1fa8b1f96..a026bb50d 100644
 --- a/deps/npm/node_modules/pacote/lib/git.js
 +++ b/deps/npm/node_modules/pacote/lib/git.js
-@@ -188,6 +188,24 @@ class GitFetcher extends Fetcher {
+@@ -188,6 +188,27 @@ class GitFetcher extends Fetcher {
        }
        noPrepare.push(this.resolved)
  
 +      if (process.env['NIX_NODEJS_BUILDNPMPACKAGE']) {
 +        const spawn = require('@npmcli/promise-spawn')
 +
-+        const npmWithNixFlags = (args, cmd) => spawn('bash', ['-c', 'npm ' + args + ` $npm${cmd}Flags "$\{npm${cmd}FlagsArray[@]}" $npmFlags "$\{npmFlagsArray[@]}" || [ -n "$forceGitDeps" ]`], { cwd: dir, env: { ...process.env, _PACOTE_NO_PREPARE_: noPrepare.join('\n') } }, { message: `\`npm ${args}\` failed` })
++        // The NIX_NPM_*_FLAGS variables are set by npmConfigHook and hold the
++        // npm flags quoted with `@Q`. The eval only builds the argument list;
++        // the npm invocation itself is never part of the evaluated string.
++        const npmWithNixFlags = (args, cmd) => spawn('bash', ['-c', `eval "flags=($\{NIX_NPM_${cmd.toUpperCase()}_FLAGS-} $\{NIX_NPM_FLAGS-})"; npm ${args} "$\{flags[@]}" || [ -n "$forceGitDeps" ]`], { cwd: dir, env: { ...process.env, _PACOTE_NO_PREPARE_: noPrepare.join('\n') } }, { message: `\`npm ${args}\` failed` })
 +        const patchShebangs = () => spawn('bash', ['-c', 'source $stdenv/setup; patchShebangs node_modules'], { cwd: dir })
 +
 +        // the DirFetcher will do its own preparation to run the prepare scripts

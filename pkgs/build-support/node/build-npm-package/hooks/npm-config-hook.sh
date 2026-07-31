@@ -24,6 +24,19 @@ npmConfigHook() {
     concatTo nixNpmInstallFlags npmInstallFlags npmInstallFlagsArray
     concatTo nixNpmRebuildFlags npmRebuildFlags npmRebuildFlagsArray
 
+    # The nested npm process needs these flags as well, but an environment
+    # variable can not hold a list. Pass them as a quoted string, which the
+    # patch turns back into an array with `eval`. `[*]` joins on the first
+    # character of IFS, so make sure that it is a space.
+    #
+    # This is also why the lists above are kept apart instead of being
+    # concatenated into one array per npm invocation, like the way the other
+    # hooks do.
+    local IFS=$' \t\n'
+    export NIX_NPM_FLAGS="${nixNpmFlags[*]@Q}"
+    export NIX_NPM_INSTALL_FLAGS="${nixNpmInstallFlags[*]@Q}"
+    export NIX_NPM_REBUILD_FLAGS="${nixNpmRebuildFlags[*]@Q}"
+
     if [ -n "${npmRoot-}" ]; then
       pushd "$npmRoot"
     fi
