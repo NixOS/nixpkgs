@@ -6,7 +6,9 @@
 #
 # See https://github.com/NixOS/nixpkgs/pull/430969 for measurements.
 
-lib:
+# These are passed early before the boot stages are run, so we get as much ready
+# as possible with them alone
+lib: config:
 let
   # Lib attributes are inherited to the lexical scope for performance reasons.
   inherit (lib)
@@ -182,9 +184,7 @@ let
       ${if (attrs ? allowedRequisites) then "allowedRequisites" else null} =
         mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
     };
-in
-config:
-let
+
   doCheckByDefault = config.doCheckByDefault or false;
   structuredAttrsByDefault = config.structuredAttrsByDefault or false;
   inherit (config) enableParallelBuildingByDefault contentAddressedByDefault;
@@ -193,8 +193,9 @@ let
     inherit lib config;
   };
 in
+# This is passed on every stage, for frustrating splicing reasons (see #547754).
+# Anything that doesn't need stdenv should come before this to memoise properly
 stdenv:
-
 let
   inherit (import ../../build-support/lib/cmake.nix { inherit lib stdenv; }) makeCMakeFlags;
   inherit (import ../../build-support/lib/meson.nix { inherit lib stdenv; }) makeMesonFlags;
