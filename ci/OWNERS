@@ -531,3 +531,4 @@ pkgs/by-name/wa/warp-terminal/  @emilytrau @imadnyc @4evy @johnrtitor
 
 # Boot security
 /pkgs/by-name/au/autopen    @NixOS/boot-security
+/pkgs/misc/signed-packages  @NixOS/boot-security
