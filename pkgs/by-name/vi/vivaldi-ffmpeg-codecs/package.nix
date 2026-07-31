@@ -25,7 +25,7 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "chromium-codecs-ffmpeg-extra";
 
-  version = "123075"; # Do not update by hand, use the update script
+  version = "0-unstable-2026-05-18"; # Do not update by hand, use the update script
 
   src = sources."${stdenv.hostPlatform.system}";
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
-    install -vD chromium-ffmpeg-${finalAttrs.version}/chromium-ffmpeg/libffmpeg.so $out/lib/libffmpeg.so
+    install -vD chromium-ffmpeg-git-${lib.removePrefix "0-unstable-" finalAttrs.version}/chromium-ffmpeg/libffmpeg.so $out/lib/libffmpeg.so
   '';
 
   passthru = {
@@ -54,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
       cawilliamson
       fptje
       sarahec
+      brw
     ];
     platforms = [
       "x86_64-linux"

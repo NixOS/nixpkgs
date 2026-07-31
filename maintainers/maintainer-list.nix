@@ -4229,6 +4229,12 @@
     matrix = "@brsvh:mozilla.org";
     name = "Burgess Chang";
   };
+  brw = {
+    email = "hi@bas.sh";
+    github = "brw";
+    githubId = 7560938;
+    name = "Bas van den Wollenberg";
+  };
   bryango = {
     name = "Bryan Lai";
     email = "bryanlais@gmail.com";
