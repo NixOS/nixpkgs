@@ -8,13 +8,16 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "spotipy";
   version = "2.26.0";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
+    pname = "spotipy";
+    inherit (finalAttrs) version;
     hash = "sha256-32ol2CCQcu+ozqFlYI7mRIhOOAT4dittjgbKGlx/imM=";
   };
 
@@ -37,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for the Spotify Web API";
     homepage = "https://spotipy.readthedocs.org/";
-    changelog = "https://github.com/plamere/spotipy/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/plamere/spotipy/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rvolosatovs ];
   };
-}
+})
