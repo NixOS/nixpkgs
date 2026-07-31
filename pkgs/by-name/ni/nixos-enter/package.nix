@@ -6,8 +6,7 @@
   util-linuxMinimal,
 }:
 replaceVarsWith {
-  pname = "nixos-enter";
-  version = lib.trivial.release;
+  name = "nixos-enter";
   src = ./nixos-enter.sh;
 
   replacements = {

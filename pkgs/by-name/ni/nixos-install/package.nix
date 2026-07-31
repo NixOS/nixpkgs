@@ -9,9 +9,7 @@
   nixosTests,
 }:
 replaceVarsWith {
-  pname = "nixos-install";
-  version = lib.trivial.release;
-
+  name = "nixos-install";
   src = ./nixos-install.sh;
 
   replacements = {

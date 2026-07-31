@@ -2,11 +2,9 @@
   replaceVarsWith,
   runtimeShell,
   installShellFiles,
-  lib,
 }:
 replaceVarsWith {
-  pname = "nixos-build-vms";
-  version = lib.trivial.release;
+  name = "nixos-build-vms";
 
   src = ./nixos-build-vms.sh;
 
