@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   psycopg2,
   sqlalchemy,
 }:
@@ -9,14 +10,16 @@
 buildPythonPackage rec {
   pname = "sqlalchemy-citext";
   version = "1.8.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "a1740e693a9a334e7c8f60ae731083fe75ce6c1605bb9ca6644a6f1f63b15b77";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     sqlalchemy
 
     # not listed in `install_requires`, but is imported in citext/__init__.py
