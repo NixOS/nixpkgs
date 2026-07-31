@@ -35,12 +35,6 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "surt" ];
 
-  disabledTests = [
-    # Tests want to download Public Suffix List
-    "test_getPublicPrefix"
-    "test_getPublicSuffix"
-  ];
-
   meta = {
     description = "Sort-friendly URI Reordering Transform (SURT) python module";
     homepage = "https://github.com/internetarchive/surt";
