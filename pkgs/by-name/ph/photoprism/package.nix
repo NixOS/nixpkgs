@@ -18,14 +18,14 @@
 }:
 
 let
-  version = "260601-a7d098548";
+  version = "260728-bbde8f452";
   pname = "photoprism";
 
   src = fetchFromGitHub {
     owner = "photoprism";
     repo = "photoprism";
     rev = version;
-    hash = "sha256-6zE9bqHFF9ifcqbvA0yjSF69+BA/M2U6ABnPta4dpl4=";
+    hash = "sha256-NRVaTrYrYpOdeNLM+GY6Ae7jXR3uNpAVjhLWWoHCdyc=";
   };
 
   backend = callPackage ./backend.nix { inherit src version; };
