@@ -2,13 +2,14 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
+  setuptools,
   loguru,
   rpyc,
 }:
 buildPythonPackage rec {
   pname = "streamcontroller-plugin-tools";
   version = "2.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "StreamController";
@@ -16,6 +17,8 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-dQZPRSzHhI3X+Pf7miwJlECGFgUfp68PtvwXAmpq5/s=";
   };
+
+  build-system = [ setuptools ];
 
   dependencies = [
     loguru
