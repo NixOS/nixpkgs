@@ -6738,8 +6738,6 @@ with pkgs;
 
   valeStyles = recurseIntoAttrs (callPackages ../by-name/va/vale/styles.nix { });
 
-  valhalla = callPackage ../development/libraries/valhalla { };
-
   vencord-web-extension = callPackage ../by-name/ve/vencord/package.nix { buildWebExtension = true; };
 
   vid-stab = callPackage ../development/libraries/vid-stab {
