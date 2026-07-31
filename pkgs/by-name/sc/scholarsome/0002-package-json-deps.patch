@@ -1,0 +1,24 @@
+--- a/package.json
++++ b/package.json
+@@ -64,11 +64,12 @@
+     "@types/adm-zip": "^0.5.0",
+     "@types/better-sqlite3": "^7.6.4",
+     "@types/multer": "^1.4.7",
++    "@types/quill": "^2.0.10",
+     "@types/string-similarity": "^4.0.0",
+     "adm-zip": "^0.5.10",
+     "axios": "1.6.0",
+     "bcrypt": "^5.1.1",
+-    "better-sqlite3": "^8.4.0",
++    "better-sqlite3": "^12.11.1",
+     "bootstrap": "^5.2.3",
+     "class-transformer": "^0.5.1",
+     "class-validator": "^0.14.0",
+@@ -143,7 +144,6 @@
+     "@types/nodemailer": "^6.4.6",
+     "@types/passport-jwt": "^3.0.6",
+     "@types/passport-local": "^1.0.34",
+-    "@types/quill": "^2.0.10",
+     "@types/sanitize-html": "^2.11.0",
+     "@typescript-eslint/eslint-plugin": "6.13.2",
+     "@typescript-eslint/parser": "6.13.2",
