@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   hypothesis,
   pytestCheckHook,
 }:
@@ -9,12 +10,14 @@
 buildPythonPackage rec {
   pname = "srt";
   version = "3.5.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-SIQxUEOk8HQP0fh47WyqN2rAbXDhNfMGptxEYy7tDMA=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     hypothesis
