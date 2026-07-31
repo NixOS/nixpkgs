@@ -33,13 +33,13 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "scantpaper";
-  version = "3.0.11";
+  version = "3.0.13";
 
   src = fetchFromGitHub {
     owner = "carygravel";
     repo = "scantpaper";
     tag = "v${version}";
-    hash = "sha256-6zjIEwDHdOIAIucV4T/zY10F80nQNOgnRkA+i2n7Sng=";
+    hash = "sha256-NlNi+KRtFJF14j5KsqhsDk5keKaKyvZMGJdCPzD4TVY=";
   };
 
   pyproject = true;
