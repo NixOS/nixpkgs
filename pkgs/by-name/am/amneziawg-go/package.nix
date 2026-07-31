@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "amneziawg-go";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "amnezia-vpn";
     repo = "amneziawg-go";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wtjUJSTDWWgJLedyQPlPa+TtOztciyDWIbyZ24N5ELM=";
+    hash = "sha256-j5tKv+ZPi+XY9eHV0iO/8/TomZXpqUKbdVjD5t/Iws0=";
   };
 
   postPatch = ''

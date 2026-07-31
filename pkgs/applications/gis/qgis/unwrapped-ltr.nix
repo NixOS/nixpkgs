@@ -76,7 +76,7 @@ let
     python-dateutil
     pytz
     pyyaml
-    qscintilla-qt5
+    py.pkgs.qscintilla # avoid confusion with C++ qscintilla
     requests
     setuptools
     sip
@@ -154,7 +154,7 @@ mkDerivation rec {
   patches = [
     (replaceVars ./set-pyqt-package-dirs-ltr.patch {
       pyQt5PackageDir = "${py.pkgs.pyqt5}/${py.pkgs.python.sitePackages}";
-      qsciPackageDir = "${py.pkgs.qscintilla-qt5}/${py.pkgs.python.sitePackages}";
+      qsciPackageDir = "${py.pkgs.qscintilla}/${py.pkgs.python.sitePackages}";
     })
     (replaceVars ./spatialite-path.patch {
       spatialiteLib = "${libspatialite}/lib/mod_spatialite.so";
