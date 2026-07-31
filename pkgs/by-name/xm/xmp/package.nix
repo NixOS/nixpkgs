@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xmp";
-  version = "4.3.0";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "libxmp";
     repo = "xmp-cli";
     rev = "${pname}-${version}";
-    hash = "sha256-bHepVTkh7Gu8ea/WW5bY7zTiqYWpENlsPqsMV+4WVT4=";
+    hash = "sha256-vy1e/d70c2sMOBEPfAdaPrUQ77BQDJkUNwE9BCFIXeg=";
   };
 
   nativeBuildInputs = [
