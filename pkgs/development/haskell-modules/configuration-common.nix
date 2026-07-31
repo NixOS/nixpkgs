@@ -2963,6 +2963,11 @@ with haskellLib;
   # once a release/Hackage revision with the relaxed bound reaches nixpkgs.
   monad-schedule = dontCheck super.monad-schedule;
 
+  # Test suite has a too-strict bound QuickCheck <2.16, but nightly ships 2.16.
+  # Bound bumped upstream in https://github.com/turion/rhine/pull/449; drop this
+  # once a release/Hackage revision with the relaxed bound reaches nixpkgs.
+  rhine = dontCheck super.rhine;
+
   # 2025-04-13: jailbreak to allow th-abstraction >= 0.7
   crucible = doJailbreak super.crucible;
 
