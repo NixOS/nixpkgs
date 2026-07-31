@@ -3,6 +3,7 @@
   blockdiag,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   nwdiag,
   sphinx,
 }:
@@ -10,14 +11,16 @@
 buildPythonPackage rec {
   pname = "sphinxcontrib-nwdiag";
   version = "2.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-bula1DutRv6NwfZRhciZfLHRZmXu42p+qvbeExN/+Fk=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     blockdiag
     nwdiag
     sphinx
