@@ -2,7 +2,6 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  gtk-engine-murrine,
   jdupes,
   sassc,
   themeVariants ? [ ], # default: blue
@@ -70,12 +69,10 @@ lib.checkListOfEnum "colloid-gtk-theme: theme variants"
       sassc
     ];
 
-    propagatedUserEnvPkgs = [
-      gtk-engine-murrine
-    ];
-
     postPatch = ''
       patchShebangs install.sh
+
+      sed -i '/"$THEME_DIR\/gtk-2.0/d' install.sh
     '';
 
     installPhase = ''
