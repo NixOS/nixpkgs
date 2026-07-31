@@ -1,6 +1,6 @@
 {
   "acme": {
-    "description": "Maintain ACME-related packages and modules.",
+    "description": "Maintain ACME-related packages and modules. Also deal with my manual edits.",
     "id": 3806126,
     "maintainers": {
       "emilazy": 18535642
