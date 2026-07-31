@@ -2,13 +2,14 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   tkinter,
 }:
 
 buildPythonPackage rec {
   pname = "sv-ttk";
   version = "2.6.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;
@@ -16,10 +17,12 @@ buildPythonPackage rec {
     hash = "sha256-R1idXiA5jPQE6DYvJPPtSPODDNCs4FbYM1T6Jdjk/kg=";
   };
 
+  build-system = [ setuptools ];
+
   # No tests available
   doCheck = false;
 
-  propagatedBuildInputs = [ tkinter ];
+  dependencies = [ tkinter ];
 
   pythonImportsCheck = [ "sv_ttk" ];
 
