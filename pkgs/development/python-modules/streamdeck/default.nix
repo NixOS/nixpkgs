@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   replaceVars,
   pkgs,
 }:
@@ -10,7 +11,7 @@
 buildPythonPackage rec {
   pname = "streamdeck";
   version = "0.9.8";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -23,6 +24,8 @@ buildPythonPackage rec {
       libusb = "${pkgs.hidapi}/lib/libhidapi-libusb${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
+
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "StreamDeck" ];
   doCheck = false;
