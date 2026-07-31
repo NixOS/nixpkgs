@@ -10,7 +10,6 @@
   python3,
   gtk3,
   gnome-themes-extra,
-  gtk-engine-murrine,
   humanity-icon-theme,
   hicolor-icon-theme,
 }:
@@ -42,7 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     humanity-icon-theme
     hicolor-icon-theme
   ];
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   dontDropIconThemeCache = true;
 
