@@ -18,7 +18,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "python-otcextensions";
+  pname = "otcextensions";
   version = "0.34.3";
   pyproject = true;
 
