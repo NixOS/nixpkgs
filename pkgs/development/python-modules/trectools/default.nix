@@ -30,11 +30,6 @@ buildPythonPackage {
     hash = "sha256-p8BvLO+rD/l+ATE4+u3I6k25R1RVKlk2dn+RLQZTLDs=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "bs4 >= 0.0.0.1" "beautifulsoup4 >= 4.11.1"
-  '';
-
   build-system = [ setuptools ];
 
   dependencies = [
@@ -48,6 +43,8 @@ buildPythonPackage {
     sarge
   ];
 
+  pythonRemoveDeps = [ "bs4" ];
+
   nativeCheckInputs = [
     unittestCheckHook
   ];
@@ -57,7 +54,7 @@ buildPythonPackage {
     rm unittests/testtreceval.py
   '';
 
-  unittestFlagsArray = [
+  unittestFlags = [
     "unittests/"
   ];
 
