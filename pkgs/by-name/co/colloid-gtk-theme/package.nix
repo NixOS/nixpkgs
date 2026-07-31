@@ -95,6 +95,9 @@ lib.checkListOfEnum "colloid-gtk-theme: theme variants"
       homepage = "https://github.com/vinceliuice/Colloid-gtk-theme";
       license = lib.licenses.gpl3Only;
       platforms = lib.platforms.unix;
-      maintainers = [ lib.maintainers.romildo ];
+      maintainers = [
+        lib.maintainers.chvp
+        lib.maintainers.romildo
+      ];
     };
   })
