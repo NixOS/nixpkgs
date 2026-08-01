@@ -9,7 +9,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.10.0";
 
   src = fetchFromGitHub {
-    owner = "TankerHQ";
+    owner = "your-tools";
     repo = "ruplacer";
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-Zvbb9pQpxbJZi0qcDU6f2jEgavl9cA7gIYU7NRXZ9fc=";
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Find and replace text in source files";
     mainProgram = "ruplacer";
-    homepage = "https://github.com/TankerHQ/ruplacer";
+    homepage = "https://github.com/your-tools/ruplacer";
     license = lib.licenses.bsd3;
   };
 })

@@ -9,7 +9,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.47.0";
 
   src = fetchFromGitHub {
-    owner = "RazrFalcon";
+    owner = "linebender";
     repo = "resvg";
     rev = "v${finalAttrs.version}";
     hash = "sha256-BCYjVOWFpOZm7ocmfszFpaBxnd96vhf3/yGlvAVRtCw=";
@@ -29,8 +29,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "SVG rendering library";
-    homepage = "https://github.com/RazrFalcon/resvg";
-    changelog = "https://github.com/RazrFalcon/resvg/blob/v${finalAttrs.version}/CHANGELOG.md";
+    homepage = "https://github.com/linebender/resvg";
+    changelog = "https://github.com/linebender/resvg/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     maintainers = [ ];
     mainProgram = "resvg";

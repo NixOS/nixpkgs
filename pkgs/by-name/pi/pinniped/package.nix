@@ -11,7 +11,7 @@ buildGoModule (finalAttrs: {
   version = "0.46.0";
 
   src = fetchFromGitHub {
-    owner = "vmware-tanzu";
+    owner = "vmware";
     repo = "pinniped";
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-C7N6iPD4caTUXR6gB+9sdfBlWyT1tfE8KwE5WaiUdQM=";
