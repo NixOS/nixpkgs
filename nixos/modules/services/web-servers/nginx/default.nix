@@ -1752,6 +1752,8 @@ in
       rotate = 26;
       compress = true;
       delaycompress = true;
+      # Run postrotate script only once after rotation of all log files:
+      sharedscripts = true;
       postrotate = "[ ! -f /var/run/nginx/nginx.pid ] || kill -USR1 `cat /var/run/nginx/nginx.pid`";
     };
   };

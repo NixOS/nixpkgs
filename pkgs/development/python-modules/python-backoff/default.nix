@@ -32,6 +32,10 @@ buildPythonPackage (finalAttrs: {
     responses
   ];
 
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn10Warning"
+  ];
+
   meta = {
     changelog = "https://github.com/python-backoff/backoff/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Python library providing function decorators for configurable backoff and retry";

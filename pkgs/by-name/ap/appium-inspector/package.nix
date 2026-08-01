@@ -15,7 +15,7 @@
 
 let
   electron = electron_41;
-  version = "2026.5.1";
+  version = "2026.7.1";
 in
 
 buildNpmPackage (finalAttrs: {
@@ -26,10 +26,10 @@ buildNpmPackage (finalAttrs: {
     owner = "appium";
     repo = "appium-inspector";
     tag = "v${version}";
-    hash = "sha256-SJlTTVTZ/zGIK7Nf35cZ62tdhevXC95MsbiQJCLiVtk=";
+    hash = "sha256-7pxXlY/aifrg4cuGZSgxONF+RPL8P7JcZ6Gobqv2nz4=";
   };
 
-  npmDepsHash = "sha256-2rjgKS1mIrjOg+YXuMaqKyEQt0utLA4DGxOs0oI4BaQ=";
+  npmDepsHash = "sha256-W9FWIHhtS2d9xBpIEGB8sWmDfcdyphL+0eCk1+8pu2s=";
   npmFlags = [ "--ignore-scripts" ];
 
   nativeBuildInputs = [

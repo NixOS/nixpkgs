@@ -1,0 +1,26 @@
+{
+    "description": "OVMF with AMD SEV-* support, direct kernel boot",
+    "interface-types": [
+        "uefi"
+    ],
+    "mapping": {
+        "device": "memory",
+        "filename": "@firmware@"
+    },
+    "targets": [
+        {
+            "architecture": "x86_64",
+            "machines": [
+                "pc-q35-*"
+            ]
+        }
+    ],
+    "features": [
+        "amd-sev",
+        "amd-sev-es",
+        "amd-sev-snp"
+    ],
+    "tags": [
+
+    ]
+}

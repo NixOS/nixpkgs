@@ -7,22 +7,20 @@
   opus,
   lib,
   stdenv,
-  # TODO: Clean up on `staging`
-  lld,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "concord-tui";
-  version = "2.4.1";
+  version = "2.4.5";
 
   src = fetchFromGitHub {
     owner = "chojs23";
     repo = "concord";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3c5jxpJrBr6vYnbcJIYD06d932Da94hXUZA5FLa3kkU=";
+    hash = "sha256-BLfNgIXTTYMr5pFmCBMfu4euKR96GAPLsGTW/AaqJjo=";
   };
 
-  cargoHash = "sha256-6iAyKsS+FoNCKkMvbL70vKSPoAaKQtUDiAQGaEMuxWk=";
+  cargoHash = "sha256-jaHDy/5e9BXXLRe3oc9g3JCCSg28bb1d2dMPkPJTkB4=";
 
   buildInputs = [
     opus
@@ -33,20 +31,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     cmake
-  ]
-  # TODO: Clean up on `staging`
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    lld
   ];
 
   __darwinAllowLocalNetworking = true;
 
   __structuredAttrs = true;
-
-  # TODO: Clean up on `staging`
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    NIX_CFLAGS_LINK = "-fuse-ld=${lib.getExe' lld "ld64.lld"}";
-  };
 
   passthru.updateScript = nix-update-script { };
 

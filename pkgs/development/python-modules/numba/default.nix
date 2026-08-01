@@ -8,6 +8,12 @@
   # nativeBuildInputs
   setuptools,
 
+  # sets NUMBA_NUM_THREADS and OMP_NUM_THREADS for packages
+  # invoking numba during checkPhase/installCheckPhase to
+  # avoid overloading builders with excessive parallelism
+  # See also: https://numba.readthedocs.io/en/stable/reference/envvars.html#threading-control
+  checkPhaseThreadLimitHook,
+
   # dependencies
   llvmlite,
   numpy,
@@ -36,7 +42,7 @@ let
   cudatoolkit = cudaPackages.cuda_nvcc;
 in
 buildPythonPackage (finalAttrs: {
-  version = "0.65.1";
+  version = "0.66.0";
   pname = "numba";
   pyproject = true;
 
@@ -52,7 +58,7 @@ buildPythonPackage (finalAttrs: {
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${finalAttrs.src.tag})"/' $out/numba/_version.py
     '';
-    hash = "sha256-DMmUyTElDFyMK4BUQ4EhDNmG43lOWQHurKbnSyhAs5k=";
+    hash = "sha256-qkljZWvd+1mwPm4okQBW8w0qCTQnEigM6QkZHN2iwyk=";
   };
 
   patches = [
@@ -102,6 +108,10 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     pytest-xdist
     writableTmpDirAsHomeHook
+  ];
+
+  propagatedNativeBuildInputs = [
+    checkPhaseThreadLimitHook
   ];
 
   # https://github.com/NixOS/nixpkgs/issues/255262

@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   meteocalc,
+  pyprojectVersionPatchHook,
   pytest-aiohttp,
   pytestCheckHook,
   setuptools,
@@ -22,6 +23,10 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   dependencies = [
     aiohttp

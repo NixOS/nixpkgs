@@ -24,15 +24,15 @@ stdenv.mkDerivation (
     # Using two URLs as the first one will break as soon as a new version is released
     srcs.bin = fetchurl {
       urls = [
-        "http://www.makemkv.com/download/makemkv-bin-${version}.tar.gz"
-        "http://www.makemkv.com/download/old/makemkv-bin-${version}.tar.gz"
+        "https://www.makemkv.com/download/makemkv-bin-${version}.tar.gz"
+        "https://www.makemkv.com/download/old/makemkv-bin-${version}.tar.gz"
       ];
       hash = "sha256-zuVt4LqlUxq+0WvYYnQtMI13K0q02uFu6GW/dPBKFgg=";
     };
     srcs.oss = fetchurl {
       urls = [
-        "http://www.makemkv.com/download/makemkv-oss-${version}.tar.gz"
-        "http://www.makemkv.com/download/old/makemkv-oss-${version}.tar.gz"
+        "https://www.makemkv.com/download/makemkv-oss-${version}.tar.gz"
+        "https://www.makemkv.com/download/old/makemkv-oss-${version}.tar.gz"
       ];
       hash = "sha256-hZAGNkjULsKpWLdFc9cCLw9MM05OT+fdU7cMbnSLpFM=";
     };

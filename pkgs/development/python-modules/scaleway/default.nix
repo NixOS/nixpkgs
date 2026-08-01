@@ -4,6 +4,7 @@
   fetchFromGitHub,
   nix-update-script,
   poetry-core,
+  pyprojectVersionPatchHook,
   scaleway-core,
 }:
 
@@ -24,6 +25,8 @@ buildPythonPackage (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/${finalAttrs.pname}";
 
   build-system = [ poetry-core ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [ scaleway-core ];
 

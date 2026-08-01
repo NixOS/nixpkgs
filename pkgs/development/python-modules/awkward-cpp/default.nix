@@ -11,6 +11,8 @@
 
   # dependencies
   numpy,
+
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -37,6 +39,8 @@ buildPythonPackage (finalAttrs: {
   dontUseCmakeConfigure = true;
 
   pythonImportsCheck = [ "awkward_cpp" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "CPU kernels and compiled extensions for Awkward Array";

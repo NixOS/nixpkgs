@@ -21,11 +21,11 @@ assert withConplay -> !libOnly;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "${lib.optionalString libOnly "lib"}mpg123";
-  version = "1.33.5";
+  version = "1.33.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/mpg123/mpg123-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-DX68jaCv88o4PIxrWmrb5ALuW7JWaFuMVJnzpzn51t0=";
+    hash = "sha256-kpp8GLpmK4knrtTeIprZroqytIBt0PMLkBE+sbTiGVo=";
   };
 
   outputs = [
@@ -81,13 +81,13 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = writeScript "update-mpg123" ''
       #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl pcre common-updater-scripts
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
       set -eu -o pipefail
 
       # Expect the text in format of '<a href="download/mpg123-1.32.6.tar.bz2">'
       new_version="$(curl -s https://mpg123.org/download.shtml |
-          pcregrep -o1 '<a href="download/mpg123-([0-9.]+).tar.bz2">')"
+          pcre2grep -o1 '<a href="download/mpg123-([0-9.]+).tar.bz2">')"
       update-source-version ${finalAttrs.pname} "$new_version"
     '';
   };

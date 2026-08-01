@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "dutctl";
-  version = "1.0.0-alpha.1-unstable-2026-07-05";
+  version = "1.0.0-alpha.1-unstable-2026-07-24";
 
   src = fetchFromGitHub {
     owner = "BlindspotSoftware";
     repo = "dutctl";
-    rev = "1ee4c9baee1b088154fd3b94cf1023ef88f8cd0a";
-    hash = "sha256-45C4ktDKiz4wkisKTSUCqlR5n5TI13IYPKAbsj5bekY=";
+    rev = "9be7f4dbc49fc9fc748ce06935619ce9a15f655d";
+    hash = "sha256-uQtH3zpqjTV2spStBorqpFX0KDFhuN178JHYCsSC8sQ=";
   };
 
-  vendorHash = "sha256-RJviv/FMfU6COdwUcsQb13cETAVOINYEGZNv5y4tKD0=";
+  vendorHash = "sha256-2Y2+ytXm17LQHulod8QIXtvAOaCMNrqj83PGbb78Uqg=";
 
   ldflags = [
     "-s"
@@ -36,6 +36,7 @@ buildGoModule (finalAttrs: {
   };
 
   __structuredAttrs = true;
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Unified device management for open firmware development";

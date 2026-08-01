@@ -13,7 +13,6 @@
   libxml2,
   libxklavier,
   libxtst,
-  gtk2,
   intltool,
   libxslt,
   at-spi2-core,
@@ -82,13 +81,14 @@ stdenv.mkDerivation (finalAttrs: {
     pythonEnv
     python3.pkgs.pygobject3
     libxtst
-    gtk2
   ];
 
   propagatedBuildInputs = [
     libgee
     libxklavier
   ];
+
+  configureFlags = [ "--enable-gtk2-module=no" ];
 
   postPatch = ''
     patchShebangs .

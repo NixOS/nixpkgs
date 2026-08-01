@@ -156,6 +156,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Qt based cross-platform GUI proxy configuration manager";
     homepage = "https://github.com/throneproj/Throne";
+    changelog = "https://github.com/throneproj/Throne/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     mainProgram = "Throne";
     maintainers = with lib.maintainers; [

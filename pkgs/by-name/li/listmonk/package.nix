@@ -17,7 +17,7 @@ buildGoModule (finalAttrs: {
     owner = "knadh";
     repo = "listmonk";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-eora/+zJf60trmANEqAhYAQXfEMifyw5gLPKcqBW46w=";
+    hash = "sha256-yLOs1vhTV/0zzq/2Rk5rJ3/1z+kE5xaYODM5NO06F6U=";
   };
 
   vendorHash = "sha256-t4l8872bniTmNIW4ias1gImURJgrR6htXkncqfrJ+AU=";

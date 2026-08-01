@@ -5,6 +5,7 @@
   fetchFromGitHub,
   buildPythonPackage,
   click,
+  defusedxml,
   joblib,
   regex,
   setuptools,
@@ -23,49 +24,53 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nltk";
-  version = "3.9.4";
+  version = "3.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nltk";
     repo = "nltk";
-    tag = finalAttrs.version;
-    hash = "sha256-kDfMiqXgLq91zzDjv/qDn0XwQkYRn2sITI6E4pgWe/8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1iflqb3cOyaviW3IostFCuJtZ9KBZI0n9dfKfqqbcO0=";
   };
 
   postPatch = ''
     # In the nix store we trust
     substituteInPlace nltk/pathsec.py \
-      --replace-fail 'if not (target == scoped_root or target.is_relative_to(scoped_root)):' 'if not (target == scoped_root or target.is_relative_to(scoped_root) or target.is_relative_to("/nix/store")):'
+      --replace-fail 'if not (target == scoped_root or target.is_relative_to(scoped_root)):' \
+                     'if not (target == scoped_root or target.is_relative_to(scoped_root) or target.is_relative_to("/nix/store")):' \
+      --replace-fail ' "/usr/share/nltk_data", ' ' "/usr/share/nltk_data", "/nix/store", '
   '';
 
   build-system = [ setuptools ];
 
   dependencies = [
     click
+    defusedxml
     joblib
     regex
     tqdm
   ];
 
-  # Use new passthru function to pass dependencies required for testing
   preInstallCheck = ''
     export NLTK_DATA=${
       nltk.dataDir (
         d: with d; [
           averaged-perceptron-tagger-eng
           averaged-perceptron-tagger-rus
+          bcp47
           brown
           cess-cat
           cess-esp
           conll2007
           floresta
           gutenberg
+          ieer
           inaugural
           indian
           large-grammars
           nombank-1-0
-          omw-1-4
+          omw-2-0
           pl196x
           porter-test
           ptb
@@ -114,9 +119,10 @@ buildPythonPackage (finalAttrs: {
   };
 
   meta = {
+    changelog = "https://github.com/nltk/nltk/blob/${finalAttrs.src.tag}/ChangeLog";
     description = "Natural Language Processing ToolKit";
     mainProgram = "nltk";
-    homepage = "http://nltk.org/";
+    homepage = "https://nltk.org/";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.bengsparks ];
   };

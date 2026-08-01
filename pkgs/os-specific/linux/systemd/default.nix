@@ -203,13 +203,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "261";
+  version = "261.1";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6IB1ZEQqQ0impwBhCaLZAEgMVkVFU61JDVlGotxNzGQ=";
+    hash = "sha256-4iOitWGdRmGgJjEXGWtq2lEhPtGguma+qrjTShrps2g=";
   };
 
   # PATCH POLICY
@@ -245,18 +245,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    substituteInPlace src/basic/path-util.h --replace "@defaultPathNormal@" "${placeholder "out"}/bin/"
+    substituteInPlace src/basic/path-util.h --replace-fail "@defaultPathNormal@" "${placeholder "out"}/bin/"
   ''
   + lib.optionalString withLibBPF ''
-    substituteInPlace meson.build \
-      --replace "find_program('clang'" "find_program('${stdenv.cc.targetPrefix}clang'"
+    substituteInPlace src/bpf/meson.build \
+      --replace-fail "find_program('clang'" "find_program('${stdenv.cc.targetPrefix}clang'"
   ''
   + lib.optionalString withUkify ''
     substituteInPlace src/ukify/ukify.py \
-      --replace \
+      --replace-fail \
       "'readelf'" \
       "'${targetPackages.stdenv.cc.bintools.targetPrefix}readelf'" \
-      --replace \
+      --replace-fail \
       "/usr/lib/systemd/boot/efi" \
       "$out/lib/systemd/boot/efi"
   ''
@@ -580,7 +580,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   preConfigure = ''
     substituteInPlace src/libsystemd/sd-journal/catalog.c \
-      --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
+      --replace-fail /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
   '';
 
   # These defines are overridden by CFLAGS and would trigger annoying
@@ -628,7 +628,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       # Fix reference to /bin/false in the D-Bus services.
       for i in $out/share/dbus-1/system-services/*.service; do
-        substituteInPlace $i --replace /bin/false ${coreutils}/bin/false
+        substituteInPlace $i --replace-fail /bin/false ${coreutils}/bin/false
       done
 
       # For compatibility with dependents that use sbin instead of bin.

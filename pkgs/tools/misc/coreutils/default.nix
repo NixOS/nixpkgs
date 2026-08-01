@@ -23,6 +23,7 @@
   openssl,
   withPrefix ? false,
   singleBinary ? "symlinks", # you can also pass "shebangs" or false
+  pkgsStatic,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus cannot use
@@ -42,6 +43,11 @@ let
     optionalString
     ;
   isCross = (stdenv.hostPlatform != stdenv.buildPlatform);
+  # stdbuf relies on an LD_PRELOAD shared library, so it is not built in
+  # static builds; drop it from the binlore override there.
+  #
+  # https://github.com/coreutils/coreutils/blob/6e812858bb8b5cc1a4c91b16502a3092ead1d72f/src/stdbuf.c#L389
+  stdbuf = optionalString (!stdenv.hostPlatform.isStatic) "stdbuf,";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "coreutils" + (optionalString (!minimal) "-full");
@@ -51,6 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://gnu/coreutils/coreutils-${finalAttrs.version}.tar.xz";
     hash = "sha256-OUAk7aCllVIXztqc0SAeZdyPo6opwpURNaSVIdV8PMM=";
   };
+
+  patches = [
+    ./CVE-2026-56391.patch
+    ./CVE-2026-56392.patch
+  ];
 
   postPatch = ''
     # The test tends to fail on btrfs, f2fs and maybe other unusual filesystems.
@@ -230,32 +241,35 @@ stdenv.mkDerivation (finalAttrs: {
       rm -r "$out/share"
     '';
 
-  passthru =
-    { }
-    // optionalAttrs (singleBinary != false) {
-      # everything in the single binary gets the same verdict, so we
-      # override _that case_ with verdicts from separate binaries.
-      #
-      # binlore only spots exec in runcon on some platforms (i.e., not
-      # darwin; see comment on inverse case below)
-      binlore.out = binlore.synthesize finalAttrs.finalPackage ''
-        execer can bin/${
-          if withPrefix then "g" else ""
-        }{chroot,env,install,nice,nohup,runcon,sort,split,stdbuf,timeout}
-        execer cannot bin/${
-          if withPrefix then "g" else ""
-        }{[,b2sum,base32,base64,basename,basenc,cat,chcon,chgrp,chmod,chown,cksum,comm,cp,csplit,cut,date,dd,df,dir,dircolors,dirname,du,echo,expand,expr,factor,false,fmt,fold,groups,head,hostid,id,join,kill,link,ln,logname,ls,md5sum,mkdir,mkfifo,mknod,mktemp,mv,nl,nproc,numfmt,od,paste,pathchk,pinky,pr,printenv,printf,ptx,pwd,readlink,realpath,rm,rmdir,seq,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum,shred,shuf,sleep,stat,stty,sum,sync,tac,tail,tee,test,touch,tr,true,truncate,tsort,tty,uname,unexpand,uniq,unlink,uptime,users,vdir,wc,who,whoami,yes}
-      '';
-    }
-    // optionalAttrs (singleBinary == false) {
-      # binlore only spots exec in runcon on some platforms (i.e., not
-      # darwin; I have a note that the behavior may need selinux?).
-      # hard-set it so people working on macOS don't miss cases of
-      # runcon until ofBorg fails.
-      binlore.out = binlore.synthesize finalAttrs.finalPackage ''
-        execer can bin/${if withPrefix then "g" else ""}runcon
-      '';
+  passthru = {
+    tests = {
+      static = pkgsStatic.coreutils;
     };
+  }
+  // optionalAttrs (singleBinary != false) {
+    # everything in the single binary gets the same verdict, so we
+    # override _that case_ with verdicts from separate binaries.
+    #
+    # binlore only spots exec in runcon on some platforms (i.e., not
+    # darwin; see comment on inverse case below)
+    binlore.out = binlore.synthesize finalAttrs.finalPackage ''
+      execer can bin/${
+        if withPrefix then "g" else ""
+      }{chroot,env,install,nice,nohup,runcon,sort,split,${stdbuf}timeout}
+      execer cannot bin/${
+        if withPrefix then "g" else ""
+      }{[,b2sum,base32,base64,basename,basenc,cat,chcon,chgrp,chmod,chown,cksum,comm,cp,csplit,cut,date,dd,df,dir,dircolors,dirname,du,echo,expand,expr,factor,false,fmt,fold,groups,head,hostid,id,join,kill,link,ln,logname,ls,md5sum,mkdir,mkfifo,mknod,mktemp,mv,nl,nproc,numfmt,od,paste,pathchk,pinky,pr,printenv,printf,ptx,pwd,readlink,realpath,rm,rmdir,seq,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum,shred,shuf,sleep,stat,stty,sum,sync,tac,tail,tee,test,touch,tr,true,truncate,tsort,tty,uname,unexpand,uniq,unlink,uptime,users,vdir,wc,who,whoami,yes}
+    '';
+  }
+  // optionalAttrs (singleBinary == false) {
+    # binlore only spots exec in runcon on some platforms (i.e., not
+    # darwin; I have a note that the behavior may need selinux?).
+    # hard-set it so people working on macOS don't miss cases of
+    # runcon until ofBorg fails.
+    binlore.out = binlore.synthesize finalAttrs.finalPackage ''
+      execer can bin/${if withPrefix then "g" else ""}runcon
+    '';
+  };
 
   meta = {
     homepage = "https://www.gnu.org/software/coreutils/";

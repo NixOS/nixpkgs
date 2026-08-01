@@ -2217,9 +2217,9 @@
   };
 
   qmljs = rec {
-    version = "0.3.0";
+    version = "0.3.1";
     url = "github:yuja/tree-sitter-qmljs?ref=${version}";
-    hash = "sha256-tV4lipey+OAQwygRFp9lQAzgCNiZzSu7p3Mr6CCBH1g=";
+    hash = "sha256-Yn3/adOETfPHBVCIVfI5qXUwC2wQr14pbhK2aUtdCiY=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
@@ -2556,9 +2556,9 @@
   };
 
   sshclientconfig = rec {
-    version = "2026.7.9";
+    version = "2026.7.16";
     url = "github:metio/tree-sitter-ssh-client-config?ref=${version}";
-    hash = "sha256-La1h6uJC5gUA84OAr3zBbQiR+AnrhcUhNf6r4HUpwhg=";
+    hash = "sha256-u0CcoXBiNAfiFJ+CV35Y7ZhmYEHmphDQWGTgaClX3gw=";
     meta = {
       license = lib.licenses.cc0;
       maintainers = with lib.maintainers; [

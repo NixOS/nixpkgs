@@ -15,21 +15,21 @@
 
 buildGoModule (finalAttrs: {
   pname = "anubis";
-  version = "1.25.0";
+  version = "1.26.2";
 
   src = fetchFromGitHub {
     owner = "TecharoHQ";
     repo = "anubis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9/XIwSMEmnS3L/Wzg6ABso7R6W3TYkJomC8aFMycxZo=";
+    hash = "sha256-yY8dwWyQy/N3A32MYtxLWAJCmR9rtSyzaYUHBNXRm/0=";
   };
 
-  vendorHash = "sha256-9CMD8Rn4q8b+hyrph+BqqS32ijZyJRNsop6ML7z5Zuk=";
+  vendorHash = "sha256-+NPwL4p0p/s74m1Ld0z2GEcsWk5FqhcLbHrTNP3yEzk=";
 
   npmDeps = fetchNpmDeps {
     name = "anubis-npm-deps";
     inherit (finalAttrs) src;
-    hash = "sha256-2U91Dt+ymspjYgTtgCjahCNr6fIs85TT/k+I8M2aC9s=";
+    hash = "sha256-SPoI66jy2XS4FM6BaJPt18dV1QM12nIOdeD5sAMaOzQ=";
   };
 
   nativeBuildInputs = [
@@ -58,7 +58,10 @@ buildGoModule (finalAttrs: {
   '';
 
   postPatch = ''
-    patchShebangs ./web/build.sh ./lib/challenge/preact/build.sh
+    patchShebangs \
+      ./web/build.sh \
+      ./lib/challenge/preact/build.sh \
+      ./lib/challenge/proofofwork/build.sh
   '';
 
   preBuild = ''
@@ -74,6 +77,8 @@ buildGoModule (finalAttrs: {
   preCheck = ''
     export DONT_USE_NETWORK=1
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   passthru = {
     tests = { inherit (nixosTests) anubis; };

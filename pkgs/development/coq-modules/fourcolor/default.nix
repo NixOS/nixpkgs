@@ -20,6 +20,7 @@ mkCoqDerivation {
   release."1.4.0".hash = "sha256-8TtNPEbp3uLAH+MjOKiTZHOjPb3vVYlabuqsdWxbg80=";
   release."1.4.1".hash = "sha256-0UASpo9CdpvidRv33BDWrevo+NSOhxLQFPCJAWPXf+s=";
   release."1.4.2".hash = "sha256-d5J8j8gi6siwCLevM6y8Hf2rTB/HEfh72LLk0Qlzr0c=";
+  release."1.4.3".hash = "sha256-9GWz7YsgPKoDkUok6nfHHT2GGLaB2oojYizKlt8BZAg=";
 
   inherit version;
   defaultVersion =
@@ -36,8 +37,9 @@ mkCoqDerivation {
     lib.switch
       [ coq.coq-version mathcomp.version ]
       [
-        (case (isGe "8.20") (isGe "2.4") "1.4.2")
-        (case (isGe "8.16") (isGe "2.0") "1.4.1")
+        (case (isGe "8.20") (isGe "2.5") "1.4.3")
+        (case (isGe "8.20") (range "2.4" "2.5") "1.4.2")
+        (case (isGe "8.16") (range "2.0" "2.4") "1.4.1")
         (case (isGe "8.16") "2.0.0" "1.3.0")
         (case (isGe "8.11") (range "1.12" "1.19") "1.2.5")
         (case (isGe "8.11") (range "1.11" "1.14") "1.2.4")

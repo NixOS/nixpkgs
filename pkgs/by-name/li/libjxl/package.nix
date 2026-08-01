@@ -31,7 +31,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libjxl";
-  version = "0.11.2";
+  version = "0.12.0";
 
   outputs = [
     "out"
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     owner = "libjxl";
     repo = "libjxl";
     tag = "v${version}";
-    hash = "sha256-L4/BY68ZBCpebQxryR7D1CxrsneYvw8B8EvW2mkF7bA=";
+    hash = "sha256-rJyvJo1ZveE1pvMErK9ilFQA0NXkD2ka93L+1gXeqf8=";
     # There are various submodules in `third_party/`.
     fetchSubmodules = true;
   };
@@ -69,7 +69,6 @@ stdenv.mkDerivation rec {
   # that the cmake build can apparently use:
   #     OpenGL/GLUT (for Examples -> comparison with sjpeg)
   #     viewer (see `cmakeFlags`)
-  #     plugins like for GDK and GIMP (see `cmakeFlags`)
 
   # Vendored libraries:
   # `libjxl` currently vendors many libraries as git submodules that they
@@ -127,7 +126,6 @@ stdenv.mkDerivation rec {
   ++ lib.optionals enablePlugins [
     # Enable plugins, such as:
     # * the `gdk-pixbuf` one, which allows applications like `eog` to load jpeg-xl files
-    # * the `gimp` one, which allows GIMP to load jpeg-xl files
     "-DJPEGXL_ENABLE_PLUGINS=ON"
   ]
   ++ lib.optionals stdenv.hostPlatform.isStatic [

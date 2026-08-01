@@ -28,15 +28,15 @@
 }:
 
 let
-  buildNum = "2025-12-08-1746";
+  buildNum = "2026-05-28-1806";
 in
 stdenv.mkDerivation {
   pname = "rgp";
-  version = "2.6.1";
+  version = "2.7";
 
   src = fetchurl {
     url = "https://gpuopen.com/download/RadeonDeveloperToolSuite-${buildNum}.tgz";
-    hash = "sha256-rfFZPA8DzgP5axSHToEBvhRTgWAejn/z0WlLMectya0=";
+    hash = "sha256-hMUAo72JVfDEv8Rp0/0YZDXX7p8ioVH40WtK/PQnRb8=";
   };
 
   nativeBuildInputs = [

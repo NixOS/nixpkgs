@@ -199,7 +199,8 @@
         && system != "riscv64-linux"
         # Exclude x86_64-freebsd because "Package ‘go-1.22.12-freebsd-amd64-bootstrap’ in /nix/store/0yw40qnrar3lvc5hax5n49abl57apjbn-source/pkgs/development/compilers/go/binary.nix:50 is not available on the requested hostPlatform"
         && system != "x86_64-freebsd"
-      ) (forAllSystems (system: (import ./ci { inherit system; }).fmt.pkg));
+        # TODO: revert to importing fmt.pkg directly from ./ci when support for 26.05 ends
+      ) (forAllSystems (system: (import ./shell.nix { inherit system; }).formatter));
 
       /**
         A nested structure of [packages](https://nix.dev/manual/nix/latest/glossary#package-attribute-set) and other values.

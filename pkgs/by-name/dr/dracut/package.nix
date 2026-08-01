@@ -38,6 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-2jdS7/LGuLSBBXv1R/o8yjgwdXl2l2wNbZWxq01wSb0";
   };
 
+  # Patch from https://github.com/dracut-ng/dracut/commit/11577739221ff38c1fd29abbba51a6c797376ed6 included in main branch.
+  # Adapted to version 111 (line number and small formatting diff)
+  patches = [
+    ./CVE-2026-6893.patch
+  ];
+
   strictDeps = true;
   __structuredAttrs = true;
 

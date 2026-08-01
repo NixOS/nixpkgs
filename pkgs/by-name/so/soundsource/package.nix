@@ -1,30 +1,29 @@
 {
   lib,
   stdenvNoCC,
-  fetchurl,
-  unzip,
+  fetchzip,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "soundsource";
-  version = "6.0.2";
+  version = "6.1.0";
 
-  src = fetchurl {
-    url = "https://web.archive.org/web/20251220113913/https://cdn.rogueamoeba.com/soundsource/download/SoundSource.zip";
-    hash = "sha256-tzgGUYaY6mIZXs3xxGC3b3AoJ/DcaESYr49zcDS7+Fo=";
+  src = fetchzip {
+    url = "https://web.archive.org/web/20260724150017/https://cdn.rogueamoeba.com/soundsource/download/SoundSource.zip";
+    hash = "sha256-C7VvtREU7NA27N9VRQ+ktU6iTQL5wWGEND+3oG6jyII=";
   };
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ unzip ];
-
   installPhase = ''
     runHook preInstall
 
-    mkdir -p "$out/Applications"
-    unzip -d "$out/Applications" $src
+    mkdir -p "$out/Applications/SoundSource.app"
+    cp -R $src/. "$out/Applications/SoundSource.app/"
 
     runHook postInstall
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     changelog = "https://rogueamoeba.com/support/releasenotes/?product=SoundSource";
@@ -34,6 +33,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       emilytrau
       _4evy
+      dfjay
     ];
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

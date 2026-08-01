@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "FTXUI_BUILD_EXAMPLES" false)
     (lib.cmakeBool "FTXUI_BUILD_DOCS" true)
-    (lib.cmakeBool "FTXUI_BUILD_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "FTXUI_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   meta = {

@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-multipart";
-  version = "0.0.30";
+  version = "0.0.32";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kludex";
     repo = "python-multipart";
     tag = finalAttrs.version;
-    hash = "sha256-qW/OkOaM+7sN6+mxO5tm6tuDDJ/c703XDNqo6i6YnXo=";
+    hash = "sha256-zw6SHzbbjyRCGfUldxdki+wKwmTAgmd9ZAu/2zU+pFw=";
   };
 
   build-system = [ hatchling ];

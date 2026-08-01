@@ -7,20 +7,20 @@
   aiohttp,
   websocket-client,
   beautifulsoup4,
-  pytestCheckHook,
+  pytest9_0CheckHook,
   pytest-homeassistant-custom-component,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "AN3Orik";
   domain = "systemair";
-  version = "1.0.29";
+  version = "1.0.36";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "systemair";
     tag = "v${version}";
-    hash = "sha256-qpwF1HZZ8pEDywkFij9ipF3BPFe3oAj8wQKILNuKoHc=";
+    hash = "sha256-QL3R9mDPaQrFneBKSP8arZL1xxqmz7vp1zGn0eYBrj4=";
   };
 
   ignoreVersionRequirement = [
@@ -36,7 +36,7 @@ buildHomeAssistantComponent rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pytest9_0CheckHook
     pytest-homeassistant-custom-component
   ];
 

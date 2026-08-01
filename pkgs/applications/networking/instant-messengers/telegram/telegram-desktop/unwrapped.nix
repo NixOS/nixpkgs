@@ -34,7 +34,6 @@
   libjxl,
   libicns,
   apple-sdk_15,
-  llvmPackages,
   nix-update-script,
 }:
 
@@ -66,11 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     gobject-introspection
-  ]
-  # Work around ld64's libc++ hardening issue causing Trace/BPT trap: 5
-  # TODO: Remove once nixpkgs#536365 reaches this branch.
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    llvmPackages.lld
   ];
 
   buildInputs = [
@@ -106,12 +100,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   dontWrapQtApps = true;
-
-  # Work around ld64's libc++ hardening issue causing Trace/BPT trap: 5
-  # TODO: Remove once nixpkgs#536365 reaches this branch.
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    NIX_CFLAGS_LINK = "-fuse-ld=lld";
-  };
 
   cmakeFlags = [
     # We're allowed to used the API ID of the Snap package:

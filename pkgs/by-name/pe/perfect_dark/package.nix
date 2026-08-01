@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "perfect-dark-pc-port";
     repo = "perfect_dark";
     rev = "514bf7affd3259b7919165201342ff81a026d92c";
-    hash = "sha256-J0n3hBxNZeLaFcR6NMIHO9QWEpKje5aORZOwn4vJG6M=";
+    hash = "sha256-HjkVk7AJFTpWE2RqQTwEp6vUzocIjMp7xs8c6Az7CBo=";
 
     postFetch = ''
       pushd $out

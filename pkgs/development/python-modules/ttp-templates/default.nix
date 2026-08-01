@@ -4,6 +4,7 @@
   fetchFromGitHub,
   poetry-core,
   pydantic,
+  pyprojectVersionPatchHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -18,7 +19,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-W6F0/CGm713HhCtgqv+tEDm5mlkx0JJRmnUc9j+Fnvs=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   dependencies = [ pydantic ];
 

@@ -42,6 +42,29 @@ let
 in
 
 let
+  hasSlashSuffix = hasSuffix "/";
+  isAbsolute = hasPrefix "/";
+
+  # normalisePath adds a slash at the end of the path if it didn't already
+  # have one.
+  #
+  # The reason slashes are added at the end of each path is to prevent `b`
+  # from accidentally depending on `a` in cases like
+  #    a = { mountPoint = "/aaa"; ... }
+  #    b = { device     = "/aaaa"; ... }
+  # Here a.mountPoint *is* a prefix of b.device even though a.mountPoint is
+  # *not* a parent of b.device. If we add a slash at the end of each string,
+  # though, this is not a problem: "/aaa/" is not a prefix of "/aaaa/".
+  normalisePath = path: "${path}${optionalString (!hasSlashSuffix path) "/"}";
+  normalise =
+    mount:
+    mount
+    // {
+      device = normalisePath (toString mount.device);
+      mountPoint = normalisePath mount.mountPoint;
+      depends = map normalisePath mount.depends;
+    };
+
   utils = rec {
 
     # Copy configuration files to avoid having the entire sources in the system closure
@@ -71,29 +94,8 @@ let
     fsBefore =
       a: b:
       let
-        # normalisePath adds a slash at the end of the path if it didn't already
-        # have one.
-        #
-        # The reason slashes are added at the end of each path is to prevent `b`
-        # from accidentally depending on `a` in cases like
-        #    a = { mountPoint = "/aaa"; ... }
-        #    b = { device     = "/aaaa"; ... }
-        # Here a.mountPoint *is* a prefix of b.device even though a.mountPoint is
-        # *not* a parent of b.device. If we add a slash at the end of each string,
-        # though, this is not a problem: "/aaa/" is not a prefix of "/aaaa/".
-        normalisePath = path: "${path}${optionalString (!(hasSuffix "/" path)) "/"}";
-        normalise =
-          mount:
-          mount
-          // {
-            device = normalisePath (toString mount.device);
-            mountPoint = normalisePath mount.mountPoint;
-            depends = map normalisePath mount.depends;
-          };
-
         a' = normalise a;
         b' = normalise b;
-
       in
       hasPrefix a'.mountPoint b'.device
       || hasPrefix a'.mountPoint b'.mountPoint
@@ -116,7 +118,6 @@ let
       in
       s:
       let
-        isAbsolute = hasPrefix "/" s;
         # path_simplify(): collapse duplicate slashes and drop "." components.
         rawComponents = filter (c: c != "" && c != ".") (splitString "/" s);
         # systemd accepts ".." only where it is redundant: a leading ".." in an
@@ -129,7 +130,7 @@ let
               acc: c:
               if c == ".." then
                 # A leading ".." in an absolute path is the only redundant case.
-                if isAbsolute && acc.components == [ ] then acc else acc // { normalized = false; }
+                if isAbsolute s && acc.components == [ ] then acc else acc // { normalized = false; }
               else
                 acc // { components = acc.components ++ [ c ]; }
             )
@@ -145,7 +146,7 @@ let
           else if simplified.components != [ ] then
             concatStringsSep "/" simplified.components
           # The root directory, and - matching systemd-escape - the empty string.
-          else if isAbsolute || s == "" then
+          else if isAbsolute s || s == "" then
             "/"
           # A relative path that reduces to nothing (e.g. "."), which has no
           # valid escaping.

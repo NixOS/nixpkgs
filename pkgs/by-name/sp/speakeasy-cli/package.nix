@@ -11,7 +11,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "speakeasy-cli";
-  version = "1.789.0";
+  version = "1.791.0";
 
   sourceRoot = ".";
   src =
@@ -33,15 +33,15 @@ stdenv.mkDerivation (finalAttrs: {
     sources = {
       "x86_64-linux" = fetchurl {
         url = "https://github.com/speakeasy-api/speakeasy/releases/download/v${finalAttrs.version}/speakeasy_linux_amd64.zip";
-        hash = "sha256-8QEtlte0PtbCVZjvcBd16zJf3weVju5nsS+PrDCMMl8=";
+        hash = "sha256-8eIMGDHVxwEUFJsfI/hXchExensgpY+w0wDT04ud/D8=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://github.com/speakeasy-api/speakeasy/releases/download/v${finalAttrs.version}/speakeasy_darwin_arm64.zip";
-        hash = "sha256-UC9YUPKeUoe1C9x5sK6mO7BXBNQTYkvyKi42L3q3/Eg=";
+        hash = "sha256-jWhcXYMV5RIPAUtLQ4IzTCZfZzDrnBG5ogZQECdf9L4=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://github.com/speakeasy-api/speakeasy/releases/download/v${finalAttrs.version}/speakeasy_linux_arm64.zip";
-        hash = "sha256-V4e6tZWd1iqpOeVbgefIlHxWuWjRVqS3zSY62FJwOF8=";
+        hash = "sha256-hUcja70HeWZOmJJM6ecLBF+FHWW4mJaVi8mXgl315zE=";
       };
     };
     updateScript = writeShellScript "update-speakeasy" ''

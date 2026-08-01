@@ -113,6 +113,11 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
+      environment = rec {
+        XDG_CACHE_HOME = "/var/cache/${config.systemd.services.llama-swap.serviceConfig.CacheDirectory}";
+        LLAMA_CACHE = "${XDG_CACHE_HOME}/huggingface/hub";
+      };
+
       serviceConfig = {
         Type = "exec";
         ExecStart = "${lib.getExe cfg.package} ${
@@ -129,6 +134,8 @@ in
         }";
         Restart = "on-failure";
         RestartSec = 3;
+
+        CacheDirectory = "llama-swap";
 
         # for GPU acceleration
         PrivateDevices = false;

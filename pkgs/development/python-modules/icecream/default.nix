@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "icecream";
-  version = "2.1.10";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gruns";
     repo = "icecream";
     tag = "v${version}";
-    hash = "sha256-5PFl+DIsWGbh2VR+xW/L9fYBF0VCo1B10b+mzsq85As=";
+    hash = "sha256-8y109lTvZS50sBNzsgxxyIDf5w3gAou7RK1NxiGIziQ=";
   };
 
   build-system = [ setuptools ];

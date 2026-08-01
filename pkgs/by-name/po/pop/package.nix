@@ -4,6 +4,8 @@
   buildGoModule,
   installShellFiles,
   fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
@@ -39,6 +41,13 @@ buildGoModule (finalAttrs: {
       --fish <($out/bin/pop completion fish) \
       --zsh <($out/bin/pop completion zsh)
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Send emails from your terminal";

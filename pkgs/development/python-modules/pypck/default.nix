@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-timeout,
   pytestCheckHook,
@@ -21,9 +22,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-b8uTY4UtyhKN7JDvu/wC1jXAN/oKs2cJ6sSRBC22vS0=";
   };
 
-  postPatch = ''
-    echo "${finalAttrs.version}" > VERSION
-  '';
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   build-system = [ setuptools ];
 

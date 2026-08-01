@@ -26,13 +26,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "v2rayn";
-  version = "7.22.2";
+  version = "7.24.3";
 
   src = fetchFromGitHub {
     owner = "2dust";
     repo = "v2rayN";
     tag = finalAttrs.version;
-    hash = "sha256-MRhJ5l+G97mBBRQzir2s5TQhgzuIeGnOIFszVK1po3w=";
+    hash = "sha256-0barNMY2kiUMmwxgp81+y9gASSAo/3zsNOdwECssF8Q=";
     fetchSubmodules = true;
   };
 
@@ -112,7 +112,7 @@ buildDotnetModule (finalAttrs: {
     homepage = "https://github.com/2dust/v2rayN";
     mainProgram = "v2rayN";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ andrewzah ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

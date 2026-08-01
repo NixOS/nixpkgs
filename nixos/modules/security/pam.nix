@@ -904,9 +904,11 @@ let
 
         text =
           let
+            hasSpaceInfix = lib.hasInfix " ";
+            escapeEndingBrackets = lib.replaceStrings [ "]" ] [ "\\]" ];
             # Formats a string for use in `module-arguments`. See `man pam.conf`.
             formatModuleArgument =
-              token: if lib.hasInfix " " token then "[${lib.replaceStrings [ "]" ] [ "\\]" ] token}]" else token;
+              token: if hasSpaceInfix token then "[${escapeEndingBrackets token}]" else token;
 
             formatRules =
               type:
@@ -1428,7 +1430,6 @@ let
                 modulePath = config.security.pam.pam_unixModulePath;
                 settings = {
                   nullok = true;
-                  yescrypt = lib.mkIf config.security.pam.enableLegacySettings true;
                 };
               }
               {

@@ -1703,6 +1703,9 @@ let
 
           shampoo = ignoreCompilationError super.shampoo; # elisp error
 
+          # missing optional dependencies
+          shexc-ts-mode = addPackageRequires super.shexc-ts-mode [ self.yaml ];
+
           # missing optional dependencies and one of them (mew) is not on any ELPA
           shimbun = ignoreCompilationError (
             addPackageRequires super.shimbun [

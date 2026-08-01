@@ -5,7 +5,7 @@
   fetchFromGitHub,
 
   # build-system
-  cython_3_1,
+  cython,
   meson-python,
   meson,
   pkg-config,
@@ -93,7 +93,7 @@ let
     '';
 
     build-system = [
-      cython_3_1
+      cython
       meson-python
       meson
       numpy

@@ -5,6 +5,7 @@
   fetchFromGitHub,
   modbus-tk,
   poetry-core,
+  pyprojectVersionPatchHook,
   pyserial,
   setuptools,
 }:
@@ -24,6 +25,10 @@ buildPythonPackage rec {
   build-system = [
     poetry-core
     setuptools
+  ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
   ];
 
   dependencies = [

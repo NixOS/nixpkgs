@@ -21,7 +21,7 @@
   lua,
   luajit,
   openssl,
-  pcre,
+  pcre2,
   ragel,
   sqlite,
   vectorscan,
@@ -46,13 +46,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rspamd";
-  version = "4.1.0";
+  version = "4.1.2";
 
   src = fetchFromGitHub {
     owner = "rspamd";
     repo = "rspamd";
     tag = finalAttrs.version;
-    hash = "sha256-QAeh8SwUwGTGmbbFlJyrprXY0quk4grP/zA/KMQQBdo=";
+    hash = "sha256-LqFLzOcLyZeDT5kRlENmyTzUhyVC0HBhoSKInMFpqZA=";
   };
 
   nativeBuildInputs = [
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsodium
     (if withLuaJIT then luajit else lua)
     openssl
-    pcre
+    pcre2
     ragel
     sqlite
     vectorscan
@@ -92,8 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool' "ENABLE_HYPERSCAN" true)
     (cmakeBool' "ENABLE_JEMALLOC" true)
     (cmakeBool' "ENABLE_LUAJIT" withLuaJIT)
-    # pcre2 jit seems to cause crashes: https://github.com/NixOS/nixpkgs/pull/181908
-    (cmakeBool' "ENABLE_PCRE2" false)
+    (cmakeBool' "ENABLE_PCRE2" true)
     # doctest 2.5.0 compat problems https://github.com/rspamd/rspamd/issues/5994
     (cmakeBool' "SYSTEM_DOCTEST" false)
     (cmakeBool' "SYSTEM_XXHASH" true)

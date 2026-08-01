@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
+  createSymlinks ? true,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stash-clipboard";
@@ -18,6 +19,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-iXL3G1H8tNS1oPAoEvvx7qwWUef95NBU3dwlEe+34zw=";
 
   __structuredAttrs = true;
+
+  postInstall = lib.optionalString createSymlinks ''
+    mkdir -p $out
+    for bin in stash-copy stash-paste wl-copy wl-paste; do
+      ln -sf $out/bin/stash $out/bin/$bin
+    done
+  '';
 
   passthru.updateScript = nix-update-script { };
 

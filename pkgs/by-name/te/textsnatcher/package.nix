@@ -21,10 +21,13 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "textsnatcher";
   version = "2.0.0";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "RajSolai";
     repo = "TextSnatcher";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-phqtPjwKB5BoCpL+cMeHvRLL76ZxQ5T74cpAsgN+/JM=";
   };
 

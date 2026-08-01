@@ -5,7 +5,6 @@
   autoreconfHook,
   pkg-config,
   cairo,
-  gtk2,
   poppler,
 }:
 
@@ -27,7 +26,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     cairo
     poppler
-    gtk2
   ];
 
   meta = {

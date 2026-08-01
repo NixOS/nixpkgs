@@ -12,6 +12,9 @@
   pybind11,
   torch,
 
+  # build-system
+  setuptools_80,
+
   # dependencies
   addict,
   mmengine,
@@ -79,6 +82,10 @@ buildPythonPackage (finalAttrs: {
       libcusparse # cusparse.h
     ]
   );
+
+  # https://github.com/open-mmlab/mmengine/issues/1616
+  # also applies here
+  build-system = [ setuptools_80 ];
 
   dependencies = [
     addict

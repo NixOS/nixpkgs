@@ -44,11 +44,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_examples" ];
 
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn10Warning"
+  ];
+
   disabledTests = [
     # Fails with AssertionError because formatting is different than expected
     "test_black_error"
     "test_black_error_dot_space"
     "test_black_error_multiline"
+    # Breaks with ruff 0.16.
+    # https://github.com/pydantic/pytest-examples/issues/69
+    "test_ruff_ok"
+    "test_ruff_error"
+    "test_ruff_config"
   ];
 
   disabledTestPaths = [

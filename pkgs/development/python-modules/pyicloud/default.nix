@@ -15,7 +15,7 @@
   pythonAtLeast,
   requests,
   rich,
-  setuptools,
+  setuptools_80,
   setuptools-scm,
   srp,
   tinyhtml,
@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   build-system = [
-    setuptools
+    setuptools_80
     setuptools-scm
   ];
 
@@ -53,6 +53,8 @@ buildPythonPackage (finalAttrs: {
     tinyhtml
     tzlocal
   ];
+
+  pythonRelaxDeps = [ "tzlocal" ];
 
   optional-dependencies = {
     cli = [

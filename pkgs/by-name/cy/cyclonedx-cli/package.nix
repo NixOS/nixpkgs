@@ -7,16 +7,16 @@
 
 buildDotnetModule rec {
   pname = "cyclonedx-cli";
-  version = "0.30.0";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-cli";
     tag = "v${version}";
-    hash = "sha256-a9jUJqj/h2u2SrIQkQV8aFSzys+RVEI2yNlHTJpll+M=";
+    hash = "sha256-XP6Zz9JITIw6xUefOkLLjoHUDsnhsOKdtY5S5xbkejU=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
   nugetDeps = ./deps.json;
 
   preFixup = ''

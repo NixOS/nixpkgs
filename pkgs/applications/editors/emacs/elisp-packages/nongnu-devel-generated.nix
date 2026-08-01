@@ -75,10 +75,10 @@
     elpaBuild {
       pname = "aidermacs";
       ename = "aidermacs";
-      version = "1.7.0.20260521.153004";
+      version = "1.9.0.20260719.1";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/aidermacs-1.7.0.20260521.153004.tar";
-        sha256 = "11pw6absa9nj0ps8n17jzsqdnajk1cdz7rv6lnp2ibfyfg6vr03c";
+        url = "https://elpa.nongnu.org/nongnu-devel/aidermacs-1.9.0.20260719.1.tar";
+        sha256 = "1rian9r2vvdnrk0hqmrgpsp2lbi7ci5gr8jzg9ghgpkz7bjsa8w1";
       };
       packageRequires = [
         compat
@@ -269,10 +269,10 @@
     elpaBuild {
       pname = "auto-dim-other-buffers";
       ename = "auto-dim-other-buffers";
-      version = "2.2.1.0.20250116.140242";
+      version = "2.2.2.0.20260624.0";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/auto-dim-other-buffers-2.2.1.0.20250116.140242.tar";
-        sha256 = "07v5n7d3whk79by6xwd1gak1m73k4zpcscwfminfidj3f6rmkj92";
+        url = "https://elpa.nongnu.org/nongnu-devel/auto-dim-other-buffers-2.2.2.0.20260624.0.tar";
+        sha256 = "1kpglnqss61dx9px0v2agbnfnjymjynslr31mpc73p6qjv0fqgcv";
       };
       packageRequires = [ ];
       meta = {
@@ -333,10 +333,10 @@
     elpaBuild {
       pname = "bash-completion";
       ename = "bash-completion";
-      version = "3.2.10.20260325.162703";
+      version = "3.2.1snapshot0.20260325.20";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/bash-completion-3.2.10.20260325.162703.tar";
-        sha256 = "0jfad1l564dz5w9n980d0yvf7ivbp570vapwx451h74f3g9xdcx1";
+        url = "https://elpa.nongnu.org/nongnu-devel/bash-completion-3.2.1snapshot0.20260325.20.tar";
+        sha256 = "1ircxf1kgdjbrkx1i16z3lv62vbdsspyhl6hh589827031lsz0sj";
       };
       packageRequires = [ ];
       meta = {
@@ -543,10 +543,10 @@
     elpaBuild {
       pname = "caml";
       ename = "caml";
-      version = "4.100.20250227.123439";
+      version = "4.10snapshot0.20250227.11";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/caml-4.100.20250227.123439.tar";
-        sha256 = "0niymrn7d4gh5bd7wgrpbfh8r7d8i455ihr0i4lgs2v7xrgzc5ci";
+        url = "https://elpa.nongnu.org/nongnu-devel/caml-4.10snapshot0.20250227.11.tar";
+        sha256 = "06r646gvwkqmsiiln434c6x6w17f8in0rqaymxpgyfhrxmx6skbb";
       };
       packageRequires = [ ];
       meta = {
@@ -566,10 +566,10 @@
     elpaBuild {
       pname = "casual";
       ename = "casual";
-      version = "2.16.2.0.20260609.0";
+      version = "2.17.1.0.20260718.0";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/casual-2.16.2.0.20260609.0.tar";
-        sha256 = "1n3br77c56psicqs394kdgzlmsxbzzbm5w7bm0g3pkz5kq1jh5bh";
+        url = "https://elpa.nongnu.org/nongnu-devel/casual-2.17.1.0.20260718.0.tar";
+        sha256 = "031vpnhf498lic2ngh9bmg0917561dsnrn3apsdv0id3rl7vsd35";
       };
       packageRequires = [
         csv-mode
@@ -619,10 +619,10 @@
     elpaBuild {
       pname = "cider";
       ename = "cider";
-      version = "1.23.0.20260624.34";
+      version = "2.0.1snapshot0.20260718.7";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/cider-1.23.0.20260624.34.tar";
-        sha256 = "0p56g5ni3w6rlajqp368zi6gw4jp0c0s5786fh04iv0kyqipw60p";
+        url = "https://elpa.nongnu.org/nongnu-devel/cider-2.0.1snapshot0.20260718.7.tar";
+        sha256 = "1y5bp14z67xky44nv419hwjry2n0md2ff54pi8mnfffcd0ikvp97";
       };
       packageRequires = [
         clojure-mode
@@ -649,10 +649,10 @@
     elpaBuild {
       pname = "clojure-mode";
       ename = "clojure-mode";
-      version = "5.23.0.0.20260615.3";
+      version = "5.23.0.0.20260709.7";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/clojure-mode-5.23.0.0.20260615.3.tar";
-        sha256 = "03sfdnyp7m9mvz55mdvp62wkjklp5nr4xrmrac5z5gvjwviqhcva";
+        url = "https://elpa.nongnu.org/nongnu-devel/clojure-mode-5.23.0.0.20260709.7.tar";
+        sha256 = "0rw17p4kgifzyxz393say6dbv5m5csvfwbyj9l96cyi9x71llz19";
       };
       packageRequires = [ ];
       meta = {
@@ -670,10 +670,10 @@
     elpaBuild {
       pname = "clojure-ts-mode";
       ename = "clojure-ts-mode";
-      version = "0.6.0.0.20260616.45";
+      version = "0.6.0.0.20260709.48";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/clojure-ts-mode-0.6.0.0.20260616.45.tar";
-        sha256 = "01vnjim6l8c6b6h6sgbznwssyqzr183j983i2p9s5gwpphcwi3qz";
+        url = "https://elpa.nongnu.org/nongnu-devel/clojure-ts-mode-0.6.0.0.20260709.48.tar";
+        sha256 = "0ia909an1q6zig3ysvnjf6nrv0gyz7jm7k3xzqfnqb0idm0sllx7";
       };
       packageRequires = [ ];
       meta = {
@@ -712,10 +712,10 @@
     elpaBuild {
       pname = "cond-let";
       ename = "cond-let";
-      version = "1.1.2.0.20260601.0";
+      version = "1.1.3.0.20260701.0";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/cond-let-1.1.2.0.20260601.0.tar";
-        sha256 = "0yqnwc5xv7aqazrr3g921lclrc6pnbaf1h3qv1qm8qxbvz7z76vd";
+        url = "https://elpa.nongnu.org/nongnu-devel/cond-let-1.1.3.0.20260701.0.tar";
+        sha256 = "1swmpvpx2437js3vn93vnfj5aqnwaf1xxw1ynyr0i2g4nr27qc7s";
       };
       packageRequires = [ ];
       meta = {
@@ -735,10 +735,10 @@
     elpaBuild {
       pname = "consult-flycheck";
       ename = "consult-flycheck";
-      version = "1.2.0.20260605.0";
+      version = "1.2.0.20260628.1";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/consult-flycheck-1.2.0.20260605.0.tar";
-        sha256 = "0kyhr3wzcdzjacda9hf07h0lrgayzacv8ly3hpnrvxq0gyjk9sk8";
+        url = "https://elpa.nongnu.org/nongnu-devel/consult-flycheck-1.2.0.20260628.1.tar";
+        sha256 = "0vffihzsnpnjcfkj2gc9qyx4hh274zhfq3nsgddygsl7dcbjv8xp";
       };
       packageRequires = [
         consult
@@ -785,10 +785,10 @@
     elpaBuild {
       pname = "crux";
       ename = "crux";
-      version = "0.6.0.20260315.62204";
+      version = "0.6.0snapshot0.20260315.12";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/crux-0.6.0.20260315.62204.tar";
-        sha256 = "0sbv5m22fgn5444ck8j0l9zvi8m8x7jv46z2zl06r6139s8m4l81";
+        url = "https://elpa.nongnu.org/nongnu-devel/crux-0.6.0snapshot0.20260315.12.tar";
+        sha256 = "09anj5a7p0waqyg0cng6x8231078xk4p6ig0ayancspbgyi9yp4d";
       };
       packageRequires = [ ];
       meta = {
@@ -914,10 +914,10 @@
     elpaBuild {
       pname = "datetime";
       ename = "datetime";
-      version = "0.10.30.20250203.204701";
+      version = "0.10.3snapshot0.20250203.0";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/datetime-0.10.30.20250203.204701.tar";
-        sha256 = "07c2wr4wdfp94hdiaxfzpcic80yckw32db9ay83gb21jy2rvys91";
+        url = "https://elpa.nongnu.org/nongnu-devel/datetime-0.10.3snapshot0.20250203.0.tar";
+        sha256 = "0d3vi2fg17rv4id78jdq9xv44skc1ndkajq9plf6x9bsgbbf3mcz";
       };
       packageRequires = [ extmap ];
       meta = {
@@ -978,10 +978,10 @@
     elpaBuild {
       pname = "devil";
       ename = "devil";
-      version = "0.7.3.0.20240129.2809";
+      version = "0.7.0beta3.0.20240129.11";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/devil-0.7.3.0.20240129.2809.tar";
-        sha256 = "0gqmp1x6li3g7fvy3aydm1smlx587g59d9fwv5ci3z5ik8cb98h8";
+        url = "https://elpa.nongnu.org/nongnu-devel/devil-0.7.0beta3.0.20240129.11.tar";
+        sha256 = "174wkr002wif8h62dlj34c5h7a1a52zs097n8flncm014l6m3y3i";
       };
       packageRequires = [ ];
       meta = {
@@ -999,10 +999,10 @@
     elpaBuild {
       pname = "diff-ansi";
       ename = "diff-ansi";
-      version = "0.2.0.20260524.93804";
+      version = "0.2.0.20260713.62";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/diff-ansi-0.2.0.20260524.93804.tar";
-        sha256 = "1wjvyhs8lfq5fszxlmrjwpw3spa3qq9dn7wmh0m0ilavmnql492v";
+        url = "https://elpa.nongnu.org/nongnu-devel/diff-ansi-0.2.0.20260713.62.tar";
+        sha256 = "0gxf2cjk96c5kx80qsn4w9ckg738zis2hhvbp26dgzkppmwxdwyk";
       };
       packageRequires = [ ];
       meta = {
@@ -1021,10 +1021,10 @@
     elpaBuild {
       pname = "dirvish";
       ename = "dirvish";
-      version = "2.3.0.0.20250504.80741";
+      version = "2.3.0.0.20260716.9";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/dirvish-2.3.0.0.20250504.80741.tar";
-        sha256 = "0h8ap8bnqy2czvgkc71l49ms3kwk8lciz0ydzi2yy5xgh5pvs71k";
+        url = "https://elpa.nongnu.org/nongnu-devel/dirvish-2.3.0.0.20260716.9.tar";
+        sha256 = "0yr5x846v1zynyacfpgn8zhhrzsw5qw3fqnr1w9cscljzfwlajs8";
       };
       packageRequires = [ compat ];
       meta = {
@@ -1084,10 +1084,10 @@
     elpaBuild {
       pname = "dracula-theme";
       ename = "dracula-theme";
-      version = "1.8.3.0.20260519.113056";
+      version = "1.8.3.0.20260701.10";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/dracula-theme-1.8.3.0.20260519.113056.tar";
-        sha256 = "0jw288i092zgfkkazxsmx60va9fbklb2y7awcq2fwpbph7k14w4r";
+        url = "https://elpa.nongnu.org/nongnu-devel/dracula-theme-1.8.3.0.20260701.10.tar";
+        sha256 = "0m26r1swffj2ax3rl3yikgqi2rq796y8vwazisfsb1lsx06hwyyn";
       };
       packageRequires = [ ];
       meta = {
@@ -1307,10 +1307,10 @@
     elpaBuild {
       pname = "elfeed";
       ename = "elfeed";
-      version = "4.0.1.0.20260623.15";
+      version = "4.1.0.0.20260714.9";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/elfeed-4.0.1.0.20260623.15.tar";
-        sha256 = "1l9zizafja49r9kmn85qv3sfwh4kpp44yvz33b6gfrj06gn1mppf";
+        url = "https://elpa.nongnu.org/nongnu-devel/elfeed-4.1.0.0.20260714.9.tar";
+        sha256 = "05y0j3hmz1ch2fsv4gryf6d4ygk1xc5vh6zi5fn7ydyxkp49pnqr";
       };
       packageRequires = [ compat ];
       meta = {
@@ -1331,10 +1331,10 @@
     elpaBuild {
       pname = "elfeed-web";
       ename = "elfeed-web";
-      version = "4.0.0.0.20260623.3";
+      version = "4.0.0.0.20260628.4";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/elfeed-web-4.0.0.0.20260623.3.tar";
-        sha256 = "18sqr02xn2vzfajysbz8i0f2m6vqq39c2vhazs8bi638vjk4irc0";
+        url = "https://elpa.nongnu.org/nongnu-devel/elfeed-web-4.0.0.0.20260628.4.tar";
+        sha256 = "0vwd5k1h47xcj6jz5wqcppm9cv2ywiliq4x3mszbharqklw83wmx";
       };
       packageRequires = [
         compat
@@ -1546,6 +1546,28 @@
       packageRequires = [ evil ];
       meta = {
         homepage = "https://elpa.nongnu.org/nongnu-devel/evil-args.html";
+        license = lib.licenses.free;
+      };
+    }
+  ) { };
+  evil-collection = callPackage (
+    {
+      elpaBuild,
+      evil,
+      fetchurl,
+      lib,
+    }:
+    elpaBuild {
+      pname = "evil-collection";
+      ename = "evil-collection";
+      version = "3.0.0.0.20260719.2";
+      src = fetchurl {
+        url = "https://elpa.nongnu.org/nongnu-devel/evil-collection-3.0.0.0.20260719.2.tar";
+        sha256 = "0xccbmkxzqdw5nqzaink8yab4ga3j0cg7djgiqrzdcd2cc44vqgx";
+      };
+      packageRequires = [ evil ];
+      meta = {
+        homepage = "https://elpa.nongnu.org/nongnu-devel/evil-collection.html";
         license = lib.licenses.free;
       };
     }
@@ -1894,10 +1916,10 @@
     elpaBuild {
       pname = "extmap";
       ename = "extmap";
-      version = "1.3.10.20250203.193959";
+      version = "1.3.1snapshot0.20250203.2";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/extmap-1.3.10.20250203.193959.tar";
-        sha256 = "1xp7y64zi0pik02r78ks90zydddx583h3f4689n4ldif5zz3wd2k";
+        url = "https://elpa.nongnu.org/nongnu-devel/extmap-1.3.1snapshot0.20250203.2.tar";
+        sha256 = "07davhhx3nq15b3i7mfckxy9cnsq12y5cds8m0m4bw61sz8svxvi";
       };
       packageRequires = [ ];
       meta = {
@@ -2037,10 +2059,10 @@
     elpaBuild {
       pname = "flycheck";
       ename = "flycheck";
-      version = "36.0.0.20260604.57";
+      version = "37.0.0.20260720.8";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/flycheck-36.0.0.20260604.57.tar";
-        sha256 = "1rkpzjy998x346sc7ka2nvhavlam0d9klpgccsandacywdps1imq";
+        url = "https://elpa.nongnu.org/nongnu-devel/flycheck-37.0.0.20260720.8.tar";
+        sha256 = "1d7pb6kqz5s862d43l0ywzvhcd15xj2y8ixgc9zy42yz3rwnqlbj";
       };
       packageRequires = [ seq ];
       meta = {
@@ -2238,10 +2260,10 @@
     elpaBuild {
       pname = "geiser";
       ename = "geiser";
-      version = "0.33.1.0.20260523.150214";
+      version = "0.33.1.0.20260718.4";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/geiser-0.33.1.0.20260523.150214.tar";
-        sha256 = "1k0x34c6w0bnrbbkc01frn5h2kbn9pr02i80clr9vfixjv7zar9b";
+        url = "https://elpa.nongnu.org/nongnu-devel/geiser-0.33.1.0.20260718.4.tar";
+        sha256 = "14sipclbj37v0f0yc1pk0fl1p704f1gzpd3r21zyh3wkgfj2vjf5";
       };
       packageRequires = [ project ];
       meta = {
@@ -2282,10 +2304,10 @@
     elpaBuild {
       pname = "geiser-chibi";
       ename = "geiser-chibi";
-      version = "0.17.0.20240521.155242";
+      version = "0.17.0.20260706.3";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/geiser-chibi-0.17.0.20240521.155242.tar";
-        sha256 = "0xiaikj274ypfj546snxpi6h30jlc9hifhnw8ljj1zxsafr1wzqq";
+        url = "https://elpa.nongnu.org/nongnu-devel/geiser-chibi-0.17.0.20260706.3.tar";
+        sha256 = "08rhpfr9zsgdmz8j4f8va07ww7lk9kbxcpnm3wxjl940n56nhji9";
       };
       packageRequires = [ geiser ];
       meta = {
@@ -2608,10 +2630,10 @@
     elpaBuild {
       pname = "gnuplot";
       ename = "gnuplot";
-      version = "0.12.0.20260623.2";
+      version = "0.12.0.20260628.3";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/gnuplot-0.12.0.20260623.2.tar";
-        sha256 = "0w38z2cmrrnc0bh6pdsqyrhsipz59lknfrkcyahybpbi80x0cgl8";
+        url = "https://elpa.nongnu.org/nongnu-devel/gnuplot-0.12.0.20260628.3.tar";
+        sha256 = "1gmivwm8xv4x3gab3xnlxnjsqxivb9xdkk6gb8nc6a3rl87py19w";
       };
       packageRequires = [ compat ];
       meta = {
@@ -2715,10 +2737,10 @@
     elpaBuild {
       pname = "gptel";
       ename = "gptel";
-      version = "0.9.9.5.0.20260620.44";
+      version = "0.9.9.5.0.20260715.65";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/gptel-0.9.9.5.0.20260620.44.tar";
-        sha256 = "1j9ij8z4hyd4rbz96gk99myrw39x8fd907imnvarqq9xl42m9hrj";
+        url = "https://elpa.nongnu.org/nongnu-devel/gptel-0.9.9.5.0.20260715.65.tar";
+        sha256 = "0ax0i8v68ibx4mh6pyz8lqjrkjw7zz9chwkricmjkcn7kha3l6l2";
       };
       packageRequires = [
         compat
@@ -2912,10 +2934,10 @@
     elpaBuild {
       pname = "helm";
       ename = "helm";
-      version = "4.0.7.0.20260624.21";
+      version = "4.0.7.0.20260716.25";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/helm-4.0.7.0.20260624.21.tar";
-        sha256 = "13kprv1v1snk018m4ccjiyj8ndmc9jf7f5saw896kq16rdiwq72p";
+        url = "https://elpa.nongnu.org/nongnu-devel/helm-4.0.7.0.20260716.25.tar";
+        sha256 = "0g3qmffjwfyrw3iqwrp2ai8pm7q6wan2x0w62vlbacvkziqy7vgf";
       };
       packageRequires = [
         helm-core
@@ -2937,10 +2959,10 @@
     elpaBuild {
       pname = "helm-core";
       ename = "helm-core";
-      version = "4.0.7.0.20260624.21";
+      version = "4.0.7.0.20260716.25";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/helm-core-4.0.7.0.20260624.21.tar";
-        sha256 = "1w3xdawc6br7i0300544rc6c35yrbck2rkd0d667fv4c79nhvix3";
+        url = "https://elpa.nongnu.org/nongnu-devel/helm-core-4.0.7.0.20260716.25.tar";
+        sha256 = "0qrcc87av7s3xmrl9290rsjljlh68hdh4wyrfjk0g988kpdpbyqx";
       };
       packageRequires = [ async ];
       meta = {
@@ -3070,10 +3092,10 @@
     elpaBuild {
       pname = "hyperdrive";
       ename = "hyperdrive";
-      version = "0.60.20251120.145618";
+      version = "0.6pre0.20251120.26";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/hyperdrive-0.60.20251120.145618.tar";
-        sha256 = "0m4ns20mfcbxqy68qdlbyy9ywvwvhrlrz34dr7g35cz836740a2v";
+        url = "https://elpa.nongnu.org/nongnu-devel/hyperdrive-0.6pre0.20251120.26.tar";
+        sha256 = "0j8zglxc2bjvbfdzw9lzy5lksda6hq6xjwcmiyg489yfrx1n5gk5";
       };
       packageRequires = [
         compat
@@ -3327,10 +3349,10 @@
     elpaBuild {
       pname = "jabber";
       ename = "jabber";
-      version = "0.11.0.0.20260619.11";
+      version = "0.12.2.0.20260715.2";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/jabber-0.11.0.0.20260619.11.tar";
-        sha256 = "0gjjbl93l0x9sqlmxabrpirkkw5c514pbja74znmdh3j89b7x5zs";
+        url = "https://elpa.nongnu.org/nongnu-devel/jabber-0.12.2.0.20260715.2.tar";
+        sha256 = "1d07y9qax62hgyxmcyfdk8w30y0p7qn4x0al2qzh1k0slvw12yjy";
       };
       packageRequires = [
         fsm
@@ -3533,10 +3555,10 @@
     elpaBuild {
       pname = "logview";
       ename = "logview";
-      version = "0.19.40.20260218.201306";
+      version = "0.19.4snapshot0.20260218.1";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/logview-0.19.40.20260218.201306.tar";
-        sha256 = "0nzhy8g714gy2w7dd9wyiwx9my2asbl9d1ps7k6m9g44xbvb2y0s";
+        url = "https://elpa.nongnu.org/nongnu-devel/logview-0.19.4snapshot0.20260218.1.tar";
+        sha256 = "1z9qplw6gbkvq5dmh2pwiwjva36bzy2dcfc4xrc79l1m0c0nffks";
       };
       packageRequires = [
         compat
@@ -3562,10 +3584,10 @@
     elpaBuild {
       pname = "loopy";
       ename = "loopy";
-      version = "0.16.0.0.20260622.0";
+      version = "0.16.1.0.20260718.10";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/loopy-0.16.0.0.20260622.0.tar";
-        sha256 = "1s534lm9ysk8q0z4ndlb4zxns1mzpffy1p11zf4qy54qsh0brj9x";
+        url = "https://elpa.nongnu.org/nongnu-devel/loopy-0.16.1.0.20260718.10.tar";
+        sha256 = "1gcw2if57rf30n0clxjfg372zb41nkrbx2q1ygh792l1cxlhbr51";
       };
       packageRequires = [
         compat
@@ -3590,10 +3612,10 @@
     elpaBuild {
       pname = "loopy-dash";
       ename = "loopy-dash";
-      version = "0.13.0.0.20260312.12155";
+      version = "0.13.0.0.20260718.11";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/loopy-dash-0.13.0.0.20260312.12155.tar";
-        sha256 = "1rg98wgrh5s6slafz8g8piazz04pa6fwiymgpic6hcrmf842fgpy";
+        url = "https://elpa.nongnu.org/nongnu-devel/loopy-dash-0.13.0.0.20260718.11.tar";
+        sha256 = "0ph9w0505yljnaiykmas8hjfj0d4rnbxv7xdw3j5aglffshl626z";
       };
       packageRequires = [
         dash
@@ -3689,10 +3711,10 @@
     elpaBuild {
       pname = "magit";
       ename = "magit";
-      version = "4.5.0.0.20260622.306";
+      version = "4.6.0.0.20260718.46";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/magit-4.5.0.0.20260622.306.tar";
-        sha256 = "07r0zjz7n6vy7fywmqf577vh7mx801104ph7302m4icawqbrk1gd";
+        url = "https://elpa.nongnu.org/nongnu-devel/magit-4.6.0.0.20260718.46.tar";
+        sha256 = "1ln6p4y19z2j2x9hj63v4p5d9kl83vzw993bwirbljf59gwn60qz";
       };
       packageRequires = [
         compat
@@ -3722,10 +3744,10 @@
     elpaBuild {
       pname = "magit-section";
       ename = "magit-section";
-      version = "4.5.0.0.20260622.306";
+      version = "4.6.0.0.20260718.46";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/magit-section-4.5.0.0.20260622.306.tar";
-        sha256 = "017345kx3wpfipy6pas53cyrhg4qx9pjl8ja7kram2g1hra3hm3z";
+        url = "https://elpa.nongnu.org/nongnu-devel/magit-section-4.6.0.0.20260718.46.tar";
+        sha256 = "02glfja6slz17qv3qzrwjz32a5j3yqj135z430nm2bz015c4k2gv";
       };
       packageRequires = [
         compat
@@ -3748,10 +3770,10 @@
     elpaBuild {
       pname = "markdown-mode";
       ename = "markdown-mode";
-      version = "2.90.20260425.95459";
+      version = "2.9alpha0.20260425.11";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/markdown-mode-2.90.20260425.95459.tar";
-        sha256 = "1xdszi0kjn3dg9nrn004hcb7ib7adh3vf6a8aznkaz4zhhqs420m";
+        url = "https://elpa.nongnu.org/nongnu-devel/markdown-mode-2.9alpha0.20260425.11.tar";
+        sha256 = "0gfaxz089cm7rzwdz9dva4kz8i1cndlq67svcb0fnyca03p6lgkr";
       };
       packageRequires = [ ];
       meta = {
@@ -3846,10 +3868,10 @@
     elpaBuild {
       pname = "meow";
       ename = "meow";
-      version = "1.5.0.0.20260619.66";
+      version = "1.5.0.0.20260714.67";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/meow-1.5.0.0.20260619.66.tar";
-        sha256 = "1m4ymrg1q8d87zxg72na8a272852qhw443na1g2lf0i01sqijsr8";
+        url = "https://elpa.nongnu.org/nongnu-devel/meow-1.5.0.0.20260714.67.tar";
+        sha256 = "1w91jlbpp37p4c11z15njvn8icd78hhwkldx70d6y28ngk14q9g3";
       };
       packageRequires = [ ];
       meta = {
@@ -4084,10 +4106,10 @@
     elpaBuild {
       pname = "opam-switch-mode";
       ename = "opam-switch-mode";
-      version = "1.80.20230802.91729";
+      version = "1.8snapshot0.20230802.1";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/opam-switch-mode-1.80.20230802.91729.tar";
-        sha256 = "1wp7h0p0mfa5gpwbn9sh43a7zy2yaslb9db9k54ylapqn8d8zapx";
+        url = "https://elpa.nongnu.org/nongnu-devel/opam-switch-mode-1.8snapshot0.20230802.1.tar";
+        sha256 = "11nvx2rp6zc4m78nkf5c9gbpfyrg68rkrwfvg6iqsga4aw4mr5z8";
       };
       packageRequires = [ ];
       meta = {
@@ -4266,10 +4288,10 @@
     elpaBuild {
       pname = "org-transclusion-http";
       ename = "org-transclusion-http";
-      version = "0.50.20240630.140904";
+      version = "0.5pre0.20240630.1";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/org-transclusion-http-0.50.20240630.140904.tar";
-        sha256 = "0kgq58mr7r9jlsc68nm6z6fm3wb0y1kjayj0qp7pbipqj9dx6b9z";
+        url = "https://elpa.nongnu.org/nongnu-devel/org-transclusion-http-0.5pre0.20240630.1.tar";
+        sha256 = "06cnyym38nrli2hb74g8qpwaajy3brg64sfkfr5rmbrqyqwlqspp";
       };
       packageRequires = [
         org-transclusion
@@ -4316,10 +4338,10 @@
     elpaBuild {
       pname = "orgit";
       ename = "orgit";
-      version = "2.1.3.0.20260623.18";
+      version = "2.2.0.0.20260701.0";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/orgit-2.1.3.0.20260623.18.tar";
-        sha256 = "0cpi9xzs79jbysj127z72611x82wpbzhfgz603ww454x9qiyb9fa";
+        url = "https://elpa.nongnu.org/nongnu-devel/orgit-2.2.0.0.20260701.0.tar";
+        sha256 = "143w8vvgn9qfyfrdd8ccs4grpgnksbvjby9sb077ciqjnzimnx5d";
       };
       packageRequires = [
         compat
@@ -4429,10 +4451,10 @@
     elpaBuild {
       pname = "paredit";
       ename = "paredit";
-      version = "270.20241103.213959";
+      version = "27beta0.20241103.20";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/paredit-270.20241103.213959.tar";
-        sha256 = "11fbgw18934ddrba1z5fz6c42m2b7jdmrg2lnzlracxfgk9gfp8p";
+        url = "https://elpa.nongnu.org/nongnu-devel/paredit-27beta0.20241103.20.tar";
+        sha256 = "0dmqfcir64pb9nw577wqnh0g0d6kvvzc4v8hca4bcl17ipa0wjkz";
       };
       packageRequires = [ ];
       meta = {
@@ -4566,10 +4588,10 @@
     elpaBuild {
       pname = "pg";
       ename = "pg";
-      version = "0.67.0.20260610.2";
+      version = "0.68.0.20260719.0";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/pg-0.67.0.20260610.2.tar";
-        sha256 = "16014aqcz3pj31pbwgyaw9qsqz5rfmmscdah6qvppg2dg17lwfhg";
+        url = "https://elpa.nongnu.org/nongnu-devel/pg-0.68.0.20260719.0.tar";
+        sha256 = "1awd1rsb95vka0raf8pdgpyj1mmx8s3nqqhgqcxs4h44v8fppyc6";
       };
       packageRequires = [ peg ];
       meta = {
@@ -4587,10 +4609,10 @@
     elpaBuild {
       pname = "php-mode";
       ename = "php-mode";
-      version = "1.26.1.0.20251112.64638";
+      version = "1.26.1.0.20260719.80";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/php-mode-1.26.1.0.20251112.64638.tar";
-        sha256 = "1vh7ynpbpps46jw5g9qwzzhyb4kll0dpppj5493kpjj3d87xclir";
+        url = "https://elpa.nongnu.org/nongnu-devel/php-mode-1.26.1.0.20260719.80.tar";
+        sha256 = "0wsid2y7lybyzk6kf61k9jc80vk3qz3bqsr2rgqy6hln5rv8g5q8";
       };
       packageRequires = [ ];
       meta = {
@@ -4672,10 +4694,10 @@
     elpaBuild {
       pname = "projectile";
       ename = "projectile";
-      version = "2.10.0.20260620.133";
+      version = "3.3.0snapshot0.20260720.5";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/projectile-2.10.0.20260620.133.tar";
-        sha256 = "1l2m7v59jx8myiaswyrwrm2z60hkk8vqnfl7bnzzvjcs10jafl82";
+        url = "https://elpa.nongnu.org/nongnu-devel/projectile-3.3.0snapshot0.20260720.5.tar";
+        sha256 = "1n26lg4i2k8nh5sw3yxjrjdmqdylmf0wdbijc0gkqzlafa3nh6qg";
       };
       packageRequires = [ compat ];
       meta = {
@@ -4693,10 +4715,10 @@
     elpaBuild {
       pname = "proof-general";
       ename = "proof-general";
-      version = "4.60.20260622.265";
+      version = "4.6snapshot0.20260622.265";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/proof-general-4.60.20260622.265.tar";
-        sha256 = "1b9qv3dv173aqx5k0drkysk017g1ycrzy25kzdhkxg8280kz3v5k";
+        url = "https://elpa.nongnu.org/nongnu-devel/proof-general-4.6snapshot0.20260622.265.tar";
+        sha256 = "1w3xbgzq9ibhdb4b06f658lvg79c0gyacicmaljp8pz3548dcly8";
       };
       packageRequires = [ ];
       meta = {
@@ -4737,10 +4759,10 @@
     elpaBuild {
       pname = "racket-mode";
       ename = "racket-mode";
-      version = "1.0.20260303.123213";
+      version = "1.0.20260626.0";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/racket-mode-1.0.20260303.123213.tar";
-        sha256 = "1iqbrsy5sivv9mm6sk48vj1mv4magh7bg7346i1a02plr0hg8qml";
+        url = "https://elpa.nongnu.org/nongnu-devel/racket-mode-1.0.20260626.0.tar";
+        sha256 = "19lbiv2wd1fs1jzr4j9q89j41hbhvlgfg9h48bjxki8dqs96d668";
       };
       packageRequires = [ compat ];
       meta = {
@@ -4928,10 +4950,10 @@
     elpaBuild {
       pname = "rubocop";
       ename = "rubocop";
-      version = "0.7.0.20210309.124149";
+      version = "0.7.0snapshot0.20210309.1";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/rubocop-0.7.0.20210309.124149.tar";
-        sha256 = "0akmidx76zrrfcax7397cs1plwnr3dm83npakbpkssihf08b13aq";
+        url = "https://elpa.nongnu.org/nongnu-devel/rubocop-0.7.0snapshot0.20210309.1.tar";
+        sha256 = "0bggy6nc2wsng83df3vrqw8ygs5ys87i09511kl5d9xfhds7fx4j";
       };
       packageRequires = [ ];
       meta = {
@@ -4997,10 +5019,10 @@
     elpaBuild {
       pname = "scad-mode";
       ename = "scad-mode";
-      version = "99.0.0.20260519.103934";
+      version = "99.0.0.20260628.1";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/scad-mode-99.0.0.20260519.103934.tar";
-        sha256 = "1rh44ifrfihh1jiy1g8fj5gln6ycdimpszilfhzy9fawxwlqhrqk";
+        url = "https://elpa.nongnu.org/nongnu-devel/scad-mode-99.0.0.20260628.1.tar";
+        sha256 = "0pwx9vknh5w1m3cqp1081dq07061qwn7y292y0x85cvisak8hkcs";
       };
       packageRequires = [ compat ];
       meta = {
@@ -5102,10 +5124,10 @@
     elpaBuild {
       pname = "sesman";
       ename = "sesman";
-      version = "0.3.30.20260616.21";
+      version = "0.3.3snapshot0.20260616.21";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/sesman-0.3.30.20260616.21.tar";
-        sha256 = "0px5lb4xqv8j1n4qran31ra5cq7l1adgfsghm63hwd2sqb999337";
+        url = "https://elpa.nongnu.org/nongnu-devel/sesman-0.3.3snapshot0.20260616.21.tar";
+        sha256 = "1nc2h58dcjwvi9kjqgmw79cvdc9i1ja8xkxs69hjhyq7y0wp85kf";
       };
       packageRequires = [ ];
       meta = {
@@ -5145,10 +5167,10 @@
     elpaBuild {
       pname = "simple-httpd";
       ename = "simple-httpd";
-      version = "1.6.0.20260623.1";
+      version = "1.6.0.20260709.3";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/simple-httpd-1.6.0.20260623.1.tar";
-        sha256 = "1npss5lv7r2nzvbhzh5jr7w53n2hx6w9pws554srh25hw68v3zd4";
+        url = "https://elpa.nongnu.org/nongnu-devel/simple-httpd-1.6.0.20260709.3.tar";
+        sha256 = "0fyl4r8x0k074cb5h7agfm9zdpny68n0sm24wb9mc089fx9j9q5c";
       };
       packageRequires = [ compat ];
       meta = {
@@ -5167,10 +5189,10 @@
     elpaBuild {
       pname = "slime";
       ename = "slime";
-      version = "2.320.20260612.49";
+      version = "2.32snapshot0.20260719.53";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/slime-2.320.20260612.49.tar";
-        sha256 = "196g2sc1v84013nk3c8my3w2r3aqvg9sjix2ca64vvrarfamb0ck";
+        url = "https://elpa.nongnu.org/nongnu-devel/slime-2.32snapshot0.20260719.53.tar";
+        sha256 = "06isvwjq37vzf636ci5jb8fkzc926fnjzwx0fszlfax4hy00mlqf";
       };
       packageRequires = [ macrostep ];
       meta = {
@@ -5231,10 +5253,10 @@
     elpaBuild {
       pname = "solarized-theme";
       ename = "solarized-theme";
-      version = "2.1.0.0.20260610.7";
+      version = "2.1.0.0.20260703.8";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/solarized-theme-2.1.0.0.20260610.7.tar";
-        sha256 = "1phh2qqjf68ap6giid63zpnggx41y1zvn9q2c60igx01fv7xnykd";
+        url = "https://elpa.nongnu.org/nongnu-devel/solarized-theme-2.1.0.0.20260703.8.tar";
+        sha256 = "0iqgpdjxn6an3vn0pmy7iya5xs1ihjc9rj0kiyk6xlfswzc5pyfk";
       };
       packageRequires = [ ];
       meta = {
@@ -5443,10 +5465,10 @@
     elpaBuild {
       pname = "symbol-overlay";
       ename = "symbol-overlay";
-      version = "4.3.0.20260423.145452";
+      version = "4.3.0.20260703.4";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/symbol-overlay-4.3.0.20260423.145452.tar";
-        sha256 = "16gm3gj84wd7v6qhf3p0sz2jgbbyi60kqwkb41rfiz7n79qlijpg";
+        url = "https://elpa.nongnu.org/nongnu-devel/symbol-overlay-4.3.0.20260703.4.tar";
+        sha256 = "1mg02vrf7lhqiqkqlnl9czd11aw9i3gsa00f53fbn80vy123hixb";
       };
       packageRequires = [ seq ];
       meta = {
@@ -5739,7 +5761,6 @@
   ) { };
   tuareg = callPackage (
     {
-      caml,
       elpaBuild,
       fetchurl,
       lib,
@@ -5747,12 +5768,12 @@
     elpaBuild {
       pname = "tuareg";
       ename = "tuareg";
-      version = "3.0.20.20260617.40";
+      version = "3.1.1snapshot0.20260626.1";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/tuareg-3.0.20.20260617.40.tar";
-        sha256 = "0xmfvmxnk50pymajgmymwzmhjs8x5ac9dg1r7mx4iwsv15x13m4f";
+        url = "https://elpa.nongnu.org/nongnu-devel/tuareg-3.1.1snapshot0.20260626.1.tar";
+        sha256 = "0y1ygn4d8dcw0zgq0y2f65kmx64id5dcv2d23kvk2sddr53qya8f";
       };
-      packageRequires = [ caml ];
+      packageRequires = [ ];
       meta = {
         homepage = "https://elpa.nongnu.org/nongnu-devel/tuareg.html";
         license = lib.licenses.free;
@@ -5789,10 +5810,10 @@
     elpaBuild {
       pname = "typst-ts-mode";
       ename = "typst-ts-mode";
-      version = "0.12.2.0.20260415.103532";
+      version = "0.12.2.0.20260624.24";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/typst-ts-mode-0.12.2.0.20260415.103532.tar";
-        sha256 = "190jabvm3p74cd96rrbj45y68myg32zvlxjrq01zvi3jv29xbpf6";
+        url = "https://elpa.nongnu.org/nongnu-devel/typst-ts-mode-0.12.2.0.20260624.24.tar";
+        sha256 = "13amyfg5zkbxwp1gipnyn01wpwpyv0p0w4sv97xpfiyazhs5w4bn";
       };
       packageRequires = [ ];
       meta = {
@@ -5937,10 +5958,10 @@
     elpaBuild {
       pname = "vm";
       ename = "vm";
-      version = "8.3.30.20260610.33";
+      version = "8.3.3snapshot0.20260716.51";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/vm-8.3.30.20260610.33.tar";
-        sha256 = "0194px4dg5q2rgddvqwylcywymjx39s3ih16kh6d8whvlk1xcm6p";
+        url = "https://elpa.nongnu.org/nongnu-devel/vm-8.3.3snapshot0.20260716.51.tar";
+        sha256 = "04pq2a39czffcj4rwv0c7bg53vc95mjyk4jqqp25blk4v4l9ygs2";
       };
       packageRequires = [ vcard ];
       meta = {
@@ -6005,10 +6026,10 @@
     elpaBuild {
       pname = "wfnames";
       ename = "wfnames";
-      version = "1.2.0.20260105.45812";
+      version = "1.2.0.20260706.4";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/wfnames-1.2.0.20260105.45812.tar";
-        sha256 = "116d5j1sqb0fbqlfaxxiaraw8c6mg69nw5mn412zwrvbq4vgpp4c";
+        url = "https://elpa.nongnu.org/nongnu-devel/wfnames-1.2.0.20260706.4.tar";
+        sha256 = "1gzypbg4nkf7yyscyq8p9n5ckclg0rcks5s8rilsljb0csnx35nz";
       };
       packageRequires = [ ];
       meta = {
@@ -6071,10 +6092,10 @@
     elpaBuild {
       pname = "with-editor";
       ename = "with-editor";
-      version = "3.5.1.0.20260623.3";
+      version = "3.5.2.0.20260701.0";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/with-editor-3.5.1.0.20260623.3.tar";
-        sha256 = "16mfh41zkdylbk92cizm4ia69lwirq58mb8rms9v448s41w2wvka";
+        url = "https://elpa.nongnu.org/nongnu-devel/with-editor-3.5.2.0.20260701.0.tar";
+        sha256 = "067x2q0ykrp9llva4gn1cjyxwnhb0yh1cxr6ghdd4yccbfdi4y85";
       };
       packageRequires = [
         compat
@@ -6185,10 +6206,10 @@
     elpaBuild {
       pname = "xah-fly-keys";
       ename = "xah-fly-keys";
-      version = "28.11.20260416140940.0.20260416.141130";
+      version = "28.11.20260712150256.0.20260712.0";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/xah-fly-keys-28.11.20260416140940.0.20260416.141130.tar";
-        sha256 = "0mrfn3z60jgk2f9lccb3qcaa52rvh366ys97ypz5lgjlxal1sr5r";
+        url = "https://elpa.nongnu.org/nongnu-devel/xah-fly-keys-28.11.20260712150256.0.20260712.0.tar";
+        sha256 = "0g4lfqm81kpszwlkapvr25c8c0b4rmg00zrr62ziz16bplvgy3ky";
       };
       packageRequires = [ ];
       meta = {
@@ -6292,10 +6313,10 @@
     elpaBuild {
       pname = "zenburn-theme";
       ename = "zenburn-theme";
-      version = "2.10.0.0.20260601.0";
+      version = "2.10.0.0.20260704.2";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/zenburn-theme-2.10.0.0.20260601.0.tar";
-        sha256 = "0li865y8wp8gsim2xiscxhmpfnwd394ag9x9kpff082yg2q4j2ww";
+        url = "https://elpa.nongnu.org/nongnu-devel/zenburn-theme-2.10.0.0.20260704.2.tar";
+        sha256 = "17wp8z3nycqr3rva4npq3gi8ddv93fwzqh45bfgcr6a0zv4pfxp4";
       };
       packageRequires = [ ];
       meta = {
@@ -6314,10 +6335,10 @@
     elpaBuild {
       pname = "zig-mode";
       ename = "zig-mode";
-      version = "0.0.8.0.20251128.25646";
+      version = "0.0.8.0.20260717.49";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/zig-mode-0.0.8.0.20251128.25646.tar";
-        sha256 = "03nqzy5xyqsr7ax1m0sprk75ygkyspj824vixgkrflqnrhyj5b2s";
+        url = "https://elpa.nongnu.org/nongnu-devel/zig-mode-0.0.8.0.20260717.49.tar";
+        sha256 = "182rhhax10ldn763fraa5fc2vqlglzm9iq2yq2rvndgklqlf5bsc";
       };
       packageRequires = [ reformatter ];
       meta = {

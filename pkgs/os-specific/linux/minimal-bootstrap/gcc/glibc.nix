@@ -22,7 +22,7 @@
 }:
 let
   pname = "gcc";
-  version = "15.2.0";
+  version = "15.3.0";
   linkerName =
     {
       i686-linux = "ld-linux.so.2";
@@ -32,7 +32,7 @@ let
 
   src = fetchurl {
     url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.xz";
-    hash = "sha256-Q4/ZloJrDIJIWinaA6ctcdbjVBqD7HAt9Ccfb+Al0k4=";
+    hash = "sha256-+lnBvu+JlfJ8TXHB3yJ1hxiTFdPm+v8btDBuYbDFMOs=";
   };
 
   gmpVersion = "6.3.0";
@@ -47,10 +47,10 @@ let
     hash = "sha256-tnugOD736KhWNzTi6InvXsPDuJigHQD6CmhprYHGzgE=";
   };
 
-  mpcVersion = "1.3.1";
+  mpcVersion = "1.4.1";
   mpc = fetchurl {
-    url = "mirror://gnu/mpc/mpc-${mpcVersion}.tar.gz";
-    hash = "sha256-q2QkkvXPiCt0qgy3MM1BCoHtzb7IlRg86TDnBsHHWbg=";
+    url = "mirror://gnu/mpc/mpc-${mpcVersion}.tar.xz";
+    hash = "sha256-kSBM0y8WS9O3yZLUpqjOZRlRGq2rMPeLaYLQv41z6TE=";
   };
 in
 bash.runCommand "${pname}-${version}"

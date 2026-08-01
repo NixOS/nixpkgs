@@ -3,13 +3,15 @@
   fetchFromGitHub,
   stdenv,
   rustPlatform,
-  pop-gtk-theme,
+  makeBinaryWrapper,
   adw-gtk3,
   pkg-config,
   libpulseaudio,
   pipewire,
   libinput,
   udev,
+  libxkbcommon,
+  wayland,
   openssl,
   nixosTests,
   nix-update-script,
@@ -17,24 +19,22 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-settings-daemon";
-  version = "1.2.0";
+  version = "1.5.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-settings-daemon";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-cCxcIRrLvCxWDujXuREukkxZ0qPl3SH4n1VWAR1c/QY=";
+    hash = "sha256-e53lyq9tmZnrhS6CYL+KTlCMnunKoN2GEvCHhHAX2hI=";
   };
 
   postPatch = ''
-    substituteInPlace src/battery.rs \
-      --replace-fail '/usr/share/sounds/Pop/' '${pop-gtk-theme}/share/sounds/Pop/'
     substituteInPlace src/theme.rs \
       --replace-fail '/usr/share/themes/adw-gtk3' '${adw-gtk3}/share/themes/adw-gtk3'
   '';
 
-  cargoHash = "sha256-rpyMdwmcddsrXuIOI5T6Kh9+cB28DdUxotiqpeGqvCc=";
+  cargoHash = "sha256-Le0FRKuSJWx6zRwU2b1+hyJzZJ+bsT039vn/Nhkf+k0=";
 
   separateDebugInfo = true;
   __structuredAttrs = true;
@@ -42,6 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
+    makeBinaryWrapper
   ];
 
   buildInputs = [
@@ -50,6 +51,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
     udev
     pipewire
+    libxkbcommon
+    wayland
   ];
 
   makeFlags = [
@@ -58,6 +61,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   dontCargoInstall = true;
+
+  postFixup = ''
+    wrapProgram $out/bin/cosmic-settings-daemon \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          wayland
+          libxkbcommon
+        ]
+      }
+  '';
 
   passthru = {
     tests = {

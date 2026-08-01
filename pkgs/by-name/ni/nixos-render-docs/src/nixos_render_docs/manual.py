@@ -375,6 +375,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         # Without this the popover can still be closed by clicking outside of it
         # It handles auto-closing when the user clicks a href.
         close_menu_js = """
+            //<![CDATA[
             document.addEventListener("DOMContentLoaded", () => {
                 const nav = document.getElementById("manual-toc");
                 nav?.addEventListener("click", (e) => {
@@ -383,6 +384,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                     }
                 });
             });
+            //]]>
         """
         intersection_observer_js = """
 function createObserver() {

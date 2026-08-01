@@ -8,6 +8,7 @@
   lxml,
   packaging,
   poetry-core,
+  pyprojectVersionPatchHook,
   pytestCheckHook,
   python-dateutil,
   semver,
@@ -27,6 +28,8 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-NKe5kM4YPxsGge1UG7DjE3SDXlfZIVazOVmF5RBCbSo=";
   };
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   build-system = [ poetry-core ];
 

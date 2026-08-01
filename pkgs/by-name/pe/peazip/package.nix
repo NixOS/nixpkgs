@@ -24,13 +24,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "peazip";
-  version = "11.1.0";
+  version = "11.2.0";
 
   src = fetchFromGitHub {
     owner = "peazip";
     repo = "peazip";
     rev = finalAttrs.version;
-    hash = "sha256-PuY+68+7XxsWylS6skhNF40o+Qt26RwmVxVTLmGXIn0=";
+    hash = "sha256-zaadYVbeNhlHl/2g7yldG4ZlyL2DEyzwODvomuCBSkE=";
   };
   sourceRoot = "${finalAttrs.src.name}/peazip-sources";
 

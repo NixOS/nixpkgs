@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "msgpack";
-  version = "1.1.2";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "msgpack";
     repo = "msgpack-python";
     tag = "v${version}";
-    hash = "sha256-9iFTQPAM6AAogcRUoCw5/bECNiGUwmAarEiwMJ+rqbk=";
+    hash = "sha256-L8nU+n0M3NJvQzjRlWESXvzP6CxR5CTSu7UkeGfHHUs=";
   };
 
   build-system = [ setuptools ];

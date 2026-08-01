@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kcl";
-  version = "0.12.4";
+  version = "0.12.7";
 
   src = fetchFromGitHub {
     owner = "kcl-lang";
     repo = "cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jtAfFwgtIP2sJRH4RcGTgVn/S5yvA15q3u2xeWus/8s=";
+    hash = "sha256-HPydO/gBJkMsqR3Eb3ymKprm5x7tr9//IKT052hiDNA=";
   };
 
-  vendorHash = "sha256-aKXfVDu3uTEeSzs4nVWQMUj+HaVkzk+iTr+lti+Yb6E=";
+  vendorHash = "sha256-46qLRdB0epfZPuvNVYaLIAiTkI9kbAS6OM9OYC8cmmE=";
 
   subPackages = [ "cmd/kcl" ];
 

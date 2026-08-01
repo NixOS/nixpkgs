@@ -10,17 +10,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "ghqr";
-  version = "0.5.0";
+  version = "0.5.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "ghqr";
     tag = "v.${finalAttrs.version}";
-    hash = "sha256-MpCOeKMqLyZd2N1XL7bUHuCM7AjLgsHzQ1plUKMWn50=";
+    hash = "sha256-cyXuBP/Uj9UdvwoV/rKWUNts44DoKnHAeOD5dzBqZBM=";
   };
 
-  vendorHash = "sha256-8lyQ1LDT1GAs+UDOpLxI/6BneU6Hqyt+PWsZIkq2rHY=";
+  vendorHash = "sha256-R/jo2Stwt9gZkJg9WfWSBTn/+3oravtE6+yh287MjDQ=";
 
   ldflags = [
     "-s"

@@ -134,6 +134,7 @@ buildPythonPackage (finalAttrs: {
       disabledTests = [ ];
       pythonImportsCheck = null;
       dontCheckRuntimeDeps = true;
+      dontCheckPythonMetadata = true; # broken due to changed pname
     });
 
     inherit (gradio) updateScript;

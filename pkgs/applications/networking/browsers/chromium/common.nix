@@ -17,6 +17,7 @@
   # Native build inputs:
   ninja,
   bashInteractive,
+  go,
   pkg-config,
   python3,
   perl,
@@ -91,7 +92,6 @@
   cupsSupport ? true,
   cups ? null,
   proprietaryCodecs ? true,
-  pulseSupport ? false,
   libpulseaudio ? null,
   ungoogled ? false,
   ungoogled-chromium,
@@ -158,11 +158,6 @@ let
     # "snappy"
     "flac"
     "libjpeg"
-  ]
-  ++ lib.optionals needsLibpng [
-    "libpng"
-  ]
-  ++ [
     # Use the vendored libwebp for M124+ until we figure out how to solve:
     # Running phase: configurePhase
     # ERROR Unresolved dependencies.
@@ -231,9 +226,6 @@ let
   isElectron = packageName == "electron";
   rustcVersion = buildPackages.rustc.version;
   llvmVersion = buildPackages.rustc.llvmPackages.llvm.version;
-  # libpng has been replaced by the png rust crate
-  # https://github.com/image-rs/image-png/discussions/562
-  needsLibpng = !chromiumVersionAtLeast "143";
 
   chromiumDeps = lib.mapAttrs (
     path: args:
@@ -323,6 +315,9 @@ let
     ++ lib.optionals (!isElectron) [
       nodejs
       npmHooks.npmConfigHook
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "151") [
+      go # third_party/dawn/tools/generate-sources-gn.py
     ];
 
     depsBuildBuild = [
@@ -338,9 +333,6 @@ let
     # maintain a separate list of buildPlatform-dependencies, we
     # simply throw in the kitchen sink.
     # ** Because of overrides, we have to copy the list as it otherwise mess with splicing **
-    ++ lib.optionals needsLibpng [
-      (buildPackages.libpng.override { apngSupport = false; }) # https://bugs.chromium.org/p/chromium/issues/detail?id=752403
-    ]
     ++ [
       (buildPackages.libopus.override { withCustomModes = true; })
       bzip2
@@ -394,14 +386,11 @@ let
       libgcrypt
       cups
     ]
-    ++ lib.optional pulseSupport libpulseaudio;
+    ++ [
+      libpulseaudio
+    ];
 
     buildInputs = [
-    ]
-    ++ lib.optionals needsLibpng [
-      (libpng.override { apngSupport = false; }) # https://bugs.chromium.org/p/chromium/issues/detail?id=752403
-    ]
-    ++ [
       (libopus.override { withCustomModes = true; })
       bzip2
       flac
@@ -455,7 +444,9 @@ let
       libgcrypt
       cups
     ]
-    ++ lib.optional pulseSupport libpulseaudio;
+    ++ [
+      libpulseaudio
+    ];
 
     patches = [
       ./patches/cross-compile.patch
@@ -493,45 +484,16 @@ let
       # This patch modifies it to read /etc/chromium/initial_preferences
       ./patches/chromium-initial-prefs.patch
     ]
-    ++ lib.optionals (!chromiumVersionAtLeast "142") [
-      # https://github.com/chromium/chromium/commit/02b6456643700771597c00741937e22068b0f956
-      # https://github.com/chromium/chromium/commit/69736ffe943ff996d4a88d15eb30103a8c854e29
-      # Rebased variant of patch to build M126+ with LLVM 17.
-      # staging-next will bump LLVM to 18, so we will be able to drop this soon.
-      # Started failing to apply with M142, but this is no longer needed anyway.
-      ./patches/chromium-126-llvm-17.patch
-    ]
-    ++ lib.optionals (versionRange "140" "141") [
-      # Partial revert of https://github.com/chromium/chromium/commit/3687976b0c6d36cf4157419a24a39f6770098d61
-      # allowing us to use our rustc and our clang.
-      ./patches/chromium-140-rust.patch
-    ]
     ++ lib.optionals (versionRange "141" "150") [
-      # Rebased variant of the patch above due to
-      # https://chromium-review.googlesource.com/c/chromium/src/+/6897026
+      # Rebased partial revert of https://chromium-review.googlesource.com/c/chromium/src/+/4596177
+      # due to https://chromium-review.googlesource.com/c/chromium/src/+/6897026
+      # allowing us to use our rustc and our clang.
       ./patches/chromium-141-rust.patch
     ]
     ++ lib.optionals (chromiumVersionAtLeast "150") [
       # Rebased variant of the patch above due to
       # https://chromium-review.googlesource.com/c/chromium/src/+/7858711
       ./patches/chromium-150-rust.patch
-    ]
-    ++ lib.optionals (!chromiumVersionAtLeast "145" && stdenv.hostPlatform.isAarch64) [
-      # Reverts decommit pooled pages which causes random crashes of tabs on systems
-      # with page sizes different than 4k. It 'supports' runtime page sizes, but has
-      # a hardcode for aarch64 systems.
-      # https://issues.chromium.org/issues/378017037
-      # Started failing to apply with M145, but this is no longer needed anyway.
-      (fetchpatch {
-        name = "reverted-v8-decommit-pooled-paged-by-default.patch";
-        # https://chromium-review.googlesource.com/c/v8/v8/+/5864909
-        url = "https://chromium.googlesource.com/v8/v8/+/1ab1a14ad97394d384d8dc6de51bb229625e66d6^!?format=TEXT";
-        decode = "base64 -d";
-        stripLen = 1;
-        extraPrefix = "v8/";
-        revert = true;
-        hash = "sha256-PuinMLhJ2W4KPXI5K0ujw85ENTB1wG7Hv785SZ55xnY=";
-      })
     ]
     ++ [
       # Modify the nodejs version check added in https://chromium-review.googlesource.com/c/chromium/src/+/6334038
@@ -553,38 +515,7 @@ let
         hash = "sha256-xf1Jq5v3InXkiVH0uT7+h1HPwZse5MDcHKuJNjSLR6k=";
       })
     ]
-    ++ lib.optionals (versionRange "142" "143") [
-      (fetchpatch {
-        # Fix https://issues.chromium.org/issues/450752866 by backporting
-        # https://chromium-review.googlesource.com/c/chromium/src/+/7030724 from M143
-        name = "chromium-142-Backport-Add-missing-include-for-FormFieldData-type-completeness.patch";
-        url = "https://chromium.googlesource.com/chromium/src/+/069d424e41f42c6f4a4551334eafc7cfaed6e880^!?format=TEXT";
-        decode = "base64 -d";
-        hash = "sha256-0ueOCHYheSFHRFzEat3TDhnU3Avf0TcNBBBpTkz+saw=";
-      })
-    ]
-    ++ lib.optionals (versionRange "144" "146") [
-      # Patch rustc_nightly_capability to eval to false instead of true.
-      # https://chromium-review.googlesource.com/c/chromium/src/+/7022369
-      ./patches/chromium-144-rustc_nightly_capability.patch
-    ]
-    ++ lib.optionals (versionRange "144.0.7559.132" "145" && !ungoogled) [
-      # Rollup was swapped with esbuild because of compile failures on Windows,
-      # which is not compatible with our build yet. So let's revert it for now.
-      # Ungoogled ships its own variant of this patch upstream.
-      # https://issues.chromium.org/issues/461602362
-      (fetchpatch {
-        name = "revert-devtools-frontend-esbuild-instead-of-rollup.patch";
-        # https://chromium-review.googlesource.com/c/devtools/devtools-frontend/+/7526345
-        url = "https://chromium.googlesource.com/devtools/devtools-frontend/+/f130475580017f9f87502343dbcfc0c76dccefe8^!?format=TEXT";
-        decode = "base64 -d";
-        stripLen = 1;
-        extraPrefix = "third_party/devtools-frontend/src/";
-        revert = true;
-        hash = "sha256-k+xCfhDuHxtuGhY7LVE8HvbDJt8SEFkslBcJe7t5CAg=";
-      })
-    ]
-    ++ lib.optionals (chromiumVersionAtLeast "146" && !ungoogled) [
+    ++ lib.optionals (!ungoogled) [
       # Same as the patch above, but from ungoogled-chromium and much
       # cleaner (and smaller) than reverting an endless chain of CLs.
       (fetchpatch {
@@ -594,7 +525,7 @@ let
         hash = "sha256-Ho5I33FOgtYHvKSZlWXWuBaqnSHqy4+f6EZdiL+/rRQ=";
       })
     ]
-    ++ lib.optionals (chromiumVersionAtLeast "146" && !ungoogled) [
+    ++ lib.optionals (!ungoogled) [
       # Revert CL 7457194 to fix the following error:
       #  ERROR at //chrome/test/BUILD.gn:6355:9: Unable to load "/build/src/components/variations/test_data/cipd/BUILD.gn".
       #  "//components/variations/test_data/cipd:single_group_per_study_prefer_existing_behavior_seed",
@@ -658,6 +589,17 @@ let
         hash = "sha256-jR0G9z2R8VGl2tkB3u0368RyWM1J6qYXqNWwKkYd5zU=";
       })
     ]
+    ++ lib.optionals (chromiumVersionAtLeast "151" && lib.versionOlder llvmVersion "23") [
+      # Revert CL 7911761 to help the patch below to apply cleanly.
+      (fetchpatch {
+        name = "chromium-151-revert-Fix-is_wasm-compile-for-supersize.patch";
+        # https://chromium-review.googlesource.com/c/chromium/src/+/7911761
+        url = "https://chromium.googlesource.com/chromium/src/+/160ccfd3b5a2dbab95516928716ae586e17de84b^!?format=TEXT";
+        decode = "base64 -d";
+        revert = true;
+        hash = "sha256-musbcTi2XMnJXW79gG+kr9qcYJZ25fv6MeIeId/nAwI=";
+      })
+    ]
     ++ lib.optionals (chromiumVersionAtLeast "149" && lib.versionOlder llvmVersion "23") [
       # clang++: error: unknown argument: '-fdiagnostics-show-inlining-chain'
       # clang++: error: unknown argument: '-fsanitize-ignore-for-ubsan-feature=array-bounds'
@@ -694,6 +636,26 @@ let
         decode = "base64 -d";
         hash = "sha256-MryWxSwBxSIONhl3X1cDxTWwNWy8a4yt/sqkrueSUNs=";
       })
+    ]
+    ++ lib.optionals (versionRange "151" "152") [
+      # ERROR Unresolved dependencies.
+      # //tools/metrics:metrics_metadata(//build/toolchain/linux/unbundle:default)
+      #   needs //tools/metrics:histograms_xml(//build/toolchain/linux/unbundle:default)
+      (fetchpatch {
+        name = "chromium-151-backport-don't-depends-on-histograms.xml-if-it-is-not-git-checkout.patch";
+        # https://chromium-review.googlesource.com/c/chromium/src/+/8019063
+        url = "https://chromium.googlesource.com/chromium/src/+/27f8690db999f6e56f0af7a9ea3d28a019ed72ca^!?format=TEXT";
+        decode = "base64 -d";
+        hash = "sha256-nKu1NEuBWYCmHC2P33BqULVU6uK//kBIEOx+fXIwsuQ=";
+      })
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "151") [
+      # third_party/dawn/tools/generate-sources-gn.py expects a Go binary in
+      # third_party/dawn/tools/golang/linux-amd64/bin/go for x86_64 and
+      # third_party/dawn/tools/golang/linux-arm64/bin/go for aarch64,
+      # which is annoying, so let's make it use Go from $PATH for
+      # both (all) architectures instead.
+      ./patches/chromium-151-dawn-use-Go-from-PATH.patch
     ];
 
     postPatch =
@@ -923,8 +885,7 @@ let
         # Disable PGO because the profile data requires a newer compiler version (LLVM 14 isn't sufficient):
         chrome_pgo_phase = 0;
         clang_base_path = "${llvmCcAndBintools}";
-      }
-      // lib.optionalAttrs (chromiumVersionAtLeast "141") {
+
         # TODO: remove opt-out of https://chromium.googlesource.com/chromium/src/+/main/docs/modules.md
         use_clang_modules = false;
       }
@@ -946,8 +907,7 @@ let
         use_system_libffi = true;
         # Use nixpkgs Rust compiler instead of the one shipped by Chromium.
         rust_sysroot_absolute = "${buildPackages.rustc}";
-        rust_bindgen_root =
-          if chromiumVersionAtLeast "144" then "${rustTools}" else "${buildPackages.rust-bindgen}";
+        rust_bindgen_root = "${rustTools}";
         enable_rust = true;
         # While we technically don't need the cache-invalidation rustc_version provides, rustc_version
         # is still used in some scripts (e.g. build/rust/std/find_std_rlibs.py).
@@ -968,7 +928,7 @@ let
         use_vaapi = false;
         use_v4l2_codec = true;
       }
-      // lib.optionalAttrs pulseSupport {
+      // {
         use_pulseaudio = true;
         link_pulseaudio = true;
       }
@@ -987,7 +947,7 @@ let
       # which causes a "error: TS2403: Subsequent variable declarations must have the same type" later in the build.
       # TypeScript is parsing both @lit/reactive-element/reactive-element.d.ts and @lit/reactive-element/development/reactive-element.d.ts,
       # but lit_reactive_element.patch only patches the former.
-      + lib.optionalString (chromiumVersionAtLeast "146") ''
+      + ''
         rm -r third_party/node/node_modules/@lit/reactive-element/development
       ''
       # Similarly, having @types/estree causes:
@@ -1045,12 +1005,7 @@ let
           TERM=dumb ninja -C "${buildPath}" -j$NIX_BUILD_CORES "${target}"
           bash -s << EOL
           (
-            source ${
-              if chromiumVersionAtLeast "144" then
-                "remoting/host/installer/linux/"
-              else
-                "chrome/installer/linux/common"
-            }/installer.include
+            source remoting/host/installer/linux//installer.include
             PACKAGE=$packageName
             MENUNAME="Chromium"
             process_template chrome/app/resources/manpage.1.in "${buildPath}/chrome.1"

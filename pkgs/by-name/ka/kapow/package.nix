@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kapow";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "gottcode";
     repo = "kapow";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IWkvAXDcWodrV23/wv3GEQXWdNcaIZDsU3LUtxsD+cA=";
+    hash = "sha256-gBr1CmOpwJOqolY6HA4fv7YCaFSeRmxbJeVkZCau9QE=";
   };
 
   nativeBuildInputs = [

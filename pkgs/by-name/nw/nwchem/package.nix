@@ -20,20 +20,19 @@
   autoconf,
   libtool,
   makeWrapper,
-  mpich,
 }:
 
 assert blas-ilp64.isILP64 == lapack-ilp64.isILP64;
 assert blas-ilp64.isILP64 == scalapack-ilp64.isILP64;
 
 let
-  versionGA = "5.8.2"; # Fixed by nwchem
+  versionGA = "5.9.2"; # Fixed by nwchem
 
   gaSrc = fetchFromGitHub {
     owner = "GlobalArrays";
     repo = "ga";
     rev = "v${versionGA}";
-    hash = "sha256-2ffQIg9topqKX7ygnWaa/UunL9d0Lj9qr9xucsjLuoY=";
+    hash = "sha256-leCvbWteOp7z7ORwtljA+KslHUptY2vdupZTmAjsArg=";
   };
 
   dftd3Src = fetchurl {
@@ -44,20 +43,20 @@ let
   plumedSrc = fetchFromGitHub {
     owner = "edoapra";
     repo = "plumed2";
-    rev = "88f06db71173e7893713a582e5ada7193e8ae1c9";
-    hash = "sha256-p5XNxHcE/QkJ5WdQH/xPp2EyrqCNjA/w/e1R2fkwYts=";
+    rev = "e7c908da50bde1c6399c9f0e445d6ea3330ddd9b";
+    hash = "sha256-CNlb6MTEkD977hj3xonYqZH1/WlQ1EdVD7cvL//heRM=";
   };
 
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nwchem";
-  version = "7.2.3";
+  version = "7.3.1";
 
   src = fetchFromGitHub {
     owner = "nwchemgit";
     repo = "nwchem";
     tag = "v${finalAttrs.version}-release";
-    hash = "sha256-2qc4kLb/WmUJuJGonIyS7pgCfyt8yXdcpDAKU0RMY58=";
+    hash = "sha256-B/P7F5dV+Uy+im6t6FoO6DVAELKb7QwHyW2BFEYtYRE=";
   };
 
   strictDeps = true;
@@ -76,9 +75,9 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     gfortran
     which
-    mpich
     python3
     openssh
+    mpi
   ];
   buildInputs = [
     tcsh

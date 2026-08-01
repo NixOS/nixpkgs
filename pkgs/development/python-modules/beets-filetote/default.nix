@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   buildPythonPackage,
 
   # build-system
@@ -31,6 +32,27 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-ZrF9Z3Eaem8ZzNJgQoW45MvsNOCoLsd7l/yLQ2pldR0=";
   };
 
+  patches = [
+    # Fixes a few test failures needed since beets 2.12, see:
+    # https://github.com/gtronset/beets-filetote/issues/328
+    # https://github.com/gtronset/beets-filetote/pull/336
+    (fetchpatch {
+      url = "https://github.com/gtronset/beets-filetote/commit/2684482ebe0cd486512b07621e3904de7faf7dc8.patch";
+      # Cause merge conflicts
+      excludes = [
+        # The changes here mainly include ci related changes, and hence can be
+        # disabled.
+        "pyproject.toml"
+        "CHANGELOG.md"
+      ];
+      hash = "sha256-zVVJY4+f8A+GBxiHZL8OzLWUUmX9uY25tUoLCkzEHh8=";
+    })
+    # Fixes test errors with beets 2.13. Upstream PR is
+    # https://github.com/gtronset/beets-filetote/pull/351 . It is not merged and not even
+    # commented by upstream, so we vendor it instead.
+    ./beets2.13.patch
+  ];
+
   # https://github.com/gtronset/beets-filetote/issues/328
   postPatch = ''
     substituteInPlace pyproject.toml --replace-fail "uv_build>=0.11.21,<0.12" "uv-build"
@@ -56,14 +78,6 @@ buildPythonPackage (finalAttrs: {
     toml
     typeguard
     writableTmpDirAsHomeHook
-  ];
-
-  disabledTestPaths = [
-    # Tests fail for Beets 2.12.x, see:
-    # https://github.com/gtronset/beets-filetote/issues/328
-    "tests/test_exclude.py::TestExclude::test_exclude_strseq_of_filenames_by_string"
-    "tests/test_exclude.py::TestExclude::test_exclude_strseq_of_filenames_by_list"
-    "tests/test_printignored.py::TestPrintIgnored::test_print_ignored"
   ];
 
   meta = {

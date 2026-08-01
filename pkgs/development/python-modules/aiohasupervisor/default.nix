@@ -53,6 +53,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # mocked url differs with empty query param value vs dropped query param
+    "test_download_backup"
+  ];
+
   pythonImportsCheck = [ "aiohasupervisor" ];
 
   meta = {

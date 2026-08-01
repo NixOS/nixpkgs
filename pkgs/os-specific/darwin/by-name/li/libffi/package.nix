@@ -3,6 +3,9 @@
   autoreconfHook,
   dejagnu,
   mkAppleDerivation,
+  runCommand,
+  dyld,
+  python3,
   stdenv,
   testers,
   texinfo,
@@ -11,6 +14,10 @@
   # dejagnu also requires tcl which can't be built statically at the moment
   doCheck ? !(stdenv.hostPlatform.isStatic),
 }:
+
+let
+  python3-with-macholib = python3.withPackages (pkgs: [ pkgs.macholib ]);
+in
 
 mkAppleDerivation (finalAttrs: {
   releaseName = "libffi";
@@ -61,7 +68,7 @@ mkAppleDerivation (finalAttrs: {
   '';
 
   postBuild = ''
-    $CC -Os -Wl,-allowable_client,! -Wl,-not_for_dyld_shared_cache -Wl,-no_compact_unwind \
+    $CC -Os -Wl,-allowable_client,! -Wl,-not_for_dyld_shared_cache -Wl,-no_compact_unwind  -Wl,-no_fixup_chains \
       src/aarch64/trampoline.S -dynamiclib -o libffi-trampolines.dylib \
       -Iinclude -Ibuild -Ibuild/include \
       -install_name "$out/lib/libffi-trampoline.dylib" -Wl,-compatibility_version,1 -Wl,-current_version,1
@@ -94,6 +101,32 @@ mkAppleDerivation (finalAttrs: {
       pkg-config = testers.hasPkgConfigModules {
         package = finalAttrs.finalPackage;
       };
+      # Done as a passthru test to avoid pulling dyld into the Darwin bootstrap just for `dyld_info`.
+      # `dyld_info` is needed because `check-trampolines-dylib.py` does not check chained fixups.
+      check-trampolines-dylib =
+        runCommand "check-trampolines-dylib"
+          {
+            inherit (finalAttrs) src version;
+
+            nativeBuildInputs = [
+              dyld
+              python3-with-macholib
+            ];
+            buildInputs = [ finalAttrs.finalPackage ];
+
+            meta = {
+              description = "Test whether the libffi trampoline was built correctly and works on Darwin.";
+              inherit (finalAttrs.meta) license platforms;
+            };
+          }
+          ''
+            runPhase unpackPhase
+            trampolineDylib=${lib.escapeShellArg (lib.getLib finalAttrs.finalPackage)}/lib/libffi-trampolines.dylib
+            patchShebangs check-trampolines-dylib.py
+            ./check-trampolines-dylib.py "$trampolineDylib"
+            dyld_info -fixups "$trampolineDylib" | grep -v "chained fixups, seg_count exceeds number of segments"
+            touch "$out"
+          '';
     };
   };
 

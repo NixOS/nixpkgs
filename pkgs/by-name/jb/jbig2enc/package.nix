@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jbig2enc";
-  version = "0.31";
+  version = "0.32";
 
   src = fetchFromGitHub {
     owner = "agl";
     repo = "jbig2enc";
     rev = finalAttrs.version;
-    hash = "sha256-UafMDNEMr+8keSgIXBNxnhR24qRrx7F0+ShleF/G2AQ=";
+    hash = "sha256-tOyj5axPfsvlk33URUw90j6lJcG14No+ryAaa0B6Ni8=";
   };
 
   nativeBuildInputs = [

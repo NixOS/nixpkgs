@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
-    (lib.cmakeBool "BUILD_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   # 'wxFont::wxFont(int, int, int, int, bool, const wxString&, wxFontEncoding)' is deprecated

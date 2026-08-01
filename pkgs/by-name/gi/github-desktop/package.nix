@@ -29,19 +29,19 @@
 
 let
   inherit (stdenv.hostPlatform.node) arch platform;
-  cacheRootHash = "sha256-/3niIma45fx3cmplxZsSxmnuS+vGtzjF2wqqZ5DcuJI=";
-  cacheAppHash = "sha256-/hmUmaPNGoIaIY9qdlP5CG/IKn2nnKCpOqf9Wvj1AwM=";
+  cacheRootHash = "sha256-2LV8hZCuX96h1KYYcL6b6XGC3uGcH5IQM4D61R7Em/U=";
+  cacheAppHash = "sha256-zX4V9mg7ljQ1AKl1fgATPVrFpx1a6jsyiLzN2VixpFE=";
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "github-desktop";
-  version = "3.6.1";
+  version = "3.6.3";
 
   src = fetchFromGitHub {
     owner = "desktop";
     repo = "desktop";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-S4lWh+6tOP3hw5nAgg6i6//Sd+gaI2aQnoRDQzHsxUg=";
+    hash = "sha256-HzfecIgPp/Hof5djWkKrrZD83Z0Afr1iC2WbzQrOyyI=";
     fetchSubmodules = true;
     postCheckout = "git -C $out rev-parse HEAD > $out/.gitrev";
   };

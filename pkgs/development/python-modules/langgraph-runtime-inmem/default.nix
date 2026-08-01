@@ -14,7 +14,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langgraph-runtime-inmem";
-  version = "0.30.0";
+  version = "0.31.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     pname = "langgraph_runtime_inmem";
     inherit (finalAttrs) version;
-    hash = "sha256-MZVOHebNQ8KEtCUkPU+uroGPaLPayk2+QxPmUbb14R0=";
+    hash = "sha256-mNTJgdiFkQgOgy+681ALxQOMceo3jWn+cfBvH67weAU=";
   };
 
   build-system = [ hatchling ];

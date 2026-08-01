@@ -20,6 +20,7 @@
   nest-asyncio,
   numpy,
   outlines-core,
+  pillow,
   pycountry,
   pydantic,
   torch,
@@ -89,6 +90,7 @@ buildPythonPackage (finalAttrs: {
     nest-asyncio
     numpy
     outlines-core
+    pillow
     pycountry
     pydantic
     torch

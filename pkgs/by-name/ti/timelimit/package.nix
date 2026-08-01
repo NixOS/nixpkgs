@@ -31,7 +31,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://devel.ringlet.net/sysutils/timelimit/";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      sheeeng
+    ];
     mainProgram = "timelimit";
   };
 })

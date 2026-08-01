@@ -109,6 +109,10 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn10Warning"
+  ];
+
   disabledTests = [
     # attempts to run the package manager uv
     "test_command_execution"

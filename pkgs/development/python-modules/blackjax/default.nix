@@ -28,7 +28,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "blackjax";
-  version = "1.6";
+  version = "1.6.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
     owner = "blackjax-devs";
     repo = "blackjax";
     tag = finalAttrs.version;
-    hash = "sha256-qLOAmUQxr1xtlJB/TMnjFkvvHUwh0XKpPN+FVD8ju8Y=";
+    hash = "sha256-NO/CvYtxfAid3ETpj5DcNQPdARP2cwqy9p0kHOybvNg=";
   };
 
   build-system = [
@@ -77,6 +77,10 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # too slow
     "test_adaptive_tempered_smc"
+
+    # AssertionError: False is not true : f32: controller never escalated (U=0);
+    # axis-aligned spike would do this, ensure u_dir is non-axis-aligned
+    "test_escalated_e2e_smoke_f32_and_x64"
 
     # AssertionError on numerical values
     "test_barker"

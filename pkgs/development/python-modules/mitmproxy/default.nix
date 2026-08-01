@@ -50,20 +50,8 @@ buildPythonPackage rec {
     hash = "sha256-YgM8GjWmWKxOZcahR3+9XO2Xyfu9v8rNgxKn/2oL35Y=";
   };
 
-  pythonRelaxDeps = [
-    # requested by maintainer
-    "brotli"
-    # just keep those
-    "typing-extensions"
-
-    "asgiref"
-    "cryptography"
-    "pyparsing"
-    "ruamel.yaml"
-    "tornado"
-    "urwid"
-    "wsproto"
-  ];
+  # pins many dependencies way to strict
+  pythonRelaxDeps = true;
 
   build-system = [ setuptools ];
 

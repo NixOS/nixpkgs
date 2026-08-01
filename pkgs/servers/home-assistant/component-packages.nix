@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2026.7.2";
+  version = "2026.7.4";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -643,8 +643,7 @@
       ];
     "bitcoin" =
       ps: with ps; [
-        blockchain
-      ];
+      ]; # missing inputs: blockchain
     "bizkaibus" =
       ps: with ps; [
         bizkaibus

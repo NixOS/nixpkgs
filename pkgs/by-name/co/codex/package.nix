@@ -14,7 +14,6 @@
   librusty_v8 ? callPackage ./librusty_v8.nix {
     inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
   },
-  livekit-libwebrtc,
   lld,
   makeBinaryWrapper,
   nix-update-script,
@@ -26,18 +25,18 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex";
-  version = "0.144.4";
+  version = "0.146.0";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "codex";
     tag = "rust-v${finalAttrs.version}";
-    hash = "sha256-NmYZxjNFPkRWN4rw+eeka10pJt6/oU3ZoLXBxj3dPRU=";
+    hash = "sha256-/kTIOX/klxm1nq2bJsBqS8f1jZZp2ilaTeULQFPJgDk=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/codex-rs";
 
-  cargoHash = "sha256-S4dsZXfmKvJItL2XYKyxfhqdCMATEG6oPjrtVRwkuYc=";
+  cargoHash = "sha256-N9jbH/cgAyu2QxneSnpkdaF0MgV3ZtDmN9q6rr9u+hE=";
 
   __structuredAttrs = true;
 
@@ -57,12 +56,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   postPatch = ''
-    # webrtc-sys asks rustc to link libwebrtc statically by default,
-    # but nixpkgs provides libwebrtc as a shared library.
-    # use LK_CUSTOM_WEBRTC to point to the packaged library and adjust linking
-    # to use the shared library instead
-    substituteInPlace $cargoDepsCopy/*/webrtc-sys-*/build.rs \
-      --replace-fail "cargo:rustc-link-lib=static=webrtc" "cargo:rustc-link-lib=dylib=webrtc"
     substituteInPlace Cargo.toml \
       --replace-fail 'lto = "thin"' "" \
       --replace-fail 'codegen-units = 4' ""
@@ -91,7 +84,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # character-conversion warning-as-error disabled.
   env = {
     LIBCLANG_PATH = "${lib.getLib libclang}/lib";
-    LK_CUSTOM_WEBRTC = lib.getDev livekit-libwebrtc;
     NIX_CFLAGS_COMPILE = toString (
       lib.optionals stdenv.cc.isGNU [
         "-Wno-error=stringop-overflow"

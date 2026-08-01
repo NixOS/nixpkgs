@@ -3,16 +3,13 @@
   stdenv,
   fetchFromGitHub,
   fpc,
-  lazarus,
+  lazarus-qt6,
   autoPatchelfHook,
 
-  glib,
   cairo,
   pango,
-  gtk2,
+  qt6Packages,
   gdk-pixbuf,
-  at-spi2-atk,
-  libx11,
   libnotify,
 
   nix-update-script,
@@ -37,24 +34,31 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     fpc
-    lazarus
+    lazarus-qt6
     autoPatchelfHook
+    qt6Packages.wrapQtAppsHook
   ];
 
   buildInputs = [
-    glib
     cairo
     pango
-    gtk2
+    qt6Packages.qtbase
+    qt6Packages.libqtpas
     gdk-pixbuf
-    at-spi2-atk
-    libx11
     libnotify
   ];
 
   patches = [ ./simplify-build-script.patch ];
 
   postPatch = "ln -s ${finalAttrs.kcontrols} kcontrols";
+
+  # The build script checks for magic files like `Qt5` or `Qt6`
+  # in order to determine which graphical toolkit tomboy-ng will
+  # be built on. Yes, this is something that upstream actually does:
+  # https://github.com/tomboy-notes/tomboy-ng/blob/619da85e4e11a7d20cd7f050b6b9d960a0e11a38/scripts/PKGBUILD.Qt6#L74
+  preBuild = ''
+    touch Qt6
+  '';
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
@@ -68,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   env = {
     COMPILER = lib.getExe' fpc "fpc";
-    LAZ_DIR = "${lazarus}/share/lazarus";
+    LAZ_DIR = "${lazarus-qt6}/share/lazarus";
   };
 
   meta = {
@@ -77,6 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pluiedev ];
     mainProgram = "tomboy-ng";
-    platforms = lib.platforms.unix ++ lib.platforms.windows;
+    platforms = lib.platforms.unix;
   };
 })

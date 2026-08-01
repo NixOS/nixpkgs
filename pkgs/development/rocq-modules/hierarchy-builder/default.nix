@@ -17,7 +17,7 @@ let
       in
       with lib.versions;
       lib.switch rocq-core.rocq-version [
-        (case (range "9.0" "9.2") "1.10.3")
+        (case (range "9.0" "9.3") "1.10.3")
         (case (range "9.0" "9.1") "1.10.2")
         (case (range "9.0" "9.1") "1.10.0")
         (case (range "9.0" "9.1") "1.9.1")

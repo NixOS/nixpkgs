@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "polkit-stdin-agent";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "r-vdp";
     repo = "polkit-stdin-agent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Na3v1773UZmsI6EdK0SwGeSOAPC890jy0J8EUwBBH2E=";
+    hash = "sha256-8eqom9btX5JnlOGzeQLPPSop9MSGqfIeBC4XAHCReCs=";
   };
 
-  cargoHash = "sha256-F/cbNrI6qC4rxUNHIRHE9ZfLh5WuKcE3xz/FaBz5eSw=";
+  cargoHash = "sha256-BDPVpF+nIHCmZwUZNp6fzUL60NXWrz+eacDNTgFU+AA=";
 
   strictDeps = true;
   __structuredAttrs = true;

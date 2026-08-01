@@ -5,6 +5,7 @@
   flit-core,
   jinja2,
   lark,
+  pyprojectVersionPatchHook,
   pysmi,
   pysnmp,
   pytestCheckHook,
@@ -24,6 +25,10 @@ buildPythonPackage (finalAttrs: {
   };
 
   build-system = [ flit-core ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   dependencies = [
     jinja2

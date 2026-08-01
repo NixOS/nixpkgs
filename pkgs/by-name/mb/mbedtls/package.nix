@@ -1,8 +1,13 @@
-{ callPackage, fetchurl }:
+{
+  lib,
+  stdenv,
+  callPackage,
+  fetchurl,
+}:
 
 callPackage ./generic.nix {
-  version = "3.6.6";
-  hash = "sha256-+PW41/c8M/Yz0EVWM4Gt4HTNBMUTU5MayaKVZ+upLIo=";
+  version = "3.6.7";
+  hash = "sha256-t1ZPeFA3ftKaEIaXQ7RXZEsiOAYK4KSSm55SFr9g17A=";
 
   patches = [
     # Fixes the build with GCC 14 on aarch64.
@@ -14,5 +19,10 @@ callPackage ./generic.nix {
       url = "https://raw.githubusercontent.com/openwrt/openwrt/52b6c9247997e51a97f13bb9e94749bc34e2d52e/package/libs/mbedtls/patches/100-fix-gcc14-build.patch";
       hash = "sha256-20bxGoUHkrOEungN3SamYKNgj95pM8IjbisNRh68Wlw=";
     })
+  ]
+  ++ lib.optionals stdenv.hostPlatform.is32bit [
+    # Fixes build with GCC 15.3 on 32-bit platforms.
+    # See: https://github.com/Mbed-TLS/mbedtls/pull/10793
+    ./fix-gcc153-32bit.patch
   ];
 }

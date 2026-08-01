@@ -10,7 +10,7 @@
 let
   pythonEnv = python3.withPackages (
     ps: with ps; [
-      cheetah3
+      ct3
       lxml
     ]
   );

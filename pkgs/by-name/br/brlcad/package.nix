@@ -227,7 +227,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "BRLCAD_ENABLE_STRICT" false)
-    (lib.cmakeBool "BUILD_TESTING" finalAttrs.doCheck)
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "BRLCAD_ENABLE_QT" enableQt)
     (lib.cmakeFeature "GTE_INCLUDE_DIR" "${gtmathematics}/include/gtmathematics")
     (lib.cmakeFeature "LMDB_LIBRARY" "${lmdb.out}/lib/liblmdb${stdenv.hostPlatform.extensions.sharedLibrary}")

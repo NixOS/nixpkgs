@@ -5,7 +5,6 @@
   jinja2,
   mock,
   packaging,
-  ply,
   pytestCheckHook,
   setuptools,
   setuptools-scm,
@@ -13,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "stone";
-  version = "3.5.2";
+  version = "3.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dropbox";
     repo = "stone";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-05sAhyQx3IalHqNkSrJgRDJz85M331hF5Crc/gtP6jE=";
+    hash = "sha256-79CY4eJcsMrhJvRCdD3brwmPkl8kxLQbGIqxIA9UXPg=";
   };
 
   postPatch = ''
@@ -38,7 +37,6 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     jinja2
     packaging
-    ply
   ];
 
   nativeCheckInputs = [

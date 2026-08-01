@@ -5,16 +5,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "reader";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "mrusme";
     repo = "reader";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qu48ikqm4EmoeL9j67tGkX3EFBd1JdrLWhhmoElCoJY=";
+    hash = "sha256-R7U+atLrpx7ppdyMR381JUSOM7KAfDr8P9oEAzuZbCY=";
   };
 
-  vendorHash = "sha256-8IjN7hm5Rg9ItkxE9pbnkVr5t+tG95W9vvXyGaWmEIA=";
+  vendorHash = "sha256-XOcqyUGfE7tq1OY6h7WV33nBNgn+oLmKRSJfVKmXIz4=";
 
   meta = {
     description = "Lightweight tool offering better readability of web pages on the CLI";

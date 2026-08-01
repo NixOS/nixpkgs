@@ -53,6 +53,10 @@ stdenv.mkDerivation rec {
     # "undefined symbol: cblas_ctrmv" errors.
     ./patches/revert-blas-mesonification.patch
 
+    # Darwin linkers fail unless some NTL-backed Cython C++ extensions link
+    # NTL directly instead of relying on transitive linkage.
+    ./patches/link-ntl-directly-for-ntl-cython-extensions.patch
+
     # https://github.com/sagemath/sage/pull/41637 causes problems when
     # docbuilding.
     (fetchpatch2 {

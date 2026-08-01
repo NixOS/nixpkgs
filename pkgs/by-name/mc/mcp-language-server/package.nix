@@ -10,7 +10,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "isaacphi";
     repo = "mcp-language-server";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-T0wuPSShJqVW+CcQHQuZnh3JOwqUxAKv1OCHwZMr7KM=";
   };
 

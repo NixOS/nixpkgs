@@ -5,6 +5,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   orjson,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-error-for-skips,
   pytestCheckHook,
@@ -26,6 +27,10 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   dependencies = [
     aiohttp

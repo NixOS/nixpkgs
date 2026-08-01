@@ -17,7 +17,7 @@
   withDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 let
-  version = "1.56.0";
+  version = "1.57.0";
 in
 rustPlatform.buildRustPackage {
   inherit version;
@@ -36,10 +36,10 @@ rustPlatform.buildRustPackage {
     owner = "casey";
     repo = "just";
     tag = version;
-    hash = "sha256-ZDaSZnn/2oncsl5JTBctUXXSqw2WQnIUIWfYRh2N70A=";
+    hash = "sha256-fFeWGX72YcTKzPqfRYloTtnW4r7uXHUipyYP9VV8LZE=";
   };
 
-  cargoHash = "sha256-I0aWzBSpU2gu1wjsUJ0jPO5oifXFcMcRdqs9P4j2vnA=";
+  cargoHash = "sha256-hdfOs9UDjdrk8XclCxTdQgSOpt+yYQoPD5lWZrdNs2Q=";
 
   nativeBuildInputs =
     lib.optionals (installShellCompletions || installManPages) [ installShellFiles ]

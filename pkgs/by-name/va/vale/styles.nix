@@ -62,12 +62,12 @@ in
 
   google = buildStyle rec {
     name = "Google";
-    version = "0.6.3";
+    version = "0.7.0";
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "Google";
       rev = "v${version}";
-      hash = "sha256-1aN7wCdShhMsBN83u7l+5Ffm2WKC8ltZyT3hPZCNWYo=";
+      hash = "sha256-ZNAQ9ITsp+DJxyCI1jd7c7JQIPnR5C3H4SvkaF6CV2Q=";
     };
     meta = {
       description = "Vale-compatible implementation of the Google Developer Documentation Style Guide";
@@ -142,12 +142,12 @@ in
 
   redhat = buildStyle rec {
     name = "RedHat";
-    version = "664";
+    version = "673";
     src = fetchFromGitHub {
       owner = "redhat-documentation";
       repo = "vale-at-red-hat";
       rev = "v${version}";
-      hash = "sha256-MVC/OJctGo5SYKkrMatNDXCfVgM/KcckHUB70STj3zw=";
+      hash = "sha256-/Yv4bzyZiSVDaEe7pYqdSJI6DPh4A4p/0Vh2bTXc0U4=";
     };
     stylePath = ".vale/styles/RedHat";
     meta = {

@@ -6,7 +6,7 @@ callPackage ./runtime-build.nix rec {
   src = requireFile {
     name = "houdini-${version}-linux_x86_64_gcc11.2.tar.gz";
     hash = "sha256-bZmoH1NKQhhMAhIl3pTL7irUZ7HrOhS8R7GApLD5514=";
-    url = "https://www.sidefx.com/download/daily-builds/?production=true";
+    url = "https://www.sidefx.com/download/daily-builds/?show_launcher=false&production=true&linux=true";
   };
   outputHash = "sha256-/7ctlMUoyJdPdBQV7rRO9pWcg9bXcnMJsB9TN/Jo8QQ=";
 }

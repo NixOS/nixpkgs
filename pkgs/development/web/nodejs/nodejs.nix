@@ -144,7 +144,7 @@ let
   );
   useSharedNBytes = lib.versionAtLeast version (if majorVersion == "24" then "24.14.0" else "25.5");
   useSharedLief = lib.versionAtLeast version "25.6";
-  useSharedMerve = lib.versionAtLeast version (if majorVersion == 24 then "24.14.0" else "25.6.1");
+  useSharedMerve = lib.versionAtLeast version (if majorVersion == "24" then "24.14.0" else "25.6.1");
   useSharedSQLite = lib.versionAtLeast version "22.5";
   useSharedTemporal = majorVersion == "26";
   useSharedZstd = lib.versionAtLeast version "22.15";
@@ -190,7 +190,8 @@ let
     inherit nbytes;
   })
   // (lib.optionalAttrs useSharedMerve {
-    inherit merve;
+    # Merve cannot be built with simdutf_6, and upstream also disables simdutf support on the 24.x branch
+    merve = if majorVersion == "24" then (merve.override { simdutf = null; }) else merve;
   })
   // (lib.optionalAttrs useSharedZstd {
     inherit zstd;
@@ -330,6 +331,7 @@ let
       ]
       ++ lib.optional useSharedTemporal "--v8-enable-temporal-support"
       ++ lib.optionals (lib.versionOlder version "19") [ "--without-dtrace" ]
+      ++ lib.optionals (lib.versionAtLeast version "22") [ "--use-prefix-to-find-headers" ]
       ++ lib.concatMap (name: [
         "--shared-${name}"
         "--shared-${name}-libpath=${lib.getLib sharedLibDeps.${name}}/lib"
@@ -347,9 +349,7 @@ let
 
       dontDisableStatic = true;
 
-      configureScript = writeScript "nodejs-configure" ''
-        exec ${python.executable} configure.py "$@"
-      '';
+      configureScript = "${python.pythonOnBuildForHost.interpreter} configure.py";
 
       # In order to support unsupported cross configurations, we copy some intermediate executables
       # from a native build and replace all the build-system tools with a script which simply touches
@@ -518,12 +518,6 @@ let
               "test-tick-processor-arguments"
               "test-set-raw-mode-reset-signal"
             ]
-            # Apple SDK update broke something related to those tests, so skipping them for now
-            ++ lib.optionals (majorVersion == "24" && stdenv.hostPlatform.isDarwin) [
-              "test-worker-track-unmanaged-fds"
-              "test-esm-import-meta-main-eval"
-              "test-worker-debug"
-            ]
             # These network/fetch/inspector tests fail on riscv64
             ++ lib.optionals (majorVersion == "24" && stdenv.hostPlatform.isRiscV64) [
               "test-fetch"
@@ -683,6 +677,9 @@ let
           done
         done
       '';
+
+      # reduces build time from ~90 to ~15 minutes on hydra
+      requiredSystemFeatures = [ "big-parallel" ];
 
       passthru.tests = {
         version = testers.testVersion {

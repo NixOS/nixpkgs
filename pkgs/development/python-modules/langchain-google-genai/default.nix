@@ -29,7 +29,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-google-genai";
-  version = "4.2.7";
+  version = "4.3.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -37,7 +37,7 @@ buildPythonPackage (finalAttrs: {
     owner = "langchain-ai";
     repo = "langchain-google";
     tag = "libs/genai/v${finalAttrs.version}";
-    hash = "sha256-pfjnXbUr8lkztcNZ8JImi+NiMF0DHOS3qtFsv5fKDiU=";
+    hash = "sha256-6RI1LNbjwqr+ZUkPPhbscCTBw+szY9SOiyxsAOeviwI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/genai";

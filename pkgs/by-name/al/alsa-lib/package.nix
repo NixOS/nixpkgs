@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "alsa-lib";
-  version = "1.2.16";
+  version = "1.2.16.1";
 
   src = fetchurl {
     url = "mirror://alsa/lib/alsa-lib-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-EiseMWbVX+GbzeZWU116NvKrEOZscsatL0PyD/3tCpY=";
+    hash = "sha256-90Dbf0iCVZRP/UQoQW7jOQqWdChWkWQz30aMKBQ2SA4=";
   };
 
   patches = [
@@ -46,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "http://www.alsa-project.org/";
+    changelog = "https://github.com/alsa-project/alsa-lib/releases/tag/v${finalAttrs.version}";
     description = "ALSA, the Advanced Linux Sound Architecture libraries";
     mainProgram = "aserver";
 

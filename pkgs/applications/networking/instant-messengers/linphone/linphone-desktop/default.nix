@@ -139,7 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   preInstall = ''
     mkdir -p $out/share/linphone
-    mkdir -p $out/share/sounds/linphone
     mkdir -p $out/share/belr
   '';
 
@@ -155,6 +154,9 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${msopenh264}/lib/mediastreamer/plugins/* $out/lib/mediastreamer/plugins/
     ln -s ${mediastreamer2}/lib/mediastreamer/plugins/* $out/lib/mediastreamer/plugins/
     ln -s ${grammars} $out/share/belr/grammars
+
+    mkdir -p $out/share/sounds/linphone/
+    ln -s ${liblinphone}/share/sounds/linphone/rings $out/share/sounds/linphone/rings
 
     wrapProgram $out/bin/linphone \
       --unset QML2_IMPORT_PATH \

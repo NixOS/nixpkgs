@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "redis";
-  version = "8.8.0";
+  version = "8.8.1";
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "redis";
     tag = finalAttrs.version;
-    hash = "sha256-D9rhe5GC0axhKHoRfeegUIGYXbrcEsa9m9vYJVxwtCk=";
+    hash = "sha256-VIzIv7NOmvuXygMXyWpYpnwKQ2rGguaGRd48/QjyYD8=";
   };
 
   patches = lib.optional useSystemJemalloc (fetchpatch2 {
@@ -77,8 +77,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isFreeBSD "-lexecinfo";
 
-  # darwin currently lacks a pure `pgrep` which is extensively used here
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  # Tests are in the `tests` passthru derivation: the suite is very large and some tests (e.g. memtests) are flaky.
+  doCheck = false;
+
   nativeCheckInputs = [
     which
     tcl
@@ -126,7 +127,10 @@ stdenv.mkDerivation (finalAttrs: {
   versionCheckProgram = "${placeholder "out"}/bin/redis-server";
 
   passthru = {
-    tests.redis = nixosTests.redis;
+    tests = {
+      redis = nixosTests.redis;
+      unitTests = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
+    };
     serverBin = "redis-server";
     updateScript = nix-update-script { };
   };

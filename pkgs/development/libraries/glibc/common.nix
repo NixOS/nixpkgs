@@ -116,6 +116,15 @@ stdenv.mkDerivation (
       # enable parallel & reproducible build of glibcLocales
       ./0001-localedata-allow-reproducible-parallel-install-of-lo.patch
       ./0002-Makeconfig-make-inst_complocaledir-overridable.patch
+
+      # Security fixes.
+      #
+      # Can be dropped on 2.44. The first patch is only to make it
+      # easier to backport the fix for CVE-2026-6238 and it seems
+      # useful in its own right anyhow.
+      ./0001-resolv-Check-for-inet_ntop-failure-in-ns_sprintrrf.patch
+      ./0002-resolv-More-types-as-unknown-in-ns_sprintrrf-CVE-202.patch
+      ./0003-resolv-Fix-buffer-overreads-in-ns_sprintrrf-CVE-2026.patch
     ]
     /*
       NVCC does not support ARM intrinsics. Since <math.h> is pulled in by almost
@@ -209,7 +218,12 @@ stdenv.mkDerivation (
 
     makeFlags =
       (args.makeFlags or [ ])
-      ++ [ "OBJCOPY=${stdenv.cc.targetPrefix}objcopy" ]
+      ++ [
+        "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
+        # zonedir does nothing on NixOS but is important for non-NixOS.
+        # See https://github.com/NixOS/nixpkgs/pull/491193
+        "zonedir=/usr/share/zoneinfo"
+      ]
       ++ lib.optionals (stdenv.cc.libc != null) [
         "BUILD_LDFLAGS=-Wl,-rpath,${stdenv.cc.libc}/lib"
         "OBJDUMP=${stdenv.cc.bintools.bintools}/bin/objdump"

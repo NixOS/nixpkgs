@@ -24,9 +24,17 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-TWL/NzQux67XSFNTI5MMfPlKz3HDWRiCsmp+pQ8+3BY=";
   };
 
-  # GNU tar fails to link libiconv even though the configure script detects it.
-  # https://savannah.gnu.org/bugs/index.php?64441
-  patches = [ ./link-libiconv.patch ];
+  patches = [
+    # GNU tar fails to link libiconv even though the configure script detects it.
+    # https://savannah.gnu.org/bugs/index.php?64441
+    ./link-libiconv.patch
+
+    # acl 2.4.0 adds functions that have name conflicts with internal
+    # (`static`) functions from GNU tar. we prefix `tar_` to these names to
+    # avoid this, matching the approach from
+    # https://lists.gnu.org/archive/html/bug-tar/2026-06/msg00013.html
+    ./acl-2.4.0-name-conflicts.patch
+  ];
 
   # gnutar tries to call into gettext between `fork` and `exec`,
   # which is not safe on darwin.

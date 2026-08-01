@@ -52,13 +52,16 @@ buildPythonPackage (finalAttrs: {
   dontUseCmakeConfigure = true;
 
   pythonRelaxDeps = [
+    "cmake"
     "draccus"
     "numpy"
     "packaging"
+    "setuptools"
     "torch"
     "torchvision"
   ];
   dependencies = [
+    cmake
     draccus
     einops
     gymnasium
@@ -69,6 +72,7 @@ buildPythonPackage (finalAttrs: {
     pillow
     requests
     safetensors
+    setuptools
     termcolor
     torch
     torchcodec

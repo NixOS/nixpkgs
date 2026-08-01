@@ -1,44 +1,60 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p common-updater-scripts coreutils gnugrep jq squashfsTools
+#!nix-shell -i bash -p gawk common-updater-scripts coreutils jq squashfsTools
 
 set -eu -o pipefail
 
 RELEASES=$(curl -H 'Snap-Device-Series: 16' http://api.snapcraft.io/v2/snaps/info/chromium-ffmpeg)
-STABLE_RELEASES=$(echo $RELEASES | jq '."channel-map" | .[] | select(.channel.risk=="stable")')
+# We only need the download url and architecture
+STABLE_RELEASES=$(echo $RELEASES | jq '.["channel-map"] | .[] |  select(.channel.risk=="stable") | { arch: .channel.architecture, url: .download.url }')
+
+function get_url() {
+  local architecture=$1
+  echo $STABLE_RELEASES | jq -r '. | select(.arch=="'${architecture}'") | .url'
+}
+
+# TODO If nix ever supports sha3-384, we can get that from the JSON and use it for the download hash
+function get_source() {
+  local url=$1
+  # returns the source path
+  nix-prefetch-url --print-path "$url" | tail -n 1
+}
 
 function max_version() {
-  local versions=$(echo $1 | jq -r '.version')
-  echo "$(echo $versions |  grep -E -o '^[0-9]+')"
+  local source=$1
+  local versions="$(unsquashfs -l $source | grep -Po '^squashfs-root/chromium-ffmpeg-git-\K[[:digit:]]{4}-[[:digit:]]{2}-[[:digit:]]{2}')"
+  echo "$versions" | sort -V | tail -n 1
 }
 
 function update_source() {
   local platform=$1
-  local selectedRelease=$2
-  local version=$3
-  local url=$(echo $selectedRelease | jq -r '.download.url')
-  source="$(nix-prefetch-url "$url")"
-  hash=$(nix-hash --to-sri --type sha256 "$source")
-  update-source-version vivaldi-ffmpeg-codecs "$version" "$hash" "$url" --ignore-same-version --system=$platform --source-key="sources.$platform" --file "package.nix"
+  local url=$2
+  local source=$3
+  local version=$4
+  local source_hash=$(nix-hash --type sha256 --flat --base32 "$source")
+  local hash=$(nix-hash --to-sri --type sha256 "$source_hash")
+  update-source-version "vivaldi-ffmpeg-codecs" "$version" "$hash" "$url" --ignore-same-version --system=$platform --source-key="sources.$platform"
 }
 
-x86Release="$(echo $STABLE_RELEASES | jq 'select(.channel.architecture=="amd64")')"
-x86CodecVersion=$(max_version "$x86Release")
-arm64Release="$(echo $STABLE_RELEASES | jq -r 'select(.channel.architecture=="arm64")')"
-arm64CodecVersion=$(max_version "$arm64Release")
+x86_url="$(get_url "amd64")"
+x86_source="$(get_source ${x86_url})"
+x86_version="0-unstable-$(max_version ${x86_source})"
 
-currentVersion=$(grep 'version =' ./package.nix | cut -d '"' -f 2)
+arm64_url="$(get_url "arm64")"
+arm64_source="$(get_source ${arm64_url})"
+arm64_version="0-unstable-$(max_version ${arm64_source})"
 
-if [[ "$currentVersion" == "$x86CodecVersion" ]]; then
+currentVersion=$(nix eval --raw -f . vivaldi-ffmpeg-codecs.version)
+
+if [[ "$currentVersion" == "$x86_version" ]]; then
   exit 0
 fi
 
-# If this fails too often, consider finding the max common version between the two architectures
-if [[ "$x86CodecVersion" != "$arm64CodecVersion" ]]; then
-    >&2 echo "Multiple chromium versions found: $x86CodecVersion (intel) and $arm64CodecVersion (arm); no update"
-    exit 1
+# If this fails too often, we can try using the lesser of the two versions for both
+# as the snap contains the last 4-5 versions.
+if [[ "$x86_version" != "$arm64_version" ]]; then
+  >&2 echo "Multiple chromium versions found: $x86_version (intel) and $arm64_version (arm); no update"
+  exit 1
 fi
 
-
-
-update_source "x86_64-linux" "$x86Release" "$x86CodecVersion"
-update_source "aarch64-linux" "$arm64Release" "$arm64CodecVersion"
+update_source "x86_64-linux" "$x86_url" "$x86_source" "$x86_version"
+update_source "aarch64-linux" "$arm64_url" "$arm64_source" "$arm64_version"

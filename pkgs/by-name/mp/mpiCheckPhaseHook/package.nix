@@ -2,7 +2,7 @@
   lib,
   makeSetupHook,
   stdenv,
-  openmpCheckPhaseHook,
+  checkPhaseThreadLimitHook,
 }:
 
 makeSetupHook {
@@ -14,7 +14,7 @@ makeSetupHook {
   };
 
   propagatedNativeBuildInputs = [
-    openmpCheckPhaseHook
+    checkPhaseThreadLimitHook
   ];
 
   meta.license = lib.licenses.mit;

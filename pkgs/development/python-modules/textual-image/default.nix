@@ -5,7 +5,7 @@
   fetchFromGitHub,
 
   # build-system
-  setuptools,
+  hatchling,
 
   # dependencies
   rich,
@@ -18,7 +18,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "textual-image";
-  version = "0.12.0";
+  version = "0.13.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -26,10 +26,10 @@ buildPythonPackage (finalAttrs: {
     owner = "lnqs";
     repo = "textual-image";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-W0f9ZnSZ58XqiPnr9SZEv22EE4yCsvXcgNA8eJebJQo=";
+    hash = "sha256-7TPng2rBYVY1r7Y1pkSZYo4r+MdyD8HzqJAMpzyNqZE=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     pillow

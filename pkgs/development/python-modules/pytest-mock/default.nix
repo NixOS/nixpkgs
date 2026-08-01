@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pytest,
   pytest-asyncio,
   pytestCheckHook,
@@ -20,6 +21,14 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-9h5/cssWs4F0LKnFLjWDsEjB2AYczLvnSjiUdsaEcBQ=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "pytest-9.1-compat.patch";
+      url = "https://github.com/pytest-dev/pytest-mock/commit/1d42981a1577207db5919852f30ef08c97208496.patch";
+      hash = "sha256-9/vQi/VvZRrIUSq1e90MvLB0idkc+tT4R6q1Ut4HKnY=";
+    })
+  ];
 
   build-system = [
     setuptools

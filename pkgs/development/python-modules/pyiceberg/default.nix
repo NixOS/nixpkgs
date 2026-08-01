@@ -80,6 +80,8 @@ buildPythonPackage (finalAttrs: {
   env.CIBUILDWHEEL = "1";
 
   pythonRelaxDeps = [
+    # cachetools<7.0,>=5.5 not satisfied by version 7.1.4
+    "cachetools"
     # rich<15.0.0,>=10.11.0 not satisfied by version 15.0.0
     "rich"
   ];

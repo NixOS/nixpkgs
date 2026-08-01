@@ -1,21 +1,47 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   python3Packages,
   qt6,
+  linkFarm,
+  hunspellDictsChromium,
+  dictionaries ? [
+    hunspellDictsChromium.en-us
+    hunspellDictsChromium.en-gb
+    hunspellDictsChromium.de-de
+    hunspellDictsChromium.fr-fr
+    hunspellDictsChromium.sv-se
+  ],
 }:
 
+let
+  qtwebengineDictionaries = linkFarm "zapzap-qtwebengine-dictionaries" (
+    map (d: {
+      name = d.dictFileName;
+      path = d;
+    }) dictionaries
+  );
+in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "zapzap";
-  version = "6.5.2.5";
+  version = "7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rafatosta";
     repo = "zapzap";
     tag = finalAttrs.version;
-    hash = "sha256-VybcZNB0k1DwAmluQpEMuM7cHKI8sGyG284g9E3YcP8=";
+    hash = "sha256-0LrIx7k9b0+zsmezjF6CmJo4nqU7GPW1HHWAUVVnbzk=";
   };
+
+  patches = [
+    # Support setting dict lookup path. Remove with next release.
+    (fetchpatch {
+      url = "https://github.com/rafatosta/zapzap/commit/3517079e8fbd3853fe184c393137709de68f020e.patch";
+      hash = "sha256-Eqy483+mJHLHsS21B8LnJ9oIqwTRCMVKhHBO8hleBh4=";
+    })
+  ];
 
   nativeBuildInputs = [
     qt6.wrapQtAppsHook
@@ -46,7 +72,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dontWrapQtApps = true;
   preFixup = ''
-    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+    makeWrapperArgs+=(
+      "''${qtWrapperArgs[@]}"
+      ${lib.optionalString (dictionaries != [ ]) ''
+        --set-default QTWEBENGINE_DICTIONARIES_PATH "${qtwebengineDictionaries}"
+      ''}
+    )
   '';
 
   # has no tests

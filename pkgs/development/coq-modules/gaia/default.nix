@@ -18,6 +18,7 @@ mkCoqDerivation {
   release."1.17".hash = "sha256-2VzdopXgKS/wC5Rd1/Zlr12J5bSIGINFjG1nrMjDrGE=";
   release."2.2".hash = "sha256-y8LlQg9d9rfPFjzS9Xu3BW/H3tPiOC+Eb/zwXJGW9d4=";
   release."2.3".hash = "sha256-inWJok0F3SZpVfoyMfpRXHVHn4z2aY8JjCKKhdVTnoc=";
+  release."2.4".hash = "sha256-7hq2K9KMkWug2zyvB2mcy1pnpTJKg8l8vtBtUt6NcXo=";
   releaseRev = (v: "v${v}");
 
   inherit version;
@@ -35,6 +36,7 @@ mkCoqDerivation {
     lib.switch
       [ coq.coq-version mathcomp.version ]
       [
+        (case (range "8.16" "9.3") (range "2.0" "2.6") "2.4")
         (case (range "8.16" "9.1") (range "2.0" "2.5") "2.3")
         (case (range "8.16" "9.0") (range "2.0" "2.3") "2.2")
         (case (range "8.10" "8.18") (range "1.12.0" "1.18.0") "1.17")

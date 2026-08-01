@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayland";
-  version = "1.25.0";
+  version = "1.26.0";
 
   src = fetchurl {
     url =
       with finalAttrs;
       "https://gitlab.freedesktop.org/wayland/wayland/-/releases/${version}/downloads/${pname}-${version}.tar.xz";
-    hash = "sha256-wGXwQK/f8xd2gGAPJJcn5Boa/CL8zyciLxX1MG+qHwM=";
+    hash = "sha256-ZBduqkbklpkD4ob45e+DMa/8F/3wOsm1g4HSsjFit6M=";
   };
 
   postPatch = lib.optionalString withDocumentation ''

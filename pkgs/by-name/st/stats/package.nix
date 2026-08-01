@@ -3,8 +3,6 @@
   swiftPackages,
   fetchFromGitHub,
   leveldb,
-  # TODO: Clean up on `staging`.
-  llvmPackages,
   perl,
   actool,
   makeWrapper,
@@ -90,8 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
     actool
     makeWrapper
     rcodesign
-    # TODO: Clean up on `staging`.
-    llvmPackages.lld
   ];
 
   buildInputs = [ leveldb ];
@@ -130,8 +126,6 @@ stdenv.mkDerivation (finalAttrs: {
       # The Swift compiler in nixpkgs uses SDK 14 headers (which compile fine), but without
       # this flag the linker records SDK 14 and macOS withholds it (Liquid Glass)
       -Xlinker -platform_version -Xlinker macos -Xlinker 14.0 -Xlinker 26.0
-      # TODO: Clean up on `staging`
-      -use-ld=lld
     )
 
     buildFramework() {

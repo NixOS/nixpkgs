@@ -7,7 +7,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "alibabacloud-darabonba-encode-util";
-  version = "0.0.2";
+  version = "0.0.3";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -15,7 +15,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     pname = "alibabacloud_darabonba_encode_util";
     inherit (finalAttrs) version;
-    hash = "sha256-8cSE8nbWBFD6SbSymHGU50H8svf6rn8ofArmWryF/U0=";
+    hash = "sha256-8pPtX1kz6XBhpR2ArrS9xNOLxn9uCspu2nxdeBSyHEY=";
   };
 
   build-system = [ setuptools ];

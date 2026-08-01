@@ -15,7 +15,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sparsediffpy";
-  version = "0.5.1";
+  version = "0.6.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -26,7 +26,7 @@ buildPythonPackage (finalAttrs: {
     # SparseDiffEngine is built from source and their cmake does not support finding it on the
     # system. We fallback to using the git submodule approach for now.
     fetchSubmodules = true;
-    hash = "sha256-PqtD3FjOpYLuu5ddeTdJ1UcL4Wvcv6RoZFGchpVdBAI=";
+    hash = "sha256-W0S7VpPrthj5IuXkqPgb9YwuebcjF1e4rAKcStRowII=";
   };
 
   build-system = [

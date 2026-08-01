@@ -286,7 +286,7 @@ stdenv.mkDerivation (finalAttrs: {
       decomposition of ideals, integral closure of rings, and more.
     '';
     homepage = "https://macaulay2.com/";
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ coolcuber ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

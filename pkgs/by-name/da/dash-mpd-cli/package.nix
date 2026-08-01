@@ -25,18 +25,22 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dash-mpd-cli";
-  version = "0.2.33";
+  version = "0.2.34";
 
   src = fetchFromGitHub {
     owner = "emarsden";
     repo = "dash-mpd-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IPWbS3kIn3rC1s7nJe3Q94scuW87LaQn5KAhXTYvWGg=";
+    hash = "sha256-6iRjceC52HsM9MzmCqiuq5/wP/GC+IR0g/IxoD91uEg=";
   };
 
-  cargoHash = "sha256-MmZwiH1Qzb5MiwhEYsCVo4xD5YmJ+mObpkgc6J0sfuw=";
+  cargoHash = "sha256-9HDpgff+JJY2qIo6Pl96c1wrTP0/j7ikgiG0lU4Nt88=";
 
   __structuredAttrs = true;
+
+  # Needed for HTTP3 support (which is enabled by default):
+  # https://github.com/emarsden/dash-mpd-cli/blob/2d53fa0c077ede18c9cee198903a7884e880d47a/.github/workflows/ci.yml#L5-L7
+  env.RUSTFLAGS = "--cfg reqwest_unstable";
 
   nativeBuildInputs = [
     makeWrapper

@@ -61,9 +61,6 @@
   vulkanSupport ? true,
   waylandSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   x11Support ? !stdenv.hostPlatform.isAndroid && !stdenv.hostPlatform.isWindows,
-
-  # TODO: Clean up on `staging`.
-  llvmPackages,
 }:
 
 assert lib.assertMsg (
@@ -73,7 +70,7 @@ assert lib.assertMsg (ibusSupport -> dbusSupport) "SDL3 requires dbus support to
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3";
-  version = "3.4.10";
+  version = "3.4.12";
 
   outputs = [
     "lib"
@@ -86,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libsdl-org";
     repo = "SDL";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-6Dph2eLiJUmpQzPWe8EuY5LrWhrFwde2f2dwfgCcWNw=";
+    hash = "sha256-b6l3HgdhqIe9LazJmLivbCJgbKPAS8S54fuB9xvgalI=";
   };
 
   postPatch =
@@ -130,8 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     validatePkgConfig
   ]
-  ++ lib.optional waylandSupport wayland-scanner
-  ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.lld;
+  ++ lib.optional waylandSupport wayland-scanner;
 
   buildInputs =
     lib.optionals libusbSupport [
@@ -211,10 +207,6 @@ stdenv.mkDerivation (finalAttrs: {
       && !(stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAndroid)
       && !(x11Support || waylandSupport)
     ))
-  ]
-  # TODO: Clean up on `staging`
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    (lib.cmakeFeature "CMAKE_LINKER_TYPE" "LLD")
   ];
 
   doCheck = true;

@@ -3,6 +3,8 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  mock,
+  pytest-mock,
   pytestCheckHook,
 }:
 
@@ -18,7 +20,11 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    mock
+    pytest-mock
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "oschmod" ];
 

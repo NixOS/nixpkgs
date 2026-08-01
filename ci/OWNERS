@@ -211,7 +211,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @Artturin @Ericson2314 @lo
 /pkgs/development/perl-modules      @stigtsp @marcusramberg
 
 # R
-/pkgs/applications/science/math/R   @jbedo
+/pkgs/by-name/r/R   @jbedo
 /pkgs/development/r-modules         @jbedo
 
 # Rust

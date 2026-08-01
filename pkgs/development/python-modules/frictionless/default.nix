@@ -1,4 +1,4 @@
-{
+args@{
   lib,
   buildPythonPackage,
   fetchFromGitHub,
@@ -56,12 +56,21 @@
   pytest-mock,
   pytest-timeout,
   pytest-vcr,
-  pytestCheckHook,
+  pytest_9_0,
+  pytest9_0CheckHook,
   requests-mock,
   xlrd,
   yattag,
 }:
 
+let
+  # With pytest 9.1 fails: AssertionError: assert not self._finalizers
+  pytestCheckHook = pytest9_0CheckHook;
+  pytest-lazy-fixtures = args.pytest-lazy-fixtures.override {
+    pytest = pytest_9_0;
+    pytestCheckHook = pytest9_0CheckHook;
+  };
+in
 buildPythonPackage (finalAttrs: {
   pname = "frictionless";
   version = "5.19.0";

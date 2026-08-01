@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "decorator";
-  version = "5.2.1";
+  version = "5.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "micheles";
     repo = "decorator";
     tag = version;
-    hash = "sha256-UBjZ8LdgJ6iLBjNTlA3up0qAVBqTSZMJt7oEhUo3ZEo=";
+    hash = "sha256-whGT0XDVdo0mhc2KP5unjdUSP3AFWKql1fKM1qlK/Zc=";
   };
 
   build-system = [ setuptools ];

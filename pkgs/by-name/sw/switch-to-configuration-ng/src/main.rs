@@ -211,17 +211,22 @@ fn die() -> ! {
     std::process::exit(code);
 }
 
+/// Parses the key-value pairs of `/etc/os-release`.
+/// Absence or emptiness of the file become the empty map.
+/// Failure to read returns an error Result.
 fn parse_os_release() -> Result<HashMap<String, String>> {
-    Ok(std::fs::read_to_string("/etc/os-release")
-        .context("Failed to read /etc/os-release")?
-        .lines()
-        .fold(HashMap::new(), |mut acc, line| {
-            if let Some((k, v)) = line.split_once('=') {
-                acc.insert(k.to_string(), v.to_string());
-            }
+    let contents = match std::fs::read_to_string("/etc/os-release") {
+        Ok(contents) => contents,
+        Err(err) if err.kind() == std::io::ErrorKind::NotFound => String::new(),
+        Err(err) => return Err(err).context("Failed to read /etc/os-release"),
+    };
+    Ok(contents.lines().fold(HashMap::new(), |mut acc, line| {
+        if let Some((k, v)) = line.split_once('=') {
+            acc.insert(k.to_string(), v.to_string());
+        }
 
-            acc
-        }))
+        acc
+    }))
 }
 
 fn do_pre_switch_check(command: &str, toplevel: &Path, action: &Action) -> Result<()> {

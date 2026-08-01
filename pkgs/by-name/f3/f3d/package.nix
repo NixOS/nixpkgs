@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Fast and minimalist 3D viewer using VTK";
-    homepage = "https://f3d-app.github.io/f3d";
+    homepage = "https://f3d.app";
     changelog = "https://github.com/f3d-app/f3d/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [

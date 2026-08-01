@@ -18,7 +18,7 @@ let
 in
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "pyg-lib";
-  version = "0.7.0";
+  version = "0.8.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -27,7 +27,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     repo = "pyg-lib";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-czHSOIocmoup502kLS8v+aeu6fVPPhqFh3hbGcFvNEQ=";
+    hash = "sha256-ZbvsA3Rtk+px/TPffdULADE+RnXkSQOSsqjSbZCsSwk=";
   };
 
   build-system = [

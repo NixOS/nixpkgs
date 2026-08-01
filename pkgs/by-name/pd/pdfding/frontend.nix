@@ -8,8 +8,8 @@
   pdfding,
 }:
 let
-  pdfjsVersion = "5.5.207"; # see update script
-  pdfjsHash = "sha256-HikisEa6L+BqsG6imgWhV+4J46BluU5zqU1nFZAG0eM=";
+  pdfjsVersion = "6.1.200"; # see update script
+  pdfjsHash = "sha256-8hByPf4BXTXakRxomXtknthlCLcjG/pCLVnjMxqrROI=";
   pdfjs = fetchzip {
     url = "https://github.com/mozilla/pdf.js/releases/download/v${pdfjsVersion}/pdfjs-${pdfjsVersion}-dist.zip";
     hash = pdfjsHash;

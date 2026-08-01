@@ -75,9 +75,14 @@ let
   */
   builtGrammars = lib.mapAttrs (_: lib.makeOverridable buildGrammar) grammars;
 
+  hasTreeSitterPrefix = lib.hasPrefix "tree-sitter-";
   grammarDerivationsFrom = lib.filterAttrs (
-    name: value: lib.hasPrefix "tree-sitter-" name && lib.isDerivation value
+    name: value: hasTreeSitterPrefix name && lib.isDerivation value
   );
+
+  removeTreesitterPrefix = lib.strings.removePrefix "tree-sitter-";
+  removeGrammarSuffix = lib.strings.removeSuffix "-grammar";
+  replaceHyphens = lib.strings.replaceStrings [ "-" ] [ "_" ];
 
   mkGrammarLinkFarm =
     grammars:
@@ -88,11 +93,7 @@ let
           name = lib.strings.getName drv;
         in
         {
-          name =
-            (lib.strings.replaceStrings [ "-" ] [ "_" ] (
-              lib.strings.removePrefix "tree-sitter-" (lib.strings.removeSuffix "-grammar" name)
-            ))
-            + ".so";
+          name = (replaceHyphens (removeTreesitterPrefix (removeGrammarSuffix name))) + ".so";
           path = "${drv}/parser";
         }
       ) grammars

@@ -197,6 +197,9 @@ buildPythonPackage (finalAttrs: {
 
     # Flaky: Unclosed temporary file handle under heavy load (as in nixpkgs-review)
     "test_check_privileges_without_c_force_root_and_no_group_entry"
+
+    # click 8.4 error message flag quoting changes
+    "test_preload_options"
   ]
   ++ lib.optionals (lib.versionAtLeast django.version "6.0") [
     "test_is_pickled"

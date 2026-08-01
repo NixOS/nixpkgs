@@ -84,8 +84,8 @@ chosenStdenv.mkDerivation (finalAttrs: {
   '';
 
   configureFlags = [
-    (lib.enableFeature finalAttrs.doCheck "unit")
-    (lib.enableFeature finalAttrs.doCheck "integration")
+    (lib.enableFeature finalAttrs.finalPackage.doCheck "unit")
+    (lib.enableFeature finalAttrs.finalPackage.doCheck "integration")
 
     # Strangely, it uses --with-fapi=yes|no instead of a normal configure flag.
     "--with-fapi=${lib.boolToYesNo fapiSupport}"

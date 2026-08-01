@@ -28,7 +28,6 @@
   gst_all_1,
   libgudev,
   umockdev,
-  zynaddsubfx,
   replaceVars,
   enableGeoLocation ? true,
   enableSystemd ? true,
@@ -75,11 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Allow installing installed tests to a separate output.
     ./installed-tests-path.patch
-
-    # Look for portal definitions under path from `NIX_XDG_DESKTOP_PORTAL_DIR` environment variable.
-    # While upstream has `XDG_DESKTOP_PORTAL_DIR`, it is meant for tests and actually blocks
-    # any configs from being loaded from anywhere else.
-    ./nix-pkgdatadir-env.patch
 
     # test tries to read /proc/cmdline, which is not intended to be accessible in the sandbox
     ./trash-test.patch

@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeBool "BUILD_STATIC" stdenv.hostPlatform.isStatic)
-    (lib.cmakeBool "WITH_UNIT_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "WITH_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   buildInputs = [

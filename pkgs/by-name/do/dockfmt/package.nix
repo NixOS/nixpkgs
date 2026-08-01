@@ -6,7 +6,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "dockfmt";
-  version = "unstable-2020-09-18";
+  version = "0.3.3-unstable-2020-09-17";
 
   # The latest released version doesn't support reading from stdin.
   src = fetchFromGitHub {

@@ -2,6 +2,7 @@
   lib,
   python3Packages,
   fetchPypi,
+  fetchgit,
   patatt,
 }:
 
@@ -30,6 +31,15 @@ python3Packages.buildPythonApplication (finalAttrs: {
     git-filter-repo
     textual
   ];
+
+  passthru = {
+    src-misc = fetchgit {
+      url = "https://git.kernel.org/pub/scm/utils/b4/b4.git";
+      rev = "v${finalAttrs.version}";
+      hash = "sha256-NjYL3RKQpjDkU98qbXyl/cvLTJYVAfIowm8E2Rg8AgI=";
+      fetchSubmodules = false;
+    };
+  };
 
   meta = {
     homepage = "https://git.kernel.org/pub/scm/utils/b4/b4.git/about";

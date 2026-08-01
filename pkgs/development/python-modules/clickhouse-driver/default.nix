@@ -17,7 +17,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "clickhouse-driver";
-  version = "0.2.10";
+  version = "0.2.11";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -27,7 +27,7 @@ buildPythonPackage (finalAttrs: {
     owner = "mymarilyn";
     repo = "clickhouse-driver";
     tag = finalAttrs.version;
-    hash = "sha256-veFkmXAp8b6/Npt7f1EhMfM9OKlLugKtlXS+zMHWAro=";
+    hash = "sha256-wXWKTmkzK2UDbNPPzO4yQdAGDILtddE/bQGxznqPANI=";
   };
 
   build-system = [

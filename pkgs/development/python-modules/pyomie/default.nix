@@ -3,6 +3,7 @@
   aiohttp,
   aioresponses,
   buildPythonPackage,
+  click,
   deepdiff,
   fetchFromGitHub,
   poetry-core,
@@ -34,6 +35,7 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     aiohttp
+    click
     rich
     typer
   ];

@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-databoxedge";
-  version = "2.0.0";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_databoxedge";
     inherit version;
-    hash = "sha256-8Y8GbQJ8maIkmY08R0CBJoIVmr44z1joewl3DKssrMA=";
+    hash = "sha256-dyJm7i3ObN3n0oueehU7P9V9J/ErRzdXQuI7P5/aJOs=";
   };
 
   build-system = [ setuptools ];

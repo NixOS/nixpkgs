@@ -7,7 +7,6 @@
   lib,
   libpulseaudio,
   ninja,
-  pcre,
   pkg-config,
   taglib,
   zlib,
@@ -43,7 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libpulseaudio
-    pcre
     libsForQt5.qtbase
     taglib
     zlib

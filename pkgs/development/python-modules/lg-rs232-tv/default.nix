@@ -5,6 +5,7 @@
   uv-build,
   serialx,
   aiowebostv,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-timeout,
   pytestCheckHook,
@@ -26,6 +27,8 @@ buildPythonPackage (finalAttrs: {
     substituteInPlace pyproject.toml \
       --replace-fail "uv_build>=0.8.4,<0.9.0" "uv_build"
   '';
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   build-system = [ uv-build ];
 

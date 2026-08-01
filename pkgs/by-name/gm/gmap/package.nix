@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gmap";
-  version = "0.3.3";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "marawny";
     repo = "gmap";
-    tag = finalAttrs.version;
-    hash = "sha256-+klVySOgI/M57f98Cx3omkEBx/NcaWD4FuIW6cz1aN8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bHQjOZrY7tuyI7ScX+Hazkch4QtPD7bxc3+fy+HCVVs=";
   };
 
-  cargoHash = "sha256-WjYCwGyFjBjITqsMPsD4kkeuSGPXtSKOFKaEfznMryI=";
+  cargoHash = "sha256-CiSt+ETQa3qVHolOo2y0wZQac8pMJZbtxqfWiEPbfM8=";
 
   nativeBuildInputs = [ pkg-config ];
 

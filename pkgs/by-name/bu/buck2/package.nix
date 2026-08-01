@@ -55,19 +55,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "buck2";
-  version = "unstable-${buildHashes.version}"; # TODO (aseipp): kill 'unstable' once a non-prerelease is made
+  version = buildHashes.version;
 
   srcs = [
     # the platform-specific binary — which is also
     # zstd-compressed
     (fetchurl {
-      url = "https://github.com/facebook/buck2/releases/download/${lib.removePrefix "unstable-" finalAttrs.version}/buck2-${platform-suffix}.zst";
+      url = "https://github.com/facebook/buck2/releases/download/${finalAttrs.version}/buck2-${platform-suffix}.zst";
       hash = archHashes.buck2;
     })
     # rust-project, which is used to provide IDE integration Buck2 Rust projects,
     # is part of the official distribution
     (fetchurl {
-      url = "https://github.com/facebook/buck2/releases/download/${lib.removePrefix "unstable-" finalAttrs.version}/rust-project-${platform-suffix}.zst";
+      url = "https://github.com/facebook/buck2/releases/download/${finalAttrs.version}/rust-project-${platform-suffix}.zst";
       hash = archHashes.rust-project;
     })
   ];
@@ -134,7 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Fast, hermetic, multi-language build system";
     homepage = "https://buck2.build";
-    changelog = "https://github.com/facebook/buck2/releases/tag/${lib.removePrefix "unstable-" finalAttrs.version}";
+    changelog = "https://github.com/facebook/buck2/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [
       asl20 # or
       mit
@@ -145,6 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
       thoughtpolice
       lf-
       _9999years
+      cbarrete
     ];
     platforms = [
       "x86_64-linux"

@@ -13,18 +13,18 @@
   writableTmpDirAsHomeHook,
 }:
 let
-  version = "0.9.6";
+  version = "0.10.1";
   src = fetchFromGitHub {
     owner = "dmtrKovalenko";
-    repo = "fff.nvim";
+    repo = "fff";
     tag = "v${version}";
-    hash = "sha256-JOoc4RDPIggZaoPtPEWhQ2msWfgOOuI4PPguFMczJls=";
+    hash = "sha256-GGoy8ghA87vwHEc0fi97uiBrpRTAGk/QgqzKu8BBRXo=";
   };
   fff-nvim-lib = rustPlatform.buildRustPackage {
     pname = "fff-nvim-lib";
     inherit version src;
 
-    cargoHash = "sha256-nHVQccbKSfX9fZXh0aPRP33n4nHWhaRdz9k49apULME=";
+    cargoHash = "sha256-sOE3Zrs/ZtOIusH0+OvR1Ew5sfQfse6eWSLPwDPVSU4=";
 
     cargoBuildFlags = [
       "-p"
@@ -74,6 +74,9 @@ let
     ];
 
     env = {
+      # Build zlob for a portable CPU baseline (https://github.com/dmtrKovalenko/fff/issues/705)
+      CI = "1";
+
       OPENSSL_NO_VENDOR = true;
 
       # Allow undefined symbols on Darwin - they will be provided by Neovim's LuaJIT runtime
@@ -108,7 +111,7 @@ vimUtils.buildVimPlugin {
 
   meta = {
     description = "Fast Fuzzy File Finder for Neovim";
-    homepage = "https://github.com/dmtrKovalenko/fff.nvim";
+    homepage = "https://github.com/dmtrKovalenko/fff";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       GaetanLepage

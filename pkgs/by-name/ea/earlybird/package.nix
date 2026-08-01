@@ -14,13 +14,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "earlybird";
-  version = "4.6.0";
+  version = "4.6.1";
 
   src = fetchFromGitHub {
     owner = "americanexpress";
     repo = "earlybird";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-P8kA9MJA+2jtVOYLBu0oG9xTUTGCtiX4R+4ecmXDAAw=";
+    hash = "sha256-Wjvg0+IQHIB5wFwY+4grTOagk5fHMf6YlIB83Jv/ZwE=";
   };
 
   vendorHash = "sha256-pQ8gSDHsdDT/cgvRB0OSqnMZz2W5vAzFBzph0xksC2o=";

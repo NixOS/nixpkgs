@@ -10,7 +10,7 @@
   gdk-pixbuf,
   gtk4,
   libadwaita,
-  libdisplay-info,
+  libdisplay-info_0_3,
   libdrm,
   ocl-icd,
   vulkan-loader,
@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gdk-pixbuf
     gtk4
     libadwaita
-    libdisplay-info
+    libdisplay-info_0_3
     libdrm
     ocl-icd
     vulkan-loader

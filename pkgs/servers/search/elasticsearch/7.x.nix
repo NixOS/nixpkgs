@@ -93,5 +93,14 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       basvandijk
     ];
+    knownVulnerabilities = [
+      "Elasticsearch 7 is EOL since January 15 2026"
+      "CVE-2026-63144"
+      "CVE-2026-56145"
+      "CVE-2026-63263"
+      "CVE-2026-56144"
+      "CVE-2026-63140"
+      "CVE-2026-63136"
+    ];
   };
 }

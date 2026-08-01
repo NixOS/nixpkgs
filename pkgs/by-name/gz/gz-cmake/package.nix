@@ -45,8 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
   doBuildExamples = false;
 
   cmakeFlags = [
-    (lib.cmakeBool "BUILDSYSTEM_TESTING" finalAttrs.doCheck)
-    (lib.cmakeBool "BUILD_TESTING" finalAttrs.doCheck)
+    (lib.cmakeBool "BUILDSYSTEM_TESTING" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "BUILD_EXAMPLES" finalAttrs.doBuildExamples)
   ];
 

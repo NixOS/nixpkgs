@@ -11,11 +11,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xset";
-  version = "1.2.5";
+  version = "1.2.6";
 
   src = fetchurl {
     url = "mirror://xorg/individual/app/xset-${finalAttrs.version}.tar.xz";
-    hash = "sha256-n2ktVWNbOGLNY2M7EiKodoDsKDx6jo7W3WmKMUf3Xi8=";
+    hash = "sha256-Yjg3NJ6oh7wAPwHuLktrjd2cJ3T2MsbXDurRtWMGtpU=";
   };
 
   strictDeps = true;

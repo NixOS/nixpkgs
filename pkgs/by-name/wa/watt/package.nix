@@ -9,16 +9,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "watt";
-  version = "1.2.0";
+  version = "1.4.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "notashelf";
     repo = "watt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mb7z1NHhS5DtFNzi/H/XQR5RfhYY5ELxJg8DFMWtzmU=";
+    hash = "sha256-l908cT/YC8n31CIzck44Z+wcf9iwwTj+9WHSSmsgEzI=";
   };
-  cargoHash = "sha256-2eHr88gMfiwimpcPa/ZQ08C2YalO91fH6BSvcyLNcso=";
+  cargoHash = "sha256-FVsEyv4mkK7b0yiRZpvI8RsFUZSNquYWPYNiNLkmxRQ=";
 
   cargoBuildFlags = [
     "-p=watt"

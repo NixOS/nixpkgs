@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   autoreconfHook,
   makeWrapper,
   glibc,
@@ -78,6 +79,13 @@ stdenv.mkDerivation (finalAttrs: {
     # Keep in mind to check /src/external/pac_responder.m4 for Kerberos compatibility before update Kerberos !!!
     # Fix Kerberos Support version for PAC responder
     #./fix-kerberos-version.patch
+
+    # Remove once a release containing this upstream fix is packaged.
+    (fetchpatch2 {
+      name = "CVE-2026-14476.patch";
+      url = "https://github.com/SSSD/sssd/commit/ba207eab76ff5253662a763b9b6e9ea42f03d31b.patch?full_index=1";
+      hash = "sha256-55V8RfIcGF49GGebg+pgCLPU9MGY2S/7PaOGIqwNL0w=";
+    })
   ];
 
   postPatch = ''

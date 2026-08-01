@@ -18,6 +18,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-6kyb0a0cCwVSS4evDGg0Z7wLGhDUHnLeXUJ9PW+fhHk=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=78.1.1,<83.0" setuptools
+  '';
+
   build-system = [ setuptools ];
 
   pythonImportsCheck = [ "infrared_protocols" ];

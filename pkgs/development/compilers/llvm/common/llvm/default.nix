@@ -222,7 +222,35 @@ stdenv.mkDerivation (
               hash = "sha256-3hkbYPUVRAtWpo5qBmc2jLZLivURMx8T0GQomvNZesc=";
               stripLen = 1;
             }
-          );
+          )
+      ++ lib.optionals (lib.versions.major release_version == "21") [
+        # Several LLVM versions have a bug in SelectionDAG that causes
+        # miscompilations around conditional poisions. This was exposed due to
+        # Rust 1.97.0 exercising the involved code path heavily and generating
+        # segfaulting code. The patch was made to LLVM 23, but the tests have
+        # many conflicts, so we vendor a version-specific modified version.
+        #
+        # This should be backported to older LLVM versions as well, but this
+        # has not yet been done in order to ship the more important fixes
+        # quickly.
+        #
+        # Rust issue: https://github.com/rust-lang/rust/issues/159035
+        # LLVM issue: https://github.com/llvm/llvm-project/issues/208611
+        # LLVM PR: https://github.com/llvm/llvm-project/pull/208683
+        (getVersionFile "llvm/sdag-freeze-condition-in-select-of-load-fold.patch")
+      ]
+      ++ lib.optionals (lib.versions.major release_version == "22") [
+        # Same issue and fix as above, for LLVM 22. While LLVM 22 was EOL at
+        # the time of the LLVM PR, and was thus not backported upstream, the
+        # backport was made to Rust's LLVM fork on LLVM 22.1. Accordingly, we
+        # fetch the patch from there.
+        (fetchpatch {
+          name = "llvm-22-sdag-freeze-condition-in-select-of-load-fold.patch";
+          url = "https://github.com/rust-lang/llvm-project/commit/abcef279cd33492fe8301c8873fc535fa4dbf0d5.patch";
+          stripLen = 1;
+          hash = "sha256-HHVMVL7ZWiZkbfnD37zYxFWnfvI3LNS0Z2oFHhOaZsU=";
+        })
+      ];
 
     nativeBuildInputs = [
       cmake

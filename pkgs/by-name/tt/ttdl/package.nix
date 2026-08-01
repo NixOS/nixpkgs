@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ttdl";
-  version = "6.2.1";
+  version = "6.2.2";
 
   src = fetchFromGitHub {
     owner = "VladimirMarkelov";
     repo = "ttdl";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-KapM/3SSBahJERNbotB4VkLGBXabU4vgPgaYKVaSmCU=";
+    sha256 = "sha256-tHK8R+FFgQRbwBBWaeNAxCXtzEhrTVIq6vl8j3YvnDk=";
   };
 
-  cargoHash = "sha256-/leNAKgCUjp7haQV831QY0qAOv7iVLPj2PNEpwPSYRA=";
+  cargoHash = "sha256-/IE64OeMwmOHGnGJXvDdAUzIVggzNk54Nh4qIuYwOj4=";
 
   meta = {
     description = "CLI tool to manage todo lists in todo.txt format";

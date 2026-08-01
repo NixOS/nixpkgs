@@ -16,20 +16,20 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "node-sqlcipher";
-  version = "3.3.5";
+  version = "3.3.9";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "node-sqlcipher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RzuyUx0WEG8j8HwV5cepVJIeqYzJpNemFNtB+9NETto=";
+    hash = "sha256-eddDeNK8UA6CW1qXZtgS8QpuXVjFO6tVwpFDyYDnX+U=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm; # may be different than top-level pnpm
     fetcherVersion = 4;
-    hash = "sha256-HK3AetwGqFq/dhxX+aWgUww6eLCeQEkZIVsmmnYqdmM=";
+    hash = "sha256-avvXNPfN5YVqwCOU2RX8dos3LTlre1t/4COKb4zHkh4=";
   };
 
   cargoRoot = "deps/extension";

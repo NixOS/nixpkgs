@@ -9,6 +9,7 @@
   libvirt,
   withQemu ? false,
   qemu,
+  socket-vmnet,
   withVfkit ? false,
   vfkit,
   makeWrapper,
@@ -77,9 +78,15 @@ buildGoModule (finalAttrs: {
       --prefix PATH : ${
         lib.makeBinPath (
           lib.optionals withQemu [ qemu ]
-          ++ lib.optionals stdenv.hostPlatform.isLinux [ libvirt ]
+          ++ lib.optionals (withQemu && stdenv.hostPlatform.isDarwin) [ socket-vmnet ]
           ++ lib.optionals (withVfkit && stdenv.hostPlatform.isDarwin) [ vfkit ]
+          ++ lib.optionals stdenv.hostPlatform.isLinux [ libvirt ]
         )
+      } \
+      ${
+        lib.optionalString (
+          withQemu && stdenv.hostPlatform.isDarwin
+        ) ''--set MINIKUBE_SOCKET_VMNET_CLIENT_PATH "${lib.getExe' socket-vmnet "socket_vmnet_client"}"''
       } \
       ${lib.optionalString stdenv.hostPlatform.isLinux "--prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [ libvirt ]

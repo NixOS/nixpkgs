@@ -15,12 +15,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "algol68g";
-  version = "3.12.2";
+  version = "3.12.3";
 
   src = fetchurl {
-    # Uses archive.org because the original site removes older versions.
-    url = "https://web.archive.org/web/20260515052918/https://algol68genie.nl/algol68g-3.12.2.tar.gz";
-    hash = "sha256-4fiubqpgoH3YOlCg1bJHQ3kOayKNulW3CYbOK1awE7k";
+    url = "https://algol68genie.nl/algol68g-${finalAttrs.version}.tar.gz";
+    hash = "sha256-TS5m+Byi+5j4jiOuQbR159QERfNJsQiGNngtoyC9IrE=";
   };
 
   outputs = [
@@ -48,8 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall =
     let
       pdfdoc = fetchurl {
-        url = "https://web.archive.org/web/20260503174213/https://algol68genie.nl/learning-algol-68-genie.pdf";
-        hash = "sha256-eLMRf3XcAkr/Dmk7ieRe62x76VcCj+2QltHH7YtL15s=";
+        url = "https://algol68genie.nl/learning-algol-68-genie.pdf";
+        hash = "sha256-BrVjYXd5sknV0+UCRgQMf0H3QMzMQcLhytEEuiTGkLE=";
       };
     in
     lib.optionalString withPDFDoc ''

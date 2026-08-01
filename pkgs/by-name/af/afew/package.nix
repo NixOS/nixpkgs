@@ -3,18 +3,17 @@
   python3Packages,
   fetchPypi,
   pkgs,
-  testers,
-  afew,
+  versionCheckHook,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "afew";
-  version = "4.0.1";
+  version = "4.0.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-LPKSD4aMAREtf5Y4A9oa6Sh5lv/uuLpamcP35SBgA/M=";
+    hash = "sha256-gsfqyoVD6CXXd14MiyA5nq0e7wE6yymW9Ssmxpu6+E4=";
   };
 
   build-system = [
@@ -39,6 +38,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = [
     pkgs.notmuch
+    versionCheckHook
   ]
   ++ (with python3Packages; [
     freezegun
@@ -54,12 +54,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "doc"
     "man"
   ];
-
-  passthru.tests = {
-    version = testers.testVersion {
-      package = afew;
-    };
-  };
 
   meta = {
     homepage = "https://github.com/afewmail/afew";

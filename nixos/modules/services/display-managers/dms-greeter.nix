@@ -4,7 +4,6 @@
   pkgs,
   ...
 }:
-
 let
   inherit (lib)
     types
@@ -24,13 +23,27 @@ let
   cfgAutoLogin = config.services.displayManager.autoLogin;
   sessionData = config.services.displayManager.sessionData;
 
+  # Miracle WM is nested under `programs.wayland.miracle-wm` unlike the rest
+  compositorOption =
+    if cfg.compositor.name == "miracle-wm" then "wayland.miracle-wm" else "${cfg.compositor.name}";
   cacheDir = "/var/lib/dms-greeter";
+
+  # Not all compositor packages match the name they use and Miracle does not have a package option
+  compositorPkg =
+    if cfg.compositor.name == "miracle-wm" then
+      pkgs.miracle-wm
+    else
+      lib.attrByPath [
+        "programs"
+        cfg.compositor.name
+        "package"
+      ] null config;
 
   greeterScript = pkgs.writeShellScriptBin "dms-greeter-start" ''
     export PATH=$PATH:${
       makeBinPath [
         cfg.quickshell.package
-        config.programs.${cfg.compositor.name}.package
+        compositorPkg
       ]
     }
     ${
@@ -123,6 +136,9 @@ in
           "niri"
           "hyprland"
           "sway"
+          "mangowc"
+          "miracle-wm"
+          "labwc"
         ];
         example = "niri";
         description = ''
@@ -135,6 +151,9 @@ in
           - niri: A scrollable-tiling Wayland compositor
           - hyprland: A dynamic tiling Wayland compositor
           - sway: An i3-compatible Wayland compositor
+          - mango: A dwm-inspired Wayland compositor with modern config options and multiple layouts
+          - miracle-wm: A keyboard-driven Wayland compositor with smooth animations and extensibility
+          - labwc: Lightweight stacking Wayland compositor inspired by Openbox
         '';
       };
 
@@ -242,12 +261,16 @@ in
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = config.programs.${cfg.compositor.name}.enable or false;
+        assertion =
+          # Assemble the full attribute structure because miracle-wm is not nested in the same location as the others
+          lib.attrByPath (
+            [ "programs" ] ++ lib.splitString "." compositorOption ++ [ "enable" ]
+          ) false config;
         message = ''
           DankMaterialShell greeter: The compositor "${cfg.compositor.name}" is not enabled.
 
           Please enable the compositor via:
-            programs.${cfg.compositor.name}.enable = true;
+            programs.${compositorOption}.enable = true;
         '';
       }
       {

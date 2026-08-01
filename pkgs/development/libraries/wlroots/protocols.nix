@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "wlr-protocols";
-  version = "unstable-2022-09-05";
+  version = "0-unstable-2022-09-05";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -22,8 +22,8 @@ stdenv.mkDerivation {
 
   patchPhase = ''
     substituteInPlace wlr-protocols.pc.in \
-      --replace '=''${pc_sysrootdir}' "=" \
-      --replace '=@prefix@' "=$out"
+      --replace-fail '=''${pc_sysrootdir}' "=" \
+      --replace-fail '=@prefix@' "=$out"
   '';
 
   doCheck = true;

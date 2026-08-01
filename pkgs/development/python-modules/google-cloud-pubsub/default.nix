@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   google-api-core,
+  google-auth,
   google-cloud-testutils,
   grpc-google-iam-v1,
   grpcio-status,
@@ -32,10 +33,10 @@ buildPythonPackage rec {
 
   dependencies = [
     google-api-core
+    google-auth
     grpc-google-iam-v1
     grpcio
     grpcio-status
-    libcst
     opentelemetry-api
     opentelemetry-sdk
     proto-plus
@@ -69,8 +70,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Google Cloud Pub/Sub API client library";
-    homepage = "https://github.com/googleapis/python-pubsub";
-    changelog = "https://github.com/googleapis/python-pubsub/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-pubsub";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/v${version}/packages/google-cloud-pubsub/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "fixup_pubsub_v1_keywords.py";

@@ -166,11 +166,15 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/bin/js${lib.versions.major version} $out/bin/js
   '';
 
-  passthru.tests.run = callPackage ./test.nix {
-    spidermonkey = finalAttrs.finalPackage;
+  passthru = {
+    tests.run = callPackage ./test.nix {
+      spidermonkey = finalAttrs.finalPackage;
+    };
+    updateScript = lib.getExe (callPackage ./update.nix { version = lib.versions.major version; });
   };
 
   meta = {
+    changelog = "https://www.firefox.com/en-US/firefox/${version}/releasenotes/";
     description = "Mozilla's JavaScript engine written in C/C++";
     homepage = "https://spidermonkey.dev/";
     license = lib.licenses.mpl20;

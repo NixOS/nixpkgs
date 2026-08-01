@@ -2,24 +2,46 @@
   lib,
   rustPlatform,
   fetchCrate,
+  fetchurl,
   pkg-config,
   dbus,
+  sops,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "secretspec";
-  version = "0.14.0";
+  version = "0.17.0";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-PlI2+cQbP/CfilYX2fJnQv8yw4euxvqYT0XqlYsU0QI=";
+    hash = "sha256-3UW0j5i+2r8yWaYYCtbdtiPJe8epLKeR1cpP35Bxko4=";
   };
 
-  cargoHash = "sha256-UfeVqZaH04Ucu+FgXX2bqgqiHJNpN3OIN0lKhWFn1j0=";
+  cargoHash = "sha256-I6HFcWPB5TUSMtnk+SEHMxiKlPBxHLrj8zgzEWllV2w=";
+
+  postPatch = ''
+    mkdir -p schema
+    cp ${
+      fetchurl {
+        url = "https://raw.githubusercontent.com/cachix/secretspec/v${finalAttrs.version}/schema/resolution-report.schema.json";
+        hash = "sha256-MDuWWa05hh3g5AtaJnoe6qDvf1XVO3C29zKJDm+f+h0=";
+      }
+    } schema/resolution-report.schema.json
+    substituteInPlace src/tests.rs \
+      --replace-fail '../../schema/resolution-report.schema.json' '../schema/resolution-report.schema.json'
+  '';
 
   nativeBuildInputs = [ pkg-config ];
+  nativeCheckInputs = [ sops ];
   buildInputs = [ dbus ];
+
+  preCheck = ''
+    export HOME="$TMPDIR"
+  '';
+
+  # A test binds to localhost, which requires an explicit Darwin sandbox exception.
+  __darwinAllowLocalNetworking = true;
 
   passthru.updateScript = nix-update-script { };
 

@@ -16,6 +16,7 @@
   python3Packages,
   cacert,
   libredirect,
+  rust-jemalloc-sys,
   writeTextFile,
   withFoundationdb ? false,
   stalwartEnterprise ? false,
@@ -50,7 +51,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stalwart" + (lib.optionalString stalwartEnterprise "-enterprise");
-  version = "0.16.13";
+  version = "0.16.15";
 
   __structuredAttrs = true;
 
@@ -58,10 +59,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "stalwartlabs";
     repo = "stalwart";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Uc1dUuu4TnpTKB17GArlo/hYT2gdUUnl3NxWalSB50k=";
+    hash = "sha256-DRo+1olglHsOpAk5D8hrTi+KVgFC5MxxqnrOphbvrUo=";
   };
 
-  cargoHash = "sha256-C+BwUqeYzutGcX13YgR1ngfUtuk+S12/k/xAYz68b3s=";
+  cargoHash = "sha256-gjZR0qDdrS7TdWTeeRcKUY6pZFnLCMwnnpGAHWqiWLw=";
 
   env = {
     # https://docs.rs/openssl/latest/openssl/#manual
@@ -71,13 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ZSTD_SYS_USE_PKG_CONFIG = true;
     ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
     ROCKSDB_LIB_DIR = "${rocksdb}/lib";
-  }
-  //
-    lib.optionalAttrs
-      (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isArmv7))
-      {
-        JEMALLOC_SYS_WITH_LG_PAGE = 16;
-      };
+  };
 
   depsBuildBuild = [
     pkg-config
@@ -92,6 +87,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     bzip2
     openssl
+    rust-jemalloc-sys
     sqlite
     zstd
   ]
@@ -298,7 +294,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         redistributable = false;
       }
     ];
-
+    maxSilent = 14400; # 4 hours
     mainProgram = "stalwart";
     maintainers = with lib.maintainers; [
       happysalada

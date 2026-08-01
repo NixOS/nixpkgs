@@ -65,7 +65,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Security protocol parser and generator";
     homepage = "https://gitlab.com/coroner/cryptoparser";
-    changelog = "https://gitlab.com/coroner/cryptoparser/-/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://gitlab.com/coroner/cryptoparser/-/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.mpl20;
     teams = with lib.teams; [ ngi ];
   };

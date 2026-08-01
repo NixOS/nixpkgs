@@ -3,10 +3,17 @@
   stdenv,
   fetchurl,
   autoPatchelfHook,
+  makeBinaryWrapper,
   undmg,
   versionCheckHook,
   xz,
   bzip2,
+  wl-clipboard,
+  # On Wayland, kiro-cli shells out to wl-clipboard (wl-copy/wl-paste) for
+  # clipboard access. Enabling this puts wl-clipboard on the runtime PATH so
+  # clipboard support works out of the box under Wayland sessions. Has no
+  # effect on Darwin.
+  waylandSupport ? stdenv.hostPlatform.isLinux,
 }:
 
 let
@@ -14,21 +21,21 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "kiro-cli";
-  version = "2.13.0";
+  version = "2.14.2";
 
   src =
     {
       x86_64-linux = fetchurl {
         url = "https://desktop-release.q.us-east-1.amazonaws.com/${finalAttrs.version}/kirocli-x86_64-linux.tar.gz";
-        hash = "sha256-8qEnlNv8lQK3SCjYJ/AdfWB/RELpjLI0VQ7n4vKA7DI=";
+        hash = "sha256-Q9y4sv7CrcAJUyWJPy8gXh6gfpIm7d9rr6odqlI7Y00=";
       };
       aarch64-linux = fetchurl {
         url = "https://desktop-release.q.us-east-1.amazonaws.com/${finalAttrs.version}/kirocli-aarch64-linux.tar.gz";
-        hash = "sha256-uKR5ZxuijDgfIJ4DmDVhN5XGHDyOyiRkLcTie2iuzZU=";
+        hash = "sha256-ikhU5yoY2UGmW6kfAJmaDljtxKeyGFa6jQxHIGg/m04=";
       };
       aarch64-darwin = fetchurl {
         url = "https://desktop-release.q.us-east-1.amazonaws.com/${finalAttrs.version}/Kiro%20CLI.dmg";
-        hash = "sha256-GAK8+adzrEc1kXtHVCNC1aU09C86D9mroSQv7dXvbfo=";
+        hash = "sha256-EU2GDOiK5iRN6Cxrf9e79BGoVmVIkYTZyfx8uaOoqBs=";
       };
     }
     .${system} or (throw "Unsupported system: ${system}");
@@ -40,6 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
       autoPatchelfHook
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && waylandSupport) [
+      makeBinaryWrapper
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       undmg
@@ -64,6 +74,12 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm755 bin/kiro-cli -t $out/bin
     install -Dm755 bin/kiro-cli-chat $out/bin/kiro-cli-chat
     install -Dm755 bin/kiro-cli-term $out/bin/kiro-cli-term
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isLinux && waylandSupport) ''
+    for bin in kiro-cli kiro-cli-chat kiro-cli-term; do
+      wrapProgram $out/bin/$bin \
+        --suffix PATH : ${lib.makeBinPath [ wl-clipboard ]}
+    done
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/bin $out/Applications

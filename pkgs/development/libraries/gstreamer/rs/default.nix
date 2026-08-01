@@ -13,9 +13,12 @@
   lld,
   nasm,
   cmake,
+  libGL,
   gstreamer,
   gst-plugins-base,
+  gst-plugins-good,
   gst-plugins-bad,
+  gst-plugins-ugly,
   gtk4,
   cairo,
   csound,
@@ -24,7 +27,11 @@
   libwebp,
   openssl,
   pango,
-  gst-plugins-good,
+
+  jq,
+  writeTextFile,
+  validatePkgConfig,
+  testers,
   nix-update-script,
   # specifies a limited subset of plugins to build (the default `null` means all plugins supported on the stdenv platform)
   plugins ? null,
@@ -36,33 +43,33 @@
 }:
 
 let
-  # populated from meson_options.txt (manually for now, but that might change in the future)
+  # checked against upstream meson_options.txt in postConfigure
+  # ordered according plugin list in README.md for readability
+  # validate plugin is excluded here and in the verification script below
   validPlugins = {
-    # audio
-    audiofx = [ ];
-    claxon = [ ];
-    csound = [ csound ];
-    lewton = [ ];
-    spotify = [ ];
-
     # generic
     file = [ ];
+    gopbuffer = [ ];
+    inter = [ ];
+    originalbuffer = [ ];
+    streamgrouper = [ ];
     sodium = [ libsodium ];
     threadshare = [ ];
 
-    # mux
-    flavors = [ ];
-    fmp4 = [ ];
-    mp4 = [ ];
-
     # net
     aws = [ openssl ];
+    deepgram = [ ];
+    hlsmultivariantsink = [ ];
     hlssink3 = [ ];
+    icecast = [ ];
+    mpegtslive = [ ];
     ndi = [ ];
     onvif = [ pango ];
+    quinn = [ ];
     raptorq = [ ];
     reqwest = [ openssl ];
     rtp = [ ];
+    rtsp = [ ];
     webrtc = [
       gst-plugins-bad
       openssl
@@ -72,18 +79,17 @@ let
       openssl
     ];
 
-    # text
-    textahead = [ ];
-    json = [ ];
-    regex = [ ];
-    textwrap = [ ];
-
-    # utils
-    fallbackswitch = [ gtk4 ];
-    livesync = [ gtk4 ];
-    togglerecord = [ gtk4 ];
-    tracers = [ ];
-    uriplaylistbin = [ ];
+    # audio
+    audiofx = [ ];
+    audioparsers = [ ];
+    claxon = [ ];
+    csound = [ csound ];
+    demucs = [ ];
+    elevenlabs = [ ];
+    lewton = [ ];
+    speechmatics = [ ];
+    spotify = [ ];
+    whisper = [ ];
 
     # video
     cdg = [ ];
@@ -95,8 +101,34 @@ let
     hsv = [ ];
     png = [ ];
     rav1e = [ ];
+    skia = [ ];
     videofx = [ cairo ];
+    # would require libvvdec
+    vvdec = [ ];
     webp = [ libwebp ];
+
+    # mux
+    flavors = [ ];
+    isobmff = [ ];
+
+    # text
+    textaccumulate = [ ];
+    textahead = [ ];
+    json = [ ];
+    regex = [ ];
+    textwrap = [ ];
+
+    # utils
+    fallbackswitch = [ gtk4 ];
+    livesync = [ gtk4 ];
+    togglerecord = [ gtk4 ];
+    tracers = [ ];
+    uriplaylistbin = [ ];
+    debugseimetainserter = [ ];
+
+    # analytics
+    analytics = [ gst-plugins-bad ];
+    burn = [ ];
   };
 
   selectedPlugins =
@@ -105,8 +137,16 @@ let
     else
       lib.subtractLists (
         [
-          "csound" # tests have weird failure on x86, does not currently work on arm or darwin
-          "livesync" # tests have suspicious intermittent failure, see https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/357
+          # tests have weird failure on x86, does not currently work on arm or darwin
+          # csound rust package currently incompatible with csound >= 7.x
+          "csound"
+
+          # test failures
+          "isobmff"
+          "webrtc"
+
+          "vvdec" # libvvdec not currently packaged
+          "skia" # skia-bindings requires configuration to link against system libraries
         ]
         ++ lib.optionals stdenv.hostPlatform.isAarch64 [
           "raptorq" # pointer alignment failure in tests on aarch64
@@ -126,7 +166,43 @@ let
         ]
       ) (lib.attrNames validPlugins);
 
+  rsPrefixedPlugins = [
+    "analytics"
+    "audiofx"
+    "audioparsers"
+    "closedcaption"
+    "file"
+    "inter"
+    "onvif"
+    "png"
+    "rtp"
+    "rtsp"
+    "tracers"
+    "videofx"
+    "webp"
+    "webrtc"
+  ];
+
+  pkgConfigName =
+    name:
+    if name == "flavors" then
+      "gstrsflv"
+    else
+      (if lib.elem name rsPrefixedPlugins then "gstrs${name}" else "gst${name}");
+  pkgConfigNames = map pkgConfigName selectedPlugins;
+
   invalidPlugins = lib.subtractLists (lib.attrNames validPlugins) selectedPlugins;
+
+  validPluginFile = writeTextFile {
+    name = "known-plugin-names.txt";
+    text = lib.concatLines (lib.attrNames validPlugins);
+  };
+
+  # aws-lc-rs has no pregenerated bindings for exotic platforms
+  # https://aws.github.io/aws-lc-rs/platform_support.html
+  # whisper requires bindgen
+  requiresBindgen =
+    !(stdenv.hostPlatform.isx86 || stdenv.hostPlatform.isAarch64) || lib.elem "whisper" selectedPlugins;
 in
 assert lib.assertMsg (invalidPlugins == [ ])
   "Invalid gst-plugins-rs plugin${
@@ -135,7 +211,7 @@ assert lib.assertMsg (invalidPlugins == [ ])
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-rs";
-  version = "0.14.4";
+  version = "0.15.3";
 
   outputs = [
     "out"
@@ -147,15 +223,32 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gstreamer";
     repo = "gst-plugins-rs";
     rev = finalAttrs.version;
-    hash = "sha256-MZyYHMq6gFJkVxlrmeXUjOmRYsQBHj0848cnF+7mtbU=";
+    hash = "sha256-DO5Dk9xjqWTI4ORzlHYPc/O/tyHfSyh7+YCzES5ZiHs=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "gst-plugins-rs-${finalAttrs.version}";
-    hash = "sha256-T+fdu+Oe07Uf1YoRGYl2DMb1QgdSZVLwcOqH4bBNGXU=";
+    hash = "sha256-EHikshVeaBzyx9+GBIkOPii63T12BobWdW6nTBLzwU8=";
   };
 
+  postConfigure = ''
+    meson introspect . --buildoptions | \
+      jq -r 'map(select(.description | test("Build .+ plugin")) | .name | select(. != "validate")) | sort | .[]' \
+      > valid-plugin-names.txt
+    echo "checking for consistency between validPlugins and meson_options.txt"
+    diff -u ${validPluginFile} valid-plugin-names.txt
+  '';
+
+  patches = [
+    ./doctest-fixes.patch
+  ];
+
+  postPatch = ''
+    patchShebangs cargo_wrapper.py dependencies.py
+  '';
+
+  __structuredAttrs = true;
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -168,11 +261,11 @@ stdenv.mkDerivation (finalAttrs: {
     rustc
     cargo
     cargo-c
+    jq
     nasm
+    validatePkgConfig
   ]
-  # aws-lc-rs has no pregenerated bindings for exotic platforms
-  # https://aws.github.io/aws-lc-rs/platform_support.html
-  ++ lib.optionals (!(stdenv.hostPlatform.isx86 || stdenv.hostPlatform.isAarch64)) [
+  ++ lib.optionals requiresBindgen [
     cmake
     rustPlatform.bindgenHook
   ]
@@ -188,6 +281,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gstreamer
     gst-plugins-base
+    libGL
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_gstreamer
@@ -197,6 +291,7 @@ stdenv.mkDerivation (finalAttrs: {
   checkInputs = [
     gst-plugins-good
     gst-plugins-bad
+    gst-plugins-ugly
   ];
 
   mesonFlags = (map (plugin: lib.mesonEnable plugin true) selectedPlugins) ++ [
@@ -211,24 +306,25 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   # csound lib dir must be manually specified for it to build
-  preConfigure = ''
-    export CARGO_BUILD_JOBS=$NIX_BUILD_CORES
-
-    patchShebangs dependencies.py
-  ''
-  + lib.optionalString (lib.elem "csound" selectedPlugins) ''
+  preConfigure = lib.optionalString (lib.elem "csound" selectedPlugins) ''
     export CSOUND_LIB_DIR=${lib.getLib csound}/lib
   '';
 
   mesonCheckFlags = [ "--verbose" ];
 
+  # required for icecast tests
+  __darwinAllowLocalNetworking =
+    finalAttrs.finalPackage.doCheck && lib.elem "icecast" selectedPlugins;
+
   preCheck = ''
     # Fontconfig error: No writable cache directories
-    export XDG_CACHE_HOME=$(mktemp -d)
+    export XDG_CACHE_HOME="$(mktemp -d)"
+    export GST_PLUGIN_PATH="$(realpath "target/${stdenv.hostPlatform.rust.cargoShortTarget}/$cargoBuildType")"
+    export GST_PLUGIN_SCANNER="${lib.getLib gstreamer}/libexec/gstreamer-1.0/gst-plugin-scanner"
   '';
 
   postInstall = ''
-    install -Dm444 -t ''${!outputDev}/lib/pkgconfig gst*.pc
+    install -Dm444 -t ''${!outputDev}/lib/pkgconfig plugins/gst*.pc
   '';
 
   doInstallCheck =
@@ -240,6 +336,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      versionCheck = true;
+    };
     updateScript = nix-update-script {
       # use numbered releases rather than gstreamer-* releases
       # this matches upstream's recommendation: https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/470#note_2202772
@@ -262,5 +362,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ tmarkus ];
+    pkgConfigModules = pkgConfigNames;
   };
 })

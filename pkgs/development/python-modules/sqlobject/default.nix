@@ -5,8 +5,6 @@
   pytestCheckHook,
   setuptools,
   formencode,
-  pastedeploy,
-  paste,
   pydispatcher,
 }:
 
@@ -26,8 +24,6 @@ buildPythonPackage rec {
 
   dependencies = [
     formencode
-    paste
-    pastedeploy
     pydispatcher
   ];
 

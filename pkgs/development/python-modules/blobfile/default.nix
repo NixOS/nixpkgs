@@ -11,7 +11,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "blobfile";
-  version = "3.1.0";
+  version = "3.2.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
     owner = "christopher-hesse";
     repo = "blobfile";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aTHEJ1P+v9IWXPg9LN+KG1TlEVJh0qTl8J41iWpoPWk=";
+    hash = "sha256-6WECMS05upC+M81EtOlEs1K3NKD/z073PqutA/OCMiE=";
   };
 
   build-system = [ setuptools ];

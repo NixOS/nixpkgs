@@ -31,6 +31,7 @@ mkCoqDerivation {
     lib.switch
       [ coq.coq-version mathcomp-ssreflect.version ]
       [
+        (case (range "8.16" "9.3") (range "2.0.0" "2.6.0") "1.0.5")
         (case (range "8.16" "9.1") (range "2.0.0" "2.5.0") "1.0.4")
         (case (range "8.16" "9.1") (range "2.0.0" "2.4.0") "1.0.3")
         (case (range "8.16" "9.0") (range "2.0.0" "2.3.0") "1.0.2")
@@ -38,6 +39,7 @@ mkCoqDerivation {
         (case (range "8.10" "8.16") (range "1.12.0" "1.17.0") "1.0.0")
       ]
       null;
+  release."1.0.5".hash = "sha256-Ti9gwd9rV+a0MJCAOjrpuZH+F9JI1l6dNAQYmIdGreU=";
   release."1.0.4".hash = "sha256-fvE53jJe7/kQUI+lhO6lKdWfsFfRjOk2YGOcHUoJ6BU=";
   release."1.0.3".hash = "sha256-5lpOCDyH6NFzGLvnXHHAnR7Qv5oXsUyC8TLBFrIiBag=";
   release."1.0.2".hash = "sha256-U20xgA+e9KTRdvILD1cxN6ia+dlA8uBTIbc4QlKz9ss=";

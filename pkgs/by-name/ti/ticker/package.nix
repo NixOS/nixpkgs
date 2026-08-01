@@ -17,11 +17,6 @@ buildGoModule (finalAttrs: {
     hash = "sha256-DXaW1pL0MDM6GTm1i7ns94OgBqSsR94wFYoumOZsnXo=";
   };
 
-  postPatch = ''
-    substituteInPlace go.mod \
-      --replace-fail "go 1.26.4" "go 1.26.3"
-  '';
-
   vendorHash = "sha256-ulAmWbsLp5oiIRJNyI0jRXBGUnjRzkZt3zHdbxkCLV0=";
 
   ldflags = [

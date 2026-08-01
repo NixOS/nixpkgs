@@ -4,7 +4,7 @@
   fetchPypi,
   setuptools,
   requests,
-  python,
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -23,10 +23,7 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [ requests ];
 
-  # tests directory is set up, but has no tests
-  checkPhase = ''
-    ${python.interpreter} -m unittest
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "ciscomobilityexpress" ];
 
