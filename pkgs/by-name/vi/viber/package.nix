@@ -62,6 +62,7 @@
   libxcb-image,
   libxtst,
   libxscrnsaver,
+  libxshmfence,
   libxrender,
   libxrandr,
   libxi,
@@ -163,6 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxrandr
     libxrender
     libxscrnsaver
+    libxshmfence
     libxtst
     libxcb
     libxcb-image
