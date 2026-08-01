@@ -37,6 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "QMI IDL compiler";
     homepage = "https://github.com/linux-msm/qrtr";
     license = lib.licenses.bsd3;
-    platforms = lib.platforms.aarch64;
+    platforms = [ "aarch64-linux" ];
   };
 })
