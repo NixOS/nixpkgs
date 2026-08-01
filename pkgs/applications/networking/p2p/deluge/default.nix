@@ -1,5 +1,6 @@
 {
   lib,
+  fetchpatch,
   fetchurl,
   intltool,
   libtorrent-rasterbar,
@@ -30,12 +31,21 @@ let
         hash = "sha256-ubonK1ukKq8caU5sKWKKuBbMGnAKN7rAiqy1JXFgas0=";
       };
 
+      patches = [
+        (fetchpatch {
+          name = "deluge-replace-pyopenssl-certificate-generation.patch";
+          url = "https://github.com/deluge-torrent/deluge/commit/b763626ce88f9f9b82616de0a29087fde6d8828f.patch";
+          hash = "sha256-EtHcdZU1nCmLFrZiysoazRu9657NnuIbFdwRMhAWjI0=";
+        })
+      ];
+
       propagatedBuildInputs =
         with pypkgs;
         [
           twisted
           mako
           chardet
+          cryptography
           pyxdg
           pyopenssl
           service-identity
