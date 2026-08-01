@@ -3,6 +3,7 @@
   stdenv,
   python3Packages,
   fetchFromGitHub,
+  fetchpatch,
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
@@ -41,6 +42,21 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   pythonRelaxDeps = true;
+
+  # dynaconf >= 3.3 honours fresh_vars: those keys are re-read from the
+  # loaders on every get(), discarding the default written by the validator.
+  # Commit 70df7a0add (the dynaconf 3.3.2 bump) dropped fresh_vars; v8.3.3
+  # predates that commit, so this patch backports the change.
+  patches = lib.optionals (lib.versionOlder finalAttrs.version "8.3.4") [
+    (fetchpatch {
+      url = "https://github.com/thegeeklab/ansible-doctor/commit/70df7a0add.patch";
+      hash = "sha256-OmTKFFOgB3kaVvEowm+5/K2k/8CxLZPilQ9nmEKtEmw=";
+      excludes = [
+        "poetry.lock"
+        "pyproject.toml"
+      ];
+    })
+  ];
 
   doCheck = true;
 
