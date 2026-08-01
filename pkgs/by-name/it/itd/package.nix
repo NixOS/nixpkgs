@@ -6,7 +6,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "itd";
-  version = "1.1.0";
+  version = "1.1.1";
 
   # https://gitea.elara.ws/Elara6331/itd/tags
   src = fetchFromGitea {
@@ -14,10 +14,10 @@ buildGoModule (finalAttrs: {
     owner = "Elara6331";
     repo = "itd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-95/9Qy0HhrX+ORuv6g1T4/Eq1hf539lYG5fTkLeY6B0=";
+    hash = "sha256-Q7UyuokwRZJU84IdsPcSFigiMr6OWye1OnwtclNCs7k=";
   };
 
-  vendorHash = "sha256-ZkAxNs4yDUFBhhmIRtzxQlEQtsa/BTuHy0g3taFcrMM=";
+  vendorHash = "sha256-EfsvgjSX3FLJe0b97DSwTkQKJ67MF8ak7DaPRrQrhcs=";
 
   preBuild = ''
     echo r${finalAttrs.version} > version.txt
