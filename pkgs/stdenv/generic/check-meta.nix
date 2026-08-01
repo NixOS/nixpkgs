@@ -166,7 +166,7 @@ let
   # package has an unfree license and is not explicitly allowed by the
   # `allowUnfreePredicate` function.
   hasDeniedUnfreeLicense =
-    attrs: hasUnfreeLicense attrs && !allowUnfree && !allowUnfreePredicate attrs;
+    if allowUnfree then _: false else attrs: hasUnfreeLicense attrs && !allowUnfreePredicate attrs;
 
   allowInsecureDefaultPredicate =
     x: elem (getNameWithVersion x) (config.permittedInsecurePackages or [ ]);
