@@ -184,7 +184,7 @@ in
       no_analytics = lib.mkDefault true;
 
       # allow updating without manual intervention
-      experimental_dumpless_upgrade = lib.mkDefault true;
+      upgrade_db = lib.mkDefault true;
     };
 
     # used to restore dumps
