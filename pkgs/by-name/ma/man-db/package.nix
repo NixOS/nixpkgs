@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     groff
     libiconv'
   ]; # (Yes, 'groff' is both native and build input)
-  nativeCheckInputs = [ libiconv' ]; # for 'iconv' binary; make very sure it matches buildinput libiconv
+  nativeInstallCheckInputs = [ libiconv' ]; # for 'iconv' binary; make very sure it matches buildinput libiconv
 
   patches = [
     ./systemwide-man-db-conf.patch
@@ -128,9 +128,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  doCheck =
-    !stdenv.hostPlatform.isMusl # iconv binary
-  ;
+  # XProtect may reject uninstalled libtool binaries on Darwin, so we run tests
+  # from $out. Linux doesn't *have* to do it, but it makes sense to test
+  # installed binaries anyway.
+  doInstallCheck = !stdenv.hostPlatform.isMusl; # no iconv binary
+  installCheckTarget = "check";
+  installCheckFlags = [ "MAN_TEST_INSTALLED=1" ];
+  preInstallCheck = ''
+    export PATH="$out/bin:$PATH"
+  '';
 
   passthru = {
     tests = {
