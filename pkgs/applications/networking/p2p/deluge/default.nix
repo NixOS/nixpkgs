@@ -1,5 +1,6 @@
 {
   lib,
+  fetchpatch,
   fetchurl,
   intltool,
   libtorrent-rasterbar,
@@ -29,6 +30,14 @@ let
         url = "http://download.deluge-torrent.org/source/${lib.versions.majorMinor version}/deluge-${version}.tar.xz";
         hash = "sha256-ubonK1ukKq8caU5sKWKKuBbMGnAKN7rAiqy1JXFgas0=";
       };
+
+      patches = [
+        (fetchpatch {
+          name = "deluge-use-importlib-for-ui-entrypoints.patch";
+          url = "https://github.com/deluge-torrent/deluge/commit/1a031d00094d4613667bcaadae57b548b7e1413b.patch";
+          hash = "sha256-KfACbRs1yVr5PsRrXLp/RD8YT3Ow71bvuPZyKMDRmOA=";
+        })
+      ];
 
       propagatedBuildInputs =
         with pypkgs;
