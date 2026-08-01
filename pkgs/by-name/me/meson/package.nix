@@ -16,14 +16,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "1.10.2";
+  version = "1.11.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mesonbuild";
     repo = "meson";
     tag = version;
-    hash = "sha256-3Zeavn6aW6920gM7yE73Ms1RPCP2GjX9IUL9YGmISfY=";
+    hash = "sha256-HGXNrw39TfNio64BH0DhSAj8zz6XLwuG0RhOfCxT2PU=";
   };
 
   patches = [
@@ -129,6 +129,8 @@ python3.pkgs.buildPythonApplication rec {
         "test cases/linuxlike/14 static dynamic linkage"
         # Nixpkgs cctools does not have bitcode support.
         "test cases/osx/7 bitcode"
+        # Fails because "_FORTIFY_SOURCE requires compiling with optimization (-O)"
+        "test cases/common/282 -D_FORTIFY_SOURCE=2 and -O0"
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # requires llvmPackages.openmp, creating cyclic dependency
