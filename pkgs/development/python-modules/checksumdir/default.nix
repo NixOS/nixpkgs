@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  setuptools,
+  poetry-core,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -20,8 +20,14 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-rOHRJAK+Or8bwAtzpbINdnEjK3WQcU+4sEZI91tMvAk=";
   };
 
+  # Upstream's pyproject.toml has no [build-system] table (PEP 517), so a source build falls back
+  # to setuptools and loses the version.
+  postPatch = ''
+    printf '\n[build-system]\nrequires = ["poetry-core"]\nbuild-backend = "poetry.core.masonry.api"\n' >> pyproject.toml
+  '';
+
   build-system = [
-    setuptools
+    poetry-core
   ];
 
   doCheck = false; # Package does not contain tests
