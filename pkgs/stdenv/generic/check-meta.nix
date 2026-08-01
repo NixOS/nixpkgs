@@ -124,17 +124,20 @@ let
 
   # Logical inversion of meta.availableOn for hostPlatform
   hasUnsupportedPlatform =
-    hostPlatform:
-    let
-      inherit (hostPlatform) system;
-      # in almost all cases, meta.platforms is a simple list of strings, and we
-      # can just check if it contains the current system. we only run the more
-      # intensive platformMatch if necessary
-      anyHostPlatform = list: elem system list || any (platformMatch hostPlatform) list;
-    in
-    pkg:
-    pkg ? meta.platforms && !(anyHostPlatform pkg.meta.platforms)
-    || pkg ? meta.badPlatforms && anyHostPlatform pkg.meta.badPlatforms;
+    if allowUnsupportedSystem then
+      _: _: false
+    else
+      hostPlatform:
+      let
+        inherit (hostPlatform) system;
+        # in almost all cases, meta.platforms is a simple list of strings, and we
+        # can just check if it contains the current system. we only run the more
+        # intensive platformMatch if necessary
+        anyHostPlatform = list: elem system list || any (platformMatch hostPlatform) list;
+      in
+      pkg:
+      pkg ? meta.platforms && !(anyHostPlatform pkg.meta.platforms)
+      || pkg ? meta.badPlatforms && anyHostPlatform pkg.meta.badPlatforms;
 
   isMarkedInsecure = attrs: (attrs.meta.knownVulnerabilities or [ ]) != [ ];
 
@@ -447,7 +450,7 @@ let
         msg = "contains elements not built from source (‘${showSourceType attrs.meta.sourceProvenance}’)";
         remediation = remediate_allowlist "NonSource" (remediate_predicate "allowNonSourcePredicate" attrs);
       }
-    else if hasUnsupportedPlatform' attrs && !allowUnsupportedSystem then
+    else if hasUnsupportedPlatform' attrs then
       let
         toPretty' = toPretty {
           allowPrettyValues = true;
