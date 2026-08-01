@@ -9,7 +9,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "4.0.0";
 
   src = fetchFromGitHub {
-    owner = "probablykasper";
+    owner = "kasper9n";
     repo = "cpc";
     tag = "v${finalAttrs.version}";
     hash = "sha256-Gd2bFOyPERcwTGurJJDMNrRjFq7smtkgFMGUXxZVwaI=";
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     mainProgram = "cpc";
     description = "Text calculator with support for units and conversion";
-    homepage = "https://github.com/probablykasper/cpc";
+    homepage = "https://github.com/kasper9n/cpc";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       s0me1newithhand7s

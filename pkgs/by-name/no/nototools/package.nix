@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "googlefonts";
+    owner = "notofonts";
     repo = "nototools";
     tag = "v${finalAttrs.version}";
     sha256 = "sha256-0se0YcnhDwwMbt2C4hep0T/JEidHfFRUnm2Sy7qr2uk=";
@@ -75,7 +75,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   meta = {
     description = "Noto fonts support tools and scripts plus web site generation";
-    homepage = "https://github.com/googlefonts/nototools";
+    homepage = "https://github.com/notofonts/nototools";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
