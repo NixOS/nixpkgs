@@ -138,7 +138,7 @@ rec {
     version = "1.12";
 
     src = fetchFromGitHub {
-      owner = "jonls";
+      owner = "sharpbracket";
       repo = "redshift";
       rev = "v${version}";
       sha256 = "12cb4gaqkybp4bkkns8pam378izr2mwhr2iy04wkprs2v92j7bz6";

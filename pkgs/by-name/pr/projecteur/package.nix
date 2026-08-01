@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.10";
 
   src = fetchFromGitHub {
-    owner = "jahnf";
+    owner = "gbin";
     repo = "Projecteur";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = false;
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Linux/X11 application for the Logitech Spotlight device (and similar devices)";
-    homepage = "https://github.com/jahnf/Projecteur";
+    homepage = "https://github.com/gbin/Projecteur";
     license = lib.licenses.mit;
     mainProgram = "projecteur";
     maintainers = with lib.maintainers; [
