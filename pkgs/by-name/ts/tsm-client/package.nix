@@ -100,6 +100,8 @@ let
     };
     inherit meta passthru;
 
+    __structuredAttrs = true;
+
     nativeBuildInputs = [
       autoPatchelfHook
       rpmextract
