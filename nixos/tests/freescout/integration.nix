@@ -151,7 +151,7 @@ in
       machine.wait_for_unit("freescout-setup")
 
       with subtest("Login works"):
-        machine.succeed("/var/lib/freescout/artisan freescout:create-user --role=admin --firstName=Xenia --lastName=TheFox --email xenia@${freescoutDomain} --no-interaction --password=foo | grep 'User created with id'")
+        machine.succeed("/var/lib/freescout/artisan -- freescout:create-user --role=admin --firstName=Xenia --lastName=TheFox --email xenia@${freescoutDomain} --no-interaction --password=foo | grep 'User created with id'")
         token=machine.succeed("curl -fsSL --cookie-jar cjar 'http://${freescoutDomain}/login' | grep -Po '(?<= name=\"_token\" value=\")(\\w+)(?=\")'").strip()
         data=f"email=xenia%40${freescoutDomain}&password=foo&_token={token}&remember=on"
         machine.succeed(f"curl -sSfX POST --cookie-jar cjar --cookie cjar --data-raw '{data}' 'http://${freescoutDomain}/login' | grep 'Redirecting to'")
