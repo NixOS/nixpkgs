@@ -69,7 +69,9 @@ let
     if envVar != "" then envVar != "0" else config.allowNonSource or true;
 
   allowlist = config.allowlistedLicenses or config.whitelistedLicenses or [ ];
+  nonEmptyAllowList = allowlist != [ ];
   blocklist = config.blocklistedLicenses or config.blacklistedLicenses or [ ];
+  nonEmptyBlocklist = blocklist != [ ];
 
   areLicenseListsValid =
     if mutuallyExclusive allowlist blocklist then
@@ -427,13 +429,13 @@ let
       }
 
     # --- Put checks that can be ignored here ---
-    else if hasDeniedUnfreeLicense attrs && !(allowlist != [ ] && hasAllowlistedLicense attrs) then
+    else if hasDeniedUnfreeLicense attrs && !(nonEmptyAllowList && hasAllowlistedLicense attrs) then
       {
         reason = "unfree";
         msg = "has an unfree license (‘${showLicense attrs.meta.license}’)";
         remediation = remediate_allowlist "Unfree" (remediate_predicate "allowUnfreePredicate" attrs);
       }
-    else if blocklist != [ ] && hasBlocklistedLicense attrs then
+    else if nonEmptyBlocklist && hasBlocklistedLicense attrs then
       {
         reason = "blocklisted";
         msg = "has a blocklisted license (‘${showLicense attrs.meta.license}’)";
