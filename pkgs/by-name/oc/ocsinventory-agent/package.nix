@@ -106,7 +106,7 @@ perlPackages.buildPerlPackage rec {
     homepage = "https://ocsinventory-ng.org";
     changelog = "https://github.com/OCSInventory-NG/UnixAgent/releases/tag/v${version}";
     downloadPage = "https://github.com/OCSInventory-NG/UnixAgent/releases";
-    license = lib.licenses.gpl2Only;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "ocsinventory-agent";
     maintainers = with lib.maintainers; [
       totoroot
