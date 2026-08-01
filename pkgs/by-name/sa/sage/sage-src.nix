@@ -53,8 +53,7 @@ stdenv.mkDerivation rec {
     # "undefined symbol: cblas_ctrmv" errors.
     ./patches/revert-blas-mesonification.patch
 
-    # Darwin linkers fail unless some NTL-backed Cython C++ extensions link
-    # NTL directly instead of relying on transitive linkage.
+    # https://github.com/sagemath/sage/pull/42587
     ./patches/link-ntl-directly-for-ntl-cython-extensions.patch
 
     # https://github.com/sagemath/sage/pull/41637 causes problems when
@@ -84,6 +83,16 @@ stdenv.mkDerivation rec {
 
     # https://github.com/sagemath/sage/issues/42473
     ./patches/lower-sleep2-test-threshold.patch
+
+    # https://github.com/sagemath/sage/pull/42611
+    ./patches/faster-flint.patch
+
+    # https://github.com/sagemath/sage/pull/41954, landed in 10.10.beta0
+    (fetchpatch2 {
+      name = "gap-element-stability.patch";
+      url = "https://github.com/sagemath/sage/commit/11da83dd3666c2509288a828c54eb0273ee0cf50.patch?full_index=1";
+      hash = "sha256-CjZyeUJVIevDaStLs+9BMT9JlISEdRw3TyTIso/BXi0=";
+    })
 
     # https://github.com/sagemath/sage/pull/42009, landed in 10.10.beta0
     (fetchpatch2 {

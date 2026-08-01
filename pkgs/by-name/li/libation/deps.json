@@ -11,8 +11,8 @@
   },
   {
     "pname": "AudibleApi",
-    "version": "10.2.0.1",
-    "hash": "sha256-z0IzuOE8eDWyyz7gf1gMGdVMMIhs6axoAceaafaZbbw="
+    "version": "10.3.1.1",
+    "hash": "sha256-XwbQnif59IrSKbSA3/RCd0QVdJ06R7fDs1Wz1bSxkzo="
   },
   {
     "pname": "Avalonia",
@@ -150,14 +150,24 @@
     "hash": "sha256-pEfX4o63xupI7uuwe6qa05One0pJ7UbzzJqLh4Shju8="
   },
   {
+    "pname": "Devlooped.CredentialManager",
+    "version": "2.7.0",
+    "hash": "sha256-sXhXYOzB0Ma0wvtrAKOlnUZ4lYfaMnyH6Ngd5DYwOQA="
+  },
+  {
     "pname": "Dinah.Core",
     "version": "10.0.0.1",
     "hash": "sha256-xKcoEa/JeuDNoIOBks8g3PMIpHvio9ptN7iLlIbCnhU="
   },
   {
+    "pname": "Dinah.Core",
+    "version": "10.2.0.1",
+    "hash": "sha256-VN1cFD8qEhXqUm88XwlII9B1zUib0cCgK7umCdU31I0="
+  },
+  {
     "pname": "Dinah.EntityFrameworkCore",
-    "version": "10.0.0.1",
-    "hash": "sha256-Y0dbs7GiaPZ+YcVFuiXUuHeIR664+Bctus4Zq7iTQkE="
+    "version": "10.2.0.1",
+    "hash": "sha256-uR6er2o9k1B5rxhbQ7JkO335jYYMWZ8/YUShFnveIf0="
   },
   {
     "pname": "DocumentFormat.OpenXml",
@@ -168,6 +178,11 @@
     "pname": "DocumentFormat.OpenXml.Framework",
     "version": "3.1.1",
     "hash": "sha256-nmmxTIrtTmROSWkufbfqljGVyl0junW9d1bcAKDr8Mo="
+  },
+  {
+    "pname": "DotNetConfig",
+    "version": "1.2.0",
+    "hash": "sha256-gbhocVVZQ61VKJMUhdL7O62qTzYNUhh/LopLH67GsLw="
   },
   {
     "pname": "DynamicData",
@@ -803,6 +818,16 @@
     "pname": "System.Security.Cryptography.ProtectedData",
     "version": "10.0.0",
     "hash": "sha256-hoR1lVXVEUXfItNzJ23/SRybLBqaf4ZYzJBjlWgHpSM="
+  },
+  {
+    "pname": "System.Security.Cryptography.ProtectedData",
+    "version": "10.0.10",
+    "hash": "sha256-sKm55fvpXHZIH5Jw+zTz06BwMb8Nog5+1LgxPyU5lbk="
+  },
+  {
+    "pname": "System.Security.Cryptography.ProtectedData",
+    "version": "8.0.0",
+    "hash": "sha256-fb0pa9sQxN+mr0vnXg1Igbx49CaOqS+GDkTfWNboUvs="
   },
   {
     "pname": "System.ServiceProcess.ServiceController",

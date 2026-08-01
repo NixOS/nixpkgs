@@ -9,7 +9,7 @@ buildGoModule (finalAttrs: {
   version = "2.8.0";
 
   src = fetchFromGitHub {
-    owner = "deepmap";
+    owner = "oapi-codegen";
     repo = "oapi-codegen";
     tag = "v${finalAttrs.version}";
     hash = "sha256-CrHseuO3gNFTJgP9b8Tec7qJ/jvmKgm3ZwiMBrAcIq8=";
