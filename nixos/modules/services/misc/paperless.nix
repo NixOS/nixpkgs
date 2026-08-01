@@ -574,7 +574,7 @@ in
               # and automatically migrates when needed (e.g. with v2 -> v3 swapping from Whoosh to Tantivy)
               ${lib.getExe cfg.package} document_index reindex --if-needed --no-progress-bar
 
-            if ${lib.boolToString (cfg.passwordFile != null)} || [[ -n $PAPERLESS_ADMIN_PASSWORD ]]; then
+            if ${lib.boolToString (cfg.passwordFile != null)} || [[ -n ''${PAPERLESS_ADMIN_PASSWORD-} ]]; then
               export PAPERLESS_ADMIN_USER="''${PAPERLESS_ADMIN_USER:-admin}"
               if [[ -e $CREDENTIALS_DIRECTORY/PAPERLESS_ADMIN_PASSWORD ]]; then
                 PAPERLESS_ADMIN_PASSWORD=$(cat "$CREDENTIALS_DIRECTORY/PAPERLESS_ADMIN_PASSWORD")
