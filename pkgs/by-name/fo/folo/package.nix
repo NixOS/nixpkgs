@@ -76,6 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
   # ast-kit from unplugin-ast).
   pnpmInstallFlags = [ "--shamefully-hoist" ];
 
+  patches = [ ./runtime-jsdom.patch ];
+
   postPatch = ''
     # pnpm 11 verifies node_modules before every `pnpm run` which conflicts
     # with --shamefully-hoist
