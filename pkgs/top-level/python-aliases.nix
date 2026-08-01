@@ -559,6 +559,7 @@ mapAliases {
   python-lz4 = throw "'python-lz4' has been renamed to/replaced by 'lz4'"; # Converted to throw 2025-10-29
   python-mbedtls = throw "'python-mbedtls' has been removed as it is unmaintained";
   python-openzwave = throw "python-openzwave was removed because openzwave is no longer maintained upstream. Consider using python3Packages.zwave-js-server-python"; # Added 2026-05-14
+  python-otcextensions = otcextensions; # Added 2026-07-31
   python-qt = throw "python-qt has been removed, because hard to maintain and not required by anything"; # Added 2025-01-14
   python-simple-hipchat = throw "'python-simple-hipchat' has been removed because it was broken and unmaintained"; # added 2025-08-26
   python-subunit = throw "'python-subunit' has been renamed to/replaced by 'subunit'"; # Converted to throw 2025-10-29
