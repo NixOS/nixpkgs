@@ -12,13 +12,13 @@
 buildHomeAssistantComponent rec {
   owner = "JeffSteinbok";
   domain = "dreo";
-  version = "1.10.6";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "hass-dreo";
     tag = "v${version}";
-    hash = "sha256-vfp5b5g9Rin0zN/eGhFNdxc77ulVKA8QnQNV70BvIy8=";
+    hash = "sha256-oVAjt5OEknQnZnS1mn31QXqD/drXCt0hGsNt9PhrdFs=";
   };
 
   dependencies = [ websockets ];
