@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   src = fetchurl {
-    url = "https://iravoice.com/downloads/IraVoice-${finalAttrs.version}.dmg";
+    url = "https://iravoice.com/downloads/distribution/IraVoice-${finalAttrs.version}.dmg";
     hash = "sha256-ZOT+T6mix1NgUwbe8O9uts0bbRL1MMk77MGvPcKSNN0=";
   };
 
