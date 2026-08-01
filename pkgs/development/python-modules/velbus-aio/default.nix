@@ -1,6 +1,7 @@
 {
   lib,
   aiofile,
+  anyio,
   backoff,
   beautifulsoup4,
   buildPythonPackage,
@@ -15,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "velbus-aio";
-  version = "2026.4.1";
+  version = "2026.7.25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Cereal2nd";
     repo = "velbus-aio";
     tag = finalAttrs.version;
-    hash = "sha256-l77L2JI2jXw+cQw/yO1LvyWBxvUF0IBctM5V02BGtO8=";
+    hash = "sha256-KCc2jhwk0YNGpyUf2hDv4iaHzRBuFTfXLQJv78MkA5Q=";
     fetchSubmodules = true;
   };
 
@@ -30,6 +31,7 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     aiofile
+    anyio
     backoff
     beautifulsoup4
     lxml
