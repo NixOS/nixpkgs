@@ -15,9 +15,9 @@ let
   relayOptions = [
     "--keys=${dataDirectory}"
     "--listen=${cfg.listenAddress}:${toString cfg.port}"
-    "--status-srv=${cfg.statusListenAddress}:${toString cfg.statusPort}"
     "--provided-by=${escapeShellArg cfg.providedBy}"
   ]
+  ++ optional (cfg.statusPort != null) "--status-srv=${cfg.statusListenAddress}:${toString cfg.statusPort}"
   ++ optional (cfg.pools != null) "--pools=${escapeShellArg (concatStringsSep "," cfg.pools)}"
   ++ optional (cfg.globalRateBps != null) "--global-rate=${toString cfg.globalRateBps}"
   ++ optional (cfg.perSessionRateBps != null) "--per-session-rate=${toString cfg.perSessionRateBps}"
@@ -58,7 +58,7 @@ in
     };
 
     statusPort = mkOption {
-      type = types.port;
+      type = types.nullOr types.port;
       default = 22070;
       description = ''
         Port to listen on for serving the relay status API. This port should be
