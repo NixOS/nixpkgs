@@ -372,7 +372,10 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/Eventual-Inc/Daft";
     changelog = "https://github.com/Eventual-Inc/Daft/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ derdennisop ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      derdennisop
+    ];
     mainProgram = "daft";
     platforms = lib.platforms.unix;
   };
