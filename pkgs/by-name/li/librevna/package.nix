@@ -26,7 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace resources/librevna.desktop \
-      --replace-fail Exec=/opt/LibreVNA-GUI Exec=$out/bin/LibreVNA-GUI
+      --replace-fail Exec=/opt/LibreVNA-GUI Exec=$out/bin/LibreVNA-GUI \
+      --replace-fail Icon=librevna.png Icon=librevna
+
+    substituteInPlace main.cpp \
+      --replace-fail 'QCoreApplication::setApplicationName("LibreVNA-GUI");' \
+        'QCoreApplication::setApplicationName("LibreVNA-GUI"); QGuiApplication::setDesktopFileName("librevna");'
   '';
 
   nativeBuildInputs = [
@@ -64,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
         install -Dm755 LibreVNA-GUI -t $out/bin
         install -Dm644 ../51-vna.rules -t $out/etc/udev/rules.d
         install -Dm644 resources/librevna.desktop -t $out/share/applications
+        install -Dm644 resources/librevna.png $out/share/icons/hicolor/256x256/apps/librevna.png
         install -Dm644 resources/librevna.png -t $out/share/pixmaps
 
         runHook postInstall
