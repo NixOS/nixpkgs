@@ -73,8 +73,8 @@ buildNpmPackage (finalAttrs: {
   ];
 
   npmWorkspace = "apps/desktop";
-  npmDepsFetcherVersion = 3;
-  npmDepsHash = "sha256-8wjt5wnJG4S4EeGWGxbo6Bwt76GIqrSiwqwwwQ17Y5Y=";
+  npmDepsFetcherVersion = 2;
+  npmDepsHash = "sha256-WRxlvkgWboO0ukUHgjC5CrfgfwnmUfDXI4r5dx9CKww=";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs)
