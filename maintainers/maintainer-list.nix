@@ -24715,6 +24715,13 @@
     githubId = 6445619;
     name = "Ruben Cano Diaz";
   };
+  Ruddickmg = {
+    name = "Marcus Ruddick";
+    github = "Ruddickmg";
+    githubId = 8334416;
+    email = "ruddickmg@gmail.com";
+    keys = [ { fingerprint = "74FF 0519 D478 AD06 9C23  4F93 343E 322A 4E3B 4C82"; } ];
+  };
   RudiOnTheAir = {
     name = "Rüdiger Schwoon";
     email = "wolf@schwoon.info";

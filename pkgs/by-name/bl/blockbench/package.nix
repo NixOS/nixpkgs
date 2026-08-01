@@ -12,13 +12,13 @@
 
 buildNpmPackage rec {
   pname = "blockbench";
-  version = "5.1.5";
+  version = "5.1.6";
 
   src = fetchFromGitHub {
     owner = "JannisX11";
     repo = "blockbench";
     tag = "v${version}";
-    hash = "sha256-1OCT128gEk/f1boaHfNuBX/J3xhvl7h3CQQT87eXL3I=";
+    hash = "sha256-CMLTtwvNMvRULOR9VpsPDOfF7710lxzeSPfArX7MTYE=";
   };
 
   patches = [

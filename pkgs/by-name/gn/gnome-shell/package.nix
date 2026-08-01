@@ -197,6 +197,9 @@ stdenv.mkDerivation (finalAttrs: {
     # We can generate it ourselves.
     rm -f man/gnome-shell.1
     rm data/theme/gnome-shell-{light,dark}.css
+
+    substituteInPlace meson.build subprojects/extensions-app/meson.build \
+      --replace-fail "gjs = find_program('gjs')" "gjs = find_program('${lib.getExe gjs}')"
   '';
 
   preInstall = ''
@@ -252,6 +255,8 @@ stdenv.mkDerivation (finalAttrs: {
       packageName = "gnome-shell";
     };
   };
+
+  strictDeps = true;
 
   meta = {
     description = "Core user interface for the GNOME 3 desktop";

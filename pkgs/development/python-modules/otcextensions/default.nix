@@ -18,15 +18,15 @@
 }:
 
 buildPythonPackage rec {
-  pname = "python-otcextensions";
-  version = "0.34.3";
+  pname = "otcextensions";
+  version = "0.34.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "opentelekomcloud";
     repo = "python-otcextensions";
     tag = version;
-    hash = "sha256-Kk1WmyquSZ7H52YNYEMM8woq3mYDuZ/2Ut+w0hESOzw=";
+    hash = "sha256-dXnXKg6EYgSydzTGi+ogibCqNAN94Hib0Czt1wbZJ8o=";
   };
 
   env.PBR_VERSION = version;
