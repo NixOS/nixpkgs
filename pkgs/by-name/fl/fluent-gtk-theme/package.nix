@@ -105,6 +105,7 @@ lib.checkListOfEnum "${pname}: theme variants"
       maintainers = with lib.maintainers; [
         luftmensch-luftmensch
         romildo
+        stzx
       ];
     };
   })
