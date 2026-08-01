@@ -59,6 +59,7 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       kachick
+      sshine
     ];
     mainProgram = "betterleaks";
   };
