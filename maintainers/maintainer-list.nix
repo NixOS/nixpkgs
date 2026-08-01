@@ -6190,6 +6190,12 @@
     githubId = 24708079;
     name = "Dan Eads";
   };
+  daneov = {
+    github = "daneov";
+    githubId = 7900887;
+    matrix = "@daneov:mozilla.org";
+    name = "daneov";
+  };
   danid3v = {
     email = "sch220233@spengergasse.at";
     github = "DaniD3v";
@@ -9187,6 +9193,13 @@
     github = "fin-w";
     githubId = 41450706;
     name = "fin-w";
+  };
+  findus = {
+    email = "findus-nix@trsk.cc";
+    github = "findus";
+    githubId = 7995019;
+    matrix = "@findus:stratum0.org";
+    name = "findus";
   };
   fiona = {
     email = "mail@fiona.hamburg";
@@ -23333,6 +23346,11 @@
     githubId = 52847440;
     name = "Ryan Burns";
   };
+  r0chd = {
+    github = "r0chd";
+    githubId = 100892812;
+    name = "Oskar Rochowiak";
+  };
   r17x = {
     email = "hi@rin.rocks";
     github = "r17x";
@@ -31169,9 +31187,13 @@
   };
   yarn = {
     name = "yarncat";
+    email = "nix@yarncat.moe";
     github = "yaaaarn";
     githubId = 30006414;
-    email = "nix@yarncat.moe";
+    matrix = "@y:mx.yarncat.moe";
+    keys = [
+      { fingerprint = "6611 1CEA 8D78 A13E C6D6 FD13 7900 447A E348 FF4D"; }
+    ];
   };
   yarny = {
     github = "Yarny0";
