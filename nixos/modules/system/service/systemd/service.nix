@@ -118,9 +118,8 @@ in
         Main command line for systemd's ExecReload with systemd's specifier and
         environment variable substitution enabled.
 
-        This option sets the primary ExecRestart entry. Additional ExecReload entries
-        can be added via `systemd.service.serviceConfig.ExecReload` with `lib.mkBefore`
-        or `lib.mkAfter`.
+        This option sets the primary ExecReload entry, and is the way to extend the
+        command line derived from {option}`process.reloadCommand`.
 
         This option allows you to use systemd specifiers like `%n` (unit name),
         `%i` (instance), `%t` (runtime directory), and environment variables using
