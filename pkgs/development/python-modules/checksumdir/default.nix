@@ -5,6 +5,9 @@
 
   # build-system
   poetry-core,
+
+  # tests
+  versionCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -30,8 +33,12 @@ buildPythonPackage (finalAttrs: {
     poetry-core
   ];
 
-  doCheck = false; # Package does not contain tests
   pythonImportsCheck = [ "checksumdir" ];
+
+  # No python tests
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
 
   meta = {
     description = "Simple package to compute a single deterministic hash of the file contents of a directory";
