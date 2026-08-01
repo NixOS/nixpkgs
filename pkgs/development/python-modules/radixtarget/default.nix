@@ -5,6 +5,7 @@
   fetchPypi,
   nix-update-script,
   poetry-core,
+  pytestCheckHook,
   rustc,
   rustPlatform,
 }:
@@ -37,6 +38,15 @@ buildPythonPackage (finalAttrs: {
     rustPlatform.maturinBuildHook
     rustc
   ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = ''
+    cp -r radixtarget/test ./
+    rm -rf radixtarget
+  '';
+
+  pytestFlags = [ "test" ];
 
   pythonImportsCheck = [ "radixtarget" ];
 
