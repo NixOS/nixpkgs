@@ -10,13 +10,12 @@
 }:
 
 let
-  zig = zig_0_16;
-
   mkModule =
     {
       pname,
       version,
       src,
+      zig,
       zigDeps,
     }:
     stdenv.mkDerivation (finalAttrs: {
@@ -24,10 +23,11 @@ let
         pname
         version
         src
+        zig
         zigDeps
         ;
 
-      nativeBuildInputs = [ zig ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
+      nativeBuildInputs = [ finalAttrs.zig ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
       env.EMACS_INCLUDE_DIR = "${emacs}/include";
 
@@ -67,8 +67,9 @@ melpaBuild (finalAttrs: {
     hash = "sha256-upIcL4wf2zAc3/3QeERF619nSDml2wEZCOl6/XOaT3E=";
   };
 
-  # this can be put into mkModule, but we put it here to ease user overrideAttrs
-  zigDeps = zig.fetchDeps {
+  # these can be put into mkModule, but we put them here to ease user overrideAttrs
+  zig = zig_0_16;
+  zigDeps = finalAttrs.zig.fetchDeps {
     inherit (finalAttrs) src pname version;
     fetchAll = true;
     hash = "sha256-NcNp0FnMy6FfZ63+pwiTRCmJ8FIovJEOhNvxVr1+uSQ=";
@@ -91,6 +92,7 @@ melpaBuild (finalAttrs: {
       inherit (finalAttrs)
         version
         src
+        zig
         zigDeps
         ;
     };
