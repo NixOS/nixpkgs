@@ -37,12 +37,12 @@ let
   yarn-berry = yarn-berry_4;
 
   pname = "anki";
-  version = "26.05";
-  rev = "e64c6b1aee3e8d668fb8bbe084beada8e070d985";
+  version = "26.08";
+  rev = "666c2c64d4a1772c03948f5b667438da63ddaa76";
 
-  srcHash = "sha256-LJNDJsRhyvngtcmKzHJ6VFFQirCZRqwuKTcSThu+1mk=";
-  cargoHash = "sha256-A5bxKStcuK7Ic8g4uueE5ipSttYvOctaUamEwwqVvJw=";
-  yarnHash = "sha256-fVsKXY8wCFdtUIjVg4zOLtdsTh1C3k5MbY6VKN4QnrU=";
+  srcHash = "sha256-0sqtKiMqw7MLXVFSCT1sKX/VO7q5BY63pJP5OnCE2zo=";
+  cargoHash = "sha256-LQ5uD86ZOKXy9vGbTqPBi3Q57PZEjwQkbHR94QAIVMg=";
+  yarnHash = "sha256-bOgiZImraPXR/gVk9MB3o9GScMGvLvdhc9mLAaCA4IE=";
   pythonDeps =
     with python3Packages;
     [
@@ -75,6 +75,7 @@ let
       trove-classifiers
 
       # transitive deps
+      asgiref
       attrs
       blinker
       certifi
@@ -316,14 +317,16 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # https://github.com/NixOS/nixpkgs/issues/438598
     mv $lib/bin $out/bin
 
-    install -D -t $out/share/applications qt/launcher/lin/anki.desktop
+    ankilinux='qt/installer/linux-template/{{ cookiecutter.format }}/{{ cookiecutter.app_name }}'
+
+    install -D -t $out/share/applications "$ankilinux"/anki.desktop
     install -D -t $doc/share/doc/anki README* LICENSE*
-    install -D -t $out/share/mime/packages qt/launcher/lin/anki.xml
+    install -D -t $out/share/mime/packages "$ankilinux"/anki.xml
 
     mkdir -p $out/share/icons/hicolor/{32x32,128x128}/apps
-    magick qt/launcher/lin/anki.xpm $out/share/icons/hicolor/32x32/apps/anki.png
-    magick qt/launcher/lin/anki.png -resize 128x128 $out/share/icons/hicolor/128x128/apps/anki.png
-    installManPage qt/launcher/lin/anki.1
+    magick "$ankilinux"/anki.xpm $out/share/icons/hicolor/32x32/apps/anki.png
+    magick "$ankilinux"/anki.png -resize 128x128 $out/share/icons/hicolor/128x128/apps/anki.png
+    installManPage "$ankilinux"/anki.1
 
     runHook postInstall
   '';
