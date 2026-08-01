@@ -54,6 +54,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://sq.io/";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iamanaws ];
   };
 })
