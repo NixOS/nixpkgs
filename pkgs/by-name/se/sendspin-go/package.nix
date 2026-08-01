@@ -5,7 +5,7 @@
   fetchFromGitHub,
   ffmpeg,
   libogg,
-  opus,
+  libopus,
   opusfile,
   pkg-config,
 }:
@@ -30,7 +30,7 @@ buildGoModule (finalAttrs: {
   buildInputs = [
     alsa-lib
     libogg
-    opus
+    libopus
     opusfile
     ffmpeg
   ];

@@ -4,7 +4,7 @@
   pkg-config,
   alsa-lib,
   cmake,
-  opus,
+  libopus,
   lib,
   stdenv,
   nix-update-script,
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-jaHDy/5e9BXXLRe3oc9g3JCCSg28bb1d2dMPkPJTkB4=";
 
   buildInputs = [
-    opus
+    libopus
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
