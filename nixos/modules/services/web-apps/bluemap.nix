@@ -278,6 +278,14 @@ in
         loaded in alphabetical order.
       '';
     };
+
+    modsFolder = mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      description = ''
+        The path of the folder containing the mods that contain extra resources for rendering.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -300,7 +308,9 @@ in
         UMask = "026";
       };
       script = ''
-        ${lib.getExe pkgs.bluemap} -c ${configFolder} -gs -r
+        ${lib.getExe pkgs.bluemap} -c ${configFolder} -gs -r ${
+          lib.optionalString (cfg.modsFolder != null) "-n ${cfg.modsFolder}"
+        }
       '';
     };
 
