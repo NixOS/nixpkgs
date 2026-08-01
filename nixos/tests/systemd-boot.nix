@@ -460,19 +460,17 @@ in
       nodes.machine = common;
 
       testScript =
-        let
-          oldVersion = "222";
-        in
         # python
         ''
           machine.succeed("mount -o remount,rw /boot")
 
           def switch():
-              # Replace version inside sd-boot with something older. See magic[] string in systemd src/boot/efi/boot.c
+              # Replace version inside sd-boot with something older. See SD_MAGIC in systemd src/boot/boot.c
+              # Note: the sed replacement has to be length-preserving, because section length matters.
               machine.succeed(
-                """
+                r"""
                 find /boot -iname '*boot*.efi' -print0 | \
-                xargs -0 -I '{}' sed -i 's/#### LoaderInfo: systemd-boot .* ####/#### LoaderInfo: systemd-boot ${oldVersion} ####/' '{}'
+                xargs -0 -I '{}' sed -i 's/#### LoaderInfo: systemd-boot [0-9]\(.*\) ####/#### LoaderInfo: systemd-boot 0\1 ####/' '{}'
                 """
               )
               return machine.succeed("/run/current-system/bin/switch-to-configuration boot 2>&1")

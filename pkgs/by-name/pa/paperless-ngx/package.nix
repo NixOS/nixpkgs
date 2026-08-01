@@ -100,6 +100,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "redis"
     "torch"
     "zxing-cpp"
+    "zxing-cpp"
     # requested by maintainer
     "imap-tools"
     "ocrmypdf"

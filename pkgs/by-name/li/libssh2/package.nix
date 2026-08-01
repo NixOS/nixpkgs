@@ -51,6 +51,18 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://salsa.debian.org/debian/libssh2/-/raw/1d4906e6ebe85a9da2931ba33677ead96a61f07f/debian/patches/libssh-unconst-backport.patch";
       hash = "sha256-jc01Fb70GbaD9+RYeSjRaLFBtKLiMPTMuXas21aC0Ag=";
     })
+
+    # https://github.com/libssh2/libssh2/issues/1925#issuecomment-4938515829
+    (fetchurl {
+      name = "CVE-2026-58050.patch";
+      url = "https://raw.githubusercontent.com/JuliaPackaging/Yggdrasil/9404aa5dd96c945a790c425a5f49af19ed2a93b0/L/LibSSH2/LibSSH2%401.11/bundled/patches/CVE-2026-58050-3449752.patch";
+      hash = "sha256-BZ1ewZgrroev2gkJwdoHCMFJK4wiRmA/Y4tzwaQqBd8=";
+    })
+    (fetchurl {
+      name = "CVE-2026-58051.patch";
+      url = "https://github.com/JuliaPackaging/Yggdrasil/raw/9404aa5dd96c945a790c425a5f49af19ed2a93b0/L/LibSSH2/LibSSH2%401.11/bundled/patches/CVE-2026-58051-a9758da.patch";
+      hash = "sha256-fduXIH02uwzqWV2RDidZmaDBy51V8yuC4XKlGYacjxg=";
+    })
   ];
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
@@ -83,6 +95,5 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.libssh2.org";
     platforms = lib.platforms.all;
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 })
