@@ -396,8 +396,6 @@ let
             };
           });
 
-          evil-magit = buildWithGit super.evil-magit;
-
           eopengrok = buildWithGit super.eopengrok;
 
           forge = buildWithGit super.forge;
@@ -444,8 +442,6 @@ let
 
           magit-gitflow = buildWithGit super.magit-gitflow;
 
-          magithub = ignoreCompilationError (buildWithGit super.magithub); # elisp error
-
           magit-svn = buildWithGit super.magit-svn;
 
           kubernetes = buildWithGit super.kubernetes;
@@ -457,8 +453,6 @@ let
           kapacitor = buildWithGit super.kapacitor;
 
           gerrit = buildWithGit super.gerrit;
-
-          gerrit-download = buildWithGit super.gerrit-download;
 
           github-pullrequest = buildWithGit super.github-pullrequest;
 
@@ -475,8 +469,6 @@ let
           magit-reviewboard = buildWithGit super.magit-reviewboard;
 
           magit-patch-changelog = buildWithGit super.magit-patch-changelog;
-
-          magit-circleci = buildWithGit super.magit-circleci;
 
           # https://github.com/dandavison/magit-delta/issues/30
           magit-delta = addPackageRequires (buildWithGit super.magit-delta) [ self.dash ];
