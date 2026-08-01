@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "Projecteur";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = false;
-    hash = "sha256-F7o93rBjrDTmArTIz8RB/uGBOYE6ny/U7ppk+jEhM5A=";
+    hash = "sha256-4g0h46kKOyk7r0bF9l4T28NAE/NEjtYjdPfLZUsGK/M=";
   };
 
   buildInputs = [
