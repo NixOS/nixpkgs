@@ -6,7 +6,7 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "gh-aw";
-  version = "0.80.9";
+  version = "0.83.1";
 
   __structuredAttrs = true;
 
@@ -14,10 +14,10 @@ buildGoModule (finalAttrs: {
     owner = "github";
     repo = "gh-aw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2BGFKy/X8j0jYQc+W2rLZmZmPgCvZ+QOZweQaAQQJLM=";
+    hash = "sha256-NJOQGJxj46sqKPVUnGF2m/EFmSXZszHY9FXjjtL2/Cc=";
   };
 
-  vendorHash = "sha256-jxh8R/X12/QHxZOIKsTvS6FcDQSmJ7RJEvDnJuUr93A=";
+  vendorHash = "sha256-0fbfRPlf+m8lvR40h3d7UtMoDN608MtgZVj3ZX5EyPE=";
 
   subPackages = [ "cmd/gh-aw" ];
 
