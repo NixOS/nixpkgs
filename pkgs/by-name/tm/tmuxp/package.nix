@@ -34,6 +34,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   postInstall = ''
     installShellCompletion --cmd tmuxp \
       --bash <(shtab --shell=bash -u tmuxp.cli.create_parser) \
+      --fish <(shtab --shell=fish -u tmuxp.cli.create_parser) \
       --zsh <(shtab --shell=zsh -u tmuxp.cli.create_parser)
   '';
 
