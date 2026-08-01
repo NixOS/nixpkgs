@@ -1,0 +1,39 @@
+From 738018a47573697f1b0250bfa4f3dc83191aa786 Mon Sep 17 00:00:00 2001
+From: Rexiel Scarlet <37258415+Rexcrazy804@users.noreply.github.com>
+Date: Sat, 1 Aug 2026 18:30:32 +0400
+Subject: [PATCH 2/2] fix build for nixpkgs
+
+---
+ package.json                | 2 +-
+ src/renderer/views/Apps.vue | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package.json b/package.json
+index 5f2583e..8e5a1ed 100644
+--- a/package.json
++++ b/package.json
+@@ -3,7 +3,7 @@
+     "version": "0.9.0",
+     "description": "Windows for Penguins",
+     "type": "module",
+-    "main": "main/main.js",
++    "main": "src/main/main.ts",
+     "engines": {
+         "node": ">=23.6.0"
+     },
+diff --git a/src/renderer/views/Apps.vue b/src/renderer/views/Apps.vue
+index 9a66044..e191343 100644
+--- a/src/renderer/views/Apps.vue
++++ b/src/renderer/views/Apps.vue
+@@ -251,7 +251,7 @@ import WBContextMenu from "../components/WBContextMenu.vue";
+ import WBMenuItem from "../components/WBMenuItem.vue";
+ import { AppIcons, DEFAULT_ICON } from "../data/appicons";
+ import { debounce } from "../utils/debounce";
+-import { Jimp, JimpMime } from "jimp";
++import "jimp";
+ const nodeFetch: typeof import("node-fetch").default = require("node-fetch");
+ const FormData: typeof import("form-data") = require("form-data");
+ 
+-- 
+2.55.0
+

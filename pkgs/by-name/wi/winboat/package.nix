@@ -1,6 +1,6 @@
 {
   lib,
-  electron_40,
+  electron_43,
   zip,
   makeWrapper,
   udev,
@@ -17,7 +17,7 @@
 }:
 
 let
-  electron = electron_40;
+  electron = electron_43;
 in
 buildNpmPackage (finalAttrs: {
   pname = "winboat";
@@ -30,10 +30,10 @@ buildNpmPackage (finalAttrs: {
     hash = "sha256-DgH6CAZf+XIgBav2xd2FF2MGRgGIyOs/98vqWHA3XYw=";
   };
 
-  postPatch = ''
-    substituteInPlace package.json \
-      --replace-fail "main/main.js" "src/main/main.ts"
-  '';
+  patches = [
+    ./patches/0001-update-lockfiles.patch
+    ./patches/0002-fix-build-for-nixpkgs.patch
+  ];
 
   nativeBuildInputs = [
     zip
@@ -43,11 +43,19 @@ buildNpmPackage (finalAttrs: {
 
   buildInputs = [ udev ];
 
-  env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
-  npmDepsHash = "sha256-DLkI9a030uM2X1et94e4nd/HEyw5ugtK8NEAn/J8p9U=";
+  env = {
+    ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
+    CXXFLAGS = "--std=c++17"; # node-addon-aapi fails to build without this
+  };
+
+  npmDepsHash = "sha256-UpsFhzWMK4SpBVldvcgeWOwcVx993n7jAsZDaqSkHGg=";
+  npmFlags = [ "--legacy-peer-deps" ];
   makeCacheWritable = true;
 
-  guest-server = pkgsCross.mingwW64.callPackage ./guest-server.nix { };
+  guest-server = pkgsCross.mingwW64.callPackage ./guest-server.nix {
+    winboat = finalAttrs.finalPackage;
+  };
+
   passthru = {
     guest-server = finalAttrs.guest-server;
     updateScript = nix-update-script {
@@ -59,8 +67,9 @@ buildNpmPackage (finalAttrs: {
   };
 
   buildPhase = ''
+    # npm exec vite build --debug # use when build fails silently
     node scripts/build.ts
-    npm exec electron-builder --linux -- \
+    npm exec electron-builder -- \
       --dir \
       -c.electronDist=${electron.dist} \
       -c.electronVersion=${electron.version}
