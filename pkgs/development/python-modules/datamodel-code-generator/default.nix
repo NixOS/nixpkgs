@@ -112,6 +112,15 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # remote testing, name resolution failure.
     "test_openapi_parser_parse_remote_ref"
+
+    # ruff formatting changed, causing errors such as
+    #   Failed: Output mismatch
+    #   AssertionError: Content mismatch for ...
+    "test_no_use_type_checking_imports"
+    "test_ruff_batch_formatting_directory"
+    "test_ruff_check_and_format_combined"
+    "test_ruff_check_only"
+    "test_type_checking_imports_default_to_runtime_imports_for_modular_pydantic_ruff"
   ];
 
   pythonImportsCheck = [ "datamodel_code_generator" ];
