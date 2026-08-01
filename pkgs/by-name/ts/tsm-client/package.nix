@@ -101,6 +101,7 @@ let
     inherit meta passthru;
 
     __structuredAttrs = true;
+    strictDeps = true;
 
     nativeBuildInputs = [
       autoPatchelfHook
