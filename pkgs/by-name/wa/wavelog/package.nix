@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   nix-update-script,
+  nixosTests,
   php,
 }:
 
@@ -23,7 +24,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = { inherit (nixosTests) wavelog; };
+  };
 
   meta = {
     description = "Webbased Amateur Radio Logging Software";
