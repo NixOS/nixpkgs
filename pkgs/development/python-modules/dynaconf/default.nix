@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "dynaconf";
-  version = "3.2.13";
+  version = "3.3.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dynaconf";
     repo = "dynaconf";
     tag = version;
-    hash = "sha256-3qUGLEQ0x/WTF/M/SEts6v9w1yGYSB6LYEcxKQcbqSk=";
+    hash = "sha256-Tdz6LDDoXf6SUYZP63yanMc5uLQYa8pnZruZx9hs3fc=";
   };
 
   build-system = [ setuptools ];
@@ -60,32 +60,41 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # AssertionError: assert 42.1 == 'From development env'
-    "test_envless_load_file"
+    # These tests share global state and fail when pytest-xdist runs the
+    # suite in parallel.
+    "test_extracted_validators_from_annotated"
+    "test_validator_from_types"
+    "test_default_value_from_types"
   ];
 
   disabledTestPaths = [
-    # import file mismatch
-    # imported module 'app_test' has this __file__ attribute:
-    # /build/source/tests_functional/issues/1005-key-type-error/app_test.py
-    # which is not the same as the test file we want to collect:
-    # /build/source/tests_functional/issues/994_validate_on_update_fix/app_test.py
-    "tests_functional/django_pytest_pure/app/tests"
+    # Under the full suite (pytest-xdist) the flask CLI raises NoAppException
+    # for 'dynaconf write', and a few subprocess tests fail.
+    "tests/test_cli.py"
+    # All these files are named app_test.py; pytest imports the one under
+    # 1005-key-type-error first, then rejects the others with
+    # ImportPathMismatchError.
     "tests_functional/issues/575_603_666_690__envvar_with_template_substitution/app_test.py"
     "tests_functional/issues/658_nested_envvar_override/app_test.py"
     "tests_functional/issues/835_926_enable-merge-equal-false/app_test.py"
     "tests_functional/issues/994_validate_on_update_fix/app_test.py"
-    "tests_functional/pytest_example/app/tests"
-    "tests_functional/pytest_example/flask/tests"
-    # flask.cli.NoAppException: Failed to find Flask application or factory in module 'app'
-    # Use 'app:name' to specify one
-    "tests/test_cli.py"
-    # sqlite3.OperationalError: no such table: auth_user
-    "tests_functional/django_pytest/app/tests/test_app.py::test_admin_user"
-    # unable connect port
+    # Its conftest.py shares the module name app.tests.conftest with
+    # tests_functional/legacy/django_pytest/app/tests/conftest.py, so pytest
+    # rejects it with ImportPathMismatchError.
+    "tests_functional/legacy/django_pytest_pure/app/tests"
+    # Needs pytest-django to create the auth_user table; without it the test
+    # fails with sqlite3.OperationalError: no such table: auth_user.
+    "tests_functional/legacy/django_pytest/app/tests/test_app.py::test_admin_user"
+    # Integration tests that need a running redis container.
     "tests/test_redis.py"
-    # need docker
+    # Integration tests that need a running vault container.
     "tests/test_vault.py"
+    # ImportError while importing the test module.
+    "tests/test_release_utility.py"
+    # Their conftest.py is also named tests.conftest, which clashes with
+    # tests/conftest.py.
+    "tests_functional/legacy/pytest_example_app/flask/tests"
+    "tests_functional/legacy/pytest_example_app/tests"
   ];
 
   # django.core.exceptions.ImproperlyConfigured: Requested setting LOGGING_CONFIG
