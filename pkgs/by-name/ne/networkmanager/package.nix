@@ -3,10 +3,14 @@
   stdenv,
   fetchurl,
   replaceVars,
+  bpftools,
   gettext,
   pkg-config,
+  clang,
   dbus,
   gitUpdater,
+  slang,
+  libbpf,
   libuuid,
   polkit,
   gnutls,
@@ -30,7 +34,6 @@
   newt,
   ethtool,
   gnused,
-  iputils,
   kmod,
   jansson,
   elfutils,
@@ -64,11 +67,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "networkmanager";
-  version = "1.56.0";
+  version = "1.58.0";
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/${finalAttrs.version}/downloads/NetworkManager-${finalAttrs.version}.tar.xz";
-    hash = "sha256-WaMtOFzB564m5DeYxvEtB/9hmKvQQewGILOgjPwCHMw=";
+    hash = "sha256-DG8nA6LJsBfNaPv+HS6KGl1/8FE3x1HsQhy6NulFRro=";
   };
 
   outputs = [
@@ -78,6 +81,10 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
     "doc"
   ];
+
+  # TODO: only disable for clang used for bpf builds
+  # this breaks clang target bpf, which does not support -fzero-call-used-regs=used-gpr
+  hardeningDisable = [ "zerocallusedregs" ];
 
   # Right now we hardcode quite a few paths at build time. Probably we should
   # patch networkmanager to allow passing these path in config file. This will
@@ -103,6 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Features
     # Allow using iwd when configured to do so
+    (lib.mesonBool "clat" (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform)) # fails to find UAPI headers
     "-Diwd=true"
     "-Dpppd=${ppp}/bin/pppd"
     "-Diptables=${iptables}/bin/iptables"
@@ -132,7 +140,6 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     (replaceVars ./fix-paths.patch {
       inherit
-        iputils
         ethtool
         gnused
         ;
@@ -146,6 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     (if withSystemd then systemd else udev)
+    libbpf
     libselinux
     audit
     libpsl
@@ -162,6 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
     newt
     jansson
     dbus # used to get directory paths with pkg-config during configuration
+    slang
   ]
   ++ lib.optionals withNbft [
     libnvme
@@ -173,6 +182,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    bpftools
+    clang
     meson
     ninja
     gettext
