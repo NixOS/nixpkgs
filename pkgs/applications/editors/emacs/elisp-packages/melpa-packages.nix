@@ -520,7 +520,7 @@ let
             '';
           });
 
-          rtags = ignoreCompilationError (dontConfigure (externalSrc super.rtags pkgs.rtags)); # elisp error
+          rtags = ignoreCompilationError (fix-rtags super.rtags); # elisp error
 
           rtags-xref = dontConfigure super.rtags;
 
