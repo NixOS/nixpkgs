@@ -23,16 +23,16 @@ in
 
 buildNpmPackage (finalAttrs: {
   pname = "radicle-explorer";
-  version = "0-unstable-2026-07-16";
+  version = "0-unstable-2026-07-29";
 
   src = fetchFromRadicle {
     seed = "seed.radicle.dev";
     repo = "z4V1sjrXqjvFdnCUbxPFqd5p4DtH5";
-    rev = "3c2935704f5767d60b3caf609ef772948bbecb10";
-    hash = "sha256-EpHKuFNgRLwCVdDDRKjPJEvfDpS9qka75B2fQEVc1ns=";
+    rev = "427cece9850944d30f0d49ccd016f98dacd77d75";
+    hash = "sha256-FC78GCaC8IcBtXDRotYcaw040cggGWnrI2lgnWLwU68=";
   };
 
-  npmDepsHash = "sha256-74r7cyggbuva9XpW++HdAHHFqEBJ6BgNuJJUR+8HE4c=";
+  npmDepsHash = "sha256-L/JOhI7KVXNDGHzk8RVNNcd8hHL+I7YKVg8sZyRSBtA=";
 
   postPatch = ''
     patchShebangs --build ./scripts
