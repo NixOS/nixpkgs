@@ -25,7 +25,7 @@ buildNpmPackage rec {
   inherit nodejs;
 
   src = fetchFromGitHub {
-    owner = "johannesjo";
+    owner = "super-productivity";
     repo = "super-productivity";
     tag = "v${version}";
     hash = "sha256-1Iu4aJLlT2VllAALcJFBV7GQ1+ujgHjolbkYLjGM1qI=";
