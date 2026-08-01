@@ -887,6 +887,15 @@ in
     };
   });
 
+  markdown = prev.markdown.overrideAttrs (old: {
+    # loosen upper bounds to allow 5.4
+    # https://github.com/mpeterv/markdown/pull/7
+    postConfigure = ''
+      substituteInPlace $rockspecFilename --replace-fail 'lua >= 5.1, < 5.4' 'lua >= 5.1, < 5.5'
+    '';
+    meta.broken = luaOlder "5.1" || luaAtLeast "5.5";
+  });
+
   mpack = prev.mpack.overrideAttrs (drv: {
     buildInputs = (drv.buildInputs or [ ]) ++ [ libmpack ];
     env = {
