@@ -1,0 +1,22 @@
+diff --git a/src/rlimit.rs b/src/rlimit.rs
+index bbf2d31..d9c89b4 100644
+--- a/src/rlimit.rs
++++ b/src/rlimit.rs
+@@ -16,8 +16,16 @@
+ //! is silently capped at `kern.maxfilesperproc`.
+
+ pub fn raise_nofile_limit() {
++    let (before, hard) = rlimit::Resource::NOFILE.get().unwrap();
+     match rlimit::increase_nofile_limit(rlimit::INFINITY) {
+-        Ok(new_limit) => log::debug!("RLIMIT_NOFILE soft limit set to {new_limit}"),
++        Ok(new_limit) => {
++            if new_limit >= before {
++                log::debug!("RLIMIT_NOFILE soft limit set to {new_limit}");
++            } else {
++                rlimit::Resource::NOFILE.set(before, hard).unwrap();
++                log::debug!("RLIMIT_NOFILE soft limit restored to {before}");
++            }
++        }
+         Err(err) => log::warn!("failed to raise RLIMIT_NOFILE: {err}"),
+     }
+ }
