@@ -19,8 +19,8 @@ buildNpmPackage rec {
     hash = "sha256-yX6Lf+7q9ptVAlx0q0Z55GnKhvAIjYvvvKR1ZZroWeo=";
   };
 
-  npmDepsFetcherVersion = 3;
-  npmDepsHash = "sha256-8wjt5wnJG4S4EeGWGxbo6Bwt76GIqrSiwqwwwQ17Y5Y=";
+  npmDepsFetcherVersion = 2;
+  npmDepsHash = "sha256-WRxlvkgWboO0ukUHgjC5CrfgfwnmUfDXI4r5dx9CKww=";
 
   nativeBuildInputs = [
     python3
