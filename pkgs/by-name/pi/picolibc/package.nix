@@ -19,7 +19,7 @@ let
 in
 stdenvNoLibc.mkDerivation (finalAttrs: {
   pname = "picolibc";
-  version = "1.8.12";
+  version = "1.8.12-1";
   strictDeps = true;
 
   outputs = [
@@ -31,7 +31,7 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
     owner = "picolibc";
     repo = "picolibc";
     tag = finalAttrs.version;
-    hash = "sha256-a2XLUN2U49Lpsyizzb2cQpMbww0cmOUUKdgIj6OHhpQ=";
+    hash = "sha256-FhTNgffsnHbzIXOOwCMe6O1FGkEtqWfw+e30RW+Y4K4=";
   };
 
   depsBuildBuild = lib.optionals canExecute [
