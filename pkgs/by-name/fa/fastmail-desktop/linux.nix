@@ -1,17 +1,16 @@
 {
+  lib,
   pname,
   version,
   src,
   passthru,
   meta,
+  stdenv,
   stdenvNoCC,
   appimageTools,
   asar,
-  autoPatchelfHook,
   makeWrapper,
   electron,
-  libgcc,
-  vips,
 }:
 let
   appimageContents = appimageTools.extract { inherit pname version src; };
@@ -26,13 +25,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     asar
-    autoPatchelfHook
     makeWrapper
-  ];
-
-  buildInputs = [
-    libgcc
-    vips
   ];
 
   installPhase = ''
@@ -56,28 +49,23 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         "$out/share/icons/hicolor/$resdir/apps/fastmail.png"
     done
 
+    # The bundled sharp libraries need libstdc++, which electron neither links
+    # nor exposes to dlopen: its libstdc++ directory is listed in DT_RUNPATH,
+    # and the loader does not consult a RUNPATH when resolving the
+    # dependencies of a dlopen'd object.  It has to be supplied through
+    # LD_LIBRARY_PATH rather than by rewriting the libraries with patchelf,
+    # because patchelf corrupts libvips-cpp: its _init routine lives at file
+    # offset 0x25c, inside the region patchelf overwrites when it relocates
+    # the string table, and the rewritten library segfaults on load.
     makeWrapper "${electron}/bin/electron" "$out/bin/fastmail" \
       --add-flags "$out/opt/fastmail/app.asar.unpacked" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ (lib.getLib stdenv.cc.cc) ]}" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-wayland-ime=true --wayland-text-input-version=3}}" \
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
 
     runHook postInstall
   '';
-
-  # remove musl-libc dependencies before the autoPatchelfHook
-  preFixup =
-    let
-      suffix =
-        {
-          aarch64-linux = "arm64";
-          x86_64-linux = "x64";
-        }
-        .${stdenvNoCC.targetPlatform.system};
-    in
-    ''
-      rm -r "$out/opt/fastmail/app.asar.unpacked/node_modules/@img/"{sharp-linuxmusl-${suffix},sharp-libvips-linuxmusl-${suffix}}
-    '';
 
   meta = meta // {
     mainProgram = "fastmail";
