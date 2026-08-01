@@ -26,8 +26,7 @@
   latex2html,
   texinfo,
   texliveSmall,
-  # Error: while running example drawTropicalCurve from d2t_singular/tropical_lib.doc:610
-  enableDocs ? !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64),
+  enableDocs ? true,
 }:
 
 stdenv.mkDerivation rec {
