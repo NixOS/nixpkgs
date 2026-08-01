@@ -374,7 +374,6 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       GaetanLepage
-      derdennisop
     ];
     mainProgram = "daft";
     platforms = lib.platforms.unix;
