@@ -7,11 +7,8 @@
   stdenvNoCC,
   appimageTools,
   asar,
-  autoPatchelfHook,
   makeWrapper,
   electron,
-  libgcc,
-  vips,
 }:
 let
   appimageContents = appimageTools.extract { inherit pname version src; };
@@ -26,14 +23,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     asar
-    autoPatchelfHook
     makeWrapper
   ];
 
-  buildInputs = [
-    libgcc
-    vips
-  ];
+  # The bundled sharp libraries are self-contained: they find each other
+  # through $ORIGIN-relative runpaths, and their remaining dependencies
+  # (libstdc++, libgcc_s, and glibc) are already loaded by electron.  Running
+  # autoPatchelfHook on them would corrupt libvips-cpp, whose _init routine
+  # lives at file offset 0x25c, inside the region patchelf rewrites when it
+  # relocates the string table.  The rewritten library segfaults on load.
+  dontAutoPatchelf = true;
 
   installPhase = ''
     runHook preInstall
@@ -64,20 +63,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
-
-  # remove musl-libc dependencies before the autoPatchelfHook
-  preFixup =
-    let
-      suffix =
-        {
-          aarch64-linux = "arm64";
-          x86_64-linux = "x64";
-        }
-        .${stdenvNoCC.targetPlatform.system};
-    in
-    ''
-      rm -r "$out/opt/fastmail/app.asar.unpacked/node_modules/@img/"{sharp-linuxmusl-${suffix},sharp-libvips-linuxmusl-${suffix}}
-    '';
 
   meta = meta // {
     mainProgram = "fastmail";
