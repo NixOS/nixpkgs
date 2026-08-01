@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   preConfigure = ''
-    if [ $doCheck -eq 1 ]; then
+    if [ -n "$doCheck" ]; then
       sed -i '/gtest/d' third_party/CMakeLists.txt
       rmdir test/spec/testsuite
       ln -s ${testsuite} test/spec/testsuite
@@ -60,6 +60,14 @@ stdenv.mkDerivation rec {
   checkInputs = [ gtest ];
   checkPhase = ''
     LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib python3 ../check.py $tests
+  '';
+
+  # bin/binaryen-unittests is absent on cross builds which don't have doCheck,
+  # so delete it on non-cross builds too (thus removing gtest from the closure).
+  postInstall = ''
+    if [ -n "$doCheck" ]; then
+      rm "$out/bin/binaryen-unittests"
+    fi
   '';
 
   tests = [
