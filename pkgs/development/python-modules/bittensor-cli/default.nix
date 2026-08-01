@@ -32,7 +32,7 @@ buildPythonPackage (finalAttrs: {
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "latent-to";
+    owner = "RaoFoundation";
     repo = "btcli";
     tag = "v${finalAttrs.version}";
     hash = "sha256-rwPYuDfRi3L1BvNN+MoqJlJjyp/vyK7/p6iyB7RJ9Wk=";
@@ -77,8 +77,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Bittensor command line tool";
-    homepage = "https://github.com/latent-to/btcli";
-    changelog = "https://github.com/latent-to/btcli/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/RaoFoundation/btcli";
+    changelog = "https://github.com/RaoFoundation/btcli/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kilyanni ];
     mainProgram = "btcli";

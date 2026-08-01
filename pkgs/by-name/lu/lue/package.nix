@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "superstarryeyes";
+    owner = "paulilaaso";
     repo = "lue";
     tag = "v${finalAttrs.version}";
     hash = "sha256-T7uh9PSCTkT+jYxQYC4ebPkabDz3pc6JjCGtgNatIAM=";
@@ -49,7 +49,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   meta = {
     description = "Terminal eBook Reader with Text-to-Speech";
-    homepage = "https://github.com/superstarryeyes/lue";
+    homepage = "https://github.com/paulilaaso/lue";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ yiyu ];
     mainProgram = "lue";
