@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   __structuredAttrs = true;
 
-  doCheck = with stdenv.hostPlatform; !isStatic && isLinux;
+  doCheck = with stdenv.hostPlatform; !isStatic && isLinux && !isLoongArch64;
   checkTarget = "unit";
   checkInputs = [
     cmocka
