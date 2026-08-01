@@ -1,24 +1,23 @@
 {
   lib,
   stdenv,
-  perlPackages,
-  fetchFromGitHub,
-  makeWrapper,
   coreutils,
   dmidecode,
+  fetchFromGitHub,
   findutils,
   inetutils,
   ipmitool,
   iproute2,
   lvm2,
+  makeWrapper,
+  nix-update-script,
+  nixosTests,
   nmap,
   pciutils,
+  perlPackages,
   usbutils,
   util-linux,
-  nixosTests,
-  testers,
-  ocsinventory-agent,
-  nix-update-script,
+  versionCheckHook,
 }:
 
 perlPackages.buildPerlPackage rec {
@@ -31,6 +30,8 @@ perlPackages.buildPerlPackage rec {
     tag = "v${version}";
     hash = "sha256-BIR93ABiE3wzuw9Q0fZMm7ClKyDmsxE+UcPTYd6P7No=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -87,14 +88,11 @@ perlPackages.buildPerlPackage rec {
       wrapProgram $out/bin/ocsinventory-agent --prefix PATH : ${lib.makeBinPath runtimeDependencies}
     '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
-    tests = {
-      inherit (nixosTests) ocsinventory-agent;
-      version = testers.testVersion {
-        package = ocsinventory-agent;
-        command = "ocsinventory-agent --version";
-      };
-    };
+    tests.ocsinventory-agent = nixosTests.ocsinventory-agent;
     updateScript = nix-update-script { };
   };
 
