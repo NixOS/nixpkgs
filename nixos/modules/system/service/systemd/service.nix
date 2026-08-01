@@ -125,10 +125,13 @@ in
         `%i` (instance), `%t` (runtime directory), and environment variables using
         `''${VAR}` syntax in your command line.
 
-        By default, it is set to {option}`process.reloadCommand` when specified, or an
-        empty string otherwise. Because {option}`process.reloadCommand` is already a
-        command line (not an argument list), it is used verbatim so that references
-        like `$MAINPID` are preserved.
+        By default, it is set to {option}`process.reloadCommand`. Because
+        {option}`process.reloadCommand` is already a command line (not an argument
+        list), it is used verbatim so that references like `$MAINPID` are preserved.
+
+        When {option}`process.reloadCommand` is unset, this option is `null` and no
+        `ExecReload` is emitted; a service may then set
+        `systemd.service.serviceConfig.ExecReload` itself.
 
         To extend {option}`process.reloadCommand` with systemd specifiers, you can append
         to the command line:
@@ -146,7 +149,7 @@ in
         for available specifiers like `%n`, `%i`, `%t`.
       '';
       type = types.nullOr types.str;
-      default = if config.process.reloadCommand != null then config.process.reloadCommand else "";
+      default = config.process.reloadCommand;
       defaultText = lib.literalExpression "config.process.reloadCommand";
     };
 
@@ -207,7 +210,7 @@ in
       # TODO description;
       wantedBy = lib.mkDefault [ "multi-user.target" ];
       serviceConfig = {
-        ExecReload = config.systemd.mainExecReload;
+        ExecReload = lib.mkIf (config.systemd.mainExecReload != null) config.systemd.mainExecReload;
         Type = lib.mkDefault (if config.notificationProtocol.systemd then "notify" else "simple");
         Restart = lib.mkDefault "always";
         RestartSec = lib.mkDefault "5";
