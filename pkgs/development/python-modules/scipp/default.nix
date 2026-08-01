@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
   scikit-build-core,
@@ -40,30 +39,16 @@
 
 buildPythonPackage rec {
   pname = "scipp";
-  version = "26.3.1";
+  version = "26.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scipp";
     repo = "Scipp";
     tag = version;
-    hash = "sha256-Jbp7dOEAnXe9kBcYt35iC01i6FnZkFY5n9okGCeuuL4=";
+    hash = "sha256-0IkLdkkqCw8qUKIh/ch9x1rbhKvAJAkjBSIz9y/GwSU=";
   };
 
-  patches = [
-    # Fixes pytest deprecation failure:
-    # https://github.com/scipp/scipp/pull/3907
-    (fetchpatch {
-      url = "https://github.com/scipp/scipp/commit/b3ad0c15e565737595f405b1d7bd1258b7bed422.patch";
-      hash = "sha256-zxcZzuZMdm9WUKXPc8q2KkB+nCS8j+jZjfZAnLiGv6c=";
-    })
-    # Fixes Numpy related issue observed in tests:
-    # https://github.com/scipp/scipp/pull/3920
-    (fetchpatch {
-      url = "https://github.com/scipp/scipp/commit/217b3baaf0696b12e39511d51a5d5270722ec48a.patch";
-      hash = "sha256-jVzayIkJq93nwtmbpDQ5kcirtpLZqua6KRXY/eN3fQg=";
-    })
-  ];
   env = {
     SKIP_REMOTE_SOURCES = "true";
   };
