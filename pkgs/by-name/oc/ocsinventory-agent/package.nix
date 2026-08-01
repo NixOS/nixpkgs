@@ -18,6 +18,7 @@
   usbutils,
   util-linux,
   versionCheckHook,
+  which,
 }:
 
 perlPackages.buildPerlPackage rec {
@@ -75,6 +76,7 @@ perlPackages.buildPerlPackage rec {
         ipmitool # ipmitool
         nmap # nmap
         pciutils # lspci
+        which # which
       ]
       ++ lib.optionals stdenv.hostPlatform.isLinux [
         dmidecode # dmidecode
