@@ -9697,7 +9697,6 @@ with pkgs;
     pipewireSupport = false;
     rdpSupport = false;
     remotingSupport = false;
-    vaapiSupport = false;
     vncSupport = false;
     vulkanSupport = false;
     webpSupport = false;
