@@ -43,6 +43,7 @@
   zstd,
   writeScript,
   callPackage,
+  wrapGAppsHook3,
 }:
 
 let
@@ -78,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     qt6.qttools
     qt6.wrapQtAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
