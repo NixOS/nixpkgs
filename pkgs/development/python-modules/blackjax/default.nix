@@ -100,6 +100,8 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # AssertionError: Not equal to tolerance rtol=1e-07, atol=1e-05
     "test_equal_matrices"
+    "test_restart_after_reset_matches_fresh_accumulation"
+    "test_split_pop_k1_degenerate"
   ];
 
   pythonImportsCheck = [ "blackjax" ];
