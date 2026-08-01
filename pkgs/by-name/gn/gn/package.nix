@@ -36,6 +36,9 @@ stdenv.mkDerivation {
     '';
   };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     ninja
     python3
