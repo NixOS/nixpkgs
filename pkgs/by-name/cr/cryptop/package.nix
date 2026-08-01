@@ -1,7 +1,7 @@
 {
   lib,
   python3Packages,
-  fetchPypi,
+  fetchFromGitHub,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cryptop";
@@ -9,9 +9,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pyproject = true;
   __structuredAttrs = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    sha256 = "0akrrz735vjfrm78plwyg84vabj0x3qficq9xxmy9kr40fhdkzpb";
+  src = fetchFromGitHub {
+    owner = "huwwp";
+    repo = "cryptop";
+    tag = "v.${finalAttrs.version}";
+    hash = "sha256-lrHTtTQJ9Zuspt+LRT9WjmCruhwms6FUM3EFo6PZ26A=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -22,7 +24,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     requests-cache
   ];
 
-  # No tests in archive
+  # No tests
   doCheck = false;
 
   meta = {
