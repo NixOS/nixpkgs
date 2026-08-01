@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   argcomplete,
   buildPythonPackage,
   fetchFromGitHub,
@@ -130,6 +131,11 @@ buildPythonPackage (finalAttrs: {
     "test_remove_stale_venv_resources_keeps_files_pipx_does_not_own"
     "test_shared_libs_create_preserves_pip_args"
   ];
+
+  # Keep long Darwin sandbox paths from wrapping literal test output.
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export COLUMNS=200
+  '';
 
   postInstall = ''
     installShellCompletion --cmd pipx \
