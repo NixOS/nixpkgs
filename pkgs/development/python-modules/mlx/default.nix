@@ -113,14 +113,21 @@ buildPythonPackage (finalAttrs: {
     "python/tests/"
   ];
 
-  disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
-    # Segmentation fault
-    "test_lapack"
-    "test_multivariate_normal"
-    "test_orthogonal"
-    "test_vmap_inverse"
-    "test_vmap_svd"
-  ];
+  disabledTests =
+    lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+      # Segmentation fault
+      "test_lapack"
+      "test_multivariate_normal"
+      "test_orthogonal"
+      "test_vmap_inverse"
+      "test_vmap_svd"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # M1 Accelerate bug, to be fixed in macOS:
+      # https://github.com/ml-explore/mlx/issues/3200
+      # https://github.com/ml-explore/mlx/pull/3563#issuecomment-4784288696
+      "test_gather_qmm_sorted"
+    ];
 
   disabledTestPaths = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
     # Segmentation fault
