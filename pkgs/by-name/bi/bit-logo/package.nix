@@ -10,7 +10,7 @@ buildGoModule (finalAttrs: {
   version = "0.3.0";
 
   src = fetchFromGitHub {
-    owner = "superstarryeyes";
+    owner = "paulilaaso";
     repo = "bit";
     tag = "v${finalAttrs.version}";
     hash = "sha256-iLwWKn8csoRkr5H8R2kpZVZCxsL0LDWHNvNoxyM6y98=";
@@ -31,7 +31,7 @@ buildGoModule (finalAttrs: {
       CLI/TUI logo designer + ANSI font library with gradient colors,
       shadows, and multi-format export.
     '';
-    homepage = "https://github.com/superstarryeyes/bit";
+    homepage = "https://github.com/paulilaaso/bit";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yiyu ];
     mainProgram = "bit-logo";

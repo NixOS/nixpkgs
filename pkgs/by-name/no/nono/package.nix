@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __darwinAllowLocalNetworking = true; # required for tests
 
   src = fetchFromGitHub {
-    owner = "always-further";
+    owner = "nolabs-ai";
     repo = "nono";
     tag = "v${finalAttrs.version}";
     hash = "sha256-RxVYatzKjv6LJ+M4Js+sTvg0hMnovXxtr6WxwFYF16Y=";
@@ -142,14 +142,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
   meta = {
     description = "Secure, kernel-enforced sandbox for AI agents, MCP and LLM workloads";
-    homepage = "https://github.com/always-further/nono";
-    changelog = "https://github.com/always-further/nono/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    homepage = "https://github.com/nolabs-ai/nono";
+    changelog = "https://github.com/nolabs-ai/nono/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       jk
     ];
     mainProgram = "nono";
-    # https://github.com/always-further/nono#platform-support
+    # https://github.com/nolabs-ai/nono#platform-support
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

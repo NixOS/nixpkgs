@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "ogulcancelik";
+    owner = "herdrdev";
     repo = "herdr";
     tag = "v${finalAttrs.version}";
     hash = "sha256-3BA8eredGku+vsL2Af7sUf43QiArR5XTHNrI+X11vFM=";
@@ -78,7 +78,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Agent multiplexer that lives in your terminal";
     homepage = "https://herdr.dev";
-    changelog = "https://github.com/ogulcancelik/herdr/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/herdrdev/herdr/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
       kevinpita

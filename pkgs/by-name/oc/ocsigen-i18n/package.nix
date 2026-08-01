@@ -11,14 +11,14 @@ ocamlPackages.buildDunePackage rec {
   buildInputs = with ocamlPackages; [ ppxlib ];
 
   src = fetchFromGitHub {
-    owner = "besport";
+    owner = "ocsigen";
     repo = "ocsigen-i18n";
     rev = version;
     hash = "sha256-NIl1YUTws8Ff4nrqdhU7oS/TN0lxVQgrtyEZtpS1ojM=";
   };
 
   meta = {
-    homepage = "https://github.com/besport/ocsigen-i18n";
+    homepage = "https://github.com/ocsigen/ocsigen-i18n";
     description = "I18n made easy for web sites written with eliom";
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.gal_bolle ];
