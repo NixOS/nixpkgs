@@ -9,10 +9,10 @@
 
 # Upstream changes files in-place, to update:
 # 1. Check latest version at http://www.un4seen.com/
-# 2. Update `version`s and `hash` sums.
+# 2. Upload that URL to the internet archive (https://web.archive.org/save).
+# 3. Use the internet archive URL.
+# 4. Update `version`s and `hash` sums.
 # See also http://www.un4seen.com/forum/?topic=18614.0
-
-# Internet Archive used due to upstream URLs being unstable
 
 let
   allBass = {
