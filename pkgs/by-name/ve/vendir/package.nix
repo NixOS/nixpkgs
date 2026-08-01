@@ -9,8 +9,8 @@ buildGoModule (finalAttrs: {
   version = "0.46.0";
 
   src = fetchFromGitHub {
-    owner = "vmware-tanzu";
-    repo = "carvel-vendir";
+    owner = "carvel-dev";
+    repo = "vendir";
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-X9tyEeE6QrUQaRlbhRkd+Lz7+bFJrWO2Dn8e0ax7Pdg=";
   };
