@@ -30312,6 +30312,16 @@
     github = "yarektyshchenko";
     githubId = 185304;
   };
+  yarn = {
+    name = "yarncat";
+    email = "nix@yarncat.moe";
+    github = "yaaaarn";
+    githubId = 30006414;
+    matrix = "@y:mx.yarncat.moe";
+    keys = [
+      { fingerprint = "6611 1CEA 8D78 A13E C6D6 FD13 7900 447A E348 FF4D"; }
+    ];
+  };
   yarny = {
     github = "Yarny0";
     githubId = 41838844;
