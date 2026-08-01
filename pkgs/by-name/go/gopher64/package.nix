@@ -1,37 +1,26 @@
 {
   lib,
-  clangStdenv,
-  linkFarm,
-  llvmPackages,
   fetchFromGitHub,
-  fetchgit,
-  runCommand,
   rustPlatform,
+  stdenv,
 
   # nativeBuildInputs
-  cargo-bundle,
-  cctools,
-  gn,
-  ninja,
   pkg-config,
-  python3,
 
   # buildInputs
   fontconfig,
-  moltenvk,
+  openssl,
   sdl3,
   sdl3-ttf,
+  vulkan-loader,
   zstd,
 
   # nativeInstallCheckInputs
   versionCheckHook,
 }:
-let
-  stdenv = clangStdenv;
-in
-rustPlatform.buildRustPackage.override { inherit stdenv; } (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gopher64";
-  version = "1.1.20";
+  version = "1.1.34";
 
   __structuredAttrs = true;
 
@@ -40,7 +29,7 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } (finalAttrs: {
     repo = "gopher64";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-gss0ZGTptk5O67SS+r3i3Caf9I7GQxP0RlHx7GfBihw=";
+    hash = "sha256-RbP+dBJezQanqsUoM3shyCFK1JUt5uOGEp+/H5IXL4c=";
   };
 
   cargoPatches = [
@@ -50,63 +39,25 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } (finalAttrs: {
 
     ./no-lto.patch
     ./no-git-describe.patch
-    ./volk-linking-order.patch
-    ./no-homebrew.patch
   ];
 
-  cargoHash = "sha256-rmt2b8lk/9ts8v33yguuSFcbFvUX00icg1onmhCbDTQ=";
-
-  # don't use lld on aarch64-linux
-  postPatch = ''
-    substituteInPlace .cargo/config.toml \
-      --replace-fail 'rustflags = ["-C", "link-arg=-fuse-ld=lld"]' ""
-  '';
+  cargoHash = "sha256-iAuWK0E9gy1cpxFeY0l7VCOHCRQwpE4/WL31Ma+6n78=";
 
   env = {
-    # See pkgs/by-name/ne/neovide/package.nix
-    SKIA_SOURCE_DIR =
-      let
-        repo = fetchFromGitHub {
-          owner = "rust-skia";
-          repo = "skia";
-          # see rust-skia:skia-bindings/Cargo.toml#package.metadata skia
-          tag = "m142-0.89.1";
-          hash = "sha256-J7mBQ124/dODxX6MsuMW1NHizCMATAqdSzwxpP2afgk=";
-        };
-        # The externals for skia are taken from skia/DEPS
-        externals = linkFarm "skia-externals" (
-          lib.mapAttrsToList (name: value: {
-            inherit name;
-            path = fetchgit value;
-          }) (lib.importJSON ./skia-externals.json)
-        );
-      in
-      runCommand "source" { } ''
-        cp -R ${repo} $out
-        chmod -R +w $out
-        ln -s ${externals} $out/third_party/externals
-      '';
+    OPENSSL_NO_VENDOR = 1;
+    ZSTD_SYS_USE_PKG_CONFIG = 1;
 
-    SKIA_GN_COMMAND = lib.getExe gn;
-    SKIA_NINJA_COMMAND = lib.getExe ninja;
-
-    ZSTD_SYS_USE_PKG_CONFIG = true;
-
-    LIBCLANG_PATH = "${lib.getLib llvmPackages.libclang}/lib";
     GIT_DESCRIBE = finalAttrs.version;
   };
 
   nativeBuildInputs = [
     pkg-config
-    python3
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    cargo-bundle
-    cctools.libtool
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
     fontconfig
+    openssl
     sdl3
     sdl3-ttf
     zstd
@@ -115,31 +66,11 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } (finalAttrs: {
   # no checks
   doCheck = false;
 
-  installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    runHook preInstall
-
-    # cargo-bundle expects the binary in target/release
-    release_target="target/${stdenv.hostPlatform.rust.cargoShortTarget}/release"
-    mv $release_target/gopher64 target/release/gopher64
-
-    export CARGO_BUNDLE_SKIP_BUILD=true
-    app_path=$(cargo bundle --release | xargs)
-
-    mkdir -p $out/Applications $out/bin
-    mv $app_path $out/Applications/
-
-    ln -s $out/Applications/Gopher64.app/Contents/MacOS/gopher64 $out/bin/gopher64
-
-    runHook postInstall
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf $out/bin/gopher64 --add-rpath ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
-  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    install_name_tool $out/Applications/Gopher64.app/Contents/MacOS/gopher64 \
-      -add_rpath "${lib.makeLibraryPath [ moltenvk ]}"
-  '';
-
-  # Error: Os { code: 1, kind: PermissionDenied, message: "Operation not permitted" }
-  doInstallCheck = !stdenv.hostPlatform.isDarwin;
+  doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
