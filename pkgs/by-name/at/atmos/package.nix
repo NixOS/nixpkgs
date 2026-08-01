@@ -2,7 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  terraform,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -25,32 +25,23 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/cloudposse/atmos/cmd.Version=v${finalAttrs.version}"
+    "-X github.com/cloudposse/atmos/pkg/version.Version=v${finalAttrs.version}"
   ];
 
-  nativeCheckInputs = [ terraform ];
+  nativeCheckInputs = [ versionCheckHook ];
 
   preCheck = ''
     # Remove tests that depend on a network connection.
     rm -f \
-      pkg/vender/component_vendor_test.go \
+      main_hooks_and_keychain_store_integration_test.go \
+      main_hooks_and_store_integration_test.go \
+      main_plan_diff_integration_test.go \
       pkg/atlantis/atlantis_generate_repo_config_test.go \
-      pkg/describe/describe_affected_test.go
+      pkg/describe/describe_affected_test.go \
+      pkg/vender/component_vendor_test.go
   '';
 
-  # depend on a network connection.
-  doCheck = false;
-
-  # depend on a network connection.
-  doInstallCheck = false;
-
-  installCheckPhase = ''
-    runHook preInstallCheck
-
-    $out/bin/atmos version | grep "v${finalAttrs.version}"
-
-    runHook postInstallCheck
-  '';
+  doInstallCheck = true;
 
   meta = {
     homepage = "https://atmos.tools";
