@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   git,
   gitMinimal,
   nodejs,
@@ -34,6 +35,18 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-BMzn+134hSYUFrDF+4+Bs81hzSURP9VNX4D9x2UuPMQ=";
   };
+
+  # Remove both patches when updating to 0.54.0 or later.
+  patches = [
+    (fetchpatch2 {
+      name = "CVE-2026-54527.patch";
+      url = "https://github.com/jupyterlab/jupyterlab-git/commit/c6d37b88f36aa59aee317930b95e427fb9d6b09b.patch?full_index=1";
+      hash = "sha256-eWE8TVetOyMWAlgjuNL03yxGoPMke+rGiU2H3qSBzM0=";
+    })
+    # Adapted from upstream commit 460035275b5963dc96e364e60ba6a73717fbd033
+    # to the pre-workspace 0.52.0 source layout.
+    ./CVE-2026-54528.patch
+  ];
 
   nativeBuildInputs = [
     nodejs
@@ -80,6 +93,14 @@ buildPythonPackage rec {
     "test_Git_get_nbdiff_file"
     "test_Git_get_nbdiff_dict"
   ];
+
+  preCheck = ''
+    jlpm test --runInBand \
+      src/__tests__/test-components/NotebookDiff.spec.tsx \
+      src/__tests__/test-components/PlainTextDiff.spec.tsx
+    pytest jupyterlab_git/tests/test_handlers.py \
+      -k test_git_show_prefix_for_excluded_path
+  '';
 
   pythonImportsCheck = [ "jupyterlab_git" ];
 
