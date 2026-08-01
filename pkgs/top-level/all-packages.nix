@@ -9372,10 +9372,6 @@ with pkgs;
     pythonBindings = true;
   };
 
-  supersonic-wayland = supersonic.override {
-    waylandSupport = true;
-  };
-
   synergyWithoutGUI = synergy.override { withGUI = false; };
 
   tabbed = callPackage ../applications/window-managers/tabbed {
