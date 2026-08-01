@@ -5,6 +5,7 @@
   fetchFromGitHub,
   just,
   libcosmicAppHook,
+  autoAddDriverRunpath,
   nixosTests,
   nix-update-script,
 }:
@@ -30,6 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     just
     libcosmicAppHook
     rustPlatform.bindgenHook
+    autoAddDriverRunpath # for GPU monitoring
   ];
 
   dontUseJustBuild = true;
