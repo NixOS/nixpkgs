@@ -96,7 +96,7 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
       bsd2
       bsd3
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ toastal ];
     # https://github.com/picolibc/picolibc/tree/${finalAttrs.version}?tab=readme-ov-file#supported-architectures
     platforms = lib.platforms.all;
   };
