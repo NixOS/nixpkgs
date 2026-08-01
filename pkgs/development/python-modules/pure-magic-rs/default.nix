@@ -8,13 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pure-magic-rs";
-  version = "0.3.3";
+  version = "0.4.3";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "qjerome";
     repo = "magic-rs";
-    tag = "pure-magic-v${finalAttrs.version}";
+    tag = "pure-magic-rs-v${finalAttrs.version}";
     hash = "sha256-cvCAiZSyB+9tNydfco9YGU5NA6Ja/SCsVeYJvuKitGo=";
   };
 
@@ -30,7 +31,9 @@ buildPythonPackage (finalAttrs: {
     maturinBuildHook
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "pure_magic_rs" ];
 
@@ -39,6 +42,5 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/qjerome/magic-rs";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
-    mainProgram = "pure-magic-rs";
   };
 })
