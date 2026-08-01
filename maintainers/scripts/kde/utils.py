@@ -91,13 +91,13 @@ class KDERepoMetadata:
         return {p.name: p for p in self.projects}
 
     @functools.cached_property
-    def projects_by_path(self):
-        return {p.project_path: p for p in self.projects}
+    def projects_by_repo(self):
+        return {p.repo_path: p for p in self.projects}
 
     def try_lookup_package(self, path):
         if path in IGNORE:
             return None
-        project = self.projects_by_path.get(path)
+        project = self.projects_by_repo.get(path)
         if project is None and path not in WARNED:
             WARNED.add(path)
             print(f"Warning: unknown project {path}")
@@ -109,7 +109,7 @@ class KDERepoMetadata:
             Project.from_yaml(metadata_file)
             for metadata_file in repo_metadata.glob("projects-invent/**/metadata.yaml")
         ] + [
-            Project(id, None, project_path, None)
+            Project(id, None, project_path, project_path)
             for project_path, id in THIRD_PARTY.items()
         ]
 
@@ -125,11 +125,11 @@ class KDERepoMetadata:
         dep_graph = collections.defaultdict(set)
 
         if unstable:
-            spec_name = "dependency-data-kf6-qt6"
+            spec_name = "kde-dependencies-latest-kf6"
         else:
-            spec_name = "dependency-data-stable-kf6-qt6"
+            spec_name = "kde-dependencies-stable-kf6"
 
-        spec_path = repo_metadata / "dependencies" / spec_name
+        spec_path = repo_metadata / "kde-dependencies" / spec_name
         for line in spec_path.open():
             line = line.strip()
             if line.startswith("#"):
