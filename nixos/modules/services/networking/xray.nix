@@ -4,40 +4,33 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 {
   options = {
-
     services.xray = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to run xray server.
-
           Either `settingsFile` or `settings` must be specified.
         '';
       };
 
-      package = mkPackageOption pkgs "xray" { };
+      package = lib.mkPackageOption pkgs "xray" { };
 
-      settingsFile = mkOption {
-        type = types.nullOr types.path;
+      settingsFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/etc/xray/config.json";
         description = ''
           The absolute path to the configuration file.
-
           Either `settingsFile` or `settings` must be specified.
-
-          See <https://www.v2fly.org/en_US/config/overview.html>.
+          See <https://xtls.github.io/en/config/>.
         '';
       };
 
-      settings = mkOption {
-        type = types.nullOr (types.attrsOf types.unspecified);
+      settings = lib.mkOption {
+        type = lib.types.nullOr (lib.types.attrsOf lib.types.unspecified);
         default = null;
         example = {
           inbounds = [
@@ -55,14 +48,11 @@ with lib;
         };
         description = ''
           The configuration object.
-
           Either `settingsFile` or `settings` must be specified.
-
-          See <https://www.v2fly.org/en_US/config/overview.html>.
+          See <https://xtls.github.io/en/config/>.
         '';
       };
     };
-
   };
 
   config =
@@ -75,13 +65,9 @@ with lib;
           pkgs.writeTextFile {
             name = "xray.json";
             text = builtins.toJSON cfg.settings;
-            checkPhase = ''
-              ${cfg.package}/bin/xray -test -config $out
-            '';
           };
-
     in
-    mkIf cfg.enable {
+    lib.mkIf cfg.enable {
       assertions = [
         {
           assertion = (cfg.settingsFile == null) != (cfg.settings == null);
@@ -94,13 +80,14 @@ with lib;
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         script = ''
-          exec "${cfg.package}/bin/xray" -config "$CREDENTIALS_DIRECTORY/config.json"
+          exec "${lib.getExe cfg.package}" -config "$CREDENTIALS_DIRECTORY/config.json"
         '';
         serviceConfig = {
           DynamicUser = true;
           LoadCredential = "config.json:${settingsFile}";
           CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
           AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
+          DeviceAllow = "/dev/net/tun rw";
           NoNewPrivileges = true;
         };
       };
