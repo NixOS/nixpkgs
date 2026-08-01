@@ -309,6 +309,16 @@
       "agpl"
     ]
   },
+  "pantry": {
+    "hash": "sha256-kPldsAVbpoJ+6kMWmh70j3HBTlzZibtbyr5tvT0ZcaA=",
+    "url": "https://github.com/chenasraf/nextcloud-pantry/releases/download/v0.24.0/pantry-v0.24.0.tar.gz",
+    "version": "0.24.0",
+    "description": "Pantry helps households stay organized in Nextcloud.\n\n- **Houses** group members and their shared data. A person can belong to multiple houses and switch between them freely.\n- **Checklists** support recurring items (e.g. milk every week) that automatically reappear when due. Share lists with the whole household so everyone knows what to pick up.\n- **Photo boards** let you keep shared reference photos organized in folders — the right brand of dog food, a favorite recipe card, a product label, and so on.\n- **Notes wall** gives the household a lightweight shared space for reminders, pinned messages, and quick notes with customizable colors.\n- **Notifications** keep everyone in the loop when photos are uploaded or notes are added or edited.\n\nAll data is scoped to a house; members only see the houses they belong to.\n\nPantry also has companion apps for mobile and desktop that let you manage your lists, photos and notes on the go and keep everything in sync with your Nextcloud instance.\n\n**Companion apps:** Android ([Google Play](https://play.google.com/store/apps/details?id=dev.casraf.pantry), [F-Droid](https://f-droid.org/en/packages/dev.casraf.pantry/)) | iOS/macOS ([App Store](https://apps.apple.com/us/app/pantry-for-nextcloud/id6762161619))",
+    "homepage": "https://github.com/chenasraf/nextcloud-pantry",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "phonetrack": {
     "hash": "sha256-cinP3WFja6QjJYlQZcTKayHTheLjvnKY9s+CIJWKlcQ=",
     "url": "https://github.com/julien-nc/phonetrack/releases/download/v1.3.2/phonetrack-1.3.2.tar.gz",
