@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libresidfp";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "libresidfp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xPIyJZWL5+tW3xk9b4dlL4klxXM6+cy38cALuhsH1zk=";
+    hash = "sha256-pczQkgx7YedPzMVUKpvLi0qtn6zs14OEe/N48OSc06c=";
   };
 
   strictDeps = true;
@@ -33,12 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withDocumentation [
     "doc"
   ];
-
-  # https://github.com/libsidplayfp/libresidfp/pull/41
-  postPatch = ''
-    substituteInPlace configure.ac \
-      --replace-fail 'AC_SUBST([LIB_MAJOR])NEWS.md' 'AC_SUBST([LIB_MAJOR])'
-  '';
 
   nativeBuildInputs = [
     autoreconfHook

@@ -75,6 +75,13 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
         --replace-fail \
           "lerp(" \
           "apex_lerp("
+    ''
+    # Upstream hardcodes `version="0.1"` in setup.py, which fails the metadata check
+    + ''
+      substituteInPlace setup.py \
+        --replace-fail \
+          'version="0.1",' \
+          'version="${finalAttrs.version}",'
     '';
 
   env = {

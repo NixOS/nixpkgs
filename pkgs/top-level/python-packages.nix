@@ -8668,6 +8668,8 @@ self: super: with self; {
 
   jupyterlab-git = callPackage ../development/python-modules/jupyterlab-git { };
 
+  jupyterlab-git-core = callPackage ../development/python-modules/jupyterlab-git-core { };
+
   jupyterlab-lsp = callPackage ../development/python-modules/jupyterlab-lsp { };
 
   jupyterlab-pygments = callPackage ../development/python-modules/jupyterlab-pygments { };
@@ -12646,6 +12648,8 @@ self: super: with self; {
   ossfs = callPackage ../development/python-modules/ossfs { };
 
   osxphotos = callPackage ../development/python-modules/osxphotos { };
+
+  otcextensions = callPackage ../development/python-modules/otcextensions { };
 
   otpauth = callPackage ../development/python-modules/otpauth { };
 
@@ -16698,8 +16702,6 @@ self: super: with self; {
 
   python-otbr-api = callPackage ../development/python-modules/python-otbr-api { };
 
-  python-otcextensions = callPackage ../development/python-modules/python-otcextensions { };
-
   python-overseerr = callPackage ../development/python-modules/python-overseerr { };
 
   python-owasp-zap-v2-4 = callPackage ../development/python-modules/python-owasp-zap-v2-4 { };
@@ -19858,7 +19860,9 @@ self: super: with self; {
 
   systembridgemodels = callPackage ../development/python-modules/systembridgemodels { };
 
-  systemd-python = callPackage ../development/python-modules/systemd-python { };
+  systemd-python = callPackage ../development/python-modules/systemd-python {
+    inherit (pkgs) systemd;
+  };
 
   systemdunitparser = callPackage ../development/python-modules/systemdunitparser { };
 
