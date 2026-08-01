@@ -43,6 +43,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       installShellCompletion --cmd starship \
         --bash <(${emulator} $out/bin/starship completions bash) \
         --fish <(${emulator} $out/bin/starship completions fish) \
+        --nushell <(${emulator} $out/bin/starship completions nushell) \
         --zsh <(${emulator} $out/bin/starship completions zsh)
     ''
   );

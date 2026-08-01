@@ -34,7 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./nix-store-date.patch
-
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     # GCC 16's unused variable analysis is more advanced than previous
     # versions, and detects that these variables are unused.
     # https://github.com/wolfcw/libfaketime/pull/528

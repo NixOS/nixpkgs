@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   python,
   pythonAtLeast,
   buildPythonPackage,
@@ -51,6 +52,16 @@ buildPythonPackage (finalAttrs: {
     fetchSubmodules = true;
     hash = "sha256-IriSrnGAZHvJ7m97s12BydNQZDZunCVtRgj/iSgw5Vc=";
   };
+
+  patches = [
+    # Fix for test failure on i686. Remove with next release.
+    # Upstream report: https://github.com/numpy/numpy/issues/32060
+    # Upstream PR: https://github.com/numpy/numpy/pull/32064
+    (fetchpatch {
+      url = "https://github.com/numpy/numpy/commit/0e1dce62e27f79be9d6552487787a19b7f95cfbf.patch";
+      hash = "sha256-mQjf6y/mLSgx9+G70/r9U3VJg5zIrl/6ANQhpP2LGmg=";
+    })
+  ];
 
   postPatch = ''
     # remove needless reference to full Python path stored in built wheel

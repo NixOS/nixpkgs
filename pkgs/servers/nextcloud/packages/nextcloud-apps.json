@@ -35,6 +35,7 @@
 , "oidc_login": "agpl3Only"
 , "onlyoffice": "asl20"
 , "phonetrack": "agpl3Plus"
+, "pantry": "agpl3Plus"
 , "polls": "agpl3Plus"
 , "previewgenerator": "agpl3Plus"
 , "qownnotesapi": "agpl3Plus"

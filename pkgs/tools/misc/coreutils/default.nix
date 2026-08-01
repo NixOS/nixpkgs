@@ -58,6 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-OUAk7aCllVIXztqc0SAeZdyPo6opwpURNaSVIdV8PMM=";
   };
 
+  patches = [
+    ./CVE-2026-56391.patch
+    ./CVE-2026-56392.patch
+  ];
+
   postPatch = ''
     # The test tends to fail on btrfs, f2fs and maybe other unusual filesystems.
     sed '2i echo Skipping dd sparse test && exit 77' -i ./tests/dd/sparse.sh

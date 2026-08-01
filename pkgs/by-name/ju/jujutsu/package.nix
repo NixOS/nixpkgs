@@ -69,6 +69,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       installShellCompletion --cmd jj \
         --bash <(COMPLETE=bash ${jj}) \
         --fish <(COMPLETE=fish ${jj}) \
+        --nushell <(${jj} util completion nushell) \
         --zsh <(COMPLETE=zsh ${jj})
     '';
 

@@ -40,13 +40,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "graphviz";
-  version = "14.1.2";
+  version = "15.1.0";
 
   src = fetchFromGitLab {
     owner = "graphviz";
     repo = "graphviz";
     tag = finalAttrs.version;
-    hash = "sha256-LkyiKl0ulS9ujEdVLfyeoc4CtjITd6CAc35IUtlHSfw=";
+    hash = "sha256-5v/ib8hwqHrJLs+jvDGvg0aJiKIt8ipXEd1EUzew7XU=";
   };
 
   nativeBuildInputs = [

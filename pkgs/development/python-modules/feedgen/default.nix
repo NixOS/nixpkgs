@@ -2,27 +2,30 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   python-dateutil,
   lxml,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "feedgen";
   version = "1.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-2b1Rw7XpVqKlKZjDcIxNLHKfL8wxEYjh5dO5cmOTVGo=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     python-dateutil
     lxml
   ];
 
-  # No tests in archive
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Python module to generate ATOM feeds, RSS feeds and Podcasts";
@@ -34,4 +37,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ casey ];
   };
-}
+})
