@@ -952,9 +952,6 @@ let
           consult-gh-embark = ignoreCompilationError super.consult-gh-embark;
 
           # needs network during compilation
-          consult-gh-forge = ignoreCompilationError super.consult-gh-forge;
-
-          # needs network during compilation
           consult-gh-with-pr-review = ignoreCompilationError super.consult-gh-with-pr-review;
 
           counsel-gtags = ignoreCompilationError super.counsel-gtags; # elisp error
