@@ -13,7 +13,7 @@
   mesa,
   xwayland,
   libinput,
-  libdisplay-info,
+  libdisplay-info_0_3,
   git,
   libgbm,
   rustc,
@@ -96,7 +96,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libinput
     mesa
     xwayland
-    libdisplay-info
+    libdisplay-info_0_3
     libgbm
     lua5_4
 
