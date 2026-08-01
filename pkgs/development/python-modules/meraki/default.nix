@@ -1,32 +1,26 @@
 {
   lib,
-  aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
-  requests,
+  httpx,
 }:
 
 buildPythonPackage rec {
   pname = "meraki";
-  version = "3.0.1";
+  version = "4.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "meraki";
     repo = "dashboard-api-python";
     tag = version;
-    hash = "sha256-XP0wvq9CoUpjGsIKmzgLrAmxhJ0F2mHDXJZdeU+AEkE=";
+    hash = "sha256-X4ndUNSnn7Dx2le9Ryfio1/x8J3NjCGcjVHg0JmVoMk=";
   };
-
-  pythonRelaxDeps = [ "aiohttp" ];
 
   build-system = [ hatchling ];
 
-  dependencies = [
-    aiohttp
-    requests
-  ];
+  dependencies = [ httpx ];
 
   # All tests require an API key
   doCheck = false;
