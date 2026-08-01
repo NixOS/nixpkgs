@@ -74,5 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     mainProgram = "dwm";
+    maintainers = with lib.maintainers; [
+      gepbird
+    ];
   };
 })
