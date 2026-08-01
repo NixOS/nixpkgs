@@ -100,6 +100,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/sagemath/sage/commit/24c9605a770b2419cd401bf6c8780bb4be923244.patch?full_index=1";
       hash = "sha256-68w2HWLR6mb13BWi5Fb6SfPAqPbdJrns0l5T6SoMqNI=";
     })
+
+    # https://github.com/sagemath/sage/pull/42612
+    (fetchpatch2 {
+      name = "relax-svd-doctest-tolerance.patch";
+      url = "https://github.com/sagemath/sage/commit/8f7b7299c985f74179555b2c7a0dad8a741bf879.patch?full_index=1";
+      hash = "sha256-9o0t5n3oWt/NmQTRlDsad5g8g7FhSYpAV62BMvY+w2Q=";
+    })
   ];
 
   # Patches needed because of package updates. We could just pin the versions of
