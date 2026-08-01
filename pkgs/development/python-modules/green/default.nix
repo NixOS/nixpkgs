@@ -50,6 +50,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python test runner";
     homepage = "https://github.com/CleanCut/green";
+    changelog = "https://github.com/CleanCut/green/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
