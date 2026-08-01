@@ -3,7 +3,6 @@
   stdenv,
   perlPackages,
   fetchFromGitHub,
-  fetchpatch,
   makeWrapper,
   coreutils,
   dmidecode,
@@ -24,23 +23,14 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "ocsinventory-agent";
-  version = "2.10.4";
+  version = "2.10.5";
 
   src = fetchFromGitHub {
     owner = "OCSInventory-NG";
     repo = "UnixAgent";
     tag = "v${version}";
-    hash = "sha256-MKUYf3k47lHc9dTGo1wYd7r4GrX98dU+04mF0Jm5e9U=";
+    hash = "sha256-BIR93ABiE3wzuw9Q0fZMm7ClKyDmsxE+UcPTYd6P7No=";
   };
-
-  patches = [
-    # Fix Getopt-Long warnings
-    # See https://github.com/OCSInventory-NG/UnixAgent/pull/490
-    (fetchpatch {
-      url = "https://github.com/OCSInventory-NG/UnixAgent/commit/c4899cef6b797df471ddf41c427970de47302f80.patch";
-      hash = "sha256-HxcWb9jmHiL0r6VWlsvmKUuybnM9W5471FLBBe3Zrfs=";
-    })
-  ];
 
   nativeBuildInputs = [ makeWrapper ];
 
