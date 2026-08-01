@@ -7,6 +7,22 @@
 
 let
   cfg = config.services.asusd;
+  configFiles = {
+    "anime.ron" = cfg.animeConfig;
+    "asusd.ron" = cfg.asusdConfig;
+    "profile.ron" = cfg.profileConfig;
+    "fan_curves.ron" = cfg.fanCurvesConfig;
+    "asusd_user_ledmodes.ron" = cfg.userLedModesConfig;
+  }
+  // lib.mapAttrs' (
+    productId: value: lib.nameValuePair "aura_${productId}.ron" value
+  ) cfg.auraConfigs;
+  managedConfigFiles = lib.filterAttrs (_: value: value != null) configFiles;
+  configPath = name: "asusd/${name}";
+  managedConfigDescription = ''
+    The declared content is restored before each asusd start. Changes made at runtime
+    persist until the service restarts.
+  '';
 in
 {
   imports = [
@@ -62,6 +78,7 @@ in
           description = ''
             The content of /etc/asusd/anime.ron.
             See <https://asus-linux.org/manual/asusctl-manual/#anime-control>.
+            ${managedConfigDescription}
           '';
         };
 
@@ -71,6 +88,7 @@ in
           description = ''
             The content of /etc/asusd/asusd.ron.
             See <https://asus-linux.org/manual/asusctl-manual/>.
+            ${managedConfigDescription}
           '';
         };
 
@@ -80,6 +98,7 @@ in
           description = ''
             The content of /etc/asusd/aura_<name>.ron.
             See <https://asus-linux.org/manual/asusctl-manual/#led-keyboard-control>.
+            ${managedConfigDescription}
           '';
         };
 
@@ -89,6 +108,7 @@ in
           description = ''
             The content of /etc/asusd/profile.ron.
             See <https://asus-linux.org/manual/asusctl-manual/#profiles>.
+            ${managedConfigDescription}
           '';
         };
 
@@ -98,6 +118,7 @@ in
           description = ''
             The content of /etc/asusd/fan_curves.ron.
             See <https://asus-linux.org/manual/asusctl-manual/#fan-curves>.
+            ${managedConfigDescription}
           '';
         };
 
@@ -107,6 +128,7 @@ in
           description = ''
             The content of /etc/asusd/asusd-user-ledmodes.ron.
             See <https://asus-linux.org/manual/asusctl-manual/#led-keyboard-control>.
+            ${managedConfigDescription}
           '';
         };
       };
@@ -115,27 +137,40 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
-    environment.etc =
-      let
-        maybeConfig =
-          name: cfg:
-          lib.mkIf (cfg != null) (
-            (if (cfg.source != null) then { source = cfg.source; } else { text = cfg.text; })
-            // {
-              mode = "0644";
-            }
-          );
-      in
-      {
-        "asusd/anime.ron" = maybeConfig "anime.ron" cfg.animeConfig;
-        "asusd/asusd.ron" = maybeConfig "asusd.ron" cfg.asusdConfig;
-        "asusd/profile.ron" = maybeConfig "profile.ron" cfg.profileConfig;
-        "asusd/fan_curves.ron" = maybeConfig "fan_curves.ron" cfg.fanCurvesConfig;
-        "asusd/asusd_user_ledmodes.ron" = maybeConfig "asusd_user_ledmodes.ron" cfg.userLedModesConfig;
-      }
-      // lib.attrsets.concatMapAttrs (prod_id: value: {
-        "asusd/aura_${prod_id}.ron" = maybeConfig "aura_${prod_id}.ron" value;
-      }) cfg.auraConfigs;
+    assertions = lib.mapAttrsToList (name: file: {
+      assertion = file.mode != "symlink";
+      message = ''
+        `/etc/${name}` must be writable by asusd. Use the matching
+        `services.asusd.*Config` option or set `environment.etc."${name}".mode` to a regular file mode.
+      '';
+    }) (lib.filterAttrs (name: _: lib.hasPrefix "asusd/" name) config.environment.etc);
+
+    environment.etc = lib.mapAttrs' (
+      name: value:
+      lib.nameValuePair (configPath name) (
+        (if value.source != null then { source = value.source; } else { text = value.text; })
+        // {
+          mode = "0644";
+        }
+      )
+    ) managedConfigFiles;
+
+    systemd.services.asusd = lib.mkIf (managedConfigFiles != { }) {
+      preStart = lib.concatMapStringsSep "\n" (
+        name:
+        let
+          path = configPath name;
+        in
+        ''
+          ${lib.getExe' pkgs.coreutils "install"} -m 0644 -- ${
+            lib.escapeShellArg (toString config.environment.etc.${path}.source)
+          } ${lib.escapeShellArg "/etc/${path}"}
+        ''
+      ) (lib.attrNames managedConfigFiles);
+      restartTriggers = map (name: config.environment.etc.${configPath name}.source) (
+        lib.attrNames managedConfigFiles
+      );
+    };
 
     services.dbus.enable = true;
     systemd.packages = [ cfg.package ];
