@@ -35,6 +35,11 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail 'version="1.9.10",' 'version="${version}",'
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [
