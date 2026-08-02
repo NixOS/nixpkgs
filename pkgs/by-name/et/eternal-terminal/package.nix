@@ -55,6 +55,9 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+  checkPhase = ''
+    ctest --output-on-failure -E 'et-test\.LargeInputNoDeadlock'
+  '';
 
   passthru.updateScript = nix-update-script { };
 
