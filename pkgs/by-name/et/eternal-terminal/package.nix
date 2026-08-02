@@ -64,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       jshort
       tomasrivera
     ];
+    mainProgram = "et";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
