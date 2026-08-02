@@ -15,6 +15,8 @@ buildPythonPackage (finalAttrs: {
   version = "0.8.15";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "akarneliuk";
     repo = "pygnmi";
