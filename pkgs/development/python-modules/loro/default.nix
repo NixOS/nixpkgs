@@ -33,7 +33,7 @@ buildPythonPackage rec {
   meta = {
     description = "Data collaborative and version-controlled JSON with CRDTs";
     homepage = "https://github.com/loro-dev/loro-py";
-    changelog = "https://github.com/loro-dev/loro-py/releases/tag/${version}";
+    changelog = "https://github.com/loro-dev/loro-py/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       dmadisetti
