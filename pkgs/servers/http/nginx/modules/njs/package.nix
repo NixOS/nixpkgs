@@ -9,13 +9,13 @@
 
 mkNginxPlugin (finalAttrs: {
   pname = "njs";
-  version = "0.9.4";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "nginx";
     repo = "njs";
     tag = finalAttrs.version;
-    hash = "sha256-Ee55QKaeZ0mYGKUroKr/AYGoOCakEonU483qkhmZdzU=";
+    hash = "sha256-svZvAVcIm13SVf4O5rgZOigJ8IKuaPQrnZenkZaDluQ=";
   };
 
   preConfigure = ''
