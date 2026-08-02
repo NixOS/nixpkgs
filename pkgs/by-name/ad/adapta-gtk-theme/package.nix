@@ -53,9 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   configureFlags = [
-    "--disable-gtk_legacy"
     "--disable-gtk_next"
-    "--disable-unity"
     "--enable-parallel"
   ];
 
