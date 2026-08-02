@@ -3677,6 +3677,8 @@ self: super: with self; {
 
   crewai = callPackage ../development/python-modules/crewai { };
 
+  crewai-cli = callPackage ../development/python-modules/crewai-cli { };
+
   crewai-core = callPackage ../development/python-modules/crewai-core { };
 
   crispy-bootstrap3 = callPackage ../development/python-modules/crispy-bootstrap3 { };
