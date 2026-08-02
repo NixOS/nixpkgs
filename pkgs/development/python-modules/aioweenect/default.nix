@@ -5,6 +5,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
@@ -30,6 +31,8 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "aiohttp" ];
 
   build-system = [ hatchling ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [ aiohttp ];
 
