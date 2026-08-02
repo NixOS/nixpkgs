@@ -31,6 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
+  __structuredAttrs = true;
+
   meta = {
     changelog = "https://codeberg.org/libidn/libidn/src/tag/v${finalAttrs.version}/NEWS";
     homepage = "https://www.gnu.org/software/libidn/";
