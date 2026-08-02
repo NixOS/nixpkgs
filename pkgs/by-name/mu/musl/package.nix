@@ -183,6 +183,9 @@ stdenv.mkDerivation (finalAttrs: {
     threadModel = "posix";
   };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   meta = {
     description = "Efficient, small, quality libc implementation";
     homepage = "https://musl.libc.org/";
