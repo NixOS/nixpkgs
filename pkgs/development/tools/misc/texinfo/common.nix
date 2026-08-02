@@ -141,6 +141,8 @@ stdenv.mkDerivation {
     done
   '';
 
+  __structuredAttrs = true;
+
   meta = meta // {
     branch = version;
   };
