@@ -260,9 +260,7 @@ stdenv.mkDerivation (finalAttrs: {
       odd-unstable = true;
       url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager.git";
     };
-    tests = {
-      inherit (nixosTests.networking) networkmanager;
-    };
+    tests = nixosTests.networking.networkmanager;
   };
 
   meta = {
