@@ -67,6 +67,13 @@ let
     hash = "sha256-AmHAa3/cQdh7KAMFOtz5TQpcM6FqO9SppmDpKPTjTt8=";
   };
 
+  monocypher = fetchFromGitHub {
+    owner = "LoupVaillant";
+    repo = "Monocypher";
+    rev = "0d85f98c9d9b0227e42cf795cb527dff372b40a4";
+    hash = "sha256-RrM8Ep/CM7U5Q4+4FAHfBknb6b0upohoiqy4f7eMye0=";
+  };
+
   prism = fetchFromGitHub {
     owner = "KiritoDv";
     repo = "prism-processor";
@@ -117,13 +124,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "2ship2harkinian";
-  version = "4.0.2";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "HarbourMasters";
     repo = "2ship2harkinian";
     tag = finalAttrs.version;
-    hash = "sha256-zrV1iSI6d6vtzIyvYmSrbgijP3qZnwBkKG9L6+pq8+0=";
+    hash = "sha256-lx5+i/S+deWB6iYTTrUOffQfB6qnUvDZrU80NWyqb2Y=";
     fetchSubmodules = true;
     deepClone = true;
     postFetch = ''
@@ -188,6 +195,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_DR_LIBS" "${dr_libs}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_IMGUI" "${imgui'}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_LIBGFXD" "${libgfxd}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MONOCYPHER" "${monocypher}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_PRISM" "${prism}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_STORMLIB" "${stormlib'}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_THREADPOOL" "${thread_pool}")
@@ -203,7 +211,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
   __structuredAttrs = true;
-  enableParallelBuilding = true;
 
   dontAddPrefix = true;
 
