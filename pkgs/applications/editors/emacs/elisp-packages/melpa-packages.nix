@@ -289,6 +289,9 @@ let
           # Build same version as Haskell package
           hindent = (externalSrc super.hindent pkgs.haskellPackages.hindent).overrideAttrs (attrs: {
             packageRequires = [ self.haskell-mode ];
+            propagatedUserEnvPkgs = attrs.propagatedUserEnvPkgs or [ ] ++ [
+              pkgs.haskellPackages.hindent
+            ];
           });
 
           hotfuzz = super.hotfuzz.overrideAttrs (old: {
@@ -520,7 +523,7 @@ let
             '';
           });
 
-          rtags = ignoreCompilationError (dontConfigure (externalSrc super.rtags pkgs.rtags)); # elisp error
+          rtags = ignoreCompilationError (fix-rtags super.rtags); # elisp error
 
           rtags-xref = dontConfigure super.rtags;
 
