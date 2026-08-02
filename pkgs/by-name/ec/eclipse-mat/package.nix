@@ -53,7 +53,7 @@ stdenvNoCC.mkDerivation (
       (makeDesktopItem {
         name = "eclipse-mat";
         exec = "eclipse-mat";
-        icon = "eclipse";
+        icon = "eclipse-mat";
         comment = "Eclipse Memory Analyzer";
         desktopName = "Eclipse MAT";
         genericName = "Java Memory Analyzer";
@@ -88,9 +88,11 @@ stdenvNoCC.mkDerivation (
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
         --add-flags "-configuration \$HOME/.eclipse-mat/${finalAttrs.version}/configuration"
 
-      mkdir -p $out/share/pixmaps
-      find $out/mat/plugins -name 'eclipse*.png' -type f -exec cp {} $out/share/pixmaps \;
-      mv $out/share/pixmaps/eclipse64.png $out/share/pixmaps/eclipse.png
+      unzip -j -q mat/plugins/org.eclipse.mat.ui.rcp_*.jar "icons/memory_analyzer_*.png" -d icons
+      for size in 32 48 64 128 256; do
+        install -Dm444 icons/memory_analyzer_$size.png \
+          $out/share/icons/hicolor/''${size}x''${size}/apps/eclipse-mat.png
+      done
 
       runHook postInstall
     '';
