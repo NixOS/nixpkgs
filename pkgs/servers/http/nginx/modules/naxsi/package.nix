@@ -6,7 +6,7 @@
 
 mkNginxPlugin (finalAttrs: {
   pname = "naxsi";
-  version = "1.0-unstable-2020-09-10";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "nbs-system";
