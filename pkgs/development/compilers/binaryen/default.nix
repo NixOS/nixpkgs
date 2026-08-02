@@ -36,6 +36,15 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+  # GCC 16 triggers `array-bounds` warnings on optimized builds with reference
+  # to some code within the STL. Since it does not occur in unoptimized builds,
+  # refers to a mutex that does not appear to exist outside the STL, and the
+  # message matches a known GCC 16 bug, this appears to be a false positive and
+  # we downgrade this error to a warning in order to fix the build.
+  # Related GCC issue: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=122197
+  # Binaryen issue: https://github.com/WebAssembly/binaryen/issues/8950
+  cmakeFlags = [ (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-error=array-bounds") ];
+
   preConfigure = ''
     if [ -n "$doCheck" ]; then
       sed -i '/gtest/d' third_party/CMakeLists.txt
