@@ -9,6 +9,7 @@
   protobuf,
   zlib,
   catch2,
+  versionCheckHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,6 +51,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   doCheck = true;
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "Remote shell that automatically reconnects without interrupting the session";
