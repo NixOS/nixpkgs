@@ -14,7 +14,7 @@
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
-  version = "0.2.15";
+  version = "0.2.19";
   pname = "incus-spawn";
 
   src =
@@ -66,15 +66,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sources = {
       "x86_64-linux" = fetchurl {
         url = "https://github.com/Sanne/incus-spawn/releases/download/v${finalAttrs.version}/incus-spawn-linux-amd64";
-        hash = "sha256-3YEasRSG7n5MLIkKrA1m/8Uu20ZS6D2L0tcDKcbnPoI=";
+        hash = "sha256-C/lN4YKXTS9sdNbPKnb+wVl19pfknbdyxvvxu2wii8I=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://github.com/Sanne/incus-spawn/releases/download/v${finalAttrs.version}/incus-spawn-linux-aarch64";
-        hash = "sha256-ZoMiinluk8VAb28xIHcYv26K95torSIK+bd8AGvE/Po=";
+        hash = "sha256-RwLDWlKeY2oUd4Y3Nw9oaOvkXfkQhKIpXANW6sN5rbs=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://github.com/Sanne/incus-spawn/releases/download/v${finalAttrs.version}/incus-spawn-macos-aarch64";
-        hash = "sha256-dnmm4GwU5pB/ME+W4stW+jUMSUOiKGsuXnQJBRgTkps=";
+        hash = "sha256-iWqb2RClSIpZOMWCBauz5tavefUTOxDVaxTchg8vjok=";
       };
     };
 
@@ -102,7 +102,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           echo "incus-spawn is already at $NEW_VERSION"
           exit 0
       fi
-      update-source-version incus-spawn "$NEW_VERSION" --source-key="git-remote-isx"
+      update-source-version incus-spawn "$NEW_VERSION" --source-key="git-remote-isx" --ignore-same-hash
       for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
         update-source-version incus-spawn "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
       done
