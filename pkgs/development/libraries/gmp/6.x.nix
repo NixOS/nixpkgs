@@ -14,19 +14,19 @@
 # files.
 
 let
-  inherit (lib) optional;
+  inherit (lib) optionals;
 in
 
 let
-  self = stdenv.mkDerivation rec {
+  self = stdenv.mkDerivation (finalAttrs: {
     pname = "gmp${lib.optionalString cxx "-with-cxx"}";
     version = "6.3.0";
 
     src = fetchurl {
       # we need to use bz2, others aren't in bootstrapping stdenv
       urls = [
-        "mirror://gnu/gmp/gmp-${version}.tar.bz2"
-        "ftp://ftp.gmplib.org/pub/gmp-${version}/gmp-${version}.tar.bz2"
+        "mirror://gnu/gmp/gmp-${finalAttrs.version}.tar.bz2"
+        "ftp://ftp.gmplib.org/pub/gmp-${finalAttrs.version}/gmp-${finalAttrs.version}.tar.bz2"
       ];
       hash = "sha256-rCghGnz7YJuuLiyNYFjWbI/pZDT3QM9v4uR7AA0cIMs=";
     };
@@ -65,17 +65,26 @@ let
       # broken on multicore CPUs). Avoid this impurity.
       "--build=${stdenv.buildPlatform.config}"
     ]
-    ++ optional (cxx && stdenv.hostPlatform.isDarwin) "CPPFLAGS=-fexceptions"
-    ++ optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.is64bit) "ABI=64"
+    ++ optionals (cxx && stdenv.hostPlatform.isDarwin) [
+      "CPPFLAGS=-fexceptions"
+    ]
+    ++ optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.is64bit) [
+      "ABI=64"
+    ]
     # to build a .dll on windows, we need --disable-static + --enable-shared
     # see https://gmplib.org/manual/Notes-for-Particular-Systems.html
-    ++ optional (!withStatic && stdenv.hostPlatform.isPE) "--disable-static --enable-shared";
+    ++ optionals (!withStatic && stdenv.hostPlatform.isPE) [
+      "--disable-static"
+      "--enable-shared"
+    ];
 
     doCheck = true; # not cross;
 
     dontDisableStatic = withStatic;
 
     enableParallelBuilding = true;
+
+    __structuredAttrs = true;
 
     meta = {
       homepage = "https://gmplib.org/";
@@ -112,6 +121,6 @@ let
       platforms = lib.platforms.all;
       maintainers = with lib.maintainers; [ coolcuber ];
     };
-  };
+  });
 in
 self
