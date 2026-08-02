@@ -311,6 +311,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     boehmgc
+    boost
     nlohmann_json
   ];
 
