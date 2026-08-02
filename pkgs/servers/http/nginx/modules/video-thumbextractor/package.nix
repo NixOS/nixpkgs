@@ -27,5 +27,6 @@ mkNginxPlugin (finalAttrs: {
     homepage = "https://github.com/wandenberg/nginx-video-thumbextractor-module";
     license = lib.licenses.gpl3;
     maintainers = [ ];
+    broken = true;
   };
 })

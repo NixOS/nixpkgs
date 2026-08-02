@@ -20,5 +20,6 @@ mkNginxPlugin (finalAttrs: {
     homepage = "https://github.com/wandenberg/nginx-push-stream-module";
     license = lib.licenses.gpl3;
     maintainers = [ ];
+    broken = true;
   };
 })
