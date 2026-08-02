@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   version = "2025-08-25";
 
   src = fetchFromGitHub {
-    owner = "paulp";
+    owner = "dwijnand";
     repo = "sbt-extras";
     inherit rev;
     sha256 = "UlxZsCi4EdcHvGwatQm1sPyamfcqJs9o8qo2HWLedQw=";
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "More featureful runner for sbt, the simple/scala/standard build tool";
-    homepage = "https://github.com/paulp/sbt-extras";
+    homepage = "https://github.com/dwijnand/sbt-extras";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       puffnfresh

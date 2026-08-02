@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "pawelsalawa";
-    repo = "sqlitestudio";
+    repo = "letos";
     rev = finalAttrs.version;
     hash = "sha256-xs0+bB0gPoDkIldaTA/nFofx9KPvIcyxe6kzcHuboxA=";
   };

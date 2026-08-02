@@ -18,14 +18,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "finetuning-scheduler";
-  version = "2.10.0.post0";
+  version = "2.13.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "speediedan";
     repo = "finetuning-scheduler";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OeIpbxEjhvUzToy1jH9JcontSMfeozFjisTJCa0f4P0=";
+    hash = "sha256-K3+a+/tSLdlzm0T3wIcJiw0RIlMUf41vRPxQXSW4GH4=";
   };
 
   build-system = [ setuptools ];

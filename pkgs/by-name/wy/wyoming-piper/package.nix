@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "rhasspy";
+    owner = "OHF-Voice";
     repo = "wyoming-piper";
     tag = "v${finalAttrs.version}";
     hash = "sha256-LKt1BNa9jrZIDUZxZvniZcPrAuUkwOs85uIiA5mFWyY=";
@@ -56,10 +56,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   meta = {
-    changelog = "https://github.com/rhasspy/wyoming-piper/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/OHF-Voice/wyoming-piper/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Wyoming Server for Piper";
     mainProgram = "wyoming-piper";
-    homepage = "https://github.com/rhasspy/wyoming-piper";
+    homepage = "https://github.com/OHF-Voice/wyoming-piper";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };

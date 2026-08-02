@@ -10,7 +10,7 @@ buildGoModule (finalAttrs: {
   version = "2.2.0";
 
   src = fetchFromGitHub {
-    owner = "SrKomodo";
+    owner = "arguablykomodo";
     repo = "shadowfox-updater";
     rev = "v${finalAttrs.version}";
     sha256 = "125mw70jidbp436arhv77201jdp6mpgqa2dzmrpmk55f9bf29sg6";
