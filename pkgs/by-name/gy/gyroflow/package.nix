@@ -229,7 +229,10 @@ rustPlatform.buildRustPackage rec {
       gpl3Plus
       cc0
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      Br1ght0ne
+      BatteredBunny
+    ];
     platforms = [
       "aarch64-darwin"
       "x86_64-linux"
