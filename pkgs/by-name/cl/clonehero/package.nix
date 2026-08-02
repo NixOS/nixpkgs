@@ -26,11 +26,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clonehero";
-  version = "1.1.0.6085";
+  version = "1.1.0.6142";
 
   src = fetchurl {
     url = "https://github.com/clonehero-game/releases/releases/download/v${finalAttrs.version}-final/Linux.x86_64-Standalone.tar";
-    hash = "sha256-xy7/3SDNgKw67ikA7CtRVK2gNrfjqx4cTDeRUkkSBKo=";
+    hash = "sha256-Vylx2TCSKDxdDVIAaia1Krjo+xKNz7QqNJbeJsiqIx0=";
   };
 
   __structuredAttrs = true;
