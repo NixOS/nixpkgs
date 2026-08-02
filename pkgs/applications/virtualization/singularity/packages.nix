@@ -98,7 +98,7 @@ let
           description = "";
           longDescription = ''
             This package produces identical store derivations to `pkgs.${packageName}`
-            overriden and installed by the NixOS module `programs.singularity`
+            overridden and installed by the NixOS module `programs.singularity`
             with default configuration.
 
             This is for binary substitutes only. Use pkgs.${packageName} instead.

@@ -340,7 +340,7 @@ def serialize_extensions(processed_extensions: list[dict[str, Any]]) -> None:
                 out.write("[ ")
             else:
                 out.write(", ")
-            # Dump each extension into a single-line string forst
+            # Dump each extension into a single-line string first
             serialized_extension = json.dumps(extension, ensure_ascii=False)
             # Inject line breaks for each supported version
             for version in supported_versions:
