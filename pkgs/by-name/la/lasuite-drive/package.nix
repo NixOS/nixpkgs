@@ -41,7 +41,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/src/backend";
 
   patches = [
-    # Support configuration throught environment variables for SECURE_*
+    # Support configuration through environment variables for SECURE_*
     ./secure_settings.patch
     # Fix some build fields on pyproject
     ./pyproject_build.patch

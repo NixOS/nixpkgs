@@ -45,7 +45,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/CtrlSpice/otel-desktop-viewer/releases/tag/v${finalAttrs.version}";
-    description = "Receive & visualize OpenTelemtry traces locally within one CLI tool";
+    description = "Receive & visualize OpenTelemetry traces locally within one CLI tool";
     homepage = "https://github.com/CtrlSpice/otel-desktop-viewer";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [

@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       At the core of Miriway is miriway-shell, a Mir based Wayland compositor that provides:
 
-      - A "floating windows" window managament policy;
+      - A "floating windows" window management policy;
       - Support for Wayland (and via Xwayland) X11 applications;
       - Dynamic workspaces;
       - Additional Wayland support for "shell components" such as panels and docs; and,

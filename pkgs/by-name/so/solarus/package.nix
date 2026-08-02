@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Zelda-like ARPG game engine";
     longDescription = ''
       Solarus is a game engine for Zelda-like ARPG games written in lua.
-      Many full-fledged games have been writen for the engine.
+      Many full-fledged games have been written for the engine.
     '';
     homepage = "https://www.solarus-games.org";
     mainProgram = "solarus-run";

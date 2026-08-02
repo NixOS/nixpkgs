@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     # Required gio-unix dependency is missing in meson.build
     ./add-gio-unix-dep.patch
 
-    # Patch custon Dex install dir
+    # Patch custom Dex install dir
     ./configure-dex-install-dir.patch
   ];
 

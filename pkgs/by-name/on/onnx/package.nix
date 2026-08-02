@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     export MAX_JOBS=$NIX_BUILD_CORES
   '';
 
-  # Leave the CMake bulid directory, export the `cmakeFlags` environment variable as CMAKE_ARGS so setup.py will pick
+  # Leave the CMake build directory, export the `cmakeFlags` environment variable as CMAKE_ARGS so setup.py will pick
   # them up, do the python build from the top-level, then resume the C++ build.
   preBuild = ''
     pushd ..

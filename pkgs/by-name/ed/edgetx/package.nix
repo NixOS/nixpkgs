@@ -38,7 +38,7 @@ let
     ]
   );
 
-  # paches are needed to fix build with CMake 4
+  # patches are needed to fix build with CMake 4
   yaml-cppSrc = applyPatches {
     inherit (yaml-cpp) src;
     patches = yaml-cpp.patches or [ ];

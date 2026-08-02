@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # Do not hardocde addr2line binary path
+    # Do not hardcode addr2line binary path
     ./no-hardcode-path-addr2line.patch
     ./remove-wolfssljni.patch
   ];

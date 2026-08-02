@@ -45,7 +45,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Take screnshots of your reMarkable tablet over SSH";
+    description = "Take screenshots of your reMarkable tablet over SSH";
     homepage = "https://github.com/cloudsftp/reSnap";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ _404wolf ];
