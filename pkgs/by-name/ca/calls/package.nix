@@ -1,14 +1,16 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
+  fetchurl,
   meson,
   mesonEmulatorHook,
   ninja,
   pkg-config,
   libadwaita,
   libsecret,
+  mobile-broadband-provider-info,
   modemmanager,
+  gmobile,
   gtk4,
   gom,
   gsound,
@@ -36,15 +38,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calls";
-  version = "49.1.1";
+  version = "50.0";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = "calls";
-    rev = "v${finalAttrs.version}";
-    fetchSubmodules = true;
-    hash = "sha256-fqvfzdk1szNFm4aRRGNDaA/AmjJdQjBsMhvEolEetE0=";
+  src = fetchurl {
+    url = "mirror://gnome/sources/calls/${lib.versions.major finalAttrs.version}/calls-${finalAttrs.version}.tar.xz";
+    hash = "sha256-8ozMjm+8UHnnuLXRGlUZabtw2QXl7ZDRsdho8SBFxy8=";
   };
 
   outputs = [
@@ -73,6 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
     modemmanager
     libadwaita
     libsecret
+    mobile-broadband-provider-info
+    gmobile
     evolution-data-server-gtk4 # UI part not needed, using gtk4 variant (over the default of gtk3) to reduce closure.
     folks
     gom
