@@ -10,7 +10,7 @@ let
 
       preRequisitePackages = [
         pkgs.fluxbox
-        pkgs.libsForQt5.kwindowsystem
+        pkgs.libsForQt5.__internalKF5.kwindowsystem
         pkgs.numlockx
         pkgs.qt5.qtsvg
         pkgs.xscreensaver
