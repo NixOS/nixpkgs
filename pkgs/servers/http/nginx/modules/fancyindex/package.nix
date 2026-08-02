@@ -6,13 +6,13 @@
 
 mkNginxPlugin (finalAttrs: {
   pname = "fancyindex";
-  version = "0.5.2";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "aperezdc";
     repo = "ngx-fancyindex";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-70bEZ5EVM3jjY5b9azXYBvJnFDoqgGXu0F7JcWkhWVk=";
+    hash = "sha256-97HCAm3hcgrwyOvBEwC+vcVkuuzedgHC67+w8OK2bEQ=";
   };
 
   meta = {

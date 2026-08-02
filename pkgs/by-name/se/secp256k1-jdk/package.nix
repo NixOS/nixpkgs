@@ -3,6 +3,7 @@
   fetchFromGitHub,
   maven,
   jdk25,
+  nix-update-script,
 }:
 
 maven.buildMavenPackage (finalAttrs: {
@@ -12,7 +13,7 @@ maven.buildMavenPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "bitcoinj";
     repo = "secp256k1-jdk";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-F2e4NDPEU7ZAu4+fvEd4BRbE2JwCvUiMeXHTMDXbIJE=";
   };
 
@@ -43,6 +44,8 @@ maven.buildMavenPackage (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/bitcoinj/secp256k1-jdk/blob/master/CHANGELOG.adoc";

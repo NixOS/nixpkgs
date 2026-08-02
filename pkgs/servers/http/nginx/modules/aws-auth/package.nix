@@ -20,5 +20,6 @@ mkNginxPlugin (finalAttrs: {
     homepage = "https://github.com/anomalizer/ngx_aws_auth";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    broken = true;
   };
 })

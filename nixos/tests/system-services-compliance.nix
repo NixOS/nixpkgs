@@ -81,6 +81,16 @@ let
             process.reloadSignal = "HUP";
           };
         }).config.systemd.services;
+
+      # A service setting `ExecReload` through the systemd escape hatch, without
+      # any `process.reloadCommand` of its own.
+      ownExecReloadUnits =
+        (evalSystemServices {
+          service = {
+            process.argv = [ "${coreutils}/bin/true" ];
+            systemd.service.serviceConfig.ExecReload = "${coreutils}/bin/kill -USR2 $MAINPID";
+          };
+        }).config.systemd.services;
     in
     {
       testDefaultType = {
@@ -96,6 +106,19 @@ let
       testReloadExecReload = {
         expr = reloadUnits.service.serviceConfig.ExecReload;
         expected = "${coreutils}/bin/kill -HUP $MAINPID";
+      };
+
+      # Without a reload command, the framework must not define `ExecReload` at
+      # all, so that it neither conflicts with a service-provided definition nor
+      # renders a bare `ExecReload=` line.
+      testNoReloadExecReloadUnset = {
+        expr = defaultUnits.service.serviceConfig ? ExecReload;
+        expected = false;
+      };
+
+      testServiceOwnExecReload = {
+        expr = ownExecReloadUnits.service.serviceConfig.ExecReload;
+        expected = "${coreutils}/bin/kill -USR2 $MAINPID";
       };
     };
 
