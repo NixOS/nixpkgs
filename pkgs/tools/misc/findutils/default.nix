@@ -81,6 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
   # or you can check libc/include/sys/cdefs.h in bionic source code
   hardeningDisable = lib.optional (stdenv.hostPlatform.libc == "bionic") "fortify";
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.gnu.org/software/findutils/";
     changelog = "https://cgit.git.savannah.gnu.org/cgit/findutils.git/tree/NEWS?h=v${finalAttrs.version}";
