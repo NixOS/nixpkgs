@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
-    substituteInPlace xargs/xargs.c --replace 'char default_cmd[] = "echo";' 'char default_cmd[] = "${lib.getExe' coreutils "echo"}";'
+    substituteInPlace xargs/xargs.c --replace-fail 'char default_cmd[] = "echo";' 'char default_cmd[] = "${lib.getExe' coreutils "echo"}";'
   '';
 
   patches = [
