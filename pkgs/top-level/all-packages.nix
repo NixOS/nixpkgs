@@ -7459,7 +7459,21 @@ with pkgs;
     ];
   };
 
-  nginxModules = recurseIntoAttrs (callPackage ../servers/http/nginx/modules.nix { });
+  mkNginxPlugin = callPackage ../servers/http/nginx/modules/builder.nix { };
+  nginxModules = recurseIntoAttrs (
+    lib.makeExtensible (
+      self:
+      let
+        packages = lib.packagesFromDirectoryRecursive {
+          inherit callPackage;
+          directory = ../servers/http/nginx/modules;
+        };
+
+        aliases = import ../servers/http/nginx/modules/aliases.nix self;
+      in
+      packages // (lib.optionalAttrs config.allowAliases aliases)
+    )
+  );
 
   # We should move to dynamic modules and create a nginxFull package with all modules
   nginxShibboleth = nginxStable.override {

@@ -23,7 +23,7 @@ buildGoModule (finalAttrs: {
   version = "0.7.1";
 
   src = fetchFromGitHub {
-    owner = "terrastruct";
+    owner = "d2lang";
     repo = "d2";
     tag = "v${finalAttrs.version}";
     hash = "sha256-ZRAvMcJKQmvcBbT2foKDYS0gTeqOZqFu3V3iXIbfLsQ=";
@@ -62,7 +62,7 @@ buildGoModule (finalAttrs: {
   '';
 
   preCheck = ''
-    # See https://github.com/terrastruct/d2/blob/master/docs/CONTRIBUTING.md#running-tests.
+    # See https://github.com/d2lang/d2/blob/master/docs/CONTRIBUTING.md#running-tests.
     export TESTDATA_ACCEPT=1
   '';
 
@@ -75,7 +75,7 @@ buildGoModule (finalAttrs: {
     description = "Modern diagram scripting language that turns text to diagrams";
     mainProgram = "d2";
     homepage = "https://d2lang.com";
-    changelog = "https://github.com/terrastruct/d2/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/d2lang/d2/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       kashw2

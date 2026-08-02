@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  llvmPackages_20,
   fetchurl,
   fetchFromGitHub,
   cmake,
@@ -31,27 +30,21 @@
   enableN320 ? true,
   enableE300 ? true,
   enableE320 ? true,
+  # passthru.tests
+  soapyuhd,
 }:
 
 let
   inherit (lib) optionals cmakeBool;
-  stdenv' = (
-    # Fix a compilation issue on Darwin, that upstream is aware of:
-    # https://github.com/EttusResearch/uhd/issues/881
-    if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
-      llvmPackages_20.stdenv
-    else
-      stdenv
-  );
 in
 
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uhd";
   # NOTE: Use the following command to update the package, and the uhdImageSrc attribute:
   #
   #     nix-shell maintainers/scripts/update.nix --argstr package uhd --arg commit true
   #
-  version = "4.9.0.1";
+  version = "4.10.0.0";
 
   outputs = [
     "out"
@@ -64,15 +57,22 @@ stdenv'.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     # The updateScript relies on the `src` using `hash`, and not `sha256. To
     # update the correct hash for the `src` vs the `uhdImagesSrc`
-    hash = "sha256-AOZYCmkgsM09YORW7dVsPAwecXNZQOxOscJnVOlMoP0=";
+    hash = "sha256-nqazjHfYIVbqFnfiHdkz1Glws4+t5rgWmojWbi0Ymk8=";
   };
   # Firmware images are downloaded (pre-built) from the respective release on Github
   uhdImagesSrc = fetchurl {
     url = "https://github.com/EttusResearch/uhd/releases/download/v${finalAttrs.version}/uhd-images_${finalAttrs.version}.tar.xz";
     # Please don't convert this to a hash, in base64, see comment near src's
     # hash.
-    sha256 = "15ahcxb7hsylvdzzv0q0shd3wqm7p2y4kzbqk85cvsxbdklxhsvn";
+    sha256 = "1pqx5ajg1z8jk1lfh44m58sqf6ypbvn9jm89walfc1h38q4ykj38";
   };
+
+  patches = [
+    # Fixes detection of uhd for packages that depend on uhd, see:
+    # https://github.com/EttusResearch/uhd/pull/939
+    ./downstream-pkgs-boost1.89-fix.patch
+  ];
+
   inherit (finalAttrs.finalPackage.passthru) pythonPath;
   passthru = {
     runtimePython = python3.withPackages (ps: finalAttrs.finalPackage.passthru.pythonPath);
@@ -156,7 +156,7 @@ stdenv'.mkDerivation (finalAttrs: {
     # ABI differences GCC 7.1
     # /nix/store/wd6r25miqbk9ia53pp669gn4wrg9n9cj-gcc-7.3.0/include/c++/7.3.0/bits/vector.tcc:394:7: note: parameter passing for argument of type 'std::vector<uhd::range_t>::iterator {aka __gnu_cxx::__normal_iterator<uhd::range_t*, std::vector<uhd::range_t> >}' changed in GCC 7.1
   ]
-  ++ optionals stdenv'.hostPlatform.isAarch32 [
+  ++ optionals stdenv.hostPlatform.isAarch32 [
     "-DCMAKE_CXX_FLAGS=-Wno-psabi"
   ];
 
@@ -184,12 +184,8 @@ stdenv'.mkDerivation (finalAttrs: {
       dpdk
     ];
 
-  patches = [
-    ./fix-pkg-config.patch
-  ];
-
   # many tests fails on darwin, according to ofborg
-  doCheck = !stdenv'.hostPlatform.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   doInstallCheck = true;
 
@@ -200,7 +196,7 @@ stdenv'.mkDerivation (finalAttrs: {
     "installFirmware"
     "removeInstalledTests"
   ]
-  ++ optionals (enableUtils && stdenv'.hostPlatform.isLinux) [
+  ++ optionals (enableUtils && stdenv.hostPlatform.isLinux) [
     "moveUdevRules"
   ];
 
@@ -229,6 +225,8 @@ stdenv'.mkDerivation (finalAttrs: {
   disallowedReferences = optionals (!enablePythonApi && !enableUtils) [
     python3
   ];
+
+  passthru.tests = { inherit soapyuhd; };
 
   meta = {
     description = "USRP Hardware Driver (for Software Defined Radio)";
