@@ -6,13 +6,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pygments-style-github";
   version = "0.4";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "pygments-style-github";
+    inherit (finalAttrs) version;
     hash = "sha256-D8q9IxR9VMhiQPYhZ4xTyZin3vqg0naRHB8t7wpF9Kc=";
   };
 
@@ -31,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})
