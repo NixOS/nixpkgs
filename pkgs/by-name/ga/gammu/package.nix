@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gammu";
-  version = "1.43.2";
+  version = "1.43.3";
 
   __structuredAttrs = true;
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gammu";
     repo = "gammu";
     rev = finalAttrs.version;
-    sha256 = "sha256-+mZBELwFUEL4S3IUIIa83TaNIYQxjQE1TvWhXTcIfYc=";
+    sha256 = "sha256-qmpbAiu0aIjawdKTNClMa3yFSdakOlh/dY5gAY04K3M=";
   };
 
   patches = [

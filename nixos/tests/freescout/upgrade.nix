@@ -73,7 +73,7 @@ in
 
       with subtest("Create user and log in"):
         # Create uesr
-        machine.succeed("/var/lib/freescout/artisan freescout:create-user --role=admin --firstName=Xenia --lastName=TheFox --email xenia@${freescoutDomain} --no-interaction --password=foo | grep 'User created with id'")
+        machine.succeed("/var/lib/freescout/artisan -- freescout:create-user --role=admin --firstName=Xenia --lastName=TheFox --email xenia@${freescoutDomain} --no-interaction --password=foo | grep 'User created with id'")
         # Obtain CSRF token
         token=machine.succeed("curl -fsSL --cookie-jar cjar 'http://${freescoutDomain}/login' | grep -Po '(?<= name=\"_token\" value=\")(\w+)(?=\")'").strip()
         # Actually log in
