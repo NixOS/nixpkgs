@@ -1,7 +1,10 @@
 {
   lib,
   fetchFromGitHub,
+  git,
+  jq,
   nix-update-script,
+  runCommand,
   rustPlatform,
   versionCheckHook,
 }:
@@ -33,6 +36,35 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests = {
+      simple-test =
+        runCommand "yarn-zpm-simple-test"
+          {
+            nativeBuildInputs = [
+              jq
+              git
+              finalAttrs.finalPackage
+            ];
+          }
+          ''
+            export HOME=$(mktemp -d)
+            git config --global user.name nixbld
+            git config --global user.email nixbld@localhost
+            cat > .yarnrc.yml <<EOF
+            nodeLinker: node-modules
+            EOF
+            yarn init
+            jq -e '.packageManager == "yarn@${finalAttrs.finalPackage.version}.local"' package.json
+            jq '. + {workspaces: ["workspace-test"]}' package.json > package.json.tmp
+            mv package.json.tmp package.json
+            mkdir workspace-test
+            jq -n '{name: "workspace-test"}' > workspace-test/package.json
+            yarn install
+            jq -e '.name == "workspace-test"' node_modules/workspace-test/package.json
+            jq -e '.workspaces | has("workspace-test")' yarn.lock
+            touch $out
+          '';
+    };
   };
 
   meta = {
