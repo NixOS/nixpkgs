@@ -45,6 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
     "gl_cv_func_wcwidth_works=yes"
   ];
 
+  makeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "CFLAGS=-D_FORTIFY_SOURCE=0"
+  ];
+
   postPatch = ''
     # Older versions of gettext come with a copy of `extern-inline.m4` that is not compatible with clang 18.
     # When a project uses gettext + autoreconfPhase, autoreconfPhase will invoke `autopoint -f`, which will
@@ -133,8 +137,4 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
   };
-}
-
-// lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-  makeFlags = [ "CFLAGS=-D_FORTIFY_SOURCE=0" ];
 })
