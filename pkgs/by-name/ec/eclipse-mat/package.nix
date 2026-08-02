@@ -1,136 +1,120 @@
 {
+  lib,
+  stdenvNoCC,
+  bintools,
   fetchurl,
-  fontconfig,
-  freetype,
+  copyDesktopItems,
+  makeDesktopItem,
+  makeWrapper,
+  unzip,
+  jdk,
   glib,
   gsettings-desktop-schemas,
   gtk3,
-  jdk21,
-  lib,
-  libx11,
-  libxrender,
   libxtst,
-  makeDesktopItem,
-  makeWrapper,
-  shared-mime-info,
-  stdenv,
-  unzip,
   webkitgtk_4_1,
-  zlib,
 }:
 
-let
-  pVersion = "1.17.0.20260601";
-  pVersionTriple = lib.splitVersion pVersion;
-  majorVersion = lib.elemAt pVersionTriple 0;
-  minorVersion = lib.elemAt pVersionTriple 1;
-  patchVersion = lib.elemAt pVersionTriple 2;
-  baseVersion = "${majorVersion}.${minorVersion}.${patchVersion}";
-  jdk = jdk21;
-in
-stdenv.mkDerivation rec {
-  pname = "eclipse-mat";
-  version = pVersion;
+stdenvNoCC.mkDerivation (
+  finalAttrs:
+  let
+    baseVersion = lib.versions.pad 3 finalAttrs.version;
+  in
+  {
+    pname = "eclipse-mat";
+    version = "1.17.0.20260601";
 
-  src = fetchurl {
-    url = "https://ftp.halifax.rwth-aachen.de/eclipse//mat/${baseVersion}/rcp/MemoryAnalyzer-${version}-linux.gtk.x86_64.zip";
-    sha256 = "sha256-4eqAp5hNQR5MTX37qwktqSVfe3ctaBolamEEm8yIN2c=";
-  };
+    strictDeps = true;
+    __structuredAttrs = true;
 
-  desktopItem = makeDesktopItem {
-    name = "eclipse-mat";
-    exec = "eclipse-mat";
-    icon = "eclipse";
-    comment = "Eclipse Memory Analyzer";
-    desktopName = "Eclipse MAT";
-    genericName = "Java Memory Analyzer";
-    categories = [ "Development" ];
-  };
+    src = fetchurl {
+      urls = [
+        "https://ftp.halifax.rwth-aachen.de/eclipse/mat/${baseVersion}/rcp/MemoryAnalyzer-${finalAttrs.version}-linux.gtk.x86_64.zip"
+        "https://download.eclipse.org/mat/${baseVersion}/rcp/MemoryAnalyzer-${finalAttrs.version}-linux.gtk.x86_64.zip"
+      ];
+      hash = "sha256-4eqAp5hNQR5MTX37qwktqSVfe3ctaBolamEEm8yIN2c=";
+    };
 
-  unpackPhase = ''
-    unzip $src
-  '';
+    sourceRoot = ".";
 
-  buildCommand = ''
-    mkdir -p $out
-    unzip $src
-    mv mat $out
+    nativeBuildInputs = [
+      copyDesktopItems
+      glib
+      makeWrapper
+      unzip
+    ];
 
-    # Patch binaries.
-    interpreter=$(echo ${stdenv.cc.libc}/lib/ld-linux*.so.2)
-    libCairo=$out/eclipse/libcairo-swt.so
-    patchelf --set-interpreter $interpreter $out/mat/MemoryAnalyzer
-    [ -f $libCairo ] && patchelf --set-rpath ${
-      lib.makeLibraryPath [
-        freetype
-        fontconfig
-        libx11
-        libxrender
-        zlib
-      ]
-    } $libCairo
+    buildInputs = [
+      gsettings-desktop-schemas
+      gtk3
+    ];
 
-    # Create wrapper script.  Pass -configuration to store settings in ~/.eclipse-mat/<version>
-    makeWrapper $out/mat/MemoryAnalyzer $out/bin/eclipse-mat \
-      --prefix PATH : ${jdk}/bin \
-      --prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [
-          glib
-          gtk3
-          libxtst
-          webkitgtk_4_1
-        ]
-      } \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-      --add-flags "-configuration \$HOME/.eclipse-mat/''${version}/configuration"
+    desktopItems = [
+      (makeDesktopItem {
+        name = "eclipse-mat";
+        exec = "eclipse-mat";
+        icon = "eclipse";
+        comment = "Eclipse Memory Analyzer";
+        desktopName = "Eclipse MAT";
+        genericName = "Java Memory Analyzer";
+        categories = [
+          "Development"
+          "Profiling"
+        ];
+      })
+    ];
 
-    # Create desktop item.
-    mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications
-    mkdir -p $out/share/pixmaps
-    find $out/mat/plugins -name 'eclipse*.png' -type f -exec cp {} $out/share/pixmaps \;
-    mv $out/share/pixmaps/eclipse64.png $out/share/pixmaps/eclipse.png
-  '';
+    installPhase = ''
+      runHook preInstall
 
-  nativeBuildInputs = [
-    unzip
-    makeWrapper
-  ];
-  buildInputs = [
-    fontconfig
-    freetype
-    glib
-    gsettings-desktop-schemas
-    gtk3
-    jdk
-    libx11
-    libxrender
-    libxtst
-    zlib
-    shared-mime-info
-    webkitgtk_4_1
-  ];
+      mkdir -p $out
+      cp -r mat $out/mat
 
-  dontBuild = true;
-  dontConfigure = true;
+      patchelf --set-interpreter ${bintools.dynamicLinker} $out/mat/MemoryAnalyzer
 
-  meta = {
-    description = "Fast and feature-rich Java heap analyzer";
-    mainProgram = "eclipse-mat";
-    longDescription = ''
-      The Eclipse Memory Analyzer is a tool that helps you find memory
-      leaks and reduce memory consumption. Use the Memory Analyzer to
-      analyze productive heap dumps with hundreds of millions of
-      objects, quickly calculate the retained sizes of objects, see
-      who is preventing the Garbage Collector from collecting objects,
-      run a report to automatically extract leak suspects.
+      # Pass -configuration so that settings are written to ~/.eclipse-mat/<version>
+      # instead of the read-only store path.
+      makeWrapper $out/mat/MemoryAnalyzer $out/bin/eclipse-mat \
+        --prefix PATH : ${lib.makeBinPath [ jdk ]} \
+        --set JAVA_HOME ${jdk.home} \
+        --prefix LD_LIBRARY_PATH : ${
+          lib.makeLibraryPath [
+            glib
+            gtk3
+            libxtst
+            webkitgtk_4_1
+          ]
+        } \
+        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
+        --add-flags "-configuration \$HOME/.eclipse-mat/${finalAttrs.version}/configuration"
+
+      mkdir -p $out/share/pixmaps
+      find $out/mat/plugins -name 'eclipse*.png' -type f -exec cp {} $out/share/pixmaps \;
+      mv $out/share/pixmaps/eclipse64.png $out/share/pixmaps/eclipse.png
+
+      runHook postInstall
     '';
-    homepage = "https://eclipse.dev/mat/";
-    changelog = "https://eclipse.dev/mat/${baseVersion}/noteworthy.html";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.epl20;
-    maintainers = [ lib.maintainers.ktor ];
-    platforms = [ "x86_64-linux" ];
-  };
 
-}
+    meta = {
+      description = "Fast and feature-rich Java heap analyzer";
+      longDescription = ''
+        The Eclipse Memory Analyzer is a tool that helps you find memory
+        leaks and reduce memory consumption. Use the Memory Analyzer to
+        analyze productive heap dumps with hundreds of millions of
+        objects, quickly calculate the retained sizes of objects, see
+        who is preventing the Garbage Collector from collecting objects,
+        run a report to automatically extract leak suspects.
+      '';
+      homepage = "https://eclipse.dev/mat/";
+      changelog = "https://eclipse.dev/mat/${baseVersion}/noteworthy.html";
+      sourceProvenance = with lib.sourceTypes; [
+        binaryBytecode
+        binaryNativeCode
+      ];
+      license = lib.licenses.epl20;
+      mainProgram = "eclipse-mat";
+      maintainers = [ lib.maintainers.ktor ];
+      platforms = [ "x86_64-linux" ];
+    };
+  }
+)
