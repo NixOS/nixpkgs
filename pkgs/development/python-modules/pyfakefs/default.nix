@@ -16,13 +16,13 @@
   xlrd,
 }:
 let
-  self = buildPythonPackage rec {
+  self = buildPythonPackage (finalAttrs: {
     pname = "pyfakefs";
     version = "6.2.0";
     pyproject = true;
 
     src = fetchPypi {
-      inherit pname version;
+      inherit (finalAttrs) pname version;
       hash = "sha256-5Zo220R79QnOnJerPRUQwIzFGJXFMRMlpWCl5bXcGUA=";
     };
 
@@ -56,13 +56,15 @@ let
       ];
     });
 
+    __structuredAttrs = true;
+
     meta = {
       description = "Fake file system that mocks the Python file system modules";
       homepage = "https://pyfakefs.org/";
-      changelog = "https://github.com/jmcgeheeiv/pyfakefs/blob/v${version}/CHANGES.md";
+      changelog = "https://github.com/jmcgeheeiv/pyfakefs/blob/v${finalAttrs.version}/CHANGES.md";
       license = lib.licenses.asl20;
       maintainers = [ ];
     };
-  };
+  });
 in
 self
