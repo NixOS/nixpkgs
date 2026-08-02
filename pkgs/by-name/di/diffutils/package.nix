@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
   # If no explicit coreutils is given, use the one from stdenv.
   buildInputs = [ coreutils ];
 
+  strictDeps = true;
+
   # Disable stack-related gnulib tests on x86_64-darwin because they have problems running under
   # Rosetta 2: test-c-stack hangs, test-sigsegv-catch-stackoverflow and test-sigaction fail.
   # Disable all gnulib tests when building on Darwin due to test-nl_langinfo-mt failure
