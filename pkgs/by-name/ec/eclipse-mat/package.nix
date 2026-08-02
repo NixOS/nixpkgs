@@ -160,7 +160,10 @@ stdenvNoCC.mkDerivation (
       ];
       license = lib.licenses.epl20;
       mainProgram = "eclipse-mat";
-      maintainers = [ lib.maintainers.ktor ];
+      maintainers = with lib.maintainers; [
+        ktor
+        dfjay
+      ];
       platforms = lib.attrNames sources;
     };
   }
