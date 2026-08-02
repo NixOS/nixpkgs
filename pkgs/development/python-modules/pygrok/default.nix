@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   regex,
-  pytest,
+  pytestCheckHook,
   setuptools,
 }:
 
@@ -23,10 +23,9 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [ regex ];
 
-  nativeCheckInputs = [ pytest ];
-  checkPhase = ''
-    pytest
-  '';
+  pythonImportsCheck = [ "pygrok" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     maintainers = with lib.maintainers; [ winpat ];
