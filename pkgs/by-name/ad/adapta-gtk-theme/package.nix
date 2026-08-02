@@ -65,6 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
       cc-by-sa-30
     ];
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ romildo ];
+    maintainers = with lib.maintainers; [
+      romildo
+      emilylange
+    ];
   };
 })
