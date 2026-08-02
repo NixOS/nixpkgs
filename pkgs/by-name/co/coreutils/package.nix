@@ -162,6 +162,8 @@ stdenv.mkDerivation (finalAttrs: {
     # TODO(@Ericson2314): Investigate whether Darwin could benefit too
     ++ optional (isCross && stdenv.hostPlatform.libc != "glibc") libiconv;
 
+  strictDeps = true;
+
   hardeningDisable = [ "trivialautovarinit" ];
 
   configureFlags = [
