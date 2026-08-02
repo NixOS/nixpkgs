@@ -7,19 +7,22 @@
   fetchFromGitHub,
   lib,
   orjson,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "hass-client";
-  version = "1.2.3";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "python-hass-client";
     tag = version;
-    hash = "sha256-uCVwxa/KTiOmaexmdeynL2LSqBhDu8Zfre+Nh9Oauiw=";
+    hash = "sha256-mrS3kuG/6ZE02B0Ua10AAAsgVBrEDRJxNfmIHT+EHWw=";
   };
 
   postPatch = ''
@@ -48,8 +51,11 @@ buildPythonPackage rec {
     "hass_client"
   ];
 
-  # upstream has no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   meta = {
     changelog = "https://github.com/music-assistant/python-hass-client/releases/tag/${version}";
