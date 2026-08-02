@@ -46,9 +46,23 @@ jobs:
             exit 1
           fi
 
-      - name: Calculate checksum
+            - name: Prepare ISO artifact
         run: |
-          cd result/iso
+          rm -rf artifact
+          mkdir -p artifact
+
+          iso_file="$(find -L result/iso -type f -name '*.iso' -print -quit)"
+
+          if [ -z "$iso_file" ]; then
+            echo "ERROR: No ISO file was found."
+            exit 1
+          fi
+
+          echo "Found ISO: $iso_file"
+
+          cp -L "$iso_file" artifact/
+
+          cd artifact
           sha256sum *.iso > SHA256SUMS
           cat SHA256SUMS
 
@@ -56,8 +70,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: euclid-linux-3d-iso
-          path: |
-            euclid-linux-3d/result/iso/*.iso
-            euclid-linux-3d/result/iso/SHA256SUMS
+          path: euclid-linux-3d/artifact/
           if-no-files-found: error
           retention-days: 30
