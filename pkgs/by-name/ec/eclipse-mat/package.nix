@@ -140,6 +140,8 @@ stdenvNoCC.mkDerivation (
           runHook postInstall
         '';
 
+    passthru.updateScript = ./update.sh;
+
     meta = {
       description = "Fast and feature-rich Java heap analyzer";
       longDescription = ''
