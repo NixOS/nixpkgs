@@ -12,7 +12,7 @@
 
 buildPythonPackage {
   pname = "envisage";
-  version = "7.0.4-unstable-2026-07-07";
+  version = "7.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
