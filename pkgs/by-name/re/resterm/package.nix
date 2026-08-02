@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "resterm";
-  version = "0.46.4";
+  version = "0.48.1";
 
   src = fetchFromGitHub {
     owner = "unkn0wn-root";
     repo = "resterm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Fpt/ZYdLC4OVA9Aj8NXJ76TY1ofxifXfjqD6irVV6cM=";
+    hash = "sha256-pOP09WnnPFCMUnwhcNTwctQVYNLmnC8f1oGdXzBlIwQ=";
   };
 
   vendorHash = "sha256-K6edyYLkVQwEZBAfRwgckUJI8dmo/ZxFRjEkExtyLxY=";
@@ -26,6 +26,20 @@ buildGoModule (finalAttrs: {
   '';
 
   subPackages = [ "cmd/resterm" ];
+
+  # Skip tests that require network access or socket binding
+  checkFlags = [
+    "-skip"
+    "^(${
+      lib.concatStringsSep "|" [
+        "TestServeMocksStartsAndStopsWithContext"
+        "TestServeMocksRequiresTLSPair"
+        "TestServeMocksValidatesJournalLimitsAsUsageErrors"
+        "TestMockControlCommandsResetClearAndVerify"
+        "TestCLIUpdaterCheckDev"
+      ]
+    })$"
+  ];
 
   ldflags = [
     "-s"

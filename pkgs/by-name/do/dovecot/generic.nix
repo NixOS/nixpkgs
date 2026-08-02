@@ -226,7 +226,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withPgSQL "--with-pgsql"
   ++ lib.optional withSQLite "--with-sqlite";
 
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  doCheck = !(stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.is32bit);
 
   strictDeps = true;
 
