@@ -46,7 +46,7 @@ jobs:
             exit 1
           fi
 
-            - name: Prepare ISO artifact
+      - name: Prepare ISO artifact
         run: |
           rm -rf artifact
           mkdir -p artifact
