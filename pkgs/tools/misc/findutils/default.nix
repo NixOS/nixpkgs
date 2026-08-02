@@ -31,6 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
   buildInputs = [ coreutils ]; # bin/updatedb script needs to call sort
 
+  strictDeps = true;
+
   # Since glibc-2.25 the i686 tests hang reliably right after test-sleep.
   doCheck =
     !stdenv.hostPlatform.isDarwin
