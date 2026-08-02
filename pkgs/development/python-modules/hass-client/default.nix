@@ -7,6 +7,7 @@
   fetchFromGitHub,
   lib,
   orjson,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
@@ -25,10 +26,9 @@ buildPythonPackage rec {
     hash = "sha256-mrS3kuG/6ZE02B0Ua10AAAsgVBrEDRJxNfmIHT+EHWw=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "1.0.0" "${version}"
-  '';
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [
     setuptools
