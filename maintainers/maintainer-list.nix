@@ -16949,6 +16949,12 @@
     githubId = 7243615;
     name = "Luna";
   };
+  lunar-seal = {
+    email = "lunar-seal@ff15.eu";
+    github = "lunar-seal";
+    githubId = 44544539;
+    name = "lunar-seal";
+  };
   lunarequest = {
     email = "nullarequest@vivlaid.net";
     github = "Lunarequest";
