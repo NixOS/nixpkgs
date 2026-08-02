@@ -82,7 +82,7 @@ with pkgs;
       # TODO It would be much better to pass the `stdenvNoCC` and *unwrapped*
       # cc, bintools, compiler-rt equivalent, etc. and create all final stdenvs
       # as part of the stage. Then we would never be tempted to override a later
-      # thing to to create an earlier thing (leading to infinite recursion) and
+      # thing to create an earlier thing (leading to infinite recursion) and
       # we also would still respect the stage arguments choices for these
       # things.
       (
@@ -116,7 +116,7 @@ with pkgs;
 
     # Inputs
     `modes`
-    : An attribute set containg keys from `config.recursionMode` defaulting to true.
+    : An attribute set containing keys from `config.recursionMode` defaulting to true.
     `attrs`
     : An attribute set to scan for derivations.
 
@@ -1279,7 +1279,7 @@ with pkgs;
   appimage-run = callPackage ../tools/package-management/appimage-run { };
   appimage-run-tests = callPackage ../tools/package-management/appimage-run/test.nix {
     appimage-run = appimage-run.override {
-      appimage-run-tests = null; # break boostrap cycle for passthru.tests
+      appimage-run-tests = null; # break bootstrap cycle for passthru.tests
     };
   };
 
@@ -1979,7 +1979,7 @@ with pkgs;
     mkDerivation = buildEmscriptenPackage;
   };
 
-  # The latest version used by elasticsearch, logstash, kibana and the the beats from elastic.
+  # The latest version used by elasticsearch, logstash, kibana and the beats from elastic.
   # When updating make sure to update all plugins or they will break!
   elk7Version = "7.17.27";
 
