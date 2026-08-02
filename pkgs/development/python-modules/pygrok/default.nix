@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pygrok";
   version = "1.0.0";
   pyproject = true;
@@ -15,8 +15,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "garyelephant";
     repo = "pygrok";
-    rev = "v${version}";
-    sha256 = "07487rcmv74srnchh60jp0vg46g086qmpkaj8gxqhp9rj47r1s4m";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-leiQD5E5XYj7Q1LNW7FB4BnyNrgSGAiZzZqcXVk+iBw=";
   };
 
   build-system = [ setuptools ];
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
   };
-}
+})
