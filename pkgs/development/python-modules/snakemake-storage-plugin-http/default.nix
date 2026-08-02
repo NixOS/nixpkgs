@@ -59,7 +59,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   meta = {
-    description = "Snakemake storage plugin for donwloading input files from HTTP(s)";
+    description = "Snakemake storage plugin for downloading input files from HTTP(s)";
     homepage = "https://github.com/snakemake/snakemake-storage-plugin-http";
     changelog = "https://github.com/snakemake/snakemake-storage-plugin-http/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;

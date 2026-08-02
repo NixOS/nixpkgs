@@ -28,7 +28,7 @@ buildPythonPackage (finalAttrs: {
     owner = "scoder";
     repo = "lupa";
     tag = "lupa-${finalAttrs.version}";
-    # we fetch the vendored lua sources for gracefull de-vendor degredation when a new lua is added
+    # we fetch the vendored lua sources for graceful de-vendor degradation when a new lua is added
     fetchSubmodules = true;
     hash = "sha256-XLBUQ1TrzWWST9RJdMTnpsceldDNzidnL82bixLhSRA=";
   };

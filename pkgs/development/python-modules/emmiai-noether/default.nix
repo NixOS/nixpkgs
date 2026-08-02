@@ -101,7 +101,7 @@ buildPythonPackage (finalAttrs: {
     "test_total_cpu_count_mac"
     "test_total_cpu_count_windows"
 
-    # Numerical precision asertion errors since torch was updated to 2.12.0
+    # Numerical precision assertion errors since torch was updated to 2.12.0
     # AssertionError: Output is not as expected
     "test_ab_upt_determinism_regression_check"
     "test_double_kwargs"

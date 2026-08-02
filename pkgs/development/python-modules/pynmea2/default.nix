@@ -33,7 +33,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pynmea2" ];
 
   meta = {
-    description = "Python library for the NMEA 0183 protcol";
+    description = "Python library for the NMEA 0183 protocol";
     homepage = "https://github.com/Knio/pynmea2";
     license = lib.licenses.mit;
     maintainers = [ ];

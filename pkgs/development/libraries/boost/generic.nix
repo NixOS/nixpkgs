@@ -209,7 +209,7 @@ stdenv.mkDerivation {
         url = "https://www.boost.org/patches/1_80_0/0005-config-libcpp15.patch";
         hash = "sha256-ULFMzKphv70unvPZ3o4vSP/01/xbSM9a2TlIV67eXDQ=";
       })
-      # This fixes another ill-formed contant expressions issue flagged by clang 16.
+      # This fixes another ill-formed constant expressions issue flagged by clang 16.
       (fetchpatch {
         url = "https://github.com/boostorg/numeric_conversion/commit/50a1eae942effb0a9b90724323ef8f2a67e7984a.patch";
         relative = "include";

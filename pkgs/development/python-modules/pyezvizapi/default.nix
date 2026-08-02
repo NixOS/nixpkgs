@@ -38,7 +38,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    description = "Python interface for for Ezviz cameras";
+    description = "Python interface for Ezviz cameras";
     homepage = "https://github.com/RenierM26/pyEzvizApi";
     changelog = "https://github.com/RenierM26/pyEzvizApi/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;

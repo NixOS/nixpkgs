@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/captin411/ofxclient";
-    description = "OFX client for dowloading transactions from banks";
+    description = "OFX client for downloading transactions from banks";
     mainProgram = "ofxclient";
     license = lib.licenses.mit;
   };

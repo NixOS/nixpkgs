@@ -164,7 +164,7 @@ extendMkDerivation {
         "stubs"
       ],
 
-      # Traversed in the order of the outputs speficied in outputs;
+      # Traversed in the order of the outputs specified in outputs;
       # entries are skipped if they don't exist in outputs.
       # NOTE: The nil LSP gets angry if we do not parenthesize the default attrset.
       outputToPatterns ? {
@@ -375,7 +375,7 @@ extendMkDerivation {
         # outputNameVarFallbacks!
         inherit expectedOutputs;
 
-        # Traversed in the order of the outputs speficied in outputs;
+        # Traversed in the order of the outputs specified in outputs;
         # entries are skipped if they don't exist in outputs.
         inherit outputToPatterns;
 

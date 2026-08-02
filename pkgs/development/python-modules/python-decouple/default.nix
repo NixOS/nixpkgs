@@ -26,7 +26,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "decouple" ];
 
   meta = {
-    description = "Module to handle code and condifuration";
+    description = "Module to handle code and configuration";
     homepage = "https://github.com/HBNetwork/python-decouple";
     changelog = "https://github.com/HBNetwork/python-decouple/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;

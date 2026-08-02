@@ -47,7 +47,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   meta = {
-    description = "Library for for asynchronous CSV reading/writing";
+    description = "Library for asynchronous CSV reading/writing";
     homepage = "https://github.com/MKuranowski/aiocsv";
     changelog = "https://github.com/MKuranowski/aiocsv/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;

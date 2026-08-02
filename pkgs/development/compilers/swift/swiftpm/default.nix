@@ -384,7 +384,7 @@ let
     postInstall = cmakeGlue.SwiftCertificates;
   };
 
-  # Build a bootrapping swiftpm using CMake.
+  # Build a bootstrapping swiftpm using CMake.
   swiftpm-bootstrap = mkBootstrapDerivation (
     commonAttrs
     // {

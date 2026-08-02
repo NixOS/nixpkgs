@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
       * Software configuration, build and testing.
       * Source and binary deployments.
       * Software life-cycle procedures.
-      B0 also provides the B00 build library which provides abitrary build
+      B0 also provides the B00 build library which provides arbitrary build
       abstraction with reliable and efficient incremental rebuilds. The B00
       library can be – and has been – used on its own to devise domain specific
       build systems.

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   meta = {
-    description = "Accessibilty tools helper library, used e.g. by screen readers";
+    description = "Accessibility tools helper library, used e.g. by screen readers";
     homepage = "https://github.com/KDE/libqaccessibilityclient";
     maintainers = with lib.maintainers; [ artturin ];
     license = with lib.licenses; [

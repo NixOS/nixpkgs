@@ -49,7 +49,7 @@ buildPythonPackage rec {
     # unmaintained and has been removed from nixpkgs.
     #
     # The image OCR feature of PaddleOCR doesn't use these classes though, so
-    # they work even after stripping the the `IaaAugment` and `CopyPaste`
+    # they work even after stripping the `IaaAugment` and `CopyPaste`
     # exports. It probably breaks some of the OCR model creation tooling that
     # PaddleOCR provides, however.
     ./remove-import-imaug.patch

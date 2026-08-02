@@ -422,7 +422,7 @@ buildPythonPackage (finalAttrs: {
     # AssertionError: assert 'did you mean https://api.wandb.ai' in '1'
     "test_login_bad_host"
 
-    # Asserttion error: 1 != 0 (testing system exit code)
+    # Assertion error: 1 != 0 (testing system exit code)
     "test_login_host_trailing_slash_fix_invalid"
 
     # Breaks in sandbox: "Timed out waiting for wandb service to start"

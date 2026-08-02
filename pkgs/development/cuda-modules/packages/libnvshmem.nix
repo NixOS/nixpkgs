@@ -195,7 +195,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     };
 
     brokenAssertions = [
-      # CUDA pre-11.7 yeilds macro/type errors in src/include/internal/host_transport/cudawrap.h.
+      # CUDA pre-11.7 yields macro/type errors in src/include/internal/host_transport/cudawrap.h.
       {
         message = "NVSHMEM does not support CUDA releases earlier than 11.7 (found ${cudaMajorMinorVersion})";
         assertion = cudaAtLeast "11.7";

@@ -114,7 +114,7 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
         --replace-fail "pybind11[global]" "pybind11" \
         --replace-fail '"pip", "torch>=2.1", "jax>=0.5.0", "flax>=0.7.1"' ""
     ''
-    # Harcode the path to the output store path that transformer_engine will use to import
+    # Hardcode the path to the output store path that transformer_engine will use to import
     # - libtransformer_engine.so
     # - transformer_engine_jax.cpython-313-x86_64-linux-gnu.so
     # - transformer_engine_torch.cpython-313-x86_64-linux-gnu.so

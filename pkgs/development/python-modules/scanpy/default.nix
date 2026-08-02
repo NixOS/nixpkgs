@@ -184,7 +184,7 @@ buildPythonPackage (finalAttrs: {
   '';
 
   pytestFlags = [
-    # UserWarning: 'where' used without 'out', expect unitialized memory in output.
+    # UserWarning: 'where' used without 'out', expect uninitialized memory in output.
     # If this is intentional, use out=None.
     "-Wignore::UserWarning"
   ];

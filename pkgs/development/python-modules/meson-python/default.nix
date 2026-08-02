@@ -51,7 +51,7 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  # meson-python respectes MACOSX_DEPLOYMENT_TARGET, but compares it with the
+  # meson-python respects MACOSX_DEPLOYMENT_TARGET, but compares it with the
   # actual platform version during tests, which mismatches.
   # https://github.com/mesonbuild/meson-python/issues/760
   # FIXME: drop in 0.19.0
