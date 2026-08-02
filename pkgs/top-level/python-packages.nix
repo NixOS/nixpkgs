@@ -6801,8 +6801,6 @@ self: super: with self; {
 
   gipc = callPackage ../development/python-modules/gipc { };
 
-  gistyc = callPackage ../development/python-modules/gistyc { };
-
   git-annex-adapter = callPackage ../development/python-modules/git-annex-adapter { };
 
   git-dummy = callPackage ../development/python-modules/git-dummy { };
