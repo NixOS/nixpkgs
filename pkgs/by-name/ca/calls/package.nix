@@ -127,6 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Phone dialer and call handler";
     longDescription = "GNOME Calls is a phone dialer and call handler. Setting NixOS option `programs.calls.enable = true` is recommended.";
     homepage = "https://gitlab.gnome.org/GNOME/calls";
+    changelog = "https://gitlab.gnome.org/GNOME/calls/-/blob/v${finalAttrs.version}/NEWS";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ craigem ];
     platforms = lib.platforms.linux;
