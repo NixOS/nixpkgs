@@ -6,13 +6,13 @@
 
 mkNginxPlugin (finalAttrs: {
   pname = "vts";
-  version = "0.2.2";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "vozlt";
     repo = "nginx-module-vts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ReTmYGVSOwtnYDMkQDMWwxw09vT4iHYfYZvgd8iBotk=";
+    hash = "sha256-3u4igVGBVsv+GNi3CSduZL6ZaOmdPoItUPA4+wmRw5Y=";
   };
 
   meta = {
