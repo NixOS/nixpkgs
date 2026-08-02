@@ -92,10 +92,13 @@ let
       firefox-beta-unwrapped = linux;
       firefox-devedition = linux;
       firefox-devedition-unwrapped = linux;
+      fractal = linux;
       freecad = linux;
       gimp = linux;
       gpu-screen-recorder = linux;
       gst_all_1.gst-plugins-bad = linux;
+      gtksourceview = linux;
+      inkscape = linux;
       jellyfin-ffmpeg = linux;
       kdePackages.kdenlive = linux;
       krita = linux;
@@ -104,6 +107,7 @@ let
       meshlab = linux;
       mistral-rs = linux;
       monado = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
+      newsflash = linux;
       noisetorch = linux;
       obs-studio-plugins.obs-backgroundremoval = linux;
       octave = linux; # because depend on SuiteSparse which need rebuild when cuda enabled
@@ -113,6 +117,7 @@ let
       openmvs = linux;
       opentrack = linux;
       openvino = linux;
+      papers = linux;
       pixinsight = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
       qgis = linux;
       rtabmap = linux;
@@ -124,6 +129,7 @@ let
       truecrack-cuda = linux;
       tts = linux;
       ueberzugpp = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
+      waybar = linux;
       wyoming-faster-whisper = linux;
       xgboost = linux;
 
