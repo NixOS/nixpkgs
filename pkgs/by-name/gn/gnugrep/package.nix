@@ -99,6 +99,8 @@ stdenv.mkDerivation {
     NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.gnu.org/software/grep/";
     description = "GNU implementation of the Unix grep command";
