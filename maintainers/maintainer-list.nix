@@ -7425,6 +7425,12 @@
     githubId = 974130;
     name = "David Pätzel";
   };
+  dpaulat = {
+    email = "dpaulat@gmail.com";
+    name = "Dan Paulat";
+    github = "dpaulat";
+    githubId = 2886605;
+  };
   dpc = {
     email = "dpc@dpc.pw";
     github = "dpc";
