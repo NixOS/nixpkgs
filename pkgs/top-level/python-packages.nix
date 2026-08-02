@@ -20961,6 +20961,8 @@ self: super: with self; {
 
   trame-common = callPackage ../development/python-modules/trame-common { };
 
+  trame-components = callPackage ../development/python-modules/trame-components { };
+
   trampoline = callPackage ../development/python-modules/trampoline { };
 
   transaction = callPackage ../development/python-modules/transaction { };
