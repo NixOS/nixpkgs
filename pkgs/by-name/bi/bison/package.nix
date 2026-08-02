@@ -50,6 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
   # TODO: enable doInstallCheck unconditionally when fixed upstream.
   doInstallCheck = !stdenv.cc.isClang;
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.gnu.org/software/bison/";
     description = "Yacc-compatible parser generator";
