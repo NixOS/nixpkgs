@@ -3538,6 +3538,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  cocci-syntax = buildVimPlugin {
+    pname = "cocci-syntax";
+    version = "0-unstable-2025-03-19";
+    src = fetchFromGitHub {
+      owner = "ahf";
+      repo = "cocci-syntax";
+      rev = "7399561a3e4a08e0f1dfa5288e2ebf112482816c";
+      hash = "sha256-Oah+00qd5MzTfNOi4daP3ibqtb6PflBaMzn0+QDqsj0=";
+    };
+    meta.homepage = "https://github.com/ahf/cocci-syntax/";
+    meta.license = unfree;
+    meta.hydraPlatforms = [ ];
+  };
+
   coconut-vim = buildVimPlugin {
     pname = "coconut.vim";
     version = "0-unstable-2017-10-10";
