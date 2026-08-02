@@ -347,6 +347,8 @@ stdenv.mkDerivation (
 
       doCheck = false; # fails
 
+      __structuredAttrs = true;
+
       meta =
 
         {
