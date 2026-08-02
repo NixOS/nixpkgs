@@ -17,7 +17,12 @@ buildGoModule (finalAttrs: {
     hash = "sha256-mVgBY1QhQ+tDQnfangqylNeCbBJTSJaM0y7vZ95BU3Y=";
   };
 
-  vendorHash = "sha256-lwZ+F/DaP5pYiaihMxFAo1DokKm6itreX7yG1CNCdWM=";
+  vendorHash = "sha256-LLYgb0DIFx97+ZXOlQc4yVdjjiw7ebXx76hADfWnlkw=";
+
+  patches = [
+    # No upstream fix yet; remove when updating to a release that uses goldmark 1.7.17 or later.
+    ./CVE-2026-5160.patch
+  ];
 
   ldflags = [ "-s" ];
 
