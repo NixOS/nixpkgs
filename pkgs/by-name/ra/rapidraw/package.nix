@@ -58,6 +58,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-JtkzeCt21KIEshvoCHWo1QoxUgvVJN1loJrUHgvV4qE=";
   };
 
+  patches = [
+    # Patch CVE-2026-64816
+    ./fix-cve-2026-64816.patch
+  ];
+
   nativeBuildInputs = [
     pkg-config
     makeWrapper
