@@ -24,6 +24,9 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "version='2.3.1'," "version='${version}',"
+
     # Files are only linked
     rm alpha_vantage/async_support/*
     cp alpha_vantage/{cryptocurrencies.py,foreignexchange.py,techindicators.py,timeseries.py} alpha_vantage/async_support/
