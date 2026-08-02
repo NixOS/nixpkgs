@@ -154,7 +154,7 @@
           "--enable-static"
           "--disable-dumper"
           "--with-cross-bootstrap"
-          # if gm4 or gnum4 are in PATH, they would be be preferred to nixpkgs m4
+          # if gm4 or gnum4 are in PATH, they would be preferred to nixpkgs m4
           "M4=m4"
         ];
 
