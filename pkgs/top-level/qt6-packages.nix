@@ -89,6 +89,8 @@ makeScopeWithSplicing' {
       libquotient = callPackage ../development/libraries/libquotient { };
       mlt = callPackage ../by-name/ml/mlt/package.nix { };
 
+      mapbox-gl-qml = callPackage ../development/libraries/mapbox-gl-qml { };
+
       maplibre-native-qt = callPackage ../development/libraries/maplibre-native-qt { };
 
       pyotherside = callPackage ../development/libraries/pyotherside { };

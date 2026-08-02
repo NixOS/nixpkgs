@@ -6,11 +6,6 @@
   ungoogled,
 }:
 
-let
-  # https://chromium-review.googlesource.com/c/chromium/src/+/7253206
-  ifElseM145 = new: old: if chromiumVersionAtLeast "145" then new else old;
-in
-
 mkChromiumDerivation (base: rec {
   name = "chromium-browser";
   packageName = "chromium";
@@ -67,16 +62,15 @@ mkChromiumDerivation (base: rec {
       $out/share/applications/chromium-browser.desktop
 
     substituteInPlace $out/share/applications/chromium-browser.desktop \
-      --replace-fail "${ifElseM145 "@@MENUNAME" "@@MENUNAME@@"}" "Chromium" \
-      --replace-fail "${ifElseM145 "@@PACKAGE" "@@PACKAGE@@"}" "chromium" \
-      --replace-fail "${ifElseM145 "/usr/bin/@@usr_bin_symlink_name" "/usr/bin/@@USR_BIN_SYMLINK_NAME@@"}" "chromium" \
-      --replace-fail "${ifElseM145 "@@uri_scheme" "@@URI_SCHEME@@"}" "x-scheme-handler/chromium;" \
-      --replace-fail "${ifElseM145 "@@extra_desktop_entries" "@@EXTRA_DESKTOP_ENTRIES@@"}" ""
+      --replace-fail "@@MENUNAME" "Chromium" \
+      --replace-fail "@@PACKAGE" "chromium" \
+      --replace-fail "/usr/bin/@@usr_bin_symlink_name" "chromium" \
+      --replace-fail "@@uri_scheme" "x-scheme-handler/chromium;" \
+      --replace-fail "@@startup_wm_class" "chromium-browser" \
+      --replace-fail "@@extra_desktop_entries" ""
 
-    # See https://github.com/NixOS/nixpkgs/issues/12433
-    substituteInPlace $out/share/applications/chromium-browser.desktop \
-      --replace-fail "[Desktop Entry]" "[Desktop Entry]''\nStartupWMClass=chromium-browser"
-
+  ''
+  + ''
     if grep -F '@@' $out/share/applications/chromium-browser.desktop ; then
       echo "error: chromium-browser.desktop contains unsubstituted placeholders" >&2
       exit 1

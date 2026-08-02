@@ -122,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
       network are rewarded with better service.
     '';
 
-    homepage = "https://gnunet.org/";
+    homepage = "https://www.gnunet.org/en/";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ pstn ];
     teams = with lib.teams; [ ngi ];

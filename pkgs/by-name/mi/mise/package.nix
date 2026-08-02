@@ -22,16 +22,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mise";
-  version = "2026.7.10";
+  version = "2026.7.17";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-klEexXMGaGM0YkcSDaHa8lD1jdwAfCcms7soRKy3r3w=";
+    hash = "sha256-OnuvK0SmRHqMiw14LEuehNKg677XtKyjedgqrg4owlM=";
   };
 
-  cargoHash = "sha256-O32fVQGb8+ECopUPeU9Pm8xKP4Aj494MtyHYwR3wFnM=";
+  cargoHash = "sha256-Ot5bP4J6KnATOb1Tt2DKOgFTY/urMWcUsFfjbPKnmVc=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -81,9 +81,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=tera::tests::test_last_modified"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-    # x86_64-darwin started failing mid-April 2025; aarch64 in Feb 2026
-    "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_with_cache"
-    "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_without_cache"
+    # shell out to macOS system binaries that the darwin sandbox refuses to exec
+    "--skip=system::defaults::tests::test_status_missing_keys_are_unset"
+    "--skip=system::packages::brew::cask::tests::upgrades_app_with_protected_existing_contents"
   ];
 
   cargoTestFlags = [ "--all-features" ];

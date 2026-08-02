@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "osqp-eigen";
-  version = "0.11.1";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
-    owner = "robotology";
+    owner = "gbionics";
     repo = "osqp-eigen";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dZL7c4tFjuEiB9AmZXWKGbZc9fNo9f07SpOrue53+yc=";
+    hash = "sha256-/9M7DufsgjlG4UbBfi64FQsMms06OsljZP2C9uCQe7w=";
   };
 
   cmakeFlags = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Simple Eigen-C++ wrapper for OSQP library";
-    homepage = "https://github.com/robotology/osqp-eigen";
+    homepage = "https://github.com/gbionics/osqp-eigen";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nim65s ];
   };

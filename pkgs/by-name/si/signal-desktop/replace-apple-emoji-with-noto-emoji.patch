@@ -2,13 +2,13 @@ diff --git a/app/AssetService.main.ts b/app/AssetService.main.ts
 index a4a21b5bb..3d5ab1eb0 100644
 --- a/app/AssetService.main.ts
 +++ b/app/AssetService.main.ts
-@@ -34,7 +34,6 @@ const OPTIONAL_ASSETS = new Map<string, string>([]);
+@@ -34,7 +34,2 @@ const OPTIONAL_ASSETS = new Map<string, string>([]);
  
- if (!process.mas) {
-   LOCAL_ASSETS.add('fonts/emoji.woff2');
+-if (!process.mas) {
+-  LOCAL_ASSETS.add('fonts/emoji.woff2');
 -  OPTIONAL_ASSETS.set('optional-fonts/emoji-large.woff2', 'emoji-font.woff2');
- }
- 
+-}
+-
  export class AssetService {
 diff --git a/app/protocol_filter.node.ts b/app/protocol_filter.node.ts
 index 17c68f0a4..4ed359de6 100644

@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "yalexs-ble";
-  version = "3.4.2";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Yale-Libs";
     repo = "yalexs-ble";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/3OH8MkAs4c5fFP1ickIeurt9SZot03I/ehLpoLr7nY=";
+    hash = "sha256-4tXmSl2y+3VLOTRmlRHij+JCJ16Xr7sEp56URmS5Ne0=";
   };
 
   build-system = [ poetry-core ];

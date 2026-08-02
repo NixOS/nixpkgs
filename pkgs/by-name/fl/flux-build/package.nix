@@ -7,7 +7,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "flux-build";
-  version = "3.0.10";
+  version = "3.1.3";
 
   __structuredAttrs = true;
 
@@ -15,10 +15,10 @@ buildGoModule (finalAttrs: {
     owner = "DoodleScheduling";
     repo = "flux-build";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ToQVm69XqJgRahunUXjNnIiieqSV8TzgFdtFJktz5/g=";
+    hash = "sha256-v5QjMgy9v0NAhGiqrYAHsxF1fWD5j9O0f1LUpIhe/is=";
   };
 
-  vendorHash = "sha256-kVi/VVVPTblDvCjvnsKxfqYELBahHmzTlW74ktdZC7k=";
+  vendorHash = "sha256-NNJYAqkwW/tpiG5tuu6Q4gwGQ7KF7pSXCSXsW/xd4QM=";
 
   passthru.updateScript = nix-update-script { };
 

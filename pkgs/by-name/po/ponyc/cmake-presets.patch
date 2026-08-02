@@ -1,0 +1,34 @@
+diff --git a/CMakePresets.json b/CMakePresets.json
+index d12d71eb5..d337e7339 100644
+--- a/CMakePresets.json
++++ b/CMakePresets.json
+@@ -9,11 +9,7 @@
+     {
+       "name": "base",
+       "hidden": true,
+-      "binaryDir": "${sourceDir}/build/build_${presetName}",
+-      "cacheVariables": {
+-        "CMAKE_C_COMPILER": "clang",
+-        "CMAKE_CXX_COMPILER": "clang++"
+-      }
++      "binaryDir": "${sourceDir}/build/build_${presetName}"
+     },
+     {
+       "name": "native",
+diff --git a/lib/CMakePresets.json b/lib/CMakePresets.json
+index 12d797b87..92196d931 100644
+--- a/lib/CMakePresets.json
++++ b/lib/CMakePresets.json
+@@ -19,11 +19,7 @@
+     {
+       "name": "libs",
+       "displayName": "Vendored LLVM + support libraries (clang)",
+-      "inherits": "libs-base",
+-      "cacheVariables": {
+-        "CMAKE_C_COMPILER": "clang",
+-        "CMAKE_CXX_COMPILER": "clang++"
+-      }
++      "inherits": "libs-base"
+     },
+     {
+       "name": "libs-windows-x86-64",

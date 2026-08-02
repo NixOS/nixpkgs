@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nxp-pn5xx";
-  version = "0.4-unstable-2025-02-08-${kernel.version}";
+  version = "0-unstable-2026-07-16-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "jr64";
     repo = "nxp-pn5xx";
-    rev = "07411e0ce3445e7dcb970df1837f0ad74b7b0a7a";
-    hash = "sha256-jVkcvURFlihKW2vFvAaqzKdtexPXywRa2LkPkIhmdeU=";
+    rev = "6ebc3ce2000dc0ba82bd2f47eb01e69b8ba2dbd0";
+    hash = "sha256-rll9NyWZaHFTUIR/jnzZtO3D0Za/i1O+qT6fyvKcYTc=";
   };
 
   nativeBuildInputs = [ udevCheckHook ] ++ kernel.moduleBuildDependencies;

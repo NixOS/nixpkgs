@@ -158,7 +158,7 @@ def mk_veth(
 def run(
     container_name: str,
     root_dir_str: str,
-    shared_dir_str: typing.Optional[str],
+    shared_dir_str: str | None,
     interfaces: dict,
     nspawn_options: list[str],
     init: str,
@@ -193,13 +193,6 @@ def run(
                 )
             )
 
-        def print_pid() -> None:
-            print(
-                f"systemd-nspawn's PID is {os.getpid()}",
-                # Need to flush stdout before systemd-nspawn gets exec-ed.
-                flush=True,
-            )
-
         shared_dir = Path(shared_dir_str) if shared_dir_str else None
 
         cp = subprocess.Popen(
@@ -216,7 +209,9 @@ def run(
                 init,
                 *cmdline,
             ],
-            preexec_fn=print_pid,
+        )
+        print(
+            f"systemd-nspawn's PID is {cp.pid}",
         )
 
         try:

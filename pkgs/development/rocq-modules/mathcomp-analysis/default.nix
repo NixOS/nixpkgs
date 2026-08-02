@@ -31,7 +31,7 @@ let
     lib.switch
       [ rocq-core.rocq-version mathcomp.version ]
       [
-        (case (range "9.0" "9.2") (range "2.4.0" "2.6.0") "1.16.0")
+        (case (range "9.0" "9.3") (range "2.4.0" "2.6.0") "1.16.0")
       ]
       null;
 

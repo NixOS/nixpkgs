@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.4.0";
 
   src = fetchFromGitHub {
-    owner = "errata-ai";
+    owner = "vale-cli";
     repo = "vale-ls";
     tag = "v${finalAttrs.version}";
     hash = "sha256-lRRKRQTxgXF4E+XghJ5AOp+mtWtiCT13EcsPVydn4Uo=";
@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "LSP implementation for the Vale command-line tool";
-    homepage = "https://github.com/errata-ai/vale-ls";
+    homepage = "https://github.com/vale-cli/vale-ls";
     license = lib.licenses.mit;
     mainProgram = "vale-ls";
     maintainers = with lib.maintainers; [

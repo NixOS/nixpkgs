@@ -79,7 +79,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "torch-geometric";
-  version = "2.8.0";
+  version = "2.8.0.post1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -87,7 +87,7 @@ buildPythonPackage (finalAttrs: {
     owner = "pyg-team";
     repo = "pytorch_geometric";
     tag = finalAttrs.version;
-    hash = "sha256-O2W/68DtVimDR4wQb5UVJcqzuZv7GG+CxCj7rqNu9iE=";
+    hash = "sha256-O9Nr+gYTz1t+h9gekukoucZDXNHYCDCIOgjF72YACLc=";
   };
 
   build-system = [

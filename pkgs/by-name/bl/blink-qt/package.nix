@@ -48,7 +48,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       lxml
       lxml-html-clean
       msrplib
-      otr
+      python3-otr
       pgpy
       pyqt6
       pyqt6-webengine

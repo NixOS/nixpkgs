@@ -49,6 +49,7 @@
   typer,
   typing-extensions,
   uvicorn,
+  urllib3,
 
   # oauth
   authlib,
@@ -157,6 +158,7 @@ buildPythonPackage (finalAttrs: {
     typer
     typing-extensions
     uvicorn
+    urllib3
   ]
   ++ lib.optionals (pythonAtLeast "3.13") [
     audioop-lts
@@ -195,6 +197,10 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ finalAttrs.passthru.optional-dependencies.oauth
   ++ pydantic.optional-dependencies.email;
+
+  pythonRelaxDeps = [
+    "tomlkit" # pre-emptive upper bound
+  ];
 
   preBuild = ''
     pnpm build
@@ -439,8 +445,8 @@ buildPythonPackage (finalAttrs: {
             shopt -u globstar
           '';
           pythonImportsCheck = null;
-          dontCheckPythonMetadata = true;
           dontCheckRuntimeDeps = true;
+          dontCheckPythonMetadata = true; # broken due to changed pname
         });
 
     # We can't use gitUpdater, because we need to update the pnpm hash.

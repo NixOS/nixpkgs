@@ -19,6 +19,7 @@ from .models import (
     Action,
     BuildAttr,
     Flake,
+    FlakeMetadataJson,
     Generation,
     GenerationJson,
     ImageVariants,
@@ -28,6 +29,8 @@ from .models import (
 )
 from .process import run_wrapper, ssh_default_opts
 from .utils import Args, dict_to_flags
+
+local_tz: Final = datetime.now().astimezone().tzinfo
 
 FLAKE_FLAGS: Final = ["--extra-experimental-features", "nix-command flakes"]
 FLAKE_REPL_TEMPLATE: Final = "repl.nix.template"
@@ -432,9 +435,10 @@ def get_generations(profile: Profile) -> list[Generation]:
     def parse_path(path: Path, profile: Profile) -> Generation:
         entry_id = path.name.split("-")[1]
         current = path.name == profile.path.readlink().name
-        timestamp = datetime.fromtimestamp(path.stat().st_ctime).strftime(
-            "%Y-%m-%d %H:%M:%S"
-        )
+        timestamp = datetime.fromtimestamp(
+            timestamp=path.stat().st_ctime,
+            tz=local_tz,
+        ).strftime("%Y-%m-%d %H:%M:%S")
 
         return Generation(
             id=int(entry_id),
@@ -576,12 +580,32 @@ def repl(build_attr: BuildAttr, nix_flags: Args | None = None) -> None:
     run_wrapper([*run_args, *dict_to_flags(nix_flags)])
 
 
+def get_flake_metadata(
+    flake: Flake, flake_flags: Args | None = None
+) -> FlakeMetadataJson:
+    r = run_wrapper(
+        [
+            "nix",
+            *FLAKE_FLAGS,
+            "flake",
+            "metadata",
+            "--json",
+            flake.resolve_path_if_exists(),
+            *dict_to_flags(flake_flags),
+        ],
+        stdout=PIPE,
+    )
+    j: FlakeMetadataJson = json.loads(r.stdout.strip())
+    return j
+
+
 def repl_flake(flake: Flake, flake_flags: Args | None = None) -> None:
     expr = Template(
         files(__package__).joinpath(FLAKE_REPL_TEMPLATE).read_text()
     ).substitute(
         flake=flake,
-        flake_path=flake.resolve_path_if_exists(),
+        # Normalize flake url to respect VSC if present:
+        flake_path=get_flake_metadata(flake, flake_flags)["resolvedUrl"],
         flake_attr=flake.attr,
         bold="\033[1m",
         blue="\033[34;1m",

@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "manga-ocr";
-  version = "0.1.15";
+  version = "0.1.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kha-white";
     repo = "manga-ocr";
     tag = "v${version}";
-    hash = "sha256-Inev2iGcDsudUV4zNzssDqglj0t6Uh/CbW3RuIDnbKE=";
+    hash = "sha256-xYPjX8IKEfwbNW6wEBr62dwAOED2+Jh9UJuWhzcXj4E=";
   };
 
   build-system = [

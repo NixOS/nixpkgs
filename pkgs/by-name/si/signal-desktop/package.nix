@@ -9,7 +9,7 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpmBuildHook,
-  electron_42,
+  electron_43,
   python3,
   makeWrapper,
   callPackage,
@@ -34,7 +34,7 @@ assert lib.warnIf (commandLineArgs != "")
 let
   nodejs = nodejs_24;
   pnpm = pnpm_11;
-  electron = electron_42;
+  electron = electron_43;
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
   signal-sqlcipher = callPackage ./signal-sqlcipher.nix {
@@ -45,13 +45,13 @@ let
   webrtc = callPackage ./webrtc.nix { };
   ringrtc = callPackage ./ringrtc.nix { inherit webrtc; };
 
-  version = "8.18.0";
+  version = "8.21.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-fynCFGmch3UecT5esNfVVlf0+xDrCdCBGw2HMMqBzWw=";
+    hash = "sha256-RuGq8ygiZewKqtKQattlqU0pcMMlgdFOJAhmN4J/8Tw=";
     # Emoji font files will be added in `postFetch` if `withAppleEmojis` is enabled. They
     # are fetched separately below.
     postFetch = ''
@@ -77,17 +77,12 @@ let
         pname
         src
         version
-        postPatch
         pnpmWorkspaces
         ;
       inherit pnpm;
       fetcherVersion = 4;
-      hash = "sha256-bWNs5W2NPk55Sm7UqwWvXU7bY+AXzevU3o2ji23HxtU=";
+      hash = "sha256-1n+u0mcZJwjkdKmNY6KE6tk6/UPYuya5WqLrKRJimGw=";
     };
-
-    postPatch = ''
-      rm sticker-creator/pnpm-lock.yaml
-    '';
 
     strictDeps = true;
     nativeBuildInputs = [
@@ -190,13 +185,13 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-bWNs5W2NPk55Sm7UqwWvXU7bY+AXzevU3o2ji23HxtU=";
+    hash = "sha256-1n+u0mcZJwjkdKmNY6KE6tk6/UPYuya5WqLrKRJimGw=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1783606680;
+    SOURCE_DATE_EPOCH = 1785418091;
   };
 
   preBuild = ''
@@ -258,6 +253,13 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm run build
     popd
     test -f node_modules/@signalapp/windows-ucv/dist/index.js
+
+    # @signalapp/types is required at runtime by preload.wrapper.js, but its
+    # output is normally produced by the prepare script.
+    pushd packages/types
+    pnpm run build
+    popd
+    test -f node_modules/@signalapp/types/dist/index.std.cjs
 
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist

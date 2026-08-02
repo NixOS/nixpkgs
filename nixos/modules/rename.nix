@@ -150,6 +150,10 @@ in
     ] "The baget module was removed due to the upstream package being unmaintained.")
     (mkRemovedOptionModule [ "services" "beegfs" ] "The BeeGFS module has been removed")
     (mkRemovedOptionModule [ "services" "beegfsEnable" ] "The BeeGFS module has been removed")
+    (mkRemovedOptionModule [
+      "services"
+      "bosun"
+    ] "bosun has been removed as it is no longer maintained upstream.")
     (mkRemovedOptionModule [ "services" "botamusique" ]
       "The botamusique module has been removed. The project was archived upstream in 2024: https://github.com/azlux/botamusique"
     )

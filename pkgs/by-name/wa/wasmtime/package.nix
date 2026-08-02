@@ -15,14 +15,14 @@
 let
   sources = {
     lts-36 = {
-      version = "36.0.12";
-      hash = "sha256-5hv7Hvw8nYfI/Q2IOMhXl0rYjp9GyUrBg/Y4vrb+r34=";
-      cargoHash = "sha256-EhuGBZchVyB9G5eRt/8QKN6grcP5AjFJMyGFdkfvT7g=";
+      version = "36.0.13";
+      hash = "sha256-KVNnxmEVDgH+EzItFdpRIpLm6DbmrN2JIKjctx6IyBE=";
+      cargoHash = "sha256-q1l2zmfdCI7Yg41/8jDTjf5akeHiQcC/60iIzMnh6B0=";
     };
     main = {
-      version = "47.0.1";
-      hash = "sha256-/4ZOL5s4L3NyoTYTkMYXmRXT9Suy81E+dGuInyMlOdM=";
-      cargoHash = "sha256-ETPn0tZZDkQSqjg0QavR9yCbqjMPEbvwZb8GIl2VgGQ=";
+      version = "47.0.3";
+      hash = "sha256-LC+WeOCP3fKjhg2PhJPYdzr7U7Ghdxb0IFy061TSTak=";
+      cargoHash = "sha256-GrLdoffHrmVICB4oHZY1qlHhiS0SSaZabfmoLs78Dqc=";
     };
   };
   source = sources.${variant};

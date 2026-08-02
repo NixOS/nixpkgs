@@ -12,7 +12,8 @@
   types-pytz,
 
   # tests
-  pytestCheckHook,
+  # pytestCheckHook,
+  pytest9_0CheckHook,
   beautifulsoup4,
   html5lib,
   jinja2,
@@ -32,7 +33,14 @@
   xarray,
   xlsxwriter,
 }:
-
+let
+  # pytest 9.1 turns non-list/tuple argvalues in @parametrize into
+  # PytestRemovedIn10Warning, which pandas-stubs' warning filter treats
+  # as a fatal error during test collection.
+  # Pin to 9.0 until upstream converts the affected
+  # generators to lists/tuples
+  pytestCheckHook = pytest9_0CheckHook;
+in
 buildPythonPackage rec {
   pname = "pandas-stubs";
   version = "3.0.3.260530";

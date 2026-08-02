@@ -12,11 +12,11 @@
 buildKodiAddon rec {
   pname = "arteplussept";
   namespace = "plugin.video.arteplussept";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/${namespace}/${namespace}-${version}.zip";
-    hash = "sha256-kYIN9I+hSWBYbaUsFRDkcU3FngQRzxmGrjN7rnsWiaA=";
+    hash = "sha256-a0HMYqeCYTTPgTgZfLcycHEqf/CPxdP03TePpE6nEK8=";
   };
 
   propagatedBuildInputs = [

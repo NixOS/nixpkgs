@@ -9,7 +9,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "explo";
-  version = "1.1.2";
+  version = "1.1.3";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -18,7 +18,7 @@ buildGoModule (finalAttrs: {
     owner = "LumePart";
     repo = "Explo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7FIDRNZn+Yh2c/oLU3Ggb4A9y+5q3vv17eVLmGR2Zeo=";
+    hash = "sha256-Wq5oU5AVgBYN3j/m7T07ZI16RF11orysXqjPbYKVd98=";
   };
 
   webui = buildNpmPackage {

@@ -92,6 +92,18 @@ in
       };
 
       settings = lib.mkOption {
+        apply =
+          settings:
+          lib.showWarnings settings.warnings (
+            (lib.removeAttrs settings [
+              "assertions"
+              "ephemeral_node_inactivity_timeout"
+              "warnings"
+            ])
+            // {
+              dns = lib.removeAttrs settings.dns [ "split" ];
+            }
+          );
         description = ''
           Overrides to {file}`config.yaml` as a Nix attribute set.
           Check the [example config](https://github.com/juanfont/headscale/blob/main/config-example.yaml)
@@ -99,6 +111,15 @@ in
         '';
         type = lib.types.submodule {
           freeformType = settingsFormat.type;
+
+          imports = [
+            ../../misc/assertions.nix
+            (lib.mkRenamedOptionModule [ "dns" "split" ] [ "dns" "nameservers" "split" ])
+            (lib.mkRenamedOptionModule
+              [ "ephemeral_node_inactivity_timeout" ]
+              [ "node" "ephemeral" "inactivity_timeout" ]
+            )
+          ];
 
           options = {
             server_url = lib.mkOption {
@@ -201,7 +222,7 @@ in
               };
             };
 
-            ephemeral_node_inactivity_timeout = lib.mkOption {
+            node.ephemeral.inactivity_timeout = lib.mkOption {
               type = lib.types.str;
               default = "30m";
               description = ''
@@ -346,17 +367,17 @@ in
                     List of nameservers to pass to Tailscale clients.
                   '';
                 };
-              };
 
-              split = lib.mkOption {
-                type = lib.types.attrsOf (lib.types.listOf lib.types.str);
-                default = { };
-                description = ''
-                  Split DNS configuration (map of domains and which DNS server to use for each).
-                  See <https://tailscale.com/kb/1054/dns/>.
-                '';
-                example = {
-                  "foo.bar.com" = [ "1.1.1.1" ];
+                split = lib.mkOption {
+                  type = lib.types.attrsOf (lib.types.listOf lib.types.str);
+                  default = { };
+                  description = ''
+                    Split DNS configuration (map of domains and which DNS server to use for each).
+                    See <https://tailscale.com/kb/1054/dns/>.
+                  '';
+                  example = {
+                    "foo.bar.com" = [ "1.1.1.1" ];
+                  };
                 };
               };
 
@@ -611,7 +632,7 @@ in
     )
     (mkRenamedOptionModule
       [ "services" "headscale" "ephemeralNodeInactivityTimeout" ]
-      [ "services" "headscale" "settings" "ephemeral_node_inactivity_timeout" ]
+      [ "services" "headscale" "settings" "node" "ephemeral" "inactivity_timeout" ]
     )
     (mkRenamedOptionModule
       [ "services" "headscale" "logLevel" ]

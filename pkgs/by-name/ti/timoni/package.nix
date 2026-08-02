@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "timoni";
-  version = "0.27.0";
+  version = "0.27.1";
 
   src = fetchFromGitHub {
     owner = "stefanprodan";
     repo = "timoni";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MCqpap94d1+4TJmn7JgYcNgZaqqB2c+G2w8BdNZG5ac=";
+    hash = "sha256-C86S9+sQ93FXVTV9iiDqHrJ50xSNSQ8z9X0fjFjamho=";
   };
 
-  vendorHash = "sha256-r4Q1kXbDfYjRilmRmtjVW9rb9YfQOFPg51x8ZHSRVpk=";
+  vendorHash = "sha256-HsHhuGBcA49/6OETChz1ZzNT2d0TYTLdww+UoefZkds=";
 
   subPackages = [ "cmd/timoni" ];
   nativeBuildInputs = [ installShellFiles ];

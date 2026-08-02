@@ -15,6 +15,19 @@ let
     self = python;
     packageOverrides = final: prev: {
       django = prev.django_6;
+
+      django-hierarkey = prev.django-hierarkey.overrideAttrs (oldAttrs: {
+        version = "2.0.1";
+
+        src = fetchFromGitHub {
+          owner = "raphaelm";
+          repo = "django-hierarkey";
+          tag = "2.0.1";
+          hash = "sha256-zIz7aokOGLGXV/xJnYcz8lBP7b2rxLrfaD3i/DLpFR8=";
+        };
+
+        postPatch = null;
+      });
     };
   };
 in

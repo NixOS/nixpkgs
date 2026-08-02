@@ -12,7 +12,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lxmf";
-  version = "1.0.1";
+  version = "1.1.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
     owner = "markqvist";
     repo = "lxmf";
     tag = finalAttrs.version;
-    hash = "sha256-Lx7eG7idbqjJrOE15/OJ8kh++4STQHxNVMTRVXdAEYE=";
+    hash = "sha256-XiBBf9eqW7BWCcRJzgQ0SrItoF9hr33u9nK6VBkSM9Y=";
   };
 
   build-system = [ setuptools ];

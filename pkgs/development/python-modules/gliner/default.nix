@@ -18,7 +18,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "gliner";
-  version = "0.2.27";
+  version = "0.2.28";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -26,7 +26,7 @@ buildPythonPackage (finalAttrs: {
     owner = "urchade";
     repo = "GLiNER";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pM2JenMxBvCiDQyj9VFMYJGRckWJWna3gCdAlhBGR1U=";
+    hash = "sha256-x8qzi7v58RQvv6EcICOpG6mpT4xO0QrELzeKejNOAbw=";
   };
 
   build-system = [

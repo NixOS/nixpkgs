@@ -1,0 +1,291 @@
+diff --git a/src/libponyc/codegen/nix.h b/src/libponyc/codegen/nix.h
+new file mode 100644
+index 000000000000..b1368f222b91
+--- /dev/null
++++ b/src/libponyc/codegen/nix.h
+@@ -0,0 +1,47 @@
++#ifndef CODEGEN_NIX_H
++#define CODEGEN_NIX_H
++
++#include "../ast/stringtab.h"
++
++#include <vector>
++
++/*
++  Nix/NixOS toolchain path discovery for the embedded LLD linker (genexe.cc)
++  and the embedded clang C-shim compiler (gencshim.cc).
++
++  On Nix there is no FHS layout: no /usr/lib, no /lib64/ld-linux-*.so, no
++  /usr/include. The libc, libgcc, C++ runtime, buildInputs and user FFI
++  libraries all live under /nix/store, and their locations reach the compiler
++  through baked-in defaults (the -DPONY_NIX_* macros set at configure time) and
++  the cc-wrapper environment (NIX_LDFLAGS, NIX_CFLAGS_COMPILE,
++  $NIX_CC/nix-support/*). These helpers gather those paths so the embedded
++  tools link and compile without a wrapper script.
++
++  On a plain non-Nix build every source is empty, so the collectors append
++  nothing and behaviour is unchanged.
++*/
++
++// Library search directories for the linker, in priority order:
++//   PONY_NIX_LINK_LIBDIRS (baked default), PONY_LINK_LIBDIRS, NIX_LDFLAGS,
++//   NIX_LDFLAGS_BEFORE, $NIX_CC/nix-support {orig-libc, cc-ldflags}.
++// Directories are interned into `strtab` and appended to `dirs`; existing
++// entries are left in place.
++void nix_collect_link_libdirs(strtable_t* strtab,
++  std::vector<const char*>& dirs);
++
++// Header search directories for the C-shim compiler, in priority order:
++//   PONY_NIX_INCLUDE_DIRS (baked default), PONY_INCLUDE_DIRS,
++//   NIX_CFLAGS_COMPILE, $NIX_CC/nix-support/libc-cflags.
++// Directories are interned into `strtab` and appended to `dirs`; existing
++// entries are left in place.
++void nix_collect_include_dirs(strtable_t* strtab,
++  std::vector<const char*>& dirs);
++
++// The ELF dynamic linker (interpreter) path, in priority order:
++//   PONY_DYNAMIC_LINKER, PONY_NIX_DYNAMIC_LINKER (baked default),
++//   $NIX_CC/nix-support/dynamic-linker.
++// Returns "" (never NULL) when none is configured, so the caller can test the
++// first byte and fall back to the built-in FHS search.
++const char* nix_dynamic_linker(strtable_t* strtab);
++
++#endif
+diff --git a/src/libponyc/codegen/nix.cc b/src/libponyc/codegen/nix.cc
+new file mode 100644
+index 000000000000..eddfd7833103
+--- /dev/null
++++ b/src/libponyc/codegen/nix.cc
+@@ -0,0 +1,220 @@
++#include "nix.h"
++
++#include "../ast/stringtab.h"
++
++#include <limits.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++
++#ifndef PATH_MAX
++#  define PATH_MAX 4096
++#endif
++
++/*
++  The baked-in Nix defaults. package.nix passes each of these through
++  -DPONY_NIX_*="..." in NIX_CFLAGS_COMPILE at configure time, capturing the
++  cc-wrapper's libc/libgcc/pcre2/openssl lib dirs, the ELF interpreter and the
++  libc/gcc include dirs. They are empty strings on a plain source build, which
++  disables every Nix-specific path below.
++*/
++#ifndef PONY_NIX_LINK_LIBDIRS
++#  define PONY_NIX_LINK_LIBDIRS ""
++#endif
++#ifndef PONY_NIX_DYNAMIC_LINKER
++#  define PONY_NIX_DYNAMIC_LINKER ""
++#endif
++#ifndef PONY_NIX_INCLUDE_DIRS
++#  define PONY_NIX_INCLUDE_DIRS ""
++#endif
++
++/*
++  Split `s` into tokens on any delimiter character in `delims`, interning each
++  token into `strtab` and appending it to `toks`. A token that would overflow
++  the buffer is dropped whole rather than truncated to a wrong path.
++*/
++static void tokenize(const char* s, const char* delims, strtable_t* strtab,
++  std::vector<const char*>& toks)
++{
++  if(s == NULL || s[0] == '\0')
++    return;
++
++  char buf[PATH_MAX];
++  size_t len = 0;
++  bool overflow = false;
++  for(const char* p = s; ; p++)
++  {
++    // The '\0' test is first so strchr is never asked to match the terminator.
++    if(*p == '\0' || strchr(delims, *p) != NULL)
++    {
++      if(len > 0 && !overflow)
++      {
++        buf[len] = '\0';
++        toks.push_back(stringtab(strtab, buf));
++      }
++      len = 0;
++      overflow = false;
++      if(*p == '\0')
++        break;
++    }
++    else if(len < sizeof(buf) - 1)
++    {
++      buf[len++] = *p;
++    }
++    else
++    {
++      overflow = true;
++    }
++  }
++}
++
++/*
++  Interpret a whitespace-separated linker-flag string (NIX_LDFLAGS,
++  $NIX_CC/nix-support/cc-ldflags) for library directories, handling the joined
++  -L<dir>, the separated -L <dir>, and -rpath / -rpath-link <dir> forms.
++
++  This is how /nix/store libraries (and directories injected by pkg-config) are
++  found where other distros would look in /usr/lib and the like.
++*/
++static void append_ldflags_dirs(const char* flags, strtable_t* strtab,
++  std::vector<const char*>& dirs)
++{
++  std::vector<const char*> toks;
++  tokenize(flags, " \t\n\r", strtab, toks);
++
++  for(size_t i = 0; i < toks.size(); i++)
++  {
++    const char* t = toks[i];
++    if(strncmp(t, "-L", 2) == 0)
++    {
++      if(t[2] != '\0')
++        dirs.push_back(stringtab(strtab, t + 2));
++      else if(i + 1 < toks.size())
++        dirs.push_back(toks[++i]);
++    }
++    else if(strcmp(t, "-rpath") == 0 || strcmp(t, "-rpath-link") == 0)
++    {
++      if(i + 1 < toks.size())
++        dirs.push_back(toks[++i]);
++    }
++  }
++}
++
++/*
++  Interpret a whitespace-separated compiler-flag string (NIX_CFLAGS_COMPILE,
++  $NIX_CC/nix-support/libc-cflags) for header search directories, handling the
++  joined -I<dir>, the separated -I <dir>, and -isystem / -idirafter / -iquote
++  <dir> forms. This covers directories injected by pkg-config too.
++*/
++static void append_cflags_include_dirs(const char* flags, strtable_t* strtab,
++  std::vector<const char*>& dirs)
++{
++  std::vector<const char*> toks;
++  tokenize(flags, " \t\n\r", strtab, toks);
++
++  for(size_t i = 0; i < toks.size(); i++)
++  {
++    const char* t = toks[i];
++    if(strcmp(t, "-isystem") == 0 || strcmp(t, "-idirafter") == 0 ||
++      strcmp(t, "-iquote") == 0 || strcmp(t, "-I") == 0)
++    {
++      if(i + 1 < toks.size())
++        dirs.push_back(toks[++i]);
++    }
++    else if(strncmp(t, "-I", 2) == 0 && t[2] != '\0')
++    {
++      dirs.push_back(stringtab(strtab, t + 2));
++    }
++  }
++}
++
++/*
++  Read $NIX_CC/nix-support/<name> into `out`, trimming trailing whitespace.
++  Returns false if the file is missing, empty, or so long it would be
++  truncated -- acting on a partial flag string would be worse than ignoring it.
++*/
++static bool read_nix_support_file(const char* nix_cc, const char* name,
++  char* out, size_t outsz)
++{
++  char path[PATH_MAX];
++  snprintf(path, sizeof(path), "%s/nix-support/%s", nix_cc, name);
++
++  FILE* f = fopen(path, "rb");
++  if(f == NULL)
++    return false;
++
++  size_t n = fread(out, 1, outsz - 1, f);
++  // If the buffer filled and the file still has bytes, the content was
++  // truncated; reject it rather than acting on a partial flag string.
++  bool truncated = (n == outsz - 1) && (fgetc(f) != EOF);
++  fclose(f);
++  if(truncated)
++    return false;
++  out[n] = '\0';
++
++  while(n > 0 && (out[n - 1] == '\n' || out[n - 1] == '\r' ||
++    out[n - 1] == ' ' || out[n - 1] == '\t'))
++    out[--n] = '\0';
++
++  return n > 0;
++}
++
++void nix_collect_link_libdirs(strtable_t* strtab,
++  std::vector<const char*>& dirs)
++{
++  tokenize(PONY_NIX_LINK_LIBDIRS, ":", strtab, dirs);
++  tokenize(getenv("PONY_LINK_LIBDIRS"), ":", strtab, dirs);
++  append_ldflags_dirs(getenv("NIX_LDFLAGS"), strtab, dirs);
++  append_ldflags_dirs(getenv("NIX_LDFLAGS_BEFORE"), strtab, dirs);
++
++  const char* nix_cc = getenv("NIX_CC");
++  if(nix_cc == NULL || nix_cc[0] == '\0')
++    return;
++
++  char buf[PATH_MAX];
++  if(read_nix_support_file(nix_cc, "orig-libc", buf, sizeof(buf)))
++  {
++    char libdir[PATH_MAX];
++    snprintf(libdir, sizeof(libdir), "%s/lib", buf);
++    dirs.push_back(stringtab(strtab, libdir));
++  }
++
++  if(read_nix_support_file(nix_cc, "cc-ldflags", buf, sizeof(buf)))
++    append_ldflags_dirs(buf, strtab, dirs);
++}
++
++void nix_collect_include_dirs(strtable_t* strtab,
++  std::vector<const char*>& dirs)
++{
++  tokenize(PONY_NIX_INCLUDE_DIRS, ":", strtab, dirs);
++  tokenize(getenv("PONY_INCLUDE_DIRS"), ":", strtab, dirs);
++  append_cflags_include_dirs(getenv("NIX_CFLAGS_COMPILE"), strtab, dirs);
++
++  const char* nix_cc = getenv("NIX_CC");
++  if(nix_cc != NULL && nix_cc[0] != '\0')
++  {
++    char cflags[PATH_MAX * 4];
++    if(read_nix_support_file(nix_cc, "libc-cflags", cflags, sizeof(cflags)))
++      append_cflags_include_dirs(cflags, strtab, dirs);
++  }
++}
++
++const char* nix_dynamic_linker(strtable_t* strtab)
++{
++  const char* dl = getenv("PONY_DYNAMIC_LINKER");
++  if(dl != NULL && dl[0] != '\0')
++    return stringtab(strtab, dl);
++
++  if(PONY_NIX_DYNAMIC_LINKER[0] != '\0')
++    return stringtab(strtab, PONY_NIX_DYNAMIC_LINKER);
++
++  const char* nix_cc = getenv("NIX_CC");
++  if(nix_cc != NULL && nix_cc[0] != '\0')
++  {
++    char buf[PATH_MAX];
++    if(read_nix_support_file(nix_cc, "dynamic-linker", buf, sizeof(buf)))
++      return stringtab(strtab, buf);
++  }
++
++  return "";
++}
+diff --git a/src/libponyc/CMakeLists.txt b/src/libponyc/CMakeLists.txt
+index f4e3e42ef48f..4a477e306ac1 100644
+--- a/src/libponyc/CMakeLists.txt
++++ b/src/libponyc/CMakeLists.txt
+@@ -27,6 +27,7 @@ add_library(libponyc STATIC
+     codegen/gendesc.c
+     codegen/gencshim.cc
+     codegen/genexe.cc
++    codegen/nix.cc
+     codegen/genexpr.c
+     codegen/genfun.c
+     codegen/genheader.c

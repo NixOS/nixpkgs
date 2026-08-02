@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   # By default, jemalloc puts a je_ prefix onto all its symbols on OSX, which
   # then stops downstream builds (mariadb in particular) from detecting it. This
@@ -59,6 +60,16 @@ stdenv.mkDerivation (finalAttrs: {
     # A (longer) patch addressing the failure posted upstream at:
     # https://github.com/jemalloc/jemalloc/pull/2954
     ./skip-extent-test-with-prof-active.patch
+
+    # the nonstandard `std::__throw_bad_alloc` is no longer exposed in gcc 16.
+    # this makes it conditional on exceptions and defers to either
+    # `throw std::bad_alloc()` or `std::terminate` as appropriate.
+    # https://github.com/jemalloc/jemalloc/pull/2900
+    (fetchpatch {
+      name = "jemalloc-dont-use-nonstandard-throw-bad-alloc.patch";
+      url = "https://github.com/jemalloc/jemalloc/commit/1a15fe33a48c52bfe26ea83e49f0d317a47da3ea.patch";
+      hash = "sha256-pL9fo8UMSbFlHCo3LFFkw0qBsdrVHcEJIkLutZYa2Yg=";
+    })
   ];
 
   nativeBuildInputs = [

@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "atuin";
-  version = "18.17.1";
+  version = "18.18.1";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "atuin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9wfeAqtE6HLNvQHdGlLX6Kv1kakmojgY14RVW/WpOSs=";
+    hash = "sha256-dPdD9U1CwuGbd1K/ljYwgTlAl9sSzt+dSuxLijLlyBQ=";
   };
 
-  cargoHash = "sha256-l2TX8thT+MnWhrTyD4ryapJkDg43mb2IurGDnyk2b74=";
+  cargoHash = "sha256-t8UK0/WBGleU1qbTUITl+hj1wXsEqIyreZJFBGxAMkg=";
 
   # atuin's default features include 'check-updates', which do not make sense
   # for distribution builds. List all other default features.
@@ -45,6 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkFlags = [
     # tries to make a network access
     "--skip=registration"
+    "--skip=api_client"
     # No such file or directory (os error 2)
     "--skip=sync"
     # PermissionDenied (Operation not permitted)

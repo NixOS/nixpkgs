@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.8.5";
 
   src = fetchFromGitHub {
-    owner = "kolbusa";
+    owner = "d3adb5";
     repo = "stalonetray";
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-/55oP6xA1LeLawOBkhh9acaDcObO4L4ojcy7e3vwnBw=";
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Stand alone tray";
-    homepage = "https://github.com/kolbusa/stalonetray";
+    homepage = "https://github.com/d3adb5/stalonetray";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ raskin ];

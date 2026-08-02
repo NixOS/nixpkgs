@@ -17,7 +17,7 @@ mkRocqDerivation {
     in
     with lib.versions;
     lib.switch rocq-core.rocq-version [
-      (case (range "9.0" "9.2") "1.13.0")
+      (case (range "9.0" "9.3") "1.13.0")
     ] null;
   release."1.13.0".sha256 = "sha256-kj8oBzarsLB4DDQ43yz4ViQbyzuISqext28wC2Fh3Sw=";
   releaseRev = v: "stdpp-${v}";

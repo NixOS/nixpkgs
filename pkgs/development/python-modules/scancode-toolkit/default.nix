@@ -145,8 +145,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Tool to scan code for license, copyright, package and their documented dependencies and other interesting facts";
-    homepage = "https://github.com/nexB/scancode-toolkit";
-    changelog = "https://github.com/nexB/scancode-toolkit/blob/v${finalAttrs.version}/CHANGELOG.rst";
+    homepage = "https://github.com/aboutcode-org/scancode-toolkit";
+    changelog = "https://github.com/aboutcode-org/scancode-toolkit/blob/v${finalAttrs.version}/CHANGELOG.rst";
     license = with lib.licenses; [
       asl20
       cc-by-40

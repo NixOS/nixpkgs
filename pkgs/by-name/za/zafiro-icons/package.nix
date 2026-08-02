@@ -4,7 +4,6 @@
   fetchFromGitHub,
   gtk3,
   kdePackages,
-  gnome-icon-theme,
   numix-icon-theme,
   numix-icon-theme-circle,
   hicolor-icon-theme,
@@ -30,7 +29,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     kdePackages.breeze-icons
-    gnome-icon-theme
     numix-icon-theme
     numix-icon-theme-circle
     hicolor-icon-theme

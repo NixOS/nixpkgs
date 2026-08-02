@@ -4,7 +4,6 @@
   acl,
   e2fsprogs,
   fetchFromGitHub,
-  fetchpatch,
   libb2,
   lz4,
   openssh,
@@ -23,35 +22,15 @@ let
 in
 python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "borgbackup";
-  version = "1.4.4";
+  version = "1.4.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "borgbackup";
     repo = "borg";
     tag = finalAttrs.version;
-    hash = "sha256-pMZr9cVr84b948b5Iuevpy6AtMeYo/Ma8uFLuagAYy4=";
+    hash = "sha256-jkFF+nNZL8lEXgworFLNoEKTr2LgCat1fOFlTh7AWs4=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "msgspec-1.2.0-compat.patch";
-      url = "https://github.com/borgbackup/borg/commit/364438f58c86aebd157b55bd2202afaf5945e008.patch";
-      excludes = [ "docs/changes.rst" ];
-      hash = "sha256-YhZDD6i2cn7p00Dgmpqi8uGJzFZzixMZmHPcZroB1sE=";
-    })
-    (fetchpatch {
-      name = "msgspec-1.2.1-compat.patch";
-      url = "https://github.com/borgbackup/borg/commit/8abdd3b8bf065dceecd52d2b22d92b3c407a7c1d.patch";
-      excludes = [ "docs/changes.rst" ];
-      hash = "sha256-bvSRxEzNvejG6PQFkeNDuQB7Zd4/EYPEZkrgjpgQ9Ss=";
-    })
-    (fetchpatch {
-      name = "msgspec-1.2.1-unpacker-compat.patch";
-      url = "https://github.com/borgbackup/borg/commit/b09bbed3de095d6ac9d69a42a486ec18523046dc.patch";
-      hash = "sha256-F8CIqOcQOLdYn7srsev2op0pgkgt8zdkc5DQUH1c6xg=";
-    })
-  ];
 
   postPatch = ''
     # sandbox does not support setuid/setgid/sticky bits

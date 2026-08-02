@@ -69,8 +69,7 @@ let
     ++ optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.is64bit) "ABI=64"
     # to build a .dll on windows, we need --disable-static + --enable-shared
     # see https://gmplib.org/manual/Notes-for-Particular-Systems.html
-    ++ optional (!withStatic && stdenv.hostPlatform.isPE) "--disable-static --enable-shared"
-    ++ optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) "--disable-assembly";
+    ++ optional (!withStatic && stdenv.hostPlatform.isPE) "--disable-static --enable-shared";
 
     doCheck = true; # not cross;
 
@@ -81,10 +80,12 @@ let
     meta = {
       homepage = "https://gmplib.org/";
       description = "GNU multiple precision arithmetic library";
-      license = with lib.licenses; [
-        lgpl3Only
-        gpl2Only
-      ];
+      license =
+        with lib.licenses;
+        OR [
+          lgpl3Plus
+          gpl2Plus
+        ];
 
       longDescription = ''
         GMP is a free library for arbitrary precision arithmetic, operating

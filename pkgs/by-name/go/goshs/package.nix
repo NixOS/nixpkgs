@@ -3,6 +3,7 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
+  fetchpatch2,
   versionCheckHook,
 }:
 
@@ -18,6 +19,15 @@ buildGoModule (finalAttrs: {
   };
 
   vendorHash = "sha256-yKNJHs6A7Du9NvGOpwaDmABz6SBMPVzJNoQb7W32IfA=";
+
+  patches = [
+    # Remove when updating to 2.1.5 or later.
+    (fetchpatch2 {
+      name = "CVE-2026-66063+CVE-2026-66064.patch";
+      url = "https://github.com/goshs-labs/goshs/commit/f3ef599e409151d1380866e47de8b1afb0bb54fa.patch?full_index=1";
+      hash = "sha256-fIKeqWKraaLcocp7aaWE58ffkA1/2NVwR7KMmJfXL5g=";
+    })
+  ];
 
   ldflags = [ "-s" ];
 

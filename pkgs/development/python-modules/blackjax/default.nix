@@ -78,6 +78,10 @@ buildPythonPackage (finalAttrs: {
     # too slow
     "test_adaptive_tempered_smc"
 
+    # AssertionError: False is not true : f32: controller never escalated (U=0);
+    # axis-aligned spike would do this, ensure u_dir is non-axis-aligned
+    "test_escalated_e2e_smoke_f32_and_x64"
+
     # AssertionError on numerical values
     "test_barker"
     "test_imm_shrinkage_seed_influence_persists_diagonal"
@@ -96,6 +100,8 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # AssertionError: Not equal to tolerance rtol=1e-07, atol=1e-05
     "test_equal_matrices"
+    "test_restart_after_reset_matches_fresh_accumulation"
+    "test_split_pop_k1_degenerate"
   ];
 
   pythonImportsCheck = [ "blackjax" ];

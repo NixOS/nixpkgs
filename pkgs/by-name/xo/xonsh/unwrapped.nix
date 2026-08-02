@@ -160,6 +160,9 @@ buildPythonPackage rec {
     changelog = "https://github.com/xonsh/xonsh/blob/${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     mainProgram = "xonsh";
-    maintainers = with lib.maintainers; [ samlukeyes123 ];
+    maintainers = with lib.maintainers; [
+      samlukeyes123
+      infinidoge
+    ];
   };
 }

@@ -234,7 +234,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postConfigure = ''
     meson introspect . --buildoptions | \
-      ${lib.getExe jq} -r 'map(select(.description | test("Build .+ plugin")) | .name | select(. != "validate")) | sort | .[]' \
+      jq -r 'map(select(.description | test("Build .+ plugin")) | .name | select(. != "validate")) | sort | .[]' \
       > valid-plugin-names.txt
     echo "checking for consistency between validPlugins and meson_options.txt"
     diff -u ${validPluginFile} valid-plugin-names.txt
@@ -261,6 +261,7 @@ stdenv.mkDerivation (finalAttrs: {
     rustc
     cargo
     cargo-c
+    jq
     nasm
     validatePkgConfig
   ]

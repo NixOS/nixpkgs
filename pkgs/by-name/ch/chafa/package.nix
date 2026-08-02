@@ -77,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Terminal graphics for the 21st century";
     homepage = "https://hpjansson.org/chafa/";
+    changelog = "https://github.com/hpjansson/chafa/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [

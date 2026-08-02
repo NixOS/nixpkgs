@@ -9,7 +9,7 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "libfrida-core";
-  version = "17.16.0";
+  version = "17.16.4";
 
   src =
     finalAttrs.passthru.sources.${stdenvNoCC.hostPlatform.system}
@@ -29,15 +29,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sources = {
       x86_64-linux = fetchurl {
         url = "https://github.com/frida/frida/releases/download/${finalAttrs.version}/frida-core-devkit-${finalAttrs.version}-linux-x86_64.tar.xz";
-        hash = "sha256-4OkangepbSAtn6DPGOrDVVlcXjVnj2XXlT0xE/+WBsg=";
+        hash = "sha256-1vD0T8T5prPguPUnebHNnmWVxRG4y8x4/k3QZfj/DPI=";
       };
       aarch64-linux = fetchurl {
         url = "https://github.com/frida/frida/releases/download/${finalAttrs.version}/frida-core-devkit-${finalAttrs.version}-linux-arm64.tar.xz";
-        hash = "sha256-HrFTlYbpS01i6mVJlrieFpdZ0a27/u45sLJwarCQ150=";
+        hash = "sha256-3BBgn7A515kuH/ZvzsglcHNN6oqhy6AY4I12PrLCy0A=";
       };
       aarch64-darwin = fetchurl {
         url = "https://github.com/frida/frida/releases/download/${finalAttrs.version}/frida-core-devkit-${finalAttrs.version}-macos-arm64.tar.xz";
-        hash = "sha256-QeT3LLGNBQOgziu/HWqMHI6q3dNmyxJfqcm5xqpxY2Q=";
+        hash = "sha256-9WoBXbXiQh89q8xiLLoPpTqluki34fxFs8b4ibJdgnc=";
       };
     };
     updateScript = writeShellScript "update-libfrida-core" ''

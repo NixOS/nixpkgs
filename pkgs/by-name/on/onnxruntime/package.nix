@@ -131,6 +131,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     # https://github.com/microsoft/onnxruntime/issues/9155
     # Patch adapted from https://gitlab.alpinelinux.org/alpine/aports/-/raw/462dfe0eb4b66948fe48de44545cc22bb64fdf9f/community/onnxruntime/0001-Remove-MATH_NO_EXCEPT-macro.patch
     ./remove-MATH_NO_EXCEPT-macro.patch
+  ]
+  ++ lib.optionals cudaSupport [
+    # Drop the orphaned ShardedMoE CUDA contrib op, whose ft_moe backend was removed upstream
+    # Fix submitted upstream: https://github.com/microsoft/onnxruntime/pull/31139
+    ./drop-orphaned-sharded-moe.patch
   ];
 
   postPatch = ''

@@ -100,6 +100,17 @@ let
         moveToOutput "share/man/man1/nc.1.gz" "$nc"
       '';
 
+      doInstallCheck = true;
+      installCheckPhase = ''
+        runHook preInstallCheck
+
+        # Check whether the build target actually contains our cacert.
+        # A simple binary match for the path is enough.
+        grep "${cacert}/etc/ssl/certs/ca-bundle.crt" $out/lib/*libtls*
+
+        runHook postInstallCheck
+      '';
+
       meta = {
         description = "Free TLS/SSL implementation";
         homepage = "https://www.libressl.org";
@@ -139,6 +150,13 @@ let
     url = "https://github.com/libressl/portable/commit/a15ea0710398eaeed3be53cf643e80a1e80c981d.patch";
     hash = "sha256-Mlf4SrGCCqALQicbGtmVGdkdfcE8DEGYkOuVyG2CozM=";
   };
+
+  # https://github.com/libressl/portable/issues/1295
+  # https://github.com/libressl/portable/pull/1303
+  tls-default-ca-patch = fetchpatch {
+    url = "https://github.com/libressl/portable/commit/c85e07d0d68129fc1b1c9039b266099c8d735c3d.patch";
+    hash = "sha256-oNL3v8Ef1HrayXn+/3T4UhHLJos8eVMlqebVyaxnWVo=";
+  };
 in
 {
   # 4.2 was released October 2025 and will become unsupported on October 22,
@@ -148,6 +166,7 @@ in
     hash = "sha256-bVwvWFg1iOp5H0yGRQBAcdAN+lVKW/eIoAbKHrWr1ws=";
     patches = [
       common-cmake-install-full-dirs-patch
+      tls-default-ca-patch
     ];
   };
 
@@ -156,5 +175,8 @@ in
   libressl_4_3 = generic {
     version = "4.3.2";
     hash = "sha256-7fAa7iTGXWnmqe/LnUS82mgv+dTzu72V55Th36kIR7U=";
+    patches = [
+      tls-default-ca-patch
+    ];
   };
 }

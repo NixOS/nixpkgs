@@ -289,6 +289,9 @@ let
           # Build same version as Haskell package
           hindent = (externalSrc super.hindent pkgs.haskellPackages.hindent).overrideAttrs (attrs: {
             packageRequires = [ self.haskell-mode ];
+            propagatedUserEnvPkgs = attrs.propagatedUserEnvPkgs or [ ] ++ [
+              pkgs.haskellPackages.hindent
+            ];
           });
 
           hotfuzz = super.hotfuzz.overrideAttrs (old: {
@@ -520,7 +523,7 @@ let
             '';
           });
 
-          rtags = ignoreCompilationError (dontConfigure (externalSrc super.rtags pkgs.rtags)); # elisp error
+          rtags = ignoreCompilationError (fix-rtags super.rtags); # elisp error
 
           rtags-xref = dontConfigure super.rtags;
 
@@ -1173,6 +1176,9 @@ let
 
           # https://github.com/PythonNut/evil-easymotion/issues/74
           evil-easymotion = addPackageRequires super.evil-easymotion [ self.evil ];
+
+          # tightly coupled to ghostel (from manual-packages), use the same source
+          evil-ghostel = externalSrc super.evil-ghostel self.ghostel;
 
           evil-mu4e = addPackageRequires super.evil-mu4e [ self.mu4e ];
 

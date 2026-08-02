@@ -7,6 +7,7 @@
   hatchling,
   httpx,
   opentelemetry-api,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
@@ -41,6 +42,7 @@ buildPythonPackage (finalAttrs: {
     freezegun
     httpx
     opentelemetry-api
+    pyprojectVersionPatchHook
     pytest-asyncio
     pytest-mock
     pytestCheckHook

@@ -30,8 +30,7 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
-  poetry-dynamic-versioning,
+  hatchling,
 
   # dependencies
   confuse,
@@ -115,20 +114,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "beets";
-  version = "2.12.0";
+  version = "2.13.1";
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "beets";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-u2qoZ0/qWq9YUcwbOpsqtIjX5BZ2z2wj00X59Pf+/fk=";
+    hash = "sha256-f25Uv7PRKBFUWah6pvEwwTFjxXKQfmAP2fyTNFJyWB0=";
   };
   pyproject = true;
 
   patches = extraPatches;
 
   build-system = [
-    poetry-core
-    poetry-dynamic-versioning
+    hatchling
   ];
 
   dependencies = [

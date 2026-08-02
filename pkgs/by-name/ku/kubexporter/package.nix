@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kubexporter";
-  version = "0.8.8";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "bakito";
     repo = "kubexporter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PD/mvjL5Xp7gAs3iIz8nhsW7cpenFyzYiEXHE/zmur4=";
+    hash = "sha256-wKw/0MXy+tL0OHqIY+zSoBP1M4+5K3JO3pG7rzVCL68=";
   };
 
-  vendorHash = "sha256-FToKA1Zu8wj5CudxYmtggvBZmuQLYWWg2taswPnMuDA=";
+  vendorHash = "sha256-Q9RvzeI82fu4/vMC20j49p0Vi4A0PNk2rMaFshKPkkQ=";
 
   ldflags = [
     "-s"

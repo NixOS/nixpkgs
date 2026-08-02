@@ -13,7 +13,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "2.19.0";
+  version = "2.23.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PODG/SQsZsixBz/j+k8ALBhXS1fPg3v/o6TXkTyzSIQ=";
+    hash = "sha256-WEyzBhkqh/B4NZD8tKoRkQGrw/85xVCftFyRamlMaYg=";
   };
 
   build-system = with python3Packages; [
@@ -163,6 +163,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # AssertionError: assert 0 == 1
     "test_preserves_accents_when_matching_latin1_encoded_file"
 
+    # TypeError: cannot pickle 'itertools.count' object (Python 3.14 compatibility)
+    "test_orchestrator_deepcopies_and_stays_functional"
+
     # Fail in the sandbox
     # vibe.core.audio_recorder.audio_recorder_port.NoAudioInputDeviceError: No audio input device available
     "test_audio_stream_yields_chunks"
@@ -226,7 +229,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "tests/e2e/"
 
     # ACP tests require network access
-    "tests/acp/test_acp.py"
     "tests/acp/test_acp_entrypoint_smoke.py"
   ];
 

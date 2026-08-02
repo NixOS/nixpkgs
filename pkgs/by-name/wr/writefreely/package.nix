@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "writefreely";
-  version = "0.17.0";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "writefreely";
     repo = "writefreely";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-sGCOFydegbD7m9OXNv3xsWFHy6kSZrIikGpci9y5nAw=";
+    sha256 = "sha256-N6AKDNGeUhJOUPHK3eXhrNi1hC3Wl2YXPawBeFPhVw0=";
   };
 
   vendorHash = "sha256-e9usNyJHwmRNMjovhuL7Z4Ll7f58DgA1v1/hfJTZ4pg=";

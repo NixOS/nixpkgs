@@ -35,9 +35,14 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     gtk3
     libgbm
-    libGL
     nspr
     nss
+  ];
+  # appendRunpaths is applied to every ELF, including shared libraries.
+  # runtimeDependencies wouldn't work here because autoPatchelfHook rewrites
+  # the RPATH of dynamic executables only, not of shared libraries.
+  appendRunpaths = lib.makeLibraryPath [
+    libGL # libEGL.so.1 is dlopen'd by ANGLE from libGLESv2.so
   ];
 
   unpackPhase = ''
@@ -55,12 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     chmod +x $out/lib/cider/Cider
 
-    # The prefixes that follow LD_LIBRARY_PATH are typically injected via wrapGAppsHook3.
+    # The prefixes that follow --add-flags are typically injected via wrapGAppsHook3.
     # We append them manually instead to avoid a double-wrapping.
     makeWrapper $out/lib/cider/Cider $out/bin/cider-2 \
       --add-flags "\$\{NIXOS_OZONE_WL:+\$\{WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true\}\}" \
       --add-flags "--no-sandbox --disable-gpu-sandbox" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
       --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}" \
       --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}" \
       --prefix GIO_EXTRA_MODULES : "${dconf.lib}/lib/gio/modules" \
@@ -72,12 +76,15 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     mv $out/share/applications/cider.desktop $out/share/applications/cider-2.desktop
     substituteInPlace $out/share/applications/cider-2.desktop \
-      --replace-fail Exec=cider Exec=cider-2
+      --replace-fail Exec=cider Exec=cider-2 \
+      --replace-fail Icon=cider Icon=cider-2
 
     install -Dm444 $out/share/pixmaps/cider.png \
-      $out/share/icons/hicolor/256x256/apps/cider.png
+      $out/share/icons/hicolor/256x256/apps/cider-2.png
 
     rm -r $out/share/{pixmaps,lintian}
+    rm $out/lib/cider/resources/Cider{,.flatpak}.desktop
+    rm $out/lib/cider/resources/public/icon{.icns,-osx-previous.icns,.ico}
   '';
 
   passthru.updateScript = ./updater.sh;

@@ -18,19 +18,19 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "vrcx";
-  version = "2026.05.03";
+  version = "2026.07.18";
 
   src = fetchFromGitHub {
     repo = "VRCX";
     owner = "vrcx-team";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TIRX1DllUaq73Aue5/2mg98luBnDoptiiMDQcZ9aBTM=";
+    hash = "sha256-gmCS1M77CTJLWb+SR42kghtGxJuPZDRADKZS14Tx9Y8=";
   };
 
   nodejs = node;
   makeCacheWritable = true;
   npmFlags = [ "--ignore-scripts" ];
-  npmDepsHash = "sha256-hOfbDvBJgoPQ6QxnZ77kpeSHDXH9dSnidmrx9Mp9q08=";
+  npmDepsHash = "sha256-YwhRYpPcGwswf3OC3n1zFoSADOPkI5sTlaQN+fDe8sI=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -38,7 +38,9 @@ buildNpmPackage (finalAttrs: {
   ];
 
   postPatch = ''
-    # V2026.05.03 seems to have an out of date lockfile
+    # VRCX's upstream lockfile lacks `integirty` and `resolved` fields
+    # annoying but can be trivially fixed by cloning the vrcx repo locally then
+    # regenerating the lockfile with `nix run nixpkgs#npm-lockfile-fix -- package-lock.json`
     cp ${./package-lock.json} package-lock.json
   '';
 

@@ -51,7 +51,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "msticpy";
-  version = "3.0.1";
+  version = "3.0.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -59,7 +59,7 @@ buildPythonPackage (finalAttrs: {
     owner = "microsoft";
     repo = "msticpy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-utE77oSCAAYKmsyf8ZPep7spUSIoJXBU6NzeLpDIvUs=";
+    hash = "sha256-gOhpmZGVEnuosU4MQw/GX0x2YvRcHToJW98B3vSNbPY=";
   };
 
   build-system = [ setuptools ];
