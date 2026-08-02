@@ -5,7 +5,7 @@
   glib,
   gsettings-desktop-schemas,
   gtk3,
-  jdk17,
+  jdk21,
   lib,
   libx11,
   libxrender,
@@ -20,13 +20,13 @@
 }:
 
 let
-  pVersion = "1.15.0.20231206";
+  pVersion = "1.17.0.20260601";
   pVersionTriple = lib.splitVersion pVersion;
   majorVersion = lib.elemAt pVersionTriple 0;
   minorVersion = lib.elemAt pVersionTriple 1;
   patchVersion = lib.elemAt pVersionTriple 2;
   baseVersion = "${majorVersion}.${minorVersion}.${patchVersion}";
-  jdk = jdk17;
+  jdk = jdk21;
 in
 stdenv.mkDerivation rec {
   pname = "eclipse-mat";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://ftp.halifax.rwth-aachen.de/eclipse//mat/${baseVersion}/rcp/MemoryAnalyzer-${version}-linux.gtk.x86_64.zip";
-    sha256 = "sha256-icmo5zdK0XaH32kXwZUVaQ0VPSGEgvlLr7v7PtdbmCg=";
+    sha256 = "sha256-4eqAp5hNQR5MTX37qwktqSVfe3ctaBolamEEm8yIN2c=";
   };
 
   desktopItem = makeDesktopItem {
@@ -125,7 +125,8 @@ stdenv.mkDerivation rec {
       who is preventing the Garbage Collector from collecting objects,
       run a report to automatically extract leak suspects.
     '';
-    homepage = "https://www.eclipse.org/mat";
+    homepage = "https://eclipse.dev/mat/";
+    changelog = "https://eclipse.dev/mat/${baseVersion}/noteworthy.html";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.epl20;
     maintainers = [ lib.maintainers.ktor ];
