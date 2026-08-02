@@ -6,13 +6,13 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnused";
   version = "4.10";
 
   src = fetchurl {
-    url = "mirror://gnu/sed/sed-${version}.tar.xz";
-    sha256 = "sha256-uOchgrLslqNXTimYxHt6qmTMIM4ADY6awxPMB87PKMc=";
+    url = "mirror://gnu/sed/sed-${finalAttrs.version}.tar.xz";
+    hash = "sha256-uOchgrLslqNXTimYxHt6qmTMIM4ADY6awxPMB87PKMc=";
   };
 
   outputs = [
@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   preConfigure = "patchShebangs ./build-aux/help2man";
 
@@ -53,4 +54,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ mic92 ];
     mainProgram = "sed";
   };
-}
+})
