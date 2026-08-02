@@ -7,12 +7,12 @@
   updateAutotoolsGnuConfigScriptsHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "automake";
   version = "1.18.1";
 
   src = fetchurl {
-    url = "mirror://gnu/automake/automake-${version}.tar.xz";
+    url = "mirror://gnu/automake/automake-${finalAttrs.version}.tar.xz";
     hash = "sha256-FoqjYyeDUbia9WaERI9SWlvOUHnQtoQr2RD90/FkaIc=";
   };
 
@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
   # "fixed" path in generated files!
   dontPatchShebangs = true;
 
+  __structuredAttrs = true;
+
   meta = {
     branch = "1.18";
     homepage = "https://www.gnu.org/software/automake/";
@@ -48,4 +50,4 @@ stdenv.mkDerivation rec {
     '';
     platforms = lib.platforms.all;
   };
-}
+})
