@@ -18,15 +18,17 @@
 # instead of adding this to `services.udev.packages` on NixOS,
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "solaar";
-  version = "1.1.19";
+  version = "1.1.20";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pwr-Solaar";
     repo = "Solaar";
     tag = finalAttrs.version;
-    hash = "sha256-Z3rWGmFQmfJvsWiPgxQmfXMPHXAAiFneBaoSVIXnAV8=";
+    hash = "sha256-h/uiy0TtMicKch2cdXHur5DkvQun2sAw2HpFI7Qstqg=";
   };
+
+  __structuredAttrs = true;
 
   outputs = [
     "out"
@@ -102,12 +104,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
       This tool requires either to be run with root/sudo or alternatively to have the udev rules files installed. On NixOS this can be achieved by setting `hardware.logitech.wireless.enable`.
     '';
     homepage = "https://pwr-solaar.github.io/Solaar/";
+    changelog = "https://github.com/pwr-Solaar/Solaar/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
     mainProgram = "solaar";
     maintainers = with lib.maintainers; [
       spinus
       ysndr
       oxalica
+      ilkecan
     ];
     platforms = lib.platforms.linux;
   };

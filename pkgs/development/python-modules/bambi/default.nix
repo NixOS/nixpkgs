@@ -28,14 +28,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "bambi";
-  version = "0.18.0";
+  version = "0.19.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "bambinos";
     repo = "bambi";
     tag = finalAttrs.version;
-    hash = "sha256-vxsjPYQkqvmB5oKKl29+xq1BPEzBTozz9/W5mICWI4A=";
+    hash = "sha256-2BLbvdVN+wkmP2NCGaBoJO10hbBXUJ1/Q7bjRN4idWM=";
   };
 
   build-system = [
@@ -74,6 +75,9 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
+    # Requires `nutpie`, which is not packaged in nixpkgs
+    "test_nuts_parameter_forwarded_to_external_samplers"
+
     # ValueError: dtype attribute is not a valid dtype instance
     "test_vonmises_regression"
 
@@ -89,6 +93,8 @@ buildPythonPackage (finalAttrs: {
 
     # Tests require network access
     "test_alias_equal_to_name"
+    "test_exclusion"
+    "test_inplace_false"
     "test_average_by"
     "test_ax"
     "test_basic"

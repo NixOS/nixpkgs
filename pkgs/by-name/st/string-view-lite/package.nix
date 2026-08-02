@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.8.0";
 
   src = fetchFromGitHub {
-    owner = "martinmoene";
+    owner = "nonstd-lite";
     repo = "string-view-lite";
     tag = "v${finalAttrs.version}";
     hash = "sha256-hXm3MLskeZzTegSj79dQV+VcwBatT1VIAUydjisd19U=";
@@ -30,8 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "C++17-like string_view for C++98, C++11 and later in a single-file header-only library";
-    homepage = "https://github.com/martinmoene/string-view-lite";
-    changelog = "https://github.com/martinmoene/string-view-lite/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/nonstd-lite/string-view-lite";
+    changelog = "https://github.com/nonstd-lite/string-view-lite/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.boost;
     maintainers = with lib.maintainers; [ titaniumtown ];
   };

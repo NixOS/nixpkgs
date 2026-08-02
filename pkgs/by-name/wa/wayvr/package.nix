@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "26.7.1";
 
   src = fetchFromGitHub {
-    owner = "wlx-team";
+    owner = "wayvr-org";
     repo = "wayvr";
     tag = "v${finalAttrs.version}";
     hash = "sha256-SdHN3jDe2QJaRORy452RP7kTMxPOZOB/yjpApUOLhRU=";
@@ -92,7 +92,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Your way to enjoy VR on Linux! Access your Wayland/X11 desktop from SteamVR/Monado (OpenVR+OpenXR support)";
-    homepage = "https://github.com/wlx-team/wayvr";
+    homepage = "https://github.com/wayvr-org/wayvr";
     license = with lib.licenses; [
       gpl3Only
       mit # wayvr-ipc
