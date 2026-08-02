@@ -24,12 +24,12 @@
 
 assert (doCheck && stdenv.hostPlatform.isLinux) -> glibcLocales != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gawk" + lib.optionalString interactive "-interactive";
   version = "5.4.1";
 
   src = fetchurl {
-    url = "mirror://gnu/gawk/gawk-${version}.tar.xz";
+    url = "mirror://gnu/gawk/gawk-${finalAttrs.version}.tar.xz";
     hash = "sha256-B/b3NCt/6+QxP8LCVCrZPWT+IK2HFyABCfEFqCb1/Tc=";
   };
 
@@ -105,6 +105,8 @@ stdenv.mkDerivation rec {
       ln -s gawk.1 "''${!outputMan}"/share/man/man1/awk.1
     '';
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.gnu.org/software/gawk/";
     description = "GNU implementation of the Awk programming language";
@@ -129,4 +131,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "gawk";
   };
-}
+})
