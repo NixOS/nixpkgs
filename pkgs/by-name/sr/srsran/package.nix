@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
-    "-DENABLE_WERROR=OFF"
+    (lib.cmakeBool "ENABLE_WERROR" false)
     (lib.cmakeBool "USE_LTE_RATES" enableLteRates)
     (lib.cmakeBool "ENABLE_AVX" enableAvx)
     (lib.cmakeBool "ENABLE_AVX2" enableAvx2)
