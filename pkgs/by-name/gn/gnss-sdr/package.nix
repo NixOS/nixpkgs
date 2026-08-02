@@ -25,13 +25,13 @@
 
 gnuradio.pkgs.mkDerivation rec {
   pname = "gnss-sdr";
-  version = "0.0.20";
+  version = "0.0.21";
 
   src = fetchFromGitHub {
     owner = "gnss-sdr";
     repo = "gnss-sdr";
     rev = "v${version}";
-    hash = "sha256-kQv8I4dcWeRuAfYtD5EAAMwvfnOTi+QWDogUZb4M/qQ=";
+    hash = "sha256-3oBF9FajapmXxvE4tQOuzwTkjwmk1DF806nMYdZqQUY=";
   };
 
   patches = [
@@ -39,10 +39,6 @@ gnuradio.pkgs.mkDerivation rec {
     # cpu_features which is bundled in the source. NOTE: Perhaps this patch
     # should be sent upstream.
     ./fix_libcpu_features_install_path.patch
-    (fetchpatch {
-      url = "https://sources.debian.org/data/main/g/gnss-sdr/0.0.20-2/debian/patches/boost1.90.diff";
-      hash = "sha256-IeLV0DIVzw+Nix9RmrqrbGDEjquvSws114UsdYphV58=";
-    })
   ];
 
   nativeBuildInputs = [
