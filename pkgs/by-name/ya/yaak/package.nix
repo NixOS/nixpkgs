@@ -20,34 +20,38 @@
   adwaita-icon-theme,
   protobuf,
   perl,
+  cacert,
   makeWrapper,
   nix-update-script,
   stdenv,
   lld,
   wasm-pack,
-  wasm-bindgen-cli_0_2_100,
+  wasm-bindgen-cli_0_2_121,
+  autoPatchelfHook,
   wrapGAppsHook3,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yaak";
-  version = "2025.6.1";
+  version = "2026.6.0";
 
   src = fetchFromGitHub {
     owner = "mountain-loop";
     repo = "yaak";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3sEq7VpzaIMbkvHQTQLf3NRbAJjtpOJpirdcA7y2FIE=";
+    hash = "sha256-uMfa1lDJ/F2uqXSQZCKAd8gQR5FwTc2bkGaci9ooldY=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-zz9wlJ3yQ3oTyCFrAV7vD1xENLW+vmf2Pzly4yYas/g=";
+    hash = "sha256-e4Ju4axd08LDDwnISMqMLXX2SuBQY0qSEdPQo1aXcCg=";
+    fetcherVersion = 2;
   };
 
-  cargoHash = "sha256-CMx7vTSGeQMXpXeH4LIOKEb29CfKXQV+r8tSYdmW5U4=";
+  cargoHash = "sha256-jkNW5VogUus1lS9z0SiUXnqBXWdex7aUF/89MC52Mjg=";
 
-  cargoRoot = "src-tauri";
+  cargoRoot = ".";
+  buildAndTestSubdir = "crates-tauri/yaak-app-client";
 
   nativeBuildInputs = [
     cargo-tauri.hook
@@ -60,8 +64,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     makeWrapper
     lld
     wasm-pack
-    wasm-bindgen-cli_0_2_100
+    wasm-bindgen-cli_0_2_121
     wrapGAppsHook3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    autoPatchelfHook
   ];
 
   buildInputs = [
@@ -80,62 +87,62 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
-  # This must be set so that `npm rebuild` doesn't download wasm-pack
-  env.NPM_CONFIG_IGNORE_SCRIPTS = "true";
+  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+
+  # Only auto-patchelf the prebuilt CLI used during the build.
+  dontAutoPatchelf = true;
 
   postPatch = ''
     substituteInPlace package.json \
       --replace-fail '"version": "0.0.0"' '"version": "${finalAttrs.version}"'
 
-    substituteInPlace src-tauri/tauri.conf.json \
+    substituteInPlace crates-tauri/yaak-app-client/tauri.conf.json \
       --replace-fail '"0.0.0"' '"${finalAttrs.version}"'
 
-    substituteInPlace src-tauri/tauri.commercial.conf.json \
-      --replace-fail '"createUpdaterArtifacts": "v1Compatible"' '"createUpdaterArtifacts": false' \
+    substituteInPlace crates-tauri/yaak-app-client/tauri.release.conf.json \
+      --replace-fail '"createUpdaterArtifacts": true' '"createUpdaterArtifacts": false' \
       --replace-fail '"https://update.yaak.app/check/{{target}}/{{arch}}/{{current_version}}"' '"https://non.existent.domain"'
 
     substituteInPlace package.json \
-      --replace-fail '"bootstrap:vendor-node": "node scripts/vendor-node.cjs",' "" \
-      --replace-fail '"bootstrap:vendor-protoc": "node scripts/vendor-protoc.cjs",' ""
+      --replace-fail '"vendor:vendor-node": "node scripts/vendor-node.cjs",' "" \
+      --replace-fail '"vendor:vendor-protoc": "node scripts/vendor-protoc.cjs",' ""
   '';
 
   preBuild =
     let
-      archPlatforms =
+      npmCliPlatforms =
         {
-          "aarch64-darwin" = "aarch64-apple-darwin";
-          "aarch64-linux" = "aarch64-unknown-linux-gnu";
-          "x86_64-linux" = "x86_64-unknown-linux-gnu";
+          "aarch64-darwin" = "darwin-arm64";
+          "aarch64-linux" = "linux-arm64";
+          "x86_64-linux" = "linux-x64";
         }
         .${stdenv.hostPlatform.system};
     in
     ''
-      mkdir -p src-tauri/vendored/node
-      ln -s ${nodejs}/bin/node src-tauri/vendored/node/yaaknode-${archPlatforms}
-      mkdir -p src-tauri/vendored/protoc
-      ln -s ${protobuf}/bin/protoc src-tauri/vendored/protoc/yaakprotoc-${archPlatforms}
-      ln -s ${protobuf}/include src-tauri/vendored/protoc/include
+      ${lib.optionalString stdenv.hostPlatform.isLinux ''
+        autoPatchelf node_modules/@yaakapp/cli-${npmCliPlatforms}/bin/yaak
+      ''}
+
+      mkdir -p crates-tauri/yaak-app-client/vendored/node
+      ln -s ${nodejs}/bin/node crates-tauri/yaak-app-client/vendored/node/yaaknode
+      mkdir -p crates-tauri/yaak-app-client/vendored/protoc
+      ln -s ${protobuf}/bin/protoc crates-tauri/yaak-app-client/vendored/protoc/yaakprotoc
+      ln -s ${protobuf}/include crates-tauri/yaak-app-client/vendored/protoc/include
     '';
 
   tauriBuildFlags = [
     "--config"
-    "./src-tauri/tauri.commercial.conf.json"
+    "./tauri.release.conf.json"
   ];
 
   # Permission denied (os error 13)
-  # write to src-tauri/vendored/protoc/include
+  # write to crates-tauri/yaak-app-client/vendored/protoc/include
   doCheck = false;
 
-  preInstall = "pushd src-tauri";
-
-  postInstall =
-    lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir $out/bin
-      makeWrapper $out/Applications/Yaak.app/Contents/MacOS/yaak-app $out/bin/yaak-app
-    ''
-    + ''
-      popd
-    '';
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir $out/bin
+    makeWrapper $out/Applications/Yaak.app/Contents/MacOS/yaak-app-client $out/bin/yaak-app-client
+  '';
 
   passthru.updateScript = nix-update-script { };
 
@@ -145,7 +152,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/mountain-loop/yaak/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ redyf ];
-    mainProgram = "yaak-app";
+    mainProgram = "yaak-app-client";
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
