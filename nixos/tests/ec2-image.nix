@@ -328,6 +328,47 @@ in
               )
               test_userdata_decompression(machine, user_data_path, proc.stdout, "lzip")
 
+          with subtest("IMDS rejecting the token it issued fails the unit"):
+              # Hand out a token the metadata service will not accept: token
+              # acquisition keeps looking healthy while every authenticated
+              # request 401s.
+              issued_token_path = os.path.join(metadata_dir, "latest", "api", "token-issued")
+              with open(issued_token_path, "w") as f:
+                  f.write("rejected-token-99999")
+
+              # Pin the unit for the duration of the subtest; the auto-restart
+              # added for transient IMDS failures would otherwise race the
+              # assertions below.
+              machine.succeed(
+                  "mkdir -p /run/systemd/system/fetch-ec2-metadata.service.d",
+                  "printf '[Service]\\nRestart=no\\n'"
+                  " > /run/systemd/system/fetch-ec2-metadata.service.d/99-no-restart.conf",
+                  "systemctl daemon-reload",
+              )
+
+              machine.succeed("rm -f /etc/ec2-metadata/user-data")
+              machine.succeed("systemctl reset-failed fetch-ec2-metadata")
+              machine.fail("systemctl restart fetch-ec2-metadata")
+              machine.succeed("systemctl is-failed --quiet fetch-ec2-metadata")
+
+              # The point of the exercise: no user-data means amazon-init must
+              # not be told the instance simply has none.
+              machine.fail("test -e /etc/ec2-metadata/user-data")
+
+              journal = machine.succeed("journalctl -u fetch-ec2-metadata --no-pager -b")
+              assert "failed to access the EC2 instance metadata service" in journal, \
+                  f"Expected the fetcher to report giving up, got: {journal}"
+
+              # Restore a working IMDS and confirm the unit recovers.
+              os.remove(issued_token_path)
+              machine.succeed(
+                  "rm -f /run/systemd/system/fetch-ec2-metadata.service.d/99-no-restart.conf",
+                  "systemctl daemon-reload",
+                  "systemctl reset-failed fetch-ec2-metadata",
+                  "systemctl restart fetch-ec2-metadata",
+                  "test -e /etc/ec2-metadata/user-data",
+              )
+
           with subtest("IPv6 IMDS fallback"):
               # Save hostname fetched via IPv4 for later comparison
               original_hostname = machine.succeed("cat /etc/ec2-metadata/hostname").strip()

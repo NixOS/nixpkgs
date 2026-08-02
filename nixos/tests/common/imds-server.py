@@ -7,7 +7,11 @@ guestfwd and socat contexts.
 Usage: imds-server <metadata-directory>
 
 The metadata directory should contain:
-  latest/api/token                        - Token value (returned on PUT)
+  latest/api/token                        - Token value accepted on GET
+  latest/api/token-issued                 - Optional. Token handed out on PUT
+                                            when it differs from the accepted
+                                            one, to simulate an IMDS that
+                                            rejects the token it just issued.
   1.0/meta-data/hostname                  - Instance hostname
   1.0/meta-data/ami-manifest-path         - AMI manifest path
   1.0/meta-data/instance-id               - Instance ID
@@ -70,13 +74,24 @@ def main():
     else:
         expected_token = None
 
+    # An optional second token to hand out on PUT. When it is present and
+    # differs from the accepted one, every authenticated GET 401s even though
+    # token acquisition looked healthy -- the failure mode that used to leave
+    # the fetcher reporting success with no metadata written.
+    issued_path = os.path.join(base_dir, "latest", "api", "token-issued")
+    if os.path.isfile(issued_path):
+        with open(issued_path) as f:
+            issued_token = f.read().strip()
+    else:
+        issued_token = expected_token
+
     method, path, headers = read_request()
     rel_path = path.lstrip("/")
 
     # PUT /latest/api/token — IMDSv2 token acquisition
     if method == "PUT" and rel_path == "latest/api/token":
         if expected_token is not None:
-            respond("200 OK", expected_token)
+            respond("200 OK", issued_token)
         else:
             respond("404 Not Found", "IMDSv2 token endpoint not configured\n")
         return
