@@ -140,6 +140,9 @@
   "ex-writeShellApplication": [
     "index.html#ex-writeShellApplication"
   ],
+  "fetchfromtangled": [
+    "index.html#fetchfromtangled"
+  ],
   "first-package-go": [
     "index.html#first-package-go"
   ],
