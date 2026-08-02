@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vale-ls";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "vale-cli";
     repo = "vale-ls";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lRRKRQTxgXF4E+XghJ5AOp+mtWtiCT13EcsPVydn4Uo=";
+    hash = "sha256-KgPSFyjKdXfjdZfoxHrhEUj1Km8oh1gd9eGSHKlsliM=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env.OPENSSL_NO_VENDOR = true;
 
-  cargoHash = "sha256-KPgi0wZh1+PTKUmvCkLGPf+DZW5Tt4dQVK/cdxjm/1A=";
+  cargoHash = "sha256-7hiNI7tzfA95SWJfbRpf9FuyU/9bQlp5Uix6c36ycyE=";
 
   postInstall = ''
     wrapProgram $out/bin/vale-ls \
