@@ -616,6 +616,7 @@ in
     imports = [ ./firefox.nix ];
     _module.args.firefoxPackage = pkgs.firefox-esr-153;
   };
+  firefox-font-rendering = runTest ./firefox/font-rendering.nix;
   firefox-syncserver = discoverTests (import ./firefox-syncserver.nix);
   firefox_decrypt = runTest ./firefox_decrypt.nix;
   firefoxpwa = runTest ./firefoxpwa.nix;
