@@ -6,13 +6,13 @@
 
 mkNginxPlugin (finalAttrs: {
   pname = "develkit";
-  version = "0.3.3";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "vision5";
     repo = "ngx_devel_kit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/RQUVHwIdNqm3UemQ/oNs2ksg8beziA4Pxejd5Yg0Pg=";
+    hash = "sha256-SXQ5KC8X9nKLbntXjEziCqJVeiX+lnBKruAVVVcexaM=";
   };
 
   meta = {
