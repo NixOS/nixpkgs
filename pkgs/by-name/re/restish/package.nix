@@ -19,7 +19,7 @@ buildGoModule (finalAttrs: {
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "danielgtaylor";
+    owner = "rest-sh";
     repo = "restish";
     tag = "v${finalAttrs.version}";
     hash = "sha256-wGchbKSEbzr1vQlYWgUTubA1xQVcxq7iyRUIuWqVL0Y=";
@@ -55,7 +55,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "CLI tool for interacting with REST-ish HTTP APIs";
     homepage = "https://rest.sh/";
-    changelog = "https://github.com/danielgtaylor/restish/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/rest-sh/restish/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "restish";

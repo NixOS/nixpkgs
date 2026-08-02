@@ -69,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     make --jobs=$NIX_BUILD_CORES -C gtk AUDIO_ALSA=1
     make -C gtk clean
     make --jobs=$NIX_BUILD_CORES -C gtk AUDIO_ALSA=1 BCD_MATH=1
+    make --jobs=$NIX_BUILD_CORES -C gtk raw2txt txt2raw
 
     runHook postBuild
   '';
@@ -82,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
                         $out/share/icons/hicolor/48x48/apps \
                         $out/share/icons/hicolor/128x128/apps
 
-    install -m755 gtk/free42dec gtk/free42bin $out/bin
+    install -m755 gtk/free42dec gtk/free42bin gtk/raw2txt gtk/txt2raw $out/bin
     install -m644 README $out/share/doc/free42/README
 
     install -m644 gtk/icon-48x48.png $out/share/icons/hicolor/48x48/apps/free42.png

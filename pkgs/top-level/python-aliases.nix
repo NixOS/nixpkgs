@@ -102,6 +102,7 @@ mapAliases {
   astropy-extension-helpers = extension-helpers; # Added 2025-10-15
   asyauth-bad = throw "'asyauth-bad' has been renamed to/replaced by 'badauth'"; # added 2025-11-06
   async-dns = throw "'async-dns' has been removed as it was unmaintained upstream"; # Added 2026-03-23
+  async-substrate-interface = throw "'async-substrate-interface' was removed because 'bittensor' 11 replaced it with its own transport"; # Added 2026-07-26
   async_generator = throw "'async_generator' has been renamed to/replaced by 'async-generator'"; # Converted to throw 2025-10-29
   async_stagger = throw "'async_stagger' has been renamed to/replaced by 'async-stagger'"; # Converted to throw 2025-10-29
   asyncio-nats-client = throw "'asyncio-nats-client' has been renamed to/replaced by 'nats-py'"; # Converted to throw 2025-10-29
@@ -131,6 +132,9 @@ mapAliases {
   bilibili-api-python = throw "'bilibili-api-python' was removed because its source is unavailable"; # added 2026-07-07
   bimmer-connected = throw "'bimmer-connected' was removed because BMW started blocking third parties"; # added 2026-03-30
   bip_utils = throw "'bip_utils' has been renamed to/replaced by 'bip-utils'"; # Converted to throw 2025-10-29
+  bittensor-cli = throw "'bittensor-cli' was removed because 'bittensor' now provides btcli"; # Added 2026-07-26
+  bittensor-drand = throw "'bittensor-drand' was removed because 'bittensor' 11 absorbed it upstream"; # Added 2026-07-26
+  bittensor-wallet = throw "'bittensor-wallet' was removed because 'bittensor' 11 absorbed it upstream"; # Added 2026-07-26
   bjoern = throw "'bjoern' has been removed, as the upstream repository was unmaintained and it was using libraries with severe security issues."; # Added 2025-09-01
   bkcharts = throw "'bkcharts' has been removed as the upstream repository was archived in 2018"; # added 2025-08-26
   BlinkStick = throw "'BlinkStick' has been renamed to/replaced by 'blinkstick'"; # Converted to throw 2025-10-29

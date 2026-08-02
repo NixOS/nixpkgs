@@ -10006,6 +10006,13 @@
     githubId = 34658064;
     name = "Grace Dinh";
   };
+  geekiot-hub = {
+    email = "geekiot@proton.me";
+    github = "geekiot-hub";
+    githubId = 227938479;
+    name = "Kirill Samoylenkov";
+    keys = [ { fingerprint = "955B 97C5 78A3 DF03 D818  25EB 8E40 5DD2 CF84 CCE0"; } ];
+  };
   genga898 = {
     email = "genga898@gmail.com";
     github = "genga898";
@@ -17991,6 +17998,12 @@
     github = "mcjocobe";
     githubId = 94081214;
     name = "Jose Colomer";
+  };
+  mcmah309 = {
+    email = "dillonmcmahon79@gmail.com";
+    github = "mcmah309";
+    githubId = 56412856;
+    name = "Dillon H. McMahon";
   };
   mcmtroffaes = {
     email = "matthias.troffaes@gmail.com";
