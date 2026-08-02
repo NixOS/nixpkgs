@@ -37,17 +37,77 @@ jobs:
             --extra-experimental-features "nix-command flakes" \
             --print-build-logs
 
-      - name: Verify ISO
+      - name: Verify ISO thoroughly
+        shell: bash
         run: |
-          find result/iso -maxdepth 1 -type f -print
+          set -euo pipefail
 
-          if ! find result/iso -maxdepth 1 -type f -name "*.iso" | grep -q .; then
+          iso_file="$(find -L result/iso -maxdepth 1 -type f -name '*.iso' -print -quit)"
+
+          if [ -z "$iso_file" ]; then
             echo "ERROR: No ISO file was generated."
             exit 1
           fi
 
+          echo "Found ISO: $iso_file"
+          echo "ISO information:"
+          ls -lh "$iso_file"
+          stat "$iso_file"
+          sha256sum "$iso_file"
+          file "$iso_file"
+
+          nix shell \
+            nixpkgs#xorriso \
+            nixpkgs#p7zip \
+            nixpkgs#squashfsTools \
+            --extra-experimental-features "nix-command flakes" \
+            --command bash -euo pipefail -c '
+              ISO="$1"
+              WORK="$(mktemp -d)"
+
+              cleanup() {
+                rm -rf "$WORK"
+              }
+
+              trap cleanup EXIT
+
+              echo "Checking ISO filesystem..."
+              xorriso -indev "$ISO" -check_media --
+
+              echo "Testing ISO archive structure..."
+              7z t "$ISO"
+
+              echo "Extracting ISO contents..."
+              mkdir -p "$WORK/iso"
+              7z x "$ISO" -o"$WORK/iso"
+
+              SQUASHFS="$(find "$WORK/iso" -type f \
+                \( -name "*.squashfs" -o -name "nix-store.squashfs" \) \
+                -print -quit)"
+
+              if [ -z "$SQUASHFS" ]; then
+                echo "ERROR: Embedded SquashFS image was not found."
+                find "$WORK/iso" -maxdepth 4 -type f -print
+                exit 1
+              fi
+
+              echo "Found SquashFS: $SQUASHFS"
+              ls -lh "$SQUASHFS"
+
+              echo "Checking SquashFS metadata..."
+              unsquashfs -s "$SQUASHFS"
+
+              echo "Listing SquashFS contents..."
+              unsquashfs -ll "$SQUASHFS" > /dev/null
+
+              echo "ISO and embedded SquashFS passed verification."
+            ' bash "$iso_file"
+
       - name: Prepare ISO artifact
+        shell: bash
         run: |
+          set -euo pipefail
+
           rm -rf artifact
           mkdir -p artifact
 
@@ -60,10 +120,23 @@ jobs:
 
           echo "Found ISO: $iso_file"
 
-          cp -L "$iso_file" artifact/
+          cp -L "$iso_file" artifact/euclid-linux-3d.iso
+
+          original_size="$(stat -c '%s' "$iso_file")"
+          copied_size="$(stat -c '%s' artifact/euclid-linux-3d.iso)"
+
+          echo "Original size: $original_size bytes"
+          echo "Copied size:   $copied_size bytes"
+
+          if [ "$original_size" != "$copied_size" ]; then
+            echo "ERROR: Artifact copy has a different size."
+            exit 1
+          fi
+
+          cmp "$iso_file" artifact/euclid-linux-3d.iso
 
           cd artifact
-          sha256sum *.iso > SHA256SUMS
+          sha256sum euclid-linux-3d.iso > SHA256SUMS
           cat SHA256SUMS
 
       - name: Upload ISO
@@ -73,3 +146,4 @@ jobs:
           path: euclid-linux-3d/artifact/
           if-no-files-found: error
           retention-days: 30
+          compression-level: 0
