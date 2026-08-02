@@ -11,6 +11,8 @@ buildPythonPackage (finalAttrs: {
   version = "0.4";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
     pname = "pygments-style-github";
     inherit (finalAttrs) version;
