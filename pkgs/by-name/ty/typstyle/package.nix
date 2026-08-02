@@ -9,6 +9,8 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typstyle";
   version = "0.15.1";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "typstyle-rs";
