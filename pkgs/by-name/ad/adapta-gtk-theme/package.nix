@@ -11,7 +11,6 @@
   glib,
   gdk-pixbuf,
   librsvg,
-  gtk-engine-murrine,
   gnome-shell,
 }:
 
@@ -25,6 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     sha256 = "19skrhp10xx07hbd0lr3d619vj2im35d8p9rmb4v4zacci804q04";
   };
+
+  patches = [
+    ./disable-gtk2.patch
+  ];
 
   preferLocalBuild = true;
 
@@ -43,8 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf
     librsvg
   ];
-
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   postPatch = "patchShebangs .";
 
