@@ -17,7 +17,7 @@
   evolution-data-server-gtk4,
   folks,
   desktop-file-utils,
-  appstream-glib,
+  appstream,
   libpeas2,
   dbus,
   vala,
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     desktop-file-utils
-    appstream-glib
+    appstream
     vala
     wrapGAppsHook4
     gtk-doc
