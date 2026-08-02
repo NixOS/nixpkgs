@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchgit,
+  fetchFromTangled,
   linux-pam,
   pkg-config,
   rustPlatform,
@@ -15,8 +15,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-i5F9WJD6hMjgiAM43iR4+ZQKZmwtKhEY8uZ0KleNqE8=";
 
-  src = fetchgit {
-    url = "https://tangled.org/did:plc:vj3bxta3i3cp26nn46yideoh";
+  src = fetchFromTangled {
+    did = "did:plc:vj3bxta3i3cp26nn46yideoh";
     tag = "v${finalAttrs.version}";
     hash = "sha256-8NFNFuolp0zqtBmEeI5ZP4aAmzdUMHNYwvm7esOoS8A=";
   };
