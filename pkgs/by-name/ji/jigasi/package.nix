@@ -9,10 +9,10 @@
 
 let
   pname = "jigasi";
-  version = "1.1-395-g3bb4143";
+  version = "1.1-412-ge9a3acc";
   src = fetchurl {
     url = "https://download.jitsi.org/stable/jigasi_${version}-1_all.deb";
-    hash = "sha256-kBUo9TZZs3/OUrV1t813jk8Pf2vNrKEP7hZL2L2oMNE=";
+    hash = "sha256-NlJxfUyUGUqyk8rQAtykZhyAhMapmTvca42HaG1MRJU=";
   };
 in
 stdenv.mkDerivation {
@@ -37,6 +37,8 @@ stdenv.mkDerivation {
   passthru.tests = {
     single-node-smoke-test = nixosTests.jitsi-meet;
   };
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Server-side application that allows regular SIP clients to join Jitsi Meet conferences";
