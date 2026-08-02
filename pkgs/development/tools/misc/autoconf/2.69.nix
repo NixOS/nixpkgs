@@ -6,12 +6,12 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "autoconf";
   version = "2.69";
 
   src = fetchurl {
-    url = "mirror://gnu/autoconf/autoconf-${version}.tar.xz";
+    url = "mirror://gnu/autoconf/autoconf-${finalAttrs.version}.tar.xz";
     sha256 = "113nlmidxy9kjr45kg9x3ngar4951mvag1js2a3j8nxcz34wxsv4";
   };
 
@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = false; # fails
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.gnu.org/software/autoconf/";
     description = "Part of the GNU Build System";
@@ -59,4 +61,4 @@ stdenv.mkDerivation rec {
 
     platforms = lib.platforms.all;
   };
-}
+})
