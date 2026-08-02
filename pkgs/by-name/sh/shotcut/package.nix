@@ -47,8 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qttools
     qt6.qtmultimedia
     qt6.qtcharts
-    qt6.qtwayland
     qt6.qtwebsockets
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qt6.qtwayland
   ];
 
   env.NIX_CFLAGS_COMPILE = "-DSHOTCUT_NOUPGRADE";
