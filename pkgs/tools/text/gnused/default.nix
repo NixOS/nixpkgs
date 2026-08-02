@@ -6,13 +6,13 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnused";
   version = "4.10";
 
   src = fetchurl {
-    url = "mirror://gnu/sed/sed-${version}.tar.xz";
-    sha256 = "sha256-uOchgrLslqNXTimYxHt6qmTMIM4ADY6awxPMB87PKMc=";
+    url = "mirror://gnu/sed/sed-${finalAttrs.version}.tar.xz";
+    hash = "sha256-uOchgrLslqNXTimYxHt6qmTMIM4ADY6awxPMB87PKMc=";
   };
 
   outputs = [
@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     PERL = "missing";
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.gnu.org/software/sed/";
     description = "GNU sed, a batch stream editor";
@@ -53,4 +55,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ mic92 ];
     mainProgram = "sed";
   };
-}
+})
