@@ -7,12 +7,13 @@
   grpcio,
   protobuf,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pygnmi";
   version = "0.8.15";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "akarneliuk";
@@ -21,7 +22,9 @@ buildPythonPackage rec {
     sha256 = "sha256-2QPUyPGTtXlO6A05mmb/jofRidXfKq0xvH7lv1f9OQk=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cryptography
     dictdiffer
     grpcio
