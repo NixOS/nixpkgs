@@ -1,0 +1,18 @@
+--- a/settings.gradle.kts	2026-06-26 15:02:59.000000000 +1000
++++ b/settings.gradle.kts	2026-07-19 18:05:13.462781223 +1000
+@@ -12,6 +12,7 @@
+                 includeGroupAndSubgroups("com.google")
+             }
+         }
++        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+         mavenCentral()
+         gradlePluginPortal()
+     }
+@@ -26,6 +27,7 @@
+                 includeGroupAndSubgroups("com.google")
+             }
+         }
++        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+         mavenCentral()
+         maven("https://jitpack.io") {
+             mavenContent {
