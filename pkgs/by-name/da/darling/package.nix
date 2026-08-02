@@ -4,7 +4,6 @@
   runCommandWith,
   writeShellScript,
   fetchFromGitHub,
-  fetchpatch,
   nixosTests,
 
   freetype,
@@ -12,10 +11,10 @@
   libpng,
   libtiff,
   giflib,
-  libX11,
-  libXext,
-  libXrandr,
-  libXcursor,
+  libx11,
+  libxext,
+  libxrandr,
+  libxcursor,
   libxkbfile,
   cairo,
   libglvnd,
@@ -33,6 +32,8 @@
   pkg-config,
   bison,
   flex,
+  # Provides setcap, which the build looks for with find_package(Setcap REQUIRED)
+  libcap,
 
   libbsd,
   openssl,
@@ -88,10 +89,10 @@ let
     libpng
     libtiff
     giflib
-    libX11
-    libXext
-    libXrandr
-    libXcursor
+    libx11
+    libxext
+    libxrandr
+    libxcursor
     libxkbfile
     cairo
     libglvnd
@@ -130,8 +131,6 @@ stdenv.mkDerivation {
     "sdk"
   ];
 
-  patches = [ ];
-
   postPatch = ''
     # We have to be careful - Patching everything indiscriminately
     # would affect Darwin scripts as well
@@ -149,41 +148,39 @@ stdenv.mkDerivation {
       --replace-fail "char frameworkName[strlen(lastSlash)+20];" "char* frameworkName = (char*)__builtin_alloca(strlen(lastSlash)+20);"
 
     # Fix compiler error: no member named 'clone' in 'Security::BlobCore'
+    # The anchors avoid the tab-indented lines around them, as .nix files must not contain tabs
     substituteInPlace src/external/cctools-port/cctools/ld64/src/ld/code-sign-blobs/blob.h \
-      --replace-fail "void length(size_t size)			{ mLength = size; }" "void length(size_t size)			{ mLength = size; }
-	BlobCore *clone() const;"
+      --replace-fail "template <class BlobType>" "BlobCore *clone() const;
+
+      template <class BlobType>"
 
     substituteInPlace src/external/cctools-port/cctools/ld64/src/ld/code-sign-blobs/blob.cpp \
-      --replace-fail "BlobWrapper *BlobWrapper::alloc(const void *data, size_t length, Magic magic /* = _magic */)
-{
-	BlobWrapper *w = alloc(length, magic);
-	memcpy(w->data(), data, w->length());
-	return w;
-}" "BlobWrapper *BlobWrapper::alloc(const void *data, size_t length, Magic magic /* = _magic */)
-{
-	BlobWrapper *w = alloc(length, magic);
-	memcpy(w->data(), data, w->length());
-	return w;
-}
+      --replace-fail "BlobWrapper *BlobWrapper::alloc(const void *data, size_t length, Magic magic /* = _magic */)" "BlobCore *BlobCore::clone() const
+      {
+        size_t len = this->length();
+        BlobCore *copy = (BlobCore *)malloc(len);
+        if (copy) {
+          memcpy(copy, this, len);
+        }
+        return copy;
+      }
 
-BlobCore *BlobCore::clone() const
-{
-	size_t len = this->length();
-	BlobCore *copy = (BlobCore *)malloc(len);
-	if (copy) {
-		memcpy(copy, this, len);
-	}
-	return copy;
-}"
+      BlobWrapper *BlobWrapper::alloc(const void *data, size_t length, Magic magic /* = _magic */)"
   '';
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     bison
     ccWrapperBypass
     cmake
     flex
+    libcap
     makeWrapper
     ninja
+    # Also a buildInput; the CA bundle is hashed with the openssl CLI at build time
+    openssl
     pkg-config
     python3
   ];
