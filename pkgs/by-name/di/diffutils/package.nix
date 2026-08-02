@@ -12,12 +12,12 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "diffutils";
   version = "3.12";
 
   src = fetchurl {
-    url = "mirror://gnu/diffutils/diffutils-${version}.tar.xz";
+    url = "mirror://gnu/diffutils/diffutils-${finalAttrs.version}.tar.xz";
     hash = "sha256-fIt/n8hgkUH96pzs6FJJ0whiQ5H/Yd7a9Sj8szdyff0=";
   };
 
@@ -80,6 +80,8 @@ stdenv.mkDerivation rec {
   # Test failure on QEMU only (#300550)
   doCheck = !stdenv.buildPlatform.isRiscV64;
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.gnu.org/software/diffutils/diffutils.html";
     description = "Commands for showing the differences between files (diff, cmp, etc.)";
@@ -90,4 +92,4 @@ stdenv.mkDerivation rec {
       helsinki-Jo
     ];
   };
-}
+})
