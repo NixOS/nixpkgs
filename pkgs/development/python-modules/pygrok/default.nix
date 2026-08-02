@@ -4,12 +4,13 @@
   fetchFromGitHub,
   regex,
   pytest,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pygrok";
   version = "1.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "garyelephant";
@@ -18,7 +19,9 @@ buildPythonPackage rec {
     sha256 = "07487rcmv74srnchh60jp0vg46g086qmpkaj8gxqhp9rj47r1s4m";
   };
 
-  propagatedBuildInputs = [ regex ];
+  build-system = [ setuptools ];
+
+  dependencies = [ regex ];
 
   nativeCheckInputs = [ pytest ];
   checkPhase = ''
