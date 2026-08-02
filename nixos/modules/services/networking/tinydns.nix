@@ -58,10 +58,11 @@ with lib;
         ln -sf ${pkgs.writeText "tinydns-data" config.services.tinydns.data} data
         tinydns-data
       '';
-      script = ''
-        cd /var/lib/tinydns
-        exec ./run
-      '';
+      serviceConfig = {
+        StateDirectory = "tinydns";
+        WorkingDirectory = "/var/lib/tinydns";
+        ExecStart = "/var/lib/tinydns/run";
+      };
     };
   };
 }

@@ -389,10 +389,10 @@ in
           // lib.mapAttrs (_: v: "%d/${v}") nonNullEnvSecretsMap
           // instance.environmentVariables;
 
-          preStart = "${execCommand} ${configArg} validate-config";
           serviceConfig = {
             User = instance.user;
             Group = instance.group;
+            ExecStartPre = "${execCommand} ${configArg} validate-config";
             ExecStart = "${execCommand} ${configArg}";
             Restart = "always";
             RestartSec = "5s";

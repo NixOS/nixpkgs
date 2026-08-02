@@ -68,7 +68,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
-    "-DENABLE_WERROR=OFF"
+    (lib.cmakeBool "ENABLE_WERROR" false)
+    # The headers provided by UHD 4.10 use features introduced in C++17, and
+    # srsRAN does not build with higher standard versions such as C++20.
+    (lib.cmakeFeature "CMAKE_CXX_STANDARD" "17")
     (lib.cmakeBool "USE_LTE_RATES" enableLteRates)
     (lib.cmakeBool "ENABLE_AVX" enableAvx)
     (lib.cmakeBool "ENABLE_AVX2" enableAvx2)
