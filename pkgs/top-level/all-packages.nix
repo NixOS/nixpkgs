@@ -5066,6 +5066,17 @@ with pkgs;
 
   ansible-builder = with python3Packages; toPythonApplication ansible-builder;
 
+  gn_0-unstable-2026-05-27 =
+    (gn.override {
+      version = "0-unstable-2026-05-27";
+      rev = "3357c4f51b1a9e676378c695dd9c7e9911c35ee6";
+      hash = "sha256-/1A+DkzAQj2zGPe/A/G0Z3VrYJXUxq4Hd/+d/o5p3G8=";
+    }).overrideAttrs
+      {
+        strictDeps = true;
+        __structuredAttrs = true;
+      };
+
   ### DEVELOPMENT / TOOLS / LANGUAGE-SERVERS
 
   inherit (callPackages ../development/tools/language-servers/nixd { }) nixf nixt nixd;
