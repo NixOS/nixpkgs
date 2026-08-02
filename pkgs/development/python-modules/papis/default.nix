@@ -149,7 +149,7 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       nico202
-      teto
+      octvs
     ];
   };
 })
