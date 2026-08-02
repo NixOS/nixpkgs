@@ -1,0 +1,29 @@
+name: ISO Build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  iso:
+    name: Build ISO Image
+    runs-on: ubuntu-latest
+    # Assuming self-hosted runner as per requirements
+    # runs-on: [self-hosted, linux, x64]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Nix
+        uses: cachix/install-nix-action@v25
+      - name: Build ISO
+        run: |
+          nix build .#iso.euclid-linux-3d-iso --extra-experimental-features "nix-command flakes"
+      - name: Calculate Checksums
+        run: |
+          cd result/iso && sha256sum *.iso > SHA256SUMS
+      - name: Upload ISO Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: euclid-linux-3d-iso
+          path: result/iso/

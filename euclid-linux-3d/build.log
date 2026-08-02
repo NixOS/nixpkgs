@@ -1,0 +1,56 @@
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcomposite' has been renamed to 'libxcomposite'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXdamage' has been renamed to 'libxdamage'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXfixes' has been renamed to 'libxfixes'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXinerama' has been renamed to 'libxinerama'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libSM' has been renamed to 'libsm'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libICE' has been renamed to 'libice'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXext' has been renamed to 'libxext'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libxcb' has been renamed to 'libxcb'
+evaluation warning: The xorg package set has been deprecated, 'xorg.xcbutil' has been renamed to 'libxcb-util'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrender' has been renamed to 'libxrender'
+these 3 derivations will be built:
+  /nix/store/c3ciriggcrr8fcjj28wdwzp6p3q72152-compiz-plugins-experimental-0.8.18.drv
+  /nix/store/gyxzlmmyr6nfwjz659kmwrqa3py3fpkg-compizconfig-python-0.8.18.drv
+  /nix/store/d8ihhm887qgw51lg44fgz588zc5cy8ry-compiz-reloaded-full.drv
+building '/nix/store/c3ciriggcrr8fcjj28wdwzp6p3q72152-compiz-plugins-experimental-0.8.18.drv'...
+building '/nix/store/gyxzlmmyr6nfwjz659kmwrqa3py3fpkg-compizconfig-python-0.8.18.drv'...
+error: Cannot build '/nix/store/gyxzlmmyr6nfwjz659kmwrqa3py3fpkg-compizconfig-python-0.8.18.drv'.
+       Reason: builder failed with exit code 1.
+       Output paths:
+         /nix/store/b384dwms26gbzhj4kjg72j2qkk35y5vj-compizconfig-python-0.8.18
+       Last 25 log lines:
+       > checking if gcc supports -c -o file.o... (cached) yes
+       > checking whether the gcc linker (ld -m elf_x86_64) supports shared libraries... yes
+       > checking whether -lc should be explicitly linked in... no
+       > checking dynamic linker characteristics... GNU/Linux ld.so
+       > checking how to hardcode library paths into programs... immediate
+       > checking whether stripping libraries is possible... yes
+       > checking if libtool supports shared libraries... yes
+       > checking whether to build shared libraries... yes
+       > checking whether to build static libraries... no
+       > checking for egrep... (cached) /nix/store/aak8d9mrdv9sgn0lcg7xss7wxdg9sqh3-gnugrep-3.12/bin/grep -E
+       > checking pkg-config is at least version 0.9.0... yes
+       > checking for libcompizconfig >= 0.6.99 glib-2.0 >= 2.6 ... yes
+       > checking whether python version is < 4.0... yes
+       > checking whether python version is >= 2.7... yes
+       > checking for python... /nix/store/gxzhl7aaiid7zp3y47jqqiq7zg5mqpwp-python3-3.14.6/bin/python
+       > checking whether /nix/store/gxzhl7aaiid7zp3y47jqqiq7zg5mqpwp-python3-3.14.6/bin/python version is >= 2.7... yes
+       > checking for /nix/store/gxzhl7aaiid7zp3y47jqqiq7zg5mqpwp-python3-3.14.6/bin/python version... 3.14
+       > checking for /nix/store/gxzhl7aaiid7zp3y47jqqiq7zg5mqpwp-python3-3.14.6/bin/python platform... linux
+       > checking for GNU default /nix/store/gxzhl7aaiid7zp3y47jqqiq7zg5mqpwp-python3-3.14.6/bin/python prefix... ${prefix}
+       > checking for GNU default /nix/store/gxzhl7aaiid7zp3y47jqqiq7zg5mqpwp-python3-3.14.6/bin/python exec_prefix... ${exec_prefix}
+       > checking for /nix/store/gxzhl7aaiid7zp3y47jqqiq7zg5mqpwp-python3-3.14.6/bin/python script directory (pythondir)... ${PYTHON_PREFIX}/lib/python3.14/site-packages
+       > checking for /nix/store/gxzhl7aaiid7zp3y47jqqiq7zg5mqpwp-python3-3.14.6/bin/python extension module directory (pyexecdir)... ${PYTHON_EXEC_PREFIX}/lib/python3.14/site-packages
+       > checking whether /nix/store/gxzhl7aaiid7zp3y47jqqiq7zg5mqpwp-python3-3.14.6/bin/python version is < 4.0... yes
+       > checking for cython... no
+       > configure: error: Couldn't find Cython
+       For full logs, run:
+         nix-store -l /nix/store/gyxzlmmyr6nfwjz659kmwrqa3py3fpkg-compizconfig-python-0.8.18.drv
+error: Cannot build '/nix/store/d8ihhm887qgw51lg44fgz588zc5cy8ry-compiz-reloaded-full.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/05wc5kav8vls3256ap0m486f9s5208x2-compiz-reloaded-full

@@ -1,0 +1,23 @@
+name: Packages Checks
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+
+jobs:
+  check:
+    name: Flake Checks & Packages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Nix
+        uses: cachix/install-nix-action@v25
+      - name: Check Flake
+        run: |
+          nix flake check --extra-experimental-features "nix-command flakes"
+      - name: Build Core Packages
+        run: |
+          nix build .#compiz-reloaded-full --extra-experimental-features "nix-command flakes"
+          nix build .#euclid-icon-theme --extra-experimental-features "nix-command flakes"
+          nix build .#euclid-welcome --extra-experimental-features "nix-command flakes"
