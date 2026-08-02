@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gupnp";
-  version = "1.6.9";
+  version = "1.6.10";
 
   outputs = [
     "out"
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gupnp/${lib.versions.majorMinor finalAttrs.version}/gupnp-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Lttu42E1WOYvU4c1NoruJxUbfgnU4uLFFgaDPagBhps=";
+    hash = "sha256-oe4Ht7Emc8Mtf8c8oVilDBpNxpqzW2XpTSTTish1NF4=";
   };
 
   depsBuildBuild = [
