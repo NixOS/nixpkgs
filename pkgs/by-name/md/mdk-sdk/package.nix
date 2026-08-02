@@ -12,6 +12,7 @@
   libglvnd,
   libpulseaudio,
   libxcb,
+  lz4,
   wayland,
   xz,
   zlib,
@@ -31,16 +32,16 @@ let
     }
     .${stdenv.hostPlatform.system} or "";
 
-  version = "0.35.1";
+  version = "0.37.0";
 
   linux = {
     url = "https://github.com/wang-bin/mdk-sdk/releases/download/v${version}/mdk-sdk-linux.tar.xz";
-    hash = "sha256-qdsYWu0bRRhPTbOEeGBFhPdk3S2JpqroOz+gd3KMDts=";
+    hash = "sha256-bBneSsNHfMH2MoDddT1cOtnyWjRNYHo0UTqnjrLpk4Q=";
   };
 
   darwin = {
     url = "https://github.com/wang-bin/mdk-sdk/releases/download/v${version}/mdk-sdk-apple.tar.xz";
-    hash = "sha256-u70LG4SiQnP9Fh0MEo7DHX1ISAvq37A9D0FMIOU/aAY=";
+    hash = "sha256-KGKzwy/unzkCUoh/dGjk0BVEUgDdMx5jy1Qt5C357DQ=";
   };
 
   sources = {
@@ -72,6 +73,7 @@ stdenv.mkDerivation {
     libglvnd
     libpulseaudio
     libxcb
+    lz4
     wayland
     xz
     zlib
