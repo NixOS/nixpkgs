@@ -27,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
+  strictDeps = true;
+
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = {
