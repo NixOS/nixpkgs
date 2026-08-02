@@ -14699,8 +14699,6 @@ self: super: with self; {
 
   pygount = callPackage ../development/python-modules/pygount { };
 
-  pygpgme = callPackage ../development/python-modules/pygpgme { };
-
   pygraphviz = callPackage ../development/python-modules/pygraphviz { inherit (pkgs) graphviz; };
 
   pygreat = callPackage ../development/python-modules/pygreat { };
