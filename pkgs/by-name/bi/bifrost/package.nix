@@ -6,6 +6,7 @@
   pkg-config,
   sqlite,
   nix-update-script,
+  nixosTests,
 }:
 
 let
@@ -98,6 +99,7 @@ buildGo127Module (finalAttrs: {
 
   passthru = {
     inherit ui;
+    tests = { inherit (nixosTests) bifrost; };
     updateScript = nix-update-script { };
   };
 
