@@ -939,101 +939,145 @@ To learn more about the default update procedures, read their [FAQ for Nixpkgs m
 >  - A `nix-update` CLI flag like `--version branch` or `--version-regex` are needed to make the update work.
 >  - You don't want to rely upon new versions to be listed in [Repology](https://repology.org/), and `nix-update` finds new versions easily (e.g GitLab projects).
 
-The `passthru.updateScript` attribute can contain one of the following:
+### Valid `passthru.updateScript` values
 
-- an executable file, either on the file system:
+Below are the types of values that can be used as `passthru.updateScript`.
 
-  ```nix
-  {
-    # ...
-    stdenv,
-    # ...
-  }:
-  stdenv.mkDerivation {
-    # ...
-    passthru.updateScript = ./update.sh;
-    # ...
-  }
-  ```
+#### Executable File
 
-  or inside the expression itself:
+Either on the file system:
 
-  ```nix
-  {
-    # ...
-    stdenv,
-    # ...
-    writeScript,
-  }:
-  stdenv.mkDerivation {
-    # ...
-    passthru.updateScript = writeScript "update-zoom-us" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
+```nix
+{
+  # ...
+  stdenv,
+  # ...
+}:
+stdenv.mkDerivation {
+  # ...
+  passthru.updateScript = ./update.sh;
+  # ...
+}
+```
 
-      set -eu -o pipefail
+Or inside the expression itself:
 
-      version="$(curl -sI https://zoom.us/client/latest/zoom_x86_64.tar.xz | grep -Fi 'Location:' | pcre2grep -o1 '/(([0-9]\.?)+)/')"
-      update-source-version zoom-us "$version"
-    '';
-    # ...
-  }
-  ```
+```nix
+{
+  # ...
+  stdenv,
+  # ...
+  writeScript,
+}:
+stdenv.mkDerivation {
+  # ...
+  passthru.updateScript = writeScript "update-zoom-us" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
-- a list, a script file followed by arguments to be passed to it:
+    set -eu -o pipefail
 
-  ```nix
-  {
-    # ...
-    stdenv,
-    # ...
-  }:
-  stdenv.mkDerivation (finalAttrs: {
-    # ...
-    passthru.updateScript = [
+    version="$(curl -sI https://zoom.us/client/latest/zoom_x86_64.tar.xz | grep -Fi 'Location:' | pcre2grep -o1 '/(([0-9]\.?)+)/')"
+    update-source-version zoom-us "$version"
+  '';
+  # ...
+}
+```
+
+#### List of Script & Arguments
+
+Example:
+
+```nix
+{
+  # ...
+  stdenv,
+  # ...
+}:
+stdenv.mkDerivation (finalAttrs: {
+  # ...
+  passthru.updateScript = [
+    ../../update.sh
+    finalAttrs.pname
+    "--requested-release=unstable"
+  ];
+  # ...
+})
+```
+
+#### Attribute Set
+
+A `passthru.updateScript` equal to an attribute set, can have several attributes, all used in the following example, and described below.
+
+```nix
+{
+  # ...
+  stdenv,
+  # ...
+}:
+stdenv.mkDerivation (finalAttrs: {
+  # ...
+  passthru.updateScript = {
+    command = [
       ../../update.sh
       finalAttrs.pname
-      "--requested-release=unstable"
     ];
-    # ...
-  })
-  ```
+    attrPath = finalAttrs.pname;
+    supportedFeatures = [
+      "commit"
+    ];
+  };
+  # ...
+})
+```
 
-- an attribute set containing:
-  - `command`
+##### `command` (string or list of strings, mandatory)
 
-    A string or list in the [format expected by `passthru.updateScript`][automatic-package-updates]
+A [string](#executable-file) or [list of strings](#list-of-script--arguments) as described in the above linked sections
 
-  - `attrPath` (optional)
+##### `attrPath` (string, optional)
 
-    A string containing the canonical attribute path for the package.
+A string containing the canonical attribute path for the package.
+If present, it will be passed to the update script instead of the attribute path on which the package was discovered during Nixpkgs traversal.
 
-    If present, it will be passed to the update script instead of the attribute path on which the package was discovered during Nixpkgs traversal.
+##### `supportedFeatures` (list, optional)
 
-  - `supportedFeatures` (optional)
+A list of the extra features the script supports.
+Below is a description of each of these features.
 
-    A list of the [extra features the script supports][supported-features].
+###### `commit`
 
-    ```nix
-    {
-      # ...
-      stdenv,
-      # ...
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      # ...
-      passthru.updateScript = {
-        command = [
-          ../../update.sh
-          finalAttrs.pname
-        ];
-        attrPath = finalAttrs.pname;
-        supportedFeatures = [
-          # ...
-        ];
-      };
-    })
-    ```
+This feature allows update scripts to *ask* `update.nix` to create Git commits.
+
+When support of this feature is declared, whenever the update script exits with `0` return status, it is expected to print a JSON list containing an object described below for each updated attribute to standard output.
+Example:
+
+```json
+[
+  {
+    "attrPath": "volume_key",
+    "oldVersion": "0.3.11",
+    "newVersion": "0.3.12",
+    "files": [
+      "/path/to/nixpkgs/pkgs/development/libraries/volume-key/default.nix"
+    ]
+  }
+]
+```
+
+When `update.nix` is run with `--arg commit true`, it will create a separate commit for each of the objects.
+An empty list can be returned when the script did not update any files; for example, when the package is already at the latest version.
+
+The commit object contains the following values:
+
+- `attrPath` – a string containing the attribute path
+- `oldVersion` – a string containing the old version
+- `newVersion` – a string containing the new version
+- `files` – a non-empty list of file paths (as strings) to add to the commit
+- `commitBody` (optional) – a string with extra content to be appended to the default commit message (useful for adding changelog links)
+- `commitMessage` (optional) – a string to use instead of the default commit message
+
+If the returned list contains exactly one object (e.g. `[{}]`), all values are optional and will be determined automatically.
 
 ### How are update scripts executed?
 
@@ -1055,45 +1099,7 @@ Furthermore each update script will be passed the following environment variable
 > Also note that `update.nix` executes update scripts in parallel by default, so you should avoid running `git commit` or any other commands that cannot handle that.
 
 While update scripts should not create commits themselves, `update.nix` supports automatically creating commits when running it with `--arg commit true`.
-If you need to customize commit message, you can have the update script implement the `commit` feature.
-
-### Supported features
-[update-script-supported-features]: #supported-features
-
-- `commit`
-
-  This feature allows update scripts to *ask* `update.nix` to create Git commits.
-
-  When support of this feature is declared, whenever the update script exits with `0` return status, it is expected to print a JSON list containing an object described below for each updated attribute to standard output.
-  Example:
-
-  ```json
-  [
-    {
-      "attrPath": "volume_key",
-      "oldVersion": "0.3.11",
-      "newVersion": "0.3.12",
-      "files": [
-        "/path/to/nixpkgs/pkgs/development/libraries/volume-key/default.nix"
-      ]
-    }
-  ]
-  ```
-  :::
-
-  When `update.nix` is run with `--arg commit true`, it will create a separate commit for each of the objects.
-  An empty list can be returned when the script did not update any files; for example, when the package is already at the latest version.
-
-  The commit object contains the following values:
-
-  - `attrPath` – a string containing the attribute path
-  - `oldVersion` – a string containing the old version
-  - `newVersion` – a string containing the new version
-  - `files` – a non-empty list of file paths (as strings) to add to the commit
-  - `commitBody` (optional) – a string with extra content to be appended to the default commit message (useful for adding changelog links)
-  - `commitMessage` (optional) – a string to use instead of the default commit message
-
-  If the returned list contains exactly one object (e.g. `[{}]`), all values are optional and will be determined automatically.
+If you need to customize commit message, you can have the update script implement the `commit` feature, as described in [`commit` supported feature](#commit).
 
 ## Reviewing contributions
 
