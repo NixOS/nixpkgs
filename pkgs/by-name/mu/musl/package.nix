@@ -176,6 +176,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.linuxHeaders = linuxHeaders;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   meta = {
     description = "Efficient, small, quality libc implementation";
     homepage = "https://musl.libc.org/";
