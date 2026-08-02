@@ -292,13 +292,13 @@
     "vendorHash": "sha256-frrFEPGmvem2qQSpPn9fG5hUITa2k5fQ0NHfm65ehfI="
   },
   "datadrivers_nexus": {
-    "hash": "sha256-gwExaFhOoJFrAhH91oZEp1AFvI7kgWekp655zd4tyd8=",
+    "hash": "sha256-t9hpZ4COmMPvs4TgcZLeuOA23oD5vvHw8UVK7SpzI0Y=",
     "homepage": "https://registry.terraform.io/providers/datadrivers/nexus",
     "owner": "datadrivers",
     "repo": "terraform-provider-nexus",
-    "rev": "v2.8.0",
+    "rev": "v3.0.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-2nNvLu2jicDUxiIi53qxtc6rvZQ+IEtW+LbRPYChfQE="
+    "vendorHash": "sha256-DXQ8bfDLI0Wt2UXXeRXaZkgLXoYKjJ6MMNeTbZctD6E="
   },
   "denoland_deno": {
     "hash": "sha256-7IvJrhXMeAmf8e21QBdYNSJyVMEzLpat4Tm4zHWglW8=",
