@@ -1,0 +1,50 @@
+{
+  "compiz-core": {
+    "url": "https://gitlab.com/compiz/compiz-core/-/archive/v0.8.18/compiz-core-v0.8.18.tar.gz",
+    "hash": "sha256-cWjsqEsYMsU85YCMAAmefu4wQwN7hYsDuCxsjY4tSFI="
+  },
+  "compiz-plugins-main": {
+    "url": "https://gitlab.com/compiz/compiz-plugins-main/-/archive/v0.8.18/compiz-plugins-main-v0.8.18.tar.gz",
+    "hash": "sha256-Uad6oQE6YK/6ntvSE2Z2ED1mTsFdDdYRLnBuSwOz+hI="
+  },
+  "compiz-plugins-extra": {
+    "url": "https://gitlab.com/compiz/compiz-plugins-extra/-/archive/v0.8.18/compiz-plugins-extra-v0.8.18.tar.gz",
+    "hash": "sha256-HMWV9PO9JwPOKMdHIPou2ElOzmARez4yQwqbv2vBQYQ="
+  },
+  "compiz-plugins-experimental": {
+    "url": "https://gitlab.com/compiz/compiz-plugins-experimental/-/archive/v0.8.18/compiz-plugins-experimental-v0.8.18.tar.gz",
+    "hash": "sha256-nGkYfX5qlGs1gmDLh4UqlnHFUKXRzXD/dwpJO4J94Z8="
+  },
+  "libcompizconfig": {
+    "url": "https://gitlab.com/compiz/libcompizconfig/-/archive/v0.8.18/libcompizconfig-v0.8.18.tar.gz",
+    "hash": "sha256-nvpMdfr8bqQ1UMNTxlR+x3uqRSjRx32x1tnd6hl6A38="
+  },
+  "compizconfig-python": {
+    "url": "https://gitlab.com/compiz/compizconfig-python/-/archive/v0.8.18/compizconfig-python-v0.8.18.tar.gz",
+    "hash": "sha256-QkO5WDniXlrcwUbSJ7ZlyW2sLi4Ik8zMAhXJpn7DO2c="
+  },
+  "ccsm": {
+    "url": "https://gitlab.com/compiz/ccsm/-/archive/v0.8.18/ccsm-v0.8.18.tar.gz",
+    "hash": "sha256-QVSD/5lDUL36oV/51O4JrIgFRLiEZM6YuItkBCbWZ7c="
+  },
+  "simple-ccsm": {
+    "url": "https://gitlab.com/compiz/simple-ccsm/-/archive/v0.8.18/simple-ccsm-v0.8.18.tar.gz",
+    "hash": "sha256-QpP1h1nCvwogd2BPW2r39DNzFsFgocSPUUmv+3GB+DQ="
+  },
+  "emerald": {
+    "url": "https://gitlab.com/compiz/emerald/-/archive/v0.8.18/emerald-v0.8.18.tar.gz",
+    "hash": "sha256-SWcnOgpbTMFIIlOzZqOE/UdHrxn0UX4ZKkntHryZd08="
+  },
+  "emerald-themes": {
+    "url": "https://gitlab.com/compiz/emerald-themes/-/archive/v0.8.18/emerald-themes-v0.8.18.tar.gz",
+    "hash": "sha256-3aM3wuNAy7xlSuhU+wwug/N4q+7YGdW9QF01I7e8wPU="
+  },
+  "fusion-icon": {
+    "url": "https://gitlab.com/compiz/fusion-icon/-/archive/v0.2.4/fusion-icon-v0.2.4.tar.gz",
+    "hash": "sha256-GZW0GP1vdb3ZQcdfv8f92FP9rBZWsoGcpBsWV8RLhD0="
+  },
+  "compiz-manager": {
+    "url": "https://gitlab.com/compiz/compiz-manager/-/archive/v0.7.0/compiz-manager-v0.7.0.tar.gz",
+    "hash": "sha256-bfhZY8eKUA+ds/PrRAwqeqHjPlX8helpHZvclwVN3V0="
+  }
+}
