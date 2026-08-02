@@ -1614,11 +1614,7 @@ in
           ];
           RestrictNamespaces = true;
           LockPersonality = true;
-          MemoryDenyWriteExecute =
-            !(
-              (builtins.any (mod: (mod.allowMemoryWriteExecute or false)) cfg.package.modules)
-              || (lib.getName cfg.package == "openresty")
-            );
+          MemoryDenyWriteExecute = false; # for pcre2 & several plugins
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
           RemoveIPC = true;
