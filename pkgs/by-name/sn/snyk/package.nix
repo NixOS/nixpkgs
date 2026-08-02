@@ -24,9 +24,9 @@ buildNpmPackage (finalAttrs: {
     '';
   };
 
-  npmDepsFetcherVersion = 3;
+  npmDepsFetcherVersion = 2;
 
-  npmDepsHash = "sha256-AmJNFEw7IF9PjgeRma6vp3I7a60ZkekfRkPXJtjVIik=";
+  npmDepsHash = "sha256-e7C2ZG7SH9xjfU07lX8rzPeox6k2Fdz7AowOduLxvvs=";
 
   nodejs = nodejs_24;
 
