@@ -14,7 +14,6 @@
   libvpx,
   libxslt,
   libnotify,
-  libappindicator-gtk2,
   libappindicator-gtk3,
   libxkbcommon,
   libGL,
@@ -58,7 +57,6 @@ let
     libvpx
     libxslt
     libnotify
-    libappindicator-gtk2
     libappindicator-gtk3
     libxkbcommon
     libGL
