@@ -9,7 +9,8 @@
   protobuf,
   zlib,
   catch2,
-  versionCheckHook
+  versionCheckHook,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -54,6 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Remote shell that automatically reconnects without interrupting the session";
