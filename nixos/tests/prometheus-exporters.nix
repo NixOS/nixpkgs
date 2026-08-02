@@ -1750,6 +1750,22 @@ let
         '';
       };
 
+    speedtest-ookla =
+      { ... }:
+      {
+        exporterConfig = {
+          enable = true;
+          debug = true;
+          refreshInterval = "1h";
+        };
+
+        exporterTest = ''
+          wait_for_unit("prometheus-speedtest-ookla-exporter.service")
+          wait_for_open_port(9876)
+          succeed("curl -sSf http://localhost:9876")
+        '';
+      };
+
     storagebox =
       { ... }:
       {
