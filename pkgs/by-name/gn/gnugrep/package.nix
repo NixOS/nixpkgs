@@ -63,6 +63,8 @@ stdenv.mkDerivation {
   ]
   ++ lib.optional (!stdenv.hostPlatform.isWindows) runtimeShellPackage;
 
+  strictDeps = true;
+
   # cygwin: FAIL: multibyte-white-space
   # freebsd: FAIL mb-non-UTF8-performance
   # x86_64-darwin: fails 'stack-overflow' tests on Rosetta 2 emulator
