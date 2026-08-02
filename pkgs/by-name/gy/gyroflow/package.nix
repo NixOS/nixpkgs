@@ -17,8 +17,10 @@
   libicns,
   libxml2,
   mdk-sdk,
+  nix-update-script,
   ocl-icd,
   opencv,
+  versionCheckHook,
   zlib,
 }:
 let
@@ -29,18 +31,21 @@ let
     hash = "sha256-W5E2aXt13fnNogll8X54a2yFMOPVkQn4dQUGlgLn9nY=";
   };
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gyroflow";
   version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "gyroflow";
     repo = "gyroflow";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ncGbM8wIwnyLHp+oArgDnKCCGIeywdH7YGZPgRBLiJM=";
   };
 
   cargoHash = "sha256-9UamQxrKVMSivhZ/cvRRCliaf3eFeHg5XPPtuaRKrg0=";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     clang
@@ -80,6 +85,10 @@ rustPlatform.buildRustPackage rec {
 
     substituteInPlace build.rs \
       --replace-fail 'println!("cargo:rustc-link-lib=static:+whole-archive=z")' ""
+
+    # Breaks reproducibility with build time embedded in the binary
+    substituteInPlace build.rs \
+      --replace-fail 'println!("cargo:rustc-env=BUILD_TIME={}", (time.as_secs() - 1642516578) / 600);' ""
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace build.rs \
@@ -134,16 +143,15 @@ rustPlatform.buildRustPackage rec {
   # For qml-video-rs. It concatenates "lib/" to this value so it needs a trailing "/":
   env.MDK_SDK = "${mdk-sdk}/";
 
-  preCheck = ''
-    # qml-video-rs/build.rs wants to overwrite it:
-    find target -name libmdk.so.0 -exec chmod +w {} \;
-  '';
-
   doCheck = false; # No tests.
 
   # mdk-sdk license key is hardcoded to 'gyroflow' process name, wrapQt changes it,
   # which breaks the license check and throws a QR code
   dontWrapQtApps = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   postInstall =
     if stdenv.hostPlatform.isDarwin then
@@ -207,7 +215,7 @@ rustPlatform.buildRustPackage rec {
       name = "gyroflow";
       desktopName = "Gyroflow";
       genericName = "Video stabilization using gyroscope data";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       icon = "gyroflow";
       exec = "gyroflow-open %u";
       terminal = false;
@@ -224,9 +232,12 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Advanced gyro-based video stabilization tool";
     homepage = "https://gyroflow.xyz";
+    mainProgram = "gyroflow";
     license = with lib.licenses; [
       gpl3Plus
       cc0
@@ -240,4 +251,4 @@ rustPlatform.buildRustPackage rec {
       "x86_64-linux"
     ];
   };
-}
+})
