@@ -29,8 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./disable-gtk2.patch
   ];
 
-  preferLocalBuild = true;
-
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
@@ -47,12 +45,18 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
   ];
 
-  postPatch = "patchShebangs .";
+  postPatch = ''
+    substituteInPlace gtk/Makefile.am \
+      --replace-fail "--jobs 100%" '--jobs ''${NIX_BUILD_CORES}'
+
+    patchShebangs .
+  '';
 
   configureFlags = [
     "--disable-gtk_legacy"
     "--disable-gtk_next"
     "--disable-unity"
+    "--enable-parallel"
   ];
 
   meta = {
