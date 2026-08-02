@@ -3,6 +3,7 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  fetchurl,
   makeDesktopItem,
   clang,
   copyDesktopItems,
@@ -21,11 +22,11 @@
   zlib,
 }:
 let
-  lens-profiles = fetchFromGitHub {
-    owner = "gyroflow";
-    repo = "lens_profiles";
-    tag = "v36";
-    hash = "sha256-JjH7cGT9hzB9pv0W6FUPaejkiUj357IM2siJNrSHiYY=";
+  lens-profiles-version = "v41";
+
+  lens-profiles-db = fetchurl {
+    url = "https://github.com/gyroflow/lens_profiles/releases/download/${lens-profiles-version}/profiles.cbor.gz";
+    hash = "sha256-W5E2aXt13fnNogll8X54a2yFMOPVkQn4dQUGlgLn9nY=";
   };
 in
 rustPlatform.buildRustPackage rec {
@@ -75,6 +76,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postPatch = ''
+    install -Dm644 ${lens-profiles-db} resources/camera_presets/profiles.cbor.gz
+
     substituteInPlace build.rs \
       --replace-fail 'println!("cargo:rustc-link-lib=static:+whole-archive=z")' ""
   ''
@@ -162,7 +165,7 @@ rustPlatform.buildRustPackage rec {
 
         png2icns $contents/Resources/AppIcon.icns resources/icon_1024_mac.png
 
-        ln -s ${lens-profiles} $contents/Resources/camera_presets
+        install -Dm644 ${lens-profiles-db} $contents/Resources/camera_presets/profiles.cbor.gz
 
         install_name_tool -add_rpath ${mdk-sdk}/lib $out/bin/gyroflow
         mv $out/bin/gyroflow $contents/MacOS/gyroflow
@@ -174,7 +177,6 @@ rustPlatform.buildRustPackage rec {
       ''
         mkdir -p $out/opt/Gyroflow
         cp -r resources $out/opt/Gyroflow/
-        ln -s ${lens-profiles} $out/opt/Gyroflow/resources/camera_presets
 
         rm -rf $out/lib
         patchelf $out/bin/gyroflow --add-rpath ${mdk-sdk}/lib
