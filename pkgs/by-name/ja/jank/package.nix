@@ -107,6 +107,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     pushd ..
     ./build/jank-test
     popd
+    runHook postCheck
   '';
 
   meta = with lib; {
