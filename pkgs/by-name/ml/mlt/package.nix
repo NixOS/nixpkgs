@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gdk-pixbuf
-    (opencv4.override { ffmpeg-headless = ffmpeg; })
+    opencv4
     ffmpeg
     fftw
     fontconfig
@@ -137,6 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "MOD_OPENCV" true)
     (lib.cmakeBool "MOD_QT6" (qtbase != null && lib.versions.major qtbase.version == "6"))
     (lib.cmakeBool "MOD_GLAXNIMATE_QT6" (qtbase != null && lib.versions.major qtbase.version == "6"))
+    (lib.cmakeBool "RELOCATABLE" false)
   ]
   ++ lib.optionals enablePython [
     (lib.cmakeBool "SWIG_PYTHON" true)
