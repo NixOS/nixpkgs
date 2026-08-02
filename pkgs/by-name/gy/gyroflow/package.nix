@@ -10,7 +10,7 @@
   qt6,
   alsa-lib,
   bash,
-  ffmpeg,
+  ffmpeg_7,
   mdk-sdk,
   ocl-icd,
   opencv,
@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     alsa-lib
     bash
-    ffmpeg
+    ffmpeg_7
     mdk-sdk
     ocl-icd
     opencv
@@ -85,7 +85,7 @@ rustPlatform.buildRustPackage rec {
   # does not contain ffmpeg *headers*.  gyroflow assumes that it
   # contains ffmpeg *libraries*, but builds fine as long as it is set
   # with any value.
-  env.FFMPEG_DIR = ffmpeg.dev;
+  env.FFMPEG_DIR = ffmpeg_7.dev;
 
   # These variables are needed by gyroflow/build.rs.
   # OPENCV_LINK_LIBS is based on the value in gyroflow/_scripts/common.just, with opencv_dnn added to fix linking.
