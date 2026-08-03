@@ -27,6 +27,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     homepage = "https://github.com/mina86/pygtrie";
     description = "Trie data structure implementation";
+    changelog = "https://github.com/mina86/pygtrie/blob/v${finalAttrs.version}/version-history.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ kmein ];
   };
