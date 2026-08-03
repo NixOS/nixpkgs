@@ -5,13 +5,12 @@
   lib,
   gnugrep,
   gnused,
-  curl,
+  curl-impersonate,
   catt,
   syncplay,
-  openssl,
   ffmpeg,
   fzf,
-  aria2,
+  yt-dlp,
   mpv,
   vlc,
   iina,
@@ -39,16 +38,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ makeWrapper ];
   runtimeInputs = [
-    openssl
     gnugrep
     gnused
-    curl
+    curl-impersonate
     fzf
     ffmpeg
-    aria2
+    yt-dlp
   ]
   ++ lib.optional chromecastSupport catt
   ++ lib.optional syncSupport syncplay;
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   installPhase = ''
     runHook preInstall
