@@ -114,11 +114,11 @@
       "dependency": "direct dev",
       "description": {
         "name": "cli_util",
-        "sha256": "5909d2c6b66817222779e1eedc19e0e28b76d1df7bd9856a4792ccb9881df358",
+        "sha256": "71e43f1976c3eae2d9468a5b4d6600bf8cae61508b87f27fa1799228935d48ab",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.5.1"
+      "version": "0.5.2"
     },
     "collection": {
       "dependency": "direct main",
@@ -484,11 +484,11 @@
       "dependency": "transitive",
       "description": {
         "name": "posix",
-        "sha256": "185ef7606574f789b40f289c233efa52e96dead518aed988e040a10737febb07",
+        "sha256": "bc1bad54ad2b735816e31f8d4600cfde6c7839975085ddfbca48b6c9f7c4044e",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "6.5.0"
+      "version": "6.5.2"
     },
     "protobuf": {
       "dependency": "direct main",
