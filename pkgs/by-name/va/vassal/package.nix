@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "VASSAL";
-  version = "3.7.20";
+  version = "3.7.26";
 
   src = fetchzip {
     url = "https://github.com/vassalengine/vassal/releases/download/${version}/${pname}-${version}-linux.tar.bz2";
-    sha256 = "sha256-aPJgZGRbP016w8riqIVOYnH90QvRs4hnsEdbCVJmLZc=";
+    sha256 = "sha256-ZohCpX5ys2W/SLrlhrOYWQU3dXznpWkF9s55+0RxCZs=";
   };
 
   buildInputs = [
