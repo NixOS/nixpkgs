@@ -1,6 +1,9 @@
-{ lib, ... }:
+{ lib, modulesPath, ... }:
 {
-  imports = [ ./backend.nix ];
+  imports = [
+    ./backend.nix
+    "${modulesPath}/security/vars.nix"
+  ];
 
   vars = {
     prompts.example.description = "Your name";

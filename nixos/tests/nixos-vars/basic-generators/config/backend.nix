@@ -57,13 +57,13 @@ in
       fixup = noop;
 
       deploy = mkBackendScript "deploy" ''
-        echo "Not implemented :(" 1>&2 
+        echo "Not implemented :(" 1>&2
         exit 1
       '';
 
       deployLocal = mkBackendScript "deployLocal" ''
         if [[ ! -d "$1" ]]; then
-          echo "System root not found" 1>&2 
+          echo "System root not found" 1>&2
           exit 1
         fi
 

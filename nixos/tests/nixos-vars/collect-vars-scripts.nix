@@ -7,7 +7,7 @@
 { pkgs, config }:
 let
   inherit (pkgs) lib;
-  evaluated = import ../nix_vars/nix/jsonify.nix {
+  evaluated = pkgs.nixos-vars.jsonify {
     inherit config;
     pkgsHost = pkgs;
     pkgsTarget = pkgs;
