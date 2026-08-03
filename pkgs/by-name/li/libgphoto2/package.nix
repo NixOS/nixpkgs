@@ -43,6 +43,9 @@ stdenv.mkDerivation rec {
     curl
     libxml2
     gd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    gettext
   ];
 
   doInstallCheck = true;
