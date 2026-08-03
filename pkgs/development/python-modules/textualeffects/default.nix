@@ -10,6 +10,7 @@ buildPythonPackage rec {
   pname = "textualeffects";
   version = "0.2.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchPypi {
     inherit pname version;
