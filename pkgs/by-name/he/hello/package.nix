@@ -35,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
   ];
 
+  strictDeps = true;
+
   doCheck = true;
 
   doInstallCheck = true;
