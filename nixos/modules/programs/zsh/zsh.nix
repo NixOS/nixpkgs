@@ -58,6 +58,8 @@ in
         type = lib.types.bool;
       };
 
+      package = lib.mkPackageOption pkgs "zsh" { };
+
       shellAliases = lib.mkOption {
         default = { };
         description = ''
@@ -195,7 +197,7 @@ in
           . ${config.system.build.setEnvironment}
       fi
 
-      HELPDIR="${pkgs.zsh}/share/zsh/$ZSH_VERSION/help"
+      HELPDIR="${cfg.package}/share/zsh/$ZSH_VERSION/help"
 
       # Tell zsh how to find installed completions.
       for p in ''${(z)NIX_PROFILES}; do
@@ -307,7 +309,7 @@ in
     environment.etc.zinputrc.text = builtins.readFile ./zinputrc;
 
     environment.systemPackages = [
-      pkgs.zsh
+      cfg.package
     ]
     ++ lib.optional cfg.enableCompletion pkgs.nix-zsh-completions;
 
@@ -317,7 +319,7 @@ in
 
     environment.shells = [
       "/run/current-system/sw/bin/zsh"
-      "${pkgs.zsh}/bin/zsh"
+      "${cfg.package}/bin/zsh"
     ];
 
   };
