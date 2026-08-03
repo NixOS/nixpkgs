@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "http://www.calculix.de";
+    homepage = "https://www.calculix.de";
     description = "Three-dimensional structural finite element program";
     mainProgram = "ccx";
     license = lib.licenses.gpl2Plus;
