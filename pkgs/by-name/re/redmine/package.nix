@@ -3,6 +3,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  fetchpatch,
   bundlerEnv,
   ruby_3_4,
   makeWrapper,
@@ -71,6 +72,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     url = "https://www.redmine.org/releases/redmine-${finalAttrs.version}.tar.gz";
     hash = "sha256-YdswCMf9GKOvxVntZW/Tj9+N+CIKxpWYsxkJUYMZC3o=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "update_rails_7_2_3_2.patch";
+      url = "https://github.com/redmine/redmine/commit/4817525723f7bd900f12ce8c16f05326c25cbadf.patch";
+      hash = "sha256-UYmaDnVNpuO0nZuuDHLecBd9rFkDq2jTCCX4Rm0xsB8=";
+    })
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
