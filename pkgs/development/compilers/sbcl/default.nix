@@ -186,6 +186,19 @@ stdenv.mkDerivation (finalAttrs: {
         ./patches/dynamic-space-size-envvar-2.5.2-tests.patch
       ];
 
+  postPatch =
+    # On SBCL < 2.5.0, `elf-sans-immobile.test.sh` triggers a bug in ZFS and
+    # causes the build to hang indefinitely. See:
+    # https://github.com/NixOS/nixpkgs/issues/544703#issuecomment-5141409041
+    # https://github.com/openzfs/zfs/issues/18135#issuecomment-5141375047
+    # To unbreak Hydra, skip the test.
+    if lib.versionOlder finalAttrs.version "2.5.0" then
+      ''
+        rm tests/elf-sans-immobile.test.sh
+      ''
+    else
+      null;
+
   sbclPatchPhase =
     lib.optionalString (finalAttrs.disabledTestFiles != [ ]) ''
       (cd tests ; rm -f ${lib.concatStringsSep " " finalAttrs.disabledTestFiles})
