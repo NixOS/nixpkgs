@@ -1,4 +1,6 @@
 {
+  stdenv,
+  buildPackages,
   fetchFromGitHub,
   gnupg,
   gpgme,
@@ -65,14 +67,25 @@ rustPlatform.buildRustPackage (finalAttrs: {
     nix
   ];
 
-  postBuild = ''
-    cargo xtask dist-man
-    cargo xtask dist-completions
-  '';
-
   postInstall = ''
-    installManPage target/dist/*.1
-    installShellCompletion target/dist/lx.{bash,fish} --zsh target/dist/_lx
+    ${
+      # Using lx to generate man pages and completions is faster than xtask
+      if stdenv.hostPlatform.emulatorAvailable buildPackages then
+        let
+          lx = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/lx";
+        in
+        ''
+          ${lx} util man --target-dir="target/dist"
+          ${lx} util completion --target-dir="target/dist"
+        ''
+      else
+        ''
+          cargo xtask dist-man
+          cargo xtask dist-completions
+        ''
+    }
+      installManPage target/dist/*.1
+      installShellCompletion target/dist/lx.{bash,fish} --zsh target/dist/_lx
   '';
 
   meta = {
