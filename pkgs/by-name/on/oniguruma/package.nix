@@ -23,6 +23,9 @@ stdenv.mkDerivation (finalAttrs: {
   outputBin = "dev"; # onig-config
 
   nativeBuildInputs = [ autoreconfHook ];
+
+  strictDeps = true;
+
   configureFlags = [ "--enable-posix-api=yes" ];
 
   meta = {
