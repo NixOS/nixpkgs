@@ -3,12 +3,14 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyhomepilot";
   version = "0.0.3";
-  format = "setuptools";
+
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nico0302";
@@ -17,7 +19,9 @@ buildPythonPackage rec {
     sha256 = "00gmqx8cwsd15iccnlr8ypgqrdg6nw9ha518cfk7pyp8vhw1ziwy";
   };
 
-  propagatedBuildInputs = [ aiohttp ];
+  build-system = [ setuptools ];
+
+  dependencies = [ aiohttp ];
 
   # Project has no tests
   doCheck = false;
