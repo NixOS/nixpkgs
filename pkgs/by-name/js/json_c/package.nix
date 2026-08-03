@@ -23,6 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     (lib.cmakeBool "BUILD_APPS" false)
   ];
