@@ -137,7 +137,7 @@ let
       appname
       meta
       ;
-    sourceRoot = "${appname}.app";
+    sourceRoot = "Obsidian ${version}-universal/${appname}.app";
     nativeBuildInputs = [
       makeWrapper
       _7zz
