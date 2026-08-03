@@ -38,6 +38,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Pysbd (Python Sentence Boundary Disambiguation) is a rule-based sentence boundary detection that works out-of-the-box across many languages";
     homepage = "https://github.com/nipunsadvilkar/pySBD";
+    changelog = "https://github.com/nipunsadvilkar/pySBD/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     teams = [ lib.teams.tts ];
   };
