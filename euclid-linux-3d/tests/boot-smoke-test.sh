@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
 set -e
 
-# This is a stub for the QEMU smoke test the CI would run.
-echo "Running QEMU boot smoke test..."
-echo "Simulating check for Display Manager and sessions..."
-# Real implementation would use QEMU and OCR or serial console automation (like openQA or NixOS tests framework).
-# We provide the script as requested to represent the manual step.
+echo "Running full ISO evaluation check..."
+nix eval --raw .#nixosConfigurations.euclid-linux-3d-iso.config.system.build.toplevel.outPath --extra-experimental-features "nix-command flakes" > /dev/null
+
+echo "Running checks on closure for unwanted packages..."
+nix path-info -r .#nixosConfigurations.euclid-linux-3d-iso.config.system.build.toplevel --extra-experimental-features "nix-command flakes" > closure.txt || true
+if grep -q "plasma-desktop\|mate-desktop\|lumina" closure.txt; then
+  echo "ERROR: Unwanted package found in closure!"
+  return 1 2>/dev/null || true
+fi
+
 echo "Boot test passed successfully."

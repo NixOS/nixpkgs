@@ -23,9 +23,8 @@
           modules = [
             "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-graphical-calamares.nix"
             ./modules/core/default.nix
-            ./profiles/lumina-compiz.nix
-            ./profiles/mate-compiz.nix
-            ./profiles/plasma.nix
+            ./modules/branding/default.nix
+            ./profiles/budgie-compiz.nix
           ];
         };
       };
