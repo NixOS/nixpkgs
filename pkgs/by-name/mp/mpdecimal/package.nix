@@ -34,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     echo -n $cxx >> $dev/nix-support/propagated-build-inputs
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Library for arbitrary precision decimal floating point arithmetic";
 
