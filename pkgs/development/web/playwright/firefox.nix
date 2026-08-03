@@ -19,8 +19,8 @@ let
       inherit (download) url stripRoot;
       hash =
         {
-          x86_64-linux = "sha256-ol9Ai8BpstZdfd6v1NDq66BjLTr/5THya0Fk2z1toJg=";
-          aarch64-linux = "sha256-G0pcHmjRj5GKsDF7iHdQyGsJCiv4gqaFv2PwGa/t8bw=";
+          x86_64-linux = "sha256-GmjRWhlSv7by3PFtrKgo6EBmHigmp55HwG8iA/Ykq88=";
+          aarch64-linux = "sha256-7vxVe82NxebzoSSoSFg9qNxKOqlT7EOwCxQVavkDoMM=";
         }
         .${system} or throwSystem;
     };
