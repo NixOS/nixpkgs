@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ggshield";
-  version = "1.52.2";
+  version = "1.53.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "ggshield";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bz3R1ylmkaYF3Wt/ylzeE2IsWKvZ8bmoF39Xu4tVzFU=";
+    hash = "sha256-1LyO5zcd5ueiWSZcwel5JqhdS9UKtESoNxYyY9z+Rbc=";
   };
 
   pythonRelaxDeps = true;
@@ -44,6 +44,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     tomli
     truststore
     typing-extensions
+    unearth
     urllib3
   ];
 
