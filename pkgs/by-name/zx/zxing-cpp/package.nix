@@ -38,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DZXING_DEPENDENCIES=LOCAL"
     "-DZXING_EXAMPLES=OFF"
     "-DZXING_USE_BUNDLED_ZINT=OFF"
+    (lib.cmakeFeature "ZXING_WRITERS" "BOTH")
   ];
 
   passthru = {
