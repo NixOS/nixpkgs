@@ -23,11 +23,13 @@ Here's how a basic generator might look like:
 {
   vars.generators.example = {
     backend = "plain";
-    files.example = {};
-    script = pkgs: pkgs.writeScript "gen-example" ''
-      #!/bin/sh
-      echo "Hewwo world!" > "$out/example"
-    '';
+    files.example = { };
+    script =
+      pkgs:
+      pkgs.writeScript "gen-example" ''
+        #!/bin/sh
+        echo "Hewwo world!" > "$out/example"
+      '';
   };
 }
 ```
@@ -75,13 +77,20 @@ Generators can depend on other generators. The inputs for a given generator will
   vars.generators.derived = {
     dependencies = [ "example" ];
     files.derived = { };
-    script = pkgs: pkgs.writeScript "gen-derived" ''
-      #!/bin/sh
-      export PATH="${lib.makeBinPath [ pkgs.coreutils pkgs.cowsay ]}"
-      cat $in/example/example | cowsay > $out/derived
-    '';
+    script =
+      pkgs:
+      pkgs.writeScript "gen-derived" ''
+        #!/bin/sh
+        export PATH="${
+          lib.makeBinPath [
+            pkgs.coreutils
+            pkgs.cowsay
+          ]
+        }"
+        cat $in/example/example | cowsay > $out/derived
+      '';
   };
-};
+}
 ```
 
 Note that we did not manually specify a backend this time! In such scenarios, the module will automatically use the `vars.defaultGeneratorBackend` backend. Running the CLI should generate the new secret:
@@ -112,13 +121,15 @@ It is often useful for generators to allow human (or otherwise external) input. 
     };
 
     generators.example = {
-      files.example = {};
+      files.example = { };
       prompts = [ "name" ];
-      script = pkgs: pkgs.writeScript "gen-example" ''
-        #!/bin/sh
-        export PATH="${lib.makeBinPath [ pkgs.coreutils ]}"
-        echo "Hi! My name is $(cat "$prompts/name")." > "$out/example"
-      '';
+      script =
+        pkgs:
+        pkgs.writeScript "gen-example" ''
+          #!/bin/sh
+          export PATH="${lib.makeBinPath [ pkgs.coreutils ]}"
+          echo "Hi! My name is $(cat "$prompts/name")." > "$out/example"
+        '';
     };
   };
 }
@@ -131,23 +142,31 @@ Running the above through the CLI (with the `-g` flag!) will ask the user to typ
 Before jumping in to the more complex idea of generator backends, we'll go over how one can specify prompt backends:
 
 ```nix
-  vars.promptBackends.plain.script = pkgs: pkgs.writeScript "simple-prompt" ''
-    #!/bin/sh
-    export PATH="${lib.makeBinPath [ pkgs.coreutils pkgs.cowsay ]}"
-    if [[ "$1" == "line" ]]; then
-      read -rp "$2: " text
-      echo -n "$text" > "$out"
-    elif [[ "$1" == "hidden" ]]; then
-      read -srp "$2: " text
-      echo ""
-      echo -n "$text" > "$out"
-    elif [[ "$1" == "multiline" ]]; then
-      echo "<$2>" > "$out"
-      $EDITOR "$out"
-    else
-      exit 1
-    fi
-  '';
+{
+  vars.promptBackends.plain.script =
+    pkgs:
+    pkgs.writeScript "simple-prompt" ''
+      #!/bin/sh
+      export PATH="${
+        lib.makeBinPath [
+          pkgs.coreutils
+          pkgs.cowsay
+        ]
+      }"
+      if [[ "$1" == "line" ]]; then
+        read -rp "$2: " text
+        echo -n "$text" > "$out"
+      elif [[ "$1" == "hidden" ]]; then
+        read -srp "$2: " text
+        echo ""
+        echo -n "$text" > "$out"
+      elif [[ "$1" == "multiline" ]]; then
+        echo "<$2>" > "$out"
+        $EDITOR "$out"
+      else
+        exit 1
+      fi
+    '';
 }
 ```
 
@@ -207,15 +226,20 @@ Backends will commonly need to define custom per-generator or per-file options. 
 {
   # Extracted from the age backend
   options.vars.generators = lib.mkOption {
-    type = lib.types.attrsOf (lib.types.submodule {
-      options.age.identity.host = lib.mkOption {
-        default = config.vars.age.identity.host;
-        type = lib.types.oneOf [ lib.types.str lib.types.path ];
-        description = ''
-          Path to the age private key file for decryption on the host machine
-        '';
-      };
-    });
+    type = lib.types.attrsOf (
+      lib.types.submodule {
+        options.age.identity.host = lib.mkOption {
+          default = config.vars.age.identity.host;
+          type = lib.types.oneOf [
+            lib.types.str
+            lib.types.path
+          ];
+          description = ''
+            Path to the age private key file for decryption on the host machine
+          '';
+        };
+      }
+    );
   };
 }
 ```
