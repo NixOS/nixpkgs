@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
+  callPackage,
   fetchFromGitHub,
   versionCheckHook,
   appdirs,
@@ -86,6 +87,12 @@ buildPythonPackage (finalAttrs: {
   dontWrapQtApps = true;
 
   pythonImportsCheck = [ "plover" ];
+
+  passthru = {
+    wrapPloverExes = callPackage ./wrap-plover-exes.nix {
+      plover = finalAttrs.finalPackage;
+    };
+  };
 
   meta = {
     description = "OpenSteno Plover stenography software";
