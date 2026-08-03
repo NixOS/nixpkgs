@@ -23,14 +23,14 @@ buildPythonPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "kaggle";
-  version = "2.2.3";
+  version = "2.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kaggle";
     repo = "kaggle-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NvSR3kSncBtjj2zuwESGXRMbZofYcnRnXIglRJ3dsrQ=";
+    hash = "sha256-G/9Z6sLapCoM1LLavn/y3jAsJeOBLnf7xL1ffixazPM=";
   };
 
   build-system = [ hatchling ];

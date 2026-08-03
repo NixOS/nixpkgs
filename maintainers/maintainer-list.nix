@@ -7425,6 +7425,12 @@
     githubId = 974130;
     name = "David Pätzel";
   };
+  dpaulat = {
+    email = "dpaulat@gmail.com";
+    name = "Dan Paulat";
+    github = "dpaulat";
+    githubId = 2886605;
+  };
   dpc = {
     email = "dpc@dpc.pw";
     github = "dpc";
@@ -24023,6 +24029,12 @@
     github = "rguevara84";
     githubId = 12279531;
     name = "Ricardo Guevara";
+  };
+  rharish = {
+    email = "harish.rajagopals@gmail.com";
+    github = "rharish101";
+    githubId = 25344287;
+    name = "Harish Rajagopal";
   };
   rhelmot = {
     name = "Audrey Dutcher";

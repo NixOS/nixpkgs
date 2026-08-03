@@ -577,6 +577,7 @@ in
   fastnetmon-advanced = runTest ./fastnetmon-advanced.nix;
   fcitx5 = runTest ./fcitx5;
   fedimintd = runTest ./fedimintd.nix;
+  feishin = handleTest ./feishin { };
   ferm = runTest ./ferm.nix;
   ferretdb = import ./ferretdb.nix { inherit pkgs runTest; };
   fider = runTest ./fider.nix;
