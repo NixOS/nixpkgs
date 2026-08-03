@@ -5,7 +5,7 @@
   hatchling,
   pydantic,
   python-dotenv,
-  pytestCheckHook,
+  pytest9_0CheckHook,
   pytest-examples,
   pytest-mock,
 }:
@@ -13,14 +13,14 @@
 let
   self = buildPythonPackage rec {
     pname = "pydantic-settings";
-    version = "2.12.0";
+    version = "2.14.2";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "pydantic";
       repo = "pydantic-settings";
       tag = "v${version}";
-      hash = "sha256-5SfF5Wfs/iLThd5xL/5C+qOQfg8s/9WUCSc5qag7CY0=";
+      hash = "sha256-7h0Jr/0qGJmve6fav9hKR1npDz29zD6Cci8h1TmuK4M=";
     };
 
     build-system = [ hatchling ];
@@ -33,14 +33,15 @@ let
     pythonImportsCheck = [ "pydantic_settings" ];
 
     nativeCheckInputs = [
-      pytestCheckHook
+      pytest9_0CheckHook
       pytest-examples
       pytest-mock
     ];
 
-    disabledTests = [
-      # expected to fail
-      "test_docs_examples[docs/index.md:212-246]"
+    disabledTestPaths = [
+      # fail with our version of ruff, can be removed once we have
+      # https://github.com/pydantic/pydantic-settings/pull/924
+      "tests/test_docs.py::test_docs_examples"
     ];
 
     preCheck = ''
