@@ -6,13 +6,13 @@
 
 mkNginxPlugin (finalAttrs: {
   pname = "moreheaders";
-  version = "0.36";
+  version = "0.40";
 
   src = fetchFromGitHub {
     owner = "openresty";
     repo = "headers-more-nginx-module";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-X+ygIesQ9PGm5yM+u1BOLYVpm1172P8jWwXNr3ixFY4=";
+    sha256 = "sha256-4oddjLXtJyDmxCa2ocBtNAeKWXxI38I9eHeFVw9/ANc=";
   };
 
   meta = {
