@@ -1037,6 +1037,8 @@ stdenvNoCC.mkDerivation {
       apple-sdk.__spliced.buildTarget or apple-sdk;
   };
 
+  __structuredAttrs = true;
+
   meta =
     let
       cc_ = optionalAttrs (cc != null) cc;
