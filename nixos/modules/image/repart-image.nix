@@ -86,7 +86,6 @@ let
         depsBuildBuild = [ ruff ];
         nativeBuildInputs = [
           python3
-          black
           mypy
         ];
       }
@@ -94,8 +93,8 @@ let
         install ${./amend-repart-definitions.py} $out
         patchShebangs --build $out
 
-        black --check --diff $out
-        ruff check --line-length 88 $out
+        ruff format --check $out
+        ruff check $out
         mypy --strict $out
       '';
 

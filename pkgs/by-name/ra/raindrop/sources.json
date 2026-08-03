@@ -1,0 +1,9 @@
+{
+  "version": "5.7.9",
+  "desktopRev": "v5.7.9",
+  "desktopHash": "sha256-l80wujoB+tTDg6sE13ilnu/RQxHqqwPDukO+nIfznec=",
+  "desktopNpmHash": "sha256-+m9Fvt3NCvf0DBe/79sPWOgiewfZC4XOV4O7p76uSy8=",
+  "webappRev": "c062e549efc885beaf630e433102f6a2cbbee6b0",
+  "webappHash": "sha256-PrxE2RL+1nEcLPxe5uRHpibokFxzRH+gZqpkw9imeaY=",
+  "webappNpmHash": "sha256-UP3E6ZXRSGJlP+j7qidf2jRSQ3v07ymMhJHm+FvGjQA="
+}
