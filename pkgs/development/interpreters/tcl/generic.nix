@@ -133,6 +133,8 @@ let
       maintainers = with lib.maintainers; [ agbrooks ];
     };
 
+    __structuredAttrs = true;
+
     passthru = rec {
       inherit release version;
       isTcl9 = lib.versions.major version == "9";
