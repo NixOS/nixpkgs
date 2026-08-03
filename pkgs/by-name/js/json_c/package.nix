@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "json-c";
     repo = "json-c";
-    rev = "json-c-0.18-20240915";
+    tag = "json-c-0.18-20240915";
     hash = "sha256-UyMXr8Vc6kDOx1/lD2YKPiHdaTotXAF9ak0yQuwrSUA=";
   };
 
@@ -28,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "BUILD_APPS" false)
   ];
+
+  __structuredAttrs = true;
 
   meta = {
     description = "JSON implementation in C";
