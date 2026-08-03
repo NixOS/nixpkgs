@@ -115,7 +115,8 @@ let
 
   isUnfree =
     licenses:
-    if isAttrs licenses && licenses ? "licenseType" then
+    # ? is non-strict in its type, so it doubles as performing an isAttrs check
+    if licenses ? licenseType then
       !(isFree licenses)
     else if isAttrs licenses then
       !(licenses.free or true)
