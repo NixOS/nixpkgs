@@ -740,14 +740,11 @@ rec {
     script:
     runCommand name
       (
-        substitutions
+        (if __structuredAttrs then { inherit substitutions; } else substitutions)
         // {
           # Make the position of the derivation accurate.
           # Since not having `name` is deprecated, this should be fairly accurate.
           pos = lib.unsafeGetAttrPos "name" args;
-          # TODO(@Artturin:) substitutions should be inside the env attrset
-          # but users are likely passing non-substitution arguments through substitutions
-          # turn off __structuredAttrs to unbreak substituteAll
           inherit __structuredAttrs;
           pname = name;
           version = "26.05pre-git";
@@ -764,16 +761,25 @@ rec {
             );
         }
       )
-      (
-        ''
-          mkdir -p $out/nix-support
-          cp ${script} $out/nix-support/setup-hook
-          recordPropagatedDependencies
-        ''
-        + lib.optionalString (substitutions != { }) ''
-          substituteAll ${script} $out/nix-support/setup-hook
-        ''
-      );
+
+      ''
+        mkdir -p $out/nix-support
+        cp ${script} $out/nix-support/setup-hook
+        recordPropagatedDependencies
+
+        declare -a setupHookSubstArgs=(
+          --subst-var name
+          --subst-var pname
+          --subst-var version
+          --subst-var system
+        )
+        declare setupHookSubstKey
+        ${lib.optionalString (!__structuredAttrs) (lib.toShellVar "substitutions" substitutions)}
+        for setupHookSubstKey in "''${!substitutions[@]}"; do
+          setupHookSubstArgs+=(--subst-var-by "$setupHookSubstKey" "''${substitutions["$setupHookSubstKey"]}")
+        done
+        substitute ${script} $out/nix-support/setup-hook "''${setupHookSubstArgs[@]}"
+      '';
 
   # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
   # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeClosure
