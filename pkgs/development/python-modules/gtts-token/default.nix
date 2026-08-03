@@ -35,6 +35,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Calculates a token to run the Google Translate text to speech";
     homepage = "https://github.com/boudewijn26/gTTS-token";
+    changelog = "https://github.com/Boudewijn26/gTTS-token/blob/${finalAttrs.src.tag}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ makefu ];
   };
