@@ -160,32 +160,40 @@ let
   isMarkedInsecure =
     attrs: attrs ? meta.knownVulnerabilities && attrs.meta.knownVulnerabilities != [ ];
 
-  # Allow granular checks to allow only some unfree packages
+  # Check whether unfree packages are allowed and if not, whether the
+  # package has an unfree license and is not explicitly allowed by the
+  # `allowUnfreePredicate` function.
+  #
   # Example:
   # {pkgs, ...}:
   # {
   #   allowUnfree = false;
   #   allowUnfreePredicate = (x: pkgs.lib.hasPrefix "vscode" x.name);
+  #   allowUnfreePackages = [ "steam" ];
   # }
-  # Defaults to allow all names defined in config.allowUnfreePackages
-  allowUnfreePredicate =
-    let
-      listPredicate = pkg: elem (getName pkg) (config.allowUnfreePackages or [ ]);
-
-      # Be robust against misconfigured allowUnfreePredicate values such as null
-      explicitPredicate =
-        let
-          raw = config.allowUnfreePredicate or null;
-        in
-        if isFunction raw then raw else (_: false);
-    in
-    pkg: (listPredicate pkg) || (explicitPredicate pkg);
-
-  # Check whether unfree packages are allowed and if not, whether the
-  # package has an unfree license and is not explicitly allowed by the
-  # `allowUnfreePredicate` function.
+  # Defaults to allow all names defined in config.allowUnfreePackages, and all
+  # packages that match the unfree predicate function
   hasDeniedUnfreeLicense =
-    if allowUnfree then _: false else attrs: hasUnfreeLicense attrs && !allowUnfreePredicate attrs;
+    if allowUnfree then
+      _: false
+    else
+      let
+        listPredicate = pkg: elem (getName pkg) config.allowUnfreePackages;
+        definedListPredicate = config.allowUnfreePackages or [ ] != [ ];
+
+        explicitPredicate = config.allowUnfreePredicate;
+        # Be robust against misconfigured allowUnfreePredicate values such as null
+        definedExplicitPredicate = isFunction (config.allowUnfreePredicate or null);
+      in
+      if definedListPredicate then
+        if definedExplicitPredicate then
+          attrs: hasUnfreeLicense attrs && !(listPredicate attrs || explicitPredicate attrs)
+        else
+          attrs: hasUnfreeLicense attrs && !listPredicate attrs
+      else if definedExplicitPredicate then
+        attrs: hasUnfreeLicense attrs && !explicitPredicate attrs
+      else
+        hasUnfreeLicense;
 
   allowInsecure = getEnv "NIXPKGS_ALLOW_INSECURE" == "1";
 
