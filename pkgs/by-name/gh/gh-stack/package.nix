@@ -30,6 +30,10 @@ buildGoModule (finalAttrs: {
     "-X=github.com/github/gh-stack/cmd.Version=${finalAttrs.version}"
   ];
 
+  postInstall = ''
+    install -Dm444 skills/gh-stack/SKILL.md $out/share/skills/gh-stack/gh-stack/SKILL.md
+  '';
+
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
