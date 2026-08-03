@@ -77,6 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''rm -f "$out"/bin/*-pkg-config''; # clean the duplicate file
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Tool that allows packages to find out information about other packages";
     homepage = "http://pkg-config.freedesktop.org/wiki/";
