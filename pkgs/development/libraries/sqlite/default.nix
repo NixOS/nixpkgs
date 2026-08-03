@@ -27,18 +27,18 @@ let
   archiveVersion = import ./archive-version.nix lib;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sqlite${lib.optionalString interactive "-interactive"}";
   version = "3.53.3";
 
   # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
-    url = "https://sqlite.org/2026/sqlite-src-${archiveVersion version}.zip";
+    url = "https://sqlite.org/2026/sqlite-src-${archiveVersion finalAttrs.version}.zip";
     hash = "sha256-u4C/ijv/wZJBzoq6WkvHTpw5gAE8sLXw8JdqmVFpQq8=";
   };
   docsrc = fetchurl {
-    url = "https://sqlite.org/2026/sqlite-doc-${archiveVersion version}.zip";
+    url = "https://sqlite.org/2026/sqlite-doc-${archiveVersion finalAttrs.version}.zip";
     hash = "sha256-Fo+Zhph2vPTbjZPvoqSDqcgVNlN9AZAMWM110KZ8yic=";
   };
 
@@ -167,7 +167,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $doc/share/doc
     unzip $docsrc
-    mv sqlite-doc-${archiveVersion version} $doc/share/doc/sqlite
+    mv sqlite-doc-${archiveVersion finalAttrs.version} $doc/share/doc/sqlite
   '';
 
   # SQLite’s tests are unreliable on Darwin. Sometimes they run successfully, but often they do not.
@@ -195,8 +195,12 @@ stdenv.mkDerivation rec {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
-    changelog = "https://www.sqlite.org/releaselog/${lib.replaceStrings [ "." ] [ "_" ] version}.html";
+    changelog = "https://www.sqlite.org/releaselog/${
+      lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
+    }.html";
     description = "Self-contained, serverless, zero-configuration, transactional SQL database engine";
     downloadPage = "https://sqlite.org/download.html";
     homepage = "https://www.sqlite.org/";
@@ -206,6 +210,6 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.security-review ];
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     pkgConfigModules = [ "sqlite3" ];
-    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "sqlite" version;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "sqlite" finalAttrs.version;
   };
-}
+})
