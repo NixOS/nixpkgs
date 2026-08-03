@@ -220,6 +220,58 @@ let
     )
   );
 
+  vxlanNetworks = mkMerge [
+    {
+      systemd.network = mkMerge (
+        flip mapAttrsToList cfg.vxlans (
+          name: vxlan: {
+            networks."45-${name}" = {
+              inherit name;
+              address = vxlan.address;
+            };
+            netdevs."45-${name}" = {
+              netdevConfig = {
+                Name = name;
+                Kind = "vxlan";
+              };
+              vxlanConfig = {
+                VNI = vxlan.vni;
+                Local = vxlan.local;
+                Remote = vxlan.remote;
+                DestinationPort = vxlan.port;
+                Independent = true;
+                MacLearning = true;
+              };
+            };
+          }
+        )
+      );
+    }
+    {
+      networking.firewall.allowedUDPPorts = optionals (cfg.vxlans != { }) (
+        map (vxlan: vxlan.port) (attrValues cfg.vxlans)
+      );
+
+      networking.firewall.extraInputRules = concatStringsSep "\n  " (
+        map (
+          vxlan:
+          "${
+            if (hasInfix ":" vxlan.local) then "ip6" else "ip"
+          } saddr ${vxlan.local} udp dport ${toString vxlan.port} accept"
+        ) (attrValues cfg.vxlans)
+      );
+
+      networking.firewall.extraReversePathFilterRules = concatStringsSep "\n  " (
+        map (
+          vxlan:
+          (concatStringsSep "\n  " (
+            map (addr: "${if (hasInfix ":" addr) then "ip6" else "ip"} saddr ${addr} accept") vxlan.address
+          ))
+        ) (attrValues cfg.vxlans)
+      );
+    }
+  ];
+
 in
 
 {
