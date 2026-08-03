@@ -12,7 +12,7 @@ let
   p = python3.pkgs;
   self = p.buildPythonApplication rec {
     pname = "backgroundremover";
-    version = "0.4.4";
+    version = "0.4.5";
     pyproject = true;
 
     build-system = [
@@ -23,7 +23,7 @@ let
       owner = "nadermx";
       repo = "backgroundremover";
       tag = "v${version}";
-      hash = "sha256-S6irFkNw+5HHr3ziMRxaeg3QoXWe1qqf10CGTTHKpb4=";
+      hash = "sha256-PFOMuYgYP0ADts5XJCXl0ikSAWS16ruPScaF8DJaaVU=";
     };
 
     models = runCommand "background-remover-models" { } ''
