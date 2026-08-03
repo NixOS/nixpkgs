@@ -4,6 +4,7 @@
   aiomqtt,
   buildPythonPackage,
   cachetools,
+  cryptography,
   defusedxml,
   docker,
   fetchFromGitHub,
@@ -23,7 +24,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "deebot-client";
-  version = "18.4.0";
+  version = "18.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.14";
@@ -32,12 +33,12 @@ buildPythonPackage (finalAttrs: {
     owner = "DeebotUniverse";
     repo = "client.py";
     tag = finalAttrs.version;
-    hash = "sha256-SFOwIK1rjvbLw5W0d6vzXVUDlUOlBYOu/GMvlwwFDs0=";
+    hash = "sha256-7edi2hTn4K+lJDKJbMmu4JY86fhmSUcRvxr1ZzaurSU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-mvHHwfeP7k8bvOMFcNTn7wZlumMJ8wx7H+p8SNreIuE=";
+    hash = "sha256-j70hY9MskVKrfWYtQKj13LVdC8WbHdPe9w/88BWPvlM=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +54,7 @@ buildPythonPackage (finalAttrs: {
     aiohttp
     aiomqtt
     cachetools
+    cryptography
     defusedxml
     orjson
   ];
