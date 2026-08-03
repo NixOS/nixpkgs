@@ -26,6 +26,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace $cargoDepsCopy/*/boring-sys-*/build/main.rs $cargoDepsCopy/*/quiche-*/src/build.rs \
       --replace-fail "cargo:rustc-link-lib=static=crypto" "cargo:rustc-link-lib=dylib=crypto" \
       --replace-fail "cargo:rustc-link-lib=static=ssl" "cargo:rustc-link-lib=dylib=ssl"
+
+    # remove reference to deprecated boringssl API
+    patch -d $cargoDepsCopy/*/boring-4.19.0/ -p1 -i ${./boring-no-secp224r1.patch}
   '';
 
   env = {
