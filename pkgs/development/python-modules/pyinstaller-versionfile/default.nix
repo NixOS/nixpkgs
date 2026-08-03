@@ -5,13 +5,14 @@
   packaging,
   jinja2,
   pyyaml,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
   pname = "pyinstaller-versionfile";
   version = "3.0.1";
 
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DudeNr33";
@@ -24,7 +25,9 @@ buildPythonPackage rec {
     touch requirements.txt
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     packaging
     jinja2
     pyyaml
