@@ -29,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/bin/byacc $out/bin/yacc
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://invisible-island.net/byacc/byacc.html";
     description = "Berkeley YACC";
