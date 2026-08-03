@@ -31,6 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
     libintl
   ];
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
 
   preCheck = ''
