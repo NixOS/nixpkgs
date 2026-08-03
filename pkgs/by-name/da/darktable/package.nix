@@ -225,6 +225,7 @@ stdenv.mkDerivation rec {
     description = "Virtual lighttable and darkroom for photographers";
     homepage = "https://www.darktable.org";
     changelog = "https://github.com/darktable-org/darktable/releases/tag/release-${version}";
+    mainProgram = "darktable";
     license = lib.licenses.gpl3Plus;
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [
