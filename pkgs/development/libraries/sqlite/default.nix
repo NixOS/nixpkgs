@@ -94,6 +94,8 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
+  strictDeps = true;
+
   # required for aarch64 but applied for all arches for simplicity
   preConfigure = ''
     patchShebangs configure
