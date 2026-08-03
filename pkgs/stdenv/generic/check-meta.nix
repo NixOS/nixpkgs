@@ -168,14 +168,24 @@ let
   hasDeniedUnfreeLicense =
     if allowUnfree then _: false else attrs: hasUnfreeLicense attrs && !allowUnfreePredicate attrs;
 
-  allowInsecureDefaultPredicate =
-    x: elem (getNameWithVersion x) (config.permittedInsecurePackages or [ ]);
-  allowInsecurePredicate = config.allowInsecurePredicate or allowInsecureDefaultPredicate;
-
   allowInsecure = getEnv "NIXPKGS_ALLOW_INSECURE" == "1";
 
   hasDisallowedInsecure =
-    attrs: isMarkedInsecure attrs && !allowInsecure && !allowInsecurePredicate attrs;
+    if allowInsecure then
+      _: false
+    else if config ? allowInsecurePredicate then
+      let
+        inherit (config) allowInsecurePredicate;
+      in
+      attrs: isMarkedInsecure attrs && !allowInsecurePredicate attrs
+    else if config ? permittedInsecurePackages then
+      let
+        inherit (config) permittedInsecurePackages;
+        allowInsecurePredicate = x: elem (getNameWithVersion x) permittedInsecurePackages;
+      in
+      attrs: isMarkedInsecure attrs && !allowInsecurePredicate attrs
+    else
+      isMarkedInsecure;
 
   # Allow granular checks to allow only some non-source-built packages
   # Example:
