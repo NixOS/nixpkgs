@@ -173,6 +173,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ nettle ];
 
+  strictDeps = true;
+
   inherit doCheck;
   # stdenv's `NIX_SSL_CERT_FILE=/no-cert-file.crt` breaks tests.
   # Also empty files won't work, and we want to avoid potentially impure /etc/
