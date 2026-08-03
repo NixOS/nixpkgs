@@ -30,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp -rv lib/* "$out/include/"
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://bluez.github.io/";
     description = "Official Linux Bluetooth protocol stack";
