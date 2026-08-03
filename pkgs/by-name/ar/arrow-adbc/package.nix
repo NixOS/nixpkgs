@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "arrow-adbc";
-  version = "23";
+  version = "24";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -30,10 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "arrow-adbc";
     tag = "apache-arrow-adbc-${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-33JUx4ZI+BHIZMvlCO43mjU34zShJZGQpAkqRrvgl2w=";
+    hash = "sha256-iwYm65b1jVZEtChwqSPNqvsGY8IlVed8ORWBfe4witk=";
   };
 
-  vendorHash = "sha256-uGxCTllRNtXkrl31d88TOK36X09ylo++gtorx0uFR8A=";
+  vendorHash = "sha256-vVGOa2yUlKShIpW+eM2cgFktNCPZX5fbxlZ8O83aE/E=";
 
   # We are building the C project
   preConfigure = ''
@@ -45,9 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
   # should be setup hooks for the mechanisms of buildGoModule, that would make
   # it easier.
   modRoot = "../../go/adbc";
-  inherit (finalAttrs.finalPackage.passthru.bigquery-go-package) goModules;
+  inherit (finalAttrs.finalPackage.passthru.go-package) goModules;
   preBuild =
-    (lib.pipe finalAttrs.finalPackage.passthru.bigquery-go-package.configurePhase [
+    (lib.pipe finalAttrs.finalPackage.passthru.go-package.configurePhase [
       # Make that this configure phase doesn't run our configure hooks.
       (lib.replaceString "runHook preConfigure" "")
       (lib.replaceString "runHook postConfigure" "")
@@ -62,15 +62,13 @@ stdenv.mkDerivation (finalAttrs: {
     # objects in $out and not in $out/lib.
     cmake
     pkg-config
-    finalAttrs.finalPackage.passthru.bigquery-go-package.passthru.go
+    finalAttrs.finalPackage.passthru.go-package.passthru.go
   ];
 
   cmakeFlags = map (driver: lib.cmakeBool "ADBC_DRIVER_${driver}" true) [
-    "BIGQUERY"
     "FLIGHTSQL"
     "MANAGER"
     "POSTGRESQL"
-    "SNOWFLAKE"
     "SQLITE"
   ];
 
@@ -83,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    bigquery-go-package = buildGoModule (finalGoAttrs: {
+    go-package = buildGoModule (finalGoAttrs: {
       inherit (finalAttrs)
         pname
         version
