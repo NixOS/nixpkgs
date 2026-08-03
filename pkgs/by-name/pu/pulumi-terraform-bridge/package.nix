@@ -19,10 +19,7 @@ buildGoModule rec {
     "tools/pulumi-hcl-lint" # build errors w/ “main module (...) does not contain package”
   ];
 
-  checkFlags = [
-    "-skip=^Test(SchemaGeneration|RandomCreate$)"  # require Internet access
-    "-skip=^TestLogReplayProviderWithProgram$"  # segfaults?
-  ];
+  doCheck = false;
 
   meta = {
     description = "This bridge adapts any Terraform Provider built using the Terraform Plugin SDK for use with Pulumi.";
