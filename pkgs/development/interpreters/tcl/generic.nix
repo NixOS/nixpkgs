@@ -46,6 +46,8 @@ let
       zlib
     ];
 
+    strictDeps = true;
+
     preConfigure = ''
       cd unix
     '';
