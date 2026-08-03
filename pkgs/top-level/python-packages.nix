@@ -21983,6 +21983,8 @@ self: super: with self; {
     llvmPackages = pkgs.llvmPackages_21;
   };
 
+  warp-nn = callPackage ../development/python-modules/warp-nn { };
+
   warrant = callPackage ../development/python-modules/warrant { };
 
   warrant-lite = callPackage ../development/python-modules/warrant-lite { };
