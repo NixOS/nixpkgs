@@ -8,7 +8,7 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "unicurses";
+  pname = "uni-curses";
   version = "3.1.2";
   pyproject = true;
 

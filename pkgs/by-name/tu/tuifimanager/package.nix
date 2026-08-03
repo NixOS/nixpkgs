@@ -46,7 +46,7 @@ lib.throwIf (enableDragAndDrop && !hasDndSupport)
 
     dependencies = [
       python3Packages.send2trash
-      python3Packages.unicurses
+      python3Packages.uni-curses
     ]
     ++ (lib.optionals enableDragAndDrop [
       python3Packages.pynput
