@@ -4,12 +4,14 @@
   dicttoxml2,
   fetchFromGitHub,
   xmltodict,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyialarm";
   version = "2.2.0";
-  format = "setuptools";
+
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RyuzakiKK";
@@ -18,7 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-rOdeYewjoFVbHdNPHN6ZC2g6X5yr84/JFE6tGSDIoRU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     dicttoxml2
     xmltodict
   ];
