@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "niks3";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "niks3";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+Aj5ca1iUqbDW9MjFGoGoylnVjcMQLlT/OlH2yMrg/I=";
+    hash = "sha256-86afR/fMjLRLmBEMFA6ow6SRI9T5Qe83l0em/FciW2g=";
   };
 
-  vendorHash = "sha256-zYGAd2N3qGavAlT4MggSME7r04kAVn19N7Nh0L0DK5k=";
+  vendorHash = "sha256-qkB99S/9fmSk5G9uHyQF/z+joi9JACIJWaHMrIo4ziU=";
 
   subPackages = [
     "cmd/niks3"
