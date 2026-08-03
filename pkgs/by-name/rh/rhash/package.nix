@@ -21,6 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ which ];
   buildInputs = lib.optionals stdenv.hostPlatform.isFreeBSD [ gettext ];
 
+  strictDeps = true;
+
   # configure script is not autotools-based, doesn't support these options
   dontAddStaticConfigureFlags = true;
 
