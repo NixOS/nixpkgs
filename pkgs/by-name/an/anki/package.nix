@@ -251,12 +251,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
     uv pip install --prefix ./out/pyenv -r requirements.txt
     # pyqt6-qt6 and pyqt6-webengine-qt6 are C++ Qt runtimes provided by the
     # system, not Python packages, so exclude them from resolution.
-    uv export --project qt --extra qt --extra audio \
+    uv export --project qt --no-dev --extra qt --extra audio \
       --no-emit-package "pyqt6-qt6" \
       --no-emit-package "pyqt6-webengine-qt6" \
       | strip_versions > requirements.txt
     uv pip install --prefix ./out/pyenv -r requirements.txt
-    uv export --project pylib | strip_versions > requirements.txt
+    uv export --project pylib --no-dev | strip_versions > requirements.txt
     uv pip install --prefix ./out/pyenv -r requirements.txt
 
     # anki's build tooling expects python and protoc-gen-mypy in pyenv
