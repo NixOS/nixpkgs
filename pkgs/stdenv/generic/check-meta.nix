@@ -127,7 +127,8 @@ let
     else if isString licenses then
       false
     else
-      any (l: !(l.free or true)) licenses;
+      # on a list, check if any of the licenses weren't free (boolean AND)
+      any (l: !l.free or false) licenses;
 
   hasUnfreeLicense = attrs: attrs ? meta.license && isUnfree attrs.meta.license;
 
