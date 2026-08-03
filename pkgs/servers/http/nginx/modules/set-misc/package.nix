@@ -8,13 +8,13 @@
 
 mkNginxPlugin (finalAttrs: {
   pname = "set-misc";
-  version = "0.33";
+  version = "0.34";
 
   src = fetchFromGitHub {
     owner = "openresty";
     repo = "set-misc-nginx-module";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jMMj3Ki1uSfQzagoB/O4NarxPjiaF9YRwjSKo+cgMxo=";
+    hash = "sha256-2QHidYeKCELkWAdXwmMq9DsirK7I06gbsUVz6uJy+CI=";
   };
 
   passthru.tests.nginx = nginx.override {
