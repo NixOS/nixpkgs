@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gettext ];
 
+  strictDeps = true;
+
   postPatch = ''
     for script in install-sh include/install-sh; do
       patchShebangs $script
