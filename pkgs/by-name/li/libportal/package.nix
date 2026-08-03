@@ -22,7 +22,7 @@ assert
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libportal" + lib.optionalString (variant != null) "-${variant}";
-  version = "0.9.1";
+  version = "0.10.0";
 
   outputs = [
     "out"
@@ -34,8 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "flatpak";
     repo = "libportal";
     rev = finalAttrs.version;
-    sha256 = "sha256-CXI4rBr9wxLUX537d6SNNf8YFR/J6YdeROlFt3edeOU=";
-  };
+    sha256 = "sha256-vU3jnHxCvxZMSJOh5hzkCB8uuE0NnbnZM7+eQ6a5+oI=";
+};
 
   depsBuildBuild = [
     pkg-config
