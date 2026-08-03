@@ -53,7 +53,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Menu bar app for monitoring MacBook power usage";
     homepage = "https://github.com/kDolphin/PowerTop";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ mnixry ];
     mainProgram = "powertop-macos";
     platforms = [ "aarch64-darwin" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
