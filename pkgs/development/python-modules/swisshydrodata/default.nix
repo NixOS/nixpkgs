@@ -6,7 +6,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   requests-mock,
   requests,
   setuptools,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "swisshydrodata";
   version = "0.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "Bouni";
