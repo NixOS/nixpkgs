@@ -6655,6 +6655,8 @@ self: super: with self; {
 
   geotorch = callPackage ../development/python-modules/geotorch { };
 
+  gepa = callPackage ../development/python-modules/gepa { };
+
   gepetto-gui = toPythonModule (gepetto-viewer.withPlugins [ gepetto-viewer-corba ]);
 
   gepetto-viewer = toPythonModule (pkgs.gepetto-viewer.override { python3Packages = self; });
@@ -21982,6 +21984,8 @@ self: super: with self; {
     stdenv = if stdenv.hostPlatform.isDarwin then pkgs.llvmPackages_21.stdenv else pkgs.stdenv;
     llvmPackages = pkgs.llvmPackages_21;
   };
+
+  warp-nn = callPackage ../development/python-modules/warp-nn { };
 
   warrant = callPackage ../development/python-modules/warrant { };
 

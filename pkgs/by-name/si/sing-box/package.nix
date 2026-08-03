@@ -111,6 +111,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       nickcao
       prince213
+      moraxyc
     ];
     mainProgram = "sing-box";
   };

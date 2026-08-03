@@ -5,7 +5,6 @@
   nix-update-script,
   makeWrapper,
   glib,
-  gtk2,
   gtk3,
   ant,
   jdk,
@@ -13,13 +12,11 @@
   coreutils,
   gnugrep,
   zulu,
-  preferGtk3 ? true,
   preferZulu ? false,
 }:
 
 let
   jre' = (if preferZulu then zulu else jdk).override { enableJavaFX = true; };
-  gtk' = if preferGtk3 then gtk3 else gtk2;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "davmail";
@@ -57,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -R ./dist/{lib,davmail{,.jar}} $out/share/davmail
     chmod +x $out/share/davmail/davmail
     makeWrapper $out/share/davmail/davmail $out/bin/davmail \
-      --set-default JAVA_OPTS "-Xmx512M -Dsun.net.inetaddr.ttl=60 -Djdk.gtk.version=${lib.versions.major gtk'.version}" \
+      --set-default JAVA_OPTS "-Xmx512M -Dsun.net.inetaddr.ttl=60 -Djdk.gtk.version=${lib.versions.major gtk3.version}" \
       --prefix PATH : ${
         lib.makeBinPath [
           jre'
@@ -68,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
           glib
-          gtk'
+          gtk3
           libxtst
         ]
       }
