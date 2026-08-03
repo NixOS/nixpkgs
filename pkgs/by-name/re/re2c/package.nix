@@ -50,6 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Tool for writing very fast and very flexible scanners";
     homepage = "https://re2c.org";
