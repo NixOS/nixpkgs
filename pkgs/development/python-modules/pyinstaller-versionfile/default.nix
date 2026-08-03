@@ -33,6 +33,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Create a windows version-file from a simple YAML file that can be used by PyInstaller";
     mainProgram = "create-version-file";
+    changelog = "https://github.com/DudeNr33/pyinstaller-versionfile/blob/v${finalAttrs.version}/CHANGELOG.md";
     homepage = "https://pypi.org/project/pyinstaller-versionfile/";
     license = lib.licenses.mit;
     maintainers = [ ];
