@@ -73,8 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
     mimalloc
     libogg
     libunibreak
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     glslang
     spirv-cross
   ]
@@ -91,7 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "install_freedesktop" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "install_macos_bundle" stdenv.hostPlatform.isDarwin)
     (lib.mesonEnable "install_relocatable" stdenv.hostPlatform.isDarwin)
-    (lib.mesonEnable "shader_transpiler" stdenv.hostPlatform.isDarwin)
   ];
 
   preConfigure = ''
