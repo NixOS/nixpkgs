@@ -61,6 +61,8 @@ let
 
         propagatedBuildInputs = [ findXMLCatalogs ];
 
+        strictDeps = true;
+
         dontBuild = true;
 
         installPhase = ''
