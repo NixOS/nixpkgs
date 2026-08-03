@@ -24,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   dontConfigure = true;
   dontBuild = true;
 
+  strictDeps = true;
+
   installPhase = ''
     mkdir -p $out/include/
     cp -rv lib/* "$out/include/"
