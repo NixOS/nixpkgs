@@ -5,7 +5,6 @@
   fetchFromGitHub,
   lndir,
   makeWrapper,
-  replaceVars,
   wrapGAppsHook3,
   wrapQtAppsHook,
 
@@ -99,6 +98,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-tdZNSA6kZHwS96YRbN7YF+ODPJrnINa/QGCo8pw196I=";
   };
 
+  postPatch = ''
+    substituteInPlace python/utils.py \
+      --replace-fail '("mod_spatialite", "sqlite3_modspatialite_init")' \
+        '("${libspatialite}/lib/mod_spatialite${stdenv.hostPlatform.extensions.sharedLibrary}", "sqlite3_modspatialite_init")'
+  '';
+
   passthru = {
     inherit pythonBuildInputs;
     inherit py;
@@ -159,12 +164,6 @@ stdenv.mkDerivation rec {
     qtsvg
   ]
   ++ pythonBuildInputs;
-
-  patches = [
-    (replaceVars ./spatialite-path.patch {
-      spatialiteLib = "${libspatialite}/lib/mod_spatialite${stdenv.hostPlatform.extensions.sharedLibrary}";
-    })
-  ];
 
   # Add path to Qt platform plugins
   # (offscreen is needed by "${APIS_SRC_DIR}/generate_console_pap.py")
