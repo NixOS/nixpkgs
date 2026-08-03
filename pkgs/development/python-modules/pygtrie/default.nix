@@ -4,14 +4,16 @@
   buildPythonPackage,
   setuptools,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pygtrie";
   version = "2.5.0";
 
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "pygtrie";
+    inherit (finalAttrs) version;
     hash = "sha256-IDUUrYJutAPasdLi3dA04NFTS75NvgITuwWT9mvrpOI=";
   };
 
@@ -23,4 +25,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ kmein ];
   };
-}
+})
