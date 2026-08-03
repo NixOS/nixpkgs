@@ -13,7 +13,12 @@ final: prev: {
   fusion-icon = prev.callPackage ../packages/compiz-reloaded/fusion-icon.nix { };
   compiz-manager = prev.callPackage ../packages/compiz-reloaded/compiz-manager.nix { };
 
+  compiz-reloaded-full = prev.symlinkJoin {
+    name = "compiz-reloaded-full";
+    paths = [ final.compiz-core final.compiz-plugins-main final.compiz-plugins-extra final.compiz-plugins-experimental final.libcompizconfig final.compizconfig-python final.ccsm final.simple-ccsm final.emerald final.emerald-themes final.fusion-icon final.compiz-manager ];
+  };
+
   euclid-icon-theme = prev.callPackage ../packages/euclid-icon-theme { };
   euclid-wallpapers = prev.callPackage ../packages/euclid-wallpapers { };
   euclid-welcome = prev.callPackage ../packages/euclid-welcome { };
-} // (import ./lumina.nix final prev)
+}

@@ -15,18 +15,16 @@ python3Packages.buildPythonApplication {
 #!/usr/bin/env python
 import sys, os, subprocess
 from PyQt6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QLabel, QPushButton, QWidget
-from PyQt6.QtCore import Qt
 
 class WelcomeWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Euclid Linux 3D Welcome")
-        self.resize(600, 400)
+        self.resize(600, 500)
 
         layout = QVBoxLayout()
 
-        # Read OS Release
-        os_name = "Euclid Linux 3D"
+        os_name = "Euclid Linux 3D Budgie+Compiz"
         try:
             with open("/etc/os-release") as f:
                 for line in f:
@@ -34,29 +32,25 @@ class WelcomeWindow(QMainWindow):
                         os_name = line.strip().split("=")[1].strip('"')
         except: pass
 
-        # Get Desktop Session
         session = os.environ.get("XDG_CURRENT_DESKTOP", "Unknown Desktop")
 
         info_label = QLabel(f"<h1>Welcome to {os_name}</h1>"
                             f"<p>Active Session: <b>{session}</b></p>"
-                            "<p>Euclid Linux 3D brings you modern 3D capabilities via Compiz Reloaded.</p>"
-                            "<ul><li><b>Lumina+Compiz</b>: The flagship, lightweight desktop.</li>"
-                            "<li><b>MATE+Compiz</b>: Traditional and stable.</li>"
-                            "<li><b>Plasma+Compiz</b>: Highly experimental.</li></ul>")
+                            "<p>Euclid Linux 3D brings you modern 3D capabilities via Compiz Reloaded.</p>")
         info_label.setWordWrap(True)
         layout.addWidget(info_label)
 
-        btn_install = QPushButton("Install Euclid Linux 3D")
-        btn_install.clicked.connect(lambda: subprocess.Popen(["calamares"]))
-        layout.addWidget(btn_install)
+        def add_button(text, cmd):
+            btn = QPushButton(text)
+            btn.clicked.connect(lambda: subprocess.Popen(cmd))
+            layout.addWidget(btn)
 
-        btn_settings = QPushButton("System Settings (ccsm)")
-        btn_settings.clicked.connect(lambda: subprocess.Popen(["ccsm"]))
-        layout.addWidget(btn_settings)
-
-        btn_docs = QPushButton("Open Release Notes")
-        btn_docs.clicked.connect(lambda: subprocess.Popen(["xdg-open", "https://github.com/euclidprojects/Euclid-Linux-3D/releases"]))
-        layout.addWidget(btn_docs)
+        add_button("Install Euclid Linux 3D", ["calamares"])
+        add_button("Open Budgie Desktop Settings", ["budgie-desktop-settings"])
+        add_button("Open CompizConfig Settings Manager", ["ccsm"])
+        add_button("Hardware Information", ["sysinfo"])
+        add_button("Update the system", ["gnome-terminal", "-e", "sudo nixos-rebuild switch"])
+        add_button("Open Release Notes", ["xdg-open", "https://github.com/euclidprojects/Euclid-Linux-3D/releases"])
 
         container = QWidget()
         container.setLayout(layout)
