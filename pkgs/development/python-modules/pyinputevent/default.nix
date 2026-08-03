@@ -6,7 +6,7 @@
 
 buildPythonPackage {
   pname = "pyinputevent";
-  version = "2016-10-18";
+  version = "0.1-unstable-2015-10-18";
   format = "setuptools";
 
   src = fetchFromGitHub {
