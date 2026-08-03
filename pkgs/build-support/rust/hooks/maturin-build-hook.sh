@@ -48,4 +48,6 @@ maturinBuildHook() {
     echo "Finished maturinBuildHook"
 }
 
-buildPhase=maturinBuildHook
+if [[ -z "${dontMaturinBuild:-}" && ( -z "${buildPhase:-}" || "$buildPhase" = pypaBuildPhase ) ]]; then
+    buildPhase=maturinBuildHook
+fi
