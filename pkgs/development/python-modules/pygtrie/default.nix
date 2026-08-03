@@ -3,6 +3,7 @@
   fetchPypi,
   buildPythonPackage,
   setuptools,
+  pytestCheckHook,
 }:
 buildPythonPackage (finalAttrs: {
   pname = "pygtrie";
@@ -18,6 +19,10 @@ buildPythonPackage (finalAttrs: {
   };
 
   build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  enabledTestPaths = [ "test.py" ];
 
   meta = {
     homepage = "https://github.com/mina86/pygtrie";
