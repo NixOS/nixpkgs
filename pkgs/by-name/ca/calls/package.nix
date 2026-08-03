@@ -11,6 +11,7 @@
   mobile-broadband-provider-info,
   modemmanager,
   gmobile,
+  gnome,
   gtk4,
   gom,
   gsound,
@@ -122,6 +123,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postCheck
   '';
+
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = "calls";
+    };
+  };
 
   meta = {
     description = "Phone dialer and call handler";
