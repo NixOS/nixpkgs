@@ -44,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
       "LDFLAGS+=-lws2_32"
     ]);
 
+  __structuredAttrs = true;
+
   meta = {
     description = "High-performance event loop/event model with lots of features";
     homepage = "https://software.schmorp.de/pkg/libev.html";
