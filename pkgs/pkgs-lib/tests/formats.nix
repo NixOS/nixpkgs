@@ -168,6 +168,8 @@ runBuildTests {
       time = "22:30:00";
     };
     expected = ''
+      %YAML 1.1
+      ---
       attrs:
         foo: null
       'false': false
@@ -188,8 +190,9 @@ runBuildTests {
     format = formats.yaml_1_1 { };
     input = null;
     expected = ''
-      null
-      ...
+      %YAML 1.1
+      ---
+        null
     '';
   };
 

@@ -11,7 +11,7 @@
   nixosTests,
   nodejs_24,
   nodejs-slim_24,
-  remarshal_0_17,
+  remarshal,
   nix-update-script,
   settings ? { },
 }:
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     yarnBuildHook
     nodejs_24
     # For yaml conversion
-    remarshal_0_17
+    remarshal
   ];
   doDist = false;
   meta = {
