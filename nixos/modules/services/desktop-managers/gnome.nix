@@ -409,19 +409,19 @@ in
       services.avahi.enable = mkDefault true;
 
       services.geoclue2.enable = mkDefault true;
-      services.geoclue2.enableDemoAgent = false; # GNOME has its own geoclue agent
+      services.geoclue2.demoAgent.enable = false; # GNOME has its own geoclue agent
 
       services.geoclue2.appConfig.gnome-datetime-panel = {
-        isAllowed = true;
-        isSystem = true;
+        allowed = true;
+        system = true;
       };
       services.geoclue2.appConfig.gnome-color-panel = {
-        isAllowed = true;
-        isSystem = true;
+        allowed = true;
+        system = true;
       };
       services.geoclue2.appConfig."org.gnome.Shell" = {
-        isAllowed = true;
-        isSystem = true;
+        allowed = true;
+        system = true;
       };
 
       services.orca.enable = notExcluded pkgs.orca;

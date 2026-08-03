@@ -156,10 +156,10 @@ in
     # We _do_ use the demo agent in the `cosmic-settings-daemon` package,
     # but this option also creates a systemd service that conflicts with the
     # `cosmic-settings-daemon` package's geoclue2 agent. Therefore, disable it.
-    services.geoclue2.enableDemoAgent = false;
+    services.geoclue2.demoAgent.enable = false;
     # As mentioned above, we do use the demo agent. And it needs to be
     # whitelisted, otherwise it doesn't run.
-    services.geoclue2.whitelistedAgents = [ "geoclue-demo-agent" ]; # whitelist our own geoclue2 agent o
+    services.geoclue2.settings.agent.whitelist = [ "geoclue-demo-agent" ]; # whitelist our own geoclue2 agent o
 
     # Good to have defaults
     hardware.bluetooth.enable = lib.mkDefault true;
