@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "libportal";
     rev = finalAttrs.version;
     sha256 = "sha256-vU3jnHxCvxZMSJOh5hzkCB8uuE0NnbnZM7+eQ6a5+oI=";
-};
+  };
 
   depsBuildBuild = [
     pkg-config
