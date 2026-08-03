@@ -2,17 +2,21 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyinotify";
   version = "0.9.6";
-  format = "setuptools";
+
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "1x3i9wmzw33fpkis203alygfnrkcmq9w1aydcm887jh6frfqm6cw";
   };
+
+  build-system = [ setuptools ];
 
   patches = [ ./skip-asyncore-python-3.12.patch ];
 
