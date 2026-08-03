@@ -141,15 +141,21 @@ let
     else
       hostPlatform:
       let
-        inherit (hostPlatform) system;
-        # in almost all cases, meta.platforms is a simple list of strings, and we
-        # can just check if it contains the current system. we only run the more
-        # intensive platformMatch if necessary
-        anyHostPlatform = list: elem system list || any (platformMatch hostPlatform) list;
+        containsHostSystem = elem hostPlatform.system;
+        matchesHostPlatform = any (platformMatch hostPlatform);
       in
       pkg:
-      pkg ? meta.platforms && !(anyHostPlatform pkg.meta.platforms)
-      || pkg ? meta.badPlatforms && anyHostPlatform pkg.meta.badPlatforms;
+      # in almost all cases, platforms are a simple list of strings, and we
+      # can just check if they contains the current system. we only run the more
+      # intensive platformMatch if necessary
+      (
+        pkg ? meta.platforms
+        && !(containsHostSystem pkg.meta.platforms || matchesHostPlatform pkg.meta.platforms)
+      )
+      || (
+        pkg ? meta.badPlatforms
+        && (containsHostSystem pkg.meta.badPlatforms || matchesHostPlatform pkg.meta.badPlatforms)
+      );
 
   isMarkedInsecure =
     attrs: attrs ? meta.knownVulnerabilities && attrs.meta.knownVulnerabilities != [ ];
