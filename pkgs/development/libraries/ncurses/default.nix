@@ -259,6 +259,8 @@ stdenv.mkDerivation (finalAttrs: {
     execer cannot bin/{reset,tput,tset}
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.gnu.org/software/ncurses/";
     description = "Free software emulation of curses in SVR4 and more";
