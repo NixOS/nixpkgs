@@ -73,6 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Foreign function call interface library";
     longDescription = ''
