@@ -1,6 +1,7 @@
 {
   lib,
   mkShell,
+  nixosTests,
   python3,
   python3Packages,
   ruff,
@@ -37,4 +38,13 @@ python3Packages.buildPythonApplication {
       age # Here to ease playing with the age backend
     ];
   };
+
+  passthru.tests = {
+    inherit (nixosTests)
+      nixos-vars-basic-generators
+      ;
+  };
+
+  # This is maybe not a good idea?
+  passthru.jsonify = import ./nix_vars/nix/jsonify.nix;
 }
