@@ -25,6 +25,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ gnum4 ];
   propagatedBuildInputs = [ gmp ];
 
+  strictDeps = true;
+
   configureFlags =
     # runtime selection of HW-accelerated code; it's default since 3.7
     [ "--enable-fat" ]
