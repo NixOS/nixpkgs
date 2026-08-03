@@ -113,6 +113,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
+  strictDeps = true;
+
   hardeningDisable = [ "strictflexarrays3" ];
 
   configureFlags = [
