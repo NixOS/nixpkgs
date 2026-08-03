@@ -109,7 +109,7 @@ let
       homepage = "https://BackgroundRemoverAI.com";
       downloadPage = "https://github.com/nadermx/backgroundremover/releases";
       license = lib.licenses.mit;
-      maintainers = [ ];
+      maintainers = with lib.maintainers; [ ayushthoren ];
     };
   };
 in
