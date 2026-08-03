@@ -299,7 +299,7 @@ def fixup_all(args: VarsArgs, config: VarsConfig):
 		generator = config.generators[gen_name]
 
 		if config.generatorBackends[generator.backend].fixup:
-			print(f"- '{gen_name}' ({len(generator.files)} files)")
+			print(f"- '{gen_name}' ({len(generator.files)} file(s))")
 		else:
 			print(f"- Skipping '{gen_name}' (no fixup script)")
 			continue
