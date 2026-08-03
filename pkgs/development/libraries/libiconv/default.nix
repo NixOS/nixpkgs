@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
   # https://git.savannah.gnu.org/cgit/config.git/commit/?id=e4786449e1c26716e3f9ea182caf472e4dbc96e0
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
 
+  strictDeps = true;
+
   # https://github.com/NixOS/nixpkgs/pull/192630#discussion_r978985593
   hardeningDisable = lib.optional (stdenv.hostPlatform.libc == "bionic") "fortify";
 
