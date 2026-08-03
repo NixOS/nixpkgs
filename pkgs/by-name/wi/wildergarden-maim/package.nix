@@ -28,7 +28,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   name = "wildergarden-maim";
-  version = "1.1.1-unstable-2025-12-17";
+  version = "1.1.1-unstable-2026-07-23";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -36,8 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ArdenButterfield";
     repo = "Maim";
-    rev = "181fe240ff99b446858f054074f8241401304e84";
-    hash = "sha256-Ht8Mj8nViXyQm/uHabSxYG1RuJj60MEsCJmISSrn6x0=";
+    rev = "985ed209436d02fb9f805ec983f4ab2c1c37d40a";
+    hash = "sha256-Cmxo74H0DDolHhlsnn+rxawsbtjz+FtfzSWBi7DEcuo=";
     fetchSubmodules = true;
   };
 
