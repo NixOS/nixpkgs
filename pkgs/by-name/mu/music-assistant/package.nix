@@ -5,6 +5,7 @@
   fetchFromGitHub,
   ffmpeg_7-headless,
   nixosTests,
+  openssl,
   replaceVars,
   writableTmpDirAsHomeHook,
   providers ? [ ],
@@ -12,16 +13,54 @@
 
 let
   pythonPackages = python3Packages.overrideScope (
-    prev: final: {
-      music-assistant-frontend = prev.callPackage ./frontend.nix { };
+    final: prev: {
+      # TODO: package properly when no longer using a fork
+      aiolibdatachannel = final.callPackage ./aiolibdatachannel.nix { };
 
-      music-assistant-models = final.music-assistant-models.overridePythonAttrs (oldAttrs: {
-        version = "1.1.129.post1";
+      music-assistant-frontend = final.callPackage ./frontend.nix { };
+
+      music-assistant-models = prev.music-assistant-models.overridePythonAttrs (oldAttrs: {
+        version = "1.1.204";
 
         src = oldAttrs.src.override {
-          hash = "sha256-86BmUmduNcSbEHxK+/he78b5fAM/XBhnNEc28Uv74GI=";
+          hash = "sha256-nmIBjdKcgiRBJJSfPrd8lGt940/u9e3Uu//1A6Q68EY=";
         };
       });
+    }
+  );
+
+  # 6.0.0.post1 causes 10+ tests to fail with encoding errors
+  # Overwriting chardet for the package set causes many rebuilds and failures in other packages,
+  # but luckily nothing is propagating it, so we can get away with only overlaying it for music-assistant
+  chardet = pythonPackages.chardet.overridePythonAttrs (
+    { src, meta, ... }:
+    let
+      version = "7.6.0";
+    in
+    {
+      inherit version;
+      src = src.override {
+        hash = "sha256-7xloMYaoAB1uwj4/5KK8PFd/mjXTgMFjS0SGW7Rrynw=";
+      };
+
+      nativeCheckInputs = with pythonPackages; [
+        pytestCheckHook
+      ];
+
+      preCheck = ''
+        ln -s ${
+          fetchFromGitHub {
+            owner = "chardet";
+            repo = "test-data";
+            tag = version;
+            hash = "sha256-kgD/fCxVuxgn6x2JVf4ij8ptzRi7AfqswccQ0akWL0s=";
+          }
+        } tests/data
+      '';
+
+      meta = meta // {
+        license = lib.licenses.bsd0;
+      };
     }
   );
 
@@ -40,7 +79,7 @@ assert
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "music-assistant";
-  version = "2.9.13";
+  version = "2.10.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -48,7 +87,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     owner = "music-assistant";
     repo = "server";
     tag = finalAttrs.version;
-    hash = "sha256-HCqd8++PKdbuzyeztkcLUXhTivTLJEl749VD2oCsHZA=";
+    hash = "sha256-6Fyi2FZp7sFTXpgxX0yYpzai8TSPqR5YkCb8jJiRtlY=";
   };
 
   patches = [
@@ -63,8 +102,8 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     # Look up shairport-sync from PATH at runtime
     ./shairport-sync.patch
 
-    # Look up cliraop/cliap2 from PATH at runtime
-    ./cliraop-cliap2.patch
+    # Look up cliairplay from PATH at runtime
+    ./cliairplay.patch
 
     # Disable interactive dependency resolution, which clashes with the immutable Python environment
     ./dont-install-deps.patch
@@ -93,9 +132,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       --replace-fail "==" ">="
 
     rm -rv \
-      music_assistant/providers/airplay/bin/{cliap2-*,cliraop-*} \
       music_assistant/providers/airplay_receiver/bin/{build_binaries.sh,shairport-sync-*} \
-      music_assistant/providers/ariacast_receiver/bin/ariacast_* \
       music_assistant/providers/spotify/bin/librespot-*
 
     found_bins=$(find music_assistant/ -wholename '*/bin/*' -type f -executable -print0 | tr '\0' ' ')
@@ -110,13 +147,9 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   ];
 
   pythonRelaxDeps = [
-    "aiohttp"
     "aiosqlite"
     "cryptography"
-    "mashumaro"
-    "orjson"
-    "xmltodict"
-    "zeroconf"
+    "torch"
   ];
 
   pythonRemoveDeps = [
@@ -134,7 +167,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       aiohttp-asyncmdnsresolver
       aiohttp-fast-zlib
       aiohttp-socks
-      aiortc
+      aiolibdatachannel
       aiosqlite
       awesomeversion
       brotli
@@ -178,6 +211,8 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     test = [
       pytest-aiohttp
       pytest-cov-stub
+      pytest-timeout
+      pytest-xdist
       syrupy
     ];
   };
@@ -185,21 +220,35 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   nativeCheckInputs =
     with pythonPackages;
     [
+      ffmpeg_7-headless
+      openssl
       pytest9_0CheckHook
       writableTmpDirAsHomeHook
     ]
     ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies
     ++ (lib.concatMap (provider: providerPackages.${provider} pythonPackages) [
       "acoustid_lookup"
+      "airplay"
       "apple_music"
       "audible"
+      "audiobookshelf"
+      "bluesound"
+      "chromecast"
       "dlna"
       "fastmcp_server"
-      "jellyfin"
+      "filesystem_google_drive"
+      "filesystem_onedrive"
+      "fully_kiosk"
       "heos"
+      "jellyfin"
+      "local_audio"
       "mpd"
       "msx_bridge"
       "opensubsonic"
+      "plex"
+      "plex_connect"
+      "profiler"
+      "sendspin"
       "sendspin"
       "smart_fades"
       "snapcast"
@@ -207,8 +256,11 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       "sonic_similarity"
       "sonos"
       "sonos_s1"
+      "soundcloud"
+      "spotify"
+      "squeezelite"
       "tidal"
-      "wiim"
+      "vban_receiver"
       "ytmusic"
     ]);
 
@@ -221,21 +273,32 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   '';
 
   disabledTestPaths = [
-    # no multicast support in build sandbox:
-    # "OSError: [Errno 19] No such device"
-    "tests/core/test_genres.py"
     # provider is missing dependencies
+    "tests/providers/amplipi"
     "tests/providers/bandcamp"
+    "tests/providers/bbc_sounds"
+    "tests/providers/deezer"
     "tests/providers/hue_entertainment"
     "tests/providers/kion_music"
     "tests/providers/nicovideo"
     "tests/providers/qqmusic"
     "tests/providers/siriusxm"
+    "tests/providers/stream_limits"
+    "tests/providers/wiim"
     "tests/providers/yandex_music"
+    "tests/providers/yandex_smarthome"
+    "tests/providers/yandex_station"
     "tests/providers/yandex_ynison"
     "tests/providers/zvuk_music"
-    # mocking music_assistant.providers.airplay.pairing.AirPlayPairing does not work
-    "tests/providers/airplay/test_player.py::test_start_pairing__pin_decision"
+    # hue_entertainment is not packaged
+    "tests/controllers/config/test_setup_flows.py::test_hue_pairing_flow_retry_then_success"
+    # Our patches break this test
+    "tests/helpers/test_util.py::TestLoadProviderModule"
+    "tests/providers/airplay/test_helpers.py::test_get_cli_binary_uses_release_asset_name"
+    # We do not have a full git repo to work with
+    "tests/scripts/test_release_workflow.py"
+    # save compute
+    "tests/benchmarks/test_bench_helpers.py"
   ];
 
   disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
@@ -249,6 +312,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   pythonImportsCheck = [ "music_assistant" ];
 
   passthru = {
+    ffmpeg = ffmpeg_7-headless;
     inherit
       pythonPackages
       pythonPath

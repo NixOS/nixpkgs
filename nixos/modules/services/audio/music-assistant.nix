@@ -137,11 +137,11 @@ in
       path =
         with pkgs;
         [
+          finalPackage.ffmpeg
           lsof
         ]
         ++ lib.optionals (lib.elem "airplay" cfg.providers) [
-          cliairplay
-          libraop
+          airplay-cli
         ]
         ++ lib.optionals (lib.elem "airplay_receiver" cfg.providers) [
           shairport-sync
@@ -157,7 +157,6 @@ in
         ]
         ++ lib.optionals useYTMusic [
           deno
-          ffmpeg-headless
         ];
 
       serviceConfig = {

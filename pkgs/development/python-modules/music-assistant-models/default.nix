@@ -2,13 +2,16 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
 
   # build-system
   setuptools,
 
   # dependencies
+  anyascii,
   mashumaro,
   orjson,
+  unidecode,
 
   # tests
   pytestCheckHook,
@@ -33,16 +36,15 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-tdjqg6N/g8fRtcpj7RLQ2QeX0f3zQlMndIfNTgtlCf4=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "0.0.0" "${finalAttrs.version}"
-  '';
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   build-system = [ setuptools ];
 
   dependencies = [
     mashumaro
     orjson
+    # TODO: remove when home-assistant updated to at least this version, too
+    (if lib.versionAtLeast finalAttrs.version "1.1.189" then anyascii else unidecode)
   ];
 
   nativeCheckInputs = [

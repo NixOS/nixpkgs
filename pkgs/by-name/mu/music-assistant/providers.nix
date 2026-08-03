@@ -1,30 +1,37 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.9.13";
+  version = "2.10.0";
   builtins = [
     "builtin"
     "coverartarchive"
     "fanarttv"
     "itunes_artwork"
-    "local_audio"
     "loudness_analysis"
     "lrclib"
     "musicbrainz"
+    "playlist_metadata"
+    "radio_playlist"
+    "recommendations"
     "sendspin"
+    "sendspin_source"
     "sync_group"
     "theaudiodb"
     "universal_player"
     "wikipedia"
   ];
   providers = {
+    abc_radio_network = ps: [
+    ];
     acoustid_lookup =
       ps: with ps; [
         pyacoustid
       ];
+    ai_radio = ps: [
+    ];
     airplay =
       ps: with ps; [
-        srptools
+        pyatv
       ];
     airplay_receiver = ps: [
     ];
@@ -32,6 +39,10 @@
       ps: with ps; [
         alexapy
       ];
+    ambient_sounds = ps: [
+    ];
+    amplipi = ps: [
+    ]; # missing pyamplipi
     apple_music =
       ps: with ps; [
         pywidevine
@@ -40,8 +51,10 @@
       ps: with ps; [
         gql
       ];
-    ariacast_receiver = ps: [
-    ];
+    ariacast_receiver =
+      ps: with ps; [
+        aiohttp
+      ];
     audible =
       ps: with ps; [
         audible
@@ -62,6 +75,10 @@
       ps: with ps; [
         pyblu
       ];
+    bose_soundtouch =
+      ps: with ps; [
+        defusedxml
+      ];
     builtin = ps: [
     ];
     chromecast =
@@ -70,13 +87,10 @@
       ];
     coverartarchive = ps: [
     ];
-    dashie_kiosk = ps: [
-    ];
     deezer =
       ps: with ps; [
-        deezer-python-async
         pycryptodome
-      ];
+      ]; # missing deezer-python-gql
     digitally_incorporated = ps: [
     ];
     dlna =
@@ -92,10 +106,18 @@
       ps: with ps; [
         fastmcp
       ];
+    filesystem_google_drive =
+      ps: with ps; [
+        python-google-drive-api
+      ];
     filesystem_local = ps: [
     ];
     filesystem_nfs = ps: [
     ];
+    filesystem_onedrive =
+      ps: with ps; [
+        onedrive-personal-sdk
+      ];
     filesystem_smb = ps: [
     ];
     fully_kiosk =
@@ -142,13 +164,15 @@
       ps: with ps; [
         liblistenbrainz
       ];
-    local_audio =
-      ps: with ps; [
-        sounddevice
-      ];
+    local_audio = ps: [
+    ];
     loudness_analysis = ps: [
     ];
     lrclib = ps: [
+    ];
+    mammamiradio = ps: [
+    ];
+    milkdrop_visualizer = ps: [
     ];
     mpd =
       ps: with ps; [
@@ -157,7 +181,10 @@
     msx_bridge =
       ps: with ps; [
         pydantic
+        segno
       ];
+    music_quiz = ps: [
+    ];
     musicbrainz = ps: [
     ];
     musiccast =
@@ -176,17 +203,25 @@
     ];
     nugs = ps: [
     ];
+    openai_compatible = ps: [
+    ];
+    openai_tts = ps: [
+    ];
     opensubsonic =
       ps: with ps; [
         py-opensonic
       ];
     orf_radiothek = ps: [
     ];
+    overcast = ps: [
+    ];
     pandora = ps: [
     ];
     party = ps: [
     ];
     phishin = ps: [
+    ];
+    playlist_metadata = ps: [
     ];
     plex =
       ps: with ps; [
@@ -196,19 +231,32 @@
       ps: with ps; [
         plexapi
       ];
+    pocketcasts = ps: [
+    ];
     podcast_index = ps: [
     ];
     podcastfeed = ps: [
     ];
+    profiler =
+      ps: with ps; [
+        psutil
+        yappi
+      ];
     qobuz = ps: [
     ];
     qqmusic = ps: [
     ]; # missing qqmusic-api-python
+    radio_playlist = ps: [
+    ];
     radiobrowser =
       ps: with ps; [
         radios
       ];
     radioparadise = ps: [
+    ];
+    rain_mood = ps: [
+    ];
+    recommendations = ps: [
     ];
     roku_media_assistant =
       ps: with ps; [
@@ -225,13 +273,17 @@
         av
       ]
       ++ aiosendspin.optional-dependencies.server;
+    sendspin_source =
+      ps: with ps; [
+        soxr
+      ];
     siriusxm = ps: [
     ]; # missing sxm
     smart_fades =
       ps: with ps; [
         beat-this
+        kaldi-native-fbank
         nnaudio
-        threadpoolctl
       ];
     smart_playlist = ps: [
     ];
@@ -247,13 +299,13 @@
       ps: with ps; [
         huggingface-hub
         pyyaml
-        threadpoolctl
         torchlibrosa
         transformers
       ];
     sonic_similarity =
       ps: with ps; [
         huggingface-hub
+        numkong
         transformers
         usearch
       ];
@@ -280,18 +332,24 @@
       ps: with ps; [
         aioslimproto
       ];
+    storytel =
+      ps: with ps; [
+        pycryptodome
+      ];
     subsonic_scrobble = ps: [
     ];
+    sverigesradio = ps: [
+    ];
     sync_group = ps: [
+    ];
+    teddycloud = ps: [
     ];
     test = ps: [
     ];
     theaudiodb = ps: [
     ];
-    tidal =
-      ps: with ps; [
-        pkce
-      ];
+    tidal = ps: [
+    ];
     tunein = ps: [
     ];
     universal_group = ps: [
@@ -307,15 +365,23 @@
     wiim =
       ps: with ps; [
         wiim
-      ];
+      ]; # missing pywiim
     wikipedia = ps: [
     ];
-    yandex_music = ps: [
-    ]; # missing yandex-music, ya-passport-auth
+    yandex_music =
+      ps: with ps; [
+        segno
+      ]; # missing yandex-music, ya-passport-auth
     yandex_smarthome = ps: [
-    ]; # missing ya-passport-auth
-    yandex_ynison = ps: [
-    ]; # missing ya-passport-auth
+    ]; # missing ya-passport-auth, ya-dialogs-api
+    yandex_station =
+      ps: with ps; [
+        segno
+      ]; # missing ya-passport-auth
+    yandex_ynison =
+      ps: with ps; [
+        segno
+      ]; # missing ya-passport-auth
     yousee = ps: [
     ];
     ytmusic =
