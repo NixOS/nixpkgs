@@ -13,12 +13,13 @@ python3Packages.buildPythonApplication {
   pname = "dr14_tmeter";
   version = "1.0.16-unstable-2025-09-27";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "hboetes";
     repo = "dr14_t.meter";
     rev = "f9d62f60c30d9404d4c4b644931e76049332310c";
-    sha256 = "sha256-3z9Gi32aG6Tk9UHpfT1VqmBZpFJrlKB+NZFu3CH+18U=";
+    hash = "sha256-3z9Gi32aG6Tk9UHpfT1VqmBZpFJrlKB+NZFu3CH+18U=";
   };
 
   build-system = with python3Packages; [ setuptools ];
