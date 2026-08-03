@@ -139,6 +139,11 @@ buildPythonPackage (finalAttrs: {
       url = "https://github.com/papis/papis/commit/15cae5986ae9dec75c7d103757adbd73c39feb89.patch?full_index=1";
       hash = "sha256-kuVZdOd+H99TinM7yAs7NJrfw7rOPyxDlSaT0P2NeC4=";
     })
+    # Commit ae77020: feat: show error instead of raising when missing isbnlib
+    (fetchpatch2 {
+      url = "https://github.com/papis/papis/commit/ae77020dcb3d44613f66c69e3ba86d55e2f2cb3e.patch?full_index=1";
+      hash = "sha256-BewySBqLoV8ID62vmT4lgRxrQVVXBIUgwpbEaTUy+X8=";
+    })
   ];
 
   meta = {
