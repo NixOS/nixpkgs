@@ -58,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://darwinsys.com/file";
     description = "Program that shows the type of files";
