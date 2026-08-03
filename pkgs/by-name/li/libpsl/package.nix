@@ -56,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt
   ];
 
+  strictDeps = true;
+
   propagatedBuildInputs = [
     publicsuffix-list
   ];
