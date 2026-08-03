@@ -240,9 +240,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   preInstall = ''
     # Delete generated shared libraries that aren't needed in the final package
     find ./target \
-      -name "libswc_common${stdenv.hostPlatform.extensions.sharedLibrary}" -o \
+      \( -name "libswc_common${stdenv.hostPlatform.extensions.sharedLibrary}" -o \
       -name "libtest_ffi${stdenv.hostPlatform.extensions.sharedLibrary}" -o \
-      -name "libtest_napi${stdenv.hostPlatform.extensions.sharedLibrary}" \
+      -name "libtest_napi${stdenv.hostPlatform.extensions.sharedLibrary}" \) \
       -delete
   '';
 
