@@ -59,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${expect}/bin/expect $out/bin/expect
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Framework for testing other programs";
 
