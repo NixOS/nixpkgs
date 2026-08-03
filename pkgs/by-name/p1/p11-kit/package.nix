@@ -14,14 +14,14 @@
   libintl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "p11-kit";
   version = "0.26.2";
 
   src = fetchFromGitHub {
     owner = "p11-glue";
     repo = "p11-kit";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-qFanbp0KPc6+CN4s5mMQNduzcxt/SrMcYWvIMZ0XnGY=";
     fetchSubmodules = true;
   };
@@ -82,6 +82,8 @@ stdenv.mkDerivation rec {
     fi
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Library for loading and sharing PKCS#11 modules";
     longDescription = ''
@@ -91,8 +93,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://p11-glue.github.io/p11-glue/p11-kit.html";
     changelog = [
-      "https://github.com/p11-glue/p11-kit/raw/${version}/NEWS"
-      "https://github.com/p11-glue/p11-kit/releases/tag/${version}"
+      "https://github.com/p11-glue/p11-kit/raw/${finalAttrs.version}/NEWS"
+      "https://github.com/p11-glue/p11-kit/releases/tag/${finalAttrs.version}"
     ];
     platforms = lib.platforms.all;
     badPlatforms = [
@@ -101,6 +103,6 @@ stdenv.mkDerivation rec {
     ];
     license = lib.licenses.bsd3;
     mainProgram = "p11-kit";
-    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "p11-kit_project" version;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "p11-kit_project" finalAttrs.version;
   };
-}
+})
