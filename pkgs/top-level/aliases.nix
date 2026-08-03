@@ -1497,6 +1497,7 @@ mapAliases {
   luminanceHDR = throw "'luminanceHDR' has been removed as it depended on EOL qt5 webengine and was unmaintained"; # Added 2026-04-17
   lunarvim = throw "'lunarvim' has been removed since it was abandoned upstream and relied on an older version of 'neovim' to work properly"; # Added 2026-02-05
   lunatic = throw "'lunatic' has been removed, as it is unmaintained"; # Added 2026-05-04
+  lxappearance-gtk2 = throw "'lxappearance-gtk2' was removed because it depended on the deprecated GTK2 engine. Consider using the GTK3-based 'lxappearance' instead."; # Added 2026-07-22
   lxd = throw "
     LXD has been removed from NixOS due to lack of Nixpkgs maintenance.
     Consider migrating or switching to Incus, or remove from your configuration.
