@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnu/make/make-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-3Rb7HWe/q3mnL16DkHNcSePo5wtJRaFasfgd23hlj7M=";
+    hash = "sha256-3Rb7HWe/q3mnL16DkHNcSePo5wtJRaFasfgd23hlj7M=";
   };
 
   # To update patches:
@@ -81,6 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
     # make sure that the override doesn't break bootstrapping
     gnumakeWithGuile = gnumake.override { guileSupport = true; };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Tool to control the generation of non-source files from sources";
