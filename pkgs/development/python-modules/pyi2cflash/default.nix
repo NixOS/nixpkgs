@@ -3,19 +3,23 @@
   buildPythonPackage,
   fetchPypi,
   pyftdi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyi2cflash";
   version = "0.2.2";
-  format = "setuptools";
+
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "1nkazgf7pajz7jym5rfy2df71lyfp4skxqbrg5ch0h4dwjdwllx1";
   };
 
-  propagatedBuildInputs = [ pyftdi ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pyftdi ];
 
   # tests are not shipped with the PyPI source
   doCheck = false;
