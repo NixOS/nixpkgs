@@ -13,13 +13,13 @@
 buildGoModule (finalAttrs: {
   pname = "opengist";
 
-  version = "1.14.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "thomiceli";
     repo = "opengist";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-glKhgETje+TRmwnSWJ+fVla0hsyljZLnRKcM4xi+zQ8=";
+    hash = "sha256-yE9HvRFEQzv3Fhhbs9hXeLc4vudCMi+NMA2T8YUlREw=";
   };
 
   frontend = buildNpmPackage {
@@ -36,10 +36,10 @@ buildGoModule (finalAttrs: {
       cp -R public $out
     '';
 
-    npmDepsHash = "sha256-Zz6qoqTV/O73OrBL7ry1VXK9nF6Eb6QeqcefLpyMN1c=";
+    npmDepsHash = "sha256-hAG0vGjG+ejumjoslYs/UnYBImZDNsTQUDtssT0X/HI=";
   };
 
-  vendorHash = "sha256-J4JMOCj7S8N0kX7VBZmrAiPuXjWur+MIkS8pMVmkLbs=";
+  vendorHash = "sha256-YU1OdYM9GzUGHypgIhWvJCvYEzlKsaKGN0NZRBfT8FY=";
 
   tags = [ "fs_embed" ];
 
