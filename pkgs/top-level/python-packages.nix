@@ -5417,6 +5417,8 @@ self: super: with self; {
 
   empy = callPackage ../development/python-modules/empy { };
 
+  emsutil = callPackage ../development/python-modules/emsutil { };
+
   emulated-roku = callPackage ../development/python-modules/emulated-roku { };
 
   emv = callPackage ../development/python-modules/emv { };
