@@ -65,6 +65,7 @@ let
       rocqnavi = callPackage ../development/rocq-modules/rocqnavi { };
       stdlib = callPackage ../development/rocq-modules/stdlib { };
       stdpp = callPackage ../development/rocq-modules/stdpp { };
+      unicoq = callPackage ../development/rocq-modules/unicoq { };
       vsrocq-language-server = callPackage ../development/rocq-modules/vsrocq-language-server { };
 
       filterPackages = doesFilter: if doesFilter then filterRocqPackages self else self;
