@@ -9,6 +9,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "aurulent-sans";
   version = "0.1";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "deepfire";
     repo = "hartke-aurulent-sans";
