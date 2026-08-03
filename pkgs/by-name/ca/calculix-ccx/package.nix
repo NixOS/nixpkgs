@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Three-dimensional structural finite element program";
     mainProgram = "ccx";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.magicquark ];
     platforms = lib.platforms.unix;
   };
 })
