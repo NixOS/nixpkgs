@@ -52,6 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
     rev-prefix = "v";
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://strace.io/";
     description = "System call tracer for Linux";
