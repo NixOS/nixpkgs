@@ -117,6 +117,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     changelog = "https://github.com/jqlang/jq/releases/tag/jq-${finalAttrs.version}";
     description = "Lightweight and flexible command-line JSON processor";
