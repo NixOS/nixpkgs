@@ -32,6 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
 
+  strictDeps = true;
+
   configureFlags = lib.optional static "LDFLAGS=-static";
 
   makeFlags =
