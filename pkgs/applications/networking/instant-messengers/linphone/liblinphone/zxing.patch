@@ -1,0 +1,27 @@
+diff -urN liblinphone-5.4.119/src/factory/factory.cpp liblinphone-5.4.119-bak/src/factory/factory.cpp
+--- liblinphone-5.4.119/src/factory/factory.cpp
++++ liblinphone-5.4.119-bak/src/factory/factory.cpp
+@@ -28,14 +28,12 @@
+ #include <BitMatrixIO.h>
+ #include <CharacterSet.h>
+ #include <MultiFormatWriter.h>
+-#include <TextUtfEncoding.h>
+ #else
+ #include <ZXing/BarcodeFormat.h>
+ #include <ZXing/BitMatrix.h>
+ #include <ZXing/BitMatrixIO.h>
+ #include <ZXing/CharacterSet.h>
+ #include <ZXing/MultiFormatWriter.h>
+-#include <ZXing/TextUtfEncoding.h>
+ #endif
+ #ifdef JPEG_ENABLED
+ #include <mediastreamer2/msvideo.h>
+@@ -926,7 +924,7 @@
+ 	}
+
+ 	auto writer = ZXing::MultiFormatWriter(format).setMargin((int)margin).setEncoding(encoding).setEccLevel(eccLevel);
+-	auto matrix = writer.encode(ZXing::TextUtfEncoding::FromUtf8(code), (int)width, (int)height);
++	auto matrix = writer.encode(code, (int)width, (int)height);
+ 	auto bitmap = ZXing::ToMatrix<uint8_t>(matrix);
+
+ 	LinphoneContent *content = Factory::createContent();
