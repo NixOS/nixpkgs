@@ -12,17 +12,19 @@ let
 
   # Only placeholders reach the world-readable Nix store; the install
   # script substitutes the real secrets at runtime.
+  dbConfig =
+    cfg.database
+    // optionalAttrs (cfg.databasePasswordFile != null) {
+      password = "@databasePassword@";
+    };
+
   flarumInstallConfig = pkgs.writeText "config.json" (
     builtins.toJSON {
       debug = false;
       offline = false;
 
       baseUrl = cfg.baseUrl;
-      databaseConfiguration =
-        cfg.database
-        // optionalAttrs (cfg.databasePasswordFile != null) {
-          password = "@databasePassword@";
-        };
+      databaseConfiguration = dbConfig;
       adminUser = {
         username = cfg.adminUser;
         password =
@@ -34,6 +36,25 @@ let
       };
     }
   );
+
+  phpFormat = pkgs.formats.php { };
+
+  configPhpFile = phpFormat.generate "flarum-config.php" {
+    debug = false;
+    database = dbConfig;
+    url = cfg.baseUrl;
+    paths = {
+      api = "api";
+      admin = "admin";
+    };
+    headers = {
+      poweredByHeader = true;
+      referrerPolicy = "same-origin";
+    };
+    queue = {
+      driver = "sync";
+    };
+  };
 in
 {
   options.services.flarum = {
@@ -268,26 +289,31 @@ in
         ln -sf ${cfg.package}/share/php/flarum/public/index.php public/
       ''
       + optionalString (cfg.createDatabaseLocally && cfg.database.driver == "mysql") ''
-        if [ ! -f config.php ]; then
-          install -m 0600 ${flarumInstallConfig} /tmp/flarum-install.json
-          ${optionalString (cfg.initialAdminPasswordFile != null) ''
-            ${pkgs.replace-secret}/bin/replace-secret '@adminPassword@' \
-              ${escapeShellArg cfg.initialAdminPasswordFile} /tmp/flarum-install.json
-          ''}
-          ${optionalString (cfg.databasePasswordFile != null) ''
-            ${pkgs.replace-secret}/bin/replace-secret '@databasePassword@' \
-              ${escapeShellArg cfg.databasePasswordFile} /tmp/flarum-install.json
-          ''}
-          php flarum install --file=/tmp/flarum-install.json
-          # config.php contains the database password; stateDir is world-readable
-          chmod 600 config.php
+        if [ ! -f .flarum-installed ]; then
+          if [ ! -f config.php ]; then
+            install -m 0600 ${flarumInstallConfig} /tmp/flarum-install.json
+            ${optionalString (cfg.initialAdminPasswordFile != null) ''
+              ${pkgs.replace-secret}/bin/replace-secret '@adminPassword@' \
+                ${escapeShellArg cfg.initialAdminPasswordFile} /tmp/flarum-install.json
+            ''}
+            ${optionalString (cfg.databasePasswordFile != null) ''
+              ${pkgs.replace-secret}/bin/replace-secret '@databasePassword@' \
+                ${escapeShellArg cfg.databasePasswordFile} /tmp/flarum-install.json
+            ''}
+            php flarum install --file=/tmp/flarum-install.json
+          fi
+          touch .flarum-installed
         fi
       ''
       + ''
-        if [ -f config.php ]; then
-          php flarum migrate
-          php flarum cache:clear
-        fi
+        install -m 0600 ${configPhpFile} config.php
+        ${optionalString (cfg.databasePasswordFile != null) ''
+          ${pkgs.replace-secret}/bin/replace-secret '@databasePassword@' \
+            ${escapeShellArg cfg.databasePasswordFile} config.php
+        ''}
+
+        php flarum migrate
+        php flarum cache:clear
       '';
     };
   };
