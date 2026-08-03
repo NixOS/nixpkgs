@@ -20,14 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cometx";
-  version = "3.6.8";
+  version = "3.6.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "comet-ml";
     repo = "cometx";
     tag = finalAttrs.version;
-    hash = "sha256-Pcu4KEh3EXXrmyTysxtl2aFj3G4dcqBfrKT1pkPQ4Oo=";
+    hash = "sha256-pt+aa4FgPl7Rm+Xr0AglSZtmbXx8cOeh5xTptLHmMF0=";
   };
 
   build-system = [ setuptools ];
