@@ -25,8 +25,10 @@ python.pkgs.buildPythonPackage (finalAttrs: {
   __structuredAttrs = true;
 
   # remove supervisor from dependencies, we use systemd
+  # and fix version, TODO move to pyprojectVersionPatchHook when it is available in stable 26.05
   postPatch = ''
     sed -i 's/supervisor.*$//' pyproject.toml
+    sed -i 's/^version = .*$/version = "${finalAttrs.version}"/' pyproject.toml
   '';
 
   dependencies =
@@ -65,7 +67,6 @@ python.pkgs.buildPythonPackage (finalAttrs: {
 
   nativeBuildInputs = [
     makeWrapper
-    python.pkgs.pyprojectVersionPatchHook
   ];
 
   optional-dependencies = {
