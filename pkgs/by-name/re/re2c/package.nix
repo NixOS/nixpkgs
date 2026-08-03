@@ -28,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
+  strictDeps = true;
+
   doCheck = true;
   enableParallelBuilding = true;
 
