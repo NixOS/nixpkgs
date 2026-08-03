@@ -24,6 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "lean4";
   version = "4.33.0";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "leanprover";
     repo = "lean4";
@@ -100,6 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
+    cadical'
     cmake
     pkg-config
     makeWrapper
@@ -110,7 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gmp
     libuv
-    cadical'
     openssl
   ];
 
