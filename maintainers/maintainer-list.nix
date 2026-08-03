@@ -29060,6 +29060,12 @@
     githubId = 10110;
     name = "Travis B. Hartwell";
   };
+  travisty- = {
+    email = "travis@traviskinney.co";
+    github = "travisty-";
+    githubId = 10015877;
+    name = "Travis Kinney";
+  };
   traxys = {
     email = "quentin+dev@familleboyer.net";
     github = "traxys";
