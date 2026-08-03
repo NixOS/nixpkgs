@@ -5405,6 +5405,8 @@ self: super: with self; {
 
   emcee = callPackage ../development/python-modules/emcee { };
 
+  emerge = callPackage ../development/python-modules/emerge { };
+
   emmiai-noether = callPackage ../development/python-modules/emmiai-noether { };
 
   emoji = callPackage ../development/python-modules/emoji { };
