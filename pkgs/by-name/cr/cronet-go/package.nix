@@ -95,7 +95,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Go bindings for naiveproxy";
     homepage = "https://github.com/SagerNet/cronet-go";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ prince213 ];
+    maintainers = with lib.maintainers; [
+      prince213
+      moraxyc
+    ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
 })
