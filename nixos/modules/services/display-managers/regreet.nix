@@ -33,7 +33,7 @@ in
 
     settings = lib.mkOption {
       type = settingsFormat.type;
-      default = { };
+      default = lib.mkDefault { };
       description = ''
         ReGreet configuration file. Refer
         <https://github.com/rharish101/ReGreet/blob/main/regreet.sample.toml>
@@ -43,7 +43,7 @@ in
 
     cageArgs = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [
+      default = lib.mkDefault [
         "-s"
         "-d"
       ];
@@ -58,7 +58,7 @@ in
 
     extraCss = lib.mkOption {
       type = lib.types.either lib.types.path lib.types.lines;
-      default = "";
+      default = lib.mkDefault "";
       description = ''
         Extra CSS rules to apply on top of the GTK theme. Refer to
         [GTK CSS Properties](https://docs.gtk.org/gtk4/css-properties.html) for
@@ -75,7 +75,7 @@ in
 
       name = lib.mkOption {
         type = lib.types.str;
-        default = "Adwaita";
+        default = lib.mkDefault "Adwaita";
         description = ''
           Name of the theme to use for regreet.
         '';
@@ -91,7 +91,7 @@ in
 
       name = lib.mkOption {
         type = lib.types.str;
-        default = "Adwaita";
+        default = lib.mkDefault "Adwaita";
         description = ''
           Name of the icon theme to use for regreet.
         '';
@@ -107,7 +107,7 @@ in
 
       name = lib.mkOption {
         type = lib.types.str;
-        default = "Cantarell";
+        default = lib.mkDefault "Cantarell";
         description = ''
           Name of the font to use for regreet.
         '';
@@ -115,7 +115,7 @@ in
 
       size = lib.mkOption {
         type = lib.types.ints.positive;
-        default = 16;
+        default = lib.mkDefault 16;
         description = ''
           Size of the font to use for regreet.
         '';
@@ -131,7 +131,7 @@ in
 
       name = lib.mkOption {
         type = lib.types.str;
-        default = "Adwaita";
+        default = lib.mkDefault "Adwaita";
         description = ''
           Name of the cursor theme to use for regreet.
         '';
