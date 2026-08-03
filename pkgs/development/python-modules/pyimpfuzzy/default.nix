@@ -6,14 +6,17 @@
   pefile,
   setuptools,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyimpfuzzy";
   version = "0.5";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "da9796df302db4b04a197128637f84988f1882f1e08fdd69bbf9fdc6cfbaf349";
+    pname = "pyimpfuzzy";
+    inherit (finalAttrs) version;
+    hash = "sha256-2peW3zAttLBKGXEoY3+EmI8YgvHgj91pu/n9xs+680k=";
   };
 
   build-system = [ setuptools ];
@@ -33,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl2Only;
     maintainers = [ ];
   };
-}
+})
