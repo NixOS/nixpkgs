@@ -1677,6 +1677,7 @@ in
   saunafs = runTest ./saunafs.nix;
   scanservjs = runTest ./scanservjs.nix;
   schleuder = runTest ./schleuder.nix;
+  scholarsome = runTest ./web-apps/scholarsome.nix;
   scion-freestanding-deployment = runTest ./scion/freestanding-deployment;
   scrutiny = runTest ./scrutiny.nix;
   scx = runTest ./scx/default.nix;
