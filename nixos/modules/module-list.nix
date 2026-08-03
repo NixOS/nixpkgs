@@ -247,6 +247,7 @@
   ./programs/iftop.nix
   ./programs/iio-hyprland.nix
   ./programs/immersed.nix
+  ./programs/ioquake3.nix
   ./programs/iotop.nix
   ./programs/jai-jail.nix
   ./programs/java.nix
