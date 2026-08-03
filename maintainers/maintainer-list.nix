@@ -5398,6 +5398,12 @@
     githubId = 718298;
     name = "Michael Livshin";
   };
+  cnst = {
+    name = "cnst";
+    email = "mail@cnst.dev";
+    github = "cnsta";
+    githubId = 61944575;
+  };
   CnTeng = {
     name = "CnTeng";
     email = "me@snakepi.xyz";
