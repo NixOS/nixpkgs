@@ -1,0 +1,620 @@
+From 421ae90e611b3a4816bf52d84abfdcc73bf999b7 Mon Sep 17 00:00:00 2001
+From: Alexander Motzkau <a.motzkau@web.de>
+Date: Tue, 9 Sep 2025 23:15:11 +0200
+Subject: [PATCH] Implement support for libpcre2
+
+The original libpcre library is deprecated and not supported anymore.
+Therefore use libpcre2 instead if available.
+---
+ src/autoconf/configure.ac |  10 +-
+ src/driver.h              |   2 +-
+ src/lex.c                 |   2 +-
+ src/mregex.c              | 335 ++++++++++++++++++++++++++++++++++----
+ src/pkg-pcre.h            |  11 +-
+ src/simulate.c            |   2 +-
+ 6 files changed, 327 insertions(+), 35 deletions(-)
+
+diff --git src/autoconf/configure.ac src/autoconf/configure.ac
+index e04bcc659..678c2f487 100644
+--- src/autoconf/configure.ac
++++ src/autoconf/configure.ac
+@@ -1301,7 +1301,15 @@ int main(void)
+ else
+     lp_cv_has_pcre=no
+ fi
+-if test "$lp_cv_has_pcre" = "no" && test "x$enable_use_pcre" = "xyes"; then
++
++lp_cv_has_pcre2_lib="no"
++AC_CHECK_LIB(pcre2-8, pcre2_config_8, PKGLIBS="$PKGLIBS -lpcre2-8" lp_cv_has_pcre2_lib="yes")
++
++if test "$lp_cv_has_pcre2_lib" = "yes"; then
++    AC_DEFINE(HAS_PCRE2, 1, [Does the machine offer PCRE2?])
++fi
++
++if test "$lp_cv_has_pcre" = "no" && test "$lp_cv_has_pcre2_lib" = "no" && test "x$enable_use_pcre" = "xyes"; then
+   AC_NOT_AVAILABLE(use-pcre)
+ fi
+ 
+diff --git src/driver.h src/driver.h
+index ec10645ac..00509f59b 100644
+--- src/driver.h
++++ src/driver.h
+@@ -139,7 +139,7 @@
+ 
+ /* If USE_PCRE is defined, check if the libpcre is available on this system.
+  * Disable USE_PCRE if not. */
+-#if defined(USE_PCRE) && !defined(HAS_PCRE)
++#if defined(USE_PCRE) && !defined(HAS_PCRE) && !defined(HAS_PCRE2)
+ #undef USE_PCRE
+ #endif
+ 
+diff --git src/lex.c src/lex.c
+index df61f4435..783428515 100644
+--- src/lex.c
++++ src/lex.c
+@@ -920,7 +920,7 @@ init_lexer(void)
+ #ifdef USE_JSON
+     add_permanent_define_str("__JSON__", -1, "1");
+ #endif
+-#ifdef HAS_PCRE
++#if defined(HAS_PCRE) || defined(HAS_PCRE2)
+     add_permanent_define_str("__PCRE__", -1, "1");
+ #endif
+     add_permanent_define_str("__LPC_NOSAVE__", -1, "1");
+diff --git src/mregex.c src/mregex.c
+index 17014ddde..81b6ef826 100644
+--- src/mregex.c
++++ src/mregex.c
+@@ -80,18 +80,22 @@
+  */
+ 
+ typedef struct regdata_s {
+-    p_uint        ref;       /* Number of refs */
+-    int           opt;       /* Additional options, but no package flags */
++    p_uint             ref;             /* Number of refs */
++    int                opt;             /* Additional options, but no package flags */
+     /* -- PCRE -- */
+-#ifdef HAS_PCRE
+-    pcre        * pProg;     /* The generated regular expression */
+-    pcre_extra  * pHints;    /* Study data */
+-    int           num_subs;  /* Number of elements in pSubs */
+-    int         * pSubs;     /* Substring offsets + workarea */
+-    int           res;       /* Result of last rx_exec() */
++#if defined(HAS_PCRE2)
++    pcre2_code       * pcre_prog;       /* The compiled regular expression */
++    pcre2_match_data * pcre_match_data; /* Block for holding the result */
++    int                res;             /* Result of last pcre2_match() */
++#elif defined(HAS_PCRE)
++    pcre             * pProg;           /* The generated regular expression */
++    pcre_extra       * pHints;          /* Study data */
++    int                num_subs;        /* Number of elements in pSubs */
++    int              * pSubs;           /* Substring offsets + workarea */
++    int                res;             /* Result of last rx_exec() */
+ #endif // HAS_PCRE
+     /* -- Traditional -- */
+-    regexp      * rx;        /* The actual regular expression */
++    regexp           * rx;              /* The actual regular expression */
+ } regdata_t;
+ 
+ #ifdef RXCACHE_TABLE
+@@ -143,7 +147,14 @@ static uint32 iXSizeAlloc     = 0;  /* Dynamic memory held in regexp structs */
+ 
+ #endif /* RXCACHE_TABLE */
+ 
+-#ifdef HAS_PCRE
++#if defined(HAS_PCRE2)
++static bool in_init_context = false;
++static pcre2_general_context* general_context = NULL;
++static pcre2_compile_context* compile_context = NULL;
++static pcre2_match_context* match_context = NULL;
++#endif
++
++#if defined(HAS_PCRE) || defined(HAS_PCRE2)
+ static size_t pcre_malloc_size;
+   /* Accumulated size from pcre_malloc() calls. Used when creating
+    * a new PCRE to capture its allocated size for statistics.
+@@ -197,7 +208,41 @@ free_regdata(regdata_t *r)
+ #endif /* RXCHACHE_TABLE */
+ 
+ /*--------------------------------------------------------------------*/
+-#ifdef HAS_PCRE
++#if defined(HAS_PCRE2)
++static void *
++pcre_xalloc (PCRE2_SIZE size, void *data)
++
++/* Wrapper function so that PCRE will use our special allocator. */
++
++{
++    void * p;
++
++    if (!pcre_malloc_err)
++        pcre_malloc_err = "in PCRE function";
++    if (in_init_context)
++    {
++        p = pxalloc(size);
++        if (p == NULL)
++            fatal("Out of memory (%zu bytes) for pcre context\n", (size_t)(size));
++    }
++    else
++        xallocate(p, size, pcre_malloc_err);
++    pcre_malloc_size += size;
++    return p;
++} /* pcre_xalloc() */
++
++/*--------------------------------------------------------------------*/
++static void
++pcre_xfree (void *block, void *data)
++
++/* Wrapper function so that PCRE will use our special allocator. */
++
++{
++    xfree(block);
++} /* pcre_xalloc() */
++
++/*--------------------------------------------------------------------*/
++#elif defined(HAS_PCRE)
+ static void *
+ pcre_xalloc (size_t size)
+ 
+@@ -223,7 +268,9 @@ rx_pcre_version (void)
+ 
+ {
+     static char buf[40];
+-#ifdef HAS_PCRE
++#if defined(HAS_PCRE2)
++    snprintf(buf, sizeof(buf), "%d.%d", PCRE2_MAJOR, PCRE2_MINOR);
++#elif defined(HAS_PCRE)
+     snprintf(buf, sizeof(buf), "%d.%d", PCRE_MAJOR, PCRE_MINOR);
+ #else
+     sprintf(buf, "not available");
+@@ -240,7 +287,22 @@ void rx_init(void)
+ #ifdef RXCACHE_TABLE
+     memset(xtable, 0, sizeof(xtable));
+ #endif
+-#ifdef HAS_PCRE
++#if defined(HAS_PCRE2)
++    in_init_context = true;
++    general_context = pcre2_general_context_create(pcre_xalloc, pcre_xfree, NULL);
++    compile_context = pcre2_compile_context_create(general_context);
++    match_context = pcre2_match_context_create(general_context);
++    in_init_context = false;
++
++#if LD_PCRE_RECURSION_LIMIT > 0
++    pcre2_set_depth_limit(match_context, LD_PCRE_RECURSION_LIMIT);
++#endif
++
++    uint32_t opt = 0;
++    if (pcre2_config(PCRE2_CONFIG_UNICODE, &opt) || !opt)
++        fprintf(stderr, "%s PCRE2 package does not support Unicode.\n", time_stamp());
++
++#elif defined(HAS_PCRE)
+     int opt = 0;
+ 
+     pcre_malloc = pcre_xalloc;
+@@ -259,10 +321,22 @@ get_error_message (int code, int package)
+ /* Return a constant string with the error message for <code>
+  * generated by <package>.
+  * If <code> is not an error, NULL is returned.
++ * Subsequent calls to this function may overwrite previous results.
+  */
+ 
+ {
+-#ifdef HAS_PCRE
++#if defined(HAS_PCRE2)
++    if (package & RE_PCRE)
++    {
++        static unsigned char buf[256];
++
++        if (!code)
++            return NULL;
++        if (pcre2_get_error_message(code, buf, sizeof(buf)) == PCRE2_ERROR_BADDATA)
++            return "unknown error";
++        return (const char*) buf;
++    }
++#elif defined(HAS_PCRE)
+     if (package & RE_PCRE)
+     {
+         const char* text;
+@@ -373,7 +447,70 @@ rx_compile_re (string_t * expr, int opt, Bool from_ed, regdata_t * rdata)
+ } /* rx_compile_re() */
+ 
+ /*--------------------------------------------------------------------*/
+-#ifdef HAS_PCRE
++#if defined(HAS_PCRE2)
++static size_t
++rx_compile_pcre (string_t * expr, int opt, Bool from_ed, regdata_t * rdata)
++
++/* Compile the expression <expr> with the options <opt> into a PCRE2
++ * expression and store it into *<rdata>.
++ * On success, return the accumulated size of the expression.
++ * On failure, if <from_ed> is FALSE, an error is thrown.
++ * On failure, if <from_ed> is TRUE, the error message is printed directly
++ * to the user and the function returns with 0.
++ */
++
++{
++    uint32_t          pcre_opt;    /* <opt> translated into PCRE opts */
++    int               err_code;
++    PCRE2_SIZE        err_offset;
++    pcre2_code*       pcre_prog;
++    pcre2_match_data* pcre_match_data;
++
++    /* Sanitize the <opt> value */
++    opt = opt & ~(RE_EXCOMPATIBLE) & ~(RE_PACKAGE_MASK);
++
++    /* Determine the RE compilation options */
++    pcre_opt = PCRE2_UTF | PCRE2_UCP;
++    if (opt & RE_CASELESS)       pcre_opt |= PCRE2_CASELESS;
++    if (opt & RE_MULTILINE)      pcre_opt |= PCRE2_MULTILINE;
++    if (opt & RE_DOTALL)         pcre_opt |= PCRE2_DOTALL;
++    if (opt & RE_EXTENDED)       pcre_opt |= PCRE2_EXTENDED;
++    if (opt & RE_DOLLAR_ENDONLY) pcre_opt |= PCRE2_DOLLAR_ENDONLY;
++    if (opt & RE_UNGREEDY)       pcre_opt |= PCRE2_UNGREEDY;
++
++    /* Compile the RE */
++    pcre_malloc_size = 0;
++    pcre_malloc_err  = "compiling regex";
++    pcre_prog = pcre2_compile((unsigned char*) get_txt(expr), mstrsize(expr),
++                              pcre_opt, &err_code, &err_offset, compile_context);
++
++    if (pcre_prog == NULL)
++    {
++        rx_free_subdata(rdata); /* Might have HS data in it already */
++        if (from_ed)
++            add_message("pcre: %s at offset %d\n", get_error_message(err_code, RE_PCRE), (int)err_offset);
++        else
++            errorf("pcre: %s at offset %d\n", get_error_message(err_code, RE_PCRE), (int)err_offset);
++        return 0;
++    }
++
++    pcre_malloc_err  = "JIT compiling regex";
++    pcre2_jit_compile(pcre_prog, PCRE2_JIT_COMPLETE);
++
++    pcre_match_data = pcre2_match_data_create_from_pattern(pcre_prog, general_context);
++
++    /* Compilation complete - store the result in the outgoing regdata
++     * structure.
++     */
++
++    rdata->pcre_prog = pcre_prog;
++    rdata->pcre_match_data = pcre_match_data;
++    rdata->res = 0;
++
++    return pcre_malloc_size;
++} /* rx_compile_pcre() */
++/*--------------------------------------------------------------------*/
++#elif defined(HAS_PCRE)
+ static size_t
+ rx_compile_pcre (string_t * expr, int opt, Bool from_ed, regdata_t * rdata)
+ 
+@@ -537,8 +674,12 @@ rx_compile_data (string_t * expr, int opt, Bool from_ed)
+ 
+         /* Regexp found, but it may not have been compiled for us yet.
+          */
+-#ifdef HAS_PCRE
++#if defined(HAS_PCRE2) || defined(HAS_PCRE)
++#if defined(HAS_PCRE2)
++        if ((opt & RE_PCRE) && !pHash->base.pcre_prog)
++#else
+         if ((opt & RE_PCRE) && !pHash->base.pProg)
++#endif
+         {
+             pHash->size = rx_compile_pcre(expr, opt, from_ed, &(pHash->base));
+             if (!pHash->size)
+@@ -560,7 +701,7 @@ rx_compile_data (string_t * expr, int opt, Bool from_ed)
+     pcre_size = 0;
+     memset(&rdata, 0, sizeof(rdata));
+ 
+-#ifdef HAS_PCRE
++#if defined(HAS_PCRE) || defined(HAS_PCRE2)
+     if (opt & RE_PCRE)
+     {
+         pcre_size = rx_compile_pcre(expr, opt, from_ed, &rdata);
+@@ -673,7 +814,7 @@ rx_compile (string_t * expr, int opt, Bool from_ed)
+             errorf("Missing specification of which regexp package to use.\n");
+         return NULL;
+     }
+-#ifndef HAS_PCRE
++#if !(defined(HAS_PCRE) || defined(HAS_PCRE2))
+     if (opt & RE_PCRE)
+     {
+         if (from_ed)
+@@ -716,7 +857,31 @@ rx_exec (regexp_t *pRegexp, string_t * string, size_t start)
+ {
+     regdata_t * prog = pRegexp->data;
+ 
+-#ifdef HAS_PCRE
++#if defined(HAS_PCRE2)
++    if (pRegexp->opt & RE_PCRE)
++    {
++        uint32_t pcre_opt = 0;
++
++        /* Determine the RE compilation options */
++        if (prog->opt & RE_ANCHORED) pcre_opt |= PCRE2_ANCHORED;
++        if (prog->opt & RE_NOTBOL)   pcre_opt |= PCRE2_NOTBOL;
++        if (prog->opt & RE_NOTEOL)   pcre_opt |= PCRE2_NOTEOL;
++        if (prog->opt & RE_NOTEMPTY) pcre_opt |= PCRE2_NOTEMPTY;
++
++        prog->res = pcre2_match(prog->pcre_prog, (unsigned char*)get_txt(string), mstrsize(string),
++                                start, pcre_opt, prog->pcre_match_data, match_context);
++
++        /* Reverse the roles of return codes 0 (pcre_match_data too small)
++         * and PCRE_ERROR_NOMATCH.
++         */
++        if (prog->res == PCRE2_ERROR_NOMATCH)
++            prog->res = 0;
++        else if (prog->res == 0)
++            prog->res = PCRE2_ERROR_NOMATCH;
++
++        return prog->res;
++    }
++#elif defined(HAS_PCRE)
+     if (pRegexp->opt & RE_PCRE)
+     {
+         int rc;
+@@ -776,7 +941,32 @@ rx_exec_str (regexp_t *pRegexp, char * string, char * start)
+ 
+ {
+     regdata_t * prog = pRegexp->data;
+-#ifdef HAS_PCRE
++
++#if defined(HAS_PCRE2)
++    if (pRegexp->opt & RE_PCRE)
++    {
++        uint32_t pcre_opt = 0;
++
++        /* Determine the RE compilation options */
++        if (prog->opt & RE_ANCHORED) pcre_opt |= PCRE2_ANCHORED;
++        if (prog->opt & RE_NOTBOL)   pcre_opt |= PCRE2_NOTBOL;
++        if (prog->opt & RE_NOTEOL)   pcre_opt |= PCRE2_NOTEOL;
++        if (prog->opt & RE_NOTEMPTY) pcre_opt |= PCRE2_NOTEMPTY;
++
++        prog->res = pcre2_match(prog->pcre_prog, (unsigned char*)start, PCRE2_ZERO_TERMINATED,
++                                string - start, pcre_opt, prog->pcre_match_data, match_context);
++
++        /* Reverse the roles of return codes 0 (pcre_match_data too small)
++         * and PCRE_ERROR_NOMATCH.
++         */
++        if (prog->res == PCRE2_ERROR_NOMATCH)
++            prog->res = 0;
++        else if (prog->res == 0)
++            prog->res = PCRE2_ERROR_NOMATCH;
++
++        return prog->res;
++    }
++#elif defined(HAS_PCRE)
+     if (pRegexp->opt & RE_PCRE)
+     {
+         int rc;
+@@ -835,7 +1025,7 @@ rx_num_matches (regexp_t *pRegexp)
+  */
+ 
+ {
+-#ifdef HAS_PCRE
++#if defined(HAS_PCRE2) || defined(HAS_PCRE)
+     if (pRegexp->opt & RE_PCRE)
+     {
+         return pRegexp->data->res >= 1 ? pRegexp->data->res : 0;
+@@ -881,7 +1071,25 @@ rx_get_match_n (regexp_t *pRegexp, string_t * str, int n, size_t * start, size_t
+     Bool rc;
+     regdata_t * prog = pRegexp->data;
+ 
+-#ifdef HAS_PCRE
++#if defined(HAS_PCRE2)
++    if (pRegexp->opt & RE_PCRE)
++    {
++        PCRE2_SIZE* subs = pcre2_get_ovector_pointer(prog->pcre_match_data);
++        if (n < 0 || n >= prog->res || subs[2*n] == PCRE2_UNSET  || subs[2*n+1] == PCRE2_UNSET)
++        {
++            *start = 0;
++            *end = 0;
++            rc = false;
++        }
++        else
++        {
++            *start = (size_t) subs[2*n];
++            *end = (size_t) subs[2*n+1];
++            rc = true;
++        }
++        return rc;
++    }
++#elif defined(HAS_PCRE)
+     if (pRegexp->opt & RE_PCRE)
+     {
+         if (n < 0
+@@ -937,7 +1145,16 @@ rx_get_match (regexp_t *pRegexp, string_t * str, size_t * start, size_t * end)
+ {
+     regdata_t * prog = pRegexp->data;
+ 
+-#ifdef HAS_PCRE
++#if defined(HAS_PCRE2)
++    if (pRegexp->opt & RE_PCRE)
++    {
++        PCRE2_SIZE* subs = pcre2_get_ovector_pointer(prog->pcre_match_data);
++
++        *start = (size_t) subs[0];
++        *end = (size_t) subs[1];
++        return;
++    }
++#elif defined(HAS_PCRE)
+     if (pRegexp->opt & RE_PCRE)
+     {
+         *start = (size_t)prog->pSubs[0];
+@@ -963,7 +1180,16 @@ rx_get_match_str (regexp_t *pRegexp, char * str, size_t * start, size_t * end)
+ {
+     regdata_t * prog = pRegexp->data;
+ 
+-#ifdef HAS_PCRE
++#if defined(HAS_PCRE2)
++    if (pRegexp->opt & RE_PCRE)
++    {
++        PCRE2_SIZE* subs = pcre2_get_ovector_pointer(prog->pcre_match_data);
++
++        *start = (size_t) subs[0];
++        *end = (size_t) subs[1];
++        return;
++    }
++#elif defined(HAS_PCRE)
+     if (pRegexp->opt & RE_PCRE)
+     {
+         *start = (size_t)prog->pSubs[0];
+@@ -1042,7 +1268,28 @@ rx_sub (regexp_t *pRegexp, string_t *source, string_t *subst)
+             }
+             else
+             {
+-#ifdef HAS_PCRE
++#if defined(HAS_PCRE2)
++                if (pRegexp->opt & RE_PCRE)
++                {
++                    PCRE2_SIZE* subs = pcre2_get_ovector_pointer(prog->pcre_match_data);
++
++                    if (no < prog->res && subs[2*no] != PCRE2_UNSET && subs[2*no+1] != PCRE2_UNSET)
++                    {
++                        size_t start = (size_t) subs[2*no];
++                        size_t sublen = (size_t) subs[2*no+1] - start;
++
++                        if (copyPass)
++                        {
++                            memcpy(dst, get_txt(source)+start, sublen);
++                            dst += sublen;
++                        }
++                        else
++                        {
++                            len += sublen;
++                        }
++                    }
++                }
++#elif defined(HAS_PCRE)
+                 if (pRegexp->opt & RE_PCRE)
+                 {
+                     if (no < prog->res
+@@ -1139,7 +1386,7 @@ rx_sub_str (regexp_t *pRegexp, char *source, char *subst)
+ /*-------------------------------------------------------------------------*/
+ Bool
+ rx_reganch (regexp_t *pRegexp)
+-  
++
+ /* If <pRegexp> is a traditional regexp, return TRUE if rx->reganch
+  * is not NULL. If <pRegexp> is a PCRE, always return FALSE.
+  *
+@@ -1162,7 +1409,19 @@ rx_free_subdata (regdata_t * expr)
+  */
+ 
+ {
+-#ifdef HAS_PCRE
++#if defined(HAS_PCRE2)
++    if (expr->pcre_match_data)
++    {
++        pcre2_match_data_free(expr->pcre_match_data);
++        expr->pcre_match_data = NULL;
++    }
++
++    if (expr->pcre_prog)
++    {
++        pcre2_code_free(expr->pcre_prog);
++        expr->pcre_prog = NULL;
++    }
++#elif defined(HAS_PCRE)
+     if (expr->pSubs)
+     {
+         xfree(expr->pSubs);
+@@ -1324,6 +1583,20 @@ rxcache_driver_info (svalue_t *svp, int value)
+ /*--------------------------------------------------------------------*/
+ #if defined(GC_SUPPORT)
+ 
++/*--------------------------------------------------------------------*/
++void
++clear_regdata_ref (regdata_t * pRegexp)
++
++/* Clear regexp data where we cannot follow references.
++ */
++
++{
++#if defined(HAS_PCRE2)
++    if (pRegexp->pcre_prog != NULL)
++        rx_free_subdata(pRegexp);
++#endif
++} /* clear_regdata_ref() */
++
+ /*--------------------------------------------------------------------*/
+ void
+ clear_rxcache_refs (void)
+@@ -1341,6 +1614,7 @@ clear_rxcache_refs (void)
+         if (NULL != xtable[i])
+         {
+             xtable[i]->base.ref = 0;
++            clear_regdata_ref(&xtable[i]->base);
+         }
+ #endif
+ } /* clear_rxcache_refs() */
+@@ -1354,7 +1628,10 @@ clear_regexp_ref (regexp_t * pRegexp)
+ 
+ {
+     if (pRegexp)
++    {
+         pRegexp->data->ref = 0;
++        clear_regdata_ref(pRegexp->data);
++    }
+ } /* clear_regexp_ref() */
+ 
+ /*--------------------------------------------------------------------*/
+@@ -1368,7 +1645,7 @@ count_regdata_ref (regdata_t * pRegexp)
+ 
+ {
+     note_malloced_block_ref(pRegexp);
+-#ifdef HAS_PCRE
++#if defined(HAS_PCRE)
+     if (pRegexp->pProg)
+     {
+         note_malloced_block_ref(pRegexp->pProg);
+@@ -1414,7 +1691,7 @@ count_rxcache_refs (void)
+     {
+         if (NULL != xtable[i])
+         {
+-            count_regdata_ref((regdata_t *)xtable[i]);
++            count_regdata_ref(&xtable[i]->base);
+         }
+     } /* for (i) */
+ #endif
+diff --git src/pkg-pcre.h src/pkg-pcre.h
+index 7aa622561..21e452916 100644
+--- src/pkg-pcre.h
++++ src/pkg-pcre.h
+@@ -11,9 +11,15 @@
+ 
+ #include "driver.h"
+ 
+-#ifdef HAS_PCRE
++#if defined(HAS_PCRE2)
++#define PCRE2_CODE_UNIT_WIDTH 8
++#include <pcre2.h>
++
++#define RE_ERROR_BACKTRACK (-8) // Free error code, see regexp.h for others.
++#undef HAS_PCRE
++
++#elif defined(HAS_PCRE)
+ #include <pcre.h>
+-#endif
+ 
+ /* Error code to be returned if too many backtracks are detected.
+  */
+@@ -22,5 +28,6 @@
+ #else
+ #define RE_ERROR_BACKTRACK (-8) // PCRE_ERROR_MATCHLIMIT from PCRE
+ #endif
++#endif
+ 
+ #endif /* PKG_PCRE_H_ */
+diff --git src/simulate.c src/simulate.c
+index ac29fed98..6c4c73783 100644
+--- src/simulate.c
++++ src/simulate.c
+@@ -5108,7 +5108,7 @@ f_set_driver_hook (svalue_t *sp)
+         }
+         else if (n == H_REGEXP_PACKAGE)
+         {
+-#ifdef HAS_PCRE
++#if defined(HAS_PCRE) || defined(HAS_PCRE2)
+             if (sp->u.number != RE_PCRE
+              && sp->u.number != RE_TRADITIONAL )
+             {

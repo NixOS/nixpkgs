@@ -43,5 +43,8 @@ callPackage ../nginx/generic.nix args rec {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ izorkin ];
+    knownVulnerabilities = [
+      "angie is insufficiently maintained in nixpkgs. Security updates are frequently delayed. Please consider stepping up as maintainer or switching to an alternative."
+    ];
   };
 }
