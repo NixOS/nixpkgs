@@ -925,6 +925,11 @@ lib.mapAttrs mkLicense (
       redistributable = true;
     };
 
+    fsfap = {
+      spdxId = "FSFAP";
+      fullName = "FSF All Permissive License";
+    };
+
     hl3 = {
       fullName = "Hippocratic License v3.0";
       url = "https://firstdonoharm.dev/version/3/0/core.txt";
