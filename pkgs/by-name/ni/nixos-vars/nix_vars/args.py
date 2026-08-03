@@ -27,7 +27,7 @@ class VarsArgs:
 			d["local"] = None
 
 		setArgDict = dict()
-		if "set" not in d:
+		if "set" in d:
 			for arg in d["set"]:
 				try:
 					key, value = arg.split(",")
