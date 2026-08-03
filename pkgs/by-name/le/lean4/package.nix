@@ -15,7 +15,7 @@
   libuv,
   enableMimalloc ? true,
   perl,
-  testers,
+  versionCheckHook,
 }:
 let
   cadical' = cadical.override { version = "2.1.3"; };
@@ -135,12 +135,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-DFETCHCONTENT_SOURCE_DIR_MIMALLOC=${finalAttrs.mimalloc-src}"
   ];
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      version = "v${finalAttrs.version}";
-    };
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = {
     description = "Automatic and interactive theorem prover";
