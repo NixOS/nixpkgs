@@ -82,11 +82,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gdk-pixbuf
-    opencv4
+    (opencv4.override { ffmpeg-headless = ffmpeg; })
     ffmpeg
     fftw
     fontconfig
-    frei0r
+    (frei0r.override { opencv = opencv4.override { ffmpeg-headless = ffmpeg; }; })
     libdv
     libebur128
     libexif
@@ -145,7 +145,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup = ''
     wrapProgram $out/bin/melt \
-      --prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1 \
+      --prefix FREI0R_PATH : ${
+        (frei0r.override { opencv = opencv4.override { ffmpeg-headless = ffmpeg; }; })
+      }/lib/frei0r-1 \
       ${lib.optionalString enableJackrack "--prefix LADSPA_PATH : ${ladspaPlugins}/lib/ladspa"} \
       ${lib.optionalString (qtbase != null) "\${qtWrapperArgs[@]}"}
 
