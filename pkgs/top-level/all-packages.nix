@@ -2779,7 +2779,6 @@ with pkgs;
   tdarr-node = tdarrPackages.node;
 
   inherit (callPackage ../development/tools/pnpm { })
-    pnpm_9
     pnpm_10_29_2
     pnpm_10_34_0
     pnpm_10

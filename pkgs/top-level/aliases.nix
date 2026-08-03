@@ -1943,6 +1943,7 @@ mapAliases {
   plv8 = throw "'plv8' has been removed. Use 'postgresqlPackages.plv8' instead."; # Added 2025-07-19
   pn = throw "'pn' has been removed as upstream was archived in 2020"; # Added 2025-10-17
   pnpm_8 = throw "'pnpm_8' has been removed as it hasn't been updated since 2024. Please use 'pnpm'"; # Added 2026-07-07
+  pnpm_9 = throw "'pnpm_9' was removed because it reached EOL on 2026-04-30"; # added 2026-08-03
   poac = throw "'poac' has been renamed to/replaced by 'cabinpkg'"; # Converted to throw 2025-10-27
   pocket-updater-utility = throw "'pocket-updater-utility' has been renamed to/replaced by 'pupdate'"; # Converted to throw 2025-10-27
   podofo010 = throw "'podofo010' has been renamed to 'podofo0'"; # Converted to throw 2025-10-27
