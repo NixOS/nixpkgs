@@ -14,6 +14,9 @@
   gtest,
   libpq,
   sqlite,
+
+  # passthru
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     cd c/
   '';
-  # Upstream's build invoces a custom `go build` command to build one of the
+  # Upstream's build invokes a custom `go build` command to build one of the
   # targets. We use buildGoModule's engineering to supply it the offline
   # `goModules` path and other GO[A-Z] environment variables. Ideally, there
   # should be setup hooks for the mechanisms of buildGoModule, that would make
@@ -89,11 +92,16 @@ stdenv.mkDerivation (finalAttrs: {
         ;
       sourceRoot = "${finalAttrs.src.name}/go/adbc";
       # This derivation is not really evaluated anyway, but it is used to
-      # update the vendorHash... TODO: Check that nix-update is capable of
-      # updating vendorHash automatically.
+      # update the vendorHash...
       dontBuild = true;
       dontInstall = true;
     });
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "apache-arrow-adbc-(.*)"
+      ];
+    };
   };
 
   meta = {
