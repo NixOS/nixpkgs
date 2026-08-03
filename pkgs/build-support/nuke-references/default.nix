@@ -6,7 +6,7 @@
 {
   lib,
   replaceVarsWith,
-  perl,
+  gnused,
   signingUtils,
   stdenvNoCC,
   shell ? stdenvNoCC.shell,
@@ -14,8 +14,10 @@
 replaceVarsWith {
   src = ./nuke-refs;
   replacements = {
-    inherit perl; # FIXME: get rid of perl dependency.
-    inherit (builtins) storeDir;
+    sed = lib.getExe gnused;
+    # `,` is used as the delimiter in multiple sed expressions
+    storeDir = lib.escape [ "," ] builtins.storeDir;
+    storeDirEscaped = lib.escape [ "," ] (lib.escapeRegex builtins.storeDir);
     shell = lib.getBin shell + (shell.shellPath or "");
     signingUtils = lib.optionalString (
       stdenvNoCC.targetPlatform.isDarwin && stdenvNoCC.targetPlatform.isAarch64
