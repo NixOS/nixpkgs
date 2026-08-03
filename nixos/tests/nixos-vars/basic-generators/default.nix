@@ -1,16 +1,11 @@
-let
-  pkgs' = import ../../../../../.. { };
-  nix-vars = pkgs: pkgs.python314Packages.callPackage ../../package.nix { };
-in
-
-pkgs'.testers.runNixOSTest {
-  name = "basic-generators";
+{
+  name = "nixos-vars-basic-generators";
 
   nodes.machine =
     { pkgs, ... }:
     {
       nix.nixPath = [ "nixpkgs=${pkgs.path}" ];
-      environment.systemPackages = [ (nix-vars pkgs) ];
+      environment.systemPackages = [ pkgs.nixos-vars ];
       environment.etc."nixos".source = ./config;
       nix.settings.experimental-features = [
         "nix-command"

@@ -5,7 +5,7 @@
     nixosConfigurations.example = inputs.nixpkgs.lib.nixosSystem {
       system = "aarch64-linux";
 
-      modules = [ ../config.nix ];
+      modules = [ ../config ];
     };
 
     # Example of how one can override the host package set!
