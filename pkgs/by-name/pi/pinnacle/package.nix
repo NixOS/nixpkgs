@@ -44,6 +44,10 @@ let
     license = lib.licenses.gpl3;
     mainProgram = "pinnacle";
     platforms = lib.platforms.linux;
+    badPlatforms = [
+      # tests fail https://hydra.nixos.org/build/337493260
+      "aarch64-linux"
+    ];
     maintainers = with lib.maintainers; [ cassandracomar ];
   };
 
