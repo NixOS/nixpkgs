@@ -26,17 +26,20 @@
 }:
 
 let
+  # upstream bumped the electron version in the used unstable revision to electron_41
+  # however, plugin loading was not actually fixed
+  # See: https://github.com/logseq/og/issues/32
   electron = electron_39;
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "logseq";
-  version = "1.0.0";
+  pname = "logseq-og";
+  version = "1.0.0-unstable-2026-05-28";
 
   src = fetchFromGitHub {
     owner = "logseq";
     repo = "og";
-    tag = finalAttrs.version;
-    hash = "sha256-4IvtEmgELTxc0AyzGK3xomYP//wAnwP4vtsJkZ36WbI=";
+    rev = "6e7afa8eb040686ff057156ee877193b581dd369";
+    hash = "sha256-LJuZDyfGQW28ARn9RTqQ1bRI1htfoqt8zhb6UuJLek0=";
   };
 
   patches = [
@@ -58,16 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
     ./electron-forge-package-instead-of-make.patch
     ./electron-forge-disable-signing.patch
 
-    # bumps better-sqlite3 to work with electron 39+
-    # also fixes outdated yarn.lock
-    ./bump-better-sqlite3.patch
-
     # zip extraction fails on newer nodejs versions without this fix
     ./bump-yauzl.patch
   ];
 
   mavenRepo = stdenv.mkDerivation {
-    name = "logseq-${finalAttrs.version}-maven-deps";
+    name = "logseq-og-${finalAttrs.version}-maven-deps";
     inherit (finalAttrs) src patches;
 
     nativeBuildInputs = [ clojure ];
@@ -107,29 +106,29 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   yarnOfflineCacheRoot = fetchYarnDeps {
-    name = "logseq-${finalAttrs.version}-yarn-deps-root";
+    name = "logseq-og-${finalAttrs.version}-yarn-deps-root";
     inherit (finalAttrs) src patches;
-    hash = "sha256-xfAJ38shd92KdRfh/P7BH4eolZHQmzl4raoH1aZpGRk=";
+    hash = "sha256-dYzozo2wo4lZRi3R7S/f5yqVlLlF/TmrwkD4/xsGQAE=";
   };
 
   # ./static and ./resources are combined into ./static by the build process
   # ./static contains the lockfile and ./resources contains everything else
   yarnOfflineCacheStaticResources = fetchYarnDeps {
-    name = "logseq-${finalAttrs.version}-yarn-deps-static-resources";
+    name = "logseq-og-${finalAttrs.version}-yarn-deps-static-resources";
     inherit (finalAttrs) src patches;
     postPatch = "cd ./static";
-    hash = "sha256-TFisR5GwcKmuddGhe0i6rAmr2wDWzed/mXnxVGARYK0=";
+    hash = "sha256-aqQwKwRxR8OPI/EnKVy9HgpuQx5MQGvXwoTCyWwrB7U=";
   };
 
   yarnOfflineCacheAmplify = fetchYarnDeps {
-    name = "logseq-${finalAttrs.version}-yarn-deps-amplify";
+    name = "logseq-og-${finalAttrs.version}-yarn-deps-amplify";
     inherit (finalAttrs) src patches;
     postPatch = "cd ./packages/amplify";
     hash = "sha256-IOhSwIf5goXCBDGHCqnsvWLf3EUPqq75xfQg55snIp4=";
   };
 
   yarnOfflineCacheTldraw = fetchYarnDeps {
-    name = "logseq-${finalAttrs.version}-yarn-deps-tldraw";
+    name = "logseq-og-${finalAttrs.version}-yarn-deps-tldraw";
     inherit (finalAttrs) src patches;
     postPatch = "cd ./tldraw";
     hash = "sha256-CtMl3MPlyO5nWfFhCC1SLb/+1HUM3YfFATAPqJg3rUo=";
@@ -257,25 +256,25 @@ stdenv.mkDerivation (finalAttrs: {
     find static/out/*/resources/app/node_modules -type f -executable -exec remove-references-to -t ${nodejs-slim} '{}' \;
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
-    install -Dm644 static/icons/logseq.png "$out/share/icons/hicolor/512x512/apps/logseq.png"
+    install -Dm644 static/icons/logseq.png "$out/share/icons/hicolor/512x512/apps/logseq-og.png"
 
-    mkdir -p $out/share/logseq
-    cp -r static/out/*/{locales,resources{,.pak}} $out/share/logseq
+    mkdir -p "$out/share/logseq-og"
+    cp -r static/out/*/{locales,resources{,.pak}} "$out/share/logseq-og"
 
-    makeWrapper ${lib.getExe electron} $out/bin/logseq \
-        --add-flags $out/share/logseq/resources/app \
+    makeWrapper ${lib.getExe electron} "$out/bin/logseq-og" \
+        --add-flags "$out/share/logseq-og/resources/app" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
         --set-default LOCAL_GIT_DIRECTORY ${git} \
         --inherit-argv0
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir -p $out/Applications
-    cp -r static/out/*/Logseq.app $out/Applications
+    mkdir -p "$out/Applications"
+    cp -r static/out/*/Logseq-OG.app "$out/Applications"
 
-    wrapProgram $out/Applications/Logseq.app/Contents/MacOS/Logseq \
+    wrapProgram "$out/Applications/Logseq-OG.app/Contents/MacOS/Logseq-OG" \
       --set-default LOCAL_GIT_DIRECTORY ${git}
 
-    makeWrapper $out/Applications/Logseq.app/Contents/MacOS/Logseq $out/bin/logseq
+    makeWrapper "$out/Applications/Logseq-OG.app/Contents/MacOS/Logseq-OG" "$out/bin/logseq-og"
   ''
   + ''
     runHook postInstall
@@ -283,24 +282,24 @@ stdenv.mkDerivation (finalAttrs: {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "Logseq";
-      desktopName = "Logseq";
-      exec = "logseq %U";
+      name = "Logseq-OG";
+      desktopName = "Logseq OG";
+      exec = "logseq-og %U";
       terminal = false;
-      icon = "logseq";
-      startupWMClass = "Logseq";
+      icon = "logseq-og";
+      startupWMClass = "Logseq OG";
       comment = "A privacy-first, open-source platform for knowledge management and collaboration.";
-      mimeTypes = [ "x-scheme-handler/logseq" ];
+      mimeTypes = [ "x-scheme-handler/logseq-og" ];
       categories = [ "Utility" ];
     })
   ];
 
   meta = {
     description = "Privacy-first, open-source platform for knowledge management and collaboration";
-    homepage = "https://github.com/logseq/logseq";
+    homepage = "https://github.com/logseq/og";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ tomasajt ];
-    mainProgram = "logseq";
+    mainProgram = "logseq-og";
     platforms = electron.meta.platforms;
   };
 })

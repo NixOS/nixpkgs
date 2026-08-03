@@ -7,8 +7,8 @@ index d42b7fb..6e66826 100644
    },
    "resolutions": {
 +    "yauzl": "^3.3.1",
-     "**/electron": "38.4.0",
-     "**/node-abi": "4.14.0",
+     "**/electron": "41.7.1",
+     "**/node-abi": "4.31.0",
      "**/node-gyp": "12.0.0",
 diff --git a/static/yarn.lock b/static/yarn.lock
 index 4738ef9..413dcd9 100644
