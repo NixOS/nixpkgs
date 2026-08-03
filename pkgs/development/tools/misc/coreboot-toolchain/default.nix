@@ -12,6 +12,7 @@ let
         callPackage,
         curl,
         fetchgit,
+        fetchpatch,
         flex,
         getopt,
         git,
@@ -39,6 +40,15 @@ let
             rm -rf $out/.git
           '';
         };
+
+        patches = [
+          (fetchpatch {
+            # Backport: util/crossgcc/buildgcc: bootstrap cmake with all threads
+            # https://review.coreboot.org/c/coreboot/+/94384
+            url = "https://review.coreboot.org/changes/coreboot~94384/revisions/2/patch?download&raw";
+            hash = "sha256-xAZwRA2hKVYGJmPw1MLa7IDPP962I5ZAAVXTaDqhfUg=";
+          })
+        ];
 
         archives = ./stable.nix;
 
