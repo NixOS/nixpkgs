@@ -14,8 +14,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "rhash";
     repo = "RHash";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-9/kFI38PG3AKsdDqEV/wEzSel9IlQQ/pvOyhU/N/aV0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9/kFI38PG3AKsdDqEV/wEzSel9IlQQ/pvOyhU/N/aV0=";
   };
 
   nativeBuildInputs = [ which ];
@@ -47,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (!enableStatic) [
     "install-lib-so-link"
   ];
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://rhash.sourceforge.net/";
