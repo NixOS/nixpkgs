@@ -1061,7 +1061,7 @@ in
           "CAP_SYS_RESOURCE"
         ];
         LockPersonality = true;
-        MemoryDenyWriteExecute = true;
+        MemoryDenyWriteExecute = false; # pcre2 jit
         NoNewPrivileges = false; # e.g for sendmail
         OOMPolicy = "continue";
         PrivateTmp = true;
