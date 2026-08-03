@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pyinstaller-versionfile";
-  version = "3.0.1";
+  version = "3.1.0";
 
   pyproject = true;
 
@@ -18,12 +18,8 @@ buildPythonPackage rec {
     owner = "DudeNr33";
     repo = "pyinstaller-versionfile";
     tag = "v${version}";
-    hash = "sha256-UNrXP5strO6LIkIM3etBo1+Vm+1lR5wF0VfKtZYRoYc=";
+    hash = "sha256-L94MrZjCOw2Cxj0kF+F35TixVNJUi1sK99FG9+CzaIg=";
   };
-
-  preBuild = ''
-    touch requirements.txt
-  '';
 
   build-system = [ poetry-core ];
 
