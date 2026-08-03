@@ -1060,6 +1060,7 @@ mapAliases {
   gutenprintBin = gutenprint-bin; # Added 2025-08-21
   gwrap = warnAlias "The 'gwrap' alias has been removed. The correct name of the package is 'g-wrap'" g-wrap; # Added 2026-01-25
   gxneur = throw "'gxneur' has been removed due to lack of maintenance and reliance on gnome2 and 2to3."; # Added 2025-08-17
+  gyroflow-bin = warnAlias "'gyroflow-bin' has been replaced by 'gyroflow'" gyroflow; # Added 2026-08-02
   hacpack = throw "hacpack has been removed from nixpkgs, as it has been taken down upstream"; # Added 2025-09-26
   harmony-music = throw "harmony-music is unmaintained and has been removed"; # Added 2025-08-26
   hasmail = throw "'hasmail' has been removed, as the GTK 2 project is no longer maintained upstream."; # Added 2026-05-22
@@ -1723,6 +1724,7 @@ mapAliases {
   nim_2_0 = throw "'nim_2_0' has been upgraded and removed, please use 'nim'"; # Added 2026-03-06
   nim_2_2 = throw "'nim_2_2' has been upgraded and removed, please use 'nim'"; # Added 2026-03-06
   nimbo = throw "'nimbo' has been removed due to being archived upstream."; # Added 2026-01-18
+  nip2 = throw "'nip2' has been removed due to lack of maintenance and relying on gtk2.";
   nitrokey-fido2-firmware = throw "'nitrokey-fido2-firmware' has been removed as it was broken and unmaintained upstream since 2022"; # Added 2026-03-23
   nix-direnv-flakes = throw "'nix-direnv-flakes' has been renamed to/replaced by 'nix-direnv'"; # Converted to throw 2025-10-27
   nix-ld-rs = throw "'nix-ld-rs' has been renamed to/replaced by 'nix-ld'"; # Converted to throw 2025-10-27

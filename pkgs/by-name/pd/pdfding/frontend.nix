@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
     name = "pdfding-${finalAttrs.version}-npm-deps";
-    hash = "sha256-TDX2xoHj07aUeuLPt/TlgkdRdTiv3fNbriChzEB4EXk=";
+    hash = "sha256-4mnw9sLQBZCBqmTKkjNHx03pgmvQ4CuDg3NOke4vMHs=";
   };
 
   nativeBuildInputs = [

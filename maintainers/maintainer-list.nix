@@ -16574,6 +16574,7 @@
     name = "Lewis";
   };
   lubsch = {
+    matrix = "@lubsch:matrix.org";
     github = "lubsch";
     githubId = 33580245;
     name = "Benjamin Lohmar";
