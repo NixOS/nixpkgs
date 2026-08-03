@@ -3703,6 +3703,8 @@ self: super: with self; {
 
   coveralls = callPackage ../development/python-modules/coveralls { };
 
+  cpace = callPackage ../development/python-modules/cpace { };
+
   cpe = callPackage ../development/python-modules/cpe { };
 
   cpe-search = callPackage ../development/python-modules/cpe-search { };
