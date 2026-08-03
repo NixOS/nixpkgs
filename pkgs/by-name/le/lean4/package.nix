@@ -5,7 +5,7 @@
   cctools,
   fetchFromGitHub,
   fetchpatch,
-  git,
+  gitMinimal,
   gmp,
   cadical,
   leangz,
@@ -75,26 +75,21 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  # Using a vendored version rather than nixpkgs' version to match the exact version required by
-  # Lean.  Apparently, even a slight version change can impact greatly the final performance.
-  mimalloc-src = fetchFromGitHub {
-    owner = "microsoft";
-    repo = "mimalloc";
-    tag = "v2.2.3";
-    hash = "sha256-B0gngv16WFLBtrtG5NqA2m5e95bYVcQraeITcOX9A74=";
-  };
-
   postPatch =
     let
       pattern = "\${LEAN_BINARY_DIR}/../mimalloc/src/mimalloc";
     in
     ''
-      for file in stage0/src/CMakeLists.txt stage0/src/runtime/CMakeLists.txt src/CMakeLists.txt src/runtime/CMakeLists.txt; do
-        substituteInPlace "$file" \
-          --replace-fail '${pattern}' '${finalAttrs.mimalloc-src}'
-      done
-      # Remove tests that fails in sandbox.
-      # It expects `sourceRoot` to be a git repository.
+      substituteInPlace \
+        src/CMakeLists.txt \
+        src/runtime/CMakeLists.txt \
+        stage0/src/CMakeLists.txt \
+        stage0/src/runtime/CMakeLists.txt \
+        --replace-fail '${pattern}' '${finalAttrs.mimalloc-src}'
+    ''
+    # Remove tests that fails in sandbox.
+    # It expects `sourceRoot` to be a git repository.
+    + ''
       rm -rf src/lake/examples/git/
     '';
 
@@ -109,7 +104,9 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     leangz # Provides leantar
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools.libtool ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools.libtool
+  ];
 
   buildInputs = [
     gmp
@@ -123,16 +120,25 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeCheckInputs = [
-    git
+    gitMinimal
     perl
   ];
 
+  # Using a vendored version rather than nixpkgs' version to match the exact version required by
+  # Lean.  Apparently, even a slight version change can impact greatly the final performance.
+  mimalloc-src = fetchFromGitHub {
+    owner = "microsoft";
+    repo = "mimalloc";
+    tag = "v2.2.3";
+    hash = "sha256-B0gngv16WFLBtrtG5NqA2m5e95bYVcQraeITcOX9A74=";
+  };
+
   cmakeFlags = [
-    "-DUSE_GITHASH=OFF"
-    "-DINSTALL_LICENSE=OFF"
-    "-DINSTALL_CADICAL=OFF"
-    "-DUSE_MIMALLOC=${if enableMimalloc then "ON" else "OFF"}"
-    "-DFETCHCONTENT_SOURCE_DIR_MIMALLOC=${finalAttrs.mimalloc-src}"
+    (lib.cmakeBool "USE_GITHASH" false)
+    (lib.cmakeBool "INSTALL_LICENSE" false)
+    (lib.cmakeBool "INSTALL_CADICAL" false)
+    (lib.cmakeBool "USE_MIMALLOC" enableMimalloc)
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MIMALLOC" finalAttrs.mimalloc-src.outPath)
   ];
 
   nativeInstallCheckInputs = [
