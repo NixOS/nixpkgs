@@ -28,7 +28,7 @@ buildPythonPackage rec {
   meta = {
     description = "Visual effects for Textual, a TerminalTextEffects wrapper";
     homepage = "https://github.com/ggozad/textualeffects";
-    changelog = "https://github.com/ggozad/textualeffects/blob/v${version}/CHANGES.txt";
+    changelog = "https://github.com/ggozad/textualeffects/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gaelj ];
   };
