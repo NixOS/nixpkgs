@@ -52,6 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
       xargs sed -i -e 's,-lncurses[a-z]*,-L${ncurses.out}/lib -lncursesw,g'
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "http://www.thrysoee.dk/editline/";
     changelog = "https://www.thrysoee.dk/editline/#changelog";
