@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "h2o";
-  version = "2.3.0-rolling-2026-06-29";
+  version = "2.3.0-rolling-2026-07-31";
 
   src = fetchFromGitHub {
     owner = "h2o";
     repo = "h2o";
-    rev = "edd7a120bfc4af11ac0cbebce2a43cc1f93f9af1";
-    hash = "sha256-WQy+v4zpwzgbMxT43+Nd33+YPynyZIwqzVTaknqjCmE=";
+    rev = "ba16320ad18c2bb2e28478ce9e37b9a57a5c98f6";
+    hash = "sha256-MmfypvlLJ3NeZ1Nyeyzo1mXxICllQPBwwseOo+rC1Ig=";
   };
 
   outputs = [
@@ -71,9 +71,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withZstandard zstd;
 
   cmakeFlags = [
-    "-DWITH_BROTLI=${if withBrotli then "ON" else "OFF"}"
-    "-DWITH_MRUBY=${if withMruby then "ON" else "OFF"}"
-    "-DWITH_ZSTD=${if withZstandard then "ON" else "OFF"}"
+    (lib.cmakeBool "WITH_BROTLI" withBrotli)
+    (lib.cmakeBool "WITH_MRUBY" withMruby)
+    (lib.cmakeBool "WITH_ZSTD" withZstandard)
   ];
 
   postInstall = ''

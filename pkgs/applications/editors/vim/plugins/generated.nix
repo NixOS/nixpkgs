@@ -3538,6 +3538,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  cocci-syntax = buildVimPlugin {
+    pname = "cocci-syntax";
+    version = "0-unstable-2025-03-19";
+    src = fetchFromGitHub {
+      owner = "ahf";
+      repo = "cocci-syntax";
+      rev = "7399561a3e4a08e0f1dfa5288e2ebf112482816c";
+      hash = "sha256-Oah+00qd5MzTfNOi4daP3ibqtb6PflBaMzn0+QDqsj0=";
+    };
+    meta.homepage = "https://github.com/ahf/cocci-syntax/";
+    meta.license = unfree;
+    meta.hydraPlatforms = [ ];
+  };
+
   coconut-vim = buildVimPlugin {
     pname = "coconut.vim";
     version = "0-unstable-2017-10-10";
@@ -4439,12 +4453,12 @@ final: prev: {
     pname = "d2-vim";
     version = "0-unstable-2025-08-19";
     src = fetchFromGitHub {
-      owner = "terrastruct";
+      owner = "d2lang";
       repo = "d2-vim";
       rev = "cb3eb7fcb1a2d45c4304bf2e91077d787b724a39";
       hash = "sha256-HmDQfOIoSV93wqRe7O4FPuHEmAxwoP1+Ut+sKhB62jA=";
     };
-    meta.homepage = "https://github.com/terrastruct/d2-vim/";
+    meta.homepage = "https://github.com/d2lang/d2-vim/";
     meta.license = getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };

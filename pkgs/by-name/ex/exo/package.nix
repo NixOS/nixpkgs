@@ -29,8 +29,12 @@ let
 
   pyo3-bindings = python3Packages.buildPythonPackage (finalAttrs: {
     pname = "exo-pyo3-bindings";
-    inherit version src;
+    # Check version in
+    # https://github.com/exo-explore/exo/blob/v<EXO_VERSION>/rust/exo_pyo3_bindings/pyproject.toml
+    version = "0.2.1";
+    inherit src;
     pyproject = true;
+    __structuredAttrs = true;
 
     buildAndTestSubdir = "rust/exo_pyo3_bindings";
 
@@ -54,9 +58,10 @@ let
   dashboard = buildNpmPackage (finalAttrs: {
     pname = "exo-dashboard";
     inherit src version;
+    __structuredAttrs = true;
 
     sourceRoot = "${finalAttrs.src.name}/dashboard";
-    npmDepsFetcherVersion = 3;
+    npmDepsFetcherVersion = 2;
 
     npmDeps = fetchNpmDeps {
       inherit (finalAttrs)
@@ -65,14 +70,15 @@ let
         src
         sourceRoot
         ;
-      fetcherVersion = 3;
-      hash = "sha256-gBWJP0dF2zDEWLYxfKYQSn9O5hVRkcviDv9oP267pQQ=";
+      fetcherVersion = 2;
+      hash = "sha256-d/+54lpNe0tXrC+Mrhpc1cdXOMjYblE0QByIdiaDgU0=";
     };
   });
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "exo";
   pyproject = true;
+  __structuredAttrs = true;
 
   inherit version src;
 

@@ -28,7 +28,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "svgdigitizer";
-  version = "0.14.4";
+  version = "0.14.5";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
     owner = "echemdb";
     repo = "svgdigitizer";
     tag = finalAttrs.version;
-    hash = "sha256-sDMSzoXa8RnygFjveh1SrF+bFit7OMQh2kbiZ478cM4=";
+    hash = "sha256-7a+IY3bxZI3DpkyUx4TQeDNBz80LhfK4s70Bl94liM0=";
   };
 
   build-system = [

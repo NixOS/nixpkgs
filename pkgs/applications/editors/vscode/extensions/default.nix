@@ -396,8 +396,8 @@ let
         mktplcRef = {
           name = "astro-vscode";
           publisher = "astro-build";
-          version = "2.16.17";
-          hash = "sha256-k54hpRlzjtNWv0mIUBKFxJYc5T2jpWxB9U8nuXXmjJ0=";
+          version = "2.16.18";
+          hash = "sha256-kDn4AtjFsdKjbUBg9nvYyXXUWiEqzoSnoxhiDuw8jVY=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/astro-build.astro-vscode/changelog";
@@ -1243,8 +1243,8 @@ let
         mktplcRef = {
           name = "vscode-markdownlint";
           publisher = "DavidAnson";
-          version = "0.61.2";
-          hash = "sha256-RGWgY6pyq7j509UjLD3SSyOOA7cXGFFk95H1hoeKPjA=";
+          version = "0.62.0";
+          hash = "sha256-cupXtTdzTKxhvTEHKe/OU8TFlp1CeAIIy2XCLvLMZ5s=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DavidAnson.vscode-markdownlint/changelog";
@@ -2015,8 +2015,8 @@ let
         mktplcRef = {
           name = "gitlab-workflow";
           publisher = "gitlab";
-          version = "6.85.3";
-          hash = "sha256-EsQ+95Wo/5F9mEMQ7X36vBgUWlsz5BCOm+7QrGHuepc=";
+          version = "6.85.5";
+          hash = "sha256-WtdTQjDxeI4YLOSQFdrFpdualNizYIQC7HQlsocSt4M=";
         };
         meta = {
           description = "GitLab extension for Visual Studio Code";
@@ -4269,8 +4269,8 @@ let
         mktplcRef = {
           publisher = "shopify";
           name = "ruby-lsp";
-          version = "0.10.4";
-          hash = "sha256-fonAbZ2nvC3Dz/9j4J23hiiJ/xgT8z/LI1HYYQh6u9w=";
+          version = "0.10.6";
+          hash = "sha256-5yEfTSgcSv9SQILOu7hyfNcK+m5IBHKpLDjXXwOZb/I=";
         };
         meta = {
           description = "VS Code plugin for connecting with the Ruby LSP";

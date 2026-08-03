@@ -7,7 +7,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "adscan";
-  version = "9.2.1";
+  version = "10.1.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "ADScanPro";
     repo = "adscan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gBlS5co1LUu07Xz+JZWi4zNOPtPHGfl+StpFPauOFG4=";
+    hash = "sha256-ITOfDt4T927fYdIiVzkowb4JWU4VTpsApdCpwWLLkK0=";
   };
 
   pythonRelaxDeps = [ "credsweeper" ];

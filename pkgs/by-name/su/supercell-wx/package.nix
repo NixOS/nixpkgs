@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  gcc14Stdenv,
   fetchFromGitHub,
   replaceVars,
   tracy,
@@ -17,13 +16,16 @@
   bzip2,
   geos,
   geographiclib,
-  glew,
   glm,
   gtest,
   howard-hinnant-date,
   libsm,
   libcpr,
+  libGLU,
+  libjpeg,
   libpng,
+  libtiff,
+  libzip,
   onetbb,
   openssl,
   python3,
@@ -34,7 +36,11 @@
   zlib,
 }:
 let
-  buildStdenv = if stdenv.cc.isGNU then gcc14Stdenv else stdenv;
+  libtiffWithCxx = libtiff.overrideAttrs (old: {
+    cmakeFlags = (old.cmakeFlags or [ ]) ++ [
+      "-Dcxx=ON"
+    ];
+  });
 
   gtestSkip = [
     # Skip tests requiring network access
@@ -57,16 +63,16 @@ let
     "MarkerModelTest.*"
   ];
 in
-buildStdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "supercell-wx";
-  version = "0.5.3";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "dpaulat";
     repo = "supercell-wx";
     tag = "v${finalAttrs.version}-release";
     fetchSubmodules = true;
-    hash = "sha256-1n1WXBLco2TpyhS8KA1tk6HzRIXLqS6YV3aYagoQiTM=";
+    hash = "sha256-wvtLu5K0bz0X7WzUCUH4/vAYtJsHJ2UOv5Q06uMMlyw=";
   };
 
   patches = [
@@ -78,13 +84,14 @@ buildStdenv.mkDerivation (finalAttrs: {
     })
     # Prevents using some Qt scripts that seemed to break the install step. Fixes missing link to some targets.
     ./patches/fix-cmake-install.patch
+    # libtiff with C++ support is required
+    ./patches/libtiff-cxx.patch
     # }}}
 
     # These may be or already are submitted upstream {{{
     ./patches/explicit-link-aws-crt.patch # fix missing symbols from aws-crt-cpp
-    ./patches/fix-qt-6.10.patch
-    ./patches/fix-find-opengl.patch
     # }}}
+    ./patches/boost-1.89-compat.patch
   ];
 
   # This also may be submitted upstream to maplibre-native-qt, which is currently vendored
@@ -96,6 +103,7 @@ buildStdenv.mkDerivation (finalAttrs: {
   env = {
     CXXFLAGS = lib.concatStringsSep " " [
       "-Wno-error=deprecated-declarations"
+      "-Wno-error=free-nonheap-object"
       "-Wno-error=maybe-uninitialized"
       "-Wno-error=restrict"
       "-Wno-error=stringop-overflow"
@@ -105,6 +113,9 @@ buildStdenv.mkDerivation (finalAttrs: {
   };
 
   cmakeFlags = [
+    # v0.6.1 Release Date
+    (lib.cmakeFeature "SCWX_RELEASE_DATE" "2026-07-18")
+
     # CMake Error at external/aws-sdk-cpp/crt/aws-crt-cpp/cmake/EnforceSubmoduleVersions.cmake:18 (message):
     # ENFORCE_SUBMODULE_VERSIONS is ON but Git was not found.
     (lib.cmakeBool "ENFORCE_SUBMODULE_VERSIONS" false)
@@ -127,13 +138,16 @@ buildStdenv.mkDerivation (finalAttrs: {
     bzip2
     geos
     geographiclib
-    glew
     glm
     gtest
     howard-hinnant-date
     libsm
     libcpr
+    libGLU
+    libjpeg
     libpng
+    libtiffWithCxx
+    libzip
     onetbb
     openssl
     (python3.withPackages (ps: [
@@ -167,7 +181,7 @@ buildStdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://supercell-wx.rtfd.io";
+    homepage = "https://supercellwx.net/";
     downloadPage = "https://github.com/dpaulat/supercell-wx/releases";
     description = "Live visualization of NEXRAD weather data and alerts";
     changelog = "https://github.com/dpaulat/supercell-wx/releases/tag/${finalAttrs.src.tag}";
@@ -184,6 +198,9 @@ buildStdenv.mkDerivation (finalAttrs: {
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with lib.maintainers; [ aware70 ];
+    maintainers = with lib.maintainers; [
+      aware70
+      dpaulat
+    ];
   };
 })
