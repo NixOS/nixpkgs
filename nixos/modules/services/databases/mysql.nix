@@ -752,7 +752,7 @@ in
             "AF_INET6"
           ];
           LockPersonality = true;
-          MemoryDenyWriteExecute = true;
+          MemoryDenyWriteExecute = false; # pcre2 jit
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
           PrivateMounts = true;
