@@ -2,6 +2,7 @@
   fetchurl,
   lib,
   stdenv,
+  bashNonInteractive,
   expect,
   makeWrapper,
   updateAutotoolsGnuConfigScriptsHook,
@@ -20,7 +21,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateAutotoolsGnuConfigScriptsHook
     makeWrapper
   ];
-  buildInputs = [ expect ];
+  buildInputs = [
+    bashNonInteractive
+    expect
+  ];
+
+  strictDeps = true;
 
   # dejagnu-1.6.3 can't successfully run tests in source tree:
   #   https://wiki.linuxfromscratch.org/lfs/ticket/4871
