@@ -35,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
     inherit bluez; # inherits bluez-headers.src
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://bluez.github.io/";
     description = "Official Linux Bluetooth protocol stack";
