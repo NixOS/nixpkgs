@@ -8,16 +8,17 @@
   poetry-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyinstaller-versionfile";
   version = "3.1.0";
 
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "DudeNr33";
     repo = "pyinstaller-versionfile";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-L94MrZjCOw2Cxj0kF+F35TixVNJUi1sK99FG9+CzaIg=";
   };
 
@@ -36,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
