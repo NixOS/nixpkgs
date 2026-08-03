@@ -139,7 +139,8 @@ let
       pkg ? meta.platforms && !(anyHostPlatform pkg.meta.platforms)
       || pkg ? meta.badPlatforms && anyHostPlatform pkg.meta.badPlatforms;
 
-  isMarkedInsecure = attrs: (attrs.meta.knownVulnerabilities or [ ]) != [ ];
+  isMarkedInsecure =
+    attrs: attrs ? meta.knownVulnerabilities && attrs.meta.knownVulnerabilities != [ ];
 
   # Allow granular checks to allow only some unfree packages
   # Example:
