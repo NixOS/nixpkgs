@@ -6,6 +6,7 @@
 buildGoModule rec {
   pname = "pulumi-terraform-bridge";
   version = "3.135.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pulumi";
