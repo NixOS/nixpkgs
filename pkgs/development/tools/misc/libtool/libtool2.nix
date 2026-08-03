@@ -13,12 +13,12 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libtool";
   version = "2.6.2";
 
   src = fetchurl {
-    url = "mirror://gnu/libtool/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/libtool/libtool-${finalAttrs.version}.tar.gz";
     hash = "sha256-JK2zqprgNccPq6NEr1fXMhXriSgQRa9sfM0wd1H4sL8=";
   };
 
@@ -68,6 +68,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  __structuredAttrs = true;
+
   meta = {
     description = "GNU Libtool, a generic library support script";
     longDescription = ''
@@ -85,4 +87,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "libtool";
   };
-}
+})
