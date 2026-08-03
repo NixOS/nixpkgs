@@ -146,6 +146,8 @@ stdenv.mkDerivation (finalAttrs: {
     rev-prefix = "elfutils-";
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://sourceware.org/elfutils/";
     description = "Set of utilities to handle ELF objects";
