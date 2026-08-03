@@ -8,38 +8,48 @@
 
 let
   inherit (lib)
-    all
     attrValues
+    concatMap
     concatMapStrings
     concatStrings
+    concatStringsSep
     filter
     findFirst
+    foldl'
     getName
+    isAttrs
+    isFunction
+    isString
     length
-    concatMap
     mutuallyExclusive
     optional
-    isAttrs
-    isString
+    optionalString
+    seq
+    unsafeGetAttrPos
     warn
-    foldl'
+    all
     ;
 
   inherit (lib.lists)
     any
-    toList
-    isList
     elem
+    isList
+    toList
     unique
     ;
 
   inherit (lib.meta)
-    platformMatch
     cpeFullVersionWithVendor
+    platformMatch
     ;
 
   inherit (lib.generators)
     toPretty
+    ;
+
+  inherit (lib.licenses)
+    containsLicenses
+    isFree
     ;
 
   inherit (builtins)
@@ -83,7 +93,7 @@ let
     assert areLicenseListsValid;
     list:
     let
-      containsListLicenses = lib.licenses.containsLicenses list;
+      containsListLicenses = containsLicenses list;
     in
     attrs:
     attrs ? meta.license
@@ -106,7 +116,7 @@ let
   isUnfree =
     licenses:
     if isAttrs licenses && licenses ? "licenseType" then
-      !(lib.licenses.isFree licenses)
+      !(isFree licenses)
     else if isAttrs licenses then
       !(licenses.free or true)
     # TODO: Returning false in the case of a string is a bug that should be fixed.
@@ -152,14 +162,14 @@ let
   # Defaults to allow all names defined in config.allowUnfreePackages
   allowUnfreePredicate =
     let
-      listPredicate = pkg: builtins.elem (lib.getName pkg) (config.allowUnfreePackages or [ ]);
+      listPredicate = pkg: elem (getName pkg) (config.allowUnfreePackages or [ ]);
 
       # Be robust against misconfigured allowUnfreePredicate values such as null
       explicitPredicate =
         let
           raw = config.allowUnfreePredicate or null;
         in
-        if builtins.isFunction raw then raw else (_: false);
+        if isFunction raw then raw else (_: false);
     in
     pkg: (listPredicate pkg) || (explicitPredicate pkg);
 
@@ -306,9 +316,9 @@ let
       missingOutputs = filter (output: !elem output actualOutputs) expectedOutputs;
     in
     ''
-      The package ${getNameWithVersion attrs} has set meta.outputsToInstall to: ${builtins.concatStringsSep ", " expectedOutputs}
+      The package ${getNameWithVersion attrs} has set meta.outputsToInstall to: ${concatStringsSep ", " expectedOutputs}
 
-      however ${getNameWithVersion attrs} only has the outputs: ${builtins.concatStringsSep ", " actualOutputs}
+      however ${getNameWithVersion attrs} only has the outputs: ${concatStringsSep ", " actualOutputs}
 
       and is missing the following outputs:
 
@@ -536,9 +546,9 @@ let
     }:
     let
       outputs = attrs.outputs or [ "out" ];
-      hasOutput = out: builtins.elem out outputs;
-      maintainersPosition = builtins.unsafeGetAttrPos "maintainers" (attrs.meta or { });
-      teamsPosition = builtins.unsafeGetAttrPos "teams" (attrs.meta or { });
+      hasOutput = out: elem out outputs;
+      maintainersPosition = unsafeGetAttrPos "maintainers" (attrs.meta or { });
+      teamsPosition = unsafeGetAttrPos "teams" (attrs.meta or { });
     in
     {
       # `name` derivation attribute includes cross-compilation cruft,
@@ -691,7 +701,7 @@ let
           let
             msg =
               "Refusing to evaluate package '${getNameWithVersion attrs}' in ${pos_str meta} because it ${error.msg}"
-              + lib.optionalString (!inHydra && error.remediation != "") "\n${error.remediation}";
+              + optionalString (!inHydra && error.remediation != "") "\n${error.remediation}";
           in
           if config ? handleEvalIssue then
             if error.reason == "problem" then
@@ -706,12 +716,12 @@ let
         let
           msg =
             "Package '${getNameWithVersion attrs}' in ${pos_str meta} ${warning.msg}"
-            + lib.optionalString (!inHydra && warning.remediation != "") " ${warning.remediation}";
+            + optionalString (!inHydra && warning.remediation != "") " ${warning.remediation}";
         in
         warn msg acc;
     in
     # Give all warnings first, then error if any
-    builtins.seq (foldl' giveWarning null warnings) withError;
+    seq (foldl' giveWarning null warnings) withError;
 
   assertValidity =
     hostPlatform:
