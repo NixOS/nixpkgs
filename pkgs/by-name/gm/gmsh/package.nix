@@ -33,11 +33,11 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmsh";
-  version = "4.15.0";
+  version = "4.15.2";
 
   src = fetchurl {
     url = "https://gmsh.info/src/gmsh-${finalAttrs.version}-source.tgz";
-    hash = "sha256-q7JjJxW9fQEw3tcUT9YmNjXNfeqIO432G6TaWM5qHf4=";
+    hash = "sha256-vj9m8iXSe6n6AU8H6DFpKF2ooFGw6KtxA9iAZrOb3T4=";
   };
 
   nativeBuildInputs = [
