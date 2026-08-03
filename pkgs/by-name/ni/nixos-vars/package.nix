@@ -1,5 +1,4 @@
 {
-  lib,
   mkShell,
   nixosTests,
   python3,
@@ -17,13 +16,7 @@ python3Packages.buildPythonApplication {
     python3Packages.setuptools
     makeWrapper
   ];
-  src = lib.fileset.toSource {
-    root = ./.;
-    fileset = lib.fileset.unions [
-      ./nix_vars
-      ./pyproject.toml
-    ];
-  };
+  src = ./src;
 
   postFixup = ''
     wrapProgram $out/bin/nix-vars \
@@ -34,7 +27,7 @@ python3Packages.buildPythonApplication {
     packages = [
       python3
       bubblewrap
-      ruff # Formatter
+      ruff
       age # Here to ease playing with the age backend
     ];
   };
@@ -45,6 +38,6 @@ python3Packages.buildPythonApplication {
       ;
   };
 
-  # This is maybe not a good idea?
-  passthru.jsonify = import ./nix_vars/nix/jsonify.nix;
+  # This is perhaps not a good idea?
+  passthru.jsonify = import ./src/nix_vars/nix/jsonify.nix;
 }
