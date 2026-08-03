@@ -85,6 +85,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  __structuredAttrs = true;
+
   meta = {
     description = "C library for the Publix Suffix List";
     longDescription = ''
