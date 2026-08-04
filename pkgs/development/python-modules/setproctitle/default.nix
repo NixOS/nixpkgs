@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   setuptools,
   pytestCheckHook,
   procps,
@@ -19,6 +20,13 @@ buildPythonPackage rec {
     tag = "version-${version}";
     hash = "sha256-dfOdtfOXRAoCQLW307+YMsFIWRv4CupbKUxckev1oUw=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/dvarrazzo/py-setproctitle/commit/68125abf821ee6ebfb4a4eb86ffe655a4c072c9e.patch";
+      hash = "sha256-ZeY/4z7EFY9Tc4Y4T3BCyEt2Gweqts/8qwqdWT1e6BM=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
