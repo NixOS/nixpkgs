@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   perl,
   # Update the enabled crypt scheme ids in passthru when the enabled hashes change
   enableHashes ? "strong",
