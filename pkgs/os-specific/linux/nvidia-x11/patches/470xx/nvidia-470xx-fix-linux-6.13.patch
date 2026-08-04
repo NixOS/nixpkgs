@@ -1,0 +1,58 @@
+From 9f91b171f680648647580c163bbc9cc1641e3920 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Joan=20Bruguera=20Mic=C3=B3?= <joanbrugueram@gmail.com>
+Date: Sat, 16 Nov 2024 22:45:21 +0000
+Subject: [PATCH] Tentative fix for NVIDIA 470.256.02 driver for Linux 6.13-rc1
+
+---
+ nvidia-modeset/nvidia-modeset.Kbuild | 8 +++++---
+ nvidia/nvidia.Kbuild                 | 8 +++++---
+ 2 files changed, 10 insertions(+), 6 deletions(-)
+
+diff --git a/nvidia-modeset/nvidia-modeset.Kbuild b/nvidia-modeset/nvidia-modeset.Kbuild
+index a7d84e0..d417c28 100644
+--- a/nvidia-modeset/nvidia-modeset.Kbuild
++++ b/nvidia-modeset/nvidia-modeset.Kbuild
+@@ -40,13 +40,15 @@ NV_KERNEL_MODULE_TARGETS += $(NVIDIA_MODESET_KO)
+ NVIDIA_MODESET_BINARY_OBJECT := $(src)/nvidia-modeset/nv-modeset-kernel.o_binary
+ NVIDIA_MODESET_BINARY_OBJECT_O := nvidia-modeset/nv-modeset-kernel.o
+ 
+-quiet_cmd_symlink = SYMLINK $@
+-cmd_symlink = ln -sf $< $@
++# Rel. commit 80f289101690 "kbuild: change working directory to external module directory with M=" (Masahiro Yamada, 10 Nov 2024)
++# Ensure `$<` is absolute, since the link target is resolved relative to its path, not from where `ln` is run from.
++quiet_cmd_symlinkabs = SYMLINK $@
++ cmd_symlinkabs = ln -sf $(abspath $<) $@
+ 
+ targets += $(NVIDIA_MODESET_BINARY_OBJECT_O)
+ 
+ $(obj)/$(NVIDIA_MODESET_BINARY_OBJECT_O): $(NVIDIA_MODESET_BINARY_OBJECT) FORCE
+-	$(call if_changed,symlink)
++	$(call if_changed,symlinkabs)
+ 
+ nvidia-modeset-y += $(NVIDIA_MODESET_BINARY_OBJECT_O)
+ 
+diff --git a/nvidia/nvidia.Kbuild b/nvidia/nvidia.Kbuild
+index 31a6f92..62689f6 100644
+--- a/nvidia/nvidia.Kbuild
++++ b/nvidia/nvidia.Kbuild
+@@ -40,13 +40,15 @@ NVIDIA_KO = nvidia/nvidia.ko
+ NVIDIA_BINARY_OBJECT := $(src)/nvidia/nv-kernel.o_binary
+ NVIDIA_BINARY_OBJECT_O := nvidia/nv-kernel.o
+ 
+-quiet_cmd_symlink = SYMLINK $@
+- cmd_symlink = ln -sf $< $@
++# Rel. commit 80f289101690 "kbuild: change working directory to external module directory with M=" (Masahiro Yamada, 10 Nov 2024)
++# Ensure `$<` is absolute, since the link target is resolved relative to its path, not from where `ln` is run from.
++quiet_cmd_symlinkabs = SYMLINK $@
++ cmd_symlinkabs = ln -sf $(abspath $<) $@
+ 
+ targets += $(NVIDIA_BINARY_OBJECT_O)
+ 
+ $(obj)/$(NVIDIA_BINARY_OBJECT_O): $(NVIDIA_BINARY_OBJECT) FORCE
+-	$(call if_changed,symlink)
++	$(call if_changed,symlinkabs)
+ 
+ nvidia-y += $(NVIDIA_BINARY_OBJECT_O)
+ 
+-- 
+2.47.0

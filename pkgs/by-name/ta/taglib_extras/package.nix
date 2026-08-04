@@ -16,11 +16,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    (fetchurl {
-      name = "2001-taglib-extras-Fix-taglib-2.x-compat.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/taglib-2.0.diff?h=taglib-extras&id=5826657b841b138c501e0633d1c9333fe9197b00";
-      hash = "sha256-yhme2KcIS5SPXz+mx/R2OiLV57WHz6WW8LJtYab4h5I=";
-    })
+    # Vendored from https://aur.archlinux.org/cgit/aur.git/plain/taglib-2.0.diff?h=taglib-extras&id=5826657b841b138c501e0633d1c9333fe9197b00
+    ./2001-taglib-extras-Fix-taglib-2.x-compat.patch
   ];
 
   buildInputs = [ taglib ];

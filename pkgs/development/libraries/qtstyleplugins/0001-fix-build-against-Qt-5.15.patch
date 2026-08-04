@@ -1,0 +1,24 @@
+--- a/src/plugins/styles/gtk2/qgtkstyle.cpp
++++ b/src/plugins/styles/gtk2/qgtkstyle.cpp
+@@ -440,7 +440,9 @@
+     // not supported as these should be entirely determined by
+     // current Gtk settings
+     if (app->desktopSettingsAware() && d->isThemeAvailable()) {
++#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+         QApplicationPrivate::setSystemPalette(standardPalette());
++#endif
+         QApplicationPrivate::setSystemFont(d->getThemeFont());
+         d->applyCustomPaletteHash();
+         if (!d->isKDE4Session())
+--- a/src/plugins/styles/gtk2/qgtkstyle_p.cpp
++++ b/src/plugins/styles/gtk2/qgtkstyle_p.cpp
+@@ -508,7 +508,9 @@
+       if (oldTheme != QGtkStylePrivate::getThemeName()) {
+           oldTheme = QGtkStylePrivate::getThemeName();
+           QPalette newPalette = qApp->style()->standardPalette();
++#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+           QApplicationPrivate::setSystemPalette(newPalette);
++#endif
+           QApplication::setPalette(newPalette);
+           if (!QGtkStylePrivate::instances.isEmpty()) {
+               QGtkStylePrivate::instances.last()->initGtkWidgets();

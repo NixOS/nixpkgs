@@ -1,0 +1,30 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -133,14 +133,14 @@
+ ####################
+ ###### BEGIN: QT configuration
+ ####################
+-FIND_PROGRAM(qmake_executable NAMES qmake qmake.exe)
++FIND_PROGRAM(qmake_executable NAMES qmake6)
+ EXECUTE_PROCESS(COMMAND
+     bash -c "${qmake_executable} --version | grep -iE '^using qt version [0-9.]+' | awk '{print $4}'"
+     OUTPUT_VARIABLE DETECTED_QT_VERSION
+     OUTPUT_STRIP_TRAILING_WHITESPACE)
+ MESSAGE("Qt version: ${DETECTED_QT_VERSION}")
+ EXECUTE_PROCESS(COMMAND
+-    bash -c "qmake --version|grep -iE '^using qt version [0-9]'|awk '{print $4}'|grep -iE '^[0-9]'|awk -F . '{print $1}'"
++    bash -c "${qmake_executable} --version|grep -iE '^using qt version [0-9]'|awk '{print $4}'|grep -iE '^[0-9]'|awk -F . '{print $1}'"
+     OUTPUT_VARIABLE QT_VERSION_MAJOR
+     OUTPUT_STRIP_TRAILING_WHITESPACE)
+ MESSAGE("QT_VERSION_MAJOR: ${QT_VERSION_MAJOR}")
+--- a/src/message-poller.cpp
++++ b/src/message-poller.cpp
+@@ -1,6 +1,8 @@
+ #include <QTimer>
+ #include <QDateTime>
+ #include <QJsonDocument>
++#include <QJsonValue>
++#include <QRegularExpression>
+ 
+ #include "utils/utils.h"
+ #include "utils/translate-commit-desc.h"

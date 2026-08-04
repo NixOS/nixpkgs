@@ -1,0 +1,61 @@
+--- pdisk/pdisk-9/makefile	2003-11-10 13:52:05.000000000 -0700
++++ pdisk-9/makefile	2020-04-17 07:08:33.740037215 -0700
+@@ -48,6 +48,8 @@
+ UNIX_SOURCE= \
+ 	bitfield.c \
+ 	bitfield.h \
++	cmdline.c \
++	cmdline.h \
+ 	convert.c \
+ 	convert.h \
+ 	cvt_pt.c \
+@@ -84,6 +86,7 @@
+ COMMON_OBJECTS = \
+ 	partition_map.o \
+ 	bitfield.o \
++	cmdline.o \
+ 	convert.o \
+ 	deblock_media.o \
+ 	file_media.o \
+@@ -102,6 +105,7 @@
+ 
+ CVT_OBJECTS = \
+ 	cvt_pt.o \
++	dump.o \
+ 	$(COMMON_OBJECTS)
+ 
+ 
+@@ -136,10 +140,10 @@
+ all: $(UNIX_BINARIES)
+ 
+ pdisk: $(UNIX_OBJECTS)
+-	cc -o pdisk $(UNIX_OBJECTS)
++	cc -lbsd -o pdisk $(UNIX_OBJECTS)
+ 
+ cvt_pt: $(CVT_OBJECTS)
+-	cc -o cvt_pt $(CVT_OBJECTS)
++	cc -lbsd -o cvt_pt $(CVT_OBJECTS)
+ 
+ tags:	$(MAC_SOURCE) $(UNIX_SOURCE)
+ 	ctags $(MAC_SOURCE) $(UNIX_SOURCE)
+@@ -189,17 +193,18 @@
+ validate.h:	partition_map.h
+ 
+ bitfield.o:	bitfield.c bitfield.h
++cmdline.o:	cmdline.c cmdline.h io.h
+ convert.o:	convert.c convert.h
+ deblock_media.o:	deblock_media.c deblock_media.h
+ dump.o:		dump.c dump.h pathname.h io.h errors.h
+-errors.o:	errors.c errors.h
++errors.o:	errors.c errors.h cmdline.c cmdline.h
+ file_media.o:	file_media.c file_media.h errors.h
+ io.o:		io.c io.h errors.h
+ layout_dump.o:	layout_dump.c layout_dump.h
+ media.o:	media.c media.h
+ partition_map.o:	partition_map.c partition_map.h pathname.h deblock_media.h io.h convert.h util.h errors.h
+ pathname.o:	pathname.c pathname.h file_media.h
+-pdisk.o:	pdisk.c pdisk.h io.h partition_map.h pathname.h errors.h dump.h validate.h version.h util.h
++pdisk.o:	pdisk.c pdisk.h io.h partition_map.h pathname.h errors.h dump.h validate.h version.h util.h cmdline.h
+ util.o:		util.c version.h util.h
+ validate.o:	validate.c validate.h deblock_media.h pathname.h convert.h io.h errors.h
+ 

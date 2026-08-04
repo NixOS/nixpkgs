@@ -1,0 +1,264 @@
+--- a/config.h.in
++++ b/config.h.in
+@@ -18,6 +18,9 @@
+ /* Define if you want your background to use the parent window background */
+ #undef ENABLE_TRANSPARENCY
+ 
++/* Define if you want to display wide glyphs */
++#undef ENABLE_WIDE_GLYPHS
++
+ /* Define if you want european extended codesets */
+ #undef ENCODING_EU
+ 
+--- a/configure
++++ b/configure
+@@ -739,6 +739,7 @@
+ enable_combining
+ enable_xft
+ enable_font_styles
++enable_wide_glyphs
+ enable_pixbuf
+ enable_startup_notification
+ enable_transparency
+@@ -1414,6 +1415,7 @@
+   --enable-combining      enable composition of base and combining characters
+   --enable-xft            enable xft support on systems that have it
+   --enable-font-styles    enable bold and italic support
++  --enable-wide-glyphs    enable displaying of wide glyphs
+   --enable-pixbuf         enable integration with gdk-pixbuf for background images
+   --enable-startup-notification  enable freedesktop startup notification support
+   --enable-transparency   enable transparent backgrounds
+@@ -5025,6 +5027,7 @@
+        support_8bitctrls=no
+        support_iso14755=no
+        support_styles=no
++       support_wide_glyphs=no
+        support_perl=no
+        codesets=
+     fi
+@@ -5050,6 +5053,7 @@
+        #support_8bitctrls=yes
+        support_iso14755=yes
+        support_styles=yes
++       support_wide_glyphs=yes
+        support_perl=yes
+        codesets=all
+     fi
+@@ -5182,6 +5186,14 @@
+ fi
+ 
+ 
++# Check whether --enable-wide-glyphs was given.
++if test "${enable_wide_glyphs+set}" = set; then :
++  enableval=$enable_wide_glyphs; if test x$enableval = xyes -o x$enableval = xno; then
++    support_wide_glyphs=$enableval
++  fi
++fi
++
++
+ # Check whether --enable-pixbuf was given.
+ if test ${enable_pixbuf+y}
+ then :
+@@ -7727,6 +7739,11 @@
+ printf "%s\n" "#define MOUSE_SLIP_WHEELING 1" >>confdefs.h
+ 
+ fi
++if test x$support_wide_glyphs = xyes; then
++
++printf "%s\n" "#define ENABLE_WIDE_GLYPHS 1" >>confdefs.h
++
++fi
+ 
+ scrolltypes=plain
+ 
+--- a/configure.ac
++++ b/configure.ac
+@@ -123,6 +123,7 @@
+        support_8bitctrls=no
+        support_iso14755=no
+        support_styles=no
++       support_wide_glyphs=no
+        support_perl=no
+        codesets=
+     fi
+@@ -148,6 +149,7 @@
+        #support_8bitctrls=yes
+        support_iso14755=yes
+        support_styles=yes
++       support_wide_glyphs=yes
+        support_perl=yes
+        codesets=all
+     fi
+@@ -231,6 +233,12 @@
+     support_styles=$enableval
+   fi])
+ 
++AC_ARG_ENABLE(wide-glyphs,
++  [  --enable-wide-glyphs    enable displaying of wide glyphs],
++  [if test x$enableval = xyes -o x$enableval = xno; then
++    support_wide_glyphs=$enableval
++  fi])
++
+ AC_ARG_ENABLE(pixbuf,
+   [  --enable-pixbuf         enable integration with gdk-pixbuf for background images],
+   [if test x$enableval = xyes -o x$enableval = xno; then
+@@ -653,6 +661,9 @@
+ if test x$support_styles = xyes; then
+   AC_DEFINE(ENABLE_STYLES, 1, Define if you want bold and italic support)
+ fi
++if test x$support_wide_glyphs = xyes; then
++  AC_DEFINE(ENABLE_WIDE_GLYPHS, 1, Define if you want to display wide glyphs)
++fi
+ if test x$support_iso14755 = xyes; then
+   AC_DEFINE(ISO_14755, 1, Define if you want ISO 14755 extended support)
+ fi
+--- a/src/command.C
++++ b/src/command.C
+@@ -237,7 +237,9 @@
+ # endif
+       scr_overlay_set (11, y + 1, ch, r);
+ 
++#if !ENABLE_WIDE_GLYPHS
+       if (WCWIDTH (ch) >= 2)
++#endif
+         scr_overlay_set (12, y + 1, NOCHAR, r);
+     }
+ 
+--- a/src/rxvtfont.C
++++ b/src/rxvtfont.C
+@@ -471,6 +471,7 @@
+       else
+         switch (t)
+           {
++            case ' ':
+             case '\t':
+             case ZERO_WIDTH_CHAR:
+             case NOCHAR:
+@@ -1038,8 +1039,10 @@
+ 
+   careful = xcs->lbearing < 0 || xcs->rbearing > prop->width * wcw;
+ 
++#if !ENABLE_WIDE_GLYPHS
+   if (careful && !OVERLAP_OK (w, wcw, prop))
+     return false;
++#endif
+ 
+   return true;
+ }
+@@ -1410,12 +1413,14 @@
+ 
+   careful = g.x > 0 || w > cwidth;
+ 
++#if !ENABLE_WIDE_GLYPHS
+   if (careful && !OVERLAP_OK (w, wcw, prop))
+     return false;
+ 
+   // this weeds out _totally_ broken fonts, or glyphs
+   if (!OVERLAP_OK (g.xOff, wcw, prop))
+     return false;
++#endif
+ 
+   return true;
+ }
+@@ -1496,6 +1501,10 @@
+ 
+           ep->glyph = glyph;
+           ep->x = x_;
++#if ENABLE_WIDE_GLYPHS
++          /* Left-align to bounding box, do not overlap to the left. */
++          max_it(ep->x, x_);
++#endif
+           ep->y = y_ + ascent;
+ 
+           // the xft font cell might differ from the terminal font cell,
+--- a/src/screen.C
++++ b/src/screen.C
+@@ -975,7 +975,61 @@
+ # endif
+ #endif
+ 
+-          rend_t rend = SET_FONT (rstyle, FONTSET (rstyle)->find_font (c));
++          rend_t rend;
++#if ENABLE_WIDE_GLYPHS
++          // Re-use previous font for space characters.
++          // This allows for better display of wider chars with regard to
++          // backtracking (which uses RS_SAME).
++          if (c != ' ')
++            {
++#endif
++            rend = SET_FONT (rstyle, FONTSET (rstyle)->find_font (c));
++#if ENABLE_WIDE_GLYPHS
++
++            }
++          else
++            {
++              // Code taken from ENABLE_COMBINING - might get refactored.
++              line_t *linep;
++              text_t *tp;
++              rend_t *rp = NULL;
++
++              if (screen.cur.col > 0)
++                {
++                  linep = line;
++                  tp = line->t + screen.cur.col - 1;
++                  rp = line->r + screen.cur.col - 1;
++                }
++              else if (screen.cur.row > 0
++                       && ROW(screen.cur.row - 1).is_longer ())
++                {
++                  linep = &ROW(screen.cur.row - 1);
++                  tp = linep->t + ncol - 1;
++                  rp = linep->r + ncol - 1;
++                }
++
++              if (rp)
++                {
++                  // XXX: this font does not show up in iso-14755 mode for the space!?
++                  if (*tp == NOCHAR)
++                    {
++                      while (*tp == NOCHAR && tp > linep->t)
++                        tp--, rp--;
++
++                      // first try to find a precomposed character
++                      unicode_t n = rxvt_compose (*tp, c);
++                      if (n == NOCHAR)
++                        n = rxvt_composite.compose (*tp, c);
++
++                      *tp = n;
++                      *rp = SET_FONT (*rp, FONTSET (*rp)->find_font (*tp));
++                    }
++                  rend = SET_FONT (rstyle, GET_FONT(*rp));
++                }
++              else
++                rend = SET_FONT (rstyle, FONTSET (rstyle)->find_font (c));
++            }
++#endif
+ 
+           // if the character doesn't fit into the remaining columns...
+           if (ecb_unlikely (screen.cur.col > ncol - width && ncol >= width))
+@@ -2434,7 +2488,12 @@
+                 text--, count++, xpixel -= fwidth;
+ 
+               // force redraw after "careful" characters to avoid pixel droppings
+-              for (int i = 0; srp[col + i] & RS_Careful && col + i < ncol - 1; i++)
++              for (int i = 0; srp[col + i] & RS_Careful && col + i < ncol - 1
++#if ENABLE_WIDE_GLYPHS
++              // But not for spaces.
++                      && stp[col + i + 1] != ' '
++#endif
++                      ; i++)
+                 drp[col + i + 1] = srp[col + i + 1] ^ RS_redraw;
+ 
+               // force redraw before "careful" characters to avoid pixel droppings
+--- a/src/xdefaults.C
++++ b/src/xdefaults.C
+@@ -298,6 +298,9 @@
+ #if ENABLE_STYLES
+                                     "styles,"
+ #endif
++#if ENABLE_WIDE_GLYPHS
++                                    "wide-glyphs,"
++#endif
+ #if ENABLE_COMBINING
+                                     "combining,"
+ #endif

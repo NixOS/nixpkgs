@@ -1,0 +1,35 @@
+--- a/src/popthelp.c.orig	2012-03-31 08:51:34 +0400
++++ b/src/popthelp.c	2012-03-31 09:08:28 +0400
+@@ -10,9 +10,11 @@
+ 
+ #include "system.h"
+ 
+-#define        POPT_USE_TIOCGWINSZ
++#undef POPT_USE_TIOCGWINSZ
+ #ifdef POPT_USE_TIOCGWINSZ
+ #include <sys/ioctl.h>
++#elif defined(_WIN32_WINNT) && !defined(__CYGWIN__)
++#include <windows.h>
+ #endif
+ 
+ #define	POPT_WCHAR_HACK
+@@ -123,8 +125,18 @@
+ 	if (ws_col > maxcols && ws_col < (size_t)256)
+ 	    maxcols = ws_col - 1;
+     }
+-#endif
+     return maxcols;
++#elif defined(_WIN32_WINNT) && !defined(__CYGWIN__)
++    HANDLE hStdout;
++    CONSOLE_SCREEN_BUFFER_INFO cbi;
++    hStdout = GetStdHandle (STD_OUTPUT_HANDLE);
++    if (hStdout == INVALID_HANDLE_VALUE)
++      return maxcols;
++    if (0 == GetConsoleScreenBufferInfo (hStdout, &cbi))
++      return maxcols;
++    else
++      return cbi.dwSize.X;
++#endif
+ }   
+ 
+ /**

@@ -1,0 +1,25 @@
+diff --git a/kernel/Kbuild b/kernel/Kbuild
+index 85aa267..baa6986 100644
+--- a/kernel/Kbuild
++++ b/kernel/Kbuild
+@@ -61,6 +61,7 @@ $(foreach _module, $(NV_KERNEL_MODULES), \
+ # $(EXTRA_CFLAGS) to ccflags-y for compatibility.
+ #
+ 
++EXTRA_CFLAGS += -std=gnu17
+ EXTRA_CFLAGS += -I$(src)/common/inc
+ EXTRA_CFLAGS += -I$(src)
+ EXTRA_CFLAGS += -Wall -MD $(DEFINES) $(INCLUDES) -Wsign-compare -Wno-cast-qual -Wno-error
+diff --git a/kernel/conftest.sh b/kernel/conftest.sh
+index 4da7588..1106ea5 100755
+--- a/kernel/conftest.sh
++++ b/kernel/conftest.sh
+@@ -151,7 +151,7 @@ test_headers() {
+ }
+ 
+ build_cflags() {
+-    BASE_CFLAGS="-O2 -D__KERNEL__ \
++    BASE_CFLAGS="-std=gnu17 -O2 -D__KERNEL__ \
+ -DKBUILD_BASENAME=\"#conftest$$\" -DKBUILD_MODNAME=\"#conftest$$\" \
+ -nostdinc -isystem $ISYSTEM \
+ -Wno-implicit-function-declaration -Wno-strict-prototypes -Wno-incompatible-pointer-types"

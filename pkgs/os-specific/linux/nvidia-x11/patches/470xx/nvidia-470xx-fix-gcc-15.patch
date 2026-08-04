@@ -1,0 +1,32 @@
+From 3d51f7abf1c591dfd47d0070e2b6942ef91301af Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Joan=20Bruguera=20Mic=C3=B3?= <joanbrugueram@gmail.com>
+Date: Sun, 1 Jun 2025 22:14:13 +0000
+Subject: [PATCH] Fix for NVIDIA 470.256.02 driver for GCC 15
+
+conftest.sh invokes GCC on its own, without going through the usual
+kernel Makefile that would add the proper CFLAGS (e.g. -std=gnu11).
+
+This means that it builds with the default of GCC, which in GCC 15
+has changed to -std=gnu23 which and has backwards incompatible changes
+that the kernel does not support. Force it to -std=gnu17 instead.
+---
+ conftest.sh | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/conftest.sh b/conftest.sh
+index 70c91e5..dc40d3a 100755
+--- a/conftest.sh
++++ b/conftest.sh
+@@ -205,6 +205,9 @@ build_cflags() {
+             CFLAGS="$CFLAGS -mfentry -DCC_USING_FENTRY"
+         fi
+     fi
++
++    # Specify the C standard, instead of defaulting to the compiler's
++    CFLAGS="$CFLAGS -std=gnu17"
+ }
+ 
+ CONFTEST_PREAMBLE="#include \"conftest/headers.h\"
+-- 
+2.49.0
+

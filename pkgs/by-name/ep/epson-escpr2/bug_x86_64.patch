@@ -1,0 +1,72 @@
+diff -ruN a/src/filter.c b/src/filter.c
+--- a/src/filter.c	2025-03-12 07:46:22.000000000 +0100
++++ b/src/filter.c	2025-05-03 18:42:46.418977873 +0200
+@@ -38,6 +38,7 @@
+ #include "epson-escpr-api.h"
+ #include "epson-escpr-services.h"
+ #include "epson-escpr-mem.h"
++#include "epson-escpr-services.h"
+ 
+ #include "err.h"
+ #include "mem.h"
+@@ -47,6 +48,11 @@
+ #include "optBase.h"
+ #include "linux_cmn.h"
+ #include "custompage.h"
++#include "xfifo.h"
++
++extern EPS_ERR_CODE SetupJobAttrib (const EPS_JOB_ATTRIB*);
++extern EPS_ERR_CODE SendStartJob (int);
++extern EPS_ERR_CODE PrintBand (const EPS_UINT8*, EPS_UINT32, EPS_UINT32*);
+ 
+ #define WIDTH_BYTES(bits) (((bits) + 31) / 32 * 4)
+ 
+@@ -453,7 +459,7 @@
+ 	}
+ 	
+ 	printJob.jobStatus = EPS_STATUS_ESTABLISHED;
+-	int printHeight = 0;
++	EPS_UINT32 printHeight = 0;
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////	
+ 
+ 	print_area_x = printJob.printableAreaWidth;
+@@ -624,7 +630,7 @@
+ 						memcpy(rever_buf + k*3, startpage + pos + (bandBmp.widthBytes - 6) - k*3, 3);
+ 					}
+ 				}
+-				PrintBand (rever_buf, bandBmp.widthBytes, &printHeight);
++				PrintBand ((const EPS_UINT8 *)rever_buf, bandBmp.widthBytes, &printHeight);
+ 				pos -= bandBmp.widthBytes;
+ 			}
+ 
+@@ -918,7 +924,7 @@
+ 
+ 	/* Get number of pages */
+ 	char page_num;
+-	read (STDIN_FILENO, &page_num, 1);
++	(void)read (STDIN_FILENO, &page_num, 1);
+ 	debug_msg("total pages = %d\n", page_num);
+ 
+ 	/* Others */
+diff -ruN a/src/mem.c b/src/mem.c
+--- a/src/mem.c	2023-10-17 09:37:18.000000000 +0200
++++ b/src/mem.c	2025-05-03 18:37:18.940061028 +0200
+@@ -23,6 +23,7 @@
+ 
+ #include <stdlib.h>
+ #include "mem.h"
++#include "err.h"
+ 
+ void *
+ mem_malloc (unsigned int size, bool_t crit)
+diff -ruN a/src/wrapper.c b/src/wrapper.c
+--- a/src/wrapper.c	2025-03-12 07:47:23.000000000 +0100
++++ b/src/wrapper.c	2025-05-03 18:37:18.940134498 +0200
+@@ -33,6 +33,7 @@
+ /* added 22-04-2004 */
+ #include <signal.h>
+ 
++#include "custompage.h"
+ #include "libprtX.h"
+ 
+ #define HAVE_PPM_W 0

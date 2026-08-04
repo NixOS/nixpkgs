@@ -1,0 +1,9 @@
+--- a/terminfo/fbterm	2010-10-18 11:20:11.000000000 +0300
++++ b/terminfo/fbterm	2021-05-19 03:05:56.885773502 +0300
+@@ -1,5 +1,5 @@
+ #	Reconstructed via infocmp from file: /lib/terminfo/l/linux
+-fbterm|framebuffer based terminal emulator,
++fbterm-256color|framebuffer based terminal emulator,
+ 	am, bce, ccc, eo, mir, msgr, xenl, xon,
+ 	colors#256, it#8, ncv#18, pairs#32767,
+ 	acsc=+\020\,\021-\030.^Y0\333`\004a\261f\370g\361h\260i\316j\331k\277l\332m\300n\305o~p\304q\304r\304s_t\303u\264v\301w\302x\263y\363z\362{\343|\330}\234~\376,

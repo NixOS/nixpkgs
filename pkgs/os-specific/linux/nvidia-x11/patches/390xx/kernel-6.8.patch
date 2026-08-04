@@ -1,0 +1,18 @@
+diff --git a/kernel/nvidia-drm/nvidia-drm-drv.c b/kernel/nvidia-drm/nvidia-drm-drv.c
+index 132d4d4..1291893 100644
+--- a/kernel/nvidia-drm/nvidia-drm-drv.c
++++ b/kernel/nvidia-drm/nvidia-drm-drv.c
+@@ -654,6 +654,13 @@ static const struct file_operations nv_drm_fops = {
+     .llseek         = noop_llseek,
+ };
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 8, 0)
++// Rel. commit. "drm: Remove locking for legacy ioctls and DRM_UNLOCKED" (Thomas Zimmermann, 22 Nov 2023)
++// Mock this flag, which was already useless on any recent kernel, since it
++// only did something if the driver set DRIVER_LEGACY in driver_features.
++static const enum drm_ioctl_flags DRM_UNLOCKED = 0;
++#endif
++
+ static const struct drm_ioctl_desc nv_drm_ioctls[] = {
+ #if defined(NV_DRM_ATOMIC_MODESET_AVAILABLE)
+     DRM_IOCTL_DEF_DRV(NVIDIA_GEM_IMPORT_NVKMS_MEMORY,

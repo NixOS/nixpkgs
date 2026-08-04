@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   fetchFromGitHub,
   nix-update-script,
   pkg-config,
@@ -27,11 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # https://github.com/NixOS/nixpkgs/issues/442063
-    (fetchpatch {
-      name = "fix_build_with_QT6.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/fix_build_with_QT6.diff?h=seafile-client&id=8bbd6e5017f03dbb368603b4313738b0d783ca2a";
-      hash = "sha256-N1fepqjTm/M17+TgwNTUecP/wGVlBuZEtTezFgJEeVM=";
-    })
+    # Vendored from https://aur.archlinux.org/cgit/aur.git/plain/fix_build_with_QT6.diff?h=seafile-client&id=8bbd6e5017f03dbb368603b4313738b0d783ca2a
+    ./fix_build_with_QT6.patch
   ];
 
   postPatch = ''

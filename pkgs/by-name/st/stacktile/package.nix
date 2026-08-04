@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromSourcehut,
-  fetchpatch,
   wayland,
   wayland-scanner,
 }:
@@ -19,10 +18,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/fix-compilation.patch?h=stacktile&id=388a522b69e34c01cc5d57341d8578470a7dccfb";
-      hash = "sha256-y5ArQyjIqT2ICmm8ZYDHZ04DwGgw2d7wsgoH5XJPZf0=";
-    })
+    # Vendored from https://aur.archlinux.org/cgit/aur.git/plain/fix-compilation.patch?h=stacktile&id=388a522b69e34c01cc5d57341d8578470a7dccfb
+    ./fix-compilation.patch
   ];
 
   outputs = [

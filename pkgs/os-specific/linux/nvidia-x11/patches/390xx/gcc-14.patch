@@ -1,0 +1,14 @@
+diff --git a/kernel/conftest.sh b/kernel/conftest.sh
+index 093704c..a9db899 100755
+--- a/kernel/conftest.sh
++++ b/kernel/conftest.sh
+@@ -153,7 +153,8 @@ test_headers() {
+ build_cflags() {
+     BASE_CFLAGS="-O2 -D__KERNEL__ \
+ -DKBUILD_BASENAME=\"#conftest$$\" -DKBUILD_MODNAME=\"#conftest$$\" \
+--nostdinc -isystem $ISYSTEM"
++-nostdinc -isystem $ISYSTEM \
++-Wno-implicit-function-declaration -Wno-strict-prototypes -Wno-incompatible-pointer-types"
+ 
+     if [ "$OUTPUT" != "$SOURCES" ]; then
+         OUTPUT_CFLAGS="-I$OUTPUT/include2 -I$OUTPUT/include"

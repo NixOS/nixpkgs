@@ -1,0 +1,78 @@
+--- a/doc/fbterm.1.in	2010-10-18 11:20:11.000000000 +0300
++++ b/doc/fbterm.1.in	2021-11-27 23:11:43.270223092 +0300
+@@ -22,8 +22,9 @@
+ file. If that is not set, /bin/sh will be used. You should use the \fI--\fR argument to separate FbTerm's options from
+ the arguments supplied to the \fIcommand\fR.
+
+-FbTerm first uses option value specified in command line arguments, then in the configure file \fI$HOME/.fbtermrc\fR.
+-If that file doesn't exist, FbTerm will create it with default options on startup.
++FbTerm first uses option value specified in command line arguments, then in the configure file \fI$XDG_CONFIG_HOME/fbtermrc\fR or
++\fI$XDG_CONFIG_HOME/fbterm/fbtermrc\fR (if directory \fI$XDG_CONFIG_HOME/fbterm/\fR exists).
++If \fIXDG_CONFIG_HOME\fR is unset or empty, FbTerm uses \fI$HOME/.config\fR for it instead.
+ .TP
+ \fB-h, --help\fR
+ display the help and exit
+@@ -77,7 +78,7 @@
+ display available VESA video modes
+
+ .TP
+-see comments in \fI$HOME/.fbtermrc\fR for details of these options.
++see comments in the configure file for details of these options.
+ .SH "SHORTCUT SUMMARY"
+ keyboard:
+   CTRL_ALT_E:    exit from FbTerm
+--- a/src/fbconfig.cpp	2010-10-18 11:20:11.000000000 +0300
++++ b/src/fbconfig.cpp	2021-11-27 23:48:54.286721768 +0300
+@@ -28,6 +28,8 @@
+ #include "config.h"
+ #include "fbconfig.h"
+
++#define CONFIG_DIR_NAME "fbterm"
++#define CONFIG_FILE_NAME "fbtermrc"
+ #define MAX_CONFIG_FILE_SIZE 10240
+
+ DEFINE_INSTANCE_DEFAULT(Config)
+@@ -38,18 +40,34 @@
+ 	mConfigBuf = 0;
+ 	mConfigEntrys = 0;
+
+-	const s8 *home = getenv("HOME");
+-	if (!home) {
+-		if (getuid()) return;
+-		home = "/root";
+-	}
+-
+-	s8 name[64];
+-	snprintf(name, sizeof(name), "%s/%s", home, ".fbtermrc");
++	s8 name[256];
+
+-	checkConfigFile(name);
++	const s8 *home = getenv("XDG_CONFIG_HOME");
++	const s8 *format_d = NULL, *format_f = NULL, *format_df = NULL;
++	if (!home || !home[0])
++	{
++		home = getenv("HOME");
++		if (!home || !home[0])
++			return;
++
++		format_d = "%s/.config/" CONFIG_DIR_NAME "/";
++		format_f = "%s/.config/" CONFIG_FILE_NAME;
++		format_df = "%s/.config/" CONFIG_DIR_NAME "/" CONFIG_FILE_NAME;
++	}
++	else
++	{
++		format_d = "%s/" CONFIG_DIR_NAME "/";
++		format_f = "%s/" CONFIG_FILE_NAME;
++		format_df = "%s/" CONFIG_DIR_NAME "/" CONFIG_FILE_NAME;
++	}
+
++	snprintf(name, sizeof(name), format_d, home);
+ 	struct stat cstat;
++	if (stat(name, &cstat) == -1)
++		snprintf(name, sizeof(name), format_f, home);
++	else
++		snprintf(name, sizeof(name), format_df, home);
++
+ 	if (stat(name, &cstat) == -1) return;
+ 	if (cstat.st_size > MAX_CONFIG_FILE_SIZE) return;
+

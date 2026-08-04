@@ -1,0 +1,19 @@
+--- a/cvt_pt.c	2010-03-05 16:09:50.000000000 -0700
++++ b/cvt_pt.c	2020-04-17 07:16:18.472198301 -0700
+@@ -21,6 +21,7 @@
+ #include <stdarg.h>
+ #include <errno.h>
+ #include <ctype.h>
++#include <fcntl.h>
+ 
+ #include "partition_map.h"
+ #include "errors.h"
+@@ -173,7 +174,7 @@
+     }
+ 
+     // 2)       open prefix of filename as partition map
+-    map = open_partition_map(s, &valid_file, 0);
++    map = open_partition_map(s, &valid_file, 0, O_RDWR);
+     if (!valid_file) {
+         fatal(-1, "%s does not have a partition map", s);
+         return;

@@ -1,0 +1,25 @@
+Description: Fix hotspot y coordinate
+Author: Tim Swast <tswast@gmail.com>
+
+--- a/src/main.c
++++ b/src/main.c
+@@ -103,7 +103,7 @@
+   if (n_channels == 3)
+     {
+       out->x = start_x;
+-      out->y = start_x;
++      out->y = start_y;
+       out->width = source->gridsize;
+       out->height = source->gridsize;
+       
+@@ -137,8 +137,8 @@
+ 		    {
+ 		      min_x = start_x + i;
+ 		      max_x = start_x + i + 1;
+-		      min_y = start_y + i;
+-		      max_y = start_y + i + 1;
++		      min_y = start_y + j;
++		      max_y = start_y + j + 1;
+ 
+ 		      found = TRUE;
+ 		    }

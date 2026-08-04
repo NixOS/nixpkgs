@@ -3,7 +3,6 @@
   stdenv,
   qt5,
   fetchFromGitHub,
-  fetchpatch,
   SDL,
   SDL_mixer,
   boost181,
@@ -34,21 +33,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    (fetchpatch {
-      name = "pokerth-1.1.2.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/pokerth-1.1.2.patch?h=pokerth&id=7734029cf9c6ef58f42ed873e1b9c3c19eb1df3b";
-      hash = "sha256-we2UOCFF5J/Wlji/rJeCHDu/dNsUU+R+bTw83AmvDxs=";
-    })
-    (fetchpatch {
-      name = "pokerth-1.1.2.patch.2019";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/pokerth-1.1.2.patch.2019?h=pokerth&id=7734029cf9c6ef58f42ed873e1b9c3c19eb1df3b";
-      hash = "sha256-m6uFPmPC3T9kV7EI1p33vQSi0d/w+YCH0dKjviAphMY=";
-    })
-    (fetchpatch {
-      name = "pokerth-1.1.2.patch.2020";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/pokerth-1.1.2.patch.2020?h=pokerth&id=7734029cf9c6ef58f42ed873e1b9c3c19eb1df3b";
-      hash = "sha256-I2qrgLGSMvFDHyUZFWGPGnuecZ914NBf2uGK02X/wOg=";
-    })
+    # Vendored from https://aur.archlinux.org/cgit/aur.git/plain/pokerth-1.1.2.patch?h=pokerth&id=7734029cf9c6ef58f42ed873e1b9c3c19eb1df3b
+    ./pokerth-1.1.2.patch
+    # Vendored from https://aur.archlinux.org/cgit/aur.git/plain/pokerth-1.1.2.patch.2019?h=pokerth&id=7734029cf9c6ef58f42ed873e1b9c3c19eb1df3b
+    ./pokerth-1.1.2-2019.patch
+    # Vendored from https://aur.archlinux.org/cgit/aur.git/plain/pokerth-1.1.2.patch.2020?h=pokerth&id=7734029cf9c6ef58f42ed873e1b9c3c19eb1df3b
+    ./pokerth-1.1.2-2020.patch
   ];
 
   postPatch = ''

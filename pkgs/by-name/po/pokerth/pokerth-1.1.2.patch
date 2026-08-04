@@ -1,0 +1,75 @@
+--- pokerth-1.1.2-rc.org/chatcleaner.proto	2017-08-16 14:24:03.000000000 +0200
++++ pokerth-1.1.2-rc.new/chatcleaner.proto	2018-01-09 03:10:19.639934652 +0100
+@@ -28,6 +28,7 @@
+  * shall include the source code for the parts of OpenSSL used as well       *
+  * as that of the covered work.                                              *
+  *****************************************************************************/
++syntax = "proto2";
+ 
+ option java_package = "de.chatcleaner.protocol";
+ option java_outer_classname = "ProtoBuf";
+--- pokerth-1.1.2-rc.org/pokerth.proto	2017-08-16 14:24:03.000000000 +0200
++++ pokerth-1.1.2-rc.new/pokerth.proto	2018-01-09 03:09:43.163536802 +0100
+@@ -28,6 +28,7 @@
+  * shall include the source code for the parts of OpenSSL used as well       *
+  * as that of the covered work.                                              *
+  *****************************************************************************/
++syntax = "proto2";
+ 
+ option java_package = "de.pokerth.protocol";
+ option java_outer_classname = "ProtoBuf";
+@@ -701,7 +702,7 @@
+ 
+ message ErrorMessage {
+ 	enum ErrorReason {
+-		reserved = 0;
++		custReserved = 0;
+ 		initVersionNotSupported = 1;
+ 		initServerFull = 2;
+ 		initAuthFailure = 3;
+--- pokerth-1.1.2-rc.org/src/gui/qt/gametable/gametableimpl.cpp	2017-08-16 14:24:03.000000000 +0200
++++ pokerth-1.1.2-rc.new/src/gui/qt/gametable/gametableimpl.cpp	2018-01-09 03:05:17.728195367 +0100
+@@ -3859,7 +3859,7 @@
+ 	int playerCount = static_cast<int>(seatList->size());
+ 	if (id < playerCount) {
+ 		PlayerListIterator pos = seatList->begin();
+-		advance(pos, id);
++		std::advance(pos, id);
+ 		myStartWindow->getSession()->startVoteKickPlayer((*pos)->getMyUniqueID());
+ 	}
+ }
+--- pokerth-1.1.2-rc.org/src/net/common/clientthread.cpp	2017-08-16 14:24:03.000000000 +0200
++++ pokerth-1.1.2-rc.new/src/net/common/clientthread.cpp	2018-01-09 02:59:43.781247809 +0100
+@@ -993,8 +993,7 @@
+ 			newSock.reset(new boost::asio::ip::tcp::socket(*m_ioService, tcp::v6()));
+ 		else
+ 			newSock.reset(new boost::asio::ip::tcp::socket(*m_ioService, tcp::v4()));
+-		boost::asio::socket_base::non_blocking_io command(true);
+-		newSock->io_control(command);
++		newSock->non_blocking(true);
+ 		newSock->set_option(tcp::no_delay(true));
+ 		newSock->set_option(boost::asio::socket_base::keep_alive(true));
+ 
+--- pokerth-1.1.2-rc.org/src/net/common/netpacket.cpp	2017-08-16 14:24:03.000000000 +0200
++++ pokerth-1.1.2-rc.new/src/net/common/netpacket.cpp	2018-01-09 03:01:34.578288430 +0100
+@@ -249,7 +249,7 @@
+ 		retVal = ErrorMessage::sessionTimeout;
+ 		break;
+ 	default :
+-		retVal = ErrorMessage::reserved;
++		retVal = ErrorMessage::custReserved;
+ 		break;
+ 	}
+ 	return retVal;
+--- pokerth-1.1.2-rc.org/src/net/serveraccepthelper.h	2017-08-16 14:24:03.000000000 +0200
++++ pokerth-1.1.2-rc.new/src/net/serveraccepthelper.h	2018-01-09 02:58:32.540839593 +0100
+@@ -122,8 +122,7 @@
+ 					  const boost::system::error_code &error)
+ 	{
+ 		if (!error) {
+-			boost::asio::socket_base::non_blocking_io command(true);
+-			acceptedSocket->io_control(command);
++			acceptedSocket->non_blocking(true);
+ 			acceptedSocket->set_option(typename P::no_delay(true));
+ 			acceptedSocket->set_option(boost::asio::socket_base::keep_alive(true));
+ 			boost::shared_ptr<SessionData> sessionData(new SessionData(acceptedSocket, m_lobbyThread->GetNextSessionId(), m_lobbyThread->GetSessionDataCallback(), *m_ioService));

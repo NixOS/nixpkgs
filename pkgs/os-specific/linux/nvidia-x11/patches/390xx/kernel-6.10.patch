@@ -1,0 +1,65 @@
+diff --git a/kernel/conftest.sh b/kernel/conftest.sh
+index a9db899..4da7588 100755
+--- a/kernel/conftest.sh
++++ b/kernel/conftest.sh
+@@ -4464,20 +4464,22 @@ compile_test() {
+             compile_check_conftest "$CODE" "NV_DRM_GEM_OBJECT_VMAP_HAS_MAP_ARG" "" "types"
+         ;;
+ 
+-        unsafe_follow_pfn)
++        follow_pfn)
+             #
+-            # Determine if unsafe_follow_pfn() is present.
++            # Determine if follow_pfn() is present.
+             #
+-            # unsafe_follow_pfn() was added by commit 69bacee7f9ad
+-            # ("mm: Add unsafe_follow_pfn") in v5.13-rc1.
++            # follow_pfn() was added by commit 3b6748e2dd69
++            # ("mm: introduce follow_pfn()") in v2.6.31-rc1, and removed
++            # by commit 233eb0bf3b94 ("mm: remove follow_pfn")
++            # from linux-next 233eb0bf3b94.
+             #
+             CODE="
+             #include <linux/mm.h>
+-            void conftest_unsafe_follow_pfn(void) {
+-                unsafe_follow_pfn();
++            void conftest_follow_pfn(void) {
++                follow_pfn();
+             }"
+ 
+-            compile_check_conftest "$CODE" "NV_UNSAFE_FOLLOW_PFN_PRESENT" "" "functions"
++            compile_check_conftest "$CODE" "NV_FOLLOW_PFN_PRESENT" "" "functions"
+         ;;
+ 
+         drm_plane_atomic_check_has_atomic_state_arg)
+diff --git a/kernel/nvidia/nvidia.Kbuild b/kernel/nvidia/nvidia.Kbuild
+index d6995ca..3a3dd17 100644
+--- a/kernel/nvidia/nvidia.Kbuild
++++ b/kernel/nvidia/nvidia.Kbuild
+@@ -165,7 +165,7 @@ NV_CONFTEST_FUNCTION_COMPILE_TESTS += ktime_get_raw_ts64
+ NV_CONFTEST_FUNCTION_COMPILE_TESTS += ktime_get_real_ts64
+ NV_CONFTEST_FUNCTION_COMPILE_TESTS += ioremap_nocache
+ NV_CONFTEST_FUNCTION_COMPILE_TESTS += vga_tryget
+-NV_CONFTEST_FUNCTION_COMPILE_TESTS += unsafe_follow_pfn
++NV_CONFTEST_FUNCTION_COMPILE_TESTS += follow_pfn
+ NV_CONFTEST_FUNCTION_COMPILE_TESTS += acpi_bus_get_device
+ NV_CONFTEST_FUNCTION_COMPILE_TESTS += acpi_video_backlight_use_native
+ 
+diff --git a/kernel/nvidia/os-mlock.c b/kernel/nvidia/os-mlock.c
+index f88daed..9e1bd0c 100644
+--- a/kernel/nvidia/os-mlock.c
++++ b/kernel/nvidia/os-mlock.c
+@@ -18,10 +18,10 @@ static inline int nv_follow_pfn(struct vm_area_struct *vma,
+                                 unsigned long address,
+                                 unsigned long *pfn)
+ {
+-#if defined(NV_UNSAFE_FOLLOW_PFN_PRESENT)
+-    return unsafe_follow_pfn(vma, address, pfn);
+-#else
++#if defined(NV_FOLLOW_PFN_PRESENT)
+     return follow_pfn(vma, address, pfn);
++#else
++    return -1;
+ #endif
+ }
+ 

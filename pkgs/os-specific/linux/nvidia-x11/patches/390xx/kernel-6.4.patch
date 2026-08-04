@@ -1,0 +1,16 @@
+diff --git a/kernel/nvidia-drm/nvidia-drm-drv.c b/kernel/nvidia-drm/nvidia-drm-drv.c
+index e5dee49..caa9e8c 100644
+--- a/kernel/nvidia-drm/nvidia-drm-drv.c
++++ b/kernel/nvidia-drm/nvidia-drm-drv.c
+@@ -766,7 +766,11 @@ static void nv_drm_update_drm_driver_features(void)
+ 
+     nv_drm_driver.dumb_create      = nv_drm_dumb_create;
+     nv_drm_driver.dumb_map_offset  = nv_drm_dumb_map_offset;
++// Rel. commit "drm: remove dumb_destroy callback" (Christian König, 26 Jan 2023)
++// NB: No resources are leaked, the kernel releases the same resources by default
++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 4, 0)
+     nv_drm_driver.dumb_destroy     = nv_drm_dumb_destroy;
++#endif
+ 
+ #if defined(NV_DRM_DRIVER_HAS_GEM_PRIME_CALLBACKS)
+     nv_drm_driver.gem_vm_ops       = &nv_drm_gem_vma_ops;

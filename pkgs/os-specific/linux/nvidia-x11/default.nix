@@ -2,7 +2,6 @@
   lib,
   callPackage,
   fetchFromGitHub,
-  fetchgit,
   fetchpatch,
   stdenv,
   pkgsi686Linux,
@@ -35,13 +34,6 @@ let
   drm_fop_flags_linux_612_patch = fetchpatch {
     url = "https://github.com/Binary-Eater/open-gpu-kernel-modules/commit/8ac26d3c66ea88b0f80504bdd1e907658b41609d.patch";
     hash = "sha256-+SfIu3uYNQCf/KXhv4PWvruTVKQSh4bgU1moePhe57U=";
-  };
-
-  # Source corresponding to https://aur.archlinux.org/packages/nvidia-390xx-dkms
-  aurPatches = fetchgit {
-    url = "https://aur.archlinux.org/nvidia-390xx-utils.git";
-    rev = "cf1a1c571c425b4b66d12e468fc4ce45a397c583";
-    hash = "sha256-SERB5ihOroagJn7apAiqjUckbrfP2FZPCuTLWcBccoM=";
   };
 
   # https://github.com/NVIDIA/open-gpu-kernel-modules/issues/840
@@ -175,42 +167,35 @@ rec {
   };
 
   # Last one supporting Kepler architecture
-  legacy_470 =
-    let
-      # Source corresponding to https://aur.archlinux.org/packages/nvidia-470xx-dkms
-      aurPatches = fetchgit {
-        url = "https://aur.archlinux.org/nvidia-470xx-utils.git";
-        rev = "7abbeeb510742be09e1eb806c14bab2833a25783";
-        hash = "sha256-hRBws0o4DWI5fvZRn0OwitXRSR9HCkRkgnvnkiZI6Ko=";
-      };
-    in
-    generic {
-      version = "470.256.02";
-      sha256_64bit = "sha256-1kUYYt62lbsER/O3zWJo9z6BFowQ4sEFl/8/oBNJsd4=";
-      sha256_aarch64 = "sha256-e+QvE+S3Fv3JRqC9ZyxTSiCu8gJdZXSz10gF/EN6DY0=";
-      settingsSha256 = "sha256-kftQ4JB0iSlE8r/Ze/+UMnwLzn0nfQtqYXBj+t6Aguk=";
-      persistencedSha256 = "sha256-iYoSib9VEdwjOPBP1+Hx5wCIMhW8q8cCHu9PULWfnyQ=";
+  legacy_470 = generic {
+    version = "470.256.02";
+    sha256_64bit = "sha256-1kUYYt62lbsER/O3zWJo9z6BFowQ4sEFl/8/oBNJsd4=";
+    sha256_aarch64 = "sha256-e+QvE+S3Fv3JRqC9ZyxTSiCu8gJdZXSz10gF/EN6DY0=";
+    settingsSha256 = "sha256-kftQ4JB0iSlE8r/Ze/+UMnwLzn0nfQtqYXBj+t6Aguk=";
+    persistencedSha256 = "sha256-iYoSib9VEdwjOPBP1+Hx5wCIMhW8q8cCHu9PULWfnyQ=";
 
-      patches = map (patch: "${aurPatches}/${patch}") [
-        "0001-Fix-conftest-to-ignore-implicit-function-declaration.patch"
-        "0002-Fix-conftest-to-use-a-short-wchar_t.patch"
-        "0003-Fix-conftest-to-use-nv_drm_gem_vmap-which-has-the-se.patch"
-        "nvidia-470xx-fix-gcc-15.patch"
-        "kernel-6.10.patch"
-        "kernel-6.12.patch"
-        "nvidia-470xx-fix-linux-6.13.patch"
-        "nvidia-470xx-fix-linux-6.14.patch"
-        "nvidia-470xx-fix-linux-6.15.patch"
-        "nvidia-470xx-fix-linux-6.17.patch"
-        "nvidia-470xx-fix-linux-6.19-part1.patch"
-        "nvidia-470xx-fix-linux-6.19-part2.patch"
-        "nvidia-470xx-fix-linux-7.0.patch"
-      ];
-      patchFlags = [
-        "-p1"
-        "--directory=kernel"
-      ];
-    };
+    # Vendored from https://aur.archlinux.org/nvidia-470xx-utils.git
+    # at commit 7abbeeb510742be09e1eb806c14bab2833a25783
+    patches = map (patch: ./patches/470xx + "/${patch}") [
+      "0001-Fix-conftest-to-ignore-implicit-function-declaration.patch"
+      "0002-Fix-conftest-to-use-a-short-wchar_t.patch"
+      "0003-Fix-conftest-to-use-nv_drm_gem_vmap-which-has-the-se.patch"
+      "nvidia-470xx-fix-gcc-15.patch"
+      "kernel-6.10.patch"
+      "kernel-6.12.patch"
+      "nvidia-470xx-fix-linux-6.13.patch"
+      "nvidia-470xx-fix-linux-6.14.patch"
+      "nvidia-470xx-fix-linux-6.15.patch"
+      "nvidia-470xx-fix-linux-6.17.patch"
+      "nvidia-470xx-fix-linux-6.19-part1.patch"
+      "nvidia-470xx-fix-linux-6.19-part2.patch"
+      "nvidia-470xx-fix-linux-7.0.patch"
+    ];
+    patchFlags = [
+      "-p1"
+      "--directory=kernel"
+    ];
+  };
 
   # Last one supporting x86
   legacy_390 = generic {
@@ -220,7 +205,9 @@ rec {
     settingsSha256 = "sha256-uJZO4ak/w/yeTQ9QdXJSiaURDLkevlI81de0q4PpFpw=";
     persistencedSha256 = "sha256-NuqUQbVt80gYTXgIcu0crAORfsj9BCRooyH3Gp1y1ns=";
 
-    patches = map (patch: "${aurPatches}/${patch}") [
+    # Vendored from https://aur.archlinux.org/nvidia-390xx-utils.git
+    # at commit cf1a1c571c425b4b66d12e468fc4ce45a397c583
+    patches = map (patch: ./patches/390xx + "/${patch}") [
       "kernel-4.16+-memory-encryption.patch"
       "kernel-6.2.patch"
       "kernel-6.3.patch"

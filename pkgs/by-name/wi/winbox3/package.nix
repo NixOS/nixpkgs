@@ -10,12 +10,9 @@
 
 let
   wine = wineWow64Packages.stable;
-  # The icon is also from the winbox AUR package (see above).
-  icon = fetchurl {
-    name = "winbox.png";
-    url = "https://aur.archlinux.org/cgit/aur.git/plain/winbox.png?h=winbox";
-    hash = "sha256-YD6u2N+1thRnEsXO6AHm138fRda9XEtUX5+EGTg004A=";
-  };
+  # Vendored from the winbox AUR package:
+  # https://aur.archlinux.org/cgit/aur.git/plain/winbox.png?h=winbox
+  icon = ./winbox.png;
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "winbox";

@@ -1,0 +1,31 @@
+--- netatop-3.2.2.orig/netatop.c	2025-06-14 17:15:03.793439733 +0200
++++ netatop-3.2.2/netatop.c	2025-06-14 17:21:00.343447465 +0200
+@@ -1767,8 +1767,8 @@
+ /*
+ ** called when module loaded
+ */
+-int
+-init_module()
++static int __init
++netatop_init(void)
+ {
+ 	int i;
+ 
+@@ -1868,8 +1868,8 @@
+ /*
+ ** called when module unloaded
+ */
+-void
+-cleanup_module()
++static void __exit
++netatop_exit(void)
+ {
+ 	/*
+  	** tell kernel daemon to stop
+@@ -1903,3 +1903,6 @@
+ 	kmem_cache_destroy(ticache);
+ 	kmem_cache_destroy(sicache);
+ }
++
++module_init(netatop_init);
++module_exit(netatop_exit);

@@ -41,20 +41,7 @@ let
     ];
   };
 
-  fetchPatchFromAUR =
-    {
-      package,
-      name,
-      rev,
-      sha256,
-    }:
-    fetchpatch rec {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/${name}?h=${package}&id=${rev}";
-      extraPrefix = "";
-      inherit name sha256;
-    };
 in
-
 stdenv.mkDerivation {
   name = "${pname}-unwrapped-${version}";
   inherit pname version;
@@ -90,18 +77,10 @@ stdenv.mkDerivation {
     (
       if emojiSupport then
         [
-          (fetchPatchFromAUR {
-            name = "enable-wide-glyphs.patch";
-            package = "rxvt-unicode-truecolor-wide-glyphs";
-            rev = "69701a09c2c206233952b84bc966407f6774f1dc";
-            sha256 = "0jfcj0ahky4dxdfrhqvh1v83mblhf5nak56dk1vq3bhyifdg7ffq";
-          })
-          (fetchPatchFromAUR {
-            name = "improve-font-rendering.patch";
-            package = "rxvt-unicode-truecolor-wide-glyphs";
-            rev = "69701a09c2c206233952b84bc966407f6774f1dc";
-            sha256 = "1jj5ai2182nq912279adihi4zph1w4dvbdqa1pwacy4na6y0fz9y";
-          })
+          # Vendored from https://aur.archlinux.org/cgit/aur.git/plain/enable-wide-glyphs.patch?h=rxvt-unicode-truecolor-wide-glyphs&id=69701a09c2c206233952b84bc966407f6774f1dc
+          ./patches/enable-wide-glyphs.patch
+          # Vendored from https://aur.archlinux.org/cgit/aur.git/plain/improve-font-rendering.patch?h=rxvt-unicode-truecolor-wide-glyphs&id=69701a09c2c206233952b84bc966407f6774f1dc
+          ./patches/improve-font-rendering.patch
         ]
       else
         [
@@ -110,12 +89,8 @@ stdenv.mkDerivation {
     )
     ++ [
       ./patches/256-color-resources.patch
-      (fetchPatchFromAUR {
-        name = "7-bit-queries.patch";
-        package = "rxvt-unicode-truecolor-wide-glyphs";
-        rev = "61ed186890a2bf37585e4704a095be61e6504ac6";
-        sha256 = "1xpv6g3bhxq5gp40k3rp8yjp4xrw7dr2g9sfkdmj0gi3rr0myx46";
-      })
+      # Vendored from https://aur.archlinux.org/cgit/aur.git/plain/7-bit-queries.patch?h=rxvt-unicode-truecolor-wide-glyphs&id=61ed186890a2bf37585e4704a095be61e6504ac6
+      ./patches/7-bit-queries.patch
     ]
     ++ lib.optional (perlSupport && lib.versionAtLeast perl.version "5.38") (fetchpatch {
       name = "perl538-locale-c.patch";

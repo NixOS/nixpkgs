@@ -1,0 +1,267 @@
+diff --git a/kernel/Kbuild b/kernel/Kbuild
+index baa6986..7324345 100644
+--- a/kernel/Kbuild
++++ b/kernel/Kbuild
+@@ -54,28 +54,21 @@ $(foreach _module, $(NV_KERNEL_MODULES), \
+  $(eval include $(src)/$(_module)/$(_module).Kbuild))
+ 
+ 
+-#
+-# Define CFLAGS that apply to all the NVIDIA kernel modules. EXTRA_CFLAGS
+-# is deprecated since 2.6.24 in favor of ccflags-y, but we need to support
+-# older kernels which do not have ccflags-y. Newer kernels append
+-# $(EXTRA_CFLAGS) to ccflags-y for compatibility.
+-#
+-
+-EXTRA_CFLAGS += -std=gnu17
+-EXTRA_CFLAGS += -I$(src)/common/inc
+-EXTRA_CFLAGS += -I$(src)
+-EXTRA_CFLAGS += -Wall -MD $(DEFINES) $(INCLUDES) -Wsign-compare -Wno-cast-qual -Wno-error
+-EXTRA_CFLAGS += -D__KERNEL__ -DMODULE -DNVRM -DNV_VERSION_STRING=\"390.157\" -Wno-unused-function -Wuninitialized -fno-strict-aliasing -mno-red-zone -mcmodel=kernel -DNV_UVM_ENABLE -Wno-sign-compare -Wno-format-extra-args
+-EXTRA_CFLAGS += $(call cc-option,-Werror=undef,)
+-EXTRA_CFLAGS += -DNV_SPECTRE_V2=$(NV_SPECTRE_V2)
+-EXTRA_CFLAGS += -DNV_KERNEL_INTERFACE_LAYER
++ccflags-y += -std=gnu17
++ccflags-y += -I$(src)/common/inc
++ccflags-y += -I$(src)
++ccflags-y += -Wall -MD $(DEFINES) $(INCLUDES) -Wno-cast-qual -Wno-error -Wno-format-extra-args
++ccflags-y += -D__KERNEL__ -DMODULE -DNVRM -DNV_VERSION_STRING=\"390.157\" -Wno-unused-function -Wuninitialized -fno-strict-aliasing -mno-red-zone -mcmodel=kernel -DNV_UVM_ENABLE
++ccflags-y += $(call cc-option,-Werror=undef,)
++ccflags-y += -DNV_SPECTRE_V2=$(NV_SPECTRE_V2)
++ccflags-y += -DNV_KERNEL_INTERFACE_LAYER
+ 
+ #
+ # Detect SGI UV systems and apply system-specific optimizations.
+ #
+ 
+ ifneq ($(wildcard /proc/sgi_uv),)
+- EXTRA_CFLAGS += -DNV_CONFIG_X86_UV
++ ccflags-y += -DNV_CONFIG_X86_UV
+ endif
+ 
+ 
+diff --git a/kernel/common/inc/nv-mm.h b/kernel/common/inc/nv-mm.h
+index acd396d..1e955a4 100644
+--- a/kernel/common/inc/nv-mm.h
++++ b/kernel/common/inc/nv-mm.h
+@@ -323,4 +323,30 @@ static inline struct rw_semaphore *nv_mmap_get_lock(struct mm_struct *mm)
+ #endif
+ }
+ 
++static inline void nv_vm_flags_set(struct vm_area_struct *vma, vm_flags_t flags)
++{
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 15, 0)
++    // Rel. commit "mm: uninline the main body of vma_start_write()" (Suren Baghdasaryan, 13 Feb 2025)
++    // Since Linux 6.15, vm_flags_set and vm_flags_clear call a GPL-only symbol
++    // for locking (__vma_start_write), which can't be called from non-GPL code.
++    // However, it appears all uses on the driver are on VMAs being initially
++    // mapped / which are already locked, so we can use vm_flags_reset, which
++    // doesn't lock the VMA, but rather just asserts it is already write-locked.
++    vm_flags_reset(vma, vma->vm_flags | flags);
++#else
++    vm_flags_set(vma, flags);
++#endif
++}
++
++static inline void nv_vm_flags_clear(struct vm_area_struct *vma, vm_flags_t flags)
++{
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 15, 0)
++    // Rel. commit "mm: uninline the main body of vma_start_write()" (Suren Baghdasaryan, 13 Feb 2025)
++    // See above
++    vm_flags_reset(vma, vma->vm_flags & ~flags);
++#else
++    vm_flags_clear(vma, flags);
++#endif
++}
++
+ #endif // __NV_MM_H__
+diff --git a/kernel/common/inc/nv-timer.h b/kernel/common/inc/nv-timer.h
+index 18df6ea..396e121 100644
+--- a/kernel/common/inc/nv-timer.h
++++ b/kernel/common/inc/nv-timer.h
+@@ -25,6 +25,7 @@
+ 
+ #include <linux/timer.h>
+ #include <linux/kernel.h> // For container_of
++#include <linux/version.h>
+ 
+ #include "conftest.h"
+ 
+@@ -63,4 +64,13 @@ static inline void nv_timer_setup(struct nv_timer *nv_timer,
+ #endif
+ }
+ 
++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 2, 0)
++// Rel. commit "treewide: Switch/rename to timer_delete[_sync]()" (Thomas Gleixner, 5 Apr 2025)
++// This provides a shim for ancient kernels before timer_delete_sync was introduced
++static inline int timer_delete_sync(struct timer_list *timer)
++{
++    return del_timer_sync(timer);
++}
++#endif
++
+ #endif // __NV_TIMER_H__
+diff --git a/kernel/nvidia-drm/nvidia-drm-connector.c b/kernel/nvidia-drm/nvidia-drm-connector.c
+index 0e9e976..5c62490 100644
+--- a/kernel/nvidia-drm/nvidia-drm-connector.c
++++ b/kernel/nvidia-drm/nvidia-drm-connector.c
+@@ -313,8 +313,14 @@ static int nv_drm_connector_get_modes(struct drm_connector *connector)
+     return count;
+ }
+ 
++// Rel. commit. "drm/connector: make mode_valid take a const struct drm_display_mode" (Dmitry Baryshkov, 14 Dec 2024)
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 15, 0)
++static int nv_drm_connector_mode_valid(struct drm_connector          *connector,
++                                       const struct drm_display_mode *mode)
++#else
+ static int nv_drm_connector_mode_valid(struct drm_connector    *connector,
+                                        struct drm_display_mode *mode)
++#endif
+ {
+     struct drm_device *dev = connector->dev;
+     struct nv_drm_device *nv_dev = to_nv_device(dev);
+diff --git a/kernel/nvidia-drm/nvidia-drm-linux.c b/kernel/nvidia-drm/nvidia-drm-linux.c
+index a4c5aeb..f8d56db 100644
+--- a/kernel/nvidia-drm/nvidia-drm-linux.c
++++ b/kernel/nvidia-drm/nvidia-drm-linux.c
+@@ -184,6 +184,7 @@ static void __exit nv_linux_drm_exit(void)
+ module_init(nv_linux_drm_init);
+ module_exit(nv_linux_drm_exit);
+ 
++MODULE_DESCRIPTION("NVIDIA GPU DRM kernel module");
+ #if defined(MODULE_LICENSE)
+   MODULE_LICENSE("MIT");
+ #endif
+diff --git a/kernel/nvidia-modeset/nvidia-modeset-linux.c b/kernel/nvidia-modeset/nvidia-modeset-linux.c
+index f7f1def..4042687 100644
+--- a/kernel/nvidia-modeset/nvidia-modeset-linux.c
++++ b/kernel/nvidia-modeset/nvidia-modeset-linux.c
+@@ -8,6 +8,7 @@
+  * _NVRM_COPYRIGHT_END_
+  */
+ 
++#include <linux/version.h>
+ #include <linux/module.h>
+ #include <linux/kernel.h>
+ #include <linux/slab.h>
+@@ -495,7 +496,13 @@ static void nvkms_kthread_q_callback(void *arg)
+      * pending timers and than waiting for workqueue callbacks.
+      */
+     if (timer->kernel_timer_created) {
++// Rel. commit "treewide: Switch/rename to timer_delete[_sync]()" (Thomas Gleixner, 5 Apr 2025)
++// This provides a shim for ancient kernels before timer_delete_sync was introduced
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 15, 0)
++        timer_delete_sync(&timer->kernel_timer);
++#else
+         del_timer_sync(&timer->kernel_timer);
++#endif
+     }
+ 
+     down(&nvkms_lock);
+@@ -1266,7 +1273,13 @@ restart:
+              * completion, and we wait for queue completion with
+              * nv_kthread_q_stop below.
+              */
++// Rel. commit "treewide: Switch/rename to timer_delete[_sync]()" (Thomas Gleixner, 5 Apr 2025)
++// This provides a shim for ancient kernels before timer_delete_sync was introduced
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 15, 0)
++            if (timer_delete_sync(&timer->kernel_timer) == 1) {
++#else
+             if (del_timer_sync(&timer->kernel_timer) == 1) {
++#endif
+                 /*  We've deactivated timer so we need to clean after it */
+                 list_del(&timer->timers_list);
+                 
+@@ -1300,6 +1313,7 @@ restart:
+ module_init(nvkms_init);
+ module_exit(nvkms_exit);
+ 
++MODULE_DESCRIPTION("NVIDIA GPU modeset kernel module");
+ #if defined(MODULE_LICENSE)
+   MODULE_LICENSE("NVIDIA");
+ #endif
+diff --git a/kernel/nvidia-uvm/uvm8.c b/kernel/nvidia-uvm/uvm8.c
+index 49e1047..4e84bbd 100644
+--- a/kernel/nvidia-uvm/uvm8.c
++++ b/kernel/nvidia-uvm/uvm8.c
+@@ -658,7 +658,7 @@ static int uvm_mmap(struct file *filp, struct vm_area_struct *vma)
+     // Using VM_DONTCOPY would be nice, but madvise(MADV_DOFORK) can reset that
+     // so we have to handle vm_open on fork anyway. We could disable MADV_DOFORK
+     // with VM_IO, but that causes other mapping issues.
+-    vm_flags_set(vma, VM_MIXEDMAP | VM_DONTEXPAND);
++    nv_vm_flags_set(vma, VM_MIXEDMAP | VM_DONTEXPAND);
+ 
+     vma->vm_ops = &uvm_vm_ops_managed;
+ 
+diff --git a/kernel/nvidia/nv-frontend.c b/kernel/nvidia/nv-frontend.c
+index 59c69a0..157689a 100644
+--- a/kernel/nvidia/nv-frontend.c
++++ b/kernel/nvidia/nv-frontend.c
+@@ -14,6 +14,7 @@
+ #include "nv-reg.h"
+ #include "nv-frontend.h"
+ 
++MODULE_DESCRIPTION("NVIDIA GPU frontend kernel module");
+ #if defined(MODULE_LICENSE)
+ MODULE_LICENSE("NVIDIA");
+ #endif
+diff --git a/kernel/nvidia/nv-mmap.c b/kernel/nvidia/nv-mmap.c
+index da891ff..526391a 100644
+--- a/kernel/nvidia/nv-mmap.c
++++ b/kernel/nvidia/nv-mmap.c
+@@ -447,7 +447,7 @@ int nvidia_mmap_helper(
+             addr  = mmap_start;
+             
+             // Needed for the linux kernel for mapping compound pages
+-            vm_flags_set(vma, VM_MIXEDMAP);
++            nv_vm_flags_set(vma, VM_MIXEDMAP);
+ 
+             for (j = 0; j < pages; j++)
+             {
+@@ -471,7 +471,7 @@ int nvidia_mmap_helper(
+             }
+         }
+ 
+-        vm_flags_set(vma, VM_IO);
++        nv_vm_flags_set(vma, VM_IO);
+     }
+     else
+     {
+@@ -533,15 +533,15 @@ int nvidia_mmap_helper(
+ 
+         NV_PRINT_AT(NV_DBG_MEMINFO, at);
+ 
+-        vm_flags_set(vma, VM_IO | VM_LOCKED | VM_RESERVED);
+-        vm_flags_set(vma, VM_DONTEXPAND | VM_DONTDUMP);
++        nv_vm_flags_set(vma, VM_IO | VM_LOCKED | VM_RESERVED);
++        nv_vm_flags_set(vma, VM_DONTEXPAND | VM_DONTDUMP);
+     }
+ 
+     if ((prot & NV_PROTECT_WRITEABLE) == 0)
+     {
+         vma->vm_page_prot = NV_PGPROT_READ_ONLY(vma->vm_page_prot);
+-        vm_flags_clear(vma, VM_WRITE);
+-        vm_flags_clear(vma, VM_MAYWRITE);
++        nv_vm_flags_clear(vma, VM_WRITE);
++        nv_vm_flags_clear(vma, VM_MAYWRITE);
+     }
+ 
+     vma->vm_ops = &nv_vm_ops;
+diff --git a/kernel/nvidia/nv.c b/kernel/nvidia/nv.c
+index 4fa9c23..cf9ebbf 100644
+--- a/kernel/nvidia/nv.c
++++ b/kernel/nvidia/nv.c
+@@ -3514,7 +3514,13 @@ int NV_API_CALL nv_stop_rc_timer(
+ 
+     nv_printf(NV_DBG_INFO, "NVRM: stopping rc timer\n");
+     nv->rc_timer_enabled = 0;
++// Rel. commit "treewide: Switch/rename to timer_delete[_sync]()" (Thomas Gleixner, 5 Apr 2025)
++// This provides a shim for ancient kernels before timer_delete_sync was introduced
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 15, 0)
++    timer_delete_sync(&nvl->rc_timer.kernel_timer);
++#else
+     del_timer_sync(&nvl->rc_timer.kernel_timer);
++#endif
+     nv_printf(NV_DBG_INFO, "NVRM: rc timer stopped\n");
+ 
+     return 0;

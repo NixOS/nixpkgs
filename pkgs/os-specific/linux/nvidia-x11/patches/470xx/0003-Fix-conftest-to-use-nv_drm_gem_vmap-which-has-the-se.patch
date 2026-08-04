@@ -1,0 +1,30 @@
+From: Benjamin ROBIN <dev@benjarobin.fr>
+Date: Sun, 12 May 2024 17:54:18 +0200
+Subject: [PATCH 3/3] Fix conftest to use nv_drm_gem_vmap() which has the
+ secondary map argument
+
+See https://forums.developer.nvidia.com/t/nvidia-modules-build-failure-with-upcoming-gcc-14-and-recent-kernels-due-to-misfiring-conftest-sh-test-heads-up/279072
+---
+ conftest.sh | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/conftest.sh b/conftest.sh
+--- a/conftest.sh
++++ b/conftest.sh
+@@ -4593,8 +4593,13 @@ compile_test() {
+             #
+             CODE="
+             #include <drm/drm_gem.h>
++            #if defined(NV_LINUX_IOSYS_MAP_H_PRESENT)
++            typedef struct iosys_map nv_sysio_map_t;
++            #else
++            typedef struct dma_buf_map nv_sysio_map_t;
++            #endif
+             int conftest_drm_gem_object_vmap_has_map_arg(
+-                    struct drm_gem_object *obj, struct dma_buf_map *map) {
++                    struct drm_gem_object *obj, nv_sysio_map_t *map) {
+                 return obj->funcs->vmap(obj, map);
+             }"
+ 
+---
+2.45.0
