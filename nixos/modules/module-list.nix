@@ -548,6 +548,7 @@
   ./services/databases/influxdb.nix
   ./services/databases/lldap.nix
   ./services/databases/memcached.nix
+  ./services/databases/memgraph.nix
   ./services/databases/monetdb.nix
   ./services/databases/mongodb.nix
   ./services/databases/mysql.nix
