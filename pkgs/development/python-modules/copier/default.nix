@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "copier";
-  version = "9.17.0";
+  version = "9.17.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm $out/tests/demo/doc/ma*ana.txt
     '';
-    hash = "sha256-I98GGrFSKgDlFQU3dAYsu7Z2mtO8NWPT0CoMtdw/EI8=";
+    hash = "sha256-Bv3jXePZwF6fbOcMq1eNPrRZiCXXp0598t6qQJXol1o=";
   };
 
   env.POETRY_DYNAMIC_VERSIONING_BYPASS = version;
