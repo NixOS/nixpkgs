@@ -838,7 +838,7 @@ stdenv.mkDerivation (
       in
       "remove-references-to ${lib.concatMapStringsSep " " (o: "-t ${o}") toStrip} config.h";
 
-    __structuredAttrs = versionAtLeast version "9";
+    __structuredAttrs = true;
     strictDeps = true;
 
     nativeBuildInputs = [
