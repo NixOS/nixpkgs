@@ -4,16 +4,16 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonPackage {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gladtex";
-  version = "unstable-2023-01-22";
+  version = "4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "humenda";
     repo = "GladTeX";
-    rev = "f84e63836622ff1325dfddc7c5649f11a795afa0";
-    sha256 = "sha256-B5sNEmLO4iIJRDgcPhr9LFKV77dPJws8ITNz4R+FE08=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-z8DZxQRLibEHdMAR8S4Gz1rwBqXXwkd25scUNbBHs2g=";
   };
 
   build-system = with python3Packages; [
@@ -28,4 +28,4 @@ python3Packages.buildPythonPackage {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ pentane ];
   };
-}
+})
