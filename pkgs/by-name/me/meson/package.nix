@@ -17,7 +17,7 @@
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "meson";
   version = "1.11.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mesonbuild";
@@ -84,6 +84,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       ''
     else
       null;
+
+  build-system = [ python3.pkgs.setuptools ];
 
   nativeBuildInputs = [ installShellFiles ];
 
