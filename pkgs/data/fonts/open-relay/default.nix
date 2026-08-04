@@ -65,7 +65,7 @@ lib.mapAttrs mkOpenRelayTypeface {
         supports many scripts and a large number of Unicode blocks as well as
         constructed scripts as encoded in the Under-ConScript Unicode Registry,
         pseudographics and semigraphics, and tons of private use characters. It
-        has been superceded by Fairfax HD but is still maintained.
+        has been superseded by Fairfax HD but is still maintained.
       '';
     };
   };

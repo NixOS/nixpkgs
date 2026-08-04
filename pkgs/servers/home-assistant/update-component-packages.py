@@ -148,7 +148,7 @@ def repository_root() -> str:
     return os.path.abspath(sys.argv[0] + "/../../../..")
 
 
-# For a package attribute and and an extra, check if the package exposes it via passthru.optional-dependencies
+# For a package attribute and an extra, check if the package exposes it via passthru.optional-dependencies
 def has_extra(package: str, extra: str):
     cmd = [
         "nix-instantiate",

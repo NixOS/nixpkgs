@@ -24,7 +24,7 @@
   So, in order for debugging to work properly, you merely need to create symlinks
   to one of these terminals at the appropriate location.
 
-  The good news is the the utility library is open source and with some effort
+  The good news is the utility library is open source and with some effort
   we could build a patched version ourselves. See:
 
   <https://github.com/Microsoft/MIEngine/blob/2885386dc7f35e0f1e44827269341e786361f28e/src/MICore/TerminalLauncher.cs#L156>
