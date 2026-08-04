@@ -5042,6 +5042,8 @@ self: super: with self; {
 
   docling-serve = callPackage ../development/python-modules/docling-serve { };
 
+  docling-slim = callPackage ../development/python-modules/docling-slim { };
+
   docloud = callPackage ../development/python-modules/docloud { };
 
   docopt = callPackage ../development/python-modules/docopt { };
