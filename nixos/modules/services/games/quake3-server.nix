@@ -171,9 +171,9 @@ in
           ReadOnlyPaths = if baseq3InStore then home else cfg.baseq3;
           ExecStartPre = optionalString (
             !baseq3InStore
-          ) "+${pkgs.coreutils}/bin/cp ${configFile} ${cfg.baseq3}/.q3a/baseq3/nix.cfg";
+          ) "+${lib.getExe' pkgs.coreutils "cp"} ${configFile} ${cfg.baseq3}/.q3a/baseq3/nix.cfg";
 
-          ExecStart = "${cfg.package}/bin/ioq3ded +exec nix.cfg";
+          ExecStart = "${lib.getExe' cfg.package "ioq3ded"} +exec nix.cfg";
         };
       };
     };
