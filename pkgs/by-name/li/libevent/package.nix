@@ -59,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     lib.optional sslSupport openssl ++ lib.optional stdenv.hostPlatform.isCygwin findutils;
 
+  strictDeps = true;
+
   doCheck = false; # needs the net
 
   postInstall = lib.optionalString sslSupport ''
