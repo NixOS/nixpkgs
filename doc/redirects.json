@@ -4295,6 +4295,9 @@
   "using-unittestcheckhook": [
     "index.html#using-unittestcheckhook"
   ],
+  "using-stestrcheckhook": [
+    "index.html#using-stestrcheckhook"
+  ],
   "using-sphinxhook": [
     "index.html#using-sphinxhook"
   ],

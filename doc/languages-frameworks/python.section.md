@@ -578,7 +578,7 @@ are used in [`buildPythonPackage`](#buildpythonpackage-function).
 - `pythonRemoveBinBytecode` to remove bytecode from the `/bin` folder.
 - `setuptoolsBuildHook` to build a wheel using `setuptools`.
 - `sphinxHook` to build documentation and manpages using Sphinx.
-- `stestrCheckHook` to run tests with `stestr`.
+- `stestrCheckHook` to run tests with `stestr`. See [example usage](#using-stestrcheckhook).
 - `venvShellHook` to source a Python 3 `venv` at the `venvDir` location. A
   `venv` is created if it does not yet exist. `postVenvCreation` can be used to
   to run commands only after venv is first created.
@@ -1554,6 +1554,35 @@ automatically add `pythonRelaxDepsHook` if either `pythonRelaxDeps` or
 ```
 
 `pytest` is compatible with `unittest`, so in most cases you can use `pytestCheckHook` instead.
+
+#### Using stestrCheckHook {#using-stestrcheckhook}
+
+`stestrCheckHook` is a hook which will set up (or configure) a [`checkPhase`](#ssec-check-phase) to run `python -m stestr run`:
+
+```nix
+{
+  nativeCheckInputs = [ stestrCheckHook ];
+
+  stestrFlags = [
+    "--test-path"
+    "tests"
+  ];
+}
+```
+
+`stestrCheckHook` recognizes the following attributes:
+
+`disabledTests`
+
+:   To specify test IDs to exclude, matched exactly (each entry is anchored as `^<id>$`).
+
+`disabledTestsRegex`
+
+:   To specify regular expressions of test IDs to exclude, matched unanchored.
+
+`stestrFlags`
+
+:   To append additional command-line arguments to `python -m stestr run`.
 
 #### Using sphinxHook {#using-sphinxhook}
 
