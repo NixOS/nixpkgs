@@ -203,6 +203,7 @@
       "Prince213": 25235514,
       "Samasaur1": 30577766,
       "Steven0351": 24440751,
+      "TyceHerrman": 22066434,
       "afh": 16507,
       "azuwis": 9315,
       "booxter": 90200,
@@ -212,7 +213,6 @@
       "copumpkin": 2623,
       "devusb": 4951663,
       "domenkozar": 126339,
-      "donn": 12652988,
       "dwt": 57199,
       "eclairevoyant": 848000,
       "ethancedwards8": 60861925,
@@ -418,10 +418,13 @@
     "description": "Maintain GNOME desktop environment and platform.",
     "id": 3806133,
     "maintainers": {
+      "bobby285271": 20080233,
       "jtojnar": 705123
     },
     "members": {
-      "bobby285271": 20080233
+      "nekowinston": 79978224,
+      "theCapypara": 3512122,
+      "thunze": 22795263
     },
     "name": "GNOME"
   },
@@ -1002,7 +1005,6 @@
       "philiptaron": 43863
     },
     "members": {
-      "Artturin": 56650223,
       "Ericson2314": 1055245,
       "reckenrode": 7413633
     },
