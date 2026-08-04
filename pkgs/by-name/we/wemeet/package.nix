@@ -132,6 +132,7 @@ let
     '';
 
     meta.license = lib.licenses.unfree;
+    meta.knownVulnerabilities = [ "using a package soure from a compromised upstream (AUR)" ];
   };
 
   # Fix for Wayland crash when XSetInputFocus is called

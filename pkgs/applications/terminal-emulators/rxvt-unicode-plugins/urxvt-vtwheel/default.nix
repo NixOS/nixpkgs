@@ -25,6 +25,7 @@ stdenv.mkDerivation {
     description = "Pass mouse wheel commands to secondary screens (screen, less, nano, etc)";
     homepage = "https://aur.archlinux.org/packages/urxvt-vtwheel";
     license = lib.licenses.mit;
+    knownVulnerabilities = [ "using a package soure from a compromised upstream (AUR)" ];
     maintainers = [ ];
     platforms = with lib.platforms; unix;
   };
