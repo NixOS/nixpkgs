@@ -15,16 +15,12 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-let
-  version = "3.12";
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnugrep";
-  inherit version;
+  version = "3.12";
 
   src = fetchurl {
-    url = "mirror://gnu/grep/grep-${version}.tar.xz";
+    url = "mirror://gnu/grep/grep-${finalAttrs.version}.tar.xz";
     hash = "sha256-JkmyfA6Q5jLq3NdXvgbG6aT0jZQd5R58D4P/dkCKB7k=";
   };
 
@@ -39,13 +35,9 @@ stdenv.mkDerivation {
   # - on Musl: https://github.com/NixOS/nixpkgs/pull/228714
   # - on x86_64-darwin: https://github.com/NixOS/nixpkgs/pull/228714#issuecomment-1576826330
   # - when building on Darwin (cross-compilation): test-nl_langinfo-mt fails
-  postPatch =
-    if stdenv.hostPlatform.isMusl || stdenv.buildPlatform.isDarwin then
-      ''
-        sed -i 's:gnulib-tests::g' Makefile.in
-      ''
-    else
-      null;
+  postPatch = lib.optionalString (stdenv.hostPlatform.isMusl || stdenv.buildPlatform.isDarwin) ''
+    substituteInPlace Makefile.in --replace-fail "gnulib-tests" ""
+  '';
 
   nativeCheckInputs = [
     perl
@@ -120,7 +112,7 @@ stdenv.mkDerivation {
     teams = [ lib.teams.security-review ];
     platforms = lib.platforms.all;
     mainProgram = "grep";
-    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnu" version // {
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnu" finalAttrs.version // {
       product = "grep";
     };
   };
@@ -128,4 +120,4 @@ stdenv.mkDerivation {
   passthru = {
     inherit pcre2;
   };
-}
+})
