@@ -2,17 +2,21 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "strict-rfc3339";
   version = "0.7";
-  format = "setuptools";
+
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-XK0Xvt/Dr1ezmdsP7TJ3Hxj8VLvZF+hVRgiGB6xeEnc=";
   };
+
+  build-system = [ setuptools ];
 
   doCheck = false;
 
