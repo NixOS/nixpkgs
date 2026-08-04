@@ -1179,6 +1179,8 @@ self: super: with self; {
 
   aocd-example-parser = callPackage ../development/python-modules/aocd-example-parser { };
 
+  aodhclient = callPackage ../development/python-modules/aodhclient { };
+
   apache-beam = callPackage ../development/python-modules/apache-beam { };
 
   apache-tvm-ffi = callPackage ../development/python-modules/apache-tvm-ffi { };
@@ -16377,8 +16379,6 @@ self: super: with self; {
   pythinkingcleaner = callPackage ../development/python-modules/pythinkingcleaner { };
 
   python-aidot = callPackage ../development/python-modules/python-aidot { };
-
-  python-aodhclient = callPackage ../development/python-modules/python-aodhclient { };
 
   python-apt = callPackage ../development/python-modules/python-apt { };
 

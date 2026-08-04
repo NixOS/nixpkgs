@@ -8,13 +8,13 @@
   ffmpeg,
 }:
 let
-  version = "0.2.4.8";
+  version = "1.2.5.1";
 
   src = fetchFromGitHub {
     owner = "maziggy";
     repo = "bambuddy";
     tag = "v${version}";
-    hash = "sha256-6qeIidvi62NUok7I9UQ8DblT0/Wscju4FMnVuPXzMdM=";
+    hash = "sha256-cYDl1QbIMECqE0zkKL92Vnoh1M6PIpVdsb3tGJHYPJ8=";
   };
 
   frontend = buildNpmPackage {
@@ -22,7 +22,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/frontend";
-    npmDepsHash = "sha256-/22FkXus5f3wYivyadZWU6ZKPYFLF8xA8mkVGxvdXm0=";
+    npmDepsHash = "sha256-v8ejfkuMxnybhdc9CD4Y/UmGCxUDGtVr9KAEQ5a6ca4=";
 
     preBuild = "chmod -R u+w ../static";
 
@@ -45,6 +45,7 @@ let
       asyncpg
       asyncssh
       bcrypt
+      certifi
       cryptography
       curl-cffi
       defusedxml

@@ -13,11 +13,11 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "maven";
-  version = "4.0.0-rc-5";
+  version = "4.0.0-rc-6";
 
   src = fetchurl {
     url = "mirror://apache/maven/maven-4/${finalAttrs.version}/binaries/apache-maven-${finalAttrs.version}-bin.tar.gz";
-    hash = "sha256-7OalyZ09BBx25/7RgU656jogoSC8s8I1pz0sTo2xbKE=";
+    hash = "sha256-/B0VCwGZnwlmKbuvSOiuQ00ATV3DbDOWK8i+ZXnT+R0=";
   };
 
   sourceRoot = ".";

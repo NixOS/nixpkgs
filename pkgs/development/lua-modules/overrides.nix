@@ -1,6 +1,7 @@
 # do not add pkgs, it messes up splicing
 {
   stdenv,
+  config,
   cargo,
   cmake,
 
@@ -44,7 +45,6 @@
   oniguruma,
   openldap,
   openssl,
-  pcre,
   pcre2,
   pkg-config,
   readline,
@@ -423,15 +423,6 @@ in
       {
         name = "ONIG";
         dep = oniguruma;
-      }
-    ];
-  };
-
-  lrexlib-pcre = prev.lrexlib-pcre.overrideAttrs {
-    externalDeps = [
-      {
-        name = "PCRE";
-        dep = pcre;
       }
     ];
   };
@@ -1343,4 +1334,7 @@ in
   });
 
   # keep-sorted end
+}
+// lib.optionalAttrs config.allowAliases {
+  lrexlib-pcre = throw "lrexlib-pcre was removed as the PCRE library is end-of-life"; # added 2026-08-03
 }
