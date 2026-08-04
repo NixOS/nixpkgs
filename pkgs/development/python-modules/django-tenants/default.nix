@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pyprojectVersionPatchHook,
   setuptools,
   django,
   psycopg,
@@ -10,19 +9,15 @@
 
 buildPythonPackage rec {
   pname = "django-tenants";
-  version = "3.11.2";
+  version = "3.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-tenants";
     repo = "django-tenants";
     tag = "v${version}";
-    hash = "sha256-J7poXEHbRxhULYwFbV4tktet5wdsvd7RNHgivETy9+8=";
+    hash = "sha256-0HFkLG2GDECiaG9OKYR4V1q5oy0vzmthlKoiSM5IIFc=";
   };
-
-  nativeBuildInputs = [
-    pyprojectVersionPatchHook
-  ];
 
   build-system = [ setuptools ];
 

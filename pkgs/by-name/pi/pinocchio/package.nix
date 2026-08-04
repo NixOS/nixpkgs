@@ -5,10 +5,8 @@
   nix-update-script,
   stdenv,
 
-  # nativeBuildInputs
-  cmake,
-  doxygen,
-  pkg-config,
+  # buildInputs
+  jrl-cmakemodules,
 
   # propagatedBuildInputs
   boost,
@@ -16,7 +14,6 @@
   coal,
   console-bridge,
   eigen,
-  jrl-cmakemodules,
   urdfdom,
 
   # nativeCheckInputs
@@ -52,10 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-    doxygen
-    pkg-config
+  nativeBuildInputs = jrl-cmakemodules.docsNativeBuildInputs;
+
+  buildInputs = [
+    jrl-cmakemodules
   ];
 
   propagatedBuildInputs = [
@@ -63,7 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     coal
     console-bridge
     eigen
-    jrl-cmakemodules
     urdfdom
   ]
   ++ lib.optionals collisionSupport [ coal ]
@@ -88,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
       "test-cpp-algorithm-utils-force"
     ];
 
-  cmakeFlags = [
+  cmakeFlags = jrl-cmakemodules.docsCmakeFlags ++ [
     (lib.cmakeBool "BUILD_PYTHON_INTERFACE" false)
     (lib.cmakeBool "BUILD_WITH_CASADI_SUPPORT" casadiSupport)
     (lib.cmakeBool "BUILD_WITH_COLLISION_SUPPORT" collisionSupport)

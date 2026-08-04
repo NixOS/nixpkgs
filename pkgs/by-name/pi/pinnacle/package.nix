@@ -13,7 +13,7 @@
   mesa,
   xwayland,
   libinput,
-  libdisplay-info,
+  libdisplay-info_0_3,
   git,
   libgbm,
   rustc,
@@ -44,6 +44,10 @@ let
     license = lib.licenses.gpl3;
     mainProgram = "pinnacle";
     platforms = lib.platforms.linux;
+    badPlatforms = [
+      # tests fail https://hydra.nixos.org/build/337493260
+      "aarch64-linux"
+    ];
     maintainers = with lib.maintainers; [ cassandracomar ];
   };
 
@@ -96,7 +100,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libinput
     mesa
     xwayland
-    libdisplay-info
+    libdisplay-info_0_3
     libgbm
     lua5_4
 
