@@ -96,6 +96,11 @@ customStdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
+    # Relax glaze dependency
+    # FIXME: this shouldn't be needed once the upstream code will adopt it
+    substituteInPlace CMakeLists.txt start/CMakeLists.txt hyprpm/CMakeLists.txt \
+      --replace-fail "glaze 7...<8" "glaze"
+
     # Fix hardcoded paths to /usr installation
     substituteInPlace src/render/types.hpp \
       --replace-fail /usr $out
