@@ -940,6 +940,11 @@ lib.mapAttrs mkLicense (
       fullName = "FSF All Permissive License";
     };
 
+    fsfullr = {
+      spdxId = "FSFULLR";
+      fullName = "FSF Unlimited License (with License Retention)";
+    };
+
     hl3 = {
       fullName = "Hippocratic License v3.0";
       url = "https://firstdonoharm.dev/version/3/0/core.txt";
