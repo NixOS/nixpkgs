@@ -19,6 +19,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [ libtool ];
 
+  strictDeps = true;
+
   src = fetchurl {
     url = "mirror://sourceforge/cunit/CUnit/${finalAttrs.version}/CUnit-${finalAttrs.version}.tar.bz2";
     sha256 = "057j82da9vv4li4z5ri3227ybd18nzyq81f6gsvhifs5z0vr3cpm";
