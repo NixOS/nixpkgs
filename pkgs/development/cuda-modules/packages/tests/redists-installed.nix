@@ -1,5 +1,4 @@
 {
-  _cuda,
   backendStdenv,
   cudaNamePrefix,
   lib,
@@ -37,19 +36,19 @@ linkedWithoutLicenses.overrideAttrs (
   finalAttrs: prevAttrs: {
     passthru = prevAttrs.passthru or { } // {
       inherit availableRedistsForPlatform;
-
-      brokenAssertions = prevAttrs.passthru.brokenAssertions or [ ] ++ [
-        {
-          message =
-            "No redists are available for the current NVIDIA system identifier (${backendStdenv.hostRedistSystem});"
-            + " ensure proper licenses are allowed and that the CUDA version in use supports the system";
-          assertion = availableRedistsForPlatform != { };
-        }
-      ];
     };
 
     meta = prevAttrs.meta or { } // {
-      broken = _cuda.lib._mkMetaBroken finalAttrs;
+      problems =
+        prevAttrs.meta.problems or { }
+        // lib.optionalAttrs (availableRedistsForPlatform == { }) {
+          noRedistsAvailable = {
+            kind = "unsupported";
+            message =
+              "No redists are available for the current NVIDIA system identifier (${backendStdenv.hostRedistSystem});"
+              + " ensure proper licenses are allowed and that the CUDA version in use supports the system.";
+          };
+        };
       license = lib.unique (
         lib.concatMap (drv: lib.toList (drv.meta.license or [ ])) (
           lib.attrValues availableRedistsForPlatform

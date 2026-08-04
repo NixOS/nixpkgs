@@ -36,7 +36,7 @@ let
     unique
     ;
   inherit (lib.trivial) mapNullable pipe;
-  inherit (_cuda.lib) _mkMetaBadPlatforms _mkMetaBroken _redistSystemIsSupported;
+  inherit (_cuda.lib) _redistSystemIsSupported;
   inherit (lib)
     licenses
     sourceTypes
@@ -110,8 +110,6 @@ extendMkDerivation {
     "release"
 
     # Misc
-    "brokenAssertions"
-    "platformAssertions"
     "expectedOutputs"
     "outputToPatterns"
     "outputNameVarFallbacks"
@@ -145,10 +143,6 @@ extendMkDerivation {
       # Extra
       passthru ? { },
       meta ? { },
-
-      # Misc
-      brokenAssertions ? [ ],
-      platformAssertions ? [ ],
 
       # Order is important here so we use a list.
       expectedOutputs ? [
@@ -384,66 +378,6 @@ extendMkDerivation {
         # Taken and modified from:
         # https://github.com/NixOS/nixpkgs/blob/fe5e11faed6241aacf7220436088789287507494/pkgs/build-support/setup-hooks/multiple-outputs.sh#L45-L62
         inherit outputNameVarFallbacks;
-
-        # brokenAssertions :: [Attrs]
-        # Used by mkMetaBroken to set `meta.broken`.
-        # Example: Broken on a specific version of CUDA or when a dependency has a specific version.
-        # NOTE: Do not use this when a broken assertion means evaluation will fail! For example, if
-        # a package is missing and is required for the build -- that should go in platformAssertions,
-        # because attempts to access attributes on the package will cause evaluation errors.
-        brokenAssertions = [
-          {
-            message = "lib output precedes static output";
-            assertion =
-              let
-                libIndex = findFirstIndex (x: x == "lib") null finalAttrs.outputs;
-                staticIndex = findFirstIndex (x: x == "static") null finalAttrs.outputs;
-              in
-              libIndex == null || staticIndex == null || libIndex < staticIndex;
-          }
-          {
-            # NOTE: We cannot (easily) check that all expected outputs have a corresponding outputNameVar attribute in
-            # finalAttrs because of the presence of attributes which use the "output" prefix but are not outputNameVars
-            # (e.g., outputChecks and outputName).
-            message = "outputNameVarFallbacks is a super set of expectedOutputs";
-            assertion =
-              subtractLists (map mkOutputNameVar finalAttrs.passthru.expectedOutputs) (
-                attrNames finalAttrs.passthru.outputNameVarFallbacks
-              ) == [ ];
-          }
-          {
-            message = "outputToPatterns is a super set of expectedOutputs";
-            assertion =
-              subtractLists finalAttrs.passthru.expectedOutputs (attrNames finalAttrs.passthru.outputToPatterns)
-              == [ ];
-          }
-          {
-            message = "propagatedBuildOutputs is a subset of outputs";
-            assertion = subtractLists finalAttrs.outputs finalAttrs.propagatedBuildOutputs == [ ];
-          }
-        ]
-        ++ brokenAssertions;
-
-        # platformAssertions :: [Attrs]
-        # Used by mkMetaBadPlatforms to set `meta.badPlatforms`.
-        # Example: Broken on a specific system when some condition is met, like targeting Jetson or
-        # a required package missing.
-        # NOTE: Use this when a failed assertion means evaluation can fail!
-        platformAssertions =
-          let
-            isSupportedRedistSystem = _redistSystemIsSupported hostRedistSystem finalAttrs.passthru.supportedRedistSystems;
-          in
-          [
-            {
-              message = "src is null if and only if hostRedistSystem is unsupported";
-              assertion = (finalAttrs.src == null) == !isSupportedRedistSystem;
-            }
-            {
-              message = "hostRedistSystem (${hostRedistSystem}) is supported (${builtins.toJSON finalAttrs.passthru.supportedRedistSystems})";
-              assertion = isSupportedRedistSystem;
-            }
-          ]
-          ++ platformAssertions;
       };
 
       meta = meta // {
@@ -451,9 +385,79 @@ extendMkDerivation {
           By downloading and using this package you accept the terms and conditions of the associated license(s).
         '';
         sourceProvenance = meta.sourceProvenance or [ sourceTypes.binaryNativeCode ];
+
+        # Platform availability is driven by `meta.platforms`: a redistributable that is unavailable
+        # for the host system has it excluded here, which the platform check in check-meta.nix turns
+        # into an `unsupported` evaluation error (bypassable with `allowUnsupportedSystem`).
         platforms = finalAttrs.passthru.supportedNixSystems;
-        broken = _mkMetaBroken finalAttrs;
-        badPlatforms = _mkMetaBadPlatforms finalAttrs;
+
+        # Internal packaging invariants. These are Nixpkgs-side bugs if violated, so they are
+        # "broken"-kind problems. Downstream packages contribute their own entries via `meta.problems`.
+        problems =
+          (meta.problems or { })
+          //
+            optionalAttrs
+              (
+                let
+                  libIndex = findFirstIndex (x: x == "lib") null finalAttrs.outputs;
+                  staticIndex = findFirstIndex (x: x == "static") null finalAttrs.outputs;
+                in
+                !(libIndex == null || staticIndex == null || libIndex < staticIndex)
+              )
+              {
+                libAfterStatic = {
+                  kind = "broken";
+                  message = "the lib output must precede the static output.";
+                };
+              }
+          # NOTE: We cannot (easily) check that all expected outputs have a corresponding outputNameVar attribute in
+          # finalAttrs because of the presence of attributes which use the "output" prefix but are not outputNameVars
+          # (e.g., outputChecks and outputName).
+          //
+            optionalAttrs
+              (
+                subtractLists (map mkOutputNameVar finalAttrs.passthru.expectedOutputs) (
+                  attrNames finalAttrs.passthru.outputNameVarFallbacks
+                ) != [ ]
+              )
+              {
+                missingOutputNameVarFallbacks = {
+                  kind = "broken";
+                  message = "outputNameVarFallbacks must be a superset of expectedOutputs.";
+                };
+              }
+          //
+            optionalAttrs
+              (
+                subtractLists finalAttrs.passthru.expectedOutputs (attrNames finalAttrs.passthru.outputToPatterns)
+                != [ ]
+              )
+              {
+                missingOutputToPatterns = {
+                  kind = "broken";
+                  message = "outputToPatterns must be a superset of expectedOutputs.";
+                };
+              }
+          // optionalAttrs (subtractLists finalAttrs.outputs finalAttrs.propagatedBuildOutputs != [ ]) {
+            unknownPropagatedBuildOutputs = {
+              kind = "broken";
+              message = "propagatedBuildOutputs must be a subset of outputs.";
+            };
+          }
+          # Internal consistency check: `src` is null exactly when the host redist system is
+          # unsupported. Availability itself is handled by `meta.platforms` above.
+          //
+            optionalAttrs
+              (
+                (finalAttrs.src == null)
+                != !(_redistSystemIsSupported hostRedistSystem finalAttrs.passthru.supportedRedistSystems)
+              )
+              {
+                srcNullMismatch = {
+                  kind = "broken";
+                  message = "src must be null if and only if hostRedistSystem is unsupported.";
+                };
+              };
         downloadPage =
           meta.downloadPage
             or "https://developer.download.nvidia.com/compute/${finalAttrs.passthru.redistName}/redist/${finalAttrs.pname}";

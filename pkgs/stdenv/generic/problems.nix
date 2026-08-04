@@ -133,6 +133,15 @@ rec {
       nixpkgsInternalUseAllowed = false;
       automatic = null;
     };
+    # A package that is legitimately not applicable to the current configuration (as opposed to
+    # `broken`, which signals a Nixpkgs-side bug). Defaults to an error that is bypassed by
+    # `allowUnsupportedSystem`, via the default matcher in ../../top-level/config.nix.
+    unsupported = {
+      manualAllowed = true;
+      isUnique = false;
+      nixpkgsInternalUseAllowed = true;
+      automatic = null;
+    };
   };
 
   # Problem kinds that are currently allowed to be specified in `meta.problems`
