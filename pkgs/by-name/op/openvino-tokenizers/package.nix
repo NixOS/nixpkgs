@@ -17,7 +17,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvino-tokenizers";
-  version = "2026.2.1.0";
+  version = "2026.3.0.0";
 
   __structuredAttrs = true;
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
       owner = "openvinotoolkit";
       repo = "openvino_tokenizers";
       tag = finalAttrs.version;
-      hash = "sha256-K0Zdo9er+s9/PWvBmVJTsWOSgzzZ5De7sRLMNEpxf/U=";
+      hash = "sha256-Fb+AWG3l4HfC71E0YCcxnV/E7wCVVTCc55gPIix6wI4=";
     };
 
   nativeBuildInputs = [
