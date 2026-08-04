@@ -162,6 +162,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
+  strictDeps = true;
+
   # This is part of the Darwin bootstrap, so we don’t always get
   # `libutil.dylib` automatically propagated through the SDK.
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
