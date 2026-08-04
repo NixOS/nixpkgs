@@ -1166,13 +1166,13 @@
     "vendorHash": "sha256-zklw0YajAZZLkosLxZCsWtAbvmHuGEI8OGpVykp1Xw4="
   },
   "sap-cloud-infrastructure_sci": {
-    "hash": "sha256-eQA4mY+Rx5PLbTgGqfefYFc5gZKIvt1w2eag8ipE0PI=",
+    "hash": "sha256-S0E8vZpJaJvch8Riy1hO5ChegTyq0NYdEfjS290h1G4=",
     "homepage": "https://registry.terraform.io/providers/sap-cloud-infrastructure/sci",
     "owner": "SAP-cloud-infrastructure",
     "repo": "terraform-provider-sci",
-    "rev": "v2.3.0",
+    "rev": "v2.5.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-InCRL4k6v0avmnNja+b6Ozg5+injxa8EmrRHIWrq4Ag="
+    "vendorHash": "sha256-22bOJyR+ERVu8eTX3iT838q6mxViGt5Fd6MVFB49JZY="
   },
   "sap_btp": {
     "hash": "sha256-fRg83kdeHizOi8riLFU0NKWmeQSAbG0xJUtkdMcvWp0=",
