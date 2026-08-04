@@ -13,7 +13,7 @@ let
     service {
       user aerospike
       group aerospike
-      paxos-single-replica-limit 1 # Number of nodes where the replica count is automatically reduced to 1.
+#      paxos-single-replica-limit 1 # Number of nodes where the replica count is automatically reduced to 1.
       proto-fd-max 15000
       work-directory ${cfg.workDir}
     }
