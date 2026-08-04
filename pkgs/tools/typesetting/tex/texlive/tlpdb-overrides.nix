@@ -572,7 +572,7 @@ lib.recursiveUpdate orig rec {
 
   # Use top-level git-latexdiff's version and src. NOTE that this derivation is
   # still different from top-level's `git-latexdiff`, due to __structuredAttrs
-  # enabled unconditionally. Still though this derivation produces a funcitonal
+  # enabled unconditionally. Still though this derivation produces a functional
   # binary.
   inherit git-latexdiff;
 

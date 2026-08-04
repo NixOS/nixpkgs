@@ -339,7 +339,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
   # Create a stage with the bootstrap tools. This will be used to build the subsequent stages and
   # build up the standard environment.
   #
-  # Note: Each stage depends only on the the packages in `prevStage`. If a package is not to be
+  # Note: Each stage depends only on the packages in `prevStage`. If a package is not to be
   # rebuilt, it should be passed through by inheriting it.
   (
     prevStage:

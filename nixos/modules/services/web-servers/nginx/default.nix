@@ -805,7 +805,7 @@ in
           Nginx package to use. This defaults to the stable version. Note
           that the nginx team recommends to use the mainline version which
           available in nixpkgs as `nginxMainline`.
-          Supported Nginx forks include `angie`, `openresty` and `tengine`.
+          Supported Nginx forks include `angie` and `openresty`.
         '';
       };
 

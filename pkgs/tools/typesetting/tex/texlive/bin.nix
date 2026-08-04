@@ -26,6 +26,9 @@
   perlPackages,
   python3Packages,
   pkg-config,
+  autoconf,
+  automake,
+  libtool,
   cmake,
   ninja,
   libpaper,
@@ -415,7 +418,12 @@ rec {
 
     hardeningDisable = [ "format" ];
 
-    inherit (core) nativeBuildInputs depsBuildBuild;
+    inherit (core) depsBuildBuild;
+    nativeBuildInputs = core.nativeBuildInputs ++ [
+      autoconf
+      automake
+      libtool
+    ];
     buildInputs = core.buildInputs ++ [
       core
       cairo
@@ -426,11 +434,21 @@ rec {
       potrace
     ];
 
-    /*
-      deleting the unused packages speeds up configure by a considerable margin
-      and ensures we do not rebuild existing libraries by mistake
-    */
+    # autoconf 2.72 has a bug where AC_PROG_CXX would reject c++20 compilers,
+    # and attempts to switch to c++98 or c++11 instead of using the compiler's
+    # default. when using gcc 16, which defaults to c++20, this causes
+    # texlive-bin-big to be built with c++11, leading to issues with some of
+    # the included icu4c headers. this bug was fixed in autoconf 2.73, so we
+    # regenerate the autoconf declarations with the newest version of autconf.
+    # once the configure scripts distributed with the source are regenerated
+    # with autoconf 2.73+, the `reautoconf` call should be removed.
+    #
+    # deleting the unused packages speeds up configure by a considerable margin
+    # and ensures we do not rebuild existing libraries by mistake
     preConfigure = ''
+      substituteInPlace ./reautoconf --replace-fail "/bin/pwd" "pwd"
+      ./reautoconf
+
       rm -r libs/{cairo,freetype2,gd,gmp,graphite2,harfbuzz,icu,libpaper,libpng} \
         libs/{mpfr,pixman,xpdf,zlib,zziplib} \
         texk/{afm2pl,bibtex-x,chktex,cjkutils,detex,dtl,dvi2tty,dvidvi,dviljk,dviout-util} \
