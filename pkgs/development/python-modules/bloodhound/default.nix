@@ -10,13 +10,12 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "bloodhound-py";
+  pname = "bloodhound";
   version = "1.9.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit (finalAttrs) version;
-    pname = "bloodhound";
+    inherit (finalAttrs) pname version;
     hash = "sha256-n1+0jv73lrn2FMNhDVUPDJxgUATa2oRO4S5P7/xQyFw=";
   };
 
