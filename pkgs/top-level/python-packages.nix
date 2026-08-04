@@ -19597,8 +19597,6 @@ self: super: with self; {
 
   stone = callPackage ../development/python-modules/stone { };
 
-  stookalert = callPackage ../development/python-modules/stookalert { };
-
   stookwijzer = callPackage ../development/python-modules/stookwijzer { };
 
   stop-words = callPackage ../development/python-modules/stop-words { };
