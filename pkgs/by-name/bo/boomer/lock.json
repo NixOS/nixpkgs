@@ -1,0 +1,28 @@
+{
+  "depends": [
+    {
+      "method": "fetchzip",
+      "packages": [
+        "x11"
+      ],
+      "path": "/nix/store/8qaywzr8nzsiddjba77nhf75hzmxx0d9-source",
+      "ref": "1.2",
+      "rev": "29aca5e519ebf5d833f63a6a2769e62ec7bfb83a",
+      "sha256": "16npqgmi2qawjxaddj9ax15rfpdc7sqc37i2r5vg23lyr6znq4wc",
+      "srcDir": "",
+      "url": "https://github.com/nim-lang/x11/archive/29aca5e519ebf5d833f63a6a2769e62ec7bfb83a.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "opengl"
+      ],
+      "path": "/nix/store/dvv6cgzl9xmax5rmjxnp5wrr08ibvjaw-source",
+      "ref": "1.2.9",
+      "rev": "8e2e098f82dc5eefd874488c37b5830233cd18f4",
+      "sha256": "01csz5bl4jiv7jx76k7izgknl7k73y2i9hd9s6brlhfqhq7cqxmz",
+      "srcDir": "src",
+      "url": "https://github.com/nim-lang/opengl/archive/8e2e098f82dc5eefd874488c37b5830233cd18f4.tar.gz"
+    }
+  ]
+}
