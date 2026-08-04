@@ -33,6 +33,10 @@ let
     version = "8.1.2";
     hash = "sha256-wJ3c8VVo/tK84K7bKYs/UWcln4mSO+tf/w5NLNjKhiI=";
   };
+  v9 = {
+    version = "9.0";
+    hash = "sha256-LbHwxvylAPh5lb/H+o+9eMVTB9X+tphrxYYX0cqAL0k=";
+  };
 in
 
 rec {
@@ -54,6 +58,10 @@ rec {
   ffmpeg_8 = mkFFmpeg v8 "small";
   ffmpeg_8-headless = mkFFmpeg v8 "headless";
   ffmpeg_8-full = mkFFmpeg v8 "full";
+
+  ffmpeg_9 = mkFFmpeg v9 "small";
+  ffmpeg_9-headless = mkFFmpeg v9 "headless";
+  ffmpeg_9-full = mkFFmpeg v9 "full";
 
   # Please make sure this is updated to new major versions once they
   # build and work on all the major platforms. If absolutely necessary

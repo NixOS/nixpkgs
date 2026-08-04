@@ -55,7 +55,7 @@
   withBzlib ? withHeadlessDeps,
   withCaca ? withFullDeps, # Textual display (ASCII art)
   withCdio ? withFullDeps && withGPL, # Audio CD grabbing
-  withCelt ? withFullDeps, # CELT decoder
+  withCelt ? withFullDeps && lib.versionOlder version "9.0", # CELT decoder, removed in 9.0
   withChromaprint ? withFullDeps, # Audio fingerprinting
   withCodec2 ? withFullDeps, # codec2 en/decoding
   withCuda ? withFullDeps && withNvcodec,
@@ -110,9 +110,11 @@
   withModplug ? withFullDeps && !stdenv.hostPlatform.isDarwin, # ModPlug support
   withMp3lame ? withHeadlessDeps, # LAME MP3 encoder
   withMysofa ? withFullDeps, # HRTF support via SOFAlizer
-  withNpp ? withFullDeps && withUnfree && config.cudaSupport, # Nvidia Performance Primitives-based code
+  # Nvidia Performance Primitives-based code, removed in 9.0
+  withNpp ? withFullDeps && withUnfree && config.cudaSupport && lib.versionOlder version "9.0",
   withNvdec ? withHeadlessDeps && withNvcodec,
   withNvenc ? withHeadlessDeps && withNvcodec,
+  withOnnxruntime ? false, # ONNX Runtime dnn backend, new in 9.0 (increases closure size by ~200 MB)
   withOpenal ? withFullDeps, # OpenAL 1.1 capture support
   withOpenapv ? withHeadlessDeps && lib.versionAtLeast version "8.0", # APV encoding support
   withOpencl ? withHeadlessDeps,
@@ -133,11 +135,20 @@
   withRubberband ? withFullDeps && withGPL && !stdenv.hostPlatform.isFreeBSD, # Rubberband filter
   withSamba ? withFullDeps && !stdenv.hostPlatform.isDarwin && withGPLv3, # Samba protocol
   withSdl2 ? withSmallDeps,
-  withShaderc ? withFullDeps && !stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "5.0",
+  # Compiles the Vulkan shaders at runtime; 9.0 does it at build time instead,
+  # see withSpirvCompiler
+  withShaderc ?
+    withFullDeps
+    && !stdenv.hostPlatform.isDarwin
+    && lib.versionAtLeast version "5.0"
+    && lib.versionOlder version "9.0",
   withShine ? withFullDeps, # Fixed-point MP3 encoding
   withSnappy ? withFullDeps, # Snappy compression, needed for hap encoding
   withSoxr ? withHeadlessDeps, # Resampling via soxr
   withSpeex ? withHeadlessDeps, # Speex de/encoder
+  # glslc compiles the Vulkan shaders at build time; without it, 9.0 loses
+  # every Vulkan filter and encoder and several hwaccels
+  withSpirvCompiler ? withVulkan && lib.versionAtLeast version "9.0",
   withSrt ? withHeadlessDeps, # Secure Reliable Transport (SRT) protocol
   withSsh ? withHeadlessDeps, # SFTP protocol
   withSvg ? withFullDeps, # SVG protocol
@@ -322,6 +333,7 @@
   nv-codec-headers,
   nv-codec-headers-12,
   ocl-icd, # OpenCL ICD
+  onnxruntime,
   openal,
   openapv,
   opencl-headers, # OpenCL headers
@@ -341,6 +353,7 @@
   snappy,
   soxr,
   speex,
+  spirv-headers,
   srt,
   svt-av1,
   uavs3d,
@@ -427,6 +440,9 @@ assert buildSwscale -> buildAvutil;
 
 # External Library dependencies
 assert (withCuda || withCuvid || withNvdec || withNvenc) -> withNvcodec;
+assert withSpirvCompiler -> withVulkan;
+assert lib.versionAtLeast version "9.0" -> !(withCelt || withNpp || withShaderc);
+assert withOnnxruntime -> lib.versionAtLeast version "9.0";
 
 stdenv.mkDerivation (
   finalAttrs:
@@ -610,7 +626,11 @@ stdenv.mkDerivation (
       (enableFeature withBzlib "bzlib")
       (enableFeature withCaca "libcaca")
       (enableFeature withCdio "libcdio")
+    ]
+    ++ optionals (versionOlder version "9.0") [
       (enableFeature withCelt "libcelt")
+    ]
+    ++ [
       (enableFeature withChromaprint "chromaprint")
       (enableFeature withCodec2 "libcodec2")
       (enableFeature withCuda "cuda")
@@ -676,6 +696,11 @@ stdenv.mkDerivation (
       (enableFeature withNpp "libnpp")
       (enableFeature withNvdec "nvdec")
       (enableFeature withNvenc "nvenc")
+    ]
+    ++ optionals (versionAtLeast version "9.0") [
+      (enableFeature withOnnxruntime "libonnxruntime")
+    ]
+    ++ [
       (enableFeature withOpenal "openal")
     ]
     ++ optionals (versionAtLeast version "8.0") [
@@ -709,7 +734,7 @@ stdenv.mkDerivation (
       (enableFeature withSamba "libsmbclient")
       (enableFeature withSdl2 "sdl2")
     ]
-    ++ optionals (versionAtLeast version "5.0") [
+    ++ optionals (versionAtLeast version "5.0" && versionOlder version "9.0") [
       (enableFeature withShaderc "libshaderc")
     ]
     ++ [
@@ -806,6 +831,10 @@ stdenv.mkDerivation (
       "--cc=${stdenv.cc.targetPrefix}clang"
       "--cxx=${stdenv.cc.targetPrefix}clang++"
     ]
+    ++ optionals withSpirvCompiler [
+      # configure otherwise probes $PATH and takes whatever it finds
+      "--glslc=${lib.getExe' buildPackages.shaderc "glslc"}"
+    ]
     ++ optionals withCudaLLVM [
       # Unwrapped compiler because it will be retargeted and used freestanding with --cuda-device-only.
       "--nvcc=${lib.getExe buildPackages.clang.cc}"
@@ -825,9 +854,19 @@ stdenv.mkDerivation (
           map placeholder (lib.remove "data" finalAttrs.outputs) # We want to keep references to the data dir.
           ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) buildPackages.stdenv.cc
           ++ lib.optional withCudaLLVM buildPackages.clang.cc
+          ++ lib.optional withSpirvCompiler buildPackages.shaderc.bin
           ++ lib.optional withMetal xcode;
       in
-      "remove-references-to ${lib.concatMapStringsSep " " (o: "-t ${o}") toStrip} config.h";
+      "remove-references-to ${lib.concatMapStringsSep " " (o: "-t ${o}") toStrip} config.h"
+      # a glslc that doesn't work is not an error to configure, it just drops
+      # every Vulkan component from the build
+      + lib.optionalString (withSpirvCompiler && buildAvfilter) ''
+
+        grep -q 'define CONFIG_AVGBLUR_VULKAN_FILTER 1' config_components.h || {
+          echo "configure disabled spirv_compiler: glslc did not work" >&2
+          exit 1
+        }
+      '';
 
     strictDeps = true;
 
@@ -906,6 +945,7 @@ stdenv.mkDerivation (
         cuda_cudart
         cuda_nvcc
       ]
+      ++ optionals withOnnxruntime [ onnxruntime ]
       ++ optionals withOpenal [ openal ]
       ++ optionals withOpenapv [ openapv ]
       ++ optionals withOpencl [
@@ -960,6 +1000,8 @@ stdenv.mkDerivation (
         vulkan-headers
         vulkan-loader
       ]
+      # swscale's SPIR-V backend, new in 9.0
+      ++ optionals (withVulkan && versionAtLeast version "9.0") [ spirv-headers ]
       ++ optionals withVvenc [ vvenc ]
       ++ optionals withWebp [ libwebp ]
       ++ optionals withWhisper [ whisper-cpp ]
@@ -1100,4 +1142,7 @@ stdenv.mkDerivation (
       "zerocallusedregs"
     ];
   }
+  # required for new packages (NPV-166); versions < 9.0 stay unset to avoid
+  # rebuilding them
+  // lib.optionalAttrs (lib.versionAtLeast version "9.0") { __structuredAttrs = true; }
 )
