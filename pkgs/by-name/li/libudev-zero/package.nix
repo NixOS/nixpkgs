@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libudev-zero";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "illiliti";
     repo = "libudev-zero";
     rev = finalAttrs.version;
-    sha256 = "sha256-uKOfN9oJBFkR5n92bQ8RxVxfNaE2EKajrQseDkH5q+k=";
+    sha256 = "sha256-kHTWoHxORizNF8614E0gfWeJgobDxqtoUpawQmEvtAQ=";
   };
 
   makeFlags = [

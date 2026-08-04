@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "dutctl";
-  version = "1.0.0-alpha.1-unstable-2026-07-24";
+  version = "1.0.0-alpha.1-unstable-2026-07-29";
 
   src = fetchFromGitHub {
     owner = "BlindspotSoftware";
     repo = "dutctl";
-    rev = "9be7f4dbc49fc9fc748ce06935619ce9a15f655d";
-    hash = "sha256-uQtH3zpqjTV2spStBorqpFX0KDFhuN178JHYCsSC8sQ=";
+    rev = "3021a5295fe81b90415c339bb3c0ae384362b5ac";
+    hash = "sha256-wgPGhUEwbB2UGNMW03KqEcgeM3a6ytVGtQrLWNyU89Y=";
   };
 
   vendorHash = "sha256-2Y2+ytXm17LQHulod8QIXtvAOaCMNrqj83PGbb78Uqg=";

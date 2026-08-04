@@ -9210,14 +9210,6 @@ with pkgs;
 
   inherit (pidginPackages) pidgin;
 
-  # perhaps there are better apps for this task? It's how I had configured my previous system.
-  # And I don't want to rewrite all rules
-  profanity = callPackage ../applications/networking/instant-messengers/profanity (
-    {
-    }
-    // (config.profanity or { })
-  );
-
   puredata-with-plugins =
     plugins: callPackage ../by-name/pu/puredata/wrapper.nix { inherit plugins; };
 
@@ -10200,11 +10192,6 @@ with pkgs;
   lumina = recurseIntoAttrs (callPackage ../desktops/lumina { });
 
   ### DESKTOPS/LXDE
-
-  lxappearance-gtk2 = callPackage ../by-name/lx/lxappearance/package.nix {
-    gtk2 = gtk2-x11;
-    withGtk3 = false;
-  };
 
   lxqt = recurseIntoAttrs (
     import ../desktops/lxqt {

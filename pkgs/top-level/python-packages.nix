@@ -2932,6 +2932,8 @@ self: super: with self; {
 
   cdxj-indexer = callPackage ../development/python-modules/cdxj-indexer { };
 
+  cel-python = callPackage ../development/python-modules/cel-python { };
+
   celery = callPackage ../development/python-modules/celery { };
 
   celery-batches = callPackage ../development/python-modules/celery-batches { };
@@ -3280,6 +3282,8 @@ self: super: with self; {
   cmake = callPackage ../development/python-modules/cmake { inherit (pkgs) cmake; };
 
   cmake-build-extension = callPackage ../development/python-modules/cmake-build-extension { };
+
+  cmake-parser = callPackage ../development/python-modules/cmake-parser { };
 
   cmarkgfm = callPackage ../development/python-modules/cmarkgfm { };
 
@@ -3676,6 +3680,10 @@ self: super: with self; {
   credsweeper = callPackage ../development/python-modules/credsweeper { };
 
   crewai = callPackage ../development/python-modules/crewai { };
+
+  crewai-cli = callPackage ../development/python-modules/crewai-cli { };
+
+  crewai-core = callPackage ../development/python-modules/crewai-core { };
 
   crispy-bootstrap3 = callPackage ../development/python-modules/crispy-bootstrap3 { };
 
@@ -5339,9 +5347,7 @@ self: super: with self; {
 
   eheimdigital = callPackage ../development/python-modules/eheimdigital { };
 
-  eigenpy = callPackage ../development/python-modules/eigenpy {
-    inherit (pkgs) graphviz; # need the `dot` program, not the python module
-  };
+  eigenpy = callPackage ../development/python-modules/eigenpy { };
 
   einops = callPackage ../development/python-modules/einops { };
 
@@ -6654,6 +6660,8 @@ self: super: with self; {
   georss-wa-dfes-client = callPackage ../development/python-modules/georss-wa-dfes-client { };
 
   geotorch = callPackage ../development/python-modules/geotorch { };
+
+  gepa = callPackage ../development/python-modules/gepa { };
 
   gepetto-gui = toPythonModule (gepetto-viewer.withPlugins [ gepetto-viewer-corba ]);
 
@@ -21982,6 +21990,8 @@ self: super: with self; {
     stdenv = if stdenv.hostPlatform.isDarwin then pkgs.llvmPackages_21.stdenv else pkgs.stdenv;
     llvmPackages = pkgs.llvmPackages_21;
   };
+
+  warp-nn = callPackage ../development/python-modules/warp-nn { };
 
   warrant = callPackage ../development/python-modules/warrant { };
 

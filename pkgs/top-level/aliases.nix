@@ -1060,6 +1060,7 @@ mapAliases {
   gutenprintBin = gutenprint-bin; # Added 2025-08-21
   gwrap = warnAlias "The 'gwrap' alias has been removed. The correct name of the package is 'g-wrap'" g-wrap; # Added 2026-01-25
   gxneur = throw "'gxneur' has been removed due to lack of maintenance and reliance on gnome2 and 2to3."; # Added 2025-08-17
+  gyroflow-bin = warnAlias "'gyroflow-bin' has been replaced by 'gyroflow'" gyroflow; # Added 2026-08-02
   hacpack = throw "hacpack has been removed from nixpkgs, as it has been taken down upstream"; # Added 2025-09-26
   harmony-music = throw "harmony-music is unmaintained and has been removed"; # Added 2025-08-26
   hasmail = throw "'hasmail' has been removed, as the GTK 2 project is no longer maintained upstream."; # Added 2026-05-22
@@ -1497,6 +1498,7 @@ mapAliases {
   luminanceHDR = throw "'luminanceHDR' has been removed as it depended on EOL qt5 webengine and was unmaintained"; # Added 2026-04-17
   lunarvim = throw "'lunarvim' has been removed since it was abandoned upstream and relied on an older version of 'neovim' to work properly"; # Added 2026-02-05
   lunatic = throw "'lunatic' has been removed, as it is unmaintained"; # Added 2026-05-04
+  lxappearance-gtk2 = throw "'lxappearance-gtk2' was removed because it depended on the deprecated GTK2 engine. Consider using the GTK3-based 'lxappearance' instead."; # Added 2026-07-22
   lxd = throw "
     LXD has been removed from NixOS due to lack of Nixpkgs maintenance.
     Consider migrating or switching to Incus, or remove from your configuration.
@@ -1722,6 +1724,7 @@ mapAliases {
   nim_2_0 = throw "'nim_2_0' has been upgraded and removed, please use 'nim'"; # Added 2026-03-06
   nim_2_2 = throw "'nim_2_2' has been upgraded and removed, please use 'nim'"; # Added 2026-03-06
   nimbo = throw "'nimbo' has been removed due to being archived upstream."; # Added 2026-01-18
+  nip2 = throw "'nip2' has been removed due to lack of maintenance and relying on gtk2.";
   nitrokey-fido2-firmware = throw "'nitrokey-fido2-firmware' has been removed as it was broken and unmaintained upstream since 2022"; # Added 2026-03-23
   nix-direnv-flakes = throw "'nix-direnv-flakes' has been renamed to/replaced by 'nix-direnv'"; # Converted to throw 2025-10-27
   nix-ld-rs = throw "'nix-ld-rs' has been renamed to/replaced by 'nix-ld'"; # Converted to throw 2025-10-27
@@ -2081,6 +2084,7 @@ mapAliases {
   redpanda = throw "'redpanda' has been renamed to/replaced by 'redpanda-client'"; # Converted to throw 2025-10-27
   redshift-plasma-applet = throw "'redshift-plasma-applet' has been removed as it is obsolete and lacks maintenance upstream."; # Added 2025-11-09
   reiserfsprogs = throw "'reiserfsprogs' has been removed as ReiserFS has not been actively maintained for many years."; # Added 2025-11-13
+  remarshal_0_17 = throw "'remarshal_0_17' has been removed because 'remarshal' supports YAML 1.1 with the `--to yaml-1.1` flag."; # added 2026-07-30
   remodel = throw "'remodel' has been removed because it was unmaintained upstream, deprecated in favor of 'lune'"; # Added 2026-05-08
   remotebox = throw "remotebox has been removed because it was unmaintained and broken for a long time"; # Added 2025-09-11
   resp-app = throw "'resp-app' has been replaced by 'redisinsight'"; # Added 2025-12-17

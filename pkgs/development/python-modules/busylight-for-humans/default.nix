@@ -5,7 +5,6 @@
   busylight-core,
   fastapi,
   fetchFromGitHub,
-  hatchling,
   hidapi,
   httpx,
   loguru,
@@ -14,26 +13,27 @@
   pytestCheckHook,
   typer,
   udevCheckHook,
+  uv-build,
   uvicorn,
   webcolors,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "busylight-for-humans";
-  version = "0.48.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JnyJny";
     repo = "busylight";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-5sQXW55P/iWhDWY6bGzN8IrWCJyrSvu2ObtIOolo2X0=";
+    tag = "busylight-cli/v${finalAttrs.version}";
+    hash = "sha256-h+YPrcf32SgzdQDYCeQlh4enzsXfsHr470W3tiFBO7g=";
+    rootDir = "packages/busylight";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ uv-build ];
 
   dependencies = [
-    bitvector-for-humans
     busylight-core
     hidapi
     loguru
@@ -53,12 +53,9 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     httpx
     pytestCheckHook
-    pytest-mock
     udevCheckHook
   ]
   ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
-
-  disabledTestPaths = [ "tests/test_pydantic_models.py" ];
 
   pythonImportsCheck = [ "busylight" ];
 
@@ -70,7 +67,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Control USB connected presence lights from multiple vendors via the command-line or web API";
     homepage = "https://github.com/JnyJny/busylight";
-    changelog = "https://github.com/JnyJny/busylight/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/JnyJny/busylight/blob/${finalAttrs.src.tag}/${finalAttrs.src.rootDir}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       das_j

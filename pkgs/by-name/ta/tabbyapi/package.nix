@@ -7,14 +7,14 @@
 }:
 python3Packages.buildPythonApplication {
   pname = "tabbyapi";
-  version = "0-unstable-2026-07-18";
+  version = "0-unstable-2026-07-31";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "theroyallab";
     repo = "tabbyAPI";
-    rev = "0158fb48d76546a6475d1d63f6cd5b90932d1d11";
-    hash = "sha256-Bkpx3MyZg7Np5zXAsq8mgxdAFsHUZhy2NZ93XSLbJgk=";
+    rev = "29680f496b57e3ed1a496c580677d2d67ac729b8";
+    hash = "sha256-eB8Q4iVlNCrgHHWutuhxzD+bQfC5Yx3z2rSCCSFsrL4=";
   };
 
   build-system = with python3Packages; [

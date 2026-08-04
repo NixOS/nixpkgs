@@ -7,13 +7,13 @@
 
 mkNginxPlugin (finalAttrs: {
   pname = "lua";
-  version = "0.10.29";
+  version = "0.10.31";
 
   src = fetchFromGitHub {
     owner = "openresty";
     repo = "lua-nginx-module";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-z62Vwrthl1FJiTdrdhifZZe6crdi8c6sTkUim6KmVlU=";
+    hash = "sha256-pS3Ce8duBtD1qb/E3NNnkuNU/39D4S9dJlGIfd9hkkc=";
   };
 
   buildInputs = [ luajit_openresty ];

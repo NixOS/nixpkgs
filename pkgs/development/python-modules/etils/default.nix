@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -139,6 +140,10 @@ buildPythonPackage (finalAttrs: {
     "test_array_spec_valid"
     "test_obj"
     "test_spec_like"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # AssertionError: assert '/tmp/to/something' == '/private/tmp/to/something'
+    "test_repr"
   ];
 
   disabledTestPaths = [
