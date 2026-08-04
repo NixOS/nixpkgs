@@ -9,7 +9,6 @@
   setuptools-scm,
 
   # dependencies
-  numpy,
   packaging,
   pandas,
   pydantic,
@@ -26,11 +25,14 @@
   geopandas,
   hypothesis,
   ibis-framework,
+  narwhals,
+  numpy,
   pandas-stubs,
   polars,
   pyyaml,
   scipy,
   shapely,
+  xarray,
 
   # tests
   joblib,
@@ -44,14 +46,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pandera";
-  version = "0.30.1";
+  version = "0.32.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "unionai-oss";
     repo = "pandera";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JmD8p0Syt/Tgf9LiMWeug1dSPp4cyd7BtBfo6yi08xg=";
+    hash = "sha256-6xLrLPFjU3BMw/G8T4O48S8Ntx8EN29OQvSv2pCjIJg=";
   };
 
   build-system = [
@@ -103,11 +105,16 @@ buildPythonPackage (finalAttrs: {
           ibis-framework
           duckdb
         ];
+        narwhals = [ narwhals ];
         pandas = [
           numpy
           pandas
         ];
         polars = [ polars ];
+        xarray = [
+          xarray
+          numpy
+        ];
       };
     in
     extras // { all = lib.concatLists (lib.attrValues extras); };
@@ -127,15 +134,19 @@ buildPythonPackage (finalAttrs: {
     "tests/pandas/test_docs_setting_column_widths.py" # tests doc generation, requires sphinx
     "tests/modin" # requires modin, not in nixpkgs
     "tests/mypy/test_pandas_static_type_checking.py" # some typing failures
-    "tests/pyspark" # requires spark
+    "tests/pyspark" # requires pyspark, not in nixpkgs
 
     # KeyError: 'dask'
     "tests/dask/test_dask.py::test_series_schema"
     "tests/dask/test_dask_accessor.py::test_dataframe_series_add_schema"
-
-    # TypeError: memtable() got an unexpected keyword argument 'name'
-    # https://github.com/unionai-oss/pandera/issues/2154
-    "tests/ibis/test_ibis_container.py"
+    # mypy tests
+    "tests/mypy/"
+    # Very time-consuming tests
+    "tests/strategies/test_strategies.py"
+    # Narwhals backend issues
+    "tests/narwhals/"
+    # Schema issues
+    "tests/strategies/test_no_filter_chain.py"
   ];
 
   disabledTests = [
@@ -143,6 +154,11 @@ buildPythonPackage (finalAttrs: {
     "test_schema_model"
     "test_schema_from_dataframe"
     "test_schema_no_geometry"
+    # Tests requires pyspark
+    "test_pyspark_pandas_does_not_route_to_pyspark_sql"
+    # Assertion error due to None vs. NaN
+    "test_ibis_backend_is_narwhals"
+    "test_ibis_custom_check"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # OOM error on ofborg:
