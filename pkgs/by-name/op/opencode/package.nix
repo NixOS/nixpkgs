@@ -16,7 +16,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "1.18.11";
+  version = "1.18.13";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "anomalyco";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Rg+NeRLeu0e+WSTZd8oJzV3XMMxXZCZ5LImDcCraX8g=";
+    hash = "sha256-xjzxTsMN4dMax3rL+2+4og0E7LovwYFvpU7Ea2sh6tM=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -78,7 +78,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # NOTE: Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash = "sha256-lHr4g4Kw9CvyDHiuyuCDsyk9vOXzz/My5bI9/zd5aYE=";
+    outputHash = "sha256-CQGZzD+XP4b452zvocKkdpjGJ2qrnxDhMQ/9846jp9I=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
@@ -140,9 +140,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
      } \
     --set OPENCODE_DISABLE_AUTOUPDATE true
 
-    install -Dm644 config.json $out/share/opencode/config.json
-    install -Dm644 tui.json $out/share/opencode/tui.json
-    install -Dm644 ../web/public/theme.json $out/share/opencode/theme.json
+    install -Dm644 config.json $out/share/config.json
+    install -Dm644 tui.json $out/share/tui.json
+    install -Dm644 ../web/public/theme.json $out/share/theme.json
 
     runHook postInstall
   '';
@@ -166,9 +166,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru = {
     jsonschema = {
-      config = "${finalAttrs.finalPackage}/share/opencode/config.json";
-      theme = "${finalAttrs.finalPackage}/share/opencode/theme.json";
-      tui = "${finalAttrs.finalPackage}/share/opencode/tui.json";
+      config = "${finalAttrs.finalPackage}/share/config.json";
+      theme = "${finalAttrs.finalPackage}/share/theme.json";
+      tui = "${finalAttrs.finalPackage}/share/tui.json";
     };
     updateScript = nix-update-script {
       extraArgs = [
