@@ -1,0 +1,14 @@
+diff --git a/src/lib/Gifcurry.hs b/src/lib/Gifcurry.hs
+index 0a5adb9..f862007 100644
+--- a/src/lib/Gifcurry.hs
++++ b/src/lib/Gifcurry.hs
+@@ -46,7 +46,8 @@ import Text.Printf
+ import Data.List (sortBy)
+ import Data.Maybe
+ import Data.Char
+-import Data.Text
++import Data.Text (Text, pack, unpack, strip)
++import qualified Data.Text as Data.Text
+ import Data.Either
+ import Data.Yaml
+ import qualified Data.ByteString.Char8 as DBC

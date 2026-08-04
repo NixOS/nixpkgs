@@ -1,0 +1,62 @@
+diff --git a/src/gui/GuiCapabilities.hs b/src/gui/GuiCapabilities.hs
+index 925daf5..49deb6d 100644
+--- a/src/gui/GuiCapabilities.hs
++++ b/src/gui/GuiCapabilities.hs
+@@ -63,7 +63,7 @@ checkCapabilitiesAndNotify
+         setLabelStyle "gifcurry-label-error"
+       (_:_:False:_) -> do
+         setImageToFile "data/error-icon.svg"
+-        setLabelText "ImageMagick convert not found. Cannot create GIFs."
++        setLabelText "ImageMagick magick not found. Cannot create GIFs."
+         setLabelStyle "gifcurry-label-error"
+       (_:_:_:False:_) -> do
+         setImageToFile "data/error-icon.svg"
+@@ -171,7 +171,7 @@ hasFfprobeWithVersion =
+ 
+ hasConvertWithVersion :: IO (Bool, Maybe (Int, Int, Int))
+ hasConvertWithVersion =
+-  hasProcessWithVersionNumber "convert" ["-version"]
++  hasProcessWithVersionNumber "magick" ["-version"]
+ 
+ hasIdentifyWithVersion :: IO (Bool, Maybe (Int, Int, Int))
+ hasIdentifyWithVersion =
+diff --git a/src/lib/Gifcurry.hs b/src/lib/Gifcurry.hs
+index 0a5adb9..f784aa8 100644
+--- a/src/lib/Gifcurry.hs
++++ b/src/lib/Gifcurry.hs
+@@ -1380,7 +1380,7 @@ annotateImage
+             , "sRGB"
+             ]
+         ++  [filePath]
+-  result <- tryProcess "convert" params
++  result <- tryProcess "magick" params
+   if isLeft result
+     then return result
+     else return $ Right $ "Annotated " ++ filePath
+@@ -1491,7 +1491,7 @@ mergeFramesIntoGif
+             , outputFile'
+             ]
+   printInfo $ "Saving your GIF to: " ++ outputFile'
+-  result <- tryProcess "convert" params
++  result <- tryProcess "magick" params
+   if isLeft result
+     then return result
+     else return $ Right outputFile'
+@@ -1513,7 +1513,7 @@ mergeFramesIntoVideo
+     printInfo "Converting the frames to the specified color count."
+     result' <-
+       tryProcess
+-        "convert"
++        "magick"
+         (   [ "-quiet"
+             , tempDir ++ [pathSeparator] ++ "extracted-frames_*." ++ frameFileExtension
+             ]
+@@ -1661,7 +1661,7 @@ getSansFontFamily fontFamilies
+ getFontFamilies
+   ::  IO [Text]
+ getFontFamilies = do
+-  (_, stdout', _) <- readProcessWithExitCode "convert" ["-list", "font"] []
++  (_, stdout', _) <- readProcessWithExitCode "magick" ["-list", "font"] []
+   let fontFamilies =
+         Prelude.map
+           (Data.Text.strip . Data.Text.drop 7 . Data.Text.strip)
