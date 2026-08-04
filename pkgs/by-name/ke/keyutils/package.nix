@@ -70,6 +70,8 @@ stdenv.mkDerivation (finalAttrs: {
     "USRLIBDIR=$(lib)/lib"
   ];
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://people.redhat.com/dhowells/keyutils/";
     description = "Tools used to control the Linux kernel key management system";
