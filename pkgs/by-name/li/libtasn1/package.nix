@@ -32,6 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
     perl
   ];
 
+  strictDeps = true;
+
   doCheck = true;
   preCheck =
     if stdenv.hostPlatform.isDarwin then "export DYLD_LIBRARY_PATH=`pwd`/lib/.libs" else null;
