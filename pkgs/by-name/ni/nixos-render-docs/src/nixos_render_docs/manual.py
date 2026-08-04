@@ -387,6 +387,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             //]]>
         """
         intersection_observer_js = """
+//<![CDATA[
 function createObserver() {
   const content = document.querySelector(".content");
   const headings = content.querySelectorAll("h1, h2, h3, h4, h5, h6");
@@ -442,6 +443,7 @@ function createObserver() {
 }
 
 document.addEventListener("DOMContentLoaded", createObserver);
+//]]>
         """
 
         header_content = ""
