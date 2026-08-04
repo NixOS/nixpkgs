@@ -502,6 +502,7 @@ in
             dontUnpack = true;
             dontBuild = true;
             strictDeps = true;
+            __structuredAttrs = true;
             # We wouldn't need to *copy* all, but it's easier and the result is temporary anyway.
             installPhase = ''
               mkdir -p "$out"/bin
