@@ -207,9 +207,7 @@ let
           };
           config = mkOption {
             type = types.submodule (
-              recursiveUpdate (import ../web-servers/nginx/vhost-options.nix {
-                inherit config lib;
-              }) { }
+              lib.modules.importApply ../web-servers/nginx/vhost-options.nix { nixosConfig = config; }
             );
             default = { };
             description = "Overrides to the nginx vhost section for api";

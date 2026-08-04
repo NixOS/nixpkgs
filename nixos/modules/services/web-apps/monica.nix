@@ -211,7 +211,7 @@ in
 
     nginx = mkOption {
       type = types.submodule (
-        recursiveUpdate (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) { }
+        lib.modules.importApply ../web-servers/nginx/vhost-options.nix { nixosConfig = config; }
       );
       default = { };
       example = ''

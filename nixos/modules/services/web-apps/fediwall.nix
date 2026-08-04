@@ -92,7 +92,7 @@ in
     };
     nginx = lib.mkOption {
       type = lib.types.submodule (
-        lib.recursiveUpdate (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) { }
+        lib.modules.importApply ../web-servers/nginx/vhost-options.nix { nixosConfig = config; }
       );
       default = { };
       example = lib.literalExpression ''

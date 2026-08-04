@@ -3,12 +3,9 @@
 # has additional options that affect the web server as a whole, like
 # the user/group to run under.)
 
-{ lib, config }:
-
-with lib;
-
-{
-  options = {
+{ nixosConfig }:
+{ lib, ... }: {
+  options = with lib; {
     basicAuth = mkOption {
       type = types.attrsOf types.str;
       default = { };
@@ -143,7 +140,7 @@ with lib;
 
     recommendedProxySettings = mkOption {
       type = types.bool;
-      default = config.services.nginx.recommendedProxySettings;
+      default = nixosConfig.services.nginx.recommendedProxySettings;
       defaultText = literalExpression "config.services.nginx.recommendedProxySettings";
       description = ''
         Enable recommended proxy settings.
@@ -152,7 +149,7 @@ with lib;
 
     recommendedUwsgiSettings = mkOption {
       type = types.bool;
-      default = config.services.nginx.recommendedUwsgiSettings;
+      default = nixosConfig.services.nginx.recommendedUwsgiSettings;
       defaultText = literalExpression "config.services.nginx.recommendedUwsgiSettings";
       description = ''
         Enable recommended uwsgi settings.

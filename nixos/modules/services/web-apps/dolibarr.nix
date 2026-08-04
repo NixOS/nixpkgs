@@ -248,11 +248,14 @@ in
     nginx = mkOption {
       type = types.nullOr (
         types.submodule (
-          lib.recursiveUpdate (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) {
-            # enable encryption by default,
-            # as sensitive login and Dolibarr (ERP) data should not be transmitted in clear text.
-            options.forceSSL.default = true;
-            options.enableACME.default = true;
+          lib.modules.importApply ../web-servers/nginx/vhost-options.nix {
+            nixosConfig = config;
+            overrideFn = lib.flip lib.recursiveUpdate {
+              # enable encryption by default,
+              # as sensitive login and Dolibarr (ERP) data should not be transmitted in clear text.
+              options.forceSSL.default = true;
+              options.enableACME.default = true;
+            };
           }
         )
       );
