@@ -91,6 +91,12 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  optional-dependencies = {
+    ninja = [ python3.pkgs.ninja ];
+    progress = [ python3.pkgs.tqdm ];
+    typing = [ python3.pkgs.mypy ];
+  };
+
   nativeCheckInputs = [
     ninja
     pkg-config
