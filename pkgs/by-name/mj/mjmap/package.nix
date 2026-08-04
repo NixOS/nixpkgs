@@ -32,7 +32,7 @@ buildGoModule {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  versionCheckProgram = "mjmap";
+  doInstallCheck = true;
 
   postBuild = ''
     make mjmap.1
