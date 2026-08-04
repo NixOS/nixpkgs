@@ -3,6 +3,7 @@
   stdenv,
   python3Packages,
   fetchFromGitHub,
+  installShellFiles,
   versionCheckHook,
   nix-update-script,
 }:
@@ -95,6 +96,19 @@ python3Packages.buildPythonApplication (finalAttrs: {
   nativeCheckInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     versionCheckHook
   ];
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  preBuild = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd oterm \
+      --zsh <($out/bin/oterm --show-completion)
+  '';
 
   passthru = {
     updateScript = nix-update-script { };
