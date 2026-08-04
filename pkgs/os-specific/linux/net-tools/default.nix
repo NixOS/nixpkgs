@@ -44,6 +44,8 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
+  strictDeps = true;
+
   meta = {
     homepage = "http://net-tools.sourceforge.net/";
     description = "Set of tools for controlling the network subsystem in Linux";
