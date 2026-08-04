@@ -24,7 +24,7 @@
   osprofiler,
   python-openstackclient,
   requests-mock,
-  stestr,
+  stestrCheckHook,
   testtools,
   testscenarios,
   tempest,
@@ -71,19 +71,11 @@ buildPythonPackage rec {
     osprofiler
     python-openstackclient
     requests-mock
-    stestr
+    stestrCheckHook
     testtools
     testscenarios
     tempest
   ];
-
-  checkPhase = ''
-    runHook preCheck
-
-    stestr run
-
-    runHook postCheck
-  '';
 
   pythonImportsCheck = [ "neutronclient" ];
 
