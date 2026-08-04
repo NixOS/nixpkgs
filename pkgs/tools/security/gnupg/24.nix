@@ -76,6 +76,8 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals withTpm2Tss [ tpm2-tss ];
 
+  strictDeps = true;
+
   # FreePG (https://freepg.org) is a set of commonly-used patches for GnuPG that
   # have not been merged upstream. It is used by Arch Linux, Debian, Fedora and
   # NixOS, and is maintained by Andrew Gallagher.
