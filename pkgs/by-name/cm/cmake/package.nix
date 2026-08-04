@@ -208,6 +208,8 @@ stdenv.mkDerivation (finalAttrs: {
     ignoredVersions = "-"; # -rc1 and friends
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://cmake.org/";
     description = "Cross-platform, open-source build system generator";
