@@ -71,6 +71,7 @@
   ./hardware/facter
   ./hardware/flipperzero.nix
   ./hardware/flirc.nix
+  ./hardware/freejoy.nix
   ./hardware/fw-fanctrl.nix
   ./hardware/glasgow.nix
   ./hardware/gpgsmartcards.nix
