@@ -9,7 +9,7 @@
   telnetlib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nad-receiver";
   version = "0.4.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "joopert";
     repo = "nad_receiver";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-CViZZCX/3s/ZbRoJN3VfpG2Nt70eNnaN7k9nD1glfRE=";
   };
 
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python interface for NAD receivers";
     homepage = "https://github.com/joopert/nad_receiver";
-    changelog = "https://github.com/joopert/nad_receiver/releases/tag/${version}";
+    changelog = "https://github.com/joopert/nad_receiver/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
