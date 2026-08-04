@@ -12727,7 +12727,7 @@ self: super: with self; {
 
   paddle-bfloat = callPackage ../development/python-modules/paddle-bfloat { };
 
-  paddle2onnx = callPackage ../development/python-modules/paddle2onnx { };
+  paddle2onnx = callPackage ../development/python-modules/paddle2onnx { inherit (pkgs) cmake; };
 
   paddleocr = callPackage ../development/python-modules/paddleocr { };
 
