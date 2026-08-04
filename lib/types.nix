@@ -1026,11 +1026,10 @@ rec {
           {
             headError = checkDefsForError check loc defs;
             value = mapAttrs (
-              n: v:
               if lazy then
-                v.optionalValue.value or elemType.emptyValue.value or v.mergedValue
+                n: v: v.optionalValue.value or elemType.emptyValue.value or v.mergedValue
               else
-                v.optionalValue.value
+                n: v: v.optionalValue.value
             ) evals;
             valueMeta.attrs = mapAttrs (n: v: v.checkedAndMerged.valueMeta) evals;
           };
