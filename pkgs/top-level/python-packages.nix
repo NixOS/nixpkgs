@@ -12017,6 +12017,8 @@ self: super: with self; {
 
   oci = callPackage ../development/python-modules/oci { };
 
+  oci-lexer-parser = callPackage ../development/python-modules/oci-lexer-parser { };
+
   ocifs = callPackage ../development/python-modules/ocifs { };
 
   ocrmypdf = callPackage ../development/python-modules/ocrmypdf { tesseract = pkgs.tesseract5; };
