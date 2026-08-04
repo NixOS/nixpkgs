@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  bashNonInteractive,
   fetchurl,
 }:
 
@@ -33,6 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
       sha256 = "1cbgwxq28fw5ldh38ngcs7xiqvpnmrw0hw9zzhbhb1hdxkavrc1s";
     })
   ];
+
+  buildInputs = [
+    bashNonInteractive
+  ];
+
+  strictDeps = true;
 
   makeFlags = lib.optionals stdenv.hostPlatform.isStatic [ "NO_SOLIB=1" ];
 
