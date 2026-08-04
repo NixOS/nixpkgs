@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   bzip2,
+  bashNonInteractive,
   enableNLS ? false,
   libnatspec,
 }:
@@ -71,7 +72,13 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ bzip2 ];
-  buildInputs = [ bzip2 ] ++ lib.optional enableNLS libnatspec;
+  buildInputs = [
+    bashNonInteractive # for zipgrep shebang
+    bzip2
+  ]
+  ++ lib.optional enableNLS libnatspec;
+
+  strictDeps = true;
 
   makefile = "unix/Makefile";
 
