@@ -2,24 +2,29 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tmb";
   version = "0.1.5";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "alemuro";
     repo = "tmb";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-XuRhRmeTXAplb14UwISyzaqEIrFeg8/aCdMxUccMUos=";
   };
 
-  env.VERSION = version;
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ requests ];
+  env.VERSION = finalAttrs.version;
+
+  dependencies = [ requests ];
 
   pythonImportsCheck = [ "tmb" ];
 
@@ -32,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
