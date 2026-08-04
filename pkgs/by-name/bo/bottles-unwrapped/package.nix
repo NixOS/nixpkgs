@@ -29,6 +29,7 @@
   vmtouch,
   libportal,
   libportal-gtk4,
+  obs-studio-plugins,
   nix-update-script,
   removeWarningPopup ? false,
 }:
@@ -113,6 +114,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       mangohud
       vmtouch
       fvs2
+      obs-studio-plugins.obs-vkcapture
 
       # Undocumented (subprocess.Popen())
       lsb-release
