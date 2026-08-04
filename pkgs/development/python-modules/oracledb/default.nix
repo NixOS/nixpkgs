@@ -8,17 +8,17 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "oracledb";
-  version = "3.4.1";
+  version = "4.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "python-oracledb";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Pwbb+/vzNnliBpcDmOpkkNMVI/cPbJY+yMIKKR6m01w=";
+    hash = "sha256-xT2PWP6kQ0K+9kxe0vNWY5+kMyKZ1J7toiEZBxfsAGE=";
   };
 
   build-system = [
@@ -39,11 +39,11 @@ buildPythonPackage rec {
   meta = {
     description = "Python driver for Oracle Database";
     homepage = "https://oracle.github.io/python-oracledb";
-    changelog = "https://github.com/oracle/python-oracledb/blob/${src.tag}/doc/src/release_notes.rst";
+    changelog = "https://github.com/oracle/python-oracledb/blob/${finalAttrs.src.tag}/doc/src/release_notes.rst";
     license = with lib.licenses; [
       asl20 # and or
       upl
     ];
     maintainers = with lib.maintainers; [ harvidsen ];
   };
-}
+})
