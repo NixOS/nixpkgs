@@ -1005,6 +1005,7 @@
   ./services/misc/tautulli.nix
   ./services/misc/tdarr
   ./services/misc/tee-supplicant
+  ./services/misc/text-embeddings-inference.nix
   ./services/misc/tiddlywiki.nix
   ./services/misc/tp-auto-kbbl.nix
   ./services/misc/transfer-sh.nix
