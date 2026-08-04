@@ -1,4 +1,9 @@
-{ lib, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 let
   # Build Quake with coverage instrumentation.
   overrides = pkgs: {
@@ -8,53 +13,70 @@ let
   };
 
   client =
-    { pkgs, ... }:
     {
-      imports = [ ./common/x11.nix ];
+      playerName,
+      ...
+    }:
+    {
+      config,
+      ...
+    }:
+    {
+      imports = [ ./common/wayland-cage.nix ];
       hardware.graphics.enable = true;
-      environment.systemPackages = [ pkgs.quake3demo ];
-      nixpkgs.config.packageOverrides = overrides;
+      services.cage.program = "${lib.getExe config.programs.ioquake3.finalPackage} +connect server";
+
+      programs.ioquake3 = {
+        enable = true;
+        settings = {
+          r_fullscreen = 0;
+          name = playerName;
+        };
+      };
+      # nixpkgs.config.packageOverrides = overrides;
     };
 in
 {
   name = "quake3";
   meta.maintainers = [ ];
 
-  node.pkgsReadOnly = false;
-
   # TODO: lcov doesn't work atm
   #makeCoverageReport = true;
 
   nodes = {
     server =
-      { pkgs, ... }:
+      { ... }:
       {
-        systemd.services.quake3-server = {
-          wantedBy = [ "multi-user.target" ];
-          script =
-            "${pkgs.quake3demo}/bin/quake3-server +set g_gametype 0 "
-            + "+map q3dm7 +addbot grunt +addbot daemia 2> /tmp/log";
+        services.quake3-server = {
+          enable = true;
+          openFirewall = true;
+          settings.g_gametype = 0;
+          extraConfig = ''
+            map q3dm7
+            addbot grunt
+            addbot daemia
+          '';
         };
-        nixpkgs.config.packageOverrides = overrides;
-        networking.firewall.allowedUDPPorts = [ 27960 ];
+        # nixpkgs.config.packageOverrides = overrides;
       };
 
-    client1 = client;
-    client2 = client;
+    client1 = client { playerName = "Foo"; };
+    client2 = client { playerName = "Bar"; };
   };
 
-  testScript = ''
+  testScript = { nodes, ... }: ''
     start_all()
 
-    server.wait_for_unit("quake3-server")
-    client1.wait_for_x()
-    client2.wait_for_x()
+    # server.wait_for_unit("q3ds")
+    client1.wait_for_unit("graphical.target")
+    client2.wait_for_unit("graphical.target")
 
-    client1.execute("quake3 +set r_fullscreen 0 +set name Foo +connect server >&2 &", check_return = False)
-    client2.execute("quake3 +set r_fullscreen 0 +set name Bar +connect server >&2 &", check_return = False)
-
-    server.wait_until_succeeds("grep -q 'Foo.*entered the game' /tmp/log")
-    server.wait_until_succeeds("grep -q 'Bar.*entered the game' /tmp/log")
+    server.wait_until_succeeds(
+        "journalctl -u q3ds.service | grep -q 'Foo.*entered the game'"
+    )
+    server.wait_until_succeeds(
+        "journalctl -u q3ds.service | grep -q 'Bar.*entered the game'"
+    )
 
     server.sleep(10)  # wait for a while to get a nice screenshot
 
