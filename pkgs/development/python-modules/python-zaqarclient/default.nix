@@ -15,7 +15,7 @@
   requests,
   setuptools,
   sphinxHook,
-  stestr,
+  stestrCheckHook,
   stevedore,
 }:
 
@@ -59,14 +59,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     ddt
     requests-mock
-    stestr
+    stestrCheckHook
   ];
-
-  checkPhase = ''
-    runHook preCheck
-    stestr run
-    runHook postCheck
-  '';
 
   pythonImportsCheck = [ "zaqarclient" ];
 
