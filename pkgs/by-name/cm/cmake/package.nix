@@ -124,6 +124,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional cursesUI ncurses
     ++ lib.optional qt5UI qtbase;
 
+  strictDeps = true;
+
   # bootstrap is not autoconf and rejects --enable-static/--disable-shared
   # FIXME: rebuild avoidance, drop optionalDrvAttr in staging
   dontAddStaticConfigureFlags = lib.optionalDrvAttr stdenv.hostPlatform.isStatic true;
