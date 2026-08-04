@@ -45,6 +45,10 @@ pkgs.makeSetupHook
   )
 ```
 
+## Default substitutions {#sec-pkgs.makeSetupHook-default-substitutions}
+
+`@name@`, `@pname@`, `@version@` and `@system@` are always substituted, without being listed in `substitutions`. Everything else must be declared explicitly.
+
 ## Attributes {#sec-pkgs.makeSetupHook-attributes}
 
 * `name` Set the name of the hook.
@@ -52,4 +56,5 @@ pkgs.makeSetupHook
 * `depsTargetTargetPropagated` Non-binary dependencies.
 * `meta`
 * `passthru`
-* `substitutions` Variables for `substituteAll`
+* `substitutions` Mapping of key to substitution value. Each `@key@` in the script is replaced by the corresponding value.
+* `__structuredAttrs` Whether to enable `__structuredAttrs` for the hook derivation itself (not for its consumers, which are unaffected either way).

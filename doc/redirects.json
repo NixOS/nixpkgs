@@ -2360,6 +2360,9 @@
   "sec-pkgs.makeSetupHook-usage-example": [
     "index.html#sec-pkgs.makeSetupHook-usage-example"
   ],
+  "sec-pkgs.makeSetupHook-default-substitutions": [
+    "index.html#sec-pkgs.makeSetupHook-default-substitutions"
+  ],
   "sec-pkgs.makeSetupHook-attributes": [
     "index.html#sec-pkgs.makeSetupHook-attributes"
   ],
