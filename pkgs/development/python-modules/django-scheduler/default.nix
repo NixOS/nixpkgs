@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "django-scheduler";
-  version = "1.0";
+  version = "0.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "llazzaro";
     repo = "django-scheduler";
-    tag = "v${version}";
-    hash = "sha256-TgIp2oqju3O6zPp3WMEB9HeNgAJILNkWWfbDFmMQ3eA=";
+    tag = version;
+    hash = "sha256-dY2TPo15RRWrv7LheUNJSQl4d/HeptSMM/wQirRSI5w=";
   };
 
   build-system = [ setuptools ];
@@ -64,7 +64,7 @@ buildPythonPackage rec {
   meta = {
     description = "Calendar app for Django";
     homepage = "https://github.com/llazzaro/django-scheduler";
-    changelog = "https://github.com/llazzaro/django-scheduler/releases/tag/${src.tag}";
+    changelog = "https://github.com/llazzaro/django-scheduler/releases/tag/${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ derdennisop ];
   };
