@@ -28,6 +28,10 @@
   # gradio
   gradio,
   requests,
+  # oauth
+  authlib,
+  fastapi,
+  itsdangerous,
   # mcp
   mcp,
 
@@ -37,14 +41,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "huggingface-hub";
-  version = "1.10.2";
+  version = "1.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "huggingface_hub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Q9N0QnxV8oJcxUsJzv4wX8Z6FkNdEfUH5BEVoZolsRY=";
+    hash = "sha256-GuTsoz7ow3A/PJyU3L/xLp56r3RVx5O1YH3nr3T4u7U=";
   };
 
   build-system = [ setuptools ];
@@ -65,11 +69,6 @@ buildPythonPackage (finalAttrs: {
     all = [
 
     ];
-    torch = [
-      torch
-      safetensors
-    ]
-    ++ safetensors.optional-dependencies.torch;
     fastai = [
       toml
       fastai
@@ -85,6 +84,17 @@ buildPythonPackage (finalAttrs: {
     mcp = [
       mcp
     ];
+    oauth = [
+      authlib
+      fastapi
+      httpx
+      itsdangerous
+    ];
+    torch = [
+      torch
+      safetensors
+    ]
+    ++ safetensors.optional-dependencies.torch;
   };
 
   nativeCheckInputs = [
