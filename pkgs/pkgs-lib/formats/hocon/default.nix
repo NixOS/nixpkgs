@@ -97,36 +97,52 @@ in
               optional = value.optional or false;
               _type = "substitution";
             };
-      };
 
+        types = {
+          hoconInclude = lib.types.listOf (
+            lib.mkOptionType {
+              name = "hoconInclude";
+              description = "hocon include statement";
+              check = value: lib.isAttrs value && value._type or null == "include";
+              merge = lib.mergeEqualOption;
+            }
+          );
+
+          hoconAppend = lib.mkOptionType {
+            name = "hoconAppend";
+            description = "hocon append";
+            check = value: lib.isAttrs value && value._type or null == "append";
+            merge = lib.mergeEqualOption;
+          };
+
+          hoconSubstitution = lib.mkOptionType {
+            name = "hoconSubstitution";
+            description = "hocon substitution";
+            check = value: lib.isAttrs value && value._type or null == "substitution";
+            merge = lib.mergeEqualOption;
+          };
+        };
+      };
     in
     {
       type =
         let
-          type' =
+          valueType =
             with lib.types;
-            let
-              atomType = nullOr (oneOf [
-                bool
-                float
-                int
-                path
-                str
-              ]);
-
-              includeType = addCheck attrs (x: (x._type or null) == "include");
-            in
-            (oneOf [
-              atomType
-              (addCheck (listOf atomType) (lib.all atomType.check))
-              (addCheck (listOf includeType) (lib.all includeType.check))
-              (attrsOf type')
+            nullOr (oneOf [
+              bool
+              int
+              float
+              str
+              path
+              (attrsOf valueType)
+              (listOf valueType)
             ])
             // {
               description = "HOCON value";
             };
         in
-        type';
+        valueType;
 
       lib = hoconLib;
 
