@@ -36,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = lib.optionals stdenv.hostPlatform.isStatic [ "NO_SOLIB=1" ];
 
+  strictDeps = true;
+
   outputs = [
     "out"
     "lib"
