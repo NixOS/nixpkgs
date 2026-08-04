@@ -2088,6 +2088,7 @@ mapAliases {
   remarshal_0_17 = throw "'remarshal_0_17' has been removed because 'remarshal' supports YAML 1.1 with the `--to yaml-1.1` flag."; # added 2026-07-30
   remodel = throw "'remodel' has been removed because it was unmaintained upstream, deprecated in favor of 'lune'"; # Added 2026-05-08
   remotebox = throw "remotebox has been removed because it was unmaintained and broken for a long time"; # Added 2025-09-11
+  rep-gtk = throw "'rep-gtk' has been removed because it depended on the deprecated GTK2 engine."; # Added 2026-08-03
   resp-app = throw "'resp-app' has been replaced by 'redisinsight'"; # Added 2025-12-17
   responsively-app = throw "'responsively-app' has been removed due to lack of maintenance upstream."; # Added 2025-06-25
   retroarchBare = throw "'retroarchBare' has been renamed to/replaced by 'retroarch-bare'"; # Converted to throw 2025-10-27
@@ -2137,6 +2138,7 @@ mapAliases {
   rymcast = throw "'rymcast' has been removed because it depended on the removed webkitgtk_4_0 and has been marked broken since October 2025"; # Added 2026-06-26
   ryujinx = throw "'ryujinx' has been replaced by 'ryubing' as the new upstream"; # Added 2025-07-30
   ryujinx-greemdev = throw "'ryujinx-greemdev' has been renamed to/replaced by 'ryubing'"; # Converted to throw 2025-10-27
+  sawfish = throw "'sawfish' has been removed as it depended on the deprecated GTK2 engine."; # Added 2026-08-03
   scantailor = throw "'scantailor' has been renamed to/replaced by 'scantailor-advanced'"; # Converted to throw 2025-10-27
   scaphandre = throw "'scaphandre' was broken with no upstream progress since February 2025"; # Added 2026-06-14
   scitoken-cpp = throw "'scitoken-cpp' has been renamed to/replaced by 'scitokens-cpp'"; # Converted to throw 2025-10-27
