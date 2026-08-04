@@ -11234,6 +11234,11 @@
     github = "HigherOrderLogic";
     githubId = 73709188;
   };
+  highghlow = {
+    name = "Alex Kravchenko";
+    github = "unhighghlow";
+    githubId = 132668972;
+  };
   hirenashah = {
     email = "hiren@hiren.io";
     github = "hirenashah";
