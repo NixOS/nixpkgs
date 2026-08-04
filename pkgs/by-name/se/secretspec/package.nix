@@ -3,41 +3,43 @@
   rustPlatform,
   fetchCrate,
   fetchurl,
-  pkg-config,
-  dbus,
+  cacert,
+  jq,
   sops,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "secretspec";
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-3UW0j5i+2r8yWaYYCtbdtiPJe8epLKeR1cpP35Bxko4=";
+    hash = "sha256-4N567/oDMgV81zlusn7TFQcDyWATvpoq879ZL/pzbuU=";
   };
 
-  cargoHash = "sha256-I6HFcWPB5TUSMtnk+SEHMxiKlPBxHLrj8zgzEWllV2w=";
+  cargoHash = "sha256-oMoRoKXjaCOER2KvKnLmSh9nKeYErh54IlQPFLHW8sE=";
 
   postPatch = ''
-    mkdir -p schema
+    mkdir -p ../tests/fixtures
     cp ${
       fetchurl {
-        url = "https://raw.githubusercontent.com/cachix/secretspec/v${finalAttrs.version}/schema/resolution-report.schema.json";
-        hash = "sha256-MDuWWa05hh3g5AtaJnoe6qDvf1XVO3C29zKJDm+f+h0=";
+        url = "https://raw.githubusercontent.com/cachix/secretspec/v${finalAttrs.version}/tests/fixtures/bw-shim.sh";
+        hash = "sha256-Xg1d8h2DOA6p0Hn9xP9TYzFN1863Wyk3QuQlFk+Y0ME=";
       }
-    } schema/resolution-report.schema.json
-    substituteInPlace src/tests.rs \
-      --replace-fail '../../schema/resolution-report.schema.json' '../schema/resolution-report.schema.json'
+    } ../tests/fixtures/bw-shim.sh
+    chmod +x ../tests/fixtures/bw-shim.sh
+    patchShebangs ../tests/fixtures/bw-shim.sh
   '';
 
-  nativeBuildInputs = [ pkg-config ];
-  nativeCheckInputs = [ sops ];
-  buildInputs = [ dbus ];
+  nativeCheckInputs = [
+    jq
+    sops
+  ];
 
   preCheck = ''
     export HOME="$TMPDIR"
+    export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
   '';
 
   # A test binds to localhost, which requires an explicit Darwin sandbox exception.
