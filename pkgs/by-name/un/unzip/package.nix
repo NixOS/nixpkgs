@@ -73,6 +73,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ bzip2 ];
   buildInputs = [ bzip2 ] ++ lib.optional enableNLS libnatspec;
 
+  strictDeps = true;
+
   makefile = "unix/Makefile";
 
   env = {
