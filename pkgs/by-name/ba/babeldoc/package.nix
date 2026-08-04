@@ -28,39 +28,39 @@ python3Packages.buildPythonApplication (finalAttrs: {
     with python3Packages;
     [
       bitstring
+      chardet
+      charset-normalizer
       configargparse
+      cryptography
+      freetype-py
       httpx
       huggingface-hub
+      hyperscan
+      levenshtein
+      msgpack
       numpy
       onnx
       onnxruntime
       openai
+      opencv-python-headless
       orjson
-      charset-normalizer
-      cryptography
       peewee
       psutil
+      pydantic
       pymupdf
+      pyzstd
+      rapidocr-onnxruntime
       rich
+      rtree
+      scikit-image
+      scikit-learn
+      scipy
+      tenacity
+      tiktoken
       toml
       tqdm
-      xsdata
-      msgpack
-      pydantic
-      tenacity
-      scikit-image
-      freetype-py
-      tiktoken
-      levenshtein
-      opencv-python-headless
-      rapidocr-onnxruntime
-      pyzstd
-      hyperscan
-      rtree
-      chardet
-      scipy
       uharfbuzz
-      scikit-learn
+      xsdata
     ]
     ++ httpx.optional-dependencies.socks
     ++ (with xsdata.optional-dependencies; cli ++ lxml ++ soap);
