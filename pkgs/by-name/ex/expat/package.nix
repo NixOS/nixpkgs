@@ -72,6 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     changelog = "https://github.com/libexpat/libexpat/blob/${tagFor finalAttrs.version}/expat/Changes";
     homepage = "https://libexpat.github.io/";
