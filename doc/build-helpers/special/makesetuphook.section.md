@@ -51,10 +51,30 @@ pkgs.makeSetupHook
 
 ## Attributes {#sec-pkgs.makeSetupHook-attributes}
 
-* `name` Set the name of the hook.
-* `propagatedBuildInputs` Runtime dependencies (such as binaries) of the hook.
-* `depsTargetTargetPropagated` Non-binary dependencies.
-* `meta`
-* `passthru`
-* `substitutions` Mapping of key to substitution value. Each `@key@` in the script is replaced by the corresponding value.
-* `__structuredAttrs` Whether to enable `__structuredAttrs` for the hook derivation itself (not for its consumers, which are unaffected either way).
+`name`
+
+: Set the name of the hook.
+
+`propagatedBuildInputs`
+
+: Runtime dependencies (such as binaries) of the hook.
+
+`depsTargetTargetPropagated`
+
+: Non-binary dependencies.
+
+`meta`
+
+: Package metadata, see [](#chap-meta).
+
+`passthru`
+
+: Extra attributes, see [](#chap-passthru).
+
+`substitutions`
+
+: Mapping of key to substitution value. Each `@key@` in the script is replaced by the corresponding value.
+
+`__structuredAttrs`
+
+: Whether to enable `__structuredAttrs` for the hook derivation itself (not for its consumers, which are unaffected either way).
