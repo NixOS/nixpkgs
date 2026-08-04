@@ -211,6 +211,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Multi-platform support library with a focus on asynchronous I/O";
     homepage = "https://libuv.org/";
