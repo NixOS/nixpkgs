@@ -1,4 +1,5 @@
 {
+  callPackage,
   gcc,
   mkl,
 }:
@@ -44,6 +45,7 @@ mkl.overrideAttrs (
       blasProvider = finalAttrs.finalPackage;
       blasImplementation = "mkl";
       provider = finalAttrs.finalPackage;
+      tests.gnu-openmp = callPackage ./test { mkl-gnulibs = finalAttrs.finalPackage; };
     };
   }
 )
