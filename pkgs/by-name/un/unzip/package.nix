@@ -7,12 +7,14 @@
   libnatspec,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unzip";
   version = "6.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/infozip/unzip${lib.replaceStrings [ "." ] [ "" ] version}.tar.gz";
+    url = "mirror://sourceforge/infozip/unzip${
+      lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
+    }.tar.gz";
     sha256 = "0dxx11knh3nk95p2gg2ak777dd11pr7jx5das2g49l262scrcv83";
   };
 
@@ -107,6 +109,8 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "http://www.info-zip.org";
     description = "Extraction utility for archives compressed in .zip format";
@@ -115,4 +119,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ RossComputerGuy ];
     mainProgram = "unzip";
   };
-}
+})
