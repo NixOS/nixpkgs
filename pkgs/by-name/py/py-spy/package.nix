@@ -73,6 +73,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/benfred/py-spy";
     changelog = "https://github.com/benfred/py-spy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 })
