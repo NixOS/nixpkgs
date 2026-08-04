@@ -1430,7 +1430,7 @@ rec {
     let
       allModules = map (
         { value, file }:
-        if isAttrs value && shorthandOnlyDefinesConfig then
+        if shorthandOnlyDefinesConfig && isAttrs value then
           {
             _file = file;
             config = value;
