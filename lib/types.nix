@@ -1428,21 +1428,19 @@ rec {
       class ? null,
     }@attrs:
     let
-      allModules =
-        defs:
-        map (
-          { value, file }:
-          if isAttrs value && shorthandOnlyDefinesConfig then
-            {
-              _file = file;
-              config = value;
-            }
-          else
-            {
-              _file = file;
-              imports = [ value ];
-            }
-        ) defs;
+      allModules = map (
+        { value, file }:
+        if isAttrs value && shorthandOnlyDefinesConfig then
+          {
+            _file = file;
+            config = value;
+          }
+        else
+          {
+            _file = file;
+            imports = [ value ];
+          }
+      );
 
       base = evalModules {
         inherit class specialArgs;
