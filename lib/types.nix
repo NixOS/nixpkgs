@@ -597,7 +597,9 @@ rec {
     name = "attrs";
     description = "attribute set";
     check = isAttrs;
-    merge = loc: foldl' (res: def: res // def.value) { };
+    merge =
+      loc: defs:
+      if length defs == 1 then (head defs).value else foldl' (res: def: res // def.value) { } defs;
     emptyValue = {
       value = { };
     };
