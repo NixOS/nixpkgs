@@ -50,6 +50,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-uvMiFURXxkLbbbwq4pG5hevsLZHQ1wVfTNvzQRTQWxE=";
 
+  patches = [
+    ./0001-fix-backport-SEC10.patch
+  ];
+
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook

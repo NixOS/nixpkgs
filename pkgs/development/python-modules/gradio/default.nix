@@ -49,6 +49,7 @@
   typer,
   typing-extensions,
   uvicorn,
+  urllib3,
 
   # oauth
   authlib,
@@ -81,7 +82,7 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "gradio";
-  version = "6.20.0"; # please always backport gradio changes
+  version = "6.22.0"; # please always backport gradio changes
   pyproject = true;
   __structuredAttrs = true;
 
@@ -89,7 +90,7 @@ buildPythonPackage (finalAttrs: {
     owner = "gradio-app";
     repo = "gradio";
     tag = "gradio@${finalAttrs.version}";
-    hash = "sha256-q5OoMguG/f0A3c6X+zotafc3kRRuebxMBPUIlrlcNFI=";
+    hash = "sha256-9FcGnZ/yktKM8sTGpgTv3QLIe2IoGbSw10rLWgj1zSU=";
   };
 
   patches = [
@@ -106,7 +107,7 @@ buildPythonPackage (finalAttrs: {
     inherit (finalAttrs) version src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-xCxr/jnp9emeB6THGt4cumvApw6fSZQwG2NGOcvR0yQ=";
+    hash = "sha256-TX4sLAfka/j002OsUKqxqi5B6Fb+DXSGdeL+w6V9XuM=";
   };
 
   env = {
@@ -157,6 +158,7 @@ buildPythonPackage (finalAttrs: {
     typer
     typing-extensions
     uvicorn
+    urllib3
   ]
   ++ lib.optionals (pythonAtLeast "3.13") [
     audioop-lts
@@ -195,6 +197,10 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ finalAttrs.passthru.optional-dependencies.oauth
   ++ pydantic.optional-dependencies.email;
+
+  pythonRelaxDeps = [
+    "tomlkit" # pre-emptive upper bound
+  ];
 
   preBuild = ''
     pnpm build
@@ -440,6 +446,7 @@ buildPythonPackage (finalAttrs: {
           '';
           pythonImportsCheck = null;
           dontCheckRuntimeDeps = true;
+          dontCheckPythonMetadata = true; # broken due to changed pname
         });
 
     # We can't use gitUpdater, because we need to update the pnpm hash.
