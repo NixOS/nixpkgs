@@ -5,6 +5,8 @@ npmBuildHook() {
 
     runHook preBuild
 
+    export NIX_NODEJS_BUILDNPMPACKAGE=1
+
     if [ -z "${npmBuildScript-}" ]; then
         echo
         echo "ERROR: no build script was specified"
