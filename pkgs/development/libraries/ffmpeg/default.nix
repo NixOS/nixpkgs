@@ -75,7 +75,7 @@ rec {
   # unversioned aliases to allow for quicker migration to new releases,
   # but can pin one of the versioned variants if they do not work with
   # the current default version.
-  ffmpeg = ffmpeg_8;
-  ffmpeg-headless = ffmpeg_8-headless;
-  ffmpeg-full = ffmpeg_8-full;
+  ffmpeg = ffmpeg_9;
+  ffmpeg-headless = ffmpeg_9-headless;
+  ffmpeg-full = ffmpeg_9-full;
 }
