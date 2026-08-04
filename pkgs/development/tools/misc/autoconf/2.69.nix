@@ -21,6 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [ m4 ];
 
+  strictDeps = true;
+
   # Work around a known issue in Cygwin.  See
   # http://thread.gmane.org/gmane.comp.sysutils.autoconf.bugs/6822 for
   # details.
