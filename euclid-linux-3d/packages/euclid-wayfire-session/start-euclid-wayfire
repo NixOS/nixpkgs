@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+# Export necessary environment variables for Wayland and Wayfire
+export XDG_SESSION_TYPE=wayland
+export XDG_CURRENT_DESKTOP=Wayfire
+export XDG_SESSION_DESKTOP=euclid-wayfire
+export DESKTOP_SESSION=euclid-wayfire
+
+export MOZ_ENABLE_WAYLAND=1
+export NIXOS_OZONE_WL=1
+export QT_QPA_PLATFORM="wayland;xcb"
+export SDL_VIDEODRIVER=wayland
+export CLUTTER_BACKEND=wayland
+
+# Ensure D-Bus is running
+if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
+    eval $(dbus-launch --exit-with-session --sh-syntax)
+fi
+
+# Determine polkit authentication agent path (try standard locations, though NixOS handles it via systemd)
+POLKIT_AUTH=$(find /nix/store -maxdepth 2 -name polkit-gnome-authentication-agent-1 | head -n 1)
+if [ -x "$POLKIT_AUTH" ]; then
+    "$POLKIT_AUTH" &
+fi
+
+if command -v wf-shell >/dev/null 2>&1; then
+    wf-shell &
+fi
+
+# Execute Wayfire as the main session process
+exec wayfire

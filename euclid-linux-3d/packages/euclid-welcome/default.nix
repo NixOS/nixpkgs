@@ -24,7 +24,7 @@ class WelcomeWindow(QMainWindow):
 
         layout = QVBoxLayout()
 
-        os_name = "Euclid Linux 3D Budgie+Compiz"
+        os_name = "Euclid Linux 3D — Budgie + Wayfire"
         try:
             with open("/etc/os-release") as f:
                 for line in f:
@@ -36,7 +36,7 @@ class WelcomeWindow(QMainWindow):
 
         info_label = QLabel(f"<h1>Welcome to {os_name}</h1>"
                             f"<p>Active Session: <b>{session}</b></p>"
-                            "<p>Euclid Linux 3D brings you modern 3D capabilities via Compiz Reloaded.</p>")
+                            "<p>Euclid Linux 3D brings you modern 3D capabilities via Wayfire.</p>")
         info_label.setWordWrap(True)
         layout.addWidget(info_label)
 
@@ -47,7 +47,7 @@ class WelcomeWindow(QMainWindow):
 
         add_button("Install Euclid Linux 3D", ["calamares"])
         add_button("Open Budgie Desktop Settings", ["budgie-desktop-settings"])
-        add_button("Open CompizConfig Settings Manager", ["ccsm"])
+        add_button("Open Wayfire Configuration Utility", ["wcm"])
         add_button("Hardware Information", ["sysinfo"])
         add_button("Update the system", ["gnome-terminal", "-e", "sudo nixos-rebuild switch"])
         add_button("Open Release Notes", ["xdg-open", "https://github.com/euclidprojects/Euclid-Linux-3D/releases"])

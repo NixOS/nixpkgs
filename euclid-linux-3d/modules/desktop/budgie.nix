@@ -9,7 +9,7 @@
   services.displayManager.gdm.enable = true;
 
   # Budgie's package advertises this session name.
-  services.displayManager.defaultSession = "budgie-desktop";
+  services.displayManager.defaultSession = lib.mkDefault "budgie-desktop";
 
   # Automatically enter the live ISO desktop.
   services.displayManager.autoLogin = {

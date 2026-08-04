@@ -6,8 +6,8 @@
 - All mock apps removed. Packages natively wrapped without shortcuts. (Pass)
 
 ## Session tests
-- Lumina+Compiz session configured and starts up in VM checks (Pass)
-- MATE+Compiz session configured and starts up (Pass)
+- Lumina session configured and starts up in VM checks (Pass)
+- MATE session configured and starts up (Pass)
 - Plasma Standard and Plasma Experimental configured (Pass)
 
 ## Installer tests

@@ -18,6 +18,5 @@ jobs:
           nix flake check --extra-experimental-features "nix-command flakes"
       - name: Build Core Packages
         run: |
-          nix build .#compiz-reloaded-full --extra-experimental-features "nix-command flakes"
           nix build .#euclid-icon-theme --extra-experimental-features "nix-command flakes"
           nix build .#euclid-welcome --extra-experimental-features "nix-command flakes"

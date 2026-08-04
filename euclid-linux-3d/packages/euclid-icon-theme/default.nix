@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     cp euclid-linux-3d-logo.png $out/share/icons/Euclid-3D/scalable/apps/euclid-linux-3d.png
 
     # Aliases
-    for icon in euclid-welcome euclid-installer euclid-settings euclid-terminal euclid-files euclid-software euclid-help euclid-about euclid-session-budgie-compiz start-here system-logo distributor-logo; do
+    for icon in euclid-welcome euclid-installer euclid-settings euclid-terminal euclid-files euclid-software euclid-help euclid-about euclid-session-budgie-wayfire start-here system-logo distributor-logo; do
       for size in 16 22 24 32 48 64 128 256 512; do
         ln -s euclid-linux-3d.png $out/share/icons/Euclid-3D/''${size}x''${size}/apps/$icon.png
       done

@@ -24,39 +24,17 @@
             "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-graphical-calamares.nix"
             ./modules/core/default.nix
             ./modules/branding/default.nix
-            ./profiles/budgie-compiz.nix
+            ./profiles/budgie-wayfire.nix
           ];
         };
       };
 
       packages.${system} = {
         inherit (pkgs)
-          compiz-bcop
-          compiz-core
-          compiz-plugins-main
-          compiz-plugins-extra
-          compiz-plugins-experimental
-          libcompizconfig
-          compizconfig-python
-          ccsm
-          simple-ccsm
-          emerald
-          emerald-themes
-          fusion-icon
-          compiz-manager
           euclid-icon-theme
           euclid-welcome
+          euclid-wayfire-session
           euclid-wallpapers;
-
-        compiz-reloaded-minimal = pkgs.symlinkJoin {
-          name = "compiz-reloaded-minimal";
-          paths = with pkgs; [ compiz-core compiz-plugins-main libcompizconfig compizconfig-python ccsm ];
-        };
-
-        compiz-reloaded-full = pkgs.symlinkJoin {
-          name = "compiz-reloaded-full";
-          paths = with pkgs; [ compiz-core compiz-plugins-main compiz-plugins-extra compiz-plugins-experimental libcompizconfig compizconfig-python ccsm simple-ccsm emerald emerald-themes fusion-icon compiz-manager ];
-        };
       };
 
       # We provide an ISO output separately to avoid heavy builds during standard flake checks
