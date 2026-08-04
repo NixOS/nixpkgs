@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "hekatomb";
-  version = "1.5.14-unstable-2024-02-14";
+  version = "1.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
