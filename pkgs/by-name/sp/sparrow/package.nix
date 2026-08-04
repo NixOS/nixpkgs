@@ -313,6 +313,7 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       msgilligan
+      eymeric
     ];
     platforms = [
       "x86_64-linux"
