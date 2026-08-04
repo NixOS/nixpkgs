@@ -122,6 +122,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
           'test cases/native/8 external program shebang parsing/script.int.in' \
           'test cases/common/274 customtarget exe for test/generate.py' \
             --replace-fail /usr/bin/env ${lib.getExe' coreutils "env"}
+        substituteInPlace run_project_tests.py \
+          --replace-fail "multiprocessing.cpu_count()" "int(os.environ['NIX_BUILD_CORES'])"
       ''
     ]
     # Remove problematic tests
