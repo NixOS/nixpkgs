@@ -137,6 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.gnome.org/GNOME/calls/-/blob/v${finalAttrs.version}/NEWS";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ craigem ];
+    teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
     mainProgram = "gnome-calls";
   };
