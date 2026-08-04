@@ -126,6 +126,8 @@ stdenv.mkDerivation (finalAttrs: {
     curl = (curl.override { scpSupport = true; }).tests.withCheck;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Client-side C library implementing the SSH2 protocol";
     homepage = "https://www.libssh2.org";
