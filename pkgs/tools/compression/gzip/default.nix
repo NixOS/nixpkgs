@@ -44,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [ runtimeShellPackage ];
 
+  strictDeps = true;
+
   makeFlags = [
     "SHELL=/bin/sh"
     "GREP=grep"
