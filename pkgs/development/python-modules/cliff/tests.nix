@@ -2,13 +2,13 @@
   buildPythonPackage,
   cliff,
   sphinx,
-  stestr,
+  stestrCheckHook,
   testscenarios,
 }:
 
 buildPythonPackage {
   pname = "cliff";
-  inherit (cliff) version src;
+  inherit (cliff) version src patches;
   pyproject = false;
 
   postPatch = ''
@@ -23,11 +23,17 @@ buildPythonPackage {
   nativeCheckInputs = [
     cliff
     sphinx
-    stestr
+    stestrCheckHook
     testscenarios
   ];
 
-  checkPhase = ''
-    stestr run
-  '';
+  # Incompatible with the cmd2 version in nixpkgs (Cmd.completenames removed);
+  # fixed upstream in cliff 4.15.0.
+  disabledTests = [
+    "cliff.tests.test_help.TestHelp.test_show_help_for_help"
+    "cliff.tests.test_interactive.TestInteractive.test_both_completenames"
+    "cliff.tests.test_interactive.TestInteractive.test_cliff_completenames"
+    "cliff.tests.test_interactive.TestInteractive.test_cmd2_completenames"
+    "cliff.tests.test_interactive.TestInteractive.test_no_completenames"
+  ];
 }
