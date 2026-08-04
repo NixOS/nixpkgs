@@ -58,13 +58,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "element-call";
-  version = "0.22.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "element-call";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nYW7KOz6lDWvgXTYrVQmpwo3uGqSCMnC3nU2kBgUnlA=";
+    hash = "sha256-xDhU8y480MXZ9Zo5C6b7ykL73D9faouI95df0CEMaBM=";
   };
 
   pnpmDeps = fetchPnpmDeps {
