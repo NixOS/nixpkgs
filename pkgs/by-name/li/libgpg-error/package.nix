@@ -81,6 +81,8 @@ stdenv.mkDerivation (
       gettext
     ];
 
+    strictDeps = true;
+
     postConfigure =
       # For some reason, /bin/sh on OpenIndiana leads to this at the end of the
       # `config.status' run:
