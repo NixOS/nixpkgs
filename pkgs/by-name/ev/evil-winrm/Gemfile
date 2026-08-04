@@ -1,7 +1,10 @@
 source 'https://rubygems.org'
 
+gem 'benchmark'
+gem 'csv'
+gem 'fileutils'
+gem 'logger'
+gem 'stringio'
+gem 'syslog'
 gem 'winrm'
 gem 'winrm-fs'
-gem 'stringio'
-gem 'logger'
-gem 'fileutils'
