@@ -433,6 +433,13 @@
     "hash": "sha256-4Jaf0p22SygVmg722FOp4dkqHKlxYFoBRlvE05gmvEQ=",
     "description": "Microsoft Azure Command-Line Tools DnsResolverManagementClient Extension"
   },
+  "documentdb": {
+    "pname": "documentdb",
+    "version": "1.0.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/documentdb-1.0.0b1-py3-none-any.whl",
+    "hash": "sha256-0ZbE9sj2y12PfLmkTb6H+4d/Qp86GWDuwEpacwKo9BE=",
+    "description": "Microsoft Azure Command-Line Tools Documentdb Extension"
+  },
   "durabletask": {
     "pname": "durabletask",
     "version": "1.0.0b8",
