@@ -180,6 +180,9 @@ let
       gnugrep
       openjdk
       autoPatchelfHook
+    ];
+
+    buildInputs = [
       (lib.getLib stdenv.cc.cc)
       zlib
       libusb1
