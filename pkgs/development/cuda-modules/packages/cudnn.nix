@@ -45,8 +45,11 @@ buildRedist (
 
     # CuDNN depends on libnvrtc.so at runtime, as mentioned here in one small error description
     # https://docs.nvidia.com/deeplearning/cudnn/backend/latest/api/cudnn-graph-library.html
-    appendRunpaths = [
-      "${lib.getLib cuda_nvrtc}/lib"
+    # libcudnn_adv and libcudnn_engines_precompiled dlopen libcublasLt -- the soname lives in
+    # .rodata and is never DT_NEEDED, so the buildInputs entry above never reaches a runpath.
+    appendRunpaths = map (pkg: "${lib.getLib pkg}/lib") [
+      cuda_nvrtc # libnvrtc.so.%s
+      libcublas # libcublasLt.so.%s
     ];
 
     # NOTE:
