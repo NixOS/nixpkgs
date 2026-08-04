@@ -30,15 +30,15 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "python-aodhclient";
-  version = "3.10.1";
+  pname = "aodhclient";
+  version = "3.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-aodhclient";
     tag = finalAttrs.version;
-    hash = "sha256-xm42ZicdBxxm4LTDHPhEIeNU6evBZtp2PGvGy6V2t8c=";
+    hash = "sha256-vyrs7QewZknxB1fovZQRhOJe3G9J5YEN4cIHeLrnvrU=";
   };
 
   env.PBR_VERSION = finalAttrs.version;
@@ -94,7 +94,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Client library for OpenStack AOodh API";
     homepage = "https://docs.openstack.org/python-aodhclient/latest/";
-    downloadPage = "https://github.com/openstack/python-aodhclientz /releases/tag/${finalAttrs.src.tag}";
+    downloadPage = "https://github.com/openstack/python-aodhclient/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     mainProgram = "aodh";
     teams = [ lib.teams.openstack ];
