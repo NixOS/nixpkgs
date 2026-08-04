@@ -1375,6 +1375,11 @@ lib.mapAttrs mkLicense (
       fullName = "Qt GPL exception 1.0";
     };
 
+    qtLgplException11 = {
+      spdxId = "Qt-LGPL-exception-1.1";
+      fullName = "Qt LPL exception 1.1";
+    };
+
     qwtException = {
       spdxId = "Qwt-exception-1.0";
       fullName = "Qwt exception 1.0";
