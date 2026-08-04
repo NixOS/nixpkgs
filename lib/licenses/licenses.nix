@@ -178,6 +178,11 @@ lib.mapAttrs mkLicense (
       fullName = "Baekmuk License";
     };
 
+    bisonException22 = {
+      spdxId = "Bison-exception-2.2";
+      fullName = "Bison exception 2.2";
+    };
+
     bitstreamCharter = {
       spdxId = "Bitstream-Charter";
       fullName = "Bitstream Charter Font License";
