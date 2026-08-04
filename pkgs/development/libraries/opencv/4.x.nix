@@ -460,9 +460,11 @@ effectiveStdenv.mkDerivation {
   ]
   ++ optionals enablePython (
     [
-      pythonPackages.pip
-      pythonPackages.wheel
-      pythonPackages.setuptools
+      (pythonPackages.python.pythonOnBuildForHost.withPackages (ps: [
+        ps.pip
+        ps.wheel
+        ps.setuptools
+      ]))
     ]
     ++ optionals (effectiveStdenv.hostPlatform == effectiveStdenv.buildPlatform) [
       pythonPackages.pythonImportsCheckHook
