@@ -20,6 +20,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ unzip ];
   propagatedNativeBuildInputs = [ findXMLCatalogs ];
 
+  strictDeps = true;
+
   unpackPhase = ''
     mkdir -p $out/xml/dtd/docbook
     cd $out/xml/dtd/docbook
