@@ -13630,6 +13630,8 @@ self: super: with self; {
 
   prison = callPackage ../development/python-modules/prison { };
 
+  probatio = callPackage ../development/python-modules/probatio { };
+
   probed = callPackage ../development/python-modules/probed { };
 
   process-tests = callPackage ../development/python-modules/process-tests { };
