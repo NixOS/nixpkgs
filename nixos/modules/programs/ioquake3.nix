@@ -23,12 +23,17 @@ let
   configFile = pkgs.writeText "ioquake3-settings.cfg" (toIoquake3Config cfg.settings);
 
   ioquake3Wrapped = pkgs.symlinkJoin {
-    name = "ioquake3-wrapped";
+    name = "${cfg.package.pname}-wrapped";
     paths = [ cfg.package ];
-    nativeBuildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = [ pkgs.makeBinaryWrapper ];
+
     postBuild = ''
-      wrapProgram "$out/bin/ioquake3" --add-flags "+set fs_basepath ${cfg.baseq3} +set fs_cdpath ${fsBasepath} +exec settings.cfg"
+      makeBinaryWrapper ${lib.getExe cfg.package} \
+        $out/bin/${baseNameOf (lib.getExe cfg.package)} \
+        --add-flags "+set fs_basepath ${cfg.baseq3} +set fs_cdpath ${fsBasepath} +exec settings.cfg"
     '';
+
+    meta.mainProgram = baseNameOf (lib.getExe cfg.package);
   };
 in
 {
@@ -63,6 +68,13 @@ in
       '';
     };
 
+    finalPackage = lib.mkOption {
+      type = lib.types.package;
+      readOnly = true;
+      internal = true;
+      description = "The wrapped ioquake3 package.";
+    };
+
     settings = lib.mkOption {
       type = lib.types.attrsOf (
         lib.types.oneOf [
@@ -93,8 +105,9 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    programs.ioquake3.finalPackage = ioquake3Wrapped;
     environment = {
-      systemPackages = [ ioquake3Wrapped ];
+      systemPackages = [ cfg.finalPackage ];
       etc."xdg/ioquake3/baseq3/settings.cfg".source = configFile;
     };
   };
