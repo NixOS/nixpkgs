@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "python-box";
-  version = "7.3.2";
+  version = "7.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cdgriffith";
     repo = "Box";
     tag = version;
-    hash = "sha256-aVPjIoizqC0OcG5ziy/lvp/JsFSUvcLUqJ03mKViKFs=";
+    hash = "sha256-tzkTiuH9zBUFYXda6iv4Ohh72WBVcW/BykMS5W7BPPo=";
   };
 
   build-system = [
@@ -48,6 +48,10 @@ buildPythonPackage rec {
   disabledTests = [
     # ruamel 8.18.13 update changed white space rules
     "test_to_yaml_ruamel"
+    # Optional toon_format encoder is not packaged
+    "test_toon_strings"
+    "test_toon_files"
+    "test_toon_from_toon_with_box_args"
   ];
 
   pythonImportsCheck = [ "box" ];
