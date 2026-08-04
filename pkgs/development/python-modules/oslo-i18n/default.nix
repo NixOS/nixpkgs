@@ -5,8 +5,8 @@
   oslotest,
   pbr,
   setuptools,
+  stestrCheckHook,
   testscenarios,
-  stestr,
 }:
 
 buildPythonPackage rec {
@@ -33,20 +33,14 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     oslotest
-    stestr
+    stestrCheckHook
     testscenarios
   ];
 
-  checkPhase = ''
-    runHook preCheck
-
-    stestr run -e <(echo "
+  disabledTests = [
     # list is not deduped
-    oslo_i18n.tests.test_gettextutils.GettextTest.test_get_available_languages
-    ")
-
-    runHook postCheck
-  '';
+    "oslo_i18n.tests.test_gettextutils.GettextTest.test_get_available_languages"
+  ];
 
   pythonImportsCheck = [ "oslo_i18n" ];
 
