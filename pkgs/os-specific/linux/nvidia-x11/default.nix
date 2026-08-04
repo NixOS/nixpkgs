@@ -100,14 +100,15 @@ rec {
   # Vulkan developer beta driver
   # See here for more information: https://developer.nvidia.com/vulkan-driver
   vulkan_beta = generic rec {
-    version = "595.44.09";
+    version = "595.44.16";
     persistencedVersion = "595.45.04";
     settingsVersion = "595.45.04";
-    sha256_64bit = "sha256-LOcwE47hUG1aZX7JvLmTb/yC5qQgXYZ0TAavSn38Xug=";
-    openSha256 = "sha256-QboSiRWRZWseFg7GN/a4vZVQGGBF1UJlC9MyAxUxyF4=";
+    sha256_64bit = "sha256-yCI8/jom9E2a9kBUK075B0yof+qHqkWBgVhG0l4hazE=";
+    sha256_aarch64 = "sha256-Bg5wta9AVvk1JAss3fTvU9FJkTr1jcofjF9JDStCt2U=";
+    openSha256 = "sha256-IuiWF0Sc9BJby7cd4/ThWuXffGPNbqXApTcW/lVbCso=";
     settingsSha256 = "sha256-Y45pryyM+6ZTJyRaRF3LMKaiIWxB5gF5gGEEcQVr9nA=";
     persistencedSha256 = "sha256-5FoeUaRRMBIPEWGy4Uo0Aho39KXmjzQsuAD9m/XkNpA=";
-    url = "https://developer.nvidia.com/downloads/vulkan-beta-${lib.concatStrings (lib.splitVersion version)}-linux";
+    url = "https://developer.nvidia.com/downloads/assets/gameworks/downloads/secure/Vulkan_Beta_Drivers/NVIDIA-Linux-${stdenv.hostPlatform.parsed.cpu.name}-${version}.run";
   };
 
   # data center driver compatible with current default cudaPackages
