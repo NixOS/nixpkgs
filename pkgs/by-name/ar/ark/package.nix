@@ -1,5 +1,6 @@
 {
   lib,
+  callPackage,
   rustPlatform,
   fetchFromGitHub,
   cmake,
@@ -43,6 +44,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wrapProgram $out/bin/ark \
       --suffix PATH : ${lib.makeBinPath [ R ]}
   '';
+
+  passthru.wrapper = callPackage ./wrapper.nix {
+    ark = finalAttrs.finalPackage;
+    inherit R;
+  };
 
   meta = {
     description = "R kernel for Jupyter applications, powering Positron's R support";
