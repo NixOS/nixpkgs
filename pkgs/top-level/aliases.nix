@@ -1146,6 +1146,7 @@ mapAliases {
   jellyfin-media-player = jellyfin-desktop; # Added 2025-12-14
   jellyseerr = warnAlias "'jellyseerr' has been renamed to 'seerr'" seerr; # Added 2026-03-17
   jesec-rtorrent = throw "'jesec-rtorrent' has been removed due to lack of maintenance upstream."; # Added 2025-11-20
+  jetty_11 = throw "'jetty_11' has been removed as it has reached end of life. Please migrate to 'jetty_12'."; # Added 2026-08-04
   jextract-21 = throw "'jextract-21' has been removed due to lack of maintenance upstream. Please use 'jextract'"; # Added 2026-05-13
   jhentai = throw "'jhentai' has been removed, as it is unmaintained"; # Added 2026-01-25
   jikespg = throw "'jikespg' has been removed due to lack of maintenance upstream."; # Added 2025-06-10

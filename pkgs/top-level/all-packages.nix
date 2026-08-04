@@ -7361,7 +7361,6 @@ with pkgs;
   inspircdMinimal = inspircd.override { extraModules = [ ]; };
 
   inherit (callPackages ../servers/http/jetty { })
-    jetty_11
     jetty_12
     ;
 
