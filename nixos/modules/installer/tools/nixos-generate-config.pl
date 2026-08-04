@@ -206,10 +206,10 @@ sub pciCheck {
          $device eq "0x4222" || $device eq "0x4227");
 
     # Intel NPU driver
-    # list taken from linux(v6.18): drivers/accel/ivpu/ivpu_drv.h
+    # list taken from linux(v7.1): drivers/accel/ivpu/ivpu_drv.h
     if ($vendor eq "0x8086" &&
-        ($device eq "0xfd3e" || $device eq "0x7d1d" || $device eq "0xad1d" ||
-         $device eq "0x643e" || $device eq "0xb03e"))
+        ($device eq "0x7d1d" || $device eq "0xad1d" || $device eq "0x643e" ||
+         $device eq "0xb03e" || $device eq "0xfd3e" || $device eq "0xd71d"))
     {
         push @attrs, "hardware.cpu.intel.npu.enable = true;";
     }
