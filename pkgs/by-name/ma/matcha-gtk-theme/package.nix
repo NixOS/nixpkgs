@@ -3,7 +3,6 @@
   stdenvNoCC,
   fetchFromGitHub,
   gdk-pixbuf,
-  gtk-engine-murrine,
   jdupes,
   librsvg,
   gitUpdater,
@@ -40,10 +39,6 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] col
     buildInputs = [
       gdk-pixbuf
       librsvg
-    ];
-
-    propagatedUserEnvPkgs = [
-      gtk-engine-murrine
     ];
 
     postPatch = ''
