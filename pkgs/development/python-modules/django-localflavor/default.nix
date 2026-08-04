@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "django-localflavor";
-  version = "5.0";
+  version = "5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django";
     repo = "django-localflavor";
     tag = version;
-    hash = "sha256-eYhkWfxoZlnxhCIaqBhoEt0+SbkZKkUNUAy4p3tYf4A=";
+    hash = "sha256-pvfXZVHL1/uXibfhimF3T76w2KwlwEVhJFe2VXWM55k=";
   };
 
   build-system = [ setuptools ];
