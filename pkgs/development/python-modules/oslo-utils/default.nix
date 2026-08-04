@@ -28,7 +28,7 @@
   pyyaml,
   qemu-utils,
   stdenv,
-  stestr,
+  stestrCheckHook,
   testscenarios,
   tzdata,
 }:
@@ -81,23 +81,14 @@ buildPythonPackage rec {
     oslotest
     pyyaml
     qemu-utils
-    stestr
+    stestrCheckHook
     testscenarios
     tzdata
   ];
 
-  # disabled tests:
-  # https://bugs.launchpad.net/oslo.utils/+bug/2054134
-  # netaddr default behaviour changed to be stricter
-  checkPhase = ''
+  preCheck = ''
     echo "nameserver 127.0.0.1" > resolv.conf
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
-
-    stestr run -e <(echo "
-      oslo_utils.tests.test_netutils.NetworkUtilsTest.test_is_valid_ip
-      oslo_utils.tests.test_netutils.NetworkUtilsTest.test_is_valid_ipv4
-      oslo_utils.tests.test_eventletutils.EventletUtilsTest.test_event_set_clear_timeout
-    ")
   '';
 
   pythonImportsCheck = [ "oslo_utils" ];
