@@ -34,6 +34,9 @@ buildPythonApplication {
     (replaceVars ./setup.patch {
       inherit version;
     })
+
+    # Use importlib instead of deprecated imp module.
+    ./importlib.patch
   ];
 
   build-system = [ setuptools ];
