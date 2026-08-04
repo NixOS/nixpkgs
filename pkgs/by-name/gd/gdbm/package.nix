@@ -65,6 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.gnu.org/software/gdbm/";
     description = "GNU dbm key/value database library";
