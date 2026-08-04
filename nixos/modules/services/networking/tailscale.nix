@@ -141,6 +141,10 @@ in
   };
 
   config = mkIf cfg.enable {
+    warnings =
+      lib.optional (!lib.pathExists "${cfg.package}/lib/systemd/system/tailscaled.service")
+        "`${cfg.package}` does not provide `lib/systemd/system/tailscaled.service`, so the change in `services.tailscale.package` may not be reflected in the systemd service";
+
     environment.systemPackages = [ cfg.package ]; # for the CLI
     systemd.packages = [ cfg.package ];
     systemd.services.tailscaled = {
