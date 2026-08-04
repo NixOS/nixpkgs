@@ -24,6 +24,7 @@
   pmix,
   python3Packages,
   rdma-core,
+  removeReferencesTo,
   ucx,
   # passthru.updateScript
   gitUpdater,
@@ -40,6 +41,7 @@ let
   inherit (lib)
     cmakeBool
     cmakeFeature
+    concatMapStringsSep
     getBin
     getDev
     getExe
@@ -77,6 +79,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     # NOTE: Python is required even if not building nvshmem4py:
     # https://github.com/NVIDIA/nvshmem/blob/131da55f643ac87c810ba0bc51d359258bf433a1/CMakeLists.txt#L173
     python3Packages.python
+    removeReferencesTo
   ]
   ++ optionals withMpi [
     # NOTE: mpi is in nativeBuildInputs because it contains compilers and is only discoverable by CMake
@@ -184,6 +187,29 @@ backendStdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     nixLog "moving top-level files in $out to $out/share"
     mv -v "$out"/{changelog,git_commit.txt,License.txt,version.txt} "$out/share/"
+  '';
+
+  # cmake_config/NVSHMEMEnv.cmake:156 bakes every -D*_HOME we pass into NVSHMEM_BUILD_VARS, a
+  # diagnostic banner that nvshmem-info and init.cu only print. Nix still counts the store paths, so
+  # build-only inputs become runtime dependencies -- and the banner is substituted into an installed
+  # header, so consumers inherit them too. Only the dev outputs and nvcc are stripped: gdrcopy and
+  # mpi appear in the same string but are genuine runtime dependencies. No disallowedRequisites
+  # guard here, unlike nccl and gdrcopy, because ucx and openmpi pull nvcc in on their own.
+  postFixup = ''
+    nixLog "removing build-time references baked into NVSHMEM_BUILD_VARS"
+    remove-references-to ${
+      concatMapStringsSep " " (p: ''-t "${p}"'') (
+        [ (getBin cuda_nvcc) ]
+        ++ optional withNccl (getDev nccl)
+        ++ optional withUcx (getDev ucx)
+        ++ optional withLibfabric (getDev libfabric)
+        ++ optional withPmix (getDev pmix)
+      )
+    } \
+      "$out"/bin/nvshmem-info \
+      "$out"/lib/libnvshmem_host.so.*.* \
+      "$out"/include/non_abi/nvshmem_version.h \
+      "$out"/share/src/*/include/non_abi/nvshmem_version.h
   '';
 
   doCheck = false;
