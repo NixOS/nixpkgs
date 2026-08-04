@@ -33,6 +33,8 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     branch = version;
     platforms = lib.platforms.unix;
