@@ -1,36 +1,53 @@
 {
   lib,
-  attrs,
-  authlib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # buildInputs
+  rdkafka,
+
+  # build-system
+  setuptools,
+
+  # optional-dependencies
+  # avro:
   avro,
+  fastavro,
+  requests,
+  # json-fast:
+  orjson,
+  # json:
+  jsonschema,
+  pyrsistent,
+  # oauthbearer-aws:
+  boto3,
+  # protobuf:
+  protobuf,
+  # rules:
   azure-identity,
   azure-keyvault-keys,
-  boto3,
-  buildPythonPackage,
-  cachetools,
   cel-python,
-  certifi,
-  fastavro,
-  fetchFromGitHub,
   google-auth,
   google-api-core,
   google-cloud-kms,
   google-re2,
   hvac,
+  pyyaml,
+  # schema-registry:
+  attrs,
+  authlib,
+  cachetools,
+  certifi,
   httpx,
-  jsonschema,
-  orjson,
-  protobuf,
+
+  # tests
   pyflakes,
-  pyrsistent,
   pytest-asyncio,
   pytestCheckHook,
-  pyyaml,
-  rdkafka,
-  requests,
   requests-mock,
   respx,
-  setuptools,
+
+  # passthru
   nix-update-script,
 }:
 
