@@ -5024,6 +5024,8 @@ self: super: with self; {
 
   dockerspawner = callPackage ../development/python-modules/dockerspawner { };
 
+  doclang = callPackage ../development/python-modules/doclang { };
+
   docling = callPackage ../development/python-modules/docling { };
 
   docling-core = callPackage ../development/python-modules/docling-core { };
