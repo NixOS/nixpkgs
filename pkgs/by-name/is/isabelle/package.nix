@@ -25,7 +25,8 @@
   isabelle-components,
   symlinkJoin,
   fetchhg,
-  electron,
+  callPackage,
+  writeTextFile,
   writableTmpDirAsHomeHook,
 }:
 
@@ -136,6 +137,27 @@ let
         };
       };
 
+  # Isabelle requires it's own version of vscodium, patched with support
+  # for it's unique charsets
+  vscodium = callPackage ./vscodium.nix { };
+
+  vscodium-settings = writeTextFile {
+    name = "vscodium-settings";
+    text =
+      if stdenv.hostPlatform.isDarwin then
+        ''
+          ISABELLE_VSCODIUM_HOME="${vscodium}/Applications"
+          ISABELLE_VSCODIUM_ELECTRON="$ISABELLE_VSCODIUM_HOME/VSCodium.app/Contents/MacOS/Electron"
+          ISABELLE_VSCODIUM_RESOURCES="$ISABELLE_VSCODIUM_HOME/VSCodium.app/Contents/Resources"
+        ''
+      else
+        ''
+          ISABELLE_VSCODIUM_HOME="${vscodium}/lib/vscode"
+          ISABELLE_VSCODIUM_ELECTRON="$ISABELLE_VSCODIUM_HOME/electron"
+          ISABELLE_VSCODIUM_RESOURCES="$ISABELLE_VSCODIUM_HOME/resources"
+        '';
+    destination = "/etc/settings";
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "isabelle";
@@ -251,6 +273,10 @@ stdenv.mkDerivation (finalAttrs: {
     done
     rm -rf contrib/*/src
 
+    substituteInPlace etc/components \
+      --replace-fail 'contrib/vscodium-1.105.17075' '${vscodium-settings}'
+    rm -rf contrib/vscodium-*
+
     substituteInPlace lib/Tools/env \
       --replace-fail /usr/bin/env ${coreutils}/bin/env
 
@@ -272,10 +298,6 @@ stdenv.mkDerivation (finalAttrs: {
       patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f"${lib.optionalString stdenv.hostPlatform.isAarch64 " || true"}
     done
     patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) contrib/bash_process-*/${platform}/bash_process
-
-    ln -sf ${electron}/bin/electron contrib/vscodium-*/*/electron
-    rm contrib/vscodium-*/*/*.so{,.*}
-    rm contrib/vscodium-*/*/chrome*
 
     for d in contrib/kodkodi-*/jni/${platform}; do
       patchelf --set-rpath "${
@@ -351,10 +373,22 @@ stdenv.mkDerivation (finalAttrs: {
         "Math"
       ];
     })
+    (makeDesktopItem {
+      name = "isabelle_vscodium";
+      exec = "isabelle vscode";
+      icon = "isabelle";
+      desktopName = "Isabelle (VSCodium)";
+      comment = finalAttrs.meta.description;
+      categories = [
+        "Education"
+        "Science"
+        "Math"
+      ];
+    })
   ];
 
   passthru = {
-    inherit platform;
+    inherit vscodium platform;
     vampire = vampire';
     polyml = polyml';
     cvc5 = cvc5';

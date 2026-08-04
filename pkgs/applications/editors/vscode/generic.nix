@@ -70,6 +70,8 @@
   useVSCodeRipgrep ? false,
   hasVsceSign ? false,
   patchVSCodePath ? true,
+  appDir ? "app",
+  installExecutable ? true,
 
   # Populate passthru.tests
   tests,
@@ -326,22 +328,27 @@ stdenv.mkDerivation (
     + (
       if stdenv.hostPlatform.isDarwin then
         ''
-          mkdir -p "$out/Applications/${longName}.app" "$out/bin"
+          mkdir -p "$out/Applications/${longName}.app"
           cp -r ./* "$out/Applications/${longName}.app"
-          ln -s "$out/Applications/${longName}.app/Contents/Resources/app/bin/${sourceExecutableName}" "$out/bin/${executableName}"
+        ''
+        + lib.optionalString installExecutable ''
+          mkdir -p "$out/bin"
+          ln -s "$out/Applications/${longName}.app/Contents/Resources/${appDir}/bin/${sourceExecutableName}" "$out/bin/${executableName}"
         ''
       else
         (
           ''
-            mkdir -p "$out/lib/${libraryName}" "$out/bin"
+            mkdir -p "$out/lib/${libraryName}"
             cp -r ./* "$out/lib/${libraryName}"
-
+          ''
+          + lib.optionalString installExecutable ''
+            mkdir -p "$out/bin"
             ln -s "$out/lib/${libraryName}/bin/${sourceExecutableName}" "$out/bin/${executableName}"
           ''
           # These are named vscode.png, vscode-insiders.png, etc to match the name in upstream *.deb packages.
           + ''
             mkdir -p "$out/share/pixmaps"
-            icon_file="$out/lib/${libraryName}/resources/app/resources/linux/code.png"
+            icon_file="$out/lib/${libraryName}/resources/${appDir}/resources/linux/code.png"
             cp "$icon_file" "$out/share/pixmaps/${iconName}.png"
 
             # Dynamically determine size of icon and place in appropriate directory
@@ -360,8 +367,8 @@ stdenv.mkDerivation (
         # in the first place.
         # Also remove prebuilt Copilot binaries that seemingly have been added by accident.
         + ''
-          rm -rf $out/lib/${libraryName}/resources/app/node_modules/vscode-encrypt
-          rm -rf $out/lib/${libraryName}/resources/app/node_modules/@github/copilot-linuxmusl*
+          rm -rf $out/lib/${libraryName}/resources/${appDir}/node_modules/vscode-encrypt
+          rm -rf $out/lib/${libraryName}/resources/${appDir}/node_modules/@github/copilot-linuxmusl*
         ''
     )
     + ''
@@ -406,13 +413,13 @@ stdenv.mkDerivation (
         # disable update checks
         ''
           tmpProductJson="$(mktemp)"
-          jq 'del(.updateUrl, .backupUpdateUrl)' resources/app/product.json > "$tmpProductJson"
-          mv "$tmpProductJson" resources/app/product.json
+          jq 'del(.updateUrl, .backupUpdateUrl)' resources/${appDir}/product.json > "$tmpProductJson"
+          mv "$tmpProductJson" resources/${appDir}/product.json
         ''
         # this is a fix for "save as root" functionality
         + ''
-          packed="resources/app/node_modules.asar"
-          unpacked="resources/app/node_modules"
+          packed="resources/${appDir}/node_modules.asar"
+          unpacked="resources/${appDir}/node_modules"
           asar extract "$packed" "$unpacked"
           substituteInPlace $unpacked/@vscode/sudo-prompt/index.js \
             --replace-fail "/usr/bin/pkexec" "/run/wrappers/bin/pkexec" \
@@ -434,13 +441,13 @@ stdenv.mkDerivation (
               # 1.129 moved node_modules back into app.asar, shipping native
               # binaries in the asar.unpacked directory like before 1.94
               if lib.versionAtLeast vscodeVersion "1.129.0" then
-                "Contents/Resources/app/node_modules.asar.unpacked"
+                "Contents/Resources/${appDir}/node_modules.asar.unpacked"
               else if lib.versionAtLeast vscodeVersion "1.94.0" then
-                "Contents/Resources/app/node_modules"
+                "Contents/Resources/${appDir}/node_modules"
               else
-                "Contents/Resources/app/node_modules.asar.unpacked"
+                "Contents/Resources/${appDir}/node_modules.asar.unpacked"
             else
-              "resources/app/node_modules";
+              "resources/${appDir}/node_modules";
 
           # see https://www.npmjs.com/package/@vscode/ripgrep-universal?activeTab=code
           ripgrepSystem =
@@ -487,11 +494,11 @@ stdenv.mkDerivation (
       ''
       # restore original vsce-sign, which has integrity checks
       + (lib.optionalString hasVsceSign ''
-        cp -r ./resources/app/node_modules/@vscode/vsce-sign/bin/vsce-sign "$out/lib/vscode/resources/app/node_modules/@vscode/vsce-sign/bin/vsce-sign"
+        cp -r ./resources/${appDir}/node_modules/@vscode/vsce-sign/bin/vsce-sign "$out/lib/vscode/resources/${appDir}/node_modules/@vscode/vsce-sign/bin/vsce-sign"
         patchelf \
           --add-needed ${lib.getLib openssl}/lib/libssl.so.3 \
-          $out/lib/vscode/resources/app/node_modules/@vscode/vsce-sign/bin/vsce-sign
-        chmod +x $out/lib/vscode/resources/app/node_modules/@vscode/vsce-sign/bin/vsce-sign
+          $out/lib/vscode/resources/${appDir}/node_modules/@vscode/vsce-sign/bin/vsce-sign
+        chmod +x $out/lib/vscode/resources/${appDir}/node_modules/@vscode/vsce-sign/bin/vsce-sign
       '')
     );
 
