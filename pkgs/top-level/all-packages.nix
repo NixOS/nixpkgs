@@ -7360,11 +7360,9 @@ with pkgs;
 
   inspircdMinimal = inspircd.override { extraModules = [ ]; };
 
-  inherit (callPackages ../servers/http/jetty { })
+  inherit (callPackages ../by-name/je/jetty { })
     jetty_12
     ;
-
-  jetty = jetty_12;
 
   inherit
     ({
