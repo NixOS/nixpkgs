@@ -38,11 +38,12 @@
   wayland-scanner,
   zlib,
   nix-update-script,
+  dbus,
 }:
 
 let
   cef = cef-binary.override {
-    version = "135.0.17"; # follow upstream. https://github.com/Almamu/linux-wallpaperengine/blob/a8ce9b6aa14cc10f0396bbb74a16ca12ed3990dc/CMakeLists.txt#L47
+    version = "135.0.17"; # follow upstream. https://github.com/Almamu/linux-wallpaperengine/blob/b39f12757908eda9f4c1039613b914606568bb84/CMakeLists.txt#L47
     gitRevision = "cbc1c5b";
     chromiumVersion = "135.0.7049.52";
 
@@ -102,6 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
     wayland-scanner
     zlib
+    dbus
   ];
 
   cmakeFlags = [
