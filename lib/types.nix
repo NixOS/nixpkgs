@@ -1015,12 +1015,12 @@ rec {
           let
             evals =
               if lazy then
-                zipAttrsWith (name: defs: mergeDefinitions (loc ++ [ name ]) elemType defs) (pushPositions defs)
+                zipAttrsWith (name: mergeDefinitions (loc ++ [ name ]) elemType) (pushPositions defs)
               else
                 # Filtering makes the merge function more strict
                 # Meaning it is less lazy
                 filterAttrs (n: v: v.optionalValue ? value) (
-                  zipAttrsWith (name: defs: mergeDefinitions (loc ++ [ name ]) elemType defs) (pushPositions defs)
+                  zipAttrsWith (name: mergeDefinitions (loc ++ [ name ]) elemType) (pushPositions defs)
                 );
           in
           {
