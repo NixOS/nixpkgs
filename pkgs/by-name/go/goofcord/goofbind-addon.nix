@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   cmake,
@@ -13,20 +12,23 @@
   libxcb,
   wayland,
   xorgproto,
+  libxi,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "venbind";
+  pname = "goofbind";
   version = "0.1.7";
 
   src = fetchFromGitHub {
-    owner = "tuxinal";
-    repo = "venbind";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-6gPyQ6JjqvM2AUuIxCfO0nOLJfyQTX5bbsbKDzlNSqo=";
+    owner = "Milkshiift";
+    repo = "goofbind";
+
+    # Fetch commit from repo, until the tag version is released
+    rev = "703237071f61d1ceede8076b0015488773a7c4ae";
+    hash = "sha256-XAt0ThqDRPun5nrp1sFWEeX3vEIGOpXpwQsx1I4bfqA=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-FZTXj8f+ezRhElovKhF3khWc5SqC+22tDHlFe9IHuwo=";
+  cargoHash = "sha256-GAtNCaMFAbgHktLU+/rQGfbjVEY4iFCmfuQw0y5wFcY=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -42,6 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libxkbcommon
     libxcb
     wayland
+    libxi
     xorgproto
   ];
 
