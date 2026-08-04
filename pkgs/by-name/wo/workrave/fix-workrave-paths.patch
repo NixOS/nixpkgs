@@ -1,0 +1,152 @@
+diff -ru workrave-1_10_53-orig/backend/src/GSettingsConfigurator.cc workrave-1_10_53-changed/backend/src/GSettingsConfigurator.cc
+--- workrave-1_10_53-orig/backend/src/GSettingsConfigurator.cc	2025-02-16 07:00:20.000000000 -0500
++++ workrave-1_10_53-changed/backend/src/GSettingsConfigurator.cc	2025-07-01 20:17:12.468762711 -0400
+@@ -29,6 +29,7 @@
+ #  include "Configurator.hh"
+ #  include "Core.hh"
+ #  include "StringUtil.hh"
++#  include "Exception.hh"
+ 
+ using namespace workrave;
+ using namespace std;
+@@ -211,7 +212,10 @@
+   TRACE_ENTER("GSettingsConfigurator::add_children");
+   int len = schema_base.length();
+ 
+-  GSettingsSchemaSource *global_schema_source = g_settings_schema_source_get_default();
++  GSettingsSchemaSource *global_schema_source =
++    g_settings_schema_source_new_from_directory("@workrave_schema_path@",
++						g_settings_schema_source_get_default(),
++						TRUE, NULL);
+ 
+   gchar **schemas = NULL;
+   g_settings_schema_source_list_schemas(global_schema_source, TRUE, &schemas, NULL);
+@@ -220,13 +224,29 @@
+     {
+       if (g_ascii_strncasecmp(schemas[i], schema_base.c_str(), len) == 0)
+         {
+-          GSettings *gsettings = g_settings_new(schemas[i]);
++	  GSettingsSchema *schema = g_settings_schema_source_lookup(global_schema_source,
++								    schemas[i], FALSE);
++
++	  if (schema == NULL) {
++	    string err_msg = "schema for schema id ";
++	    err_msg += schemas[i];
++	    err_msg += " not found!";
++	    
++	    TRACE_MSG(err_msg);
++	    throw Exception(err_msg);
++	  }
++	  
++          GSettings *gsettings = g_settings_new_full(schema, NULL, NULL);
+ 
+           settings[schemas[i]] = gsettings;
+           g_signal_connect(gsettings, "changed", G_CALLBACK(on_settings_changed), this);
++
++	  g_settings_schema_unref(schema);
+         }
+     }
+ 
++  g_settings_schema_source_unref(global_schema_source);
++
+   TRACE_EXIT();
+ }
+ 
+diff -ru workrave-1_10_53-orig/frontend/applets/common/src/control.c workrave-1_10_53-changed/frontend/applets/common/src/control.c
+--- workrave-1_10_53-orig/frontend/applets/common/src/control.c	2025-02-16 07:00:20.000000000 -0500
++++ workrave-1_10_53-changed/frontend/applets/common/src/control.c	2025-07-01 19:52:26.137713925 -0400
+@@ -461,9 +461,21 @@
+ workrave_timerbox_control_create_dbus(WorkraveTimerboxControl *self)
+ {
+   WorkraveTimerboxControlPrivate *priv = workrave_timerbox_control_get_instance_private(self);
+-  GSettings *settings = g_settings_new("org.workrave.gui");
++
++  GSettingsSchemaSource *global_schema_source =
++    g_settings_schema_source_new_from_directory("@workrave_schema_path@",
++						g_settings_schema_source_get_default(),
++						TRUE, NULL);
++
++  GSettingsSchema *schema = g_settings_schema_source_lookup(global_schema_source,
++							    "org.workrave.gui", FALSE);
++  
++  GSettings *settings = g_settings_new_full(schema, NULL, NULL);
+   gboolean autostart = g_settings_get_boolean(settings, "autostart");
++  
+   g_object_unref(settings);
++  g_settings_schema_unref(schema);
++  g_settings_schema_source_unref(global_schema_source);
+ 
+   GDBusProxyFlags flags = autostart ? 0 : G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START;
+ 
+diff -ru workrave-1_10_53-orig/frontend/applets/common/src/timerbox.c workrave-1_10_53-changed/frontend/applets/common/src/timerbox.c
+--- workrave-1_10_53-orig/frontend/applets/common/src/timerbox.c	2025-02-16 07:00:20.000000000 -0500
++++ workrave-1_10_53-changed/frontend/applets/common/src/timerbox.c	2025-07-01 19:50:29.254132502 -0400
+@@ -108,13 +108,26 @@
+   priv->enabled = FALSE;
+   priv->force_icon = FALSE;
+   priv->mode = g_strdup("normal");
+-  priv->settings = g_settings_new("org.workrave.gui");
++  
++  GSettingsSchemaSource *global_schema_source =
++    g_settings_schema_source_new_from_directory("@workrave_schema_path@",
++						g_settings_schema_source_get_default(),
++						TRUE, NULL);
++
++  GSettingsSchema *schema = g_settings_schema_source_lookup(global_schema_source,
++							    "org.workrave.gui", FALSE);
++  
++  priv->settings = g_settings_new_full(schema, NULL, NULL);
++  
+   g_signal_connect(priv->settings, "changed", G_CALLBACK(workrave_on_settings_changed), self);
+ 
+   priv->normal_sheep_icon = NULL;
+   priv->quiet_sheep_icon = NULL;
+   priv->suspended_sheep_icon = NULL;
+ 
++  g_settings_schema_unref(schema);
++  g_settings_schema_source_unref(global_schema_source);
++
+   workrave_timerbox_init_images(self);
+ }
+ 
+diff -ru workrave-1_10_53-orig/frontend/applets/gnome-shell-45/src/extension.js workrave-1_10_53-changed/frontend/applets/gnome-shell-45/src/extension.js
+--- workrave-1_10_53-orig/frontend/applets/gnome-shell-45/src/extension.js	2025-02-16 07:00:20.000000000 -0500
++++ workrave-1_10_53-changed/frontend/applets/gnome-shell-45/src/extension.js	2025-07-01 18:48:42.276241686 -0400
+@@ -11,7 +11,10 @@
+   gettext as _,
+ } from "resource:///org/gnome/shell/extensions/extension.js";
+ 
+-import Workrave from "gi://Workrave?version=2.0";
++import GIRepository from 'gi://GIRepository';
++
++GIRepository.Repository.prepend_search_path('@workrave_typelib_path@');
++const Workrave = (await import("gi://Workrave?version=2.0")).default;
+ 
+ let start = GLib.get_monotonic_time();
+ console.log("workrave-applet: start @ " + start);
+diff -ru workrave-1_10_53-orig/frontend/applets/indicator/src/indicator-workrave.c workrave-1_10_53-changed/frontend/applets/indicator/src/indicator-workrave.c
+--- workrave-1_10_53-orig/frontend/applets/indicator/src/indicator-workrave.c	2025-02-16 07:00:20.000000000 -0500
++++ workrave-1_10_53-changed/frontend/applets/indicator/src/indicator-workrave.c	2025-07-01 19:52:18.944739850 -0400
+@@ -451,9 +451,21 @@
+ indicator_workrave_create_dbus(IndicatorWorkrave *self)
+ {
+   IndicatorWorkravePrivate *priv = INDICATOR_WORKRAVE_GET_PRIVATE(self);
+-  GSettings *settings = g_settings_new("org.workrave.gui");
++  
++  GSettingsSchemaSource *global_schema_source =
++    g_settings_schema_source_new_from_directory("@workrave_schema_path@",
++						g_settings_schema_source_get_default(),
++						TRUE, NULL);
++
++  GSettingsSchema *schema = g_settings_schema_source_lookup(global_schema_source,
++							    "org.workrave.gui", FALSE);
++  
++  GSettings *settings = g_settings_new_full(schema, NULL, NULL);
+   gboolean autostart = g_settings_get_boolean(settings, "autostart");
++  
+   g_object_unref(settings);
++  g_settings_schema_unref(schema);
++  g_settings_schema_source_unref(global_schema_source);
+ 
+   GDBusProxyFlags flags = autostart ?: G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START;
+ 
