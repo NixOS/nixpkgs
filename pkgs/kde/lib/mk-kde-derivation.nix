@@ -35,11 +35,6 @@ let
       # https://invent.kde.org/kdevelop/kdevelop/-/blob/master/LICENSES/LicenseRef-MIT-KDevelop-Ideal.txt
       "LicenseRef-MIT-KDevelop-Ideal" = lib.licenses.mit;
 
-      "FSFAP" = {
-        spdxId = "FSFAP";
-        fullName = "FSF All Permissive License";
-      };
-
       "FSFULLR" = {
         spdxId = "FSFULLR";
         fullName = "FSF Unlimited License (with License Retention)";
