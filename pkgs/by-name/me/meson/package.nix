@@ -10,6 +10,7 @@
   pkg-config,
   python3,
   replaceVars,
+  writableTmpDirAsHomeHook,
   writeShellScriptBin,
   zlib,
 }:
@@ -92,6 +93,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   nativeCheckInputs = [
     ninja
     pkg-config
+    writableTmpDirAsHomeHook
   ]
   ++ lib.optionals python3.isPyPy [
     # Several tests hardcode python3.
@@ -150,9 +152,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       ]
     ))
     ++ [
-      ''HOME="$TMPDIR" ${
-        if python3.isPyPy then python3.interpreter else "python"
-      } ./run_project_tests.py''
+      "${if python3.isPyPy then python3.interpreter else "python"} ./run_project_tests.py"
       "runHook postCheck"
     ]
   );
