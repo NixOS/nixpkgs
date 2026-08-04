@@ -699,6 +699,11 @@ lib.mapAttrs mkLicense (
       url = "https://geant4.web.cern.ch/geant4/license/LICENSE.html";
     };
 
+    gccException31 = {
+      spdxId = "GCC-exception-3.1";
+      fullName = "GCC Runtime Library exception 3.1";
+    };
+
     geogebra = {
       fullName = "GeoGebra Non-Commercial License Agreement";
       url = "https://www.geogebra.org/license";
