@@ -38,6 +38,7 @@ buildPythonPackage (finalAttrs: {
   pname = "confluent-kafka";
   version = "2.15.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "confluentinc";
