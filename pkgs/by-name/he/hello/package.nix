@@ -3,7 +3,6 @@
   lib,
   stdenv,
   fetchurl,
-  nixos,
   testers,
   versionCheckHook,
   hello,
