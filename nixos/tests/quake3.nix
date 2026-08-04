@@ -38,7 +38,7 @@ let
 in
 {
   name = "quake3";
-  meta.maintainers = [ ];
+  meta.maintainers = [ lib.maintainers.onny ];
 
   # TODO: lcov doesn't work atm
   #makeCoverageReport = true;
