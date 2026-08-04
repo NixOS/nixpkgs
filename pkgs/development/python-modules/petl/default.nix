@@ -7,7 +7,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "petl";
   version = "1.7.22";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "petl-developers";
     repo = "petl";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-oFBJk0wrqRKyTXx9JCn4Ipafeey4ybUqaC5DPimmET0=";
   };
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/petl-developers/petl";
-    changelog = "https://github.com/petl-developers/petl/releases/tag/${src.tag}";
+    changelog = "https://github.com/petl-developers/petl/releases/tag/${finalAttrs.src.tag}";
     description = "Python package for extracting, transforming and loading tables of data";
     license = lib.licenses.mit;
     mainProgram = "petl";
@@ -42,4 +42,4 @@ buildPythonPackage rec {
       alapshin
     ];
   };
-}
+})
