@@ -240,6 +240,7 @@ in
     inherit runTest lib;
   };
   acme-dns = runTest ./acme-dns.nix;
+  act = runTest ./act.nix;
   activation = pkgs.callPackage ../modules/system/activation/test.nix { };
   activation-bashless = runTest ./activation/bashless.nix;
   activation-bashless-closure = pkgs.callPackage ./activation/bashless-closure.nix { };
