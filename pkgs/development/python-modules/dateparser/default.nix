@@ -18,6 +18,7 @@
   parsel,
   requests,
   ruamel-yaml,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -61,12 +62,9 @@ buildPythonPackage (finalAttrs: {
     parsel
     requests
     ruamel-yaml
+    writableTmpDirAsHomeHook
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
-
-  preCheck = ''
-    export HOME="$TEMPDIR"
-  '';
 
   # Upstream only runs the tests in tests/ in CI, others use git clone
   enabledTestPaths = [ "tests" ];
