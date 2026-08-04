@@ -9,7 +9,7 @@
   osc-lib,
   osc-placement,
   pbr,
-  python-aodhclient,
+  aodhclient,
   python-barbicanclient,
   python-cinderclient,
   python-designateclient,
@@ -98,8 +98,8 @@ buildPythonPackage (finalAttrs: {
   optional-dependencies = {
     # See https://github.com/openstack/python-openstackclient/blob/master/doc/source/contributor/plugins.rst
     cli-plugins = [
+      aodhclient
       osc-placement
-      python-aodhclient
       python-barbicanclient
       python-designateclient
       python-heatclient
