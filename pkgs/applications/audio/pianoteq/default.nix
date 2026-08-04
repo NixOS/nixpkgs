@@ -252,7 +252,7 @@ let
   version6 = "6.7.3";
   version7 = "7.5.4";
   version8 = "8.4.3";
-  version9 = "9.1.2";
+  version9 = "9.2.1";
 
   mkStandard =
     version: hash:
@@ -326,10 +326,23 @@ let
         inherit hash;
       };
     };
+  mkStandard9 =
+    hash:
+    mkPianoteq {
+      name = "standard";
+      mainProgram = "Pianoteq 9";
+      startupWMClass = "Pianoteq";
+      version = version9;
+      src = fetchPianoteqWithLogin {
+        name = "pianoteq_setup_v${versionForFile version9}.tar.xz";
+        inherit hash;
+      };
+    };
 in
 {
-  trial_9 = mkTrial9 "sha256-1ofPL6F12Gv+k2rZBadOa5Iyukuji6vdww87ufdKjM8=";
-  stage_9 = mkStage9 "sha256-Jvm/AhBwgj5INW8U48rJjgDB7j/Z1VnYKczvtrpl/AY=";
+  standard_9 = mkStandard9 "sha256-iIKYmXy7d5mGkONUqR91Qjo7IIGJE9eBN4pCr0+D7no=";
+  trial_9 = mkTrial9 "sha256-QQMLYvn7KW7u4JYeNCqxE+7Yn36bR+bTA2bP2IcQGZg=";
+  stage_9 = mkStage9 "sha256-iIKYmXy7d5mGkONUqR91Qjo7IIGJE9eBN4pCr0+D7no=";
 
   standard_8 = mkStandard version8 "sha256-72eV+d3jwRZJSs6I4e055ZrR/dvnhwAaM63eZEQAtOg=";
   stage_8 = mkStage version8 "";
