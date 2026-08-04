@@ -42,6 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
     inherit gnutls samba qemu;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.gnu.org/software/libtasn1/";
     description = "ASN.1 library";
