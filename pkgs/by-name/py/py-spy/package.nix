@@ -10,6 +10,7 @@
 
   # tests
   python3,
+  versionCheckHook,
 }:
 
 let
@@ -55,6 +56,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # called `Option::unwrap()` on a `None` value
     "--skip=test_thread_names"
   ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = {
     description = "Sampling profiler for Python programs";
