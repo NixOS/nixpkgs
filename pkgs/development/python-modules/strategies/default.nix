@@ -8,15 +8,17 @@
   pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "strategies";
   version = "0.2.3";
 
+  __structuredAttrs = true;
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "02i4ydrs9k61p8iv2vl2akks8p9gc88rw8031wlwb1zqsyjmb328";
+    pname = "strategies";
+    inherit (finalAttrs) version;
+    hash = "sha256-SIxVpdf4h8UpDwMgnhFiL12k51SCbrEjusHMpHPzJAo=";
   };
 
   build-system = [ setuptools ];
@@ -33,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ suhr ];
   };
-}
+})
