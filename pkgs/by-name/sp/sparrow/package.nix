@@ -36,6 +36,20 @@ let
     }
     ."${stdenvNoCC.hostPlatform.system}";
 
+  javaArch =
+    {
+      x86_64-linux = "x64";
+      aarch64-linux = "aarch64";
+    }
+    ."${stdenvNoCC.hostPlatform.system}";
+
+  jnaArch =
+    {
+      x86_64-linux = "x86-64";
+      aarch64-linux = "aarch64";
+    }
+    ."${stdenvNoCC.hostPlatform.system}";
+
   src = fetchurl {
     url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/sparrowwallet-${version}-${sparrowArch}.tar.gz";
     hash =
@@ -117,10 +131,17 @@ let
       --add-reads=com.sparrowwallet.merged.module=com.fasterxml.jackson.core
       --add-reads=com.sparrowwallet.merged.module=co.nstant.in.cbor
       --add-reads=kotlin.stdlib=kotlinx.coroutines.core
+      --enable-native-access=com.sparrowwallet.drongo
+      --enable-native-access=com.sparrowwallet.merged.module
+      --enable-native-access=javafx.graphics
+      --enable-native-access=com.fazecast.jSerialComm
+      --enable-native-access=org.usb4java
       -m com.sparrowwallet.sparrow
     )
 
-    XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS ${openjdk}/bin/java ''${params[@]} $@
+    XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS \
+    LD_LIBRARY_PATH=@nativeLibs@''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH} \
+    ${openjdk}/bin/java ''${params[@]} $@
   '';
 
   torWrapper = writeScript "tor-wrapper" ''
@@ -215,6 +236,40 @@ let
       find . | grep "\.so$" | xargs -- chmod ugo+x
       popd
 
+      # Provide native libs for LD_LIBRARY_PATH
+      mkdir native-libs
+      cp lib/runtime/lib/libargon2.so \
+         lib/runtime/lib/libbwt_jni.so \
+         lib/runtime/lib/libopenpnp-capture.so \
+         lib/runtime/lib/libzbar.so \
+         native-libs/
+      chmod ugo+x native-libs/*.so
+
+      # secp256k1 explicitly looks in java.home/lib or inside the module jar
+      mkdir -p modules/com.sparrowwallet.drongo/native/linux/${javaArch}
+      cp lib/runtime/lib/libsecp256k1.so modules/com.sparrowwallet.drongo/native/linux/${javaArch}/
+
+      # JNA extracts from resource path
+      mkdir -p modules/com.sparrowwallet.merged.module/com/sun/jna/linux-${jnaArch}
+      cp lib/runtime/lib/libjnidispatch.so modules/com.sparrowwallet.merged.module/com/sun/jna/linux-${jnaArch}/
+
+      # hidapi extracts from resource path via JNA
+      mkdir -p modules/com.sparrowwallet.merged.module/linux-${jnaArch}
+      cp lib/runtime/lib/libhidapi.so modules/com.sparrowwallet.merged.module/linux-${jnaArch}/
+      cp lib/runtime/lib/libhidapi-libusb.so modules/com.sparrowwallet.merged.module/linux-${jnaArch}/
+
+      # usb4java extracts from resource path
+      mkdir -p modules/org.usb4java/org/usb4java/linux-${jnaArch}
+      cp lib/runtime/lib/libusb4java.so modules/org.usb4java/org/usb4java/linux-${jnaArch}/
+
+      # jzbar extracts from resource path
+      mkdir -p modules/io.github.doblon8.jzbar/native/linux/${javaArch}
+      cp lib/runtime/lib/libzbar.so modules/io.github.doblon8.jzbar/native/linux/${javaArch}/
+
+      # openpnp extracts from resource path
+      mkdir -p modules/io.github.doblon8.openpnp.capture/native/linux/${javaArch}
+      cp lib/runtime/lib/libopenpnp-capture.so modules/io.github.doblon8.openpnp.capture/native/linux/${javaArch}/
+
       # Replace the embedded Tor binary (which is in a Tar archive)
       # with one from Nixpkgs.
       gzip -c ${torWrapper}  > tor.gz
@@ -225,6 +280,7 @@ let
       mkdir -p $out
       cp manifest.txt $out/
       cp -r modules/ $out/
+      cp -r native-libs/ $out/
     '';
   };
 in
@@ -281,6 +337,7 @@ stdenvNoCC.mkDerivation rec {
     install -D -m 777 ${launcher} $out/bin/sparrow-desktop
     substituteAllInPlace $out/bin/sparrow-desktop
     substituteInPlace $out/bin/sparrow-desktop --subst-var-by jdkModules ${jdk-modules}
+    substituteInPlace $out/bin/sparrow-desktop --subst-var-by nativeLibs ${sparrow-modules}/native-libs
 
     mkdir -p $out/share/icons
     ln -s ${sparrow-icons}/hicolor $out/share/icons
