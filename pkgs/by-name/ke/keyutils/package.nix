@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git/snapshot/keyutils-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-ph1XBhNq5MBb1I+GGGvP29iN2L1RB+Phlckkz8Gzm7Q=";
+    hash = "sha256-ph1XBhNq5MBb1I+GGGvP29iN2L1RB+Phlckkz8Gzm7Q=";
   };
 
   patches = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # https://github.com/archlinux/svntogit-packages/blob/packages/keyutils/trunk/reproducible.patch
     substituteInPlace Makefile \
-      --replace \
+      --replace-fail \
         'VCPPFLAGS	:= -DPKGBUILD="\"$(shell date -u +%F)\""' \
         'VCPPFLAGS	:= -DPKGBUILD="\"$(date -ud "@$SOURCE_DATE_EPOCH" +%F)\""'
   '';
@@ -74,6 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
     "LIBDIR=$(lib)/lib"
     "USRLIBDIR=$(lib)/lib"
   ];
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://people.redhat.com/dhowells/keyutils/";
