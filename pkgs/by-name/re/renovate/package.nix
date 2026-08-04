@@ -24,6 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "renovate";
   version = "44.13.1";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "renovatebot";
     repo = "renovate";
