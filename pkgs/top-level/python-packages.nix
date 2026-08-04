@@ -5409,6 +5409,8 @@ self: super: with self; {
 
   emcee = callPackage ../development/python-modules/emcee { };
 
+  emerge = callPackage ../development/python-modules/emerge { };
+
   emmiai-noether = callPackage ../development/python-modules/emmiai-noether { };
 
   emoji = callPackage ../development/python-modules/emoji { };
@@ -5420,6 +5422,8 @@ self: super: with self; {
   empty-files = callPackage ../development/python-modules/empty-files { };
 
   empy = callPackage ../development/python-modules/empy { };
+
+  emsutil = callPackage ../development/python-modules/emsutil { };
 
   emulated-roku = callPackage ../development/python-modules/emulated-roku { };
 
@@ -11976,6 +11980,8 @@ self: super: with self; {
 
   nvidia-ml-py = callPackage ../development/python-modules/nvidia-ml-py { };
 
+  nvmath-python = callPackage ../development/python-modules/nvmath-python { };
+
   nwdiag = callPackage ../development/python-modules/nwdiag { };
 
   nxt-python = callPackage ../development/python-modules/nxt-python { };
@@ -14708,8 +14714,6 @@ self: super: with self; {
   };
 
   pygount = callPackage ../development/python-modules/pygount { };
-
-  pygpgme = callPackage ../development/python-modules/pygpgme { };
 
   pygraphviz = callPackage ../development/python-modules/pygraphviz { inherit (pkgs) graphviz; };
 
