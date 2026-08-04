@@ -5,8 +5,8 @@
   fetchzip,
   nix-update-script,
   nodejs-slim,
-
-  testers,
+  writableTmpDirAsHomeHook,
+  versionCheckHook,
 }:
 let
   inherit (stdenvNoCC.hostPlatform.node) arch platform;
@@ -54,9 +54,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+    versionCheckHook
+  ];
+  # uv_os_homedir returned ENOENT (no such file or directory)
+  versionCheckKeepEnvironment = lib.optionals stdenvNoCC.hostPlatform.isDarwin [ "HOME" ];
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
   meta = {
