@@ -19,7 +19,7 @@
   setuptools,
   sphinxcontrib-apidoc,
   sphinxHook,
-  stestr,
+  stestrCheckHook,
   stevedore,
 }:
 
@@ -60,27 +60,23 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    stestr
+    stestrCheckHook
     requests-mock
     oslotest
   ];
 
   env.PBR_VERSION = version;
 
-  checkPhase = ''
-    runHook preCheck
-    stestr run -e <(echo "
-      ironicclient.tests.unit.osc.v1.test_baremetal_chassis.TestChassisCreate.test_chassis_create_no_options
-      ironicclient.tests.unit.osc.v1.test_baremetal_chassis.TestChassisCreate.test_chassis_create_with_description
-      ironicclient.tests.unit.osc.v1.test_baremetal_chassis.TestChassisCreate.test_chassis_create_with_extra
-      ironicclient.tests.unit.osc.v1.test_baremetal_chassis.TestChassisCreate.test_chassis_create_with_uuid
-      ironicclient.tests.unit.osc.v1.test_baremetal_conductor.TestBaremetalConductorShow.test_conductor_show
-      ironicclient.tests.unit.osc.v1.test_baremetal_node.TestBaremetalCreate
-      ironicclient.tests.unit.osc.v1.test_baremetal_node.TestBaremetalShow.test_baremetal_show
-      ironicclient.tests.unit.osc.v1.test_baremetal_node.TestNodeHistoryEventGet.test_baremetal_node_history_list
-    ")
-    runHook postCheck
-  '';
+  disabledTests = [
+    "ironicclient.tests.unit.osc.v1.test_baremetal_chassis.TestChassisCreate.test_chassis_create_no_options"
+    "ironicclient.tests.unit.osc.v1.test_baremetal_chassis.TestChassisCreate.test_chassis_create_with_description"
+    "ironicclient.tests.unit.osc.v1.test_baremetal_chassis.TestChassisCreate.test_chassis_create_with_extra"
+    "ironicclient.tests.unit.osc.v1.test_baremetal_chassis.TestChassisCreate.test_chassis_create_with_uuid"
+    "ironicclient.tests.unit.osc.v1.test_baremetal_conductor.TestBaremetalConductorShow.test_conductor_show"
+    "ironicclient.tests.unit.osc.v1.test_baremetal_node.TestBaremetalCreate"
+    "ironicclient.tests.unit.osc.v1.test_baremetal_node.TestBaremetalShow.test_baremetal_show"
+    "ironicclient.tests.unit.osc.v1.test_baremetal_node.TestNodeHistoryEventGet.test_baremetal_node_history_list"
+  ];
 
   pythonImportsCheck = [ "ironicclient" ];
 
