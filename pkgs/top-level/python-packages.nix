@@ -1411,6 +1411,8 @@ self: super: with self; {
 
   asserts = callPackage ../development/python-modules/asserts { };
 
+  ast-comments = callPackage ../development/python-modules/ast-comments { };
+
   ast-grep-py = callPackage ../development/python-modules/ast-grep-py { };
 
   ast-serialize = callPackage ../development/python-modules/ast-serialize { };
@@ -2926,6 +2928,8 @@ self: super: with self; {
 
   cccolutils = callPackage ../development/python-modules/cccolutils { krb5-c = pkgs.krb5; };
 
+  ccxt = callPackage ../development/python-modules/ccxt { };
+
   cdcs = callPackage ../development/python-modules/cdcs { };
 
   cddlparser = callPackage ../development/python-modules/cddlparser { };
@@ -4033,6 +4037,8 @@ self: super: with self; {
   datashader = callPackage ../development/python-modules/datashader { };
 
   datashaper = callPackage ../development/python-modules/datashaper { };
+
+  datasieve = callPackage ../development/python-modules/datasieve { };
 
   datasketch = callPackage ../development/python-modules/datasketch { };
 
@@ -14265,6 +14271,8 @@ self: super: with self; {
 
   pycoin = callPackage ../development/python-modules/pycoin { };
 
+  pycoingecko = callPackage ../development/python-modules/pycoingecko { };
+
   pycollada = callPackage ../development/python-modules/pycollada { };
 
   pycolorecho = callPackage ../development/python-modules/pycolorecho { };
@@ -18157,6 +18165,8 @@ self: super: with self; {
 
   saxonche = callPackage ../development/python-modules/saxonche { };
 
+  sb3-contrib = callPackage ../development/python-modules/sb3-contrib { };
+
   sbom2dot = callPackage ../development/python-modules/sbom2dot { };
 
   sbom4files = callPackage ../development/python-modules/sbom4files { };
@@ -19889,6 +19899,8 @@ self: super: with self; {
   sysv-ipc = callPackage ../development/python-modules/sysv-ipc { };
 
   t61codec = callPackage ../development/python-modules/t61codec { };
+
+  ta-lib = callPackage ../development/python-modules/ta-lib { inherit (pkgs) ta-lib; };
 
   tabcmd = callPackage ../development/python-modules/tabcmd { };
 
