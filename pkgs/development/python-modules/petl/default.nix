@@ -2,9 +2,13 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
+
+  # build-system
   setuptools,
   setuptools-scm,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -29,9 +33,7 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "petl"
-  ];
+  pythonImportsCheck = [ "petl" ];
 
   meta = {
     homepage = "https://github.com/petl-developers/petl";
