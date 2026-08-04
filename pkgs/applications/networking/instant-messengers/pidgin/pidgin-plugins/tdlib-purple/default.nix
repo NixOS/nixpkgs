@@ -9,11 +9,12 @@
   openssl,
   pkg-config,
   gettext,
+  python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tdlib-purple";
-  version = "1.1.0";
+  version = "2.0.1";
 
   __structuredAttrs = true;
 
@@ -21,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "adrighem";
     repo = "tdlib-purple";
     tag = "tdlib-purple-v${finalAttrs.version}";
-    hash = "sha256-H7fb/kYSjplrazwMbqQD9uLVUadIsn+O810G4Qhx6Rk=";
+    hash = "sha256-jWUXBBfpUE/fShLsy7MKsrCFa9tRyl+pLTLVWLNAceE=";
   };
 
   preConfigure = ''
@@ -36,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     libwebp
     gettext
+    python3
   ];
 
   buildInputs = [
