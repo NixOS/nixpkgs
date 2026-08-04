@@ -208,6 +208,12 @@
   "module-services-tdarr-server-only": [
     "index.html#module-services-tdarr-server-only"
   ],
+  "module-services-traggo": [
+    "index.html#module-services-traggo"
+  ],
+  "module-services-traggo-configuration": [
+    "index.html#module-services-traggo-configuration"
+  ],
   "module-virtualisation-xen": [
     "index.html#module-virtualisation-xen"
   ],
