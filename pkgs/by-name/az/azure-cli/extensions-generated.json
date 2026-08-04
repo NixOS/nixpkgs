@@ -883,9 +883,9 @@
   },
   "oracle-database": {
     "pname": "oracle-database",
-    "version": "2.0.3",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/oracle_database-2.0.3-py3-none-any.whl",
-    "hash": "sha256-Qd9WtF7opKFbotazhgJsCb6CdGO/xQ1/5De+LcIaAiY=",
+    "version": "2.0.5",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/oracle_database-2.0.5-py3-none-any.whl",
+    "hash": "sha256-SkmNXFR9HzH8LkClMHVNfN4IqGf/c+/DTb2JG9lpyXU=",
     "description": "Microsoft Azure Command-Line Tools OracleDatabase Extension"
   },
   "orbital": {
