@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "pydantic-extra-types";
-  version = "2.11.0";
+  version = "2.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic-extra-types";
     tag = "v${version}";
-    hash = "sha256-aXhlfDBCpk8h3F4gXAQ40fVKxsoFvkmfO/roaqrGxho=";
+    hash = "sha256-4seg6MqCvKUgJj5BLAQE5sHUkz95hRA/0xBMLuoNO9k=";
   };
 
   build-system = [ hatchling ];
