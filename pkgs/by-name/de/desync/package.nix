@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "desync";
-  version = "1.0.3";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "folbricht";
     repo = "desync";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rdwUoTwN/fG4fsOY4mCcg0bzWMErFaxBe72RtmHohdA=";
+    hash = "sha256-/ojucBo+UOr5WFahVMSz7xJ84dzenwuotZk+5QqODls=";
   };
 
-  vendorHash = "sha256-unwaA+WNyaJbNrOFvjXeMI2YbNTpGBrjwBGXhvOfj0M=";
+  vendorHash = "sha256-PU2EbYei6X/fmA/POaFI6flAZYb2WcBA10E9+rS651U=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -34,13 +34,17 @@ buildGoModule (finalAttrs: {
         "TestExtractCommand/extract_with_single_seed,_explicit_data_directory_and_unexpected_seed_options" # block cloning fails on ZFS
         "TestExtractCommand/extract_with_single_seed_and_explicit_data_directory" # block cloning fails on ZFS
         "TestExtractWithNonStaticSeeds" # block cloning fails on ZFS
+        "TestLocalFSDirSetgidWhilePopulated" # cannot setgid in /tmp
         "TestMountIndex" # FUSE does not work in sandbox
         "TestSeed/extract_repetitive_file" # block cloning fails on ZFS
+        "TestTar" # xattr.list: operation not supported
+        "TestUnTarDirMTime" # xattr.list: operation not supported
+        "TestUnTarIntoReadOnlyDir" # xattr.list: operation not supported
+        "TestUnTarNoSamePermissionsOverReadOnlyTree" # xattr.list: operation not supported
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        # sendfile is not permitted in Darwin sandbox
-        "TestS3StoreGetChunk/fail"
-        "TestS3StoreGetChunk/recover"
+        "TestS3StoreGetChunk/fail" # sendfile is not permitted in Darwin sandbox
+        "TestS3StoreGetChunk/recover" # sendfile is not permitted in Darwin sandbox
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
