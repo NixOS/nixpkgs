@@ -92,9 +92,9 @@
   },
   "appnet-preview": {
     "pname": "appnet-preview",
-    "version": "1.0.0b2",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/appnet_preview-1.0.0b2-py3-none-any.whl",
-    "hash": "sha256-JGt61AOwZxk4oxZh4ohktQQH73cBnuHyHwvreev+xH0=",
+    "version": "1.0.0b3",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/appnet_preview-1.0.0b3-py3-none-any.whl",
+    "hash": "sha256-2aretbpSZKQCLbTNuYtl83Ws/C0kLzocx4imjB652c8=",
     "description": "Azure CLI commands for working with Azure Kubernetes Application Network resources"
   },
   "arcgateway": {
