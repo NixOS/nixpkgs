@@ -8,18 +8,20 @@
   zstd,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kepler";
-  version = "unstable-2023-07-19";
+  version = "1.0.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Exein-io";
     repo = "kepler";
-    rev = "9f4f9c617f2477850ed70f1b1d7387807c35d26c";
-    hash = "sha256-jmQ88flSMrS0CB7GNj1Ee60HZgroDKTwLk0i/kg6gVM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oRcd9VpusHFfLulNTsjrb9+cMUwRCFmF8i50+HNBZSc=";
   };
 
-  cargoHash = "sha256-5ORjyzCkX3j62pL4S8CqSXExZUjTIO0db99oIuczEY0=";
+  cargoHash = "sha256-waV73sR/M6WMkl6GaQGW1ZEIIiiFo3S+rLY2ykmY40Q=";
 
   nativeBuildInputs = [
     pkg-config
@@ -42,4 +44,4 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "kepler";
   };
-}
+})
