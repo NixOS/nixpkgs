@@ -2348,6 +2348,7 @@ mapAliases {
   temurin-bin-24 = throw "Temurin 24 has been removed as it has reached its end of life"; # Added 2025-10-04
   temurin-jre-bin-23 = throw "Temurin 23 has been removed as it has reached its end of life"; # Added 2025-11-04
   temurin-jre-bin-24 = throw "Temurin 24 has been removed as it has reached its end of life"; # Added 2025-10-04
+  tengine = throw "tengine has been removed as it has seen seriously delayed responses to security vulnerabilities. Please switch to another webserver by updating or removing your `services.nginx.package` option."; # Added 2026-08-03
   tepl = throw "'tepl' has been renamed to/replaced by 'libgedit-tepl'"; # Converted to throw 2025-10-27
   termbook = throw "'termbook' has been removed because it is not maintained upstream and has insecure dependencies."; # Added 2025-12-01
   terminus-nerdfont = throw "'terminus-nerdfont' has been renamed to/replaced by 'nerd-fonts.terminess-ttf'"; # Converted to throw 2025-10-27
