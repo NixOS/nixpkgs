@@ -62,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     perl
   ];
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
 
   doCheck = true;
