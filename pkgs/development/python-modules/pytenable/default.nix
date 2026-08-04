@@ -37,6 +37,12 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-KRZbrJgIxdNAnlmP7Ww/JasoDJqJZkBkd0qXm9gfXp4=";
   };
 
+  postPatch = ''
+    # pytest 9 rejects marks on fixtures, where they never had any effect
+    substituteInPlace tests/sc/conftest.py \
+      --replace-fail "@pytest.mark.filterwarnings('ignore::DeprecationWarning')" ""
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [
@@ -63,10 +69,6 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     requests-pkcs12
     responses
-  ];
-
-  pytestFlags = [
-    "-Wignore::pytest.PytestRemovedIn9Warning"
   ];
 
   disabledTestPaths = [
