@@ -118,7 +118,7 @@ let
       # `pkgs{theirHost}{theirTarget}`. For example, `pkgsBuildHost` means their
       # host platform is our build platform, and their target platform is our host
       # platform. We only care about their host/target platforms, not their build
-      # platform, because the the former two alone affect the interface of the
+      # platform, because the former two alone affect the interface of the
       # final package; the build platform is just an implementation detail that
       # should not leak.
       pkgsBuildBuild = withFallback adjacentPackages.pkgsBuildBuild;

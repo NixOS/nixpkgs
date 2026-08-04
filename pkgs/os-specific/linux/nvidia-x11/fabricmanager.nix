@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://www.nvidia.com/object/unix.html";
-    description = "Fabricmanager daemon for NVLink intialization and control";
+    description = "Fabricmanager daemon for NVLink initialization and control";
     license = lib.licenses.unfreeRedistributable;
     platforms = nvidia_x11.meta.platforms;
     mainProgram = "nv-fabricmanager";

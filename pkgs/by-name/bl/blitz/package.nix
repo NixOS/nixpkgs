@@ -22,7 +22,7 @@
 }:
 
 let
-  inherit (lib) optional optionals;
+  inherit (lib) optional;
 in
 stdenv.mkDerivation rec {
   pname = "blitz++";

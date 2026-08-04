@@ -10,7 +10,7 @@
   # sourceExecutableName is the name of the binary in the source archive over
   # which we have no control and it is needed to run the insider version as
   # documented in https://wiki.nixos.org/wiki/Visual_Studio_Code#Insiders_Build
-  # On MacOS the insider binary is still called code instead of code-insiders as
+  # On macOS the insider binary is still called code instead of code-insiders as
   # of 2023-08-06.
   sourceExecutableName ?
     "code" + lib.optionalString (isInsiders && stdenv.hostPlatform.isLinux) "-insiders",
