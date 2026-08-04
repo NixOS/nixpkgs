@@ -11,6 +11,9 @@
   # tests
   python3,
   versionCheckHook,
+
+  # passthru
+  nix-update-script,
 }:
 
 let
@@ -61,6 +64,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Sampling profiler for Python programs";
