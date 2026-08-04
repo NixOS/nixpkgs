@@ -19,12 +19,14 @@
   libxrandr,
   libxkbcommon,
   libgbm,
+  libva,
   nss,
   nspr,
+  pipewire,
   gtk3,
   libnotify,
   libpulseaudio,
-  writeShellApplication,
+  alsa-lib,
 }:
 
 stdenv.mkDerivation rec {
@@ -75,7 +77,16 @@ stdenv.mkDerivation rec {
     wrapProgramShell $out/opt/osmium \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libGL ]}
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          libGL
+          libva
+          libnotify
+          pipewire
+          alsa-lib
+          libpulseaudio
+        ]
+      }
 
     for size in 16x16 32x32 48x48 64x64 128x128 256x256 512x512
     do
