@@ -18,15 +18,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "emsutil";
-  version = "0.8.3";
+  version = "0.8.3-unstable-2026-08-03";
   pyproject = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "FennisRobert";
     repo = "emsutil";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-Ca+nhaa9pMMsNy5p9Yg17bVJgFPPTnBFgz8vTFLCjVU=";
+    rev = "18449659ca374ba84f02709a0d245b6bebb8ddb6";
+    hash = "sha256-9kyEBNKKP9Dz6s1svzq6C3ow27jV+zwz2M82gJndZsg=";
   };
 
   build-system = [
@@ -54,12 +54,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Utilities for the EMerge software suite";
     homepage = "https://github.com/FennisRobert/emsutil";
-    license =
-      with lib.licenses;
-      AND [
-        cc0 # src/emsutil/lib.py
-        unfree # FIXME: https://github.com/FennisRobert/emsutil/issues/1
-      ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ eljamm ];
     teams = with lib.teams; [ ngi ];
   };
