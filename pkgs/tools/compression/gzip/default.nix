@@ -89,6 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.makecheck = gzip.overrideAttrs { doCheck = true; };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.gnu.org/software/gzip/";
     description = "GNU zip compression program";
