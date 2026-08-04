@@ -22,7 +22,6 @@
 }:
 
 let
-  version = "1.1-unstable-2021-05-01";
   perlVersion = lib.getVersion perl;
 
   botan = callPackage ./botan2.nix { enableForMonotone = true; };
@@ -30,13 +29,16 @@ in
 
 assert perlVersion != "";
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "monotone";
-  inherit version;
+  version = "1.1-unstable-2021-05-01";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   #  src = fetchurl {
   #    url = "http://monotone.ca/downloads/${version}/monotone-${version}.tar.bz2";
-  #    sha256 = "124cwgi2q86hagslbk5idxbs9j896rfjzryhr6z63r6l485gcp7r";
+  #    hash = "sha256-+Vz2CiLU5GG+ydDnL102CcmkV2+xzEX1U9AgLOLjjIg=";
   #  };
 
   # My mirror of upstream Monotone repository
@@ -46,7 +48,7 @@ stdenv.mkDerivation rec {
     owner = "7c6f434c";
     repo = "monotone-mirror";
     rev = "b30b0e1c16def043d2dad57d1467d5bfdecdb070";
-    hash = "sha256:1hfy8vaap3184cd7h3qhz0da7c992idkc6q2nz9frhma45c5vgmd";
+    hash = "sha256-rb5dWCGqwuzStwIbNlsUKbGjGvgQD3gaIyiMq9RG3sE=";
   };
 
   patches = [
@@ -56,7 +58,7 @@ stdenv.mkDerivation rec {
       name = "rm-clang-float128-hack.patch";
       url = "https://github.com/7c6f434c/monotone-mirror/commit/5f01a3a9326a8dbdae7fc911b208b7c319e5f456.patch";
       revert = true;
-      sha256 = "0fzjdv49dx5lzvqhkvk50lkccagwx8h0bfha4a0k6l4qh36f9j7c";
+      hash = "sha256-7MjkzICYUDOBIgq6BSDq/CnGJgVl7gnx/rT0lshu8js=";
     })
     ./monotone-1.1-gcc-14.patch
   ];
@@ -94,15 +96,15 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    mkdir -p $out/share/${pname}-${version}
-    cp -rv contrib/ $out/share/${pname}-${version}/contrib
+    mkdir -p $out/share/monotone-${finalAttrs.version}
+    cp -rv contrib/ $out/share/monotone-${finalAttrs.version}/contrib
     mkdir -p $out/${perl.libPrefix}/${perlVersion}
     cp -v contrib/Monotone.pm $out/${perl.libPrefix}/${perlVersion}
 
     patchShebangs "$out/share/monotone"
-    patchShebangs "$out/share/${pname}-${version}"
+    patchShebangs "$out/share/monotone-${finalAttrs.version}"
 
-    find "$out"/share/{doc/monotone,${pname}-${version}}/contrib/ -type f | xargs sed -e 's@! */usr/bin/@!/usr/bin/env @; s@! */bin/bash@!/usr/bin/env bash@' -i
+    find "$out"/share/{doc/monotone,monotone-${finalAttrs.version}}/contrib/ -type f | xargs sed -e 's@! */usr/bin/@!/usr/bin/env @; s@! */bin/bash@!/usr/bin/env bash@' -i
   '';
 
   #doCheck = true; # some tests fail (and they take VERY long)
@@ -114,4 +116,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
   };
-}
+})

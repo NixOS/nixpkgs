@@ -5201,7 +5201,7 @@ with self;
       hash = "sha256-p1KK8in6OhIF3NJakd59dKxvp9lSgbmTtV6Lb0+HuZE=";
     };
     meta = {
-      description = "Set of modules to make the module developement easier";
+      description = "Set of modules to make the module development easier";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -8782,7 +8782,7 @@ with self;
       hash = "sha256-tpGbpJuf6Yv98+isyue5t/eNyeceu9C3/vekXZkyTMs=";
     };
     meta = {
-      description = "Perl extension for simple genrating of unique id's";
+      description = "Perl extension for simple generating of unique id's";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -9556,7 +9556,7 @@ with self;
       commonsense
     ];
     meta = {
-      description = "Deliantra suppport module to read/write archetypes, maps etc";
+      description = "Deliantra support module to read/write archetypes, maps etc";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -14302,7 +14302,7 @@ with self;
       hash = "sha256-JtCfgYNuQ+rkACjVKD/lYg/m/mJ4vz6462AMSOw0r8c=";
     };
     meta = {
-      description = "Perl extension for reading from continously updated files";
+      description = "Perl extension for reading from continuously updated files";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -25483,7 +25483,7 @@ with self;
     buildInputs = [ TestFatal ];
     preCheck = "rm t/icmp_ps.t t/icmpv6_ps.t"; # ping socket tests fail
     meta = {
-      description = "Asyncronously check remote host for reachability";
+      description = "Asynchronously check remote host for reachability";
       homepage = "https://github.com/frioux/Net-Async-Ping";
       license = with lib.licenses; [
         artistic1
@@ -31698,7 +31698,7 @@ with self;
       StatisticsDistributions
     ];
     meta = {
-      description = "Perl module to perform T-test on 2 independent samples Statistics::TTest::Sufficient - Perl module to perfrom T-Test on 2 indepdent samples using sufficient statistics";
+      description = "Perl module to perform T-test on 2 independent samples Statistics::TTest::Sufficient - Perl module to perform T-Test on 2 independent samples using sufficient statistics";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -37204,7 +37204,7 @@ with self;
       hash = "sha256-1RP7tRQT98oeZKG9zmGU337GB23qVQZtZ7lQGR7sMqk=";
     };
     meta = {
-      description = "Tied hash with specific methods overriden by callbacks";
+      description = "Tied hash with specific methods overridden by callbacks";
       license = lib.licenses.artistic1;
     };
   };
