@@ -7,7 +7,6 @@
   darwin,
   libtool,
   pkg-config,
-  pkgsStatic,
 
   # for passthru.tests
   bind,
@@ -19,6 +18,7 @@
   neovim,
   nodejs,
   ocamlPackages,
+  pkgsStatic,
   python3,
   testers,
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "libuv";
     repo = "libuv";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Y9Nph2LkT1qnOYTW3WCumWWwORnI4P7HxzBjUlGaL7M=";
   };
 
@@ -210,6 +210,8 @@ stdenv.mkDerivation (finalAttrs: {
     static = pkgsStatic.libuv;
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Multi-platform support library with a focus on asynchronous I/O";
