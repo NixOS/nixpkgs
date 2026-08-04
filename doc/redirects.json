@@ -440,6 +440,9 @@
   "sec-darwin-availability-checks": [
     "index.html#sec-darwin-availability-checks"
   ],
+  "sec-darwin-builder-vz": [
+    "index.html#sec-darwin-builder-vz"
+  ],
   "sec-darwin-libcxx-deployment-targets": [
     "index.html#sec-darwin-libcxx-deployment-targets"
   ],
