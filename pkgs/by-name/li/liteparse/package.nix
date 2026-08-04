@@ -65,6 +65,7 @@ in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "liteparse";
   version = "2.8.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "run-llama";
@@ -77,9 +78,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mkdir -p .tesseract-rs/third_party
     ln -s ${leptonicaSrc} .tesseract-rs/third_party/leptonica
     ln -s ${tesseractSrc} .tesseract-rs/third_party/tesseract
-
-    # tesseract-rs builds leptonica/tesseract via cmake and expects libraries under
-    # lib/, while newer upstream sources may install to lib64 on some platforms.
+  ''
+  # tesseract-rs builds leptonica/tesseract via cmake and expects libraries under
+  # lib/, while newer upstream sources may install to lib64 on some platforms.
+  + ''
     tesseractRsBuildRs=$(echo "$cargoDepsCopy"/source-registry-*/tesseract-rs-*/build.rs)
     substituteInPlace "$tesseractRsBuildRs" \
       --replace-fail \
@@ -126,13 +128,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env = {
     OPENSSL_NO_VENDOR = true;
-    PDFIUM_INCLUDE_PATH = "${pdfium}/include";
-    PDFIUM_LIB_PATH = "${pdfium}/lib";
+    PDFIUM_INCLUDE_PATH = "${lib.getInclude pdfium}/include";
+    PDFIUM_LIB_PATH = "${lib.getLib pdfium}/lib";
   };
 
   postInstall = ''
     wrapProgram $out/bin/lit \
-      --set PDFIUM_LIB_PATH "${pdfium}/lib" \
+      --set PDFIUM_LIB_PATH "${lib.getLib pdfium}/lib" \
       --set TESSDATA_PREFIX "${tesseract}/share/tessdata"
   '';
 
