@@ -52,7 +52,7 @@
 
 let
   pname = "mongodb-compass";
-  version = "1.49.10";
+  version = "1.49.12";
 
   selectSystem =
     attrs:
@@ -66,8 +66,8 @@ let
       }
     }";
     hash = selectSystem {
-      x86_64-linux = "sha256-faD8sIbnho5urBWE0btcmD7tXT8eQCNyJYzpIyI+bA4=";
-      aarch64-darwin = "sha256-HGOJPYC4+CgLQQ3BNUTNZUln5oqPkC8ewHft99LCZQ8=";
+      x86_64-linux = "sha256-syuoNZ2MmPHgTi55HioqkYQzS1LsbzcgdWoFeM+z2Rg=";
+      aarch64-darwin = "sha256-BY5EUWJdPg4OJ7+ehCb/H8dIAoJVYlJnNcSPp0r/XfA=";
     };
   };
 
@@ -119,13 +119,16 @@ in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version src;
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    dpkg
-    wrapGAppsHook3
-    patchelf
-  ];
+  __structuredAttrs = true;
+  strictDeps = true;
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ unzip ];
+  nativeBuildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      dpkg
+      wrapGAppsHook3
+      patchelf
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ unzip ];
 
   dontUnpack = stdenv.hostPlatform.isLinux;
   dontFixup = stdenv.hostPlatform.isDarwin;
@@ -156,7 +159,8 @@ stdenv.mkDerivation (finalAttrs: {
       patchelf --set-rpath ${rpath}:$out/lib/mongodb-compass "$file" || true
     done
 
-    wrapGAppsHook $out/bin/mongodb-compass
+    gappsWrapperArgsHook
+    wrapGApp "$out/bin/mongodb-compass"
   '';
 
   installPhase = ''
@@ -185,6 +189,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "GUI for MongoDB";
     homepage = "https://github.com/mongodb-js/compass";
+    changelog = "https://github.com/mongodb-js/compass/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.sspl;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "mongodb-compass";

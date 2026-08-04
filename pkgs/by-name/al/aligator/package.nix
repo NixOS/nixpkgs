@@ -6,14 +6,9 @@
   nix-update-script,
   stdenv,
 
-  # nativeBuildInputs
-  doxygen,
-  cmake,
-  graphviz,
-  pkg-config,
-
   # buildInputs
   fmt,
+  jrl-cmakemodules,
   mimalloc,
 
   # propagatedBuildInputs
@@ -57,15 +52,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    doxygen
-    cmake
-    graphviz
-    pkg-config
-  ];
+  nativeBuildInputs = jrl-cmakemodules.docsNativeBuildInputs;
 
   buildInputs = [
     fmt
+    jrl-cmakemodules
     mimalloc
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -82,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     gbenchmark
   ];
 
-  cmakeFlags = [
+  cmakeFlags = jrl-cmakemodules.docsCmakeFlags ++ [
     (lib.cmakeBool "BUILD_PYTHON_INTERFACE" false)
     (lib.cmakeBool "BUILD_WITH_PINOCCHIO_SUPPORT" true)
     (lib.cmakeBool "BUILD_CROCODDYL_COMPAT" true)

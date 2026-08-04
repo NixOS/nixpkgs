@@ -7,13 +7,13 @@
 
 mkNginxPlugin (finalAttrs: {
   pname = "pam";
-  version = "1.5.3";
+  version = "1.5.5";
 
   src = fetchFromGitHub {
     owner = "sto";
     repo = "ngx_http_auth_pam_module";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Kojk0/zxAktpZ/8YvCglVlN0xi+jELYGMcU8CZukliY=";
+    hash = "sha256-ESlrWZwpLE0bVS1MwTc2Zcu7892HsaCQ7APGsmdbIuU=";
   };
 
   buildInputs = [ pam ];

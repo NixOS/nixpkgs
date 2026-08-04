@@ -4,7 +4,31 @@
   fetchFromGitHub,
   nix-update-script,
   cmake,
+
+  # docs
+  doxygen,
+  graphviz,
+  ghostscript,
+  pdf2svg,
+  pkg-config,
+  texliveBasic,
+  writableTmpDirAsHomeHook,
+
+  # tests
+  catch2_3,
+  matio,
+  python3Packages,
+  simde,
+  suitesparse,
 }:
+
+let
+  doxygenTexlive = texliveBasic.withPackages (ps: [
+    ps.newunicodechar
+    ps.stmaryrd
+    ps.xcolor
+  ]);
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jrl-cmakemodules";
@@ -19,7 +43,43 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  passthru.updateScript = nix-update-script { };
+  cmakeFlags = [
+    (lib.cmakeBool "JRL_CMAKEMODULES_GENERATE_API_DOC" true)
+    (lib.cmakeBool "JRL_CMAKEMODULES_BUILD_TESTS" finalAttrs.doCheck)
+  ];
+
+  doCheck = true;
+
+  checkInputs = [
+    catch2_3
+    matio
+    python3Packages.boost
+    python3Packages.nanobind
+    python3Packages.numpy
+    python3Packages.pytest
+    simde
+    suitesparse
+  ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+    docsNativeBuildInputs = [
+      cmake
+      doxygen
+      doxygenTexlive
+      graphviz
+      ghostscript
+      pdf2svg
+      pkg-config
+      writableTmpDirAsHomeHook
+    ];
+    docsCmakeFlags = [
+      (lib.cmakeFeature "DOXYGEN_FORMULA_FONTSIZE" "13")
+      (lib.cmakeFeature "DOXYGEN_HTML_FORMULA_FORMAT" "svg")
+      (lib.cmakeFeature "DOXYGEN_HTML_OUTPUT" "doxygen-html")
+      (lib.cmakeBool "DOXYGEN_USE_MATHJAX" false)
+    ];
+  };
 
   meta = {
     description = "CMake utility toolbox";

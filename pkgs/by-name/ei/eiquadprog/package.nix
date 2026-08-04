@@ -1,12 +1,9 @@
 {
   boost,
-  cmake,
-  doxygen,
   eigen,
   fetchFromGitHub,
   jrl-cmakemodules,
   lib,
-  pkg-config,
   stdenv,
 }:
 
@@ -26,12 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  nativeBuildInputs = [
-    cmake
-    doxygen
-    pkg-config
-    jrl-cmakemodules
-  ];
+  cmakeFlags = jrl-cmakemodules.docsCmakeFlags;
+
+  nativeBuildInputs = jrl-cmakemodules.docsNativeBuildInputs;
+  buildInputs = [ jrl-cmakemodules ];
   propagatedBuildInputs = [ eigen ];
   checkInputs = [ boost ];
 
