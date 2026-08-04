@@ -82,7 +82,10 @@ buildGoModule rec {
     homepage = "https://github.com/damongolding/immich-kiosk";
     changelog = "https://github.com/damongolding/immich-kiosk/releases/tag/v${version}";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ tlvince ];
+    maintainers = with lib.maintainers; [
+      tlvince
+      esch
+    ];
     mainProgram = "immich-kiosk";
   };
 }
