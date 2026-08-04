@@ -851,7 +851,6 @@ in
               inherit (self)
                 stdenv
                 runCommandLocal
-                patchelf
                 libunistring
                 ;
             };
