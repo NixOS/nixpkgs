@@ -2,27 +2,31 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  git,
 }:
 let
   core = fetchFromGitHub {
     owner = "fvs-lab";
     repo = "core";
-    tag = "v0.0.1";
-    hash = "sha256-IBNNa5LGjtPNWhI0PC0NX8rK8z2LnfzOpKpDE1TZQhw=";
+    tag = "v0.1.1";
+    hash = "sha256-vEQhV9wInqxgJlSyhgp0BV5VaYBJVtqcPrdN2NP33i4=";
   };
 in
 buildGoModule (finalAttrs: {
   pname = "fvs2";
-  version = "0.2.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "fvs-lab";
     repo = "fvs2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wod+GzJ/tCl0dlAv0PM9I1TG9l96SujrOkSlEsgXp5U=";
+    hash = "sha256-lJZd9QbvjArYMSXG6qHcaxaAe5UOPpko/TXD2L8yxDA=";
   };
 
-  vendorHash = "sha256-MDizWAeXJW0YTMrGEtk3Ulvx0InW0EgytrtE9O7T3Ps=";
+  vendorHash = "sha256-FUst0ccxpZS3NjvthQQE7CVlULWPhXj8KA2cOoksLGI=";
+
+  # Needed for build time tests
+  nativeBuildInputs = [ git ];
 
   preBuild = ''
     cp -r ${core} ../core
