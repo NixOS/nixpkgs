@@ -39,6 +39,14 @@ buildNpmPackage rec {
       --replace-fail "../../../" "../../"
   '';
 
+  # to support later versions of nodejs
+  # node_mdns is unmaintained so this is the best we can do
+  postConfigure = ''
+    substituteInPlace node_modules/mdns/lib/resolver_sequence_tasks.js --replace-fail \
+      'cares.getaddrinfo(req, host, family, 0, false)' \
+      'cares.getaddrinfo(req, host, family, 0, 0)'
+  '';
+
   dontNpmInstall = true;
   installPhase = ''
     runHook preInstall
