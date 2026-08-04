@@ -637,9 +637,17 @@ rec {
       entries' =
         if (lib.isAttrs entries) then
           entries
-        # We do this foldl to have last-wins semantics in case of repeated entries
         else if (lib.isList entries) then
-          foldl' (a: b: a // { "${b.name}" = b.path; }) { } entries
+          # listToAttrs takes the first attribute with a given name, so we
+          # reverse the list to get last-wins semantics in case of repeated entries
+          lib.listToAttrs (
+            lib.reverseList (
+              map (entry: {
+                inherit (entry) name;
+                value = entry.path;
+              }) entries
+            )
+          )
         else
           throw "linkFarm entries must be either attrs or a list!";
 
