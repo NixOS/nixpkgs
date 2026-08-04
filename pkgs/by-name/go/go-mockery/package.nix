@@ -11,6 +11,7 @@
 buildGoModule (finalAttrs: {
   pname = "go-mockery";
   version = "3.7.2";
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "vektra";
@@ -57,9 +58,7 @@ buildGoModule (finalAttrs: {
 
     ${
       # TestRemoteTemplates/schema_validation_OK fails only on x86_64-darwin
-      (lib.optionalString (
-        stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86
-      ) "rm -rf e2e/test_remote_templates/")
+      (lib.optionalString (stdenv.hostPlatform.isDarwin) "rm -rf e2e/test_remote_templates/")
     }
     # run unit tests and e2e tests plus pre-gen necessary mocks
     task test.ci
