@@ -42,7 +42,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "froide";
-  version = "0-unstable-2025-09-10";
+  version = "5.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
