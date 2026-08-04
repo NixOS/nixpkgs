@@ -70,22 +70,18 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     ./007-freebsd-pkgconfig-path.patch
   ];
 
-  postPatch =
-    if python3.isPyPy then
-      ''
-        substituteInPlace mesonbuild/modules/python.py \
-          --replace-fail "PythonExternalProgram('python3', mesonlib.python_command" \
-                         "PythonExternalProgram('${python3.meta.mainProgram}', mesonlib.python_command"
-        substituteInPlace mesonbuild/modules/python3.py \
-          --replace-fail "state.environment.lookup_binary_entry(mesonlib.MachineChoice.HOST, 'python3'" \
-                         "state.environment.lookup_binary_entry(mesonlib.MachineChoice.HOST, '${python3.meta.mainProgram}'"
-        substituteInPlace "test cases"/*/*/*.py "test cases"/*/*/*/*.py \
-          --replace-quiet '#!/usr/bin/env python3' '#!/usr/bin/env pypy3' \
-          --replace-quiet '#! /usr/bin/env python3' '#!/usr/bin/env pypy3'
-        chmod +x "test cases"/*/*/*.py "test cases"/*/*/*/*.py
-      ''
-    else
-      null;
+  ${if python3.isPyPy then "postPatch" else null} = ''
+    substituteInPlace mesonbuild/modules/python.py \
+      --replace-fail "PythonExternalProgram('python3', mesonlib.python_command" \
+                      "PythonExternalProgram('${python3.meta.mainProgram}', mesonlib.python_command"
+    substituteInPlace mesonbuild/modules/python3.py \
+      --replace-fail "state.environment.lookup_binary_entry(mesonlib.MachineChoice.HOST, 'python3'" \
+                      "state.environment.lookup_binary_entry(mesonlib.MachineChoice.HOST, '${python3.meta.mainProgram}'"
+    substituteInPlace "test cases"/*/*/*.py "test cases"/*/*/*/*.py \
+      --replace-quiet '#!/usr/bin/env python3' '#!/usr/bin/env pypy3' \
+      --replace-quiet '#! /usr/bin/env python3' '#!/usr/bin/env pypy3'
+    chmod +x "test cases"/*/*/*.py "test cases"/*/*/*/*.py
+  '';
 
   build-system = [ python3.pkgs.setuptools ];
 
