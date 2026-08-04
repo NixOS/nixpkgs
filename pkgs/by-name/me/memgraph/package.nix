@@ -8,6 +8,7 @@
   libuuid,
   openssl,
   python313,
+  nixosTests,
 }:
 stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
@@ -59,6 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     ln -sf ../lib/memgraph/memgraph $out/bin
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) memgraph;
+  };
 
   meta = with lib; {
     description = "High-performance open-source in-memory graph database";
