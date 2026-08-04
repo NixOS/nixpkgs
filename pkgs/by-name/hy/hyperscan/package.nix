@@ -8,7 +8,7 @@
   util-linux,
   pkg-config,
   boost,
-  pcre2,
+  pcre,
   withStatic ? false, # build only shared libs by default, build static+shared if true
 }:
 
@@ -78,10 +78,11 @@ stdenv.mkDerivation (finalAttrs: {
   # hyperscan CMake is completely broken for chimera builds when pcre is compiled
   # the only option to make it build - building from source
   # In case pcre is built from source, chimera build is turned on by default
+  # NOTE: chimera requires PCRE1 (>= 8.41), it is not compatible with pcre2.
   preConfigure = lib.optionalString withStatic (
     ''
       mkdir -p pcre
-      tar xvf ${pcre2.src} --strip-components 1 -C pcre
+      tar xvf ${pcre.src} --strip-components 1 -C pcre
     ''
     # - CMake 4 dropped support of versions lower than 3.5, versions lower than 3.10 are deprecated.
     #   https://github.com/NixOS/nixpkgs/issues/445447
