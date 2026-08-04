@@ -77,6 +77,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       shortName = "GitHub Copilot License";
       url = "https://github.com/customer-terms/github-copilot-product-specific-terms";
     };
+    sourceProvenance = with lib.sourceTypes; [
+      binaryNativeCode # prebuild directory
+      binaryBytecode # WASM files
+      obfuscatedCode # minified JavaScript
+    ];
     mainProgram = "copilot-language-server";
     platforms = [
       "x86_64-linux"
