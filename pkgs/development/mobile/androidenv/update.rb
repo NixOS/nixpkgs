@@ -442,7 +442,7 @@ def parse_addon_xml doc
   [licenses, addons, extras]
 end
 
-# Make the clean diff by always sorting the result before puting it in the stdout.
+# Make the clean diff by always sorting the result before putting it in the stdout.
 def sort_recursively value
   if value.is_a?(Hash)
     Hash[
