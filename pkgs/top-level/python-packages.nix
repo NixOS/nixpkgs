@@ -91,8 +91,6 @@ self: super: with self; {
 
   adbc-driver-postgresql = callPackage ../development/python-modules/adbc-driver-postgresql { };
 
-  adbc-driver-snowflake = callPackage ../development/python-modules/adbc-driver-snowflake { };
-
   adbc-driver-sqlite = callPackage ../development/python-modules/adbc-driver-sqlite { };
 
   adblock = callPackage ../development/python-modules/adblock { };
