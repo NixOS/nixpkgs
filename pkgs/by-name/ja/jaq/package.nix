@@ -5,6 +5,7 @@
   versionCheckHook,
   nix-update-script,
   runCommand,
+  jotdown,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -25,6 +26,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   doInstallCheck = true;
+
+  nativeBuildInputs = [
+    jotdown # for manpage
+  ];
+
+  postBuild = ''
+    pushd docs || true
+    make jaq.1
+    popd
+  '';
+
+  postInstall = ''
+    install -D docs/jaq.1 -t $out/share/man/man1
+  '';
 
   passthru = {
     updateScript = nix-update-script {
