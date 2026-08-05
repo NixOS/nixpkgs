@@ -155,5 +155,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ izorkin ];
+    knownVulnerabilities = [
+      "CVE-2026-49975 - HPACK/QPACK header decompression bomb in HTTP/1, HTTP/2 and HTTP/3"
+      "CVE-2026-9256 - heap buffer overflow with overlapping captures in ngx_http_rewrite_module"
+      "CVE-2026-42945 - escaping issue and possible buffer overrun in ngx_http_rewrite_module"
+      "CVE-2026-42946 - buffer overread when parsing a split status line in ngx_http_scgi_module and ngx_http_uwsgi_module"
+      "CVE-2026-42934 - buffer overread in recode_from_utf8() of ngx_http_charset_module"
+      "CVE-2026-40701 - use-after-free in the OCSP resolver of ngx_http_ssl_module"
+      "CVE-2026-1642 - a premature plain text response from an SSL backend was parsed before the handshake"
+      "The current version is over 3 years old and contains serious vulnerabilities. It will be dropped in 26.11. Please consider switchiting to another webserver by updating or removing your `services.nginx.package` option."
+    ];
   };
 }
