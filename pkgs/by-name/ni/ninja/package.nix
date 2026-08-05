@@ -52,6 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt.bin
   ];
 
+  strictDeps = true;
+
   patches = [
     ./0001-spawn-sh-instead-of-bin-sh.patch
   ]
