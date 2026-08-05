@@ -18,6 +18,8 @@ stdenvNoCC.mkDerivation {
 
   dontBuild = true;
 
+  strictDeps = true;
+
   installPhase = ''
     runHook preInstall
 
@@ -27,6 +29,8 @@ stdenvNoCC.mkDerivation {
   '';
 
   passthru.updateScript = unstableGitUpdater { };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://publicsuffix.org/";
