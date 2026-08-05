@@ -37,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     inherit curl;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://github.com/ngtcp2/nghttp3";
     changelog = "https://github.com/ngtcp2/nghttp3/releases/tag/v${finalAttrs.version}";
