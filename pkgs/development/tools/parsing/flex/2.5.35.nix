@@ -10,13 +10,13 @@
   m4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flex";
   version = "2.5.35";
 
   src = fetchurl {
     url = "https://github.com/westes/flex/archive/flex-${
-      lib.replaceStrings [ "." ] [ "-" ] version
+      lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }.tar.gz";
     sha256 = "0wh06nix8bd4w1aq4k2fbbkdq5i30a9lxz3xczf3ff28yy0kfwzm";
   };
@@ -48,6 +48,8 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails 2 out of 46 tests
 
+  __structuredAttrs = true;
+
   meta = {
     branch = "2.5.35";
     homepage = "https://flex.sourceforge.net/";
@@ -56,4 +58,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
   };
-}
+})
