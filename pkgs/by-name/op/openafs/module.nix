@@ -81,7 +81,7 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p ${modDestDir}
     cp src/libafs/MODLOAD-*/libafs-${kernel.modDirVersion}.* ${modDestDir}/libafs.ko
-    xz -f ${modDestDir}/libafs.ko
+    xz --check=crc32 --lzma2=dict=1MiB -f ${modDestDir}/libafs.ko
   '';
 
   meta = {
