@@ -5024,6 +5024,8 @@ self: super: with self; {
 
   dockerspawner = callPackage ../development/python-modules/dockerspawner { };
 
+  doclang = callPackage ../development/python-modules/doclang { };
+
   docling = callPackage ../development/python-modules/docling { };
 
   docling-core = callPackage ../development/python-modules/docling-core { };
@@ -5039,6 +5041,8 @@ self: super: with self; {
   };
 
   docling-serve = callPackage ../development/python-modules/docling-serve { };
+
+  docling-slim = callPackage ../development/python-modules/docling-slim { };
 
   docloud = callPackage ../development/python-modules/docloud { };
 
