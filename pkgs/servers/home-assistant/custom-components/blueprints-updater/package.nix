@@ -2,24 +2,25 @@
   lib,
   buildHomeAssistantComponent,
   fetchFromGitHub,
-  httpx,
   home-assistant,
+  httpx,
+  pytest-asyncio,
   pytest-cov-stub,
   pytest-homeassistant-custom-component,
-  pytest-asyncio,
+  pytest-xdist,
   pytestCheckHook,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "luuquangvu";
   domain = "blueprints_updater";
-  version = "2.10.1";
+  version = "2.11.1";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "blueprints-updater";
     tag = version;
-    hash = "sha256-MhhdWvSV+oyDxYGGj0IcqP5bymCjNCVTNIzvHdRKesU=";
+    hash = "sha256-hFBOmjbhw8HECJLj/MmgCzCb1rVlh7k/oI9v20HuYlI=";
   };
 
   patches = [
@@ -41,6 +42,7 @@ buildHomeAssistantComponent rec {
     pytest-asyncio
     pytest-cov-stub
     pytest-homeassistant-custom-component
+    pytest-xdist
     pytestCheckHook
   ];
 

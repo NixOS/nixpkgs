@@ -21,21 +21,21 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "kiro-cli";
-  version = "2.14.2";
+  version = "2.16.1";
 
   src =
     {
       x86_64-linux = fetchurl {
         url = "https://desktop-release.q.us-east-1.amazonaws.com/${finalAttrs.version}/kirocli-x86_64-linux.tar.gz";
-        hash = "sha256-Q9y4sv7CrcAJUyWJPy8gXh6gfpIm7d9rr6odqlI7Y00=";
+        hash = "sha256-OTYzyZH6q172iLKqDdQgSByrf8oxLNhjkjwyh+mHS4I=";
       };
       aarch64-linux = fetchurl {
         url = "https://desktop-release.q.us-east-1.amazonaws.com/${finalAttrs.version}/kirocli-aarch64-linux.tar.gz";
-        hash = "sha256-ikhU5yoY2UGmW6kfAJmaDljtxKeyGFa6jQxHIGg/m04=";
+        hash = "sha256-hBO2IHJ4B0c3TAkyFHAi4pByXpNNRh5DC1rhKnPzOyM=";
       };
       aarch64-darwin = fetchurl {
         url = "https://desktop-release.q.us-east-1.amazonaws.com/${finalAttrs.version}/Kiro%20CLI.dmg";
-        hash = "sha256-EU2GDOiK5iRN6Cxrf9e79BGoVmVIkYTZyfx8uaOoqBs=";
+        hash = "sha256-X86c+dymp08MUpFRdqZCH1lI5pA4E6+QSAxrciyyDTI=";
       };
     }
     .${system} or (throw "Unsupported system: ${system}");

@@ -707,7 +707,6 @@ in
     ];
     propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [
       final.bit32
-      final.std-normalize
     ];
   });
 

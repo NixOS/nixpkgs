@@ -4561,6 +4561,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  dataform-nvim = buildVimPlugin {
+    pname = "dataform.nvim";
+    version = "0-unstable-2025-06-16";
+    src = fetchFromGitHub {
+      owner = "magal1337";
+      repo = "dataform.nvim";
+      rev = "43a5f9e17275325ae32e5248c6f21636418e2018";
+      hash = "sha256-HA6E9L6U37Btb/dDgtm7du97/fae5IawCSg/nmB/tqg=";
+    };
+    meta.homepage = "https://github.com/magal1337/dataform.nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   ddc-filter-matcher_head = buildVimPlugin {
     pname = "ddc-filter-matcher_head";
     version = "0-unstable-2026-06-23";

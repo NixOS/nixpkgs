@@ -1254,6 +1254,7 @@ mapAliases {
   libdbiDriversBase = warnAlias "'libdbiDriversBase' has been renamed to 'libdbi-drivers-base'" libdbi-drivers-base; # Added 2026-02-08
   libdevil = throw "libdevil has been removed, as it was unmaintained in Nixpkgs and upstream since 2017"; # Added 2025-09-16
   libdevil-nox = throw "libdevil has been removed, as it was unmaintained in Nixpkgs and upstream since 2017"; # Added 2025-09-16
+  libdisplay-info_0_2 = throw "`libdisplay-info_0_2` has been removed as it is was unused in Nixpkgs. Consider upgrading to `libdisplay-info_0_3` or `libdisplay-info` instead"; # Added 2026-08-04
   libdwarf-lite = throw "`libdwarf-lite` has been replaced by `libdwarf` as it's mostly a mirror"; # Added 2025-06-16
   libdynd = throw "'libdynd' has been removed due to lack of maintenance"; # Added 2026-03-24
   libepc = throw "'libepc' has been removed as it was archived upstream and depended on libsoup 2.4"; # Added 2026-06-07
@@ -1563,7 +1564,6 @@ mapAliases {
   marwaita-yellow = throw "'marwaita-yellow' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   massif-visualizer = throw "'massif-visualizer' has been removed due to outdated KF5 dependencies."; # Added 2026-05-01
   mastodon-bot = throw "'mastodon-bot' has been removed because it was archived by upstream in 2021."; # Added 2025-11-07
-  matcha-gtk-theme = throw "'matcha-gtk-theme' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   materia-theme = throw "'materia-theme' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   material-kwin-decoration = throw "'material-kwin-decoration' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
   matheria-theme-transparent = throw "'matheria-theme-transparent' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
@@ -1840,7 +1840,6 @@ mapAliases {
   openzwave = throw "openzwave was removed because upstream is no longer maintained. Consider using zwave-js-server"; # Added 2026-05-14
   opera = throw "'opera' has been removed due to lack of maintenance in nixpkgs"; # Added 2025-05-19
   opusTools = warnAlias "'opusTools' has been renamed to 'opus-tools'" opus-tools; # Added 2026-02-12
-  orchis-theme = throw "'orchis-theme' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   orion = throw "'orion' was removed because it depended on the deprecated GTK2 engine."; # Added 2026-07-22
   orogene = throw "'orogene' uses a wasm-specific fork of async-tar that is vulnerable to CVE-2025-62518, which is not supported by its upstream"; # Added 2025-10-24
   ortp = throw "'ortp' has been moved to 'linphonePackages.ortp'"; # Added 2025-09-20
