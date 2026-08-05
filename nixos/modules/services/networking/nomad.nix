@@ -30,7 +30,7 @@ in
 
       dropPrivileges = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         description = ''
           Whether the nomad agent should be run as a non-root nomad user.
         '';
