@@ -68,6 +68,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "redmine";
   inherit version;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "https://www.redmine.org/releases/redmine-${finalAttrs.version}.tar.gz";
     hash = "sha256-hX6fiGDDHkxTE4nl2T7qJkiNummDBISjsKqQS+YV6Qo=";
