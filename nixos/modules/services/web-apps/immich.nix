@@ -50,9 +50,6 @@ let
     mkOption
     mkEnableOption
     ;
-
-  postgresqlPackage =
-    if cfg.database.enable then config.services.postgresql.package else pkgs.postgresql;
 in
 {
   imports = [
@@ -251,6 +248,29 @@ in
         default = "immich";
         description = "The database user for immich.";
       };
+      package = mkOption {
+        type = types.package;
+        default =
+          if config.services.postgresql.enable then config.services.postgresql.package else pkgs.postgresql;
+        defaultText = lib.literalExpression ''
+          if config.services.postgresql.enable then
+            config.services.postgresql.package
+          else
+            pkgs.postgresql
+        '';
+        example = lib.literalExpression "pkgs.postgresql_18";
+        description = ''
+          The postgresql package providing the client programs that immich uses,
+          most notably the `pg_dumpall` of its database backup job.
+
+          These programs refuse to talk to a server that is newer than
+          themselves, so this must not be older than the server reachable at
+          {option}`services.immich.database.host`. It is derived from
+          {option}`services.postgresql.package` whenever the postgresql module
+          is enabled on this host; set it explicitly when the database lives on
+          another machine.
+        '';
+      };
     };
     redis = {
       enable = mkEnableOption "a redis cache for use with immich" // {
@@ -329,7 +349,7 @@ in
       in
       [
         ''
-          ${lib.getExe' postgresqlPackage "psql"} -d "${cfg.database.name}" -f "${sqlFile}"
+          ${lib.getExe' cfg.database.package "psql"} -d "${cfg.database.name}" -f "${sqlFile}"
         ''
       ];
 
@@ -399,7 +419,7 @@ in
       path = [
         # gzip and pg_dumpall are used by the backup service
         pkgs.gzip
-        postgresqlPackage
+        cfg.database.package
       ];
 
       preStart = mkIf (cfg.settings != null) secretsReplacement.script;
