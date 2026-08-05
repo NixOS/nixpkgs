@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "gbionics";
     repo = "osqp-eigen";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/9M7DufsgjlG4UbBfi64FQsMms06OsljZP2C9uCQe7w=";
   };
 
