@@ -25,6 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
     "CC:=$(CC)"
   ];
 
+  __structuredAttrs = true;
+
   meta = {
     platforms = lib.platforms.unix;
     homepage = "http://frodo.looijaard.name/project/getopt";
