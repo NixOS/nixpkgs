@@ -1,0 +1,12 @@
+[package]
+name = "custom-sparse"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Three registries, each with a different `dl` template in its config.json:
+# regA uses `{crate}@{version}`, regB uses `{prefix}/{crate}/{version}`, regC
+# specifies no markers so `/{crate}/{version}/download` gets appended.
+hello = { version = "1.0.0", registry = "regA" }
+prefixed = { version = "1.0.0", registry = "regB" }
+plain = { version = "1.0.0", registry = "regC" }

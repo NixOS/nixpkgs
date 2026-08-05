@@ -183,6 +183,7 @@ in
 
   buildRustCrate = recurseIntoAttrs (callPackage ../build-support/rust/build-rust-crate/test { });
   importCargoLock = recurseIntoAttrs (callPackage ../build-support/rust/test/import-cargo-lock { });
+  fetchCargoVendor = recurseIntoAttrs (callPackage ../build-support/rust/test/fetch-cargo-vendor { });
 
   vim = callPackage ./vim { };
 

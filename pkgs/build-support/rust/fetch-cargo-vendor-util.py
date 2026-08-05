@@ -263,7 +263,7 @@ def make_download_url_for_tarball(pkg: RegistryPackage, dl: str) -> str:
 
 
 def download_crate_tarball(session: requests.Session, url: str, out_path: Path, expected_checksum: str) -> None:
-    out_path.parent.mkdir(exist_ok=True)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
 
     eprint(f"Fetching {url} -> {out_path}")
     calculated_checksum = download_file_with_checksum(session, url, out_path)
@@ -279,6 +279,24 @@ def download_git_tree(url: str, git_sha_rev: str, out_dir: Path) -> None:
 
     cmd = ["nix-prefetch-git", "--builder", "--quiet", "--fetch-submodules", "--url", url, "--rev", git_sha_rev, "--out", str(tree_out_dir)]
     subprocess.check_output(cmd)
+
+
+def tarball_relpath(source: RegistrySource, filename: str) -> Path:
+    # Registry index 0 is always crates.io, no matter whether the lockfile
+    # refers to it via `registry+` or `sparse+`. Keep its tarballs in the flat
+    # `tarballs/` layout so that the cargoHash of existing crates.io-only
+    # packages stays valid.
+    if source.ind == 0:
+        return Path("tarballs") / filename
+    return Path("tarballs") / f"registry-{source.ind}" / filename
+
+
+def make_registry_dir_name(source: RegistrySource) -> str:
+    # Each registry needs its own vendor directory: cargo refuses to define
+    # multiple sources for the same directory.
+    if source.ind == 0:
+        return "source-registry"
+    return f"source-registry-{source.ind}"
 
 
 def create_vendor_staging(lockfile_path: Path, out_dir: Path) -> None:
@@ -318,7 +336,7 @@ def create_vendor_staging(lockfile_path: Path, out_dir: Path) -> None:
 
                 checksum = pkg.checksum
                 filename = f'{pkg.name}-{pkg.version}.tar.gz'
-                out_path = out_dir / "tarballs" / filename
+                out_path = out_dir / tarball_relpath(source, filename)
 
                 future = executor.submit(download_crate_tarball, session, url, out_path, checksum)
                 futures.append(future)
@@ -481,7 +499,7 @@ def create_vendor(vendor_staging_dir: Path, out_dir: Path) -> None:
                     orig_key=f"original-registry-source-{source.ind}",
                     orig_selector=make_registry_source_selector(source),
                     vendored_key=f"vendored-registry-source-{source.ind}",
-                    vendored_dir="@vendor@/source-registry"
+                    vendored_dir=f"@vendor@/{make_registry_dir_name(source)}"
                 )
             case GitSource():
                 # TODO: support https://github.com/NixOS/nixpkgs/pull/501979 changes
@@ -514,12 +532,12 @@ def create_vendor(vendor_staging_dir: Path, out_dir: Path) -> None:
                     json.dump({"files": {}}, f)
 
             case RegistryPackage():
-                crate_out_dir = out_dir / "source-registry" / f"{pkg.name}-{pkg.version}"
+                crate_out_dir = out_dir / make_registry_dir_name(pkg.source) / f"{pkg.name}-{pkg.version}"
                 crate_out_dir.parent.mkdir(exist_ok=True)
 
                 filename = f"{pkg.name}-{pkg.version}.tar.gz"
 
-                tarball_path = vendor_staging_dir / "tarballs" / filename
+                tarball_path = vendor_staging_dir / tarball_relpath(pkg.source, filename)
 
                 extract_crate_tarball_contents(tarball_path, crate_out_dir)
 
