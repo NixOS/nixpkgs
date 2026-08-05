@@ -171,6 +171,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals ncursesSupport [ ncurses ]
   ++ lib.optionals systemdSupport [ systemdLibs ];
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
 
   postInstall = ''
