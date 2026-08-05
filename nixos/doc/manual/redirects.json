@@ -1643,6 +1643,15 @@
   "module-services-emacs-man-pages": [
     "index.html#module-services-emacs-man-pages"
   ],
+  "module-services-dispatcharr": [
+    "index.html#module-services-dispatcharr"
+  ],
+  "module-services-dispatcharr-basic-usage": [
+    "index.html#module-services-dispatcharr-basic-usage"
+  ],
+  "module-services-dispatcharr-reverse-proxy": [
+    "index.html#module-services-dispatcharr-reverse-proxy"
+  ],
   "module-services-ente": [
     "index.html#module-services-ente"
   ],

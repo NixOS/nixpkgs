@@ -1664,6 +1664,7 @@
   ./services/web-apps/dependency-track.nix
   ./services/web-apps/dex.nix
   ./services/web-apps/discourse.nix
+  ./services/web-apps/dispatcharr.nix
   ./services/web-apps/documize.nix
   ./services/web-apps/docuseal.nix
   ./services/web-apps/dokuwiki.nix

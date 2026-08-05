@@ -7,6 +7,7 @@
   moreutils,
   nodejs,
   npmHooks,
+  nixosTests,
   python3Packages,
   ffmpeg,
   streamlink,
@@ -22,6 +23,38 @@ let
     };
   };
   pythonPackages = python.pkgs;
+
+  dependencies = with pythonPackages; [
+    celery
+    channels
+    channels-redis
+    daphne
+    django
+    django-celery-beat
+    django-cors-headers
+    django-db-geventpool
+    django-filter
+    django-redis
+    djangorestframework
+    djangorestframework-simplejwt
+    drf-spectacular
+    gevent
+    lxml
+    m3u8
+    packaging
+    pillow
+    psutil
+    psycopg
+    python-vlc
+    pytz
+    rapidfuzz
+    regex
+    requests
+    sentence-transformers
+    torch
+    tzlocal
+    yt-dlp
+  ];
 in
 
 pythonPackages.buildPythonApplication (finalAttrs: {
@@ -29,6 +62,8 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   version = "0.28.2";
   pyproject = true;
   __structuredAttrs = true;
+
+  inherit dependencies;
 
   src = fetchFromGitHub {
     owner = "Dispatcharr";
@@ -87,38 +122,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     hatchling
   ];
 
-  dependencies = with pythonPackages; [
-    celery
-    channels
-    channels-redis
-    daphne
-    django
-    django-celery-beat
-    django-cors-headers
-    django-db-geventpool
-    django-filter
-    django-redis
-    djangorestframework
-    djangorestframework-simplejwt
-    drf-spectacular
-    gevent
-    lxml
-    m3u8
-    packaging
-    pillow
-    psutil
-    psycopg
-    python-vlc
-    pytz
-    rapidfuzz
-    regex
-    requests
-    sentence-transformers
-    torch
-    tzlocal
-    yt-dlp
-  ];
-
   pythonRemoveDeps = [
     # streamlink and uwsgi are runtime command-line tools, not Python imports
     "streamlink"
@@ -173,6 +176,14 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "apps"
     "core"
   ];
+
+  passthru = {
+    inherit python;
+    pythonPath = pythonPackages.makePythonPath dependencies;
+    tests = {
+      inherit (nixosTests) dispatcharr;
+    };
+  };
 
   meta = {
     description = "IPTV stream, M3U/EPG, and HDHomeRun management companion";
