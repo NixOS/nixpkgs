@@ -45,6 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = lib.optional stdenv.hostPlatform.isUnix bashNonInteractive;
 
+  strictDeps = true;
+
   patches = [
     # This patches makes sure we do not attempt to use the MD5 implementation
     # of the host platform when running the tests
