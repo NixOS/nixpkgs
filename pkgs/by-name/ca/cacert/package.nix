@@ -70,6 +70,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ buildcatrust ];
 
+  strictDeps = true;
+
   buildPhase = ''
     mkdir unbundled hashed
     buildcatrust \
