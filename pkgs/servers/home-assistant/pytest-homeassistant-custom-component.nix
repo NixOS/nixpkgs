@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-homeassistant-custom-component";
-  version = "0.13.348";
+  version = "0.13.353";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -28,12 +28,8 @@ buildPythonPackage rec {
     owner = "MatthewFlamm";
     repo = "pytest-homeassistant-custom-component";
     tag = version;
-    hash = "sha256-pqfTyYvg79QM6kIym8iVGCx4lcZXZFjisjx0lmNb6sU=";
+    hash = "sha256-vBcAj0beBdBRKO1Z8y8dA466UG/xmMHLXTwdgX8HHTc=";
   };
-
-  patches = [
-    ./syrupy-5.5-compat.patch
-  ];
 
   build-system = [ setuptools ];
 
