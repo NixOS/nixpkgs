@@ -47,6 +47,8 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-std=gnu17";
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Library for interactive line editing";
 
