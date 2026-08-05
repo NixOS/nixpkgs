@@ -13,6 +13,7 @@
   makeShellWrapper,
   copyDesktopItems,
   electron,
+  darwin,
 
   nixosTests,
 }:
@@ -67,6 +68,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     pnpm
     makeShellWrapper
     copyDesktopItems
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+    darwin.autoSignDarwinBinariesHook
   ];
 
   installPhase = ''
