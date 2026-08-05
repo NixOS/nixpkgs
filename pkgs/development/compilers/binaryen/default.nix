@@ -9,6 +9,12 @@
   lit,
   nodejs,
   filecheck,
+  writeShellApplication,
+  common-updater-scripts,
+  curl,
+  jq,
+  nix,
+  nix-update,
 }:
 let
   testsuite = fetchFromGitHub {
@@ -103,5 +109,28 @@ stdenv.mkDerivation rec {
     ];
     license = lib.licenses.asl20;
   };
-  passthru.tests = { inherit emscripten; };
+  passthru = {
+    tests = { inherit emscripten; };
+    inherit testsuite; # For updateScript to use.
+    updateScript = lib.getExe (writeShellApplication {
+      name = "binaryen-update";
+      runtimeInputs = [
+        common-updater-scripts
+        curl
+        jq
+        nix
+        nix-update
+      ];
+      text = ''
+        nix-update binaryen
+
+        # keep the testsuite pin on binaryen's submodule pointer at the new tag
+        tag=$(nix eval --raw --file . binaryen.src.rev)
+        rev=$(curl -fsSL "https://api.github.com/repos/WebAssembly/binaryen/contents/test/spec/testsuite?ref=$tag" | jq -er .sha)
+        if [[ $rev != "$(nix eval --raw --file . binaryen.testsuite.rev)" ]]; then
+          update-source-version binaryen --source-key=testsuite --rev="$rev" --ignore-same-version
+        fi
+      '';
+    });
+  };
 }
