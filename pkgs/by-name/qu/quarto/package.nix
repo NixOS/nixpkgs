@@ -17,6 +17,8 @@
   extraPythonPackages ? ps: [ ],
   sysctl,
   which,
+  autoPatchelfHook,
+  bashNonInteractive,
 }:
 
 let
@@ -36,6 +38,12 @@ let
     ]
     ++ (extraPythonPackages ps)
   );
+
+  # bin/quarto resolves every bundled tool through bin/tools/$ARCH_DIR, which it
+  # derives from uname and can only ever be x86_64 or aarch64
+  archDir = stdenv.hostPlatform.parsed.cpu.name;
+  denoDomExt = if stdenv.hostPlatform.isDarwin then "dylib" else "so";
+  denoDomPlugin = "libplugin.${denoDomExt}";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "quarto";
@@ -48,10 +56,20 @@ stdenv.mkDerivation (finalAttrs: {
   # the macOS tarball unpacks flat instead of into a versioned directory
   sourceRoot = if stdenv.hostPlatform.isDarwin then "." else "quarto-${finalAttrs.version}";
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     makeWrapper
-    which
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+
+  buildInputs = [
+    # bin/quarto is a bash script; under strictDeps patchShebangs only resolves
+    # its interpreter from the host dependencies
+    bashNonInteractive
+  ]
+  # libgcc_s.so.1 for the retained typst-gather and deno_dom binaries
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ (stdenv.cc.cc.libgcc or null) ];
 
   dontStrip = true;
 
@@ -62,6 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
       --set-default QUARTO_ESBUILD ${lib.getExe esbuild} \
       --set-default QUARTO_DART_SASS ${lib.getExe dart-sass} \
       --set-default QUARTO_TYPST ${lib.getExe typst} \
+      --set-default QUARTO_DENO_DOM $out/bin/tools/${archDir}/deno_dom/${denoDomPlugin} \
+      --suffix PATH : ${lib.makeBinPath [ which ]} \
       ${lib.optionalString (rWrapper != null) "--set-default QUARTO_R ${rWithPackages}/bin/R"} \
       ${
         lib.optionalString (python3 != null) "--set-default QUARTO_PYTHON ${pythonWithPackages}/bin/python3"
@@ -75,8 +95,41 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/bin $out/share
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # the macOS asset bundles a complete tool tree for every architecture,
+    # alongside AppleDouble metadata files
+    find bin/tools -mindepth 1 -maxdepth 1 -type d ! -name ${archDir} -exec rm -r {} +
+    find . -name '._*' -delete
+  ''
+  + ''
+    tools=bin/tools/${archDir}
+    if [ ! -d "$tools" ]; then
+      echo "upstream no longer ships $tools, which is where quarto looks up its tools" >&2
+      exit 1
+    fi
 
-    rm -r bin/tools
+    # swap the vendored tools for the nixpkgs builds. typst-gather and deno_dom
+    # have no nixpkgs equivalent and are kept: dropping the whole directory
+    # broke `quarto call typst-gather` and the DENO_DOM_PLUGIN export.
+    rm -r "$tools"/deno "$tools"/pandoc "$tools"/typst "$tools"/esbuild "$tools"/dart-sass
+
+    ln -s ${lib.getExe deno} "$tools"/deno
+    ln -s ${lib.getExe pandoc} "$tools"/pandoc
+    ln -s ${lib.getExe typst} "$tools"/typst
+    ln -s ${lib.getExe esbuild} "$tools"/esbuild
+    mkdir "$tools"/dart-sass
+    ln -s ${lib.getExe dart-sass} "$tools"/dart-sass/sass
+
+    # the linux-arm64 asset names the plugin libplugin-linux-aarch64.so, while
+    # bin/quarto and QUARTO_DENO_DOM only ever point at the unsuffixed name; a
+    # dlopen miss is swallowed and silently downgrades quarto to the wasm parser
+    if [ ! -e "$tools"/deno_dom/${denoDomPlugin} ]; then
+      mv "$tools"/deno_dom/libplugin*.${denoDomExt} "$tools"/deno_dom/${denoDomPlugin}
+    fi
+
+    # pre-1.4 location, still probed by the VS Code extension
+    ln -s ${archDir}/pandoc bin/tools/pandoc
 
     mv bin/* $out/bin
     mv share/* $out/share
