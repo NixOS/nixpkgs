@@ -14953,6 +14953,12 @@
     github = "kmcopper";
     githubId = 57132115;
   };
+  kmdtaufik = {
+    email = "nixpkgs@khanmdtaufik.dev";
+    name = "Md Taufik Khan";
+    github = "kmdtaufik";
+    githubId = 147173391;
+  };
   kmeakin = {
     email = "karlwfmeakin@gmail.com";
     name = "Karl Meakin";
