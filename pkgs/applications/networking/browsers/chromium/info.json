@@ -1,9 +1,9 @@
 {
   "chromium": {
-    "version": "151.0.7922.71",
+    "version": "151.0.7922.75",
     "chromedriver": {
-      "version": "151.0.7922.72",
-      "hash_darwin_aarch64": "sha256-kWllVPzAaSM5/wDB31d7gQHmFdrTTKIFwj2YkUQE4jE="
+      "version": "151.0.7922.76",
+      "hash_darwin_aarch64": "sha256-OzlgQzGpu/yt5Gzck6/opqnxduKrJJnhOcTgIzSOx3c="
     },
     "deps": {
       "depot_tools": {
@@ -20,8 +20,8 @@
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "ef35003457e93c278f911a334b06e4a5f8967e06",
-        "hash": "sha256-t6j280DSQQQwwcD41ldN3uLmOihW/Q2674+rR5qMkGU=",
+        "rev": "1ddc0a2003eb30c3990568d74ed0437451e9c374",
+        "hash": "sha256-QKVYipzVK/TUVdI4k8LLNmmhwAR6xP/Bgc1ZmNjySjo=",
         "recompress": true
       },
       "src/third_party/clang-format/script": {
@@ -656,8 +656,8 @@
       },
       "src/third_party/skia": {
         "url": "https://skia.googlesource.com/skia.git",
-        "rev": "14c2431eaed7c0a097d197caa3669cda996c63b7",
-        "hash": "sha256-i3rLTKer13xHzpiEdMlNS5rQOYSDFmvAVvdYUiizDzA="
+        "rev": "f4eee5c6735d33a829ab2cfbf3fe23d0376e7992",
+        "hash": "sha256-UKewcYGGJrWA+ZJAp5TA3gGQpns+/5L6PlFxpEHWfG8="
       },
       "src/third_party/smhasher/src": {
         "url": "https://chromium.googlesource.com/external/smhasher.git",
