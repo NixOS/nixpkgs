@@ -3,6 +3,7 @@
   fetchFromGitHub,
   lib,
   nix-update-script,
+  nixosTests,
   nodejs,
 }:
 
@@ -35,6 +36,8 @@ buildNpmPackage (finalAttrs: {
     mv $out/lib/node_modules/kener $out/lib
     ln -s $out/lib/kener $out/lib/node_modules/kener
   '';
+
+  passthru.tests.kener = nixosTests.kener;
 
   passthru.updateScript = nix-update-script { };
 
