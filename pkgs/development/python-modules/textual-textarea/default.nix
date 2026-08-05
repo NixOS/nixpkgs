@@ -47,13 +47,6 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # AssertionError: assert None == 'word'
-    # https://github.com/tconbeer/textual-textarea/issues/312
-    "test_autocomplete"
-    "test_autocomplete_with_types"
-  ];
-
   pythonImportsCheck = [ "textual_textarea" ];
 
   meta = {
