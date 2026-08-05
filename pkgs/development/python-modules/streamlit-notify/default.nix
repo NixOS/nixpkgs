@@ -31,6 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "streamlit_notify" ];
 
+  disabledTests = [
+    # App is not available
+    "TestStreamlitNotifyIntegration"
+  ];
+
   meta = {
     description = "Queues and displays Streamlit Status Elements notifications";
     homepage = "https://github.com/pgarrett-scripps/Streamlit_Notify";
