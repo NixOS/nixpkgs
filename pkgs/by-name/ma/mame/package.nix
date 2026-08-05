@@ -24,7 +24,7 @@
   portmidi,
   pugixml,
   python3,
-  libsForQt5,
+  qt6,
   rapidjson,
   sqlite,
   utf8proc,
@@ -36,14 +36,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mame";
-  version = "0.287";
+  version = "0.289";
   srcVersion = builtins.replaceStrings [ "." ] [ "" ] finalAttrs.version;
 
   src = fetchFromGitHub {
     owner = "mamedev";
     repo = "mame";
     rev = "mame${finalAttrs.srcVersion}";
-    hash = "sha256-d1Y3KrJwL8iDjQDqG6FRN82WzVAqTcY1YJaayUQO8sk=";
+    hash = "sha256-tbveDIOPZjEoTmo5rV2fR9An1I6X4P8Ec7HYHWL6H6U=";
   };
 
   outputs = [
@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     SDL2_ttf
     sqlite
-    libsForQt5.qtbase
+    qt6.qtbase
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     which
-    libsForQt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   patches = [
