@@ -505,6 +505,19 @@ in
     ) { }
   );
 
+  wheelMetadataVersionPatchHook = callPackage (
+    { makePythonHook }:
+    makePythonHook {
+      name = "wheel-metadata-version-patch-hook.sh";
+      substitutions = {
+        inherit pythonInterpreter pythonSitePackages wheel;
+      };
+      meta = {
+        maintainers = [ lib.maintainers.dotlambda ];
+      };
+    } ./wheel-metadata-version-patch-hook.sh
+  ) { };
+
   wheelUnpackHook = callPackage (
     { makePythonHook, wheel }:
     makePythonHook {
