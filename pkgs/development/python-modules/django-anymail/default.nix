@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "django-anymail";
-  version = "15.0";
+  version = "15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anymail";
     repo = "django-anymail";
     tag = "v${version}";
-    hash = "sha256-SAiHjVFh0x1lXoxAlU+Lpfzv9pndsz/V9AVWwyKehEo=";
+    hash = "sha256-Qlqg7nfhH3vDfbnxIyq6uLDWZfzmaKVX95XEXpSeel8=";
   };
 
   build-system = [ hatchling ];
