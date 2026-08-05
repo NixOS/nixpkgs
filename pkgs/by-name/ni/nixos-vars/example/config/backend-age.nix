@@ -126,8 +126,6 @@ in
         options.age = {
           publicKeys = lib.mkOption {
             type = lib.types.listOf lib.types.str;
-            # TODO: this will merge the lists, which is not what we want,
-            # right? 🤔
             default = cfg.publicKeys;
             description = "Age public keys to encrypt to";
           };
