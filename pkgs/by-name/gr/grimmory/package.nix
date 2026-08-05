@@ -4,6 +4,7 @@
   fetchFromGitHub,
   writeShellScript,
   nix-update,
+  nixosTests,
   ## backend
   gradle_9,
   makeWrapper,
@@ -144,6 +145,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.src = src;
+
+  passthru.tests = {
+    inherit (nixosTests) grimmory;
+  };
 
   meta = meta // {
     mainProgram = "grimmory";
