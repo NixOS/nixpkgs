@@ -32,6 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+  strictDeps = true;
+
   cmakeFlags = lib.optional staticOnly "-DBUILD_SHARED_LIBS=OFF";
 
   outputs = [
