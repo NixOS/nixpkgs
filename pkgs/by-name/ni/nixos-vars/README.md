@@ -178,7 +178,15 @@ Generator backends are specified in a similar manner to prompt backends:
 
 ```nix
 {
+  # For a full example, see the example directory
   vars.generatorBackends.plain = {
+    get =
+      pkgs:
+      pkgs.writeScript "vars-plain-get" ''
+        #!/bin/sh
+        export PATH="${lib.makeBinPath [ pkgs.coreutils ]}"
+        cat /var/lib/nixos-vars-plain/generators/"$1"/files/"$2" > "$out"
+      '';
     # ...
   };
 }
