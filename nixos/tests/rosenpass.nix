@@ -41,6 +41,7 @@ in
             };
           };
 
+          networking.useNetworkd = true;
           networking.firewall.allowedUDPPorts = [ 9999 ];
 
           systemd.network = {
@@ -72,6 +73,7 @@ in
       server = {
         imports = [ (shared server) ];
 
+        networking.useNetworkd = true;
         networking.firewall.allowedUDPPorts = [ server.wg.listen ];
 
         systemd.network.netdevs."10-${deviceName}" = {
