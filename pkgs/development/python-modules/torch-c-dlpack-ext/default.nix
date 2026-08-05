@@ -14,6 +14,7 @@ buildPythonPackage (finalAttrs: {
   pname = "torch-c-dlpack-ext";
   inherit (apache-tvm-ffi) version src;
   pyproject = true;
+  __structuredAttrs = true;
 
   sourceRoot = "${finalAttrs.src.name}/addons/torch_c_dlpack_ext";
 
