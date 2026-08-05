@@ -98,7 +98,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/mozilla-services/syncstorage-rs";
     changelog = "https://github.com/mozilla-services/syncstorage-rs/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ titaniumtown ];
+    maintainers = with lib.maintainers; [
+      titaniumtown
+      weriomat
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "syncserver";
   };
