@@ -18,6 +18,7 @@ let
   settingsFileUnsubstituted = cfg: settingsFormat.generate "mautrix-meta-config.yaml" cfg.settings;
 
   metaName = name: "mautrix-meta-${name}";
+  packageName = network: if network == "instagram" then "mautrix-instagram" else "mautrix-meta";
 
   enabledInstances = lib.filterAttrs (
     name: config: config.enable
@@ -471,7 +472,7 @@ in
               cp '${settingsFile cfg}' '${settingsFile cfg}.tmp'
 
               echo "Generating registration file"
-              mautrix-meta \
+              ${lib.getExe' upperCfg.package (packageName cfg.settings.network.mode)} \
                 --generate-registration \
                 --config='${settingsFile cfg}.tmp' \
                 --registration='${cfg.registrationFile}'
@@ -568,7 +569,7 @@ in
               EnvironmentFile = cfg.environmentFile;
 
               ExecStart = lib.escapeShellArgs [
-                (lib.getExe upperCfg.package)
+                (lib.getExe' upperCfg.package (packageName cfg.settings.network.mode))
                 "--config=${settingsFile cfg}"
               ];
             };
