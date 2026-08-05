@@ -399,12 +399,6 @@ let
             };
           });
 
-          evil-magit = buildWithGit super.evil-magit;
-
-          eopengrok = buildWithGit super.eopengrok;
-
-          forge = buildWithGit super.forge;
-
           gnuplot = super.gnuplot.overrideAttrs (attrs: {
             postPatch = attrs.postPatch or "" + ''
               substituteInPlace gnuplot.el \
@@ -419,74 +413,14 @@ let
             '';
           });
 
-          magit = buildWithGit super.magit;
-
-          magit-find-file = buildWithGit super.magit-find-file;
-
-          magit-gh-pulls = buildWithGit super.magit-gh-pulls;
-
-          magit-imerge = buildWithGit super.magit-imerge;
-
-          magit-lfs = buildWithGit super.magit-lfs;
-
-          magit-org-todos = buildWithGit super.magit-org-todos;
-
-          magit-tbdiff = buildWithGit super.magit-tbdiff;
-
-          magit-topgit = ignoreCompilationError (buildWithGit super.magit-topgit); # elisp error
-
-          magit-vcsh = buildWithGit super.magit-vcsh;
-
-          magit-gerrit = buildWithGit super.magit-gerrit;
-
-          magit-annex = buildWithGit super.magit-annex;
-
-          magit-todos = buildWithGit super.magit-todos;
-
-          magit-filenotify = buildWithGit super.magit-filenotify;
-
-          magit-gitflow = buildWithGit super.magit-gitflow;
-
-          magithub = ignoreCompilationError (buildWithGit super.magithub); # elisp error
-
-          magit-svn = buildWithGit super.magit-svn;
-
-          kubernetes = buildWithGit super.kubernetes;
-
-          kubernetes-evil = buildWithGit super.kubernetes-evil;
+          magit-topgit = ignoreCompilationError super.magit-topgit; # elisp error
 
           egg = buildWithGit super.egg;
 
-          kapacitor = buildWithGit super.kapacitor;
-
-          gerrit = buildWithGit super.gerrit;
-
-          gerrit-download = buildWithGit super.gerrit-download;
-
-          github-pullrequest = buildWithGit super.github-pullrequest;
-
-          jist = buildWithGit super.jist;
-
           mandoku = addPackageRequires super.mandoku [ self.git ]; # upstream is archived
 
-          magit-p4 = buildWithGit super.magit-p4;
-
-          magit-rbr = buildWithGit super.magit-rbr;
-
-          magit-diff-flycheck = buildWithGit super.magit-diff-flycheck;
-
-          magit-reviewboard = buildWithGit super.magit-reviewboard;
-
-          magit-patch-changelog = buildWithGit super.magit-patch-changelog;
-
-          magit-circleci = buildWithGit super.magit-circleci;
-
           # https://github.com/dandavison/magit-delta/issues/30
-          magit-delta = addPackageRequires (buildWithGit super.magit-delta) [ self.dash ];
-
-          orgit = buildWithGit super.orgit;
-
-          orgit-forge = buildWithGit super.orgit-forge;
+          magit-delta = addPackageRequires super.magit-delta [ self.dash ];
 
           ormolu = super.ormolu.overrideAttrs (attrs: {
             postPatch = attrs.postPatch or "" + ''
@@ -494,8 +428,6 @@ let
                 --replace-fail 'ormolu-process-path "ormolu"' 'ormolu-process-path "${lib.getExe pkgs.ormolu}"'
             '';
           });
-
-          ox-rss = buildWithGit super.ox-rss;
 
           python-isort = super.python-isort.overrideAttrs (attrs: {
             postPatch = attrs.postPatch or "" + ''
@@ -998,8 +930,6 @@ let
           # depends on distel which is not on any ELPA https://github.com/massemanet/distel/issues/21
           company-distel = ignoreCompilationError super.company-distel;
 
-          company-forge = buildWithGit super.company-forge;
-
           # qmltypes-table.el causing native-compiler-error-empty-byte
           company-qml = ignoreCompilationError super.company-qml;
 
@@ -1023,9 +953,6 @@ let
 
           # needs network during compilation
           consult-gh-embark = ignoreCompilationError super.consult-gh-embark;
-
-          # needs network during compilation
-          consult-gh-forge = ignoreCompilationError (buildWithGit super.consult-gh-forge);
 
           # needs network during compilation
           consult-gh-with-pr-review = ignoreCompilationError super.consult-gh-with-pr-review;
@@ -1132,8 +1059,6 @@ let
             ];
           });
 
-          embark-vc = buildWithGit super.embark-vc;
-
           # https://github.com/nubank/emidje/issues/23
           emidje = addPackageRequires super.emidje [ self.pkg-info ];
 
@@ -1211,8 +1136,6 @@ let
 
           fold-dwim-org = ignoreCompilationError super.fold-dwim-org; # elisp error
 
-          forge-llm = buildWithGit super.forge-llm;
-
           frontside-javascript = super.frontside-javascript.overrideAttrs (
             finalAttrs: previousAttrs: {
               # https://github.com/melpa/melpa/pull/9182
@@ -1237,8 +1160,6 @@ let
             self.company
             self.flycheck
           ];
-
-          gh-notify = buildWithGit super.gh-notify;
 
           # https://gitlab.com/emacs-stuff/git-commit-insert-issue/-/issues/24
           git-commit-insert-issue = addPackageRequires super.git-commit-insert-issue [ self.glab ];
