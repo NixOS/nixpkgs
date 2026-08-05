@@ -7605,12 +7605,12 @@ final: prev: {
 
   hotpot-nvim = buildVimPlugin {
     pname = "hotpot.nvim";
-    version = "2.1.2";
+    version = "2.1.3";
     src = fetchFromGitHub {
       owner = "rktjmp";
       repo = "hotpot.nvim";
-      tag = "v2.1.2";
-      hash = "sha256-3kDqfyutw3WPPbDGWnQTJvGMu0FXMvIdRVPo7t9y2A4=";
+      tag = "v2.1.3";
+      hash = "sha256-GIJWMPhi9JeFlMABM1exrS///AbBjkA/g0vQrlAjOFE=";
     };
     meta.homepage = "https://github.com/rktjmp/hotpot.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
