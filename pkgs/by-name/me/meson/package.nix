@@ -106,6 +106,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     libblocksruntime
   ];
 
+  strictDeps = true;
+
   checkPhase = lib.concatStringsSep "\n" (
     [
       "runHook preCheck"
