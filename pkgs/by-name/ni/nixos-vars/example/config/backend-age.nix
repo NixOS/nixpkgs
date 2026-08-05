@@ -177,11 +177,10 @@ in
         #!/bin/sh
         set -euo pipefail
         ${ageScript pkgs "deploy"} | ssh "${cfg.ssh.target}" -i "${cfg.ssh.identity}" '
-          # set -euo pipefail # <- Can't do this because it might not be bash :(
-          # Not atomic hhhhh. A better implementation would not do it like this!
-          rm -rf "${cfg.targetDirectory}"
-          mkdir -p "${cfg.targetDirectory}"
-          tar xf - -C "${cfg.targetDirectory}"
+          # set -euo pipefail # <- Can't do this; the shell might not be bash :(
+          mkdir -p "${cfg.targetDirectory}.tmp"
+          tar xf - -C "${cfg.targetDirectory}.tmp"
+          mv "${cfg.targetDirectory}.tmp" -T "${cfg.targetDirectory}"
         '
       ''
     );
