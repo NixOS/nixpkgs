@@ -20754,6 +20754,8 @@ self: super: with self; {
 
   tree-sitter-sql = callPackage ../development/python-modules/tree-sitter-sql { };
 
+  tree-sitter-typescript = callPackage ../development/python-modules/tree-sitter-typescript { };
+
   tree-sitter-yaml = callPackage ../development/python-modules/tree-sitter-yaml { };
 
   tree-sitter-zeek = callPackage ../development/python-modules/tree-sitter-zeek { };
