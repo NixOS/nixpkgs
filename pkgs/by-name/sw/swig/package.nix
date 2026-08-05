@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "swig";
     repo = "swig";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jsi83v9sg0n5kUfDACqdNAS2VuLSyxv+pe2LRcO4Khc=";
   };
 
@@ -42,6 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   enableParallelBuilding = true;
+
+  __structuredAttrs = true;
 
   meta = {
     changelog = "https://github.com/swig/swig/blob/${finalAttrs.src.rev}/CHANGES.current";
