@@ -95,6 +95,8 @@ let
       updateAutotoolsGnuConfigScriptsHook
     ];
 
+    strictDeps = true;
+
     cmakeFlags = [
       # Projects with tablegen-like tools.
       "-DLLVM_ENABLE_PROJECTS=${
