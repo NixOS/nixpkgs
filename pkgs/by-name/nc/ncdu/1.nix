@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ncdu";
-  version = "1.22";
+  version = "1.23.0";
 
   src = fetchFromGitHub {
     owner = "BratishkaErik";
     repo = "ncdu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KcI3sXyD/gt+n8JbSdzdoQYNmjKMPLlIPpZSPAHGb40=";
+    hash = "sha256-XhBZlcQ7QmzdmNjHa0saWZUkqbGPD041Y2IW13Y3R40=";
   };
 
   __structuredAttrs = true;
