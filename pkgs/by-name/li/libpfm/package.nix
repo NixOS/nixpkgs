@@ -38,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = lib.optional stdenv.hostPlatform.isMinGW windows.libgnurx;
 
+  strictDeps = true;
+
   meta = {
     description = "Helper library to program the performance monitoring events";
     longDescription = ''
