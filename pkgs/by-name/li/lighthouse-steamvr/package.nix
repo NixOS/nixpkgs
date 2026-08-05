@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "ShayBox";
     repo = "Lighthouse";
     rev = finalAttrs.version;
-    hash = "sha256-2AJMXnfMvtYfCWusVDdZYUzKIPxey2mP4v3JVhsp2JE=";
+    hash = "sha256-qlQyDY+ZU4m3GBtn60DUiGJDhC8OF+WTqXc4BQIf+OI=";
   };
 
   cargoHash = "sha256-fOiVMg3K3wYhgYZ9kx3WfAgrgcSzUKjKyvXm5N386nw=";
@@ -22,6 +22,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ dbus ];
+  buildFeatures = [ "cli" ];
 
   meta = {
     description = "VR Lighthouse power state management";
