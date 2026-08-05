@@ -56,7 +56,7 @@ while read -r platform; do
 
   update-source-version ngrok "$version" "$hash" "$url" --version-key="version" --ignore-same-version --ignore-same-hash --system="$platform" --source-key="sources.$platform" --file="pkgs/by-name/ng/ngrok/package.nix"
 done < <(
-  nix eval --raw --impure --expr "let pkgs = import $nixpkgs_root {}; in builtins.concatStringsSep \"\\n\" pkgs.ngrok.passthru.platforms"
+  nix eval --json .#ngrok.passthru.platforms | jq --raw-output '.[]'
 )
 
 if [[ -z "$latest_version" ]]; then
