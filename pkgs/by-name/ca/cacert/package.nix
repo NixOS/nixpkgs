@@ -249,5 +249,7 @@ stdenv.mkDerivation {
       };
   };
 
+  __structuredAttrs = true;
+
   inherit meta;
 }
