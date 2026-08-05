@@ -851,11 +851,11 @@
     "vendorHash": "sha256-ckqikGwr3Y3GePpPkrE8SrsTgftWm1xNfAIrhm4QbW8="
   },
   "linode_linode": {
-    "hash": "sha256-N/SVZ1ajNRT53zxdYBT6Hd/wwAuKhEre0QSZUYbkwGA=",
+    "hash": "sha256-vWVU8LNXhBwiZ+Ky/Le05uPMxAlNja7zhVTIwBYmTD4=",
     "homepage": "https://registry.terraform.io/providers/linode/linode",
     "owner": "linode",
     "repo": "terraform-provider-linode",
-    "rev": "v4.1.0",
+    "rev": "v4.2.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-r5T8kmvCb2iBUJqw5m7hrr+ET7U9kIBUbsvEVqZlgrE="
   },
@@ -1184,13 +1184,13 @@
     "vendorHash": "sha256-axcwlLXe3HMgpGxWc6YAS/rF0Esy5/Sk4BRmMlKD6Yg="
   },
   "scaleway_scaleway": {
-    "hash": "sha256-NXW3b4E92uqZbzIpRTFKVKbPRghwfRK4akn4KY7C9p0=",
+    "hash": "sha256-luax9j0caBIO4qMWWQeSr9G2eCt0EpS/BuiYKpuXThg=",
     "homepage": "https://registry.terraform.io/providers/scaleway/scaleway",
     "owner": "scaleway",
     "repo": "terraform-provider-scaleway",
-    "rev": "v2.79.0",
+    "rev": "v2.80.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-MKYAdMLETD12850TIBqBfHLRNLy15B6ycDUckIapwt8="
+    "vendorHash": "sha256-tjZ+6z1gqSiX19N0dC1/9+WC8l8+A2t2YB9YQQpWM+A="
   },
   "scottwinkler_shell": {
     "hash": "sha256-LTWEdXxi13sC09jh+EFZ6pOi1mzuvgBz5vceIkNE/JY=",
