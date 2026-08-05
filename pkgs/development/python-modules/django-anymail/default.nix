@@ -15,7 +15,7 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-anymail";
   version = "15.1";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "anymail";
     repo = "django-anymail";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Qlqg7nfhH3vDfbnxIyq6uLDWZfzmaKVX95XEXpSeel8=";
   };
 
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     pytest-django
     pytestCheckHook
   ]
-  ++ optional-dependencies.amazon-ses;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   disabledTestMarks = [ "live" ];
 
@@ -75,8 +75,8 @@ buildPythonPackage rec {
   meta = {
     description = "Django email backends and webhooks for Mailgun";
     homepage = "https://github.com/anymail/django-anymail";
-    changelog = "https://github.com/anymail/django-anymail/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/anymail/django-anymail/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})
