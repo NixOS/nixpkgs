@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  # skip spawn related tests for openmpi implemention
+  # skip spawn related tests for openmpi implementation
   # see https://github.com/mpi4py/mpi4py/issues/545#issuecomment-2343011460
   env.MPI4PY_TEST_SPAWN = if mpi.pname == "openmpi" then 0 else 1;
 

@@ -16381,6 +16381,19 @@
     github = "i-am-logger";
     githubId = 1440852;
   };
+  logn = {
+    name = "Logan Devine";
+    github = "thetayloredman";
+    githubId = 26350849;
+
+    email = "nixpkgs@zirco.dev";
+    matrix = "@logn:zirco.dev";
+    keys = [
+      {
+        fingerprint = "67FA AA65 5DBD 691E 7957  E095 1594 E544 D8F8 F21E";
+      }
+    ];
+  };
   logo = {
     email = "logo4poop@protonmail.com";
     matrix = "@logo4poop:matrix.org";

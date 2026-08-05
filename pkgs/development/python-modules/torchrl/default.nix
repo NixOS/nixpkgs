@@ -264,7 +264,7 @@ buildPythonPackage (finalAttrs: {
     "test_trans_serial_env_check"
     "test_transform_env"
 
-    # undeterministic
+    # nondeterministic
     "test_distributed_collector_updatepolicy"
     "test_timeit"
 

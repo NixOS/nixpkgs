@@ -317,8 +317,8 @@ let
               "--url=https://github.com/gradle/gradle"
               "--use-github-releases"
               # Gradle’s .0 releases are tagged as `vX.Y.0`, but the actual
-              # release version omits the `.0`, so we’ll wanto to only capture
-              # the version up but not including the the trailing `.0`.
+              # release version omits the `.0`, so we’ll want to only capture
+              # the version up to but not including the trailing `.0`.
               "--version-regex=^v(${updateScriptMajorVersion}\\.\\d+(?:\\.[1-9]\\d?)?)(\\.0)?$"
             ];
           }

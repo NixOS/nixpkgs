@@ -1,5 +1,6 @@
 {
   lib,
+  aiocache,
   fetchFromGitHub,
   buildHomeAssistantComponent,
   music-assistant-client,
@@ -8,16 +9,17 @@
 buildHomeAssistantComponent rec {
   owner = "droans";
   domain = "mass_queue";
-  version = "0.10.2";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "mass_queue";
     tag = version;
-    hash = "sha256-kr3XV/C7TGffDX8U/81UnjN7HSZnsAd+k/ALls/QALc=";
+    hash = "sha256-x64R6h66nXUdaI14W57QRMkR8Xid1oqQ6WFrdWuwR7Y=";
   };
 
   dependencies = [
+    aiocache
     music-assistant-client
   ];
 

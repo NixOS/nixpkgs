@@ -95,7 +95,7 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    # dependens on an old myst-docutils version
+    # depends on an old myst-docutils version
     "docs"
   ];
 
