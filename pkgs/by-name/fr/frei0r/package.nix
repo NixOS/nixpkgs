@@ -32,12 +32,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     cairo
-    gavl
     opencv
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    gavl
   ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
     cudaPackages.cuda_nvcc
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "WITHOUT_GAVL" (!stdenv.hostPlatform.isLinux))
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
