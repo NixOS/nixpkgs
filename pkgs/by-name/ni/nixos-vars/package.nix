@@ -1,4 +1,5 @@
 {
+  lib,
   mkShell,
   nixosTests,
   python3,
@@ -40,4 +41,15 @@ python3Packages.buildPythonApplication {
 
   # This is perhaps not a good idea?
   passthru.jsonify = import ./src/nix_vars/nix/jsonify.nix;
+
+  meta = {
+    description = "NixOS secret management abstraction";
+    homepage = "https://github.com/NixOS/nixpkgs/tree/master/pkgs/by-name/ni/nixos-vars";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      lassulus
+      prescientmoon
+    ];
+    mainProgram = "nix-vars";
+  };
 }
