@@ -27,7 +27,7 @@ let
     paths = [ cfg.package ];
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postBuild = ''
-      wrapProgram "$out/bin/ioquake3" --add-flags  "+set fs_basepath ${fsBasepath} +exec settings.cfg"
+      wrapProgram "$out/bin/ioquake3" --add-flags "+set fs_basepath ${cfg.baseq3} +set fs_cdpath ${fsBasepath} +exec settings.cfg"
     '';
   };
 in
@@ -36,6 +36,32 @@ in
     enable = lib.mkEnableOption "ioquake3, an enhanced, cross-platform, open source engine for id Software's Quake 3";
 
     package = lib.mkPackageOption pkgs "ioquake3" { };
+
+    baseq3 = lib.mkOption {
+      type = with lib.types; (either package path);
+      default = pkgs.symlinkJoin {
+        name = "quake3-demo-content";
+        paths = [
+          pkgs.quake3demodata
+          pkgs.quake3pointrelease
+        ];
+      };
+      defaultText = "Freely redistributable Quake 3 demo data (`pak0`) plus the 1.32 point release files (`pak1`-`pak8`), merged together.";
+      example = "/var/lib/quake3";
+      description = ''
+        Path to the directory containing the baseq3 files (pak*.pk3).
+
+        Defaults to the freely redistributable demo data (pak0) merged
+        with the 1.32 point release files (pak1-pak8), so the game runs
+        out of the box without owning a retail copy.
+
+        This value is passed directly as fs_basepath, so pak files are
+        searched for in `''${baseq3}/baseq3/`, e.g. a value of
+        `/var/lib/quake3` expects `/var/lib/quake3/baseq3/pak0.pk3` and
+        so on. To use a full retail install instead, point this at the
+        directory containing its `baseq3` folder.
+      '';
+    };
 
     settings = lib.mkOption {
       type = lib.types.attrsOf (
