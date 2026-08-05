@@ -1413,6 +1413,8 @@ self: super: with self; {
 
   asserts = callPackage ../development/python-modules/asserts { };
 
+  ast-grep-cli = callPackage ../development/python-modules/ast-grep-cli { };
+
   ast-grep-py = callPackage ../development/python-modules/ast-grep-py { };
 
   ast-serialize = callPackage ../development/python-modules/ast-serialize { };
