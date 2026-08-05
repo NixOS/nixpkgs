@@ -8331,6 +8331,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  jupynium-nvim = buildVimPlugin {
+    pname = "jupynium.nvim";
+    version = "0.2.7";
+    src = fetchFromGitHub {
+      owner = "kiyoon";
+      repo = "jupynium.nvim";
+      tag = "v0.2.7";
+      hash = "sha256-YLM1XaWeUx4twqaIDDxASP94CYIEf3iT78zmexzRZos=";
+    };
+    meta.homepage = "https://github.com/kiyoon/jupynium.nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   jupytext-nvim = buildVimPlugin {
     pname = "jupytext.nvim";
     version = "0-unstable-2024-04-05";
