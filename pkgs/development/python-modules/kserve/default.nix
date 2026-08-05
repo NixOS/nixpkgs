@@ -73,11 +73,16 @@ buildPythonPackage (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/python/kserve";
 
+  build-system = [
+    setuptools
+  ];
+
   pythonRelaxDeps = [
     "cryptography"
     "fastapi"
     "httpx"
     "numpy"
+    "pandas"
     "prometheus-client"
     "protobuf"
     "psutil"
@@ -85,11 +90,6 @@ buildPythonPackage (finalAttrs: {
     "starlette"
     "uvicorn"
   ];
-
-  build-system = [
-    setuptools
-  ];
-
   dependencies = [
     aiohttp
     cloudevents
@@ -179,6 +179,9 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
+    # TypeError: Cannot interpret '<StringDtype(na_value=nan)>' as a data type
+    "test_fp16_input_as_binary_data"
+
     # AttributeError: 'google._upb._message.FieldDescriptor' object has no attribute 'label'
     "test_health_handler"
     "test_list_handler"
