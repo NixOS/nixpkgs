@@ -9,7 +9,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "patchright";
-  version = "1.58.0";
+  version = "1.61.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Kaliiiiiiiiii-Vinyzu";
     repo = "patchright-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-msV0CbVbTDSAB1BgxkUOpuzQDr8vMK2/wxJy1SSUU80=";
+    hash = "sha256-2CiN1yxX0Bn+codnzb5DOVR4Dq4ZCICiUItXJjSP4n0=";
   };
 
   build-system = [ setuptools ];
