@@ -622,8 +622,8 @@ in
       "sha256-9P8m5QYikdsimepaivrYcb/tP1iThyPZWFMkyo24+bo=";
 
   mypy-boto3-inspector2 =
-    buildMypyBoto3Package "inspector2" "1.43.53"
-      "sha256-eY0CZnh9rwCj3gnNUsN9x65urg8641Yd6QsowbxJipk=";
+    buildMypyBoto3Package "inspector2" "1.43.64"
+      "sha256-7xAA1OyNETjna5Yehnnzd8u3OJF8P3lMsBFE0/0tx/4=";
 
   mypy-boto3-internetmonitor =
     buildMypyBoto3Package "internetmonitor" "1.43.0"
