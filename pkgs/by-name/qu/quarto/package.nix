@@ -7,18 +7,24 @@
   deno,
   fetchurl,
   dart-sass,
+  installShellFiles,
   rWrapper,
   rPackages,
   extraRPackages ? [ ],
   makeWrapper,
   runCommand,
   python3,
-  quarto,
   extraPythonPackages ? ps: [ ],
   sysctl,
   which,
   autoPatchelfHook,
   bashNonInteractive,
+  coreutils,
+  versionCheckHook,
+  writeShellScript,
+  curl,
+  jq,
+  common-updater-scripts,
 }:
 
 let
@@ -59,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   nativeBuildInputs = [
+    installShellFiles
     makeWrapper
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
@@ -81,7 +88,12 @@ stdenv.mkDerivation (finalAttrs: {
       --set-default QUARTO_DART_SASS ${lib.getExe dart-sass} \
       --set-default QUARTO_TYPST ${lib.getExe typst} \
       --set-default QUARTO_DENO_DOM $out/bin/tools/${archDir}/deno_dom/${denoDomPlugin} \
-      --suffix PATH : ${lib.makeBinPath [ which ]} \
+      --suffix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          which
+        ]
+      } \
       ${lib.optionalString (rWrapper != null) "--set-default QUARTO_R ${rWithPackages}/bin/R"} \
       ${
         lib.optionalString (python3 != null) "--set-default QUARTO_PYTHON ${pythonWithPackages}/bin/python3"
@@ -131,11 +143,19 @@ stdenv.mkDerivation (finalAttrs: {
     # pre-1.4 location, still probed by the VS Code extension
     ln -s ${archDir}/pandoc bin/tools/pandoc
 
+    # share/man also holds the qmd the page is generated from, which
+    # compressManPages would gzip in place for mandb to trip over
+    installManPage --name quarto.1 share/man/quarto-man.man
+    rm -r share/man
+
     mv bin/* $out/bin
     mv share/* $out/share
 
     runHook postInstall
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru = {
     sources = {
@@ -162,10 +182,35 @@ stdenv.mkDerivation (finalAttrs: {
           }
           ''
             export HOME="$(mktemp -d)"
-            ${quarto}/bin/quarto check
+            ${lib.getExe finalAttrs.finalPackage} check
             touch $out
           '';
     };
+
+    updateScript = writeShellScript "update-quarto" ''
+      set -o errexit -o pipefail
+      export PATH="${
+        lib.makeBinPath [
+          curl
+          jq
+          common-updater-scripts
+        ]
+      }"
+      NEW_VERSION=$(curl --fail --silent --show-error --location https://api.github.com/repos/quarto-dev/quarto-cli/releases/latest | jq '.tag_name | ltrimstr("v")' --raw-output)
+      # a truncated response still leaves jq at exit 0, and an empty version
+      # would reach update-source-version
+      if [[ -z "$NEW_VERSION" || "$NEW_VERSION" = "null" ]]; then
+          echo "Could not read the latest release tag from the GitHub API." >&2
+          exit 1
+      fi
+      if [[ "${finalAttrs.version}" = "$NEW_VERSION" ]]; then
+          echo "The new version same as the old version."
+          exit 0
+      fi
+      for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
+        update-source-version "''${UPDATE_NIX_ATTR_PATH:-quarto}" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
+      done
+    '';
   };
 
   meta = {
@@ -177,7 +222,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://quarto.org/";
     changelog = "https://github.com/quarto-dev/quarto-cli/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       minijackson
       mrtarantoga
