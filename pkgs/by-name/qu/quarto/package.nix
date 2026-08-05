@@ -41,10 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "quarto";
   version = "1.10.18";
 
-  src = fetchurl {
-    url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${finalAttrs.version}/quarto-${finalAttrs.version}-linux-amd64.tar.gz";
-    hash = "sha256-r60HG1vSLALy0wBpV0MYnTZQ4FN6Uwc+ZUtjDP8rDHM=";
-  };
+  src =
+    finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+
+  # the macOS tarball unpacks flat instead of into a versioned directory
+  sourceRoot = if stdenv.hostPlatform.isDarwin then "." else "quarto-${finalAttrs.version}";
 
   nativeBuildInputs = [
     makeWrapper
@@ -82,17 +84,35 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    quarto-check =
-      runCommand "quarto-check"
-        {
-          nativeBuildInputs = [ which ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ sysctl ];
-        }
-        ''
-          export HOME="$(mktemp -d)"
-          ${quarto}/bin/quarto check
-          touch $out
-        '';
+  passthru = {
+    sources = {
+      x86_64-linux = fetchurl {
+        url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${finalAttrs.version}/quarto-${finalAttrs.version}-linux-amd64.tar.gz";
+        hash = "sha256-r60HG1vSLALy0wBpV0MYnTZQ4FN6Uwc+ZUtjDP8rDHM=";
+      };
+      aarch64-linux = fetchurl {
+        url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${finalAttrs.version}/quarto-${finalAttrs.version}-linux-arm64.tar.gz";
+        hash = "sha256-9qB99o4lMwtd809l099mvKYFrM47gwxZOljpGITUz2w=";
+      };
+      # the macOS asset is a universal binary carrying both architectures
+      aarch64-darwin = fetchurl {
+        url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${finalAttrs.version}/quarto-${finalAttrs.version}-macos.tar.gz";
+        hash = "sha256-3danGp4ESKsV+2VbxYnhHLZYmiSOw1zNf39EE3UxaI4=";
+      };
+    };
+
+    tests = {
+      quarto-check =
+        runCommand "quarto-check"
+          {
+            nativeBuildInputs = [ which ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ sysctl ];
+          }
+          ''
+            export HOME="$(mktemp -d)"
+            ${quarto}/bin/quarto check
+            touch $out
+          '';
+    };
   };
 
   meta = {
@@ -109,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
       minijackson
       mrtarantoga
     ];
-    platforms = lib.platforms.all;
+    platforms = builtins.attrNames finalAttrs.passthru.sources;
     sourceProvenance = with lib.sourceTypes; [
       binaryNativeCode
       binaryBytecode
