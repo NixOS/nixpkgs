@@ -22571,6 +22571,13 @@
     githubId = 11898437;
     name = "Florian Ströger";
   };
+  prescientmoon = {
+    email = "nix@moonythm.dev";
+    matrix = "@prescientmoon:moonythm.dev";
+    github = "prescientmoon";
+    githubId = 39400800;
+    name = "prescientmoon";
+  };
   presto8 = {
     name = "Preston Hunt";
     email = "me@prestonhunt.com";
