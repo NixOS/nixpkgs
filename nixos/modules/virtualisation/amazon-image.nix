@@ -108,6 +108,15 @@ in
       script = builtins.readFile ./ec2-metadata-fetcher.sh;
       serviceConfig.Type = "oneshot";
       serviceConfig.StandardOutput = "journal+console";
+      # The fetcher now exits non-zero when IMDS is unreachable or rejects our
+      # token. That is frequently transient at first boot, and an instance that
+      # loses this race never gets its user data, so retry a bounded number of
+      # times before giving up and staying failed.
+      serviceConfig.RemainAfterExit = true;
+      serviceConfig.Restart = "on-failure";
+      serviceConfig.RestartSec = 10;
+      startLimitIntervalSec = 300;
+      startLimitBurst = 5;
     };
 
     # Amazon-issued AMIs include the SSM Agent by default, so we do the same.

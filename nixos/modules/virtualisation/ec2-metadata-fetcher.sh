@@ -57,12 +57,31 @@ if [ "$IMDS_TOKEN" == "" ]; then
 fi
 
 try=1
+imds_validated=""
 while [ $try -le 10 ]; do
   echo "(attempt $try/10) validating the EC2 instance metadata service v2 token..."
-  preflight_imds_token "$IMDS_BASE_URL" && break
+  if preflight_imds_token "$IMDS_BASE_URL"; then
+    imds_validated=1
+    break
+  fi
   try=$((try + 1))
   sleep 1
+  # The token we already hold can itself be the problem: IMDS may hand out a
+  # token that then only yields 401s. Get a fresh one before trying again.
+  # Skipped when we never obtained a token, since we are then validating the
+  # token-less (IMDSv1) path, which the loop above already gave up on.
+  if [ -n "$IMDS_TOKEN" ] && token=$(get_imds_token "$IMDS_BASE_URL"); then
+    IMDS_TOKEN="$token"
+  fi
 done
+
+if [ "$imds_validated" == "" ]; then
+  # Do not fall through to fetching metadata we know we cannot read: every
+  # request would fail, nothing would be written to $metaDir, and the unit
+  # would still report success, silently dropping the instance's user data.
+  echo "failed to access the EC2 instance metadata service at $IMDS_BASE_URL; giving up." >&2
+  exit 1
+fi
 
 echo "getting EC2 instance metadata..."
 
