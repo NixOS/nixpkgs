@@ -11,19 +11,21 @@
 
 buildPythonPackage rec {
   pname = "proto-plus";
-  version = "1.27.0";
+  version = "1.27.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "proto-plus-python";
     tag = "v${version}";
-    hash = "sha256-Ya7BY0ZyAAEzomJVExd1cF5r11gTHXeHcjPRqkBjeuQ=";
+    hash = "sha256-B+CkOLzbpu3XXnH7MND5GCljG/bUyPPU57zXIIXoRiU=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [ protobuf ];
+
+  pythonRelaxDeps = [ "protobuf" ];
 
   nativeCheckInputs = [
     pytestCheckHook

@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.2.4";
 
   src = fetchurl {
-    url = "http://www.jfc.org.uk/files/lwm/lwm-${finalAttrs.version}.tar.gz";
+    url = "https://www.jfc.org.uk/files/lwm/lwm-${finalAttrs.version}.tar.gz";
     sha256 = "1bcdr173f0gl61fyl43p3gr145angci7lvjqb8rl00y9f9amvh3y";
   };
 

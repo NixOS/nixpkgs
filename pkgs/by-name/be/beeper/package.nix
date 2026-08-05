@@ -1,35 +1,63 @@
 {
   lib,
+  stdenv,
+  runCommand,
   fetchurl,
   appimageTools,
   makeWrapper,
+  asar,
   writeShellApplication,
   curl,
   common-updater-scripts,
 }:
 let
   pname = "beeper";
-  version = "4.2.630";
-  src = fetchurl {
-    url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}-x86_64.AppImage";
-    hash = "sha256-1oaJoQ9Ws9Bc+CQFojYCJc5ChgkHUVOKtWrT3ehGMNU=";
+  version = "4.3.0";
+
+  inherit (stdenv.hostPlatform) system;
+
+  sources = {
+    x86_64-linux = fetchurl {
+      url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}-x86_64.AppImage";
+      hash = "sha256-/DJmQMQGzZFnONjQZ9fr9NDtGv9Kg8jF8aBzAOUyCUg=";
+    };
+    aarch64-linux = fetchurl {
+      url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}-arm64.AppImage";
+      hash = "sha256-zZIbcE78XcXremyWjs3jsiBRTwP24y45CfZHJym8MhQ=";
+    };
   };
+
+  src = sources.${system} or (throw "beeper is not supported on ${system}");
+
+  # Beeper 4.2.985+ ships AppImages without the type-2 magic bytes
+  # (ASCII "AI" + 0x02 at ELF offset 8) that appimageTools.extract requires.
+  linuxSrc = runCommand "Beeper-${version}-appimage" { inherit src; } ''
+    cp $src $out
+    chmod +w $out
+    printf 'AI\x02' | dd of=$out bs=1 seek=8 conv=notrunc status=none
+  '';
+
   appimageContents = appimageTools.extract {
-    inherit pname version src;
+    inherit pname version;
+    src = linuxSrc;
 
     postExtract = ''
+      appRoot="$out/resources/app"
+      ${lib.getExe asar} extract "$out/resources/app.asar" "$appRoot"
+      rm "$out/resources/app.asar"
+
       # disable creating a desktop file and icon in the home folder during runtime
-      linuxConfigFilename=$out/resources/app/build/main/linux-*.mjs
+      linuxConfigFilename=$appRoot/build/main/linux-*.mjs
       echo "export function registerLinuxConfig() {}" > $linuxConfigFilename
 
       # disable auto update
-      sed -i 's/auto_update_disabled:[^,}]*/auto_update_disabled:true/g' $out/resources/app/build/main/main-entry-*.mjs
+      sed -i 's/c=d??{},p=c.hw_acceleration??!0/c={...(d??{}),auto_update_disabled:true},p=c.hw_acceleration??!0/g' $appRoot/build/main/index-*.mjs
 
       # prevent updates
-      sed -i -E 's/executeDownload\([^)]+\)\{/executeDownload(){return;/g' $out/resources/app/build/main/main-entry-*.mjs
+      sed -i -E 's/executeDownload\([^)]+\)\{/executeDownload(){return;/g' $appRoot/build/main/main-entry-*.mjs
 
-      # hide version status element on about page otherwise a error message is shown
-      sed -i '$ a\.subview-prefs-about > div:nth-child(2) {display: none;}' $out/resources/app/build/renderer/PrefsPanes-*.css
+      # hide version status element on about page otherwise an error message is shown
+      sed -i '$ a\.subview-prefs-about > div:nth-child(2) {display: none;}' $appRoot/build-browser/*.css
     '';
   };
 in
@@ -53,6 +81,7 @@ appimageTools.wrapAppImage {
   '';
 
   passthru = {
+    inherit sources;
     updateScript = lib.getExe (writeShellApplication {
       name = "update-beeper";
       runtimeInputs = [
@@ -63,12 +92,11 @@ appimageTools.wrapAppImage {
         set -o errexit
         latestLinux="$(curl --silent --output /dev/null --write-out "%{redirect_url}\n" https://api.beeper.com/desktop/download/linux/x64/stable/com.automattic.beeper.desktop)"
         version="$(echo "$latestLinux" | grep --only-matching --extended-regexp '[0-9]+\.[0-9]+\.[0-9]+')"
-        update-source-version beeper "$version"
+        for platform in ${lib.escapeShellArgs (lib.attrNames sources)}; do
+          update-source-version beeper "$version" --ignore-same-version --source-key="passthru.sources.$platform"
+        done
       '';
     });
-
-    # needed for nix-update
-    inherit src;
   };
 
   meta = {
@@ -83,7 +111,10 @@ appimageTools.wrapAppImage {
     maintainers = with lib.maintainers; [
       jshcmpbll
       zh4ngx
+      aspauldingcode
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.attrNames sources;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    mainProgram = "beeper";
   };
 }

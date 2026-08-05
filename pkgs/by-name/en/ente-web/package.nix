@@ -1,18 +1,16 @@
 {
   lib,
-  stdenv,
+  buildNpmPackage,
   binaryen,
   cargo,
   fetchFromGitHub,
-  fetchYarnDeps,
   nodejs,
   rustPlatform,
   rustc,
-  wasm-bindgen-cli_0_2_106,
+  sd,
+  wasm-bindgen-cli_0_2_125,
   wasm-pack,
-  yarnConfigHook,
-  yarnBuildHook,
-  nix-update-script,
+  writeScript,
   extraBuildEnv ? { },
   # This package contains serveral sub-applications. This specifies which of them you want to build.
   enteApp ? "photos",
@@ -21,14 +19,15 @@
   # can set this parameter to override these occurrences with your own url. Must include the schema.
   # Example: https://my-ente.example.com
   enteMainUrl ? null,
+  nixosTests,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+buildNpmPackage (finalAttrs: {
   pname = "ente-web-${enteApp}";
-  version = "1.3.13";
+  version = "1.3.59";
 
   src = fetchFromGitHub {
-    owner = "ente-io";
+    owner = "ente";
     repo = "ente";
     sparseCheckout = [
       "rust"
@@ -36,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     tag = "photos-v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Bfu4O+kBtXxxVyx2iC/577TPD049ifjg1ItmKN4bx4U=";
+    hash = "sha256-M2JFNfozDU6AeHpPul6rLtwxjc//CdxTLjl4vWojv8w=";
   };
   sourceRoot = "${finalAttrs.src.name}/web";
 
@@ -48,52 +47,50 @@ stdenv.mkDerivation (finalAttrs: {
       sourceRoot
       cargoRoot
       ;
-    hash = "sha256-dedLmQP15V+gAtycXx1fpWfjXWsTPLXPPcCIAcr/ME0=";
+    hash = "sha256-66MZPxwXkvna3IfDGH6vPJ5CxTaYl1AJ/7qGYKHt1Mg=";
   };
-  cargoRoot = "packages/wasm";
+  cargoRoot = "../rust";
 
-  offlineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/web/yarn.lock";
-    hash = "sha256-OPmO+4VlM4Fy9vjgb2ZxDP6Ber9A+ANwix1dZSuEgUE=";
-  };
+  npmDepsHash = "sha256-+ygPdfrgVGephAtef7VhRrLGLtTb503BlaJbiIzfEl8=";
 
   nativeBuildInputs = [
-    yarnConfigHook
-    yarnBuildHook
     binaryen
     cargo
     rustPlatform.cargoSetupHook
     rustc
     rustc.llvmPackages.lld
     nodejs
-    wasm-bindgen-cli_0_2_106
+    wasm-bindgen-cli_0_2_125
     wasm-pack
   ];
 
-  # See: https://github.com/ente-io/ente/blob/main/web/apps/photos/.env
+  # See: https://github.com/ente/ente/blob/main/web/apps/photos/.env
   env = extraBuildEnv;
 
   postPatch =
+    # The Rust workspace lives in `../rust`, outside the `web` sourceRoot, so it
+    # is not made writable during unpacking. `wasm-pack` needs to create a cargo
+    # target directory there, so make it writable.
+    ''
+      chmod -R u+w ../rust
+    ''
     # Use our `wasm-pack` binary, rather than the Node version, which is
     # just a wrapper that tries to download the actual binary
-    ''
+    + ''
       substituteInPlace \
         packages/wasm/package.json \
         --replace-fail "wasm-pack " ${lib.escapeShellArg "${wasm-pack}/bin/wasm-pack "}
     ''
-    # Replace hardcoded ente.io urls if desired
+    # Replace hardcoded links pointing to the public ente instance so that
+    # users of a self-hosted instance are not accidentally redirected there
     + lib.optionalString (enteMainUrl != null) ''
-      substituteInPlace \
-        apps/payments/src/services/billing.ts \
-        apps/photos/src/pages/shared-albums.tsx \
-        --replace-fail "https://ente.io" ${lib.escapeShellArg enteMainUrl}
-
-      substituteInPlace \
-        apps/accounts/src/pages/index.tsx \
-        --replace-fail "https://web.ente.io" ${lib.escapeShellArg enteMainUrl}
+      for pattern in "https://web.ente.io" "https://ente.com" "https://ente.io"; do
+        mapfile -d "" -t files < <(grep -rlFZ -- "$pattern" apps/)
+        ${lib.getExe sd} -F -- "$pattern" ${lib.escapeShellArg enteMainUrl} "''${files[@]}"
+      done
     '';
 
-  yarnBuildScript = "build:${enteApp}";
+  npmBuildScript = "build:${enteApp}";
   installPhase =
     let
       distName = if enteApp == "payments" then "dist" else "out";
@@ -106,17 +103,65 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postInstall
     '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "photos-v(.*)"
-    ];
+  passthru = {
+    tests = { inherit (nixosTests) ente; };
+    updateScript = writeScript "update-ente-web" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p coreutils nix-update gnugrep gnused curl
+
+      set -eu -o pipefail
+
+      # Assume the current working directory is Nixpkgs
+      file_path="./pkgs/by-name/en/ente-web/package.nix"
+
+      # Extract version, then update
+      old_version=$(grep -oP 'version = "\K[^"]+' "$file_path" | head -n1)
+      if [[ -z "$old_version" ]]; then
+        echo "Failed to extract old version from $file_path"
+        exit 1
+      fi
+
+      nix-update ente-web --version-regex 'photos-v(.*)'
+
+      new_version=$(grep -oP 'version = "\K[^"]+' "$file_path" | head -n1)
+      if [[ -z "$new_version" ]]; then
+        echo "Failed to extract new version from $file_path"
+        exit 1
+      fi
+
+      if [[ "$old_version" == "$new_version" ]]; then
+        echo "No update"
+        exit 0
+      fi
+
+      echo "Updated to version $new_version, checking wasm-bindgen..."
+
+      # Fetch Cargo.lock from GitHub instead of cloning repository
+      cargo_lock_url="https://raw.githubusercontent.com/ente-io/ente/photos-v$new_version/rust/Cargo.lock"
+
+      wasm_bindgen_version=$(curl -s "$cargo_lock_url" | tr -d '\r' | grep -A1 '^name = "wasm-bindgen"$' | grep -oP 'version = "\K[^"]+' | head -n1)
+
+      if [[ -z "$wasm_bindgen_version" ]]; then
+        echo "Failed to find wasm-bindgen version in Cargo.lock from $cargo_lock_url"
+        exit 1
+      fi
+
+      echo "Found wasm-bindgen version: $wasm_bindgen_version"
+
+      # Construct new attribute name
+      wasm_bindgen_attr="wasm-bindgen-cli_''${wasm_bindgen_version//./_}"
+
+      # Replace old attribute name in file
+      sed -i "s/wasm-bindgen-cli_[0-9_]\+/$wasm_bindgen_attr/g" "$file_path"
+
+      echo "Successfully updated wasm-bindgen-cli to $wasm_bindgen_attr"
+    '';
   };
 
   meta = {
     description = "Ente application web frontends";
     homepage = "https://ente.io/";
-    changelog = "https://github.com/ente-io/ente/releases";
+    changelog = "https://github.com/ente/ente/releases";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       pinpox

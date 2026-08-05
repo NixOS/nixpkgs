@@ -10,19 +10,19 @@
 
 buildPythonPackage rec {
   pname = "pcodec";
-  version = "1.0.1";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pcodec";
     repo = "pcodec";
     tag = "v${version}";
-    hash = "sha256-Ov3S4W8Yms+sMVInRrK7YO4jruyitvyoJW/b/4DX/sg=";
+    hash = "sha256-fL+UCaQ8GdIe7e4Y7VeaWkjoNwuXXqaW2fHkaWs+1Lw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-PygRP4qVKbart3KFl0Q3zAQi8JN5GFbsBg4SwgzDRfk=";
+    hash = "sha256-4RRN4gyEQdnpiljxa1kPM2/naarpFrKMoTVLpXD3f4A=";
   };
 
   buildAndTestSubdir = "pco_python";
@@ -47,10 +47,6 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       flokli
-    ];
-    badPlatforms = [
-      # Illegal instruction: 4
-      "x86_64-darwin"
     ];
   };
 }

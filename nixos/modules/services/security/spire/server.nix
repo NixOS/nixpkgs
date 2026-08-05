@@ -11,6 +11,8 @@ in
 {
   meta.maintainers = [ lib.maintainers.arianvp ];
 
+  imports = [ ./server-tpm.nix ];
+
   options.services.spire.server = {
     enable = lib.mkEnableOption "SPIRE Server";
 
@@ -59,8 +61,35 @@ in
               Built-in plugin types can be found at [the plugin types documentation](https://spiffe.io/docs/latest/deploying/spire_server/#plugin-types).
               See [plugin configuration](https://spiffe.io/docs/latest/deploying/spire_server/#plugin-configuration) for options and how to configure external plugins.
             '';
-            # TODO: We can probably enforce some of these constraints with a submodule
-            type = format.type;
+            type = lib.types.submodule {
+              freeformType = format.type;
+              options.NodeAttestor = lib.mkOption {
+                default = { };
+                description = ''
+                  NodeAttestor plugins implement validation logic for nodes attempting to assert their identity.
+                  They are generally paired with an agent plugin of the same type.
+                  See [the documentation](https://spiffe.io/docs/latest/deploying/spire_server/#nodeattestor)
+                  for the list of built-in NodeAttestor plugins.
+                '';
+                type = lib.types.submodule {
+                  freeformType = format.type;
+                  options.join_token = lib.mkOption {
+                    default = null;
+                    description = "Join token based node attestation.";
+                    type = lib.types.nullOr (
+                      lib.types.submodule {
+                        freeformType = format.type;
+                        options.plugin_data = lib.mkOption {
+                          type = format.type;
+                          default = { };
+                          description = "Plugin data for the join_token NodeAttestor.";
+                        };
+                      }
+                    );
+                  };
+                };
+              };
+            };
             example = {
               KeyManager.memory.plugin_data = { };
               DataStore.sql.plugin_data = {
@@ -76,7 +105,7 @@ in
 
     configFile = lib.mkOption {
       type = lib.types.path;
-      default = format.generate "server.conf" cfg.settings;
+      default = format.generate "server.conf" (lib.filterAttrsRecursive (_: v: v != null) cfg.settings);
       defaultText = "Config file generated from services.spire.server.settings";
       description = ''
         Path to the SPIRE server configuration file. See [the documentation](https://spiffe.io/docs/latest/deploying/spire_server/) for more information.

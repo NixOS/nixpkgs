@@ -11,20 +11,20 @@
   libiodbc,
 
   withUnixODBC ? true,
-  unixODBC,
+  unixodbc,
 }:
 
 assert lib.xor withLibiodbc withUnixODBC;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "psqlodbc";
-  version = "17.00.0007";
+  version = "18.00.0002";
 
   src = fetchFromGitHub {
     owner = "postgresql-interfaces";
     repo = "psqlodbc";
     tag = "REL-${lib.replaceString "." "_" finalAttrs.version}";
-    hash = "sha256-KlAGA+oNV/jJpcDJNGzsq/n55QKhUwTwhfNJ6QL6Pas=";
+    hash = "sha256-qzbyo9P/o784Ux3KDA8NDMbcm0EbnfG8LiBLRk6n698=";
   };
 
   buildInputs = [
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ]
   ++ lib.optional withLibiodbc libiodbc
-  ++ lib.optional withUnixODBC unixODBC;
+  ++ lib.optional withUnixODBC unixodbc;
 
   nativeBuildInputs = [
     autoreconfHook
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-libpq=${lib.getDev libpq}"
   ]
   ++ lib.optional withLibiodbc "--with-iodbc=${libiodbc}"
-  ++ lib.optional withUnixODBC "--with-unixodbc=${unixODBC}";
+  ++ lib.optional withUnixODBC "--with-unixodbc=${unixodbc}";
 
   passthru = {
     updateScript = nix-update-script {

@@ -1,7 +1,9 @@
 {
   lib,
+  stdenv,
   buildGo126Module,
   fetchFromGitHub,
+  installShellFiles,
   nix-update-script,
   writableTmpDirAsHomeHook,
   versionCheckHook,
@@ -9,20 +11,24 @@
 
 buildGo126Module (finalAttrs: {
   pname = "crush";
-  version = "0.49.0";
+  version = "0.88.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "crush";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/1Z5S28yJCxjpQwM5hLTmgKU7OxAcxjmBROktQSstTE=";
+    hash = "sha256-5yfYpjwfQtioSTnpO9VIv4+V7A+Hrv6X/LItfbyw2i4=";
   };
 
-  vendorHash = "sha256-xakV5Alm3EwDk5VkSINxJM1C3uF492QzA+BQkqZ6qB4=";
+  vendorHash = "sha256-qXR+z31tZ3FWclBUWkBF0k/F463iKSGZ6dCgJMBcWi8=";
 
   ldflags = [
     "-s"
     "-X=github.com/charmbracelet/crush/internal/version.Version=${finalAttrs.version}"
+  ];
+
+  nativeBuildInputs = [
+    installShellFiles
   ];
 
   checkFlags =
@@ -33,6 +39,7 @@ buildGo126Module (finalAttrs: {
         "TestOpenAIClientStreamChoices"
         "TestGrepWithIgnoreFiles"
         "TestSearchImplementations"
+        "TestDispatch_BinaryPassthroughExecutes"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
@@ -44,7 +51,14 @@ buildGo126Module (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  updateScript = nix-update-script { };
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd crush \
+      --bash <($out/bin/crush completion bash) \
+      --fish <($out/bin/crush completion fish) \
+      --zsh <($out/bin/crush completion zsh)
+  '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Glamourous AI coding agent for your favourite terminal";

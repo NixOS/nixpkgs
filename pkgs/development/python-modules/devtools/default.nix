@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'asttokens>=2.0.0,<3.0.0' 'asttokens>=2.0.0' \
+      --replace-fail 'asttokens>=2.0.0,<3.0.0' 'asttokens>=2.0.0'
   '';
 
   build-system = [ hatchling ];

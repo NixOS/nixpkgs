@@ -10,7 +10,7 @@
   pytestCheckHook,
   requests,
   types-pyyaml,
-  setuptools,
+  uv-build,
   types-markdown,
   types-requests,
   typing-extensions,
@@ -18,22 +18,22 @@
 
 buildPythonPackage rec {
   pname = "djangorestframework-stubs";
-  version = "3.16.7";
+  version = "3.16.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "typeddjango";
     repo = "djangorestframework-stubs";
     tag = version;
-    hash = "sha256-reOx6b1isu6wtC8cM8KI1HEr5wfJUNIeQd2YaZjIRnQ=";
+    hash = "sha256-I7+XMUB87+bIyQMQZUm5hUTsJ+2wA3F6qyjJQeWeQdo=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "<79.0.0" ""
+      --replace-fail "uv_build>=0.8.19,<0.10.0" "uv_build"
   '';
 
-  build-system = [ setuptools ];
+  build-system = [ uv-build ];
 
   dependencies = [
     django-stubs

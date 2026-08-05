@@ -4,8 +4,9 @@
   buildNpmPackage,
   fetchFromGitHub,
   cctools,
-  remarshal,
+  go-toml,
   ttfautohint-nox,
+  nodejs_latest,
   # Custom font set options.
   # See https://typeof.net/Iosevka/customizer
   # Can be a raw TOML string, or a Nix attrset.
@@ -58,25 +59,28 @@ assert (extraParameters != null) -> set != null;
 
 buildNpmPackage rec {
   pname = "Iosevka${toString set}";
-  version = "34.2.1";
+  version = "34.7.0";
 
   src = fetchFromGitHub {
     owner = "be5invis";
     repo = "iosevka";
-    rev = "v${version}";
-    hash = "sha256-yj46lNYOzaopu5Mo68jwh+xf/q/bjMmQdprh6e56eeY=";
+    tag = "v${version}";
+    hash = "sha256-OwCtp/WufMCzuaPTDCr2siorUC52zgM2e80DyshzsZw=";
   };
 
-  npmDepsHash = "sha256-it0YwPcoYCIMddktgywBuYvvx3Psghoii3pu0K3RDlI=";
+  npmDepsHash = "sha256-tlBxO9K0itXO6Mac4jcygZ6+9kj1gTdmu+rtbL2qdcE=";
+  nodejs = nodejs_latest;
 
   nativeBuildInputs = [
-    remarshal
+    go-toml
     ttfautohint-nox
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # libtool
     cctools
   ];
+
+  strictDeps = true;
 
   buildPlan =
     if builtins.isAttrs privateBuildPlan then
@@ -85,22 +89,16 @@ buildNpmPackage rec {
       privateBuildPlan;
 
   inherit extraParameters;
-  passAsFile = [
-    "extraParameters"
-  ]
-  ++ lib.optionals (
-    !(builtins.isString privateBuildPlan && lib.hasPrefix builtins.storeDir privateBuildPlan)
-  ) [ "buildPlan" ];
 
   configurePhase = ''
     runHook preConfigure
     ${lib.optionalString (builtins.isAttrs privateBuildPlan) ''
-      remarshal -i "$buildPlanPath" -o private-build-plans.toml -if json -of toml
+      printf "%s" "$buildPlan" | jsontoml -use-json-number > private-build-plans.toml
     ''}
     ${lib.optionalString
       (builtins.isString privateBuildPlan && (!lib.hasPrefix builtins.storeDir privateBuildPlan))
       ''
-        cp "$buildPlanPath" private-build-plans.toml
+        printf "%s" "$buildPlan" > private-build-plans.toml
       ''
     }
     ${lib.optionalString
@@ -111,7 +109,7 @@ buildNpmPackage rec {
     }
     ${lib.optionalString (extraParameters != null) ''
       echo -e "\n" >> params/parameters.toml
-      cat "$extraParametersPath" >> params/parameters.toml
+      printf "%s" "$extraParameters" >> params/parameters.toml
     ''}
     runHook postConfigure
   '';
@@ -137,6 +135,8 @@ buildNpmPackage rec {
   enableParallelBuilding = true;
   requiredSystemFeatures = [ "big-parallel" ];
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://typeof.net/Iosevka/";
     downloadPage = "https://github.com/be5invis/Iosevka/releases";
@@ -149,7 +149,6 @@ buildNpmPackage rec {
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
-      ttuegel
       lunik1
     ];
   };

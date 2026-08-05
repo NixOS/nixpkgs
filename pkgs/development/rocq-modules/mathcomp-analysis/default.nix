@@ -4,6 +4,7 @@
   mathcomp,
   mathcomp-finmap,
   mathcomp-bigenough,
+  mathcomp-real-closed,
   stdlib,
   single ? false,
   rocq-core,
@@ -30,7 +31,7 @@ let
     lib.switch
       [ rocq-core.rocq-version mathcomp.version ]
       [
-        (case (range "9.0" "9.1") (range "2.4.0" "2.5.0") "1.16.0")
+        (case (range "9.0" "9.3") (range "2.4.0" "2.6.0") "1.16.0")
       ]
       null;
 
@@ -38,8 +39,8 @@ let
   packages = {
     "classical" = [ ];
     "reals" = [ "classical" ];
-    "experimental-reals" = [ "reals" ];
     "analysis" = [ "reals" ];
+    "experimental-reals" = [ "analysis" ];
     "reals-stdlib" = [ "reals" ];
     "analysis-stdlib" = [
       "analysis"
@@ -58,6 +59,7 @@ let
       analysis-deps = [
         mathcomp.field
         mathcomp-bigenough
+        mathcomp-real-closed
       ];
       intra-deps = lib.optionals (package != "single") (map mathcomp_ packages.${package});
       pkgpath =
@@ -83,7 +85,7 @@ let
           ;
 
         namePrefix = [
-          "rocq-core"
+          "rocq"
           "mathcomp"
         ];
 

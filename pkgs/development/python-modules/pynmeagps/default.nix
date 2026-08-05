@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pynmeagps";
-  version = "1.1.2";
+  version = "1.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "semuconsulting";
     repo = "pynmeagps";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0Jgo2lQwftnJfzaaxN2dA9D1ACvWMuOLVac/P/I9ty4=";
+    hash = "sha256-uVIlr+zRwbaQqtInJqCebzMR5pe7dEls3gVzbW7TYkQ=";
   };
 
   build-system = [ setuptools ];

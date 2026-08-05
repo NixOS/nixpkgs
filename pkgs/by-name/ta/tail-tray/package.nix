@@ -3,7 +3,6 @@
   fetchFromGitHub,
   davfs2,
   cmake,
-  extra-cmake-modules,
   stdenv,
   pkg-config,
   kdePackages,
@@ -11,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tail-tray";
-  version = "0.2.30";
+  version = "0.2.34";
 
   src = fetchFromGitHub {
     owner = "SneWs";
     repo = "tail-tray";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MqofvOaqpQdUbYsxvnu/ZJJswa2bwLMKqJZtOCulbys=";
+    hash = "sha256-dKDEi5tGbhreCu1KdVxZB5ZdGX94+b8J0QgpbSpyixY=";
   };
 
   nativeBuildInputs = with kdePackages; [

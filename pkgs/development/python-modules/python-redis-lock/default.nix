@@ -4,8 +4,7 @@
   buildPythonPackage,
   setuptools,
   eventlet,
-  fetchPypi,
-  fetchpatch,
+  fetchFromGitHub,
   gevent,
   pkgs,
   process-tests,
@@ -16,13 +15,15 @@
 
 buildPythonPackage rec {
   pname = "python-redis-lock";
-  version = "4.0.0";
+  version = "4.0.1";
 
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Sr0Lz0kTasrWZye/VIbdJJQHjKVeSe+mk/eUB3MZCRo=";
+  src = fetchFromGitHub {
+    owner = "ionelmc";
+    repo = "python-redis-lock";
+    tag = "v${version}";
+    hash = "sha256-KlmVRglglvj3EuX1m2sLqd/yZeU7CjeRxSUJ/cT4ww4=";
   };
 
   # Fix django tests
@@ -32,11 +33,6 @@ buildPythonPackage rec {
   '';
 
   patches = [
-    # https://github.com/ionelmc/python-redis-lock/pull/119
-    (fetchpatch {
-      url = "https://github.com/ionelmc/python-redis-lock/commit/ae404b7834990b833c1f0f703ec8fbcfecd201c2.patch";
-      hash = "sha256-Fo43+pCtnrEMxMdEEdo0YfJGkBlhhH0GjYNgpZeHF3U=";
-    })
     ./test_signal_expiration_increase_sleep.patch
   ];
 

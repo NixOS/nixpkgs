@@ -24,7 +24,7 @@
   setuptools,
   stestr,
   stevedore,
-  subunit,
+  python-subunit,
   testscenarios,
   testtools,
   urllib3,
@@ -32,12 +32,12 @@
 
 buildPythonPackage rec {
   pname = "tempest";
-  version = "46.1.1";
+  version = "46.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-E61jqj0Wy1f81ackoFnnEZI2UCw70YIGYxQA1ME++xU=";
+    hash = "sha256-F/K0X4wHZOR4dvicGwQ9JOeh25iyqfKkgjiIZc6qWLY=";
   };
 
   postPatch = ''
@@ -67,7 +67,7 @@ buildPythonPackage rec {
     pyyaml
     stestr
     stevedore
-    subunit
+    python-subunit
     testscenarios
     testtools
     urllib3

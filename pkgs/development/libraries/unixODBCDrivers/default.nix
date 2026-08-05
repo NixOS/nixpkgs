@@ -3,7 +3,7 @@
   fetchpatch,
   fetchurl,
   stdenv,
-  unixODBC,
+  unixodbc,
   cmake,
   mariadb,
   sqlite,
@@ -73,7 +73,7 @@
 
     nativeBuildInputs = [ cmake ];
     buildInputs = [
-      unixODBC
+      unixodbc
       openssl
       libiconv
       zlib
@@ -82,10 +82,10 @@
 
     cmakeFlags = [
       "-DWITH_EXTERNAL_ZLIB=ON"
-      "-DODBC_LIB_DIR=${lib.getLib unixODBC}/lib"
-      "-DODBC_INCLUDE_DIR=${lib.getDev unixODBC}/include"
+      "-DODBC_LIB_DIR=${lib.getLib unixodbc}/lib"
+      "-DODBC_INCLUDE_DIR=${lib.getDev unixodbc}/include"
       "-DWITH_OPENSSL=ON"
-      # on darwin this defaults to ON but we want to build against unixODBC
+      # on darwin this defaults to ON but we want to build against unixodbc
       "-DWITH_IODBC=OFF"
     ];
 
@@ -130,14 +130,14 @@
     ];
 
     buildInputs = [
-      unixODBC
+      unixodbc
       sqlite
       zlib
       libxml2
     ];
 
     configureFlags = [
-      "--with-odbc=${unixODBC}"
+      "--with-odbc=${unixodbc}"
       "--with-sqlite3=${sqlite.dev}"
     ];
 
@@ -161,7 +161,7 @@
       changelog = "http://www.ch-werner.de/sqliteodbc/html/index.html#changelog";
       license = lib.licenses.bsd2;
       platforms = lib.platforms.unix;
-      maintainers = with lib.maintainers; [ vlstill ];
+      maintainers = [ ];
     };
   };
 
@@ -195,7 +195,7 @@
     postFixup = ''
       patchelf --set-rpath ${
         lib.makeLibraryPath [
-          unixODBC
+          unixodbc
           openssl
           libkrb5
           libuuid
@@ -236,7 +236,6 @@
         {
           x86_64-linux = "https://packages.microsoft.com/debian/11/prod/pool/main/m/msodbcsql${finalAttrs.versionMajor}/msodbcsql${finalAttrs.versionMajor}_${finalAttrs.version}_amd64.deb";
           aarch64-linux = "https://packages.microsoft.com/debian/11/prod/pool/main/m/msodbcsql${finalAttrs.versionMajor}/msodbcsql${finalAttrs.versionMajor}_${finalAttrs.version}_arm64.deb";
-          x86_64-darwin = "https://download.microsoft.com/download/6/4/0/64006503-51e3-44f0-a6cd-a9b757d0d61b/msodbcsql${finalAttrs.versionMajor}-${finalAttrs.version}-amd64.tar.gz";
           aarch64-darwin = "https://download.microsoft.com/download/6/4/0/64006503-51e3-44f0-a6cd-a9b757d0d61b/msodbcsql${finalAttrs.versionMajor}-${finalAttrs.version}-arm64.tar.gz";
         }
         .${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
@@ -244,7 +243,6 @@
         {
           x86_64-linux = "sha256:1f0rmh1aynf1sqmjclbsyh2wz5jby0fixrwz71zp6impxpwvil52";
           aarch64-linux = "sha256:0zphnbvkqdbkcv6lvv63p7pyl68h5bs2dy6vv44wm6bi89svms4a";
-          x86_64-darwin = "sha256:1fn80byn1yihflznxcm9cpj42mpllnz54apnk9n46vzm2ng2lj6d";
           aarch64-darwin = "sha256:116xl8r2apr5b48jnq6myj9fwqs88yccw5176yfyzh4534fznj5x";
         }
         .${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
@@ -283,14 +281,14 @@
     fixupPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
       ${stdenv.cc.bintools.targetPrefix}install_name_tool \
         -change /usr/lib/libiconv.2.dylib ${libiconv}/lib/libiconv.2.dylib \
-        -change /opt/homebrew/lib/libodbcinst.2.dylib ${unixODBC}/lib/libodbcinst.2.dylib \
+        -change /opt/homebrew/lib/libodbcinst.2.dylib ${unixodbc}/lib/libodbcinst.2.dylib \
         $out/${finalAttrs.passthru.driver}
     '';
 
     postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
       patchelf --set-rpath ${
         lib.makeLibraryPath [
-          unixODBC
+          unixodbc
           openssl
           libkrb5
           libuuid
@@ -337,18 +335,18 @@
       cd src
     '';
 
-    # `unixODBC` is loaded with `dlopen`, so `autoPatchElfHook` cannot see it, and `patchELF` phase would strip the manual patchelf. Thus:
+    # `unixodbc` is loaded with `dlopen`, so `autoPatchElfHook` cannot see it, and `patchELF` phase would strip the manual patchelf. Thus:
     # - Manually patchelf with `unixODCB` libraries
     # - Disable automatic `patchELF` phase
     installPhase = ''
       mkdir -p $out/lib
       cp opt/amazon/redshiftodbc/lib/64/* $out/lib
-      patchelf --set-rpath ${unixODBC}/lib/ $out/lib/libamazonredshiftodbc64.so
+      patchelf --set-rpath ${unixodbc}/lib/ $out/lib/libamazonredshiftodbc64.so
     '';
 
     dontPatchELF = true;
 
-    buildInputs = [ unixODBC ];
+    buildInputs = [ unixodbc ];
 
     # see the top of the file for an explanation
     passthru = {
@@ -368,5 +366,5 @@
   };
 }
 // lib.optionalAttrs config.allowAliases {
-  mysql = throw "unixODBCDrivers.mysql has been removed because it has been marked as broken since 2016."; # Added 2025-10-11
+  mysql = throw "unixodbcDrivers.mysql has been removed because it has been marked as broken since 2016."; # Added 2025-10-11
 }

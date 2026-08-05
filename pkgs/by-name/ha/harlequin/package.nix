@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  python3Packages,
+  python3,
   fetchFromGitHub,
   nix-update-script,
   glibcLocales,
@@ -10,16 +10,33 @@
   withPostgresAdapter ? true,
   withBigQueryAdapter ? true,
 }:
+
+let
+  python = python3.override {
+    packageOverrides = _final: prev: {
+      # throws a runtime error with textual 8.2.5:
+      # KeyError: 'textual-ansi'
+      textual = prev.textual.overridePythonAttrs (old: rec {
+        version = "8.2.4";
+        src = old.src.override {
+          tag = "v${version}";
+          hash = "sha256-827cm9pcj1o1FYeaoWKCJ6dEyXeDop4kYd205cySTfg=";
+        };
+      });
+    };
+  };
+  python3Packages = python.pkgs;
+in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "harlequin";
-  version = "2.5.1";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "harlequin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hy72GgugzNRXqxlN0MAWrjfSUY1FZv2O5aa2494hInY=";
+    hash = "sha256-jZGQ6t6djiKK9B+R8TYMPwXKkLPk7Z+dXuUcVQuZMfU=";
   };
 
   pythonRelaxDeps = [
@@ -29,6 +46,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "questionary"
     "rich-click"
     "textual"
+    "tomlkit"
     "tree-sitter"
     "tree-sitter-sql"
   ];
@@ -72,6 +90,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = with python3Packages; [
     pytest-asyncio
+    pytest-xdist
     pytestCheckHook
     versionCheckHook
     writableTmpDirAsHomeHook
@@ -99,7 +118,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "SQL IDE for Your Terminal";
     homepage = "https://harlequin.sh";
-    changelog = "https://github.com/tconbeer/harlequin/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/tconbeer/harlequin/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     mainProgram = "harlequin";
     maintainers = with lib.maintainers; [ pcboy ];

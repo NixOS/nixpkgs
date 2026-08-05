@@ -6,7 +6,7 @@
   zammad-py,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pretalx-zammad";
   version = "2025.0.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "badbadc0ffee";
     repo = "pretalx-zammad";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-YIKZO04vaKPGhUrTFiE4F+KjuBrYm0KsxUua5+Hm7gg=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

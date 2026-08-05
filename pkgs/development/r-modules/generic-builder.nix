@@ -5,7 +5,6 @@
   xvfb-run,
   util-linux,
   gettext,
-  gfortran,
   libiconv,
 }:
 
@@ -17,6 +16,12 @@
 
 stdenv.mkDerivation (
   {
+    __structuredAttrs = true;
+    outputChecks.out.disallowedReferences = [
+      stdenv.cc
+      stdenv.cc.cc
+    ];
+
     buildInputs =
       buildInputs
       ++ [
@@ -28,7 +33,6 @@ stdenv.mkDerivation (
         xvfb-run
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        gfortran
         libiconv
       ];
 
@@ -38,8 +42,14 @@ stdenv.mkDerivation (
 
     configurePhase = ''
       runHook preConfigure
+
       export MAKEFLAGS+="''${enableParallelBuilding:+-j$NIX_BUILD_CORES}"
       export R_LIBS_SITE="$R_LIBS_SITE''${R_LIBS_SITE:+:}$out/library"
+
+      if [ -f ./configure ] && [ -z "''${dontPatchShebangsInConfigure:-}" ]; then
+        patchShebangs --build ./configure
+      fi
+
       runHook postConfigure
     '';
 
@@ -64,6 +74,8 @@ stdenv.mkDerivation (
       $rCommand CMD INSTALL --built-timestamp='1970-01-01 00:00:00 UTC' $installFlags --configure-args="$configureFlags" -l $out/library .
       runHook postInstall
     '';
+
+    stripDebugList = [ "library/${attrs.pname}/libs" ];
 
     postFixup = ''
       if test -e $out/nix-support/propagated-build-inputs; then

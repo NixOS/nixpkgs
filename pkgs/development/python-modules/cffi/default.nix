@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "cffi";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-cffi";
     repo = "cffi";
     tag = "v${version}";
-    hash = "sha256-7Mzz3KmmmE2xQru1GA4aY0DZqn6vxykWiExQvnA1bjM=";
+    hash = "sha256-17OgcPo1pYwsPV/2iHe7iXVusCp5zLTFGcHYUfX1g48=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   doCheck = !(stdenv.hostPlatform.isMusl || stdenv.hostPlatform.useLLVM or false);
 
   disabledTests = [
-    # parse errror
+    # parse error
     "test_dont_remove_comment_in_line_directives"
     "test_multiple_line_directives"
     "test_commented_line_directive"

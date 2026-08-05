@@ -25,8 +25,13 @@
           repath-studio
         ];
 
-        # electron application, give more memory
+        # electron application, give more memory and cpu
         virtualisation.memorySize = 4096;
+        virtualisation.cores = 4;
+        virtualisation.qemu.options = [
+          # Force qemu at 1020x768 resolution for the Save button click
+          "-vga none -device virtio-gpu-pci,xres=1020,yres=768"
+        ];
       };
   };
 
@@ -35,7 +40,6 @@
   # Debug interactively with:
   # - nix run .#nixosTests.repath-studio.driverInteractive -L
   # - start_all()/run_tests()
-  # ssh -o User=root vsock%3 (can also do vsock/3, but % works with scp etc.)
   interactive.sshBackdoor.enable = true;
 
   testScript = /* python */ ''
@@ -52,7 +56,9 @@
     machine.sleep(2)
     machine.send_key("ctrl-shift-s")
     machine.sleep(2)
-    machine.send_chars("/tmp/saved.rps\n")
+    machine.send_chars("/tmp/saved.rps")
+    machine.sleep(2)
+    machine.succeed("su - alice -c 'DISPLAY=:0 xdotool mousemove --sync 975 745 click 1'") # Save file dialog
     machine.sleep(2)
     print(machine.succeed("cat /tmp/saved.rps"))
     assert "${pkgs.repath-studio.version}" in machine.succeed("cat /tmp/saved.rps")

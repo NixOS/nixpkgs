@@ -6,6 +6,7 @@
   compressStep,
   stepreduce,
   parallel,
+  python3,
   zip,
 }:
 let
@@ -24,6 +25,9 @@ let
         stepreduce
         parallel
         zip
+      ]
+      ++ lib.optionals (name == "symbols") [
+        python3
       ];
 
       postInstall =

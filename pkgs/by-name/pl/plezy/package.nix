@@ -1,8 +1,10 @@
 {
   lib,
-  flutter338,
+  stdenv,
+  stdenvNoCC,
+  flutter344,
   fetchFromGitHub,
-  yq-go,
+  fetchurl,
   pkg-config,
   libsecret,
   jsoncpp,
@@ -10,117 +12,161 @@
   libass,
   keybinder3,
   ffmpeg,
-  sdl3,
+  zlib,
+  libevdev,
+  jdk,
   makeDesktopItem,
   copyDesktopItems,
   imagemagick,
-  _experimental-update-script-combinators,
-  nix-update-script,
+  _7zz,
+  makeBinaryWrapper,
   runCommand,
-  dart,
+  noto-fonts-cjk-sans ? null,
+  use16kPagesizeWorkaround ? false,
 }:
 
-flutter338.buildFlutterApplication rec {
+let
   pname = "plezy";
-  version = "1.17.0";
+  version = "2.12.1";
 
   src = fetchFromGitHub {
     owner = "edde746";
     repo = "plezy";
     tag = version;
-    hash = "sha256-bJ/Qho6hkjbGOFUJj3J4XKk4Eq+3PU1VFGxik5ht16c=";
+    hash = "sha256-Ib1ZBKbuan8GfkxKVytQ5Bn0sPKtDR3o4em4h8p78Xk=";
   };
 
-  pubspecLock = lib.importJSON ./pubspec.lock.json;
-
-  gitHashes = lib.importJSON ./git-hashes.json;
-
-  nativeBuildInputs = [
-    pkg-config
-    copyDesktopItems
-    imagemagick
-  ];
-
-  buildInputs = [
-    libsecret
-    jsoncpp
-    mpv-unwrapped
-    libass
-    keybinder3
-    ffmpeg
-    sdl3
-  ];
-
-  postPatch = ''
-    # Avoid FetchContent download of SDL3 during build.
-    substituteInPlace linux/CMakeLists.txt \
-      --replace-fail "set(BUNDLE_SDL3 ON CACHE BOOL \"\" FORCE)" \
-                     "set(BUNDLE_SDL3 OFF CACHE BOOL \"\" FORCE)"
-  '';
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "plezy";
-      exec = "plezy";
-      icon = "plezy";
-      desktopName = "Plezy";
-      comment = "Modern cross-platform Plex client built with Flutter";
-      categories = [
-        "AudioVideo"
-        "Video"
-        "Player"
-      ];
-    })
-  ];
-
-  postInstall = ''
-    install -Dm644 assets/plezy.png $out/share/icons/hicolor/128x128/apps/plezy.png
-    for size in 16 24 32 48 64 256 512; do
-      mkdir -p $out/share/icons/hicolor/''${size}x''${size}/apps
-      convert assets/plezy.png -resize ''${size}x''${size} $out/share/icons/hicolor/''${size}x''${size}/apps/plezy.png
-    done
-  '';
-
-  passthru = {
-    pubspecSource =
-      runCommand "pubspec.lock.json"
-        {
-          inherit src;
-          nativeBuildInputs = [ yq-go ];
-        }
-        ''
-          yq eval --output-format=json --prettyPrint $src/pubspec.lock > "$out"
-        '';
-    updateScript = _experimental-update-script-combinators.sequence [
-      (nix-update-script { })
-      (
-        (_experimental-update-script-combinators.copyAttrOutputToFile "plezy.pubspecSource" ./pubspec.lock.json)
-        // {
-          supportedFeatures = [ ];
-        }
-      )
-      {
-        command = [
-          dart.fetchGitHashesScript
-          "--input"
-          ./pubspec.lock.json
-          "--output"
-          ./git-hashes.json
-        ];
-        supportedFeatures = [ ];
-      }
-    ];
+  simdutf = fetchurl {
+    url = "https://github.com/simdutf/simdutf/releases/download/v6.4.2/singleheader.zip";
+    hash = "sha256-n+TW9RVySlXI3oj+5EY+CJChq+ImfNoTxLXSRdWAOeY=";
   };
+
+  zlib-root = runCommand "zlib-root" { } ''
+    mkdir $out
+    ln -s ${zlib.dev}/include $out/include
+    ln -s ${zlib}/lib $out/lib
+  '';
 
   meta = {
-    description = "Modern cross-platform Plex client built with Flutter";
+    description = "Modern cross-platform Plex & Jellyfin client built with Flutter";
     homepage = "https://github.com/edde746/plezy";
     mainProgram = "plezy";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       mio
       miniharinn
+      BatteredBunny
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ [
+      "aarch64-darwin"
+    ];
+    sourceProvenance = lib.optionals stdenv.hostPlatform.isDarwin (
+      with lib.sourceTypes; [ binaryNativeCode ]
+    );
   };
-}
+
+  linux = flutter344.buildFlutterApplication rec {
+    inherit pname version src;
+
+    pubspecLock = lib.importJSON ./pubspec.lock.json;
+
+    gitHashes = lib.importJSON ./git-hashes.json;
+
+    patches = lib.optionals use16kPagesizeWorkaround [
+      ./16k-font-workaround.patch
+    ];
+
+    nativeBuildInputs = [
+      pkg-config
+      copyDesktopItems
+      imagemagick
+    ];
+
+    buildInputs = [
+      libsecret
+      jsoncpp
+      mpv-unwrapped
+      libass
+      keybinder3
+      ffmpeg
+      zlib
+      libevdev
+      jdk
+    ];
+
+    env = {
+      ZLIB_ROOT = zlib-root;
+      JAVA_HOME = "${jdk}/lib/openjdk";
+    };
+
+    postPatch = ''
+      substituteInPlace linux/CMakeLists.txt \
+        --replace-fail "URL https://github.com/simdutf/simdutf/releases/download/v6.4.2/singleheader.zip" \
+                       "URL file://${simdutf}"
+    ''
+    + lib.optionalString use16kPagesizeWorkaround ''
+      # Opt-in workaround for invisible text on aarch64-linux systems with 16K page size kernels
+      # (e.g. Asahi Linux). Text was invisible; bundling the font as a Dart asset fixed it,
+      # likely related to libflutter_linux_gtk.so being compiled with 4K page alignment only.
+      install -Dm644 ${noto-fonts-cjk-sans}/share/fonts/opentype/noto-cjk/NotoSansCJK-VF.otf.ttc assets/fonts/NotoSans.ttc
+    '';
+
+    desktopItems = [
+      (makeDesktopItem {
+        name = "plezy";
+        exec = "plezy";
+        icon = "plezy";
+        desktopName = "Plezy";
+        comment = meta.description;
+        categories = [
+          "AudioVideo"
+          "Video"
+          "Player"
+        ];
+      })
+    ];
+
+    postInstall = ''
+      install -Dm644 assets/plezy.png $out/share/icons/hicolor/128x128/apps/plezy.png
+      for size in 16 24 32 48 64 256 512; do
+        mkdir -p $out/share/icons/hicolor/''${size}x''${size}/apps
+        convert assets/plezy.png -resize ''${size}x''${size} $out/share/icons/hicolor/''${size}x''${size}/apps/plezy.png
+      done
+    '';
+
+    passthru.updateScript = ./update.sh;
+
+    inherit meta;
+  };
+
+  darwin = stdenvNoCC.mkDerivation {
+    inherit pname version;
+
+    passthru.updateScript = ./update.sh;
+
+    src = fetchurl {
+      url = "https://github.com/edde746/plezy/releases/download/${version}/plezy-macos.dmg";
+      hash = "sha256-el4w0SXVo3kQi/aRrozl4q8KGs+Y7kCJeQmpV26+Pvk=";
+    };
+
+    nativeBuildInputs = [
+      _7zz
+      makeBinaryWrapper
+    ];
+
+    sourceRoot = "Plezy.app";
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/Applications/Plezy.app
+      cp -r . $out/Applications/Plezy.app
+      makeBinaryWrapper $out/Applications/Plezy.app/Contents/MacOS/Plezy $out/bin/plezy
+
+      runHook postInstall
+    '';
+
+    inherit meta;
+  };
+in
+if stdenv.hostPlatform.isDarwin then darwin else linux

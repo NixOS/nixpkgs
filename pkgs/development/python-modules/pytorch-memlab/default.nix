@@ -9,16 +9,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytorch-memlab";
-  version = "0.3.0";
+  version = "0.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Stonesjtu";
     repo = "pytorch_memlab";
-    tag = version;
-    hash = "sha256-wNgbipvi3vYr9Ka9hA7I+C4y8Nf6AiZXUoXX+qKtZ+I=";
+    tag = finalAttrs.version;
+    hash = "sha256-46C/2RvzhbHt1IHPmPCrLsIk2D3POhzuADNaXqUe0F4=";
   };
 
   build-system = [ setuptools ];
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Simple and accurate CUDA memory management laboratory for pytorch";
     homepage = "https://github.com/Stonesjtu/pytorch_memlab";
-    changelog = "https://github.com/Stonesjtu/pytorch_memlab/releases/tag/${version}";
+    changelog = "https://github.com/Stonesjtu/pytorch_memlab/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jherland ];
   };
-}
+})

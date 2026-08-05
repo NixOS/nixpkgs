@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
       ps: with ps; [
         ewmh
         pytest
-        xlib
+        python-xlib
       ]
     ))
     xdotool

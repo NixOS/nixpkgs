@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage {
   meta = {
     homepage = "https://github.com/KSXGitHub/strip-ansi-cli";
     description = "Strip ANSI escape sequences from text";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers._9999years ];
     mainProgram = "strip-ansi";
   };

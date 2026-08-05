@@ -32,6 +32,7 @@
   libslirp,
   libcbor,
   darwin,
+  apple-sdk_15,
   guestAgentSupport ?
     (with stdenv.hostPlatform; isLinux || isNetBSD || isOpenBSD || isSunOS || isWindows) && !minimal,
   numaSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32 && !minimal,
@@ -92,10 +93,14 @@
   fuse3,
   canokeySupport ? false,
   canokey-qemu,
+  u2fEmuSupport ? false,
+  libu2f-emu,
   capstoneSupport ? !minimal,
   capstone,
   valgrindSupport ? false,
   valgrind-light,
+  brlttySupport ? !minimal && !stdenv.hostPlatform.isDarwin,
+  brltty,
   pluginsSupport ? !stdenv.hostPlatform.isStatic,
   enableDocs ? !minimal || toolsOnly,
   enableTools ? !minimal || toolsOnly,
@@ -138,11 +143,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString nixosTestRunner "-for-vm-tests"
     + lib.optionalString toolsOnly "-utils"
     + lib.optionalString userOnly "-user";
-  version = "10.2.1";
+  version = "11.0.2";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-o3F0d9jiyE1jC//7wg9s0yk+tFqh5trG0MwnaJmRyeE=";
+    hash = "sha256-N0X26oji6H/g3IOLKx1OCncL9I4BodWhhoQqH/92zPU=";
   };
 
   depsBuildBuild = [
@@ -163,6 +168,8 @@ stdenv.mkDerivation (finalAttrs: {
     # For python changes other than simple package additions, ping @dramforever for review.
     # Don't change `python3Packages` to `python3.pkgs.*`, breaks cross-compilation.
     python3Packages.distlib
+    python3Packages.setuptools
+    python3Packages.wheel
     # Hooks from the python package are needed to add `$pythonPath` so
     # `python/scripts/mkvenv.py` can detect `meson` otherwise the vendored meson without patches will be used.
     python3Packages.python
@@ -245,8 +252,11 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals uringSupport [ liburing ]
   ++ lib.optionals fuseSupport [ fuse3 ]
   ++ lib.optionals canokeySupport [ canokey-qemu ]
+  ++ lib.optionals u2fEmuSupport [ libu2f-emu ]
   ++ lib.optionals capstoneSupport [ capstone ]
-  ++ lib.optionals valgrindSupport [ valgrind-light ];
+  ++ lib.optionals valgrindSupport [ valgrind-light ]
+  ++ lib.optionals brlttySupport [ brltty ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
 
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
   dontAddStaticConfigureFlags = true;
@@ -270,6 +280,12 @@ stdenv.mkDerivation (finalAttrs: {
       sha256 = "sha256-oC+bRjEHixv1QEFO9XAm4HHOwoiT+NkhknKGPydnZ5E=";
       revert = true;
     })
+
+    # Fix compilation of the TLS migration tests when gnutls is available
+    # but libtasn1 is not, as in the minimal build, see #547163.
+    # Submitted upstream, remove when included in a release:
+    # https://lists.gnu.org/archive/html/qemu-devel/2026-07/msg08469.html
+    ./fix-tls-tests-without-tasn1.patch
   ]
   ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
 
@@ -329,7 +345,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional uringSupport "--enable-linux-io-uring"
   ++ lib.optional fuseSupport "--enable-fuse"
   ++ lib.optional canokeySupport "--enable-canokey"
+  ++ lib.optional u2fEmuSupport "--enable-u2f"
   ++ lib.optional capstoneSupport "--enable-capstone"
+  ++ lib.optional brlttySupport "--enable-brlapi"
   ++ lib.optional (!pluginsSupport) "--disable-plugins"
   ++ lib.optional (!enableBlobs) "--disable-install-blobs"
   ++ lib.optional userOnly "--disable-system"
@@ -370,7 +388,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   # tests can still timeout on slower systems
   doCheck = false;
-  nativeCheckInputs = [ socat ];
+  nativeCheckInputs = [
+    python3Packages.pygdbmi
+    python3Packages.qemu-qmp
+    socat
+  ];
   preCheck = ''
     # time limits are a little meagre for a build machine that's
     # potentially under load.
@@ -440,16 +462,23 @@ stdenv.mkDerivation (finalAttrs: {
       license = lib.licenses.gpl2Plus;
       maintainers = with lib.maintainers; [ qyliss ];
       teams = lib.optionals xenSupport xen.meta.teams;
-      platforms = lib.platforms.unix;
+      platforms = with lib.systems.inspect; patternLogicalAnd patterns.is64bit patterns.isUnix;
     }
     # toolsOnly: Does not have qemu-kvm and there's no main support tool
     # userOnly: There's one qemu-<arch> for every architecture
     // lib.optionalAttrs (!toolsOnly && !userOnly) {
       mainProgram = "qemu-kvm";
     }
-    # userOnly: https://qemu.readthedocs.io/en/v9.0.2/user/main.html
+    # userOnly: https://qemu.readthedocs.io/en/master/user/main.html#supported-operating-systems
     // lib.optionalAttrs userOnly {
-      platforms = with lib.platforms; (linux ++ freebsd ++ openbsd ++ netbsd);
+      platforms =
+        with lib.systems.inspect;
+        patternLogicalAnd patterns.is64bit [
+          patterns.isLinux
+          patterns.isFreeBSD
+          patterns.isOpenBSD
+          patterns.isNetBSD
+        ];
       description = "QEMU User space emulator - launch executables compiled for one CPU on another CPU";
     };
 })

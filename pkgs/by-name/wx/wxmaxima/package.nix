@@ -6,24 +6,25 @@
   cmake,
   gettext,
   maxima,
-  wxwidgets_3_2,
+  # Supports also wxwidgets_3_2
+  wxwidgets_3_3,
   adwaita-icon-theme,
   glib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wxmaxima";
-  version = "26.01.0";
+  version = "26.07.1";
 
   src = fetchFromGitHub {
     owner = "wxMaxima-developers";
     repo = "wxmaxima";
     rev = "Version-${finalAttrs.version}";
-    hash = "sha256-RoFOmBro8Oo6P3gglaz8ofkrhwxnwy6Rf0po3jOY5D4=";
+    hash = "sha256-pSo6I2U8yOf083/fNYQzPJtTexnQGt0rRsoMcBl67Ik=";
   };
 
   buildInputs = [
-    wxwidgets_3_2
+    wxwidgets_3_3
     maxima
     # So it won't embed svg files into headers.
     adwaita-icon-theme
@@ -38,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DwxWidgets_LIBRARIES=${wxwidgets_3_2}/lib"
+    "-DwxWidgets_LIBRARIES=${wxwidgets_3_3}/lib"
   ];
 
   preConfigure = ''

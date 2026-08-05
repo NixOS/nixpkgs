@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "rchitect";
-  version = "0.4.9";
+  version = "0.4.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "randy3k";
     repo = "rchitect";
     tag = "v${version}";
-    hash = "sha256-xIBDPYuEdYrwpHQBSXfZcEkLra+b0bKy5ILNDCS2Vz0=";
+    hash = "sha256-CTXvca687RL1aFxf7jptcNIKPUcugzFdVTSyApcaWS4=";
   };
 
   postPatch = ''

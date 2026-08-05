@@ -16,7 +16,6 @@
   selinuxSupport ? false,
   libselinux,
   libsepol,
-  texinfo,
   # No openssl in default version, so openssl-induced rebuilds aren't too big.
   # It makes *sum functions significantly faster.
   minimal ? true,
@@ -24,6 +23,7 @@
   openssl,
   withPrefix ? false,
   singleBinary ? "symlinks", # you can also pass "shebangs" or false
+  pkgsStatic,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus cannot use
@@ -43,17 +43,25 @@ let
     optionalString
     ;
   isCross = (stdenv.hostPlatform != stdenv.buildPlatform);
+  # stdbuf relies on an LD_PRELOAD shared library, so it is not built in
+  # static builds; drop it from the binlore override there.
+  #
+  # https://github.com/coreutils/coreutils/blob/6e812858bb8b5cc1a4c91b16502a3092ead1d72f/src/stdbuf.c#L389
+  stdbuf = optionalString (!stdenv.hostPlatform.isStatic) "stdbuf,";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "coreutils" + (optionalString (!minimal) "-full");
-  version = "9.10"; # TODO: remove texinfo dep and the patch on next release.
+  version = "9.11";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/coreutils-${finalAttrs.version}.tar.xz";
-    hash = "sha256-FlNamt8LEANzZOLWEqrT2fTso6NElJztdNEvr0vVHSU=";
+    hash = "sha256-OUAk7aCllVIXztqc0SAeZdyPo6opwpURNaSVIdV8PMM=";
   };
 
-  patches = [ ./fix-kill-doctest.patch ];
+  patches = [
+    ./CVE-2026-56391.patch
+    ./CVE-2026-56392.patch
+  ];
 
   postPatch = ''
     # The test tends to fail on btrfs, f2fs and maybe other unusual filesystems.
@@ -102,6 +110,10 @@ stdenv.mkDerivation (finalAttrs: {
     # intermittent failures on builders, unknown reason
     sed '2i echo Skipping du basic test && exit 77' -i ./tests/du/basic.sh
 
+    # flaky on some filesystems due to non-deterministic disk usage
+    sed '2i echo Skipping du deref test && exit 77' -i ./tests/du/deref.sh
+    sed '2i echo Skipping du inacc-dir test && exit 77' -i ./tests/du/inacc-dir.sh
+
     # fails when syscalls related to acl not being available, e.g. in sandboxed environment
     sed '2i echo Skipping ls -al with acl test && exit 77' -i ./tests/ls/acl.sh
   ''
@@ -134,7 +146,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     perl
-    texinfo
     xz.bin
   ];
 
@@ -230,28 +241,35 @@ stdenv.mkDerivation (finalAttrs: {
       rm -r "$out/share"
     '';
 
-  passthru =
-    { }
-    // optionalAttrs (singleBinary != false) {
-      # everything in the single binary gets the same verdict, so we
-      # override _that case_ with verdicts from separate binaries.
-      #
-      # binlore only spots exec in runcon on some platforms (i.e., not
-      # darwin; see comment on inverse case below)
-      binlore.out = binlore.synthesize finalAttrs.finalPackage ''
-        execer can bin/{chroot,env,install,nice,nohup,runcon,sort,split,stdbuf,timeout}
-        execer cannot bin/{[,b2sum,base32,base64,basename,basenc,cat,chcon,chgrp,chmod,chown,cksum,comm,cp,csplit,cut,date,dd,df,dir,dircolors,dirname,du,echo,expand,expr,factor,false,fmt,fold,groups,head,hostid,id,join,kill,link,ln,logname,ls,md5sum,mkdir,mkfifo,mknod,mktemp,mv,nl,nproc,numfmt,od,paste,pathchk,pinky,pr,printenv,printf,ptx,pwd,readlink,realpath,rm,rmdir,seq,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum,shred,shuf,sleep,stat,stty,sum,sync,tac,tail,tee,test,touch,tr,true,truncate,tsort,tty,uname,unexpand,uniq,unlink,uptime,users,vdir,wc,who,whoami,yes}
-      '';
-    }
-    // optionalAttrs (singleBinary == false) {
-      # binlore only spots exec in runcon on some platforms (i.e., not
-      # darwin; I have a note that the behavior may need selinux?).
-      # hard-set it so people working on macOS don't miss cases of
-      # runcon until ofBorg fails.
-      binlore.out = binlore.synthesize finalAttrs.finalPackage ''
-        execer can bin/runcon
-      '';
+  passthru = {
+    tests = {
+      static = pkgsStatic.coreutils;
     };
+  }
+  // optionalAttrs (singleBinary != false) {
+    # everything in the single binary gets the same verdict, so we
+    # override _that case_ with verdicts from separate binaries.
+    #
+    # binlore only spots exec in runcon on some platforms (i.e., not
+    # darwin; see comment on inverse case below)
+    binlore.out = binlore.synthesize finalAttrs.finalPackage ''
+      execer can bin/${
+        if withPrefix then "g" else ""
+      }{chroot,env,install,nice,nohup,runcon,sort,split,${stdbuf}timeout}
+      execer cannot bin/${
+        if withPrefix then "g" else ""
+      }{[,b2sum,base32,base64,basename,basenc,cat,chcon,chgrp,chmod,chown,cksum,comm,cp,csplit,cut,date,dd,df,dir,dircolors,dirname,du,echo,expand,expr,factor,false,fmt,fold,groups,head,hostid,id,join,kill,link,ln,logname,ls,md5sum,mkdir,mkfifo,mknod,mktemp,mv,nl,nproc,numfmt,od,paste,pathchk,pinky,pr,printenv,printf,ptx,pwd,readlink,realpath,rm,rmdir,seq,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum,shred,shuf,sleep,stat,stty,sum,sync,tac,tail,tee,test,touch,tr,true,truncate,tsort,tty,uname,unexpand,uniq,unlink,uptime,users,vdir,wc,who,whoami,yes}
+    '';
+  }
+  // optionalAttrs (singleBinary == false) {
+    # binlore only spots exec in runcon on some platforms (i.e., not
+    # darwin; I have a note that the behavior may need selinux?).
+    # hard-set it so people working on macOS don't miss cases of
+    # runcon until ofBorg fails.
+    binlore.out = binlore.synthesize finalAttrs.finalPackage ''
+      execer can bin/${if withPrefix then "g" else ""}runcon
+    '';
+  };
 
   meta = {
     homepage = "https://www.gnu.org/software/coreutils/";

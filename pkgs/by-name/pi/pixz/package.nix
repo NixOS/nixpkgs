@@ -49,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Parallel compressor/decompressor for xz format";
+    homepage = "https://github.com/vasi/pixz";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;

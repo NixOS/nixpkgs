@@ -435,21 +435,21 @@ in
           null
           options.services.caddy.httpPort.default
         ]
-      ) "http_port ${cfg.httpPort}"}
+      ) "http_port ${toString cfg.httpPort}"}
       ${optionalString (
         !elem cfg.httpsPort [
           null
           options.services.caddy.httpsPort.default
         ]
-      ) "https_port ${cfg.httpsPort}"}
+      ) "https_port ${toString cfg.httpsPort}"}
       log {
         ${cfg.logFormat}
       }
     '';
 
     # https://github.com/quic-go/quic-go/wiki/UDP-Buffer-Sizes
-    boot.kernel.sysctl."net.core.rmem_max" = mkDefault 2500000;
-    boot.kernel.sysctl."net.core.wmem_max" = mkDefault 2500000;
+    boot.kernel.sysctl."net.core.rmem_max" = mkDefault 7500000;
+    boot.kernel.sysctl."net.core.wmem_max" = mkDefault 7500000;
 
     systemd.packages = [ cfg.package ];
     systemd.services.caddy = {

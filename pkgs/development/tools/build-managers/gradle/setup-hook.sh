@@ -4,12 +4,12 @@ gradleConfigureHook() {
     fi
     export GRADLE_USER_HOME
     export TERM=dumb
-    gradleFlagsArray+=(--no-daemon --console plain --init-script "${gradleInitScript:-@init_script@}")
+    gradleFlagsArray+=(--no-daemon -Dorg.gradle.console=plain --init-script "${gradleInitScript:-@init_script@}")
     if [ -n "${MITM_CACHE_CA-}" ]; then
         if [ -z "${MITM_CACHE_KEYSTORE-}" ]; then
             MITM_CACHE_KEYSTORE="$MITM_CACHE_CERT_DIR/keystore"
             MITM_CACHE_KS_PWD="$(head -c10 /dev/random | base32)"
-            echo y | @jdk@/bin/keytool -importcert -file "$MITM_CACHE_CA" -alias alias -keystore "$MITM_CACHE_KEYSTORE" -storepass "$MITM_CACHE_KS_PWD"
+            @jdk@/bin/keytool -importcert -noprompt -file "$MITM_CACHE_CA" -alias alias -keystore "$MITM_CACHE_KEYSTORE" -storepass "$MITM_CACHE_KS_PWD"
         fi
         gradleFlagsArray+=(-Dhttp.proxyHost="$MITM_CACHE_HOST" -Dhttp.proxyPort="$MITM_CACHE_PORT")
         gradleFlagsArray+=(-Dhttps.proxyHost="$MITM_CACHE_HOST" -Dhttps.proxyPort="$MITM_CACHE_PORT")

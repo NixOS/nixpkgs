@@ -17,13 +17,13 @@
 buildHomeAssistantComponent rec {
   owner = "bramstroker";
   domain = "powercalc";
-  version = "1.20.9";
+  version = "1.23.2";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "homeassistant-powercalc";
     tag = "v${version}";
-    hash = "sha256-0B7C4WBYgfS1M838kcc57gIIkH6ufozAelKF0IKzFi8=";
+    hash = "sha256-JOZLVQhT3MhYbq6wuS7PM6H5fKVvf1ZhAYR5LZoRWAA=";
   };
 
   dependencies = [ numpy ];
@@ -34,7 +34,7 @@ buildHomeAssistantComponent rec {
     aioresponses
     pytest-freezegun
   ]
-  ++ home-assistant.getPackages "camera" home-assistant.python.pkgs;
+  ++ home-assistant.getPackages "camera" home-assistant.python3Packages;
 
   preCheck = ''
     patchShebangs --build tests/setup.sh

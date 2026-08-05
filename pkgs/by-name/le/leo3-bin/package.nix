@@ -7,11 +7,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "leo3";
-  version = "1.2";
+  version = "1.7.18";
 
   src = fetchurl {
-    url = "https://github.com/leoprover/Leo-III/releases/download/v${finalAttrs.version}/leo3.jar";
-    sha256 = "1lgwxbr1rnk72rnvc8raq5i1q71ckhn998pwd9xk6zf27wlzijk7";
+    url = "https://github.com/leoprover/Leo-III/releases/download/v${finalAttrs.version}/leo3-v${finalAttrs.version}.jar";
+    sha256 = "sha256-HEUi8Krxv9u9Rq/2Gu0Tts86sseaAZq+pccJ4Q5MRr0=";
   };
 
   dontUnpack = true;

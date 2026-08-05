@@ -62,7 +62,7 @@
   qrcodegencpp,
   simde,
   nix-update-script,
-  extra-cmake-modules,
+  kdePackages,
 }:
 
 let
@@ -98,13 +98,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-studio";
-  version = "32.1.0";
+  version = "32.1.2";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = finalAttrs.version;
-    hash = "sha256-edmDqavmDT8+bl0nXmDqYPpkuitg9T8u2fI/j6mWoFc=";
+    hash = "sha256-9i7wLHpKqbcYzPlzSMF4xEpsTINQnVDPtneLJaSM+/I=";
     fetchSubmodules = true;
   };
 
@@ -121,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     wrapGAppsHook3
     wrapQtAppsHook
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
   ]
   ++ optional scriptingSupport swig
   ++ optional cudaSupport autoAddDriverRunpath;
@@ -253,6 +253,7 @@ stdenv.mkDerivation (finalAttrs: {
       video content, efficiently
     '';
     homepage = "https://obsproject.com";
+    changelog = "https://github.com/obsproject/obs-studio/releases/tag/${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       jb55
       materus

@@ -18,19 +18,19 @@
   writableTmpDirAsHomeHook,
 
   buildVST3 ? true,
-  buildLV2 ? stdenv.isLinux,
+  buildLV2 ? stdenv.hostPlatform.isLinux,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qdelay";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "tiagolr";
     repo = "qdelay";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-RKTfKKsPSnraLS6SFKWB/wRPSFqeRpl/DYVKF4BKAYU=";
+    hash = "sha256-CjJJYr4dQkc7N+KbTAdaX7u8vnRi+mjBx8iqrN/Pi+4=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig
     freetype
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     libx11
     libxcomposite

@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  flit-core,
   ipython,
 }:
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-Q+y0Xr7wuo8ZwCHEELSi0QSXa8DLtfZ8XQc48eOk4bw=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ flit-core ];
 
   dependencies = [ ipython ];
 

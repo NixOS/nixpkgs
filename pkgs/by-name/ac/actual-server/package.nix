@@ -3,23 +3,25 @@
   stdenv,
   cctools,
   fetchFromGitHub,
+  git,
   jq,
-  makeWrapper,
+  makeBinaryWrapper,
   nodejs_22,
   python3,
+  xcbuild,
   yarn-berry_4,
   nixosTests,
 }:
 let
   nodejs = nodejs_22;
   yarn-berry = yarn-berry_4.override { inherit nodejs; };
-  version = "26.3.0";
+  version = "26.8.0";
   src = fetchFromGitHub {
     name = "actualbudget-actual-source";
     owner = "actualbudget";
     repo = "actual";
     tag = "v${version}";
-    hash = "sha256-V7dysdY5m5b96aPEqD7xsNhvZrfm1FnX9I2D6+d/uAg=";
+    hash = "sha256-AHifM1g0SAb3NzvCq1J5FVhWcA0wU/WufCFxnOjYpc8=";
   };
   translations = fetchFromGitHub {
     name = "actualbudget-translations-source";
@@ -27,8 +29,8 @@ let
     repo = "translations";
     # Note to updaters: this repo is not tagged, so just update this to the Git
     # tip at the time the update is performed.
-    rev = "d65b77cf33d4456f037605215d1be64b8b0644c0";
-    hash = "sha256-xVokghZuM/q0meTeK3sKYVNQcCgJnhq6htvwPYhQ3Go=";
+    rev = "f5a3541768632052e2e2039f977e3dc608ef0b60";
+    hash = "sha256-NTEStwU6UzbrGpYoEosbwstoQAXvZYqgK2HCF6Jf6Ak=";
   };
 
 in
@@ -44,10 +46,14 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     (yarn-berry.yarnBerryConfigHook.override { inherit nodejs; })
     (python3.withPackages (ps: [ ps.setuptools ])) # Used by node-gyp
-    makeWrapper
+    makeBinaryWrapper
+    # lage (used by `bin/package-browser`) shells out to `git ls-tree` to
+    # compute file hashes for its build cache.
+    git
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
+    xcbuild
   ];
 
   env = {
@@ -55,8 +61,13 @@ stdenv.mkDerivation (finalAttrs: {
     NODE_JQ_SKIP_INSTALL_BINARY = "true";
     SHARP_IGNORE_GLOBAL_LIBVIPS = "1";
   };
+  # during build, vite tries to access localhost
+  __darwinAllowLocalNetworking = true;
 
   postPatch = ''
+    # We bring our own yarn
+    sed -i '/yarnPath:/d' .yarnrc.yml
+
     ln -sv ../../../${translations.name} ./packages/desktop-client/locale
 
     patchShebangs --build ./bin ./packages/*/bin
@@ -86,6 +97,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     export HOME=$(mktemp -d)
 
+    # lage hashes source files via `git ls-tree HEAD`, so it needs a repo with
+    # at least one commit.
+    git -c init.defaultBranch=main init -q
+    git add -A
+    git -c user.email=nix@localhost -c user.name=nix commit -q --allow-empty -m "snapshot"
+
     yarn build:server
     yarn workspace @actual-app/sync-server build
 
@@ -95,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-wdOIUYtiLbAkLngl+hIB/TlMLuX/YWZ9dt+a4qm+Fp8=";
+    hash = "sha256-wYBRDhf1lu1xiNdWh7jXM2Ecimj/aETI863G0PlFLRU=";
   };
 
   pname = "actual-server";
@@ -105,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/{bin,lib,lib/actual/packages/sync-server,lib/actual/packages/desktop-client}
-    cp -r ./packages/sync-server/build/{app.js,src,migrations,bin} $out/lib/actual/packages/sync-server
+    cp -r ./packages/sync-server/build/. $out/lib/actual/packages/sync-server/
     # sync-server uses package.json to determine version info
     cp ./packages/sync-server/package.json $out/lib/actual/packages/sync-server
     # sync-server uses package.json to determine path to web ui.
@@ -120,8 +137,9 @@ stdenv.mkDerivation (finalAttrs: {
     yarn workspaces focus @actual-app/sync-server --production
     rm -r node_modules/.bin
     cp -r ./node_modules $out/lib/actual/
+    cp -r ./packages/crdt $out/lib/actual/packages/crdt
 
-    makeWrapper ${lib.getExe nodejs} "$out/bin/actual-server" \
+    makeBinaryWrapper ${lib.getExe nodejs} "$out/bin/actual-server" \
       --add-flags "$out/lib/actual/packages/sync-server/bin/actual-server.js" \
       --set NODE_PATH "$out/actual/lib/node_modules"
 
@@ -130,7 +148,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit (finalAttrs) offlineCache;
+    inherit translations;
     tests = nixosTests.actual;
+    updateScript = ./update.sh;
   };
 
   meta = {
@@ -139,6 +159,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://actualbudget.org/";
     mainProgram = "actual-server";
     license = lib.licenses.mit;
+    platforms = with lib.platforms; linux ++ darwin;
     maintainers = [
       lib.maintainers.oddlama
       lib.maintainers.patrickdag

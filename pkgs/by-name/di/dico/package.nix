@@ -9,7 +9,7 @@
   gsasl,
   guile,
   python3,
-  pcre,
+  pcre2,
   libffi,
   groff,
   libxcrypt,
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     gsasl
     guile
     python3
-    pcre
+    pcre2
     libffi
     libxcrypt
   ];

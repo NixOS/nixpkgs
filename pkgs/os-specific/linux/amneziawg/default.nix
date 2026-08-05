@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  srcOnly,
   kernel,
   kernelModuleMakeFlags,
   nix-update-script,
@@ -10,28 +9,32 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "amneziawg";
-  version = "1.0.20251009";
+  version = "3.0.20260731-02";
 
   src = fetchFromGitHub {
     owner = "amnezia-vpn";
     repo = "amneziawg-linux-kernel-module";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OcMlwXOwjxLqHkAQHSwDigK6wuOFCSzoE5spVwybN1M=";
+    hash = "sha256-WlwOBRf8FsfS08NrLCRjo6GZ/ufd0QE2JKTurTf9nt0=";
   };
+
+  patches = [
+    # Compatibility fixes for kernel 7.1.5+, 7.2
+    # Submitted upstream: https://github.com/amnezia-vpn/amneziawg-linux-kernel-module/pull/194
+    ./sk-715.patch
+  ];
 
   sourceRoot = "${finalAttrs.src.name}/src";
   hardeningDisable = [ "pic" ];
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   buildFlags = [
-    "apply-patches"
     "module"
   ];
 
-  makeFlags =
-    kernelModuleMakeFlags
-    ++ [ "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ]
-    ++ lib.optional (lib.versionAtLeast kernel.version "5.6") "KERNEL_SOURCE_DIR=${srcOnly kernel}";
+  makeFlags = kernelModuleMakeFlags ++ [
+    "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+  ];
 
   enableParallelBuilding = true;
 

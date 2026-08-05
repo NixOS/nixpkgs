@@ -13,6 +13,7 @@
 
   # buildInputs
   rdkafka,
+  rust-jemalloc-sys-unprefixed,
 
   # tests
   cacert,
@@ -25,16 +26,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "restate";
-  version = "1.6.2";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "restatedev";
     repo = "restate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-i9P6Lh0Qw4ylUVwAE51UTE5rSDluZafpEmxuAtv0SYQ=";
+    hash = "sha256-UXyDlrhCVD4lPVnlNvLg8QcV+nBOmHrq8m0eiJFsq/c=";
   };
 
-  cargoHash = "sha256-LfLqScEqBJK9s+xRg2Ah1OnBEDQjXQ9LgJGusmxEDfk=";
+  cargoHash = "sha256-Enouq6a0V0q/raMfjXIDIijF1gb7ezBn1kFIqxwklp4=";
 
   env = {
     PROTOC = lib.getExe protobuf;
@@ -92,6 +93,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     rdkafka
+    # tikv-jemalloc-sys's vendored jemalloc configure breaks under gcc 15.
+    rust-jemalloc-sys-unprefixed
   ];
 
   nativeCheckInputs = [

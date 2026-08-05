@@ -5,7 +5,6 @@
   blurhash,
   cryptography,
   decorator,
-  fetchpatch,
   graphemeu,
   http-ece,
   python-dateutil,
@@ -21,23 +20,15 @@
 
 buildPythonPackage rec {
   pname = "mastodon-py";
-  version = "2.1.4";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "halcy";
     repo = "Mastodon.py";
     tag = "v${version}";
-    hash = "sha256-i3HMT8cabSl664UK3eopJQ9bDBpGCgbHTvBJkgeoxd8=";
+    hash = "sha256-RsSM7TkNwsirT1ksaXP/IKOmrpPrNGh/16S77Up+3MM=";
   };
-
-  patches = [
-    # Switch dependency from unmaintained `grapheme` to `graphemeu`
-    (fetchpatch {
-      url = "https://github.com/halcy/Mastodon.py/commit/939c7508414e950922c518260a9ba5a5853aeef2.patch";
-      hash = "sha256-XBiAFxYUBNyynld++UwPGIIg9j+3/EF2jGqiysVqYRM=";
-    })
-  ];
 
   build-system = [ setuptools ];
 
@@ -66,13 +57,6 @@ buildPythonPackage rec {
     requests-mock
   ]
   ++ lib.concatAttrValues optional-dependencies;
-
-  # disabledTests = [
-  #   "test_notifications_dismiss_pre_2_9_2"
-  #   "test_status_card_pre_2_9_2"
-  #   "test_stream_user_direct"
-  #   "test_stream_user_local"
-  # ];
 
   pythonImportsCheck = [ "mastodon" ];
 

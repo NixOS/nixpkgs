@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   src = fetchFromGitHub {
     rev = "v${finalAttrs.version}";
-    owner = "sbstp";
+    owner = "kubie-org";
     repo = "kubie";
     sha256 = "sha256-eSzNCH0MiGvLKHrSXFSXQq4lN5tfmr0NcuGaN96Invs=";
   };
@@ -41,8 +41,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Shell independent context and namespace switcher for kubectl";
     mainProgram = "kubie";
-    homepage = "https://github.com/sbstp/kubie";
-    license = with lib.licenses; [ zlib ];
+    homepage = "https://github.com/kubie-org/kubie";
+    license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ illiusdope ];
   };
 })

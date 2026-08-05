@@ -9,16 +9,16 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "cosmic-ext-applet-sysinfo";
-  version = "0-unstable-2026-03-06";
+  version = "0-unstable-2026-08-02";
 
   src = fetchFromGitHub {
     owner = "cosmic-utils";
     repo = "cosmic-ext-applet-sysinfo";
-    rev = "8012b7b09103722f0ed581b102e5134ae5a90da3";
-    hash = "sha256-zau7OCHjfnskQjC+G68Wc/s4Yk0Kjy9JsHLFk3jMTTs=";
+    rev = "950713d02883f8ea2c0d980e9220c88409087255";
+    hash = "sha256-ePGpJBRF+0kk9HxsajEYaWlQ1CzN/cLCIYziR7e7wwM=";
   };
 
-  cargoHash = "sha256-qOtj14G3iYEgXmTQfkjvMP7CBAFKvoGo7bfDu0PQSjU=";
+  cargoHash = "sha256-txUuPLwts10Qn8c9Ix48NaOe7/3k8cd27rwYbgGcRfE=";
 
   nativeBuildInputs = [
     libcosmicAppHook

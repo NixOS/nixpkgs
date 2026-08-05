@@ -3,103 +3,101 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  electron_39,
-  dart-sass,
+  electron_41,
   mpv-unwrapped,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10_29_2,
+  pnpm_11,
+  nodejs-slim_latest,
   darwin,
+  actool,
   copyDesktopItems,
   makeDesktopItem,
   nix-update-script,
+  webVersion ? false,
 }:
 let
   pname = "feishin";
-  version = "1.9.0";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = "feishin";
     tag = "v${version}";
-    hash = "sha256-LcSe7aEtTDs4JIk50zI0IFgN4ZCSJ6NClfk02uO2Sg8=";
+    hash = "sha256-2UKJBUZNUpUUZIG1JFXok7YJdzqt+Ge0ykHUm8BeNcw=";
   };
 
-  electron = electron_39;
+  electron = electron_41;
+
+  # Fix pnpm issue on darwin https://github.com/NixOS/nixpkgs/issues/525627
+  pnpm = pnpm_11.override { nodejs-slim = nodejs-slim_latest; };
 in
 buildNpmPackage {
   inherit pname version;
 
   inherit src;
 
+  __structuredAttrs = true;
+
   npmConfigHook = pnpmConfigHook;
+  npmBuildScript = if webVersion then "build:web" else "build";
 
   npmDeps = null;
   pnpmDeps = fetchPnpmDeps {
     inherit
       pname
+      pnpm
       version
       src
       ;
-    pnpm = pnpm_10_29_2;
-    fetcherVersion = 3;
-    hash = "sha256-XhBcZRa66QdkjXxbefzsBUdvPIEshorq1uqzoWMXuTc=";
+    fetcherVersion = 4;
+    hash = "sha256-9uG0AxIBAmuIPywg3p9fFCXmRvM9zDLhWfluSLRnUXY=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   nativeBuildInputs = [
-    pnpm_10_29_2
+    pnpm
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux) [ copyDesktopItems ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.autoSignDarwinBinariesHook ];
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && !webVersion) [ copyDesktopItems ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && !webVersion) [
+    darwin.autoSignDarwinBinariesHook
+    actool
+  ];
 
   postPatch = ''
     # release/app dependencies are installed on preConfigure
     substituteInPlace package.json \
       --replace-fail '"postinstall": "electron-builder install-app-deps",' ""
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    # https://github.com/electron/electron/issues/31121
-    substituteInPlace src/main/index.ts \
-      --replace-fail "process.resourcesPath" "'$out/share/feishin/resources'"
   '';
 
-  preBuild = ''
-    rm -r node_modules/.pnpm/sass-embedded-*
+  postBuild = lib.optionalString (!webVersion) ''
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
 
-    test -d node_modules/.pnpm/sass-embedded@*
-    dir="$(echo node_modules/.pnpm/sass-embedded@*)/node_modules/sass-embedded/dist/lib/src/vendor/dart-sass"
-    mkdir -p "$dir"
-    ln -s ${dart-sass}/bin/dart-sass "$dir"/sass
+    npm exec electron-builder -- \
+      --dir \
+      -c.electronDist=electron-dist \
+      -c.electronVersion=${electron.version} \
+      -c.npmRebuild=false \
+      ${lib.optionalString stdenv.hostPlatform.isDarwin "-c.mac.identity=null"}
   '';
-
-  postBuild =
-    lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # electron-builder appears to build directly on top of Electron.app, by overwriting the files in the bundle.
-      cp -r ${electron.dist}/Electron.app ./
-      find ./Electron.app -name 'Info.plist' | xargs -d '\n' chmod +rw
-    ''
-    + ''
-      npm exec electron-builder -- \
-        --dir \
-        -c.electronDist=${if stdenv.hostPlatform.isDarwin then "./" else electron.dist} \
-        -c.electronVersion=${electron.version} \
-        -c.npmRebuild=false \
-        ${lib.optionalString stdenv.hostPlatform.isDarwin "-c.mac.identity=null"}
-    '';
 
   installPhase = ''
     runHook preInstall
   ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  + lib.optionalString webVersion ''
+    mkdir -p $out
+    cp -r out/web/* $out
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin && !webVersion) ''
     mkdir -p $out/{Applications,bin}
     cp -r dist/**/Feishin.app $out/Applications/
     makeWrapper $out/Applications/Feishin.app/Contents/MacOS/Feishin $out/bin/feishin \
       --prefix PATH : "${lib.makeBinPath [ mpv-unwrapped ]}" \
       --set DISABLE_AUTO_UPDATES 1
   ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
+  + lib.optionalString (stdenv.hostPlatform.isLinux && !webVersion) ''
     mkdir -p $out/share/feishin
 
     pushd dist/*-unpacked/
@@ -130,7 +128,7 @@ buildNpmPackage {
     runHook postInstall
   '';
 
-  desktopItems = [
+  desktopItems = lib.optionals (!webVersion) [
     (makeDesktopItem {
       name = "feishin";
       desktopName = "Feishin";
@@ -156,11 +154,11 @@ buildNpmPackage {
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
-    mainProgram = "feishin";
     maintainers = with lib.maintainers; [
       BatteredBunny
       onny
       jlbribeiro
     ];
-  };
+  }
+  // lib.optionalAttrs (!webVersion) { mainProgram = "feishin"; };
 }

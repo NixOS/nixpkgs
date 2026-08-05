@@ -38,7 +38,8 @@ let
 
 in
 symlinkJoin {
-  name = "wordlists";
+  pname = "wordlists";
+  version = lib.trivial.release;
 
   paths = [
     wordlistsCollection

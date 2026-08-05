@@ -207,6 +207,10 @@ in
           AmbientCapabilities = "cap_net_bind_service";
         };
       };
+
+      services.fastnetmon-advanced.hostgroups = {
+        global = { };
+      };
     })
 
     (lib.mkIf (cfg.enable && cfg.enableAdvancedTrafficPersistence) {

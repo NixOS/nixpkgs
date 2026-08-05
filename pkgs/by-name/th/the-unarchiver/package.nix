@@ -34,7 +34,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ xiaoxiangmoe ];
     platforms = [
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

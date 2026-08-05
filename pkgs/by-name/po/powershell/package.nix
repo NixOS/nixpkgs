@@ -31,7 +31,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "powershell";
-  version = "7.5.5";
+  version = "7.6.4";
 
   src =
     passthru.sources.${stdenv.hostPlatform.system}
@@ -74,11 +74,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share/powershell}
     cp -R * $out/share/powershell
     chmod +x $out/share/powershell/pwsh
-    makeWrapper $out/share/powershell/pwsh $out/bin/pwsh \
+    wrapProgram $out/share/powershell/pwsh \
       --prefix ${platformLdLibraryPath} : "${lib.makeLibraryPath buildInputs}" \
-      --set TERM xterm \
       --set POWERSHELL_TELEMETRY_OPTOUT 1 \
       --set DOTNET_CLI_TELEMETRY_OPTOUT 1
+    cp $out/share/powershell/pwsh $out/bin/pwsh
 
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -96,19 +96,15 @@ stdenv.mkDerivation rec {
     sources = {
       aarch64-darwin = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-osx-arm64.tar.gz";
-        hash = "sha256-2/P90/s2Dro1lYD9xyI9Z5oV+UhNLxY/qwdCJ3mkf1I=";
+        hash = "sha256-//NxNTB9OlcDittE7e1sO03NLiVDgvSRO8JTSZ7zRp0=";
       };
       aarch64-linux = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-linux-arm64.tar.gz";
-        hash = "sha256-4i4PAFthzjul5ImHAPacPgbdov3gcfOCqxVnDWjw5Kc=";
-      };
-      x86_64-darwin = fetchurl {
-        url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-osx-x64.tar.gz";
-        hash = "sha256-JIKb2lh+o5DAJ1qYHeX/nSWV8nPklI2eaediwtTnenk=";
+        hash = "sha256-1O8jgvpFLyzL20igGtu86e1klUhyEjlwwWvm0IbRIks=";
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-linux-x64.tar.gz";
-        hash = "sha256-OaYvRmlW42Bq7mY37Q0HNcHtJ2Eqdt6XOxEVMN3/Lnc=";
+        hash = "sha256-RHG1o2v+hux6+FJdNrscrLoBKOeqwi0FzAZLwA5gRyE=";
       };
     };
     tests.version = testers.testVersion {

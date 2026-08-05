@@ -36,45 +36,35 @@ let
 
   # upstream does not distribute jax-cuda12-plugin 0.4.38 binaries for aarch64-linux
   srcs = {
-    "3.11-x86_64-linux" = getSrcFromPypi {
-      platform = "manylinux_2_27_x86_64";
-      dist = "cp311";
-      hash = "sha256-CwozBM5+SUrNjZxZNJDBEqMs22AQ/hr8WE2eQf2GMWc=";
-    };
-    "3.11-aarch64-linux" = getSrcFromPypi {
-      platform = "manylinux_2_27_aarch64";
-      dist = "cp311";
-      hash = "sha256-cNMyIkhK1cN1uPg1e3wjysuET27Pw5Vn+N1H/eboeFg=";
-    };
     "3.12-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp312";
-      hash = "sha256-IBZYYbPT5m67LA9jpUfR1e4X6kSsO+cVPHkIycqMiPM=";
+      hash = "sha256-Mf/iRdDi/Rz07lclT/xMiFBbuOf1639rOjfWkdc2ZQo=";
     };
     "3.12-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_aarch64";
       dist = "cp312";
-      hash = "sha256-QD1eB3MbXNrDvZ+z9Ei9hIAGLLLAq2HqKtI/zQplR5o=";
+      hash = "sha256-PpXLnerCmI4VImxtiSfnK//IQVBdI2Ix5IQ6ixZnnyU=";
     };
     "3.13-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp313";
-      hash = "sha256-gsZ5i+Zr+MdzOGkY5MjlzYEZdT87+zyku8RoGCg3UMY=";
+      hash = "sha256-tvcG1sEP6b+v4DNMXVLkDm6Z80PCTY508EWsZ7f3rOI=";
     };
     "3.13-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_aarch64";
       dist = "cp313";
-      hash = "sha256-Y3OH3DQIzSBFYmaFAvnpX3bG7d4KbS5I8FUWLcKuvw0=";
+      hash = "sha256-7xA7NTZHlXCMSkOAN22Nc/w9SHNWpwN/zyDKtzX7WaY=";
     };
     "3.14-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp314";
-      hash = "sha256-pYmLrB2KtgILVFRkQCVkCfLGa8u7OhCZykc8hIQ63a0=";
+      hash = "sha256-S2sGD+c//eIG5iwmNweWGMNMK0t0vlywNxsipDqQfEo=";
     };
     "3.14-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_aarch64";
       dist = "cp314";
-      hash = "sha256-WMUUc/xiLgMTgDWYX3QYM1ZNcKS9WiF49htizaoy/5Q=";
+      hash = "sha256-L43Mb/NIMxWCUbUrcRo7XHN4XsNkdxKUvDgnqq6nVFA=";
     };
   };
 in
@@ -82,6 +72,7 @@ buildPythonPackage {
   pname = "jax-cuda12-plugin";
   inherit version;
   pyproject = false;
+  __structuredAttrs = true;
 
   src = (
     srcs."${python.pythonVersion}-${stdenv.hostPlatform.system}"

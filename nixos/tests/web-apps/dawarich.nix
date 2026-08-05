@@ -3,17 +3,50 @@
   name = "dawarich-nixos";
 
   nodes.machine =
-    { pkgs, ... }:
+    { lib, pkgs, ... }:
     {
       services.dawarich = {
         enable = true;
         localDomain = "localhost";
       };
 
-      environment.etc.geojson.source = pkgs.fetchurl {
-        url = "https://github.com/Freika/dawarich/raw/8c24764aa56a084e980e21bc2ffd13a72fd611db/spec/fixtures/files/geojson/export.json";
-        hash = "sha256-qI00E5ixKTRJduAD+qB3JzvrpoJmC55llNtSiPVyxz4=";
-      };
+      environment.etc.geojson.text =
+        let
+          # based on https://github.com/Freika/dawarich/raw/8c24764aa56a084e980e21bc2ffd13a72fd611db/spec/fixtures/files/geojson/export.json
+          # but with different timestamps to avoid points being flagged as anomalies
+          points = map (i: {
+            lat = i / 10.0;
+            lon = i / 10.0;
+            timestamp = 1609459200 + i * 1000;
+          }) (lib.range 1 10);
+
+          mkGeoJsonPoint =
+            {
+              lat,
+              lon,
+              timestamp,
+            }:
+            {
+              type = "Feature";
+              geometry = {
+                type = "Point";
+                coordinates = [
+                  lon
+                  lat
+                ];
+              };
+              properties = {
+                altitude = 1;
+                vertical_accuracy = 1;
+                accuracy = 1;
+                inherit timestamp;
+              };
+            };
+        in
+        builtins.toJSON {
+          type = "FeatureCollection";
+          features = map mkGeoJsonPoint points;
+        };
     };
 
   testScript = ''

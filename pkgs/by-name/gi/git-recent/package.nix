@@ -3,39 +3,56 @@
   stdenv,
   fetchFromGitHub,
   makeBinaryWrapper,
+  bash,
   gitMinimal,
-  less,
-  util-linuxMinimal,
+  delta,
+  fzf,
+  coreutils,
+  gnugrep,
+  gnused,
+  gawk,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "git-recent";
-  version = "2.0.4";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "paulirish";
     repo = "git-recent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-b6AWLEXCOza+lIHlvyYs3M6yHGr2StYXzl7OsA9gv/k=";
+    hash = "sha256-qE6UNNuFfB2n3MuR+9gCRQCJKe0jOgW8ZwzlBZwvkrs=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];
+  buildInputs = [ bash ];
 
+  __structuredAttrs = true;
+  strictDeps = true;
   dontBuild = true;
 
   installPhase = ''
     runHook preInstall
 
-    install -D -m755 -t $out/bin git-recent
+    install -Dm755 -t $out/bin git-recent
 
+    patchShebangs $out/bin/git-recent
+
+    # git-recent treats delta as optional and probes PATH at runtime
+    # (`delta || diff-so-fancy`), so keep it after the user's PATH to prefer
+    # any user-provided diff pager.
     wrapProgram $out/bin/git-recent \
       --prefix PATH : "${
         lib.makeBinPath [
           gitMinimal
-          less
-          util-linuxMinimal
+          fzf
+          coreutils
+          gnugrep
+          gnused
+          gawk
         ]
-      }"
+      }" \
+      --suffix PATH : "${lib.makeBinPath [ delta ]}"
 
     runHook postInstall
   '';

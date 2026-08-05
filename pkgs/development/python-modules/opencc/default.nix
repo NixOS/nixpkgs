@@ -9,20 +9,21 @@
 
 buildPythonPackage rec {
   pname = "opencc";
-  version = "1.1.9";
-  format = "setuptools";
+  version = "1.4.1";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "opencc";
     inherit version;
-    hash = "sha256-itcig3MpUTAzkPrjOhztqYrJsDNoqPKRLtyTTXQHfko=";
+    hash = "sha256-osWCFWJqxRMcXbJ3dmZ41VL8KW6eApnvGDy2fBp/MOc=";
   };
 
-  nativeBuildInputs = [
-    cmake
+  build-system = [
     setuptools
     wheel
   ];
+
+  nativeBuildInputs = [ cmake ];
 
   dontUseCmakeConfigure = true;
 

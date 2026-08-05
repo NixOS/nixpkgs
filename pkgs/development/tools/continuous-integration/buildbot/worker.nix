@@ -7,6 +7,9 @@
   # patch
   coreutils,
 
+  # build system
+  setuptools,
+
   # propagates
   autobahn,
   msgpack,
@@ -15,7 +18,6 @@
   # tests
   parameterized,
   psutil,
-  setuptools-trial,
 
   # passthru
   nixosTests,
@@ -24,7 +26,7 @@
 buildPythonPackage {
   pname = "buildbot_worker";
   inherit (buildbot) src version;
-  format = "setuptools";
+  pyproject = true;
 
   postPatch = ''
     cd worker
@@ -33,11 +35,9 @@ buildPythonPackage {
       --replace /usr/bin/tail "${coreutils}/bin/tail"
   '';
 
-  nativeBuildInputs = [
-    setuptools-trial
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     autobahn
     msgpack
     twisted
@@ -47,6 +47,9 @@ buildPythonPackage {
     parameterized
     psutil
   ];
+
+  # the date-based version of buildbot-worker doesn't align with buildbot's version
+  dontCheckPythonMetadata = true;
 
   passthru.tests = {
     smoke-test = nixosTests.buildbot;

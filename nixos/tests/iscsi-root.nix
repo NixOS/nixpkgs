@@ -142,6 +142,8 @@ in
           };
         };
 
+        # No SCSI support in systemd stage 1 at present.
+        boot.initrd.systemd.enable = false;
         boot.iscsi-initiator = {
           discoverPortal = "target";
           name = initiatorName;
@@ -167,7 +169,7 @@ in
       initiatorAuto.succeed("mkfs.xfs /dev/sda")
       initiatorAuto.succeed("mkdir /mnt && mount /dev/sda /mnt")
       initiatorAuto.succeed(
-          "nixos-install --no-bootloader --no-root-passwd --system ${nodes.initiatorRootDisk.config.system.build.toplevel}"
+          "nixos-install --no-bootloader --no-root-passwd --system ${nodes.initiatorRootDisk.system.build.toplevel}"
       )
       initiatorAuto.succeed("umount /mnt && rmdir /mnt")
       initiatorAuto.shutdown()

@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  flutter332,
+  flutter341,
   callPackage,
   makeDesktopItem,
   copyDesktopItems,
@@ -11,7 +11,7 @@
   gitUpdater,
   runCommand,
   sideswap,
-  yq,
+  yq-go,
   dart,
 }:
 
@@ -20,15 +20,15 @@ let
   libsideswap-client = callPackage ./libsideswap-client.nix { };
 in
 
-flutter332.buildFlutterApplication rec {
+flutter341.buildFlutterApplication (finalAttrs: {
   pname = "sideswap";
-  version = "1.8.2";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "sideswap-io";
     repo = "sideswapclient";
-    tag = "v${version}";
-    hash = "sha256-+zaQJCMKQZOrZ7i6CzgGTa+rJqpglaufUvYWSWMWTEw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-E+njx//oCr85nwF8rvuOjDTNvs5177+lh9uy5LEvTVE=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -53,11 +53,11 @@ flutter332.buildFlutterApplication rec {
   desktopItems = [
     (makeDesktopItem {
       name = "sideswap";
-      exec = meta.mainProgram;
+      exec = finalAttrs.meta.mainProgram;
       desktopName = "SideSwap";
       genericName = "L-USDT Wallet";
       icon = "sideswap";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       categories = [
         "Finance"
         "Network"
@@ -78,11 +78,11 @@ flutter332.buildFlutterApplication rec {
     pubspecSource =
       runCommand "pubspec.lock.json"
         {
-          nativeBuildInputs = [ yq ];
-          inherit (sideswap) src;
+          inherit (finalAttrs) src;
+          nativeBuildInputs = [ yq-go ];
         }
         ''
-          cat $src/pubspec.lock | yq > $out
+          yq eval --output-format=json --prettyPrint $src/pubspec.lock > "$out"
         '';
 
     # Usage: nix-shell maintainers/scripts/update.nix --argstr package sideswap
@@ -129,4 +129,4 @@ flutter332.buildFlutterApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ starius ];
   };
-}
+})

@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  installFonts,
 }:
 let
   fonts = {
@@ -110,19 +111,13 @@ let
         inherit hash;
       };
 
-      installPhase = ''
-        runHook preInstall
+      nativeBuildInputs = [
+        installFonts
+      ];
 
-        mkdir -p $out/share/fonts/truetype
-        cp -v *.ttf $out/share/fonts/truetype/
-
-        mkdir -p $out/etc/fonts/conf.d
-        cp -v *.conf $out/etc/fonts/conf.d
-
-        mkdir -p "$out/share/doc/lohit-${pname}"
-        cp -v ChangeLog* COPYRIGHT* "$out/share/doc/lohit-${pname}/"
-
-        runHook postInstall
+      postInstall = ''
+        install -Dm644 *.conf -t $out/etc/fonts/conf.d
+        install -Dm644 ChangeLog* COPYRIGHT* -t "$out/share/doc/lohit-${pname}/"
       '';
 
       meta = {
@@ -131,7 +126,6 @@ let
         homepage = "https://pagure.io/lohit";
         maintainers = [
           lib.maintainers.mathnerd314
-          lib.maintainers.ttuegel
         ];
         # Set a non-zero priority to allow easy overriding of the
         # fontconfig configuration files.

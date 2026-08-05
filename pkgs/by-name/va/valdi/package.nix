@@ -6,20 +6,20 @@
 
 buildNpmPackage rec {
   pname = "valdi";
-  version = "1.0.7";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "Snapchat";
     repo = "Valdi";
-    rev = "57fba0055df5351fa5019168fa164b6e80ed7816";
-    hash = "sha256-vduG/WPhh6zRC5JACav2FPQQZHhdFHfo3wsnncgfFvE=";
+    rev = "d0f3ae863e218c776af1789bcd9848b148ed1a64";
+    hash = "sha256-HJmWPlLC1/2etwEm+xSfOwcbXY1qx+QlM0QgDJ4FIcg=";
   };
 
   passthru.updateScript = ./update.sh;
 
   sourceRoot = "${src.name}/npm_modules/cli";
 
-  npmDepsHash = "sha256-h1DuH8HE5T7mEBQKlegbqkvRQSx3yEFJhcNVHh5Uo6Y=";
+  npmDepsHash = "sha256-UFdWHEdi6VQYLBQ7gmwxcLNRfoHLKwx4l0ANe5lZnZc=";
 
   meta = {
     description = "Cross-platform UI framework CLI by Snapchat";

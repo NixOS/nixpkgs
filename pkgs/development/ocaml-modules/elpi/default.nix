@@ -15,10 +15,10 @@
   ppx_deriving_0_15,
   ppx_deriving_0_33,
   ppx_optcomp,
-  coqPackages,
+  rocqPackages,
   version ?
     if lib.versionAtLeast ocaml.version "4.13" then
-      "3.6.1"
+      "3.7.1"
     else if lib.versionAtLeast ocaml.version "4.08" then
       "1.20.0"
     else
@@ -33,7 +33,9 @@ let
 in
 
 let
-  fetched = coqPackages.metaFetch {
+  fetched = rocqPackages.metaFetch {
+    release."3.7.1".sha256 = "sha256-AQn0T9bAj17tAcVZdl3PTj4ri0fCXQJvAVN1dFn19GY=";
+    release."3.6.2".sha256 = "sha256-BDE4L5qYZfaMt+6JivNBJIaJGeDSf5E+Kw1Wera/WFk=";
     release."3.6.1".sha256 = "sha256-zoVgRqNAXeCgk3zGntVkkZxIiQrCU5+ONeI97BiT674=";
     release."3.4.5".sha256 = "sha256-cck6XqC98Z9lb3CYS8K/aB1WOckjAyXzZ14vX41nJvI=";
     release."3.4.4".sha256 = "sha256-SvNNAyBYIkSMv3rhx0wVu2JjHdGYUOqaFzZKGBMMebs=";
@@ -107,6 +109,8 @@ buildDunePackage {
         ppx_deriving_0_15
       ]
   );
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Embeddable λProlog Interpreter";

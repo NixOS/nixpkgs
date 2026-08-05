@@ -77,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
         darwin
         illumos
       ];
+    broken = stdenv.isDarwin;
     maintainers = with lib.maintainers; [
       thoughtpolice
       vifino

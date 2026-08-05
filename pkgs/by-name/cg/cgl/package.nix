@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cgl";
-  version = "0.60.9";
+  version = "0.60.10";
 
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = "Cgl";
     rev = "releases/${finalAttrs.version}";
-    hash = "sha256-E84yCrgpRMjt7owPLPk1ATW+aeHNw8V24DHgkb6boIE=";
+    hash = "sha256-zkq8pdn4m56sGd3I6xID3M+u7BxVp0S5naKBjqAdeyE=";
   };
 
   nativeBuildInputs = [

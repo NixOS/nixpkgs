@@ -1,56 +1,56 @@
 {
   "stable": {
     "linux": {
-      "version": "8.12.6",
+      "version": "8.12.28",
       "sources": {
         "x86_64": {
-          "url": "https://downloads.1password.com/linux/tar/stable/x86_64/1password-8.12.6.x64.tar.gz",
-          "hash": "sha256-OLAPOgt5xgHudTUbu+XjpiN1lACWHZ86rYPZeX2idaw="
+          "url": "https://downloads.1password.com/linux/tar/stable/x86_64/1password-8.12.28.x64.tar.gz",
+          "hash": "sha256-JpXXLpjAOfBh+oc1YIBxqBZha02IuzclVhQRiF29V6c="
         },
         "aarch64": {
-          "url": "https://downloads.1password.com/linux/tar/stable/aarch64/1password-8.12.6.arm64.tar.gz",
-          "hash": "sha256-dhSn/wPzny7eO2/5huEqBfus/TIkVAei7eqJVY0HdPI="
+          "url": "https://downloads.1password.com/linux/tar/stable/aarch64/1password-8.12.28.arm64.tar.gz",
+          "hash": "sha256-lbiIXeyexz6XpXD7/57U/T//JDEBDikm9HaNR1t7cps="
         }
       }
     },
     "darwin": {
-      "version": "8.12.6",
+      "version": "8.12.28",
       "sources": {
         "x86_64": {
-          "url": "https://downloads.1password.com/mac/1Password-8.12.6-x86_64.zip",
-          "hash": "sha256-fL0KXi4+4fZfLX0sChWz7T//AdW9SCQF3mZvd92brIE="
+          "url": "https://downloads.1password.com/mac/1Password-8.12.28-x86_64.zip",
+          "hash": "sha256-ONY0M48v4wJe9LBlvjJY4BqfbQf5evtRijbbSDGQFpE="
         },
         "aarch64": {
-          "url": "https://downloads.1password.com/mac/1Password-8.12.6-aarch64.zip",
-          "hash": "sha256-1N5bKMFSuyZ5KHXhmLevewsCLZvjunWTObBw5QMfbcY="
+          "url": "https://downloads.1password.com/mac/1Password-8.12.28-aarch64.zip",
+          "hash": "sha256-utESL4dUIe/jD9gu3YIF+HWnGUlWr54tSI1Jtrruxsc="
         }
       }
     }
   },
   "beta": {
     "linux": {
-      "version": "8.12.0-11.BETA",
+      "version": "8.12.32-26.BETA",
       "sources": {
         "x86_64": {
-          "url": "https://downloads.1password.com/linux/tar/beta/x86_64/1password-8.12.0-11.BETA.x64.tar.gz",
-          "hash": "sha256-0PDkZAqlY/afocvc/rcly/nwZeSSbXdRyXH57aVPUoQ="
+          "url": "https://downloads.1password.com/linux/tar/beta/x86_64/1password-8.12.32-26.BETA.x64.tar.gz",
+          "hash": "sha256-9LtsORe/o1+SxBfeGCFf6hiO1uwuBWyIjHVs2jW0FNo="
         },
         "aarch64": {
-          "url": "https://downloads.1password.com/linux/tar/beta/aarch64/1password-8.12.0-11.BETA.arm64.tar.gz",
-          "hash": "sha256-0YDJKexCdOeU0/KPsJzI5rBUlbDEFW5N33LFXtDo3tg="
+          "url": "https://downloads.1password.com/linux/tar/beta/aarch64/1password-8.12.32-26.BETA.arm64.tar.gz",
+          "hash": "sha256-zyTyqTEIq4mXttyy5VCai9oBgTNo8tsmtqU+PuZOtGA="
         }
       }
     },
     "darwin": {
-      "version": "8.11.22-25.BETA",
+      "version": "8.12.32-26.BETA",
       "sources": {
         "x86_64": {
-          "url": "https://downloads.1password.com/mac/1Password-8.11.22-25.BETA-x86_64.zip",
-          "hash": "sha256-ZUFlsExUccqIXagggwTFj99Efd1i5Lo07P/XgTZuHBs="
+          "url": "https://downloads.1password.com/mac/1Password-8.12.32-26.BETA-x86_64.zip",
+          "hash": "sha256-PhqdUmd7EjYiYbzxuzs4Z4v2TD0S6SJPaKLvinCxcqE="
         },
         "aarch64": {
-          "url": "https://downloads.1password.com/mac/1Password-8.11.22-25.BETA-aarch64.zip",
-          "hash": "sha256-ALY5Kj/Wt/p3OTCv085q+TWFS5rLXp6MctCBUSG0ZSI="
+          "url": "https://downloads.1password.com/mac/1Password-8.12.32-26.BETA-aarch64.zip",
+          "hash": "sha256-eVkVAGQRRWv4vMnGJt+4ETAdnU6/slLXlTJgXxhNRzc="
         }
       }
     }

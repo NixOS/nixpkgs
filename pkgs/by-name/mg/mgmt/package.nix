@@ -12,18 +12,21 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "mgmt";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "purpleidea";
     repo = "mgmt";
     tag = finalAttrs.version;
-    hash = "sha256-Qi9KkWzFOqmUp5CSHxzQabQ8bVnBbxxKS/W6aLBTv6k=";
+    hash = "sha256-jVFIVlytDvfTrAzWkX+pedAq/AcLrCDFtLPx0Wc+XjM=";
   };
 
-  vendorHash = "sha256-XZTDqN5nQqze41Y/jOhT3mFHXeR2oPjXpz7CJuPOi8k=";
+  vendorHash = "sha256-mMRAlqySy6dpRG86p0BHSpYn2gzE8N4sZ3qHiyuttBA=";
+
+  proxyVendor = true;
 
   postPatch = ''
+    rm -rf vendor
     patchShebangs misc/header.sh
   '';
   preBuild = ''
@@ -60,5 +63,6 @@ buildGoModule (finalAttrs: {
       karpfediem
     ];
     mainProgram = "mgmt";
+    platforms = lib.platforms.linux;
   };
 })

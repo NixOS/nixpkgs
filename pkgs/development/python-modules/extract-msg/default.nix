@@ -21,23 +21,23 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "extract-msg";
-  version = "0.55.0";
+  version = "0.56.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TeamMsgExtractor";
     repo = "msg-extractor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-n/v3ubgzWlWqLXZfy1O7+FvTJoLMtgL7DFPL39SZnfM=";
+    hash = "sha256-Zp31WhQQMJlxg52AHsiqxyxqIy1BXpdBkyNIgg2V5aw=";
   };
-
-  build-system = [
-    setuptools
-  ];
 
   pythonRelaxDeps = [
     "beautifulsoup4"
+    "ebcdic"
   ];
+
+  build-system = [ setuptools ];
+
   dependencies = [
     beautifulsoup4
     compressed-rtf

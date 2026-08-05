@@ -9,6 +9,7 @@
   freetype,
   glib,
   glslang,
+  gst_all_1,
   gtk4-layer-shell,
   harfbuzz,
   libadwaita,
@@ -75,6 +76,9 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     libx11
     gtk4-layer-shell
+    gst_all_1.gstreamer # Used for playing audio, e.g. audible bells
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-base
 
     # OpenGL renderer
     glslang
@@ -170,6 +174,7 @@ stdenv.mkDerivation (finalAttrs: {
       features, or native UIs. Ghostty provides all three.
     '';
     homepage = "https://ghostty.org/";
+    donationPage = "https://ghostty.org/docs/sponsor";
     downloadPage = "https://ghostty.org/download";
     changelog = "https://ghostty.org/docs/install/release-notes/${
       builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version

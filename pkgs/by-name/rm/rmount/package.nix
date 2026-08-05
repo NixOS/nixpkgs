@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     rev = "v${finalAttrs.version}";
-    owner = "Luis-Hebendanz";
+    owner = "Qubasa";
     repo = "rmount";
     sha256 = "0j1ayncw1nnmgna7vyx44vwinh4ah1b0l5y8agc7i4s8clbvy3h0";
   };
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://github.com/Luis-Hebendanz/rmount";
+    homepage = "https://github.com/Qubasa/rmount";
     description = "Remote mount utility which parses a json file";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.qubasa ];

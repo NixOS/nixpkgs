@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "openstep-plist";
-  version = "0.5.1";
+  version = "0.5.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "openstep_plist";
     inherit version;
-    hash = "sha256-AGgwTRLOwP4TLE+dIHfHG/pP9DkEmU/SosqX1aB2M44=";
+    hash = "sha256-Kg1w/3oDzOZKcnBitkuy9cmvn9SmNqqkM5tqqiz2UZU=";
   };
 
   build-system = [

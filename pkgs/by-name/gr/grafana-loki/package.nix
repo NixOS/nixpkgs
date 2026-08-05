@@ -1,25 +1,22 @@
 {
-  stdenv,
   lib,
   buildGoModule,
   fetchFromGitHub,
-  makeWrapper,
   nix-update-script,
   nixosTests,
-  systemd,
   testers,
   grafana-loki,
 }:
 
 buildGoModule (finalAttrs: {
-  version = "3.6.7";
+  version = "3.7.4";
   pname = "grafana-loki";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "loki";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Gg86aV/7/VoLHGLO40kxng6tYOMpbmSCwV1BRlrW+qc=";
+    hash = "sha256-sTmez6HBu8rQigToUqVFthYIkQ7E+rFVCSH0e8GBQVw=";
   };
 
   vendorHash = null;
@@ -28,20 +25,9 @@ buildGoModule (finalAttrs: {
     # TODO split every executable into its own package
     "cmd/loki"
     "cmd/loki-canary"
-    "clients/cmd/promtail"
     "cmd/logcli"
     "cmd/lokitool"
   ];
-
-  tags = [ "promtail_journal_enabled" ];
-
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ systemd.dev ];
-
-  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    wrapProgram $out/bin/promtail \
-      --prefix LD_LIBRARY_PATH : "${lib.getLib systemd}/lib"
-  '';
 
   passthru = {
     tests = {
@@ -71,7 +57,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Like Prometheus, but for logs";
-    mainProgram = "promtail";
+    mainProgram = "loki";
     license = with lib.licenses; [
       agpl3Only
       asl20

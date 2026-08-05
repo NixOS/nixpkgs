@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nwipe";
-  version = "0.40";
+  version = "0.41";
 
   src = fetchFromGitHub {
     owner = "martijnvanbrummelen";
     repo = "nwipe";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Gx7i8jxnQm+5G65JFdZ7R54ulSrBq12MIrfFGJb2tW4=";
+    sha256 = "sha256-qVO2K9Ub0AxGK89Zxhg8g7VUdWBlNWMgmdUu1Tb9nRQ=";
   };
 
   nativeBuildInputs = [

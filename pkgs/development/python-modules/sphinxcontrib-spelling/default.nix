@@ -4,8 +4,8 @@
   fetchFromGitHub,
   sphinx,
   pyenchant,
-  setuptools,
-  setuptools-scm,
+  hatchling,
+  hatch-vcs,
   wheel,
 }:
 
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    setuptools
-    setuptools-scm
+    hatchling
+    hatch-vcs
     wheel
   ];
 

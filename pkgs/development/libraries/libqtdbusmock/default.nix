@@ -16,6 +16,9 @@
   qtbase,
 }:
 
+let
+  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libqtdbusmock";
   version = "0.10.0";
@@ -68,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   cmakeFlags = [
-    (lib.cmakeBool "ENABLE_QT6" (lib.strings.versionAtLeast qtbase.version "6"))
+    (lib.cmakeBool "ENABLE_QT6" withQt6)
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
@@ -95,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     teams = [ lib.teams.lomiri ];
     pkgConfigModules = [
-      "libqtdbusmock-1"
+      "libqtdbusmock${lib.optionalString withQt6 "-qt6"}-1"
     ];
   };
 })

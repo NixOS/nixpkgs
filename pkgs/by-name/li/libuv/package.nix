@@ -24,14 +24,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.51.0";
+  version = "1.52.1";
   pname = "libuv";
 
   src = fetchFromGitHub {
     owner = "libuv";
     repo = "libuv";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ayTk3qkeeAjrGj5ab7wF7vpWI8XWS1EeKKUqzaD/LY0=";
+    hash = "sha256-Y9Nph2LkT1qnOYTW3WCumWWwORnI4P7HxzBjUlGaL7M=";
   };
 
   outputs = [
@@ -129,7 +129,15 @@ stdenv.mkDerivation (finalAttrs: {
         # https://github.com/libuv/libuv/issues/1871
         "shutdown_close_pipe"
       ]
+      ++ lib.optionals stdenv.hostPlatform.isRiscV64 [
+        # Aborts (SIGABRT, exit 134)
+        "poll_nested_epoll"
+      ]
       ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+        # ENETUNREACH when performed in jailed build env
+        "tcp_connect"
+        "udp_connect"
+        "connect_unspecified"
         # EOPNOTSUPP when performed in jailed build env
         "tcp_reuseport"
         "udp_reuseport"
@@ -206,7 +214,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://libuv.org/";
     changelog = "https://github.com/libuv/libuv/blob/v${finalAttrs.version}/ChangeLog";
     pkgConfigModules = [ "libuv" ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ miniharinn ];
     platforms = lib.platforms.all;
     license = with lib.licenses; [
       mit

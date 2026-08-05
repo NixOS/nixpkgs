@@ -21,6 +21,37 @@ DEFAULT_RUN_KWARGS = {
 }
 
 
+def test_parse_args_elevate() -> None:
+    r, _ = nr.parse_args(["nixos-rebuild", "switch"])
+    assert r.elevator is nr.elevate.NO_ELEVATOR
+
+    r, _ = nr.parse_args(["nixos-rebuild", "switch", "--elevate=sudo"])
+    assert isinstance(r.elevator, nr.elevate.SudoElevator)
+
+    r, _ = nr.parse_args(["nixos-rebuild", "switch", "--elevate=run0"])
+    assert isinstance(r.elevator, nr.elevate.Run0Elevator)
+
+    # back-compat aliases
+    for flag in ("--sudo", "--use-remote-sudo"):
+        r, _ = nr.parse_args(["nixos-rebuild", "switch", flag])
+        assert isinstance(r.elevator, nr.elevate.SudoElevator)
+
+    r, _ = nr.parse_args(["nixos-rebuild", "switch", "--ask-sudo-password"])
+    assert isinstance(r.elevator, nr.elevate.SudoElevator)
+    assert r.ask_elevate_password
+
+    # -S without --elevate implies sudo
+    r, _ = nr.parse_args(["nixos-rebuild", "switch", "-S"])
+    assert isinstance(r.elevator, nr.elevate.SudoElevator)
+
+    # explicit --elevate wins over the --sudo alias
+    r, _ = nr.parse_args(["nixos-rebuild", "switch", "--elevate=none", "--sudo"])
+    assert isinstance(r.elevator, nr.elevate.NoElevator)
+
+    with pytest.raises(SystemExit):
+        nr.parse_args(["nixos-rebuild", "switch", "--elevate=doas"])
+
+
 def test_parse_args() -> None:
     with pytest.raises(SystemExit) as e:
         nr.parse_args(["nixos-rebuild", "unknown-action"])
@@ -57,6 +88,22 @@ def test_parse_args() -> None:
     )
     assert r_store_path.flake is False
     assert r_store_path.store_path == "/nix/store/foo"
+
+    # --file and --attr should disable flake auto-detection
+    r_file, _ = nr.parse_args(["nixos-rebuild", "switch", "--file", "foo.nix"])
+    assert r_file.flake is False
+    assert r_file.file == "foo.nix"
+
+    r_attr, _ = nr.parse_args(["nixos-rebuild", "switch", "--attr", "bar"])
+    assert r_attr.flake is False
+    assert r_attr.attr == "bar"
+
+    r_file_attr, _ = nr.parse_args(
+        ["nixos-rebuild", "switch", "--file", "foo.nix", "--attr", "bar"]
+    )
+    assert r_file_attr.flake is False
+    assert r_file_attr.file == "foo.nix"
+    assert r_file_attr.attr == "bar"
 
     r1, g1 = nr.parse_args(
         [
@@ -166,15 +213,8 @@ def test_parse_args() -> None:
     {"NIXOS_REBUILD_I_UNDERSTAND_THE_CONSEQUENCES_PLEASE_BREAK_MY_SYSTEM": "1"},
     clear=True,
 )
-@patch("uuid.uuid4")
 @patch("subprocess.run", autospec=True)
-@patch("subprocess.Popen")
-def test_execute_nix_boot(
-    mock_popen: Mock, mock_run: Mock, mock_uuid4: Mock, tmp_path: Path
-) -> None:
-    test_uuid = uuid.UUID("58fe9784-f60a-42bc-aa94-eb8f1a7e5c17")
-    mock_uuid4.return_value = test_uuid
-
+def test_execute_nix_boot(mock_run: Mock, tmp_path: Path) -> None:
     nixpkgs_path = tmp_path / "nixpkgs"
     (nixpkgs_path / ".git").mkdir(parents=True)
     config_path = tmp_path / "test"
@@ -194,12 +234,18 @@ def test_execute_nix_boot(
 
     nr.execute(["nixos-rebuild", "boot", "--no-flake", "-vvv", "--no-reexec"])
 
-    assert mock_run.call_count == 7
+    assert mock_run.call_count == 8
     mock_run.assert_has_calls(
         [
             call(
+                ["nix-instantiate", "--find-file", "nixos-system"],
+                capture_output=True,
+                check=False,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
                 ["nix-instantiate", "--find-file", "nixpkgs", "-vvv"],
-                stdout=PIPE,
+                capture_output=True,
                 check=False,
                 **DEFAULT_RUN_KWARGS,
             ),
@@ -217,7 +263,7 @@ def test_execute_nix_boot(
             call(
                 [
                     "nix-build",
-                    "<nixpkgs/nixos>",
+                    "<nixos-system>",
                     "--attr",
                     "config.system.build.toplevel",
                     "--no-out-link",
@@ -245,12 +291,12 @@ def test_execute_nix_boot(
             ),
             call(
                 [
-                    *nr.nix.SYSTEMD_RUN_CMD_PREFIX,
-                    f"--unit={nr.nix.SYSTEMD_RUN_UNIT_PREFIX}-{test_uuid.hex[:8]}",
+                    *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
                     config_path / "bin/switch-to-configuration",
                     "boot",
                 ],
                 check=True,
+                stdout=ANY,
                 **(
                     DEFAULT_RUN_KWARGS
                     | {
@@ -267,8 +313,7 @@ def test_execute_nix_boot(
 # https://github.com/NixOS/nixpkgs/issues/437872
 @patch.dict(os.environ, {}, clear=True)
 @patch("subprocess.run", autospec=True)
-@patch("subprocess.Popen")
-def test_execute_nix_build(mock_popen: Mock, mock_run: Mock, tmp_path: Path) -> None:
+def test_execute_nix_build(mock_run: Mock, tmp_path: Path) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
 
@@ -287,9 +332,15 @@ def test_execute_nix_build(mock_popen: Mock, mock_run: Mock, tmp_path: Path) -> 
         ]
     )
 
-    assert mock_run.call_count == 1
+    assert mock_run.call_count == 2
     mock_run.assert_has_calls(
         [
+            call(
+                ["nix-instantiate", "--find-file", "nixos-system"],
+                check=False,
+                capture_output=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
             call(
                 [
                     "nix",
@@ -310,14 +361,15 @@ def test_execute_nix_build(mock_popen: Mock, mock_run: Mock, tmp_path: Path) -> 
 
 @patch.dict(os.environ, {}, clear=True)
 @patch("subprocess.run", autospec=True)
-@patch("subprocess.Popen")
-def test_execute_nix_build_vm(mock_popen: Mock, mock_run: Mock, tmp_path: Path) -> None:
+def test_execute_nix_build_vm(mock_run: Mock, tmp_path: Path) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
 
     def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
         if args[0] == "nix-build":
             return CompletedProcess([], 0, str(config_path))
+        elif args[0] == "nix-instantiate":
+            return CompletedProcess([], 1)
         else:
             return CompletedProcess([], 0)
 
@@ -336,9 +388,15 @@ def test_execute_nix_build_vm(mock_popen: Mock, mock_run: Mock, tmp_path: Path) 
         ]
     )
 
-    assert mock_run.call_count == 1
+    assert mock_run.call_count == 2
     mock_run.assert_has_calls(
         [
+            call(
+                ["nix-instantiate", "--find-file", "nixos-system"],
+                check=False,
+                capture_output=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
             call(
                 [
                     "nix-build",
@@ -353,17 +411,14 @@ def test_execute_nix_build_vm(mock_popen: Mock, mock_run: Mock, tmp_path: Path) 
                 check=True,
                 stdout=PIPE,
                 **DEFAULT_RUN_KWARGS,
-            )
+            ),
         ]
     )
 
 
 @patch.dict(os.environ, {}, clear=True)
 @patch("subprocess.run", autospec=True)
-@patch("subprocess.Popen")
-def test_execute_nix_build_image_flake(
-    mock_popen: Mock, mock_run: Mock, tmp_path: Path
-) -> None:
+def test_execute_nix_build_image_flake(mock_run: Mock, tmp_path: Path) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
 
@@ -376,6 +431,8 @@ def test_execute_nix_build_image_flake(
             )
         elif args[0] == "nix":
             return CompletedProcess([], 0, str(config_path))
+        elif args[0] == "nix-instantiate":
+            return CompletedProcess([], 1)
         else:
             return CompletedProcess([], 0)
 
@@ -392,9 +449,15 @@ def test_execute_nix_build_image_flake(
         ]
     )
 
-    assert mock_run.call_count == 3
+    assert mock_run.call_count == 4
     mock_run.assert_has_calls(
         [
+            call(
+                ["nix-instantiate", "--find-file", "nixos-system"],
+                check=False,
+                capture_output=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
             call(
                 [
                     "nix",
@@ -445,21 +508,16 @@ def test_execute_nix_build_image_flake(
     {"NIXOS_REBUILD_I_UNDERSTAND_THE_CONSEQUENCES_PLEASE_BREAK_MY_SYSTEM": "1"},
     clear=True,
 )
-@patch("uuid.uuid4")
 @patch("subprocess.run", autospec=True)
-@patch("subprocess.Popen")
-def test_execute_nix_switch_flake(
-    mock_popen: Mock, mock_run: Mock, mock_uuid4: Mock, tmp_path: Path
-) -> None:
+def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
-
-    test_uuid = uuid.UUID("58fe9784-f60a-42bc-aa94-eb8f1a7e5c17")
-    mock_uuid4.return_value = test_uuid
 
     def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
         if args[0] == "nix":
             return CompletedProcess([], 0, str(config_path))
+        elif args[0] == "nix-instantiate":
+            return CompletedProcess([], 1)
         else:
             return CompletedProcess([], 0)
 
@@ -482,9 +540,15 @@ def test_execute_nix_switch_flake(
         ]
     )
 
-    assert mock_run.call_count == 4
+    assert mock_run.call_count == 5
     mock_run.assert_has_calls(
         [
+            call(
+                ["nix-instantiate", "--find-file", "nixos-system"],
+                check=False,
+                capture_output=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
             call(
                 [
                     "nix",
@@ -526,12 +590,12 @@ def test_execute_nix_switch_flake(
                     "env",
                     "-i",
                     "NIXOS_INSTALL_BOOTLOADER=1",
-                    *nr.nix.SYSTEMD_RUN_CMD_PREFIX,
-                    f"--unit={nr.nix.SYSTEMD_RUN_UNIT_PREFIX}-{test_uuid.hex[:8]}",
+                    *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
                     config_path / "bin/switch-to-configuration",
                     "switch",
                 ],
                 check=True,
+                stdout=ANY,
                 **DEFAULT_RUN_KWARGS,
             ),
         ]
@@ -544,13 +608,11 @@ def test_execute_nix_switch_flake(
     clear=True,
 )
 @patch("subprocess.run", autospec=True)
-@patch("subprocess.Popen")
 @patch("uuid.uuid4", autospec=True)
 @patch(get_qualified_name(nr.services.cleanup_ssh), autospec=True)
 def test_execute_nix_switch_build_target_host(
     mock_cleanup_ssh: Mock,
     mock_uuid4: Mock,
-    mock_popen: Mock,
     mock_run: Mock,
     tmp_path: Path,
 ) -> None:
@@ -574,8 +636,7 @@ def test_execute_nix_switch_build_target_host(
             return CompletedProcess([], 0)
 
     mock_run.side_effect = run_side_effect
-    test_uuid = uuid.UUID("58fe9784-f60a-42bc-aa94-eb8f1a7e5c17")
-    mock_uuid4.side_effect = [uuid.UUID(int=0), uuid.UUID(int=1), test_uuid]
+    mock_uuid4.return_value = uuid.UUID(int=0)
 
     nr.execute(
         [
@@ -596,9 +657,15 @@ def test_execute_nix_switch_build_target_host(
         ]
     )
 
-    assert mock_run.call_count == 11
+    assert mock_run.call_count == 12
     mock_run.assert_has_calls(
         [
+            call(
+                ["nix-instantiate", "--find-file", "nixos-system"],
+                check=False,
+                capture_output=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
             call(
                 [
                     "nix-instantiate",
@@ -610,7 +677,7 @@ def test_execute_nix_switch_build_target_host(
                     "nixpkgs=$HOME/.nix-defexpr/channels/pinned_nixpkgs",
                 ],
                 check=False,
-                stdout=PIPE,
+                capture_output=True,
                 **DEFAULT_RUN_KWARGS,
             ),
             call(
@@ -643,7 +710,7 @@ def test_execute_nix_switch_build_target_host(
                     "--",
                     "/bin/sh",
                     "-c",
-                    """'exec env -i PATH="${PATH-}" "$@"'""",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
                     "sh",
                     "mktemp",
                     "-d",
@@ -662,13 +729,13 @@ def test_execute_nix_switch_build_target_host(
                     "--",
                     "/bin/sh",
                     "-c",
-                    """'exec env -i PATH="${PATH-}" "$@"'""",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
                     "sh",
                     "nix-store",
                     "--realise",
                     str(config_path),
                     "--add-root",
-                    "/tmp/tmpdir/00000000000000000000000000000001",
+                    "/tmp/tmpdir/00000000000000000000000000000000",
                 ],
                 check=True,
                 stdout=PIPE,
@@ -682,7 +749,7 @@ def test_execute_nix_switch_build_target_host(
                     "--",
                     "/bin/sh",
                     "-c",
-                    """'exec env -i PATH="${PATH-}" "$@"'""",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
                     "sh",
                     "readlink",
                     "-f",
@@ -700,7 +767,7 @@ def test_execute_nix_switch_build_target_host(
                     "--",
                     "/bin/sh",
                     "-c",
-                    """'exec env -i PATH="${PATH-}" "$@"'""",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
                     "sh",
                     "rm",
                     "-rf",
@@ -733,7 +800,7 @@ def test_execute_nix_switch_build_target_host(
                     "sudo",
                     "/bin/sh",
                     "-c",
-                    """'exec env -i PATH="${PATH-}" "$@"'""",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
                     "sh",
                     "nix-env",
                     "-p",
@@ -752,7 +819,7 @@ def test_execute_nix_switch_build_target_host(
                     "--",
                     "/bin/sh",
                     "-c",
-                    """'exec env -i PATH="${PATH-}" "$@"'""",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
                     "sh",
                     "test",
                     "-d",
@@ -770,14 +837,14 @@ def test_execute_nix_switch_build_target_host(
                     "sudo",
                     "/bin/sh",
                     "-c",
-                    """'exec env -i PATH="${PATH-}" LOCALE_ARCHIVE="${LOCALE_ARCHIVE-}" NIXOS_NO_CHECK="${NIXOS_NO_CHECK-}" NIXOS_INSTALL_BOOTLOADER=0 "$@"'""",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" LOCALE_ARCHIVE="${LOCALE_ARCHIVE-}" NIXOS_NO_CHECK="${NIXOS_NO_CHECK-}" NIXOS_INSTALL_BOOTLOADER=0 "$@"'""",
                     "sh",
-                    *nr.nix.SYSTEMD_RUN_CMD_PREFIX,
-                    f"--unit={nr.nix.SYSTEMD_RUN_UNIT_PREFIX}-{test_uuid.hex[:8]}",
+                    *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
                     str(config_path / "bin/switch-to-configuration"),
                     "switch",
                 ],
                 check=True,
+                stdout=ANY,
                 **DEFAULT_RUN_KWARGS,
             ),
         ]
@@ -789,26 +856,21 @@ def test_execute_nix_switch_build_target_host(
     {"NIXOS_REBUILD_I_UNDERSTAND_THE_CONSEQUENCES_PLEASE_BREAK_MY_SYSTEM": "1"},
     clear=True,
 )
-@patch("uuid.uuid4")
 @patch("subprocess.run", autospec=True)
-@patch("subprocess.Popen")
 @patch(get_qualified_name(nr.services.cleanup_ssh), autospec=True)
 def test_execute_nix_switch_flake_target_host(
     mock_cleanup_ssh: Mock,
-    mock_popen: Mock,
     mock_run: Mock,
-    mock_uuid4: Mock,
     tmp_path: Path,
 ) -> None:
-    test_uuid = uuid.UUID("58fe9784-f60a-42bc-aa94-eb8f1a7e5c17")
-    mock_uuid4.return_value = test_uuid
-
     config_path = tmp_path / "test"
     config_path.touch()
 
     def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
         if args[0] == "nix":
             return CompletedProcess([], 0, str(config_path))
+        elif args[0] == "nix-instantiate":
+            return CompletedProcess([], 1)
         else:
             return CompletedProcess([], 0)
 
@@ -827,9 +889,15 @@ def test_execute_nix_switch_flake_target_host(
         ]
     )
 
-    assert mock_run.call_count == 5
+    assert mock_run.call_count == 6
     mock_run.assert_has_calls(
         [
+            call(
+                ["nix-instantiate", "--find-file", "nixos-system"],
+                check=False,
+                capture_output=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
             call(
                 [
                     "nix",
@@ -858,7 +926,7 @@ def test_execute_nix_switch_flake_target_host(
                     "sudo",
                     "/bin/sh",
                     "-c",
-                    """'exec env -i PATH="${PATH-}" "$@"'""",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
                     "sh",
                     "nix-env",
                     "-p",
@@ -877,7 +945,7 @@ def test_execute_nix_switch_flake_target_host(
                     "--",
                     "/bin/sh",
                     "-c",
-                    """'exec env -i PATH="${PATH-}" "$@"'""",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
                     "sh",
                     "test",
                     "-d",
@@ -895,14 +963,14 @@ def test_execute_nix_switch_flake_target_host(
                     "sudo",
                     "/bin/sh",
                     "-c",
-                    """'exec env -i PATH="${PATH-}" LOCALE_ARCHIVE="${LOCALE_ARCHIVE-}" NIXOS_NO_CHECK="${NIXOS_NO_CHECK-}" NIXOS_INSTALL_BOOTLOADER=0 "$@"'""",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" LOCALE_ARCHIVE="${LOCALE_ARCHIVE-}" NIXOS_NO_CHECK="${NIXOS_NO_CHECK-}" NIXOS_INSTALL_BOOTLOADER=0 "$@"'""",
                     "sh",
-                    *nr.nix.SYSTEMD_RUN_CMD_PREFIX,
-                    f"--unit={nr.nix.SYSTEMD_RUN_UNIT_PREFIX}-{test_uuid.hex[:8]}",
+                    *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
                     str(config_path / "bin/switch-to-configuration"),
                     "switch",
                 ],
                 check=True,
+                stdout=ANY,
                 **DEFAULT_RUN_KWARGS,
             ),
         ]
@@ -914,28 +982,23 @@ def test_execute_nix_switch_flake_target_host(
     {"NIXOS_REBUILD_I_UNDERSTAND_THE_CONSEQUENCES_PLEASE_BREAK_MY_SYSTEM": "1"},
     clear=True,
 )
-@patch("uuid.uuid4")
 @patch("subprocess.run", autospec=True)
-@patch("subprocess.Popen")
 @patch(get_qualified_name(nr.services.cleanup_ssh), autospec=True)
 def test_execute_nix_switch_flake_build_host(
     mock_cleanup_ssh: Mock,
-    mock_popen: Mock,
     mock_run: Mock,
-    mock_uuid4: Mock,
     tmp_path: Path,
 ) -> None:
-    test_uuid = uuid.UUID("58fe9784-f60a-42bc-aa94-eb8f1a7e5c17")
-    mock_uuid4.return_value = test_uuid
-
     config_path = tmp_path / "test"
     config_path.touch()
 
     def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
-        if args[0] == "nix" and "eval" in args:
+        if (args[0] == "nix" and "eval" in args) or (
+            args[0] == "ssh" and "nix" in args
+        ):
             return CompletedProcess([], 0, str(config_path))
-        elif args[0] == "ssh" and "nix" in args:
-            return CompletedProcess([], 0, str(config_path))
+        elif args[0] == "nix-instantiate":
+            return CompletedProcess([], 1)
         else:
             return CompletedProcess([], 0)
 
@@ -953,9 +1016,15 @@ def test_execute_nix_switch_flake_build_host(
         ]
     )
 
-    assert mock_run.call_count == 7
+    assert mock_run.call_count == 8
     mock_run.assert_has_calls(
         [
+            call(
+                ["nix-instantiate", "--find-file", "nixos-system"],
+                check=False,
+                capture_output=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
             call(
                 [
                     "nix",
@@ -982,7 +1051,7 @@ def test_execute_nix_switch_flake_build_host(
                     "--",
                     "/bin/sh",
                     "-c",
-                    """'exec env -i PATH="${PATH-}" "$@"'""",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
                     "sh",
                     "nix",
                     "--extra-experimental-features",
@@ -1024,12 +1093,12 @@ def test_execute_nix_switch_flake_build_host(
             ),
             call(
                 [
-                    *nr.nix.SYSTEMD_RUN_CMD_PREFIX,
-                    f"--unit={nr.nix.SYSTEMD_RUN_UNIT_PREFIX}-{test_uuid.hex[:8]}",
+                    *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
                     config_path / "bin/switch-to-configuration",
                     "switch",
                 ],
                 check=True,
+                stdout=ANY,
                 **DEFAULT_RUN_KWARGS,
             ),
         ]
@@ -1037,15 +1106,14 @@ def test_execute_nix_switch_flake_build_host(
 
 
 @patch("subprocess.run", autospec=True)
-@patch("subprocess.Popen")
-def test_execute_switch_rollback(
-    mock_popen: Mock, mock_run: Mock, tmp_path: Path
-) -> None:
+def test_execute_switch_rollback(mock_run: Mock, tmp_path: Path) -> None:
     nixpkgs_path = tmp_path / "nixpkgs"
     (nixpkgs_path / ".git").mkdir(parents=True)
 
     def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
-        if args[0] == "nix-instantiate":
+        if args[0] == "nix-instantiate" and "nixos-system" in args:
+            return CompletedProcess([], 1)
+        elif args[0] == "nix-instantiate":
             return CompletedProcess([], 0, str(nixpkgs_path))
         elif args[0] == "git":
             return CompletedProcess([], 0, "")
@@ -1067,13 +1135,19 @@ def test_execute_switch_rollback(
         ]
     )
 
-    assert mock_run.call_count == 5
+    assert mock_run.call_count == 6
     mock_run.assert_has_calls(
         [
             call(
+                ["nix-instantiate", "--find-file", "nixos-system"],
+                capture_output=True,
+                check=False,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
                 ["nix-instantiate", "--find-file", "nixpkgs"],
                 check=False,
-                stdout=PIPE,
+                capture_output=True,
                 **DEFAULT_RUN_KWARGS,
             ),
             call(
@@ -1110,6 +1184,7 @@ def test_execute_switch_rollback(
                     "switch",
                 ],
                 check=True,
+                stdout=ANY,
                 **DEFAULT_RUN_KWARGS,
             ),
         ]
@@ -1117,20 +1192,27 @@ def test_execute_switch_rollback(
 
 
 @patch("subprocess.run", autospec=True)
-@patch("subprocess.Popen")
-def test_execute_build(mock_popen: Mock, mock_run: Mock, tmp_path: Path) -> None:
+def test_execute_build(mock_run: Mock, tmp_path: Path) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
     mock_run.side_effect = [
+        # nix-instantiate --find-file nixos-system
+        CompletedProcess([], 1),
         # nixos_build_flake
         CompletedProcess([], 0, str(config_path)),
     ]
 
     nr.execute(["nixos-rebuild", "build", "--no-flake", "--no-reexec"])
 
-    assert mock_run.call_count == 1
+    assert mock_run.call_count == 2
     mock_run.assert_has_calls(
         [
+            call(
+                ["nix-instantiate", "--find-file", "nixos-system"],
+                capture_output=True,
+                check=False,
+                **DEFAULT_RUN_KWARGS,
+            ),
             call(
                 [
                     "nix-build",
@@ -1141,19 +1223,20 @@ def test_execute_build(mock_popen: Mock, mock_run: Mock, tmp_path: Path) -> None
                 check=True,
                 stdout=PIPE,
                 **DEFAULT_RUN_KWARGS,
-            )
+            ),
         ]
     )
 
 
 @patch("subprocess.run", autospec=True)
-@patch("subprocess.Popen")
 def test_execute_build_dry_run_build_and_target_remote(
-    mock_popen: Mock, mock_run: Mock, tmp_path: Path
+    mock_run: Mock, tmp_path: Path
 ) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
     mock_run.side_effect = [
+        # nix-instantiate --find-file nixos-system
+        CompletedProcess([], 1),
         CompletedProcess([], 0, str(config_path)),
         CompletedProcess([], 0),
         CompletedProcess([], 0, str(config_path)),
@@ -1172,9 +1255,15 @@ def test_execute_build_dry_run_build_and_target_remote(
         ]
     )
 
-    assert mock_run.call_count == 3
+    assert mock_run.call_count == 4
     mock_run.assert_has_calls(
         [
+            call(
+                ["nix-instantiate", "--find-file", "nixos-system"],
+                capture_output=True,
+                check=False,
+                **DEFAULT_RUN_KWARGS,
+            ),
             call(
                 [
                     "nix",
@@ -1201,7 +1290,7 @@ def test_execute_build_dry_run_build_and_target_remote(
                     "--",
                     "/bin/sh",
                     "-c",
-                    """'exec env -i PATH="${PATH-}" "$@"'""",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
                     "sh",
                     "nix",
                     "--extra-experimental-features",
@@ -1220,15 +1309,14 @@ def test_execute_build_dry_run_build_and_target_remote(
 
 
 @patch("subprocess.run", autospec=True)
-@patch("subprocess.Popen")
-def test_execute_test_flake(mock_popen: Mock, mock_run: Mock, tmp_path: Path) -> None:
+def test_execute_test_flake(mock_run: Mock, tmp_path: Path) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
 
     def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
         if args[0] == "nix":
             return CompletedProcess([], 0, str(config_path))
-        elif args[0] == "test":
+        elif args[0] == "nix-instantiate" or args[0] == "test":
             return CompletedProcess([], 1)
         else:
             return CompletedProcess([], 0)
@@ -1239,9 +1327,15 @@ def test_execute_test_flake(mock_popen: Mock, mock_run: Mock, tmp_path: Path) ->
         ["nixos-rebuild", "test", "--flake", "github:user/repo#hostname", "--no-reexec"]
     )
 
-    assert mock_run.call_count == 3
+    assert mock_run.call_count == 4
     mock_run.assert_has_calls(
         [
+            call(
+                ["nix-instantiate", "--find-file", "nixos-system"],
+                capture_output=True,
+                check=False,
+                **DEFAULT_RUN_KWARGS,
+            ),
             call(
                 [
                     "nix",
@@ -1264,6 +1358,7 @@ def test_execute_test_flake(mock_popen: Mock, mock_run: Mock, tmp_path: Path) ->
             call(
                 [config_path / "bin/switch-to-configuration", "test"],
                 check=True,
+                stdout=ANY,
                 **DEFAULT_RUN_KWARGS,
             ),
         ]
@@ -1271,13 +1366,11 @@ def test_execute_test_flake(mock_popen: Mock, mock_run: Mock, tmp_path: Path) ->
 
 
 @patch("subprocess.run", autospec=True)
-@patch("subprocess.Popen")
 @patch("pathlib.Path.exists", autospec=True, return_value=True)
 @patch("pathlib.Path.mkdir", autospec=True)
 def test_execute_test_rollback(
     mock_path_mkdir: Mock,
     mock_path_exists: Mock,
-    mock_popen: Mock,
     mock_run: Mock,
 ) -> None:
     def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
@@ -1291,7 +1384,9 @@ def test_execute_test_rollback(
                 2084   2024-11-07 23:54:17   (current)
                 """),
             )
-        elif args[0] == "test":
+        elif (args[0] == "nix-instantiate" and "nixos-system" in args) or args[
+            0
+        ] == "test":
             return CompletedProcess([], 1)
         else:
             return CompletedProcess([], 0)
@@ -1302,7 +1397,7 @@ def test_execute_test_rollback(
         ["nixos-rebuild", "test", "--rollback", "--profile-name", "foo", "--no-reexec"]
     )
 
-    assert mock_run.call_count == 3
+    assert mock_run.call_count == 4
     mock_run.assert_has_calls(
         [
             call(
@@ -1329,6 +1424,7 @@ def test_execute_test_rollback(
                     "test",
                 ],
                 check=True,
+                stdout=ANY,
                 **DEFAULT_RUN_KWARGS,
             ),
         ]
@@ -1340,19 +1436,12 @@ def test_execute_test_rollback(
     {"NIXOS_REBUILD_I_UNDERSTAND_THE_CONSEQUENCES_PLEASE_BREAK_MY_SYSTEM": "1"},
     clear=True,
 )
-@patch("uuid.uuid4", autospec=True)
 @patch("subprocess.run", autospec=True)
-@patch("subprocess.Popen")
-def test_execute_switch_store_path(
-    mock_popen: Mock, mock_run: Mock, mock_uuid4: Mock, tmp_path: Path
-) -> None:
-    test_uuid = uuid.UUID("58fe9784-f60a-42bc-aa94-eb8f1a7e5c17")
-    mock_uuid4.return_value = test_uuid
-
+def test_execute_switch_store_path(mock_run: Mock, tmp_path: Path) -> None:
     config_path = tmp_path / "test-system"
     config_path.mkdir()
 
-    mock_run.return_value = CompletedProcess([], 0)
+    mock_run.return_value = CompletedProcess([], 0, stdout="")
 
     nr.execute(
         [
@@ -1365,9 +1454,15 @@ def test_execute_switch_store_path(
     )
 
     # --store-path skips build and write_version_suffix, so only activation calls
-    assert mock_run.call_count == 3
+    assert mock_run.call_count == 4
     mock_run.assert_has_calls(
         [
+            call(
+                ["nix-instantiate", "--find-file", "nixos-system"],
+                capture_output=True,
+                check=False,
+                **DEFAULT_RUN_KWARGS,
+            ),
             call(
                 [
                     "nix-env",
@@ -1386,12 +1481,12 @@ def test_execute_switch_store_path(
             ),
             call(
                 [
-                    *nr.nix.SYSTEMD_RUN_CMD_PREFIX,
-                    f"--unit={nr.nix.SYSTEMD_RUN_UNIT_PREFIX}-{test_uuid.hex[:8]}",
+                    *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
                     config_path / "bin/switch-to-configuration",
                     "switch",
                 ],
                 check=True,
+                stdout=ANY,
                 **(
                     DEFAULT_RUN_KWARGS
                     | {
@@ -1406,24 +1501,17 @@ def test_execute_switch_store_path(
 
 
 @patch.dict(os.environ, {}, clear=True)
-@patch("uuid.uuid4")
 @patch("subprocess.run", autospec=True)
 @patch(get_qualified_name(nr.services.cleanup_ssh), autospec=True)
-@patch("subprocess.Popen")
 def test_execute_switch_store_path_target_host(
-    mock_popen: Mock,
     mock_cleanup_ssh: Mock,
     mock_run: Mock,
-    mock_uuid4: Mock,
     tmp_path: Path,
 ) -> None:
-    test_uuid = uuid.UUID("58fe9784-f60a-42bc-aa94-eb8f1a7e5c17")
-    mock_uuid4.return_value = test_uuid
-
     config_path = tmp_path / "test-system"
     config_path.mkdir()
 
-    mock_run.return_value = CompletedProcess([], 0)
+    mock_run.return_value = CompletedProcess([], 0, stdout="")
 
     nr.execute(
         [
@@ -1439,7 +1527,7 @@ def test_execute_switch_store_path_target_host(
     )
 
     # --store-path skips build and write_version_suffix, so only copy/activation calls
-    assert mock_run.call_count == 5
+    assert mock_run.call_count == 6
     mock_run.assert_has_calls(
         [
             call(
@@ -1455,7 +1543,7 @@ def test_execute_switch_store_path_target_host(
                     "--",
                     "/bin/sh",
                     "-c",
-                    """'exec env -i PATH="${PATH-}" "$@"'""",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
                     "sh",
                     "test",
                     "-f",
@@ -1473,7 +1561,7 @@ def test_execute_switch_store_path_target_host(
                     "sudo",
                     "/bin/sh",
                     "-c",
-                    """'exec env -i PATH="${PATH-}" "$@"'""",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
                     "sh",
                     "nix-env",
                     "-p",
@@ -1492,7 +1580,7 @@ def test_execute_switch_store_path_target_host(
                     "--",
                     "/bin/sh",
                     "-c",
-                    """'exec env -i PATH="${PATH-}" "$@"'""",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
                     "sh",
                     "test",
                     "-d",
@@ -1510,14 +1598,14 @@ def test_execute_switch_store_path_target_host(
                     "sudo",
                     "/bin/sh",
                     "-c",
-                    """'exec env -i PATH="${PATH-}" LOCALE_ARCHIVE="${LOCALE_ARCHIVE-}" NIXOS_NO_CHECK="${NIXOS_NO_CHECK-}" NIXOS_INSTALL_BOOTLOADER=0 "$@"'""",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" LOCALE_ARCHIVE="${LOCALE_ARCHIVE-}" NIXOS_NO_CHECK="${NIXOS_NO_CHECK-}" NIXOS_INSTALL_BOOTLOADER=0 "$@"'""",
                     "sh",
-                    *nr.nix.SYSTEMD_RUN_CMD_PREFIX,
-                    f"--unit={nr.nix.SYSTEMD_RUN_UNIT_PREFIX}-{test_uuid.hex[:8]}",
+                    *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
                     str(config_path / "bin/switch-to-configuration"),
                     "switch",
                 ],
                 check=True,
+                stdout=ANY,
                 **DEFAULT_RUN_KWARGS,
             ),
         ]

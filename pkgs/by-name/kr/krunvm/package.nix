@@ -1,0 +1,83 @@
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  asciidoctor,
+  buildah,
+  buildah-unwrapped,
+  cargo,
+  darwin,
+  libiconv,
+  libkrun,
+  makeWrapper,
+  rustc,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "krunvm";
+  version = "0.2.6";
+
+  src = fetchFromGitHub {
+    owner = "libkrun";
+    repo = "krunvm";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-peOaPivQKOwioh5skPNFiA3ptHv9pSsnjpy43cms8O8=";
+  };
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src;
+    hash = "sha256-MRcQ0Vnd3PJqE2q981JpXPjwMUKT4t+RcOvzWptK7PQ=";
+  };
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+    asciidoctor
+    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.sigtool ];
+
+  buildInputs = [
+    libkrun
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
+
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  postPatch = ''
+    # do not pollute etc
+    substituteInPlace src/utils.rs \
+      --replace-fail "etc/containers" "share/krunvm/containers"
+  '';
+
+  postInstall = ''
+    mkdir -p $out/share/krunvm/containers
+    install -D -m755 ${buildah-unwrapped.src}/tests/registries.conf $out/share/krunvm/containers/registries.conf
+    install -D -m755 ${buildah-unwrapped.src}/tests/policy.json $out/share/krunvm/containers/policy.json
+  '';
+
+  # It attaches entitlements with codesign and strip removes those,
+  # voiding the entitlements and making it non-operational.
+  dontStrip = stdenv.hostPlatform.isDarwin;
+
+  postFixup = ''
+    wrapProgram $out/bin/krunvm \
+      --prefix PATH : ${lib.makeBinPath [ buildah ]}
+  '';
+
+  meta = {
+    description = "CLI-based utility for creating microVMs from OCI images";
+    homepage = "https://github.com/libkrun/krunvm";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nickcao ];
+    platforms = libkrun.meta.platforms;
+    mainProgram = "krunvm";
+  };
+})

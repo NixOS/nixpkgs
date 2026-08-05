@@ -47,7 +47,13 @@ stdenv.mkDerivation (finalAttrs: {
   postConfigure = "doxygen -u";
 
   configureFlags = [
+    "--sysconfdir=/etc"
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+  ];
+
+  installFlags = [
+    # The NixOS module generates /etc/mptcpd/mptcpd.conf declaratively.
+    "pkgsysconfdir=$out/etc/mptcpd"
   ];
 
   # fix: 'Fontconfig error: Cannot load default config file: No such file: (null)'

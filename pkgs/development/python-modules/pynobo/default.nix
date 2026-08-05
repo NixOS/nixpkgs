@@ -5,16 +5,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pynobo";
-  version = "1.8.1";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "echoromeo";
     repo = "pynobo";
-    tag = "v${version}";
-    hash = "sha256-OSgpT9CLkfnv1BLAJApZUs3vMc1WE2eG7ZrinCLy/0U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7saIhGkcRkT+HATpnL+DcIWarZue7UCp1lTyfgzLfl8=";
   };
 
   build-system = [ setuptools ];
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python TCP/IP interface for Nobo Hub/Nobo Energy Control devices";
     homepage = "https://github.com/echoromeo/pynobo";
-    changelog = "https://github.com/echoromeo/pynobo/releases/tag/v${version}";
-    license = with lib.licenses; [ gpl3Plus ];
+    changelog = "https://github.com/echoromeo/pynobo/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

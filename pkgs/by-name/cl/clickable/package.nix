@@ -11,14 +11,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "clickable";
-  version = "8.7.0";
+  version = "8.9.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "clickable";
     repo = "clickable";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-W6NPZ5uP7wGjgyA+Nv2vpmshKWny2CCSrn/Gaoi7Pr4=";
+    hash = "sha256-hrtAx/RKBlVf8cguPAGd55/m0D6YLu678f+aqeIzRos=";
   };
 
   __structuredAttrs = true;

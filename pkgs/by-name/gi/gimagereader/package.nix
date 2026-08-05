@@ -6,7 +6,7 @@
   pkg-config,
   libuuid,
   sane-backends,
-  podofo_0_10,
+  podofo0,
   libjpeg,
   djvulibre,
   libxmlxx3,
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     libzip
     libuuid
     sane-backends
-    podofo_0_10
+    podofo0
     libjpeg
     djvulibre
     tesseract

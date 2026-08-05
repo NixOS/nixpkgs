@@ -6,7 +6,6 @@
   # build-system
   hatch-docstring-description,
   hatch-fancy-pypi-readme,
-  hatch-min-requirements,
   hatch-vcs,
   hatchling,
 
@@ -22,13 +21,12 @@
   furo,
   pytest,
   sphinx,
-  sphinx-autodoc-typehints,
   # full
   h5py,
   zarr,
   # test
   anndata,
-  numcodecs,
+  scikit-learn,
   # test-min
   coverage,
   pytest-codspeed,
@@ -44,14 +42,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fast-array-utils";
-  version = "1.3.1";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scverse";
     repo = "fast-array-utils";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FUzCdDFDqP+izlSWruWzslfPayzRN7MFx1LOikyMDss=";
+    hash = "sha256-9tB8cV3i9WPbdLeS5/FmQzLu8rk/jRVtUZ35X/XSCx8=";
   };
 
   # hatch-min-requirements tries to talk to PyPI by default. See https://github.com/tlambert03/hatch-min-requirements?tab=readme-ov-file#environment-variables.
@@ -60,7 +58,6 @@ buildPythonPackage (finalAttrs: {
   build-system = [
     hatch-docstring-description
     hatch-fancy-pypi-readme
-    hatch-min-requirements
     hatch-vcs
     hatchling
   ];
@@ -79,9 +76,7 @@ buildPythonPackage (finalAttrs: {
     doc = [
       furo
       pytest
-      # scanpydoc
       sphinx
-      sphinx-autodoc-typehints
       # sphinx-autofixture
     ];
     full = [
@@ -96,11 +91,10 @@ buildPythonPackage (finalAttrs: {
     ];
     test = [
       anndata
-      numcodecs
+      scikit-learn
       zarr
     ]
-    ++ self.accel
-    ++ self.test-min;
+    ++ self.accel;
     test-min = [
       coverage
       pytest

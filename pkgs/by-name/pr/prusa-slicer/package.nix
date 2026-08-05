@@ -19,7 +19,7 @@
   gmp,
   gtk3,
   hicolor-icon-theme,
-  ilmbase,
+  hidapi,
   libpng,
   mpfr,
   nanosvg,
@@ -62,14 +62,14 @@ let
 in
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "prusa-slicer";
-  version = "2.9.4";
+  version = "2.9.6";
   # Build with clang even on Linux, because GCC uses absolutely obscene amounts of memory
   # on this particular code base (OOM with 32GB memory and --cores 16 on GCC, succeeds
   # with --cores 32 on clang).
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "PrusaSlicer";
-    hash = "sha256-1ilgr9RaIoWvj0TDVc20XjjUUcNtnicR7KlE0ii3GQE=";
+    hash = "sha256-SXNIyAncnPU6Zac8/plM32sPBgj9Uj9eVDL3NBu+IL4=";
     rev = "version_${finalAttrs.version}";
   };
 
@@ -78,6 +78,11 @@ clangStdenv.mkDerivation (finalAttrs: {
     # https://github.com/NixOS/nixpkgs/issues/415703
     # https://gitlab.archlinux.org/archlinux/packaging/packages/prusa-slicer/-/merge_requests/5
     ./allow_wayland.patch
+    # Pick https://github.com/prusa3d/PrusaSlicer/pull/14207 to remove unused and insecure ilmbase dependency
+    ./no-ilmbase.patch
+    # catch2 3.15 support
+    # https://github.com/prusa3d/PrusaSlicer/pull/15462
+    ./catch2_3_15.patch
   ];
 
   # (not applicable to super-slicer fork)
@@ -93,6 +98,18 @@ clangStdenv.mkDerivation (finalAttrs: {
     + ''
       substituteInPlace src/platform/unix/PrusaGcodeviewer.desktop \
         --replace-fail 'MimeType=text/x.gcode;' 'MimeType=application/x-bgcode;text/x.gcode;'
+    ''
+    # Make PrusaSlicer handle the url "prusaslicer://"
+    + ''
+      substituteInPlace src/platform/unix/PrusaSlicer.desktop \
+        --replace-fail \
+        'Exec=prusa-slicer %F' \
+        'Exec=prusa-slicer %U'
+
+      substituteInPlace src/platform/unix/PrusaSlicer.desktop \
+        --replace-fail \
+        'MimeType=model/stl;application/vnd.ms-3mfdocument;application/prs.wavefront-obj;application/x-amf;' \
+        'MimeType=model/stl;application/vnd.ms-3mfdocument;application/prs.wavefront-obj;application/x-amf;x-scheme-handler/prusaslicer;'
     ''
   );
 
@@ -119,7 +136,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     gmp
     gtk3
     hicolor-icon-theme
-    ilmbase
+    hidapi
     libpng
     mpfr
     nanosvg-fltk

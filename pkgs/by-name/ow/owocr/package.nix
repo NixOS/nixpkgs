@@ -5,14 +5,15 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "owocr";
-  version = "1.26.3";
+  version = "1.26.8";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "AuroraWright";
     repo = "owocr";
     tag = finalAttrs.version;
-    hash = "sha256-/eee0uOWZgjHKhN3Ie75qxXqlSH1Fm3ipDYkvyIK5LM=";
+    hash = "sha256-bdkhuEH2OJspJ9gBmQQAzCimN1Iuj5D6Cdzr0dO0HEc=";
   };
 
   # we use pystray directly to avoid making a new package
@@ -62,7 +63,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Optical character recognition for Japanese text";
     homepage = "https://github.com/AuroraWright/owocr";
+    changelog = "https://github.com/AuroraWright/owocr/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sigmanificient ];
+    mainProgram = "owocr";
   };
 })

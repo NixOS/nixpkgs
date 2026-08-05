@@ -14,14 +14,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-ci-broker";
-  version = "0.26.0";
+  version = "0.30.0";
 
   src = fetchFromRadicle {
-    seed = "seed.radicle.xyz";
+    seed = "seed.radicle.dev";
     repo = "zwTxygwuz5LDGBq255RA2CbNGrz8";
     node = "z6MkgEMYod7Hxfy9qCvDv5hYHkZ4ciWmLFgfvm3Wn1b2w2FV";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ns2X+XD1AL7vo9fsAm1WTj/HRBmZ9eJhIH/WYF+j4uM=";
+    hash = "sha256-30+s//C9uMpGgA976RRduHmnmF6YEYmmG+V5P/1TYhA=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git_head
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  cargoHash = "sha256-dMc11UB8qzP9uIF9eU+ScwCTmUS/6yLkRYfTxZYnCa0=";
+  cargoHash = "sha256-9DzdeJcjl8IpmDR+kXdbEHrGi/5e9P26HsZJ9OPZRSA=";
 
   postPatch = ''
     substituteInPlace build.rs \
@@ -66,13 +66,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Radicle CI broker";
-    homepage = "https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:zwTxygwuz5LDGBq255RA2CbNGrz8";
-    changelog = "https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:zwTxygwuz5LDGBq255RA2CbNGrz8/tree/NEWS.md";
+    homepage = "https://radicle.network/nodes/seed.radicle.dev/rad:zwTxygwuz5LDGBq255RA2CbNGrz8";
+    changelog = "https://radicle.network/nodes/seed.radicle.dev/rad:zwTxygwuz5LDGBq255RA2CbNGrz8/tree/NEWS.md";
     license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with lib.maintainers; [ defelo ];
+    teams = [ lib.teams.radicle ];
     mainProgram = "cib";
   };
 })

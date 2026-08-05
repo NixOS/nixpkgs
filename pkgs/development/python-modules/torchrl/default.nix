@@ -75,14 +75,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "torchrl";
-  version = "0.11.1";
+  version = "0.13.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "rl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1S/A9zb6hlRYIV8Jf1lQ31TzxuA16lDiQHTu+Y6WSQk=";
+    hash = "sha256-xnQLwOofHwdRvrOMNJpAEiOT7BEfxoPmrcxw2H3CTvI=";
   };
 
   postPatch = ''
@@ -263,7 +264,7 @@ buildPythonPackage (finalAttrs: {
     "test_trans_serial_env_check"
     "test_transform_env"
 
-    # undeterministic
+    # nondeterministic
     "test_distributed_collector_updatepolicy"
     "test_timeit"
 

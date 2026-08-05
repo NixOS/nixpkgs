@@ -6,30 +6,18 @@
   cmake,
   supercollider,
   fftw,
+  fftwFloat,
   gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "sc3-plugins";
-  version = "3.13.0";
+  version = "3.14.0";
 
   src = fetchurl {
     url = "https://github.com/supercollider/sc3-plugins/releases/download/Version-${version}/sc3-plugins-${version}-Source.tar.bz2";
-    sha256 = "sha256-+N7rhh1ALipy21HUC0jEQ2kCYbWlOveJg9TPe6dnF6I=";
+    sha256 = "sha256-CW9JVVdgeITg2/0TLprw1V8WW4VhBmCN2Ns8XmiZKh0=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/supercollider/sc3-plugins/commit/3dc56bf7fcc1f2261afc13f96da762b78bcbfa51.patch";
-      hash = "sha256-lvXvGunfmjt6i+XPog14IKdnH1Qk8vefxplSDkXXXHU=";
-    })
-
-    # Fix build with GCC 15
-    (fetchpatch2 {
-      url = "https://github.com/supercollider/sc3-plugins/commit/deaa55a7204bedf65a2000a463ae87a481bf3eb8.patch";
-      hash = "sha256-d8+4ZmedAwVt/AlU/YKqQF+80shEa8DiPnvMwJtW/RM=";
-    })
-  ];
 
   strictDeps = true;
 
@@ -38,6 +26,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     supercollider
     fftw
+    fftwFloat # builds without this will return an error message about no FFTW3F-INCLUDE-DIR
   ];
 
   cmakeFlags = [
@@ -59,7 +48,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Community plugins for SuperCollider";
     homepage = "https://supercollider.github.io/sc3-plugins/";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      pretentiousUsername
+    ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };

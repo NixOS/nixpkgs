@@ -6,6 +6,7 @@
   autoconf,
   automake,
   libtool,
+  pkg-config,
   gitMinimal,
   perl,
   python3,
@@ -18,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "prrte";
-  version = "3.0.13";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "openpmix";
     repo = "prrte";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-T/iHmSO2isyIjsaiTrNYeTiBobM/9eg7gTP12m7ehno=";
+    hash = "sha256-FO2dFqvJ3Ahc7rE2gAiQhmM5GTc7LJ8nE4y5fe+FgDg=";
     fetchSubmodules = true;
   };
 
@@ -46,10 +47,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   preConfigure = ''
     ./autogen.pl
+    patchShebangs --build ./src/util/prte-convert-help.py
   '';
 
   postInstall = ''
     moveToOutput "bin/prte_info" "''${!outputDev}"
+    moveToOutput "bin/prte-info" "''${!outputDev}"
     # Fix a broken symlink, created due to FHS assumptions
     rm "$out/bin/pcc"
     ln -s ${lib.getDev pmix}/bin/pmixcc "''${!outputDev}"/bin/pcc
@@ -66,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     libtool
     flex
     gitMinimal
+    pkg-config
   ];
 
   buildInputs = [

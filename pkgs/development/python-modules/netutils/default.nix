@@ -11,16 +11,16 @@
   toml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "netutils";
-  version = "1.17.1";
+  version = "1.17.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "networktocode";
     repo = "netutils";
-    tag = "v${version}";
-    hash = "sha256-LdLNDzO5ANpTqpcemgyNoZxm6LDYRonS5o8mMmdg4vM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DHftRRqbuUa74ATfh8MHxINwNkpz9lo/drwOmeo0itE=";
   };
 
   build-system = [ poetry-core ];
@@ -59,8 +59,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library that is a collection of objects for common network automation tasks";
     homepage = "https://github.com/networktocode/netutils";
-    changelog = "https://github.com/networktocode/netutils/releases/tag/${src.tag}";
+    changelog = "https://github.com/networktocode/netutils/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

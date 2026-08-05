@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jujutsu";
-  version = "0.39.0";
+  version = "0.43.0";
 
   src = fetchFromGitHub {
     owner = "jj-vcs";
     repo = "jj";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rcmiBDDQaJYpESJt/gWkcitWtcvQosDY9pUbX5YpFjA=";
+    hash = "sha256-XgBq2ZN34iWlwKVgW7Syr46KUdt7pJuSDd/J6QWJwwQ=";
   };
 
-  cargoHash = "sha256-WqM9NJQIrbu+ynhh1pq9nXjoL30A56vIE2lHi7ZUQoc=";
+  cargoHash = "sha256-bEvpTd+FAHrD+CZN7+AuCuThyJ5LtufQR7OrGpjrWK0=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -69,6 +69,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       installShellCompletion --cmd jj \
         --bash <(COMPLETE=bash ${jj}) \
         --fish <(COMPLETE=fish ${jj}) \
+        --nushell <(${jj} util completion nushell) \
         --zsh <(COMPLETE=zsh ${jj})
     '';
 

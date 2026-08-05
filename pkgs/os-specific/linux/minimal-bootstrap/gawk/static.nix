@@ -5,7 +5,6 @@
   fetchurl,
   bash,
   gcc,
-  musl,
   binutils,
   gnumake,
   gnused,
@@ -32,7 +31,6 @@ bash.runCommand "${pname}-${version}"
 
     nativeBuildInputs = [
       gcc
-      musl
       binutils
       gnumake
       gnused
@@ -48,6 +46,7 @@ bash.runCommand "${pname}-${version}"
       result:
       bash.runCommand "${pname}-get-version-${version}" { } ''
         ${result}/bin/awk --version
+        ${result}/bin/awk 'BEGIN { if (2 + 2 != 4) exit 1 }'
         mkdir $out
       '';
   }
@@ -62,13 +61,17 @@ bash.runCommand "${pname}-${version}"
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
       --disable-dependency-tracking \
-      CC=musl-gcc \
-      CFLAGS=-static
+      --disable-extensions \
+      --disable-mpfr \
+      --disable-nls \
+      --disable-pma
 
     # Build
     make -j $NIX_BUILD_CORES
 
     # Install
-    make -j $NIX_BUILD_CORES install
+    make -j $NIX_BUILD_CORES install-strip
     rm $out/bin/gawkbug
+    rm -rf $out/etc $out/include $out/lib $out/libexec
+    rm -rf $out/share
   ''

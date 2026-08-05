@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yarn-zpm";
-  version = "6.0.0-rc.15";
+  version = "6.0.0-rc.18";
 
   src = fetchFromGitHub {
     owner = "yarnpkg";
     repo = "zpm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2HIEZR8gfze1Xf0LIQiMxjXAjs2NfZrs0mf/l/uku4U=";
+    hash = "sha256-eiI20hptKhQegh/BRKgDwd6ztQ7XsupV3vtGpdxTrdA=";
   };
 
-  cargoHash = "sha256-gDgJ2u0Rm8pOB/XILy69qQCFSB5DbqbQI/LcVf/97Ng=";
+  cargoHash = "sha256-mcTlUwnr02pmiQhgkLHOUHoxBxWB8rwuOgjEEqdW0wE=";
 
   cargoBuildFlags = [ "--package=zpm" ];
   cargoTestFlags = [ "--package=zpm" ];

@@ -10,8 +10,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "markdown-pdf";
     publisher = "yzane";
-    version = "1.5.0";
-    hash = "sha256-aiifZgHXC4GUEbkKAbLc0p/jUZxp1jF/J1Y/KIyvLIE=";
+    version = "2.1.0";
+    hash = "sha256-3N4de2jgLbBlDGouFU7XoH4ElL9En9+2ZprMqoL03/E=";
   };
   nativeBuildInputs = [
     jq

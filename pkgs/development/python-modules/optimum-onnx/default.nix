@@ -47,9 +47,6 @@ buildPythonPackage rec {
       onnxruntime
     ];
     # onnxruntime-gpu = [ onnxruntime-gpu ];
-    quality = [
-      ruff
-    ];
   };
 
   pythonImportsCheck = [ "optimum.onnxruntime" ];

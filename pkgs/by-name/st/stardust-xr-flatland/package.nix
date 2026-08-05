@@ -7,32 +7,32 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stardust-xr-flatland";
-  version = "0-unstable-2024-04-13";
+  version = "0.51.1";
 
   src = fetchFromGitHub {
     owner = "stardustxr";
     repo = "flatland";
-    rev = "b3b0f29c4ea1b82c96cf9de507837bf15a5e4c0e";
-    hash = "sha256-m7c6XpmpTM1URuqMG2KqtaWbL2Vt8vJFJtmvq123BmY=";
+    tag = finalAttrs.version;
+    hash = "sha256-Gp2r6PJiyNb+augDwS/vGPJfwb5U6pVYgSyhS9QlggY=";
   };
+
+  patches = [ ./fix-reify-test-signature.patch ];
 
   env.STARDUST_RES_PREFIXES = "${finalAttrs.src}/res";
 
-  cargoHash = "sha256-oM4nQUEc3iq1x4uRp8Kw5WtE/L5b6VlLOfElMT9Tk98=";
+  cargoHash = "sha256-2LT/Szwzs83Poe7BojmUFh9yyUEhSgHmBR5QaO/BE4g=";
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
-  };
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Flat window for Stardust XR";
     homepage = "https://stardustxr.org";
     license = lib.licenses.mit;
     mainProgram = "flatland";
-    maintainers = with lib.maintainers; [
-      pandapip1
-      technobaboo
-    ];
-    platforms = lib.platforms.linux;
+    teams = with lib.teams; [ stardust-xr ];
+    platforms = lib.platforms.unix;
   };
 })

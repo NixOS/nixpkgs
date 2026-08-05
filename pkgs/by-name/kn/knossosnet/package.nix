@@ -11,13 +11,13 @@
 
 buildDotnetModule rec {
   pname = "knossosnet";
-  version = "1.3.2";
+  version = "1.3.10";
 
   src = fetchFromGitHub {
     owner = "KnossosNET";
     repo = "Knossos.NET";
     tag = "v${version}";
-    hash = "sha256-Ss9xk7HiWBy6Ku8cMvhsxxCCkE8PbWmpSv7Rqk/l3bI=";
+    hash = "sha256-oIkeR3072Ye24BQRNidf1Lr0/2z6h+eljwTr9NMqq98=";
   };
 
   patches = [ ./dotnet-8-upgrade.patch ];
@@ -30,10 +30,6 @@ buildDotnetModule rec {
   enableParallelBuilding = false;
 
   runtimeDeps = [ openal ];
-
-  env = {
-    AVALONIA_TELEMETRY_OPTOUT = "1";
-  };
 
   nativeBuildInputs = [ copyDesktopItems ];
 

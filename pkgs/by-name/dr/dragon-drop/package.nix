@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       das_j
-      taliyahwebb
+      panicrune
     ];
     mainProgram = "dragon-drop";
     platforms = lib.platforms.linux;

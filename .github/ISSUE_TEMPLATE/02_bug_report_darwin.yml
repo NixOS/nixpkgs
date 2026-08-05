@@ -35,8 +35,8 @@ body:
         If you are using an older version, please update to the latest stable version and check if the issue persists before continuing this bug report.
       options:
         - "Please select a version."
-        - "- Unstable (26.05)"
-        - "- Stable (25.11)"
+        - "- Unstable (26.11)"
+        - "- Stable (26.05)"
       default: 0
     validations:
       required: true
@@ -99,7 +99,7 @@ body:
     attributes:
       label: "Are you using nix-darwin?"
       description: |
-        [`nix-darwin`](https://github.com/LnL7/nix-darwin) is a set of NixOS-like modules for macOS systems. Depending on your issue, this information may be relevant.
+        [`nix-darwin`](https://github.com/nix-darwin/nix-darwin) is a set of NixOS-like modules for macOS systems. Depending on your issue, this information may be relevant.
       options:
         - "Yes, I am using nix-darwin."
         - "No, I am not using nix-darwin."
@@ -134,6 +134,8 @@ body:
         - label: "I assert that this is not a [duplicate of an existing issue](https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue+label%3A%220.kind%3A+bug%22+label%3A%226.topic%3A+darwin%22). "
           required: true
         - label: "I assert that I have read the [NixOS Code of Conduct](https://github.com/NixOS/.github/blob/master/CODE_OF_CONDUCT.md) and agree to abide by it."
+          required: true
+        - label: "I assert that I have read the [automation/AI policy](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#automationai-policy) and that this issue report complies with it."
           required: true
   - type: "markdown"
     attributes:

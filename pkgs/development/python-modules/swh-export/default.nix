@@ -6,6 +6,7 @@
   setuptools-scm,
   boto3,
   click,
+  luigi,
   tqdm,
   pyorc,
   plyvel,
@@ -16,7 +17,7 @@
   swh-model,
   swh-storage,
   pytestCheckHook,
-  pytest-kafka,
+  pytest-click,
   pytest-mock,
   tzdata,
   pkgs,
@@ -24,7 +25,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "swh-export";
-  version = "1.8.0";
+  version = "1.11.8";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -33,7 +34,7 @@ buildPythonPackage (finalAttrs: {
     owner = "devel";
     repo = "swh-export";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-n97MMYn7EmTrv411YSxUD1+zfbFB8KOSns44N3NqqV8=";
+    hash = "sha256-wqUcoQddN0FJV673u/xcwNuNz/BB9AFWNFEuQPHyVDw=";
   };
 
   build-system = [
@@ -44,6 +45,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     boto3
     click
+    luigi
     tqdm
     pyorc
     plyvel
@@ -63,11 +65,14 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-kafka
+    pytest-click
     pytest-mock
     pkgs.zstd
     pkgs.pv
   ];
+
+  # Kafka tests use librdkafka's mock broker bound to the loopback interface.
+  __darwinAllowLocalNetworking = true;
 
   disabledTests = [
     # I don't know how to fix the following error

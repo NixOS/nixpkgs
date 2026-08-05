@@ -48,7 +48,24 @@ let
 
   hoogleWithPackages' = if withHoogle then hoogleWithPackages selectPackages else null;
 
-  packages = selectPackages haskellPackages ++ [ hoogleWithPackages' ];
+  # Catches obviously-wrong inputs (functions, strings, etc.) but lets
+  # non-Haskell derivations through; shellFor passes libraryFrameworkDepends
+  # and similar mixed inputs in, and those are dropped later by the
+  # closure-side `isHaskellLibrary` filter.
+  checkPackage =
+    p:
+    if p == null || lib.isDerivation p then
+      p
+    else
+      throw ''
+        ghcWithPackages: expected a derivation, got a ${builtins.typeOf p}.
+        A common cause is missing parentheses around an override, e.g.
+          (hp: [ dontCheck hp.foo ])
+        should be written as
+          (hp: [ (dontCheck hp.foo) ]).
+      '';
+
+  packages = map checkPackage (selectPackages haskellPackages ++ [ hoogleWithPackages' ]);
 
   isHaLVM = ghc.isHaLVM or false;
   ghcCommand' = "ghc";

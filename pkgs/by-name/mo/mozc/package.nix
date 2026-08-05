@@ -111,7 +111,7 @@ buildBazelPackage rec {
   ''
   + (lib.optionalString withIbus ''
     install -Dm555 "bazel-bin/unix/ibus/ibus_mozc"          "$out/lib/ibus-mozc/ibus-engine-mozc"
-    install -Dm555 "bazel-bin/unix/ibus/mozc.xml"           "$out/share/ibus/components/mozc.xml"
+    install -Dm555 "bazel-bin/unix/ibus/mozc.xml"           "$out/share/ibus/component/mozc.xml"
     install -d "$out/share/ibus-mozc/"
     for icon in $out/share/icons/mozc/*.png
     do
@@ -135,6 +135,7 @@ buildBazelPackage rec {
     description = "Japanese input method from Google";
     mainProgram = "mozc_emacs_helper";
     homepage = "https://github.com/google/mozc";
+    changelog = "https://github.com/google/mozc/releases/tag/${version}";
     license = lib.licenses.free;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [

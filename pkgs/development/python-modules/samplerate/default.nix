@@ -23,20 +23,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "samplerate";
-  version = "0.2.3";
+  version = "0.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tuxu";
     repo = "python-samplerate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7FAdIqsYCapmEAYiAuoS5m/jFExXZX3hn3kwxn9NWEc=";
+    hash = "sha256-wetpPAoCenzOo6pD3+F0YNb/fc1BvaeKiw325C19rS0=";
   };
-
-  patches = [
-    # https://github.com/tuxu/python-samplerate/pull/33
-    ./numpy-2.4-compat.patch
-  ];
 
   # unvendor pybind11, libsamplerate
   postPatch = ''

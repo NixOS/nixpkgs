@@ -3,6 +3,7 @@
   jdk11,
   jdk17,
   jdk21,
+  jdk25,
   nix-update-script,
 }:
 
@@ -28,17 +29,23 @@ let
       inherit (gradle) version;
 
       paths = [
-        (makeSetupHook { name = "gradle-setup-hook"; } (concatTextFile {
-          name = "setup-hook.sh";
-          files = [
-            (mitm-cache.setupHook)
-            (replaceVars ./setup-hook.sh {
-              # jdk used for keytool
-              inherit (gradle) jdk;
-              init_script = "${./init-build.gradle}";
-            })
-          ];
-        }))
+        (makeSetupHook
+          {
+            name = "gradle-setup-hook";
+            meta.license = lib.licenses.mit;
+          }
+          (concatTextFile {
+            name = "setup-hook.sh";
+            files = [
+              (mitm-cache.setupHook)
+              (replaceVars ./setup-hook.sh {
+                # jdk used for keytool
+                inherit (gradle) jdk;
+                init_script = "${./init-build.gradle}";
+              })
+            ];
+          })
+        )
         gradle
         mitm-cache
       ];
@@ -108,7 +115,6 @@ let
         "aarch64-linux"
         "i686-windows"
         "x86_64-cygwin"
-        "x86_64-darwin"
         "x86_64-linux"
         "x86_64-windows"
       ],
@@ -119,7 +125,7 @@ let
 
       # Put the update script in passthru. Should only be on a single attrpath
       # so that nixpkgs-update doesn't create duplicate PRs.
-      enableUpdateScript ? false,
+      updateScriptMajorVersion ? null,
     }@genArgs:
 
     {
@@ -300,19 +306,20 @@ let
               '';
         };
       };
-      passthru.jdk = defaultJava;
+      passthru.jdk = java;
       passthru.wrapped = callPackage wrapGradle {
         gradle-unwrapped = mkGradle genArgs;
       };
       passthru.updateScript =
-        if enableUpdateScript then
+        if updateScriptMajorVersion != null then
           nix-update-script {
             extraArgs = [
               "--url=https://github.com/gradle/gradle"
+              "--use-github-releases"
               # Gradle’s .0 releases are tagged as `vX.Y.0`, but the actual
-              # release version omits the `.0`, so we’ll wanto to only capture
-              # the version up but not including the the trailing `.0`.
-              "--version-regex=^v(\\d+\\.\\d+(?:\\.[1-9]\\d?)?)(\\.0)?$"
+              # release version omits the `.0`, so we’ll want to only capture
+              # the version up to but not including the trailing `.0`.
+              "--version-regex=^v(${updateScriptMajorVersion}\\.\\d+(?:\\.[1-9]\\d?)?)(\\.0)?$"
             ];
           }
         else
@@ -364,16 +371,16 @@ rec {
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_9 = mkGradle {
-    version = "9.4.0";
-    hash = "sha256-YOpyM1bYEmPoAC/sD8+eKw7uDAhQx6PXqwpj8szGAfM=";
-    defaultJava = jdk21;
+    version = "9.5.1";
+    hash = "sha256-uvwUG2Ga1jUP2XX8kDFW3VwVGZjMiwWOjBBEq197Ax8=";
+    defaultJava = jdk25;
+    updateScriptMajorVersion = "9";
   };
   gradle_8 = mkGradle {
     version = "8.14.4";
     hash = "sha256-8XcSmKcPbbWina9iN4xOGKF/wzybprFDYuDN9AYQOA0=";
     defaultJava = jdk21;
-    # Only enable this on *one* version to avoid duplicate PRs.
-    enableUpdateScript = true;
+    updateScriptMajorVersion = "8";
   };
   gradle_7 = mkGradle {
     version = "7.6.6";

@@ -18,7 +18,7 @@ let
     "rspamd"
     "octopus"
     "superlu"
-    "suitesparse_5_3"
+    "suitesparse"
     "scs"
     "scalapack"
     "petsc"
@@ -94,7 +94,7 @@ let
   blas64Users = [
     "rspamd"
     "sundials"
-    "suitesparse_5_3"
+    "suitesparse"
     "petsc"
     "cholmod-extra"
     "arpack"

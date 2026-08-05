@@ -7,6 +7,7 @@
   fetchFromGitHub,
   go,
   pykerberos,
+  hatchling,
   skein,
   sqlalchemy,
   traitlets,
@@ -15,7 +16,7 @@
 buildPythonPackage rec {
   pname = "dask-gateway-server";
   version = "2025.4.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
@@ -28,7 +29,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ go ];
 
-  propagatedBuildInputs = [
+  build-system = [ hatchling ];
+
+  dependencies = [
     aiohttp
     colorlog
     cryptography

@@ -4,15 +4,18 @@
   appimageTools,
   fetchurl,
   makeWrapper,
+  writeShellApplication,
+  curl,
+  common-updater-scripts,
 }:
 let
   pname = "clickup";
-  version = "3.5.120";
+  version = "3.5.185";
 
   src = fetchurl {
     # Using archive.org because the website doesn't store older versions of the software.
-    url = "https://web.archive.org/web/20250802083833/https://desktop.clickup.com/linux";
-    hash = "sha256-LVHgXqTxDTsnVJ3zx74TzaSrEs2OD0wl0eioPd4+484=";
+    url = "https://web.archive.org/web/20260323060753/https://desktop.clickup.com/linux";
+    hash = "sha256-szPbhY1vsEG0Zq4TD2I9qVTa4wAUYfoVA2O2xP4HGeE=";
   };
 
   appimage = appimageTools.wrapType2 {
@@ -52,6 +55,36 @@ stdenvNoCC.mkDerivation {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = lib.getExe (writeShellApplication {
+    name = "update-clickup";
+    runtimeInputs = [
+      curl
+      common-updater-scripts
+    ];
+    text = ''
+      upstream_version="$(curl --silent --location --range 0-0 --dump-header - --output /dev/null https://desktop.clickup.com/linux | grep --only-matching --extended-regexp '[0-9]+\.[0-9]+\.[0-9]+')"
+
+      current_version="$(nix-instantiate --eval --strict -A clickup.version | tr -d '"')"
+
+      if [[ "$current_version" = "$upstream_version" ]]; then
+        echo "clickup is already up-to-date at $current_version"
+        exit 0
+      fi
+
+      echo "Updating clickup from $current_version to $upstream_version"
+
+      echo "Saving new version to archive.org..."
+      archived_url="$(curl --silent --max-time 600 --output /dev/null --dump-header - "https://web.archive.org/save/https://desktop.clickup.com/linux" | grep --ignore-case '^location:' | tr -d '\r' | cut -d' ' -f2)"
+
+      if [[ -z "$archived_url" || "$archived_url" != *"web.archive.org/web/"* ]]; then
+        echo "error: failed to archive URL on archive.org" >&2
+        exit 1
+      fi
+
+      update-source-version clickup "$upstream_version" "" "$archived_url"
+    '';
+  });
 
   meta = {
     description = "All in one project management solution";

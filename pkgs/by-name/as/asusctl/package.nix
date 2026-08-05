@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitLab,
+  fetchFromGitHub,
   systemd,
   coreutils,
   gnugrep,
@@ -18,16 +18,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asusctl";
-  version = "6.3.4";
+  version = "6.3.8";
 
-  src = fetchFromGitLab {
-    owner = "asus-linux";
+  src = fetchFromGitHub {
+    owner = "OpenGamingCollective";
     repo = "asusctl";
     tag = finalAttrs.version;
-    hash = "sha256-1B4uKX8Aqorxh+QMsUEmSnO56zqYhUb6wLMXPAR5HQo=";
+    hash = "sha256-DXpuKZmjYKiQp8ULH39EYtY75muZ77YzwYmE/yF1wEY=";
   };
 
-  cargoHash = "sha256-aRsrA1j4nYp2rbQM2FbTfWVDkVfKFFa6L+DtW8mKcmk=";
+  cargoHash = "sha256-nZDpKuL+7IIuV5q/W4qWHa7C/HEoX5YaerUMcDQQVtg=";
 
   postPatch = ''
     files="
@@ -50,10 +50,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail /usr/bin/asusd $out/bin/asusd \
       --replace-fail /bin/sleep ${lib.getExe' coreutils "sleep"}
 
+    substituteInPlace data/asus-shutdown.service \
+      --replace-fail /usr/bin/asus-shutdown $out/bin/asus-shutdown
+
     substituteInPlace Makefile \
       --replace-fail /usr/bin/grep ${lib.getExe gnugrep}
 
-    substituteInPlace /build/asusctl-${finalAttrs.version}-vendor/sg-0.4.0/build.rs \
+    substituteInPlace /build/asusctl-${finalAttrs.version}-vendor/source-*/sg-*/build.rs \
       --replace-fail /usr/include ${lib.getDev glibc}/include
   '';
 
@@ -100,7 +103,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Control daemon, CLI tools, and a collection of crates for interacting with ASUS ROG laptops";
-    homepage = "https://gitlab.com/asus-linux/asusctl";
+    homepage = "https://github.com/OpenGamingCollective/asusctl";
     license = lib.licenses.mpl20;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [

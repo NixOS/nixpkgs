@@ -24,7 +24,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  # unittest based tests using yield, imcompatible with pytest
+  # unittest based tests using yield, incompatible with pytest
   # test_check_token_detects_valid_hotp_token,
   # test_check_token_detects_valid_totp_token and
   postPatch = ''

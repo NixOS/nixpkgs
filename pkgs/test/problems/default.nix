@@ -20,7 +20,17 @@ lib.mapAttrs (
       export NIX_STATE_DIR=$(mktemp -d)
       mkdir $out
 
-      command=(
+
+      command=()
+      ${lib.optionalString (builtins.pathExists (./cases + "/${name}/env.nix")) ''
+        command+=(
+          env
+          ${lib.concatMapAttrsStringSep "\n" (name: value: "${name}=${toString value}") (
+            import (./cases + "/${name}/env.nix")
+          )}
+        )
+      ''}
+      command+=(
         # FIXME: Using this version because it doesn't print a trace by default
         # Probably should have some regex-style error matching instead
         "${lib.getBin nix}/bin/nix-instantiate"
@@ -40,10 +50,15 @@ lib.mapAttrs (
       echo "$?" > $out/code
       echo "Command exited with code $(<$out/code)"
       remove-references-to -t ${nixFile} $out/stderr
-      if grep '(stack trace truncated.*)' $out/stderr; then
-        sed -i -n '/(stack trace truncated.*)/,$ p' $out/stderr
-      fi
+
       sed -i 's/^       //' $out/stderr
+
+      # extract only from the error message to the end, sometimes the stack
+      # traces are too short for nix to truncate them and then we've false
+      # negative CI results due to unrelated changes in nixpkgs.
+      if grep -q '^error: .' $out/stderr; then
+        sed -i -n '/^error: ./,$ p' $out/stderr
+      fi
     '';
     checker = runCommand "test-problems-check-${name}" { } ''
       if ! PAGER=cat ${lib.getExe gitMinimal} diff --no-index ${

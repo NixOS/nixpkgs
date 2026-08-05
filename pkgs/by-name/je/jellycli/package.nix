@@ -35,7 +35,7 @@ buildGoModule (finalAttrs: {
     '';
     homepage = "https://github.com/tryffel/jellycli";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ oxzi ];
+    maintainers = [ ];
     mainProgram = "jellycli";
   };
 })

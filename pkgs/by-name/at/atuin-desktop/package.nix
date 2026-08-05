@@ -31,19 +31,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoRoot = "./.";
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs)
-      # TMP: Include patches from root to ensure Cargo.lock consistency between root and deps.
-      patches
-      src
-      ;
-    hash = "sha256-eOFMUxXPQrhBthuQLgBsixe1vsniGUnoHb2EOhZQ/iY=";
+    inherit (finalAttrs) src;
+    hash = "sha256-68yQkgIVpqUo5tOcvxKh6NOkW565V94zHIZeI4q7nNA=";
   };
-
-  patches = [
-    # TMP: Until a duplicate entry for `tauri-build` dependency in `Cargo.lock` is resolved
-    #  (https://github.com/atuinsh/desktop/issues/364), remove one of the duplicated entries.
-    ./0001-fix-Remove-duplicate-dependency-entry-for-tauri-build.patch
-  ];
 
   node_modules = stdenv.mkDerivation {
     inherit (finalAttrs) src version;
@@ -90,7 +80,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       {
         aarch64-darwin = "sha256-YbjDAa2KG8U0ODqIYc5h7iNr5px+6+iforDrPomOVDo=";
         aarch64-linux = "sha256-JoUPAfBF4xdQxtx+J/VNpYomBACNsL7Wes0XXuGByGk=";
-        x86_64-darwin = "sha256-YzxQyZPfcQci8QsGEDRTcc2A9tmvem3cHkv/OBFlWDQ=";
         x86_64-linux = "sha256-w8fMS6f+F+23EtMjjl0RsHMm6b5jOXSwUDAc21vqLAg=";
       }
       .${stdenv.hostPlatform.system}
@@ -139,7 +128,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     cp -R ${finalAttrs.node_modules} node_modules/
 
-    # Bun takes executables from this folder
+    # Bun takes executables from this folder.
     chmod -R u+rw node_modules
     chmod -R u+x node_modules/.bin
 
@@ -163,7 +152,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=ui::viewport::tests::test_add_line_scrolling"
     "--skip=ui::viewport::tests::test_line_wrapping"
   ];
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   __structuredAttrs = true;
 

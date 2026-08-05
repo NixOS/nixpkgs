@@ -2,7 +2,7 @@
   lib,
   symlinkJoin,
   R,
-  makeWrapper,
+  makeBinaryWrapper,
   recommendedPackages,
   packages,
 }:
@@ -19,7 +19,7 @@ symlinkJoin {
   buildInputs = [ R ] ++ recommendedPackages ++ packages;
   paths = [ R ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   postBuild = ''
     cd ${R}/bin

@@ -5,8 +5,10 @@
   build,
   click,
   fetchFromGitHub,
+  fetchpatch,
   pip,
   pyproject-hooks,
+  pytest-mock,
   pytest-xdist,
   pytestCheckHook,
   setuptools,
@@ -17,18 +19,29 @@
 
 buildPythonPackage rec {
   pname = "pip-tools";
-  version = "7.5.2";
+  version = "7.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "pip-tools";
     tag = "v${version}";
-    hash = "sha256-+y4oXiLWGFIzIT75EZFpcYCX5HKeEyPsk+phTOyoKl8=";
+    hash = "sha256-MkYGD/ropw+MLLrk4gRZZguOv5extzNNXwTy6NQnCu0=";
   };
 
   patches = [
     ./fix-setup-py-bad-syntax-detection.patch
+
+    (fetchpatch {
+      name = "pip-26-compat.patch";
+      url = "https://github.com/jazzband/pip-tools/commit/cbe3c692f8977270e7ae6061c8159450a73c13fe.patch";
+      excludes = [
+        "changelog.d/2379.feature.md"
+        "pyproject.toml"
+        "tox.ini"
+      ];
+      hash = "sha256-wDma1FBnWnrRln0o7HaizMIkoQey6VdQzGh+q84cHxE=";
+    })
   ];
 
   build-system = [ setuptools-scm ];
@@ -45,6 +58,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
+    pytest-mock
     pytest-xdist
     pytestCheckHook
     tomli-w
@@ -74,6 +88,7 @@ buildPythonPackage rec {
     "test_iter_dependencies_after_combine_install_requirements"
     "test_iter_dependencies_after_combine_install_requirements_extras"
     "test_name_collision"
+    "test_build_project_metadata_upgrading_raises_error"
     # Assertion error
     "test_compile_recursive_extras"
     "test_compile_build_targets_setuptools_no_wheel_dep"

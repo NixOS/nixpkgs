@@ -54,6 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace CMakeLists.txt \
       --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)" \
       --replace-fail "cmake_policy(SET CMP0042 OLD)" ""
+
+    # jsoncpp 1.9.7 dropped char const*/String const& overloads in favor of std::string_view.
+    substituteInPlace cmake/CMakeCompilerSettings.cmake \
+      --replace-fail "-std=c++11" "-std=c++17"
   '';
 
   preConfigure = ''

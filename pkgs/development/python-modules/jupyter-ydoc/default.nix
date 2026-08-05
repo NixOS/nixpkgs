@@ -19,14 +19,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jupyter-ydoc";
-  version = "3.4.0";
+  version = "3.4.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jupyter-server";
     repo = "jupyter_ydoc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-k6qrkXnrz6gunqh6bx5/fLLfBBQOYJVOnJifP3aRmLI=";
+    hash = "sha256-HlYSPlYiHyVwJhsRY10SgotKa9ejlj0hlxbS+chtaBI=";
   };
 
   build-system = [
@@ -34,6 +35,9 @@ buildPythonPackage (finalAttrs: {
     hatchling
   ];
 
+  pythonRelaxDeps = [
+    "pycrdt"
+  ];
   dependencies = [
     anyio
     pycrdt

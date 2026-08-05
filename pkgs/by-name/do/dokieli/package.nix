@@ -16,19 +16,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dokieli";
-  version = "0-unstable-2026-03-17";
+  version = "0-unstable-2026-05-08";
 
   src = fetchFromGitHub {
     owner = "dokieli";
     repo = "dokieli";
-    rev = "ea9e0b4a4d374a87abc76365b44e7d24017206a6";
-    hash = "sha256-KJbnXRSUvKGm6q8koZYoNGMaSO5u8xCoA3hDWOCgIx4=";
+    rev = "f0372663098582c0310c9e16918a55cf000fbaf1";
+    hash = "sha256-jpIQcE1GdjvEsk6HPxjdFLbrxGWvVCaaG7T08HdMj7Y=";
   };
 
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-fhwuF0ELHw2avw8pnZUXPVkq+MJjuynFTBAU6O92mLM=";
+    hash = "sha256-SEoYmh7oHmJrVhShOjRyaClyQxW9S96GCI3ggRkW+6U=";
   };
 
   buildPhase = ''
@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Clientside editor for decentralised article publishing, annotations and social interactions";
-    homepage = "https://github.com/linkeddata/dokieli";
+    homepage = "https://github.com/dokieli/dokieli";
     license = with lib.licenses; [
       cc-by-40
       mit

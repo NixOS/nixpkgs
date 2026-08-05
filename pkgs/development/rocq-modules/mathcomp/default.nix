@@ -1,9 +1,9 @@
 ############################################################################
 # This file mainly provides the `mathcomp` derivation, which is            #
 # essentially a meta-package containing all core mathcomp libraries        #
-# (boot order fingroup algebra solvable field character). They can be      #
-# accessed individually through the passthrough attributes of mathcomp     #
-# bearing the same names (mathcomp.boot, etc).                             #
+# (boot order finite-group algebra solvable field group-representation).   #
+# They can be accessed individually through the passthrough attributes of  #
+# mathcomp bearing the same names (mathcomp.boot, etc).                    #
 ############################################################################
 # Compiling a custom version of mathcomp using `mathcomp.override`.        #
 # This is the replacement for the former `mathcomp_ config` function.      #
@@ -21,6 +21,7 @@
   single ? false,
   rocq-core,
   hierarchy-builder,
+  micromega-plugin,
   version ? null,
 }@args:
 
@@ -34,9 +35,11 @@ let
       inherit (lib.versions) range;
     in
     lib.switch rocq-core.rocq-version [
+      (case (range "9.2" "9.3") "2.6.0") # also compiles on Rocq 9.0 and 9.1
       (case (range "9.0" "9.1") "2.5.0")
     ] null;
   release = {
+    "2.6.0".sha256 = "sha256-SovoQ++213r8ISljts81j9E9G1vxVrFy+hhpsCw1fDY=";
     "2.5.0".sha256 = "sha256-M/6IP4WhTQ4j2Bc8nXBXjSjWO08QzNIYI+a2owfOh+8=";
   };
   releaseRev = v: "mathcomp-${v}";
@@ -45,22 +48,30 @@ let
   packages = {
     "boot" = [ ];
     "order" = [ "boot" ];
-    "fingroup" = [ "boot" ];
+    "finite-group" = [ "boot" ];
     "algebra" = [
       "order"
-      "fingroup"
+      "finite-group"
     ];
     "solvable" = [ "algebra" ];
     "field" = [ "solvable" ];
-    "character" = [ "field" ];
-    "all" = [ "character" ];
+    "group-representation" = [ "field" ];
+    "all" = [ "group-representation" ];
   };
 
   mathcomp_ =
     package:
     let
       mathcomp-deps = lib.optionals (package != "single") (map mathcomp_ packages.${package});
-      pkgpath = if package == "single" then "." else package;
+      cdpkg =
+        if package == "single" then
+          "cd ."
+        else if package == "group-representation" then
+          "cd group_representation || cd character"
+        else if package == "finite-group" then
+          "cd finite_group || cd fingroup"
+        else
+          "cd ${package}";
       pname = if package == "single" then "mathcomp" else "mathcomp-${package}";
       pkgallMake = ''
         echo "all.v"  > Make
@@ -94,7 +105,7 @@ let
             fi
           ''
           + ''
-            cd ${pkgpath}
+            ${cdpkg}
           ''
           + lib.optionalString (package == "all") pkgallMake;
 
@@ -131,8 +142,22 @@ let
           extraInstallFlags = [ "-f Makefile.coq" ];
         }
       );
-      # patched-derivation1 = derivation.overrideAttrs ...
+      patched-derivation1 = derivation.overrideAttrs (
+        o:
+        lib.optionalAttrs
+          (
+            lib.elem package [
+              "algebra"
+              "single"
+            ]
+            && o.version != null
+            && (o.version == "dev" || lib.versions.isGe "2.6.0" o.version)
+          )
+          {
+            propagatedBuildInputs = o.propagatedBuildInputs ++ [ micromega-plugin ];
+          }
+      );
     in
-    derivation;
+    patched-derivation1;
 in
 mathcomp_ (if single then "single" else "all")

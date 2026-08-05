@@ -13,11 +13,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "grooveauthor";
-  version = "1.1.3";
+  version = "1.1.4";
 
   src = fetchzip {
     url = "https://github.com/PerryAsleep/GrooveAuthor/releases/download/v${finalAttrs.version}/GrooveAuthor-v${finalAttrs.version}-linux-x64.tar.gz";
-    hash = "sha256-XuELs7Sj/M32ros5clKxKuVo/CdCja39Lwc+zsFGvFU=";
+    hash = "sha256-LjOOI1cUbYpl4tmY1eAZV3S99yQOb4V6LU9Gu/hTtnY=";
     stripRoot = false;
   };
 
@@ -70,7 +70,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --set DOTNET_ROOT ${dotnetCorePackages.runtime_8_0}/share/dotnet
+      --set DOTNET_ROOT ${dotnetCorePackages.runtime_10_0}/share/dotnet
       --suffix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
           alsa-lib

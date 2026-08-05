@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
+  versionCheckHook,
 
   # build-system
   setuptools,
@@ -15,6 +16,7 @@
   httpx,
   itsdangerous,
   packaging,
+  packaging-legacy,
   passlib,
   platformdirs,
   pluggy,
@@ -27,7 +29,6 @@
   # tests
   beautifulsoup4,
   nginx,
-  packaging-legacy,
   pytest-asyncio,
   pytestCheckHook,
   webtest,
@@ -41,14 +42,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "devpi-server";
-  version = "6.19.1";
+  version = "6.19.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "devpi";
     repo = "devpi";
     tag = "server-${finalAttrs.version}";
-    hash = "sha256-YFY2iLnORzFxnfGYU2kCpJL8CZi+lALIkL1bRpfd4NE=";
+    hash = "sha256-rAku3oHcmzFNA/MP/64382gCTgqopwjjy4S4HTEFZiY=";
   };
 
   postPatch = ''
@@ -71,6 +72,7 @@ buildPythonPackage (finalAttrs: {
     httpx
     itsdangerous
     packaging
+    packaging-legacy
     passlib
     platformdirs
     pluggy
@@ -83,10 +85,11 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ passlib.optional-dependencies.argon2;
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   nativeCheckInputs = [
     beautifulsoup4
     nginx
-    packaging-legacy
     pytest-asyncio
     pytestCheckHook
     webtest
@@ -141,5 +144,6 @@ buildPythonPackage (finalAttrs: {
       confus
       makefu
     ];
+    mainProgram = "devpi-server";
   };
 })

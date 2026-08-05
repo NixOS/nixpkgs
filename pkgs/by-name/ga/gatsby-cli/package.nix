@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "The Gatsby command line interface";
     homepage = "https://github.com/gatsbyjs/gatsby/tree/master/packages/gatsby-cli#readme";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "gatsby";
   };
 })

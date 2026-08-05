@@ -21,25 +21,25 @@
 # A pure Rust build would lack the Prettier plugin functionality.
 stdenv.mkDerivation (finalAttrs: {
   pname = "oxfmt";
-  version = "0.40.0";
+  version = "0.61.0";
 
   src = fetchFromGitHub {
     owner = "oxc-project";
     repo = "oxc";
     tag = "oxfmt_v${finalAttrs.version}";
-    hash = "sha256-A2cq1WgZg8csNGB3yFNo21450f46n4ZVblke1yqlBCc=";
+    hash = "sha256-uXkAD4+B8ghUbti1ts1RO+Jc0wQlpovl6+JzZA1JaRk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-Oz9u2+5lq+z9A81BEn2T4jvVMqf1uNXip+OH4AxiTG0=";
+    hash = "sha256-eZAJdMDC09nE9n2Arh72ZZUQjmMFdA68rPCmH2tSx2w=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
-    fetcherVersion = 2;
-    hash = "sha256-iO1MRUTO8Ce1YGH/qDWQmdfvTfvsmgwGBaybWw3wiu0=";
+    fetcherVersion = 3;
+    hash = "sha256-WZ4eYwQNeDF55ax3mW5swKafCDeYG5rWPPzJk5f+H1k=";
   };
 
   nativeBuildInputs = [
@@ -94,8 +94,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "JavaScript formatter with Prettier integration";
-    homepage = "https://github.com/oxc-project/oxc";
+    description = "High-performance formatter for the JavaScript ecosystem";
+    homepage = "https://oxc.rs/docs/guide/usage/formatter";
+    downloadPage = "https://github.com/oxc-project/oxc";
     changelog = "https://github.com/oxc-project/oxc/blob/${finalAttrs.src.tag}/apps/oxfmt/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];

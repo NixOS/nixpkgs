@@ -914,10 +914,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1ipbrgvf0pp6zxdk5ascp6i29aybz2bx9wdrlchjmpx6mhvkwfw1";
+      sha256 = "sha256-svG+g26WjMx4zPzid+p5xyqIYz8iMGeCwW/yP7QV0eE=";
       type = "gem";
     };
-    version = "1.3.5";
+    version = "1.3.8";
   };
   connection_pool = {
     groups = [ "default" ];
@@ -1020,6 +1020,20 @@
       type = "gem";
     };
     version = "3.5.0";
+  };
+  debug = {
+    dependencies = [
+      "irb"
+      "reline"
+    ];
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "sha256-LgsKxhGfIgem+Kx9SnPKjrTkQPZNoKMTbDA0MUbpUrY=";
+      type = "gem";
+    };
+    version = "1.11.1";
   };
   dentaku = {
     dependencies = [ "concurrent-ruby" ];
@@ -1648,10 +1662,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0dd66xccm6zg2szhcn740nvk3bhzknw169knr992qlf43hvsz2qa";
+      sha256 = "1k71h37jv0hn61sw9nrmph6mlw1y2d4bibk43163ndj7v1vfq76j";
       type = "gem";
     };
-    version = "4.3.3";
+    version = "4.3.6";
   };
   globalid = {
     dependencies = [ "activesupport" ];
@@ -3048,10 +3062,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0i24prs7yy1p1zdps2x1ksb7lmvbn2f0llxwdjdw3z2ksddx136b";
+      sha256 = "1px886qvws5zvqphy5cysj8vg01lym0w7vs9wq1h41pk1pjlxaln";
       type = "gem";
     };
-    version = "0.5.12";
+    version = "0.6.6";
   };
   net-pop = {
     dependencies = [ "net-protocol" ];

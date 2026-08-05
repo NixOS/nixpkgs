@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "diff-pdf";
-  version = "0.5.2";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "vslavik";
     repo = "diff-pdf";
     rev = "v${version}";
-    sha256 = "sha256-6aKF3Xqp/1BoHEiZVZJSemTjn5Qwwr3QyhsXOIjTr08=";
+    sha256 = "sha256-Cx1gp7wazaXB/LcUTe7Pas8iLl4TU1Jyt/1AeTu6YEA=";
   };
 
   nativeBuildInputs = [

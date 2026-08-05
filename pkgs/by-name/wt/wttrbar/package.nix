@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wttrbar";
-  version = "0.14.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "bjesus";
     repo = "wttrbar";
     tag = finalAttrs.version;
-    hash = "sha256-AgNWz8GiJKyfhvv6+8NZPMcaxPNaufw/k/yVVLoJl7U=";
+    hash = "sha256-Fr9Zlzssw69YUdiQA1AcqQdHVg1cZghuoVB1EgS1vak=";
   };
 
-  cargoHash = "sha256-ZDP9EEQiW57O/Pgjja1/4cb513naymx6quSRLgCpphM=";
+  cargoHash = "sha256-oumahPzbX8EjuQt1ke7yc1KAGayjsRcucsSm9uT6gOs=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];

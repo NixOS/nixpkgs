@@ -34,6 +34,8 @@ let
     else
       # FIXME fetching HEAD if no rev or tag is provided is problematic at best
       "HEAD";
+
+  hasColonInfix = lib.hasInfix ":";
 in
 
 lib.makeOverridable (
@@ -133,7 +135,7 @@ lib.makeOverridable (
         */
 
         let
-          finalHashHasColon = lib.hasInfix ":" finalAttrs.hash;
+          finalHashHasColon = hasColonInfix finalAttrs.hash;
           finalHashColonMatch = lib.match "([^:]+)[:](.*)" finalAttrs.hash;
         in
 
@@ -177,7 +179,8 @@ lib.makeOverridable (
           sparseCheckoutText =
             # Changed to throw on 2023-06-04
             assert (
-              lib.assertMsg (lib.isList finalAttrs.sparseCheckout) "Please provide directories/patterns for sparse checkout as a list of strings. Passing a (multi-line) string is not supported any more."
+              lib.isList finalAttrs.sparseCheckout
+              || throw "Please provide directories/patterns for sparse checkout as a list of strings. Passing a (multi-line) string is not supported any more."
             );
             assert finalAttrs.nonConeMode -> (finalAttrs.sparseCheckout != [ ]);
             # git-sparse-checkout(1) says:
@@ -251,7 +254,18 @@ lib.makeOverridable (
             ${if allowedRequisites != null then "allowedRequisites" else null} = allowedRequisites;
           };
 
-          inherit preferLocalBuild meta;
+          inherit preferLocalBuild;
+
+          meta = meta // {
+            identifiers = {
+              purlParts = {
+                type = "generic";
+                # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/generic-definition.md
+                spec = "${name}?vcs_url=${url}@${(lib.revOrTag rev tag)}";
+              };
+            }
+            // meta.identifiers or { };
+          };
 
           env = {
             NIX_PREFETCH_GIT_CHECKOUT_HOOK = finalAttrs.postCheckout;

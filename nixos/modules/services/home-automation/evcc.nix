@@ -41,7 +41,7 @@ in
     environmentFile = mkOption {
       type = nullOr path;
       default = null;
-      example = /run/keys/evcc;
+      example = "/run/keys/evcc";
       description = ''
         File with environment variables to pass into the runtime environment.
 

@@ -13,7 +13,7 @@
   openssh,
   bash-completion,
   fetchpatch,
-  withUtempter ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl,
+  withUtempter ? stdenv.hostPlatform.isLinux,
   libutempter,
   # build server binary only when set to false (useful for perlless systems)
   withClient ? true,

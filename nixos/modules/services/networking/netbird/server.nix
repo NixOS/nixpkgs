@@ -56,7 +56,7 @@ in
       }
       // (optionalAttrs cfg.coturn.enable rec {
         turnDomain = cfg.domain;
-        turnPort = config.services.coturn.tls-listening-port;
+        turnPort = config.services.coturn.listening-port;
         # We cannot merge a list of attrsets so we have to redefine the whole list
         settings = {
           TURNConfig.Turns = mkDefault [

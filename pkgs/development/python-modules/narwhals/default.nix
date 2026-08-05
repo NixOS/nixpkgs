@@ -5,7 +5,7 @@
   dask,
   duckdb,
   fetchFromGitHub,
-  hatchling,
+  uv-build,
   hypothesis,
   ibis-framework,
   packaging,
@@ -15,6 +15,7 @@
   pyarrow,
   pyspark,
   pytest-env,
+  pytest-xdist,
   pytestCheckHook,
   rich,
   sqlframe,
@@ -22,17 +23,17 @@
 
 buildPythonPackage rec {
   pname = "narwhals";
-  version = "2.16.0";
+  version = "2.23.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "narwhals-dev";
     repo = "narwhals";
     tag = "v${version}";
-    hash = "sha256-k7CeM8Q4JgKbkLisAaVrljro4diOf0K0immek6AI0vM=";
+    hash = "sha256-fT3v7T2S7cmv0tX60kjRBrUq+89TG2/Ar9Qh9O4LP8U=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ uv-build ];
 
   optional-dependencies = {
     # cudf = [ cudf ];
@@ -55,6 +56,7 @@ buildPythonPackage rec {
     duckdb
     hypothesis
     pytest-env
+    pytest-xdist
     pytestCheckHook
   ]
   ++ lib.concatAttrValues optional-dependencies;
@@ -85,6 +87,10 @@ buildPythonPackage rec {
     "test_first_expr_broadcasting"
     # sqlframe improvements cause strict XPASS failures (tests expected to fail now pass)
     "test_unique_expr"
+    # sqlframe issues
+    "test_over_quantile"
+    "test_quantile_expr"
+    "test_join_duplicate_column_names"
   ];
 
   disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [

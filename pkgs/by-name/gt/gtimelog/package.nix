@@ -76,6 +76,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     '';
     homepage = "https://gtimelog.org/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ oxzi ];
+    maintainers = [ ];
   };
 })

@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "metals";
-  version = "1.6.6";
+  version = "1.6.8";
 
   deps = stdenv.mkDerivation {
     name = "metals-deps-${finalAttrs.version}";
     buildCommand = ''
       export COURSIER_CACHE=$(pwd)
-      ${coursier}/bin/cs fetch org.scalameta:metals_2.13:${finalAttrs.version} \
+      ${coursier}/bin/cs fetch org.scalameta:metals_2.13:${finalAttrs.version} org.scalameta:metals-mcp_2.13:${finalAttrs.version} \
         -r bintray:scalacenter/releases \
         -r sonatype:snapshots > deps
       mkdir -p $out/share/java
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-Snx4JvWOTkJcihVRwj25op4BJqmChz+1fZH/PrCCbt0=";
+    outputHash = "sha256-LdZ6I7zOUTHgS/TTo0T6Dh+Kb3YpgJg8gK0UngsA7Gs=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +41,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeWrapper ${jre}/bin/java $out/bin/metals \
       --add-flags "${finalAttrs.extraJavaOpts} -cp $CLASSPATH scala.meta.metals.Main"
+
+    makeWrapper ${jre}/bin/java $out/bin/metals-mcp \
+      --add-flags "${finalAttrs.extraJavaOpts} -cp $CLASSPATH scala.meta.metals.McpMain"
   '';
 
   meta = {

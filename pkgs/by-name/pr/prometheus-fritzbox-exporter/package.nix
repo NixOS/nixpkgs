@@ -30,7 +30,6 @@ buildGoModule {
     maintainers = with lib.maintainers; [
       bachp
       flokli
-      sbruder
     ];
   };
 }

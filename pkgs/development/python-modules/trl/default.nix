@@ -5,35 +5,33 @@
 
   # build-system
   setuptools,
-  setuptools-scm,
 
   # dependencies
   accelerate,
   datasets,
+  packaging,
   rich,
   transformers,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "trl";
-  version = "0.27.0";
+  version = "0.24.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "trl";
-    tag = "v${version}";
-    hash = "sha256-NEvIWrirHqcLJpyA894NgNFPn/Svg+ND/xDMIRHW8d0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-t0wOuEKlcZzFlQeS4PYHykFsz+43hYc0gJ9u4emr8HI=";
   };
 
-  build-system = [
-    setuptools
-    setuptools-scm
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     accelerate
     datasets
+    packaging
     rich
     transformers
   ];
@@ -46,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Train transformer language models with reinforcement learning";
     homepage = "https://github.com/huggingface/trl";
-    changelog = "https://github.com/huggingface/trl/releases/tag/${src.tag}";
+    changelog = "https://github.com/huggingface/trl/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hoh ];
   };
-}
+})

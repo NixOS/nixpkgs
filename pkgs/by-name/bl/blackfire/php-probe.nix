@@ -16,57 +16,47 @@ let
   phpMajor = lib.versions.majorMinor php.version;
   inherit (stdenv.hostPlatform) system;
 
-  version = "1.92.51";
+  version = "2026.7.1";
 
   hashes = {
     "x86_64-linux" = {
       system = "amd64";
       hash = {
-        "8.1" = "sha256-HxVqkPupo3LrKfbQGOqoxpGJjFN17Jlkdya4BjBsBVw=";
-        "8.2" = "sha256-ssbMa4Wa27nwhJZ16FT+qrB4LH/HztOtCx+MI+i16Pg=";
-        "8.3" = "sha256-p9SXxHQGmsjtSeRFt9vYS5XK6nouT7qbqmlWbEpb2Hk=";
-        "8.4" = "sha256-ArI/SNjPIbjwEBMHvKCdSOkth8qqBWT6W0RnoWyWA+o=";
-        "8.5" = "sha256-5e4f9iEn5QPZY6Z+05O7QxTwaW+cjmP6nB5fkpValoM=";
+        "8.1" = "sha256-nkLVqnzw63ZftmVE1KWDPDSaiNkk8v9I+D1EipS6eYA=";
+        "8.2" = "sha256-PbZrm6fV28D4oyUW+OgRINK5ySJdnXO/ZBTliPtb4c8=";
+        "8.3" = "sha256-Yhl0UTQyQaUbMD3XAmzxqsmjxMRl2gr9S17SpFrTGto=";
+        "8.4" = "sha256-nR/um5sD0qrU91FCB3uYMqBc50IKGwsBwenJ9mSFpRA=";
+        "8.5" = "sha256-QzvH/VZ2SFSw5wioKMcM1nqcyOZq2Z1q6z3z0H/l3KE=";
       };
     };
     "i686-linux" = {
       system = "i386";
       hash = {
-        "8.1" = "sha256-mTw8v5DaP7D5qb3XwRZvx8XH4bTiuu2xzzo82KsrrZU=";
-        "8.2" = "sha256-Vtb0DVfPBC0JtK1XOPQ8KmA0Jq0pBBA3jkDaCV7icGg=";
-        "8.3" = "sha256-vnL8gfA6ejMcpnfKXalSOvl7vixwQLJBC3DTO4Dafow=";
-        "8.4" = "sha256-x9/BcZPJib0hal6M2vUVk1cLmN1gc3k6hypViTqForo=";
-        "8.5" = "sha256-aVmQ8vHS/oQeb44RyV5hggOt+VXLqP7wKDxgfpbopQQ=";
+        "8.1" = "sha256-MQBYuc3KSozbI4WPslsqWC8XwHeOOAZ46OlVxqwsNdk=";
+        "8.2" = "sha256-bJiDWWZlnHtXNg67bWjgpew5o8LIuFEPGvI5Ziooi+U=";
+        "8.3" = "sha256-WpRKROLWscmr7+IDqFpvEheaW5l2AEtCFfy46JTdHPw=";
+        "8.4" = "sha256-mMLPqB7U8iUtJbFxAOGU6ZEUd2AzFd0EeDScy1zmfwk=";
+        "8.5" = "sha256-472Bm0y/kJT75IEfno2LSG+dPDF6ODKEJURWWTQg0Fo=";
       };
     };
     "aarch64-linux" = {
       system = "arm64";
       hash = {
-        "8.1" = "sha256-S41qr5wU2dsK0IBsR/mTALguPQU+SKYVTLP7DwGQo40=";
-        "8.2" = "sha256-eQkvDRxwQNXlkZ9XzcSRfkKjp/CTZGaFwolXq6TZWaE=";
-        "8.3" = "sha256-GBjjx0cSJjYCOdDiArUPA4iqOcgpk3y9o0wi6b6UJgM=";
-        "8.4" = "sha256-s4zcHogsOy1GjTAGJuO6i7S6dp/lmRVzbjJk3/t8Zn4=";
-        "8.5" = "sha256-/lFwv6p9izXj7X+pqZe9clcp+wSYtzIPnwqeE/HFqNk=";
+        "8.1" = "sha256-16A1dICRcNMorBAKHvD9YK6oddmrfiOy3hrHpW2KfpA=";
+        "8.2" = "sha256-Y1+CEIGQHWPNfaXevTNNiOyeV2HwX+od277s+FNsTiM=";
+        "8.3" = "sha256-PrFcGI8RlhO54jDgqpdl+he8ly+nSUVHbX6zQDLuKtA=";
+        "8.4" = "sha256-HETb8SSeDITKaeazk8K0acZkEQUzIqVnS6F6ZBqbSSo=";
+        "8.5" = "sha256-cyuHH9X3w9d4tCSKDUqaYz8Cq0z0nQFZHIR9U1CMQl4=";
       };
     };
     "aarch64-darwin" = {
       system = "arm64";
       hash = {
-        "8.1" = "sha256-+ko465G24UELdMmEg4ZqOA9p0/0DSs3p+On6Gg2IVMM=";
-        "8.2" = "sha256-TERILY6E1vnl+L6t+oel+1H3HTHWTTeEb1rVXtriJ8w=";
-        "8.3" = "sha256-R5Ue3erVCe1gOPk1SuDRXGA05WPm1IisHCnbXfmjFcw=";
-        "8.4" = "sha256-qqbmZa4qd7Ck87GylHeHP9m3K47DAEiTxlKdtXEnzVo=";
-        "8.5" = "sha256-3d9glqfXCMXwtLZm8fuj9DVzCIczynX7MRxnbMC7/NE=";
-      };
-    };
-    "x86_64-darwin" = {
-      system = "amd64";
-      hash = {
-        "8.1" = "sha256-XvV6x8LKjR4j081PIdKpYCVl+ayXOmPsXf+gsMeFOro=";
-        "8.2" = "sha256-qxFWj1HpWokwzsFTiRhi4vw67H8yLwu1xbhja+fAxqY=";
-        "8.3" = "sha256-ffrwc48MZzX0MJHbaDmWQpday1LicOxhR2+fwylItD0=";
-        "8.4" = "sha256-P8j8gc8lZRbuVd1UmSpYmle88h50vhJfNxTZp3v9/Sg=";
-        "8.5" = "sha256-zy24hLCTajY+BVdkJCiXoy8abhQ82Ntw7Wuqn6zJKOQ=";
+        "8.1" = "sha256-IYKuYK4jLavOEmtvt/21m5u/BNuWQKQvqPcVYx4XEmE=";
+        "8.2" = "sha256-uitcd/WSs089ADBd5oEyJS7HObTY2N+e7CGrVy72fSE=";
+        "8.3" = "sha256-z6vDJ/k9acNM9HnQOL4OeaaQpjf/g9F85iwKHZdeCkw=";
+        "8.4" = "sha256-BzNouJIeKGzHG3rxf8u4TUOH/3mfjl4oJAdtkQbxu3Q=";
+        "8.5" = "sha256-XGgRPF4PpgOa3ZjGVIyYTZXrd0bOayek+zK6L9ZUyv4=";
       };
     };
   };
@@ -161,12 +151,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Blackfire Profiler PHP module";
     homepage = "https://blackfire.io/";
     license = lib.licenses.unfree;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ spk ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
       "i686-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

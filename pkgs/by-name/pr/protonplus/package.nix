@@ -20,13 +20,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "protonplus";
-  version = "0.5.17";
+  version = "0.5.21";
 
   src = fetchFromGitHub {
     owner = "Vysp3r";
     repo = "protonplus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RusqseGVmHw9mWerKo1ooGRx1WZqWhaBPTpcqZsQ7ME=";
+    hash = "sha256-elc2hDAiMT15bAZW4z55K9EsTRmHeU3YBccTx2GMTIE=";
   };
 
   nativeBuildInputs = [

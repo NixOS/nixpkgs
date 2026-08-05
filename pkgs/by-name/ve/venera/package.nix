@@ -50,7 +50,7 @@ flutter341.buildFlutterApplication (finalAttrs: {
   ];
 
   postInstall = ''
-    install -D --mode=0644 debian/gui/venera.png $out/share/icons/hicolor/1024x1024/apps/venera.png
+    install -D --mode=0644 debian/gui/venera.png $out/share/icons/venera.png
   '';
 
   extraWrapProgramArgs = ''
@@ -92,7 +92,7 @@ flutter341.buildFlutterApplication (finalAttrs: {
     description = "Comic reader that support reading local and network comics";
     homepage = "https://github.com/venera-app/venera";
     mainProgram = "venera";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };

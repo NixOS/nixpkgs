@@ -25,6 +25,9 @@ stdenv.mkDerivation {
     cryptopp
   ];
 
+  # Discards [[nodiscard]] return from ParseFromArray (protobuf 34).
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-result";
+
   meta = {
     description = "Generate chunked backups for Signal messages";
     homepage = "https://gitlab.com/gerum/signal-backup-deduplicator";

@@ -11,7 +11,7 @@ let
   # Patchset release number from rpmfusion, to more easily differentiate
   # versions and updates. See `wl-kmod.spec` file:
   # https://github.com/rpmfusion/wl-kmod/blob/master/wl-kmod.spec#L19
-  release = "59";
+  release = "63";
   hashes = {
     i686-linux = "sha256-T4twspOsjMXHDlca1dGHjQ8p0TOkb+eGmGjZwZtQWM0=";
     x86_64-linux = "sha256-X3l3TVvuyPdja1nA+wegMQju8eP9MkVjiyCFjHFBRL4=";
@@ -24,8 +24,8 @@ let
   rpmFusionPatches = fetchFromGitHub {
     owner = "rpmfusion";
     repo = "wl-kmod";
-    rev = "7786b3a3e54962124d24b4b61a6472bb0c4bbd94";
-    hash = "sha256-yEMsFaGBVs/rtDZLG8j8ZW1CV9SDtt00avoWxkJdLAU=";
+    rev = "5156986093f0f12ed04fe913b0a2f9e996c24274";
+    hash = "sha256-bH4d2VVhtwFS7xNfCsKhErx3pj2euJTncMvOBy8Fj9E=";
   };
   patchset = [
     "wl-kmod-001_wext_workaround.patch"
@@ -63,6 +63,9 @@ let
     "wl-kmod-033_disable_objtool_add_warning_unmaintained.patch"
     "wl-kmod-034_kernel_6.15_adaptation_replace_del_timer_with_timer_delete.patch"
     "wl-kmod-035_kernel_6.17_adaptation_fix_functions_prototypes.patch"
+    "wl-kmod-036_kernel_7.1_adaptation_replace_net_device_struct_with_wireless_dev_struct.patch"
+    "wl-kmod-037_kernel_6.13_remove_flush_scheduled_work.patch"
+    "wl-kmod-038_kernel_7.2_adaptation_remove_strncpy_function.patch"
   ];
 in
 stdenv.mkDerivation (finalAttrs: {

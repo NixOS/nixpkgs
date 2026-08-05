@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "xnldorker";
-  version = "4.2";
+  version = "4.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xnl-h4ck3r";
     repo = "xnldorker";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-g5o2H5FqP+ytu5eqmGUyn0lD9NQcCJ4+xQCmTk0Qxrg=";
+    hash = "sha256-2Oh341KTxD47aZVTikDMFs6e4HGfQ77BPptksw+6w7s=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

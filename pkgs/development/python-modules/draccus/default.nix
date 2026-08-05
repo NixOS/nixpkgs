@@ -39,6 +39,13 @@ buildPythonPackage rec {
     })
   ];
 
+  # Pass non-callable type= (typing.Union, X | Y) through argparse.
+  postPatch = ''
+    substituteInPlace draccus/wrappers/field_wrapper.py \
+      --replace-fail '_arg_options["type"] = tpe' \
+                     '_arg_options["type"] = tpe if callable(tpe) else str'
+  '';
+
   build-system = [
     setuptools
   ];

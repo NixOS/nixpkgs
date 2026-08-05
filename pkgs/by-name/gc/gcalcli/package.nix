@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-FU1EHLQ+/2sOGeeGwONsrV786kHTFfMel7ocBcCe+rI=";
   };
 
-  updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace gcalcli/argparsers.py \

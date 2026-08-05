@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "toot";
-  version = "0.51.1";
+  version = "0.52.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ihabunek";
     repo = "toot";
     tag = finalAttrs.version;
-    hash = "sha256-PZMh11MeJaKipt3E1reZQdL8+qz7gY/8bKleRPjshzI=";
+    hash = "sha256-lsX/34bdnAFWn/MNrQjrPIgkbgFusLvuK54Wc6N8bJU=";
   };
 
   nativeCheckInputs = with python3Packages; [ pytest ];
@@ -34,6 +34,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     click
     pillow
     term-image
+    pysocks
   ];
 
   checkPhase = ''

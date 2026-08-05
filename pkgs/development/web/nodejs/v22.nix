@@ -16,13 +16,15 @@ let
 
   gypPatches =
     if stdenv.buildPlatform.isDarwin then
-      callPackage ./gyp-patches.nix { patch_tools = false; }
+      [
+        ./gyp-patches-set-fallback-value-for-CLT-darwin.patch
+      ]
     else
       [ ];
 in
 buildNodejs {
-  version = "22.22.1";
-  sha256 = "87104b07e7acee748bcc5391e1bc69cf3571caa0fdfb8b1d6b5fd3f9599b7849";
+  version = "22.23.2";
+  sha256 = "bbe768df8d5815d7fa76124052985332452e0a4742d39f32027550d1aab8f6fb";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -61,13 +63,6 @@ buildNodejs {
       (fetchpatch2 {
         url = "https://github.com/nodejs/node/commit/ff3a028f8bf88da70dc79e1d7b7947a8d5a8548a.patch?full_index=1";
         hash = "sha256-LJcO3RXVPnpbeuD87fiJ260m3BQXNk3+vvZkBMFUz5w=";
-      })
-      # update tests for nghttp2 1.65
-      ./deprecate-http2-priority-signaling.patch
-      (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/a63126409ad4334dd5d838c39806f38c020748b9.diff?full_index=1";
-        hash = "sha256-lfq8PMNvrfJjlp0oE3rJkIsihln/Gcs1T/qgI3wW2kQ=";
-        includes = [ "test/*" ];
       })
     ];
 }

@@ -105,11 +105,11 @@ assert lib.all (p: p.enabled -> !(builtins.elem null p.buildInputs)) plugins;
 
 stdenv.mkDerivation rec {
   pname = "weechat";
-  version = "4.8.1";
+  version = "4.10.0";
 
   src = fetchurl {
     url = "https://weechat.org/files/src/weechat-${version}.tar.xz";
-    hash = "sha256-56wfvMcUWO1keq2odHmQkFy1v7k/2MzMvCqWlnOkKFo=";
+    hash = "sha256-w6fnxqVAHd6aRtAmT6RKowMsqYqoZBDEVNPeXGlQXFQ=";
   };
 
   # Why is this needed? https://github.com/weechat/weechat/issues/2031
@@ -199,7 +199,7 @@ stdenv.mkDerivation rec {
       on https://nixos.org/nixpkgs/manual/#sec-weechat .
     '';
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ ncfavier ];
+    maintainers = with lib.maintainers; [ abbe ];
     mainProgram = "weechat";
     platforms = lib.platforms.unix;
   };

@@ -48,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "I/O forwarding server that implements a variant of the 9P protocol";
+    homepage = "https://github.com/chaos/diod";
     maintainers = with lib.maintainers; [ rnhmjoj ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;

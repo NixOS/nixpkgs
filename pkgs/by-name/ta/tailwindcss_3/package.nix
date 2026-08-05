@@ -13,7 +13,6 @@ let
       aarch64-darwin = "macos-arm64";
       aarch64-linux = "linux-arm64";
       armv7l-linux = "linux-armv7";
-      x86_64-darwin = "macos-x64";
       x86_64-linux = "linux-x64";
     }
     .${system} or throwSystem;
@@ -23,7 +22,6 @@ let
       aarch64-darwin = "sha256-odDHmFdZrMygvxLlGsHcvw9s8v/7Yubg9i0JHEd6EKM=";
       aarch64-linux = "sha256-abE3i4EzGS19L+sSoRb6EtA1WU9Y2z7/IVh55K2M85s=";
       armv7l-linux = "sha256-cE59ka+6bh9jCImv0NfbNrRjTmKFEswUHVBKW+riiGA=";
-      x86_64-darwin = "sha256-bL2tdL53bAh/+l6aBXUSxUiY+f6IKNM2IhLf4y/JM6M=";
       x86_64-linux = "sha256-fST3+hkdIZO3jNX1pCpgk+FECVIZCFKfQtgLEf3h8dQ=";
     }
     .${system} or throwSystem;

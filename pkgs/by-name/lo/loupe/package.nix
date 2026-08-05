@@ -25,23 +25,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "loupe";
-  version = "49.2";
+  version = "50.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/loupe/${lib.versions.major finalAttrs.version}/loupe-${finalAttrs.version}.tar.xz";
-    hash = "sha256-WFPnXM66f6K+oBvic80vCjBhlB573+OgCLIzFxBnFCw=";
+    hash = "sha256-euT7rl4ZMWqmQMVvgNxaeRRIpi3Y8P8G4ppYutgTqZQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "loupe-deps-${finalAttrs.version}";
-    hash = "sha256-9jEz6hcdFUv5Daeh/0co1hHt49bE9kFAbFvnyiEaGJg=";
+    hash = "sha256-I4z5qjX10AUuwk+JdX/1ZU0uCAVPQj8HkEc+n9aMczE=";
   };
 
   postPatch = ''
     substituteInPlace src/meson.build --replace-fail \
       "'src' / rust_target / meson.project_name()," \
-      "'src' / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name()," \
+      "'src' / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name(),"
   '';
 
   nativeBuildInputs = [

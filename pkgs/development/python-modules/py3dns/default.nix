@@ -5,13 +5,13 @@
   flit-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py3dns";
   version = "4.0.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-mGUugOzsFDxg948OazQWMcqadWDt2N3fyGTAKQJhijk=";
   };
 
@@ -24,4 +24,4 @@ buildPythonPackage rec {
     homepage = "https://launchpad.net/py3dns";
     license = lib.licenses.psfl;
   };
-}
+})

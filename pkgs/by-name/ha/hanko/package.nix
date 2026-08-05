@@ -8,16 +8,19 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hanko";
-  version = "0.5.4";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "SRv6d";
     repo = "hanko";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9HRoXqZ3wdD6xf33tooEHiBWSZlggjUFomblwF4cFtA=";
+    hash = "sha256-tmspfsIIxYa9fTPhHJrVRUcpC8gZ0R4prTLTDstuwbg=";
   };
 
-  cargoHash = "sha256-wHvhlWi99igZ2gKAIcBYg207JrbQNCOjlcVttIy3MV0=";
+  cargoHash = "sha256-IcQtG29qTQl4U0HwG+kvPT07RhSgUADtejV7ObWyjG0=";
+
+  # Upstream tests require network access, which is unavailable in the sandbox.
+  doCheck = false;
 
   passthru = {
     updateScript = nix-update-script { };

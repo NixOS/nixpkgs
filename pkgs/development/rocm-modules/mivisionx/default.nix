@@ -40,13 +40,13 @@ stdenv.mkDerivation (finalAttrs: {
         "cpu"
     );
 
-  version = "7.2.0";
+  version = "7.2.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "MIVisionX";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-rdYQt001kFi9FjVL5R8XVzT+Y+rZVeMsbjXCJEB887A=";
+    hash = "sha256-LyiPcZi4vU0R+eI/AbYk8ioewuqET5lCtArtPltJ+Gw=";
   };
 
   patches = [
@@ -125,16 +125,12 @@ stdenv.mkDerivation (finalAttrs: {
     python3 -m sphinx -T -E -b html -d _build/doctrees -D language=en ../docs _build/html
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "Set of comprehensive computer vision and machine intelligence libraries, utilities, and applications";
     homepage = "https://github.com/ROCm/MIVisionX";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
     broken = useOpenCL;

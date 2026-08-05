@@ -6,15 +6,15 @@
   textual,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "textual-slider";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "TomJGooding";
     repo = "textual-slider";
-    rev = "91e64bafe3aa72f8d875e76b437d6af9320e039e";
-    hash = "sha256-lwN7igiEB8uC9e7qBSVLuKCpF41+Ni7ZJ3cVK19cEY8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Y/QKN89IWEdO9bTBQ3RFhrYShganUBQ6O5+HgsITFH0=";
   };
 
   pyproject = true;
@@ -29,4 +29,4 @@ buildPythonPackage {
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.lukegb ];
   };
-}
+})

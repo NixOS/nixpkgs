@@ -7,6 +7,7 @@
   pygobject3,
   libblockdev,
   bytesize,
+  dasbus,
   pyudev,
   dbus-python,
   util-linux,
@@ -34,14 +35,14 @@ let
 in
 buildPythonPackage rec {
   pname = "blivet";
-  version = "3.13.1";
+  version = "3.13.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "blivet";
     tag = "blivet-${version}";
-    hash = "sha256-5uhiCnwj5DyffsI2XEaLdvHMepjGWt2JlDmyZExSNRI=";
+    hash = "sha256-Yq8lIgu2S4L2PNeJ+ybn6daaPA2XlDJkUPihHiH2n+w=";
   };
 
   postPatch = ''
@@ -61,6 +62,7 @@ buildPythonPackage rec {
     pygobject3
     libblockdevPython
     bytesize
+    dasbus
     pyudev
     dbus-python
     util-linux
@@ -84,7 +86,10 @@ buildPythonPackage rec {
     stratisd
   ];
 
-  pythonImportsCheck = [ "blivet" ];
+  pythonImportsCheck = [
+    "blivet"
+    "blivet.devicelibs.lvm"
+  ];
 
   # Even unit tests require a system D-Bus.
   # TODO: Write a NixOS VM test?

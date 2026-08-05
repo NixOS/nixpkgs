@@ -2,36 +2,34 @@
   lib,
   stdenv,
   rustPlatform,
-  fetchFromGitHub,
-  libGL,
-  libinput,
-  pkgconf,
-  xkeyboard_config,
-  libgbm,
-  pango,
-  udev,
-  shaderc,
-  libglvnd,
-  vulkan-loader,
   autoPatchelfHook,
+  fetchFromGitHub,
   installShellFiles,
+  libGL,
+  libgbm,
+  libglvnd,
+  libinput,
   nix-update-script,
+  pango,
+  pkgconf,
+  sqlite,
+  udev,
+  vulkan-loader,
+  xkeyboard_config,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jay";
-  version = "1.11.1";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "mahkoh";
     repo = "jay";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-mm2bXxl9TaKwmeCwFz3IKznqjsfY8RKEVU/RK4zd63U=";
+    sha256 = "sha256-bdvcGO1E9fkmKiXQxc3nvISwjIAegY8g37HmxXolsmU=";
   };
 
-  cargoHash = "sha256-T7053eAH3IqkAxNZpYHdC6Z7JZtArrOqGMjoIccjemI=";
-
-  env.SHADERC_LIB_DIR = "${lib.getLib shaderc}/lib";
+  cargoHash = "sha256-5yjMPDh7liaa9+KntfdCzUXz4vWzTcAhFmXrnVZ+pjM=";
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -41,17 +39,26 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     libGL
-    xkeyboard_config
     libgbm
-    pango
-    udev
     libinput
-    shaderc
+    pango
+    sqlite
+    udev
+    vulkan-loader
+    xkeyboard_config
   ];
 
   runtimeDependencies = [
     libglvnd
-    vulkan-loader
+  ];
+
+  checkFlags = [
+    # these 5 tests fail in the lix sandbox because they rely on io_uring
+    "--skip=cpu_worker::tests::cancel"
+    "--skip=cpu_worker::tests::complete"
+    "--skip=eventfd_cache::tests::test"
+    "--skip=io_uring::ops::read_write_no_cancel::tests::cancel_in_kernel"
+    "--skip=io_uring::ops::read_write_no_cancel::tests::cancel_in_userspace"
   ];
 
   postInstall = ''
@@ -76,7 +83,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/mahkoh/jay";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = with lib.maintainers; [ uku3lig ];
     mainProgram = "jay";
   };
 })

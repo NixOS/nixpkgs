@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "asteval";
-  version = "1.0.8";
+  version = "1.0.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lmfit";
     repo = "asteval";
     tag = version;
-    hash = "sha256-qENmfqWaKhNKMTTYg2QrhL1eqhda8dUOP8b0Wcq4Ats=";
+    hash = "sha256-TJGKQA4jI6aRcwUbFH2t1pFs0XdN3MVSEfGovnzI2/Q=";
   };
 
   build-system = [ setuptools-scm ];

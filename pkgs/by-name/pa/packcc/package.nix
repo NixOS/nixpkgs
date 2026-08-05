@@ -11,13 +11,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "packcc";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "arithy";
     repo = "packcc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-uRvZr6mw9eI0a4JxFwDNyPBIrwTHgq3KmarDP/NmrEs=";
+    hash = "sha256-vBRi9Pxcy6MhdrbZd13Xgel3w3qiIrU8F3rO1GFqSgE=";
   };
 
   postPatch = ''

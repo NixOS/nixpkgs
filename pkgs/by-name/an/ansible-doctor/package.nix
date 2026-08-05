@@ -4,18 +4,19 @@
   python3Packages,
   fetchFromGitHub,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ansible-doctor";
-  version = "8.2.2";
+  version = "8.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thegeeklab";
     repo = "ansible-doctor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gezpY5iaFxNcngAyUnlVRPGo33zUgjdsm2zFlfWUWfA=";
+    hash = "sha256-3xdMTuy6Rtb2VwfzN6SV73UZmp+9fmU9SfPySHCayJg=";
   };
 
   build-system = with python3Packages; [
@@ -45,8 +46,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonImportsCheck = [ "ansibledoctor" ];
 
-  # ansible.errors.AnsibleError: Unable to create local directories(/private/var/empty/.ansible/tmp)
-  nativeCheckInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ versionCheckHook ];
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+    versionCheckHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   meta = {
     description = "Annotation based documentation for your Ansible roles";

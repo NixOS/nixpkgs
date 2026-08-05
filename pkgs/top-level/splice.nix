@@ -18,6 +18,7 @@ lib: pkgs: actuallySplice:
 
 let
   inherit (lib.customisation) mapCrossIndex renameCrossIndexFrom;
+  inherit (lib) mapAttrs;
 
   spliceReal =
     inputs:
@@ -31,43 +32,43 @@ let
         # The same pkgs sets one probably intends
         // inputs.buildHost
         // inputs.hostTarget;
-      merge = name: {
-        inherit name;
-        value =
-          let
-            defaultValue = mash.${name};
-            # `or {}` is for the non-derivation attsert splicing case, where `{}` is the identity.
-            value' = mapCrossIndex (x: x.${name} or { }) inputs;
+      merge =
+        name: defaultValue:
+        let
+          # `or {}` is for the non-derivation attsert splicing case, where `{}` is the identity.
+          value' = mapCrossIndex (x: x.${name} or { }) inputs;
 
-            augmentedValue = defaultValue // {
-              __spliced = lib.filterAttrs (k: v: inputs.${k} ? ${name}) value';
-            };
-            # Get the set of outputs of a derivation. If one derivation fails to
-            # evaluate we don't want to diverge the entire splice, so we fall back
-            # on {}
-            tryGetOutputs =
-              value0:
-              let
-                inherit (builtins.tryEval value0) success value;
-              in
-              getOutputs (lib.optionalAttrs success value);
-            getOutputs =
-              value: lib.genAttrs (value.outputs or (lib.optional (value ? out) "out")) (output: value.${output});
-          in
-          # The derivation along with its outputs, which we recur
-          # on to splice them together.
-          if lib.isDerivation defaultValue then
-            augmentedValue
-            // spliceReal (mapCrossIndex tryGetOutputs value' // { hostTarget = getOutputs value'.hostTarget; })
-          else if lib.isAttrs defaultValue then
-            spliceReal value'
-          else
-            # Don't be fancy about non-derivations. But we could have used used
-            # `__functor__` for functions instead.
-            defaultValue;
-      };
+          augmentedValue = defaultValue // {
+            __spliced = lib.filterAttrs (k: v: inputs.${k} ? ${name}) value';
+          };
+          # Get the set of outputs of a derivation. If one derivation fails to
+          # evaluate we don't want to diverge the entire splice, so we fall back
+          # on {}
+          tryGetOutputs =
+            value0:
+            let
+              inherit (builtins.tryEval value0) success value;
+            in
+            getOutputs (lib.optionalAttrs success value);
+          getOutputs =
+            value: lib.genAttrs (value.outputs or (lib.optional (value ? out) "out")) (output: value.${output});
+          outputNames = defaultValue.outputs or (lib.optional (defaultValue ? out) "out");
+          outputSplice = spliceReal (
+            mapCrossIndex tryGetOutputs value' // { hostTarget = getOutputs value'.hostTarget; }
+          );
+        in
+        # The derivation along with its outputs, which we recur
+        # on to splice them together.
+        if lib.isDerivation defaultValue then
+          augmentedValue // lib.genAttrs outputNames (out: outputSplice.${out})
+        else if lib.isAttrs defaultValue then
+          spliceReal value'
+        else
+          # Don't be fancy about non-derivations. But we could have used used
+          # `__functor__` for functions instead.
+          defaultValue;
     in
-    lib.listToAttrs (map merge (lib.attrNames mash));
+    mapAttrs merge mash;
 
   splicePackages =
     {

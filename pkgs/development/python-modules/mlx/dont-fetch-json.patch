@@ -1,8 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 2451aa65..f88d4889 100644
+index 6d24df02..113629ba 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -241,14 +241,6 @@ else()
+@@ -313,14 +313,6 @@ else()
    set(MLX_BUILD_ACCELERATE OFF)
  endif()
  
@@ -14,7 +14,6 @@ index 2451aa65..f88d4889 100644
 -target_include_directories(
 -  mlx PRIVATE $<BUILD_INTERFACE:${json_SOURCE_DIR}/single_include/nlohmann>)
 -
- add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/mlx)
- 
- target_include_directories(
-
+ # Add standalone JACCL library (RDMA over Thunderbolt distributed backend)
+ if(MLX_BUILD_CPU
+    AND ${CMAKE_SYSTEM_NAME} MATCHES "Darwin"

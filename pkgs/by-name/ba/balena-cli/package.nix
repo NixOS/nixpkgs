@@ -1,9 +1,10 @@
 {
   lib,
   stdenv,
+  balena-compose-parser,
   buildNpmPackage,
   fetchFromGitHub,
-  nodejs_latest,
+  nodejs_24,
   versionCheckHook,
   node-gyp,
   python3,
@@ -13,24 +14,24 @@
 
 let
   buildNpmPackage' = buildNpmPackage.override {
-    nodejs = nodejs_latest;
+    nodejs = nodejs_24;
   };
   node-gyp' = node-gyp.override {
-    nodejs = nodejs_latest;
+    nodejs = nodejs_24;
   };
 in
 buildNpmPackage' rec {
   pname = "balena-cli";
-  version = "24.0.3";
+  version = "25.1.6";
 
   src = fetchFromGitHub {
     owner = "balena-io";
     repo = "balena-cli";
     rev = "v${version}";
-    hash = "sha256-RoS0T8YuWHw+aXHkHURO+sQGJGaPP8olJ1Jau/lkh7g=";
+    hash = "sha256-ipl8eK9DpMGd4kyr46QTMUqYfr5ghOY3u5WS1GXVeIw=";
   };
 
-  npmDepsHash = "sha256-6rVP4cQ29W0UC20ULmXix/Ku8i5lqVjizVq+DkddJCs=";
+  npmDepsHash = "sha256-HAOZlCRcPjX0u9GBLaYR03Jb+bvg679MqcGGHkQ2FPM=";
 
   makeCacheWritable = true;
 
@@ -45,6 +46,10 @@ buildNpmPackage' rec {
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     udev
   ];
+
+  postInstall = ''
+    cp ${lib.getExe balena-compose-parser} $out/lib/node_modules/balena-cli/node_modules/@balena/compose-parser/bin/
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -71,7 +76,6 @@ buildNpmPackage' rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       kalebpace
-      doronbehar
     ];
     mainProgram = "balena";
   };

@@ -24,6 +24,7 @@
   prometheus-client,
   protobuf,
   psutil,
+  pyasn1,
   pydantic,
   python-dateutil,
   python-multipart,
@@ -59,14 +60,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "kserve";
-  version = "0.17.0";
+  version = "0.19.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "kserve";
     repo = "kserve";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gLYYuIy43cuXrCvjjXLHMim0m/EAwaivLdFhKuUdeX0=";
+    hash = "sha256-i8eFdXwNLPTdEj2MnNAMbefxQGkMLHNwZXxg8+zv6v0=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python/kserve";
@@ -105,6 +107,7 @@ buildPythonPackage (finalAttrs: {
     prometheus-client
     protobuf
     psutil
+    pyasn1
     pydantic
     python-dateutil
     python-multipart
@@ -176,6 +179,12 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
+    # AttributeError: 'google._upb._message.FieldDescriptor' object has no attribute 'label'
+    "test_health_handler"
+    "test_list_handler"
+    "test_liveness_handler"
+    "test_server_readiness"
+
     # Started failing since vllm was updated to 0.13.0
     # pydantic_core._pydantic_core.ValidationError: 1 validation error for RerankResponse
     # usage.prompt_tokens

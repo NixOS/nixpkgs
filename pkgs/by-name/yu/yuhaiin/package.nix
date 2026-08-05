@@ -28,6 +28,9 @@ buildGoModule (finalAttrs: {
     [
       "-s"
       "-w"
+      # pkg/net/proxy/websocket/x uses //go:linkname to access net/http.putBufioWriter,
+      # which Go 1.23+ restricts without a matching linkname on the stdlib side.
+      "-checklinkname=0"
       "-X ${module}/version.Version=v${finalAttrs.version}"
       "-X ${module}/version.GitCommit=${finalAttrs.src.rev}"
       "-X ${module}/version.BuildDate=unknown"

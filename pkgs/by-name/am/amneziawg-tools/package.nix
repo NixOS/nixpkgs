@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "amneziawg-tools";
-  version = "1.0.20260223";
+  version = "3.0.20260730";
 
   src = fetchFromGitHub {
     owner = "amnezia-vpn";
     repo = "amneziawg-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pHmuxlrbTqjwRrB7BShdC4ENw3iVQRRLH+Z2w8x+KeE=";
+    hash = "sha256-jIE2yrTeikJaa9wX7P+QAL/WmeWz6eGwlju9unMny1g=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";

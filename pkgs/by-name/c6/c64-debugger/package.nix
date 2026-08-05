@@ -46,7 +46,7 @@ stdenv.mkDerivation {
 
     # Build C64 debugger
     make -C MTEngine \
-      CFLAGS="-w -O2 -fcommon" \
+      CFLAGS="-w -O2 -fcommon -std=gnu17" \
       CXXFLAGS="-w -O2 --std=c++11" \
       DEFINES="-DRUN_COMMODORE64" \
       -j$NIX_BUILD_CORES
@@ -55,7 +55,7 @@ stdenv.mkDerivation {
 
     # Build 65XE debugger
     make -C MTEngine \
-      CFLAGS="-w -O2 -fcommon" \
+      CFLAGS="-w -O2 -fcommon -std=gnu17" \
       CXXFLAGS="-w -O2 --std=c++11" \
       DEFINES="-DRUN_ATARI" \
       -j$NIX_BUILD_CORES
@@ -64,7 +64,7 @@ stdenv.mkDerivation {
 
     # Build NES debugger
     make -C MTEngine \
-      CFLAGS="-w -O2 -fcommon" \
+      CFLAGS="-w -O2 -fcommon -std=gnu17" \
       CXXFLAGS="-w -O2 --std=c++11" \
       DEFINES="-DRUN_NES" \
       -j$NIX_BUILD_CORES

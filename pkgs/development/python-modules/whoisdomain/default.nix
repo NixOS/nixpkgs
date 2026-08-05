@@ -3,21 +3,28 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
+  tld,
+  whodap,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "whoisdomain";
-  version = "1.20260106.1";
+  version = "2.20260709.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mboot-github";
     repo = "WhoisDomain";
     tag = finalAttrs.version;
-    hash = "sha256-OQlOqDmBhqHVFs6U3lC1EryNu4UEi8fzKERkOE3uBaw=";
+    hash = "sha256-9oXKqMdZZFC0orrWMgcpL1mmJil3ENRY5fZjlISupF0=";
   };
 
   build-system = [ hatchling ];
+
+  dependencies = [
+    tld
+    whodap
+  ];
 
   pythonImportsCheck = [ "whoisdomain" ];
 

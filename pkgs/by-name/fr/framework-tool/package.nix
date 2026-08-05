@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "framework-tool";
-  version = "0.6.1";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "FrameworkComputer";
     repo = "framework-system";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lpd6686qN06WgJbs1PuCIFMRGEqBFtQqyVauKGG9jH4=";
+    hash = "sha256-criNeQcbMAWA8q27GClzCncbcj/zhD7yJylQnnFKMS4=";
   };
 
-  cargoHash = "sha256-y17Qlw8D7XWcStJ/54h1ARgODg1htzf9FVKjFZGERss=";
+  cargoHash = "sha256-sMhH/Qzc2Pf+hnKcCEmw37s8rLniqFnfZ72ptG8APOk=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ udev ];
@@ -29,7 +29,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [
       nickcao
-      leona
       kloenk
       johnazoidberg
     ];

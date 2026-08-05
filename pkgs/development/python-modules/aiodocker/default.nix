@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiodocker";
-  version = "0.26.0";
+  version = "0.27.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiodocker";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XpHEgBmcxYoOlzP16BtVOtfuqb+wj0LN0KxXj7p2atk=";
+    hash = "sha256-l7CATx+kqT9aG3c523ctK0ooJDaJHw1Hf8Ow7EqFkDs=";
   };
 
   build-system = [

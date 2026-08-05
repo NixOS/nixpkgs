@@ -51,7 +51,7 @@ flutter338.buildFlutterApplication rec {
     mpv-unwrapped
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-base
-    gst_all_1.gst-vaapi
+    gst_all_1.gst-plugins-bad
     gst_all_1.gstreamer
     libunwind
     orc
@@ -92,7 +92,6 @@ flutter338.buildFlutterApplication rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       heyimnova
-      lucasew
     ];
     mainProgram = "flet";
   };

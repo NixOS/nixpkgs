@@ -69,13 +69,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "linkwarden";
-  version = "2.13.5";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "linkwarden";
     repo = "linkwarden";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-S6MjWXiB3eJLy5V1kQsGD1zzce/trIGUwadDlDxZMiE=";
+    hash = "sha256-mcdLOHGm0UyNDCBA5aheUAfsUONL/Q/KeVtwXTVcsxQ=";
   };
 
   patches = [
@@ -89,12 +89,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
        pkgs/by-name/ne/nextjs-ollama-llm-ui/0002-use-local-google-fonts.patch
     */
     ./01-localfont.patch
+
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/linkwarden/linkwarden/blob/main/package.json#L3
+    ./02-yarn-4.14-support.patch
   ];
 
   missingHashes = ./missing-hashes.json;
   yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes;
-    hash = "sha256-TCjTG3nbS7uTJA9eVe0imR6+s73yu2FU8Vk3nwRKd4c=";
+    inherit (finalAttrs) src missingHashes patches;
+    hash = "sha256-riijYhsnIUXwl5AHYfhTiKHZFPc+ORDTLO2GUY7Yl+g=";
   };
 
   nativeBuildInputs = [
@@ -143,7 +147,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   postBuild = ''
     substituteInPlace node_modules/next/dist/server/image-optimizer.js \
-      --replace-fail 'this.cacheDir = (0, _path.join)(distDir, "cache", "images");' 'this.cacheDir = (0, _path.join)(process.env.LINKWARDEN_CACHE_DIR, "cache", "images");'
+      --replace-fail "this.cacheDir = (0, _path.join)(distDir, 'cache', 'images');" "this.cacheDir = (0, _path.join)(process.env.LINKWARDEN_CACHE_DIR, 'cache', 'images');"
   '';
 
   installPhase = ''

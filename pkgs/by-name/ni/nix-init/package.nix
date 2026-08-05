@@ -9,6 +9,7 @@
   bzip2,
   libgit2,
   openssl,
+  sqlite,
   zlib,
   zstd,
   spdx-license-list-data,
@@ -26,16 +27,16 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nix-init";
-  version = "0.3.4";
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-init";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tjVdiKaa6mGIkjvG6NYnKef9VBJS26FXHGjZ+Zxb0s0=";
+    hash = "sha256-9UEGGtNm5XpcBA/80v03XEunWshgM0M35TrJ79PQNG8=";
   };
 
-  cargoHash = "sha256-PUD3c/YnxYCVf/4C++MWxejHsLSS1ysWwiTRZVOp8Vc=";
+  cargoHash = "sha256-cRnyTuUIRUFPWUle7/bcqcZ9LjvhRuK2tF++hoMl+xs=";
 
   nativeBuildInputs = [
     curl
@@ -48,6 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     curl
     libgit2
     openssl
+    sqlite
     zlib
     zstd
   ];
@@ -79,6 +81,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env = {
     GEN_ARTIFACTS = "artifacts";
     LIBGIT2_NO_VENDOR = true;
+    LIBSQLITE3_SYS_USE_PKG_CONFIG = true;
     NIX = lib.getExe nix;
     NURL = lib.getExe nurl;
     ZSTD_SYS_USE_PKG_CONFIG = true;

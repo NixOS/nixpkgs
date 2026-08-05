@@ -22,11 +22,6 @@ let
     enablePython = true;
   };
 
-  pname = "nextpnr";
-
-  # Version 0.9 was patched (c7cfb) for Boost 1.87+ compatibility (boost system)
-  version = "0.9-unstable-2026-02-08";
-
   prjbeyond_src = fetchFromGitHub {
     owner = "YosysHQ-GmbH";
     repo = "prjbeyond-db";
@@ -35,65 +30,67 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
-  inherit pname version;
+stdenv.mkDerivation (finalAttrs: {
+  pname = "nextpnr";
+  version = "0.10";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo = "nextpnr";
-    rev = "35f14336c042a9aa86cc66221434262fbb02034e";
-    hash = "sha256-5Fn/Y+pjhnGFcZsCN7XZN0nPB9u/BIr+lxgrCC5pnpE=";
+    tag = "nextpnr-${finalAttrs.version}";
     fetchSubmodules = true;
+    hash = "sha256-goHHEvkBw+9s3RHGfQtRaueXRBnoI14TmfGmb+1WPAY=";
   };
+
+  # Don't use #embed macro for chipdb binary embeddings - otherwise getting spurious type narrowing errors.
+  # Maybe related to: https://github.com/llvm/llvm-project/issues/119256
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "check_cxx_compiler_hash_embed(HAS_HASH_EMBED CXX_FLAGS_HASH_EMBED)" ""
+  '';
 
   nativeBuildInputs = [
     cmake
     python3
   ]
-  ++ (lib.optional enableGui wrapQtAppsHook);
+  ++ lib.optionals enableGui [
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
     boostPython
     eigen
     python3Packages.apycula
   ]
-  ++ (lib.optional enableGui qtbase)
-  ++ (lib.optional stdenv.cc.isClang llvmPackages.openmp);
+  ++ lib.optionals enableGui [
+    qtbase
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+  ];
 
-  cmakeFlags =
-    let
-      # Use the commit hash for the internal versioning
-      rev = src.rev;
-      versionStr = if (lib.hasPrefix "nextpnr-" rev) then rev else "nextpnr-${lib.substring 0 7 rev}";
-    in
-    [
-      "-DCURRENT_GIT_VERSION=${versionStr}"
-      "-DARCH=generic;ice40;ecp5;himbaechel"
-      "-DBUILD_TESTS=ON"
-      "-DICESTORM_INSTALL_PREFIX=${icestorm}"
-      "-DTRELLIS_INSTALL_PREFIX=${trellis}"
-      "-DTRELLIS_LIBDIR=${trellis}/lib/trellis"
-      "-DGOWIN_BBA_EXECUTABLE=${python3Packages.apycula}/bin/gowin_bba"
-      "-DUSE_OPENMP=ON"
+  cmakeFlags = [
+    (lib.cmakeFeature "CURRENT_GIT_VERSION" finalAttrs.src.tag)
+    (lib.cmakeFeature "ARCH" "generic;ice40;ecp5;himbaechel")
+    (lib.cmakeBool "BUILD_TESTS" true)
+    (lib.cmakeFeature "ICESTORM_INSTALL_PREFIX" icestorm.outPath)
+    (lib.cmakeFeature "TRELLIS_INSTALL_PREFIX" trellis.outPath)
+    (lib.cmakeFeature "TRELLIS_LIBDIR" "${lib.getLib trellis}/lib/trellis")
+    (lib.cmakeFeature "GOWIN_BBA_EXECUTABLE" (lib.getExe' python3Packages.apycula "gowin_bba"))
+    (lib.cmakeBool "USE_OPENMP" true)
 
-      # gatemate excluded due to non-reproducible build https://github.com/YosysHQ/prjpeppercorn/issues/9
-      # xilinx excluded due to needing vivado https://github.com/f4pga/prjxray?tab=readme-ov-file#step-1
-      "-DHIMBAECHEL_UARCH=example;gowin;ng-ultra"
+    # gatemate excluded due to non-reproducible build https://github.com/YosysHQ/prjpeppercorn/issues/9
+    # xilinx excluded due to needing vivado https://github.com/f4pga/prjxray?tab=readme-ov-file#step-1
+    (lib.cmakeFeature "HIMBAECHEL_UARCH" "example;gowin;ng-ultra")
 
-      "-DHIMBAECHEL_GOWIN_DEVICES=all"
-      "-DHIMBAECHEL_PRJBEYOND_DB=${prjbeyond_src}"
-      # https://github.com/YosysHQ/nextpnr/issues/1578
-      # `Compatibility with CMake < 3.5 has been removed from CMake.`
-      "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
-    ]
-    ++ (lib.optional enableGui "-DBUILD_GUI=ON");
+    (lib.cmakeFeature "HIMBAECHEL_GOWIN_DEVICES" "all")
+    (lib.cmakeFeature "HIMBAECHEL_PRJBEYOND_DB" prjbeyond_src.outPath)
+    # https://github.com/YosysHQ/nextpnr/issues/1578
+    # `Compatibility with CMake < 3.5 has been removed from CMake.`
+    # "CMAKE_POLICY_VERSION_MINIMUM=3.5"
 
-  postPatch = ''
-    # Don't use #embed macro for chipdb binary embeddings - otherwise getting spurious type narrowing errors.
-    # Maybe related to: https://github.com/llvm/llvm-project/issues/119256
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "check_cxx_compiler_hash_embed(HAS_HASH_EMBED CXX_FLAGS_HASH_EMBED)" ""
-  '';
+    (lib.cmakeBool "BUILD_GUI" enableGui)
+  ];
 
   doCheck = true;
 
@@ -109,8 +106,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Place and route tool for FPGAs";
     homepage = "https://github.com/yosyshq/nextpnr";
+    changelog = "https://github.com/YosysHQ/nextpnr/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.isc;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

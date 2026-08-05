@@ -9,7 +9,7 @@
   zarith,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "kdl";
   version = "0.2.0";
 
@@ -34,7 +34,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "eilvelia";
     repo = "ocaml-kdl";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-0MiJe0XbWAlS2NvGxLplsgVfCNaA/7iCMx4+F+6FAtM=";
   };
 
@@ -44,4 +44,4 @@ buildDunePackage rec {
     maintainers = with lib.maintainers; [ toastal ];
     homepage = "https://github.com/eilvelia/ocaml-kdl";
   };
-}
+})

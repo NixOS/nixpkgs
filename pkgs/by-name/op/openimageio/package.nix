@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openimageio";
-  version = "3.1.11.0";
+  version = "3.1.15.0";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenImageIO";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7VP/XSYti8YbFQwofAXAolsHc0rEHw14oqN0359LYJg=";
+    hash = "sha256-ebB9f0QkW83ZT6ydbpV2srvSaFayw1OM3HjI8rqPL4k=";
   };
 
   outputs = [

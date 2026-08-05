@@ -1,9 +1,9 @@
 {
   lib,
   buildPythonPackage,
-  fetchpatch,
   fetchPypi,
   setuptools,
+  setuptools-scm,
   docutils,
   jinja2,
   nbconvert,
@@ -21,14 +21,11 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-0HZZCDmajuK1e+euiBzy6ljWbbOve78z5utI+DvqVJU=";
   };
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/spatialaudio/nbsphinx/commit/a921973a5d8ecc39c6e02184572b79ab72c9978c.patch";
-      hash = "sha256-uxfSaOESWn8uVcUm+1ADzQgMQDEqaTs0TbfNYsS+E6I=";
-    })
-  ];
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     docutils

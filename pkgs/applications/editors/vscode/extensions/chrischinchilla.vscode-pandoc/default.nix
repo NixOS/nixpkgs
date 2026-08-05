@@ -10,8 +10,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "vscode-pandoc";
     publisher = "chrischinchilla";
-    version = "0.7.1";
-    hash = "sha256-sGZ0o3lyGs1N8v1gYcdsFYYQwNeMChW881EXe6NoBgU=";
+    version = "0.7.3";
+    hash = "sha256-TGkNYA96mzFtUoM+XPKXJ/AM+hbiLc6Lvk5YDxFUwcI=";
   };
   nativeBuildInputs = [
     jq

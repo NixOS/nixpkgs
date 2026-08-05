@@ -23,7 +23,7 @@ buildPythonPackage rec {
   # pythonRelaxDeps seems not taking effect for the build-system dependencies
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'hatchling==1.26.3' 'hatchling' \
+      --replace-fail 'hatchling==1.26.3' 'hatchling'
   '';
 
   nativeCheckInputs = [

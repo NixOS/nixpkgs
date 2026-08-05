@@ -51,7 +51,10 @@ in
           freeformType = yaml.type;
           options = {
             sso_providers = mkOption {
-              description = "Configure OIDC single sign-on providers.";
+              description = ''
+                Configure OIDC single sign-on providers.
+                Main documentation can be found [here](https://warpgate.null.page/sso).
+              '';
               default = [ ];
               type = listOf (submodule {
                 freeformType = yaml.type;
@@ -62,11 +65,39 @@ in
                   };
                   label = mkOption {
                     description = "SSO provider name displayed on login page.";
-                    type = str;
+                    default = null;
+                    type = nullOr str;
+                  };
+                  auto_create_users = mkOption {
+                    description = "Whether to create user automatically at first SSO login.";
+                    default = false;
+                    type = bool;
                   };
                   provider = mkOption {
-                    description = "SSO provider configurations.";
+                    description = ''
+                      SSO provider configurations.
+                      See [here](https://github.com/warp-tech/warpgate/blob/ffc755f0137944bd39cf4cbce90f4279da500943/config-schema.json#L430) for all acceptable options.
+                    '';
                     type = attrsOf yaml.type;
+                  };
+                  return_domain_whitelist = mkOption {
+                    description = ''
+                      Controls the SSO return URL supplied to SSO provider.
+                      This will also required you to connect to this instance via whitelisted domain when doing SSO login.
+                    '';
+                    default = null;
+                    type = nullOr (listOf str);
+                  };
+                  return_url_prefix = mkOption {
+                    description = ''
+                      Controls the SSO return URL supplied to SSO provider.
+                      Useful for providers that do not allow the @ sign in the URL (e.g. Azure).
+                    '';
+                    default = "@";
+                    type = enum [
+                      "@"
+                      "_"
+                    ];
                   };
                 };
               });
@@ -105,6 +136,7 @@ in
               description = ''
                 Configure the domain name of this Warpgate instance.
                 See [HTTP domain binding](https://warpgate.null.page/http-domain-binding/).
+                This option is considered legacy, please use protocol specific `external_host` instead.
               '';
               default = null;
               type = nullOr str;
@@ -127,6 +159,11 @@ in
                 description = "Listen endpoint of SSH listener.";
                 default = "[::]:2222";
                 type = str;
+              };
+              external_host = mkOption {
+                description = "The SSH listener is reachable via this domain name externally.";
+                default = null;
+                type = nullOr str;
               };
               external_port = mkOption {
                 description = "The SSH listener is reachable via this port externally.";
@@ -163,6 +200,11 @@ in
                 description = "Listen endpoint of HTTP listener.";
                 default = "[::]:8888";
                 type = str;
+              };
+              external_host = mkOption {
+                description = "The HTTP listener is reachable via this domain name externally.";
+                default = null;
+                type = nullOr str;
               };
               external_port = mkOption {
                 description = "The HTTP listener is reachable via this port externally.";
@@ -239,6 +281,11 @@ in
                 default = "[::]:33306";
                 type = str;
               };
+              external_host = mkOption {
+                description = "The MySQL listener is reachable via this domain name externally.";
+                default = null;
+                type = nullOr str;
+              };
               external_port = mkOption {
                 description = "The MySQL listener is reachable via this port externally.";
                 default = null;
@@ -266,6 +313,11 @@ in
                 default = "[::]:55432";
                 type = str;
               };
+              external_host = mkOption {
+                description = "The PostgreSQL listener is reachable via this domain name externally.";
+                default = null;
+                type = nullOr str;
+              };
               external_port = mkOption {
                 description = "The PostgreSQL listener is reachable via this port externally.";
                 default = null;
@@ -282,9 +334,59 @@ in
                 type = str;
               };
             };
+            kubernetes = {
+              enable = mkOption {
+                description = "Whether to enable Kubernetes listener.";
+                default = false;
+                type = bool;
+              };
+              listen = mkOption {
+                description = "Listen endpoint of Kubernetes listener.";
+                default = "[::]:8443";
+                type = str;
+              };
+              external_host = mkOption {
+                description = "The Kubernetes listener is reachable via this domain name externally.";
+                default = null;
+                type = nullOr str;
+              };
+              external_port = mkOption {
+                description = "The Kubernetes listener is reachable via this port externally.";
+                default = null;
+                type = nullOr str;
+              };
+              certificate = mkOption {
+                description = "Path to Kubernetes listener certificate.";
+                default = "/var/lib/warpgate/tls.certificate.pem";
+                type = str;
+              };
+              key = mkOption {
+                description = "Path to Kubernetes listener private key.";
+                default = "/var/lib/warpgate/tls.key.pem";
+                type = str;
+              };
+              session_max_age = mkOption {
+                description = "How long until a logged in session expires.";
+                default = "30m";
+                type = str;
+              };
+            };
             log = {
+              format = mkOption {
+                description = "The format Warpgate emits logs in.";
+                default = "text";
+                type = enum [
+                  "text"
+                  "json"
+                ];
+              };
+              audit_retention = mkOption {
+                description = "How long Warpgate keeps its audit logs.";
+                default = "1year";
+                type = str;
+              };
               retention = mkOption {
-                description = "How long Warpgate keep its logs.";
+                description = "How long Warpgate keeps its non-audit logs and session recordings.";
                 default = "7days";
                 type = str;
               };
@@ -296,17 +398,6 @@ in
                 default = null;
                 type = nullOr str;
               };
-            };
-            config_provider = mkOption {
-              description = ''
-                Source of truth of users.
-                DO NOT change this, Warpgate only implemented database provider.
-              '';
-              default = "database";
-              type = enum [
-                "file"
-                "database"
-              ];
             };
           };
         };
@@ -371,6 +462,10 @@ in
         {
           assertion = !((cfg.databaseUrlFile == null) && (cfg.settings.database_url == null));
           message = "Either databaseUrlFile or settings.database_url must be set; Set the other to null.";
+        }
+        {
+          assertion = !(lib.hasAttr "config_provider" cfg.settings);
+          message = "`services.warpgate.settings.config_provider` is a legacy option that has been removed since 0.14.0. Please do not set this option.";
         }
       ];
 

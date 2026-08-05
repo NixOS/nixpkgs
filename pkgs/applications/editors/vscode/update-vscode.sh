@@ -12,7 +12,7 @@ currentVersion=$(nix eval --raw -f . vscode.version)
 if [[ -n "$version" ]]; then
   latestVersion="$version"
 else
-  latestVersion=$(curl --fail --silent https://api.github.com/repos/Microsoft/vscode/releases | jq --raw-output 'map(select(.prerelease==false)) | .[].tag_name' | sort -V | tail -n1)
+  latestVersion=$(curl --fail --silent https://api.github.com/repos/Microsoft/vscode/releases | jq --raw-output 'map(select(.prerelease==false)) | .[].tag_name' | grep -E '^[0-9]+\.[0-9]+(\.[0-9]+)?$' | sort -V | tail -n1)
   if ! [[ "$latestVersion" =~ ^[0-9]+\.[0-9]+(\.[0-9]+)?$ ]]; then
     echo "Error: Invalid version from GitHub API: $latestVersion"
     exit 1

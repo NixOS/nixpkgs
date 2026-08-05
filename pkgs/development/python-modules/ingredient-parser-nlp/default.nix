@@ -8,21 +8,20 @@
   nltk,
   numpy,
   pint,
-  python-crfsuite,
 
   pytestCheckHook,
   nltk-data,
 }:
 buildPythonPackage rec {
   pname = "ingredient-parser-nlp";
-  version = "2.5.0";
+  version = "2.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strangetom";
     repo = "ingredient-parser";
     tag = version;
-    hash = "sha256-xJ+WuTi/vihuliwSOvFWXk23uMUPUQIGP/WeaChwL4U=";
+    hash = "sha256-WodKuK4CaBipKxLQyOgQ0sFfTDzS/F0URgkoQaFNoNc=";
   };
 
   build-system = [ setuptools ];
@@ -31,7 +30,6 @@ buildPythonPackage rec {
     nltk
     numpy
     pint
-    python-crfsuite
   ];
 
   nativeCheckInputs = [

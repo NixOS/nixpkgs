@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl gnused common-updater-scripts jq prefetch-npm-deps unzip nix-prefetch
+#!nix-shell -i bash -p curl gnused common-updater-scripts jq prefetch-npm-deps
 # shellcheck shell=bash
 set -euo pipefail
 
@@ -17,7 +17,7 @@ playwright_driver_file="$root/driver.nix"
 playwright_raw_repo_url="https://raw.githubusercontent.com/microsoft/playwright"
 playwright_mcp_package_file="$root/../../../by-name/pl/playwright-mcp/package.nix"
 browser_names=(chromium chromium-headless-shell firefox webkit ffmpeg)
-browser_systems=(x86_64-linux aarch64-linux x86_64-darwin aarch64-darwin)
+browser_systems=(x86_64-linux aarch64-linux aarch64-darwin)
 
 github_api_get() {
     curl "${github_api_curl_args[@]}" -fsSL "$1"
@@ -31,8 +31,8 @@ python_version=$(github_api_get https://api.github.com/repos/microsoft/playwrigh
 # Most of the time, this should be the latest stable release of the Node-based
 # Playwright version, but upstream occasionally ships additional npm-only patch
 # releases. Resolve the latest patch in the same major.minor series.
-setup_py_url="https://github.com/microsoft/playwright-python/raw/v${python_version}/setup.py"
-python_driver_version=$(curl -fsSL "$setup_py_url" | grep '^driver_version =' | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+')
+driver_version_url="https://github.com/microsoft/playwright-python/raw/v${python_version}/DRIVER_VERSION"
+python_driver_version=$(curl -fsSL "$driver_version_url" | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+')
 python_major_minor=$(major_minor "$python_driver_version")
 resolve_driver_version_latest_patch() {
     local mm_escaped
@@ -45,7 +45,7 @@ resolve_driver_version_latest_patch() {
 }
 driver_version="$(resolve_driver_version_latest_patch)"
 : "${driver_version:?failed to resolve driver version from npm for python major.minor ${python_major_minor}}"
-: "${python_driver_version:?failed to resolve driver_version from ${setup_py_url}}"
+: "${python_driver_version:?failed to resolve driver_version from ${driver_version_url}}"
 
 # TODO: skip if update-source-version reported the same version
 update-source-version playwright-driver "$driver_version"
@@ -103,10 +103,19 @@ replace_sha() {
 prefetch_browser() {
     local url="$1"
     local strip_root="$2"
+    local fake="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+    local expr
+    local out
 
-    # nix-prefetch is used to obtain sha with `stripRoot = false`
-    # doesn't work on macOS https://github.com/msteen/nix-prefetch/issues/53
-    nix-prefetch --option extra-experimental-features flakes -q "{ stdenv, fetchzip }: stdenv.mkDerivation { name=\"browser\"; src = fetchzip { url = \"$url\"; stripRoot = $strip_root; }; }"
+    # Use real fetchzip via fake-hash trick. nix-prefetch wrapper is broken on
+    # macOS (msteen/nix-prefetch#53), so parse the "got:" line from the
+    # mismatch error of a fixed-output derivation instead.
+    expr="(import \"$repo_root\" {}).fetchzip { url = \"$url\"; stripRoot = $strip_root; hash = \"$fake\"; }"
+    if out=$(nix-build --no-out-link -E "$expr" 2>&1); then
+        echo "prefetch_browser: unexpected build success for $url" >&2
+        return 1
+    fi
+    echo "$out" | grep -Eo 'got:[[:space:]]+sha256-[A-Za-z0-9+/=]+' | awk '{print $NF}' | head -n1
 }
 
 browser_download_info() {

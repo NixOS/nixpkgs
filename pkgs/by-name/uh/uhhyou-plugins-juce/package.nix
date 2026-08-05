@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/ryukau/UhhyouPluginsJuce";
     description = "A collection of VST3 effect plugins";
-    license = [ lib.licenses.agpl3Only ];
+    license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ magnetophon ];
     platforms = lib.platforms.linux;
   };

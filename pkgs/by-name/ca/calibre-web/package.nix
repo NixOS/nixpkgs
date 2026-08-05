@@ -127,14 +127,18 @@ python3Packages.buildPythonApplication rec {
   pythonRelaxDeps = [
     "apscheduler"
     "bleach"
+    "certifi"
+    "chardet"
     "cryptography"
     "flask"
     "flask-limiter"
     "lxml"
     "pypdf"
     "regex"
+    "requests"
     "tornado"
     "unidecode"
+    "wand"
   ];
 
   nativeCheckInputs = lib.concatAttrValues optional-dependencies;
@@ -153,7 +157,7 @@ python3Packages.buildPythonApplication rec {
     # changelog = "https://github.com/janeczku/calibre-web/releases/tag/${src.tag}";
     changelog = "https://github.com/janeczku/calibre-web/compare/0.6.26...${src.rev}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ pborzenkov ];
+    maintainers = [ ];
     mainProgram = "calibre-web";
     platforms = lib.platforms.all;
   };

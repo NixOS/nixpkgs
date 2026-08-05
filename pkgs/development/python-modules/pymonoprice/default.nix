@@ -20,6 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-kyFOWG/Jvn+h9ludzd2Zul9/lkwPxReH76nnDIGD+fM=";
   };
 
+  patches = [
+    # https://github.com/etsinko/pymonoprice/pull/14
+    ./python-3.14-compat.patch
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [

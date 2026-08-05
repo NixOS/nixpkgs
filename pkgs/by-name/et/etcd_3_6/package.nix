@@ -1,9 +1,7 @@
 {
-  applyPatches,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  k3s,
   lib,
   nixosTests,
   stdenv,
@@ -11,19 +9,17 @@
 }:
 
 let
-  version = "3.6.8";
-  etcdSrcHash = "sha256-dNoQ+KKHZoi9GAqjyKPOpEJUwN6FID1tKfMiMknG7Dc=";
-  etcdCtlVendorHash = "sha256-lxFvpEGsp/HS0p54JrjBps7C/c7QR2QFQXU81sO9cPU=";
-  etcdUtlVendorHash = "sha256-6vzClDji9O2SGnKL3lsv3AUbCt/BicsDy1sPeuPdGXk=";
-  etcdServerVendorHash = "sha256-4vz63r05uZOzFQYA9jz9HLsQEDFL30cOETmV/AZanmY=";
+  version = "3.6.14";
+  etcdSrcHash = "sha256-kALMdhbZSzc+WLAjiSFQL093TTm/sQ2C2keQch8cB7E=";
+  etcdCtlVendorHash = "sha256-9aOCatgY5ov/b4NuYlK6osSP06WavUXMnf+UZHG3Qrc=";
+  etcdUtlVendorHash = "sha256-ABDOp5QenMh4sCrMDQtXdtumcolyVSDb9H2vMWBSQYI=";
+  etcdServerVendorHash = "sha256-H0C6rPP0QOYQxPmHKw/z90Am/VXQRrp1lDlOI1LHGYQ=";
 
-  src = applyPatches {
-    src = fetchFromGitHub {
-      owner = "etcd-io";
-      repo = "etcd";
-      tag = "v${version}";
-      hash = etcdSrcHash;
-    };
+  src = fetchFromGitHub {
+    owner = "etcd-io";
+    repo = "etcd";
+    tag = "v${version}";
+    hash = etcdSrcHash;
   };
 
   env = {
@@ -35,14 +31,11 @@ let
     downloadPage = "https://github.com/etcd-io/etcd";
     license = lib.licenses.asl20;
     homepage = "https://etcd.io/";
-    maintainers = with lib.maintainers; [
-      dtomvan
-      superherointj
-    ];
+    maintainers = with lib.maintainers; [ dtomvan ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
 
-  etcdserver = buildGo124Module {
+  etcdserver = buildGoModule {
     pname = "etcdserver";
 
     inherit
@@ -69,7 +62,7 @@ let
     ldflags = [ "-X go.etcd.io/etcd/api/v3/version.GitSHA=GitNotFound" ];
   };
 
-  etcdutl = buildGo124Module {
+  etcdutl = buildGoModule {
     pname = "etcdutl";
 
     inherit
@@ -95,7 +88,7 @@ let
     '';
   };
 
-  etcdctl = buildGo124Module {
+  etcdctl = buildGoModule {
     pname = "etcdctl";
 
     inherit

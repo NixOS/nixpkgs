@@ -16,16 +16,16 @@
   wassima,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "niquests";
-  version = "3.18.2";
+  version = "3.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jawah";
     repo = "niquests";
-    tag = "v${version}";
-    hash = "sha256-lZMUm1rYCsNSMz/cKTqynaLqb1P75JJCFMDZ9onFS4g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oKxs1ivKzoCIqFnh81MwCbLfjH5JTKj/orTZNe7uiC4=";
   };
 
   build-system = [ hatchling ];
@@ -70,17 +70,24 @@ buildPythonPackage rec {
     pytest-httpbin
     pytestCheckHook
   ]
-  ++ optional-dependencies.socks;
+  ++ finalAttrs.passthru.optional-dependencies.socks;
 
   disabledTestPaths = [
     # tests connect to the internet
     "tests/test_requests.py"
+    # we don't care about coverage
+    "tests/wasi_guest/coverage_runner.py"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # NameResolutionError: Failed to resolve 'localhost'
     "tests/test_rate_limiters.py"
     "tests/test_lowlevel.py"
     "tests/test_testserver.py"
+    # ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1032)
+    "tests/test_crl.py"
+    "tests/test_live.py"
+    "tests/test_ocsp.py"
+    "tests/test_sse.py"
   ];
 
   disabledTests =
@@ -94,10 +101,10 @@ buildPythonPackage rec {
     ];
 
   meta = {
-    changelog = "https://github.com/jawah/niquests/blob/${src.tag}/HISTORY.md";
+    changelog = "https://github.com/jawah/niquests/blob/${finalAttrs.src.tag}/HISTORY.md";
     description = "Simple HTTP library that is a drop-in replacement for Requests";
     homepage = "https://github.com/jawah/niquests";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

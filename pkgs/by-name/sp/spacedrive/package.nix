@@ -26,10 +26,6 @@ let
           url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-darwin-aarch64.dmg";
           hash = "sha256-0Bj6GjsxLUgLlycA33pXIvItoqFtatjJl2Z/ZwjnC0c=";
         };
-        x86_64-darwin = {
-          url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-darwin-x86_64.dmg";
-          hash = "sha256-E1XCGeWBe/oHHE3izMykT8wFrIGhNMvmxEieMrnSfZ8=";
-        };
         x86_64-linux = {
           url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-linux-x86_64.deb";
           hash = "sha256-MLCAHNLJ/9bdCBLBBssrpk98uvKTfHs9YGxmxJ11/oY=";
@@ -38,12 +34,12 @@ let
       .${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
 
   meta = {
+    broken = true;
     description = "Open source file manager, powered by a virtual distributed filesystem";
     homepage = "https://www.spacedrive.com";
     changelog = "https://github.com/spacedriveapp/spacedrive/releases/tag/${version}";
     platforms = [
       "aarch64-darwin"
-      "x86_64-darwin"
       "x86_64-linux"
     ];
     license = lib.licenses.agpl3Plus;

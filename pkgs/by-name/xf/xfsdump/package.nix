@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xfsdump";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/fs/xfs/xfsdump/xfsdump-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-KRTbvh68iMfZOtiOIgqlfavEPSFuEfBiIcAe3zzBBzI=";
+    sha256 = "sha256-nKPpEFWUX4pwvU1GXVRk9jFjDGVGKJbtpHnXNx/WHbc=";
   };
 
   nativeBuildInputs = [

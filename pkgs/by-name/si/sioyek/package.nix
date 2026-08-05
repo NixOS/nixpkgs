@@ -15,13 +15,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sioyek";
-  version = "2.0.0-unstable-2026-03-13";
+  version = "2.0.0-unstable-2026-07-21";
 
   src = fetchFromGitHub {
     owner = "ahrm";
     repo = "sioyek";
-    rev = "13a37e0e0ab77a76f8dbe3adf599ee916615b3db";
-    hash = "sha256-3bMVoF4f1+pZV3tdti8KNS17wWK1tmIgjKQUQS+Rzt8=";
+    rev = "efc88cd7e0985e81d1707c907968088c44f75aea";
+    hash = "sha256-dOjWV9NlTY0L9SK960TcVw02aSThYF9GcbmkTN9BUa0=";
   };
 
   buildInputs = [
@@ -82,12 +82,16 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://sioyek.info/";
     description = "PDF viewer designed for research papers and technical books";
     mainProgram = "sioyek";
-    changelog = "https://github.com/ahrm/sioyek/releases/tag/v${finalAttrs.version}";
+    # no changelog for unstable version, change back to
+    # https://github.com/ahrm/sioyek/releases/tag/v${finalAttrs.version}
+    # once stable again
+    changelog = "https://github.com/ahrm/sioyek/releases";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       podocarp
       stephen-huan
       xyven1
+      stephsi
     ];
     platforms = lib.platforms.unix;
   };

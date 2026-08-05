@@ -33,6 +33,21 @@ let
       features = [ "hypr" ];
       descriptionSuffix = "Hyprland";
     };
+    niri = {
+      suffix = "-niri";
+      features = [ "niri" ];
+      descriptionSuffix = "Niri";
+    };
+    cosmic = {
+      suffix = "-cosmic";
+      features = [ "cosmic" ];
+      descriptionSuffix = "Cosmic";
+    };
+    socket = {
+      suffix = "";
+      features = [ "socket" ];
+      descriptionSuffix = "Socket client";
+    };
   };
 
   variant = variants.${withVariant} or null;
@@ -43,13 +58,13 @@ assert (
 );
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xremap${variant.suffix or ""}";
-  version = "0.14.18";
+  version = "0.15.10";
 
   src = fetchFromGitHub {
     owner = "xremap";
     repo = "xremap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bn5Qq3pcrxTKUBfMkoK1xtLl4c4tHafe74REMQS+cz8=";
+    hash = "sha256-tOQ5q+Xg7JN2P9c1UEG7s9hysC+Z06wxiJ0yPweA4fw=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -57,7 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildNoDefaultFeatures = true;
   buildFeatures = variant.features;
 
-  cargoHash = "sha256-MJ41A8hUurevmy9MX1qB32T8J4KaZO/gDA96CmTuIBU=";
+  cargoHash = "sha256-HbM6UwGRyQIS/Sq0OQdm0eYok6CemTOu88i4w7X5aIY=";
 
   passthru = lib.mapAttrs (name: lib.const (xremap.override { withVariant = name; })) variants;
 

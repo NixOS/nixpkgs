@@ -33,19 +33,23 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-openai";
-  version = "1.1.10";
+  version = "1.3.5";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-openai==${finalAttrs.version}";
-    hash = "sha256-k0JpzgF+2UaYUbtzOB+NFxq7Ge/eRbT8M4PgvDpRG2g=";
+    hash = "sha256-kfzfMldzWdhR785rfNPwI2T0u9ep66diQWYJeTpsdCM=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/partners/openai";
 
   build-system = [ hatchling ];
+
+  # The python3Packages.openai update has to go through staging, so be open to newer versions
+  pythonRelaxDeps = [ "openai" ];
 
   dependencies = [
     langchain-core
@@ -87,6 +91,7 @@ buildPythonPackage (finalAttrs: {
     "test_load_openai_llm"
     "test_loads_openai_chat"
     "test_load_openai_chat"
+    "test_format_message_content"
   ];
 
   pythonImportsCheck = [ "langchain_openai" ];
@@ -96,6 +101,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-openai==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

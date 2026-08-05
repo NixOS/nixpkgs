@@ -1,4 +1,4 @@
-From 71ff7368f729289f2eb3fe5a01365411fa006751 Mon Sep 17 00:00:00 2001
+From 84bfd76cc75904cb722f53058b6da67f494c4bd4 Mon Sep 17 00:00:00 2001
 From: Christoph Heiss <christoph@c8h4.io>
 Date: Mon, 23 Feb 2026 10:58:20 +0100
 Subject: [PATCH proxmox-backup 1/2] cargo: re-route dependencies not available
@@ -6,14 +6,14 @@ Subject: [PATCH proxmox-backup 1/2] cargo: re-route dependencies not available
 
 Signed-off-by: Christoph Heiss <christoph@c8h4.io>
 ---
- Cargo.toml | 100 ++++++++++++++++++++++++++---------------------------
- 1 file changed, 50 insertions(+), 50 deletions(-)
+ Cargo.toml | 104 ++++++++++++++++++++++++++---------------------------
+ 1 file changed, 52 insertions(+), 52 deletions(-)
 
 diff --git a/Cargo.toml b/Cargo.toml
-index 9bf7b79a..ced3b793 100644
+index 3e036f54e..2d97df9fd 100644
 --- a/Cargo.toml
 +++ b/Cargo.toml
-@@ -271,57 +271,57 @@ proxmox-rrd-api-types.workspace = true
+@@ -277,59 +277,59 @@ proxmox-rrd-api-types.workspace = true
  # Local path overrides
  # NOTE: You must run `cargo update` after changing this for it to take effect!
  [patch.crates-io]
@@ -30,6 +30,7 @@ index 9bf7b79a..ced3b793 100644
 -#proxmox-compression = { path = "../proxmox/proxmox-compression" }
 -#proxmox-config-digest = { path = "../proxmox/proxmox-config-digest" }
 -#proxmox-daemon = { path = "../proxmox/proxmox-daemon" }
+-#proxmox-docgen = { path = "../proxmox/proxmox-docgen" }
 -#proxmox-http = { path = "../proxmox/proxmox-http" }
 -#proxmox-http-error = { path = "../proxmox/proxmox-http-error" }
 -#proxmox-human-byte = { path = "../proxmox/proxmox-human-byte" }
@@ -42,6 +43,7 @@ index 9bf7b79a..ced3b793 100644
 -#proxmox-network-types = { path = "../proxmox/proxmox-network-types" }
 -#proxmox-notify = { path = "../proxmox/proxmox-notify" }
 -#proxmox-openid = { path = "../proxmox/proxmox-openid" }
+-#proxmox-parallel-handler = { path = "../proxmox/proxmox-parallel-handler" }
 -#proxmox-product-config = { path = "../proxmox/proxmox-product-config" }
 -#proxmox-rate-limiter = { path = "../proxmox/proxmox-rate-limiter" }
 -#proxmox-rest-server = { path = "../proxmox/proxmox-rest-server" }
@@ -77,6 +79,7 @@ index 9bf7b79a..ced3b793 100644
 +proxmox-compression = { path = "../proxmox/proxmox-compression" }
 +proxmox-config-digest = { path = "../proxmox/proxmox-config-digest" }
 +proxmox-daemon = { path = "../proxmox/proxmox-daemon" }
++proxmox-docgen = { path = "../proxmox/proxmox-docgen" }
 +proxmox-http = { path = "../proxmox/proxmox-http" }
 +proxmox-http-error = { path = "../proxmox/proxmox-http-error" }
 +proxmox-human-byte = { path = "../proxmox/proxmox-human-byte" }
@@ -89,6 +92,7 @@ index 9bf7b79a..ced3b793 100644
 +proxmox-network-types = { path = "../proxmox/proxmox-network-types" }
 +proxmox-notify = { path = "../proxmox/proxmox-notify" }
 +proxmox-openid = { path = "../proxmox/proxmox-openid" }
++proxmox-parallel-handler = { path = "../proxmox/proxmox-parallel-handler" }
 +proxmox-product-config = { path = "../proxmox/proxmox-product-config" }
 +proxmox-rate-limiter = { path = "../proxmox/proxmox-rate-limiter" }
 +proxmox-rest-server = { path = "../proxmox/proxmox-rest-server" }
@@ -122,5 +126,5 @@ index 9bf7b79a..ced3b793 100644
  [features]
  default = []
 -- 
-2.52.0
+2.53.0
 

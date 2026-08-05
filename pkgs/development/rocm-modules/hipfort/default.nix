@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipfort";
-  version = "7.2.0";
+  version = "7.2.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -50,16 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "/bin/ln" "ln"
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "Fortran interfaces for ROCm libraries";
     homepage = "https://github.com/ROCm/hipfort";
-    license = with lib.licenses; [ mit ]; # mitx11
+    license = lib.licenses.mit; # mitx11
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

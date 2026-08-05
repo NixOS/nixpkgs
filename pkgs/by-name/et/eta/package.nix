@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "eta";
-  version = "1.0.1";
+  version = "1.0.1-unstable-2026-01-04";
 
   src = fetchFromGitHub {
     owner = "aioobe";
     repo = "eta";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-UQ8ZoxFAy5dKtXTLwPolPMd7YJeEjsK639RkGCMY6rU=";
+    rev = "7027a4012e7c697be1c9af1a9f21bfae1bd4913b";
+    hash = "sha256-18TOXDohyRGA0pmRyWgR9EPhKgZt+ZtkuTCFWbSnFlY=";
   };
 
   outputs = [

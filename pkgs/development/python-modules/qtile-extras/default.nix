@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   anyio,
   gobject-introspection,
   gtk3,
@@ -22,9 +21,9 @@
   xorg-server,
   nixosTests,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qtile-extras";
-  version = "0.34.1";
+  version = "0.36.0";
   # nixpkgs-update: no auto update
   # should be updated alongside with `qtile`
   pyproject = true;
@@ -32,18 +31,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "elParaguayo";
     repo = "qtile-extras";
-    tag = "v${version}";
-    hash = "sha256-CtmTZmUQlqkDPd++n3fPbRB4z1NA4ZxnmIR84IjsURw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-H2A5Y+ukTkUqjQB5eQVuOMYpf7T8RgQlNlQ25wlWwr8=";
   };
-
-  patches = [
-    # Remove unpack of widget.eval call in tests
-    # https://github.com/elParaguayo/qtile-extras/pull/460
-    (fetchpatch {
-      url = "https://github.com/elParaguayo/qtile-extras/commit/359964520a9dcd2c7e12680bfc53e359d74c489b.patch?full_index=1";
-      hash = "sha256-nKt39bTaBbvEC5jWU6XH0pigTs4hpSmMIwFe/A9YdJA=";
-    })
-  ];
 
   build-system = [ setuptools-scm ];
 
@@ -82,8 +72,6 @@ buildPythonPackage rec {
     # AttributeError: 'NoneType' object has no attribute 'theta'
     "test_image_size_horizontal"
     "test_image_size_vertical"
-    # flaky, timing sensitive
-    "test_visualiser"
   ];
 
   disabledTestPaths = [
@@ -92,6 +80,11 @@ buildPythonPackage rec {
     "test/widget/test_upower.py"
     # Marked as broken due to https://github.com/stravalib/stravalib/issues/379
     "test/widget/test_strava.py"
+  ];
+
+  pytestFlags = [
+    "--reruns 3"
+    "--reruns-delay 5"
   ];
 
   preCheck = ''
@@ -107,8 +100,8 @@ buildPythonPackage rec {
   meta = {
     description = "Extra modules and widgets for the Qtile tiling window manager";
     homepage = "https://github.com/elParaguayo/qtile-extras";
-    changelog = "https://github.com/elParaguayo/qtile-extras/blob/${src.tag}/CHANGELOG";
+    changelog = "https://github.com/elParaguayo/qtile-extras/blob/${finalAttrs.src.tag}/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ arjan-s ];
   };
-}
+})

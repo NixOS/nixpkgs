@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "minijinja";
-  version = "2.17.1";
+  version = "2.22.0";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "minijinja";
     rev = finalAttrs.version;
-    hash = "sha256-cuazG7Sm6gol6FIzcK0zvUU6EunJbetmaLiurYVeVko=";
+    hash = "sha256-IFlfhQwyJtjgZJixdm4hxuDW1V6TJTFSiqX1s0NuvE8=";
   };
 
-  cargoHash = "sha256-QsqixSyBeo4KAnZgnY7stdrczqRREoPN7EnLN9GMCu0=";
+  cargoHash = "sha256-hnWD89auEdZUtBLaScUrj/3k46As6mNhNfo3rXVwY0E=";
 
   # The tests relies on the presence of network connection
   doCheck = false;
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Command Line Utility to render MiniJinja/Jinja2 templates";
     homepage = "https://github.com/mitsuhiko/minijinja";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ psibi ];
     changelog = "https://github.com/mitsuhiko/minijinja/blob/${finalAttrs.version}/CHANGELOG.md";
     mainProgram = "minijinja-cli";

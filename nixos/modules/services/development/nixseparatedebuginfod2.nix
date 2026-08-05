@@ -7,7 +7,7 @@
 }:
 let
   cfg = config.services.nixseparatedebuginfod2;
-  url = "127.0.0.1:${toString cfg.port}";
+  address = "127.0.0.1:${toString cfg.port}";
 in
 {
   imports = [
@@ -40,16 +40,16 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
-    systemd.services.nixseparatedebuginfod2 = {
+    systemd.sockets.nixseparatedebuginfod2 = {
       wantedBy = [ "multi-user.target" ];
-      path = [ config.nix.package ];
+      socketConfig.ListenStream = [ address ];
+    };
+    systemd.services.nixseparatedebuginfod2 = {
       serviceConfig = {
         ExecStart = [
           (utils.escapeSystemdExecArgs (
             [
               (lib.getExe cfg.package)
-              "--listen-address"
-              url
               "--expiration"
               cfg.cacheExpirationDelay
             ]
@@ -59,6 +59,7 @@ in
             ]) cfg.substituters)
           ))
         ];
+        Type = "notify";
         Restart = "on-failure";
         CacheDirectory = "nixseparatedebuginfod2";
         DynamicUser = true;
@@ -101,7 +102,7 @@ in
       };
     };
 
-    environment.debuginfodServers = [ "http://${url}" ];
+    environment.debuginfodServers = [ "http://${address}" ];
 
   };
 }

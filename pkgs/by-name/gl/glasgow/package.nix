@@ -2,13 +2,30 @@
   lib,
   python3,
   fetchFromGitHub,
+  fetchPypi,
   sdcc,
   yosys,
   icestorm,
   nextpnr,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  # glasgow uses importlib_resources' open_text(), removed in 7.x; pin it to 6.x.
+  pythonPackages = python3.pkgs.overrideScope (
+    final: prev: {
+      importlib-resources = prev.importlib-resources.overridePythonAttrs (old: rec {
+        version = "6.5.2";
+        src = fetchPypi {
+          pname = "importlib_resources";
+          inherit version;
+          hash = "sha256-GF+Hre9bzCiESdmPtPugfOp4vANkVd1ExfxKL+eP7Sw=";
+        };
+        doCheck = false;
+      });
+    }
+  );
+in
+pythonPackages.buildPythonApplication rec {
   pname = "glasgow";
   version = "0-unstable-2025-12-22";
   # Similar to `pdm show`, but without the commit counter
@@ -36,10 +53,10 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   build-system = [
-    python3.pkgs.pdm-backend
+    pythonPackages.pdm-backend
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with pythonPackages; [
     aiohttp
     amaranth
     cobs
@@ -54,7 +71,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = [
     # pytestCheckHook discovers way less tests
-    python3.pkgs.unittestCheckHook
+    pythonPackages.unittestCheckHook
     icestorm
     nextpnr
     yosys
@@ -67,14 +84,18 @@ python3.pkgs.buildPythonApplication rec {
   __darwinAllowLocalNetworking = true;
 
   preBuild = ''
-    make -C firmware GIT_REV_SHORT=${firmwareGitRev} LIBFX2=${python3.pkgs.fx2}/share/libfx2
+    make -C firmware GIT_REV_SHORT=${firmwareGitRev} LIBFX2=${pythonPackages.fx2}/share/libfx2
 
     # Normalize the .ihex file, see ./software/deploy-firmware.sh.
-    ${python3.withPackages (p: [ p.fx2 ])}/bin/python firmware/normalize.py \
+    ${pythonPackages.python.withPackages (p: [ p.fx2 ])}/bin/python firmware/normalize.py \
       firmware/glasgow.ihex firmware/glasgow.ihex
 
     # Ensure the compiled firmware is exactly the same as the one shipped in the repo.
-    cmp -s firmware/glasgow.ihex software/glasgow/hardware/firmware.ihex
+    if ! cmp -s firmware/glasgow.ihex software/glasgow/hardware/firmware.ihex; then
+      echo >&2 "Firmware doesn't reproduce!"
+      diff -u software/glasgow/hardware/firmware.ihex firmware/glasgow.ihex
+      exit 1
+    fi
 
     cd software
     export PDM_BUILD_SCM_VERSION="${pdmVersion}"

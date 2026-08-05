@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "conspy";
-  version = "1.16";
+  version = "1.17";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/conspy/conspy-${finalAttrs.version}-1/conspy-${finalAttrs.version}.tar.gz";
-    hash = "sha256-7l72SOoI0g2QYtsi579ip7cmGvAgU/kWAW0bgKZqVgk=";
+    hash = "sha256-YSMO9sWJjc+zqMtg0hjIRYWI2XNnqQ2VOLZvHZSZC2Q=";
     curlOpts = " -A application/octet-stream ";
   };
 

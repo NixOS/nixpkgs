@@ -9,6 +9,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "alcarin-tengwar";
   version = "0.83";
 
+  outputs = [
+    "out"
+    "webfont"
+  ];
+
   src = fetchFromGitHub {
     owner = "Tosche";
     repo = "Alcarin-Tengwar";

@@ -10,13 +10,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyvex";
   version = "9.2.154";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-a3ei2w66v18QKAofpPvDUoM42zHRHPrNQic+FE+rLKY=";
   };
 
@@ -64,4 +64,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

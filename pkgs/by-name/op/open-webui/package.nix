@@ -5,17 +5,16 @@
   python3Packages,
   nixosTests,
   fetchurl,
-  ffmpeg-headless,
 }:
 let
   pname = "open-webui";
-  version = "0.8.10";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-wXkU3j0Bzpd2H5aVkqmKyUHxukRamBYQh8HBXB8tLpM=";
+    hash = "sha256-SP5Huefj35PHvVzqS8R/DGSBci/hCHoueEb5RupGVqY=";
   };
 
   frontend = buildNpmPackage rec {
@@ -23,22 +22,16 @@ let
     inherit version src;
 
     # the backend for run-on-client-browser python execution
-    # must match lock file in open-webui
-    # TODO: should we automate this?
-    # TODO: with JQ? "jq -r '.packages["node_modules/pyodide"].version' package-lock.json"
-    pyodideVersion = "0.28.2";
+    # must match the version that is locked in package-lock.json
+    pyodideVersion = "314.0.3";
     pyodide = fetchurl {
-      hash = "sha256-MQIRdOj9yVVsF+nUNeINnAfyA6xULZFhyjuNnV0E5+c=";
+      hash = "sha256-oCgELZDbqedP377PNuqn1X6IvwrWGNnFBZ6xBAqnYSo=";
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-ZiIEGeKee/qEhe44SGlPTDhwP+vL9K8RkFEOeUdzUI8=";
+    npmDepsHash = "sha256-9Wa6gP0asGPCoBJh8ufpweOg4zNf7onzBu08iQwgqis=";
 
-    # See https://github.com/open-webui/open-webui/issues/15880
-    npmFlags = [
-      "--force"
-      "--legacy-peer-deps"
-    ];
+    npmFlags = [ "--force" ];
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
@@ -46,10 +39,6 @@ let
       substituteInPlace package.json \
         --replace-fail "npm run pyodide:fetch && vite build" "vite build"
     '';
-
-    propagatedBuildInputs = [
-      ffmpeg-headless
-    ];
 
     env.CYPRESS_INSTALL_BINARY = "0"; # disallow cypress from downloading binaries in sandbox
     env.ONNXRUNTIME_NODE_INSTALL_CUDA = "skip";
@@ -90,8 +79,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     [
       accelerate
       aiocache
+      aiodns
       aiofiles
       aiohttp
+      aiosqlite
       alembic
       anthropic
       apscheduler
@@ -107,9 +98,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
       black
       boto3
       brotli
+      brotlicffi
       chardet
       chromadb
       cryptography
+      datasets_3
       ddgs
       docx2txt
       einops
@@ -124,14 +117,17 @@ python3Packages.buildPythonApplication (finalAttrs: {
       google-cloud-storage
       google-genai
       googleapis-common-protos
+      hiredis
       httpx
       itsdangerous
+      joserfc
       langchain
       langchain-classic
       langchain-community
       langchain-text-splitters
       ldap3
       loguru
+      lxml
       markdown
       mcp
       msoffcrypto-tool
@@ -152,14 +148,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
       opentelemetry-sdk
       openpyxl
       opensearch-py
+      orjson
       pandas
-      peewee
-      peewee-migrate
-      pgvector
       pillow
       psutil
+      psycopg
       pyarrow
       pycrdt
+      pydantic
       pydub
       pyjwt
       pymdown-extensions
@@ -167,7 +163,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       pypandoc
       pypdf
       python-dotenv
-      python-jose
       python-mimeparse
       python-multipart
       python-pptx
@@ -176,24 +171,29 @@ python3Packages.buildPythonApplication (finalAttrs: {
       pytz
       pyxlsb
       rank-bm25
-      rapidocr-onnxruntime
+      rapidocr
       redis
+      regex
       requests
       restrictedpython
       sentence-transformers
       sentencepiece
       soundfile
+      sqlalchemy
       starlette-compress
       starsessions
       tiktoken
       transformers
-      unstructured
       uvicorn
       validators
       xlrd
       youtube-transcript-api
     ]
+    ++ (with httpx.optional-dependencies; brotli ++ cli ++ http2 ++ socks ++ zstd)
+    ++ uvicorn.optional-dependencies.standard
+    ++ psycopg.optional-dependencies.c
     ++ pyjwt.optional-dependencies.crypto
+    ++ sqlalchemy.optional-dependencies.asyncio
     ++ starsessions.optional-dependencies.redis;
 
   optional-dependencies = with python3Packages; {
@@ -206,15 +206,17 @@ python3Packages.buildPythonApplication (finalAttrs: {
       mariadb
     ];
 
+    unstructured = [
+      unstructured
+    ];
+
     all = [
       azure-search-documents
       colbert-ai
       elasticsearch
-      firecrawl-py
-      gcp-storage-emulator
       moto
       oracledb
-      pinecone-client
+      pinecone
       playwright
       pymilvus
       pymongo
@@ -223,6 +225,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ]
     ++ finalAttrs.passthru.optional-dependencies.mariadb
     ++ finalAttrs.passthru.optional-dependencies.postgres
+    ++ finalAttrs.passthru.optional-dependencies.unstructured
     ++ moto.optional-dependencies.s3;
   };
 

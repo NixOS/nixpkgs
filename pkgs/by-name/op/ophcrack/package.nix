@@ -33,9 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ] ++ lib.optional enableGui libsForQt5.wrapQtAppsHook;
   buildInputs = [
     openssl
+    expat
   ]
-  ++ (if enableGui then [ libsForQt5.qtcharts ] else [ expat ])
-  ++ lib.optional stdenv.hostPlatform.isDarwin expat;
+  ++ lib.optional enableGui libsForQt5.qtcharts;
 
   configureFlags = [
     "--with-libssl"
@@ -50,15 +50,15 @@ stdenv.mkDerivation (finalAttrs: {
       [ "--disable-gui" ]
   );
 
-  installPhase = lib.optional stdenv.hostPlatform.isDarwin ''
-    mkdir -p $out/bin
-    cp -R src/ophcrack $out/bin
+  installPhase = lib.optional (stdenv.hostPlatform.isDarwin && enableGui) ''
+    mkdir -p $out/Applications
+    cp -R src/ophcrack.app $out/Applications/ophcrack.app
   '';
 
   meta = {
     description = "Free Windows password cracker based on rainbow tables";
     homepage = "https://ophcrack.sourceforge.io";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ tochiaha ];
     mainProgram = "ophcrack";
     platforms = lib.platforms.all;

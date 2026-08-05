@@ -29,7 +29,7 @@
   liblc3,
   libass,
   lrdf,
-  ladspaH,
+  ladspa-header,
   lcms2,
   libnice,
   webrtcAudioProcessingSupport ? lib.meta.availableOn stdenv.hostPlatform webrtc-audio-processing_1,
@@ -108,14 +108,15 @@
   # Checks meson.is_cross_build(), so even canExecute isn't enough.
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
-  guiSupport ? true,
+  # causes gtk4 to depend on gtk3 and makes little sense
+  guiSupport ? false,
   gst-plugins-bad,
   apple-sdk_gstreamer,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-bad";
-  version = "1.26.5";
+  version = "1.28.5";
 
   outputs = [
     "out"
@@ -124,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-${finalAttrs.version}.tar.xz";
-    hash = "sha256-mJDyYvOyqVZNy2KenraX13uT0fcYl+2hqBcLfc/nMpQ=";
+    hash = "sha256-2K9V+u8pWMGoZjdRR17kb1Fkh3z02MWRPqkG7xgK63E=";
   };
 
   patches = [
@@ -133,6 +134,12 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (addDriverRunpath) driverLink;
     })
   ];
+
+  separateDebugInfo = true;
+
+  __structuredAttrs = true;
+  # Argument list too long
+  strictDeps = true;
 
   nativeBuildInputs = [
     meson
@@ -242,7 +249,7 @@ stdenv.mkDerivation (finalAttrs: {
     spandsp
 
     # ladspa plug-in
-    ladspaH
+    ladspa-header
     lrdf # TODO: make build on Darwin
 
     # lv2 plug-in
@@ -311,6 +318,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dwasapi=disabled" # not packaged in nixpkgs as of writing / no Windows support
     "-Dwasapi2=disabled" # not packaged in nixpkgs as of writing / no Windows support
     "-Dwpe=disabled" # required `wpe-webkit` library not packaged in nixpkgs as of writing
+    "-Dwpe2=disabled"
     "-Dgs=disabled" # depends on `google-cloud-cpp`
     "-Donnx=disabled" # depends on `libonnxruntime` not packaged in nixpkgs as of writing
     "-Dopenaptx=enabled" # since gstreamer-1.20.1 `libfreeaptx` is supported for circumventing the dubious license conflict with `libopenaptx`
@@ -326,6 +334,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "webrtcdsp" webrtcAudioProcessingSupport)
     (lib.mesonEnable "isac" webrtcAudioProcessingSupport)
   ]
+  ++ lib.mapAttrsToList lib.mesonEnable {
+    mpeghdec = false; # mpeghdec not packaged
+    tflite = false;
+  }
   ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
     "-Ddoc=disabled" # needs gstcuda to be enabled which is Linux-only
   ]
@@ -359,8 +371,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (!gst-plugins-base.glEnabled) [
     "-Dgl=disabled"
   ]
-  ++ lib.optionals (!gst-plugins-base.waylandEnabled || !guiSupport) [
+  ++ lib.optionals (!guiSupport) [
     "-Dgtk3=disabled" # Wayland-based GTK sink
+  ]
+  ++ lib.optionals (!gst-plugins-base.waylandEnabled) [
     "-Dwayland=disabled"
   ]
   ++ lib.optionals (!gst-plugins-base.glEnabled) [
@@ -384,9 +398,6 @@ stdenv.mkDerivation (finalAttrs: {
         "-Dx265=disabled"
       ]
   );
-
-  # Argument list too long
-  strictDeps = true;
 
   postPatch = ''
     patchShebangs \
@@ -416,7 +427,7 @@ stdenv.mkDerivation (finalAttrs: {
       };
     };
 
-    updateScript = directoryListingUpdater { };
+    updateScript = directoryListingUpdater { odd-unstable = true; };
   };
 
   meta = {
@@ -431,6 +442,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = if enableGplPlugins then lib.licenses.gpl2Plus else lib.licenses.lgpl2Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tmarkus ];
   };
 })

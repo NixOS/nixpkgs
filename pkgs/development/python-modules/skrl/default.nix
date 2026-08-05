@@ -17,24 +17,31 @@
 
   # tests
   flax,
+  hypothesis,
   jax,
+  mujoco,
   optax,
   pettingzoo,
   pygame,
   pymunk,
+  pytest-xdist,
   pytestCheckHook,
+  warp-lang,
+  warp-nn,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "skrl";
-  version = "1.4.3";
+  version = "2.1.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Toni-SM";
     repo = "skrl";
     tag = finalAttrs.version;
-    hash = "sha256-5lkoYAmMIWqK3+E3WxXMWS9zal2DhZkfl30EkrHKpdI=";
+    hash = "sha256-pntQ/7kefi7LLLG1DTKY9Zjlzb0UXiduQCzlX5PkZds=";
   };
 
   build-system = [ setuptools ];
@@ -53,21 +60,39 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     flax
+    hypothesis
     jax
+    mujoco
     optax
     pettingzoo
     pygame
     pymunk
+    pytest-xdist
     pytestCheckHook
+    warp-lang
+    warp-nn
+    writableTmpDirAsHomeHook
   ];
 
   disabledTests = [
+    # Flaky when using pytest-xdist
+    "test_agent"
+
     # TypeError: The array passed to from_dlpack must have __dlpack__ and __dlpack_device__ methods
     "test_env"
     "test_multi_agent_env"
 
     # OverflowError
     "test_key"
+
+    # Require GPU access
+    "test_device[cuda]"
+    "test_parse_device[cuda]"
+  ];
+
+  disabledTestPaths = [
+    # TypeError: Can't instantiate abstract class Memory without an implementation for abstract method 'sample'
+    "tests/memories/torch/test_base.py"
   ];
 
   meta = {

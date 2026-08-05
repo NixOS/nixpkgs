@@ -22,7 +22,7 @@
   python3,
   range-v3,
   ronn,
-  xxHash,
+  xxhash,
   utf8cpp,
   zstd,
   parallel-hashmap,
@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     jemalloc
     libarchive
     lz4
-    xxHash
+    xxhash
     utf8cpp
     zstd
 

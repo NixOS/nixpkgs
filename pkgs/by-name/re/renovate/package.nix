@@ -20,13 +20,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renovate";
-  version = "43.59.4";
+  version = "43.214.1";
 
   src = fetchFromGitHub {
     owner = "renovatebot";
     repo = "renovate";
     tag = finalAttrs.version;
-    hash = "sha256-pdB5b8mdvuykI7iCiINj2iITPZXJIqyVObQDuDszIdc=";
+    hash = "sha256-S5ixP4Dp/YDv23kE5lvmp/Px6GrF9B6/wwSiKUwVWhA=";
   };
 
   postPatch = ''
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     yq-go
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     xcbuild
     cctools # contains libtool, required by better-sqlite3
   ];
@@ -50,8 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
-    fetcherVersion = 2;
-    hash = "sha256-EujMiRpGdEsl9CWtM+WMffYWS3Fbv9QSNjTagyvnNyY=";
+    fetcherVersion = 3;
+    hash = "sha256-A8aL5ZF0tFKi0uCXxOQMzxByAIVyt76wnLvolFVYKuI=";
   };
 
   env.COREPACK_ENABLE_STRICT = 0;
@@ -78,12 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     export npm_config_nodedir=${nodejs}
     npm run rebuild
     rm -rf build/Release/{obj.target,.deps} vendor
-
-    popd
-
-    pushd node_modules/.pnpm/better-sqlite3*/node_modules/better-sqlite3
-    npm run build-release
-    rm -rf build/Release/{obj.target,sqlite3.a,.deps} deps
 
     popd
 

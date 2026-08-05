@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freeorion";
-  version = "0.5.1.1";
+  version = "0.5.1.2";
 
   src = fetchFromGitHub {
     owner = "freeorion";
     repo = "freeorion";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0z3EPiSlViWQzpUu6+4IZ3ih0pbwdkZWAiVPsVcJr8o=";
+    hash = "sha256-/pLNOkxjuh/vdQQZQ9BzPCMygYPMDJDJuSXxn5lJt2o=";
   };
 
   buildInputs = [

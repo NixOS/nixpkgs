@@ -6,6 +6,8 @@
   perl,
   nixosTests,
   autoreconfHook,
+  buildPackages,
+  runtimeShellPackage,
   brotliSupport ? false,
   brotli,
   c-aresSupport ? false,
@@ -48,8 +50,6 @@
   rtmpdump,
   scpSupport ? zlibSupport && !stdenv.hostPlatform.isSunOS && !stdenv.hostPlatform.isCygwin,
   libssh2,
-  wolfsslSupport ? false,
-  wolfssl,
   rustlsSupport ? false,
   rustls-ffi,
   zlibSupport ? true,
@@ -80,14 +80,16 @@ assert
     (lib.count (x: x) [
       gnutlsSupport
       opensslSupport
-      wolfsslSupport
       rustlsSupport
     ]) > 1
   );
 
+let
+  isCross = !lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.18.0";
+  version = "8.21.0";
 
   src = fetchurl {
     urls = [
@@ -96,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
         builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
       }/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-QN95Fm50qiAUk2XhHuTHmKRq1Xw05PaP0TEA4smpGUY=";
+    hash = "sha256-qhtmpw6s6D3GJFCHRWRsCK5WHeUSq0A63/uTrIf8cuY=";
   };
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
@@ -118,6 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   env = {
     CXX = "${stdenv.cc.targetPrefix}c++";
@@ -160,7 +163,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional pslSupport libpsl
     ++ lib.optional rtmpSupport rtmpdump
     ++ lib.optional scpSupport libssh2
-    ++ lib.optional wolfsslSupport wolfssl
     ++ lib.optional rustlsSupport rustls-ffi
     ++ lib.optional zlibSupport zlib
     ++ lib.optional zstdSupport zstd;
@@ -192,7 +194,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeatureAs idnSupport "libidn2" (lib.getDev libidn2))
     (lib.withFeatureAs opensslSupport "openssl" (lib.getDev openssl))
     (lib.withFeatureAs scpSupport "libssh2" (lib.getDev libssh2))
-    (lib.withFeatureAs wolfsslSupport "wolfssl" (lib.getDev wolfssl))
   ]
   ++ lib.optional gssSupport "--with-gssapi=${lib.getDev libkrb5}"
   # For the 'urandom', maybe it should be a cross-system option
@@ -203,7 +204,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-ca-bundle"
     "--without-ca-path"
   ]
-  ++ lib.optionals (!gnutlsSupport && !opensslSupport && !wolfsslSupport && !rustlsSupport) [
+  ++ lib.optionals (!gnutlsSupport && !opensslSupport && !rustlsSupport) [
     "--without-ssl"
   ]
   ++ lib.optionals (rustlsSupport && !stdenv.hostPlatform.isDarwin) [
@@ -245,7 +246,20 @@ stdenv.mkDerivation (finalAttrs: {
     ln $out/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcurl-gnutls${stdenv.hostPlatform.extensions.sharedLibrary}
     ln $out/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcurl-gnutls${stdenv.hostPlatform.extensions.sharedLibrary}.4
     ln $out/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcurl-gnutls${stdenv.hostPlatform.extensions.sharedLibrary}.4.4.0
+  ''
+  # The wcurl shell script found in `''${!outputBin}/bin`, is located in the
+  # source along with all the scripts patched in `postPatch` above.
+  # `patchShebangs` at that stage causes the host intended wcurl script to get
+  # the buildPlatform's runtimeShell shebang, instead of the hostPlatform's. To
+  # make sure this doesn't happen we disallow it, and fix it above in the
+  # postInstall, and also with the conditional hostPlatform's
+  # runtimeShellPackage added in buildInputs.
+  + lib.optionalString isCross ''
+    patchShebangs --update --host "''${!outputBin}/bin"
   '';
+  outputChecks.bin.disallowedReferences = lib.optional isCross buildPackages.runtimeShellPackage;
+  outputChecks.out.disallowedReferences = lib.optional isCross buildPackages.runtimeShellPackage;
+  buildInputs = lib.optional isCross runtimeShellPackage;
 
   passthru =
     let
@@ -281,6 +295,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://curl.se/ch/${finalAttrs.version}.html";
     description = "Command line tool for transferring files with URL syntax";
     homepage = "https://curl.se/";
+    donationPage = "https://curl.se/donation.html";
     license = lib.licenses.curl;
     maintainers = with lib.maintainers; [
       Scrumplex

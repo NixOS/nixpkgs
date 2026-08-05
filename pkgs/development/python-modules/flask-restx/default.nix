@@ -3,25 +3,32 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   aniso8601,
-  jsonschema,
   flask,
   importlib-resources,
-  werkzeug,
+  jsonschema,
   pytz,
+  werkzeug,
+
+  # tests
+  blinker,
   faker,
   mock,
-  blinker,
   py,
+  pytest-benchmark,
   pytest-flask,
   pytest-mock,
-  pytest-benchmark,
   pytest-vcr,
   pytestCheckHook,
-  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flask-restx";
   version = "1.3.2";
   pyproject = true;
@@ -30,7 +37,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-restx";
     repo = "flask-restx";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-KSHRfGX6M/w09P35A68u7uzMKaRioytScPh0Sw8JBfw=";
   };
 
@@ -80,6 +87,18 @@ buildPythonPackage rec {
     # we disable the tests in the meanwhile and let upstream decide
     "test_rfc822_value"
     "test_iso8601_value"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # TypeError: Wildcard.__init__() takes 2 positional arguments but 3 were given
+    "test_description"
+    "test_max_length"
+    "test_max_length_as_callable"
+    "test_min_length"
+    "test_min_length_as_callable"
+    "test_pattern"
+    "test_readonly"
+    "test_required"
+    "test_title"
   ];
 
   pythonImportsCheck = [ "flask_restx" ];
@@ -87,8 +106,8 @@ buildPythonPackage rec {
   meta = {
     description = "Fully featured framework for fast, easy and documented API development with Flask";
     homepage = "https://github.com/python-restx/flask-restx";
-    changelog = "https://github.com/python-restx/flask-restx/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/python-restx/flask-restx/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

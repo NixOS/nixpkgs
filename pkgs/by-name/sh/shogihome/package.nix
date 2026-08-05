@@ -4,8 +4,8 @@
   buildNpmPackage,
   fetchFromGitHub,
   makeWrapper,
-  electron_39,
-  vulkan-loader,
+  electron_42,
+  cacert,
   makeDesktopItem,
   copyDesktopItems,
   commandLineArgs ? [ ],
@@ -13,25 +13,27 @@
   _experimental-update-script-combinators,
   writeShellApplication,
   nix,
+  curl,
+  common-updater-scripts,
   jq,
   gnugrep,
 }:
 
 let
-  electron = electron_39;
+  electron = electron_42;
 in
 buildNpmPackage (finalAttrs: {
   pname = "shogihome";
-  version = "1.26.1";
+  version = "1.28.1";
 
   src = fetchFromGitHub {
     owner = "sunfish-shogi";
     repo = "shogihome";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7kDk85tN4uP0WJnof8yyn0M85Qairls5ZqhKwwhRQxc=";
+    hash = "sha256-En2tH9AFBdhZsHoy/uiHf4RO3+gFkfwHnZAyDJ7FcoE=";
   };
 
-  npmDepsHash = "sha256-Sft5fEf86o1uUJ+yszx9XgQBGNRc+9aKRyR5rOelgQw=";
+  npmDepsHash = "sha256-9O/PQAGv0xg6dKgFHjErYTnaM2PxyUIZk8auiReSo2Q=";
 
   postPatch = ''
     substituteInPlace package.json \
@@ -51,6 +53,11 @@ buildNpmPackage (finalAttrs: {
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     npm_config_build_from_source = "true";
+
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Prevent "unable to get local issuer certificate" error
+    NODE_EXTRA_CA_CERTS = "${cacert}/etc/ssl/certs/ca-bundle.crt";
   };
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
@@ -67,16 +74,11 @@ buildNpmPackage (finalAttrs: {
 
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
-  ''
-  # Electron builder complains about symlink in electron-dist
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    rm electron-dist/libvulkan.so.1
-    cp '${lib.getLib vulkan-loader}/lib/libvulkan.so.1' electron-dist
-  ''
-  # Explicitly set identity to null to avoid signing on arm64 macs with newer electron-builder.
-  # See: https://github.com/electron-userland/electron-builder/pull/9007
-  + ''
+
     npm run electron:pack
+
+    # Explicitly set identity to null to avoid signing on arm64 macs with newer electron-builder.
+    # See: https://github.com/electron-userland/electron-builder/pull/9007
 
     ./node_modules/.bin/electron-builder \
         --dir \
@@ -130,9 +132,26 @@ buildNpmPackage (finalAttrs: {
 
   passthru = {
     updateScript = _experimental-update-script-combinators.sequence [
+      (lib.getExe (writeShellApplication {
+        name = "${finalAttrs.pname}-version-updater";
+
+        runtimeInputs = [
+          curl
+          jq
+          common-updater-scripts
+        ];
+
+        # Use release.json as the primary source rather than git tags or GitHub releases:
+        # https://github.com/sunfish-shogi/shogihome/issues/1704#issuecomment-5105936699
+        text = ''
+          version="$(curl -s 'https://sunfish-shogi.github.io/shogihome/release.json' | jq -r '.latest.version')"
+          update-source-version '${finalAttrs.pname}' "$version"
+        '';
+      }))
+      # Update src.hash and npmDepsHash
       (nix-update-script {
         extraArgs = [
-          "--version-regex=^v([\\d\\.]+)$"
+          "--version=skip"
         ];
       })
       (lib.getExe (writeShellApplication {
@@ -158,10 +177,12 @@ buildNpmPackage (finalAttrs: {
   meta = {
     description = "Shogi frontend supporting USI engines";
     homepage = "https://sunfish-shogi.github.io/shogihome/";
-    license = with lib.licenses; [
-      mit
-      asl20 # for icons
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        mit
+        asl20 # for icons
+      ];
     maintainers = with lib.maintainers; [
       kachick
     ];

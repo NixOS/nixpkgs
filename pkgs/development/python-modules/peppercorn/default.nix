@@ -19,5 +19,6 @@ buildPythonPackage rec {
     homepage = "https://docs.pylonsproject.org/projects/peppercorn/en/latest/";
     maintainers = [ ];
     platforms = lib.platforms.all;
+    license = lib.licenses.bsd3Modification;
   };
 }

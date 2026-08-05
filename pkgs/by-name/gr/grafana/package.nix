@@ -21,7 +21,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "grafana";
-  version = "12.4.1";
+  version = "13.1.1";
 
   subPackages = [
     "pkg/cmd/grafana"
@@ -33,7 +33,7 @@ buildGoModule (finalAttrs: {
     owner = "grafana";
     repo = "grafana";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-xzQMDIlvhzO8Cn6pav631T1NxIBDO7Qh71Jj/k8LSsE=";
+    hash = "sha256-e5Potkxm4VB1nUFyvByamsSkWAKMTMzpHIzrKSeRRM4=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
@@ -49,12 +49,12 @@ buildGoModule (finalAttrs: {
   # Since this is not a dependency attribute the buildPackages has to be specified.
   offlineCache = buildPackages.yarn-berry_4-fetcher.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-odT+qMGpeWlXG5jUGwM1PcqbaSR0FUiSUr3mq2mJFDw=";
+    hash = "sha256-c/gCHjwfItp4h+CHa5CPKHhe8/hiqF9MNFin/hK8GmQ=";
   };
 
   disallowedRequisites = [ finalAttrs.offlineCache ];
 
-  vendorHash = "sha256-orf8qecHZ/AP4+4halAFsoE3oodZ9hPlPHlrQ1e+KqY=";
+  vendorHash = "sha256-tlXBxcXt472A7PHurrbvW/SRlQmum8PUUlkmu5q2Y7Q=";
 
   # Grafana seems to just set it to the latest version available
   # nowadays.
@@ -167,11 +167,10 @@ buildGoModule (finalAttrs: {
     ];
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
       "aarch64-linux"
       "aarch64-darwin"
       "riscv64-linux"
     ];
-    mainProgram = "grafana-server";
+    mainProgram = "grafana";
   };
 })

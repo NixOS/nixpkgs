@@ -57,6 +57,7 @@ lib.makeExtensible (
       gphoto2Support = true;
       krb5Support = true;
       embedInstallers = true;
+      smartcardSupport = true;
     };
 
     stable = self.base.override { wineRelease = "stable"; };

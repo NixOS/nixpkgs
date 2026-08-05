@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  poetry-dynamic-versioning,
   loguru,
   python-dateutil,
   pyyaml,
@@ -24,14 +25,14 @@ buildPythonPackage rec {
 
   postPatch = ''
     # Those versions seems to work with `bubop`.
-    substituteInPlace pyproject.toml \
-    --replace-fail 'loguru = "^0.5.3"' 'loguru = "^0.7"' \
-    --replace-fail 'PyYAML = "~5.3.1"' 'PyYAML = "^6.0"'
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [
+    poetry-core
+    poetry-dynamic-versioning
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     loguru
     python-dateutil
     pyyaml
@@ -46,6 +47,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/bergercookie/bubop";
     changelog = "https://github.com/bergercookie/bubop/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ raitobezarius ];
+    maintainers = [ ];
   };
 }

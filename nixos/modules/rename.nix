@@ -82,6 +82,10 @@ in
       "programs"
       "gnome-documents"
     ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "programs"
+      "pqos-wrapper"
+    ] "The corresponding package was removed from nixpkgs.") # added 2026-05-13
     (mkRemovedOptionModule
       [
         "services"
@@ -121,6 +125,9 @@ in
     (mkRemovedOptionModule [ "programs" "yabar" ]
       "programs.yabar has been removed from NixOS. This is because the yabar repository has been archived upstream."
     )
+    (mkRemovedOptionModule [ "security" "dhparams" ] ''
+      The security.dhparams module has been removed as RFC 7919 has shown that generating your own params is problematic.
+    '')
     (mkRemovedOptionModule [ "security" "hideProcessInformation" ] ''
       The hidepid module was removed, since the underlying machinery
       is broken when using cgroups-v2.
@@ -143,6 +150,13 @@ in
     ] "The baget module was removed due to the upstream package being unmaintained.")
     (mkRemovedOptionModule [ "services" "beegfs" ] "The BeeGFS module has been removed")
     (mkRemovedOptionModule [ "services" "beegfsEnable" ] "The BeeGFS module has been removed")
+    (mkRemovedOptionModule [
+      "services"
+      "bosun"
+    ] "bosun has been removed as it is no longer maintained upstream.")
+    (mkRemovedOptionModule [ "services" "botamusique" ]
+      "The botamusique module has been removed. The project was archived upstream in 2024: https://github.com/azlux/botamusique"
+    )
     (mkRemovedOptionModule [
       "services"
       "cgmanager"
@@ -217,9 +231,27 @@ in
     (mkRemovedOptionModule
       [
         "services"
+        "globalprotect"
+      ]
+      "The corresponding package was removed from nixpkgs, as it depended on qt5 webengine. A replacements based on tauri exist upstream, but requires non-trivial maintainance in nixpkgs to update."
+    )
+    (mkRemovedOptionModule
+      [
+        "services"
         "grafana-agent"
       ]
       "The grafana-agent module has been removed. Consider migrating to `grafana-alloy` (`services.alloy.enable`). See <https://grafana.com/docs/alloy/latest/set-up/migrate/>"
+    )
+    (mkRemovedOptionModule
+      [
+        "services"
+        "promtail"
+      ]
+      ''
+        The promtail module has been removed, as promtail reached its end of life.
+        Consider migrating to `grafana-alloy` (`services.alloy.enable`), or, if you are looking for something light-weight, `fluent-bit` (`services.fluent-bit.enable`).
+        See <https://grafana.com/docs/alloy/latest/set-up/migrate/> or <https://docs.fluentbit.io/manual/data-pipeline/outputs/loki>.
+      ''
     )
     (mkRemovedOptionModule [ "services" "homeassistant-satellite" ]
       "The `services.homeassistant-satellite` module has been replaced by `services.wyoming-satellite`."
@@ -249,6 +281,13 @@ in
       "services"
       "marathon"
     ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule
+      [
+        "services"
+        "matrix-appservice-discord"
+      ]
+      "The matrix-appservice-discord package has been removed as it is no longer actively maintained upstream. Use `services.mautrix-discord` instead."
+    )
     (mkRemovedOptionModule [ "services" "mathics" ] "The Mathics module has been removed")
     (mkRemovedOptionModule [ "services" "matrix-sliding-sync" ]
       "The matrix-sliding-sync package has been removed, since matrix-synapse incorporated its functionality. Remove `services.sliding-sync` from your NixOS Configuration, and the `.well-known` record for `org.matrix.msc3575.proxy` from your webserver"
@@ -368,6 +407,20 @@ in
       as the underlying package isn't being maintained. Working alternatives are
       libinput and synaptics.
     '')
+    (mkRemovedOptionModule [ "services" "xserver" "windowManager" "afterstep" ] ''
+      The services.xserver.windowManager.afterstep module and the corresponding
+      package have been removed from Nixpkgs because they were unmaintained
+      upstream.
+    '')
+    (mkRemovedOptionModule [ "services" "xserver" "windowManager" "ragnarwm" ] ''
+      The services.xserver.windowManager.ragnarwm module has been removed
+      because the corresponding package was removed from nixpkgs.
+    '')
+    (mkRemovedOptionModule [ "services" "xserver" "windowManager" "sawfish" ] ''
+      The services.xserver.windowManager.sawfish module and the corresponding
+      package have been removed from Nixpkgs because they depended on the
+      deprecated GTK2 engine.
+    '')
     (mkRemovedOptionModule [
       "services"
       "xmr-stak"
@@ -452,6 +505,10 @@ in
     (mkRemovedOptionModule [ "services" "gateone" ] ''
       The gateone module was removed since the package was removed alongside much other obsolete python 2.
     '')
+    (mkRemovedOptionModule [ "services" "opengfw" ] ''
+      The opengfw package and services.opengfw module have been removed since the upstream
+      GitHub repository and website have been shut down.
+    '')
     (mkRemovedOptionModule [ "virtualisation" "lxd" ] ''
       LXD has been removed from NixOS due to lack of Nixpkgs maintenance.
       Consider migrating or switching to Incus, or remove from your configuration.
@@ -468,7 +525,7 @@ in
       services.simplesamlphp has been vulnerable and unmaintained in nixpkgs.
     '')
     (mkRemovedOptionModule [ "security" "pam" "enableEcryptfs" ] ''
-      security.pam.enableFscrypt was removed since it was unmaintained in nixpkgs.
+      security.pam.enableEcryptfs was removed since it was unmaintained in nixpkgs.
     '')
     (mkRemovedOptionModule [ "security" "rngd" ] ''
       rngd is not necessary for any device that the kernel recognises
@@ -482,6 +539,22 @@ in
     (mkRemovedOptionModule [ "programs" "spacefm" ] ''
       spacefm has been removed since it was unmaintained upstream.
     '')
+    (mkRemovedOptionModule [ "services" "pyload" ] ''
+      services.pyload has been removed since the pyload-ng package had vulnerabilities and was unmaintained in nixpkgs.
+    '')
+    (mkRemovedOptionModule [ "services" "xtreemfs" ] ''
+      services.xtreemfs has been removed as it was broken and unmaintained upstream
+    '')
+    (mkRemovedOptionModule [ "services" "xserver" "cmt" ] ''
+      services.xserver.cmt has been removed as it was broken and unmaintained upstream
+    '')
+    (mkRemovedOptionModule
+      [
+        "services"
+        "overseerr"
+      ]
+      "`services.overseerr` has been replaced by `services.seerr` as the project has been merged with Jellyseerr under Seerr."
+    )
     # Do NOT add any option renames here, see top of the file
   ];
 }

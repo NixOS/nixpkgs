@@ -29,13 +29,13 @@
 # Additionally, when gemrb adds support for the EE games, libvlc will be needed anyway.
 
 let
-  version = "0.9.4";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "gemrb";
     repo = "gemrb";
     rev = "v${version}";
-    hash = "sha256-+aPnOJQGRblqcrblVU5ZwA8CZqeT19rxEtn3GLuofYU=";
+    hash = "sha256-gPtmJb3GhBrvP1vy933wPPy+n3BwBIbJ2o8VV674Mso=";
   };
 
   icons = runCommand "gemrb-icons" { nativeBuildInputs = [ imagemagick ]; } ''

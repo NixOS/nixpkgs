@@ -10,17 +10,18 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pyrefly";
-  version = "0.55.0";
+  version = "1.2.0-dev.3";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "pyrefly";
     tag = finalAttrs.version;
-    hash = "sha256-Pdfi+ZCAnBCCFNI/5NLNexacn1kFDHjnjgkhfw/m1j0=";
+    hash = "sha256-5rNqEIC1xU5fp1CBlcQe61JOeYz2YowmshPai2hBviI=";
   };
 
   buildAndTestSubdir = "pyrefly";
-  cargoHash = "sha256-HXJsTE0a8X4c+CvC9e0xp4PVUBrFOpB5R/K/UG5MeDs=";
+
+  cargoHash = "sha256-xpWZ/1FI5zWg6r4k9QF76gUnFhDh5rmDPARJypLQ76w=";
 
   buildInputs = [ rust-jemalloc-sys ];
 
@@ -36,9 +37,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   preCheck = ''
     export TMPDIR=$(mktemp -d)
   '';
-
-  # requires unstable rust features
-  env.RUSTC_BOOTSTRAP = 1;
 
   passthru.updateScript = nix-update-script { };
 

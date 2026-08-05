@@ -22,7 +22,12 @@ buildNpmPackage (finalAttrs: {
     hash = "sha256-/xH3tBnZAnDr/EbewtJc0WpBirW1Obn6tka7NP0ovAc=";
   };
 
-  npmDepsHash = "sha256-xoZ/qz7fGw858GsITkx/ag0FeeL4zcXh32qwb+OTLbg=";
+  patches = [
+    # zip extraction fails on newer nodejs versions without this fix
+    ./bump-yauzl.patch
+  ];
+
+  npmDepsHash = "sha256-p26yEuIiK7baeAxf06E+cmuzl45NS2WOmWNeFfTplQA=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -35,6 +40,8 @@ buildNpmPackage (finalAttrs: {
     ONNXRUNTIME_NODE_INSTALL = "skip";
     ONNXRUNTIME_NODE_INSTALL_CUDA = "skip";
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+    # electron-forge's console output is squeezed into one narrow column if unset
+    CI = "1";
   };
 
   makeCacheWritable = true;

@@ -5,12 +5,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.21.0";
+  version = "2.22.0";
   pname = "commons-io";
 
   src = fetchurl {
     url = "mirror://apache/commons/io/binaries/commons-io-${finalAttrs.version}-bin.tar.gz";
-    hash = "sha256-x2Szn/hbuYWX+8J0ZHV9XAY0L5PQlvtIKpV2MJSic4w=";
+    hash = "sha256-DQ17WESs+TMizYkp7yG103LZdS8i+XqEkfFrlttoTm8=";
   };
 
   installPhase = ''

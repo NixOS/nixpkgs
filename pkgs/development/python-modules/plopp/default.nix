@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pythonAtLeast,
 
   # build-system
@@ -36,15 +37,23 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "plopp";
-  version = "26.3.1";
+  version = "26.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scipp";
     repo = "plopp";
     tag = finalAttrs.version;
-    hash = "sha256-A8F2Gd0HmHRlusScFoFulsFaqaXA/HxmtT8ODdRLA+U=";
+    hash = "sha256-TpoTOzdD8N9IcATmMRTfbSSBWwosxCW+MBa5MDtabf8=";
   };
+
+  patches = [
+    # Fixes test failures: https://github.com/scipp/plopp/pull/592
+    (fetchpatch {
+      url = "https://github.com/scipp/plopp/commit/4d2aac82d9ac42f5b74b4e12de689a627e1fc457.patch";
+      hash = "sha256-Kec+AQrwCNE8X/EfUzXMZIxD8puVbmrR3y6J7EThBlk=";
+    })
+  ];
 
   build-system = [
     setuptools
@@ -75,7 +84,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = lib.optionals (pythonAtLeast "3.14") [
-    # RuntimeError: There is no current event loop in thread 'MainThread'
+    # https://github.com/scipp/plopp/issues/508
     "test_move_cut"
     "test_value_cuts"
   ];

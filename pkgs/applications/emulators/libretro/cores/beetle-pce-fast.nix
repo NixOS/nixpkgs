@@ -5,13 +5,13 @@
 }:
 mkLibretroCore {
   core = "mednafen-pce-fast";
-  version = "0-unstable-2026-03-13";
+  version = "0-unstable-2026-07-31";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "beetle-pce-fast-libretro";
-    rev = "0fa44d2500ebc9bf96d2808209be27a69006df79";
-    hash = "sha256-NBL506+aaLRQh9XawvvynNRunWDPqxrt7ngy6FCmiIQ=";
+    rev = "b211204c7026dff6e86e79b00185512e2421fff8";
+    hash = "sha256-NfVgWG76T6cbb44F8Qva7rlwlsuhF8H6WtKjLPNfs7k=";
   };
 
   makefile = "Makefile";

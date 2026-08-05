@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  pnpm,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -11,22 +11,25 @@
 }:
 
 let
+  pnpm = pnpm_10;
+
   vsix = stdenvNoCC.mkDerivation (finalAttrs: {
     name = "roo-code-${finalAttrs.version}.vsix";
     pname = "roo-code-vsix";
-    version = "3.51.1";
+    version = "3.54.0";
 
     src = fetchFromGitHub {
       owner = "RooCodeInc";
       repo = "Roo-Code";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-HpLL466mzDvNf7twW0a3dDUvgveRm0tbCOXGymTW+tA=";
+      hash = "sha256-pVJcFAI/xxNflzf+wj0fOASP8Fx9oybu9V6dGrDx7do=";
     };
 
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
-      fetcherVersion = 2;
-      hash = "sha256-Q97MDHl22lIF84/J3UW53dCD7oaN3Y6R32xhjRDBmpw=";
+      inherit pnpm;
+      fetcherVersion = 3;
+      hash = "sha256-VD4DDLpZdnsfZNkg2oD0DT+zoxsk4CUh2pFll8n3mu4=";
     };
 
     nativeBuildInputs = [

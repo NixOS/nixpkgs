@@ -47,7 +47,6 @@ let
     linux
     mapTestOnCross
     pkgsForCross
-    unix
     ;
 
   inherit (release-lib.lib)
@@ -84,6 +83,7 @@ let
     mesa = nativePlatforms;
     rustc = nativePlatforms;
     cargo = nativePlatforms;
+    fd = nativePlatforms;
   };
 
   gnuCommon = recursiveUpdate common {
@@ -121,6 +121,10 @@ let
     gmp = nativePlatforms;
     boehmgc = nativePlatforms;
     hello = nativePlatforms;
+    tree-sitter.builtGrammars =
+      mapAttrs (_: _: nativePlatforms)
+        (pkgsForCross systems.examples.wasm32-wasip1 (builtins.head supportedSystems))
+        .tree-sitter.builtGrammars;
     zlib = nativePlatforms;
   };
 
@@ -197,8 +201,8 @@ in
 
   crossIphone32 = mapTestOnCross systems.examples.iphone32 darwinCommon;
 
-  # Test some cross builds to the Sheevaplug
-  crossSheevaplugLinux = mapTestOnCross systems.examples.sheevaplug (
+  # Test some cross builds to ARMv5
+  armv5tel = mapTestOnCross systems.examples.armv5tel-multiplatform (
     linuxCommon
     // {
       ubootSheevaplug = nativePlatforms;
@@ -235,8 +239,6 @@ in
   # Linux on armv7l-hf
   armv7l-hf = mapTestOnCross systems.examples.armv7l-hf-multiplatform linuxCommon;
 
-  pogoplug4 = mapTestOnCross systems.examples.pogoplug4 linuxCommon;
-
   # Linux on aarch64
   aarch64 = mapTestOnCross systems.examples.aarch64-multiplatform linuxCommon;
   aarch64-musl = mapTestOnCross systems.examples.aarch64-multiplatform-musl linuxCommon;
@@ -249,6 +251,7 @@ in
   loongarch64-linux = mapTestOnCross systems.examples.loongarch64-linux linuxCommon;
 
   m68k = mapTestOnCross systems.examples.m68k linuxCommon;
+  arc = mapTestOnCross systems.examples.arc linuxCommon;
   s390x = mapTestOnCross systems.examples.s390x linuxCommon;
 
   # (Cross-compiled) Linux on x86
@@ -267,6 +270,7 @@ in
   android64 = mapTestOnCross systems.examples.aarch64-android-prebuilt linuxCommon;
   android32 = mapTestOnCross systems.examples.armv7a-android-prebuilt linuxCommon;
 
+  wasm32-wasip1 = mapTestOnCross systems.examples.wasm32-wasip1 wasiCommon;
   wasi32 = mapTestOnCross systems.examples.wasi32 wasiCommon;
 
   msp430 = mapTestOnCross systems.examples.msp430 embedded;
@@ -290,10 +294,6 @@ in
   x86_64-freebsd = mapTestOnCross systems.examples.x86_64-freebsd common;
   x86_64-netbsd = mapTestOnCross systems.examples.x86_64-netbsd common;
   x86_64-openbsd = mapTestOnCross systems.examples.x86_64-openbsd common;
-
-  # we test `embedded` instead of `linuxCommon` because very few packages
-  # successfully cross-compile to Redox so far
-  x86_64-redox = mapTestOnCross systems.examples.x86_64-unknown-redox embedded;
 
   # Cross-built bootstrap tools for every supported platform
   bootstrapTools =

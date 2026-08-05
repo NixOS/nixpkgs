@@ -12,18 +12,22 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-videointelligence";
-  version = "2.18.0";
+  version = "2.20.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_videointelligence";
-    inherit version;
-    hash = "sha256-sq45vSLRhiGGhKKXwvovpjblh05p059xlQTXKfRGOf0=";
+    inherit (finalAttrs) version;
+    hash = "sha256-5EktMzhD8EAZG0cw/1igpK6hAINQBTh5vEBY3fYtqKA=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core
@@ -56,8 +60,8 @@ buildPythonPackage rec {
   meta = {
     description = "Google Cloud Video Intelligence API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-videointelligence";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-videointelligence-v${version}/packages/google-cloud-videointelligence/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-videointelligence-v${finalAttrs.version}/packages/google-cloud-videointelligence/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

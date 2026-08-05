@@ -1,6 +1,10 @@
-{ lib, fetchFromGitHub }:
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+}:
 rec {
-  version = "9.2.0106";
+  version = "9.2.0782";
 
   outputs = [
     "out"
@@ -11,13 +15,13 @@ rec {
     owner = "vim";
     repo = "vim";
     rev = "v${version}";
-    hash = "sha256-byOf2Gr1vA7xQw3YHV454te1QrVxRy3sXrLdFUp2XRg=";
+    hash = "sha256-D4IyDgl1JdmumDzO0uMg2LhoSnFUeqhcMJ6ImC17wzs=";
   };
 
   enableParallelBuilding = true;
   enableParallelInstalling = false;
 
-  hardeningDisable = [ "fortify" ];
+  hardeningDisable = if stdenv.cc.isClang then [ "strictflexarrays1" ] else [ "fortify" ];
 
   # Use man from $PATH; escape sequences are still problematic.
   postPatch = ''

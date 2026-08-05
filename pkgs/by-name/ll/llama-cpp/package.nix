@@ -15,6 +15,8 @@
   rocmPackages ? { },
   rocmGpuTargets ? rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets,
 
+  cpuArchDynamicDispatch ? true,
+
   openclSupport ? false,
   clblast,
 
@@ -28,18 +30,18 @@
   blas,
 
   fetchNpmDeps,
-  nodejs,
+  nodejs_latest,
   npmHooks,
 
   pkg-config,
-  metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && !openclSupport,
+  metalSupport ? stdenv.hostPlatform.isDarwin && !openclSupport,
   vulkanSupport ? false,
   rpcSupport ? false,
   openssl,
-  llama-cpp,
   shaderc,
   vulkan-headers,
   vulkan-loader,
+  spirv-headers,
   ninja,
 }:
 
@@ -56,7 +58,7 @@ let
     ;
 
   cudaBuildInputs = with cudaPackages; [
-    cuda_cccl # <nv/target>
+    cccl # <nv/target>
 
     # A temporary hack for reducing the closure size, remove once cudaPackages
     # have stopped using lndir: https://github.com/NixOS/nixpkgs/issues/271792
@@ -78,7 +80,7 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "8255";
+  version = "10273";
 
   outputs = [
     "out"
@@ -89,7 +91,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-2bPFOEbBPpv2GwhMRkpJpIySh4/KLXKQ8uV7TiY3h+M=";
+    hash = "sha256-A4VLmyOr19NaWI/L//BzK30EuaWNI+38em8YABvQ3wE=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT
@@ -99,17 +101,14 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   patches = [ ];
 
-  postPatch = ''
-    rm tools/server/public/index.html.gz
-  '';
-
   nativeBuildInputs = [
     cmake
     installShellFiles
     ninja
-    nodejs
+    nodejs_latest
     npmHooks.npmConfigHook
     pkg-config
+    spirv-headers
   ]
   ++ optionals cudaSupport [
     cudaPackages.cuda_nvcc
@@ -124,8 +123,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ optionals vulkanSupport vulkanBuildInputs
     ++ [ openssl ];
 
-  npmRoot = "tools/server/webui";
-  npmDepsHash = "sha256-5ZswgZFLeI32/xQZqCTTFbCzleDqr5AotjFg/5rNn1M=";
+  npmRoot = "tools/ui";
+  npmDepsHash = "sha256-B7uEynAG70a3xauBKc20RuFa9cnWaWzVBCh+LPLBnIM=";
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src patches;
@@ -138,13 +137,12 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     prependToVar cmakeFlags "-DLLAMA_BUILD_COMMIT:STRING=$(cat COMMIT)"
     pushd ${finalAttrs.npmRoot}
-    npm run build
+    LLAMA_BUILD_NUMBER=${finalAttrs.version} npm run build
     popd
   '';
 
   cmakeFlags = [
-    # -march=native is non-deterministic; override with platform-specific flags if needed
-    (cmakeBool "GGML_NATIVE" false)
+    (cmakeBool "GGML_NATIVE" false) # -march=native would make builds non-deterministic
     (cmakeBool "LLAMA_BUILD_EXAMPLES" false)
     (cmakeBool "LLAMA_BUILD_SERVER" true)
     (cmakeBool "LLAMA_BUILD_TESTS" (finalAttrs.finalPackage.doCheck or false))
@@ -158,6 +156,18 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (cmakeBool "GGML_RPC" rpcSupport)
     (cmakeBool "GGML_VULKAN" vulkanSupport)
     (cmakeFeature "LLAMA_BUILD_NUMBER" finalAttrs.version)
+  ]
+  ++ optionals cpuArchDynamicDispatch [
+    # Build all CPU backend variants for runtime dynamic dispatch.
+    # This avoids illegal instructions on older CPUs and gives optimal performance
+    # on newer ones without needing separate builds.
+    # Enabling AVX2 can make CPU inference 13x faster compared to NixOS's x86_64 defaults.
+    # Note it is not a bug that the CPU variant .so files are placed in `bin/`
+    # (as opposed to `lib/`) alongside the executables by upstream's `CMakeLists.txt` design:
+    # * https://github.com/ggml-org/llama.cpp/blob/b46812de78f8fbcb6cf0154947e8633ebc78d9ac/ggml/src/CMakeLists.txt#L249-L252
+    # * https://github.com/ggml-org/llama.cpp/blob/b46812de78f8fbcb6cf0154947e8633ebc78d9ac/ggml/src/ggml-backend-reg.cpp#L480-L486
+    (cmakeBool "GGML_CPU_ALL_VARIANTS" true)
+    (cmakeBool "GGML_BACKEND_DL" true)
   ]
   ++ optionals cudaSupport [
     (cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
@@ -179,9 +189,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   # upstream plans on adding targets at the cmakelevel, remove those
   # additional steps after that
   postInstall = ''
-    # Match previous binary name for this package
-    ln -sf $out/bin/llama-cli $out/bin/llama
-
     mkdir -p $out/include
     cp $src/include/llama.h $out/include/
 
@@ -195,9 +202,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   doCheck = false;
 
   passthru = {
-    tests = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-      metal = llama-cpp.override { metalSupport = true; };
-    };
     updateScript = nix-update-script {
       attrPath = "llama-cpp";
       extraArgs = [
@@ -214,7 +218,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     mainProgram = "llama";
     maintainers = with lib.maintainers; [
       booxter
-      dit7ya
       philiptaron
       xddxdd
       yuannan

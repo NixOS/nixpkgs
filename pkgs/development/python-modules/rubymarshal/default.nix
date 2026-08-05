@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  poetry-core,
+  hatchling,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     hash = "sha256-iZtG5khSANCHhY/1YpWIF2T/Umj2/fAbfsxOTgPT7Xw=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   # pypi doesn't distribute tests
   doCheck = false;

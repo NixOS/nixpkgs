@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tmc-cli";
-  version = "1.1.2";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "rage";
     repo = "tmc-cli-rust";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-C7X+XTOqquqf/W29+A4wUUl6aDZYLlc5XokkIOrCbp0=";
+    hash = "sha256-P6jlj9HWZ09vAw7EVT8po49eWGkGv/ppvKwnq06t2A0=";
   };
 
-  cargoHash = "sha256-2KoHKTN1Jvyvk9ravi0a9D+RIFYa1KmHLJQzKT2iP9A=";
+  cargoHash = "sha256-YUIEKr1nQij4f/4kOeJq6AgqeQq+U3bOBTJaJM2Bs2Y=";
 
   nativeCheckInputs = [
     writableTmpDirAsHomeHook

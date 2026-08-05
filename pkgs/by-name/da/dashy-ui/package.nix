@@ -9,27 +9,29 @@
   fixup-yarn-lock,
   prefetch-yarn-deps,
   nixosTests,
-  nodejs_20,
-  nodejs-slim_20,
-  remarshal_0_17,
+  nodejs_24,
+  nodejs-slim_24,
+  remarshal,
+  nix-update-script,
   settings ? { },
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "dashy-ui";
-  version = "3.1.1-unstable-2025-09-12";
+  version = "4.5.1";
   src = fetchFromGitHub {
     owner = "lissy93";
     repo = "dashy";
-    rev = "e70ade555fdccf4e723a90f8a2d46fcf83645c4f";
-    hash = "sha256-edsGHc6Hi306aq+TA2g5FL/ZYNfExbcgHS5PWF9O0+0=";
+    tag = finalAttrs.version;
+    hash = "sha256-1TWWgvVBsfuH84tF+l98g+Yu3/dmDuGFZy301uaRZ0A=";
   };
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-r36w3Cz/V7E/xPYYpvfQsdk2QXfCVDYE9OxiFNyKP2s=";
+    hash = "sha256-zo5B1L/zTDiQyiAb8zTc7cZCh8hb5aZ6CD0mBiMg8gs=";
   };
 
-  passthru.tests = {
-    dashy = nixosTests.dashy;
+  passthru = {
+    tests.dashy = nixosTests.dashy;
+    updateScript = nix-update-script { };
   };
 
   # - If no settings are passed, use the default config provided by upstream
@@ -54,19 +56,19 @@ stdenv.mkDerivation (finalAttrs: {
     # but they've been overridden for the sake of consistency/in case future updates to dashy/node would cause issues with differing major versions
     (yarnConfigHook.override {
       fixup-yarn-lock = fixup-yarn-lock.override {
-        nodejs-slim = nodejs-slim_20;
+        nodejs-slim = nodejs-slim_24;
       };
       prefetch-yarn-deps = prefetch-yarn-deps.override {
-        nodejs-slim = nodejs-slim_20;
+        nodejs-slim = nodejs-slim_24;
       };
       yarn = yarn.override {
-        nodejs = nodejs_20;
+        nodejs = nodejs_24;
       };
     })
     yarnBuildHook
-    nodejs_20
+    nodejs_24
     # For yaml conversion
-    remarshal_0_17
+    remarshal
   ];
   doDist = false;
   meta = {

@@ -10,25 +10,27 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "atuin";
-  version = "18.12.1";
+  version = "18.18.1";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "atuin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ojIL8Iy74UgFE4Mp75oHWbZDsFRKRhOBdkPP/TtZpz4=";
+    hash = "sha256-dPdD9U1CwuGbd1K/ljYwgTlAl9sSzt+dSuxLijLlyBQ=";
   };
 
-  cargoHash = "sha256-KamAFi6OHE38ss8rIncNecNMVjd8gAeSWMh8G7Yb/rQ=";
+  cargoHash = "sha256-t8UK0/WBGleU1qbTUITl+hj1wXsEqIyreZJFBGxAMkg=";
 
   # atuin's default features include 'check-updates', which do not make sense
   # for distribution builds. List all other default features.
   buildNoDefaultFeatures = true;
   buildFeatures = [
+    "ai"
     "client"
-    "sync"
     "clipboard"
     "daemon"
+    "hex"
+    "sync"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -43,6 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkFlags = [
     # tries to make a network access
     "--skip=registration"
+    "--skip=api_client"
     # No such file or directory (os error 2)
     "--skip=sync"
     # PermissionDenied (Operation not permitted)
@@ -56,7 +59,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     tests = {
-      inherit (nixosTests) atuin;
+      inherit (nixosTests) atuin atuin-programs;
     };
     updateScript = nix-update-script { };
   };

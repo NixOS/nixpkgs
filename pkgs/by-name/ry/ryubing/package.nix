@@ -4,7 +4,7 @@
   cctools,
   darwin,
   dotnetCorePackages,
-  fetchFromGitLab,
+  fetchFromForgejo,
   libx11,
   libgdiplus,
   moltenvk,
@@ -34,19 +34,17 @@ buildDotnetModule rec {
   pname = "ryubing";
   version = "1.3.3";
 
-  src = fetchFromGitLab {
+  src = fetchFromForgejo {
     domain = "git.ryujinx.app";
-    owner = "Ryubing";
-    repo = "Ryujinx";
+    owner = "projects";
+    repo = "Ryubing";
     tag = version;
     hash = "sha256-LhQaXxmj5HIgfmrsDN8GhhVXlXHpDO2Q8JtNLaCq0mk=";
   };
 
   nativeBuildInputs =
-    lib.optional stdenv.hostPlatform.isLinux [
-      wrapGAppsHook3
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin [
+    lib.optional stdenv.hostPlatform.isLinux wrapGAppsHook3
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools
       darwin.sigtool
     ];
@@ -82,11 +80,11 @@ buildDotnetModule rec {
     libGL
     SDL2
   ]
-  ++ lib.optional (!stdenv.hostPlatform.isDarwin) [
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     udev
     pulseaudio
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin [ moltenvk ];
+  ++ lib.optional stdenv.hostPlatform.isDarwin moltenvk;
 
   projectFile = "Ryujinx.sln";
   testProjectFile = "src/Ryujinx.Tests/Ryujinx.Tests.csproj";
@@ -135,7 +133,8 @@ buildDotnetModule rec {
 
   meta = {
     homepage = "https://ryujinx.app";
-    changelog = "https://git.ryujinx.app/ryubing/ryujinx/-/wikis/changelog";
+    # historical changelog https://git.ryujinx.app/projects/Ryubing/wiki/Changelog
+    changelog = "https://git.ryujinx.app/projects/Ryubing/releases/tag/${src.tag}";
     description = "Experimental Nintendo Switch Emulator written in C# (community fork of Ryujinx)";
     longDescription = ''
       Ryujinx is an open-source Nintendo Switch emulator, created by gdkchan,

@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "gst-python";
-  version = "1.26.0";
+  version = "1.28.5";
 
   pyproject = false;
 
@@ -32,20 +32,12 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-python/gst-python-${version}.tar.xz";
-    hash = "sha256-5QRqBdd6uxVnGtAc0ZCNF9YuWgb114Qb5DQq3io/uNs=";
+    hash = "sha256-CsRhtXALl2aZiqaGQ5BkyvWMpP2vhI39R3tadwCxdsw=";
   };
 
   patches = [
-    # Fix segfault with PyGObject>=3.52.0
-    # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8653
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/69bba61e548c7a63bc18137e63e41489a7de9d36.patch";
-      stripLen = 2;
-      hash = "sha256-BfWPc8dsB09KiEm9bNT8e+jH76jiDefQlEhhLJoq7tI=";
-    })
-
-    # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/issues/4322
-    ./skip-failing-test-not-initialized.patch
+    # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/9918#note_3530752
+    ./fix-test-plugin-imports.patch
   ];
 
   # Python 2.x is not supported.
@@ -103,13 +95,13 @@ buildPythonPackage rec {
   '';
 
   passthru = {
-    updateScript = directoryListingUpdater { };
+    updateScript = directoryListingUpdater { odd-unstable = true; };
   };
 
   meta = {
     homepage = "https://gstreamer.freedesktop.org";
     description = "Python bindings for GStreamer";
     license = lib.licenses.lgpl2Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tmarkus ];
   };
 }

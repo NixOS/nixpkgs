@@ -28,12 +28,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "orthanc";
-  version = "1.12.10";
+  version = "1.12.11";
 
   src = fetchhg {
     url = "https://orthanc.uclouvain.be/hg/orthanc/";
     rev = "Orthanc-${finalAttrs.version}";
-    hash = "sha256-+y+99NKyAWoQmvgCfubNuGiJ68uUwUvE2O64gZ/3uNA=";
+    hash = "sha256-EoohVYrnGN3dJUlXAd+10glcKA0AdZSyQ3wy2luycMQ=";
   };
 
   outputs = [

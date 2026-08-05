@@ -6,48 +6,81 @@
   openssl,
   perl,
   zig,
+  gitMinimal,
   pkg-config,
   stdenv,
   vimUtils,
+  writableTmpDirAsHomeHook,
 }:
 let
-  version = "1001eb8-unstable-2026-03-13";
+  version = "0.10.1";
   src = fetchFromGitHub {
     owner = "dmtrKovalenko";
-    repo = "fff.nvim";
-    rev = "fcdf4a9172fba824ca6834731b93b74eba51d1c3";
-    hash = "sha256-AYxWrqru0/HCrfTXRqTExiOT6mNzNMk+pT6APRs0BUM=";
+    repo = "fff";
+    tag = "v${version}";
+    hash = "sha256-GGoy8ghA87vwHEc0fi97uiBrpRTAGk/QgqzKu8BBRXo=";
   };
   fff-nvim-lib = rustPlatform.buildRustPackage {
     pname = "fff-nvim-lib";
     inherit version src;
 
-    cargoHash = "sha256-nXtJPE6HNZx5Ra4CwYi/f4EWww//1XwsiwtRG77RPJk=";
+    cargoHash = "sha256-sOE3Zrs/ZtOIusH0+OvR1Ew5sfQfse6eWSLPwDPVSU4=";
+
+    cargoBuildFlags = [
+      "-p"
+      "fff-nvim"
+      "--features"
+      "zlob"
+    ];
+
+    cargoCheckFlags = [
+      "-p"
+      "fff-nvim"
+      "--features"
+      "zlob"
+    ];
 
     nativeBuildInputs = [
       pkg-config
       perl
       rustPlatform.bindgenHook
+      writableTmpDirAsHomeHook
+      zig
     ];
+
+    dontUseZigConfigure = true;
+    dontUseZigBuild = true;
+    dontUseZigCheck = true;
+    dontUseZigInstall = true;
+
+    # Some tests need git
+    nativeCheckInputs = [ gitMinimal ];
+
+    # Tests need these permissions in order to use the FSEvents API on macOS.
+    sandboxProfile = ''
+      (allow mach-lookup (global-name "com.apple.FSEvents"))
+    '';
 
     buildInputs = [
       openssl
     ];
 
-    # This test requires curl and GitHub access
     checkFlags = [
+      # This test requires curl and GitHub access
       "--skip=update_check::tests::test_update_check_end_to_end"
+
+      # This test depends on catching a race window and is not deterministic
+      "--skip=drop_during_post_scan_does_not_crash"
     ];
 
     env = {
-      RUSTC_BOOTSTRAP = 1; # We need rust unstable features
+      # Build zlob for a portable CPU baseline (https://github.com/dmtrKovalenko/fff/issues/705)
+      CI = "1";
 
       OPENSSL_NO_VENDOR = true;
 
       # Allow undefined symbols on Darwin - they will be provided by Neovim's LuaJIT runtime
       RUSTFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-C link-arg=-undefined -C link-arg=dynamic_lookup";
-
-      ZIG = lib.getExe zig; # zlob requires zig
     };
   };
 in
@@ -62,14 +95,13 @@ vimUtils.buildVimPlugin {
         "return '${fff-nvim-lib}/lib'"
   '';
 
-  nvimSkipModule = [
+  nvimSkipModules = [
     # Skip single file dev config for testing fff.nvim locally
     "empty_config"
   ];
 
   passthru = {
     updateScript = nix-update-script {
-      extraArgs = [ "--version=branch" ];
       attrPath = "vimPlugins.fff-nvim.fff-nvim-lib";
     };
 
@@ -79,7 +111,7 @@ vimUtils.buildVimPlugin {
 
   meta = {
     description = "Fast Fuzzy File Finder for Neovim";
-    homepage = "https://github.com/dmtrKovalenko/fff.nvim";
+    homepage = "https://github.com/dmtrKovalenko/fff";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       GaetanLepage

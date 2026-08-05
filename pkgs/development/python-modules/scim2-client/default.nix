@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "scim2-client";
-  version = "0.7.3";
+  version = "0.7.5";
 
   pyproject = true;
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "python-scim";
     repo = "scim2-client";
     tag = version;
-    hash = "sha256-jw8Dp/PekM0JrgxRkN+A896O2twkSDxQpsGsljJFdB0=";
+    hash = "sha256-vySSYdCd7O7wDB3NDzGizhREwBJQdLfaXk6edJ1HqGE=";
   };
 
   postPatch = ''

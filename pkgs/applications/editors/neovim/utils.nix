@@ -6,12 +6,8 @@
   config,
   vimUtils,
   vimPlugins,
-  nodejs,
   neovim-unwrapped,
-  bundlerEnv,
-  ruby,
   lua,
-  python3Packages,
   wrapNeovimUnstable,
 }:
 let
@@ -82,7 +78,7 @@ let
       neovimConfig =
         structuredConfigure:
         let
-          module = import ./module.nix;
+          module = import ./plugin-submodule.nix;
           # Generate init.vim configuration
           cfg = (
             lib.evalModules {
@@ -97,6 +93,7 @@ let
 
       checked_cfg = neovimConfig {
         inherit plugins;
+        _file = "pkgs/applications/editors/neovim/plugin-submodule.nix";
       };
 
       pluginsNormalized = checked_cfg.plugins;
@@ -108,11 +105,12 @@ let
 
       # viml config set by the user along with the plugin
       inherit (checked_cfg)
-        userPluginViml
+        userPluginViml # redefine via userPluginConfigs
         runtimeDeps
         pluginAdvisedLua
         pluginPython3Packages
         luaDependencies
+        userPluginConfigs
         ;
 
       # A Vim "package", see ':h packages'
@@ -145,45 +143,38 @@ let
     let
       luaEnv = neovim-unwrapped.lua.withPackages extraLuaPackages;
     in
-    attrs
-    // {
-      neovimRcContent = customRC;
-      luaRcContent =
-        if attrs ? luaRcContent then
-          lib.warn "makeNeovimConfig: luaRcContent parameter is deprecated. Please use customLuaRC instead." attrs.luaRcContent
-        else
-          customLuaRC;
-      wrapperArgs = lib.optionals (luaEnv != null) [
-        "--prefix"
-        "LUA_PATH"
-        ";"
-        (neovim-unwrapped.lua.pkgs.luaLib.genLuaPathAbsStr luaEnv)
-        "--prefix"
-        "LUA_CPATH"
-        ";"
-        (neovim-unwrapped.lua.pkgs.luaLib.genLuaCPathAbsStr luaEnv)
-      ];
-    };
+    lib.warn
+      "neovimUtils.makeNeovimConfig is deprecated. Use wrapNeovim or wrapNeovimUnstable directly."
+      (
+        attrs
+        // {
+          neovimRcContent = customRC;
+          luaRcContent =
+            if attrs ? luaRcContent then
+              lib.warn "makeNeovimConfig: luaRcContent parameter is deprecated. Please use customLuaRC instead." attrs.luaRcContent
+            else
+              customLuaRC;
+          wrapperArgs = lib.optionals (luaEnv != null) [
+            "--prefix"
+            "LUA_PATH"
+            ";"
+            (neovim-unwrapped.lua.pkgs.luaLib.genLuaPathAbsStr luaEnv)
+            "--prefix"
+            "LUA_CPATH"
+            ";"
+            (neovim-unwrapped.lua.pkgs.luaLib.genLuaCPathAbsStr luaEnv)
+          ];
+        }
+      );
 
   # to keep backwards compatibility for people using neovim.override
   legacyWrapper =
     neovim:
     {
       extraMakeWrapperArgs ? "",
-      # the function you would have passed to python.withPackages
-      extraPythonPackages ? (_: [ ]),
-      # the function you would have passed to python.withPackages
-      withPython3 ? false,
-      extraPython3Packages ? (_: [ ]),
-      # the function you would have passed to lua.withPackages
-      extraLuaPackages ? (_: [ ]),
-      withNodeJs ? false,
-      withRuby ? false,
-      vimAlias ? false,
-      viAlias ? false,
       configure ? { },
-      extraName ? "",
-    }:
+      ...
+    }@attrs:
     let
 
       # we convert from the old configure.format to
@@ -204,26 +195,16 @@ let
           optional = true;
         }) opt);
 
-      res = makeNeovimConfig {
-        inherit withPython3;
-        inherit extraPython3Packages;
-        inherit extraLuaPackages;
-        inherit
-          withNodeJs
-          withRuby
-          viAlias
-          vimAlias
-          ;
-        customRC = configure.customRC or "";
-        customLuaRC = configure.customLuaRC or "";
-        inherit plugins;
-        inherit extraName;
-      };
     in
     wrapNeovimUnstable neovim (
-      res
+      attrs
       // {
-        wrapperArgs = lib.escapeShellArgs res.wrapperArgs + " " + extraMakeWrapperArgs;
+        neovimRcContent = configure.customRC or "";
+        luaRcContent = configure.customLuaRC or "";
+        inherit plugins;
+
+        wrapperArgs = lib.escapeShellArgs (attrs.wrapperArgs or [ ]) + " " + extraMakeWrapperArgs;
+
         wrapRc = configure != { };
         legacyWrapper = true;
       }
@@ -278,6 +259,30 @@ let
     inherit lua;
   };
 
+  toGrammarName = lib.flip lib.pipe [
+    lib.getName
+
+    # added in buildGrammar
+    (lib.removeSuffix "-grammar")
+
+    # grammars from tree-sitter.builtGrammars
+    (lib.removePrefix "tree-sitter-")
+    (lib.replaceStrings [ "-" ] [ "_" ])
+  ];
+
+  nvimGrammars = lib.mapAttrsToList (
+    name: value:
+    value.origGrammar
+      or (throw "additions to `pkgs.vimPlugins.nvim-treesitter.grammarPlugins` set should be passed through `pkgs.neovimUtils.grammarToPlugin` first")
+  ) vimPlugins.nvim-treesitter.grammarPlugins;
+
+  isNvimGrammar = x: builtins.elem x nvimGrammars;
+
+  toNvimTreesitterGrammar = makeSetupHook {
+    name = "to-nvim-treesitter-grammar";
+    meta.license = lib.licenses.mit;
+  } ./to-nvim-treesitter-grammar.sh;
+
   grammarToPlugin =
     grammar:
     # If the grammar has already been processed by this function, return it as-is.
@@ -287,27 +292,7 @@ let
       grammar
     else
       let
-        name = lib.pipe grammar [
-          lib.getName
-
-          # added in buildGrammar
-          (lib.removeSuffix "-grammar")
-
-          # grammars from tree-sitter.builtGrammars
-          (lib.removePrefix "tree-sitter-")
-          (lib.replaceStrings [ "-" ] [ "_" ])
-        ];
-
-        nvimGrammars = lib.mapAttrsToList (
-          name: value:
-          value.origGrammar
-            or (throw "additions to `pkgs.vimPlugins.nvim-treesitter.grammarPlugins` set should be passed through `pkgs.neovimUtils.grammarToPlugin` first")
-        ) vimPlugins.nvim-treesitter.grammarPlugins;
-        isNvimGrammar = x: builtins.elem x nvimGrammars;
-
-        toNvimTreesitterGrammar = makeSetupHook {
-          name = "to-nvim-treesitter-grammar";
-        } ./to-nvim-treesitter-grammar.sh;
+        name = toGrammarName grammar;
       in
 
       (toVimPlugin (

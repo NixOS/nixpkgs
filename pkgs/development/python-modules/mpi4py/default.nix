@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "mpi4py";
-  version = "4.1.1";
+  version = "4.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "mpi4py";
     owner = "mpi4py";
     tag = version;
-    hash = "sha256-I7b4x3pxtfbmlbno5OIxo4HutRX3/RjdsoNtBRKgE5w=";
+    hash = "sha256-h9RZr+xLmp+cVvrPkew3AOJLE8okd4A/2oqhsSmVBXU=";
   };
 
   build-system = [
@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  # skip spawn related tests for openmpi implemention
+  # skip spawn related tests for openmpi implementation
   # see https://github.com/mpi4py/mpi4py/issues/545#issuecomment-2343011460
   env.MPI4PY_TEST_SPAWN = if mpi.pname == "openmpi" then 0 else 1;
 

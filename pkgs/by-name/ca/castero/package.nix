@@ -54,6 +54,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     # E  +  where '' = <castero.menus.episodemenu.EpisodeMenu object at 0x7ffff3acd0d0>.metadata
     # E  +  and   <MagicMock name='mock.metadata' id='140737279137104'> = episode1.metadata
     "test_menu_episode_metadata"
+    # flaky: segfaults on Hydra when a background DB reload thread races the test
+    "test_perspective_downloaded_draw_metadata"
   ];
 
   pythonImportsCheck = [

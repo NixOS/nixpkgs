@@ -33,12 +33,12 @@ let
   version = "0.1.1";
 in
 stdenv.mkDerivation {
-  pname = "${pname}";
+  pname = "scopehal-apps";
   version = "${version}";
 
   src = fetchFromGitHub {
     owner = "ngscopeclient";
-    repo = "${pname}";
+    repo = "scopehal-apps";
     tag = "v${version}";
     hash = "sha256-7ZXfxfRa+1fbMj2IDF/boNL/qCy4i9IyMnzIgOZunDw=";
     fetchSubmodules = true;

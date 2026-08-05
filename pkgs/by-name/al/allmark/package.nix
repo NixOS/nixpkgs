@@ -32,7 +32,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Cross-platform markdown web server";
     homepage = "https://github.com/andreaskoch/allmark";
-    changelog = "https://github.com/andreaskoch/allmark/-/releases/v${finalAttrs.version}";
+    changelog = "https://github.com/andreaskoch/allmark/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       luftmensch-luftmensch

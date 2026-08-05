@@ -46,14 +46,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain";
-  version = "1.2.12";
+  version = "1.3.14";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain==${finalAttrs.version}";
-    hash = "sha256-Z0noVsSu0OZchynlJSkIe0p076/0nay+1uS2ZXnztns=";
+    hash = "sha256-SmbqK8/AmUYfp+hUEnuwl18K+A/6csLxMUTv0oQHhEs=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/langchain_v1";
@@ -117,17 +118,24 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Depends on shell's truncation style
     "test_truncation_indicator_present"
+    "test_truncation_by_bytes"
     # Depends on the sleep shell command
     "test_timeout_returns_error"
     # Can't see the shell session results when sandboxed
     "test_startup_and_shutdown_commands"
     # Timing sensitive tests
     "test_tool_retry_constant_backoff"
+    # AttributeError: 'ImportErrorProfileModel' object has no attribute 'profile'
+    # https://github.com/langchain-ai/langchain/issues/36312
+    "test_summarization_middleware_missing_profile"
   ];
 
   disabledTestPaths = [
     # Their configuration tests don't place nicely with nixpkgs
     "tests/unit_tests/test_pytest_config.py"
+
+    # Timing sensitive tests
+    "tests/unit_tests/agents/middleware/implementations/test_model_retry.py"
   ];
 
   pythonImportsCheck = [ "langchain" ];
@@ -136,6 +144,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

@@ -42,7 +42,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "django";
-  version = "6.0.3";
+  version = "6.0.8";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -51,7 +51,7 @@ buildPythonPackage (finalAttrs: {
     owner = "django";
     repo = "django";
     tag = finalAttrs.version;
-    hash = "sha256-FXaK9e2/grRH0c4r/t+Sm9uyYHlSUx6S0klnYTW/8KQ=";
+    hash = "sha256-hQQMKa8YirrTAoCrW1nn3RqRXv0szLgeSOjeKxBfiSo=";
   };
 
   patches = [
@@ -62,6 +62,9 @@ buildPythonPackage (finalAttrs: {
     ./6.x/pythonpath.patch
     # test_incorrect_timezone should raise but doesn't
     ./6.x/disable-failing-test.patch
+    # https://code.djangoproject.com/ticket/36997
+    # https://github.com/django/django/pull/21019
+    ./6.x/invalidate-importlib-cache.patch
   ]
   ++ lib.optionals withGdal [
     (replaceVars ./6.x/gdal.patch {
@@ -124,8 +127,7 @@ buildPythonPackage (finalAttrs: {
     runHook preCheck
 
     pushd tests
-    # without --parallel=1, tests fail with an "unexpected error due to a database lock" on Darwin
-    ${python.interpreter} runtests.py --settings=test_sqlite ${lib.optionalString stdenv.hostPlatform.isDarwin "--parallel=1"}
+    ${python.interpreter} runtests.py --settings=test_sqlite --parallel=$NIX_BUILD_CORES
     popd
 
     runHook postCheck

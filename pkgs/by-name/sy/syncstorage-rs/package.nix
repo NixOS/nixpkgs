@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Mozilla Sync Storage built with Rust";
     homepage = "https://github.com/mozilla-services/syncstorage-rs";
-    changelog = "https://github.com/mozilla-services/syncstorage-rs/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/mozilla-services/syncstorage-rs/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     maintainers = [ ];
     platforms = lib.platforms.linux;

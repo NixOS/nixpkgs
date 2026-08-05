@@ -7,7 +7,7 @@ index a2fcd1e..43b9c36 100755
      __preflightish_die "Failed to find usable 'awk' executable in \$PATH"
  
 -# == Jujutsu ==
--__preflightish_require "0.37" jj --version --ignore-working-copy
+-__preflightish_require "0.38.0" jj --version --ignore-working-copy
 -
 -# == fzf ==
 -__preflightish_require "0.67.0" fzf --version

@@ -10,23 +10,39 @@
   nix-update-script,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? stdenv.hostPlatform.isStatic,
+  variant ? "main",
 }:
+let
+  sources = {
+    lts-36 = {
+      version = "36.0.13";
+      hash = "sha256-KVNnxmEVDgH+EzItFdpRIpLm6DbmrN2JIKjctx6IyBE=";
+      cargoHash = "sha256-q1l2zmfdCI7Yg41/8jDTjf5akeHiQcC/60iIzMnh6B0=";
+    };
+    main = {
+      version = "47.0.3";
+      hash = "sha256-LC+WeOCP3fKjhg2PhJPYdzr7U7Ghdxb0IFy061TSTak=";
+      cargoHash = "sha256-GrLdoffHrmVICB4oHZY1qlHhiS0SSaZabfmoLs78Dqc=";
+    };
+  };
+  source = sources.${variant};
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasmtime";
-  version = "42.0.1";
+  version = source.version;
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wasmtime";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vKKPeYRqRWVx+ZErnXf8k7GUASaNeASR9YkPciWcLJU=";
+    hash = source.hash;
     fetchSubmodules = true;
   };
 
   # Disable cargo-auditable until https://github.com/rust-secure-code/cargo-auditable/issues/124 is solved.
   auditable = false;
 
-  cargoHash = "sha256-9OvBmbld4DK5c+E3m5EEQwUhhLZIK5l0cc3zCipSQ20=";
+  cargoHash = source.cargoHash;
   cargoBuildFlags = [
     "--package"
     "wasmtime-cli"
@@ -39,6 +55,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "dev"
     "lib"
   ];
+
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     cmake
@@ -105,10 +123,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Standalone JIT-style runtime for WebAssembly, using Cranelift";
     homepage = "https://wasmtime.dev/";
-    license = [
-      lib.licenses.asl20
-      lib.licenses.llvm-exception
-    ];
+    license = lib.licenses.WITH lib.licenses.asl20 lib.licenses.llvm-exception;
     mainProgram = "wasmtime";
     maintainers = with lib.maintainers; [
       ereslibre

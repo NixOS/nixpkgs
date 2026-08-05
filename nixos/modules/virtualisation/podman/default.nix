@@ -105,7 +105,7 @@ in
       type = types.bool;
       default = false;
       description = ''
-        **Deprecated**, please use hardware.nvidia-container-toolkit.enable instead.
+        **Deprecated**, please use {option}`hardware.nvidia-container-toolkit.enable` instead.
 
         Enable use of Nvidia GPUs from within podman containers.
       '';

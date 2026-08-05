@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   aiohttp,
   aioresponses,
   aiosqlite,
@@ -13,31 +12,34 @@
   freezegun,
   frozendict,
   jsonschema,
-  pyserial-asyncio-fast,
-  pytest-asyncio_0,
+  pytest-asyncio,
   pytest-timeout,
   pytestCheckHook,
+  serialx,
   setuptools,
   typing-extensions,
   voluptuous,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zigpy";
-  version = "0.92.0";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy";
-    tag = version;
-    hash = "sha256-6rbjv91mkTSEAKndDy/2a8bGpzw/5g57FEZvZdt9ARI=";
+    tag = finalAttrs.version;
+    hash = "sha256-40znZSNqls+Z3Ikg/RFq0652O3d4ydGs33OMR8nn+Ns=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail '"setuptools-git-versioning<2"' "" \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail 'dynamic = ["version"]' 'version = "${finalAttrs.version}"'
+
+    # do not install development tools
+    rm -r tools
   '';
 
   build-system = [ setuptools ];
@@ -50,7 +52,7 @@ buildPythonPackage rec {
     cryptography
     frozendict
     jsonschema
-    pyserial-asyncio-fast
+    serialx
     typing-extensions
     voluptuous
   ];
@@ -59,7 +61,7 @@ buildPythonPackage rec {
     aioresponses
     filelock
     freezegun
-    pytest-asyncio_0
+    pytest-asyncio
     pytest-timeout
     pytestCheckHook
   ];
@@ -67,6 +69,8 @@ buildPythonPackage rec {
   disabledTests = [
     # assert quirked.quirk_metadata.quirk_location.endswith("zigpy/tests/test_quirks_v2.py]-line:104") is False
     "test_quirks_v2"
+    # (Race condition) AssertionError: assert 4 == 3
+    "test_periodic_scan_priority"
   ];
 
   disabledTestPaths = [
@@ -88,9 +92,9 @@ buildPythonPackage rec {
   meta = {
     description = "Library implementing a ZigBee stack";
     homepage = "https://github.com/zigpy/zigpy";
-    changelog = "https://github.com/zigpy/zigpy/releases/tag/${version}";
+    changelog = "https://github.com/zigpy/zigpy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ mvnetbiz ];
     platforms = lib.platforms.linux;
   };
-}
+})

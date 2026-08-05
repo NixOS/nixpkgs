@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
   meson,
   ninja,
   pkg-config,
@@ -147,7 +146,6 @@ let
         license = lib.licenses.mit;
         platforms = lib.platforms.linux ++ lib.platforms.freebsd;
         maintainers = with lib.maintainers; [
-          synthetica
           wineee
           doronbehar
         ];
@@ -164,13 +162,13 @@ let
 
 in
 {
-  wlroots_0_18 = generic {
-    version = "0.18.3";
-    hash = "sha256-D8RapSeH+5JpTtq+OU8PyVZubLhjcebbCBPuSO5Q7kU=";
+  wlroots_0_19 = generic {
+    version = "0.19.3";
+    hash = "sha256-J+wSVUtuizaCyCn523chFbE8VtbPjyu5XYv5eLT+GM0=";
   };
 
-  wlroots_0_19 = generic {
-    version = "0.19.2";
-    hash = "sha256-8VOhSaH9D0GkqyIP42W3uGcDT5ixPVDMT/OLlMXBNXA=";
+  wlroots_0_20 = generic {
+    version = "0.20.2";
+    hash = "sha256-VdYymvzYp6/R255AK20j4xTd+JbCZgNiRfgeRJD+UZY=";
   };
 }

@@ -14,20 +14,23 @@
   which,
 
   # runtime
-  nodejs_20,
+  nodejs_24,
 
   # tests
   nixosTests,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "peertube";
-  version = "8.0.2";
+  version = "8.2.3";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "Chocobozzz";
     repo = "PeerTube";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-u4LDk9r88h3EqX6ZRMPCQmjOvfJDXwV2YYrKEkGBWgs=";
+    hash = "sha256-w+mSFr+uobq1TtqfewRmakGMYlEjwLs0k39mWHMbq+Q=";
   };
 
   outputs = [
@@ -40,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-1CmfcDZ23oITP8GQGIBeZP4Z5AON0f3CtdHGnpZxHgQ=";
+    hash = "sha256-qrx8JtIAmn0JEsFwptrHlOL0IaYPJPLzjuDWNs7XFfc=";
   };
 
   nativeBuildInputs = [
@@ -49,11 +52,12 @@ stdenv.mkDerivation (finalAttrs: {
     jq
     pnpmConfigHook
     pnpm_10
+    nodejs_24
     which
   ];
 
   buildInputs = [
-    nodejs_20
+    nodejs_24
   ];
 
   preBuild = ''
@@ -69,8 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    export HOME=$PWD
-
     # Build PeerTube server
     npm run build:server
 
@@ -79,22 +81,22 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Build PeerTube cli
     npm run build:peertube-cli
-    patchShebangs ~/apps/peertube-cli/dist/peertube.js
+    patchShebangs ./apps/peertube-cli/dist/peertube.mjs
 
     # Build PeerTube runner
     npm run build:peertube-runner
-    patchShebangs ~/apps/peertube-runner/dist/peertube-runner.js
+    patchShebangs ./apps/peertube-runner/dist/peertube-runner.mjs
 
     # Clean up declaration files
     find \
-      ~/dist/ \
-      ~/packages/core-utils/dist/ \
-      ~/packages/ffmpeg/dist/ \
-      ~/packages/models/dist/ \
-      ~/packages/node-utils/dist/ \
-      ~/packages/server-commands/dist/ \
-      ~/packages/transcription/dist/ \
-      ~/packages/typescript-utils/dist/ \
+      ./dist/ \
+      ./packages/core-utils/dist/ \
+      ./packages/ffmpeg/dist/ \
+      ./packages/models/dist/ \
+      ./packages/node-utils/dist/ \
+      ./packages/server-commands/dist/ \
+      ./packages/transcription/dist/ \
+      ./packages/typescript-utils/dist/ \
       \( -name '*.d.ts' -o -name '*.d.ts.map' \) -type f -delete
 
     runHook postBuild
@@ -104,21 +106,21 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/dist
-    mv ~/dist $out
-    mv ~/node_modules $out/node_modules
+    mv ./dist $out
+    mv ./node_modules $out/node_modules
 
     mkdir $out/client
-    mv ~/client/{dist,node_modules,package.json} $out/client
+    mv ./client/{dist,node_modules,package.json} $out/client
 
     mkdir -p $out/packages/{core-utils,ffmpeg,models,node-utils,server-commands,transcription,typescript-utils}
-    mv ~/packages/core-utils/{dist,package.json} $out/packages/core-utils
-    mv ~/packages/ffmpeg/{dist,package.json} $out/packages/ffmpeg
-    mv ~/packages/models/{dist,package.json} $out/packages/models
-    mv ~/packages/node-utils/{dist,package.json} $out/packages/node-utils
-    mv ~/packages/server-commands/{dist,package.json} $out/packages/server-commands
-    mv ~/packages/transcription/{dist,package.json} $out/packages/transcription
-    mv ~/packages/typescript-utils/{dist,package.json} $out/packages/typescript-utils
-    mv ~/{config,support,CREDITS.md,FAQ.md,LICENSE,README.md,package.json,pnpm-lock.yaml} $out
+    mv ./packages/core-utils/{dist,package.json} $out/packages/core-utils
+    mv ./packages/ffmpeg/{dist,package.json} $out/packages/ffmpeg
+    mv ./packages/models/{dist,package.json} $out/packages/models
+    mv ./packages/node-utils/{dist,package.json} $out/packages/node-utils
+    mv ./packages/server-commands/{dist,package.json} $out/packages/server-commands
+    mv ./packages/transcription/{dist,package.json} $out/packages/transcription
+    mv ./packages/typescript-utils/{dist,package.json} $out/packages/typescript-utils
+    mv ./{config,support,CREDITS.md,FAQ.md,LICENSE,README.md,package.json,pnpm-lock.yaml} $out
 
     # Remove broken symlinks in node_modules from workspace packages that aren't needed
     # by the built artifact. If any new packages break the check for broken symlinks,
@@ -129,12 +131,12 @@ stdenv.mkDerivation (finalAttrs: {
     rm $out/client/node_modules/@peertube/player
 
     mkdir -p $cli/bin
-    mv ~/apps/peertube-cli/{dist,node_modules,package.json} $cli
-    ln -s $cli/dist/peertube.js $cli/bin/peertube-cli
+    mv ./apps/peertube-cli/{dist,node_modules,package.json} $cli
+    ln -s $cli/dist/peertube.mjs $cli/bin/peertube-cli
 
     mkdir -p $runner/bin
-    mv ~/apps/peertube-runner/{dist,node_modules,package.json} $runner
-    ln -s $runner/dist/peertube-runner.js $runner/bin/peertube-runner
+    mv ./apps/peertube-runner/{dist,node_modules,package.json} $runner
+    ln -s $runner/dist/peertube-runner.mjs $runner/bin/peertube-runner
 
     # Create static gzip and brotli files
     fd -e css -e eot -e html -e js -e json -e svg -e webmanifest -e xlf \
@@ -145,7 +147,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests.peertube = nixosTests.peertube;
+  passthru = {
+    nodejs = nodejs_24;
+    tests.peertube = nixosTests.peertube;
+  };
 
   meta = {
     description = "Free software to take back control of your videos";
@@ -165,11 +170,12 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.agpl3Plus;
     homepage = "https://joinpeertube.org/";
+    changelog = "https://github.com/Chocobozzz/PeerTube/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
       # feasible, looking for maintainer to help out
-      # "x86_64-darwin" "aarch64-darwin"
+      # "aarch64-darwin"
     ];
     maintainers = with lib.maintainers; [
       immae

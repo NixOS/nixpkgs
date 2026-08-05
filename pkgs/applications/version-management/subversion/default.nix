@@ -9,6 +9,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   apr,
   aprutil,
   zlib,
@@ -39,16 +40,16 @@ let
   common =
     {
       version,
-      sha256,
+      hash,
       extraPatches ? [ ],
     }:
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation (finalAttrs: {
       inherit version;
       pname = "subversion${lib.optionalString (!bdbSupport && perlBindings && pythonBindings) "-client"}";
 
       src = fetchurl {
-        url = "mirror://apache/subversion/subversion-${version}.tar.bz2";
-        inherit sha256;
+        url = "mirror://apache/subversion/subversion-${finalAttrs.version}.tar.bz2";
+        inherit hash;
       };
 
       # Can't do separate $lib and $bin, as libs reference bins
@@ -62,7 +63,8 @@ let
         autoconf
         libtool
         python3
-      ];
+      ]
+      ++ lib.optional perlBindings perl; # Needed for swig / EXTERN.h
 
       buildInputs = [
         zlib
@@ -81,12 +83,30 @@ let
       ++ lib.optional perlBindings perl
       ++ lib.optional saslSupport sasl;
 
-      patches = [ ./apr-1.patch ] ++ extraPatches;
+      strictDeps = true;
 
-      # remove vendored swig-3 files as these will shadow the swig provided
-      # ones and result in compile errors
+      patches = [
+        ./apr-1.patch
+
+        # swig-4.4 support:
+        #   https://lists.apache.org/thread/7rtyfcmg737bnmnrwf6bjmlxx4wpq2og
+        (fetchpatch {
+          name = "swig-4.4.patch";
+          url = "https://github.com/apache/subversion/commit/bf72420e86059a894fa3aacbbd6e3bee9286e46e.patch";
+          hash = "sha256-0X9y/0qDDctKo1vu86pKu3k79zIqhOhQU9rvyG4v6jg=";
+        })
+      ]
+      ++ extraPatches;
+
+      # Remove vendored swig-3 files as these will shadow the swig provided
+      # ones and result in compile errors.
+      # Also remove the generated Perl wrappers from the release tarball
+      # so they are rebuilt with the same SWIG runtime as libsvn_swig_perl.
       postPatch = ''
         rm subversion/bindings/swig/proxy/{perlrun.swg,pyrun.swg,python.swg,rubydef.swg,rubyhead.swg,rubytracking.swg,runtime.swg,swigrun.swg}
+      ''
+      + lib.optionalString perlBindings ''
+        rm subversion/bindings/swig/perl/native/{core.c,svn_*.c}
       '';
 
       env = {
@@ -126,32 +146,26 @@ let
         makeFlagsArray=(APACHE_LIBEXECDIR=$out/modules)
       '';
 
-      postInstall = ''
-        if test -n "$pythonBindings"; then
-            make swig-py swig_pydir=$(toPythonPath $out)/libsvn swig_pydir_extra=$(toPythonPath $out)/svn
-            make install-swig-py swig_pydir=$(toPythonPath $out)/libsvn swig_pydir_extra=$(toPythonPath $out)/svn
-        fi
+      postInstall =
+        lib.optionalString pythonBindings ''
+          make swig-py swig_pydir=$(toPythonPath $out)/libsvn swig_pydir_extra=$(toPythonPath $out)/svn
+          make install-swig-py swig_pydir=$(toPythonPath $out)/libsvn swig_pydir_extra=$(toPythonPath $out)/svn
+        ''
+        + lib.optionalString perlBindings ''
+          make install-swig-pl
+        ''
+        + ''
+          mkdir -p $out/share/bash-completion/completions
+          cp tools/client-side/bash_completion $out/share/bash-completion/completions/subversion
 
-        if test -n "$perlBindings"; then
-            make swig-pl-lib
-            make install-swig-pl-lib
-            cd subversion/bindings/swig/perl/native
-            perl Makefile.PL PREFIX=$out
-            make install
-            cd -
-        fi
-
-        mkdir -p $out/share/bash-completion/completions
-        cp tools/client-side/bash_completion $out/share/bash-completion/completions/subversion
-
-        for f in $out/lib/*.la $out/lib/python*/site-packages/*/*.la; do
-          substituteInPlace $f \
-            --replace "${expat.dev}/lib" "${expat.out}/lib" \
-            --replace "${zlib.dev}/lib" "${zlib.out}/lib" \
-            --replace "${sqlite.dev}/lib" "${sqlite.out}/lib" \
-            --replace "${openssl.dev}/lib" "${lib.getLib openssl}/lib"
-        done
-      '';
+          for f in $out/lib/*.la $out/lib/python*/site-packages/*/*.la; do
+            substituteInPlace $f \
+              --replace "${expat.dev}/lib" "${expat.out}/lib" \
+              --replace "${zlib.dev}/lib" "${zlib.out}/lib" \
+              --replace "${sqlite.dev}/lib" "${sqlite.out}/lib" \
+              --replace "${openssl.dev}/lib" "${lib.getLib openssl}/lib"
+          done
+        '';
 
       inherit perlBindings pythonBindings;
 
@@ -174,12 +188,12 @@ let
         maintainers = [ ];
         platforms = lib.platforms.linux ++ lib.platforms.darwin;
       };
-    };
+    });
 
 in
 {
   subversion = common {
     version = "1.14.5";
-    sha256 = "sha256-54op53Zri3s1RJfQj3GlVkGrxTZ1zhh1WEeBquNWRKE=";
+    hash = "sha256-54op53Zri3s1RJfQj3GlVkGrxTZ1zhh1WEeBquNWRKE=";
   };
 }

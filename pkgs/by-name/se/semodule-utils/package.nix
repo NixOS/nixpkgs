@@ -5,15 +5,15 @@
   libsepol,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "semodule-utils";
-  version = "3.8.1";
+  version = "3.11";
 
   inherit (libsepol) se_url;
 
   src = fetchurl {
-    url = "${se_url}/${version}/semodule-utils-${version}.tar.gz";
-    sha256 = "sha256-dwWw2wWcU6IdanfAtQ9sRn2RoOqS/4dfHJNSfNJ2I5U=";
+    url = "${finalAttrs.se_url}/${finalAttrs.version}/semodule-utils-${finalAttrs.version}.tar.gz";
+    hash = "sha256-DFdOFUE/9+1mDEXgEb7+JIu4nqonPbb1brKX1h3rLtY=";
   };
 
   buildInputs = [ libsepol ];
@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "SELinux policy core utilities (packaging additions)";
     license = lib.licenses.gpl2Only;
-    inherit (libsepol.meta) homepage platforms;
-    maintainers = with lib.maintainers; [ RossComputerGuy ];
+    inherit (libsepol.meta) homepage platforms maintainers;
   };
-}
+})

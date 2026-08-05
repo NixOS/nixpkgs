@@ -8,16 +8,21 @@
 
 buildGoModule (finalAttrs: {
   pname = "zvm";
-  version = "0.8.11";
+  version = "0.8.27";
 
   src = fetchFromGitHub {
     owner = "tristanisham";
     repo = "zvm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RMXF69zqqNK3tifbeDM7dxkiHMws7n+PeeHvCUK7/OU=";
+    hash = "sha256-NDkvTghdqabfzzXSyxYHZj67u+upY0WfLOAO5DWAZ3s=";
   };
 
-  vendorHash = "sha256-dM9FiUucSBkk8L93HfzoHQ1EyyRmAZjfedvOyRBDFBA=";
+  vendorHash = "sha256-kJrCUxzbpyxEUF9UQeAI28tWKA+T7zT1DBI1wf3pjjM=";
+
+  postPatch = ''
+    substituteInPlace cli/meta/version.go \
+      --replace-fail 'VERSION = "v0.8.25"' 'VERSION = "v${finalAttrs.version}"'
+  '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

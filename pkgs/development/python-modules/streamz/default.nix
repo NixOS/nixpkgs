@@ -23,14 +23,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "streamz";
-  version = "0.6.5";
+  version = "0.6.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-streamz";
     repo = "streamz";
     tag = finalAttrs.version;
-    hash = "sha256-OoWFOACrJ8zXJJ1bmRukj04zx+s1Zgg9KqlJooLDRW0=";
+    hash = "sha256-m+kBRz3K5W5yuLRcamWCZ6j6A3MBT3HyjuCLzIzUqak=";
   };
 
   build-system = [ setuptools ];

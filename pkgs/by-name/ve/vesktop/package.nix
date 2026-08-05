@@ -8,12 +8,12 @@
   makeDesktopItem,
   copyDesktopItems,
   vencord,
-  electron_40,
+  electron_43,
   libicns,
   pipewire,
   libpulseaudio,
   autoPatchelfHook,
-  pnpm_10_29_2,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -26,17 +26,17 @@
   withSystemVencord ? false,
 }:
 let
-  electron = electron_40;
+  electron = electron_43;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vesktop";
-  version = "1.6.5";
+  version = "1.6.5-unstable-2026-07-16";
 
   src = fetchFromGitHub {
     owner = "Vencord";
     repo = "Vesktop";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-YPDlqiO+0BtDgC7aFl8B2KPYsT41WqzOQ7et2Tejs3M=";
+    rev = "8a718e00785f1e17153e49c2d7ffae094e5cecef";
+    hash = "sha256-0t/1GIknc6NBW2E+BNZ/NTU+38IMVxEtOEXOwHkZrGo=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -46,15 +46,15 @@ stdenv.mkDerivation (finalAttrs: {
       src
       patches
       ;
-    pnpm = pnpm_10_29_2;
-    fetcherVersion = 2;
-    hash = "sha256-o9dxtqXfCKTQpvNrbD/h0F3Hh39TEEA1qqYA9tN3j5I=";
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-xvb3DfqmcCyOpGHaGjeCJxClfVcHpdezyzxLXNiz72k=";
   };
 
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_10_29_2
+    pnpm_11
     jq
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -87,20 +87,16 @@ stdenv.mkDerivation (finalAttrs: {
     ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
   };
 
-  # electron builds must be writable
   preBuild = ''
     # Validate electron version matches upstream package.json
-    if [ "`jq -r '.devDependencies.electron' < package.json | cut -d. -f1 | tr -d '^'`" != "${lib.versions.major electron.version}" ]
-    then
-      echo "ERROR: electron version mismatch between package.json and nixpkgs"
+    expectedMajor="$(jq -r '.devDependencies.electron | ltrimstr("^") | split(".") | .[0]' < package.json)"
+    actualMajor="${lib.versions.major electron.version}"
+    if [ "$actualMajor" != "$expectedMajor" ] 2>/dev/null; then
+      echo "ERROR: electron version mismatch between package.json (major $expectedMajor) and nixpkgs (major $actualMajor)"
       exit 1
     fi
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    cp -r ${electron.dist}/Electron.app .
-    chmod -R u+w Electron.app
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
+
+    # electron builds must be writable
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
   '';
@@ -112,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm exec electron-builder \
       --dir \
       -c.asarUnpack="**/*.node" \
-      -c.electronDist=${if stdenv.hostPlatform.isDarwin then "." else "electron-dist"} \
+      -c.electronDist=electron-dist \
       -c.electronVersion=${electron.version} \
       ${lib.optionalString stdenv.hostPlatform.isDarwin "-c.mac.identity=null"} # disable code signing on macos, https://github.com/electron-userland/electron-builder/blob/77f977435c99247d5db395895618b150f5006e8f/docs/code-signing.md#how-to-disable-code-signing-during-the-build-process-on-macos
 
@@ -178,6 +174,9 @@ stdenv.mkDerivation (finalAttrs: {
       "InstantMessaging"
       "Chat"
     ];
+    mimeTypes = [
+      "x-scheme-handler/discord"
+    ];
   });
 
   passthru = {
@@ -200,7 +199,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

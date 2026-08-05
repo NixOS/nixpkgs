@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   installShellFiles,
   nixosTests,
 }:
@@ -11,11 +12,19 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "beanstalkd";
 
   src = fetchFromGitHub {
-    owner = "kr";
+    owner = "beanstalkd";
     repo = "beanstalkd";
     rev = "v${finalAttrs.version}";
     hash = "sha256-xoudhPad4diGGE8iZaY1/4LiENlKT2dYcIR6wlQdlTU=";
   };
+
+  patches = [
+    # Fix build with GCC 15, remove after next update
+    (fetchpatch {
+      url = "https://github.com/beanstalkd/beanstalkd/commit/85070765.patch";
+      hash = "sha256-QDDypvrQtjlG7iPE0GfvpZMActIw1gRx36+BpZ6WjMw=";
+    })
+  ];
 
   hardeningDisable = [ "fortify" ];
 

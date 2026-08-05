@@ -13,10 +13,6 @@
   glib-networking,
   libadwaita,
 
-  # Test dependencies
-  xvfb-run,
-  dbus,
-
   # Optional dependencies
   enableJingle ? true,
   farstream,
@@ -25,13 +21,12 @@
   gst-libav,
   gst-plugins-good,
   libnice,
-  enableE2E ? true,
   enableSecrets ? true,
   libsecret,
   enableRST ? true,
   docutils,
   enableSpelling ? true,
-  gspell,
+  libspelling,
   enableUPnP ? true,
   gupnp-igd,
   enableAppIndicator ? true,
@@ -41,16 +36,16 @@
   extraPythonPackages ? ps: [ ],
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gajim";
-  version = "2.4.4";
+  version = "2.5.0";
 
   src = fetchFromGitLab {
     domain = "dev.gajim.org";
     owner = "gajim";
     repo = "gajim";
-    tag = version;
-    hash = "sha256-buHCwrG3S28AgzBqJN/a0uBDDq2IM8LdE51baGFGLwM=";
+    tag = finalAttrs.version;
+    hash = "sha256-3/HQNizXLjeQpCdEK14LMflyNUKF1BI8eli3BGxiH40=";
   };
 
   pyproject = true;
@@ -60,17 +55,17 @@ python3.pkgs.buildPythonApplication rec {
     adwaita-icon-theme
     gtksourceview5
     glib-networking
+    gstreamer
+    gst-plugins-base
   ]
   ++ lib.optionals enableJingle [
     farstream
-    gstreamer
-    gst-plugins-base
     gst-libav
     gst-plugins-good
     libnice
   ]
   ++ lib.optional enableSecrets libsecret
-  ++ lib.optional enableSpelling gspell
+  ++ lib.optional enableSpelling libspelling
   ++ lib.optional enableUPnP gupnp-igd
   ++ lib.optional enableAppIndicator libappindicator-gtk3
   ++ lib.optional enableSoundNotifications gsound;
@@ -115,42 +110,35 @@ python3.pkgs.buildPythonApplication rec {
       httpx
       h2
       truststore
+      pysequoia
     ]
-    ++ lib.optionals enableE2E [
-      pycrypto
-      python-gnupg
-    ]
+    ++ httpx.optional-dependencies.socks
     ++ lib.optional enableRST docutils
     ++ extraPythonPackages python3.pkgs;
 
   nativeCheckInputs = [
-    xvfb-run
-    dbus
+    python3.pkgs.pytestCheckHook
   ];
-
-  checkPhase = ''
-    xvfb-run dbus-run-session \
-      --config-file=${dbus}/share/dbus-1/session.conf \
-      ${python3.interpreter} -m unittest discover -s test/gui -v
-    ${python3.interpreter} -m unittest discover -s test/common -v
-  '';
-
-  # test are broken in 1.7.3, 1.8.0
-  doCheck = false;
 
   # necessary for wrapGAppsHook3
   strictDeps = false;
 
   meta = {
     homepage = "http://gajim.org/";
-    description = "Jabber client written in PyGTK";
+    description = "XMPP chat client";
+    longDescription = "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat with your friends or family, easily share pictures and thoughts or discuss the news with your groups.";
+    changelog = "https://dev.gajim.org/gajim/gajim/-/blob/${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       raskin
       hlad
+      vbgl
+      haansn08
     ];
+    donationPage = "https://liberapay.com/Gajim";
     downloadPage = "http://gajim.org/download/";
     platforms = lib.platforms.linux;
     mainProgram = "gajim";
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gajim" finalAttrs.version;
   };
-}
+})

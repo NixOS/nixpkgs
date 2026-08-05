@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lxc";
-  version = "6.0.6";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DaKyaBfxO67L7zzOAYWSiYTAIILtdF4Ij7EXr+SAXVs=";
+    hash = "sha256-eB68l7SmVxJViGmVlVtEXVD+cRtr4WqOrA8b9ImQ89g=";
   };
 
   nativeBuildInputs = [

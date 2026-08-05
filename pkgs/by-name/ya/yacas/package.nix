@@ -5,7 +5,6 @@
   fetchpatch,
   cmake,
   perl,
-  enableGui ? false,
   enableJupyter ? true,
   boost,
   jsoncpp,
@@ -14,7 +13,6 @@
   enableJava ? false,
   openjdk,
   gtest,
-  libsForQt5,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [ "format" ];
 
   cmakeFlags = [
-    "-DENABLE_CYACAS_GUI=${if enableGui then "ON" else "OFF"}"
+    "-DENABLE_CYACAS_GUI=OFF"
     "-DENABLE_CYACAS_KERNEL=${if enableJupyter then "ON" else "OFF"}"
     "-DENABLE_JYACAS=${if enableJava then "ON" else "OFF"}"
     "-DENABLE_CYACAS_UNIT_TESTS=ON"
@@ -48,6 +46,12 @@ stdenv.mkDerivation (finalAttrs: {
       sha256 = "sha256-aPO5T8iYNkGtF8j12YxNJyUPJJPKrXje1DmfCPt317A=";
     })
   ];
+  # jsoncpp 1.9.7 rejects std::sub_match in Json::Value::operator[].
+  postPatch = ''
+    substituteInPlace cyacas/yacas-kernel/src/yacas_kernel.cpp \
+      --replace-fail 'content_data[m[2]] = base64_encode(img);' \
+                     'content_data[m[2].str()] = base64_encode(img);'
+  '';
   preCheck = ''
     patchShebangs ../tests/test-yacas
   '';
@@ -65,11 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
     openjdk
   ];
   buildInputs = [
-  ]
-  ++ lib.optionals enableGui [
-    libsForQt5.qtbase
-    libsForQt5.wrapQtAppsHook
-    libsForQt5.qtwebengine
   ]
   ++ lib.optionals enableJupyter [
     boost

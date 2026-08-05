@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchurl,
+  fetchpatch2,
   autoreconfHook,
   pkg-config,
   SDL2,
@@ -35,6 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchurl {
       url = "https://github.com/clementgallet/libTAS/commit/779ff0fb0f3accfc62949680d85ecf96b28d18ef.patch";
       hash = "sha256-xAaTWIXt8FkMu6GE5mBWtLypROFZ1aEqmBTtG+6rTWk=";
+    })
+    # Fix build with gcc15
+    (fetchpatch2 {
+      url = "https://github.com/clementgallet/libTAS/commit/9699b158c522cf778bcdf626d0520fdd0a8b83aa.patch?full_index=1";
+      hash = "sha256-vM1f6rvKIFyzEGJ7k+b/Zp4gAv8u6mdDUD5evV+hCJU=";
     })
   ];
 

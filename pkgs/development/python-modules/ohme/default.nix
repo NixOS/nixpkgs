@@ -6,16 +6,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ohme";
-  version = "1.7.0";
+  version = "1.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dan-r";
     repo = "ohmepy";
-    tag = "v${version}";
-    hash = "sha256-EKi4etpZdt1y0qWsjHLlVbGfTa1vnv0/MbTtgtSOJi0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MhFDwEu67Gnk9WJCrWKLs3KSk/KryC/QFEpdkZqbgT4=";
   };
 
   build-system = [ setuptools ];
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for interacting with the Ohme API";
     homepage = "https://github.com/dan-r/ohmepy";
-    changelog = "https://github.com/dan-r/ohmepy/releases/tag/${src.tag}";
+    changelog = "https://github.com/dan-r/ohmepy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -2,14 +2,12 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   nixosTests,
   testers,
   boost,
   cmake,
   cmake-extras,
-  ctestCheckHook,
   doxygen,
   gst_all_1,
   gdk-pixbuf,
@@ -32,15 +30,18 @@
   xvfb-run,
 }:
 
+let
+  withQt6 = lib.versions.major qtbase.version == "6";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-thumbnailer";
-  version = "3.1.0";
+  version = "3.1.3";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-thumbnailer";
     tag = finalAttrs.version;
-    hash = "sha256-lXvXK7UCLX5aoGID8sOoeHBEMhdle7RUMACLHiWpcEo=";
+    hash = "sha256-bDSqLxYQYCnN5SngoZmYwJTL6qoWpZ9HVUQMiAVQxlE=";
   };
 
   outputs = [
@@ -63,27 +64,21 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace plugins/Lomiri/Thumbnailer*/CMakeLists.txt \
       --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
-
-    # I think this variable fails to be populated because of our toolchain, while upstream uses Debian / Ubuntu where this works fine
-    # https://cmake.org/cmake/help/v3.26/variable/CMAKE_LIBRARY_ARCHITECTURE.html
-    # > If the <LANG> compiler passes to the linker an architecture-specific system library search directory such as
-    # > <prefix>/lib/<arch> this variable contains the <arch> name if/as detected by CMake.
+  ''
+  # I think this variable fails to be populated because of our toolchain, while upstream uses Debian / Ubuntu where this works fine
+  # https://cmake.org/cmake/help/v3.26/variable/CMAKE_LIBRARY_ARCHITECTURE.html
+  # > If the <LANG> compiler passes to the linker an architecture-specific system library search directory such as
+  # > <prefix>/lib/<arch> this variable contains the <arch> name if/as detected by CMake.
+  + ''
     substituteInPlace tests/qml/CMakeLists.txt \
       --replace-fail 'CMAKE_LIBRARY_ARCHITECTURE' 'CMAKE_SYSTEM_PROCESSOR' \
       --replace-fail 'powerpc-linux-gnu' 'ppc' \
       --replace-fail 's390x-linux-gnu' 's390x'
-
-    # Tests run in parallel to other builds, don't suck up cores
+  ''
+  # Tests run in parallel to other builds, don't suck up cores
+  + ''
     substituteInPlace tests/headers/compile_headers.py \
       --replace-fail 'max_workers=multiprocessing.cpu_count()' "max_workers=1"
-  ''
-  # https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/merge_requests/31
-  # Too simple to bother with fetchpatch
-  + ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail \
-        'find_package(Boost COMPONENTS filesystem iostreams regex system REQUIRED)' \
-        'find_package(Boost COMPONENTS filesystem iostreams regex REQUIRED)'
   '';
 
   strictDeps = true;
@@ -128,7 +123,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]);
 
   nativeCheckInputs = [
-    ctestCheckHook
     shared-mime-info
     xvfb-run
   ];
@@ -141,6 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   cmakeFlags = [
+    (lib.cmakeBool "ENABLE_QT6" withQt6)
     (lib.cmakeBool "GSETTINGS_LOCALINSTALL" true)
     (lib.cmakeBool "GSETTINGS_COMPILE" true)
     # error: use of old-style cast to 'std::remove_reference<_GstElement*>::type' {aka 'struct _GstElement*'}
@@ -148,11 +143,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-
-  disabledTests = [
-    # QSignalSpy tests in QML suite always fail, pass when running interactively
-    "qml"
-  ];
 
   enableParallelChecking = false;
 
@@ -176,6 +166,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+        versionCheck = true;
+      };
+    }
+    // lib.optionalAttrs (!withQt6) {
       # gallery app delegates to thumbnailer, tests various formats
       inherit (nixosTests.lomiri-gallery-app)
         format-mp4
@@ -187,11 +183,6 @@ stdenv.mkDerivation (finalAttrs: {
 
       # music app relies on thumbnailer to extract embedded cover art
       music-app = nixosTests.lomiri-music-app;
-
-      pkg-config = testers.hasPkgConfigModules {
-        package = finalAttrs.finalPackage;
-        versionCheck = true;
-      };
     };
     updateScript = gitUpdater { };
   };
@@ -208,7 +199,7 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
-      "liblomiri-thumbnailer-qt"
+      "liblomiri-thumbnailer-qt${lib.optionalString withQt6 "6"}"
     ];
   };
 })

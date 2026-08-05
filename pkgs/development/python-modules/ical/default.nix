@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ical";
-  version = "13.2.2";
+  version = "13.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "ical";
     tag = finalAttrs.version;
-    hash = "sha256-7EKnwfXRU7hzFVre5EVil8/HN+XnCh2qz0BF69sLDHc=";
+    hash = "sha256-tyPD0z2wWND6b6TKe/uXH2N5HcaJifhV4gQS9GEAQxs=";
   };
 
   build-system = [ setuptools ];

@@ -8,16 +8,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "magic-wormhole-rs";
-  version = "0.7.7";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "magic-wormhole";
     repo = "magic-wormhole.rs";
     rev = finalAttrs.version;
-    sha256 = "sha256-OQU7agpcyhNEnY4BtPYon+Ujhx5tVA1X41dJy0x4fII=";
+    sha256 = "sha256-23NXmXkuFGMocicw2UxsXroCZ4N0PYkrOropuQYe0d8=";
   };
 
-  cargoHash = "sha256-CwmC0YDi6h5Bo8Zrvb1JIb2x6XntzYsWVV9f+d1TS68=";
+  cargoHash = "sha256-LqsYyyJyMxJ97c4JOsjyL28idKLyV6GOQMccuyDRlYs=";
 
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ libxcb ];
 

@@ -35,6 +35,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   patches = [
     # https://github.com/jkwill87/mnamer/pull/291
     ./cached_session_error.patch
+    # https://github.com/jkwill87/mnamer/pull/333
+    ./fix-requests-cache-version-check.patch
   ];
 
   nativeCheckInputs = [ python3Packages.pytestCheckHook ];

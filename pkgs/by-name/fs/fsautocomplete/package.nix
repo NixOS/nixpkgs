@@ -12,7 +12,7 @@ buildDotnetModule (finalAttrs: {
   version = "0.83.0";
 
   src = fetchFromGitHub {
-    owner = "fsharp";
+    owner = "ionide";
     repo = "FsAutoComplete";
     tag = "v${finalAttrs.version}";
     hash = "sha256-1WK6vb/UfqnF5KlwrjmGTPeAnEgwPswcYweeotB6j00=";
@@ -24,7 +24,7 @@ buildDotnetModule (finalAttrs: {
     rm global.json
 
     substituteInPlace src/FsAutoComplete/FsAutoComplete.fsproj \
-      --replace-fail TargetFrameworks TargetFramework \
+      --replace-fail TargetFrameworks TargetFramework
   '';
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
@@ -43,8 +43,8 @@ buildDotnetModule (finalAttrs: {
   meta = {
     description = "Backend service for rich editing or intellisense features for editors";
     mainProgram = "fsautocomplete";
-    homepage = "https://github.com/fsharp/FsAutoComplete";
-    changelog = "https://github.com/fsharp/FsAutoComplete/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/ionide/FsAutoComplete";
+    changelog = "https://github.com/ionide/FsAutoComplete/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [

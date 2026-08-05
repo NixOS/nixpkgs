@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     description = "Display SHA-256 as PGP words";
     homepage = "https://github.com/kirei/sha2wordlist";
     maintainers = with lib.maintainers; [ baloo ];
-    license = [ lib.licenses.bsd2 ];
+    license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
     mainProgram = "sha2wordlist";
   };

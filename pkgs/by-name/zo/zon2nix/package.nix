@@ -2,23 +2,25 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  zig_0_14,
+  zig_0_16,
   nix,
 }:
-
+let
+  zig = zig_0_16;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zon2nix";
-  version = "0.1.3-unstable-2025-03-20";
+  version = "0.1.3-unstable-2026-04-13";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "zon2nix";
-    rev = "2360e358c2107860dadd340f88b25d260b538188";
-    hash = "sha256-89hYzrzQokQ+HUOd3g4epP9jdajaIoaMG81SrCNCqqU=";
+    rev = "d1e1762ce1e5d4df3b65a0d45421b6fb7b99cf92";
+    hash = "sha256-LzmPWG0cEhQS3+NDg/5KRgsUJHygllTK9lvDJJI/o+U=";
   };
 
   nativeBuildInputs = [
-    zig_0_14
+    zig
   ];
 
   zigBuildFlags = [
@@ -38,6 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       RossComputerGuy
     ];
-    inherit (zig_0_14.meta) platforms;
+    inherit (zig.meta) platforms;
   };
 })

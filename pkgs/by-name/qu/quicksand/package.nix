@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -16,16 +17,7 @@ stdenvNoCC.mkDerivation {
     sparseCheckout = [ "fonts" ];
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/fonts/quicksand
-
-    install -Dm444 fonts/*.ttf -t $out/share/fonts/quicksand/
-    install -Dm444 fonts/statics/*.ttf -t $out/share/fonts/quicksand/
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     homepage = "https://github.com/andrew-paglinawan/QuicksandFamily";
@@ -37,7 +29,7 @@ stdenvNoCC.mkDerivation {
       sizes as well. Quicksand Family is available in three styles
       which are Light, Regular and Bold including true italics for each weight.
     '';
-    license = with lib.licenses; [ ofl ];
+    license = lib.licenses.ofl;
     maintainers = with lib.maintainers; [ hubble ];
     platforms = lib.platforms.all;
   };

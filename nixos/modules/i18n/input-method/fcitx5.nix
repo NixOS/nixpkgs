@@ -109,7 +109,8 @@ in
         (pkgs.writeTextDir "share/fcitx5/data/QuickPhrase.mb" (
           lib.concatStringsSep "\n" (
             lib.mapAttrsToList (
-              name: value: "${name} ${builtins.replaceStrings [ "\\" "\n" ] [ "\\\\" "\\n" ] value}"
+              name: value:
+              "${name} \"${builtins.replaceStrings [ "\\" "\n" "\"" ] [ "\\\\" "\\n" "\\\"" ] value}\""
             ) cfg.quickPhrase
           )
         ))

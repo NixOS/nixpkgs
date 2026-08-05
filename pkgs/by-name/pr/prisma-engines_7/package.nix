@@ -11,16 +11,16 @@
 # function correctly.
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prisma-engines_7";
-  version = "7.3.0";
+  version = "7.9.1";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma-engines";
     tag = finalAttrs.version;
-    hash = "sha256-a4skrL5r6tfFMMD+yikm5wgkiAOXom6FC5fuAYPzT5I=";
+    hash = "sha256-bGtVKGoWZc/3s0lhTXksp+6fM/Q461ve/HQsRPxWD0Q=";
   };
 
-  cargoHash = "sha256-DkuqGzcHHqW3u6ZVz6xCJjeF+l8Y44pYMNaeFjb7vIc=";
+  cargoHash = "sha256-zLl2ErsCTXZVShPFLH94GLJ0q2FrMnfnecnfKD7VDL4=";
 
   # Use system openssl.
   env.OPENSSL_NO_VENDOR = 1;
@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://www.prisma.io/";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
-    mainProgram = "prisma";
+    mainProgram = "schema-engine";
     maintainers = with lib.maintainers; [
       aqrln
     ];
@@ -67,7 +67,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 # Read the example's README: https://github.com/pimeys/nix-prisma-example/blob/main/README.md
 # Prisma requires 2 packages, `prisma-engines` and `prisma`, to be at *exact* same versions.
 # Certify at `package.json` that dependencies "@prisma/client" and "prisma" are equal, meaning no caret (`^`) in version.
-# Configure NPM to use exact version: `npm config set save-exact=true`
+# Configure npm to use exact version: `npm config set save-exact=true`
 # Delete `package-lock.json`, delete `node_modules` directory and run `npm install`.
 # Run prisma client from `node_modules/.bin/prisma`.
 # Run `./node_modules/.bin/prisma --version` and check if both prisma packages versions are equal, current platform is `linux-nixos`, and other keys equal to the prisma environment variables you defined for prisma.

@@ -7,8 +7,10 @@
   testers,
 
   static ? stdenv.hostPlatform.isStatic,
+  snappySupport ? false,
 
   lz4,
+  snappy,
   zlib,
   zstd,
 }:
@@ -51,7 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     lz4
     zlib
     zstd
-  ];
+  ]
+  ++ lib.optional snappySupport snappy;
 
   cmakeFlags = [
     "-DBUILD_STATIC=${if static then "ON" else "OFF"}"
@@ -64,7 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_EXAMPLES=OFF"
     "-DBUILD_BENCHMARKS=OFF"
     "-DBUILD_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
-  ];
+  ]
+  ++ lib.optional snappySupport "-DDEACTIVATE_SNAPPY=OFF";
 
   doCheck = !static;
 

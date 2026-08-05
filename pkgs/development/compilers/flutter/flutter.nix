@@ -26,6 +26,7 @@
   which,
   jq,
   writableTmpDirAsHomeHook,
+  installShellFiles,
   flutterTools ? null,
 }@args:
 
@@ -70,8 +71,11 @@ let
       makeWrapper
       jq
       gitMinimal
+      installShellFiles
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
+
+    __structuredAttrs = true;
     strictDeps = true;
 
     preConfigure = ''
@@ -158,6 +162,12 @@ let
       runHook postInstall
     '';
 
+    postInstall = ''
+      $out/bin/flutter bash-completion "$TMPDIR/flutter.bash"
+      installShellCompletion --bash "$TMPDIR/flutter.bash"
+      installShellCompletion --zsh "$TMPDIR/flutter.bash"
+    '';
+
     doInstallCheck = true;
     nativeInstallCheckInputs = [
       which
@@ -193,7 +203,9 @@ let
     };
 
     meta = {
-      broken = (lib.versionOlder version "3.32") && useNixpkgsEngine;
+      # TODO: investigate why nixpkgs engine fails for versions >= 3.34
+      broken =
+        ((lib.versionOlder version "3.32") || lib.versionAtLeast version "3.34") && useNixpkgsEngine;
       description = "Makes it easy and fast to build beautiful apps for mobile and beyond";
       longDescription = ''
         Flutter is Google's SDK for crafting beautiful,
@@ -207,7 +219,6 @@ let
       platforms = [
         "x86_64-linux"
         "aarch64-linux"
-        "x86_64-darwin"
         "aarch64-darwin"
       ];
       mainProgram = "flutter";

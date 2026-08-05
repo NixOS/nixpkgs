@@ -2,23 +2,22 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  markdownlint-cli2,
   nix-update-script,
   runCommand,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "markdownlint-cli2";
-  version = "0.21.0";
+  version = "0.23.2";
 
   src = fetchFromGitHub {
     owner = "DavidAnson";
     repo = "markdownlint-cli2";
-    tag = "v${version}";
-    hash = "sha256-ftfj7IZQxSaEwQ2Rry2iLD2hqEd5UDHIziW/u4qEIEk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nWKkQdzwm+jLoZYs25USsdbRwXj++aS1tif2ro4FsBI=";
   };
 
-  npmDepsHash = "sha256-jtONdZPfpnOOiDH8UmFFWDgwcOYvTnBo8FkY8Ec+TYU=";
+  npmDepsHash = "sha256-cUwSR+B1MA6wciAemCxevT1VrtSEGzPUpBKzZzMul2E=";
 
   postPatch = ''
     rm -f .npmrc
@@ -29,8 +28,8 @@ buildNpmPackage rec {
 
   passthru = {
     tests = {
-      smoke = runCommand "${pname}-test" { nativeBuildInputs = [ markdownlint-cli2 ]; } ''
-        markdownlint-cli2 ${markdownlint-cli2}/lib/node_modules/markdownlint-cli2/CHANGELOG.md > $out
+      smoke = runCommand "markdownlint-cli2-test" { nativeBuildInputs = [ finalAttrs.finalPackage ]; } ''
+        markdownlint-cli2 ${finalAttrs.finalPackage}/lib/node_modules/markdownlint-cli2/CHANGELOG.md > $out
       '';
     };
     updateScript = nix-update-script {
@@ -39,7 +38,7 @@ buildNpmPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/DavidAnson/markdownlint-cli2/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/DavidAnson/markdownlint-cli2/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Fast, flexible, configuration-based command-line interface for linting Markdown/CommonMark files with the markdownlint library";
     homepage = "https://github.com/DavidAnson/markdownlint-cli2";
     license = lib.licenses.mit;
@@ -49,4 +48,4 @@ buildNpmPackage rec {
     ];
     mainProgram = "markdownlint-cli2";
   };
-}
+})

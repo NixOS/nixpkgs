@@ -32,7 +32,7 @@ maven.buildMavenPackage {
 
   mvnFetchExtraArgs.dontConfigure = true;
   mvnJdk = jdk_headless;
-  mvnHash = "sha256-2uthmSjFQ43N5lgV11DsxuGce+ZptZsmRLTgjDo0M2w=";
+  mvnHash = "sha256-xxTR+2E+4nIkGwxCk0B+f0//rLdlqO/nwRaArxt3u8U=";
 
   nativeBuildInputs = [
     jdk_headless
@@ -71,6 +71,6 @@ maven.buildMavenPackage {
     mainProgram = "java-language-server";
     homepage = "https://github.com/georgewfraser/java-language-server";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ hqurve ];
+    maintainers = [ ];
   };
 }

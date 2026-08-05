@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jellyfin-tui";
-  version = "1.4.1";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "dhonus";
     repo = "jellyfin-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dJbCMIKxDEht2Fgor2VsTyDvmhFxi5K22nTRMM1KOu0=";
+    hash = "sha256-ZdcAPN+APEnkQbPdLpcQd/fdQnEP6peQ+xdZI5sskSM=";
   };
 
-  cargoHash = "sha256-b47arb13oXnulUZB58Cj0v0Qu+IygYlInbBQeeLXYP0=";
+  cargoHash = "sha256-mri4PhYcUTWWKLl39sDhLUsFQFGLUAvDlhKNcj9gTFU=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [

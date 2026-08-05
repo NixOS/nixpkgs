@@ -6,28 +6,28 @@
   installShellFiles,
   nix-update-script,
   tzdata,
-  fuse,
+  fuse3,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustic";
-  version = "0.11.1";
+  version = "0.11.3";
 
   src = fetchFromGitHub {
     owner = "rustic-rs";
     repo = "rustic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Iih6qZglnsD6aSQQUoCfYtGvz2CcmWeCVmwbWkgW5Hg=";
+    hash = "sha256-k5Z/jKom5Aj0Ypp9udMC5zIcWo7/DmwK6inCm/RbV50=";
   };
 
-  cargoHash = "sha256-osVyOFO+vHbcXEp44VH7XI8y4Ir8/IkCr/cF0FMPQvQ=";
+  cargoHash = "sha256-y/QAhpF8JOu2QLwLpYEgox4O5CFFl6qhP5ct4mn/en8=";
 
   buildFeatures = lib.optionals stdenv.hostPlatform.isLinux [ "mount" ];
   checkFeatures = lib.subtractLists [ "mount" ] finalAttrs.buildFeatures; # we do not want `mount` during unit tests because it breaks rustic's test snapshots
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ fuse ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ fuse3 ];
 
   nativeCheckInputs = [ tzdata ];
 

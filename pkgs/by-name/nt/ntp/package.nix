@@ -52,10 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://www.ntp.org/";
     description = "Implementation of the Network Time Protocol";
-    license = {
-      # very close to isc and bsd2
-      url = "https://www.eecis.udel.edu/~mills/ntp/html/copyright.html";
-    };
+    license = lib.licenses.AND [
+      lib.licenses.ntp
+      lib.licenses.bsd2
+    ];
     maintainers = with lib.maintainers; [ thoughtpolice ];
     platforms = lib.platforms.unix;
   };

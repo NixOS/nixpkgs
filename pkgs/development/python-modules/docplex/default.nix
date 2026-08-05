@@ -7,19 +7,19 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "docplex";
-  version = "2.31.254";
+  version = "2.32.264";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-LGMpeN3r9/xIzLhGwtWrTrXs0CUMDGEmspu6vVNpwEY=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-Tisps1WecCvP4SxnR0KMdSsMOaUIqBrd8F7aqza3a9g=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools~=68.2.2" "setuptools>=68.2.2"
+      --replace-fail "setuptools~=78.1.1" "setuptools"
   '';
 
   build-system = [ setuptools ];
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

@@ -6,16 +6,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wassima";
-  version = "2.0.5";
+  version = "2.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jawah";
     repo = "wassima";
-    tag = version;
-    hash = "sha256-qfsoo+y8lbQomyBRltTsPp/OCPL/f1S0bzW9KwKabuA=";
+    tag = finalAttrs.version;
+    hash = "sha256-aIsex/iUoXwBJzSc4wECaHIklXa7jEKVyjUpyOJ0GZM=";
   };
 
   build-system = [ hatchling ];
@@ -30,10 +30,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/jawah/wassima/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/jawah/wassima/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Access your OS root certificates with utmost ease";
     homepage = "https://github.com/jawah/wassima";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

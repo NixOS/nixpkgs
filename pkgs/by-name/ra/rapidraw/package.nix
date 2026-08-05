@@ -38,31 +38,25 @@
   npmHooks,
   cargo-tauri,
   writableTmpDirAsHomeHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rapidraw";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "CyberTimon";
     repo = "RapidRAW";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-C6U3xU/rL+Og6DgJTnPESf+LPlm+svTNS5bSGhrn7dQ=";
-    fetchSubmodules = true;
-
-    # darwin/linux hash mismatch in rawler submodule
-    # Same fix as is used in dnglab packaging
-    postFetch = ''
-      rm -rf $out/src-tauri/rawler/rawler/data/testdata/cameras/Canon/{"EOS REBEL T7i","EOS Rebel T7i"}
-    '';
+    hash = "sha256-CxuoyscGiZmWz2P3i3tcKe0JIL2PIvCk6AicjgdyUzw=";
   };
 
-  cargoHash = "sha256-cgqNGft6LK5XNGv1CDLw5v+m8a9xmu7albfoGJnkE34=";
+  cargoHash = "sha256-UEM5UG+0fh5StIVU8AIptX6bqwTqUA4SNOn1GmUPfow=";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-YpM/EQ4eFqziwEpSXpBNEO8A5fCmjVtCrgr11YxLKxY=";
+    hash = "sha256-DXz+An1LzPiHM8rY+7KdrsieimAjwPYJBiGSa624SE0=";
   };
 
   nativeBuildInputs = [
@@ -125,11 +119,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail 'if !is_valid' 'if false'
   '';
 
-  # Fix dyld error about onnxruntime not being loaded on darwin during cargo test
-  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    export DYLD_LIBRARY_PATH="${onnxruntime}/lib:$DYLD_LIBRARY_PATH"
-  '';
-
   dontWrapGApps = true;
 
   env = {
@@ -148,8 +137,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ln -sf ${onnxruntime}/lib/libonnxruntime.so $out/lib/RapidRAW/resources/libonnxruntime.so
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Add rpath for onnxruntime so the binary can find libonnxruntime.dylib at runtime
-      install_name_tool -add_rpath "${onnxruntime}/lib" "$out/Applications/RapidRAW.app/Contents/MacOS/rapidraw"
+      # The app also dlopen()s libonnxruntime.dylib at a hardcoded path inside the bundle
+      mkdir -p "$out/Applications/RapidRAW.app/Contents/Resources/resources"
+      ln -sf ${onnxruntime}/lib/libonnxruntime.dylib "$out/Applications/RapidRAW.app/Contents/Resources/resources/libonnxruntime.dylib"
     '';
 
   postFixup =
@@ -163,12 +153,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --set ORT_STRATEGY "system"
     '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Blazingly-fast, non-destructive, and GPU-accelerated RAW image editor built with performance in mind";
     homepage = "https://github.com/CyberTimon/RapidRAW";
     license = lib.licenses.agpl3Only;
     mainProgram = "rapidraw";
-    maintainers = with lib.maintainers; [ taciturnaxolotl ];
+    maintainers = with lib.maintainers; [
+      philipdb
+      taciturnaxolotl
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

@@ -272,7 +272,7 @@ stdenv.mkDerivation (
             # Have to double-wrap it...
             installPhase = oa.installPhase + ''
               wrapProgram $out/bin/update-source-version \
-                --add-flag '--file=${lib.strings.removeSuffix "/common.nix" __curPos.file}/default.nix'
+                --add-flag '--file=pkgs/servers/mir/default.nix'
             '';
           });
         in
@@ -312,9 +312,14 @@ stdenv.mkDerivation (
       ]
       ++ lib.optionals (lib.strings.versionOlder version "2.17.0") [ "mircookie" ]
       ++ lib.optionals (lib.strings.versionAtLeast version "2.17.0") [
-        "mircommon-internal"
         "mirserver-internal"
       ]
+      ++
+        lib.optionals
+          (lib.strings.versionAtLeast version "2.17.0" && lib.strings.versionOlder version "2.26.0")
+          [
+            "mircommon-internal"
+          ]
       ++ lib.optionals (lib.strings.versionOlder version "2.25.0") [
         "mir-renderer-gl-dev"
         "mirrenderer"

@@ -7,6 +7,7 @@
   lib,
   mashumaro,
   orjson,
+  pyprojectVersionPatchHook,
   pytest-cov-stub,
   pytestCheckHook,
   syrupy,
@@ -15,15 +16,17 @@
 
 buildPythonPackage rec {
   pname = "pyfirefly";
-  version = "0.1.15";
+  version = "0.1.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "erwindouna";
     repo = "pyfirefly";
     tag = "v${version}";
-    hash = "sha256-vB/2CJMr5UEkANmJYCSA8igDCTYX0DFitDK3RFr68aE=";
+    hash = "sha256-RrVjXhV42DBvmTcZMowmHXN5K4nZfKPT/CDbvf1tOAQ=";
   };
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   build-system = [ hatchling ];
 

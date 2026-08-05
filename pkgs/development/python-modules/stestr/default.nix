@@ -5,7 +5,7 @@
   cliff,
   fixtures,
   flit-core,
-  subunit,
+  python-subunit,
   testtools,
   tomlkit,
   voluptuous,
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   dependencies = [
     cliff
     fixtures
-    subunit
+    python-subunit
     testtools
     tomlkit
     voluptuous

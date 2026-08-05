@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  setuptools_80,
   pytestCheckHook,
 }:
 
@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-ZtwHlS3V18EqDXJxTTwfUdtOvyQg9GbSArV7sOs1b38=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   pythonImportsCheck = [ "roman" ];
 
@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Integer to Roman numerals converter";
     changelog = "https://github.com/zopefoundation/roman/blob/${finalAttrs.version}/CHANGES.rst";
-    homepage = "https://pypi.python.org/pypi/roman";
+    homepage = "https://pypi.org/project/roman/";
     license = lib.licenses.psfl;
     maintainers = with lib.maintainers; [ sigmanificient ];
     mainProgram = "roman";

@@ -1,26 +1,31 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  jaxtyping,
-  pytestCheckHook,
-  scipy,
+
+  # build-system
   setuptools,
   setuptools-scm,
+
+  # dependencies
+  scipy,
   torch,
-  typeguard,
+
+  # tests
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "linear-operator";
-  version = "0.6";
+  version = "0.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cornellius-gp";
     repo = "linear_operator";
-    tag = "v${version}";
-    hash = "sha256-qBC7wrpcZ8ViFqIOSd2F8heeBRQxrac/l33srHhNaIM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Ghe4a3zMSvTv3J6ROd1RLELK+k24/rO8p+XUPVsl090=";
   };
 
   build-system = [
@@ -29,15 +34,8 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    jaxtyping
     scipy
     torch
-    typeguard
-  ];
-
-  pythonRelaxDeps = [
-    "jaxtyping"
-    "typeguard"
   ];
 
   pythonImportsCheck = [ "linear_operator" ];
@@ -49,12 +47,17 @@ buildPythonPackage rec {
     "test_matmul_matrix_broadcast"
     "test_solve_matrix_broadcast"
     "test_svd"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # RuntimeError: Failed to initialize cpuinfo!
+    "test_half"
   ];
 
   meta = {
     description = "LinearOperator implementation to wrap the numerical nuts and bolts of GPyTorch";
-    homepage = "https://github.com/cornellius-gp/linear_operator/";
+    homepage = "https://github.com/cornellius-gp/linear_operator";
+    changelog = "https://github.com/cornellius-gp/linear_operator/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

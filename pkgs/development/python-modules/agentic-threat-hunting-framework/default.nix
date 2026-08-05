@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "agentic-threat-hunting-framework";
-  version = "0.7.2";
+  version = "0.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Nebulock-Inc";
     repo = "agentic-threat-hunting-framework";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HFPPEonSRWTU+Cm/B657En78avehebGbWrsAfr+WmI8=";
+    hash = "sha256-QABUV/aSVvYm/aPkxI1WxIlA+uDlCX90bipLs5Ez6h0=";
   };
 
   build-system = [ setuptools ];

@@ -28,13 +28,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "perses";
-  version = "0.53.0";
+  version = "0.53.1";
 
   src = fetchFromGitHub {
     owner = "perses";
     repo = "perses";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lr4+0MEKXOdPTsD28hu55o8SAspKbr2791dQAXhdxtA=";
+    hash = "sha256-Oxq+zweg1mpgxKXWBwnsanD66TcD+kOkt3WCTU2FqnQ=";
   };
 
   outputs = [
@@ -53,7 +53,7 @@ buildGoModule (finalAttrs: {
     inherit (finalAttrs) version src;
     pname = "${finalAttrs.pname}-ui";
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.npmRoot}";
-    hash = "sha256-ObQvOZ2IvU/6lfozPweVu46nohKXT0YzZeTyd0VK7GM=";
+    hash = "sha256-yhqpwxWhnYBewDsYYP5R1n45dDTz6Wz3IJri77FBdO8=";
   };
 
   npmRoot = "ui";
@@ -63,7 +63,7 @@ buildGoModule (finalAttrs: {
     preBuild = null;
   };
 
-  vendorHash = "sha256-KV0zXXzMBgsMZ543+fLXeGvYtugq5PtYJXSQgqrtbMI=";
+  vendorHash = "sha256-dAvDBJGpY4Dlx4D9hR6VSUt+ppJLJPNNu5smsyutSC8=";
 
   ldflags = [
     "-s"

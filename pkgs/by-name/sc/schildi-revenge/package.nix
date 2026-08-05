@@ -14,20 +14,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "schildi-revenge";
-  version = "26.03.03";
+  version = "26.07.13";
 
   src = fetchFromGitHub {
     owner = "SchildiChat";
     repo = "schildi-revenge";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9peDC4NCa/cJ3eljs/2eyM9yMTBa7w2ddcuQOKjX5Ts=";
+    hash = "sha256-1Akm57GxGtEymDbfq879uglxEoENp/g+aFUNM1O0qRo=";
     fetchSubmodules = true;
   };
 
   cargoRoot = "matrix-rust-sdk";
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src cargoRoot;
-    hash = "sha256-NWxop42zsSGtI2H2itwRdgkgbOBXe3po5MKb47BWbcQ=";
+    hash = "sha256-TIpT2g00f99qTGPA+bBaEz4kj5BC1scEywv6oDCFlkQ=";
   };
 
   nativeBuildInputs = [
@@ -59,14 +59,14 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    BUILD_DIR="composeApp/build/compose/binaries/main-release/app/SchildiChatRevenge"
+    BUILD_DIR="composeApp/build/compose/binaries/main-release/app/schildichat-revenge"
 
     mkdir -p $out/share/{applications,icons/scalable}
     cp -r $BUILD_DIR/bin $out/bin
     cp -r $BUILD_DIR/lib $out/lib
 
     cp -r graphics/ic_launcher_foreground.svg $out/share/icons/scalable/ic_launcher.svg
-    cp -r launcher/SchildiChatRevenge.desktop $out/share/applications
+    cp -r launcher/schildichat-revenge.desktop $out/share/applications
 
     runHook postInstall
   '';
@@ -80,15 +80,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Matrix client for desktop written in Kotlin and using the Matrix Rust SDK";
-    mainProgram = "SchildiChatRevenge";
+    mainProgram = "schildichat-revenge";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Only;
+    homepage = "https://schildi.chat/revenge";
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # mitm cache
     ];
     maintainers = with lib.maintainers; [
       _71rd
+      xeni
     ];
   };
 })

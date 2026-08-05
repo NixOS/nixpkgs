@@ -5,7 +5,7 @@
   setuptools,
   aiohttp,
   demjson3,
-  unittestCheckHook,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -21,14 +21,14 @@ buildPythonPackage rec {
     hash = "sha256-IJfj65p80Q4LwWkGV0A0QPtK2+FPkNVz9/WaNGzgTy8=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     demjson3
   ];
 
-  nativeCheckInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pysyncthru" ];
 

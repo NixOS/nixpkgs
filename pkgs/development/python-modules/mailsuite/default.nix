@@ -1,24 +1,35 @@
 {
   lib,
+  azure-identity,
+  authres,
   buildPythonPackage,
+  cryptography,
+  dkimpy,
   dnspython,
   expiringdict,
-  fetchPypi,
+  fetchFromGitHub,
+  google-api-python-client,
+  google-auth,
+  google-auth-oauthlib,
   hatchling,
   html2text,
   imapclient,
   mail-parser,
+  msgraph-sdk,
   publicsuffix2,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mailsuite";
-  version = "1.11.2";
+  version = "2.2.2";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ilcOH27lVKhh/xFO/dkWZkwtx6wPYrKTWR3n1xqoUdk=";
+  src = fetchFromGitHub {
+    owner = "seanthegeek";
+    repo = "mailsuite";
+    tag = finalAttrs.version;
+    hash = "sha256-qQ+AaelLQED0mWCAItx/3d7o9QVUnhUVxvdCfnNRqzQ=";
   };
 
   pythonRelaxDeps = [ "mail-parser" ];
@@ -26,6 +37,9 @@ buildPythonPackage rec {
   build-system = [ hatchling ];
 
   dependencies = [
+    authres
+    cryptography
+    dkimpy
     dnspython
     expiringdict
     html2text
@@ -34,16 +48,30 @@ buildPythonPackage rec {
     publicsuffix2
   ];
 
+  optional-dependencies = {
+    all = lib.concatAttrValues (lib.removeAttrs finalAttrs.passthru.optional-dependencies [ "all" ]);
+    gmail = [
+      google-api-python-client
+      google-auth
+      google-auth-oauthlib
+    ];
+    msgraph = [
+      azure-identity
+      msgraph-sdk
+    ];
+  };
+
   pythonImportsCheck = [ "mailsuite" ];
 
-  # Module has no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = {
     description = "Python package to simplify receiving, parsing, and sending email";
     homepage = "https://seanthegeek.github.io/mailsuite/";
-    changelog = "https://github.com/seanthegeek/mailsuite/blob/master/CHANGELOG.md";
+    changelog = "https://github.com/seanthegeek/mailsuite/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ talyz ];
   };
-}
+})

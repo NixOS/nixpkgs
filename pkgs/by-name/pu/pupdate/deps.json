@@ -1,8 +1,8 @@
 [
   {
     "pname": "Aspose.Zip",
-    "version": "24.11.0",
-    "hash": "sha256-wPxD7K7bc0K1BqJweWgEaXJOX4F/hgRjrFSXLs+UnMs="
+    "version": "26.3.0",
+    "hash": "sha256-u9+EkZPyfGHsKmDVNvxZBnUsKTfQucxxhhEfXJkZWbE="
   },
   {
     "pname": "CommandLineParser",
@@ -11,13 +11,53 @@
   },
   {
     "pname": "ConsoleMenu-simple",
-    "version": "2.6.1",
-    "hash": "sha256-1bMCCWLnJ7rCtaLyz+AF8YOZK9qktqy0HZhqyPQ5ce0="
+    "version": "2.7.0",
+    "hash": "sha256-uH84lCwCs3EXVDORsjX6cC6aqAGZyPDQ/DoBfHJAtVQ="
   },
   {
     "pname": "Crc32.NET",
     "version": "1.2.0",
     "hash": "sha256-sMQNIppJXHU2mULn5b//uRbbPMyguH9QlG6HKVIYUmE="
+  },
+  {
+    "pname": "Extism.runtime.all",
+    "version": "1.13.0",
+    "hash": "sha256-Q2qTvfzd3+OB1IxeSQbzOGWbMq/HOUR7oRl317zR7cU="
+  },
+  {
+    "pname": "Extism.runtime.linux-arm64",
+    "version": "1.13.0",
+    "hash": "sha256-UUMt3yUZSle4ZzP8GjwBGfRIFpvx3Fn6acdcgVQ+71E="
+  },
+  {
+    "pname": "Extism.runtime.linux-musl-arm64",
+    "version": "1.13.0",
+    "hash": "sha256-1rWHy/n2UqcBU7AEYzduzDYnuFqFRpw00Egbdc18Qt8="
+  },
+  {
+    "pname": "Extism.runtime.linux-x64",
+    "version": "1.13.0",
+    "hash": "sha256-hLnuVAgoD5iGg3sBtsvRVvdvh6eFTscL6/VnFiUZy1g="
+  },
+  {
+    "pname": "Extism.runtime.osx-arm64",
+    "version": "1.13.0",
+    "hash": "sha256-cRDTJR79JL6UqjmiTsgz3m87rbU9rrFi0eJz3QXFuq4="
+  },
+  {
+    "pname": "Extism.runtime.osx-x64",
+    "version": "1.13.0",
+    "hash": "sha256-zow1ThY1dvjPzM1NDdXdH4q+fAdG5K9V+sVs5a6p+k0="
+  },
+  {
+    "pname": "Extism.runtime.win-x64",
+    "version": "1.13.0",
+    "hash": "sha256-MaEmHW0eeh1rFuKlKheD5mLcGjiFMzpBOax9bauW3M8="
+  },
+  {
+    "pname": "Extism.Sdk",
+    "version": "1.10.0",
+    "hash": "sha256-M3hLppQdfE8lDE0LFZMR6RT0xw4RJ0kFPHgHGQM/+qE="
   },
   {
     "pname": "Microsoft.NETCore.Platforms",
@@ -36,8 +76,8 @@
   },
   {
     "pname": "Newtonsoft.Json",
-    "version": "13.0.3",
-    "hash": "sha256-hy/BieY4qxBWVVsDqqOPaLy1QobiIapkbrESm6v2PHc="
+    "version": "13.0.4",
+    "hash": "sha256-8JCB1FdAW681qXP6DFDWvycu1oPyVoxaYgpJ2pUvZSk="
   },
   {
     "pname": "System.Buffers",

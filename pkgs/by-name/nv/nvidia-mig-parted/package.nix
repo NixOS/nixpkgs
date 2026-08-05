@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "nvidia-mig-parted";
-  version = "0.14.0";
+  version = "0.14.4";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "mig-parted";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-b+/Rz1Lj+Ef7fIw4g2el8td982SGKXb0iPboP53XGKQ=";
+    hash = "sha256-iizYj7JEfBiGfSuuysAIWA2EujxoKclsHho8EHUmuFc=";
   };
 
   vendorHash = null;

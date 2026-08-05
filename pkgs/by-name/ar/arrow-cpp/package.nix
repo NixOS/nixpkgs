@@ -33,7 +33,6 @@
   gtest,
   libbacktrace,
   lz4,
-  minio,
   ninja,
   nlohmann_json,
   openssl,
@@ -81,7 +80,7 @@ let
     hash = "sha256-Xd6o3RT6Q0tPutV77J0P1x3F6U3RHdCBOKGUKtkQCKk=";
   };
 
-  version = "23.0.0";
+  version = "24.0.0";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "arrow-cpp";
@@ -91,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "apache";
     repo = "arrow";
     rev = "apache-arrow-${version}";
-    hash = "sha256-BluUlbtGJwvlrpN/c/KziOfFh5dvzZyuCy4JZkkFea4=";
+    hash = "sha256-qTdkzZegANNvtO7nbqXVC8hc7BexvmeFF/0l5VzRb8g=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cpp";
@@ -132,8 +131,10 @@ stdenv.mkDerivation (finalAttrs: {
       };
 
       # apache-orc looks for things in caps
-      LZ4_ROOT = lz4;
-      ZSTD_ROOT = zstd.dev;
+      LZ4_HOME = lz4;
+      PROTOBUF_HOME = protobuf;
+      SNAPPY_HOME = snappy.dev;
+      ZSTD_HOME = zstd.dev;
       ARROW_TEST_DATA = "${arrow-testing}/data";
       PARQUET_TEST_DATA = "${parquet-testing}/data";
       GTEST_FILTER =
@@ -153,6 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
               "TestMinioServer.Connect"
               "TestS3FS.*"
               "TestS3FSGeneric.*"
+              "TestS3FSHTTPS.*" # Needs Minio
             ]
             ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
               # https://github.com/apache/arrow/issues/41505
@@ -290,7 +292,6 @@ stdenv.mkDerivation (finalAttrs: {
     which
     sqlite
   ]
-  ++ lib.optionals enableS3 [ minio ]
   ++ lib.optionals enableFlight [ python3 ]
   ++ lib.optionals enableAzure [ azurite ];
 
@@ -304,6 +305,8 @@ stdenv.mkDerivation (finalAttrs: {
         "arrow-flight-integration-test"
         # File already exists in database: orc_proto.proto
         "arrow-orc-adapter-test"
+        # missing test fixture
+        "parquet-encryption-test"
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # https://github.com/NixOS/nixpkgs/issues/460687
@@ -320,7 +323,11 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postInstallCheck
     '';
 
+  __structuredAttrs = true;
+
   meta = {
+    # https://hydra.nixos.org/job/nixpkgs/unstable/arrow-cpp.x86_64-darwin/all
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
     description = "Cross-language development platform for in-memory data";
     homepage = "https://arrow.apache.org/docs/cpp/";
     changelog = "https://arrow.apache.org/release/${finalAttrs.version}.html";

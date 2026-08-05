@@ -11,19 +11,19 @@
 buildHomeAssistantComponent rec {
   owner = "olen";
   domain = "openplantbook";
-  version = "1.3.3";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "home-assistant-openplantbook";
     tag = "v${version}";
-    hash = "sha256-t4ZyY6zodCRJZTIqu7Rcfr7sRUmo5QarZU8y0lCKmWE=";
+    hash = "sha256-Lk+dyrBwTqRil64fVm28bhN+q57bA5U9FpX2wFf/g8I=";
   };
 
-  postPatch = ''
-    substituteInPlace custom_components/openplantbook/manifest.json \
-      --replace-fail "==" ">="
-  '';
+  ignoreVersionRequirement = [
+    "json-timeseries"
+    "openplantbook-sdk"
+  ];
 
   dependencies = [
     json-timeseries

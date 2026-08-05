@@ -13,21 +13,24 @@
   openssh,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_11,
   stdenv,
   sqliteSupport ? true,
   nixosTests,
 }:
 
 let
+  pnpm = pnpm_11;
+
   frontend = stdenv.mkDerivation (finalAttrs: {
     pname = "gitea-frontend";
     inherit (gitea) src version;
 
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
-      fetcherVersion = 3;
-      hash = "sha256-Atb6m5ZD9NKjYezFnYLnQqnlr72g5dz7ROfOF9fsqto=";
+      inherit pnpm;
+      fetcherVersion = 4;
+      hash = "sha256-VAXSj+AYV6uEdCAD/sEzeydqn4cqNL+ITfrGq41jaLI=";
     };
 
     nativeBuildInputs = [
@@ -35,6 +38,8 @@ let
       pnpmConfigHook
       pnpm
     ];
+
+    __darwinAllowLocalNetworking = true;
 
     buildPhase = ''
       make frontend
@@ -46,20 +51,20 @@ let
     '';
   });
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gitea";
-  version = "1.25.5";
+  version = "1.27.1";
 
   src = fetchFromGitHub {
     owner = "go-gitea";
     repo = "gitea";
-    tag = "v${gitea.version}";
-    hash = "sha256-EDj/n4dOZsdJx4zdP8GwUavZNK145Q8ENXmIL+81MY4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OCThp8432WAD+9v7c7phY2u4JndXAfve4XRbJTLdn6g=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-o7OIVo0/gunGMIDd0r6c9KDtku6pWwzmgm1X9qVbx4w=";
+  vendorHash = "sha256-YRBMGWKIZgMxOXaXG2bIBj1XzkhSwiMyfRy+yQGw+Bo=";
 
   outputs = [
     "out"
@@ -71,10 +76,17 @@ buildGoModule rec {
   # go-modules derivation doesn't provide $data
   # so we need to wait until it is built, and then
   # at that time we can then apply the substituteInPlace
-  overrideModAttrs = _: { postPatch = null; };
+  overrideModAttrs = _: {
+    postPatch = ''
+      substituteInPlace go.mod \
+        --replace-fail "go 1.26.4" "go 1.26.0"
+    '';
+  };
 
   postPatch = ''
     substituteInPlace modules/setting/server.go --subst-var data
+    substituteInPlace go.mod \
+      --replace-fail "go 1.26.4" "go 1.26.0"
   '';
 
   subPackages = [ "." ];
@@ -89,8 +101,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
-    "-X 'main.Tags=${lib.concatStringsSep " " tags}'"
+    "-X main.Version=${finalAttrs.version}"
+    "-X 'main.Tags=${lib.concatStringsSep " " finalAttrs.tags}'"
   ];
 
   postInstall = ''
@@ -100,6 +112,7 @@ buildGoModule rec {
     mkdir -p $out
     cp -R ./options/locale $out/locale
 
+    mv $out/bin/gitea{.dev,}
     wrapProgram $out/bin/gitea \
       --prefix PATH : ${
         lib.makeBinPath [
@@ -123,6 +136,7 @@ buildGoModule rec {
   meta = {
     description = "Git with a cup of tea";
     homepage = "https://about.gitea.com";
+    changelog = "https://github.com/go-gitea/gitea/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       techknowlogick
@@ -130,4 +144,4 @@ buildGoModule rec {
     ];
     mainProgram = "gitea";
   };
-}
+})

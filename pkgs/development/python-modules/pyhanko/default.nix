@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
 
   # build-system
   setuptools,
@@ -38,14 +39,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyhanko";
-  version = "0.33.0";
+  version = "0.35.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "pyHanko";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+576MAbtWFGaPu/HqhdeeRNHi84pLnDaMDa0e/J/CUs=";
+    hash = "sha256-CY+YgUu8za5c0t2OKStKvCN9X8hVXT2sN42KSDiyMX8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/pkgs/pyhanko";
@@ -54,20 +55,22 @@ buildPythonPackage (finalAttrs: {
     substituteInPlace src/pyhanko/version/__init__.py \
       --replace-fail "0.0.0.dev1" "${finalAttrs.version}" \
       --replace-fail "(0, 0, 0, 'dev1')" "tuple(\"${finalAttrs.version}\".split(\".\"))"
-    substituteInPlace pyproject.toml \
-      --replace-fail "0.0.0.dev1" "${finalAttrs.version}"
   '';
 
   build-system = [ setuptools ];
 
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
+
   dependencies = [
     asn1crypto
     cryptography
+    lxml
     pyhanko-certvalidator
     pyyaml
     requests
     tzlocal
-    lxml
   ];
 
   optional-dependencies = {
@@ -145,10 +148,14 @@ buildPythonPackage (finalAttrs: {
       sourceRoot = "${finalAttrs.src.name}/internal/common-test-utils";
       # Include the test pdf/xml files etc. in the build output
       postPatch = ''
-        echo "graft src/test_data" > MANIFEST.in
+        echo "graft src/pyhanko_testing_commons/test_data" > MANIFEST.in
       '';
 
       build-system = [ setuptools ];
+
+      nativeBuildInputs = [
+        pyprojectVersionPatchHook
+      ];
 
       dependencies = [
         certomancer

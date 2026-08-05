@@ -18,6 +18,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   build-system = [ python3Packages.poetry-core ];
 
+  pythonRelaxDeps = [ "typer" ];
+
   dependencies = with python3Packages; [
     setuptools # for pkg_resources
     tomlkit

@@ -35,7 +35,7 @@ buildPythonPackage rec {
   meta = {
     description = "Flag emoji from country codes for Python";
     homepage = "https://github.com/cvzi/flag";
-    changelog = "https://github.com/cvzi/flag/releases/tag/v${src.tag}";
+    changelog = "https://github.com/cvzi/flag/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       skohtv

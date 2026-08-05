@@ -4,7 +4,6 @@
   fetchFromGitHub,
   hatchling,
   pytestCheckHook,
-  mock,
   pyyaml,
 
   # for passthru.tests
@@ -15,16 +14,16 @@
   starlette,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-multipart";
-  version = "0.0.21";
+  version = "0.0.32";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kludex";
     repo = "python-multipart";
-    tag = version;
-    hash = "sha256-fvqXqQwU0JC4Pkvho5WGe/itlxttk1lKL7R5Vt0oKpA=";
+    tag = finalAttrs.version;
+    hash = "sha256-zw6SHzbbjyRCGfUldxdki+wKwmTAgmd9ZAu/2zU+pFw=";
   };
 
   build-system = [ hatchling ];
@@ -33,7 +32,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    mock
     pyyaml
   ];
 
@@ -48,10 +46,13 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/Kludex/python-multipart/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Kludex/python-multipart/blob/${finalAttrs.version}/CHANGELOG.md";
     description = "Streaming multipart parser for Python";
     homepage = "https://github.com/Kludex/python-multipart";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ris ];
+    maintainers = with lib.maintainers; [
+      dotlambda
+      ris
+    ];
   };
-}
+})

@@ -121,40 +121,41 @@ in
   # implementation
 
   config = lib.mkIf cfg.enable (
-    lib.recursiveUpdate baseModule.config {
-      warnings = (
-        lib.optional (
+    lib.mkMerge [
+      baseModule.config
+      {
+        warnings = lib.optional (
           cfg.role == "agent" && cfg.cni != null
-        ) "rke2: cni should not be set if role is 'agent'"
-      );
+        ) "rke2: cni should not be set if role is 'agent'";
 
-      # Configure NetworkManager to ignore CNI network interfaces.
-      # See: https://docs.rke2.io/known_issues#networkmanager
-      environment.etc."NetworkManager/conf.d/rke2-canal.conf" = {
-        enable = config.networking.networkmanager.enable;
-        text = ''
-          [keyfile]
-          unmanaged-devices=interface-name:flannel*;interface-name:cali*;interface-name:tunl*;interface-name:vxlan.calico;interface-name:vxlan-v6.calico;interface-name:wireguard.cali;interface-name:wg-v6.cali
-        '';
-      };
-
-      # CIS hardening
-      # https://docs.rke2.io/security/hardening_guide#kernel-parameters
-      # https://github.com/rancher/rke2/blob/ef0fc7aa9d3bbaa95ce9b1895972488cbd92e302/bundle/share/rke2/rke2-cis-sysctl.conf
-      boot.kernel.sysctl = {
-        "vm.panic_on_oom" = 0;
-        "vm.overcommit_memory" = 1;
-        "kernel.panic" = 10;
-        "kernel.panic_on_oops" = 1;
-      };
-      # https://docs.rke2.io/security/hardening_guide#etcd-is-configured-properly
-      users = lib.mkIf cfg.cisHardening {
-        users.etcd = {
-          isSystemUser = true;
-          group = "etcd";
+        # Configure NetworkManager to ignore CNI network interfaces.
+        # See: https://docs.rke2.io/known_issues#networkmanager
+        environment.etc."NetworkManager/conf.d/rke2-canal.conf" = {
+          enable = config.networking.networkmanager.enable;
+          text = ''
+            [keyfile]
+            unmanaged-devices=interface-name:flannel*;interface-name:cali*;interface-name:tunl*;interface-name:vxlan.calico;interface-name:vxlan-v6.calico;interface-name:wireguard.cali;interface-name:wg-v6.cali
+          '';
         };
-        groups.etcd = { };
-      };
-    }
+
+        # CIS hardening
+        # https://docs.rke2.io/security/hardening_guide#kernel-parameters
+        # https://github.com/rancher/rke2/blob/ef0fc7aa9d3bbaa95ce9b1895972488cbd92e302/bundle/share/rke2/rke2-cis-sysctl.conf
+        boot.kernel.sysctl = {
+          "vm.panic_on_oom" = 0;
+          "vm.overcommit_memory" = 1;
+          "kernel.panic" = 10;
+          "kernel.panic_on_oops" = 1;
+        };
+        # https://docs.rke2.io/security/hardening_guide#etcd-is-configured-properly
+        users = lib.mkIf cfg.cisHardening {
+          users.etcd = {
+            isSystemUser = true;
+            group = "etcd";
+          };
+          groups.etcd = { };
+        };
+      }
+    ]
   );
 }

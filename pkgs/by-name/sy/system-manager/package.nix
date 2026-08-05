@@ -6,8 +6,11 @@
   pkg-config,
   clippy,
   nix,
+  nixVersions,
   cargo,
   nix-update-script,
+  writableTmpDirAsHomeHook,
+  system-manager,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -32,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     clippy
     nix
     cargo
+    writableTmpDirAsHomeHook
   ];
 
   preCheck = ''
@@ -43,7 +47,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     export NIX_STATE_DIR=$TMPDIR
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.latest-nix = system-manager.override { nix = nixVersions.latest; };
+  };
 
   meta = {
     description = "Manage system config using nix on any distro";

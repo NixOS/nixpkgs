@@ -14,16 +14,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-lsp-ruff";
-  version = "2.3.0";
+  version = "2.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = "python-lsp-ruff";
-    tag = "v${version}";
-    hash = "sha256-jtfDdZ68AroXlmR+AIVk/b3WpZk78BCtT8TUh4ELZZI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1dgtuUX1GWKRiZOl5BYB/U8ecg42eTUMZqRYPKzHW/Y=";
   };
 
   postPatch =
@@ -70,8 +70,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/python-lsp/python-lsp-ruff";
     description = "Ruff linting plugin for pylsp";
-    changelog = "https://github.com/python-lsp/python-lsp-ruff/releases/tag/v${version}";
+    changelog = "https://github.com/python-lsp/python-lsp-ruff/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ linsui ];
   };
-}
+})

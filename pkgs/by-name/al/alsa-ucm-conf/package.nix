@@ -9,12 +9,16 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "alsa-ucm-conf";
-  version = "1.2.15.1";
+  version = "1.2.16.1";
 
   src = fetchurl {
     url = "mirror://alsa/lib/alsa-ucm-conf-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-JGxdWdIXtvf0ehH9EPG3ZtJavLDZyZavMHm7nJrFobA=";
+    hash = "sha256-zz0cB+CJqDxOziwg8F3WqKq3/NEIdow4gROGiAV1SSs=";
   };
+
+  patches = [
+
+  ];
 
   dontBuild = true;
 
@@ -43,6 +47,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.alsa-project.org/";
+    changelog = "https://github.com/alsa-project/alsa-ucm-conf/releases/tag/v${finalAttrs.version}";
     description = "ALSA Use Case Manager configuration";
 
     longDescription = ''
@@ -54,6 +59,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       roastiek
       mvs
+      nick-linux
     ];
 
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;

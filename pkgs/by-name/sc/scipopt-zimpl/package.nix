@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     maintainers = with lib.maintainers; [ pmeinhold ];
     platforms = lib.platforms.linux;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     changelog = "https://zimpl.zib.de/download/CHANGELOG.txt";
     description = "Zuse Institute Mathematical Programming Language";
     longDescription = ''

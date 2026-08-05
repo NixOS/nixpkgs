@@ -21,7 +21,7 @@
   applyPatches,
 }:
 let
-  version = "4.0.16.2944";
+  version = "4.0.18.2971";
   # The dotnet8 compatibility patches also change `yarn.lock`, so we must pass
   # the already patched lockfile to `fetchYarnDeps`.
   src = applyPatches {
@@ -29,7 +29,7 @@ let
       owner = "Sonarr";
       repo = "Sonarr";
       tag = "v${version}";
-      hash = "sha256-ec/fxCUvKd6/+zrWLccnOsCwnZucZkEeCz9VpzdtjTg=";
+      hash = "sha256-83qbbBNk42KjKZNvYaAINoWZa3uEgaV0eveGl9dKTd8=";
     };
     postPatch = ''
       mv src/NuGet.Config NuGet.Config
@@ -62,6 +62,8 @@ buildDotnetModule {
   pname = "sonarr";
   inherit version src;
 
+  # Upstream expects to be ran from a "bin" directory
+  installPath = "${placeholder "out"}/lib/sonarr/bin";
   strictDeps = true;
   nativeBuildInputs = [
     nodejs
@@ -87,12 +89,18 @@ buildDotnetModule {
     yarn --offline run build --env production
   '';
   postInstall =
+    let
+      packageInfo = writers.writeText "package_info" ''
+        PackageVersion=${version}
+        PackageAuthor=[NixOS](https://nixos.org)
+      '';
+    in
     lib.optionalString withFFmpeg ''
-      rm -- "$out/lib/sonarr/ffprobe"
-      ln -s -- "$ffprobe" "$out/lib/sonarr/ffprobe"
+      ln -sf -- "$ffprobe" "$out/lib/sonarr/bin/ffprobe"
     ''
     + ''
-      cp -a -- _output/UI "$out/lib/sonarr/UI"
+      cp -a -- _output/UI "$out/lib/sonarr/bin/UI"
+      ln -s ${packageInfo} $out/lib/sonarr/package_info
     '';
   # Add an alias for compatibility with Sonarr v3 package.
   postFixup = ''
@@ -200,6 +208,7 @@ buildDotnetModule {
       tie
       niklaskorz
       karaolidis
+      nyanloutre
     ];
     mainProgram = "Sonarr";
     # platforms inherited from dotnet-sdk.

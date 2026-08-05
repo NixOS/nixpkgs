@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "openscad-lsp";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "Leathong";
     repo = "openscad-LSP";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ACxsXGeVYmB13x/n+molCoScSOe6Zh2PYiaGGHnd4DQ=";
+    hash = "sha256-vzlwt1lTaZIqHS/+6bVPHjd+Ex3G/YDVNW0JKZ0arnk=";
   };
 
-  cargoHash = "sha256-Q4NrRVSic7M1CFq24ffUv3d835PmaHus4Z0lLnUQ7Ts=";
+  cargoHash = "sha256-BU3gabsC/5lH59NSSBn2Zr5/egxcHAt7iCAftrOh1ak=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

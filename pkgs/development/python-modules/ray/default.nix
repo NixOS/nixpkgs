@@ -73,10 +73,11 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ray";
-  version = "2.54.0";
+  version = "2.56.1";
   format = "wheel";
+  __structuredAttrs = true;
 
-  disabled = pythonAtLeast "3.14";
+  disabled = pythonAtLeast "3.15";
 
   src =
     let
@@ -90,19 +91,22 @@ buildPythonPackage (finalAttrs: {
       # Results are in ./ray-hashes.nix
       hashes = {
         x86_64-linux = {
-          cp311 = "sha256-kouwkkWjxvfDwRO6jq/Gn5SNqWAtfzPoJR7N+XwVdhU=";
-          cp312 = "sha256-qXKv1ao92pnQsvNptfYuXdlYZat9N78uCg4NLPvZsyU=";
-          cp313 = "sha256-q4nmCJq7bkb7mP3ZbTmbMahS15EnzYrAB0bGHZPe+iw=";
+          cp311 = "sha256-5wA6R6Qu8q0z7As03Ftq+wP2P+WUZeb0yPbQVJLZ5KY=";
+          cp312 = "sha256-5dMXNpaDETTHa9CUUd/pXDLXLCcSU7DWsJ0t+ZlKpmA=";
+          cp313 = "sha256-gfLbICzDG8P1xKz57xVNEPHzns5gLZ0tMQiHXEm/AcM=";
+          cp314 = "sha256-rpH+V4+t6jjBOiCKD+wn4c7SOMzfX/+V7z4wrDBx3sk=";
         };
         aarch64-linux = {
-          cp311 = "sha256-SRrlargNiCLE6vTVu5bc8ypiMdjXt264A0QA65vhuxg=";
-          cp312 = "sha256-eVriHWt2QkXT9SG8WDNEbVhWnn396cV3dBfrKF2HRQ8=";
-          cp313 = "sha256-iVLCOoqpTxByjC0W4Nw3MtCaoOYlSAF1f/SUmEohT0U=";
+          cp311 = "sha256-TfRfM8wXaxHGkZHv3PtKzq7qIv7Pp4T2SFtlBO+MiyY=";
+          cp312 = "sha256-j91rCWIVkGzx+azceJjJ1hQGBvLSckV3i4OFqfGebLA=";
+          cp313 = "sha256-f9xH3k4jDw23xsZoqeFh+GTaxUi9MiMJhuCww244brU=";
+          cp314 = "sha256-6jcsf5WxTx928L3Sq8lgLFboi8MGmdIij3gTPndJsvE=";
         };
         aarch64-darwin = {
-          cp311 = "sha256-jjndVrR6Chgg1aWlQ4W75U0dZ+EJNzbRLY7U6Z0PpFU=";
-          cp312 = "sha256-z1wztLE4UOwkpb1fnZ4KgWH45Ya/0pflKRPRcN7ER/4=";
-          cp313 = "sha256-Wtd5Yf6hbGl6D7DlEhbdOcC+wohozeVKxmjt1Y0SuK4=";
+          cp311 = "sha256-XuvXds1GHt68WHTS37owBRR7a0VkXYoWplSTEcXv/+o=";
+          cp312 = "sha256-RLwAAMW/rYWy/24O+R6V+QHRotL91y+U8IoEbrSUzWE=";
+          cp313 = "sha256-k97atlgzSvgYd7bthAxOX4Xi4LGzZBsg6q7jfK2DXMY=";
+          cp314 = "sha256-dvYmimacHZkQ8de3OQPePt6YUO2U0+KDGNSVVZvTfQ4=";
         };
       };
     in
@@ -113,7 +117,7 @@ buildPythonPackage (finalAttrs: {
       python = pyShortVersion;
       abi = pyShortVersion;
       platform = platforms.${stdenv.hostPlatform.system} or { };
-      sha256 =
+      hash =
         hashes.${stdenv.hostPlatform.system}.${pyShortVersion}
           or (throw "No hash specified for '${stdenv.hostPlatform.system}.${pyShortVersion}'");
     };

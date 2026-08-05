@@ -9,7 +9,7 @@
   perl,
   fmt,
   hiredis,
-  xxHash,
+  xxhash,
   zstd,
   bashInteractive,
   doctest,
@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ccache";
-  version = "4.13.1";
+  version = "4.13.6";
 
   src = fetchFromGitHub {
     owner = "ccache";
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
         exit 1
       fi
     '';
-    hash = "sha256-8Qw5nkY86wGJ7B2hrNk9jIoz18nJ2FK+EbPH5fS5aEc=";
+    hash = "sha256-A0n+DO6IznETsAFUNIpBkQI6A3UilgEUbuyP3sqKDTk=";
   };
 
   outputs = [
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     fmt
     hiredis
-    xxHash
+    xxhash
     zstd
   ];
 
@@ -99,7 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   disabledTests = [
-    "test.direct" # https://github.com/ccache/ccache/issues/1699
     "test.fileclone" # flaky on hydra, also seems to fail on zfs
     "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
   ]
@@ -121,7 +120,11 @@ stdenv.mkDerivation (finalAttrs: {
           isClang = unwrappedCC.isClang or false;
           isGNU = unwrappedCC.isGNU or false;
           isCcache = true;
-        };
+        }
+        // builtins.intersectAttrs {
+          hardeningUnsupportedFlagsByTargetPlatform = null;
+          hardeningUnsupportedFlags = null;
+        } unwrappedCC;
         lib = lib.getLib unwrappedCC;
         nativeBuildInputs = [ makeWrapper ];
         # Unwrapped clang does not have a targetPrefix because it is multi-target

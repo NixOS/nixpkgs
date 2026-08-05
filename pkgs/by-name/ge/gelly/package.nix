@@ -14,20 +14,21 @@
   openssl,
   bubblewrap,
   glycin-loaders,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gelly";
-  version = "0.19.0";
+  version = "1.9.5";
 
   src = fetchFromGitHub {
     owner = "Fingel";
     repo = "gelly";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pxyO5CVNfLHMrTKamyEBUj8QTg2bPTfS5FZ3YTmkkQk=";
+    hash = "sha256-k6LgXEK5xoVrjiXCkYnFgC7Hs7oz+v3Kz47CELPqN9Q=";
   };
 
-  cargoHash = "sha256-ZKeVAgQsBOhhNbqdHYRTtpq6+z+xa1Be4eFnrY71f+s=";
+  cargoHash = "sha256-RbOs5CEj3KRe6F1RJSGx97wBoQKSynx+iza929ipfjA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -68,6 +69,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
     )
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "A Jellyfin GTK client for Linux focused on music";

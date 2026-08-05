@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "environs";
-  version = "14.6.0";
+  version = "15.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sloria";
     repo = "environs";
     tag = finalAttrs.version;
-    hash = "sha256-TX8C3KIuvAkC+ArGFz9FXyqxd9pfTgmMqnLuYNIlA4o=";
+    hash = "sha256-t3T31kI2Bh5biJrIzHJXJpEXWps9cLQRnlTZYKwtAtA=";
   };
 
   build-system = [ flit-core ];

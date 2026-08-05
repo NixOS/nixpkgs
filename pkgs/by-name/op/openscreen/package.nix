@@ -6,33 +6,38 @@
   copyDesktopItems,
   makeWrapper,
   makeDesktopItem,
-  electron_39,
+  xcbuild,
+  electron_41,
   nodejs_22,
   nix-update-script,
-
-  nodejs ? nodejs_22,
-  electron ? electron_39,
 }:
+let
+  electron = electron_41;
+  nodejs = nodejs_22;
+in
 buildNpmPackage (finalAttrs: {
   inherit nodejs;
 
   pname = "openscreen";
-  version = "1.2.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "siddharthvaddem";
     repo = "openscreen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9vtX6rEwRADbi8bSXOi995UvO6wI3z8ai580nhsXJEM=";
+    hash = "sha256-ZBWDQVYDXJ/IQGhlmscmCOMjpl03kVIdMoJXOW8OjUI=";
   };
 
-  npmDepsHash = "sha256-wYKw8fNuRVJOzR+KMa3DVN3bcT3R5GhKe/xWEH+nt0U=";
+  npmDepsHash = "sha256-SMAYgOwlZg9+/KZBUhVviOxEdMeL3Z2YdC8Hx8Q/ioY=";
 
   npmRebuildFlags = [ "--ignore-scripts" ]; # Prevent running `node-gyp build`
 
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    xcbuild
   ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -60,7 +65,8 @@ buildNpmPackage (finalAttrs: {
       npm exec electron-builder -- \
         --dir \
         -c.electronDist=${electron.dist} \
-        -c.electronVersion=${electron.version}
+        -c.electronVersion=${electron.version} \
+        -c.npmRebuild=false
     ''}
 
     runHook postBuild

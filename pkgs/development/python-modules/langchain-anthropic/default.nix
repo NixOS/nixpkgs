@@ -24,19 +24,23 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-anthropic";
-  version = "1.3.5";
+  version = "1.5.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-anthropic==${finalAttrs.version}";
-    hash = "sha256-R4X2WEU1I9HuuA9k4/6NrRMYuLjS6DQHQeP3xzp+Uso=";
+    hash = "sha256-mk0Cx1rYO1sPbFJdpqVs+hCvLkV7u1WrHOIkTW5ewDE=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/partners/anthropic";
 
   build-system = [ hatchling ];
+
+  # Langchain always tracks the latest release of anthropic whether or not it's needed
+  pythonRelaxDeps = [ "anthropic" ];
 
   dependencies = [
     anthropic
@@ -59,6 +63,8 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Fails when langchain-core gets ahead of this
     "test_serdes"
+    # KeyError: 'versions' in 1.4.6
+    "test_anthropic_model_params"
   ];
 
   pythonImportsCheck = [ "langchain_anthropic" ];
@@ -68,11 +74,12 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-anthropic==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain-anthropic/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${finalAttrs.src.tag}";
     description = "Build LangChain applications with Anthropic";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/anthropic";
     license = lib.licenses.mit;

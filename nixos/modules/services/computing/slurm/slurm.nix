@@ -453,6 +453,8 @@ in
         users.groups.slurmrestd = lib.mkIf (cfg.rest.enable) { };
 
         systemd.services.slurmd = lib.mkIf (cfg.client.enable) {
+
+          environment.LD_LIBRARY_PATH = lib.mkIf config.hardware.nvidia.datacenter.enable "/run/opengl-driver/lib";
           path =
             with pkgs;
             [

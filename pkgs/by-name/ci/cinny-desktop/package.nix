@@ -20,35 +20,30 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cinny-desktop";
-  # We have to be using the same version as cinny-web or this isn't going to work.
-  version = "4.11.1";
+  version = "4.12.5";
 
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/zHXlAqIxWN1obFO3H/eqFj38pjopF4D5ooz0YiVgD0=";
+    hash = "sha256-/A/O42jwwK2iDV1IdRjOO8fE/AZ0h7UWAZZLozOqUWs=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src-tauri";
 
-  cargoHash = "sha256-bchjUTC0/hWPf/cOs+cxRbqho/B9LMJ3ChW530zEoXU=";
+  cargoHash = "sha256-EF8gpfeZasazq0NKrjItt4bkgautQjYjEegf1OlWLOw=";
 
   postPatch =
     let
-      cinny' =
-        assert lib.assertMsg (
-          cinny.version == finalAttrs.version
-        ) "cinny.version (${cinny.version}) != cinny-desktop.version (${finalAttrs.version})";
-        cinny.override {
-          conf = {
-            hashRouter.enabled = true;
-          };
+      cinny' = cinny.override {
+        conf = {
+          hashRouter.enabled = true;
         };
+      };
     in
     ''
       ${lib.getExe jq} \
-        'del(.plugins.tauri.updater) | .build.frontendDist = "${cinny'}" | del(.build.beforeBuildCommand) | .bundle.createUpdaterArtifacts = false' tauri.conf.json \
+        '.build.frontendDist = "${cinny'}" | del(.build.beforeBuildCommand) | .bundle.createUpdaterArtifacts = false' tauri.conf.json \
         | ${lib.getExe' moreutils "sponge"} tauri.conf.json
     '';
 
@@ -63,12 +58,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --set-key="Categories" --set-value="Network;InstantMessaging;" \
         $out/share/applications/Cinny.desktop
     '';
-
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --set-default WEBKIT_DISABLE_DMABUF_RENDERER "1"
-    )
-  '';
 
   nativeBuildInputs = [
     cargo-tauri.hook
@@ -87,6 +76,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
     webkitgtk_4_1
   ];
+
+  buildNoDefaultFeatures = true;
+  buildFeatures = [ "custom-protocol" ];
 
   passthru = {
     updateScript = _experimental-update-script-combinators.sequence [

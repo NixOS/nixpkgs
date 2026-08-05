@@ -31,14 +31,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "4.6.0";
+  version = "4.10.0";
   pname = "baresip";
 
   src = fetchFromGitHub {
     owner = "baresip";
     repo = "baresip";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ikfSr9chbkv+5XPlDZKH/80N98tBzHvyNf29kENXOFI=";
+    hash = "sha256-EUnMcRvSvQoCgVmDVPjtfeppUiheVU2xD49D9hZbGb4=";
   };
 
   patches = [

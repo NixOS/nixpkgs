@@ -40,7 +40,7 @@ declare -r -A update_urls=(
   [graaljs]="https://api.github.com/repos/oracle/graaljs/releases/latest"
   [graalnodejs]="https://api.github.com/repos/oracle/graaljs/releases/latest"
   [graalpy]="https://api.github.com/repos/oracle/graalpython/releases/latest"
-  [truffleruby]="https://api.github.com/repos/oracle/truffleruby/releases/latest"
+  [truffleruby]="https://api.github.com/repos/truffleruby/truffleruby/releases/latest"
 )
 
 current_version="$(nix-instantiate "$nixpkgs" --eval --strict -A "graalvmPackages.${product}.version" --json | jq -r)"
@@ -73,7 +73,7 @@ declare -r -A products_urls=(
   [graaljs]="https://github.com/oracle/graaljs/releases/download/graal-${new_version}/graaljs-community-${new_version}-@platform@.tar.gz"
   [graalnodejs]="https://github.com/oracle/graaljs/releases/download/graal-${new_version}/graalnodejs-community-${new_version}-@platform@.tar.gz"
   [graalpy]="https://github.com/oracle/graalpython/releases/download/graal-${new_version}/graalpy-community-${new_version}-@platform@.tar.gz"
-  [truffleruby]="https://github.com/oracle/truffleruby/releases/download/graal-${new_version}/truffleruby-community-${new_version}-@platform@.tar.gz"
+  [truffleruby]="https://github.com/truffleruby/truffleruby/releases/download/graal-${new_version}/truffleruby-community-${new_version}-@platform@.tar.gz"
 )
 
 # Argh, this is really inconsistent...
@@ -82,14 +82,12 @@ if [[ "$product" == "graalvm-ce" ]]; then
     [aarch64-linux]="linux-aarch64"
     [x86_64-linux]="linux-x64"
     [aarch64-darwin]="macos-aarch64"
-    [x86_64-darwin]="macos-x64"
   )
 else
   declare -r -A platforms=(
     [aarch64-linux]="linux-aarch64"
     [x86_64-linux]="linux-amd64"
     [aarch64-darwin]="macos-aarch64"
-    [x86_64-darwin]="macos-amd64"
   )
 fi
 

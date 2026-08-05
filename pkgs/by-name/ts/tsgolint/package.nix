@@ -3,21 +3,23 @@
   buildGo126Module,
   fetchFromGitHub,
   findutils,
-  go_1_26,
   nix-update-script,
 }:
 
 buildGo126Module (finalAttrs: {
   pname = "tsgolint";
-  version = "0.17.0";
+  version = "7.0.2001";
 
   src = fetchFromGitHub {
     owner = "oxc-project";
     repo = "tsgolint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bY5oDaaKMu4KmGQFT3MyzNNKZWC8PVSRjAgWYhPVE2s=";
+    hash = "sha256-UU5tNa/rOxDWW7TwE1SrhzkVWvHRTe82YbK/o42+vuA=";
     fetchSubmodules = true;
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = [ findutils ];
 
@@ -25,36 +27,26 @@ buildGo126Module (finalAttrs: {
     pushd typescript-go
   '';
 
-  # These patches are applied to the typescript-go submodule in justfile's "init" target upstream.
+  # These patches are applied to the typescript-go submodule in upstream justfile's "init" target.
   patches = [
-    (finalAttrs.src + "/patches/0001-Parallel-readDirectory-visitor.patch")
-    (finalAttrs.src + "/patches/0002-Adapt-project-service-for-single-run-mode.patch")
-    (finalAttrs.src + "/patches/0003-patch-expose-more-functions-via-the-shim-with-type-f.patch")
-    (finalAttrs.src + "/patches/0004-fix-early-return-from-invalid-tsconfig-for-better-er.patch")
-    (finalAttrs.src + "/patches/0005-fix-collections-avoid-internal-json-import-in-ordere.patch")
-    (finalAttrs.src + "/patches/0006-perf-vfs-cache-ReadFile-results-in-cachedvfs.patch")
+    (finalAttrs.src + "/patches/0001-Adapt-project-service-for-single-run-mode.patch")
+    (finalAttrs.src + "/patches/0002-patch-expose-more-functions-via-the-shim-with-type-f.patch")
+    (finalAttrs.src + "/patches/0003-fix-early-return-from-invalid-tsconfig-for-better-er.patch")
+    (finalAttrs.src + "/patches/0004-fix-collections-avoid-internal-json-import-in-ordere.patch")
+    (finalAttrs.src + "/patches/0005-perf-vfs-cache-ReadFile-results-in-cachedvfs.patch")
   ];
 
   postPatch =
-    # We don't want to build with go.work, so we add the replacement to
-    # the local module to the go.mod instead.
+    # From upstream justfile's "init" target.
     ''
       popd
-      ${lib.getExe go_1_26} mod edit --replace=github.com/microsoft/typescript-go=./typescript-go
-    ''
-    +
-    # From justfile's "init" target upstream.
-    ''
-      rm go.work{,.sum}
       mkdir -p internal/collections && find ./typescript-go/internal/collections -type f ! -name '*_test.go' -exec cp {} internal/collections/ \;
     '';
 
   proxyVendor = true;
-  vendorHash = "sha256-Mb78gEN582QFTRTBefdAz8Yly2vB3zbPyViRnA1V3wI=";
+  vendorHash = "sha256-YdoEXZ9M1sK/v5AlHjYS7aa8XPJXU4mFVUyVS6JFUlo=";
 
   subPackages = [ "cmd/tsgolint" ];
-
-  env.GOEXPERIMENT = "greenteagc";
 
   passthru = {
     updateScript = nix-update-script { };
@@ -63,8 +55,12 @@ buildGo126Module (finalAttrs: {
   meta = {
     description = "Type aware linting for oxlint";
     homepage = "https://github.com/oxc-project/tsgolint";
+    changelog = "https://github.com/oxc-project/tsgolint/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [
+      jnsgruk
+      anish
+    ];
     mainProgram = "tsgolint";
   };
 })

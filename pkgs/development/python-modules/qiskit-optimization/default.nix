@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "qiskit";
-    repo = pname;
+    repo = "qiskit-optimization";
     tag = version;
     hash = "sha256-aonL08avVZlpGQ/FCZnrsPMvu1lbhRiadzKf/oPndZk=";
   };

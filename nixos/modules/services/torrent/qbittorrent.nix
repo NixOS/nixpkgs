@@ -75,8 +75,13 @@ in
 
     profileDir = mkOption {
       type = path;
-      default = "/var/lib/qBittorrent/";
-      description = "the path passed to qbittorrent via --profile.";
+      default = "/var/lib/qBittorrent";
+      description = ''
+        The path passed to qbittorrent via --profile.
+        Please note that the resulting systemd service will be run with some very strict security controls,
+        such as `ProtectHome=yes`, `PrivateUsers=true`, and `ProtectSystem=full` among others, so you cannot specify
+        a profileDir in your home directory. See [this bug report](https://github.com/NixOS/nixpkgs/issues/514206) for further info.
+      '';
     };
 
     openFirewall = mkEnableOption "opening both the webuiPort and torrentPort over TCP in the firewall";
@@ -154,11 +159,6 @@ in
             mode = "755";
             inherit (cfg) user group;
           };
-          "${cfg.profileDir}/qBittorrent/config/qBittorrent.conf"."C+" = mkIf (cfg.serverConfig != { }) {
-            mode = "600";
-            inherit (cfg) user group;
-            argument = toString configFile;
-          };
         };
       };
       services.qbittorrent = {
@@ -176,6 +176,12 @@ in
           Type = "simple";
           User = cfg.user;
           Group = cfg.group;
+
+          # the config file has to be writable, so we have to do this weird dance
+          ExecStartPre = lib.mkIf (cfg.serverConfig != { }) ''
+            ${pkgs.coreutils}/bin/install -Dm600 ${configFile} "${cfg.profileDir}/qBittorrent/config/qBittorrent.conf"
+          '';
+
           ExecStart = utils.escapeSystemdExecArgs (
             [
               (getExe cfg.package)

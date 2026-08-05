@@ -6,6 +6,7 @@
   fetchpatch,
   stdenv,
   pkgsi686Linux,
+  kernel,
 }:
 
 let
@@ -18,19 +19,8 @@ let
       lib32 =
         (pkgsi686Linux.callPackage imported {
           libsOnly = true;
-          kernel = null;
         }).out;
     };
-
-  kernel =
-    # a hacky way of extracting parameters from callPackage
-    callPackage (
-      {
-        kernel,
-        libsOnly ? false,
-      }:
-      if libsOnly then { } else kernel
-    ) { };
 
   selectHighestVersion = a: b: if lib.versionOlder a.version b.version then b else a;
 
@@ -76,42 +66,45 @@ rec {
   # Policy: use the highest stable version as the default (on our master).
   stable = if stdenv.hostPlatform.system == "i686-linux" then legacy_390 else production;
 
+  latest = selectHighestVersion production new_feature;
+
+  bleeding_edge = selectHighestVersion latest beta;
+
   production = generic {
-    version = "580.142";
-    sha256_64bit = "sha256-IJFfzz/+icNVDPk7YKBKKFRTFQ2S4kaOGRGkNiBEdWM=";
-    sha256_aarch64 = "sha256-jntr88SpTYR648P1rizQjB/8KleBoa14Ay12vx8XETM=";
-    openSha256 = "sha256-v968LbRqy8jB9+yHy9ceP2TDdgyqfDQ6P41NsCoM2AY=";
-    settingsSha256 = "sha256-BnrIlj5AvXTfqg/qcBt2OS9bTDDZd3uhf5jqOtTMTQM=";
-    persistencedSha256 = "sha256-il403KPFAnDbB+dITnBGljhpsUPjZwmLjGt8iPKuBqw=";
+    version = "595.84";
+    sha256_64bit = "sha256-mcQE5SExvye8ptoCaNzOPr7cenOrF0BxqZXPGmxeugY=";
+    sha256_aarch64 = "sha256-GloNdDFfmXFVu4FAlNNk2qzqLOuw2N5CKatKkcSrQxk=";
+    openSha256 = "sha256-pEmA2tUcOKwUPKy6N0QvS49Pdut4/7Phs/JhjdyBcNY=";
+    settingsSha256 = "sha256-QrnBM+sdWO4GanO62rxpHmRrjYkYpl5RD6fIiHq4C4A=";
+    persistencedSha256 = "sha256-50xYdgx7EEThbaMp4QS8GADbxj0mhBXh8QQN0tWMwRg=";
   };
 
-  latest = selectHighestVersion production (generic {
-    version = "590.48.01";
-    sha256_64bit = "sha256-ueL4BpN4FDHMh/TNKRCeEz3Oy1ClDWto1LO/LWlr1ok=";
-    sha256_aarch64 = "sha256-FOz7f6pW1NGM2f74kbP6LbNijxKj5ZtZ08bm0aC+/YA=";
-    openSha256 = "sha256-hECHfguzwduEfPo5pCDjWE/MjtRDhINVr4b1awFdP44=";
-    settingsSha256 = "sha256-NWsqUciPa4f1ZX6f0By3yScz3pqKJV1ei9GvOF8qIEE=";
-    persistencedSha256 = "sha256-wsNeuw7IaY6Qc/i/AzT/4N82lPjkwfrhxidKWUtcwW8=";
-    patchesOpen = [ kernel_6_19_patch ];
-  });
+  new_feature = generic {
+    version = "610.57.04";
+    sha256_64bit = "sha256-suk1xmuDuwDAyFe8jg7g/VLekoa0DJzB7sKafOfrEW0=";
+    sha256_aarch64 = "sha256-QCefrMBCmpOwuOyXv1k5Gj0iB2CYlPgnG3JToUw/j54=";
+    openSha256 = "sha256-rQHOOOY4KL92Ww3KDwh+j4eGU7oNAH8LutZC5wmFnPo=";
+    settingsSha256 = "sha256-ZEMo8I8Zc2Tq6RVDNYpAH+f094dUaZiBqO+5f6lIjRI=";
+    persistencedSha256 = "sha256-aXmD2VY1RLlgAnlHhOUMWzvMyhI6JTClcFLm4imF/mA=";
+  };
 
-  beta = selectHighestVersion latest (generic {
+  beta = generic {
     version = "595.45.04";
     sha256_64bit = "sha256-zUllSSRsuio7dSkcbBTuxF+dN12d6jEPE0WgGvVOj14=";
     sha256_aarch64 = "sha256-jl6lQWsgF6ya22sAhYPpERJ9r+wjnWzbGnINDpUMzsk=";
     openSha256 = "sha256-uqNfImwTKhK8gncUdP1TPp0D6Gog4MSeIJMZQiJWDoE=";
     settingsSha256 = "sha256-Y45pryyM+6ZTJyRaRF3LMKaiIWxB5gF5gGEEcQVr9nA=";
     persistencedSha256 = "sha256-5FoeUaRRMBIPEWGy4Uo0Aho39KXmjzQsuAD9m/XkNpA=";
-  });
+  };
 
   # Vulkan developer beta driver
   # See here for more information: https://developer.nvidia.com/vulkan-driver
   vulkan_beta = generic rec {
-    version = "595.44.03";
+    version = "595.44.09";
     persistencedVersion = "595.45.04";
     settingsVersion = "595.45.04";
-    sha256_64bit = "sha256-hKRUCKRnBlydG5Qe9pYjSCKWvSc8cb5K8L2tiup3Q+0=";
-    openSha256 = "sha256-zSnUuqxsFGLzDLC5BLKr1zljfbDiOqc/K5MusBeoP54=";
+    sha256_64bit = "sha256-LOcwE47hUG1aZX7JvLmTb/yC5qQgXYZ0TAavSn38Xug=";
+    openSha256 = "sha256-QboSiRWRZWseFg7GN/a4vZVQGGBF1UJlC9MyAxUxyF4=";
     settingsSha256 = "sha256-Y45pryyM+6ZTJyRaRF3LMKaiIWxB5gF5gGEEcQVr9nA=";
     persistencedSha256 = "sha256-5FoeUaRRMBIPEWGy4Uo0Aho39KXmjzQsuAD9m/XkNpA=";
     url = "https://developer.nvidia.com/downloads/vulkan-beta-${lib.concatStrings (lib.splitVersion version)}-linux";
@@ -126,17 +119,19 @@ rec {
     sha256_64bit = "sha256-ueL4BpN4FDHMh/TNKRCeEz3Oy1ClDWto1LO/LWlr1ok=";
     persistencedSha256 = "sha256-wsNeuw7IaY6Qc/i/AzT/4N82lPjkwfrhxidKWUtcwW8=";
     fabricmanagerSha256 = "sha256-f/AQ8HrgoqBQyXNrXA/UaI4OMQ9QcjjYWIhr1/5uM74=";
+    openSha256 = "sha256-hECHfguzwduEfPo5pCDjWE/MjtRDhINVr4b1awFdP44=";
     useSettings = false;
     usePersistenced = true;
     useFabricmanager = true;
   };
 
   dc_580 = generic rec {
-    version = "580.126.09";
+    version = "580.159.04";
     url = "https://us.download.nvidia.com/tesla/${version}/NVIDIA-Linux-x86_64-${version}.run";
-    sha256_64bit = "sha256-TKxT5I+K3/Zh1HyHiO0kBZokjJ/YCYzq/QiKSYmG7CY=";
-    persistencedSha256 = "sha256-J1UwS0o/fxz45gIbH9uaKxARW+x4uOU1scvAO4rHU5Y=";
-    fabricmanagerSha256 = "sha256-tyCHKIr8nxVfZIqcWKAwRoMLzmGlsOUhDlO5V/9W97Y=";
+    sha256_64bit = "sha256-weZnYbCI0Xs632y2l53przi+JoTRArABoXbc+vq9yh4=";
+    persistencedSha256 = "sha256-vDawiy52GB8JABUKZDiQUc8uda8p/7jCFW7rTu6QMa4=";
+    fabricmanagerSha256 = "sha256-Jk6XVn/d6vqfxYGAACiD9UHelnjdC4+zOi4EEv8LuKE=";
+    openSha256 = "sha256-zsNmjZW0cyZWPp3vDT3mNeqAo0hS0M7e9Tbvwvij+F4=";
     useSettings = false;
     usePersistenced = true;
     useFabricmanager = true;
@@ -148,6 +143,7 @@ rec {
     sha256_64bit = "sha256-AlaGfggsr5PXsl+nyOabMWBiqcbHLG4ij617I4xvoX0=";
     persistencedSha256 = "sha256-x4K0Gp89LdL5YJhAI0AydMRxl6fyBylEnj+nokoBrK8=";
     fabricmanagerSha256 = "sha256-jSTKzeRVTUcYma1Cb0ajSdXKCi6KzUXCp2OByPSWSR4=";
+    openSha256 = "sha256-aTV5J4zmEgRCOavo6wLwh5efOZUG+YtoeIT/tnrC1Hg=";
     useSettings = false;
     usePersistenced = true;
     useFabricmanager = true;
@@ -156,6 +152,16 @@ rec {
   # Update note:
   # If you add a legacy driver here, also update `top-level/linux-kernels.nix`,
   # adding to the `nvidia_x11_legacy*` entries.
+
+  # LTSB supported until Aug 2028
+  legacy_580 = generic {
+    version = "580.173.02";
+    sha256_64bit = "sha256-jY65AB4FqaimY9PV0wT+tk7yhE7hhczf2VJ4aCD0bhs=";
+    sha256_aarch64 = "sha256-1lvVYIfvTXjwSoCNp4g8NaWQHF/TfpXRUKdgLrqXqoA=";
+    openSha256 = "sha256-lhloZdf6XbaAFTZBF1DxE0Nv9VC6obY8UPf0VyfVepE=";
+    settingsSha256 = "sha256-dfdu/3tnwHUfP7WoeQFNOMalMlpmUWjeMDIOnu+yi8E=";
+    persistencedSha256 = "sha256-j8YM1w231X+JIP3c3TpUNurEBumEu1stVjzFGWu1JXE=";
+  };
 
   # Last one without the bug reported here:
   # https://bbs.archlinux.org/viewtopic.php?pid=2155426#p2155426
@@ -174,8 +180,8 @@ rec {
       # Source corresponding to https://aur.archlinux.org/packages/nvidia-470xx-dkms
       aurPatches = fetchgit {
         url = "https://aur.archlinux.org/nvidia-470xx-utils.git";
-        rev = "7c1c2c124147d960a6c7114eb26a4eadae9b9f3d";
-        hash = "sha256-sNW+I4dkPSudfORLEp1RNGHyQKWBYnBEeGrfJU7SYTs=";
+        rev = "7abbeeb510742be09e1eb806c14bab2833a25783";
+        hash = "sha256-hRBws0o4DWI5fvZRn0OwitXRSR9HCkRkgnvnkiZI6Ko=";
       };
     in
     generic {
@@ -196,6 +202,9 @@ rec {
         "nvidia-470xx-fix-linux-6.14.patch"
         "nvidia-470xx-fix-linux-6.15.patch"
         "nvidia-470xx-fix-linux-6.17.patch"
+        "nvidia-470xx-fix-linux-6.19-part1.patch"
+        "nvidia-470xx-fix-linux-6.19-part2.patch"
+        "nvidia-470xx-fix-linux-7.0.patch"
       ];
       patchFlags = [
         "-p1"

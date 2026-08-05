@@ -10,14 +10,14 @@
 }:
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "sbomnix";
-  version = "1.7.4";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tiiuae";
     repo = "sbomnix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-s7mmtbELRcl/7ab5A3fU7f8m4rIm+mBLmXMeYHa7/n4=";
+    hash = "sha256-oMIFcfjbt+lgAcdJbA64opu1qCwUVUIEukotqQEox3Q=";
 
     # Remove documentation as it contains references to nix store
     postFetch = ''

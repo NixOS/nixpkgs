@@ -6,18 +6,17 @@
   llama-index-core,
   llama-index-embeddings-openai,
   llama-index-llms-openai,
-  llama-index-vector-stores-chroma,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "llama-index-cli";
-  version = "0.5.5";
+  version = "0.5.7";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_cli";
     inherit (finalAttrs) version;
-    hash = "sha256-ot5aIvZ19gkIyM0f2HPxMs8r/fNGL6ee9fvmuVcnows=";
+    hash = "sha256-n80Z69VhWsaQ0cK+RzOqRhBlBGQsF7CcaSh0CDezkZk=";
   };
 
   build-system = [ hatchling ];
@@ -26,7 +25,6 @@ buildPythonPackage (finalAttrs: {
     llama-index-core
     llama-index-embeddings-openai
     llama-index-llms-openai
-    llama-index-vector-stores-chroma
   ];
 
   # Tests are only available in the mono repo

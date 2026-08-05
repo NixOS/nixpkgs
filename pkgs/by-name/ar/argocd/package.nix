@@ -13,13 +13,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "argocd";
-  version = "3.3.2";
+  version = "3.4.6";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-cd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cxjBXT/YvhC8GA5Btjyqsy5FBescie9f+yfj/6wNV24=";
+    hash = "sha256-Dpn4KHKs766/cmh0gLwaFExQ2tMRbdXZK+2v2jM3iF8=";
   };
 
   ui = stdenv.mkDerivation {
@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${finalAttrs.src}/ui/yarn.lock";
-      hash = "sha256-kqBolkQiwZUBic0f+Ek5HwYsOmro1+FStkDLXAre79o=";
+      hash = "sha256-/B7FviD0a3VDmbbM59Ksmr8apuTRHrRbTtfX4QgO8JM=";
     };
 
     nativeBuildInputs = [
@@ -45,7 +45,7 @@ buildGoModule (finalAttrs: {
   };
 
   proxyVendor = true; # darwin/linux hash mismatch
-  vendorHash = "sha256-UYDGt7iTyDlq3lKEZAqFchO0IYV5kVlfbegWaHsA1Og=";
+  vendorHash = "sha256-yzVSMdupFdrYUWMCPFhiYTnjCDGZo4Se0osXbCvB7gM=";
 
   # Set target as ./cmd per cli-local
   # https://github.com/argoproj/argo-cd/blob/master/Makefile
@@ -75,7 +75,7 @@ buildGoModule (finalAttrs: {
   # set ldflag for kubectlVersion since it is needed for argo
   # Per https://github.com/search?q=repo%3Aargoproj%2Fargo-cd+%22KUBECTL_VERSION%3D%22+path%3AMakefile&type=code
   prePatch = ''
-    export KUBECTL_VERSION=$(grep 'k8s.io/kubectl v' go.mod | cut -f 2 -d " " | cut -f 1 -d "=" )
+    export KUBECTL_VERSION=$(go list -m -f '{{.Version}}' k8s.io/kubectl)
     echo using $KUBECTL_VERSION
     ldflags="''${ldflags} -X github.com/argoproj/argo-cd/v3/common.kubectlVersion=''${KUBECTL_VERSION}"
   '';

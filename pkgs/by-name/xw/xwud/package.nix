@@ -9,11 +9,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xwud";
-  version = "1.0.7";
+  version = "1.0.8";
 
   src = fetchurl {
     url = "mirror://xorg/individual/app/xwud-${finalAttrs.version}.tar.xz";
-    hash = "sha256-5Vy+2rNtel9nGr+OWUiIr8SMqhFtUdQp6lPqMX7Axh4=";
+    hash = "sha256-LigmSMNAGP2HAFK42BTqTTWtn9ubz8i9xaBoIsD4bpk=";
   };
 
   strictDeps = true;

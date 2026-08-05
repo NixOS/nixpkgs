@@ -40,6 +40,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "replibyte";
     homepage = "https://github.com/Qovery/replibyte";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
   };
 })

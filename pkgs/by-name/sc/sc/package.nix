@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sc";
-  version = "7.16_1.1.4";
+  version = "7.16_1.2.0";
 
   src = fetchFromGitHub {
     repo = "sc";
     owner = "n-t-roff";
     tag = finalAttrs.version;
-    hash = "sha256-qC7UQQqprT0Td7TCCe7iB9qJIBp47GW3aBAon27Katg=";
+    hash = "sha256-4Ma3JWrK2udMLEAUboBGzfLTQjX+TdXG7ygvhS14BiM=";
   };
 
   buildInputs = [ ncurses ];

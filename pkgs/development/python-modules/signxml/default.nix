@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "signxml";
-  version = "4.4.0";
+  version = "4.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "XML-Security";
     repo = "signxml";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BExi8MQ59Vq7+X66fTKjKaSPRAbplQkAT42De/QCpvI=";
+    hash = "sha256-0DzHw7E2sAJE3O7io++zjsi07FbkBD24EjGDOVo8/9s=";
   };
 
   build-system = [

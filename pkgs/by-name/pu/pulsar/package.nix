@@ -89,7 +89,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pulsar";
-  version = "1.131.1";
+  version = "1.132.1";
 
   src =
     finalAttrs.passthru.srcs.${stdenv.hostPlatform.system}
@@ -98,11 +98,11 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.srcs = {
     x86_64-linux = fetchurl {
       url = "https://github.com/pulsar-edit/pulsar/releases/download/v${finalAttrs.version}/Linux.pulsar-${finalAttrs.version}.tar.gz";
-      hash = "sha256-Is+KAnPuHUrj87KFTjB/v/LMDflq4LbX3VP8Cv7/CNQ=";
+      hash = "sha256-66kubyDMEHgRdT38TTESMIZ+wQPPXWHBc0jYY3aMSkU=";
     };
     aarch64-linux = fetchurl {
       url = "https://github.com/pulsar-edit/pulsar/releases/download/v${finalAttrs.version}/ARM.Linux.pulsar-${finalAttrs.version}-arm64.tar.gz";
-      hash = "sha256-P2ZBV9Al6xw347yUs3BOWnwJGWegRh52oygLFgjoBcw=";
+      hash = "sha256-MTWqUlbfjJlIQVy0YBLbenMzA7Xgnkr34nr2t8nhofc=";
     };
   };
 
@@ -166,6 +166,8 @@ stdenv.mkDerivation (finalAttrs: {
       $opt/resources/app/ppm/bin/node
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       $opt/resources/app.asar.unpacked/node_modules/symbol-provider-ctags/vendor/ctags-linux
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      $opt/chrome_crashpad_handler
 
     # Replace the bundled git with the one from nixpkgs
     dugite=$opt/resources/app.asar.unpacked/node_modules/dugite
@@ -259,10 +261,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = writeShellScript "update-pulsar" ''
     set -euo pipefail
-    PATH="${lib.getBin curl}:$PATH"
-    PATH="${lib.getBin jq}:$PATH"
-    PATH="${lib.getBin coreutils}:$PATH"
-    PATH="${lib.getBin nix-update}:$PATH"
+    export PATH="${
+      lib.makeBinPath [
+        coreutils
+        curl
+        jq
+        git
+        nix-update
+      ]
+    }"
     version="$(curl https://api.github.com/repos/pulsar-edit/pulsar/releases/latest | jq ".tag_name" -r | tr -d 'v')"
     nix-update pkgsCross.gnu64.pulsar --version "$version"
     nix-update pkgsCross.aarch64-multiplatform.pulsar --version skip

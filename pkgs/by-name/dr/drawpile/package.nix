@@ -3,7 +3,9 @@
   lib,
   fetchFromGitHub,
   cargo,
-  extra-cmake-modules,
+  pkg-config,
+  cmake,
+  kdePackages,
   rustc,
   rustPlatform,
   fetchpatch,
@@ -91,7 +93,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cargo
-    extra-cmake-modules
+    pkg-config
+    cmake
+    kdePackages.extra-cmake-modules
     rustc
     rustPlatform.cargoSetupHook
     qt6Packages.wrapQtAppsHook

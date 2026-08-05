@@ -14,10 +14,12 @@ from textwrap import dedent
 from typing import Final, Literal
 
 from . import tmpdir
+from .elevate import NO_ELEVATOR, PRESERVE_ENV, Elevator
 from .models import (
     Action,
     BuildAttr,
     Flake,
+    FlakeMetadataJson,
     Generation,
     GenerationJson,
     ImageVariants,
@@ -25,14 +27,14 @@ from .models import (
     Profile,
     Remote,
 )
-from .process import PRESERVE_ENV, SSH_DEFAULT_OPTS, run_wrapper, run_wrapper_bg
-from .process import Args as ProcessArgs
+from .process import run_wrapper, ssh_default_opts
 from .utils import Args, dict_to_flags
+
+local_tz: Final = datetime.now().astimezone().tzinfo
 
 FLAKE_FLAGS: Final = ["--extra-experimental-features", "nix-command flakes"]
 FLAKE_REPL_TEMPLATE: Final = "repl.nix.template"
-SYSTEMD_RUN_UNIT_PREFIX: Final = "nixos-rebuild-switch-to-configuration"
-SYSTEMD_RUN_CMD_PREFIX: Final = [
+SWITCH_TO_CONFIGURATION_CMD_PREFIX: Final = [
     "systemd-run",
     "-E",
     # Will be set to new value early in switch-to-configuration script,
@@ -43,10 +45,11 @@ SYSTEMD_RUN_CMD_PREFIX: Final = [
     "-E",
     "NIXOS_NO_CHECK",
     "--collect",
-    "--wait",
     "--no-ask-password",
+    "--pipe",
     "--quiet",
     "--service-type=exec",
+    "--unit=nixos-rebuild-switch-to-configuration",
 ]
 logger: Final = logging.getLogger(__name__)
 
@@ -193,7 +196,7 @@ def copy_closure(
     Also supports copying a closure from a remote to another remote."""
 
     sshopts = os.getenv("NIX_SSHOPTS", "")
-    env = {"NIX_SSHOPTS": " ".join(filter(lambda x: x, [sshopts, *SSH_DEFAULT_OPTS]))}
+    env = {"NIX_SSHOPTS": " ".join(filter(lambda x: x, [sshopts, *ssh_default_opts()]))}
 
     def nix_copy_closure(host: Remote, to: bool) -> None:
         run_wrapper(
@@ -207,17 +210,20 @@ def copy_closure(
             append_local_env=env,
         )
 
-    def nix_copy(to_host: Remote, from_host: Remote) -> None:
+    def nix_copy(to_host: Remote | None, from_host: Remote | None) -> None:
+        host_flags = []
+        if from_host is not None:
+            host_flags += ["--from", f"{from_host.store_type}://{from_host.host}"]
+        if to_host is not None:
+            host_flags += ["--to", f"{to_host.store_type}://{to_host.host}"]
+
         run_wrapper(
             [
                 "nix",
                 *FLAKE_FLAGS,
                 "copy",
                 *dict_to_flags(copy_flags),
-                "--from",
-                f"ssh://{from_host.host}",
-                "--to",
-                f"ssh://{to_host.host}",
+                *host_flags,
                 closure,
             ],
             append_local_env=env,
@@ -226,9 +232,12 @@ def copy_closure(
     match (to_host, from_host):
         case (x, y) if x == y:
             return
-        case (Remote(_) as host, None) | (None, Remote(_) as host):
+        # nix-copy-closure doesn't support store types other than "ssh".
+        case (Remote(_) as host, None) | (None, Remote(_) as host) if (
+            host.store_type == "ssh"
+        ):
             nix_copy_closure(host, to=bool(to_host))
-        case (Remote(_), Remote(_)):
+        case (Remote(_), _) | (_, Remote(_)):
             nix_copy(to_host, from_host)
 
 
@@ -265,8 +274,8 @@ def find_file(file: str, nix_flags: Args | None = None) -> Path | None:
     "Find classic Nix file location."
     r = run_wrapper(
         ["nix-instantiate", "--find-file", file, *dict_to_flags(nix_flags)],
-        stdout=PIPE,
         check=False,
+        capture_output=True,
     )
     if r.returncode:
         return None
@@ -426,9 +435,10 @@ def get_generations(profile: Profile) -> list[Generation]:
     def parse_path(path: Path, profile: Profile) -> Generation:
         entry_id = path.name.split("-")[1]
         current = path.name == profile.path.readlink().name
-        timestamp = datetime.fromtimestamp(path.stat().st_ctime).strftime(
-            "%Y-%m-%d %H:%M:%S"
-        )
+        timestamp = datetime.fromtimestamp(
+            timestamp=path.stat().st_ctime,
+            tz=local_tz,
+        ).strftime("%Y-%m-%d %H:%M:%S")
 
         return Generation(
             id=int(entry_id),
@@ -437,7 +447,10 @@ def get_generations(profile: Profile) -> list[Generation]:
         )
 
     return sorted(
-        [parse_path(p, profile) for p in profile.path.parent.glob("system-*-link")],
+        [
+            parse_path(p, profile)
+            for p in profile.path.parent.glob(f"{profile.name}-*-link")
+        ],
         key=lambda d: d.id,
     )
 
@@ -445,7 +458,7 @@ def get_generations(profile: Profile) -> list[Generation]:
 def get_generations_from_nix_env(
     profile: Profile,
     target_host: Remote | None = None,
-    sudo: bool = False,
+    elevate: Elevator = NO_ELEVATOR,
 ) -> list[Generation]:
     """Get all NixOS generations from profile with nix-env. Needs root.
 
@@ -460,7 +473,7 @@ def get_generations_from_nix_env(
         ["nix-env", "-p", profile.path, "--list-generations"],
         stdout=PIPE,
         remote=target_host,
-        sudo=sudo,
+        elevate=elevate,
     )
 
     def parse_line(line: str) -> Generation:
@@ -567,12 +580,32 @@ def repl(build_attr: BuildAttr, nix_flags: Args | None = None) -> None:
     run_wrapper([*run_args, *dict_to_flags(nix_flags)])
 
 
+def get_flake_metadata(
+    flake: Flake, flake_flags: Args | None = None
+) -> FlakeMetadataJson:
+    r = run_wrapper(
+        [
+            "nix",
+            *FLAKE_FLAGS,
+            "flake",
+            "metadata",
+            "--json",
+            flake.resolve_path_if_exists(),
+            *dict_to_flags(flake_flags),
+        ],
+        stdout=PIPE,
+    )
+    j: FlakeMetadataJson = json.loads(r.stdout.strip())
+    return j
+
+
 def repl_flake(flake: Flake, flake_flags: Args | None = None) -> None:
     expr = Template(
         files(__package__).joinpath(FLAKE_REPL_TEMPLATE).read_text()
     ).substitute(
         flake=flake,
-        flake_path=flake.resolve_path_if_exists(),
+        # Normalize flake url to respect VSC if present:
+        flake_path=get_flake_metadata(flake, flake_flags)["resolvedUrl"],
         flake_attr=flake.attr,
         bold="\033[1m",
         blue="\033[34;1m",
@@ -592,12 +625,12 @@ def repl_flake(flake: Flake, flake_flags: Args | None = None) -> None:
     )
 
 
-def rollback(profile: Profile, target_host: Remote | None, sudo: bool) -> Path:
+def rollback(profile: Profile, target_host: Remote | None, elevate: Elevator) -> Path:
     "Rollback Nix profile, like one created by `nixos-rebuild switch`."
     run_wrapper(
         ["nix-env", "--rollback", "-p", profile.path],
         remote=target_host,
-        sudo=sudo,
+        elevate=elevate,
     )
     # Rollback config PATH is the own profile
     return profile.path
@@ -606,11 +639,11 @@ def rollback(profile: Profile, target_host: Remote | None, sudo: bool) -> Path:
 def rollback_temporary_profile(
     profile: Profile,
     target_host: Remote | None,
-    sudo: bool,
+    elevate: Elevator,
 ) -> Path | None:
     "Rollback a temporary Nix profile, like one created by `nixos-rebuild test`."
     generations = get_generations_from_nix_env(
-        profile, target_host=target_host, sudo=sudo
+        profile, target_host=target_host, elevate=elevate
     )
     previous_gen_id = None
     for generation in generations:
@@ -627,7 +660,7 @@ def set_profile(
     profile: Profile,
     path_to_config: Path,
     target_host: Remote | None,
-    sudo: bool,
+    elevate: Elevator,
 ) -> None:
     "Set a path as the current active Nix profile."
     if not os.environ.get(
@@ -660,87 +693,15 @@ def set_profile(
     run_wrapper(
         ["nix-env", "-p", profile.path, "--set", path_to_config],
         remote=target_host,
-        sudo=sudo,
+        elevate=elevate,
     )
-
-
-def _has_systemd(target_host: Remote | None) -> bool:
-    r = run_wrapper(
-        ["test", "-d", "/run/systemd/system"],
-        remote=target_host,
-        check=False,
-    )
-    return r.returncode == 0
-
-
-def _run_action(
-    action: Literal[Action.SWITCH, Action.BOOT, Action.TEST, Action.DRY_ACTIVATE],
-    path_to_config: Path,
-    install_bootloader: bool,
-    target_host: Remote | None,
-    sudo: bool,
-    prefix: ProcessArgs | None = None,
-) -> None:
-    cmd: ProcessArgs = [path_to_config / "bin/switch-to-configuration", str(action)]
-    if prefix:
-        cmd = [*prefix, *cmd]
-
-    run_wrapper(
-        cmd,
-        env={
-            "LOCALE_ARCHIVE": PRESERVE_ENV,
-            "NIXOS_NO_CHECK": PRESERVE_ENV,
-            "NIXOS_INSTALL_BOOTLOADER": "1" if install_bootloader else "0",
-        },
-        remote=target_host,
-        sudo=sudo,
-    )
-
-
-def _run_action_with_systemd(
-    action: Literal[Action.SWITCH, Action.BOOT, Action.TEST, Action.DRY_ACTIVATE],
-    path_to_config: Path,
-    install_bootloader: bool,
-    target_host: Remote | None,
-    sudo: bool,
-) -> None:
-    unique_unit_name = SYSTEMD_RUN_UNIT_PREFIX + "-" + uuid.uuid4().hex[:8]
-    journalctl = run_wrapper_bg(
-        [
-            "journalctl",
-            "-f",
-            f"--unit={unique_unit_name}",
-            "--output=cat",
-        ],
-        remote=target_host,
-        sudo=sudo,
-    )
-
-    try:
-        _run_action(
-            action=action,
-            path_to_config=path_to_config,
-            install_bootloader=install_bootloader,
-            target_host=target_host,
-            sudo=sudo,
-            prefix=[*SYSTEMD_RUN_CMD_PREFIX, f"--unit={unique_unit_name}"],
-        )
-    except KeyboardInterrupt:
-        run_wrapper(
-            ["systemctl", "stop", unique_unit_name],
-            remote=target_host,
-            sudo=sudo,
-        )
-        raise
-    finally:
-        journalctl.terminate()
 
 
 def switch_to_configuration(
     path_to_config: Path,
     action: Literal[Action.SWITCH, Action.BOOT, Action.TEST, Action.DRY_ACTIVATE],
     target_host: Remote | None,
-    sudo: bool,
+    elevate: Elevator,
     install_bootloader: bool = False,
     specialisation: str | None = None,
 ) -> None:
@@ -759,41 +720,57 @@ def switch_to_configuration(
         if not path_to_config.exists():
             raise NixOSRebuildError(f"specialisation not found: {specialisation}")
 
-    if _has_systemd(target_host):
-        _run_action_with_systemd(
-            action=action,
-            path_to_config=path_to_config,
-            install_bootloader=install_bootloader,
-            target_host=target_host,
-            sudo=sudo,
-        )
-    else:
+    r = run_wrapper(
+        ["test", "-d", "/run/systemd/system"],
+        remote=target_host,
+        check=False,
+    )
+    cmd = SWITCH_TO_CONFIGURATION_CMD_PREFIX
+    if r.returncode:
         logger.debug(
             "skipping systemd-run to switch configuration since systemd is "
             "not working in target host"
         )
-        _run_action(
-            action=action,
-            path_to_config=path_to_config,
-            install_bootloader=install_bootloader,
-            target_host=target_host,
-            sudo=sudo,
-        )
+        cmd = []
+    elif os.environ.get("NIXOS_REBUILD_NO_SYSTEMD_RUN"):
+        cmd = []
+
+    run_wrapper(
+        [*cmd, path_to_config / "bin/switch-to-configuration", str(action)],
+        env={
+            "LOCALE_ARCHIVE": PRESERVE_ENV,
+            "NIXOS_NO_CHECK": PRESERVE_ENV,
+            "NIXOS_INSTALL_BOOTLOADER": "1" if install_bootloader else "0",
+        },
+        remote=target_host,
+        elevate=elevate,
+        # switch-to-configuration is not expected to produce meaningful
+        # stdout, but if it (or any of its children) does, it would leak
+        # into our stdout and break the "only the store path on stdout"
+        # contract documented in services.py (see print_result). Redirect
+        # its stdout to our stderr defensively.
+        stdout=sys.stderr,
+    )
 
 
-def upgrade_channels(all_channels: bool = False, sudo: bool = False) -> None:
+def upgrade_channels(
+    all_channels: bool = False,
+    elevate: Elevator = NO_ELEVATOR,
+    channels_dir: Path = Path("/nix/var/nix/profiles/per-user/root/channels/"),
+) -> None:
     """Upgrade channels for classic Nix.
 
     It will either upgrade just the `nixos` channel (including any channel
     that has a `.update-on-nixos-rebuild` file) or all.
     """
-    if not sudo and os.geteuid() != 0:
+    if not elevate.elevates and os.geteuid() != 0:
         raise NixOSRebuildError(
             "if you pass the '--upgrade' or '--upgrade-all' flag, you must "
-            "also pass '--sudo' or run the command as root (e.g., with sudo)"
+            "also pass '--elevate' or run the command as root"
         )
 
-    for channel_path in Path("/nix/var/nix/profiles/per-user/root/channels/").glob("*"):
+    channel_updated = False
+    for channel_path in channels_dir.glob("*"):
         if channel_path.is_dir() and (
             all_channels
             or channel_path.name == "nixos"
@@ -802,5 +779,9 @@ def upgrade_channels(all_channels: bool = False, sudo: bool = False) -> None:
             run_wrapper(
                 ["nix-channel", "--update", channel_path.name],
                 check=False,
-                sudo=sudo,
+                elevate=elevate,
             )
+            channel_updated = True
+
+    if not channel_updated:
+        logger.warning("'--upgrade(-all)' flag passed but no channels to update")

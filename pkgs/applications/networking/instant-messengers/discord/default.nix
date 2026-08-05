@@ -1,6 +1,5 @@
 {
   callPackage,
-  fetchurl,
   lib,
   stdenv,
   discord,
@@ -36,7 +35,7 @@ let
         self = discord-development;
       };
     };
-    x86_64-darwin = {
+    aarch64-darwin = {
       discord = rec {
         branch = "stable";
         binaryName = desktopName;
@@ -63,7 +62,6 @@ let
       };
     };
 
-    aarch64-darwin = x86_64-darwin;
     default = x86_64-linux; # Used for unsupported platforms, so we can return *something* there.
   };
 
@@ -75,14 +73,13 @@ let
     mainProgram = "discord";
     maintainers = with lib.maintainers; [
       artturin
-      FlameFlag
+      _4evy
       infinidoge
       jopejoe1
       Scrumplex
     ];
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
@@ -101,13 +98,7 @@ lib.genAttrs [ "discord" "discord-ptb" "discord-canary" "discord-development" ] 
   callPackage package (
     args
     // {
-      inherit pname;
-      inherit (source) version;
-
-      src = fetchurl {
-        inherit (source) url hash;
-      };
-
+      inherit pname source;
       meta = meta // {
         mainProgram = args.binaryName;
       };

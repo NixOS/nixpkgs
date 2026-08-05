@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildPythonPackage,
   hatchling,
+  pythonOlder,
 
   # propagated
   backports-zstd,
@@ -24,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "django-valkey";
-  version = "0.4.0";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-commons";
     repo = "django-valkey";
     tag = version;
-    hash = "sha256-F6BycXVBmfmtRL1C05lgg/2wehcmlqA5WWGgAIxuAsE=";
+    hash = "sha256-kXp4i7E2DnrMi0tTg8kdWmuImIWIPKTM5s7sPLWPFko=";
   };
 
   build-system = [ hatchling ];
@@ -47,8 +48,8 @@ buildPythonPackage rec {
     lz4 = [ lz4 ];
     msgpack = [ msgpack ];
     msgspec = [ msgspec ];
-    pyzstd = [ backports-zstd ];
-    zstd = [ backports-zstd ];
+    pyzstd = lib.optionals (pythonOlder "3.14") [ backports-zstd ];
+    zstd = lib.optionals (pythonOlder "3.14") [ backports-zstd ];
   };
 
   pythonImportsCheck = [ "django_valkey" ];
@@ -82,11 +83,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Valkey backend for django";
     homepage = "https://github.com/django-commons/django-valkey";
     changelog = "https://github.com/django-commons/django-valkey/releases/tag/${version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

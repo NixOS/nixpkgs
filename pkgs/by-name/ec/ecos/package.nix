@@ -15,6 +15,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-WMgqDc+XAY3g2wwlefjJ0ATxR5r/jL971FZKtxsunnU=";
   };
 
+  # tests call no-arg-declared functions with args; pre-C23 allows it
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   buildPhase = ''
     runHook preBuild
 

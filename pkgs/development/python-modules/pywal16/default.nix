@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pywal16";
-  version = "3.8.14";
+  version = "3.8.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eylles";
     repo = "pywal16";
     tag = finalAttrs.version;
-    hash = "sha256-68HbYH4wydaM1yY8kGHNIHTOZuUQRl+9o5ZPaemTlUE=";
+    hash = "sha256-2KlVeOrF/nfRZk12gthDJ08xNvVbP5em3eXPMudo1Vs=";
   };
 
   build-system = [ setuptools ];

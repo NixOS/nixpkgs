@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
+  setuptools,
 }:
 
 let
@@ -12,12 +13,14 @@ in
 
 buildPythonPackage {
   inherit pname version;
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-JWpnIQbxZ0VEUijZZiQLd7VfRqCW0gMFkBpXql0fTC8=";
   };
+
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "atomicwrites" ];
 

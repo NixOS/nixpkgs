@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dissect-volume";
   version = "3.18";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.volume";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-2ivRkA4OLFntS2CtnXIr+/sLlcDVpmz6eINbejeH/3s=";
   };
 
@@ -61,8 +61,8 @@ buildPythonPackage rec {
   meta = {
     description = "Dissect module implementing various utility functions for the other Dissect modules";
     homepage = "https://github.com/fox-it/dissect.volume";
-    changelog = "https://github.com/fox-it/dissect.volume/releases/tag/${src.tag}";
+    changelog = "https://github.com/fox-it/dissect.volume/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -7,12 +7,12 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "claude-dev";
     publisher = "saoudrizwan";
-    version = "3.73.0";
-    hash = "sha256-gPB5/CUw5GQ2jIQzRQ4/osJOkEHDsGY8ATy9lTfBwW8=";
+    version = "4.1.3";
+    hash = "sha256-z1TrY/GWPkB14LSbFBALotU/WY2qHW6aj92PxCn4Uhc=";
   };
 
   meta = {
-    description = "VSCode extension providing an autonomous coding agent right in your IDE, capable of creating/editing files, executing commands, using the browser, and more with your permission every step of the way";
+    description = "Cline - autonomous coding agent VSCode extension, capable of creating/editing files, executing commands, using the browser, and more with your permission every step of the way";
     downloadPage = "https://github.com/cline/cline";
     homepage = "https://github.com/cline/cline";
     license = lib.licenses.asl20;

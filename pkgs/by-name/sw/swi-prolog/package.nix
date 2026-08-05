@@ -10,9 +10,9 @@
   openssl,
   gmp,
   gperftools,
-  readline,
   libedit,
   libarchive,
+  libicns,
 
   # optional dependencies
   withDb ? true,
@@ -22,7 +22,7 @@
   jdk,
 
   withOdbc ? true,
-  unixODBC,
+  unixodbc,
 
   withPcre ? true,
   pcre2,
@@ -78,7 +78,7 @@
 
 let
   # minorVersion is even for stable, odd for unstable
-  version = "9.2.9";
+  version = "10.0.2";
 
   # This package provides several with* options, which replaces the old extraLibraries option.
   # This error should help users that still use this option find their way to these flags.
@@ -97,7 +97,7 @@ let
     [ ]
     ++ (lib.optional withDb db)
     ++ (lib.optional withJava jdk)
-    ++ (lib.optional withOdbc unixODBC)
+    ++ (lib.optional withOdbc unixodbc)
     ++ (lib.optional withPcre pcre2)
     ++ (lib.optional withPython python3)
     ++ (lib.optional withYaml libyaml)
@@ -125,18 +125,25 @@ stdenv.mkDerivation {
     owner = "SWI-Prolog";
     repo = "swipl";
     tag = "V${version}";
-    hash = "sha256-M0stUwiD3Auz5OsmgVJFWg2RAswu42UUp8bafqZOC7A=";
+    hash = "sha256-w9BzcnXS2sqHsLXYEcfhZ1niKpifffiDtm8EcJ6cG9g=";
     fetchSubmodules = true;
   };
 
-  # Add the packInstall path to the swipl pack search path
   postPatch = ''
+    # Add the packInstall path to the swipl pack search path
     echo "user:file_search_path(pack, '$out/lib/swipl/extra-pack')." >> boot/init.pl
+
+    # iconutil is unavailable, replace with png2icns from libicns
+    substituteInPlace desktop/make_icns.sh \
+      --replace-fail 'iconutil -c icns "$ICONSET_DIR" -o "$OUTPUT"' 'png2icns "$OUTPUT" "$INPUT"'
   '';
 
   nativeBuildInputs = [
     cmake
     ninja
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libicns
   ];
 
   buildInputs = [
@@ -146,7 +153,6 @@ stdenv.mkDerivation {
     openssl
     gperftools
     gmp
-    readline
     libedit
   ]
   ++ optionalDependencies;

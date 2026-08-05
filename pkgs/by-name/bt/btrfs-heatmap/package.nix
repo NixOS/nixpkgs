@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "knorrie";
     repo = "btrfs-heatmap";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-yCkuZqWwxrs2eS7EXY6pAOVVVSq7dAMxJtf581gX8vg=";
   };
 
@@ -40,12 +40,18 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  strictDeps = true;
+  __structuredAttrs = true;
+  enableParallelBuilding = true;
+
   meta = {
     description = "Visualize the layout of a mounted btrfs";
     mainProgram = "btrfs-heatmap";
     homepage = "https://github.com/knorrie/btrfs-heatmap";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      sandarukasa
+    ];
   };
 })

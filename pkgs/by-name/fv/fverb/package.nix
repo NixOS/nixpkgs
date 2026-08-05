@@ -34,6 +34,6 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     # clang++: error: unsupported option '-mfpu=' for target 'arm64-apple-darwin'
     # clang++: error: unsupported option '-mfloat-abi=' for target 'arm64-apple-darwin'
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 }

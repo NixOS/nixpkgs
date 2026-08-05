@@ -1,9 +1,7 @@
 {
   buildPythonPackage,
-  acme,
   certbot,
   pyparsing,
-  pytestCheckHook,
   setuptools,
 }:
 
@@ -18,15 +16,13 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    acme
     certbot
     pyparsing
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  pytestFlags = [
-    "-pno:cacheprovider"
+  pythonImportsCheck = [
+    "certbot_nginx"
+    "certbot.plugins.nginx"
   ];
 
   meta = certbot.meta // {

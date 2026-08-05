@@ -1,0 +1,29 @@
+From 9cb3e66870ae22d87222ee7636e5b6c85c776673 Mon Sep 17 00:00:00 2001
+From: Nicolas PARLANT <nicolas.parlant@parhuet.fr>
+Date: Sun, 27 Jul 2025 15:53:17 +0200
+Subject: [PATCH] missing include cstdlib
+
+Fix an error with libcxx-21
+
+>In file included from ../rubberband-4.0.0/src/common/mathmisc.cpp:24:
+>../rubberband-4.0.0/src/common/mathmisc.h:58:1:
+>error: unknown type name 'size_t'; did you mean 'std::size_t'?
+
+Signed-off-by: Nicolas PARLANT <nicolas.parlant@parhuet.fr>
+---
+ src/common/mathmisc.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/common/mathmisc.h b/src/common/mathmisc.h
+index d8bcc14d..66f3378c 100644
+--- a/src/common/mathmisc.h
++++ b/src/common/mathmisc.h
+@@ -26,6 +26,8 @@
+ 
+ #include "sysutils.h"
+ 
++#include <cstdlib>
++
+ #ifndef M_PI
+ #define M_PI 3.14159265358979323846
+ #endif // M_PI

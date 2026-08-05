@@ -35,6 +35,9 @@
   enableSystemd ? false,
 }:
 
+let
+  system = "/run/current-system/sw";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "elogind";
   version = "255.5";
@@ -83,6 +86,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace meson.build --replace-fail "install_emptydir(elogindstatedir)" ""
+  ''
+  + lib.optionalString (!enableSystemd) ''
+    substituteInPlace ./rules.d/71-seat.rules.in --replace-fail "{{BINDIR}}/udevadm" "${eudev}/bin/udevadm"
   '';
 
   patches = [
@@ -130,6 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
     ./Add-missing-musl_missing.h-includes-for-basename.patch
     ./Remove-outdated-musl-hack-in-rlimit_nofile_safe.patch
+    ./errno-list-filter-out-EFSBADCRC-and-EFSCORRUPTED.patch
   ];
 
   # Inspired by the systemd `preConfigure`.
@@ -148,6 +155,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "dbuspolicydir" "${placeholder "out"}/share/dbus-1/system.d")
     (lib.mesonOption "dbussystemservicedir" "${placeholder "out"}/share/dbus-1/system-services")
     (lib.mesonOption "sysconfdir" "${placeholder "out"}/etc")
+    (lib.mesonOption "halt-path" "${system}/bin/halt")
+    (lib.mesonOption "poweroff-path" "${system}/bin/poweroff")
+    (lib.mesonOption "reboot-path" "${system}/bin/reboot")
     (lib.mesonBool "utmp" (!stdenv.hostPlatform.isMusl))
     (lib.mesonEnable "xenctrl" false)
   ];

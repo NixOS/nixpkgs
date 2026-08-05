@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
@@ -21,6 +22,10 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   dependencies = [
     aiohttp

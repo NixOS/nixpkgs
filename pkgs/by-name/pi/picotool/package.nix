@@ -13,14 +13,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "picotool";
-  version = "2.2.0-a4";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "picotool";
     tag = finalAttrs.version;
-    hash = "sha256-kIB/ODAvwWWoAQDq2cMiFuNWjzzLgPuRQv0NluWYU+Y=";
+    hash = "sha256-w9kVCdwevEjc12NNZWztehp6SSgsd9ehSaxqc9sg4O4=";
   };
+
+  postPatch = ''
+    # necessary for signing/hashing support. our pico-sdk does not come with
+    # it by default, and it shouldn't due to submodule size. pico-sdk uses
+    # an upstream version of mbedtls 3.x so we patch ours in directly.
+    substituteInPlace lib/CMakeLists.txt \
+      --replace-fail "''$"'{PICO_SDK_PATH}/lib/mbedtls' '${mbedtls.src}'
+  '';
 
   buildInputs = [
     libusb1
@@ -33,6 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DPICO_SDK_PATH=${pico-sdk}/lib/pico-sdk"
   ];
+
+  postInstall = ''
+    install -Dm444 ../udev/60-picotool.rules -t $out/etc/udev/rules.d
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook

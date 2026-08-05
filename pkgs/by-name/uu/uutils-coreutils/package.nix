@@ -21,13 +21,13 @@ assert selinuxSupport -> lib.meta.availableOn stdenv.hostPlatform libselinux;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uutils-coreutils";
-  version = "0.7.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "coreutils";
     tag = finalAttrs.version;
-    hash = "sha256-mS1KjnMUQzRqsmy1GCLDlDh2kOSfPhc59RnR9abqtu4=";
+    hash = "sha256-g+RuVQr7CNtF9eqEJb3dlgfgPO3aRwWgXWPniNmhXeA=";
   };
 
   # error: linker `aarch64-linux-gnu-gcc` not found
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname src version;
-    hash = "sha256-jNFZEafyW0DGpG0tPiI3lzANBiAXYxoOnTsKoGjeOK0=";
+    hash = "sha256-WoPqxO1TBt4eCOR3tlzuoXqH9u/mTHR5Dr/WnKLxyYM=";
   };
 
   buildInputs =
@@ -77,14 +77,22 @@ stdenv.mkDerivation (finalAttrs: {
     }"
     "SKIP_UTILS=${lib.optionalString stdenv.hostPlatform.isStatic "stdbuf"}"
   ]
-  ++ lib.optionals (prefix != null) [ "PROG_PREFIX=${prefix}" ]
-  ++ lib.optionals buildMulticallBinary [ "MULTICALL=y" ];
+  ++ lib.optionals (prefix != null) [
+    "PROG_PREFIX=${prefix}"
+  ]
+  ++ lib.optionals buildMulticallBinary [
+    "MULTICALL=y"
+  ];
 
   env = {
     CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
+    # Upstream uses hardlinks for the multicall aliases by default, but NAR
+    # serialization does not preserve hardlinks, exploding the closure to
+    # ~100 copies of the 14 MiB binary.
+    LN = "ln -sf";
   }
   // lib.optionalAttrs selinuxSupport {
-    SELINUX_INCLUDE_DIR = "${libselinux.dev}/include";
+    SELINUX_INCLUDE_DIR = "${lib.getInclude libselinux}/include";
     SELINUX_LIB_DIR = lib.makeLibraryPath [
       libselinux
     ];

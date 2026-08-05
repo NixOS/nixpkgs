@@ -40,6 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # From https://github.com/LibreSprite/LibreSprite/pull/565
     ./cmake4.diff
+    # Remove Homebrew-specific brew invocation for libarchive on Darwin;
+    # Nix provides libarchive directly via buildInputs.
+    ./no-brew.patch
   ];
   nativeBuildInputs = [
     cmake
@@ -84,6 +87,10 @@ stdenv.mkDerivation (finalAttrs: {
       dst="$out"/share/icons/hicolor/"$size"x"$size"
       install -Dm644 "$src"/doc"$size".png "$dst"/mimetypes/aseprite.png
     done
+
+    substituteInPlace $out/share/thumbnailers/libresprite.thumbnailer \
+      --replace-fail "TryExec=libresprite-thumbnailer" "TryExec=$out/bin/libresprite-thumbnailer" \
+      --replace-fail "Exec=libresprite-thumbnailer" "Exec=$out/bin/libresprite-thumbnailer"
   '';
 
   passthru.tests = {
@@ -110,7 +117,5 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
-    # https://github.com/LibreSprite/LibreSprite/issues/308
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

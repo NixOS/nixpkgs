@@ -12,13 +12,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mimalloc";
-  version = "3.1.5";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "mimalloc";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-fk6nfyBFS1G0sJwUJVgTC1+aKd0We/JjsIYTO+IOfyg=";
+    hash = "sha256-GZ37qQVDe9jgMb4Coe5oKvgaLTspZDlSkS5rdy1MfUU=";
   };
 
   doCheck = !stdenv.hostPlatform.isStatic;
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     MI_SECURE = secureBuild;
     MI_BUILD_SHARED = stdenv.hostPlatform.hasSharedLibraries;
     MI_LIBC_MUSL = stdenv.hostPlatform.libc == "musl";
-    MI_BUILD_TESTS = finalAttrs.doCheck;
+    MI_BUILD_TESTS = finalAttrs.finalPackage.doCheck;
 
     # MI_OPT_ARCH is inaccurate (e.g. it assumes aarch64 == armv8.1-a).
     # Nixpkgs's native platform configuration does a better job.

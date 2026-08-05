@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
         throw "only linux and mac x86_64 are currently supported"
     );
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   installPhase = ''
     install -m755 -D bin/NuSMV $out/bin/NuSMV

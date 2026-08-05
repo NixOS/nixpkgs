@@ -11,13 +11,13 @@
 # nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio-health-checking";
-  version = "1.78.0";
+  version = "1.82.1";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "grpcio_health_checking";
     inherit version;
-    hash = "sha256-eFJtXGC5uZ/RiVS4n4bXADPHAulq1szJdJuvFhNpebM=";
+    hash = "sha256-hiVeBOHTnxyXpmMtQbYySTUUCN5cWOhe7eh6/X2YKN0=";
   };
 
   propagatedBuildInputs = [
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   meta = {
     description = "Standard Health Checking Service for gRPC";
     homepage = "https://pypi.org/project/grpcio-health-checking/";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
   };
 }

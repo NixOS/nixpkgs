@@ -39,13 +39,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "openpbs";
-  version = "23.06.06-unstable-2026-01-29";
+  version = "23.06.06-unstable-2026-04-02";
 
   src = fetchFromGitHub {
     owner = "openpbs";
     repo = "openpbs";
-    rev = "cfd431b703e8cbe3bc99db6fbbcdd970625ef032";
-    hash = "sha256-NZoSZmcl9a/6YWHO7qRNknB6ii0JBLo5bOpHDRKeuwI=";
+    rev = "e395fe79388d5f77908eeb80e3bb73d848315449";
+    hash = "sha256-FQgps7vdxz4gIAEE333MvELWf+Qx7dhnpoH4hLwOp5Q=";
   };
 
   nativeBuildInputs = [
@@ -73,12 +73,10 @@ stdenv.mkDerivation {
     munge
   ];
 
-  enableParallelBuilding = true;
+  # https://github.com/openpbs/openpbs/issues/2713
+  hardeningDisable = [ "fortify" ];
 
-  patches = [
-    ./2709.patch
-    ./2711.patch
-  ];
+  enableParallelBuilding = true;
 
   postPatch = ''
     substituteInPlace src/cmds/scripts/Makefile.am --replace-fail "/etc/profile.d" "$out/etc/profile.d"

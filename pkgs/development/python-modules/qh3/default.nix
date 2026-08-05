@@ -2,6 +2,7 @@
   buildPythonPackage,
   cmake,
   cryptography,
+  dnspython,
   fetchFromGitHub,
   lib,
   pytest-asyncio,
@@ -11,21 +12,21 @@
   stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qh3";
-  version = "1.6.0";
+  version = "1.9.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jawah";
     repo = "qh3";
-    tag = "v${version}";
-    hash = "sha256-/kmRTxXKoi7aSs4WzlhvoYHWfV60sjFkA+gwp4rqiwY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Mu9wvwHHn5wZfE+TdMu/nr2B7+WbFhFHDoItDs6rRPM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-1yaVYJ6+nmRvi8TUR/bWYEXlIdARk03SQv++28OOqIc=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-bwdaM+DdXm5YpzVlyYdDqnR+QQ0dY199DYN2g33RvCs=";
   };
 
   nativeBuildInputs = [
@@ -47,6 +48,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     cryptography
+    dnspython
     pytest-asyncio
     pytest-mock
     pytestCheckHook
@@ -59,16 +61,18 @@ buildPythonPackage rec {
     rm -r qh3
   '';
 
-  disabledTests = lib.optionals stdenv.buildPlatform.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # ConnectionError
     "test_connect_and_serve_ipv4"
+    "test_ech_accepted"
+    "test_grease_ech_no_rejection"
   ];
 
   meta = {
-    changelog = "https://github.com/jawah/qh3/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/jawah/qh3/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     description = "Lightweight QUIC and HTTP/3 implementation in Python";
     homepage = "https://github.com/jawah/qh3";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

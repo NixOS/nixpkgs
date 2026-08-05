@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation {
   pname = "mtPaint";
-  version = "3.50.12";
+  version = "3.50.14";
 
   src = fetchFromGitHub {
     owner = "wjaguar";
     repo = "mtPaint";
-    rev = "7cae5d663ed835a365d89a535536c39e18862a83";
-    hash = "sha256-W/MQZ1WqoVMzyEd60rbvA8yieesDc/xfKqbYGZumi2U=";
+    rev = "8304376e8861a8a603371b0f188db30f9cafdc17";
+    hash = "sha256-dyBbzEjdgMPlPnjFlJoZOh5qjx/qY94F28jEr2ihLQE=";
   };
 
   strictDeps = true;

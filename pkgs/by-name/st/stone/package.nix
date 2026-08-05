@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.4";
 
   src = fetchurl {
-    url = "http://www.gcd.org/sengoku/stone/stone-${finalAttrs.version}.tar.gz";
+    url = "https://www.gcd.org/sengoku/stone/stone-${finalAttrs.version}.tar.gz";
     hash = "sha256-1dwa9uxdpQPypAs98/4ZqPv5085pa49G9NU9KsjY628=";
   };
 

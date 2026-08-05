@@ -1,6 +1,6 @@
 {
   lib,
-  gcc15Stdenv,
+  gcc16Stdenv,
   cmake,
   fetchFromGitHub,
   pkg-config,
@@ -13,15 +13,15 @@
   wayland-scanner,
   nix-update-script,
 }:
-gcc15Stdenv.mkDerivation (finalAttrs: {
+gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprsunset";
-  version = "0.3.3";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprsunset";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Yk6nDzCXrOehX3At8qdZ0cLr1kPySqACsihMYuP6T8w=";
+    hash = "sha256-MhrVi5f6n9eJv8kcDngb8j2P5F3i5/GCR77+qIWnjf4=";
   };
 
   postPatch = ''
@@ -46,12 +46,16 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  cmakeBuildType = "RelWithDebInfo";
+  separateDebugInfo = true;
+
   passthru = {
     updateScript = nix-update-script { };
   };
 
   meta = {
     homepage = "https://github.com/hyprwm/hyprsunset";
+    changelog = "https://github.com/hyprwm/hyprsunset/releases/tag/${finalAttrs.src.tag}";
     description = "Application to enable a blue-light filter on Hyprland";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;

@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asdbctl";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "juliuszint";
     repo = "asdbctl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-S5m1iQlchGKc0PODQNDHpNzaNXRepmk5zfK5aXdiMiM=";
+    hash = "sha256-jDflaksnsw55RHMgamfJNRE7GwThQMYfXtLAWbOnoMw=";
   };
 
   cargoHash = "sha256-OPmnGh6xN6XeREeIgyYB2aeHUpdQ5hFS5MivcTeY29E=";

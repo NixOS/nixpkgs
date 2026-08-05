@@ -27,17 +27,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cadwyn";
-  version = "6.0.1";
+  version = "7.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zmievsa";
     repo = "cadwyn";
     tag = finalAttrs.version;
-    hash = "sha256-wvwR4JCPvWoWSdkK61oDmQWNq2UnDZMRlWxo1GLznjk=";
+    hash = "sha256-Kf82lJS8c6f0m2DFrbhRcBOK5C8Qpz+KHob65VeIqn4=";
   };
-
-  disabled = pythonAtLeast "3.14";
 
   build-system = [ hatchling ];
 

@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "dasel";
-  version = "3.3.1";
+  version = "3.11.2";
 
   src = fetchFromGitHub {
     owner = "TomWright";
     repo = "dasel";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-h6AIu1Yavqezpl6yeMwdZ168SV7Rz19Mr7GtNeyDzpk=";
+    hash = "sha256-F7oNs65AsokIgYjaPqgSbtsZ5JwSFJ/A6Edm+LzQqgU=";
   };
 
-  vendorHash = "sha256-hHxEE0xNSP4wnT5B13BAxUPpdIWs8v7KF1MuISfaYBE=";
+  vendorHash = "sha256-oqGUHPnfCxgUTueB1zEJ8/h0L+2oxoVQHI+oJm3HcPo=";
 
   ldflags = [
     "-s"
@@ -27,7 +27,7 @@ buildGoModule (finalAttrs: {
   doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   installCheckPhase = ''
     runHook preInstallCheck
-    if [[ $($out/bin/dasel version) == "v${finalAttrs.version}" ]]; then
+    if [[ $($out/bin/dasel version) == "${finalAttrs.version}" ]]; then
       echo '{ "my": { "favourites": { "colour": "blue" } } }' \
         | $out/bin/dasel -i json 'my.favourites.colour = "red"' \
         | grep "red"

@@ -1,7 +1,8 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  jansson,
   openssl,
   zlib,
   libxcrypt,
@@ -9,14 +10,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ircd-hybrid";
-  version = "8.2.46";
+  version = "8.2.47";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/ircd-hybrid/ircd-hybrid-${finalAttrs.version}.tgz";
-    sha256 = "sha256-pdXI8YiPqC+97XoxNFb1plm4cfLOB+b/getajXPzx0s=";
+  src = fetchFromGitHub {
+    owner = "ircd-hybrid";
+    repo = "ircd-hybrid";
+    tag = finalAttrs.version;
+    hash = "sha256-A6YWKtwqCWfP3fvuSxXFer21T+RMOfR+OhKiYbQpUao=";
   };
 
   buildInputs = [
+    jansson
     openssl
     zlib
     libxcrypt
@@ -32,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "IPv6-capable IRC server";
+    maintainers = with lib.maintainers; [ tbutter ];
     platforms = lib.platforms.unix;
     homepage = "https://www.ircd-hybrid.org/";
   };

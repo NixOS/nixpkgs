@@ -28,11 +28,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "reqable";
-  version = "3.0.38";
+  version = "3.2.16";
 
   src = fetchurl {
     url = "https://github.com/reqable/reqable-app/releases/download/${finalAttrs.version}/reqable-app-linux-x86_64.deb";
-    hash = "sha256-oY5Z47dKEEwg4R5c80zS8ORqppDxj2A9rO8t3g+TnXM=";
+    hash = "sha256-E9bVx3BcHOY9Vq7ZyH3UsIRG3NWWXkRIbW9Zvy9lTQo=";
   };
 
   nativeBuildInputs = [
@@ -78,6 +78,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper $out/share/reqable/reqable $out/bin/reqable \
       --prefix LD_LIBRARY_PATH : $out/share/reqable/lib \
       ''${gappsWrapperArgs[@]}
+
+    rm -r $out/share/pixmaps
   '';
 
   passthru.updateScript = nix-update-script { };

@@ -13,19 +13,10 @@ let
     types
     literalExpression
     mkIf
-    mkDefault
     ;
   cfg = config.services.miniflux;
 
   boolToInt = b: if b then 1 else 0;
-
-  pgbin = "${config.services.postgresql.package}/bin";
-  # The hstore extension is no longer needed as of v2.2.14
-  # and would prevent Miniflux from starting.
-  preStart = pkgs.writeScript "miniflux-pre-start" ''
-    #!${pkgs.runtimeShell}
-    ${pgbin}/psql "miniflux" -c "DROP EXTENSION IF EXISTS hstore"
-  '';
 in
 
 {
@@ -143,14 +134,19 @@ in
       serviceConfig = {
         Type = "oneshot";
         User = config.services.postgresql.superUser;
-        ExecStart = preStart;
+        # The hstore extension is no longer needed as of v2.2.14
+        # and would prevent Miniflux from starting.
+        ExecStart = ''${config.services.postgresql.package}/bin/psql "miniflux" -c "DROP EXTENSION IF EXISTS hstore"'';
       };
     };
 
     systemd.services.miniflux = {
       description = "Miniflux service";
       wantedBy = [ "multi-user.target" ];
-      requires = lib.optional cfg.createDatabaseLocally "miniflux-dbsetup.service";
+      requires = lib.optionals cfg.createDatabaseLocally [
+        "miniflux-dbsetup.service"
+        "postgresql.target"
+      ];
       after = [
         "network.target"
       ]

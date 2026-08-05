@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation {
   pname = "edit";
-  version = "unstable-2021-04-05";
+  version = "0-unstable-2021-04-05";
 
   src = fetchgit {
     url = "git://c9x.me/ed.git";

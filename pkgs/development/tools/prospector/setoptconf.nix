@@ -4,13 +4,13 @@
   lib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "setoptconf-tmp";
   version = "0.3.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "0y2pgpraa36wzlzkxigvmz80mqd3mzcc9wv2yx9bliqks7fhlj70";
   };
 
@@ -19,10 +19,10 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://pypi.org/project/setoptconf-tmp";
-    description = "Module for retrieving program settings from various sources in a consistant method";
+    description = "Module for retrieving program settings from various sources in a consistent method";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       kamadorueda
     ];
   };
-}
+})

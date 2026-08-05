@@ -19,14 +19,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "agent-client-protocol";
-  version = "0.8.1";
+  version = "0.11.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "agentclientprotocol";
     repo = "python-sdk";
     tag = finalAttrs.version;
-    hash = "sha256-pP2exnCiXPw4mPKBQVUWaCE7N132WIGU//whsJGTwgY=";
+    hash = "sha256-R4DYTUuy7vs4c+8k4nF7IjOWVjICGe/Zf9/QlyXu94U=";
   };
 
   build-system = [

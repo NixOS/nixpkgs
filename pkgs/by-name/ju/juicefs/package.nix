@@ -35,6 +35,6 @@ buildGoModule (finalAttrs: {
     description = "Distributed POSIX file system built on top of Redis and S3";
     homepage = "https://www.juicefs.com/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
   };
 })

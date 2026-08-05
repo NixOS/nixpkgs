@@ -31,11 +31,13 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = _final: prev: {
-      django = prev.django_5;
+      django = prev.django_6;
+      pygobject = prev.pygobject3;
     };
   };
-  python3Packages = python3.pkgs;
+  python3Packages = python.pkgs;
 
   GI_TYPELIB_PATH = lib.makeSearchPathOutput "out" "lib/girepository-1.0" [
     pango
@@ -48,7 +50,7 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "weblate";
-  version = "5.16.2";
+  version = "2026.6.1";
   pyproject = true;
 
   outputs = [
@@ -60,11 +62,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "WeblateOrg";
     repo = "weblate";
     tag = "weblate-${finalAttrs.version}";
-    hash = "sha256-er3KtCAFtHh3UtM58Kni/PTBfXpWW/GOarRGJeAanL8=";
+    hash = "sha256-7dhEkU2sVIjMPPR/0U2sMFXG6bl8s5WDvw8MyZZhqNE=";
   };
 
   postPatch = ''
     sed -i 's|/bin/true|true|g' weblate/addons/example_pre.py
+
+    sed -i 's/"setuptools==.*"/"setuptools"/' pyproject.toml
+    sed -i 's/"translate-toolkit==.*"/"translate-toolkit"/' pyproject.toml
   '';
 
   build-system = with python3Packages; [ setuptools ];
@@ -91,27 +96,40 @@ python3Packages.buildPythonApplication (finalAttrs: {
       ${manage} compress
     '';
 
-  pythonRelaxDeps = [
-    "certifi"
-    "crispy-bootstrap5"
-  ];
+  # Upstream pins all dependencies, so their version constraints are mostly meanningless,
+  # except for a few packages maintained by themselfes.
+  # https://github.com/WeblateOrg/weblate/issues/20003#issuecomment-4691837274
+  pythonRelaxDeps =
+    let
+      # Dependencies owned by Weblate that should always be in the exact version specified
+      coreDeps = [
+        "weblate-fonts"
+        "weblate-schemas"
+        "weblate-language-data"
+        "translation-finder"
+        "translate-toolkit"
+      ];
+    in
+    lib.concatMap (
+      p: if !p ? "pname" || lib.elem p.pname coreDeps then [ ] else [ p.pname ]
+    ) finalAttrs.passthru.dependencies;
 
   dependencies =
     with python3Packages;
     [
-      aeidon
       ahocorasick-rs
       altcha
+      argon2-cffi-bindings
+      argon2-cffi
       (toPythonModule (borgbackup.override { python3 = python; }))
       celery
       certifi
+      cffi
       charset-normalizer
       confusable-homoglyphs
-      crispy-bootstrap3
       crispy-bootstrap5
       cryptography
       cssselect
-      cython
       cyrtranslit
       dateparser
       diff-match-patch
@@ -133,24 +151,31 @@ python3Packages.buildPythonApplication (finalAttrs: {
       drf-standardized-errors
       fedora-messaging
       filelock
-      fluent-syntax
       gitpython
       hiredis
       html2text
-      iniparse
       jsonschema
       lxml
       mistletoe
       nh3
       openpyxl
+      opentelemetry-exporter-otlp-proto-http
+      opentelemetry-instrumentation-celery
+      opentelemetry-instrumentation-django
+      opentelemetry-instrumentation-psycopg
+      opentelemetry-instrumentation-redis
+      opentelemetry-instrumentation-requests
+      opentelemetry-sdk
       packaging
-      phply
       pillow
       pyaskalono
+      pyasn1
       pycairo
       pygments
-      pygobject3
+      pygobject
       pyicumessageformat
+      pyjwt
+      pyopenssl
       pyparsing
       python-dateutil
       qrcode
@@ -166,6 +191,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       tesserocr
       translate-toolkit
       translation-finder
+      twisted
       unidecode
       urllib3
       user-agents
@@ -177,16 +203,20 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ++ celery.optional-dependencies.redis
     ++ drf-spectacular.optional-dependencies.sidecar
     ++ drf-standardized-errors.optional-dependencies.openapi
+    ++ translate-toolkit.optional-dependencies.chardet
+    ++ translate-toolkit.optional-dependencies.fluent
+    ++ translate-toolkit.optional-dependencies.ini
+    ++ translate-toolkit.optional-dependencies.markdown
     ++ translate-toolkit.optional-dependencies.toml
+    ++ translate-toolkit.optional-dependencies.php
+    ++ translate-toolkit.optional-dependencies.rc
+    ++ translate-toolkit.optional-dependencies.subtitles
+    ++ translate-toolkit.optional-dependencies.yaml
     ++ urllib3.optional-dependencies.brotli
     ++ urllib3.optional-dependencies.zstd;
 
   # Commented entries are not packaged yet
   optional-dependencies = with python3Packages; {
-    alibaba = [
-      aliyun-python-sdk-alimt
-      aliyun-python-sdk-core
-    ];
     amazon = [ boto3 ];
     # gelf = [ logging-gelf ];
     # gerrit = [ git-review ];
@@ -194,14 +224,20 @@ python3Packages.buildPythonApplication (finalAttrs: {
       google-cloud-storage
       google-cloud-translate
     ];
+    google-errors = [
+      google-cloud-error-reporting
+    ];
     ldap = [ django-auth-ldap ];
     # mercurial = [ mercurial ];
-    mysql = [ mysqlclient ];
-    openai = [ openai ];
     postgres = [ psycopg ];
-    saml = [ python3-saml ];
-    # saml2idp = [ djangosaml2idp ];
-    # wlhosted = [ wlhosted ];
+    rollbar = [ rollbar ];
+    saml = [
+      python3-saml
+      xmlsec
+    ];
+    # saml2idp = [ djangosaml2idp2 ];
+    sphinx = [ sphinx ];
+    # wllegal = [ wllegal ];
     wsgi = [ granian ];
     # zxcvbn = [ django-zxcvbn-password-validator ];
   };
@@ -224,7 +260,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       pytest-django
       pytest-xdist
       responses
-      respx
       selenium
       standardwebhooks
 
@@ -242,7 +277,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       openssh
     ]
     ++ social-auth-core.optional-dependencies.saml
-    ++ (lib.concatLists (builtins.attrValues finalAttrs.passthru.optional-dependencies));
+    ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   env = {
     CI_DATABASE = "postgresql";
@@ -274,6 +309,39 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # Tries to download things from GitHub
     "test_ocr"
     "test_ocr_backend"
+  ];
+
+  disabledTestPaths = [
+    # Probably network access?
+    "weblate/addons/tests.py::SlackWebhooksAddonsTest::test_component_scopes"
+    "weblate/addons/tests.py::SlackWebhooksAddonsTest::test_connection_error"
+    "weblate/addons/tests.py::SlackWebhooksAddonsTest::test_invalid_response"
+    "weblate/addons/tests.py::SlackWebhooksAddonsTest::test_project_scopes"
+    "weblate/addons/tests.py::SlackWebhooksAddonsTest::test_site_wide_scope"
+    "weblate/addons/tests.py::SlackWebhooksAddonsTest::test_translation_added"
+    "weblate/addons/tests.py::SlackWebhooksAddonsTest::test_announcement"
+    "weblate/addons/tests.py::SlackWebhooksAddonsTest::test_bulk_changes"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_announcement"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_bulk_changes"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_category_in_payload"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_component_scopes"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_connection_error"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_invalid_response"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_project_scopes"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_site_wide_scope"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_translation_added"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_webhook_signature"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_webhook_signature_prefix"
+
+    # Tries to resolve DNS
+    "weblate/api/tests.py::ProjectAPITest::test_install_machinery"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_form"
+
+    # djangosaml2idp2 is not packaged yet
+    "weblate/utils/tests/test_djangosaml2idp.py"
+
+    # Don't understand why
+    "weblate/trans/tests/test_alert.py::WebsiteAlertSettingTest::test_website_alerts_enabled"
   ];
 
   passthru = {

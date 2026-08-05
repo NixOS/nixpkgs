@@ -105,6 +105,8 @@ in
           wantedBy = [ "multi-user.target" ];
 
           serviceConfig = {
+            Type = "notify";
+            NotifyAccess = "all";
             User = "${s.user}";
             # backoff would be nice, but doesn't automatically
             # get reset on successful start yet, so static 10s restart for now:
@@ -117,11 +119,16 @@ in
                     "-o \"UserKnownHostsFile=${s.knownHostsFile}\""
                   else
                     "-o \"UserKnownHostsFile=/dev/null\" -o \"StrictHostKeyChecking=no\"";
+                ready = pkgs.writers.writeBash "systemd-signal-ready" ''
+                  ${pkgs.systemd}/bin/systemd-notify --ready
+                '';
               in
               ''
                 ${pkgs.openssh}/bin/ssh \
                   -o "ServerAliveInterval 30" \
                   -o "ServerAliveCountMax 3" \
+                  -o "PermitLocalCommand=yes" \
+                  -o "LocalCommand ${ready}" \
                   -o ExitOnForwardFailure=yes \
                   ${hostKeyCheckOption} \
                   -N \

@@ -42,7 +42,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       l0b0
-      synthetica
     ];
   };
 })

@@ -36,8 +36,8 @@ let
       inherit (download) url stripRoot;
       hash =
         {
-          x86_64-linux = "sha256-/xskLzTc9tTZmu1lwkMpjV3QV7XjP92D/7zRcFuVWT8=";
-          aarch64-linux = "sha256-jckH5+eGJ4BhH1NAa5LIgf3/salKLAHW9XUOo5gob4c=";
+          x86_64-linux = "sha256-wnN0SL8QqiFGZdevm06WOhR9o6q34+kHL5ay1mRYnxs=";
+          aarch64-linux = "sha256-d9Qr3q4GjtUp2ZVFSq+M2Ap++WKaEscRzEkk4JwXL/E=";
         }
         .${system} or throwSystem;
     };
@@ -57,7 +57,7 @@ let
       libxfixes
       libxrandr
       libgbm
-      libgcc.lib
+      libgcc
       libxkbcommon
       nspr
       nss
@@ -70,18 +70,12 @@ let
 
   darwin = fetchzip {
     inherit (download) url stripRoot;
-    hash =
-      {
-        x86_64-darwin = "sha256-bgU7lZhp9XUFfGu58pFdZyhXho3Jiy4MjljR+yk0M1c=";
-        aarch64-darwin = "sha256-45DjMIu0t7IEYdXOmIqpV/1/MKdEfx/8T7DWagh6Zhc=";
-      }
-      .${system} or throwSystem;
+    hash = "sha256-qWrMOreqTOFhmFBROlXIPXrM3wqNT7iJJwpelVFke6I=";
   };
 in
 {
   x86_64-linux = linux;
   aarch64-linux = linux;
-  x86_64-darwin = darwin;
   aarch64-darwin = darwin;
 }
 .${system} or throwSystem

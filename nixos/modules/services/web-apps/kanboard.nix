@@ -123,7 +123,7 @@ in
           "pm" = "dynamic";
           "php_admin_value[error_log]" = "stderr";
           "php_admin_flag[log_errors]" = true;
-          "listen.owner" = "nginx";
+          "listen.owner" = config.services.nginx.user;
           "catch_workers_output" = true;
           "pm.max_children" = "32";
           "pm.start_servers" = "2";

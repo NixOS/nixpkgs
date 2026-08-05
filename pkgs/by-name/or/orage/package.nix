@@ -18,14 +18,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "orage";
-  version = "4.20.2";
+  version = "4.20.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.xfce.org";
     owner = "apps";
     repo = "orage";
     tag = "orage-${finalAttrs.version}";
-    hash = "sha256-iV4eVYmOXfEpq5cnHeCXRvx0Ms0Dis3EIwbcSakGLXs=";
+    hash = "sha256-0C0vuWvYSBMfyHTQBvfx/Olvg1SjEs9vuT8EOE8Ng70=";
   };
 
   nativeBuildInputs = [

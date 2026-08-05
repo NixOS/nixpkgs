@@ -7,34 +7,30 @@
 
   # nativeBuildInputs
   cmake,
-
-  # propagatedBuildInputs
-  nlohmann_json,
-  stb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tinygltf";
-  version = "2.9.7";
+  version = "3.0.0";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "syoyo";
     repo = "tinygltf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tG9hrR2rsfgS8zCBNdcplig2vyiIcNspSVKop03Zx9A=";
+    hash = "sha256-qs/7O/nPXpMbn31smMfdd3V9zRbyhAnDyjZwlduseKU=";
   };
 
   nativeBuildInputs = [
     cmake
   ];
 
-  propagatedBuildInputs = [
-    nlohmann_json
-    stb
-  ];
-
   cmakeFlags = [
-    (lib.cmakeBool "TINYGLTF_INSTALL_VENDOR" false)
+    # unvendoring will break downstream applications
+    # unless at least patch the CMake modules
+    (lib.cmakeBool "TINYGLTF_INSTALL_VENDOR" true)
   ];
 
   passthru.updateScript = nix-update-script { };

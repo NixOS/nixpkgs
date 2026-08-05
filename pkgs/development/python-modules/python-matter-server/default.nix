@@ -3,11 +3,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  stdenvNoCC,
-  replaceVars,
   buildNpmPackage,
   python,
-  home-assistant-chip-wheels,
 
   # build
   setuptools,
@@ -40,27 +37,10 @@ let
   version = "8.1.2";
 
   src = fetchFromGitHub {
-    owner = "home-assistant-libs";
+    owner = "matter-js";
     repo = "python-matter-server";
     tag = version;
     hash = "sha256-vnI57h/aesnaDYorq1PzcMCLmV0z0ZBJvMg4Nzh1Dtc=";
-  };
-
-  paaCerts = stdenvNoCC.mkDerivation {
-    pname = "matter-server-paa-certificates";
-    inherit (home-assistant-chip-wheels) version src;
-
-    dontConfigure = true;
-    dontBuild = true;
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out
-      cp connectedhomeip/credentials/development/paa-root-certs/* $out/
-
-      runHook postInstall
-    '';
   };
 
   # Maintainer note: building the dashboard requires a python environment with a
@@ -119,12 +99,6 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.12";
 
-  patches = [
-    (replaceVars ./link-paa-root-certs.patch {
-      paacerts = paaCerts;
-    })
-  ];
-
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail 'version = "0.0.0"' 'version = "${version}"'
@@ -178,11 +152,13 @@ buildPythonPackage rec {
     "tests/server/ota/test_dcl.py"
   ];
 
+  env.dontCheckPythonMetadata = true;
+
   meta = {
-    changelog = "https://github.com/home-assistant-libs/python-matter-server/releases/tag/${src.tag}";
+    changelog = "https://github.com/matter-js/python-matter-server/releases/tag/${src.tag}";
     description = "Python server to interact with Matter";
     mainProgram = "matter-server";
-    homepage = "https://github.com/home-assistant-libs/python-matter-server";
+    homepage = "https://github.com/matter-js/python-matter-server";
     license = lib.licenses.asl20;
     teams = [ lib.teams.home-assistant ];
   };

@@ -1,27 +1,34 @@
 {
   lib,
-  rustPlatform,
   fetchFromGitHub,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jwt-hack";
-  version = "2.0.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "hahwul";
     repo = "jwt-hack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uJur/ABoAaQT3BBO2yprK/0/bQPT138Yg9IbztZ6w2w=";
+    hash = "sha256-C/K4AG+qQwgo58EwN+k3Bys9qgV59xfRNVCtZmjtcRM=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-0WS8+6wFpWWz6jqPdr5F4CURA3sHrKa2vnbDCnBF0Lo=";
 
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
+  nativeBuildInputs = [ pkg-config ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  buildInputs = [ openssl ];
+
+  env.OPENSSL_NO_VENDOR = 1;
+
+  doInstallCheck = true;
 
   meta = {
     description = "JSON Web Token Hack Toolkit";

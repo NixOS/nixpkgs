@@ -47,14 +47,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "highscore-unwrapped";
-  version = "0-unstable-2026-01-01";
+  version = "0-unstable-2026-02-01";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "highscore";
-    rev = "c9f537e06414a32632e9f9d7a73d9028b788f275";
-    hash = "sha256-6sBfjVFIFg0w3apzJBYMYEIjTavnOAE0YK3ayzoyDks=";
+    rev = "281d8e1d7d9abaa8452b869d1d52d4a933a00d26";
+    hash = "sha256-HQD8Dge/nSvIDgiekCxHzCmRl4cO98Er8X24ZoP8OiQ=";
   };
 
   patches = [
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace meson.build --replace-fail \
-      "run_command('git', 'rev-parse', '--short', 'HEAD').stdout().strip()" \
+      "run_command('git', 'rev-parse', '--short', 'HEAD', check: false).stdout().strip()" \
       "'${finalAttrs.src.rev}'"
   '';
 

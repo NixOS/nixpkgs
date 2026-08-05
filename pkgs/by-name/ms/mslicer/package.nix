@@ -15,16 +15,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mslicer";
-  version = "0.4.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "connorslade";
     repo = "mslicer";
     rev = finalAttrs.version;
-    hash = "sha256-4b+LVOfV1CZVkdVHIJAhfisflRqpTO0LjWvM7qD9mSY=";
+    hash = "sha256-kDpV9UlqiqV+/h0PWk6fsOWumCHben4gkQk1mEXE5wk=";
   };
 
-  cargoHash = "sha256-U+khaF+XHrZjNHtxon2QFwk1Sd2+b5CRtUBeWWHKtRY=";
+  cargoHash = "sha256-o1igInyC0N8TorQ/naKbRyTTdZiaSNquVy0i0jzNcAk=";
+
+  postPatch = ''
+    patchShebangs --build dist/msla_format/generate.sh
+  '';
 
   buildInputs = [
     libglvnd
@@ -53,6 +57,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "-lXi"
     "--pop-state"
   ];
+
+  # Build all binaries (e.g. the cli `slicer`) -- not just the default `mslicer` GUI application:
+  cargoBuildFlags = [ "--workspace" ];
 
   strictDeps = true;
 

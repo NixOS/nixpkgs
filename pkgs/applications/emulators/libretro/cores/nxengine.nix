@@ -5,13 +5,13 @@
 }:
 mkLibretroCore {
   core = "nxengine";
-  version = "0-unstable-2024-10-21";
+  version = "0-unstable-2026-04-09";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "nxengine-libretro";
-    rev = "9adc032a5f6aa913d71d22042bb72cb11cf0f4a2";
-    hash = "sha256-8XjZp18lQU3xFNDjIuNsSHn7Mhba8Lze/IeRsy8/U1U=";
+    rev = "a1c45fd4d045333f4ea523e556469b545be82b0a";
+    hash = "sha256-v7mUr4GeNc/bOe4gQvtPns4/uLA+r7UFGavDdtBNj6E=";
   };
 
   makefile = "Makefile";

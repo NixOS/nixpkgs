@@ -1,29 +1,32 @@
 {
   lib,
+  attrs,
   bellows,
   buildPythonPackage,
   fetchFromGitHub,
   freezegun,
+  frozendict,
   looptime,
-  pyserial,
-  pyserial-asyncio-fast,
+  pyprojectVersionPatchHook,
   pytest-asyncio_0,
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
   pythonOlder,
   setuptools,
-  zha-quirks,
   zigpy,
   zigpy-deconz,
   zigpy-xbee,
   zigpy-zigate,
+  zigpy-ziggurat,
   zigpy-znp,
+  zha,
+  zha-quirks,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zha";
-  version = "0.0.90";
+  version = "2.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -31,29 +34,35 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zha";
-    tag = version;
-    hash = "sha256-w5pWVkFDxnVzH5BX7VpfjStv1BabGTWE0aFysReWNqA=";
+    tag = finalAttrs.version;
+    hash = "sha256-SKDz6ojUW4qq37jfin+tYhM16/K60eEXJZdI2xJTwXc=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail '"setuptools-git-versioning<3"' "" \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail '"setuptools-git-versioning<3"' ""
+
+    # do not install development tools
+    rm -r tools
   '';
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [
     setuptools
   ];
 
   dependencies = [
+    attrs
     bellows
-    pyserial
-    pyserial-asyncio-fast
-    zha-quirks
+    frozendict
     zigpy
     zigpy-deconz
     zigpy-xbee
     zigpy-zigate
+    zigpy-ziggurat
     zigpy-znp
   ];
 
@@ -64,9 +73,12 @@ buildPythonPackage rec {
     pytest-timeout
     pytest-xdist
     pytestCheckHook
+    zha-quirks
   ];
 
   pythonImportsCheck = [ "zha" ];
+
+  doCheck = false; # infinite recursion with zhaquirks
 
   disabledTests = [
     # Tests are long-running and often keep hanging
@@ -93,15 +105,18 @@ buildPythonPackage rec {
     "test_startup_concurrency_limit"
     "test_fan_ikea"
     "test_background"
+    "test_gateway_startup_failure" # Failed first attempt, passed second, flaky
   ];
 
-  disabledTestPaths = [ "tests/test_cluster_handlers.py" ];
+  passthru.tests = {
+    pytest = zha.overridePythonAttrs { doCheck = true; };
+  };
 
   meta = {
     description = "Zigbee Home Automation";
     homepage = "https://github.com/zigpy/zha";
-    changelog = "https://github.com/zigpy/zha/releases/tag/${version}";
+    changelog = "https://github.com/zigpy/zha/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

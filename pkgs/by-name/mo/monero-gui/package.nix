@@ -7,7 +7,6 @@
   libgcrypt,
   libgpg-error,
   libsodium,
-  miniupnpc,
   monero-cli,
   pkg-config,
   qt5,
@@ -28,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "monero-gui";
-  version = "0.18.4.5";
+  version = "0.18.5.2";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero-gui";
     rev = "v${version}";
-    hash = "sha256-K275qry6PWeEh3g0EofkD8E4pO5uWGFoAGzdkj9kuvA=";
+    hash = "sha256-2FlenQtrsoHmRTfU+KhWtg3eVPzz9ktQ3dnOlWhOPC8=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +48,6 @@ stdenv.mkDerivation rec {
     libgcrypt
     libgpg-error
     libsodium
-    miniupnpc
     qt5.qtbase
     qt5.qtdeclarative
     qt5.qtgraphicaleffects

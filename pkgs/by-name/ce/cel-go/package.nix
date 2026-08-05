@@ -6,13 +6,13 @@
 let
   cel-spec = buildGoModule (finalAttrs: {
     pname = "cel-spec";
-    version = "0.25.1";
+    version = "0.25.2";
 
     src = fetchFromGitHub {
-      owner = "google";
+      owner = "cel-expr";
       repo = "cel-spec";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-D9NHnQerquU2nDhDIheHmzV2FUwKi+MfTO+sehMXudg=";
+      hash = "sha256-aNyBGUlpTqILCiQHo7BxaZShI6q9xgtRegywd+jQSlo=";
     };
 
     vendorHash = "sha256-7Ngemih4jRO6VHSH2QxU/p1Q/E/ukUZ5wuUbZzRj6kA=";
@@ -26,18 +26,18 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "cel-go";
-  version = "0.27.0";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
-    owner = "google";
+    owner = "cel-expr";
     repo = "cel-go";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gry3Kwx9SKFxLrUCVpg4hxv5J1R6HzHWW9W0OG7dpKA=";
+    hash = "sha256-D07O4eLNvOLecIRDylUC5Rrc8EfworHwEPIzTZV82IU=";
   };
 
   modRoot = "repl";
 
-  vendorHash = "sha256-J0O3yGBYsX+9Eel0O5crUJxk0DNLxob/Tsue57O9Toc=";
+  vendorHash = "sha256-AR1XxMJZEtfFgq/H/N07d/qpnI7K1/IHZCHqvqIfeC8=";
 
   subPackages = [
     "main"
@@ -62,10 +62,15 @@ buildGoModule (finalAttrs: {
     mv $out/bin/{main,cel-go}
   '';
 
+  passthru = {
+    inherit cel-spec;
+    updateScript = ./update.sh;
+  };
+
   meta = {
-    changelog = "https://github.com/google/cel-go/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/cel-expr/cel-go/releases/tag/${finalAttrs.src.tag}";
     description = "Fast, portable, non-Turing complete expression evaluation with gradual typing";
-    homepage = "https://github.com/google/cel-go";
+    homepage = "https://github.com/cel-expr/cel-go";
     license = lib.licenses.asl20;
     mainProgram = "cel-go";
     maintainers = with lib.maintainers; [ hythera ];

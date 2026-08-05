@@ -28,7 +28,7 @@ buildRedist (
     ];
 
     buildInputs = [
-      # NOTE: Verions of CUDNN after 9.0 no longer depend on libcublas:
+      # NOTE: Versions of CUDNN after 9.0 no longer depend on libcublas:
       # https://docs.nvidia.com/deeplearning/cudnn/latest/release-notes.html?highlight=cublas#cudnn-9-0-0
       # However, NVIDIA only provides libcublasLT via the libcublas package.
       (lib.getLib libcublas)
@@ -50,7 +50,7 @@ buildRedist (
     ];
 
     # NOTE:
-    #   With cuDNN forward compatiblity, all non-natively supported compute capabilities JIT compile PTX kernels.
+    #   With cuDNN forward compatibility, all non-natively supported compute capabilities JIT compile PTX kernels.
     #
     #   While this is sub-optimal and we should warn the user and encourage them to use a newer version of cuDNN, we
     #   have no clean mechanism by which we can warn the user, or allow silencing such a warning if the use of an

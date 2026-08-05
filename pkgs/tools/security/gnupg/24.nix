@@ -166,6 +166,13 @@ stdenv.mkDerivation rec {
   ++ lib.optional withTpm2Tss "--with-tss=intel"
   ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-ccid-driver";
 
+  outputs = [
+    "out"
+    "info"
+    "man"
+    "doc"
+  ];
+
   postInstall =
     if enableMinimal then
       ''

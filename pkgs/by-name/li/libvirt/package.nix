@@ -25,6 +25,7 @@
   nftables,
   ninja,
   openssh,
+  passt,
   perl,
   perlPackages,
   polkit,
@@ -98,6 +99,7 @@ let
       numactl
       numad
       openssh
+      passt
       pmutils
       systemd
     ]
@@ -119,14 +121,14 @@ assert enableZfs -> isLinux;
 stdenv.mkDerivation rec {
   pname = "libvirt";
   # if you update, also bump <nixpkgs/pkgs/development/python-modules/libvirt/default.nix> and SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
-  version = "12.1.0";
+  version = "12.4.0";
 
   src = fetchFromGitLab {
     owner = "libvirt";
     repo = "libvirt";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-gscVarCRdj7auFHedIFVAYT1de49QOWyhdm3NVWQ5zY=";
+    hash = "sha256-xgXbgZ8UDdiKPJSGEHB5PasGws5VvCgd+DpoOxwceEA=";
   };
 
   patches = [
@@ -417,7 +419,7 @@ stdenv.mkDerivation rec {
     libvirtVersion=$(curl https://gitlab.com/api/v4/projects/192693/repository/tags | jq -r '.[].name|select(. | contains("rc") | not)' | head -n1 | sed "s/v//g")
     sysvirtVersion=$(curl https://gitlab.com/api/v4/projects/192677/repository/tags | jq -r '.[].name|select(. | contains("rc") | not)' | head -n1 | sed "s/v//g")
     update-source-version ${pname} "$libvirtVersion"
-    update-source-version python3Packages.${pname} "$libvirtVersion"
+    update-source-version python3Packages.libvirt-python "$libvirtVersion"
     update-source-version perlPackages.SysVirt "$sysvirtVersion" --file="pkgs/top-level/perl-packages.nix"
   '';
 

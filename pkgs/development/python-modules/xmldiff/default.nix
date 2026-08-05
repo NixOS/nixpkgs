@@ -7,29 +7,21 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xmldiff";
-  version = "2.7.0";
+  version = "3.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-wJELH4ADZt1+xikj5dBuiwahvZEgVpocJ/TyRGucaKI=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-OA7E0FzvM/W3Bs94mrzISNJ3MNZ+AtwLTxEH4Wzpqq0=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    lxml
-    setuptools
-  ];
+  dependencies = [ lxml ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTests = [
-    # lxml 6.0 compat issue
-    "test_api_diff_texts"
-  ];
 
   pythonImportsCheck = [ "xmldiff" ];
 
@@ -40,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sfrijters ];
   };
-}
+})

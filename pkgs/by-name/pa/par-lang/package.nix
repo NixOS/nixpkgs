@@ -19,16 +19,16 @@
 
 rustPlatform.buildRustPackage {
   pname = "par-lang";
-  version = "0-unstable-2026-03-03";
+  version = "0-unstable-2026-07-29";
 
   src = fetchFromGitHub {
-    owner = "faiface";
+    owner = "par-team";
     repo = "par-lang";
-    rev = "a5777923d4c94480b614c3e8cfceffe6923d1a1a";
-    hash = "sha256-QGqwgSIcYc7PI/e7dZ+bWo7lrGEzvKEO2FCwtpwbFVI=";
+    rev = "97e3ae546d7da1baa05bb0f4d523e39132e1d7ff";
+    hash = "sha256-gBXf2XYtlThr7X4uMfREeoYhmsfcqKU9z8rYX74gH1c=";
   };
 
-  cargoHash = "sha256-taLTRYB1Crvx0wz3IRvkPRImaRIs0mGscOjLFBkhkgE=";
+  cargoHash = "sha256-8lG+cKN3/W+LYWhmOfDwGiq6u3nlLJaD5uNABaY0zRY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -50,15 +50,15 @@ rustPlatform.buildRustPackage {
       ];
     in
     lib.optionalString stdenv.hostPlatform.isLinux ''
-      patchelf --add-rpath ${lib.makeLibraryPath runtimeDependencies} $out/bin/par-lang
+      patchelf --add-rpath ${lib.makeLibraryPath runtimeDependencies} $out/bin/par
     '';
 
   doInstallCheck = true;
   installCheckPhase = ''
     runHook preInstallCheck
 
-    echo 'def Main = Console.Open.print("Hello, World!").close' > test.par
-    diff -U3 --color=auto <($out/bin/par-lang run test.par) <(echo 'Hello, World!')
+    $out/bin/par new hello
+    diff -U3 --color=auto <($out/bin/par run --package hello 2>&1) <(echo 'Hello, World!')
 
     runHook postInstallCheck
   '';
@@ -69,7 +69,7 @@ rustPlatform.buildRustPackage {
       desktopName = "Par Playground";
       genericName = "Experimental concurrent programming language";
       categories = [ "Development" ];
-      exec = "par-lang playground %f";
+      exec = "par playground %f";
     })
   ];
 
@@ -77,9 +77,9 @@ rustPlatform.buildRustPackage {
 
   meta = {
     description = "Experimental concurrent programming language";
-    homepage = "https://github.com/faiface/par-lang";
+    homepage = "https://github.com/par-team/par-lang";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
-    mainProgram = "par-lang";
+    mainProgram = "par";
   };
 }

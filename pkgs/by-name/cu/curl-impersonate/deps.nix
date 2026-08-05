@@ -22,14 +22,14 @@
     hash = "sha256-YHsXRVTSKoKLxTLR1zT+D3KbXV7SB/LxLpamLoPynFU=";
   };
 
-  "ngtcp2-1.11.0.tar.bz2" = fetchurl {
-    url = "https://github.com/ngtcp2/ngtcp2/releases/download/v1.11.0/ngtcp2-1.11.0.tar.bz2";
-    hash = "sha256-122s6G/Docj84codTLsf3pu6k81fKGEdVbypukPjF7w=";
+  "ngtcp2-1.20.0.tar.bz2" = fetchurl {
+    url = "https://github.com/ngtcp2/ngtcp2/releases/download/v1.20.0/ngtcp2-1.20.0.tar.bz2";
+    hash = "sha256-hx7JethoA88xKQGww5Ow7nAWPiWofJsolNEjQ0HOTpc=";
   };
 
-  "nghttp3-1.9.0.tar.bz2" = fetchurl {
-    url = "https://github.com/ngtcp2/nghttp3/releases/download/v1.9.0/nghttp3-1.9.0.tar.bz2";
-    hash = "sha256-TTCmjxfnKhOStghdr6qfxzLaHX0m7sVUuyFnCDMvzxo=";
+  "nghttp3-1.15.0.tar.bz2" = fetchurl {
+    url = "https://github.com/ngtcp2/nghttp3/releases/download/v1.15.0/nghttp3-1.15.0.tar.bz2";
+    hash = "sha256-xsSRpSgEgUCY5EZjDm78RZr8DT2nlS/+bL3As/mbK2I=";
   };
 
   "zlib-1.3.1.tar.gz" = fetchurl {

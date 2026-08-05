@@ -137,7 +137,6 @@ stdenv.mkDerivation {
       detegr
       shnarazk
       sternenseemann
-      synthetica
     ];
     platforms = lib.platforms.all;
   };

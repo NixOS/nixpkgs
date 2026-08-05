@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   google-api-core,
-  libcst,
+  google-auth,
   mock,
   proto-plus,
   protobuf,
@@ -14,20 +14,24 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-container";
-  version = "2.62.0";
+  version = "2.65.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_container";
     inherit version;
-    hash = "sha256-O647Jw3v9kD1Pn0naPvAP/vzUxqIZWD7nk97VRRs1T8=";
+    hash = "sha256-Z2BdOWoYjr0CzXOkJVA2Z+ovW8VrF1cammeLfVW3NNw=";
   };
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
+
   dependencies = [
     google-api-core
-    libcst
+    google-auth
     proto-plus
     protobuf
   ]

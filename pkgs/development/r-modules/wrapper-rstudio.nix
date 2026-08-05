@@ -4,7 +4,7 @@
   runCommand,
   R,
   rstudio,
-  makeWrapper,
+  makeBinaryWrapper,
   recommendedPackages,
   packages,
   fontconfig,
@@ -15,7 +15,7 @@ runCommand (rstudio.name + "-wrapper")
     preferLocalBuild = true;
     allowSubstitutes = false;
 
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeBinaryWrapper ];
     dontWrapQtApps = true;
 
     buildInputs = [

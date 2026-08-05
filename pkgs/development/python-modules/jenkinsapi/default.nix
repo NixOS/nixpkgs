@@ -2,14 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  hatchling,
   mock,
-  pbr,
   pytest-mock,
   pytestCheckHook,
   pytz,
   requests,
-  setuptools,
   six,
 }:
 
@@ -25,15 +23,13 @@ buildPythonPackage rec {
     hash = "sha256-1dTcT84cDpP9V4tVrgW2MTYx4jQj0/tZiAuakC+orUQ=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-    pbr
+  build-system = [
+    hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pytz
     requests
-    setuptools
     six
   ];
 

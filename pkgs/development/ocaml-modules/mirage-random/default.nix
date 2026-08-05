@@ -5,14 +5,14 @@
   cstruct,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "mirage-random";
   version = "3.0.0";
 
   duneVersion = "3";
 
   src = fetchurl {
-    url = "https://github.com/mirage/mirage-random/releases/download/v${version}/mirage-random-v${version}.tbz";
+    url = "https://github.com/mirage/mirage-random/releases/download/v${finalAttrs.version}/mirage-random-v${finalAttrs.version}.tbz";
     sha256 = "sha256-Sf4/KB1kMMwXI+yr5H/JuOmynYPNXwlk9dAA+gFAZs8=";
   };
 
@@ -24,4 +24,4 @@ buildDunePackage rec {
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

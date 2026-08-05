@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   buildNpmPackage,
-  electron_40,
+  electron_41,
   makeWrapper,
   testers,
   mattermost-desktop,
@@ -10,21 +10,21 @@
 }:
 
 let
-  electron = electron_40;
+  electron = electron_41;
 in
 
 buildNpmPackage rec {
   pname = "mattermost-desktop";
-  version = "6.1.0";
+  version = "6.2.2";
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "desktop";
     tag = "v${version}";
-    hash = "sha256-5sVYDnz5RPkHfCpA3I1+Lm7z7YLa3fOFYOTEI6Sbxz8=";
+    hash = "sha256-KSyFJrYy+pueSrX20SPBoudWfiHmy5L2O8TdzLJRiYk=";
   };
 
-  npmDepsHash = "sha256-YdpF/wuH2H+ouBDzCUcTQWLB8s8wa9L12UiGj4MnurQ=";
+  npmDepsHash = "sha256-70TBP4iDKuF4X9Tf0tsbUQ3N7bluoPn65OdfdcWin4Y=";
   npmBuildScript = "build-prod";
   makeCacheWritable = true;
 
@@ -37,6 +37,8 @@ buildNpmPackage rec {
       --replace-fail \
         "const VERSION = childProcess.execSync('git rev-parse --short HEAD', {cwd: __dirname}).toString();" \
         "const VERSION = process.env.version;"
+    substituteInPlace src/common/config/buildConfig.ts \
+      --replace-fail 'enableUpdateNotifications: true,' 'enableUpdateNotifications: false,'
   '';
 
   postBuild = ''
@@ -45,7 +47,7 @@ buildNpmPackage rec {
     chmod -R u+w electron-dist
 
     npm exec electron-builder -- \
-        --config electron-builder.json \
+        --config electron-builder.ts \
         --dir \
         -c.electronDist=electron-dist \
         -c.electronVersion=${electron.version}
@@ -101,6 +103,7 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [
       joko
       liff
+      yayayayaka
     ];
   };
 }

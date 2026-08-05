@@ -9,15 +9,19 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.1.1";
+  version = "2.2.1";
   pname = "lcalc";
 
   src = fetchFromGitLab {
     owner = "sagemath";
     repo = "lcalc";
     tag = finalAttrs.version;
-    hash = "sha256-0CYrRGn5YQ07BaGu0Q5otnjwyh3sNq21EXp3M/KlRdw=";
+    hash = "sha256-L9502+lwSPLk63C14Pxa8OZWhnY4OqKv9WudZO2vP7E=";
   };
+
+  # upstream ships a patched ltmain.sh from libtool 2.5.4. the patch
+  # is already included in libtool 2.6.1.
+  postPatch = "sed -i '/ltmain.sh/d' configure.ac";
 
   nativeBuildInputs = [
     autoreconfHook
@@ -37,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/sagemath/lcalc";
     description = "Program for calculating with L-functions";
     mainProgram = "lcalc";
-    license = with lib.licenses; [ gpl2 ];
+    license = lib.licenses.gpl2;
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.all;
   };

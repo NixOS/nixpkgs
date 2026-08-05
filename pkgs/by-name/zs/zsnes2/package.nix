@@ -6,23 +6,26 @@
 
 pkgsi686Linux.stdenv.mkDerivation (finalAttrs: {
   pname = "zsnes2";
-  version = "2.0.12";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "zsnes";
     tag = finalAttrs.version;
-    hash = "sha256-Xz+9YgMpnHyno7vP67aut4tIyG/gTn7SnU2FO2QMND0=";
+    hash = "sha256-jH1NoodprQlUSJHWz0gjM6LdgJtE6AvQ6/7hQQCUl5U=";
   };
 
   nativeBuildInputs = [
     pkgsi686Linux.nasm
     pkgsi686Linux.pkg-config
+    pkgsi686Linux.python3
     pkgsi686Linux.udevCheckHook
   ];
 
   buildInputs = [
-    pkgsi686Linux.SDL
+    (pkgsi686Linux.sdl3.overrideAttrs (oldAttrs: {
+      doCheck = false;
+    }))
     pkgsi686Linux.libGL
     pkgsi686Linux.libGLU
     pkgsi686Linux.libpng

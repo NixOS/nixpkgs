@@ -34,10 +34,9 @@ jq '
           elif .url | contains("linux-x86_64") then
             {key: "x86_64-linux", value: .}
           elif .url | contains("macOS-universal") then
-            [{key: "aarch64-darwin", value: .}, {key: "x86_64-darwin", value: .}]
+            {key: "aarch64-darwin", value: .}
           else null end
         )
-      | flatten
       | from_entries
     )
   }

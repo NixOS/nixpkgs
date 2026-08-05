@@ -151,6 +151,6 @@ stdenv.mkDerivation {
     mainProgram = "UltraStar-Manager";
     homepage = "https://github.com/UltraStar-Deluxe/UltraStar-Manager";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ Profpatsch ];
+    maintainers = [ ];
   };
 }

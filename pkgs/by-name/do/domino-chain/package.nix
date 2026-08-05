@@ -38,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-warn /usr/share/fonts/truetype/freefont/ ${freefont_ttf}/share/fonts/truetype/
     substituteInPlace src/domino-chain/screen.cpp \
       --replace-fail /usr/share/fonts/truetype/freefont/ ${freefont_ttf}/share/fonts/truetype/
+    substituteInPlace Makefile \
+      --replace-fail "LIBS += -lboost_system\$(BOOST_TAGS)" ""
   '';
 
   nativeBuildInputs = [

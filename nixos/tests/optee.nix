@@ -2,8 +2,8 @@
 {
   name = "optee";
 
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ jmbaur ];
+  meta = {
+    maintainers = with lib.maintainers; [ jmbaur ];
   };
 
   nodes.machine =
@@ -16,7 +16,8 @@
       uboot = ubootQemuAarch64.overrideAttrs (old: {
         postPatch = (old.postPatch or "") + ''
           substituteInPlace board/emulation/qemu-arm/qemu-arm.env \
-            --replace-fail "ramdisk_addr_r=0x44000000" "ramdisk_addr_r=0x46000000"
+            --replace-fail "kernel_addr_r=0x40400000" "kernel_addr_r=0x50000000" \
+            --replace-fail "ramdisk_addr_r=0x44000000" "ramdisk_addr_r=0x58000000"
         '';
       });
 
@@ -52,6 +53,7 @@
 
       # VM boots up via qfw
       boot.loader.grub.enable = false;
+      boot.kernelModules = [ "optee" ];
 
       services.tee-supplicant = {
         enable = true;

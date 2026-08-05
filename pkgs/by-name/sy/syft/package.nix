@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "syft";
-  version = "1.42.2";
+  version = "1.50.0";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "syft";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ewy5I/dEH5rt6RgCJsLNx/yemcPdzqbhAKyOvUzs7Uk=";
+    hash = "sha256-jXNz/BWGAVRfQpUcaGS0nmGa6N3q8Yxk5xppJWgOVOE=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
   # hash mismatch with darwin
   proxyVendor = true;
 
-  vendorHash = "sha256-uT5dLpYeQDakfVr5r7FjbwBIwDtRfPkoBtvyrpA7GUo=";
+  vendorHash = "sha256-dxCwVQrvc620F+StnKyPFtZ7eexcTL2rA8h3R24CRnk=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -83,7 +83,7 @@ buildGoModule (finalAttrs: {
       (SBOM) from container images and filesystems. Exceptional for
       vulnerability detection when used with a scanner tool like Grype.
     '';
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       developer-guy
       jk

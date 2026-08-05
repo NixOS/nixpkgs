@@ -13,6 +13,8 @@
   zip,
   gnupg,
   coreutils,
+  gnugrep,
+  gnused,
 
   # Used by the bundled webcam-app
   libv4l,
@@ -24,16 +26,22 @@
 }:
 
 let
-  version = "2.1.9";
+  version = "2.1.11";
 
   jdk = zulu25.override { enableJavaFX = true; };
+
+  argumentFile = builtins.toFile "app.args" ''
+    -Djpackage.app-version=${version}
+    -classpath
+    @out@/lib/app/desktop-app-launcher.jar:@classpath@
+  '';
 
   bisq-launcher =
     args:
     writeShellScript "bisq-launcher" ''
       rm -fR $HOME/.local/share/Bisq2/tor
 
-      exec "${lib.getExe jdk}" -Djpackage.app-version=@version@ -classpath @out@/lib/app/desktop-app-launcher.jar:@out@/lib/app/* ${args} bisq.desktop_app_launcher.DesktopAppLauncher "$@"
+      exec "${lib.getExe jdk}" @@out@/lib/app.args ${args} bisq.desktop_app_launcher.DesktopAppLauncher "$@"
     '';
 
   # A given release will be signed by either Alejandro Garcia or Henrik Jannsen
@@ -69,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   # nixpkgs-update: no auto update
   src = fetchurl {
     url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/Bisq-${version}.deb";
-    hash = "sha256-E7GV4YGbF0Nj6aWVqJNUUpwLH1G5v5bEQamHP7OUzQY=";
+    hash = "sha256-Ts0u1Rapgfz/z17U3VSN17/rdACr/KOGmiZjWnGJmcw=";
 
     # Verify the upstream Debian package prior to extraction.
     # See https://bisq.wiki/Bisq_2#Installation
@@ -94,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   signature = fetchurl {
     url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/Bisq-${version}.deb.asc";
-    hash = "sha256-bNZNRbm9uNGfLzGvshXNaRLUNX38Uz58GGy6WqJwV1E=";
+    hash = "sha256-/+HDj28uOFQwkrrzKfcQW0T5/qTIeB30Zd10EjeGhlU=";
   };
 
   nativeBuildInputs = [
@@ -104,6 +112,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeBinaryWrapper
     zip
     gnupg
+    gnugrep
+    gnused
   ];
 
   desktopItems = [
@@ -150,6 +160,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/lib $out/bin
     cp -r opt/bisq2/lib/app $out/lib
+
+    export classpath=$(ls -1 $out/lib/app/ | grep -v desktop-app-launcher.jar | sort | sed -e 's/^/@out@\/lib\/app\//g' | tr '\n' ':')
+    cp -L ${argumentFile} $out/lib/app.args
+    substituteAllInPlace $out/lib/app.args
 
     install -D -m 777 ${bisq-launcher ""} $out/bin/bisq2
     substituteAllInPlace $out/bin/bisq2

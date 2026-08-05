@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "chisel";
-  version = "1.11.5";
+  version = "1.11.8";
 
   src = fetchFromGitHub {
     owner = "jpillora";
     repo = "chisel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9b4y09eStfVLGRGUHw1GicBWsWHy7j9nwhQ3kfmB8Wc=";
+    hash = "sha256-hhkauBn8yEnUmHQjgSF8LMM7zEwhIRRPIkx5VhVZCTI=";
   };
 
-  vendorHash = "sha256-hqHd+62csVjHY2oAvi5fwlI0LbjR/LSDg6b1SMwe8Fw=";
+  vendorHash = "sha256-wt6d6yNi4QRI/RQiemfOAbc6FG8sBexWFT1dKOmFEes=";
 
   ldflags = [
     "-s"

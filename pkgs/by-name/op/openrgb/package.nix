@@ -1,8 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
-  fetchpatch,
+  fetchFromCodeberg,
   libusb1,
   hidapi,
   pkg-config,
@@ -16,22 +15,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openrgb";
-  version = "1.0rc2";
+  version = "1.0rc3";
 
-  src = fetchFromGitLab {
-    owner = "CalcProgrammer1";
+  src = fetchFromCodeberg {
+    owner = "OpenRGB";
     repo = "OpenRGB";
     tag = "release_candidate_${finalAttrs.version}";
-    hash = "sha256-vdIA9i1ewcrfX5U7FkcRR+ISdH5uRi9fz9YU5IkPKJQ=";
+    hash = "sha256-x7B3Ht9+JM+w/3qL5Ku08r05BBLrbuO5JBqP4fnJ0nc=";
   };
 
   patches = [
     ./system-plugins-env.patch
-    (fetchpatch {
-      name = "Install-systemd-service-under-PREFIX.patch";
-      url = "https://gitlab.com/CalcProgrammer1/OpenRGB/-/commit/b58b3c0402131918b3b988631f42617020df9346.patch";
-      hash = "sha256-q5i5BNjaLbsXSYEXKQOR/cMm5ExckmW1n2r9H0j09T0=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -116,7 +110,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Open source RGB lighting control";
-    homepage = "https://gitlab.com/CalcProgrammer1/OpenRGB";
+    changelog = "https://codeberg.org/OpenRGB/OpenRGB/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://openrgb.org";
     maintainers = with lib.maintainers; [ johnrtitor ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;

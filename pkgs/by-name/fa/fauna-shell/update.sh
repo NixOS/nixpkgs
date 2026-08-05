@@ -19,9 +19,10 @@ fi
 git clone "https://github.com/fauna/fauna-shell" -b "v$NEW_VERSION" "$WORKDIR/src"
 pushd "$WORKDIR/src"
 npx --yes npm-package-lock-add-resolved
+npm install --package-lock-only --ignore-scripts
 
-# Update package-lock patch
-git diff -U0 >"$PACKAGE_DIR/package-lock-fix.patch"
+# Update vendored lock file
+cp package-lock.json "$PACKAGE_DIR/package-lock.json"
 popd
 
 # Run nix-update

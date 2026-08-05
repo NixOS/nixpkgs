@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   nodejs,
-  pnpm_9,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   npmHooks,
@@ -12,26 +12,26 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "taze";
-  version = "19.10.0";
+  version = "19.16.0";
 
   src = fetchFromGitHub {
     owner = "antfu-collective";
     repo = "taze";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jkVbPEHSO2ZZwxfxzq6GUsAi0O/BJYv2YLghpiLM66g=";
+    hash = "sha256-VVWceyF/jgsdJt33FbHJUNCey5peIB3BxhmOwxhVaHI=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
-    fetcherVersion = 1;
-    hash = "sha256-+kORi1CwLD567b2L0PRs+t16Qi7HegpYoc8W127rp9k=";
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-p0rkOHqieg1K+QWAMr2JtXL5Cq6iEa+Skt0B0Iq/OpI=";
   };
 
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_9
+    pnpm_11
     npmHooks.npmInstallHook
   ];
 

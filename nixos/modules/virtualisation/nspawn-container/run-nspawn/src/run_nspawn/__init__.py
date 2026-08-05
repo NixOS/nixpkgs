@@ -1,6 +1,7 @@
 import contextlib
 import dataclasses
 import fcntl
+import hashlib
 import logging
 import os
 import signal
@@ -68,7 +69,9 @@ def ensure_vlan_bridge(vlan: int) -> typing.Generator[str, None, None]:
     ipv6_addr = f"2001:db8:{vlan}::fe/64"
 
     bridge_name = f"br{vlan}"
+    tap_name = f"vde-tap{vlan}"
     bridge_path = Path("/sys/class/net") / bridge_name
+    tap_path = Path("/sys/class/net") / tap_name
     try:
         # To avoid racing against other nspawn containers that also
         # need this vlan, grab an exclusive lock.
@@ -80,14 +83,36 @@ def ensure_vlan_bridge(vlan: int) -> typing.Generator[str, None, None]:
                 run_ip("addr", "add", ipv4_addr, "dev", bridge_name)
                 run_ip("addr", "add", ipv6_addr, "dev", bridge_name)
 
+            if tap_path.exists():
+                logger.info(f"attaching {tap_name} to {bridge_name}")
+                run_ip("link", "set", tap_name, "master", bridge_name)
+                run_ip("link", "set", tap_name, "up")
+            else:
+                logger.warning(
+                    f"TAP {tap_name} not found; container will be isolated from VDE"
+                )
+                if not Path("/dev/net").exists():
+                    logger.warning(
+                        "A common reason for this is that /dev/net is not available in the Nix sandbox. Try adding /dev/net to extra-sandbox-paths."
+                    )
+
         yield bridge_name
     finally:
         # To avoid racing against other nspawn containers that also
         # releasing this vlan, grab an exclusive lock.
         with vlan_lock(vlan):
             if bridge_path.exists():
-                child_intf_count = len(list((bridge_path / "brif").iterdir()))
-                if child_intf_count == 0:
+                # The VDE tap is owned by the test driver's vde_plug2tap
+                # and shares its lifetime with the vlan, not with any
+                # container. Don't count it when deciding whether the
+                # bridge is still in use, otherwise the bridge would
+                # never be deleted as long as vde_plug2tap is alive.
+                child_intfs = [
+                    p.name
+                    for p in (bridge_path / "brif").iterdir()
+                    if p.name != tap_name
+                ]
+                if not child_intfs:
                     logger.info("deleting bridge %s", bridge_name)
                     run_ip("link", "delete", bridge_name)
 
@@ -100,6 +125,13 @@ def mk_veth(
     vlan: int,
 ) -> typing.Generator[None, None, None]:
     host_intf_name = f"{container_name}-{container_intf_name}"
+    # If the names for systemd-nspawn containers are too long,
+    # the generated bridge interface names will surpass the
+    # kernel limit IFNAMSIZ (15 characters + '\0').
+    if len(host_intf_name) > 15:
+        hashed = hashlib.sha256(host_intf_name.encode()).hexdigest()[:6]
+        host_intf_name = f"{host_intf_name[:8]}-{hashed}"
+
     with ensure_vlan_bridge(vlan) as bridge_name:
         logger.info("creating interface %s", host_intf_name)
         run_ip(
@@ -126,6 +158,7 @@ def mk_veth(
 def run(
     container_name: str,
     root_dir_str: str,
+    shared_dir_str: str | None,
     interfaces: dict,
     nspawn_options: list[str],
     init: str,
@@ -144,6 +177,7 @@ def run(
 
     root_dir.mkdir(parents=True, exist_ok=True)
     root_dir.chmod(0o755)
+    (root_dir / "usr/bin").mkdir(parents=True, exist_ok=True)
 
     with (
         mk_netns(f"nixos-nspawn-{container_name}") as netns,
@@ -159,12 +193,7 @@ def run(
                 )
             )
 
-        def print_pid() -> None:
-            print(
-                f"systemd-nspawn's PID is {os.getpid()}",
-                # Need to flush stdout before systemd-nspawn gets exec-ed.
-                flush=True,
-            )
+        shared_dir = Path(shared_dir_str) if shared_dir_str else None
 
         cp = subprocess.Popen(
             [
@@ -172,10 +201,17 @@ def run(
                 *nspawn_options,
                 f"--directory={root_dir}",
                 f"--network-namespace-path={netns.path}",
+                *(
+                    [f"--bind={shared_dir}:/tmp/shared"]
+                    if shared_dir is not None
+                    else []
+                ),
                 init,
                 *cmdline,
             ],
-            preexec_fn=print_pid,
+        )
+        print(
+            f"systemd-nspawn's PID is {cp.pid}",
         )
 
         try:
@@ -219,6 +255,11 @@ def main():
         help="Path to container root directory (overridable with RUN_NSPAWN_ROOT_DIR)",
     )
     arg_parser.add_argument(
+        "--shared-dir",
+        required=False,
+        help="Path to a shared directory to bind-mount into the container at /tmp/shared (overridable with RUN_NSPAWN_SHARED_DIR)",
+    )
+    arg_parser.add_argument(
         "--interfaces-json",
         dest="interfaces",
         type=json.loads,
@@ -239,6 +280,7 @@ def main():
     run(
         container_name=args.container_name,
         root_dir_str=os.getenv("RUN_NSPAWN_ROOT_DIR", default=args.root_dir),
+        shared_dir_str=os.getenv("RUN_NSPAWN_SHARED_DIR", default=args.shared_dir),
         interfaces=args.interfaces,
         nspawn_options=nspawn_options,
         init=args.init,

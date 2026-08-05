@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   testers,
   boost,
@@ -18,28 +17,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "persistent-cache-cpp";
-  version = "1.0.9";
+  version = "1.0.10";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lib-cpp/persistent-cache-cpp";
-    rev = finalAttrs.version;
-    hash = "sha256-1ETr4b0HEJIM6a4ObtKWtxn0y4gQy9fzBjE4QhMPGqU=";
+    tag = finalAttrs.version;
+    hash = "sha256-siZb9D6ZGdKjlxJEgguPi9ZemWS0zY/7RwafWY6u67I=";
   };
 
   outputs = [
     "out"
     "dev"
     "doc"
-  ];
-
-  patches = [
-    # Remove when version > 1.0.9
-    (fetchpatch {
-      name = "0001-persistent-cache-cpp-Fix-compatibility-with-Boost-1.89.patch";
-      url = "https://gitlab.com/ubports/development/core/lib-cpp/persistent-cache-cpp/-/commit/121397b58bdb2d6750a41bec0cf1676e4e9b8cf5.patch";
-      hash = "sha256-QKPf5E49NNZ+rzCCknJNQjcd/bEgHuh23RBM892Xz1o=";
-    })
   ];
 
   postPatch = ''
@@ -86,7 +76,10 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   passthru = {
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      versionCheck = true;
+    };
     updateScript = gitUpdater { };
   };
 

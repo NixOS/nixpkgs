@@ -3,7 +3,7 @@
   stdenv,
   libxml2,
   libxslt,
-  fetchhg,
+  fetchFromGitHub,
 }:
 
 # Upstream maintains documentation (sources of https://nginx.org) in separate
@@ -14,13 +14,13 @@
 # $out/bin/nginx, but we have no better options.
 stdenv.mkDerivation {
   pname = "nginx-doc-unstable";
-  version = "2022-05-05";
-  src = fetchhg {
-    url = "https://hg.nginx.org/nginx.org";
-    rev = "a3aee2697d4e";
-    sha256 = "029n4mnmjw94h01qalmjgf1c2h3h7wm798xv5knk3padxiy4m28b";
+  version = "0-unstable-2026-05-15";
+  src = fetchFromGitHub {
+    owner = "nginx";
+    repo = "nginx.org";
+    rev = "7884e3ae20269c6aa718dc104c0c578f797e5269";
+    hash = "sha256-ut2LRZg2gyGPbili7XcOH0wZ/nI3ArA2RGWJKcZTBOk=";
   };
-  patches = [ ./exclude-google-analytics.patch ];
   nativeBuildInputs = [
     libxslt
     libxml2

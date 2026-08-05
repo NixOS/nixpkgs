@@ -14,14 +14,14 @@
   webtest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pecan";
-  version = "1.7.0";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-feFb9KJgDcWEvtDyVDHf7WvyCnpbyTWkjSzlAGMzmBU=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-L5+86obo2/Gi0olUIlVHY0oonbcgHndkUWpdzobBFt4=";
   };
 
   build-system = [ setuptools ];
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "WSGI object-dispatching web framework";
     homepage = "https://www.pecanpy.org/";
-    changelog = "https://github.com/pecan/pecan/releases/tag/${version}";
+    changelog = "https://github.com/pecan/pecan/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ applePrincess ];
   };
-}
+})

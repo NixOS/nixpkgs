@@ -7,7 +7,8 @@
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cdist";
   version = "7.0.0";
-  format = "setuptools";
+  pyproject = true;
+
   outputs = [
     "out"
     "man"
@@ -21,6 +22,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     rev = finalAttrs.version;
     hash = "sha256-lIx0RtGQJdY2e00azI9yS6TV+5pCegpKOOD0dQmgMqA=";
   };
+
+  build-system = with python3Packages; [ setuptools ];
 
   nativeBuildInputs = with python3Packages; [
     six

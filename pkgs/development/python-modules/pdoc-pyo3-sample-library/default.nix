@@ -9,19 +9,19 @@
   libiconv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pdoc-pyo3-sample-library";
   version = "1.0.11";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pdoc_pyo3_sample_library";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-ZGMo7WgymkSDQu8tc4rTfWNsIWO0AlDPG0OzpKRq3oA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
+    inherit (finalAttrs) src;
     hash = "sha256-XqXkheK8OEzlLEbq09KMRFxrjJBnFaxvj4rIL2gmydA=";
   };
 
@@ -45,4 +45,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.pbsds ];
   };
-}
+})

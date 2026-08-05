@@ -6,6 +6,7 @@
   pkg-config,
   libqalculate,
   gtk3,
+  gtk-mac-integration-gtk3,
   curl,
   wrapGAppsHook3,
   desktopToDarwinBundle,
@@ -13,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qalculate-gtk";
-  version = "5.9.0";
+  version = "5.12.0";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "qalculate-gtk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5rldVskEoCJi6SvBn4xbGUB9wb6lObToi8gN3e8FvHY=";
+    hash = "sha256-c0n0iu8KB0sK7dnvMcwQAFQvtOmaBpET4oRRufliN4k=";
   };
 
   hardeningDisable = [ "format" ];
@@ -30,11 +31,16 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+
   buildInputs = [
     libqalculate
     gtk3
     curl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    gtk-mac-integration-gtk3
   ];
+
   enableParallelBuilding = true;
 
   meta = {

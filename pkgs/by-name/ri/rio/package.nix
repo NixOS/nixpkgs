@@ -11,6 +11,7 @@
   cmake,
   ncurses,
   scdoc,
+  shaderc,
   pkg-config,
   gcc-unwrapped,
   fontconfig,
@@ -50,16 +51,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rio";
-  version = "0.2.37";
+  version = "0.5.9";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5otVXZf8C1yGpfJ8EC5cs8a97KB3+EOI8ulnCI1dspU=";
+    hash = "sha256-gZW7qPGDxM9+ZKHBJssGH3xvdpStXAzazwNQK/FaIfk=";
   };
 
-  cargoHash = "sha256-MGCH3l37ldBYygRv7IMDV5Coy1kjMi1a7ihjRS63ESA=";
+  cargoHash = "sha256-a3JO5CQ8nGucXEWdO5jZD4xPOs9SQlHvI9kjd94nGNc=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -71,6 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cmake
     pkg-config
     autoPatchelfHook
+    shaderc
   ];
 
   runtimeDependencies = rlinkLibs;
@@ -90,8 +92,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildFeatures = [ ] ++ lib.optional withX11 "x11" ++ lib.optional withWayland "wayland";
 
   checkFlags = [
-    # Fail to run in sandbox environment.
-    "--skip=sys::unix::eventedfd::EventedFd"
+    # These build "dead" contexts, which carry the placeholder shell PID 1.
+    # Dropping one sends SIGHUP to that PID, and the builder is PID 1 inside the
+    # sandbox, so the tests kill the build. Workaround until
+    # https://github.com/raphamorim/rio/pull/1812 is merged.
+    "--skip=context::test::"
+    "--skip=context::title::test::test_update_title"
   ];
 
   postInstall = ''
@@ -99,8 +105,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -D -m 644 misc/logo.svg \
                       $out/share/icons/hicolor/scalable/apps/rio.svg
 
-    install -dm 755 "$terminfo/share/terminfo/r/"
-    tic -xe rio,rio-direct -o "$terminfo/share/terminfo" misc/rio.terminfo
+    install -dm 755 "$terminfo/share/terminfo"
+    tic -xe xterm-rio,rio -o "$terminfo/share/terminfo" misc/rio.terminfo
     mkdir -p $out/nix-support
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
 

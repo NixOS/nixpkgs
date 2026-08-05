@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cfspeedtest";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "code-inflation";
     repo = "cfspeedtest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6ZlcZZSC5WPrlskxWnLheMt5sJlHI7K4UPAPsvr8zSc=";
+    hash = "sha256-xwiWYTqs1ZQg7CQYg2IqskMV5HMrFqNstobDkh17GyU=";
   };
 
-  cargoHash = "sha256-h9X/WKKiXri4I2DBulkNnpiTaYAL9oXAx0BiTBKaEtE=";
+  cargoHash = "sha256-CBNShvjczlegOOrdULpPZ5GPdaWWqP3yhQFc9spaNlg=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -31,6 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # require internet access
   checkFlags = map (t: "--skip=${t}") [
     "speedtest::tests::test_fetch_metadata_integration"
+    "speedtest::tests::test_fetch_metadata_ipv6_timeout_error"
     "speedtest::tests::test_run_tests_does_not_retry_non_retryable_4xx"
     "speedtest::tests::test_run_tests_retries_429_and_records_success"
     "speedtest::tests::test_run_tests_retry_delay_resets_after_success"
@@ -44,7 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Unofficial CLI for speed.cloudflare.com";
     homepage = "https://github.com/code-inflation/cfspeedtest";
     changelog = "https://github.com/code-inflation/cfspeedtest/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       colemickens
       stepbrobd

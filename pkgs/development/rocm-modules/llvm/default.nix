@@ -13,7 +13,6 @@
   zstd,
   gcc-unwrapped,
   glibc,
-  replaceVars,
   libffi,
   libxml2,
   removeReferencesTo,
@@ -37,7 +36,7 @@
 }:
 
 let
-  version = "7.2.0";
+  version = "7.2.3";
   # major version of this should be the clang version ROCm forked from
   rocmLlvmVersion = "22.0.0-rocm";
   # llvmPackages_base version should match rocmLlvmVersion
@@ -119,7 +118,7 @@ let
     owner = "ROCm";
     repo = "llvm-project";
     rev = "rocm-${version}";
-    hash = "sha256-I/Bxq1JjU9N4h3vXj/tbD3xPYY4+N7QzYA8UTIq1EL0=";
+    hash = "sha256-TwFvQimbax2E37ZC/52lNkHXCgyBNfSGDBaqmas2x/s=";
   };
   llvmMajorVersion = lib.versions.major rocmLlvmVersion;
   # An llvmPackages (pkgs/development/compilers/llvm/) built from ROCm LLVM's source tree
@@ -294,17 +293,29 @@ let
 in
 overrideLlvmPackagesRocm (s: {
   libllvm = (s.prev.libllvm.override { }).overrideAttrs (old: {
-    patches = old.patches ++ [
+    patches = [
+      # Backport select ptr combine fixes so our LLVM 22 sdag fix backport can apply
       (fetchpatch {
-        # Revert of a patch that cause perf regression by pessimising loop unrolling decisions
-        # See PR and issue discussion
-        # https://github.com/ROCm/rocm-systems/issues/2865 https://github.com/ROCm/llvm-project/pull/1349
-        name = "rocm-llvm-revert-unrolling-regression.patch";
-        url = "https://github.com/ROCm/llvm-project/commit/f58b06dce1f9c15707c5f808fd002e18c2accf7e.patch";
-        hash = "sha256-pH+3C7PSDqNfOF014sA5Rvm+sc2IJMQJfysS2bvj/o0=";
-        # stripLen instead of relative to avoid filterdiff mangling /dev/null on the deleted test file
-        stripLen = 1;
+        name = "amdgpu-add-baseline-load-select-ptr-combine-test.patch";
+        url = "https://github.com/llvm/llvm-project/commit/ac27b2455ad7c89cc1f928de7beb05933a035031.patch";
+        relative = "llvm";
+        hash = "sha256-1mine1h/oqnn2tKDYW4FntyZXu/foyifrKGkqKOHrPg=";
       })
+      (fetchpatch {
+        name = "amdgpu-fix-treating-divergent-loads-as-uniform.patch";
+        url = "https://github.com/llvm/llvm-project/commit/d3c3c6bab5df051d9db12ea96add2211df9d81be.patch";
+        relative = "llvm";
+        hash = "sha256-9VB77d4d+nwX8s+JBq1PXmbmqT7oD6lRC0uDIrTgjjo=";
+      })
+      (fetchpatch {
+        name = "dag-allow-select-ptr-combine-for-non-0-address-spaces.patch";
+        url = "https://github.com/llvm/llvm-project/commit/0e1cb2de90aafa1d5dbd46fc9e6c4e743700fa8b.patch";
+        relative = "llvm";
+        hash = "sha256-6Pj3pRESaho60YhXWwaQxEKteSuziZseeT4FbZqZANk=";
+      })
+    ]
+    ++ old.patches
+    ++ [
       ./perf-increase-namestring-size.patch
       # v64i8 shuffle lowering inf loop on VBMI targets, hangs whisper-cpp etc
       # https://github.com/NixOS/nixpkgs/issues/497745

@@ -1,13 +1,12 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  nodejs,
+  fetchPypi,
+  pythonRelaxDepsHook,
   notebook,
   ipywidgets,
   ipykernel,
   numpy,
-  runCommand,
   jupyter-packaging,
   jupyter-core,
   notebook-shim,
@@ -18,32 +17,24 @@
   pillow,
   ase,
 }:
-let
-  nodeModules = runCommand "nglview-node-modules" { } ''
-    mkdir -p $out/node_modules/@jupyter-widgets/base
-    cat > $out/node_modules/@jupyter-widgets/base/package.json <<EOF
-    {
-      "name": "@jupyter-widgets/base",
-      "version": "4.1.1",
-      "main": "lib/index.js"
-    }
-    EOF
-  '';
-in
 buildPythonPackage rec {
   pname = "nglview";
   version = "4.0";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "nglviewer";
-    repo = "nglview";
-    tag = "v${version}";
-    hash = "sha256-Dacsg3+asY0THJ5qrM7+IZCnc2rhCOrbOfN7Xai63Ac=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-LAz/LFseKgpy4zkwh85ErgMIUkxapflTV4EtPtvCboM=";
   };
 
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  # NGLview demands numpy < 2.3, but nixpkgs ships >= 2.4
+  pythonRelaxDeps = [ "numpy" ];
+
   build-system = [
-    nodejs
     jupyter-packaging
     jupyter-core
     notebook-shim
@@ -57,12 +48,6 @@ buildPythonPackage rec {
     ipykernel
     numpy
   ];
-
-  preBuild = ''
-    cd js
-    cp -r ${nodeModules}/node_modules .
-    cd ..
-  '';
 
   pythonImportsCheck = [ "nglview" ];
 
@@ -80,15 +65,10 @@ buildPythonPackage rec {
     "test_movie_maker"
   ];
 
-  postInstall = ''
-    mkdir -p $out/share/jupyter/nbextensions
-    cp -r nglview/static $out/share/jupyter/nbextensions/nglview-js-widgets
-  '';
-
   meta = {
     description = "IPython/Jupyter widget to interactively view molecular structures and trajectories";
     homepage = "https://github.com/nglviewer/nglview";
-    changelog = "https://github.com/nglviewer/nglview/releases/tag/${src.tag}";
+    changelog = "https://github.com/nglviewer/nglview/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ guelakais ];
   };

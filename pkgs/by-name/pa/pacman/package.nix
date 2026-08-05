@@ -34,6 +34,9 @@
   gnugrep,
   gnupg,
 
+  # makepkg requires compgen to work
+  bashInteractive,
+
   # Tells pacman where to find ALPM hooks provided by packages.
   # This path is very likely to be used in an Arch-like root.
   sysHookDir ? "/usr/share/libalpm/hooks/",
@@ -41,20 +44,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pacman";
-  version = "7.0.0";
+  version = "7.1.0-unstable-2026-01-25";
 
   src = fetchFromGitLab {
     domain = "gitlab.archlinux.org";
     owner = "pacman";
     repo = "pacman";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-ejOBxN2HjV4dZwFA7zvPz3JUJa0xiJ/jZ+evEQYG1Mc=";
+    rev = "cb7452f63414291b52061166ab2ebf1083897917";
+    hash = "sha256-ocynGQ1oIeaQgLlCTCrxq/ihxziDMqrIPKAJThvV7SE=";
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [
     asciidoc
+    bashInteractive
     gettext
     installShellFiles
     libarchive
@@ -101,10 +105,6 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail "/bin/true" "${coreutils}/bin/true"
       substituteInPlace scripts/repo-add.sh.in \
         --replace-fail bsdtar "${libarchive}/bin/bsdtar"
-
-      # Fix https://gitlab.archlinux.org/pacman/pacman/-/issues/171
-      substituteInPlace scripts/libmakepkg/source/git.sh.in \
-        --replace-warn "---mirror" "--mirror"
     '';
 
   mesonFlags = [

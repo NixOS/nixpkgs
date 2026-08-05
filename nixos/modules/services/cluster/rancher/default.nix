@@ -518,6 +518,12 @@ let
           default = null;
         };
 
+        nodeExternalIP = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          description = "IPv4/IPv6 external addresses to advertise for node.";
+          default = null;
+        };
+
         selinux = lib.mkOption {
           type = lib.types.bool;
           description = "Enable SELinux in containerd.";
@@ -826,8 +832,8 @@ let
             "${name}: token, tokenFile or configPath (with 'token' or 'token-file' keys) should be set if role is 'agent'"
           )
           ++ (lib.optional (
-            cfg.role == "agent" && !(cfg.agentTokenFile != null || cfg.agentToken != "")
-          ) "${name}: agentToken and agentToken should not be set if role is 'agent'");
+            cfg.role == "agent" && (cfg.agentTokenFile != null || cfg.agentToken != "")
+          ) "${name}: agentToken and agentTokenFile should not be set if role is 'agent'");
 
         environment.systemPackages = [ config.services.${name}.package ];
 
@@ -936,6 +942,7 @@ let
                 ++ (lib.optionals (cfg.nodeLabel != [ ]) (map (l: "--node-label=${l}") cfg.nodeLabel))
                 ++ (lib.optionals (cfg.nodeTaint != [ ]) (map (t: "--node-taint=${t}") cfg.nodeTaint))
                 ++ (lib.optional (cfg.nodeIP != null) "--node-ip=${cfg.nodeIP}")
+                ++ (lib.optional (cfg.nodeExternalIP != null) "--node-external-ip=${cfg.nodeExternalIP}")
                 ++ (lib.optional cfg.selinux "--selinux")
                 ++ (lib.optional (kubeletParams != { }) "--kubelet-arg=config=${kubeletConfig}")
                 ++ (lib.optional (cfg.extraKubeProxyConfig != { }) "--kube-proxy-arg=config=${kubeProxyConfig}")

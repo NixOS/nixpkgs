@@ -1,6 +1,6 @@
 {
   pkgs,
-  systemdStage1 ? false,
+  systemdStage1,
   ...
 }:
 

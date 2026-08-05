@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
           xmessage
           xterm
         ]
-      }" \
+      }"
   '';
 
   meta = {

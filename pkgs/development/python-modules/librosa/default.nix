@@ -34,13 +34,13 @@
   resampy,
   samplerate,
   writableTmpDirAsHomeHook,
-  pythonAtLeast,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "librosa";
   version = "0.11.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "librosa";
@@ -112,6 +112,11 @@ buildPythonPackage (finalAttrs: {
     "test_unknown_axis"
     "test_axis_bound_warning"
     "test_auto_aspect"
+
+    # audioread.exceptions.NoBackendError
+    "test_get_duration_audioread"
+    "test_get_samplerate_audioread"
+    "test_load_force_audioread"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     # AssertionError (numerical comparison fails)
@@ -128,13 +133,12 @@ buildPythonPackage (finalAttrs: {
     "test_istft_multi"
     "test_pitch_shift_multi"
     "test_time_stretch_multi"
-  ]
-  ++ lib.optionals (pythonAtLeast "3.14") [
-    # ValueError: cannot resize an array that references or is referenced
-    "test_resample_mono"
     "test_resample_multichannel"
-    "test_resample_scale"
-    "test_resample_stereo"
+  ];
+
+  disabledTestPaths = [
+    # matplotlib 3.11 exceeds tolerances for image comparison
+    "tests/test_display.py"
   ];
 
   meta = {

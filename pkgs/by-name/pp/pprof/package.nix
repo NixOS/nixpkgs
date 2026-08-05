@@ -7,13 +7,13 @@
 
 buildGoModule {
   pname = "pprof";
-  version = "0-unstable-2025-03-02";
+  version = "0-unstable-2026-03-02";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "pprof";
-    rev = "9094ed2288e75ea6574fce30e1474932a96bb048";
-    hash = "sha256-pvjKxBHIL1wq24Hsq3UOtYh+MEH4G1dOSz4lEyiTPRc=";
+    rev = "a15ffb7f9dccb95074ad153aef0f1fcbb01e61e3";
+    hash = "sha256-l+D7wbu+Nu8ePmDvhfDgOnu8jcn6mH9Wt3aUPOK+LsM=";
   };
 
   nativeCheckInputs = [
@@ -24,7 +24,7 @@ buildGoModule {
     rm -rf browsertests   # somewhat independent module to ignore.
   '';
 
-  vendorHash = "sha256-oOjkjVb3OIGMwz3/85KTewXISpBZM3o1BfFG9aysFbo=";
+  vendorHash = "sha256-nGBPg0OV6sOSpKEY+EPt9v5eIm/3OrxNYLJDOcdDwio=";
 
   meta = {
     description = "Tool for visualization and analysis of profiling data";

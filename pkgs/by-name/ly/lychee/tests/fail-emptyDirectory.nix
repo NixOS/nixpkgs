@@ -2,6 +2,7 @@
   runCommand,
   testers,
   emptyDirectory,
+  jq,
 }:
 let
   sitePkg = runCommand "site" { } ''
@@ -19,14 +20,30 @@ let
       # cannot check URI: InvalidUrlRemap("The remapping pattern must produce a valid URL, but it is not: /nix/store/4d0ix...empty-directory/foo
       "https://example.com" = emptyDirectory;
     };
+    extraArgs = [
+      "--format"
+      "json"
+      "--output"
+      "${placeholder "out"}"
+    ];
   };
 
   failure = testers.testBuildFailure check;
 in
-runCommand "link-check-fail" { inherit failure; } ''
-  # The details of the message might change, but we have to make sure the
-  # correct error is reported, so that we know it's not something else that
-  # went wrong.
-  grep 'empty-directory/foo.*Cannot find file' $failure/testBuildFailure.log >/dev/null
-  touch $out
-''
+runCommand "link-check-fail"
+  {
+    nativeBuildInputs = [ jq ];
+    inherit failure;
+  }
+  ''
+    # The details of the message might change, but we have to make sure the
+    # correct error is reported, so that we know it's not something else that
+    # went wrong.
+    jq -e '.error_map | to_entries[] | .value[] | select(.url | test("empty-directory/foo")) | .status.text | test("File not found")' $failure/result > /dev/null || {
+      echo Lychee output:
+      jq . $failure/result
+      echo 'Did not find expected error in JSON output. Adjust test if behavior is acceptable. It should find the broken link to non-existent `foo`.'
+      exit 1
+    }
+    touch $out
+  ''

@@ -73,6 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/GNOME/libgit2-glib";
     license = lib.licenses.lgpl21Plus;
     teams = [ lib.teams.gnome ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 })

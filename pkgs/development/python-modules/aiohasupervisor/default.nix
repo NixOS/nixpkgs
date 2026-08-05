@@ -6,34 +6,35 @@
   fetchFromGitHub,
   mashumaro,
   orjson,
+  pyprojectVersionPatchHook,
   pytest-aiohttp,
   pytest-cov-stub,
   pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "aiohasupervisor";
-  version = "0.3.3";
+  version = "0.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "python-supervisor-client";
     tag = version;
-    hash = "sha256-v6w+g1M3VR/an3a5MfWf8fDCHNzRC4+05L7GW45PzWU=";
+    hash = "sha256-qIj3kiKSo0aUj7b250c39FqxU3jV6uegmBlxR6wOkQ8=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"' \
-      --replace-fail "setuptools>=68.0,<80.10" "setuptools"
+      --replace-fail "setuptools>=68.0,<82.1" "setuptools"
   '';
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ setuptools ];
 
@@ -50,6 +51,11 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-timeout
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # mocked url differs with empty query param value vs dropped query param
+    "test_download_backup"
   ];
 
   pythonImportsCheck = [ "aiohasupervisor" ];

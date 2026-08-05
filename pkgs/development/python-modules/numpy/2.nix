@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   python,
   pythonAtLeast,
   buildPythonPackage,
@@ -13,15 +14,20 @@
   meson-python,
   mesonEmulatorHook,
   pkg-config,
-  xcbuild,
 
   # native dependencies
   blas,
   coreutils,
   lapack,
 
+  checkPhaseThreadLimitHook,
+
   # Reverse dependency
+  astropy,
+  numba,
+  pandas,
   sage,
+  xarray,
 
   # tests
   hypothesis,
@@ -31,11 +37,12 @@
   typing-extensions,
 }:
 
-assert (!blas.isILP64) && (!lapack.isILP64);
+# Verify these are compatible
+assert blas.isILP64 == lapack.isILP64;
 
 buildPythonPackage (finalAttrs: {
   pname = "numpy";
-  version = "2.4.2";
+  version = "2.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -43,14 +50,17 @@ buildPythonPackage (finalAttrs: {
     repo = "numpy";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-HFNa7siXRIBBjWrkqQd8QAPWQQsTrYFXNq2DRzVmkQk=";
+    hash = "sha256-IriSrnGAZHvJ7m97s12BydNQZDZunCVtRgj/iSgw5Vc=";
   };
 
-  patches = lib.optionals python.hasDistutilsCxxPatch [
-    # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
-    # Patching of numpy.distutils is needed to prevent it from undoing the
-    # patch to distutils.
-    ./numpy-distutils-C++.patch
+  patches = [
+    # Fix for test failure on i686. Remove with next release.
+    # Upstream report: https://github.com/numpy/numpy/issues/32060
+    # Upstream PR: https://github.com/numpy/numpy/pull/32064
+    (fetchpatch {
+      url = "https://github.com/numpy/numpy/commit/0e1dce62e27f79be9d6552487787a19b7f95cfbf.patch";
+      hash = "sha256-mQjf6y/mLSgx9+G70/r9U3VJg5zIrl/6ANQhpP2LGmg=";
+    })
   ];
 
   postPatch = ''
@@ -63,22 +73,33 @@ buildPythonPackage (finalAttrs: {
       --replace-fail '/bin/true' '${lib.getExe' coreutils "true"}'
   '';
 
+  mesonFlags = [
+    # See https://numpy.org/devdocs/building/blas_lapack.html
+    "-Duse-ilp64=${if blas.isILP64 then "true" else "false"}"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isLoongArch64) [
+    # This is required to support CPUs with feature-sets earlier than x86-64-v2
+    # (before 2009). This will still build optimizations for newer features, but
+    # allow for importing with older machines. See:
+    #
+    #  - https://github.com/NixOS/nixpkgs/issues/496822
+    #  - https://numpy.org/devdocs/reference/simd/build-options.html
+    #  - https://github.com/numpy/numpy/issues/31073
+    #
+    # NOTE: It is possible to enable CPU features based upon attributes defined
+    # in `lib/systems/architectures.nix`, but that might trigger tons of
+    # rebuilds on old x86_64 CPU machines, and it will be too complex for
+    # maintenance.
+    (lib.mesonOption "cpu-baseline" "none")
+  ];
+
   build-system = [
     cython
     gfortran
     meson-python
     pkg-config
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcrun ]
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
-
-  # we default openblas to build with 64 threads
-  # if a machine has more than 64 threads, it will segfault
-  # see https://github.com/OpenMathLib/OpenBLAS/issues/2993
-  preConfigure = ''
-    sed -i 's/-faltivec//' numpy/distutils/system_info.py
-    export OMP_NUM_THREADS=$((NIX_BUILD_CORES > 64 ? 64 : NIX_BUILD_CORES))
-  '';
 
   buildInputs = [
     blas
@@ -97,6 +118,18 @@ buildPythonPackage (finalAttrs: {
     pytest-xdist
     setuptools
     typing-extensions
+  ];
+
+  # Enables any dependent package to easily find numpy.pc via standard
+  # pkg-config call. The `$out/include` symlink matches what's written in the
+  # numpy.pc file.
+  postInstall = ''
+    ln -s $out/${python.sitePackages}/numpy/_core/lib/pkgconfig $out/lib/pkgconfig
+    ln -s ${placeholder "out"}/${finalAttrs.passthru.coreIncludeInnerDir} $out/include
+  '';
+
+  propagatedNativeBuildInputs = [
+    checkPhaseThreadLimitHook
   ];
 
   preCheck = ''
@@ -134,6 +167,10 @@ buildPythonPackage (finalAttrs: {
     "test_quad_precision" # AssertionError: selectedrealkind(32): expected 16 but got -1
     "test_big_arrays" # ValueError: array is too big; `arr.size * arr.dtype.itemsize` is larger tha...
     "test_multinomial_pvals_float32" # Failed: DID NOT RAISE <class 'ValueError'>
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isRiscV64 [
+    "test_floor_division_errors" # FloatingPointError: invalid value encountered in floor_divide
+    "test_unary_spurious_fpexception" # AssertionError: Got warnings: [<warnings.WarningMessage ...>]
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # AssertionError: (np.int64(0), np.longdouble('9.9999999999999994515e-21'), np.longdouble('3.9696755572509052902e+20'), 'arctanh')
@@ -174,9 +211,23 @@ buildPythonPackage (finalAttrs: {
       name = "site.cfg";
       text = lib.generators.toINI { } finalAttrs.finalPackage.buildConfig;
     };
-    coreIncludeDir = "${finalAttrs.finalPackage}/${python.sitePackages}/numpy/_core/include";
+    # Need to be defined with two variables for postInstall to use `placeholder
+    # "out"` where here we have to use `${finalAttrs.finalPackage}`, that would
+    # cause infinite recursion if used in postInstall too.
+    coreIncludeInnerDir = "${python.sitePackages}/numpy/_core/include";
+    coreIncludeDir = "${finalAttrs.finalPackage}/${finalAttrs.finalPackage.passthru.coreIncludeInnerDir}";
     tests = {
-      inherit sage;
+      # NOTE: It is important to check these central dependent packages when
+      # issuing Numpy PRs and especially version bumps (even minor version
+      # bumps) - evidently these have caused issues in staging-next in the
+      # past.
+      inherit
+        astropy
+        numba
+        pandas
+        sage
+        xarray
+        ;
     };
   };
 

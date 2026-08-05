@@ -44,7 +44,6 @@ let
       "aarch64-linux"
       "aarch64-darwin"
       "x86_64-linux"
-      "x86_64-darwin"
     ];
     maintainers = [ ];
   };
@@ -126,20 +125,10 @@ let
   darwin = stdenv.mkDerivation {
     inherit pname version passthru;
 
-    src =
-      let
-        arch = selectSystem {
-          x86_64-darwin = "x64";
-          aarch64-darwin = "arm64";
-        };
-      in
-      fetchurl {
-        url = "https://github.com/wavetermdev/waveterm/releases/download/v${version}/Wave-darwin-${arch}-${version}.zip";
-        hash = selectSystem {
-          x86_64-darwin = "sha256-U22AVln0IhGrL41YUbJMi2agjfAs1N8Zd6msElpAXD8=";
-          aarch64-darwin = "sha256-NY/KFFGgtrQr9YL32nudWeTIGNDjswelcOD1wo+Jh3s=";
-        };
-      };
+    src = fetchurl {
+      url = "https://github.com/wavetermdev/waveterm/releases/download/v${version}/Wave-darwin-arm64-${version}.zip";
+      hash = "sha256-NY/KFFGgtrQr9YL32nudWeTIGNDjswelcOD1wo+Jh3s=";
+    };
 
     nativeBuildInputs = [ unzip ];
 

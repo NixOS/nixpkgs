@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "liborcus";
-  version = "0.19.2";
+  version = "0.21.0";
 
   src = fetchFromGitLab {
     owner = "orcus";
     repo = "orcus";
     rev = finalAttrs.version;
-    hash = "sha256-+9C52H99c/kL5DEIoXV+WcLnTftRbicRLQN/FdIXBw8=";
+    hash = "sha256-vR/TtfUOa2Fmc4APfqG+Xu+mTAILGV+/JJnnmNHNJdQ=";
   };
 
   nativeBuildInputs = [

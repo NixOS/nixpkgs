@@ -38,7 +38,7 @@
 
 let
   pname = "mindustry";
-  version = "154.3";
+  version = "159.3";
   buildVersion = makeBuildVersion version;
 
   jdk = jdk17;
@@ -48,21 +48,21 @@ let
     owner = "Anuken";
     repo = "Mindustry";
     tag = "v${version}";
-    hash = "sha256-PguKdpZ3yaV7eW1NKZpbsOEUiMxX6gdYZxJ4p7wkvi8=";
+    hash = "sha256-i29EbiKBVWab9YJWPWeVFQLLvRcigvHJPc7803A5e6g=";
   };
   Arc = fetchFromGitHub {
     name = "Arc-source";
     owner = "Anuken";
     repo = "Arc";
     tag = "v${version}";
-    hash = "sha256-RMoXtyDh9DbEYxYLAopItp6Bf8kg92Av+g5lSqKFhdU=";
+    hash = "sha256-1HEPON+cfsPYhPtYwVhj7zrc7fMdwpOA6H2r8yp4erE=";
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
     repo = "soloud";
-    # This is pinned in Arc's arc-core/build.gradle
-    tag = "2025.12.01";
-    hash = "sha256-I+VZW34eRGn1RJmK8e9nVSXIFSOK/pER+xEhmXeUB4Y=";
+    # This is pinned in Arc's build.gradle
+    tag = "2026.06.01";
+    hash = "sha256-0/A3myfCYb+AMP3WH6stmXeb1eiA4dgX6H1Quj4AD9Q=";
   };
 
   desktopItem = makeDesktopItem {
@@ -92,17 +92,31 @@ stdenv.mkDerivation {
     runHook postUnpack
   '';
 
-  patches = [
-    # Fixes a build system issue where the classes UnsafeBuffers and Java16Buffers get built
-    # and copied multiple times, which causes conflicts when zipping up the final arc-core jar.
-    ./0001-fix-duplicate-classes.patch
-  ];
-
   postPatch = ''
     # Ensure the prebuilt shared objects don't accidentally get shipped
     rm -r Arc/natives/natives-*/libs/*
     rm -r Arc/backends/backend-*/libs/*
     rm -f Arc/arc-core/unsafe/unsafe.jar
+
+    # Remove unbuildable Android
+    substituteInPlace Arc/settings.gradle \
+      --replace-fail 'include ":natives:natives-android"' ""
+    rm Arc/backends/backend-android/build.gradle
+
+    # avoid a circular dependency with rebuilding those
+    pushd Arc/arc-core/unsafe/
+    javac --target 8 --source 8 -d . UnsafeBuffers.java
+    javac --target 16 --source 16 -d . Java16Buffers.java
+    jar cvf unsafe.jar arc
+    rm -r arc
+    popd
+
+    # We need to mock those as otherwise mitmCache tries to download them
+    pushd Arc/backends/backend-sdl/
+    mkdir -p build/jnigen/sources/
+    touch build/jnigen/sources/glew.zip
+    touch build/jnigen/sources/sdlmingw.tar.gz
+    popd
 
     cd Mindustry
 
@@ -152,30 +166,23 @@ stdenv.mkDerivation {
 
   buildPhase = ''
     runHook preBuild
-
-    pushd ../Arc
-    gradle :arc-core:recompileUnsafe
-    popd
   ''
   + lib.optionalString enableServer ''
     gradle server:dist
   ''
   + lib.optionalString enableClient ''
     pushd ../Arc
-    # unsupported platforms need to be excluded because their native build tools aren't available
-    gradle jnigenBuild -x jnigenBuildAndroid -x jnigenBuildWindows -x jnigenBuildWindows64
-    gradle jnigenJarNativesDesktop
-    glewlib=${lib.getLib glew}/lib/libGLEW.so
-    sdllib=${lib.getLib SDL2}/lib/libSDL2.so
-    patchelf backends/backend-sdl/build/Arc/backends/backend-sdl/libs/linux64/libsdl-arc*.so \
-      --add-needed "$glewlib" \
-      --add-needed "$sdllib"
-    # Put the freshly-built libraries where the pre-built libraries used to be:
-    cp arc-core/libs/*/* natives/natives-desktop/libs/
-    cp backends/backend-sdl/build/Arc/backends/backend-sdl/libs/*/* natives/natives-desktop/libs/
-    # below target dirs are based on Arc upstream: Arc/extensions/../build.gradle
-    cp extensions/freetype/build/Arc/extensions/freetype/libs/*/* natives/natives-freetype-desktop/libs/
-    cp extensions/filedialogs/build/Arc/extensions/filedialogs/libs/*/* natives/natives-filedialogs/libs/
+    gradle jnigenBuildLinux_x86_64
+    # Copy freshly-built libraries to where Gradle resource dirs expect them.
+    # Using jnigenBuildLinux64 skips the postJni tasks, so we copy manually.
+    # arc-core uses relative libsDir, others use absolute which causes path doubling.
+    cp arc-core/build/natives/*/* natives/natives-desktop/libs/
+    cp extensions/freetype/build/natives/*/* natives/natives-freetype-desktop/libs/
+    cp extensions/filedialogs/build/natives/*/* natives/natives-filedialogs/libs/
+    patchelf backends/backend-sdl/libs/linux64/libsdl-arc*.so \
+      --add-needed "${lib.getLib glew}/lib/libGLEW.so" \
+      --add-needed "${lib.getLib SDL2}/lib/libSDL2.so"
+    gradle jnigenPackageAllDesktop
     popd
 
     gradle desktop:dist

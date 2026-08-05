@@ -21,13 +21,7 @@ let
       "s390x"
     else
       throw "Unsupported arch: ${stdenv.hostPlatform.system}";
-  platform =
-    if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
-      "macos_arm64"
-    else if stdenv.hostPlatform.isDarwin then
-      "macos"
-    else
-      "linux_${arch}";
+  platform = if stdenv.hostPlatform.isDarwin then "macos_arm64" else "linux_${arch}";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ibmcloud-cli";
@@ -37,7 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://download.clis.cloud.ibm.com/ibm-cloud-cli/${finalAttrs.version}/binaries/IBM_Cloud_CLI_${finalAttrs.version}_${platform}.tgz";
     hash =
       {
-        "x86_64-darwin" = "sha256-/sekaJxa8+inOBsHucyPE3yWM+Z+64jArGwCht8Corc=";
         "aarch64-darwin" = "sha256-JrTFbufKjX9uUwUcfxCDjqbZx6drgSmqn0F/xtce/mE=";
         "x86_64-linux" = "sha256-Zu6XFQeD9Dlny6cex7X6P428MiQftwn9RR4QL3H/0AU=";
         "aarch64-linux" = "sha256-pfHhAszhbbLKkJnwP94dCaDZNFTLr+2tnO3aHxOch+U=";

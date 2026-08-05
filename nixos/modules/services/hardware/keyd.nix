@@ -5,62 +5,67 @@
   ...
 }:
 let
+  inherit (lib) types;
+  inherit (lib.attrsets) mapAttrs' mapAttrsToList nameValuePair;
+  inherit (lib.generators) toINI;
+  inherit (lib.modules) mkDefault mkIf mkRemovedOptionModule;
+  inherit (lib.options) literalExpression mkEnableOption mkOption;
+  inherit (lib.strings) concatStringsSep;
+
   cfg = config.services.keyd;
 
-  keyboardOptions =
-    { ... }:
-    {
-      options = {
-        ids = lib.mkOption {
-          type = lib.types.listOf lib.types.str;
-          default = [ "*" ];
-          example = [
-            "*"
-            "-0123:0456"
-          ];
-          description = ''
-            Device identifiers, as shown by {manpage}`keyd(1)`.
-          '';
-        };
+  keyboardOptions = {
+    options = {
+      ids = mkOption {
+        type = with types; listOf str;
+        default = [ "*" ];
+        example = [
+          "*"
+          "-0123:0456"
+        ];
+        description = ''
+          Device identifiers, as shown by {manpage}`keyd(1)`.
+        '';
+      };
 
-        settings = lib.mkOption {
-          type = (pkgs.formats.ini { }).type;
-          default = { };
-          example = {
-            main = {
-              capslock = "overload(control, esc)";
-              rightalt = "layer(rightalt)";
-            };
-
-            rightalt = {
-              j = "down";
-              k = "up";
-              h = "left";
-              l = "right";
-            };
+      settings = mkOption {
+        inherit (pkgs.formats.ini { }) type;
+        default = { };
+        example = {
+          main = {
+            capslock = "overload(control, esc)";
+            rightalt = "layer(rightalt)";
           };
-          description = ''
-            Configuration, except `ids` section, that is written to {file}`/etc/keyd/<keyboard>.conf`.
-            Appropriate names can be used to write non-alpha keys, for example "equal" instead of "=" sign (see <https://github.com/NixOS/nixpkgs/issues/236622>).
-            See <https://github.com/rvaiya/keyd> how to configure.
-          '';
-        };
 
-        extraConfig = lib.mkOption {
-          type = lib.types.lines;
-          default = "";
-          example = ''
-            [control+shift]
-            h = left
-          '';
-          description = ''
-            Extra configuration that is appended to the end of the file.
-            **Do not** write `ids` section here, use a separate option for it.
-            You can use this option to define compound layers that must always be defined after the layer they are comprised.
-          '';
+          rightalt = {
+            j = "down";
+            k = "up";
+            h = "left";
+            l = "right";
+          };
         };
+        description = ''
+          Configuration, except `ids` section, that is written to {file}`/etc/keyd/<keyboard>.conf`.
+          Appropriate names can be used to write non-alpha keys, for example "equal" instead of "=" sign (see <https://github.com/NixOS/nixpkgs/issues/236622>).
+          See <https://github.com/rvaiya/keyd> how to configure.
+        '';
+      };
+
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''
+          [control+shift]
+          h = left
+        '';
+        description = ''
+          Extra configuration that is appended to the end of the file.
+          **Do not** write `ids` section here, use a separate option for it.
+          You can use this option to define compound layers that must always be defined after the layer they are comprised.
+        '';
       };
     };
+  };
 in
 {
   imports = [
@@ -73,14 +78,14 @@ in
   ];
 
   options.services.keyd = {
-    enable = lib.mkEnableOption "keyd, a key remapping daemon";
+    enable = mkEnableOption "keyd, a key remapping daemon";
 
     package = lib.mkPackageOption pkgs "keyd" { };
 
-    keyboards = lib.mkOption {
-      type = lib.types.attrsOf (lib.types.submodule keyboardOptions);
+    keyboards = mkOption {
+      type = with types; attrsOf (submodule keyboardOptions);
       default = { };
-      example = lib.literalExpression ''
+      example = literalExpression ''
         {
           default = {
             ids = [ "*" ];
@@ -106,22 +111,22 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.enable {
     # Creates separate files in the `/etc/keyd/` directory for each key in the dictionary
-    environment.etc = lib.mapAttrs' (
+    environment.etc = mapAttrs' (
       name: options:
-      lib.nameValuePair "keyd/${name}.conf" {
+      nameValuePair "keyd/${name}.conf" {
         text = ''
           [ids]
-          ${lib.concatStringsSep "\n" options.ids}
+          ${concatStringsSep "\n" options.ids}
 
-          ${lib.generators.toINI { } options.settings}
+          ${toINI { } options.settings}
           ${options.extraConfig}
         '';
       }
     ) cfg.keyboards;
 
-    hardware.uinput.enable = lib.mkDefault true;
+    hardware.uinput.enable = mkDefault true;
 
     systemd.services.keyd = {
       description = "Keyd remapping daemon";
@@ -129,18 +134,12 @@ in
 
       wantedBy = [ "multi-user.target" ];
 
-      restartTriggers = lib.mapAttrsToList (
-        name: options: config.environment.etc."keyd/${name}.conf".source
+      restartTriggers = mapAttrsToList (
+        name: _options: config.environment.etc."keyd/${name}.conf".source
       ) cfg.keyboards;
 
-      # this is configurable in 2.4.2, later versions seem to remove this option.
-      # post-2.4.2 may need to set makeFlags in the derivation:
-      #
-      #     makeFlags = [ "SOCKET_PATH/run/keyd/keyd.socket" ];
-      environment.KEYD_SOCKET = "/run/keyd/keyd.sock";
-
       serviceConfig = {
-        ExecStart = lib.getExe' cfg.package "keyd";
+        ExecStart = lib.getExe cfg.package;
         Restart = "always";
 
         # TODO investigate why it doesn't work propeprly with DynamicUser

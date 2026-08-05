@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "msmart-ng";
-  version = "2025.12.0";
+  version = "2026.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mill1000";
     repo = "midea-msmart";
     tag = version;
-    hash = "sha256-zRTs6nRgI5ixbHzDXfAjJ2JW/9y+b7vzAyUGk120xj4=";
+    hash = "sha256-OW5++yd+o2KqaFWTo/RiLjK1HO2l9WSDxkiX3lYtaUs=";
   };
 
   build-system = [

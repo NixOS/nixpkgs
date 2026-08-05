@@ -109,7 +109,7 @@ in
         "-f",
         "qcow2",
         "-b",
-        "${nodes.machine.system.build.image}/${nodes.machine.image.repart.imageFile}",
+        "${nodes.machine.system.build.image}/${nodes.machine.image.filePath}",
         "-F",
         "raw",
         tmp_disk_image.name,

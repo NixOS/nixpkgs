@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   lark,
+  pyprojectVersionPatchHook,
   pytestCheckHook,
   regex,
   typing-extensions,
@@ -30,6 +31,8 @@ buildPythonPackage (finalAttrs: {
       --replace-fail "uv_build~=0.9.0" "uv_build"
   '';
 
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
+
   pythonRelaxDeps = [ "regex" ];
 
   dependencies = [
@@ -49,7 +52,7 @@ buildPythonPackage (finalAttrs: {
     description = "Python based Bicep parser";
     homepage = "https://github.com/gruebel/pycep";
     changelog = "https://github.com/gruebel/pycep/blob/${finalAttrs.src.tag}/CHANGELOG.md";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

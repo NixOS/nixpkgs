@@ -11,10 +11,6 @@ let
   src =
     fetchurl
       {
-        x86_64-darwin = {
-          url = "https://github.com/pinokiocomputer/pinokio/releases/download/${version}/Pinokio-${version}.dmg";
-          hash = "sha256-Il5zaVWu4icSsKmMjU9u1/Mih34fd+xNpF1nkFAFFGo=";
-        };
         x86_64-linux = {
           url = "https://github.com/pinokiocomputer/pinokio/releases/download/${version}/Pinokio-${version}.AppImage";
           hash = "sha256-/E/IAOUgxH9RWpE2/vLlQy92LOgwpHF79K/1XEtSpXI=";
@@ -30,7 +26,6 @@ let
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ByteSudoer ];
     platforms = [
-      "x86_64-darwin"
       "x86_64-linux"
     ];
     mainProgram = "pinokio";

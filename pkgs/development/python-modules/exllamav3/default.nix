@@ -7,7 +7,7 @@
 
   setuptools,
 
-  flash-attn,
+  flash-linear-attention,
   formatron,
   kbnf,
   marisa-trie,
@@ -25,16 +25,16 @@
 let
   newerThanTuring = lib.filter (version: lib.versionOlder "7.9" version) torch.cudaCapabilities;
 in
-buildPythonPackage (finalAttrs: {
+buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "exllamav3";
-  version = "0.0.25";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "turboderp-org";
     repo = "exllamav3";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CltM0bQ3mvQwUYulsVByS7mcIIy6O/P1+nq4h5UAO6E=";
+    hash = "sha256-pWdh5fiGZEkdSLXvI5DAEdj6XmBFquzew57L1YIsEg8=";
   };
 
   pythonRelaxDeps = [
@@ -58,7 +58,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
-    flash-attn
+    flash-linear-attention
     formatron
     kbnf
     marisa-trie

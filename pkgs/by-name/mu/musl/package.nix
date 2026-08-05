@@ -57,11 +57,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "musl";
-  version = "1.2.5";
+  version = "1.2.6";
 
   src = fetchurl {
     url = "https://musl.libc.org/releases/musl-${finalAttrs.version}.tar.gz";
-    sha256 = "qaEYu+hNh2TaDqDSizqz+uhHf8fkCF2QECuFlvx8deQ=";
+    hash = "sha256-1YX9O2E8ZhUfwySejtRPdwIMtebB5jWmFtP5+CRgUSo=";
   };
 
   enableParallelBuilding = true;
@@ -85,24 +85,29 @@ stdenv.mkDerivation (finalAttrs: {
       sha256 = "0hfadrycb60sm6hb6by4ycgaqc9sgrhh42k39v8xpmcvdzxrsq2n";
     })
     (fetchurl {
-      name = "CVE-2025-26519_0.patch";
-      url = "https://www.openwall.com/lists/musl/2025/02/13/1/1";
-      hash = "sha256-CJb821El2dByP04WXxPCCYMOcEWnXLpOhYBgg3y3KS4=";
+      name = "CVE-2026-6042";
+      url = "https://www.openwall.com/lists/musl/2026/04/03/2/1";
+      hash = "sha256-RE+nDlLKFY+31LrVYGN3kLv49y6AuC//hA3Wb6gwkeM=";
     })
     (fetchurl {
-      name = "CVE-2025-26519_1.patch";
-      url = "https://www.openwall.com/lists/musl/2025/02/13/1/2";
-      hash = "sha256-BiD87k6KTlLr4ep14rUdIZfr2iQkicBYaSTq+p6WBqE=";
+      name = "CVE-2026-40200.patch";
+      url = "https://www.openwall.com/lists/musl/2026/04/10/3/1";
+      hash = "sha256-HuKfZPnKjorXw0l3nWYf9rUhJqJ1ddNYaYE1elLEBvs=";
     })
-    # required for systemd user namespacing and oomd to work correctly on musl
-    # drop next release
-    # https://git.musl-libc.org/cgit/musl/commit/?id=fde29c04adbab9d5b081bf6717b5458188647f1c
-    ./stdio-skip-empty-iovec-when-buffering-is-disabled.patch
   ];
-  CFLAGS = [
-    "-fstack-protector-strong"
-  ]
-  ++ lib.optional stdenv.hostPlatform.isPower "-mlong-double-64";
+
+  env = {
+    CFLAGS = toString (
+      [
+        "-fstack-protector-strong"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isPower [
+        "-mlong-double-64"
+      ]
+    );
+
+    NIX_DONT_SET_RPATH = true;
+  };
 
   configureFlags = [
     "--enable-shared"
@@ -121,8 +126,6 @@ stdenv.mkDerivation (finalAttrs: {
   dontDisableStatic = true;
   dontAddStaticConfigureFlags = true;
   separateDebugInfo = true;
-
-  NIX_DONT_SET_RPATH = true;
 
   preBuild = ''
     ${lib.optionalString (stdenv.targetPlatform.libc == "musl" && stdenv.targetPlatform.isx86_32)

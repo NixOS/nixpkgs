@@ -82,7 +82,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
-  version = "2.86.3";
+  version = "2.88.1";
 
   outputs = [
     "bin"
@@ -95,14 +95,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
-    hash = "sha256-syEdjTS5313KBXh+8K1dfKdd7JmLlw4aqwAB0imXfGU=";
+    hash = "sha256-UauATFb26rPlBFx3TRKQrF5Mkj1Pmj2OMxI77kXBhA4=";
   };
 
   patches =
-    lib.optionals stdenv.hostPlatform.isDarwin [
-      ./darwin-compilation.patch
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMusl [
+    lib.optionals stdenv.hostPlatform.isMusl [
       ./quark_init_on_demand.patch
       ./gobject_init_on_demand.patch
     ]
@@ -373,9 +370,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C library of programming buildings blocks";
     homepage = "https://gitlab.gnome.org/GNOME/glib";
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [
-      raskin
-    ];
     teams = [ lib.teams.gnome ];
     pkgConfigModules = [
       "gio-2.0"

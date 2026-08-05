@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasm-pack";
-  version = "0.13.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
-    owner = "rustwasm";
+    owner = "wasm-bindgen";
     repo = "wasm-pack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CN1LcLX7ag+in9sosT2NYVKfhDLGv2m3zHOk2T4MFYc=";
+    hash = "sha256-+M59AC/dz8WwK9+854QZjSPuikTW+x6Nx2FKnr7qiXs=";
   };
 
-  cargoHash = "sha256-nYWvk2v+4IAk/y7fg+Z/nMH+Ml+J5k5ER8uudCQOMB8=";
+  cargoHash = "sha256-u8LFx2D9LDa9W/ghRWZ9N/vOBr0bAkTdnZt9YaKrD30=";
 
   nativeBuildInputs = [
     cmake
@@ -32,13 +32,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doCheck = false;
 
   meta = {
+    changelog = "https://github.com/wasm-bindgen/wasm-pack/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Utility that builds rust-generated WebAssembly package";
     mainProgram = "wasm-pack";
-    homepage = "https://github.com/rustwasm/wasm-pack";
+    homepage = "https://github.com/wasm-bindgen/wasm-pack";
     license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = [ lib.maintainers.dhkl ];
+    maintainers = with lib.maintainers; [
+      dhkl
+      hythera
+    ];
   };
 })

@@ -25,14 +25,14 @@
   weston,
   xwayland,
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "x11docker";
-  version = "7.6.0-unstable-2024-04-04";
+  version = "7.8.0";
   src = fetchFromGitHub {
     owner = "mviereck";
     repo = "x11docker";
-    rev = "cb29a996597839239e482409b895353b1097ce3b";
-    sha256 = "sha256-NYMr2XZ4m6uvuIGO+nzX2ksxtVLJL4zy/JebxeAvqD4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mOxPNT6psRBTuTrMgASBTBr3dZzCSxanSkHKF84lmO8=";
   };
   nativeBuildInputs = [ makeWrapper ];
 
@@ -77,4 +77,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.linux;
     mainProgram = "x11docker";
   };
-}
+})

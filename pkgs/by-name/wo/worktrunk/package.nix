@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "worktrunk";
-  version = "0.29.0";
+  version = "0.68.0";
 
   src = fetchFromGitHub {
     owner = "max-sixty";
     repo = "worktrunk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JawxnNoEv8ZDLaZmOlMrvsa/cEzmOFYv7oHWmPeOIbc=";
+    hash = "sha256-4mxWRNNrpM5Fo49Xm8ypzBS15Y8kPPFd1iPod1RwxjA=";
   };
 
-  cargoHash = "sha256-aEUnR3Dk3LFo3vJf+k550YiP3pSN6a7175d91yEned0=";
+  cargoHash = "sha256-ZEv3peP/mjDDWYw4LNuhIt8I806W/yfUKtEA7e3t7rA=";
 
   cargoBuildFlags = [ "--package=worktrunk" ];
 
@@ -39,20 +39,29 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --cmd wt \
       --bash <($out/bin/wt config shell completions bash) \
       --fish <($out/bin/wt config shell completions fish) \
-      --zsh  <($out/bin/wt config shell completions zsh)
+      --nushell <($out/bin/wt config shell completions nu) \
+      --zsh <($out/bin/wt config shell completions zsh)
+
+    # -L dereferences symlinks (e.g. skills/worktrunk/reference/README.md → repo
+    # root), so no dangling symlinks end up in $out.
+    cp -RL ${finalAttrs.src}/skills $out/
   '';
 
   nativeCheckInputs = [ gitMinimal ];
 
   checkFlags = [
-    # Expects to run inside a git repository
-    "--skip=git::recover::tests::test_current_or_recover_returns_repo_when_cwd_exists"
-    # Insta snapshot mismatch across git versions
-    "--skip=git::recover::tests::test_hint_for_repo_suggests_switch"
     # Expects `which` on PATH
     "--skip=output::commit_generation::tests::test_command_exists_known_command"
     # Integration tests use insta snapshots with environment-specific paths
     "--skip=integration_tests::"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # These tests probe the live process table — on macOS that means libproc
+    # (`proc_listallpids` / `proc_pidinfo`). Inside the Nix darwin sandbox,
+    # those calls are denied. The build process can't even read its own pid
+    # from the table, so two tests panic:
+    "--skip=shell::utils::tests::test_process_name_and_ppid_self"
+    "--skip=shell::utils::tests::test_probe_reports_invoked_name_for_sh"
   ];
 
   doInstallCheck = true;
@@ -74,6 +83,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     platforms = lib.platforms.unix;
     mainProgram = "wt";
-    maintainers = with lib.maintainers; [ siriobalmelli ];
+    maintainers = with lib.maintainers; [
+      siriobalmelli
+      DuskyElf
+      yzx9
+    ];
   };
 })

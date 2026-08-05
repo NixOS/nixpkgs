@@ -8,12 +8,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.6.40";
+  version = "1.6.42";
   pname = "memcached";
 
   src = fetchurl {
     url = "https://memcached.org/files/memcached-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-o9Ng6doiIaSb+ark5ogPLUTaayovrjmxkRucp2SI+/0=";
+    sha256 = "sha256-UPCLh51PnTbeqdkF6eqt4Vxwjjjbfppz/CHci0U5Xec=";
   };
 
   configureFlags = [

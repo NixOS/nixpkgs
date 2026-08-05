@@ -6,19 +6,24 @@
   pytestCheckHook,
   pyyaml,
   pythonAtLeast,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "configargparse";
-  version = "1.7.1";
+  version = "1.7.5";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bw2";
     repo = "ConfigArgParse";
-    tag = version;
-    hash = "sha256-wrWfQzr0smM83helOEJPbayrEpAtXJYYXIw4JnGLNho=";
+    tag = "v${version}";
+    hash = "sha256-ZRdwA3X1TCv0BIwr1gFeSi6UuziXiazciKw/6ewkpRE=";
   };
+
+  build-system = [
+    setuptools-scm
+  ];
 
   optional-dependencies = {
     yaml = [ pyyaml ];

@@ -2,7 +2,8 @@
   lib,
   stdenv,
   fetchurl,
-  gnu-efi_3,
+  fetchpatch,
+  gnu-efi,
   nixosTests,
   efibootmgr,
   openssl,
@@ -57,6 +58,16 @@ stdenv.mkDerivation (finalAttrs: {
     # Avoid leaking the build timestamp
     # https://sourceforge.net/p/refind/code/merge-requests/53/
     ./0002-preserve-dates.patch
+
+    # gnu-efi 4 compatibility
+    (fetchpatch {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/refind/-/raw/0.14.2-2/fix-target-option.patch";
+      hash = "sha256-8JxTlgbbgZnXxRrqbPMIBcuT5KEbwXQ8eURKZXeVLU0=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/refind/-/raw/0.14.2-2/gnu-efi-4-compat.patch";
+      hash = "sha256-F37fCfVhLJBQB8HnNYMN4lSA/+wfuRKUgkT8PBSdkOs=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -64,16 +75,16 @@ stdenv.mkDerivation (finalAttrs: {
     installShellFiles
   ];
 
-  buildInputs = [ gnu-efi_3 ];
+  buildInputs = [ gnu-efi ];
 
   hardeningDisable = [ "stackprotector" ];
 
   makeFlags = [
     "prefix="
-    "EFIINC=${gnu-efi_3}/include/efi"
-    "EFILIB=${gnu-efi_3}/lib"
-    "GNUEFILIB=${gnu-efi_3}/lib"
-    "EFICRT0=${gnu-efi_3}/lib"
+    "EFIINC=${gnu-efi}/include/efi"
+    "EFILIB=${gnu-efi}/lib"
+    "GNUEFILIB=${gnu-efi}/lib"
+    "EFICRT0=${gnu-efi}/lib"
     "HOSTARCH=${hostarch}"
     "ARCH=${hostarch}"
   ]

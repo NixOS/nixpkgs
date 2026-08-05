@@ -1,10 +1,12 @@
 # Generic builder for lua packages
 {
   lib,
+  stdenv,
   lua,
   wrapLua,
   luarocks_bootstrap,
   writeTextFile,
+  buildPackages,
 
   # Whether the derivation provides a lua module or not.
   luarocksCheckHook,
@@ -235,6 +237,12 @@ let
           export LUAROCKS_CONFIG="$PWD/${luarocks_config}";
           runHook postShell
         '';
+
+        disallowedReferences = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+          buildPackages.bash
+          lua.luaOnBuild
+          lua.luaOnBuild.pkgs.luarocks_bootstrap
+        ];
 
         passthru = {
           inherit lua;

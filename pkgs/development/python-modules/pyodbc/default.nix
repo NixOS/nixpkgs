@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   isPyPy,
-  unixODBC,
+  unixodbc,
 }:
 
 buildPythonPackage rec {
@@ -19,10 +19,10 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    unixODBC # for odbc_config
+    unixodbc # for odbc_config
   ];
 
-  buildInputs = [ unixODBC ];
+  buildInputs = [ unixodbc ];
 
   # Tests require a database server
   doCheck = false;

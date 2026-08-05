@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "google-guest-oslogin";
-  version = "20250821.00";
+  version = "20260214.00";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "guest-oslogin";
     rev = finalAttrs.version;
-    sha256 = "sha256-dvLr3rOzHs5gRbllxqmnkLlHUFYv9Hm2vz6AkwZoZy4=";
+    hash = "sha256-xMelRZ3OGQwZLOC03TjpUcXWqsViVWffIZcSVLz58S4=";
   };
 
   postPatch = ''
@@ -40,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     "MANDIR=$(out)/share/man"
     "SYSTEMDDIR=$(out)/etc/systemd/system"
     "PRESETDIR=$(out)/etc/systemd/system-preset"
+    "GOOGLEUSERSDIR=$(out)/google-users.d" # A readme is installed to this directory
   ];
 
   postInstall = ''

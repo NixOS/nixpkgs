@@ -21,7 +21,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "swh-auth";
-  version = "0.10.0";
+  version = "0.10.2";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -30,7 +30,7 @@ buildPythonPackage (finalAttrs: {
     owner = "devel";
     repo = "swh-auth";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8ctd5D7zT66oVNZlvRIs8pN7Fe2BhTgC+S9p1HBDO9E=";
+    hash = "sha256-fRkhSpgguBff+vIOploi8i2qzd9qmsswiC62rIcY5bE=";
   };
 
   build-system = [

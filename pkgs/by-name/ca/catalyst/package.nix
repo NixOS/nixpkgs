@@ -19,14 +19,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "catalyst";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.kitware.com";
     owner = "paraview";
     repo = "catalyst";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uPb7vgJpKquZVmSMxeWDVMiNkUdYv3oVVKu7t4+zkbs=";
+    hash = "sha256-8pBQQE5/h9LKRgFJi/KHtQPQ9rm7JyxBRVgh6Uf0Q98=";
   };
 
   nativeBuildInputs = [

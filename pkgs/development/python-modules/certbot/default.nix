@@ -5,7 +5,6 @@
   python,
   runCommand,
   fetchFromGitHub,
-  fetchpatch,
   configargparse,
   acme,
   configobj,
@@ -23,27 +22,19 @@
   writeShellScriptBin,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "certbot";
-  version = "5.2.2";
+  version = "5.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "certbot";
     repo = "certbot";
-    tag = "v${version}";
-    hash = "sha256-+LQX845Qw/T+kR846bNu9xTJ0zcL76rtp48e/Cgu6Vk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-knaEk4bjC0cdnMiO4ENvaDm/i/3tn6ZOJPdyqJxLKOs=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-test_rollback_too_many.patch";
-      url = "https://github.com/certbot/certbot/commit/4c61a450d4a843c66baab6d5d9a42ce0554e99d7.patch";
-      hash = "sha256-PSh2JXoEWNUrqxNh8X5QchyIP8KRHT60T/cLax6VRWo=";
-    })
-  ];
-
-  postPatch = "cd certbot"; # using sourceRoot would interfere with patches
+  sourceRoot = "${finalAttrs.src.name}/certbot";
 
   build-system = [ setuptools ];
 
@@ -96,9 +87,9 @@ buildPythonPackage rec {
     let
       pythonEnv = python.withPackages f;
     in
-    runCommand "certbot-with-plugins-${version}"
+    runCommand "certbot-with-plugins-${finalAttrs.version}"
       {
-        inherit pname version;
+        inherit (finalAttrs) pname version;
       }
       ''
         mkdir -p $out/bin
@@ -108,11 +99,11 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/certbot/certbot";
-    changelog = "https://github.com/certbot/certbot/blob/${src.tag}/certbot/CHANGELOG.md";
+    changelog = "https://github.com/certbot/certbot/blob/${finalAttrs.src.tag}/certbot/CHANGELOG.md";
     description = "ACME client that can obtain certs and extensibly update server configurations";
     platforms = lib.platforms.unix;
     mainProgram = "certbot";
-    maintainers = [ ];
-    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ miniharinn ];
+    license = lib.licenses.asl20;
   };
-}
+})

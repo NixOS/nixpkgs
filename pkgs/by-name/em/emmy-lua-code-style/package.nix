@@ -19,6 +19,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+  # Vendored mimalloc-2.0.9 uses ATOMIC_VAR_INIT, removed in C23.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
@@ -27,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Fast, powerful, and feature-rich Lua formatting and checking tool";
     mainProgram = "CodeFormat";
     platforms = lib.platforms.unix;
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers.nobbz ];
   };
 })
