@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "granian";
-  version = "2.8.0";
+  version = "2.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "emmett-framework";
     repo = "granian";
     tag = "v${version}";
-    hash = "sha256-vmYQk+2CBmthRcllEB7nFN+zBQ7Jq1WRBFO/Ljim74g=";
+    hash = "sha256-OCVy8OH+jt4a6fjJhtQG8BODulmVb4XFY4LDxMLgmZY=";
   };
 
   # Granian forces a custom allocator for all the things it runs,
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   cargoDeps = rustPlatform.fetchCargoVendor {
     pname = "granian";
     inherit version src;
-    hash = "sha256-IdvKvAFuE+GpnLknbVNUGEqAJghJc4sHuJkOL2tDHWI=";
+    hash = "sha256-YnQf9mJ0ujL7hq3LW3jTJfwNIzrwD5Z8tHOsrCRGOuo=";
   };
 
   nativeBuildInputs = with rustPlatform; [
