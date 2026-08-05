@@ -128,6 +128,9 @@
   "ex-pkgs-replace-vars-with": [
     "index.html#ex-pkgs-replace-vars-with"
   ],
+  "ex-pkgs-nuke-references": [
+    "index.html#ex-pkgs-nuke-references"
+  ],
   "ex-pnpm-build-hook": [
     "index.html#ex-pnpm-build-hook"
   ],
@@ -366,6 +369,9 @@
   ],
   "pkgs-replacevarswith": [
     "index.html#pkgs-replacevarswith"
+  ],
+  "pkgs-nukereferences": [
+    "index.html#pkgs-nukereferences"
   ],
   "part-toolchains": [
     "index.html#part-toolchains"
