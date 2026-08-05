@@ -72,7 +72,7 @@ in
         # target machine :p
 
         if [[ ! -d "$1" ]]; then
-          echo "System root not found" 1>&2 
+          echo "System root not found" 1>&2
           exit 1
         fi
 
