@@ -402,6 +402,21 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  R-nvim = buildVimPlugin {
+    pname = "R.nvim";
+    version = "1.0.0";
+    src = fetchFromGitHub {
+      owner = "R-nvim";
+      repo = "R.nvim";
+      tag = "v1.0.0";
+      hash = "sha256-RWEDjiHOGYULfTvfz8cSdFQREW23xtan9nKfGXD4bJk=";
+      fetchSubmodules = true;
+    };
+    meta.homepage = "https://github.com/R-nvim/R.nvim/";
+    meta.license = getLicenseFromSpdxId "GPL-3.0-only";
+    meta.hydraPlatforms = [ ];
+  };
+
   Recover-vim = buildVimPlugin {
     pname = "Recover.vim";
     version = "0-unstable-2022-09-07";
