@@ -13,12 +13,12 @@
 # dependency during bootstrap. Useful when gcc is built from snapshot
 # or from a git tree (flex lexers are not pre-generated there).
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flex";
   version = "2.6.4";
 
   src = fetchurl {
-    url = "https://github.com/westes/flex/releases/download/v${version}/flex-${version}.tar.gz";
+    url = "https://github.com/westes/flex/releases/download/v${finalAttrs.version}/flex-${finalAttrs.version}.tar.gz";
     sha256 = "15g9bv236nzi665p9ggqjlfn4dwck5835vf0bbw2cz7h5c1swyp8";
   };
 
@@ -71,10 +71,12 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/flex $out/bin/lex
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://github.com/westes/flex";
     description = "Fast lexical analyser generator";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
   };
-}
+})
