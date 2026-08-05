@@ -236,6 +236,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Validating, recursive, and caching DNS resolver";
     license = lib.licenses.bsd3;
