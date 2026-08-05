@@ -119,6 +119,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cd ./packages/opencode
     bun --bun ./script/build.ts --single --skip-install
     bun --bun ./script/schema.ts config.json tui.json
+    substituteInPlace config.json \
+      --replace-fail "https://models.dev/model-schema.json" \
+                     "file://$out/share/model-schema.json"
 
     runHook postBuild
   '';
@@ -140,6 +143,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
      } \
     --set OPENCODE_DISABLE_AUTOUPDATE true
 
+    install -Dm644 ${models-dev.jsonschema} $out/share/model-schema.json
     install -Dm644 config.json $out/share/config.json
     install -Dm644 tui.json $out/share/tui.json
     install -Dm644 ../web/public/theme.json $out/share/theme.json
