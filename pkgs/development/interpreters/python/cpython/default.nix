@@ -366,6 +366,8 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ buildInputs;
 
+  strictDeps = true;
+
   prePatch = optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure --replace-fail '`/usr/bin/arch`' '"i386"'
   '';
