@@ -30,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Real-time data (de)compression library";
     longDescription = ''
