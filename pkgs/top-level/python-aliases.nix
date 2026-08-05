@@ -139,6 +139,7 @@ mapAliases {
   bkcharts = throw "'bkcharts' has been removed as the upstream repository was archived in 2018"; # added 2025-08-26
   BlinkStick = throw "'BlinkStick' has been renamed to/replaced by 'blinkstick'"; # Converted to throw 2025-10-29
   blockchain = throw "'blockchain' has been removed because its source is unavailable"; # added 2026-07-20
+  bloodhound-py = bloodhound; # added 2026-08-04
   boiboite-opener-framework = throw "'boiboite-opener-framework' has been removed as it was unmaintained upstream"; # Added 2026-03-23
   bsblan = throw "'bsblan' has been renamed to/replaced by 'python-bsblan'"; # Converted to throw 2025-10-29
   bsddb3 = throw "'bsddb3' has been removed because it was deprecated in favor of 'berkeleydb'"; # added 2026-01-20
@@ -667,6 +668,7 @@ mapAliases {
   sqlalchemy_1_3 = throw "'sqlalchemy_1_3' has been removed because it was actually version 1.4.54"; # added 2026-07-20
   sqlalchemy_migrate = throw "'sqlalchemy_migrate' has been renamed to/replaced by 'sqlalchemy-migrate'"; # Converted to throw 2025-10-29
   steamship = throw "'steamship' has been removed because it is broken and unmaintained upstream"; # Added 2026-05-06
+  stookalert = throw "'stookalert' has been removed because it is unmaintained upstream"; # Added 2026-08-04
   strawberry-django = strawberry-graphql-django; # Added 2026-07-14
   subunit2sql = throw "subunit2sql has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-04
   subunit = python-subunit; # added 2026-06-21

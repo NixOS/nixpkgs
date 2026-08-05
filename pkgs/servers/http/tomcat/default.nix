@@ -15,6 +15,9 @@ let
       pname = "apache-tomcat";
       inherit version;
 
+      __structuredAttrs = true;
+      strictDeps = true;
+
       src = fetchurl {
         url = "mirror://apache/tomcat/tomcat-${lib.versions.major version}/v${version}/bin/apache-tomcat-${version}.tar.gz";
         inherit hash;
@@ -26,10 +29,14 @@ let
       ];
 
       installPhase = ''
+        runHook preInstall
+
         mkdir $out
         mv * $out
         mkdir -p $webapps/webapps
         mv $out/webapps $webapps/
+
+        runHook postInstall
       '';
 
       passthru = {

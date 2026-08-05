@@ -1,4 +1,10 @@
 {
+  "module-services-portmaster": [
+    "index.html#module-services-portmaster"
+  ],
+  "module-services-portmaster-declarative-configuration": [
+    "index.html#module-services-portmaster-declarative-configuration"
+  ],
   "module-hardware-facter": [
     "index.html#module-hardware-facter"
   ],

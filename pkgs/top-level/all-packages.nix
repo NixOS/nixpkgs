@@ -289,7 +289,7 @@ with pkgs;
 
   cve = with python3Packages; toPythonApplication cvelib;
 
-  bloodhound-py = with python3Packages; toPythonApplication bloodhound-py;
+  bloodhound-py = with python3Packages; toPythonApplication bloodhound;
 
   # Zip file format only allows times after year 1980, which makes e.g. Python
   # wheel building fail with:
@@ -7476,7 +7476,7 @@ with pkgs;
           directory = ../servers/http/nginx/modules;
         };
 
-        aliases = import ../servers/http/nginx/modules/aliases.nix self;
+        aliases = import ../servers/http/nginx/module-aliases.nix self;
       in
       packages // (lib.optionalAttrs config.allowAliases aliases)
     )
