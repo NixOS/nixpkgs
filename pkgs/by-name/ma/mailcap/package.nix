@@ -58,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.nginx-mime = nixosTests.nginx-mime;
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Helper application and MIME type associations for file types";
     homepage = "https://pagure.io/mailcap";
