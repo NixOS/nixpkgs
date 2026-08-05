@@ -1254,6 +1254,7 @@ mapAliases {
   libdbiDriversBase = warnAlias "'libdbiDriversBase' has been renamed to 'libdbi-drivers-base'" libdbi-drivers-base; # Added 2026-02-08
   libdevil = throw "libdevil has been removed, as it was unmaintained in Nixpkgs and upstream since 2017"; # Added 2025-09-16
   libdevil-nox = throw "libdevil has been removed, as it was unmaintained in Nixpkgs and upstream since 2017"; # Added 2025-09-16
+  libdisplay-info_0_2 = throw "`libdisplay-info_0_2` has been removed as it is was unused in Nixpkgs. Consider upgrading to `libdisplay-info_0_3` or `libdisplay-info` instead"; # Added 2026-08-04
   libdwarf-lite = throw "`libdwarf-lite` has been replaced by `libdwarf` as it's mostly a mirror"; # Added 2025-06-16
   libdynd = throw "'libdynd' has been removed due to lack of maintenance"; # Added 2026-03-24
   libepc = throw "'libepc' has been removed as it was archived upstream and depended on libsoup 2.4"; # Added 2026-06-07
