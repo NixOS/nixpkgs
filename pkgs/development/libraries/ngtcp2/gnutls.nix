@@ -33,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [ gnutls ];
 
+  strictDeps = true;
+
   configureFlags = [ "--with-gnutls=yes" ];
   enableParallelBuilding = true;
 
