@@ -9,7 +9,7 @@
   pbr,
   python-glanceclient,
   setuptools,
-  stestr,
+  stestrCheckHook,
   python-subunit,
   testscenarios,
   testtools,
@@ -42,18 +42,15 @@ buildPythonPackage rec {
     jsonschema
     python-subunit
     oslotest
-    stestr
+    stestrCheckHook
     testscenarios
     testtools
   ];
 
-  checkPhase = ''
-    runHook preCheck
-
-    stestr run
-
-    runHook postCheck
-  '';
+  disabledTests = [
+    # assertItemsEqual removed since Python 3.12
+    "os_client_config.tests.test_config.TestConfig.test_get_all_clouds"
+  ];
 
   pythonImportsCheck = [ "os_client_config" ];
 

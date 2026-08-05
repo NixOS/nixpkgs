@@ -18,8 +18,7 @@
   pythonAtLeast,
   setuptools,
   stdenv,
-  stestr,
-  writeText,
+  stestrCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -63,39 +62,31 @@ buildPythonPackage rec {
     fixtures
     libredirect.hook
     oslotest
-    stestr
+    stestrCheckHook
   ];
 
-  checkPhase =
-    let
-      disabledTests = [
-        "oslo_concurrency.tests.unit.test_lockutils_eventlet.TestInternalLock.test_fair_lock_with_spawn"
-        "oslo_concurrency.tests.unit.test_lockutils_eventlet.TestInternalLock.test_fair_lock_with_spawn_n"
-        "oslo_concurrency.tests.unit.test_lockutils_eventlet.TestInternalLock.test_lock_with_spawn"
-        "oslo_concurrency.tests.unit.test_lockutils_eventlet.TestInternalLock.test_lock_with_spawn_n"
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        "oslo_concurrency.tests.unit.test_lockutils.FileBasedLockingTestCase.test_interprocess_nonblocking_external_lock"
-        "oslo_concurrency.tests.unit.test_lockutils.LockTestCase.test_lock_externally"
-        "oslo_concurrency.tests.unit.test_lockutils.LockTestCase.test_lock_externally_lock_dir_not_exist"
-        "oslo_concurrency.tests.unit.test_processutils.PrlimitTestCase.test_stack_size"
-      ]
-      ++ lib.optionals (pythonAtLeast "3.14") [
-        # Disable test incompatible with Python 3.14+
-        # See proposed change upstream: https://review.opendev.org/c/openstack/oslo.concurrency/+/971765
-        "oslo_concurrency.tests.unit.test_lockutils"
-      ];
-    in
-    ''
-      runHook preCheck
+  preCheck = ''
+    echo "nameserver 127.0.0.1" > resolv.conf
+    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
+  '';
 
-      echo "nameserver 127.0.0.1" > resolv.conf
-      export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
-
-      stestr run -e <(echo "${lib.concatStringsSep "\n" disabledTests}")
-
-      runHook postCheck
-    '';
+  disabledTestsRegex = [
+    "oslo_concurrency.tests.unit.test_lockutils_eventlet.TestInternalLock.test_fair_lock_with_spawn"
+    "oslo_concurrency.tests.unit.test_lockutils_eventlet.TestInternalLock.test_fair_lock_with_spawn_n"
+    "oslo_concurrency.tests.unit.test_lockutils_eventlet.TestInternalLock.test_lock_with_spawn"
+    "oslo_concurrency.tests.unit.test_lockutils_eventlet.TestInternalLock.test_lock_with_spawn_n"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "oslo_concurrency.tests.unit.test_lockutils.FileBasedLockingTestCase.test_interprocess_nonblocking_external_lock"
+    "oslo_concurrency.tests.unit.test_lockutils.LockTestCase.test_lock_externally"
+    "oslo_concurrency.tests.unit.test_lockutils.LockTestCase.test_lock_externally_lock_dir_not_exist"
+    "oslo_concurrency.tests.unit.test_processutils.PrlimitTestCase.test_stack_size"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # Disable test incompatible with Python 3.14+
+    # See proposed change upstream: https://review.opendev.org/c/openstack/oslo.concurrency/+/971765
+    "oslo_concurrency.tests.unit.test_lockutils"
+  ];
 
   pythonImportsCheck = [ "oslo_concurrency" ];
 

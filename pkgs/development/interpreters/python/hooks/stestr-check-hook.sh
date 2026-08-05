@@ -26,6 +26,7 @@ function stestrCheckPhase() {
         flagsArray+=(--exclude-regex "($(concatStringsSep "|" patterns))")
     fi
 
+    concatTo flagsArray stestrFlags
     echoCmd 'stestr flags' "${flagsArray[@]}"
     @pythonCheckInterpreter@ -m stestr run "${flagsArray[@]}"
 

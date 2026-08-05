@@ -14,7 +14,7 @@
   setuptools,
   sphinxcontrib-apidoc,
   sphinxHook,
-  stestr,
+  stestrCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -58,14 +58,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     requests-mock
-    stestr
+    stestrCheckHook
   ];
-
-  checkPhase = ''
-    runHook preCheck
-    stestr run
-    runHook postCheck
-  '';
 
   pythonImportsCheck = [ "barbicanclient" ];
 

@@ -11,7 +11,7 @@
   pbr,
   setuptools,
   sphinxHook,
-  stestr,
+  stestrCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -50,14 +50,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     oslo-serialization
     oslotest
-    stestr
+    stestrCheckHook
   ];
-
-  checkPhase = ''
-    runHook preCheck
-    stestr run
-    runHook postCheck
-  '';
 
   pythonImportsCheck = [ "osc_placement" ];
 

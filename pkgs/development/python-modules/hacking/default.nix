@@ -6,7 +6,7 @@
   flake8,
   pbr,
   setuptools,
-  stestr,
+  stestrCheckHook,
   testscenarios,
 }:
 
@@ -33,15 +33,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     ddt
-    stestr
+    stestrCheckHook
     testscenarios
   ];
-
-  checkPhase = ''
-    runHook preCheck
-    stestr run
-    runHook postCheck
-  '';
 
   pythonImportsCheck = [ "hacking" ];
 

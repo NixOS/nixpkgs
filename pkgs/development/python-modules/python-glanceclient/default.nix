@@ -14,36 +14,15 @@
   oslo-utils,
   wrapt,
   pyopenssl,
-  stestr,
+  stestrCheckHook,
   testscenarios,
   ddt,
   requests-mock,
-  writeText,
 }:
+
 let
   pname = "python-glanceclient";
   version = "4.11.0";
-
-  disabledTests = [
-    # Skip tests which require networking.
-    "test_http_chunked_response"
-    "test_v1_download_has_no_stray_output_to_stdout"
-    "test_v2_requests_valid_cert_verification"
-    "test_download_has_no_stray_output_to_stdout"
-    "test_v1_requests_cert_verification_no_compression"
-    "test_v1_requests_cert_verification"
-    "test_v2_download_has_no_stray_output_to_stdout"
-    "test_v2_requests_bad_ca"
-    "test_v2_requests_bad_cert"
-    "test_v2_requests_cert_verification_no_compression"
-    "test_v2_requests_cert_verification"
-    "test_v2_requests_valid_cert_no_key"
-    "test_v2_requests_valid_cert_verification_no_compression"
-    "test_log_request_id_once"
-    # asserts exact amount of mock calls
-    "test_cache_schemas_gets_when_forced"
-    "test_cache_schemas_gets_when_not_exists"
-  ];
 in
 buildPythonPackage {
   inherit pname version;
@@ -78,15 +57,30 @@ buildPythonPackage {
     ddt
     openstacksdk
     requests-mock
-    stestr
+    stestrCheckHook
     testscenarios
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    stestr run -e ${writeText "disabled-tests" (lib.concatStringsSep "\n" disabledTests)}
-    runHook postCheck
-  '';
+  disabledTestsRegex = [
+    # Skip tests which require networking.
+    "test_http_chunked_response"
+    "test_v1_download_has_no_stray_output_to_stdout"
+    "test_v2_requests_valid_cert_verification"
+    "test_download_has_no_stray_output_to_stdout"
+    "test_v1_requests_cert_verification_no_compression"
+    "test_v1_requests_cert_verification"
+    "test_v2_download_has_no_stray_output_to_stdout"
+    "test_v2_requests_bad_ca"
+    "test_v2_requests_bad_cert"
+    "test_v2_requests_cert_verification_no_compression"
+    "test_v2_requests_cert_verification"
+    "test_v2_requests_valid_cert_no_key"
+    "test_v2_requests_valid_cert_verification_no_compression"
+    "test_log_request_id_once"
+    # asserts exact amount of mock calls
+    "test_cache_schemas_gets_when_forced"
+    "test_cache_schemas_gets_when_not_exists"
+  ];
 
   pythonImportsCheck = [ "glanceclient" ];
 
