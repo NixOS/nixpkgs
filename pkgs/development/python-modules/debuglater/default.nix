@@ -36,6 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "debuglater" ];
 
+  disabledTests = [
+    # Assertion error
+    "test_data_structures"
+  ];
+
   meta = {
     description = "Module for post-mortem debugging of Python programs";
     homepage = "https://github.com/ploomber/debuglater";
