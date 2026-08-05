@@ -31,7 +31,7 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "pytest_docker_tools" ];
 
   meta = {
-    description = "Opionated helpers for creating py.test fixtures for Docker integration and smoke testing environments";
+    description = "Opinionated helpers for creating py.test fixtures for Docker integration and smoke testing environments";
     homepage = "https://github.com/Jc2k/pytest-docker-tools";
     changelog = "https://github.com/Jc2k/pytest-docker-tools/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;

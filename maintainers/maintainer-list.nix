@@ -5958,7 +5958,7 @@
     name = "Serg Nesterov";
     keys = [ { fingerprint = "6E7D BA30 DB5D BA60 693C  3BE3 1512 F6EB 84AE CC8C"; } ];
   };
-  cvengler = {
+  cve = {
     name = "Clara Engler";
     github = "cvengler";
     githubId = 12272949;
@@ -16375,6 +16375,19 @@
     email = "ido.samuelson@gmail.com";
     github = "i-am-logger";
     githubId = 1440852;
+  };
+  logn = {
+    name = "Logan Devine";
+    github = "thetayloredman";
+    githubId = 26350849;
+
+    email = "nixpkgs@zirco.dev";
+    matrix = "@logn:zirco.dev";
+    keys = [
+      {
+        fingerprint = "67FA AA65 5DBD 691E 7957  E095 1594 E544 D8F8 F21E";
+      }
+    ];
   };
   logo = {
     email = "logo4poop@protonmail.com";

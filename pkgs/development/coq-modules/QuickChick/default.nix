@@ -25,8 +25,8 @@
     lib.switch
       [ coq.coq-version mathcomp-boot.version ]
       [
-        (case (lib.versions.range "8.15" "9.1") lib.pred.true "2.1.1")
-        (case (lib.versions.range "8.13" "8.17") lib.pred.true "1.6.5")
+        (case (lib.versions.range "8.20" "9.1") lib.pred.true "2.1.1")
+        (case (lib.versions.range "8.13" "8.16") lib.pred.true "1.6.5")
         (case "8.13" lib.pred.true "1.5.0")
         (case "8.12" lib.pred.true "1.4.0")
         (case "8.11" lib.pred.true "1.3.2")
