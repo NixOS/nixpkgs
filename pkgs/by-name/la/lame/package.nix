@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  pkg-config,
   nasmSupport ? true,
   nasm, # Assembly optimizations
   cpmlSupport ? true, # Compaq's fast math library
@@ -10,6 +11,7 @@
   libsndfile, # Use libsndfile, instead of lame's internal routines
   analyzerHooksSupport ? true, # Use analyzer hooks
   decoderSupport ? true, # mpg123 decoder
+  libmpg123,
   frontendSupport ? true, # Build the lame executable
   #, mp3xSupport ? false, gtk1 # Build GTK frame analyzer
   mp3rtpSupport ? false, # Build mp3rtp
@@ -18,11 +20,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lame";
-  version = "3.100";
+  version = "4.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/lame/lame-${finalAttrs.version}.tar.gz";
-    sha256 = "07nsn5sy3a8xbmw1bidxnsj5fj6kg9ai04icmqw40ybkp353dznx";
+    hash = "sha256-PfUSTVrTqYMS/9e6aps2Iw5Pij5m084PQl4zbDLSFus=";
   };
 
   outputs = [
@@ -32,13 +34,23 @@ stdenv.mkDerivation (finalAttrs: {
   ]; # a small single header
   outputMan = "out";
 
-  nativeBuildInputs = [ ] ++ lib.optional nasmSupport nasm;
+  patches = [
+    # fix ID3v2 UTF-8 tag path to avoid incompatible-pointer-types
+    # with GCC 15; upstream SVN r6562, SF bug #524
+    ./fix-utf8-id3-tag.patch
+    # setlocale() is used under HAVE_LANGINFO_H, but <locale.h> was only
+    # included together with HAVE_ICONV, breaking the build on macOS;
+    # upstream SVN r6590
+    ./fix-setlocale-without-iconv.patch
+    # hip_set_pinfo/hip_finish_pinfo are used by the frontend but were missing
+    # from the exported symbol list, breaking the link with analyzer hooks
+    # enabled; upstream SVN r6564, SF bug #515
+    ./export-hip-pinfo-symbols.patch
+  ];
 
-  buildInputs =
-    [ ]
-    #++ optional efenceSupport libefence
-    #++ optional mp3xSupport gtk1
-    ++ lib.optional sndfileFileIOSupport libsndfile;
+  nativeBuildInputs = [ pkg-config ] ++ lib.optional nasmSupport nasm;
+
+  buildInputs = lib.optional decoderSupport libmpg123 ++ lib.optional sndfileFileIOSupport libsndfile;
 
   configureFlags = [
     (lib.enableFeature nasmSupport "nasm")
@@ -54,15 +66,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.optionalString debugSupport "--enable-debug=alot")
   ];
 
-  preConfigure = ''
-    # Prevent a build failure for 3.100 due to using outdated symbol list
-    # https://hydrogenaud.io/index.php/topic,114777.msg946373.html#msg946373
-    sed -i '/lame_init_old/d' include/libmp3lame.sym
-  '';
-
   meta = {
     description = "High quality MPEG Audio Layer III (MP3) encoder";
-    homepage = "http://lame.sourceforge.net";
+    homepage = "https://lame.sourceforge.io";
     license = lib.licenses.lgpl2;
     maintainers = [ ];
     platforms = lib.platforms.all;
