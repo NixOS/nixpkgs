@@ -196,13 +196,20 @@ The user might remove generators from their configuration, yet the respective se
 
 The `delete` script is given a generator and a file name as an argument, and must delete the given file (you might notice a theme here).
 
-The `list` argument must print (to standard out) a list of every file it currently finds on disk (or in the cloud, or wherever the secrets are stored). The format of the output goes as follows: every line contains a space separated list where the first element is the generator name, and the second element is the file name.
+The `list` argument must print (to standard out) a list of every file it currently finds on disk (or in the cloud, or wherever the secrets are stored). The format of the output goes as follows: every line contains a space separated list where the first element is the generator name, and the second element is the file name (_not_ the full file path!). For example, the output of `list` could look like this:
+
+```txt
+gen-foo file-1
+gen-foo file-2
+gen-bar file-3
+gen-goo file-4
+```
 
 These operations are not difficult to implement for in the easy case of managing a single machine. One thing to note is that backends might want to share secrets across multiple machines. The aforementioned `list` command must then only return secrets related to the given machine/configuration! (otherwise the CLI will ask the backend to delete every one of the files it finds in the list but not in the given machine/configuration).
 
 ### Performing automatic updates
 
-Backends might need to perform maintenance work on the secret files on disk. Think re-keying when using `age` keys and a new recipient is added, or perhaps rotating API keys when storing the secrets remotely. A backend can provide a `fixup` script, which will be run after each `generate` command (and will be given, as you might've guessed, a generator name and a file name as arguments).
+Backends might need to perform maintenance work on the secret files on disk. Think re-keying when using `age` keys and a new recipient is added, or perhaps rotating API keys when storing the secrets remotely. A backend can provide a `fixup` script, which will be run after each `generate` command (even if the generator & file in question has not changed this run!). Said script will be given, as you might've guessed, a generator name and a file name as arguments.
 
 ### Deployment
 
@@ -248,7 +255,7 @@ Backends will commonly need to define custom per-generator or per-file options. 
 
 Earlier on we observed that the vars CLI can take in NixOS configurations as argument. Of course, this by itself can be read in multiple ways. For example — do the configurations in question need to be evaluated already? If not, where is Nixpkgs taken from?
 
-The CLI does accept pre-evaluated configurations (like one would, for example, expect when using flakes). When given a non-evaluated configuration, the CLI will evaluate it using the Nixpkgs available in the Nix path.
+The CLI does accept pre-evaluated configurations (like one would, for example, expect when using flakes). When given a non-evaluated configuration, the CLI will evaluate it using the Nixpkgs available in the `NIX_PATH`.
 
 Once the configuration is evaluated, the CLI will extract the data it needs into a Nix attrset that can be directly serialized as JSON (this implies the package set-reliant script functions are evaluated with the host package set as an argument, for example) before being taken in by the Python code.
 
