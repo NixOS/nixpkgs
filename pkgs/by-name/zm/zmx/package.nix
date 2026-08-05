@@ -24,7 +24,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zmx";
-  version = "0.6.0";
+  version = "0.7.0";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -32,13 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "neurosnap";
     repo = "zmx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OkXtVf/LdBrZL6FH9TGx+mIhUXt2eSugLxZyMd+HL6k=";
+    hash = "sha256-cWTeFRycSZFEbjCYIzKplNhV9SDM1kDl8CeQPOR3uyk=";
   };
 
   zigDeps = zig.fetchDeps {
     inherit (finalAttrs) src pname version;
     fetchAll = true;
-    hash = "sha256-TwKoeaE4g5G7t7smKoqHkCCh998nSqKx5k6sO2vDlGs=";
+    hash = "sha256-w2jTusfDpW5Vk0lVhi2VNEGtir2n0NKQePsKSE2jpmc=";
   };
 
   postConfigure = ''
@@ -57,6 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+
+  preCheck = ''
+    export ZMX_DIR="$TMPDIR/zmx-test"
+  '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ${finalAttrs.meta.mainProgram} \
