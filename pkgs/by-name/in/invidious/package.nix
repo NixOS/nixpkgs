@@ -144,5 +144,6 @@ crystal.buildCrystalPackage rec {
       _999eagle
       GaetanLepage
     ];
+    platforms = lib.platforms.linux;
   };
 }
