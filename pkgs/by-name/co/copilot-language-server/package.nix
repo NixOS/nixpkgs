@@ -4,10 +4,13 @@
   makeWrapper,
   fetchzip,
   nix-update-script,
-  nodejs,
-
-  testers,
+  nodejs-slim,
+  writableTmpDirAsHomeHook,
+  versionCheckHook,
 }:
+let
+  inherit (stdenvNoCC.hostPlatform.node) arch platform;
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "copilot-language-server";
   version = "1.527.1";
@@ -23,24 +26,44 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    nodejs
+    nodejs-slim
   ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/copilot-language-server
-    cp -r ./* $out/share/copilot-language-server/
+    server=$out/share/copilot-language-server
 
-    makeWrapper ${lib.getExe nodejs} $out/bin/copilot-language-server \
+    mkdir -p $server
+    cp -r ./* $server/
+
+    find "$server/node_modules/@github" -mindepth 1 -maxdepth 1 \
+      \( -name 'copilot-linux-*' -o -name 'copilot-darwin-*' -o -name 'copilot-win32-*' \) \
+      ! -name "copilot-${platform}-${arch}" -exec rm -rf {} +
+
+    find "$server/bin" "$server/compiled" -mindepth 1 -maxdepth 1 ! -name "${platform}" -exec rm -rf {} +
+    find "$server/bin/${platform}" "$server/compiled/${platform}" -mindepth 1 -maxdepth 1 ! -name "${arch}" -exec rm -rf {} +
+
+    find "$server/policy-templates" -mindepth 1 -maxdepth 1 ! -name "${platform}" -exec rm -rf {} +
+
+    find "$server" -name '*.map' -delete
+
+    makeWrapper ${lib.getExe nodejs-slim} $out/bin/copilot-language-server \
       --add-flags $out/share/copilot-language-server/main.js
 
     runHook postInstall
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+    versionCheckHook
+  ];
+  # uv_os_homedir returned ENOENT (no such file or directory)
+  versionCheckKeepEnvironment = lib.optionals stdenvNoCC.hostPlatform.isDarwin [ "HOME" ];
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
   meta = {
@@ -54,6 +77,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       shortName = "GitHub Copilot License";
       url = "https://github.com/customer-terms/github-copilot-product-specific-terms";
     };
+    sourceProvenance = with lib.sourceTypes; [
+      binaryNativeCode # prebuild directory
+      binaryBytecode # WASM files
+      obfuscatedCode # minified JavaScript
+    ];
     mainProgram = "copilot-language-server";
     platforms = [
       "x86_64-linux"
