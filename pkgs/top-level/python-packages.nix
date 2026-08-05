@@ -13507,7 +13507,7 @@ self: super: with self; {
 
   patchpy = callPackage ../development/python-modules/patchpy { };
 
-  patchright = callPackage ../development/python-modules/patchright { };
+  patchright = callPackage ../development/python-modules/patchright { inherit (pkgs) jq; };
 
   path = callPackage ../development/python-modules/path { };
 
