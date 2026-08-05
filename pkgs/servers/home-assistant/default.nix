@@ -336,6 +336,10 @@ python3Packages.buildPythonApplication rec {
 
     substituteInPlace pyproject.toml \
       --replace-fail "setuptools==78.1.1" setuptools
+
+    # https://github.com/RenierM26/pyEzvizApi/commit/ae0651ea93f031e94e7286fa3439fcc12acfb001
+    substituteInPlace homeassistant/components/ezviz/switch.py \
+      --replace-fail "SupportFulldayRecord" "SupportFullDayRecord"
   '';
 
   pythonRemoveDeps = [
