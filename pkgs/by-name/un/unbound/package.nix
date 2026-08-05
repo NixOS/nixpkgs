@@ -99,6 +99,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withDoQ [ ngtcp2 ]
   ++ lib.optionals withPythonModule [ python ];
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
 
   configureFlags = [
