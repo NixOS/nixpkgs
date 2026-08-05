@@ -62,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://github.com/google/brotli";
     changelog = "https://github.com/google/brotli/blob/${finalAttrs.src.tag}/CHANGELOG.md";
