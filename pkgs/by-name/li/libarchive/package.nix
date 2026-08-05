@@ -108,6 +108,8 @@ stdenv.mkDerivation (finalAttrs: {
     acl
   ];
 
+  strictDeps = true;
+
   hardeningDisable = [
     "strictflexarrays3"
   ]
