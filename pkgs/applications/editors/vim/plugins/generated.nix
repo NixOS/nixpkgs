@@ -11541,12 +11541,12 @@ final: prev: {
 
   neotest-haskell = buildVimPlugin {
     pname = "neotest-haskell";
-    version = "4.1.0";
+    version = "4.1.1";
     src = fetchFromGitHub {
       owner = "MrcJkb";
       repo = "neotest-haskell";
-      tag = "v4.1.0";
-      hash = "sha256-pYNxBczQMUgFibHFpcWAdf4FndGKnxmbWdmFW6Gs2Lw=";
+      tag = "v4.1.1";
+      hash = "sha256-jaLgVrxlvSy88FEj+e7xUcbZXjdIEkhRkDov/Fnotvk=";
     };
     meta.homepage = "https://github.com/MrcJkb/neotest-haskell/";
     meta.license = getLicenseFromSpdxId "GPL-2.0-only";
