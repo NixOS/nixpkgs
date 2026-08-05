@@ -57,28 +57,40 @@ crystal.buildCrystalPackage rec {
     in
     ''
       for d in ${videojs}/*; do ln -s "$d" assets/videojs; done
-
-      # Use the version metadata from the derivation instead of using git at
-      # build-time
+    ''
+    # Use the version metadata from the derivation instead of using git at
+    # build-time
+    + ''
       substituteInPlace src/invidious.cr \
-          --replace-fail ${lib.escapeShellArg branchTemplate} '"master"' \
-          --replace-fail ${lib.escapeShellArg commitTemplate} '"${commit}"' \
-          --replace-fail ${lib.escapeShellArg versionTemplate} '"${date}"' \
-          --replace-fail ${lib.escapeShellArg assetCommitTemplate} '"${commit}"' \
-          --replace-fail ${lib.escapeShellArg tagTemplate} '"v${version}"'
-
-      # Patch the assets and locales paths to be absolute
+        --replace-fail ${lib.escapeShellArg branchTemplate} '"master"' \
+        --replace-fail ${lib.escapeShellArg commitTemplate} '"${commit}"' \
+        --replace-fail ${lib.escapeShellArg versionTemplate} '"${date}"' \
+        --replace-fail ${lib.escapeShellArg assetCommitTemplate} '"${commit}"' \
+        --replace-fail ${lib.escapeShellArg tagTemplate} '"v${version}"'
+    ''
+    # Patch the assets and locales paths to be absolute
+    + ''
       substituteInPlace src/invidious.cr \
-          --replace-fail 'StaticAssetsHandler.new("assets"' 'StaticAssetsHandler.new("${placeholder "out"}/share/invidious/assets"'
+        --replace-fail \
+          'StaticAssetsHandler.new("assets"' \
+          'StaticAssetsHandler.new("${placeholder "out"}/share/invidious/assets"'
+
       substituteInPlace src/invidious/helpers/i18n.cr \
-          --replace-fail 'File.read("locales/' 'File.read("${placeholder "out"}/share/invidious/locales/'
-
-      # Reference sql initialisation/migration scripts by absolute path
+        --replace-fail \
+          'File.read("locales/' \
+          'File.read("${placeholder "out"}/share/invidious/locales/'
+    ''
+    # Reference sql initialisation/migration scripts by absolute path
+    + ''
       substituteInPlace src/invidious/database/base.cr \
-            --replace-fail 'config/sql' '${placeholder "out"}/share/invidious/config/sql'
+        --replace-fail \
+          'config/sql' \
+          '${placeholder "out"}/share/invidious/config/sql'
 
       substituteInPlace src/invidious/user/captcha.cr \
-          --replace-fail 'Process.run(%(rsvg-convert' 'Process.run(%(${lib.getBin librsvg}/bin/rsvg-convert'
+        --replace-fail \
+          'Process.run(%(rsvg-convert' \
+          'Process.run(%(${lib.getBin librsvg}/bin/rsvg-convert'
     '';
 
   nativeBuildInputs = [
@@ -137,10 +149,13 @@ crystal.buildCrystalPackage rec {
     description = "Open source alternative front-end to YouTube";
     mainProgram = "invidious";
     homepage = "https://invidious.io/";
+    downloadPage = "https://github.com/iv-org/invidious";
+    changelog = "https://github.com/iv-org/invidious/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
       _999eagle
       GaetanLepage
     ];
+    platforms = lib.platforms.linux;
   };
 }
