@@ -56,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
     re2
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
   ]
