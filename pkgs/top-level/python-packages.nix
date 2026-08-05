@@ -11111,8 +11111,6 @@ self: super: with self; {
 
   myjwt = callPackage ../development/python-modules/myjwt { };
 
-  mypermobil = callPackage ../development/python-modules/mypermobil { };
-
   mypy = callPackage ../development/python-modules/mypy { };
 
   inherit (callPackage ../development/python-modules/mypy-boto3 { })
