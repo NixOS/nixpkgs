@@ -707,7 +707,6 @@ in
     ];
     propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [
       final.bit32
-      final.std-normalize
     ];
   });
 
@@ -939,8 +938,12 @@ in
 
     # patchShebang removes the nvim in nlua's shebang so we hardcode one
     postFixup = ''
-      sed -i -e "1 s|.*|#\!${coreutils}/bin/env -S ${neovim-unwrapped}/bin/nvim -l|" "$out/bin/nlua"
+      substituteInPlace "$out/bin/nlua" \
+        --replace-fail \
+        "#!/usr/bin/env -S nvim" \
+        "#!${coreutils}/bin/env -S ${neovim-unwrapped}/bin/nvim"
     '';
+
     dontPatchShebangs = true;
   };
 

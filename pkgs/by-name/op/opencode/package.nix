@@ -72,13 +72,20 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       mkdir -p $out
       find . -type d -name node_modules -exec cp -R --parents {} $out \;
 
+      # opencode targets only Linux and Darwin (see meta.platforms), so the
+      # Windows executables that "bun install --os=*" fetches are never
+      # executed. Dropping them keeps the output reproducible on hosts whose
+      # security endpoint agents scan the store, and removes the vulnerable
+      # bundled 7za.exe that will be quarantined.
+      find $out -type f -name '*.exe' -delete
+
       runHook postInstall
     '';
 
     # NOTE: Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash = "sha256-CQGZzD+XP4b452zvocKkdpjGJ2qrnxDhMQ/9846jp9I=";
+    outputHash = "sha256-gb1vgLGiK56A9Xtg71d2J9ct8TJAjDg1A7cOUx0v3cA=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
