@@ -4,31 +4,29 @@ from .exec import list_secrets, delete_secret, fixup_all
 
 
 def collect_garbage(args: VarsArgs, config: VarsConfig):
-	for backend in config.generatorBackends.values():
-		if not backend.list or not backend.delete:
-			print(
-				f"Skipping '{backend.name}': missing 'list' or 'delete' script"
-			)
+    for backend in config.generatorBackends.values():
+        if not backend.list or not backend.delete:
+            print(f"Skipping '{backend.name}': missing 'list' or 'delete' script")
 
-			continue
+            continue
 
-		secrets = list_secrets(config, backend)
-		specified = set()
-		for generator in config.generators.values():
-			for file in generator.files.values():
-				specified.add((generator.name, file.name))
+        secrets = list_secrets(config, backend)
+        specified = set()
+        for generator in config.generators.values():
+            for file in generator.files.values():
+                specified.add((generator.name, file.name))
 
-		unspecified = secrets - specified
-		if not unspecified:
-			print(f"Skipping '{backend.name}': nothing to collect")
-			continue
+        unspecified = secrets - specified
+        if not unspecified:
+            print(f"Skipping '{backend.name}': nothing to collect")
+            continue
 
-		print(f"Backend '{backend.name}':")
-		for gen_name, file_name in sorted(unspecified):
-			if args.dry_run:
-				print(f"- Would delete '{gen_name}/{file_name}'")
-			else:
-				print(f"- Deleting '{gen_name}/{file_name}'")
-				delete_secret(args, file, backend, gen_name, file_name)
+        print(f"Backend '{backend.name}':")
+        for gen_name, file_name in sorted(unspecified):
+            if args.dry_run:
+                print(f"- Would delete '{gen_name}/{file_name}'")
+            else:
+                print(f"- Deleting '{gen_name}/{file_name}'")
+                delete_secret(args, file, backend, gen_name, file_name)
 
-	fixup_all(args, config)
+    fixup_all(args, config)
