@@ -7,13 +7,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "litestream";
-  version = "0.5.15";
+  version = "0.5.16";
 
   src = fetchFromGitHub {
     owner = "benbjohnson";
     repo = "litestream";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-SsHyi7E/1dHEzFQgKr8eSi1fEf61iqTQ6Avr4c/h9j4=";
+    hash = "sha256-06ZQbOol87HZVaBFOyYbSasl3eHFcdwrYTnmProg9uY=";
   };
 
   ldflags = [
@@ -22,7 +22,7 @@ buildGoModule (finalAttrs: {
     "-X main.Version=${finalAttrs.version}"
   ];
 
-  vendorHash = "sha256-Ms33rbFjsWzGbLy9v6kFGl6b62QQI4XAZ4wr73g5udw=";
+  vendorHash = "sha256-xoJwxmQzWSQ055+W1I+hNyEcB3bfShCoAfdMU4Pckjc=";
 
   # httptest servers in tests
   __darwinAllowLocalNetworking = true;
