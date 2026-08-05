@@ -127,8 +127,7 @@ buildPythonPackage (finalAttrs: {
     runHook preCheck
 
     pushd tests
-    # without --parallel=1, tests fail with an "unexpected error due to a database lock" on Darwin
-    ${python.interpreter} runtests.py --settings=test_sqlite ${lib.optionalString stdenv.hostPlatform.isDarwin "--parallel=1"}
+    ${python.interpreter} runtests.py --settings=test_sqlite --parallel=$NIX_BUILD_CORES
     popd
 
     runHook postCheck
