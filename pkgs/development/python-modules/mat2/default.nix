@@ -23,7 +23,7 @@
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mat2";
   version = "0.15.0";
   pyproject = true;
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jvoisin";
     repo = "mat2";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-8i0ZGIy1yFPXk3WX5li4m9wZvSB6V4hX+D3rMGL4WLQ=";
   };
 
@@ -99,9 +99,9 @@ buildPythonPackage rec {
   meta = {
     description = "Handy tool to trash your metadata";
     homepage = "https://github.com/jvoisin/mat2";
-    changelog = "https://github.com/jvoisin/mat2/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/jvoisin/mat2/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.lgpl3Plus;
     mainProgram = "mat2";
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})
