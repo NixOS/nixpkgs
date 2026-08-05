@@ -7742,6 +7742,8 @@ self: super: with self; {
     }
   );
 
+  hpp-toppra = toPythonModule (pkgs.hpp-toppra.override { python3Packages = self; });
+
   hpp-tutorial = toPythonModule (pkgs.hpp-tutorial.override { python3Packages = self; });
 
   hpp-universal-robot = toPythonModule (
