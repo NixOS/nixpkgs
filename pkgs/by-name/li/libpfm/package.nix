@@ -40,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Helper library to program the performance monitoring events";
     longDescription = ''
