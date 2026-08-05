@@ -89,6 +89,8 @@ in
       description = ''
         Path to the age private key file for decryption on the target machine
       '';
+
+      example = "/var/lib/nixos-vars/age.key";
     };
 
     identity.host = lib.mkOption {
