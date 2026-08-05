@@ -136,6 +136,8 @@ buildPythonPackage (finalAttrs: {
     "test_options_validator"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Running a distributed job processing documents with Docling";
     homepage = "https://github.com/docling-project/docling-jobkit";
