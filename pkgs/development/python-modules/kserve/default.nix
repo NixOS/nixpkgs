@@ -73,11 +73,16 @@ buildPythonPackage (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/python/kserve";
 
+  build-system = [
+    setuptools
+  ];
+
   pythonRelaxDeps = [
     "cryptography"
     "fastapi"
     "httpx"
     "numpy"
+    "pandas"
     "prometheus-client"
     "protobuf"
     "psutil"
@@ -85,11 +90,6 @@ buildPythonPackage (finalAttrs: {
     "starlette"
     "uvicorn"
   ];
-
-  build-system = [
-    setuptools
-  ];
-
   dependencies = [
     aiohttp
     cloudevents
