@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    substituteInPlace mailcap --replace "/usr/bin/" ""
+    substituteInPlace mailcap --replace-fail "/usr/bin/" ""
     sh generate-nginx-mimetypes.sh < mime.types > nginx-mime.types
 
     install -D -m0644 nginx-mime.types $out/etc/nginx/mime.types
@@ -57,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests.nginx-mime = nixosTests.nginx-mime;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Helper application and MIME type associations for file types";
