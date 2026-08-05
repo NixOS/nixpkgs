@@ -11930,6 +11930,8 @@ self: super: with self; {
 
   npyscreen = callPackage ../development/python-modules/npyscreen { };
 
+  nrf-ota = callPackage ../development/python-modules/nrf-ota { };
+
   nrgkick-api = callPackage ../development/python-modules/nrgkick-api { };
 
   nsapi = callPackage ../development/python-modules/nsapi { };
