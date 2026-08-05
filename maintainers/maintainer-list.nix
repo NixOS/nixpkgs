@@ -15239,6 +15239,12 @@
     githubId = 4032;
     name = "Kristoffer Thømt Ravneberg";
   };
+  kreativmonkey = {
+    email = "kreativmonkey@calyrium.org";
+    github = "kreativmonkey";
+    githubId = 8607439;
+    name = "Sebastian Preisner";
+  };
   krishnans2006 = {
     email = "krishnans2006@gmail.com";
     matrix = "@krishnans2006:matrix.org";
