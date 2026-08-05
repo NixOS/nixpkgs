@@ -10,15 +10,17 @@
   sqlglot,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hakuin";
   version = "0.2.2";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "pruzko";
     repo = "hakuin";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-97nh+woUsCXcoO2i5KprCwJiE24V3mg91qcNgy7bpgg=";
   };
 
@@ -45,4 +47,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "hk";
   };
-}
+})
