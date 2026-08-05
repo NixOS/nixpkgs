@@ -298,10 +298,10 @@ in
 
     generators = lib.mkOption {
       description = ''
-        A set of generators that can be used to generate files. Generators are
-        scripts that produce files based on the values of other generators and
-        user input. Each generator is expected to produce a set of files under
-        a directory.
+        A set of generators that each are expected to produce a set of files
+        under a directory. Generators can produce files using a script,
+        possibly referencing values produced by other generators and user
+        input.
       '';
       default = { };
       type = lib.types.attrsOf generatorModule;
