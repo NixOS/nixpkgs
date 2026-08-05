@@ -298,7 +298,7 @@ in
 
     generators = lib.mkOption {
       description = ''
-        A set of generators that each are expected to produce a set of files
+        A set of generators that are each expected to produce a set of files
         under a directory. Generators can produce files using a script,
         possibly referencing values produced by other generators and user
         input.
