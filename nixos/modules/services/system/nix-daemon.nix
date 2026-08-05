@@ -102,9 +102,13 @@ in
         systemd.services.nix-daemon = {
           # Nix assumes it should use `daemon` if it isn't root, so we have to set `NIX_REMOTE` anyway
           environment.NIX_REMOTE = "local?use-roots-daemon=true";
+          # Nix wants a HOME it can access to cache substituter contents, among other things.
+          environment.HOME = "%S/nix-daemon";
           serviceConfig = {
             User = cfg.daemonUser;
             Group = cfg.daemonGroup;
+
+            StateDirectory = "nix-daemon";
 
             # Empty string needed to disable old Exec
             ExecStart = [
