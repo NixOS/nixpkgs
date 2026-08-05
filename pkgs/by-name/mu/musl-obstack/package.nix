@@ -26,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
 
   meta = {
