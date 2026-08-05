@@ -67,17 +67,18 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    homepage = "https://randombytes.cr.yp.to/";
-    description = "Simple API for applications generating fresh randomness";
-    changelog = "https://randombytes.cr.yp.to/download.html";
-    license = with lib.licenses; [
-      # Upstream specifies the public domain licenses with the terms here https://cr.yp.to/spdx.html
-      publicDomain
-      cc0
-      bsd0
-      mit
-      mit0
-    ];
+    homepage = "https://lib25519.cr.yp.to";
+    description = "Microlibrary for X25519/Ed25519 cryptography";
+    changelog = "https://lib25519.cr.yp.to/download.html";
+    license =
+      # Upstream specifies the public domain licenses with the terms here https://lib25519.cr.yp.to/license.html
+      lib.licenses.OR [
+        lib.licenses.publicDomain
+        lib.licenses.cc0
+        lib.licenses.bsd0
+        lib.licenses.mit
+        lib.licenses.mit0
+      ];
     maintainers = with lib.maintainers; [
       kiike
       imadnyc
