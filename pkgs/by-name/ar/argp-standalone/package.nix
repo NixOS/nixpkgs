@@ -22,6 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
+  strictDeps = true;
+
   doCheck = true;
 
   meta = {
