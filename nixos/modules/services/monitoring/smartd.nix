@@ -113,9 +113,12 @@ in
         };
 
         display = lib.mkOption {
-          default = ":${toString config.services.xserver.display}";
-          defaultText = lib.literalExpression ''":''${toString config.services.xserver.display}"'';
-          type = lib.types.str;
+          default = ":${
+            toString (if config.services.xserver.display == null then 0 else config.services.xserver.display)
+          }";
+          defaultText = lib.literalExpression ''
+            ":''${toString (if config.services.xserver.displ(if config.services.xserver.display == null then 0 else config.services.xserver.display)}"
+          '';
           description = "DISPLAY to send X11 notifications to.";
         };
       };
