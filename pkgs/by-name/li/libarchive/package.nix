@@ -142,6 +142,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "http://libarchive.org";
     description = "Multi-format archive and compression library";
