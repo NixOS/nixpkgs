@@ -4,11 +4,7 @@
   fetchPypi,
 
   # dependencies
-  cuda-bindings,
-  numpy,
   nvidia-cutlass-dsl-libs-base,
-  protobuf,
-  typing-extensions,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -20,30 +16,24 @@ buildPythonPackage (finalAttrs: {
   # Universal metadata-only wheel that just pulls in `nvidia-cutlass-dsl-libs-base`
   # (which actually ships the Python code and the bundled MLIR/CUDA runtime libs).
   src = fetchPypi {
-    pname = "nvidia_cutlass_dsl_libs_core";
+    pname = "nvidia_cutlass_dsl";
     inherit (finalAttrs) version;
     format = "wheel";
     python = "py3";
     dist = "py3";
-    hash = "sha256-PGoSjOMUrKPzMuq8sOVaLEw6qVHjNlhKeusrATvtRHQ=";
+    hash = "sha256-+W41wTk6ivqaIMraGqCP3KFtZzhS8ydBROPoFpPxOhQ=";
   };
 
   pythonRemoveDeps = [
-    # Only cuda-bindings is needed
-    "cuda-python"
-
-    # just a wrapper for cudaPackages.cuda_nvdisasm
-    "nvidia-cuda-nvdisasm"
+    # Bundled in nvidia-cutlass-dsl-libs-base
+    "nvidia-cutlass-dsl-libs-cu12"
+    "nvidia-cutlass-dsl-libs-cu13"
   ];
   dependencies = [
-    cuda-bindings
-    numpy
     nvidia-cutlass-dsl-libs-base
-    protobuf
-    typing-extensions
   ];
 
-  # pythonImportsCheck = [ "cutlass" ];
+  pythonImportsCheck = [ "cutlass" ];
 
   # No tests in the Pypi archive
   doCheck = false;
