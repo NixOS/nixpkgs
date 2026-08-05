@@ -20800,7 +20800,7 @@
     name = "nova madeline";
   };
   novaviper = {
-    email = "coder.nova99@mailbox.org";
+    email = "code4nova@aluwux.me";
     github = "novaviper";
     githubId = 7191115;
     name = "Nova Leary";
