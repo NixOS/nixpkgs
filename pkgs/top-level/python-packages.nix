@@ -560,6 +560,8 @@ self: super: with self; {
 
   aiosonos = callPackage ../development/python-modules/aiosonos { };
 
+  aiospinel = callPackage ../development/python-modules/aiospinel { };
+
   aiosql = callPackage ../development/python-modules/aiosql { };
 
   aiosqlite = callPackage ../development/python-modules/aiosqlite { };
