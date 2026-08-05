@@ -52,7 +52,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   meta = {
-    description = "Licomp implementaiton of OSLC-handbook";
+    description = "Licomp implementation of OSLC-handbook";
     homepage = "https://github.com/hesa/licomp-oslc-handbook";
     changelog = "https://github.com/hesa/licomp-oslc-handbook/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [

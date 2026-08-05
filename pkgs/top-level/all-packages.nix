@@ -5591,6 +5591,9 @@ with pkgs;
     ffmpeg_8
     ffmpeg_8-headless
     ffmpeg_8-full
+    ffmpeg_9
+    ffmpeg_9-headless
+    ffmpeg_9-full
     ffmpeg
     ffmpeg-headless
     ffmpeg-full
@@ -5997,7 +6000,6 @@ with pkgs;
   libdbusmenu-gtk2 = libdbusmenu.override { gtkVersion = "2"; };
   libdbusmenu-gtk3 = libdbusmenu.override { gtkVersion = "3"; };
 
-  libdisplay-info_0_2 = callPackage ../by-name/li/libdisplay-info/0.2.nix { };
   libdisplay-info_0_3 = callPackage ../by-name/li/libdisplay-info/0.3.nix { };
 
   dwarfdump = libdwarf.bin;

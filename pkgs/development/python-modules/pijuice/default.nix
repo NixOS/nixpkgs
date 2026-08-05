@@ -23,7 +23,7 @@ buildPythonPackage rec {
   patches = [
     # The pijuice_cli.cli file doesn't have a shebang as the first line of the
     # script. Without it, the pythonWrapPrograms hook will not wrap the program.
-    # Add a python shebang here so that the the hook is triggered.
+    # Add a python shebang here so that the hook is triggered.
     ./patch-shebang.diff
   ];
 

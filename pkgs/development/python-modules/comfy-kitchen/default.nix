@@ -6,6 +6,7 @@
   cudaSupport ? config.cudaSupport,
   fetchFromGitHub,
   nanobind,
+  ninja,
   setuptools,
   torch,
   comfyui,
@@ -16,19 +17,15 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "comfy-kitchen";
-  version = "0.2.22";
+  version = "0.2.26";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Comfy-Org";
     repo = "comfy-kitchen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3neQWBLlB0bFQYbbkIy78eaBBwWQEdpUtDFIt0EIzb0=";
+    hash = "sha256-T/govRMiwiANbVXRizY4W3jz4iN8NuLyM0nVA990Lwg=";
   };
-
-  nativeBuildInputs = lib.optionals cudaSupport [
-    cmake
-  ];
 
   buildInputs = lib.optionals cudaSupport (
     with cudaPackages;
@@ -39,7 +36,9 @@ buildPythonPackage (finalAttrs: {
   );
 
   build-system = [
+    cmake
     nanobind
+    ninja
     setuptools
   ];
 
