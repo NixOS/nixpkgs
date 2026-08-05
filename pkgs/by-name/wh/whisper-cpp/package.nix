@@ -81,13 +81,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "whisper-cpp";
-  version = "1.8.7";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "whisper.cpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hzgO2IqV1+JQjiYBBmFSOLfp1BgH0DgU0TZyO7OzFHE=";
+    hash = "sha256-tW3UkERd/4PLpjSObBkZVqJPzue70oGeLDNiQDTDwSU=";
   };
 
   # The upstream download script tries to download the models to the
@@ -95,15 +95,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   # inside the nix store. This patch changes the script to download
   # the models to the current directory of where it is being run from.
   patches = [ ./download-models.patch ];
-
-  postPatch = ''
-    for target in examples/{bench,command,cli,quantize,server,stream,talk-llama}/CMakeLists.txt; do
-      if ! grep -q -F 'install('; then
-        echo 'install(TARGETS ''${TARGET} RUNTIME)' >> $target
-        ${lib.optionalString stdenv.hostPlatform.isDarwin "echo 'install(TARGETS whisper.coreml LIBRARY)' >> src/CMakeLists.txt"}
-      fi
-    done
-  '';
 
   nativeBuildInputs = [
     cmake
@@ -185,12 +176,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   installCheckPhase = ''
     runHook preInstallCheck
     "$out/bin/whisper-cli" --help >/dev/null
+    "$out/bin/parakeet-cli" --help >/dev/null
     runHook postInstallCheck
-  '';
-
-  postFixup = ''
-    substituteInPlace $out/lib/pkgconfig/whisper.pc \
-      --replace-fail '//' '/'
   '';
 
   passthru.updateScript = nix-update-script { };

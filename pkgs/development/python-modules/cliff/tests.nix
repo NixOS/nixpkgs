@@ -3,7 +3,6 @@
   cliff,
   sphinx,
   stestr,
-  testscenarios,
 }:
 
 buildPythonPackage {
@@ -24,7 +23,6 @@ buildPythonPackage {
     cliff
     sphinx
     stestr
-    testscenarios
   ];
 
   checkPhase = ''
