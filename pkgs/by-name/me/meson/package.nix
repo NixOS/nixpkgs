@@ -3,18 +3,43 @@
   stdenv,
   fetchFromGitHub,
   installShellFiles,
+  cargo,
+  cmake,
+  cups,
   coreutils,
+  gfortran,
+  gitMinimal,
+  glib,
+  gobject-introspection,
+  hdf5-fortran,
+  jdk,
   libblocksruntime,
   llvmPackages,
+  meson,
+  nasm,
+  netcdf,
   ninja,
   pkg-config,
   python3,
+  ncurses,
+  libxml2,
+  qt6,
   replaceVars,
+  rustc,
   writableTmpDirAsHomeHook,
   writeShellScriptBin,
   zlib,
+  # This field is intended for internal nixpkgs use (to break dependency cycles).
+  # It is a positive integer specifying the level of additional tests to run.
+  # 0 is the default.
+  # At the moment, 1 is more tests (and a larger closure),
+  # 2 is even more (including LLVM/clang/rustc in the closure).
+  _extraTests ? 0,
 }:
 
+let
+  boost' = python3.pkgs.boost.override { enableStatic = true; };
+in
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "meson";
   version = "1.11.2";
@@ -93,6 +118,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     typing = [ python3.pkgs.mypy ];
   };
 
+  ${if _extraTests > 0 then "dontUseCmakeConfigure" else null} = true;
+  ${if _extraTests > 1 then "dontUseQmakeConfigure" else null} = true;
+  ${if _extraTests > 1 then "dontWrapQtApps" else null} = true;
+
   nativeCheckInputs = [
     ninja
     pkg-config
@@ -101,16 +130,55 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ++ lib.optionals python3.isPyPy [
     # Several tests hardcode python3.
     (writeShellScriptBin "python3" ''exec pypy3 "$@"'')
+  ]
+  ++ lib.optionals (_extraTests > 0) [
+    cmake
+    gfortran
+    gitMinimal
+    glib # glib-compile-resources
+    nasm
+    python3.pkgs.cython
+  ]
+  ++ lib.optionals (_extraTests > 1) [
+    cargo
+    gobject-introspection # g-ir-scanner
+    jdk
+    llvmPackages.clang
+    llvmPackages.llvm
+    qt6.qmake
+    qt6.qtbase
+    qt6.qtdeclarative
+    qt6.qttools
+    rustc
   ];
 
   checkInputs = [
     zlib
   ]
-  ++ lib.optionals (stdenv.cc.isClang && !stdenv.hostPlatform.isDarwin) [
-    # https://github.com/mesonbuild/meson/blob/bd3f1b2e0e70ef16dfa4f441686003212440a09b/test%20cases/common/184%20openmp/meson.build
-    llvmPackages.openmp
+  ++ lib.optionals (_extraTests > 0) [
+    boost'
+    boost'.dev
+    glib
+    hdf5-fortran
+    netcdf
+    python3 # required by "test cases/python3/3 cython/meson.build"
+  ]
+  ++ lib.optionals (_extraTests > 1) [
+    cups.dev
+    cups.lib
+    libxml2
+    libxml2.dev
+    llvmPackages.llvm.dev
+    llvmPackages.llvm.lib
+    ncurses
+    ncurses.dev
+  ]
+  ++ lib.optionals (_extraTests > 1 && stdenv.cc.isClang) [
     # https://github.com/mesonbuild/meson/blob/1670fca36fcb1a4fe4780e96731e954515501a35/test%20cases/frameworks/29%20blocks/meson.build
     libblocksruntime
+    # https://github.com/mesonbuild/meson/blob/bd3f1b2e0e70ef16dfa4f441686003212440a09b/test%20cases/common/184%20openmp/meson.build
+    llvmPackages.openmp
+    llvmPackages.openmp.dev
   ];
 
   checkPhase = lib.concatStringsSep "\n" (
@@ -126,24 +194,48 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
           --replace-fail "multiprocessing.cpu_count()" "int(os.environ['NIX_BUILD_CORES'])"
       ''
     ]
+    ++ lib.optionals (_extraTests > 1) [
+      # For some reason, this variable is TRUE and not ON.
+      ''
+        substituteInPlace 'test cases/common/211 dependency get_variable method/meson.build' \
+          --replace-fail \
+            "dep_cm.get_variable(cmake : 'LLVM_ENABLE_RTTI') == 'ON')" \
+            "dep_cm.get_variable(cmake : 'LLVM_ENABLE_RTTI') == 'TRUE')"
+        substituteInPlace "test cases/python3/3 cython/meson.build" \
+          --replace-fail \
+            "find_program('cython3'" \
+            "find_program('${python3.pkgs.cython.meta.mainProgram}'"
+      ''
+    ]
     # Remove problematic tests
     ++ (map (f: ''rm -vr "${f}";'') (
       [
+        # Nixpkgs cctools does not have bitcode support.
+        "test cases/osx/7 bitcode"
+        # This test tries to compile with flags `-D_FORTIFY_SOURCE=2 -U_FORTIFY_SOURCE -O0`.
+        # It fails because cc-wrapper adds `-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=3`
+        # after the provided args (to ensure that fortify cannot be disabled without
+        # being allowed by the package definition)
+        "test cases/common/282 -D_FORTIFY_SOURCE=2 and -O0"
+        # requires static zlib, see #66461
+        "test cases/linuxlike/14 static dynamic linkage"
+      ]
+      ++ lib.optionals (_extraTests < 1) [
         # requires git, creating cyclic dependency
         "test cases/common/66 vcstag"
         # requires glib, creating cyclic dependency
         "test cases/linuxlike/6 subdir include order"
         "test cases/linuxlike/9 compiler checks with dependencies"
-        # requires static zlib, see #66461
-        "test cases/linuxlike/14 static dynamic linkage"
-        # Nixpkgs cctools does not have bitcode support.
-        "test cases/osx/7 bitcode"
-        # Fails because "_FORTIFY_SOURCE requires compiling with optimization (-O)"
-        "test cases/common/282 -D_FORTIFY_SOURCE=2 and -O0"
       ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        # requires llvmPackages.openmp, creating cyclic dependency
+      ++ lib.optionals (stdenv.cc.isClang) [
+        # _extraTests < 2: needs llvmPackages.openmp
+        # _extraTests >= 2: seems to require both headers from llvmPackages.openmp.dev (for C/C++) and gfortran.
         "test cases/common/184 openmp"
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.isDarwin && _extraTests > 1) [
+        # These expect libraries to be .so files, not .dylib files.
+        "test cases/frameworks/12 multiple gir"
+        "test cases/frameworks/34 gir static lib"
       ]
       ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
         # pch doesn't work quite right on FreeBSD, I think
@@ -185,6 +277,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   setupHook = ./setup-hook.sh;
   env.hostPlatform = stdenv.targetPlatform.system;
+  passthru.tests = {
+    extraTests1 = meson.override { _extraTests = 1; };
+    extraTests2 = meson.override { _extraTests = 2; };
+  };
 
   meta = {
     homepage = "https://mesonbuild.com";
