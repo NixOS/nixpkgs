@@ -1,5 +1,7 @@
 {
   callPackage,
+  stdenv,
+  gradle-native-platform ? null,
   jdk11,
   jdk17,
   jdk21,
@@ -104,6 +106,8 @@ let
       # A current LTS version of a JDK is a good choice.
       defaultJava,
 
+      extraNativePlatformJars ? null,
+
       # The platforms supported by this Gradle package.
       # Gradle Native-Platform ships some binaries that
       # are compatible only with specific platforms.
@@ -117,7 +121,8 @@ let
         "x86_64-cygwin"
         "x86_64-linux"
         "x86_64-windows"
-      ],
+      ]
+      ++ (if extraNativePlatformJars != null then [ "riscv64-linux" ] else [ ]),
 
       # Extra attributes to be merged into the resulting derivation's
       # meta attribute.
@@ -240,7 +245,12 @@ let
           export PATH="${buildPackages.jdk}/bin:$PATH"
           . ${./patching.sh}
 
-          nativeVersion="$(extractVersion native-platform $gradleLibexec/lib/native-platform-*.jar)"
+          nativeVersion="$(extractVersion native-platform $gradleLibexec/lib/native-platform-*.jar)"${
+            lib.optionalString (extraNativePlatformJars != null) ''
+
+              cp -t "$gradleLibexec/lib/" ${extraNativePlatformJars}/lib/*.jar
+            ''
+          }
           for variant in "" "-ncurses5" "-ncurses6"; do
             autoPatchelfInJar \
               $gradleLibexec/lib/native-platform-linux-${arch}$variant-''${nativeVersion}.jar \
@@ -381,6 +391,7 @@ rec {
     hash = "sha256-8XcSmKcPbbWina9iN4xOGKF/wzybprFDYuDN9AYQOA0=";
     defaultJava = jdk21;
     updateScriptMajorVersion = "8";
+    extraNativePlatformJars = if stdenv.hostPlatform.isRiscV64 then gradle-native-platform else null;
   };
 
   # Default version of Gradle in nixpkgs.
