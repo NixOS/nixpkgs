@@ -1106,12 +1106,12 @@ final: prev: {
 
   astroui = buildVimPlugin {
     pname = "astroui";
-    version = "4.0.0";
+    version = "4.0.1";
     src = fetchFromGitHub {
       owner = "AstroNvim";
       repo = "astroui";
-      tag = "v4.0.0";
-      hash = "sha256-290PxuIz8Pc1UWz6Huy0ZQH1CxGeoqN5x2U+VDCRBJc=";
+      tag = "v4.0.1";
+      hash = "sha256-9QU4eSd+6CtR8IhVFEp37L8M226iES8CAMkpxh6ThYQ=";
     };
     meta.homepage = "https://github.com/AstroNvim/astroui/";
     meta.license = getLicenseFromSpdxId "GPL-3.0-only";
