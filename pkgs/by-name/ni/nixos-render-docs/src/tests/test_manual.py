@@ -1,6 +1,26 @@
+import xml.parsers.expat as expat
+from html.entities import name2codepoint
 from pathlib import Path
 
 from nixos_render_docs.manual import HTMLConverter, HTMLParameters
+
+
+def _parse_xhtml(text: str) -> None:
+    parser = expat.ParserCreate()
+    # Use offline html entity definitions
+    # and enble to use them (XML_PARAM_ENTITY_PARSING_ALWAYS)
+    parser.UseForeignDTD(True)
+    parser.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_ALWAYS)
+
+    def external_entity_ref(context: str | None, base: str | None,
+                            system_id: str | None, public_id: str | None) -> int:
+        sub = parser.ExternalEntityParserCreate(context)
+        sub.Parse("".join(f'<!ENTITY {name} "&#{cp};">'
+                          for name, cp in name2codepoint.items()), True)
+        return 1
+
+    parser.ExternalEntityRefHandler = external_entity_ref
+    parser.Parse(text, True)
 
 
 def _build(tmp_path: Path, sidebar_depth: int = 2, sidebar_open: frozenset[str] = frozenset()) -> str:
@@ -122,3 +142,30 @@ def test_chunked_pages_carry_the_sidebar(tmp_path: Path) -> None:
     assert '<h4 id="sub-a" class="title"' in chunk
     assert chunk.count("<h1") <= 1
     assert "Table of Contents" not in chunk
+
+
+def test_output_is_well_formed_xhtml(tmp_path: Path) -> None:
+    (tmp_path / "chapter.md").write_text(
+        "# Fixed-point arguments {#chap-fpa}\n\n"
+        "Intro.\n\n"
+        "## First section {#sec-first}\n\n"
+        "Body.\n"
+    )
+    (tmp_path / "index.md").write_text(
+        "# Test manual {#book-test}\n\n"
+        "## Version 1\n\n"
+        "```{=include=} chapters html:into-file=//chapter.html\nchapter.md\n```\n"
+    )
+    out = tmp_path / "out"
+    out.mkdir(exist_ok=True)
+    conv = HTMLConverter(
+        "1.0.0",
+        HTMLParameters("test-gen", [], [], 3, Path("media")),
+        {},
+    )
+    conv.convert(tmp_path / "index.md", out / "index.html")
+    pages = sorted(out.glob("*.html"))
+    # Test that pages produced orderly with into-file
+    assert {p.name for p in pages} == {"index.html", "chapter.html"}
+    for page in pages:
+        _parse_xhtml(page.read_text())

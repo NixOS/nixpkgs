@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "JavaScript engine written in Zig";
     license = lib.licenses.mit;
     homepage = "https://kiesel.dev";
-    maintainers = with lib.maintainers; [ cvengler ];
+    maintainers = with lib.maintainers; [ cve ];
     platforms = lib.platforms.all;
     mainProgram = "kiesel";
   };
