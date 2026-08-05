@@ -137,6 +137,8 @@ crystal.buildCrystalPackage rec {
     description = "Open source alternative front-end to YouTube";
     mainProgram = "invidious";
     homepage = "https://invidious.io/";
+    downloadPage = "https://github.com/iv-org/invidious";
+    changelog = "https://github.com/iv-org/invidious/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
       _999eagle
