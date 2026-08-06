@@ -70,6 +70,7 @@ let
         alpaka = self.callPackage ./misc/alpaka { };
         cxx-rust-cssparser = self.callPackage ./misc/cxx-rust-cssparser { };
         glaxnimate = self.callPackage ./misc/glaxnimate { };
+        karton = self.callPackage ./misc/karton { };
         kdiagram = self.callPackage ./misc/kdiagram { };
         kdevelop-pg-qt = self.callPackage ./misc/kdevelop-pg-qt { };
         kdsoap-ws-discovery-client = self.callPackage ./misc/kdsoap-ws-discovery-client { };
