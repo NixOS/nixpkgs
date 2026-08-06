@@ -22248,8 +22248,6 @@ self: super: with self; {
 
   vprof = callPackage ../development/python-modules/vprof { };
 
-  vqgan-jax = callPackage ../development/python-modules/vqgan-jax { };
-
   vsts = callPackage ../development/python-modules/vsts { };
 
   vsts-cd-manager = callPackage ../development/python-modules/vsts-cd-manager { };
