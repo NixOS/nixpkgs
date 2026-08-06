@@ -2,6 +2,7 @@
   lib,
   apple-sdk_14,
   apple-sdk_26,
+  llvmPackages,
   llvmPackages_upstream,
   patchelf,
   stdenv,
@@ -14,6 +15,7 @@
   swiftc,
   symlinkJoin,
   swift_release,
+  enableRepl ? true, # Whether to build and include LLDB for the Swift REPL.
 }:
 
 let
@@ -30,6 +32,10 @@ let
     paths = [
       swiftc.out
       swiftc.dev
+    ]
+    ++ lib.optionals enableRepl [
+      # LLDB is used by `swift repl` to provide the REPL.
+      llvmPackages.lldb.out
     ]
     ++ lib.optionals (stdlib != null) [
       stdlib.dev
@@ -163,6 +169,25 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail @stdlibPath@ ${lib.escapeShellArg stdlib.out} \
         --replace-fail @swiftPath@ "$out" \
         --replace-fail @swiftPlatform@ ${stdenv.hostPlatform.swift.platform}
+    ''}
+    ${lib.optionalString enableRepl ''
+      # LLDB expects to find Swift relative to its location. Both the wrapper and its binary need copied,
+      # and the wrapper needs updated to find the binary in the new location.
+      lldbBinPath=$(dirname $(readlink "$out/bin/lldb"))
+      for lldbExe in lldb .lldb-wrapped; do
+        rm "$out/bin/$lldbExe"
+        cp "$lldbBinPath/$lldbExe" "$out/bin/$lldbExe"
+      done
+      substituteInPlace "$out/bin/lldb" \
+        --replace-fail "$lldbBinPath" "$out/bin"
+      ${lib.optionalString stdenv.hostPlatform.isElf ''
+        # LLDB tries to find the Swift resource folder relative to where it finds `liblldb.so` via RPATH.
+        oldRpaths=$(patchelf --print-rpath "$out/bin/.lldb-wrapped")
+        lldbRpath=${lib.escapeShellArg llvmPackages.lldb.out}
+
+        chmod u+w "$out/bin/.lldb-wrapped"
+        patchelf --set-rpath "''${oldRpaths/$lldbRpath/$out}" "$out/bin/.lldb-wrapped"
+      ''}
     ''}
     chmod -R u-w "$out/bin" "$out/lib" "$out/nix-support"
   '';
