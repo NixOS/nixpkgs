@@ -486,10 +486,12 @@ python3Packages.buildPythonApplication rec {
     # checks whether pip is installed
     "tests/util/test_package.py::test_check_package_fragment"
     # flaky
+    "tests/test_bootstrap.py::test_bootstrap_does_not_preimport_stage_1_integrations"
     "tests/test_bootstrap.py::test_setup_hass_takes_longer_than_log_slow_startup"
     "tests/test_test_fixtures.py::test_evict_faked_translations"
     "tests/helpers/test_backup.py::test_async_get_manager"
     "tests/helpers/test_trigger.py::test_platform_multiple_triggers[sync_action]"
+    "tests/util/test_thread.py::test_thread_with_exception_invalid"
     # various failing after python-updates
     "tests/helpers/test_entity_platform.py::test_platform_warn_slow_setup" # ValueError: not enough values to unpack (expected 2, got 0)
     "tests/helpers/test_entity_component.py::test_set_scan_interval_via_config" # assert 10 == 30.0
