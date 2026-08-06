@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
     repo = "eiquadprog";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ukYIc5ZCIDunXMyC44Dd1qac4Ku4pNv9p4ik+xyI0i0=";
   };
 
