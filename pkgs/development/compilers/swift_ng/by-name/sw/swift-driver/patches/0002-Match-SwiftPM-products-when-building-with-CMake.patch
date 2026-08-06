@@ -1,0 +1,59 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Fri, 26 Jun 2026 21:01:31 -0400
+Subject: [PATCH 2/4] Match SwiftPM products when building with CMake
+
+Adjust the built libraries to match the way SwiftPM would build the
+Swift Compiler Driver.
+---
+ Sources/SwiftDriverExecution/CMakeLists.txt | 7 +------
+ Sources/SwiftOptions/CMakeLists.txt         | 7 +------
+ 2 files changed, 2 insertions(+), 12 deletions(-)
+
+diff --git a/Sources/SwiftDriverExecution/CMakeLists.txt b/Sources/SwiftDriverExecution/CMakeLists.txt
+index 91c9bc12..17adca61 100644
+--- a/Sources/SwiftDriverExecution/CMakeLists.txt
++++ b/Sources/SwiftDriverExecution/CMakeLists.txt
+@@ -6,7 +6,7 @@
+ # See http://swift.org/LICENSE.txt for license information
+ # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
+ 
+-add_library(SwiftDriverExecution
++add_library(SwiftDriverExecution STATIC
+   llbuild.swift
+   MultiJobExecutor.swift
+   SwiftDriverExecutor.swift)
+@@ -24,8 +24,3 @@ set_property(GLOBAL APPEND PROPERTY SWIFTDRIVER_EXPORTS SwiftDriverExecution)
+ # NOTE: workaround for CMake not setting up include flags yet
+ set_target_properties(SwiftDriverExecution PROPERTIES
+   INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_Swift_MODULE_DIRECTORY})
+-
+-install(TARGETS SwiftDriverExecution
+-  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+-  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+-  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
+diff --git a/Sources/SwiftOptions/CMakeLists.txt b/Sources/SwiftOptions/CMakeLists.txt
+index d4dbbcc3..4dea39d6 100644
+--- a/Sources/SwiftOptions/CMakeLists.txt
++++ b/Sources/SwiftOptions/CMakeLists.txt
+@@ -6,7 +6,7 @@
+ # See http://swift.org/LICENSE.txt for license information
+ # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
+ 
+-add_library(SwiftOptions
++add_library(SwiftOptions STATIC
+   DriverKind.swift
+   Option.swift
+   OptionTable.swift
+@@ -23,8 +23,3 @@ set_property(GLOBAL APPEND PROPERTY SWIFTDRIVER_EXPORTS SwiftOptions)
+ # NOTE: workaround for CMake not setting up include flags yet
+ set_target_properties(SwiftOptions PROPERTIES
+   INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_Swift_MODULE_DIRECTORY})
+-
+-install(TARGETS SwiftOptions
+-  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+-  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+-  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
+-- 
+2.54.0
+

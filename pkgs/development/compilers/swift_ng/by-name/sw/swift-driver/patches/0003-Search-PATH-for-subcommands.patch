@@ -1,0 +1,57 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Fri, 26 Jun 2026 20:57:27 -0400
+Subject: [PATCH 3/4] Search PATH for subcommands
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This aligns Swift Driver with the legacy/C++ frontend’s behavior when
+searching for subcommands.
+---
+ Sources/swift-driver/main.swift | 19 ++++++++++++++-----
+ 1 file changed, 14 insertions(+), 5 deletions(-)
+
+diff --git a/Sources/swift-driver/main.swift b/Sources/swift-driver/main.swift
+index 8c2a75ef..a34856d9 100644
+--- a/Sources/swift-driver/main.swift
++++ b/Sources/swift-driver/main.swift
+@@ -37,6 +37,8 @@ import enum TSCBasic.ProcessEnv
+ import class TSCBasic.DiagnosticsEngine
+ import class TSCBasic.Process
+ import class TSCBasic.ProcessSet
++import func TSCBasic.getEnvSearchPaths
++import func TSCBasic.lookupExecutablePath
+ import func TSCBasic.resolveSymlinks
+ import protocol TSCBasic.DiagnosticData
+ import var TSCBasic.localFileSystem
+@@ -121,14 +123,21 @@ do {
+   if case .subcommand(let subcommand) = mode {
+     // We are running as a subcommand, try to find the subcommand adjacent to the executable we are running as.
+     // If we didn't find the tool there, let the OS search for it.
+-    let subcommandPath: AbsolutePath?
+-    if let executablePath = Process.findExecutable(CommandLine.arguments[0]) {
++    let executablePath = try Process.findExecutable(subcommand).map {
+       // Attempt to resolve the executable symlink in order to be able to
+       // resolve compiler-adjacent library locations.
+-      subcommandPath = try TSCBasic.resolveSymlinks(executablePath).parentDirectory.appending(component: subcommand)
+-    } else {
+-      subcommandPath = Process.findExecutable(subcommand)
++      try TSCBasic.resolveSymlinks($0).parentDirectory
+     }
++#if os(Windows)
++    let searchPaths = TSCBasic.getEnvSearchPaths(pathString: ProcessEnv.block["Path"],
++                                                 currentWorkingDirectory: localFileSystem.currentWorkingDirectory)
++#else
++    let searchPaths = TSCBasic.getEnvSearchPaths(pathString: ProcessEnv.block["PATH"],
++                                                 currentWorkingDirectory: localFileSystem.currentWorkingDirectory)
++#endif
++    let subcommandPath = TSCBasic.lookupExecutablePath(filename: subcommand,
++                                                       currentWorkingDirectory: executablePath,
++                                                       searchPaths: searchPaths)
+ 
+     guard let subcommandPath = subcommandPath,
+           localFileSystem.exists(subcommandPath) else {
+-- 
+2.54.0
+

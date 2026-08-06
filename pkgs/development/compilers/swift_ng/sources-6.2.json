@@ -11,6 +11,9 @@
   "swift-corelibs-libdispatch": {
     "hash": "sha256-Tu2G9FAP4q1xgM1n9q17T6VrqJ3tv8RezyUex38yNds="
   },
+  "swift-driver": {
+    "hash": "sha256-CZYqUadpAsAUnCTZElobZS9nlMfCuHiMnac3o0k7hnI="
+  },
   "swift-experimental-string-processing": {
     "hash": "sha256-WtLLqdvYTmLWSS5q42b8yXFrJcC+dUy4uTuCeIflRFs="
   },
