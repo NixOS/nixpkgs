@@ -367,6 +367,16 @@ with pkgs;
 
   deviceTree = callPackage ../os-specific/linux/device-tree { };
 
+  inherit (callPackage ../servers/ocis-bin { })
+    ocis_5-bin
+    ocis_70-bin
+    ocis_71-bin
+    ocis_72-bin
+    ocis_73-bin
+    ocis_80-bin
+    ocis_81-bin
+    ;
+
   octodns-providers = octodns.providers;
 
   oletools = with python3.pkgs; toPythonApplication oletools;
