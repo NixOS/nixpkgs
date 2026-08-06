@@ -4,9 +4,10 @@
   fetchPypi,
   numpy,
   matplotlib,
-  pytest,
+  pytestCheckHook,
   setuptools,
   scipy,
+  scikit-learn,
 }:
 
 buildPythonPackage rec {
@@ -27,8 +28,9 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest
+    pytestCheckHook
     scipy
+    scikit-learn
   ];
 
   meta = {
