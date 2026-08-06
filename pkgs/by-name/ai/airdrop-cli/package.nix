@@ -27,6 +27,8 @@ swiftPackages.stdenv.mkDerivation {
     "PREFIX=$(out)"
   ];
 
+  dontUseSwiftpmInstall = true;
+
   meta = {
     description = "Use Airdrop from the CLI on macOS written in Swift";
     homepage = "https://github.com/vldmrkl/airdrop-cli";
