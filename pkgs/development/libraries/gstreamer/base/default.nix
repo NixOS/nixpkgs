@@ -50,7 +50,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-base";
-  version = "1.28.5";
+  version = "1.28.6";
 
   outputs = [
     "out"
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-${finalAttrs.version}.tar.xz";
-    hash = "sha256-d28ZIo+R/SW79U2YUFl+FYUH9ZSHKlK5toFOJCm0Pqo=";
+    hash = "sha256-C6aZx8bGb0umQL54yziiRxWt2Wg/PjoZn1Np3FpPBKw=";
   };
 
   __structuredAttrs = true;
