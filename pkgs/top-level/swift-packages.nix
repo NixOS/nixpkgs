@@ -73,6 +73,10 @@ makeScopeWithSplicing' {
 
       llvmPackages_upstream = llvmPackages;
 
+      swift-minimal = self.swift.override {
+        swift-corelibs-libdispatch = null;
+      };
+
       swift_sources = swift_sources_6_2;
     };
   f = lib.extends autoCalledPackages (self: {
