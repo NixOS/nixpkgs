@@ -32,6 +32,9 @@
   "swift-llbuild": {
     "hash": "sha256-nZdiFXYrUiTSlSl6lxNFVpD2x8KGC4OVUUvJSOqH7gU="
   },
+  "swift-package-manager": {
+    "hash": "sha256-RIJLOoyDWWseBdDbJ5fluoZVq11jOdlV1yjq+m5xIws="
+  },
   "swift-syntax": {
     "hash": "sha256-DMMVJQj590RGGBkTgA89u01ZP2B8kbJTmfu+oxzYPds="
   },
