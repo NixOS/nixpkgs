@@ -19,6 +19,7 @@
   replaceVars,
   srcOnly,
   stdenv,
+  stdlib,
   swift-cmark,
   swift-corelibs-libdispatch,
   swift-syntax,
