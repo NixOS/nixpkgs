@@ -229,6 +229,11 @@ stdenv.mkDerivation (
           "Development"
           "IDE"
         ];
+        mimeTypes = [
+          "application/x-code-workspace"
+          "text/plain"
+          "inode/directory"
+        ];
         keywords = [ "vscode" ];
         actions.new-empty-window = {
           name = "New Empty Window";
