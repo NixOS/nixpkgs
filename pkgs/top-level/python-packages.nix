@@ -560,6 +560,8 @@ self: super: with self; {
 
   aiosonos = callPackage ../development/python-modules/aiosonos { };
 
+  aiospinel = callPackage ../development/python-modules/aiospinel { };
+
   aiosql = callPackage ../development/python-modules/aiosql { };
 
   aiosqlite = callPackage ../development/python-modules/aiosqlite { };
@@ -2480,6 +2482,8 @@ self: super: with self; {
   bleak-esphome = callPackage ../development/python-modules/bleak-esphome { };
 
   bleak-retry-connector = callPackage ../development/python-modules/bleak-retry-connector { };
+
+  bleak-smlight = callPackage ../development/python-modules/bleak-smlight { };
 
   blebox-uniapi = callPackage ../development/python-modules/blebox-uniapi { };
 
@@ -11105,8 +11109,6 @@ self: super: with self; {
 
   myjwt = callPackage ../development/python-modules/myjwt { };
 
-  mypermobil = callPackage ../development/python-modules/mypermobil { };
-
   mypy = callPackage ../development/python-modules/mypy { };
 
   inherit (callPackage ../development/python-modules/mypy-boto3 { })
@@ -11927,6 +11929,8 @@ self: super: with self; {
   nptyping = callPackage ../development/python-modules/nptyping { };
 
   npyscreen = callPackage ../development/python-modules/npyscreen { };
+
+  nrf-ota = callPackage ../development/python-modules/nrf-ota { };
 
   nrgkick-api = callPackage ../development/python-modules/nrgkick-api { };
 
@@ -17153,8 +17157,6 @@ self: super: with self; {
 
   pyviz-comms = callPackage ../development/python-modules/pyviz-comms { };
 
-  pyvizio = callPackage ../development/python-modules/pyvizio { };
-
   pyvlx = callPackage ../development/python-modules/pyvlx { };
 
   pyvmomi = callPackage ../development/python-modules/pyvmomi { };
@@ -18649,6 +18651,8 @@ self: super: with self; {
   sigstore-rekor-types = callPackage ../development/python-modules/sigstore-rekor-types { };
 
   sigtools = callPackage ../development/python-modules/sigtools { };
+
+  silabs-ble-ota = callPackage ../development/python-modules/silabs-ble-ota { };
 
   silero-vad = callPackage ../development/python-modules/silero-vad { };
 
@@ -20966,8 +20970,6 @@ self: super: with self; {
   typed-argparse = callPackage ../development/python-modules/typed-argparse { };
 
   typed-settings = callPackage ../development/python-modules/typed-settings { };
-
-  typedmonarchmoney = callPackage ../development/python-modules/typedmonarchmoney { };
 
   typedunits = callPackage ../development/python-modules/typedunits { };
 

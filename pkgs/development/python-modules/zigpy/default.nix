@@ -14,6 +14,7 @@
   jsonschema,
   pytest-asyncio,
   pytest-timeout,
+  pytest-xdist,
   pytestCheckHook,
   serialx,
   setuptools,
@@ -23,14 +24,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "zigpy";
-  version = "2.0.1";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy";
     tag = finalAttrs.version;
-    hash = "sha256-40znZSNqls+Z3Ikg/RFq0652O3d4ydGs33OMR8nn+Ns=";
+    hash = "sha256-zmgh+ihNgQMxGoWx3zQ+UWGh04IyXCQUfGf3ybJg3Sc=";
   };
 
   postPatch = ''
@@ -63,12 +64,11 @@ buildPythonPackage (finalAttrs: {
     freezegun
     pytest-asyncio
     pytest-timeout
+    pytest-xdist
     pytestCheckHook
   ];
 
   disabledTests = [
-    # assert quirked.quirk_metadata.quirk_location.endswith("zigpy/tests/test_quirks_v2.py]-line:104") is False
-    "test_quirks_v2"
     # (Race condition) AssertionError: assert 4 == 3
     "test_periodic_scan_priority"
   ];
@@ -77,8 +77,6 @@ buildPythonPackage (finalAttrs: {
     # Tests require network access
     "tests/ota/test_ota_image.py"
     "tests/ota/test_ota_providers.py"
-    # All tests fail to shutdown thread during teardown
-    "tests/ota/test_ota_matching.py"
   ];
 
   pythonImportsCheck = [

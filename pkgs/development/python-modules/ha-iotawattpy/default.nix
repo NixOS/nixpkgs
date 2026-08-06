@@ -1,27 +1,37 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   httpx,
-  setuptools,
+  hatchling,
   pytestCheckHook,
+  pytest-asyncio,
+  pytest-cov-stub,
+  respx,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "ha-iotawattpy";
-  version = "0.1.2";
+  version = "0.2.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-eMsBEbmENjbJME9Gzo4O9LbGo1i0MP0IuwLUAYqxbI8=";
+  src = fetchFromGitHub {
+    owner = "home-assistant-libs";
+    repo = "iotawattpy";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yPWQisSBeAGx5bTCXq6HeJmH06Frk7zlP+9kpoOHTOo=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [ httpx ];
+  dependencies = [ httpx ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+    pytest-cov-stub
+    respx
+  ];
 
   pythonImportsCheck = [ "iotawattpy" ];
 

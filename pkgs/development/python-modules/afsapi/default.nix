@@ -6,7 +6,8 @@
   hatchling,
   hatch-vcs,
   defusedxml,
-  pytest-aiohttp,
+  pytest-asyncio,
+  pytest-vcr,
   pytestCheckHook,
 }:
 
@@ -32,14 +33,19 @@ buildPythonPackage (finalAttrs: {
     defusedxml
   ];
 
-  doCheck = false; # Failed: async def functions are not natively supported.
-
   nativeCheckInputs = [
-    pytest-aiohttp
+    pytest-asyncio
+    pytest-vcr
     pytestCheckHook
   ];
 
-  enabledTestPaths = [ "async_tests.py" ];
+  disabledTestPaths = [
+    # Failed: async def functions are not natively supported.
+    "async_tests.py"
+    # requires local device
+    "tests/test_device_recordings.py"
+    "tests/test_device_recordings_write.py"
+  ];
 
   pythonImportsCheck = [ "afsapi" ];
 
