@@ -1,0 +1,40 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sun, 23 Aug 2026 21:49:05 -0400
+Subject: [PATCH 11/11] Always find Clang in the toolchain
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+We want Swift to be usable in a default stdenv, which means `CC` is GCC
+on Linux. Since SwiftPM doesn’t actually support GCC, use Clang from the
+toolchain. This means you can’t override the Clang version, but that’s
+probably not a good idea usually.
+---
+ Sources/PackageModel/UserToolchain.swift | 10 ----------
+ 1 file changed, 10 deletions(-)
+
+diff --git a/Sources/PackageModel/UserToolchain.swift b/Sources/PackageModel/UserToolchain.swift
+index b63997bad..903bdeba3 100644
+--- a/Sources/PackageModel/UserToolchain.swift
++++ b/Sources/PackageModel/UserToolchain.swift
+@@ -377,16 +377,6 @@ public final class UserToolchain: Toolchain {
+             return clang
+         }
+ 
+-        // Check in the environment variable first.
+-        if let toolPath = UserToolchain.lookup(
+-            variable: "CC",
+-            searchPaths: self.envSearchPaths,
+-            environment: environment
+-        ) {
+-            self._clangCompiler = toolPath
+-            return toolPath
+-        }
+-
+         // Then, check the toolchain.
+         if let toolPath = try? UserToolchain.getTool(
+             "clang",
+-- 
+2.54.0
+
