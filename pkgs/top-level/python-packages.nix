@@ -2503,6 +2503,8 @@ self: super: with self; {
 
   blockbuster = callPackage ../development/python-modules/blockbuster { };
 
+  blockchain = callPackage ../development/python-modules/blockchain { };
+
   blockdiag = callPackage ../development/python-modules/blockdiag { };
 
   blockfrost-python = callPackage ../development/python-modules/blockfrost-python { };
