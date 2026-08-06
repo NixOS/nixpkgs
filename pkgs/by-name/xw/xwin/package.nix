@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       lib.licenses.mit
       lib.licenses.asl20
     ];
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.eveeifyeve ];
     platforms = with lib.platforms; linux ++ darwin ++ windows;
   };
 })
