@@ -133,12 +133,15 @@ stdenv.mkDerivation (finalAttrs: {
         "sha256-0F7psE+jTimCoy+UVJRgxNC6GEVdY/PJu49hf+D7T3U=";
     };
     mainInstaller = "QuartusLiteSetup-${finalAttrs.version}-linux.run";
+    # Make it a bit easier to override the download URL schema.
+    baseURL = "https://downloads.intel.com/akdlm/software/acdsinst";
+    # e.g. "23.1std.1.993" -> "23.1std/993"
+    URLdir = "${lib.versions.majorMinor finalAttrs.version}std/${lib.elemAt (lib.splitVersion finalAttrs.version) 4}/ib_installers";
     download =
       name: hash:
       fetchurl {
         inherit name hash;
-        # e.g. "23.1std.1.993" -> "23.1std/993"
-        url = "https://downloads.intel.com/akdlm/software/acdsinst/${lib.versions.majorMinor finalAttrs.version}std/${lib.elemAt (lib.splitVersion finalAttrs.version) 4}/ib_installers/${name}";
+        url = "${finalAttrs.finalPackage.baseURL}/${finalAttrs.finalPackage.URLdir}/${name}";
       };
   };
 
