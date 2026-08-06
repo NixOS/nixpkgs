@@ -5,6 +5,9 @@
   "swift": {
     "hash": "sha256-apbBe/TMzq0+1XLkaTOj5NaYzLQ81i+vU+O7VSEJrKo="
   },
+  "swift-corelibs-foundation": {
+    "hash": "sha256-Ytxiu80su2jnF/xLcLVEaHXYvI4spLO8d+qEhDxqAdQ="
+  },
   "swift-corelibs-libdispatch": {
     "hash": "sha256-Tu2G9FAP4q1xgM1n9q17T6VrqJ3tv8RezyUex38yNds="
   },
