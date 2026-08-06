@@ -166,15 +166,17 @@ in
     networking.networkmanager.enable = lib.mkDefault true;
     services.acpid.enable = lib.mkDefault true;
     services.avahi.enable = lib.mkDefault true;
-    services.gnome.gnome-keyring.enable = lib.mkDefault true;
+    services.gnome.gnome-keyring.enable = lib.mkDefault (lib.versionOlder lib.version "26.11");
+    services.gnome.gcr-ssh-agent.enable = lib.mkDefault true;
+    services.oo7.enable = lib.mkDefault (lib.versionAtLeast lib.version "26.11");
     services.gvfs.enable = lib.mkDefault true;
     services.orca.enable = lib.mkDefault (notExcluded pkgs.orca);
     services.power-profiles-daemon.enable = lib.mkDefault (
       !config.hardware.system76.power-daemon.enable
     );
 
-    warnings = lib.optionals (cfg.showExcludedPkgsWarning && excludedCorePkgs != [ ]) [
-      ''
+    warnings = [
+      (lib.mkIf (cfg.showExcludedPkgsWarning && excludedCorePkgs != [ ]) ''
         The `environment.cosmic.excludePackages` option was used to exclude some
         packages from the environment which also includes some packages that the
         maintainers of the COSMIC DE deem necessary for the COSMIC DE to start
@@ -187,7 +189,19 @@ in
 
         You can stop this warning from appearing by setting the option
         `services.desktopManager.cosmic.showExcludedPkgsWarning` to `false`.
-      ''
+      '')
+
+      (lib.mkIf (config.services.gnome.gnome-keyring.enable) ''
+        The Secret Service provider used by COSMIC `gnome-keyring` has been
+        replaced by `oo7` starting with 26.11.
+
+        You can migrate to this new service by setting the option
+        `services.gnome.gnome-keyring.enable` to `false` and `services.oo7.enable`
+        to `true`.
+
+        After the migration has been completed (which hapens on first login),
+        `gnome-keyring` will no longer be able to read the current keyring.
+      '')
     ];
   };
 }
