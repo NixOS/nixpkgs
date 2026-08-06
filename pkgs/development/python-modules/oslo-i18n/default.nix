@@ -40,10 +40,7 @@ buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
 
-    stestr run -e <(echo "
-    # list is not deduped
-    oslo_i18n.tests.test_gettextutils.GettextTest.test_get_available_languages
-    ")
+    stestr run
 
     runHook postCheck
   '';

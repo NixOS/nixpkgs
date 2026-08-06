@@ -12793,6 +12793,8 @@ self: super: with self; {
 
   paddlex = callPackage ../development/python-modules/paddlex { };
 
+  padne = callPackage ../development/python-modules/padne { };
+
   pagelabels = callPackage ../development/python-modules/pagelabels { };
 
   paginate = callPackage ../development/python-modules/paginate { };
@@ -20759,6 +20761,8 @@ self: super: with self; {
   tree-sitter-rust = callPackage ../development/python-modules/tree-sitter-rust { };
 
   tree-sitter-sql = callPackage ../development/python-modules/tree-sitter-sql { };
+
+  tree-sitter-typescript = callPackage ../development/python-modules/tree-sitter-typescript { };
 
   tree-sitter-yaml = callPackage ../development/python-modules/tree-sitter-yaml { };
 

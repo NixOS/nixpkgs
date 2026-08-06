@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   nix-update-script,
   kdePackages,
@@ -14,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vermouth";
-  version = "1.9.7";
+  version = "2.0.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -23,17 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dekomote";
     repo = "vermouth";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hcsvTvvuzuqTGgOdWt3sxyoJqjZjlUPlnlYJUgNpV4g=";
+    hash = "sha256-5Bej9GJgOUqg3WI4kHkyWXjjTv+MmimZbCK4vxpBdeU=";
   };
-
-  patches = [
-    # backport fix for desktop file generation
-    # FIXME: remove in next update
-    (fetchpatch {
-      url = "https://github.com/dekomote/vermouth/commit/436a201091505c142a88848135fe04e1ec996a1a.diff";
-      hash = "sha256-fIgcewbJOpi+qHPgOJRCr+67RbziPPGP4sC1dclydgQ=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake

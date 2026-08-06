@@ -7,7 +7,7 @@
 
 buildNpmPackage rec {
   pname = "asf-ui";
-  version = "a4d5a9a4fbd09ad2ed00ec09db8344175f120898";
+  version = "5e028bc91dd3c0238b602714d96713a205600248";
 
   src = fetchFromGitHub {
     owner = "JustArchiNET";
@@ -15,10 +15,10 @@ buildNpmPackage rec {
     # updated by the update script
     # this is always the commit that should be used with asf-ui from the latest asf version
     rev = version;
-    hash = "sha256-PP9VT1F8EX5AgNr3OGsirDkUSVAzKHbBpJi6XBlEWeg=";
+    hash = "sha256-HdUdSrwTXALoT7qmcAYwaeaw1POus8++TBeoqIuEMDM=";
   };
 
-  npmDepsHash = "sha256-bqwDKSaQt6ptfZC7B332Ig/BAZvJRQ/NaxPgA5VQ884=";
+  npmDepsHash = "sha256-Vhs5apBz951fcvIx8J+/oShit7rD4/RB919d40cjavs=";
 
   installPhase = ''
     runHook preInstall
