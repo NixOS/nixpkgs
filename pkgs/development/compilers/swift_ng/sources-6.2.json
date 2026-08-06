@@ -11,6 +11,9 @@
   "swift-experimental-string-processing": {
     "hash": "sha256-WtLLqdvYTmLWSS5q42b8yXFrJcC+dUy4uTuCeIflRFs="
   },
+  "swift-foundation-icu": {
+    "hash": "sha256-C2rq5Q0F1id89mTN4+B/fKSvX1SEAf3/Zgvb/3IdsJ8="
+  },
   "swift-syntax": {
     "hash": "sha256-DMMVJQj590RGGBkTgA89u01ZP2B8kbJTmfu+oxzYPds="
   }
