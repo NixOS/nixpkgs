@@ -14,6 +14,10 @@ let
   # Need to use an older SDK if `swiftc` does not support macros.
   propagated-sdk = if swiftc.supportsMacros then apple-sdk_26 else apple-sdk_14;
 
+  # The toolchain needs to propagate libdispatch with and without the Swift overlay to make sure it propagates
+  # both the non-Swift shared libraries and the Swift overlay shared library.
+  swift-corelibs-libdispatch-no-overlay = swift-corelibs-libdispatch.override { useSwift = false; };
+
   # `out` and `dev` are merged because that’s what Swift expects.
   outLinks = symlinkJoin {
     name = "swift" + lib.removePrefix "swiftc" (lib.getName swiftc) + "-${swift_release}-out";
@@ -25,6 +29,8 @@ let
       lib.optionals (swift-corelibs-libdispatch != null) [
         swift-corelibs-libdispatch.out
         swift-corelibs-libdispatch.dev
+        swift-corelibs-libdispatch-no-overlay.out
+        swift-corelibs-libdispatch-no-overlay.dev
       ]
     );
   };
@@ -63,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionals stdenv.targetPlatform.isDarwin [ propagated-sdk ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) (
       lib.optionals (swift-corelibs-libdispatch != null) [
+        swift-corelibs-libdispatch-no-overlay.out
         swift-corelibs-libdispatch.out
       ]
     );
