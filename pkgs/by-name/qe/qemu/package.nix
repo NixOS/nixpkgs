@@ -405,15 +405,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace 'timeout: slow_tests' 'timeout: 50 * slow_tests'
     substituteInPlace tests/qtest/meson.build \
       --replace 'timeout: slow_qtests' 'timeout: 50 * slow_qtests'
-    substituteInPlace tests/fp/meson.build \
-      --replace 'timeout: 90)' 'timeout: 300)'
-
-    # point tests towards correct binaries
-    substituteInPlace tests/unit/test-qga.c \
-      --replace '/bin/bash' "$(type -P bash)" \
-      --replace '/bin/echo' "$(type -P echo)"
-    substituteInPlace tests/unit/test-io-channel-command.c \
-      --replace '/bin/socat' "$(type -P socat)"
 
     # combined with a long package name, some temp socket paths
     # can end up exceeding max socket name len
