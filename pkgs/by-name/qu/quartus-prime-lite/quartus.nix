@@ -125,6 +125,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://fpgasoftware.intel.com";
     description = "FPGA design and simulation software";
+    mainProgram = "quartus";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
