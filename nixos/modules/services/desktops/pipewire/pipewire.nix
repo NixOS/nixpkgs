@@ -208,6 +208,9 @@ in
 
             Every item in this attrset becomes a separate drop-in file in `/etc/pipewire/pipewire.conf.d`.
 
+            For changes to take effect, PipeWire service has to be restarted,
+            auto-restart can be enabled with `services.pipewire.restartOnConfigChange = true`.
+
             See `man pipewire.conf` for details, and [the PipeWire wiki][wiki] for examples.
 
             See also:
@@ -283,6 +286,9 @@ in
 
             Every item in this attrset becomes a separate drop-in file in `/etc/pipewire/pipewire-pulse.conf.d`.
 
+            For changes to take effect, PipeWire PulseAudio service has to be restarted,
+            auto-restart can be enabled with `services.pipewire.restartOnConfigChange = true`.
+
             See `man pipewire-pulse.conf` for details, and [the PipeWire wiki][wiki] for examples.
 
             See also:
@@ -327,6 +333,9 @@ in
 
           LV2/LADSPA dependencies will be picked up from config packages automatically
           via `passthru.requiredLv2Packages`/`passthru.requiredLadspaPackages`.
+
+          For changes to PipeWire or PipeWire PulseAudio to take effect, the corresponding service has to be restarted,
+          auto-restart can be enabled with `services.pipewire.restartOnConfigChange = true`.
         '';
       };
 
