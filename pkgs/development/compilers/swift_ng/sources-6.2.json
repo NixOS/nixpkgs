@@ -2,6 +2,9 @@
   "llvm-project": {
     "hash": "sha256-5Nb8rQmk6onrc4wKW/kT38FsYsWTqMBWtsHYZLA/0Po="
   },
+  "swift": {
+    "hash": "sha256-apbBe/TMzq0+1XLkaTOj5NaYzLQ81i+vU+O7VSEJrKo="
+  },
   "swift-corelibs-libdispatch": {
     "hash": "sha256-Tu2G9FAP4q1xgM1n9q17T6VrqJ3tv8RezyUex38yNds="
   }

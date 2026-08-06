@@ -13,6 +13,7 @@ in
   llvmPackages,
   makeScopeWithSplicing',
   stdenvNoCC,
+  swiftPackages_ng,
   otherSplices ? generateSplicesForMkScope "swiftPackages_ng",
 }:
 
@@ -32,6 +33,10 @@ makeScopeWithSplicing' {
       };
     in
     {
+      bootstrapStage = 0;
+
+      buildSwiftPackages = swiftPackages_ng.overrideScope (_: _: { swift = null; });
+
       inherit llvm_libtool;
 
       llvmPackages_upstream = llvmPackages;
