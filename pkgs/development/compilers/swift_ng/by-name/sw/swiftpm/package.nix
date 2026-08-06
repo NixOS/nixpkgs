@@ -19,6 +19,7 @@
   swift-syntax,
   swift-system,
   swift-tools-support-core,
+  swiftpmHook,
   swift_release,
   swift_sources,
 }:
@@ -113,6 +114,8 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     swift
   ];
+
+  propagatedBuildInputs = [ swiftpmHook ];
 
   buildInputs = [
     sqlite
