@@ -6,22 +6,27 @@
   hatchling,
   jinja2,
   nltk,
+  pyprojectVersionPatchHook,
   sqlglot,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hakuin";
   version = "0.2.2";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "pruzko";
     repo = "hakuin";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-97nh+woUsCXcoO2i5KprCwJiE24V3mg91qcNgy7bpgg=";
   };
 
   build-system = [ hatchling ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     aiohttp
@@ -40,5 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pruzko/hakuin";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "hk";
   };
-}
+})
