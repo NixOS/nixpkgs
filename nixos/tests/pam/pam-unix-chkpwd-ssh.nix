@@ -1,6 +1,6 @@
 # Test that PAM is able to distinguish expired from active accounts
-# even when invoked from an unprivileged context (as is done by sshd).
-# This is the purpose of the set-id unix_chkpwd(8) helper binary.
+# when invoked by ssh's sandboxed "preauth" process.  This is a
+# secondary function of the set-id unix_chkpwd(8) helper binary.
 #
 # Note: this test validates the behavior of a set-id binary, and
 # therefore requires test VMs.
@@ -19,25 +19,27 @@ let
         mkdir -p $out
         ssh-keygen -t ed25519 -N "" -f $out/alice
       '';
-  makeTestScript =
-    toUser:
-    pkgs.writeShellScript "pam-unix-chkpwd-test-ssh-to-${toUser}" ''
-      set -xeuo pipefail
-      sshbin=${pkgs.openssh}/bin
+  makeTestScript = pkgs.writeShellScript "pam-unix-chkpwd-test-ssh" ''
+    set -xeuo pipefail
 
-      if [ ! -f "$HOME/.ssh/config" ]; then
-        mkdir -p "$HOME/.ssh"
-        chmod 700 "$HOME/.ssh"
-        echo "StrictHostKeyChecking accept-new" > "$HOME/.ssh/config"
-        chmod 600 "$HOME/.ssh/config"
-      fi
+    corebin='${pkgs.coreutils}/bin'
+    sshbin='${pkgs.openssh}/bin'
+    sshcreds='${testOnlySSHCredentials}'
+    toUser="$1"
 
-      eval $($sshbin/ssh-agent)
-      $sshbin/ssh-add ${testOnlySSHCredentials}/alice
-      $sshbin/ssh-add -l &>2
+    if [ ! -f "$HOME/.ssh/config" ]; then
+      mkdir -p "$HOME/.ssh"
+      chmod 700 "$HOME/.ssh"
+      echo "StrictHostKeyChecking accept-new" > "$HOME/.ssh/config"
+      chmod 600 "$HOME/.ssh/config"
+    fi
 
-      exec $sshbin/ssh -v ${toUser}@localhost ${pkgs.coreutils}/bin/id
-    '';
+    eval $("$sshbin"/ssh-agent)
+    "$sshbin"/ssh-add "$sshcreds"/alice
+    "$sshbin"/ssh-add -l 1&>2
+
+    exec "$sshbin"/ssh -v "$toUser"@localhost "$corebin"/id
+  '';
   makeTestVM =
     mutableUsers: extraOptions:
     lib.recursiveUpdate {
@@ -78,7 +80,7 @@ let
     } extraOptions;
 in
 {
-  name = "pam-unix-chkpwd";
+  name = "pam-unix-chkpwd-ssh";
 
   nodes = {
     mutable-legacy = makeTestVM true { };
@@ -96,8 +98,7 @@ in
   testScript = ''
     import re
 
-    testBobScript = "${makeTestScript "bob"}"
-    testCarolScript = "${makeTestScript "carol"}"
+    testScript = "${makeTestScript}"
     expectedBobOutput = re.compile(r"^uid=[0-9]+\(bob\) ", re.MULTILINE)
 
     for m in machines:
@@ -106,11 +107,11 @@ in
       m.wait_for_unit("systemd-user-sessions.service")
 
       with subtest(f"{m.name}: alice should be able to ssh bob@localhost"):
-        bobOutput = m.succeed(f"su -c '{testBobScript}' -l alice")
+        bobOutput = m.succeed(f"su -c '\"{testScript}\" bob' -l alice")
         log.debug(f"{m.name}: bob output: {bobOutput}")
         t.assertIsNotNone(expectedBobOutput.search(bobOutput))
 
       with subtest(f"{m.name}: alice should not be able to ssh carol@localhost"):
-        m.fail(f"su -c '{testCarolScript}' -l alice")
+        m.fail(f"su -c '\"{testScript}\" carol' -l alice")
   '';
 }
