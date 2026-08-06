@@ -38,6 +38,7 @@ in
 symlinkJoin {
   pname = "nordvpn";
   inherit version;
+  inherit (common) src;
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -50,7 +51,14 @@ symlinkJoin {
   passthru = {
     cli = callPackage ./cli.nix common;
     gui = callPackage ./gui.nix common;
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "cli"
+        "--subpackage"
+        "gui"
+      ];
+    };
   };
 
   meta = common.meta // {
