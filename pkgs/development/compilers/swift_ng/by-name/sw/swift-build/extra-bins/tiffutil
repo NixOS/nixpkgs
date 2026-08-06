@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+
+set -eux -o pipefail
+
+compression=""
+cmd=copy
+outfile=""
+
+declare -a files=()
+
+while [ "$#" -gt 0 ]; do
+  test -z "$1" && continue # Sometimes xcbuild passes empty arguments
+  case "$1" in
+    -none)
+      compression=""
+      ;;
+    -lzw)
+      compression="-c lzw"
+      ;;
+    -packbits)
+      compression="-c packbits"
+      ;;
+    -cat)
+      cmd=cat
+      ;;
+    -catnosizecheck)
+      echo "warning: size checks are not implemented" >&2
+      cmd=cat
+      ;;
+    -cathidpicheck)
+      echo "warning: DPI guidelines checks are not implemented" >&2
+      cmd=cat
+      ;;
+    -extract)
+      shift
+      index=$1
+      shift
+      file=$(realpath "$1")
+      files+=("$file,$index")
+      ;;
+    -info|-verboseinfo|-dump)
+      cmd=info
+      ;;
+    -out)
+      shift
+      outfile=$(realpath "$1")
+      ;;
+    *)
+      files+=("$(realpath "$1")")
+      ;;
+  esac
+  shift
+done
+
+echo "Files: ${files[@]}"
+case "${#files[@]},$cmd" in
+  0,*)
+    echo "error: missing source and destination files" >&2
+    exit 1
+    ;;
+  1,*)
+    echo "Got one file, yay"
+    ;;
+  *,copy|*,info)
+    echo "error: too many input files specified"
+    exit 1
+    ;;
+esac
+
+case $cmd in
+  cat|copy)
+    @libtiff@/bin/tiffcp $compression "${files[@]}" "$outfile"
+    ;;
+  info)
+    @libtiff@/bin/tiffinfo "${files[@]}"
+    ;;
+esac

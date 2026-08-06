@@ -1,0 +1,1090 @@
+From 10f011cf8753c2175456a850b51c9968b2908081 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Tue, 9 Dec 2025 20:57:45 -0500
+Subject: [PATCH] replace-impure-paths
+
+---
+ Plugins/run-xcodebuild/run-xcodebuild.swift   |  2 +-
+ Sources/SWBAndroidPlatform/Plugin.swift       |  2 +-
+ Sources/SWBBuildService/Messages.swift        |  2 +-
+ .../CommandLineToolSpec.swift                 |  2 +-
+ .../SpecImplementations/Tools/CodeSign.swift  |  2 +-
+ .../SpecImplementations/Tools/TouchTool.swift |  2 +-
+ Sources/SWBCore/Specs/CoreBuildSystem.xcspec  |  2 +-
+ .../SWBCore/Specs/NativeBuildSystem.xcspec    | 10 ++--
+ Sources/SWBGenericUnixPlatform/Plugin.swift   |  4 +-
+ .../SWBTaskExecution/BuildDescription.swift   |  4 +-
+ .../TaskActions/CopyTiffTaskAction.swift      |  2 +-
+ .../EmbedSwiftStdLibTaskAction.swift          |  2 +-
+ Sources/SWBTestSupport/CoreBasedTests.swift   |  6 +--
+ Sources/SWBTestSupport/FSUtilities.swift      |  4 +-
+ .../SWBTestSupport/LibraryGeneration.swift    |  4 +-
+ Sources/SWBTestSupport/Xcode.swift            |  2 +-
+ .../Specs/CodeSign.xcspec                     |  2 +-
+ Sources/SWBUtil/Signatures.swift              |  2 +-
+ .../CoreQualificationTester.swift             |  2 +-
+ Tests/SWBCoreTests/CommandLineSpecTests.swift |  2 +-
+ .../CodeSignTaskConstructionTests.swift       | 48 +++++++++----------
+ .../MergeableLibraryTests.swift               | 10 ++--
+ .../PlatformTaskConstructionTests.swift       |  8 ++--
+ .../PostprocessingTaskConstructionTests.swift |  4 +-
+ .../SwiftTaskConstructionTests.swift          |  6 +--
+ .../TaskConstructionTests.swift               | 26 +++++-----
+ .../UnitTestTaskConstructionTests.swift       | 12 ++---
+ .../WatchTaskConstructionTests.swift          | 12 ++---
+ .../SignatureCollectionActionTests.swift      |  4 +-
+ Tests/SWBUtilTests/MiscTests.swift            |  2 +-
+ Tests/SWBUtilTests/SignaturesTests.swift      |  4 +-
+ .../SwiftBuildTests/BuildOperationTests.swift | 16 +++----
+ 32 files changed, 106 insertions(+), 106 deletions(-)
+
+diff --git a/Plugins/run-xcodebuild/run-xcodebuild.swift b/Plugins/run-xcodebuild/run-xcodebuild.swift
+index 710a84a..c83982d 100644
+--- a/Plugins/run-xcodebuild/run-xcodebuild.swift
++++ b/Plugins/run-xcodebuild/run-xcodebuild.swift
+@@ -39,7 +39,7 @@ struct RunXcodebuild: CommandPlugin {
+         }
+ 
+         let process = Process()
+-        process.executableURL = URL(fileURLWithPath: "/usr/bin/xcrun")
++        process.executableURL = URL(fileURLWithPath: "@xcrun@/bin/xcrun")
+         process.arguments = ["xcodebuild"] + args.remainingArguments
+         process.environment = ProcessInfo.processInfo.environment.merging(["XCBBUILDSERVICE_PATH": buildServiceURL.path()]) { _, new in new }
+         try await process.run()
+diff --git a/Sources/SWBAndroidPlatform/Plugin.swift b/Sources/SWBAndroidPlatform/Plugin.swift
+index 117e7c6..6014cad 100644
+--- a/Sources/SWBAndroidPlatform/Plugin.swift
++++ b/Sources/SWBAndroidPlatform/Plugin.swift
+@@ -118,7 +118,7 @@ struct AndroidPlatformExtension: PlatformInfoExtension {
+             "GENERATE_TEXT_BASED_STUBS": "NO",
+             "GENERATE_INTERMEDIATE_TEXT_BASED_STUBS": "NO",
+ 
+-            "CHOWN": "/usr/bin/chown",
++            "CHOWN": "@coreutils@/bin/chown",
+ 
+             "LIBTOOL": .plString(host.imageFormat.executableName(basename: "llvm-lib")),
+             "AR": .plString(host.imageFormat.executableName(basename: "llvm-ar")),
+diff --git a/Sources/SWBBuildService/Messages.swift b/Sources/SWBBuildService/Messages.swift
+index 070b5d3..47c7c3b 100644
+--- a/Sources/SWBBuildService/Messages.swift
++++ b/Sources/SWBBuildService/Messages.swift
+@@ -192,7 +192,7 @@ extension SetSessionWorkspaceContainerPathRequest: PIFProvidingRequest {
+             try fs.createDirectory(dir, recursive: true)
+             let pifPath = dir.join(Foundation.UUID().description + ".json")
+             let argument = isProject ? "-project" : "-workspace"
+-            let result = try await Process.getOutput(url: URL(fileURLWithPath: "/usr/bin/xcrun"), arguments: ["xcodebuild", "-dumpPIF", pifPath.str, argument, path.str], currentDirectoryURL: URL(fileURLWithPath: containerPath.dirname.str, isDirectory: true), environment: Environment.current.addingContents(of: [.developerDir: session.core.developerPath.path.str]))
++            let result = try await Process.getOutput(url: URL(fileURLWithPath: "@xcrun@/bin/xcrun"), arguments: ["xcodebuild", "-dumpPIF", pifPath.str, argument, path.str], currentDirectoryURL: URL(fileURLWithPath: containerPath.dirname.str, isDirectory: true), environment: Environment.current.addingContents(of: [.developerDir: session.core.developerPath.path.str]))
+             if !result.exitStatus.isSuccess {
+                 throw StubError.error("Could not dump PIF for '\(path.str)': \(String(decoding: result.stderr, as: UTF8.self))")
+             }
+diff --git a/Sources/SWBCore/SpecImplementations/CommandLineToolSpec.swift b/Sources/SWBCore/SpecImplementations/CommandLineToolSpec.swift
+index 116a390..66d030f 100644
+--- a/Sources/SWBCore/SpecImplementations/CommandLineToolSpec.swift
++++ b/Sources/SWBCore/SpecImplementations/CommandLineToolSpec.swift
+@@ -246,7 +246,7 @@ extension DiscoveredCommandLineToolSpecInfo {
+         if !toolPath.isAbsolute {
+             throw StubError.error("\(toolPath.str) is not absolute")
+         }
+-        return try await producer.discoveredCommandLineToolSpecInfo(delegate, toolPath.basename, ["/usr/bin/what", "-q", toolPath.str]) { executionResult in
++        return try await producer.discoveredCommandLineToolSpecInfo(delegate, toolPath.basename, ["@shell_cmds@/bin/what", "-q", toolPath.str]) { executionResult in
+             let outputString = String(decoding: executionResult.stdout, as: UTF8.self).trimmingCharacters(in: .whitespacesAndNewlines)
+             let lines = Set(outputString.split(separator: "\n").map(String.init)) // version info is printed once per architecture slice, but we never expect them to differ
+             return try construct(AppleGenericVersionInfo(string: lines.only ?? outputString))
+diff --git a/Sources/SWBCore/SpecImplementations/Tools/CodeSign.swift b/Sources/SWBCore/SpecImplementations/Tools/CodeSign.swift
+index d8d7ead..ea8fb21 100644
+--- a/Sources/SWBCore/SpecImplementations/Tools/CodeSign.swift
++++ b/Sources/SWBCore/SpecImplementations/Tools/CodeSign.swift
+@@ -20,7 +20,7 @@ public final class CodesignToolSpec : CommandLineToolSpec, SpecIdentifierType, @
+     public override func computeExecutablePath(_ cbc: CommandBuildContext) -> String {
+         var codesign = Path(cbc.scope.evaluate(BuiltinMacros.CODESIGN))
+         if codesign.isEmpty {
+-            codesign = Path("/usr/bin/codesign")
++            codesign = Path("@sigtool@/bin/codesign")
+         }
+         if !codesign.isAbsolute {
+             codesign = resolveExecutablePath(cbc, codesign)
+diff --git a/Sources/SWBCore/SpecImplementations/Tools/TouchTool.swift b/Sources/SWBCore/SpecImplementations/Tools/TouchTool.swift
+index e6997b7..9644d09 100644
+--- a/Sources/SWBCore/SpecImplementations/Tools/TouchTool.swift
++++ b/Sources/SWBCore/SpecImplementations/Tools/TouchTool.swift
+@@ -45,7 +45,7 @@ final class TouchToolSpec : CommandLineToolSpec, SpecIdentifierType, @unchecked
+             // FIXME: Need to properly quote the path here, or generally handle this better
+             commandLine = [commandShellPath, "/c", "copy /b \"\(input.absolutePath.str)\" +,,"]
+         } else {
+-            commandLine = ["/usr/bin/touch", "-c", input.absolutePath.str]
++            commandLine = ["@coreutils@/bin/touch", "-c", input.absolutePath.str]
+         }
+ 
+         delegate.createTask(type: self, ruleInfo: ["Touch", input.absolutePath.str], commandLine: commandLine, environment: EnvironmentBindings(), workingDirectory: cbc.producer.defaultWorkingDirectory, inputs: [delegate.createNode(input.absolutePath)], outputs: outputs, mustPrecede: [], action: delegate.taskActionCreationDelegate.createDeferredExecutionTaskActionIfRequested(userPreferences: cbc.producer.userPreferences), execDescription: resolveExecutionDescription(cbc, delegate, lookup: outputFileOverride), enableSandboxing: enableSandboxing)
+diff --git a/Sources/SWBCore/Specs/CoreBuildSystem.xcspec b/Sources/SWBCore/Specs/CoreBuildSystem.xcspec
+index 467e061..cee7bd1 100644
+--- a/Sources/SWBCore/Specs/CoreBuildSystem.xcspec
++++ b/Sources/SWBCore/Specs/CoreBuildSystem.xcspec
+@@ -3176,7 +3176,7 @@ For more information on mergeable libraries, see [Configuring your project to us
+             {
+                 Name = "JAVA_COMPILER";
+                 Type = Path;
+-                DefaultValue = "/usr/bin/javac";
++                DefaultValue = "javac";
+             },
+             {
+                 Name = "JAVA_ARCHIVE_CLASSES";
+diff --git a/Sources/SWBCore/Specs/NativeBuildSystem.xcspec b/Sources/SWBCore/Specs/NativeBuildSystem.xcspec
+index b4fcfa8..79f4b99 100644
+--- a/Sources/SWBCore/Specs/NativeBuildSystem.xcspec
++++ b/Sources/SWBCore/Specs/NativeBuildSystem.xcspec
+@@ -823,23 +823,23 @@ When `GENERATE_INFOPLIST_FILE` is enabled, sets the value of the [CFBundleExecut
+             },
+             {   Name = ICONV;
+                 Type = Path;
+-                DefaultValue = "/usr/bin/iconv";
++                DefaultValue = "@libiconv@/bin/iconv";
+             },
+             {   Name = SED;
+                 Type = Path;
+-                DefaultValue = "/usr/bin/sed";
++                DefaultValue = "@gnused@/bin/sed";
+             },
+             {   Name = CHOWN;
+                 Type = Path;
+-                DefaultValue = "/usr/sbin/chown";
++                DefaultValue = "@coreutils@/bin/chown";
+             },
+             {   Name = CHMOD;
+                 Type = Path;
+-                DefaultValue = "/bin/chmod";
++                DefaultValue = "@coreutils@/bin/chmod";
+             },
+             {   Name = DIFF;
+                 Type = Path;
+-                DefaultValue = "/usr/bin/diff";
++                DefaultValue = "@diffutils@/bin/diff";
+             },
+ 
+             // Utility settings
+diff --git a/Sources/SWBGenericUnixPlatform/Plugin.swift b/Sources/SWBGenericUnixPlatform/Plugin.swift
+index 632a4ca..5b18fc4 100644
+--- a/Sources/SWBGenericUnixPlatform/Plugin.swift
++++ b/Sources/SWBGenericUnixPlatform/Plugin.swift
+@@ -120,8 +120,8 @@ struct GenericUnixSDKRegistryExtension: SDKRegistryExtension {
+                 "GENERATE_TEXT_BASED_STUBS": "NO",
+                 "GENERATE_INTERMEDIATE_TEXT_BASED_STUBS": "NO",
+ 
+-                "CHOWN": "/usr/bin/chown",
+-                "AR": "llvm-ar",
++                "CHOWN": "@coreutils@/bin/chown",
++                "AR": "@llvm@/bin/llvm-ar",
+             ]
+         default:
+             defaultProperties = [:]
+diff --git a/Sources/SWBTaskExecution/BuildDescription.swift b/Sources/SWBTaskExecution/BuildDescription.swift
+index 53aae73..15fc1ea 100644
+--- a/Sources/SWBTaskExecution/BuildDescription.swift
++++ b/Sources/SWBTaskExecution/BuildDescription.swift
+@@ -896,7 +896,7 @@ package final class BuildDescriptionBuilder {
+ 
+         var commandLine = commandLine
+         if bypassActualTasks {
+-            commandLine = [ByteString(encodingAsUTF8: "/usr/bin/true")] + commandLine
++            commandLine = [ByteString(encodingAsUTF8: "@coreutils@/bin/true")] + commandLine
+         }
+ 
+         // Add the command definition.
+@@ -976,7 +976,7 @@ package final class BuildDescriptionBuilder {
+     func addCustomCommand(_ task: any PlannedTask, tool: String, inputs: [any PlannedNode], outputs: [any PlannedNode], deps: DependencyDataStyle? = nil, allowMissingInputs: Bool, alwaysOutOfDate: Bool, description: [String]) throws {
+         // Honor `bypassActualTasks`.
+         if bypassActualTasks {
+-            try addSubprocessCommand(task, inputs: inputs, outputs: outputs, description: description, commandLine: ["/usr/bin/true"], allowMissingInputs: allowMissingInputs, alwaysOutOfDate: alwaysOutOfDate, isUnsafeToInterrupt: false)
++            try addSubprocessCommand(task, inputs: inputs, outputs: outputs, description: description, commandLine: ["@coreutils@/bin/true"], allowMissingInputs: allowMissingInputs, alwaysOutOfDate: alwaysOutOfDate, isUnsafeToInterrupt: false)
+             return
+         }
+ 
+diff --git a/Sources/SWBTaskExecution/TaskActions/CopyTiffTaskAction.swift b/Sources/SWBTaskExecution/TaskActions/CopyTiffTaskAction.swift
+index df1675a..9e4b37c 100644
+--- a/Sources/SWBTaskExecution/TaskActions/CopyTiffTaskAction.swift
++++ b/Sources/SWBTaskExecution/TaskActions/CopyTiffTaskAction.swift
+@@ -141,7 +141,7 @@ public final class CopyTiffTaskAction: TaskAction {
+ 
+             // If we have a compression argument, pass through tiffutil.
+             if let compression = options.compression {
+-                let tiffutilCommand = ["/usr/bin/tiffutil", "-\(compression)", input.str, "-out", output.str]
++                let tiffutilCommand = ["@graphics_cmds@/bin/tiffutil", "-\(compression)", input.str, "-out", output.str]
+ 
+                 let processDelegate = TaskProcessDelegate(outputDelegate: outputDelegate)
+                 do {
+diff --git a/Sources/SWBTaskExecution/TaskActions/EmbedSwiftStdLibTaskAction.swift b/Sources/SWBTaskExecution/TaskActions/EmbedSwiftStdLibTaskAction.swift
+index 40509fc..e2a3ae6 100644
+--- a/Sources/SWBTaskExecution/TaskActions/EmbedSwiftStdLibTaskAction.swift
++++ b/Sources/SWBTaskExecution/TaskActions/EmbedSwiftStdLibTaskAction.swift
+@@ -847,7 +847,7 @@ public final class EmbedSwiftStdLibTaskAction: TaskAction {
+             // Codesign the Swift libraries in $build_dir/$frameworks
+             // but not the libraries in $build_dir/$unsigned_frameworks.
+             if codeSignIdentity != nil && !swiftLibs.isEmpty {
+-                let codesign = Path(self.effectiveEnvironment["CODESIGN"] ?? "/usr/bin/codesign")
++                let codesign = Path(self.effectiveEnvironment["CODESIGN"] ?? "@sigtool@/bin/codesign")
+ 
+                 // Swift libraries that are up-to-date get codesigned anyway
+                 // (in case options changed or a previous build was incomplete).
+diff --git a/Sources/SWBTestSupport/CoreBasedTests.swift b/Sources/SWBTestSupport/CoreBasedTests.swift
+index ff76cf5..4d3ea5c 100644
+--- a/Sources/SWBTestSupport/CoreBasedTests.swift
++++ b/Sources/SWBTestSupport/CoreBasedTests.swift
+@@ -227,9 +227,9 @@ extension CoreBasedTests {
+     package var libtoolPath: Path {
+         get async throws {
+             let (core, defaultToolchain) = try await coreAndToolchain()
+-            let fallbacklibtool = Path("/usr/bin/libtool")
++            let fallbacklibtool = Path("@libtool@/bin/libtool")
+             return try #require(defaultToolchain.executableSearchPaths.findExecutable(operatingSystem: core.hostOperatingSystem, basename: "libtool")
+-                                ?? defaultToolchain.executableSearchPaths.findExecutable(operatingSystem: core.hostOperatingSystem, basename: "llvm-ar")
++                                ?? defaultToolchain.executableSearchPaths.findExecutable(operatingSystem: core.hostOperatingSystem, basename: "@llvm@/bin/llvm-ar")
+                                 ?? (localFS.exists(fallbacklibtool) ? fallbacklibtool : nil), "couldn't find libtool in default toolchain")
+         }
+     }
+@@ -238,7 +238,7 @@ extension CoreBasedTests {
+     package var llvmlibPath: Path {
+         get async throws {
+             let (core, defaultToolchain) = try await coreAndToolchain()
+-            let fallbacklibtool = Path("/usr/bin/llvm-lib")
++            let fallbacklibtool = Path("@llvm@/bin/llvm-lib")
+             return try #require(defaultToolchain.executableSearchPaths.findExecutable(operatingSystem: core.hostOperatingSystem, basename: "llvm-lib") ?? (localFS.exists(fallbacklibtool) ? fallbacklibtool : nil), "couldn't find llvm-lib in default toolchain")
+         }
+     }
+diff --git a/Sources/SWBTestSupport/FSUtilities.swift b/Sources/SWBTestSupport/FSUtilities.swift
+index e95573a..972df55 100644
+--- a/Sources/SWBTestSupport/FSUtilities.swift
++++ b/Sources/SWBTestSupport/FSUtilities.swift
+@@ -325,9 +325,9 @@ package extension FSProxy {
+ 
+         if self === localFS {
+             if !shallow {
+-                _ = try await runProcess(["/usr/bin/codesign", "-s", "-", binary.join(path.basenameWithoutSuffix).str])
++                _ = try await runProcess(["@sigtool@/bin/codesign", "-s", "-", binary.join(path.basenameWithoutSuffix).str])
+             }
+-            _ = try await runProcess(["/usr/bin/codesign", "-s", "-", (shallow ? path : contents).str])
++            _ = try await runProcess(["@sigtool@/bin/codesign", "-s", "-", (shallow ? path : contents).str])
+         } else {
+             try await writeFileContents(contents.join("_CodeSignature/CodeSignature")) { $0 <<< "signature" }
+         }
+diff --git a/Sources/SWBTestSupport/LibraryGeneration.swift b/Sources/SWBTestSupport/LibraryGeneration.swift
+index 1a23807..3f750f3 100644
+--- a/Sources/SWBTestSupport/LibraryGeneration.swift
++++ b/Sources/SWBTestSupport/LibraryGeneration.swift
+@@ -87,7 +87,7 @@ extension InstalledXcode {
+             let linkArgs = [["-sdk", platform.sdkName, "clang", "-dynamiclib", "-target", target], targetVariantArgs, linkerArgs, ["-L" + swiftRuntimeLibraryDirectoryPath(name: platform.sdkName), "-L/usr/lib/swift", "-o", machoPath.str, objectPath.str]].reduce([], +)
+             _ = try await xcrun(linkArgs, workingDirectory: workingDirectory)
+             if needSigned {
+-                _ = try await runProcessWithDeveloperDirectory(["/usr/bin/codesign", "-s", "-", machoPath.str])
++                _ = try await runProcessWithDeveloperDirectory(["@sigtool@/bin/codesign", "-s", "-", machoPath.str])
+             }
+             return machoPath
+         }
+@@ -178,7 +178,7 @@ extension InstalledXcode {
+                 } else {
+                     _ = try await xcrun(["-sdk", platform.sdkName, "clang", "-dynamiclib", "-target", target] + targetVariantArgs + linkerArgs + ["-o", machoPath.str, objectPath.str])
+                     if needSigned {
+-                        _ = try await runProcessWithDeveloperDirectory(["/usr/bin/codesign", "-s", "-", machoPath.str])
++                        _ = try await runProcessWithDeveloperDirectory(["@sigtool@/bin/codesign", "-s", "-", machoPath.str])
+                     }
+                     machos.append(machoPath)
+                 }
+diff --git a/Sources/SWBTestSupport/Xcode.swift b/Sources/SWBTestSupport/Xcode.swift
+index 969fc92..087816c 100644
+--- a/Sources/SWBTestSupport/Xcode.swift
++++ b/Sources/SWBTestSupport/Xcode.swift
+@@ -32,7 +32,7 @@ package struct InstalledXcode: Sendable {
+     }
+ 
+     package func xcrun(_ args: [String], workingDirectory: Path? = nil, redirectStderr: Bool = true) async throws -> String {
+-        return try await runProcessWithDeveloperDirectory(["/usr/bin/xcrun"] + args, workingDirectory: workingDirectory, overrideDeveloperDirectory: self.developerDirPath.str, redirectStderr: redirectStderr)
++        return try await runProcessWithDeveloperDirectory(["@xcrun@/bin/xcrun"] + args, workingDirectory: workingDirectory, overrideDeveloperDirectory: self.developerDirPath.str, redirectStderr: redirectStderr)
+     }
+ 
+     package func productBuildVersion() throws -> ProductBuildVersion {
+diff --git a/Sources/SWBUniversalPlatform/Specs/CodeSign.xcspec b/Sources/SWBUniversalPlatform/Specs/CodeSign.xcspec
+index 02ec3dd..51629c9 100644
+--- a/Sources/SWBUniversalPlatform/Specs/CodeSign.xcspec
++++ b/Sources/SWBUniversalPlatform/Specs/CodeSign.xcspec
+@@ -17,7 +17,7 @@
+         Description = "Code-sign a framework, application, or other built target.";
+         ExecDescription = "Sign $(InputFileName)";
+         ProgressDescription = "Signing product";
+-        ExecPath = "/usr/bin/codesign";
++        ExecPath = "@sigtool@/bin/codesign";
+         // codesign is currently not safe to interrupt, tracked by 20712615.
+         IsUnsafeToInterrupt = YES;
+         CommandOutputParser = (
+diff --git a/Sources/SWBUtil/Signatures.swift b/Sources/SWBUtil/Signatures.swift
+index eb3c1e2..180dcc6 100644
+--- a/Sources/SWBUtil/Signatures.swift
++++ b/Sources/SWBUtil/Signatures.swift
+@@ -140,7 +140,7 @@ public struct CodeSignatureInfo: Codable, Sendable {
+ 
+     static public func invokeCodesignVerification(for path: String, treatUnsignedAsError: Bool) async throws {
+         #if os(macOS)
+-        let executionResult = try await Process.getOutput(url: URL(filePath: "/usr/bin/codesign"), arguments: ["-vvvv", path])
++        let executionResult = try await Process.getOutput(url: URL(filePath: "@sigtool@/bin/codesign"), arguments: ["-vvvv", path])
+         let stdoutContent = String(data: executionResult.stdout, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+         let stderrContent = String(data: executionResult.stderr, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+ 
+diff --git a/Sources/SwiftBuildTestSupport/CoreQualificationTester.swift b/Sources/SwiftBuildTestSupport/CoreQualificationTester.swift
+index 8495d9f..1e4dd60 100644
+--- a/Sources/SwiftBuildTestSupport/CoreQualificationTester.swift
++++ b/Sources/SwiftBuildTestSupport/CoreQualificationTester.swift
+@@ -326,7 +326,7 @@ extension FileContentsCheckingResult {
+             let plist: PropertyListItem?
+             switch destination {
+             case .signed:
+-                let bytes = try await Array(xcode.xcrun(["/usr/bin/codesign", "-a", slice.arch, "-d", "--entitlements", ":-", binaryPath.str], redirectStderr: false).utf8)
++                let bytes = try await Array(xcode.xcrun(["@sigtool@/bin/codesign", "-a", slice.arch, "-d", "--entitlements", ":-", binaryPath.str], redirectStderr: false).utf8)
+                 plist = try !bytes.isEmpty ? PropertyList.fromBytes(bytes) : nil
+             case .simulated:
+                 // xcrun otool-classic [-arch arch] -X -s __TEXT __entitlements <path>
+diff --git a/Tests/SWBCoreTests/CommandLineSpecTests.swift b/Tests/SWBCoreTests/CommandLineSpecTests.swift
+index 77813bc..03df67f 100644
+--- a/Tests/SWBCoreTests/CommandLineSpecTests.swift
++++ b/Tests/SWBCoreTests/CommandLineSpecTests.swift
+@@ -1721,7 +1721,7 @@ import SWBMacro
+             let commandShellPath = try #require(getEnvironmentVariable("ComSpec"), "Can't determine path to cmd.exe because the ComSpec environment variable is not set")
+             task.checkCommandLine([commandShellPath, "/c", "copy /b \"\(Path.root.join("tmp/input").str)\" +,,"])
+         } else {
+-            task.checkCommandLine(["/usr/bin/touch", "-c", Path.root.join("tmp/input").str])
++            task.checkCommandLine(["@coreutils@/bin/touch", "-c", Path.root.join("tmp/input").str])
+         }
+         #expect(task.execDescription == "Touch input")
+     }
+diff --git a/Tests/SWBTaskConstructionTests/CodeSignTaskConstructionTests.swift b/Tests/SWBTaskConstructionTests/CodeSignTaskConstructionTests.swift
+index 33972fe..838b3d0 100644
+--- a/Tests/SWBTaskConstructionTests/CodeSignTaskConstructionTests.swift
++++ b/Tests/SWBTaskConstructionTests/CodeSignTaskConstructionTests.swift
+@@ -572,7 +572,7 @@ fileprivate struct CodeSignTaskConstructionTests: CoreBasedTests {
+         await tester.checkBuild(BuildParameters(action: .install, configuration: "Release", overrides: ["ENABLE_LIBRARY_VALIDATION": "YES", "ENABLE_HARDENED_RUNTIME": "YES", "CODE_SIGN_RESTRICT": "YES"]), runDestination: .macOS) { results in
+             results.checkTarget("macOSFramework") { target in
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
+-                    task.checkCommandLineMatches(["/usr/bin/codesign", "--force", "--sign", "-", "-o", "library,restrict,runtime", "--entitlements", .suffix("macOSFramework.framework.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Library/Frameworks/macOSFramework.framework/Versions/A"])
++                    task.checkCommandLineMatches(["@sigtool@/bin/codesign", "--force", "--sign", "-", "-o", "library,restrict,runtime", "--entitlements", .suffix("macOSFramework.framework.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Library/Frameworks/macOSFramework.framework/Versions/A"])
+                 }
+             }
+ 
+@@ -583,7 +583,7 @@ fileprivate struct CodeSignTaskConstructionTests: CoreBasedTests {
+         await tester.checkBuild(BuildParameters(action: .install, configuration: "Release", overrides: ["ENABLE_LIBRARY_VALIDATION": "NO", "ENABLE_HARDENED_RUNTIME": "NO", "CODE_SIGN_RESTRICT": "NO"]), runDestination: .macOS) { results in
+             results.checkTarget("macOSFramework") { target in
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
+-                    task.checkCommandLineMatches(["/usr/bin/codesign", "--force", "--sign", "-", "--entitlements", .suffix("macOSFramework.framework.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Library/Frameworks/macOSFramework.framework/Versions/A"])
++                    task.checkCommandLineMatches(["@sigtool@/bin/codesign", "--force", "--sign", "-", "--entitlements", .suffix("macOSFramework.framework.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Library/Frameworks/macOSFramework.framework/Versions/A"])
+                 }
+             }
+ 
+@@ -594,7 +594,7 @@ fileprivate struct CodeSignTaskConstructionTests: CoreBasedTests {
+         await tester.checkBuild(BuildParameters(action: .install, configuration: "Release", overrides: ["ENABLE_LIBRARY_VALIDATION": "NO", "ENABLE_HARDENED_RUNTIME": "NO", "CODE_SIGN_RESTRICT": "YES", "OTHER_CODE_SIGN_FLAGS": "-o library,restrict"]), runDestination: .macOS) { results in
+             results.checkTarget("macOSFramework") { target in
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
+-                    task.checkCommandLineMatches(["/usr/bin/codesign", "--force", "--sign", "-", "-o", "library,restrict", "--entitlements", .suffix("macOSFramework.framework.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Library/Frameworks/macOSFramework.framework/Versions/A"])
++                    task.checkCommandLineMatches(["@sigtool@/bin/codesign", "--force", "--sign", "-", "-o", "library,restrict", "--entitlements", .suffix("macOSFramework.framework.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Library/Frameworks/macOSFramework.framework/Versions/A"])
+                 }
+             }
+ 
+@@ -605,7 +605,7 @@ fileprivate struct CodeSignTaskConstructionTests: CoreBasedTests {
+         await tester.checkBuild(BuildParameters(action: .install, configuration: "Release", overrides: ["ENABLE_LIBRARY_VALIDATION": "NO", "ENABLE_HARDENED_RUNTIME": "NO", "CODE_SIGN_RESTRICT": "NO", "OTHER_CODE_SIGN_FLAGS": "-o library,restrict,runtime"]), runDestination: .macOS) { results in
+             results.checkTarget("macOSFramework") { target in
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
+-                    task.checkCommandLineMatches(["/usr/bin/codesign", "--force", "--sign", "-", "-o", "library,restrict,runtime", "--entitlements", .suffix("macOSFramework.framework.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Library/Frameworks/macOSFramework.framework/Versions/A"])
++                    task.checkCommandLineMatches(["@sigtool@/bin/codesign", "--force", "--sign", "-", "-o", "library,restrict,runtime", "--entitlements", .suffix("macOSFramework.framework.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Library/Frameworks/macOSFramework.framework/Versions/A"])
+                 }
+             }
+ 
+@@ -616,7 +616,7 @@ fileprivate struct CodeSignTaskConstructionTests: CoreBasedTests {
+         await tester.checkBuild(BuildParameters(action: .install, configuration: "Release", overrides: ["ENABLE_LIBRARY_VALIDATION": "NO", "ENABLE_HARDENED_RUNTIME": "NO", "CODE_SIGN_RESTRICT": "NO", "OTHER_CODE_SIGN_FLAGS": "-o library,restrict,runtime", "DISABLE_FREEFORM_CODE_SIGN_OPTION_FLAGS": "YES"]), runDestination: .macOS) { results in
+             results.checkTarget("macOSFramework") { target in
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
+-                    task.checkCommandLineMatches(["/usr/bin/codesign", "--force", "--sign", "-", "--entitlements", .suffix("macOSFramework.framework.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Library/Frameworks/macOSFramework.framework/Versions/A"])
++                    task.checkCommandLineMatches(["@sigtool@/bin/codesign", "--force", "--sign", "-", "--entitlements", .suffix("macOSFramework.framework.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Library/Frameworks/macOSFramework.framework/Versions/A"])
+                 }
+             }
+ 
+@@ -630,7 +630,7 @@ fileprivate struct CodeSignTaskConstructionTests: CoreBasedTests {
+         await tester.checkBuild(BuildParameters(action: .install, configuration: "Release", overrides: ["ENABLE_LIBRARY_VALIDATION": "YES", "ENABLE_HARDENED_RUNTIME": "YES", "CODE_SIGN_RESTRICT": "YES", "OTHER_CODE_SIGN_FLAGS": "--options kill,hard,host,expires,linker-signed"]), runDestination: .macOS) { results in // ignore-unacceptable-language; codesign tool option
+             results.checkTarget("macOSFramework") { target in
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
+-                    task.checkCommandLineMatches(["/usr/bin/codesign", "--force", "--sign", "-", "--options", "expires,hard,host,kill,library,linker-signed,restrict,runtime", "--entitlements", .suffix("macOSFramework.framework.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Library/Frameworks/macOSFramework.framework/Versions/A"]) // ignore-unacceptable-language; codesign tool option
++                    task.checkCommandLineMatches(["@sigtool@/bin/codesign", "--force", "--sign", "-", "--options", "expires,hard,host,kill,library,linker-signed,restrict,runtime", "--entitlements", .suffix("macOSFramework.framework.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Library/Frameworks/macOSFramework.framework/Versions/A"]) // ignore-unacceptable-language; codesign tool option
+                 }
+             }
+ 
+@@ -641,7 +641,7 @@ fileprivate struct CodeSignTaskConstructionTests: CoreBasedTests {
+         await tester.checkBuild(BuildParameters(action: .install, configuration: "Release", overrides: ["ENABLE_LIBRARY_VALIDATION": "NO", "ENABLE_HARDENED_RUNTIME": "NO", "CODE_SIGN_RESTRICT": "YES", "OTHER_CODE_SIGN_FLAGS": "--options kill,hard,host,expires,linker-signed"]), runDestination: .macOS) { results in // ignore-unacceptable-language; codesign tool option
+             results.checkTarget("macOSFramework") { target in
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
+-                    task.checkCommandLineMatches(["/usr/bin/codesign", "--force", "--sign", "-", "--options", "expires,hard,host,kill,linker-signed,restrict", "--entitlements", .suffix("macOSFramework.framework.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Library/Frameworks/macOSFramework.framework/Versions/A"]) // ignore-unacceptable-language; codesign tool option
++                    task.checkCommandLineMatches(["@sigtool@/bin/codesign", "--force", "--sign", "-", "--options", "expires,hard,host,kill,linker-signed,restrict", "--entitlements", .suffix("macOSFramework.framework.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Library/Frameworks/macOSFramework.framework/Versions/A"]) // ignore-unacceptable-language; codesign tool option
+                 }
+             }
+ 
+@@ -892,7 +892,7 @@ fileprivate struct CodeSignTaskConstructionTests: CoreBasedTests {
+         await tester.checkBuild(BuildParameters(action: .install, configuration: "Release", overrides: ["ENABLE_HARDENED_RUNTIME": "YES"]), runDestination: .macCatalyst, fs: fs) { results in
+             results.checkTarget("App") { target in
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
+-                    task.checkCommandLineMatches(["/usr/bin/codesign", "--force", "--sign", "3ACDE4E702E4", "-o", "runtime", "--entitlements", .suffix("App.app.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Applications/App.app"])
++                    task.checkCommandLineMatches(["@sigtool@/bin/codesign", "--force", "--sign", "3ACDE4E702E4", "-o", "runtime", "--entitlements", .suffix("App.app.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Applications/App.app"])
+                 }
+                 results.checkNoDiagnostics()
+             }
+@@ -900,7 +900,7 @@ fileprivate struct CodeSignTaskConstructionTests: CoreBasedTests {
+         await tester.checkBuild(BuildParameters(action: .install, configuration: "Release", overrides: ["OTHER_CODE_SIGN_FLAGS": "-o library,restrict,runtime"]), runDestination: .macCatalyst, fs: fs) { results in
+             results.checkTarget("App") { target in
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
+-                    task.checkCommandLineMatches(["/usr/bin/codesign", "--force", "--sign", "3ACDE4E702E4", "-o", "library,restrict,runtime", "--entitlements", .suffix("App.app.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Applications/App.app"])
++                    task.checkCommandLineMatches(["@sigtool@/bin/codesign", "--force", "--sign", "3ACDE4E702E4", "-o", "library,restrict,runtime", "--entitlements", .suffix("App.app.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Applications/App.app"])
+                 }
+                 results.checkNoDiagnostics()
+             }
+@@ -908,7 +908,7 @@ fileprivate struct CodeSignTaskConstructionTests: CoreBasedTests {
+         await tester.checkBuild(BuildParameters(action: .install, configuration: "Release", overrides: ["ENABLE_LIBRARY_VALIDATION": "YES", "ENABLE_HARDENED_RUNTIME": "YES", "CODE_SIGN_RESTRICT": "YES"]), runDestination: .iOS, fs: fs) { results in
+             results.checkTarget("App") { target in
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
+-                    task.checkCommandLineMatches(["/usr/bin/codesign", "--force", "--sign", "105DE4E702E4", "-o", "library,restrict,runtime", "--entitlements", .suffix("App.app.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Applications/App.app"])
++                    task.checkCommandLineMatches(["@sigtool@/bin/codesign", "--force", "--sign", "105DE4E702E4", "-o", "library,restrict,runtime", "--entitlements", .suffix("App.app.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Applications/App.app"])
+                 }
+                 results.checkNoDiagnostics()
+             }
+@@ -916,7 +916,7 @@ fileprivate struct CodeSignTaskConstructionTests: CoreBasedTests {
+         await tester.checkBuild(BuildParameters(action: .install, configuration: "Release", overrides: ["ENABLE_HARDENED_RUNTIME": "YES"]), runDestination: .iOS, fs: fs) { results in
+             results.checkTarget("App") { target in
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
+-                    task.checkCommandLineMatches(["/usr/bin/codesign", "--force", "--sign", "105DE4E702E4", "-o", "runtime", "--entitlements", .suffix("App.app.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Applications/App.app"])
++                    task.checkCommandLineMatches(["@sigtool@/bin/codesign", "--force", "--sign", "105DE4E702E4", "-o", "runtime", "--entitlements", .suffix("App.app.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Applications/App.app"])
+                 }
+                 results.checkNoDiagnostics()
+             }
+@@ -924,7 +924,7 @@ fileprivate struct CodeSignTaskConstructionTests: CoreBasedTests {
+         await tester.checkBuild(BuildParameters(action: .install, configuration: "Release", overrides: ["ENABLE_HARDENED_RUNTIME": "YES"]), runDestination: .macOS, fs: fs) { results in
+             results.checkTarget("macOSFramework") { target in
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
+-                    task.checkCommandLineMatches(["/usr/bin/codesign", "--force", "--sign", "3ACDE4E702E4", "-o", "runtime", "--entitlements", .suffix("macOSFramework.framework.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Library/Frameworks/macOSFramework.framework/Versions/A"])
++                    task.checkCommandLineMatches(["@sigtool@/bin/codesign", "--force", "--sign", "3ACDE4E702E4", "-o", "runtime", "--entitlements", .suffix("macOSFramework.framework.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Library/Frameworks/macOSFramework.framework/Versions/A"])
+                 }
+                 results.checkNoDiagnostics()
+             }
+@@ -932,7 +932,7 @@ fileprivate struct CodeSignTaskConstructionTests: CoreBasedTests {
+         await tester.checkBuild(BuildParameters(action: .install, configuration: "Release", overrides: ["ENABLE_HARDENED_RUNTIME": "YES"]), runDestination: .watchOS, fs: fs) { results in
+             results.checkTarget("watchOSFramework") { target in
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
+-                    task.checkCommandLineMatches(["/usr/bin/codesign", "--force", "--sign", "105DE4E702E4", "-o", "runtime", "--entitlements", .suffix("watchOSFramework.framework.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Library/Frameworks/watchOSFramework.framework"])
++                    task.checkCommandLineMatches(["@sigtool@/bin/codesign", "--force", "--sign", "105DE4E702E4", "-o", "runtime", "--entitlements", .suffix("watchOSFramework.framework.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Library/Frameworks/watchOSFramework.framework"])
+                 }
+                 results.checkNoDiagnostics()
+             }
+@@ -942,7 +942,7 @@ fileprivate struct CodeSignTaskConstructionTests: CoreBasedTests {
+         await tester.checkBuild(BuildParameters(action: .install, configuration: "Release", overrides: ["ENABLE_HARDENED_RUNTIME": "YES"]), runDestination: .iOSSimulator, fs: fs) { results in
+             results.checkTarget("App") { target in
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
+-                    task.checkCommandLineMatches(["/usr/bin/codesign", "--force", "--sign", "105DE4E702E4", "--entitlements", .suffix("App.app.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Applications/App.app"])
++                    task.checkCommandLineMatches(["@sigtool@/bin/codesign", "--force", "--sign", "105DE4E702E4", "--entitlements", .suffix("App.app.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Applications/App.app"])
+                 }
+                 results.checkNoDiagnostics()
+             }
+@@ -950,7 +950,7 @@ fileprivate struct CodeSignTaskConstructionTests: CoreBasedTests {
+         await tester.checkBuild(BuildParameters(action: .install, configuration: "Release", overrides: ["ENABLE_LIBRARY_VALIDATION": "YES", "ENABLE_HARDENED_RUNTIME": "YES", "CODE_SIGN_RESTRICT": "YES"]), runDestination: .iOSSimulator, fs: fs) { results in
+             results.checkTarget("App") { target in
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
+-                    task.checkCommandLineMatches(["/usr/bin/codesign", "--force", "--sign", "105DE4E702E4", "-o", "library,restrict", "--entitlements", .suffix("App.app.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Applications/App.app"])
++                    task.checkCommandLineMatches(["@sigtool@/bin/codesign", "--force", "--sign", "105DE4E702E4", "-o", "library,restrict", "--entitlements", .suffix("App.app.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Applications/App.app"])
+                 }
+                 results.checkNoDiagnostics()
+             }
+@@ -958,7 +958,7 @@ fileprivate struct CodeSignTaskConstructionTests: CoreBasedTests {
+         await tester.checkBuild(BuildParameters(action: .install, configuration: "Release", overrides: ["OTHER_CODE_SIGN_FLAGS": "-o runtime"]), runDestination: .iOSSimulator, fs: fs) { results in
+             results.checkTarget("App") { target in
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
+-                    task.checkCommandLineMatches(["/usr/bin/codesign", "--force", "--sign", "105DE4E702E4", "--entitlements", .suffix("App.app.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Applications/App.app"])
++                    task.checkCommandLineMatches(["@sigtool@/bin/codesign", "--force", "--sign", "105DE4E702E4", "--entitlements", .suffix("App.app.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Applications/App.app"])
+                 }
+                 results.checkNoDiagnostics()
+             }
+@@ -966,7 +966,7 @@ fileprivate struct CodeSignTaskConstructionTests: CoreBasedTests {
+         await tester.checkBuild(BuildParameters(action: .install, configuration: "Release", overrides: ["OTHER_CODE_SIGN_FLAGS": "-o library,restrict,runtime"]), runDestination: .iOSSimulator, fs: fs) { results in
+             results.checkTarget("App") { target in
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
+-                    task.checkCommandLineMatches(["/usr/bin/codesign", "--force", "--sign", "105DE4E702E4", "-o", "library,restrict", "--entitlements", .suffix("App.app.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Applications/App.app"])
++                    task.checkCommandLineMatches(["@sigtool@/bin/codesign", "--force", "--sign", "105DE4E702E4", "-o", "library,restrict", "--entitlements", .suffix("App.app.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Applications/App.app"])
+                 }
+                 results.checkNoDiagnostics()
+             }
+@@ -974,7 +974,7 @@ fileprivate struct CodeSignTaskConstructionTests: CoreBasedTests {
+         await tester.checkBuild(BuildParameters(action: .install, configuration: "Release", overrides: ["ENABLE_HARDENED_RUNTIME": "YES"]), runDestination: .watchOSSimulator, fs: fs) { results in
+             results.checkTarget("watchOSFramework") { target in
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
+-                    task.checkCommandLineMatches(["/usr/bin/codesign", "--force", "--sign", "105DE4E702E4", "--entitlements", .suffix("watchOSFramework.framework.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Library/Frameworks/watchOSFramework.framework"])
++                    task.checkCommandLineMatches(["@sigtool@/bin/codesign", "--force", "--sign", "105DE4E702E4", "--entitlements", .suffix("watchOSFramework.framework.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/Library/Frameworks/watchOSFramework.framework"])
+                 }
+                 results.checkNoDiagnostics()
+             }
+@@ -1019,7 +1019,7 @@ fileprivate struct CodeSignTaskConstructionTests: CoreBasedTests {
+         await tester.checkBuild(BuildParameters(action: .install, configuration: "Release", overrides: ["LAUNCH_CONSTRAINT_SELF": "/tmp/SelfLaunchConstraint.plist"]), runDestination: .macOS) { results in
+             results.checkTarget("Tool") { target in
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
+-                    task.checkCommandLineMatches(["/usr/bin/codesign", "--force", "--sign", "-", "--entitlements", .suffix("Tool.xcent"), "--generate-entitlement-der", "--launch-constraint-self", .suffix("SelfLaunchConstraint.plist"), "/tmp/aProject.dst/usr/local/bin/Tool"])
++                    task.checkCommandLineMatches(["@sigtool@/bin/codesign", "--force", "--sign", "-", "--entitlements", .suffix("Tool.xcent"), "--generate-entitlement-der", "--launch-constraint-self", .suffix("SelfLaunchConstraint.plist"), "/tmp/aProject.dst/usr/local/bin/Tool"])
+                 }
+             }
+         }
+@@ -1028,7 +1028,7 @@ fileprivate struct CodeSignTaskConstructionTests: CoreBasedTests {
+         await tester.checkBuild(BuildParameters(action: .install, configuration: "Release", overrides: ["LAUNCH_CONSTRAINT_PARENT": "/tmp/ParentLaunchConstraint.plist"]), runDestination: .macOS) { results in
+             results.checkTarget("Tool") { target in
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
+-                    task.checkCommandLineMatches(["/usr/bin/codesign", "--force", "--sign", "-", "--entitlements", .suffix("Tool.xcent"), "--generate-entitlement-der", "--launch-constraint-parent", .suffix("ParentLaunchConstraint.plist"), "/tmp/aProject.dst/usr/local/bin/Tool"])
++                    task.checkCommandLineMatches(["@sigtool@/bin/codesign", "--force", "--sign", "-", "--entitlements", .suffix("Tool.xcent"), "--generate-entitlement-der", "--launch-constraint-parent", .suffix("ParentLaunchConstraint.plist"), "/tmp/aProject.dst/usr/local/bin/Tool"])
+                 }
+             }
+         }
+@@ -1038,7 +1038,7 @@ fileprivate struct CodeSignTaskConstructionTests: CoreBasedTests {
+         await tester.checkBuild(BuildParameters(action: .install, configuration: "Release", overrides: ["LAUNCH_CONSTRAINT_RESPONSIBLE": "/tmp/ResponsibleLaunchConstraint.plist"]), runDestination: .macOS) { results in
+             results.checkTarget("Tool") { target in
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
+-                    task.checkCommandLineMatches(["/usr/bin/codesign", "--force", "--sign", "-", "--entitlements", .suffix("Tool.xcent"), "--generate-entitlement-der", "--launch-constraint-responsible", .suffix("ResponsibleLaunchConstraint.plist"), "/tmp/aProject.dst/usr/local/bin/Tool"])
++                    task.checkCommandLineMatches(["@sigtool@/bin/codesign", "--force", "--sign", "-", "--entitlements", .suffix("Tool.xcent"), "--generate-entitlement-der", "--launch-constraint-responsible", .suffix("ResponsibleLaunchConstraint.plist"), "/tmp/aProject.dst/usr/local/bin/Tool"])
+                 }
+             }
+         }
+@@ -1047,7 +1047,7 @@ fileprivate struct CodeSignTaskConstructionTests: CoreBasedTests {
+         await tester.checkBuild(BuildParameters(action: .install, configuration: "Release", overrides: ["LAUNCH_CONSTRAINT_SELF": "/tmp/SelfLaunchConstraint.plist", "LAUNCH_CONSTRAINT_PARENT": "/tmp/ParentLaunchConstraint.plist", "LAUNCH_CONSTRAINT_RESPONSIBLE": "/tmp/ResponsibleLaunchConstraint.plist"]), runDestination: .macOS) { results in
+             results.checkTarget("Tool") { target in
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
+-                    task.checkCommandLineMatches(["/usr/bin/codesign", "--force", "--sign", "-", "--entitlements", .suffix("Tool.xcent"), "--generate-entitlement-der", "--launch-constraint-self", .suffix("SelfLaunchConstraint.plist"), "--launch-constraint-parent", .suffix("ParentLaunchConstraint.plist"), "--launch-constraint-responsible", .suffix("ResponsibleLaunchConstraint.plist"), "/tmp/aProject.dst/usr/local/bin/Tool"])
++                    task.checkCommandLineMatches(["@sigtool@/bin/codesign", "--force", "--sign", "-", "--entitlements", .suffix("Tool.xcent"), "--generate-entitlement-der", "--launch-constraint-self", .suffix("SelfLaunchConstraint.plist"), "--launch-constraint-parent", .suffix("ParentLaunchConstraint.plist"), "--launch-constraint-responsible", .suffix("ResponsibleLaunchConstraint.plist"), "/tmp/aProject.dst/usr/local/bin/Tool"])
+                 }
+             }
+         }
+@@ -1091,7 +1091,7 @@ fileprivate struct CodeSignTaskConstructionTests: CoreBasedTests {
+         await tester.checkBuild(BuildParameters(action: .install, configuration: "Release", overrides: ["LIBRARY_LOAD_CONSTRAINT": "/tmp/LibraryLoadConstraint.plist"]), runDestination: .macOS, systemInfo: SystemInfo(operatingSystemVersion: Version(14), productBuildVersion: "99A98", nativeArchitecture: "arm64")) { results in
+             results.checkTarget("Tool") { target in
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
+-                    task.checkCommandLineMatches(["/usr/bin/codesign", "--force", "--sign", "-", "--entitlements", .suffix("Tool.xcent"), "--generate-entitlement-der", "--library-constraint", .suffix("LibraryLoadConstraint.plist"), "/tmp/aProject.dst/usr/local/bin/Tool"])
++                    task.checkCommandLineMatches(["@sigtool@/bin/codesign", "--force", "--sign", "-", "--entitlements", .suffix("Tool.xcent"), "--generate-entitlement-der", "--library-constraint", .suffix("LibraryLoadConstraint.plist"), "/tmp/aProject.dst/usr/local/bin/Tool"])
+                 }
+             }
+         }
+@@ -1100,7 +1100,7 @@ fileprivate struct CodeSignTaskConstructionTests: CoreBasedTests {
+         await tester.checkBuild(BuildParameters(action: .install, configuration: "Release", overrides: ["LIBRARY_LOAD_CONSTRAINT": "/tmp/LibraryLoadConstraint.plist"]), runDestination: .macOS, systemInfo: SystemInfo(operatingSystemVersion: Version(13), productBuildVersion: "99A98", nativeArchitecture: "arm64")) { results in
+             results.checkTarget("Tool") { target in
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
+-                    task.checkCommandLineMatches(["/usr/bin/codesign", "--force", "--sign", "-", "--entitlements", .suffix("Tool.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/usr/local/bin/Tool"])
++                    task.checkCommandLineMatches(["@sigtool@/bin/codesign", "--force", "--sign", "-", "--entitlements", .suffix("Tool.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/usr/local/bin/Tool"])
+                 }
+             }
+         }
+diff --git a/Tests/SWBTaskConstructionTests/MergeableLibraryTests.swift b/Tests/SWBTaskConstructionTests/MergeableLibraryTests.swift
+index 4584f5d..edc83b1 100644
+--- a/Tests/SWBTaskConstructionTests/MergeableLibraryTests.swift
++++ b/Tests/SWBTaskConstructionTests/MergeableLibraryTests.swift
+@@ -289,7 +289,7 @@ fileprivate struct MergeableLibraryTests: CoreBasedTests {
+                         let signedDir = String("\(FWK_FULL_PRODUCT_NAME)/\(FWK_CONTENTS_DIR_SUBPATH)".dropLast())       // Chop off the trailing '/'
+                         results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemPattern(.suffix(signedDir))) { task in
+                             task.checkRuleInfo(["CodeSign", "\(BUILT_PRODUCTS_DIR)/\(FULL_PRODUCT_NAME)/\(FWK_CONTENTS_DIR_SUBPATH)\(reexportedBinariesDirectoryName)/\(signedDir)"])
+-                            task.checkCommandLineContains(["/usr/bin/codesign", "--preserve-metadata=identifier,entitlements,flags", "\(BUILT_PRODUCTS_DIR)/\(FULL_PRODUCT_NAME)/\(FWK_CONTENTS_DIR_SUBPATH)\(reexportedBinariesDirectoryName)/\(signedDir)"])
++                            task.checkCommandLineContains(["@sigtool@/bin/codesign", "--preserve-metadata=identifier,entitlements,flags", "\(BUILT_PRODUCTS_DIR)/\(FULL_PRODUCT_NAME)/\(FWK_CONTENTS_DIR_SUBPATH)\(reexportedBinariesDirectoryName)/\(signedDir)"])
+                             results.checkTaskFollows(task, [.matchTarget(target), .matchRuleType("Copy"), .matchRuleItemBasename(FWK_FULL_PRODUCT_NAME)])
+                         }
+                     }
+@@ -303,7 +303,7 @@ fileprivate struct MergeableLibraryTests: CoreBasedTests {
+                         }
+                         results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename(DYLIB_FULL_PRODUCT_NAME)) { task in
+                             task.checkRuleInfo(["CodeSign", "\(BUILT_PRODUCTS_DIR)/\(FULL_PRODUCT_NAME)/\(FWK_CONTENTS_DIR_SUBPATH)\(reexportedBinariesDirectoryName)/\(DYLIB_FULL_PRODUCT_NAME)"])
+-                            task.checkCommandLineContains(["/usr/bin/codesign", "--preserve-metadata=identifier,entitlements,flags", "\(BUILT_PRODUCTS_DIR)/\(FULL_PRODUCT_NAME)/\(FWK_CONTENTS_DIR_SUBPATH)\(reexportedBinariesDirectoryName)/\(DYLIB_FULL_PRODUCT_NAME)"])
++                            task.checkCommandLineContains(["@sigtool@/bin/codesign", "--preserve-metadata=identifier,entitlements,flags", "\(BUILT_PRODUCTS_DIR)/\(FULL_PRODUCT_NAME)/\(FWK_CONTENTS_DIR_SUBPATH)\(reexportedBinariesDirectoryName)/\(DYLIB_FULL_PRODUCT_NAME)"])
+                             results.checkTaskFollows(task, [.matchTarget(target), .matchRuleType("Copy"), .matchRuleItemBasename(DYLIB_FULL_PRODUCT_NAME)])
+                         }
+                     }
+@@ -732,7 +732,7 @@ fileprivate struct MergeableLibraryTests: CoreBasedTests {
+                         let signedDir = String("\(FWK_FULL_PRODUCT_NAME)/\(FWK_CONTENTS_DIR_SUBPATH)".dropLast())       // Chop off the trailing '/'
+                         results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemPattern(.suffix(signedDir))) { task in
+                             task.checkRuleInfo(["CodeSign", "\(BUILT_PRODUCTS_DIR)/\(FULL_PRODUCT_NAME)/\(FWK_CONTENTS_DIR_SUBPATH)\(reexportedBinariesDirectoryName)/\(signedDir)"])
+-                            task.checkCommandLineContains(["/usr/bin/codesign", "--preserve-metadata=identifier,entitlements,flags", "\(BUILT_PRODUCTS_DIR)/\(FULL_PRODUCT_NAME)/\(FWK_CONTENTS_DIR_SUBPATH)\(reexportedBinariesDirectoryName)/\(signedDir)"])
++                            task.checkCommandLineContains(["@sigtool@/bin/codesign", "--preserve-metadata=identifier,entitlements,flags", "\(BUILT_PRODUCTS_DIR)/\(FULL_PRODUCT_NAME)/\(FWK_CONTENTS_DIR_SUBPATH)\(reexportedBinariesDirectoryName)/\(signedDir)"])
+                             results.checkTaskFollows(task, [.matchTarget(target), .matchRuleType("Copy"), .matchRuleItemBasename(FWK_FULL_PRODUCT_NAME)])
+                         }
+                     }
+@@ -1113,7 +1113,7 @@ fileprivate struct MergeableLibraryTests: CoreBasedTests {
+                     }
+                     results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("FwkTarget.framework")) { task in
+                         task.checkRuleInfo(["CodeSign", "\(SYMROOT)/Config-iphoneos/\(targetName).framework/\(reexportedBinariesDirectoryName)/FwkTarget.framework"])
+-                        task.checkCommandLineContains(["/usr/bin/codesign", "--preserve-metadata=identifier,entitlements,flags", "\(SYMROOT)/Config-iphoneos/\(targetName).framework/\(reexportedBinariesDirectoryName)/FwkTarget.framework"])
++                        task.checkCommandLineContains(["@sigtool@/bin/codesign", "--preserve-metadata=identifier,entitlements,flags", "\(SYMROOT)/Config-iphoneos/\(targetName).framework/\(reexportedBinariesDirectoryName)/FwkTarget.framework"])
+                         results.checkTaskFollows(task, [.matchTarget(target), .matchRuleType("Copy"), .matchRuleItemBasename("FwkTarget.framework")])
+                     }
+ 
+@@ -2242,7 +2242,7 @@ fileprivate struct MergeableLibraryTests: CoreBasedTests {
+                         }
+                         results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemPattern(.suffix("\(reexportedBinariesDirectoryName)/\(fwkTargetName).framework"))) { task in
+                             task.checkRuleInfo(["CodeSign", "\(SYMROOT)/Config-iphoneos/\(targetName).app/\(reexportedBinariesDirectoryName)/\(fwkTargetName).framework"])
+-                            task.checkCommandLineContains(["/usr/bin/codesign", "--preserve-metadata=identifier,entitlements,flags", "\(SYMROOT)/Config-iphoneos/\(targetName).app/\(reexportedBinariesDirectoryName)/\(fwkTargetName).framework"])
++                            task.checkCommandLineContains(["@sigtool@/bin/codesign", "--preserve-metadata=identifier,entitlements,flags", "\(SYMROOT)/Config-iphoneos/\(targetName).app/\(reexportedBinariesDirectoryName)/\(fwkTargetName).framework"])
+                             results.checkTaskFollows(task, [.matchTarget(target), .matchRuleType("Copy"), .matchRuleItemPattern(.suffix("\(reexportedBinariesDirectoryName)/\(fwkTargetName).framework"))])
+                         }
+                     }
+diff --git a/Tests/SWBTaskConstructionTests/PlatformTaskConstructionTests.swift b/Tests/SWBTaskConstructionTests/PlatformTaskConstructionTests.swift
+index f2e561d..5a11f29 100644
+--- a/Tests/SWBTaskConstructionTests/PlatformTaskConstructionTests.swift
++++ b/Tests/SWBTaskConstructionTests/PlatformTaskConstructionTests.swift
+@@ -191,7 +191,7 @@ fileprivate struct PlatformTaskConstructionTests: CoreBasedTests {
+                 }
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("FwkTarget.framework")) { task in
+                     task.checkRuleInfo(["CodeSign", "\(SRCROOT)/build/Debug-iphoneos/AppTarget.app/Frameworks/FwkTarget.framework"])
+-                    task.checkCommandLine(["/usr/bin/codesign", "--force", "--sign", "105DE4E702E4", "--timestamp=none", "--preserve-metadata=identifier,entitlements,flags", "--generate-entitlement-der", "\(SRCROOT)/build/Debug-iphoneos/AppTarget.app/Frameworks/FwkTarget.framework"])
++                    task.checkCommandLine(["@sigtool@/bin/codesign", "--force", "--sign", "105DE4E702E4", "--timestamp=none", "--preserve-metadata=identifier,entitlements,flags", "--generate-entitlement-der", "\(SRCROOT)/build/Debug-iphoneos/AppTarget.app/Frameworks/FwkTarget.framework"])
+                     task.checkInputs([
+                         .path("\(SRCROOT)/build/Debug-iphoneos/AppTarget.app/Frameworks/FwkTarget.framework"),
+                         .path("\(SRCROOT)/build/Debug-iphoneos/AppTarget.app/Frameworks/FwkTarget.framework"),
+@@ -211,7 +211,7 @@ fileprivate struct PlatformTaskConstructionTests: CoreBasedTests {
+                 // There should be a codesign task for the app.
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("AppTarget.app")) { task in
+                     #expect(task.ruleInfo[1] == "\(SRCROOT)/build/Debug-iphoneos/AppTarget.app")
+-                    task.checkCommandLine(["/usr/bin/codesign", "--force", "--sign", "105DE4E702E4", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug-iphoneos/AppTarget.build/AppTarget.app.xcent", "--timestamp=none", "--generate-entitlement-der", "\(SRCROOT)/build/Debug-iphoneos/AppTarget.app"])
++                    task.checkCommandLine(["@sigtool@/bin/codesign", "--force", "--sign", "105DE4E702E4", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug-iphoneos/AppTarget.build/AppTarget.app.xcent", "--timestamp=none", "--generate-entitlement-der", "\(SRCROOT)/build/Debug-iphoneos/AppTarget.app"])
+                     task.checkEnvironment([
+                         "CODESIGN_ALLOCATE": .equal("codesign_allocate"),
+                     ], exact: true)
+@@ -322,7 +322,7 @@ fileprivate struct PlatformTaskConstructionTests: CoreBasedTests {
+                 }
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("FwkTarget.framework")) { task in
+                     task.checkRuleInfo(["CodeSign", "\(SRCROOT)/build/Debug-iphonesimulator/AppTarget.app/Frameworks/FwkTarget.framework"])
+-                    task.checkCommandLine(["/usr/bin/codesign", "--force", "--sign", "105DE4E702E4", "--timestamp=none", "--preserve-metadata=identifier,entitlements,flags", "--generate-entitlement-der", "\(SRCROOT)/build/Debug-iphonesimulator/AppTarget.app/Frameworks/FwkTarget.framework"])
++                    task.checkCommandLine(["@sigtool@/bin/codesign", "--force", "--sign", "105DE4E702E4", "--timestamp=none", "--preserve-metadata=identifier,entitlements,flags", "--generate-entitlement-der", "\(SRCROOT)/build/Debug-iphonesimulator/AppTarget.app/Frameworks/FwkTarget.framework"])
+                     task.checkInputs([
+                         .path("\(SRCROOT)/build/Debug-iphonesimulator/AppTarget.app/Frameworks/FwkTarget.framework"),
+                         .path("\(SRCROOT)/build/Debug-iphonesimulator/AppTarget.app/Frameworks/FwkTarget.framework"),
+@@ -346,7 +346,7 @@ fileprivate struct PlatformTaskConstructionTests: CoreBasedTests {
+                 // There should be a codesign task for the app.
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("AppTarget.app")) { task in
+                     #expect(task.ruleInfo[1] == "\(SRCROOT)/build/Debug-iphonesimulator/AppTarget.app")
+-                    task.checkCommandLine(["/usr/bin/codesign", "--force", "--sign", "105DE4E702E4", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug-iphonesimulator/AppTarget.build/AppTarget.app.xcent", "--timestamp=none", "--generate-entitlement-der", "\(SRCROOT)/build/Debug-iphonesimulator/AppTarget.app"])
++                    task.checkCommandLine(["@sigtool@/bin/codesign", "--force", "--sign", "105DE4E702E4", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug-iphonesimulator/AppTarget.build/AppTarget.app.xcent", "--timestamp=none", "--generate-entitlement-der", "\(SRCROOT)/build/Debug-iphonesimulator/AppTarget.app"])
+                 }
+ 
+                 // There should be one product validation task.
+diff --git a/Tests/SWBTaskConstructionTests/PostprocessingTaskConstructionTests.swift b/Tests/SWBTaskConstructionTests/PostprocessingTaskConstructionTests.swift
+index 85fd06e..d5d7251 100644
+--- a/Tests/SWBTaskConstructionTests/PostprocessingTaskConstructionTests.swift
++++ b/Tests/SWBTaskConstructionTests/PostprocessingTaskConstructionTests.swift
+@@ -75,7 +75,7 @@ fileprivate struct PostprocessingTaskConstructionTests: CoreBasedTests {
+                         let suffix = buildVariant == "normal" ? "" : "_\(buildVariant)"
+ 
+                         task.checkRuleInfo(["SetOwnerAndGroup", "exampleUser:exampleGroup", "/tmp/aProject.dst/usr/local/lib/Library\(suffix).dylib"])
+-                        task.checkCommandLine(["/usr/sbin/chown", "-RH", "exampleUser:exampleGroup", "/tmp/aProject.dst/usr/local/lib/Library\(suffix).dylib"])
++                        task.checkCommandLine(["@coreutils@/bin/chown", "-RH", "exampleUser:exampleGroup", "/tmp/aProject.dst/usr/local/lib/Library\(suffix).dylib"])
+ 
+                         task.checkInputs([
+                             .path("/tmp/aProject.dst/usr/local/lib/Library\(suffix).dylib"),
+@@ -117,7 +117,7 @@ fileprivate struct PostprocessingTaskConstructionTests: CoreBasedTests {
+             results.checkTarget("Framework") { target in
+                 results.checkTask(.matchTarget(target), .matchRuleType("SetOwnerAndGroup")) { task in
+                     task.checkRuleInfo(["SetOwnerAndGroup", "exampleUser:exampleGroup", "/tmp/aProject.dst/Library/Frameworks/Framework.framework"])
+-                    task.checkCommandLine(["/usr/sbin/chown", "-RH", "exampleUser:exampleGroup", "/tmp/aProject.dst/Library/Frameworks/Framework.framework"])
++                    task.checkCommandLine(["@coreutils@/bin/chown", "-RH", "exampleUser:exampleGroup", "/tmp/aProject.dst/Library/Frameworks/Framework.framework"])
+ 
+                     task.checkInputs([
+                         .path("/tmp/aProject.dst/Library/Frameworks/Framework.framework"),
+diff --git a/Tests/SWBTaskConstructionTests/SwiftTaskConstructionTests.swift b/Tests/SWBTaskConstructionTests/SwiftTaskConstructionTests.swift
+index 1d901c0..c184bd2 100644
+--- a/Tests/SWBTaskConstructionTests/SwiftTaskConstructionTests.swift
++++ b/Tests/SWBTaskConstructionTests/SwiftTaskConstructionTests.swift
+@@ -181,7 +181,7 @@ fileprivate struct SwiftTaskConstructionTests: CoreBasedTests {
+         // Create a fake codesign_allocate tool so it can be found in the executable search paths.
+         let fs = PseudoFS()
+         try await fs.writeFileContents(swiftCompilerPath) { $0 <<< "binary" }
+-        try await fs.writeFileContents(core.developerPath.path.join("Toolchains/XcodeDefault.xctoolchain/usr/bin/codesign_allocate")) { $0 <<< "binary" }
++        try await fs.writeFileContents(core.developerPath.path.join("Toolchains/XcodeDefault.xctoolchain@sigtool@/bin/codesign_allocate")) { $0 <<< "binary" }
+ 
+         // NOTE: The toolchain cannot be set normally and must be passed in as an override.
+         var overrides = ["TOOLCHAINS": toolchainIdentifier]
+@@ -437,7 +437,7 @@ fileprivate struct SwiftTaskConstructionTests: CoreBasedTests {
+                         .name("CopySwiftStdlib \(SRCROOT)/build/Debug/AppTarget.app"),])
+ 
+                     task.checkEnvironment([
+-                        "CODESIGN_ALLOCATE":    .equal(core.developerPath.path.join("Toolchains/XcodeDefault.xctoolchain/usr/bin/codesign_allocate").str),
++                        "CODESIGN_ALLOCATE":    .equal(core.developerPath.path.join("Toolchains/XcodeDefault.xctoolchain@sigtool@/bin/codesign_allocate").str),
+                         "DEVELOPER_DIR":        .equal(core.developerPath.path.str),
+                         "SDKROOT":              .equal(core.loadSDK(.macOS).path.str),
+                         // This is coming from our overrides in unit test infrastructure.
+@@ -448,7 +448,7 @@ fileprivate struct SwiftTaskConstructionTests: CoreBasedTests {
+                 // There should be a product 'Touch' task.
+                 results.checkTask(.matchTarget(target), .matchRuleType("Touch")) { task in
+                     task.checkRuleInfo(["Touch", "\(SRCROOT)/build/Debug/AppTarget.app"])
+-                    task.checkCommandLine(["/usr/bin/touch", "-c", "\(SRCROOT)/build/Debug/AppTarget.app"])
++                    task.checkCommandLine(["@coreutils@/bin/touch", "-c", "\(SRCROOT)/build/Debug/AppTarget.app"])
+                 }
+ 
+                 results.checkTask(.matchTarget(target), .matchRuleType("RegisterExecutionPolicyException")) { task in
+diff --git a/Tests/SWBTaskConstructionTests/TaskConstructionTests.swift b/Tests/SWBTaskConstructionTests/TaskConstructionTests.swift
+index 4f9a3e5..ee50974 100644
+--- a/Tests/SWBTaskConstructionTests/TaskConstructionTests.swift
++++ b/Tests/SWBTaskConstructionTests/TaskConstructionTests.swift
+@@ -960,7 +960,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
+                     // There should be a chown and chmod task.
+                     results.checkTask(.matchTarget(target), .matchRuleType("SetOwnerAndGroup")) { task in
+                         task.checkRuleInfo(["SetOwnerAndGroup", "exampleUser:exampleGroup", "/tmp/aProject.dst/Applications/AppTarget.app"])
+-                        task.checkCommandLine(["/usr/sbin/chown", "-RH", "exampleUser:exampleGroup", "/tmp/aProject.dst/Applications/AppTarget.app"])
++                        task.checkCommandLine(["@coreutils@/bin/chown", "-RH", "exampleUser:exampleGroup", "/tmp/aProject.dst/Applications/AppTarget.app"])
+ 
+                         task.checkInputs([
+                             .path("/tmp/aProject.dst/Applications/AppTarget.app"),
+@@ -996,7 +996,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
+                     // There should be a chown task targeting the file in the the ALTERNATE_PERMISSIONS_FILES build setting.
+                     results.checkTask(.matchTarget(target), .matchRuleType("SetOwner")) { task in
+                         task.checkRuleInfo(["SetOwner", "fooOwner", "/tmp/aProject.dst/Applications/AlternatePermissions.txt"])
+-                        task.checkCommandLine(["/usr/sbin/chown", "-RH", "fooOwner", "/tmp/aProject.dst/Applications/AlternatePermissions.txt"])
++                        task.checkCommandLine(["@coreutils@/bin/chown", "-RH", "fooOwner", "/tmp/aProject.dst/Applications/AlternatePermissions.txt"])
+ 
+                         task.checkInputs([
+                             .path("/tmp/aProject.dst/Applications/AlternatePermissions.txt"),
+@@ -1056,7 +1056,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
+ 
+                     // There should be three codesign tasks (one for the copied FW, one for the copied dylib, one for the app), two of which should be re-signing tasks.
+                     results.checkTask(.matchTarget(target), .matchRule(["CodeSign", "/tmp/aProject.dst/Applications/AppTarget.app/Contents/Frameworks/FWToCopy.framework/Versions/A"])) { task in
+-                        task.checkCommandLine(["/usr/bin/codesign", "--force", "--sign", "-", "--preserve-metadata=identifier,entitlements,flags", "--generate-entitlement-der", "/tmp/aProject.dst/Applications/AppTarget.app/Contents/Frameworks/FWToCopy.framework/Versions/A"])
++                        task.checkCommandLine(["@sigtool@/bin/codesign", "--force", "--sign", "-", "--preserve-metadata=identifier,entitlements,flags", "--generate-entitlement-der", "/tmp/aProject.dst/Applications/AppTarget.app/Contents/Frameworks/FWToCopy.framework/Versions/A"])
+                         task.checkInputs([
+                             .path("/tmp/aProject.dst/Applications/AppTarget.app/Contents/Frameworks/FWToCopy.framework"),
+                             .path("/tmp/aProject.dst/Applications/AppTarget.app/Contents/Frameworks/FWToCopy.framework/Versions/A"),
+@@ -1077,7 +1077,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
+                         ])
+                     }
+                     results.checkTask(.matchTarget(target), .matchRule(["CodeSign", "/tmp/aProject.dst/Applications/AppTarget.app/Contents/Frameworks/libdynamic.dylib"])) { task in
+-                        task.checkCommandLine(["/usr/bin/codesign", "--force", "--sign", "-", "--preserve-metadata=identifier,entitlements,flags", "--generate-entitlement-der", "/tmp/aProject.dst/Applications/AppTarget.app/Contents/Frameworks/libdynamic.dylib"])
++                        task.checkCommandLine(["@sigtool@/bin/codesign", "--force", "--sign", "-", "--preserve-metadata=identifier,entitlements,flags", "--generate-entitlement-der", "/tmp/aProject.dst/Applications/AppTarget.app/Contents/Frameworks/libdynamic.dylib"])
+                         task.checkInputs([
+                             .path("/tmp/aProject.dst/Applications/AppTarget.app/Contents/Frameworks/libdynamic.dylib"),
+                             .path("/tmp/aProject.dst/Applications/AppTarget.app/Contents/Frameworks/libdynamic.dylib"),
+@@ -1095,7 +1095,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
+                         ])
+                     }
+                     results.checkTask(.matchTarget(target), .matchRule(["CodeSign", "/tmp/aProject.dst/Applications/AppTarget.app"])) { task in
+-                        task.checkCommandLine(["/usr/bin/codesign", "--force", "--sign", "-", "--entitlements", "\(SRCROOT)/build/aProject.build/Release/AppTarget.build/AppTarget.app.xcent", "--generate-entitlement-der", "/tmp/aProject.dst/Applications/AppTarget.app"])
++                        task.checkCommandLine(["@sigtool@/bin/codesign", "--force", "--sign", "-", "--entitlements", "\(SRCROOT)/build/aProject.build/Release/AppTarget.build/AppTarget.app.xcent", "--generate-entitlement-der", "/tmp/aProject.dst/Applications/AppTarget.app"])
+                         task.checkInputs([
+                             .path("/tmp/aProject.dst/Applications/AppTarget.app"),
+                             .path("/tmp/aProject.dst/Applications/AppTarget.app"),
+@@ -4167,7 +4167,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
+                     // There should be two code signing tasks, one for the library and one for the product.
+                     results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("libclang_rt.asan_osx_dynamic.dylib")) { task in
+                         task.checkRuleInfo([.equal("CodeSign"), .equal("\(SRCROOT)/build/Debug/\(targetName).app/Contents/Frameworks/libclang_rt.asan_osx_dynamic.dylib")])
+-                        task.checkCommandLine(["/usr/bin/codesign", "--force", "--sign", "-", "--timestamp=none", "--preserve-metadata=identifier,entitlements,flags", "--generate-entitlement-der", "\(SRCROOT)/build/Debug/\(targetName).app/Contents/Frameworks/libclang_rt.asan_osx_dynamic.dylib"])
++                        task.checkCommandLine(["@sigtool@/bin/codesign", "--force", "--sign", "-", "--timestamp=none", "--preserve-metadata=identifier,entitlements,flags", "--generate-entitlement-der", "\(SRCROOT)/build/Debug/\(targetName).app/Contents/Frameworks/libclang_rt.asan_osx_dynamic.dylib"])
+                         task.checkInputs([
+                             .path("\(SRCROOT)/build/Debug/AppTarget.app/Contents/Frameworks/libclang_rt.asan_osx_dynamic.dylib"),
+                             .path("\(SRCROOT)/build/Debug/AppTarget.app/Contents/Frameworks/libclang_rt.asan_osx_dynamic.dylib"),
+@@ -4178,7 +4178,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
+                     }
+                     results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("\(targetName).app")) { task in
+                         task.checkRuleInfo([.equal("CodeSign"), .equal("\(SRCROOT)/build/Debug/\(targetName).app")])
+-                        task.checkCommandLine(["/usr/bin/codesign", "--force", "--sign", "-", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug/AppTarget.build/AppTarget.app.xcent", "--timestamp=none", "--generate-entitlement-der", "\(SRCROOT)/build/Debug/\(targetName).app"])
++                        task.checkCommandLine(["@sigtool@/bin/codesign", "--force", "--sign", "-", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug/AppTarget.build/AppTarget.app.xcent", "--timestamp=none", "--generate-entitlement-der", "\(SRCROOT)/build/Debug/\(targetName).app"])
+                     }
+                 }
+ 
+@@ -4225,7 +4225,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
+                     // There should be one code signing task for the ASan library.
+                     results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("libclang_rt.asan_osx_dynamic.dylib")) { task in
+                         task.checkRuleInfo([.equal("CodeSign"), .equal("\(SRCROOT)/build/Debug/\(targetName).app/Contents/Frameworks/libclang_rt.asan_osx_dynamic.dylib")])
+-                        task.checkCommandLine(["/usr/bin/codesign", "--force", "--sign", "-", "--timestamp=none", "--preserve-metadata=identifier,entitlements,flags", "--generate-entitlement-der", "\(SRCROOT)/build/Debug/\(targetName).app/Contents/Frameworks/libclang_rt.asan_osx_dynamic.dylib"])
++                        task.checkCommandLine(["@sigtool@/bin/codesign", "--force", "--sign", "-", "--timestamp=none", "--preserve-metadata=identifier,entitlements,flags", "--generate-entitlement-der", "\(SRCROOT)/build/Debug/\(targetName).app/Contents/Frameworks/libclang_rt.asan_osx_dynamic.dylib"])
+                         task.checkInputs([
+                             .path("\(SRCROOT)/build/Debug/AppTarget.app/Contents/Frameworks/libclang_rt.asan_osx_dynamic.dylib"),
+                             .path("\(SRCROOT)/build/Debug/AppTarget.app/Contents/Frameworks/libclang_rt.asan_osx_dynamic.dylib"),
+@@ -4238,7 +4238,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
+                     // There should be one code signing task for the TSan library.
+                     results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("libclang_rt.tsan_osx_dynamic.dylib")) { task in
+                         task.checkRuleInfo([.equal("CodeSign"), .equal("\(SRCROOT)/build/Debug/\(targetName).app/Contents/Frameworks/libclang_rt.tsan_osx_dynamic.dylib")])
+-                        task.checkCommandLine(["/usr/bin/codesign", "--force", "--sign", "-", "--timestamp=none", "--preserve-metadata=identifier,entitlements,flags", "--generate-entitlement-der", "\(SRCROOT)/build/Debug/\(targetName).app/Contents/Frameworks/libclang_rt.tsan_osx_dynamic.dylib"])
++                        task.checkCommandLine(["@sigtool@/bin/codesign", "--force", "--sign", "-", "--timestamp=none", "--preserve-metadata=identifier,entitlements,flags", "--generate-entitlement-der", "\(SRCROOT)/build/Debug/\(targetName).app/Contents/Frameworks/libclang_rt.tsan_osx_dynamic.dylib"])
+                         task.checkInputs([
+                             .path("\(SRCROOT)/build/Debug/AppTarget.app/Contents/Frameworks/libclang_rt.tsan_osx_dynamic.dylib"),
+                             .path("\(SRCROOT)/build/Debug/AppTarget.app/Contents/Frameworks/libclang_rt.tsan_osx_dynamic.dylib"),
+@@ -4301,7 +4301,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
+                     // There should be two code signing tasks, one for the library and one for the product.
+                     results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("libclang_rt.tsan_osx_dynamic.dylib")) { task in
+                         task.checkRuleInfo([.equal("CodeSign"), .equal("\(SRCROOT)/build/Debug/\(targetName).app/Contents/Frameworks/libclang_rt.tsan_osx_dynamic.dylib")])
+-                        task.checkCommandLine(["/usr/bin/codesign", "--force", "--sign", "-", "--timestamp=none", "--preserve-metadata=identifier,entitlements,flags", "--generate-entitlement-der", "\(SRCROOT)/build/Debug/\(targetName).app/Contents/Frameworks/libclang_rt.tsan_osx_dynamic.dylib"])
++                        task.checkCommandLine(["@sigtool@/bin/codesign", "--force", "--sign", "-", "--timestamp=none", "--preserve-metadata=identifier,entitlements,flags", "--generate-entitlement-der", "\(SRCROOT)/build/Debug/\(targetName).app/Contents/Frameworks/libclang_rt.tsan_osx_dynamic.dylib"])
+                         task.checkInputs([
+                             .path("\(SRCROOT)/build/Debug/AppTarget.app/Contents/Frameworks/libclang_rt.tsan_osx_dynamic.dylib"),
+                             .path("\(SRCROOT)/build/Debug/AppTarget.app/Contents/Frameworks/libclang_rt.tsan_osx_dynamic.dylib"),
+@@ -4312,7 +4312,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
+                     }
+                     results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("\(targetName).app")) { task in
+                         task.checkRuleInfo([.equal("CodeSign"), .equal("\(SRCROOT)/build/Debug/\(targetName).app")])
+-                        task.checkCommandLine(["/usr/bin/codesign", "--force", "--sign", "-", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug/AppTarget.build/AppTarget.app.xcent", "--timestamp=none", "--generate-entitlement-der", "\(SRCROOT)/build/Debug/\(targetName).app"])
++                        task.checkCommandLine(["@sigtool@/bin/codesign", "--force", "--sign", "-", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug/AppTarget.build/AppTarget.app.xcent", "--timestamp=none", "--generate-entitlement-der", "\(SRCROOT)/build/Debug/\(targetName).app"])
+                     }
+                 }
+ 
+@@ -4356,7 +4356,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
+                     // There should be two code signing tasks, one for the library and one for the product.
+                     results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("libclang_rt.ubsan_osx_dynamic.dylib")) { task in
+                         task.checkRuleInfo([.equal("CodeSign"), .equal("\(SRCROOT)/build/Debug/\(targetName).app/Contents/Frameworks/libclang_rt.ubsan_osx_dynamic.dylib")])
+-                        task.checkCommandLine(["/usr/bin/codesign", "--force", "--sign", "-", "--timestamp=none", "--preserve-metadata=identifier,entitlements,flags", "--generate-entitlement-der", "\(SRCROOT)/build/Debug/\(targetName).app/Contents/Frameworks/libclang_rt.ubsan_osx_dynamic.dylib"])
++                        task.checkCommandLine(["@sigtool@/bin/codesign", "--force", "--sign", "-", "--timestamp=none", "--preserve-metadata=identifier,entitlements,flags", "--generate-entitlement-der", "\(SRCROOT)/build/Debug/\(targetName).app/Contents/Frameworks/libclang_rt.ubsan_osx_dynamic.dylib"])
+                         task.checkInputs([
+                             .path("\(SRCROOT)/build/Debug/AppTarget.app/Contents/Frameworks/libclang_rt.ubsan_osx_dynamic.dylib"),
+                             .path("\(SRCROOT)/build/Debug/AppTarget.app/Contents/Frameworks/libclang_rt.ubsan_osx_dynamic.dylib"),
+@@ -4367,7 +4367,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
+                     }
+                     results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("\(targetName).app")) { task in
+                         task.checkRuleInfo([.equal("CodeSign"), .equal("\(SRCROOT)/build/Debug/\(targetName).app")])
+-                        task.checkCommandLine(["/usr/bin/codesign", "--force", "--sign", "-", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug/AppTarget.build/AppTarget.app.xcent", "--timestamp=none", "--generate-entitlement-der", "\(SRCROOT)/build/Debug/\(targetName).app"])
++                        task.checkCommandLine(["@sigtool@/bin/codesign", "--force", "--sign", "-", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug/AppTarget.build/AppTarget.app.xcent", "--timestamp=none", "--generate-entitlement-der", "\(SRCROOT)/build/Debug/\(targetName).app"])
+                     }
+                 }
+ 
+diff --git a/Tests/SWBTaskConstructionTests/UnitTestTaskConstructionTests.swift b/Tests/SWBTaskConstructionTests/UnitTestTaskConstructionTests.swift
+index 761146f..95bfcb7 100644
+--- a/Tests/SWBTaskConstructionTests/UnitTestTaskConstructionTests.swift
++++ b/Tests/SWBTaskConstructionTests/UnitTestTaskConstructionTests.swift
+@@ -657,7 +657,7 @@ fileprivate struct UnitTestTaskConstructionTests: CoreBasedTests {
+                 }
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("UnitTestTargetOne.xctest")) { task in
+                     task.checkRuleInfo(["CodeSign", "\(SRCROOT)/build/Debug/AppTarget.app/Contents/PlugIns/UnitTestTargetOne.xctest"])
+-                    task.checkCommandLine(["/usr/bin/codesign", "--force", "--sign", "-", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug/UnitTestTargetOne.build/UnitTestTargetOne.xctest.xcent", "--timestamp=none", "--generate-entitlement-der", "\(SRCROOT)/build/Debug/AppTarget.app/Contents/PlugIns/UnitTestTargetOne.xctest"])
++                    task.checkCommandLine(["@sigtool@/bin/codesign", "--force", "--sign", "-", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug/UnitTestTargetOne.build/UnitTestTargetOne.xctest.xcent", "--timestamp=none", "--generate-entitlement-der", "\(SRCROOT)/build/Debug/AppTarget.app/Contents/PlugIns/UnitTestTargetOne.xctest"])
+                     task.checkInputs([
+                         .path("\(SRCROOT)/build/Debug/AppTarget.app/Contents/PlugIns/UnitTestTargetOne.xctest"),
+                         .path("\(SRCROOT)/build/Debug/AppTarget.app/Contents/PlugIns/UnitTestTargetOne.xctest"),
+@@ -843,7 +843,7 @@ fileprivate struct UnitTestTaskConstructionTests: CoreBasedTests {
+                 results.checkTask(.matchTarget(target), .matchRuleType("ProcessProductPackagingDER")) { _ in }
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("UnitTestTargetOne.xctest")) { task in
+                     task.checkRuleInfo(["CodeSign", "\(SRCROOT)/build/UninstalledProducts/macosx/UnitTestTargetOne.xctest"])
+-                    task.checkCommandLine(["/usr/bin/codesign", "--force", "--sign", "-", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug/UnitTestTargetOne.build/UnitTestTargetOne.xctest.xcent", "--generate-entitlement-der", "\(SRCROOT)/build/UninstalledProducts/macosx/UnitTestTargetOne.xctest"])
++                    task.checkCommandLine(["@sigtool@/bin/codesign", "--force", "--sign", "-", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug/UnitTestTargetOne.build/UnitTestTargetOne.xctest.xcent", "--generate-entitlement-der", "\(SRCROOT)/build/UninstalledProducts/macosx/UnitTestTargetOne.xctest"])
+                     task.checkInputs([
+                         .path("\(SRCROOT)/build/UninstalledProducts/macosx/UnitTestTargetOne.xctest"),
+                         .path("\(SRCROOT)/build/UninstalledProducts/macosx/UnitTestTargetOne.xctest"),
+@@ -2515,7 +2515,7 @@ fileprivate struct UnitTestTaskConstructionTests: CoreBasedTests {
+                 }
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("UITestTarget.xctest")) { task in
+                     task.checkRuleInfo(["CodeSign", "\(SRCROOT)/build/Debug/UITestTarget-Runner.app/Contents/PlugIns/UITestTarget.xctest"])
+-                    task.checkCommandLine(["/usr/bin/codesign", "--force", "--sign", "-", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug/UITestTarget.build/UITestTarget.xctest.xcent", "--timestamp=none", "--generate-entitlement-der", "\(SRCROOT)/build/Debug/UITestTarget-Runner.app/Contents/PlugIns/UITestTarget.xctest"])
++                    task.checkCommandLine(["@sigtool@/bin/codesign", "--force", "--sign", "-", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug/UITestTarget.build/UITestTarget.xctest.xcent", "--timestamp=none", "--generate-entitlement-der", "\(SRCROOT)/build/Debug/UITestTarget-Runner.app/Contents/PlugIns/UITestTarget.xctest"])
+                     task.checkInputs(contain: [
+                         .path("\(SRCROOT)/build/Debug/UITestTarget-Runner.app/Contents/PlugIns/UITestTarget.xctest"),
+                         .path("\(SRCROOT)/build/Debug/UITestTarget-Runner.app/Contents/PlugIns/UITestTarget.xctest"),
+@@ -2535,7 +2535,7 @@ fileprivate struct UnitTestTaskConstructionTests: CoreBasedTests {
+                 }
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("UITestTarget-Runner.app")) { task in
+                     task.checkRuleInfo(["CodeSign", "\(SRCROOT)/build/Debug/UITestTarget-Runner.app"])
+-                    task.checkCommandLine(["/usr/bin/codesign", "--force", "--sign", "-", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug/UITestTarget.build/UITestTarget.xctest.xcent", "--timestamp=none", "--generate-entitlement-der", "\(SRCROOT)/build/Debug/UITestTarget-Runner.app"])
++                    task.checkCommandLine(["@sigtool@/bin/codesign", "--force", "--sign", "-", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug/UITestTarget.build/UITestTarget.xctest.xcent", "--timestamp=none", "--generate-entitlement-der", "\(SRCROOT)/build/Debug/UITestTarget-Runner.app"])
+                     task.checkInputs(contain: ([[
+                         .path("\(SRCROOT)/build/Debug/UITestTarget-Runner.app/Contents/PlugIns/UITestTarget.xctest"),
+                         .path("\(SRCROOT)/build/Debug/UITestTarget-Runner.app"),
+@@ -2689,7 +2689,7 @@ fileprivate struct UnitTestTaskConstructionTests: CoreBasedTests {
+                 results.checkTask(.matchTarget(target), .matchRuleType("ProcessProductPackagingDER"), .matchRuleItemPattern(.suffix(".xcent"))) { _ in }
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("UITestTarget.xctest")) { task in
+                     task.checkRuleInfo(["CodeSign", "\(SRCROOT)/build/UninstalledProducts/macosx/UITestTarget-Runner.app/Contents/PlugIns/UITestTarget.xctest"])
+-                    task.checkCommandLine(["/usr/bin/codesign", "--force", "--sign", "-", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug/UITestTarget.build/UITestTarget.xctest.xcent", "--generate-entitlement-der", "\(SRCROOT)/build/UninstalledProducts/macosx/UITestTarget-Runner.app/Contents/PlugIns/UITestTarget.xctest"])
++                    task.checkCommandLine(["@sigtool@/bin/codesign", "--force", "--sign", "-", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug/UITestTarget.build/UITestTarget.xctest.xcent", "--generate-entitlement-der", "\(SRCROOT)/build/UninstalledProducts/macosx/UITestTarget-Runner.app/Contents/PlugIns/UITestTarget.xctest"])
+                     task.checkInputs(contain: [
+                         .path("\(SRCROOT)/build/UninstalledProducts/macosx/UITestTarget-Runner.app/Contents/PlugIns/UITestTarget.xctest"),
+                         .path("\(SRCROOT)/build/UninstalledProducts/macosx/UITestTarget-Runner.app/Contents/PlugIns/UITestTarget.xctest"),
+@@ -2709,7 +2709,7 @@ fileprivate struct UnitTestTaskConstructionTests: CoreBasedTests {
+                 }
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("UITestTarget-Runner.app")) { task in
+                     task.checkRuleInfo(["CodeSign", "\(SRCROOT)/build/UninstalledProducts/macosx/UITestTarget-Runner.app"])
+-                    task.checkCommandLine(["/usr/bin/codesign", "--force", "--sign", "-", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug/UITestTarget.build/UITestTarget.xctest.xcent", "--generate-entitlement-der", "\(SRCROOT)/build/UninstalledProducts/macosx/UITestTarget-Runner.app"])
++                    task.checkCommandLine(["@sigtool@/bin/codesign", "--force", "--sign", "-", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug/UITestTarget.build/UITestTarget.xctest.xcent", "--generate-entitlement-der", "\(SRCROOT)/build/UninstalledProducts/macosx/UITestTarget-Runner.app"])
+                     task.checkInputs(contain: ([[
+                         .path("\(SRCROOT)/build/UninstalledProducts/macosx/UITestTarget-Runner.app/Contents/PlugIns/UITestTarget.xctest"),
+                         .path("\(SRCROOT)/build/UninstalledProducts/macosx/UITestTarget-Runner.app"),
+diff --git a/Tests/SWBTaskConstructionTests/WatchTaskConstructionTests.swift b/Tests/SWBTaskConstructionTests/WatchTaskConstructionTests.swift
+index db2a64f..7319fdd 100644
+--- a/Tests/SWBTaskConstructionTests/WatchTaskConstructionTests.swift
++++ b/Tests/SWBTaskConstructionTests/WatchTaskConstructionTests.swift
+@@ -296,7 +296,7 @@ fileprivate struct WatchTaskConstructionTests: CoreBasedTests {
+                 // There should be one codesign task.
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
+                     #expect(task.ruleInfo[1] == "\(SRCROOT)/build/Debug-watchos/Watchable WatchKit Extension.appex")
+-                    task.checkCommandLine(["/usr/bin/codesign", "--force", "--sign", "105DE4E702E4", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug-watchos/\(target.target.name).build/\(target.target.name).appex.xcent", "--timestamp=none", "--generate-entitlement-der", "\(SRCROOT)/build/Debug-watchos/\(target.target.name).appex"])
++                    task.checkCommandLine(["@sigtool@/bin/codesign", "--force", "--sign", "105DE4E702E4", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug-watchos/\(target.target.name).build/\(target.target.name).appex.xcent", "--timestamp=none", "--generate-entitlement-der", "\(SRCROOT)/build/Debug-watchos/\(target.target.name).appex"])
+                     task.checkEnvironment([
+                         "CODESIGN_ALLOCATE": .equal("codesign_allocate"),
+                     ], exact: true)
+@@ -384,7 +384,7 @@ fileprivate struct WatchTaskConstructionTests: CoreBasedTests {
+                 // There should be one codesign task.
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
+                     #expect(task.ruleInfo[1] == builtWatchAppPath)
+-                    task.checkCommandLine(["/usr/bin/codesign", "--force", "--sign", "105DE4E702E4", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug-watchos/Watchable WatchKit App.build/Watchable WatchKit App.app.xcent", "--timestamp=none", "--generate-entitlement-der", builtWatchAppPath])
++                    task.checkCommandLine(["@sigtool@/bin/codesign", "--force", "--sign", "105DE4E702E4", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug-watchos/Watchable WatchKit App.build/Watchable WatchKit App.app.xcent", "--timestamp=none", "--generate-entitlement-der", builtWatchAppPath])
+                     task.checkEnvironment([
+                         "CODESIGN_ALLOCATE": .equal("codesign_allocate"),
+                     ], exact: true)
+@@ -490,7 +490,7 @@ fileprivate struct WatchTaskConstructionTests: CoreBasedTests {
+                 // There should be one codesign task.
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
+                     #expect(task.ruleInfo[1] == builtHostIOSAppPath)
+-                    task.checkCommandLine(["/usr/bin/codesign", "--force", "--sign", "105DE4E702E4", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug-iphoneos/Watchable.build/Watchable.app.xcent", "--timestamp=none", "--generate-entitlement-der", builtHostIOSAppPath])
++                    task.checkCommandLine(["@sigtool@/bin/codesign", "--force", "--sign", "105DE4E702E4", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug-iphoneos/Watchable.build/Watchable.app.xcent", "--timestamp=none", "--generate-entitlement-der", builtHostIOSAppPath])
+                     task.checkEnvironment([
+                         "CODESIGN_ALLOCATE": .equal("codesign_allocate"),
+                     ], exact: true)
+@@ -599,7 +599,7 @@ fileprivate struct WatchTaskConstructionTests: CoreBasedTests {
+                 // There should be one codesign task.
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
+                     #expect(task.ruleInfo[1] == "\(SRCROOT)/build/Debug-watchsimulator/Watchable WatchKit Extension.appex")
+-                    task.checkCommandLine(["/usr/bin/codesign", "--force", "--sign", "105DE4E702E4", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug-watchsimulator/Watchable WatchKit Extension.build/Watchable WatchKit Extension.appex.xcent", "--timestamp=none", "--generate-entitlement-der", "\(SRCROOT)/build/Debug-watchsimulator/Watchable WatchKit Extension.appex"])
++                    task.checkCommandLine(["@sigtool@/bin/codesign", "--force", "--sign", "105DE4E702E4", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug-watchsimulator/Watchable WatchKit Extension.build/Watchable WatchKit Extension.appex.xcent", "--timestamp=none", "--generate-entitlement-der", "\(SRCROOT)/build/Debug-watchsimulator/Watchable WatchKit Extension.appex"])
+                     task.checkEnvironment([
+                         "CODESIGN_ALLOCATE": .equal("codesign_allocate"),
+                     ], exact: true)
+@@ -667,7 +667,7 @@ fileprivate struct WatchTaskConstructionTests: CoreBasedTests {
+                 // There should be one codesign task.
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
+                     #expect(task.ruleInfo[1] == builtWatchAppPath)
+-                    task.checkCommandLine(["/usr/bin/codesign", "--force", "--sign", "105DE4E702E4", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug-watchsimulator/Watchable WatchKit App.build/Watchable WatchKit App.app.xcent", "--timestamp=none", "--generate-entitlement-der", builtWatchAppPath])
++                    task.checkCommandLine(["@sigtool@/bin/codesign", "--force", "--sign", "105DE4E702E4", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug-watchsimulator/Watchable WatchKit App.build/Watchable WatchKit App.app.xcent", "--timestamp=none", "--generate-entitlement-der", builtWatchAppPath])
+                     task.checkEnvironment([
+                         "CODESIGN_ALLOCATE": .equal("codesign_allocate"),
+                     ], exact: true)
+@@ -768,7 +768,7 @@ fileprivate struct WatchTaskConstructionTests: CoreBasedTests {
+                 // There should be one codesign task.
+                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
+                     #expect(task.ruleInfo[1] == builtHostIOSAppPath)
+-                    task.checkCommandLine(["/usr/bin/codesign", "--force", "--sign", "105DE4E702E4", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug-iphonesimulator/Watchable.build/Watchable.app.xcent", "--timestamp=none", "--generate-entitlement-der", builtHostIOSAppPath])
++                    task.checkCommandLine(["@sigtool@/bin/codesign", "--force", "--sign", "105DE4E702E4", "--entitlements", "\(SRCROOT)/build/aProject.build/Debug-iphonesimulator/Watchable.build/Watchable.app.xcent", "--timestamp=none", "--generate-entitlement-der", builtHostIOSAppPath])
+                     task.checkEnvironment([
+                         "CODESIGN_ALLOCATE": .equal("codesign_allocate"),
+                     ], exact: true)
+diff --git a/Tests/SWBTaskExecutionTests/SignatureCollectionActionTests.swift b/Tests/SWBTaskExecutionTests/SignatureCollectionActionTests.swift
+index 3c11b2c..1842a9f 100644
+--- a/Tests/SWBTaskExecutionTests/SignatureCollectionActionTests.swift
++++ b/Tests/SWBTaskExecutionTests/SignatureCollectionActionTests.swift
+@@ -107,7 +107,7 @@ fileprivate struct SignatureCollectionActionTests {
+             let bundlePath = rootPath.join("test.bundle")
+             try fs.copy(Path(Bundle.module.bundlePath), to: bundlePath)
+ 
+-            let codesignTool = URL(fileURLWithPath: "/usr/bin/codesign")
++            let codesignTool = URL(fileURLWithPath: "@sigtool@/bin/codesign")
+             let codesignResult = try await Process.run(url: codesignTool, arguments: ["--remove-signature", bundlePath.str])
+             #expect(codesignResult.isSuccess)
+ 
+@@ -162,7 +162,7 @@ fileprivate struct SignatureCollectionActionTests {
+             let bundlePath = rootPath.join("test.bundle")
+             try fs.copy(Path(Bundle.module.bundlePath), to: bundlePath)
+ 
+-            let codesignTool = URL(fileURLWithPath: "/usr/bin/codesign")
++            let codesignTool = URL(fileURLWithPath: "@sigtool@/bin/codesign")
+             let codesignResult = try await Process.run(url: codesignTool, arguments: ["--remove-signature", bundlePath.str])
+             #expect(codesignResult.isSuccess)
+ 
+diff --git a/Tests/SWBUtilTests/MiscTests.swift b/Tests/SWBUtilTests/MiscTests.swift
+index f93094a..2ff6572 100644
+--- a/Tests/SWBUtilTests/MiscTests.swift
++++ b/Tests/SWBUtilTests/MiscTests.swift
+@@ -62,7 +62,7 @@ import SWBUtil
+             let path = try await xcode.compileFramework(path: tmpDir, platform: .iOS, infoLookup: Lookup(), archs: ["arm64"], useSwift: false)
+             #expect(!pbxcp_path_is_code_signed(path), "binary was unexpectedly code signed")
+ 
+-            _ = try await runProcess(["/usr/bin/codesign", "-s", "-", path.str])
++            _ = try await runProcess(["@sigtool@/bin/codesign", "-s", "-", path.str])
+             #expect(pbxcp_path_is_code_signed(path), "binary was unexpectedly NOT code signed")
+         }
+     }
+diff --git a/Tests/SWBUtilTests/SignaturesTests.swift b/Tests/SWBUtilTests/SignaturesTests.swift
+index ca93d8f..c853bd2 100644
+--- a/Tests/SWBUtilTests/SignaturesTests.swift
++++ b/Tests/SWBUtilTests/SignaturesTests.swift
+@@ -28,7 +28,7 @@ fileprivate struct SignaturesTests {
+             try await fs.writePlist(bundlePath.join("Info.plist"), .plDict([:]))
+             try fs.write(bundlePath.join("test"), contents: "#!/bin/bash", atomically: true)
+ 
+-            let codesignTool = URL(fileURLWithPath: "/usr/bin/codesign")
++            let codesignTool = URL(fileURLWithPath: "@sigtool@/bin/codesign")
+ 
+             // Set-up the ad-hoc signed bundle for testing.
+             let codesignSigningResult = try await Process.run(url: codesignTool, arguments: ["-s", "-", "-i", "test-ident", bundlePath.str])
+@@ -48,7 +48,7 @@ fileprivate struct SignaturesTests {
+             try await fs.writePlist(bundlePath.join("Info.plist"), .plDict([:]))
+             try fs.write(bundlePath.join("test"), contents: "#!/bin/bash", atomically: true)
+ 
+-            let codesignTool = URL(fileURLWithPath: "/usr/bin/codesign")
++            let codesignTool = URL(fileURLWithPath: "@sigtool@/bin/codesign")
+ 
+             // Set-up the ad-hoc signed bundle for testing.
+             let codesignSigningResult = try await Process.run(url: codesignTool, arguments: ["-s", "-", bundlePath.str])
+diff --git a/Tests/SwiftBuildTests/BuildOperationTests.swift b/Tests/SwiftBuildTests/BuildOperationTests.swift
+index 077da08..6a14464 100644
+--- a/Tests/SwiftBuildTests/BuildOperationTests.swift
++++ b/Tests/SwiftBuildTests/BuildOperationTests.swift
+@@ -213,7 +213,7 @@ fileprivate struct BuildOperationTests: CoreBasedTests {
+                                                      buildPhases: [
+                                                         TestShellScriptBuildPhase(
+                                                             name: "A.Script", originalObjectID: "A.Script", contents: (OutputByteStream()
+-                                                                                                                       <<< "/usr/bin/touch ${SCRIPT_OUTPUT_FILE_0}"
++                                                                                                                       <<< "@coreutils@/bin/touch ${SCRIPT_OUTPUT_FILE_0}"
+                                                                                                                       ).bytes.asString, inputs: [], outputs: ["$(DERIVED_FILE_DIR)/stamp"])
+                                                      ],
+                                                      dependencies: ["B"]
+@@ -228,7 +228,7 @@ fileprivate struct BuildOperationTests: CoreBasedTests {
+                                                     // This task will be up-to-date after the first build
+                                                     TestShellScriptBuildPhase(
+                                                         name: "B.Once", originalObjectID: "B.Once",
+-                                                        contents: "/usr/bin/touch ${SCRIPT_OUTPUT_FILE_0}",
++                                                        contents: "@coreutils@/bin/touch ${SCRIPT_OUTPUT_FILE_0}",
+                                                         inputs: [], outputs: ["$(DERIVED_FILE_DIR)/stamp"]),
+                                                     // This task will always run.
+                                                     TestShellScriptBuildPhase(
+@@ -1260,7 +1260,7 @@ fileprivate struct BuildOperationTests: CoreBasedTests {
+                                 "PRODUCT_NAME": "$(TARGET_NAME)",
+                                 "USE_HEADERMAP": "NO",
+                                 // We run a task which will never finish.
+-                                "CC": "/usr/bin/yes",
++                                "CC": "@coreutils@/bin/yes",
+                             ])],
+                     buildPhases: [
+                         TestSourcesBuildPhase([TestBuildFile("foo.c")]),
+@@ -1331,7 +1331,7 @@ fileprivate struct BuildOperationTests: CoreBasedTests {
+                                 "PRODUCT_NAME": "$(TARGET_NAME)",
+                                 "USE_HEADERMAP": "NO",
+                                 // We run a task which will never finish.
+-                                "CC": "/usr/bin/yes",
++                                "CC": "@coreutils@/bin/yes",
+                             ])],
+                     buildPhases: [
+                         TestSourcesBuildPhase([TestBuildFile("foo.c")]),
+@@ -1403,7 +1403,7 @@ fileprivate struct BuildOperationTests: CoreBasedTests {
+                                 "PRODUCT_NAME": "$(TARGET_NAME)",
+                                 "USE_HEADERMAP": "NO",
+                                 // We run a task which will never finish.
+-                                "CC": "/usr/bin/yes",
++                                "CC": "@coreutils@/bin/yes",
+                             ])],
+                     buildPhases: [
+                         TestSourcesBuildPhase([TestBuildFile("foo.c")]),
+@@ -1485,7 +1485,7 @@ fileprivate struct BuildOperationTests: CoreBasedTests {
+                                 "PRODUCT_NAME": "$(TARGET_NAME)",
+                                 "USE_HEADERMAP": "NO",
+                                 // We run a task which will never finish.
+-                                "CC": "/usr/bin/yes",
++                                "CC": "@coreutils@/bin/yes",
+                             ])],
+                     buildPhases: [
+                         TestSourcesBuildPhase([TestBuildFile("foo.c")]),
+@@ -1565,7 +1565,7 @@ fileprivate struct BuildOperationTests: CoreBasedTests {
+                                 "PRODUCT_NAME": "$(TARGET_NAME)",
+                                 "USE_HEADERMAP": "NO",
+                                 // We run a task which will never finish.
+-                                "CC": "/usr/bin/yes",
++                                "CC": "@coreutils@/bin/yes",
+                             ])],
+                     buildPhases: [
+                         TestSourcesBuildPhase([TestBuildFile("foo.c")]),
+@@ -1724,7 +1724,7 @@ fileprivate struct BuildOperationTests: CoreBasedTests {
+                                         "PRODUCT_NAME": "$(TARGET_NAME)",
+                                         "USE_HEADERMAP": "NO",
+                                         // We run a task which will never finish.
+-                                        "CC": "/usr/bin/yes",
++                                        "CC": "@coreutils@/bin/yes",
+                                     ])],
+                             buildPhases: [
+                                 TestSourcesBuildPhase([TestBuildFile("foo.c")]),
+-- 
+2.51.2
+
