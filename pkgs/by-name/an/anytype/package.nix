@@ -61,17 +61,38 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     buildPhase = ''
       runHook preBuild
 
-      export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
       # https://bun.com/docs/pm/cli/install#configuring-with-environment-variables
+      export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
 
-      # Bun always tries to use the fastest available installation method for the target platform. On macOS, that’s clonefile and on Linux, that’s hardlink.
-      bun install \
-        --backend=copyfile \
-        --cpu="*" \
-        --frozen-lockfile \
-        --ignore-scripts \
-        --no-progress \
-        --os="*"
+      # TODO: drop the retry loop once a bun release carries the fixes below
+      # When a tarball download hiccups, bun gives up on the spot instead of asking for
+      # it again. We pull in every platform's binaries below, which is around 90 extra
+      # downloads, so sooner or later one goes wrong and the build dies with
+      # error: Fail extracting tarball for "@esbuild/android-x64"
+      # https://github.com/oven-sh/bun/pull/34827 (retry cut short bodies, still open)
+      # https://github.com/oven-sh/bun/pull/34861 (merged to main, not in 1.3.13)
+      for attempt in 1 2 3; do
+        # Bun always tries to use the fastest available installation method for the target platform. On macOS, that’s clonefile and on Linux, that’s hardlink.
+        if bun install \
+          --backend=copyfile \
+          --cpu="*" \
+          --frozen-lockfile \
+          --ignore-scripts \
+          --no-progress \
+          --os="*"; then
+          break
+        fi
+
+        if [ "$attempt" = 3 ]; then
+          echo "error: bun install kept failing after $attempt attempts, giving up" >&2
+          exit 1
+        fi
+
+        # Wipe the tree before going again, otherwise a half written package could stick
+        # around and change the output hash. Everything that did download is still in the
+        # cache dir, so this costs almost nothing
+        find . -type d -name node_modules -prune -exec rm -rf {} +
+      done
 
       runHook postBuild
     '';
