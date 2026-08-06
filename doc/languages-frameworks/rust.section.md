@@ -169,7 +169,7 @@ a `Cargo.lock` file to `src`. A straightforward solution is to use:
 ```nix
 {
   postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
+    install -m 644 ${./Cargo.lock} Cargo.lock
   '';
 }
 ```
