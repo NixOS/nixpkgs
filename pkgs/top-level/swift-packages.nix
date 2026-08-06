@@ -31,6 +31,7 @@ let
         );
       }
       // lib.optionalAttrs (bootstrapStage != 2) {
+        stdlib = null; # Have the bootstrap compiler use its own build of the stdlib.
         swift-driver = prev.swift-driver.overrideAttrs (old: {
           pname = "early-${old.pname}";
         });
