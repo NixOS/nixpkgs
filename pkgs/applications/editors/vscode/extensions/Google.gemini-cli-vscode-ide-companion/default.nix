@@ -38,6 +38,7 @@ vscode-utils.buildVscodeExtension (finalAttrs: {
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=Google.gemini-cli-vscode-ide-companion";
     license = lib.licenses.asl20;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    problems.removal.message = "Unpaid tier and Google One users: Gemini CLI will be replaced by Antigravity CLI.";
     maintainers = with lib.maintainers; [ xiaoxiangmoe ];
   };
 })
