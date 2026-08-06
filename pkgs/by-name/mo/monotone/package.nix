@@ -7,7 +7,7 @@
   zlib,
   libidn,
   lua,
-  pcre,
+  pcre2,
   sqlite,
   perl,
   pkg-config,
@@ -36,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   __structuredAttrs = true;
 
+  enableParallelBuilding = true;
+
   #  src = fetchurl {
   #    url = "http://monotone.ca/downloads/${version}/monotone-${version}.tar.bz2";
   #    hash = "sha256-+Vz2CiLU5GG+ydDnL102CcmkV2+xzEX1U9AgLOLjjIg=";
@@ -55,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./monotone-botan-key-format.patch
     ./monotone-1.1-gcc-14.patch
     ./monotone-botan-error-reporting.patch
+    ./monotone-pcre2.patch
   ];
 
   postPatch = ''
@@ -78,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     botan3
     libidn
     lua
-    pcre
+    pcre2
     sqlite
     expect
     openssl
@@ -86,6 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
     bzip2
     perl
   ];
+
+  env.NIX_LDFLAGS = " -lpcre2-8 ";
 
   postInstall = ''
     mkdir -p $out/share/monotone-${finalAttrs.version}
@@ -168,7 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
       checkPhase = ''
         runHook preCheck
 
-        make test/unit.status
+        make test/unit.status -j $NIX_CORES
 
         runHook postCheck
         grep '^0$' test/unit.status
@@ -195,10 +200,11 @@ stdenv.mkDerivation (finalAttrs: {
       preCheck = ''
         sed -e 's@test/func.status *: *mtn$(EXEEXT)@test/func.status : @' -i Makefile*
       '';
-      patches = [
+      patches = (finalAttrs.patches or [ ]) ++ [
         ./monotone-test-passphrase-botan3.patch
         ./monotone-test-nop-migration.patch
         ./monotone-base64-error-reporting.patch
+        ./monotone-test-pcre2-mtnignore.patch
       ];
     };
   };
