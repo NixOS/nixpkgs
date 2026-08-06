@@ -45,6 +45,7 @@ in
 
 {
   lib,
+  config,
   clangStdenv,
   generateSplicesForMkScope,
   llvmPackages,
@@ -108,15 +109,22 @@ makeScopeWithSplicing' {
 
       swift_sources = swift_sources_6_2;
     };
-  f = lib.extends autoCalledPackages (self: {
-    stdenv = clangStdenv;
-    swift_release = "6.2.4";
-
-    # Compatibility aliases for the old Swift packaging.
-    swift-unwrapped = self.swift;
-    swiftNoSwiftDriver = self.swift.override { swift-driver = null; };
-    Dispatch = self.swift-corelibs-libdispatch;
-    Foundation = self.swift-corelibs-foundation;
-    XCTest = self.swift-corelibs-xctest;
-  });
+  f = lib.extends autoCalledPackages (
+    self:
+    {
+      stdenv = clangStdenv;
+      swift_release = "6.2.4";
+    }
+    // lib.optionalAttrs config.allowAliases {
+      # Compatibility aliases for the old Swift packaging.
+      swift-unwrapped = lib.warnOnInstantiate "Swift is no longer wrapped. Use `swift` directly." self.swift;
+      swiftNoSwiftDriver =
+        lib.warnOnInstantiate
+          "swiftNoSwiftDriver is an alias. Override `swift` and set `swift-driver` to `null` instead."
+          (self.swift.override { swift-driver = null; });
+      Dispatch = lib.warnOnInstantiate "Dispatch has been renamed to swift-corelibs-libdispatch. It is also now included in the default Swift SDK and no longer needs referenced as a separate package." self.swift-corelibs-libdispatch;
+      Foundation = lib.warnOnInstantiate "Foundation has been renamed to swift-corelibs-foundation. It is also now included in the default Swift SDK and no longer needs referenced as a separate package." self.swift-corelibs-foundation;
+      XCTest = lib.warnOnInstantiate "XCTest has been renamed to swift-corelibs-xctest. It is also now included in the default Swift SDK and no longer needs referenced as a separate package." self.swift-corelibs-xctest;
+    }
+  );
 }
