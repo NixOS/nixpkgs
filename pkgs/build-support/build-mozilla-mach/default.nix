@@ -16,6 +16,7 @@
   extraPostPatch ? "",
   extraNativeBuildInputs ? [ ],
   extraConfigureFlags ? [ ],
+  extraPreConfigure ? "",
   extraBuildInputs ? [ ],
   extraMakeFlags ? [ ],
   extraPassthru ? { },
@@ -470,7 +471,8 @@ buildStdenv.mkDerivation {
     # linking firefox hits the vm.max_map_count kernel limit with the default musl allocator
     # TODO: Default vm.max_map_count has been increased, retest without this
     export LD_PRELOAD=${mimalloc}/lib/libmimalloc.so
-  '';
+  ''
+  + extraPreConfigure;
 
   # firefox has a different definition of configurePlatforms from nixpkgs, see configureFlags
   configurePlatforms = [ ];
