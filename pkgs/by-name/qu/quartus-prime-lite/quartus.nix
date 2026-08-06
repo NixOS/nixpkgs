@@ -2,6 +2,7 @@
   stdenv,
   lib,
   unstick,
+  unzip,
   fetchurl,
   withQuesta ? true,
   supportedDevices ? [
@@ -24,13 +25,23 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "quartus-prime-lite-unwrapped";
   version = "25.1std.0.1129";
 
-  nativeBuildInputs = [ unstick ];
+  nativeBuildInputs = [
+    unstick
+    # The devices' .qdz files are actually zip files, and without `unzip` here
+    # they are failed to be extracted because the installer tries to run its
+    # own `unzip` utility.
+    unzip
+  ];
 
   buildCommand = ''
     echo "setting up installer..."
   ''
   + lib.pipe finalAttrs.finalPackage.passthru.installers [
     (lib.mapAttrsToList finalAttrs.finalPackage.passthru.download)
+    # NOTE that we don't have a choice but to `cp` the installers and not
+    # symlink them, because the installers lookup for `.qdz` files by looking
+    # at the directory of their real, symlink-resolved location. We can however
+    # symlink the `.qdz` files to `$TEMP`.
     (map (installer: ''
       # `$(cat $NIX_CC/nix-support/dynamic-linker) $src[0]` often segfaults, so cp + patchelf
       cp ${installer} $TEMP/${installer.name}
@@ -62,7 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.mapAttrsToList (
         id: hash: finalAttrs.finalPackage.passthru.download "${id}-${finalAttrs.version}.qdz" hash
       ))
-      (map (component: "cp ${component} $TEMP/${component.name}"))
+      # See NOTE above `map` that iterates the installers.
+      (map (component: "ln -s ${component} $TEMP/${component.name}"))
       (lib.concatStringsSep "\n")
     ]
   )
