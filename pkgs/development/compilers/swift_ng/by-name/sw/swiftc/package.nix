@@ -1,6 +1,7 @@
 {
   lib,
   apple-sdk_14,
+  apple-sdk_26,
   bootstrapStage,
   buildSwiftPackages,
   cmake,
@@ -48,6 +49,8 @@
     "toolchain-dev-tools"
     "toolchain-tools"
     #    "tools"
+  ]
+  ++ lib.optionals (stdlib == null) [
     "back-deployment"
     "sdk-overlay"
     "static-mirror-lib"
@@ -58,9 +61,19 @@
 }:
 
 let
-  build-sdk = apple-sdk_14;
+  # SDK versions past 14.x don’t work with the c++-based bootstrap compiler due to unconditionally exposing macros.
+  build-sdk = if bootstrapStage == 2 then apple-sdk_26 else apple-sdk_14;
 
-  swift = buildSwiftPackages.swift;
+  # `buildSwiftPackages` is always the previous stage. Building the stage 2 compiler requires linking against the
+  # separately build stdlib becuase it does not build its own. Override the stage 1 compiler to use it.
+  # Otherwise, packages with macros will fail to build with missing symbols in Swift Syntax.
+  swift =
+    if bootstrapStage == 2 then
+      buildSwiftPackages.swift.override { inherit stdlib; }
+    else
+      buildSwiftPackages.swift;
+
+  swift-driver = swift.swift-driver or null;
 
   inherit (llvmPackages)
     clang
@@ -73,11 +86,15 @@ let
 
   inherit (darwin) sigtool;
 
+  doCheck = false; # TODO: Implement tests per https://github.com/swiftlang/swift/blob/main/docs/Testing.md.
+
   dylibExt = stdenv.hostPlatform.extensions.sharedLibrary;
 
   isNotSwiftSyntax = if bootstrapStage == 0 then c: !lib.hasInfix "swift-syntax" c else _: true;
 
   swiftComponents' = lib.filter isNotSwiftSyntax swiftComponents;
+
+  swiftPlatform = stdenv.hostPlatform.swift.platform;
 
   srcs = {
     swift-experimental-string-processing = fetchFromGitHub {
@@ -236,7 +253,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "SWIFT_DARWIN_DEPLOYMENT_VERSION_OSX" stdenv.hostPlatform.darwinMinVersion)
     (lib.cmakeFeature "SWIFT_HOST_TRIPLE" stdenv.hostPlatform.swift.triple)
     # Tests should only be built when building a regular compiler. The bootstrap compiler is not functional enough.
-    (lib.cmakeBool "SWIFT_INCLUDE_TESTS" false)
+    (lib.cmakeBool "SWIFT_INCLUDE_TESTS" doCheck)
     # Swift Concurrency is needed to build the stage 1 compiler on Linux.
     (lib.cmakeBool "SWIFT_ENABLE_EXPERIMENTAL_CONCURRENCY" true)
   ]
@@ -252,7 +269,36 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "SWIFT_ENABLE_EXPERIMENTAL_STRING_PROCESSING" true)
     # Synchronization is required to build Foundation.
     (lib.cmakeBool "SWIFT_ENABLE_SYNCHRONIZATION" true)
-  ];
+  ]
+  ++ lib.optionals (bootstrapStage >= 2) (
+    [
+      # Build Swift with LTO for better performance. Only enable it for tools. The stdlib will enable it separately.
+      (lib.cmakeFeature "SWIFT_TOOLS_ENABLE_LTO" "thin")
+      # LTO is slow with ld64. Only use it for targets that benefit from LTO.
+      (lib.cmakeBool "SWIFT_TOOLS_LD64_LTO_CODEGEN_ONLY_FOR_SUPPORTING_TARGETS" stdenv.hostPlatform.isDarwin)
+      # Enable the remaining features.
+      (lib.cmakeBool "SWIFT_ENABLE_BACKTRACING" true)
+      (lib.cmakeBool "SWIFT_ENABLE_EXPERIMENTAL_CXX_INTEROP" true)
+      (lib.cmakeBool "SWIFT_ENABLE_EXPERIMENTAL_DIFFERENTIABLE_PROGRAMMING" true)
+      (lib.cmakeBool "SWIFT_ENABLE_EXPERIMENTAL_DISTRIBUTED" true)
+      (lib.cmakeBool "SWIFT_ENABLE_EXPERIMENTAL_PARSER_VALIDATION" true)
+      (lib.cmakeBool "SWIFT_ENABLE_EXPERIMENTAL_POINTER_BOUNDS" true)
+      (lib.cmakeBool "SWIFT_ENABLE_EXPERIMENTAL_RUNTIME_MODULE" true)
+      (lib.cmakeBool "SWIFT_ENABLE_VOLATILE" true)
+      (lib.cmakeBool "SWIFT_ENABLE_RUNTIME_MODULE" true)
+      (lib.cmakeBool "SWIFT_STDLIB_ENABLE_STRICT_AVAILABILITY" true)
+    ]
+    ++ lib.optionals stdenv.cc.bintools.isGNU [
+      # Use `llvm-ar` and `llvm-ranlib` when LTO is enabled, or builds will fail due missing symbol tables in archives.
+      # e.g., `error: lib/libswiftDemangling.a: no archive symbol table (run ranlib)`.
+      (lib.cmakeFeature "CMAKE_AR" (lib.getExe' llvm "llvm-ar"))
+      (lib.cmakeFeature "CMAKE_RANLIB" (lib.getExe' llvm "llvm-ranlib"))
+      # Make sure Swift is built with a consistent toolchan version. This doesn’t matter for non-LTO builds, but it causes
+      # LTO builds to fail when objects built with a newer Clang are processed by the Swift Clang’s libLTO.
+      (lib.cmakeFeature "CMAKE_C_COMPILER" (lib.getExe' clang "clang"))
+      (lib.cmakeFeature "CMAKE_CXX_COMPILER" (lib.getExe' clang "clang++"))
+    ]
+  );
 
   env = {
     # Swift uses `<arch>-apple.macosx` triples instead of `<arch>-apple-darwin`, which causes tons of warnings.
@@ -260,6 +306,9 @@ stdenv.mkDerivation (finalAttrs: {
     NIX_CFLAGS_COMPILE = toString (
       # Swift compiles some of its stdlib for older deployment targets without using availability checks.
       [ "-Wno-error=unguarded-availability" ]
+      # Enable fat LTO (ELF only). This allows the compiler and stdlib to built with LTO while not requiring
+      # dependent packages to require a linker plugin to read the LLVM bitcode.
+      ++ lib.optionals (bootstrapStage == 2 && stdenv.hostPlatform.isElf) [ "-ffat-lto-objects" ]
     );
   };
 
@@ -271,6 +320,9 @@ stdenv.mkDerivation (finalAttrs: {
         # Unfortunately, the 26.0 SDK uses unguarded macros, so the C++ bootstrap compiler has to use the 14.4 SDK.
         NIX_LDFLAGS+=" -undefined dynamic_lookup"
       fi
+    ''
+    + lib.optionalString (swift-driver != null) ''
+      appendToVar cmakeFlags "-DSWIFT_EARLY_SWIFT_DRIVER_BUILD:PATH=${lib.escapeShellArg (lib.getBin swift-driver)}/bin"
     ''
     + lib.optionalString (bootstrapStage >= 1) ''
       appendToVar cmakeFlags "-DSWIFT_PATH_TO_STRING_PROCESSING_SOURCE:PATH=$NIX_BUILD_TOP/swift-experimental-string-processing"
@@ -313,6 +365,8 @@ stdenv.mkDerivation (finalAttrs: {
     (swift-corelibs-libdispatch.override { useSwift = false; })
   ];
 
+  inherit doCheck;
+
   postInstall = ''
     # Swift has a separate resource root from Clang, but locates the Clang
     # resource root via subdir or symlink.
@@ -341,6 +395,28 @@ stdenv.mkDerivation (finalAttrs: {
         if [[ "$res" =~ invalidate ]]; then codesign -s - -f "$exe"; fi
       fi
     done < <(find "$out" -type f -print0)
+  ''
+  # Swift installs some back-deployment and stdlib components as part of the compiler component. Delete them.
+  + lib.optionalString (stdlib != null) ''
+    rm -rf "''${!outputLib}/lib/swift/${swiftPlatform}"
+    rm -rf "''${!outputLib}/lib/swift-6.2"
+    rm -rf "''${!outputLib}/lib/swift_static"
+  ''
+  # Remove early Swift Driver from `$out/bin`. It will be supplied by the `swift` derivation.
+  + lib.optionalString (swift-driver != null) ''
+    declare -a swiftDriverFiles=(
+      swift
+      swift-driver
+      swift-help
+      swift-legacy-driver
+      swiftc
+      swiftc-legacy-driver
+    )
+    for file in "''${swiftDriverFiles[@]}"; do
+      rm "''${!outputBin}/bin/$file"
+    done
+    ln -s swift-frontend "''${!outputBin}/bin/swift"
+    ln -s swift-frontend "''${!outputBin}/bin/swiftc"
   '';
 
   passthru.supportsMacros = bootstrapStage >= 1;

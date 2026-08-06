@@ -63,6 +63,13 @@ let
     bootstrapStage = 0;
     buildSwiftPackages = swiftPackages_ng.overrideScope (_: _: { swift = null; });
   };
+
+  bootstrapStage1SwiftPackages = mkBootstrapSwiftPackages {
+    inherit lib;
+    swiftPackages = swiftPackages_ng;
+    bootstrapStage = 1;
+    buildSwiftPackages = bootstrapStage0SwiftPackages;
+  };
 in
 
 makeScopeWithSplicing' {
@@ -81,9 +88,9 @@ makeScopeWithSplicing' {
       };
     in
     {
-      bootstrapStage = 1;
+      bootstrapStage = 2;
 
-      buildSwiftPackages = bootstrapStage0SwiftPackages;
+      buildSwiftPackages = bootstrapStage1SwiftPackages;
 
       inherit llvm_libtool;
 
