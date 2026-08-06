@@ -2391,7 +2391,6 @@ mapAliases {
   tlaplusToolbox = tlaplus-toolbox; # Added 2025-08-21
   tm = throw "'tm' has been removed as it is broken and hasn't been maintained upstream since 2014"; # Added 2026-05-05
   tokyo-night-gtk = throw "'tokyo-night-gtk' has been renamed to/replaced by 'tokyonight-gtk-theme'"; # Converted to throw 2025-10-27
-  tokyonight-gtk-theme = throw "'tokyonight-gtk-theme' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   tomcat_connectors = throw "'tomcat_connectors' has been renamed to/replaced by 'apacheHttpdPackages.mod_jk'"; # Converted to throw 2025-10-27
   tooling-language-server = deputy; # Added 2025-06-22
   tor-browser-bundle-bin = throw "'tor-browser-bundle-bin' has been renamed to/replaced by 'tor-browser'"; # Converted to throw 2025-10-27
