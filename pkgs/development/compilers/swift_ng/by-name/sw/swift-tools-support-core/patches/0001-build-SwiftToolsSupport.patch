@@ -1,0 +1,108 @@
+From 2e4200e2586b2389f2214506bfe5e06102060f15 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Mon, 8 Dec 2025 17:40:01 -0500
+Subject: [PATCH] build SwiftToolsSupport
+
+---
+ Sources/TSCBasic/CMakeLists.txt   |  7 +------
+ Sources/TSCUtility/CMakeLists.txt | 25 +++++++++++++------------
+ Sources/TSCclibc/CMakeLists.txt   |  6 ++----
+ 3 files changed, 16 insertions(+), 22 deletions(-)
+
+diff --git a/Sources/TSCBasic/CMakeLists.txt b/Sources/TSCBasic/CMakeLists.txt
+index d8b85ea..ebb8cbe 100644
+--- a/Sources/TSCBasic/CMakeLists.txt
++++ b/Sources/TSCBasic/CMakeLists.txt
+@@ -6,7 +6,7 @@
+ # See http://swift.org/LICENSE.txt for license information
+ # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
+ 
+-add_library(TSCBasic
++add_library(TSCBasic STATIC
+   Await.swift
+   ByteString.swift
+   CStringArray.swift
+@@ -69,9 +69,4 @@ target_link_libraries(TSCBasic PRIVATE
+ set_target_properties(TSCBasic PROPERTIES
+   INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_Swift_MODULE_DIRECTORY})
+ 
+-install(TARGETS TSCBasic
+-  ARCHIVE DESTINATION lib
+-  LIBRARY DESTINATION lib
+-  RUNTIME DESTINATION bin)
+-
+ set_property(GLOBAL APPEND PROPERTY TSC_EXPORTS TSCBasic)
+diff --git a/Sources/TSCUtility/CMakeLists.txt b/Sources/TSCUtility/CMakeLists.txt
+index 8e0a232..78e4558 100644
+--- a/Sources/TSCUtility/CMakeLists.txt
++++ b/Sources/TSCUtility/CMakeLists.txt
+@@ -6,7 +6,7 @@
+ # See http://swift.org/LICENSE.txt for license information
+ # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
+ 
+-add_library(TSCUtility
++add_library(SwiftToolsSupport
+   Archiver.swift
+   ArgumentParser.swift
+   ArgumentParserShellCompletion.swift
+@@ -42,29 +42,30 @@ add_library(TSCUtility
+   dlopen.swift
+   misc.swift
+ )
+-target_link_libraries(TSCUtility PUBLIC
+-  TSCBasic)
+-target_link_libraries(TSCUtility PRIVATE
++target_link_libraries(SwiftToolsSupport PUBLIC
++  $<LINK_LIBRARY:WHOLE_ARCHIVE,TSCBasic>)
++target_link_libraries(SwiftToolsSupport PRIVATE
+   TSCclibc
+   ${CMAKE_DL_LIBS}
+   Threads::Threads)
+ 
+ if(NOT CMAKE_SYSTEM_NAME STREQUAL Darwin)
+   if(CMAKE_SYSTEM_NAME STREQUAL OpenBSD OR CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
+-    target_link_directories(TSCUtility PRIVATE /usr/local/lib)
++    target_link_directories(SwiftToolsSupport PRIVATE /usr/local/lib)
+   endif()
+   if(Foundation_FOUND)
+-    target_link_libraries(TSCUtility PUBLIC
++    target_link_libraries(SwiftToolsSupport PUBLIC
+       FoundationNetworking)
+   endif()
+ endif()
+ # NOTE(compnerd) workaround for CMake not setting up include flags yet
+-set_target_properties(TSCUtility PROPERTIES
++set_target_properties(SwiftToolsSupport PROPERTIES
++  Swift_MODULE_NAME TSCUtility
+   INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_Swift_MODULE_DIRECTORY})
+ 
+-install(TARGETS TSCUtility
+-  ARCHIVE DESTINATION lib
+-  LIBRARY DESTINATION lib
+-  RUNTIME DESTINATION bin)
++install(TARGETS SwiftToolsSupport
++  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
++  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
++  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
+ 
+-set_property(GLOBAL APPEND PROPERTY TSC_EXPORTS TSCUtility)
++set_property(GLOBAL APPEND PROPERTY TSC_EXPORTS SwiftToolsSupport)
+diff --git a/Sources/TSCclibc/CMakeLists.txt b/Sources/TSCclibc/CMakeLists.txt
+index e28860c..8048c24 100644
+--- a/Sources/TSCclibc/CMakeLists.txt
++++ b/Sources/TSCclibc/CMakeLists.txt
+@@ -14,9 +14,7 @@ target_compile_definitions(TSCclibc PRIVATE
+   "$<$<PLATFORM_ID:Linux>:_GNU_SOURCE>")
+ set_target_properties(TSCclibc PROPERTIES POSITION_INDEPENDENT_CODE YES)
+ 
+-if(NOT BUILD_SHARED_LIBS)
+-  install(TARGETS TSCclibc
+-    ARCHIVE DESTINATION lib)
+-endif()
++install(TARGETS TSCclibc
++  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+ 
+ set_property(GLOBAL APPEND PROPERTY TSC_EXPORTS TSCclibc)
+-- 
+2.51.2
+
