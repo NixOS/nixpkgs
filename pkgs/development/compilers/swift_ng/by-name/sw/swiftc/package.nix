@@ -17,9 +17,11 @@
   perl,
   python3,
   replaceVars,
+  srcOnly,
   stdenv,
   swift-cmark,
   swift-corelibs-libdispatch,
+  swift-syntax,
   xcbuild,
   xz,
   zlib,
@@ -72,11 +74,35 @@ let
 
   dylibExt = stdenv.hostPlatform.extensions.sharedLibrary;
 
-  swiftComponents' = swiftComponents;
+  isNotSwiftSyntax = if bootstrapStage == 0 then c: !lib.hasInfix "swift-syntax" c else _: true;
+
+  swiftComponents' = lib.filter isNotSwiftSyntax swiftComponents;
+
+  srcs = {
+    swift-experimental-string-processing = fetchFromGitHub {
+      owner = "swiftlang";
+      repo = "swift-experimental-string-processing";
+      tag = "swift-${swift_release}-RELEASE";
+      inherit (swift_sources.swift-experimental-string-processing) hash;
+    };
+
+    swift-syntax = srcOnly {
+      inherit (swift-syntax)
+        name
+        version
+        src
+        patches
+        stdenv
+        ;
+    };
+  };
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "swiftc" + lib.optionalString (bootstrapStage == 0) "-cxx_bootstrap";
+  pname =
+    "swiftc"
+    + lib.optionalString (bootstrapStage == 0) "-cxx_bootstrap"
+    + lib.optionalString (bootstrapStage == 1) "-bootstrap";
   version = swift_release;
 
   outputs = [
@@ -92,6 +118,11 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "swift-${swift_release}-RELEASE";
     inherit (swift_sources.swift) hash;
   };
+
+  postUnpack = lib.optionalString (bootstrapStage >= 1) ''
+    ln -s ${lib.escapeShellArg srcs.swift-experimental-string-processing} "$NIX_BUILD_TOP/swift-experimental-string-processing"
+    ln -s ${lib.escapeShellArg srcs.swift-syntax} "$NIX_BUILD_TOP/swift-syntax"
+  '';
 
   patches = [
     # ClangImporter needs help finding the location of libc and libc++ (and using it).
@@ -124,12 +155,19 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/swiftlang/swift/commit/cfbe70db5d1e65bed2388f97ee52f65719c812b3.patch?full_index=1";
       hash = "sha256-XxdP3Qs2YfT20d5E216cOQy+fUgYQpwMDWSyl77NQHw=";
     })
+  ]
+  ++ lib.optionals (bootstrapStage == 0) [
     # Revert optimizer changes that cause the C++-based bootstrap compiler to be unable to compile functions with
     # infinite loops that return from the loop. This doesn’t affect the later stages, so it’s applied conditionally.
     # https://github.com/swiftlang/swift/pull/79186
     ./patches/0008-revert-optimizer-changes.patch
     # Work around a compiler crash by partially reverting https://github.com/swiftlang/swift/pull/80920.
     ./patches/0009-siloptimizer-bootstrap-workaround.patch
+  ]
+  ++ lib.optionals (bootstrapStage == 1) [
+    # Stage 1 doesn’t have a compiler that supports _StringProcessing.
+    # This isn’t a problem on Darwin, but it fails on Linux.
+    ./patches/0010-Remove-dependency-on-_StringProcessing-during-stage-.patch
   ];
 
   postPatch = ''
@@ -198,6 +236,21 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "SWIFT_HOST_TRIPLE" stdenv.hostPlatform.swift.triple)
     # Tests should only be built when building a regular compiler. The bootstrap compiler is not functional enough.
     (lib.cmakeBool "SWIFT_INCLUDE_TESTS" false)
+    # Swift Concurrency is needed to build the stage 1 compiler on Linux.
+    (lib.cmakeBool "SWIFT_ENABLE_EXPERIMENTAL_CONCURRENCY" true)
+  ]
+  ++ lib.optionals (bootstrapStage == 1) [
+    # Work around crashes in ownership verifier in the bootstrap compiler.
+    # See https://github.com/swiftlang/swift/issues/84552#issuecomment-3409245634
+    "-DCMAKE_Swift_FLAGS=-Xfrontend -disable-sil-ownership-verifier"
+  ]
+  ++ lib.optionals (bootstrapStage >= 1) [
+    # These features are needed for the final build due to using unguarded macros in the SDK required to build it.
+    (lib.cmakeBool "SWIFT_BUILD_SWIFT_SYNTAX" true)
+    (lib.cmakeBool "SWIFT_ENABLE_EXPERIMENTAL_OBSERVATION" true)
+    (lib.cmakeBool "SWIFT_ENABLE_EXPERIMENTAL_STRING_PROCESSING" true)
+    # Synchronization is required to build Foundation.
+    (lib.cmakeBool "SWIFT_ENABLE_SYNCHRONIZATION" true)
   ];
 
   env = {
@@ -209,14 +262,19 @@ stdenv.mkDerivation (finalAttrs: {
     );
   };
 
-  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # `env.NIX_LDFLAGS` can’t be done conditionally because all obvious conditions cause infinite recursions.
-    if [ $NIX_APPLE_SDK_VERSION -lt 260000 ]; then
-      # Swift 6.2 needs to weakly link against `swift_coroFrameAlloc`, which is only in the 26.0 SDK.
-      # Unfortunately, the 26.0 SDK uses unguarded macros, so the C++ bootstrap compiler has to use the 14.4 SDK.
-      NIX_LDFLAGS+=" -undefined dynamic_lookup"
-    fi
-  '';
+  preConfigure =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # `env.NIX_LDFLAGS` can’t be done conditionally because all obvious conditions cause infinite recursions.
+      if [ $NIX_APPLE_SDK_VERSION -lt 260000 ]; then
+        # Swift 6.2 needs to weakly link against `swift_coroFrameAlloc`, which is only in the 26.0 SDK.
+        # Unfortunately, the 26.0 SDK uses unguarded macros, so the C++ bootstrap compiler has to use the 14.4 SDK.
+        NIX_LDFLAGS+=" -undefined dynamic_lookup"
+      fi
+    ''
+    + lib.optionalString (bootstrapStage >= 1) ''
+      appendToVar cmakeFlags "-DSWIFT_PATH_TO_STRING_PROCESSING_SOURCE:PATH=$NIX_BUILD_TOP/swift-experimental-string-processing"
+      appendToVar cmakeFlags "-DSWIFT_PATH_TO_SWIFT_SYNTAX_SOURCE:PATH=$NIX_BUILD_TOP/swift-syntax"
+    '';
 
   postConfigure = ''
     # Make sure `swift` can locate the C and C++ standard library relative to `swift` binary in `bin`.
@@ -283,6 +341,8 @@ stdenv.mkDerivation (finalAttrs: {
       fi
     done < <(find "$out" -type f -print0)
   '';
+
+  passthru.supportsMacros = bootstrapStage >= 1;
 
   __structuredAttrs = true;
 
