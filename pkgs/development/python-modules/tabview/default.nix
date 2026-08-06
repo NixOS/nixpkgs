@@ -3,12 +3,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   unittestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "tabview";
   version = "1.4.4";
-  format = "setuptools";
+  pyproject = true;
 
   # newest release only available as wheel on pypi
   src = fetchFromGitHub {
@@ -17,6 +18,8 @@ buildPythonPackage rec {
     rev = version;
     sha256 = "1d1l8fhdn3w2zg7wakvlmjmgjh9lh9h5fal1clgyiqmhfix4cn4m";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 
