@@ -222,7 +222,12 @@ in
                 ++ lib.optionals nm.enable [ smartmontools ]
                 ++ lib.optionals ns.enable [ config.systemd.package ]
                 ++ lib.optionals nw.enable [ util-linux ]
-                ++ lib.optionals nx.enable [ xmessage ];
+                ++ lib.optionals nx.enable [
+                  gawk
+                  getent
+                  xmessage
+                  config.systemd.package
+                ];
 
               text = ''
                 ${lib.optionalString nm.enable ''
@@ -254,15 +259,42 @@ in
                   } | wall 2>/dev/null
                 ''}
                 ${lib.optionalString nx.enable ''
-                  export DISPLAY=${nx.display}
-                  {
-                  cat << EOF
-                  Problem detected with disk: $SMARTD_DEVICESTRING
-                  Warning message from smartd is:
+                  popup() {
+                    printf '%s\n' \
+                      "Problem detected with disk: $SMARTD_DEVICESTRING" \
+                      "Warning message from smartd is:" \
+                      "" \
+                      "$SMARTD_FULLMESSAGE" \
+                      | xmessage -file - >/dev/null 2>&1 &
+                  }
 
-                  $SMARTD_FULLMESSAGE
-                  EOF
-                  } | xmessage -file - 2>/dev/null &
+                  # See: https://wiki.archlinux.org/title/Desktop_notifications#Send_notifications_to_all_graphical_users
+                  found_session=""
+                  for session in $(loginctl list-sessions --no-legend | awk '{print $1}'); do
+                    session_type=$(loginctl show-session "$session" -p Type --value)
+                    if [ "$session_type" != "x11" ]; then
+                      continue
+                    fi
+                    session_display=$(loginctl show-session "$session" -p Display --value)
+                    session_user=$(loginctl show-session "$session" -p Name --value)
+                    session_home=$(getent passwd "$session_user" | cut -d: -f6)
+                    if [ -z "$session_display" ] || [ ! -r "$session_home/.Xauthority" ]; then
+                      continue
+                    fi
+                    found_session=1
+                    (
+                      # shellcheck disable=SC2030,SC2031
+                      export DISPLAY="$session_display"
+                      export XAUTHORITY="$session_home/.Xauthority"
+                      popup
+                    )
+                  done
+
+                  if [ -z "$found_session" ]; then
+                    # shellcheck disable=SC2031
+                    export DISPLAY=${nx.display}
+                    popup
+                  fi
                 ''}
               '';
             };
