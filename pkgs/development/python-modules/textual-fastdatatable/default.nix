@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "textual-fastdatatable";
-  version = "0.14.0";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "textual-fastdatatable";
     tag = "v${version}";
-    hash = "sha256-gm1h+r8rZO1/9sXoNwqVuBbv7CpZm2a3YAMHRHGg5uo=";
+    hash = "sha256-BTQ8amOm4gKmT9kVv4F7Z5312hcMWpX3CP8krcx8DcI=";
   };
 
   build-system = [ hatchling ];
