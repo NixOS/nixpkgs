@@ -40,7 +40,7 @@
   krb5,
   wrapGAppsHook3,
   _experimental-update-script-combinators,
-  unzip
+  unzip,
 }:
 let
   version = "18";
@@ -69,8 +69,8 @@ let
     '';
   };
   justcefNative = fetchurl {
-	url = "https://static.grayjay.app/justcef/1/JustCefNative-linux-x64.zip";
-	hash = "sha256-LXOp+QZZcWBd8eP+BpK++AMBo9303+aIDEEYNVWekhE=";
+    url = "https://static.grayjay.app/justcef/1/JustCefNative-linux-x64.zip";
+    hash = "sha256-LXOp+QZZcWBd8eP+BpK++AMBo9303+aIDEEYNVWekhE=";
   };
 in
 buildDotnetModule (finalAttrs: {
@@ -96,7 +96,7 @@ buildDotnetModule (finalAttrs: {
     autoPatchelfHook
     wrapGAppsHook3
     copyDesktopItems
-	unzip
+    unzip
   ];
 
   dontWrapGApps = true;
@@ -143,10 +143,10 @@ buildDotnetModule (finalAttrs: {
   preBuild = ''
     rm -r Grayjay.ClientServer/wwwroot/web
     cp -r ${frontend} Grayjay.ClientServer/wwwroot/web
-	
-	mkdir -p JustCef/obj/justcef/net8.0/1/linux-x64
-  	cp ${justcefNative} \
-	JustCef/obj/justcef/net8.0/1/linux-x64/JustCefNative-linux-x64.zip
+
+    mkdir -p JustCef/obj/justcef/net8.0/1/linux-x64
+    cp ${justcefNative} \
+    JustCef/obj/justcef/net8.0/1/linux-x64/JustCefNative-linux-x64.zip
   '';
 
   postInstall = ''
