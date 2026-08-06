@@ -5,6 +5,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   writableTmpDirAsHomeHook,
+  nix-update-script,
 
   cudaPackages,
 
@@ -37,6 +38,7 @@
   callPackage,
 
   cudaSupport ? config.cudaSupport,
+  withMkl ? stdenv.hostPlatform.isx86_64 && config.allowUnfree,
 }:
 
 let
@@ -61,7 +63,7 @@ in
 
 buildPythonPackage (finalAttrs: {
   pname = "emerge";
-  version = "2.8.1";
+  version = "2.8.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -69,7 +71,7 @@ buildPythonPackage (finalAttrs: {
     owner = "FennisRobert";
     repo = "EMerge";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TArhxtPAGEmPI4L+/pgy+RhV9atAZ5Ig0TkUDoV+eXQ=";
+    hash = "sha256-wxJeSiHfYTY7mRll8cxJSpdciun+uw5V7FLTUKuHu28=";
   };
 
   postPatch = ''
@@ -103,7 +105,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   buildInputs =
-    lib.optionals stdenv.hostPlatform.isx86_64 [
+    lib.optionals withMkl [
       mkl
     ]
     ++ lib.optionals cudaSupport [
@@ -145,11 +147,16 @@ buildPythonPackage (finalAttrs: {
       ;
 
     tests = callPackage ./tests { };
+
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex=^v(2\\.[0-9].*)$" ];
+    };
   };
 
   meta = {
     description = "Electromagnetic field computation program";
     homepage = "https://github.com/FennisRobert/EMerge";
+    mainProgram = "emerge";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ eljamm ];
     teams = with lib.teams; [ ngi ];
