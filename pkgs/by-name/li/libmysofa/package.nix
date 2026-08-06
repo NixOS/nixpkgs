@@ -38,6 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/hoene/libmysofa";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ hythera ];
   };
 })
