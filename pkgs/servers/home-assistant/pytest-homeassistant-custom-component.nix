@@ -31,6 +31,11 @@ buildPythonPackage rec {
     hash = "sha256-odLMKgdhaG0Wd6Pi4pX4WtCosKxSDRIALhiVjah16no=";
   };
 
+  patches = [
+    # e2e tests should write temporary files into a temporary directory instead of into the installation directory aka the nix store
+    ./pytest-homeassistant-custom-component-tmpdir.patch
+  ];
+
   build-system = [ setuptools ];
 
   pythonRemoveDeps = true;
