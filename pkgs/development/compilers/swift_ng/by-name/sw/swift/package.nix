@@ -3,7 +3,9 @@
   apple-sdk_14,
   apple-sdk_26,
   llvmPackages_upstream,
+  patchelf,
   stdenv,
+  stdlib,
   swift-corelibs-foundation,
   swift-corelibs-libdispatch,
   swift-driver,
@@ -27,6 +29,11 @@ let
     name = "swift" + lib.removePrefix "swiftc" (lib.getName swiftc) + "-${swift_release}-out";
     paths = [
       swiftc.out
+      swiftc.dev
+    ]
+    ++ lib.optionals (stdlib != null) [
+      stdlib.dev
+      stdlib.out
       swiftc.dev
     ]
     ++ lib.optionals (swift-driver != null) [
@@ -87,6 +94,10 @@ stdenv.mkDerivation (finalAttrs: {
   # Will effectively be `buildInputs` when swift is put in `nativeBuildInputs`.
   depsTargetTargetPropagated =
     lib.optionals stdenv.targetPlatform.isDarwin [ propagated-sdk ]
+    ++ lib.optionals (stdlib != null) [
+      # Propagate the stdlib to make sure the linker wrapper will pick up the dynamic and static libraries.
+      stdlib
+    ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) (
       lib.optionals (swift-corelibs-libdispatch != null) [
         swift-corelibs-libdispatch-no-overlay.out
@@ -143,6 +154,16 @@ stdenv.mkDerivation (finalAttrs: {
 
     recordPropagatedDependencies
 
+    ${lib.optionalString (stdlib != null) ''
+      # Can’t use `replaceVars` because it needs to substitute $out.
+      substitute ${./setup-hook.sh} "$out/nix-support/setup-hook" \
+        --replace-fail @patchelf@ ${lib.escapeShellArg (lib.getExe patchelf)} \
+        --replace-fail @objdump@ ${lib.escapeShellArg (lib.getExe' llvmPackages_upstream.llvm "llvm-objdump")} \
+        --replace-fail @install_name_tool@ ${lib.escapeShellArg (lib.getExe' llvmPackages_upstream.llvm "llvm-install-name-tool")} \
+        --replace-fail @stdlibPath@ ${lib.escapeShellArg stdlib.out} \
+        --replace-fail @swiftPath@ "$out" \
+        --replace-fail @swiftPlatform@ ${stdenv.hostPlatform.swift.platform}
+    ''}
     chmod -R u-w "$out/bin" "$out/lib" "$out/nix-support"
   '';
 
