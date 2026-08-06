@@ -13,6 +13,10 @@
 let
   inherit (stdenv.hostPlatform.extensions) sharedLibrary;
   buildSharedLibrary = stdenv.buildPlatform.extensions.sharedLibrary;
+
+  # Can’t use `swift-minimal`. Swift Testing fails to build using the classic Swift frontend.
+  # It requires the new Swift compiler driver.
+  swift' = swift.override { swift-testing = null; };
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-    swift
+    swift'
   ];
 
   buildInputs = [ swift-syntax ];

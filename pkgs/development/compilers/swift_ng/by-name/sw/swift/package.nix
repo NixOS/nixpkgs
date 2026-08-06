@@ -9,9 +9,11 @@
   stdlib,
   swift-corelibs-foundation,
   swift-corelibs-libdispatch,
+  swift-corelibs-xctest,
   swift-driver,
   swift-foundation,
   swift-foundation-icu,
+  swift-testing,
   swiftc,
   symlinkJoin,
   swift_release,
@@ -19,6 +21,8 @@
 }:
 
 let
+  includeTesting = swiftc.supportsMacros && swift-testing != null;
+
   # Need to use an older SDK if `swiftc` does not support macros.
   propagated-sdk = if swiftc.supportsMacros then apple-sdk_26 else apple-sdk_14;
 
@@ -36,6 +40,12 @@ let
     ++ lib.optionals enableRepl [
       # LLDB is used by `swift repl` to provide the REPL.
       llvmPackages.lldb.out
+    ]
+    ++ lib.optionals includeTesting [
+      swift-corelibs-xctest.dev
+      swift-corelibs-xctest.out
+      swift-testing.dev
+      swift-testing.out
     ]
     ++ lib.optionals (stdlib != null) [
       stdlib.dev
@@ -85,6 +95,7 @@ let
     ];
   };
 in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "swift" + lib.removePrefix "swiftc" (lib.getName swiftc);
   version = swift_release;
@@ -103,6 +114,10 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (stdlib != null) [
       # Propagate the stdlib to make sure the linker wrapper will pick up the dynamic and static libraries.
       stdlib
+    ]
+    ++ lib.optionals includeTesting [
+      swift-corelibs-xctest.out
+      swift-testing.out
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) (
       lib.optionals (swift-corelibs-libdispatch != null) [

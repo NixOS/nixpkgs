@@ -22,6 +22,7 @@ let
           {
             swift-corelibs-libdispatch = null;
             swift-foundation = null;
+            swift-testing = null;
             enableRepl = false;
           }
           # Swift Driver is required when building the compiler’s Swift Syntax in the final toolchain.
@@ -101,6 +102,7 @@ makeScopeWithSplicing' {
         swift-corelibs-libdispatch = null;
         swift-driver = null;
         swift-foundation = null;
+        swift-testing = null;
         enableRepl = false;
       };
 
