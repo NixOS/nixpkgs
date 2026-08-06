@@ -20,6 +20,9 @@
   "swift-foundation-icu": {
     "hash": "sha256-C2rq5Q0F1id89mTN4+B/fKSvX1SEAf3/Zgvb/3IdsJ8="
   },
+  "swift-llbuild": {
+    "hash": "sha256-nZdiFXYrUiTSlSl6lxNFVpD2x8KGC4OVUUvJSOqH7gU="
+  },
   "swift-syntax": {
     "hash": "sha256-DMMVJQj590RGGBkTgA89u01ZP2B8kbJTmfu+oxzYPds="
   }
