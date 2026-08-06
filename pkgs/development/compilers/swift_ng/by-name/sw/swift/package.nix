@@ -216,6 +216,20 @@ stdenv.mkDerivation (finalAttrs: {
       inherit callPackage;
       directory = ./tests;
     };
+
+    # Swift libraries are installed in `lib` to make it easier to use Nixpkgs tooling with them.
+    swiftLibSubdir = "lib";
+    swiftStaticLibSubdir = "lib";
+
+    # Our toolchain builds install modules in `lib/swift/<platform>`, which matches what upstream toolchains do.
+    swiftModuleSubdir = "lib/swift/${stdenv.hostPlatform.swift.platform}";
+    swiftStaticModuleSubdir = "lib/swift_static/${stdenv.hostPlatform.swift.platform}";
+
+    # Legacy aliases for the old Swift packaging. These should eventually be removed.
+    swift = finalAttrs.finalPackage;
+    swiftArch = stdenv.hostPlatform.swift.arch;
+    swiftDriver = lib.warn "'swiftDriver' has been renamed to 'swift-driver'" finalAttrs.passthru.swift-driver;
+    swiftOs = stdenv.hostPlatform.swift.platform;
   };
 
   meta = {
