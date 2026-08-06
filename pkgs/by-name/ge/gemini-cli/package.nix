@@ -116,6 +116,7 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://github.com/google-gemini/gemini-cli";
     license = lib.licenses.asl20;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    problems.removal.message = "Unpaid tier and Google One users: Gemini CLI will be replaced by Antigravity CLI.";
     maintainers = with lib.maintainers; [
       brantes
       xiaoxiangmoe
