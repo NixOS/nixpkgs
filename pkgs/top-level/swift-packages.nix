@@ -36,6 +36,19 @@ in
   otherSplices ? generateSplicesForMkScope "swiftPackages_ng",
 }:
 
+let
+  # Swift requires three bootstrap stages:
+  # - Stage 0 builds a minimal Swift compiler using only C++.
+  # - Stage 1 builds a Swift compiler using the stage 0 Swift compiler. Features needed to build macros are enabled.
+  # - Stage 2 builds a full Swift compiler and stdlib using the stage 1 compiler.
+  bootstrapStage0SwiftPackages = mkBootstrapSwiftPackages {
+    inherit lib;
+    swiftPackages = swiftPackages_ng;
+    bootstrapStage = 0;
+    buildSwiftPackages = swiftPackages_ng.overrideScope (_: _: { swift = null; });
+  };
+in
+
 makeScopeWithSplicing' {
   inherit otherSplices;
   extra =
@@ -52,9 +65,9 @@ makeScopeWithSplicing' {
       };
     in
     {
-      bootstrapStage = 0;
+      bootstrapStage = 1;
 
-      buildSwiftPackages = swiftPackages_ng.overrideScope (_: _: { swift = null; });
+      buildSwiftPackages = bootstrapStage0SwiftPackages;
 
       inherit llvm_libtool;
 
