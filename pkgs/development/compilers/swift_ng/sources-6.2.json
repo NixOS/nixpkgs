@@ -32,6 +32,12 @@
   "swift-experimental-string-processing": {
     "hash": "sha256-WtLLqdvYTmLWSS5q42b8yXFrJcC+dUy4uTuCeIflRFs="
   },
+  "swift-format": {
+    "hash": "sha256-01lnZFaFAcjWN9Hn0y60gEANz7RbYRvjESysYqB9iSo=",
+    "swiftpmDeps": {
+      "hash": "sha256-UAvKJKEN32FVILwdADqXAZ7opS3Tf3e7Qp+RhD4R4QE="
+    }
+  },
   "swift-foundation": {
     "hash": "sha256-otE5EGG53zadZVZ0P67rr+4h4x/c3rWWEdZyL23Mxio="
   },
