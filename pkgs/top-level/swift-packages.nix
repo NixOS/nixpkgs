@@ -10,6 +10,7 @@ in
   lib,
   clangStdenv,
   generateSplicesForMkScope,
+  llvmPackages,
   makeScopeWithSplicing',
   otherSplices ? generateSplicesForMkScope "swiftPackages_ng",
 }:
@@ -17,8 +18,10 @@ in
 makeScopeWithSplicing' {
   inherit otherSplices;
   extra = self: {
-    swift_sources = swift_sources_6_2;
-  };
+      llvmPackages_upstream = llvmPackages;
+
+      swift_sources = swift_sources_6_2;
+    };
   f = lib.extends autoCalledPackages (self: {
     stdenv = clangStdenv;
     swift_release = "6.2.4";
