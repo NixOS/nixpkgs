@@ -25,5 +25,8 @@
   },
   "swift-syntax": {
     "hash": "sha256-DMMVJQj590RGGBkTgA89u01ZP2B8kbJTmfu+oxzYPds="
+  },
+  "swift-tools-support-core": {
+    "hash": "sha256-mV+z5sdG/maUzXUhK1vMtsnLCclcjqyXSMO6J2FjBEg="
   }
 }
