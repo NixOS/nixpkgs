@@ -43,7 +43,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ngff-zarr";
-  version = "0.39.0";
+  version = "0.41.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -51,7 +51,7 @@ buildPythonPackage (finalAttrs: {
     owner = "fideus-labs";
     repo = "ngff-zarr";
     tag = "py-v${finalAttrs.version}";
-    hash = "sha256-ukr/P1I9Y6eu7yP6LyUcxAG02vNvmI3OhVKiibSi2Rs=";
+    hash = "sha256-8kf3ycK9RpRPVYA5gkNKaXtPKz7FSXwuI7MDnCWZBXM=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/py/";
