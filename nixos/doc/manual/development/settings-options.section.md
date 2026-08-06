@@ -291,10 +291,17 @@ have a predefined type and string generator already declared under
     and returning a set with JSON-specific attributes `type` and
     `generate` as specified [below](#pkgs-formats-result).
 
-`pkgs.formats.yaml` { }
+`pkgs.formats.yaml` { *`tags`* ? false }
 
-:   A function taking an empty attribute set (for future extensibility)
-    and returning a set with YAML-specific attributes `type` and
+:   A function taking an attribute set with values
+
+    `tags`
+
+    :   A boolean for controlling whether YAML tags can be generated.
+        If set, attribute sets with a single key that starts with a "!"
+        will be interpreted as a YAML tag.
+
+    It returns a set with YAML-specific attributes `type` and
     `generate` as specified [below](#pkgs-formats-result).
 
 `pkgs.formats.ini` { *`listsAsDuplicateKeys`* ? false, *`listToValue`* ? null, \.\.\. }
