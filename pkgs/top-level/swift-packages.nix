@@ -111,5 +111,12 @@ makeScopeWithSplicing' {
   f = lib.extends autoCalledPackages (self: {
     stdenv = clangStdenv;
     swift_release = "6.2.4";
+
+    # Compatibility aliases for the old Swift packaging.
+    swift-unwrapped = self.swift;
+    swiftNoSwiftDriver = self.swift.override { swift-driver = null; };
+    Dispatch = self.swift-corelibs-libdispatch;
+    Foundation = self.swift-corelibs-foundation;
+    XCTest = self.swift-corelibs-xctest;
   });
 }
