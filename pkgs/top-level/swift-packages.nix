@@ -12,12 +12,28 @@ in
   generateSplicesForMkScope,
   llvmPackages,
   makeScopeWithSplicing',
+  stdenvNoCC,
   otherSplices ? generateSplicesForMkScope "swiftPackages_ng",
 }:
 
 makeScopeWithSplicing' {
   inherit otherSplices;
-  extra = self: {
+  extra =
+    self:
+    let
+      llvm_libtool = stdenvNoCC.mkDerivation {
+        pname = "libtool";
+        version = lib.getVersion llvmPackages.llvm;
+
+        buildCommand = ''
+          mkdir -p "$out/bin"
+          ln -s ${lib.getExe' llvmPackages.llvm "llvm-libtool-darwin"} "$out/bin/libtool"
+        '';
+      };
+    in
+    {
+      inherit llvm_libtool;
+
       llvmPackages_upstream = llvmPackages;
 
       swift_sources = swift_sources_6_2;
