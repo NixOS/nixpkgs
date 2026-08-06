@@ -1,5 +1,6 @@
 {
   lib,
+  config,
   apple-sdk_14,
   apple-sdk_26,
   callPackage,
@@ -224,12 +225,13 @@ stdenv.mkDerivation (finalAttrs: {
     # Our toolchain builds install modules in `lib/swift/<platform>`, which matches what upstream toolchains do.
     swiftModuleSubdir = "lib/swift/${stdenv.hostPlatform.swift.platform}";
     swiftStaticModuleSubdir = "lib/swift_static/${stdenv.hostPlatform.swift.platform}";
-
+  }
+  // lib.optionalAttrs config.allowAliases {
     # Legacy aliases for the old Swift packaging. These should eventually be removed.
-    swift = finalAttrs.finalPackage;
-    swiftArch = stdenv.hostPlatform.swift.arch;
-    swiftDriver = lib.warn "'swiftDriver' has been renamed to 'swift-driver'" finalAttrs.passthru.swift-driver;
-    swiftOs = stdenv.hostPlatform.swift.platform;
+    swift = lib.warnOnInstantiate "`swift` is an alias for this (`swift`) package. Just use it directly." finalAttrs.finalPackage;
+    swiftArch = lib.warnOnInstantiate "'swiftArch' is an alias for 'stdenv.hostPlatform.swift.arch'." stdenv.hostPlatform.swift.arch;
+    swiftDriver = lib.warnOnInstantiate "'swiftDriver' has been renamed to 'swift-driver'" finalAttrs.passthru.swift-driver;
+    swiftOs = lib.warnOnInstantiate "'swiftOs' is an alias for 'stdenv.hostPlatform.swift.platform'." stdenv.hostPlatform.swift.platform;
   };
 
   meta = {
