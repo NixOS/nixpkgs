@@ -2,6 +2,7 @@
   lib,
   apple-sdk_14,
   apple-sdk_26,
+  callPackage,
   llvmPackages,
   llvmPackages_upstream,
   patchelf,
@@ -211,6 +212,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit swiftc swift-driver;
+    tests = lib.packagesFromDirectoryRecursive {
+      inherit callPackage;
+      directory = ./tests;
+    };
   };
 
   meta = {
