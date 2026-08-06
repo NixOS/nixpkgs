@@ -18,13 +18,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ncdu";
-  version = "2.10.0";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "BratishkaErik";
     repo = "ncdu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YfvuXW0IaRaUNReLe/hMgYA2geDLvt1bprJAbOCFCQk=";
+    hash = "sha256-wKDo8f2PVXqFopnUgZ1mTJmsdzs6iUkzXFl3VpMkGIc=";
   };
 
   __structuredAttrs = true;
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   zigDeps = zig.fetchDeps {
     inherit (finalAttrs) pname version src;
     fetchAll = true;
-    hash = "sha256-vk4wMIpKEQObFXuNd5szQQU6z0NyVJKInOMDiEn4A5k=";
+    hash = "sha256-plS7YUHWysZCQ1hHVWlgKvZkDtnjYSFfi3fdMYJVI9I=";
   };
 
   postConfigure = ''
