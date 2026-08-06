@@ -4,10 +4,18 @@
 
 {
   lib,
+  apple-sdk_26,
+  darwin,
   fetchFromGitHub,
   generateSplicesForMkScope,
+  libuuid,
+  lld,
   llvmPackages_19, # Needs to match the `llvmVersion` of the fork.
+  python3,
   stdenv,
+  stdlib,
+  swift-cmark,
+  swiftc,
   swift_release,
   swift_sources,
 }:
@@ -38,6 +46,8 @@ in
     // {
       # Updated patch that also prevents Clang from trying to copy `clang-deps-launcher.py` to `${llvm}/bin`.
       "clang/gnu-install-dirs.patch" = [ { path = ./patches; } ];
+      # The patch needs slightly tweaked to apply to Swift’s LLDB fork.
+      "lldb/backport-ParseTrieEntries-fixes.patch" = [ { path = ./patches; } ];
       # Update backport of the Darwin triple changes for macOS 27.
       "llvm/backport-darwin-triple-parsing.patch" = [ { path = ./patches; } ];
     };
@@ -82,5 +92,81 @@ in
             '';
           }
         );
+
+      lldb =
+        let
+          python3-with-distutils = python3.withPackages (pkgs: [ pkgs.distutils ]);
+
+          swiftLLDB = prev.lldb.overrideAttrs (old: {
+            patches = (old.patches or [ ]) ++ [
+              # The LLDB build on Linux assumes the rpath is set relative to the toolchain and that `SWIFT_LIBRARY_DIR`
+              # consists of only one path (and is not a list). It needs to point to the stdlib.
+              ./patches/lldb/0001-Set-stdlib-path-on-Linux.patch
+              # Otherwise, linking `lldb-server` fails with a missing symbol error on Linux.
+              ./patches/lldb/0002-Link-lldb-server-to-swiftCore.patch
+              # Don’t resolve the liblldb symlink to help it find the Swift toolchain that it’s linked into.
+              ./patches/lldb/0003-Don-t-follow-symlinks-when-finding-liblldb.patch
+              # Darwin needs to find the path to LLDB via the main executable because dyld always resolves symlinks
+              # when loading dylibs from disk.
+              ./patches/lldb/0004-Use-the-LLDB-executable-path-to-find-the-stdlib.patch
+            ];
+            buildInputs =
+              (old.buildInputs or [ ])
+              ++ [
+                stdlib # The LLDB build system expects the stdlib libraries to be available on the default linker path.
+              ]
+              # For `swift_coroFrameAlloc`, which needs an SDK with libswiftCore text-based stubs that have the symbol.
+              ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_26 ];
+            # Swift’s fork of LLDB has extra requirements.
+            nativeBuildInputs =
+              (old.nativeBuildInputs or [ ])
+              ++ [
+                python3-with-distutils # distutils is needed for the bundled Python plugin.
+              ]
+              ++ lib.optionals stdenv.hostPlatform.isDarwin [
+                darwin.sigtool # Required for code-signing.
+                lld # Otherwise results in `can't find ordinal for imported symbol '_objc_opt_self'` when linking.
+              ];
+            # These aren’t set correctly otherwise. The LLDB build system needs an explicit Swift path regardless.
+            cmakeFlags =
+              (old.cmakeFlags or [ ])
+              ++ [
+                (lib.cmakeFeature "LLVM_DIR" "${lib.getDev final.libllvm}/lib/cmake/llvm")
+                (lib.cmakeFeature "Swift_DIR" "${lib.getOutput "static" swiftc}")
+                (lib.cmakeFeature "cmark-gfm_DIR" "${swift-cmark.out}/lib/cmake")
+                (lib.cmakeFeature "LLDB_SWIFT_LIBS" "${lib.getDev stdlib}/lib/swift")
+                # LLDB looks for Clang’s resource root in `${swiftc}/lib/swift/clang`. When it’s not there, which it’s
+                # not because it’s been moved to the `swift` package, LLDB falls back to `CLANG_RESOURCE_DIR`,
+                # but that’s `libclang.lib`, which also doesn’t have it. So use the wrapped Clang’s resource root.
+                (lib.cmakeFeature "CLANG_RESOURCE_DIR" "../../../../${lib.getBin final.clang}/resource-root")
+              ]
+              ++ lib.optionals stdenv.hostPlatform.isDarwin [
+                (lib.cmakeFeature "CMAKE_LINKER_TYPE" "LLD") # Darwin fails to link correctly using ld64 (see above).
+              ];
+
+            # Make sure LLDB can find the Swift compiler shared libraries.
+            postInstall =
+              (old.postInstall or "")
+              + lib.optionalString stdenv.hostPlatform.isElf ''
+                for output in $(getAllOutputNames); do
+                  while IFS= read -d "" f; do
+                    if isELF "$f"; then
+                      # Make sure all rpaths are present. Why is libuuid getting dropped? I have no idea.
+                      patchelf --add-rpath ${
+                        lib.escapeShellArg (lib.makeSearchPathOutput "out" "lib/swift/host/compiler" [ swiftc ])
+                      } "$f" || true
+                      patchelf --add-rpath ${lib.escapeShellArg (lib.makeLibraryPath [ libuuid ])} "$f" || true
+                    fi
+                  done < <(find "''${!output}" -type f -print0)
+                done
+                # Reduce LLDB closure size by symlinking `lib/swift` into LLDB instead of copying it.
+                rm -rf "''$out/lib/swift"
+                ln -s ${lib.escapeShellArg swiftc}/lib/swift "$out/lib/swift"
+              '';
+          });
+        in
+        # Linux tries to use a GCC stdenv to build LLDB, but the Swift headers aren’t compatible with GCC.
+        # The stdenv passed in from the package set arguments is the Clang-based stdenv from `swift-packages.nix`.
+        final.callPackage swiftLLDB.override { inherit stdenv; };
     }
   )
