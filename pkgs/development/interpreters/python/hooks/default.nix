@@ -510,7 +510,11 @@ in
     makePythonHook {
       name = "wheel-metadata-version-patch-hook.sh";
       substitutions = {
-        inherit pythonInterpreter pythonSitePackages wheel;
+        inherit pythonSitePackages wheel;
+        pythonInterpreter =
+          (pythonOnBuildForHost.withPackages (ps: [
+            ps.packaging
+          ])).interpreter;
       };
       meta = {
         maintainers = [ lib.maintainers.dotlambda ];

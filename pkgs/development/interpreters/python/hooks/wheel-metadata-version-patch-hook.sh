@@ -12,16 +12,26 @@ _patchMetadataVersion() {
         return 1
     fi
 
-    if grep -q "^Version: $version" "$metadata_file"; then
-        echo "Error: The version already matches the derivation's version. Remove this hook"
+    if ! grep -q "^Version:" "$metadata_file"; then
+        echo "Error: No patchable version specification found"
         return 1
     fi
 
-    if grep -q "^Version:" "$metadata_file"; then
+    local -r current_version=$(grep -P "^Version:" "$metadata_file" | cut -d ' ' -f 2-)
+
+    if PYTHONPATH="@wheel@/@pythonSitePackages@:$PYTHONPATH" @pythonInterpreter@ -c "
+      from packaging.version import Version
+      import sys
+
+      sys.exit(Version(sys.argv[1]) == Version(sys.argv[2]))
+    " "$current_version" "$version"; then
         sed -i -E "s/^(Version:).*/\1 $version/" "$metadata_file"
     else
-        echo "Error: No patchable version specification found"
+        echo "Error: The version already matches the derivation's version. Remove wheelMetadataVersionPatchHook"
+        return 1
     fi
+
+    sed -i -E "s/^(Version:).*/\1 $version/" "$metadata_file"
 }
 
 wheelMatadataVersionPatchPhase() {
