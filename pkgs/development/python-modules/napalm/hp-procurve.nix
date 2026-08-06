@@ -12,7 +12,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "napalm-hp-procurve";
+  pname = "napalm-procurve";
   version = "0.7.0";
   pyproject = true;
 
