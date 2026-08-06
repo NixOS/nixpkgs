@@ -402,14 +402,14 @@ stdenv.mkDerivation (finalAttrs: {
     # time limits are a little meagre for a build machine that's
     # potentially under load.
     substituteInPlace tests/unit/meson.build \
-      --replace 'timeout: slow_tests' 'timeout: 50 * slow_tests'
+      --replace-fail 'timeout: slow_tests' 'timeout: 50 * slow_tests'
     substituteInPlace tests/qtest/meson.build \
-      --replace 'timeout: slow_qtests' 'timeout: 50 * slow_qtests'
+      --replace-fail 'timeout: slow_qtests' 'timeout: 50 * slow_qtests'
 
     # combined with a long package name, some temp socket paths
     # can end up exceeding max socket name len
     substituteInPlace tests/qtest/bios-tables-test.c \
-      --replace 'qemu-test_acpi_%s_tcg_%s' '%s_%s'
+      --replace-fail 'qemu-test_acpi_%s_tcg_%s' '%s_%s'
 
     # get-fsinfo attempts to access block devices, disallowed by sandbox
     sed -i -e '/\/qga\/get-fsinfo/d' -e '/\/qga\/blacklist/d' \
@@ -423,7 +423,7 @@ stdenv.mkDerivation (finalAttrs: {
     # skip test that stalls on darwin, perhaps due to subtle differences
     # in fifo behaviour
     substituteInPlace tests/unit/meson.build \
-      --replace "'test-io-channel-command'" "#'test-io-channel-command'"
+      --replace-fail "'test-io-channel-command'" "#'test-io-channel-command'"
   '';
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
