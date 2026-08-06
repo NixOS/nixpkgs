@@ -11,6 +11,9 @@ buildNpmPackage (finalAttrs: {
   pname = "uptime-kuma";
   version = "2.5.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "louislam";
     repo = "uptime-kuma";

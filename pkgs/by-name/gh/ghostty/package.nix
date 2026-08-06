@@ -149,6 +149,9 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $vim $out/share/vim-plugins
 
     remove-references-to -t ${finalAttrs.deps} $out/bin/.ghostty-wrapped
+
+    substituteInPlace $out/share/applications/com.mitchellh.ghostty.desktop \
+      --replace-fail "Exec=$out/bin/ghostty" "Exec=ghostty"
   '';
 
   nativeInstallCheckInputs = [
