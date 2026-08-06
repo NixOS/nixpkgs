@@ -1570,6 +1570,7 @@
   ./services/security/sslmate-agent.nix
   ./services/security/step-ca.nix
   ./services/security/tang.nix
+  ./services/security/tetragon.nix
   ./services/security/timekpr.nix
   ./services/security/tinyauth.nix
   ./services/security/tor.nix
