@@ -4960,6 +4960,8 @@ self: super: with self; {
 
   djoser = callPackage ../development/python-modules/djoser { };
 
+  djvulibre-python = callPackage ../development/python-modules/djvulibre-python { };
+
   dkimpy = callPackage ../development/python-modules/dkimpy { };
 
   dlib = callPackage ../development/python-modules/dlib { inherit (pkgs) dlib; };
@@ -16523,8 +16525,6 @@ self: super: with self; {
   python-digitalocean = callPackage ../development/python-modules/python-digitalocean { };
 
   python-discovery = callPackage ../development/python-modules/python-discovery { };
-
-  python-djvulibre = callPackage ../development/python-modules/python-djvulibre { };
 
   python-docs-theme = callPackage ../development/python-modules/python-docs-theme { };
 
