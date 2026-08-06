@@ -27,6 +27,8 @@ swiftPackages.stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "prefix=$(out)" ];
 
+  dontUseSwiftpmInstall = true;
+
   meta = {
     description = "Run a script whenever dark mode changes in macOS";
     homepage = "https://github.com/bouk/dark-mode-notify";
