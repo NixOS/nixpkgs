@@ -13199,6 +13199,12 @@
     githubId = 156372486;
     name = "Vaios Karastathis";
   };
+  jjba23 = {
+    email = "jjbigorra@gmail.com";
+    github = "jjba23";
+    githubId = 42377845;
+    name = "Josep Bigorra";
+  };
   jjjollyjim = {
     email = "jamie@kwiius.com";
     github = "JJJollyjim";
