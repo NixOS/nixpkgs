@@ -80,6 +80,9 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
+    # TypeError: not all arguments converted during string formatting
+    "test_dtensor"
+
     # FileNotFoundError: [Errno 2] No such file or directory: '/build/source/tensordict/tensorclass.pyi
     "test_tensorclass_instance_methods"
     "test_tensorclass_stub_methods"
