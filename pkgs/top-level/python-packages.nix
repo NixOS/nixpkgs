@@ -9972,6 +9972,8 @@ self: super: with self; {
 
   loompy = callPackage ../development/python-modules/loompy { };
 
+  loop-rate-limiters = callPackage ../development/python-modules/loop-rate-limiters { };
+
   looptime = callPackage ../development/python-modules/looptime { };
 
   loopy = callPackage ../development/python-modules/loopy { };
