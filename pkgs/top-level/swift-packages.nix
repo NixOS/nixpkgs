@@ -23,7 +23,17 @@ let
             swift-corelibs-libdispatch = null;
             swift-foundation = null;
           }
+          # Swift Driver is required when building the compiler’s Swift Syntax in the final toolchain.
+          # Otherwise, symbols are stripped from it that are needed to build Swift Testing.
+          // lib.optionalAttrs (bootstrapStage == 0) {
+            swift-driver = null;
+          }
         );
+      }
+      // lib.optionalAttrs (bootstrapStage != 2) {
+        swift-driver = prev.swift-driver.overrideAttrs (old: {
+          pname = "early-${old.pname}";
+        });
       }
       // lib.optionalAttrs (swift_release != null) { inherit swift_release; }
       // lib.optionalAttrs (swift_sources != null) { inherit swift_sources; }
@@ -80,6 +90,7 @@ makeScopeWithSplicing' {
 
       swift-minimal = self.swift.override {
         swift-corelibs-libdispatch = null;
+        swift-driver = null;
         swift-foundation = null;
       };
 

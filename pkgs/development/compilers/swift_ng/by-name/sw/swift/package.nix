@@ -6,6 +6,7 @@
   stdenv,
   swift-corelibs-foundation,
   swift-corelibs-libdispatch,
+  swift-driver,
   swift-foundation,
   swift-foundation-icu,
   swiftc,
@@ -27,6 +28,11 @@ let
     paths = [
       swiftc.out
       swiftc.dev
+    ]
+    ++ lib.optionals (swift-driver != null) [
+      swift-driver.out
+      swift-driver.dev
+      swift-driver.lib
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && swift-foundation != null) [
       # Needed for FoundationMacros, which is otherwise not part of the SDK on Darwin.
@@ -116,6 +122,14 @@ stdenv.mkDerivation (finalAttrs: {
       fi
     done
 
+    # Make sure `swift` and `swiftc` point to `swift-driver` if present.
+    if [ -e "$out/bin/swift-driver" ]; then
+      for exe in swift swiftc; do
+        rm -f "$out/bin/$exe"
+        ln -s swift-driver "$out/bin/$exe"
+      done
+    fi
+
     # Propagated inputs in `$dev/nix-support` have to be substituted to use this derivation instead of swiftc.
     for f in "$out/nix-support/"*; do
       orig=$(readlink "$f")
@@ -135,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   passthru = {
-    inherit swiftc;
+    inherit swiftc swift-driver;
   };
 
   meta = {
