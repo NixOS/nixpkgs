@@ -2,11 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
   napalm,
   librouteros,
   pytestCheckHook,
-  pythonAtLeast,
+  poetry-core,
 }:
 buildPythonPackage rec {
   pname = "napalm-ros";
@@ -20,14 +19,26 @@ buildPythonPackage rec {
     hash = "sha256-Fv11Blx44vZZ8NuhQQIFpDr+dH2gDJtQP7b0kAk3U/s=";
   };
 
-  build-system = [ setuptools ];
+  # Setuptools is wrong, upstream uses poetry
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'requires = ["setuptools>=56.0.0", "wheel"]' 'requires = ["poetry-core"]' \
+      --replace-fail 'build-backend = "setuptools.build_meta"' 'build-backend = "poetry.core.masonry.api"'
+  '';
 
-  dependencies = [ librouteros ];
+  build-system = [ poetry-core ];
 
-  nativeCheckInputs = [
+  dependencies = [
+    librouteros
     napalm
-    pytestCheckHook
   ];
+
+  pythonRelaxDeps = [
+    "librouteros"
+    "napalm"
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # AssertionError: Some methods vary.
