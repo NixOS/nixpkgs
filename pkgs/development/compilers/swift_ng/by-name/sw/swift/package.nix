@@ -1,6 +1,7 @@
 {
   lib,
   apple-sdk_14,
+  apple-sdk_26,
   llvmPackages_upstream,
   stdenv,
   swift-corelibs-libdispatch,
@@ -10,7 +11,8 @@
 }:
 
 let
-  propagated-sdk = apple-sdk_14;
+  # Need to use an older SDK if `swiftc` does not support macros.
+  propagated-sdk = if swiftc.supportsMacros then apple-sdk_26 else apple-sdk_14;
 
   # `out` and `dev` are merged because that’s what Swift expects.
   outLinks = symlinkJoin {
