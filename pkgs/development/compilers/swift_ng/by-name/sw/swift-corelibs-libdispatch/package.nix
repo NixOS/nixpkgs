@@ -7,17 +7,30 @@
   ninja,
   stdenv,
   swift-corelibs-libdispatch,
+  swift-minimal,
   swift_release,
   swift_sources,
+  useSwift ? true, # Where to build the Swift overlay and swiftDispatch shared library.
 }:
 
 let
-  swift-corelibs-libdispatch-no-overlay-lib = placeholder "out";
-  swift-corelibs-libdispatch-no-overlay-dev = placeholder "dev";
+  swift-corelibs-libdispatch-no-overlay = swift-corelibs-libdispatch.override { useSwift = false; };
+
+  swift-corelibs-libdispatch-no-overlay-lib =
+    if useSwift then
+      lib.escapeShellArg (lib.getLib swift-corelibs-libdispatch-no-overlay)
+    else
+      placeholder "out";
+
+  swift-corelibs-libdispatch-no-overlay-dev =
+    if useSwift then
+      lib.escapeShellArg (lib.getDev swift-corelibs-libdispatch-no-overlay)
+    else
+      placeholder "dev";
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "swift-corelibs-libdispatch";
+  pname = "swift-corelibs-libdispatch${lib.optionalString useSwift "-swift-overlay"}";
   version = swift_release;
 
   outputs = [
@@ -48,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     # The Swift overlay is built separately using the no-overlay derivation as a base.
-    (lib.cmakeBool "ENABLE_SWIFT" false)
+    (lib.cmakeBool "ENABLE_SWIFT" useSwift)
   ]
   ++ lib.optionals stdenv.hostPlatform.isMusl [
     # Musl requires _GNU_SOURCE or the getprogname shim fails to build.
@@ -63,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
   ]
+  ++ lib.optionals useSwift [ swift-minimal ]
   ++ lib.optionals stdenv.hostPlatform.isWindows [ lld ];
 
   postInstall = ''
@@ -79,7 +93,27 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '@dev@' ${swift-corelibs-libdispatch-no-overlay-dev} \
       --replace-fail '@out-swift@' "$out" \
       --replace-fail '@dev-swift@' "''${!outputDev}"
-  '';
+  ''
+  + lib.optionalString useSwift (
+    ''
+      mkdir -p "$dev/nix-support" "$man"
+
+      moveToOutput lib/swift "''${!outputDev}"
+
+      # Rely on `propagated-build-inputs` to propagate the non-Swift shared libraries,
+      # so with or without overlay uses the same ones.
+      rm "''${!outputLib}/lib/libdispatch$libExt" "''${!outputLib}/lib/libBlocksRuntime$libExt"
+
+      ln -s ${lib.escapeShellArg (lib.getMan swift-corelibs-libdispatch-no-overlay)}/* "$man"
+
+      echo -n ${swift-corelibs-libdispatch-no-overlay-dev} >> "$dev/nix-support/propagated-build-inputs"
+    ''
+    # Clean up the rpaths to reference the non-overlay shared libraries.
+    + lib.optionalString stdenv.hostPlatform.isElf ''
+      dylib="''${!outputLib}/lib/libswiftDispatch${stdenv.hostPlatform.extensions.sharedLibrary}"
+      patchelf --add-rpath ${swift-corelibs-libdispatch-no-overlay-lib}/lib "$dylib"
+    ''
+  );
 
   __structuredAttrs = true;
 
