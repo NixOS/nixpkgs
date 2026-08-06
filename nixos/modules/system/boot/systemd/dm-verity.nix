@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  options,
+  ...
+}:
 
 let
   cfg = config.boot.initrd.systemd.dmVerity;
@@ -17,41 +22,47 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
-    assertions = [
+  config = lib.mkIf cfg.enable (
+    lib.mkMerge [
       {
-        assertion = config.boot.initrd.systemd.enable;
-        message = ''
-          'boot.initrd.systemd.dmVerity.enable' requires 'boot.initrd.systemd.enable' to be enabled.
-        '';
-      }
-    ];
+        assertions = [
+          {
+            assertion = config.boot.initrd.systemd.enable;
+            message = ''
+              'boot.initrd.systemd.dmVerity.enable' requires 'boot.initrd.systemd.enable' to be enabled.
+            '';
+          }
+        ];
 
-    boot.initrd = {
-      availableKernelModules = [
-        "dm_mod"
-        "dm_verity"
-      ];
+        boot.initrd = {
+          availableKernelModules = [
+            "dm_mod"
+            "dm_verity"
+          ];
+
+          # The additional targets and store paths allow users to integrate verity-protected devices
+          # through the systemd tooling.
+          systemd = {
+            additionalUpstreamUnits = [
+              "veritysetup-pre.target"
+              "veritysetup.target"
+              "remote-veritysetup.target"
+            ];
+
+            storePaths = [
+              "${config.boot.initrd.systemd.package}/lib/systemd/systemd-veritysetup"
+              "${config.boot.initrd.systemd.package}/lib/systemd/system-generators/systemd-veritysetup-generator"
+            ];
+          };
+        };
+      }
 
       # dm-verity needs additional udev rules from LVM to work.
-      services.lvm.enable = true;
-
-      # The additional targets and store paths allow users to integrate verity-protected devices
-      # through the systemd tooling.
-      systemd = {
-        additionalUpstreamUnits = [
-          "veritysetup-pre.target"
-          "veritysetup.target"
-          "remote-veritysetup.target"
-        ];
-
-        storePaths = [
-          "${config.boot.initrd.systemd.package}/lib/systemd/systemd-veritysetup"
-          "${config.boot.initrd.systemd.package}/lib/systemd/system-generators/systemd-veritysetup-generator"
-        ];
-      };
-    };
-  };
+      (lib.optionalAttrs (options ? boot.initrd.services.lvm) {
+        boot.initrd.services.lvm.enable = true;
+      })
+    ]
+  );
 
   meta.maintainers = with lib.maintainers; [
     msanft

@@ -1,5 +1,6 @@
 {
   config,
+  options,
   lib,
   pkgs,
   utils,
@@ -549,396 +550,410 @@ in
 
   ###### implementation
 
-  config = {
+  config = lib.mkMerge [
+    {
 
-    warnings =
-      let
-        mkOneNetOnlineWarn =
-          typeStr: name: def:
-          lib.optional (
-            lib.elem "network-online.target" def.after
-            && !(lib.elem "network-online.target" (def.wants ++ def.requires ++ def.bindsTo))
-          ) "${name}.${typeStr} is ordered after 'network-online.target' but doesn't depend on it";
-        mkNetOnlineWarns =
-          typeStr: defs: lib.concatLists (lib.mapAttrsToList (mkOneNetOnlineWarn typeStr) defs);
-        mkMountNetOnlineWarns =
-          typeStr: defs: lib.concatLists (map (m: mkOneNetOnlineWarn typeStr m.what m) defs);
-      in
-      concatLists (
+      warnings =
+        let
+          mkOneNetOnlineWarn =
+            typeStr: name: def:
+            lib.optional (
+              lib.elem "network-online.target" def.after
+              && !(lib.elem "network-online.target" (def.wants ++ def.requires ++ def.bindsTo))
+            ) "${name}.${typeStr} is ordered after 'network-online.target' but doesn't depend on it";
+          mkNetOnlineWarns =
+            typeStr: defs: lib.concatLists (lib.mapAttrsToList (mkOneNetOnlineWarn typeStr) defs);
+          mkMountNetOnlineWarns =
+            typeStr: defs: lib.concatLists (map (m: mkOneNetOnlineWarn typeStr m.what m) defs);
+        in
+        concatLists (
+          mapAttrsToList (
+            name: service:
+            let
+              type = service.serviceConfig.Type or "";
+              restart = service.serviceConfig.Restart or "no";
+              hasDeprecated = builtins.hasAttr "StartLimitInterval" service.serviceConfig;
+            in
+            concatLists [
+              (optional (type == "oneshot" && (restart == "always" || restart == "on-success"))
+                "Service '${name}.service' with 'Type=oneshot' cannot have 'Restart=always' or 'Restart=on-success'"
+              )
+              (optional hasDeprecated "Service '${name}.service' uses the attribute 'StartLimitInterval' in the Service section, which is deprecated. See https://github.com/NixOS/nixpkgs/issues/45786.")
+              (optional (service.reloadIfChanged && service.reloadTriggers != [ ])
+                "Service '${name}.service' has both 'reloadIfChanged' and 'reloadTriggers' set. This is probably not what you want, because 'reloadTriggers' behave the same whay as 'restartTriggers' if 'reloadIfChanged' is set."
+              )
+            ]
+          ) cfg.services
+        )
+        ++ (mkNetOnlineWarns "target" cfg.targets)
+        ++ (mkNetOnlineWarns "service" cfg.services)
+        ++ (mkNetOnlineWarns "socket" cfg.sockets)
+        ++ (mkNetOnlineWarns "timer" cfg.timers)
+        ++ (mkNetOnlineWarns "path" cfg.paths)
+        ++ (mkMountNetOnlineWarns "mount" cfg.mounts)
+        ++ (mkMountNetOnlineWarns "automount" cfg.automounts)
+        ++ (mkNetOnlineWarns "slice" cfg.slices);
+
+      assertions = concatLists (
         mapAttrsToList (
           name: service:
-          let
-            type = service.serviceConfig.Type or "";
-            restart = service.serviceConfig.Restart or "no";
-            hasDeprecated = builtins.hasAttr "StartLimitInterval" service.serviceConfig;
-          in
-          concatLists [
-            (optional (type == "oneshot" && (restart == "always" || restart == "on-success"))
-              "Service '${name}.service' with 'Type=oneshot' cannot have 'Restart=always' or 'Restart=on-success'"
-            )
-            (optional hasDeprecated "Service '${name}.service' uses the attribute 'StartLimitInterval' in the Service section, which is deprecated. See https://github.com/NixOS/nixpkgs/issues/45786.")
-            (optional (service.reloadIfChanged && service.reloadTriggers != [ ])
-              "Service '${name}.service' has both 'reloadIfChanged' and 'reloadTriggers' set. This is probably not what you want, because 'reloadTriggers' behave the same whay as 'restartTriggers' if 'reloadIfChanged' is set."
-            )
-          ]
-        ) cfg.services
-      )
-      ++ (mkNetOnlineWarns "target" cfg.targets)
-      ++ (mkNetOnlineWarns "service" cfg.services)
-      ++ (mkNetOnlineWarns "socket" cfg.sockets)
-      ++ (mkNetOnlineWarns "timer" cfg.timers)
-      ++ (mkNetOnlineWarns "path" cfg.paths)
-      ++ (mkMountNetOnlineWarns "mount" cfg.mounts)
-      ++ (mkMountNetOnlineWarns "automount" cfg.automounts)
-      ++ (mkNetOnlineWarns "slice" cfg.slices);
-
-    assertions = concatLists (
-      mapAttrsToList (
-        name: service:
-        map
-          (message: {
-            assertion = false;
-            inherit message;
-          })
-          (concatLists [
-            (optional
-              (
-                (builtins.elem "network-interfaces.target" service.after)
-                || (builtins.elem "network-interfaces.target" service.wants)
+          map
+            (message: {
+              assertion = false;
+              inherit message;
+            })
+            (concatLists [
+              (optional
+                (
+                  (builtins.elem "network-interfaces.target" service.after)
+                  || (builtins.elem "network-interfaces.target" service.wants)
+                )
+                "Service '${name}.service' is using the deprecated target network-interfaces.target, which no longer exists. Using network.target is recommended instead."
               )
-              "Service '${name}.service' is using the deprecated target network-interfaces.target, which no longer exists. Using network.target is recommended instead."
-            )
-          ])
-      ) cfg.services
-    );
-
-    system.build.units = cfg.units;
-
-    system.nssModules = [ cfg.package.out ];
-    system.nssDatabases = {
-      hosts = (
-        mkMerge [
-          (mkOrder 400 [ "mymachines" ]) # 400 to ensure it comes before resolve (which is 501)
-          (mkOrder 999 [ "myhostname" ]) # after files (which is 998), but before regular nss modules
-        ]
+            ])
+        ) cfg.services
       );
-      passwd = (
-        mkMerge [
-          (mkAfter [ "systemd" ])
-        ]
-      );
-      group = (
-        mkMerge [
-          (mkAfter [ "[success=merge] systemd" ]) # need merge so that NSS won't stop at file-based groups
-        ]
-      );
-      shadow = (
-        mkMerge [
-          (mkAfter [ "systemd" ])
-        ]
-      );
-    };
 
-    environment.systemPackages = [ cfg.package ];
+      system.build.units = cfg.units;
 
-    environment.variables = {
-      SYSTEMD_XKB_DIRECTORY = "/etc/X11/xkb";
-    };
+      system.nssModules = [ cfg.package.out ];
+      system.nssDatabases = {
+        hosts = (
+          mkMerge [
+            (mkOrder 400 [ "mymachines" ]) # 400 to ensure it comes before resolve (which is 501)
+            (mkOrder 999 [ "myhostname" ]) # after files (which is 998), but before regular nss modules
+          ]
+        );
+        passwd = (
+          mkMerge [
+            (mkAfter [ "systemd" ])
+          ]
+        );
+        group = (
+          mkMerge [
+            (mkAfter [ "[success=merge] systemd" ]) # need merge so that NSS won't stop at file-based groups
+          ]
+        );
+        shadow = (
+          mkMerge [
+            (mkAfter [ "systemd" ])
+          ]
+        );
+      };
 
-    environment.etc =
-      let
-        # generate contents for /etc/systemd/${dir} from attrset of links and packages
-        hooks =
-          dir: links:
-          pkgs.runCommand "${dir}"
-            {
-              preferLocalBuild = true;
-              packages = cfg.packages;
-            }
-            ''
-              set -e
-              mkdir -p $out
-              for package in $packages
-              do
-                for hook in $package/lib/systemd/${dir}/*
+      environment.systemPackages = [ cfg.package ];
+
+      environment.variables = {
+        SYSTEMD_XKB_DIRECTORY = "/etc/X11/xkb";
+      };
+
+      environment.etc =
+        let
+          # generate contents for /etc/systemd/${dir} from attrset of links and packages
+          hooks =
+            dir: links:
+            pkgs.runCommand "${dir}"
+              {
+                preferLocalBuild = true;
+                packages = cfg.packages;
+              }
+              ''
+                set -e
+                mkdir -p $out
+                for package in $packages
                 do
-                  ln -s $hook $out/
+                  for hook in $package/lib/systemd/${dir}/*
+                  do
+                    ln -s $hook $out/
+                  done
                 done
-              done
-              ${concatStrings (mapAttrsToList (exec: target: "ln -s ${target} $out/${exec};\n") links)}
-            '';
+                ${concatStrings (mapAttrsToList (exec: target: "ln -s ${target} $out/${exec};\n") links)}
+              '';
 
-        enabledUpstreamSystemUnits = filter (n: !elem n cfg.suppressedSystemUnits) upstreamSystemUnits;
-        enabledUnits = removeAttrs cfg.units cfg.suppressedSystemUnits;
+          enabledUpstreamSystemUnits = filter (n: !elem n cfg.suppressedSystemUnits) upstreamSystemUnits;
+          enabledUnits = removeAttrs cfg.units cfg.suppressedSystemUnits;
 
-      in
-      {
-        "systemd/system".source = generateUnits {
-          type = "system";
-          units = enabledUnits;
-          upstreamUnits = enabledUpstreamSystemUnits;
-          upstreamWants = upstreamSystemWants;
-        };
-
-        "systemd/system.conf".text = settingsToSections cfg.settings;
-
-        "systemd/sleep.conf".text = settingsToSections cfg.sleep.settings;
-
-        "systemd/user-generators" = {
-          source = hooks "user-generators" cfg.user.generators;
-        };
-        "systemd/system-generators" = {
-          source = hooks "system-generators" cfg.generators;
-        };
-        "systemd/system-shutdown" = {
-          source = hooks "system-shutdown" cfg.shutdown;
-        };
-
-        # Ignore all other preset files so systemd doesn't try to enable/disable
-        # units during runtime.
-        "systemd/system-preset/00-nixos.preset".text = ''
-          ignore *
-        '';
-        "systemd/user-preset/00-nixos.preset".text = ''
-          ignore *
-        '';
-
-        "systemd/generator-environment.json".source =
-          json.generate "systemd-generator-environment.json" cfg.generatorEnvironment;
-
-        "systemd/system-environment-generators/env-generator".source =
-          "${config.system.nixos-init.package}/bin/env-generator";
-
-        "sysctl.d/50-default.conf".source = "${cfg.package}/example/sysctl.d/50-default.conf";
-      };
-
-    services.dbus.enable = true;
-
-    users.users.systemd-network = {
-      uid = config.ids.uids.systemd-network;
-      group = "systemd-network";
-    };
-    users.groups.systemd-network.gid = config.ids.gids.systemd-network;
-    users.users.systemd-resolve = {
-      uid = config.ids.uids.systemd-resolve;
-      group = "systemd-resolve";
-    };
-    users.groups.systemd-resolve.gid = config.ids.gids.systemd-resolve;
-
-    # Target for ‘charon send-keys’ to hook into.
-    users.groups.keys.gid = config.ids.gids.keys;
-
-    systemd.targets.keys = {
-      description = "Security Keys";
-      unitConfig.X-StopOnReconfiguration = true;
-    };
-
-    # This target only exists so that services ordered before sysinit.target
-    # are restarted in the correct order, notably BEFORE the other services,
-    # when switching configurations.
-    systemd.targets.sysinit-reactivation = {
-      description = "Reactivate sysinit units";
-    };
-
-    systemd.units =
-      let
-        withName = cfgToUnit: cfg: lib.nameValuePair cfg.name (cfgToUnit cfg);
-      in
-      mapAttrs' (_: withName pathToUnit) cfg.paths
-      // mapAttrs' (_: withName serviceToUnit) cfg.services
-      // mapAttrs' (_: withName sliceToUnit) cfg.slices
-      // mapAttrs' (_: withName socketToUnit) cfg.sockets
-      // mapAttrs' (_: withName targetToUnit) cfg.targets
-      // mapAttrs' (_: withName timerToUnit) cfg.timers
-      // listToAttrs (map (withName mountToUnit) cfg.mounts)
-      // listToAttrs (map (withName automountToUnit) cfg.automounts);
-
-    # Environment of PID 1
-    systemd.managerEnvironment = {
-      # Doesn't contain systemd itself - everything works so it seems to use the compiled-in value for its tools
-      # util-linux is needed for the main fsck utility wrapping the fs-specific ones
-      PATH = lib.makeBinPath (
-        config.system.fsPackages
-        ++ [ cfg.package.util-linux ]
-        # systemd-ssh-generator needs sshd in PATH
-        ++ lib.optional config.services.openssh.enable config.services.openssh.package
-      );
-      LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
-      TZDIR = "/etc/zoneinfo";
-      # If SYSTEMD_UNIT_PATH ends with an empty component (":"), the usual unit load path will be appended to the contents of the variable
-      SYSTEMD_UNIT_PATH = lib.mkIf (
-        config.boot.extraSystemdUnitPaths != [ ]
-      ) "${builtins.concatStringsSep ":" config.boot.extraSystemdUnitPaths}:";
-    };
-    systemd.settings.Manager = {
-      ManagerEnvironment = lib.concatStringsSep " " (
-        lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment
-      );
-      DefaultIOAccounting = lib.mkDefault true;
-      DefaultIPAccounting = lib.mkDefault true;
-    };
-
-    # These are needed for systemd-fstab-generator to schedule systemd-fsck@
-    # units.
-    systemd.generatorPath = config.system.fsPackages ++ [
-      cfg.package.util-linux
-    ];
-
-    systemd.generatorEnvironment = {
-      PATH = lib.makeBinPath cfg.generatorPath;
-    };
-
-    system.requiredKernelConfig = map config.lib.kernelConfig.isEnabled [
-      "DEVTMPFS"
-      "CGROUPS"
-      "INOTIFY_USER"
-      "SIGNALFD"
-      "TIMERFD"
-      "EPOLL"
-      "NET"
-      "SYSFS"
-      "PROC_FS"
-      "FHANDLE"
-      "CRYPTO_USER_API_HASH"
-      "CRYPTO_HMAC"
-      "CRYPTO_SHA256"
-      "DMIID"
-      "AUTOFS_FS"
-      "TMPFS_POSIX_ACL"
-      "TMPFS_XATTR"
-      "SECCOMP"
-    ];
-
-    # Generate timer units for all services that have a ‘startAt’ value.
-    systemd.timers = mapAttrs (name: service: {
-      wantedBy = [ "timers.target" ];
-      timerConfig.OnCalendar = service.startAt;
-    }) (filterAttrs (name: service: service.enable && service.startAt != [ ]) cfg.services);
-
-    # Some overrides to upstream units.
-    systemd.services."systemd-backlight@".restartIfChanged = false;
-    systemd.services."systemd-fsck@".restartIfChanged = false;
-    systemd.services."systemd-fsck@".path = [ pkgs.util-linux ] ++ config.system.fsPackages;
-    systemd.services."systemd-makefs@" = {
-      restartIfChanged = false;
-      path = [ pkgs.util-linux ] ++ config.system.fsPackages;
-      # Since there is no /etc/systemd/system/systemd-makefs@.service
-      # file, the units generated in /run/systemd/generator would
-      # override anything we put here. But by forcing the use of a
-      # drop-in in /etc, it does apply.
-      overrideStrategy = "asDropin";
-    };
-    systemd.services."systemd-mkswap@" = {
-      restartIfChanged = false;
-      path = [ pkgs.util-linux ];
-      overrideStrategy = "asDropin";
-    };
-    systemd.services."modprobe@" = {
-      restartIfChanged = false;
-      serviceConfig.ExecSearchPath = lib.makeBinPath [ pkgs.kmod ];
-    };
-    systemd.services.systemd-random-seed.restartIfChanged = false;
-    systemd.services.systemd-remount-fs.restartIfChanged = false;
-    systemd.services.systemd-update-utmp.restartIfChanged = false;
-    systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;
-    systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
-    systemd.services.systemd-importd = lib.mkIf cfg.package.withImportd {
-      environment = proxy_env;
-      path = [ pkgs.gnupgMinimal ];
-    };
-    systemd.services.systemd-pstore.wantedBy = [ "sysinit.target" ]; # see #81138
-
-    # NixOS has kernel modules in a different location, so override that here.
-    systemd.services.kmod-static-nodes.unitConfig.ConditionFileNotEmpty = [
-      "" # required to unset the previous value!
-      "/run/booted-system/kernel-modules/lib/modules/%v/modules.devname"
-    ];
-
-    # Don't bother with certain units in containers.
-    systemd.services.systemd-remount-fs.unitConfig.ConditionVirtualization = "!container";
-
-    # When using the classic /etc mechanism, we set certain paths in /etc to
-    # /etc/static so that systemd cannot change them (as they are symlinks to
-    # the read-only Nix Store). This is only done so that these services cannot
-    # change the values. All other parts of systemd should read them from their
-    # canonical locations.
-    #
-    # If you use the overlay mechanism to manage /etc, this is unnecessary
-    # because either the overlay is mutable (and users can legitimately change
-    # values without them being overridden) or it is immutable and systemd will
-    # suggest to only make runtime changes.
-    systemd.services."systemd-localed".environment =
-      lib.mkIf (!config.system.etc.overlay.enable && !config.i18n.imperativeLocale)
+        in
         {
-          SYSTEMD_ETC_LOCALE_CONF = "/etc/static/locale.conf";
-          SYSTEMD_ETC_VCONSOLE_CONF = "/etc/static/vconsole.conf";
+          "systemd/system".source = generateUnits {
+            type = "system";
+            units = enabledUnits;
+            upstreamUnits = enabledUpstreamSystemUnits;
+            upstreamWants = upstreamSystemWants;
+          };
+
+          "systemd/system.conf".text = settingsToSections cfg.settings;
+
+          "systemd/sleep.conf".text = settingsToSections cfg.sleep.settings;
+
+          "systemd/user-generators" = {
+            source = hooks "user-generators" cfg.user.generators;
+          };
+          "systemd/system-generators" = {
+            source = hooks "system-generators" cfg.generators;
+          };
+          "systemd/system-shutdown" = {
+            source = hooks "system-shutdown" cfg.shutdown;
+          };
+
+          # Ignore all other preset files so systemd doesn't try to enable/disable
+          # units during runtime.
+          "systemd/system-preset/00-nixos.preset".text = ''
+            ignore *
+          '';
+          "systemd/user-preset/00-nixos.preset".text = ''
+            ignore *
+          '';
+
+          "systemd/generator-environment.json".source =
+            json.generate "systemd-generator-environment.json" cfg.generatorEnvironment;
+
+          "systemd/system-environment-generators/env-generator".source =
+            "${config.system.nixos-init.package}/bin/env-generator";
+
+          "sysctl.d/50-default.conf".source = "${cfg.package}/example/sysctl.d/50-default.conf";
         };
-    systemd.services."systemd-timedated".environment =
-      lib.mkIf (!config.system.etc.overlay.enable && config.time.timeZone != null)
-        {
-          SYSTEMD_ETC_LOCALTIME = "/etc/static/localtime";
-          SYSTEMD_ETC_ADJTIME = "/etc/static/adjtime";
+
+      users.users.systemd-network = {
+        uid = config.ids.uids.systemd-network;
+        group = "systemd-network";
+      };
+      users.groups.systemd-network.gid = config.ids.gids.systemd-network;
+      users.users.systemd-resolve = {
+        uid = config.ids.uids.systemd-resolve;
+        group = "systemd-resolve";
+      };
+      users.groups.systemd-resolve.gid = config.ids.gids.systemd-resolve;
+
+      # Target for ‘charon send-keys’ to hook into.
+      users.groups.keys.gid = config.ids.gids.keys;
+
+      systemd.targets.keys = {
+        description = "Security Keys";
+        unitConfig.X-StopOnReconfiguration = true;
+      };
+
+      # This target only exists so that services ordered before sysinit.target
+      # are restarted in the correct order, notably BEFORE the other services,
+      # when switching configurations.
+      systemd.targets.sysinit-reactivation = {
+        description = "Reactivate sysinit units";
+      };
+
+      systemd.units =
+        let
+          withName = cfgToUnit: cfg: lib.nameValuePair cfg.name (cfgToUnit cfg);
+        in
+        mapAttrs' (_: withName pathToUnit) cfg.paths
+        // mapAttrs' (_: withName serviceToUnit) cfg.services
+        // mapAttrs' (_: withName sliceToUnit) cfg.slices
+        // mapAttrs' (_: withName socketToUnit) cfg.sockets
+        // mapAttrs' (_: withName targetToUnit) cfg.targets
+        // mapAttrs' (_: withName timerToUnit) cfg.timers
+        // listToAttrs (map (withName mountToUnit) cfg.mounts)
+        // listToAttrs (map (withName automountToUnit) cfg.automounts);
+
+      # Environment of PID 1
+      systemd.managerEnvironment = {
+        # Doesn't contain systemd itself - everything works so it seems to use the compiled-in value for its tools
+        # util-linux is needed for the main fsck utility wrapping the fs-specific ones
+        PATH = lib.makeBinPath (
+          config.system.fsPackages
+          ++ [ cfg.package.util-linux ]
+          # systemd-ssh-generator needs sshd in PATH
+          ++ lib.optional config.services.openssh.enable config.services.openssh.package
+        );
+        LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
+        TZDIR = "/etc/zoneinfo";
+        # If SYSTEMD_UNIT_PATH ends with an empty component (":"), the usual unit load path will be appended to the contents of the variable
+        SYSTEMD_UNIT_PATH = lib.mkIf (
+          config.boot.extraSystemdUnitPaths != [ ]
+        ) "${builtins.concatStringsSep ":" config.boot.extraSystemdUnitPaths}:";
+      };
+      systemd.settings.Manager = {
+        ManagerEnvironment = lib.concatStringsSep " " (
+          lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment
+        );
+        DefaultIOAccounting = lib.mkDefault true;
+        DefaultIPAccounting = lib.mkDefault true;
+      };
+
+      # These are needed for systemd-fstab-generator to schedule systemd-fsck@
+      # units.
+      systemd.generatorPath = config.system.fsPackages ++ [
+        cfg.package.util-linux
+      ];
+
+      systemd.generatorEnvironment = {
+        PATH = lib.makeBinPath cfg.generatorPath;
+      };
+
+      system.requiredKernelConfig = map config.lib.kernelConfig.isEnabled [
+        "DEVTMPFS"
+        "CGROUPS"
+        "INOTIFY_USER"
+        "SIGNALFD"
+        "TIMERFD"
+        "EPOLL"
+        "NET"
+        "SYSFS"
+        "PROC_FS"
+        "FHANDLE"
+        "CRYPTO_USER_API_HASH"
+        "CRYPTO_HMAC"
+        "CRYPTO_SHA256"
+        "DMIID"
+        "AUTOFS_FS"
+        "TMPFS_POSIX_ACL"
+        "TMPFS_XATTR"
+        "SECCOMP"
+      ];
+
+      # Generate timer units for all services that have a ‘startAt’ value.
+      systemd.timers = mapAttrs (name: service: {
+        wantedBy = [ "timers.target" ];
+        timerConfig.OnCalendar = service.startAt;
+      }) (filterAttrs (name: service: service.enable && service.startAt != [ ]) cfg.services);
+
+      # Some overrides to upstream units.
+      systemd.services."systemd-backlight@".restartIfChanged = false;
+      systemd.services."systemd-fsck@".restartIfChanged = false;
+      systemd.services."systemd-fsck@".path = [ pkgs.util-linux ] ++ config.system.fsPackages;
+      systemd.services."systemd-makefs@" = {
+        restartIfChanged = false;
+        path = [ pkgs.util-linux ] ++ config.system.fsPackages;
+        # Since there is no /etc/systemd/system/systemd-makefs@.service
+        # file, the units generated in /run/systemd/generator would
+        # override anything we put here. But by forcing the use of a
+        # drop-in in /etc, it does apply.
+        overrideStrategy = "asDropin";
+      };
+      systemd.services."systemd-mkswap@" = {
+        restartIfChanged = false;
+        path = [ pkgs.util-linux ];
+        overrideStrategy = "asDropin";
+      };
+      systemd.services."modprobe@" = {
+        restartIfChanged = false;
+        serviceConfig.ExecSearchPath = lib.makeBinPath [ pkgs.kmod ];
+      };
+      systemd.services.systemd-random-seed.restartIfChanged = false;
+      systemd.services.systemd-remount-fs.restartIfChanged = false;
+      systemd.services.systemd-update-utmp.restartIfChanged = false;
+      systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;
+      systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
+      systemd.services.systemd-importd = lib.mkIf cfg.package.withImportd {
+        environment = proxy_env;
+        path = [ pkgs.gnupgMinimal ];
+      };
+      systemd.services.systemd-pstore.wantedBy = [ "sysinit.target" ]; # see #81138
+
+      # NixOS has kernel modules in a different location, so override that here.
+      systemd.services.kmod-static-nodes.unitConfig.ConditionFileNotEmpty = [
+        "" # required to unset the previous value!
+        "/run/booted-system/kernel-modules/lib/modules/%v/modules.devname"
+      ];
+
+      # Don't bother with certain units in containers.
+      systemd.services.systemd-remount-fs.unitConfig.ConditionVirtualization = "!container";
+
+      # When using the classic /etc mechanism, we set certain paths in /etc to
+      # /etc/static so that systemd cannot change them (as they are symlinks to
+      # the read-only Nix Store). This is only done so that these services cannot
+      # change the values. All other parts of systemd should read them from their
+      # canonical locations.
+      #
+      # If you use the overlay mechanism to manage /etc, this is unnecessary
+      # because either the overlay is mutable (and users can legitimately change
+      # values without them being overridden) or it is immutable and systemd will
+      # suggest to only make runtime changes.
+      systemd.services."systemd-localed".environment =
+        lib.mkIf (!config.system.etc.overlay.enable && !config.i18n.imperativeLocale)
+          {
+            SYSTEMD_ETC_LOCALE_CONF = "/etc/static/locale.conf";
+            SYSTEMD_ETC_VCONSOLE_CONF = "/etc/static/vconsole.conf";
+          };
+      systemd.services."systemd-timedated".environment =
+        lib.mkIf (!config.system.etc.overlay.enable && config.time.timeZone != null)
+          {
+            SYSTEMD_ETC_LOCALTIME = "/etc/static/localtime";
+            SYSTEMD_ETC_ADJTIME = "/etc/static/adjtime";
+          };
+      systemd.services."systemd-hostnamed".environment = lib.mkIf (!config.system.etc.overlay.enable) {
+        SYSTEMD_ETC_HOSTNAME = "/etc/static/hostname";
+        SYSTEMD_ETC_MACHINE_INFO = "/etc/static/machine-info";
+      };
+
+      # Increase numeric PID range (set directly instead of copying a one-line file from systemd)
+      # https://github.com/systemd/systemd/pull/12226
+      boot.kernel.sysctl."kernel.pid_max" = mkIf pkgs.stdenv.hostPlatform.is64bit (lib.mkDefault 4194304);
+
+      # run0 is supposed to authenticate the user via polkit and then run a command. Without this next
+      # part, run0 would fail to run the command even if authentication is successful and the user has
+      # permission to run the command. This next part is only enabled if polkit is enabled because the
+      # error that we’re trying to avoid can’t possibly happen if polkit isn’t enabled. When polkit isn’t
+      # enabled, run0 will fail before it even tries to run the command.
+      security.pam.services = mkIf config.security.polkit.enable {
+        systemd-run0 = {
+          # Upstream config: https://github.com/systemd/systemd/blob/main/src/run/systemd-run0.in
+          setLoginUid = true;
+          pamMount = false;
         };
-    systemd.services."systemd-hostnamed".environment = lib.mkIf (!config.system.etc.overlay.enable) {
-      SYSTEMD_ETC_HOSTNAME = "/etc/static/hostname";
-      SYSTEMD_ETC_MACHINE_INFO = "/etc/static/machine-info";
-    };
-
-    # Increase numeric PID range (set directly instead of copying a one-line file from systemd)
-    # https://github.com/systemd/systemd/pull/12226
-    boot.kernel.sysctl."kernel.pid_max" = mkIf pkgs.stdenv.hostPlatform.is64bit (lib.mkDefault 4194304);
-
-    services.logrotate.settings = {
-      "/var/log/btmp" = mapAttrs (_: mkDefault) {
-        frequency = "monthly";
-        rotate = 1;
-        create = "0660 root ${config.users.groups.utmp.name}";
-        minsize = "1M";
       };
-      "/var/log/wtmp" = mapAttrs (_: mkDefault) {
-        frequency = "monthly";
-        rotate = 1;
-        create = "0664 root ${config.users.groups.utmp.name}";
-        minsize = "1M";
+      # the systemd vmspawn credential dropin executes sshd and expects ExecSearchPath to be set, see:
+      # https://github.com/systemd/systemd/blob/v259.3/src/vmspawn/vmspawn.c#L2662
+      # this service is used, for example, when NixOS is started via systemd-vmspawn
+      systemd.services."sshd-vsock@" = mkIf config.services.openssh.enable {
+        serviceConfig.ExecSearchPath = "${config.services.openssh.package}/bin";
+        overrideStrategy = "asDropin";
       };
-    };
 
-    # run0 is supposed to authenticate the user via polkit and then run a command. Without this next
-    # part, run0 would fail to run the command even if authentication is successful and the user has
-    # permission to run the command. This next part is only enabled if polkit is enabled because the
-    # error that we’re trying to avoid can’t possibly happen if polkit isn’t enabled. When polkit isn’t
-    # enabled, run0 will fail before it even tries to run the command.
-    security.pam.services = mkIf config.security.polkit.enable {
-      systemd-run0 = {
-        # Upstream config: https://github.com/systemd/systemd/blob/main/src/run/systemd-run0.in
-        setLoginUid = true;
-        pamMount = false;
+      # Fix paths in sshd-vsock.socket
+      # https://github.com/systemd/systemd/blob/v259.3/src/ssh-generator/ssh-generator.c#L239
+      # this socket is used, for example, when NixOS is started via systemd-vmspawn
+      systemd.sockets.sshd-vsock = mkIf config.services.openssh.enable {
+        overrideStrategy = "asDropin";
+        socketConfig.ExecStartPost = [
+          ""
+          "${config.systemd.package}/lib/systemd/systemd-ssh-issue --make-vsock"
+        ];
+        socketConfig.ExecStopPre = [
+          ""
+          "${config.systemd.package}/lib/systemd/systemd-ssh-issue --rm-vsock"
+        ];
       };
-    };
-
-    # the systemd vmspawn credential dropin executes sshd and expects ExecSearchPath to be set, see:
-    # https://github.com/systemd/systemd/blob/v259.3/src/vmspawn/vmspawn.c#L2662
-    # this service is used, for example, when NixOS is started via systemd-vmspawn
-    systemd.services."sshd-vsock@" = mkIf config.services.openssh.enable {
-      serviceConfig.ExecSearchPath = "${config.services.openssh.package}/bin";
-      overrideStrategy = "asDropin";
-    };
-
-    # Fix paths in sshd-vsock.socket
-    # https://github.com/systemd/systemd/blob/v259.3/src/ssh-generator/ssh-generator.c#L239
-    # this socket is used, for example, when NixOS is started via systemd-vmspawn
-    systemd.sockets.sshd-vsock = mkIf config.services.openssh.enable {
-      overrideStrategy = "asDropin";
-      socketConfig.ExecStartPost = [
-        ""
-        "${config.systemd.package}/lib/systemd/systemd-ssh-issue --make-vsock"
-      ];
-      socketConfig.ExecStopPre = [
-        ""
-        "${config.systemd.package}/lib/systemd/systemd-ssh-issue --rm-vsock"
-      ];
-    };
-  };
+    }
+    (lib.optionalAttrs (options ? services.dbus) {
+      services.dbus.enable = true;
+    })
+    (lib.optionalAttrs (options ? security.polkit.extraConfig) {
+      # Remove with systemd 259.4
+      security.polkit.extraConfig = mkIf config.security.polkit.enable ''
+        polkit.addRule(function(action, subject) {
+            if (action.id == "org.freedesktop.machine1.register-machine" &&
+                subject.user != "root") {
+                return polkit.Result.AUTH_ADMIN_KEEP;
+            }
+        });
+      '';
+    })
+    (lib.optionalAttrs (options ? services.logrotate) {
+      services.logrotate.settings = {
+        "/var/log/btmp" = mapAttrs (_: mkDefault) {
+          frequency = "monthly";
+          rotate = 1;
+          create = "0660 root ${config.users.groups.utmp.name}";
+          minsize = "1M";
+        };
+        "/var/log/wtmp" = mapAttrs (_: mkDefault) {
+          frequency = "monthly";
+          rotate = 1;
+          create = "0664 root ${config.users.groups.utmp.name}";
+          minsize = "1M";
+        };
+      };
+    })
+  ];
 
   # FIXME: Remove these eventually.
   imports = [
