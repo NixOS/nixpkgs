@@ -8,8 +8,8 @@
   pdfding,
 }:
 let
-  pdfjsVersion = "5.5.207"; # see update script
-  pdfjsHash = "sha256-HikisEa6L+BqsG6imgWhV+4J46BluU5zqU1nFZAG0eM=";
+  pdfjsVersion = "6.1.200"; # see update script
+  pdfjsHash = "sha256-8hByPf4BXTXakRxomXtknthlCLcjG/pCLVnjMxqrROI=";
   pdfjs = fetchzip {
     url = "https://github.com/mozilla/pdf.js/releases/download/v${pdfjsVersion}/pdfjs-${pdfjsVersion}-dist.zip";
     hash = pdfjsHash;
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
     name = "pdfding-${finalAttrs.version}-npm-deps";
-    hash = "sha256-TDX2xoHj07aUeuLPt/TlgkdRdTiv3fNbriChzEB4EXk=";
+    hash = "sha256-4mnw9sLQBZCBqmTKkjNHx03pgmvQ4CuDg3NOke4vMHs=";
   };
 
   nativeBuildInputs = [
