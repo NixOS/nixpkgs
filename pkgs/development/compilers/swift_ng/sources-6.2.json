@@ -2,6 +2,9 @@
   "llvm-project": {
     "hash": "sha256-5Nb8rQmk6onrc4wKW/kT38FsYsWTqMBWtsHYZLA/0Po="
   },
+  "sourcekit-lsp": {
+    "hash": "sha256-vDMZJSIeM+oIheeJCEfP0+FAJn+RyNYDDdWrHJDRcyE="
+  },
   "swift": {
     "hash": "sha256-apbBe/TMzq0+1XLkaTOj5NaYzLQ81i+vU+O7VSEJrKo="
   },
