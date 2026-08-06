@@ -6,13 +6,13 @@
   python3,
 }:
 let
-  version = "1.25.0";
+  version = "1.25.2";
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "meet";
     tag = "v${version}";
-    hash = "sha256-0+X7kqydIkISYh+zy8/dqOkhkNmkpCuRgyq32OKtbcY=";
+    hash = "sha256-gtChKd6sr2nHEmi0Z/nbuCCNsOD8iVIAFjqonZFgQ/Y=";
   };
 
   meta = {

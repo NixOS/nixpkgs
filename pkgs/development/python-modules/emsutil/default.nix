@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
 
   # build-system
   hatchling,
@@ -50,6 +51,11 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [
     "emsutil"
   ];
+
+  # TODO: remove after new release (>0.8.3)
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     description = "Utilities for the EMerge software suite";
