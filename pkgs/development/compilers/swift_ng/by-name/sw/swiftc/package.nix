@@ -309,7 +309,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ build-sdk ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libuuid
-    swift-corelibs-libdispatch
+    (swift-corelibs-libdispatch.override { useSwift = false; })
   ];
 
   postInstall = ''
