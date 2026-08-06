@@ -20,6 +20,12 @@
   "swift-corelibs-xctest": {
     "hash": "sha256-BbzY1kZUaHu7O29c8J7xDuelik6lhqmfSSskvvPZ7R4="
   },
+  "swift-docc": {
+    "hash": "sha256-zu70RyYvnfhW3DdovSeLFXTNmdHrhdnSYCN8RisSkt8=",
+    "swiftpmDeps": {
+      "hash": "sha256-kJFuNw/pRn2A4UMvGcX3j04Faz44mriSz90u8hLdaZc="
+    }
+  },
   "swift-driver": {
     "hash": "sha256-CZYqUadpAsAUnCTZElobZS9nlMfCuHiMnac3o0k7hnI="
   },
