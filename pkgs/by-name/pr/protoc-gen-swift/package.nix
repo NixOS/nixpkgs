@@ -17,7 +17,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "apple";
     repo = "swift-protobuf";
     rev = "${finalAttrs.version}";
-    hash = "sha256-DnnDT4egw00tvy84PuyvSKINjVwueg7QRSQrwD81qbg=";
+    hash = "sha256-Kit/kQDNs0ohtaNC0xWxG6o0vNGUWWE++YK1JP2o8OM=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
