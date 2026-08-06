@@ -18,7 +18,12 @@ let
       final: prev:
       {
         inherit bootstrapStage buildSwiftPackages;
-        swift = prev.swift.override { swift-corelibs-libdispatch = null; };
+        swift = prev.swift.override (
+          {
+            swift-corelibs-libdispatch = null;
+            swift-foundation = null;
+          }
+        );
       }
       // lib.optionalAttrs (swift_release != null) { inherit swift_release; }
       // lib.optionalAttrs (swift_sources != null) { inherit swift_sources; }
@@ -75,6 +80,7 @@ makeScopeWithSplicing' {
 
       swift-minimal = self.swift.override {
         swift-corelibs-libdispatch = null;
+        swift-foundation = null;
       };
 
       swift_sources = swift_sources_6_2;

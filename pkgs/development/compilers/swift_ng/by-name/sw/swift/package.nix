@@ -4,7 +4,10 @@
   apple-sdk_26,
   llvmPackages_upstream,
   stdenv,
+  swift-corelibs-foundation,
   swift-corelibs-libdispatch,
+  swift-foundation,
+  swift-foundation-icu,
   swiftc,
   symlinkJoin,
   swift_release,
@@ -25,12 +28,23 @@ let
       swiftc.out
       swiftc.dev
     ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && swift-foundation != null) [
+      # Needed for FoundationMacros, which is otherwise not part of the SDK on Darwin.
+      swift-foundation.out
+    ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) (
       lib.optionals (swift-corelibs-libdispatch != null) [
         swift-corelibs-libdispatch.out
         swift-corelibs-libdispatch.dev
         swift-corelibs-libdispatch-no-overlay.out
         swift-corelibs-libdispatch-no-overlay.dev
+      ]
+      ++ lib.optionals (swift-foundation != null) [
+        swift-corelibs-foundation.out
+        swift-corelibs-foundation.dev
+        swift-foundation-icu.out
+        swift-foundation.dev
+        swift-foundation.out
       ]
     );
   };
@@ -71,6 +85,11 @@ stdenv.mkDerivation (finalAttrs: {
       lib.optionals (swift-corelibs-libdispatch != null) [
         swift-corelibs-libdispatch-no-overlay.out
         swift-corelibs-libdispatch.out
+      ]
+      ++ lib.optionals (swift-foundation != null) [
+        swift-corelibs-foundation.out
+        swift-foundation-icu.out
+        swift-foundation.out
       ]
     );
 
