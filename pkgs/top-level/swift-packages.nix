@@ -4,6 +4,25 @@ let
   swift_sources_6_2 = builtins.fromJSON (
     builtins.readFile ../development/compilers/swift_ng/sources-6.2.json
   );
+
+  mkBootstrapSwiftPackages =
+    {
+      lib,
+      bootstrapStage,
+      buildSwiftPackages,
+      swiftPackages,
+      swift_release ? null,
+      swift_sources ? null,
+    }:
+    swiftPackages.overrideScope (
+      final: prev:
+      {
+        inherit bootstrapStage buildSwiftPackages;
+        swift = prev.swift.override { swift-corelibs-libdispatch = null; };
+      }
+      // lib.optionalAttrs (swift_release != null) { inherit swift_release; }
+      // lib.optionalAttrs (swift_sources != null) { inherit swift_sources; }
+    );
 in
 
 {
