@@ -153,6 +153,8 @@ in
           then
             # No bindist, "borrowing" the GHC from Debian
             bb.packages.ghc966DebianBinary
+          else if stdenv.buildPlatform.isRiscV64 then
+            bb.packages.ghc966DebianBinary
           else if stdenv.buildPlatform.isi686 then
             bb.packages.ghc967
           else
