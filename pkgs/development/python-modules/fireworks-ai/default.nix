@@ -37,7 +37,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fireworks-ai";
-  version = "1.2.0";
+  version = "1.2.6";
   pyproject = true;
   __structuredAttrs = true;
   strictDeps = true;
@@ -46,7 +46,7 @@ buildPythonPackage (finalAttrs: {
     owner = "fw-ai-external";
     repo = "python-sdk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hcJ32r4MnZFBPYf3aT2PhrtXDIYY3EBaE8Y5wH2Sxuw=";
+    hash = "sha256-zepwiqN2odjAizXaR4mOUZh2AgITs0f3T5/NdS/9qPk=";
   };
 
   postPatch = ''
