@@ -258,7 +258,11 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals brlttySupport [ brltty ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
 
-  dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
+  # QEMU uses Meson and Ninja but still wants Make to be the entrypoint.
+  dontUseMesonConfigure = true;
+  dontUseNinjaBuild = true;
+  dontUseNinjaCheck = true;
+  dontUseNinjaInstall = true;
   dontAddStaticConfigureFlags = true;
 
   outputs = [ "out" ] ++ lib.optional enableDocs "doc" ++ lib.optional guestAgentSupport "ga";
@@ -304,6 +308,8 @@ stdenv.mkDerivation (finalAttrs: {
     mv VERSION QEMU_VERSION
     substituteInPlace configure \
       --replace-fail '$source_path/VERSION' '$source_path/QEMU_VERSION'
+    substituteInPlace Makefile \
+      --replace-fail '$(SRC_PATH)/VERSION' '$(SRC_PATH)/QEMU_VERSION'
     substituteInPlace meson.build \
       --replace-fail "'VERSION'" "'QEMU_VERSION'"
     substituteInPlace docs/conf.py \
@@ -384,7 +390,6 @@ stdenv.mkDerivation (finalAttrs: {
     # <https://github.com/NixOS/nixpkgs/issues/83667>
     rm -f $out/nix-support/propagated-build-inputs
   '';
-  preBuild = "cd build";
 
   # tests can still timeout on slower systems
   doCheck = false;
@@ -396,37 +401,37 @@ stdenv.mkDerivation (finalAttrs: {
   preCheck = ''
     # time limits are a little meagre for a build machine that's
     # potentially under load.
-    substituteInPlace ../tests/unit/meson.build \
+    substituteInPlace tests/unit/meson.build \
       --replace 'timeout: slow_tests' 'timeout: 50 * slow_tests'
-    substituteInPlace ../tests/qtest/meson.build \
+    substituteInPlace tests/qtest/meson.build \
       --replace 'timeout: slow_qtests' 'timeout: 50 * slow_qtests'
-    substituteInPlace ../tests/fp/meson.build \
+    substituteInPlace tests/fp/meson.build \
       --replace 'timeout: 90)' 'timeout: 300)'
 
     # point tests towards correct binaries
-    substituteInPlace ../tests/unit/test-qga.c \
+    substituteInPlace tests/unit/test-qga.c \
       --replace '/bin/bash' "$(type -P bash)" \
       --replace '/bin/echo' "$(type -P echo)"
-    substituteInPlace ../tests/unit/test-io-channel-command.c \
+    substituteInPlace tests/unit/test-io-channel-command.c \
       --replace '/bin/socat' "$(type -P socat)"
 
     # combined with a long package name, some temp socket paths
     # can end up exceeding max socket name len
-    substituteInPlace ../tests/qtest/bios-tables-test.c \
+    substituteInPlace tests/qtest/bios-tables-test.c \
       --replace 'qemu-test_acpi_%s_tcg_%s' '%s_%s'
 
     # get-fsinfo attempts to access block devices, disallowed by sandbox
     sed -i -e '/\/qga\/get-fsinfo/d' -e '/\/qga\/blacklist/d' \
-      ../tests/unit/test-qga.c
+      tests/unit/test-qga.c
 
     # xattrs are not allowed in the sandbox
-    substituteInPlace ../tests/qtest/virtio-9p-test.c \
+    substituteInPlace tests/qtest/virtio-9p-test.c \
       --replace-fail mapped-xattr mapped-file
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # skip test that stalls on darwin, perhaps due to subtle differences
     # in fifo behaviour
-    substituteInPlace ../tests/unit/meson.build \
+    substituteInPlace tests/unit/meson.build \
       --replace "'test-io-channel-command'" "#'test-io-channel-command'"
   '';
 
