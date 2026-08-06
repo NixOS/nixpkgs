@@ -5,20 +5,23 @@
   numpy,
   matplotlib,
   pytest,
+  setuptools,
   scipy,
 }:
 
 buildPythonPackage rec {
   pname = "tadasets";
   version = "0.2.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-C+l19J0PHjZTlzAhXbojicaOyr/gjN8fuH7cLyb449w=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     numpy
     matplotlib
   ];
