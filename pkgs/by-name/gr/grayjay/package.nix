@@ -1,6 +1,7 @@
 {
   buildDotnetModule,
   fetchFromGitLab,
+  fetchurl,
   dotnetCorePackages,
   buildNpmPackage,
   lib,
@@ -39,15 +40,16 @@
   krb5,
   wrapGAppsHook3,
   _experimental-update-script-combinators,
+  unzip
 }:
 let
-  version = "17";
+  version = "18";
   src = fetchFromGitLab {
     domain = "gitlab.futo.org";
     owner = "videostreaming";
     repo = "Grayjay.Desktop";
     tag = version;
-    hash = "sha256-/oeoLXKewjYkCO7naZNOzauWm1OYDKnsxXY9EkI7fTM=";
+    hash = "sha256-dhXUjj9x8v1bfHLPxNtcysj/eKeT3kkSeVuX6PKoykE=";
     fetchSubmodules = true;
     fetchLFS = true;
   };
@@ -65,6 +67,10 @@ let
       cp -r dist/ $out
       runHook postInstall
     '';
+  };
+  justcefNative = fetchurl {
+	url = "https://static.grayjay.app/justcef/1/JustCefNative-linux-x64.zip";
+	hash = "sha256-LXOp+QZZcWBd8eP+BpK++AMBo9303+aIDEEYNVWekhE=";
   };
 in
 buildDotnetModule (finalAttrs: {
@@ -90,6 +96,7 @@ buildDotnetModule (finalAttrs: {
     autoPatchelfHook
     wrapGAppsHook3
     copyDesktopItems
+	unzip
   ];
 
   dontWrapGApps = true;
@@ -110,7 +117,7 @@ buildDotnetModule (finalAttrs: {
     "Grayjay.Engine/Grayjay.Engine/Grayjay.Engine.csproj"
     "Grayjay.Desktop.CEF/Grayjay.Desktop.CEF.csproj"
     "FUTO.MDNS/FUTO.MDNS/FUTO.MDNS.csproj"
-    "JustCef/DotCef.csproj"
+    "JustCef/JustCef.csproj"
   ];
 
   testProjectFile = [
@@ -136,10 +143,14 @@ buildDotnetModule (finalAttrs: {
   preBuild = ''
     rm -r Grayjay.ClientServer/wwwroot/web
     cp -r ${frontend} Grayjay.ClientServer/wwwroot/web
+	
+	mkdir -p JustCef/obj/justcef/net8.0/1/linux-x64
+  	cp ${justcefNative} \
+	JustCef/obj/justcef/net8.0/1/linux-x64/JustCefNative-linux-x64.zip
   '';
 
   postInstall = ''
-    chmod +x $out/lib/grayjay/cef/dotcefnative
+    chmod +x $out/lib/grayjay/cef/justcefnative
     chmod +x $out/lib/grayjay/ffmpeg
     rm $out/lib/grayjay/Portable
     ln -s /tmp/grayjay-launch $out/lib/grayjay/launch
