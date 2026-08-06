@@ -1,43 +1,43 @@
 {
-  stdenv,
-  lib,
-  replaceVars,
-  fetchpatch,
+  alsa-lib,
   buildPackages,
+  colord,
+  docbook-xsl-nons,
+  fetchpatch,
   fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  gnome,
-  perl,
+  gcr_4,
+  geoclue2,
+  geocode-glib_2,
   gettext,
   glib,
-  libnotify,
-  libgnomekbd,
-  libpulseaudio,
-  alsa-lib,
-  libcanberra,
-  upower,
-  colord,
-  libgweather,
-  polkit,
+  gnome,
+  gnome-desktop,
+  gnome-session-ctl,
   gsettings-desktop-schemas,
-  geoclue2,
-  systemd,
+  lib,
+  libcanberra,
+  libgnomekbd,
   libgudev,
-  libxslt,
+  libgweather,
+  libnotify,
+  libpulseaudio,
   libxml2,
+  libxslt,
+  meson,
   modemmanager,
   networkmanager,
-  gnome-desktop,
-  geocode-glib_2,
-  docbook-xsl-nons,
-  wrapGAppsNoGuiHook,
+  ninja,
+  perl,
+  pkg-config,
+  polkit,
   python3,
+  replaceVars,
+  stdenv,
+  systemd,
   tzdata,
-  gcr_4,
-  gnome-session-ctl,
   udevCheckHook,
+  upower,
+  wrapGAppsNoGuiHook,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
@@ -65,39 +65,39 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    perl
+    docbook-xsl-nons
     gettext
     glib
     libxml2
     libxslt
-    docbook-xsl-nons
-    wrapGAppsNoGuiHook
+    meson
+    ninja
+    perl
+    pkg-config
     python3
     udevCheckHook
+    wrapGAppsNoGuiHook
   ];
 
   buildInputs = [
+    alsa-lib
+    colord
+    gcr_4
+    geoclue2
+    geocode-glib_2
     glib
+    gnome-desktop
     gsettings-desktop-schemas
+    libcanberra
+    libgnomekbd # for org.gnome.libgnomekbd.keyboard schema
+    libgudev
+    libgweather
+    libnotify
+    libpulseaudio
     modemmanager
     networkmanager
-    libnotify
-    libgnomekbd # for org.gnome.libgnomekbd.keyboard schema
-    gnome-desktop
-    libpulseaudio
-    alsa-lib
-    libcanberra
-    upower
-    colord
-    libgweather
     polkit
-    geocode-glib_2
-    geoclue2
-    libgudev
-    gcr_4
+    upower
   ]
   ++ lib.optionals withSystemd [
     systemd
