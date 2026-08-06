@@ -39,8 +39,6 @@ buildGo127Module (finalAttrs: {
 
   checkFlags = [
     "-tags=unit"
-    # requires networking
-    "-skip=TestOidcService_downloadAndSaveLogoFromURL"
   ];
 
   # required for TestIsURLPrivate
