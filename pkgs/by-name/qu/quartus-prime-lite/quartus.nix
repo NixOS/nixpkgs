@@ -114,6 +114,9 @@ stdenv.mkDerivation {
         --disable-components ${lib.concatStringsSep "," disabledComponents} \
         --mode unattended --installdir $out --accept_eula 1
 
+      echo "installer log:"
+      cat "$out/logs/quartus-${version}-linux-install.log"
+
       echo "cleaning up..."
       rm -r $out/uninstall $out/logs
 
