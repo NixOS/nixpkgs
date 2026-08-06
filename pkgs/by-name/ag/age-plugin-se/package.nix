@@ -63,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
     "RELEASE=1"
   ];
 
+  dontUseSwiftpmInstall = true;
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
