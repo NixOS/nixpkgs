@@ -20,6 +20,7 @@ in
   branding = "browser/branding/librewolf";
   inherit (librewolf-src)
     extraConfigureFlags
+    extraPreConfigure
     extraPatches
     extraPostPatch
     extraPassthru
