@@ -1863,7 +1863,7 @@ rec {
 
     :::
   */
-  overrideExisting = old: new: mapAttrs (name: value: new.${name} or value) old;
+  overrideExisting = old: new: old // intersectAttrs old new;
 
   /**
     Turns a list of strings into a human-readable description of those
