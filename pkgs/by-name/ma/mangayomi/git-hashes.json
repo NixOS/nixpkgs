@@ -6,12 +6,12 @@
   "flutter_web_auth_2": "sha256-3aci73SP8eXg6++IQTQoyS+erUUuSiuXymvR32sxHFw=",
   "isar_community_generator": "sha256-4M5nmNvWGJK5CdK4oMrhFjOTdcGg5wo15zDruVEa97k=",
   "m_extension_server": "sha256-gIfUhR51sYHAZ7q54sFiunj+Z9iDT/mHynIkKYK/u9Q=",
-  "media_kit": "sha256-rJeZ/40TfiOTdjpWJNlDUZySmD7v1KLSgq+O8ZsFtjo=",
-  "media_kit_libs_android_video": "sha256-rJeZ/40TfiOTdjpWJNlDUZySmD7v1KLSgq+O8ZsFtjo=",
-  "media_kit_libs_ios_video": "sha256-rJeZ/40TfiOTdjpWJNlDUZySmD7v1KLSgq+O8ZsFtjo=",
-  "media_kit_libs_linux": "sha256-rJeZ/40TfiOTdjpWJNlDUZySmD7v1KLSgq+O8ZsFtjo=",
-  "media_kit_libs_macos_video": "sha256-rJeZ/40TfiOTdjpWJNlDUZySmD7v1KLSgq+O8ZsFtjo=",
-  "media_kit_libs_video": "sha256-rJeZ/40TfiOTdjpWJNlDUZySmD7v1KLSgq+O8ZsFtjo=",
-  "media_kit_libs_windows_video": "sha256-rJeZ/40TfiOTdjpWJNlDUZySmD7v1KLSgq+O8ZsFtjo=",
-  "media_kit_video": "sha256-rJeZ/40TfiOTdjpWJNlDUZySmD7v1KLSgq+O8ZsFtjo="
+  "media_kit": "sha256-YLMdwh9ch1C34X4McZd92WUo7lISwvK08zSGnVmZCeE=",
+  "media_kit_libs_android_video": "sha256-YLMdwh9ch1C34X4McZd92WUo7lISwvK08zSGnVmZCeE=",
+  "media_kit_libs_ios_video": "sha256-YLMdwh9ch1C34X4McZd92WUo7lISwvK08zSGnVmZCeE=",
+  "media_kit_libs_linux": "sha256-YLMdwh9ch1C34X4McZd92WUo7lISwvK08zSGnVmZCeE=",
+  "media_kit_libs_macos_video": "sha256-YLMdwh9ch1C34X4McZd92WUo7lISwvK08zSGnVmZCeE=",
+  "media_kit_libs_video": "sha256-YLMdwh9ch1C34X4McZd92WUo7lISwvK08zSGnVmZCeE=",
+  "media_kit_libs_windows_video": "sha256-YLMdwh9ch1C34X4McZd92WUo7lISwvK08zSGnVmZCeE=",
+  "media_kit_video": "sha256-YLMdwh9ch1C34X4McZd92WUo7lISwvK08zSGnVmZCeE="
 }
