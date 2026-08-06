@@ -105,6 +105,8 @@ let
         openal
 
         # Steam runtime
+        attr
+        glibc
         libgcrypt
         libgpg-error
         p11-kit
