@@ -4,9 +4,18 @@
 
 {
   lib,
+  apple-sdk_26,
+  darwin,
   fetchFromGitHub,
   generateSplicesForMkScope,
+  libuuid,
+  lld,
   llvmPackages_19, # Needs to match the `llvmVersion` of the fork.
+  python3,
+  stdenv,
+  stdlib,
+  swift-cmark,
+  swiftc,
   swift_release,
   swift_sources,
 }:
@@ -51,6 +60,73 @@ in
           moveToOutput bin/clang-deps-launcher.py "$python"
         '';
       });
+
+      lldb =
+        let
+          python3-with-distutils = python3.withPackages (pkgs: [ pkgs.distutils ]);
+
+          swiftLLDB = prev.lldb.overrideAttrs (old: {
+            patches = (old.patches or [ ]) ++ [
+              # The LLDB build on Linux assumes the rpath is set relative to the toolchain and that `SWIFT_LIBRARY_DIR`
+              # consists of only one path (and is not a list). It needs to point to the stdlib.
+              ./patches/lldb/0001-Set-stdlib-path-on-Linux.patch
+              # Otherwise, linking `lldb-server` fails with a missing symbol error on Linux.
+              ./patches/lldb/0002-Link-lldb-server-to-swiftCore.patch
+              # Don’t resolve the liblldb symlink to help it find the Swift toolchain that it’s linked into.
+              ./patches/lldb/0003-Don-t-follow-symlinks-when-finding-liblldb.patch
+            ];
+            buildInputs =
+              (old.buildInputs or [ ])
+              ++ [
+                stdlib # The LLDB build system expects the stdlib libraries to be available on the default linker path.
+              ]
+              # For `swift_coroFrameAlloc`, which needs an SDK with libswiftCore text-based stubs that have the symbol.
+              ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_26 ];
+            # Swift’s fork of LLDB has extra requirements.
+            nativeBuildInputs =
+              (old.nativeBuildInputs or [ ])
+              ++ [
+                python3-with-distutils # distutils is needed for the bundled Python plugin.
+              ]
+              ++ lib.optionals stdenv.hostPlatform.isDarwin [
+                darwin.sigtool # Required for code-signing.
+                lld # Otherwise results in `can't find ordinal for imported symbol '_objc_opt_self'` when linking.
+              ];
+            # These aren’t set correctly otherwise. The LLDB build system needs an explicit Swift path regardless.
+            cmakeFlags =
+              (old.cmakeFlags or [ ])
+              ++ [
+                (lib.cmakeFeature "Clang_DIR" "${lib.getDev final.libclang}/lib/cmake/clang")
+                (lib.cmakeFeature "LLVM_DIR" "${lib.getDev final.libllvm}/lib/cmake/llvm")
+                (lib.cmakeFeature "Swift_DIR" "${lib.getOutput "static" swiftc}")
+                (lib.cmakeFeature "cmark-gfm_DIR" "${swift-cmark.out}/lib/cmake")
+                (lib.cmakeFeature "LLDB_SWIFT_LIBS" "${lib.getDev stdlib}/lib/swift")
+              ]
+              ++ lib.optionals stdenv.hostPlatform.isDarwin [
+                (lib.cmakeFeature "CMAKE_LINKER_TYPE" "LLD") # Darwin fails to link correctly using ld64 (see above).
+              ];
+
+            # Make sure LLDB can find the Swift compiler shared libraries.
+            postInstall =
+              (old.postInstall or "")
+              + lib.optionalString stdenv.hostPlatform.isElf ''
+                for output in $(getAllOutputNames); do
+                  while IFS= read -d "" f; do
+                    if isELF "$f"; then
+                      # Make sure all rpaths are present. Why is libuuid getting dropped? I have no idea.
+                      patchelf --add-rpath ${
+                        lib.escapeShellArg (lib.makeSearchPathOutput "out" "lib/swift/host/compiler" [ swiftc ])
+                      } "$f" || true
+                      patchelf --add-rpath ${lib.escapeShellArg (lib.makeLibraryPath [ libuuid ])} "$f" || true
+                    fi
+                  done < <(find "''${!output}" -type f -print0)
+                done
+              '';
+          });
+        in
+        # Linux tries to use a GCC stdenv to build LLDB, but the Swift headers aren’t compatible with GCC.
+        # The stdenv passed in from the package set arguments is the Clang-based stdenv from `swift-packages.nix`.
+        swiftLLDB.override { inherit stdenv; };
 
       libllvm =
         let
