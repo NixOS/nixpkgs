@@ -13276,6 +13276,8 @@ self: super: with self; {
 
   pims = callPackage ../development/python-modules/pims { };
 
+  pin-pink = callPackage ../development/python-modules/pin-pink { };
+
   pinboard = callPackage ../development/python-modules/pinboard { };
 
   pinecone = callPackage ../development/python-modules/pinecone { };
