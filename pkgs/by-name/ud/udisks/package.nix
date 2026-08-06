@@ -42,13 +42,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "udisks";
-  version = "2.11.1";
+  version = "2.11.2";
 
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "udisks";
     tag = "udisks-${finalAttrs.version}";
-    hash = "sha256-FZr5AhAxvMbaonYIClHgxsoHaGR2nIClK65IEaYxMeA=";
+    hash = "sha256-bzTposLFl8jrRr+MphV8uM60TBFPuvwEKBUgVlq1YNo=";
   };
 
   outputs = [
