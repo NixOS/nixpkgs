@@ -6,6 +6,7 @@
 }:
 let
   cfg = config.security.tpm2;
+  json = pkgs.formats.json { };
 
   # This snippet is taken from tpm2-tss/dist/tpm-udev.rules, but modified to allow custom user/groups
   # The idea is that the tssUser is allowed to access the TPM and kernel TPM resource manager, while
@@ -24,26 +25,22 @@ let
     }
   '';
 
-  fapiConfig = (
-    pkgs.writeText "fapi-config.json" (
-      builtins.toJSON (
-        {
-          profile_name = cfg.fapi.profileName;
-          profile_dir = cfg.fapi.profileDir;
-          user_dir = cfg.fapi.userDir;
-          system_dir = cfg.fapi.systemDir;
-          tcti = cfg.fapi.tcti;
-          system_pcrs = cfg.fapi.systemPcrs;
-          log_dir = cfg.fapi.logDir;
-          firmware_log_file = cfg.fapi.firmwareLogFile;
-          ima_log_file = cfg.fapi.imaLogFile;
-        }
-        // lib.optionalAttrs (cfg.fapi.ekCertLess != null) {
-          ek_cert_less = lib.boolToYesNo cfg.fapi.ekCertLess;
-        }
-        // lib.optionalAttrs (cfg.fapi.ekFingerprint != null) { ek_fingerprint = cfg.fapi.ekFingerprint; }
-      )
-    )
+  fapiConfig = json.generate "fapi-config.json" (
+    {
+      profile_name = cfg.fapi.profileName;
+      profile_dir = cfg.fapi.profileDir;
+      user_dir = cfg.fapi.userDir;
+      system_dir = cfg.fapi.systemDir;
+      tcti = cfg.fapi.tcti;
+      system_pcrs = cfg.fapi.systemPcrs;
+      log_dir = cfg.fapi.logDir;
+      firmware_log_file = cfg.fapi.firmwareLogFile;
+      ima_log_file = cfg.fapi.imaLogFile;
+    }
+    // lib.optionalAttrs (cfg.fapi.ekCertLess != null) {
+      ek_cert_less = lib.boolToYesNo cfg.fapi.ekCertLess;
+    }
+    // lib.optionalAttrs (cfg.fapi.ekFingerprint != null) { ek_fingerprint = cfg.fapi.ekFingerprint; }
   );
 in
 {
