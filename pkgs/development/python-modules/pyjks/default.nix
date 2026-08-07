@@ -35,6 +35,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Pure-Python Java Keystore (JKS) library";
+    changelog = "https://github.com/kurtbrose/pyjks/blob/v${finalAttrs.version}/CHANGELOG.md";
     homepage = "https://github.com/kurtbrose/pyjks";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kamadorueda ];
