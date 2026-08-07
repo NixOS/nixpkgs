@@ -15,7 +15,7 @@
 
 buildPythonPackage {
   pname = "kokoro";
-  version = "0-unstable-2025-06-16";
+  version = "0-unstable-2025-05-03";
   pyproject = true;
 
   src = fetchFromGitHub {
