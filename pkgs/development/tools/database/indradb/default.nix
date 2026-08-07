@@ -28,7 +28,7 @@ in
 {
   indradb-server = rustPlatform.buildRustPackage {
     pname = "indradb-server";
-    version = "unstable-2021-01-05";
+    version = "unstable-2022-01-05";
     inherit src meta;
 
     cargoHash = "sha256-wehQU0EOSkxQatoViqBJwgu4LG7NsbKjVZvKE6SoOFs=";
