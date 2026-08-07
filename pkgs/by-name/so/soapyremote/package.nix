@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "0.5.2-unstable-2024-01-24";
+  version = "0.5.2-unstable-2024-01-21";
 
 in
 stdenv.mkDerivation {
