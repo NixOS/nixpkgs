@@ -10,15 +10,16 @@
   twofish,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyjks";
   version = "20.0.0";
 
+  __structuredAttrs = true;
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "0378cec15fb11b2ed27ba54dad9fd987d48e6f62f49fcff138f5f7a8b312b044";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-A3jOwV+xGy7Se6VNrZ/Zh9SOb2L0n8/xOPX3qLMSsEQ=";
   };
 
   build-system = [ setuptools ];
@@ -38,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kamadorueda ];
   };
-}
+})
