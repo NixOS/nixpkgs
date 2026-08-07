@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "vinteo";
   domain = "opensprinkler";
-  version = "1.5.6";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "vinteo";
     repo = "hass-opensprinkler";
     tag = "v${version}";
-    hash = "sha256-/aekP1HEyKGhIJZ8TV+gHb/2g9UWbkkep2Qk2x4/Ghk=";
+    hash = "sha256-XpiT9C0SkgQBDML62D4SbRRFaqefVdGORbYGZLlyFZk=";
   };
 
   dependencies = [

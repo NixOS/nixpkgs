@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   buildPythonPackage,
 
   # build-system
@@ -22,41 +21,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "beets-filetote";
-  version = "1.3.6";
+  version = "1.3.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gtronset";
     repo = "beets-filetote";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZrF9Z3Eaem8ZzNJgQoW45MvsNOCoLsd7l/yLQ2pldR0=";
+    hash = "sha256-W5ZZ30LzZLXSMxBBIEQB03Fh04ovETfacZE5gA4oqVM=";
   };
-
-  patches = [
-    # Fixes a few test failures needed since beets 2.12, see:
-    # https://github.com/gtronset/beets-filetote/issues/328
-    # https://github.com/gtronset/beets-filetote/pull/336
-    (fetchpatch {
-      url = "https://github.com/gtronset/beets-filetote/commit/2684482ebe0cd486512b07621e3904de7faf7dc8.patch";
-      # Cause merge conflicts
-      excludes = [
-        # The changes here mainly include ci related changes, and hence can be
-        # disabled.
-        "pyproject.toml"
-        "CHANGELOG.md"
-      ];
-      hash = "sha256-zVVJY4+f8A+GBxiHZL8OzLWUUmX9uY25tUoLCkzEHh8=";
-    })
-    # Fixes test errors with beets 2.13. Upstream PR is
-    # https://github.com/gtronset/beets-filetote/pull/351 . It is not merged and not even
-    # commented by upstream, so we vendor it instead.
-    ./beets2.13.patch
-  ];
-
-  # https://github.com/gtronset/beets-filetote/issues/328
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace-fail "uv_build>=0.11.21,<0.12" "uv-build"
-  '';
 
   build-system = [
     uv-build

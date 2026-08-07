@@ -85,15 +85,11 @@ self: super: with self; {
 
   adb-shell = callPackage ../development/python-modules/adb-shell { };
 
-  adbc-driver-bigquery = callPackage ../development/python-modules/adbc-driver-bigquery { };
-
   adbc-driver-flightsql = callPackage ../development/python-modules/adbc-driver-flightsql { };
 
   adbc-driver-manager = callPackage ../development/python-modules/adbc-driver-manager { };
 
   adbc-driver-postgresql = callPackage ../development/python-modules/adbc-driver-postgresql { };
-
-  adbc-driver-snowflake = callPackage ../development/python-modules/adbc-driver-snowflake { };
 
   adbc-driver-sqlite = callPackage ../development/python-modules/adbc-driver-sqlite { };
 
@@ -559,6 +555,8 @@ self: super: with self; {
   aiosonic = callPackage ../development/python-modules/aiosonic { };
 
   aiosonos = callPackage ../development/python-modules/aiosonos { };
+
+  aiospinel = callPackage ../development/python-modules/aiospinel { };
 
   aiosql = callPackage ../development/python-modules/aiosql { };
 
@@ -2481,6 +2479,8 @@ self: super: with self; {
 
   bleak-retry-connector = callPackage ../development/python-modules/bleak-retry-connector { };
 
+  bleak-smlight = callPackage ../development/python-modules/bleak-smlight { };
+
   blebox-uniapi = callPackage ../development/python-modules/blebox-uniapi { };
 
   bless = callPackage ../development/python-modules/bless { };
@@ -3357,6 +3357,8 @@ self: super: with self; {
 
   colcon-argcomplete = callPackage ../development/python-modules/colcon-argcomplete { };
 
+  colcon-bash = callPackage ../development/python-modules/colcon-bash { };
+
   colcon-cargo = callPackage ../development/python-modules/colcon-cargo { };
 
   colcon-cd = callPackage ../development/python-modules/colcon-cd { };
@@ -3366,6 +3368,8 @@ self: super: with self; {
   colcon-defaults = callPackage ../development/python-modules/colcon-defaults { };
 
   colcon-devtools = callPackage ../development/python-modules/colcon-devtools { };
+
+  colcon-ed = callPackage ../development/python-modules/colcon-ed { };
 
   colcon-hardware-acceleration =
     callPackage ../development/python-modules/colcon-hardware-acceleration
@@ -4083,8 +4087,6 @@ self: super: with self; {
   datasketch = callPackage ../development/python-modules/datasketch { };
 
   datastar-py = callPackage ../development/python-modules/datastar-py { };
-
-  datauri = callPackage ../development/python-modules/datauri { };
 
   datefinder = callPackage ../development/python-modules/datefinder { };
 
@@ -4957,6 +4959,8 @@ self: super: with self; {
   djmail = callPackage ../development/python-modules/djmail { };
 
   djoser = callPackage ../development/python-modules/djoser { };
+
+  djvulibre-python = callPackage ../development/python-modules/djvulibre-python { };
 
   dkimpy = callPackage ../development/python-modules/dkimpy { };
 
@@ -7355,6 +7359,8 @@ self: super: with self; {
   gymnasium = callPackage ../development/python-modules/gymnasium { };
 
   gyp = callPackage ../development/python-modules/gyp { };
+
+  gz-math = callPackage ../development/python-modules/gz-math { };
 
   h11 = callPackage ../development/python-modules/h11 { };
 
@@ -11107,8 +11113,6 @@ self: super: with self; {
 
   myjwt = callPackage ../development/python-modules/myjwt { };
 
-  mypermobil = callPackage ../development/python-modules/mypermobil { };
-
   mypy = callPackage ../development/python-modules/mypy { };
 
   inherit (callPackage ../development/python-modules/mypy-boto3 { })
@@ -11929,6 +11933,8 @@ self: super: with self; {
   nptyping = callPackage ../development/python-modules/nptyping { };
 
   npyscreen = callPackage ../development/python-modules/npyscreen { };
+
+  nrf-ota = callPackage ../development/python-modules/nrf-ota { };
 
   nrgkick-api = callPackage ../development/python-modules/nrgkick-api { };
 
@@ -16502,6 +16508,8 @@ self: super: with self; {
 
   python-dali = callPackage ../development/python-modules/python-dali { };
 
+  python-datauri = callPackage ../development/python-modules/datauri { };
+
   python-datemath = callPackage ../development/python-modules/python-datemath { };
 
   python-dateutil = callPackage ../development/python-modules/python-dateutil { };
@@ -16519,8 +16527,6 @@ self: super: with self; {
   python-digitalocean = callPackage ../development/python-modules/python-digitalocean { };
 
   python-discovery = callPackage ../development/python-modules/python-discovery { };
-
-  python-djvulibre = callPackage ../development/python-modules/python-djvulibre { };
 
   python-docs-theme = callPackage ../development/python-modules/python-docs-theme { };
 
@@ -17152,8 +17158,6 @@ self: super: with self; {
   pyvista = callPackage ../development/python-modules/pyvista { };
 
   pyviz-comms = callPackage ../development/python-modules/pyviz-comms { };
-
-  pyvizio = callPackage ../development/python-modules/pyvizio { };
 
   pyvlx = callPackage ../development/python-modules/pyvlx { };
 
@@ -18649,6 +18653,8 @@ self: super: with self; {
   sigstore-rekor-types = callPackage ../development/python-modules/sigstore-rekor-types { };
 
   sigtools = callPackage ../development/python-modules/sigtools { };
+
+  silabs-ble-ota = callPackage ../development/python-modules/silabs-ble-ota { };
 
   silero-vad = callPackage ../development/python-modules/silero-vad { };
 
@@ -20966,8 +20972,6 @@ self: super: with self; {
   typed-argparse = callPackage ../development/python-modules/typed-argparse { };
 
   typed-settings = callPackage ../development/python-modules/typed-settings { };
-
-  typedmonarchmoney = callPackage ../development/python-modules/typedmonarchmoney { };
 
   typedunits = callPackage ../development/python-modules/typedunits { };
 

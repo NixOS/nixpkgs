@@ -7,13 +7,13 @@
 
 buildDunePackage (finalAttrs: {
   pname = "miou";
-  version = "0.5.5";
+  version = "0.8.0";
 
-  minimalOCamlVersion = "5.0.0";
+  minimalOCamlVersion = "5.1";
 
   src = fetchurl {
     url = "https://github.com/robur-coop/miou/releases/download/v${finalAttrs.version}/miou-${finalAttrs.version}.tbz";
-    hash = "sha256-YJZ/nlqpxW77mhcamtCMx5d6/f9MVVBv1QCOz55EyuA=";
+    hash = "sha256-jMBfd6I2gKUqMAjUYa/tOyEMKcbMzazREyMsQbq3ifo=";
   };
 
   buildInputs = [ dune-configurator ];

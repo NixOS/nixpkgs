@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "chrhansk";
     repo = "sleqp";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ycO7s13LT/Gi01XFjTeZQCN+TiAVlp2zXjrlI7vfgTk=";
   };
 

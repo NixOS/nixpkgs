@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "laurel";
-  version = "0.7.3";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "threathunters-io";
     repo = "laurel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4LIv9rdYTPPERgMT8mF6Ymdur9f4tzNkkkMHBePtAH0=";
+    hash = "sha256-Z457Ht8533DYuak2gSLE+q8pUlZja7F1QdltKH+za4w=";
   };
 
-  cargoHash = "sha256-AgyCiCsP3iuk0mRXkFAPDbXG12jE7uXfcGblpALbpMA=";
+  cargoHash = "sha256-SBhhRw+gx3iNyEPSHTRHXZq194otxoxeHG7/vE/g+J4=";
 
   postPatch = ''
     # Upstream started to redirect aarch64-unknown-linux-gnu to aarch64-linux-gnu-gcc

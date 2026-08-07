@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "loco-3d";
     repo = "ndcurves";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-X9p01hMoAx6fMSEU/nf/eqyFgy23mZrpBFonjoT1DLo=";
   };
 

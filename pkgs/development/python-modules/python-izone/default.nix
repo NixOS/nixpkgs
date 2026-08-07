@@ -3,35 +3,34 @@
   buildPythonPackage,
   fetchFromGitHub,
   aiohttp,
-  netifaces,
+  ifaddr,
   pytest-aio,
   pytest-asyncio,
   pytestCheckHook,
-  setuptools-scm,
+  hatchling,
+  hatch-vcs,
 }:
 
 buildPythonPackage rec {
   pname = "python-izone";
-  version = "1.2.10";
+  version = "1.3.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Swamp-Ig";
     repo = "pizone";
     tag = "v${version}";
-    hash = "sha256-/wErnm3SY5N/Bm1oODQsAVTPAtERcrJqwPt1ipDBuZ0=";
+    hash = "sha256-4A89HG1Zlw9Cx/1I+DiJzLiOMBeINWQ1eSQ856favgU=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"setuptools_scm_git_archive",' ""
-  '';
-
-  build-system = [ setuptools-scm ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   dependencies = [
     aiohttp
-    netifaces
+    ifaddr
   ];
 
   nativeCheckInputs = [

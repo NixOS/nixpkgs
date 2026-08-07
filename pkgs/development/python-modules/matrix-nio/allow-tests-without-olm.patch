@@ -1,8 +1,8 @@
 diff --git a/tests/async_client_test.py b/tests/async_client_test.py
-index b0f7a5a..2494fc6 100644
+index 2a3c817..e24b11b 100644
 --- a/tests/async_client_test.py
 +++ b/tests/async_client_test.py
-@@ -140,7 +140,10 @@ from nio.api import (
+@@ -141,7 +141,10 @@ from nio.api import (
      ThreadInclusion,
  )
  from nio.client.async_client import connect_wrapper, on_request_chunk_sent
@@ -15,24 +15,17 @@ index b0f7a5a..2494fc6 100644
  
  BASE_URL_V1 = f"https://example.org{MATRIX_API_PATH_V1}"
 diff --git a/tests/conftest.py b/tests/conftest.py
-index 0c67ee0..6b77e02 100644
+index d9a5f50..2ce4377 100644
 --- a/tests/conftest.py
 +++ b/tests/conftest.py
-@@ -10,11 +10,17 @@ from conftest_async import (  # noqa: F401
-     async_client_pair_same_user,
-     unauthed_async_client,
+@@ -12,8 +12,11 @@ from conftest_async import (  # noqa: F401
  )
--from olm import Account
-+try:
-+    from olm import Account
-+except ImportError:
-+    pass
  
  from nio import Client, ClientConfig, HttpClient
--from nio.crypto import Olm, OlmDevice
+-from nio.crypto import Olm, OlmAccount, OlmDevice
 -from nio.store import SqliteMemoryStore
 +try:
-+    from nio.crypto import Olm, OlmDevice
++    from nio.crypto import Olm, OlmAccount, OlmDevice
 +    from nio.store import SqliteMemoryStore
 +except ImportError:
 +    pass
