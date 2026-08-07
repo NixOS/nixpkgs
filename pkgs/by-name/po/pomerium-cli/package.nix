@@ -14,13 +14,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "pomerium-cli";
-  version = "0.33.0";
+  version = "0.33.1";
 
   src = fetchFromGitHub {
     owner = "pomerium";
     repo = "cli";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Rn/TUTqqUtd4vWfj51aRrdst25B9Weiajesa2AtcEt4=";
+    sha256 = "sha256-tXB7iEg29Wzp/CHrWCWrxwwdp22wtFlt2oX1pp5xtYE=";
   };
 
   vendorHash = "sha256-Jr+sGTjFB/6cNggdbCL3PqwVaHqr/hWrVLLjdPbL82Y=";
