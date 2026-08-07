@@ -6,7 +6,7 @@
 }:
 stdenvNoCC.mkDerivation {
   pname = "fcitx5-tokyonight";
-  version = "0-unstable-2024-01-28";
+  version = "0-unstable-2023-12-17";
 
   src = fetchFromGitHub {
     owner = "ch4xer";
