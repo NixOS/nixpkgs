@@ -13815,6 +13815,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  nvim-toggler = buildVimPlugin {
+    pname = "nvim-toggler";
+    version = "0.3.1";
+    src = fetchFromGitHub {
+      owner = "nguyenvukhang";
+      repo = "nvim-toggler";
+      tag = "v0.3.1";
+      hash = "sha256-6X+m7FeylME0J9hLx45bDqKvHxup3d+Hpa31VESKhrs=";
+    };
+    meta.homepage = "https://github.com/nguyenvukhang/nvim-toggler/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   nvim-tree-lua = buildVimPlugin {
     pname = "nvim-tree.lua";
     version = "1.18.0";
