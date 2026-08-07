@@ -1,6 +1,9 @@
 {
   buildDotnetModule,
   fetchFromGitLab,
+  fetchNpmDeps,
+  npmHooks,
+  nodejs,
   dotnetCorePackages,
   lib,
   ffmpeg,
@@ -42,7 +45,6 @@
   krb5,
   wrapGAppsHook3,
   _experimental-update-script-combinators,
-  grayjay-frontend,
   grayjay-libcurlshim,
 }:
 let
@@ -65,8 +67,6 @@ buildDotnetModule (finalAttrs: {
 
   inherit version src;
 
-  frontend = grayjay-frontend;
-
   __structuredAttrs = true;
   strictDeps = true;
   buildInputs = [
@@ -85,6 +85,8 @@ buildDotnetModule (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    npmHooks.npmConfigHook
+    nodejs
     autoPatchelfHook
     wrapGAppsHook3
     copyDesktopItems
@@ -131,9 +133,20 @@ buildDotnetModule (finalAttrs: {
 
   executables = [ "Grayjay" ];
 
+  npmRoot = "Grayjay.Desktop.Web";
+  npmDeps = fetchNpmDeps {
+    name = "grayjay-frontend-${finalAttrs.version}-npm-deps";
+    inherit (finalAttrs) src;
+    sourceRoot = "${finalAttrs.src.name}/${finalAttrs.npmRoot}";
+    hash = "sha256-3yJIPkuEvkFL9Wb4y/r0yEULQbXx/wHqicFBLzOPj68=";
+  };
+
   preBuild = ''
+    pushd "$npmRoot"
+    npm run build
+    popd
     rm -r Grayjay.ClientServer/wwwroot/web
-    cp -r ${grayjay-frontend} Grayjay.ClientServer/wwwroot/web
+    cp -r "$npmRoot/dist" Grayjay.ClientServer/wwwroot/web
   '';
 
   postInstall = ''
@@ -190,8 +203,6 @@ buildDotnetModule (finalAttrs: {
   passthru.updateScript = _experimental-update-script-combinators.sequence [
     (nix-update-script {
       extraArgs = [
-        "--subpackage"
-        "frontend"
         "--url"
         "https://gitlab.futo.org/api/v4/projects/videostreaming%2FGrayjay%2EDesktop/repository/archive.tar.gz?sha=refs%2Ftags%2F10"
       ];
