@@ -27,7 +27,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "river";
-  version = "0.4.7";
+  version = "0.4.8";
   __structuredAttrs = true;
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "river";
     repo = "river";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uDu4jywRhhEMaYzgBeR7CYuVVoEa5aSJj7ydLJVgBtc=";
+    hash = "sha256-vqOGyd0sddjYZ47xPMFmfzDIg8mHfIBzAJQ2CcsMQ3Y=";
   };
 
   strictDeps = true;
