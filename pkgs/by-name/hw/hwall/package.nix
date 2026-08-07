@@ -10,6 +10,8 @@
   hicolor-icon-theme,
 }:
 
+__structuredAttrs = true;
+
 rustPlatform.buildRustPackage rec {
   pname = "hwall";
   version = "1.0.5";
