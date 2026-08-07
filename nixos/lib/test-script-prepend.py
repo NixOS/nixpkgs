@@ -35,8 +35,8 @@ class PollingConditionProtocol(Protocol):
         self,
         fun_: Callable | None = None,
         *,
+        seconds_interval: dt.timedelta | float | None = None,
         interval: dt.timedelta | None = None,
-        seconds_interval: float | None = None,
         description: str | None = None,
     ) -> Union[Callable[[Callable], ContextManager], ContextManager]:
         raise Exception("This is just type information for the Nix test driver")
@@ -102,8 +102,8 @@ log: AbstractLogger = CompositeLogger([])
 def polling_condition(
     fun_: Callable | None = None,
     *,
+    seconds_interval: float | dt.timedelta | None = None,
     interval: dt.timedelta | None = None,
-    seconds_interval: float | None = None,
     description: str | None = None,
 ):
     pass
@@ -111,8 +111,8 @@ def polling_condition(
 
 def retry(
     fn: Callable,
+    timeout_seconds: int | dt.timedelta | None = None,
     timeout: dt.timedelta | None = None,
-    timeout_seconds: int | None = None,
 ) -> None:
     pass
 

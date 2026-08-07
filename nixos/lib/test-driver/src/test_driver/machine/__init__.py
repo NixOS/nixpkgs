@@ -108,8 +108,8 @@ def make_command(args: list) -> str:
 
 def retry(
     fn: Callable,
+    timeout_seconds: int | dt.timedelta | None = None,
     timeout: dt.timedelta | None = None,
-    timeout_seconds: int | None = None,
 ) -> None:
     """Call the given function repeatedly, with a one second interval between
     retries, until it returns True or a timeout is reached.
@@ -124,9 +124,10 @@ def retry(
             raise TypeError(
                 "retry() got both 'timeout' and 'timeout_seconds' arguments. Pass only 'timeout'"
             )
-        warnings.warn(
-            "retry(): The 'timeout_seconds' argument is deprecated. Use 'timeout' instead.",
-        )
+        if not isinstance(timeout_seconds, dt.timedelta):
+            warnings.warn(
+                "retry(): The 'timeout_seconds' argument is deprecated. Use 'timeout' instead.",
+            )
         timeout = as_timedelta(timeout_seconds)
 
     if timeout is None:
@@ -559,16 +560,19 @@ class BaseMachine(ABC):
             return output
 
     def sleep(
-        self, duration: dt.timedelta | None = None, secs: int | None = None
+        self,
+        secs: dt.timedelta | int | None = None,
+        duration: dt.timedelta | None = None,
     ) -> None:
         if secs is not None:
             if duration is not None:
                 raise TypeError(
                     "sleep() got both 'duration' and 'secs'. Pass only 'duration'"
                 )
-            warnings.warn(
-                "sleep(): The 'secs' argument is deprecated. Use 'duration' instead.",
-            )
+            if not isinstance(secs, dt.timedelta):
+                warnings.warn(
+                    "sleep(): The 'secs' argument is deprecated. Use 'duration' instead.",
+                )
             duration = as_timedelta(secs)
 
         if duration is None:

@@ -530,8 +530,8 @@ class Driver:
         self,
         fun_: Callable | None = None,
         *,
+        seconds_interval: float | dt.timedelta | None = None,
         interval: dt.timedelta | None = None,
-        seconds_interval: float | None = None,
         description: str | None = None,
     ) -> Callable[[Callable], AbstractContextManager] | AbstractContextManager:
         driver = self
@@ -541,9 +541,10 @@ class Driver:
                 raise TypeError(
                     "polling_condition() got both 'interval' and 'seconds_interval' arguments. Pass only 'interval'"
                 )
-            warnings.warn(
-                "polling_condition(): The 'seconds_interval' argument is deprecated. Use 'interval' instead.",
-            )
+            if not isinstance(seconds_interval, dt.timedelta):
+                warnings.warn(
+                    "polling_condition(): The 'seconds_interval' argument is deprecated. Use 'interval' instead.",
+                )
             interval = as_timedelta(seconds_interval)
 
         if interval is None:
@@ -567,17 +568,18 @@ class Driver:
 
             def wait(
                 self,
+                timeout_seconds: int | dt.timedelta | None = None,
                 timeout: dt.timedelta | None = None,
-                timeout_seconds: int | None = None,
             ) -> None:
                 if timeout_seconds is not None:
                     if timeout is not None:
                         raise TypeError(
                             "wait() got both 'timeout' and 'timeout_seconds' arguments. Pass only 'timeout'"
                         )
-                    warnings.warn(
-                        "wait(): The 'timeout_seconds' argument is deprecated. Use 'timeout' instead.",
-                    )
+                    if not isinstance(timeout_seconds, dt.timedelta):
+                        warnings.warn(
+                            "wait(): The 'timeout_seconds' argument is deprecated. Use 'timeout' instead.",
+                        )
                     timeout = as_timedelta(timeout_seconds)
 
                 if timeout is None:
