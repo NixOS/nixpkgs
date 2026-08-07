@@ -5,7 +5,7 @@
 }:
 stdenvNoCC.mkDerivation {
   pname = "bemoji";
-  version = "0.4.0-unstable-2024-04-28";
+  version = "0.4.0-unstable-2025-02-06";
 
   src = fetchFromGitHub {
     owner = "marty-oehme";
