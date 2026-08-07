@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation {
   pname = "tangerine";
-  version = "0-unstable-2024-04-05";
+  version = "0-unstable-2024-01-29";
 
   src = fetchFromGitHub {
     owner = "Aeva";
