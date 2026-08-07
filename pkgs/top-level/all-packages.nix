@@ -376,6 +376,10 @@ with pkgs;
   ollama-cuda = callPackage ../by-name/ol/ollama/package.nix { acceleration = "cuda"; };
   ollama-vulkan = callPackage ../by-name/ol/ollama/package.nix { acceleration = "vulkan"; };
 
+  local-ai-cpu = callPackage ../by-name/lo/local-ai/package.nix { with_cublas = false; with_clblas = false; with_vulkan = false; };
+  local-ai-cuda = callPackage ../by-name/lo/local-ai/package.nix { with_cublas = true; with_clblas = false; with_vulkan = false; };
+  local-ai-vulkan = callPackage ../by-name/lo/local-ai/package.nix { with_cublas = false; with_clblas = false; with_vulkan = true; };
+
   diffPlugins = (callPackage ../build-support/plugins.nix { }).diffPlugins;
 
   devShellTools = callPackage ../build-support/dev-shell-tools { };
