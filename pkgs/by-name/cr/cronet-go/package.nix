@@ -13,6 +13,7 @@
   symlinkJoin,
   xcbuild,
 }:
+
 let
   llvmCcAndBintools = symlinkJoin {
     name = "llvmCcAndBintools";
@@ -24,15 +25,16 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cronet-go";
-  version = "148.0.7778.96-1-unstable-2026-07-12";
+  version = "150.0.7871.63-1";
 
   # nixpkgs-update: no auto update
+
   src = fetchFromGitHub {
     owner = "SagerNet";
     repo = "cronet-go";
-    rev = "617d38f41f935b46a68f550d9add2e38abb3f168";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-UK7mv0TuhJX4y64DhH49t5mgZFGhMx4Viy/chulKD4s=";
+    hash = "sha256-dTKKl32saIIVt8ue105Xw643TBNEf09H38GbSdEcmKQ=";
   };
 
   patches = [
@@ -43,6 +45,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       libresolv = lib.getInclude darwin.libresolv;
     }
   );
+
+  postPatch = lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+    patchShebangs naiveproxy/src/build/toolchain/apple/linker_driver.py
+  '';
 
   nativeBuildInputs = [
     buildPackages.rustc.llvmPackages.bintools
