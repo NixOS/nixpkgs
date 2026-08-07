@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "higan";
-  version = "115-unstable-2025-08-30";
+  version = "115-unstable-2025-09-01";
 
   src = fetchFromGitHub {
     owner = "higan-emu";
