@@ -48,7 +48,7 @@ let
 in
 buildDotnetModule {
   pname = "am2rlauncher";
-  version = "2.3.0-unstable-2023-11-08";
+  version = "2.3.0-unstable-2023-09-03";
 
   src = fetchFromGitHub {
     owner = "AM2R-Community-Developers";
