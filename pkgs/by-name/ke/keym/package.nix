@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "keym";
-  version = "unstable-2022-07-10";
+  version = "unstable-2022-06-10";
 
   src = fetchFromGitHub {
     owner = "cwkx";
