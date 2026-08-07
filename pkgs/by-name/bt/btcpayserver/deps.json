@@ -186,8 +186,8 @@
   },
   {
     "pname": "HtmlSanitizer",
-    "version": "9.0.967",
-    "hash": "sha256-88jTkQSISDXnBXyIgdGtsfs90aBh244cxh9o6jrarvU="
+    "version": "9.1.982",
+    "hash": "sha256-poXCxuxW8Ln+xCbuHeCh2t35SVAENV0xfCOr2NJomHk="
   },
   {
     "pname": "Humanizer.Core",
@@ -511,13 +511,13 @@
   },
   {
     "pname": "NBitcoin",
-    "version": "10.0.7",
-    "hash": "sha256-4arn8+u0dy2iOmwMH/tjcTXR+/4viRf9dlUeMCRqXvI="
+    "version": "10.0.8",
+    "hash": "sha256-SnJ60lhDv94oD0370ZyrvFG2LDJ0wkixNP1pIvcq8AA="
   },
   {
     "pname": "NBitcoin.Altcoins",
-    "version": "6.0.3",
-    "hash": "sha256-U6xigLzDH9TpA6XkLTJRVBsL2OsaYjTD5evaVJ9NP7g="
+    "version": "6.0.4",
+    "hash": "sha256-BpXLxjmFf1JUud0Mwz/Zph0jPVqrEfa6KiMMnsOeIU8="
   },
   {
     "pname": "NBitpayClient",
@@ -526,8 +526,8 @@
   },
   {
     "pname": "NBXplorer.Client",
-    "version": "5.0.6",
-    "hash": "sha256-DN5tG7RSPZwn/c7SdL4OkrlSqT1wrEQmS7Jg7GGEiBo="
+    "version": "5.0.8",
+    "hash": "sha256-io1df2tgBDDoZL+55yR7Nmb1JmZBDLpuiV2A7LlRF/c="
   },
   {
     "pname": "NETStandard.Library",
