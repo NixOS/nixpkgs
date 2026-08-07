@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   ninja,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "kubazip";
@@ -37,6 +38,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "v([0-9]+\\.[0-9]+\\.[0-9]+)"
+    ];
+  };
 
   meta = {
     description = "Portable, simple zip library written in C";
