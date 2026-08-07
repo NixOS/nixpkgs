@@ -16,11 +16,11 @@
   socat,
   versionCheckHook,
   writableTmpDirAsHomeHook,
+  manifest ? lib.importJSON ./manifest.json,
 }:
 let
   stdenv = stdenvNoCC;
   baseUrl = "https://downloads.claude.ai/claude-code-releases";
-  manifest = lib.importJSON ./manifest.json;
   platformKey = "${stdenv.hostPlatform.node.platform}-${stdenv.hostPlatform.node.arch}";
   platformManifestEntry = manifest.platforms.${platformKey};
 in
