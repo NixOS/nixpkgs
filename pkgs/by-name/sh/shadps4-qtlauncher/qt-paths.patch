@@ -1,0 +1,50 @@
+diff --git a/src/common/versions.cpp b/src/common/versions.cpp
+index b935bb6..8625989 100644
+--- a/src/common/versions.cpp
++++ b/src/common/versions.cpp
+@@ -18,7 +18,7 @@ namespace VersionManager {
+ 
+ std::vector<Version> GetVersionList(std::filesystem::path const& path) {
+     std::filesystem::path cfg_path =
+-        path.empty() ? Common::FS::GetUserPath(Common::FS::PathType::LauncherDir) / "versions.json"
++        path.empty() ? "@shadps4-qt@/share/versions.json"
+                      : path;
+ 
+     std::ifstream ifs{cfg_path};
+@@ -76,7 +76,7 @@ std::vector<Version> GetVersionList(std::filesystem::path const& path) {
+ 
+ void SaveVersionList(std::vector<Version> const& versions, std::filesystem::path const& path) {
+     std::filesystem::path out_path =
+-        path.empty() ? Common::FS::GetUserPath(Common::FS::PathType::LauncherDir) / "versions.json"
++        path.empty() ? "@shadps4-qt@/share/versions.json"
+                      : path;
+ 
+     json root = json::array();
+diff --git a/src/qt_gui/gui_settings.cpp b/src/qt_gui/gui_settings.cpp
+index 707131c..40e3f14 100644
+--- a/src/qt_gui/gui_settings.cpp
++++ b/src/qt_gui/gui_settings.cpp
+@@ -5,7 +5,9 @@
+ #include "gui_settings.h"
+ 
+ gui_settings::gui_settings(QObject* parent) : settings(parent) {
+-    m_settings = std::make_unique<QSettings>(ComputeSettingsDir() + "qt_ui.ini",
++    QString currentPath;
++    Common::FS::PathToQString(currentPath, "@shadps4-qt@/share/qt_ui.ini");
++    m_settings = std::make_unique<QSettings>(currentPath,
+                                              QSettings::Format::IniFormat, parent);
+ }
+ 
+diff --git a/src/qt_gui/version_dialog.cpp b/src/qt_gui/version_dialog.cpp
+index 2ed0418..13c6788 100644
+--- a/src/qt_gui/version_dialog.cpp
++++ b/src/qt_gui/version_dialog.cpp
+@@ -638,7 +638,7 @@ tr("First you need to choose a location to save the versions in\n'Path to save v
+ }
+ 
+ void VersionDialog::LoadInstalledList() {
+-    const auto path = Common::FS::GetUserPath(Common::FS::PathType::LauncherDir) / "versions.json";
++    const auto path = "@shadps4-qt@/share/versions.json";
+     auto versions = VersionManager::GetVersionList(path);
+     const auto& selected_version =
+         m_gui_settings->GetValue(gui::vm_versionSelected).toString().toStdString();

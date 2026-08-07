@@ -1,0 +1,33 @@
+From 8be99f5972826c25378bccb9fbd7291623c7b2a7 Mon Sep 17 00:00:00 2001
+From: Moraxyc <i@qaq.li>
+Date: Fri, 9 May 2025 13:39:17 +0800
+Subject: [PATCH] Compatibility with boost 1.83
+
+---
+ boost/network/protocol/http/server/impl/parsers.ipp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/boost/network/protocol/http/server/impl/parsers.ipp b/boost/network/protocol/http/server/impl/parsers.ipp
+index c31e60e..3272c2f 100755
+--- a/boost/network/protocol/http/server/impl/parsers.ipp
++++ b/boost/network/protocol/http/server/impl/parsers.ipp
+@@ -13,6 +13,7 @@
+ #include <tuple>
+ #include <boost/fusion/include/std_tuple.hpp>
+ #include <boost/network/protocol/http/message/header.hpp>
++#include <boost/regex/pending/unicode_iterator.hpp>
+ 
+ #ifdef BOOST_NETWORK_NO_LIB
+ #ifndef BOOST_NETWORK_INLINE
+@@ -32,7 +33,7 @@ typedef std::basic_string<uint32_t> u32_string;
+ template <>  // <typename Attrib, typename T, typename Enable>
+ struct assign_to_container_from_value<std::string, u32_string, void> {
+   static void call(u32_string const& val, std::string& attr) {
+-    u32_to_u8_iterator<u32_string::const_iterator> begin = val.begin(),
++    boost::u32_to_u8_iterator<u32_string::const_iterator> begin = val.begin(),
+                                                    end = val.end();
+     for (; begin != end; ++begin) attr += *begin;
+   }
+-- 
+2.48.1
+

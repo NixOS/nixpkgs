@@ -1,0 +1,16 @@
+The vendored copy of Google's cpp-btree relies on <cstdint> being pulled in
+transitively.  libstdc++ 15 no longer does so, which makes uint8_t/uint16_t
+undeclared, and the resulting fallback to int trips the kNodeValues
+COMPILE_ASSERT with a "1 << 32" shift.
+
+diff --git a/include/btree.h b/include/btree.h
+--- a/include/btree.h
++++ b/include/btree.h
+@@ -104,6 +104,7 @@
+ #include <stddef.h>
+ #include <string.h>
+ #include <sys/types.h>
++#include <cstdint>
+ #include <algorithm>
+ #include <functional>
+ #include <iostream>

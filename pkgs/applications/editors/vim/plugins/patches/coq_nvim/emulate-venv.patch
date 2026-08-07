@@ -1,0 +1,35 @@
+diff --git a/coq/__main__.py b/coq/__main__.py
+index f588f718..36bcca21 100644
+--- a/coq/__main__.py
++++ b/coq/__main__.py
+@@ -78,7 +78,7 @@ _EXEC_PATH = Path(executable)
+ _EXEC_PATH = _EXEC_PATH.parent.resolve(strict=True) / _EXEC_PATH.name
+ _REQ = REQUIREMENTS.read_text()
+ 
+-_IN_VENV = _RT_PY.parent.resolve() / _RT_PY.name == _EXEC_PATH
++_IN_VENV = True
+ 
+ 
+ if command == "deps":
+@@ -152,7 +152,7 @@ elif command == "run":
+     try:
+         if not _IN_VENV:
+             raise ImportError()
+-        elif lock != _REQ:
++        elif False:
+             raise ImportError()
+         else:
+             import pynvim_pp
+diff --git a/coq/consts.py b/coq/consts.py
+index 804e92ab..5c090a93 100644
+--- a/coq/consts.py
++++ b/coq/consts.py
+@@ -10,7 +10,7 @@ TOP_LEVEL = Path(__file__).resolve(strict=True).parent.parent
+ REQUIREMENTS = TOP_LEVEL / "requirements.txt"
+ 
+ 
+-VARS = TOP_LEVEL / ".vars"
++VARS = Path.home() / ".cache/coq_nvim/vars"
+ 
+ RT_DIR = VARS / "runtime"
+ RT_PY = RT_DIR / "Scripts" / "python.exe" if IS_WIN else RT_DIR / "bin" / "python3"

@@ -1,0 +1,296 @@
+diff --git a/package-lock.json b/package-lock.json
+index 1beb8ee..7160473 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -11,7 +11,7 @@
+       "license": "Apache-2.0",
+       "dependencies": {
+         "@simonwep/pickr": "^1.9.1",
+-        "better-sqlite3": "^12.9.0",
++        "better-sqlite3": "^12.11.1",
+         "bufferutil": "^4.1.0",
+         "comlink": "~4.3.1",
+         "crypto-js": "^4.2.0",
+@@ -50,7 +50,7 @@
+         "css-loader": "^7.1.4",
+         "css-minimizer-webpack-plugin": "^8.0.0",
+         "del": "^6.1.1",
+-        "electron": "40.9.2",
++        "electron": "42.6.0",
+         "electron-builder": "^26.9.0",
+         "electron-debug": "^3.2.0",
+         "electron-devtools-installer": "github:lyswhut/electron-devtools-installer#64596d615c1fc891eefd8aef1dfcb2c87aaadf03",
+@@ -210,6 +210,16 @@
+         "node": ">=14.17.0"
+       }
+     },
++    "node_modules/@electron-internal/extract-zip": {
++      "version": "1.0.4",
++      "resolved": "https://registry.npmjs.org/@electron-internal/extract-zip/-/extract-zip-1.0.4.tgz",
++      "integrity": "sha512-Zr1Vs7E9tpCNhZHDAbFVXc2gEVCG9RqPDjrno5+bdgB6LRAuvgyMHJut4NCVyYwtAieapMzc3fiQ3CSTi75ARg==",
++      "dev": true,
++      "license": "BSD-2-Clause",
++      "engines": {
++        "node": ">=22.12.0"
++      }
++    },
+     "node_modules/@electron/asar": {
+       "version": "3.4.1",
+       "resolved": "https://registry.npmjs.org/@electron/asar/-/asar-3.4.1.tgz",
+@@ -283,25 +293,37 @@
+       }
+     },
+     "node_modules/@electron/get": {
+-      "version": "2.0.3",
+-      "resolved": "https://registry.npmjs.org/@electron/get/-/get-2.0.3.tgz",
+-      "integrity": "sha512-Qkzpg2s9GnVV2I2BjRksUi43U5e6+zaQMcjoJy0C+C5oxaKl+fmckGDQFtRpZpZV0NQekuZZ+tGz7EA9TVnQtQ==",
++      "version": "5.0.0",
++      "resolved": "https://registry.npmjs.org/@electron/get/-/get-5.0.0.tgz",
++      "integrity": "sha512-pjoBpru1KdEtcExBnuHAP1cAc/5faoedw0hzJkL3o4/IJp7HNF1+fbrdxT3gMYRX2oJfvnA/WXeCTVQpYYxyJA==",
+       "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "debug": "^4.1.1",
+-        "env-paths": "^2.2.0",
+-        "fs-extra": "^8.1.0",
+-        "got": "^11.8.5",
++        "env-paths": "^3.0.0",
++        "graceful-fs": "^4.2.11",
+         "progress": "^2.0.3",
+-        "semver": "^6.2.0",
++        "semver": "^7.6.3",
+         "sumchecker": "^3.0.1"
+       },
+       "engines": {
+-        "node": ">=12"
++        "node": ">=22.12.0"
+       },
+       "optionalDependencies": {
+-        "global-agent": "^3.0.0"
++        "undici": "^7.24.4"
++      }
++    },
++    "node_modules/@electron/get/node_modules/env-paths": {
++      "version": "3.0.0",
++      "resolved": "https://registry.npmjs.org/env-paths/-/env-paths-3.0.0.tgz",
++      "integrity": "sha512-dtJUTepzMW3Lm/NPxRf3wP4642UWhjL2sQxc+ym2YMj1m/H2zDNQOlezafzkHwn6sMstjHTwG6iQQsctDW/b1A==",
++      "dev": true,
++      "license": "MIT",
++      "engines": {
++        "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
++      },
++      "funding": {
++        "url": "https://github.com/sponsors/sindresorhus"
+       }
+     },
+     "node_modules/@electron/notarize": {
+@@ -2014,17 +2036,6 @@
+       "dev": true,
+       "license": "MIT"
+     },
+-    "node_modules/@types/yauzl": {
+-      "version": "2.10.3",
+-      "resolved": "https://registry.npmjs.org/@types/yauzl/-/yauzl-2.10.3.tgz",
+-      "integrity": "sha512-oJoftv0LSuaDZE3Le4DbKX+KS9G36NzOeSap90UIK0yMA/NhKJhqlSGtNDORNRaIbQfzjXDrQa0ytJ6mNRGz/Q==",
+-      "dev": true,
+-      "license": "MIT",
+-      "optional": true,
+-      "dependencies": {
+-        "@types/node": "*"
+-      }
+-    },
+     "node_modules/@typescript-eslint/eslint-plugin": {
+       "version": "6.21.0",
+       "resolved": "https://registry.npmjs.org/@typescript-eslint/eslint-plugin/-/eslint-plugin-6.21.0.tgz",
+@@ -3373,9 +3384,9 @@
+       "license": "MIT"
+     },
+     "node_modules/better-sqlite3": {
+-      "version": "12.9.0",
+-      "resolved": "https://registry.npmjs.org/better-sqlite3/-/better-sqlite3-12.9.0.tgz",
+-      "integrity": "sha512-wqUv4Gm3toFpHDQmaKD4QhZm3g1DjUBI0yzS4UBl6lElUmXFYdTQmmEDpAFa5o8FiFiymURypEnfVHzILKaxqQ==",
++      "version": "12.11.1",
++      "resolved": "https://registry.npmjs.org/better-sqlite3/-/better-sqlite3-12.11.1.tgz",
++      "integrity": "sha512-dq9AtApgg5PGFtBzPFSBl3HZQjHok5gaQCM6zh2Yk0aSmDCs1CbnVI8/HgASQkNKsWFpseIO9beg5xxpYhbIfA==",
+       "hasInstallScript": true,
+       "license": "MIT",
+       "dependencies": {
+@@ -3383,7 +3394,7 @@
+         "prebuild-install": "^7.1.1"
+       },
+       "engines": {
+-        "node": "20.x || 22.x || 23.x || 24.x || 25.x"
++        "node": "20.x || 22.x || 23.x || 24.x || 25.x || 26.x"
+       }
+     },
+     "node_modules/big.js": {
+@@ -3632,16 +3643,6 @@
+         "ieee754": "^1.1.13"
+       }
+     },
+-    "node_modules/buffer-crc32": {
+-      "version": "0.2.13",
+-      "resolved": "https://registry.npmjs.org/buffer-crc32/-/buffer-crc32-0.2.13.tgz",
+-      "integrity": "sha512-VO9Ht/+p3SN7SKWqcrgEzjGbRSJYTx+Q1pTQC0wrWqHx0vpJraQ6GtHx8tvcg1rlK1byhU5gccxgOgj7B0TDkQ==",
+-      "dev": true,
+-      "license": "MIT",
+-      "engines": {
+-        "node": "*"
+-      }
+-    },
+     "node_modules/buffer-from": {
+       "version": "1.1.2",
+       "resolved": "https://registry.npmjs.org/buffer-from/-/buffer-from-1.1.2.tgz",
+@@ -5529,22 +5530,22 @@
+       }
+     },
+     "node_modules/electron": {
+-      "version": "40.9.2",
+-      "resolved": "https://registry.npmjs.org/electron/-/electron-40.9.2.tgz",
+-      "integrity": "sha512-gTLLTlfMyORZDj+03tkxsstQOQlmu6dYl0X8cwlmFb+gMmCM9Gc+rmBGSaCb5KI11IMUWHu4hvKA/spP8oJe+w==",
++      "version": "42.6.0",
++      "resolved": "https://registry.npmjs.org/electron/-/electron-42.6.0.tgz",
++      "integrity": "sha512-axGNgd+yCTg+vi1VEGrQqAj9WVWkePKwbICSAvMiT2eTaxhij9a/xhBHD6rXV8wrlW9ZfJzE5+xg752ImxrmTw==",
+       "dev": true,
+-      "hasInstallScript": true,
+       "license": "MIT",
+       "dependencies": {
+-        "@electron/get": "^2.0.0",
+-        "@types/node": "^24.9.0",
+-        "extract-zip": "^2.0.1"
++        "@electron-internal/extract-zip": "^1.0.1",
++        "@electron/get": "^5.0.0",
++        "@types/node": "^24.9.0"
+       },
+       "bin": {
+-        "electron": "cli.js"
++        "electron": "cli.js",
++        "install-electron": "install.js"
+       },
+       "engines": {
+-        "node": ">= 12.20.55"
++        "node": ">= 22.12.0"
+       }
+     },
+     "node_modules/electron-builder": {
+@@ -6963,27 +6964,6 @@
+       "dev": true,
+       "license": "MIT"
+     },
+-    "node_modules/extract-zip": {
+-      "version": "2.0.1",
+-      "resolved": "https://registry.npmjs.org/extract-zip/-/extract-zip-2.0.1.tgz",
+-      "integrity": "sha512-GDhU9ntwuKyGXdZBUgTIe+vXnWj0fppUEtMDL0+idd5Sta8TGpHssn/eusA9mrPr9qNDym6SxAYZjNvCn/9RBg==",
+-      "dev": true,
+-      "license": "BSD-2-Clause",
+-      "dependencies": {
+-        "debug": "^4.1.1",
+-        "get-stream": "^5.1.0",
+-        "yauzl": "^2.10.0"
+-      },
+-      "bin": {
+-        "extract-zip": "cli.js"
+-      },
+-      "engines": {
+-        "node": ">= 10.17.0"
+-      },
+-      "optionalDependencies": {
+-        "@types/yauzl": "^2.9.1"
+-      }
+-    },
+     "node_modules/extsprintf": {
+       "version": "1.4.1",
+       "resolved": "https://registry.npmjs.org/extsprintf/-/extsprintf-1.4.1.tgz",
+@@ -7096,16 +7076,6 @@
+         "node": ">=0.8.0"
+       }
+     },
+-    "node_modules/fd-slicer": {
+-      "version": "1.1.0",
+-      "resolved": "https://registry.npmjs.org/fd-slicer/-/fd-slicer-1.1.0.tgz",
+-      "integrity": "sha512-cE1qsB/VwyQozZ+q1dGxR8LBYNZeofhEdUNGSMbQD3Gw2lAzX9Zb3uIU6Ebc/Fmyjo9AWWfnn0AUCHqtevs/8g==",
+-      "dev": true,
+-      "license": "MIT",
+-      "dependencies": {
+-        "pend": "~1.2.0"
+-      }
+-    },
+     "node_modules/fdir": {
+       "version": "6.5.0",
+       "resolved": "https://registry.npmjs.org/fdir/-/fdir-6.5.0.tgz",
+@@ -7390,21 +7360,6 @@
+       "integrity": "sha512-y6OAwoSIf7FyjMIv94u+b5rdheZEjzR63GTyZJm5qh4Bi+2YgwLCcI/fPFZkL5PSixOt6ZNKm+w+Hfp/Bciwow==",
+       "license": "MIT"
+     },
+-    "node_modules/fs-extra": {
+-      "version": "8.1.0",
+-      "resolved": "https://registry.npmjs.org/fs-extra/-/fs-extra-8.1.0.tgz",
+-      "integrity": "sha512-yhlQgA6mnOJUKOsRUFsgJdQCvkKhcz8tlZG5HBQfReYZy46OwLcY+Zia0mtdHsOo9y/hP+CxMN0TU9QxoOtG4g==",
+-      "dev": true,
+-      "license": "MIT",
+-      "dependencies": {
+-        "graceful-fs": "^4.2.0",
+-        "jsonfile": "^4.0.0",
+-        "universalify": "^0.1.0"
+-      },
+-      "engines": {
+-        "node": ">=6 <7 || >=8"
+-      }
+-    },
+     "node_modules/fs.realpath": {
+       "version": "1.0.0",
+       "resolved": "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz",
+@@ -10819,13 +10774,6 @@
+         "url": "https://github.com/sponsors/jet2jet"
+       }
+     },
+-    "node_modules/pend": {
+-      "version": "1.2.0",
+-      "resolved": "https://registry.npmjs.org/pend/-/pend-1.2.0.tgz",
+-      "integrity": "sha512-F3asv42UuXchdzt+xXqfW1OGlVBe+mxa2mqI0pg5yAHZPvFmY3Y6drSf/GQ1A86WgWEN9Kzh/WrgKa6iGcHXLg==",
+-      "dev": true,
+-      "license": "MIT"
+-    },
+     "node_modules/picocolors": {
+       "version": "1.1.1",
+       "resolved": "https://registry.npmjs.org/picocolors/-/picocolors-1.1.1.tgz",
+@@ -16252,17 +16200,6 @@
+         "node": ">=12"
+       }
+     },
+-    "node_modules/yauzl": {
+-      "version": "2.10.0",
+-      "resolved": "https://registry.npmjs.org/yauzl/-/yauzl-2.10.0.tgz",
+-      "integrity": "sha512-p4a9I6X6nu6IhoGmBqAcbJy1mlC4j27vEPZX9F4L4/vZT3Lyq1VkFHw/V/PUcB9Buo+DG3iHkT0x3Qya58zc3g==",
+-      "dev": true,
+-      "license": "MIT",
+-      "dependencies": {
+-        "buffer-crc32": "~0.2.3",
+-        "fd-slicer": "~1.1.0"
+-      }
+-    },
+     "node_modules/yocto-queue": {
+       "version": "0.1.0",
+       "resolved": "https://registry.npmjs.org/yocto-queue/-/yocto-queue-0.1.0.tgz",
+diff --git a/package.json b/package.json
+index cc041c3..b656a6b 100644
+--- a/package.json
++++ b/package.json
+@@ -123,7 +123,7 @@
+     "css-loader": "^7.1.4",
+     "css-minimizer-webpack-plugin": "^8.0.0",
+     "del": "^6.1.1",
+-    "electron": "40.9.2",
++    "electron": "42.6.0",
+     "electron-builder": "^26.9.0",
+     "electron-debug": "^3.2.0",
+     "electron-devtools-installer": "github:lyswhut/electron-devtools-installer#64596d615c1fc891eefd8aef1dfcb2c87aaadf03",
+@@ -167,7 +167,7 @@
+   },
+   "dependencies": {
+     "@simonwep/pickr": "^1.9.1",
+-    "better-sqlite3": "^12.9.0",
++    "better-sqlite3": "^12.11.1",
+     "bufferutil": "^4.1.0",
+     "comlink": "~4.3.1",
+     "crypto-js": "^4.2.0",
