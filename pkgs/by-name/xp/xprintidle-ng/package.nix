@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xprintidle-ng";
-  version = "0-unstable-2015-09-01";
+  version = "0-unstable-2015-08-10";
 
   src = fetchFromGitHub {
     owner = "taktoa";
