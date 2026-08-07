@@ -29,7 +29,7 @@ let
   zstd-src = fetchFromGitHub {
     owner = "facebook";
     repo = "zstd";
-    rev = "v1.5.7";
+    tag = "v1.5.7";
     hash = "sha256-tNFWIT9ydfozB8dWcmTMuZLCQmQudTFJIkSr0aG7S44=";
   };
 in
