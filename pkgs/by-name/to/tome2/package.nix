@@ -30,7 +30,7 @@ let
 in
 stdenv.mkDerivation {
   inherit pname;
-  version = "2.4-unstable-2025-02-17";
+  version = "2.4-unstable-2025-02-27";
 
   src = fetchFromGitHub {
     owner = "tome2";
