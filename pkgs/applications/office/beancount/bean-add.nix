@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation {
   pname = "bean-add";
-  version = "0-unstable-2018-01-08";
+  version = "0-unstable-2018-01-17";
 
   src = fetchFromGitHub {
     owner = "simon-v";
