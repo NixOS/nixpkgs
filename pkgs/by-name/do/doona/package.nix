@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "doona";
-  version = "0-unstable-2019-03-08";
+  version = "0-unstable-2022-02-17";
 
   src = fetchFromGitHub {
     owner = "wireghoul";
