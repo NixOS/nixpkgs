@@ -1,5 +1,5 @@
 diff --git a/src/sys/linux/AutoRun.cpp b/src/sys/linux/AutoRun.cpp
-index 1fafe35..fe04c75 100644
+index 1fafe35..a32e7fe 100644
 --- a/src/sys/linux/AutoRun.cpp
 +++ b/src/sys/linux/AutoRun.cpp
 @@ -31,18 +31,9 @@ void AutoRun_SetEnabled(bool enable) {
@@ -22,3 +22,18 @@ index 1fafe35..fe04c75 100644
      if (enable) {
          if (!QDir().exists(userAutoStartPath) && !QDir().mkpath(userAutoStartPath)) {
              // qCWarning(lcUtility) << "Could not create autostart folder"
+diff --git a/src/sys/linux/UrlScheme.cpp b/src/sys/linux/UrlScheme.cpp
+index 63e4118..a9d3a42 100644
+--- a/src/sys/linux/UrlScheme.cpp
++++ b/src/sys/linux/UrlScheme.cpp
+@@ -14,9 +14,7 @@ static const QString kDesktopId = "throne-url-handler.desktop";
+ // For AppImage the launcher must point at the outer image ($APPIMAGE), not the
+ // extracted binary inside the mount, which disappears after exit.
+ static QString execTarget() {
+-    auto env = QProcessEnvironment::systemEnvironment();
+-    if (env.contains("APPIMAGE")) return env.value("APPIMAGE");
+-    return QApplication::applicationFilePath();
++    return "Throne";
+ }
+ 
+ static QString desktopFilePath() {
