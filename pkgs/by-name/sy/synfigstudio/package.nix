@@ -6,34 +6,35 @@
   autoreconfHook,
   wrapGAppsHook3,
 
-  boost,
   cairo,
+  ffmpeg,
   gettext,
   glibmm,
+  libmng,
   gtk3,
   gtkmm3,
   libjack2,
   libsigcxx,
   libxmlxx,
   mlt,
-  pango,
   imagemagick,
   intltool,
   adwaita-icon-theme,
   harfbuzz,
   freetype,
+  fontconfig,
   fribidi,
   openexr,
   fftw,
 }:
 
 let
-  version = "1.5.3";
+  version = "1.5.5";
   src = fetchFromGitHub {
     owner = "synfig";
     repo = "synfig";
     rev = "v${version}";
-    hash = "sha256-D+FUEyzJ74l0USq3V9HIRAfgyJfRP372aEKDqF8+hsQ=";
+    hash = "sha256-5jVd+YqHVHKkePXBb3zjXEVlgdlU6Yb6LC4CurvsBtE=";
   };
 
   ETL = stdenv.mkDerivation {
@@ -46,9 +47,6 @@ let
       pkg-config
       autoreconfHook
     ];
-    buildInputs = [
-      glibmm
-    ];
   };
 
   synfig = stdenv.mkDerivation {
@@ -57,11 +55,7 @@ let
 
     sourceRoot = "${src.name}/synfig-core";
 
-    configureFlags = [
-      "--with-boost=${boost.dev}"
-      "--with-boost-libdir=${boost.out}/lib"
-    ]
-    ++ lib.optionals stdenv.cc.isClang [
+    configureFlags = lib.optionals stdenv.cc.isClang [
       # Newer versions of clang default to C++17, but synfig and some of its dependencies use deprecated APIs that
       # are removed in C++17. Setting the language version to C++14 allows it to build.
       "CXXFLAGS=-std=c++14"
@@ -74,22 +68,23 @@ let
       autoreconfHook
       gettext
       intltool
+      imagemagick
     ];
     buildInputs = [
       ETL
-      boost
-      cairo
       glibmm
       mlt
       libsigcxx
       libxmlxx
-      pango
       imagemagick
       harfbuzz
       freetype
+      fontconfig
       fribidi
       openexr
       fftw
+      ffmpeg
+      libmng
     ];
   };
 in
@@ -119,11 +114,11 @@ stdenv.mkDerivation {
     gettext
     intltool
     wrapGAppsHook3
+    synfig
   ];
   buildInputs = [
     ETL
     synfig
-    boost
     cairo
     glibmm
     gtk3
@@ -133,6 +128,8 @@ stdenv.mkDerivation {
     libsigcxx
     libxmlxx
     mlt
+    fontconfig
+    ffmpeg
     adwaita-icon-theme
     openexr
     fftw
