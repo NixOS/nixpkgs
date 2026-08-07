@@ -13,13 +13,13 @@
   writeText,
 }:
 let
-  version = "3.2.4";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "grimmory-tools";
     repo = "grimmory";
     rev = "v${version}";
-    hash = "sha256-RiERszsb/oGsXja6EWoGSVGQ0T2KIfWBXqnDOFcoiQU=";
+    hash = "sha256-PO+JVYQPKtoY4oxkd/TGrT0L2/Mm1rI65fj5Zg3iCbw=";
   };
 
   frontend = stdenvNoCC.mkDerivation (finalAttrs: {
@@ -43,7 +43,7 @@ let
         ;
       pnpm = pnpm_11;
       fetcherVersion = 4;
-      hash = "sha256-5EtJ1muaMX4asa43MS0xbbYiS2BGOC9RIpkiwwFIB98=";
+      hash = "sha256-pVPxfIUD2euFh7myOx2lwleWdM15myfBfiCbYNfYACY=";
     };
 
     env = {
