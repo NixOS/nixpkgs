@@ -10,8 +10,6 @@
   hicolor-icon-theme,
 }:
 
-__structuredAttrs = true;
-
 rustPlatform.buildRustPackage rec {
   pname = "hwall";
   version = "1.0.5";
@@ -25,6 +23,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-zQ4bbPV+ApX0Uq+BLLbqaCki9VZF1c5i8u160QBAAsY=";
 
+  __structuredAttrs = true;
+ 
   nativeBuildInputs = [
     pkg-config
     wrapGAppsHook4 # sets XDG_DATA_DIRS, GDK_PIXBUF_MODULE_FILE, GIO_EXTRA_MODULES
