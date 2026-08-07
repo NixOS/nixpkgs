@@ -13,7 +13,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "ante";
-  version = "0-unstable-2025-07-12";
+  version = "0-unstable-2025-07-19";
   src = fetchFromGitHub {
     owner = "jfecher";
     repo = "ante";
