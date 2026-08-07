@@ -17,7 +17,7 @@
 
 mkDerivation {
   pname = "gr-bladeRF";
-  version = "0-unstable-2023-11-20";
+  version = "0-unstable-2023-11-29";
 
   src = fetchFromGitHub {
     owner = "Nuand";
