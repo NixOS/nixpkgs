@@ -40,7 +40,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Skipping individual checks causes failure as `--skip` flags
   # end up passed to executing `hayabusa`
   # > error: unexpected argument '--skip' found
-
   doCheck = false;
 
   postInstall = ''
@@ -59,6 +58,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
       jk
+      d3vil0p3r
     ];
     mainProgram = "hayabusa";
   };
