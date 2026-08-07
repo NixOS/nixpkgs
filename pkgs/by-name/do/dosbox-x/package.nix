@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dosbox-x";
-  version = "2026.07.02";
+  version = "2026.08.02";
 
   src = fetchFromGitHub {
     owner = "joncampbell123";
     repo = "dosbox-x";
     rev = "dosbox-x-v${finalAttrs.version}";
-    hash = "sha256-HO5JJQHeEJYXU7TtNCXZALgqkNbIMGI+TjDwbvs5L8w=";
+    hash = "sha256-zipg/eTz/k6IQeUovgpZ/ezOJNEjSQwHpkpGYOtdpS0=";
   };
 
   patches = [
