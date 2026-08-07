@@ -27377,6 +27377,11 @@
     githubId = 19950702;
     email = "silence.m@hotmail.com";
   };
+  subham-roy = {
+    github = "SUBHAM-ROY";
+    githubId = 7468505;
+    name = "Subham Roy";
+  };
   SubhrajyotiSen = {
     email = "subhrajyoti12@gmail.com";
     github = "SubhrajyotiSen";

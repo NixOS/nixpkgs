@@ -30,13 +30,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fcitx5-lotus";
-  version = "3.4.0";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "LotusInputMethod";
     repo = "fcitx5-lotus";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-MN83U0/o+vDGCxpYgFxfXAf+Iw59OaXyB7770ppLmEQ=";
+    hash = "sha256-8JL/DblBSwlnc9iXVbmqtTGRYy+8ioimWZeyZRWN0qo=";
     fetchSubmodules = true;
   };
 
