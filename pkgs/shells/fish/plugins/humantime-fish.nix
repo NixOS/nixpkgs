@@ -6,7 +6,7 @@
 }:
 buildFishPlugin {
   pname = "humantime-fish";
-  version = "1.0.0-unstable-2022-04-08";
+  version = "1.0.0-unstable-2021-01-16";
 
   src = fetchFromGitHub {
     owner = "jorgebucaran";
