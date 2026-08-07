@@ -81,13 +81,13 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "stirling-pdf" + lib.optionalString isDesktopVariant "-desktop";
-  version = "2.14.2";
+  version = "2.14.3";
 
   src = fetchFromGitHub {
     owner = "Stirling-Tools";
     repo = "Stirling-PDF";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2u4d9K4OEuOw9qE4YgpGXDvVLExVGUKAeXYNCySqy1c=";
+    hash = "sha256-Jh7F3e7Zho3BlaBZD8xfXSCjwXyF5qQk4VSm8DIwIBY=";
   };
 
   patches = [
@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src patches;
     postPatch = "cd ${finalAttrs.npmRoot}";
-    hash = "sha256-ujvSzang7n6DJZbNU/lDlG0x1265N5LJ6prkPbBYEic=";
+    hash = "sha256-3JYcOtX0pBMIgUtcK6LoejIhoSR2jpnQRzhePdCfJzI=";
   };
 
   cargoRoot = "frontend/editor/src-tauri";
