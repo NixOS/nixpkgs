@@ -1046,7 +1046,7 @@ lib.mapAttrs mkLicense (
 
     llgplPreamble = {
       spdxId = "LLGPL";
-      fullName = "LLGPL Preamble";
+      fullName = "LLGPL Preamble"; # Only used together with LGPL (clarifying C-centric terms of LGPL in context of Lisp), SPDX tracks it separately
     };
 
     llvm-exception = {
