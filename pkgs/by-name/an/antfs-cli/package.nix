@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "antfs-cli";
-  version = "0-unstable-2017-02-11";
+  version = "0-unstable-2017-01-18";
   pyproject = true;
 
   meta = {
