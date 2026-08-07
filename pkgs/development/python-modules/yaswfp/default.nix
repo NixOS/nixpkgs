@@ -8,7 +8,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "yaswfp";
-  version = "0.9.3-unstable-2014-09-11";
+  version = "0.9.3-unstable-2014-09-25";
   pyproject = true;
 
   __structuredAttrs = true;
