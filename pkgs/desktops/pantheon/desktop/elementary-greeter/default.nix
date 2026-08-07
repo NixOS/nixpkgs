@@ -33,7 +33,7 @@
 
 stdenv.mkDerivation {
   pname = "elementary-greeter";
-  version = "8.1.2-unstable-2025-01-12";
+  version = "8.1.2-unstable-2026-01-12";
 
   src = fetchFromGitHub {
     owner = "elementary";
