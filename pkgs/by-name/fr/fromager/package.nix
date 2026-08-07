@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fromager";
-  version = "0.91.0";
+  version = "0.93.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-wheel-build";
     repo = "fromager";
     tag = finalAttrs.version;
-    hash = "sha256-N+4DbKNUpQdkJAfr0vwlfXJS8FLLBOXxuzkLoJblJM4=";
+    hash = "sha256-Nn1zfzslAa+d5SS3PDv8ag6//qnyq8MgF35ZE0zLx9I=";
   };
 
   build-system = with python3Packages; [
