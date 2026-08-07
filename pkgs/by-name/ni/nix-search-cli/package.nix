@@ -7,7 +7,7 @@
 
 buildGoModule {
   pname = "nix-search-cli";
-  version = "0.3-unstable-2025-12-03";
+  version = "0.3-unstable-2025-11-03";
 
   src = fetchFromGitHub {
     owner = "peterldowns";
