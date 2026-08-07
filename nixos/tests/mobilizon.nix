@@ -8,7 +8,6 @@ in
 {
   name = "mobilizon";
   meta.maintainers = with lib.maintainers; [
-    minijackson
     erictapen
   ];
 
