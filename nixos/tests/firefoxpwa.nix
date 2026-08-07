@@ -4,7 +4,7 @@
   name = "firefoxpwa";
   meta.maintainers = with lib.maintainers; [ camillemndn ];
 
-  nodes.machine =
+  containers.machine =
     { pkgs, ... }:
     {
       imports = [ ./common/x11.nix ];
