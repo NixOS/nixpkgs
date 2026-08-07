@@ -8,6 +8,77 @@ let
   cfg = config.services.llama-swap;
   settingsFormat = pkgs.formats.yaml { };
   configFile = settingsFormat.generate "config.yaml" cfg.settings;
+
+  # Options shared between the backend defaults layer and individual models.
+  # At the backend level they get real `mkOption` defaults.
+  # In each model, backend-level values are pushed in via `mkDefault` so
+  # explicit per-model assignments (normal priority) naturally win.
+  sharedOptions = {
+    package = lib.mkOption {
+      type = lib.types.package;
+      defaultText = lib.literalExpression "pkgs.llama-cpp";
+      description = ''
+        The llama-cpp package to use.
+      '';
+    };
+
+    ctxSize = lib.mkOption {
+      type = lib.types.ints.positive;
+      defaultText = lib.literalExpression "8192";
+      description = ''
+        Context size (`-c` / `--ctx-size`) passed to `llama-server`.
+      '';
+    };
+
+    gpuLayers = lib.mkOption {
+      type = lib.types.ints.u8; # 0-255
+      defaultText = lib.literalExpression "0";
+      description = ''
+        Number of layers to offload to the GPU (`-ngl`).
+        Set to 0 for CPU-only inference.
+      '';
+    };
+
+    threads = lib.mkOption {
+      type = lib.types.ints.positive;
+      defaultText = lib.literalExpression "4";
+      description = ''
+        Number of CPU threads for inference (`--threads`).
+      '';
+    };
+
+    extraFlags = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      example = [
+        "--temp"
+        "0.2"
+        "--top-k"
+        "9"
+      ];
+      description = ''
+        Extra command-line flags to append to the generated
+        `llama-server` invocation.
+      '';
+    };
+
+    aliases = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      description = ''
+        Additional model names that route to this backend.
+      '';
+    };
+
+    concurrencyLimit = lib.mkOption {
+      type = lib.types.nullOr lib.types.ints.positive;
+      default = null;
+      description = ''
+        Maximum number of concurrent requests before queuing.
+        When `null`, no limit is set.
+      '';
+    };
+  };
 in
 {
   options.services.llama-swap = {
@@ -94,6 +165,105 @@ in
           };
         };
       '';
+    };
+
+    backends.llama-cpp = lib.mkOption {
+      description = ''
+        Declarative llama.cpp backend configuration. Set defaults at this
+        level (e.g. `gpuLayers`, `threads`) and they will apply to all models
+        unless overridden.
+
+        Individual models are defined under {option}`models` and are converted
+        into {option}`settings.models` automatically, so both can be used
+        alongside each other.
+
+        Unlike {option}`settings.models`, which requires manually writing the
+        full `cmd` string, backends let you specify the model path and common
+        flags as structured Nix values.
+      '';
+      example = lib.literalExpression ''
+        {
+          # Backend-level defaults
+          gpuLayers = 0;
+          threads = 4;
+
+          models = {
+            qwen = {
+              model = ./models/qwen3.gguf;
+              ctxSize = 32768;
+            };
+            llama = {
+              model = ./models/llama3.gguf;
+              # inherits gpuLayers and threads from above
+              aliases = [ "llama-fallback" ];
+            };
+          };
+        }
+      '';
+      type = lib.types.submodule (
+        { config, ... }:
+        let
+          # After module resolution, `config` here has all backend-level
+          # values filled in. Push them into each model at mkDefault priority
+          # (1200) so explicit per-model assignments (1000) win.
+          backendDefaults = {
+            package = lib.mkDefault config.package;
+            ctxSize = lib.mkDefault config.ctxSize;
+            gpuLayers = lib.mkDefault config.gpuLayers;
+            threads = lib.mkDefault config.threads;
+            extraFlags = lib.mkDefault config.extraFlags;
+            aliases = lib.mkDefault config.aliases;
+            concurrencyLimit = lib.mkDefault config.concurrencyLimit;
+          };
+        in
+        {
+          options = sharedOptions // {
+            settings = settingsOption ''
+              Global llama-server CLI flags. Keys are long-form flag
+              names without dashes. These become defaults for all
+              models.
+
+              Bool values map to flags: `true` → `--flag`, `false` →
+              (omitted). Use negated flag names for `--no-...` flags
+              (e.g. `no-webui = true;` → `--no-webui`).
+            '';
+
+            models = lib.mkOption {
+              default = { };
+              description = ''
+                Individual model definitions. Each attribute becomes a model
+                served by a `llama-server` instance. Inherited defaults from
+                the backend level can be overridden per-model.
+              '';
+              type = lib.types.attrsOf (
+                lib.types.submodule (
+                  { config, ... }:
+                  {
+                    options = sharedOptions // {
+                      model = lib.mkOption {
+                        type = lib.types.path;
+                        description = ''
+                          Path to the GGUF model file.
+                        '';
+                      };
+                    };
+
+                    config = backendDefaults;
+                  }
+                )
+              );
+            };
+          };
+
+          # Backend-level defaults
+          config = {
+            package = lib.mkDefault pkgs.llama-cpp;
+            ctxSize = lib.mkDefault 8192;
+            gpuLayers = lib.mkDefault 0;
+            threads = lib.mkDefault 4;
+          };
+        }
+      );
     };
   };
   config = lib.mkIf cfg.enable {
