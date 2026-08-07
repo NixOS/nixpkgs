@@ -61,8 +61,8 @@ let
       }
     else
       {
-        version = "2026.2";
-        hash = "sha256-0n5EVegkYXeVI2Z5hjGg2tny4fVnQApsuFShaNzAUN0=";
+        version = "2026.3";
+        hash = "sha256-EJS3u8ajlgIjgnEUYmZXEQtACWzflZinJ5NfyE6/iqA=";
       };
 
 in

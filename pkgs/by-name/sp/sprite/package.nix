@@ -9,7 +9,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sprite";
-  version = "0.0.1-rc46";
+  version = "0.0.1-rc47";
 
   src = fetchurl {
     url = "https://sprites-binaries.t3.storage.dev/client/v${finalAttrs.version}/sprite-${
@@ -17,9 +17,9 @@ stdenv.mkDerivation (finalAttrs: {
     }-${if stdenv.hostPlatform.isx86_64 then "amd64" else "arm64"}.tar.gz";
     hash =
       {
-        aarch64-darwin = "sha256-q7GzIi55W6esVYepqgI9hUCziZlL/Fx1mDd1J1aqkWI=";
-        aarch64-linux = "sha256-c7ldoDrCbGjT1kps/UgYfSAskyu+LYkywpwTpzfpYVw=";
-        x86_64-linux = "sha256-uOUcgW6W1xv4GXVnDnDeKOXJ9OgYQu8UdmKQXiEqTco=";
+        aarch64-darwin = "sha256-L+6siRt0WJMAJw7I8qVLoJgVsX64mGpAcsX/EV8CP20=";
+        aarch64-linux = "sha256-wX0KbxMOXhq/7W/1TyelsAjbMYf4DM58oMLK7hgVW6w=";
+        x86_64-linux = "sha256-rwOSHuYmb0DIAbLcS0VW83psvcpLLUUqYhG2njmZy44=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };

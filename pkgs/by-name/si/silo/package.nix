@@ -30,16 +30,16 @@ buildGoModule (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "silo";
-  version = "2026-08-04T00-00-00Z";
+  version = "2026-08-06T00-00-00Z";
 
   src = fetchFromGitHub {
     owner = "pgsty";
-    repo = "minio";
+    repo = "silo";
     tag = "RELEASE.${finalAttrs.version}";
-    hash = "sha256-F5gyhSBVH4RUoOyo+8UQ0RXuraXkGVO/mGkuFIi0hoc=";
+    hash = "sha256-mFHgeetimgSgztA39oP4TcxdlFpI+Usjg7cvhyjsYRI=";
   };
 
-  vendorHash = "sha256-gDcO0q6beKEGSs6MM/C3iKC2+eFk1o6Ug5KLMmK12ek=";
+  vendorHash = "sha256-7uXfM10x5ouCLNuk204AUi9up5oXVesPdNAbbGFyQ6U=";
 
   subPackages = [ "." ];
 
@@ -60,6 +60,7 @@ buildGoModule (finalAttrs: {
       "-X ${t}.CopyrightYear=${versionToYear finalAttrs.version}"
     ];
 
+  # Despite the renaming, the binary result comes out as minio. Upstream's goreleaser pipeline passes an explicit -o silo. The buildGoModule does not.
   postInstall = ''
     ln -s "$out/bin/minio" "$out/bin/silo"
   '';
@@ -71,8 +72,8 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Community-maintained fork of MinIO packaged as silo";
-    homepage = "https://github.com/pgsty/minio";
-    changelog = "https://github.com/pgsty/minio/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/pgsty/silo";
+    changelog = "https://github.com/pgsty/silo/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [ randoneering ];
     license = lib.licenses.agpl3Plus;
     mainProgram = "silo";
