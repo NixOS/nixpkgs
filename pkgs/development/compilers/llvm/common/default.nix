@@ -467,8 +467,6 @@ makeScopeWithSplicing' {
       openmp = callPackage ./openmp { };
 
       mlir = callPackage ./mlir { };
-
-      libclc = callPackage ./libclc { };
     }
     // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "19") {
       bolt = callPackage ./bolt { };

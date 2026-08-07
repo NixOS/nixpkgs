@@ -3895,7 +3895,6 @@ with pkgs;
   llvm = llvmPackages.llvm;
   flang = llvmPackages_20.flang;
 
-  libclc = llvmPackages.libclc;
   libllvm = llvmPackages.libllvm;
   llvm-manpages = llvmPackages.llvm-manpages;
 
