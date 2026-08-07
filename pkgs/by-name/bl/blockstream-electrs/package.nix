@@ -11,7 +11,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "blockstream-electrs";
-  version = "0.4.1-unstable-2026-04-20";
+  version = "0.4.1-unstable-2026-04-27";
 
   src = fetchFromGitHub {
     owner = "Blockstream";
