@@ -9,7 +9,7 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnsmap";
   tag = "0.36";
-  version = "${finalAttrs.tag}-unstable-2024-08-20";
+  version = "${finalAttrs.tag}-unstable-2024-03-06";
 
   src = fetchFromGitHub {
     owner = "resurrecting-open-source-projects";
