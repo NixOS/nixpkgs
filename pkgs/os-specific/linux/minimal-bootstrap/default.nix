@@ -299,6 +299,12 @@ lib.makeScope
           gnutar = gnutar-latest;
         };
 
+        libiberty = callPackage ./gcc/libiberty.nix {
+          gcc = gcc10;
+          gnumake = gnumake-musl;
+          gnutar = gnutar-latest;
+        };
+
         libmpc = callPackage ./gcc/mpc.nix {
           gcc = gcc10;
           gnumake = gnumake-musl;
