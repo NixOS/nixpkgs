@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "cdecl-blocks";
-  version = "2.5-unstable-2024-05-07";
+  version = "2.5-unstable-2025-08-31";
 
   src = fetchFromGitHub {
     owner = "ridiculousfish";
