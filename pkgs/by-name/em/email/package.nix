@@ -27,7 +27,7 @@ in
 
 stdenv.mkDerivation {
   pname = "email-git";
-  version = "unstable-2016-01-31";
+  version = "unstable-2016-08-08";
   src = eMailSrc;
 
   patches = [
