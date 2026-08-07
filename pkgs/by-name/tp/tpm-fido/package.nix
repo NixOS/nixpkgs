@@ -7,7 +7,7 @@
 
 buildGoModule {
   pname = "tpm-fido";
-  version = "0-unstable-2024-10-30";
+  version = "0-unstable-2023-06-22";
 
   src = fetchFromGitHub {
     owner = "psanford";
