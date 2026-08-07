@@ -112,6 +112,10 @@
   guiSupport ? false,
   gst-plugins-bad,
   apple-sdk_gstreamer,
+  vulkanSupport ? stdenv.hostPlatform.isLinux,
+  vulkan-headers,
+  vulkan-loader,
+  shaderc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -156,6 +160,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (gst-plugins-base.waylandEnabled && stdenv.hostPlatform.isLinux) [
     wayland-scanner
+  ]
+  ++ lib.optionals vulkanSupport [
+    shaderc
   ];
 
   buildInputs = [
@@ -275,6 +282,10 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_gstreamer
+  ]
+  ++ lib.optionals vulkanSupport [
+    vulkan-headers
+    vulkan-loader
   ];
 
   mesonFlags = [
@@ -314,7 +325,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dteletext=disabled" # required `zvbi` library not packaged in nixpkgs as of writing
     "-Dtinyalsa=disabled" # not packaged in nixpkgs as of writing
     "-Dvoamrwbenc=disabled" # required `vo-amrwbenc` library not packaged in nixpkgs as of writing
-    "-Dvulkan=disabled" # Linux-only, and we haven't figured out yet which of the vulkan nixpkgs it needs
     "-Dwasapi=disabled" # not packaged in nixpkgs as of writing / no Windows support
     "-Dwasapi2=disabled" # not packaged in nixpkgs as of writing / no Windows support
     "-Dwpe=disabled" # required `wpe-webkit` library not packaged in nixpkgs as of writing
@@ -333,6 +343,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "ldac" ldacbtSupport)
     (lib.mesonEnable "webrtcdsp" webrtcAudioProcessingSupport)
     (lib.mesonEnable "isac" webrtcAudioProcessingSupport)
+    (lib.mesonEnable "vulkan" vulkanSupport)
   ]
   ++ lib.mapAttrsToList lib.mesonEnable {
     mpeghdec = false; # mpeghdec not packaged
@@ -401,7 +412,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs \
-      scripts/extract-release-date-from-doap-file.py
+      scripts/extract-release-date-from-doap-file.py \
+      ext/vulkan/shaders/bin2array.py
   '';
 
   # This package has some `_("string literal")` string formats
