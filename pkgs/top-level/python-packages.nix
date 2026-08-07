@@ -9057,6 +9057,8 @@ self: super: with self; {
 
   langchain-protocol = callPackage ../development/python-modules/langchain-protocol { };
 
+  langchain-sail = callPackage ../development/python-modules/langchain-sail { };
+
   langchain-tests = callPackage ../development/python-modules/langchain-tests { };
 
   langchain-text-splitters = callPackage ../development/python-modules/langchain-text-splitters { };
