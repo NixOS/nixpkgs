@@ -12,7 +12,7 @@ mkAppleDerivation {
 
   meta = {
     description = "Basic commands for Darwin";
-    license = [
+    license = lib.licenses.AND [
       lib.licenses.isc
       lib.licenses.bsd3
     ];

@@ -63,7 +63,7 @@ mkAppleDerivation {
 
   meta = {
     description = "Darwin shell commands and the Almquist shell";
-    license = [
+    license = lib.licenses.AND [
       lib.licenses.bsd2
       lib.licenses.bsd3
     ];
