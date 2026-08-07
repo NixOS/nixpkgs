@@ -10511,10 +10511,6 @@ with pkgs;
     // (config.caffe or { })
   );
 
-  gap-minimal = lowPrio (gap.override { packageSet = "minimal"; });
-
-  gap-full = lowPrio (gap.override { packageSet = "full"; });
-
   ### SCIENCE / MISC
 
   boinc-headless = boinc.override { headless = true; };
