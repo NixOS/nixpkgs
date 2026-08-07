@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kcl-language-server";
-  version = "0.11.2-unstable-2025-10-26";
+  version = "0.11.2-unstable-2025-10-08";
 
   src = fetchFromGitHub {
     owner = "kcl-lang";
