@@ -3,20 +3,21 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
+  pytest-asyncio,
   pytestCheckHook,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "solaredge-web";
-  version = "0.2.0";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Solarlibs";
     repo = "solaredge-web";
     tag = "v${version}";
-    hash = "sha256-bONCD7dE8U0Y55UuQ0VYQE5r/q7ihtki33ZkPssiIJ4=";
+    hash = "sha256-ptvONjdNBgdFWgxV2cRyfpa3rdvHjgTndhbmDzOfUZA=";
   };
 
   build-system = [ setuptools ];
@@ -28,6 +29,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "solaredge_web" ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
   ];
 
