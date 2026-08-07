@@ -103,7 +103,7 @@ in
   };
 
   fmt_12 = generic {
-    version = "12.1.0";
-    hash = "sha256-ZmI1Dv0ZabPlxa02OpERI47jp7zFfjpeWCy1WyuPYZ0=";
+    version = "12.2.0";
+    hash = "sha256-Tc7PmNxUv7ajw6GaHPGEEtrD/fl6is7RB8TPestJa1o=";
   };
 }
