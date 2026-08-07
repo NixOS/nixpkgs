@@ -15,8 +15,8 @@ FragmentType = Literal['preface', 'part', 'chapter', 'section', 'appendix']
 
 # the TOC allows every fragment type. it also allows the enclosing book.
 # it allows 'example' and 'figure'.
-# --experimental-config adds a generic 'content' kind.
-TocEntryType = Literal['book', 'preface', 'part', 'chapter', 'section', 'appendix', 'example', 'figure', 'content']
+# --experimental-config adds a generic 'page' kind.
+TocEntryType = Literal['book', 'preface', 'part', 'chapter', 'section', 'appendix', 'example', 'figure', 'page']
 
 def is_include(token: Token) -> bool:
     return token.type == "fence" and token.info.startswith("{=include=} ")

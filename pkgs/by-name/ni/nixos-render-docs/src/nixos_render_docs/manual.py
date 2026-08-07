@@ -236,7 +236,7 @@ class RendererMixin(Renderer):
             'included_preface': lambda *args: self._included_thing("preface", *args),
             'included_parts': lambda *args: self._included_thing("part", *args),
             'included_appendix': lambda *args: self._included_thing("appendix", *args),
-            'included_content': lambda *args: self._included_thing("content", *args),
+            'included_page': lambda *args: self._included_thing("page", *args),
             'included_options': self.included_options,
         }
 
@@ -396,7 +396,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         intersection_observer_js = """
 //<![CDATA[
 function createObserver() {
-  const content = document.querySelector(".content");
+  const content = document.querySelector("main.content");
   const headings = content.querySelectorAll("h1, h2, h3, h4, h5, h6");
 
   const links = new Map();
@@ -739,7 +739,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
 
     def _build_config_include(self, nodes: list[ConfigNode], config_file: Path) -> Token:
         included = [self._build_config_item(node, config_file) for node in nodes]
-        token = Token('included_content', '', 0, map=[0, 1])
+        token = Token('included_page', '', 0, map=[0, 1])
         token.meta['included'] = included
         token.meta['include-args'] = {}
         return token
@@ -749,7 +749,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
             path = (config_file.parent / node.file).resolve()
             leaf_src = path.read_text()
             self._base_paths.append(path)
-            self._current_type.append('content')
+            self._current_type.append('page')
             try:
                 fragment = self._parse(leaf_src)
             finally:
@@ -884,7 +884,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
             title_html = (
                 f"<em>{title_html}</em>"
                 if typ == 'chapter'
-                else title_html if typ in [ 'book', 'part', 'content' ]
+                else title_html if typ in [ 'book', 'part', 'page' ]
                 else f'the section called “{title_html}”'
             )
         return XrefTarget(id, title_html, toc_html, re.sub('<.*?>', '', title), path, drop_fragment)
