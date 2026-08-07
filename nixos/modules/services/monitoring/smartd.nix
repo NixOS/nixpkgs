@@ -220,7 +220,7 @@ in
                   coreutils
                 ]
                 ++ lib.optionals nm.enable [ smartmontools ]
-                ++ lib.optionals ns.enable [ dbus ]
+                ++ lib.optionals ns.enable [ config.systemd.package ]
                 ++ lib.optionals nw.enable [ util-linux ]
                 ++ lib.optionals nx.enable [ xmessage ];
 
@@ -239,10 +239,9 @@ in
                   } | ${nm.mailer} -i "${nm.recipient}"
                 ''}
                 ${lib.optionalString ns.enable ''
-                  dbus-send --system \
-                    / net.nuetzlich.SystemNotifications.Notify \
-                    "string:Problem detected with disk: $SMARTD_DEVICESTRING" \
-                    "string:Warning message from smartd is: $SMARTD_MESSAGE"
+                  busctl --system emit / net.nuetzlich.SystemNotifications Notify ss \
+                    "Problem detected with disk: $SMARTD_DEVICESTRING" \
+                    "Warning message from smartd is: $SMARTD_MESSAGE"
                 ''}
                 ${lib.optionalString nw.enable ''
                   {
