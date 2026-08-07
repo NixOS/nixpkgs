@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation {
   pname = "openbrf";
-  version = "unstable-2016-01-09";
+  version = "unstable-2016-11-03";
 
   src = fetchFromGitHub {
     owner = "cfcohen";
