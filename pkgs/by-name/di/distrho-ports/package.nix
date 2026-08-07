@@ -32,7 +32,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "distrho-ports";
-  version = "2021-03-15-unstable-2025-08-15";
+  version = "2021-03-15-unstable-2025-09-14";
 
   src = fetchFromGitHub {
     owner = "DISTRHO";
