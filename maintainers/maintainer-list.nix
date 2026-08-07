@@ -4962,6 +4962,12 @@
     githubId = 33503784;
     name = "Yucheng Zhang";
   };
+  chengjilai = {
+    email = "chengjilai@sjtu.edu.cn";
+    github = "chengjilai";
+    githubId = 191971401;
+    name = "Jilai Cheng";
+  };
   cheriimoya = {
     email = "github@hausch.xyz";
     github = "cheriimoya";
