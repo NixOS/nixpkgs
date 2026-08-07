@@ -6,20 +6,24 @@
   # pythonPackages
   pyasn1-modules,
   pycryptodomex,
+  setuptools,
   twofish,
 }:
 
 buildPythonPackage rec {
   pname = "pyjks";
   version = "20.0.0";
-  format = "setuptools";
+
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "0378cec15fb11b2ed27ba54dad9fd987d48e6f62f49fcff138f5f7a8b312b044";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pyasn1-modules
     pycryptodomex
     twofish
