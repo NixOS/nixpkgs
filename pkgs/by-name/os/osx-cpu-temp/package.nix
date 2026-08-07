@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "osx-cpu-temp";
-  version = "unstable-2020-12-04";
+  version = "unstable-2019-05-17";
 
   src = fetchFromGitHub {
     name = "osx-cpu-temp-source";
