@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   strictDeps = true;
 
   pname = "phytool";
-  version = "2-unstable-2024-07-14";
+  version = "2-unstable-2024-06-14";
 
   src = fetchFromGitHub {
     owner = "wkz";
