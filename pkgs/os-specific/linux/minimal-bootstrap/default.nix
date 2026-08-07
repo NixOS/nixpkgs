@@ -150,10 +150,20 @@ lib.makeScope
           gnutar = gnutar-musl;
         };
 
-        gcc10 = callPackage ./gcc/10.nix {
+        gcc10-unwrapped = callPackage ./gcc/10.nix {
           gcc = gcc46-cxx;
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
+        };
+        gcc10 = callPackage ./gcc/wrapper.nix {
+          gcc-unwrapped = gcc10-unwrapped;
+          bash-build = bash;
+          libc = musl;
+          libgcc = gcc10-unwrapped;
+          libstdcxx = gcc10-unwrapped;
+          targetPlatform = hostPlatform;
+          dynamicLinkerGlob = "${musl}/lib/libc.so";
+          staticLibgcc = true;
         };
 
         gcc-latest-unwrapped = callPackage ./gcc/latest.nix {
