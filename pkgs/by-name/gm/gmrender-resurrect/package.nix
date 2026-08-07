@@ -5,17 +5,21 @@
   autoreconfHook,
   pkg-config,
   makeWrapper,
-  gstreamer,
-  gst-plugins-base,
-  gst-plugins-good,
-  gst-plugins-bad,
-  gst-plugins-ugly,
-  gst-libav,
+  gst_all_1,
   libupnp,
 }:
 
 let
   version = "0.3.1";
+
+  inherit (gst_all_1)
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+    gst-libav
+    ;
 
   pluginPath = lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" [
     gstreamer
@@ -25,6 +29,7 @@ let
     gst-plugins-ugly
     gst-libav
   ];
+
 in
 stdenv.mkDerivation {
   pname = "gmrender-resurrect";
