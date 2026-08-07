@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "jiratui";
-  version = "1.11.2";
+  version = "1.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "whyisdifficult";
     repo = "jiratui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QxYMaTM6/LmecaBBBNz6wghr3IAF4CyvDDGopdNpzmA=";
+    hash = "sha256-c+ycttouo6LZr1jaJ9lrS2aAODfsTRNhxyL4o4nqc/c=";
   };
 
   postPatch = ''

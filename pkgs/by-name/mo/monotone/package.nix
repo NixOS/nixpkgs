@@ -1,12 +1,13 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromForgejo,
+  botan3,
   boost,
   zlib,
   libidn,
   lua,
-  pcre,
+  pcre2,
   sqlite,
   perl,
   pkg-config,
@@ -19,48 +20,44 @@
   texinfo,
   fetchpatch,
   callPackage,
+  runCommand,
 }:
 
 let
   perlVersion = lib.getVersion perl;
-
-  botan = callPackage ./botan2.nix { enableForMonotone = true; };
 in
 
 assert perlVersion != "";
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "monotone";
-  version = "1.1-unstable-2021-05-01";
+  version = "1.1-unstable-2025-12-11";
 
   strictDeps = true;
   __structuredAttrs = true;
+
+  enableParallelBuilding = true;
 
   #  src = fetchurl {
   #    url = "http://monotone.ca/downloads/${version}/monotone-${version}.tar.bz2";
   #    hash = "sha256-+Vz2CiLU5GG+ydDnL102CcmkV2+xzEX1U9AgLOLjjIg=";
   #  };
 
-  # My mirror of upstream Monotone repository
-  # Could fetchmtn, but circular dependency; snapshot requested
-  # https://lists.nongnu.org/archive/html/monotone-devel/2021-05/msg00000.html
-  src = fetchFromGitHub {
-    owner = "7c6f434c";
-    repo = "monotone-mirror";
-    rev = "b30b0e1c16def043d2dad57d1467d5bfdecdb070";
-    hash = "sha256-rb5dWCGqwuzStwIbNlsUKbGjGvgQD3gaIyiMq9RG3sE=";
+  # Upstream developer's mirror for easier access
+  # Could fetchmtn, but circular dependency
+  src = fetchFromForgejo {
+    domain = "git.lapo.it";
+    owner = "lapo";
+    repo = "monotone";
+    rev = "f93a19184e0c6c6ca5842ab050fcd62f2376c4ca";
+    hash = "sha256-PT0DfVFDTHIWH1hZlaxpceoG94pytqFbjJvHVpIBNHs=";
   };
 
   patches = [
-    ./monotone-1.1-Adapt-to-changes-in-pcre-8.42.patch
-    ./monotone-1.1-adapt-to-botan2.patch
-    (fetchpatch {
-      name = "rm-clang-float128-hack.patch";
-      url = "https://github.com/7c6f434c/monotone-mirror/commit/5f01a3a9326a8dbdae7fc911b208b7c319e5f456.patch";
-      revert = true;
-      hash = "sha256-7MjkzICYUDOBIgq6BSDq/CnGJgVl7gnx/rT0lshu8js=";
-    })
+    ./monotone-botan-key-format.patch
     ./monotone-1.1-gcc-14.patch
+    ./monotone-botan-error-reporting.patch
+    ./monotone-pcre2.patch
   ];
 
   postPatch = ''
@@ -73,8 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
       {} +
   '';
 
-  env.CXXFLAGS = " --std=c++11 ";
-
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
@@ -83,10 +78,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     zlib
-    botan
+    botan3
     libidn
     lua
-    pcre
+    pcre2
     sqlite
     expect
     openssl
@@ -94,6 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
     bzip2
     perl
   ];
+
+  env.NIX_LDFLAGS = " -lpcre2-8 ";
 
   postInstall = ''
     mkdir -p $out/share/monotone-${finalAttrs.version}
@@ -109,9 +106,112 @@ stdenv.mkDerivation (finalAttrs: {
 
   #doCheck = true; # some tests fail (and they take VERY long)
 
+  passthru.tests = {
+    basicEndToEnd =
+      runCommand "monotone-test-end-to-end" { nativeBuildInputs = [ finalAttrs.finalPackage ]; }
+        ''
+          mkdir -p "$out/share/monotone-test/log/"
+          target="$out/share/monotone-test/log/monotone-test-end-to-end.log"
+
+          (
+            export HOME="$PWD"
+            set -x
+
+            mtn genkey test@localhost
+
+            mkdir a b c
+
+            mtn -d :test1 db init
+            mtn -d :test2 db init
+
+            (
+              cd a
+              mtn -d :test1 -b test setup
+              echo 123 > aaa
+              mtn add aaa
+              mtn ci -m 'add aaa'
+              mtn log
+            )
+
+            (
+              cd b
+              mtn -d :test2 sync file:///$HOME/.monotone/databases/test1.mtn'?*'
+              mtn -d :test2 co -r h:test -b test .
+              mtn up
+              echo 456 > bbb
+              mtn add bbb
+              mtn ci -m 'add bbb'
+              mtn log
+            )
+
+            (
+              cd a
+              echo 789 > ccc
+              mtn add ccc
+              mtn ci -m 'add ccc'
+              mtn log
+            )
+
+            (
+              cd c
+              mtn -d :test1 sync file:///$HOME/.monotone/databases/test2.mtn'?*'
+              mtn -d :test1 merge -b test
+              mtn -d :test1 co -r h:test -b test .
+              mtn up
+              mtn log
+              cat aaa bbb ccc | xargs | grep '123 456 789'
+            )
+
+          ) 2>&1 | tee "$target"
+        '';
+    packageTests-unit = finalAttrs.finalPackage.overrideAttrs {
+      pname = "monotone-test";
+      doCheck = true;
+      buildPhase = " cp -iv ${finalAttrs.finalPackage}/bin/* . ";
+      installPhase = " true; ";
+      postCheck = " touch $out; ";
+      checkPhase = ''
+        runHook preCheck
+
+        make test/unit.status -j $NIX_CORES
+
+        runHook postCheck
+        grep '^0$' test/unit.status
+      '';
+    };
+    packageTests-func = finalAttrs.finalPackage.overrideAttrs {
+      pname = "monotone-test";
+      doCheck = true;
+      nativeBuildInputs = finalAttrs.nativeBuildInputs ++ [ finalAttrs.finalPackage ];
+      buildPhase = " cp -iv ${finalAttrs.finalPackage}/bin/* . ";
+      installPhase = " true; ";
+      postCheck = " touch $out; ";
+      checkPhase = ''
+        runHook preCheck
+
+        make test/func.status -j $NIX_CORES
+
+        runHook postCheck
+        grep '^0$' test/func.status || {
+          cat test/work/*.log
+          exit 1
+        }
+      '';
+      preCheck = ''
+        sed -e 's@test/func.status *: *mtn$(EXEEXT)@test/func.status : @' -i Makefile*
+      '';
+      patches = (finalAttrs.patches or [ ]) ++ [
+        ./monotone-test-passphrase-botan3.patch
+        ./monotone-test-nop-migration.patch
+        ./monotone-base64-error-reporting.patch
+        ./monotone-test-pcre2-mtnignore.patch
+      ];
+    };
+  };
+
   meta = {
     description = "Free distributed version control system";
-    homepage = "https://github.com/7c6f434c/monotone-mirror";
+    homepage = "https://git.lapo.it/lapo/monotone";
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;

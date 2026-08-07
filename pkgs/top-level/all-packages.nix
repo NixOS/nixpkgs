@@ -1269,7 +1269,6 @@ with pkgs;
     # See https://github.com/NixOS/nixpkgs/pull/10474#discussion_r42369334
     modules = [
       nginxModules.rtmp
-      nginxModules.dav
       nginxModules.moreheaders
     ];
   };
@@ -2221,10 +2220,6 @@ with pkgs;
   hdf5-threadsafe = hdf5.override {
     cppSupport = false;
     threadsafe = true;
-  };
-
-  highlight = callPackage ../tools/text/highlight {
-    lua = lua5;
   };
 
   host = bind.host;
@@ -7449,7 +7444,6 @@ with pkgs;
     # See https://github.com/NixOS/nixpkgs/pull/10474#discussion_r42369334
     modules = [
       nginxModules.rtmp
-      nginxModules.dav
       nginxModules.moreheaders
     ];
   };
@@ -7461,7 +7455,6 @@ with pkgs;
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474#discussion_r42369334
     modules = [
-      nginxModules.dav
       nginxModules.moreheaders
     ];
   };
@@ -7486,7 +7479,6 @@ with pkgs;
   nginxShibboleth = nginxStable.override {
     modules = [
       nginxModules.rtmp
-      nginxModules.dav
       nginxModules.moreheaders
       nginxModules.shibboleth
     ];

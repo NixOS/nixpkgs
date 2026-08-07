@@ -35,16 +35,16 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ergohaven-entropy";
-  version = "0.3.1";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "ergohaven";
     repo = "entropy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ibU379pT0/u6xsIOfgK7KjIlmoyoN9+G3J1T2rYwc44=";
+    hash = "sha256-+8MuDAGYZuSB/oBiP9pUgDzaRG0tpU8pbtJ5qGZeK9w=";
   };
 
-  cargoHash = "sha256-e2bLlqH+2Cv4LBV+JooupcXDUe83NmiFI4zPNMTEW3A=";
+  cargoHash = "sha256-N6VlBT0isBLo/9b1gVOuN/d0GewB5oeanKboYSQQPR0=";
 
   __structuredAttrs = true;
 

@@ -95,7 +95,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20
     ];
     maintainers = with lib.maintainers; [
-      cathalmullan
       anish
     ];
     platforms = lib.platforms.all;

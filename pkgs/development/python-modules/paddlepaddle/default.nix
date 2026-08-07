@@ -77,6 +77,25 @@ buildPythonPackage {
     "opt_einsum"
   ];
 
+  pythonRemoveDeps = lib.optionals cudaSupport [
+    "cuda-python"
+    "nvidia-cublas-cu12"
+    "nvidia-cuda-cccl-cu12"
+    "nvidia-cuda-cupti-cu12"
+    "nvidia-cuda-nvrtc-cu12"
+    "nvidia-cuda-runtime-cu12"
+    "nvidia-cudnn-cu12"
+    "nvidia-cufile-cu12"
+    "nvidia-cufft-cu12"
+    "nvidia-curand-cu12"
+    "nvidia-cusolver-cu12"
+    "nvidia-cusparse-cu12"
+    "nvidia-cusparselt-cu12"
+    "nvidia-nccl-cu12"
+    "nvidia-nvjitlink-cu12"
+    "nvidia-nvtx-cu12"
+  ];
+
   dependencies = [
     setuptools
     httpx
