@@ -35,7 +35,7 @@
       };
 
       system.services.php-fpm = {
-        imports = [ php.services.default ];
+        imports = [ config.modularServices.php.default ];
         php-fpm = {
           package = php;
           settings = {

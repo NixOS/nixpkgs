@@ -5,14 +5,14 @@
 
   nodes = {
     machine =
-      { pkgs, ... }:
+      { config, pkgs, ... }:
       {
         environment.systemPackages = [
           pkgs.holo-daemon
           pkgs.holo-cli
         ];
         system.services.holo-daemon = {
-          imports = [ pkgs.holo-daemon.services.default ];
+          imports = [ config.modularServices.holo-daemon.default ];
         };
         users.users.holo = {
           isSystemUser = true;

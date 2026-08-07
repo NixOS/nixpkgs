@@ -5,7 +5,6 @@
 {
   lib,
   config,
-  options,
   ...
 }:
 let
@@ -157,17 +156,5 @@ in
     ++ optional (cfg.backendPort != null) "-backend-port=${toString cfg.backendPort}"
     ++ optional (cfg.unixDirectory != null) "-unix-directory=${cfg.unixDirectory}"
     ++ optional cfg.proxyProto "-proxy-proto";
-  }
-  // lib.optionalAttrs (options ? systemd) {
-    systemd.service = {
-      after = [ "network.target" ];
-      wants = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        Restart = "on-failure";
-        DynamicUser = true;
-        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
-      };
-    };
   };
 }

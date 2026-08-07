@@ -48,6 +48,7 @@
 /lib/options.nix            @infinisil @roberth @hsjobeki @llakala
 /lib/tests/modules.sh       @infinisil @roberth @hsjobeki
 /lib/tests/modules          @infinisil @roberth @hsjobeki
+/modules/generic            @nbp @roberth
 
 # Nixpkgs Internals
 /default.nix                                     @Ericson2314

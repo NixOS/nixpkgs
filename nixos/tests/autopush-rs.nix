@@ -17,7 +17,7 @@
         };
         system.services.autopush-autoconnect = {
           imports = [
-            pkgs.autopush-rs.services.autoconnect
+            config.modularServices.autopush-rs.autoconnect
           ];
           autoconnect.settings = {
             #do not use this key in production!!!
@@ -28,7 +28,7 @@
         };
         system.services.autopush-autoendpoint = {
           imports = [
-            pkgs.autopush-rs.services.autoendpoint
+            config.modularServices.autopush-rs.autoendpoint
           ];
           autoendpoint.settings = {
             #do not use this key in production!!!

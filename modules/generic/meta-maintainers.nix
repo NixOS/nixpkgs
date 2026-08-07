@@ -52,8 +52,11 @@ in
       };
     };
   };
-  meta.maintainers = with lib.maintainers; [
-    pierron
-    roberth
-  ];
+
+  # This module deliberately does not define `meta.maintainers` for itself.
+  # It is imported by every module system that offers the option - NixOS
+  # (`nixos/modules/misc/meta.nix`) and modular services
+  # (`lib/services/service.nix`) - so a definition here would attribute this
+  # file's maintainers to every module and every service that imports it.
+  # Ownership of this file is recorded in `ci/OWNERS` instead.
 }

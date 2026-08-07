@@ -39,4 +39,9 @@ in
     runTest
     ;
 
+  # Environment-specific variants of the modular services, keyed by
+  # `<environment>.<pkg>.<service>`. See
+  # nixos/modules/system/service/modular/default.nix.
+  modularServices = import ../modules/system/service/modular;
+
 }

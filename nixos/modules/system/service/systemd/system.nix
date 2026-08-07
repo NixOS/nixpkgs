@@ -68,11 +68,19 @@ let
     ];
     extraRootSpecialArgs = {
       systemdPackage = config.systemd.package;
+      # Exposed so environment-specific service variants under
+      # `nixos/modules/system/service/modular/` can pull in their pure base from
+      # `pkgs.<name>.services.<svc>`.
+      inherit pkgs;
     };
   };
 in
 {
   _class = "nixos";
+
+  imports = [
+    ./defaults.nix
+  ];
 
   # First half of the magic: mix systemd logic into the otherwise abstract services
   options = {

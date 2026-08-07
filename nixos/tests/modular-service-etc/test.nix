@@ -4,7 +4,7 @@
 
 # This tests the NixOS modular service integration to make sure `etc` entries
 # are generated correctly for `configData` files.
-{ lib, ... }:
+{ config, lib, ... }:
 {
   _class = "nixosTest";
   name = "modular-service-etc";
@@ -16,7 +16,7 @@
         # Normally the package services.default attribute combines this, but we
         # don't have that, because this is not a production service. Should it be?
         python-http-server = {
-          imports = [ ./python-http-server.nix ];
+          imports = [ config.modularServices.python-http-server.default ];
           python-http-server.package = pkgs.python3;
         };
       in
