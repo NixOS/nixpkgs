@@ -1,0 +1,13 @@
+diff --git a/src/utils/auth.ts b/src/utils/auth.ts
+index 94f02c3..bd7fb00 100644
+--- a/src/utils/auth.ts
++++ b/src/utils/auth.ts
+@@ -408,7 +408,7 @@ function detectCodingAgents(): string[] {
+  * Check if telemetry is disabled via environment variable
+  */
+ function isTelemetryDisabled(): boolean {
+-  const noTelemetry = process.env.FIRECRAWL_NO_TELEMETRY;
++  const noTelemetry = process.env.FIRECRAWL_NO_TELEMETRY ?? 'true';
+   return noTelemetry === '1' || noTelemetry === 'true';
+ }
+ 
