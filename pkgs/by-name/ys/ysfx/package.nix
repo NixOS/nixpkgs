@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation rec {
   pname = "ysfx";
-  version = "0-unstable-2026-03-13";
+  version = "0-unstable-2026-02-25";
 
   src = fetchFromGitHub {
     owner = "JoepVanlier";
