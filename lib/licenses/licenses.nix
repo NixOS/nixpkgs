@@ -203,6 +203,11 @@ lib.mapAttrs mkLicense (
       fullName = " BitTorrent Open Source License v1.1";
     };
 
+    blessing = {
+      spdxId = "blessing";
+      fullName = "SQLite Blessing";
+    };
+
     boehmGC = {
       spdxId = "Boehm-GC";
       fullName = "Boehm-Demers-Weiser GC License";
