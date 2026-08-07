@@ -13,10 +13,13 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "hydrogen-web";
   version = "0.5.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "hydrogen-web";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pXrmWPp4/MYIS1FHEGzAxGbh4OnTaiPudg+NauvA6Vc=";
   };
 
