@@ -7,7 +7,7 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "julefmt";
-  version = "0.0.0-unstable-2026-05-02";
+  version = "0.0.0-unstable-2026-06-05";
 
   src = fetchFromGitHub {
     owner = "julelang";
