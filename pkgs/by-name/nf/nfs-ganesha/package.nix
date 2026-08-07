@@ -27,7 +27,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nfs-ganesha";
-  version = "13.0";
+  version = "14.1";
 
   outputs = [
     "out"
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "nfs-ganesha";
     repo = "nfs-ganesha";
     tag = "V${finalAttrs.version}";
-    hash = "sha256-PAEDBUIMjuMzhSvWn80EtiHOaFPgcJgE9kZVG6nKLZs=";
+    hash = "sha256-fn59QvPt0F6G8wyuX1/GXwvDOj46C7Wk6cVwnwtTmRk=";
     fetchSubmodules = true;
   };
 
