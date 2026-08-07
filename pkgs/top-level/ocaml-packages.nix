@@ -1649,9 +1649,7 @@ let
 
         odig = callPackage ../development/ocaml-modules/odig { };
 
-        odoc = callPackage ../development/ocaml-modules/odoc {
-          cmdliner = cmdliner_1;
-        };
+        odoc = callPackage ../development/ocaml-modules/odoc { };
 
         odoc-parser = callPackage ../development/ocaml-modules/odoc-parser { };
 
