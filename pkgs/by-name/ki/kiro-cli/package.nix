@@ -1,102 +1,70 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  undmg,
-  versionCheckHook,
-  xz,
-  bzip2,
+  buildFHSEnv,
+  symlinkJoin,
+  testers,
+  kiro-cli-unwrapped,
+  # On Wayland, kiro-cli shells out to wl-clipboard (wl-copy/wl-paste) for
+  # clipboard access. Enabling this puts wl-clipboard on the runtime PATH so
+  # clipboard support works out of the box under Wayland sessions. Has no
+  # effect on Darwin.
+  waylandSupport ? stdenv.hostPlatform.isLinux,
 }:
 
 let
-  inherit (stdenv.hostPlatform) system;
+  inherit (kiro-cli-unwrapped) version meta;
+
+  # Each of kiro-cli's user-facing commands, run inside a minimal FHS sandbox.
+  # The sandbox provides a standard /lib64/ld-linux-x86-64.so.2 plus libgcc_s/
+  # libstdc++ (via stdenv.cc.cc.lib), so the generic-glibc `bun` that
+  # kiro-cli-chat extracts at runtime just works — no binary patching of the
+  # extracted asset, and no build-time execution of the tool.
+  fhsFor =
+    executableName:
+    buildFHSEnv {
+      pname = executableName;
+      inherit version;
+      inherit executableName;
+      runScript = executableName;
+
+      targetPkgs =
+        pkgs:
+        [
+          kiro-cli-unwrapped
+          pkgs.stdenv.cc.cc.lib # libstdc++.so.6, libgcc_s.so.1 for the extracted bun
+        ]
+        ++ lib.optional waylandSupport pkgs.wl-clipboard;
+
+      meta = meta // {
+        mainProgram = executableName;
+      };
+    };
 in
-stdenv.mkDerivation (finalAttrs: {
-  pname = "kiro-cli";
-  version = "2.3.0";
-
-  src =
-    let
-      darwinDmg = fetchurl {
-        url = "https://desktop-release.q.us-east-1.amazonaws.com/${finalAttrs.version}/Kiro%20CLI.dmg";
-        hash = "sha256-lHBlzPFeT9m54dbFBXm7l/bJIVcBJqodZ6xKD9XThJc=";
-      };
-    in
-    {
-      x86_64-linux = fetchurl {
-        url = "https://desktop-release.q.us-east-1.amazonaws.com/${finalAttrs.version}/kirocli-x86_64-linux.tar.gz";
-        hash = "sha256-zLizK/0m9PdIzN4IMicq7/95lWahj7sdLzEEYpv/o+E=";
-      };
-      aarch64-linux = fetchurl {
-        url = "https://desktop-release.q.us-east-1.amazonaws.com/${finalAttrs.version}/kirocli-aarch64-linux.tar.gz";
-        hash = "sha256-B4NElbGE0M7P6eGrd90UYvoeqN1fEoe+2g1/M1wM3ZY=";
-      };
-      x86_64-darwin = darwinDmg;
-      aarch64-darwin = darwinDmg;
-    }
-    .${system} or (throw "Unsupported system: ${system}");
-
-  sourceRoot = if stdenv.hostPlatform.isDarwin then "Kiro CLI.app" else "kirocli";
-
-  strictDeps = true;
-
-  nativeBuildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      autoPatchelfHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      undmg
+# Darwin ships a normal .app bundle with no embedded-bun problem, so it needs
+# no FHS sandbox; hand back the unwrapped derivation under the public name.
+if stdenv.hostPlatform.isLinux then
+  symlinkJoin {
+    name = "kiro-cli-${version}";
+    # Preserve the strictDeps = true that the unwrapped derivation exposes, so
+    # the top-level attribute keeps it too (nixpkgs-vet NPV-165).
+    strictDeps = true;
+    paths = map fhsFor [
+      "kiro-cli"
+      "kiro-cli-chat"
+      "kiro-cli-term"
     ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    stdenv.cc.cc.lib
-    xz
-    bzip2
-  ];
-
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  doInstallCheck = true;
-
-  dontConfigure = true;
-  dontBuild = true;
-
-  installPhase = ''
-    runHook preInstall
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    install -Dm755 bin/kiro-cli -t $out/bin
-    install -Dm755 bin/kiro-cli-chat $out/bin/kiro-cli-chat
-    install -Dm755 bin/kiro-cli-term $out/bin/kiro-cli-term
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir -p $out/bin $out/Applications
-    cp -r "../Kiro CLI.app" "$out/Applications/"
-    ln -s "$out/Applications/Kiro CLI.app/Contents/MacOS/kiro-cli" $out/bin/kiro-cli
-    for bin in kiro-cli-chat kiro-cli-term; do
-      if [[ -e "$out/Applications/Kiro CLI.app/Contents/MacOS/$bin" ]]; then
-        ln -s "$out/Applications/Kiro CLI.app/Contents/MacOS/$bin" "$out/bin/$bin"
-      fi
-    done
-  ''
-  + ''
-    runHook postInstall
-  '';
-
-  passthru.updateScript = ./update.sh;
-
-  meta = {
-    description = "Command-line interface for Kiro, an agentic IDE";
-    homepage = "https://kiro.dev";
-    license = lib.licenses.unfree;
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    maintainers = [ lib.maintainers.jamesward ];
-    mainProgram = "kiro-cli";
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-      "x86_64-darwin"
-      "aarch64-darwin"
-    ];
-  };
-})
+    passthru = {
+      unwrapped = kiro-cli-unwrapped;
+      tests.version = testers.testVersion {
+        # The FHS wrapper needs user namespaces (bubblewrap), which aren't
+        # available in the Nix build sandbox, so exercise the unwrapped binary
+        # the wrapper ultimately execs.
+        package = kiro-cli-unwrapped;
+        inherit version;
+      };
+    };
+    inherit meta;
+  }
+else
+  kiro-cli-unwrapped.overrideAttrs { pname = "kiro-cli"; }

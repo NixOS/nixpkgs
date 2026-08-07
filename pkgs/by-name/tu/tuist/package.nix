@@ -4,15 +4,16 @@
   fetchurl,
   unzip,
   nix-update-script,
+  versionCheckHook,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tuist";
-  version = "4.144.0";
+  version = "4.202.1";
 
   src = fetchurl {
     url = "https://github.com/tuist/tuist/releases/download/${finalAttrs.version}/tuist.zip";
-    hash = "sha256-t6nqGnrIwZQFfji7r1I2MvV0e8MFtUTlpOmOi8i8aYM=";
+    hash = "sha256-J/xlwRRW3zLr03jA6Xpa5frlRQGHa/nmzzlj35/30tw=";
   };
 
   dontUnpack = true;
@@ -33,6 +34,24 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ln -s $out/opt/tuist/tuist $out/bin/tuist
 
     runHook postInstall
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "version";
+  versionCheckKeepEnvironment = [
+    "HOME"
+    "XDG_CACHE_HOME"
+    "XDG_CONFIG_HOME"
+    "XDG_STATE_HOME"
+  ];
+  preVersionCheck = ''
+    export HOME=$(mktemp -d)
+    export XDG_CACHE_HOME=$HOME/.cache
+    export XDG_CONFIG_HOME=$HOME/.config
+    export XDG_STATE_HOME=$HOME/.local/state
   '';
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=^([0-9.]+)$" ]; };

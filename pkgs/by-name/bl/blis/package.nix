@@ -5,6 +5,12 @@
   perl,
   python3,
 
+  # sets BLIS_NUM_THREADS and OMP_NUM_THREADS for packages
+  # invoking blis during checkPhase/installCheckPhase to
+  # avoid overloading builders with excessive parallelism
+  # See also: https://github.com/flame/blis/blob/b8b75b4e19459f5d618b57aa814ca38b1d82eb82/docs/Multithreading.md#specifying-multithreading
+  checkPhaseThreadLimitHook,
+
   # Enable BLAS interface with 64-bit integer width.
   blas64 ? false,
 
@@ -20,13 +26,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "blis";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "flame";
     repo = "blis";
     tag = finalAttrs.version;
-    sha256 = "sha256-+n8SbiiEJDN4j1IPmZfI5g1i2J+jWrUXh7S48JEDTAE=";
+    sha256 = "sha256-eEwqM+3+Cfm0oKog+hg29bf5DUZqJ4YsCpjl4v/8Aw0=";
   };
 
   inherit blas64;
@@ -34,6 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     perl
     python3
+  ];
+
+  propagatedNativeBuildInputs = [
+    checkPhaseThreadLimitHook
   ];
 
   doCheck = true;

@@ -79,17 +79,17 @@
   xz,
   zlib,
   zstd,
+  buildPackages,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal" + lib.optionalString useMinimalFeatures "-minimal";
-  version = "3.12.4";
+  version = "3.13.2";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sD/ZAOvMWK2+AGw6wgziDsheH+hwUwhd7i2f65cjFKg=";
+    hash = "sha256-sHMfAAZ4LrHXXh1g3Q9WsAqt8DHRkSdBlb3kZSy+vX0=";
   };
 
   nativeBuildInputs = [
@@ -132,6 +132,9 @@ stdenv.mkDerivation (finalAttrs: {
     # This is not strictly needed as the Java bindings wouldn't build anyway if
     # ant/jdk were not available.
     "-DBUILD_JAVA_BINDINGS=OFF"
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "-DCMAKE_CROSSCOMPILING_EMULATOR=${stdenv.hostPlatform.emulator buildPackages}"
   ];
 
   buildInputs =
@@ -257,8 +260,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   disabledTestPaths = [
     # tests that attempt to make network requests
+    "gcore/basic_test.py::test_hint_http"
     "gcore/vsis3.py"
     "gdrivers/gdalhttp.py"
+    "gdrivers/hdf5multidim.py::test_hdf5_multimdim_eos_grid_dimension_list"
     "gdrivers/wms.py"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -307,6 +312,11 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!usePoppler) [
     "test_pdf_jpx_compression"
+  ]
+  ++ lib.optionals (!useNetCDF) [
+    # writes the Zarr tile-presence cache (.gmac) via the netCDF driver, which
+    # is absent in the minimal build
+    "test_zarr_read_simple_sharding"
   ];
   postCheck = ''
     popd # autotest

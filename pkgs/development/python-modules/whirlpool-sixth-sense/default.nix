@@ -2,6 +2,7 @@
   lib,
   aioconsole,
   aiohttp,
+  aiointercept,
   aioresponses,
   async-timeout,
   buildPythonPackage,
@@ -15,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "whirlpool-sixth-sense";
-  version = "1.2.0";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "abmantis";
     repo = "whirlpool-sixth-sense";
     tag = finalAttrs.version;
-    hash = "sha256-uX1Q4F6pcc/mPdopPgyU63p4yeo9YPmUGbn0sxW09Yo=";
+    hash = "sha256-zqdgZw3PAZ0tONwkdR5jgZNvSc8IiGj0Zr855ewsPpI=";
   };
 
   build-system = [ setuptools ];
@@ -36,6 +37,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     aioresponses
+    aiointercept
     pytest-asyncio
     pytest-mock
     pytestCheckHook

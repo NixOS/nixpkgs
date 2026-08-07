@@ -37,6 +37,7 @@ lib.makeOverridable (
     ];
     gradleScript = writeShellScript "gradle-commands.sh" ''
       set -eo pipefail
+      if [ -e "''${NIX_ATTRS_SH_FILE:-}" ]; then . "$NIX_ATTRS_SH_FILE"; fi
       export http_proxy="$MITM_CACHE_ADDRESS"
       export https_proxy="$MITM_CACHE_ADDRESS"
       export SSL_CERT_FILE="$MITM_CACHE_CA"

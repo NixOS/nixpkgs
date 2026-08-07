@@ -1,4 +1,4 @@
-From 12b0c98a4e844ab18545c8ba521ac1ef71301938 Mon Sep 17 00:00:00 2001
+From a8011a8d2610bc86224965a9ab9a935510af36f1 Mon Sep 17 00:00:00 2001
 From: Naomi Roberts <mia@naomieow.xyz>
 Date: Thu, 4 Dec 2025 19:59:48 +0000
 Subject: [PATCH] Remove Windows-specific dep
@@ -9,23 +9,23 @@ Signed-off-by: Naomi Roberts <mia@naomieow.xyz>
  electron/src/main/app.js    | 17 +----------------
  electron/webpack.config.cjs |  4 +---
  package.json                |  1 -
- pnpm-lock.yaml              | 11 -----------
- 5 files changed, 2 insertions(+), 32 deletions(-)
+ pnpm-lock.yaml              | 16 ----------------
+ 5 files changed, 2 insertions(+), 37 deletions(-)
 
 diff --git a/electron/package.json b/electron/package.json
-index a7b2bd3e..ce55d877 100644
+index 13d40060..d7154097 100644
 --- a/electron/package.json
 +++ b/electron/package.json
-@@ -26,7 +26,6 @@
-     "electron-updater": "^6.8.4"
+@@ -27,7 +27,6 @@
+     "electron-updater": "^6.8.9"
    },
    "dependencies": {
--    "@paymoapp/electron-shutdown-handler": "^1.1.2",
+-    "@paymoapp/electron-shutdown-handler": "^1.1.3",
      "@xhayper/discord-rpc": "^1.3.4",
-     "concurrently": "^9.2.1",
+     "concurrently": "^10.0.3",
      "jimp": "0.22.12",
 diff --git a/electron/src/main/app.js b/electron/src/main/app.js
-index 5875d276..682d3bb1 100644
+index 68aeb491..7237ad09 100644
 --- a/electron/src/main/app.js
 +++ b/electron/src/main/app.js
 @@ -7,7 +7,6 @@ import Jimp from 'jimp'
@@ -75,42 +75,42 @@ index 716dfcf7..3c9e4d1f 100644
        aliasFields: [],
        alias: {
 diff --git a/package.json b/package.json
-index 52de5f3a..470faf9d 100644
+index b02fcb7d..4fddc6ea 100644
 --- a/package.json
 +++ b/package.json
-@@ -48,7 +48,6 @@
-       "svelte-keybinds": "patches/svelte-keybinds.patch"
+@@ -47,7 +47,6 @@
+       "cordova-plugin-apkupdater": "patches/cordova-plugin-apkupdater.patch"
      },
      "onlyBuiltDependencies": [
 -      "@paymoapp/electron-shutdown-handler",
        "bufferutil",
        "electron",
-       "fs-native-extensions",
+       "electron-winstaller",
 diff --git a/pnpm-lock.yaml b/pnpm-lock.yaml
-index c373d877..e774678a 100644
+index 102a5cd1..5dcb8798 100644
 --- a/pnpm-lock.yaml
 +++ b/pnpm-lock.yaml
-@@ -257,9 +257,6 @@ importers:
+@@ -267,9 +267,6 @@ importers:
  
    electron:
      dependencies:
 -      '@paymoapp/electron-shutdown-handler':
--        specifier: ^1.1.2
--        version: 1.1.2
+-        specifier: ^1.1.3
+-        version: 1.1.3
        '@xhayper/discord-rpc':
          specifier: ^1.3.4
-         version: 1.3.4(bufferutil@4.0.8)(utf-8-validate@6.0.4)
-@@ -848,9 +845,6 @@ packages:
-   '@paralleldrive/cuid2@2.3.1':
-     resolution: {integrity: sha512-XO7cAxhnTZl0Yggq6jOgjiOHhbgcO4NqFqwSmQpjK3b6TEE6Uj/jfSk6wzYyemh3+I0sHirKSetjQwn5cZktFw==}
+         version: 1.3.4(bufferutil@4.1.0)(utf-8-validate@6.0.6)
+@@ -930,9 +927,6 @@ packages:
+   '@obsidize/rx-console@6.2.1':
+     resolution: {integrity: sha512-UXa8S8pNoDmyZ9x2UjU/GJmqEhJ/LGmAI/2V/3njNBQRIxmDFCIPJIavsRv6x+JueNZ4mU1wHE0gU7paT5iWrA==}
  
--  '@paymoapp/electron-shutdown-handler@1.1.2':
--    resolution: {integrity: sha512-/MIC+wdRlVw1Sm56qJcT17O/KBpQARP2tOcAgg1OKB4W83B9IyBBtIoLXkRlpCOEJnGEleuv5HiSBryUgwbFvQ==}
+-  '@paymoapp/electron-shutdown-handler@1.1.3':
+-    resolution: {integrity: sha512-DfsuC7d1F07oNzzCcarSi0oNRd6NI9elCa3Ge1iWwqttJRJC/kuBbbYEalf6tSeCEK8D6Q+5reabkkexBKjB/w==}
 -
-   '@peculiar/asn1-cms@2.6.1':
-     resolution: {integrity: sha512-vdG4fBF6Lkirkcl53q6eOdn3XYKt+kJTG59edgRZORlg/3atWWEReRCx5rYE1ZzTTX6vLK5zDMjHh7vbrcXGtw==}
+   '@peculiar/asn1-cms@2.7.0':
+     resolution: {integrity: sha512-hew63shtzzvBcSHbhm+cyAmKe6AIfinT9hzEqSPjDC6opTTMKmTkQ0gHuN2KsWlvqiKw1S/fS94fhag/FJkioQ==}
  
-@@ -4112,9 +4106,6 @@ packages:
+@@ -3961,9 +3955,6 @@ packages:
    node-addon-api@4.3.0:
      resolution: {integrity: sha512-73sE9+3UaLYYFmDsFZnqCInzPyh3MqIwZO9cw58yIqAZhONrrabrYyYe3TuIqtIiOuTXVhsGau8hcrhhwSsDIQ==}
  
@@ -120,7 +120,19 @@ index c373d877..e774678a 100644
    node-addon-api@6.1.0:
      resolution: {integrity: sha512-+eawOlIgy680F0kBzPUNFhMZGtJ1YmqM6l4+Crf4IkImjYrO/mqPwRMh352g23uIaQKFItcQ64I7KMaJxHgAVA==}
  
-@@ -10823,8 +10814,6 @@ snapshots:
+@@ -6812,11 +6803,6 @@ snapshots:
+ 
+   '@obsidize/rx-console@6.2.1': {}
+ 
+-  '@paymoapp/electron-shutdown-handler@1.1.3':
+-    dependencies:
+-      node-addon-api: 5.1.0
+-      prebuild-install: 7.1.3
+-
+   '@peculiar/asn1-cms@2.7.0':
+     dependencies:
+       '@peculiar/asn1-schema': 2.7.0
+@@ -10388,8 +10374,6 @@ snapshots:
  
    node-addon-api@4.3.0: {}
  
@@ -130,5 +142,5 @@ index c373d877..e774678a 100644
  
    node-api-version@0.2.1:
 -- 
-2.53.0
+2.54.0
 

@@ -1,7 +1,7 @@
 {
   symlinkJoin,
   writeTextFile,
-  runCommand,
+  runCommandLocal,
   testers,
 }:
 
@@ -31,7 +31,7 @@ let
     text = "qux";
   };
 
-  emulatedSymlinkJoinFooBarStrip = runCommand "symlinkJoin-strip-foo-bar" { } ''
+  emulatedSymlinkJoinFooBarStrip = runCommandLocal "symlinkJoin-strip-foo-bar" { } ''
     mkdir $out
     ln -s ${foo}/etc/test.d/foo $out/
     ln -s ${bar}/etc/test.d/bar $out/
@@ -48,7 +48,7 @@ in
         baz
       ];
     };
-    expected = runCommand "symlinkJoin-foo-bar-baz" { } ''
+    expected = runCommandLocal "symlinkJoin-foo-bar-baz" { } ''
       mkdir -p $out/{var/lib/arbitrary,etc/test.d}
       ln -s {${foo},${bar}}/etc/test.d/* $out/etc/test.d
       ln -s ${baz}/var/lib/arbitrary/baz $out/var/lib/arbitrary/
@@ -66,7 +66,7 @@ in
         baz
       ];
     };
-    expected = runCommand "symlinkJoin-foo-bar-baz" { } ''
+    expected = runCommandLocal "symlinkJoin-foo-bar-baz" { } ''
       mkdir -p $out/{var/lib/arbitrary,etc/test.d}
       ln -s {${foo},${bar}}/etc/test.d/* $out/etc/test.d
       ln -s ${baz}/var/lib/arbitrary/baz $out/var/lib/arbitrary/
@@ -115,7 +115,7 @@ in
   };
 
   symlinkJoin-fails-on-missing =
-    runCommand "symlinkJoin-fails-on-missing"
+    runCommandLocal "symlinkJoin-fails-on-missing"
       {
         failed = testBuildFailure (symlinkJoin {
           name = "symlinkJoin-fail";
@@ -134,7 +134,7 @@ in
       '';
 
   symlinkJoin-fails-on-file =
-    runCommand "symlinkJoin-fails-on-file"
+    runCommandLocal "symlinkJoin-fails-on-file"
       {
         failed = testBuildFailure (symlinkJoin {
           name = "symlinkJoin-fail";

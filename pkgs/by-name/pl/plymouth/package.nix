@@ -20,6 +20,7 @@
   systemd,
   xkeyboard-config,
   fontconfig,
+  bashNonInteractive,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
@@ -63,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    bashNonInteractive
     gtk3
     libdrm
     libevdev

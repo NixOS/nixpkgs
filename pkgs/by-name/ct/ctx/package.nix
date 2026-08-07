@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ctx";
-  version = "unstable-2023-09-03";
+  version = "0-unstable-2023-09-03";
 
   src = fetchgit {
     name = "ctx-source"; # because of a dash starting the directory

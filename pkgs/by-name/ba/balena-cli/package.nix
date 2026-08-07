@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  balena-compose-parser,
   buildNpmPackage,
   fetchFromGitHub,
   nodejs_24,
@@ -46,6 +47,10 @@ buildNpmPackage' rec {
     udev
   ];
 
+  postInstall = ''
+    cp ${lib.getExe balena-compose-parser} $out/lib/node_modules/balena-cli/node_modules/@balena/compose-parser/bin/
+  '';
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
@@ -71,7 +76,6 @@ buildNpmPackage' rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       kalebpace
-      doronbehar
     ];
     mainProgram = "balena";
   };

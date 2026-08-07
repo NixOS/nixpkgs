@@ -16,13 +16,16 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "1.15.7";
+  version = "1.18.13";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "anomalyco";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fk8GDVE+bQfOkZCQ1YEc3V7YIXDHfNC/srcZs/MrE38=";
+    hash = "sha256-xjzxTsMN4dMax3rL+2+4og0E7LovwYFvpU7Ea2sh6tM=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -69,13 +72,20 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       mkdir -p $out
       find . -type d -name node_modules -exec cp -R --parents {} $out \;
 
+      # opencode targets only Linux and Darwin (see meta.platforms), so the
+      # Windows executables that "bun install --os=*" fetches are never
+      # executed. Dropping them keeps the output reproducible on hosts whose
+      # security endpoint agents scan the store, and removes the vulnerable
+      # bundled 7za.exe that will be quarantined.
+      find $out -type f -name '*.exe' -delete
+
       runHook postInstall
     '';
 
     # NOTE: Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash = "sha256-bwCWjaIYfzkJkCMRQ8veKM81pBt8CzMZhUqHgFM/muk=";
+    outputHash = "sha256-gb1vgLGiK56A9Xtg71d2J9ct8TJAjDg1A7cOUx0v3cA=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
@@ -116,6 +126,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cd ./packages/opencode
     bun --bun ./script/build.ts --single --skip-install
     bun --bun ./script/schema.ts config.json tui.json
+    substituteInPlace config.json \
+      --replace-fail "https://models.dev/model-schema.json" \
+                     "file://$out/share/model-schema.json"
 
     runHook postBuild
   '';
@@ -134,10 +147,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
            sysctl
          ]
        )
-     }
+     } \
+    --set OPENCODE_DISABLE_AUTOUPDATE true
 
-    install -Dm644 config.json $out/share/opencode/config.json
-    install -Dm644 tui.json $out/share/opencode/tui.json
+    install -Dm644 ${models-dev.jsonschema} $out/share/model-schema.json
+    install -Dm644 config.json $out/share/config.json
+    install -Dm644 tui.json $out/share/tui.json
+    install -Dm644 ../web/public/theme.json $out/share/theme.json
 
     runHook postInstall
   '';
@@ -161,8 +177,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru = {
     jsonschema = {
-      config = "${placeholder "out"}/share/opencode/config.json";
-      tui = "${placeholder "out"}/share/opencode/tui.json";
+      config = "${finalAttrs.finalPackage}/share/config.json";
+      theme = "${finalAttrs.finalPackage}/share/theme.json";
+      tui = "${finalAttrs.finalPackage}/share/tui.json";
     };
     updateScript = nix-update-script {
       extraArgs = [
@@ -175,25 +192,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "AI coding agent built for the terminal";
     homepage = "https://github.com/anomalyco/opencode";
+    changelog = "https://github.com/anomalyco/opencode/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       delafthi
       DuskyElf
       graham33
-      superherointj
     ];
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
     mainProgram = "opencode";
-    badPlatforms = [
-      # Broken as 2026-04-23, errors as:
-      # CPU lacks AVX support, strange crashes may occur. Reinstall Bun
-      "x86_64-darwin"
-    ];
   };
 })

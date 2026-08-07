@@ -21,7 +21,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "grafana";
-  version = "13.0.1+security-01";
+  version = "13.1.1";
 
   subPackages = [
     "pkg/cmd/grafana"
@@ -33,14 +33,8 @@ buildGoModule (finalAttrs: {
     owner = "grafana";
     repo = "grafana";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-v/6a0Xlj11nZ0u8xtFzw5i674rB1YV21iLCuLc5af+I=";
+    hash = "sha256-e5Potkxm4VB1nUFyvByamsSkWAKMTMzpHIzrKSeRRM4=";
   };
-
-  patches = [
-    # Remove after upstream updates to Yarn 4.14
-    # https://github.com/grafana/grafana/blob/main/package.json#L483
-    ./yarn-4.14-support.patch
-  ];
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
   env = {
@@ -54,13 +48,13 @@ buildGoModule (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   # Since this is not a dependency attribute the buildPackages has to be specified.
   offlineCache = buildPackages.yarn-berry_4-fetcher.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-uOl9PemVZiKwGfhLUpAAByMvt5A8JyA5qyJ6Cdl6od4=";
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-c/gCHjwfItp4h+CHa5CPKHhe8/hiqF9MNFin/hK8GmQ=";
   };
 
   disallowedRequisites = [ finalAttrs.offlineCache ];
 
-  vendorHash = "sha256-PEGgrkTguHvqrclzvZDQ7yk6rwTKDLXdUSjeaQFnYtU=";
+  vendorHash = "sha256-tlXBxcXt472A7PHurrbvW/SRlQmum8PUUlkmu5q2Y7Q=";
 
   # Grafana seems to just set it to the latest version available
   # nowadays.
@@ -173,7 +167,6 @@ buildGoModule (finalAttrs: {
     ];
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
       "aarch64-linux"
       "aarch64-darwin"
       "riscv64-linux"

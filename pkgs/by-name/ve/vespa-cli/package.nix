@@ -9,14 +9,14 @@
 
 buildGoModule (finalAttrs: {
   pname = "vespa-cli";
-  version = "8.685.1";
+  version = "8.697.20";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "vespa-engine";
     repo = "vespa";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RRuUDeHYYCbEeeaUk+lz8rv+ZG3UD/OK3HrmmuOe5HI=";
+    hash = "sha256-h2dwCScX0LVd5hV1fnhKjXQue/ywmqyk5t/vzEDAwQE=";
   };
 
   # case-insensitive conflicts which produce platform `vendorHash` checksumm
@@ -24,7 +24,7 @@ buildGoModule (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/client/go";
 
-  vendorHash = "sha256-qC/8pIhsVbt9uUyLDiAW18tCUWDw3Agvmcx/CIUsCKQ=";
+  vendorHash = "sha256-lrMGxMzUdr2ZlTn13AGwzHZBHUDonmoSxmUIo7cWx3g=";
 
   env.CGO_ENABLED = 0;
 

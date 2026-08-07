@@ -192,7 +192,7 @@ let
   #   -> [a]  -- list of elements from which to remove
   #   -> [a]
   #
-  # > removeMany ["aarch64-linux" "x86_64-darwin"] ["aarch64-linux" "x86_64-darwin" "x86_64-linux"]
+  # > removeMany ["aarch64-linux" "aarch64-darwin"] ["aarch64-linux" "aarch64-darwin" "x86_64-linux"]
   # ["x86_64-linux"]
   removeMany = itemsToRemove: list: lib.foldr lib.remove list itemsToRemove;
 
@@ -204,11 +204,11 @@ let
   #   -> AttrSet
   #
   # > attrSet = {
-  #     foo = ["aarch64-linux" "x86_64-darwin" "x86_64-linux"];
+  #     foo = ["aarch64-linux" "aarch64-darwin" "x86_64-linux"];
   #     bar.baz = ["aarch64-linux" "x86_64-linux"];
-  #     bar.quux = ["aarch64-linux" "x86_64-darwin"];
+  #     bar.quux = ["aarch64-linux" "aarch64-darwin"];
   #   }
-  # > removePlatforms ["aarch64-linux" "x86_64-darwin"] attrSet
+  # > removePlatforms ["aarch64-linux" "aarch64-darwin"] attrSet
   # {
   #   foo = ["x86_64-linux"];
   #   bar = {
@@ -373,7 +373,6 @@ let
             "aarch64-linux"
 
             # musl only supports linux, not darwin.
-            "x86_64-darwin"
             "aarch64-darwin"
           ]
           {
@@ -401,7 +400,6 @@ let
             "aarch64-linux" # times out on Hydra
 
             # Static doesn't work on darwin
-            "x86_64-darwin"
             "aarch64-darwin"
           ]
           {
@@ -500,7 +498,6 @@ let
               # Testing cross from x86_64-linux
               "aarch64-darwin"
               "aarch64-linux"
-              "x86_64-darwin"
             ]
             {
               haskellPackages = {

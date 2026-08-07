@@ -3,8 +3,10 @@
   buildPythonPackage,
   fetchPypi,
   google-api-core,
+  google-auth,
   google-cloud-core,
   google-cloud-testutils,
+  grpcio,
   libcst,
   mock,
   proto-plus,
@@ -14,26 +16,26 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-datastore";
-  version = "2.24.0";
+  version = "2.26.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_datastore";
-    inherit version;
-    hash = "sha256-8IfAKmqkrGi78X8MBIrj7jVYVr8JxRQ5v7oZN0E4d5I=";
+    inherit (finalAttrs) version;
+    hash = "sha256-GsSILwM/y5C9ddEXG0ZADs1d7yN2hZiEPZwEHgwLSmo=";
   };
 
   build-system = [ setuptools ];
 
-  pythonRelaxDeps = [
-    "protobuf"
-  ];
+  pythonRelaxDeps = [ "protobuf" ];
 
   dependencies = [
     google-api-core
+    google-auth
     google-cloud-core
+    grpcio
     proto-plus
     protobuf
   ]
@@ -73,9 +75,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Google Cloud Datastore API client library";
-    homepage = "https://github.com/googleapis/python-datastore";
-    changelog = "https://github.com/googleapis/python-datastore/blob/v${version}/CHANGELOG.md";
+    homepage = "https://cloud.google.com/datastore";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-datastore-v${finalAttrs.version}/packages/google-cloud-datastore/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

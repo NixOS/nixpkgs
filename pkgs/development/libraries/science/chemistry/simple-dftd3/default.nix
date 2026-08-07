@@ -24,13 +24,13 @@ assert (
 
 stdenv.mkDerivation rec {
   pname = "simple-dftd3";
-  version = "1.3.2";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "dftd3";
     repo = "simple-dftd3";
     tag = "v${version}";
-    hash = "sha256-h9KFqZOfH7c7hntfL/C5WG9HVof64O4U1BNCCOuQhpA=";
+    hash = "sha256-Bv+N9/dQVpSglt/54ay6mt4kRhu4klMTp7+sRP1bP80=";
   };
 
   patches = [
@@ -64,9 +64,6 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  preCheck = ''
-    export OMP_NUM_THREADS=2
-  '';
 
   meta = {
     description = "Reimplementation of the DFT-D3 program";

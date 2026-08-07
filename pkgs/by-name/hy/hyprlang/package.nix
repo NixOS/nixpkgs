@@ -1,13 +1,13 @@
 {
   lib,
-  gcc15Stdenv,
+  gcc16Stdenv,
   fetchFromGitHub,
   cmake,
   pkg-config,
   hyprutils,
 }:
 
-gcc15Stdenv.mkDerivation (finalAttrs: {
+gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprlang";
   version = "0.6.8";
 
@@ -33,6 +33,9 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+
+  cmakeBuildType = "RelWithDebInfo";
+  separateDebugInfo = true;
 
   meta = {
     homepage = "https://github.com/hyprwm/hyprlang";

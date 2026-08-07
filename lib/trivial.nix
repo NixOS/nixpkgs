@@ -474,7 +474,7 @@ in
   */
   oldestSupportedRelease =
     # Update on master only. Do not backport.
-    2511;
+    2605;
 
   /**
     Whether a feature is supported in all supported releases (at the time of
@@ -504,7 +504,7 @@ in
     On each release the first letter is bumped and a new animal is chosen
     starting with that new letter.
   */
-  codeName = "Yarara";
+  codeName = "Zokor";
 
   /**
     Returns the current nixpkgs version suffix as string.

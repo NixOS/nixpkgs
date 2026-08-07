@@ -52,6 +52,7 @@ buildPythonPackage (finalAttrs: {
 
   pythonRelaxDeps = [
     "cryptography"
+    "rich"
     "sigstore-models"
   ];
 

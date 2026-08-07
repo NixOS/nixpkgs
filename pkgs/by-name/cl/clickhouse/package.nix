@@ -1,6 +1,6 @@
 import ./generic.nix {
-  version = "26.4.2.10-stable";
-  rev = "184f682d431389803dd383668f52729cf26e23db";
-  hash = "sha256-UCRwnrIY/j0gdjFnNmR5U7VZeBRqA96mIt6AEKRJQ5Q=";
+  version = "26.7.1.1315-stable";
+  rev = "a6156303df65c307bdb8b66e9e9cc5637346a6b8";
+  hash = "sha256-jCUSLYmhRLIUvDw3JYDtqmcjW92aJBzfFHyCAtxvlsY=";
   lts = false;
 }

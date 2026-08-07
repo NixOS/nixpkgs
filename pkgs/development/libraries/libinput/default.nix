@@ -7,7 +7,6 @@
   meson,
   ninja,
   libevdev,
-  lua5_4,
   mtdev,
   udev,
   wacomSupport ? stdenv.hostPlatform.isLinux,
@@ -20,6 +19,8 @@
   cairo,
   glib,
   gtk3,
+  luaSupport ? true,
+  lua5_4,
   testsSupport ? false,
   check,
   valgrind,
@@ -32,8 +33,6 @@
 }:
 
 let
-  mkFlag = optSet: flag: "-D${flag}=${lib.boolToString optSet}";
-
   sphinx-build =
     let
       env = python3.withPackages (
@@ -54,7 +53,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libinput";
-  version = "1.31.1";
+  version = "1.31.3";
 
   outputs = [
     "bin"
@@ -67,7 +66,7 @@ stdenv.mkDerivation rec {
     owner = "libinput";
     repo = "libinput";
     rev = version;
-    hash = "sha256-9Ko97vJyo4a9NUF7omqHTwzVV02sJ2EqpDIh+nPeLwk=";
+    hash = "sha256-2l+YGD1AFTwJRouMg0d3nQX+2me6A4yOB4g2WE2H//g=";
   };
 
   nativeBuildInputs = [
@@ -84,7 +83,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libevdev
-    lua5_4
     mtdev
     (python3.withPackages (
       pp: with pp; [
@@ -100,6 +98,9 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals wacomSupport [
     libwacom
+  ]
+  ++ lib.optionals luaSupport [
+    lua5_4
   ]
   ++ lib.optionals eventGUISupport [
     # GUI event viewer
@@ -119,10 +120,11 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    (mkFlag documentationSupport "documentation")
-    (mkFlag eventGUISupport "debug-gui")
-    (mkFlag testsSupport "tests")
-    (mkFlag wacomSupport "libwacom")
+    (lib.mesonBool "documentation" documentationSupport)
+    (lib.mesonBool "debug-gui" eventGUISupport)
+    (lib.mesonBool "tests" testsSupport)
+    (lib.mesonBool "libwacom" wacomSupport)
+    (lib.mesonEnable "lua-plugins" luaSupport)
     "--sysconfdir=/etc"
     "--libexecdir=${placeholder "bin"}/libexec"
   ]

@@ -30,14 +30,14 @@
 }:
 
 let
-  version = "7.3.0";
+  version = "7.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Labelbox";
     repo = "labelbox-python";
     tag = "v${version}";
-    hash = "sha256-3xsV7X5M6s1wXYrThFC2SdvWgXAt1Hlw4OGQB/bKCCY=";
+    hash = "sha256-6NTrac0C1rFFVk2+/Nt82p9VH1WxwYMkgVP2uqn+j2k=";
   };
 
   lbox-clients = buildPythonPackage {
@@ -133,7 +133,7 @@ buildPythonPackage rec {
   meta = {
     description = "Platform API for LabelBox";
     homepage = "https://github.com/Labelbox/labelbox-python";
-    changelog = "https://github.com/Labelbox/labelbox-python/releases/tag/v.${src.tag}";
+    changelog = "https://github.com/Labelbox/labelbox-python/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rakesh4g ];
   };

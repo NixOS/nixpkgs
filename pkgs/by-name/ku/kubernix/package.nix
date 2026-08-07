@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kubernix";
-  version = "0.3.2";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "saschagrunert";
     repo = "kubernix";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-CtY2HzDOtR//0aJhJtO4wrqUwvCkTLmemfNYyoYrl88=";
+    sha256 = "sha256-8wFrcs1XuW8Fz4P12eHAeA62ZthwO9grrtTHxhL+f1o=";
   };
 
-  cargoHash = "sha256-+bEwLg/S2TBCZLbNrQfA+FsftW4bb0XbIXtXGj+FO2A=";
+  cargoHash = "sha256-sz7omys2cLTx+pHmQKjikxwJjSz8P0scO59KI2zm2e0=";
 
   # Tests require network access
   doCheck = false;
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Single dependency Kubernetes clusters for local testing, experimenting and development";
     mainProgram = "kubernix";
     homepage = "https://github.com/saschagrunert/kubernix";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ saschagrunert ];
     platforms = lib.platforms.linux;
   };

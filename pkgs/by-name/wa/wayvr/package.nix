@@ -1,5 +1,6 @@
 {
   alsa-lib,
+  dav1d,
   dbus,
   fetchFromGitHub,
   lib,
@@ -25,16 +26,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wayvr";
-  version = "26.2.1";
+  version = "26.7.1";
 
   src = fetchFromGitHub {
-    owner = "wlx-team";
+    owner = "wayvr-org";
     repo = "wayvr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-v1Wkelru825KV+ciXD9esLq39oTyMm/Z4rRbN+jjviY=";
+    hash = "sha256-SdHN3jDe2QJaRORy452RP7kTMxPOZOB/yjpApUOLhRU=";
   };
 
-  cargoHash = "sha256-d6iRaOHq+4j90L76bx7+EwCLOY4MxPeqm3ELJ5H9O+8=";
+  cargoHash = "sha256-eGmlFtlorKG7uygLer3UW6ERLQzdugoYyXVSC2sFh+k=";
 
   nativeBuildInputs = [
     pkg-config
@@ -43,6 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     alsa-lib
+    dav1d
     dbus
     libx11
     libxext
@@ -78,6 +80,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     install -D wayvr/wayvr.desktop -t $out/share/applications
     install -D wayvr/wayvr.svg -t $out/share/icons/hicolor/scalable/apps
+
+    rm $out/bin/prost_build
   '';
 
   passthru = {
@@ -88,7 +92,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Your way to enjoy VR on Linux! Access your Wayland/X11 desktop from SteamVR/Monado (OpenVR+OpenXR support)";
-    homepage = "https://github.com/wlx-team/wayvr";
+    homepage = "https://github.com/wayvr-org/wayvr";
     license = with lib.licenses; [
       gpl3Only
       mit # wayvr-ipc

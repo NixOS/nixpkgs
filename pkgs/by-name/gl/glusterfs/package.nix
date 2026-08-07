@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fuse,
+  fuse3,
   bison,
   flex,
   openssl,
@@ -52,7 +52,7 @@ let
   #       can help with finding new Python scripts.
 
   buildInputs = [
-    fuse
+    fuse3
     openssl
     ncurses
     readline

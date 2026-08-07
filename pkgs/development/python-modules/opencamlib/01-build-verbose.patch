@@ -1,0 +1,12 @@
+diff --git i/pyproject.toml w/pyproject.toml
+index 20be73f..3773051 100644
+--- i/pyproject.toml
++++ w/pyproject.toml
+@@ -36,7 +36,7 @@ requires = ["scikit-build-core"]
+ build-backend = "scikit_build_core.build"
+
+ [tool.scikit-build]
+-cmake.verbose = true
++build.verbose = true
+ logging.level = "DEBUG"
+ wheel.packages = ["src/pythonlib/opencamlib"]

@@ -1,0 +1,25 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sun, 14 Jun 2026 10:49:22 -0400
+Subject: [PATCH] Suppress undefined symbol error on Darwin
+
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index f347162..720bffa 100644
+--- a/Makefile
++++ b/Makefile
+@@ -133,7 +133,7 @@ libgif.a: $(OBJECTS) $(HEADERS)
+ 
+ $(LIBUTILSO): $(UOBJECTS) $(UHEADERS)
+ ifeq ($(UNAME), Darwin)
+-	$(CC) $(CFLAGS) -dynamiclib -current_version $(LIBVER) $(UOBJECTS) -o $(LIBUTILSO)
++	$(CC) $(CFLAGS) -dynamiclib -current_version $(LIBVER) $(UOBJECTS) -Wl,-U,_GifErrorString -o $(LIBUTILSO)
+ else
+ 	$(CC) $(CFLAGS) $(CPPLAGS) -shared $(LDFLAGS) -Wl,-soname -Wl,$(LIBUTILSOMAJOR) -o $(LIBUTILSO) $(UOBJECTS)
+ endif
+-- 
+2.54.0
+

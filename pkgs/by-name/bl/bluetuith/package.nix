@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "bluetuith";
-  version = "0.2.6";
+  version = "0.2.7";
 
   src = fetchFromGitHub {
     owner = "bluetuith-org";
     repo = "bluetuith";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jxN4FLefv+edlpBnwDN/pBxZ7sHkv2w+R2tUeNCI6Tw=";
+    hash = "sha256-FoFmkc6/sPxssEkWHgwM+jtvwJzpDsTJ4T3dzYcxcVc=";
   };
 
-  vendorHash = "sha256-baSiOHiB02hfqDt95ldeKwz+tJgunXheTvREznxPUSc=";
+  vendorHash = "sha256-38yPy0dhZ99smFQK0tvQLHah+Sn6DsXvNrh8nQaR5qk=";
 
   subPackages = [ "." ];
 

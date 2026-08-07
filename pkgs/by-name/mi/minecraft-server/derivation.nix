@@ -36,7 +36,11 @@ stdenv.mkDerivation {
 
   passthru = {
     tests = { inherit (nixosTests) minecraft-server; };
-    updateScript = ./update.py;
+    updateScript = {
+      command = [ ./update.py ];
+
+      supportedFeatures = [ "commit" ];
+    };
   };
 
   meta = {
@@ -48,6 +52,7 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       thoughtpolice
       tomberek
+      wrench-exile-legacy
       costrouc
     ];
     mainProgram = "minecraft-server";

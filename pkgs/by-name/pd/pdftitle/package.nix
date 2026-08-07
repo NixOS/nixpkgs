@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   python3Packages,
-  openai,
   pdfminer,
 
   withOpenai ? false,

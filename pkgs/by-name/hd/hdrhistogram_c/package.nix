@@ -11,14 +11,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hdrhistogram_c";
-  version = "0.11.9";
+  version = "0.11.10";
 
   src = fetchFromGitHub {
     owner = "HdrHistogram";
     repo = "HdrHistogram_c";
     tag = finalAttrs.version;
-    hash = "sha256-9Xp+gPqJpB7xZr5dzyc9Via9gxG9q/EriCx3cm++0kU=";
+    hash = "sha256-LMZj7vuxOA1bgU/J10IKnyNe3R0dk2AA1ydLTHun4vg=";
   };
+
+  # Fix build on i686 by not trying to build AVX2 code
+  # Submitted upstream: https://github.com/HdrHistogram/HdrHistogram_c/pull/143
+  patches = [
+    ./no-avx2-i386.patch
+  ];
 
   buildInputs = [ zlib ];
   nativeBuildInputs = [

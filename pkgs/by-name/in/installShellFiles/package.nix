@@ -13,4 +13,5 @@ makeSetupHook {
       directory = ./tests;
     };
   };
+  meta.license = lib.licenses.mit;
 } ./setup-hook.sh

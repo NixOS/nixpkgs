@@ -24,7 +24,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "unified-memory-framework";
-  version = "1.1.0";
+  version = "1.2.0";
 
   nativeBuildInputs = [
     cmake
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "oneapi-src";
     repo = "unified-memory-framework";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1Z65rNsUNeaeSJmxwpEHPbiU4KEDvyrWL9LyAWFsR1c=";
+    hash = "sha256-HC4ZtW9rcoY9krWJnhdD/vwborBVKjbaZKyS/5MmRjw=";
   };
 
   strictDeps = true;

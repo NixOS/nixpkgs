@@ -8,6 +8,8 @@
 
   # nativeBuildInputs
   cargo-tauri,
+  jq,
+  moreutils,
   nodejs,
   pkg-config,
   yarnBuildHook,
@@ -30,30 +32,33 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "music-assistant-desktop";
-  version = "0.3.6";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "desktop-app";
     tag = finalAttrs.version;
-    hash = "sha256-GL9Cpk6NDhRV0npVXwGjR3Dm0H/uo9cD4ebaI751VLM=";
+    hash = "sha256-d9dC6YiF4xIM2hVA2lX5B8qt5dnDFSG/MAZhQdZf8q4=";
   };
 
-  # hide update feature
+  patches = [
+    ./remove-updater.diff
+  ];
+
   postPatch = ''
-    substituteInPlace src-tauri/src/lib.rs \
-      --replace-fail \
-        "let update =" \
-        "// let update =" \
-      --replace-fail \
-        "&update," \
-        "// &update," \
+    # set version
+    substituteInPlace package.json src-tauri/tauri.conf.json \
+      --replace-fail "0.0.0" "${finalAttrs.version}"
+
+    # disable upstream updater
+    jq '.plugins.updater.endpoints = [ ] | .bundle.createUpdaterArtifacts = false' src-tauri/tauri.conf.json \
+      | sponge src-tauri/tauri.conf.json
   '';
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-rd0kvUTAi4fOh3hxCY1cmkkLWsxNPxVmPVzB9uEv/8c=";
+  cargoHash = "sha256-AFn2m8eO+U86s6g2LlzBuAsJBesrm3Gncihf+zbPDeE=";
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
@@ -62,6 +67,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     cargo-tauri.hook
+    jq
+    moreutils
     nodejs
     pkg-config
     yarnBuildHook
@@ -100,6 +107,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Official companion desktop app for Music Assistant";
+    changelog = "https://github.com/music-assistant/desktop-app/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/music-assistant/desktop-app";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nim65s ];

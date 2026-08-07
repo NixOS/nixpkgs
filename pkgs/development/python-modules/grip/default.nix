@@ -4,7 +4,7 @@
   fetchpatch,
   # Python bits:
   buildPythonPackage,
-  pytest,
+  setuptools,
   responses,
   docopt,
   flask,
@@ -13,17 +13,21 @@
   pygments,
   requests,
   tabulate,
+  addBinToPathHook,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "grip";
   version = "4.6.1";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "joeyespo";
     repo = "grip";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-CHL2dy0H/i0pLo653F7aUHFvZHTeZA6jC/rwn1KrEW4=";
   };
 
@@ -36,12 +40,9 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeCheckInputs = [
-    pytest
-    responses
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     docopt
     flask
     markdown
@@ -51,10 +52,15 @@ buildPythonPackage rec {
     tabulate
   ];
 
-  checkPhase = ''
-    export PATH="$PATH:$out/bin"
-    py.test -xm "not assumption"
-  '';
+  pythonImportsCheck = [ "grip" ];
+
+  nativeCheckInputs = [
+    responses
+    pytestCheckHook
+    addBinToPathHook
+  ];
+
+  enabledTestMarks = [ "not assumption" ];
 
   meta = {
     description = "Preview GitHub Markdown files like Readme locally before committing them";
@@ -63,4 +69,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ koral ];
   };
-}
+})

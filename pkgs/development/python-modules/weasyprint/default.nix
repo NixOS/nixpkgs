@@ -4,6 +4,7 @@
   pkgs,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   fontconfig,
   glib,
   harfbuzz,
@@ -34,7 +35,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "weasyprint";
-  version = "68.1-unstable-2026-05-18";
+  version = "69.0";
   pyproject = true;
 
   __darwinAllowLocalNetworking = true;
@@ -42,10 +43,8 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "WeasyPrint";
-    # Includes upstream's Ghostscript 10.07-compatible rasterization tests.
-    # Drop the pin when the next WeasyPrint release is packaged.
-    rev = "2cb9b3d2378c67e2bfde646344ca4c2cb7c0f25f";
-    hash = "sha256-zQ8gvYy72ROMwprT5dWA3N1vC7y+6ZKNwKESwtPS21w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-kd5ei3dBty8VL0ATPz8LZFP+UTUq7yTjuDtO1s/fdxg=";
   };
 
   patches = [
@@ -56,6 +55,11 @@ buildPythonPackage (finalAttrs: {
       harfbuzz_subset = "${harfbuzz.out}/lib/libharfbuzz-subset${stdenv.hostPlatform.extensions.sharedLibrary}";
       pango = "${pango.out}/lib/libpango-1.0${stdenv.hostPlatform.extensions.sharedLibrary}";
       pangoft2 = "${pango.out}/lib/libpangoft2-1.0${stdenv.hostPlatform.extensions.sharedLibrary}";
+    })
+    (fetchpatch2 {
+      name = "fix-unicode-test";
+      url = "https://github.com/Kozea/WeasyPrint/commit/b2efb459fbe7f7fd35ab9078734121cb87d3d65a.patch?full_index=1";
+      hash = "sha256-uixfpg9fvkdNmSTqz/M1c1vkV/mJDqOs7zDAunn2rEY=";
     })
   ];
 
@@ -107,24 +111,26 @@ buildPythonPackage (finalAttrs: {
 
   env.FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
 
-  # Test include some emoji characters that require a custom fontconfig configuration to be found.
+  # Custom font configuration for tests
   preCheck = ''
-    export FONTCONFIG_FILE=${makeFontsConf { fontDirectories = [ twemoji-color-font ]; }}
+    export FONTCONFIG_FILE=${
+      makeFontsConf {
+        # include some emoji characters
+        fontDirectories = [ twemoji-color-font ];
+
+        # Darwin builds without sandbox can pollute the build
+        impureFontDirectories = [ ];
+      }
+    }
   '';
 
   # Set env variable explicitly for Darwin, but allow overriding when invoking directly
   makeWrapperArgs = [ "--set-default FONTCONFIG_FILE ${finalAttrs.env.FONTCONFIG_FILE}" ];
 
-  # Upstream still reports the last release version from weasyprint.__version__.
-  # Remove when the next release is packaged.
-  preVersionCheck = ''
-    version=68.1
-  '';
-
   pythonImportsCheck = [ "weasyprint" ];
 
   meta = {
-    changelog = "https://github.com/Kozea/WeasyPrint/commits/${finalAttrs.src.rev}";
+    changelog = "https://github.com/Kozea/WeasyPrint/releases/tag/${finalAttrs.src.tag}";
     description = "Converts web documents to PDF";
     homepage = "https://weasyprint.org/";
     license = lib.licenses.bsd3;

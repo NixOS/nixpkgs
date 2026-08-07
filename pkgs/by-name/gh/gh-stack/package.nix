@@ -4,11 +4,12 @@
   buildGoModule,
   versionCheckHook,
   nix-update-script,
+  gitMinimal,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "gh-stack";
-  version = "0.0.4";
+  version = "0.1.0";
 
   __structuredAttrs = true;
 
@@ -16,10 +17,12 @@ buildGoModule (finalAttrs: {
     owner = "github";
     repo = "gh-stack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sC8QQ4H2WsEVf4FjaWlPvMlVlVc3J6IVmdlqNbJ3M6I=";
+    hash = "sha256-48JkOeqbvHlCZ2u3LnwJymw55xMQWLTPJLDbV44clGI=";
   };
 
-  vendorHash = "sha256-JnuqORtdW+xz8pAGAFXdjRey8jCEj+miJiyfY7gzRSU=";
+  vendorHash = "sha256-0Xtr/MOpX4u5GnbRdNxKPA0GpSzi8PIbVc9MmP05De4=";
+
+  nativeCheckInputs = [ gitMinimal ];
 
   ldflags = [
     "-s"
@@ -38,7 +41,10 @@ buildGoModule (finalAttrs: {
     downloadPage = "https://github.com/github/gh-stack/";
     changelog = "https://github.com/github/gh-stack/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ethancedwards8 ];
+    maintainers = with lib.maintainers; [
+      antoineco
+      ethancedwards8
+    ];
     mainProgram = "gh-stack";
   };
 })

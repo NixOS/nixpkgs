@@ -291,8 +291,21 @@
     };
 
     # No changes from 13.1 to 13.2
-    # https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#host-compiler-support-policy
+    # https://docs.nvidia.com/cuda/archive/13.2.0/cuda-installation-guide-linux/index.html#host-compiler-support-policy
     "13.2" = {
+      clang = {
+        maxMajorVersion = "21";
+        minMajorVersion = "7";
+      };
+      gcc = {
+        maxMajorVersion = "15";
+        minMajorVersion = "6";
+      };
+    };
+
+    # No changes from 13.2 to 13.3
+    # https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#host-compiler-support-policy
+    "13.3" = {
       clang = {
         maxMajorVersion = "21";
         minMajorVersion = "7";

@@ -253,6 +253,7 @@ stdenv.mkDerivation (finalAttrs: {
       video content, efficiently
     '';
     homepage = "https://obsproject.com";
+    changelog = "https://github.com/obsproject/obs-studio/releases/tag/${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       jb55
       materus

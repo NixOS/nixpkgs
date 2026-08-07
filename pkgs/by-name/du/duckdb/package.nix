@@ -152,11 +152,12 @@ stdenv.mkDerivation (finalAttrs: {
       );
       LD_LIBRARY_PATH = lib.optionalString stdenv.hostPlatform.isDarwin "DY" + "LD_LIBRARY_PATH";
     in
+    # FIXME: do something about the excessive logging on x86_64-linux (> 250 MiB).
     ''
       runHook preInstallCheck
       (($(ulimit -n) < 1024)) && ulimit -n 1024
 
-      HOME="$(mktemp -d)" ${LD_LIBRARY_PATH}="$lib/lib" ./test/unittest ${toString excludes}
+      HOME="$(mktemp -d)" ${LD_LIBRARY_PATH}="$lib/lib" ./test/unittest ${toString excludes}${lib.optionalString stdenv.hostPlatform.isx86_64 " >/dev/null"}
 
       runHook postInstallCheck
     '';

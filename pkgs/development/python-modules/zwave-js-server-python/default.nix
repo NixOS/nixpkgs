@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "zwave-js-server-python";
-  version = "0.69.0";
+  version = "0.73.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "zwave-js-server-python";
     tag = finalAttrs.version;
-    hash = "sha256-EBhIoCWclKhxwmqI6fvtsVh3zCnWS5jRXP5aYY3aNbM=";
+    hash = "sha256-xIElSGx6NOKEB5XDgXi6Cf5+XFW2i1riu7RPDHgmIt4=";
   };
 
   build-system = [ setuptools ];

@@ -88,6 +88,9 @@
 
         machine.succeed("shadps4 /etc/openorbis-sample-packages/OpenOrbis-PNG-Sample/uroot/eboot.bin >&2 &")
 
+        machine.wait_for_text("Save Migration")
+        machine.succeed("xdotool mousemove 879 182 click 1")
+
         # Look for logo
         with machine.nested("Waiting for the screen to have openorbisColor {} on it:".format(openorbisColor)):
             retry(check_for_color(openorbisColor))

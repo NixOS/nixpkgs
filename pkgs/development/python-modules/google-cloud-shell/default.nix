@@ -14,13 +14,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-shell";
-  version = "1.15.0";
+  version = "1.16.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_shell";
     inherit (finalAttrs) version;
-    hash = "sha256-FSnxSR937S5mUz7uxACWB3NRD5bFNaxTKiTWCzt/VAg=";
+    hash = "sha256-e0RMNqR4jxA+hwlNM2Lyspsh9WKfQRWndZ1oZJMRZoI=";
   };
 
   build-system = [ setuptools ];

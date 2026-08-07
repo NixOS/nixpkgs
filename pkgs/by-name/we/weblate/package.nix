@@ -50,7 +50,7 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "weblate";
-  version = "5.17";
+  version = "2026.6.1";
   pyproject = true;
 
   outputs = [
@@ -62,11 +62,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "WeblateOrg";
     repo = "weblate";
     tag = "weblate-${finalAttrs.version}";
-    hash = "sha256-+czdS1cICvm8esXxJG9BjzPTJExajxvDoRVH7f+t6lY=";
+    hash = "sha256-7dhEkU2sVIjMPPR/0U2sMFXG6bl8s5WDvw8MyZZhqNE=";
   };
 
   postPatch = ''
     sed -i 's|/bin/true|true|g' weblate/addons/example_pre.py
+
+    sed -i 's/"setuptools==.*"/"setuptools"/' pyproject.toml
+    sed -i 's/"translate-toolkit==.*"/"translate-toolkit"/' pyproject.toml
   '';
 
   build-system = with python3Packages; [ setuptools ];
@@ -93,26 +96,40 @@ python3Packages.buildPythonApplication (finalAttrs: {
       ${manage} compress
     '';
 
-  pythonRelaxDeps = [
-    "requests"
-    "pygobject"
-    "certifi"
-  ];
+  # Upstream pins all dependencies, so their version constraints are mostly meanningless,
+  # except for a few packages maintained by themselfes.
+  # https://github.com/WeblateOrg/weblate/issues/20003#issuecomment-4691837274
+  pythonRelaxDeps =
+    let
+      # Dependencies owned by Weblate that should always be in the exact version specified
+      coreDeps = [
+        "weblate-fonts"
+        "weblate-schemas"
+        "weblate-language-data"
+        "translation-finder"
+        "translate-toolkit"
+      ];
+    in
+    lib.concatMap (
+      p: if !p ? "pname" || lib.elem p.pname coreDeps then [ ] else [ p.pname ]
+    ) finalAttrs.passthru.dependencies;
 
   dependencies =
     with python3Packages;
     [
       ahocorasick-rs
       altcha
+      argon2-cffi-bindings
+      argon2-cffi
       (toPythonModule (borgbackup.override { python3 = python; }))
       celery
       certifi
+      cffi
       charset-normalizer
       confusable-homoglyphs
       crispy-bootstrap5
       cryptography
       cssselect
-      cython
       cyrtranslit
       dateparser
       diff-match-patch
@@ -142,13 +159,23 @@ python3Packages.buildPythonApplication (finalAttrs: {
       mistletoe
       nh3
       openpyxl
+      opentelemetry-exporter-otlp-proto-http
+      opentelemetry-instrumentation-celery
+      opentelemetry-instrumentation-django
+      opentelemetry-instrumentation-psycopg
+      opentelemetry-instrumentation-redis
+      opentelemetry-instrumentation-requests
+      opentelemetry-sdk
       packaging
       pillow
       pyaskalono
+      pyasn1
       pycairo
       pygments
       pygobject
       pyicumessageformat
+      pyjwt
+      pyopenssl
       pyparsing
       python-dateutil
       qrcode
@@ -164,6 +191,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       tesserocr
       translate-toolkit
       translation-finder
+      twisted
       unidecode
       urllib3
       user-agents
@@ -189,10 +217,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   # Commented entries are not packaged yet
   optional-dependencies = with python3Packages; {
-    alibaba = [
-      aliyun-python-sdk-alimt
-      aliyun-python-sdk-core
-    ];
     amazon = [ boto3 ];
     # gelf = [ logging-gelf ];
     # gerrit = [ git-review ];
@@ -200,11 +224,17 @@ python3Packages.buildPythonApplication (finalAttrs: {
       google-cloud-storage
       google-cloud-translate
     ];
+    google-errors = [
+      google-cloud-error-reporting
+    ];
     ldap = [ django-auth-ldap ];
     # mercurial = [ mercurial ];
-    openai = [ openai ];
     postgres = [ psycopg ];
-    saml = [ python3-saml ];
+    rollbar = [ rollbar ];
+    saml = [
+      python3-saml
+      xmlsec
+    ];
     # saml2idp = [ djangosaml2idp2 ];
     sphinx = [ sphinx ];
     # wllegal = [ wllegal ];
@@ -230,7 +260,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       pytest-django
       pytest-xdist
       responses
-      respx
       selenium
       standardwebhooks
 
@@ -306,6 +335,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
     # Tries to resolve DNS
     "weblate/api/tests.py::ProjectAPITest::test_install_machinery"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_form"
 
     # djangosaml2idp2 is not packaged yet
     "weblate/utils/tests/test_djangosaml2idp.py"

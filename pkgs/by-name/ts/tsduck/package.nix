@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   # build and doc tooling
-  asciidoctor-with-extensions,
+  asciidoctor,
   doxygen,
   graphviz,
   python3,
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    asciidoctor-with-extensions
+    asciidoctor
     doxygen
     graphviz
     python3

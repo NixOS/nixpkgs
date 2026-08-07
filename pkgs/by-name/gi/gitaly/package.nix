@@ -7,7 +7,7 @@
 }:
 
 let
-  version = "18.11.3";
+  version = "19.0.4";
   package_version = "v${lib.versions.major version}";
   gitaly_package = "gitlab.com/gitlab-org/gitaly/${package_version}";
 
@@ -21,10 +21,10 @@ let
       owner = "gitlab-org";
       repo = "gitaly";
       rev = "v${version}";
-      hash = "sha256-oFQevVXbxu9G4LF3BrC0EUUviypSwB4cKRjipdiO3jU=";
+      hash = "sha256-IkOS2XYo+QkLkhodeqmzz5bR2FxMG68hUsT357h7cKo=";
     };
 
-    vendorHash = "sha256-123WUtoUaPIyDywcTKEhiZP2SYYHxAQoOPyCebsHYRI=";
+    vendorHash = "sha256-oc+H5DV2B++buxH2LI0BoaWjDUVJGRcbuofnIX69ddI=";
 
     ldflags = [
       "-X ${gitaly_package}/internal/version.version=${version}"
@@ -98,7 +98,7 @@ buildGoModule (
     meta = {
       homepage = "https://gitlab.com/gitlab-org/gitaly";
       description = "Git RPC service for handling all the git calls made by GitLab";
-      platforms = lib.platforms.linux ++ [ "x86_64-darwin" ];
+      platforms = lib.platforms.linux;
       teams = [ lib.teams.gitlab ];
       license = lib.licenses.mit;
     };

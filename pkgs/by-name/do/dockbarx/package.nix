@@ -44,7 +44,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pillow
     pygobject3
     pyxdg
-    xlib
+    python-xlib
   ];
 
   # no tests

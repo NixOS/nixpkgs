@@ -12,18 +12,24 @@
   pip,
   platformdirs,
   wheel,
+
+  # tests
+  griffe,
+  jsonschema,
+  mkdocstrings,
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "griffelib";
-  version = "2.0.2";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = "griffe";
     tag = finalAttrs.version;
-    hash = "sha256-Fxa9lrBVQ/enVLiU7hUc0d5x9ItI19EGnbxa7MX6Plc=";
+    hash = "sha256-hNKL86LSE9PwIofxt2t5PrlThiX7hTgYADK2HDVhNjk=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/griffelib";
@@ -42,6 +48,19 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [
     "griffe"
+  ];
+
+  nativeCheckInputs = [
+    griffe
+    jsonschema
+    mkdocstrings
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # missing griffecli
+    "tests/test_api.py"
+    "tests/test_git.py"
   ];
 
   meta = {

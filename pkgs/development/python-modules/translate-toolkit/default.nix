@@ -29,18 +29,19 @@
   addBinToPathHook,
   pytest-xdist,
   gettext,
+  syrupy,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "translate-toolkit";
-  version = "3.19.5";
+  version = "3.19.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "translate";
     repo = "translate";
     tag = finalAttrs.version;
-    hash = "sha256-NJuhkJyXfGO2iwvcHUrfMZi55t1+89RN6jEIxHk8mcs=";
+    hash = "sha256-+94oo6IYnRR4jnR60C3WNjesK6Tk6jND3xsYyx6sw0U=";
   };
 
   build-system = [ setuptools-scm ];
@@ -49,6 +50,8 @@ buildPythonPackage (finalAttrs: {
     lxml
     unicode-segmentation-rs
   ];
+
+  pythonRelaxDeps = [ "lxml" ];
 
   optional-dependencies = {
     chardet = [ charset-normalizer ];
@@ -69,6 +72,7 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     addBinToPathHook
     pytest-xdist
+    syrupy
     gettext
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
@@ -76,12 +80,6 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Probably breaks because of nix sandbox
     "test_timezones"
-  ];
-
-  disabledTestPaths = [
-    # Require pytest-snapshot but there are no snapshots checked in
-    "tests/translate/tools/test_pocount.py"
-    "tests/translate/tools/test_junitmsgfmt.py"
   ];
 
   pythonImportsCheck = [ "translate" ];

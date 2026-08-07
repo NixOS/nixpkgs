@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/java $out/bin
     cp ${finalAttrs.src} $out/share/java/closure-compiler-v${finalAttrs.version}.jar
     makeWrapper ${jre}/bin/java $out/bin/closure-compiler \
-      --add-flags "-jar $out/share/java/closure-compiler-v${finalAttrs.version}.jar"
+      --add-flags "\$NIX_JAVA_ARGS -jar $out/share/java/closure-compiler-v${finalAttrs.version}.jar"
   '';
 
   meta = {

@@ -82,13 +82,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "viber";
-  version = "24.9.0.3";
+  version = "27.3.0.2";
 
   src = fetchurl {
     # Taking Internet Archive snapshot of a specific version to avoid breakage
     # on new versions
-    url = "https://web.archive.org/web/20250830135453/https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
-    hash = "sha256-i7fG8Sdl/v5QAyTsCh6OKe4BDYnQ0jBJgSdqMOrkLNo=";
+    url = "https://web.archive.org/web/20260518041738/https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
+    hash = "sha256-lhU03Ay5IABux66BCLDhugmkdu7x4TtLNwp5zVLdIPM=";
   };
 
   nativeBuildInputs = [

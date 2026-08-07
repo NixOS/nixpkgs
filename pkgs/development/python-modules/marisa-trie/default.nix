@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "marisa-trie";
-  version = "1.3.1";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytries";
     repo = "marisa-trie";
     tag = version;
-    hash = "sha256-7T0V5levh9xjWmjJdFix0p8L3lZhfurikSWMI7Hotbs=";
+    hash = "sha256-U3gntlvJ0IaWoK+2V0OQ/XoDLfQsSbrrsSj95VR1m+4=";
   };
 
   patches = [

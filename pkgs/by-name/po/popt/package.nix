@@ -60,5 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ qyliss ];
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+    identifiers.purlParts = {
+      type = "github";
+      spec = "rpm-software-management/popt@popt-${finalAttrs.version}-release";
+    };
   };
 })

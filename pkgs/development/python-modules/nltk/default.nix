@@ -1,12 +1,14 @@
 {
   lib,
+  stdenv,
   pkgs,
-  fetchPypi,
-  fetchpatch,
+  fetchFromGitHub,
   buildPythonPackage,
   click,
+  defusedxml,
   joblib,
   regex,
+  setuptools,
   tqdm,
 
   # preInstallCheck
@@ -20,59 +22,55 @@
   pytest-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nltk";
-  version = "3.9.2";
-  format = "setuptools";
+  version = "3.10.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-D0CemwacpBd8GQPD6EPu+Qx+kpkvpJMa5gfabeSeFBk=";
+  src = fetchFromGitHub {
+    owner = "nltk";
+    repo = "nltk";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1iflqb3cOyaviW3IostFCuJtZ9KBZI0n9dfKfqqbcO0=";
   };
 
-  patches = [
-    # https://github.com/nltk/nltk/security/advisories/GHSA-jm6w-m3j8-898g
-    # https://github.com/NixOS/nixpkgs/issues/502599
-    (fetchpatch {
-      name = "fix-unauthed-shutdown";
-      url = "https://github.com/nltk/nltk/commit/bbaae83db86a0f49e00f5b0db44a7254c268de9b.patch";
-      hash = "sha256-1ZzOQXiNxZ6o7JQs0b9FpsUjZtuUAjXEmDkc9mV3dYU=";
-    })
+  postPatch = ''
+    # In the nix store we trust
+    substituteInPlace nltk/pathsec.py \
+      --replace-fail 'if not (target == scoped_root or target.is_relative_to(scoped_root)):' \
+                     'if not (target == scoped_root or target.is_relative_to(scoped_root) or target.is_relative_to("/nix/store")):' \
+      --replace-fail ' "/usr/share/nltk_data", ' ' "/usr/share/nltk_data", "/nix/store", '
+  '';
 
-    # https://github.com/nltk/nltk/security/advisories/GHSA-469j-vmhf-r6v7
-    # https://github.com/NixOS/nixpkgs/issues/502535
-    (fetchpatch {
-      name = "fix-downloader-path-traversal";
-      url = "https://github.com/nltk/nltk/commit/89fe2ec2c6bae6e2e7a46dad65cc34231976ed8a.patch";
-      hash = "sha256-hQJmVEDDcio4Ew+Y10WzMV53mpYZuuDsFcEZKEzl7nk=";
-    })
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     click
+    defusedxml
     joblib
     regex
     tqdm
   ];
 
-  # Use new passthru function to pass dependencies required for testing
   preInstallCheck = ''
     export NLTK_DATA=${
       nltk.dataDir (
         d: with d; [
           averaged-perceptron-tagger-eng
           averaged-perceptron-tagger-rus
+          bcp47
           brown
           cess-cat
           cess-esp
           conll2007
           floresta
           gutenberg
+          ieer
           inaugural
           indian
           large-grammars
           nombank-1-0
-          omw-1-4
+          omw-2-0
           pl196x
           porter-test
           ptb
@@ -108,6 +106,11 @@ buildPythonPackage rec {
     "nltk/test/unit/test_downloader.py" # Touches network
   ];
 
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # ModuleNotFoundError: No module named '_tkinter'
+    "test_chartparser_app_uses_pickle_load_not_pickle_load_standard"
+  ];
+
   pythonImportsCheck = [ "nltk" ];
 
   passthru = {
@@ -116,10 +119,11 @@ buildPythonPackage rec {
   };
 
   meta = {
+    changelog = "https://github.com/nltk/nltk/blob/${finalAttrs.src.tag}/ChangeLog";
     description = "Natural Language Processing ToolKit";
     mainProgram = "nltk";
-    homepage = "http://nltk.org/";
+    homepage = "https://nltk.org/";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.bengsparks ];
   };
-}
+})

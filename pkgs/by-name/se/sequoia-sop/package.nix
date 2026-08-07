@@ -7,20 +7,24 @@
   rustPlatform,
   sqlite,
   pkg-config,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sequoia-sop";
-  version = "0.37.3";
+  version = "0.38.0";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia-sop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7fyItwtzNia97fbLJ1YkpkS7KmCo3I81uksh3lNvxwU=";
+    hash = "sha256-3PxUXMLRBqw9GO0+wRiwI7P6/RH9vuAkSN4OnSxV0SQ=";
   };
 
-  cargoHash = "sha256-NrJYFf2bK/QwfFpIrPD8Zc9N/tKVbN2I48jA2B0rNWk=";
+  cargoHash = "sha256-iKC6vIT8fVFv/Yx3YJUSCHyTOZ7X860Ak0l/+7lrU9Y=";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     pkg-config
@@ -35,19 +39,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildFeatures = [ "cli" ];
 
-  env.ASSET_OUT_DIR = "/tmp/";
+  env.ASSET_OUT_DIR = "target";
 
   # Install manual pages
   postInstall = ''
-    installManPage /tmp/man-pages/*.*
+    installManPage ${finalAttrs.env.ASSET_OUT_DIR}/man-pages/*.*
     installShellCompletion --cmd sqop \
-      --bash /tmp/shell-completions/sqop.bash \
-      --fish /tmp/shell-completions/sqop.fish \
-      --zsh /tmp/shell-completions/_sqop
+      --bash ${finalAttrs.env.ASSET_OUT_DIR}/shell-completions/sqop.bash \
+      --fish ${finalAttrs.env.ASSET_OUT_DIR}/shell-completions/sqop.fish \
+      --zsh ${finalAttrs.env.ASSET_OUT_DIR}/shell-completions/_sqop
     # Also elv and powershell are generated there
   '';
 
   doCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "version";
 
   passthru.updateScript = nix-update-script { };
 
@@ -56,7 +63,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://gitlab.com/sequoia-pgp/sequoia-sop";
     changelog = "https://gitlab.com/sequoia-pgp/sequoia-sop/-/blob/${finalAttrs.src.tag}/NEWS";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ doronbehar ];
+    maintainers = with lib.maintainers; [
+      doronbehar
+      anish
+    ];
     mainProgram = "sqop";
   };
 })

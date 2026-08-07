@@ -13,8 +13,8 @@
   openssl,
   cmake,
   cacert,
+  tzdata,
   usage,
-  mise,
   testers,
   runCommand,
   jq,
@@ -22,16 +22,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mise";
-  version = "2026.5.12";
+  version = "2026.7.17";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-X4Q7bwRroP8+2GLBfHFy8ru6y2UwBw3CaH43mym0O74=";
+    hash = "sha256-OnuvK0SmRHqMiw14LEuehNKg677XtKyjedgqrg4owlM=";
   };
 
-  cargoHash = "sha256-WFNy0/lP2wEuMRt21HpJZUMDJd6dPNKDY7Pqjx6AXxU=";
+  cargoHash = "sha256-Ot5bP4J6KnATOb1Tt2DKOgFTY/urMWcUsFfjbPKnmVc=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -69,22 +69,29 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rustPlatform.bindgenHook
   ];
 
-  # disable warnings as errors for aws-lc-sys in checkPhase
-  env.NIX_CFLAGS_COMPILE = "-Wno-error";
+  env = {
+    # disable warnings as errors for aws-lc-sys in checkPhase
+    NIX_CFLAGS_COMPILE = "-Wno-error";
+    # tera date helper tests look up timezone data via TZDIR.
+    TZDIR = "${tzdata}/share/zoneinfo";
+  };
 
   checkFlags = [
     # last_modified will always be different in nix
     "--skip=tera::tests::test_last_modified"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-    # x86_64-darwin started failing mid-April 2025; aarch64 in Feb 2026
-    "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_with_cache"
-    "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_without_cache"
+    # shell out to macOS system binaries that the darwin sandbox refuses to exec
+    "--skip=system::defaults::tests::test_status_missing_keys_are_unset"
+    "--skip=system::packages::brew::cask::tests::upgrades_app_with_protected_existing_contents"
   ];
 
   cargoTestFlags = [ "--all-features" ];
   # some tests access the same folders, don't test in parallel to avoid race conditions
   dontUseCargoParallelTests = true;
+
+  # HTTP tests use mock servers that bind to localhost. Without this, darwin builds fail.
+  __darwinAllowLocalNetworking = true;
 
   postInstall = ''
     installManPage ./man/man1/mise.1
@@ -110,7 +117,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ];
     };
     tests = {
-      version = (testers.testVersion { package = mise; }).overrideAttrs (old: {
+      version = (testers.testVersion { package = finalAttrs.finalPackage; }).overrideAttrs (old: {
         nativeBuildInputs = old.nativeBuildInputs ++ [ cacert ];
       });
       usageCompat =
@@ -118,7 +125,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         runCommand "mise-usage-compatibility"
           {
             nativeBuildInputs = [
-              mise
+              finalAttrs.finalPackage
               usage
               jq
             ];
@@ -141,7 +148,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Front-end to your dev env";
     changelog = "https://github.com/jdx/mise/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ konradmalik ];
+    maintainers = with lib.maintainers; [
+      konradmalik
+      Br1ght0ne
+    ];
     mainProgram = "mise";
   };
 })

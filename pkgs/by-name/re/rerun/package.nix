@@ -4,6 +4,7 @@
   rustPlatform,
   fetchFromGitHub,
   arrow-cpp,
+
   # nativeBuildInputs
   binaryen,
   lld,
@@ -12,6 +13,7 @@
   protobuf,
   rustfmt,
   nasm,
+
   # buildInputs
   freetype,
   glib,
@@ -19,7 +21,10 @@
   libxkbcommon,
   openssl,
   vulkan-loader,
+  # linux-only:
+  udev,
   wayland,
+
   versionCheckHook,
   # passthru
   nix-update-script,
@@ -35,10 +40,9 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rerun";
-  version = "0.32.1";
+  version = "0.35.0";
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   outputs = [
     "out"
@@ -49,7 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "rerun-io";
     repo = "rerun";
     tag = finalAttrs.version;
-    hash = "sha256-WedZ5RZiin6jGx2aCe5obkkWJSnwzMoP4s+qQIyeq8Y=";
+    hash = "sha256-PPur5of8zoStXl+3Eq/sgDZ0E9ADUnks6nJ55mzJTuI=";
   };
 
   # The path in `build.rs` is wrong for some reason, so we patch it to make the passthru tests work
@@ -58,7 +62,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '"rerun_sdk/rerun_cli/rerun"' '"rerun_sdk/rerun"'
   '';
 
-  cargoHash = "sha256-LkZA3wcDGIGSjRkjPY7YhjlfVqlGWAMc+qIfDLFZUTE=";
+  cargoHash = "sha256-yapmDUOCCqvxmFFe/nQjeBWytTEnMw2opd/U7aXI4jQ=";
 
   cargoBuildFlags = [
     "--package"
@@ -139,11 +143,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     freetype
     glib
     gtk3
-    (lib.getDev openssl)
     libxkbcommon
+    openssl
     vulkan-loader
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ (lib.getLib wayland) ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    udev
+    (lib.getLib wayland)
+  ];
 
   propagatedBuildInputs = [ arrow-cpp ];
 

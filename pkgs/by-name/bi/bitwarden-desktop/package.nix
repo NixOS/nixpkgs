@@ -5,15 +5,14 @@
   copyDesktopItems,
   dart-sass,
   darwin,
-  electron_39,
+  electron_41,
   fetchFromGitHub,
   gnome-keyring,
   jq,
-  llvmPackages_18,
   makeDesktopItem,
   makeWrapper,
   nix-update-script,
-  nodejs_22,
+  nodejs_24,
   pkg-config,
   rustc,
   rustPlatform,
@@ -22,24 +21,18 @@
 }:
 
 let
-  description = "Secure and free password manager for all of your devices";
   icon = "bitwarden";
-  electron = electron_39;
-
-  # argon2 npm dependency is using `std::basic_string<uint8_t>`, which is no longer allowed in LLVM 19
-  buildNpmPackage' = buildNpmPackage.override {
-    stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_18.stdenv else stdenv;
-  };
+  electron = electron_41;
 in
-buildNpmPackage' rec {
+buildNpmPackage (finalAttrs: {
   pname = "bitwarden-desktop";
-  version = "2026.3.1";
+  version = "2026.7.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
-    rev = "desktop-v${version}";
-    hash = "sha256-ecaCHk04N9h0RP8gK0o+MLgYS6Linsqi7AaC86hwQ3U=";
+    tag = "desktop-v${finalAttrs.version}";
+    hash = "sha256-E4glf4G70BuT0GYu1kEb5Z9B76ElIlDPe1rdGSdmCzo=";
   };
 
   patches = [
@@ -55,10 +48,6 @@ buildNpmPackage' rec {
   ];
 
   postPatch = ''
-    # https://github.com/bitwarden/clients/pull/20480
-    substituteInPlace package-lock.json apps/desktop/desktop_native/napi/package.json \
-      --replace-fail '"@napi-rs/cli": "3.5.1"' '"@napi-rs/cli": "3.2.0"'
-
     # remove code under unfree license
     rm -r bitwarden_license
 
@@ -75,7 +64,7 @@ buildNpmPackage' rec {
     rm -r apps/cli
   '';
 
-  nodejs = nodejs_22;
+  nodejs = nodejs_24;
 
   makeCacheWritable = true;
   npmFlags = [
@@ -85,24 +74,21 @@ buildNpmPackage' rec {
 
   npmWorkspace = "apps/desktop";
   npmDepsFetcherVersion = 2;
-  npmDepsHash = "sha256-1t4CSd1NDC1medTTFHSzX9ZkgHqPG2L//yjaloH47z0=";
+  npmDepsHash = "sha256-WRxlvkgWboO0ukUHgjC5CrfgfwnmUfDXI4r5dx9CKww=";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
       cargoRoot
       patches
       ;
-    hash = "sha256-d9Iv7OekHOteH1lyAuyj/EzfU/KSCW6ATx83foOW3IE=";
+    hash = "sha256-PLfR+yS+MtscRRuyLaK/qIWJVDoefhOobev1fpNeHNo=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
-
-  # make electron-builder not attempt to codesign the app on darwin
-  env.CSC_IDENTITY_AUTO_DISCOVERY = "false";
 
   nativeBuildInputs = [
     cargo
@@ -153,7 +139,8 @@ buildNpmPackage' rec {
     npm exec electron-builder -- \
       --dir \
       -c.electronDist=electron-dist \
-      -c.electronVersion=${electron.version}
+      -c.electronVersion=${electron.version} \
+      ${lib.optionalString stdenv.hostPlatform.isDarwin "-c.mac.identity=null"}
 
     popd
   '';
@@ -177,7 +164,7 @@ buildNpmPackage' rec {
   ];
 
   preCheck = ''
-    pushd ${cargoRoot}
+    pushd ${finalAttrs.cargoRoot}
     cargoCheckType=release
     HOME=$(mktemp -d)
   '';
@@ -210,7 +197,7 @@ buildNpmPackage' rec {
     # Extract the polkit policy file from the multiline string in the source code.
     # This may break in the future but its better than copy-pasting it manually.
     mkdir -p $out/share/polkit-1/actions/
-    pushd apps/desktop/src/key-management/biometrics
+    pushd apps/desktop/src/key-management/biometrics/native-v2
     awk '/const polkitPolicy = `/{gsub(/^.*`/, ""); print; str=1; next} str{if (/`;/) str=0; gsub(/`;/, ""); print}' os-biometrics-linux.service.ts > $out/share/polkit-1/actions/com.bitwarden.Bitwarden.policy
     popd
 
@@ -231,7 +218,7 @@ buildNpmPackage' rec {
       name = "bitwarden";
       exec = "bitwarden %U";
       inherit icon;
-      comment = description;
+      comment = finalAttrs.meta.description;
       desktopName = "Bitwarden";
       categories = [ "Utility" ];
       mimeTypes = [ "x-scheme-handler/bitwarden" ];
@@ -248,17 +235,19 @@ buildNpmPackage' rec {
   };
 
   meta = {
-    changelog = "https://github.com/bitwarden/clients/releases/tag/${src.rev}";
-    inherit description;
+    changelog = "https://github.com/bitwarden/clients/releases/tag/${finalAttrs.src.tag}";
+    description = "Secure and free password manager for all of your devices";
     homepage = "https://bitwarden.com";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ amarshall ];
+    maintainers = with lib.maintainers; [
+      tree-sapii
+      amarshall
+    ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     mainProgram = "bitwarden";
   };
-}
+})

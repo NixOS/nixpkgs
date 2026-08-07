@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "guile-hoot";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromCodeberg {
     owner = "spritely";
     repo = "hoot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-b372dMUsDTa+hYrOwvj+/YcwVP52BCJxwSGRaqSSWZs=";
+    hash = "sha256-ZzWGdLKiJF9lBKrlX7jCKnPlmWRi1dDB4zrfkIOMpQU=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
       libs = [ "$out" ] ++ finalAttrs.propagatedBuildInputs;
     in
     ''
-      cp ./repl/repl.js $out/share/guile-hoot/0.8.0/repl/repl.js
+      cp ./repl/repl.js $out/share/guile-hoot/${finalAttrs.version}/repl/repl.js
       wrapProgram $out/bin/hoot \
         --prefix GUILE_LOAD_PATH : ${lib.makeSearchPath guile.siteDir libs} \
         --prefix GUILE_LOAD_COMPILED_PATH : ${lib.makeSearchPath guile.siteCcacheDir libs}
@@ -62,7 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Scheme to WebAssembly compiler backend for GNU Guile and a general purpose WASM toolchain";
     homepage = "https://codeberg.org/spritely/hoot";
-    license = lib.licenses.asl20;
+    license = with lib.licenses; [
+      asl20
+      lgpl3Plus
+    ];
     maintainers = with lib.maintainers; [ jinser ];
     platforms = lib.platforms.unix;
     mainProgram = "hoot";

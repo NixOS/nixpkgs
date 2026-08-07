@@ -8,16 +8,19 @@
 }:
 buildGo125Module (finalAttrs: {
   pname = "plakar";
-  version = "1.0.6";
+  version = "1.1.4";
+
+  # to avoid having all the Test(Get|Set|Validate)Service.* tests fail on darwin
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "PlakarKorp";
     repo = "plakar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-X8m2dXMb+cxWBbKm0MhhY2pNSBTUONyHoPnGlDG9jOg=";
+    hash = "sha256-Urj1BG3XGhSroaa9pl9NGiKj38J1P+H9sA7noGwIhdc=";
   };
 
-  vendorHash = "sha256-6MdwUJTu9QvqZ3iGEg39L5B5mce7JssFTF3ZmoTuH3M=";
+  vendorHash = "sha256-aqHjSTVVxBbaHAZZNQaFbftN0Hbl/+7wgk5uFM664po=";
 
   buildInputs = [
     fuse
@@ -30,8 +33,8 @@ buildGo125Module (finalAttrs: {
   checkFlags =
     let
       skippedTests = [
-        # mount: fusermount: exec: "fusermount": executable file not found in $PATH
-        "TestExecuteCmdMountDefault"
+        # hangs even outside Nix, so probably an upstream issue:
+        "TestRebuildStateVersionMismatch"
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         "TestBTreeScanMemory"
@@ -53,6 +56,7 @@ buildGo125Module (finalAttrs: {
     maintainers = with lib.maintainers; [
       heph2
       qbit
+      nadir-ishiguro
     ];
   };
 })

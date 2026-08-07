@@ -141,6 +141,10 @@ in
       services.libinput.enable = mkDefault true;
 
       security.pam.services.mate-screensaver.unixAuth = true;
+      security.polkit = {
+        enable = true;
+        enablePkexecWrapper = mkDefault true;
+      };
 
       xdg.portal.configPackages = mkDefault [ pkgs.mate-desktop ];
 

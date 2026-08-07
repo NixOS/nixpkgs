@@ -2,46 +2,39 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libsForQt5,
+  fetchpatch,
+  cmake,
+  qt6Packages,
+  ninja,
   pkg-config,
   gst_all_1,
   makeDesktopItem,
   copyDesktopItems,
-
-  withVLC ? true,
-  libvlc,
-  withMPV ? true,
   mpv-unwrapped,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "anilibria-winmaclinux";
-  version = "2.2.35";
+  version = "2.2.36";
 
   src = fetchFromGitHub {
     owner = "anilibria";
     repo = "anilibria-winmaclinux";
     tag = finalAttrs.version;
-    hash = "sha256-3tiCfL6j2yhhL16mG1LYD41G6nbomwmqZOwgm4bEHTs=";
+    hash = "sha256-2fwpLHEH1jlxl7r7QiVTHZniBO5k0GWaloNBynZJlTw=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
 
-  qmakeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ]
-  ++ lib.optionals withVLC [ "CONFIG+=unixvlc" ]
-  ++ lib.optionals withMPV [ "CONFIG+=unixmpv" ];
-
   patches = [
-    ./0001-fix-installation-paths.patch
-    ./0002-disable-version-check.patch
+    ./0001-disable-version-check.patch
+    (fetchpatch {
+      name = "0002-fixed-qt6-folder-modal.patch";
+      url = "https://github.com/anilibria/anilibria-winmaclinux/commit/adb4f7e5447d733fc3042f4bff25224ed726f3e6.patch";
+      hash = "sha256-6/oXAObmXS+GKjjLNneMIj2gtKNvz6zHshWDYPv4agY=";
+      stripLen = 1;
+    })
   ];
-
-  preConfigure = ''
-    substituteInPlace AniLibria.pro \
-      --replace "\$\$PREFIX" '${placeholder "out"}'
-  '';
 
   qtWrapperArgs = [
     "--prefix GST_PLUGIN_PATH : ${
@@ -59,17 +52,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    libsForQt5.qmake
+    cmake
     pkg-config
-    libsForQt5.wrapQtAppsHook
+    ninja
+    qt6Packages.wrapQtAppsHook
     copyDesktopItems
   ];
 
   buildInputs = [
-    libsForQt5.qtbase
-    libsForQt5.qtquickcontrols2
-    libsForQt5.qtwebsockets
-    libsForQt5.qtmultimedia
+    qt6Packages.qtbase
+    qt6Packages.qtwebsockets
+    qt6Packages.qtmultimedia
+    mpv-unwrapped.dev
   ]
   ++ (with gst_all_1; [
     gst-plugins-bad
@@ -77,34 +71,34 @@ stdenv.mkDerivation (finalAttrs: {
     gst-plugins-base
     gst-libav
     gstreamer
-  ])
-  ++ lib.optionals withVLC [ libvlc ]
-  ++ lib.optionals withMPV [ mpv-unwrapped.dev ];
+  ]);
 
   desktopItems = [
     (makeDesktopItem {
-      name = "AniLibria";
-      desktopName = "AniLibria";
-      icon = "anilibria";
+      name = "AniLiberty";
+      desktopName = "AniLiberty";
+      icon = "aniliberty";
       comment = finalAttrs.meta.description;
-      genericName = "AniLibria desktop client";
+      genericName = "AniLiberty (ex AniLibria) desktop client";
       categories = [
         "Qt"
+        "Audio"
+        "Video"
         "AudioVideo"
         "Player"
       ];
       keywords = [ "anime" ];
-      exec = "AniLibria";
+      exec = finalAttrs.meta.mainProgram;
       terminal = false;
     })
   ];
 
   meta = {
     homepage = "https://github.com/anilibria/anilibria-winmaclinux";
-    description = "AniLibria cross platform desktop client";
+    description = "AniLiberty (ex AniLibria) cross platform desktop client, an anime theater for any computer you own";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ _3JlOy-PYCCKUi ];
-    inherit (libsForQt5.qtbase.meta) platforms;
-    mainProgram = "AniLibria";
+    inherit (qt6Packages.qtbase.meta) platforms;
+    mainProgram = "AniLiberty";
   };
 })

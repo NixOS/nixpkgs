@@ -94,7 +94,6 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ cab404 ];
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
       "aarch64-linux"
     ]; # qtbase doesn't build yet on aarch64-darwin
   };

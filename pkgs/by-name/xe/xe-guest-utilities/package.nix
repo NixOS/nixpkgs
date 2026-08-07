@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "xe-guest-utilities";
-  version = "10.0.0";
+  version = "10.0.1";
 
   src = fetchFromGitHub {
     owner = "xenserver";
     repo = "xe-guest-utilities";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-U4s2g5hB0vQ4cI58/GtFbWpWgP4I+GZ/OLYI55Sw4wI=";
+    hash = "sha256-KUcsCk5ll+fjLS3HORHB6lirFMgGSNZBorgNPUFKW9Y=";
   };
 
   nativeBuildInputs = [
@@ -24,7 +24,7 @@ buildGoModule (finalAttrs: {
   doInstallCheck = true;
 
   deleteVendor = true;
-  vendorHash = "sha256-X/BI+ZhoqCGCmJfccyEBVgZc70aRTp3rL5j+rBWG5fE=";
+  vendorHash = "sha256-YhgCs5iYvY34EWh/bl47Dr3Nrfi55QK4T7i47C77B9w=";
 
   postPatch = ''
     substituteInPlace mk/xen-vcpu-hotplug.rules \

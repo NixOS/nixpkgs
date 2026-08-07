@@ -9,6 +9,7 @@
   wrapGAppsHook4,
   appstream-glib,
   desktop-file-utils,
+  fvs2,
   librsvg,
   gtk4,
   gtksourceview5,
@@ -33,13 +34,13 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "bottles-unwrapped";
-  version = "63.2";
+  version = "64.1";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = "bottles";
     tag = finalAttrs.version;
-    hash = "sha256-cBqKUf96BLYyVD8onkvejL7pcxYrVCnhjhhT9FSwuNo=";
+    hash = "sha256-RwH2XLY9PmyDvIYu3Wr2qL89ErJBfC58i0jHLLNnKJQ=";
   };
 
   patches = [
@@ -87,7 +88,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       icoextract
       patool
       pathvalidate
-      fvs
       orjson
       pycairo
       pygobject3
@@ -110,6 +110,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       gamescope
       mangohud
       vmtouch
+      fvs2
 
       # Undocumented (subprocess.Popen())
       lsb-release

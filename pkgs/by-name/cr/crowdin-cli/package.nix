@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "crowdin-cli";
-  version = "4.14.2";
+  version = "4.15.0";
 
   src = fetchurl {
     url = "https://github.com/crowdin/crowdin-cli/releases/download/${finalAttrs.version}/crowdin-cli.zip";
-    hash = "sha256-XfOBmMkbi3XrjRBfDrJ86y1+BuJIcvhJ1tULQDsGCqE=";
+    hash = "sha256-wVnuKFw1Sq2W76YKeX6d0Cm/bPGyFUqXQXyKjTiaUq0=";
   };
 
   nativeBuildInputs = [

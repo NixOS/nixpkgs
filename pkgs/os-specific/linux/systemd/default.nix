@@ -34,8 +34,8 @@
   acl,
   lz4,
   openssl,
+  libucontext,
   libgcrypt,
-  libgpg-error,
   libidn2,
   curl,
   zlib,
@@ -106,6 +106,7 @@
   withHostnamed ? true,
   withHwdb ? true,
   withImportd ? true,
+  withImds ? true,
   withKmod ? true,
   withLibBPF ?
     lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
@@ -142,6 +143,7 @@
   withRemote ? true,
   withResolved ? true,
   withShellCompletions ? true,
+  withSysinstall ? true,
   withSysusers ? true,
   withSysupdate ? true,
   withTimedated ? true,
@@ -190,7 +192,7 @@ assert withRepart -> withCryptsetup;
 assert withBootloader -> withEfi;
 
 let
-  wantCurl = withRemote || withImportd;
+  wantCurl = withRemote || withImportd || withImds;
 
   # Use the command below to update `releaseTimestamp` on every (major) version
   # change. More details in the commentary at mesonFlags.
@@ -201,13 +203,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "260.1";
+  version = "261.1";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-FUKj3lvjz8TIsyu8NyJYtiNele+1BhdJPdw7r7nW6as=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4iOitWGdRmGgJjEXGWtq2lEhPtGguma+qrjTShrps2g=";
   };
 
   # PATCH POLICY
@@ -243,18 +245,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    substituteInPlace src/basic/path-util.h --replace "@defaultPathNormal@" "${placeholder "out"}/bin/"
+    substituteInPlace src/basic/path-util.h --replace-fail "@defaultPathNormal@" "${placeholder "out"}/bin/"
   ''
   + lib.optionalString withLibBPF ''
-    substituteInPlace meson.build \
-      --replace "find_program('clang'" "find_program('${stdenv.cc.targetPrefix}clang'"
+    substituteInPlace src/bpf/meson.build \
+      --replace-fail "find_program('clang'" "find_program('${stdenv.cc.targetPrefix}clang'"
   ''
   + lib.optionalString withUkify ''
     substituteInPlace src/ukify/ukify.py \
-      --replace \
+      --replace-fail \
       "'readelf'" \
       "'${targetPackages.stdenv.cc.bintools.targetPrefix}readelf'" \
-      --replace \
+      --replace-fail \
       "/usr/lib/systemd/boot/efi" \
       "$out/lib/systemd/boot/efi"
   ''
@@ -308,11 +310,7 @@ stdenv.mkDerivation (finalAttrs: {
         jinja2
       ]
       ++ lib.optional withEfi ps.pyelftools
-      # pefile is only required to trigger a check in meson to actually build
-      # ukify. This module should never appear in the runtime closure of ukify.
-      # Instead the pefile from buildInputs should be used.
-      # Remove this when it's fixed upstream: https://github.com/systemd/systemd/pull/41959
-      ++ lib.optional withUkify ps.pefile
+      ++ lib.optional (withUkify && finalAttrs.finalPackage.doCheck) ps.pefile
     ))
   ]
   ++ lib.optionals withLibBPF [
@@ -321,17 +319,25 @@ stdenv.mkDerivation (finalAttrs: {
     buildPackages.llvmPackages.libllvm
   ];
 
-  autoPatchelfFlags = [ "--keep-libc" ];
+  autoPatchelfFlags = [
+    "--keep-libc"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMusl [
+    # TODO: can be unconditionalized on staging.
+    # Nixpkgs does not rely on gettext for libintl for musl.
+    "--ignore-missing=libintl.so.8"
+  ];
 
   buildInputs = [
     libxcrypt
     libuuid
     linuxHeaders
   ]
-
+  ++ lib.optionals stdenv.hostPlatform.isMusl [
+    libucontext
+  ]
   ++ lib.optionals withGcrypt [
     libgcrypt
-    libgpg-error
   ]
   ++ lib.optionals withOpenSSL [ openssl ]
   ++ lib.optional withTests glib
@@ -347,7 +353,7 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
   ]
   ++ lib.optional withCoredump elfutils
-  ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
+  ++ lib.optional withCryptsetup cryptsetup
   ++ lib.optional withKexectools kexec-tools
   ++ lib.optional withKmod kmod
   ++ lib.optional withLibidn2 libidn2
@@ -363,7 +369,14 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (withHomed || withCryptsetup) [ libfido2 ]
   ++ lib.optionals withLibBPF [ libbpf ]
   ++ lib.optional withTpm2Tss tpm2-tss
-  ++ lib.optional withUkify (python3Packages.python.withPackages (ps: with ps; [ pefile ]))
+  ++ lib.optional withUkify (
+    python3Packages.python.withPackages (
+      ps: with ps; [
+        cryptography
+        pefile
+      ]
+    )
+  )
   ++ lib.optionals withPasswordQuality [ libpwquality ]
   ++ lib.optionals withQrencode [ qrencode ]
   ++ lib.optionals withLibarchive [ libarchive ]
@@ -491,6 +504,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "apparmor" withApparmor)
     (lib.mesonEnable "gcrypt" withGcrypt)
     (lib.mesonEnable "importd" withImportd)
+    (lib.mesonEnable "imds" withImds)
     (lib.mesonEnable "homed" withHomed)
     (lib.mesonEnable "polkit" withPolkit)
     (lib.mesonEnable "elfutils" withCoredump)
@@ -532,6 +546,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "coredump" withCoredump)
     (lib.mesonBool "firstboot" withFirstboot)
     (lib.mesonBool "resolve" withResolved)
+    (lib.mesonBool "sysinstall" withSysinstall)
     (lib.mesonBool "sysusers" withSysusers)
     (lib.mesonBool "efi" withEfi)
     (lib.mesonBool "utmp" withUtmp)
@@ -565,7 +580,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   preConfigure = ''
     substituteInPlace src/libsystemd/sd-journal/catalog.c \
-      --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
+      --replace-fail /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
   '';
 
   # These defines are overridden by CFLAGS and would trigger annoying
@@ -613,7 +628,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       # Fix reference to /bin/false in the D-Bus services.
       for i in $out/share/dbus-1/system-services/*.service; do
-        substituteInPlace $i --replace /bin/false ${coreutils}/bin/false
+        substituteInPlace $i --replace-fail /bin/false ${coreutils}/bin/false
       done
 
       # For compatibility with dependents that use sbin instead of bin.
@@ -696,6 +711,7 @@ stdenv.mkDerivation (finalAttrs: {
       withMachined
       withNetworkd
       withNspawn
+      withRepart
       withPortabled
       withSysupdate
       withTimedated
@@ -710,106 +726,140 @@ stdenv.mkDerivation (finalAttrs: {
     # enabled. See https://github.com/systemd/systemd/blob/876ee10e0eb4bbb0920bdab7817a9f06cc34910f/units/meson.build#L521
     withTpm2Units = withTpm2Tss && withBootloader && withOpenSSL;
 
-    tests =
+    # These are all the tests that need to pass in order to merge a PR that
+    # updates systemd.
+    #
+    # This list cannot grow indefinitely. It needs to balance the coverage of
+    # important features of a NixOS system exposed via systemd and the actual
+    # ability of maintainers to execute the tests. Only if this remains
+    # executable with reasonable effort, can it serve its purpose as a quality
+    # gate for updating systemd.
+    nixosTests =
       let
-        # Some entries in the `nixosTests.systemd-*` set of attributes are collections of tests,
-        # not individual tests themselves. Let's gather them into one set.
-        gatherNixosTestsFromCollection =
-          prefix: collection:
+        prefixTests =
+          prefix:
           lib.mapAttrs' (name: value: {
             name = "${prefix}-${name}";
             inherit value;
-          }) collection;
-
-        # Here's all the nixosTests that are collections of tests, rather than individual tests.
-        collectedNixosTests = lib.mergeAttrsList (
-          lib.mapAttrsToList gatherNixosTestsFromCollection {
-            inherit (nixosTests)
-              systemd-binfmt
-              systemd-boot
-              systemd-initrd-networkd
-              systemd-repart
-              installer-systemd-stage-1
-              ;
-          }
-        );
-
-        # ... and here's all the individual tests.
-        individualNixosTests = {
-          inherit (nixosTests)
-            fsck-systemd-stage-1
-            hibernate-systemd-stage-1
-            switchTest
-            systemd
-            systemd-analyze
-            systemd-bpf
-            systemd-confinement
-            systemd-coredump
-            systemd-cryptenroll
-            systemd-credentials-tpm2
-            systemd-escaping
-            systemd-initrd-btrfs-raid
-            systemd-initrd-luks-fido2
-            systemd-initrd-luks-keyfile
-            systemd-initrd-luks-empty-passphrase
-            systemd-initrd-luks-password
-            systemd-initrd-luks-tpm2
-            systemd-initrd-modprobe
-            systemd-initrd-shutdown
-            systemd-initrd-simple
-            systemd-initrd-swraid
-            systemd-initrd-vconsole
-            systemd-initrd-networkd-ssh
-            systemd-initrd-networkd-openvpn
-            systemd-initrd-vlan
-            systemd-journal
-            systemd-journal-gateway
-            systemd-journal-upload
-            systemd-machinectl
-            systemd-networkd
-            systemd-networkd-bridge
-            systemd-networkd-dhcpserver
-            systemd-networkd-dhcpserver-static-leases
-            systemd-networkd-ipv6-prefix-delegation
-            systemd-networkd-vrf
-            systemd-no-tainted
-            systemd-nspawn
-            systemd-nspawn-configfile
-            systemd-oomd
-            systemd-portabled
-            systemd-pstore
-            systemd-resolved
-            systemd-shutdown
-            systemd-sysupdate
-            systemd-sysusers-mutable
-            systemd-sysusers-immutable
-            systemd-sysusers-password-option-override-ordering
-            systemd-timesyncd-nscd-dnssec
-            systemd-user-linger
-            systemd-user-tmpfiles-rules
-            systemd-misc
-            systemd-userdbd
-            systemd-homed
-            ;
-        };
-
-        # Finally, make an attrset we're fairly sure is just tests.
-        relevantNixosTests = lib.mapAttrs (
-          name: value:
-          assert lib.assertMsg (lib.isDerivation value) "${name} is not a derivation";
-          value
-        ) (individualNixosTests // collectedNixosTests);
+          }) nixosTests."${prefix}";
       in
-      relevantNixosTests
+      {
+        inherit (prefixTests "systemd-binfmt")
+          systemd-binfmt-basic
+          systemd-binfmt-chroot
+          systemd-binfmt-ldPreload
+          systemd-binfmt-preserveArgvZero
+          ;
+      }
       // {
-        cross =
-          let
-            systemString = if stdenv.buildPlatform.isAarch64 then "gnu64" else "aarch64-multiplatform";
-          in
-          pkgsCross.${systemString}.systemd;
-
-        pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+        inherit (prefixTests "systemd-initrd-networkd")
+          systemd-initrd-networkd-basic
+          systemd-initrd-networkd-doFlush
+          systemd-initrd-networkd-dontFlush
+          ;
+      }
+      // {
+        inherit (prefixTests "systemd-boot")
+          systemd-boot-basic
+          systemd-boot-basicXbootldr
+          systemd-boot-bootCounting
+          systemd-boot-bootCountingSpecialisation
+          systemd-boot-defaultEntry
+          systemd-boot-defaultEntryWithBootCounting
+          systemd-boot-edk2-uefi-shell
+          systemd-boot-entryFilenameXbootldr
+          systemd-boot-extraEntries
+          systemd-boot-extraFiles
+          systemd-boot-fallback
+          systemd-boot-garbage-collect-entry
+          systemd-boot-garbageCollectEntryWithBootCounting
+          systemd-boot-memtest86
+          systemd-boot-memtestSortKey
+          systemd-boot-netbootxyz
+          systemd-boot-secureBoot
+          systemd-boot-specialisation
+          systemd-boot-switch-test
+          systemd-boot-update
+          systemd-boot-windows
+          ;
+      }
+      // {
+        inherit (prefixTests "systemd-repart")
+          systemd-repart-after-initrd
+          systemd-repart-basic
+          systemd-repart-create-root
+          systemd-repart-encrypt-tpm2
+          # systemd-repart-factory-reset # broken upstream
+          ;
+      }
+      // {
+        inherit (nixosTests)
+          simple-vm
+          fsck-systemd-stage-1
+          hibernate-systemd-stage-1
+          switchTest
+          # systemd # broken on master
+          systemd-analyze
+          systemd-bpf
+          systemd-confinement
+          # systemd-coredump # broken on master
+          systemd-cryptenroll
+          systemd-credentials-tpm2
+          systemd-escaping
+          systemd-initrd-btrfs-raid
+          systemd-initrd-luks-fido2
+          systemd-initrd-luks-keyfile
+          systemd-initrd-luks-empty-passphrase
+          systemd-initrd-luks-password
+          systemd-initrd-luks-tpm2
+          systemd-initrd-modprobe
+          systemd-initrd-shutdown
+          systemd-initrd-simple
+          systemd-initrd-swraid
+          # systemd-initrd-vconsole # broken on master
+          systemd-initrd-networkd-ssh
+          systemd-initrd-networkd-openvpn
+          systemd-initrd-vlan
+          systemd-journal
+          # systemd-journal-gateway # broken on master
+          systemd-journal-upload
+          # systemd-machinectl # broken on master
+          systemd-networkd
+          systemd-networkd-bridge
+          systemd-networkd-dhcpserver
+          systemd-networkd-dhcpserver-static-leases
+          systemd-networkd-ipv6-prefix-delegation
+          systemd-networkd-vrf
+          systemd-no-tainted
+          systemd-nspawn
+          systemd-nspawn-configfile
+          systemd-oomd
+          systemd-portabled
+          systemd-pstore
+          systemd-resolved
+          systemd-shutdown
+          systemd-sysupdate
+          systemd-sysusers-mutable
+          systemd-sysusers-immutable
+          systemd-sysusers-password-option-override-ordering
+          # systemd-timesyncd-nscd-dnssec # broken on master
+          systemd-user-linger
+          systemd-user-tmpfiles-rules
+          systemd-misc
+          systemd-userdbd
+          # systemd-homed # broken on master
+          ;
       };
+
+    tests = finalAttrs.passthru.nixosTests // {
+      cross =
+        let
+          systemString = if stdenv.buildPlatform.isAarch64 then "gnu64" else "aarch64-multiplatform";
+        in
+        pkgsCross.${systemString}.systemd;
+
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
   };
 
   meta = {

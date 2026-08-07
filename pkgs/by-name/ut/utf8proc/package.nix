@@ -40,7 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = [
-      lib.maintainers.ftrvxmtrx
       lib.maintainers.sternenseemann
     ];
   };

@@ -28,16 +28,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vector";
-  version = "0.55.0";
+  version = "0.57.0";
 
   src = fetchFromGitHub {
     owner = "vectordotdev";
     repo = "vector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1t0fHBYBBfG8oFbo1QPXb5y8+lyIPPve4bDtry+KF5Q=";
+    hash = "sha256-x4yfC/qAMRM7X19usonsp8GSJHwIsn0zoX0owLn2EXs=";
   };
 
-  cargoHash = "sha256-/a/KnZEXBeAtYS0yXCmI+07acol0/UBwauIKTi/QF1k=";
+  cargoHash = "sha256-H26tUF+i/79t7W2BVjh2bVRCGZK8rgazHzlTF4L2jyA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -75,7 +75,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     # needed for internal protobuf c wrapper library
     PROTOC = "${protobuf}/bin/protoc";
-    PROTOC_INCLUDE = "${protobuf}/include";
     RUSTONIG_SYSTEM_LIBONIG = true;
 
     TZDIR = "${tzdata}/share/zoneinfo";
@@ -104,6 +103,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=sources::host_metrics::cgroups::tests::generates_cgroups_metrics"
     "--skip=sources::host_metrics::cpu::tests::generates_cpu_metrics"
     "--skip=sources::internal_logs::tests::repeated_logs_are_not_rate_limited"
+    "--skip=topology::test::reload::topology_reload_preserves_enrichment_table_state"
 
     # Requires access to journalctl
     "--skip=sources::journald::tests::emits_cursor"
@@ -152,9 +152,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    tests = {
-      inherit (nixosTests) vector;
-    };
+    tests = nixosTests.vector;
     updateScript = nix-update-script { };
   };
 

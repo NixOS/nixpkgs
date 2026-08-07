@@ -4,19 +4,21 @@
   fetchFromGitHub,
   testers,
   spicetify-cli,
+  nodejs,
+  esbuild,
 }:
 buildGoModule (finalAttrs: {
   pname = "spicetify-cli";
-  version = "2.43.2";
+  version = "2.44.0";
 
   src = fetchFromGitHub {
     owner = "spicetify";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-77OZVDtybkYI5R3tZ7q2cLJ+Ixn8WB4CP4qP6Yp535g=";
+    hash = "sha256-4RRy1mmqjKxDUqSV7W6KHZZcbsJvnB2hZpys1MPip3E=";
   };
 
-  vendorHash = "sha256-uuvlu5yocqnDh6OO5a4Ngp5SahqURc/14fcg1Kr9sec=";
+  vendorHash = "sha256-FTTJJrPFqqWLBBQ6pQ0RZRaWUZ4MxsV5e9HGPOp2jOY=";
 
   postPatch = ''
     substituteInPlace src/preprocess/preprocess.go \
@@ -27,6 +29,17 @@ buildGoModule (finalAttrs: {
     "-s -w"
     "-X 'main.version=${finalAttrs.version}'"
   ];
+
+  nativeBuildInputs = [
+    nodejs
+    esbuild
+  ];
+
+  postBuild = ''
+    esbuild ./src/jsHelper/spicetifyWrapper/index.js \
+      --bundle --minify --target=chrome108 --format=iife \
+      --outfile=spicetifyWrapper.js
+  '';
 
   postInstall =
     /*
@@ -39,7 +52,9 @@ buildGoModule (finalAttrs: {
       mkdir -p $out/share/spicetify
 
       cp -r $src/jsHelper $out/share/spicetify/jsHelper
+      chmod -R u+w $out/share/spicetify/jsHelper
       cp $src/css-map.json $out/share/spicetify/css-map.json
+      cp spicetifyWrapper.js $out/share/spicetify/jsHelper/spicetifyWrapper.js
 
       mv $out/bin/cli $out/share/spicetify/spicetify
 

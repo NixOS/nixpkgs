@@ -8,7 +8,6 @@
   urllib3,
   dnspython,
   pytestCheckHook,
-  etcd_3_4,
   mock,
   pyopenssl,
   python,
@@ -42,7 +41,6 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     pytestCheckHook
-    etcd_3_4
     mock
     pyopenssl
   ];
@@ -56,6 +54,14 @@ buildPythonPackage {
         --replace-fail "assertEquals" "assertEqual"
     done
   '';
+
+  disabledTestPaths = [
+    # these tests expect that etcd is at version 3.4, which has been dropped in
+    # Nixpkgs due to it being unmaintained.
+    "src/etcd/tests/integration/test_simple.py"
+    "src/etcd/tests/integration/test_ssl.py"
+    "src/etcd/tests/test_auth.py"
+  ];
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # Seems to be failing because of network restrictions

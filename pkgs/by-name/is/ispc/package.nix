@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ispc";
-  version = "1.30.0";
+  version = "1.31.0";
 
   src = fetchFromGitHub {
     owner = "ispc";
     repo = "ispc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CzyK38c8fCG7QiVHE0rSzxmyTXNr4sg1WtChbi75Wmw=";
+    hash = "sha256-n1zWokIuZEDJZN/KH3jxnIhgUo8iKDfZwiQnXZdxhL8=";
   };
 
   nativeBuildInputs = [

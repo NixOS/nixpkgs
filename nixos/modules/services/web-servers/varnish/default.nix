@@ -21,20 +21,9 @@ let
   # Varnish has very strong opinions and very complicated code around handling
   # the stateDir. After a lot of back and forth, we decided that we a)
   # do not want a configurable option here, as most of the handling depends
-  # on the version and the compile time options. Putting everything into
-  # /var/run (RAM backed) is absolutely recommended by Varnish anyways.
-  # We do need to pay attention to the version-dependend variations, though!
-  stateDir =
-    if
-      (lib.versionOlder cfg.package.version "7")
-    # Remove after Varnish 6.0 is gone. In 6.0 varnishadm always appends the
-    # hostname (by default) and can't be nudged to not use any name. This has
-    # long changed by 7.5 and can be used without the host name.
-    then
-      "/var/run/varnish/${config.networking.hostName}"
-    # Newer varnish uses this:
-    else
-      "/var/run/varnishd";
+  # on the compile time options. Putting everything into /var/run (RAM backed)
+  # is absolutely recommended by Varnish anyways.
+  stateDir = "/var/run/varnishd";
 
   # from --help:
   #   -a [<name>=]address[:port][,proto] # HTTP listen address and port

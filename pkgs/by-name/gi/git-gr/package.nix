@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/9999years/git-gr";
     changelog = "https://github.com/9999years/git-gr/releases/tag/v${version}";
     description = "Gerrit CLI client";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers._9999years ];
     mainProgram = "git-gr";
   };

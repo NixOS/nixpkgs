@@ -35,8 +35,8 @@ body:
         If you are using an older version, please update to the latest stable version and check if the issue persists before continuing this bug report.
       options:
         - "Please select a version."
-        - "- Unstable (26.05)"
-        - "- Stable (25.11)"
+        - "- Unstable (26.11)"
+        - "- Stable (26.05)"
       default: 0
     validations:
       required: true
@@ -99,7 +99,7 @@ body:
     attributes:
       label: "Are you using nix-darwin?"
       description: |
-        [`nix-darwin`](https://github.com/LnL7/nix-darwin) is a set of NixOS-like modules for macOS systems. Depending on your issue, this information may be relevant.
+        [`nix-darwin`](https://github.com/nix-darwin/nix-darwin) is a set of NixOS-like modules for macOS systems. Depending on your issue, this information may be relevant.
       options:
         - "Yes, I am using nix-darwin."
         - "No, I am not using nix-darwin."

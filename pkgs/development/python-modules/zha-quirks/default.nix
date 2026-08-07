@@ -8,12 +8,13 @@
   pythonOlder,
   setuptools,
   time-machine,
+  zha,
   zigpy,
 }:
 
 buildPythonPackage rec {
   pname = "zha-quirks";
-  version = "1.2.0";
+  version = "2.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zha-device-handlers";
     tag = version;
-    hash = "sha256-mDcvVwqzSmszaJDahzkRNteiO4C/eU+BqTdBpWj5yGw=";
+    hash = "sha256-CHyp+uU6keMHoNL+mj5NhrwF/oQH2fEvWv1alHBLMg8=";
   };
 
   postPatch = ''
@@ -35,6 +36,7 @@ buildPythonPackage rec {
 
   dependencies = [
     aiohttp
+    zha
     zigpy
   ];
 
@@ -46,13 +48,8 @@ buildPythonPackage rec {
 
   disabledTests = [
     # AssertionError: expected call not found
-    "test_moes"
     "test_tuya_mcu_set_time"
-  ];
-
-  disabledTestPaths = [
-    # TypeError: unhashable type: 'dict'
-    "tests/test_quirks_v2.py"
+    "test_moes"
   ];
 
   pythonImportsCheck = [ "zhaquirks" ];

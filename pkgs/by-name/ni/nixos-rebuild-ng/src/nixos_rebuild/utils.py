@@ -46,8 +46,7 @@ def dict_to_flags(d: Args | None) -> list[str]:
                 for vs in value:
                     flags.append(flag)
                     if isinstance(vs, list):
-                        for v in vs:
-                            flags.append(v)
+                        flags.extend(vs)
                     else:
                         flags.append(vs)
             case _:

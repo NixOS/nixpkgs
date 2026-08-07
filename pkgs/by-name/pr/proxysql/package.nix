@@ -49,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./makefiles.patch
     ./dont-phone-home.patch
+    ./btree-cstdint.patch
   ];
 
   nativeBuildInputs = [
@@ -226,7 +227,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "High-performance MySQL proxy";
     mainProgram = "proxysql";
     homepage = "https://proxysql.com/";
-    license = with lib.licenses; [ gpl3Only ];
+    license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
   };
 })

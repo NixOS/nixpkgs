@@ -6,7 +6,7 @@
   bzip2,
   zstd,
   stdenv,
-  rocksdb,
+  callPackage,
   nix-update-script,
   testers,
   matrix-continuwuity,
@@ -14,41 +14,20 @@
   liburing,
   nixosTests,
 }:
-let
-  rocksdb' =
-    (rocksdb.override {
-      # rocksdb does not support prefixed jemalloc, which is required on darwin
-      enableJemalloc = !stdenv.hostPlatform.isDarwin;
-      jemalloc = rust-jemalloc-sys-unprefixed;
-    }).overrideAttrs
-      (
-        final: old: {
-          version = "10.10.1";
-          src = fetchFromGitea {
-            domain = "forgejo.ellis.link";
-            owner = "continuwuation";
-            repo = "rocksdb";
-            rev = "10.10.fb";
-            hash = "sha256-1ef75IDMs5Hba4VWEyXPJb02JyShy5k4gJfzGDhopRk=";
-          };
 
-          patches = [ ];
-        }
-      );
-in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-continuwuity";
-  version = "0.5.9";
+  version = "26.7.2";
 
   src = fetchFromGitea {
     domain = "forgejo.ellis.link";
     owner = "continuwuation";
     repo = "continuwuity";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4zs26kTqwkJV7x+Sm12LnR02bbyH0f6Itbz7bDKUyts=";
+    hash = "sha256-uE38tYYgze2q4hgW1mzk5CLTD3ezAwCnj+RQOmZtCdw=";
   };
 
-  cargoHash = "sha256-T11ESuNg3BS54LtNJfhOoIgiyVL7VsdP4OeDI2nVBIk=";
+  cargoHash = "sha256-DZsRr0Xt/7HnlNCZfXK4dUILK/uEOnSD+r26OxvycD0=";
 
   nativeBuildInputs = [
     pkg-config
@@ -64,12 +43,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
-    ROCKSDB_INCLUDE_DIR = "${rocksdb'}/include";
-    ROCKSDB_LIB_DIR = "${rocksdb'}/lib";
+    ROCKSDB_INCLUDE_DIR = "${finalAttrs.rocksdb}/include";
+    ROCKSDB_LIB_DIR = "${finalAttrs.rocksdb}/lib";
   };
 
+  rocksdb = callPackage ./rocksdb.nix { }; # make used rocksdb version available (e.g., for backup scripts)
+
   passthru = {
-    rocksdb = rocksdb'; # make used rocksdb version available (e.g., for backup scripts)
     updateScript = nix-update-script { };
     tests = {
       version = testers.testVersion {

@@ -13,16 +13,16 @@
   python-dateutil,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioamazondevices";
-  version = "13.5.0";
+  version = "14.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chemelli74";
     repo = "aioamazondevices";
-    tag = "v${version}";
-    hash = "sha256-+71t47H4/idWeef8Nf+4TVHB0xEe5mWCQ271ECm3jOg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/odlNQg1buiZkcpWaDzSKo5mfJVdow/dD/gyef6NOOo=";
   };
 
   build-system = [ poetry-core ];
@@ -45,10 +45,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/chemelli74/aioamazondevices/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/chemelli74/aioamazondevices/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Python library to control Amazon devices";
     homepage = "https://github.com/chemelli74/aioamazondevices";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

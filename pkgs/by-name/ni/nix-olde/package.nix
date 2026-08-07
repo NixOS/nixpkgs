@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nix-olde";
-  version = "0.2.3";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "trofi";
     repo = "nix-olde";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Q5M9/tW5Kz4ILm0MKhx540iPrFaH5Y5gQawZ13l2hg0=";
+    hash = "sha256-zpKcEUSqfkfBgDaz/2wIajCAzPOrBP6aPnMA6v1wnb8=";
   };
 
-  cargoHash = "sha256-jCaDTLF3U3Ov1EBsoz27UlA2KYXnDTD9GRcj0isueNQ=";
+  cargoHash = "sha256-HbcgCrRjQ49Ekwl6MoWk6h6iYqKtNzEx/gtp9ktP1Y8=";
 
   meta = {
     description = "Show details about outdated packages in your NixOS system";

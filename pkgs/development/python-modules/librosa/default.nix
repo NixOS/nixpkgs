@@ -34,7 +34,6 @@
   resampy,
   samplerate,
   writableTmpDirAsHomeHook,
-  pythonAtLeast,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -134,13 +133,12 @@ buildPythonPackage (finalAttrs: {
     "test_istft_multi"
     "test_pitch_shift_multi"
     "test_time_stretch_multi"
-  ]
-  ++ lib.optionals (pythonAtLeast "3.14") [
-    # ValueError: cannot resize an array that references or is referenced
-    "test_resample_mono"
     "test_resample_multichannel"
-    "test_resample_scale"
-    "test_resample_stereo"
+  ];
+
+  disabledTestPaths = [
+    # matplotlib 3.11 exceeds tolerances for image comparison
+    "tests/test_display.py"
   ];
 
   meta = {

@@ -14,7 +14,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "phira-unwrapped";
-  version = "0.7.1";
+  version = "0.8.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "TeamFlos";
     repo = "phira";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bn1vRxL4O32Txna3RqafOzXISziDiL//S8NwiIK5c4M=";
+    hash = "sha256-/ziX3rkHs38BKNQU8Q9NJC51ArJbs/HBSKN7BIozCBY=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./assets.patch
   ];
 
-  cargoHash = "sha256-a+bQ5d9n18jrsgnqygBlMKWlu7KPU5tbQQSXRXE5zWY=";
+  cargoHash = "sha256-R4JljAElhxT88Ar1cvBlv0qSquyrvia7Rbygr9NSxwY=";
 
   # The developer put assets necessary for this test in gitignore, so it cannot run.
   checkFlags = [ "--skip=test_parse_chart" ];
@@ -73,6 +73,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     install -Dm644 assets/icon.png $out/share/icons/hicolor/128x128/apps/phira.png
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Rhythm game with custom charts and multiplayer";

@@ -74,7 +74,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     cudaPackages.libcublas
     cudaPackages.cuda_nvcc
     cudaPackages.cuda_cudart
-    cudaPackages.cuda_cccl
+    cudaPackages.cccl
   ]
   ++ lib.optionals clblastSupport [
     clblast
@@ -131,7 +131,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     mainProgram = "koboldcpp";
     maintainers = with lib.maintainers; [
       maxstrid
-      FlameFlag
+      _4evy
     ];
     platforms = lib.platforms.unix;
   };

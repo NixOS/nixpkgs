@@ -58,6 +58,34 @@ let
       internal = true;
     };
 
+    attrPathsDisallowedForInternalUse = mkOption {
+      type = types.listOf (
+        types.submodule {
+          options.attrPath = lib.mkOption {
+            type = types.listOf types.str;
+            description = ''
+              Attribute path to disallow.
+            '';
+          };
+          options.reason = lib.mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = /* because */ "it's dangerous.";
+            description = ''
+              Reason for it being disallowed.
+            '';
+          };
+        }
+      );
+      internal = true;
+      default = [ ];
+      description = ''
+        List of attribute paths that may not be used by other packages in Nixpkgs.
+
+        Should usually only be defined by Nixpkgs CI.
+      '';
+    };
+
     # Config options
 
     warnUndeclaredOptions = mkOption {
@@ -422,7 +450,7 @@ let
     };
 
     rewriteURL = mkOption {
-      type = types.functionTo (types.nullOr types.str);
+      type = types.nullOr (types.functionTo (types.nullOr types.str));
       description = ''
         A hook to rewrite/filter URLs before they are fetched.
 
@@ -432,8 +460,7 @@ let
 
         The intended use is to allow URL rewriting to insert company-internal mirrors, or work around company firewalls and similar network restrictions.
       '';
-      default = lib.id;
-      defaultText = literalExpression "(url: url)";
+      default = null;
       example = literalExpression ''
         {
           # Use Nix like it's 2024! ;-)
@@ -455,18 +482,18 @@ let
     };
 
     allowDeprecatedx86_64Darwin = mkOption {
-      # `force` does nothing; it’s reserved for forward compatibility
-      # with 26.11. We hide it from the documentation to avoid a
-      # footgun, as it will make the error in 26.11 less useful.
-      type = types.either types.bool (types.enum [ "force" ]) // {
-        inherit (types.bool) description descriptionClass;
-      };
+      # `true` does nothing; it silenced the warning in 26.05.
+      type = types.either types.bool (types.enum [ "force" ]);
       default = false;
       description = ''
-        Silence the warning for the upcoming deprecation of the
-        `x86_64-darwin` platform in Nixpkgs 26.11.
+        Set to `"force"` to allow evaluating for the `x86_64-darwin`
+        platform despite its deprecation in Nixpkgs 26.11.
 
-        See the [release notes](#x86_64-darwin-26.05) for more
+        This is not expected to function, and Hydra will not build
+        binaries for the platform. It is provided only as an escape
+        hatch for custom setups, and comes with no support.
+
+        See the [release notes](#x86_64-darwin-26.11) for more
         information.
       '';
     };

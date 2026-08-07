@@ -2,16 +2,15 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
-  pytestCheckHook,
-  setuptools,
-  writableTmpDirAsHomeHook,
 
+  # build-system
+  setuptools,
+
+  # dependencies
   packaging,
   pandas,
   pyogrio,
   pyproj,
-  rtree,
   shapely,
 
   # optional-dependencies
@@ -24,18 +23,24 @@
   pyarrow,
   sqlalchemy,
   xyzservices,
+
+  # tests
+  pytestCheckHook,
+  rtree,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "geopandas";
-  version = "1.1.3";
+  version = "1.1.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "geopandas";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-66FbHNewpSEVZ9RwngK7E4bcELa9Z2OQ9xVP9+fgeHQ=";
+    hash = "sha256-7XWPPLuJjc6x+Vb16z0bEjYe1lX710vz5Rwjg/WFHH0=";
   };
 
   build-system = [ setuptools ];

@@ -13,9 +13,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.4.0";
 
   src = fetchFromGitHub {
-    owner = "NTBBloodbath";
-    repo = "norgolith";
-    tag = "v${finalAttrs.version}";
+    owner = "norgolith";
+    repo = "core";
+    tag = "norgolith-v${finalAttrs.version}";
     hash = "sha256-K3Gg/8LKmxrHLzVUx4IF3nTxwl2PU7CrV5oZ8BwHo1U=";
   };
 
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "The monolithic Norg static site generator built with Rust";
     homepage = "https://norgolith.amartin.beer";
-    changelog = "https://github.com/NTBBloodbath/norgolith/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/norgolith/core/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ Ladas552 ];
     mainProgram = "lith";

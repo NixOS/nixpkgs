@@ -87,5 +87,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/redis/redis-om-python/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
+    teams = [ lib.teams.redis ];
   };
 }

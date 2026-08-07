@@ -72,9 +72,9 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  virtualboxVersion = "7.2.8";
+  virtualboxVersion = "7.2.14";
   virtualboxSubVersion = "";
-  virtualboxSha256 = "0642ed4a12b7204cd30c0abbc2c10c1cc7ad55ce1756a01e86a16d4b6b066592";
+  virtualboxSha256 = "384f293184c52fd51bc941c17d753b4019446f53a6b07c828adfb3e61fe0a500";
 
   kvmPatchVboxVersion = "7.2.6";
   kvmPatchVersion = "20260201";
@@ -84,7 +84,7 @@ let
   # modsrc at all.
   withModsrc = !enableKvm;
 
-  virtualboxGuestAdditionsIso = callPackage guest-additions-iso/default.nix {
+  virtualboxGuestAdditionsIso = callPackage ./guest-additions-iso {
     inherit virtualboxVersion;
   };
 

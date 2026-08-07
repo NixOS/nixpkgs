@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  setuptools,
+  setuptools_80,
 
   # dependencies
   fastcore,
@@ -24,7 +24,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   build-system = [
-    setuptools
+    setuptools_80
   ];
 
   dependencies = [

@@ -1,0 +1,32 @@
+diff --git a/src/sage/config.py.in b/src/sage/config.py.in
+index 3a95538d313..cdd551122fc 100644
+--- a/src/sage/config.py.in
++++ b/src/sage/config.py.in
+@@ -4,6 +4,8 @@ import sage
+ 
+ VERSION = "@PACKAGE_VERSION@"
+ 
++SAGE_BUILD_SRC = "@EDITABLE_SRC@/src"
++
+ # The following must not be used during build to determine source or installation
+ # location of sagelib.  See comments in SAGE_ROOT/src/Makefile.in
+ # These variables come first so that other substituted variable values can refer
+diff --git a/src/sage/misc/sageinspect.py b/src/sage/misc/sageinspect.py
+index c237af52c24..7a8e8291406 100644
+--- a/src/sage/misc/sageinspect.py
++++ b/src/sage/misc/sageinspect.py
+@@ -270,6 +270,14 @@ def _extract_embedded_position(docstring):
+         return None
+ 
+     raw_filename = res.group('FILENAME')
++
++    # remove SAGE_BUILD_SRC prefix to workaround
++    # https://github.com/cython/cython/pull/6755
++    from sage.config import SAGE_BUILD_SRC
++    from os.path import commonprefix, relpath
++    if commonprefix([raw_filename, SAGE_BUILD_SRC]) == SAGE_BUILD_SRC:
++        raw_filename = relpath(raw_filename, SAGE_BUILD_SRC)
++
+     filename = raw_filename
+ 
+     if not os.path.isabs(filename):

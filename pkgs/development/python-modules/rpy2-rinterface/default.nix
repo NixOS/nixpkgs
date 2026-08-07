@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchurl,
@@ -11,13 +10,14 @@
   zlib,
   zstd,
   icu,
+  libdeflate,
   pytestCheckHook,
   setuptools,
   cffi,
 }:
 
 buildPythonPackage rec {
-  version = "3.6.4";
+  version = "3.6.6";
   pyproject = true;
   pname = "rpy2-rinterface";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${
       builtins.replaceStrings [ "-" ] [ "_" ] pname
     }-${version}.tar.gz";
-    hash = "sha256-4spJyjzqu9zEGtDFk3ZgsiWvbeYfBE6xI3NWlRw3pZA=";
+    hash = "sha256-qcwTQc5ctN8dxnxA3Dss4Mr6znIVvUJi/g7QEZWKM2k=";
   };
 
   patches = [
@@ -39,7 +39,8 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace 'src/rpy2/rinterface_lib/embedded.py' --replace '@NIX_R_LIBS_SITE@' "$R_LIBS_SITE"
+    substituteInPlace 'src/rpy2/rinterface_lib/embedded.py' \
+      --replace-fail '@NIX_R_LIBS_SITE@' "$R_LIBS_SITE"
   '';
 
   buildInputs = [
@@ -48,6 +49,7 @@ buildPythonPackage rec {
     zlib
     zstd
     icu
+    libdeflate
   ]
   ++ rWrapper.recommendedPackages;
 
@@ -55,9 +57,12 @@ buildPythonPackage rec {
     R # needed at setup time to detect R_HOME (alternatively set R_HOME explicitly)
   ];
 
-  propagatedBuildInputs = [
-    cffi
+  build-system = [
     setuptools
+  ];
+
+  dependencies = [
+    cffi
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

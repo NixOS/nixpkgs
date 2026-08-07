@@ -20,6 +20,7 @@ in
   branding = "browser/branding/librewolf";
   inherit (librewolf-src)
     extraConfigureFlags
+    extraPreConfigure
     extraPatches
     extraPostPatch
     extraPassthru
@@ -29,9 +30,13 @@ in
     description = "Fork of Firefox, focused on privacy, security and freedom";
     homepage = "https://librewolf.net/";
     maintainers = with lib.maintainers; [
+      azahi
       dwrege
       fpletz
       hythera
+      mBornand
+      thbemme
+      wolfgangwalther
     ];
     platforms = lib.platforms.unix;
     broken = stdenv.buildPlatform.is32bit;

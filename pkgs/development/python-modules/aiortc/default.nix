@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "aiortc";
-  version = "1.14.0";
+  version = "1.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aiortc";
     repo = "aiortc";
     tag = version;
-    hash = "sha256-ZgxSaiKkJrA5XvUT1zq8kwqB8mOvn46vLWXHyJSsHbM=";
+    hash = "sha256-XuqitZv0VJmbcvLZK3tLsN0TLfjujL35mbcyBche5SQ=";
   };
 
   build-system = [

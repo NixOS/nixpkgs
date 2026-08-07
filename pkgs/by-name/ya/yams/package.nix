@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "yams";
   # nixpkgs-update: no auto update
   version = "0.7.3";
@@ -13,8 +13,8 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Berulacks";
     repo = "yams";
-    rev = version;
-    sha256 = "1zkhcys9i0s6jkaz24an690rvnkv1r84jxpaa84sf46abi59ijh8";
+    tag = finalAttrs.version;
+    hash = "sha256-CMqYSlzKEKcJUup2SVAOe9qdQTJWEfHVlEaDmLRncP4=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -22,11 +22,9 @@ python3Packages.buildPythonPackage rec {
   dependencies = with python3Packages; [
     pyyaml
     psutil
-    mpd2
+    python-mpd2
     requests
   ];
-
-  doCheck = false;
 
   pythonImportsCheck = [ "yams.scrobble" ];
 
@@ -35,6 +33,8 @@ python3Packages.buildPythonPackage rec {
     description = "Last.FM scrobbler for MPD";
     mainProgram = "yams";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ccellado ];
+    maintainers = with lib.maintainers; [
+      acidbong
+    ];
   };
-}
+})

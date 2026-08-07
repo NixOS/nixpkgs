@@ -29,14 +29,14 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "harlequin";
-  version = "2.5.2";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "harlequin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ea8fR+tsur/tIQwfUS88HvjCADv8VgEjHD7JnR44Twk=";
+    hash = "sha256-jZGQ6t6djiKK9B+R8TYMPwXKkLPk7Z+dXuUcVQuZMfU=";
   };
 
   pythonRelaxDeps = [
@@ -90,6 +90,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = with python3Packages; [
     pytest-asyncio
+    pytest-xdist
     pytestCheckHook
     versionCheckHook
     writableTmpDirAsHomeHook
@@ -117,7 +118,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "SQL IDE for Your Terminal";
     homepage = "https://harlequin.sh";
-    changelog = "https://github.com/tconbeer/harlequin/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/tconbeer/harlequin/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     mainProgram = "harlequin";
     maintainers = with lib.maintainers; [ pcboy ];

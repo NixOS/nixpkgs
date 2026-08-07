@@ -24,12 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
       file from a PFA or PFB font.
     '';
     homepage = "https://www.lcdf.org/type/";
-    license = {
-      shortName = "Click"; # README.md says BSD-like, see LICENSE
-      url = "https://github.com/kohler/t1utils/blob/master/LICENSE";
-      free = true;
-      redistributable = true;
-    };
+    license = lib.licenses.mit-click;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.bjornfor ];
   };

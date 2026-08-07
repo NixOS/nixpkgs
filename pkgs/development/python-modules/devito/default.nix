@@ -32,14 +32,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "devito";
-  version = "4.8.21";
+  version = "4.8.22";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "devitocodes";
     repo = "devito";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nD1bUFv24lnonajUG6m5yhGUAC0pVtSKTX69JwSt69E=";
+    hash = "sha256-7bHMMZKm+n+wSVGUSSoYQjXklxzdTeyCkjMuK0Z8qTI=";
   };
 
   patches = [

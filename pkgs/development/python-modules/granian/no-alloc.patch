@@ -1,5 +1,5 @@
 diff --git a/Cargo.toml b/Cargo.toml
-index e1b6a3d..8fe77cf 100644
+index a33fb2c..8426d66 100644
 --- a/Cargo.toml
 +++ b/Cargo.toml
 @@ -46,3 +46,2 @@ itertools = "0.14"
@@ -7,8 +7,8 @@ index e1b6a3d..8fe77cf 100644
 -mimalloc = { version = "0.1.49", default-features = false, features = ["local_dynamic_tls"], optional = true }
  mime_guess = "=2.0"
 @@ -58,3 +57,2 @@ socket2 = { version = "=0.6", features = ["all"] }
- sysinfo = "=0.38"
--tikv-jemallocator = { version = "0.6.0", default-features = false, features = ["disable_initial_exec_tls"], optional = true }
+ sysinfo = "=0.39"
+-tikv-jemallocator = { version = "=0.7", default-features = false, features = ["disable_initial_exec_tls"], optional = true }
  tls-listener = { version = "=0.11", git = "https://github.com/gi0baro/tls-listener.git", branch = "0.11.x", features = ["rustls-ring", "rustls-tls12"] }
 @@ -68,6 +66,2 @@ pyo3-build-config = "=0.27"
  

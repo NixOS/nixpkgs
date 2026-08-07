@@ -6,25 +6,31 @@
   python3,
   stdenv,
   libzint,
+  pkg-config,
+  stb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zxing-cpp";
-  version = "2.3.0";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "zxing-cpp";
     repo = "zxing-cpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e3nSxjg8p+1DEUbZOh4C2zfnA6iGhNJMPiIe2oJEbRo=";
+    hash = "sha256-ZtjvHBnuPJkc9kU998jH7IPlX3jF/RGtLNWDzsb0v4A=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
+    pkg-config
   ];
 
   buildInputs = [
     libzint
+    stb
   ];
 
   cmakeFlags = [
@@ -57,7 +63,10 @@ stdenv.mkDerivation (finalAttrs: {
       formats.
     '';
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ lukegb ];
+    maintainers = with lib.maintainers; [
+      lukegb
+      qweered
+    ];
     platforms = lib.platforms.unix;
   };
 })

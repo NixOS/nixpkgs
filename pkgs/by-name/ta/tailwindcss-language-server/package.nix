@@ -3,20 +3,20 @@
   stdenv,
   fetchFromGitHub,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tailwindcss-language-server";
-  version = "0.14.28";
+  version = "0.14.29";
 
   src = fetchFromGitHub {
     owner = "tailwindlabs";
     repo = "tailwindcss-intellisense";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jds6Wq4rcR4wXonZ1v9JITiEc4gflT0sTc3KUSBCMFc=";
+    hash = "sha256-o5NyU52j3ZyuKWT4lL5U78qz4TBbXerylTl2fdvwqlk=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -25,15 +25,21 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       pnpmWorkspaces
+      patchPhase
       ;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-3pHEmYMgQuHFFMyGeFzo9BWRFt6yvWzFFMJEdRhwS2w=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-excPYLP+81ftU/LwBeO/lmj4Nbefb4dNvpvudg/sx+w=";
   };
+
+  patchPhase = ''
+    substituteInPlace ./packages/tailwindcss-language-server/package.json \
+      --replace '"@tailwindcss/oxide": "^4.1.15",' '"@tailwindcss/oxide": "^4.1.14",'
+  '';
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
   ];
 
   buildInputs = [

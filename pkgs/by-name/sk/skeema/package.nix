@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "skeema";
-  version = "1.13.2";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "skeema";
     repo = "skeema";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Gy+AYjUEi3wvXX9j5jCOs7/Qk0bgIt20cjY+SSP+uQI=";
+    hash = "sha256-enp51IdhRNcbUBf/+RAJktrltPz7aGISFssMcqbu6Gc=";
   };
 
   vendorHash = null;

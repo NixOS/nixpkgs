@@ -46,6 +46,8 @@ buildPythonPackage rec {
     # Don't require vim for tests, it causes lots of rebuilds
     "test_find_editor_not_specified"
     "test_transcript"
+    # Removed upstream after rich 15 update
+    "test_from_ansi_wrapper"
   ];
 
   pythonImportsCheck = [ "cmd2" ];
@@ -54,7 +56,7 @@ buildPythonPackage rec {
     description = "Enhancements for standard library's cmd module";
     homepage = "https://github.com/python-cmd2/cmd2";
     changelog = "https://github.com/python-cmd2/cmd2/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ teto ];
   };
 }

@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   version = "2016-07-26";
 
   src = fetchFromGitHub {
-    owner = "KeyboardFire";
+    owner = "tckmn";
     repo = "xscast";
     rev = "9e6fd3c28d3f5ae630619f6dbccaf1f6ca594b21";
     sha256 = "0br27bq9bpglfdpv63h827bipgvhlh10liyhmhcxls4227kagz72";
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "https://github.com/KeyboardFire/xscast";
+    homepage = "https://github.com/tckmn/xscast";
     license = lib.licenses.mit;
     description = "Screencasts of windows with list of keystrokes overlayed";
     maintainers = [ ];

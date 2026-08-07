@@ -6,24 +6,14 @@
 
 anki-utils.buildAnkiAddon (finalAttrs: {
   pname = "ajt-card-management";
-  version = "25.10.14.0";
-  src =
-    (fetchFromGitHub {
-      owner = "Ajatt-Tools";
-      repo = "learn-now-button";
-      rev = "v${finalAttrs.version}";
-      hash = "sha256-ebGMrEfDV9ZWtrV2AjiaNd7WMeNBHlaOBE2xL1x0nWs=";
-      fetchSubmodules = true;
-    })
-    # HACK: remove when https://github.com/Ajatt-Tools/learn-now-button/pull/9 is released
-    .overrideAttrs
-      (oldAttrs: {
-        env = oldAttrs.env or { } // {
-          GIT_CONFIG_COUNT = 1;
-          GIT_CONFIG_KEY_0 = "url.https://github.com/.insteadOf";
-          GIT_CONFIG_VALUE_0 = "git@github.com:";
-        };
-      });
+  version = "26.2.21.0";
+  src = fetchFromGitHub {
+    owner = "Ajatt-Tools";
+    repo = "learn-now-button";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-9PLEEE9M+4LQX5xI7R/xORvykq9qf0k+Eo2UG71e1iM=";
+    fetchSubmodules = true;
+  };
   sourceRoot = "${finalAttrs.src.name}/card_management";
   meta = {
     description = "Reset, Learn, and Grade cards from the card browser";

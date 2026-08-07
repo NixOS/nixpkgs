@@ -5,6 +5,7 @@
   hash,
   patches ? [ ],
   fetchFromGitHub,
+  buildPackages,
 
   cmake,
   ninja,
@@ -86,6 +87,10 @@ stdenv.mkDerivation rec {
     # [2]: https://github.com/Mbed-TLS/mbedtls/issues/9885
     "-DCMAKE_C_FLAGS=-fzero-init-padding-bits=unions"
   ];
+
+  env = lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+    HOSTCC = lib.getExe buildPackages.stdenv.cc;
+  };
 
   doCheck = true;
 

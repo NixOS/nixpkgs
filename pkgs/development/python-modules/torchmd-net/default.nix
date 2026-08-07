@@ -1,0 +1,96 @@
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  ase,
+  h5py,
+  lightning,
+  numpy,
+  torch,
+  torch-geometric,
+  tqdm,
+  warp-lang,
+
+  # tests
+  pytest-xdist,
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "torchmd-net";
+  version = "3.0.3";
+  pyproject = true;
+  __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "torchmd";
+    repo = "torchmd-net";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FBeeNkc7mJQYmMwlsW3Un+3RHvErJM7rWKUqSCYYUCM=";
+  };
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # NotImplementedError: The operator 'torchmdnet::warp_neighbor_brute_fwd' is not currently implemented for the MPS device.
+    # As a temporary fix, you can set the environment variable `PYTORCH_ENABLE_MPS_FALLBACK=1` to use the CPU as a fallback for this op.
+    # WARNING: this will be slower than running natively on MPS.
+    PYTORCH_ENABLE_MPS_FALLBACK = true;
+  };
+
+  pythonRemoveDeps = [
+    # Not a runtime dependency
+    "setuptools"
+  ];
+  dependencies = [
+    ase
+    h5py
+    lightning
+    numpy
+    torch
+    torch-geometric
+    tqdm
+    warp-lang
+  ];
+
+  pythonImportsCheck = [ "torchmdnet" ];
+
+  nativeCheckInputs = [
+    pytest-xdist
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  disabledTests = [
+    # Require internet access
+    "test_dataset_s66x8"
+
+    # Failed: torch.compile failed on TorchScripted tensornet model:
+    # torch.compile does not support compiling torch.jit.script or torch.jit.freeze models directly.
+    "test_torchscript_then_compile"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # torch._inductor.exc.InductorError: ImportError: ...
+    # symbol not found in flat namespace '___kmpc_barrier'
+    "test_ase_calculator"
+    "test_torch_export_then_compile"
+  ];
+
+  meta = {
+    description = "Library to train state-of-the-art neural networks potentials (NNPs)";
+    homepage = "https://github.com/torchmd/torchmd-net";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
+  };
+})

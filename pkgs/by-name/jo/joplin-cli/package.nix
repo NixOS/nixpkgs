@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "joplin-cli";
-  version = "3.5.1";
+  version = "3.6.2";
 
   src = fetchFromGitHub {
     owner = "laurent22";
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
       # there's a file with a weird name that causes a hash mismatch on darwin
       rm $out/packages/app-cli/tests/support/photo*
     '';
-    hash = "sha256-NNtdY6ajMfcMWj/AIo+b2nhylBCqyOIwCepYx/ZNCBY=";
+    hash = "sha256-nWMUvAseKoTOv5ui9uYDUiGlvO+8nNV4ux7JbsnrM5U=";
   };
 
   patches = [
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
       patches
       postPatch
       ;
-    hash = "sha256-qTDrNoOnlrceIJZ/VGAYnMozQsURbCdtAA4ZV3NQYmc=";
+    hash = "sha256-mdDVYLJ4ZN7zJJdf/2Wh+or+p1uJPTrMCyDYWwc04YM=";
   };
 
   nativeBuildInputs = [

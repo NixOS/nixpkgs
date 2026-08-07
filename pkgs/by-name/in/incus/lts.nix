@@ -1,85 +1,109 @@
 import ./generic.nix {
-  hash = "sha256-7s2gc+78O8jKypVe1itaUrsLPa2mLjNgUUrR/cv7ITA=";
-  version = "7.0.0";
-  vendorHash = "sha256-6irMB3hpWcxDuMQBxWXnhMLAOwTAl63JX6JJZMQXf5E=";
-  lts = true;
+  hash = "sha256-Ivj0vWKuhgb4VvyxcuB+CXsJ02zwo65rqxD5/cLUmSk=";
+  version = "7.0.1";
+  vendorHash = "sha256-F3LhWVjckU0ypgOppHztjR6hDB6enHxoDmRWcSDfwQE=";
   patches = fetchpatch2: [
+    # incusd/storage: Strip unsafe symlinks in externally-supplied instance data
     (fetchpatch2 {
-      name = "doc-devices-disk_Fix-broken-link.patch";
-      url = "https://github.com/lxc/incus/commit/faa636b70c05a5cca0346492a0586d5747e4b117.patch?full_index=1";
-      hash = "sha256-UsfzSeLJq0B9xDmd124ITzFBJzg2w1xXNK6TavQ5iMs=";
+      url = "https://github.com/lxc/incus/commit/136444d9b65d17a55519f1a86809f030d58c9c79.patch?full_index=1";
+      hash = "sha256-mNgcLPq6liRBqLRHwMd3cgolESXx3nzYFPsqqhXtPXQ=";
+    })
+    # incusd/storage/s3: Reject symlinks in bucket backups
+    (fetchpatch2 {
+      url = "https://github.com/lxc/incus/commit/4dc6e1f7935ac13bcff98f6aa213e02815d0dcc8.patch?full_index=1";
+      hash = "sha256-t5dM7BGGD8H/PfgDoRgP/0jIB38sK0ez0uYGjb+I9f8=";
+    })
+    # incusd/storage: Allow expected symlinks in instance metadata
+    (fetchpatch2 {
+      url = "https://github.com/lxc/incus/commit/001bd0657f9ea6d73368118a01c5248080f2bbef.patch?full_index=1";
+      hash = "sha256-daCtygGZN1C7LIN2FGsajnUjMt/JeefrfxTC/8IhddY=";
+    })
+    # incusd/project: Restrict volume creation options in restricted projects
+    (fetchpatch2 {
+      url = "https://github.com/lxc/incus/commit/dbc1e36173f8cac74ef276a88ba1e0bc9964002c.patch?full_index=1";
+      hash = "sha256-1fOHnNUMdIlzHZRFuAfflRT7ZlZBMlpvAhfCVUDiwls=";
+    })
+    # internal/instance: Prevent line breaks in NVIDIA config values
+    (fetchpatch2 {
+      url = "https://github.com/lxc/incus/commit/4f847ad5ab34716efb723e3f46e3d72e472035de.patch?full_index=1";
+      hash = "sha256-O/1RoRPTzq5WxnApTE+2KeIVsDT2CSz8yX4/rqRr83Y=";
+    })
+    # incusd/storage: Confine backup.yaml write to instance root
+    (fetchpatch2 {
+      url = "https://github.com/lxc/incus/commit/7135f0183d9dc0661d2e3eb36779bc2273545266.patch?full_index=1";
+      hash = "sha256-K/c03Qlomig8uQz/Sj/eIRNvVZweq7PNJra6ehY1u+M=";
+    })
+    # incusd/instance: Confine metadata.yaml access to instance root
+    (fetchpatch2 {
+      url = "https://github.com/lxc/incus/commit/1bb869273c69cd5d17558a021028c5dee45d82d4.patch?full_index=1";
+      hash = "sha256-ckKR8u02s7tQm9bq9sAYC5w0HfZVSZc6q54j0lNoHOA=";
+    })
+    # incusd/instance/qemu: Confine template access to instance root
+    (fetchpatch2 {
+      url = "https://github.com/lxc/incus/commit/181ae5c746c718767e8ca6f3edbe3df4a6fc9fbe.patch?full_index=1";
+      hash = "sha256-ccAAdn7KKc5y0ZanL78+GBWrQy5y2a/hUX8U1gYTZaQ=";
+    })
+    # incusd/images: Validate image fingerprint for all protocols
+    (fetchpatch2 {
+      url = "https://github.com/lxc/incus/commit/3d7246efe5ec4dba476f95ec163eb4a165717863.patch?full_index=1";
+      hash = "sha256-2J9T12qFRWaX1l7pyXXucPMN3VRmUoNKoCiQfFFvieI=";
+    })
+    # incusd/storage: Validate volume name on ISO and backup import
+    (fetchpatch2 {
+      url = "https://github.com/lxc/incus/commit/c7cf33d46a83fd39b59843f0bd406a2c88d2e899.patch?full_index=1";
+      hash = "sha256-/cgRwmWNtl2PAgqpYH3BEv6+ZrF7rH8s+yn84+ICYHU=";
+    })
+    # incusd/instances: Validate instance name on backup import
+    (fetchpatch2 {
+      url = "https://github.com/lxc/incus/commit/0d21c84dbff03e1a676a94ecbfaafca8b48695ba.patch?full_index=1";
+      hash = "sha256-5CcxJgqBssaXcV1GviI297DgygEeJp5ZKUtDmotS3nw=";
+    })
+    # incusd/instances: Re-check restrictions after copy config merge
+    (fetchpatch2 {
+      url = "https://github.com/lxc/incus/commit/9bc9f9ba5ab61fd5e6c9fa0f5e2440d4ce8495e5.patch?full_index=1";
+      hash = "sha256-raNNgdbIw5SzJSfIVaOEy0A7A0B98HogAIRGaX7V/Sk=";
+    })
+    # incusd/instance: Enforce project restrictions on migration overrides
+    (fetchpatch2 {
+      url = "https://github.com/lxc/incus/commit/57c415871256445efa758086e6ef8111464b1c26.patch?full_index=1";
+      hash = "sha256-3UJZzY0SgTUJwjeYUFDjzxL/xU5TeYY4ky649BGqy/w=";
+    })
+    # incusd: Expand network address set project for authorization
+    (fetchpatch2 {
+      url = "https://github.com/lxc/incus/commit/f86f08bfcd36aae7e8f29e83e71e6767ddb3e077.patch?full_index=1";
+      hash = "sha256-epqnu2AayZsn/9im7VQJcCfoShRL3/BcUNXIDjJI9kk=";
+    })
+    # incusd/instance: Fix NVIDIA require.cuda and require.driver handling
+    (fetchpatch2 {
+      url = "https://github.com/lxc/incus/commit/038fd13e82c107ed40cad7697eabe45f3395a0cf.patch?full_index=1";
+      hash = "sha256-OrArP0PJbBnGd0qVjlTxADTtdhWGLueJqM0Jt1J+1UI=";
+    })
+    # incusd/instance: Confine exec-output access to its directory
+    (fetchpatch2 {
+      url = "https://github.com/lxc/incus/commit/1e09276c318107c21091b9811643ef13e8692824.patch?full_index=1";
+      hash = "sha256-5Y/fVAQBwVkOGclVIeYAF2+OJGeJsaldkBIkzqhz6eM=";
+    })
+    # incusd: Fail closed on unknown authorization project expansion
+    (fetchpatch2 {
+      url = "https://github.com/lxc/incus/commit/8cdc50343707525e01178b04f11350340b67eaa1.patch?full_index=1";
+      hash = "sha256-VGODoJ/cPO+icGUMTgsmaSdudzPHShQDq2Lmp9Hndv0=";
+    })
+    # incusd/instance/qemu: Use os.Root for template output
+    (fetchpatch2 {
+      url = "https://github.com/lxc/incus/commit/a89084e2de1548513d349c5305f509ed80d43240.patch?full_index=1";
+      hash = "sha256-+zcaHORD+DK9r8dsqTxSm8Khjr/hQBPw9st3K2qD/XA=";
     })
     (fetchpatch2 {
-      name = "incusd-instance-qemu_Fix-version-detection-for-qemu-kvm.patch";
-      url = "https://github.com/lxc/incus/commit/a5f50d36eaa41580f2233b05936bd29fe1b15100.patch?full_index=1";
-      hash = "sha256-Qwu2oljB7COZB2m3W/9Y5wCCZyxvLj4ZUHcNqtoDGzk=";
+      url = "https://raw.githubusercontent.com/zabbly/incus/8834ea357ab4f0fd546077fa7630bd75762a485d/patches/incus-0001-incusd-instance-Confine-OCI-network-writes-to-instan.patch?full_index=1";
+      hash = "sha256-/2kY2Us4hV7PemwgBzluF29MHEtM+dITDKsPb+/B3KE=";
     })
     (fetchpatch2 {
-      name = "incusd_Re-introduce-core-scheduling-detection.patch";
-      url = "https://github.com/lxc/incus/commit/1e6ce18e8cd92b5b3eb4346e7bd27fd4a7d1fb9b.patch?full_index=1";
-      hash = "sha256-RLy8bcod55g8vtXxChte4oalApw7d/gZg8No6BUZQS0=";
+      url = "https://raw.githubusercontent.com/zabbly/incus/8834ea357ab4f0fd546077fa7630bd75762a485d/patches/incus-0002-incusd-project-Enforce-isolated-restriction-when-idm.patch?full_index=1";
+      hash = "sha256-KIrSDgD4AI5F72YySAlPosBEQTZEfSQmkrSn3VUVtLs=";
     })
-    (fetchpatch2 {
-      name = "incusd-instance-lxc_Fix-swap=false-failure.patch";
-      url = "https://github.com/lxc/incus/commit/5f2cdf7545c5398290dc507313de9ee547fe803f.patch?full_index=1";
-      hash = "sha256-Ux6mm8Y4q68fj//hG7k+bXMjqhGDOxGNm64De1pwcYY=";
-    })
-    (fetchpatch2 {
-      name = "incusd-forknet_Persist-DHCPv6-client-DUID-across-restarts.patch";
-      url = "https://github.com/lxc/incus/commit/47377e345930e77d3fbce29d037fc7dbd6823dcf.patch?full_index=1";
-      hash = "sha256-CWaNaDYuBBLahxkqnM0FQZraVkvBSbrx1+8dcB8Vfbg=";
-    })
-    (fetchpatch2 {
-      name = "incusd-forknet_Include-FQDN-in-DHCPv6-INFO-requests.patch";
-      url = "https://github.com/lxc/incus/commit/d7f1c9d75ca33eb2ddb0bf10cec934fd6e352089.patch?full_index=1";
-      hash = "sha256-3zyADLiPUuiGLwdeISj5lUk3tkAayQGaRI+/yBHrvuM=";
-    })
-    (fetchpatch2 {
-      name = "incusd-forknet_Properly-renew-stateful-DHCPv6.patch";
-      url = "https://github.com/lxc/incus/commit/3b127758c17752302b3f4bf907f42e926ab664e4.patch?full_index=1";
-      hash = "sha256-+dcdeZwuyTWH7yfPEDqKOax/lS1Yqvwn9ooqJxKD3jA=";
-    })
-    (fetchpatch2 {
-      name = "incusd-forknet_Add-jitter-to-DHCPv6-renewal.patch";
-      url = "https://github.com/lxc/incus/commit/2b24a260b6177c033047f270286933563f05a999.patch?full_index=1";
-      hash = "sha256-grMspYyqn4Zl1Kn+hFeUfeIevdwszJc0x2YDC2JILKw=";
-    })
-    (fetchpatch2 {
-      name = "incusd-device-nic_bridged_Fix-swapped-IPv4-IPv6-DNS-record.patch";
-      url = "https://github.com/lxc/incus/commit/33ffcf71745e138dd4f3546839115c293e6be083.patch?full_index=1";
-      hash = "sha256-E8Plz9qdoTt3id9I5jbZYMKQt+kUrKmXmtMJ6IXlRJg=";
-    })
-    (fetchpatch2 {
-      name = "doc-authorization_Fix-reference-to-old-manager-relation.patch";
-      url = "https://github.com/lxc/incus/commit/c65ac0f4e6e94859b8565bce41bbf1595f4a8085.patch?full_index=1";
-      hash = "sha256-6wEz3uxWauIibBkH+OdB7+VsFySmugt6wk61qMayzYo=";
-    })
-    (fetchpatch2 {
-      name = "incusd-network-acl_Fix-issue-with-instances-in-different-project-than-ACL.patch";
-      url = "https://github.com/lxc/incus/commit/2a3584b6fccf152be42cf5614e54241bdb13e671.patch?full_index=1";
-      hash = "sha256-CXE5Bowk3ZPup6oVDEJb9ucsJoXhXu/kU7gGCghhtjQ=";
-    })
-    (fetchpatch2 {
-      name = "incusd-projects_Fix-targeting-on-project-delete.patch";
-      url = "https://github.com/lxc/incus/commit/3a104e4dc24897f0d6543136bb1043fcd4a33632.patch?full_index=1";
-      hash = "sha256-kTFkJqbjzdq5jvNxKw8YMPR04WRj4t5IS6ymoGyXDXE=";
-    })
-    (fetchpatch2 {
-      name = "test-network_acl_Add-test-for-ACL-used-by-instance-in-different-project.patch";
-      url = "https://github.com/lxc/incus/commit/41878729f06e9c31df9d4fac20fb8c384608577c.patch?full_index=1";
-      hash = "sha256-YR2Akus4vp3vNvHEmsJUh/3gbEf3R/cFUOVvt9u/wEU=";
-    })
-    (fetchpatch2 {
-      name = "incusd-instance-qemu_Remove-deprecated-QEMU-flag.patch";
-      url = "https://github.com/lxc/incus/commit/c1f18c78fc6bc4850df20574bdcc541e5eefc4ac.patch?full_index=1";
-      hash = "sha256-kbn4Yd/G23FCFA0Ch0+d81HUxCbcoiOzHfZ0MW+VlzE=";
-    })
-    (fetchpatch2 {
-      name = "incusd-cluster_Re-order-evacuations-to-happen-earlier-on-shutdown.patch";
-      url = "https://github.com/lxc/incus/commit/5b29ecc164ef28239d2e2a874a7c871a2e419083.patch?full_index=1";
-      hash = "sha256-jpyJYjiZvRw/aOGsykEx8uotRBF7p1q5O08PVhyQtvk=";
-    })
+
   ];
+  lts = true;
   nixUpdateExtraArgs = [
     "--version-regex=^v(7\\.0\\.[0-9]+)$"
     "--override-filename=pkgs/by-name/in/incus/lts.nix"

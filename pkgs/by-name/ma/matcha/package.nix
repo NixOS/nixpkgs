@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGoLatestModule,
   fetchFromGitHub,
   pkg-config,
   pcsclite,
@@ -10,20 +10,20 @@
   versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoLatestModule (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "matcha";
-  version = "0.37.0";
+  version = "0.44.0";
 
   src = fetchFromGitHub {
     owner = "floatpane";
     repo = "matcha";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bvy7og6om+Mqn4J0GrtIx8VQQXUiy8Y7Kueyfj5FWWQ=";
+    hash = "sha256-y1YEnqTCmf+CMKpv3wN4SZsN+lUuv3T8pKmM+zu1Ipw=";
   };
 
-  vendorHash = "sha256-SH7zP5+3R82mMx9vHY8QbPUkLr29pwbIbiV55UUQu+M=";
+  vendorHash = "sha256-cg6R4WtDORwZlo+P16rN6qc0zZMOPtnr4VyQKV9Q2nM=";
   proxyVendor = true;
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [

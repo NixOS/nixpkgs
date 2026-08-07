@@ -23,13 +23,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "qtstyleplugin-kvantum${lib.optionalString isQt5 "5"}";
-  version = "1.1.7";
+  version = "1.1.8";
 
   src = fetchFromGitHub {
     owner = "tsujan";
     repo = "Kvantum";
     rev = "V${finalAttrs.version}";
-    hash = "sha256-S/oIkr0C4fj78ih8Tm6pKxlREEMLeF5Va7+3jC6bK3c=";
+    hash = "sha256-Ki3AAcKKuPNARXH6kMsxA2JfouNPJIQkXjTE+7+vgq4=";
   };
 
   nativeBuildInputs = [

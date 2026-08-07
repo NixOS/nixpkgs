@@ -20,7 +20,6 @@
 
   # optional-dependencies
   # image
-  pillow,
   # train
   accelerate,
   datasets,
@@ -34,14 +33,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sentence-transformers";
-  version = "5.4.1";
+  version = "5.6.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "sentence-transformers";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VZu50DVuU0P7o3+iKVWougui7nWSrnP/eza0Rqtt7ZU=";
+    hash = "sha256-nV378rNxaIdPjshxkgqCpQuUQmh7/Z7xhhD5u9KT81A=";
   };
 
   build-system = [ setuptools ];
@@ -159,10 +159,15 @@ buildPythonPackage (finalAttrs: {
     "tests/base/modules/"
     "tests/base/test_model.py"
     "tests/base/test_model_card.py"
+    "tests/base/test_model_type_subclass.py"
     "tests/cross_encoder/evaluation/test_reranking.py"
+    "tests/cross_encoder/losses/test_rerank_losses_dtype.py"
     "tests/cross_encoder/test_model.py"
     "tests/cross_encoder/test_model_card.py"
     "tests/cross_encoder/test_train_stsb.py"
+    "tests/sentence_transformer/losses/test_adaptive_layer.py"
+    "tests/sentence_transformer/losses/test_denoising_auto_encoder.py"
+    "tests/sentence_transformer/losses/test_embed_distill.py"
     "tests/sentence_transformer/test_compute_embeddings.py"
     "tests/sentence_transformer/test_model.py"
     "tests/sentence_transformer/test_model_card.py"

@@ -179,7 +179,7 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/EleutherAI/lm-evaluation-harness/releases/tag/${finalAttrs.src.tag}";
     description = "Framework for few-shot evaluation of language models";
     homepage = "https://github.com/EleutherAI/lm-evaluation-harness";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers.booxter ];
   };
 })

@@ -11,8 +11,7 @@
   buildPackages,
 
   # apparmor deps
-  apparmor-parser,
-  apparmor-teardown,
+  apparmor-init,
 }:
 let
   inherit (python3Packages) libapparmor;
@@ -26,7 +25,7 @@ python3Packages.buildPythonApplication {
     cd utils
 
     substituteInPlace aa-remove-unknown \
-      --replace-fail "/lib/apparmor/rc.apparmor.functions" "${apparmor-parser}/lib/apparmor/rc.apparmor.functions"
+      --replace-fail "/lib/apparmor/rc.apparmor.functions" "${apparmor-init}/lib/apparmor/rc.apparmor.functions"
     substituteInPlace Makefile \
       --replace-fail "/usr/include/linux/capability.h" "${linuxHeaders}/include/linux/capability.h"
     sed -i -E 's/^(DESTDIR|BINDIR|PYPREFIX)=.*//g' Makefile
@@ -75,8 +74,6 @@ python3Packages.buildPythonApplication {
   postInstall = ''
     wrapProgram $out/bin/aa-remove-unknown \
      --prefix PATH : ${lib.makeBinPath [ gawk ]}
-
-    ln -s ${lib.getExe apparmor-teardown} $out/bin/aa-teardown
   '';
 
   meta = libapparmor.meta // {

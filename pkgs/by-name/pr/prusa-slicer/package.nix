@@ -19,6 +19,7 @@
   gmp,
   gtk3,
   hicolor-icon-theme,
+  hidapi,
   libpng,
   mpfr,
   nanosvg,
@@ -61,14 +62,14 @@ let
 in
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "prusa-slicer";
-  version = "2.9.4";
+  version = "2.9.6";
   # Build with clang even on Linux, because GCC uses absolutely obscene amounts of memory
   # on this particular code base (OOM with 32GB memory and --cores 16 on GCC, succeeds
   # with --cores 32 on clang).
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "PrusaSlicer";
-    hash = "sha256-1ilgr9RaIoWvj0TDVc20XjjUUcNtnicR7KlE0ii3GQE=";
+    hash = "sha256-SXNIyAncnPU6Zac8/plM32sPBgj9Uj9eVDL3NBu+IL4=";
     rev = "version_${finalAttrs.version}";
   };
 
@@ -79,6 +80,9 @@ clangStdenv.mkDerivation (finalAttrs: {
     ./allow_wayland.patch
     # Pick https://github.com/prusa3d/PrusaSlicer/pull/14207 to remove unused and insecure ilmbase dependency
     ./no-ilmbase.patch
+    # catch2 3.15 support
+    # https://github.com/prusa3d/PrusaSlicer/pull/15462
+    ./catch2_3_15.patch
   ];
 
   # (not applicable to super-slicer fork)
@@ -132,6 +136,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     gmp
     gtk3
     hicolor-icon-theme
+    hidapi
     libpng
     mpfr
     nanosvg-fltk

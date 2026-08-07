@@ -1,25 +1,25 @@
 {
   aiohttp,
-  aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
   lib,
   lxml,
+  mocket,
   pytest-asyncio,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyblu";
-  version = "2.0.6";
+  version = "2.0.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LouisChrist";
     repo = "pyblu";
     tag = "v${version}";
-    hash = "sha256-qLB9o40tRYgmbYJEEx8r3SodH1hB8MM4yLXbdKIs/xA=";
+    hash = "sha256-uYYiu0V491eHg47Rc9HGEiddONnFqGuPj34Mkfk5Gnk=";
   };
 
   pythonRelaxDeps = [ "aiohttp" ];
@@ -34,9 +34,15 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyblu" ];
 
   nativeCheckInputs = [
-    aioresponses
+    mocket
     pytest-asyncio
     pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # all tests fail with:
+    #  aiohttp.client_exceptions.ClientConnectorDNSError: Cannot connect to host node:11000 ssl:default [Could not contact DNS servers]
+    "tests/test_player.py"
   ];
 
   meta = {

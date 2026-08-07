@@ -17,4 +17,4 @@ macos_hash=$(nix-hash --to-sri --type sha256 "$macos_hash")
 
 update-source-version harmonoid "$version" "$linux64_hash" --system=x86_64-linux --ignore-same-version
 update-source-version harmonoid "$version" "$linux_aarch_hash" --system=aarch64-linux --ignore-same-version
-update-source-version harmonoid "$version" "$macos_hash" --system=x86_64-darwin --ignore-same-version
+update-source-version harmonoid "$version" "$macos_hash" --system=aarch64-darwin --ignore-same-version

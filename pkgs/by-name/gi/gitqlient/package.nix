@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.6.3-unstable-2025-09-11"; # cmake does not install correctly on tagged release
 
   src = fetchFromGitHub {
-    owner = "francescmm";
+    owner = "francescmaestre";
     repo = "gitqlient";
     rev = "faa3e2c19205123944bb88427a569c6f1b4366a1";
     fetchSubmodules = true;
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations"; # QCheckBox::stateChanged is deprecated
 
   meta = {
-    homepage = "https://github.com/francescmm/GitQlient";
+    homepage = "https://github.com/francescmaestre/GitQlient";
     description = "Multi-platform Git client written with Qt";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.linux;

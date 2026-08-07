@@ -24,14 +24,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "awkward";
-  version = "2.9.0";
+  version = "2.12.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "awkward";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ovbhCPTNxyfL7tkvBCiHF0kZt0l0oMSpdsE4E9S4JJY=";
+    hash = "sha256-X5fwX4HCMPRaYEIEf5cgGWUodtb6eEmU7ue6mjCzVSA=";
   };
 
   build-system = [

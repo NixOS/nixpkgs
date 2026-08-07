@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zizmor";
-  version = "1.25.2";
+  version = "1.29.0";
 
   src = fetchFromGitHub {
     owner = "zizmorcore";
     repo = "zizmor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nmhmW+e/Mys/PVGA0V2NalFDQ/qkcvT0F80XrmIZYb4=";
+    hash = "sha256-2I4RvLsAzsq8HMCiXeG2IrZ9fRvr/VIGCw9qKQ5NHlA=";
   };
 
-  cargoHash = "sha256-3ALVZJNpk0HiwmDGQigoSXuOdJR94nEKOWWiP5aggxo=";
+  cargoHash = "sha256-B8TMVvNWKdGUqXWBZ4900alkItj8tIikKFEv8cbpEVw=";
 
   buildInputs = [
     rust-jemalloc-sys
@@ -39,6 +39,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=audit::known_vulnerable_actions::tests::test_fix_upgrade_actions_setup_node"
     "--skip=audit::known_vulnerable_actions::tests::test_fix_upgrade_multiple_vulnerable_actions"
     "--skip=audit::known_vulnerable_actions::tests::test_fix_upgrade_third_party_action"
+    # insta snapshot appears to depend on checkout structure
+    "--skip=e2e::issue_1745"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

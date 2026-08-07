@@ -1,17 +1,19 @@
 {
+  actool,
   stdenv,
   lib,
   nodejs_24,
-  pnpm_10_29_2,
+  pnpm_10,
+  pnpm_11,
   node-gyp,
   fetchPnpmDeps,
   pnpmConfigHook,
-  electron_41,
+  pnpmBuildHook,
+  electron_43,
   python3,
   makeWrapper,
   callPackage,
   fetchFromGitHub,
-  fetchpatch,
   fetchurl,
   jq,
   makeDesktopItem,
@@ -31,22 +33,25 @@ assert lib.warnIf (commandLineArgs != "")
   true;
 let
   nodejs = nodejs_24;
-  pnpm = pnpm_10_29_2;
-  electron = electron_41;
+  pnpm = pnpm_11;
+  electron = electron_43;
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
-  signal-sqlcipher = callPackage ./signal-sqlcipher.nix { inherit pnpm nodejs; };
+  signal-sqlcipher = callPackage ./signal-sqlcipher.nix {
+    pnpm = pnpm_10;
+    inherit nodejs;
+  };
 
   webrtc = callPackage ./webrtc.nix { };
   ringrtc = callPackage ./ringrtc.nix { inherit webrtc; };
 
-  version = "8.9.1";
+  version = "8.21.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-HXxIjCVGh3JFAj0UUEAvmVnm7jMZdxRqWDILRDFCGw4=";
+    hash = "sha256-RuGq8ygiZewKqtKQattlqU0pcMMlgdFOJAhmN4J/8Tw=";
     # Emoji font files will be added in `postFetch` if `withAppleEmojis` is enabled. They
     # are fetched separately below.
     postFetch = ''
@@ -62,32 +67,34 @@ let
 
   sticker-creator = stdenv.mkDerivation (finalAttrs: {
     pname = "signal-desktop-sticker-creator";
-    inherit version;
-    src = src + "/sticker-creator";
+    inherit src version;
+
+    pnpmRoot = "sticker-creator";
+    pnpmWorkspaces = [ "signal-art-creator" ];
 
     pnpmDeps = fetchPnpmDeps {
-      inherit (finalAttrs) pname src version;
+      inherit (finalAttrs)
+        pname
+        src
+        version
+        pnpmWorkspaces
+        ;
       inherit pnpm;
-      fetcherVersion = 3;
-      hash = "sha256-CPZkybD/rCBMBK9qUSweBdLr9hXu0Ztn8fekqrRzUR4=";
+      fetcherVersion = 4;
+      hash = "sha256-1n+u0mcZJwjkdKmNY6KE6tk6/UPYuya5WqLrKRJimGw=";
     };
 
     strictDeps = true;
     nativeBuildInputs = [
       nodejs
       pnpmConfigHook
+      pnpmBuildHook
       pnpm
     ];
 
-    buildPhase = ''
-      runHook preBuild
-      pnpm run build
-      runHook postBuild
-    '';
-
     installPhase = ''
       runHook preInstall
-      cp -r dist $out
+      cp -r sticker-creator/dist $out
       runHook postInstall
     '';
   });
@@ -98,9 +105,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
   nativeBuildInputs = [
+    actool
     node-gyp
     nodejs
     pnpmConfigHook
+    pnpmBuildHook
     pnpm
     makeWrapper
     python3
@@ -114,15 +123,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Custom fonts currently don't work on windows other than the main one,
-    # which causes some of the text to look messed up. We want to include
-    # this patch since we are overriding the emoji font by default.
-    # Upstream PR: https://github.com/signalapp/Signal-Desktop/pull/7864
-    # This patch can be removed after `v8.11.0`.
-    (fetchpatch {
-      url = "https://github.com/signalapp/Signal-Desktop/commit/52ecd0d931e6071da79b016d2af1f508167b2a98.patch";
-      hash = "sha256-dtc0bwv9aLz92j5Zfm/SREWtQ43ljXN9Vm2VkeDbAx8=";
-    })
     ./force-90-days-expiration.patch
   ]
   ++ lib.optional (!withAppleEmojis) (
@@ -157,6 +157,11 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace config/production.json \
       --replace-fail '"updatesEnabled": true' '"updatesEnabled": false'
 
+    # pnpm 11 verifies node_modules before every `pnpm run`, which fails
+    # after nixpkgs swaps in the prebuilt native modules below.
+    substituteInPlace pnpm-workspace.yaml \
+      --replace-fail "verifyDepsBeforeRun: prompt" "verifyDepsBeforeRun: false"
+
     # Nix builds do not need upstream release hooks (notarization and
     # language-pack postprocessing), and they expect a different macOS
     # app layout than nixpkgs' Electron provides.
@@ -179,18 +184,14 @@ stdenv.mkDerivation (finalAttrs: {
       patches
       ;
     inherit pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-ls7DYPI5Dq06KI7WCdEkKHPsHTMJ3kO0qJDZsHZQHBQ=";
+    fetcherVersion = 4;
+    hash = "sha256-1n+u0mcZJwjkdKmNY6KE6tk6/UPYuya5WqLrKRJimGw=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1778260300;
-  }
-  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    # Disable code signing during local macOS builds.
-    CSC_IDENTITY_AUTO_DISCOVERY = "false";
+    SOURCE_DATE_EPOCH = 1785418091;
   };
 
   preBuild = ''
@@ -244,17 +245,30 @@ stdenv.mkDerivation (finalAttrs: {
     node-gyp rebuild
     popd
     test -f node_modules/fs-xattr/build/Release/xattr.node
-  '';
 
-  buildPhase = ''
-    runHook preBuild
+    # @signalapp/windows-ucv is imported on all platforms, but its TypeScript
+    # output is normally produced by its preinstall script. pnpmConfigHook runs
+    # `pnpm install --ignore-scripts`, so build it explicitly.
+    pushd packages/windows-ucv
+    pnpm run build
+    popd
+    test -f node_modules/@signalapp/windows-ucv/dist/index.js
 
-    export npm_config_nodedir=${electron.headers}
+    # @signalapp/types is required at runtime by preload.wrapper.js, but its
+    # output is normally produced by the prepare script.
+    pushd packages/types
+    pnpm run build
+    popd
+    test -f node_modules/@signalapp/types/dist/index.std.cjs
+
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
     cp -r ${sticker-creator} sticker-creator/dist
+  '';
 
-    pnpm run generate
+  pnpmBuildScript = "generate";
+
+  postBuild = ''
     pnpm exec electron-builder \
       ${
         if stdenv.hostPlatform.isDarwin then "--mac" else "--linux"
@@ -264,8 +278,6 @@ stdenv.mkDerivation (finalAttrs: {
       -c.electronVersion=${electron.version} \
       -c.npmRebuild=false \
       ${lib.optionalString stdenv.hostPlatform.isDarwin "-c.mac.identity=null"}
-
-    runHook postBuild
   '';
 
   installPhase = ''
@@ -355,7 +367,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

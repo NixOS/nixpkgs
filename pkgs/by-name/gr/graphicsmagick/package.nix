@@ -28,11 +28,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "graphicsmagick";
-  version = "1.3.47";
+  version = "1.3.48";
 
   src = fetchurl {
     url = "mirror://sourceforge/graphicsmagick/GraphicsMagick-${finalAttrs.version}.tar.xz";
-    hash = "sha256-lftoLasCBqnbFo0GWWP0/99aYLCyo3WsofRJL7GNBic=";
+    hash = "sha256-khjreBeREPkTcQZqt1yztN0DS5u0ZLKc6bq3oRl5Iys=";
   };
 
   outputs = [
@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
       including important formats like DPX, GIF, JPEG, JPEG-2000, JXL, PNG, PDF,
       PNM, TIFF, and WebP.
     '';
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ambossmann ];
     mainProgram = "gm";
     platforms = lib.platforms.all;

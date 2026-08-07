@@ -15,14 +15,13 @@
 
   ## wandb
   buildPythonPackage,
-  replaceVars,
 
   # build-system
   hatchling,
 
   # dependencies
   click,
-  gitpython,
+  packaging,
   platformdirs,
   protobuf,
   pydantic,
@@ -30,14 +29,12 @@
   requests,
   sentry-sdk,
   setproctitle,
-  setuptools,
   pythonOlder,
   typing-extensions,
 
   # tests
-  pytestCheckHook,
-  azure-core,
   azure-containerregistry,
+  azure-core,
   azure-identity,
   azure-storage-blob,
   bokeh,
@@ -52,7 +49,9 @@
   jsonschema,
   kubernetes,
   kubernetes-asyncio,
+  looptime,
   matplotlib,
+  moto,
   moviepy,
   pandas,
   parameterized,
@@ -65,6 +64,7 @@
   pytest-mock,
   pytest-timeout,
   pytest-xdist,
+  pytestCheckHook,
   rdkit,
   responses,
   scikit-learn,
@@ -76,12 +76,12 @@
 }:
 
 let
-  version = "0.27.0";
+  version = "0.28.1";
   src = fetchFromGitHub {
     owner = "wandb";
     repo = "wandb";
     tag = "v${version}";
-    hash = "sha256-A/tEyY47BDgahOhQWlmeF2koEDpIsV9QVoYMIBEbKqA=";
+    hash = "sha256-yXsSHyPOh3QXRRkTL4Rj8lLuFjp1LIKfPiacy4+obAk=";
   };
 
   wandb-xpu = rustPlatform.buildRustPackage {
@@ -143,7 +143,7 @@ let
       ''
         substituteInPlace go.mod \
           --replace-fail \
-            "go 1.26.3" \
+            "go 1.26.4" \
             "go 1.26.2"
       ''
       # hardcode the `wandb-xpu` binary path.
@@ -197,13 +197,6 @@ buildPythonPackage (finalAttrs: {
 
   inherit src version;
 
-  patches = [
-    # Replace git paths
-    (replaceVars ./hardcode-git-path.patch {
-      git = lib.getExe gitMinimal;
-    })
-  ];
-
   postPatch =
     # Prevent hatch from building wandb-core and arrow-rs-wrapper
     ''
@@ -217,6 +210,13 @@ buildPythonPackage (finalAttrs: {
         --replace-fail \
           'bin_path = pathlib.Path(__file__).parent / "bin" / "wandb-core"' \
           'bin_path = pathlib.Path("${lib.getExe wandb-core}")'
+    ''
+    # Hard-code the path to git in the python code
+    + ''
+      substituteInPlace wandb/cli/cli.py \
+        --replace-fail \
+          '["git", "apply",' \
+          '["${lib.getExe gitMinimal}", "apply",' \
     '';
 
   env = {
@@ -234,7 +234,7 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     click
-    gitpython
+    packaging
     platformdirs
     protobuf
     pydantic
@@ -242,8 +242,6 @@ buildPythonPackage (finalAttrs: {
     requests
     sentry-sdk
     setproctitle
-    # setuptools is necessary since pkg_resources is required at runtime.
-    setuptools
   ]
   ++ lib.optionals (pythonOlder "3.12") [
     typing-extensions
@@ -252,9 +250,8 @@ buildPythonPackage (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
-    pytestCheckHook
-    azure-core
     azure-containerregistry
+    azure-core
     azure-identity
     azure-storage-blob
     bokeh
@@ -262,6 +259,7 @@ buildPythonPackage (finalAttrs: {
     cloudpickle
     cwsandbox
     flask
+    gitMinimal
     google-cloud-artifact-registry
     google-cloud-compute
     google-cloud-storage
@@ -269,7 +267,9 @@ buildPythonPackage (finalAttrs: {
     jsonschema
     kubernetes
     kubernetes-asyncio
+    looptime
     matplotlib
+    moto
     moviepy
     pandas
     parameterized
@@ -282,11 +282,13 @@ buildPythonPackage (finalAttrs: {
     pytest-mock
     pytest-timeout
     pytest-xdist
+    pytestCheckHook
     rdkit
     responses
     scikit-learn
     soundfile
     tenacity
+    versionCheckHook
     torch
     torchvision
     tqdm
@@ -420,7 +422,7 @@ buildPythonPackage (finalAttrs: {
     # AssertionError: assert 'did you mean https://api.wandb.ai' in '1'
     "test_login_bad_host"
 
-    # Asserttion error: 1 != 0 (testing system exit code)
+    # Assertion error: 1 != 0 (testing system exit code)
     "test_login_host_trailing_slash_fix_invalid"
 
     # Breaks in sandbox: "Timed out waiting for wandb service to start"
@@ -443,9 +445,10 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "CLI and library for interacting with the Weights and Biases API";
     homepage = "https://github.com/wandb/wandb";
-    changelog = "https://github.com/wandb/wandb/raw/${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/wandb/wandb/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ samuela ];
+    mainProgram = "wandb";
     broken = wandb-xpu.meta.broken || wandb-core.meta.broken;
   };
 })

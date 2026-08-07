@@ -22,7 +22,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "emscripten";
-  version = "5.0.6";
+  version = "6.0.2";
 
   llvmEnv = symlinkJoin {
     name = "emscripten-llvm-${version}";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     name = "emscripten-node-modules-${version}";
     inherit pname version src;
 
-    npmDepsHash = "sha256-QW8wnNBBJs8nHsNuczZZevm6ELqtljsDdL21qtFo6pM=";
+    npmDepsHash = "sha256-uZSDPdMNT50JBg4e16cHDoon0cunxB/JyWWkj67X5ls=";
 
     dontBuild = true;
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
-    hash = "sha256-1lsM/qyNS1rRj0D45mSTtTz7ba+OZggdE0t9N4SHLBU=";
+    hash = "sha256-tFJ699cOOmv1uEsl5RzsIV5gosOgTvMX2UQYTb0x7Gk=";
     rev = version;
   };
 
@@ -209,7 +209,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       qknight
-      raitobezarius
       willcohen
     ];
     license = lib.licenses.ncsa;

@@ -22,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cyclonedx-python-lib";
-  version = "11.7.0";
+  version = "11.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-python-lib";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-35JTr2he7sHOqG3Nd0UM9CZ4Q/HFv3UQsF6hxOKR/+k=";
+    hash = "sha256-P6TJHxETBazn+zfrDYUuzCH2DHhYVtn1ceBharxCXRo=";
   };
 
   pythonRelaxDeps = [ "py-serializable" ];

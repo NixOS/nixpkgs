@@ -11,13 +11,13 @@
 buildHomeAssistantComponent rec {
   owner = "olen";
   domain = "plant";
-  version = "2026.5.1";
+  version = "2026.8.0";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "homeassistant-plant";
     tag = "v${version}";
-    hash = "sha256-b5KhO1TvU4RI4tD0UQtJgwJHjjTTG2il2woLMoBclc0=";
+    hash = "sha256-2u+0Ufpg22Ad+TRT4pUzzEdwSpKASotww/tun38e4AA=";
   };
 
   dependencies = [
@@ -28,6 +28,12 @@ buildHomeAssistantComponent rec {
     pytest-freezer
     pytest-homeassistant-custom-component
     pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # pytest_homeassistant_custom_component wants to write into its nix store path
+    "tests/test_conditions.py"
+    "tests/test_triggers.py"
   ];
 
   meta = {

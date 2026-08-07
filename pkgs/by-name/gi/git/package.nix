@@ -55,6 +55,7 @@
   rustSupport ? lib.meta.availableOn stdenv.hostPlatform rustc,
   cargo,
   rustc,
+  nix-update-script,
 }:
 
 assert osxkeychainSupport -> stdenv.hostPlatform.isDarwin;
@@ -62,7 +63,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.54.0";
+  version = "2.55.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [
     CGI
@@ -104,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
         }.tar.xz"
       else
         "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    hash = "sha256-9okWI2TBDeee+Jqo2/SHMesFfjTtu9IKylEM4BVGgaM=";
+    hash = "sha256-RX/bBNyHKOAH1GiGleaRLm9oByeSDypAvxHqzBdQU1c=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -132,17 +133,6 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://lore.kernel.org/git/20260504101429.340123-1-joerg@thalheim.io/raw";
       hash = "sha256-44EPfEJ39LjPWjqjFb52EKNaJGzYxZzJaJOis8QnazU=";
     })
-    # Address test failure (new in 2.52.0) caused by `git-gui--askyesno` being
-    # installed by `make install`.
-    (fetchurl {
-      name = "expect-gui--askyesno-failure-in-t1517.patch";
-      url = "https://lore.kernel.org/git/20251201031040.1120091-1-brianmlyles@gmail.com/raw";
-      hash = "sha256-vvhbvg74OIMzfksHiErSnjOZ+W0M/T9J8GOQ4E4wKbU=";
-    })
-  ]
-  ++ lib.optionals rustSupport [
-    # The above patch doesn’t work with Rust support enabled.
-    ./osxkeychain-link-rust_lib.patch
   ]
   ++ lib.optionals withSsh [
     # Hard-code the ssh executable to ${pkgs.openssh}/bin/ssh instead of
@@ -157,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace contrib/credential/libsecret/Makefile \
         --replace-fail 'pkg-config' "$PKG_CONFIG"
   ''
-  + lib.optionalString doInstallCheck ''
+  + lib.optionalString finalAttrs.doInstallCheck ''
     # ensure we are using the correct shell when executing the test scripts
     patchShebangs t/*.sh
   ''
@@ -210,6 +200,11 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withLibsecret [
     glib
     libsecret
+  ];
+
+  # This is required for building the rust build.rs script when cross compiling
+  depsBuildBuild = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    buildPackages.stdenv.cc
   ];
 
   env = {
@@ -266,7 +261,7 @@ stdenv.mkDerivation (finalAttrs: {
   # See https://github.com/Homebrew/homebrew-core/commit/dfa3ccf1e7d3901e371b5140b935839ba9d8b706
   ++ lib.optional stdenv.hostPlatform.isDarwin "TKFRAMEWORK=/nonexistent"
   # Starting with future Git version 3.0.0, rust will be mandatory. For now, it's optional.
-  ++ lib.optional rustSupport "WITH_RUST=YesPlease";
+  ++ lib.optional (!rustSupport) "NO_RUST=YesPlease";
 
   disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     stdenv.shellPackage
@@ -487,6 +482,13 @@ stdenv.mkDerivation (finalAttrs: {
   installCheckFlags = [
     "DEFAULT_TEST_TARGET=prove"
     "PERL_PATH=${buildPackages.perl}/bin/perl"
+
+    # Without setting debug explicitly, the test suite inherits the value of
+    # debug from the environment, which -- if separateDebugInfo is true -- will
+    # be the debug output path.  The test suite then prints out extra debug
+    # info, as if `--debug` were passed on the command line, which causes test
+    # failures because that info can't be interpreted by the test harness.
+    "debug="
   ];
 
   nativeInstallCheckInputs = lib.optional (
@@ -547,6 +549,18 @@ stdenv.mkDerivation (finalAttrs: {
     disable_test t7513-interpret-trailers
     disable_test t2200-add-update
 
+    # Fails when run with GIT_TEST_INSTALLED, that is, when we're testing an
+    # installed package rather than the build output prior to installation.
+    # This test is fragile when testing an installed package even in Nix's
+    # otherwise clean build environment, upstream haven't been keen on patching
+    # individual failures when they crop up, and nobody has yet managed to
+    # rewrite the test to be less fragile.
+    #
+    # See in particular the below messages and discussions around them:
+    # https://lore.kernel.org/git/xmqqect7fhnp.fsf@gitster.g/
+    # https://lore.kernel.org/git/20251201031040.1120091-1-brianmlyles@gmail.com/
+    disable_test t1517-outside-repo
+
     # Fails reproducibly on ZFS on Linux with formD normalization
     disable_test t0021-conversion
     disable_test t3910-mac-os-precompose
@@ -577,6 +591,15 @@ stdenv.mkDerivation (finalAttrs: {
     # Fails largely due to assumptions about BOM
     # Tested to fail: 2.18.0
     disable_test t0028-working-tree-encoding
+  ''
+  + lib.optionalString stdenv.hostPlatform.isFreeBSD ''
+    # Time zones are not available in the build sandbox.
+    # This can be fixed if/when we decide on how the hardcoded libc paths should look
+    disable_test t0006-date
+    # Kernel bug (?) related to confusion over whether ulimit -n should set max fd or num files
+    disable_test t5324-split-commit-graph
+    # known breakage vanished?
+    disable_test t7815-grep-binary
   '';
 
   stripDebugList = [
@@ -602,7 +625,17 @@ stdenv.mkDerivation (finalAttrs: {
       };
     }
     // tests.fetchgit;
-    updateScript = ./update.sh;
+
+    # We get the source from the release packages, since that contains a few
+    # extra files that make the build easier without already having a Git
+    # installation.  We get the version from GitHub, however, as that provides
+    # a nicer API for checking what the latest version is.
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--url"
+        "https://github.com/git/git"
+      ];
+    };
   };
 
   meta = {

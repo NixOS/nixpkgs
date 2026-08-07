@@ -32,7 +32,7 @@ index a976b2e..c15e6f3 100644
  
  	for (ii = 0; strv && strv[ii]; ii++) {
 diff --git a/src/Microsoft365/camel/camel-m365-store.c b/src/Microsoft365/camel/camel-m365-store.c
-index 6c1ebd6..4b7de44 100644
+index 5c9f51d..1510272 100644
 --- a/src/Microsoft365/camel/camel-m365-store.c
 +++ b/src/Microsoft365/camel/camel-m365-store.c
 @@ -311,7 +311,7 @@ m365_store_save_category_changes (GHashTable *old_categories, /* gchar *id ~> Ca

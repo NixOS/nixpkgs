@@ -5,27 +5,37 @@
   rustPlatform,
   pytestCheckHook,
   arro3-core,
-  pyarrow,
-  pyproj,
+  obstore,
+
+  # tests
+  arro3-compute,
+  arro3-io,
+  geoarrow-types,
+  geodatasets,
+  geopandas,
   numpy,
   pandas,
-  geoarrow-types,
+  pyarrow,
+  pyogrio,
+  pyproj,
+  pytest-asyncio,
+  shapely,
 }:
 let
-  version = "0.6.1";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "geoarrow";
     repo = "geoarrow-rs";
     tag = "py-v${version}";
-    hash = "sha256-3/HOQsgQVpEd9iAVvIHvpb0slg55/V6X6KLLvhDUVz4=";
+    hash = "sha256-5RWhOw31yRzkBE27LeES7z3G7OgRHQZP3aYacBuPUDM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src version;
     pname = "geoarrow-rust-vendor";
     cargoRoot = "python";
-    hash = "sha256-UjLqynlt5Rkx10hlnaY76wDRhJwhNvHmkhpj04Y8/ek=";
+    hash = "sha256-HbtNzcFkqDS8RpxW6MBfOhhzy5MsaKguKkhDN5xGckY=";
   };
 
   commonMeta = {
@@ -100,6 +110,7 @@ let
     pythonImportsCheck = [ "geoarrow.rust.io" ];
     dependencies = [
       arro3-core
+      obstore
       pyproj
     ];
   };
@@ -113,16 +124,40 @@ let
     dontInstall = true;
 
     nativeCheckInputs = [
-      pytestCheckHook
-      geoarrow-types
-      pandas
-      pyarrow
-      numpy
+      arro3-compute
+      arro3-io
       geoarrow-rust-core
       geoarrow-rust-io
+      geoarrow-types
+      geodatasets
+      geopandas
+      numpy
+      obstore
+      pandas
+      pyarrow
+      pyogrio
+      pytest-asyncio
+      pytestCheckHook
+      shapely
     ];
 
-    pytestFlags = [ "python" ];
+    # use the latest test folder (skips the tests_old folder)
+    pytestFlags = [ "python/tests" ];
+
+    disabledTests = [
+      # require internet access to download datasets
+      "test_parse_nybb"
+      "test_parse_nybb_chunked"
+      "test_getitem"
+      "test_geo_interface_polygon"
+      "test_parquet_file"
+    ];
+
+    # fix the directory name, as it is named as source for nix build
+    postPatch = ''
+      substituteInPlace python/tests/utils.py \
+        --replace-fail 'while current_dir.stem != "geoarrow-rs":' 'while current_dir.stem != "source":'
+    '';
   };
 in
 {

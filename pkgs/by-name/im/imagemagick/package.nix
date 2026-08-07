@@ -41,7 +41,7 @@
   pango,
   libtiffSupport ? true,
   libtiff,
-  libultrahdrSupport ? true,
+  libultrahdrSupport ? lib.meta.availableOn stdenv.hostPlatform libultrahdr,
   libultrahdr,
   libxml2Support ? true,
   libxml2,
@@ -61,40 +61,21 @@
   nixos-icons,
   perlPackages,
   python3,
+  nix-update-script,
 }:
 
 assert libXtSupport -> libX11Support;
 assert libraqmSupport -> freetypeSupport;
 
-let
-  arch =
-    if stdenv.hostPlatform.system == "i686-linux" then
-      "i686"
-    else if
-      stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "x86_64-darwin"
-    then
-      "x86-64"
-    else if stdenv.hostPlatform.system == "armv7l-linux" then
-      "armv7l"
-    else if
-      stdenv.hostPlatform.system == "aarch64-linux" || stdenv.hostPlatform.system == "aarch64-darwin"
-    then
-      "aarch64"
-    else if stdenv.hostPlatform.system == "powerpc64le-linux" then
-      "ppc64le"
-    else
-      null;
-in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "7.1.2-23";
+  version = "7.1.2-29";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
     tag = finalAttrs.version;
-    hash = "sha256-zYk75q+EyWq5g/AHFU6v8a7gye0aDAEe/ZZvjqR9ZTc=";
+    hash = "sha256-gVp6eAXLl11KhtcpZ4hPeurCRHtRhhrAggJi7PatQ+M=";
   };
 
   outputs = [
@@ -112,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     "MVDelegate=${lib.getExe' coreutils "mv"}"
     "RMDelegate=${lib.getExe' coreutils "rm"}"
     "--with-frozenpaths"
-    (lib.withFeatureAs (arch != null) "gcc-arch" arch)
+    "--with-gcc-arch=generic"
     (lib.withFeature librsvgSupport "rsvg")
     (lib.withFeature librsvgSupport "pango")
     (lib.withFeature liblqr1Support "lqr")
@@ -204,9 +185,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     homepage = "http://www.imagemagick.org/";
-    changelog = "https://github.com/ImageMagick/Website/blob/main/ChangeLog.md";
+    changelog = "https://github.com/ImageMagick/Website/blob/main/docs/changelog/index.md";
     description = "Software suite to create, edit, compose, or convert bitmap images";
     pkgConfigModules = [
       "ImageMagick"

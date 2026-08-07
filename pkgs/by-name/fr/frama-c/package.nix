@@ -2,16 +2,14 @@
   lib,
   stdenv,
   darwin,
-  fetchurl,
+  fetchzip,
+  makeBinaryWrapper,
   graphviz,
   doxygen,
   ocamlPackages,
   coq,
   dune,
   why3,
-  gdk-pixbuf,
-  wrapGAppsHook3,
-  withGui ? true,
   withWP ? true,
   withMarkdown ? true,
   withApron ? true,
@@ -20,14 +18,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "frama-c";
-  version = "32.1";
-  slang = "Germanium";
+  version = "33.0";
+  slang = "Arsenic";
 
   __structuredAttrs = true;
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://frama-c.com/download/frama-c-${finalAttrs.version}-${finalAttrs.slang}.tar.gz";
-    hash = "sha256-3V1uid9d3mpAs4vq0wLQpbmGCxw7ZbzYU2CneAh8E+I=";
+    hash = "sha256-QGqEwwyNFEVrUoE179Yz2AR2s5wWbkUrP3EsnQw9Cjo=";
   };
 
   preConfigure = ''
@@ -38,8 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   nativeBuildInputs = [
-    wrapGAppsHook3
     dune
+    makeBinaryWrapper
   ]
   ++ (with ocamlPackages; [
     ocaml
@@ -64,10 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
       unionFind
       yojson
       zarith
-    ]
-    ++ lib.optionals withGui [
-      lablgtk3
-      lablgtk3-sourceview3
     ]
     ++ lib.optionals withWP [
       why3
@@ -113,7 +107,8 @@ stdenv.mkDerivation (finalAttrs: {
       ocamlPath = lib.makeSearchPath "/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib" runtimeDeps;
     in
     ''
-      gappsWrapperArgs+=(--prefix OCAMLPATH ':' ${ocamlPath}:$out/lib/)
+      wrapProgram $out/bin/frama-c \
+        --prefix OCAMLPATH : ${ocamlPath}:$out/lib/
     '';
 
   meta = {
@@ -129,7 +124,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [
       thoughtpolice
-      amiddelk
       luc65r
     ];
     platforms = lib.platforms.unix;

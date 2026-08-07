@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "as-tree";
-  version = "unstable-2021-03-09";
+  version = "0.12.0-unstable-2021-03-09";
 
   src = fetchFromGitHub {
     owner = "jez";
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage {
   meta = {
     description = "Print a list of paths as a tree of paths";
     homepage = "https://github.com/jez/as-tree";
-    license = with lib.licenses; [ blueOak100 ];
+    license = lib.licenses.blueOak100;
     maintainers = with lib.maintainers; [ jshholland ];
     mainProgram = "as-tree";
   };

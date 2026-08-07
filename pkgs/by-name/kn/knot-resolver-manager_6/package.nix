@@ -9,7 +9,7 @@ let
 in
 assert lib.versionAtLeast kresd.version "6.0.0";
 python3Packages.buildPythonPackage {
-  pname = "knot-resolver-manager_6";
+  pname = "knot-resolver";
   inherit (kresd) version src;
   pyproject = true;
 
@@ -77,7 +77,7 @@ python3Packages.buildPythonPackage {
 
   doCheck = python3Packages.stdenv.hostPlatform.isLinux; # maybe in future
   nativeCheckInputs = with python3Packages; [
-    augeas
+    python-augeas
     dnspython
     lief
     pytestCheckHook

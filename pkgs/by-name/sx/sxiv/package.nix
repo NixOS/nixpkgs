@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "muennich";
+    owner = "xyb3rt";
     repo = "sxiv";
     tag = "v${finalAttrs.version}";
     hash = "sha256-jrCEx1o7Go0jgwQ3YJ0L97Q5BCHvVTTqOWId3xzlSnU=";
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Simple X Image Viewer";
-    homepage = "https://github.com/muennich/sxiv";
+    homepage = "https://github.com/xyb3rt/sxiv";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ h7x4 ];

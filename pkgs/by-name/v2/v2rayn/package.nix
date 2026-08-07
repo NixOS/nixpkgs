@@ -26,13 +26,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "v2rayn";
-  version = "7.19.4";
+  version = "7.24.5";
 
   src = fetchFromGitHub {
     owner = "2dust";
     repo = "v2rayN";
     tag = finalAttrs.version;
-    hash = "sha256-MkLJi+rMHhLjZ1huappvdxziYCNlKkoWTjjmvSPznFg=";
+    hash = "sha256-BFhmvfwb0CuiBlbpJ/+NMVB+XdOybGJQCW4h5hjRv9k=";
     fetchSubmodules = true;
   };
 
@@ -57,9 +57,9 @@ buildDotnetModule (finalAttrs: {
 
   dotnetBuildFlags = [ "-p:PublishReadyToRun=false" ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
 
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   executables = [ "v2rayN" ];
 
@@ -111,8 +111,8 @@ buildDotnetModule (finalAttrs: {
     description = "GUI client support Xray core and sing-box-core and others";
     homepage = "https://github.com/2dust/v2rayN";
     mainProgram = "v2rayN";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = [ ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ andrewzah ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

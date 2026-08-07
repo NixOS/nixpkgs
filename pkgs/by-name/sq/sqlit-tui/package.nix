@@ -2,19 +2,21 @@
   fetchFromGitHub,
   lib,
   python3Packages,
+  versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sqlit-tui";
-  version = "1.4.0";
+  version = "1.5.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Maxteabag";
     repo = "sqlit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lcZe7EiN/wZllRO7KnXryoeGiUVBhSE4AYaRniZV6Cw=";
+    hash = "sha256-HFr4dZlquFrdj2R1EJ8vWEtQa4/GpRhArqvfDKvAEws=";
   };
 
   build-system = with python3Packages; [
@@ -27,8 +29,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     docker
     duckdb
     keyring
-    mariadb
-    mysql-connector
+    mysql-connector-python
     oracledb
     paramiko
     psycopg2
@@ -40,15 +41,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
     textual-fastdatatable
   ];
 
-  pythonRelaxDeps = [
-    "paramiko"
-  ];
-
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ]
+  ++ (with python3Packages; [
     pytest-asyncio
     pytestCheckHook
-    writableTmpDirAsHomeHook
-  ];
+  ]);
 
   pythonImportsCheck = [ "sqlit" ];
 

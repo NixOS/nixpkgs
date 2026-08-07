@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   src = fetchFromGitHub {
     owner = "donovan6000";
-    repo = "M3D-Linux";
+    repo = "M33-Linux";
     rev = "5c1b90c13d260771dac970b49fdc9f840fee5f4a";
     sha256 = "1bvbclkyfcv23vxb4s1zssvygklks1nhp4iwi4v90c1fvyz0356f";
   };
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "https://github.com/donovan6000/M3D-Linux";
+    homepage = "https://github.com/donovan6000/M33-Linux";
     description = "Linux program that can communicate with the Micro 3D printer";
     mainProgram = "m33-linux";
     license = lib.licenses.gpl2Only;

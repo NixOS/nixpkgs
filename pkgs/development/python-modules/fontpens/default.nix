@@ -3,22 +3,26 @@
   buildPythonPackage,
   fetchFromGitHub,
   fonttools,
-  setuptools,
+  hatch-vcs,
+  hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fontpens";
-  version = "0.3.0";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "robotools";
     repo = "fontpens";
-    tag = "v${version}";
-    sha256 = "13msj0s7mg45klzbnd2w4f4ljb16bp9m0s872s6hczn0j7jmyz11";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-K768vbhacnuSRlmC3QG+7p+y8QiBtvqETvCYOuO1IxM=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
 
   dependencies = [ fonttools ];
 
@@ -43,9 +47,10 @@ buildPythonPackage rec {
   ]);
 
   meta = {
+    changelog = "https://github.com/robotools/fontPens/releases/tag/${finalAttrs.src.tag}";
     description = "Collection of classes implementing the pen protocol for manipulating glyphs";
     homepage = "https://github.com/robotools/fontPens";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.sternenseemann ];
   };
-}
+})

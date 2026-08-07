@@ -38,7 +38,7 @@ buildPythonPackage {
   meta = {
     description = "Support multiple worker processes, each with multiple tqdm progress bars, displaying them cleanly through the main process";
     homepage = "https://github.com/EleutherAI/tqdm-multiprocess";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers.booxter ];
   };
 }

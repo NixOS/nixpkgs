@@ -11,13 +11,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "alibabacloud-credentials";
-  version = "1.0.8";
+  version = "1.0.10";
   pyproject = true;
 
   src = fetchPypi {
     pname = "alibabacloud_credentials";
     inherit (finalAttrs) version;
-    hash = "sha256-Nkwiq+8tJAslnOrfHOaAABfxmjNnKVU5VpKKHt0S52k=";
+    hash = "sha256-rmbEN0kUhilZy/CWg55Ayt+PRMbxjqRKWj8ecdpjxCg=";
   };
 
   pythonRelaxDeps = [ "aiofiles" ];

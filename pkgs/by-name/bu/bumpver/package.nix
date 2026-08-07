@@ -8,12 +8,12 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "bumpver";
-  version = "2021.1110";
+  version = "2026.1132";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    sha256 = "b6a0ddb78db7e00ae7ffe895bf8ef97f91e6310dfc1c4721896bdfd044b1cb03";
+    sha256 = "sha256-gLIjwj/Km8ndVpt6RGgJSdNL7iOnOIYNmps28avjsOA=";
   };
 
   prePatch = ''
@@ -21,6 +21,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       --replace-fail "if any(arg.startswith(\"bdist\") for arg in sys.argv):" ""\
       --replace-fail "import lib3to6" ""\
       --replace-fail "package_dir = lib3to6.fix(package_dir)" ""
+
+    patchShebangs test/fixtures/hooks
   '';
 
   build-system = with python3.pkgs; [
@@ -28,23 +30,16 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   dependencies = with python3.pkgs; [
-    pathlib2
     click
     toml
     lexid
     colorama
-    setuptools
   ];
 
   nativeCheckInputs = [
     python3.pkgs.pytestCheckHook
     git
     mercurial
-  ];
-
-  disabledTests = [
-    # fails due to more aggressive setuptools version specifier validation
-    "test_parse_default_pattern"
   ];
 
   meta = {

@@ -82,4 +82,18 @@ lib.recurseIntoAttrs {
     assert cross.makeWrapper ? __spliced;
     assert appended.makeWrapper ? __spliced;
     pkgs.emptyFile;
+
+  massRebuildVariantComposition =
+    let
+      variants = [
+        "pkgsChecked"
+        "pkgsParallel"
+        "pkgsStrict"
+        "pkgsStructured"
+      ];
+      all = lib.getAttrFromPath variants pkgs;
+      all-reversed = lib.getAttrFromPath (lib.reverseList variants) pkgs;
+    in
+    assert pkgs.config.allowVariants -> (all.hello == all-reversed.hello);
+    pkgs.emptyFile;
 }

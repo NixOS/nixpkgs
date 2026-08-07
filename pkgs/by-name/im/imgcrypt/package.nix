@@ -6,24 +6,26 @@
 
 buildGoModule (finalAttrs: {
   pname = "imgcrypt";
-  version = "1.1.10";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "imgcrypt";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-81jfoWHYYenGQFcQI9kk8uPnv6FcyOtcJjpo1ykdtOI=";
+    hash = "sha256-xHL+vxjGkjkDCEHMVOQsT6uokZq50iFAqGyDj6dDuG4=";
   };
 
-  vendorHash = null;
+  modRoot = "cmd";
+
+  vendorHash = "sha256-tTRYEvqhQm1XpSvXDDXEx5piZYOxAtmcjf2dLL9fGck=";
 
   ldflags = [
     "-X github.com/containerd/containerd/version.Version=${finalAttrs.version}"
   ];
 
   subPackages = [
-    "cmd/ctd-decoder"
-    "cmd/ctr"
+    "ctd-decoder"
+    "ctr"
   ];
 
   postFixup = ''

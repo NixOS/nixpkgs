@@ -4,21 +4,22 @@
   buildGoModule,
   testers,
   gitea-actions-runner,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "gitea-actions-runner";
-  version = "1.0.3";
+  version = "2.2.0";
 
   src = fetchFromGitea {
     domain = "gitea.com";
     owner = "gitea";
     repo = "runner";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-p6NdkQiZiEeuQjJp3CKTayStZlyk3d1XGigSI5uuLp0=";
+    hash = "sha256-aiba7Tdyyy8aDzJq62zOWNkEZE+twIxReW7clbIoVTI=";
   };
 
-  vendorHash = "sha256-T1T5ZpGqGmipIkTWlYxlsLdAthW8bhcAvr0xyZ74+wQ=";
+  vendorHash = "sha256-Zpq/G/SZ959SRUIMGo2votFv4DzB46OmPmZwFoae3gU=";
 
   # Tests require network access (artifactcache tests try to determine outbound IP)
   doCheck = false;
@@ -33,9 +34,12 @@ buildGoModule (finalAttrs: {
     mv "$out/bin/runner" "$out/bin/gitea-runner"
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = gitea-actions-runner;
-    version = "v${finalAttrs.version}";
+  passthru = {
+    tests.version = testers.testVersion {
+      package = gitea-actions-runner;
+      version = "v${finalAttrs.version}";
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
@@ -44,9 +48,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://gitea.com/gitea/runner";
     license = lib.licenses.mit;
     mainProgram = "gitea-runner";
-    maintainers = with lib.maintainers; [
-      superherointj
-      techknowlogick
-    ];
+    maintainers = with lib.maintainers; [ techknowlogick ];
   };
 })

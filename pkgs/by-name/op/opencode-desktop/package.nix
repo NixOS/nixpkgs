@@ -2,7 +2,7 @@
   autoPatchelfHook,
   bun,
   copyDesktopItems,
-  electron_41,
+  electron_42,
   lib,
   makeBinaryWrapper,
   makeDesktopItem,
@@ -17,7 +17,7 @@
 }:
 
 let
-  electron = electron_41;
+  electron = electron_42;
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode-desktop";
@@ -47,19 +47,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   # resolve on glibc systems. They aren't loaded at runtime on the host libc anyway.
   autoPatchelfIgnoreMissingDeps = [ "libc.musl-*.so.*" ];
 
+  __structuredAttrs = true;
   strictDeps = true;
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+    NODE_OPTIONS = "--max-old-space-size=4096";
     OPENCODE_CHANNEL = "prod";
     MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
     OPENCODE_DISABLE_MODELS_FETCH = true;
-  }
-  # Disable code signing on macOS. Public build hosts don't have Apple Developer
-  # certificates, so electron-builder's `security find-identity` spawns produce
-  # EPERM inside the nix sandbox.
-  // lib.optionalAttrs stdenvNoCC.hostPlatform.isDarwin {
-    CSC_IDENTITY_AUTO_DISCOVERY = "false";
   };
 
   postPatch = ''
@@ -130,11 +126,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   desktopItems = lib.optional stdenvNoCC.hostPlatform.isLinux (makeDesktopItem {
-    name = "opencode-desktop";
+    name = "ai.opencode.desktop";
     desktopName = "OpenCode";
     exec = "opencode-desktop %U";
     icon = "opencode-desktop";
-    startupWMClass = "OpenCode";
+    startupWMClass = "ai.opencode.desktop";
     categories = [ "Development" ];
     mimeTypes = [ "x-scheme-handler/opencode" ];
   });
@@ -150,7 +146,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       (lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
         mkdir -p $out/Applications $out/bin
         mv packages/desktop/dist/mac-*/OpenCode.app "$out/Applications/OpenCode.app"
-        ln -s "$out/Applications/OpenCode.app/Contents/MacOS/OpenCode" $out/bin/OpenCode
+        ln -s "$out/Applications/OpenCode.app/Contents/MacOS/OpenCode" $out/bin/opencode-desktop
       '')
       (lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
         mkdir -p $out/opt/opencode-desktop
@@ -184,9 +180,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "AI coding agent desktop client";
     homepage = "https://opencode.ai";
-    inherit (opencode.meta) platforms;
+    inherit (opencode.meta) changelog platforms;
     license = lib.licenses.mit;
-    mainProgram = if stdenvNoCC.hostPlatform.isDarwin then "OpenCode" else "opencode-desktop";
+    mainProgram = "opencode-desktop";
     maintainers = with lib.maintainers; [ xiaoxiangmoe ];
   };
 })

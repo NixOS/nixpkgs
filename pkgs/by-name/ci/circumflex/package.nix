@@ -1,35 +1,37 @@
 {
   lib,
-  less,
-  ncurses,
   buildGoModule,
   fetchFromGitHub,
-  makeWrapper,
+  installShellFiles,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "circumflex";
-  version = "4.1";
+  version = "4.3";
 
   src = fetchFromGitHub {
     owner = "bensadeh";
     repo = "circumflex";
     tag = finalAttrs.version;
-    hash = "sha256-JJgLRRE0Fh/oaZLZo0hLCfwUHJXBvXXfTNdmQMNUM7A=";
+    hash = "sha256-VyUJ7qiaodLTdfGyh3/tLGfNVZCAxImxOuz4ztaaqtg=";
   };
 
-  vendorHash = "sha256-in6yPiT/SqRaw6hFF2gCmBwGcJ315Qej3HuM7TF5MaE=";
+  vendorHash = "sha256-4YL0N8wA8igveYfeL4uZDY5YD1InW0iD3WWq1E/vIJs=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  excludedPackages = [
+    "gen-completions"
+  ];
 
   postInstall = ''
-    wrapProgram $out/bin/clx \
-      --prefix PATH : ${
-        lib.makeBinPath [
-          less
-          ncurses
-        ]
-      }
+    installManPage share/man/clx.1
+
+    installShellCompletion --bash share/completions/clx.bash
+    installShellCompletion --fish share/completions/clx.fish
+    installShellCompletion --zsh share/completions/_clx
   '';
 
   meta = {

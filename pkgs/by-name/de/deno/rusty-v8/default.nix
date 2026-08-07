@@ -1,21 +1,18 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   rustPlatform,
   rustc,
-  rustc-unwrapped,
   rust-bindgen,
-  rust-analyzer,
   rustfmt,
   cargo,
-  clippy,
   llvmPackages ? rustc.llvmPackages,
   pkg-config,
   stdenv,
   glib,
   glibc,
   icu,
+  libffi,
   python3,
   gn,
   ninja,
@@ -29,20 +26,24 @@ let
     name = "rusty-v8-rust-toolchain";
     paths = [
       rustc
-      rustc-unwrapped
       rust-bindgen
-      rust-analyzer
       rustfmt
       cargo
-      clippy
       llvmPackages.libclang.lib
+      # To provide about the same tools as the upstream rust toolchain, the following inputs are also needed.
+      # But they are not actually needed, and to avoid unnecessary rebuilds, we are not adding them.
+      #rustc-unwrapped
+      #rust-analyzer
+      #clippy
     ];
-    postBuild = ''
-      mkdir -p "$out/lib/rustlib/src/rust"
-      cp -r '${rustPlatform.rustcSrc}'/* "$out/lib/rustlib/src/rust/"
-      chmod u+w "$out/lib/rustlib/src/rust/library/"
-      ln -s '${rustPlatform.rustVendorSrc}' "$out/lib/rustlib/src/rust/library/vendor"
-    '';
+    /*
+      postBuild = ''
+        mkdir -p "$out/lib/rustlib/src/rust"
+        cp -r '${rustPlatform.rustcSrc}'/* "$out/lib/rustlib/src/rust/"
+        chmod u+w "$out/lib/rustlib/src/rust/library/"
+        ln -s '${rustPlatform.rustVendorSrc}' "$out/lib/rustlib/src/rust/library/vendor"
+      '';
+    */
   };
 
   clangBasePath = symlinkJoin {
@@ -70,34 +71,27 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rusty-v8";
-  version = "147.4.0";
+  version = "150.2.0";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "rusty_v8";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-cS9oBDY2+9RtdqPuOadNl0Lce89ESpBb1qPiWSHPiCg=";
+    hash = "sha256-Iwgc08bUHR4OiwqopJua6fkQYMOdC5k9TgoCmZQrWIw=";
   };
 
   patches = [
     ./librusty_v8_no_downloads.patch
-    (fetchpatch {
-      name = "chromium-146-revert-Update-fsanitizer=array-bounds-config.patch";
-      # https://chromium-review.googlesource.com/c/chromium/src/+/7539408
-      url = "https://chromium.googlesource.com/chromium/src/+/acb47d9a6b56c4889a2ed4216e9968cfc740086c^!?format=TEXT";
-      decode = "base64 -d";
-      revert = true;
-      includes = [ "build/config/compiler/BUILD.gn" ];
-      hash = "sha256-0yEK66IEyS8xABDHY4W8oIvl4Ga1JfL1wxQy8PhXyqI=";
-    })
-    ./librusty_v8_revert_-fno-lifetime-dse.patch
+    ./llvm22.patch
+    ./gn_inputs_fix.patch
+    ./c_additional_outputs.patch
   ]
   ++ lib.optionals stdenv.targetPlatform.isDarwin [
     ./librusty_v8-darwin-fix-__rust_no_alloc_shim_is_unstable_v2.patch
   ];
 
-  cargoHash = "sha256-e/G9AevaJwqYdr8022kmv05Mwzi4Cishj9imLproNB0=";
+  cargoHash = "sha256-M65ODvL+o3njO3SdbJaCvgRupoguCGCIoYY/dYiJPng=";
 
   nativeBuildInputs = [
     llvmPackages.clang
@@ -114,10 +108,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     glib
     icu
+    libffi
   ]
   ++ lib.optionals stdenv.targetPlatform.isDarwin [
     apple-sdk_15
   ];
+
+  postPatch = ''
+    ln -sv ${rustToolchain} third_party/rust-toolchain
+  '';
 
   env = {
     V8_FROM_SOURCE = 1;
@@ -127,14 +126,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     RUSTC_BOOTSTRAP = 1;
     EXTRA_GN_ARGS = lib.concatStringsSep " " (
       [
+        "use_system_libffi=true"
         "use_sysroot=false" # prevent download of debian sysroot
         "clang_version=\"${lib.versions.major llvmPackages.clang.version}\""
         "rustc_version=\"${rustc.version}\""
         "rust_sysroot_absolute=\"${rustToolchain}\""
         "rust_bindgen_root=\"${rustToolchain}\""
-        # To accomodate our newer rustc compiler
-        "removed_rust_stdlib_libs=[\"adler\"]"
-        "added_rust_stdlib_libs=[\"adler2\"]"
       ]
       ++ lib.optional stdenv.targetPlatform.isDarwin "mac_deployment_target=\"${stdenv.targetPlatform.darwinMinVersion}\""
     );

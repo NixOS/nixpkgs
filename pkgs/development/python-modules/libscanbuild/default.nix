@@ -37,6 +37,6 @@ buildPythonPackage rec {
       asl20
       llvm-exception
     ];
-    maintainers = with lib.maintainers; [ RossSmyth ];
+    maintainers = [ ];
   };
 }

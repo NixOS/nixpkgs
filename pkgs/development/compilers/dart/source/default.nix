@@ -7,6 +7,7 @@
   dart-bin,
   debug ? false,
   fetchurl,
+  fetchpatch,
   gn,
   gitMinimal,
   gitSetupHook,
@@ -22,13 +23,14 @@
   samurai,
   stdenv,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
   writeShellScript,
   writeText,
   zlib,
 }:
 
 let
-  version = "3.11.4";
+  version = "3.12.2";
 
   tools = callPackage ../../flutter/engine/tools.nix { inherit (stdenv) hostPlatform buildPlatform; };
 
@@ -53,78 +55,75 @@ let
     ]
   );
 
-  src =
-    runCommand "dart-source-deps"
-      {
-        pname = "dart-source-deps";
-        inherit version;
+  src = stdenv.mkDerivation (finalAttrs: {
+    pname = "dart-source-deps";
+    inherit version;
 
-        nativeBuildInputs = [
-          cacert
-          curlMinimal
-          gitMinimal
-          pax-utils
-          python3
-          tools.cipd
-        ];
+    nativeBuildInputs = [
+      cacert
+      curlMinimal
+      tools.cipd
+      gitMinimal
+      pax-utils
+      python3
+      writableTmpDirAsHomeHook
+    ];
 
-        env = {
-          NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-          GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-          SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-          DEPOT_TOOLS_UPDATE = "0";
-          DEPOT_TOOLS_COLLECT_METRICS = "0";
-          PYTHONDONTWRITEBYTECODE = "1";
-          CIPD_HTTP_USER_AGENT = "standard-nix-build";
-        };
+    env = {
+      NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+      GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+      SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+      DEPOT_TOOLS_UPDATE = "0";
+      DEPOT_TOOLS_COLLECT_METRICS = "0";
+      PYTHONDONTWRITEBYTECODE = "1";
+      CIPD_HTTP_USER_AGENT = "standard-nix-build";
+    };
 
-        outputHashAlgo = "sha256";
-        outputHashMode = "recursive";
-        outputHash = "sha256-y2F+wB0M5dq6koxGpCs9BExGU7p8tFOIiRqfdf8ip+8=";
-      }
-      ''
-        mkdir source
-        cd source
-        source ${../../../../build-support/fetchgit/deterministic-git}
-        export -f clean_git
-        export -f make_deterministic_repo
-        cp ${writeText ".gclient" ''
-          solutions = [{
-              'name': 'sdk',
-              'url': 'https://dart.googlesource.com/sdk.git@${version}',
-          }]
-          target_os = ['linux']
-          target_cpu = ['x64', 'arm64', 'riscv64']
-          target_cpu_only = True
-        ''} .gclient
-        export PATH=${python3}/bin:$PATH:${tools.depot_tools}
-        python3 ${tools.depot_tools}/gclient.py sync --no-history --nohooks --noprehooks
-        find sdk -name ".versions" -type d -exec rm -rf {} +
-        rm --recursive --force sdk/buildtools/sysroot
-        rm --recursive --force sdk/buildtools/linux-arm64
-        rm --recursive --force sdk/buildtools/reclient
-        rm --recursive --force sdk/buildtools/*/clang
-        find sdk -type f \( -name "*.snapshot" -o -name "*.dill" -o -name "*.sym" \) -delete
-        rm --recursive --force sdk/tools/sdks/dart-sdk
-        find . -type l ! -exec test -e {} \; -delete
-        find . -name "ChangeLog*" -delete
-        rm --force .gclient .gclient_entries .gclient_previous_sync_commits .last_sync_hashes
-        rm --recursive --force .cipd .cipd_cache
-        find . -name ".git" -type d -prune -exec rm --recursive --force {} +
-        find . -name ".git*" -exec rm --recursive --force {} +
-        find . \( \
-            -name ".build-id" -o \
-            -name ".svn" -o \
-            -name "*~" -o \
-            -name "#*#" \
-        \) -exec rm --recursive --force {} +
-        for elf in $(scanelf --recursive --all --format "%F" sdk | sort); do
-            rm --force "$elf"
-        done
-        find . -name "__pycache__" -type d -exec rm --recursive --force {} +
-        find . -name "*.pyc" -delete
-        cp --recursive sdk $out
-      '';
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
+    outputHash = "sha256-J+qlj0sSWYqqvMiTP6hZYD97ho2VsrqRynCaiSRQV6Q=";
+
+    buildCommand = ''
+      mkdir source
+      cd source
+      cp ${writeText ".gclient" ''
+        solutions = [{
+            'name': 'sdk',
+            'url': 'https://dart.googlesource.com/sdk.git@${finalAttrs.version}',
+        }]
+        target_os = ['linux']
+        target_cpu = ['x64', 'arm64', 'riscv64']
+        target_cpu_only = True
+      ''} .gclient
+      export PATH=${python3}/bin:$PATH:${tools.depot_tools}
+      python3 ${tools.depot_tools}/gclient.py sync --no-history --nohooks --noprehooks
+      find sdk -name ".versions" -type d -exec rm -rf {} +
+      rm --recursive --force sdk/buildtools/sysroot
+      rm --recursive --force sdk/buildtools/linux-arm64
+      rm --recursive --force sdk/buildtools/reclient
+      rm --recursive --force sdk/buildtools/*/clang
+      find sdk -type f \( -name "*.snapshot" -o -name "*.dill" -o -name "*.sym" \) -delete
+      rm --recursive --force sdk/tools/sdks/dart-sdk
+      find . -type l ! -exec test -e {} \; -delete
+      find . -name "ChangeLog*" -delete
+      rm --force .gclient .gclient_entries .gclient_previous_sync_commits .last_sync_hashes
+      rm --recursive --force .cipd .cipd_cache
+      find . -name ".git" -type d -prune -exec rm --recursive --force {} +
+      find . -name ".git*" -exec rm --recursive --force {} +
+      find . \( \
+          -name ".build-id" -o \
+          -name ".svn" -o \
+          -name "*~" -o \
+          -name "#*#" \
+      \) -exec rm --recursive --force {} +
+      for elf in $(scanelf --recursive --all --format "%F" sdk | sort); do
+          rm --force "$elf"
+      done
+      find . -name "__pycache__" -type d -exec rm --recursive --force {} +
+      find . -name "*.pyc" -delete
+      cp --recursive sdk $out
+    '';
+  });
 in
 dart-bin.overrideAttrs (oldAttrs: {
   inherit version src;
@@ -146,6 +145,28 @@ dart-bin.overrideAttrs (oldAttrs: {
     ./gcc13.patch
     ./zlib-not-found.patch
     ./custom-flags.patch
+
+    # GCC 16 triggers various build warnings (made errors by -Werror) in the
+    # Dart SDK. These have been fixed upstream, either by correcting the
+    # problematic code or silencing the relevant warnings. Until they have
+    # been released, we fetch the patches here.
+    # Remove when upgrading to Dart 3.13:
+    (fetchpatch {
+      name = "dart-fix-gcc-build.patch";
+      url = "https://github.com/dart-lang/sdk/commit/b2911c0bf1dab671ee4008e05b0d71441a522d84.patch";
+      hash = "sha256-RuS4NuOofg0VjhkwN2oFE1iYjMnCdFtoNZnZLzCDJaU=";
+    })
+    (fetchpatch {
+      name = "dart-fix-gcc16-build.patch";
+      url = "https://github.com/dart-lang/sdk/commit/2f2a523818bf64e23657d1bf9da901d7f58c67aa.patch";
+      hash = "sha256-NQd9YcaFKUXDcG2IdBSTnkJAIqs+3/ahN82gWPnOeQo=";
+    })
+    # Remove when upgrading to Dart 3.14:
+    (fetchpatch {
+      name = "dart-ignore-binaryen-warnings.patch";
+      url = "https://github.com/dart-lang/sdk/commit/963b46dfebad01cab9e063fc8b508df227154a31.patch";
+      hash = "sha256-+JY97WFq+UWNoGikXfHIPxBwPdCWV1HYHjhi9pzqVCo=";
+    })
   ]
   ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
     ./unbundle.patch
@@ -153,7 +174,7 @@ dart-bin.overrideAttrs (oldAttrs: {
   ];
 
   postPatch = ''
-    sed --in-place 's/"-fsanitize=memory"//g' build/config/compiler/BUILD.gn
+    sed --in-place '/"-fsanitize=memory"/d' build/config/compiler/BUILD.gn
     patchShebangs runtime/tools/
     sed --in-place 's/ldflags = pkgresult\[4\]/ldflags = []/' build/config/linux/pkg_config.gni
     cp ${

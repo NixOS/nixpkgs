@@ -16,13 +16,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "firefoxpwa-unwrapped";
-  version = "2.18.2";
+  version = "2.18.4";
 
   src = fetchFromGitHub {
     owner = "filips123";
     repo = "PWAsForFirefox";
     rev = "v${version}";
-    hash = "sha256-eNJKR6dmG4dDKwvWjC0Nbzk5ixNJtnRXjWJgxc9W5i8=";
+    hash = "sha256-Rz0H6dpeTnKHRnmBUZicjgzRSrcpamuGDJRw/lqD/7k=";
   };
 
   sourceRoot = "${src.name}/native";
@@ -83,6 +83,11 @@ rustPlatform.buildRustPackage rec {
 
     wrapProgram $out/bin/firefoxpwa-connector \
       --prefix FFPWA_SYSDATA : "$out/share/firefoxpwa"
+
+    # Create empty `lib/firefoxpwa` directory so the Firefox wrapper won't fail
+    # trying to disable the update checks. It will try to write to
+    # `$out/lib/firefoxpwa/is-packaged-app`, which doesn't exist by default.
+    mkdir $out/lib/firefoxpwa
   '';
 
   passthru = {

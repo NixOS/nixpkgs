@@ -5,13 +5,13 @@
 }:
 mkYaziPlugin {
   pname = "clipboard.yazi";
-  version = "0-unstable-2026-05-20";
+  version = "0-unstable-2026-08-05";
 
   src = fetchFromGitHub {
     owner = "XYenon";
     repo = "clipboard.yazi";
-    rev = "a125df07ba69c893df0e22592e55c1130ce16fe4";
-    hash = "sha256-Q+8MGfeP7reX3nDl5V/HFxRYIayPKEQT5w0b+n73b5k=";
+    rev = "0f4982a65ef5f249c08dd4a3d335d179694c4f9b";
+    hash = "sha256-hDNjQ0h3LOjgOb+1rf8bVbZYA9y6p8wGZsjFjfiLm8w=";
   };
 
   meta = {

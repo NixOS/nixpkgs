@@ -8,12 +8,12 @@
 }:
 let
   pname = "models-dev";
-  version = "0-unstable-2026-05-19";
+  version = "sdk-v0.0.5-unstable-2026-08-04";
   src = fetchFromGitHub {
     owner = "anomalyco";
     repo = "models.dev";
-    rev = "db0a7cf6113f380b15e8ab21944e5de18bb30feb";
-    hash = "sha256-kFskkQ5YrK7ler8s+vC5ONEjmNmOpiIKAZqoiCk97Qk=";
+    rev = "183bea88e4c0e9922c81eddb3987d9edb3a640ed";
+    hash = "sha256-h7GsDMuZFOzFVR0Yp3C0fEJAqQi0XLrC/hohMUKE6/8=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -57,7 +57,7 @@ let
     # NOTE: Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash = "sha256-kn5Ung5DGDYMf5MHnZ+jsqXCg+MYahfkbiixcD9kh4Y=";
+    outputHash = "sha256-aL2kNCYF6Y4QnEvlpQ9U5Qe+K8a1J2X7BvJqE+BnRcY=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
@@ -85,6 +85,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     cd packages/web
     bun run ./script/build.ts
+    bun ${./generate-schema.ts} ./dist/_api.json ./dist/model-schema.json
 
     runHook postBuild
   '';
@@ -98,12 +99,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version=branch"
-      "--subpackage"
-      "node_modules"
-    ];
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version=branch"
+        "--subpackage"
+        "node_modules"
+      ];
+    };
+    jsonschema = "${finalAttrs.finalPackage}/dist/model-schema.json";
   };
 
   meta = {

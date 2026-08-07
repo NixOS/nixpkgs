@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "shira";
-  version = "1.8.2";
+  version = "1.8.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KraXen72";
     repo = "shira";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SgxEvIpjRfc0saoarqw8KySwhbk1UYCGjMcbhhWMhZg=";
+    hash = "sha256-SPR2Jtc6mYURwMl4c/v2fPGydBu7aOhrvetgFoBvjoM=";
   };
 
   build-system = [
@@ -29,6 +29,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
     requests-cache
     yt-dlp
     ytmusicapi
+  ];
+
+  # Needed because of:
+  # yt-dlp==2026.3.17 not satisfied by version 2026.7.4
+  pythonRelaxDeps = [
+    "yt-dlp"
   ];
 
   makeWrapperArgs = [

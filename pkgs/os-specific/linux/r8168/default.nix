@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
       If you want to use this driver, you might need to blacklist the r8169 driver
       by adding "r8169" to boot.blacklistedKernelModules.
     '';
+    homepage = "https://github.com/mtorromeo/r8168";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ ];

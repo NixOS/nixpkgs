@@ -31,7 +31,7 @@ buildPythonPackage rec {
   meta = {
     description = "Hatch build-hook to compile Babel *.po files to *.mo files at build time";
     homepage = "https://github.com/NiklasRosenstein/hatch-babel";
-    changelog = "https://github.com/NiklasRosenstein/hatch-babel/blob/${src.tag}/.changelog/${src.tag}.toml";
+    # changelog = "https://github.com/NiklasRosenstein/hatch-babel/blob/${src.tag}/.changelog/${src.tag}.toml";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

@@ -3,6 +3,7 @@
   bootstrapStdenv,
   meson,
   ninja,
+  runCommand,
   sourceRelease,
   xcodeProjectCheckHook,
 }:
@@ -51,25 +52,46 @@ lib.extendMkDerivation {
       }
       // args.meta or { };
     }
-    // lib.optionalAttrs (args ? xcodeHash) {
-      postUnpack =
-        args.postUnpack or ""
-        + lib.concatMapStrings (
-          file:
-          if baseNameOf file == "meson.build.in" then
-            "substitute ${lib.escapeShellArg "${file}"} \"$sourceRoot/meson.build\" --subst-var version\n"
-          else
-            "cp ${lib.escapeShellArg "${file}"} \"$sourceRoot/\"${lib.escapeShellArg (baseNameOf file)}\n"
-        ) mesonFiles;
+    // lib.optionalAttrs (args ? xcodeHash) (
+      let
+        xcodeProject = args.xcodeProject or "${releaseName}.xcodeproj";
+      in
+      {
+        postUnpack =
+          args.postUnpack or ""
+          + lib.concatMapStrings (
+            file:
+            if baseNameOf file == "meson.build.in" then
+              "substitute ${lib.escapeShellArg "${file}"} \"$sourceRoot/meson.build\" --subst-var version\n"
+            else
+              "cp ${lib.escapeShellArg "${file}"} \"$sourceRoot/\"${lib.escapeShellArg (baseNameOf file)}\n"
+          ) mesonFiles;
 
-      xcodeProject = args.xcodeProject or "${releaseName}.xcodeproj";
+        inherit xcodeProject;
 
-      nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [
-        meson
-        ninja
-        xcodeProjectCheckHook
-      ];
+        nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [
+          meson
+          ninja
+          xcodeProjectCheckHook
+        ];
 
-      mesonBuildType = "release";
-    };
+        mesonBuildType = "release";
+
+        # build-platform check so CI catches stale xcodeHashes the Darwin-only postUnpack hook misses
+        passthru = lib.recursiveUpdate (args.passthru or { }) {
+          tests.xcodeProjectHash =
+            runCommand "${finalAttrs.pname}-xcodeproject-hash-check"
+              {
+                sourceRoot = "${finalAttrs.src}";
+                inherit xcodeProject;
+                inherit (args) xcodeHash;
+                nativeBuildInputs = [ xcodeProjectCheckHook ];
+              }
+              ''
+                verifyXcodeProjectHash
+                touch "$out"
+              '';
+        };
+      }
+    );
 }

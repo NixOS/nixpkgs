@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ktfmt";
-  version = "0.61";
+  version = "0.63";
 
   src = fetchFromGitHub {
-    owner = "facebook";
+    owner = "Kotlin";
     repo = "ktfmt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WY3d25c8VLsgeNBV/lSlOL+C3XtM9lfRYqMz3Z0mT3s=";
+    hash = "sha256-wAnlUEPFyilAbEXN6DGXHXeYfZgx2tlp4vDENP4O2Hw=";
   };
 
   patches = ./remove-idea-plugin.patch;
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Program that reformats Kotlin source code to comply with the common community standard for Kotlin code conventions";
-    homepage = "https://github.com/facebook/ktfmt";
+    homepage = "https://github.com/Kotlin/ktfmt";
     license = lib.licenses.asl20;
     mainProgram = "ktfmt";
     maintainers = with lib.maintainers; [ ghostbuster91 ];

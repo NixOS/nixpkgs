@@ -8,7 +8,7 @@
   python,
   sqlite,
   withMysql ? false,
-  mysql-connector,
+  mysql-connector-python,
   withPostgres ? false,
   psycopg2,
   setuptools,
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     apsw
   ]
   ++ lib.optionals withPostgres [ psycopg2 ]
-  ++ lib.optionals withMysql [ mysql-connector ];
+  ++ lib.optionals withMysql [ mysql-connector-python ];
 
   nativeCheckInputs = [ flask ];
 

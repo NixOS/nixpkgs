@@ -136,6 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
     ./Add-missing-musl_missing.h-includes-for-basename.patch
     ./Remove-outdated-musl-hack-in-rlimit_nofile_safe.patch
+    ./errno-list-filter-out-EFSBADCRC-and-EFSCORRUPTED.patch
   ];
 
   # Inspired by the systemd `preConfigure`.

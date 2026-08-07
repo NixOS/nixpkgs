@@ -21,6 +21,8 @@ let
         };
         doCheck = false;
       });
+
+      sqlalchemy = self.sqlalchemy_1_4;
     })
   ];
 
@@ -54,7 +56,7 @@ python.pkgs.buildPythonApplication {
     pyrfc3339
     pytz
     pyyaml
-    sqlalchemy_1_3
+    sqlalchemy
     yt-dlp
   ];
 

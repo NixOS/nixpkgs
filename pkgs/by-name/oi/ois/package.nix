@@ -33,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Object-oriented C++ input system";
+    homepage = "https://github.com/wgois/OIS";
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
     license = lib.licenses.zlib;

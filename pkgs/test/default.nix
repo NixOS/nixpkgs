@@ -153,6 +153,9 @@ in
   );
   fetchFromBitbucket = recurseIntoAttrs (callPackages ../build-support/fetchbitbucket/tests.nix { });
   fetchFromGitHub = recurseIntoAttrs (callPackages ../build-support/fetchgithub/tests.nix { });
+  fetchFromHuggingFace = recurseIntoAttrs (
+    callPackages ../build-support/fetchhuggingface/tests.nix { }
+  );
   fetchFirefoxAddon = recurseIntoAttrs (
     callPackages ../build-support/fetchfirefoxaddon/tests.nix { }
   );
@@ -253,6 +256,16 @@ in
       }
     ) pkgs.arrayUtilities
   );
+
+  # Accumulate all passthru.tests from qt5 into a single attribute set.
+  qt5 = recurseIntoAttrs {
+    wrapQtAppsHook = recurseIntoAttrs pkgs.qt5.wrapQtAppsHook.passthru.tests;
+  };
+
+  # Accumulate all passthru.tests from qt6 into a single attribute set.
+  qt6 = recurseIntoAttrs {
+    wrapQtAppsHook = recurseIntoAttrs pkgs.qt6.wrapQtAppsHook.passthru.tests;
+  };
 
   srcOnly = callPackage ../build-support/src-only/tests.nix { };
 

@@ -12,19 +12,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "frigidaire";
-  version = "0.18.44";
+  version = "0.18.50";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bm1549";
     repo = "frigidaire";
     tag = finalAttrs.version;
-    hash = "sha256-Laq5I0KmsJKXAg2aZn0INGF1coaGf5GLEfYOop6YR4I=";
+    hash = "sha256-y48pONTQGpu2B+N3wAyu7tU0GqytZ+HDs1xqYrG4jQU=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-warn 'version = "SNAPSHOT"' 'version = "${finalAttrs.version}"'
+      --replace-fail 'version = "0.0.0-dev"' 'version = "${finalAttrs.version}"'
   '';
 
   nativeBuildInputs = [ setuptools ];

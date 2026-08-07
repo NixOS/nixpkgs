@@ -20,7 +20,6 @@
 
   versionCheckHook,
 
-  testers,
   mistral-rs,
   nix-update-script,
 
@@ -35,6 +34,7 @@
 
 let
   inherit (stdenv) hostPlatform;
+  rustc = rustPlatform.callPackage ({ rustc }: rustc) { };
 
   accelIsValid = builtins.elem acceleration [
     null
@@ -74,13 +74,14 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mistral-rs";
-  version = "0.8.0";
+  version = "0.9.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "EricLBuehler";
     repo = "mistral.rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WuDvD2ifk0AtB4fpgLqQSiXVfb/50M9oIuz738pdsis=";
+    hash = "sha256-3p/e7UZ8BLwT+dpb61NmzX2Z1QxxEgkgjlNzv5lWybM=";
   };
 
   patches = [
@@ -94,9 +95,42 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --replace-fail \
           "lto = true" \
           "lto = false"
+
+    ''
+    # LLVM 21 cannot select the VPDPBUSD intrinsic because its argument types are incorrect.
+    # Fixed by https://github.com/rust-lang/llvm-project/commit/94e2c19f86a699d7a19ff0f4130b696699189c8d.
+    + lib.optionalString (hostPlatform.isx86_64 && lib.versionOlder rustc.llvm.version "22") ''
+      substituteInPlace "$cargoDepsCopy/source-git-0/candle-core-0.11.0/src/quantized/mod.rs" \
+        --replace-fail \
+          '#[cfg(target_arch = "x86_64")]' \
+          '#[cfg(any())]' \
+        --replace-fail \
+          '#[cfg(not(any(target_arch = "aarch64", target_arch = "x86_64")))]' \
+          '#[cfg(not(target_arch = "aarch64"))]'
+
+      substituteInPlace "$cargoDepsCopy/source-git-0/candle-core-0.11.0/src/quantized/repack.rs" \
+        --replace-fail \
+          '#[cfg(target_arch = "x86_64")]' \
+          '#[cfg(any())]' \
+        --replace-fail \
+          '#[cfg(not(any(target_arch = "aarch64", target_arch = "x86_64")))]' \
+          '#[cfg(not(target_arch = "aarch64"))]'
+    ''
+    # Prevent build scripts from attempting to clone cutlass (which would fail in the sandbox anyway).
+    # Instead, we provide cutlass in buildInputs.
+    + lib.optionalString cudaSupport ''
+      substituteInPlace mistralrs-flash-attn/build.rs \
+        --replace-fail \
+          ".with_cutlass(Some(&cutlass_commit))" \
+          ""
+
+      substituteInPlace mistralrs-quant/build.rs \
+        --replace-fail \
+          "builder = builder.with_cutlass(Some(&cutlass_commit));" \
+          ""
     '';
 
-  cargoHash = "sha256-MzGU62v6ZvVzTN7Ra+zz1uNlk4ul09YG5Hbj2A7hZbY=";
+  cargoHash = "sha256-TULJ3mEAWp1ktPDPeBbUJGHhsEuo5T2qh3/JpS+8+ds=";
 
   nativeBuildInputs = [
     pkg-config
@@ -116,11 +150,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
   ]
   ++ lib.optionals cudaSupport [
-    cudaPackages.cuda_cccl
+    cudaPackages.cccl
     cudaPackages.cuda_cudart
     cudaPackages.cuda_nvrtc
     cudaPackages.libcublas
     cudaPackages.libcurand
+
+    # For compiling kernels
+    cudaPackages.cutlass
   ]
   ++ lib.optionals mklSupport [ mkl ];
 
@@ -185,6 +222,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=gguf::gguf_tokenizer::tests::test_encode_decode_llama"
     "--skip=util::tests::test_parse_image_url"
     "--skip=utils::tiktoken::tests::test_tiktoken_conversion"
+
+    # Spawn a nested sandbox (bubblewrap-like) which fails inside the nix build sandbox
+    "--skip=callbacks_outlive_manager_executor_tempdir"
+    "--skip=sandboxed_session_can_execute_python"
+    "--skip=sandboxed_session_default_policy_can_execute_python"
+
+    # Linux namespace / seccomp tests require capabilities the nix build sandbox blocks
+    "--skip=network_none_blocks_socket"
+    "--skip=rlimit_nproc_caps_processes"
+    "--skip=seccomp_blocks_ptrace"
+    "--skip=unshare_is_denied_inside_child"
   ];
 
   nativeInstallCheckInputs = [

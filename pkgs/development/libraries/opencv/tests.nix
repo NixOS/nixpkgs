@@ -1,6 +1,5 @@
 {
   enableGStreamer,
-  enableGtk2,
   enableGtk3,
   gst_all_1,
   lib,
@@ -76,7 +75,7 @@ runCommand "opencv4-tests"
       #"dnn" #- some caffe tests failed, probably because github workflow also downloads additional models
     ]
     ++ optionals (!isAarch64 && enableGStreamer) [ "gapi" ]
-    ++ optionals (enableGtk2 || enableGtk3) [ "highgui" ];
+    ++ optionals enableGtk3 [ "highgui" ];
 
     inherit runPerformanceTests;
 

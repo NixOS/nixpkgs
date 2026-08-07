@@ -80,7 +80,7 @@ let
 in
 buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
   pname = "transformer-engine";
-  version = "2.15";
+  version = "2.16.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -90,7 +90,7 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
     tag = "v${finalAttrs.version}";
     # Their CMakeLists.txt does not easily let us inject dependencies
     fetchSubmodules = true;
-    hash = "sha256-0a6etDttNoTL1pe2OZb1CcS0/AtozeAG8NFz2Hkppn8=";
+    hash = "sha256-jYQZwgBedpCALhXYw2qH7PwIoSz6ttUje78xjdF+CYc=";
   };
 
   patches = optionals cudaSupport [
@@ -114,7 +114,7 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
         --replace-fail "pybind11[global]" "pybind11" \
         --replace-fail '"pip", "torch>=2.1", "jax>=0.5.0", "flax>=0.7.1"' ""
     ''
-    # Harcode the path to the output store path that transformer_engine will use to import
+    # Hardcode the path to the output store path that transformer_engine will use to import
     # - libtransformer_engine.so
     # - transformer_engine_jax.cpython-313-x86_64-linux-gnu.so
     # - transformer_engine_torch.cpython-313-x86_64-linux-gnu.so

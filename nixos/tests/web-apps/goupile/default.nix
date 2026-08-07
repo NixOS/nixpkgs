@@ -100,7 +100,6 @@ in
     in
     # py
     ''
-      import os
       start_all()
 
       machine.wait_for_unit("goupile.service")
@@ -113,15 +112,13 @@ in
       try:
           machine.succeed("run-goupile-test")
       finally:
-          out_dir = os.environ.get("out", os.getcwd())
-          machine.copy_from_vm("/tmp/videos", out_dir)
+          machine.copy_from_machine("/tmp/videos")
     '';
 
   # Debug interactively with:
   # - nix-build -A nixosTests.goupile.driverInteractive
   # - ./result/bin/nixos-test-driver
   # - run_tests()
-  # ssh -o User=root vsock%3 (can also do vsock/3, but % works with scp etc.)
   interactive.sshBackdoor.enable = true;
 
   interactive.nodes.machine =

@@ -10,6 +10,7 @@
   pcre2,
   libiconv,
   lynx,
+  withLynx ? false,
   which,
   libxcrypt,
   buildPackages,
@@ -33,11 +34,11 @@
 
 stdenv.mkDerivation rec {
   pname = "apache-httpd";
-  version = "2.4.67";
+  version = "2.4.68";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    hash = "sha256-Zs0gZjew1cRG+n2r51/gNSXaj7VYVYdsRiiM2IsTaqQ=";
+    hash = "sha256-aMdNTfOMJr7U372487rx61MvOHI1e+zBu6XRNva2PAY=";
   };
 
   patches = [
@@ -82,7 +83,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i config.layout -e "s|installbuilddir:.*|installbuilddir: $dev/share/build|"
     sed -i configure -e 's|perlbin=.*|perlbin="/usr/bin/env perl"|'
-    sed -i support/apachectl.in -e 's|@LYNX_PATH@|${lynx}/bin/lynx|'
+    ${lib.optionalString withLynx "sed -i support/apachectl.in -e 's|@LYNX_PATH@|${lynx}/bin/lynx|'"}
   '';
 
   # Required for ‘pthread_cancel’.
@@ -164,6 +165,6 @@ stdenv.mkDerivation rec {
     homepage = "https://httpd.apache.org/";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ arcayr ];
   };
 }

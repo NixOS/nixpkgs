@@ -5,26 +5,26 @@
   packaging,
   jinja2,
   pyyaml,
+  poetry-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyinstaller-versionfile";
-  version = "3.0.1";
+  version = "3.1.0";
 
-  format = "setuptools";
+  pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "DudeNr33";
     repo = "pyinstaller-versionfile";
-    tag = "v${version}";
-    hash = "sha256-UNrXP5strO6LIkIM3etBo1+Vm+1lR5wF0VfKtZYRoYc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-L94MrZjCOw2Cxj0kF+F35TixVNJUi1sK99FG9+CzaIg=";
   };
 
-  preBuild = ''
-    touch requirements.txt
-  '';
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     packaging
     jinja2
     pyyaml
@@ -33,8 +33,9 @@ buildPythonPackage rec {
   meta = {
     description = "Create a windows version-file from a simple YAML file that can be used by PyInstaller";
     mainProgram = "create-version-file";
+    changelog = "https://github.com/DudeNr33/pyinstaller-versionfile/blob/v${finalAttrs.version}/CHANGELOG.md";
     homepage = "https://pypi.org/project/pyinstaller-versionfile/";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

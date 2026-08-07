@@ -15,10 +15,10 @@
 
 let
   source = {
-    version = "2.35.0";
-    hash = "sha256-KJ+/p6Szblof7fPeHkikOVK10xvcyVgpeFMx6cOOEgc=";
-    npmDepsHash = "sha256-iqH32SWpoILLb9JQjgF+lrkZXHlbXTi3XFsvNKup934=";
-    clientNpmDepsHash = "sha256-jSjw/Y+1VYlG8pKqOzNzrZRTUeIyBPdOAhZqEbC2qiA=";
+    version = "2.36.0";
+    hash = "sha256-oohjRiKARpIyoPFEXR24nlKK4xBBEHUMVTaq/i6NfV8=";
+    npmDepsHash = "sha256-uDIL9PxbFUa3MwLoPomTfq1A/R1ewDIv+EFWml/8uy8=";
+    clientNpmDepsHash = "sha256-0xqqpls8FLuXngjjdwjoNLpq9dSixWouROviTjsFCbU=";
   };
 
   src = fetchFromGitHub {
@@ -70,6 +70,8 @@ buildNpmPackage {
   npmInstallFlags = [ "--only-production" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/opt/client
     cp -r index.js server package* node_modules $out/opt/
     cp -r ${client}/lib/node_modules/audiobookshelf-client/dist $out/opt/client/dist
@@ -79,6 +81,8 @@ buildNpmPackage {
     echo "  exec ${nodejs_22}/bin/node $out/opt/index.js" >> $out/bin/audiobookshelf
 
     chmod +x $out/bin/audiobookshelf
+
+    runHook postInstall
   '';
 
   passthru = {

@@ -45,9 +45,19 @@ let
 
   setSessionScript = pkgs.callPackage ../x11/display-managers/account-service-util.nix { };
 
-  greeterEnvFile = pkgs.writeText "gdm-greeter-env" ''
-    DCONF_PROFILE=gdm
-  '';
+  greeterUsers = lib.genAttrs' [ null 1 2 3 4 ] (
+    i:
+    let
+      # adding 1 to create `gdm-greeter{-2,-3,-4,-5}`
+      suffix = lib.optionalString (i != null) "-${toString (i + 1)}";
+    in
+    lib.nameValuePair "gdm-greeter${suffix}" {
+      isSystemUser = true;
+      uid = 60578 + (if i == null then 0 else i);
+      group = "gdm";
+      home = "/run/gdm/home/gdm-greeter${suffix}";
+    }
+  );
 in
 
 {
@@ -200,24 +210,8 @@ in
           group = "gdm";
           description = "GDM user";
         };
-
-        gdm-greeter = {
-          isSystemUser = true;
-          uid = 60578;
-          group = "gdm";
-          home = "/run/gdm";
-        };
       }
-
-      (lib.genAttrs' [ 1 2 3 4 ] (
-        i:
-        lib.nameValuePair "gdm-greeter-${toString i}" {
-          isSystemUser = true;
-          uid = 60578 + i;
-          group = "gdm";
-          home = "/run/gdm-${toString i}";
-        }
-      ))
+      greeterUsers
     ];
 
     users.groups.gdm.gid = config.ids.gids.gdm;
@@ -259,17 +253,20 @@ in
       };
     };
 
-    systemd.tmpfiles.rules = [
-      "d /run/gdm/.config 0711 gdm gdm"
-    ]
-    ++ lib.optionals config.services.pulseaudio.enable [
-      "d /run/gdm/.config/pulse 0711 gdm gdm"
-      "L+ /run/gdm/.config/pulse/${pulseConfig.name} - - - - ${pulseConfig}"
-    ]
-    ++ lib.optionals config.services.gnome.gnome-initial-setup.enable [
-      # Create stamp file for gnome-initial-setup to prevent it starting in GDM.
-      "f /run/gdm/.config/gnome-initial-setup-done 0711 gdm gdm - yes"
-    ];
+    systemd.tmpfiles.rules =
+      lib.optionals config.services.pulseaudio.enable (
+        lib.concatLists (
+          lib.mapAttrsToList (name: user: [
+            "d ${user.home}/.config 0711 ${name} gdm"
+            "d ${user.home}/.config/pulse 0711 ${name} gdm"
+            "L+ ${user.home}/.config/pulse/${pulseConfig.name} - - - - ${pulseConfig}"
+          ]) greeterUsers
+        )
+      )
+      ++ lib.optionals config.services.gnome.gnome-initial-setup.enable [
+        # Create stamp file for gnome-initial-setup to prevent it starting in GDM.
+        "f /run/gdm/gdm.ran-initial-setup 0711 gdm gdm - yes"
+      ];
 
     # Otherwise GDM will not be able to start correctly and display Wayland sessions
     systemd.packages = [
@@ -424,7 +421,7 @@ in
             {
               name = "unix";
               control = "sufficient";
-              modulePath = "${config.security.pam.package}/lib/security/pam_unix.so";
+              modulePath = config.security.pam.pam_unixModulePath;
             }
           ];
 
@@ -456,11 +453,21 @@ in
               settings.conffile = "/etc/pam/environment";
               settings.readenv = 0;
             }
+            # make sure the spawned session has the same variables as `display-manager.service`
+            # https://github.com/NixOS/nixpkgs/issues/523332
             {
               name = "env-greeter";
               control = "required";
               modulePath = "${config.security.pam.package}/lib/security/pam_env.so";
-              settings.envfile = greeterEnvFile;
+              settings.conffile =
+                let
+                  env = config.services.displayManager.generic.environment;
+                in
+                pkgs.writeText "gdm-launch-environment-env-conf" ''
+                  PATH          DEFAULT="''${PATH}:${pkgs.gnome-session}/bin"
+                  XDG_DATA_DIRS DEFAULT="''${XDG_DATA_DIRS}:${env.XDG_DATA_DIRS}"
+                '';
+              settings.readenv = 0;
             }
             {
               name = "systemd";
@@ -560,7 +567,7 @@ in
             {
               name = "unix";
               control = "sufficient";
-              modulePath = "${config.security.pam.package}/lib/security/pam_unix.so";
+              modulePath = config.security.pam.pam_unixModulePath;
             }
           ];
 
@@ -568,9 +575,8 @@ in
             {
               name = "unix";
               control = "requisite";
-              modulePath = "${config.security.pam.package}/lib/security/pam_unix.so";
+              modulePath = config.security.pam.pam_unixModulePath;
               settings.nullok = true;
-              settings.yescrypt = true;
             }
           ];
 

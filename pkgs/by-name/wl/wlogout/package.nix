@@ -79,9 +79,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ArtsyMacaw/wlogout";
     description = "Wayland based logout menu";
     changelog = "https://github.com/ArtsyMacaw/wlogout/releases/tag/${finalAttrs.src.rev}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     mainProgram = "wlogout";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iogamaster ];
     inherit (wayland.meta) platforms;
   };
 })

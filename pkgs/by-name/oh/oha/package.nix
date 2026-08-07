@@ -4,6 +4,7 @@
   fetchFromGitHub,
   stdenv,
   cacert,
+  installShellFiles,
   libredirect,
   pkg-config,
   openssl,
@@ -13,23 +14,26 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oha";
-  version = "1.14.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "hatoo";
     repo = "oha";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N6XHnglCn7MwSaMLy8qNUBXf23EJEuh6xn92SgNJgQs=";
+    hash = "sha256-WkV4tiDjaFy0fttR7HhhqxWF2VggQfdNMLIZzxjTCOA=";
   };
 
-  cargoHash = "sha256-Tg30RKcaLDWvSW0Ny34kPEZpIWnjILO+yO6kqz2wyQk=";
+  cargoHash = "sha256-KZZKV5DXABfgjXRc+BhO0AGONaKxoCNKYxTnupzvZV0=";
 
   env = {
     CARGO_PROFILE_RELEASE_LTO = "fat";
     CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
   };
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  nativeBuildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config
   ];
 
@@ -53,6 +57,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=test_google"
     "--skip=test_proxy"
   ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    for shell in bash fish zsh; do
+      installShellCompletion --cmd oha --$shell <($out/bin/oha --completions $shell)
+    done
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook

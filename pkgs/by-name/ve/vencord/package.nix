@@ -6,7 +6,7 @@
   lib,
   nix-update,
   nodejs,
-  pnpm_10,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   stdenv,
@@ -18,24 +18,24 @@
   buildWebExtension ? false,
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_11;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
-  version = "1.14.13";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Xqk/akTa/NcHjSm6h77y6Fkvq7ayBcR0w0HG0Hwfkf8=";
+    hash = "sha256-z3EY/nc9pHPjuMteY8ubYM3sqgjASznEG6B1U4mNCU4=";
   };
 
   patches = [ ./fix-deps.patch ];
 
   postPatch = ''
     substituteInPlace packages/vencord-types/package.json \
-      --replace-fail '"@types/react": "18.3.1"' '"@types/react": "19.0.12"'
+      --replace-fail '"@types/react": "18.3.1"' '"@types/react": "19.1.0"'
   '';
 
   pnpmDeps = fetchPnpmDeps {
@@ -46,8 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
       postPatch
       ;
     inherit pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-hk1rnNog5xvuIVI0M1ZJ5xrEuk0zcBiYsbROUycdi+A=";
+    fetcherVersion = 4;
+    hash = "sha256-JmTSfUVHsMG0TcOwXkZWinRxpONZagtwKzESd8Q4LlQ=";
   };
 
   nativeBuildInputs = [
@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Vendicated/Vencord";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      FlameFlag
+      _4evy
       FlafyDev
       Gliczy
       NotAShelf

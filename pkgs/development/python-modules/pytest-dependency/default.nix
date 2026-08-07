@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytest,
   pytestCheckHook,
   setuptools,
@@ -9,13 +9,20 @@
 
 buildPythonPackage rec {
   pname = "pytest-dependency";
-  version = "0.6.0";
+  version = "0.6.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-k0sOajnZWZUGLBk/fq7tio/6Bv8bzvS2Kw3HSnCLrME=";
+  src = fetchFromGitHub {
+    owner = "RKrahl";
+    repo = "pytest-dependency";
+    tag = version;
+    hash = "sha256-1tAikpdCLJMmylIbd1zQ45Bq+95O5cDQxNGwe3XpZuw=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "UNKNOWN" "${version}"
+  '';
 
   nativeBuildInputs = [ setuptools ];
 

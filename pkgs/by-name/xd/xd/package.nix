@@ -20,6 +20,14 @@ buildGoModule (finalAttrs: {
 
   nativeCheckInputs = [ perl ];
 
+  preBuild = ''
+    make webui
+  '';
+
+  tags = [
+    "webui"
+  ];
+
   postInstall = ''
     ln -s $out/bin/XD $out/bin/XD-CLI
   '';

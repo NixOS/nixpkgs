@@ -4,15 +4,17 @@
   fetchFromGitHub,
   fetchpatch2,
   pkgsStatic,
+  rc,
   byacc,
   ed,
   ncurses,
   readline,
+  editline,
   installShellFiles,
   historySupport ? true,
   readlineSupport ? true,
-  lineEditingLibrary ?
-    if (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isStatic) then "null" else "readline",
+  editlineSupport ? false,
+  lineEditingLibrary ? if stdenv.hostPlatform.isDarwin then "null" else "readline",
 }:
 
 assert lib.elem lineEditingLibrary [
@@ -25,13 +27,13 @@ assert lib.elem lineEditingLibrary [
 assert
   !(lib.elem lineEditingLibrary [
     "edit"
-    "editline"
     "vrl"
   ]); # broken
 assert (lineEditingLibrary == "readline") -> readlineSupport;
+assert (lineEditingLibrary == "editline") -> editlineSupport;
 stdenv.mkDerivation (finalAttrs: {
   pname = "rc";
-  version = "unstable-2025-10-01";
+  version = "1.7.4-unstable-2025-10-01";
 
   src = fetchFromGitHub {
     owner = "rakitzis";
@@ -45,19 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
-  # TODO: think on a less ugly fixup
   postPatch = ''
-    ed -v -s Makefile << EOS
-    # - remove reference to now-inexistent git index file
-    /version.h:/ s| .git/index||
-    # - manually insert the git revision string
-    /v=/ c
-    ${"\t"}v=${builtins.substring 0 7 finalAttrs.src.rev}
-    .
-    /\.git\/index:/ d
-    w
-    q
-    EOS
+    sed -i '/main.o: version.h/ d' Makefile
+    cat << EOF > version.h
+    #define VERSION "1.7.4+${finalAttrs.src.rev}"
+    EOF
   '';
 
   nativeBuildInputs = [
@@ -69,9 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     ncurses
   ]
-  ++ lib.optionals readlineSupport [
-    readline
-  ];
+  ++ lib.optional readlineSupport readline
+  ++ lib.optional editlineSupport editline;
 
   strictDeps = true;
 
@@ -81,7 +74,9 @@ stdenv.mkDerivation (finalAttrs: {
     "MANPREFIX=${placeholder "man"}/share/man"
     "CPPFLAGS=\"-DSIGCLD=SIGCHLD\""
     "EDIT=${lineEditingLibrary}"
-  ];
+  ]
+  # Required to fix static build, harmless for dynamic builds.
+  ++ lib.optional (lineEditingLibrary == "readline") "LDLIBS=-lncurses";
 
   buildFlags = [
     "all"
@@ -96,13 +91,27 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     shellPath = "/bin/rc";
-    tests.static = pkgsStatic.rc;
+    tests = {
+      static = pkgsStatic.rc;
+      readline = lib.optionalDrvAttr (!stdenv.hostPlatform.isDarwin) (
+        rc.override {
+          readlineSupport = true;
+          lineEditingLibrary = "readline";
+        }
+      );
+      editline = lib.optionalDrvAttr (!stdenv.hostPlatform.isDarwin) (
+        rc.override {
+          editlineSupport = true;
+          lineEditingLibrary = "editline";
+        }
+      );
+    };
   };
 
   meta = {
     homepage = "https://github.com/rakitzis/rc";
     description = "Plan 9 shell";
-    license = [ lib.licenses.zlib ];
+    license = lib.licenses.zlib;
     mainProgram = "rc";
     maintainers = with lib.maintainers; [ ramkromberg ];
     platforms = lib.platforms.unix;

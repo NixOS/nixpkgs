@@ -25,6 +25,7 @@
   vte,
   xxhash,
   zlib,
+  zydis,
   useX11 ? false,
   rubyBindings ? false,
   luaBindings ? false,
@@ -40,8 +41,8 @@ let
   sdb = fetchFromGitHub {
     owner = "radareorg";
     repo = "sdb";
-    tag = "2.4.2"; # https://github.com/radareorg/radare2/blob/master/subprojects/sdb.wrap
-    hash = "sha256-JN27SkDqHtX83d1CPUF9hbVKwE/dwhDgn5MlCX9RPrc=";
+    tag = "2.4.6"; # https://github.com/radareorg/radare2/blob/master/subprojects/sdb.wrap
+    hash = "sha256-5DuHC5uL4gXBJPGW2awDq/5Ufdi1RoEJnm+eAU3X8S4=";
   };
 
   qjs = fetchFromGitHub {
@@ -53,13 +54,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "radare2";
-  version = "6.1.4";
+  version = "6.1.8";
 
   src = fetchFromGitHub {
-    owner = "radare";
+    owner = "radareorg";
     repo = "radare2";
     tag = finalAttrs.version;
-    hash = "sha256-3MwBtjR3XQMhbJHnD30OVedUEKcje5jDPszNynkGCT8=";
+    hash = "sha256-Gh+W0vWsIscbew1u5cuOXWC20azCxYuA7D+qVTkfEN0=";
   };
 
   mesonFlags = [
@@ -69,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "use_sys_openssl" true)
     (lib.mesonBool "use_sys_xxhash" true)
     (lib.mesonBool "use_sys_zip" true)
+    (lib.mesonBool "use_sys_zydis" true)
     (lib.mesonBool "use_sys_zlib" true)
     (lib.mesonOption "r2_gittap" finalAttrs.version)
   ];
@@ -97,6 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     readline
     zlib
+    zydis
   ]
   ++ lib.optionals useX11 [
     gtkdialog

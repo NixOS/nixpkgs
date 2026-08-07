@@ -40,6 +40,7 @@ let
     "network-online.target"
     "nss-lookup.target"
     "nss-user-lookup.target"
+    "time-set.target"
     "time-sync.target"
     "first-boot-complete.target"
   ]
@@ -64,6 +65,7 @@ let
     # Udev.
     "systemd-udevd-control.socket"
     "systemd-udevd-kernel.socket"
+    "systemd-udevd-varlink.socket"
     "systemd-udevd.service"
   ]
   ++ (optional (!config.boot.isContainer) "systemd-udev-trigger.service")
@@ -156,6 +158,8 @@ let
     "systemd-ask-password-wall.service"
 
     # Varlink APIs
+    "systemd-ask-password@.service"
+    "systemd-ask-password.socket"
   ]
   ++ lib.optionals cfg.package.withBootloader [
     "systemd-bootctl@.service"
@@ -177,11 +181,13 @@ let
   ]
   ++ optionals cfg.package.withImportd [
     "systemd-importd.service"
+    "systemd-importd.socket"
   ]
   ++ optionals cfg.package.withMachined [
     "machine.slice"
     "machines.target"
     "systemd-machined.service"
+    "systemd-machined.socket"
   ]
   ++ optionals cfg.package.withNspawn [
     "systemd-nspawn@.service"
@@ -190,6 +196,9 @@ let
     # Misc.
     "systemd-sysctl.service"
     "systemd-machine-id-commit.service"
+
+    "systemd-mute-console@.service"
+    "systemd-mute-console.socket"
   ]
   ++ optionals cfg.package.withTimedated [
     "dbus-org.freedesktop.timedate1.service"
@@ -208,6 +217,11 @@ let
     "dbus-org.freedesktop.portable1.service"
     "systemd-portabled.service"
   ]
+  ++ optionals cfg.package.withRepart [
+    # Varlink APIs
+    "systemd-repart@.service"
+    "systemd-repart.socket"
+  ]
   ++ [
     "systemd-exit.service"
     "systemd-update-done.service"
@@ -220,6 +234,8 @@ let
     "factory-reset.target"
     "systemd-factory-reset-request.service"
     "systemd-factory-reset-reboot.service"
+    "systemd-factory-reset@.service"
+    "systemd-factory-reset.socket"
   ]
   ++ cfg.additionalUpstreamSystemUnits;
 
@@ -243,7 +259,27 @@ in
 
   options.systemd = {
 
-    package = mkPackageOption pkgs "systemd" { };
+    package = mkPackageOption pkgs "systemd" { } // {
+      # audit 4.2 rejects overlong values (max 15 bytes) for the kernel comm.
+      # systemd attempts to send the full 19 bytes of "systemd-update-utmp",
+      # and the systemd-update-utmp service fails to start. this patch shortens
+      # the kernel comm entry to "update-utmp".
+      # TODO: revert on staging when updating to audit 4.2.1
+      # original commit: https://github.com/linux-audit/audit-userspace/commit/d7ea98263ebdb974b383a4057856a5ec339776fc
+      # switch to truncate: https://github.com/linux-audit/audit-userspace/commit/d7ea98263ebdb974b383a4057856a5ec339776fc
+      # systemd pr: https://github.com/systemd/systemd/pull/43144
+      apply =
+        pkg:
+        pkg.overrideAttrs (prevAttrs: {
+          patches = prevAttrs.patches or [ ] ++ [
+            (pkgs.fetchpatch {
+              name = "systemd-update-utmp-shorten-comm.patch";
+              url = "https://github.com/systemd/systemd/commit/b8968c492108506952ab2748c4a44ce32fc9477c.patch";
+              hash = "sha256-d0rMssj1+cDw3+KOk8ecjqIIuBhjDixIH+7MJfC+I+M=";
+            })
+          ];
+        });
+    };
 
     enableStrictShellChecks = mkEnableOption "" // {
       description = ''
@@ -808,7 +844,7 @@ in
     systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.services.systemd-importd = lib.mkIf cfg.package.withImportd {
       environment = proxy_env;
-      path = [ pkgs.gnupg ];
+      path = [ pkgs.gnupgMinimal ];
     };
     systemd.services.systemd-pstore.wantedBy = [ "sysinit.target" ]; # see #81138
 

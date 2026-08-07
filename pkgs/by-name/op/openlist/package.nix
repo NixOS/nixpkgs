@@ -8,18 +8,17 @@
   installShellFiles,
   libredirect,
   versionCheckHook,
-  fuse,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "openlist";
-  version = "4.2.1";
+  version = "4.2.4";
 
   src = fetchFromGitHub {
     owner = "OpenListTeam";
     repo = "OpenList";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9MDcAQh06W6mOhYpFR49bxvTTrIoJnKY9P3WRVWsujI=";
+    hash = "sha256-dev6hUxJ8y1TjDy9ecCKnUe9d9PLkgVxvoSggahT8I8=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -35,16 +34,19 @@ buildGoModule (finalAttrs: {
   frontend = callPackage ./frontend.nix { };
 
   proxyVendor = true;
-  vendorHash = "sha256-Ho9zVKdzpGKZ/ftJmidUkMBsN4qfvLa96Fg3ayTfYac=";
+  vendorHash = "sha256-YRIadkUlp8u36E/g2/+3469BG9pwAWNl8JgF5yQbCEY=";
 
   nativeBuildInputs = [
     installShellFiles
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin libredirect.hook;
 
-  buildInputs = [ fuse ];
-
   tags = [ "jsoniter" ];
+
+  subPackages = [
+    "."
+    "pkg/gowebdav/cmd/gowebdav"
+  ];
 
   ldflags = [
     "-s"

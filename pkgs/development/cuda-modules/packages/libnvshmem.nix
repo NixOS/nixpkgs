@@ -3,7 +3,7 @@
   backendStdenv,
   buildPackages,
   cmake,
-  cuda_cccl,
+  cccl,
   cuda_cudart,
   cuda_nvcc,
   cuda_nvml_dev,
@@ -32,7 +32,7 @@
   withIbgda ? true,
   withLibfabric ? true,
   withMpi ? true,
-  withNccl ? true,
+  withNccl ? nccl.meta.available,
   withPmix ? true,
   withUcx ? true,
 }:
@@ -104,7 +104,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   buildInputs = [
-    cuda_cccl
+    cccl
     cuda_cudart
     cuda_nvml_dev
     cuda_nvrtc
@@ -195,7 +195,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     };
 
     brokenAssertions = [
-      # CUDA pre-11.7 yeilds macro/type errors in src/include/internal/host_transport/cudawrap.h.
+      # CUDA pre-11.7 yields macro/type errors in src/include/internal/host_transport/cudawrap.h.
       {
         message = "NVSHMEM does not support CUDA releases earlier than 11.7 (found ${cudaMajorMinorVersion})";
         assertion = cudaAtLeast "11.7";

@@ -64,7 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
-      ftrvxmtrx
       chris-martin
     ];
     license = lib.licenses.mit;

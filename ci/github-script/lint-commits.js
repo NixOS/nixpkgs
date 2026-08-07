@@ -74,8 +74,10 @@ async function checkCommitMessages({ commits, core }) {
     'fix',
     'perf',
     'refactor',
+    'services',
     'style',
     'test',
+    'update',
   ]
 
   /**

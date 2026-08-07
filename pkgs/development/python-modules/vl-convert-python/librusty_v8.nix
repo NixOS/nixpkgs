@@ -24,7 +24,6 @@ fetch_librusty_v8 {
   shas = {
     x86_64-linux = "sha256-f7aDA74Jn2h4rp9sACGHX4DBbN6yevgWCEKdfI1fJDU=";
     aarch64-linux = "sha256-vuEP7in+A/PrBXSunRq1SC77dOuMiScsKcA712AuNuk=";
-    x86_64-darwin = "sha256-sNe2VCwZvy64jdbPwx7pZ91fFRv1xosOcGiAtSPbt8A=";
     aarch64-darwin = "sha256-GmwTJADMxArwOvRN/w5KVmWGc1+WfraBc/wWe7dxHMg=";
   };
 }

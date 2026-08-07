@@ -7,14 +7,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pyhanko-cli";
-  version = "0.4.0";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "pyhanko";
     tag = "pyhanko-cli/v${finalAttrs.version}";
-    hash = "sha256-huOy04wY7xP1gZ5azsZYnMXLZ4MwMkLGujlgXTtjLy4=";
+    hash = "sha256-PyCVebWLtDeYFDxAE2mZ8tGaVQF60czU8ZyVbSyVONo=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/pkgs/pyhanko-cli";
@@ -23,9 +23,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
     substituteInPlace src/pyhanko/cli/version.py \
       --replace-fail "0.0.0.dev1" "${finalAttrs.version}" \
       --replace-fail "(0, 0, 0, 'dev1')" "tuple(\"${finalAttrs.version}\".split(\".\"))"
-    substituteInPlace pyproject.toml \
-      --replace-fail "0.0.0.dev1" "${finalAttrs.version}"
   '';
+
+  nativeBuildInputs = [
+    python3Packages.pyprojectVersionPatchHook
+  ];
 
   build-system = [ python3Packages.setuptools ];
 

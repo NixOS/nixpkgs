@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "prst";
-  version = "13.3";
+  version = "14.0";
 
   src = fetchFromGitHub {
     owner = "patnashev";
     repo = "prst";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J+45JwkA/z3HmzO9J6RVVXutUAVSzOXDMkyUR3zSh9E=";
+    hash = "sha256-41yUbSpUwV2jh8jSZjGb8X9YNc+UaS3jRaKtbaEVamA=";
     fetchSubmodules = true;
   };
 

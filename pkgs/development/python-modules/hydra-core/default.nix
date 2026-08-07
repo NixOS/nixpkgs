@@ -26,7 +26,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "hydra-core";
-  version = "1.3.2";
+  version = "1.3.4";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -34,7 +34,7 @@ buildPythonPackage (finalAttrs: {
     owner = "facebookresearch";
     repo = "hydra";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kD4BStnstr5hwyAOxdpPzLAJ9MZqU/CPiHkaD2HnUPI=";
+    hash = "sha256-H947PLC0lkV9WJXXLtC0ThWHaAlsdWY6YSWiuRD9Y00=";
   };
 
   patches = [

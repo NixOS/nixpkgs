@@ -11,7 +11,7 @@ buildGoModule rec {
   version = "0.54.0";
 
   src = fetchFromGitHub {
-    owner = "cirruslabs";
+    owner = "openai";
     repo = "orchard";
     rev = version;
     hash = "sha256-Kf8RGYxgnXX9iEbZ9B0aRKUDQ5PgfyBfVk/C62zSrMU=";
@@ -53,7 +53,7 @@ buildGoModule rec {
   meta = {
     mainProgram = "orchard";
     description = "Orchestrator for running Tart Virtual Machines on a cluster of Apple Silicon devices";
-    homepage = "https://github.com/cirruslabs/orchard";
+    homepage = "https://github.com/openai/orchard";
     license = lib.licenses.fairsource09;
     maintainers = with lib.maintainers; [ techknowlogick ];
   };

@@ -47,6 +47,12 @@ stdenv.mkDerivation (finalAttrs: {
     fribidi
   ];
 
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/gnome-font-viewer.thumbnailer \
+      --replace-fail "TryExec=gnome-thumbnail-font" "TryExec=$out/bin/gnome-thumbnail-font" \
+      --replace-fail "Exec=gnome-thumbnail-font" "Exec=$out/bin/gnome-thumbnail-font"
+  '';
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnome-font-viewer";

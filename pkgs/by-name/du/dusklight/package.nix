@@ -26,6 +26,7 @@
   makeWrapper,
   ninja,
   nlohmann_json,
+  nodtool,
   pkg-config,
   python3,
   sdl3,
@@ -40,19 +41,25 @@ let
   auroraSrc = fetchFromGitHub {
     owner = "encounter";
     repo = "aurora";
-    rev = "10006618ee493f248b8597e4dfa1d2871d76a1d9";
-    hash = "sha256-lY2xuVyB7aPJ9+2wwLRB3F5U/BuPSxdSpegdG+qNd9o=";
+    rev = "cb2c340d6cde6827387f14c31ce19e5f28a40e09";
+    hash = "sha256-fiAe5DChCFeakI3pga/g0tXd27osnhQtMBQchuP2NwQ=";
   };
-  dawnSrc = fetchzip {
-    url = "https://github.com/encounter/dawn-build/releases/download/v20260423.175430/dawn-linux-x86_64.tar.gz";
-    hash = "sha256-HXfKTLHtMPwupnFnaflCARtXVPuS/0PoCePXidjE5xs=";
-    stripRoot = false;
-  };
-  nodSrc = fetchzip {
-    url = "https://github.com/encounter/nod/releases/download/v2.0.0-alpha.8/libnod-linux-x86_64.tar.gz";
-    hash = "sha256-mUqvLsbsqaZ+HAjMmHYPYO+MgtanGRTw7Gzn5uXR5rE=";
-    stripRoot = false;
-  };
+  dawnSrc = fetchzip (
+    {
+      x86_64-linux = {
+        url = "https://github.com/encounter/dawn-build/releases/download/v20260523.201736/dawn-linux-x86_64.tar.gz";
+        hash = "sha256-KkdlSeiaw2gbQa+phZOpgbequshxQaFITzFdiuGBZvc=";
+      };
+      aarch64-linux = {
+        url = "https://github.com/encounter/dawn-build/releases/download/v20260523.201736/dawn-linux-aarch64.tar.gz";
+        hash = "sha256-accDTIBzgByQ8Rk2a1dAm85s8hj9SYI7NoHkih0vvAg=";
+      };
+    }
+    .${stdenv.hostPlatform.system}
+    // {
+      stripRoot = false;
+    }
+  );
   imguiSrc = fetchFromGitHub {
     owner = "ocornut";
     repo = "imgui";
@@ -70,13 +77,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dusklight";
-  version = "1.2.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "TwilitRealm";
     repo = "dusklight";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-a5nCri4XTpnotJY9qRrKTJ8cb9L6cfGKPXmvbbj/1fQ=";
+    hash = "sha256-TarPuCE6bjn4nGtHU54pE2gAo/dIgTyghWn7hjdFFgk=";
   };
 
   strictDeps = true;
@@ -111,6 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxscrnsaver
     libxtst
     nlohmann_json
+    nodtool
     sdl3
     tracy
     vulkan-loader
@@ -138,14 +146,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_XXHASH" xxhash.src.outPath)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_FMT" fmt.src.outPath)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_TRACY" tracy.src.outPath)
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_NOD_PREBUILT" nodSrc.outPath)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_FREETYPE" freetype.src.outPath)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ZSTD" zstd.src.outPath)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_SQLITE3" sqliteSrc.outPath)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_IMGUI" imguiSrc.outPath)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_RMLUI" rmluiSrc.outPath)
     (lib.cmakeFeature "AURORA_SDL3_PROVIDER" "system")
-    (lib.cmakeFeature "AURORA_NOD_PROVIDER" "package")
+    (lib.cmakeFeature "AURORA_NOD_PROVIDER" "system")
+    (lib.cmakeFeature "AURORA_NOD_LINKAGE" "static")
     (lib.cmakeBool "CMAKE_CROSSCOMPILING" true)
     (lib.cmakeBool "DUSK_ENABLE_SENTRY_NATIVE" false)
   ];
@@ -159,16 +167,13 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ../share/dusklight/dusklight   $out/bin/dusklight
 
     install -Dm644 \
-      ../platforms/freedesktop/dusklight.desktop \
-      $out/share/applications/dusklight.desktop
-
-    substituteInPlace $out/share/applications/dusklight.desktop \
-      --replace-fail "Icon=dusklight" "Icon=dev.twilitrealm.dusklight"
+      ../platforms/freedesktop/dev.twilitrealm.dusk.desktop \
+      $out/share/applications/dev.twilitrealm.dusk.desktop
 
     for size in 16x16 32x32 48x48 64x64 128x128 256x256 512x512 1024x1024; do
       install -Dm644 \
-        ../platforms/freedesktop/$size/apps/dusklight.png \
-        $out/share/icons/hicolor/$size/apps/dev.twilitrealm.dusklight.png
+        ../platforms/freedesktop/$size/apps/dev.twilitrealm.dusk.png \
+        $out/share/icons/hicolor/$size/apps/dev.twilitrealm.dusk.png
     done
 
     runHook postInstall
@@ -193,7 +198,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/TwilitRealm/dusklight/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.cc0;
     mainProgram = "dusklight";
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ liberodark ];
   };
 })

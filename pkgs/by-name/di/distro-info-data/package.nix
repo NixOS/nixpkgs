@@ -6,14 +6,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "distro-info-data";
-  version = "0.69";
+  version = "0.70";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "distro-info-data";
     tag = "debian/${finalAttrs.version}";
-    hash = "sha256-EsIg+ZPTKVXHvvGnwFSgzFfn+h0JTXcYzCP4ewFM5Kc=";
+    hash = "sha256-aTQak1meAqj/bTcw0Ky9xtYAuDISZ14EuOxwKsJZMhw=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

@@ -2,7 +2,7 @@
   llvmPackages_20,
   lib,
   fetchurl,
-  fetchpatch,
+  fetchpatch2,
   dotnetCorePackages,
   jq,
   curl,
@@ -153,7 +153,9 @@ stdenv.mkDerivation {
     ++ lib.optional (
       lib.versionAtLeast version "10" && lib.versionOlder version "11"
     ) ./Prefer-DOTNET_ROOT-over-directory-traversal-when-fin.patch
-    ++ lib.optional (lib.versionAtLeast version "11") ./Prefer-DOTNET_ROOT-over-directory-traversal-when-fin.2.patch
+    ++ lib.optionals (lib.versionAtLeast version "11") [
+      ./Prefer-DOTNET_ROOT-over-directory-traversal-when-fin.2.patch
+    ]
     ++ lib.optional (lib.versionAtLeast version "11" && isDarwin) ./fix-cmake-darwin.patch;
 
   postPatch = ''
@@ -178,6 +180,16 @@ stdenv.mkDerivation {
       -s //Project -t elem -n PropertyGroup \
       -s \$prev -t elem -n NoWarn -v '$(NoWarn);NU1603' \
       src/nuget-client/src/NuGet.Core/NuGet.CommandLine.XPlat/NuGet.CommandLine.XPlat.csproj
+
+    # AD0001 crashes intermittently in source-build-reference-packages with
+    # CSC : error AD0001: Analyzer 'Microsoft.NetCore.CSharp.Analyzers.Runtime.CSharpDetectPreviewFeatureAnalyzer' threw an exception of type 'System.NullReferenceException' with message 'Object reference not set to an instance of an object.'.
+    # https://github.com/dotnet/roslyn/issues/81645
+    xmlstarlet ed \
+      --inplace \
+      -s //Project -t elem -n PropertyGroup \
+      -s \$prev -t elem -n NoWarn -v '$(NoWarn);AD0001' \
+      src/source-build-assets/src/referencePackages/Directory.Build.props
+
   ''
   + lib.optionalString (lib.versionOlder version "10") ''
     # https://github.com/microsoft/ApplicationInsights-dotnet/issues/2848
@@ -395,15 +407,18 @@ stdenv.mkDerivation {
   dontConfigureNuget = true; # NUGET_PACKAGES breaks the build
   dontUseCmakeConfigure = true;
 
-  # https://github.com/NixOS/nixpkgs/issues/38991
-  # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
-  LOCALE_ARCHIVE = lib.optionalString (
-    isLinux && glibcLocales != null
-  ) "${glibcLocales}/lib/locale/locale-archive";
+  env = {
+    # https://github.com/NixOS/nixpkgs/issues/38991
+    # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
+    LOCALE_ARCHIVE = lib.optionalString (
+      isLinux && glibcLocales != null
+    ) "${glibcLocales}/lib/locale/locale-archive";
 
-  # clang: error: argument unused during compilation: '-Wa,--compress-debug-sections' [-Werror,-Wunused-command-line-argument]
-  # caused by separateDebugInfo
-  NIX_CFLAGS_COMPILE = "-Wno-unused-command-line-argument";
+    # clang: error: argument unused during compilation:
+    # '-Wa,--compress-debug-sections' [-Werror,-Wunused-command-line-argument]
+    # caused by separateDebugInfo
+    NIX_CFLAGS_COMPILE = "-Wno-unused-command-line-argument";
+  };
 
   buildFlags = [
     "--with-packages"
@@ -528,11 +543,7 @@ stdenv.mkDerivation {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
-    # build deadlocks intermittently on rosetta
-    # https://github.com/dotnet/runtime/issues/111628
-    broken = stdenv.hostPlatform.system == "x86_64-darwin";
   };
 }

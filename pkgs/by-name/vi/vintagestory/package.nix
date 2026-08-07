@@ -27,11 +27,11 @@ assert waylandSupport -> libxkbcommon != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vintagestory";
-  version = "1.22.2";
+  version = "1.22.5";
 
   src = fetchurl {
     url = "https://cdn.vintagestory.at/gamefiles/stable/vs_client_linux-x64_${finalAttrs.version}.tar.gz";
-    hash = "sha256-caLSOm/WXpXrjC1az72Nc0XDWOpWB2R9iVq8ShDEZgU=";
+    hash = "sha256-ozpjsnqJKFdzKeJuOSuurYN8UEvLrBw17quGZeMN8PY=";
   };
 
   __structuredAttrs = true;
@@ -137,6 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
       artturin
       gigglesquid
       dtomvan
+      bubylou
     ];
     mainProgram = "vintagestory";
   };

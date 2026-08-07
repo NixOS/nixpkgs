@@ -4,7 +4,7 @@
   generator-out,
 }:
 python3.pkgs.buildPythonPackage {
-  pname = "nanopb-python-module";
+  pname = "nanopb";
   inherit version;
   src = generator-out;
   pyproject = true;

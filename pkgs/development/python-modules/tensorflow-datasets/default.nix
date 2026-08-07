@@ -75,6 +75,13 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-nq0c5hBTVwkxCRvWxtnfI+AHD+URY+nNfZAurEGaLXk=";
   };
 
+  postPatch =
+    # The git checkout ships the development `version.py`, which appends a `+nightly` suffix.
+    # Upstream replaces it with `version_stable.py` for stable releases.
+    ''
+      cp tensorflow_datasets/version_stable.py tensorflow_datasets/version.py
+    '';
+
   build-system = [
     packaging
     setuptools

@@ -9,14 +9,16 @@
   ocamlPackages_4_10,
   ocamlPackages_4_12,
   ocamlPackages_4_14,
-  ocamlPackages_5_4,
+  ocamlPackages_5_5,
   rocqPackages_9_0,
   rocqPackages_9_1,
   rocqPackages_9_2,
+  rocqPackages_9_3,
   rocqPackages,
   fetchpatch,
   makeWrapper,
   coq2html,
+  dune,
 }@args:
 let
   lib = import ../build-support/coq/extra-lib.nix { inherit (args) lib; };
@@ -26,14 +28,14 @@ let
     self: coq:
     let
       callPackage = self.callPackage;
-      coqPackages = self // {
+      rocqPackages = self // {
         recurseForDerivations = false;
       };
     in
     {
-      inherit coqPackages lib;
+      inherit rocqPackages lib;
 
-      metaFetch = import ../build-support/coq/meta-fetch/default.nix {
+      metaFetch = import ../build-support/rocq/meta-fetch/default.nix {
         inherit
           lib
           stdenv
@@ -41,7 +43,16 @@ let
           fetchurl
           ;
       };
-      mkCoqDerivation = lib.makeOverridable (callPackage ../build-support/coq { });
+      mkRocqDerivation = lib.makeOverridable (callPackage ../build-support/rocq { });
+      mkCoqDerivation =
+        args:
+        self.mkRocqDerivation (
+          {
+            useCoq = true;
+            namePrefix = [ "coq" ];
+          }
+          // args
+        );
 
       coq = coq.overrideAttrs (oldAttrs: {
         passthru = (oldAttrs.passthru or { }) // {
@@ -285,7 +296,7 @@ let
         let
           v = set.${name} or null;
         in
-        lib.optional (!v.meta.coqFilter or false) (
+        lib.optional (!v.meta.rocqFilter or false) (
           lib.nameValuePair name (
             if lib.isAttrs v && v.recurseForDerivations or false then filterCoqPackages v else v
           )
@@ -301,7 +312,7 @@ let
         ocamlPackages_4_10
         ocamlPackages_4_12
         ocamlPackages_4_14
-        ocamlPackages_5_4
+        ocamlPackages_5_5
         ;
       rocqPackages = rp;
     };
@@ -341,6 +352,7 @@ rec {
   coqPackages_9_0 = mkCoqPackages (mkCoq "9.0" rocqPackages_9_0);
   coqPackages_9_1 = mkCoqPackages (mkCoq "9.1" rocqPackages_9_1);
   coqPackages_9_2 = mkCoqPackages (mkCoq "9.2" rocqPackages_9_2);
+  coqPackages_9_3 = mkCoqPackages (mkCoq "9.3" rocqPackages_9_3);
 
   coq_8_7 = coqPackages_8_7.coq;
   coq_8_8 = coqPackages_8_8.coq;
@@ -359,6 +371,7 @@ rec {
   coq_9_0 = coqPackages_9_0.coq;
   coq_9_1 = coqPackages_9_1.coq;
   coq_9_2 = coqPackages_9_2.coq;
+  coq_9_3 = coqPackages_9_3.coq;
 
   coqPackages = lib.recurseIntoAttrs coqPackages_9_1;
   coq = coqPackages.coq;

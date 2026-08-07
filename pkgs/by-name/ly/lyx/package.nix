@@ -12,12 +12,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.4.4";
+  version = "2.5.1";
   pname = "lyx";
 
   src = fetchurl {
-    url = "ftp://ftp.lyx.org/pub/lyx/stable/2.4.x/${pname}-${version}.tar.xz";
-    hash = "sha256-/6zTdIDzIPPz+PMERf5AiX6d9EyU7oe6BBPjZAhvS5A=";
+    url = "ftp://ftp.lyx.org/pub/lyx/stable/2.5.x/lyx-${version}.tar.xz";
+    hash = "sha256-8qI4e8s/L1RsH8E+THTLT4qmSHBs5XiO9wXdUTRNLP0=";
   };
 
   # LaTeX is used from $PATH, as people often want to have it with extra pkgs
@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
   qtWrapperArgs = [ " --prefix PATH : ${python3}/bin" ];
 
   meta = {
+    changelog = "https://www.lyx.org/announce/${lib.replaceString "." "_" version}.txt";
     description = "WYSIWYM frontend for LaTeX, DocBook";
     homepage = "https://www.lyx.org";
     license = lib.licenses.gpl2Plus;

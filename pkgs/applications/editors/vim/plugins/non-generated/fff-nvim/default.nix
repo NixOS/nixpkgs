@@ -13,18 +13,18 @@
   writableTmpDirAsHomeHook,
 }:
 let
-  version = "0.8.0";
+  version = "0.10.1";
   src = fetchFromGitHub {
     owner = "dmtrKovalenko";
-    repo = "fff.nvim";
+    repo = "fff";
     tag = "v${version}";
-    hash = "sha256-JbV2dTQhTyZgDZYvFoR1mz9CeM2IPv59Qmp2iiJC8a0=";
+    hash = "sha256-GGoy8ghA87vwHEc0fi97uiBrpRTAGk/QgqzKu8BBRXo=";
   };
   fff-nvim-lib = rustPlatform.buildRustPackage {
     pname = "fff-nvim-lib";
     inherit version src;
 
-    cargoHash = "sha256-L/Ens/wzw/jKaa1T3A2pLIBKs09saPEk/0bRhgRezPQ=";
+    cargoHash = "sha256-sOE3Zrs/ZtOIusH0+OvR1Ew5sfQfse6eWSLPwDPVSU4=";
 
     cargoBuildFlags = [
       "-p"
@@ -65,12 +65,18 @@ let
       openssl
     ];
 
-    # This test requires curl and GitHub access
     checkFlags = [
+      # This test requires curl and GitHub access
       "--skip=update_check::tests::test_update_check_end_to_end"
+
+      # This test depends on catching a race window and is not deterministic
+      "--skip=drop_during_post_scan_does_not_crash"
     ];
 
     env = {
+      # Build zlob for a portable CPU baseline (https://github.com/dmtrKovalenko/fff/issues/705)
+      CI = "1";
+
       OPENSSL_NO_VENDOR = true;
 
       # Allow undefined symbols on Darwin - they will be provided by Neovim's LuaJIT runtime
@@ -89,7 +95,7 @@ vimUtils.buildVimPlugin {
         "return '${fff-nvim-lib}/lib'"
   '';
 
-  nvimSkipModule = [
+  nvimSkipModules = [
     # Skip single file dev config for testing fff.nvim locally
     "empty_config"
   ];
@@ -105,7 +111,7 @@ vimUtils.buildVimPlugin {
 
   meta = {
     description = "Fast Fuzzy File Finder for Neovim";
-    homepage = "https://github.com/dmtrKovalenko/fff.nvim";
+    homepage = "https://github.com/dmtrKovalenko/fff";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       GaetanLepage

@@ -1,6 +1,5 @@
 {
   lib,
-  isPy27,
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
@@ -14,7 +13,6 @@ buildPythonPackage rec {
   pname = "mlrose";
   version = "1.3.0";
   pyproject = true;
-  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "gkhayes";

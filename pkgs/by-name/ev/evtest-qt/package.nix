@@ -45,6 +45,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/Grumbel/evtest-qt";
     maintainers = with lib.maintainers; [ alexarice ];
     platforms = lib.platforms.linux;
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
   };
 }

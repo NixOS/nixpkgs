@@ -5,25 +5,29 @@
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
   pytest-asyncio,
   pytestCheckHook,
-  setuptools,
   xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "aioruckus";
-  version = "0.42";
+  version = "0.46.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ms264556";
     repo = "aioruckus";
     tag = "v${version}";
-    hash = "sha256-UfyB3qGEDOQ39YA1AueCBXeoJhGH+XDCLZSFA+kpT2k=";
+    hash = "sha256-17vcYdggtoeAtGShshseBMB4PSiIOf00nRNIHOAP9Jw=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
 
   dependencies = [
     aiohttp

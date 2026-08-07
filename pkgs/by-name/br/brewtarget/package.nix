@@ -16,15 +16,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "brewtarget";
-  version = "5.1.0";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "Brewtarget";
     repo = "brewtarget";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CVFj/tsOOFj/LpkmMy4h9dnCBTOq9WGkXFUr/yJdcK0=";
+    hash = "sha256-1baUFgw3L+q2Ig/xvakP14mzk3Uop+NZy53YHhJLkR8=";
     fetchSubmodules = true;
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   postPatch = ''
     # 3 sed statements from below derived from AUR
@@ -41,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     pkg-config
+    qt6.qttools
     qt6.wrapQtAppsHook
     wrapGAppsHook3
     pandoc
@@ -51,7 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
     qt6.qtmultimedia
     qt6.qtsvg
-    qt6.qttools
     xercesc
     xalanc
   ];
@@ -66,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open source beer recipe creation tool";
     mainProgram = "brewtarget";
     homepage = "https://www.brewtarget.beer";
+    changelog = "https://github.com/Brewtarget/brewtarget/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [

@@ -11,18 +11,18 @@
 
 buildGoModule rec {
   pname = "vale";
-  version = "3.14.2";
+  version = "3.17.0";
 
   subPackages = [ "cmd/vale" ];
 
   src = fetchFromGitHub {
-    owner = "errata-ai";
+    owner = "vale-cli";
     repo = "vale";
     tag = "v${version}";
-    hash = "sha256-cjJ1LDTIaEJaaQigcofi+CfsSVWf3IRsUmxh/T9W7ec=";
+    hash = "sha256-FChOhCgvV/jO795nKlkbnGiB9oFCA8XmJBlgH+DyYvs=";
   };
 
-  vendorHash = "sha256-Nu0Sof5Aek754dNo/jXI1cv6G2k1tNBIigIT82iGAzk=";
+  vendorHash = "sha256-95Om+XQB+4L1Xr9ZGW2T8hMDdVjvlOLiRGOIig2SJ50=";
 
   ldflags = [
     "-s"
@@ -61,7 +61,7 @@ buildGoModule rec {
       ```
     '';
     homepage = "https://vale.sh/";
-    changelog = "https://github.com/errata-ai/vale/releases/tag/v${version}";
+    changelog = "https://github.com/vale-cli/vale/releases/tag/v${version}";
     mainProgram = "vale";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];

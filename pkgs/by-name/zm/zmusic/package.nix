@@ -62,7 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
-      azahi
       lassulus
       Gliczy
       r4v3n6101

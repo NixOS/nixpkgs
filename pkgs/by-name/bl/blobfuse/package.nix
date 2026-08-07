@@ -36,6 +36,7 @@ buildGoModule {
 
   meta = {
     description = "Mount an Azure Blob storage as filesystem through FUSE";
+    homepage = "https://github.com/Azure/azure-storage-fuse";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jbgi ];
     platforms = lib.platforms.linux;

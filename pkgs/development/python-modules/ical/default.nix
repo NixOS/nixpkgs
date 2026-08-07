@@ -5,6 +5,7 @@
   fetchFromGitHub,
   freezegun,
   tzdata,
+  pdoc,
   pydantic,
   pytest-benchmark,
   pytestCheckHook,
@@ -15,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ical";
-  version = "13.2.2";
+  version = "14.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "ical";
     tag = finalAttrs.version;
-    hash = "sha256-7EKnwfXRU7hzFVre5EVil8/HN+XnCh2qz0BF69sLDHc=";
+    hash = "sha256-y+YKHSVPd1Lkkjty2xA1O4YKmXvE4c0yIASEhjV82xo=";
   };
 
   build-system = [ setuptools ];
@@ -36,6 +37,7 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     emoji
     freezegun
+    pdoc
     pytest-benchmark
     pytestCheckHook
     syrupy

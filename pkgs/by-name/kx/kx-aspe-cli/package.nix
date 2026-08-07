@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Keyoxide profile generator CLI using ASPE";
     mainProgram = "kx-aspe";
     platforms = lib.platforms.linux;
-    license = [ lib.licenses.asl20 ];
+    license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.nobbz ];
   };
 })

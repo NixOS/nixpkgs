@@ -9,16 +9,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "cargo-feature-combinations";
-  version = "0.0.52";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "romnn";
     repo = "cargo-feature-combinations";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e012XP2LsbcYC5oQYebvLzQvRzfjTSgIyngd/EpIYKY=";
+    hash = "sha256-jB2I/AZTiBR6w1SsxQKQbu5OtiEvPZBKIy8ostTx21M=";
   };
 
-  cargoHash = "sha256-JcqVGS5EFED66e8BDXLqDz8OAjW3+/H4XkLb5mYV1Dc=";
+  cargoHash = "sha256-ECGf597VaVBIs7NsRF7vSCo+Uf5T/v5Es61MmoRIZI4=";
 
   passthru.updateScript = nix-update-script { };
 

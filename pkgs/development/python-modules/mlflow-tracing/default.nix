@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
   mlflow,
 
   # build-system
@@ -15,9 +16,6 @@
   packaging,
   protobuf,
   pydantic,
-
-  # tests
-  pytestCheckHook,
 }:
 buildPythonPackage (finalAttrs: {
   pname = "mlflow-tracing";
@@ -25,13 +23,23 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
   __structuredAttrs = true;
 
-  inherit (mlflow) src;
+  src = fetchFromGitHub {
+    owner = "mlflow";
+    repo = "mlflow";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GVa/O2nT0vJS6NG00NMGpyX+3Z+bbOarNe0ZZqCQrH8=";
+  };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        "setuptools<=82.0.1" \
+        "setuptools"
+  '';
 
   sourceRoot = "${finalAttrs.src.name}/libs/tracing";
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     cachetools
@@ -53,6 +61,9 @@ buildPythonPackage (finalAttrs: {
     description = "Open-Source SDK for observability and monitoring GenAI applications";
     homepage = "https://github.com/mlflow/mlflow/tree/master/libs/tracing";
     inherit (mlflow.meta) license;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      gquetel
+    ];
   };
 })

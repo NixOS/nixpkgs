@@ -1,33 +1,33 @@
 {
   "twentynineteen": {
-    "path": "twentynineteen/3.2",
-    "rev": "301643",
-    "sha256": "1xvyvkfzf0lzq55g24j5rx40jdv84jsbcf4bhc9y358cwcy4cvh4",
-    "version": "3.2"
+    "path": "twentynineteen/3.3",
+    "rev": "329585",
+    "sha256": "1h7a0w716spxhqf0pm21056s8z3pjxljhmx9by8lfxkhzsdpb5js",
+    "version": "3.3"
   },
   "twentytwenty": {
-    "path": "twentytwenty/3.0",
-    "rev": "301649",
-    "sha256": "02wqwxl6zdbs64j6zapmrxdfhai29mk6fq5sbdrmjy9yc26vyn3s",
-    "version": "3.0"
+    "path": "twentytwenty/3.1",
+    "rev": "329586",
+    "sha256": "1gibv7zhjn7jmdx3cpxg47kf6j93xdckgh3n3brq6gi6n2746ln4",
+    "version": "3.1"
   },
   "twentytwentyfive": {
-    "path": "twentytwentyfive/1.4",
-    "rev": "301650",
-    "sha256": "1knpjhql8ccczjclg2wcacjp5adhxafh4bnw5mrgf34wghna0j6w",
-    "version": "1.4"
+    "path": "twentytwentyfive/1.5",
+    "rev": "329589",
+    "sha256": "0vi6ing7d47qsdxgxvynwvq38dn8c7p0i8gd85hcik7bq82gjdzx",
+    "version": "1.5"
   },
   "twentytwentyfour": {
-    "path": "twentytwentyfour/1.4",
-    "rev": "301651",
-    "sha256": "1agfpdazn91win42k75gj8aznf4d86cmqk8kvv6md9z4zcxw5nzn",
-    "version": "1.4"
+    "path": "twentytwentyfour/1.5",
+    "rev": "329588",
+    "sha256": "0v91qmk5spn2zchyczpw8np1xam02wp3kg0q0h3p9rxn24hnbnlw",
+    "version": "1.5"
   },
   "twentytwentyone": {
-    "path": "twentytwentyone/2.7",
-    "rev": "301652",
-    "sha256": "14n3lsm698phfyp3mjkdz82s574zpnr8nijxfsbbxim136x4fmn8",
-    "version": "2.7"
+    "path": "twentytwentyone/2.8",
+    "rev": "329587",
+    "sha256": "1mi5gzjxkivjff4r21qikkmc7l2brlhjmdm2aada3g9ybplwjx6a",
+    "version": "2.8"
   },
   "twentytwentythree": {
     "path": "twentytwentythree/1.6",

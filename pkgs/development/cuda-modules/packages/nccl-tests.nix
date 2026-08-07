@@ -4,7 +4,7 @@
 {
   backendStdenv,
   _cuda,
-  cuda_cccl,
+  cccl,
   cuda_cudart,
   cuda_nvcc,
   cudaNamePrefix,
@@ -30,13 +30,13 @@ backendStdenv.mkDerivation (finalAttrs: {
   # NOTE: Depends on the CUDA package set, so use cudaNamePrefix.
   name = "${cudaNamePrefix}-${finalAttrs.pname}-${finalAttrs.version}";
   pname = "nccl-tests";
-  version = "2.18.3";
+  version = "2.19.6";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nccl-tests";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dhpJxt7TJMTgBTAEFTznHxLidPpK2Fz6UUV/FQ41AzM=";
+    hash = "sha256-Dvqg5wRI/1ehZdLje5i7Yz0lhGdILUSIsEK7k9Cl46Q=";
   };
 
   postPatch = ''
@@ -53,7 +53,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    cuda_cccl # <nv/target>
+    cccl # <nv/target>
     cuda_cudart
     nccl
   ]

@@ -56,7 +56,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pyxdg
     pycairo
     dbus-python
-    xlib
+    python-xlib
   ];
 
   patches = [

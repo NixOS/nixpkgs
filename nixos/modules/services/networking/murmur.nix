@@ -355,17 +355,13 @@ in
       ]
       ++ lib.optional (cfg.tls.useACMEHost != null) "acme-${cfg.tls.useACMEHost}.service";
       wants = lib.mkIf (cfg.tls.useACMEHost != null) [ "acme-${cfg.tls.useACMEHost}.service" ];
-      preStart = ''
-        ${pkgs.envsubst}/bin/envsubst \
-          -o /run/murmur/murmurd.ini \
-          -i ${configFile}
-      '';
 
       serviceConfig = {
         # murmurd doesn't fork when logging to the console.
         Type = if forking then "forking" else "simple";
         PIDFile = lib.mkIf forking "/run/murmur/murmurd.pid";
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
+        ExecStartPre = "${pkgs.envsubst}/bin/envsubst -i '${configFile}' -o /run/murmur/murmurd.ini";
         ExecStart = "${cfg.package}/bin/mumble-server -ini /run/murmur/murmurd.ini";
         Restart = "always";
         LogsDirectory = lib.mkIf cfg.logToFile "murmur";

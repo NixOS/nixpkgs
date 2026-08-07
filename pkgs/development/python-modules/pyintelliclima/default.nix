@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyintelliclima";
-  version = "0.3.1";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dvdinth";
     repo = "pyintelliclima";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EHcnrynvNIfo31vZyh8tS/5JfFuEQGVlYzu4XyD3XCI=";
+    hash = "sha256-9Ny+muA1fYSZu3Y6fA6Z3Pwk5T9wVRG+UalcMxMOjxo=";
   };
 
   pythonRelaxDeps = [ "dacite" ];

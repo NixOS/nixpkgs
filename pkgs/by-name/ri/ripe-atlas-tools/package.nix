@@ -100,6 +100,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/RIPE-NCC/ripe-atlas-tools";
     changelog = "https://github.com/RIPE-NCC/ripe-atlas-tools/blob/v${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ raitobezarius ];
+    maintainers = [ ];
   };
 })

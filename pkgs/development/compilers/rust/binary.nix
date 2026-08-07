@@ -79,7 +79,6 @@ rec {
       targetPlatformsWithHostTools = [
         # Platforms with host tools from
         # https://doc.rust-lang.org/nightly/rustc/platform-support.html
-        "x86_64-darwin"
         "aarch64-darwin"
         "i686-freebsd"
         "x86_64-freebsd"
@@ -119,8 +118,9 @@ rec {
         "armv6l-netbsd"
         "mipsel-netbsd"
         "riscv64-netbsd"
+        "riscv32-none"
         "x86_64-redox"
-        "wasm32-wasi"
+        "wasm32-wasip1"
       ];
       badTargetPlatforms = [
         # Rust is currently unable to target the n32 ABI

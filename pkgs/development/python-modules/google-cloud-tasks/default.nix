@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-tasks";
-  version = "2.22.0";
+  version = "2.23.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_tasks";
     inherit version;
-    hash = "sha256-vJfYR/HfvxtgK2e5Kbe69XD+o13O2q2rta39+BameEE=";
+    hash = "sha256-ptosEUpNtaWVk+umSYekv2lzoPSLGjGj1Kz/tvTHvrk=";
   };
 
   build-system = [ setuptools ];

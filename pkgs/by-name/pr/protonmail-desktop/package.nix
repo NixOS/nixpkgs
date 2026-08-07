@@ -10,9 +10,9 @@
 }:
 let
   mainProgram = "proton-mail";
-  version = "1.13.0";
-  linuxHash = "sha256-ehvDkemVmKQuNm9FgKtUM/M/z4YMjXA8qtLt94SN73U=";
-  darwinHash = "sha256-YtLlW+fSRd3hJMjHOA3kXKKq2j71Edc8NW/55zTLywY=";
+  version = "1.13.4";
+  linuxHash = "sha256-m6l2I/Lqr16+bAEEiAS//etsJeRFrr3J3K4E6xu3d1k=";
+  darwinHash = "sha256-4yEfNT89sOoAAhjjZVaY1yg6AFuYp6tM/ArnFX+1WZw=";
 in
 stdenv.mkDerivation {
   pname = "protonmail-desktop";
@@ -25,10 +25,6 @@ stdenv.mkDerivation {
         hash = linuxHash;
       };
       "aarch64-darwin" = fetchurl {
-        url = "https://proton.me/download/mail/macos/${version}/ProtonMail-desktop.dmg";
-        hash = darwinHash;
-      };
-      "x86_64-darwin" = fetchurl {
         url = "https://proton.me/download/mail/macos/${version}/ProtonMail-desktop.dmg";
         hash = darwinHash;
       };

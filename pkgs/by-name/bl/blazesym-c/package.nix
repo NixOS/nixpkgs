@@ -9,24 +9,27 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "blazesym-c";
-  version = "0.1.7";
+  version = "0.1.10";
 
   src = fetchFromGitHub {
     owner = "libbpf";
     repo = "blazesym";
     tag = "capi-v${finalAttrs.version}";
-    hash = "sha256-+wpKDxZgFkezvKzL0xA7FFS/sIx++kwSf32Kl4u0rAg=";
+    hash = "sha256-0ceEzlimp6UfrkoEYhwH6RWCrvkCpHF13G9vmM1HbQM=";
   };
 
-  cargoHash = "sha256-J14dckx/t0BG+l6NOiBY/Kkq42C98dXIzP9e6LtpgVg=";
+  cargoHash = "sha256-uQ7buVP0I+RgWHYFZxQP0hwJFMoB7Fz5D7S2dL1d/CM=";
 
   cargoBuildFlags = [
     "--package"
     "blazesym-c"
   ];
 
-  nativeCheckInputs = [
+  nativeBuildInputs = [
     pkg-config
+  ];
+
+  buildInputs = [
     elfutils
     zlib
   ];

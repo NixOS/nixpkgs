@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cryptolyzer";
-  version = "1.1.0";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "coroner";
     repo = "cryptolyzer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z9RuboCWHEqw4aFfQTjWly/UP9Yed0R+VdMLVXxdBmc=";
+    hash = "sha256-v+himg/DOBlIRiWBIGkxiahT3JGp384Ed4cUCIq6TOw=";
   };
 
   patches = [
@@ -71,7 +71,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Cryptographic protocol analyzer";
     homepage = "https://gitlab.com/coroner/cryptolyzer";
-    changelog = "https://gitlab.com/coroner/cryptolyzer/-/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://gitlab.com/coroner/cryptolyzer/-/blob/v${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.mpl20;
     mainProgram = "cryptolyze";
     teams = with lib.teams; [ ngi ];

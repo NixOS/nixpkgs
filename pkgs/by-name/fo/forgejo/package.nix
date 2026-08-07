@@ -1,9 +1,9 @@
 import ./generic.nix {
-  version = "15.0.2";
-  hash = "sha256-ba5jog6eXY4TTmBblhfVa2LSLPGE1/HPfslIb30b3kk=";
-  npmDepsHash = "sha256-70w39jbMWpuAsbzBC9oFHaUMwshtFDeTSEOXDgFNPmE=";
-  vendorHash = "sha256-I6bGvXBP2K3+Xx9E9DS/AyG6Ilqf/s8VjfBnCmLUHsk=";
-  lts = true;
+  version = "16.0.2";
+  hash = "sha256-cJWX77ROA9I1Y6/IEoGhm6wc2ScgKkMclpEyd4lHqew=";
+  npmDepsHash = "sha256-SS9Yb4fEY9C+ddk2Omf4+v1w6Ff2ArJZd1p5XGRN2EU=";
+  vendorHash = "sha256-iLzYUo+oTSiJbqp7NygfaUxZxeXYuQm1/9oTk5+n0dk=";
+  lts = false;
   nixUpdateExtraArgs = [
     "--override-filename"
     "pkgs/by-name/fo/forgejo/package.nix"

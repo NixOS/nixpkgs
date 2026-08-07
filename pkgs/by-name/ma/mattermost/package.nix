@@ -13,6 +13,8 @@
   nixosTests,
 
   latestVersionInfo ? null,
+  removeUserLimit ? false,
+  removeFreeBadge ? false,
   versionInfo ? {
     # ESR releases only. Note: if NixOS would release with an ESR that goes out
     # of support during the lifetime of the NixOS release, it is acceptable
@@ -25,13 +27,18 @@
     #
     # Ensure you also check ../mattermostLatest/package.nix.
     regex = "^v(11\\.7\\.[0-9]+)$";
-    version = "11.7.0";
-    srcHash = "sha256-oH9bLN2BPvRSWl5m3VNHBNMBXfdmkwaE9tzL7pcD1mg=";
-    vendorHash = "sha256-PmwwiXNaDarc1H7z1G4zstgs7tvmZ/d7V5eGqMh1VX4=";
-    npmDepsHash = "sha256-C3vfWW2hMOMnrPn1538kT+ma09T9VswrmADV/KPkrPc=";
+    version = "11.7.7";
+    srcHash = "sha256-dV+U+2yYX4IrM/EMaBAMwhW9WJh976WGDWFNOqnkTE8=";
+    vendorHash = "sha256-XaXqQN20c3DhW2/L0zhTA8dLeRp4MyBxUKpiMVwp/7s=";
+    npmDepsHash = "sha256-8ZEe2TM2bevzdn04YIcVICWFSaa8HZTVS4gKn6aFcqM=";
   },
   ...
 }:
+
+assert lib.warnIf (latestVersionInfo != null && (removeUserLimit || removeFreeBadge)) ''
+  The user limit and free badge patches are not tested with this Mattermost version
+  (${latestVersionInfo.version}).
+'' true;
 
 let
   /*
@@ -136,6 +143,10 @@ buildMattermost rec {
     '';
   };
 
+  patches = lib.optionals removeUserLimit [
+    ./mattermost-remove-user-limit.patch
+  ];
+
   # Needed because buildGoModule does not support go workspaces yet.
   # We use go 1.22's workspace vendor command, which is not yet available
   # in the default version of go used in nixpkgs, nor is it used by upstream:
@@ -238,6 +249,10 @@ buildMattermost rec {
 
       sourceRoot = "${src.name}/webapp";
 
+      patches = lib.optionals removeFreeBadge [
+        ./mattermost-remove-free-banner.patch
+      ];
+
       # Remove deprecated image-webpack-loader causing build failures
       # See: https://github.com/tcoopman/image-webpack-loader#deprecated
       postPatch = ''
@@ -255,7 +270,7 @@ buildMattermost rec {
       buildPhase = ''
         runHook preBuild
 
-        for ws in platform/{types,client,components,shared} channels; do
+        for ws in platform/{types,client,shared,components} channels; do
           if [ -d "$ws" ]; then
             npm run build --workspace="$ws"
           fi

@@ -12,15 +12,15 @@
   # passthru
   nix-update-script,
 }:
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "wheelwizard";
-  version = "2.4.4";
+  version = "2.4.11";
 
   src = fetchFromGitHub {
     owner = "TeamWheelWizard";
     repo = "WheelWizard";
-    tag = version;
-    hash = "sha256-uuEAJPV3P9SRs77nDC9nR3XtnGJreD+H1Xweyx4tU2s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8Dex2PDgwnxKguf0jtC1T0+jm7bA7jDfvspwkiqJgUg";
   };
   postPatch = ''
     rm .config/dotnet-tools.json
@@ -53,7 +53,7 @@ buildDotnetModule rec {
     cp -r WheelWizard/bin/Release/net8.0/*/* $out/lib/wheelwizard/
 
     makeWrapper $out/lib/wheelwizard/WheelWizard $out/bin/WheelWizard \
-      --prefix PATH : ${lib.makeBinPath [ dotnet-runtime ]}
+      --prefix PATH : ${lib.makeBinPath [ finalAttrs.dotnet-runtime ]}
 
     install -D $desktopItem/share/applications/* -t $out/share/applications
 
@@ -82,4 +82,4 @@ buildDotnetModule rec {
     mainProgram = "WheelWizard";
     maintainers = with lib.maintainers; [ DerHalbGrieche ];
   };
-}
+})

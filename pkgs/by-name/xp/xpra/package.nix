@@ -159,7 +159,6 @@ effectiveBuildPythonApplication rec {
   ]
   ++ (with gst_all_1; [
     gst-libav
-    gst-vaapi
     gst-plugins-ugly
     gst-plugins-bad
     gst-plugins-base
@@ -304,7 +303,6 @@ effectiveBuildPythonApplication rec {
     maintainers = with lib.maintainers; [
       numinit
       mvnetbiz
-      lucasew
     ];
   };
 }

@@ -50,6 +50,10 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "acme"
+  ];
+
   dependencies = [
     acme
     aiohttp
@@ -88,6 +92,7 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       fab
+      Scriptkiddi
     ];
   };
 })

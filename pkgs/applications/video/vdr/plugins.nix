@@ -19,6 +19,9 @@ let
       buildInputs = [ vdr ];
       preConfigure = "cd PLUGINS/src/${name}";
       installFlags = [ "DESTDIR=$(out)" ];
+      meta = {
+        homepage = "https://git.tvdr.de/?p=vdr.git";
+      };
     };
 in
 {

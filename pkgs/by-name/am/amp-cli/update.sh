@@ -10,7 +10,6 @@ cd "$(dirname "${BASH_SOURCE[0]}")/../../../.."
 for system in \
   x86_64-linux \
   aarch64-linux \
-  x86_64-darwin \
   aarch64-darwin
 do
   update-source-version amp-cli "$version" \

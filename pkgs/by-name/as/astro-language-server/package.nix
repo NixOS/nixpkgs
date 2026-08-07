@@ -2,32 +2,45 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_10,
+  pnpm_11,
+  nodejs-slim_22,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
   nix-update-script,
+  fetchpatch2,
 }:
+let
+  # pnpm 11's bundled Node.js 24 has a libuv/kqueue bug on macOS, workaround copied from openclaw package
+  pnpm = pnpm_11.override { nodejs-slim = nodejs-slim_22; };
+
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "astro-language-server";
-  version = "2.16.7";
+  version = "2.16.10";
 
   src = fetchFromGitHub {
     owner = "withastro";
     repo = "astro";
     tag = "@astrojs/language-server@${finalAttrs.version}";
-    hash = "sha256-0UkbHGOvMJxY4RXVLx9T8oh2cnuwziEuwUfFrls4Wc0=";
+    hash = "sha256-ZzLLGfbY6Rtjzqw+MMCHthvalo3B8lf/qxFJNJ/2LdQ=";
   };
+
+  patches = [
+    # remove on next release
+    (fetchpatch2 {
+      name = "fix-supply-chain-verification-fail.patch";
+      url = "https://github.com/withastro/astro/commit/272ca6173b40cfa37299c27b513f495f386d4009.patch?full_index=1";
+      includes = [ "pnpm-workspace.yaml" ];
+      hash = "sha256-jPYFiyBlIoqpbIcT/hPa+VlF1IX+QCP8CVFQGarzlEs=";
+    })
+  ];
 
   # https://pnpm.io/filtering#--filter-package_name-1
   pnpmWorkspaces = [
     "@astrojs/language-server..."
     "@astrojs/ts-plugin"
   ];
-  prePnpmInstall = ''
-    pnpm config set dedupe-peer-dependents false
-    pnpm approve-builds @emmetio/css-parser
-  '';
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
@@ -35,17 +48,18 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       pnpmWorkspaces
-      prePnpmInstall
+      patches
       ;
-    pnpm = pnpm_10;
-    fetcherVersion = 3;
-    hash = "sha256-1kdXt0Wc/ON//hwBYozRSMAyKQqEfSMfOI7XJyd9MBc=";
+    inherit pnpm;
+    # pnpm 11 stores state in a SQLite binary, fetcherVersion = 4 dumps it to a deterministic SQL text file
+    fetcherVersion = 4;
+    hash = "sha256-dqqvN8FMLjEbTtgQRkkURD7clMJ/OL9Mbk6icc4KU60=";
   };
 
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_10
+    pnpm
   ];
 
   buildInputs = [ nodejs ];
@@ -70,6 +84,9 @@ stdenv.mkDerivation (finalAttrs: {
     pushd $out/lib/node_modules/astro-language-server/node_modules
     rm -rf {./,.pnpm/node_modules/}astro-{scripts,benchmark} .pnpm/node_modules/@astrojs/ts-plugin
     popd
+    # pnpm creates symlinks for optional platform-specific packages (e.g. @biomejs/cli-darwin-arm64)
+    # that are not installed by the --prod --filter install, leaving dangling symlinks
+    find $out -xtype l -delete
     ln -s $out/lib/node_modules/astro-language-server/packages/language-tools/language-server/bin/nodeServer.js $out/bin/astro-ls
 
     runHook postInstall

@@ -30,6 +30,7 @@ buildGoModule (finalAttrs: {
     description = "Beautiful, fast, and feature-rich terminal-based Excel and CSV viewer built with Go";
     homepage = "https://github.com/CodeOne45/vex-tui";
     license = lib.licenses.mit;
+    mainProgram = "vex";
     maintainers = with lib.maintainers; [ Inarizxc ];
     platforms = lib.platforms.linux;
   };

@@ -6,16 +6,20 @@
   nixosTests,
   systemd,
   autoPatchelfHook,
+  jdk25_headless,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "unifi-controller";
-  version = "10.2.105";
+  version = "10.5.54";
 
-  # see https://community.ui.com/releases / https://www.ui.com/download/unifi
+  # See https://community.ui.com/releases or https://www.ui.com/download/unifi.
+  #
+  # When upgrading, make sure we don't need to bump `passthru.jrePackage` below
+  # as well.
   src = fetchurl {
     url = "https://dl.ui.com/unifi/${finalAttrs.version}/unifi_sysvinit_all.deb";
-    hash = "sha256-MBTFxNwrIbx6UKZYCcZ+BjYjSlfdxL60Ogei/ba4O+U=";
+    hash = "sha256-Ed6N6lbxPgCaDm7w9m8H/nlw9hBJELnzIKr0s7MoaYU=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +40,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests = { inherit (nixosTests) unifi; };
+  passthru = {
+    jrePackage = jdk25_headless;
+
+    tests = {
+      inherit (nixosTests) unifi;
+    };
+  };
 
   meta = {
     homepage = "https://www.ui.com";

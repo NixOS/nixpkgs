@@ -45,6 +45,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Space battle game with gravity as the main theme";
+    homepage = "https://github.com/Draradech/NewtonWars";
     mainProgram = "nw";
     maintainers = with lib.maintainers; [ pSub ];
     platforms = lib.platforms.linux;

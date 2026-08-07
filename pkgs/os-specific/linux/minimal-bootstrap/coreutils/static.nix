@@ -5,7 +5,6 @@
   fetchurl,
   bash,
   gcc,
-  musl,
   binutils,
   gnumake,
   gnused,
@@ -36,8 +35,7 @@ let
     # libstdbuf.so fails in static builds
     "--enable-no-install-program=stdbuf"
     "--enable-single-binary=symlinks"
-    "CC=musl-gcc"
-    "CFLAGS=\"-static -I${linux-headers}/include\""
+    "CFLAGS=\"-I${linux-headers}/include\""
   ];
 in
 bash.runCommand "${pname}-${version}"
@@ -46,7 +44,6 @@ bash.runCommand "${pname}-${version}"
 
     nativeBuildInputs = [
       gcc
-      musl
       binutils
       gnumake
       gnused
@@ -80,5 +77,5 @@ bash.runCommand "${pname}-${version}"
     make -j $NIX_BUILD_CORES install-strip
 
     # Remove documentation not needed in the bootstrap chain.
-    rm -rf $out/share/info $out/share/man
+    rm -rf $out/share
   ''

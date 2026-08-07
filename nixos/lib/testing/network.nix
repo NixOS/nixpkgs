@@ -93,7 +93,7 @@ let
               # We also want to test router protocols that enable connections
               # between nodes even if they don't share a VLAN, so we include
               # the primary IPs of all machines in the hosts file.
-              primaryIPs = [
+              primaryIPs = lib.remove "" [
                 remoteConfig.networking.primaryIPAddress
                 remoteConfig.networking.primaryIPv6Address
               ];
@@ -135,8 +135,13 @@ let
       );
       udevRules = map (
         interface:
-        # MAC Addresses for QEMU network devices are lowercase, and udev string comparison is case-sensitive.
-        ''SUBSYSTEM=="net",ACTION=="add",ATTR{address}=="${toLower (qemu-common.qemuNicMac interface.vlan config.virtualisation.test.nodeNumber)}",NAME="${interface.name}"''
+        lib.concatStringsSep ", " [
+          ''SUBSYSTEM=="net"''
+          ''ACTION=="add"''
+          # MAC Addresses for QEMU network devices are lowercase, and udev string comparison is case-sensitive.
+          ''ATTR{address}=="${toLower (qemu-common.qemuNicMac interface.vlan config.virtualisation.test.nodeNumber)}"''
+          ''NAME="${interface.name}"''
+        ]
       ) interfaces;
     in
     {

@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "aks-mcp-server";
-  version = "0.0.18";
+  version = "0.0.19";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "aks-mcp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-h/zLbnc2ffcQkx+KE6vglaSG6QAySZSg8EB4zyqH4sg=";
+    hash = "sha256-Zu/caWrTuyzS4ejJ5LTOCyLTsmJOFrkX0kUGM0zDfFs=";
   };
 
-  vendorHash = "sha256-HYIEGnQOVNNVJxzoOiLTXwRFOBvCwikAwqky18VqFSQ=";
+  vendorHash = "sha256-eipcHVKKHBOey2fUGB4lf2pE/wdwGgsbYvCrvDG1JK8=";
 
   subPackages = [ "cmd/aks-mcp" ];
 

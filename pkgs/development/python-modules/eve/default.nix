@@ -22,7 +22,10 @@ buildPythonPackage rec {
     hash = "sha256-y0QfxLDoTKNZuAKcPqrLjwkZ0mRseBVq7OyflwUd+Lk=";
   };
 
-  pythonRelaxDeps = [ "events" ];
+  pythonRelaxDeps = [
+    "events"
+    "simplejson"
+  ];
 
   build-system = [ setuptools ];
 

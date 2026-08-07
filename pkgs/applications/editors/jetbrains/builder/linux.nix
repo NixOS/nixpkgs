@@ -86,6 +86,8 @@ lib.extendMkDerivation {
         fontconfig
         libGL
         libx11
+        # required for the bundled jcef-plugin
+        udev
       ];
 
       nativeBuildInputs = nativeBuildInputs ++ [
@@ -184,6 +186,10 @@ lib.extendMkDerivation {
         ln -s "$item/share/applications" $out/share
 
         runHook postInstall
+      '';
+
+      preFixup = ''
+        addAutoPatchelfSearchPath "${jdk.home}/lib"
       '';
 
       preferLocalBuild = !(finalAttrs.meta.license.free or true);

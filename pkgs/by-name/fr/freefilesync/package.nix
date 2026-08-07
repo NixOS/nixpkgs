@@ -38,7 +38,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freefilesync";
-  version = "14.9";
+  version = "14.10";
 
   src = fetchurl {
     url = "https://freefilesync.org/download/FreeFileSync_${finalAttrs.version}_Source.zip";
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       rm -f "$out"
       tryDownload "$url" "$out"
     '';
-    hash = "sha256-TY41DJIvp7CNR8U12q2YUhiyHZuL9FcfLTVDQWTIfQA=";
+    hash = "sha256-tjyJ4+sc4nZxP7NQnBlISODsqDHKSKfpw8P8RixZj80=";
   };
 
   sourceRoot = ".";

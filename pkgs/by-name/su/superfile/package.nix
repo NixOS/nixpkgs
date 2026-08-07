@@ -51,7 +51,6 @@ buildGoModule {
     changelog = "https://github.com/yorukot/superfile/blob/${tag}/changelog.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      momeemt
       redyf
     ];
     mainProgram = "superfile";

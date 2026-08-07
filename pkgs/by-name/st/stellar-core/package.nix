@@ -10,8 +10,6 @@
   libtool,
   libunwind,
   perl,
-  postgresql,
-  postgresqlTestHook,
   pkg-config,
   ripgrep,
   rustc,
@@ -50,53 +48,61 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stellar-core";
-  version = "26.1.0";
+  version = "27.1.0";
 
   src = fetchFromGitHub {
     owner = "stellar";
     repo = "stellar-core";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0bdomxjx+Qwvxu6NWUTYbLvoKwCvM0e5I3qwhKLEecM=";
+    hash = "sha256-EXtfkjNOl3Loml7GXWYE8hh/IqItqA677YEh0Ve6dOI=";
     fetchSubmodules = true;
   };
 
-  cargoDeps = symlinkJoin {
-    name = "stellar-core-${finalAttrs.version}-cargo-vendor-dir";
-    paths = [
-      (rustPlatform.fetchCargoVendor {
+  cargoDeps =
+    let
+      sorobanProtocolHashes = {
+        p21 = "sha256-cUhi2YennW+tukwf0woP69bqf1ZMsQ4JDeNqpk0jYjg=";
+        p22 = "sha256-5mNAblS3TYXu5a1ThmIdbKC9hUg/3F8vUPvFex3G58U=";
+        p23 = "sha256-l1nqc4qrqWV8aKOd9NFUaOLw1Mags2znjbQixU5H3+Y=";
+        p24 = "sha256-P+Q8SNcuFX6diBYqGpkOwHtplK4y4PZxB+gj6MnpYDs=";
+        p25 = "sha256-9NhnB3bDQI1FLmr0zTYTjEYl8V8KteWbMefWObLDB/A=";
+        p26 = "sha256-OxkiWTzNtmYxB64OtLUwghAkcT//SnMZVfUXynFg2Bg=";
+        p27 = "sha256-KcsyPBJLUOwRAtp95IYFiZZNMi1xWmYW7XXG+bMucmY=";
+      };
+      mainCargoDeps = rustPlatform.fetchCargoVendor {
         inherit (finalAttrs) src;
-        hash = "sha256-sm8cn288vb4aYJXNOwkjDmPQ8Ug0mnur5YcXH5sS2Sg=";
-      })
-    ]
-    ++
-      map
-        (
-          protocol:
-          rustPlatform.fetchCargoVendor {
-            pname = "stellar-core-${protocol}";
-            inherit (finalAttrs) version src;
-            cargoRoot = "src/rust/soroban/${protocol}";
-            hash =
-              {
-                p21 = "sha256-cUhi2YennW+tukwf0woP69bqf1ZMsQ4JDeNqpk0jYjg=";
-                p22 = "sha256-5mNAblS3TYXu5a1ThmIdbKC9hUg/3F8vUPvFex3G58U=";
-                p23 = "sha256-l1nqc4qrqWV8aKOd9NFUaOLw1Mags2znjbQixU5H3+Y=";
-                p24 = "sha256-P+Q8SNcuFX6diBYqGpkOwHtplK4y4PZxB+gj6MnpYDs=";
-                p25 = "sha256-9NhnB3bDQI1FLmr0zTYTjEYl8V8KteWbMefWObLDB/A=";
-                p26 = "sha256-OxkiWTzNtmYxB64OtLUwghAkcT//SnMZVfUXynFg2Bg=";
-              }
-              .${protocol};
-          }
-        )
-        [
-          "p21"
-          "p22"
-          "p23"
-          "p24"
-          "p25"
-          "p26"
-        ];
-  };
+        hash = "sha256-8seehYc2W0lvW9WPewPHC3cLR9Lgj2qCib/EXK0gwVA=";
+      };
+      sorobanCargoDeps = lib.mapAttrs (
+        protocol: hash:
+        rustPlatform.fetchCargoVendor {
+          pname = "stellar-core-${protocol}";
+          inherit (finalAttrs) version src;
+          cargoRoot = "src/rust/soroban/${protocol}";
+          inherit hash;
+        }
+      ) sorobanProtocolHashes;
+    in
+    symlinkJoin {
+      name = "stellar-core-${finalAttrs.version}-cargo-vendor-dir";
+      paths = [ mainCargoDeps ] ++ lib.attrValues sorobanCargoDeps;
+      passthru = {
+        inherit sorobanProtocolHashes mainCargoDeps sorobanCargoDeps;
+      };
+      postBuild = ''
+        # `soroban-synth-wasm` resolves this path relative to the vendored git
+        # source root, but cargo vendors the workspace crates with versioned
+        # directory names.
+        for source in "$out"/source-git-*; do
+          for dir in "$source"/soroban-env-common-*; do
+            if [ -d "$dir" ] && [ ! -e "$source"/soroban-env-common ]; then
+              ln -s "$(basename "$dir")" "$source"/soroban-env-common
+            fi
+            break
+          done
+        done
+      '';
+    };
 
   strictDeps = true;
 
@@ -115,11 +121,6 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.cargoSetupHook
   ];
 
-  nativeCheckInputs = [
-    postgresql
-    postgresqlTestHook
-  ];
-
   buildInputs = [
     libpq
     libunwind
@@ -128,14 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   doCheck = true;
-
-  postgresqlTestUserOptions = "LOGIN CREATEDB";
-
-  postgresqlTestSetupPost = ''
-    for database in $(seq 0 15); do
-      createdb "test$database"
-    done
-  '';
 
   preConfigure = ''
     # Due to https://github.com/NixOS/nixpkgs/issues/8567 we cannot rely on
@@ -162,15 +155,16 @@ stdenv.mkDerivation (finalAttrs: {
   checkPhase = ''
     runHook preCheck
 
-    # The full upstream test suite is too heavy for a default package check: it
-    # includes long-running integration scenarios and Soroban tests across all
-    # p21-p26 protocol crates. Keep this focused on a basic consensus smoke test
-    # plus a PostgreSQL-backed persistence test.
+    # The full upstream test suite is too heavy for a default package check.
+    # Keep this focused on a basic consensus smoke test.
     ./src/stellar-core test --ll fatal -w NoTests -a -r simple --disable-dots "standalone"
-    ./src/stellar-core test --ll fatal -w NoTests -a -r simple --disable-dots "SCP State"
 
     runHook postCheck
   '';
+
+  passthru = {
+    updateScript = ./update.sh;
+  };
 
   meta = {
     description = "Reference peer-to-peer agent that manages the Stellar network";

@@ -6,10 +6,12 @@
 # The module
 {
   lib,
+  config,
+  options,
   ...
 }:
 let
-  inherit (lib) mkOption types;
+  inherit (lib) mkEnableOption mkOption types;
   pathOrStr = types.coercedTo types.path (x: "${x}") types.str;
 in
 {
@@ -39,7 +41,7 @@ in
       visible = "shallow";
     };
     process = {
-      argv = lib.mkOption {
+      argv = mkOption {
         type = types.listOf pathOrStr;
         example = lib.literalExpression ''[ (lib.getExe config.package) "--nobackground" ]'';
         description = ''
@@ -49,6 +51,57 @@ in
           a shell script or `importas` from `pkgs.execline`.
         '';
       };
+
+      reloadSignal = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "HUP";
+        description = ''
+          Configures the reload signal to send to the service manager.
+        '';
+      };
+
+      reloadCommand = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = lib.literalExpression ''"''${pkgs.coreutils}/bin/kill -HUP $MAINPID"'';
+
+        description = ''
+          Command used for reloading in the underlying service manager to reload.
+        '';
+      };
     };
+
+    notificationProtocol = mkOption {
+      type = types.submodule {
+        options = {
+          systemd = mkEnableOption "Whether the service supports systemd-notify.";
+          s6 = mkEnableOption "Whether the service supports s6-notify.";
+        };
+      };
+      description = ''
+        Notification protocol that this service supports with the underlying service manager.
+      '';
+    };
+  };
+
+  config = {
+    assertions = [
+      {
+        # `reloadSignal` derives `reloadCommand` at `mkDefault` priority below, so a
+        # conflict only exists when the user *also* set `reloadCommand` explicitly.
+        # An explicit (non-`mkDefault`) definition has `defaultOverridePriority`.
+        assertion =
+          !(
+            config.process.reloadSignal != null
+            && options.process.reloadCommand.highestPrio <= lib.modules.defaultOverridePriority
+          );
+        message = "reloadSignal conflicts with reloadCommand. Please either use reloadSignal or reloadCommand.";
+      }
+    ];
+
+    process.reloadCommand = lib.mkIf (config.process.reloadSignal != null) (
+      lib.mkDefault "${pkgs.coreutils}/bin/kill -${config.process.reloadSignal} $MAINPID"
+    );
   };
 }

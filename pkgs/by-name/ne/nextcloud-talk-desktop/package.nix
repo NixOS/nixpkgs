@@ -32,11 +32,11 @@
 }:
 let
   pname = "nextcloud-talk-desktop";
-  version = "2.1.1"; # Ensure both hashes (Linux and Darwin) are updated!
+  version = "2.2.1"; # Ensure both hashes (Linux and Darwin) are updated!
 
   hashes = {
-    linux = "sha256-s6+p21KLoDvcQz0EgV7WYIwYc9JolZpqkxZ8iIol8Yg=";
-    darwin = "sha256-rp6+bYb3Y8yEXYUY+cuDo7Lw6cq/EUnPjLIqscKeULc=";
+    linux = "sha256-AhNHPejdnGmL55/mHGKkDaGWl2fm7uufX4JaB5VSBos=";
+    darwin = "sha256-TkLAydkedLbi6vqd3kvQNkVnXGSHfF6xTBF3PCOgJ6I=";
   };
 
   # Only x86_64-linux is supported with Darwin support being universal
@@ -62,7 +62,7 @@ let
   meta = {
     description = "Nextcloud Talk Desktop Client";
     homepage = "https://github.com/nextcloud/talk-desktop";
-    changelog = "https://github.com/nextcloud/talk-desktop/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/nextcloud/talk-desktop/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ kashw2 ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];

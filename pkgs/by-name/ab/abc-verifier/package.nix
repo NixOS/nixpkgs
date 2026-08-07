@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Tool for sequential logic synthesis and formal verification";
     homepage = "https://people.eecs.berkeley.edu/~alanmi/abc";
-    license = lib.licenses.mit;
+    license = lib.licenses.mit-modern;
     maintainers = with lib.maintainers; [
       thoughtpolice
       Luflosi

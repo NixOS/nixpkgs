@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "strictdoc";
-  version = "0.19.0";
+  version = "0.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strictdoc-project";
     repo = "strictdoc";
     tag = finalAttrs.version;
-    hash = "sha256-UkXVn1GVWBBhjFaRvkVk+E9mug3i2k7SQk+7JVA8KSo=";
+    hash = "sha256-mDsI/pGMIcyfFqX9uWWlg09As+4Mth9WK5xylQvSVGM=";
   };
 
   build-system = [
@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   dependencies = with python3.pkgs; [
     beautifulsoup4
-    datauri
+    python-datauri
     docutils
     fastapi
     graphviz
@@ -79,9 +79,12 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Software for technical documentation and requirements management";
     homepage = "https://github.com/strictdoc-project/strictdoc";
-    changelog = "https://github.com/strictdoc-project/strictdoc/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/strictdoc-project/strictdoc/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.puzzlewolf ];
+    maintainers = with lib.maintainers; [
+      dadada
+      puzzlewolf
+    ];
     mainProgram = "strictdoc";
   };
 })

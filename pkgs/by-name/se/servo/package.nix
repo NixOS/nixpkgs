@@ -69,13 +69,13 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "servo";
-  version = "0.1.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "servo";
     repo = "servo";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-DnjtKizYwadBYDqafFDuE/DRIjCqnK/L95zV0Fv0Xhc=";
+    tag = finalAttrs.version;
+    hash = "sha256-oA6fFvSajUHFxyu5kgT3BZ8oxWNMdkdaov6tVkxgNrE=";
     # Breaks reproducibility depending on whether the picked commit
     # has other ref-names or not, which may change over time, i.e. with
     # "ref-names: HEAD -> main" as long this commit is the branch HEAD
@@ -85,7 +85,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  cargoHash = "sha256-TJXWscTnsXxaWTfn7BugVMPamXOsyHXQhJskX04X7Zw=";
+  cargoHash = "sha256-kFuW2RoE37ClYAEcEcRudQoUsRsjbUeEBbz/6d96FPU=";
 
   # set `HOME` to a temp dir for write access
   # Fix invalid option errors during linking (https://github.com/mozilla/nixpkgs-mozilla/commit/c72ff151a3e25f14182569679ed4cd22ef352328)
@@ -171,6 +171,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     # undefined libmozjs_sys symbols during linking
     broken = stdenv.hostPlatform.isDarwin;
+    changelog = "https://github.com/servo/servo/releases/tag/${finalAttrs.src.tag}";
     description = "Embeddable, independent, memory-safe, modular, parallel web rendering engine";
     homepage = "https://servo.org";
     license = lib.licenses.mpl20;

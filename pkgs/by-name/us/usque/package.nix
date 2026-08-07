@@ -10,15 +10,15 @@
 }:
 buildGo125Module (finalAttrs: {
   pname = "usque";
-  version = "3.0.0";
+  version = "3.0.1";
   src = fetchFromGitHub {
     owner = "Diniboy1123";
     repo = "usque";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xgndE4kfR7LVLBvcxJ68Yq0NLN+8zyciMYaP9K+qS9M=";
+    hash = "sha256-4vFlHJINMDlaOC+R5Q+vUhmyrXlv1r8UiNVRx8juxZ4=";
   };
 
-  vendorHash = "sha256-29f/5PnmqaVS8PP1xVksgszFk3GyYZXXGDD1hjE/iSA=";
+  vendorHash = "sha256-/SYyIWRr+uwF5Jr5Ql08a+WwrZMXmKEa+Q7Nxzt2wKw=";
 
   ldflags = [
     "-s"

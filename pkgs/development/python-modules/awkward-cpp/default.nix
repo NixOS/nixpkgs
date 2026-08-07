@@ -11,17 +11,20 @@
 
   # dependencies
   numpy,
+
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "awkward-cpp";
-  version = "52";
+  version = "55";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "awkward_cpp";
     inherit (finalAttrs) version;
-    hash = "sha256-7xQesgVE3yYblzyYbPrle+MpAiBhvoaBdQat1nZZcnU=";
+    hash = "sha256-4si+Pmo1PW0qk9Zb4ZALqZd2WxYOp2aPmrIh3l+4o3M=";
   };
 
   build-system = [
@@ -36,6 +39,8 @@ buildPythonPackage (finalAttrs: {
   dontUseCmakeConfigure = true;
 
   pythonImportsCheck = [ "awkward_cpp" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "CPU kernels and compiled extensions for Awkward Array";

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
 
   # nativeBuildInputs
   cmake,
@@ -37,6 +36,7 @@
   # nativeCheckInputs
   gzip,
   which,
+  writableTmpDirAsHomeHook,
 
   # build options
   enableQt ? false,
@@ -45,15 +45,71 @@ let
   bext = fetchFromGitHub {
     owner = "BRL-CAD";
     repo = "bext";
-    rev = "f9074f84c87605f89d912069cee1b1e710ead635"; # must match brlcad_bext_init() in CMakeLists.txt
-    hash = "sha256-jCBw4aDk/bmz2Woe9qIA88mgLRRZSu7zDYM5pi3MbP8=";
+    rev = "12f7d5669eec143eb882a367fa2d2a56127d1942"; # must match brlcad_bext_init() in CMakeLists.txt
+    hash = "sha256-T6zA/zLmSPTlj7+AlxxWXb1OsxdBEcyatYCYUUTIDY8=";
     fetchSubmodules = true;
+    # remove unneeded subprojects to reduce NAR size
+    postFetch =
+      let
+        subprojectsToRemove = toString [
+          "appleseed"
+          "astyle"
+          "boost"
+          "bullet"
+          "deflate"
+          "eigen"
+          "embree"
+          "expat"
+          "flexbison"
+          "fmt"
+          "gdal"
+          "gte"
+          "icu"
+          "ispc"
+          "jpeg"
+          "lief"
+          "llvm"
+          "lmdb"
+          "lz4"
+          "minizip-ng"
+          "ncurses"
+          "netpbm"
+          "onetbb"
+          "opencolorio"
+          "opencv"
+          "openexr"
+          "openimageio"
+          "osl"
+          "ospray"
+          "patchelf"
+          "plief"
+          "png"
+          "proj"
+          "pugixml"
+          "pystring"
+          "qt"
+          "rkcommon"
+          "sqlite3"
+          "stepcode"
+          "tiff"
+          "tinygltf"
+          "xerces-c"
+          "xmltools"
+          "yaml-cpp"
+          "zstd"
+        ];
+      in
+      ''
+        for name in ${subprojectsToRemove}; do
+          rm -r $out/$name
+        done
+      '';
   };
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "brlcad";
-  version = "7.42.2";
+  version = "7.44.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -62,70 +118,82 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "BRL-CAD";
     repo = "brlcad";
     tag = "rel-${lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
-    hash = "sha256-smsCbUWlAfO9xyT8Bz/vLRkTJuehF9xANrP8bT//t18=";
+    hash = "sha256-ehfjrff2mjaW0s0G8I7pNXpRXdnsOcPwRTXewNijAZo=";
   };
 
   prePatch = ''
     # clone bext src so we can patch it
+    # (copy hidden files too, e.g. .gitmodules, which the dependency-graph target needs)
     mkdir -p build/bext
-    cp -r --no-preserve=mode ${bext}/* build/bext/
+    cp -r --no-preserve=mode ${bext}/. build/bext/
   '';
 
   patches = [
-    # make libgcv work with modern lemon
-    (fetchpatch {
-      url = "https://github.com/BRL-CAD/brlcad/commit/0dbd82a10040edc45754242ab36ed130a0259fb8.patch";
-      hash = "sha256-N54FnF69PgeRUDZk/i9hoLHoBzb1neYN20KhDyMqvi4=";
-      excludes = [ "CMakeLists.txt" ];
-    })
     # disable internal RPATH manipulation which gets in our way
     ./disable-rpath-manipulation.patch
+
     # make <PACKAGE>_ROOT respect our cmakeFlags settings instead of being hardwired to CMAKE_BINARY_DIR
     ./fix-findpackage-root.patch
+
+    # only reset a dependency's cached find_package results when the third-party
+    # state actually changed, so externally-injected values (e.g. GTE_INCLUDE_DIR)
+    # survive configure instead of being unconditionally cleared
+    ./restore-find-package-reset-guard.patch
+
     # libgcv defines EQUAL macro, which causes gdal to not define STRCASECMP macro
     ./fix-gdal-strcasecmp.patch
-    # only call set_target_properties on perm-test when testing is enabled
-    # https://github.com/BRL-CAD/brlcad/pull/235
-    ./fix-perm-test-cmake.patch
+
     # fix typo in GeometryIO.tcl which causes model exports to fail
     # https://github.com/BRL-CAD/brlcad/pull/234
     ./fix-export.patch
   ];
 
-  postPatch = ''
+  postPatch =
     # disable all bext projects by default
-    substituteInPlace build/bext/CMakeLists.txt \
-      --replace-fail "add_project" "#add_project"
-
+    ''
+      substituteInPlace build/bext/CMakeLists.txt \
+        --replace-fail "add_project" "#add_project"
+    ''
     # enable bext projects we actually need:
     # * itcl: needs v3
     # * itk: needs v3
     # * iwidgets, tkhtml, tktable: missing in nixpkgs
     # * manifold: needs v2
+    # * mmesh: required by librt, missing in nixpkgs
     # * opennurbs: many vendored patches
-    # * osmesa, perplex, regex, utahrle: specialized vendored libraries
+    # * osmesa, perplex, regex: specialized vendored libraries
+    # * poissonrecon: provides SPSR headers to brlcad via the bext noinstall dir
     # * patch, strclear: required internally
-    # * assetimport, lemon, re2c, tcl, tk, zlib: transitive dependency, not actually built
-    substituteInPlace build/bext/CMakeLists.txt \
-      --replace-fail "#add_project(patch)" "add_project(patch)"
-    for name in itcl itk iwidgets tkhtml tktable manifold opennurbs osmesa perplex regex utahrle strclear zlib assetimport lemon re2c tcl tk; do
+    # * assetimport, clipper2, lemon, re2c, tcl, tk, zlib: transitive dependency, not actually built
+    + ''
       substituteInPlace build/bext/CMakeLists.txt \
-        --replace-fail "#add_project($name " "add_project($name "
-    done
+        --replace-fail \
+          "#add_project(patch)" \
+          "add_project(patch)"
 
+      for name in itcl itk iwidgets tkhtml tktable manifold mmesh opennurbs osmesa perplex regex poissonrecon strclear clipper2 zlib assetimport lemon re2c tcl tk; do
+        substituteInPlace build/bext/CMakeLists.txt \
+          --replace-fail \
+            "#add_project($name " \
+            "add_project($name "
+      done
+    ''
     # inject TCL_ROOT into bext projects
-    sed -i '1i set(TCL_ROOT "${tcl};${tk}")' \
-      build/bext/CMake/FindTCL.cmake \
-      build/bext/itcl/addfiles/FindTCL.cmake \
-      build/bext/itk/addfiles/FindTCL.cmake \
-      build/bext/tktable/tktable/CMake/FindTCL.cmake \
-      build/bext/tkhtml/tkhtml/CMake/FindTCL.cmake
-  ''
-  + lib.optionalString stdenv.hostPlatform.isAarch64 ''
+    + ''
+      sed -i '1i set(TCL_ROOT "${tcl};${tk}")' \
+        build/bext/CMake/FindTCL.cmake \
+        build/bext/itcl/addfiles/FindTCL.cmake \
+        build/bext/itk/addfiles/FindTCL.cmake \
+        build/bext/tktable/tktable/CMake/FindTCL.cmake \
+        build/bext/tkhtml/tkhtml/CMake/FindTCL.cmake
+    ''
     # remove a failing test
-    substituteInPlace src/libbu/tests/CMakeLists.txt \
-      --replace-fail "brlcad_add_test(NAME bu_color_to_rgb_floats_1 COMMAND bu_test color 4 192,78,214)" ""
-  '';
+    + lib.optionalString stdenv.hostPlatform.isAarch64 ''
+      substituteInPlace src/libbu/tests/CMakeLists.txt \
+        --replace-fail \
+          "brlcad_add_test(NAME bu_color_to_rgb_floats_1 COMMAND bu_test test_color 4 192,78,214)" \
+          ""
+    '';
 
   nativeBuildInputs = [
     cmake
@@ -167,8 +235,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "BRLCAD_ENABLE_STRICT" false)
-    (lib.cmakeBool "BUILD_TESTING" finalAttrs.doCheck)
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "BRLCAD_ENABLE_QT" enableQt)
+    # static-library link-closure validation tests fail to link (libbn's static
+    # target does not pull in its libbu dependency); we only ship the shared libs
+    (lib.cmakeBool "BRLCAD_VALIDATE_STATIC_LINKS" false)
     (lib.cmakeFeature "GTE_INCLUDE_DIR" "${gtmathematics}/include/gtmathematics")
     (lib.cmakeFeature "LMDB_LIBRARY" "${lmdb.out}/lib/liblmdb${stdenv.hostPlatform.extensions.sharedLibrary}")
     (lib.cmakeFeature "LMDB_INCLUDE_DIR" "${lmdb.dev}/include")
@@ -189,7 +260,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-Wno-error=template-id-cdtor"
     ];
     CFLAGS = toString [
-      # itk, tkhtml, tktable, utahrle
+      # itk, tkhtml, tktable
       "-Wno-incompatible-pointer-types"
       "-std=gnu17"
     ];
@@ -198,6 +269,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     gzip
     which
+    # bu_dir test writes into HOME/cache/config, which must be writable
+    writableTmpDirAsHomeHook
   ];
 
   doCheck = true;

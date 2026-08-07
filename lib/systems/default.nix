@@ -17,12 +17,17 @@ let
 
   inherit (lib.strings) toJSON;
 
+  inherit (lib.trivial)
+    oldestSupportedReleaseIsAtLeast
+    ;
+
   doubles = import ./doubles.nix { inherit lib; };
   parse = import ./parse.nix { inherit lib; };
   inspect = import ./inspect.nix { inherit lib; };
   platforms = import ./platforms.nix { inherit lib; };
   examples = import ./examples.nix { inherit lib; };
   architectures = import ./architectures.nix { inherit lib; };
+  rustc-target-env = import ./rustc-target-env.nix;
 
   /**
     Elaborated systems contain functions, which means that they don't satisfy
@@ -165,6 +170,8 @@ let
             "relibc"
           else if final.isMusl then
             "musl"
+          else if final.isPicolibc then
+            "picolibc"
           else if final.isUClibc then
             "uclibc"
           else if final.isAndroid then
@@ -240,7 +247,7 @@ let
               netbsd = "NetBSD";
               freebsd = "FreeBSD";
               openbsd = "OpenBSD";
-              wasi = "Wasi";
+              wasip1 = "WasiP1";
               redox = "Redox";
               genode = "Genode";
             }
@@ -299,12 +306,10 @@ let
         inherit
           (
             {
-              linux-kernel = args.linux-kernel or { };
               gcc = args.gcc or { };
             }
             // platforms.select final
           )
-          linux-kernel
           gcc
           ;
 
@@ -451,12 +456,24 @@ let
                 else
                   final.parsed.cpu.name;
 
+              # https://doc.rust-lang.org/reference/conditional-compilation.html#target_env
+              # Accomodate system definitions written before Nixpkgs learned about target_env.
+              env =
+                if rust ? platform.env then
+                  rust.platform.env
+                else if rustc-target-env ? ${final.rust.rustcTargetSpec} then
+                  rustc-target-env.${final.rust.rustcTargetSpec}
+                else
+                  "";
+
               # https://doc.rust-lang.org/reference/conditional-compilation.html#target_os
               os =
                 if rust ? platform then
                   rust.platform.os or "none"
                 else if final.isDarwin then
                   "macos"
+                else if final.isWasi then
+                  "wasi"
                 else if final.isWasm && !final.isWasi then
                   "unknown" # Needed for {wasm32,wasm64}-unknown-unknown.
                 else
@@ -515,11 +532,7 @@ let
                   abi.name;
 
               inferred =
-                if final.isWasi then
-                  # Rust uses `wasm32-wasip?` rather than `wasm32-unknown-wasi`.
-                  # We cannot know which subversion does the user want, and
-                  # currently use WASI 0.1 as default for compatibility. Custom
-                  # users can set `rust.rustcTargetSpec` to override it.
+                if final.isWasiP1 then
                   "${cpu_}-wasip1"
                 else
                   "${cpu_}-${vendor_}-${kernel.name}${optionalString (abi.name != "unknown") "-${abi_}"}";
@@ -572,6 +585,7 @@ let
               "i686" = "386";
               "loongarch64" = "loong64";
               "mips" = "mips";
+              "mips64" = "mips64";
               "mips64el" = "mips64le";
               "mipsel" = "mipsle";
               "powerpc64" = "ppc64";
@@ -582,7 +596,7 @@ let
               "wasm32" = "wasm";
             }
             .${final.parsed.cpu.name} or null;
-          GOOS = if final.isWasi then "wasip1" else final.parsed.kernel.name;
+          GOOS = if final.isWasiP1 then "wasip1" else final.parsed.kernel.name;
 
           # See https://go.dev/wiki/GoArm
           GOARM = toString (lib.intersectLists [ (final.parsed.cpu.version or "") ] [ "5" "6" "7" ]);
@@ -692,6 +706,14 @@ let
         };
       };
     in
+    # Platforms elaborated by pre-26.11 Nixpkgs will include the `linux-kernel` attr,
+    # so we can't assert its absence until 26.11 is the oldest supported release.
+    # Assertion will activate during the 27.05 cycle, when 26.05 support ends.
+    # TODO: Remove assertion in the 27.11 cycle.
+    assert
+      oldestSupportedReleaseIsAtLeast 2611 && args ? linux-kernel
+      -> throw "lib.systems.elaborate: linux-kernel has been removed; see the 26.11 release notes";
+
     assert final.useAndroidPrebuilt -> final.isAndroid;
     assert foldl' (pass: { assertion, message }: if assertion final then pass else throw message) true (
       final.parsed.abi.assertions or [ ]

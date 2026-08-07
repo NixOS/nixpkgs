@@ -83,6 +83,12 @@
     "project_path": "pim/akonadi-contacts",
     "repo_path": "pim/akonadi-contacts"
   },
+  "akonadi-e2e-tests": {
+    "description": "Test suite for end-to-end testing of Akonadi Resources against real servers.",
+    "name": "akonadi-e2e-tests",
+    "project_path": "pim/akonadi-e2e-tests",
+    "repo_path": "pim/akonadi-e2e-tests"
+  },
   "akonadi-exchange": {
     "description": "Akonadi plugin for Exchange groupware functionality",
     "name": "akonadi-exchange",
@@ -1715,6 +1721,12 @@
     "project_path": "frameworks/kconfig",
     "repo_path": "frameworks/kconfig"
   },
+  "kconfigeditor": {
+    "description": "Graphical editor for KConfig files",
+    "name": "kconfigeditor",
+    "project_path": "system/kconfigeditor",
+    "repo_path": "system/kconfigeditor"
+  },
   "kconfigwidgets": {
     "description": "Widgets for KConfig",
     "name": "kconfigwidgets",
@@ -2531,6 +2543,12 @@
     "project_path": "utilities/keepsecret",
     "repo_path": "utilities/keepsecret"
   },
+  "kemoji": {
+    "description": "Framework providing an emoji dictionary, model, search and basic components for use in applications.",
+    "name": "kemoji",
+    "project_path": "libraries/kemoji",
+    "repo_path": "libraries/kemoji"
+  },
   "kemoticons": {
     "description": "KEmoticons",
     "name": "kemoticons",
@@ -2897,6 +2915,12 @@
     "project_path": "libs/kirigami-addons",
     "repo_path": "libraries/kirigami-addons"
   },
+  "kirigami-app-components": {
+    "description": "Kirigami addons and modules necessary to do a full featured KDE application, such as integration with configurable keyboard shortcuts and standard actions.",
+    "name": "kirigami-app-components",
+    "project_path": "libraries/kirigami-app-components",
+    "repo_path": "libraries/kirigami-app-components"
+  },
   "kirigami-gallery": {
     "description": "Kirigami component gallery application",
     "name": "kirigami-gallery",
@@ -3089,6 +3113,12 @@
     "project_path": "pim/kmbox",
     "repo_path": "pim/kmbox"
   },
+  "kmcpclientinspector": {
+    "description": "App which allows the user to inspect apps which implement MCP protocol support.",
+    "name": "kmcpclientinspector",
+    "project_path": "sdk/kmcpclientinspector",
+    "repo_path": "sdk/kmcpclientinspector"
+  },
   "kmediaplayer": {
     "description": "KMediaPlayer",
     "name": "kmediaplayer",
@@ -3104,8 +3134,8 @@
   "kmime": {
     "description": "Library to assist handling MIME data",
     "name": "kmime",
-    "project_path": "pim/kmime",
-    "repo_path": "pim/kmime"
+    "project_path": "frameworks/kmime",
+    "repo_path": "frameworks/kmime"
   },
   "kmines": {
     "description": "KMines is the classic Minesweeper game",
@@ -5398,6 +5428,12 @@
     "name": "optiimage",
     "project_path": "graphics/optiimage",
     "repo_path": "graphics/optiimage"
+  },
+  "os-autoinst-distri-kdelinux": {
+    "description": "End-to-end tests for KDE Linux using openQA",
+    "name": "os-autoinst-distri-kdelinux",
+    "project_path": "kde-linux/os-autoinst-distri-kdelinux",
+    "repo_path": "kde-linux/os-autoinst-distri-kdelinux"
   },
   "osx-patches": {
     "description": "Fixes for KDE problems that occur on Apple OS X",
@@ -8014,6 +8050,12 @@
     "name": "websites-libregraphicsmeeting-org-2026",
     "project_path": "websites/libregraphicsmeeting-org-2026",
     "repo_path": "websites/libregraphicsmeeting-org-2026"
+  },
+  "websites-linux-kde-org": {
+    "description": "Website for KDE Linux - linux.kde.org",
+    "name": "websites-linux-kde-org",
+    "project_path": "websites/linux-kde-org",
+    "repo_path": "websites/linux-kde-org"
   },
   "websites-lists-kde-org": {
     "description": "Necessary code to redirect from lists.kde.org to appropriate mail archives",

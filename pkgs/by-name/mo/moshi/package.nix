@@ -83,7 +83,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     alsa-lib
   ]
   ++ lib.optionals config.cudaSupport [
-    cudaPackages.cuda_cccl
+    cudaPackages.cccl
     cudaPackages.cuda_cudart
     cudaPackages.cuda_nvrtc
     cudaPackages.libcublas
@@ -129,7 +129,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/kyutai-labs/moshi";
     # The rust implementation is licensed under Apache
     # https://github.com/kyutai-labs/moshi/tree/main/rust#license
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     platforms = lib.platforms.all;
     mainProgram = "moshi-cli";

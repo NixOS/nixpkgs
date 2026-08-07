@@ -4,8 +4,6 @@
   fetchurl,
   makeWrapper,
   mono,
-  gtk2,
-  curl,
   imagemagick,
   copyDesktopItems,
   makeDesktopItem,
@@ -36,11 +34,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ mono ];
 
-  libraries = lib.makeLibraryPath [
-    gtk2
-    curl
-  ];
-
   dontBuild = true;
 
   installPhase = ''
@@ -51,8 +44,7 @@ stdenv.mkDerivation rec {
     done
     install -m 644 -D $src $out/bin/ckan.exe
     makeWrapper ${mono}/bin/mono $out/bin/ckan \
-      --add-flags $out/bin/ckan.exe \
-      --set LD_LIBRARY_PATH $libraries
+      --add-flags $out/bin/ckan.exe
     runHook postInstall
   '';
 

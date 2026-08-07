@@ -16,7 +16,6 @@
 let
   suffixMap = {
     aarch64-darwin = "native-mac-aarch64";
-    x86_64-darwin = "native-mac-amd64";
     aarch64-linux = "native-linux-aarch64";
     x86_64-linux = "native-linux-amd64";
   };
@@ -26,16 +25,15 @@ let
 in
 stdenvNoCC.mkDerivation rec {
   pname = "mill";
-  version = "1.1.2";
+  version = "1.1.7";
 
   src = fetchurl {
     url = "https://repo1.maven.org/maven2/com/lihaoyi/mill-dist-${suffix}/${version}/mill-dist-${suffix}-${version}.exe";
     sha256 =
       {
-        aarch64-darwin = "sha256-UiooqMbxceUepk4uJV8ZSL1o4VLeTZgWs3URQFXFmQs=";
-        x86_64-darwin = "sha256-EvIH0GHrdFtE5m6WqHAu7XDJn/8rElpmSxLrdCx5CKY=";
-        aarch64-linux = "sha256-Az/NCaFVrKANJvgIHx9QlW/fPyFVc4XiJ6BZr4ahfxk=";
-        x86_64-linux = "sha256-YhygFs8+ffOgoOSpggrYQ+xS19q8koYbN9UnozlLTPY=";
+        aarch64-darwin = "sha256-tQpV0Goe9Oq16rm14mavS5ELl7z4Bsu7JBVbbFgauPE=";
+        aarch64-linux = "sha256-lq0mR0lFhl7ESY+BM6kVRjyI3bpZOSwj+bSo37dAkaI=";
+        x86_64-linux = "sha256-2GSLEvRTlH9QPzkGM52sYiJh6OqXQzn/V0sPQ+SA39s=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
@@ -118,7 +116,6 @@ stdenvNoCC.mkDerivation rec {
       "x86_64-linux"
       "aarch64-linux"
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

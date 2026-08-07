@@ -52,9 +52,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       substituteInPlace $i \
         --replace /usr/sbin/sendmail sendmail
     done
-
-    substituteInPlace config/filter.d/dovecot.conf \
-      --replace dovecot.service dovecot2.service
   '';
 
   doCheck = false;
@@ -113,6 +110,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     homepage = "https://www.fail2ban.org/";
     description = "Program that scans log files for repeated failing login attempts and bans IP addresses";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      Deric-W
+    ];
   };
 })

@@ -8,16 +8,17 @@
   netbox,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "netbox-documents";
-  version = "0.8.2";
+  version = "0.8.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jasonyates";
     repo = "netbox-documents";
-    tag = "v${version}";
-    hash = "sha256-XFVfNLU9a/0tQAVTrN2B1Oia/isOD8G5BdA3fVUn2sM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6t7r/98UILL73JT1TwUBAqygQOtOWj1s1bY7IbRcUKQ=";
   };
 
   build-system = [ setuptools ];
@@ -36,8 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "Plugin designed to faciliate the storage of site, circuit, device type and device specific documents within NetBox";
     homepage = "https://github.com/jasonyates/netbox-documents";
-    changelog = "https://github.com/jasonyates/netbox-documents/releases/tag/${src.tag}";
+    changelog = "https://github.com/jasonyates/netbox-documents/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ felbinger ];
   };
-}
+})

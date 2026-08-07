@@ -1,53 +1,80 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  fastprogress,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  cloudpickle,
   fastcore,
   fastdownload,
-  torchvision,
+  fastprogress,
+  fasttransform,
   matplotlib,
+  packaging,
+  pandas,
   pillow,
+  plum-dispatch,
+  pyyaml,
+  requests,
   scikit-learn,
   scipy,
   spacy,
-  pandas,
-  requests,
+  torch,
+  torchvision,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fastai";
-  version = "2.8.6";
-  format = "setuptools";
+  version = "2.8.7";
+  pyproject = true;
+  __structuredAttrs = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-eZW96Upogr6qws6lD8eX2kywuBmTXsbG7vaQKLwx9y8=";
+  src = fetchFromGitHub {
+    owner = "fastai";
+    repo = "fastai";
+    tag = finalAttrs.version;
+    hash = "sha256-qjBVqSVQV+v1Uc95Tz8NyLkKwCLdG+R7MkH+CugzY1Q=";
   };
 
-  propagatedBuildInputs = [
-    fastprogress
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
+    cloudpickle
     fastcore
     fastdownload
-    torchvision
+    fastprogress
+    fasttransform
     matplotlib
+    packaging
+    pandas
     pillow
+    plum-dispatch
+    pyyaml
+    requests
     scikit-learn
     scipy
     spacy
-    pandas
-    requests
+    torch
+    torchvision
   ];
 
-  doCheck = false;
   pythonImportsCheck = [ "fastai" ];
 
+  # Tests fail at collection with:
+  #   fixture 'f' not found
+  doCheck = false;
+
   meta = {
-    homepage = "https://github.com/fastai/fastai";
     description = "Fastai deep learning library";
+    homepage = "https://github.com/fastai/fastai";
     mainProgram = "configure_accelerate";
-    changelog = "https://github.com/fastai/fastai/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/fastai/fastai/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rxiao ];
   };
-}
+})

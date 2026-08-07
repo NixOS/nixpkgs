@@ -8,18 +8,18 @@
 
 buildGoModule rec {
   pname = "prow";
-  version = "0-unstable-2026-05-19";
-  rev = "32fe11af9437baf705c1a232e7a2ffbc78b042ac";
+  version = "0-unstable-2026-07-14";
+  rev = "0633879af8026d056e1a5dbe1e29f5a98f6acec3";
 
   src = fetchFromGitHub {
     inherit rev;
 
     owner = "kubernetes-sigs";
     repo = "prow";
-    hash = "sha256-X414GUPK81i6cO/YVatn8P7TVxtRuIYCMJ2i/MFLY8g=";
+    hash = "sha256-tpIxZSqftGgA501zh4MyjTrBUvLOaLjkBO8nK/IDwhU=";
   };
 
-  vendorHash = "sha256-xFGvUkA1KTjHQ3kBw8PaDGG0gxSIhO1awM2PFFDgrMo=";
+  vendorHash = "sha256-iLJ2atYyHNMvflyuETpPnuhKD293k25vfZQU68Y7oN8=";
 
   # doCheck = false;
 

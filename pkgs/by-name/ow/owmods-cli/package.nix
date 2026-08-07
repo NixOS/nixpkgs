@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "owmods-cli";
-  version = "0.15.5";
+  version = "0.15.7";
 
   src = fetchFromGitHub {
     owner = "ow-mods";
     repo = "ow-mod-man";
     rev = "cli_v${finalAttrs.version}";
-    hash = "sha256-8ZHLb57/gC03+rWe8mHcBS0nJVNjjRMtLADwGcSZ0CI=";
+    hash = "sha256-ohCP0VKf2jEtjZsDN5ISZ5c/EGYANvjuCPyKQcNCwyc=";
   };
 
-  cargoHash = "sha256-WxfbkfOXU1NgUYagsDu3ri26k+XytG7Vy8+ofuQEwjE=";
+  cargoHash = "sha256-oYTz7Dzdv9prHzDSSjX9PozzKToMXRW6qs8Y2dfYQ8A=";
 
   nativeBuildInputs = [
     pkg-config

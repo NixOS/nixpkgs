@@ -1,11 +1,11 @@
 {
   stdenv,
   lib,
-  buildGo125Module,
+  buildGo126Module,
   fetchFromGitHub,
   makeWrapper,
   llvmPackages_20,
-  go_1_25,
+  go_1_26,
   xar,
   binaryen,
   avrdude,
@@ -18,8 +18,8 @@
 let
   # nixpkgs typically updates default llvm and go versions faster than tinygo releases
   # which ends up breaking this build. Use fixed versions for each release.
-  buildGoModule = buildGo125Module;
-  go = go_1_25;
+  buildGoModule = buildGo126Module;
+  go = go_1_26;
   llvmMajor = lib.versions.major llvm.version;
   inherit (llvmPackages_20)
     llvm

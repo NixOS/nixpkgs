@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation {
   pname = "john";
-  version = "1.9.0-Jumbo-1-unstable-2026-04-13";
+  version = "1.9.0-Jumbo-1-unstable-2026-07-07";
 
   src = fetchFromGitHub {
     owner = "openwall";
     repo = "john";
-    rev = "f514ece8ec4ae5e38ad75aaa322eac86d73dcd76";
-    hash = "sha256-zO1/KUJe3LvYCGlwVpNg5uDwPRD0ql/7anErb7tywC0=";
+    rev = "b544069b36ac166fb0a2fb19d0dc144ca72da6bb";
+    hash = "sha256-dSdezI0+WSufYVLNChNJQ04VzuKczbfBLrI/5smR1fA=";
   };
 
   patches = lib.optionals withOpenCL [
@@ -94,6 +94,10 @@ stdenv.mkDerivation {
       dpkt
       scapy
       lxml
+    ])
+    # For office2john.py
+    ++ (with python3Packages; [
+      olefile
     ])
     ++ (with perlPackages; [
       # For pass_gen.pl

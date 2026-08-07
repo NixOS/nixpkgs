@@ -4,7 +4,7 @@
   buildPythonPackage,
   pythonAtLeast,
   pythonOlder,
-  fetchPypi,
+  fetchFromGitHub,
   fetchpatch,
   python,
 
@@ -56,27 +56,26 @@
 
 buildPythonPackage rec {
   pname = "twisted";
-  version = "25.5.0";
+  version = "26.4.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    extension = "tar.gz";
-    hash = "sha256-HesnI1jLa+Hj6PxvnIs2946w+nwiM9Lb4R7G/uBOoxY=";
+  src = fetchFromGitHub {
+    owner = "twisted";
+    repo = "twisted";
+    tag = "twisted-${version}";
+    hash = "sha256-D6vDa+8qwjryKnElPBZgXCNokMX2l3i2bMdtk4FhEp4=";
   };
 
   patches = [
+    # pyOpenSSL 26.3.0 dropped some deprecated APIs, which breaks various
+    # functionality in twisted. We include the patch which replaces these
+    # with equivalent functionality from pyca/cryptography.
+    # https://github.com/twisted/twisted/issues/12660
+    # https://github.com/twisted/twisted/pull/12661
     (fetchpatch {
-      # https://github.com/twisted/twisted/pull/12508
-      url = "https://github.com/twisted/twisted/commit/ef6160aa2595adfba0c71da6db65b7a7252f23e9.patch";
-      hash = "sha256-zHkEWT0lvWf86RlkzU5Wx6R5ear04cfpxB7wjgdpw5c=";
-    })
-    # https://github.com/twisted/twisted/pull/12511
-    ./python314-urljoin-compat.patch
-    (fetchpatch {
-      # https://github.com/twisted/twisted/pull/12551
-      url = "https://github.com/twisted/twisted/commit/b1173fa307a9752eedd63890113eb610c3cca4a0.patch";
-      hash = "sha256-DWEygdo1b8uQOeFLy0/zcRNuuKJdSsF7cQM7RH04Puw=";
+      name = "twisted-replace-pyopenssl-x509req-with-cryptography-csr.patch";
+      url = "https://github.com/twisted/twisted/commit/5b4601c9965ffc92d6aa952b8c05127d5ac37307.patch";
+      hash = "sha256-mbSZOvzinfUolfOHJl+vEdAEGjy8OF2S/SrTsAbvjIw=";
     })
   ];
 

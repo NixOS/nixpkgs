@@ -1,26 +1,25 @@
 {
-  lib,
+  boltons,
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
   hatch-vcs,
-  boltons,
+  lib,
   libmambapy,
   msgpack,
   requests,
   zstandard,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "conda-libmamba-solver";
-  version = "25.11.0";
+  version = "26.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
-    inherit pname version;
     owner = "conda";
     repo = "conda-libmamba-solver";
-    tag = version;
-    hash = "sha256-t4mwQ9nsduicT1sL1TQLbuCoS4r7K/GaXyBFOO+3/m8=";
+    tag = finalAttrs.version;
+    hash = "sha256-8+BIUQp2tg50P0UDjzBvywg8/mDelDYMtp/ejEcMH20=";
   };
 
   build-system = [
@@ -47,4 +46,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.ericthemagician ];
   };
-}
+})

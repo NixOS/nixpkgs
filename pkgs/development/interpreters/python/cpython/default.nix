@@ -31,6 +31,7 @@
   sqlite,
   xz,
   zlib,
+  withZstd ? !withMinimalDeps,
   zstd,
 
   # platform-specific dependencies
@@ -133,7 +134,6 @@ let
     getLib
     optionals
     optionalString
-    replaceStrings
     ;
 
   withLibxcrypt =
@@ -202,6 +202,7 @@ let
         in
         python;
       pythonVersion = with sourceVersion; "${major}.${minor}";
+      abiFlags = lib.optionalString (!enableGIL) "t" + lib.optionalString enableDebug "d";
       libPrefix = "python${pythonVersion}${lib.optionalString (!enableGIL) "t"}";
     in
     passthruFun {
@@ -213,7 +214,7 @@ let
         pythonVersion
         ;
       implementation = "cpython";
-      executable = libPrefix;
+      executable = "python${pythonVersion}${abiFlags}";
       sitePackages = "lib/${libPrefix}/site-packages";
       inherit hasDistutilsCxxPatch pythonAttr;
       inherit (splices)
@@ -227,7 +228,7 @@ let
       pythonABITags = [
         "abi3"
         "none"
-        "cp${sourceVersion.major}${sourceVersion.minor}${lib.optionalString (!enableGIL) "t"}"
+        "cp${sourceVersion.major}${sourceVersion.minor}${abiFlags}"
       ];
     };
 
@@ -290,7 +291,7 @@ let
     ++ optionals withExpat [
       expat
     ]
-    ++ optionals (passthru.pythonAtLeast "3.14") [
+    ++ optionals (withZstd && passthru.pythonAtLeast "3.14") [
       zstd
     ]
     ++ optionals bluezSupport [
@@ -426,15 +427,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals (pythonAtLeast "3.11" && pythonOlder "3.13") [
     # backport fix for https://github.com/python/cpython/issues/95855
     ./platform-triplet-detection.patch
-  ]
-  ++ optionals (pythonAtLeast "3.14" && pythonOlder "3.15") [
-    # https://github.com/python/cpython/issues/146264
-    # https://github.com/python/cpython/pull/146265
-    ./3.14/hacl-static-ldeps-for-static-modules.patch
-  ]
-  ++ optionals (version == "3.13.10" || version == "3.14.1") [
-    # https://github.com/python/cpython/issues/142218
-    ./${lib.versions.majorMinor version}/gh-142218.patch
   ]
   ++ optionals (stdenv.hostPlatform.isMinGW) (
     let
@@ -861,6 +853,7 @@ stdenv.mkDerivation (finalAttrs: {
         "https://docs.python.org/release/${version}/whatsnew/changelog.html"
       else
         "https://docs.python.org/${majorMinor}/whatsnew/changelog.html#python-${dashedVersion}";
+    donationPage = "https://www.python.org/psf/donations/";
     description = "High-level dynamically-typed programming language";
     longDescription = ''
       Python is a remarkably powerful dynamic programming language that
@@ -877,7 +870,7 @@ stdenv.mkDerivation (finalAttrs: {
       lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.windows ++ lib.platforms.freebsd;
     mainProgram = executable;
     teams = [ lib.teams.python ];
-    # static build on x86_64-darwin/aarch64-darwin breaks with:
+    # static build on aarch64-darwin breaks with:
     # configure: error: C compiler cannot create executables
 
     # mingw patches only apply to Python 3.11 currently

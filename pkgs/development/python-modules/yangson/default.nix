@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "yangson";
-  version = "1.7.6";
+  version = "1.7.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CZ-NIC";
     repo = "yangson";
     tag = version;
-    hash = "sha256-goheMKny+ZH2twD1g3CvzocaiSIK50VPZZTAP+YCWx0=";
+    hash = "sha256-otvKjMsH2A4Zxs1ZeafTSDNUroSmxzOhw8P+V13uN88=";
   };
 
   build-system = [ poetry-core ];

@@ -21,7 +21,8 @@ buildGoModule (finalAttrs: {
     hash = "sha256-N5ckTnyA3mueZre+rMhFZBiAFgEu4pmtzkiUidXnan8=";
   };
 
-  vendorHash = "sha256-6H0KpLin+DqwEg5bdzaxj2CoNSneZ/ET43MTrrdF3h8=";
+  proxyVendor = true;
+  vendorHash = "sha256-SUnZ9uN43CAw/iHC8cPBm3nYD03d3Pg2pYS2PwjDCnE=";
 
   nativeBuildInputs = [
     asciidoctor
@@ -37,7 +38,7 @@ buildGoModule (finalAttrs: {
   subPackages = [ "." ];
 
   preBuild = ''
-    GOARCH= go generate ./commands
+    CC= GOOS= GOARCH= go generate ./commands
   '';
 
   postBuild = ''

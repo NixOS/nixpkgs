@@ -1,6 +1,7 @@
 import contextlib
 import dataclasses
 import fcntl
+import hashlib
 import logging
 import os
 import signal
@@ -124,6 +125,13 @@ def mk_veth(
     vlan: int,
 ) -> typing.Generator[None, None, None]:
     host_intf_name = f"{container_name}-{container_intf_name}"
+    # If the names for systemd-nspawn containers are too long,
+    # the generated bridge interface names will surpass the
+    # kernel limit IFNAMSIZ (15 characters + '\0').
+    if len(host_intf_name) > 15:
+        hashed = hashlib.sha256(host_intf_name.encode()).hexdigest()[:6]
+        host_intf_name = f"{host_intf_name[:8]}-{hashed}"
+
     with ensure_vlan_bridge(vlan) as bridge_name:
         logger.info("creating interface %s", host_intf_name)
         run_ip(
@@ -150,7 +158,7 @@ def mk_veth(
 def run(
     container_name: str,
     root_dir_str: str,
-    shared_dir_str: typing.Optional[str],
+    shared_dir_str: str | None,
     interfaces: dict,
     nspawn_options: list[str],
     init: str,
@@ -185,13 +193,6 @@ def run(
                 )
             )
 
-        def print_pid() -> None:
-            print(
-                f"systemd-nspawn's PID is {os.getpid()}",
-                # Need to flush stdout before systemd-nspawn gets exec-ed.
-                flush=True,
-            )
-
         shared_dir = Path(shared_dir_str) if shared_dir_str else None
 
         cp = subprocess.Popen(
@@ -208,7 +209,9 @@ def run(
                 init,
                 *cmdline,
             ],
-            preexec_fn=print_pid,
+        )
+        print(
+            f"systemd-nspawn's PID is {cp.pid}",
         )
 
         try:
