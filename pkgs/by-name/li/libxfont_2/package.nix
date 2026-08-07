@@ -41,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [ xorgproto ];
 
+  configureFlags = [ "--enable-fc" ];
+
   passthru = {
     updateScript = writeScript "update-${finalAttrs.pname}" ''
       #!/usr/bin/env nix-shell
