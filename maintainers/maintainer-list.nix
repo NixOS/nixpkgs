@@ -7955,6 +7955,12 @@
     matrix = "@edrex:matrix.org";
     name = "Eric Drechsel";
   };
+  edror12 = {
+    email = "edror01@tutamail.com";
+    github = "edror12";
+    githubId = 243646170;
+    name = "Emily Dror";
+  };
   edswordsmith = {
     email = "eduardo.espadeiro@tecnico.ulisboa.pt";
     github = "EdSwordsmith";
