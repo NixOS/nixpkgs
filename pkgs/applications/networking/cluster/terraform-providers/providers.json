@@ -815,13 +815,13 @@
     "vendorHash": "sha256-UuLHaOEG6jmOAgfdNOtLyUimlAr3g6K8n3Ehu64sKqk="
   },
   "keycloak_keycloak": {
-    "hash": "sha256-3KlfUM3qQwzRlUkuq+91z1VjRxIL3qcdCHfkVnfYJKQ=",
+    "hash": "sha256-XYY1xd8IHFSkVbEV6pxVHdnlSzbWgVAT+21mvri7qAs=",
     "homepage": "https://registry.terraform.io/providers/keycloak/keycloak",
     "owner": "keycloak",
     "repo": "terraform-provider-keycloak",
-    "rev": "v5.8.0",
+    "rev": "v5.9.0",
     "spdx": "Apache-2.0",
-    "vendorHash": "sha256-JTcIyUKoeCRxAzUWJy9FkMCYy3+D70uyzuiSTW3nHlA="
+    "vendorHash": "sha256-xzYkFRBLKGF8lf9vDG/dx4Qel6uGN1XpQLFrpVX2HWo="
   },
   "kislerdm_neon": {
     "hash": "sha256-NvAQY8uoTtBoyx6XF8rruaRXVRARAr1yFKFkBes6Css=",
