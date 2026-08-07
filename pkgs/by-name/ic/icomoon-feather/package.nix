@@ -5,7 +5,7 @@
 }:
 stdenvNoCC.mkDerivation {
   pname = "icomoon-feather";
-  version = "0-unstable-2024-05-11";
+  version = "0-unstable-2024-03-20";
 
   src = fetchFromGitHub {
     owner = "adi1090x";
