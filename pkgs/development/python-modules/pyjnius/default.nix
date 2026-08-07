@@ -4,17 +4,26 @@
   cython,
   fetchPypi,
   jdk,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyjnius";
   version = "1.7.0";
-  format = "setuptools";
+
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-n4FwhISwqE6tPrC6hOU6xXnkxDyhDHRvmJip891Q9U0=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "Cython~=3.1.2" "Cython"
+  '';
+
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [
     jdk
