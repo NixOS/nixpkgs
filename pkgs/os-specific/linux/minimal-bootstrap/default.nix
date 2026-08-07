@@ -166,18 +166,23 @@ lib.makeScope
           staticLibgcc = true;
         };
 
-        gcc-latest-unwrapped = callPackage ./gcc/latest.nix {
+        gcc-latest-unwrapped = callPackage ./gcc/ng.nix {
+          binutils-buildbuild = binutils;
+          binutils-buildtarget = binutils;
+          binutils-hosttarget = binutils;
           gcc = gcc10;
+          gcc-buildbuild = gcc10;
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
+          libc-headers = musl;
+          libc = musl;
+          targetPlatform = hostPlatform;
         };
         gcc-latest = callPackage ./gcc/wrapper.nix {
           bash-build = bash;
           gcc-unwrapped = gcc-latest-unwrapped;
           targetPlatform = hostPlatform;
           libc = musl;
-          libgcc = gcc-latest-unwrapped;
-          libstdcxx = gcc-latest-unwrapped;
           dynamicLinkerGlob = "${musl}/lib/libc.so";
           staticLibgcc = true;
         };
@@ -315,6 +320,26 @@ lib.makeScope
           gcc = gcc10;
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
+        };
+
+        libgcc = callPackage ./gcc/libgcc.nix {
+          binutils-buildbuild = binutils;
+          gcc-buildbuild = gcc10;
+          gcc = gcc-latest-unwrapped;
+          gnumake = gnumake-musl;
+          gnutar = gnutar-latest;
+          enableShared = false;
+          libc = musl;
+          libc-headers = musl;
+        };
+
+        libstdcxx = callPackage ./gcc/libstdcxx.nix {
+          gcc = gcc-latest-unwrapped;
+          gnumake = gnumake-musl;
+          gnutar = gnutar-latest;
+          libc = musl;
+          dynamicLinkerGlob = "${musl}/lib/libc.so";
+          staticLibgcc = true;
         };
 
         linux-headers = callPackage ./linux-headers {
@@ -490,7 +515,6 @@ lib.makeScope
             ''
             + (lib.strings.optionalString (hostPlatform.libc == "glibc") ''
               echo ${gcc-glibc.tests.hello-world}
-              echo ${glibc.tests.hello-world}
             '')
             + ''
               mkdir ''${out}
