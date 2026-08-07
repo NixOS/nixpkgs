@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "colemak-dh";
-  version = "0-unstable-2022-08-07";
+  version = "0-unstable-2022-08-09";
 
   src = fetchFromGitHub {
     owner = "ColemakMods";
