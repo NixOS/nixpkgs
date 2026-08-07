@@ -24,6 +24,10 @@ rec {
     "--enable-lto=thin,cross"
   ];
 
+  extraPreConfigure = ''
+    export MOZ_TELEMETRY_REPORTING=
+  '';
+
   extraPostPatch = ''
     while read patch_name; do
       echo "applying LibreWolf patch: $patch_name"
