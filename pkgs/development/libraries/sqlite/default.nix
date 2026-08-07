@@ -161,7 +161,7 @@ stdenv.mkDerivation rec {
     description = "Self-contained, serverless, zero-configuration, transactional SQL database engine";
     downloadPage = "https://sqlite.org/download.html";
     homepage = "https://www.sqlite.org/";
-    license = lib.licenses.publicDomain;
+    license = lib.licenses.blessing;
     mainProgram = "sqlite3";
     maintainers = with lib.maintainers; [ np ];
     teams = [ lib.teams.security-review ];
