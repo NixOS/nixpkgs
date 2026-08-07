@@ -287,20 +287,20 @@ lib.makeScope
         heirloom-devtools = callPackage ./heirloom-devtools { tinycc = tinycc-mes; };
 
         libgmp = callPackage ./gcc/gmp.nix {
-          gcc-buildbuild = gcc-latest;
-          gcc = gcc-latest;
+          gcc-buildbuild = gcc10;
+          gcc = gcc10;
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
         };
 
         libmpc = callPackage ./gcc/mpc.nix {
-          gcc = gcc-latest;
+          gcc = gcc10;
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
         };
 
         libmpfr = callPackage ./gcc/mpfr.nix {
-          gcc = gcc-latest;
+          gcc = gcc10;
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
         };
