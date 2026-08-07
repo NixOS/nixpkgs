@@ -7,7 +7,7 @@
 
 buildGoModule {
   pname = "goofys";
-  version = "unstable-2022-04-21";
+  version = "unstable-2022-05-16";
 
   src = fetchFromGitHub {
     owner = "kahing";
