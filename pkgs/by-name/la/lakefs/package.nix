@@ -12,13 +12,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "lakefs";
-  version = "1.84.1";
+  version = "1.85.0";
 
   src = fetchFromGitHub {
     owner = "treeverse";
     repo = "lakeFS";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-l9UxuiGiVaI8lxJfpvLlsphX13eEb+OP0colVAPmB78=";
+    hash = "sha256-SaqLfWB1bm3Rg0nGESnQzyi3IfPUHlLk83ES6IewzHw=";
   };
 
   webui = buildNpmPackage {
