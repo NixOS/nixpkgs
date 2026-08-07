@@ -6,18 +6,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "imgcrypt";
-  version = "2.0.2";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "imgcrypt";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-xHL+vxjGkjkDCEHMVOQsT6uokZq50iFAqGyDj6dDuG4=";
+    hash = "sha256-nr5M+xbu7TY9zZEBXmIAErIUZuOk0rxMIVrPdFMrg8s=";
   };
 
   modRoot = "cmd";
 
-  vendorHash = "sha256-tTRYEvqhQm1XpSvXDDXEx5piZYOxAtmcjf2dLL9fGck=";
+  vendorHash = "sha256-PuubaNqPHSVWqavV5oTNDn6ZiQDGoGnkAN9HS3JAcdA=";
 
   ldflags = [
     "-X github.com/containerd/containerd/version.Version=${finalAttrs.version}"

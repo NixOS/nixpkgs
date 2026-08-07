@@ -19,18 +19,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "distroshelf";
-  version = "1.4.8";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "ranfdev";
     repo = "DistroShelf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3O+KsOZzwH8E2rDSEgiVZK64B2wK1U/uDJ2z37NtJCg=";
+    hash = "sha256-6UAsG8K/j6lX6mwZOg5JZYbYUe98i6+nPaPLjQMM3w8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-lNKWcpdIr1tm2m50B9uOqFQvhndAEM5ADmmPBPb8sj4=";
+    hash = "sha256-0ZOgiLGvcjpBcYdEVrcerdIJBPMhS8sPtUOY4t+eUjg=";
   };
 
   nativeBuildInputs = [
