@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tiny library to interface with ALSA in the Linux kernel";
     license = lib.licenses.mit;
     pkgConfigModules = [ "tinyalsa" ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tmarkus ];
     platforms = with lib.platforms; linux;
   };
 })
