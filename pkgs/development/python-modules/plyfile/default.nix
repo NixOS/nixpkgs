@@ -1,4 +1,5 @@
 {
+  lib,
   fetchFromGitHub,
   buildPythonPackage,
 
@@ -35,6 +36,8 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "NumPy-based text/binary PLY file reader/writer for Python";
     homepage = "https://github.com/dranjan/python-plyfile";
+    changelog = "https://github.com/dranjan/python-plyfile/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
   };
 })
