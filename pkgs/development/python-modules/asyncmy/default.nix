@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "asyncmy";
   version = "0.2.13";
   pyproject = true;
@@ -15,11 +15,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "long2ice";
     repo = "asyncmy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-SoRnOd+GpJF6kaixl7v6/UpPgcr62tl9MGPvwO0IQdA=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     poetry-core
     setuptools
@@ -33,7 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to interact with MySQL/mariaDB";
     homepage = "https://github.com/long2ice/asyncmy";
+    changelog = "https://github.com/long2ice/asyncmy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
