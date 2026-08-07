@@ -28,16 +28,13 @@ let
 
   gettyCmd = args: "${lib.getExe' pkgs.util-linux "agetty"} ${escapeShellArgs baseArgs} ${args}";
 
-  autologinScript = ''
-    otherArgs="--noclear --keep-baud $TTY 115200,38400,9600 $TERM";
-    ${lib.optionalString cfg.autologinOnce ''
-      autologged="/run/agetty.autologged"
-      if test "$TTY" = tty1 && ! test -f "$autologged"; then
-        touch "$autologged"
-        exec ${gettyCmd "$otherArgs --autologin ${cfg.autologinUser}"}
-      fi
-    ''}
-    exec ${gettyCmd "$otherArgs"}
+  autologinOnceScript = otherArgs: ''
+    autologged="/run/agetty.autologged"
+    if test "$TTY" = tty1 && ! test -f "$autologged"; then
+      touch "$autologged"
+      exec ${gettyCmd "${otherArgs} --autologin ${cfg.autologinUser}"}
+    fi
+    exec ${gettyCmd otherArgs}
   '';
 
 in
@@ -179,7 +176,15 @@ in
       serviceConfig.ExecStart = [
         # override upstream default with an empty ExecStart
         ""
-        (pkgs.writers.writeDash "getty" autologinScript)
+        (
+          let
+            args = "--noclear --keep-baud $TTY 115200,38400,9600 $TERM";
+          in
+          if cfg.autologinOnce then
+            (pkgs.writers.writeDash "getty" (autologinOnceScript args))
+          else
+            gettyCmd args
+        )
       ];
       environment.TTY = "%I";
       restartIfChanged = false;
