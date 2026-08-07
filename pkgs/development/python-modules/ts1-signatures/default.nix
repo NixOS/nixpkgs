@@ -9,7 +9,7 @@
 }:
 buildPythonPackage {
   pname = "ts1-signatures";
-  version = "0-unstable-2024-08-10";
+  version = "0-unstable-2024-04-17";
   pyproject = true;
 
   src = fetchFromGitHub {
