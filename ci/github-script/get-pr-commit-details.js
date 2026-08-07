@@ -84,7 +84,6 @@ async function getCommitDetailsForPR({ core, pr, repoPath }) {
             'log',
             '--format=%s\t%aN\t%aE\t%cN\t%cE',
             '--name-only',
-            '-m',
             '-1',
             sha,
           ],
