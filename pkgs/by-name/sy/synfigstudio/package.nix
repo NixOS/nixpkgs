@@ -5,6 +5,7 @@
   pkg-config,
   autoreconfHook,
   wrapGAppsHook3,
+  gitUpdater,
 
   cairo,
   ffmpeg,
@@ -37,23 +38,29 @@ let
     hash = "sha256-5jVd+YqHVHKkePXBb3zjXEVlgdlU6Yb6LC4CurvsBtE=";
   };
 
-  ETL = stdenv.mkDerivation {
+  ETL = stdenv.mkDerivation (finalAttrs: {
     pname = "ETL";
     inherit version src;
 
     sourceRoot = "${src.name}/ETL";
 
+    __structuredAttrs = true;
+    strictDeps = true;
+
     nativeBuildInputs = [
       pkg-config
       autoreconfHook
     ];
-  };
+  });
 
-  synfig = stdenv.mkDerivation {
+  synfig = stdenv.mkDerivation (finalAttrs: {
     pname = "synfig";
     inherit version src;
 
     sourceRoot = "${src.name}/synfig-core";
+
+    __structuredAttrs = true;
+    strictDeps = true;
 
     configureFlags = lib.optionals stdenv.cc.isClang [
       # Newer versions of clang default to C++17, but synfig and some of its dependencies use deprecated APIs that
@@ -86,13 +93,16 @@ let
       ffmpeg
       libmng
     ];
-  };
+  });
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "synfigstudio";
   inherit version src;
 
   sourceRoot = "${src.name}/synfig-studio";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   postPatch = ''
     patchShebangs images/splash_screen_development.sh
@@ -140,13 +150,17 @@ stdenv.mkDerivation {
   passthru = {
     # Expose libraries and cli tools
     inherit ETL synfig;
+
+    updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
   meta = {
     description = "2D animation program";
     homepage = "https://www.synfig.org";
+    changelog = "https://github.com/synfig/synfig/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
+    mainProgram = "synfigstudio";
     maintainers = [ ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})
