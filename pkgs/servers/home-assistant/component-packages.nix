@@ -7451,7 +7451,8 @@
       ];
     "vizio" =
       ps: with ps; [
-      ]; # missing inputs: vizaio
+        vizaio
+      ];
     "vlc" =
       ps: with ps; [
         python-vlc
@@ -9053,6 +9054,7 @@
     "vilfo"
     "vistapool"
     "vivotek"
+    "vizio"
     "vlc_telnet"
     "vodafone_station"
     "voicerss"
