@@ -14,6 +14,7 @@
   python3,
   gitUpdater,
   pkgsStatic,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,6 +25,13 @@ stdenv.mkDerivation rec {
     url = "mirror://kernel/linux/utils/net/iproute2/iproute2-${version}.tar.xz";
     hash = "sha256-/Z+huVgJQXFXyoPdcpV+MmG9vOiWNTy5NvgK8LM6S1w=";
   };
+
+  patches = lib.optionals stdenv.hostPlatform.isMusl [
+    (fetchpatch {
+      url = "https://hina.lysator.liu.se/pub/gentoo-portage/sys-apps/iproute2/files/iproute2-6.18.0-musl.patch";
+      sha256 = "0q8d7166gm5w7zik7ki7y4hqnfndphd86rnjh7ijfab00qx6cvcl";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace Makefile \
