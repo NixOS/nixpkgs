@@ -212,52 +212,65 @@ in
             nw = cfg.notifications.wall;
             nx = cfg.notifications.x11;
 
-            smartdNotify = pkgs.writeScript "smartd-notify.sh" ''
-              #! ${pkgs.runtimeShell}
-              ${lib.optionalString nm.enable ''
-                {
-                ${pkgs.coreutils}/bin/cat << EOF
-                From: smartd on ${host} <${nm.sender}>
-                To: ${nm.recipient}
-                Subject: $SMARTD_SUBJECT
+            smartdNotify = pkgs.writeShellApplication {
+              name = "smartd-notify.sh";
+              runtimeInputs =
+                with pkgs;
+                [
+                  coreutils
+                ]
+                ++ lib.optionals nm.enable [ smartmontools ]
+                ++ lib.optionals ns.enable [ dbus ]
+                ++ lib.optionals nw.enable [ util-linux ]
+                ++ lib.optionals nx.enable [ xmessage ];
 
-                $SMARTD_FULLMESSAGE
-                EOF
+              text = ''
+                ${lib.optionalString nm.enable ''
+                  {
+                  cat << EOF
+                  From: smartd on ${host} <${nm.sender}>
+                  To: ${nm.recipient}
+                  Subject: $SMARTD_SUBJECT
 
-                ${pkgs.smartmontools}/sbin/smartctl -a -d "$SMARTD_DEVICETYPE" "$SMARTD_DEVICE"
-                } | ${nm.mailer} -i "${nm.recipient}"
-              ''}
-              ${lib.optionalString ns.enable ''
-                ${pkgs.dbus}/bin/dbus-send --system \
-                  / net.nuetzlich.SystemNotifications.Notify \
-                  "string:Problem detected with disk: $SMARTD_DEVICESTRING" \
-                  "string:Warning message from smartd is: $SMARTD_MESSAGE"
-              ''}
-              ${lib.optionalString nw.enable ''
-                {
-                ${pkgs.coreutils}/bin/cat << EOF
-                Problem detected with disk: $SMARTD_DEVICESTRING
-                Warning message from smartd is:
+                  $SMARTD_FULLMESSAGE
+                  EOF
 
-                $SMARTD_MESSAGE
-                EOF
-                } | ${pkgs.util-linux}/bin/wall 2>/dev/null
-              ''}
-              ${lib.optionalString nx.enable ''
-                export DISPLAY=${nx.display}
-                {
-                ${pkgs.coreutils}/bin/cat << EOF
-                Problem detected with disk: $SMARTD_DEVICESTRING
-                Warning message from smartd is:
+                  smartctl -a -d "$SMARTD_DEVICETYPE" "$SMARTD_DEVICE"
+                  } | ${nm.mailer} -i "${nm.recipient}"
+                ''}
+                ${lib.optionalString ns.enable ''
+                  dbus-send --system \
+                    / net.nuetzlich.SystemNotifications.Notify \
+                    "string:Problem detected with disk: $SMARTD_DEVICESTRING" \
+                    "string:Warning message from smartd is: $SMARTD_MESSAGE"
+                ''}
+                ${lib.optionalString nw.enable ''
+                  {
+                  cat << EOF
+                  Problem detected with disk: $SMARTD_DEVICESTRING
+                  Warning message from smartd is:
 
-                $SMARTD_FULLMESSAGE
-                EOF
-                } | ${pkgs.xmessage}/bin/xmessage -file - 2>/dev/null &
-              ''}
-            '';
+                  $SMARTD_MESSAGE
+                  EOF
+                  } | wall 2>/dev/null
+                ''}
+                ${lib.optionalString nx.enable ''
+                  export DISPLAY=${nx.display}
+                  {
+                  cat << EOF
+                  Problem detected with disk: $SMARTD_DEVICESTRING
+                  Warning message from smartd is:
+
+                  $SMARTD_FULLMESSAGE
+                  EOF
+                  } | xmessage -file - 2>/dev/null &
+                ''}
+              '';
+            };
 
             notifyOpts = lib.optionalString (nm.enable || ns.enable || nw.enable || nx.enable) (
-              "-m <nomailer> -M exec ${smartdNotify} " + lib.optionalString cfg.notifications.test "-M test "
+              "-m <nomailer> -M exec ${lib.getExe smartdNotify} "
+              + lib.optionalString cfg.notifications.test "-M test "
             );
 
             smartdConf = pkgs.writeText "smartd.conf" ''
