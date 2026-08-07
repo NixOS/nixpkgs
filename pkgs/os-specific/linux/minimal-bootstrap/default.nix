@@ -532,10 +532,28 @@ lib.makeScope
         test = tests.full;
       }
       // (lib.optionalAttrs (hostPlatform.libc == "glibc")) {
-        gcc-glibc = callPackage ./gcc/glibc.nix {
+        gcc-glibc-unwrapped = callPackage ./gcc/ng.nix {
+          binutils-buildbuild = binutils;
+          binutils-buildtarget = binutils;
+          binutils-hosttarget = binutils-static;
           gcc = gcc-latest;
+          gcc-buildbuild = gcc-latest;
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
+          libc = glibc;
+          libc-headers = glibc;
+          targetPlatform = hostPlatform;
+        };
+
+        gcc-glibc = callPackage ./gcc/wrapper.nix {
+          bash-build = bash;
+          bash = bash-static;
+          binutils = binutils-static;
+          gcc-unwrapped = gcc-glibc-unwrapped;
+          libc = glibc;
+          targetPlatform = hostPlatform;
+          dynamicLinkerGlob = "${glibc}/lib/ld-linux*.so.2";
+          staticLibgcc = true;
         };
 
         glibc = callPackage ./glibc {
