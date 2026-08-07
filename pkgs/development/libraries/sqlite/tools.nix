@@ -39,7 +39,7 @@ let
       meta = {
         inherit description homepage mainProgram;
         downloadPage = "http://sqlite.org/download.html";
-        license = lib.licenses.publicDomain;
+        license = lib.licenses.blessing;
         maintainers = with lib.maintainers; [ johnazoidberg ];
         platforms = lib.platforms.unix;
       };
