@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "i3-auto-layout";
-  version = "unstable-2022-05-29";
+  version = "unstable-2022-03-29";
 
   src = fetchFromGitHub {
     owner = "chmln";
