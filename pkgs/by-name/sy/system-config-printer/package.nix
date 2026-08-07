@@ -9,7 +9,7 @@
   wrapGAppsHook3,
   docbook_xml_dtd_412,
   docbook_xsl,
-  libxml2,
+  libxml2Python,
   desktop-file-utils,
   libusb1,
   cups,
@@ -30,16 +30,23 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+let
+  libxml2 = libxml2Python;
+in
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "system-config-printer";
   version = "1.5.18";
 
   src = fetchFromGitHub {
     owner = "openPrinting";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-l3HEnYycP56vZWREWkAyHmcFgtu09dy4Ds65u7eqNZk=";
+    repo = "system-config-printer";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-l3HEnYycP56vZWREWkAyHmcFgtu09dy4Ds65u7eqNZk=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   prePatch = ''
     # for automake
@@ -53,7 +60,7 @@ stdenv.mkDerivation rec {
     # fix typeerror, remove on next release
     (fetchpatch {
       url = "https://github.com/OpenPrinting/system-config-printer/commit/399b3334d6519639cfe7f1c0457e2475b8ee5230.patch";
-      sha256 = "sha256-JCdGmZk2vRn3X1BDxOJaY3Aw8dr0ODVzi0oY20ZWfRs=";
+      hash = "sha256-JCdGmZk2vRn3X1BDxOJaY3Aw8dr0ODVzi0oY20ZWfRs=";
       excludes = [ "NEWS" ];
     })
 
@@ -145,4 +152,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
   };
-}
+})
