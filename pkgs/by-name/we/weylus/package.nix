@@ -35,7 +35,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "weylus";
-  version = "unstable-2025-10-08";
+  version = "unstable-2025-09-09";
 
   src = fetchFromGitHub {
     owner = "H-M-H";
