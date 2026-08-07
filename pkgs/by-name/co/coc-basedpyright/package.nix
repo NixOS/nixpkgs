@@ -7,7 +7,7 @@
 buildNpmPackage {
   pname = "coc-basedpyright";
   # No tagged releases, this version is inferred from <https://www.npmjs.com/package/coc-basedpyright>
-  version = "1.19.0-unstable-2025-04-30";
+  version = "1.19.0-unstable-2025-04-07";
 
   src = fetchFromGitHub {
     owner = "fannheyward";
