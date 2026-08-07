@@ -7,7 +7,8 @@
   pytestCheckHook,
   poetry-core,
 }:
-buildPythonPackage rec {
+
+buildPythonPackage (finalAttrs: {
   pname = "napalm-ros";
   version = "1.2.6";
   pyproject = true;
@@ -15,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "napalm-automation-community";
     repo = "napalm-ros";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Fv11Blx44vZZ8NuhQQIFpDr+dH2gDJtQP7b0kAk3U/s=";
   };
 
@@ -50,9 +51,9 @@ buildPythonPackage rec {
   meta = {
     description = "MikroTik RouterOS NAPALM driver";
     homepage = "https://github.com/napalm-automation-community/napalm-ros";
-    changelog = "https://github.com/napalm-automation-community/napalm-ros/releases/tag/${src.tag}";
+    changelog = "https://github.com/napalm-automation-community/napalm-ros/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ felbinger ];
   };
-}
+})
