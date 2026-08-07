@@ -106,13 +106,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       imports = [
         (lib.modules.importApply ./service-autoconnect.nix { inherit pkgs; })
       ];
-      package = finalAttrs.finalPackage.out;
+      autoconnect.package = finalAttrs.finalPackage;
     };
     services.autoendpoint = {
       imports = [
         (lib.modules.importApply ./service-autoendpoint.nix { inherit pkgs; })
       ];
-      package = finalAttrs.finalPackage.out;
+      autoendpoint.package = finalAttrs.finalPackage;
     };
 
     updateScript = nix-update-script { };
