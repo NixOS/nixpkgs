@@ -55,6 +55,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Sigma-based threat hunting and fast forensics timeline generator for Windows event logs";
     homepage = "https://github.com/Yamato-Security/hayabusa";
+    changelog = "https://github.com/Yamato-Security/hayabusa/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
       jk
