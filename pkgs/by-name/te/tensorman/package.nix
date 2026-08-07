@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "tensorman";
-  version = "0.1.0-unstable-2024-06-24";
+  version = "0.1.0-unstable-2024-07-24";
 
   src = fetchFromGitHub {
     owner = "pop-os";
