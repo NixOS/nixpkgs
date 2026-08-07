@@ -8,7 +8,7 @@
 mkTmuxPlugin {
   pluginName = "tmux-which-key";
   rtpFilePath = "plugin.sh.tmux";
-  version = "0-unstable-2024-06-08";
+  version = "0-unstable-2024-07-08";
   buildInputs = [
     check-jsonschema
     (python3.withPackages (ps: with ps; [ pyyaml ]))
