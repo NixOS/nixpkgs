@@ -18,7 +18,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "syzkaller";
-  version = "0-unstable-2024-01-09";
+  version = "0-unstable-2025-01-09";
 
   src = fetchFromGitHub {
     owner = "google";
