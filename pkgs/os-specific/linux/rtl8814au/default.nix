@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation {
   pname = "rtl8814au";
-  version = "${kernel.version}-unstable-2024-05-26";
+  version = "${kernel.version}-unstable-2024-04-25";
 
   src = fetchFromGitHub {
     owner = "morrownr";
