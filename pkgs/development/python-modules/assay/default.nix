@@ -8,7 +8,7 @@
 
 buildPythonPackage {
   pname = "assay";
-  version = "0-unstable-2024-05-09";
+  version = "0-unstable-2024-03-09";
   pyproject = true;
 
   src = fetchFromGitHub {
