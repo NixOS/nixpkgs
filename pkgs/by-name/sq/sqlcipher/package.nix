@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     TCLLIBDIR = "${placeholder "out"}/lib/tcl${lib.versions.majorMinor tcl.version}";
   };
 
-  # Rename files from sqlite3 to sqlcipher to prevent file collisons
+  # Rename files from sqlite3 to sqlcipher to prevent file collisions
   postInstall = ''
     mv $out/bin/{sqlite3,sqlcipher}
     mkdir $out/include/sqlcipher

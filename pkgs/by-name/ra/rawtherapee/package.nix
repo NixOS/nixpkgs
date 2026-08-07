@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "5.12";
 
   src = fetchurl {
-    # The developers ask not to use the tarball from Github releases, see
+    # The developers ask not to use the tarball from GitHub releases, see
     # https://www.rawtherapee.com/downloads/5.12/#news-relevant-to-package-maintainers
     url = "https://rawtherapee.com/shared/source/rawtherapee-${finalAttrs.version}.tar.xz";
     hash = "sha256-2abBBTfWSihbxGVnX+WaqpTOMiOCPfvs8K4slZkILVc=";

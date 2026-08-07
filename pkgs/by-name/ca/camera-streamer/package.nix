@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   };
 
   # not sure why the -Werror isn't being an issue for the project maintainer
-  # my best guess is it's because the project README specifices
+  # my best guess is it's because the project README specifies
   # "Debian Bookworm" as a requirement which provides gcc12 by default
   postPatch = ''
     sed -i 's|git submodule update.*||' Makefile

@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/brona/iproute2mac";
-    description = "CLI wrapper for basic network utilites on Mac OS X inspired with iproute2 on Linux systems - ip command";
+    description = "CLI wrapper for basic network utilities on Mac OS X inspired with iproute2 on Linux systems - ip command";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jiegec ];
     platforms = lib.platforms.darwin;

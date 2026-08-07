@@ -177,7 +177,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Only Ladybird and WebContent need wrapped, if Qt is enabled.
-  # On linux we end up wraping some non-Qt apps, like headless-browser.
+  # On linux we end up wrapping some non-Qt apps, like headless-browser.
   dontWrapQtApps = stdenv.hostPlatform.isDarwin;
 
   passthru.tests = {

@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "Steganographic image analyzer, solver and data extractor for challanges";
+    description = "Steganographic image analyzer, solver and data extractor for challenges";
     homepage = "https://www.wechall.net/forum/show/thread/527/Stegsolve_1.3/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
