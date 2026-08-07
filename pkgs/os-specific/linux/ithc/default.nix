@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "ithc";
-  version = "unstable-2022-06-07";
+  version = "unstable-2022-06-05";
 
   src = fetchFromGitHub {
     owner = "quo";
