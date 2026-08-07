@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   pname = "lx";
   version = "0.40.2";
 
+  __structuredAttrs = true; # required for new packages (NPV-166)
+
   src = fetchFromGitHub {
     owner = "lumen-oss";
     repo = "lux";
