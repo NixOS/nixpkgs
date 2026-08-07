@@ -168,6 +168,8 @@ lib.makeScope
           libc = musl;
           libgcc = gcc-latest-unwrapped;
           libstdcxx = gcc-latest-unwrapped;
+          dynamicLinkerGlob = "${musl}/lib/libc.so";
+          staticLibgcc = true;
         };
 
         gnugrep = callPackage ./gnugrep {
