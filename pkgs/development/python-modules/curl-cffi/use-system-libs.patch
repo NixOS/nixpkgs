@@ -1,0 +1,38 @@
+--- a/scripts/build.py
++++ b/scripts/build.py
+@@ -122,27 +122,8 @@ def get_curl_libraries():
+ ffibuilder = FFI()
+ system = platform.system()
+ root_dir = Path(__file__).parent.parent
+-download_libcurl()
+-
+-# With mega archive, we only have one to link
+-static_libs = get_curl_archives()
+ extra_link_args = []
+-if is_static:
+-    if system == "Darwin":
+-        extra_link_args = [
+-            f"-Wl,-force_load,{static_libs[0]}",
+-            "-lc++",
+-        ]
+-    elif system in ("Linux", "Android"):
+-        cxx_lib = "-lc++" if is_android else "-lstdc++"
+-        extra_link_args = [
+-            "-Wl,--whole-archive",
+-            static_libs[0],
+-            "-Wl,--no-whole-archive",
+-            cxx_lib,
+-        ]
+-
+-libraries = get_curl_libraries()
++libraries = ["curl-impersonate"]
+ 
+ ffibuilder.set_source(
+     "curl_cffi._wrapper",
+@@ -160,7 +132,7 @@ ffibuilder.set_source(
+     """,
+     library_dirs=[str(libdir)],
+-    libraries=get_curl_libraries(),
++    libraries=libraries,
+     extra_objects=[],  # linked via extra_link_args
+     source_extension=".c",

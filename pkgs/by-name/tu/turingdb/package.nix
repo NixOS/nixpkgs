@@ -1,0 +1,153 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  python3,
+  gitMinimal,
+  bison,
+  flex,
+  inih,
+  minio-cpp,
+  arrow-cpp,
+  curl,
+  curlpp,
+  nlohmann_json,
+  openssl,
+  openblas,
+  pugixml,
+  faiss,
+  zlib,
+  llvmPackages_20,
+  versionCheckHook,
+
+  config,
+  cudaSupport ? config.cudaSupport,
+  cudaPackages,
+}:
+
+let
+  turingstdenv =
+    if stdenv.hostPlatform.isDarwin then
+      llvmPackages_20.stdenv
+    else if cudaSupport then
+      cudaPackages.backendStdenv
+    else
+      stdenv;
+in
+turingstdenv.mkDerivation (finalAttrs: {
+  pname = "turingdb";
+  version = "1.33";
+
+  __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "turing-db";
+    repo = "turingdb";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-osxz5x8lxMZM5/qTc5Xx3YDMMPeGYyN2aO9pX+kERgo=";
+
+    fetchSubmodules = true;
+
+    leaveDotGit = true;
+    postFetch = ''
+      git -C $out log -1 --format=%H > $out/HEAD_COMMIT_HASH
+      git -C $out log -1 --format=%ct > $out/HEAD_COMMIT_TIMESTAMP
+      rm -rf $out/.git
+    '';
+  };
+
+  postPatch = ''
+    substituteInPlace storage/dump/DumpConfig.h \
+      --replace-fail HEAD_COMMIT_TIMESTAMP "$(cat $src/HEAD_COMMIT_TIMESTAMP)"
+
+    substituteInPlace io/parquet/CMakeLists.txt \
+      --replace-fail "Parquet::parquet_static" "Parquet::parquet_shared"
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'COMMAND git rev-parse HEAD' 'COMMAND cat HEAD_COMMIT_HASH' \
+      --replace-fail 'COMMAND git show --no-patch --format=%at' 'COMMAND cat HEAD_COMMIT_TIMESTAMP'
+
+    substituteInPlace tools/turingdb/TuringDBTool.cpp \
+      --replace-fail '"turingdb", "1.0"' '"turingdb", "${finalAttrs.version}"'
+
+    for dir in test samples regress fuzz examples; do
+      substituteInPlace CMakeLists.txt --replace-fail "add_subdirectory($dir)" ""
+    done
+  '';
+
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    bison
+    cmake
+    flex
+    gitMinimal
+    pkg-config
+    python3
+  ]
+  ++ lib.optionals cudaSupport [
+    # Needed by transitive dependency faiss
+    cudaPackages.cuda_nvcc
+  ];
+
+  buildInputs = [
+    arrow-cpp
+    curl
+    curlpp
+    faiss
+    inih
+    minio-cpp
+    nlohmann_json
+    openblas
+    openssl
+    pugixml
+    zlib
+  ]
+  ++ lib.optionals turingstdenv.isDarwin [ llvmPackages_20.openmp ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.cc.lib ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+    cudaPackages.libcublas
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "NIX_BUILD" true)
+    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-fopenmp")
+    (lib.cmakeFeature "CMAKE_EXE_LINKER_FLAGS" "-lgomp")
+    (lib.cmakeFeature "FLEX_INCLUDE_DIR" "${lib.getDev flex}/include")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeFeature "OpenMP_CXX_FLAGS" "-fopenmp")
+    (lib.cmakeFeature "OpenMP_CXX_LIB_NAMES" "omp")
+    (lib.cmakeFeature "OpenMP_omp_LIBRARY" "${lib.getLib llvmPackages_20.openmp}/lib/libomp.dylib")
+  ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  # Upstream tests require running a TuringDB server and performing
+  # network operations, which are incompatible with the Nix build sandbox.
+  doCheck = false;
+
+  meta = {
+    description = "High performance in-memory column-oriented graph database engine";
+    longDescription = ''
+      TuringDB is a high-performance in-memory column-oriented graph
+      database engine designed for analytical and read-intensive workloads.
+    '';
+    homepage = "https://turingdb.ai";
+    changelog = "https://github.com/turing-db/turingdb/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.bsl11;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-darwin"
+    ];
+    mainProgram = "turingdb";
+    maintainers = with lib.maintainers; [
+      cyrusknopf
+      drupol
+      roquess
+    ];
+  };
+})

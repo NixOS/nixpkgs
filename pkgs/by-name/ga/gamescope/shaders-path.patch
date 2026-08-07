@@ -1,0 +1,13 @@
+diff --git a/src/Utils/DirHelpers.cpp b/src/Utils/DirHelpers.cpp
+index df0cf34..2b82176 100644
+--- a/src/Utils/DirHelpers.cpp
++++ b/src/Utils/DirHelpers.cpp
+@@ -25,7 +25,7 @@ namespace gamescope {
+ 
+     std::string GetUsrDir()
+     {
+-        return "/usr";
++        return "@out@";
+     }
+ 
+     std::string_view GetConfigDir()

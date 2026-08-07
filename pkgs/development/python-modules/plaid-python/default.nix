@@ -1,0 +1,41 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nulltype,
+  python-dateutil,
+  urllib3,
+  setuptools,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "plaid-python";
+  version = "42.0.0";
+  pyproject = true;
+
+  src = fetchPypi {
+    pname = "plaid_python";
+    inherit (finalAttrs) version;
+    hash = "sha256-3+AMimjYDU9BEKOgOp3IsEcPjGPazgZQ93kDLerM90k=";
+  };
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    nulltype
+    python-dateutil
+    urllib3
+  ];
+
+  # Tests require a Client IP
+  doCheck = false;
+
+  pythonImportsCheck = [ "plaid" ];
+
+  meta = {
+    description = "Python client library for the Plaid API and Link";
+    homepage = "https://github.com/plaid/plaid-python";
+    changelog = "https://github.com/plaid/plaid-python/blob/master/CHANGELOG.md";
+    license = lib.licenses.mit;
+  };
+})

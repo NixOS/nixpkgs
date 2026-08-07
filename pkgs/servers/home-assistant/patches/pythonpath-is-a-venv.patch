@@ -1,0 +1,17 @@
+diff --git a/homeassistant/util/package.py b/homeassistant/util/package.py
+index 21149f43cb2..faf3cdbd31d 100644
+--- a/homeassistant/util/package.py
++++ b/homeassistant/util/package.py
+@@ -32,8 +32,10 @@ class InstalledPackage(TypedDict):
+ def is_virtual_env() -> bool:
+     """Return if we run in a virtual environment."""
+     # Check supports venv && virtualenv
+-    return getattr(sys, "base_prefix", sys.prefix) != sys.prefix or hasattr(
+-        sys, "real_prefix"
++    return (
++        getattr(sys, "base_prefix", sys.prefix) != sys.prefix
++        or hasattr(sys, "real_prefix")
++        or "PYTHONPATH" in os.environ
+     )
+ 
+ 

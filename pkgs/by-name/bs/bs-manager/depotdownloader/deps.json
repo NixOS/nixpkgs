@@ -1,0 +1,72 @@
+[
+  {
+    "pname": "Microsoft.NETCore.Platforms",
+    "version": "5.0.0",
+    "hash": "sha256-LIcg1StDcQLPOABp4JRXIs837d7z0ia6+++3SF3jl1c="
+  },
+  {
+    "pname": "Microsoft.Win32.Registry",
+    "version": "5.0.0",
+    "hash": "sha256-9kylPGfKZc58yFqNKa77stomcoNnMeERXozWJzDcUIA="
+  },
+  {
+    "pname": "Microsoft.Windows.CsWin32",
+    "version": "0.3.275",
+    "hash": "sha256-sqIFj1dNatchuS9R7sk0Os6vSoSXFjm20qppvnnw78c="
+  },
+  {
+    "pname": "Microsoft.Windows.SDK.Win32Docs",
+    "version": "0.1.42-alpha",
+    "hash": "sha256-6DvzmNzrGVfWmNJNqooj+Ya+7bAQlyeg7pmyKaUlIws="
+  },
+  {
+    "pname": "Microsoft.Windows.SDK.Win32Metadata",
+    "version": "63.0.31-preview",
+    "hash": "sha256-MMvQoyVT15IU93EKZ46rhP/hyx3wV452vuFnf8OTd60="
+  },
+  {
+    "pname": "Microsoft.Windows.SDK.Win32Metadata",
+    "version": "70.0.11-preview",
+    "hash": "sha256-JRcTFlzV+sDfgUKPtn0oOn25SdNivmhbS8+0HcAozu8="
+  },
+  {
+    "pname": "Microsoft.Windows.WDK.Win32Metadata",
+    "version": "0.13.25-experimental",
+    "hash": "sha256-eQeaRJ2PYhBSvK8TA55BHRwbd67EqJzwTZZRjQphlhc="
+  },
+  {
+    "pname": "protobuf-net",
+    "version": "3.2.56",
+    "hash": "sha256-KjwRHyGwflQDjVaudT+NjRnfGhHb4CpCfn9hHVixI+E="
+  },
+  {
+    "pname": "protobuf-net.Core",
+    "version": "3.2.56",
+    "hash": "sha256-NVvLreCvvvnS/s0syL5/L3mRpXeswP7E71C6WP9f2Dc="
+  },
+  {
+    "pname": "SteamKit2",
+    "version": "3.3.1",
+    "hash": "sha256-f6kc15RKNxCSIlynlVHU8fBqQ7N8nG1xV3DNbBlRmvo="
+  },
+  {
+    "pname": "System.IO.Hashing",
+    "version": "9.0.8",
+    "hash": "sha256-Jj1XwumBjBa5LJqSVTN2naQJ0FM4wwPvZS8NxGd5Hnw="
+  },
+  {
+    "pname": "System.Security.AccessControl",
+    "version": "5.0.0",
+    "hash": "sha256-ueSG+Yn82evxyGBnE49N4D+ngODDXgornlBtQ3Omw54="
+  },
+  {
+    "pname": "System.Security.Principal.Windows",
+    "version": "5.0.0",
+    "hash": "sha256-CBOQwl9veFkrKK2oU8JFFEiKIh/p+aJO+q9Tc2Q/89Y="
+  },
+  {
+    "pname": "ZstdSharp.Port",
+    "version": "0.8.6",
+    "hash": "sha256-rc3YWP80fykqujDsD72SXOA1tBDoy2KrvVETOC8eTx8="
+  }
+]

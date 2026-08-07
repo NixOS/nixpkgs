@@ -1,0 +1,98 @@
+From 6a7cb95c5af4537bad72bad9b190e09cb6d7883c Mon Sep 17 00:00:00 2001
+From: cexen <cexenial@gmail.com>
+Date: Sun, 21 Jan 2024 21:01:29 +0900
+Subject: [PATCH] replace PyMem_* to PyMem_Raw*
+
+Fixes #72.
+---
+ c_src/posix_mutex.c     | 4 ++--
+ c_src/simpleaudio.c     | 8 ++++----
+ c_src/simpleaudio_win.c | 8 ++++----
+ 3 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/c_src/posix_mutex.c b/c_src/posix_mutex.c
+index 533a3f1..04619f1 100644
+--- a/c_src/posix_mutex.c
++++ b/c_src/posix_mutex.c
+@@ -10,14 +10,14 @@ MIT License (see LICENSE.txt)
+ 
+ void* create_mutex() {
+   void* mutex;
+-  mutex = PyMem_Malloc(sizeof(pthread_mutex_t));
++  mutex = PyMem_RawMalloc(sizeof(pthread_mutex_t));
+   pthread_mutex_init((pthread_mutex_t*)mutex, NULL);
+   return mutex;
+ }
+ 
+ void destroy_mutex(void* mutex) {
+   pthread_mutex_destroy((pthread_mutex_t*)mutex);
+-  PyMem_Free(mutex);
++  PyMem_RawFree(mutex);
+ }
+ 
+ void grab_mutex(void* mutex) {
+diff --git a/c_src/simpleaudio.c b/c_src/simpleaudio.c
+index edacba3..b0b24b8 100644
+--- a/c_src/simpleaudio.c
++++ b/c_src/simpleaudio.c
+@@ -219,7 +219,7 @@ void delete_list_item(play_item_t* play_item) {
+         play_item->prev_item->next_item = play_item->next_item;
+     }
+     destroy_mutex(play_item->mutex);
+-    PyMem_Free(play_item);
++    PyMem_RawFree(play_item);
+ }
+ 
+ /*********************************************/
+@@ -228,7 +228,7 @@ play_item_t* new_list_item(play_item_t* list_head) {
+     play_item_t* new_item;
+     play_item_t* old_tail;
+ 
+-    new_item = PyMem_Malloc(sizeof(play_item_t));
++    new_item = PyMem_RawMalloc(sizeof(play_item_t));
+     new_item->next_item = NULL;
+ 
+     old_tail = list_head;
+@@ -269,13 +269,13 @@ void destroy_audio_blob(audio_blob_t* audio_blob) {
+     grab_mutex(audio_blob->list_mutex);
+     delete_list_item(audio_blob->play_list_item);
+     release_mutex(audio_blob->list_mutex);
+-    PyMem_Free(audio_blob);
++    PyMem_RawFree(audio_blob);
+ }
+ 
+ /********************************************/
+ 
+ audio_blob_t* create_audio_blob() {
+-    audio_blob_t* audio_blob = PyMem_Malloc(sizeof(audio_blob_t));
++    audio_blob_t* audio_blob = PyMem_RawMalloc(sizeof(audio_blob_t));
+ 
+     dbg1("created audio blob at %p\n", audio_blob);
+ 
+diff --git a/c_src/simpleaudio_win.c b/c_src/simpleaudio_win.c
+index 5aed022..ba79d23 100644
+--- a/c_src/simpleaudio_win.c
++++ b/c_src/simpleaudio_win.c
+@@ -57,8 +57,8 @@ MMRESULT fill_buffer(WAVEHDR* wave_header, audio_blob_t* audio_blob) {
+         if (audio_blob->num_buffers > 0) {
+             dbg2("done buffering - dellocating a buffer\n");
+ 
+-            PyMem_Free(wave_header->lpData);
+-            PyMem_Free(wave_header);
++            PyMem_RawFree(wave_header->lpData);
++            PyMem_RawFree(wave_header);
+             audio_blob->num_buffers--;
+         }
+         if (audio_blob->num_buffers == 0) {
+@@ -182,9 +182,9 @@ PyObject* play_os(Py_buffer buffer_obj, int len_samples, int num_channels, int b
+     dbg1("allocating %d buffers of %d bytes\n", NUM_BUFS, buffer_size);
+ 
+     for (i = 0; i < NUM_BUFS; i++) {
+-        temp_wave_hdr = PyMem_Malloc(sizeof(WAVEHDR));
++        temp_wave_hdr = PyMem_RawMalloc(sizeof(WAVEHDR));
+         memset(temp_wave_hdr, 0, sizeof(WAVEHDR));
+-        temp_wave_hdr->lpData = PyMem_Malloc(buffer_size);
++        temp_wave_hdr->lpData = PyMem_RawMalloc(buffer_size);
+         temp_wave_hdr->dwBufferLength = buffer_size;
+ 
+         result = fill_buffer(temp_wave_hdr, audio_blob);

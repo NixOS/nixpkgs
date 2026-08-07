@@ -1,0 +1,11 @@
+--- a/naiveproxy/src/build/config/mac/BUILD.gn
++++ b/naiveproxy/src/build/config/mac/BUILD.gn
+@@ -14,7 +14,7 @@ import("//build/toolchain/siso.gni")
+ # is applied to all targets. It is here to separate out the logic.
+ config("compiler") {
+   # These flags are shared between the C compiler and linker.
+-  common_mac_flags = []
++  common_mac_flags = [ "-I@libresolv@/include" ]
+ 
+   # CPU architecture.
+   _archs_mapping_os = archs_mapping[current_os]

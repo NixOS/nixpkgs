@@ -1,0 +1,141 @@
+diff --git a/ki/__init__.py b/ki/__init__.py
+index 3f29c1a..f4ad950 100644
+--- a/ki/__init__.py
++++ b/ki/__init__.py
+@@ -1321,7 +1321,7 @@ def _clone1(collection: str, directory: str = "") -> git.Repo:
+     try:
+         col = M.collection(col_file)
+         _, _ = _clone2(col, targetdir, msg="Initial commit", silent=False)
+-        col.close(save=False)
++        col.close()
+         kirepo: KiRepo = M.kirepo(targetdir)
+         kirepo.repo.create_tag(LCA)
+         kirepo.repo.close()
+@@ -1404,11 +1404,11 @@ def _pull1() -> None:
+     hashes = list(filter(lambda l: l != "", hashes))
+     if md5sum in hashes[-1]:
+         echo("ki pull: up to date.")
+-        col.close(save=False)
++        col.close()
+         return
+ 
+     col = _pull2(kirepo, col)
+-    col.close(save=False)
++    col.close()
+ 
+ 
+ @beartype
+@@ -1545,7 +1545,7 @@ def _push() -> PushResult:
+     # If there are no changes, quit.
+     if len(set(deltas)) == 0:
+         echo("ki push: up to date.")
+-        col.close(save=False)
++        col.close()
+         return PushResult.UP_TO_DATE
+ 
+     echo(f"Pushing to '{kirepo.col_file}'")
+@@ -1603,7 +1603,7 @@ def write_collection(
+     do(warn, F.cat(map(push_note(tempcol, timestamp_ns, guids, new_nids), decknotes)))
+ 
+     # It is always safe to save changes to the DB, since the DB is a copy.
+-    tempcol.close(save=True)
++    tempcol.close()
+ 
+     # Backup collection file and overwrite collection.
+     backup(kirepo)
+@@ -1621,7 +1621,7 @@ def write_collection(
+     renames = filter(lambda a: a.file.name != a.new_name, map(addmedia(col), mbytes))
+     warnings = map(lambda r: RenamedMediaFileWarning(r.file.name, r.new_name), renames)
+     do(warn, warnings)
+-    col.close(save=True)
++    col.close()
+ 
+     # Append and commit collection checksum to hashes file.
+     append_md5sum(kirepo.ki, kirepo.col_file.name, F.md5(kirepo.col_file))
+diff --git a/tests/test_integration.py b/tests/test_integration.py
+index e046b8c..93d3661 100644
+--- a/tests/test_integration.py
++++ b/tests/test_integration.py
+@@ -320,7 +320,7 @@ def test_clone_generates_deck_tree_correctly():
+     # Create empty decks.
+     col = opencol(a)
+     do(col.decks.id, [":a:::b:", "blank::blank", "blank::Hello"])
+-    col.close(save=True)
++    col.close()
+ 
+     os.chdir(F.mkdtemp())
+     clone(a)
+@@ -401,7 +401,7 @@ def test_clone_writes_media_files():
+     a: File = mkcol([("Basic", ["Default"], 1, ["a", "b[sound:1sec.mp3]"])])
+     col = opencol(a)
+     col.media.add_file(DATA / "media/1sec.mp3")
+-    col.close(save=True)
++    col.close()
+     clone(a)
+     assert (Path(MEDIA) / "1sec.mp3").is_file()
+ 
+@@ -883,7 +883,7 @@ def test_push_writes_media():
+     write_basic("Default", ("air", '<img src="bullhorn-lg.png">'))
+     col = opencol(a)
+     col.media.add_file(DATA / "media/bullhorn-lg.png")
+-    col.close(save=True)
++    col.close()
+     F.commitall(repo, ".")
+     repo.close()
+     out = push()
+@@ -987,7 +987,7 @@ def test_push_doesnt_unnecessarily_deduplicate_notetypes():
+ 
+     col = opencol(a)
+     models = col.models.all_names_and_ids()
+-    col.close(save=False)
++    col.close()
+ 
+     # Remove a note.
+     assert os.path.isfile("Default/a.md")
+@@ -1012,7 +1012,7 @@ def test_push_doesnt_unnecessarily_deduplicate_notetypes():
+ 
+     col = opencol(a)
+     assert len(models) == len(col.models.all_names_and_ids())
+-    col.close(save=False)
++    col.close()
+ 
+ 
+ def test_push_is_nontrivial_when_pushed_changes_are_reverted_in_repository():
+diff --git a/tests/test_ki.py b/tests/test_ki.py
+index 5270b56..e5f3297 100644
+--- a/tests/test_ki.py
++++ b/tests/test_ki.py
+@@ -482,7 +482,7 @@ def mkcol(ns: List[NoteSpec]) -> File:
+     file = F.touch(F.mkdtemp(), "a.anki2")
+     col = opencol(file)
+     do(addnote(col), ns)
+-    col.close(save=True)
++    col.close()
+     return F.chk(file)
+ 
+ 
+@@ -491,7 +491,7 @@ def rm(f: File, nid: int) -> File:
+     """Remove note with given `nid`."""
+     col = opencol(f)
+     col.remove_notes([nid])
+-    col.close(save=True)
++    col.close()
+     return f
+ 
+ 
+@@ -514,7 +514,7 @@ def edit(f: File, spec: NoteSpec) -> File:
+     """Edit a note with specified nid."""
+     col = opencol(f)
+     editnote(col, spec)
+-    col.close(save=True)
++    col.close()
+     return f
+ 
+ 
+@@ -531,7 +531,7 @@ def editcol(
+     do(addnote(col), adds)
+     do(editnote(col), edits)
+     col.remove_notes(deletes)
+-    col.close(save=True)
++    col.close()
+     return f

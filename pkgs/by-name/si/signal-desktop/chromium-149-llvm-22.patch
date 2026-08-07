@@ -1,0 +1,30 @@
+diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
+index f977c9fed76e6f50c50351ca22128e8c8c8897b1..81460f3591b734f3354a6f9ac7bb0990e5b28889 100644
+--- a/build/config/compiler/BUILD.gn
++++ b/build/config/compiler/BUILD.gn
+@@ -589,7 +589,7 @@ config("compiler") {
+     # Flags for diagnostics.
+     cflags += [ "-fcolor-diagnostics" ]
+     if (!is_win) {
+-      cflags += [ "-fdiagnostics-show-inlining-chain" ]
++      cflags += [ ]
+     } else {
+       # Combine after https://github.com/llvm/llvm-project/pull/192241
+       cflags += [ "/clang:-fdiagnostics-show-inlining-chain" ]
+@@ -1911,7 +1911,7 @@ config("clang_warning_suppression") {
+ # See also: https://crbug.com/40891132#comment10
+ ubsan_hardening("c_array_bounds") {
+   sanitizer = "array-bounds"
+-  condition = !(is_asan && target_cpu == "x86")
++  condition = false
+ 
+   # Because we've enabled array-bounds sanitizing we also want to suppress
+   # the related warning about "unsafe-buffer-usage-in-static-sized-array",
+@@ -1925,6 +1925,7 @@ ubsan_hardening("c_array_bounds") {
+ # `NOTREACHED()` at the end of such functions.
+ ubsan_hardening("return") {
+   sanitizer = "return"
++  condition = false
+ }
+ 
+ config("rustc_revision") {

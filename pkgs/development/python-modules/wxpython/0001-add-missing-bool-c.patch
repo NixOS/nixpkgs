@@ -1,0 +1,41 @@
+From f16912c7932ecc1cceb2fd9565fcae37bfd0447b Mon Sep 17 00:00:00 2001
+From: wxt <3264117476@qq.com>
+Date: Tue, 22 Oct 2024 11:07:58 +0800
+Subject: [PATCH] tt
+
+---
+ sip/siplib/bool.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+ create mode 100644 sip/siplib/bool.c
+
+diff --git a/sip/siplib/bool.c b/sip/siplib/bool.c
+new file mode 100644
+index 0000000..781babb
+--- /dev/null
++++ b/sip/siplib/bool.c
+@@ -0,0 +1,22 @@
++// This contains all the C++ code that is needed by the sip module.
++//
++// Copyright (c) 2015 Riverbank Computing Limited <info@riverbankcomputing.com>
++//
++// This file is part of SIP.
++//
++// This copy of SIP is licensed for use under the terms of the SIP License
++// Agreement.  See the file LICENSE for more details.
++//
++// This copy of SIP may also used under the terms of the GNU General Public
++// License v2 or v3 as published by the Free Software Foundation which can be
++// found in the files LICENSE-GPL2 and LICENSE-GPL3 included in this package.
++//
++// SIP is supplied WITHOUT ANY WARRANTY; without even the implied warranty of
++// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
++
++
++// Set a C++ bool for the main C implementation of the module.
++extern "C" void sipSetBool(void *ptr, int val)
++{
++    *reinterpret_cast<bool *>(ptr) = !!val;
++}
+-- 
+2.46.1
+
