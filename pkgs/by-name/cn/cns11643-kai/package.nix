@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "cns11643-kai";
-  version = "0-unstable-2025-01-13";
+  version = "0-unstable-2025-03-20";
 
   src = fetchFromGitHub {
     owner = "rypervenche";
