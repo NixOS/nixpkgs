@@ -33,6 +33,8 @@ let
   ];
 
   configureFlags = [
+    # otherwise the binary links dynamically and pulls gcc into the closure
+    "LDFLAGS=--static"
     "--prefix=${placeholder "out"}"
     "--build=${buildPlatform.config}"
     "--host=${hostPlatform.config}"

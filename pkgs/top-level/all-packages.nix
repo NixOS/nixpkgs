@@ -1851,12 +1851,11 @@ with pkgs;
 
   comet-gog_heroic = callPackage ../by-name/co/comet-gog/package.nix { comet-gog_kind = "heroic"; };
 
-  coreutils = callPackage ../tools/misc/coreutils { };
-
-  # The coreutils above are built with dependencies from
-  # bootstrapping. We cannot override it here, because that pulls in
-  # openssl from the previous stage as well.
-  coreutils-full = callPackage ../tools/misc/coreutils { minimal = false; };
+  # The `coreutils` package (in pkgs/by-name) is built with dependencies from
+  # bootstrapping. We cannot override it for `coreutils-full`, because that
+  # pulls in openssl from the previous stage as well.
+  # `coreutils-prefixed` does not use openssl, though, so it can be overridden.
+  coreutils-full = callPackage ../by-name/co/coreutils/package.nix { minimal = false; };
   coreutils-prefixed = coreutils.override {
     withPrefix = true;
     singleBinary = false;
@@ -7060,14 +7059,6 @@ with pkgs;
     ];
   };
 
-  sbcl_2_6_5 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.6.5"; };
-    faslExt = "fasl";
-    flags = [
-      "--dynamic-space-size"
-      "3000"
-    ];
-  };
   sbcl_2_6_6 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl { version = "2.6.6"; };
     faslExt = "fasl";
@@ -7076,7 +7067,15 @@ with pkgs;
       "3000"
     ];
   };
-  sbcl = sbcl_2_6_6;
+  sbcl_2_6_7 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.6.7"; };
+    faslExt = "fasl";
+    flags = [
+      "--dynamic-space-size"
+      "3000"
+    ];
+  };
+  sbcl = sbcl_2_6_7;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 

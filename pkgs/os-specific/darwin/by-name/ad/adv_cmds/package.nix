@@ -74,8 +74,10 @@ mkAppleDerivation {
         --replace-fail '/usr/local' "$out"
     done
   '';
-
-  env.NIX_CFLAGS_COMPILE = "-I${privateHeaders}/include";
+  env.NIX_CFLAGS_COMPILE = lib.join " " [
+    "-I${privateHeaders}/include"
+    "-Wno-error=incompatible-pointer-types"
+  ];
 
   buildInputs = [
     libxo

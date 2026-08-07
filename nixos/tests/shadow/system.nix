@@ -4,6 +4,7 @@ let
   controllerPython = pkgs.python3.withPackages (ps: [
     ps.flaky
     ps.jc
+    ps.passlib
     ps.pytest
     ps.pytest-mh
     ps.pytest-ticket
@@ -35,6 +36,7 @@ in
         environment.systemPackages = with pkgs; [
           shadow
           expect
+          vim
         ];
 
         users.defaultUserShell = "/bin/sh";

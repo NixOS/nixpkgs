@@ -97,6 +97,8 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 
+  __structuredAttrs = true;
+
   meta = {
     changelog = "https://github.com/besser82/libxcrypt/blob/v${finalAttrs.version}/NEWS";
     description = "Extended crypt library for descrypt, md5crypt, bcrypt, and others";

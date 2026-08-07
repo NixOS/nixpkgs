@@ -14,6 +14,16 @@ gappsWrapperArgsHook() {
         gappsWrapperArgs+=(--set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE")
     fi
 
+    # Per the XDG Base Directories Specification, XDG_DATA_DIRS
+    # defaults to /usr/local/share/:/usr/share/ if unset.  To preserve
+    # the transparency of the wrapper, continue including these paths
+    # if XDG_DATA_DIRS is not set outside the wrapper.  This is
+    # important for programs to work properly on non-NixOS systems
+    # where these paths exist.
+    if [ -n "$GSETTINGS_SCHEMAS_PATH" ] || [ -d "${prefix:?}/share" ]; then
+        gappsWrapperArgs+=(--set-default XDG_DATA_DIRS /usr/local/share/:/usr/share/)
+    fi
+
     if [ -n "$GSETTINGS_SCHEMAS_PATH" ]; then
         gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH")
     fi
