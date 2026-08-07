@@ -15807,6 +15807,8 @@ self: super: with self; {
 
   pyschlage = callPackage ../development/python-modules/pyschlage { };
 
+  pyscorpiontrack = callPackage ../development/python-modules/pyscorpiontrack { };
+
   pyscreenshot = callPackage ../development/python-modules/pyscreenshot { };
 
   pyscreeze = callPackage ../development/python-modules/pyscreeze { };
