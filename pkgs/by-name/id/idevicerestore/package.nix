@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "idevicerestore";
-  version = "1.0.0-unstable-2026-07-26";
+  version = "1.0.0-unstable-2026-06-25";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
