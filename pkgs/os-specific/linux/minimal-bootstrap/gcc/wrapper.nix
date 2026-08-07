@@ -5,6 +5,7 @@
   xz,
   bash-build,
   gnused,
+  buildPlatform,
   targetPlatform,
   libc,
   libgcc,
@@ -25,7 +26,30 @@ bash-build.runCommand "${pname}-${gcc-unwrapped.version}"
     version = gcc-unwrapped.version;
     meta = gcc-unwrapped.meta;
     nativeBuildInputs = [ gnused ];
-    passthru.unwrapped = gcc-unwrapped;
+    passthru = {
+      unwrapped = gcc-unwrapped;
+      tests.hello-world =
+        result:
+        bash-build.runCommand "${pname}-simple-program-${gcc-unwrapped.version}"
+          {
+            nativeBuildInputs = [
+              binutils
+              result
+            ];
+          }
+          ''
+            cat <<EOF >> test.c
+            #include <stdio.h>
+            int main() {
+              printf("Hello World!\n");
+              return 0;
+            }
+            EOF
+            ${targetPlatform.config}-gcc -o test test.c
+            ${lib.optionalString (buildPlatform.canExecute targetPlatform) "./test"}
+            mkdir $out
+          '';
+    };
   }
   ''
     if [[ -z '${dynamicLinkerGlob}' ]]; then
