@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation {
   pname = "icamerasrc-${ipu6-camera-hal.ipuVersion}";
-  version = "unstable-2025-12-26";
+  version = "unstable-2025-09-26";
 
   src = fetchFromGitHub {
     owner = "intel";
