@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   dependencies = with python3.pkgs; [
     beautifulsoup4
-    datauri
+    python-datauri
     docutils
     fastapi
     graphviz
@@ -81,7 +81,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/strictdoc-project/strictdoc";
     changelog = "https://github.com/strictdoc-project/strictdoc/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.puzzlewolf ];
+    maintainers = with lib.maintainers; [
+      dadada
+      puzzlewolf
+    ];
     mainProgram = "strictdoc";
   };
 })

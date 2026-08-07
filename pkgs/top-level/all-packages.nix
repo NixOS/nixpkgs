@@ -6454,7 +6454,6 @@ with pkgs;
   };
 
   inherit (callPackages ../development/libraries/openssl { })
-    openssl_1_1
     openssl_3
     openssl_3_5
     openssl_3_6
@@ -9375,6 +9374,13 @@ with pkgs;
     bdbSupport = false;
     perlBindings = true;
     pythonBindings = true;
+  };
+
+  syncstorage-rs-mysql = callPackage ../by-name/sy/syncstorage-rs/package.nix {
+    dbBackend = "mysql";
+  };
+  syncstorage-rs-pgsql = callPackage ../by-name/sy/syncstorage-rs/package.nix {
+    dbBackend = "postgresql";
   };
 
   synergyWithoutGUI = synergy.override { withGUI = false; };

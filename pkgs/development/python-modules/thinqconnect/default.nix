@@ -20,6 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-0efPQ0fvBLi+Bp+JbBMRJPYFqRKBVpPQFyQ9rvHpEnY=";
   };
 
+  patches = [
+    # https://github.com/thinq-connect/pythinqconnect/pull/48
+    ./csr-generation-fix.patch
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [

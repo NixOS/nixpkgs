@@ -1182,7 +1182,6 @@ let
         ];
         MODULE_COMPRESS_ALL = whenAtLeast "6.12" yes;
         MODULE_COMPRESS_XZ = yes;
-        MODULE_DECOMPRESS = whenAtLeast "6.0" yes;
 
         SYSVIPC = yes; # System-V IPC
 

@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  testers,
 }:
 let
   # The web client verifies that the server version is a valid datetime string:
@@ -29,33 +30,20 @@ buildGoModule (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "silo";
-  version = "2026-06-18T00-00-00Z";
+  version = "2026-08-04T00-00-00Z";
 
   src = fetchFromGitHub {
     owner = "pgsty";
     repo = "minio";
     tag = "RELEASE.${finalAttrs.version}";
-    hash = "sha256-TwuqWof8FozryQoZt1lybw7z8z8E3Ose4jbKZ0To2lk=";
+    hash = "sha256-F5gyhSBVH4RUoOyo+8UQ0RXuraXkGVO/mGkuFIi0hoc=";
   };
 
-  vendorHash = "sha256-rewz3Sez/01iWGCEhMVmcVnIxxjgBzmeUyMqFi6s4mc=";
+  vendorHash = "sha256-gDcO0q6beKEGSs6MM/C3iKC2+eFk1o6Ug5KLMmK12ek=";
 
   subPackages = [ "." ];
 
   env.CGO_ENABLED = 0;
-
-  # nixpkgs go_1_26 pinned to 1.26.3; pgsty/minio's go.mod says go 1.26.4.
-  # Step down to 1.26.3 to use the available toolchain. If pgsty/minio
-  # genuinely needs 1.26.4 features, we can replace this with one of:
-  #   - Go toolchain auto-switch: prePatch GOTOOLCHAIN=go1.26.4+auto
-  #     (fails inside Nix sandbox since GOPROXY=off blocks toolchain download)
-  #   - Override go: buildGoModule.override { go = go_1_26.overrideAttrs ... }
-  #     (compile go 1.26.4 from source, ~5–10 min)
-  #   - Wait for nixpkgs to bump go_1_26 past 1.26.4
-  postPatch = ''
-    substituteInPlace go.mod \
-      --replace-fail "go 1.26.4" "go 1.26.3"
-  '';
 
   tags = [ "kqueue" ];
 
@@ -75,6 +63,11 @@ buildGoModule (finalAttrs: {
   postInstall = ''
     ln -s "$out/bin/minio" "$out/bin/silo"
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    version = "RELEASE.${finalAttrs.version}";
+  };
 
   meta = {
     description = "Community-maintained fork of MinIO packaged as silo";

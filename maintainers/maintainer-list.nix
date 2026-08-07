@@ -12107,6 +12107,12 @@
     githubId = 157678;
     keys = [ { fingerprint = "E864 BDFA AB55 36FD C905  5195 DBF2 52AF FB26 19FD"; } ];
   };
+  irgendeinwer = {
+    name = "Irgendeinwer";
+    email = "irgendeinwer@proton.me";
+    github = "Irgendeinwer";
+    githubId = 175053643;
+  };
   ironicbadger = {
     email = "alexktz@gmail.com";
     github = "ironicbadger";
@@ -30461,6 +30467,12 @@
     email = "wsh@2x.cz";
     github = "wentasah";
     githubId = 140542;
+  };
+  weriomat = {
+    name = "Elias Engel";
+    email = "nixpkgs@weriomat.com";
+    github = "weriomat";
+    githubId = 59094810;
   };
   wesleyjrz = {
     email = "dev@wesleyjrz.com";

@@ -77,6 +77,8 @@ mapAliases {
   # keep-sorted start case=no numeric=yes
   abjad = throw "'abjad' was removed due to lack of maintenance"; # Added 2026-03-24
   abodepy = throw "'abodepy' has been renamed to/replaced by 'jaraco-abode'"; # Converted to throw 2025-10-29
+  adbc-driver-bigquery = throw "'adbc-driver-bigquery' has been removed due to being archived upstream"; # added 2026-08-05
+  adbc-driver-snowflake = throw "'adbc-driver-snowflake' has been removed due to being archived upstream"; # added 2026-08-05
   advocate = throw "'advocate' has been removed due to being archived upstream and unused"; # added 2026-07-01
   aioinflux = throw "'aioinflux' was removed because it is abandoned upstream. For InfluxDB v2+ support, please use the official Python client library"; # Added 2026-01-15
   aiosasl = throw "'aiosasl' was removed because it is abandoned upstream and does not work on modern Python versions."; # Added 2026-06-28
@@ -174,6 +176,7 @@ mapAliases {
   dataclasses-serialization = throw "'dataclasses-serialization' has been removed due to lack of upstream maintenance."; # added 2026-07-14
   datashape = throw "'datashape' has been removed as it was unmaintained upstream"; # Added 2026-03-22
   datatable = throw "'datatable' has been removed due to lack of upstream maintenance"; # added 2026-02-02
+  datauri = warnAlias "'datauri' has been renamed to by 'python-datauri'" python-datauri; # Added 2026-07-28
   dateutil = throw "'dateutil' has been renamed to/replaced by 'python-dateutil'"; # Converted to throw 2025-10-29
   debian = throw "'debian' has been renamed to/replaced by 'python-debian'"; # Converted to throw 2025-10-29
   dedupe-pylbfgs = pylbfgs; # added 2026-06-28
@@ -410,6 +413,7 @@ mapAliases {
   mullvad-closest = throw "'mullvad-closest' has been removed as it was unmaintained. Consider using 'mullvad-compass' instead."; # Added 2026-01-13
   multi_key_dict = throw "'multi_key_dict' has been renamed to/replaced by 'multi-key-dict'"; # Converted to throw 2025-10-29
   mutag = throw "mutag has been removed because it is unmaintained since 2018"; # added 2025-05-25
+  mypermobil = throw "'mypermobil' was removed because Home Assistant dropped the integration"; # added 2026-08-05
   mysql-connector = mysql-connector-python; # added 2026-06-21
   napari-npe2 = warnAlias "napari-npe2 has been renamed to 'npe2'" npe2; # added 2026-07-28
   net2grid = throw "'net2grid' has been renamed to/replaced by 'gridnet'"; # Converted to throw 2025-10-29
@@ -559,6 +563,7 @@ mapAliases {
   python-aodhclient = aodhclient; # added 2026-07-28
   python-bring-api = throw "python-bring-api was removed because Home Assistant switched to bring-api"; # added 2025-10-03
   python-clementine-remote = throw "'python-clementine-remote' was removed because Home Assistant dropped the integration"; # Added 2026-06-04
+  python-djvulibre = djvulibre-python; # Added 2026-08-07
   python-ethtool = throw "'python-ethtool' has been renamed to/replaced by 'ethtool'"; # Converted to throw 2025-10-29
   python-igraph = throw "'python-igraph' has been renamed to/replaced by 'igraph'"; # Converted to throw 2025-10-29
   python-jsonrpc-server = throw "python-jsonrpc-server has been removed because it was no longer used by anything"; # added 2025-11-11
@@ -587,6 +592,7 @@ mapAliases {
   pyupdate = throw "'pyupdate' has been removed because it was unused and unmaintained upstream"; # added 2026-06-11
   pyvicare-neo = throw "'pyvicare-neo' has been renamed to/replaced by 'pyvicare'"; # Converted to throw 2025-10-29
   PyVirtualDisplay = throw "'PyVirtualDisplay' has been renamed to/replaced by 'pyvirtualdisplay'"; # Converted to throw 2025-10-29
+  pyvizio = throw "'pyvizio' was removed because Home Assistant switched to 'vizaio'"; # added 2026-08-05
   pyvoro = throw "pyvoro has been removed because it is unmaintained upstream and has been marked as broken since 2023."; # Added 2025-10-11
   pywal = pywal16; # added 2026-02-01
   pywlroots = throw "pywlroots has been removed because it was no longer used by anything"; # added 2026-02-25
@@ -707,6 +713,7 @@ mapAliases {
   tvdb_api = throw "'tvdb_api' has been renamed to/replaced by 'tvdb-api'"; # Converted to throw 2025-10-29
   tweedledum = throw "'tweedledum' has been removed due to lack of upstream maintenance."; # Added 2025-11-22
   typed-ast = throw "typed-ast was removed because it went end of life in July 2023"; # added 2025-05-24
+  typedmonarchmoney = throw "'typedmonarchmoney' was removed because Home Assistant switched to 'monarchmoneycommunity'"; # added 2026-08-05
   typer-slim = warnAlias "typer-slim was an alias package of typer that only depended on it and has been removed." typer; # added 2026-02-16
   types-typed-ast = throw "types-typed-ast was removed because so was typed-ast"; # added 2025-05-24
   typesentry = throw "typesentry was removed because it was broken and unmaintained"; # added 2026-02-02

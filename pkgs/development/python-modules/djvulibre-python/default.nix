@@ -11,7 +11,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "python-djvulibre";
+  pname = "djvulibre-python";
   version = "0.9.3";
   pyproject = true;
 
