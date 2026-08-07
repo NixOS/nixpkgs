@@ -29,7 +29,7 @@
 
 buildPythonPackage {
   pname = "misaki";
-  version = "0-unstable-2025-06-16";
+  version = "0-unstable-2025-04-30";
   pyproject = true;
 
   src = fetchFromGitHub {
