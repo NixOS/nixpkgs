@@ -116,6 +116,12 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://github.com/google-gemini/gemini-cli";
     license = lib.licenses.asl20;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    problems.removal = {
+      message = "Unpaid tier and Google AI Pro/Ultra users: Gemini CLI was replaced by Antigravity CLI.";
+      urls = [
+        "https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/"
+      ];
+    };
     maintainers = with lib.maintainers; [
       brantes
       xiaoxiangmoe
