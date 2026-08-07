@@ -23,7 +23,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oculante";
-  version = "0.9.2.1-unstable-2025-10-08";
+  version = "0.9.2.1-unstable-2025-08-30";
 
   src = fetchFromGitHub {
     owner = "woelper";
