@@ -28,13 +28,10 @@ let
     hash = "sha256-N/YA8r7zxegwAUcFlWiyouQKetbMxlzpQlVtSUKcxmc=";
   };
 
-  linkerFile =
-    {
-      x86_64-linux = "ld-linux-x86-64";
-      i686-linux = "ld-linux";
-    }
-    .${buildPlatform.system};
-
+  # FIXME: eventually, prefix unconditionally
+  binutilsTargetPrefix = lib.optionalString (
+    hostPlatform.config != buildPlatform.config
+  ) "${hostPlatform.config}-";
 in
 bash.runCommand "${pname}-${version}"
   {
@@ -71,11 +68,18 @@ bash.runCommand "${pname}-${version}"
     # Configure
     mkdir build
     cd build
+
+    LIBGCC_LIB="${libgcc}/lib/gcc/${hostPlatform.config}/${libgcc.version}"
+    export CFLAGS="-B$LIBGCC_LIB -Wl,-rpath,$LIBGCC_LIB -O1 -Wno-error=attribute-alias -Wno-error=maybe-uninitialized -fexceptions"
+    export AR=${binutils}/bin/${binutilsTargetPrefix}ar
+    export OBJCOPY=${binutils}/bin/${binutilsTargetPrefix}objcopy
+    export OBJDUMP=${binutils}/bin/${binutilsTargetPrefix}objdump
+    export NM=${binutils}/bin/${binutilsTargetPrefix}nm
+    export READELF=${binutils}/bin/${binutilsTargetPrefix}readelf
+    export STRIP=${binutils}/bin/${binutilsTargetPrefix}strip
+    export LDFLAGS="-B$LIBGCC_LIB"
     # libstdc++.so is built against musl and fails to link
-    LIBGCC_PATH="${libgcc}/lib/gcc/${hostPlatform.config}/${libgcc.version}"
     export CXX=false
-    export CFLAGS="-B$LIBGCC_PATH -Wl,-rpath,$LIBGCC_PATH -O1 -Wno-error=attribute-alias -Wno-error=maybe-uninitialized -fexceptions"
-    export LDFLAGS="-B$LIBGCC_PATH"
     bash ../configure \
       --prefix=$out \
       --build=${buildPlatform.config} \
@@ -86,7 +90,8 @@ bash.runCommand "${pname}-${version}"
       --disable-build-nscd \
       --disable-profile \
       --disable-timezone-tools \
-      --disable-mathvec
+      --disable-mathvec \
+      --with-binutils=${binutils}/bin
 
     # Build
     make -j $NIX_BUILD_CORES sysdep-LDFLAGS="$LDFLAGS"
@@ -94,7 +99,7 @@ bash.runCommand "${pname}-${version}"
     # Install
     make -j $NIX_BUILD_CORES INSTALL_UNCOMPRESSED=yes install
     ln -s $(ls -d ${linux-headers}/include/* | grep -v scsi\$) $out/include/
-    find $out/{bin,sbin,lib,libexec} -type f -exec strip --strip-unneeded {} + || true
+    find $out/{bin,sbin,lib,libexec} -type f -exec ${binutilsTargetPrefix}strip --strip-unneeded {} + || true
 
     # localedef + iconv() are never invoked downstream of this glibc
     rm -rf $out/share/i18n $out/lib/gconv $out/share/locale
