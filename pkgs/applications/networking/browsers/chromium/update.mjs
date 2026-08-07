@@ -170,6 +170,10 @@ async function fetch_chromedriver_binaries(version) {
   const url = (platform) => `https://storage.googleapis.com/chrome-for-testing-public/${version}/${platform}/chromedriver-${platform}.zip`
   return {
     version,
+    // Do not remove x86_64-darwin from the update script/lockfile until 26.05 is EOL, as
+    // chromium bumps (which chromedriver is part of) are annoying to backport otherwise.
+    // See https://github.com/NixOS/nixpkgs/pull/541166#discussion_r3599248819
+    hash_darwin: await prefetch(url('mac-x64')),
     hash_darwin_aarch64: await prefetch(url('mac-arm64')),
   }
 }
