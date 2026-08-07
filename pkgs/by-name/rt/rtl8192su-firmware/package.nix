@@ -5,7 +5,7 @@
 }:
 stdenvNoCC.mkDerivation {
   pname = "rtl8192su-firmware";
-  version = "0-unstable-2016-10-05";
+  version = "0-unstable-2016-12-17";
 
   src = fetchFromGitHub {
     owner = "chunkeey";
