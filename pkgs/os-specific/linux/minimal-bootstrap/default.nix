@@ -462,7 +462,7 @@ lib.makeScope
               echo ${gcc46.tests.get-version}
               echo ${gcc46-cxx.tests.hello-world}
               echo ${gcc10.tests.hello-world}
-              echo ${gcc-latest-unwrapped.tests.hello-world}
+              echo ${gcc-latest.tests.hello-world}
             ''
             + (lib.strings.optionalString (hostPlatform.libc == "glibc") ''
               echo ${gcc-glibc.tests.hello-world}
