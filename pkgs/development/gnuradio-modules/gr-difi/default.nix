@@ -14,7 +14,7 @@
 
 mkDerivation {
   pname = "gr-difi";
-  version = "0-unstable-2025-08-16";
+  version = "0-unstable-2025-08-26";
 
   src = fetchFromGitHub {
     owner = "DIFI-Consortium";
