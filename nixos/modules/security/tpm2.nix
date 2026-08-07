@@ -400,9 +400,13 @@ in
 
       {
         environment.etc."tpm2-tss/fapi-config.json".source = fapiConfig;
+        # Use Z to adjust ownership recursively, as setgid causes new files to inherit group, but not user.
+        # See also https://github.com/tpm2-software/tpm2-tss/issues/1816
         systemd.tmpfiles.rules = [
-          "d ${cfg.fapi.logDir} 2750 ${cfg.tssUser} ${cfg.tssGroup} -"
-          "d ${cfg.fapi.systemDir} 2770 root ${cfg.tssGroup} -"
+          "d ${cfg.fapi.systemDir} 2770 ${cfg.tssUser} ${cfg.tssGroup} - -"
+          "Z ${cfg.fapi.systemDir} ~2770 ${cfg.tssUser} ${cfg.tssGroup} - -"
+          "d ${cfg.fapi.logDir} 2770 ${cfg.tssUser} ${cfg.tssGroup} - -"
+          "Z ${cfg.fapi.logDir} ~2770 ${cfg.tssUser} ${cfg.tssGroup} - -"
         ];
       }
     ]
