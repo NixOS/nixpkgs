@@ -52,7 +52,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "opensoldat";
-  version = "unstable-2025-10-21";
+  version = "unstable-2025-10-16";
 
   src = fetchFromGitHub {
     name = "opensoldat";
