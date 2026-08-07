@@ -115,7 +115,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       GaetanLepage
-      adamcstephens
     ];
     mainProgram = "river";
     platforms = lib.platforms.linux;
