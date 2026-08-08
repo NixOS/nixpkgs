@@ -116,11 +116,11 @@ with self;
 
   ack = buildPerlPackage rec {
     pname = "ack";
-    version = "3.9.0";
+    version = "3.10.0";
 
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PETDANCE/ack-v${version}.tar.gz";
-      hash = "sha256-lO1Hfjs/lNEmzscynw6DmfHQzoLHxNiCqUrbFQ5//JA=";
+      hash = "sha256-Zeg8+zinH8pyXpoUqCAe6HHmKfxrECMeEwPdNQG6Vjo=";
     };
 
     outputs = [
