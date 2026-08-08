@@ -57,7 +57,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     gst-python
     pillow
     pygobject3
-    python-zbar
+    zbar
     qrcode
     typing-extensions
   ];
