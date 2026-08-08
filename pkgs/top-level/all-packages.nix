@@ -5891,6 +5891,7 @@ with pkgs;
     webpSupport = true;
     jxlSupport = true;
     psSupport = true;
+    j2kSupport = true;
   };
   imlib2-nox = imlib2.override {
     x11Support = false;
