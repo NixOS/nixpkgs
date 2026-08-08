@@ -438,6 +438,7 @@ with self;
       ppx_jane
       uri-sexp
     ];
+    __darwinAllowLocalNetworking = true;
   };
 
   cohttp_static_handler = janePackage {
