@@ -37,7 +37,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Exports data to binary VTK files for visualization/analysis";
     homepage = "https://github.com/pyscience-projects/pyevtk";
-    license = lib.licenses.bsd2;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
 })
