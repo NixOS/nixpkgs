@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   pname = "ucx";
-  version = "1.21.0";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "openucx";
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Otherwise compilation fails with:
     #   fatal error: gpunetio/common/doca_gpunetio_verbs_def.h: No such file or directory
     fetchSubmodules = true;
-    hash = "sha256-Td6L5wXDadIbHfk251bj6k9J3kIjqCYVx5lDso/u76M=";
+    hash = "sha256-R/uUjkYLPtY9c3vZWrkzKaSgK9Z/cppJCwQ1V1cuwPc=";
   };
 
   postPatch = ''
@@ -125,6 +125,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Unified Communication X library";
     homepage = "https://www.openucx.org";
+    downloadPage = "https://github.com/openucx/ucx";
+    changelog = "https://github.com/openucx/ucx/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     # LoongArch64 is not supported.
