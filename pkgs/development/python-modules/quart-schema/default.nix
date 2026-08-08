@@ -53,7 +53,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Create subcommand-based CLI programs with docopt";
-    homepage = "https://github.com/abingham/docopt-subcommands";
+    homepage = "https://github.com/pgjones/quart-schema";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
