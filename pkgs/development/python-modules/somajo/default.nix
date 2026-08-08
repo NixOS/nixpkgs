@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "somajo";
-  version = "2.4.3";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tsproisl";
     repo = "SoMaJo";
     tag = "v${version}";
-    hash = "sha256-fq891LX6PukUEfrXplulhnisuPX/RqLAQ/5ty/Fvm9k=";
+    hash = "sha256-2ddFfwTZGAWBnZprkD5qTBezAOl9DaraNwwWWVGQz8I=";
   };
 
   build-system = [ setuptools ];
