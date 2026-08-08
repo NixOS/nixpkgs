@@ -2929,6 +2929,12 @@
     githubId = 22575913;
     name = "Anish Lakhwara";
   };
+  ayushthoren = {
+    email = "ayushthoren@gmail.com";
+    github = "ayushthoren";
+    githubId = 29691296;
+    name = "Ayush Thoren";
+  };
   azahi = {
     name = "Azat Bahawi";
     email = "azat@bahawi.net";
