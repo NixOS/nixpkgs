@@ -5,11 +5,17 @@
   shiboken6-generator,
   numpy,
   cmake,
+  ninja,
   stdenv,
+  buildPackages,
 }:
 
 let
   stdenv' = if stdenv.cc.isClang then stdenv else llvmPackages.stdenv;
+  pythonWithPackages = python.pythonOnBuildForHost.withPackages (ps: [
+    ps.packaging
+    ps.setuptools
+  ]);
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "shiboken6";
@@ -20,11 +26,8 @@ stdenv'.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    python.pkgs.ninja
-    (python.pythonOnBuildForHost.withPackages (ps: [
-      ps.packaging
-      ps.setuptools
-    ]))
+    ninja
+    pythonWithPackages
   ];
 
   propagatedNativeBuildInputs = [
@@ -36,10 +39,14 @@ stdenv'.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin python.pkgs.qt6.darwinVersionInputs;
 
+  strictDeps = true;
+
   cmakeFlags = [
     "-DBUILD_TESTS=OFF"
     "-DNUMPY_INCLUDE_DIR=${numpy.coreIncludeDir}"
     "-Dis_pyside6_superproject_build=1"
+    # Upstream variable explicitly provided to help with cross-compilation
+    "-DQFP_PYTHON_HOST_PATH=${pythonWithPackages.interpreter}"
   ];
 
   # We intentionally use single quotes around `${BASH}` since it expands from a CMake
@@ -57,11 +64,13 @@ stdenv'.mkDerivation (finalAttrs: {
   postInstall = ''
     cd ../../..
     chmod +w .
-    python3 setup.py egg_info --build-type=shiboken6
+    python3 setup.py egg_info --build-type=shiboken6 --qtpaths=${lib.getExe' buildPackages.python3.pkgs.qt6.qtbase "qtpaths"}
     cp -r shiboken6.egg-info $out/${python.sitePackages}/
   '';
 
   dontWrapQtApps = true;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Generator for the pyside6 Qt bindings - Python library";
