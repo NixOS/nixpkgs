@@ -15001,8 +15001,6 @@ self: super: with self; {
 
   pylette = callPackage ../development/python-modules/pylette { };
 
-  pylev = callPackage ../development/python-modules/pylev { };
-
   pylgnetcast = callPackage ../development/python-modules/pylgnetcast { };
 
   pylibacl = callPackage ../development/python-modules/pylibacl { };
