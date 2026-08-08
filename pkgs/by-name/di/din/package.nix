@@ -29,7 +29,7 @@ assert lib.assertMsg (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "din";
-  version = "64.2";
+  version = "65";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://dinisnoise.org/files/din-${finalAttrs.version}.tar.gz";
-    hash = "sha256-YpaGOAVJmUMDkqvu9+fzW1RbNNSRO2Id8zg8DIblGXE=";
+    hash = "sha256-Iij8GGbeNVHCkrHc/on5pV5TU20+pQbI+oAnAXFsSmQ=";
   };
 
   nativeBuildInputs = [
