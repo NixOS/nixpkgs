@@ -33,6 +33,9 @@ python312Packages.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = [
     "requests"
+    # upstream is avoiding upgrade to support x86_64-darwin
+    # which we no longer support anyway
+    "cryptography"
   ];
 
   pythonImportsCheck = [
