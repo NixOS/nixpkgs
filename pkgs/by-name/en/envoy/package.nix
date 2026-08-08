@@ -54,8 +54,8 @@ let
       depsHash
     else
       {
-        x86_64-linux = "sha256-+oEQV3VfZu+p/f6Sif9pj2AkaA9+u0M8k+czdlcDLXI=";
-        aarch64-linux = "sha256-FcZfRinOd5KO6VnO9cx6ZQxJJ+KCFfB3Nk2k7zMuVU4";
+        x86_64-linux = "sha256-eaLv6jct51e8KSOb2wQo2T3avI94s9bFqgeBTLfDfAY=";
+        aarch64-linux = "sha256-TSsma8nT1MtoEgXgWijNyun/IIKsWjOTy322FPRaMIg=";
       }
       .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 

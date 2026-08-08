@@ -159,7 +159,7 @@ in
   fetchAttrs = {
     sha256 =
       {
-        x86_64-linux = "sha256-9L+oVq/yHqUGLhzSpwqxfYSJ1bIVcnaZgFVB3sjokXs=";
+        x86_64-linux = "sha256-fUC2MD8vRBmi+w00wNPxaeMxL6D0cJ0trdubSzssa9g=";
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
     preInstall =
