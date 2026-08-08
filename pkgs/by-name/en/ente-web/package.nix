@@ -12,7 +12,7 @@
   wasm-pack,
   writeScript,
   extraBuildEnv ? { },
-  # This package contains serveral sub-applications. This specifies which of them you want to build.
+  # This package contains several sub-applications. This specifies which of them you want to build.
   enteApp ? "photos",
   # Accessing some apps (such as account) directly will result in a hardcoded redirect to ente.io.
   # To prevent users from accidentally logging in to ente.io instead of the selfhosted instance, you

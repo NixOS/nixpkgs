@@ -1,9 +1,12 @@
 {
+  config,
   lib,
   stdenv,
   fetchFromGitHub,
   cmake,
   python3Packages,
+  cudaSupport ? config.cudaSupport,
+  cudaPackages,
   nix-update-script,
 }:
 
@@ -25,9 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-  ];
+  ]
+  ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
 
-  buildInputs = [ opencv4WithGtk ];
+  buildInputs = [ opencv4WithGtk ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ];
 
   cmakeFlags = [ (lib.cmakeBool "BUILD_EXAMPLES" true) ];
 

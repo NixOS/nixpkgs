@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch =
-    # The project uses Git to retrieve version informations but our
+    # The project uses Git to retrieve version information but our
     # fetcher deletes the .git directory, so we replace the commands
     # with the correct data directly.
     ''

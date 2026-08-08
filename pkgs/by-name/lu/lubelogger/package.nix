@@ -32,7 +32,7 @@ buildDotnetModule rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Vehicle service records and maintainence tracker";
+    description = "Vehicle service records and maintenance tracker";
     longDescription = ''
       A self-hosted, open-source, unconventionally-named vehicle maintenance records and fuel mileage tracker.
     '';

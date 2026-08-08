@@ -9464,6 +9464,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  lualine-so-fancy-nvim = buildVimPlugin {
+    pname = "lualine-so-fancy.nvim";
+    version = "0-unstable-2025-01-09";
+    src = fetchFromGitHub {
+      owner = "meuter";
+      repo = "lualine-so-fancy.nvim";
+      rev = "6ba7b138f2ca435673eb04c2cf85f0757df69b07";
+      hash = "sha256-Ctdt8kCG+4ynpfEHpvUhFQpbhcaLg0hoPX+yPkUQGS0=";
+    };
+    meta.homepage = "https://github.com/meuter/lualine-so-fancy.nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   luasnip-latex-snippets-nvim = buildVimPlugin {
     pname = "luasnip-latex-snippets.nvim";
     version = "1.0.1-unstable-2025-04-22";
@@ -9811,6 +9825,20 @@ final: prev: {
       hash = "sha256-g9tPvjThz6EUk7zcY7lL+YH4lrT4x3FJ6jrNMHA8PAE=";
     };
     meta.homepage = "https://github.com/ravitemer/mcphub.nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
+  md-table-tidy-nvim = buildVimPlugin {
+    pname = "md-table-tidy.nvim";
+    version = "0-unstable-2026-02-23";
+    src = fetchFromGitHub {
+      owner = "timantipov";
+      repo = "md-table-tidy.nvim";
+      rev = "e094d694e9ca97908fe311145b36664556e7c3c2";
+      hash = "sha256-vrsUk8VaivL7ZDTArJ7RkW4nW+Rl2o/FcaKH/NUfW+8=";
+    };
+    meta.homepage = "https://github.com/timantipov/md-table-tidy.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
@@ -13811,6 +13839,20 @@ final: prev: {
       hash = "sha256-PC2rxrS7WYOux/y05BePAZAK7JrPfxqTanQb6R0Vzu8=";
     };
     meta.homepage = "https://github.com/chrisgrieser/nvim-tinygit/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
+  nvim-toggler = buildVimPlugin {
+    pname = "nvim-toggler";
+    version = "0.3.1";
+    src = fetchFromGitHub {
+      owner = "nguyenvukhang";
+      repo = "nvim-toggler";
+      tag = "v0.3.1";
+      hash = "sha256-6X+m7FeylME0J9hLx45bDqKvHxup3d+Hpa31VESKhrs=";
+    };
+    meta.homepage = "https://github.com/nguyenvukhang/nvim-toggler/";
     meta.license = getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };

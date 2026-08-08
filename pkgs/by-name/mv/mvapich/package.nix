@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-device=ch4:ofi"
   ];
 
-  doCheck = false; # requries bindir/bin/mpicc before install is run
+  doCheck = false; # requires bindir/bin/mpicc before install is run
 
   postInstall = ''
     for e in mpif77 mpif90 mpifort mpichversion mpic++ mpicxx mpicc mpivars; do

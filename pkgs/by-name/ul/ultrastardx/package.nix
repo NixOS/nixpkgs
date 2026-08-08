@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
       export NIX_LDFLAGS="$NIX_LDFLAGS ${items}"
     '';
 
-  # dlopened libgcc requires the rpath not to be shrinked
+  # dlopened libgcc requires the rpath not to be shrunk
   dontPatchELF = true;
 
   meta = {

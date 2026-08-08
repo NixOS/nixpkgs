@@ -76,7 +76,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://gitlab.com/sequoia-pgp/sequoia-sq/-/blob/v${finalAttrs.version}/NEWS";
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [
-      minijackson
       doronbehar
       dvn0
       anish

@@ -47,7 +47,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   /*
     We use the created releases, and not the tags, for the update script as nix-update loads releases.atom
-    that contains both. Sometimes upstream pushes the tags but the Github releases don't get created due to
+    that contains both. Sometimes upstream pushes the tags but the GitHub releases don't get created due to
     CI errors. Last time this happened was on 8-33, where a tag was created but no releases were created.
     As of 2024-03-13, there have been no announcements indicating that the CI has been fixed, and thus
     we avoid nix-update-script and use our own update script instead.

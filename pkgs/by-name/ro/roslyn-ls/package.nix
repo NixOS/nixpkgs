@@ -73,7 +73,7 @@ buildDotnetModule (finalAttrs: {
   dotnetFlags = [
     "-p:TargetRid=${rid}"
     # we don't want to build the binary
-    # and useAppHost is not enough, need to explicilty set to false
+    # and useAppHost is not enough, need to explicitly set to false
     "-p:UseAppHost=false"
     # avoid platform-specific crossgen packages
     "-p:PublishReadyToRun=false"

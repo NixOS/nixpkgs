@@ -175,7 +175,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "xen";
   version = "4.20.4";
 
-  # This attribute can be overriden to correct the file paths in
+  # This attribute can be overridden to correct the file paths in
   # `passthru` when building an unstable Xen.
   upstreamVersion = finalAttrs.version;
   # Useful for further identifying downstream Xen variants. (i.e. Qubes)

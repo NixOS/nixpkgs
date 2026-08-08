@@ -49,7 +49,7 @@ buildDotnetModule (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/TechnitiumSoftware/DnsServer/blob/master/CHANGELOG.md";
-    description = "Authorative and Recursive DNS server for Privacy and Security";
+    description = "Authoritative and Recursive DNS server for Privacy and Security";
     homepage = "https://github.com/TechnitiumSoftware/DnsServer";
     license = lib.licenses.gpl3Only;
     mainProgram = "technitium-dns-server";

@@ -32,11 +32,11 @@
 }:
 let
   pname = "nextcloud-talk-desktop";
-  version = "2.2.1"; # Ensure both hashes (Linux and Darwin) are updated!
+  version = "2.2.3"; # Ensure both hashes (Linux and Darwin) are updated!
 
   hashes = {
-    linux = "sha256-AhNHPejdnGmL55/mHGKkDaGWl2fm7uufX4JaB5VSBos=";
-    darwin = "sha256-TkLAydkedLbi6vqd3kvQNkVnXGSHfF6xTBF3PCOgJ6I=";
+    linux = "sha256-6YoAlMGKPeSJoXd211cufdE/XgroojH3djwaSEwlBjs=";
+    darwin = "sha256-BpyVJXyCYC1qH4ecDobHBVLLTeVDx/MPWBsnXgrnKhE=";
   };
 
   # Only x86_64-linux is supported with Darwin support being universal

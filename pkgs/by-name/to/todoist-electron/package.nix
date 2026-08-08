@@ -34,7 +34,7 @@ appimageTools.wrapAppImage {
 
   extraPkgs = pkgs: [ pkgs.hidapi ];
 
-  # Add desktop convencience stuff
+  # Add desktop convenience stuff
   extraInstallCommands = ''
     install -D --mode 0644 ${appimageContents}/todoist.desktop -t $out/share/applications
     install -D --mode 0644 ${appimageContents}/todoist.png -t $out/share/icons/hicolor/512x512/apps

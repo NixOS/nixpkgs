@@ -63,7 +63,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
-    # FIXME: Pass overrided `rust-analyzer` once `buildRustPackage` also implements #119942
+    # FIXME: Pass overridden `rust-analyzer` once `buildRustPackage` also implements #119942
     # FIXME: test script can't find rust std lib so hover doesn't return expected result
     # https://github.com/NixOS/nixpkgs/pull/354304
     # tests.neovim-lsp = callPackage ./test-neovim-lsp.nix { };

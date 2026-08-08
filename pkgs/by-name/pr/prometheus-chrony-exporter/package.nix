@@ -22,7 +22,7 @@ buildGoModule (finalAttrs: {
     '';
   };
 
-  # do not use real BuildDate, but fixed imagenary (commit date) for binary reproducibility
+  # do not use real BuildDate, but fixed imaginary (commit date) for binary reproducibility
   preBuild = ''
     ldflags+=" -X github.com/prometheus/common/version.BuildDate=$(cat BUILD_COMMIT_DATE)"
   '';
