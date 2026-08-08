@@ -42,7 +42,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "django";
-  version = "6.1.1";
+  version = "6.0.8";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -51,7 +51,7 @@ buildPythonPackage (finalAttrs: {
     owner = "django";
     repo = "django";
     tag = finalAttrs.version;
-    hash = "sha256-jOshsS3ceWEJoxOuyUSEJvIPE5LLMrzMXEhVgX6wDPQ=";
+    hash = "sha256-hQQMKa8YirrTAoCrW1nn3RqRXv0szLgeSOjeKxBfiSo=";
   };
 
   patches = [
@@ -62,6 +62,8 @@ buildPythonPackage (finalAttrs: {
     ./6.x/pythonpath.patch
     # test_incorrect_timezone should raise but doesn't
     ./6.x/disable-failing-test.patch
+    # some perf tests are often flaky under pressure
+    ./6.0/skip-flaky-tests.patch
     # https://code.djangoproject.com/ticket/36997
     # https://github.com/django/django/pull/21019
     ./6.x/invalidate-importlib-cache.patch
