@@ -2979,6 +2979,13 @@
     githubId = 2998834;
     name = "Bruno Rodrigues";
   };
+  b-swist = {
+    email = "bswist@protonmail.com";
+    github = "b-swist";
+    githubId = 187181291;
+    name = "Bartosz Świst";
+    keys = [ { fingerprint = "A601 ABB3 1BFC AA4E B7A0  BB02 AEF5 F296 583F B763"; } ];
+  };
   b4dm4n = {
     email = "fabianm88@gmail.com";
     github = "B4dM4n";
