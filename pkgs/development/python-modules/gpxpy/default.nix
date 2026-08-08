@@ -4,12 +4,14 @@
   buildPythonPackage,
   python,
   lxml,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "gpxpy";
   version = "1.6.2";
-  format = "setuptools";
+
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tkrajina";
@@ -18,7 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-s65k0u4LIwHX9RJMJIYMkNS4/Z0wstzqYVPAjydo2iI=";
   };
 
-  propagatedBuildInputs = [ lxml ];
+  build-system = [ setuptools ];
+
+  dependencies = [ lxml ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest test
