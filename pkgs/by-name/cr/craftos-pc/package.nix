@@ -14,34 +14,64 @@
   pngpp,
   libwebp,
   libx11,
+  enableLuaJIT ? false,
 }:
 
 let
   version = "2.8.3";
-  craftos2-lua = fetchFromGitHub {
-    owner = "MCJack123";
-    repo = "craftos2-lua";
-    rev = "v${version}";
-    hash = "sha256-OCHN/ef83X4r5hZcPfFFvNJHjINCTiK+COf369/WPsA=";
-  };
   craftos2-rom = fetchFromGitHub {
     owner = "McJack123";
     repo = "craftos2-rom";
     rev = "v${version}";
     hash = "sha256-YidLt/JLwBMW0LMo5Q5PV6wGhF0J72FGX+iWYn6v0Z4=";
   };
+
+  luaCtx =
+    if enableLuaJIT then
+      {
+        pname = "craftos-pc-accelerated";
+        binName = "craftos-luajit";
+        luaDir = "craftos2-luajit";
+        luaLib = "libluajit-craftos.so";
+        luaSrc = fetchFromGitHub {
+          owner = "MCJack123";
+          repo = "craftos2-luajit";
+          rev = "4f4466fd3fafd3523e2c07e91c478b73b6748f0c";
+          hash = "sha256-YmecY6R2AHmk5S+RdfFtaXzLV9GksLdjTIGlrr+FpPo=";
+        };
+        craftosSrc = fetchFromGitHub {
+          owner = "MCJack123";
+          repo = "craftos2";
+          rev = "v${version}-luajit";
+          hash = "sha256-F7Y/9hlLL/r5R+oJtbIiQm8aZbKJqjl7AYrUum/+Aes=";
+        };
+      }
+    else
+      {
+        pname = "craftos-pc";
+        binName = "craftos";
+        luaDir = "craftos2-lua";
+        luaLib = "liblua${stdenv.hostPlatform.extensions.sharedLibrary}";
+        luaSrc = fetchFromGitHub {
+          owner = "MCJack123";
+          repo = "craftos2-lua";
+          rev = "v${version}";
+          hash = "sha256-OCHN/ef83X4r5hZcPfFFvNJHjINCTiK+COf369/WPsA=";
+        };
+        craftosSrc = fetchFromGitHub {
+          owner = "MCJack123";
+          repo = "craftos2";
+          rev = "v${version}";
+          hash = "sha256-DbxAsXxpsa42dF6DaLmgIa+Hs/PPqJ4dE97PoKxG2Ig=";
+        };
+      };
 in
 
-stdenv.mkDerivation rec {
-  pname = "craftos-pc";
+stdenv.mkDerivation (finalAttrs: {
+  pname = luaCtx.pname;
   inherit version;
 
-  src = fetchFromGitHub {
-    owner = "MCJack123";
-    repo = "craftos2";
-    rev = "v${version}";
-    hash = "sha256-DbxAsXxpsa42dF6DaLmgIa+Hs/PPqJ4dE97PoKxG2Ig=";
-  };
+  src = luaCtx.craftosSrc;
 
   nativeBuildInputs = [
     unzip
@@ -63,11 +93,14 @@ stdenv.mkDerivation rec {
     libx11
   ];
   strictDeps = true;
+  __structuredAttrs = true;
 
   preBuild = ''
-    cp -R ${craftos2-lua}/* ./craftos2-lua/
-    chmod -R u+w ./craftos2-lua
-    make -C craftos2-lua ${if stdenv.hostPlatform.isDarwin then "macosx" else "linux"}
+    cp -R ${luaCtx.luaSrc}/* ./${luaCtx.luaDir}/
+    chmod -R u+w ./${luaCtx.luaDir}
+    make -C ${luaCtx.luaDir} ${
+      lib.optionalString (!enableLuaJIT) (if stdenv.hostPlatform.isDarwin then "macosx" else "linux")
+    }
   '';
 
   buildPhase = ''
@@ -87,13 +120,13 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin $out/lib $out/share/craftos $out/include
     DESTDIR=$out/bin make install
-    cp ./craftos2-lua/src/liblua${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib
+    cp ./${luaCtx.luaDir}/src/${luaCtx.luaLib} $out/lib
     ${lib.optionalString stdenv.hostPlatform.isDarwin ''
-      chmod +w $out/bin/craftos
-      install_name_tool -change liblua${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/liblua${stdenv.hostPlatform.extensions.sharedLibrary} $out/bin/craftos
+      chmod +w $out/bin/${luaCtx.binName}
+      install_name_tool -change ${luaCtx.luaLib} $out/lib/${luaCtx.luaLib} $out/bin/${luaCtx.binName}
     ''}
     ${lib.optionalString stdenv.hostPlatform.isLinux ''
-      patchelf --replace-needed craftos2-lua/src/liblua${stdenv.hostPlatform.extensions.sharedLibrary} liblua${stdenv.hostPlatform.extensions.sharedLibrary} $out/bin/craftos
+      patchelf --replace-needed ${luaCtx.luaDir}/src/${luaCtx.luaLib} ${luaCtx.luaLib} $out/bin/${luaCtx.binName}
     ''}
     cp -R api $out/include/CraftOS-PC
     cp -R ${craftos2-rom}/* $out/share/craftos
@@ -113,12 +146,18 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    eval-hello-world = callPackage ./test-eval-hello-world { };
-    eval-periphemu = callPackage ./test-eval-periphemu { };
+    eval-hello-world = callPackage ./test-eval-hello-world {
+      craftos-pc = finalAttrs.finalPackage;
+    };
+    eval-periphemu = callPackage ./test-eval-periphemu {
+      craftos-pc = finalAttrs.finalPackage;
+    };
   };
 
   meta = {
-    description = "Implementation of the CraftOS-PC API written in C++ using SDL";
+    description =
+      "Implementation of the CraftOS-PC API written in C++ using SDL"
+      + lib.optionalString enableLuaJIT " (LuaJIT-accelerated variant)";
     homepage = "https://www.craftos-pc.cc";
     license = with lib.licenses; [
       mit
@@ -130,6 +169,6 @@ stdenv.mkDerivation rec {
       tomodachi94
       viluon
     ];
-    mainProgram = "craftos";
+    mainProgram = luaCtx.binName;
   };
-}
+})
