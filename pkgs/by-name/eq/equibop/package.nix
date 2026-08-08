@@ -6,7 +6,7 @@
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
-  electron_41,
+  electron_43,
   python3Packages,
   pipewire,
   libpulseaudio,
@@ -18,17 +18,17 @@
   withMiddleClickScroll ? false,
 }:
 let
-  electron = electron_41;
+  electron = electron_43;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "equibop";
-  version = "3.2.1";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "Equicord";
     repo = "Equibop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WqfxrVAJvD6Y6ZjkhbvibL6Bps7PL2lx3JBY94Yd6kk=";
+    hash = "sha256-foKgtyN1jr4+PHwJHTVXrYzWNVYtR1Sq8rLG4VEnujs=";
   };
 
   postPatch = ''
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail -baseline ""
   '';
 
-  node-modules = callPackage ./node-modules.nix { };
+  node-modules = callPackage ./node-modules.nix { equibop = finalAttrs.finalPackage; }; # helps when the parent package is overidden
 
   nativeBuildInputs = [
     bun
