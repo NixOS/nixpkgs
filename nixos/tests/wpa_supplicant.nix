@@ -66,6 +66,7 @@ let
                 ssid = "nixos-test-mixed";
                 authentication = {
                   mode = "wpa3-sae-transition";
+                  transitionDisable = true;
                   saeAddToMacAllow = true;
                   saePasswordsFile = pkgs.writeText "password" naughtyPassphrase;
                   wpaPasswordFile = pkgs.writeText "password" naughtyPassphrase;
@@ -76,6 +77,7 @@ let
                 ssid = "nixos-test-mixed";
                 authentication = {
                   mode = "wpa3-sae-transition";
+                  transitionDisable = true;
                   saeAddToMacAllow = true;
                   saePasswordsFile = pkgs.writeText "password" naughtyPassphrase;
                   wpaPasswordFile = pkgs.writeText "password" naughtyPassphrase;
@@ -327,7 +329,16 @@ in
     };
   };
 
-  # Test connecting to a mixed SAE/WPA2 hotspot using WPA2
+  # Test connecting to a mixed SAE/WPA2 hotspot using legacy WPA2-PSK
+  mixedUsingWpa2Psk = runConnectionTest "mixed-using-wpa2-psk" {
+    fallbackToWPA2 = true;
+    networks.nixos-test-mixed = {
+      pskRaw = "ext:psk_nixos_test";
+      authProtocols = [ "WPA-PSK" ];
+    };
+  };
+
+  # Test connecting to a mixed SAE/WPA2 hotspot using WPA2-PSK-SHA256
   mixedUsingWpa2 = runConnectionTest "mixed-using-wpa2" {
     fallbackToWPA2 = true;
     networks.nixos-test-mixed = {

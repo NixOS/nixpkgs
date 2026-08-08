@@ -795,11 +795,32 @@ in
                             - {var}`"wpa2-sha256"`: WPA2-Personal using HMAC-SHA256 (IEEE 802.11i/RSN). Passwords are set
                               using {option}`wpaPassword` or preferably by {option}`wpaPasswordFile` or {option}`wpaPskFile`.
                             - {var}`"wpa3-sae-transition"`: Use WPA3-Personal (SAE) if possible, otherwise fallback
-                              to WPA2-SHA256. Only use if necessary and switch to the newer WPA3-SAE when possible.
+                              to WPA2-Personal. Only use if necessary and switch to the newer WPA3-SAE when possible.
                               You will have to specify both {option}`wpaPassword` and {option}`saePasswords` (or one of their alternatives).
                             - {var}`"wpa3-sae"`: Use WPA3-Personal (SAE). This is currently the recommended way to
                               setup a secured WiFi AP (as of March 2023) and therefore the default. Passwords are set
                               using either {option}`saePasswords` or {option}`saePasswordsFile`.
+                          '';
+                        };
+
+                        transitionDisable = mkOption {
+                          default = false;
+                          example = true;
+                          type = types.bool;
+                          description = ''
+                            Enable the WPA3-Personal Transition Disable indication. After a successful
+                            WPA3 association, compatible stations will disable WPA2-Personal for this
+                            network profile, protecting subsequent associations against downgrade attacks.
+                            Legacy stations can still connect using WPA2 in transition mode.
+
+                            This option is supported in `"wpa3-sae"` and `"wpa3-sae-transition"` modes.
+
+                            ::: {.warning}
+                            Enable this only when every BSS in the network using this SSID supports
+                            WPA3-Personal. The indication applies to a station's entire network profile
+                            and can prevent it from connecting to WPA2-only BSSs. Therefore, the WPA3 spec
+                            requires this to be disabled by default.
+                            :::
                           '';
                         };
 
@@ -1075,15 +1096,12 @@ in
                           wpa_key_mgmt = "SAE";
                           # Derive PWE using both hunting-and-pecking loop and hash-to-element
                           sae_pwe = 2;
-                          # Prevent downgrade attacks by indicating to clients that they should
-                          # disable any transition modes from now on.
-                          transition_disable = "0x01";
                           # Per WPA3 spec, MFP is required.
                           ieee80211w = 2;
                         }
                         // optionalAttrs (bssCfg.authentication.mode == "wpa3-sae-transition") {
                           wpa = 2;
-                          wpa_key_mgmt = "WPA-PSK-SHA256 SAE";
+                          wpa_key_mgmt = "WPA-PSK WPA-PSK-SHA256 SAE";
                           ieee80211w = 1;
                         }
                         // optionalAttrs (bssCfg.authentication.mode == "wpa2-sha1") {
@@ -1099,6 +1117,9 @@ in
                         // optionalAttrs (bssCfg.authentication.mode != "none") {
                           wpa_pairwise = pairwiseCiphers;
                           rsn_pairwise = pairwiseCiphers;
+                        }
+                        // optionalAttrs bssCfg.authentication.transitionDisable {
+                          transition_disable = "0x01";
                         }
                         // optionalAttrs (bssCfg.authentication.wpaPassword != null) {
                           wpa_passphrase = bssCfg.authentication.wpaPassword;
@@ -1410,6 +1431,15 @@ in
               {
                 assertion = auth.saePasswords == [ ] || auth.saePasswordsFile == null;
                 message = "hostapd radio ${radio} bss ${bss}: must use only one SAE password option (saePasswords or saePasswordsFile)";
+              }
+              {
+                assertion =
+                  auth.transitionDisable
+                  -> builtins.elem auth.mode [
+                    "wpa3-sae"
+                    "wpa3-sae-transition"
+                  ];
+                message = "hostapd radio ${radio} bss ${bss}: transitionDisable requires WPA3-SAE or WPA3-SAE transition mode";
               }
               {
                 assertion = auth.mode == "wpa3-sae" -> (auth.saePasswords != [ ] || auth.saePasswordsFile != null);
