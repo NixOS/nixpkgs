@@ -94,9 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./fix-paths.patch {
       plymouth = "${plymouth}/bin/plymouth";
     })
-
-    # glib gettext is deprecated and broken, so use regular gettext instead
-    ./use-regular-gettext.patch
   ];
 
   dontWrapQtApps = true;
