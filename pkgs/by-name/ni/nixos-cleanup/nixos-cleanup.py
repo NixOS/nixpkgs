@@ -5,6 +5,7 @@ import argparse
 import os
 import pwd
 import re
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -105,23 +106,6 @@ def free_bytes_on_root():
     return 0
 
 
-def clean_globs(globs, ctx):
-    freed = 0
-    for pattern in globs:
-        for p in sorted(ctx.home.glob(pattern)):
-            log(f"clearing {p}")
-            if not ctx.dry_run:
-                for child in p.iterdir():
-                    if child.is_dir() and not child.is_symlink():
-                        shutil.rmtree(child, ignore_errors=True)
-                    else:
-                        try:
-                            child.unlink()
-                        except OSError:
-                            pass
-    return freed
-
-
 def find_old_files(root, days):
     cmd = ["find", str(root), "-xdev", "-type", "f", "-mtime", f"+{days}"]
     out, _ = run(cmd, Ctx(dry_run=False, verbose=False, user="", home=""), check=False)
@@ -141,7 +125,7 @@ def parse_freed(text):
 
 def delete_nix_generations(profile, keep, ctx):
     total_kept = keep
-    spec = f"+{max(total_kept - 1, 0)}"
+    spec = f"+{max(total_kept, 1)}"
     gen_out = query(["nix-env", "--list-generations", "-p", profile])
     if not gen_out.strip():
         log(f"profile {profile} has no generations")
@@ -316,7 +300,6 @@ def main():
                 Task(f"user caches ({user})", lambda: clean_user_caches(user_ctx)),
                 Task(f"trash ({user})", lambda: empty_dir(user_ctx.home / ".local/share/Trash", user_ctx)),
                 Task(f"flatpak unused (user, {user})", lambda: flatpak_unused(user_ctx, "user")),
-                Task(f"steam shader cache ({user})", lambda: clean_steam_shaders(user_ctx)),
             ]
 
     banner = "DRY RUN (no changes)" if dry_run else "PERFORMING CLEANUP"
@@ -363,27 +346,12 @@ def clean_user_caches(ctx):
     return total
 
 
-def clean_steam_shaders(ctx):
-    total = 0
-    for rel in (
-        ".steam/steam/steamapps/shadercache",
-        ".local/share/Steam/steamapps/shadercache",
-        ".local/share/Steam/steamapps/common",
-    ):
-        base = ctx.home / rel
-        if base.is_dir():
-            for p in base.iterdir():
-                if p.is_dir() and p.name != "Steamworks Shared":
-                    total += empty_dir(p, ctx)
-    return total
-
-
 def report():
     print(f"\n{BOLD}== Largest space consumers on / =={RESET}", file=sys.stderr)
     for p in ("/nix/store", "/var", "/home"):
         if Path(p).exists():
             print(f"{DIM}{p}: {human(dir_size(p))}{RESET}", file=sys.stderr)
-    out, _ = run(["du", "-xh", "--max-depth=1", "/nix/store", "/var", "/home"],
+    out, _ = run(["du", "-xB1", "--max-depth=1", "/nix/store", "/var", "/home"],
                  Ctx(dry_run=False, verbose=False, user="", home=""), check=False)
     entries = []
     for line in out.splitlines():
