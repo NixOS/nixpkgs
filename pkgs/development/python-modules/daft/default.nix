@@ -349,6 +349,12 @@ buildPythonPackage (finalAttrs: {
     "test_download_with_none" # None vs nan
     "test_from_pandas_roundtrip" # Timestamp[us] vs Timestamp[ns]
     "test_infer_from_type" # issubclass() arg 1 must be a class (numpy_ndarray_int)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Flaky:
+    # Failed to get cluster ID from GCS server: TimedOut: Timed out while waiting for GCS to become available.
+    "test_extension_ray_runner"
+    "test_extension_ray_runner_aggregate"
   ];
 
   pythonImportsCheck = [ "daft" ];
