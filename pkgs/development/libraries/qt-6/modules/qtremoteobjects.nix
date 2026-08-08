@@ -3,7 +3,9 @@
   stdenv,
   qtModule,
   qtbase,
+  qtconnectivity,
   qtdeclarative,
+  qtwebsockets,
   pkgsBuildBuild,
 }:
 
@@ -11,7 +13,9 @@ qtModule {
   pname = "qtremoteobjects";
   propagatedBuildInputs = [
     qtbase
+    qtconnectivity
     qtdeclarative
+    qtwebsockets
   ];
 
   cmakeFlags = [
