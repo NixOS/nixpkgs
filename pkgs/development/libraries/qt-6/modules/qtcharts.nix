@@ -2,6 +2,7 @@
   qtModule,
   qtbase,
   qtdeclarative,
+  qtmultimedia,
   pkgsBuildBuild,
 }:
 
@@ -10,6 +11,7 @@ qtModule {
   propagatedBuildInputs = [
     qtbase
     qtdeclarative
+    qtmultimedia
   ];
 
   cmakeFlags = [
