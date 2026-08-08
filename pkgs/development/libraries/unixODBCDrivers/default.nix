@@ -45,14 +45,14 @@
 
   duckdb = duckdb-odbc;
 
-  mariadb = stdenv.mkDerivation rec {
+  mariadb = stdenv.mkDerivation (finalAttrs: {
     pname = "mariadb-connector-odbc";
     version = "3.2.9";
 
     src = fetchFromGitHub {
       owner = "mariadb-corporation";
       repo = "mariadb-connector-odbc";
-      rev = version;
+      tag = finalAttrs.version;
       hash = "sha256-VPpQa17dj544G+kx8b93rErvRZxghvAbZN3povPKYrw=";
       # this driver only seems to build correctly when built against the mariadb-connect-c subrepo
       # (see https://github.com/NixOS/nixpkgs/issues/73258)
@@ -60,6 +60,7 @@
     };
 
     nativeBuildInputs = [ cmake ];
+
     buildInputs = [
       unixodbc
       openssl
@@ -69,19 +70,15 @@
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ libkrb5 ];
 
     cmakeFlags = [
-      "-DWITH_EXTERNAL_ZLIB=ON"
-      "-DODBC_LIB_DIR=${lib.getLib unixodbc}/lib"
-      "-DODBC_INCLUDE_DIR=${lib.getDev unixodbc}/include"
-      "-DWITH_OPENSSL=ON"
-      # on darwin this defaults to ON but we want to build against unixodbc
-      "-DWITH_IODBC=OFF"
+      # On darwin this defaults to ON but we want to build against unixodbc
+      (lib.cmakeBool "WITH_IODBC" false)
+      (lib.cmakeBool "WITH_OPENSSL" true)
+      (lib.cmakeBool "WITH_EXTERNAL_ZLIB" true)
+      (lib.cmakeFeature "ODBC_LIB_DIR" "${lib.getLib unixodbc}/lib")
+      (lib.cmakeFeature "ODBC_INCLUDE_DIR" "${lib.getDev unixodbc}/include")
     ];
 
     buildFlags = if stdenv.hostPlatform.isDarwin then [ "maodbc" ] else null;
-
-    env = lib.optionalAttrs stdenv.cc.isGNU {
-      NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
-    };
 
     installTargets = if stdenv.hostPlatform.isDarwin then [ "install/fast" ] else null;
 
@@ -97,7 +94,7 @@
       license = lib.licenses.gpl2;
       platforms = lib.platforms.linux ++ lib.platforms.darwin;
     };
-  };
+  });
 
   sqlite = stdenv.mkDerivation rec {
     pname = "sqlite-connector-odbc";
