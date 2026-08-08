@@ -11591,6 +11591,8 @@ self: super: with self; {
 
   nc-dnsapi = callPackage ../development/python-modules/nc-dnsapi { };
 
+  nccl4py = callPackage ../development/python-modules/nccl4py { };
+
   ncclient = callPackage ../development/python-modules/ncclient { };
 
   nclib = callPackage ../development/python-modules/nclib { };
@@ -13195,6 +13197,8 @@ self: super: with self; {
   phonenumberslite = callPackage ../development/python-modules/phonenumberslite { };
 
   phonopy = callPackage ../development/python-modules/phonopy { };
+
+  phonors = callPackage ../development/python-modules/phonors { };
 
   photutils = callPackage ../development/python-modules/photutils { };
 

@@ -48,6 +48,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-exCQwduQM29K5Omb48KYIqm2D4yfOKFFEr37zhIvACY=";
   };
 
+  postPatch = ''
+    substituteInPlace albumentations/core/analytics/settings.py \
+      --replace-fail '"telemetry": True,' '"telemetry": False,'
+  '';
+
   build-system = [
     hatchling
   ];
@@ -121,6 +126,9 @@ buildPythonPackage (finalAttrs: {
 
     # Requires unfree google-docstring-parser
     "tests/test_docstrings.py"
+
+    # Fails due to disabling telemetry in postPatch
+    "tests/test_telemetry.py"
   ];
 
   meta = {

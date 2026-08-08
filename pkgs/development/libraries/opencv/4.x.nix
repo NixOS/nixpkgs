@@ -59,7 +59,8 @@
   enableVtk ? false,
   vtk,
   enableFfmpeg ? true,
-  ffmpeg-headless,
+  # FIXME: unpin once upstream has ffmpeg 9 support
+  ffmpeg_8-headless,
   enableGStreamer ? true,
   elfutils,
   gst_all_1,
@@ -386,7 +387,7 @@ effectiveStdenv.mkDerivation {
     openjpeg
   ]
   ++ optionals enableFfmpeg [
-    ffmpeg-headless
+    ffmpeg_8-headless
   ]
   ++ optionals (enableGStreamer && effectiveStdenv.hostPlatform.isLinux) [
     elfutils
