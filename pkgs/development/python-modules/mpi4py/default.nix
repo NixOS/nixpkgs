@@ -13,7 +13,7 @@
   mpich,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mpi4py";
   version = "4.1.2";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "mpi4py";
     owner = "mpi4py";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-h9RZr+xLmp+cVvrPkew3AOJLE8okd4A/2oqhsSmVBXU=";
   };
 
@@ -69,7 +69,7 @@ buildPythonPackage rec {
     mpiexec -n 1 python test/main.py -v
     echo 'Testing mpi4py (np=2)'
     mpiexec -n 2 python test/main.py -v -f -e spawn${
-      lib.concatMapStrings (test: " -x ${test}") disabledTests
+      lib.concatMapStrings (test: " -x ${test}") finalAttrs.disabledTests
     }
 
     runHook postCheck
@@ -86,8 +86,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for the Message Passing Interface standard";
     homepage = "https://github.com/mpi4py/mpi4py";
-    changelog = "https://github.com/mpi4py/mpi4py/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/mpi4py/mpi4py/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})
