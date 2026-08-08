@@ -2929,12 +2929,6 @@
     githubId = 22575913;
     name = "Anish Lakhwara";
   };
-  ayushthoren = {
-    email = "ayushthoren@gmail.com";
-    github = "ayushthoren";
-    githubId = 29691296;
-    name = "Ayush Thoren";
-  };
   azahi = {
     name = "Azat Bahawi";
     email = "azat@bahawi.net";
@@ -12099,6 +12093,12 @@
     github = "iquerejeta";
     githubId = 31273774;
     name = "Inigo Querejeta-Azurmendi";
+  };
+  irendy = {
+    name = "IRendy";
+    email = "irendy@qq.com";
+    github = "IRendy";
+    githubId = 42890271;
   };
   irenes = {
     name = "Irene Knapp";
