@@ -375,7 +375,7 @@ jobs:
         with:
           github-token: ${{ steps.app-token.outputs.token || github.token }}
           script: |
-            require('./nixpkgs/trusted/ci/github-script/check-target-branch.js')({
+            require('./nixpkgs/trusted/ci/github-script/check-target-branch.ts')({
               github,
               context,
               core,
