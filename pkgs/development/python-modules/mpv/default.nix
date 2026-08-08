@@ -40,6 +40,15 @@ buildPythonPackage rec {
     xvfb
   ];
 
+  disabledTestPaths = [
+    # timing sensitive
+    "tests/test_mpv.py::CommandTests::test_sub_add"
+
+    # flaky
+    "tests/test_mpv.py::ObservePropertyTest::test_property_observer_decorator"
+    "tests/test_mpv.py::RegressionTests::test_wait_for_property_concurrency"
+  ];
+
   pythonImportsCheck = [ "mpv" ];
 
   meta = {

@@ -26,7 +26,7 @@ let
     "19.1.7".officialRelease.sha256 = "sha256-cZAB5vZjeTsXt9QHbP5xluWNQnAHByHtHnAhVDV0E6I=";
     "20.1.8".officialRelease.sha256 = "sha256-ysyB/EYxi2qE9fD5x/F2zI4vjn8UDoo1Z9ukiIrjFGw=";
     "21.1.8".officialRelease.sha256 = "sha256-pgd8g9Yfvp7abjCCKSmIn1smAROjqtfZaJkaUkBSKW0=";
-    "22.1.5".officialRelease.sha256 = "sha256-eunfMOH+HVpefZJ+CG7hXDoM+pi6iYvHpD3DoSAsjoE=";
+    "22.1.8".officialRelease.sha256 = "sha256-SF7wFuh4kXZTytpdgX7vUZItKtRobnVICm+ixze4iG0=";
     "23.1.0-rc1" = {
       gitRelease = {
         rev = "acdf320b78fcf075ddcf660b51cf18d5c0af755b";

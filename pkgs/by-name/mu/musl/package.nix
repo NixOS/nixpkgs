@@ -94,6 +94,16 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://www.openwall.com/lists/musl/2025/02/13/1/2";
       hash = "sha256-BiD87k6KTlLr4ep14rUdIZfr2iQkicBYaSTq+p6WBqE=";
     })
+    (fetchurl {
+      name = "CVE-2026-6042.patch";
+      url = "https://www.openwall.com/lists/musl/2026/04/03/2/1";
+      hash = "sha256-RE+nDlLKFY+31LrVYGN3kLv49y6AuC//hA3Wb6gwkeM=";
+    })
+    (fetchurl {
+      name = "CVE-2026-40200.patch";
+      url = "https://www.openwall.com/lists/musl/2026/04/10/3/1";
+      hash = "sha256-HuKfZPnKjorXw0l3nWYf9rUhJqJ1ddNYaYE1elLEBvs=";
+    })
     # required for systemd user namespacing and oomd to work correctly on musl
     # drop next release
     # https://git.musl-libc.org/cgit/musl/commit/?id=fde29c04adbab9d5b081bf6717b5458188647f1c
