@@ -44,11 +44,12 @@
   # Extra `buildInputs` - meant for packages that require more inputs
   extraBuildInputs ? [ ],
   extraNativeBuildInputs ? [ ],
+
+  # passthru
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  # LAMMPS has weird versioning convention. Updates should go smoothly with:
-  # nix-update --commit lammps --version-regex 'stable_(.*)'
   version = "22Jul2025_update5";
   pname = "lammps";
 
@@ -78,6 +79,12 @@ stdenv.mkDerivation (finalAttrs: {
     inherit extraCmakeFlags;
     inherit extraBuildInputs;
     inherit extraNativeBuildInputs;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "stable_(.*)"
+      ];
+    };
   };
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" true)
