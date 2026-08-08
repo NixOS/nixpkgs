@@ -74,3 +74,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     platforms = platforms.linux;
   };
 }
+)
