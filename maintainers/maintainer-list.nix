@@ -2929,6 +2929,12 @@
     githubId = 22575913;
     name = "Anish Lakhwara";
   };
+  ayushthoren = {
+    email = "ayushthoren@gmail.com";
+    github = "ayushthoren";
+    githubId = 29691296;
+    name = "Ayush Thoren";
+  };
   azahi = {
     name = "Azat Bahawi";
     email = "azat@bahawi.net";
@@ -12094,6 +12100,12 @@
     githubId = 31273774;
     name = "Inigo Querejeta-Azurmendi";
   };
+  irendy = {
+    name = "IRendy";
+    email = "irendy@qq.com";
+    github = "IRendy";
+    githubId = 42890271;
+  };
   irenes = {
     name = "Irene Knapp";
     email = "ireneista@gmail.com";
@@ -12101,12 +12113,6 @@
     github = "IreneKnapp";
     githubId = 157678;
     keys = [ { fingerprint = "E864 BDFA AB55 36FD C905  5195 DBF2 52AF FB26 19FD"; } ];
-  };
-  irendy = {
-    name = "IRendy";
-    email = "irendy@qq.com";
-    github = "IRendy";
-    githubId = 42890271;
   };
   irgendeinwer = {
     name = "Irgendeinwer";
