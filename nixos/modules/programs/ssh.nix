@@ -402,8 +402,10 @@ in
         export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent"
       fi
     '';
-
-    environment.variables.SSH_ASKPASS = lib.optionalString cfg.enableAskPassword cfg.askPassword;
+    # Cant use optionalString, as openssh assumes that if its set then it points to a valid binary instead of using a default
+    environment.variables = lib.optionalAttrs cfg.enableAskPassword {
+      SSH_ASKPASS = cfg.askPassword;
+    };
 
   };
 }
