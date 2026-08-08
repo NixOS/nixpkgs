@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
-    substituteInPlace xargs/xargs.c --replace 'char default_cmd[] = "echo";' 'char default_cmd[] = "${lib.getExe' coreutils "echo"}";'
+    substituteInPlace xargs/xargs.c --replace-fail 'char default_cmd[] = "echo";' 'char default_cmd[] = "${lib.getExe' coreutils "echo"}";'
   '';
 
   patches = [
@@ -30,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
   buildInputs = [ coreutils ]; # bin/updatedb script needs to call sort
+
+  strictDeps = true;
 
   # Since glibc-2.25 the i686 tests hang reliably right after test-sleep.
   doCheck =
@@ -78,6 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
   # https://github.com/NixOS/nixpkgs/pull/192630#discussion_r978985593
   # or you can check libc/include/sys/cdefs.h in bionic source code
   hardeningDisable = lib.optional (stdenv.hostPlatform.libc == "bionic") "fortify";
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://www.gnu.org/software/findutils/";
