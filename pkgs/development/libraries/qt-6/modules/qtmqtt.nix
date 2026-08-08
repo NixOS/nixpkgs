@@ -4,6 +4,7 @@
   qtbase,
   qtdeclarative,
   qtwebsockets,
+  pkgsBuildBuild,
 }:
 
 qtModule rec {
@@ -21,5 +22,9 @@ qtModule rec {
     qtbase
     qtdeclarative
     qtwebsockets
+  ];
+
+  cmakeFlags = [
+    "-DQt6QuickTools_DIR=${pkgsBuildBuild.qt6.qtdeclarative}/lib/cmake/Qt6QuickTools"
   ];
 }
