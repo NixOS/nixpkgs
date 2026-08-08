@@ -51,7 +51,7 @@
 stdenv.mkDerivation (finalAttrs: {
   # LAMMPS has weird versioning convention. Updates should go smoothly with:
   # nix-update --commit lammps --version-regex 'stable_(.*)'
-  version = "22Jul2025_update4";
+  version = "22Jul2025_update5";
   pname = "lammps";
 
   __structuredAttrs = true;
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "lammps";
     repo = "lammps";
     tag = "stable_${finalAttrs.version}";
-    hash = "sha256-QH63nh7J3NjfdfpN7J96Q+9ZGqj8cA0YwEmgTuBbGmg=";
+    hash = "sha256-kI4CubDgXwnDDeXNan88RzG+iGMJMnsqfpfhWtJFhAI=";
   };
   preConfigure = ''
     cd cmake
