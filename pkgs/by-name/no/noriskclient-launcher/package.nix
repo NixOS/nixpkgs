@@ -84,7 +84,7 @@ symlinkJoin {
 
     glibPostInstallHook
     gappsWrapperArgsHook
-    wrapGAppsHook
+    wrapGApp "$out/bin/noriskclient-launcher-v3"
   '';
 
   meta = {
