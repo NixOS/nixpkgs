@@ -346,6 +346,7 @@
   ./programs/tsm-client.nix
   ./programs/turbovnc.nix
   ./programs/udevil.nix
+  ./programs/upki.nix
   ./programs/usbtop.nix
   ./programs/vim.nix
   ./programs/virt-manager.nix
