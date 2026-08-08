@@ -7,81 +7,182 @@
   coreutils,
   curl,
   file,
-  git,
-  makeWrapper,
+  makeBinaryWrapper,
   nixosTests,
   protobuf,
   python3,
   ocaml,
   ocamlPackages,
   which,
+
   debug ? false,
 }:
+
+let
+  # Version as given in se_version.h
+  version = "2.30.100.1";
+  # Version as used in the Git tag
+  versionTag = "2.30";
+
+  # Pre-built Intel-signed Architectural Enclaves (AE). They help run user
+  # application enclaves, verify launch policies, produce remote attestation
+  # quotes, and do platform certification.
+  ae.prebuilt = fetchurl {
+    url = "https://download.01.org/intel-sgx/sgx-linux/${versionTag}/prebuilt_ae_${versionTag}.tar.gz";
+    hash = "sha256-Hcz1dtFJFj3LHfs35CQSObmyV4zC2PLzj42bvaLuylQ=";
+  };
+
+  # DCAP (Data Center Attestation Primitives) platform enclaves and pre-built
+  # sgxssl.
+  dcap = {
+    version = "1.27";
+    filename = "prebuilt_dcap_${dcap.version}.tar.gz";
+
+    # DCAP pre-built enclaves + sgxssl lib
+    prebuilt = fetchurl {
+      url = "https://download.01.org/intel-sgx/sgx-dcap/${dcap.version}/linux/${dcap.filename}";
+      hash = "sha256-5zdrb2E3YC20Vs85YHDJ5/KHyM2VXI6xJGbOzxcFoeY=";
+    };
+
+    # DCAP repo
+    src = fetchFromGitHub {
+      owner = "intel";
+      repo = "confidential-computing.tee.dcap";
+      tag = "DCAP_${dcap.version}";
+      hash = "sha256-ywONoNFkofnDFOnGwDjddi+nNfxJzQmE1f+s0XcWxjY=";
+    };
+
+    # DCAP QVL (Quote Verification Library) repo
+    qvl.src = fetchFromGitHub {
+      owner = "intel";
+      repo = "confidential-computing.tee.dcap.qvl";
+      tag = "v${dcap.version}";
+      hash = "sha256-RkY3XQ+Ih5m/QPDK/2DDSHL83vxlR4Eedqu1mSut4MI=";
+    };
+  };
+
+  # SGX "enclave memory management library" repo
+  sgx-emm.src = fetchFromGitHub {
+    owner = "intel";
+    repo = "sgx-emm";
+    rev = "bb3d852d9091458366fec397488aaeb8d52a2ad0";
+    hash = "sha256-Z4dcSv4Wa4LrvZnr+PX+EQbacVjWrRupJKDYqXhOKj4=";
+  };
+
+  # Only build the untrusted host enclave runtime and edger8r needed for
+  # sgx-psw/aesmd. Building the entire SDK takes like 30+ min, while this takes
+  # 1 min.
+  sgx-sdk-runtime = stdenv.mkDerivation {
+    pname = "sgx-sdk-runtime";
+    inherit version;
+
+    src = fetchFromGitHub {
+      owner = "intel";
+      repo = "confidential-computing.sgx.sdk";
+      tag = "sgx_${versionTag}";
+      hash = "sha256-wbozHPlHOQ8lgc2hDWPML+cKp+WlupE7Wtjnurc23tM=";
+    };
+
+    postUnpack = ''
+      mkdir -p $sourceRoot/external/sgx-emm/emm_src
+      cp -R --no-preserve=mode ${sgx-emm.src}/. $sourceRoot/external/sgx-emm/emm_src/
+
+      mkdir -p $sourceRoot/prebuilt/dcap
+      tar -xzf ${dcap.prebuilt} -C $sourceRoot/prebuilt/dcap \
+        --strip-components=1 prebuilt/openssl
+    '';
+
+    postPatch = ''
+      patchShebangs external/sgx-emm/create_symlink.sh
+      external/sgx-emm/create_symlink.sh
+    '';
+
+    nativeBuildInputs = [
+      ocaml
+      ocamlPackages.ocamlbuild
+    ];
+
+    dontConfigure = true;
+
+    # Build:
+    # - `sgx_edger8r` enclave .edl -> .h file codegen tool
+    # - uRTS untrusted enclave runtime libs
+    buildPhase = ''
+      runHook preBuild
+
+      make -C sdk/edger8r/linux
+      make -C enclave_runtime ${lib.optionalString debug "DEBUG=1"}
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      install -Dm755 build/linux/sgx_edger8r $out/bin/x64/sgx_edger8r
+      ln -s x64/sgx_edger8r $out/bin/sgx_edger8r
+
+      mkdir -p $out/include $out/lib
+      cp -LR common/inc/. $out/include/
+      install -Dm644 enclave_runtime/enclave_common/sgx_enclave_common.h $out/include/sgx_enclave_common.h
+      cp -a build/linux/libsgx_enclave_common.so* $out/lib/
+      cp -a build/linux/libsgx_urts.so* $out/lib/
+      install -Dm755 build/linux/liburts_internal.so $out/lib/liburts_internal.so
+      ln -s lib $out/lib64
+
+      substitute common/buildenv.mk $out/buildenv.mk \
+        --replace-fail '@SDK_PKG_VERSION@' '${version}'
+
+      runHook postInstall
+    '';
+  };
+in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "sgx-psw";
-  # Version as given in se_version.h
-  version = "2.29.100.1";
-  # Version as used in the Git tag
-  versionTag = "2.29";
+  inherit version versionTag;
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "confidential-computing.sgx";
-    rev = "sgx_${finalAttrs.versionTag}";
-    hash = "sha256-gi4aNXHMHuPmc36JalALAXjIdn4COuXOZzC6dQRB6nU=";
-    fetchSubmodules = true;
+    tag = "sgx_${finalAttrs.versionTag}";
+    hash = "sha256-YYbE1QJTPumyXbpmWEKO+mn/MvGOlhdOvXkInYpr1WY=";
   };
 
-  # Extract Intel-provided, pre-built enclaves and libs.
-  postUnpack =
-    let
-      # Fetch the pre-built, Intel-signed Architectural Enclaves (AE). They help
-      # run user application enclaves, verify launch policies, produce remote
-      # attestation quotes, and do platform certification.
-      ae.prebuilt = fetchurl {
-        url = "https://download.01.org/intel-sgx/sgx-linux/${finalAttrs.versionTag}/prebuilt_ae_${finalAttrs.versionTag}.tar.gz";
-        hash = "sha256-Hlh96rYOyml2y50d8ASKz6U97Fl0hbGYECeZiG9nMSQ=";
-      };
+  # Extract Intel-provided pre-built enclaves, libs, and subrepos
+  postUnpack = ''
+    mkdir -p \
+      $sourceRoot/sdk \
+      $sourceRoot/external/dcap_source \
+      $sourceRoot/external/dcap_source/QuoteVerification/QVL \
+      $sourceRoot/prebuilt/dcap
 
-      # Pre-built ipp-crypto with mitigations.
-      optlib.prebuilt = fetchurl {
-        url = "https://download.01.org/intel-sgx/sgx-linux/${finalAttrs.versionTag}/optimized_libs_${finalAttrs.versionTag}.tar.gz";
-        hash = "sha256-7mDTaLtpOQLHQ6Fv+FWJ2k/veJZPXIcuj7kOdRtRqhg=";
-      };
+    cp -R --no-preserve=mode ${sgx-sdk-runtime.src}/. $sourceRoot/sdk/
+    cp -R --no-preserve=mode ${dcap.src}/. $sourceRoot/external/dcap_source/
+    cp -R --no-preserve=mode ${dcap.qvl.src}/. $sourceRoot/external/dcap_source/QuoteVerification/QVL/
 
-      # Fetch the Data Center Attestation Primitives (DCAP) platform enclaves
-      # and pre-built sgxssl.
-      dcap = rec {
-        version = "1.26";
-        filename = "prebuilt_dcap_${version}.tar.gz";
-        prebuilt = fetchurl {
-          url = "https://download.01.org/intel-sgx/sgx-dcap/${version}/linux/${filename}";
-          hash = "sha256-TXQ8xh0q9RKPyKqjMvxoQtIH2lxbhCiwpV+HvQxACaw=";
-        };
-      };
-    in
-    ''
-      # Make sure this is the right version of linux-sgx
-      grep -q '"${finalAttrs.version}"' "$src/common/inc/internal/se_version.h" \
-        || (echo "Could not find expected version ${finalAttrs.version} in linux-sgx source" >&2 && exit 1)
+    tar -xzf ${dcap.prebuilt} -C $sourceRoot/external/dcap_source prebuilt/
+    tar -xzf ${dcap.prebuilt} -C $sourceRoot/external/dcap_source/QuoteGeneration psw/
+    tar -xzf ${dcap.prebuilt} -C $sourceRoot/prebuilt/dcap --strip-components=1 prebuilt/openssl
 
-      tar -xzvf ${ae.prebuilt}     -C $sourceRoot/
-      tar -xzvf ${optlib.prebuilt} -C $sourceRoot/
+    tar -xzf ${ae.prebuilt} -C $sourceRoot/
 
-      # Make sure we use the correct version of prebuilt DCAP
-      grep -qE '(dcap_version=${dcap.version}|ae_file_name=${dcap.filename})' \
-        "$src/external/dcap_source/QuoteGeneration/download_prebuilt.sh" \
-        || (echo "Could not find expected prebuilt DCAP ${dcap.filename} in linux-sgx source" >&2 && exit 1)
+    # Make sure we have the repo version matches our package version.
+    grep -q '"${finalAttrs.version}"' "$sourceRoot/common/inc/internal/se_version.h" \
+      || (echo "Could not find expected version ${finalAttrs.version}" >&2 && exit 1)
 
-      tar -xzvf ${dcap.prebuilt} -C $sourceRoot/external/dcap_source prebuilt/
-      tar -xzvf ${dcap.prebuilt} -C $sourceRoot/external/dcap_source/QuoteGeneration psw/
-    '';
+    # Make sure we have right DCAP version
+    grep -qE '(dcap_version=${dcap.version}|ae_file_name=${dcap.filename})' \
+      "$sourceRoot/external/dcap_source/QuoteGeneration/download_prebuilt.sh" \
+      || (echo "Could not find expected prebuilt DCAP ${dcap.filename}" >&2 && exit 1)
+  '';
 
   patches = [
-    # There's a `make preparation` step that downloads some prebuilt binaries
-    # and applies some patches to the in-repo git submodules. This patch removes
-    # the parts that download things, since we can't do that inside the sandbox.
-    ./disable-downloads.patch
+    # Maintain backwards compat with pre-v2.30 clients, which omit `buf_size`
+    # when no public key ID buffer is requested.
+    #
+    # See PR upstream: https://github.com/intel/confidential-computing.sgx/pull/1107
+    ./aesm-init-quote-ex-compat.patch
 
     # This patch disables mtime in bundled zip file for reproducible builds.
     #
@@ -96,51 +197,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./cppmicroservices-compat.patch
   ];
 
-  postPatch =
-    let
-      # The base directories we want to copy headers from. The exact headers are
-      # parsed from <linux/installer/common/sdk/BOMs/sdk_base.txt>
-      bomDirsToCopyFrom = builtins.concatStringsSep "|" [
-        "common/"
-        "external/dcap_source/"
-        "external/ippcp_internal/"
-        "external/sgx-emm/"
-        "psw/"
-        "sdk/tlibcxx/"
-      ];
-    in
-    ''
-      patchShebangs \
-        external/sgx-emm/create_symlink.sh \
-        linux/installer/bin/build-installpkg.sh \
-        linux/installer/common/psw/createTarball.sh \
-        linux/installer/common/psw/install.sh
-
-      # Run sgx-sdk preparation step
-      make preparation
-
-      # Build a fake SGX_SDK directory. Normally sgx-psw depends on first building
-      # all of sgx-sdk, however we can actually build them independently by just
-      # copying a few header files and building `sgx_edger8r` separately.
-      mkdir .sgxsdk
-      export SGX_SDK="$(readlink -f .sgxsdk)"
-
-      # Parse the BOM for the headers we need, then copy them into SGX_SDK
-      # Each line in the BOM.txt looks like:
-      # <deliverydir>/...\t<installdir>/package/...\t....
-      # TODO(phlip9): hardlink?
-      sed -n -r 's:^<deliverydir>/(${bomDirsToCopyFrom})(\S+)\s<installdir>/package/(\S+)\s.*$:\1\2\n.sgxsdk/\3:p' \
-        < linux/installer/common/sdk/BOMs/sdk_base.txt \
-        | xargs --max-args=2 install -v -D
-    '';
-
   nativeBuildInputs = [
     cmake
     file
-    git
-    makeWrapper
-    ocaml
-    ocamlPackages.ocamlbuild
+    makeBinaryWrapper
     python3
     which
   ];
@@ -152,61 +212,85 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontUseCmakeConfigure = true;
 
-  preBuild = ''
-    # Build `sgx_edger8r`, the enclave .edl -> .h file codegen tool.
-    # Then place it in `$SGX_SDK/bin` and `$SGX_SDK/bin/x64`.
-    make -C sdk/edger8r/linux
-    mkdir -p $SGX_SDK/bin/x64
-    sgx_edger8r_bin="$(readlink -f build/linux/sgx_edger8r)"
-    ln -s $sgx_edger8r_bin $SGX_SDK/bin/
-    ln -s $sgx_edger8r_bin $SGX_SDK/bin/x64/
-
-    # Add this so we can link against libsgx_urts.
-    build_dir="$(readlink -f build/linux)"
-    ln -s $build_dir $SGX_SDK/lib
-    ln -s $build_dir $SGX_SDK/lib64
-  '';
-
-  buildFlags = [ "psw_install_pkg" ] ++ lib.optionals debug [ "DEBUG=1" ];
-
-  installFlags = [
-    "-C linux/installer/common/psw/output"
-    "DESTDIR=$(TMPDIR)/install"
+  makeFlags = [
+    "-C"
+    "psw"
   ];
+  buildFlags = lib.optionals debug [ "DEBUG=1" ];
 
-  postInstall = ''
-    installDir=$TMPDIR/install
-    sgxPswDir=$installDir/opt/intel/sgxpsw
+  SGX_SDK = sgx-sdk-runtime;
 
-    mv $installDir/usr/lib64/ $out/lib/
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/{aesm/bundles,etc,lib,share/licenses}
+
+    cp -a $SGX_SDK/lib/libsgx_enclave_common.so* $out/lib/
+    cp -a $SGX_SDK/lib/libsgx_urts.so* $out/lib/
+    cp -a build/linux/libsgx_quote_ex.so* $out/lib/
+    install -m755 build/linux/libsgx_uae_service.so $out/lib/
     ln -sr $out/lib $out/lib64
 
-    # Install udev rules to lib/udev/rules.d
-    mv $sgxPswDir/udev/ $out/lib/
+    # Avoid including the sgx-sdk-runtime in the final closure
+    urts=$(readlink -f $out/lib/libsgx_urts.so)
+    chmod u+w $urts
+    patchelf --set-rpath \
+      "$(patchelf --print-rpath $urts | sed "s#$SGX_SDK/lib#$out/lib#")" \
+      $urts
 
-    # Install example AESM config
-    mkdir $out/etc/
-    mv $sgxPswDir/aesm/conf/aesmd.conf $out/etc/
-    rmdir $sgxPswDir/aesm/conf/
+    # Assemble the AESM service
+    install -m755 \
+      build/linux/aesm_service \
+      build/linux/libCppMicroServices.so.4.0.0 \
+      build/linux/libipc.so \
+      build/linux/liboal.so \
+      build/linux/libutils.so \
+      $out/aesm/
+    install -m755 \
+      build/linux/bundles/libecdsa_quote_service_bundle.so \
+      build/linux/bundles/liblinux_network_service_bundle.so \
+      build/linux/bundles/libpce_service_bundle.so \
+      build/linux/bundles/libquote_ex_service_bundle.so \
+      $out/aesm/bundles/
 
-    # Delete init service
-    rm $sgxPswDir/aesm/aesmd.conf
+    install -m755 $SGX_SDK/lib/liburts_internal.so $out/aesm/
+    ln -s liburts_internal.so $out/aesm/libsgx_urts.so.2
 
-    # Move systemd services
-    mkdir -p $out/lib/systemd/system/
-    mv $sgxPswDir/aesm/aesmd.service $out/lib/systemd/system/
-    mv $sgxPswDir/remount-dev-exec.service $out/lib/systemd/system/
+    # Copy DCAP libs
+    dcapBuild=external/dcap_source/QuoteGeneration/build/linux
+    cp -a $dcapBuild/libsgx_default_qcnl_wrapper.so* $out/aesm/
+    install -m755 $dcapBuild/libsgx_pce_logic.so $out/aesm/libsgx_pce_logic.so.1
+    install -m755 $dcapBuild/libsgx_qe3_logic.so $out/aesm/libsgx_qe3_logic.so.1
+    ln -s libsgx_qe3_logic.so.1 $out/aesm/libsgx_qe3_logic.so
+    # Place the default Intel quote provider in the fallback location, so the
+    # configurable quote provider can take precedence if set.
+    install -m755 "$(readlink -f $dcapBuild/libdcap_quoteprov.so)" \
+      $out/aesm/libdcap_quoteprov.so
 
-    # Move misc files
-    mkdir $out/share/
-    mv $sgxPswDir/licenses $out/share/
+    # Copy the pre-built enclaves into place
+    install -m755 psw/ae/data/prebuilt/libsgx_pce.signed.so \
+      $out/aesm/libsgx_pce.signed.so.1
+    install -m755 \
+      external/dcap_source/QuoteGeneration/psw/ae/data/prebuilt/libsgx_qe3.signed.so \
+      $out/aesm/libsgx_qe3.signed.so.1
+    install -m755 \
+      external/dcap_source/QuoteGeneration/psw/ae/data/prebuilt/libsgx_id_enclave.signed.so \
+      $out/aesm/libsgx_id_enclave.signed.so.1
 
-    # Remove unnecessary files
-    rm $sgxPswDir/{cleanup.sh,startup.sh}
-    rm -r $sgxPswDir/scripts
-
-    # Move aesmd binaries/libraries/enclaves
-    mv $sgxPswDir/aesm/ $out/
+    # Install aesmd systemd service configs and udev rules. If you use
+    # `services.aesmd` in NixOS, then this isn't actually used.
+    install -m755 linux/installer/common/sgx-aesm-service/linksgx.sh $out/aesm/
+    install -Dm644 psw/ae/aesm_service/config/network/aesmd.conf $out/etc/aesmd.conf
+    install -Dm644 build/linux/aesmd.service $out/lib/systemd/system/aesmd.service
+    install -Dm644 \
+      sdk/build_infrastructure/linux/installer/common/libsgx-enclave-common/remount-dev-exec.service \
+      $out/lib/systemd/system/remount-dev-exec.service
+    install -Dm644 \
+      sdk/build_infrastructure/linux/installer/common/libsgx-enclave-common/91-sgx-enclave.rules \
+      $out/lib/udev/rules.d/91-sgx-enclave.rules
+    install -Dm644 linux/installer/common/sgx-aesm-service/92-sgx-provision.rules \
+      $out/lib/udev/rules.d/93-sgx-provision.rules
+    install -Dm644 License.txt $out/share/licenses/License.txt
 
     # We absolutely MUST avoid stripping or patching these ".signed.so" SGX
     # enclaves. Stripping would change each enclave measurement (hash of the
@@ -219,11 +303,15 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir $out/bin
     makeWrapper $out/aesm/aesm_service $out/bin/aesm_service \
-      --suffix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ protobuf ]}:$out/aesm \
-      --chdir "$out/aesm"
+      --chdir "$out/aesm" \
+      --suffix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          curl
+          protobuf
+        ]
+      }:$out/aesm
 
-    # Make sure we didn't forget to handle any files
-    rmdir $sgxPswDir || (echo "Error: The directory $installDir still contains unhandled files: $(ls -A $installDir)" >&2 && exit 1)
+    runHook postInstall
   '';
 
   stripDebugList = [
@@ -238,12 +326,12 @@ stdenv.mkDerivation (finalAttrs: {
     mv $TMPDIR/enclaves/*.signed.so* $out/aesm/
     rmdir $TMPDIR/enclaves
 
-    # Fixup the aesmd systemd service
+    # Fixup the aesmd systemd service for non-NixOS users.
     #
-    # Most—if not all—of those fixups are not relevant for NixOS as we have our own
-    # NixOS module which is based on those files without relying on them. Still, it
-    # is helpful to have properly patched versions for non-NixOS distributions.
-    echo "Fixing aesmd.service"
+    # Most (if not all) of these fixups are not relevant for NixOS as we have
+    # our own NixOS module which is based on those files without relying on
+    # them. Still, it's helpful to have properly patched versions for non-NixOS
+    # distros.
     substituteInPlace $out/lib/systemd/system/aesmd.service \
       --replace-fail '@aesm_folder@' \
                      "$out/aesm" \
@@ -251,28 +339,21 @@ stdenv.mkDerivation (finalAttrs: {
                      'Type=simple' \
       --replace-fail "ExecStart=$out/aesm/aesm_service" \
                      "ExecStart=$out/bin/aesm_service --no-daemon"\
-      --replace-fail "/bin/mkdir" \
-                     "${coreutils}/bin/mkdir" \
-      --replace-fail "/bin/chown" \
-                     "${coreutils}/bin/chown" \
-      --replace-fail "/bin/chmod" \
-                     "${coreutils}/bin/chmod" \
-      --replace-fail "/bin/kill" \
-                     "${coreutils}/bin/kill"
+      --replace-fail "/bin/mkdir" "${lib.getExe' coreutils "mkdir"}" \
+      --replace-fail "/bin/chown" "${lib.getExe' coreutils "chown"}" \
+      --replace-fail "/bin/chmod" "${lib.getExe' coreutils "chmod"}" \
+      --replace-fail "/bin/kill"  "${lib.getExe' coreutils "kill"}"
   '';
 
-  passthru.tests = {
-    service = nixosTests.aesmd;
+  passthru = {
+    inherit sgx-sdk-runtime;
+    tests.service = nixosTests.aesmd;
   };
 
   meta = {
     description = "Intel SGX Architectural Enclave Service Manager";
     homepage = "https://github.com/intel/confidential-computing.sgx";
-    maintainers = with lib.maintainers; [
-      phlip9
-      veehaitch
-      citadelcore
-    ];
+    maintainers = with lib.maintainers; [ phlip9 ];
     platforms = [ "x86_64-linux" ];
     license = lib.licenses.bsd3;
   };
