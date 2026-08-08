@@ -3,6 +3,7 @@
   qtbase,
   qtdeclarative,
   openssl,
+  pkgsBuildBuild,
 }:
 
 qtModule {
@@ -12,4 +13,8 @@ qtModule {
     qtdeclarative
   ];
   buildInputs = [ openssl ];
+
+  cmakeFlags = [
+    "-DQt6QuickTools_DIR=${pkgsBuildBuild.qt6.qtdeclarative}/lib/cmake/Qt6QuickTools"
+  ];
 }
