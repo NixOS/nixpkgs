@@ -23,6 +23,7 @@ let
     }@args:
     let
       gradle = gradle-unwrapped.override args;
+      localDepsLib = callPackage ./local-deps.nix { };
     in
     symlinkJoin {
       pname = "gradle";
@@ -51,7 +52,10 @@ let
       ];
 
       passthru = {
-        fetchDeps = callPackage ./fetch-deps.nix { inherit mitm-cache; };
+        fetchDeps = callPackage ./fetch-deps.nix { inherit mitm-cache localDepsLib; };
+        # Build an overrides attrset from nixpkgs derivations for use with
+        # the `localDeps` or `overrides` parameter of fetchDeps.
+        inherit (localDepsLib) mkGradleLocalOverrides mkVersionChainUpgrade;
         inherit (gradle) jdk;
         unwrapped = gradle;
         tests = {

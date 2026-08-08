@@ -1,13 +1,19 @@
 {
   mitm-cache,
+  localDepsLib,
   lib,
   pkgs,
   stdenv,
   callPackage,
+  fetchurl,
+  writeText,
 }:
 
 let
   getPkg = attrPath: lib.getAttrFromPath (lib.splitString "." (toString attrPath)) pkgs;
+  securityOverrides = callPackage ./security-overrides.nix {
+    inherit (localDepsLib) mkVersionChainUpgrade;
+  };
 in
 # the derivation to fetch/update deps for
 {
@@ -19,6 +25,15 @@ in
   bwrapFlags ? "--ro-bind \"$PWD\" \"$PWD\"",
   # deps path (relative to the package directory, or absolute)
   data,
+  # List of nixpkgs-backed Maven artifact specs. Each element is an attrset
+  # accepted by gradle.mkGradleLocalOverrides:
+  #   { drv, groupId, artifactId, version, jarPath?, pom? }
+  # The MITM proxy will serve the nixpkgs derivation instead of the fetched
+  # artifact for every matching (groupId, artifactId, version) triple.
+  localDeps ? [ ],
+  # Additional raw overrides attrset (merged after localDeps and security
+  # overrides; highest priority). Keyed by "groupId:artifactId:version".
+  overrides ? { },
   # redirect stdout to stderr to allow the update script to be used with update script combinators
   silent ? true,
   useBwrap ? stdenv.hostPlatform.isLinux,
@@ -255,12 +270,49 @@ let
       };
 
   finalData = visitAttrs { } [ ] data';
+
+  # Validate that every localDeps entry's GAV appears in deps.json, so typos
+  # are caught at eval time rather than silently ignored at build time.
+  checkLocalDeps =
+    let
+      gavToUrlFragment =
+        groupId: artifactId: version:
+        let
+          groupPath = builtins.replaceStrings [ "." ] [ "/" ] groupId;
+        in
+        "${groupPath}/${artifactId}/${version}/${artifactId}-${version}";
+      entryInData =
+        {
+          groupId,
+          artifactId,
+          version,
+          ...
+        }:
+        let
+          fragment = gavToUrlFragment groupId artifactId version;
+        in
+        if builtins.any (url: lib.hasInfix fragment url) (builtins.attrNames finalData) then
+          true
+        else
+          throw "gradle.fetchDeps: localDeps entry ${groupId}:${artifactId}:${version} not found in deps.json. Check spelling and verify the artifact was fetched by Gradle.";
+    in
+    builtins.all entryInData localDeps;
+
+  # Merge priority (highest last): security upgrades < localDeps < caller overrides.
+  allOverrides =
+    assert checkLocalDeps;
+    lib.foldl' lib.recursiveUpdate { } [
+      securityOverrides
+      (localDepsLib.mkGradleLocalOverrides localDeps)
+      overrides
+    ];
 in
 mitm-cache.fetch {
   name = "${pkg.pname or pkg.name}-deps";
   data = finalData // {
     "!version" = 1;
   };
+  overrides = allOverrides;
   passthru = lib.optionalAttrs (!builtins.isAttrs data) {
     updateScript = callPackage ./update-deps.nix { } {
       inherit
