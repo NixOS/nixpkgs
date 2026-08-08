@@ -6,16 +6,27 @@
 }:
 
 let
-  cfg = config.programs.river-classic;
+  cfg = config.programs.river;
 
   wayland-lib = import ./lib.nix { inherit lib; };
+
+  # River does not export WAYLAND_DISPLAY to the systemd activation
+  # environment, so UWSM would never see the session become ready.  Run
+  # `uwsm finalize` before river's usual init executable.
+  uwsmInit = pkgs.writeShellScript "river-uwsm-init" ''
+    ${lib.getExe config.programs.uwsm.package} finalize
+    init="''${XDG_CONFIG_HOME:-$HOME/.config}/river/init"
+    if [ -x "$init" ]; then
+      exec "$init"
+    fi
+  '';
 in
 {
-  options.programs.river-classic = {
-    enable = lib.mkEnableOption "river-classic, a dynamic tiling Wayland compositor";
+  options.programs.river = {
+    enable = lib.mkEnableOption "river, a non-monolithic Wayland compositor";
 
     package =
-      lib.mkPackageOption pkgs "river-classic" {
+      lib.mkPackageOption pkgs "river" {
         nullable = true;
         extraDescription = ''
           If the package is not overridable with `xwaylandSupport`, then the module option
@@ -40,46 +51,33 @@ in
       default = true;
     };
 
+    withUWSM = lib.mkEnableOption "UWSM (Unified Wayland Session Manager) to run river without a display manager while still activating `graphical-session.target` for the portal and XDG autostart services";
+
     extraPackages = lib.mkOption {
       type = with lib.types; listOf package;
-      default = with pkgs; [
-        swaylock
-        foot
-        dmenu
-      ];
-      defaultText = lib.literalExpression ''
-        with pkgs; [ swaylock foot dmenu ];
-      '';
+      default = [ ];
       example = lib.literalExpression ''
         with pkgs; [ alacritty rofi light ]
       '';
       description = ''
-        Extra packages to be installed system wide. See
-        [Common X11 apps used on i3 with Wayland alternatives](https://github.com/swaywm/sway/wiki/i3-Migration-Guide#common-x11-apps-used-on-i3-with-wayland-alternatives)
-        for a list of useful software.
+        Extra packages to be installed system wide.  River needs a window
+        manager implementing the river-window-management-v1 protocol, such as
+        kwm.  See [useful software suggested by
+        river](https://codeberg.org/river/wiki/src/branch/main/pages/useful-software.md).
       '';
     };
   };
 
-  imports = [
-    (lib.mkRenamedOptionModule [ "programs" "river" "enable" ] [ "programs" "river-classic" "enable" ])
-    (lib.mkRenamedOptionModule
-      [ "programs" "river" "package" ]
-      [ "programs" "river-classic" "package" ]
-    )
-    (lib.mkRenamedOptionModule
-      [ "programs" "river" "xwayland" "enable" ]
-      [ "programs" "river-classic" "xwayland" "enable" ]
-    )
-    (lib.mkRenamedOptionModule
-      [ "programs" "river" "extraPackages" ]
-      [ "programs" "river-classic" "extraPackages" ]
-    )
-  ];
-
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
+        assertions = [
+          {
+            assertion = !config.programs.river-classic.enable;
+            message = "programs.river and programs.river-classic both install a `river` binary and session; enable only one of them.";
+          }
+        ];
+
         environment.systemPackages = lib.optional (cfg.package != null) cfg.package ++ cfg.extraPackages;
 
         # To make a river session available if a display manager like SDDM is enabled:
@@ -96,8 +94,30 @@ in
         inherit lib pkgs;
         enableXWayland = cfg.xwayland.enable;
       })
+
+      (lib.mkIf cfg.withUWSM {
+        assertions = [
+          {
+            assertion = cfg.package != null;
+            message = "programs.river.withUWSM needs programs.river.package to be set, since the UWSM entry runs river by store path.";
+          }
+        ];
+
+        programs.uwsm = {
+          enable = true;
+          waylandCompositors.river = lib.mkIf (cfg.package != null) {
+            prettyName = lib.mkDefault "River";
+            comment = lib.mkDefault "River compositor managed by UWSM";
+            binPath = lib.mkDefault (lib.getExe cfg.package);
+            extraArgs = lib.mkDefault [
+              "-c"
+              "${uwsmInit}"
+            ];
+          };
+        };
+      })
     ]
   );
 
-  meta.maintainers = with lib.maintainers; [ GaetanLepage ];
+  meta.maintainers = with lib.maintainers; [ yiyu ];
 }
