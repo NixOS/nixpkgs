@@ -11,7 +11,6 @@
   flex,
   gperf,
   ninja,
-  pkg-config,
   python3,
   which,
   nodejs,
@@ -81,7 +80,6 @@ qtModule {
     flex
     gperf
     ninja
-    pkg-config
     (python3.withPackages (ps: with ps; [ html5lib ]))
     which
     gn
