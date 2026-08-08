@@ -7,7 +7,6 @@
   pkg-config,
   oniguruma,
   installShellFiles,
-  zola,
   testers,
 }:
 
@@ -46,7 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --zsh <($out/bin/zola completion zsh)
   '';
 
-  passthru.tests.version = testers.testVersion { package = zola; };
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = {
     description = "Fast static site generator with everything built-in";
