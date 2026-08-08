@@ -15,6 +15,10 @@
 
   helm-secrets = callPackage ./helm-secrets.nix { };
 
+  helm-secrets-getter = callPackage ./helm-secrets-getter.nix { };
+
+  helm-secrets-post-renderer = callPackage ./helm-secrets-post-renderer.nix { };
+
   helm-schema = callPackage ./helm-schema.nix { };
 
   helm-unittest = callPackage ./helm-unittest.nix { };
