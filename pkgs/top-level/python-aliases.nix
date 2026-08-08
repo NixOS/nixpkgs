@@ -163,6 +163,7 @@ mapAliases {
   chromeprint = throw "'chromaprint' was removed as it depended on m2r which was removed."; # Added 2026-05-27
   cirq-rigetti = throw "cirq-rigetti was removed because it is no longer provided by upstream"; # added 2025-09-13
   class-registry = throw "'class-registry' has been renamed to/replaced by 'phx-class-registry'"; # Converted to throw 2025-10-29
+  clikit = throw "'clikit' has been removed from nixpkgs because it is not longer maintained upstream"; # Added 2026-08-08
   ColanderAlchemy = throw "'ColanderAlchemy' has been renamed to/replaced by 'colanderalchemy'"; # Converted to throw 2025-10-29
   command_runner = throw "'command_runner' has been renamed to/replaced by 'command-runner'"; # Converted to throw 2025-10-29
   commitizen = throw "commitizen has been promoted to a top-level attribute name: `pkgs.commitizen`"; # added 2025-09-14
