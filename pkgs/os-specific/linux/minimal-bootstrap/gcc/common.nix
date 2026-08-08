@@ -19,6 +19,7 @@ let
       hash = "sha256-Cn7rvg1FI7H/26GzSe4pv5VW/gvwbwGqivAqEeawkwk=";
     })
     ./configure-skip-target-libs-hooks.patch
+    ./musl-libssp_nonshared.patch
   ];
 in
 {
