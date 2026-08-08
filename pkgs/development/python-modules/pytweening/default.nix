@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  unittestCheckHook,
 }:
 buildPythonPackage rec {
   pname = "pytweening";
@@ -17,9 +18,15 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   pythonImportsCheck = [ "pytweening" ];
-  checkPhase = ''
-    python -m unittest tests.basicTests
-  '';
+
+  unittestFlags = [
+    "-s"
+    "tests"
+    "-p"
+    "basicTests.py"
+  ];
+
+  nativeCheckInputs = [ unittestCheckHook ];
 
   meta = {
     description = "Set of tweening / easing functions implemented in Python";
