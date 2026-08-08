@@ -16376,10 +16376,10 @@ with self;
 
   HTMLGumbo = buildPerlModule {
     pname = "HTML-Gumbo";
-    version = "0.18";
+    version = "0.20";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RU/RUZ/HTML-Gumbo-0.18.tar.gz";
-      hash = "sha256-v1C2HCRlbMP8lYYC2AqcfQFyR6842Nv6Dp3sW3VCXV8=";
+      url = "mirror://cpan/authors/id/B/BP/BPS/HTML-Gumbo-0.20.tar.gz";
+      hash = "sha256-ImEK+8bIfgZ92E9/EZo9J4Ie1kEwNFU8Ga694iEdiDU=";
     };
     propagatedBuildInputs = [ AlienLibGumbo ];
     meta = {
