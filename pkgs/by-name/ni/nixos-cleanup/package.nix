@@ -21,6 +21,10 @@ stdenv.mkDerivation {
   dontUnpack = true;
   dontBuild = true;
 
+  __structuredAttrs = true;
+  strictDeps = true;
+  nativeBuildInputs = [ python3 ];
+
   installPhase = ''
     runHook preInstall
     install -D -m755 "$src" "$out/bin/nixos-cleanup"
@@ -38,6 +42,7 @@ stdenv.mkDerivation {
       {
         name = "MulpinKR";
         email = "derkaca751@gmail.com";
+        githubId = 102258404;
       }
     ];
     mainProgram = "nixos-cleanup";
