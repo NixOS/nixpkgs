@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   passthru = {
-    appImageContents = appimageTools.extractType2 {
+    appImageContents = appimageTools.extract {
       inherit (finalAttrs) pname src version;
     };
 
