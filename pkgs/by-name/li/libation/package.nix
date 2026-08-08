@@ -12,6 +12,7 @@
   libxi,
   libxcursor,
   nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 
 buildDotnetModule rec {
@@ -45,7 +46,10 @@ buildDotnetModule rec {
     "HangoverAvalonia/HangoverAvalonia.csproj"
   ];
 
-  nativeBuildInputs = [ wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    writableTmpDirAsHomeHook # build fails without this on darwin
+  ];
 
   runtimeDeps = [
     # For Avalonia UI
