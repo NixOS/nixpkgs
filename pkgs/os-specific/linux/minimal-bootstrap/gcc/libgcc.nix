@@ -116,7 +116,8 @@ bash.runCommand "${pname}-${common.version}"
         --disable-libvtv \
         --disable-vtable-verify \
         --with-sysroot=/ \
-        --with-native-system-headers=${libc-headers}/include
+        --with-native-system-headers=${libc-headers}/include \
+        ${lib.optionalString hostPlatform.isGnu "--with-glibc-version=${libc-headers.version}"}
 
       sed -i 's,libgcc.mvars:.*$,libgcc.mvars:,' -i Makefile
 

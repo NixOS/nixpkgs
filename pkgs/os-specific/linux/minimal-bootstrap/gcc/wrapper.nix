@@ -13,12 +13,21 @@
   gcc-unwrapped,
   binutils,
   bash,
-  dynamicLinkerGlob,
-  staticLibgcc,
 }:
 let
+  common = import ./common.nix {
+    inherit
+      lib
+      bash
+      fetchurl
+      gnutar
+      xz
+      ;
+  };
   pname = "gcc-wrapper";
-  extraFlags = lib.optionalString staticLibgcc "-static-libgcc ";
+  extraFlags = lib.optionalString (!libgcc.sharedAvailable) "-static-libgcc ";
+  # adapted from bintools-wrapper
+  dynamicLinkerGlob = common.dynamicLinkerGlob targetPlatform libc;
 in
 bash-build.runCommand "${pname}-${gcc-unwrapped.version}"
   {

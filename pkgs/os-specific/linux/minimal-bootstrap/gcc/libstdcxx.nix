@@ -20,8 +20,6 @@
   bzip2,
   xz,
   libc,
-  dynamicLinkerGlob,
-  staticLibgcc,
 }:
 let
   common = import ./common.nix {
@@ -40,9 +38,7 @@ let
     buildPlatform.config != hostPlatform.config
   ) "${hostPlatform.config}-";
 
-  # FIXME: hack until we have a proper cross-compilation setup in minimal-bootstrap
-  fakeBuildPlatform = lib.replaceString "-gnu" "-musl" buildPlatform.config;
-  fakeHostPlatform = lib.replaceString "-gnu" "-musl" hostPlatform.config;
+  dynamicLinkerGlob = common.dynamicLinkerGlob hostPlatform libc;
 in
 bash.runCommand "${pname}-${common.version}"
   {
@@ -146,7 +142,4 @@ bash.runCommand "${pname}-${common.version}"
       rm -rf "$out/lib64"
       ln -s lib "$out/lib64"
     fi
-
-    # FIXME: hack until we have a proper cross-compilation setup in minimal-bootstrap
-    ln -s "$out/include/c++/${common.version}/${fakeHostPlatform}" "$out/include/c++/${common.version}/${hostPlatform.config}"
   ''
