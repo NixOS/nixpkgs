@@ -2,14 +2,19 @@
   lib,
   stdenv,
   fetchFromGitHub,
+
+  # nativeBuildInputs
+  pkg-config,
+  cmake,
+  python3,
+
+  # buildInputs
   libpng,
   gzip,
   fftw,
   blas,
   lapack,
-  python3,
-  cmake,
-  pkg-config,
+
   # Available list of packages can be found near here:
   #
   # - https://github.com/lammps/lammps/blob/develop/cmake/CMakeLists.txt#L222
