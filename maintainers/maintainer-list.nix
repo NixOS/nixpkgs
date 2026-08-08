@@ -23633,6 +23633,13 @@
     github = "rachalaraj";
     githubId = 124191100;
   };
+  rachitvrma = {
+    name = "Rachit Kumar Verma";
+    email = "rachitverma1122+nixpkgs@gmail.com";
+    matrix = "@rachitvrma:matrix.org";
+    github = "rachitvrma";
+    githubId = 155641117;
+  };
   RadxaYuntian = {
     # This is the work account for @MakiseKurisu
     name = "ZHANG Yuntian";
