@@ -177,6 +177,7 @@ with self;
       async_websocket
       cohttp_async_websocket
     ];
+    __darwinAllowLocalNetworking = true;
   };
 
   async_sendfile = janePackage {
