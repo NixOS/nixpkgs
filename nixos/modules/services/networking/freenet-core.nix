@@ -9,7 +9,7 @@ let
   cfg = config.services.freenet-core;
   stateDir = "/var/lib/freenet-core";
   configDir = "${stateDir}/config";
-  logDir = "/var/log/freenet-core";
+  cacheDir = "/var/cache/freenet-core";
 
   command = [
     (lib.getExe cfg.package)
@@ -17,7 +17,6 @@ let
     "--disable-auto-update"
     "--config-dir=${configDir}"
     "--data-dir=${stateDir}"
-    "--log-dir=${logDir}"
     "--network-address=${cfg.networkAddress}"
     "--network-port=${toString cfg.networkPort}"
     "--ws-api-address=${cfg.websocketAddress}"
@@ -125,7 +124,9 @@ in
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       environment = {
+        FREENET_LOG_TO_STDERR = "1";
         HOME = stateDir;
+        XDG_CACHE_HOME = cacheDir;
       }
       // cfg.environment;
       serviceConfig = {
@@ -135,8 +136,8 @@ in
         DynamicUser = true;
         StateDirectory = "freenet-core";
         StateDirectoryMode = "0700";
-        LogsDirectory = "freenet-core";
-        LogsDirectoryMode = "0700";
+        CacheDirectory = "freenet-core";
+        CacheDirectoryMode = "0700";
         WorkingDirectory = stateDir;
         Nice = cfg.nice;
         LimitNOFILE = 65536;
@@ -149,6 +150,8 @@ in
 
         CapabilityBoundingSet = "";
         LockPersonality = true;
+        # Freenet JIT-compiles WebAssembly contracts.
+        MemoryDenyWriteExecute = false;
         NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateTmp = true;
@@ -164,6 +167,7 @@ in
         ProtectSystem = "strict";
         RemoveIPC = true;
         RestrictAddressFamilies = [
+          "AF_UNIX"
           "AF_INET"
           "AF_INET6"
         ];
@@ -171,6 +175,7 @@ in
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
+        SystemCallFilter = [ "@system-service" ];
       };
     };
   };
