@@ -4,6 +4,7 @@
   lib,
   qtbase,
   qtdeclarative,
+  qtquicktimeline,
   openssl,
   pkgsBuildBuild,
 }:
@@ -13,6 +14,7 @@ qtModule {
   propagatedBuildInputs = [
     qtbase
     qtdeclarative
+    qtquicktimeline
   ];
   buildInputs = [ openssl ];
 
