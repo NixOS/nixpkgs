@@ -99,6 +99,7 @@ let
     {
       auto-deploy = mkTests ./auto-deploy.nix;
       configuration = mkTests ./configuration.nix;
+      extra-containerd-settings = mkTests ./extra-containerd-settings.nix;
       etcd = mkTests ./etcd.nix;
       multi-node = mkTests ./multi-node.nix;
       single-node = mkTests ./single-node.nix;
