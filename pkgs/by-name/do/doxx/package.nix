@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "doxx";
-  version = "0.1.2";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "bgreenwell";
     repo = "doxx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-V0pBeh9u6iNt6hS1MpUau6nYBdfn9bELhR0GAMqTRmc=";
+    hash = "sha256-0+7R0kdCcw+PdX4UfYuacCv86nzJW+LgTVml9drGZXE=";
   };
 
-  cargoHash = "sha256-WsV6IGKO3mwAXtqXHu+CP1dQ/tw1jsuZlfSZx4L2WIM=";
+  cargoHash = "sha256-Eix63WAxOdK4//WBDfAdqMrtHCM1VSepSy841hCndeI=";
 
   # https://github.com/bgreenwell/doxx/issues/65
   checkFlags = [ "--skip=terminal_image::tests::test_renderer_creation" ];

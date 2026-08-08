@@ -6,6 +6,7 @@
   openssl,
   pkg-config,
   nix-update-script,
+  versionCheckHook,
   _experimental-update-script-combinators,
 }:
 
@@ -41,9 +42,19 @@ rustPlatform.buildRustPackage rec {
   # Basic CLI operations (--help, fetch) don't create an isolate, so work fine.
   doCheck = false;
 
+  # --version doesn't create a V8 isolate, so this runs fine in the sandbox
+  # where the tests (see above) crash.
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   env = {
     OPENSSL_NO_VENDOR = 1;
     RUSTY_V8_ARCHIVE = librusty_v8;
+    # Upstream never bumps the workspace Cargo.toml version per release (still
+    # 0.1.0 at the v0.1.10 tag); obscura-cli/build.rs only reports the git tag
+    # on GitHub Actions and otherwise falls back to CARGO_PKG_VERSION. Pin it
+    # here so `obscura --version` matches the packaged release.
+    OBSCURA_VERSION = version;
   };
 
   passthru = {

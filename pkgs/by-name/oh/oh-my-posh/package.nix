@@ -3,19 +3,20 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
+  versionCheckHook,
 }:
 buildGoModule (finalAttrs: {
   pname = "oh-my-posh";
-  version = "30.4.0";
+  version = "30.6.2";
 
   src = fetchFromGitHub {
     owner = "jandedobbeleer";
     repo = "oh-my-posh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pEprhxE8qqCT001DXC/OQmfSHX2mSw4oHpe5/C2cxhg=";
+    hash = "sha256-4evKi+JDCisdw1y3B4ZFp2kiJoMFt/dXxEPOFsgYsNI=";
   };
 
-  vendorHash = "sha256-7LLRPE0aYI+hG0AOL7PARzwDpHto56c68ddQDapGKSM=";
+  vendorHash = "sha256-SupbcYfodpcw7MEhwK8KXy+MyLxLog0rkvfB2O7+ccU=";
 
   sourceRoot = "${finalAttrs.src.name}/src";
 
@@ -43,6 +44,9 @@ buildGoModule (finalAttrs: {
   '';
 
   passthru.updateScript = nix-update-script { };
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Prompt theme engine for any shell";

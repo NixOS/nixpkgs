@@ -12,7 +12,7 @@ const reviewKey = 'check-target-branch'
 /**
  * @param {{
  *  github: InstanceType<import('@actions/github/lib/utils').GitHub>,
- *  context: import('@actions/github/lib/context').Context
+ *  context: typeof import('@actions/github').context
  *  core: import('@actions/core')
  *  dry: boolean
  * }} CheckTargetBranchProps
