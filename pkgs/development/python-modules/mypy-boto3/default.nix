@@ -874,8 +874,8 @@ in
       "sha256-5AqWiNGz9jemWb8dZkuGQXxPXIruMdDWcoRzbT+ZGro=";
 
   mypy-boto3-mediapackagev2 =
-    buildMypyBoto3Package "mediapackagev2" "1.43.55"
-      "sha256-ZMHmbq4kd8J7N30nfRUoPS5+tlBMvOGzq7FkmSOS7wk=";
+    buildMypyBoto3Package "mediapackagev2" "1.43.67"
+      "sha256-zgO/4TSdGI7TDa1diqAQ7S56T/G7vON5HoTcIxSv/sE=";
 
   mypy-boto3-mediastore =
     buildMypyBoto3Package "mediastore" "1.43.0"
