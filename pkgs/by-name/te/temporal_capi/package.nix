@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     Cflags: -I\''${includedir}
     EOF
   '';
-  postFixup = lib.optional (stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isStatic) ''
+  postFixup = lib.optionalString (stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isStatic) ''
     ${stdenv.cc.targetPrefix}install_name_tool -id "$out/lib/libtemporal_capi.dylib" "$out/lib/libtemporal_capi.dylib"
   '';
 

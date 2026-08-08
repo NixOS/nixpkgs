@@ -139,7 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
         stdenv.cc.cc
       ];
     in
-    lib.optionals (!buildRockCompiler) ''
+    lib.optionalString (!buildRockCompiler) ''
       mkdir -p $external/lib
       cp -a external/llvm-project/llvm/lib/{*.a*,*.so*} $external/lib
       patchelf --set-rpath $external/lib:$out/lib:${libPath} $external/lib/*.so*

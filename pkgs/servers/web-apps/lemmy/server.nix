@@ -69,7 +69,7 @@ rustPlatform.buildRustPackage rec {
 
   # This gets installed automatically by cargoInstallHook,
   # but we don't actually need it, and it leaks a reference to rustc.
-  postInstall = lib.optionals (!stdenv.hostPlatform.isDarwin) ''
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     rm $out/lib/libhtml2md.so
   '';
 

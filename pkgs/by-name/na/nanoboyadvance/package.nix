@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Make it runnable from the terminal on Darwin
-  postInstall = lib.optionals stdenv.hostPlatform.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir "$out/bin"
     ln -s "$out/Applications/NanoBoyAdvance.app/Contents/MacOS/NanoBoyAdvance" "$out/bin/NanoBoyAdvance"
   '';
