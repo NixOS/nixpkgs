@@ -8,9 +8,7 @@
   blas,
   lapack,
   python3,
-  mpich,
   cmake,
-  autoAddDriverRunpath,
   pkg-config,
   # Available list of packages can be found near here:
   #
