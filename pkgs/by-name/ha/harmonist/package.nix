@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "harmonist";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchFromCodeberg {
     owner = "anaseto";
     repo = "harmonist";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JR2EM9tlxNuntx//BV/hqsBv5fCkjjxZOcZtx+CZgIo=";
+    hash = "sha256-9cEKkvQze+hg4CwDe5epTpuQPevylwnSP5xQAVGJ/wQ=";
   };
 
-  vendorHash = "sha256-0gtDnV+ofHj705nXFpZHP6imIU5G2ItQr6B17S59teI=";
+  vendorHash = "sha256-wibNLDdykV2psOnJbMKu0EZSrrhKRxrN/OTWXmUz2FM=";
 
   ldflags = [
     "-s"
