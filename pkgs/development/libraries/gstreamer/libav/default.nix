@@ -9,7 +9,8 @@
   gstreamer,
   gst-plugins-base,
   gettext,
-  ffmpeg-headless,
+  # FIXME: unpin when upstream supports ffmpeg 9
+  ffmpeg_8-headless,
   # Checks meson.is_cross_build(), so even canExecute isn't enough.
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
@@ -50,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gstreamer
     gst-plugins-base
-    ffmpeg-headless
+    ffmpeg_8-headless
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_gstreamer
