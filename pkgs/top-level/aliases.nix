@@ -2931,7 +2931,6 @@ mapAliases {
   yarGen = warnAlias "'yarGen' has been renamed to 'yargen'" yargen; # Added 2026-02-12
   yarn2nix = throw "'yarn2nix' and its tooling has been removed as it was unusable within nodePackages. Use the standard yarn v1 hooks available in nixpkgs instead."; # Added 2026-04-25
   yarn2nix-moretea = throw "'yarn2nix' and its tooling has been removed as it was unusable within nodePackages. Use the standard yarn v1 hooks available in nixpkgs instead."; # Added 2026-04-25
-  yaru-theme = throw "'yaru-theme' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   yeahwm = throw "'yeahwm' has been removed, as it was broken and unmaintained upstream."; # Added 2025-06-12
   yojimbo = throw "'yojimbo' has been removed as it used an EOL TLS library and was broken."; # Added 2026-05-06
   yosys-synlig = throw "yosys-synlig has been removed because it is unmaintained upstream and incompatible with current Yosys versions."; # Added 2026-01-06

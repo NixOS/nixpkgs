@@ -18267,6 +18267,11 @@
     github = "merrkry";
     githubId = 124278440;
   };
+  mershl = {
+    name = "Mershl";
+    github = "mershl";
+    githubId = 520251;
+  };
   mert-kurttutan = {
     email = "mert-kurttutan@gmail.com";
     name = "Mert Kurttutan";
