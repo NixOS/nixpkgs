@@ -11,13 +11,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "alist";
-  version = "3.57.0";
+  version = "3.63.0";
 
   src = fetchFromGitHub {
     owner = "AlistGo";
     repo = "alist";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wwV65vxNSrGzP7TQ+nnjWS+dcCj/+67WcMPRbNqOVbQ=";
+    hash = "sha256-G3guBu+SRIF8a4OZzPvnu2Ri1N7VRst4LB/WCykmH58=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -38,7 +38,7 @@ buildGoModule (finalAttrs: {
   '';
 
   proxyVendor = true;
-  vendorHash = "sha256-aRnS3LLG25FK1ELKd7K1e5aGLmKnQ7w/3QVe4P9RRLI=";
+  vendorHash = "sha256-oHuNsTfP216Kd46TNF8oUDGgoABq1NtPiPN1srOFJzE=";
 
   buildInputs = [ fuse ];
 
@@ -62,6 +62,7 @@ buildGoModule (finalAttrs: {
     ldflags+=" -X \"github.com/alist-org/alist/v3/internal/conf.BuiltAt=$(cat SOURCE_DATE_EPOCH)\""
     ldflags+=" -X github.com/alist-org/alist/v3/internal/conf.GitCommit=$(cat COMMIT)"
   '';
+  __darwinAllowLocalNetworking = true;
 
   checkFlags =
     let
@@ -94,10 +95,10 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     updateScript = lib.getExe (callPackage ./update.nix { });
-    webVersion = "3.57.0";
+    webVersion = "3.63.0";
     web = fetchzip {
       url = "https://github.com/AlistGo/alist-web/releases/download/${finalAttrs.passthru.webVersion}/dist.tar.gz";
-      hash = "sha256-QP1eWlSr7XBX8jUyvXhpmEGIwWaY6wy4M2l/35AiuUg=";
+      hash = "sha256-uWktKQU9EYPXj88Wj8LbRbuIPqW2u3EBQ5MM82wawtM=";
     };
   };
 
