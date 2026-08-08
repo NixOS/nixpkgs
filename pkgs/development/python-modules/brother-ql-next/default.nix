@@ -12,7 +12,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "brother-ql";
+  pname = "brother-ql-next";
   version = "0.12.0";
   pyproject = true;
 
