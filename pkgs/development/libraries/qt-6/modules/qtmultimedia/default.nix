@@ -64,12 +64,15 @@ qtModule {
   ];
 
   cmakeFlags = [
-    "-DENABLE_DYNAMIC_RESOLVE_VAAPI_SYMBOLS=0"
+    "-DENABLE_DYNAMIC_RESOLVE_VAAPI_SYMBOLS=0" # Manually-specified variables were not used by the project; drop?
     "-DQt6ShaderToolsTools_DIR=${pkgsBuildBuild.qt6.qtshadertools}/lib/cmake/Qt6ShaderToolsTools"
+    "-DQt6QuickTools_DIR=${pkgsBuildBuild.qt6.qtdeclarative}/lib/cmake/Qt6QuickTools"
+    "-DQt6Quick3DTools_DIR=${pkgsBuildBuild.qt6.qtquick3d}/lib/cmake/Qt6Quick3DTools"
+    "-DQt6QmlTools_DIR=${pkgsBuildBuild.qt6.qtdeclarative}/lib/cmake/Qt6QmlTools"
   ];
 
-  env = {
-    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-include AudioToolbox/AudioToolbox.h";
-    NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework AudioToolbox";
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_CFLAGS_COMPILE = "-include AudioToolbox/AudioToolbox.h";
+    NIX_LDFLAGS = "-framework AudioToolbox";
   };
 }
