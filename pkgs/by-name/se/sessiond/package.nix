@@ -11,14 +11,14 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
   pname = "sessiond";
-  version = "0.1.1";
+  version = "0.2.0";
 
-  cargoHash = "sha256-i5F9WJD6hMjgiAM43iR4+ZQKZmwtKhEY8uZ0KleNqE8=";
+  cargoHash = "sha256-QM5eDBSBahobqsJKFAG9eR/FvYrpVuQ3L1CXmhlIBFY=";
 
   src = fetchgit {
     url = "https://tangled.org/did:plc:vj3bxta3i3cp26nn46yideoh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8NFNFuolp0zqtBmEeI5ZP4aAmzdUMHNYwvm7esOoS8A=";
+    hash = "sha256-kygJ/Hw/5tBjGCxsRLrti3L1Zcpm8y5gLpGPGsqV0VI=";
   };
 
   nativeBuildInputs = [
@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   meta = {
-    description = "Session and seat management daemon";
+    description = "Session management daemon";
     homepage = "https://tangled.org/r0chd.pl/sessiond";
     license = lib.licenses.gpl3Only;
     maintainers = builtins.attrValues { inherit (lib.maintainers) r0chd; };
