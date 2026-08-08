@@ -162,6 +162,11 @@ let
     "meta"
   ];
 
+  repoPath = projectInfo.${pname}.repo_path or null;
+  # Enable darwin by default only for framework scope atm
+  # In other folders most of them tend to not work
+  isFramework = repoPath != null && lib.hasPrefix "frameworks/" repoPath;
+
   meta = {
     description = projectInfo.${pname}.description;
     homepage = "https://invent.kde.org/${projectInfo.${pname}.repo_path}";
@@ -169,7 +174,8 @@ let
     license = lib.filter (l: l != null) (map (l: licensesBySpdxId.${l}) licenseInfo.${pname});
     teams = [ lib.teams.qt-kde ];
     # Platforms are currently limited to what upstream tests in CI, but can be extended if there's interest.
-    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+    platforms =
+      lib.platforms.linux ++ lib.platforms.freebsd ++ lib.optionals isFramework lib.platforms.darwin;
   }
   // (args.meta or { });
 
