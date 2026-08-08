@@ -52,6 +52,18 @@ rec {
     unique
     ;
 
+  inherit (lib.generators)
+    toPretty
+    ;
+
+  inherit (lib.meta)
+    platformMatch
+    ;
+
+  inherit (builtins)
+    getEnv
+    ;
+
   handlers = rec {
     # Ordered from less to more
     levels = [
@@ -87,13 +99,15 @@ rec {
           # If `description` is not defined, the derivation is probably not a package.
           # Simply checking whether `meta` is defined is insufficient,
           # as some fetchers and trivial builders do define meta.
-          config: attrs:
+          config: _hostPlatform: attrs:
           # Order of checks optimised for short-circuiting the common case of having maintainers
           (attrs.meta.maintainers or [ ] == [ ])
           && (attrs.meta.teams or [ ] == [ ])
           && (!attrs ? outputHash)
           && (attrs ? meta.description);
-        value.message = "This package has no declared maintainer, i.e. an empty `meta.maintainers` and `meta.teams` attribute.";
+        value = _config: _hostPlatform: _attrs: {
+          message = "This package has no declared maintainer, i.e. an empty `meta.maintainers` and `meta.teams` attribute.";
+        };
       };
     };
     broken = {
@@ -112,14 +126,76 @@ rec {
                 "config.allowBrokenPredicate is deprecated, use config.problems.handlers.myPackage.broken = \"warn\" for individual packages instead."
                 config.allowBrokenPredicate;
           in
+          _hostPlatform:
           if allowBroken then
             attrs: false
           else if config ? allowBrokenPredicate then
             attrs: attrs ? meta.broken && attrs.meta.broken && !allowBrokenPredicate attrs
           else
             attrs: attrs ? meta.broken && attrs.meta.broken;
-        value.message = "This package is broken.";
+        value = _config: _hostPlatform: _attrs: {
+          message = "This package is broken.";
+        };
       };
+    };
+    unsupported = {
+      manualAllowed = true;
+      isUnique = true;
+      nixpkgsInternalUseAllowed = true;
+      automatic =
+        let
+          envAllowUnsupportedSystem = getEnv "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM" == "1";
+          # Logical inversion of meta.availableOn for hostPlatform
+          hasUnsupportedPlatform =
+            hostPlatform:
+            let
+              inherit (hostPlatform) system;
+              # in almost all cases, meta.platforms is a simple list of strings, and we
+              # can just check if it contains the current system. we only run the more
+              # intensive platformMatch if necessary
+              anyHostPlatform = list: elem system list || any (platformMatch hostPlatform) list;
+            in
+            pkg:
+            pkg ? meta.platforms && !(anyHostPlatform pkg.meta.platforms)
+            || pkg ? meta.badPlatforms && anyHostPlatform pkg.meta.badPlatforms;
+        in
+        {
+          condition =
+            config:
+            let
+              allowUnsupportedSystem = config.allowUnsupportedSystem || envAllowUnsupportedSystem;
+            in
+            hostPlatform:
+            let
+              hasUnsupportedPlatform' = hasUnsupportedPlatform hostPlatform;
+            in
+            attrs: hasUnsupportedPlatform' attrs && !allowUnsupportedSystem;
+          value =
+            let
+              # lazily importing the library only when we need it for
+              # the actual message value. The import will be cached
+              # anyway and the thunk will only exist once unless there
+              # are multiple lines importing it.
+              inherit (import ./remediations.nix { inherit lib; }) remediate_allowlist;
+            in
+            _config: hostPlatform: attrs: {
+              message =
+                let
+                  toPretty' = toPretty {
+                    allowPrettyValues = true;
+                    indent = "  ";
+                  };
+                in
+                ''
+                  is not available on the requested hostPlatform:
+                    hostPlatform.system = "${hostPlatform.system}"
+                    package.meta.platforms = ${toPretty' (attrs.meta.platforms or [ ])}
+                    package.meta.badPlatforms = ${toPretty' (attrs.meta.badPlatforms or [ ])}
+                '';
+              # FIXME: add remediation support to meta.problems
+              remediation = remediate_allowlist "UnsupportedSystem" "";
+            };
+        };
     };
     removal = {
       manualAllowed = true;
@@ -149,10 +225,10 @@ rec {
   );
 
   genAutomaticProblems =
-    config: attrs:
+    config: hostPlatform: attrs:
     listToAttrs (
-      map (problem: lib.nameValuePair problem.kindName problem.value) (
-        filter (problem: problem.condition config attrs) automaticProblems
+      map (problem: lib.nameValuePair problem.kindName (problem.value config hostPlatform attrs)) (
+        filter (problem: problem.condition config hostPlatform attrs) automaticProblems
       )
     );
 
@@ -469,7 +545,7 @@ rec {
     };
 
   genCheckProblems =
-    config:
+    config: hostPlatform:
     let
       # This is here so that it gets cached for a (checkProblems config) thunk
       inherit (genHandlerSwitch config)
@@ -486,7 +562,7 @@ rec {
       automaticProblemsConfigCache = concatMap (
         problem:
         optional (elem problem.kindName configuredProblems) {
-          condition = problem.condition config;
+          condition = problem.condition config hostPlatform;
           handler = handlerForProblem problem.kindName problem.kindName;
         }
       ) automaticProblems;
@@ -511,7 +587,7 @@ rec {
       # Slow path, only here we actually figure out which problems we need to handle
       let
         pname = getName attrs;
-        problems = attrs.meta.problems or { } // genAutomaticProblems config attrs;
+        problems = attrs.meta.problems or { } // genAutomaticProblems config hostPlatform attrs;
         problemsToHandle = filter (v: v.handler != "ignore") (
           mapAttrsToList (name: problem: rec {
             inherit name;
@@ -525,9 +601,9 @@ rec {
       processProblems pname problemsToHandle;
 
   completeMetaProblems =
-    config: attrs:
+    config: hostPlatform: attrs:
     mapAttrs (name: problem: { kind = name; } // problem) (
-      (attrs.meta.problems or { }) // genAutomaticProblems config attrs
+      (attrs.meta.problems or { }) // genAutomaticProblems config hostPlatform attrs
     );
 
   processProblems =
@@ -567,6 +643,7 @@ rec {
               ${concatMapStringsSep "\n" (x: "- ${fullMessage x}") errorProblems}
             '';
             ## TODO: Add mention of problem.matchers, or maybe better link to docs of that
+            ## TODO: add remediation
             remediation = ''
               See also https://nixos.org/manual/nixpkgs/unstable#sec-problems
               To allow evaluation regardless, use:

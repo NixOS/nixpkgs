@@ -11,8 +11,6 @@ let
     all
     attrValues
     concatMapStrings
-    concatStrings
-    filter
     findFirst
     getName
     length
@@ -34,12 +32,7 @@ let
     ;
 
   inherit (lib.meta)
-    platformMatch
     cpeFullVersionWithVendor
-    ;
-
-  inherit (lib.generators)
-    toPretty
     ;
 
   inherit (builtins)
@@ -51,6 +44,14 @@ let
     genCheckProblems
     completeMetaProblems
     ;
+
+  inherit (import ./remediation.nix { inherit lib; })
+    remediateOutputsToInstall
+    remediate_allowlist
+    remediate_predicate
+    remediate_insecure
+    ;
+
   checkProblems = genCheckProblems config;
 
   # If we're in hydra, we can dispense with the more verbose error
@@ -98,9 +99,6 @@ let
 
   hasBlocklistedLicense = hasListedLicense blocklist;
 
-  allowUnsupportedSystem =
-    config.allowUnsupportedSystem || getEnv "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM" == "1";
-
   isUnfree =
     licenses:
     if isAttrs licenses && licenses ? "licenseType" then
@@ -119,20 +117,6 @@ let
   hasUnfreeLicense = attrs: attrs ? meta.license && isUnfree attrs.meta.license;
 
   isMarkedBroken = attrs: attrs.meta.broken or false;
-
-  # Logical inversion of meta.availableOn for hostPlatform
-  hasUnsupportedPlatform =
-    hostPlatform:
-    let
-      inherit (hostPlatform) system;
-      # in almost all cases, meta.platforms is a simple list of strings, and we
-      # can just check if it contains the current system. we only run the more
-      # intensive platformMatch if necessary
-      anyHostPlatform = list: elem system list || any (platformMatch hostPlatform) list;
-    in
-    pkg:
-    pkg ? meta.platforms && !(anyHostPlatform pkg.meta.platforms)
-    || pkg ? meta.badPlatforms && anyHostPlatform pkg.meta.badPlatforms;
 
   isMarkedInsecure = attrs: (attrs.meta.knownVulnerabilities or [ ]) != [ ];
 
@@ -196,108 +180,6 @@ let
   showSourceType = showLicenseOrSourceType;
 
   pos_str = meta: meta.position or "«unknown-file»";
-
-  remediation_env_var =
-    allow_attr:
-    {
-      Unfree = "NIXPKGS_ALLOW_UNFREE";
-      UnsupportedSystem = "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM";
-      NonSource = "NIXPKGS_ALLOW_NONSOURCE";
-    }
-    .${allow_attr};
-  remediation_phrase =
-    allow_attr:
-    {
-      Unfree = "unfree packages";
-      UnsupportedSystem = "packages that are unsupported for this system";
-      NonSource = "packages not built from source";
-    }
-    .${allow_attr};
-  remediate_predicate = predicateConfigAttr: attrs: ''
-
-    Alternatively you can configure a predicate to allow specific packages:
-      { nixpkgs.config.${predicateConfigAttr} = pkg: builtins.elem (lib.getName pkg) [
-          "${getName attrs}"
-        ];
-      }
-  '';
-
-  # flakeNote will be printed in the remediation messages below.
-  flakeNote = "
-   Note: When using `nix shell`, `nix build`, `nix develop`, etc with a flake,
-         then pass `--impure` in order to allow use of environment variables.
-    ";
-
-  remediate_allowlist = allow_attr: rebuild_amendment: ''
-    a) To temporarily allow ${remediation_phrase allow_attr}, you can use an environment variable
-       for a single invocation of the nix tools.
-
-         $ export ${remediation_env_var allow_attr}=1
-         ${flakeNote}
-    b) For `nixos-rebuild` you can set
-      { nixpkgs.config.allow${allow_attr} = true; }
-    in configuration.nix to override this.
-    ${rebuild_amendment}
-    c) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
-      { allow${allow_attr} = true; }
-    to ~/.config/nixpkgs/config.nix.
-  '';
-
-  remediate_insecure =
-    attrs:
-    ''
-
-      Known issues:
-    ''
-    + (concatStrings (map (issue: " - ${issue}\n") attrs.meta.knownVulnerabilities))
-    + ''
-
-      You can install it anyway by allowing this package, using the
-      following methods:
-
-      a) To temporarily allow all insecure packages, you can use an environment
-         variable for a single invocation of the nix tools:
-
-           $ export NIXPKGS_ALLOW_INSECURE=1
-           ${flakeNote}
-      b) for `nixos-rebuild` you can add ‘${getNameWithVersion attrs}’ to
-         `nixpkgs.config.permittedInsecurePackages` in the configuration.nix,
-         like so:
-
-           {
-             nixpkgs.config.permittedInsecurePackages = [
-               "${getNameWithVersion attrs}"
-             ];
-           }
-
-      c) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
-         ‘${getNameWithVersion attrs}’ to `permittedInsecurePackages` in
-         ~/.config/nixpkgs/config.nix, like so:
-
-           {
-             permittedInsecurePackages = [
-               "${getNameWithVersion attrs}"
-             ];
-           }
-
-    '';
-
-  remediateOutputsToInstall =
-    attrs:
-    let
-      expectedOutputs = attrs.meta.outputsToInstall or [ ];
-      actualOutputs = attrs.outputs or [ "out" ];
-      missingOutputs = filter (output: !elem output actualOutputs) expectedOutputs;
-    in
-    ''
-      The package ${getNameWithVersion attrs} has set meta.outputsToInstall to: ${builtins.concatStringsSep ", " expectedOutputs}
-
-      however ${getNameWithVersion attrs} only has the outputs: ${builtins.concatStringsSep ", " actualOutputs}
-
-      and is missing the following outputs:
-
-      ${concatStrings (map (output: "  - ${output}\n") missingOutputs)}
-    '';
 
   metaType =
     let
@@ -399,11 +281,7 @@ let
   # !!! reason strings are hardcoded into OfBorg, make sure to keep them in sync
   # Along with a boolean flag for each reason
   checkValidity =
-    hostPlatform:
-    let
-      hasUnsupportedPlatform' = hasUnsupportedPlatform hostPlatform;
-    in
-    attrs:
+    hostPlatform: attrs:
     if !attrs ? meta then
       null
     else
@@ -444,23 +322,6 @@ let
         reason = "non-source";
         msg = "contains elements not built from source (‘${showSourceType attrs.meta.sourceProvenance}’)";
         remediation = remediate_allowlist "NonSource" (remediate_predicate "allowNonSourcePredicate" attrs);
-      }
-    else if hasUnsupportedPlatform' attrs && !allowUnsupportedSystem then
-      let
-        toPretty' = toPretty {
-          allowPrettyValues = true;
-          indent = "  ";
-        };
-      in
-      {
-        reason = "unsupported";
-        msg = ''
-          is not available on the requested hostPlatform:
-            hostPlatform.system = "${hostPlatform.system}"
-            package.meta.platforms = ${toPretty' (attrs.meta.platforms or [ ])}
-            package.meta.badPlatforms = ${toPretty' (attrs.meta.badPlatforms or [ ])}
-        '';
-        remediation = remediate_allowlist "UnsupportedSystem" "";
       }
     else if hasDisallowedInsecure attrs then
       {
@@ -509,9 +370,6 @@ let
   #   validity = checkMeta.assertValidity hostPlatform { inherit meta attrs; };
   commonMeta =
     hostPlatform:
-    let
-      hasUnsupportedPlatform' = hasUnsupportedPlatform hostPlatform;
-    in
     {
       validity,
       attrs,
@@ -650,10 +508,9 @@ let
       # Expose the result of the checks for everyone to see.
       unfree = hasUnfreeLicense attrs;
       broken = isMarkedBroken attrs;
-      unsupported = hasUnsupportedPlatform' attrs;
       insecure = isMarkedInsecure attrs;
 
-      problems = completeMetaProblems config attrs;
+      problems = completeMetaProblems config hostPlatform attrs;
 
       available =
         validity.valid != "no"
@@ -701,11 +558,12 @@ let
     hostPlatform:
     let
       checkValidity' = checkValidity hostPlatform;
+      checkProblems' = checkProblems hostPlatform;
     in
     { meta, attrs }:
     let
       invalid = checkValidity' attrs;
-      problems = checkProblems attrs;
+      problems = checkProblems' attrs;
     in
     if invalid == null then
       if problems == null then
