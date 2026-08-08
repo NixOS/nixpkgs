@@ -3,16 +3,12 @@
   stdenv,
   fetchurl,
   python3Packages,
+  python3,
   zlib,
   bash,
 }:
 
-let
-  pythonPackages = python3Packages;
-  inherit (pythonPackages) python;
-in
-
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "quast";
   version = "5.3.0";
   format = "other";
@@ -22,7 +18,7 @@ pythonPackages.buildPythonApplication rec {
     hash = "sha256-rJ26A++dClHXqeLFaCYQTnjzQPYmOjrTk2SEQt68dOw=";
   };
 
-  pythonPath = with pythonPackages; [
+  pythonPath = with python3Packages; [
     simplejson
     joblib
     setuptools
@@ -39,10 +35,10 @@ pythonPackages.buildPythonApplication rec {
   installPhase = ''
     substituteInPlace quast_libs/bedtools/Makefile \
       --replace "/bin/bash" "${bash}/bin/bash"
-    mkdir -p "$out/${python.sitePackages}"
-    export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
-    ${python.pythonOnBuildForHost.interpreter} setup.py install \
-      --install-lib=$out/${python.sitePackages} \
+    mkdir -p "$out/${python3.sitePackages}"
+    export PYTHONPATH="$out/${python3.sitePackages}:$PYTHONPATH"
+    ${python3.pythonOnBuildForHost.interpreter} setup.py install \
+      --install-lib=$out/${python3.sitePackages} \
       --prefix="$out"
   '';
 
