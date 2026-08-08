@@ -15,16 +15,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "spacetimedb";
-  version = "2.7.0-hotfix1";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "clockworklabs";
     repo = "spacetimedb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-71/pt3OmjtGJboGIqACDQ6GwELHnS2Zs+8kD7IrIcmg=";
+    hash = "sha256-d5qmsH08y+wuuqSkML0HI0HnEBQ0vANEc0BGwClGD4w=";
   };
 
-  cargoHash = "sha256-KfgSYXHQprIX5BVvHWpTKaJg+h8TQkiW0HVjCXttIeQ=";
+  cargoHash = "sha256-NQj5B3YGTy/QXka2riMNyMgLPumhAYgWv1nN29k6/FU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -74,6 +74,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     SPACETIMEDB_NIX_BUILD_GIT_COMMIT = finalAttrs.src.rev;
     # required to make jemalloc_tikv_sys build
     CFLAGS = "-O";
+    RUSTFLAGS = "--cfg tokio_unstable";
   };
 
   nativeInstallCheckInputs = [ versionCheckHook ];
