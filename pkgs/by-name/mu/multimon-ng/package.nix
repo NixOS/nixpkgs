@@ -7,26 +7,18 @@
   libx11,
   makeWrapper,
   sox,
-  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "multimon-ng";
-  version = "1.4.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "EliasOenal";
     repo = "multimon-ng";
     rev = finalAttrs.version;
-    sha256 = "sha256-/2NHUlAojDamNq/EVs8hoBYVikPLAFFFu/2syG4Xo4U=";
+    sha256 = "sha256-elDyVU95rNt0b698qmzmkiD4JG2Jt5+gMW31BlQO7Vo=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/EliasOenal/multimon-ng/commit/1c111e83053e9e78ba568463cc015edadf77ed5f.diff";
-      hash = "sha256-gW9ihUn3rZcyurbu7+IhkWSotqWlJsHdeFHu12oVld4=";
-    })
-  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio
