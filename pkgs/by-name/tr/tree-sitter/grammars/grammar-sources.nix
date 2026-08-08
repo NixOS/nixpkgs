@@ -1123,6 +1123,19 @@
     };
   };
 
+  hledger = {
+    version = "0-unstable-2026-03-11";
+    url = "github:chrislloyd/tree-sitter-hledger";
+    rev = "8ee65478cb941a8cdaa798ffa73bb4437d4c4d07";
+    hash = "sha256-92k6/0tcHGMp164VVZDtDiBopKCD+4tfBXGFLSOrUdQ=";
+    meta = {
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
+        tomasrivera
+      ];
+    };
+  };
+
   hocon = {
     version = "0-unstable-2022-11-07";
     url = "github:antosha417/tree-sitter-hocon";
