@@ -270,7 +270,7 @@ in
               ProtectSystem = "strict";
               DevicePolicy = "closed";
               LockPersonality = true;
-              MemoryDenyWriteExecute = true;
+              MemoryDenyWriteExecute = false; # pcre2 jit
               ProtectHostname = true;
               ProtectProc = true;
               ProtectKernelLogs = true;
