@@ -135,6 +135,7 @@ bash.runCommand "${pname}-${version}"
       --with-sysroot=${musl} \
       --enable-languages=c,c++ \
       --enable-checking=release \
+      --enable-static \
       --disable-serial-configure \
       --disable-analyzer \
       --disable-bootstrap \
