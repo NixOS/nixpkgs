@@ -12100,6 +12100,12 @@
     githubId = 31273774;
     name = "Inigo Querejeta-Azurmendi";
   };
+  irendy = {
+    name = "IRendy";
+    email = "irendy@qq.com";
+    github = "IRendy";
+    githubId = 42890271;
+  };
   irenes = {
     name = "Irene Knapp";
     email = "ireneista@gmail.com";
