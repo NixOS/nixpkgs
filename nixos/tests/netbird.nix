@@ -11,6 +11,7 @@
       services.netbird = {
         enable = true;
         clients.custom.port = 51819;
+        clients.custom.ssh.enable = true;
         ui.enable = true;
       };
     };
@@ -87,6 +88,29 @@
 
     for name in instances:
       wait_until_rcode(node, f"{name} status |& grep -C20 Disconnected", 0, retries=5)
+
+    with subtest("ssh.enable gates the ProxyCommand on a daemon-backed peer lookup"):
+      node.succeed("grep -F 'netbird-custom ssh proxy %h %p' /etc/ssh/ssh_config")
+
+      # this VM never logs in, so the daemon reports no peers and the block must stay inert.
+      # `ssh -G` prints no `proxycommand` line at all unless one is configured; don't grep for
+      # "netbird", which a peer-shaped hostname echoes back on its own `hostname` line.
+      # `timeout` catches a lost fail-fast guard, `succeed` a Match block that breaks all ssh.
+      out = node.succeed("timeout 5 ssh -G node.netbird.cloud 2>/dev/null")
+      assert "proxycommand" not in out, f"block engaged for a non-peer:\n{out}"
+
+      # the other fail-closed path: no daemon to ask at all
+      node.succeed("systemctl stop netbird-custom.service")
+      node.wait_until_fails("test -S /var/run/netbird-custom/sock")
+      out = node.succeed("timeout 5 ssh -G node.netbird.cloud 2>/dev/null")
+      assert "proxycommand" not in out, f"block engaged without a daemon:\n{out}"
+
+    with subtest("the Match block does not capture later ssh_config directives"):
+      # `programs.ssh.extraConfig` is shared; an unterminated Match would silently scope
+      # whatever another module appends after it.
+      # `ssh_config` ends without a newline, so lead with one or the lines run together.
+      node.succeed("{ cat /etc/ssh/ssh_config; printf '\\nCompression yes\\n'; } >/tmp/after.conf")
+      node.succeed("ssh -G -F /tmp/after.conf nonmatching.example.org | grep -qx 'compression yes'")
   ''
   # The status used to turn into `NeedsLogin`, but recently started crashing instead.
   # leaving the snippets in here, in case some update goes back to the old behavior and can be tested again
