@@ -10,7 +10,7 @@
   hicolor-icon-theme,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs:  {
   pname = "hwall";
   version = "1.0.5";
 
