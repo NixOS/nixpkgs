@@ -17355,10 +17355,10 @@ with self;
 
   Imager = buildPerlPackage rec {
     pname = "Imager";
-    version = "1.031";
+    version = "1.034";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TONYC/Imager-${version}.tar.gz";
-      hash = "sha256-kL59G9/F7bfxfPgreeamYUxbAuv+Mm67b2afzaeRNAE=";
+      hash = "sha256-hrWizXGna4QJJJFSGl1WI4Qo8sN1AYMsmVxaMxJg+AM=";
     };
     buildInputs = [
       pkgs.freetype
