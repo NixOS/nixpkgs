@@ -15,7 +15,7 @@
   qt6Packages,
   cmake,
   gitUpdater,
-  ffmpeg,
+  ffmpeg_8,
   wrapGAppsHook3,
 }:
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     SDL2
-    (frei0r.override { opencv = opencv4.override { ffmpeg-headless = ffmpeg; }; })
+    (frei0r.override { opencv = opencv4.override { ffmpeg_8-headless = ffmpeg_8; }; })
     ladspaPlugins
     gettext
     qt6Packages.mlt
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (replaceVars ./fix-mlt-ffmpeg-path.patch {
-      inherit ffmpeg;
+      ffmpeg = ffmpeg_8;
       mlt = qt6Packages.mlt;
     })
   ];
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   qtWrapperArgs = [
     "--set FREI0R_PATH ${
-      (frei0r.override { opencv = opencv4.override { ffmpeg-headless = ffmpeg; }; })
+      (frei0r.override { opencv = opencv4.override { ffmpeg_8-headless = ffmpeg_8; }; })
     }/lib/frei0r-1"
     "--set LADSPA_PATH ${ladspaPlugins}/lib/ladspa"
     "--prefix LD_LIBRARY_PATH : ${
