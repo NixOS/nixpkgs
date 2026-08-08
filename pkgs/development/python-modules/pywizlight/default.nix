@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pywizlight";
-  version = "0.6.4";
+  version = "0.6.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sbidy";
     repo = "pywizlight";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ki4X+4s+tM3kIyhA2cxPPzG775Qz9jKFS8/ssUqfHas=";
+    hash = "sha256-rfrmsfotCHqwKUiqC0NO7kvv/oKODwxZi4AjvJQCXlM=";
   };
 
   build-system = [ setuptools ];
