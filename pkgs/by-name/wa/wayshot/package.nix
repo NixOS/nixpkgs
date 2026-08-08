@@ -14,13 +14,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wayshot";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "waycrate";
     repo = "wayshot";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-sbY3h3FoWxDmxSng9YvYpt3kyasVJGsykYC/7tblFn8=";
+    hash = "sha256-MihZAAZ+K95jBE1gp0kne/+Z3rBUDqlphmyBI0FI1jE=";
   };
   nativeBuildInputs = [
     pkg-config
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libGL
     wayland
   ];
-  cargoHash = "sha256-J7ZKWx258bBCNBd061aCeKgTdcWMUF4yzAiIa9l8ZRA=";
+  cargoHash = "sha256-SAI+KXRV4E130ROmNyXraaO31D341CRWXGuIPV8depA=";
 
   postInstall = ''
     installManPage docs/wayshot.1.scd docs/wayshot.5.scd docs/wayshot.7.scd
