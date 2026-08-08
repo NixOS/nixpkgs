@@ -28,7 +28,7 @@ buildGoModule rec {
 
   nativeBuildInputs = lib.optionals withSystemdSupport [ makeWrapper ];
   buildInputs = lib.optionals withSystemdSupport [ systemdLibs ];
-  tags = lib.optionals (!withSystemdSupport) "nosystemd";
+  tags = lib.optionals (!withSystemdSupport) [ "nosystemd" ];
 
   postInstall = lib.optionals withSystemdSupport ''
     wrapProgram $out/bin/postfix_exporter \
