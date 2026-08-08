@@ -15,18 +15,19 @@
   libevdev,
   libxml2,
   libxkbcommon,
+  fmt,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wcm";
-  version = "0.10.0";
+  version = "0.11.0-unstable-2026-07-28";
 
   src = fetchFromGitHub {
     owner = "WayfireWM";
     repo = "wcm";
-    rev = "v${finalAttrs.version}";
+    rev = "14f2e03fc4bfa3a20d10b913461636363e39240c";
     fetchSubmodules = true;
-    hash = "sha256-O4BYwb+GOMZIn3I2B/WMJ5tUZlaegvwBuyNK9l/gxvQ=";
+    hash = "sha256-ShclD93AQDHXwjCDTN8zom1xr3v4oMKLzO2q7B3ZAPg=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     wayland-scanner
     wrapGAppsHook3
+    fmt.dev
   ];
 
   buildInputs = [
@@ -46,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     libevdev
     libxml2
     libxkbcommon
+    fmt
   ];
 
   meta = {
