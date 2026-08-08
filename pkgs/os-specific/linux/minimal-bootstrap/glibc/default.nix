@@ -78,7 +78,6 @@ bash.runCommand "${pname}-${version}"
     export LDFLAGS="-L${libgcc}/lib -L${libgcc}/lib/gcc/${hostPlatform.config}/${libgcc.version} -B${libgcc}/lib -B${libgcc}/lib/gcc/${hostPlatform.config}/${libgcc.version}"
     # libstdc++.so is built against musl and fails to link
     export CXX=false
-
     bash ../configure \
       --prefix=$out \
       --build=${buildPlatform.config} \
