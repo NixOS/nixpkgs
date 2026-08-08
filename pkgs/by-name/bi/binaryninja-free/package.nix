@@ -1,6 +1,7 @@
 {
   autoPatchelfHook,
   copyDesktopItems,
+  curl,
   dbus,
   fetchurl,
   fontconfig,
@@ -20,11 +21,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "binaryninja-free";
-  version = "5.2.8722";
+  version = "5.3.9757";
 
   src = fetchurl {
     url = "https://github.com/Vector35/binaryninja-api/releases/download/stable/${finalAttrs.version}/binaryninja_free_linux.zip";
-    hash = "sha256-YlBr/Cdjev7LWY/VsKgv/i3zHj4YR49RX69zmhhie7U=";
+    hash = "sha256-YKr3oF0Um7D7yoLX/OFixuQXDZ6SbpDmEWIVbCPxwlI=";
   };
 
   icon = fetchurl {
@@ -54,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    curl
     dbus
     fontconfig
     freetype
