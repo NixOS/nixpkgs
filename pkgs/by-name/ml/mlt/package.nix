@@ -160,7 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    inherit ffmpeg;
+    ffmpeg = ffmpeg_8;
   };
 
   passthru.updateScript = gitUpdater {
