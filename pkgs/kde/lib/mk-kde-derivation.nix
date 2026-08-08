@@ -79,10 +79,13 @@ in
 let
   depNames = dependencies.${pname} or [ ];
   filteredDepNames = builtins.filter (dep: !(builtins.elem dep excludeDependencies)) depNames;
+  availableDepNames = builtins.filter (
+    dep: lib.meta.availableOn stdenv.hostPlatform self.${dep}
+  ) filteredDepNames;
 
   # FIXME(later): this is wrong for cross, some of these things really need to go into nativeBuildInputs,
   # but cross is currently very broken anyway, so we can figure this out later.
-  deps = map (dep: self.${dep}) filteredDepNames;
+  deps = map (dep: self.${dep}) availableDepNames;
 
   traceDuplicateDeps =
     attrName: attrValue:
