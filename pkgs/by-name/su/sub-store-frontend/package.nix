@@ -14,13 +14,13 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "sub-store-frontend";
-  version = "2.27.3";
+  version = "2.28.6";
 
   src = fetchFromGitHub {
     owner = "sub-store-org";
     repo = "Sub-Store-Front-End";
     tag = finalAttrs.version;
-    hash = "sha256-OO40cItVKlYAQqohxdbJkuX5Wf9y1MaId+ewfCkRjSo=";
+    hash = "sha256-dCby4fKCx9lzlSdn9TZwOsQWPFf36ZcL5bEg3XgipjY=";
   };
 
   nativeBuildInputs = [
