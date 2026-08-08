@@ -21,7 +21,6 @@
   pygobject3,
   python,
   scipy,
-  sparsehash,
   zstandard,
 
   writableTmpDirAsHomeHook,
@@ -37,7 +36,7 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "graph-tool";
-  version = "2.98";
+  version = "3.6";
   pyproject = false;
 
   strictDeps = true;
@@ -46,7 +45,7 @@ buildPythonPackage (finalAttrs: {
 
   src = fetchurl {
     url = "https://downloads.skewed.de/graph-tool/graph-tool-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-7vGUi5N/XwQ3Se7nX+DG1+jwNlUdlF6dVeN4cLBsxSc=";
+    hash = "sha256-KFKitvz3zFEQAi8hkvIBC0c5QTRmOJRamdV0cyMbejU=";
   };
 
   postPatch =
@@ -71,6 +70,16 @@ buildPythonPackage (finalAttrs: {
       cgal = lib.getDev cgal;
       python-module-path = "$(out)/${python.sitePackages}";
     }
+    ++ [
+      # CXXFLAGS defaults to "-g -O2", if unset.
+      # "-g" produces debugging information, which significantly increases
+      # resource requirements during compilation, but is not necessary as we
+      # subsequently strip the binaries.
+      # "-ftemplate-backtrace-limit=1" reduces the number of template
+      # instantiation notes per warning in order to reduce the log file size.
+      # "-O3" is also used by upstream.
+      "CXXFLAGS=-ftemplate-backtrace-limit=1 -O3"
+    ]
     ++
       lib.optionals stdenv.cc.isGNU
         # enable GCC's link-time optimizer in order to reduce compilation time and memory usage during compilation
@@ -89,7 +98,6 @@ buildPythonPackage (finalAttrs: {
     cgal
     expat
     mpfr
-    sparsehash
   ]
   ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
