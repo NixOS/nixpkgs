@@ -8228,16 +8228,16 @@ with self;
 
   DataEntropy = buildPerlPackage {
     pname = "Data-Entropy";
-    version = "0.008";
+    version = "0.010";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RR/RRWO/Data-Entropy-0.008.tar.gz";
-      hash = "sha256-GKUrE4boLGuM2zhKOYYdYCIKRCp5DgdwEL5y3YU7Z7M=";
+      url = "mirror://cpan/authors/id/R/RR/RRWO/Data-Entropy-0.010.tar.gz";
+      hash = "sha256-0M8s2wKCAuidw2K42Qtw00WFApOwGQDZoYgqDG8g+Dc=";
     };
     propagatedBuildInputs = [
       CryptRijndael
       CryptURandom
       DataFloat
-      HTTPLite
+      DevelDeprecate
       ParamsClassify
     ];
     meta = {
