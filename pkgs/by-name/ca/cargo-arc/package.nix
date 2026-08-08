@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
@@ -24,6 +25,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Tries to read from dir $CARGO_MANIFEST_DIR
     "--skip=test_analyze_empty_history"
     "--skip=test_analyze_real_repo"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Tries to read /proc/1/mem
+    "--skip=test_load_io_error"
   ];
 
   passthru.updateScript = nix-update-script { };
