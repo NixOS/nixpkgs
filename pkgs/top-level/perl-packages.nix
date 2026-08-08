@@ -7124,16 +7124,15 @@ with self;
 
   CryptDSA = buildPerlPackage {
     pname = "Crypt-DSA";
-    version = "1.21";
+    version = "1.24";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TI/TIMLEGGE/Crypt-DSA-1.21.tar.gz";
-      hash = "sha256-pGIB6DkOi6O75RER12SJ8x2v2g9qYLCrkxndUr0rMrA=";
+      url = "mirror://cpan/authors/id/T/TI/TIMLEGGE/Crypt-DSA-1.24.tar.gz";
+      hash = "sha256-ChY4tvK07+ktbuL0kBzKAtenBWf2uw9Iapu19pvnZ2Y=";
     };
     propagatedBuildInputs = [
       ConvertASN1
       ConvertPEM
       CryptSysRandom
-      CryptURandom
       DataBuffer
       FileWhich
     ];
