@@ -24,6 +24,9 @@
   scipy,
   sparsehash,
   zstandard,
+
+  writableTmpDirAsHomeHook,
+
   gitUpdater,
 }:
 
@@ -43,13 +46,17 @@ let
     inherit python;
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "graph-tool";
   version = "2.98";
   pyproject = false;
 
+  strictDeps = true;
+
+  __structuredAttrs = true;
+
   src = fetchurl {
-    url = "https://downloads.skewed.de/graph-tool/graph-tool-${version}.tar.bz2";
+    url = "https://downloads.skewed.de/graph-tool/graph-tool-${finalAttrs.version}.tar.bz2";
     hash = "sha256-7vGUi5N/XwQ3Se7nX+DG1+jwNlUdlF6dVeN4cLBsxSc=";
   };
 
@@ -109,10 +116,11 @@ buildPythonPackage rec {
 
   propagatedNativeBuildInputs = [ gobject-introspection ];
 
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
   preInstallCheck =
     # avoid warnings about Matplotlib and Fontconfig configuration issues
     ''
-      export HOME=$(mktemp -d)
       export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
     '';
 
@@ -126,8 +134,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for manipulation and statistical analysis of graphs";
     homepage = "https://graph-tool.skewed.de";
-    changelog = "https://git.skewed.de/count0/graph-tool/commits/release-${version}";
+    changelog = "https://git.skewed.de/count0/graph-tool/commits/release-${finalAttrs.version}";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ lib.maintainers.mjoerg ];
   };
-}
+})
