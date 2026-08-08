@@ -1,5 +1,3 @@
-/// @ts-check
-
 // TODO: should this be combined with the branch checks in prepare.js?
 // They do seem quite similar, but this needs to run after eval,
 // and prepare.js obviously doesn't.
