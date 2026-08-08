@@ -7,16 +7,17 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gpxpy";
   version = "1.6.2";
 
+  __structuredAttrs = true;
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tkrajina";
     repo = "gpxpy";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-s65k0u4LIwHX9RJMJIYMkNS4/Z0wstzqYVPAjydo2iI=";
   };
 
@@ -34,4 +35,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ sikmir ];
   };
-}
+})
