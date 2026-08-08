@@ -24,11 +24,11 @@ buildGoModule (finalAttrs: {
   ];
 
   meta = {
-    description = "Fetcher for Javascript files";
+    description = "Fetcher for JavaScript files";
     mainProgram = "subjs";
     longDescription = ''
-      subjs fetches Javascript files from a list of URLs or subdomains.
-      Analyzing Javascript files can help you find undocumented endpoints,
+      subjs fetches JavaScript files from a list of URLs or subdomains.
+      Analyzing JavaScript files can help you find undocumented endpoints,
       secrets and more.
     '';
     homepage = "https://github.com/lc/subjs";

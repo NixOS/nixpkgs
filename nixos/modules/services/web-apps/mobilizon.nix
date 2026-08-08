@@ -479,7 +479,6 @@ in
   };
 
   meta.maintainers = with lib.maintainers; [
-    minijackson
     erictapen
   ];
 }

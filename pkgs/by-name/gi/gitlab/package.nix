@@ -123,7 +123,7 @@ let
             '';
           };
 
-          # GitLab publishes a Cargo.lock for gitlab_query_lanaguage that does not contain the `source` attribute
+          # GitLab publishes a Cargo.lock for gitlab_query_language that does not contain the `source` attribute
           # for the `glql` dependency. This is an intentional choice by them that is documented in the README.
           # This code refetches this hash and exposes the lockfile, so that it can be used in later stages.
           nativeBuildInputs = [ cargo ];

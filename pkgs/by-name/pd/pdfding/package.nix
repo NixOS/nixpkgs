@@ -52,7 +52,7 @@ python.pkgs.buildPythonPackage (finalAttrs: {
       ruamel-yaml
       whitenoise
 
-      # dependecies required for django collectstatic
+      # dependencies required for django collectstatic
       cryptography
       pyjwt
       requests

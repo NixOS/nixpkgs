@@ -25,7 +25,7 @@ buildGoModule rec {
   doInstallCheck = true;
 
   meta = {
-    description = "Reverse proxy that provides authentication with Google, Github, or other providers";
+    description = "Reverse proxy that provides authentication with Google, GitHub, or other providers";
     homepage = "https://github.com/oauth2-proxy/oauth2-proxy/";
     license = lib.licenses.mit;
     mainProgram = "oauth2-proxy";

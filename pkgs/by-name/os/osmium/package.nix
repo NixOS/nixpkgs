@@ -29,11 +29,11 @@
 
 stdenv.mkDerivation rec {
   pname = "osmium";
-  version = "0.0.32-alpha";
+  version = "0.0.33-alpha";
 
   src = fetchurl {
     url = "https://updater.osmium.chat/Osmium-${version}-x64.tar.gz";
-    hash = "sha256-gW8AuO1W2MesYPgmXji8INyXKMXeP85+8MgieEn/UHo=";
+    hash = "sha256-ybv/CCaCqcNvoyTNKQbjSdNxOC81QDnnKjKcw8X9y2Y=";
   };
 
   nativeBuildInputs = [

@@ -51,7 +51,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stalwart" + (lib.optionalString stalwartEnterprise "-enterprise");
-  version = "0.16.15";
+  version = "0.16.16";
 
   __structuredAttrs = true;
 
@@ -59,10 +59,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "stalwartlabs";
     repo = "stalwart";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DRo+1olglHsOpAk5D8hrTi+KVgFC5MxxqnrOphbvrUo=";
+    hash = "sha256-svf9J8oAMo427X6eiGdPiDMZ2/DdN7+FodGfhQL9hME=";
   };
 
-  cargoHash = "sha256-gjZR0qDdrS7TdWTeeRcKUY6pZFnLCMwnnpGAHWqiWLw=";
+  cargoHash = "sha256-QSEr2XPOh/iLARdjgCeClY2eN6UDF6E9Hoov4xprkag=";
 
   env = {
     # https://docs.rs/openssl/latest/openssl/#manual

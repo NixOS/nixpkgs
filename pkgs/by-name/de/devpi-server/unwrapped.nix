@@ -96,7 +96,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   # root_passwd_hash tries to write to store
-  # TestMirrorIndexThings tries to write to /var through ngnix
+  # TestMirrorIndexThings tries to write to /var through nginx
   # nginx tests try to write to /var
   preCheck = ''
     export PATH=$PATH:$out/bin

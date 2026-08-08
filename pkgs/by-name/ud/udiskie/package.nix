@@ -96,7 +96,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     changelog = "https://github.com/coldfix/udiskie/blob/${finalAttrs.src.tag}/CHANGES.rst";
     description = "Removable disk automounter for udisks";
     longDescription = ''
-      udiskie is a udisks2 front-end that allows to manage removeable media such
+      udiskie is a udisks2 front-end that allows to manage removable media such
       as CDs or flash drives from userspace.
 
       Its features include:

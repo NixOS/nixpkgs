@@ -120,7 +120,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=sources::journald::tests::parses_string_sequences"
     "--skip=sources::journald::tests::reads_journal"
 
-    # No multicast access avaiable in sandbox
+    # No multicast access available in sandbox
     "--skip=sources::socket::test::multicast_and_unicast_udp_message"
     "--skip=sources::socket::test::multicast_udp_message"
     "--skip=sources::socket::test::multiple_multicast_addresses_udp_message"

@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   meta = {
-    description = "Osmocom implementation of 3GPP Home Location Registr (HLR)";
+    description = "Osmocom implementation of 3GPP Home Location Register (HLR)";
     homepage = "https://osmocom.org/projects/osmo-hlr";
     license = lib.licenses.agpl3Plus;
     maintainers = [ lib.maintainers.markuskowa ];

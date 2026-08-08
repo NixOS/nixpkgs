@@ -2419,6 +2419,10 @@ assertNoAdditions {
     dependencies = [ self.lualine-nvim ];
   };
 
+  lualine-so-fancy-nvim = super.lualine-so-fancy-nvim.overrideAttrs {
+    dependencies = [ self.lualine-nvim ];
+  };
+
   luasnip-latex-snippets-nvim = super.luasnip-latex-snippets-nvim.overrideAttrs {
     dependencies = [ self.luasnip ];
     # E5108: /luasnip-latex-snippets/luasnippets/tex/utils/init.lua:3: module 'luasnip-latex-snippets.luasnippets.utils.conditions' not found:
