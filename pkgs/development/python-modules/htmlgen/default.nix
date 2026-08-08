@@ -9,6 +9,8 @@
   # dependencies
   asserts,
   mypy,
+
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -33,17 +35,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     asserts
+    unittestCheckHook
   ];
-  # From some reason, using unittestCheckHook doesn't work, and the list of
-  # test files have to be used explicitly, and also without the `discover`
-  # argument.
-  checkPhase = ''
-    runHook preCheck
 
-    python -m unittest test_htmlgen/*.py
-
-    runHook postCheck
-  '';
+  unittestFlags = [
+    "--start"
+    "test_htmlgen"
+    "--pattern"
+    "*.py"
+  ];
 
   pythonImportsCheck = [
     "htmlgen"
