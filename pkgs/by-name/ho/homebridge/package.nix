@@ -6,16 +6,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "homebridge";
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "homebridge";
     repo = "homebridge";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Vqs4zhhBt6Be/bzu5XX9PJxGqkvEeQjUymoFlL2adcQ=";
+    hash = "sha256-Vj868PCGTuigDuxybVsgjD82ehEXQmq9tJO9ZN7FMho=";
   };
 
-  npmDepsHash = "sha256-yswPaaTVsb/OnBi+q1Gtlz+1PLUFaMJ+2RCWB+yJZ4k=";
+  npmDepsHash = "sha256-OEuBTBgcmFzMaH8iEWKogg4O7HXUJlWaT6iAs9n6WcQ=";
 
   meta = {
     description = "Lightweight emulator of iOS HomeKit API";
