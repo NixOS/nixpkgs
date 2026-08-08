@@ -42,8 +42,8 @@ qtModule {
       "-DQt6LinguistTools_DIR=${pkgsBuildBuild.qt6.qttools}/lib/cmake/Qt6LinguistTools"
       "-DQt6ToolsTools_DIR=${pkgsBuildBuild.qt6.qttools}/lib/cmake/Qt6ToolsTools"
     ]
-    ++ lib.optionals withClang [
-      "-DFEATURE_clang=ON"
+    ++ [
+      (lib.cmakeBool "FEATURE_clang" withClang)
     ];
 
   postInstall = ''
