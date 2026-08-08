@@ -13,7 +13,8 @@
   fetchpatch,
   fetchurl,
   ffmpeg-headless,
-  fmt,
+  # FIXME: unpin when upstream supports fmt 12
+  fmt_11,
   frozen-containers,
   gamemode,
   glslang,
@@ -88,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     cubeb
     enet
     ffmpeg-headless
-    fmt
+    fmt_11
     frozen-containers
     gamemode
     httplib
