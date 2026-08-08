@@ -2,6 +2,7 @@
   lib,
   buildNpmPackage,
   fetchzip,
+  skipUpdates ? true,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "command-code";
@@ -23,6 +24,12 @@ buildNpmPackage (finalAttrs: {
   npmDepsHash = "sha256-9fXgFM4nEfFv5nBpUxfWO7jJsVkJ5aaiA9YGaReNTzI=";
 
   dontNpmBuild = true;
+
+  makeWrapperArgs = lib.optionals skipUpdates [
+    "--set-default"
+    "COMMANDCODE_SKIP_UPDATES"
+    "1"
+  ];
 
   passthru.updateScript = ./update.sh;
 
