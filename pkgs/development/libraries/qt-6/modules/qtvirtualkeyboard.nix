@@ -2,6 +2,7 @@
   qtModule,
   qtbase,
   qtdeclarative,
+  qtmultimedia,
   qtsvg,
   hunspell,
   pkgsBuildBuild,
@@ -12,6 +13,7 @@ qtModule {
   propagatedBuildInputs = [
     qtbase
     qtdeclarative
+    qtmultimedia
     qtsvg
     hunspell
   ];
