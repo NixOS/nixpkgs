@@ -10,13 +10,13 @@
 
 buildGoModule rec {
   pname = "immich-kiosk";
-  version = "0.41.0";
+  version = "0.42.0";
 
   src = fetchFromGitHub {
     owner = "damongolding";
     repo = "immich-kiosk";
     tag = "v${version}";
-    hash = "sha256-mr0cxHdekpzfKfJ2IKpm79vTu5qnSl8q2c8eWose7tg=";
+    hash = "sha256-NgNVTVU7WlOBiaLXviTUYAq3PSLQuCKICP3rO/2U61Y=";
   };
 
   postPatch = ''
@@ -25,13 +25,13 @@ buildGoModule rec {
     # immich-kiosk bumps go at a faster cadence than nixpkgs
     sed -i -E 's/^go 1\.26\.[0-9]+$/go 1.26/' go.mod
   '';
-  vendorHash = "sha256-5mMU73/XvHfvT8VaseSymZjDalvHj/KR6cTz1nvXHPQ=";
+  vendorHash = "sha256-E+IS0/GxTpasiyKBj6oN9Jb3R4fzXZJ4v8bVkxlHWIk=";
   proxyVendor = true;
 
   npmDeps = fetchNpmDeps {
     inherit src;
     sourceRoot = "${src.name}/frontend";
-    hash = "sha256-1m0JvPZDYjd2cNy9atENRS3/GHWzLnPISwGnJbSZwAo=";
+    hash = "sha256-Tebhu7qdn7DHTwEBeN2htZJuhYfPE15NyUskIxrfqls=";
   };
   # Frontend is in a subdirectory
   npmRoot = "frontend";
@@ -82,7 +82,10 @@ buildGoModule rec {
     homepage = "https://github.com/damongolding/immich-kiosk";
     changelog = "https://github.com/damongolding/immich-kiosk/releases/tag/v${version}";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ tlvince ];
+    maintainers = with lib.maintainers; [
+      tlvince
+      esch
+    ];
     mainProgram = "immich-kiosk";
   };
 }

@@ -38,7 +38,7 @@ buildGoModule (finalAttrs: {
     # > Some binaries contain forbidden references to /build/.
     #
     # If we need it in the future, we should consider packaging silkworm and silkworm-go
-    # as depenedencies explicitly.
+    # as dependencies explicitly.
     "nosilkworm"
   ];
 

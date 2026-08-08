@@ -12,6 +12,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tbtools";
   version = "0.8.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "intel";
     repo = "tbtools";

@@ -3,11 +3,11 @@
   buildPythonPackage,
   fetchFromGitHub,
 
-  fetchpatch,
-  fetchzip,
-  replaceVars,
+  fetchurl,
+  linkFarm,
 
   setuptools,
+  setuptools-scm,
   colorlog,
   pyclipper,
   opencv-python,
@@ -23,75 +23,55 @@
   requests,
 }:
 let
-  version = "3.8.1";
+  version = "3.9.2";
+
+  # The models bundled into the wheel are the ones selected by the defaults in
+  # `python/rapidocr/config.yaml`. Run `python tools/prepare_wheel_assets.py --skip-manifest-in`
+  # from `python/` after a bump to check whether that selection changed; it prints the resolved
+  # URLs and their checksums.
+  models = linkFarm "rapidocr-models" {
+    "PP-OCRv6_det_small.onnx" = fetchurl {
+      url = "https://www.modelscope.cn/models/RapidAI/RapidOCR/resolve/v${version}/onnx/PP-OCRv6/det/PP-OCRv6_det_small.onnx";
+      hash = "sha256-CQ8Eq82dmnSYvE6/Z35Mub3OH+QZfdt+Up8e9E4f+U8=";
+    };
+    "ch_ppocr_mobile_v2.0_cls_mobile.onnx" = fetchurl {
+      url = "https://www.modelscope.cn/models/RapidAI/RapidOCR/resolve/v${version}/onnx/PP-OCRv4/cls/ch_ppocr_mobile_v2.0_cls_mobile.onnx";
+      hash = "sha256-5HrO32YyMPiGP/GrDmTdLYK4OPzrWVcUbasYWonWIVw=";
+    };
+    "PP-OCRv6_rec_small.onnx" = fetchurl {
+      url = "https://www.modelscope.cn/models/RapidAI/RapidOCR/resolve/v${version}/onnx/PP-OCRv6/rec/PP-OCRv6_rec_small.onnx";
+      hash = "sha256-bzJyRrUDiPPBdq4wS9lXZ+ptwMmukhU++MviELPBSIQ=";
+    };
+  };
+in
+buildPythonPackage (finalAttrs: {
+  pname = "rapidocr";
+  inherit version;
+  pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "RapidAI";
     repo = "RapidOCR";
-    tag = "v${version}";
-    hash = "sha256-keAR7H/qn0Q+Vo0usp69dWZO5QWB60EgU7d9vspQ+2w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EdiYf8cM1+byEECK+3sRc7MC075BQV/PKIf/fC2Y1Lc=";
   };
 
-  models =
-    fetchzip {
-      url = "https://github.com/RapidAI/RapidOCR/releases/download/v1.1.0/required_for_whl_v1.3.0.zip";
-      hash = "sha256-j/0nzyvu/HfNTt5EZ+2Phe5dkyPOdQw/OZTz0yS63aA=";
-      stripRoot = false;
-    }
-    + "/required_for_whl_v1.3.0/resources/models";
-in
-buildPythonPackage {
-  pname = "rapidocr";
-  inherit version src;
-  pyproject = true;
+  sourceRoot = "${finalAttrs.src.name}/python";
 
-  sourceRoot = "${src.name}/python";
+  # Upstream ships an empty `models` directory and downloads the models at runtime. Pre-populate it
+  # so that the default configuration works without network access.
+  postPatch = ''
+    ln -s ${models}/* rapidocr/models
+  '';
 
-  # HACK:
-  # Upstream uses a very unconventional structure to organize the packages, and we have to coax the
-  # existing infrastructure to work with it.
-  # See https://github.com/RapidAI/RapidOCR/blob/02829ef986bc2a5c4f33e9c45c9267bcf2d07a1d/.github/workflows/gen_whl_to_pypi_rapidocr_ort.yml#L80-L92
-  # for the "intended" way of building this package.
-
-  # The setup.py supplied by upstream tries to determine the current version by
-  # fetching the latest version of the package from PyPI, and then bumping the version number.
-  # This is not allowed in the Nix build environment as we do not have internet access,
-  # hence we patch that out and get the version from the build environment directly.
-  patches = [
-    (replaceVars ./setup-py-override-version-checking.patch {
-      inherit version;
-    })
-    # Fix type error in Immich which is caused by passing null to Path() when model_root_dir is the default null
-    (fetchpatch {
-      url = "https://github.com/RapidAI/RapidOCR/commit/57dfac08d8de63c4c00d21a1ab14a4a3b5c01975.patch";
-      stripLen = 1;
-      hash = "sha256-G49mTvBOm20BFOll4Pc0X397ZABT1tWMXd8nlDjBr7E=";
-    })
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
-  postPatch = ''
-    mkdir -p rapidocr/models
-
-    ln -s ${models}/* rapidocr/models
-
-    echo "from .rapidocr.main import RapidOCR, VisRes" > __init__.py
-  '';
-
-  # Upstream expects the source files to be under rapidocr/rapidocr
-  # instead of rapidocr for the wheel to build correctly.
-  preBuild = ''
-    mkdir rapidocr_t
-    mv rapidocr rapidocr_t
-    mv rapidocr_t rapidocr
-  '';
-
-  # Revert the above hack
-  postBuild = ''
-    mv rapidocr rapidocr_t
-    mv rapidocr_t/* .
-  '';
-
-  build-system = [ setuptools ];
+  # setuptools-scm derives the version from the git metadata, which fetchFromGitHub does not keep
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
 
   dependencies = [
     colorlog
@@ -116,11 +96,11 @@ buildPythonPackage {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/RapidAI/RapidOCR/releases/tag/${src.tag}";
     description = "Cross platform OCR Library based on OnnxRuntime";
     homepage = "https://github.com/RapidAI/RapidOCR";
+    changelog = "https://github.com/RapidAI/RapidOCR/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pluiedev ];
     mainProgram = "rapidocr";
   };
-}
+})

@@ -357,6 +357,7 @@
   ./programs/wayland/gtklock.nix
   ./programs/wayland/hyprland.nix
   ./programs/wayland/hyprlock.nix
+  ./programs/wayland/kanshi.nix
   ./programs/wayland/labwc.nix
   ./programs/wayland/mango.nix
   ./programs/wayland/miracle-wm.nix
@@ -857,6 +858,7 @@
   ./services/misc/cgminer.nix
   ./services/misc/clipcat.nix
   ./services/misc/clipmenu.nix
+  ./services/misc/comfyui.nix
   ./services/misc/confd.nix
   ./services/misc/conman.nix
   ./services/misc/cpuminer-cryptonight.nix
@@ -1376,6 +1378,7 @@
   ./services/networking/pihole-ftl.nix
   ./services/networking/pixiecore.nix
   ./services/networking/pleroma.nix
+  ./services/networking/portmaster.nix
   ./services/networking/porxie.nix
   ./services/networking/powerdns.nix
   ./services/networking/pppd.nix

@@ -6,22 +6,6 @@ let
   inherit (lib) mapAttrs' nameValuePair;
 
   variants = {
-    "9" = {
-      version = "9.15.9";
-      hash = "sha256-z4anrXZEBjldQoam0J1zBxFyCsxtk+nc6ax6xNxKKKc=";
-      knownVulnerabilities = [
-        "CVE-2026-48995"
-        "CVE-2026-50014"
-        "CVE-2026-50015"
-        "CVE-2026-50016"
-        "CVE-2026-50017"
-        "CVE-2026-50573"
-        "CVE-2026-55699"
-        "CVE-2026-59194"
-        "CVE-2026-59195"
-        "CVE-2026-59196"
-      ];
-    };
     # 10.29.3 made a breaking change: https://github.com/pnpm/pnpm/issues/10601.
     # Pnpm packages that depend on electron builder must be upgraded to 26.8.2 or newer
     # otherwise a runtime error will occur when launching the application.
@@ -61,8 +45,8 @@ let
       hash = "sha256-zLXEecqxsAYhMlv+fUyaioAx56Ul1ySeJ17L7IGwjbI=";
     };
     "11" = {
-      version = "11.18.0";
-      hash = "sha256-KcNcqNKih5iP3uPg824H2bk3g/VntXm3/Vt5ikVj3YE=";
+      version = "11.20.0";
+      hash = "sha256-NOGYyx5DI3UX7O39MfmuJqbAo+U2bOWKLQX0sh+18Zo=";
     };
   };
 

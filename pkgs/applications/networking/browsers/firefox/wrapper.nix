@@ -12,6 +12,7 @@
 
   ## various stuff that can be plugged in
   ffmpeg_7,
+  ffmpeg_8,
   libxxf86vm,
   libxxf86dga,
   libxt,
@@ -88,6 +89,11 @@ let
 
     let
       ffmpegSupport = browser.ffmpegSupport or false;
+      # Firefox dlopens libavcodec by hardcoded soname, so each ffmpeg major needs
+      # explicit browser support; keep versioned pins here (never the ffmpeg alias)
+      # and add a tier when a release gains the next ABI. 146 added libavcodec 62
+      # (https://bugzilla.mozilla.org/show_bug.cgi?id=1962139), not uplifted to ESR 140.
+      ffmpegPackage = if lib.versionAtLeast browser.version "146" then ffmpeg_8 else ffmpeg_7;
       gssSupport = browser.gssSupport or false;
       alsaSupport = browser.alsaSupport or false;
       pipewireSupport = browser.pipewireSupport or false;
@@ -113,7 +119,7 @@ let
           ++ lib.optional (cfg.speechSynthesisSupport or true) speechd-minimal
         )
         ++ lib.optional pipewireSupport pipewire
-        ++ lib.optional ffmpegSupport ffmpeg_7
+        ++ lib.optional ffmpegSupport ffmpegPackage
         ++ lib.optional gssSupport libkrb5
         ++ lib.optional useGlvnd libglvnd
         ++ lib.optionals (cfg.enableQuakeLive or false) [

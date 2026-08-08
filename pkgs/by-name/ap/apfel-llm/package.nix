@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "apfel-llm";
-  version = "1.8.4";
+  version = "1.9.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Building from source requires swift 6.3.0 while nixpkgs only has 5.10.1
   src = fetchurl {
     url = "https://github.com/Arthur-Ficial/apfel/releases/download/v${finalAttrs.version}/apfel-${finalAttrs.version}-arm64-macos.tar.gz";
-    hash = "sha256-farvPPo3VU2qUat+72qaiMpcd9LwFO7kqzGGKKtPwGE=";
+    hash = "sha256-CWM2S+/+IAF7juSEsLx8glYKUY8q5iKfPySQ9xdQ1AM=";
   };
 
   sourceRoot = ".";

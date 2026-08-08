@@ -589,7 +589,7 @@ let
               };
           in
           {
-            ppx_deriving_0_15 = ppx_deriving_ "0.15";
+            ppx_deriving_0_15 = ppx_deriving_ "0.15.0";
             ppx_deriving_0_33 = ppx_deriving_ "0.33.0";
           }
         );
@@ -1649,9 +1649,7 @@ let
 
         odig = callPackage ../development/ocaml-modules/odig { };
 
-        odoc = callPackage ../development/ocaml-modules/odoc {
-          cmdliner = cmdliner_1;
-        };
+        odoc = callPackage ../development/ocaml-modules/odoc { };
 
         odoc-parser = callPackage ../development/ocaml-modules/odoc-parser { };
 

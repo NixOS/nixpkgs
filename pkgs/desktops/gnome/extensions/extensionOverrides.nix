@@ -54,6 +54,14 @@ in
 # the upstream repository's sources.
 super:
 lib.trivial.pipe super [
+  (patchExtension "appindicatorsupport@rgcjonas.gmail.com" (old: {
+    patches = [
+      (replaceVars ./extensionOverridesPatches/appindicatorsupport_at_rgcjonas.gmail.com.patch {
+        gjs = lib.getExe gjs;
+      })
+    ];
+  }))
+
   (patchExtension "apps-menu@gnome-shell-extensions.gcampax.github.com" (old: {
     patches = [
       (replaceVars

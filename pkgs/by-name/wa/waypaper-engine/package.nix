@@ -17,13 +17,13 @@
 let
   pnpm = pnpm_11;
 
-  version = "3.0.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "0bCdian";
     repo = "Waypaper-Engine";
     tag = "v${version}";
-    hash = "sha256-oee44RABW+0BcirsJbc5WnLVQeyAamXfxj4Q1x4B2JA=";
+    hash = "sha256-MnxxHJ6ff13N2ABqr/29uTxBbgmm1hySROVCwXEYCc0=";
   };
 
   backend = buildGoModule (finalAttrs: {
@@ -42,7 +42,7 @@ let
     buildInputs = [ wayland ];
 
     proxyVendor = true;
-    vendorHash = "sha256-KGyaZhWU5UOPV73MitA5eycy3ugH+rwgNu09r3ALtIo=";
+    vendorHash = "sha256-yKXPQ3Q/dyn/ZHQX/lDRjkYiF+6/lUkDioqnzPlYtN0=";
 
     subPackages = [ "cmd/daemon" ];
 
@@ -70,8 +70,8 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-m/TtZ1rUXyzSYfxDMuZGW8d0Rl6T7qU+v4kRHAa6PM0=";
+    fetcherVersion = 4;
+    hash = "sha256-8x0qzKW2iGTKIF2VI9KGEgFeSPtnOjURZHtN/azbfSw=";
   };
 
   patchPhase = ''

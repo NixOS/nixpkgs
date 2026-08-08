@@ -416,6 +416,11 @@ in
       The services.xserver.windowManager.ragnarwm module has been removed
       because the corresponding package was removed from nixpkgs.
     '')
+    (mkRemovedOptionModule [ "services" "xserver" "windowManager" "sawfish" ] ''
+      The services.xserver.windowManager.sawfish module and the corresponding
+      package have been removed from Nixpkgs because they depended on the
+      deprecated GTK2 engine.
+    '')
     (mkRemovedOptionModule [
       "services"
       "xmr-stak"

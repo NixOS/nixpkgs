@@ -10,7 +10,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "datauri";
+  pname = "python-datauri";
   version = "3.0.2";
   pyproject = true;
 

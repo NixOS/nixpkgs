@@ -51,24 +51,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rio";
-  version = "0.4.7";
+  version = "0.5.10";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vlNt8hBb1fhO5tEAID5WXMc7I0k9vn6/L45nkTXS6Qg=";
+    hash = "sha256-NMbONH9ra+QW8NcdlMhxKtTJv9FCRmJTaJLNdBDxJAI=";
   };
 
-  cargoHash = "sha256-8qVS9wINEBLKKWbylG3sHO+oqnLvsa1wgN0OOHFzOBM=";
-
-  # The 0.4.7 "update to rust 1.96" bump (raphamorim/rio@6a11aa33c7) only made
-  # clippy-style refactors that build on older rustc; the MSRV pin is cosmetic.
-  # Lower it so nixpkgs' rustc (1.95) can build rio.
-  postPatch = ''
-    substituteInPlace Cargo.toml \
-      --replace-fail 'rust-version = "1.96.0"' 'rust-version = "1.95.0"'
-  '';
+  cargoHash = "sha256-7Yxy6jBUCHnT6ZU6Zkse4WorOuO4Ex0nb+yXu5mhP1g=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -100,8 +92,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildFeatures = [ ] ++ lib.optional withX11 "x11" ++ lib.optional withWayland "wayland";
 
   checkFlags = [
-    # Fail to run in sandbox environment.
-    "--skip=sys::unix::eventedfd::EventedFd"
+    # These build "dead" contexts, which carry the placeholder shell PID 1.
+    # Dropping one sends SIGHUP to that PID, and the builder is PID 1 inside the
+    # sandbox, so the tests kill the build. Workaround until
+    # https://github.com/raphamorim/rio/pull/1812 is merged.
+    "--skip=context::test::"
+    "--skip=context::title::test::test_update_title"
   ];
 
   postInstall = ''
@@ -109,8 +105,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -D -m 644 misc/logo.svg \
                       $out/share/icons/hicolor/scalable/apps/rio.svg
 
-    install -dm 755 "$terminfo/share/terminfo/r/"
-    tic -xe rio,rio-direct -o "$terminfo/share/terminfo" misc/rio.terminfo
+    install -dm 755 "$terminfo/share/terminfo"
+    tic -xe xterm-rio,rio -o "$terminfo/share/terminfo" misc/rio.terminfo
     mkdir -p $out/nix-support
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
 

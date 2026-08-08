@@ -50,7 +50,7 @@ buildGoModule (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Command line utility to interact with a cert-manager instalation on Kubernetes";
+    description = "Command line utility to interact with a cert-manager installation on Kubernetes";
     mainProgram = "cmctl";
     longDescription = ''
       cert-manager adds certificates and certificate issuers as resource types

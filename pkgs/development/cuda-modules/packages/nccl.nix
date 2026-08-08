@@ -1,5 +1,6 @@
 {
   _cuda,
+  autoAddDriverRunpath,
   backendStdenv,
   cccl,
   cuda_cudart,
@@ -8,12 +9,18 @@
   cudaNamePrefix,
   fetchFromGitHub,
   flags,
+  gdrcopy,
   lib,
+  patchelf,
   python3,
+  rdma-core,
   removeReferencesTo,
   which,
   # passthru.updateScript
   gitUpdater,
+
+  withGdrcopy ? true,
+  withRdmaCore ? true,
 }:
 let
   inherit (_cuda.lib) _mkMetaBadPlatforms;
@@ -27,6 +34,8 @@ let
     getLib
     licenses
     maintainers
+    makeLibraryPath
+    optional
     optionalString
     teams
     versionAtLeast
@@ -74,7 +83,11 @@ backendStdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    # libnccl dlopens libnvidia-ml.so.1 (src/os/linux.cc), and the statically linked CUDA runtime
+    # (src/Makefile: CUDARTLIB ?= cudart_static) dlopens libcuda.so.1, both by bare soname.
+    autoAddDriverRunpath
     cuda_nvcc
+    patchelf
     python3
     removeReferencesTo
     which
@@ -137,6 +150,15 @@ backendStdenv.mkDerivation (finalAttrs: {
     remove-references-to -t "${lib.getBin cuda_nvcc}" \
       ''${!outputLib}/lib/libnccl.so.* \
       ''${!outputStatic}/lib/*.a
+  ''
+  # makefiles/common.mk sets RDMA_CORE=0 and MLX5DV=0, so libibverbs/libmlx5/libgdrapi are dlopen'd
+  # rather than DT_NEEDED and buildInputs would not reach the runpath. Losing them is quiet: NCCL
+  # logs at INFO and falls back to the socket transport.
+  + optionalString (withRdmaCore || withGdrcopy) ''
+    nixLog "adding dlopen'd transport libraries to libnccl's runpath"
+    patchelf --add-rpath "${
+      makeLibraryPath (optional withRdmaCore rdma-core ++ optional withGdrcopy gdrcopy)
+    }" "''${!outputLib:?}"/lib/libnccl.so.*.*
   '';
 
   # C.f. remove-references-to above. Ensure *all* references to cuda_nvcc are removed

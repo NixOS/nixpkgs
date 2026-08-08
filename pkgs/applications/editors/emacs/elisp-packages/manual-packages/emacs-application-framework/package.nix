@@ -54,13 +54,13 @@ in
 melpaBuild (finalAttrs: {
 
   pname = "eaf";
-  version = "0-unstable-2025-08-22";
+  version = "0-unstable-2025-08-29";
 
   src = fetchFromGitHub {
     owner = "emacs-eaf";
     repo = "emacs-application-framework";
-    rev = "dc5f6e7fa21a15b5e05c7722c2b8f32158aeab82";
-    hash = "sha256-wWC5Ma9p/k0GLcGpPn7NO0KqkIXmEbaQc7TJ2ImMIr4=";
+    rev = "ada92215ad864c2d142feb6ad6e1127e90bce668";
+    hash = "sha256-on+cIZW+lV+J4FwPq5HH2C6FPOHRq4+BU+e0shM1l4E=";
   };
 
   packageRequires = [

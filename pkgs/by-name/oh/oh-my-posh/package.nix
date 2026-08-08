@@ -3,19 +3,20 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
+  versionCheckHook,
 }:
 buildGoModule (finalAttrs: {
   pname = "oh-my-posh";
-  version = "29.37.0";
+  version = "30.6.2";
 
   src = fetchFromGitHub {
     owner = "jandedobbeleer";
     repo = "oh-my-posh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ydUheYGG/7G1om/h7HGxA4uFW4/KYy0E/9OONT+P+os=";
+    hash = "sha256-4evKi+JDCisdw1y3B4ZFp2kiJoMFt/dXxEPOFsgYsNI=";
   };
 
-  vendorHash = "sha256-2BlJ6un86mqPAH9DsugZV96bnHN8fByypaqYsrTwaPk=";
+  vendorHash = "sha256-SupbcYfodpcw7MEhwK8KXy+MyLxLog0rkvfB2O7+ccU=";
 
   sourceRoot = "${finalAttrs.src.name}/src";
 
@@ -33,7 +34,7 @@ buildGoModule (finalAttrs: {
 
   postPatch = ''
     # these tests requires internet access
-    rm cli/image/image_test.go config/migrate_glyphs_test.go cli/upgrade/notice_test.go segments/upgrade_test.go
+    rm config/migrate_glyphs_test.go cli/upgrade/notice_test.go segments/upgrade_test.go
   '';
 
   postInstall = ''
@@ -43,6 +44,9 @@ buildGoModule (finalAttrs: {
   '';
 
   passthru.updateScript = nix-update-script { };
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Prompt theme engine for any shell";

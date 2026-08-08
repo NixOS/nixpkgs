@@ -670,7 +670,7 @@ let
 
       USB_EHCI_ROOT_HUB_TT = yes; # Root Hub Transaction Translators
       USB_EHCI_TT_NEWSCHED = yes; # Improved transaction translator scheduling
-      USB_HIDDEV = yes; # USB Raw HID Devices (like monitor controls and Uninterruptable Power Supplies)
+      USB_HIDDEV = yes; # USB Raw HID Devices (like monitor controls and Uninterruptible Power Supplies)
 
       # default to dual role mode
       USB_DWC2_DUAL_ROLE = yes;
@@ -1182,7 +1182,6 @@ let
         ];
         MODULE_COMPRESS_ALL = whenAtLeast "6.12" yes;
         MODULE_COMPRESS_XZ = yes;
-        MODULE_DECOMPRESS = whenAtLeast "6.0" yes;
 
         SYSVIPC = yes; # System-V IPC
 
@@ -1393,7 +1392,7 @@ let
         HOTPLUG_PCI_ACPI = yes; # PCI hotplug using ACPI
         HOTPLUG_PCI_PCIE = yes; # PCI-Expresscard hotplug support
 
-        # Allos PCIe devices report errors with Advanced Error Reporting (AER).
+        # Allows PCIe devices to report errors with Advanced Error Reporting (AER).
         PCIEAER = yes;
         ACPI_APEI_PCIEAER = yes;
 

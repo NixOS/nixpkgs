@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "earthbuild";
-  version = "0.8.17";
+  version = "0.8.18";
 
   src = fetchFromGitHub {
     owner = "EarthBuild";
     repo = "earthbuild";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ATdNA9KjAXsxMiez3AF6TxK7OujNDABY8jB6hXeSNpc=";
+    hash = "sha256-ydi649sjAnObI4PrbdwVQifWVHyTmJsj2qqJ54rXllQ=";
   };
 
-  vendorHash = "sha256-49FWzLHEbgwWOXT1uPshdY5risFHInA541Mfhu7v08A=";
+  vendorHash = "sha256-w5JnfSJ5yNtrc6IM2kCWXAJGbszpvA49rQQJ2+ynlg0=";
 
   __structuredAttrs = true;
   subPackages = [

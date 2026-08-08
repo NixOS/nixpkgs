@@ -62,7 +62,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # ArangoDB has been removed from Nixpkgs due to lack of maintenace,
+  # ArangoDB has been removed from Nixpkgs due to lack of maintenance,
   # so we cannot run the tests at present.
   #
   # Before that, the issue was:

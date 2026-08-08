@@ -6,7 +6,7 @@
 }:
 stdenv.mkDerivation {
   pname = "sony-dump";
-  version = "0-unstable-2019-11-3";
+  version = "0-unstable-2019-11-03";
 
   src = fetchFromGitHub {
     owner = "munjeni";

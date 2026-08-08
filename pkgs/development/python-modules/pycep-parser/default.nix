@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   lark,
+  pyprojectVersionPatchHook,
   pytestCheckHook,
   regex,
   typing-extensions,
@@ -29,6 +30,8 @@ buildPythonPackage (finalAttrs: {
     substituteInPlace pyproject.toml \
       --replace-fail "uv_build~=0.9.0" "uv_build"
   '';
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   pythonRelaxDeps = [ "regex" ];
 

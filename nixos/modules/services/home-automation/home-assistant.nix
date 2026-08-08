@@ -312,7 +312,22 @@ in
   options.services.home-assistant = {
     # Running home-assistant on NixOS is considered an installation method that is unsupported by the upstream project.
     # https://github.com/home-assistant/architecture/blob/master/adr/0012-define-supported-installation-method.md#decision
-    enable = mkEnableOption "Home Assistant. Please note that this installation method is unsupported upstream";
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = ''
+        Whether to enable Home Assistant, open source home automation that puts local control and privacy first.
+
+        Your instance will bind to `*:8123` by default. This can be changed in the [HTTP] integration in the frontend.
+
+        :::{.warning}
+        The upstream project does not support this installation method. Make sure to file issues against nixpkgs first.
+        :::
+
+        [HTTP]: https://www.home-assistant.io/integrations/http/
+      '';
+    };
 
     extraArgs = mkOption {
       type = types.listOf types.str;
@@ -562,29 +577,6 @@ in
                 example = "Europe/Amsterdam";
                 description = ''
                   Pick your time zone from the column TZ of Wikipedia’s [list of tz database time zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
-                '';
-              };
-            };
-
-            http = {
-              # https://www.home-assistant.io/integrations/http/
-              server_host = mkOption {
-                type = types.either types.str (types.listOf types.str);
-                default = [
-                  "0.0.0.0"
-                  "::"
-                ];
-                example = "::1";
-                description = ''
-                  Only listen to incoming requests on specific IP/host. The default listed assumes support for IPv4 and IPv6.
-                '';
-              };
-
-              server_port = mkOption {
-                default = 8123;
-                type = types.port;
-                description = ''
-                  The port on which to listen.
                 '';
               };
             };

@@ -1030,6 +1030,27 @@ assertNoAdditions {
     ];
   };
 
+  copilot-lua = super.copilot-lua.overrideAttrs {
+    # Avoid copying the bundled 500MB language server into the plugin output.
+    preInstall = ''
+      rm -rf copilot/js
+    '';
+
+    postInstall = ''
+      mkdir -p $target/copilot
+      ln -s ${copilot-language-server}/share/copilot-language-server $target/copilot/js
+
+      substituteInPlace $target/lua/copilot/lsp/nodejs.lua \
+        --replace-fail "copilot/js/language-server.js" "copilot/js/main.js"
+      sed -i 's/version = "[^"]*"/version = "${copilot-language-server.version}"/' $target/lua/copilot/util.lua
+    '';
+
+    runtimeDeps = [
+      copilot-language-server
+      nodejs
+    ];
+  };
+
   copilot-lualine = super.copilot-lualine.overrideAttrs {
     dependencies = with self; [
       copilot-lua
@@ -2395,6 +2416,10 @@ assertNoAdditions {
   };
 
   lualine-lsp-progress = super.lualine-lsp-progress.overrideAttrs {
+    dependencies = [ self.lualine-nvim ];
+  };
+
+  lualine-so-fancy-nvim = super.lualine-so-fancy-nvim.overrideAttrs {
     dependencies = [ self.lualine-nvim ];
   };
 

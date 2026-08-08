@@ -47,7 +47,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "autopush";
-  version = "1.82.3";
+  version = "1.83.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -61,10 +61,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "mozilla-services";
     repo = "autopush-rs";
     tag = finalAttrs.version;
-    hash = "sha256-lUmwy5ncMDp4wVP8cwvYV6/QBOPL3NUtlWbxMW1p5bc=";
+    hash = "sha256-T1FLDDAIU+YEdDRY11XzUvxKQS3ETqufDC7B4U5vyFk=";
   };
 
-  cargoHash = "sha256-b61aBbc1DdsT9UeUdbCz4xUHnvj9ans7O0fH3DizFl0=";
+  cargoHash = "sha256-a413jA5s6EcjwF6Jxf8Mnqxv4ULVwXRzpUTnLv2CkCg=";
 
   nativeBuildInputs = [
     pkg-config
@@ -106,13 +106,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       imports = [
         (lib.modules.importApply ./service-autoconnect.nix { inherit pkgs; })
       ];
-      package = finalAttrs.finalPackage.out;
+      autoconnect.package = finalAttrs.finalPackage;
     };
     services.autoendpoint = {
       imports = [
         (lib.modules.importApply ./service-autoendpoint.nix { inherit pkgs; })
       ];
-      package = finalAttrs.finalPackage.out;
+      autoendpoint.package = finalAttrs.finalPackage;
     };
 
     updateScript = nix-update-script { };

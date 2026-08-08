@@ -13,18 +13,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "whatsapp";
-  version = "1.1.1";
+  version = "1.2.9";
 
   src = fetchFromGitHub {
     owner = "dagmoller";
     repo = "whatsapp-electron";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-i3rk/wAr2MtJqXv7Z9uG0YzIsvaxrDvcXsXQhDEmzxw=";
+    hash = "sha256-g7EYdPYN1KRS8JQtO0RMkoHyp/2A14YekI1MAzLFoFA=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-5AlnAtxiQDbJEbxthGT8DQhZG5tdkrFk0+47czalnlU=";
+    hash = "sha256-Z+dukXaK5V/eWBCyKqp1/Nm9rDQcUqH8XJSi1WqPPL8=";
   };
 
   patches = [ ./icon.patch ];

@@ -5,10 +5,10 @@ callPackage ./common.nix { } {
   component = "node";
 
   hashes = {
-    linux_x64 = "sha256-hF4W72VEWAryCoLZecrwdT98iN3sARaPWJnEApFeHCw=";
-    linux_arm64 = "sha256-wJ3fZLJKUHama1P6YTslTb3fiYI4qjGm5VdHKGcG8k4=";
-    darwin_x64 = "sha256-cL6REyGqwFemXLMkgAXy9PTS0j7maT1lBNzckTL4Ez0=";
-    darwin_arm64 = "sha256-0LFTw4fbdFXcEYGVk1C1UOVRAh/MfGctFzfKB/mr6lM=";
+    linux_x64 = "sha256-77u5Rjd0v3yFPZb0n/lpmpLta6mAxtiDicjECCv17rI=";
+    linux_arm64 = "sha256-lmU6UO+K9N9HnXl/3xa12b946ESnSr895MEYhQyKdjs=";
+    darwin_x64 = "sha256-wwmZdDClYAyHS2xUF7bU+FzrckV/gKcD6KECEJTkinM=";
+    darwin_arm64 = "sha256-j1c+z6v0a7I/k1JM+BUpPrSA/xRpZOZ9+2Rv7Ywgw38=";
   };
 
   includeInPath = [ ccextractor ];

@@ -15,12 +15,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "gehomesdk";
-  version = "2026.7.2";
+  version = "2026.8.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-dSx+fmQU8UJTVaBaNWyJh302CDb7LcyELSnL0B0sbjk=";
+    hash = "sha256-4WGkodI608LmlHpzYfPIrexZBNAsImmj2B55+WJgq2E=";
   };
 
   build-system = [ setuptools ];

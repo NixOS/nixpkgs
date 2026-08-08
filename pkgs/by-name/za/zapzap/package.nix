@@ -25,23 +25,15 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "zapzap";
-  version = "7.0";
+  version = "7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rafatosta";
     repo = "zapzap";
     tag = finalAttrs.version;
-    hash = "sha256-0LrIx7k9b0+zsmezjF6CmJo4nqU7GPW1HHWAUVVnbzk=";
+    hash = "sha256-/fJd9D1f1D215o461B9XcaxKV//7au3FBNDBUsq5uD8=";
   };
-
-  patches = [
-    # Support setting dict lookup path. Remove with next release.
-    (fetchpatch {
-      url = "https://github.com/rafatosta/zapzap/commit/3517079e8fbd3853fe184c393137709de68f020e.patch";
-      hash = "sha256-Eqy483+mJHLHsS21B8LnJ9oIqwTRCMVKhHBO8hleBh4=";
-    })
-  ];
 
   nativeBuildInputs = [
     qt6.wrapQtAppsHook

@@ -5,6 +5,7 @@
   replaceVars,
   SDL2,
   frei0r,
+  opencv4,
   ladspaPlugins,
   gettext,
   jack1,
@@ -38,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     SDL2
-    frei0r
+    (frei0r.override { opencv = opencv4.override { ffmpeg-headless = ffmpeg; }; })
     ladspaPlugins
     gettext
     qt6Packages.mlt
@@ -47,8 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qttools
     qt6.qtmultimedia
     qt6.qtcharts
-    qt6.qtwayland
     qt6.qtwebsockets
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qt6.qtwayland
   ];
 
   env.NIX_CFLAGS_COMPILE = "-DSHOTCUT_NOUPGRADE";
@@ -65,7 +68,9 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapGApps = true;
 
   qtWrapperArgs = [
-    "--set FREI0R_PATH ${frei0r}/lib/frei0r-1"
+    "--set FREI0R_PATH ${
+      (frei0r.override { opencv = opencv4.override { ffmpeg-headless = ffmpeg; }; })
+    }/lib/frei0r-1"
     "--set LADSPA_PATH ${ladspaPlugins}/lib/ladspa"
     "--prefix LD_LIBRARY_PATH : ${
       lib.makeLibraryPath ([ SDL2 ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ jack1 ])

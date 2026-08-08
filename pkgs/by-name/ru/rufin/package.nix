@@ -14,7 +14,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rufin";
-  version = "0.9.0";
+  version = "0.12.5";
 
   __structuredAttrs = true;
 
@@ -22,10 +22,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "screwys";
     repo = "Rufin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VYuM0SAAvoQ/H4dufgoPFNIYwwEjpctqiElrKPi5D+E=";
+    hash = "sha256-QOlDZAVjDgAV1G4+f82TpNbyv+96QGDAUqf5r+A4PuU=";
   };
 
-  cargoHash = "sha256-a0VPqbw2rjOzRjYpk8NoI2mq9LxFd6BBJ/AmE3tyVR4=";
+  cargoHash = "sha256-6u23YZSYYYAcnoOOZiCUCy9rbiOS59Nu4hj3WKhL/B0=";
 
   strictDeps = true;
 
@@ -57,6 +57,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doCheck = false;
 
   postInstall = ''
+    install -Dm644 data/japanese-readings.dic \
+      "$out/share/rufin/japanese-readings.dic"
+    install -Dm644 data/japanese-readings.LICENSE \
+      "$out/share/licenses/rufin/japanese-readings.LICENSE"
     install -Dm644 data/io.github.screwys.Rufin.desktop \
       "$out/share/applications/io.github.screwys.Rufin.desktop"
     substituteInPlace "$out/share/applications/io.github.screwys.Rufin.desktop" \
@@ -92,7 +96,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   meta = {
-    description = "Native GTK music client for Jellyfin";
+    description = "Native GTK4/libadwaita music client for Jellyfin, Subsonic, Navidrome and local libraries written in Rust";
     homepage = "https://github.com/screwys/Rufin";
     changelog = "https://github.com/screwys/Rufin/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;

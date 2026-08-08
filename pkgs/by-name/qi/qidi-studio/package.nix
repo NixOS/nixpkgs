@@ -7,11 +7,11 @@
 }:
 let
   pname = "qidi-studio";
-  version = "2.07.02.10";
+  version = "2.07.02.60";
 
   src = fetchurl {
     url = "https://github.com/QIDITECH/QIDIStudio/releases/download/v${version}/QIDIStudio_v0${version}_Ubuntu24.AppImage";
-    hash = "sha256-Ei5PV/XRWtCMlXF07AJu9UWplSr+8GdwAFvXwDE3TpM=";
+    hash = "sha256-1H0rLI3V8W1I+KIbolQg/Wat9WsACMy1RIdyU0s8seg=";
   };
 
   appimageContents = appimageTools.extract {
@@ -41,7 +41,7 @@ appimageTools.wrapType2 {
     description = "Slicer for QIDI 3D Printers, based on Bambu Studio";
     longDescription = ''
       QIDI Studio is a professional 3D printer slicing software, which is perfectly compatible with all printers and 3D printing filaments of QIDI Technology.
-      Multi-platform support, simple inerface, easy to use, complate functions, easy to learn 3D printing.
+      Multi-platform support, simple interface, easy to use, complete functions, easy to learn 3D printing.
     '';
     homepage = "https://github.com/QIDITECH/QIDIStudio";
     license = lib.licenses.agpl3Plus;

@@ -74,7 +74,7 @@ index e09fcc1ce8c59f..2f0fd30771881b 100644
 +              'action_name': 'make_temporal_zoneinfo_cpp_action',
 +              'inputs': [
 +                '<(V8_ROOT)/tools/include-file-as-bytes.py',
-+                '<(V8_ROOT)/../crates/vendor/zoneinfo64/src/data/zoneinfo64.res',
++                '<(V8_ROOT)/../crates/vendor/zoneinfo64-v0_3/src/data/zoneinfo64.res',
 +              ],
 +              'outputs': [
 +                '<(SHARED_INTERMEDIATE_DIR)/src/builtins/builtins-temporal-zoneinfo64-data.cc',
@@ -82,7 +82,7 @@ index e09fcc1ce8c59f..2f0fd30771881b 100644
 +              'action': [
 +                '<(python)',
 +                '<(V8_ROOT)/tools/include-file-as-bytes.py',
-+                '<(V8_ROOT)/../crates/vendor/zoneinfo64/src/data/zoneinfo64.res',
++                '<(V8_ROOT)/../crates/vendor/zoneinfo64-v0_3/src/data/zoneinfo64.res',
 +                '<@(_outputs)',
 +                'zoneinfo64_static_data',
 +              ],

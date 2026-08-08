@@ -25,7 +25,7 @@
 let
   nodejs = nodejs_24;
 
-  version = "2026.5.3";
+  version = "2026.5.6";
 
   cargoPackageFlags = [
     "--package"
@@ -36,7 +36,7 @@ let
     owner = "goauthentik";
     repo = "authentik";
     tag = "version/${version}";
-    hash = "sha256-nmAX8nwZpdDcFAPvC9hAEp0x43RnFtGLUTAm7NcvNZo=";
+    hash = "sha256-/HdXzjjvuSW7zjbCNJKm3Fj8gvIwfrDf8mOYev0yuIg=";
   };
 
   meta = {
@@ -129,7 +129,7 @@ let
     sourceRoot = "${src.name}/website";
 
     inherit nodejs;
-    npmDepsHash = "sha256-SkIZF+wQPgoZOGJc0YR8Ot07KCsAdA1985SLQaoibfA=";
+    npmDepsHash = "sha256-5zAsS+Jw/hcBOws+MvFGZMMSn+NNKcpUmmkd9NO9fTY=";
     npmDepsFetcherVersion = 2;
     makeCacheWritable = true;
     npmInstallFlags = [ "--legacy-peer-deps" ];
@@ -189,7 +189,7 @@ let
 
     outputHash =
       {
-        "aarch64-linux" = "sha256-41xZEfLul92vJATZqyVnd7Pp++NzLL/u8NeJJPHpXrw=";
+        "aarch64-linux" = "sha256-ZdfDKrrcVpNImY8cYa9CPEwI7tuaoPn3kM6MXGGio2U=";
         "x86_64-linux" = "sha256-p6xjAinU2Isl/uYgoJuacqHN7jBnbWam40J6AQudbtQ=";
       }
       .${stdenvNoCC.hostPlatform.system} or (throw "authentik-webui-deps: unsupported host platform");
@@ -292,6 +292,8 @@ let
 
         build-system = with final; [ hatchling ];
 
+        nativeBuildInputs = with final; [ pyprojectVersionPatchHook ];
+
         propagatedBuildInputs = with final; [
           django
           typing-extensions
@@ -306,6 +308,8 @@ let
         sourceRoot = "${src.name}/packages/django-channels-postgres";
 
         build-system = with final; [ hatchling ];
+
+        nativeBuildInputs = with final; [ pyprojectVersionPatchHook ];
 
         pythonRelaxDeps = [
           "structlog"
@@ -332,6 +336,8 @@ let
         sourceRoot = "${src.name}/packages/django-dramatiq-postgres";
 
         build-system = with final; [ hatchling ];
+
+        nativeBuildInputs = with final; [ pyprojectVersionPatchHook ];
 
         pythonRelaxDeps = [
           "structlog"
@@ -360,6 +366,8 @@ let
 
         build-system = with final; [ hatchling ];
 
+        nativeBuildInputs = with final; [ pyprojectVersionPatchHook ];
+
         propagatedBuildInputs = with final; [
           django
           django-postgres-extra
@@ -367,7 +375,7 @@ let
       };
 
       authentik-django = final.buildPythonPackage {
-        pname = "authentik-django";
+        pname = "authentik";
         inherit version src meta;
         pyproject = true;
 
@@ -383,9 +391,7 @@ let
             --replace-fail "and (self._base_dir.is_mount() or (self._base_dir / self.usage.value).is_mount())" ""
         '';
 
-        build-system = [
-          final.hatchling
-        ];
+        build-system = with final; [ hatchling ];
 
         pythonRemoveDeps = [ "dumb-init" ];
 
@@ -486,7 +492,7 @@ let
     pname = "authentik-worker";
     inherit version src meta;
 
-    cargoHash = "sha256-KExlNyT9G3R5rnt99beT2pYrWxezMLhGw+Q9T1X2kj4=";
+    cargoHash = "sha256-bpS1cXIG8srVE4tTS1rXL6R+ZBE65BZTlMghSPiAJy4=";
 
     nativeBuildInputs = [
       cmake

@@ -4,7 +4,7 @@
   lib,
 }:
 let
-  version = "0.1.3";
+  version = "0.1.5";
 in
 rustPlatform.buildRustPackage {
   pname = "pid-fan-controller";
@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage {
     owner = "zimward";
     repo = "pid-fan-controller";
     tag = version;
-    hash = "sha256-BgBFX4x1gMSMla7lhkFk1n5fBC1TFK0Z5Z3mFH2oBF0=";
+    hash = "sha256-2LylkjhWYMHGG/dSkbBoKv2Dpf6yNqfvsUdmJlwqPzU=";
   };
   cargoHash = "sha256-AN7EbjKZBxb8UP0MEbJUw5Y8E/rE35MByKVmxX2ctko=";
 
@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage {
   '';
   postInstall = ''
     install -Dm0644 resources/pid-fan-controller.service $out/lib/systemd/system/pid-fan-controller.service
-    install -Dm0644 resources/pid-fan-controller-sleep.service $out/lib/systemd/system/pid-fan-controller-sleep.service
   '';
 
   meta = {

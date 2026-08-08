@@ -35,30 +35,8 @@ let
       # https://invent.kde.org/kdevelop/kdevelop/-/blob/master/LICENSES/LicenseRef-MIT-KDevelop-Ideal.txt
       "LicenseRef-MIT-KDevelop-Ideal" = lib.licenses.mit;
 
-      "FSFAP" = {
-        spdxId = "FSFAP";
-        fullName = "FSF All Permissive License";
-      };
-
-      "FSFULLR" = {
-        spdxId = "FSFULLR";
-        fullName = "FSF Unlimited License (with License Retention)";
-      };
-
-      "W3C-20150513" = {
-        spdxId = "W3C-20150513";
-        fullName = "W3C Software Notice and Document License (2015-05-13)";
-      };
-
-      "LGPL" = lib.licenses.lgpl2Plus;
-
-      # Technically not exact
-      "bzip2-1.0.6" = lib.licenses.bsdOriginal;
-
       # FIXME: typo lol
       "ICS" = lib.licenses.isc;
-      "BSD-2-Clauses" = lib.licenses.bsd2;
-      "BSD-3-clause" = lib.licenses.bsd3;
       "BSD-3-Clauses" = lib.licenses.bsd3;
 
       # These are only relevant to Qt commercial users
@@ -67,13 +45,8 @@ let
       "LicenseRef-Qt-Commercial-exception-1.0" = null;
 
       # FIXME: ???
-      "Qt-GPL-exception-1.0" = null;
       "LicenseRef-Qt-LGPL-exception-1.0" = null;
-      "Qt-LGPL-exception-1.1" = null;
       "LicenseRef-Qt-exception" = null;
-      "GCC-exception-3.1" = null;
-      "Bison-exception-2.2" = null;
-      "Font-exception-2.0" = null;
       None = null;
     };
 

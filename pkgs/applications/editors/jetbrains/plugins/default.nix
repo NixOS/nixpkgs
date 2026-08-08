@@ -16,7 +16,7 @@
     let
       processPlugin =
         plugin:
-        # We can remove this check and just asume plugins to be derivations starting with 26.11.
+        # We can remove this check and just assume plugins to be derivations starting with 26.11.
         lib.throwIfNot (lib.isDerivation plugin)
           "addPlugins no longer supports resolving plugins by name or id strings. Please supply a derivation instead"
           plugin;
