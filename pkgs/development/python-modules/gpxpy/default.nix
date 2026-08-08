@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  python,
+  unittestCheckHook,
   lxml,
   setuptools,
 }:
@@ -24,9 +24,7 @@ buildPythonPackage rec {
 
   dependencies = [ lxml ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest test
-  '';
+  nativeCheckInputs = [ unittestCheckHook ];
 
   meta = {
     description = "Python GPX (GPS eXchange format) parser";
