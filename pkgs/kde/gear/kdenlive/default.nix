@@ -2,6 +2,8 @@
   mkKdeDerivation,
   replaceVars,
   mlt,
+  frei0r,
+  opencv4,
   glaxnimate,
   ffmpeg-full,
   ffmpegthumbs,
@@ -15,9 +17,18 @@
   libv4l,
   kio-extras,
   opentimelineio,
-  frei0r,
   qtimageformats,
+  lib,
+  stdenv,
 }:
+let
+  # Make sure only a single copy of opencv gets into the closure
+  # With multiple the application will crash
+  # Same issue as shotcut had
+  frei0r' = frei0r.override {
+    opencv = opencv4.override { ffmpeg-headless = mlt.ffmpeg; };
+  };
+in
 mkKdeDerivation {
   pname = "kdenlive";
 
@@ -49,14 +60,20 @@ mkKdeDerivation {
 
     ffmpeg-full
     ffmpegthumbs
-    libv4l
     mlt
     opentimelineio
+  ]
+  ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) [
+    libv4l
   ];
 
   qtWrapperArgs = [
-    "--set FREI0R_PATH ${frei0r}/lib/frei0r-1"
+    "--set FREI0R_PATH ${frei0r'}/lib/frei0r-1"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--set MLT_PREFIX ${mlt}"
   ];
 
   meta.mainProgram = "kdenlive";
+  meta.platforms = lib.platforms.unix;
 }
