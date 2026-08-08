@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Collection of small XKB utilities";
     longDescription = ''
-      xkbutils is a collection of small utilities using the X Keyboard extenison:
+      xkbutils is a collection of small utilities using the X Keyboard extension:
       - xkbbell: generate X Keyboard Extension bell events
       - xkbvleds: display X Keyboard Extension LED state in a window
       - xkbwatch: report state changes using the X Keyboard Extension

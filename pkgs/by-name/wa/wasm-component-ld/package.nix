@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-u1rV51QwPG7ZCB6d/P9+seO8yumxUJ9iQ3N58zijbGc=";
 
   # Tests require a rustc that can target wasm32-wasip1, including std. This is awkward for
-  # Nixpkgs to provide at the same time as providing a rustc that's targetting the actual target.
+  # Nixpkgs to provide at the same time as providing a rustc that's targeting the actual target.
   # TODO: work around by patching the test suite to invoke pkgsBuildTarget.rustc rather than just looking in PATH for any old rustc
   doCheck = false;
 

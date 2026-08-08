@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ libffi ];
 
-  # The pkg-config script in the build.xml doesn't work propery
+  # The pkg-config script in the build.xml doesn't work properly
   # set the lib path manually to work around this.
   env.LIBFFI_LIBS = "${libffi}/lib/libffi${stdenv.hostPlatform.extensions.sharedLibrary}";
   env.ANT_ARGS = "-Duse.system.libffi=1";

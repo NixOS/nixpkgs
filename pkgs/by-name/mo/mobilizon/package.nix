@@ -157,7 +157,6 @@ beamPackages.mixRelease rec {
     changelog = "https://framagit.org/framasoft/mobilizon/-/releases/${src.tag}";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
-      minijackson
       erictapen
     ];
   };

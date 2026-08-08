@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   };
 
   patches = [
-    # Remove once https://github.com/AGProjects/blink-qt/pull/7 is mereged and tagged
+    # Remove once https://github.com/AGProjects/blink-qt/pull/7 is merged and tagged
     ./fix-none-account.patch
   ];
 

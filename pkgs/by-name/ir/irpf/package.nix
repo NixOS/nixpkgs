@@ -86,9 +86,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Brazillian government application for reporting income tax";
+    description = "Brazilian government application for reporting income tax";
     longDescription = ''
-      Brazillian government application for reporting income tax.
+      Brazilian government application for reporting income tax.
 
       IRFP - Imposto de Renda Pessoa Física - Receita Federal do Brasil.
     '';

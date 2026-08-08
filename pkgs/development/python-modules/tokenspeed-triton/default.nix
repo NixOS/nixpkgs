@@ -40,6 +40,20 @@ buildPythonPackage (finalAttrs: {
     substituteInPlace pyproject.toml \
       --replace-fail "cmake>=3.20,<4.0" "cmake>=3.20" \
       --replace-fail "nanobind==2.10.2" "nanobind>=2.10.2"
+  ''
+
+  # nanobind >= 2.13 also requires the `Python::Interpreter`
+  # target, which upstream's `find_package(Python3)` ->
+  # `find_package(Python)` bridge misses:
+  # https://github.com/wjakob/nanobind/commit/706131bef6771ad3634b1d772f029f65b7ea8bd2
+  + ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'if(NOT TARGET Python::Module)' \
+        'if(NOT TARGET Python::Interpreter)
+      add_executable(Python::Interpreter ALIAS Python3::Interpreter)
+    endif()
+    if(NOT TARGET Python::Module)'
   '';
 
   build-system = [

@@ -56,7 +56,7 @@ python3Packages.buildPythonApplication rec {
       versions of LilyPond, automatically selects the correct version, Built-in
       LilyPond documentation browser and built-in User Guide, Smart
       layout-control functions like coloring specific objects in the PDF,
-      MusicXML import, Modern user iterface with configurable colors,
+      MusicXML import, Modern user interface with configurable colors,
       fonts and keyboard shortcuts
     '';
     license = lib.licenses.gpl2Plus;
