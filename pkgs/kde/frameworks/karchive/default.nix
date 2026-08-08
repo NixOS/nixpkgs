@@ -14,8 +14,6 @@ mkKdeDerivation {
   ];
   extraBuildInputs = [
     xz
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     bzip2
   ];
 }
