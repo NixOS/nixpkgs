@@ -286,6 +286,12 @@ lib.makeScope
 
         heirloom-devtools = callPackage ./heirloom-devtools { tinycc = tinycc-mes; };
 
+        libbacktrace = callPackage ./gcc/libbacktrace.nix {
+          gcc = gcc10;
+          gnumake = gnumake-musl;
+          gnutar = gnutar-latest;
+        };
+
         libgmp = callPackage ./gcc/gmp.nix {
           gcc-buildbuild = gcc10;
           gcc = gcc10;
