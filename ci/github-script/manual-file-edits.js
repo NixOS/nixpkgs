@@ -5,7 +5,7 @@ const { getCommitDetailsForPR } = require('./get-pr-commit-details')
 /**
  * @param {{
  *  github: InstanceType<import('@actions/github/lib/utils').GitHub>,
- *  context: import('@actions/github/lib/context').Context,
+ *  context: typeof import('@actions/github').context,
  *  core: import('@actions/core'),
  *  repoPath?: string,
  *  dry: boolean,

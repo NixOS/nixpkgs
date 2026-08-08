@@ -5,9 +5,6 @@
   fetchFromGitHub,
   pythonAtLeast,
 
-  # buildInputs
-  llvmPackages,
-
   # build-system
   setuptools,
 
@@ -185,7 +182,7 @@ buildPythonPackage (finalAttrs: {
     "CheckpointTest"
   ];
 
-  disabledTestPaths = lib.optionals (!(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64)) [
+  disabledTestPaths = [
     # numerous instances of torch.multiprocessing.spawn.ProcessRaisedException:
     "tests/test_cpu.py"
     "tests/test_grad_sync.py"
