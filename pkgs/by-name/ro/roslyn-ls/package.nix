@@ -136,19 +136,25 @@ buildDotnetModule (finalAttrs: {
               ];
               meta.timeout = 60;
             }
+            # run a LSP handshake rather than matching startup logs -
+            # those go through a StreamWriter that upstream never flushes
             ''
               HOME=$TMPDIR
               expect <<"EOF"
-                spawn ${finalAttrs.meta.mainProgram} --stdio --logLevel Information --extensionLogDirectory log
-                expect_before timeout {
-                  send_error "timeout!\n"
-                  exit 1
+                set timeout 60
+                set req "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"processId\":null,\"rootUri\":null,\"capabilities\":{}}}"
+
+                set chan [open "|${finalAttrs.meta.mainProgram} --stdio --extensionLogDirectory log 2>@stderr" r+]
+                fconfigure $chan -translation binary -buffering none
+                spawn -open $chan
+                match_max 100000
+
+                send -- "Content-Length: [string length $req]\r\n\r\n$req"
+                expect {
+                  -ex {"id":1,"result"} { }
+                  timeout { send_error "\ntimeout!\n"; exit 1 }
+                  eof { send_error "\nserver exited!\n"; exit 1 }
                 }
-                expect "Language server initialized"
-                send \x04
-                expect eof
-                catch wait result
-                exit [lindex $result 3]
               EOF
               touch $out
             '';
