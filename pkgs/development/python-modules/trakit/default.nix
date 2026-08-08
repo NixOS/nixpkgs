@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "trakit";
-  version = "0.2.5";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ratoaq2";
     repo = "trakit";
     tag = version;
-    hash = "sha256-x/83yRzvQ81+wS0lJr52KYBMoPvSVDr17ppxG/lSfUg=";
+    hash = "sha256-uKLuXkvyZWjCMx5MHlsTKvTJwHYYV+wnRyE+D8BtCC0=";
   };
 
   build-system = [ poetry-core ];
