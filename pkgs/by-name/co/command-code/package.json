@@ -1,6 +1,6 @@
 {
   "name": "command-code",
-  "version": "1.9.0",
+  "version": "1.15.0",
   "description": "Command Code, coding agent that continuously learns your coding taste. Best coding agent for open models.",
   "type": "module",
   "engines": {

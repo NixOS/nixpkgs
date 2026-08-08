@@ -9,9 +9,8 @@ trap 'rm -rf "$temporary_dir"' EXIT
 
 version="$(npm view command-code version)"
 npm pack --ignore-scripts --pack-destination "$temporary_dir" "command-code@$version" >/dev/null
-tar -xzf "$temporary_dir/command-code-$version.tgz" -C "$temporary_dir"
-jq 'del(.devDependencies)' "$temporary_dir/package/package.json" > "$temporary_dir/package.json"
-cp "$temporary_dir/package.json" "$package_dir/package.json"
+tar -xzf "$temporary_dir/command-code-$version.tgz" --to-stdout package/package.json |
+  jq 'del(.devDependencies)' > "$package_dir/package.json"
 
 cd "$package_dir"
 npm install \
