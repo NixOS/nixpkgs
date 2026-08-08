@@ -12102,6 +12102,12 @@
     githubId = 157678;
     keys = [ { fingerprint = "E864 BDFA AB55 36FD C905  5195 DBF2 52AF FB26 19FD"; } ];
   };
+  irendy = {
+    name = "IRendy";
+    email = "irendy@qq.com";
+    github = "IRendy";
+    githubId = 42890271;
+  };
   irgendeinwer = {
     name = "Irgendeinwer";
     email = "irgendeinwer@proton.me";
