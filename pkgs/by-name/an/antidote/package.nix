@@ -5,14 +5,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.1.0";
+  version = "2.2.2";
   pname = "antidote";
 
   src = fetchFromGitHub {
     owner = "mattmc3";
     repo = "antidote";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cLgfRprMuMl+yH5GtgOxP51pKReGebxKynzbvR8XlI0=";
+    hash = "sha256-K2IzFUkiuAdEsm7p0u9HVFB5DTOy3v4wSZk8io7i8dU=";
   };
 
   dontPatch = true;
