@@ -10,14 +10,14 @@
   hicolor-icon-theme,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs:  {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hwall";
   version = "1.0.5";
 
   src = fetchFromGitHub {
+    tag = "v${finalAttrs.version}";
     owner = "pulpul-s";
     repo = "HWall";
-    tag = ${finalAttrs.version};
     hash = "sha256-4xl4WUgfa86YWoLxD0L7zVxzMddlDvNKbCi8z8JwqKo=";
   };
 
