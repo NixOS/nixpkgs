@@ -193,6 +193,7 @@ lib.makeScope
         };
 
         gnugrep-static = callPackage ./gnugrep/static.nix {
+          bash-build = bash;
           gcc = gcc-latest;
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
