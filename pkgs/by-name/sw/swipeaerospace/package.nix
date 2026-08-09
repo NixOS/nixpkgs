@@ -44,7 +44,7 @@ let
         -emit-module \
         -module-name Socket \
         -emit-module-path "$buildDir/Socket.swiftmodule" \
-        -Xlinker -install_name -Xlinker "$out/lib/swift/libSocket.dylib" \
+        -Xlinker -install_name -Xlinker "$out/lib/libSocket.dylib" \
         Sources/Socket/*.swift \
         -o "$buildDir/libSocket.dylib"
 
@@ -54,9 +54,9 @@ let
     installPhase = ''
       runHook preInstall
 
-      mkdir -p "$out/lib/swift"
-      cp build/libSocket.dylib "$out/lib/swift/"
-      cp build/Socket.* "$out/lib/swift/"
+      mkdir -p "$out/lib/swift/macosx"
+      cp build/libSocket.dylib "$out/lib"
+      cp build/Socket.* "$out/lib/swift/macosx"
 
       runHook postInstall
     '';
@@ -123,6 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
     done < <(find SwipeAeroSpace -name '*.swift' -print0)
 
     swiftc \
+      -I${lib.getDev blueSocket}/lib/swift/${stdenv.hostPlatform.swift.platform} \
       -O \
       -swift-version 5 \
       -parse-as-library \
