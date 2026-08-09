@@ -266,12 +266,7 @@ stdenv.mkDerivation (
       ]
       ++ lib.optionals (lib.versionOlder release_version "22") [
         # Needed to add arm64e.x1 support, as the enum name differs from the architecture name
-        (fetchpatch {
-          name = "llvm-textapi-separate-arch-name-enum-label.patch";
-          url = "https://github.com/llvm/llvm-project/commit/477a65a051ce151895193f8dede1262fdc251132.patch";
-          stripLen = 1;
-          hash = "sha256-XXteX2zK5TzFQX+XhLzUtikY4PkCWF1f8l5MshelzX4=";
-        })
+        (getVersionFile "llvm/llvm-textapi-separate-arch-name-enum-label.patch")
       ]
       ++ lib.optionals (lib.versionOlder release_version "23") [
         # Needed to link with the macOS 27 sdk, as it has libraries linked for arm64e.x1
