@@ -1,5 +1,6 @@
 {
   mkKdeDerivation,
+  lib,
   qtwayland,
   pkg-config,
   libxscrnsaver,
@@ -12,4 +13,6 @@ mkKdeDerivation {
     qtwayland
     libxscrnsaver
   ];
+
+  meta.badPlatforms = lib.platforms.darwin;
 }
