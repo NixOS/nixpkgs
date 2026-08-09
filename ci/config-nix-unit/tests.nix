@@ -1,15 +1,15 @@
-# Tests for `nixpkgs.config` that inspect evaluation *error messages*.
+# Tests for `nixpkgs.config` that cannot run at evaluation time, either
+# because they match the text of an error, which `builtins.tryEval` never
+# exposes, or because they depend on the process environment.
 #
-# Everything that can be asserted on values instead lives in
-# `pkgs/test/top-level`, where it runs at evaluation time and costs no build.
-# These tests remain here because `builtins.tryEval` reports only whether an
-# evaluation failed, never why, so the message can only be matched by a runner
-# such as nix-unit.
+# Everything that can be asserted on a value lives in `pkgs/test/config.nix`,
+# where it runs at evaluation time and costs no build.
 #
 # Run with:
-#   nix-unit ci/config-nix-unit/tests.nix
-# or
 #   nix-build ci -A config-nix-unit
+#
+# Running `nix-unit` on this file directly requires `$NIXPKGS_CONFIG` to point
+# at a file containing `{ allowUnfree = true; }`, which `./default.nix` sets up.
 #
 {
   nixpkgsPath ? ../..,
@@ -53,5 +53,24 @@ in
       type = "ThrownError";
       msg = ".*my-nixos-module.nix.*";
     };
+  };
+
+  # Control for the test below: importing Nixpkgs without a `config` argument
+  # does read `$NIXPKGS_CONFIG`. Without this, a NixOS package set could look
+  # unaffected by the environment merely because the variable was never seen.
+  testEnvironmentConfigIsRead = {
+    expr = (import nixpkgsPath { }).config.allowUnfree;
+    expected = true;
+  };
+
+  # The NixOS module always passes `config`, so `$NIXPKGS_CONFIG` must not
+  # reach a package set it built. This is what the module's former explicit
+  # `config = { }` protected, before the definitions were passed as modules.
+  testNixosConfigIgnoresEnvironment = {
+    expr =
+      (import (nixpkgsPath + "/nixos/lib/eval-config.nix") {
+        modules = [ { nixpkgs.hostPlatform = "x86_64-linux"; } ];
+      }).pkgs.config.allowUnfree;
+    expected = false;
   };
 }
