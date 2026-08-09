@@ -4,12 +4,13 @@
   fetchFromGitHub,
   jsonpointer,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "jsonpatch";
   version = "1.33";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stefankoegl";
@@ -18,7 +19,9 @@ buildPythonPackage rec {
     hash = "sha256-JHBB64LExzHQVoFF2xcsqGlNWX/YeEBa1M/TmfeQLWI=";
   };
 
-  propagatedBuildInputs = [ jsonpointer ];
+  build-system = [ setuptools ];
+
+  dependencies = [ jsonpointer ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
