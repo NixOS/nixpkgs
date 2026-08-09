@@ -29422,6 +29422,12 @@
     matrix = "@ty:tjll.net";
     name = "Tyler Langlois";
   };
+  TylerNilson = {
+    name = "Tyler Nilson";
+    email = "tyler@nilsonintegrations.ca";
+    github = "TylerNilson";
+    githubId = 184452187;
+  };
   tylervick = {
     email = "nix@tylervick.com";
     github = "tylervick";
