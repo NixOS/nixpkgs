@@ -89,6 +89,12 @@
       path = ../22;
     }
   ];
+  "llvm/get-rid-of-incorrect-std-template-specializations.patch" = [
+    {
+      before = "22";
+      path = ../18;
+    }
+  ];
   "llvm/gnu-install-dirs.patch" = [
     {
       after = "23";
