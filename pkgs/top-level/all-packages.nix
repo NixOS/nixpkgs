@@ -7453,8 +7453,6 @@ with pkgs;
     modules = [ ];
   };
 
-  system-sendmail = lowPrio (callPackage ../servers/mail/system-sendmail { });
-
   # PulseAudio daemons
 
   pulseaudioFull = pulseaudio.override {
