@@ -58,7 +58,7 @@ case "${#files[@]}" in
 esac
 
 if $compress; then
-  oxipng $optimize "$source" --force --out "$dest"
+  @oxipng@/bin/oxipng $optimize "$source" --force --out "$dest"
 else
   @coreutils@/bin/cp "$source" "$dest"
 fi
