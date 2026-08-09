@@ -6,13 +6,13 @@
 
 callPackage ../generic.nix rec {
   pname = "tower-pixel-dungeon";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "FixAkaTheFix";
     repo = "Tower-Pixel-Dungeon";
     tag = "TPDv${lib.replaceStrings [ "." ] [ "" ] version}";
-    hash = "sha256-/s+3FarO1iSW7f6SMkVxb9OSSEgVpM3gFUWFd+orcp4=";
+    hash = "sha256-GwHBNWEKkdfcfen/SpK0GtHDUGeB2M1IQben9LtQhFM=";
   };
 
   sourceRoot = src.name + "/pixel-towers-master";
