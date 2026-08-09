@@ -50,6 +50,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Python library to interact with Digi International's XBee radio frequency modules";
+    changelog = "https://github.com/digidotcom/xbee-python/blob/${finalAttrs.version}/CHANGELOG.rst";
     homepage = "https://github.com/digidotcom/xbee-python";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ jefflabonte ];
