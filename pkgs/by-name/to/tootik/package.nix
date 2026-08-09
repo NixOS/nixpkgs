@@ -10,17 +10,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "tootik";
-  version = "0.23.3";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "dimkr";
     repo = "tootik";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YcpRt17X9EHTCDhyFRnUriin4Y5vllLItKPGbrzUr8Y=";
+    hash = "sha256-DjlbWQ75/f9pfMhtHAeLF+5A/ma+DIFieq9qR86sV2E=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-VeMTiOL4JQGzDN4Nan6nZbujDnX2Ksby2W+AK7kAs+M=";
+  vendorHash = "sha256-SWQVuSLjHJsRYhAxHBAarIQ1MzhzN2uogiyWne918CI=";
 
   subPackages = [ "cmd/tootik" ];
 
