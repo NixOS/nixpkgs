@@ -8,13 +8,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "adminneo";
-  version = "5.5.0";
+  version = "5.5.1";
 
   src = fetchFromGitHub {
     owner = "adminneo-org";
     repo = "adminneo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8A+sCojrtwsQdsJck1Cy1UBl8gFhuvsWq2ISbVkhh0Q=";
+    hash = "sha256-hGRuEtOgk2EBCTBv2jMGsV3KjiHRapxDvjnFDTSnPqg=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir $out
-    cp compiled/adminneo-${finalAttrs.version}.php $out/adminneo.php
+    cp compiled/adminneo.php $out/adminneo.php
     # for compatibility
     ln -s adminneo.php $out/index.php
   ''

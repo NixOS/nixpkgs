@@ -258270,7 +258270,7 @@ self: {
       hydraPlatforms = lib.platforms.none;
       broken = true;
     }
-  ) { inherit (pkgs.gnome2) GConf; };
+  ) { GConf = null; };
 
   gd =
     callPackage
@@ -279720,7 +279720,7 @@ self: {
       hydraPlatforms = lib.platforms.none;
       broken = true;
     }
-  ) { inherit (pkgs.gnome2) libglade; };
+  ) { libglade = null; };
 
   gladexml-accessor = callPackage (
     {
@@ -295103,7 +295103,7 @@ self: {
       )
       {
         inherit (pkgs) gtk2;
-        inherit (pkgs.gnome2) gtkglext;
+        inherit (pkgs) gtkglext;
         inherit (pkgs) libGLU;
         inherit (pkgs) libice;
         inherit (pkgs) libsm;
@@ -309381,6 +309381,7 @@ self: {
       ];
       description = "A breakout game written in Yampa using SDL";
       license = "unknown";
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "haskanoid";
     }
   ) { };

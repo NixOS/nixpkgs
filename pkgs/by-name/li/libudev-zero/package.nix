@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   # non-install target that builds everything anyway.
   dontBuild = true;
 
-  installTargets = lib.optionals stdenv.hostPlatform.isStatic "install-static";
+  installTargets = lib.optionals stdenv.hostPlatform.isStatic [ "install-static" ];
 
   passthru.tests = {
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;

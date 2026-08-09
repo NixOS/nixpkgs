@@ -1,26 +1,53 @@
 {
-  lib,
+  arj,
+  binutils-unwrapped,
+  brotli,
+  bzip2,
+  cabextract,
+  cpio,
+  dtrx,
   fetchFromGitHub,
   gitUpdater,
-  python3Packages,
   gnutar,
-  unzip,
-  lhasa,
-  rpm,
-  binutils,
-  cpio,
   gzip,
+  lhasa,
+  lib,
+  lrzip,
+  lzip,
   p7zip,
-  cabextract,
+  python3Packages,
+  rpm,
   unrar,
   unshield,
-  bzip2,
+  unzip,
   xz,
-  lzip,
-  unzipSupport ? false,
+  zstd,
+  arjSupport ? false,
   unrarSupport ? false,
+  unzipSupport ? false,
 }:
-
+let
+  archivers = [
+    binutils-unwrapped
+    brotli
+    bzip2
+    cabextract
+    cpio
+    gnutar
+    gzip
+    lhasa
+    lrzip
+    lzip
+    p7zip
+    rpm
+    unshield
+    xz
+    zstd
+  ]
+  ++ lib.optional arjSupport arj
+  ++ lib.optional unrarSupport unrar
+  ++ lib.optional unzipSupport unzip;
+in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "dtrx";
   version = "8.7.1";
@@ -33,36 +60,36 @@ python3Packages.buildPythonApplication (finalAttrs: {
     sha256 = "sha256-FNSFEGIK0vDNlvqc8BKDCB/0hoxrITfeh59JcyzX3jY=";
   };
 
-  makeWrapperArgs =
-    let
-      archivers = lib.makeBinPath (
-        [
-          gnutar
-          lhasa
-          rpm
-          binutils
-          cpio
-          gzip
-          p7zip
-          cabextract
-          unshield
-          bzip2
-          xz
-          lzip
-        ]
-        ++ lib.optional unzipSupport unzip
-        ++ lib.optional unrarSupport unrar
-      );
-    in
-    [
-      ''--prefix PATH : "${archivers}"''
-    ];
-
-  build-system = with python3Packages; [
-    setuptools
+  makeWrapperArgs = [
+    ''--prefix PATH : "${lib.makeBinPath archivers}"''
   ];
 
+  build-system = [
+    python3Packages.setuptools
+  ];
+
+  nativeCheckInputs = archivers ++ [
+    python3Packages.pyaml
+  ];
+
+  postPatch = ''
+    patchShebangs --build tests/compare.py
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+    tests/compare.py '^(?!download and extract$)(?!password zip noninteractive$).*'
+    runHook postCheck
+  '';
+
+  doCheck = arjSupport && unrarSupport && unzipSupport;
+
   passthru.updateScript = gitUpdater { };
+  passthru.tests.dtrx-full = dtrx.override {
+    arjSupport = true;
+    unrarSupport = true;
+    unzipSupport = true;
+  };
 
   meta = {
     description = "Do The Right Extraction: A tool for taking the hassle out of extracting archives";
