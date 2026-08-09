@@ -11,7 +11,7 @@
   sensor-state-data,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mopeka-iot-ble";
   version = "1.0.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bluetooth-devices";
     repo = "mopeka-iot-ble";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+iKeh/zt4dUAPGt6aGStjfnF0m6WLRRW1EsWvCJ1Jhw=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for Mopeka IoT BLE devices";
     homepage = "https://github.com/bluetooth-devices/mopeka-iot-ble";
-    changelog = "https://github.com/Bluetooth-Devices/mopeka-iot-ble/releases/tag/v${version}";
+    changelog = "https://github.com/Bluetooth-Devices/mopeka-iot-ble/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
