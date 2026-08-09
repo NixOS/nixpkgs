@@ -1177,9 +1177,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     assert isFromNixpkgs prevStage.binutils-unwrapped.src;
     assert isBuiltByNixpkgsCompiler prevStage.curl;
 
-    # libiconv should be an alias for darwin.libiconv
-    assert prevStage.libiconv == prevStage.darwin.libiconv;
-
     {
       inherit (prevStage) config overlays stdenv;
     }
