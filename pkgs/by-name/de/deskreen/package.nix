@@ -28,7 +28,7 @@ appimageTools.wrapType2 rec {
     };
   extraInstallCommands =
     let
-      contents = appimageTools.extractType2 { inherit pname version src; };
+      contents = appimageTools.extract { inherit pname version src; };
     in
     ''
       install -m 444 -D ${contents}/deskreen-ce.desktop $out/share/applications/deskreen-ce.desktop

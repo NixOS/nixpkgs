@@ -793,6 +793,7 @@ mapAliases {
   fastfetchMinimal = warnAlias "'fastfetchMinimal' has been renamed to 'fastfetch-unwrapped'" fastfetch-unwrapped; # Added 2026-05-18
   fastJson = warnAlias "'fastJson' has been renamed to 'libfastjson'" libfastjson; # Added 2026-02-08
   fastnlo_toolkit = throw "'fastnlo_toolkit' has been renamed to/replaced by 'fastnlo-toolkit'"; # Converted to throw 2025-10-27
+  faust2alsa = throw "'faust2alsa' has been removed as it depends on GTK2, which is deprecated."; # Added 2026-08-08
   faustPhysicalModeling = warnAlias "'faustPhysicalModeling' has been renamed to 'faust-physicalmodeling'" faust-physicalmodeling; # Added 2026-02-08
   faustStk = throw "'faustStk' has been renamed to/replaced by 'faustPhysicalModeling'"; # Converted to throw 2025-10-27
   fbjni = throw "fbjni has been removed, as it was broken"; # Added 2025-08-25
