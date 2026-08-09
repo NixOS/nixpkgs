@@ -4,17 +4,16 @@
 set -eu -o pipefail
 
 function usage() {
-    echo "Usage: update.sh <swift version> <swift-docc-render rev> <swift-tools-protocols version>" >&2
+    echo "Usage: update.sh <swift version> <swift-docc-render rev>" >&2
     exit 1
 }
 
-if [[ -z "${1:-}" || -z "${2:-}" || -z "${3:-}" ]]; then
+if [[ -z "${1:-}" || -z "${2:-}" ]]; then
     usage
 fi
 
 SWIFT_VERSION=$1
 SWIFT_DOCC_RENDER_REV=$2
-SWIFT_TOOLS_PROTOCOLS_VERSION=$3
 
 SCRIPT_DIR=$(dirname "$(realpath $0)")
 
@@ -52,9 +51,6 @@ function get_rev() {
     case "$1" in
         swift-docc-render)
             echo "$SWIFT_DOCC_RENDER_REV"
-            ;;
-        swift-tools-protocols)
-            echo "$SWIFT_TOOLS_PROTOCOLS_VERSION"
             ;;
         *)
             jq -r --arg pkg "$1" --arg swift_version "$SWIFT_VERSION" \
@@ -123,9 +119,6 @@ for package in "${packages[@]}"; do
     case "$package" in
         swift-docc-render)
             pkg=$(jq --arg rev "$SWIFT_DOCC_RENDER_REV" '. * {"swift-docc-render": {"rev": $rev}}' <<< "$pkg")
-            ;;
-        swift-tools-protocols)
-            pkg=$(jq --arg version "$SWIFT_TOOLS_PROTOCOLS_VERSION" '. * {"swift-tools-protocols": {"version": $version}}' <<< "$pkg")
             ;;
     esac
 
