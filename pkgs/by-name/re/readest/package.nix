@@ -23,13 +23,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "readest";
-  version = "0.11.18";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "readest";
     repo = "readest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ate2vEYdE121wy3WUautpbIzfejbcaBZr/CnA6rf2Zw=";
+    hash = "sha256-Cm2qzLcEZvnL9a32/igklKLldxda0V0RRyKEq0h/qcI=";
     fetchSubmodules = true;
   };
 
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_11;
     fetcherVersion = 4;
-    hash = "sha256-wtWYdIfqytwn8PNahbQ/WxJuhhH1lbgNshQy6V0vvcA=";
+    hash = "sha256-MTB3PWV0PP0yJ9tJFgtV1TBm1E06Sa/ZfsCSQHCHSss=";
     pnpmInstallFlags = [
       # Increase number of fetch attempts to work around timeout issues on slow
       # networks: "TimeoutError: The operation was aborted due to timeout".
@@ -59,14 +59,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoRoot = "../..";
-  cargoHash = "sha256-RgqkTttEScAp1R+CWE1ItD5yCDMtJ5tb3fjgkMi3x9E=";
+  cargoHash = "sha256-UOPemalcHW45OKLioQCFvKU4Sx4LPTMqMmrCX2cHYP4=";
 
   buildAndTestSubdir = "src-tauri";
 
   postPatch = ''
     substituteInPlace src-tauri/tauri.conf.json \
+      --replace-fail \
+        '"beforeBuildCommand": "pnpm build && pnpm upload-sourcemaps"' \
+        '"beforeBuildCommand": "pnpm build"' \
       --replace-fail '"createUpdaterArtifacts": true' '"createUpdaterArtifacts": false' \
-      --replace-fail '"Readest"' '"readest"'
+      --replace-fail '"productName": "Readest"' '"productName": "readest"'
     jq 'del(.plugins."deep-link")' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
     substituteInPlace src/services/constants.ts \
       --replace-fail "autoCheckUpdates: true" "autoCheckUpdates: false" \
