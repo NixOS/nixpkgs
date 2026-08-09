@@ -3,6 +3,7 @@
   cmake,
   createToolchainStubsHook,
   fetchFromGitHub,
+  fixUnhelpfulCmakeRpathsHook,
   lld,
   ninja,
   patchesForVersion,
@@ -71,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    fixUnhelpfulCmakeRpathsHook
     ninja
   ]
   ++ lib.optionals useSwift [
