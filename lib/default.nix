@@ -444,6 +444,7 @@ let
         getLicenseFromSpdxIdOr
         getExe
         getExe'
+        getDarwinApp'
         ;
       inherit (self.filesystem)
         pathType

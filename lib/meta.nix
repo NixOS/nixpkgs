@@ -582,6 +582,54 @@ rec {
     "${getBin x}/bin/${y}";
 
   /**
+    Get the path of an darwin app for a derivation.
+
+    # Inputs
+
+    `x`
+
+    : 1\. Function argument
+
+    `y`
+
+    : 2\. Function argument
+
+    # Type
+
+    ```
+    getDarwinApp' :: Derivation -> String -> StorePath
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.meta.getDarwinApp'` usage example
+
+    ```nix
+    getDarwinApp' pkgs.linear "Linear.app"
+    => "/nix/store/z4vh6ldb2vpspv307q7mk6wazfmh5dic-linear-1.30.2/Applications/Linear.app"
+    getDarwinApp' pkgs.vscodium "VSCodium.app"
+    => "/nix/store/0y95mgmlrs8cayv2cnj23xjfljwhlib0-vscodium-1.121.03429/Applications/VSCodium.app"
+    ```
+
+    :::
+  */
+  getDarwinApp' =
+    x: y:
+    assert
+      isDerivation x
+      || throw "lib.meta.getDarwinApp': The first argument is of type ${typeOf x}, but it should be a derivation instead.";
+    assert
+      isString y
+      || throw "lib.meta.getDarwinApp': The second argument is of type ${typeOf y}, but it should be a string instead.";
+    assert
+      lib.hasInfix "/" y == false
+      || throw "lib.meta.getDarwinApp': The second argument \"${y}\" is a nested path with a \"/\" character, but it should just be the name of the app instead.";
+    assert
+      lib.hasSuffix ".app" y
+      || throw "lib.meta.getDarwinApp': The second argument \"${y}\" must end in `.app`";
+    "${lib.getOutput "out" x}/Applications/${y}";
+
+  /**
     Generate [CPE parts](#var-meta-identifiers-cpeParts) from inputs. Copies `vendor` and `version` to the output, and sets `update` to `*`.
 
     # Inputs
