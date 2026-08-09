@@ -500,7 +500,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       swiftBinaryDir=''${!outputBin}
       swiftIncludeDirs=$swiftcIncPath/include\;$stdlibIncPath/lib\;$stdlibIncPath/include\;$static/include
-      swiftLibraryDirs=$swiftcDevPath/lib\;$swiftcLibPath/lib\;$stdlibLibPath/lib\;$stdlibDevPath/lib
+      swiftLibraryDirs=$swiftcDevPath/lib\;$swiftcLibPath/lib\;$stdlibLibPath/lib\;$stdlibDevPath/lib/swift/${swiftPlatform}
 
       swiftArch=${stdenv.hostPlatform.swift.arch}
       swiftPlatform=${stdenv.hostPlatform.swift.platform}
