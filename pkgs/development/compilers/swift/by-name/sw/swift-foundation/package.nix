@@ -2,7 +2,9 @@
   lib,
   cmake,
   createToolchainStubsHook,
+  darwin,
   fetchFromGitHub,
+  fixUnhelpfulCmakeRpathsHook,
   ninja,
   patchesForVersion,
   stdenv,
@@ -13,6 +15,10 @@
   swift_release,
   swift_sources,
 }:
+
+let
+  swiftPlatform = stdenv.hostPlatform.swift.platform;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swift-foundation";
@@ -53,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    fixUnhelpfulCmakeRpathsHook
     ninja
     swift-minimal
   ]
@@ -85,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  postInstall = (
+  postInstall =
     lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       moveToOutput lib/swift/host "''${!outputDev}"
       moveToOutput lib/swift/_FoundationCShims "''${!outputDev}"
@@ -97,25 +104,15 @@ stdenv.mkDerivation (finalAttrs: {
       substitute ${./files/SwiftFoundationConfig.cmake} "''${!outputDev}/lib/cmake/SwiftFoundation/SwiftFoundationConfig.cmake" \
         --replace-fail '@buildType@' ${if stdenv.hostPlatform.isStatic then "STATIC" else "SHARED"} \
         --replace-fail '@dev@' "''${!outputDev}" \
-        --replace-fail '@lib@' "''${!outputLib}" \
-        --replace-fail '@swiftPlatform@' ${stdenv.hostPlatform.swift.platform}
+        --replace-fail '@swiftPlatform@' ${swiftPlatform}
 
-      # Copy the _FoundationCollections module. It’s not installed by default.
-      moduleDir=''${!outputDev}/lib/swift/${stdenv.hostPlatform.swift.platform}/_FoundationCollections.swiftmodule
-      mkdir -p "$moduleDir"
-      cp swift/_FoundationCollections.swiftmodule "$moduleDir/${stdenv.hostPlatform.swift.triple}.swiftmodule"
+      moveToOutput lib/swift/${swiftPlatform} "''${!outputDev}"
     ''
     + lib.optionalString (stdenv.hostPlatform.isElf && !stdenv.hostPlatform.isStatic) ''
-      # Make sure Swift Foundation has an rpath pointing at the stdlib (since it is installed outside of it).
-      for so in FoundationEssentials FoundationInternationalization; do
-        patchelf --add-rpath ${
-          lib.escapeShellArg (
-            lib.makeSearchPathOutput "out" "lib/swift/${stdenv.hostPlatform.swift.platform}" [ swift-minimal ]
-          )
-        } "$out/lib/lib$so${stdenv.hostPlatform.extensions.sharedLibrary}"
-      done
-    ''
-  );
+      # In spite of fixUnhelpfulCmakeRpathsHook, CMake still strips the ICU rpath.
+      patchelf "$out/lib/libFoundationInternationalization.so" \
+        --add-rpath ${lib.escapeShellArg (lib.getLib darwin.ICU)}/lib
+    '';
 
   __structuredAttrs = true;
 
