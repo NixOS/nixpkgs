@@ -195,14 +195,16 @@ let
                 ln -s libicucore.A.dylib "$out/lib/libicucore.dylib"
               ''
               + lib.optionalString stdenv.hostPlatform.isLinux ''
-                ${stdenv.cc.targetPrefix}cc -shared \
-                  -L "$out/lib" \
-                  -Wl,--no-as-needed \
-                  -licuuc \
-                  -licudata \
-                  -licui18n \
-                  -licuio \
-                  -o "$out/lib/libicucore.so.A"
+                cat <<EOF > "$out/lib/libicucore.so.A"
+                INPUT(
+                  AS_NEEDED (
+                    $out/lib/libicuuc.so
+                    $out/lib/libicudata.so
+                    $out/lib/libicui18n.so
+                    $out/lib/libicuio.so
+                  )
+                )
+                EOF
                 ln -s libicucore.so.A "$out/lib/libicucore.so"
               ''
             )
