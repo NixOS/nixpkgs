@@ -1,6 +1,7 @@
 {
   lib,
   cmake,
+  createToolchainStubsHook,
   fetchFromGitHub,
   ninja,
   stdenv,
@@ -56,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    createToolchainStubsHook
     ninja
     swift'
   ];
