@@ -29,7 +29,6 @@ let
     literalExpression
     mapAttrsToList
     mergeAttrsList
-    mkEnableOption
     mkIf
     mkMerge
     mkOption
@@ -298,9 +297,13 @@ in
       "home-assistant"
       "autoExtraComponents"
     ] "Components are now parsed from services.home-assistant.config unconditionally")
-    (mkRenamedOptionModule
-      [ "services" "home-assistant" "port" ]
-      [ "services" "home-assistant" "config" "http" "server_port" ]
+    (mkRemovedOptionModule
+      [
+        "services"
+        "home-assistant"
+        "openFirewall"
+      ]
+      "The frontend port is not configured in YAML any more and therefore cannot be determined at eval time any longer."
     )
   ];
 
@@ -767,27 +770,11 @@ in
       '';
     };
 
-    openFirewall = mkOption {
-      default = false;
-      type = types.bool;
-      description = ''
-        Whether to open the firewall for the specified frontend port
-
-        :::{.note}
-        For components specific ports see {option}`services.home-assistant.openFirewallForComponents`.
-        :::
-      '';
-    };
-
     openFirewallForComponents = mkOption {
       default = false;
       type = types.bool;
       description = ''
         Whether to open required firewall ports for enabled components.
-
-        :::{.note}
-        For the frontend see {option}`services.home-assistant.openFirewall`.
-        :::
       '';
     };
 
@@ -843,10 +830,6 @@ in
 
     assertions = [
       {
-        assertion = cfg.openFirewall -> cfg.config != null;
-        message = "openFirewall can only be used with a declarative config";
-      }
-      {
         assertion = !(cfg.lovelaceConfig != null && cfg.lovelaceConfigFile != null);
         message = "Only one of `lovelaceConfig` or `lovelaceConfigFile` can be configured at the same time.";
       }
@@ -856,15 +839,12 @@ in
       }
     ];
 
-    networking.firewall.allowedTCPPorts = mkMerge [
-      (mkIf cfg.openFirewall [ cfg.config.http.server_port ])
-      (mkIf cfg.openFirewallForComponents (
-        # https://www.home-assistant.io/integrations/homekit/#firewall
-        optionals (useComponent "homekit") [ 21063 ]
-        # https://www.home-assistant.io/integrations/sonos/#network-requirements
-        ++ optionals (useComponent "sonos") [ 1400 ]
-      ))
-    ];
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewallForComponents (
+      # https://www.home-assistant.io/integrations/homekit/#firewall
+      optionals (useComponent "homekit") [ 21063 ]
+      # https://www.home-assistant.io/integrations/sonos/#network-requirements
+      ++ optionals (useComponent "sonos") [ 1400 ]
+    );
 
     networking.firewall.allowedUDPPorts = mkIf cfg.openFirewallForComponents (
       # https://www.home-assistant.io/integrations/homekit/#firewall
