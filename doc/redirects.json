@@ -1948,6 +1948,9 @@
   "sec-darwin-troubleshooting-xcodebuild-absolute-paths": [
     "index.html#sec-darwin-troubleshooting-xcodebuild-absolute-paths"
   ],
+  "sec-darwin-missing-macros": [
+    "index.html#sec-darwin-missing-macros"
+  ],
   "sec-darwin-troubleshooting-libiconv": [
     "index.html#sec-darwin-troubleshooting-libiconv"
   ],
