@@ -44,6 +44,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/googlefonts/axisregistry";
     changelog = "https://github.com/googlefonts/axisregistry/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ danc86 ];
+    maintainers = with lib.maintainers; [
+      danc86
+      jopejoe1
+    ];
   };
 }
