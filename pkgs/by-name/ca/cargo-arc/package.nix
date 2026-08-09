@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
@@ -7,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-arc";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "seflue";
     repo = "cargo-arc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Jf23dACQW2LbfINWq98wNf1rwqueM4bPFFwQIdDT+3Y=";
+    hash = "sha256-tAES0CP7kGS9RYDsXqiVc/Q8q/APci5m55kTjpIAXNg=";
   };
 
-  cargoHash = "sha256-kKAL5ZgOZOt7Lmu2Epe7B9/FrayGAUguUcb9HPi3gj0=";
+  cargoHash = "sha256-kqFHu1+BYQQZKCr1WVAWoTzuwkPNfxY34jhtffN9MVE=";
 
   checkFlags = [
     # Tries to create temp dir
@@ -24,6 +25,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Tries to read from dir $CARGO_MANIFEST_DIR
     "--skip=test_analyze_empty_history"
     "--skip=test_analyze_real_repo"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Tries to read /proc/1/mem
+    "--skip=test_load_io_error"
   ];
 
   passthru.updateScript = nix-update-script { };
