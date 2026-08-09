@@ -4342,8 +4342,6 @@ self: super: with self; {
 
   dictdiffer = callPackage ../development/python-modules/dictdiffer { };
 
-  dictionaries = callPackage ../development/python-modules/dictionaries { };
-
   dicttoxml = callPackage ../development/python-modules/dicttoxml { };
 
   dicttoxml2 = callPackage ../development/python-modules/dicttoxml2 { };
