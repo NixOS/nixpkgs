@@ -16212,6 +16212,11 @@
     githubId = 263230236;
     name = "Lila Hummel";
   };
+  lildojd = {
+    github = "LilDojd";
+    githubId = 37330594;
+    name = "George";
+  };
   lilioid = {
     name = "Lilly";
     email = "li@lly.sh";
