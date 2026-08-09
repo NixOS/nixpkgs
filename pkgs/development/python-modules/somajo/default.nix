@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   buildPythonPackage,
+  pytestCheckHook,
   setuptools,
   regex,
 }:
@@ -23,8 +24,7 @@ buildPythonPackage rec {
 
   dependencies = [ regex ];
 
-  # loops forever
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "somajo" ];
 
