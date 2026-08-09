@@ -60,7 +60,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "kserve";
-  version = "0.19.0";
+  version = "0.20.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -68,7 +68,7 @@ buildPythonPackage (finalAttrs: {
     owner = "kserve";
     repo = "kserve";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-i8eFdXwNLPTdEj2MnNAMbefxQGkMLHNwZXxg8+zv6v0=";
+    hash = "sha256-XSEdhYrsSdrKjHnFCoMPoS0nAZ+Fa8JGj+izVw3wl0o=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python/kserve";

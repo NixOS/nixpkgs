@@ -74,6 +74,11 @@ stdenv.mkDerivation (finalAttrs: {
     ci/* ci/docker/run/* ci/docker/run/hooks/* ci/docker/buildenv/build.sh
     # verilator --gdbbt uses /bin/sh to test if gdb works.
     substituteInPlace bin/verilator --replace-fail "/bin/sh" "${bash}/bin/sh"
+  ''
+  # prevent rewriting the lexer signatures to size_t for macOS 26+; upstream flex's FlexLexer.h uses int.
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/flexfix \
+      --replace-fail 'if platform.system() == "Darwin":' 'if False:'
   '';
   # grep '^#!/' -R . | grep -v /nix/store | less
   # (in nix-shell after patchPhase)
@@ -103,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       thoughtpolice
+      carlossless
     ];
   };
 })
