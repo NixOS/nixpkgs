@@ -151,6 +151,7 @@ mapAliases {
   BTrees = throw "'BTrees' has been renamed to/replaced by 'btrees'"; # Converted to throw 2025-10-29
   btsmarthub_devicelist = throw "'btsmarthub_devicelist' has been renamed to/replaced by 'btsmarthub-devicelist'"; # Converted to throw 2025-10-29
   bugzilla = throw "'bugzilla' has been renamed to/replaced by 'python-bugzilla'"; # Converted to throw 2025-10-29
+  bumpfontversion = throw "'bumpfontversion' has been removed as its no longer used"; # added 2026-08-09
   bunch = throw "bunch has been removed as it is unmaintained since inception"; # added 2025-05-31
   bz2file = throw "'bz2file' has beem removed, as it was not longed maintained upstream since 2020"; # added 2025-08-26
   calysto-scheme = throw "'calysto-scheme' has been removed as it is no longer maintained upstream"; # Added 2026-01-31
