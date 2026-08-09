@@ -4,8 +4,18 @@
   rustPlatform,
   fetchFromGitHub,
   cargo-bundle,
+  fontconfig,
+  freetype,
+  libGL,
+  libxcb,
+  libxkbcommon,
+  makeBinaryWrapper,
   nix-update-script,
+  openssl,
+  pkg-config,
   versionCheckHook,
+  vulkan-loader,
+  wayland,
 }:
 
 let
@@ -59,13 +69,33 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    cargo-bundle
     rustPlatform.bindgenHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cargo-bundle
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    makeBinaryWrapper
+    pkg-config
+  ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    fontconfig
+    freetype
+    libGL
+    libxcb
+    libxkbcommon
+    openssl
+    vulkan-loader
+    wayland
   ];
 
   cargoBuildFlags = [
     "--package=openlogi"
     "--package=openlogi-gui"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "--package=openlogi-agent"
   ];
 
   cargoTestFlags = [ "--workspace" ];
@@ -80,6 +110,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     runHook preInstall
 
     release_target="target/${stdenv.hostPlatform.rust.cargoShortTarget}/release"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mv "$release_target/openlogi-gui" target/release/openlogi-gui
 
     pushd crates/openlogi-gui
@@ -90,8 +122,47 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mkdir -p "$out/Applications" "$out/bin"
     mv "$app_path" "$out/Applications/"
     install -Dm755 "$release_target/openlogi" "$out/bin/openlogi"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -Dm755 "$release_target/openlogi" "$out/bin/openlogi"
+    install -Dm755 "$release_target/openlogi-gui" "$out/bin/openlogi-gui"
+    install -Dm755 "$release_target/openlogi-agent" "$out/bin/openlogi-agent"
 
+    # Upstream's own packaging inputs, installed verbatim rather than
+    # re-authored here (they are what the .deb/.rpm ship).
+    install -Dm644 packaging/linux/udev/70-openlogi.rules \
+      "$out/lib/udev/rules.d/70-openlogi.rules"
+    install -Dm644 packaging/linux/desktop/openlogi.desktop \
+      "$out/share/applications/openlogi.desktop"
+    install -Dm644 packaging/linux/systemd/openlogi-agent.service \
+      "$out/share/systemd/user/openlogi-agent.service"
+
+    # The unit hardcodes /usr/bin (upstream's install.sh rewrites it for a
+    # custom PREFIX); point it at the store path instead.
+    substituteInPlace "$out/share/systemd/user/openlogi-agent.service" \
+      --replace-fail "ExecStart=/usr/bin/openlogi-agent" \
+                     "ExecStart=$out/bin/openlogi-agent"
+
+    install -Dm644 design/icon/openlogi.png \
+      "$out/share/icons/hicolor/1024x1024/apps/openlogi.png"
+  ''
+  + ''
     runHook postInstall
+  '';
+
+  # GPUI (Blade) dlopen()s its Vulkan/Wayland/GL backends at runtime, so they
+  # are invisible to the linker and must be on the wrapper's search path.
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    wrapProgram "$out/bin/openlogi-gui" \
+      --suffix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          libGL
+          libxcb
+          libxkbcommon
+          vulkan-loader
+          wayland
+        ]
+      }"
   '';
 
   doInstallCheck = true;
@@ -110,6 +181,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     mainProgram = "openlogi";
     maintainers = with lib.maintainers; [ imcvampire ];
-    platforms = lib.platforms.darwin;
+    platforms = lib.platforms.darwin ++ [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
   };
 })
