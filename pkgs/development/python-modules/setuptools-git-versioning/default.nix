@@ -64,7 +64,7 @@ buildPythonPackage (finalAttrs: {
     description = "Use git repo data (latest tag, current commit hash, etc) for building a version number according PEP-440";
     mainProgram = "setuptools-git-versioning";
     homepage = "https://github.com/dolfinus/setuptools-git-versioning";
-    changelog = "https://github.com/dolfinus/setuptools-git-versioning/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
+    changelog = "https://setuptools-git-versioning.readthedocs.io/en/${finalAttrs.src.tag}/changelog.html";
     license = lib.licenses.mit;
   };
 })
