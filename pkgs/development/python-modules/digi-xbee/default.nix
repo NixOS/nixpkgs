@@ -7,14 +7,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "digi-xbee";
   version = "1.5.0";
+
+  __structuredAttrs = true;
   pyproject = true;
 
   src = fetchPypi {
     pname = "digi_xbee";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-amUrhHIpeRHuShD0cxb2sbbRTpJQZ9/b8otsa1Bo+bI=";
   };
 
@@ -52,4 +54,4 @@ buildPythonPackage rec {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ jefflabonte ];
   };
-}
+})
