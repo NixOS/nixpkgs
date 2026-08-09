@@ -61,8 +61,12 @@ swiftpmCheckPhase() {
     )
     concatTo flagsArray swiftpmFlags swiftpmFlagsArray
 
+    if [ "@disableXCTest@" = 1 ]; then
+        appendToVar flagsArray --disable-xctest
+    fi
+
     echoCmd 'check flags' "${flagsArray[@]}"
-    TERM=dumb swift test "${flagsArray[@]}"
+    TERM=dumb swift test --disable-sandbox "${flagsArray[@]}"
 
     runHook postCheck
 }
