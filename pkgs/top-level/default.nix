@@ -203,7 +203,20 @@ let
   # via `evalModules` is not idempotent. In other words, if you add `config` to
   # `newArgs`, expect strange very hard to debug errors! (Yes, I'm speaking from
   # experience here.)
-  nixpkgsFun = newArgs: import ./. (args // newArgs);
+  #
+  # `_configDefinitions` (only ever set by the NixOS `nixpkgs` module) and
+  # `config` are mutually exclusive, see `checked` above. A caller passing
+  # `config` supplies the complete configuration for the new package set —
+  # it is derived from the `config` variable above, which already contains
+  # everything `_configDefinitions` evaluated to — so the definitions must be
+  # dropped instead of being combined. Without this, package set variants
+  # overriding `config` (`pkgsRocm`, `pkgsCuda`, `pkgsChecked`, ...) would fail
+  # to evaluate inside a NixOS configuration.
+  nixpkgsFun =
+    newArgs:
+    import ./. (
+      (if newArgs ? config then removeAttrs args [ "_configDefinitions" ] else args) // newArgs
+    );
 
   # Partially apply some arguments for building bootstrapping stage pkgs
   # sets. Only apply arguments which no stdenv would want to override.

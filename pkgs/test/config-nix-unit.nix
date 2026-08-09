@@ -93,6 +93,48 @@ in
     expected = true;
   };
 
+  # Package set variants that override `config` must keep working when Nixpkgs
+  # was instantiated by the NixOS module, which forwards the definitions via the
+  # internal `_configDefinitions` argument.
+  # Regression test for https://github.com/NixOS/nixpkgs/issues/550852
+  testVariantOverridingConfig = {
+    expr =
+      let
+        eval = evalNixos [
+          { nixpkgs.config.allowUnfree = true; }
+          { nixpkgs.config.allowBroken = true; }
+          { nixpkgs.config.allowBroken = lib.mkForce false; }
+        ];
+      in
+      {
+        inherit (eval.pkgs.pkgsRocm.config)
+          rocmSupport
+          cudaSupport
+          allowUnfree
+          allowBroken
+          ;
+      };
+    expected = {
+      # Set by the variant itself.
+      rocmSupport = true;
+      cudaSupport = false;
+      # Inherited from the NixOS modules, with properties already resolved.
+      allowUnfree = true;
+      allowBroken = false;
+    };
+  };
+
+  # Variants that do not override `config` keep receiving the definitions, so
+  # module system properties are still resolved by the new instance.
+  testVariantInheritingConfig = {
+    expr =
+      (evalNixos [
+        { nixpkgs.config.allowUnfree = true; }
+        { nixpkgs.config.allowUnfree = lib.mkForce false; }
+      ]).pkgs.pkgsCross.aarch64-multiplatform.config.allowUnfree;
+    expected = false;
+  };
+
   # Passing both config and _configDefinitions is not allowed
   testConfigAndDefinitionsMutuallyExclusive = {
     expr =
