@@ -170,14 +170,27 @@ let
           "/dev/rfkill"
         ]
         ++ lib.optional cfg.dbusControlled "/run/dbus"
-        ++ lib.optional cfg.allowAuxiliaryImperativeNetworks "/etc/wpa_supplicant";
+        ++ lib.optional cfg.allowAuxiliaryImperativeNetworks "/etc/wpa_supplicant"
+        # token access for the PKCS#11 backends
+        ++ lib.optionals cfg.pkcs11.enable [
+          "-${config.security.tpm2.tctiEnvironment.deviceConf}"
+          "-/run/pcscd"
+          "-/etc/tpm2_pkcs11"
+        ];
         BindReadOnlyPaths = [
           builtins.storeDir
           "/etc/"
         ]
         ++ cfg.extraConfigFiles
         ++ lib.optional (cfg.secretsFile != null) cfg.secretsFile;
-        DeviceAllow = "/dev/rfkill rw";
+        DeviceAllow = [
+          "/dev/rfkill rw"
+        ]
+        ++ lib.optional cfg.pkcs11.enable "${config.security.tpm2.tctiEnvironment.deviceConf} rw";
+        # Grant tss group for tpm2 access if pkcs11 is enabled.
+        SupplementaryGroups = lib.optional (
+          cfg.pkcs11.enable && config.security.tpm2.enable && config.security.tpm2.tssGroup != null
+        ) config.security.tpm2.tssGroup;
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
         NoNewPrivileges = true;
@@ -643,9 +656,19 @@ in
             PKCS#11 tokens such as smartcards or a TPM.
 
             ::: {.note}
-            Hardware-backed tokens usually also require disabling
-            {option}`networking.wireless.enableHardening`, since the hardened
-            service cannot access device nodes such as the TPM.
+            With {option}`networking.wireless.enableHardening` enabled,
+            the service is additionally granted:
+              - Membership in {option}`security.tpm2.tssGroup`.
+              - Access to the TPM device configured by
+                {option}`security.tpm2.tctiEnvironment.deviceConf`.
+              - pcscd socket for smartcard readers.
+              - Access to default system-wide token store `/etc/tpm2_pkcs11`.
+                Note that the hardened service by default has no home directory,
+                so only the system store location applies.
+
+            The store must be writable by {option}`security.tpm2.tssGroup`.
+            Enable {option}`security.tpm2.pkcs11.enable` option to grant
+            tss group access to the store.
             :::
 
             ::: {.note}

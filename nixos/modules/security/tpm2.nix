@@ -290,6 +290,13 @@ in
           '';
         };
 
+        # Give rw access for tss group to tpm2-pkcs11's system-wide token store.
+        # Consumers like tpm2-pkcs11 refuses to use a store they cannot lock and update.
+        systemd.tmpfiles.rules = lib.mkIf (cfg.pkcs11.enable && cfg.tssGroup != null) [
+          "d /etc/tpm2_pkcs11 2770 root ${cfg.tssGroup} -"
+          "Z /etc/tpm2_pkcs11 ~2770 - ${cfg.tssGroup} -"
+        ];
+
         services.udev.extraRules = lib.mkIf cfg.applyUdevRules (udevRules cfg.tssUser cfg.tssGroup);
 
         # Create the tss user and group only if the default value is used
