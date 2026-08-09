@@ -6,14 +6,14 @@
   tcllib,
 }:
 
-mkTclDerivation rec {
+mkTclDerivation (finalAttrs: {
   pname = "critcl";
   version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "andreas-kupries";
     repo = "critcl";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-LBTAuwTrvwj42vo/TXVSUK8euxHgvSLai23e1jmhMso=";
   };
 
@@ -45,4 +45,4 @@ mkTclDerivation rec {
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
   };
-}
+})
