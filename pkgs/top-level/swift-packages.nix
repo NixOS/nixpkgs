@@ -35,6 +35,7 @@ let
             swift-foundation = null;
             swift-testing = null;
             enableRepl = false;
+            enableSourceKitLSP = false;
           }
           # Swift Driver is required when building the compiler’s Swift Syntax in the final toolchain.
           # Otherwise, symbols are stripped from it that are needed to build Swift Testing.
@@ -255,6 +256,7 @@ makeScopeWithSplicing' {
         swift-foundation = null;
         swift-testing = null;
         enableRepl = false;
+        enableSourceKitLSP = false;
       };
     };
   f = lib.extends autoCalledPackages (

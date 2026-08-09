@@ -5,9 +5,11 @@
   apple-sdk_26,
   apple-sdk_27,
   callPackage,
+  indexstore-db,
   llvmPackages,
   llvmPackages_upstream,
   patchelf,
+  sourcekit-lsp,
   stdenv,
   stdlib,
   swift-corelibs-foundation,
@@ -21,6 +23,7 @@
   symlinkJoin,
   swift_release,
   enableRepl ? true, # Whether to build and include LLDB for the Swift REPL.
+  enableSourceKitLSP ? true, # Whether to include sourcekit-lsp, which is expected to be in the toolchain.
 }:
 
 let
@@ -47,6 +50,10 @@ let
     ++ lib.optionals enableRepl [
       # LLDB is used by `swift repl` to provide the REPL.
       llvmPackages.lldb.out
+    ]
+    ++ lib.optionals enableSourceKitLSP [
+      sourcekit-lsp.out
+      indexstore-db.out
     ]
     ++ lib.optionals includeTesting [
       swift-corelibs-xctest.dev
@@ -171,6 +178,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Swift Build expects to find and load libclang from the toolchain.
     ln -s ${lib.escapeShellArg (lib.getLib llvmPackages.libclang)}/lib/libclang${stdenv.hostPlatform.extensions.sharedLibrary} "$out/lib/libclang${stdenv.hostPlatform.extensions.sharedLibrary}"
+
+    # Swift Build and SwiftPM need to load IndexStoreDB for Swift Testing support to work.
+    ln -s ${lib.escapeShellArg (lib.getLib llvmPackages.libclang)}/lib/libIndexStore${stdenv.hostPlatform.extensions.sharedLibrary} "$out/lib/libIndexStore${stdenv.hostPlatform.extensions.sharedLibrary}"
 
     # Propagated inputs in `$dev/nix-support` have to be substituted to use this derivation instead of swiftc.
     for f in "$out/nix-support/"*; do

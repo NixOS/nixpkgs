@@ -3,7 +3,6 @@
   callPackage,
   cmake,
   fetchFromGitHub,
-  llvmPackages,
   ninja,
   replaceVars,
   sqlite,
@@ -49,6 +48,7 @@ let
 
   swift' = swift.override {
     enableRepl = false;
+    enableSourceKitLSP = false;
   };
 in
 
@@ -82,10 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/0008-set-compiler-vendor.patch
     # A couple of required libraries are missing from the `CMakeLists.txt` files.
     ./patches/0009-add-missing-libraries.patch
-    # SwiftPM tries to load IndexStoreDB from the toolchain, but load it from the store instead.
-    (replaceVars ./patches/0010-Load-IndexStore-from-the-store.patch {
-      libclang = lib.getLib llvmPackages.libclang;
-    })
     # SwiftPM tries to find Clang via `CC`, but that can be GCC on Linux, which doesn’t actually work with SwiftPM.
     ./patches/0011-Always-find-Clang-in-the-toolchain.patch
     # Include the Darwin testing helper in the CMake-built package.
@@ -186,6 +182,13 @@ stdenv.mkDerivation (finalAttrs: {
     for dylib in "''${dylibs[@]}"; do
       install_name_tool "$dylib" ''${mappings[@]}
     done
+
+    # swiftpm-testing-helper is not included in SwiftPM’s CMake files. Upstream says CMake is only for bootstrapping,
+    # but building SwiftPM with itself would mean vendoring its dependencies, which we don’t want to do.
+    # Just build it manually instead.
+    mkdir -p "''${!outputBin}/libexec/swift/pm"
+    swiftc -O -parse-as-library -o "''${!outputBin}/libexec/swift/pm/swiftpm-testing-helper" \
+      ../Sources/swiftpm-testing-helper/Entrypoint.swift
   ''
   + lib.optionalString stdenv.hostPlatform.isElf ''
     for output in "''${outputs[@]}"; do
