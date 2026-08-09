@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation {
   pname = "system-sendmail";
-  version = "1.0";
+  version = lib.trivial.release;
 
   src = ./sendmail.c;
 
