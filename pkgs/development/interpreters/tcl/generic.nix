@@ -129,6 +129,8 @@ let
         ''}
       '';
 
+    __structuredAttrs = true;
+
     meta = {
       description = "Tcl scripting language";
       homepage = "https://www.tcl.tk/";
