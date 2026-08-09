@@ -628,8 +628,9 @@ let
         will change) to Markdown instructions to users for manually migrating
         their data to this breakpoint. The migration instructions will be
         included in the NixOS documentation for this option. (These instructions
-        must only contain Markdown inlines, because they will be rendered in a
-        table. In particular, lists will not render correctly.)
+        must only contain Markdown inlines, because they will be rendered as
+        items in an ordered list. In particular, nested lists will not render
+        correctly.)
 
         `migrations` will also be exposed as an attribute on the result.
 
@@ -706,11 +707,9 @@ let
           `stateRevision`, up to and including the row for the new
           `stateRevision`):
 
-          | `stateRevision` | Migration instructions |
-          |-----------------|------------------------|
-          | 0               | (none)                 |
+          0. (none)
           ${concatImapStringsSep "\n" (
-            v: sv: "| ${toString v} | ${replaceStrings [ "\n" ] [ " " ] migrations.${sv}} |"
+            v: sv: "${toString v}. ${replaceStrings [ "\n" ] [ " " ] migrations.${sv}}"
           ) versions}
 
           Note that you do **not** need to change {option}`system.stateVersion`
