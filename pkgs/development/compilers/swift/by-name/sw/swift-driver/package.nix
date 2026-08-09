@@ -46,8 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Align Swift Driver’s subcommand lookup behavior with the legacy/C++ frontend. Nixpkgs needs this because it
     # builds and installs SwiftPM separately from the rest of the Swift toolchain. Otherwise, `swift build` will fail.
     ./patches/0003-Search-PATH-for-subcommands.patch
-    # The stdlib is located at the top-level `lib` folder in the toolchain in Nixpkgs. Help `swift repl` find it there.
-    ./patches/0004-Help-the-repl-find-the-stdlib-in-Nixpkgs.patch
   ];
 
   strictDeps = true;
