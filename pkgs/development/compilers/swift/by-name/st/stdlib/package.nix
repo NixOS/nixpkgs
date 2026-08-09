@@ -11,6 +11,8 @@ let
   swiftPlatform = stdenv.hostPlatform.swift.platform;
   libraryExtension = stdenv.hostPlatform.extensions.library;
 
+  # Swift 6.2 is used as a bootstrap compiler. Disable LTO for its stdlib to improve build time.
+  enableLTO = lib.versions.majorMinor swift_release != "6.2";
   toolLTO = lib.cmakeFeature "SWIFT_TOOLS_ENABLE_LTO" "thin";
 in
 (swiftc.override {
@@ -36,7 +38,7 @@ in
       # Only enable LTO for the stdlib. Remove it if it’s enabled for the tools.
       (lib.filter (flag: flag != toolLTO) (old.cmakeFlags or [ ]))
       # LTO is slow (and pointless due to using system libraries) on Darwin, so only enable it for other platforms.
-      ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      ++ lib.optionals (enableLTO && !stdenv.hostPlatform.isDarwin) [
         (lib.cmakeFeature "SWIFT_STDLIB_ENABLE_LTO" "thin")
       ];
 
@@ -73,7 +75,7 @@ in
     ''
     # Convert LLVM bitcode files into native code to avoid requiring LTO for C++ interop.
     # Note: This could be done with llc, but it crashes when converting object files from the Swift 6.3.3 stdlib.
-    + lib.optionalString stdenv.hostPlatform.isElf ''
+    + lib.optionalString (enableLTO && stdenv.hostPlatform.isElf) ''
       LLVM_DIS=${lib.escapeShellArg (lib.getExe' llvmPackages.llvm "llvm-dis")}
       CLANG=${lib.escapeShellArg (lib.getExe' llvmPackages.clang.cc "clang")}
       "$LLVM_DIS" stdlib/public/Cxx/${lib.toUpper stdenv.hostPlatform.swift.platform}/${stdenv.hostPlatform.swift.arch}/Cxx.o -o Cxx.ll
