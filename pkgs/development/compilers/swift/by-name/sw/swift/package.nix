@@ -55,8 +55,6 @@ let
     ]
     ++ lib.optionals (swift-driver != null) [
       swift-driver.out
-      swift-driver.dev
-      swift-driver.lib
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && swift-foundation != null) [
       # Needed for FoundationMacros, which is otherwise not part of the SDK on Darwin.
