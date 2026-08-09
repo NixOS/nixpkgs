@@ -1,6 +1,7 @@
 {
   lib,
   cmake,
+  createToolchainStubsHook,
   curl,
   fetchFromGitHub,
   libxml2,
@@ -43,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    createToolchainStubsHook
     ninja
     swift-minimal
   ];
