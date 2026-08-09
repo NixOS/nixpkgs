@@ -6,14 +6,14 @@
   tcl,
 }:
 
-mkTclDerivation rec {
+mkTclDerivation (finalAttrs: {
   pname = "tclcurl";
   version = "7.22.1";
 
   src = fetchFromGitHub {
     owner = "flightaware";
     repo = "tclcurl-fa";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XQuP+SiqvGX3ckBShUxsGBADjV3QdvYpU4hW6LMbMMQ=";
   };
 
@@ -32,4 +32,4 @@ mkTclDerivation rec {
     maintainers = with lib.maintainers; [ fgaz ];
     broken = tcl.isTcl9;
   };
-}
+})
