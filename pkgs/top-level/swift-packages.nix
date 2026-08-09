@@ -1,6 +1,13 @@
 let
   autoCalledPackages = import ./by-name-overlay.nix ../development/compilers/swift/by-name;
 
+  swift_release =
+    let
+      raw_release = builtins.readFile ../development/compilers/swift/swift-version;
+      len = builtins.stringLength raw_release;
+    in
+    builtins.substring 0 (len - 1) raw_release; # Drop the trailing newline.
+
   swift_sources_6_2 = builtins.fromJSON (
     builtins.readFile ../development/compilers/swift/sources-6.2.json
   );
@@ -111,7 +118,7 @@ makeScopeWithSplicing' {
     self:
     {
       stdenv = clangStdenv;
-      swift_release = "6.2.4";
+      inherit swift_release;
     }
     // lib.optionalAttrs config.allowAliases {
       # Compatibility aliases for the old Swift packaging.
