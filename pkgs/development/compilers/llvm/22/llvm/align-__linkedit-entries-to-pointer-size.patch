@@ -1,0 +1,713 @@
+diff --git a/lib/ObjCopy/MachO/MachOLayoutBuilder.cpp b/lib/ObjCopy/MachO/MachOLayoutBuilder.cpp
+index 8660c903c6..aa4c0654ea 100644
+--- a/lib/ObjCopy/MachO/MachOLayoutBuilder.cpp
++++ b/lib/ObjCopy/MachO/MachOLayoutBuilder.cpp
+@@ -235,24 +235,27 @@
+          "Incorrect tail offset");
+   Offset = std::max(Offset, HeaderSize + O.Header.SizeOfCmds);
+ 
++  const uint64_t LinkEditAlign = Is64Bit ? 8 : 4;
++  Offset = alignToPowerOf2(Offset, LinkEditAlign);
++
+   // The exports trie can be in either LC_DYLD_INFO or in
+   // LC_DYLD_EXPORTS_TRIE, but not both.
+-  size_t DyldInfoExportsTrieSize = 0;
+-  size_t DyldExportsTrieSize = 0;
++  uint64_t DyldInfoExportsTrieRawSize = 0;
++  uint64_t DyldExportsTrieRawSize = 0;
+   for (const auto &LC : O.LoadCommands) {
+     switch (LC.MachOLoadCommand.load_command_data.cmd) {
+     case MachO::LC_DYLD_INFO:
+     case MachO::LC_DYLD_INFO_ONLY:
+-      DyldInfoExportsTrieSize = O.Exports.Trie.size();
++      DyldInfoExportsTrieRawSize = O.Exports.Trie.size();
+       break;
+     case MachO::LC_DYLD_EXPORTS_TRIE:
+-      DyldExportsTrieSize = O.Exports.Trie.size();
++      DyldExportsTrieRawSize = O.Exports.Trie.size();
+       break;
+     default:
+       break;
+     }
+   }
+-  assert((DyldInfoExportsTrieSize == 0 || DyldExportsTrieSize == 0) &&
++  assert((DyldInfoExportsTrieRawSize == 0 || DyldExportsTrieRawSize == 0) &&
+          "Export trie in both LCs");
+ 
+   uint64_t NListSize = Is64Bit ? sizeof(MachO::nlist_64) : sizeof(MachO::nlist);
+@@ -263,28 +266,43 @@
+   // trie, chained fixups, dyld exports trie, function starts, data-in-code,
+   // symbol table, indirect symbol table, symbol table strings,
+   // dylib codesign drs, and code signature.
+-  auto updateOffset = [&Offset](size_t Size) {
++  auto updateOffset = [&Offset, LinkEditAlign](uint64_t Size) {
+     uint64_t PreviousOffset = Offset;
+-    Offset += Size;
+-    return PreviousOffset;
++    // Match ld64 and lld-macho behavior by aligning all LINKEDIT entries to
++    // pointer size. This is safe because zero padding is valid for all entries.
++    uint64_t PaddedSize = alignToPowerOf2(Size, LinkEditAlign);
++    Offset += PaddedSize;
++    return std::make_pair(PreviousOffset, PaddedSize);
+   };
+ 
+-  uint64_t StartOfRebaseInfo = updateOffset(O.Rebases.Opcodes.size());
+-  uint64_t StartOfBindingInfo = updateOffset(O.Binds.Opcodes.size());
+-  uint64_t StartOfWeakBindingInfo = updateOffset(O.WeakBinds.Opcodes.size());
+-  uint64_t StartOfLazyBindingInfo = updateOffset(O.LazyBinds.Opcodes.size());
+-  uint64_t StartOfExportTrie = updateOffset(DyldInfoExportsTrieSize);
+-  uint64_t StartOfChainedFixups = updateOffset(O.ChainedFixups.Data.size());
+-  uint64_t StartOfDyldExportsTrie = updateOffset(DyldExportsTrieSize);
+-  uint64_t StartOfFunctionStarts = updateOffset(O.FunctionStarts.Data.size());
+-  uint64_t StartOfDataInCode = updateOffset(O.DataInCode.Data.size());
+-  uint64_t StartOfLinkerOptimizationHint =
++  auto [StartOfRebaseInfo, RebaseInfoSize] =
++      updateOffset(O.Rebases.Opcodes.size());
++  auto [StartOfBindingInfo, BindingInfoSize] =
++      updateOffset(O.Binds.Opcodes.size());
++  auto [StartOfWeakBindingInfo, WeakBindingInfoSize] =
++      updateOffset(O.WeakBinds.Opcodes.size());
++  auto [StartOfLazyBindingInfo, LazyBindingInfoSize] =
++      updateOffset(O.LazyBinds.Opcodes.size());
++  auto [StartOfExportTrie, ExportTrieSize] =
++      updateOffset(DyldInfoExportsTrieRawSize);
++  auto [StartOfChainedFixups, ChainedFixupsSize] =
++      updateOffset(O.ChainedFixups.Data.size());
++  auto [StartOfDyldExportsTrie, DyldExportsTrieSize] =
++      updateOffset(DyldExportsTrieRawSize);
++  auto [StartOfFunctionStarts, FunctionStartsSize] =
++      updateOffset(O.FunctionStarts.Data.size());
++  auto [StartOfDataInCode, DataInCodeSize] =
++      updateOffset(O.DataInCode.Data.size());
++  auto [StartOfLinkerOptimizationHint, LinkerOptimizationHintSize] =
+       updateOffset(O.LinkerOptimizationHint.Data.size());
+-  uint64_t StartOfSymbols = updateOffset(NListSize * O.SymTable.Symbols.size());
++  uint64_t StartOfSymbols =
++      updateOffset(NListSize * O.SymTable.Symbols.size()).first;
+   uint64_t StartOfIndirectSymbols =
+-      updateOffset(sizeof(uint32_t) * O.IndirectSymTable.Symbols.size());
+-  uint64_t StartOfSymbolStrings = updateOffset(StrTableBuilder.getSize());
+-  uint64_t StartOfDylibCodeSignDRs = updateOffset(O.DylibCodeSignDRs.Data.size());
++      updateOffset(sizeof(uint32_t) * O.IndirectSymTable.Symbols.size()).first;
++  auto [StartOfSymbolStrings, SymbolStringsSize] =
++      updateOffset(StrTableBuilder.getSize());
++  auto [StartOfDylibCodeSignDRs, DylibCodeSignDRsSize] =
++      updateOffset(O.DylibCodeSignDRs.Data.size());
+ 
+   uint64_t StartOfCodeSignature = Offset;
+   uint32_t CodeSignatureSize = 0;
+@@ -343,13 +361,13 @@
+       break;
+     case MachO::LC_DYLIB_CODE_SIGN_DRS:
+       MLC.linkedit_data_command_data.dataoff = StartOfDylibCodeSignDRs;
+-      MLC.linkedit_data_command_data.datasize = O.DylibCodeSignDRs.Data.size();
++      MLC.linkedit_data_command_data.datasize = DylibCodeSignDRsSize;
+       break;
+     case MachO::LC_SYMTAB:
+       MLC.symtab_command_data.symoff = StartOfSymbols;
+       MLC.symtab_command_data.nsyms = O.SymTable.Symbols.size();
+       MLC.symtab_command_data.stroff = StartOfSymbolStrings;
+-      MLC.symtab_command_data.strsize = StrTableBuilder.getSize();
++      MLC.symtab_command_data.strsize = SymbolStringsSize;
+       break;
+     case MachO::LC_DYSYMTAB: {
+       if (MLC.dysymtab_command_data.ntoc != 0 ||
+@@ -368,20 +386,19 @@
+     }
+     case MachO::LC_DATA_IN_CODE:
+       MLC.linkedit_data_command_data.dataoff = StartOfDataInCode;
+-      MLC.linkedit_data_command_data.datasize = O.DataInCode.Data.size();
++      MLC.linkedit_data_command_data.datasize = DataInCodeSize;
+       break;
+     case MachO::LC_LINKER_OPTIMIZATION_HINT:
+       MLC.linkedit_data_command_data.dataoff = StartOfLinkerOptimizationHint;
+-      MLC.linkedit_data_command_data.datasize =
+-          O.LinkerOptimizationHint.Data.size();
++      MLC.linkedit_data_command_data.datasize = LinkerOptimizationHintSize;
+       break;
+     case MachO::LC_FUNCTION_STARTS:
+       MLC.linkedit_data_command_data.dataoff = StartOfFunctionStarts;
+-      MLC.linkedit_data_command_data.datasize = O.FunctionStarts.Data.size();
++      MLC.linkedit_data_command_data.datasize = FunctionStartsSize;
+       break;
+     case MachO::LC_DYLD_CHAINED_FIXUPS:
+       MLC.linkedit_data_command_data.dataoff = StartOfChainedFixups;
+-      MLC.linkedit_data_command_data.datasize = O.ChainedFixups.Data.size();
++      MLC.linkedit_data_command_data.datasize = ChainedFixupsSize;
+       break;
+     case MachO::LC_DYLD_EXPORTS_TRIE:
+       MLC.linkedit_data_command_data.dataoff = StartOfDyldExportsTrie;
+@@ -391,19 +408,19 @@
+     case MachO::LC_DYLD_INFO_ONLY:
+       MLC.dyld_info_command_data.rebase_off =
+           O.Rebases.Opcodes.empty() ? 0 : StartOfRebaseInfo;
+-      MLC.dyld_info_command_data.rebase_size = O.Rebases.Opcodes.size();
++      MLC.dyld_info_command_data.rebase_size = RebaseInfoSize;
+       MLC.dyld_info_command_data.bind_off =
+           O.Binds.Opcodes.empty() ? 0 : StartOfBindingInfo;
+-      MLC.dyld_info_command_data.bind_size = O.Binds.Opcodes.size();
++      MLC.dyld_info_command_data.bind_size = BindingInfoSize;
+       MLC.dyld_info_command_data.weak_bind_off =
+           O.WeakBinds.Opcodes.empty() ? 0 : StartOfWeakBindingInfo;
+-      MLC.dyld_info_command_data.weak_bind_size = O.WeakBinds.Opcodes.size();
++      MLC.dyld_info_command_data.weak_bind_size = WeakBindingInfoSize;
+       MLC.dyld_info_command_data.lazy_bind_off =
+           O.LazyBinds.Opcodes.empty() ? 0 : StartOfLazyBindingInfo;
+-      MLC.dyld_info_command_data.lazy_bind_size = O.LazyBinds.Opcodes.size();
++      MLC.dyld_info_command_data.lazy_bind_size = LazyBindingInfoSize;
+       MLC.dyld_info_command_data.export_off =
+           O.Exports.Trie.empty() ? 0 : StartOfExportTrie;
+-      MLC.dyld_info_command_data.export_size = DyldInfoExportsTrieSize;
++      MLC.dyld_info_command_data.export_size = ExportTrieSize;
+       break;
+     // Note that LC_ENCRYPTION_INFO.cryptoff despite its name and the comment in
+     // <mach-o/loader.h> is not an offset in the binary file, instead, it is a
+diff --git a/lib/ObjCopy/MachO/MachOWriter.cpp b/lib/ObjCopy/MachO/MachOWriter.cpp
+index 07514dd2f8..d83a82cee7 100644
+--- a/lib/ObjCopy/MachO/MachOWriter.cpp
++++ b/lib/ObjCopy/MachO/MachOWriter.cpp
+@@ -24,6 +24,12 @@
+ using namespace llvm::objcopy::macho;
+ using namespace llvm::support::endian;
+ 
++#ifndef NDEBUG
++static uint64_t paddedLinkEditEntrySize(uint64_t Size, bool Is64Bit) {
++  return alignToPowerOf2(Size, Is64Bit ? 8 : 4);
++}
++#endif
++
+ size_t MachOWriter::headerSize() const {
+   return Is64Bit ? sizeof(MachO::mach_header_64) : sizeof(MachO::mach_header);
+ }
+@@ -55,29 +61,34 @@
+         O.LoadCommands[*O.DyLdInfoCommandIndex]
+             .MachOLoadCommand.dyld_info_command_data;
+     if (DyLdInfoCommand.rebase_off) {
+-      assert((DyLdInfoCommand.rebase_size == O.Rebases.Opcodes.size()) &&
++      assert((DyLdInfoCommand.rebase_size ==
++              paddedLinkEditEntrySize(O.Rebases.Opcodes.size(), Is64Bit)) &&
+              "Incorrect rebase opcodes size");
+       Ends.push_back(DyLdInfoCommand.rebase_off + DyLdInfoCommand.rebase_size);
+     }
+     if (DyLdInfoCommand.bind_off) {
+-      assert((DyLdInfoCommand.bind_size == O.Binds.Opcodes.size()) &&
++      assert((DyLdInfoCommand.bind_size ==
++              paddedLinkEditEntrySize(O.Binds.Opcodes.size(), Is64Bit)) &&
+              "Incorrect bind opcodes size");
+       Ends.push_back(DyLdInfoCommand.bind_off + DyLdInfoCommand.bind_size);
+     }
+     if (DyLdInfoCommand.weak_bind_off) {
+-      assert((DyLdInfoCommand.weak_bind_size == O.WeakBinds.Opcodes.size()) &&
++      assert((DyLdInfoCommand.weak_bind_size ==
++              paddedLinkEditEntrySize(O.WeakBinds.Opcodes.size(), Is64Bit)) &&
+              "Incorrect weak bind opcodes size");
+       Ends.push_back(DyLdInfoCommand.weak_bind_off +
+                      DyLdInfoCommand.weak_bind_size);
+     }
+     if (DyLdInfoCommand.lazy_bind_off) {
+-      assert((DyLdInfoCommand.lazy_bind_size == O.LazyBinds.Opcodes.size()) &&
++      assert((DyLdInfoCommand.lazy_bind_size ==
++              paddedLinkEditEntrySize(O.LazyBinds.Opcodes.size(), Is64Bit)) &&
+              "Incorrect lazy bind opcodes size");
+       Ends.push_back(DyLdInfoCommand.lazy_bind_off +
+                      DyLdInfoCommand.lazy_bind_size);
+     }
+     if (DyLdInfoCommand.export_off) {
+-      assert((DyLdInfoCommand.export_size == O.Exports.Trie.size()) &&
++      assert((DyLdInfoCommand.export_size ==
++              paddedLinkEditEntrySize(O.Exports.Trie.size(), Is64Bit)) &&
+              "Incorrect trie size");
+       Ends.push_back(DyLdInfoCommand.export_off + DyLdInfoCommand.export_size);
+     }
+@@ -320,7 +331,8 @@
+       O.LoadCommands[*O.DyLdInfoCommandIndex]
+           .MachOLoadCommand.dyld_info_command_data;
+   char *Out = Buf->getBufferStart() + DyLdInfoCommand.rebase_off;
+-  assert((DyLdInfoCommand.rebase_size == O.Rebases.Opcodes.size()) &&
++  assert((DyLdInfoCommand.rebase_size ==
++          paddedLinkEditEntrySize(O.Rebases.Opcodes.size(), Is64Bit)) &&
+          "Incorrect rebase opcodes size");
+   memcpy(Out, O.Rebases.Opcodes.data(), O.Rebases.Opcodes.size());
+ }
+@@ -332,7 +344,8 @@
+       O.LoadCommands[*O.DyLdInfoCommandIndex]
+           .MachOLoadCommand.dyld_info_command_data;
+   char *Out = Buf->getBufferStart() + DyLdInfoCommand.bind_off;
+-  assert((DyLdInfoCommand.bind_size == O.Binds.Opcodes.size()) &&
++  assert((DyLdInfoCommand.bind_size ==
++          paddedLinkEditEntrySize(O.Binds.Opcodes.size(), Is64Bit)) &&
+          "Incorrect bind opcodes size");
+   memcpy(Out, O.Binds.Opcodes.data(), O.Binds.Opcodes.size());
+ }
+@@ -344,7 +357,8 @@
+       O.LoadCommands[*O.DyLdInfoCommandIndex]
+           .MachOLoadCommand.dyld_info_command_data;
+   char *Out = Buf->getBufferStart() + DyLdInfoCommand.weak_bind_off;
+-  assert((DyLdInfoCommand.weak_bind_size == O.WeakBinds.Opcodes.size()) &&
++  assert((DyLdInfoCommand.weak_bind_size ==
++          paddedLinkEditEntrySize(O.WeakBinds.Opcodes.size(), Is64Bit)) &&
+          "Incorrect weak bind opcodes size");
+   memcpy(Out, O.WeakBinds.Opcodes.data(), O.WeakBinds.Opcodes.size());
+ }
+@@ -356,7 +370,8 @@
+       O.LoadCommands[*O.DyLdInfoCommandIndex]
+           .MachOLoadCommand.dyld_info_command_data;
+   char *Out = Buf->getBufferStart() + DyLdInfoCommand.lazy_bind_off;
+-  assert((DyLdInfoCommand.lazy_bind_size == O.LazyBinds.Opcodes.size()) &&
++  assert((DyLdInfoCommand.lazy_bind_size ==
++          paddedLinkEditEntrySize(O.LazyBinds.Opcodes.size(), Is64Bit)) &&
+          "Incorrect lazy bind opcodes size");
+   memcpy(Out, O.LazyBinds.Opcodes.data(), O.LazyBinds.Opcodes.size());
+ }
+@@ -368,7 +383,8 @@
+       O.LoadCommands[*O.DyLdInfoCommandIndex]
+           .MachOLoadCommand.dyld_info_command_data;
+   char *Out = Buf->getBufferStart() + DyLdInfoCommand.export_off;
+-  assert((DyLdInfoCommand.export_size == O.Exports.Trie.size()) &&
++  assert((DyLdInfoCommand.export_size ==
++          paddedLinkEditEntrySize(O.Exports.Trie.size(), Is64Bit)) &&
+          "Incorrect export trie size");
+   memcpy(Out, O.Exports.Trie.data(), O.Exports.Trie.size());
+ }
+@@ -398,7 +414,8 @@
+   const MachO::linkedit_data_command &LinkEditDataCommand =
+       O.LoadCommands[*LCIndex].MachOLoadCommand.linkedit_data_command_data;
+   char *Out = Buf->getBufferStart() + LinkEditDataCommand.dataoff;
+-  assert((LinkEditDataCommand.datasize == LD.Data.size()) &&
++  assert((LinkEditDataCommand.datasize ==
++          paddedLinkEditEntrySize(LD.Data.size(), Is64Bit)) &&
+          "Incorrect data size");
+   memcpy(Out, LD.Data.data(), LD.Data.size());
+ }
+@@ -575,7 +592,8 @@
+       O.LoadCommands[*O.ExportsTrieCommandIndex]
+           .MachOLoadCommand.linkedit_data_command_data;
+   char *Out = Buf->getBufferStart() + ExportsTrieCmd.dataoff;
+-  assert((ExportsTrieCmd.datasize == O.Exports.Trie.size()) &&
++  assert((ExportsTrieCmd.datasize ==
++          paddedLinkEditEntrySize(O.Exports.Trie.size(), Is64Bit)) &&
+          "Incorrect export trie size");
+   memcpy(Out, O.Exports.Trie.data(), O.Exports.Trie.size());
+ }
+diff --git a/test/tools/llvm-objcopy/MachO/linkedit-alignment.test b/test/tools/llvm-objcopy/MachO/linkedit-alignment.test
+new file mode 100644
+index 0000000000..86f826968c
+--- /dev/null
++++ b/test/tools/llvm-objcopy/MachO/linkedit-alignment.test
+@@ -0,0 +1,366 @@
++## This test verifies that all LINKEDIT entry offset and sizes are
++## aligned to the target word size.
++
++# RUN: yaml2obj --docnum=1 %s -o %t.arm64
++# RUN: llvm-objcopy %t.arm64 %t.arm64.copy
++# RUN: obj2yaml %t.arm64.copy > %t.arm64.yaml
++## Print the result twice: first to capture the LINKEDIT offsets and sizes,
++## then to check that the captured values are aligned.
++# RUN: cat %t.arm64.yaml %t.arm64.yaml | FileCheck %s --check-prefix=ARM64
++
++# ARM64: cmd:             LC_SEGMENT_64
++# ARM64: segname:         __LINKEDIT
++# ARM64: fileoff:         [[#ARM64_LINKEDIT_FILEOFF:]]
++# ARM64: filesize:        [[#ARM64_LINKEDIT_FILESIZE:]]
++
++# ARM64: cmd:             LC_DYLD_INFO_ONLY
++# ARM64: rebase_off:      [[#ARM64_REBASE_OFF:]]
++# ARM64: rebase_size:     [[#ARM64_REBASE_SIZE:]]
++# ARM64: bind_off:        [[#ARM64_BIND_OFF:]]
++# ARM64: bind_size:       [[#ARM64_BIND_SIZE:]]
++# ARM64: weak_bind_off:   [[#ARM64_WEAK_BIND_OFF:]]
++# ARM64: weak_bind_size:  [[#ARM64_WEAK_BIND_SIZE:]]
++# ARM64: lazy_bind_off:   [[#ARM64_LAZY_BIND_OFF:]]
++# ARM64: lazy_bind_size:  [[#ARM64_LAZY_BIND_SIZE:]]
++# ARM64: export_off:      [[#ARM64_EXPORT_OFF:]]
++# ARM64: export_size:     [[#ARM64_EXPORT_SIZE:]]
++
++# ARM64: cmd:             LC_SYMTAB
++# ARM64: symoff:          [[#ARM64_SYMOFF:]]
++# ARM64: stroff:          [[#ARM64_STROFF:]]
++# ARM64: strsize:         [[#ARM64_STRSIZE:]]
++
++# ARM64: cmd:             LC_DYSYMTAB
++# ARM64: indirectsymoff:  [[#ARM64_INDIRECTSYMOFF:]]
++
++# ARM64: cmd:             LC_FUNCTION_STARTS
++# ARM64: dataoff:         [[#ARM64_FUNCTION_STARTS_OFF:]]
++# ARM64: datasize:        [[#ARM64_FUNCTION_STARTS_SIZE:]]
++
++# ARM64: cmd:             LC_DATA_IN_CODE
++# ARM64: dataoff:         [[#ARM64_DATA_IN_CODE_OFF:]]
++# ARM64: datasize:        [[#ARM64_DATA_IN_CODE_SIZE:]]
++
++# ARM64: --- !mach-o
++
++# ARM64: cmd:             LC_SEGMENT_64
++# ARM64: segname:         __LINKEDIT
++# ARM64: fileoff:         [[#mul(div(ARM64_LINKEDIT_FILEOFF, 8), 8)]]
++# ARM64: filesize:        [[#mul(div(ARM64_LINKEDIT_FILESIZE, 8), 8)]]
++
++# ARM64: cmd:             LC_DYLD_INFO_ONLY
++# ARM64: rebase_off:      [[#mul(div(ARM64_REBASE_OFF, 8), 8)]]
++# ARM64: rebase_size:     [[#mul(div(ARM64_REBASE_SIZE, 8), 8)]]
++# ARM64: bind_off:        [[#mul(div(ARM64_BIND_OFF, 8), 8)]]
++# ARM64: bind_size:       [[#mul(div(ARM64_BIND_SIZE, 8), 8)]]
++# ARM64: weak_bind_off:   [[#mul(div(ARM64_WEAK_BIND_OFF, 8), 8)]]
++# ARM64: weak_bind_size:  [[#mul(div(ARM64_WEAK_BIND_SIZE, 8), 8)]]
++# ARM64: lazy_bind_off:   [[#mul(div(ARM64_LAZY_BIND_OFF, 8), 8)]]
++# ARM64: lazy_bind_size:  [[#mul(div(ARM64_LAZY_BIND_SIZE, 8), 8)]]
++# ARM64: export_off:      [[#mul(div(ARM64_EXPORT_OFF, 8), 8)]]
++# ARM64: export_size:     [[#mul(div(ARM64_EXPORT_SIZE, 8), 8)]]
++
++# ARM64: cmd:             LC_SYMTAB
++# ARM64: symoff:          [[#mul(div(ARM64_SYMOFF, 8), 8)]]
++# ARM64: stroff:          [[#mul(div(ARM64_STROFF, 8), 8)]]
++# ARM64: strsize:         [[#mul(div(ARM64_STRSIZE, 8), 8)]]
++
++# ARM64: cmd:             LC_DYSYMTAB
++# ARM64: indirectsymoff:  [[#mul(div(ARM64_INDIRECTSYMOFF, 8), 8)]]
++
++# ARM64: cmd:             LC_FUNCTION_STARTS
++# ARM64: dataoff:         [[#mul(div(ARM64_FUNCTION_STARTS_OFF, 8), 8)]]
++# ARM64: datasize:        [[#mul(div(ARM64_FUNCTION_STARTS_SIZE, 8), 8)]]
++
++# ARM64: cmd:             LC_DATA_IN_CODE
++# ARM64: dataoff:         [[#mul(div(ARM64_DATA_IN_CODE_OFF, 8), 8)]]
++# ARM64: datasize:        [[#mul(div(ARM64_DATA_IN_CODE_SIZE, 8), 8)]]
++
++# RUN: yaml2obj --docnum=2 %s -o %t.armv7
++# RUN: llvm-objcopy %t.armv7 %t.armv7.copy
++# RUN: obj2yaml %t.armv7.copy > %t.armv7.yaml
++# RUN: cat %t.armv7.yaml %t.armv7.yaml | FileCheck %s --check-prefix=ARMV7
++
++# ARMV7: cmd:             LC_SEGMENT
++# ARMV7: segname:         __LINKEDIT
++# ARMV7: fileoff:         [[#ARMV7_LINKEDIT_FILEOFF:]]
++# ARMV7: filesize:        [[#ARMV7_LINKEDIT_FILESIZE:]]
++
++# ARMV7: cmd:             LC_DYLD_INFO_ONLY
++# ARMV7: rebase_off:      [[#ARMV7_REBASE_OFF:]]
++# ARMV7: rebase_size:     [[#ARMV7_REBASE_SIZE:]]
++# ARMV7: bind_off:        [[#ARMV7_BIND_OFF:]]
++# ARMV7: bind_size:       [[#ARMV7_BIND_SIZE:]]
++# ARMV7: weak_bind_off:   [[#ARMV7_WEAK_BIND_OFF:]]
++# ARMV7: weak_bind_size:  [[#ARMV7_WEAK_BIND_SIZE:]]
++# ARMV7: lazy_bind_off:   [[#ARMV7_LAZY_BIND_OFF:]]
++# ARMV7: lazy_bind_size:  [[#ARMV7_LAZY_BIND_SIZE:]]
++# ARMV7: export_off:      [[#ARMV7_EXPORT_OFF:]]
++# ARMV7: export_size:     [[#ARMV7_EXPORT_SIZE:]]
++
++# ARMV7: cmd:             LC_SYMTAB
++# ARMV7: symoff:          [[#ARMV7_SYMOFF:]]
++# ARMV7: stroff:          [[#ARMV7_STROFF:]]
++# ARMV7: strsize:         [[#ARMV7_STRSIZE:]]
++
++# ARMV7: cmd:             LC_DYSYMTAB
++# ARMV7: indirectsymoff:  [[#ARMV7_INDIRECTSYMOFF:]]
++
++# ARMV7: cmd:             LC_FUNCTION_STARTS
++# ARMV7: dataoff:         [[#ARMV7_FUNCTION_STARTS_OFF:]]
++# ARMV7: datasize:        [[#ARMV7_FUNCTION_STARTS_SIZE:]]
++
++# ARMV7: cmd:             LC_DATA_IN_CODE
++# ARMV7: dataoff:         [[#ARMV7_DATA_IN_CODE_OFF:]]
++# ARMV7: datasize:        [[#ARMV7_DATA_IN_CODE_SIZE:]]
++
++# ARMV7: --- !mach-o
++
++# ARMV7: cmd:             LC_SEGMENT
++# ARMV7: segname:         __LINKEDIT
++# ARMV7: fileoff:         [[#mul(div(ARMV7_LINKEDIT_FILEOFF, 4), 4)]]
++# ARMV7: filesize:        [[#mul(div(ARMV7_LINKEDIT_FILESIZE, 4), 4)]]
++
++# ARMV7: cmd:             LC_DYLD_INFO_ONLY
++# ARMV7: rebase_off:      [[#mul(div(ARMV7_REBASE_OFF, 4), 4)]]
++# ARMV7: rebase_size:     [[#mul(div(ARMV7_REBASE_SIZE, 4), 4)]]
++# ARMV7: bind_off:        [[#mul(div(ARMV7_BIND_OFF, 4), 4)]]
++# ARMV7: bind_size:       [[#mul(div(ARMV7_BIND_SIZE, 4), 4)]]
++# ARMV7: weak_bind_off:   [[#mul(div(ARMV7_WEAK_BIND_OFF, 4), 4)]]
++# ARMV7: weak_bind_size:  [[#mul(div(ARMV7_WEAK_BIND_SIZE, 4), 4)]]
++# ARMV7: lazy_bind_off:   [[#mul(div(ARMV7_LAZY_BIND_OFF, 4), 4)]]
++# ARMV7: lazy_bind_size:  [[#mul(div(ARMV7_LAZY_BIND_SIZE, 4), 4)]]
++# ARMV7: export_off:      [[#mul(div(ARMV7_EXPORT_OFF, 4), 4)]]
++# ARMV7: export_size:     [[#mul(div(ARMV7_EXPORT_SIZE, 4), 4)]]
++
++# ARMV7: cmd:             LC_SYMTAB
++# ARMV7: symoff:          [[#mul(div(ARMV7_SYMOFF, 4), 4)]]
++# ARMV7: stroff:          [[#mul(div(ARMV7_STROFF, 4), 4)]]
++# ARMV7: strsize:         [[#mul(div(ARMV7_STRSIZE, 4), 4)]]
++
++# ARMV7: cmd:             LC_DYSYMTAB
++# ARMV7: indirectsymoff:  [[#mul(div(ARMV7_INDIRECTSYMOFF, 4), 4)]]
++
++# ARMV7: cmd:             LC_FUNCTION_STARTS
++# ARMV7: dataoff:         [[#mul(div(ARMV7_FUNCTION_STARTS_OFF, 4), 4)]]
++# ARMV7: datasize:        [[#mul(div(ARMV7_FUNCTION_STARTS_SIZE, 4), 4)]]
++
++# ARMV7: cmd:             LC_DATA_IN_CODE
++# ARMV7: dataoff:         [[#mul(div(ARMV7_DATA_IN_CODE_OFF, 4), 4)]]
++# ARMV7: datasize:        [[#mul(div(ARMV7_DATA_IN_CODE_SIZE, 4), 4)]]
++
++--- !mach-o
++FileHeader:
++  magic:           0xFEEDFACF
++  cputype:         0x0100000C
++  cpusubtype:      0x00000000
++  filetype:        0x00000002
++  ncmds:           6
++  sizeofcmds:      256
++  flags:           0x00000085
++  reserved:        0x00000000
++LoadCommands:
++  - cmd:             LC_SEGMENT_64
++    cmdsize:         72
++    segname:         __LINKEDIT
++    vmaddr:          288
++    vmsize:          256
++    fileoff:         288
++    filesize:        256
++    maxprot:         1
++    initprot:        1
++    nsects:          0
++    flags:           0
++  - cmd:             LC_DYLD_INFO_ONLY
++    cmdsize:         48
++    rebase_off:      288
++    rebase_size:     1
++    bind_off:        289
++    bind_size:       1
++    weak_bind_off:   290
++    weak_bind_size:  1
++    lazy_bind_off:   291
++    lazy_bind_size:  1
++    export_off:      0
++    export_size:     0
++  - cmd:             LC_SYMTAB
++    cmdsize:         24
++    symoff:          304
++    nsyms:           2
++    stroff:          340
++    strsize:         24
++  - cmd:             LC_DYSYMTAB
++    cmdsize:         80
++    ilocalsym:       0
++    nlocalsym:       0
++    iextdefsym:      0
++    nextdefsym:      0
++    iundefsym:       0
++    nundefsym:       2
++    tocoff:          0
++    ntoc:            0
++    modtaboff:       0
++    nmodtab:         0
++    extrefsymoff:    0
++    nextrefsyms:     0
++    indirectsymoff:  336
++    nindirectsyms:   1
++    extreloff:       0
++    nextrel:         0
++    locreloff:       0
++    nlocrel:         0
++  - cmd:             LC_FUNCTION_STARTS
++    cmdsize:         16
++    dataoff:         292
++    datasize:        1
++  - cmd:             LC_DATA_IN_CODE
++    cmdsize:         16
++    dataoff:         293
++    datasize:        8
++LinkEditData:
++  RebaseOpcodes:
++    - Opcode:          REBASE_OPCODE_DONE
++      Imm:             0
++  BindOpcodes:
++    - Opcode:          BIND_OPCODE_DONE
++      Imm:             0
++      Symbol:          ''
++  WeakBindOpcodes:
++    - Opcode:          BIND_OPCODE_DONE
++      Imm:             0
++      Symbol:          ''
++  LazyBindOpcodes:
++    - Opcode:          BIND_OPCODE_DONE
++      Imm:             0
++      Symbol:          ''
++  NameList:
++    - n_strx:          1
++      n_type:          0x01
++      n_sect:          0
++      n_desc:          0
++      n_value:         0
++    - n_strx:          6
++      n_type:          0x01
++      n_sect:          0
++      n_desc:          0
++      n_value:         0
++  StringTable:
++    - ''
++    - _foo
++    - _bar
++    - ''
++  IndirectSymbols: [ 0x1 ]
++  FunctionStarts:  [ 0x0 ]
++  DataInCode:
++    - Offset:          0x0
++      Length:          4
++      Kind:            0x4
++...
++
++--- !mach-o
++IsLittleEndian:  true
++FileHeader:
++  magic:           0xFEEDFACE
++  cputype:         0x0000000C
++  cpusubtype:      0x00000009
++  filetype:        0x00000002
++  ncmds:           6
++  sizeofcmds:      240
++  flags:           0x00000085
++LoadCommands:
++  - cmd:             LC_SEGMENT
++    cmdsize:         56
++    segname:         __LINKEDIT
++    vmaddr:          268
++    vmsize:          128
++    fileoff:         268
++    filesize:        128
++    maxprot:         1
++    initprot:        1
++    nsects:          0
++    flags:           0
++  - cmd:             LC_DYLD_INFO_ONLY
++    cmdsize:         48
++    rebase_off:      268
++    rebase_size:     1
++    bind_off:        269
++    bind_size:       1
++    weak_bind_off:   270
++    weak_bind_size:  1
++    lazy_bind_off:   271
++    lazy_bind_size:  1
++    export_off:      0
++    export_size:     0
++  - cmd:             LC_SYMTAB
++    cmdsize:         24
++    symoff:          284
++    nsyms:           2
++    stroff:          312
++    strsize:         16
++  - cmd:             LC_DYSYMTAB
++    cmdsize:         80
++    ilocalsym:       0
++    nlocalsym:       0
++    iextdefsym:      0
++    nextdefsym:      0
++    iundefsym:       0
++    nundefsym:       2
++    tocoff:          0
++    ntoc:            0
++    modtaboff:       0
++    nmodtab:         0
++    extrefsymoff:    0
++    nextrefsyms:     0
++    indirectsymoff:  308
++    nindirectsyms:   1
++    extreloff:       0
++    nextrel:         0
++    locreloff:       0
++    nlocrel:         0
++  - cmd:             LC_FUNCTION_STARTS
++    cmdsize:         16
++    dataoff:         272
++    datasize:        4
++  - cmd:             LC_DATA_IN_CODE
++    cmdsize:         16
++    dataoff:         276
++    datasize:        8
++LinkEditData:
++  RebaseOpcodes:
++    - Opcode:          REBASE_OPCODE_DONE
++      Imm:             0
++  BindOpcodes:
++    - Opcode:          BIND_OPCODE_DONE
++      Imm:             0
++      Symbol:          ''
++  WeakBindOpcodes:
++    - Opcode:          BIND_OPCODE_DONE
++      Imm:             0
++      Symbol:          ''
++  LazyBindOpcodes:
++    - Opcode:          BIND_OPCODE_DONE
++      Imm:             0
++      Symbol:          ''
++  NameList:
++    - n_strx:          1
++      n_type:          0x01
++      n_sect:          0
++      n_desc:          0
++      n_value:         0
++    - n_strx:          6
++      n_type:          0x01
++      n_sect:          0
++      n_desc:          0
++      n_value:         0
++  StringTable:
++    - ''
++    - _foo
++    - _bar
++    - ''
++  IndirectSymbols: [ 0x1 ]
++  FunctionStarts:  [ 0x0 ]
++  DataInCode:
++    - Offset:          0x0
++      Length:          4
++      Kind:            0x4
++...
+diff --git a/test/tools/llvm-objcopy/MachO/linkedit-order-1.test b/test/tools/llvm-objcopy/MachO/linkedit-order-1.test
+index 4915f344c1..b7ee56ed47 100644
+--- a/test/tools/llvm-objcopy/MachO/linkedit-order-1.test
++++ b/test/tools/llvm-objcopy/MachO/linkedit-order-1.test
+@@ -51,7 +51,8 @@
+ # CHECK: --- !mach-o
+ 
+ # CHECK: cmd:             LC_SYMTAB
+-# CHECK: stroff:          [[#SYMTAB_STROFF: DYSYMTAB_INDIRECTSYMOFF + mul(DYSYMTAB_NINDIRECTSYMS, 4)]]
++## LINKEDIT entries are aligned to the target word size.
++# CHECK: stroff:          [[#SYMTAB_STROFF: DYSYMTAB_INDIRECTSYMOFF + mul(div(mul(DYSYMTAB_NINDIRECTSYMS, 4) + 4, 8), 8)]]
+ # CHECK: strsize:         [[#SYMTAB_STRSIZE:]]
+ 
+ # CHECK: cmd:             LC_CODE_SIGNATURE
+diff --git a/test/tools/llvm-objcopy/MachO/linkedit-order-2.test b/test/tools/llvm-objcopy/MachO/linkedit-order-2.test
+index 0c5521ece0..dfbb7277a4 100644
+--- a/test/tools/llvm-objcopy/MachO/linkedit-order-2.test
++++ b/test/tools/llvm-objcopy/MachO/linkedit-order-2.test
+@@ -50,7 +50,8 @@
+ # CHECK: --- !mach-o
+ 
+ # CHECK: cmd:             LC_SYMTAB
+-# CHECK: stroff:          [[#SYMTAB_STROFF: DYSYMTAB_INDIRECTSYMOFF + mul(DYSYMTAB_NINDIRECTSYMS, 4)]]
++## LINKEDIT entries are aligned to the target word size.
++# CHECK: stroff:          [[#SYMTAB_STROFF: DYSYMTAB_INDIRECTSYMOFF + mul(div(mul(DYSYMTAB_NINDIRECTSYMS, 4) + 4, 8), 8)]]
+ # CHECK: strsize:         [[#SYMTAB_STRSIZE:]]
+ 
+ # CHECK: cmd:             LC_CODE_SIGNATURE
+diff --git a/test/tools/llvm-objcopy/MachO/symbol-table.test b/test/tools/llvm-objcopy/MachO/symbol-table.test
+index 7e0e1421c0..a95c2ac7a3 100644
+--- a/test/tools/llvm-objcopy/MachO/symbol-table.test
++++ b/test/tools/llvm-objcopy/MachO/symbol-table.test
+@@ -301,7 +301,7 @@
+     vmaddr:          4294975488
+     vmsize:          4096
+     fileoff:         8192
+-    filesize:        508
++    filesize:        512
+     maxprot:         1
+     initprot:        1
+     nsects:          0
+@@ -310,7 +310,7 @@
+     cmdsize:         24
+     symoff:          8192
+     nsyms:           18
+-    stroff:          8484
++    stroff:          8488
+     strsize:         216
+   - cmd:             LC_DYSYMTAB
+     cmdsize:         80
