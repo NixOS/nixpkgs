@@ -7,6 +7,12 @@
 
 let
   cfg = config.boot.initrd.nix-store-veritysetup;
+
+  # nix-store-veritysetup-generator must be build against exactly same systemd that initrd use,
+  # otherwise storePath statement below wouldn't work properly
+  package = pkgs.nix-store-veritysetup-generator.override {
+    systemd = config.boot.initrd.systemd.package;
+  };
 in
 {
   meta.maintainers = with lib.maintainers; [ nikstur ];
@@ -25,8 +31,7 @@ in
 
     boot.initrd.systemd = {
       contents = {
-        "/etc/systemd/system-generators/nix-store-veritysetup-generator".source =
-          "${lib.getExe pkgs.nix-store-veritysetup-generator}";
+        "/etc/systemd/system-generators/nix-store-veritysetup-generator".source = "${lib.getExe package}";
       };
 
       storePaths = [
