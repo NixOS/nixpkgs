@@ -1911,6 +1911,7 @@ mapAliases {
   patchelfStable = throw "'patchelfStable' has been renamed to/replaced by 'patchelf'"; # Converted to throw 2025-10-27
   path-of-building = lib.warnOnInstantiate "'path-of-building' has been replaced by 'rusty-path-of-building'" rusty-path-of-building; # Added 2025-10-30
   paup = throw "'paup' has been renamed to/replaced by 'paup-cli'"; # Converted to throw 2025-10-27
+  pcb2gcode = throw "'pcb2gcode' has been removed as it depended on the deprecated gtk2 via gerbv"; # Added 2026-08-09
   pcb = throw "'pcb' has been removed as it is unmaintained upstream."; # Added 2026-07-26
   pcmanx-gtk2 = throw "'pcmanx-gtk2' has been removed has gtk2 has reach end of life"; # Added 2026-03-19
   pcmciaUtils = warnAlias "'pcmciaUtils' has been renamed to 'pcmciautils'" pcmciautils; # Added 2026-02-12
