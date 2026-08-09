@@ -62,9 +62,7 @@ let
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) (
       lib.optionals (swift-corelibs-libdispatch != null) [
-        swift-corelibs-libdispatch.out
         swift-corelibs-libdispatch.dev
-        swift-corelibs-libdispatch-no-overlay.out
         swift-corelibs-libdispatch-no-overlay.dev
       ]
       ++ lib.optionals (swift-foundation != null) [
