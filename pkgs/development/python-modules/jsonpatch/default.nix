@@ -7,15 +7,17 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jsonpatch";
   version = "1.33";
+
+  __structuredAttrs = true;
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stefankoegl";
     repo = "python-json-patch";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-JHBB64LExzHQVoFF2xcsqGlNWX/YeEBa1M/TmfeQLWI=";
   };
 
@@ -35,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})
