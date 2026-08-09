@@ -114,7 +114,8 @@ swiftpmInstallPhase() {
         install -D -t "${!outputLib}/lib" "${libsToInstall[@]}"
         # Only install modules if there are any library products.
         if [ -n "${modulesToInstall}" ]; then
-            install -D -t "${!outputInclude}/lib/swift/@swiftPlatform@" "${modulesToInstall[@]}"
+            mkdir -p "${!outputInclude}/lib/swift/@swiftPlatform@"
+            cp -Rv "${modulesToInstall[@]}" "${!outputInclude}/lib/swift/@swiftPlatform@"
         fi
     fi
 
