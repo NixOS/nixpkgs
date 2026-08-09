@@ -1,6 +1,7 @@
 {
   lib,
   cmake,
+  createToolchainStubsHook,
   fetchFromGitHub,
   lld,
   ninja,
@@ -27,6 +28,8 @@ let
       lib.escapeShellArg (lib.getDev swift-corelibs-libdispatch-no-overlay)
     else
       placeholder "dev";
+
+  swiftPlatform = stdenv.hostPlatform.swift.platform;
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -70,7 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
   ]
-  ++ lib.optionals useSwift [ swift-minimal ]
+  ++ lib.optionals useSwift [
+    createToolchainStubsHook
+    swift-minimal
+  ]
   ++ lib.optionals stdenv.hostPlatform.isWindows [ lld ];
 
   postInstall = ''
@@ -82,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "''${!outputDev}/lib/cmake/dispatch"
     substitute ${./files/dispatchConfig.cmake} "''${!outputDev}/lib/cmake/dispatch/dispatchConfig.cmake" \
       --replace-fail '@buildType@' ${if stdenv.hostPlatform.isStatic then "STATIC" else "SHARED"} \
-      --replace-fail '@swiftPlatform@' ${stdenv.hostPlatform.swift.platform} \
+      --replace-fail '@swiftPlatform@' ${swiftPlatform} \
       --replace-fail '@lib@' ${swift-corelibs-libdispatch-no-overlay-lib} \
       --replace-fail '@dev@' ${swift-corelibs-libdispatch-no-overlay-dev} \
       --replace-fail '@out-swift@' "$out" \
@@ -106,6 +112,9 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString stdenv.hostPlatform.isElf ''
       dylib="''${!outputLib}/lib/libswiftDispatch${stdenv.hostPlatform.extensions.sharedLibrary}"
       patchelf --add-rpath ${swift-corelibs-libdispatch-no-overlay-lib}/lib "$dylib"
+
+      # Link libdispatch and libBlocksRuntime into the toolchain because it’s expected to be there.
+      ln -s ${swift-corelibs-libdispatch-no-overlay-lib}/lib/* "''${!outputDev}/lib/swift/${swiftPlatform}"
     ''
   );
 
