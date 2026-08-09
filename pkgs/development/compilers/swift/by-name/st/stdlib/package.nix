@@ -1,5 +1,6 @@
 {
   lib,
+  createToolchainStubsHook,
   llvmPackages,
   llvmPackages_upstream,
   stdenv,
@@ -34,6 +35,8 @@ in
       "dev"
     ];
 
+    nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ createToolchainStubsHook ];
+
     cmakeFlags =
       # Only enable LTO for the stdlib. Remove it if it’s enabled for the tools.
       (lib.filter (flag: flag != toolLTO) (old.cmakeFlags or [ ]))
@@ -57,7 +60,7 @@ in
       mv -v "''${!outputLib}/lib/swift/${swiftPlatform}"/*${libraryExtension} "''${!outputLib}/lib"
 
       # Install C++ interop libraries and headers
-      cp -v lib/swift/${swiftPlatform}/libswiftCxx*${stdenv.hostPlatform.extensions.staticLibrary} "''${!outputDev}/lib"
+      cp -v lib/swift/${swiftPlatform}/libswiftCxx*${stdenv.hostPlatform.extensions.staticLibrary} "''${!outputDev}/lib/swift/${swiftPlatform}"
       cp -rv lib/swift/${swiftPlatform}/Cxx*.swiftmodule "''${!outputDev}/lib/swift/${swiftPlatform}"
 
       mkdir -p "''${!outputDev}/include/swiftToCxx"
@@ -80,44 +83,54 @@ in
       CLANG=${lib.escapeShellArg (lib.getExe' llvmPackages.clang.cc "clang")}
       "$LLVM_DIS" stdlib/public/Cxx/${lib.toUpper stdenv.hostPlatform.swift.platform}/${stdenv.hostPlatform.swift.arch}/Cxx.o -o Cxx.ll
       "$CLANG" -c Cxx.ll -o Cxx.o
-      "$AR" Drs "''${!outputDev}/lib/libswiftCxx.a" Cxx.o
+      "$AR" Drs "''${!outputDev}/lib/swift/${swiftPlatform}/libswiftCxx.a" Cxx.o
       "$LLVM_DIS" stdlib/public/Cxx/std/${lib.toUpper stdenv.hostPlatform.swift.platform}/${stdenv.hostPlatform.swift.arch}/CxxStdlib.o -o CxxStdlib.ll
       "$CLANG" -c CxxStdlib.ll -o CxxStdlib.o
-      "$AR" Drs "''${!outputDev}/lib/libswiftCxxStdlib.a" CxxStdlib.o
+      "$AR" Drs "''${!outputDev}/lib/swift/${swiftPlatform}/libswiftCxxStdlib.a" CxxStdlib.o
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Back-deployment libraries are installed as part of the compiler component, so install them manually.
-      cp -rv lib/swift/macosx/libswiftCompatibility*.a "''${!outputDev}/lib"
+      cp -rv lib/swift/${swiftPlatform}/libswiftCompatibility*.a "''${!outputDev}/lib/swift/${swiftPlatform}"
 
       # Install `Span`-compatibility back-deployment library.
-      mkdir -p "''${!outputLib}/lib/swift-6.2/macosx"
-      cp -v lib/swift-6.2/macosx/libswiftCompatibilitySpan.dylib "''${!outputLib}/lib/swift-6.2/macosx/libswiftCompatibilitySpan.dylib"
+      mkdir -p "''${!outputLib}/lib/swift-6.2/${swiftPlatform}"
+      cp -v lib/swift-6.2/${swiftPlatform}/libswiftCompatibilitySpan.dylib "''${!outputLib}/lib/swift-6.2/${swiftPlatform}/libswiftCompatibilitySpan.dylib"
 
       # macOS 26.4 dropped the Swift Differentiation dylibs. Use the one in the store instead of `/usr/lib/swift`.
       install_name_tool "''${!outputLib}/lib/libswift_Differentiation.dylib" -id "''${!outputLib}/lib/libswift_Differentiation.dylib"
-
-      # Generate text-based stubs for the stdlib. Darwin links against the system library, so they aren’t necessary.
-      for dylib in "''${!outputLib}/lib/"*.dylib; do
-        dylibName=$(basename "$dylib" .dylib)
-        if [ "$dylibName" = "libswiftCompatibilitySpan" ]; then
-          # Follow the SDK, which symlinks `libswiftCompatibilitySpan.tbd` to `libswiftCore.tbd`.
-          ln -s libswiftCore.tbd "''${!outputDev}/lib/$dylibName.tbd"
-        else
-          ${lib.escapeShellArg (lib.getExe' llvmPackages_upstream.llvm "llvm-readtapi")} --filetype=tbd-v4 \
-            "$dylib" -o "''${!outputDev}/lib/$dylibName.tbd"
-        fi
-        if [ "$dylibName" != "libswift_Differentiation" ]; then
-          rm "$dylib"
-        fi
-      done
-
-      # The linker should be using the stubs in $dev, which will reference the dylibs in $lib.
-      # There’s no need to propagate it on Darwin.
-      rm -rf "''${!outputDev}/nix-support"
-
-      # Clean up empty folders.
-      rmdir "''${!outputLib}/lib/swift/${swiftPlatform}" "''${!outputLib}/lib/swift"
     '';
 
-    postFixup = null;
+    postFixup =
+      # Remove the dylibs from the stdlib. Darwin links against the system library, so they aren’t necessary.
+      # The exception is `libswift_Differentiation.dylib`, which macOS no longer ships in the dyld cache.
+      lib.optionalString stdenv.hostPlatform.isDarwin ''
+        for dylib in "''${!outputLib}/lib/"*.dylib; do
+          dylibName=$(basename "$dylib" .dylib)
+          case "$dylibName" in
+            libswift_Differentiation)
+              # Swift Differentiation needs to symlink the dylib to ensure that it can be imported in Swift scripts.
+              rm "''${!outputDev}/lib/swift/${swiftPlatform}/$dylibName.tbd"
+              ln -s "''${!outputLib}/lib/$dylibName.dylib" "''${!outputDev}/lib/swift/${swiftPlatform}/$dylibName.dylib"
+              ;;
+            libswiftCompatibilitySpan)
+              # Follow the SDK, which symlinks `libswiftCompatibilitySpan.tbd` to `libswiftCore.tbd`.
+              rm "''${!outputDev}/lib/swift/${swiftPlatform}/$dylibName.tbd"
+              ln -s libswiftCore.tbd "''${!outputDev}/lib/swift/${swiftPlatform}/$dylibName.tbd"
+              ;& # Fall through to remove the dylib.
+            *)
+              rm "$dylib"
+              # Copy the stubs back to $lib. This is needed for compatibility with packages that link Swift libraries
+              # directly without going through `swiftc` (mostly the source-based .NET builds).
+              cp "''${!outputDev}/lib/swift/${swiftPlatform}/$dylibName.tbd" "''${!outputLib}/lib/$dylibName.tbd"
+              ;;
+          esac
+        done
+
+        # The linker should be using the stubs in $dev, which will reference the dylibs in $lib.
+        # There’s no need to propagate it on Darwin.
+        rm -rf "''${!outputDev}/nix-support"
+
+        # Clean up empty folders.
+        rmdir "''${!outputLib}/lib/swift/${swiftPlatform}" "''${!outputLib}/lib/swift"
+      '';
   })

@@ -51,7 +51,6 @@ let
     ]
     ++ lib.optionals (stdlib != null) [
       stdlib.dev
-      stdlib.out
       swiftc.dev
     ]
     ++ lib.optionals (swift-driver != null) [

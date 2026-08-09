@@ -500,7 +500,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       swiftBinaryDir=''${!outputBin}
       swiftIncludeDirs=$swiftcIncPath/include\;$stdlibIncPath/lib\;$stdlibIncPath/include\;$static/include
-      swiftLibraryDirs=$swiftcDevPath/lib\;$swiftcLibPath/lib\;$stdlibLibPath/lib\;$stdlibDevPath/lib
+      swiftLibraryDirs=$swiftcDevPath/lib\;$swiftcLibPath/lib\;$stdlibLibPath/lib\;$stdlibDevPath/lib/swift/${swiftPlatform}
 
       swiftArch=${stdenv.hostPlatform.swift.arch}
       swiftPlatform=${stdenv.hostPlatform.swift.platform}
@@ -554,7 +554,7 @@ stdenv.mkDerivation (finalAttrs: {
       # one of several outputs belong to different derivations.
       sed -i "$static/lib/cmake/swift/SwiftExports.cmake" \
         -e "s|IMPORTED_LOCATION_''${buildType^^} \"$buildDir/lib/swift/$swiftPlatform/$swiftArch/\(.*$sharedLibExt\)\"|IMPORTED_LOCATION_''${buildType^^} \"$stdlibLibPath/lib/\1\"|g" \
-        -e "s|IMPORTED_LOCATION_''${buildType^^} \"$buildDir/lib/swift/$swiftPlatform/$swiftArch/\(.*$staticLibExt\)\"|IMPORTED_LOCATION_''${buildType^^} \"$stdlibDevPath/lib/\1\"|g" \
+        -e "s|IMPORTED_LOCATION_''${buildType^^} \"$buildDir/lib/swift/$swiftPlatform/$swiftArch/\(.*$staticLibExt\)\"|IMPORTED_LOCATION_''${buildType^^} \"$stdlibDevPath//lib/swift/${swiftPlatform}/\1\"|g" \
         -e "s|IMPORTED_LOCATION_''${buildType^^} \"$buildDir/lib/\(swift-[^/]*\)/$swiftPlatform/$swiftArch/\([^/\"]*\)\"|IMPORTED_LOCATION_''${buildType^^} \"$stdlibLibPath/lib/\1/\2\"|g" \
         -e "s|IMPORTED_LOCATION_''${buildType^^} \"$buildDir/lib/swift/host/\(.*$sharedLibExt\)\"|IMPORTED_LOCATION_''${buildType^^} \"$swiftcLibPath/lib/swift/host/\1\"|g" \
         -e "s|IMPORTED_LOCATION_''${buildType^^} \"$buildDir/lib/swift/host/\(.*$staticLibExt\)\"|IMPORTED_LOCATION_''${buildType^^} \"$swiftcDevPath/lib/swift/host/\1\"|g" \
