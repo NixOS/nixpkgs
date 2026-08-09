@@ -8,6 +8,12 @@
   swift,
 }:
 
+let
+  swift' = swift.override {
+    enableRepl = false;
+  };
+in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "swift-system";
   version = "1.8.1";
@@ -36,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-    swift
+    swift'
   ];
 
   postInstall = ''
