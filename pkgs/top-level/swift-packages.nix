@@ -12,6 +12,8 @@ let
     builtins.readFile ../development/compilers/swift/sources-6.2.json
   );
 
+  swift_sources = builtins.fromJSON (builtins.readFile ../development/compilers/swift/sources.json);
+
   mkBootstrapSwiftPackages =
     {
       lib,
@@ -67,16 +69,34 @@ let
   # - Stage 0 builds a minimal Swift compiler using only C++.
   # - Stage 1 builds a Swift compiler using the stage 0 Swift compiler. Features needed to build macros are enabled.
   # - Stage 2 builds a full Swift compiler and stdlib using the stage 1 compiler.
-  bootstrapStage0SwiftPackages = mkBootstrapSwiftPackages {
+  bootstrapStage0SwiftPackages62 = mkBootstrapSwiftPackages {
     inherit lib swiftPackages;
     bootstrapStage = 0;
     buildSwiftPackages = swiftPackages.overrideScope (_: _: { swift = null; });
+    swift_sources = swift_sources_6_2;
+    swift_release = "6.2.4";
+  };
+
+  bootstrapStage1SwiftPackages62 = mkBootstrapSwiftPackages {
+    inherit lib swiftPackages;
+    bootstrapStage = 1;
+    buildSwiftPackages = bootstrapStage0SwiftPackages62;
+    swift_sources = swift_sources_6_2;
+    swift_release = "6.2.4";
+  };
+
+  bootstrapStage2SwiftPackages62 = mkBootstrapSwiftPackages {
+    inherit lib swiftPackages;
+    bootstrapStage = 2;
+    buildSwiftPackages = bootstrapStage1SwiftPackages62;
+    swift_sources = swift_sources_6_2;
+    swift_release = "6.2.4";
   };
 
   bootstrapStage1SwiftPackages = mkBootstrapSwiftPackages {
     inherit lib swiftPackages;
     bootstrapStage = 1;
-    buildSwiftPackages = bootstrapStage0SwiftPackages;
+    buildSwiftPackages = bootstrapStage2SwiftPackages62;
   };
 in
 
@@ -152,7 +172,7 @@ makeScopeWithSplicing' {
 
       buildSwiftPackages = bootstrapStage1SwiftPackages;
 
-      inherit llvm_libtool patchesForVersion;
+      inherit llvm_libtool patchesForVersion swift_sources;
 
       llvmPackages_upstream = llvmPackages;
 
@@ -163,8 +183,6 @@ makeScopeWithSplicing' {
         swift-testing = null;
         enableRepl = false;
       };
-
-      swift_sources = swift_sources_6_2;
     };
   f = lib.extends autoCalledPackages (
     self:

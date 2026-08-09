@@ -12,6 +12,7 @@
   lld,
   llvmPackages,
   llvmPackages_19, # Needs to match the `llvmVersion` of the fork.
+  llvmPackages_21,
   python3,
   stdenv,
   stdlib,
@@ -30,7 +31,16 @@ let
     # Update backport of the Darwin triple changes for macOS 27.
     "llvm/backport-darwin-triple-parsing.patch" = [ { path = ./patches; } ];
     # Backport support for arm64e.x1, the new cpu subtype for A20 and M6
-    "llvm/backport-minimal-arm64e_x1-support.patch" = [ { path = ./patches; } ];
+    "llvm/backport-minimal-arm64e_x1-support.patch" = [
+      {
+        before = "21";
+        path = ./patches/19;
+      }
+      {
+        after = "21";
+        path = ./patches/21;
+      }
+    ];
   };
 
   inherit
@@ -41,6 +51,17 @@ let
           llvmVersion = "19.1.5";
           llvmPackages = llvmPackages_19;
           patchOverrides = basePatchOverrides;
+        };
+        "6.3.3" = {
+          swiftLlvmVersion = "21.0.0"; # From https://github.com/swiftlang/swift/blob/swift-$swiftVersion-RELEASE/utils/build_swift/build_swift/defaults.py#L51
+          llvmVersion = "21.1.6"; # From https://github.com/swiftlang/llvm-project/blob/swift-$swiftVersion-RELEASE/cmake/Modules/LLVMVersion.cmake
+          llvmPackages = llvmPackages_21;
+          patchOverrides = basePatchOverrides // {
+            # Swift’s LLVM fork needs to use `sys::path::make_absolute` instead of `sys::fs::make_absolute`.
+            "llvm/gnu-install-dirs.patch" = [ { path = ./patches/21; } ];
+            # This is an empty patch because Swift’s LLVM fork already has this change.
+            "llvm/llvm-textapi-separate-arch-name-enum-label.patch" = [ { path = ./patches/21; } ];
+          };
         };
       }
       .${swift_release} or (throw "Unsupported Swift version: ${swift_release}.")
@@ -131,9 +152,9 @@ let
                   # consists of only one path (and is not a list). It needs to point to the stdlib.
                   ./patches/lldb/0001-Set-stdlib-path-on-Linux.patch
                   # Otherwise, linking `lldb-server` fails with a missing symbol error on Linux.
-                  ./patches/lldb/0002-Link-lldb-server-to-swiftCore.patch
+                  ./patches/${lib.versions.major final.release_version}/lldb/0002-Link-lldb-server-to-swiftCore.patch
                   # Don’t resolve the liblldb symlink to help it find the Swift toolchain that it’s linked into.
-                  ./patches/lldb/0003-Don-t-follow-symlinks-when-finding-liblldb.patch
+                  ./patches/${lib.versions.major final.release_version}/lldb/0003-Don-t-follow-symlinks-when-finding-liblldb.patch
                   # Darwin needs to find the path to LLDB via the main executable because dyld always resolves symlinks
                   # when loading dylibs from disk.
                   ./patches/lldb/0004-Use-the-LLDB-executable-path-to-find-the-stdlib.patch

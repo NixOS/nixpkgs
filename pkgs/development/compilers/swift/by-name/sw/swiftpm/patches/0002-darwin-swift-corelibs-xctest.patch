@@ -8,7 +8,7 @@ Subject: [PATCH 02/11] darwin-swift-corelibs-xctest
  1 file changed, 65 deletions(-)
 
 diff --git a/Sources/Commands/Utilities/TestingSupport.swift b/Sources/Commands/Utilities/TestingSupport.swift
-index 81b329613..536babca5 100644
+index 2d6d12beb..e8348bd72 100644
 --- a/Sources/Commands/Utilities/TestingSupport.swift
 +++ b/Sources/Commands/Utilities/TestingSupport.swift
 @@ -29,46 +29,6 @@ import func TSCBasic.withTemporaryFile

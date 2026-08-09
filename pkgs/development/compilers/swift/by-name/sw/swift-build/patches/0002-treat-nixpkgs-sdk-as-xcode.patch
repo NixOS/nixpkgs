@@ -1,7 +1,7 @@
-From 0e17f25cf6827dfa94ad37590964d4f7b1d23625 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Randy Eckenrode <randy@largeandhighquality.com>
 Date: Tue, 9 Dec 2025 21:03:16 -0500
-Subject: [PATCH] treat-nixpkgs-sdk-as-xcode
+Subject: [PATCH 2/3] treat-nixpkgs-sdk-as-xcode
 
 ---
  Sources/SWBCore/Core.swift                      | 4 ++--
@@ -9,29 +9,29 @@ Subject: [PATCH] treat-nixpkgs-sdk-as-xcode
  2 files changed, 4 insertions(+), 3 deletions(-)
 
 diff --git a/Sources/SWBCore/Core.swift b/Sources/SWBCore/Core.swift
-index 8a19a5e..7ab64fd 100644
+index 830d921d..e03f4b07 100644
 --- a/Sources/SWBCore/Core.swift
 +++ b/Sources/SWBCore/Core.swift
-@@ -267,7 +267,7 @@ public final class Core: Sendable {
+@@ -276,7 +276,7 @@ public final class Core: Sendable {
  
              switch developerPath {
              case .xcode(let path):
--                toolchainPaths.append((path.join("Toolchains"), strict: path.str.hasSuffix(".app/Contents/Developer")))
-+                toolchainPaths.append((path.join("Toolchains"), strict: path.str.hasSuffix(".app/Contents/Developer") || path.str.hasPrefix("@store-dir@")))
+-                toolchainPaths.append(.init(path: path.join("Toolchains"), strict: path.str.hasSuffix(".app/Contents/Developer")))
++                toolchainPaths.append(.init(path: path.join("Toolchains"), strict: path.str.hasSuffix(".app/Contents/Developer") || path.str.hasPrefix("@store-dir@")))
              case .swiftToolchain(let path, xcodeDeveloperPath: let xcodeDeveloperPath):
                  if hostOperatingSystem == .windows {
-                     toolchainPaths.append((path.join("Toolchains"), strict: true))
-@@ -275,7 +275,7 @@ public final class Core: Sendable {
-                     toolchainPaths.append((path, strict: true))
+                     toolchainPaths.append(.init(path: path.join("Toolchains"), strict: true, aliases: ["default"]))
+@@ -284,7 +284,7 @@ public final class Core: Sendable {
+                     toolchainPaths.append(.init(path: path, strict: true))
                  }
                  if let xcodeDeveloperPath {
--                    toolchainPaths.append((xcodeDeveloperPath.join("Toolchains"), strict: xcodeDeveloperPath.str.hasSuffix(".app/Contents/Developer")))
-+                    toolchainPaths.append((xcodeDeveloperPath.join("Toolchains"), strict: xcodeDeveloperPath.str.hasSuffix(".app/Contents/Developer") || path.str.hasPrefix("@store-dir@")))
+-                    toolchainPaths.append(.init(path: xcodeDeveloperPath.join("Toolchains"), strict: xcodeDeveloperPath.str.hasSuffix(".app/Contents/Developer")))
++                    toolchainPaths.append(.init(path: xcodeDeveloperPath.join("Toolchains"), strict: xcodeDeveloperPath.str.hasSuffix(".app/Contents/Developer") || path.str.hasPrefix("@store-dir@")))
                  }
              }
  
 diff --git a/Sources/SWBTestSupport/SkippedTestSupport.swift b/Sources/SWBTestSupport/SkippedTestSupport.swift
-index 1db4090..08e3109 100644
+index f1662a83..49aa98e9 100644
 --- a/Sources/SWBTestSupport/SkippedTestSupport.swift
 +++ b/Sources/SWBTestSupport/SkippedTestSupport.swift
 @@ -148,7 +148,8 @@ extension Trait where Self == Testing.ConditionTrait {
@@ -45,5 +45,5 @@ index 1db4090..08e3109 100644
      }
  
 -- 
-2.51.2
+2.54.0
 

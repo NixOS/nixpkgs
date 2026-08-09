@@ -9,17 +9,17 @@ Subject: [PATCH 2/2] Load IndexStore from the store
  2 files changed, 3 insertions(+), 11 deletions(-)
 
 diff --git a/Sources/ToolchainRegistry/Toolchain.swift b/Sources/ToolchainRegistry/Toolchain.swift
-index 41d697bd..008a77af 100644
+index f726ebfe..a3a6fb44 100644
 --- a/Sources/ToolchainRegistry/Toolchain.swift
 +++ b/Sources/ToolchainRegistry/Toolchain.swift
-@@ -330,11 +330,8 @@ public final class Toolchain: Sendable {
+@@ -395,11 +395,8 @@ public final class Toolchain: Sendable {
          foundAny = true
        }
  
 -      #if os(Windows)
--      let libIndexStorePath = binPath.appendingPathComponent("libIndexStore\(dylibExtension)")
+-      let libIndexStorePath = binPath.appending(component: "libIndexStore\(dylibExtension)")
 -      #else
--      let libIndexStorePath = libPath.appendingPathComponent("libIndexStore\(dylibExtension)")
+-      let libIndexStorePath = libPath.appending(component: "libIndexStore\(dylibExtension)")
 -      #endif
 +      let libIndexStorePath = URL(filePath: "@libclang@").appending(components: "lib", "libIndexStore\(dylibExtension)")
 +
@@ -27,20 +27,20 @@ index 41d697bd..008a77af 100644
          libIndexStore = libIndexStorePath
          foundAny = true
 diff --git a/Tests/ToolchainRegistryTests/ToolchainRegistryTests.swift b/Tests/ToolchainRegistryTests/ToolchainRegistryTests.swift
-index 60c4bf10..c8582c7a 100644
+index 25e07743..b240b53a 100644
 --- a/Tests/ToolchainRegistryTests/ToolchainRegistryTests.swift
 +++ b/Tests/ToolchainRegistryTests/ToolchainRegistryTests.swift
-@@ -758,11 +758,6 @@ private func makeToolchain(
+@@ -747,11 +747,6 @@ private func makeToolchain(
      #endif
    }
    if libIndexStore {
 -    #if os(Windows)
 -    // Windows has a prefix of `lib` on this particular library ...
--    try Data().write(to: binPath.appendingPathComponent("libIndexStore\(dylibSuffix)"))
+-    try Data().write(to: binPath.appending(component: "libIndexStore\(dylibSuffix)"))
 -    #else
--    try Data().write(to: libPath.appendingPathComponent("libIndexStore\(dylibSuffix)"))
+-    try Data().write(to: libPath.appending(component: "libIndexStore\(dylibSuffix)"))
 -    #endif
-+    try Data().write(to: URL(filePath: "@libclang@").appending(components: "lib", "libIndexStore\(dylibSuffix)"))
++    try Data().write(to: URL(filePath: "@libclang@").appending(components: "lib", "libIndexStore\(dylibExtension)"))
    }
  }
 -- 

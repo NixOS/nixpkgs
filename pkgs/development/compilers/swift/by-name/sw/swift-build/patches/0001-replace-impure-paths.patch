@@ -1,45 +1,70 @@
-From 10f011cf8753c2175456a850b51c9968b2908081 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Randy Eckenrode <randy@largeandhighquality.com>
 Date: Tue, 9 Dec 2025 20:57:45 -0500
-Subject: [PATCH] replace-impure-paths
+Subject: [PATCH 1/3] replace-impure-paths
 
 ---
+ Plugins/launch-xcode/launch-xcode.swift       |  2 +-
  Plugins/run-xcodebuild/run-xcodebuild.swift   |  2 +-
- Sources/SWBAndroidPlatform/Plugin.swift       |  2 +-
+ Sources/SWBApplePlatform/Specs/DTrace.xcspec  |  2 +-
+ .../SWBApplePlatform/Specs/OSACompile.xcspec  |  2 +-
  Sources/SWBBuildService/Messages.swift        |  2 +-
+ Sources/SWBCore/BuildRuleSet.swift            |  2 +-
+ Sources/SWBCore/SDKRegistry.swift             |  2 +-
  .../CommandLineToolSpec.swift                 |  2 +-
  .../SpecImplementations/Tools/CodeSign.swift  |  2 +-
+ .../SpecImplementations/Tools/MkdirTool.swift |  2 +-
+ .../Tools/SymlinkTool.swift                   |  2 +-
  .../SpecImplementations/Tools/TouchTool.swift |  2 +-
  Sources/SWBCore/Specs/CoreBuildSystem.xcspec  |  2 +-
- .../SWBCore/Specs/NativeBuildSystem.xcspec    | 10 ++--
- Sources/SWBGenericUnixPlatform/Plugin.swift   |  4 +-
+ .../SWBCore/Specs/NativeBuildSystem.xcspec    | 12 ++---
+ .../SWBProjectModel/PIFGenerationModel.swift  |  4 +-
+ .../ShellScriptTaskProducer.swift             |  2 +-
+ .../GeneratedFilesTaskProducer.swift          |  2 +-
  .../SWBTaskExecution/BuildDescription.swift   |  4 +-
  .../TaskActions/CopyTiffTaskAction.swift      |  2 +-
  .../EmbedSwiftStdLibTaskAction.swift          |  2 +-
- Sources/SWBTestSupport/CoreBasedTests.swift   |  6 +--
+ Sources/SWBTestSupport/CoreBasedTests.swift   |  4 +-
  Sources/SWBTestSupport/FSUtilities.swift      |  4 +-
  .../SWBTestSupport/LibraryGeneration.swift    |  4 +-
+ .../SWBTestSupport/Projects/AppClips.swift    |  2 +-
+ .../SWBTestSupport/SkippedTestSupport.swift   |  8 ++--
+ Sources/SWBTestSupport/TestWorkspaces.swift   |  4 +-
  Sources/SWBTestSupport/Xcode.swift            |  2 +-
  .../Specs/CodeSign.xcspec                     |  2 +-
+ Sources/SWBUtil/PbxCp.swift                   |  6 +--
  Sources/SWBUtil/Signatures.swift              |  2 +-
- .../CoreQualificationTester.swift             |  2 +-
+ .../CoreQualificationTester.swift             |  4 +-
  Tests/SWBCoreTests/CommandLineSpecTests.swift |  2 +-
- .../CodeSignTaskConstructionTests.swift       | 48 +++++++++----------
+ .../CodeSignTaskConstructionTests.swift       | 46 +++++++++----------
  .../MergeableLibraryTests.swift               | 10 ++--
  .../PlatformTaskConstructionTests.swift       |  8 ++--
  .../PostprocessingTaskConstructionTests.swift |  4 +-
  .../SwiftTaskConstructionTests.swift          |  6 +--
- .../TaskConstructionTests.swift               | 26 +++++-----
+ .../TaskConstructionTests.swift               | 26 +++++------
  .../UnitTestTaskConstructionTests.swift       | 12 ++---
  .../WatchTaskConstructionTests.swift          | 12 ++---
  .../SignatureCollectionActionTests.swift      |  4 +-
  Tests/SWBUtilTests/MiscTests.swift            |  2 +-
  Tests/SWBUtilTests/SignaturesTests.swift      |  4 +-
  .../SwiftBuildTests/BuildOperationTests.swift | 16 +++----
- 32 files changed, 106 insertions(+), 106 deletions(-)
+ 44 files changed, 124 insertions(+), 124 deletions(-)
 
+diff --git a/Plugins/launch-xcode/launch-xcode.swift b/Plugins/launch-xcode/launch-xcode.swift
+index 674b8be7..9e4e3edb 100644
+--- a/Plugins/launch-xcode/launch-xcode.swift
++++ b/Plugins/launch-xcode/launch-xcode.swift
+@@ -40,7 +40,7 @@ struct LaunchXcode: CommandPlugin {
+ 
+         print("Launching Xcode...")
+         let process = Process()
+-        process.executableURL = URL(fileURLWithPath: "/usr/bin/open")
++        process.executableURL = URL(fileURLWithPath: "open")
+         process.arguments = ["-n", "-F", "-W", "--env", "XCBBUILDSERVICE_PATH=\(buildServiceURL.path())", "-b", "com.apple.dt.Xcode"]
+         process.standardOutput = nil
+         process.standardError = nil
 diff --git a/Plugins/run-xcodebuild/run-xcodebuild.swift b/Plugins/run-xcodebuild/run-xcodebuild.swift
-index 710a84a..c83982d 100644
+index 710a84a2..d403f4c9 100644
 --- a/Plugins/run-xcodebuild/run-xcodebuild.swift
 +++ b/Plugins/run-xcodebuild/run-xcodebuild.swift
 @@ -39,7 +39,7 @@ struct RunXcodebuild: CommandPlugin {
@@ -47,38 +72,77 @@ index 710a84a..c83982d 100644
  
          let process = Process()
 -        process.executableURL = URL(fileURLWithPath: "/usr/bin/xcrun")
-+        process.executableURL = URL(fileURLWithPath: "@xcrun@/bin/xcrun")
++        process.executableURL = URL(fileURLWithPath: "xcrun")
          process.arguments = ["xcodebuild"] + args.remainingArguments
          process.environment = ProcessInfo.processInfo.environment.merging(["XCBBUILDSERVICE_PATH": buildServiceURL.path()]) { _, new in new }
          try await process.run()
-diff --git a/Sources/SWBAndroidPlatform/Plugin.swift b/Sources/SWBAndroidPlatform/Plugin.swift
-index 117e7c6..6014cad 100644
---- a/Sources/SWBAndroidPlatform/Plugin.swift
-+++ b/Sources/SWBAndroidPlatform/Plugin.swift
-@@ -118,7 +118,7 @@ struct AndroidPlatformExtension: PlatformInfoExtension {
-             "GENERATE_TEXT_BASED_STUBS": "NO",
-             "GENERATE_INTERMEDIATE_TEXT_BASED_STUBS": "NO",
- 
--            "CHOWN": "/usr/bin/chown",
-+            "CHOWN": "@coreutils@/bin/chown",
- 
-             "LIBTOOL": .plString(host.imageFormat.executableName(basename: "llvm-lib")),
-             "AR": .plString(host.imageFormat.executableName(basename: "llvm-ar")),
+diff --git a/Sources/SWBApplePlatform/Specs/DTrace.xcspec b/Sources/SWBApplePlatform/Specs/DTrace.xcspec
+index 6c77a0b3..9fbf6d48 100644
+--- a/Sources/SWBApplePlatform/Specs/DTrace.xcspec
++++ b/Sources/SWBApplePlatform/Specs/DTrace.xcspec
+@@ -15,7 +15,7 @@
+         Type = Compiler;
+         Name = "DTrace";
+         Description = "Invoke the 'dtrace' command line utility to compile a DTrace script file.";
+-        CommandLine = "/usr/sbin/dtrace [options] -s $(InputFileRelativePath) -o $(DerivedFilesDir)/$(InputFileBase).h";
++        CommandLine = "dtrace [options] -s $(InputFileRelativePath) -o $(DerivedFilesDir)/$(InputFileBase).h";
+         RuleName = "CompileDTraceScript $(InputFileRelativePath)";
+         ExecDescription = "Process DTrace script $(InputFileName)";
+         ProgressDescription = "Processing $(CommandProgressByType) DTrace scripts";
+diff --git a/Sources/SWBApplePlatform/Specs/OSACompile.xcspec b/Sources/SWBApplePlatform/Specs/OSACompile.xcspec
+index 4e82f5e9..c2c368be 100644
+--- a/Sources/SWBApplePlatform/Specs/OSACompile.xcspec
++++ b/Sources/SWBApplePlatform/Specs/OSACompile.xcspec
+@@ -18,7 +18,7 @@
+         Name = "OSACompile";
+         Description = "AppleScript Compiler";
+         Vendor = "Apple";
+-        CommandLine = "/usr/bin/osacompile -l AppleScript -d -o $(ProductResourcesDir)/$(InputFileBase).scpt [options] $(InputFileRelativePath)";
++        CommandLine = "osacompile -l AppleScript -d -o $(ProductResourcesDir)/$(InputFileBase).scpt [options] $(InputFileRelativePath)";
+         RuleName = "OSACompile $(InputFileRelativePath)";
+         ExecDescription = "Compile $(InputFileName)";
+         ProgressDescription = "Compiling $(CommandProgressByType) AppleScripts";
 diff --git a/Sources/SWBBuildService/Messages.swift b/Sources/SWBBuildService/Messages.swift
-index 070b5d3..47c7c3b 100644
+index 4f2e6ad2..55ab0778 100644
 --- a/Sources/SWBBuildService/Messages.swift
 +++ b/Sources/SWBBuildService/Messages.swift
-@@ -192,7 +192,7 @@ extension SetSessionWorkspaceContainerPathRequest: PIFProvidingRequest {
+@@ -190,7 +190,7 @@ extension SetSessionWorkspaceContainerPathRequest: PIFProvidingRequest {
              try fs.createDirectory(dir, recursive: true)
              let pifPath = dir.join(Foundation.UUID().description + ".json")
              let argument = isProject ? "-project" : "-workspace"
 -            let result = try await Process.getOutput(url: URL(fileURLWithPath: "/usr/bin/xcrun"), arguments: ["xcodebuild", "-dumpPIF", pifPath.str, argument, path.str], currentDirectoryURL: URL(fileURLWithPath: containerPath.dirname.str, isDirectory: true), environment: Environment.current.addingContents(of: [.developerDir: session.core.developerPath.path.str]))
-+            let result = try await Process.getOutput(url: URL(fileURLWithPath: "@xcrun@/bin/xcrun"), arguments: ["xcodebuild", "-dumpPIF", pifPath.str, argument, path.str], currentDirectoryURL: URL(fileURLWithPath: containerPath.dirname.str, isDirectory: true), environment: Environment.current.addingContents(of: [.developerDir: session.core.developerPath.path.str]))
++            let result = try await Process.getOutput(url: URL(fileURLWithPath: "xcrun"), arguments: ["xcodebuild", "-dumpPIF", pifPath.str, argument, path.str], currentDirectoryURL: URL(fileURLWithPath: containerPath.dirname.str, isDirectory: true), environment: Environment.current.addingContents(of: [.developerDir: session.core.developerPath.path.str]))
              if !result.exitStatus.isSuccess {
                  throw StubError.error("Could not dump PIF for '\(path.str)': \(String(decoding: result.stderr, as: UTF8.self))")
              }
+diff --git a/Sources/SWBCore/BuildRuleSet.swift b/Sources/SWBCore/BuildRuleSet.swift
+index a9aef7c2..1eda835b 100644
+--- a/Sources/SWBCore/BuildRuleSet.swift
++++ b/Sources/SWBCore/BuildRuleSet.swift
+@@ -160,7 +160,7 @@ extension Core {
+         let shouldRunDuringInstallAPI = scope.evaluate(BuiltinMacros.APPLY_RULES_IN_INSTALLAPI)
+ 
+         // FIXME: There needs to be a way to specify the interpreter
+-        let action = BuildRuleScriptAction(guid: guid, name: name, interpreterPath: "/bin/sh", scriptSource: scriptContents, inputFiles: inputFiles, inputFileLists: inputFileLists, outputFiles: outputFiles, outputFileLists: outputFileLists, dependencyInfo: dependencyInfo, runOncePerArchitecture: runOncePerArchitecture, runDuringInstallAPI: shouldRunDuringInstallAPI, runDuringInstallHeaders: false)
++        let action = BuildRuleScriptAction(guid: guid, name: name, interpreterPath: "sh", scriptSource: scriptContents, inputFiles: inputFiles, inputFileLists: inputFileLists, outputFiles: outputFiles, outputFileLists: outputFileLists, dependencyInfo: dependencyInfo, runOncePerArchitecture: runOncePerArchitecture, runDuringInstallAPI: shouldRunDuringInstallAPI, runDuringInstallHeaders: false)
+ 
+         let condition: any BuildRuleCondition
+         switch inputSpecifier {
+diff --git a/Sources/SWBCore/SDKRegistry.swift b/Sources/SWBCore/SDKRegistry.swift
+index 5fb5a318..0770b232 100644
+--- a/Sources/SWBCore/SDKRegistry.swift
++++ b/Sources/SWBCore/SDKRegistry.swift
+@@ -1099,7 +1099,7 @@ public final class SDKRegistry: SDKRegistryLookup, CustomStringConvertible, Send
+                 "GENERATE_TEXT_BASED_STUBS": "NO",
+                 "GENERATE_INTERMEDIATE_TEXT_BASED_STUBS": "NO",
+ 
+-                "CHOWN": "/usr/bin/chown",
++                "CHOWN": "chown",
+ 
+                 // TODO are these going to be appropriate for all kinds of SDK's?
+                 // SwiftSDK _could_ have tool entries for these, so use them if they are available
 diff --git a/Sources/SWBCore/SpecImplementations/CommandLineToolSpec.swift b/Sources/SWBCore/SpecImplementations/CommandLineToolSpec.swift
-index 116a390..66d030f 100644
+index cee454e4..3b6c1d51 100644
 --- a/Sources/SWBCore/SpecImplementations/CommandLineToolSpec.swift
 +++ b/Sources/SWBCore/SpecImplementations/CommandLineToolSpec.swift
 @@ -246,7 +246,7 @@ extension DiscoveredCommandLineToolSpecInfo {
@@ -91,7 +155,7 @@ index 116a390..66d030f 100644
              let lines = Set(outputString.split(separator: "\n").map(String.init)) // version info is printed once per architecture slice, but we never expect them to differ
              return try construct(AppleGenericVersionInfo(string: lines.only ?? outputString))
 diff --git a/Sources/SWBCore/SpecImplementations/Tools/CodeSign.swift b/Sources/SWBCore/SpecImplementations/Tools/CodeSign.swift
-index d8d7ead..ea8fb21 100644
+index 8f0dd409..2932af97 100644
 --- a/Sources/SWBCore/SpecImplementations/Tools/CodeSign.swift
 +++ b/Sources/SWBCore/SpecImplementations/Tools/CodeSign.swift
 @@ -20,7 +20,7 @@ public final class CodesignToolSpec : CommandLineToolSpec, SpecIdentifierType, @
@@ -99,28 +163,54 @@ index d8d7ead..ea8fb21 100644
          var codesign = Path(cbc.scope.evaluate(BuiltinMacros.CODESIGN))
          if codesign.isEmpty {
 -            codesign = Path("/usr/bin/codesign")
-+            codesign = Path("@sigtool@/bin/codesign")
++            codesign = Path("codesign")
          }
          if !codesign.isAbsolute {
-             codesign = resolveExecutablePath(cbc, codesign)
+             codesign = resolveExecutablePath(cbc.producer, codesign)
+diff --git a/Sources/SWBCore/SpecImplementations/Tools/MkdirTool.swift b/Sources/SWBCore/SpecImplementations/Tools/MkdirTool.swift
+index 78feb6d3..fa5aa2d5 100644
+--- a/Sources/SWBCore/SpecImplementations/Tools/MkdirTool.swift
++++ b/Sources/SWBCore/SpecImplementations/Tools/MkdirTool.swift
+@@ -21,7 +21,7 @@ public final class MkdirToolSpec : CommandLineToolSpec, SpecIdentifierType, @unc
+         let outputs: [any PlannedNode] = [delegate.createNode(output), delegate.createVirtualNode("MkDir \(output.str)")]
+         delegate.createTask(
+             type: self, ruleInfo: ["MkDir", output.str],
+-            commandLine: ["/bin/mkdir", "-p", output.str],
++            commandLine: ["mkdir", "-p", output.str],
+             environment: EnvironmentBindings(),
+             workingDirectory: cbc.producer.defaultWorkingDirectory,
+             inputs: [], outputs: outputs, action: nil,
+diff --git a/Sources/SWBCore/SpecImplementations/Tools/SymlinkTool.swift b/Sources/SWBCore/SpecImplementations/Tools/SymlinkTool.swift
+index 0d889a54..f325311e 100644
+--- a/Sources/SWBCore/SpecImplementations/Tools/SymlinkTool.swift
++++ b/Sources/SWBCore/SpecImplementations/Tools/SymlinkTool.swift
+@@ -40,7 +40,7 @@ public final class SymlinkToolSpec : CommandLineToolSpec, SpecIdentifierType, @u
+             toPath = destination.normalize().str
+         }
+ 
+-        let commandLine = ["/bin/ln", "-sfh", toPath, outputPath.str]
++        let commandLine = ["ln", "-sfh", toPath, outputPath.str]
+         delegate.createTask(
+             type: self, ruleInfo: ["SymLink", outputPath.str, toPath],
+             commandLine: commandLine, environment: environmentFromSpec(cbc, delegate),
 diff --git a/Sources/SWBCore/SpecImplementations/Tools/TouchTool.swift b/Sources/SWBCore/SpecImplementations/Tools/TouchTool.swift
-index e6997b7..9644d09 100644
+index 57ab5f1a..cdb6a6f5 100644
 --- a/Sources/SWBCore/SpecImplementations/Tools/TouchTool.swift
 +++ b/Sources/SWBCore/SpecImplementations/Tools/TouchTool.swift
-@@ -45,7 +45,7 @@ final class TouchToolSpec : CommandLineToolSpec, SpecIdentifierType, @unchecked
-             // FIXME: Need to properly quote the path here, or generally handle this better
-             commandLine = [commandShellPath, "/c", "copy /b \"\(input.absolutePath.str)\" +,,"]
+@@ -44,7 +44,7 @@ final class TouchToolSpec : CommandLineToolSpec, SpecIdentifierType, @unchecked
+             }
+             commandLine = [commandShellPath, "/c", "copy", "/b", input.absolutePath.str, "+,,"]
          } else {
 -            commandLine = ["/usr/bin/touch", "-c", input.absolutePath.str]
-+            commandLine = ["@coreutils@/bin/touch", "-c", input.absolutePath.str]
++            commandLine = ["touch", "-c", input.absolutePath.str]
          }
  
          delegate.createTask(type: self, ruleInfo: ["Touch", input.absolutePath.str], commandLine: commandLine, environment: EnvironmentBindings(), workingDirectory: cbc.producer.defaultWorkingDirectory, inputs: [delegate.createNode(input.absolutePath)], outputs: outputs, mustPrecede: [], action: delegate.taskActionCreationDelegate.createDeferredExecutionTaskActionIfRequested(userPreferences: cbc.producer.userPreferences), execDescription: resolveExecutionDescription(cbc, delegate, lookup: outputFileOverride), enableSandboxing: enableSandboxing)
 diff --git a/Sources/SWBCore/Specs/CoreBuildSystem.xcspec b/Sources/SWBCore/Specs/CoreBuildSystem.xcspec
-index 467e061..cee7bd1 100644
+index 7593180b..4fe24daf 100644
 --- a/Sources/SWBCore/Specs/CoreBuildSystem.xcspec
 +++ b/Sources/SWBCore/Specs/CoreBuildSystem.xcspec
-@@ -3176,7 +3176,7 @@ For more information on mergeable libraries, see [Configuring your project to us
+@@ -3215,7 +3215,7 @@ For more information on mergeable libraries, see [Configuring your project to us
              {
                  Name = "JAVA_COMPILER";
                  Type = Path;
@@ -130,77 +220,123 @@ index 467e061..cee7bd1 100644
              {
                  Name = "JAVA_ARCHIVE_CLASSES";
 diff --git a/Sources/SWBCore/Specs/NativeBuildSystem.xcspec b/Sources/SWBCore/Specs/NativeBuildSystem.xcspec
-index b4fcfa8..79f4b99 100644
+index 65e3918c..4ec129a1 100644
 --- a/Sources/SWBCore/Specs/NativeBuildSystem.xcspec
 +++ b/Sources/SWBCore/Specs/NativeBuildSystem.xcspec
-@@ -823,23 +823,23 @@ When `GENERATE_INFOPLIST_FILE` is enabled, sets the value of the [CFBundleExecut
+@@ -751,7 +751,7 @@ When `GENERATE_INFOPLIST_FILE` is enabled, sets the value of the [CFBundleExecut
+             // Default OSACompiler
+             {   Name = OSAC;
+                 Type = Path;
+-                DefaultValue = "/usr/bin/osacompile";
++                DefaultValue = "osacompile";
+             },
+             {   Name = OTHER_OSAFLAGS;
+                 Type = StringList;
+@@ -819,15 +819,15 @@ When `GENERATE_INFOPLIST_FILE` is enabled, sets the value of the [CFBundleExecut
+             // Other tool settings
+             {   Name = CP;
+                 Type = Path;
+-                DefaultValue = "/bin/cp";
++                DefaultValue = "cp";
              },
              {   Name = ICONV;
                  Type = Path;
 -                DefaultValue = "/usr/bin/iconv";
-+                DefaultValue = "@libiconv@/bin/iconv";
++                DefaultValue = "iconv";
              },
              {   Name = SED;
                  Type = Path;
 -                DefaultValue = "/usr/bin/sed";
-+                DefaultValue = "@gnused@/bin/sed";
++                DefaultValue = "sed";
              },
              {   Name = CHOWN;
                  Type = Path;
--                DefaultValue = "/usr/sbin/chown";
-+                DefaultValue = "@coreutils@/bin/chown";
+@@ -835,11 +835,11 @@ When `GENERATE_INFOPLIST_FILE` is enabled, sets the value of the [CFBundleExecut
              },
              {   Name = CHMOD;
                  Type = Path;
 -                DefaultValue = "/bin/chmod";
-+                DefaultValue = "@coreutils@/bin/chmod";
++                DefaultValue = "chmod";
              },
              {   Name = DIFF;
                  Type = Path;
 -                DefaultValue = "/usr/bin/diff";
-+                DefaultValue = "@diffutils@/bin/diff";
++                DefaultValue = "diff";
              },
  
              // Utility settings
-diff --git a/Sources/SWBGenericUnixPlatform/Plugin.swift b/Sources/SWBGenericUnixPlatform/Plugin.swift
-index 632a4ca..5b18fc4 100644
---- a/Sources/SWBGenericUnixPlatform/Plugin.swift
-+++ b/Sources/SWBGenericUnixPlatform/Plugin.swift
-@@ -120,8 +120,8 @@ struct GenericUnixSDKRegistryExtension: SDKRegistryExtension {
-                 "GENERATE_TEXT_BASED_STUBS": "NO",
-                 "GENERATE_INTERMEDIATE_TEXT_BASED_STUBS": "NO",
+diff --git a/Sources/SWBProjectModel/PIFGenerationModel.swift b/Sources/SWBProjectModel/PIFGenerationModel.swift
+index 00e96dc0..88a997e4 100644
+--- a/Sources/SWBProjectModel/PIFGenerationModel.swift
++++ b/Sources/SWBProjectModel/PIFGenerationModel.swift
+@@ -356,7 +356,7 @@ public enum PIF {
+         /// Adds a "shell script" build phase, i.e. one that runs a custom shell script as part of the build.
+         @discardableResult public func addShellScriptBuildPhase(
+             name: String,
+-            shellPath: String = "/bin/sh",
++            shellPath: String = "sh",
+             scriptContents: String,
+             inputPaths: [String],
+             outputPaths: [String],
+@@ -382,7 +382,7 @@ public enum PIF {
+         /// Adds a "shell script" build phase, i.e. one that runs a custom shell script as part of the build.
+         @discardableResult public func addShellScriptBuildPhaseWithConfigurableSandboxing(
+             name: String,
+-            shellPath: String = "/bin/sh",
++            shellPath: String = "sh",
+             scriptContents: String,
+             inputPaths: [String],
+             outputPaths: [String],
+diff --git a/Sources/SWBTaskConstruction/TaskProducers/BuildPhaseTaskProducers/ShellScriptTaskProducer.swift b/Sources/SWBTaskConstruction/TaskProducers/BuildPhaseTaskProducers/ShellScriptTaskProducer.swift
+index fedc42f6..111e3272 100644
+--- a/Sources/SWBTaskConstruction/TaskProducers/BuildPhaseTaskProducers/ShellScriptTaskProducer.swift
++++ b/Sources/SWBTaskConstruction/TaskProducers/BuildPhaseTaskProducers/ShellScriptTaskProducer.swift
+@@ -201,7 +201,7 @@ final class ShellScriptTaskProducer: PhasedTaskProducer, TaskProducer, ShellBase
+         let ruleInfo = ["PhaseScriptExecution", shellScriptBuildPhase.name, scriptFilePath.str]
+         // NOTE: We must escape the script path, as `/bin/sh -c` will reevaluate.
+         let execDescription = "Run custom shell script '\(shellScriptBuildPhase.name)'"
+-        let commandLine = ["/bin/sh", "-c", scriptFilePath.str.escaped]
++        let commandLine = ["sh", "-c", scriptFilePath.str.escaped]
  
--                "CHOWN": "/usr/bin/chown",
--                "AR": "llvm-ar",
-+                "CHOWN": "@coreutils@/bin/chown",
-+                "AR": "@llvm@/bin/llvm-ar",
-             ]
-         default:
-             defaultProperties = [:]
+         let isSandboxingEnabled: Bool
+ 
+diff --git a/Sources/SWBTaskConstruction/TaskProducers/OtherTaskProducers/GeneratedFilesTaskProducer.swift b/Sources/SWBTaskConstruction/TaskProducers/OtherTaskProducers/GeneratedFilesTaskProducer.swift
+index 17f0d1e0..c6ccf305 100644
+--- a/Sources/SWBTaskConstruction/TaskProducers/OtherTaskProducers/GeneratedFilesTaskProducer.swift
++++ b/Sources/SWBTaskConstruction/TaskProducers/OtherTaskProducers/GeneratedFilesTaskProducer.swift
+@@ -62,7 +62,7 @@ final class GeneratedFilesTaskProducer: PhasedTaskProducer, TaskProducer {
+             await appendGeneratedTasks(&tasks) { delegate in
+                 await context.productPackagingSpec.constructProductEntitlementsTasks(CommandBuildContext(producer: context, scope: scope, inputs: [FileToBuild(context: context, absolutePath: input)], output: entitlements.output), delegate, entitlementsVariant, fs: context.workspaceContext.fs)
+ 
+-                delegate.createTask(type: context.productPackagingSpec, ruleInfo: ["ProcessProductPackagingDER", entitlements.output.str, entitlements.outputDer.str], commandLine: ["/usr/bin/derq", "query", "-f", "xml", "-i", entitlements.output.str, "-o", entitlements.outputDer.str, "--raw"], environment: EnvironmentBindings([:]), workingDirectory: context.defaultWorkingDirectory, inputs: [delegate.createNode(entitlements.output)], outputs: [delegate.createNode(entitlements.outputDer)], action: delegate.taskActionCreationDelegate.createDeferredExecutionTaskActionIfRequested(userPreferences: context.userPreferences), execDescription: "Generate DER entitlements", enableSandboxing: context.productPackagingSpec.enableSandboxing)
++                delegate.createTask(type: context.productPackagingSpec, ruleInfo: ["ProcessProductPackagingDER", entitlements.output.str, entitlements.outputDer.str], commandLine: ["derq", "query", "-f", "xml", "-i", entitlements.output.str, "-o", entitlements.outputDer.str, "--raw"], environment: EnvironmentBindings([:]), workingDirectory: context.defaultWorkingDirectory, inputs: [delegate.createNode(entitlements.output)], outputs: [delegate.createNode(entitlements.outputDer)], action: delegate.taskActionCreationDelegate.createDeferredExecutionTaskActionIfRequested(userPreferences: context.userPreferences), execDescription: "Generate DER entitlements", enableSandboxing: context.productPackagingSpec.enableSandboxing)
+             }
+         }
+ 
 diff --git a/Sources/SWBTaskExecution/BuildDescription.swift b/Sources/SWBTaskExecution/BuildDescription.swift
-index 53aae73..15fc1ea 100644
+index f2279da3..2fb2fd57 100644
 --- a/Sources/SWBTaskExecution/BuildDescription.swift
 +++ b/Sources/SWBTaskExecution/BuildDescription.swift
-@@ -896,7 +896,7 @@ package final class BuildDescriptionBuilder {
+@@ -893,7 +893,7 @@ package final class BuildDescriptionBuilder {
  
          var commandLine = commandLine
          if bypassActualTasks {
 -            commandLine = [ByteString(encodingAsUTF8: "/usr/bin/true")] + commandLine
-+            commandLine = [ByteString(encodingAsUTF8: "@coreutils@/bin/true")] + commandLine
++            commandLine = [ByteString(encodingAsUTF8: "true")] + commandLine
          }
  
          // Add the command definition.
-@@ -976,7 +976,7 @@ package final class BuildDescriptionBuilder {
+@@ -973,7 +973,7 @@ package final class BuildDescriptionBuilder {
      func addCustomCommand(_ task: any PlannedTask, tool: String, inputs: [any PlannedNode], outputs: [any PlannedNode], deps: DependencyDataStyle? = nil, allowMissingInputs: Bool, alwaysOutOfDate: Bool, description: [String]) throws {
          // Honor `bypassActualTasks`.
          if bypassActualTasks {
 -            try addSubprocessCommand(task, inputs: inputs, outputs: outputs, description: description, commandLine: ["/usr/bin/true"], allowMissingInputs: allowMissingInputs, alwaysOutOfDate: alwaysOutOfDate, isUnsafeToInterrupt: false)
-+            try addSubprocessCommand(task, inputs: inputs, outputs: outputs, description: description, commandLine: ["@coreutils@/bin/true"], allowMissingInputs: allowMissingInputs, alwaysOutOfDate: alwaysOutOfDate, isUnsafeToInterrupt: false)
++            try addSubprocessCommand(task, inputs: inputs, outputs: outputs, description: description, commandLine: ["true"], allowMissingInputs: allowMissingInputs, alwaysOutOfDate: alwaysOutOfDate, isUnsafeToInterrupt: false)
              return
          }
  
 diff --git a/Sources/SWBTaskExecution/TaskActions/CopyTiffTaskAction.swift b/Sources/SWBTaskExecution/TaskActions/CopyTiffTaskAction.swift
-index df1675a..9e4b37c 100644
+index df1675af..eb5056d4 100644
 --- a/Sources/SWBTaskExecution/TaskActions/CopyTiffTaskAction.swift
 +++ b/Sources/SWBTaskExecution/TaskActions/CopyTiffTaskAction.swift
 @@ -141,7 +141,7 @@ public final class CopyTiffTaskAction: TaskAction {
@@ -208,50 +344,47 @@ index df1675a..9e4b37c 100644
              // If we have a compression argument, pass through tiffutil.
              if let compression = options.compression {
 -                let tiffutilCommand = ["/usr/bin/tiffutil", "-\(compression)", input.str, "-out", output.str]
-+                let tiffutilCommand = ["@graphics_cmds@/bin/tiffutil", "-\(compression)", input.str, "-out", output.str]
++                let tiffutilCommand = ["tiffutil", "-\(compression)", input.str, "-out", output.str]
  
                  let processDelegate = TaskProcessDelegate(outputDelegate: outputDelegate)
                  do {
 diff --git a/Sources/SWBTaskExecution/TaskActions/EmbedSwiftStdLibTaskAction.swift b/Sources/SWBTaskExecution/TaskActions/EmbedSwiftStdLibTaskAction.swift
-index 40509fc..e2a3ae6 100644
+index 38501d22..c1aa44bc 100644
 --- a/Sources/SWBTaskExecution/TaskActions/EmbedSwiftStdLibTaskAction.swift
 +++ b/Sources/SWBTaskExecution/TaskActions/EmbedSwiftStdLibTaskAction.swift
-@@ -847,7 +847,7 @@ public final class EmbedSwiftStdLibTaskAction: TaskAction {
+@@ -839,7 +839,7 @@ public final class EmbedSwiftStdLibTaskAction: TaskAction {
              // Codesign the Swift libraries in $build_dir/$frameworks
              // but not the libraries in $build_dir/$unsigned_frameworks.
              if codeSignIdentity != nil && !swiftLibs.isEmpty {
 -                let codesign = Path(self.effectiveEnvironment["CODESIGN"] ?? "/usr/bin/codesign")
-+                let codesign = Path(self.effectiveEnvironment["CODESIGN"] ?? "@sigtool@/bin/codesign")
++                let codesign = Path(self.effectiveEnvironment["CODESIGN"] ?? "codesign")
  
                  // Swift libraries that are up-to-date get codesigned anyway
                  // (in case options changed or a previous build was incomplete).
 diff --git a/Sources/SWBTestSupport/CoreBasedTests.swift b/Sources/SWBTestSupport/CoreBasedTests.swift
-index ff76cf5..4d3ea5c 100644
+index 6beda66f..c7d8b15f 100644
 --- a/Sources/SWBTestSupport/CoreBasedTests.swift
 +++ b/Sources/SWBTestSupport/CoreBasedTests.swift
-@@ -227,9 +227,9 @@ extension CoreBasedTests {
+@@ -241,7 +241,7 @@ extension CoreBasedTests {
      package var libtoolPath: Path {
          get async throws {
              let (core, defaultToolchain) = try await coreAndToolchain()
 -            let fallbacklibtool = Path("/usr/bin/libtool")
-+            let fallbacklibtool = Path("@libtool@/bin/libtool")
++            let fallbacklibtool = Path("libtool")
              return try #require(defaultToolchain.executableSearchPaths.findExecutable(operatingSystem: core.hostOperatingSystem, basename: "libtool")
--                                ?? defaultToolchain.executableSearchPaths.findExecutable(operatingSystem: core.hostOperatingSystem, basename: "llvm-ar")
-+                                ?? defaultToolchain.executableSearchPaths.findExecutable(operatingSystem: core.hostOperatingSystem, basename: "@llvm@/bin/llvm-ar")
+                                 ?? defaultToolchain.executableSearchPaths.findExecutable(operatingSystem: core.hostOperatingSystem, basename: "llvm-ar")
                                  ?? (localFS.exists(fallbacklibtool) ? fallbacklibtool : nil), "couldn't find libtool in default toolchain")
-         }
-     }
-@@ -238,7 +238,7 @@ extension CoreBasedTests {
+@@ -252,7 +252,7 @@ extension CoreBasedTests {
      package var llvmlibPath: Path {
          get async throws {
              let (core, defaultToolchain) = try await coreAndToolchain()
 -            let fallbacklibtool = Path("/usr/bin/llvm-lib")
-+            let fallbacklibtool = Path("@llvm@/bin/llvm-lib")
++            let fallbacklibtool = Path("llvm-lib")
              return try #require(defaultToolchain.executableSearchPaths.findExecutable(operatingSystem: core.hostOperatingSystem, basename: "llvm-lib") ?? (localFS.exists(fallbacklibtool) ? fallbacklibtool : nil), "couldn't find llvm-lib in default toolchain")
          }
      }
 diff --git a/Sources/SWBTestSupport/FSUtilities.swift b/Sources/SWBTestSupport/FSUtilities.swift
-index e95573a..972df55 100644
+index 75c193c9..a6b46a4b 100644
 --- a/Sources/SWBTestSupport/FSUtilities.swift
 +++ b/Sources/SWBTestSupport/FSUtilities.swift
 @@ -325,9 +325,9 @@ package extension FSProxy {
@@ -259,15 +392,15 @@ index e95573a..972df55 100644
          if self === localFS {
              if !shallow {
 -                _ = try await runProcess(["/usr/bin/codesign", "-s", "-", binary.join(path.basenameWithoutSuffix).str])
-+                _ = try await runProcess(["@sigtool@/bin/codesign", "-s", "-", binary.join(path.basenameWithoutSuffix).str])
++                _ = try await runProcess(["codesign", "-s", "-", binary.join(path.basenameWithoutSuffix).str])
              }
 -            _ = try await runProcess(["/usr/bin/codesign", "-s", "-", (shallow ? path : contents).str])
-+            _ = try await runProcess(["@sigtool@/bin/codesign", "-s", "-", (shallow ? path : contents).str])
++            _ = try await runProcess(["codesign", "-s", "-", (shallow ? path : contents).str])
          } else {
              try await writeFileContents(contents.join("_CodeSignature/CodeSignature")) { $0 <<< "signature" }
          }
 diff --git a/Sources/SWBTestSupport/LibraryGeneration.swift b/Sources/SWBTestSupport/LibraryGeneration.swift
-index 1a23807..3f750f3 100644
+index 1a238077..664f3732 100644
 --- a/Sources/SWBTestSupport/LibraryGeneration.swift
 +++ b/Sources/SWBTestSupport/LibraryGeneration.swift
 @@ -87,7 +87,7 @@ extension InstalledXcode {
@@ -275,7 +408,7 @@ index 1a23807..3f750f3 100644
              _ = try await xcrun(linkArgs, workingDirectory: workingDirectory)
              if needSigned {
 -                _ = try await runProcessWithDeveloperDirectory(["/usr/bin/codesign", "-s", "-", machoPath.str])
-+                _ = try await runProcessWithDeveloperDirectory(["@sigtool@/bin/codesign", "-s", "-", machoPath.str])
++                _ = try await runProcessWithDeveloperDirectory(["codesign", "-s", "-", machoPath.str])
              }
              return machoPath
          }
@@ -284,12 +417,70 @@ index 1a23807..3f750f3 100644
                      _ = try await xcrun(["-sdk", platform.sdkName, "clang", "-dynamiclib", "-target", target] + targetVariantArgs + linkerArgs + ["-o", machoPath.str, objectPath.str])
                      if needSigned {
 -                        _ = try await runProcessWithDeveloperDirectory(["/usr/bin/codesign", "-s", "-", machoPath.str])
-+                        _ = try await runProcessWithDeveloperDirectory(["@sigtool@/bin/codesign", "-s", "-", machoPath.str])
++                        _ = try await runProcessWithDeveloperDirectory(["codesign", "-s", "-", machoPath.str])
                      }
                      machos.append(machoPath)
                  }
+diff --git a/Sources/SWBTestSupport/Projects/AppClips.swift b/Sources/SWBTestSupport/Projects/AppClips.swift
+index 46c235b3..af32fdc9 100644
+--- a/Sources/SWBTestSupport/Projects/AppClips.swift
++++ b/Sources/SWBTestSupport/Projects/AppClips.swift
+@@ -36,7 +36,7 @@ extension TestProject {
+                 ]),
+             buildConfigurations: [
+                 TestBuildConfiguration("Debug", buildSettings: [
+-                    "ASSETCATALOG_EXEC": "$(DEVELOPER_DIR)/usr/bin/actool",
++                    "ASSETCATALOG_EXEC": "actool",
+                     "ALWAYS_SEARCH_USER_PATHS": "NO",
+                     "ASSETCATALOG_COMPILER_APPICON_NAME": "Foo",
+                     "CODE_SIGNING_ALLOWED": "NO",
+diff --git a/Sources/SWBTestSupport/SkippedTestSupport.swift b/Sources/SWBTestSupport/SkippedTestSupport.swift
+index 48eb9fbf..f1662a83 100644
+--- a/Sources/SWBTestSupport/SkippedTestSupport.swift
++++ b/Sources/SWBTestSupport/SkippedTestSupport.swift
+@@ -243,14 +243,14 @@ extension Trait where Self == Testing.ConditionTrait {
+                 return true
+             }
+ 
+-            let apt = try await checkInstalled(hostOS: .linux, packageManagerPath: Path("/usr/bin/apt"), args: ["list", "--installed", "apt"], packages: apt, regex: #/(?<name>.+)\//#)
++            let apt = try await checkInstalled(hostOS: .linux, packageManagerPath: Path("apt"), args: ["list", "--installed", "apt"], packages: apt, regex: #/(?<name>.+)\//#)
+ 
+             // spelled `--installed` in newer versions of yum, but Amazon Linux 2 is on older versions
+-            let yum = try await checkInstalled(hostOS: .linux, packageManagerPath: Path("/usr/bin/yum"), args: ["list", "installed", "yum"], packages: yum, regex: #/(?<name>.+)\./#)
++            let yum = try await checkInstalled(hostOS: .linux, packageManagerPath: Path("yum"), args: ["list", "installed", "yum"], packages: yum, regex: #/(?<name>.+)\./#)
+ 
+-            let freebsd = try await checkInstalled(hostOS: .freebsd, packageManagerPath: Path("/usr/sbin/pkg"), args: ["info"], packages: freebsd, regex: #/^Name(?:[ ]+): (?<name>.+)$/#)
++            let freebsd = try await checkInstalled(hostOS: .freebsd, packageManagerPath: Path("pkg"), args: ["info"], packages: freebsd, regex: #/^Name(?:[ ]+): (?<name>.+)$/#)
+ 
+-            let openbsd = try await checkInstalled(hostOS: .openbsd, packageManagerPath: Path("/usr/sbin/pkg_info"), args: ["-A"], packages: openbsd, regex: #/^(?<name>.+)-.*/#)
++            let openbsd = try await checkInstalled(hostOS: .openbsd, packageManagerPath: Path("pkg_info"), args: ["-A"], packages: openbsd, regex: #/^(?<name>.+)-.*/#)
+ 
+             return apt && yum && freebsd && openbsd
+         }
+diff --git a/Sources/SWBTestSupport/TestWorkspaces.swift b/Sources/SWBTestSupport/TestWorkspaces.swift
+index 9d550ea4..7c8370c0 100644
+--- a/Sources/SWBTestSupport/TestWorkspaces.swift
++++ b/Sources/SWBTestSupport/TestWorkspaces.swift
+@@ -690,7 +690,7 @@ package final class TestShellScriptBuildPhase: TestInternalBuildPhase {
+         return overriddenGuid ?? "\(Self.guidCode)\(guidIdentifier)"
+     }
+ 
+-    package init(name: String, guid: String? = nil, shellPath: String = "/bin/sh", originalObjectID: String, contents: String = "", inputs: [String] = [], inputFileLists: [String] = [], outputs: [String] = [], outputFileLists: [String] = [], onlyForDeployment: Bool = false, emitEnvironment: Bool = false, dependencyInfo: SWBProtocol.DependencyInfo? = nil, alwaysOutOfDate: Bool = false, sandboxingOverride: SWBProtocol.SandboxingOverride = .basedOnBuildSetting, alwaysRunForInstallHdrs: Bool = false) {
++    package init(name: String, guid: String? = nil, shellPath: String = "sh", originalObjectID: String, contents: String = "", inputs: [String] = [], inputFileLists: [String] = [], outputs: [String] = [], outputFileLists: [String] = [], onlyForDeployment: Bool = false, emitEnvironment: Bool = false, dependencyInfo: SWBProtocol.DependencyInfo? = nil, alwaysOutOfDate: Bool = false, sandboxingOverride: SWBProtocol.SandboxingOverride = .basedOnBuildSetting, alwaysRunForInstallHdrs: Bool = false) {
+         self.name = name
+         self.overriddenGuid = guid
+         self.shellPath = shellPath
+@@ -1194,7 +1194,7 @@ package final class TestExternalTarget: TestInternalTarget {
+     private let dependencies: [String]
+     private let passBuildSettingsInEnvironment: Bool?
+ 
+-    package init(_ name: String, toolPath: String = "/usr/bin/make", arguments: String = "$(ACTION)", workingDirectory: String = "$(PROJECT_DIR)", buildConfigurations: [TestBuildConfiguration]? = nil, customTasks: [TestCustomTask] = [], dependencies: [String] = [], passBuildSettingsInEnvironment: Bool? = nil) {
++    package init(_ name: String, toolPath: String = "make", arguments: String = "$(ACTION)", workingDirectory: String = "$(PROJECT_DIR)", buildConfigurations: [TestBuildConfiguration]? = nil, customTasks: [TestCustomTask] = [], dependencies: [String] = [], passBuildSettingsInEnvironment: Bool? = nil) {
+         self.name = name
+         self.toolPath = toolPath
+         self.arguments = arguments
 diff --git a/Sources/SWBTestSupport/Xcode.swift b/Sources/SWBTestSupport/Xcode.swift
-index 969fc92..087816c 100644
+index 969fc923..c1d7e43a 100644
 --- a/Sources/SWBTestSupport/Xcode.swift
 +++ b/Sources/SWBTestSupport/Xcode.swift
 @@ -32,7 +32,7 @@ package struct InstalledXcode: Sendable {
@@ -297,12 +488,12 @@ index 969fc92..087816c 100644
  
      package func xcrun(_ args: [String], workingDirectory: Path? = nil, redirectStderr: Bool = true) async throws -> String {
 -        return try await runProcessWithDeveloperDirectory(["/usr/bin/xcrun"] + args, workingDirectory: workingDirectory, overrideDeveloperDirectory: self.developerDirPath.str, redirectStderr: redirectStderr)
-+        return try await runProcessWithDeveloperDirectory(["@xcrun@/bin/xcrun"] + args, workingDirectory: workingDirectory, overrideDeveloperDirectory: self.developerDirPath.str, redirectStderr: redirectStderr)
++        return try await runProcessWithDeveloperDirectory(["xcrun"] + args, workingDirectory: workingDirectory, overrideDeveloperDirectory: self.developerDirPath.str, redirectStderr: redirectStderr)
      }
  
      package func productBuildVersion() throws -> ProductBuildVersion {
 diff --git a/Sources/SWBUniversalPlatform/Specs/CodeSign.xcspec b/Sources/SWBUniversalPlatform/Specs/CodeSign.xcspec
-index 02ec3dd..51629c9 100644
+index 02ec3dd5..5682a27f 100644
 --- a/Sources/SWBUniversalPlatform/Specs/CodeSign.xcspec
 +++ b/Sources/SWBUniversalPlatform/Specs/CodeSign.xcspec
 @@ -17,7 +17,7 @@
@@ -310,12 +501,40 @@ index 02ec3dd..51629c9 100644
          ExecDescription = "Sign $(InputFileName)";
          ProgressDescription = "Signing product";
 -        ExecPath = "/usr/bin/codesign";
-+        ExecPath = "@sigtool@/bin/codesign";
++        ExecPath = "codesign";
          // codesign is currently not safe to interrupt, tracked by 20712615.
          IsUnsafeToInterrupt = YES;
          CommandOutputParser = (
+diff --git a/Sources/SWBUtil/PbxCp.swift b/Sources/SWBUtil/PbxCp.swift
+index 2d3bedd0..76bb7e70 100644
+--- a/Sources/SWBUtil/PbxCp.swift
++++ b/Sources/SWBUtil/PbxCp.swift
+@@ -106,12 +106,12 @@ fileprivate func stripFile(_ srcPath: Path, _ dstPath: Path, _ strip_tool_path:
+     args.append(srcPath.str)
+     args.append("-o")
+     args.append(dstPath.str)
+-    let toolPath = strip_tool_path ?? Path("/usr/bin/strip")
++    let toolPath = strip_tool_path ?? Path("strip")
+     try await spawnTaskAndWait(toolPath, args, nil, nil, dryRun, stream)
+ }
+ 
+ fileprivate func stripBitcodeFile(_ srcPath: Path, _ dstPath: Path, _ bitcode_strip_tool_path: Path?, _ bitcode_strip_flag: String, _ dryRun: Bool, _ stream: OutputByteStream) async throws {
+-    let toolPath = bitcode_strip_tool_path ?? Path("/usr/bin/bitcode_strip")
++    let toolPath = bitcode_strip_tool_path ?? Path("bitcode_strip")
+     // Note that srcPath and dstPath could be the same, in which case the file gets stripped in-place.
+     let args = [srcPath.str, bitcode_strip_flag, "-o", dstPath.str]
+     try await spawnTaskAndWait(toolPath, args, nil, nil, dryRun, stream)
+@@ -512,7 +512,7 @@ struct CopyOptions: AsyncParsableCommand {
+     var stripUnsignedBinaries: Bool = false
+ 
+     @Option(name: .customLong("strip-tool", withSingleDash: true), help: "path to strip tool; defaults to /usr/bin/strip")
+-    var stripTool = Path("/usr/bin/strip")
++    var stripTool = Path("strip")
+ 
+     @Option(name: .customLong("strip-flags", withSingleDash: true), help: "flags to pass to strip tool; defaults to -S -no_atom_info")
+     var stripFlags: String = "-S -no_atom_info"
 diff --git a/Sources/SWBUtil/Signatures.swift b/Sources/SWBUtil/Signatures.swift
-index eb3c1e2..180dcc6 100644
+index eb3c1e27..09f34b84 100644
 --- a/Sources/SWBUtil/Signatures.swift
 +++ b/Sources/SWBUtil/Signatures.swift
 @@ -140,7 +140,7 @@ public struct CodeSignatureInfo: Codable, Sendable {
@@ -323,12 +542,12 @@ index eb3c1e2..180dcc6 100644
      static public func invokeCodesignVerification(for path: String, treatUnsignedAsError: Bool) async throws {
          #if os(macOS)
 -        let executionResult = try await Process.getOutput(url: URL(filePath: "/usr/bin/codesign"), arguments: ["-vvvv", path])
-+        let executionResult = try await Process.getOutput(url: URL(filePath: "@sigtool@/bin/codesign"), arguments: ["-vvvv", path])
++        let executionResult = try await Process.getOutput(url: URL(filePath: "codesign"), arguments: ["-vvvv", path])
          let stdoutContent = String(data: executionResult.stdout, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
          let stderrContent = String(data: executionResult.stderr, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
  
 diff --git a/Sources/SwiftBuildTestSupport/CoreQualificationTester.swift b/Sources/SwiftBuildTestSupport/CoreQualificationTester.swift
-index 8495d9f..1e4dd60 100644
+index 8495d9ff..33026894 100644
 --- a/Sources/SwiftBuildTestSupport/CoreQualificationTester.swift
 +++ b/Sources/SwiftBuildTestSupport/CoreQualificationTester.swift
 @@ -326,7 +326,7 @@ extension FileContentsCheckingResult {
@@ -336,17 +555,26 @@ index 8495d9f..1e4dd60 100644
              switch destination {
              case .signed:
 -                let bytes = try await Array(xcode.xcrun(["/usr/bin/codesign", "-a", slice.arch, "-d", "--entitlements", ":-", binaryPath.str], redirectStderr: false).utf8)
-+                let bytes = try await Array(xcode.xcrun(["@sigtool@/bin/codesign", "-a", slice.arch, "-d", "--entitlements", ":-", binaryPath.str], redirectStderr: false).utf8)
++                let bytes = try await Array(xcode.xcrun(["codesign", "-a", slice.arch, "-d", "--entitlements", ":-", binaryPath.str], redirectStderr: false).utf8)
                  plist = try !bytes.isEmpty ? PropertyList.fromBytes(bytes) : nil
              case .simulated:
                  // xcrun otool-classic [-arch arch] -X -s __TEXT __entitlements <path>
+@@ -352,7 +352,7 @@ extension FileContentsCheckingResult {
+ 
+                         let derPlist: PropertyListItem = try await withTemporaryDirectory { path in
+                             try localFS.write(path.join("in.der"), contents: ByteString(bytes))
+-                            try await runProcess(["/usr/bin/derq", "query", "-i", path.join("in.der").str, "-o", path.join("out.xml").str, "--xml"])
++                            try await runProcess(["derq", "query", "-i", path.join("in.der").str, "-o", path.join("out.xml").str, "--xml"])
+                             return try PropertyList.fromPath(path.join("out.xml"), fs: localFS)
+                         }
+                         #expect(plist == derPlist, "Expected both DER and plist entitlements to be equivalent")
 diff --git a/Tests/SWBCoreTests/CommandLineSpecTests.swift b/Tests/SWBCoreTests/CommandLineSpecTests.swift
-index 77813bc..03df67f 100644
+index 335444f7..e8f03ff3 100644
 --- a/Tests/SWBCoreTests/CommandLineSpecTests.swift
 +++ b/Tests/SWBCoreTests/CommandLineSpecTests.swift
-@@ -1721,7 +1721,7 @@ import SWBMacro
+@@ -1835,7 +1835,7 @@ import SWBMacro
              let commandShellPath = try #require(getEnvironmentVariable("ComSpec"), "Can't determine path to cmd.exe because the ComSpec environment variable is not set")
-             task.checkCommandLine([commandShellPath, "/c", "copy /b \"\(Path.root.join("tmp/input").str)\" +,,"])
+             task.checkCommandLine([commandShellPath, "/c", "copy", "/b", Path.root.join("tmp/input").str, "+,,"])
          } else {
 -            task.checkCommandLine(["/usr/bin/touch", "-c", Path.root.join("tmp/input").str])
 +            task.checkCommandLine(["@coreutils@/bin/touch", "-c", Path.root.join("tmp/input").str])
@@ -354,7 +582,7 @@ index 77813bc..03df67f 100644
          #expect(task.execDescription == "Touch input")
      }
 diff --git a/Tests/SWBTaskConstructionTests/CodeSignTaskConstructionTests.swift b/Tests/SWBTaskConstructionTests/CodeSignTaskConstructionTests.swift
-index 33972fe..838b3d0 100644
+index 65bc5eb1..913eb528 100644
 --- a/Tests/SWBTaskConstructionTests/CodeSignTaskConstructionTests.swift
 +++ b/Tests/SWBTaskConstructionTests/CodeSignTaskConstructionTests.swift
 @@ -572,7 +572,7 @@ fileprivate struct CodeSignTaskConstructionTests: CoreBasedTests {
@@ -556,7 +784,7 @@ index 33972fe..838b3d0 100644
              }
          }
 @@ -1091,7 +1091,7 @@ fileprivate struct CodeSignTaskConstructionTests: CoreBasedTests {
-         await tester.checkBuild(BuildParameters(action: .install, configuration: "Release", overrides: ["LIBRARY_LOAD_CONSTRAINT": "/tmp/LibraryLoadConstraint.plist"]), runDestination: .macOS, systemInfo: SystemInfo(operatingSystemVersion: Version(14), productBuildVersion: "99A98", nativeArchitecture: "arm64")) { results in
+         await tester.checkBuild(BuildParameters(action: .install, configuration: "Release", overrides: ["LIBRARY_LOAD_CONSTRAINT": "/tmp/LibraryLoadConstraint.plist"]), runDestination: .macOS) { results in
              results.checkTarget("Tool") { target in
                  results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
 -                    task.checkCommandLineMatches(["/usr/bin/codesign", "--force", "--sign", "-", "--entitlements", .suffix("Tool.xcent"), "--generate-entitlement-der", "--library-constraint", .suffix("LibraryLoadConstraint.plist"), "/tmp/aProject.dst/usr/local/bin/Tool"])
@@ -564,20 +792,11 @@ index 33972fe..838b3d0 100644
                  }
              }
          }
-@@ -1100,7 +1100,7 @@ fileprivate struct CodeSignTaskConstructionTests: CoreBasedTests {
-         await tester.checkBuild(BuildParameters(action: .install, configuration: "Release", overrides: ["LIBRARY_LOAD_CONSTRAINT": "/tmp/LibraryLoadConstraint.plist"]), runDestination: .macOS, systemInfo: SystemInfo(operatingSystemVersion: Version(13), productBuildVersion: "99A98", nativeArchitecture: "arm64")) { results in
-             results.checkTarget("Tool") { target in
-                 results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
--                    task.checkCommandLineMatches(["/usr/bin/codesign", "--force", "--sign", "-", "--entitlements", .suffix("Tool.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/usr/local/bin/Tool"])
-+                    task.checkCommandLineMatches(["@sigtool@/bin/codesign", "--force", "--sign", "-", "--entitlements", .suffix("Tool.xcent"), "--generate-entitlement-der", "/tmp/aProject.dst/usr/local/bin/Tool"])
-                 }
-             }
-         }
 diff --git a/Tests/SWBTaskConstructionTests/MergeableLibraryTests.swift b/Tests/SWBTaskConstructionTests/MergeableLibraryTests.swift
-index 4584f5d..edc83b1 100644
+index e1461d9c..77a5918e 100644
 --- a/Tests/SWBTaskConstructionTests/MergeableLibraryTests.swift
 +++ b/Tests/SWBTaskConstructionTests/MergeableLibraryTests.swift
-@@ -289,7 +289,7 @@ fileprivate struct MergeableLibraryTests: CoreBasedTests {
+@@ -303,7 +303,7 @@ fileprivate struct MergeableLibraryTests: CoreBasedTests {
                          let signedDir = String("\(FWK_FULL_PRODUCT_NAME)/\(FWK_CONTENTS_DIR_SUBPATH)".dropLast())       // Chop off the trailing '/'
                          results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemPattern(.suffix(signedDir))) { task in
                              task.checkRuleInfo(["CodeSign", "\(BUILT_PRODUCTS_DIR)/\(FULL_PRODUCT_NAME)/\(FWK_CONTENTS_DIR_SUBPATH)\(reexportedBinariesDirectoryName)/\(signedDir)"])
@@ -586,7 +805,7 @@ index 4584f5d..edc83b1 100644
                              results.checkTaskFollows(task, [.matchTarget(target), .matchRuleType("Copy"), .matchRuleItemBasename(FWK_FULL_PRODUCT_NAME)])
                          }
                      }
-@@ -303,7 +303,7 @@ fileprivate struct MergeableLibraryTests: CoreBasedTests {
+@@ -317,7 +317,7 @@ fileprivate struct MergeableLibraryTests: CoreBasedTests {
                          }
                          results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename(DYLIB_FULL_PRODUCT_NAME)) { task in
                              task.checkRuleInfo(["CodeSign", "\(BUILT_PRODUCTS_DIR)/\(FULL_PRODUCT_NAME)/\(FWK_CONTENTS_DIR_SUBPATH)\(reexportedBinariesDirectoryName)/\(DYLIB_FULL_PRODUCT_NAME)"])
@@ -595,7 +814,7 @@ index 4584f5d..edc83b1 100644
                              results.checkTaskFollows(task, [.matchTarget(target), .matchRuleType("Copy"), .matchRuleItemBasename(DYLIB_FULL_PRODUCT_NAME)])
                          }
                      }
-@@ -732,7 +732,7 @@ fileprivate struct MergeableLibraryTests: CoreBasedTests {
+@@ -758,7 +758,7 @@ fileprivate struct MergeableLibraryTests: CoreBasedTests {
                          let signedDir = String("\(FWK_FULL_PRODUCT_NAME)/\(FWK_CONTENTS_DIR_SUBPATH)".dropLast())       // Chop off the trailing '/'
                          results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemPattern(.suffix(signedDir))) { task in
                              task.checkRuleInfo(["CodeSign", "\(BUILT_PRODUCTS_DIR)/\(FULL_PRODUCT_NAME)/\(FWK_CONTENTS_DIR_SUBPATH)\(reexportedBinariesDirectoryName)/\(signedDir)"])
@@ -604,7 +823,7 @@ index 4584f5d..edc83b1 100644
                              results.checkTaskFollows(task, [.matchTarget(target), .matchRuleType("Copy"), .matchRuleItemBasename(FWK_FULL_PRODUCT_NAME)])
                          }
                      }
-@@ -1113,7 +1113,7 @@ fileprivate struct MergeableLibraryTests: CoreBasedTests {
+@@ -1139,7 +1139,7 @@ fileprivate struct MergeableLibraryTests: CoreBasedTests {
                      }
                      results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("FwkTarget.framework")) { task in
                          task.checkRuleInfo(["CodeSign", "\(SYMROOT)/Config-iphoneos/\(targetName).framework/\(reexportedBinariesDirectoryName)/FwkTarget.framework"])
@@ -613,7 +832,7 @@ index 4584f5d..edc83b1 100644
                          results.checkTaskFollows(task, [.matchTarget(target), .matchRuleType("Copy"), .matchRuleItemBasename("FwkTarget.framework")])
                      }
  
-@@ -2242,7 +2242,7 @@ fileprivate struct MergeableLibraryTests: CoreBasedTests {
+@@ -2268,7 +2268,7 @@ fileprivate struct MergeableLibraryTests: CoreBasedTests {
                          }
                          results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemPattern(.suffix("\(reexportedBinariesDirectoryName)/\(fwkTargetName).framework"))) { task in
                              task.checkRuleInfo(["CodeSign", "\(SYMROOT)/Config-iphoneos/\(targetName).app/\(reexportedBinariesDirectoryName)/\(fwkTargetName).framework"])
@@ -623,7 +842,7 @@ index 4584f5d..edc83b1 100644
                          }
                      }
 diff --git a/Tests/SWBTaskConstructionTests/PlatformTaskConstructionTests.swift b/Tests/SWBTaskConstructionTests/PlatformTaskConstructionTests.swift
-index f2e561d..5a11f29 100644
+index 317fe9f9..b092d1a0 100644
 --- a/Tests/SWBTaskConstructionTests/PlatformTaskConstructionTests.swift
 +++ b/Tests/SWBTaskConstructionTests/PlatformTaskConstructionTests.swift
 @@ -191,7 +191,7 @@ fileprivate struct PlatformTaskConstructionTests: CoreBasedTests {
@@ -663,10 +882,10 @@ index f2e561d..5a11f29 100644
  
                  // There should be one product validation task.
 diff --git a/Tests/SWBTaskConstructionTests/PostprocessingTaskConstructionTests.swift b/Tests/SWBTaskConstructionTests/PostprocessingTaskConstructionTests.swift
-index 85fd06e..d5d7251 100644
+index 60684f5f..fad199eb 100644
 --- a/Tests/SWBTaskConstructionTests/PostprocessingTaskConstructionTests.swift
 +++ b/Tests/SWBTaskConstructionTests/PostprocessingTaskConstructionTests.swift
-@@ -75,7 +75,7 @@ fileprivate struct PostprocessingTaskConstructionTests: CoreBasedTests {
+@@ -79,7 +79,7 @@ fileprivate struct PostprocessingTaskConstructionTests: CoreBasedTests {
                          let suffix = buildVariant == "normal" ? "" : "_\(buildVariant)"
  
                          task.checkRuleInfo(["SetOwnerAndGroup", "exampleUser:exampleGroup", "/tmp/aProject.dst/usr/local/lib/Library\(suffix).dylib"])
@@ -675,7 +894,7 @@ index 85fd06e..d5d7251 100644
  
                          task.checkInputs([
                              .path("/tmp/aProject.dst/usr/local/lib/Library\(suffix).dylib"),
-@@ -117,7 +117,7 @@ fileprivate struct PostprocessingTaskConstructionTests: CoreBasedTests {
+@@ -121,7 +121,7 @@ fileprivate struct PostprocessingTaskConstructionTests: CoreBasedTests {
              results.checkTarget("Framework") { target in
                  results.checkTask(.matchTarget(target), .matchRuleType("SetOwnerAndGroup")) { task in
                      task.checkRuleInfo(["SetOwnerAndGroup", "exampleUser:exampleGroup", "/tmp/aProject.dst/Library/Frameworks/Framework.framework"])
@@ -685,7 +904,7 @@ index 85fd06e..d5d7251 100644
                      task.checkInputs([
                          .path("/tmp/aProject.dst/Library/Frameworks/Framework.framework"),
 diff --git a/Tests/SWBTaskConstructionTests/SwiftTaskConstructionTests.swift b/Tests/SWBTaskConstructionTests/SwiftTaskConstructionTests.swift
-index 1d901c0..c184bd2 100644
+index 55f54e72..ac27d9c1 100644
 --- a/Tests/SWBTaskConstructionTests/SwiftTaskConstructionTests.swift
 +++ b/Tests/SWBTaskConstructionTests/SwiftTaskConstructionTests.swift
 @@ -181,7 +181,7 @@ fileprivate struct SwiftTaskConstructionTests: CoreBasedTests {
@@ -693,7 +912,7 @@ index 1d901c0..c184bd2 100644
          let fs = PseudoFS()
          try await fs.writeFileContents(swiftCompilerPath) { $0 <<< "binary" }
 -        try await fs.writeFileContents(core.developerPath.path.join("Toolchains/XcodeDefault.xctoolchain/usr/bin/codesign_allocate")) { $0 <<< "binary" }
-+        try await fs.writeFileContents(core.developerPath.path.join("@sigtool@/bin/codesign_allocate")) { $0 <<< "binary" }
++        try await fs.writeFileContents(core.developerPath.path.join("Toolchains/XcodeDefault.xctoolchain@sigtool@/bin/codesign_allocate")) { $0 <<< "binary" }
  
          // NOTE: The toolchain cannot be set normally and must be passed in as an override.
          var overrides = ["TOOLCHAINS": toolchainIdentifier]
@@ -702,7 +921,7 @@ index 1d901c0..c184bd2 100644
  
                      task.checkEnvironment([
 -                        "CODESIGN_ALLOCATE":    .equal(core.developerPath.path.join("Toolchains/XcodeDefault.xctoolchain/usr/bin/codesign_allocate").str),
-+                        "CODESIGN_ALLOCATE":    .equal(core.developerPath.path.join("@sigtool@/bin/codesign_allocate").str),
++                        "CODESIGN_ALLOCATE":    .equal(core.developerPath.path.join("Toolchains/XcodeDefault.xctoolchain@sigtool@/bin/codesign_allocate").str),
                          "DEVELOPER_DIR":        .equal(core.developerPath.path.str),
                          "SDKROOT":              .equal(core.loadSDK(.macOS).path.str),
                          // This is coming from our overrides in unit test infrastructure.
@@ -716,10 +935,10 @@ index 1d901c0..c184bd2 100644
  
                  results.checkTask(.matchTarget(target), .matchRuleType("RegisterExecutionPolicyException")) { task in
 diff --git a/Tests/SWBTaskConstructionTests/TaskConstructionTests.swift b/Tests/SWBTaskConstructionTests/TaskConstructionTests.swift
-index 4f9a3e5..ee50974 100644
+index 62d5765f..ada22390 100644
 --- a/Tests/SWBTaskConstructionTests/TaskConstructionTests.swift
 +++ b/Tests/SWBTaskConstructionTests/TaskConstructionTests.swift
-@@ -960,7 +960,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
+@@ -963,7 +963,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
                      // There should be a chown and chmod task.
                      results.checkTask(.matchTarget(target), .matchRuleType("SetOwnerAndGroup")) { task in
                          task.checkRuleInfo(["SetOwnerAndGroup", "exampleUser:exampleGroup", "/tmp/aProject.dst/Applications/AppTarget.app"])
@@ -728,7 +947,7 @@ index 4f9a3e5..ee50974 100644
  
                          task.checkInputs([
                              .path("/tmp/aProject.dst/Applications/AppTarget.app"),
-@@ -996,7 +996,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
+@@ -999,7 +999,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
                      // There should be a chown task targeting the file in the the ALTERNATE_PERMISSIONS_FILES build setting.
                      results.checkTask(.matchTarget(target), .matchRuleType("SetOwner")) { task in
                          task.checkRuleInfo(["SetOwner", "fooOwner", "/tmp/aProject.dst/Applications/AlternatePermissions.txt"])
@@ -737,7 +956,7 @@ index 4f9a3e5..ee50974 100644
  
                          task.checkInputs([
                              .path("/tmp/aProject.dst/Applications/AlternatePermissions.txt"),
-@@ -1056,7 +1056,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
+@@ -1059,7 +1059,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
  
                      // There should be three codesign tasks (one for the copied FW, one for the copied dylib, one for the app), two of which should be re-signing tasks.
                      results.checkTask(.matchTarget(target), .matchRule(["CodeSign", "/tmp/aProject.dst/Applications/AppTarget.app/Contents/Frameworks/FWToCopy.framework/Versions/A"])) { task in
@@ -746,7 +965,7 @@ index 4f9a3e5..ee50974 100644
                          task.checkInputs([
                              .path("/tmp/aProject.dst/Applications/AppTarget.app/Contents/Frameworks/FWToCopy.framework"),
                              .path("/tmp/aProject.dst/Applications/AppTarget.app/Contents/Frameworks/FWToCopy.framework/Versions/A"),
-@@ -1077,7 +1077,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
+@@ -1080,7 +1080,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
                          ])
                      }
                      results.checkTask(.matchTarget(target), .matchRule(["CodeSign", "/tmp/aProject.dst/Applications/AppTarget.app/Contents/Frameworks/libdynamic.dylib"])) { task in
@@ -755,7 +974,7 @@ index 4f9a3e5..ee50974 100644
                          task.checkInputs([
                              .path("/tmp/aProject.dst/Applications/AppTarget.app/Contents/Frameworks/libdynamic.dylib"),
                              .path("/tmp/aProject.dst/Applications/AppTarget.app/Contents/Frameworks/libdynamic.dylib"),
-@@ -1095,7 +1095,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
+@@ -1098,7 +1098,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
                          ])
                      }
                      results.checkTask(.matchTarget(target), .matchRule(["CodeSign", "/tmp/aProject.dst/Applications/AppTarget.app"])) { task in
@@ -764,7 +983,7 @@ index 4f9a3e5..ee50974 100644
                          task.checkInputs([
                              .path("/tmp/aProject.dst/Applications/AppTarget.app"),
                              .path("/tmp/aProject.dst/Applications/AppTarget.app"),
-@@ -4167,7 +4167,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
+@@ -4300,7 +4300,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
                      // There should be two code signing tasks, one for the library and one for the product.
                      results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("libclang_rt.asan_osx_dynamic.dylib")) { task in
                          task.checkRuleInfo([.equal("CodeSign"), .equal("\(SRCROOT)/build/Debug/\(targetName).app/Contents/Frameworks/libclang_rt.asan_osx_dynamic.dylib")])
@@ -773,7 +992,7 @@ index 4f9a3e5..ee50974 100644
                          task.checkInputs([
                              .path("\(SRCROOT)/build/Debug/AppTarget.app/Contents/Frameworks/libclang_rt.asan_osx_dynamic.dylib"),
                              .path("\(SRCROOT)/build/Debug/AppTarget.app/Contents/Frameworks/libclang_rt.asan_osx_dynamic.dylib"),
-@@ -4178,7 +4178,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
+@@ -4311,7 +4311,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
                      }
                      results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("\(targetName).app")) { task in
                          task.checkRuleInfo([.equal("CodeSign"), .equal("\(SRCROOT)/build/Debug/\(targetName).app")])
@@ -782,7 +1001,7 @@ index 4f9a3e5..ee50974 100644
                      }
                  }
  
-@@ -4225,7 +4225,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
+@@ -4358,7 +4358,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
                      // There should be one code signing task for the ASan library.
                      results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("libclang_rt.asan_osx_dynamic.dylib")) { task in
                          task.checkRuleInfo([.equal("CodeSign"), .equal("\(SRCROOT)/build/Debug/\(targetName).app/Contents/Frameworks/libclang_rt.asan_osx_dynamic.dylib")])
@@ -791,7 +1010,7 @@ index 4f9a3e5..ee50974 100644
                          task.checkInputs([
                              .path("\(SRCROOT)/build/Debug/AppTarget.app/Contents/Frameworks/libclang_rt.asan_osx_dynamic.dylib"),
                              .path("\(SRCROOT)/build/Debug/AppTarget.app/Contents/Frameworks/libclang_rt.asan_osx_dynamic.dylib"),
-@@ -4238,7 +4238,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
+@@ -4371,7 +4371,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
                      // There should be one code signing task for the TSan library.
                      results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("libclang_rt.tsan_osx_dynamic.dylib")) { task in
                          task.checkRuleInfo([.equal("CodeSign"), .equal("\(SRCROOT)/build/Debug/\(targetName).app/Contents/Frameworks/libclang_rt.tsan_osx_dynamic.dylib")])
@@ -800,7 +1019,7 @@ index 4f9a3e5..ee50974 100644
                          task.checkInputs([
                              .path("\(SRCROOT)/build/Debug/AppTarget.app/Contents/Frameworks/libclang_rt.tsan_osx_dynamic.dylib"),
                              .path("\(SRCROOT)/build/Debug/AppTarget.app/Contents/Frameworks/libclang_rt.tsan_osx_dynamic.dylib"),
-@@ -4301,7 +4301,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
+@@ -4434,7 +4434,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
                      // There should be two code signing tasks, one for the library and one for the product.
                      results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("libclang_rt.tsan_osx_dynamic.dylib")) { task in
                          task.checkRuleInfo([.equal("CodeSign"), .equal("\(SRCROOT)/build/Debug/\(targetName).app/Contents/Frameworks/libclang_rt.tsan_osx_dynamic.dylib")])
@@ -809,7 +1028,7 @@ index 4f9a3e5..ee50974 100644
                          task.checkInputs([
                              .path("\(SRCROOT)/build/Debug/AppTarget.app/Contents/Frameworks/libclang_rt.tsan_osx_dynamic.dylib"),
                              .path("\(SRCROOT)/build/Debug/AppTarget.app/Contents/Frameworks/libclang_rt.tsan_osx_dynamic.dylib"),
-@@ -4312,7 +4312,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
+@@ -4445,7 +4445,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
                      }
                      results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("\(targetName).app")) { task in
                          task.checkRuleInfo([.equal("CodeSign"), .equal("\(SRCROOT)/build/Debug/\(targetName).app")])
@@ -818,7 +1037,7 @@ index 4f9a3e5..ee50974 100644
                      }
                  }
  
-@@ -4356,7 +4356,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
+@@ -4489,7 +4489,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
                      // There should be two code signing tasks, one for the library and one for the product.
                      results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("libclang_rt.ubsan_osx_dynamic.dylib")) { task in
                          task.checkRuleInfo([.equal("CodeSign"), .equal("\(SRCROOT)/build/Debug/\(targetName).app/Contents/Frameworks/libclang_rt.ubsan_osx_dynamic.dylib")])
@@ -827,7 +1046,7 @@ index 4f9a3e5..ee50974 100644
                          task.checkInputs([
                              .path("\(SRCROOT)/build/Debug/AppTarget.app/Contents/Frameworks/libclang_rt.ubsan_osx_dynamic.dylib"),
                              .path("\(SRCROOT)/build/Debug/AppTarget.app/Contents/Frameworks/libclang_rt.ubsan_osx_dynamic.dylib"),
-@@ -4367,7 +4367,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
+@@ -4500,7 +4500,7 @@ fileprivate struct TaskConstructionTests: CoreBasedTests {
                      }
                      results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("\(targetName).app")) { task in
                          task.checkRuleInfo([.equal("CodeSign"), .equal("\(SRCROOT)/build/Debug/\(targetName).app")])
@@ -837,10 +1056,10 @@ index 4f9a3e5..ee50974 100644
                  }
  
 diff --git a/Tests/SWBTaskConstructionTests/UnitTestTaskConstructionTests.swift b/Tests/SWBTaskConstructionTests/UnitTestTaskConstructionTests.swift
-index 761146f..95bfcb7 100644
+index 30160571..135348f4 100644
 --- a/Tests/SWBTaskConstructionTests/UnitTestTaskConstructionTests.swift
 +++ b/Tests/SWBTaskConstructionTests/UnitTestTaskConstructionTests.swift
-@@ -657,7 +657,7 @@ fileprivate struct UnitTestTaskConstructionTests: CoreBasedTests {
+@@ -694,7 +694,7 @@ fileprivate struct UnitTestTaskConstructionTests: CoreBasedTests {
                  }
                  results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("UnitTestTargetOne.xctest")) { task in
                      task.checkRuleInfo(["CodeSign", "\(SRCROOT)/build/Debug/AppTarget.app/Contents/PlugIns/UnitTestTargetOne.xctest"])
@@ -849,7 +1068,7 @@ index 761146f..95bfcb7 100644
                      task.checkInputs([
                          .path("\(SRCROOT)/build/Debug/AppTarget.app/Contents/PlugIns/UnitTestTargetOne.xctest"),
                          .path("\(SRCROOT)/build/Debug/AppTarget.app/Contents/PlugIns/UnitTestTargetOne.xctest"),
-@@ -843,7 +843,7 @@ fileprivate struct UnitTestTaskConstructionTests: CoreBasedTests {
+@@ -880,7 +880,7 @@ fileprivate struct UnitTestTaskConstructionTests: CoreBasedTests {
                  results.checkTask(.matchTarget(target), .matchRuleType("ProcessProductPackagingDER")) { _ in }
                  results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("UnitTestTargetOne.xctest")) { task in
                      task.checkRuleInfo(["CodeSign", "\(SRCROOT)/build/UninstalledProducts/macosx/UnitTestTargetOne.xctest"])
@@ -858,7 +1077,7 @@ index 761146f..95bfcb7 100644
                      task.checkInputs([
                          .path("\(SRCROOT)/build/UninstalledProducts/macosx/UnitTestTargetOne.xctest"),
                          .path("\(SRCROOT)/build/UninstalledProducts/macosx/UnitTestTargetOne.xctest"),
-@@ -2515,7 +2515,7 @@ fileprivate struct UnitTestTaskConstructionTests: CoreBasedTests {
+@@ -2554,7 +2554,7 @@ fileprivate struct UnitTestTaskConstructionTests: CoreBasedTests {
                  }
                  results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("UITestTarget.xctest")) { task in
                      task.checkRuleInfo(["CodeSign", "\(SRCROOT)/build/Debug/UITestTarget-Runner.app/Contents/PlugIns/UITestTarget.xctest"])
@@ -867,7 +1086,7 @@ index 761146f..95bfcb7 100644
                      task.checkInputs(contain: [
                          .path("\(SRCROOT)/build/Debug/UITestTarget-Runner.app/Contents/PlugIns/UITestTarget.xctest"),
                          .path("\(SRCROOT)/build/Debug/UITestTarget-Runner.app/Contents/PlugIns/UITestTarget.xctest"),
-@@ -2535,7 +2535,7 @@ fileprivate struct UnitTestTaskConstructionTests: CoreBasedTests {
+@@ -2574,7 +2574,7 @@ fileprivate struct UnitTestTaskConstructionTests: CoreBasedTests {
                  }
                  results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("UITestTarget-Runner.app")) { task in
                      task.checkRuleInfo(["CodeSign", "\(SRCROOT)/build/Debug/UITestTarget-Runner.app"])
@@ -876,7 +1095,7 @@ index 761146f..95bfcb7 100644
                      task.checkInputs(contain: ([[
                          .path("\(SRCROOT)/build/Debug/UITestTarget-Runner.app/Contents/PlugIns/UITestTarget.xctest"),
                          .path("\(SRCROOT)/build/Debug/UITestTarget-Runner.app"),
-@@ -2689,7 +2689,7 @@ fileprivate struct UnitTestTaskConstructionTests: CoreBasedTests {
+@@ -2728,7 +2728,7 @@ fileprivate struct UnitTestTaskConstructionTests: CoreBasedTests {
                  results.checkTask(.matchTarget(target), .matchRuleType("ProcessProductPackagingDER"), .matchRuleItemPattern(.suffix(".xcent"))) { _ in }
                  results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("UITestTarget.xctest")) { task in
                      task.checkRuleInfo(["CodeSign", "\(SRCROOT)/build/UninstalledProducts/macosx/UITestTarget-Runner.app/Contents/PlugIns/UITestTarget.xctest"])
@@ -885,7 +1104,7 @@ index 761146f..95bfcb7 100644
                      task.checkInputs(contain: [
                          .path("\(SRCROOT)/build/UninstalledProducts/macosx/UITestTarget-Runner.app/Contents/PlugIns/UITestTarget.xctest"),
                          .path("\(SRCROOT)/build/UninstalledProducts/macosx/UITestTarget-Runner.app/Contents/PlugIns/UITestTarget.xctest"),
-@@ -2709,7 +2709,7 @@ fileprivate struct UnitTestTaskConstructionTests: CoreBasedTests {
+@@ -2748,7 +2748,7 @@ fileprivate struct UnitTestTaskConstructionTests: CoreBasedTests {
                  }
                  results.checkTask(.matchTarget(target), .matchRuleType("CodeSign"), .matchRuleItemBasename("UITestTarget-Runner.app")) { task in
                      task.checkRuleInfo(["CodeSign", "\(SRCROOT)/build/UninstalledProducts/macosx/UITestTarget-Runner.app"])
@@ -895,10 +1114,10 @@ index 761146f..95bfcb7 100644
                          .path("\(SRCROOT)/build/UninstalledProducts/macosx/UITestTarget-Runner.app/Contents/PlugIns/UITestTarget.xctest"),
                          .path("\(SRCROOT)/build/UninstalledProducts/macosx/UITestTarget-Runner.app"),
 diff --git a/Tests/SWBTaskConstructionTests/WatchTaskConstructionTests.swift b/Tests/SWBTaskConstructionTests/WatchTaskConstructionTests.swift
-index db2a64f..7319fdd 100644
+index 4bb83b9d..e5e0ad6b 100644
 --- a/Tests/SWBTaskConstructionTests/WatchTaskConstructionTests.swift
 +++ b/Tests/SWBTaskConstructionTests/WatchTaskConstructionTests.swift
-@@ -296,7 +296,7 @@ fileprivate struct WatchTaskConstructionTests: CoreBasedTests {
+@@ -298,7 +298,7 @@ fileprivate struct WatchTaskConstructionTests: CoreBasedTests {
                  // There should be one codesign task.
                  results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
                      #expect(task.ruleInfo[1] == "\(SRCROOT)/build/Debug-watchos/Watchable WatchKit Extension.appex")
@@ -907,7 +1126,7 @@ index db2a64f..7319fdd 100644
                      task.checkEnvironment([
                          "CODESIGN_ALLOCATE": .equal("codesign_allocate"),
                      ], exact: true)
-@@ -384,7 +384,7 @@ fileprivate struct WatchTaskConstructionTests: CoreBasedTests {
+@@ -387,7 +387,7 @@ fileprivate struct WatchTaskConstructionTests: CoreBasedTests {
                  // There should be one codesign task.
                  results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
                      #expect(task.ruleInfo[1] == builtWatchAppPath)
@@ -916,7 +1135,7 @@ index db2a64f..7319fdd 100644
                      task.checkEnvironment([
                          "CODESIGN_ALLOCATE": .equal("codesign_allocate"),
                      ], exact: true)
-@@ -490,7 +490,7 @@ fileprivate struct WatchTaskConstructionTests: CoreBasedTests {
+@@ -493,7 +493,7 @@ fileprivate struct WatchTaskConstructionTests: CoreBasedTests {
                  // There should be one codesign task.
                  results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
                      #expect(task.ruleInfo[1] == builtHostIOSAppPath)
@@ -925,7 +1144,7 @@ index db2a64f..7319fdd 100644
                      task.checkEnvironment([
                          "CODESIGN_ALLOCATE": .equal("codesign_allocate"),
                      ], exact: true)
-@@ -599,7 +599,7 @@ fileprivate struct WatchTaskConstructionTests: CoreBasedTests {
+@@ -602,7 +602,7 @@ fileprivate struct WatchTaskConstructionTests: CoreBasedTests {
                  // There should be one codesign task.
                  results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
                      #expect(task.ruleInfo[1] == "\(SRCROOT)/build/Debug-watchsimulator/Watchable WatchKit Extension.appex")
@@ -934,7 +1153,7 @@ index db2a64f..7319fdd 100644
                      task.checkEnvironment([
                          "CODESIGN_ALLOCATE": .equal("codesign_allocate"),
                      ], exact: true)
-@@ -667,7 +667,7 @@ fileprivate struct WatchTaskConstructionTests: CoreBasedTests {
+@@ -670,7 +670,7 @@ fileprivate struct WatchTaskConstructionTests: CoreBasedTests {
                  // There should be one codesign task.
                  results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
                      #expect(task.ruleInfo[1] == builtWatchAppPath)
@@ -943,7 +1162,7 @@ index db2a64f..7319fdd 100644
                      task.checkEnvironment([
                          "CODESIGN_ALLOCATE": .equal("codesign_allocate"),
                      ], exact: true)
-@@ -768,7 +768,7 @@ fileprivate struct WatchTaskConstructionTests: CoreBasedTests {
+@@ -771,7 +771,7 @@ fileprivate struct WatchTaskConstructionTests: CoreBasedTests {
                  // There should be one codesign task.
                  results.checkTask(.matchTarget(target), .matchRuleType("CodeSign")) { task in
                      #expect(task.ruleInfo[1] == builtHostIOSAppPath)
@@ -953,7 +1172,7 @@ index db2a64f..7319fdd 100644
                          "CODESIGN_ALLOCATE": .equal("codesign_allocate"),
                      ], exact: true)
 diff --git a/Tests/SWBTaskExecutionTests/SignatureCollectionActionTests.swift b/Tests/SWBTaskExecutionTests/SignatureCollectionActionTests.swift
-index 3c11b2c..1842a9f 100644
+index 3c11b2cf..1842a9fe 100644
 --- a/Tests/SWBTaskExecutionTests/SignatureCollectionActionTests.swift
 +++ b/Tests/SWBTaskExecutionTests/SignatureCollectionActionTests.swift
 @@ -107,7 +107,7 @@ fileprivate struct SignatureCollectionActionTests {
@@ -975,7 +1194,7 @@ index 3c11b2c..1842a9f 100644
              #expect(codesignResult.isSuccess)
  
 diff --git a/Tests/SWBUtilTests/MiscTests.swift b/Tests/SWBUtilTests/MiscTests.swift
-index f93094a..2ff6572 100644
+index f93094a4..2ff65724 100644
 --- a/Tests/SWBUtilTests/MiscTests.swift
 +++ b/Tests/SWBUtilTests/MiscTests.swift
 @@ -62,7 +62,7 @@ import SWBUtil
@@ -988,7 +1207,7 @@ index f93094a..2ff6572 100644
          }
      }
 diff --git a/Tests/SWBUtilTests/SignaturesTests.swift b/Tests/SWBUtilTests/SignaturesTests.swift
-index ca93d8f..c853bd2 100644
+index ca93d8fd..c853bd28 100644
 --- a/Tests/SWBUtilTests/SignaturesTests.swift
 +++ b/Tests/SWBUtilTests/SignaturesTests.swift
 @@ -28,7 +28,7 @@ fileprivate struct SignaturesTests {
@@ -1010,7 +1229,7 @@ index ca93d8f..c853bd2 100644
              // Set-up the ad-hoc signed bundle for testing.
              let codesignSigningResult = try await Process.run(url: codesignTool, arguments: ["-s", "-", bundlePath.str])
 diff --git a/Tests/SwiftBuildTests/BuildOperationTests.swift b/Tests/SwiftBuildTests/BuildOperationTests.swift
-index 077da08..6a14464 100644
+index 077da084..6a144641 100644
 --- a/Tests/SwiftBuildTests/BuildOperationTests.swift
 +++ b/Tests/SwiftBuildTests/BuildOperationTests.swift
 @@ -213,7 +213,7 @@ fileprivate struct BuildOperationTests: CoreBasedTests {
@@ -1086,5 +1305,5 @@ index 077da08..6a14464 100644
                              buildPhases: [
                                  TestSourcesBuildPhase([TestBuildFile("foo.c")]),
 -- 
-2.51.2
+2.54.0
 
