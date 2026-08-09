@@ -72,9 +72,9 @@ in
         config =
           { pkgs, lib, ... }:
           {
-            allowUnfree = lib.isAttrs pkgs;
+            checkMeta = lib.isAttrs pkgs;
           };
-      }).config.allowUnfree;
+      }).config.checkMeta;
     expected = true;
   };
 
