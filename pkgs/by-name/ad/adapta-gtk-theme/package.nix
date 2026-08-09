@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
         gpl2
         cc-by-sa-40
       ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       romildo
       emilylange
