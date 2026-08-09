@@ -1,8 +1,10 @@
 {
   lib,
+  llvmPackages,
   llvmPackages_upstream,
   stdenv,
   swiftc,
+  swift_release,
 }:
 
 let
@@ -70,10 +72,15 @@ in
       moveToOutput lib/swift/${swiftPlatform}/${stdenv.hostPlatform.swift.arch} "''${!outputDev}"
     ''
     # Convert LLVM bitcode files into native code to avoid requiring LTO for C++ interop.
+    # Note: This could be done with llc, but it crashes when converting object files from the Swift 6.3.3 stdlib.
     + lib.optionalString stdenv.hostPlatform.isElf ''
-      ${lib.escapeShellArg (lib.getExe' llvmPackages_upstream.llvm "llc")} stdlib/public/Cxx/${lib.toUpper stdenv.hostPlatform.swift.platform}/${stdenv.hostPlatform.swift.arch}/Cxx.o -o Cxx.o -filetype=obj
+      LLVM_DIS=${lib.escapeShellArg (lib.getExe' llvmPackages.llvm "llvm-dis")}
+      CLANG=${lib.escapeShellArg (lib.getExe' llvmPackages.clang.cc "clang")}
+      "$LLVM_DIS" stdlib/public/Cxx/${lib.toUpper stdenv.hostPlatform.swift.platform}/${stdenv.hostPlatform.swift.arch}/Cxx.o -o Cxx.ll
+      "$CLANG" -c Cxx.ll -o Cxx.o
       "$AR" Drs "''${!outputDev}/lib/libswiftCxx.a" Cxx.o
-      ${lib.escapeShellArg (lib.getExe' llvmPackages_upstream.llvm "llc")} stdlib/public/Cxx/std/${lib.toUpper stdenv.hostPlatform.swift.platform}/${stdenv.hostPlatform.swift.arch}/CxxStdlib.o -o CxxStdlib.o -filetype=obj
+      "$LLVM_DIS" stdlib/public/Cxx/std/${lib.toUpper stdenv.hostPlatform.swift.platform}/${stdenv.hostPlatform.swift.arch}/CxxStdlib.o -o CxxStdlib.ll
+      "$CLANG" -c CxxStdlib.ll -o CxxStdlib.o
       "$AR" Drs "''${!outputDev}/lib/libswiftCxxStdlib.a" CxxStdlib.o
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
