@@ -22580,6 +22580,11 @@
     github = "plebhash";
     githubId = 147345153;
   };
+  plrigaux = {
+    name = "plrigaux";
+    github = "plrigaux";
+    githubId = 491172;
+  };
   pluiedev = {
     email = "hi@pluie.me";
     github = "pluiedev";

@@ -17,6 +17,8 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sysd-manager";
   version = "2.20.10";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "plrigaux";
@@ -71,7 +73,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       install -Dm644 target/loc/io.github.plrigaux.sysd-manager.metainfo.xml $out/share/metainfo/io.github.plrigaux.sysd-manager.metainfo.xml
       install -Dm644 data/schemas/io.github.plrigaux.sysd-manager.gschema.xml -t $out/share/gsettings-schemas/$name/glib-2.0/schemas
       glib-compile-schemas $out/share/gsettings-schemas/$name/glib-2.0/schemas/
-
 
       install -Dm644 sysd-manager-proxy/data/io.github.plrigaux.SysDManager.conf "${conf_file}"
       install -Dm644 target/loc/io.github.plrigaux.SysDManager.policy $out/share/polkit-1/actions/io.github.plrigaux.SysDManager.policy
