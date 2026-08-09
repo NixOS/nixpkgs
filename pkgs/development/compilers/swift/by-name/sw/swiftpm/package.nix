@@ -46,6 +46,8 @@ let
     swift-tools-support-core
   ];
 
+  swiftPlatform = stdenv.hostPlatform.swift.platform;
+
   swift' = swift.override {
     enableRepl = false;
   };
@@ -147,30 +149,59 @@ stdenv.mkDerivation (finalAttrs: {
     swift-tools-support-core
   ];
 
-  postInstall =
-    lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Replace `@rpath` with absolute paths on Darwin. For some reason, this isn’t always done during installation.
-      # `fixDarwinDylibNames` doesn’t work either.
-      IFS= readarray -d "" dylibs < <(find "$out" -type f -and -name '*.dylib' -print0)
-      declare -a mappings
+  postInstall = ''
+    declare -a staticLibs=(
+      LLBuildManifest
+      PackageFingerprint
+      PackageRegistry
+      PackageSigning
+      SourceKitLSPAPI
+      SPMLLBuild
+    )
 
-      for dylib in "''${dylibs[@]}"; do
-        mappings+=(-change "@rpath/$(basename "$dylib")" "$dylib")
-      done
+    # Install the swiftmodules.
+    mkdir -p "''${!outputDev}/lib/swift/${swiftPlatform}" "''${!outputDev}/lib/swift_static/${swiftPlatform}"
+    for f in "''${staticLibs[@]}"; do
+      mv -v swift/$f.swiftmodule "''${!outputDev}/lib/swift_static/${swiftPlatform}"
+    done
+    cp -v swift/*.swiftmodule "''${!outputDev}/lib/swift/${swiftPlatform}"
 
-      for dylib in "''${dylibs[@]}"; do
-        install_name_tool "$dylib" ''${mappings[@]}
-      done
-    ''
-    + lib.optionalString stdenv.hostPlatform.isElf ''
-      for output in "''${outputs[@]}"; do
-        while IFS= read -d "" f; do
-          if isELF "$f"; then
-            patchelf --add-rpath ${lib.escapeShellArg rpaths} "$f"
-          fi
-        done < <(find "$output" -type f -print0)
-      done
-    '';
+    # Install the static libraries.
+    for f in "''${staticLibs[@]}"; do
+      cp -v lib/lib$f${stdenv.hostPlatform.extensions.staticLibrary} "''${!outputDev}/lib"
+    done
+
+    # Install CMake config file for the SwiftPM library.
+    mkdir -p "''${!outputDev}/lib/cmake/SwiftPM"
+    substitute ${./files/SwiftPMConfig.cmake} "''${!outputDev}/lib/cmake/SwiftPM/SwiftPMConfig.cmake" \
+      --replace-fail '@buildType@' ${if stdenv.hostPlatform.isStatic then "STATIC" else "SHARED"} \
+      --replace-fail '@dev@' "''${!outputDev}" \
+      --replace-fail '@lib@' "''${!outputLib}" \
+      --replace-fail '@swiftPlatform@' ${swiftPlatform}
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Replace `@rpath` with absolute paths on Darwin. For some reason, this isn’t always done during installation.
+    # `fixDarwinDylibNames` doesn’t work either.
+    IFS= readarray -d "" dylibs < <(find "$out" -type f -and -name '*.dylib' -print0)
+    declare -a mappings
+
+    for dylib in "''${dylibs[@]}"; do
+      mappings+=(-change "@rpath/$(basename "$dylib")" "$dylib")
+    done
+
+    for dylib in "''${dylibs[@]}"; do
+      install_name_tool "$dylib" ''${mappings[@]}
+    done
+  ''
+  + lib.optionalString stdenv.hostPlatform.isElf ''
+    for output in "''${outputs[@]}"; do
+      while IFS= read -d "" f; do
+        if isELF "$f"; then
+          patchelf --add-rpath ${lib.escapeShellArg rpaths} "$f"
+        fi
+      done < <(find "$output" -type f -print0)
+    done
+  '';
 
   passthru.tests = lib.packagesFromDirectoryRecursive {
     inherit callPackage;
