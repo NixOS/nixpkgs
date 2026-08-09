@@ -4605,6 +4605,9 @@
   "ssec-swift-packaging-with-swiftpm2nix": [
     "index.html#ssec-swift-packaging-with-swiftpm2nix"
   ],
+  "ssec-swiftpm-prefetch-dependencies": [
+    "index.html#ssec-swiftpm-prefetch-dependencies"
+  ],
   "ssec-swiftpm-patching-dependencies": [
     "index.html#ssec-swiftpm-patching-dependencies"
   ],

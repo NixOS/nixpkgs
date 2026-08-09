@@ -4072,6 +4072,7 @@ with pkgs;
   swiftPackages = recurseIntoAttrs (callPackage ./swift-packages.nix { });
   inherit (swiftPackages)
     fetchSwiftPMDeps
+    prefetch-swiftpm-deps
     sourcekit-lsp
     swift
     swift-corelibs-libdispatch
