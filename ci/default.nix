@@ -63,6 +63,7 @@ rec {
 
   # CI jobs
   lib-tests = import ../lib/tests/release.nix { inherit pkgs; };
+  config-nix-unit = pkgs.callPackage ../ci/config-nix-unit { nixpkgs = nixpkgs'; };
   manual-nixos = (import ../nixos/release.nix { }).manual.${system} or null;
   manual-nixpkgs = (import ../doc { pkgs = docPkgs; });
   nixpkgs-vet = pkgs.callPackage ./nixpkgs-vet.nix {

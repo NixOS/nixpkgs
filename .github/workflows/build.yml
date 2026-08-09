@@ -35,8 +35,8 @@ jobs:
         include:
           - runner: ubuntu-24.04
             system: x86_64-linux
-            builds: [shell, manual-nixos, lib-tests, tarball]
-            desc: shell, docs, lib, tarball
+            builds: [shell, manual-nixos, lib-tests, config-nix-unit, tarball]
+            desc: shell, docs, lib, config, tarball
           - runner: ubuntu-24.04-arm
             system: aarch64-linux
             builds: [shell, manual-nixos, manual-nixpkgs]
@@ -96,6 +96,10 @@ jobs:
       - name: Build lib tests
         if: contains(matrix.builds, 'lib-tests') && !cancelled()
         run: nix-build-uncached nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A lib-tests
+
+      - name: Build Nixpkgs config tests
+        if: contains(matrix.builds, 'config-nix-unit') && !cancelled()
+        run: nix-build-uncached nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A config-nix-unit
 
       - name: Build tarball
         if: contains(matrix.builds, 'tarball') && !cancelled()

@@ -1,14 +1,15 @@
 # Tests for `nixpkgs.config` that inspect evaluation *error messages*.
 #
-# Everything that can be asserted on a value lives in `pkgs/test/config.nix`,
-# where it runs at evaluation time and costs no build. These cases remain here
-# because `builtins.tryEval` reports only whether an evaluation failed, never
-# why, so the message can only be matched by a runner such as nix-unit.
+# Everything that can be asserted on values instead lives in
+# `pkgs/test/top-level`, where it runs at evaluation time and costs no build.
+# These tests remain here because `builtins.tryEval` reports only whether an
+# evaluation failed, never why, so the message can only be matched by a runner
+# such as nix-unit.
 #
 # Run with:
-#   nix-unit pkgs/test/config-nix-unit.nix
+#   nix-unit ci/config-nix-unit/tests.nix
 # or
-#   nix-build -A tests.config-nix-unit
+#   nix-build ci -A config-nix-unit
 #
 {
   nixpkgsPath ? ../..,
