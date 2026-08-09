@@ -1,5 +1,5 @@
 diff --git a/src/global/Configs.cpp b/src/global/Configs.cpp
-index 37b69be..2d458f3 100644
+index 9600a95..ee38aaa 100644
 --- a/src/global/Configs.cpp
 +++ b/src/global/Configs.cpp
 @@ -45,6 +45,12 @@ namespace Configs {
@@ -15,11 +15,11 @@ index 37b69be..2d458f3 100644
          auto fn = QApplication::applicationDirPath() + "/ThroneCore";
  #ifdef Q_OS_WIN
          fn += ".exe";
-diff --git a/src/ui/mainwindow.cpp b/src/ui/mainwindow.cpp
-index 9acfee4..c0c313a 100644
---- a/src/ui/mainwindow.cpp
-+++ b/src/ui/mainwindow.cpp
-@@ -163,8 +163,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
+diff --git a/src/ui/mainWindow/mainwindow_setup.cpp b/src/ui/mainWindow/mainwindow_setup.cpp
+index 7bec187..0f04cc8 100644
+--- a/src/ui/mainWindow/mainwindow_setup.cpp
++++ b/src/ui/mainWindow/mainwindow_setup.cpp
+@@ -207,8 +207,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
      runOnNewThread([=, this] {GetDeviceDetails(); });
  
      // Prepare core
@@ -29,7 +29,11 @@ index 9acfee4..c0c313a 100644
  
      bool coreDebugMode = (Configs::dataManager->settingsRepo->log_level == "debug");
  
-@@ -1296,6 +1295,15 @@ bool MainWindow::get_elevated_permissions(int reason) {
+diff --git a/src/ui/mainWindow/mainwindow_system.cpp b/src/ui/mainWindow/mainwindow_system.cpp
+index f1a7504..efffd4a 100644
+--- a/src/ui/mainWindow/mainwindow_system.cpp
++++ b/src/ui/mainWindow/mainwindow_system.cpp
+@@ -193,6 +193,15 @@ bool MainWindow::get_elevated_permissions(ExitReason reason) {
          return true;
      }
      if (Configs::IsAdmin()) return true;
