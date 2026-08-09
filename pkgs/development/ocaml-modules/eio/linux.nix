@@ -17,11 +17,11 @@ buildDunePackage {
     version
     ;
 
-  minimalOCamlVersion = "5.0";
+  minimalOCamlVersion = "5.2";
 
   dontStrip = true;
 
-  buildInputs = lib.optional (lib.versionAtLeast eio.version "1.4") dune-configurator;
+  buildInputs = [ dune-configurator ];
 
   propagatedBuildInputs = [
     eio

@@ -2032,6 +2032,14 @@ assertNoAdditions {
   });
 
   jupytext-nvim = super.jupytext-nvim.overrideAttrs (old: {
+    # `vim.health.report_*` was removed in neovim 0.11, which makes
+    # `:checkhealth jupytext` error out. Upstream is inactive and has several
+    # open PRs for this, e.g.
+    # https://github.com/GCBallesteros/jupytext.nvim/pull/40
+    postPatch = ''
+      substituteInPlace lua/jupytext/health.lua \
+        --replace-fail "vim.health.report_" "vim.health."
+    '';
     passthru = old.passthru // {
       python3Dependencies = ps: [ ps.jupytext ];
     };
