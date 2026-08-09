@@ -16,7 +16,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "knadh";
     repo = "listmonk";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yLOs1vhTV/0zzq/2Rk5rJ3/1z+kE5xaYODM5NO06F6U=";
   };
 
