@@ -1,12 +1,12 @@
 {
   lib,
-  swiftPackages,
   swift,
   swiftpm,
   fetchFromGitHub,
+  stdenv,
 }:
 
-swiftPackages.stdenv.mkDerivation {
+stdenv.mkDerivation {
   pname = "pam-watchid";
   version = "2-unstable-2024-12-24";
 
