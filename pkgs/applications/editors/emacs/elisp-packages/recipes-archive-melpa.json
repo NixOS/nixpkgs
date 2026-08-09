@@ -122078,8 +122078,8 @@
   "repo": "emacs-slack/emacs-slack",
   "unstable": {
    "version": [
-    20260807,
-    1358
+    20260808,
+    1935
    ],
    "deps": [
     "alert",
@@ -122091,8 +122091,8 @@
     "ts",
     "websocket"
    ],
-   "commit": "8cd7d72bcc82bbb433e3ba5865e0dcb931c82738",
-   "sha256": "1yc3qcpjj4gkdx3j5k9lwgh5s8f2q9xvp4ls78rp2j93wb5zl2zj"
+   "commit": "90dc2b9e9aae1c6be47b16ca2948dced265eb7c2",
+   "sha256": "06qcxw553vdx5vr8ag8rc5c2a3ianpxaz7gav6apk5nwljwsjw9j"
   }
  },
  {
