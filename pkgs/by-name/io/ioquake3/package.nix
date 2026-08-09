@@ -17,7 +17,6 @@
   libjpeg,
   makeDesktopItem,
   freetype,
-  mumble,
   unstableGitUpdater,
   bc,
   cmake,
@@ -54,7 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     libogg
     libvorbis
-    mumble
     openal
     opusfile
     speex
