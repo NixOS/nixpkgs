@@ -28,7 +28,8 @@ let
     "SwiftSyntaxBuilder"
     "SwiftSyntaxMacroExpansion"
     "SwiftSyntaxMacros"
-  ];
+  ]
+  ++ lib.optionals (lib.versionAtLeast swift_release "6.3") [ "SwiftRefactor" ];
 in
 
 stdenv.mkDerivation (finalAttrs: {

@@ -2,16 +2,8 @@
   lib,
   cmake,
   coreutils,
-  darwin,
-  diffutils,
   fetchFromGitHub,
-  gnused,
-  libiconv,
-  libtiff,
-  llvmPackages_upstream,
-  llvm_libtool,
   ninja,
-  oxipng,
   replaceVars,
   sqlite,
   stdenv,
@@ -21,8 +13,8 @@
   swift-driver,
   swift-llbuild,
   swift-system,
+  swift-tools-protocols,
   swift-tools-support-core,
-  xcbuild,
   swift_release,
   swift_sources,
 }:
@@ -51,19 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # Remove as many impure paths as possible.
-    (replaceVars ./patches/0001-replace-impure-paths.patch {
-      xcrun = if stdenv.hostPlatform.isDarwin then xcbuild.xcrun else "/not-supported";
-      inherit (darwin) graphics_cmds;
-      coreutils = lib.getBin coreutils;
-      diffutils = lib.getBin diffutils;
-      gnused = lib.getBin gnused;
-      libiconv = lib.getBin libiconv;
-      libtool = lib.getBin llvm_libtool;
-      llvm = lib.getBin llvmPackages_upstream.llvm;
-      shell_cmds =
-        if stdenv.hostPlatform.isDarwin then lib.getBin darwin.shell_cmds else "/not-supported";
-      sigtool = lib.getBin darwin.sigtool;
-    })
+    ./patches/0001-replace-impure-paths.patch
     # Swift Build checks whether the SDK is Xcode by looking at the `DEVELOPER_DIR` path for Xcode.
     # Have it treat store paths as being Xcode SDKs so that the nixpkgs SDK is treated as a Darwin platform.
     (replaceVars ./patches/0002-treat-nixpkgs-sdk-as-xcode.patch {
@@ -109,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     swift-argument-parser
     swift-driver
     swift-llbuild
+    swift-tools-protocols
     swift-system
     swift-tools-support-core
   ];

@@ -20,6 +20,7 @@
   swift-llbuild,
   swift-syntax,
   swift-system,
+  swift-tools-protocols,
   swift-tools-support-core,
   swiftpmHook,
   swift_release,
@@ -41,6 +42,7 @@ let
     swift-llbuild
     swift-syntax-no-toolchain
     swift-system
+    swift-tools-protocols
     swift-tools-support-core
   ];
 in
@@ -107,6 +109,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  # Needed for rpath fixups to work on Darwin.
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";
+
   preConfigure = ''
     appendToVar cmakeFlags -DCMAKE_Swift_COMPILER_TARGET=${stdenv.hostPlatform.swift.triple}
     appendToVar cmakeFlags -DCMAKE_Swift_FLAGS=-module-cache-path\ "$NIX_BUILD_TOP/module-cache"
@@ -132,6 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
     swift-llbuild
     swift-syntax-no-toolchain
     swift-system
+    swift-tools-protocols
     swift-tools-support-core
   ];
 
