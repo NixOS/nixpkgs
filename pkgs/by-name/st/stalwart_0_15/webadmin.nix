@@ -3,6 +3,7 @@
   rustPlatform,
   stalwart_0_15,
   fetchFromGitHub,
+  fetchpatch,
   trunk,
   tailwindcss_3,
   fetchNpmDeps,
@@ -15,6 +16,24 @@
   zip,
 }:
 
+let
+
+  # apply upstream fix https://github.com/wasm-bindgen/wasm-bindgen/pull/4380,
+  # as we cannot change the wasm-bindgen version, as it's pinned to 0.2.93.
+  wasmBindgenCliPatched =
+    let
+      wasmBindgenCliDedupExportsPatch = fetchpatch {
+        url = "https://github.com/wasm-bindgen/wasm-bindgen/commit/b375e974cf30a203f1ea7f6320ad32759c5cb9e6.patch";
+        relative = "crates/cli-support";
+        hash = "sha256-pejDKqNbtlpLLqNcdpwgxDSxsGxyv5V8/QeK+OCY3qw=";
+      };
+    in
+    wasm-bindgen-cli_0_2_93.overrideAttrs (old: {
+      postPatch = (old.postPatch or "") + ''
+        patch -p1 -d "$cargoDepsCopy"/*/wasm-bindgen-cli-support-* < ${wasmBindgenCliDedupExportsPatch}
+      '';
+    });
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "webadmin";
   version = "0.1.37";
@@ -46,7 +65,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tailwindcss_3
     trunk
     # needs to match with wasm-bindgen version in upstreams Cargo.lock
-    wasm-bindgen-cli_0_2_93
+    wasmBindgenCliPatched
 
     zip
   ];

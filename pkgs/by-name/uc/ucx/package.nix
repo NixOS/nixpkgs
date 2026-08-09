@@ -125,6 +125,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Unified Communication X library";
     homepage = "https://www.openucx.org";
+    downloadPage = "https://github.com/openucx/ucx";
+    changelog = "https://github.com/openucx/ucx/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     # LoongArch64 is not supported.
