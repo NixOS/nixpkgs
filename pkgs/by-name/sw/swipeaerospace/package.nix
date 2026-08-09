@@ -4,12 +4,11 @@
   fetchFromGitHub,
   lib,
   nix-update-script,
-  swiftPackages,
+  stdenv,
+  swift,
 }:
 
 let
-  inherit (swiftPackages) stdenv swift;
-
   blueSocket = stdenv.mkDerivation (finalAttrs: {
     pname = "blue-socket";
     version = "2.0.4";
