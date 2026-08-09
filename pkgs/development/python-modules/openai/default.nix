@@ -49,10 +49,10 @@
   respx,
 
   # optional-dependencies toggle
-  withAiohttp ? true,
+  withAiohttp ? false,
   withDatalib ? false,
-  withRealtime ? true,
-  withVoiceHelpers ? true,
+  withRealtime ? false,
+  withVoiceHelpers ? false,
 }:
 
 buildPythonPackage (finalAttrs: {
