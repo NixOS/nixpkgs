@@ -29956,6 +29956,12 @@
     githubId = 94648307;
     name = "Thanh Viet Nguyen";
   };
+  viewer12 = {
+    email = "marketing@nexusshell.app";
+    github = "viewer12";
+    githubId = 25808434;
+    name = "Sameral";
+  };
   vifino = {
     email = "vifino@tty.sh";
     github = "vifino";
