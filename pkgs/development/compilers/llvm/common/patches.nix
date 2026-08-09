@@ -20,6 +20,12 @@
       path = ../18;
     }
   ];
+  "lldb/backport-ParseTrieEntries-fixes.patch" = [
+    {
+      before = "23";
+      path = ../18;
+    }
+  ];
   "llvm/backport-darwin-triple-parsing.patch" = [
     {
       after = "18";
