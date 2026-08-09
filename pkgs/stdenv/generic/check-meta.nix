@@ -469,7 +469,14 @@ let
       }
 
     # --- Put checks that can be ignored here ---
-    else if hasDeniedUnfreeLicense attrs && !(nonEmptyAllowList && hasAllowlistedLicense attrs) then
+    # Testing the license first keeps `config` unforced for packages that are
+    # not unfree, which would otherwise be a cycle when `config` is a function,
+    # as those are passed `pkgs`.
+    else if
+      hasUnfreeLicense attrs
+      && hasDeniedUnfreeLicense attrs
+      && !(nonEmptyAllowList && hasAllowlistedLicense attrs)
+    then
       {
         reason = "unfree";
         msg = "has an unfree license (‘${showLicense attrs.meta.license}’)";

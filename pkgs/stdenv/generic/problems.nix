@@ -111,13 +111,19 @@ rec {
               lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2605)
                 "config.allowBrokenPredicate is deprecated, use config.problems.handlers.myPackage.broken = \"warn\" for individual packages instead."
                 config.allowBrokenPredicate;
+
+            # Testing `meta.broken` first keeps `config` unforced for packages
+            # that are not broken, which would otherwise be a cycle when
+            # `config` is a function, as those are passed `pkgs`.
+            denied =
+              if allowBroken then
+                _: false
+              else if config ? allowBrokenPredicate then
+                attrs: !allowBrokenPredicate attrs
+              else
+                _: true;
           in
-          if allowBroken then
-            attrs: false
-          else if config ? allowBrokenPredicate then
-            attrs: attrs ? meta.broken && attrs.meta.broken && !allowBrokenPredicate attrs
-          else
-            attrs: attrs ? meta.broken && attrs.meta.broken;
+          attrs: attrs ? meta.broken && attrs.meta.broken && denied attrs;
         value.message = "This package is broken.";
       };
     };
