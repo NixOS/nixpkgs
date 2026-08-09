@@ -1765,6 +1765,7 @@ mapAliases {
   nim_2_2 = throw "'nim_2_2' has been upgraded and removed, please use 'nim'"; # Added 2026-03-06
   nimbo = throw "'nimbo' has been removed due to being archived upstream."; # Added 2026-01-18
   nip2 = throw "'nip2' has been removed due to lack of maintenance and relying on gtk2.";
+  nitrogen = throw "'nitrogen' has been removed as it depended on the deprecated gtk2 via gtkmm2"; # Added 2026-08-09
   nitrokey-fido2-firmware = throw "'nitrokey-fido2-firmware' has been removed as it was broken and unmaintained upstream since 2022"; # Added 2026-03-23
   nix-direnv-flakes = throw "'nix-direnv-flakes' has been renamed to/replaced by 'nix-direnv'"; # Converted to throw 2025-10-27
   nix-ld-rs = throw "'nix-ld-rs' has been renamed to/replaced by 'nix-ld'"; # Converted to throw 2025-10-27
