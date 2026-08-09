@@ -29,15 +29,26 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
   ];
   buildInputs = [
     cairo
-    gavl
     opencv
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    gavl
   ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
-    cudaPackages.cuda_nvcc
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "WITHOUT_GAVL" (!stdenv.hostPlatform.isLinux))
+  ]
+  ++ lib.optionals cudaSupport [
+    (lib.cmakeFeature "CUDAToolkit_ROOT" "${lib.getBin cudaPackages.cuda_nvcc}")
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''

@@ -1310,8 +1310,6 @@ with pkgs;
     else
       throw "freshBootstrapTools: unknown hostPlatform ${stdenv.hostPlatform.config}";
 
-  crystfel-headless = crystfel.override { withGui = false; };
-
   inherit (callPackages ../tools/security/bitwarden-directory-connector { })
     bitwarden-directory-connector-cli
     bitwarden-directory-connector
@@ -2317,13 +2315,7 @@ with pkgs;
   };
   kakouneUtils = callPackage ../applications/editors/kakoune/plugins/kakoune-utils.nix { };
 
-  keybase = callPackage ../tools/security/keybase { };
-
-  kbfs = callPackage ../tools/security/keybase/kbfs.nix { };
-
   kbdVlock = callPackage ../by-name/kb/kbd/package.nix { withVlock = true; };
-
-  keybase-gui = callPackage ../tools/security/keybase/gui.nix { };
 
   keycloakPlugins = recurseIntoAttrs keycloak.plugins;
 
@@ -10187,10 +10179,6 @@ with pkgs;
   neuron-full = neuron-mpi.override {
     useCore = true;
     useRx3d = true;
-  };
-
-  minc_tools = callPackage ../applications/science/biology/minc-tools {
-    inherit (perlPackages) perl TextFormat;
   };
 
   raxml-mpi = raxml.override { useMpi = true; };

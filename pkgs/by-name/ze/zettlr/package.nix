@@ -15,7 +15,7 @@ let
     url = "https://github.com/Zettlr/Zettlr/releases/download/v${version}/Zettlr-${version}-x86_64.appimage";
     hash = "sha256-l1jpZZ6vAlmTlu0m106waeVQaM1mZb5wC1Tcv2IS0Ec=";
   };
-  appimageContents = appimageTools.extractType2 {
+  appimageContents = appimageTools.extract {
     inherit pname version src;
   };
 in
