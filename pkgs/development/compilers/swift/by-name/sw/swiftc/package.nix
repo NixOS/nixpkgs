@@ -61,6 +61,9 @@
 }:
 
 let
+  # Swift 6.2.4 requires different settings and disables LTO to improve build times.
+  isBootstrapToolchain62 = lib.versions.majorMinor swift_release == "6.2";
+
   # SDK versions past 14.x don’t work with the c++-based bootstrap compiler due to unconditionally exposing macros.
   build-sdk = if bootstrapStage == 2 then apple-sdk_26 else apple-sdk_14;
 
@@ -272,8 +275,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (bootstrapStage >= 2) (
     [
-      # Build Swift with LTO for better performance. Only enable it for tools. The stdlib will enable it separately.
-      (lib.cmakeFeature "SWIFT_TOOLS_ENABLE_LTO" "thin")
       # Enable the remaining features.
       (lib.cmakeBool "SWIFT_ENABLE_EXPERIMENTAL_CXX_INTEROP" true)
       (lib.cmakeBool "SWIFT_ENABLE_EXPERIMENTAL_DIFFERENTIABLE_PROGRAMMING" true)
@@ -285,16 +286,22 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "SWIFT_ENABLE_RUNTIME_MODULE" true)
       (lib.cmakeBool "SWIFT_STDLIB_ENABLE_STRICT_AVAILABILITY" true)
     ]
-    ++ lib.optionals stdenv.cc.bintools.isGNU [
-      # Use `llvm-ar` and `llvm-ranlib` when LTO is enabled, or builds will fail due missing symbol tables in archives.
-      # e.g., `error: lib/libswiftDemangling.a: no archive symbol table (run ranlib)`.
-      (lib.cmakeFeature "CMAKE_AR" (lib.getExe' llvm "llvm-ar"))
-      (lib.cmakeFeature "CMAKE_RANLIB" (lib.getExe' llvm "llvm-ranlib"))
-      # Make sure Swift is built with a consistent toolchain version. This doesn’t matter for non-LTO builds, but it causes
-      # LTO builds to fail when objects built with a newer Clang are processed by the Swift Clang’s libLTO.
-      (lib.cmakeFeature "CMAKE_C_COMPILER" (lib.getExe' clang "clang"))
-      (lib.cmakeFeature "CMAKE_CXX_COMPILER" (lib.getExe' clang "clang++"))
-    ]
+    ++ lib.optionals (!isBootstrapToolchain62) (
+      [
+        # Build Swift with LTO for better performance. Only enable it for tools. The stdlib will enable it separately.
+        (lib.cmakeFeature "SWIFT_TOOLS_ENABLE_LTO" "thin")
+      ]
+      ++ lib.optionals stdenv.cc.bintools.isGNU [
+        # Use `llvm-ar` and `llvm-ranlib` when LTO is enabled, or builds will fail due missing symbol tables in archives.
+        # e.g., `error: lib/libswiftDemangling.a: no archive symbol table (run ranlib)`.
+        (lib.cmakeFeature "CMAKE_AR" (lib.getExe' llvm "llvm-ar"))
+        (lib.cmakeFeature "CMAKE_RANLIB" (lib.getExe' llvm "llvm-ranlib"))
+        # Make sure Swift is built with a consistent toolchain version. This doesn’t matter for non-LTO builds, but it causes
+        # LTO builds to fail when objects built with a newer Clang are processed by the Swift Clang’s libLTO.
+        (lib.cmakeFeature "CMAKE_C_COMPILER" (lib.getExe' clang "clang"))
+        (lib.cmakeFeature "CMAKE_CXX_COMPILER" (lib.getExe' clang "clang++"))
+      ]
+    )
   );
 
   env = {
