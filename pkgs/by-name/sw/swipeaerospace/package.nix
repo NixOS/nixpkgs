@@ -97,10 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-468QGWjbRtA9Fml6jjeJZBTCUEp227cQPckqwyLK0dM=";
   };
 
-  # Keep SettingsView unchanged, but open it through a regular WindowGroup.
-  # @Environment(\.openSettings) does not compile with nixpkgs' SwiftUI SDK.
-  patches = [ ./settings-window.patch ];
-
   nativeBuildInputs = [
     swift
     actool
