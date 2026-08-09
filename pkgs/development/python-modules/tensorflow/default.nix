@@ -634,6 +634,10 @@ buildPythonPackage {
   # https://github.com/tensorflow/tensorflow/blob/v1.7.1/tensorflow/tools/pip_package/setup.py#L79
   postInstall = ''
     rm $out/bin/tensorboard
+
+    # Don't set RTLD_GLOBAL by removing file only meant to ship in static builds.
+    # https://github.com/tensorflow/tensorflow/commit/5720ab7845de0b2a2e2f5fdf547d2515d39a20b9
+    rm $out/${python.sitePackages}/tensorflow/python/pywrap_dlopen_global_flags.py
   '';
 
   setupPyGlobalFlags = [
