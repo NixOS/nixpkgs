@@ -25,6 +25,9 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "19skrhp10xx07hbd0lr3d619vj2im35d8p9rmb4v4zacci804q04";
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   patches = [
     ./disable-gtk2.patch
   ];
