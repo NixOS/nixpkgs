@@ -1,17 +1,16 @@
 {
   lib,
-  swiftPackages,
   fetchFromGitHub,
   darwin,
   actool,
   ibtool,
   makeWrapper,
   nix-update-script,
+  swift,
+  stdenv,
 }:
 
 let
-  inherit (swiftPackages) stdenv swift;
-
   masShortcutSrc = fetchFromGitHub {
     owner = "rxhanson";
     repo = "MASShortcut";
