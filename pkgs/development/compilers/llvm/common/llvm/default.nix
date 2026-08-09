@@ -278,6 +278,12 @@ stdenv.mkDerivation (
         # a new arm64 subtype that gives more pointer authentication machinery.
         # Vendored backport of the patch for LLVM 23
         (getVersionFile "llvm/backport-minimal-arm64e_x1-support.patch")
+      ]
+      ++ lib.optionals (lib.versionOlder release_version "23") [
+        # macOS 27 requires the string pool to be pointer-aligned when dylibs are linked against the 27.0 SDK.
+        # While ld64 does align them correctly, they are misaligned by LLVM’s `strip`.
+        # See: https://github.com/llvm/llvm-project/issues/203678
+        (getVersionFile "llvm/align-__linkedit-entries-to-pointer-size.patch")
       ];
 
     nativeBuildInputs = [
