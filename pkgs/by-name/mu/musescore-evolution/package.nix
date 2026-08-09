@@ -46,6 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
   # Download manually at Help > Manage Resources
   cmakeFlags = [
     (lib.cmakeBool "DOWNLOAD_SOUNDFONT" false)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeFeature "CMAKE_CXX_STANDARD" "17")
   ];
 
   qtWrapperArgs = [
