@@ -3,10 +3,18 @@
   lib,
   stdenv,
   writeText,
-  jdk,
+  openjdk21,
+  openjfx21,
   makeWrapper,
   nixosTests,
 }:
+let
+  openjfx_jdk = openjfx21.override { withWebKit = true; };
+  jdk = openjdk21.override {
+    enableJavaFX = true;
+    inherit openjfx_jdk;
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "soapui";
   version = "5.9.1";
