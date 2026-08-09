@@ -267,6 +267,15 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "SWIFT_ENABLE_EXPERIMENTAL_STRING_PROCESSING" true)
     # Synchronization is required to build Foundation.
     (lib.cmakeBool "SWIFT_ENABLE_SYNCHRONIZATION" true)
+    # The stage 1 compiler needs to support backtracing to link against a stdlib with backtracing support.
+    #
+    # When building the stdlib, Swift first builds itself using the stdlib from the bootstrap compiler, then it builds
+    # the stdlib using that compiler. This is necessary because Swift does not support building the stdlib with a
+    # different compiler version than the stdlib version.
+    #
+    # This isn’t necessary when building the stage 1 compiler for Swift 6.2.4 because it uses the stage 0 C++ bootstrap
+    # compiler, but newer versions of Swift use a fully-featured Swift 6.2.4 to build their stage 1 compilers.
+    (lib.cmakeBool "SWIFT_ENABLE_BACKTRACING" true)
   ]
   ++ lib.optionals (bootstrapStage >= 2) (
     [
@@ -275,7 +284,6 @@ stdenv.mkDerivation (finalAttrs: {
       # LTO is slow with ld64. Only use it for targets that benefit from LTO.
       (lib.cmakeBool "SWIFT_TOOLS_LD64_LTO_CODEGEN_ONLY_FOR_SUPPORTING_TARGETS" stdenv.hostPlatform.isDarwin)
       # Enable the remaining features.
-      (lib.cmakeBool "SWIFT_ENABLE_BACKTRACING" true)
       (lib.cmakeBool "SWIFT_ENABLE_EXPERIMENTAL_CXX_INTEROP" true)
       (lib.cmakeBool "SWIFT_ENABLE_EXPERIMENTAL_DIFFERENTIABLE_PROGRAMMING" true)
       (lib.cmakeBool "SWIFT_ENABLE_EXPERIMENTAL_DISTRIBUTED" true)
