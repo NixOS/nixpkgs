@@ -5,27 +5,33 @@
   pkg-config,
   go,
   llvm,
-  clang,
+  clang_20,
   bash,
   writableTmpDirAsHomeHook,
   gitMinimal,
+  installShellFiles,
+  nix-update-script,
 }:
-
+let
+  # https://github.com/cilium/tetragon/issues/5389
+  clang = clang_20;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tetragon";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "cilium";
     repo = "tetragon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-A6a7yjxenB/7sfdfoIaJAxdkw0ouNinZtahNMRAytwA=";
+    hash = "sha256-MOBT2hdzssrWW34v0K4CE4qlAmB+Y7F/R5kAxjl6yT8=";
   };
 
   nativeBuildInputs = [
     pkg-config
     writableTmpDirAsHomeHook
     gitMinimal
+    installShellFiles
   ];
 
   buildInputs = [
@@ -68,16 +74,32 @@ stdenv.mkDerivation (finalAttrs: {
     cp -n -r ./bpf/objs $out/lib/tetragon/bpf
     install -m755 -D ./tetra $out/bin/tetra
     install -m755 -D ./tetragon $out/bin/tetragon
-
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd tetra \
+      --bash <($out/bin/tetra completion bash) \
+      --fish <($out/bin/tetra completion fish) \
+      --zsh <($out/bin/tetra completion zsh)
+    installShellCompletion --cmd tetragon \
+      --bash <($out/bin/tetragon completion bash) \
+      --fish <($out/bin/tetragon completion fish) \
+      --zsh <($out/bin/tetragon completion zsh)
+  ''
+  + ''
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
   meta = {
     description = "Real-time, eBPF-based Security Observability and Runtime Enforcement tool";
     homepage = "https://github.com/cilium/tetragon";
     license = lib.licenses.asl20;
     mainProgram = "tetragon";
-    maintainers = with lib.maintainers; [ gangaram ];
+    maintainers = with lib.maintainers; [
+      gangaram
+      RoGreat
+    ];
     platforms = lib.platforms.linux;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
   };
