@@ -36,6 +36,9 @@ let
   commonPatches = [
     # Do not look in /usr etc. for dependencies.
     ./no-sys-dirs.patch
+
+    ./CVE-2026-15534-1.patch
+    ./CVE-2026-15534-2.patch
   ]
 
   # Fix build on Solaris on x86_64
