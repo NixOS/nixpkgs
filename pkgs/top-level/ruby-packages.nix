@@ -3552,10 +3552,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1pa9zpr51kqnsq549p6apvnr95s9flx6bnwqii24s8jg2b5i0p74";
+      sha256 = "1c0l2jb2d75zdw7diqhh6sciwlxcwfacshp107af0cnmmff0xgyp";
       type = "gem";
     };
-    version = "7.1.0";
+    version = "7.2.1";
   };
   pwntools = {
     dependencies = [
