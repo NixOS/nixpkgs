@@ -61,6 +61,7 @@ let
     genList
     getExe
     getExe'
+    getDarwinApp
     getDarwinApp'
     getLicenseFromSpdxIdOr
     groupBy
@@ -4714,6 +4715,16 @@ runTests {
   testGetExe'FailureFirstArg = testingThrow (getExe' "not a derivation" "executable");
 
   testGetExe'FailureSecondArg = testingThrow (getExe' { type = "derivation"; } "dir/executable");
+
+  testGetDarwinAppOutput = {
+    expr = getDarwinApp {
+      type = "derivation";
+      out = "somelonghash";
+      bin = "somelonghash";
+      meta.mainDarwinApp = "mainDarwinApp.app";
+    };
+    expected = "somelonghash/Applications/mainDarwinApp.app";
+  };
 
   testGetDarwinApp'Output = {
     expr = getDarwinApp' {

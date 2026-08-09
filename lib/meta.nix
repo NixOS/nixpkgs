@@ -530,7 +530,7 @@ rec {
         lib.warn
           "getExe: Package ${
             lib.strings.escapeNixIdentifier x.meta.name or x.pname or x.name
-          } does not have the meta.mainProgram attribute. We'll assume that the main program has the same name for now, but this behavior is deprecated, because it leads to surprising errors when the assumption does not hold. If the package has a main program, please set `meta.mainProgram` in its definition to make this warning go away. Otherwise, if the package does not have a main program, or if you don't control its definition, use getExe' to specify the name to the program, such as lib.getExe' foo \"bar\"."
+          } does not have the meta.mainProgram attribute. We'll assume that the main program has the same name for now, but this behavior is deprecated, because it leads to surprising errors when the assumption does not hold. If the package has a main program, please set `meta.mainProgram` in its definition to make this error go away. Otherwise, if the package does not have a main program, or if you don't control its definition, use getExe' to specify the name to the program, such as lib.getExe' foo \"bar\"."
           lib.getName
           x
       )
@@ -580,6 +580,42 @@ rec {
       match ".*/.*" y == null
       || throw "lib.meta.getExe': The second argument \"${y}\" is a nested path with a \"/\" character, but it should just be the name of the executable instead.";
     "${getBin x}/bin/${y}";
+
+  /**
+    Get the path to the main darwin app of a package based on `meta.mainDarwinApp`
+
+    # Inputs
+
+    `x`
+
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    getDarwinApp :: Derivation -> StorePath
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.meta.getDarwinApp` usage example
+
+    ```nix
+    getDarwinApp pkgs.vscodium
+    => "/nix/store/0y95mgmlrs8cayv2cnj23xjfljwhlib0-vscodium-1.121.03429/Applications/VSCodium.app"
+    getDarwinApp pkgs.slack
+    => "/nix/store/g52cl8dblki8dr5bkr0vajpkralkmhi0-slack-4.49.89/Applications/Slack.app"
+    ```
+
+    :::
+  */
+  getDarwinApp =
+    x:
+    getDarwinApp' x (
+      x.meta.mainDarwinApp or (builtins.throw "getDarwinApp: Package ${
+        lib.strings.escapeNixIdentifier x.meta.name or x.pname or x.name
+      } does not have the meta.mainDarwinApp attribute. If the package has a main darwin app, please set `meta.mainDarwinApp` in its definition to make this warning go away. Otherwise, if the package does not have a main darwin app, or if you don't control its definition, use getDarwinApp' to specify the name to the program, such as lib.getDarwinApp' vscodium \"VSCodium.app\".")
+    );
 
   /**
     Get the path of an darwin app for a derivation.
