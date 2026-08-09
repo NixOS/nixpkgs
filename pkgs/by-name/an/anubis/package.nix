@@ -15,21 +15,21 @@
 
 buildGoModule (finalAttrs: {
   pname = "anubis";
-  version = "1.26.2";
+  version = "1.27.0";
 
   src = fetchFromGitHub {
     owner = "TecharoHQ";
     repo = "anubis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yY8dwWyQy/N3A32MYtxLWAJCmR9rtSyzaYUHBNXRm/0=";
+    hash = "sha256-YFjUgePFDH6OvlLNEF2F55Z5lr4lw5vXXXSnEySQDRk=";
   };
 
-  vendorHash = "sha256-+NPwL4p0p/s74m1Ld0z2GEcsWk5FqhcLbHrTNP3yEzk=";
+  vendorHash = "sha256-5eHlR1zMogegkCO9yCU0kZcNQhTdDha0WhUPeR5eep8=";
 
   npmDeps = fetchNpmDeps {
     name = "anubis-npm-deps";
     inherit (finalAttrs) src;
-    hash = "sha256-SPoI66jy2XS4FM6BaJPt18dV1QM12nIOdeD5sAMaOzQ=";
+    hash = "sha256-DDql6lIZdqv59wl7oJSY6SrXe+EYpy6aaRqOGukunm8=";
   };
 
   nativeBuildInputs = [
