@@ -24,17 +24,17 @@
 let
   src = buildNpmPackage (finalAttrs: {
     pname = "fava-frontend";
-    version = "1.30.13";
+    version = "1.30.14";
 
     src = fetchFromGitHub {
       owner = "beancount";
       repo = "fava";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-h4mjZIINR6RLYycGl2RFIEGuPPbJYYSg1TBGlZupCMw=";
+      hash = "sha256-whfFXZjhZl69cUie/7xFLcsvqUmpDRHVAO56HEsz0HE=";
     };
     sourceRoot = "${finalAttrs.src.name}/frontend";
 
-    npmDepsHash = "sha256-DQQISV615wZjNbvZwmF/AGJyJJIIs3iBS1tJCNPpT/o=";
+    npmDepsHash = "sha256-FFqBomnTbiJLaxMtEKPkb4/ASFbtcF6lR/MbcK+MiaQ=";
     makeCacheWritable = true;
 
     preBuild = ''
