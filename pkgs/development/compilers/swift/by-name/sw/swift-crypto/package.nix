@@ -14,6 +14,7 @@ let
 
   swift' = swift.override {
     enableRepl = false;
+    enableSourceKitLSP = false;
   };
 in
 

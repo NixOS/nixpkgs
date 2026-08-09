@@ -36,6 +36,7 @@ let
 
   swift' = swift.override {
     enableRepl = false;
+    enableSourceKitLSP = false;
   };
 
   # FIXME: Drop once `darwin.sigtool` has a new release.

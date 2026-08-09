@@ -21,6 +21,7 @@ let
   swift' = swift.override {
     swift-testing = null;
     enableRepl = false;
+    enableSourceKitLSP = false;
   };
 in
 
