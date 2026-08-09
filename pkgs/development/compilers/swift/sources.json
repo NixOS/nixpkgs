@@ -6,10 +6,7 @@
     "hash": "sha256-EzSgVCdEYtrrC9fjqUVu4ALp8FmtwgLfLzL/pMQKb/4="
   },
   "sourcekit-lsp": {
-    "hash": "sha256-/uAkOzNRRFkUC+qYntBytcEcWWBEpH5hsko0LR3Skhs=",
-    "swiftpmDeps": {
-      "hash": "sha256-p12/b/OR+etd7W22ERxkyxCuSEKTifRrYzPEKhj2BN8="
-    }
+    "hash": "sha256-/uAkOzNRRFkUC+qYntBytcEcWWBEpH5hsko0LR3Skhs="
   },
   "swift": {
     "hash": "sha256-X3jFUJiASISZmqVR1aiHF0nDL15fiIupsIUMjOTtBCM="
