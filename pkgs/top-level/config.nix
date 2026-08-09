@@ -249,6 +249,30 @@ let
       '';
     };
 
+    allowNonSource = mkOption {
+      type = types.bool;
+      default = true;
+      # getEnv part is in check-meta.nix
+      defaultText = literalExpression ''
+        let envVar = getEnv "NIXPKGS_ALLOW_NONSOURCE"; in envVar != "" then envVar != "0" else config.allowNonSource
+      '';
+      description = ''
+        Whether to allow packages that are not built from source.
+      '';
+    };
+
+    allowNonSourcePredicate = mkOption {
+      type = types.functionTo types.bool;
+      default = x: false;
+      defaultText = literalExpression "x: false";
+      description = ''
+        Allow granular checks to allow only some non-source-built packages.
+      '';
+      example = literalExpression ''
+        pkg: !(lib.lists.any (p: !p.isSource && p != lib.sourceTypes.binaryFirmware) pkg.meta.sourceProvenance);
+      '';
+    };
+
     allowUnfree = mkOption {
       type = types.bool;
       default = false;
@@ -278,6 +302,16 @@ let
       '';
     };
 
+    allowUnfreePredicate = mkOption {
+      type = types.functionTo types.bool;
+      default = x: false;
+      defaultText = literalExpression "x: false";
+      description = ''
+        Allow granular checks to allow only some unfree packages.
+      '';
+      example = literalExpression ''pkg: builtins.elem (lib.getName pkg) [ "vscode" ]'';
+    };
+
     allowBroken = mkOption {
       type = types.bool;
       default = false;
@@ -287,6 +321,16 @@ let
         Whether to allow broken packages.
 
         See [Installing broken packages](https://nixos.org/manual/nixpkgs/stable/#sec-allow-broken) in the NixOS manual.
+      '';
+    };
+
+    permittedInsecurePackages = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      description = ''
+        Whether to allow specific insecure packages.
+
+        See [Installing insecure packages](https://nixos.org/manual/nixpkgs/stable/#sec-allow-insecure) in the NixOS manual.
       '';
     };
 
@@ -421,6 +465,14 @@ let
       '';
     };
 
+    checkMetaRecursively = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to check meta recursively through dependencies.
+      '';
+    };
+
     recursionMode = mkOption {
       type = types.uniq (
         types.enum [
@@ -469,6 +521,16 @@ let
       '';
     };
 
+    android_sdk.accept_license = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        If the Android SDK Platform-Tools license has been accepted.
+
+        Please go to <https://developer.android.com/tools/releases/platform-tools> and download the SDK Platform-Tools for Linux to see the license.
+      '';
+    };
+
     microsoftVisualStudioLicenseAccepted = mkOption {
       type = types.bool;
       default = false;
@@ -495,6 +557,54 @@ let
 
         See the [release notes](#x86_64-darwin-26.11) for more
         information.
+      '';
+    };
+
+    packageOverrides = mkOption {
+      type = types.functionTo types.attrs;
+      default = pkgs: { };
+      description = ''
+        A function to replace or add packages in `pkgs` expects an attrset to be returned when called.
+      '';
+    };
+
+    perlPackageOverrides = mkOption {
+      type = types.functionTo types.attrs;
+      default = pkgs: { };
+      description = ''
+        The same as `packageOverrides` but for packages in the perl package set.
+      '';
+    };
+
+    inHydra = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Wether to change the log format to the one used in Hydra.
+      '';
+    };
+
+    allowlistedLicenses = mkOption {
+      type = types.listOf types.anything; # TODO: use license type ones we have that in check-meta
+      default = [ ];
+      description = ''
+        License which are allowed to be used.
+      '';
+    };
+
+    blocklistedLicenses = mkOption {
+      type = types.listOf types.anything; # TODO: use license type ones we have that in check-meta
+      default = [ ];
+      description = ''
+        License which are not allowed to be used.
+      '';
+    };
+
+    stdenv.userHook = mkMassRebuild {
+      type = types.nullOr types.path;
+      default = null;
+      description = ''
+        Global user hook, can be used to define global build flags.
       '';
     };
 
