@@ -10,6 +10,7 @@
   pyprojectVersionPatchHook,
   pytestCheckHook,
   pytest-rerunfailures,
+  pytest-xdist,
   setuptools,
   tomli-w,
 }:
@@ -47,12 +48,8 @@ buildPythonPackage (finalAttrs: {
     git
     pytestCheckHook
     pytest-rerunfailures
+    pytest-xdist
     tomli-w
-  ];
-
-  # limit tests because the full suite takes several minutes to run
-  enabledTestMarks = [
-    "important"
   ];
 
   disabledTests = [
