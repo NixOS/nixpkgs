@@ -2909,10 +2909,6 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  texmacs = callPackage ../applications/editors/texmacs {
-    extraFonts = true;
-  };
-
   tldr-hs = haskellPackages.tldr;
 
   tmuxPlugins = recurseIntoAttrs (callPackage ../misc/tmux-plugins { });
@@ -9126,15 +9122,6 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
-  pdfpc = callPackage ../applications/misc/pdfpc {
-    inherit (gst_all_1)
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-libav
-      ;
-  };
-
   pianoteq = callPackage ../applications/audio/pianoteq { };
 
   pidginPackages = recurseIntoAttrs (
@@ -10449,14 +10436,6 @@ with pkgs;
   };
 
   ### SCIENCE / MATH
-
-  caffe = callPackage ../applications/science/math/caffe (
-    {
-      opencv4 = opencv4WithoutCuda; # Used only for image loading.
-      blas = openblas;
-    }
-    // (config.caffe or { })
-  );
 
   gap-minimal = lowPrio (gap.override { packageSet = "minimal"; });
 

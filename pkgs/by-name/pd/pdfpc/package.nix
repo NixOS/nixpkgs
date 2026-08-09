@@ -9,10 +9,7 @@
   libgee,
   poppler,
   libpthread-stubs,
-  gstreamer,
-  gst-plugins-base,
-  gst-plugins-good,
-  gst-libav,
+  gst_all_1,
   gobject-introspection,
   wrapGAppsHook3,
   qrencode,
@@ -24,14 +21,23 @@
   librsvg,
 }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (gst_all_1)
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-libav
+    ;
+in
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "pdfpc";
   version = "4.7.0";
 
   src = fetchFromGitHub {
     repo = "pdfpc";
     owner = "pdfpc";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fPhCrn1ELC03/II+e021BUNJr1OKCBIcFCM7z+2Oo+s=";
   };
 
@@ -82,4 +88,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
   };
 
-}
+})
