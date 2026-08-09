@@ -135,25 +135,40 @@ in
     expected = false;
   };
 
-  # Passing both config and _configDefinitions is not allowed
-  testConfigAndDefinitionsMutuallyExclusive = {
+  # `config` also accepts a list of modules, which is how the NixOS module
+  # forwards its definitions. Merging and properties work across them.
+  testStandaloneConfigModules = {
+    expr =
+      let
+        pkgs' = import nixpkgsPath {
+          config = [
+            { allowUnfree = true; }
+            { allowBroken = true; }
+            { allowBroken = lib.mkForce false; }
+          ];
+        };
+      in
+      {
+        inherit (pkgs'.config) allowUnfree allowBroken;
+      };
+    expected = {
+      allowUnfree = true;
+      allowBroken = false;
+    };
+  };
+
+  # Module locations are preserved, so conflicts point at the defining file.
+  testConfigModuleLocations = {
     expr =
       (import nixpkgsPath {
-        config = {
-          allowUnfree = true;
-        };
-        _configDefinitions = [
-          {
-            file = "test";
-            value = {
-              allowBroken = true;
-            };
-          }
+        config = map (lib.modules.setDefaultModuleLocation "some-file.nix") [
+          { fetchedSourceNameDefault = "versioned"; }
+          { fetchedSourceNameDefault = "full"; }
         ];
-      }).config.allowUnfree;
+      }).config.fetchedSourceNameDefault;
     expectedError = {
       type = "ThrownError";
-      msg = ".*_configDefinitions.*internal.*must not be combined.*";
+      msg = ".*some-file.nix.*";
     };
   };
 }

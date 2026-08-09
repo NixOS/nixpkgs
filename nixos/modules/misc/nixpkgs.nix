@@ -34,7 +34,15 @@ let
     ++ lib.optional (opt.localSystem.highestPrio < (lib.mkOptionDefault { }).priority) opt.localSystem
     ++ lib.optional (opt.crossSystem.highestPrio < (lib.mkOptionDefault { }).priority) opt.crossSystem;
 
-  _configDefinitions = opt.config.definitionsWithLocations;
+  # Forward the `nixpkgs.config` definitions unevaluated, so that Nixpkgs
+  # performs the single authoritative evaluation of `pkgs/top-level/config.nix`
+  # and merging follows the usual module system semantics.
+  #
+  # Passing this always, even when empty, also keeps `impure.nix` from falling
+  # back to the `NIXPKGS_CONFIG` environment variable.
+  configModules = map (
+    def: lib.modules.setDefaultModuleLocation def.file def.value
+  ) opt.config.definitionsWithLocations;
 
   defaultPkgs =
     if opt.hostPlatform.isDefined then
@@ -53,20 +61,14 @@ let
       in
       import ../../.. (
         {
-          inherit _configDefinitions;
+          config = configModules;
           inherit (cfg) overlays;
-          # Explicitly set config to prevent impure.nix from filling it
-          # from the NIXPKGS_CONFIG environment variable.
-          config = { };
         }
         // systemArgs
       )
     else
       import ../../.. {
-        inherit _configDefinitions;
-        # Explicitly set config to prevent impure.nix from filling it
-        # from the NIXPKGS_CONFIG environment variable.
-        config = { };
+        config = configModules;
         inherit (cfg)
           overlays
           localSystem

@@ -28,6 +28,11 @@
   crossSystem ? null,
 
   # Allow a configuration attribute set to be passed in as an argument.
+  #
+  # This may also be a function returning one, or a list of modules for
+  # `pkgs/top-level/config.nix`. The NixOS `nixpkgs` module uses the latter to
+  # forward the `nixpkgs.config` definitions unevaluated, so that the module
+  # system merges them here with their priorities and locations intact.
   config ? { },
 
   # Temporary hack to let Nixpkgs forbid internal use of `lib.fileset`
@@ -44,11 +49,6 @@
   # environment. See below for the arguments given to that function, the type of
   # list it returns.
   stdenvStages ? import ../stdenv,
-
-  # Temporary parameter to unify nixpkgs/pkgs evaluation
-  # Internal, do not use this manually!
-  # Will be removed again within the next releases
-  _configDefinitions ? null,
 
   # Ignore unexpected args.
   ...
@@ -114,13 +114,11 @@ let
       (throwIfNot (lib.all lib.isFunction overlays) "All overlays passed to nixpkgs must be functions.")
       (throwIfNot (lib.isList crossOverlays) "The crossOverlays argument to nixpkgs must be a list.")
       (throwIfNot (lib.all lib.isFunction crossOverlays) "All crossOverlays passed to nixpkgs must be functions.")
-      (throwIf (
-        ((localSystem.isDarwin && localSystem.isx86) || (crossSystem.isDarwin && crossSystem.isx86))
-        && config.allowDeprecatedx86_64Darwin != "force"
-      ) x86_64DarwinDeprecationMessage)
       (
-        throwIfNot (_configDefinitions == null || config0 == { })
-          "The `_configDefinitions` argument is an internal interface and must not be combined with `config`."
+        throwIf (
+          ((localSystem.isDarwin && localSystem.isx86) || (crossSystem.isDarwin && crossSystem.isx86))
+          && config.allowDeprecatedx86_64Darwin != "force"
+        ) x86_64DarwinDeprecationMessage
       );
 
   localSystem = lib.systems.elaborate args.localSystem;
@@ -153,8 +151,8 @@ let
       ./config.nix
     ]
     ++ (
-      if _configDefinitions != null then
-        map (def: lib.modules.setDefaultModuleLocation def.file def.value) _configDefinitions
+      if lib.isList config0 then
+        config0
       else
         [
           {
@@ -203,20 +201,7 @@ let
   # via `evalModules` is not idempotent. In other words, if you add `config` to
   # `newArgs`, expect strange very hard to debug errors! (Yes, I'm speaking from
   # experience here.)
-  #
-  # `_configDefinitions` (only ever set by the NixOS `nixpkgs` module) and
-  # `config` are mutually exclusive, see `checked` above. A caller passing
-  # `config` supplies the complete configuration for the new package set —
-  # it is derived from the `config` variable above, which already contains
-  # everything `_configDefinitions` evaluated to — so the definitions must be
-  # dropped instead of being combined. Without this, package set variants
-  # overriding `config` (`pkgsRocm`, `pkgsCuda`, `pkgsChecked`, ...) would fail
-  # to evaluate inside a NixOS configuration.
-  nixpkgsFun =
-    newArgs:
-    import ./. (
-      (if newArgs ? config then removeAttrs args [ "_configDefinitions" ] else args) // newArgs
-    );
+  nixpkgsFun = newArgs: import ./. (args // newArgs);
 
   # Partially apply some arguments for building bootstrapping stage pkgs
   # sets. Only apply arguments which no stdenv would want to override.
