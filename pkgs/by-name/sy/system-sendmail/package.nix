@@ -33,5 +33,6 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     priority = 10;
     mainProgram = "sendmail";
+    maintainers = with lib.maintainers; [ h7x4 ];
   };
 }
