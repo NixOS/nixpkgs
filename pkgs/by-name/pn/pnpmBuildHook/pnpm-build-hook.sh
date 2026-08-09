@@ -12,15 +12,17 @@ pnpmBuildHook() {
     concatTo pnpmWorkspacesArray pnpmWorkspaces
 
     local -a pnpmBuildFlagsArray
-    concatTo pnpmBuildFlagsArray pnpmFlags pnpmBuildFlags
+    concatTo pnpmBuildFlagsArray pnpmBuildFlags
 
+    local -a pnpmFlagsArray
+    concatTo pnpmFlagsArray pnpmFlags
 
     echo
     echo "Running"
-    echo "pnpm run ${pnpmWorkspacesArray[*]/#/--filter=} ${pnpmBuildScript:-build} ${pnpmBuildFlagsArray[*]}"
+    echo "pnpm ${pnpmFlagsArray[*]} run ${pnpmWorkspacesArray[*]/#/--filter=} ${pnpmBuildScript:-build} ${pnpmBuildFlagsArray[*]}"
     echo
 
-    if ! pnpm run "${pnpmWorkspacesArray[@]/#/--filter=}" "${pnpmBuildScript:-build}" "${pnpmBuildFlagsArray[@]}"; then
+    if ! pnpm "${pnpmFlagsArray[@]}" run "${pnpmWorkspacesArray[@]/#/--filter=}" "${pnpmBuildScript:-build}" "${pnpmBuildFlagsArray[@]}"; then
         echo
         echo "ERROR: 'pnpm run ${pnpmBuildScript:-build}' failed"
         echo
