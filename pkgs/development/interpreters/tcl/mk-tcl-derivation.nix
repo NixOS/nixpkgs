@@ -76,6 +76,8 @@ lib.extendMkDerivation {
         }
         // args.env or { };
 
+        __structuredAttrs = true;
+
         meta = {
           platforms = tcl.meta.platforms;
         }
