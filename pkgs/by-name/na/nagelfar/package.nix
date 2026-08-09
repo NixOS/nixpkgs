@@ -6,14 +6,14 @@
   tk,
 }:
 
-tcl.mkTclDerivation rec {
+tcl.mkTclDerivation (finalAttrs: {
   pname = "nagelfar";
   version = "1.3.5";
 
   src = fetchurl {
     url = "https://sourceforge.net/projects/nagelfar/files/Rel_${
-      lib.replaceString "." "" version
-    }/nagelfar${lib.replaceString "." "" version}.tar.gz";
+      lib.replaceString "." "" finalAttrs.version
+    }/nagelfar${lib.replaceString "." "" finalAttrs.version}.tar.gz";
     hash = "sha256-O6+SD7NLc+MgZxGDZdB02FkpjivON0itlFhiS+zoWyM=";
   };
 
@@ -43,4 +43,4 @@ tcl.mkTclDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.nat-418 ];
   };
-}
+})
