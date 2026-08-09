@@ -257,7 +257,6 @@ stdenv.mkDerivation {
     ];
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
-      chkno
       fgaz
       thekostins
       indium114
