@@ -10081,8 +10081,6 @@ with pkgs;
     }
   );
 
-  gnome2 = recurseIntoAttrs (callPackage ../desktops/gnome-2 { });
-
   gnome = recurseIntoAttrs (callPackage ../desktops/gnome { });
 
   inherit (callPackage ../desktops/gnome/extensions { })

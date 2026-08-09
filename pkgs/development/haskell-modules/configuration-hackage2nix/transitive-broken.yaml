@@ -1320,6 +1320,7 @@ dont-distribute-packages:
  - Hashell
  - hashflare
  - hask-home
+ - haskanoid
  - haskdeep
  - haskeem
  - haskell-admin

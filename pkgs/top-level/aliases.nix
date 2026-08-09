@@ -887,6 +887,7 @@ mapAliases {
   ); # Converted to warning 2025-10-28
   forge = throw "forge was removed due to numerous vulnerabilities in freeimage"; # Added 2025-10-23
   forgejo-actions-runner = throw "'forgejo-actions-runner' has been renamed to/replaced by 'forgejo-runner'"; # Converted to throw 2025-10-27
+  foxtrotgps = throw "'foxtrotgps' has been removed as it depended on the deprecated GTK2 engine and the archive GNOME 2 libglade."; # Added 2026-07-23
   fped = throw "'fped' has been removed, as it is unmaintained upstream and depends on GTK 2. Consider using 'kicad' instead."; # Added 2026-05-22
   fractal-next = throw "'fractal-next' has been renamed to/replaced by 'fractal'"; # Converted to throw 2025-10-27
   framac = warnAlias "'framac' has been renamed to 'frama-c'" frama-c; # Added 2026-04-24
@@ -995,6 +996,16 @@ mapAliases {
   gnatcoll-zlib = throw "'gnatcoll-zlib' has been renamed to/replaced by 'gnatPackages.gnatcoll-zlib'"; # Converted to throw 2025-10-27
   gnatinspect = throw "'gnatinspect' has been renamed to/replaced by 'gnatPackages.gnatinspect'"; # Converted to throw 2025-10-27
   gnaural = throw "'gnaural' has been removed due to lack of maintenance and relying on gtk2. Consider using 'sbagen' instead"; # Added 2026-05-22
+  gnome2.GConf = throw "gnome2.GConf has been removed as it was long deprecated upstream. Consider using gsettings and dconf instead."; # Added 2026-07-23
+  gnome2.gnome-common = throw "gnome2.gnome-common has been removed as it was deprecated upstream and unused in Nixpkgs"; # Added 2026-07-23
+  gnome2.gnome_mime_data = throw "gnome2.gnome_mime_data has been removed as it was unused in Nixpkgs"; # Added 2026-07-23
+  gnome2.gtkglext = warnAlias "'gnome2.gtkglext' has been renamed to 'gtkglext'" gtkglext; # Added 2026-07-23
+  gnome2.libart_lgpl = throw "gnome2.libart_lpl has been removed as it was deprecated upstream and unused in Nixpkgs"; # Added 2026-07-23
+  gnome2.libglade = throw "gnome2.libglade has been removed as it has been archived upstream since January 2010"; # Added 2026-07-23
+  gnome2.libgnomecanvas = throw "gnome2.libgnomecanvas has been removed as it has been archived upstream since April 2012"; # Added 2026-07-23
+  gnome2.libgtksourceview = throw "gnome2.libgtksourceview has been removed as it was unmaintained upstream and depended on the deprecated GTK2 engine. Consider using gtksourceview3, gtksourceview4, or gtksourceview5 instead."; # Added 2026-07-23
+  gnome2.libIDL = throw "gnome2.libIDL has been removed as it has been archived upstream since July 2014"; # Added 2026-07-23
+  gnome2.ORBit2 = throw "gnome2.ORBit2 has been removed as it has been archived upstream since July 2016"; # Added 2026-07-23
   gnome-bluetooth_1_0 = throw "'gnome-bluetooth_1_0' has been removed as it is unmaintained upstream"; # Added 2026-03-09
   gnome-firmware-updater = throw "'gnome-firmware-updater' has been renamed to/replaced by 'gnome-firmware'"; # Converted to throw 2025-10-27
   gnome-icon-theme = throw "'gnome-icon-theme' has been removed because it is unmaintained upstream and depends on GTK 2."; # Added 2026-07-22
@@ -1158,6 +1169,7 @@ mapAliases {
   jsduck = throw "jsduck has been removed, as it was broken and unmaintained upstream."; # Added 2025-12-02
   julia_19 = throw "Julia 1.9 has reached its end of life and 'julia_19' has been removed. Please use a supported version."; # Added 2025-10-29
   julia_19-bin = throw "Julia 1.9 has reached its end of life and 'julia_19-bin' has been removed. Please use a supported version."; # Added 2025-10-29
+  jwm-settings-manager = throw "'jwm-settings-manager' has been removed, as it is unmaintained upstream"; # Added 2026-08-01
   k3s_1_30 = throw "'k3s_1_30' has been removed from nixpkgs as it has reached end of life"; # Added 2025-09-01
   k3s_1_31 = throw "'k3s_1_31' has been removed from nixpkgs as it has reached end of life"; # Added 2025-12-08
   k3s_1_32 = throw "'k3s_1_32' has been removed from nixpkgs as it has reached end of life"; # Added 2026-03-31
@@ -1934,6 +1946,7 @@ mapAliases {
   pkgsx86_64Darwin = throw "pkgsx86_64Darwin has been removed, as support for the platform has been dropped; see https://nixos.org/manual/nixpkgs/unstable/release-notes#x86_64-darwin-26.11"; # Added 2026-06-21
   plandex = throw "plandex has been removed, as it is not maintained anymore"; # Added 2026-05-18
   plandex-server = throw "plandex has been removed, as it is not maintained anymore"; # Added 2026-05-18
+  planetary_annihilation = throw "'planetary_annihilation' has been removed, as it was outdated and unmaintained in Nixpkgs"; # Added 2026-07-23
   plano-theme = throw "'plano-theme' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   plant-it = throw "plant-it backend was discontinued in september 2025"; # Added 2026-01-30
   plant-it-frontend = throw "plant-it-frontend has been presented as being Android-only since the server-side was discontinued in september 2025"; # Added 2026-01-30
