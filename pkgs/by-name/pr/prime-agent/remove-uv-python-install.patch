@@ -1,0 +1,10 @@
+--- a/packages/coding-agent/src/core/kernel/bootstrap.ts
++++ b/packages/coding-agent/src/core/kernel/bootstrap.ts
+@@ -730,7 +730,6 @@
+ 	const runtimeRequirement = sourceDir ?? RUNTIME_REQUIREMENT;
+ 	const runtimeIdentity = await resolveRuntimeIdentity();
+
+-	await run(uv, ["python", "install", PYTHON_VERSION]);
+ 	await run(uv, ["venv", venv, "--python", PYTHON_VERSION, "--seed"]);
+ 	await run(uv, [
+ 		"pip",
