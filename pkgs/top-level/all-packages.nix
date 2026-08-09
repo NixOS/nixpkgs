@@ -4103,11 +4103,12 @@ with pkgs;
 
   swiftPackages = recurseIntoAttrs (callPackage ../development/compilers/swift { });
   swiftPackages_ng = recurseIntoAttrs (callPackage ./swift-packages.nix { });
-  inherit (swiftPackages)
-    swift
-    swiftpm
+  inherit (swiftPackages_ng)
     sourcekit-lsp
+    swift
+    swift-corelibs-libdispatch
     swift-format
+    swiftpm
     swiftpm2nix
     ;
 
@@ -10795,8 +10796,6 @@ with pkgs;
   wfuzz = with python3Packages; toPythonApplication wfuzz;
 
   sieveshell = with python3.pkgs; toPythonApplication managesieve;
-
-  swift-corelibs-libdispatch = swiftPackages.Dispatch;
 
   duden = python3Packages.toPythonApplication python3Packages.duden;
 
