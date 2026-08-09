@@ -82,7 +82,7 @@ buildPythonPackage (finalAttrs: {
     # Since `cudaPackages.nccl-ep` is used as a byte string, it gets
     # compressed and no dependency is created. Disable string
     # compression for Nix to correctly detect the dependency.
-    NIX_CLFAGS_COMPILE = "-DCYTHON_COMPRESS_STRINGS=0";
+    NIX_CFLAGS_COMPILE = "-DCYTHON_COMPRESS_STRINGS=0";
   };
 
   buildInputs =
