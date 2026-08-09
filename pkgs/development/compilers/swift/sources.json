@@ -1,4 +1,7 @@
 {
+  "indexstore-db": {
+    "hash": "sha256-okJrYhn2LmRNV+Wn/QM1W6yxbt/s1X7L2kmUccxD74o="
+  },
   "llvm-project": {
     "hash": "sha256-EzSgVCdEYtrrC9fjqUVu4ALp8FmtwgLfLzL/pMQKb/4="
   },
