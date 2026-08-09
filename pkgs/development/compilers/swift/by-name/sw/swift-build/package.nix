@@ -29,6 +29,10 @@
 
 let
   swiftPlatform = stdenv.hostPlatform.swift.platform;
+
+  swift' = swift.override {
+    enableRepl = false;
+  };
 in
 
 # Swift Build is a dependency of SwiftPM. It must be built with CMake to avoid dependency cycles.
@@ -100,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-    swift
+    swift'
   ];
 
   buildInputs = [

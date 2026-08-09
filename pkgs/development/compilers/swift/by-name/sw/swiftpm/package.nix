@@ -45,6 +45,10 @@ let
     swift-tools-protocols
     swift-tools-support-core
   ];
+
+  swift' = swift.override {
+    enableRepl = false;
+  };
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -122,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-    swift
+    swift'
   ];
 
   propagatedBuildInputs = [ swiftpmHook ];
