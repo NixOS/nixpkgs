@@ -4,12 +4,13 @@
   pyserial,
   srp,
   lib,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "digi-xbee";
   version = "1.5.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "digi_xbee";
@@ -17,7 +18,9 @@ buildPythonPackage rec {
     hash = "sha256-amUrhHIpeRHuShD0cxb2sbbRTpJQZ9/b8otsa1Bo+bI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pyserial
     srp
   ];
