@@ -2,6 +2,7 @@
   lib,
   cmake,
   fetchFromGitHub,
+  fixUnhelpfulCmakeRpathsHook,
   gitUpdater,
   ninja,
   stdenv,
@@ -43,6 +44,9 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     swift'
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isElf [
+    fixUnhelpfulCmakeRpathsHook
   ];
 
   postInstall = ''
