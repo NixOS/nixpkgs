@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cqlsh-rs";
-  version = "0.5.15";
+  version = "0.5.17";
 
   src = fetchFromGitHub {
     owner = "scylladb";
     repo = "cqlsh-rs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-mQE5um4jPFtHYR0YvFVCbmLq7d4DKmG77Klg5zw085Y=";
+    hash = "sha256-swilyE6culJzqwrMeL+zUhbK7eh4D2FASBUq7GGWDp4=";
   };
 
-  cargoHash = "sha256-oZhxw7P5MCOMBdxtHrwfaZd3gU0Zs6wQolYpOczoe0A=";
+  cargoHash = "sha256-dLHziQjQ25xMSunPgXdDFfziONb7iIEhmx9FX4A8i6w=";
 
   strictDeps = true;
   __structuredAttrs = true;
