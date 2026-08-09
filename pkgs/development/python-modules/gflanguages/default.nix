@@ -9,16 +9,17 @@
   setuptools-scm,
   uharfbuzz,
   youseedee,
+  gfmetadata,
 }:
 
 buildPythonPackage rec {
   pname = "gflanguages";
-  version = "0.7.7";
+  version = "0.7.9";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JR+lmwGhPR/RoskpouNzGOE9kRgvSGgzx5Xa196k0eA=";
+    hash = "sha256-57a0dvGuwGux9fuOnBEoZCnbJ0RQ+T0+5SCUrSro5BE=";
   };
 
   # Relax the dependency on protobuf 3. Other packages in the Google Fonts
@@ -37,6 +38,7 @@ buildPythonPackage rec {
   dependencies = [
     protobuf
     regex
+    gfmetadata
   ];
 
   nativeCheckInputs = [
