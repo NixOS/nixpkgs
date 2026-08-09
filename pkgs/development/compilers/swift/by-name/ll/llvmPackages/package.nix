@@ -36,7 +36,7 @@ in
   };
 
   otherSplices = generateSplicesForMkScope [
-    "swiftPackages_ng"
+    "swiftPackages"
     "llvmPackages"
   ];
 
