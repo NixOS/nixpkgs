@@ -7981,6 +7981,12 @@
     githubId = 1365692;
     name = "Will Fancher";
   };
+  elzorrorebelde = {
+    name = "Jorge Javier Araya Navarro";
+    email = "jorge@esavara.cr";
+    github = "elzorrorebelde";
+    githubId = 1055216;
+  };
   emaiax = {
     email = "github@emaiax.dev";
     github = "emaiax";
@@ -25128,12 +25134,6 @@
     github = "sguimmara";
     githubId = 5512096;
     name = "Sébastien Guimmara";
-  };
-  shackra = {
-    name = "Jorge Javier Araya Navarro";
-    email = "jorge@esavara.cr";
-    github = "shackra";
-    githubId = 1055216;
   };
   shadaj = {
     github = "shadaj";
