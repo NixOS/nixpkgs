@@ -18,6 +18,10 @@ mkTclDerivation (finalAttrs: {
 
   sourceRoot = finalAttrs.src.name + "/TclMagick";
 
+  nativeBuildInputs = [
+    graphicsmagick # for GraphicsMagickWand-config script
+  ];
+
   buildInputs = [
     graphicsmagick
     tk

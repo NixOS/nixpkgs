@@ -4,6 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   tcl,
+  bashNonInteractive,
   tk,
   libx11,
   zlib,
@@ -30,6 +31,7 @@ tcl.mkTclDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    bashNonInteractive
     tk
     libx11
     zlib

@@ -1,6 +1,7 @@
 {
   lib,
   fetchurl,
+  bashNonInteractive,
   tcl,
   tclPackages,
   tk,
@@ -18,6 +19,7 @@ tcl.mkTclDerivation (finalAttrs: {
   };
 
   buildInputs = [
+    bashNonInteractive
     tcl
     tclPackages.tcllib
     tk

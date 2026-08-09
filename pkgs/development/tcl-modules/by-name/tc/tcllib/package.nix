@@ -4,6 +4,7 @@
   mkTclDerivation,
   critcl,
   withCritcl ? true,
+  bashNonInteractive,
 }:
 
 mkTclDerivation (finalAttrs: {
@@ -16,6 +17,10 @@ mkTclDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = lib.optional withCritcl critcl;
+
+  buildInputs = [
+    bashNonInteractive
+  ];
 
   buildFlags = [ "all" ] ++ lib.optional withCritcl "critcl";
 

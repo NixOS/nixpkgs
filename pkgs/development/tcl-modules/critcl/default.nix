@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   mkTclDerivation,
+  bashNonInteractive,
   tcl,
   tcllib,
 }:
@@ -18,6 +19,7 @@ mkTclDerivation (finalAttrs: {
   };
 
   buildInputs = [
+    bashNonInteractive
     tcl
     tcllib
   ];

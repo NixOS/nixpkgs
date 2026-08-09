@@ -56,6 +56,8 @@ lib.extendMkDerivation {
 
         propagatedBuildInputs = args.propagatedBuildInputs or [ ] ++ [ tcl ];
 
+        strictDeps = true;
+
         # Run tests after install, at which point we've done all TCLLIBPATH setup
         doCheck = false;
         doInstallCheck = args.doCheck or (args.doInstallCheck or false);

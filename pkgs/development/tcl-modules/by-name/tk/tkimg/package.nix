@@ -23,6 +23,10 @@ tcl.mkTclDerivation (finalAttrs: {
     "--with-tkinclude=${tk.dev}/include"
   ];
 
+  nativeBuildInputs = [
+    tcllib # for dtplite
+  ];
+
   buildInputs = [
     libx11
     tcllib

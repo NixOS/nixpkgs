@@ -17,10 +17,11 @@ mkTclDerivation (finalAttrs: {
     hash = "sha256-XQuP+SiqvGX3ckBShUxsGBADjV3QdvYpU4hW6LMbMMQ=";
   };
 
-  buildInputs = [ curl ];
+  nativeBuildInputs = [
+    curl # for curl-config
+  ];
 
-  # Uses curl-config
-  strictDeps = false;
+  buildInputs = [ curl ];
 
   makeFlags = [ "LDFLAGS=-lcurl" ];
 

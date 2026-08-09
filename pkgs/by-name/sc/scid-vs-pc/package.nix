@@ -2,6 +2,7 @@
   lib,
   fetchurl,
   tcl,
+  bashNonInteractive,
   tk,
   libx11,
   zlib,
@@ -29,6 +30,7 @@ tcl.mkTclDerivation (finalAttrs: {
     which
   ];
   buildInputs = [
+    bashNonInteractive
     tk
     libx11
     zlib

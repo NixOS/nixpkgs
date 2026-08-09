@@ -40,8 +40,6 @@ tcl.mkTclDerivation (finalAttrs: {
 
   __structuredAttrs = true;
 
-  strictDeps = true;
-
   postInstall = ''
     tclWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ tcl ]})
     ${lib.optionalString stdenv.hostPlatform.isDarwin "tclWrapperArgs+=(--prefix DYLD_LIBRARY_PATH : $out/lib/expect${finalAttrs.version})"}

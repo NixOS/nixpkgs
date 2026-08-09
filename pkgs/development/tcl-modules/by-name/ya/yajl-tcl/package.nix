@@ -18,8 +18,6 @@ mkTclDerivation (finalAttrs: {
     hash = "sha256-MKm/cfZxPoxpsHuZf9qSXZXzdFbDb7IGeJgMHGh9bcE=";
   };
 
-  strictDeps = true;
-
   nativeBuildInputs = [
     autoreconfHook
     pkg-config

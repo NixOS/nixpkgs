@@ -3,6 +3,7 @@
   stdenv,
   fetchzip,
   gitUpdater,
+  bashNonInteractive,
   tk,
   tclPackages,
   tcl,
@@ -22,6 +23,10 @@ tcl.mkTclDerivation (finalAttrs: {
     url = "https://dianne.skoll.ca/projects/remind/download/remind-${finalAttrs.version}.tar.gz";
     hash = "sha256-R6kceXLzg5CRMYAgMyhnmKxWT49ayXIFm/IpXuDgl8I=";
   };
+
+  buildInputs = [
+    bashNonInteractive
+  ];
 
   propagatedBuildInputs = lib.optionals withGui [
     tclPackages.tcllib
