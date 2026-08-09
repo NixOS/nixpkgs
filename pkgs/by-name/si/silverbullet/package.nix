@@ -2,30 +2,28 @@
   lib,
   fetchFromGitHub,
   buildNpmPackage,
-  buildGoModule,
   replaceVars,
+  rustPlatform,
 }:
 
-buildGoModule (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "silverbullet";
-  version = "2.9.0";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "silverbulletmd";
     repo = "silverbullet";
     rev = finalAttrs.version;
-    hash = "sha256-XQ0OKkiQrrmwmdGXk3dcim/2qosenF3EG2lkglQQ/iY=";
+    hash = "sha256-tcn0NrABLnX22OWJ3PzYJ5xbTLyNH5p6JtJ6CujkpQQ=";
   };
 
-  vendorHash = "sha256-8zZlhVptJq8y3k2DBghJ0lPNcIcaZYkrxN67b6dNBPs=";
-
-  subPackages = [ "." ];
+  cargoHash = "sha256-M/bX9oj76kmXGkCzvBJZMeI7/4UJ+yvz84KrysyPOLA=";
 
   frontend = buildNpmPackage {
     pname = "silverbullet-frontend";
     inherit (finalAttrs) version src;
 
-    npmDepsHash = "sha256-Twcv3I3scF09onJQdYsc1zOFzMFPOEyPF7VPYa7LBko=";
+    npmDepsHash = "sha256-We3K4jZGcC5Q1WBgEOKDKhn8M83srNLP3C36WCOX5Qs=";
 
     patches = [
       (replaceVars ./override-public-version.patch { inherit (finalAttrs) version; })
@@ -39,7 +37,7 @@ buildGoModule (finalAttrs: {
       runHook preInstall
 
       mkdir -p $out
-      cp -r client_bundle public_version.ts $out/
+      cp -r client_bundle version.json $out/
 
       runHook postInstall
     '';
@@ -47,15 +45,7 @@ buildGoModule (finalAttrs: {
 
   preBuild = ''
     cp -r ${finalAttrs.frontend}/client_bundle .
-    cp ${finalAttrs.frontend}/public_version.ts .
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm755 "$GOPATH/bin/silverbullet" $out/bin/silverbullet
-
-    runHook postInstall
+    cp ${finalAttrs.frontend}/version.json .
   '';
 
   passthru.updateScript = ./update.sh;

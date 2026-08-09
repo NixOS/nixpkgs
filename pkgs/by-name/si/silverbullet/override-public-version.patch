@@ -1,9 +1,9 @@
-diff --git a/build/build_plugs.ts b/build/build_plugs.ts
-index e72beaaa..e0660eef 100644
---- a/build/build_plugs.ts
-+++ b/build/build_plugs.ts
-@@ -42,41 +42,15 @@ export async function buildPlugsAndLibraries(options?: {
-
+diff --git a/build/version.ts b/build/version.ts
+index 0b1a2159..5b8947b2 100644
+--- a/build/version.ts
++++ b/build/version.ts
+@@ -31,51 +31,16 @@ import { version } from "../version.ts";
+  */
  export function updateVersionFile(): Promise<void> {
    return new Promise<void>((resolve, reject) => {
 -    const gitProcess = spawn("git", ["describe", "--tags", "--long"], {
@@ -24,16 +24,26 @@ index e72beaaa..e0660eef 100644
 -        commitVersion = `${version}-${process.env.GITHUB_SHA || "unknown"}`;
 -      }
 -
--      const versionFilePath = "./public_version.ts";
--      // Write version to file with date in YYYY-MM-DDTHH-MM-SSZ format attached to the version
--      const versionContent = `export const publicVersion = "${commitVersion}-${new Date()
+-      // Keep the existing string when it was minted for this same commit, so
+-      // repeated builds stay byte-identical (see the note above).
+-      if (isForCommit(await readVersionFile(), commitVersion)) {
+-        resolve();
+-        return;
+-      }
+-
+-      // Attach the build date in YYYY-MM-DDTHH-MM-SSZ format to the version.
+-      const publicVersion = `${commitVersion}-${new Date()
 -        .toISOString()
 -        .split(".")[0]
 -        .replaceAll(":", "-")
--        .concat("Z")}";`;
+-        .concat("Z")}`;
 -
 -      try {
--        await writeFile(versionFilePath, versionContent, "utf-8");
+-        await writeFile(
+-          "./version.json",
+-          `${JSON.stringify({ version: publicVersion })}\n`,
+-          "utf-8",
+-        );
 -        resolve();
 -      } catch (err) {
 -        reject(err);
@@ -41,15 +51,16 @@ index e72beaaa..e0660eef 100644
 -    });
 -
 -    gitProcess.on("error", reject);
-+    const versionFilePath = "./public_version.ts";
-+    const versionContent = `export const publicVersion = "@version@";`;
-+
 +    try {
-+      writeFile(versionFilePath, versionContent, "utf-8");
++      writeFile(
++				"./version.json",
++				`${JSON.stringify({ version: "@version@" })}\n`,
++         "utf-8"
++       );
 +      resolve();
 +    } catch (err) {
 +      reject(err);
 +    }
    });
  }
-
+ 
