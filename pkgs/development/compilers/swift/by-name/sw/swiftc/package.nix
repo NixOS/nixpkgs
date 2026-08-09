@@ -19,6 +19,7 @@
   python3,
   srcOnly,
   stdenv,
+  stdenvNoCC,
   stdlib,
   swift-cmark,
   swift-corelibs-libdispatch,
@@ -85,6 +86,24 @@ let
     libclang
     libllvm
     ;
+
+  lld =
+    if stdenv.hostPlatform.isDarwin then
+      # Darwin can use LLD unwrapped because install names ensure it can find the linked dylibs.
+      # The wrapped version also doesn’t seem to work on Darwin.
+      llvmPackages.lld
+    else
+      stdenvNoCC.mkDerivation {
+        # The linker in `llvmPackages.lld` isn’t wrapped, which causes the build to fail due to missing rpaths.
+        pname = "lld-wrapper";
+        version = lib.getVersion llvmPackages.lld;
+
+        buildCommand = ''
+          mkdir -p "$out/bin"
+          ln -s ${lib.getExe' llvmPackages.bintools "ld"} "$out/bin/ld"
+          ln -s ${lib.getExe' llvmPackages.bintools "ld.lld"} "$out/bin/ld.lld"
+        '';
+      };
 
   inherit (darwin) sigtool;
 
@@ -225,6 +244,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "SWIFT_INCLUDE_TESTS" doCheck)
     # Swift Concurrency is needed to build the stage 1 compiler on Linux.
     (lib.cmakeBool "SWIFT_ENABLE_EXPERIMENTAL_CONCURRENCY" true)
+    # Linking with LLD is more compatible. The resulting shared libraries can be linked by either LLD or GNU ld.
+    # The same is not true when linking with GNU ld. It’s also faster.
+    (lib.cmakeFeature "CMAKE_LINKER_TYPE" "LLD")
   ]
   ++ lib.optionals (bootstrapStage == 1) [
     # Work around crashes in ownership verifier in the bootstrap compiler.
@@ -252,8 +274,6 @@ stdenv.mkDerivation (finalAttrs: {
     [
       # Build Swift with LTO for better performance. Only enable it for tools. The stdlib will enable it separately.
       (lib.cmakeFeature "SWIFT_TOOLS_ENABLE_LTO" "thin")
-      # LTO is slow with ld64. Only use it for targets that benefit from LTO.
-      (lib.cmakeBool "SWIFT_TOOLS_LD64_LTO_CODEGEN_ONLY_FOR_SUPPORTING_TARGETS" stdenv.hostPlatform.isDarwin)
       # Enable the remaining features.
       (lib.cmakeBool "SWIFT_ENABLE_EXPERIMENTAL_CXX_INTEROP" true)
       (lib.cmakeBool "SWIFT_ENABLE_EXPERIMENTAL_DIFFERENTIABLE_PROGRAMMING" true)
@@ -270,7 +290,7 @@ stdenv.mkDerivation (finalAttrs: {
       # e.g., `error: lib/libswiftDemangling.a: no archive symbol table (run ranlib)`.
       (lib.cmakeFeature "CMAKE_AR" (lib.getExe' llvm "llvm-ar"))
       (lib.cmakeFeature "CMAKE_RANLIB" (lib.getExe' llvm "llvm-ranlib"))
-      # Make sure Swift is built with a consistent toolchan version. This doesn’t matter for non-LTO builds, but it causes
+      # Make sure Swift is built with a consistent toolchain version. This doesn’t matter for non-LTO builds, but it causes
       # LTO builds to fail when objects built with a newer Clang are processed by the Swift Clang’s libLTO.
       (lib.cmakeFeature "CMAKE_C_COMPILER" (lib.getExe' clang "clang"))
       (lib.cmakeFeature "CMAKE_CXX_COMPILER" (lib.getExe' clang "clang++"))
@@ -317,6 +337,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    lld
     ninja
     perl # For pod2man
     python3
