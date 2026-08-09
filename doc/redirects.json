@@ -4548,20 +4548,35 @@
   "ssec-swift-packaging-with-swiftpm": [
     "index.html#ssec-swift-packaging-with-swiftpm"
   ],
+  "ssec-swift-packaging-with-fetch-swiftpm-deps": [
+    "index.html#ssec-swift-packaging-with-fetch-swiftpm-deps"
+  ],
+  "ssec-swift-packaging-with-swiftpm2nix": [
+    "index.html#ssec-swift-packaging-with-swiftpm2nix"
+  ],
+  "ssec-swiftpm-patching-dependencies": [
+    "index.html#ssec-swiftpm-patching-dependencies"
+  ],
   "ssec-swiftpm-custom-build-flags": [
     "index.html#ssec-swiftpm-custom-build-flags"
   ],
   "ssec-swiftpm-running-tests": [
     "index.html#ssec-swiftpm-running-tests"
   ],
-  "ssec-swiftpm-patching-dependencies": [
-    "index.html#ssec-swiftpm-patching-dependencies"
+  "ssec-swiftpm-install-phase": [
+    "index.html#ssec-swiftpm-install-phase"
+  ],
+  "ssec-swift-hooks": [
+    "index.html#ssec-swift-hooks"
   ],
   "ssec-swift-considerations-for-custom-build-tools": [
     "index.html#ssec-swift-considerations-for-custom-build-tools"
   ],
   "ssec-swift-linking-the-standard-library": [
     "index.html#ssec-swift-linking-the-standard-library"
+  ],
+  "ssec-swift-platform-properties": [
+    "index.html#ssec-swift-platform-properties"
   ],
   "sec-language-tcl": [
     "index.html#sec-language-tcl"
