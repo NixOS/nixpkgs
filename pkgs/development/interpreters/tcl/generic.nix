@@ -18,7 +18,7 @@
 }:
 
 let
-  baseInterp = stdenv.mkDerivation rec {
+  baseInterp = stdenv.mkDerivation (finalAttrs: {
     pname = "tcl";
     inherit version src;
 
@@ -31,10 +31,10 @@ let
 
     postPatch = ''
       substituteInPlace library/clock.tcl \
-        --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo" \
-        --replace "/usr/share/lib/zoneinfo" "" \
-        --replace "/usr/lib/zoneinfo" "" \
-        --replace "/usr/local/etc/zoneinfo" ""
+        --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo" \
+        --replace-fail "/usr/share/lib/zoneinfo" "" \
+        --replace-fail "/usr/lib/zoneinfo" "" \
+        --replace-fail "/usr/local/etc/zoneinfo" ""
     ''
     + extraPatch;
 
@@ -139,41 +139,44 @@ let
       maintainers = with lib.maintainers; [ agbrooks ];
     };
 
-    passthru = rec {
-      inherit release version;
-      isTcl9 = lib.versions.major version == "9";
-      libPrefix = "tcl${release}";
-      libdir = "lib/${libPrefix}";
-      tclPackageHook = callPackage (
-        { buildPackages }:
-        makeSetupHook {
-          name = "tcl-package-hook";
-          propagatedBuildInputs = [ buildPackages.makeBinaryWrapper ];
-          meta = {
-            inherit (meta) maintainers platforms;
-            license = lib.licenses.mit;
-          };
-        } ./tcl-package-hook.sh
-      ) { };
-      tclRequiresCheckHook = callPackage (
-        { buildPackages }:
-        makeSetupHook {
-          name = "tcl-requires-check-hook";
-          propagatedBuildInputs = [ buildPackages.makeBinaryWrapper ];
-          meta = {
-            inherit (meta) maintainers platforms;
-            license = lib.licenses.mit;
-          };
-        } ./tcl-requires-check-hook.sh
-      ) { };
-      # verify that Tcl's clock library can access tzdata
-      tests.tzdata = runCommand "${pname}-test-tzdata" { } ''
-        ${baseInterp}/bin/tclsh <(echo "set t [clock scan {2004-10-30 05:00:00} \
-                                      -format {%Y-%m-%d %H:%M:%S} \
-                                      -timezone :America/New_York]") > $out
-      '';
-    };
-  };
+    passthru =
+      let
+        libPrefix = "tcl${release}";
+      in
+      {
+        inherit release version libPrefix;
+        isTcl9 = lib.versions.major version == "9";
+        libdir = "lib/${libPrefix}";
+        tclPackageHook = callPackage (
+          { buildPackages }:
+          makeSetupHook {
+            name = "tcl-package-hook";
+            propagatedBuildInputs = [ buildPackages.makeBinaryWrapper ];
+            meta = {
+              inherit (finalAttrs.meta) maintainers platforms;
+              license = lib.licenses.mit;
+            };
+          } ./tcl-package-hook.sh
+        ) { };
+        tclRequiresCheckHook = callPackage (
+          { buildPackages }:
+          makeSetupHook {
+            name = "tcl-requires-check-hook";
+            propagatedBuildInputs = [ buildPackages.makeBinaryWrapper ];
+            meta = {
+              inherit (finalAttrs.meta) maintainers platforms;
+              license = lib.licenses.mit;
+            };
+          } ./tcl-requires-check-hook.sh
+        ) { };
+        # verify that Tcl's clock library can access tzdata
+        tests.tzdata = runCommand "${finalAttrs.pname}-test-tzdata" { } ''
+          ${baseInterp}/bin/tclsh <(echo "set t [clock scan {2004-10-30 05:00:00} \
+                                        -format {%Y-%m-%d %H:%M:%S} \
+                                        -timezone :America/New_York]") > $out
+        '';
+      };
+  });
 
   mkTclDerivation = callPackage ./mk-tcl-derivation.nix { tcl = baseInterp; };
 
