@@ -4,12 +4,9 @@
   stdenv,
   swift,
   swiftpm,
-  swiftPackages,
 }:
 
-# Use the same stdenv, including clang, as Swift itself
-# Fixes build issues, see https://github.com/NixOS/nixpkgs/pull/296082 and https://github.com/NixOS/nixpkgs/issues/295322
-swiftPackages.stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dark-mode-notify";
   version = "0-unstable-2022-07-18";
 
