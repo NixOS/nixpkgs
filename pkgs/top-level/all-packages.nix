@@ -10990,11 +10990,11 @@ with pkgs;
     meta.license = lib.licenses.mit;
   } ../os-specific/bsd/setup-hook.sh;
 
-  freebsd = callPackage ../os-specific/bsd/freebsd { };
+  freebsd = recurseIntoAttrs (callPackage ../os-specific/bsd/freebsd { });
 
-  netbsd = callPackage ../os-specific/bsd/netbsd { };
+  netbsd = recurseIntoAttrs (callPackage ../os-specific/bsd/netbsd { });
 
-  openbsd = callPackage ../os-specific/bsd/openbsd { };
+  openbsd = recurseIntoAttrs (callPackage ../os-specific/bsd/openbsd { });
 
   radicle-node-unstable = callPackage ../by-name/ra/radicle-node/unstable.nix { };
 
