@@ -45,7 +45,6 @@ let
     ]
     ++ lib.optionals includeTesting [
       swift-corelibs-xctest.dev
-      swift-corelibs-xctest.out
       swift-testing.dev
       swift-testing.out
     ]
