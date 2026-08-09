@@ -89,6 +89,7 @@ mkDerivation (
       ./compat-cxx-safe-header.patch
       ./compat-dont-configure-twice.patch
       ./compat-no-force-native.patch
+      ./compat-host-locale-t.patch
     ];
 
     preInstall = ''
