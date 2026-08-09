@@ -14,42 +14,44 @@
   pkgsBuildBuild,
 }:
 let
-  packages = with python.pkgs.qt6; [
-    # required
-    python.pkgs.ninja
-    python.pkgs.packaging
-    python.pkgs.setuptools
-    qtbase
+  packages =
+    with python.pkgs.qt6;
+    [
+      # required
+      python.pkgs.ninja
+      python.pkgs.packaging
+      python.pkgs.setuptools
+      qtbase
 
-    # optional
-    qt3d
-    qtcharts
-    qtconnectivity
-    qtdatavis3d
-    qtdeclarative
-    qthttpserver
-    qtmultimedia
-    qtnetworkauth
-    qtquick3d
-    qtremoteobjects
-    qtscxml
-    qtsensors
-    qtspeech
-    qtsvg
-    qtwebchannel
-    qtwebsockets
-    qtpositioning
-    qtlocation
-    qtshadertools
-    qtserialport
-    qtserialbus
-    qtgraphs
-    qttools
-  ]
-  # qtwebview is broken in cross
-  ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    qtwebview
-  ];
+      # optional
+      qt3d
+      qtcharts
+      qtconnectivity
+      qtdatavis3d
+      qtdeclarative
+      qthttpserver
+      qtmultimedia
+      qtnetworkauth
+      qtquick3d
+      qtremoteobjects
+      qtscxml
+      qtsensors
+      qtspeech
+      qtsvg
+      qtwebchannel
+      qtwebsockets
+      qtpositioning
+      qtlocation
+      qtshadertools
+      qtserialport
+      qtserialbus
+      qtgraphs
+      qttools
+    ]
+    # qtwebview is broken in cross
+    ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      qtwebview
+    ];
   qt_linked = symlinkJoin {
     name = "qt_linked";
     paths = packages;
