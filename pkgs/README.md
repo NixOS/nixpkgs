@@ -1223,43 +1223,23 @@ If a security fix applies to both master and a stable release then, similar to r
 
 Critical security fixes may bypass the staging branches and be delivered directly to release branches such as `master` and `release-*`.
 
-### Vulnerability Roundup
+### Vulnerability tracker
 
-#### Issues
+Vulnerable packages in Nixpkgs are tracked using the [Nixpkgs security tracker](https://tracker.security.nixos.org/).
 
-Vulnerable packages in Nixpkgs are managed using issues.
-Currently opened ones can be found using the following:
+CVEs are automatically matched against Nixpkgs derivations and reviewed by the [security team](https://nixos.org/community/teams/security/).
+When a match is confirmed, the tracker publishes it and automatically opens a corresponding GitHub issue where listed maintainers are notified.
 
-[github.com/NixOS/nixpkgs/issues?q=is:issue+is:open+"Vulnerability+roundup"](https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue+is%3Aopen+%22Vulnerability+roundup%22)
+Each entry corresponds to a vulnerable version of a package; as a consequence:
 
-Each issue corresponds to a vulnerable version of a package; as a consequence:
+- One entry can contain several CVEs;
+- A single package can be concerned by several entries.
 
-- One issue can contain several CVEs;
-- One CVE can be shared across several issues;
-- A single package can be concerned by several issues.
-
-
-A "Vulnerability roundup" issue usually respects the following format:
-
-```txt
-<link to relevant package search on search.nix.gsc.io>, <link to relevant files in Nixpkgs on GitHub>
-
-<list of related CVEs, their CVSS score, and the impacted NixOS version>
-
-<list of the scanned Nixpkgs versions>
-
-<list of relevant contributors>
-```
-
-Note that there can be an extra comment containing links to previously reported (and still open) issues for the same package.
-
+Maintainers are encouraged to [subscribe to notifications](https://tracker.security.nixos.org/subscriptions/) for the packages they maintain.
 
 #### Triaging and Fixing
 
-**Note**: An issue can be a "false positive" (i.e. automatically opened, but without the package it refers to being actually vulnerable).
-If you find such a "false positive", comment on the issue an explanation of why it falls into this category, linking as much information as necessary to help maintainers double check.
-
-If you are investigating a "true positive":
+If you are investigating an [issue opened by the security tracker](https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue%20state%3Aopen%20author%3Aapp%2Fnixpkgs-security-tracker):
 
 - Find the earliest patched version or a code patch in the CVE details;
 - Is the issue already patched (version up-to-date or patch applied manually) in Nixpkgs's `master` branch?

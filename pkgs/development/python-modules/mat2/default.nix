@@ -4,8 +4,6 @@
   buildPythonPackage,
   pytestCheckHook,
   fetchFromGitHub,
-  fetchpatch,
-  fetchpatch2,
   replaceVars,
   exiftool,
   ffmpeg,
@@ -25,16 +23,16 @@
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mat2";
-  version = "0.14.0";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jvoisin";
     repo = "mat2";
-    tag = version;
-    hash = "sha256-JTt2/PuSxOXXHUuRP42y8jxw09mNMMz1piJM4ldnjq0=";
+    tag = finalAttrs.version;
+    hash = "sha256-8i0ZGIy1yFPXk3WX5li4m9wZvSB6V4hX+D3rMGL4WLQ=";
   };
 
   patches = [
@@ -51,21 +49,6 @@ buildPythonPackage rec {
     ./executable-name.patch
     # hardcode path to mat2 executable
     ./tests.patch
-    (fetchpatch {
-      name = "fix-test_html.patch";
-      url = "https://github.com/jvoisin/mat2/commit/00b4f110711754496932c59d5af3c0b2ed694484.patch";
-      hash = "sha256-5h/nM1dK8HmYtoIBVGOvUegMFBpGxcfpn5O6QrjLi9M=";
-    })
-    # Loosen test_climat2 assertions split across terminal-width boundaries.
-    (fetchpatch2 {
-      url = "https://github.com/jvoisin/mat2/commit/690e01d475117a4e0c85f26154b26ef332f036be.patch?full_index=1";
-      hash = "sha256-pDbY3E6BPp20orDOx7zxhCdAB+nAdpddTYjPYHStVLc=";
-    })
-    # Fix test_climat2 under Python 3.14+ argparse usage formatting.
-    (fetchpatch2 {
-      url = "https://github.com/jvoisin/mat2/commit/05f34a17695be65b1ad9782911f87e000de8fc8b.patch?full_index=1";
-      hash = "sha256-rIaXocT+LKM2De5iBPIPoBdFbdd17TJJPyFrPzNAJF0=";
-    })
   ];
 
   postPatch = ''
@@ -116,9 +99,9 @@ buildPythonPackage rec {
   meta = {
     description = "Handy tool to trash your metadata";
     homepage = "https://github.com/jvoisin/mat2";
-    changelog = "https://github.com/jvoisin/mat2/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/jvoisin/mat2/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.lgpl3Plus;
     mainProgram = "mat2";
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

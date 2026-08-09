@@ -41,6 +41,7 @@
   python3,
 
   traySupport ? config.profanity.traySupport or true,
+  terminal-notifier,
   gtk3,
   otrSupport ? true,
   libotr,
@@ -88,6 +89,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals notifySupport [
     libnotify
     gdk-pixbuf
+  ]
+  ++ lib.optionals (notifySupport && stdenv.hostPlatform.isDarwin) [
+    terminal-notifier
   ]
   ++ lib.optionals omemoSupport [
     libsignal-protocol-c
