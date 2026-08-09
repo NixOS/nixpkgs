@@ -145,6 +145,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     '';
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+      GaetanLepage
       breakds
       daniel-fahey
     ];
