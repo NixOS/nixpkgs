@@ -174,26 +174,31 @@ let
   # Defaults to allow all names defined in config.allowUnfreePackages, and all
   # packages that match the unfree predicate function
   hasDeniedUnfreeLicense =
-    if allowUnfree then
-      _: false
-    else
-      let
-        listPredicate = pkg: elem (getName pkg) config.allowUnfreePackages;
-        definedListPredicate = config.allowUnfreePackages or [ ] != [ ];
+    let
+      listPredicate = pkg: elem (getName pkg) config.allowUnfreePackages;
+      definedListPredicate = config.allowUnfreePackages or [ ] != [ ];
 
-        explicitPredicate = config.allowUnfreePredicate;
-        # Be robust against misconfigured allowUnfreePredicate values such as null
-        definedExplicitPredicate = isFunction (config.allowUnfreePredicate or null);
-      in
-      if definedListPredicate then
-        if definedExplicitPredicate then
-          attrs: hasUnfreeLicense attrs && !(listPredicate attrs || explicitPredicate attrs)
+      explicitPredicate = config.allowUnfreePredicate;
+      # Be robust against misconfigured allowUnfreePredicate values such as null
+      definedExplicitPredicate = isFunction (config.allowUnfreePredicate or null);
+
+      # Still selected once, rather than per package.
+      deniedByPredicates =
+        if definedListPredicate then
+          if definedExplicitPredicate then
+            attrs: !(listPredicate attrs || explicitPredicate attrs)
+          else
+            attrs: !listPredicate attrs
+        else if definedExplicitPredicate then
+          attrs: !explicitPredicate attrs
         else
-          attrs: hasUnfreeLicense attrs && !listPredicate attrs
-      else if definedExplicitPredicate then
-        attrs: hasUnfreeLicense attrs && !explicitPredicate attrs
-      else
-        hasUnfreeLicense;
+          _: true;
+    in
+    # `hasUnfreeLicense` has to be tested before `allowUnfree`: for a free
+    # package the `&&` short-circuits and `allowUnfree` is never forced. Reading
+    # `allowUnfree` first makes every package force `config`, which is a cycle
+    # whenever `config` is itself a function of `pkgs`.
+    attrs: hasUnfreeLicense attrs && !allowUnfree && deniedByPredicates attrs;
 
   allowInsecure = getEnv "NIXPKGS_ALLOW_INSECURE" == "1";
 
