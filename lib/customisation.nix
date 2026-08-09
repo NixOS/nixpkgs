@@ -397,33 +397,16 @@ rec {
     ```
   */
   extendDerivation =
+    let
+      defaultOutputs = [ "out" ];
+    in
     condition: passthru: drv:
     let
-      commonAttrs =
-        drv
-        // listToAttrs (
-          outputsList
-          ++ [
-            {
-              name = "all";
-              value = map (x: x.value) outputsList;
-            }
-          ]
-        )
-        // passthru
+      mkOutput =
+        outputName:
+        commonAttrs
         // {
-          drvPath =
-            assert condition;
-            drv.drvPath;
-          outPath =
-            assert condition;
-            drv.outPath;
-        };
-
-      outputsList = map (outputName: {
-        name = outputName;
-        value = commonAttrs // {
-          inherit (drv.${outputName}) type outputName;
+          inherit outputName;
           outputSpecified = true;
           drvPath =
             assert condition;
@@ -438,7 +421,39 @@ rec {
           ${if passthru ? overrideAttrs then "overrideAttrs" else null} =
             f: (passthru.overrideAttrs f).${outputName};
         };
-      }) (drv.outputs or [ "out" ]);
+      commonAttrs =
+        if !drv ? outputs || drv.outputs == defaultOutputs then
+          drv
+          // {
+            out = mkOutput "out";
+            all = [ (mkOutput "out") ]; # all is almost never accessed, so we prefer to recompute
+            drvPath =
+              assert condition;
+              drv.drvPath;
+            outPath =
+              assert condition;
+              drv.outPath;
+          }
+          // passthru
+        else
+          let
+            outputsData = map (outputName: {
+              name = outputName;
+              value = mkOutput outputName;
+            }) drv.outputs;
+          in
+          drv
+          // (listToAttrs outputsData)
+          // {
+            all = map (x: x.value) outputsData;
+            drvPath =
+              assert condition;
+              drv.drvPath;
+            outPath =
+              assert condition;
+              drv.outPath;
+          }
+          // passthru;
     in
     commonAttrs;
 
