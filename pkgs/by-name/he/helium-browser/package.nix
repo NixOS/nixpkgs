@@ -22,6 +22,7 @@
 let
   pname = "helium-browser";
   version = "0.15.2.1";
+  system = "x86_64_linux";
 
   myBuildInputs = [
     glib
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
   inherit pname version;
 
   src = fetchurl {
-    url = "https://github.com/imputnet/helium-linux/releases/download/${version}/helium-${version}-x86_64_linux.tar.xz";
+    url = "https://github.com/imputnet/helium-linux/releases/download/${version}/helium-${version}-${system}.tar.xz";
     sha256 = "sha256-+Bw3Ty77cLQA8nBhx1gjyXFUjBbn4RMTU/D9Fc9DaKw=";
   };
 
