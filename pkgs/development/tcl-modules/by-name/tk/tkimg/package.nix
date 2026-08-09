@@ -8,12 +8,12 @@
   zlib,
 }:
 
-tcl.mkTclDerivation rec {
+tcl.mkTclDerivation (finalAttrs: {
   pname = "tkimg";
   version = "2.1.1";
 
   src = fetchzip {
-    url = "mirror://sourceforge/tkimg/tkimg/Img-${version}.tar.gz";
+    url = "mirror://sourceforge/tkimg/tkimg/Img-${finalAttrs.version}.tar.gz";
     hash = "sha256-TRtE2/BVrYgkdKtbF06UjLvokokgLGQ/EKDLxhz2Ckw=";
   };
 
@@ -37,4 +37,4 @@ tcl.mkTclDerivation rec {
     platforms = lib.platforms.unix;
     badPlatforms = lib.platforms.darwin;
   };
-}
+})
