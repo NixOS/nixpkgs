@@ -9,6 +9,8 @@ let
     builtins.substring 0 (len - 1) raw_release; # Drop the trailing newline.
 
   swift_sources_6_2 = builtins.fromJSON (
+    # Contains only the hashes for the packages used to build the bootstrap compiler.
+    # Hashes for other packages (like SwiftPM) are omitted.
     builtins.readFile ../development/compilers/swift/sources-6.2.json
   );
 
