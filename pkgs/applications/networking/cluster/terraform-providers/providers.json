@@ -508,13 +508,13 @@
     "vendorHash": "sha256-ikBqIxD5aTOcwNHCMN6EaOwSHCAP5n/SULuqQXPLpOc="
   },
   "hashicorp_aws": {
-    "hash": "sha256-YG2eaaJC+F69+hKn6oyhyiuZxgW5dAY5Y4DOVxm+J1A=",
+    "hash": "sha256-+TkbHnCRDruCFeyyKOLdwl2JafLsy86d1osygP2/su8=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/aws",
     "owner": "hashicorp",
     "repo": "terraform-provider-aws",
-    "rev": "v6.57.1",
+    "rev": "v6.58.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-qYV4FDTFUNuTThXUcjxNqAYtm8YQF0a4CVoLGJlzRhc="
+    "vendorHash": "sha256-zqirPhQ8sklb21OKGzRIjEJRangPPT2pna+FBNC5+0A="
   },
   "hashicorp_awscc": {
     "hash": "sha256-J7nmxCcI7nWMMWZjbm0N/B+HpDjruJuaIukgI0Rtsuk=",
