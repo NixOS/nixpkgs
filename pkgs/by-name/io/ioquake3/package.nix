@@ -17,7 +17,6 @@
   libjpeg,
   makeDesktopItem,
   freetype,
-  mumble,
   unstableGitUpdater,
   bc,
   buildPackages,
@@ -49,16 +48,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     SDL2
-    libGL
-    openal
     curl
-    speex
-    opusfile
+    freetype
+    libGL
+    libjpeg
     libogg
     libvorbis
-    libjpeg
-    freetype
-    mumble
+    openal
+    opusfile
+    speex
   ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
