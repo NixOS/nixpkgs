@@ -28,18 +28,6 @@
 }:
 
 let
-  graphics_cmds = stdenvNoCC.mkDerivation {
-    pname = "graphics_cmds";
-    version = "1";
-
-    # Note: These depend on oxipng and tools from libtiff, but we don’t want to pull them into the Swift Build
-    # closure unnecessarily. Packages using those commands will have to add them themselves.
-    buildCommand = ''
-      install -m755 -D ${replaceVars ./extra-bins/copypng { inherit coreutils; }} "$out/bin/copypng"
-      install -m755 -D ${replaceVars ./extra-bins/tiffutil { }} "$out/bin/tiffutil"
-    '';
-  };
-
   swiftPlatform = stdenv.hostPlatform.swift.platform;
 in
 
@@ -65,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Remove as many impure paths as possible.
     (replaceVars ./patches/0001-replace-impure-paths.patch {
       xcrun = if stdenv.hostPlatform.isDarwin then xcbuild.xcrun else "/not-supported";
-      inherit graphics_cmds;
+      inherit (darwin) graphics_cmds;
       coreutils = lib.getBin coreutils;
       diffutils = lib.getBin diffutils;
       gnused = lib.getBin gnused;
