@@ -130,8 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "LLVM_INCLUDE_DOCS" (buildDocs || buildMan))
     (lib.cmakeBool "MLIR_INCLUDE_DOCS" (buildDocs || buildMan))
     (lib.cmakeBool "LLVM_BUILD_DOCS" (buildDocs || buildMan))
-    # It's tempting to set BUILD_SHARED_LIBS, which saves far more space
-    # but currently segfaults in keras's test suite. More work needed.
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeBool "LLVM_TOOL_LLVM_DRIVER_BUILD" true) # Save space by using busybox style tool binary
     # Way too slow, only uses one core
     # (lib.cmakeBool "LLVM_ENABLE_DOXYGEN" (buildDocs || buildMan))
