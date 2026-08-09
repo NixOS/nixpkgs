@@ -6325,6 +6325,13 @@
     github = "darkyzhou";
     githubId = 7220778;
   };
+  daroche = {
+    name = "daroche";
+    email = "him@daroche.me";
+    matrix = "@him:daroche.me";
+    github = "RealDaroche";
+    githubId = 94007359;
+  };
   darshancode2005 = {
     name = "Darshan Thakare";
     email = "darshanthakaregsoc2023@gmail.com";
