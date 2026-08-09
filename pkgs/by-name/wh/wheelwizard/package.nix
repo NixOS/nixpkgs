@@ -56,6 +56,7 @@ buildDotnetModule (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath [ finalAttrs.dotnet-runtime ]}
 
     install -D $desktopItem/share/applications/* -t $out/share/applications
+    install -Dm444 Flatpak/io.github.TeamWheelWizard.WheelWizard.png $out/share/icons/hicolor/256x256/apps/io.github.TeamWheelWizard.WheelWizard.png
 
     runHook postInstall
   '';
@@ -67,6 +68,7 @@ buildDotnetModule (finalAttrs: {
   desktopItem = makeDesktopItem {
     name = "wheelwizard";
     exec = "WheelWizard";
+    icon = "io.github.TeamWheelWizard.WheelWizard";
     comment = "WheelWizard, Retro Rewind Launcher";
     desktopName = "Wheel Wizard";
     categories = [ "Game" ];
