@@ -11,7 +11,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "kontainer";
-  version = "1.5.2";
+  version = "1.6.1";
 
   strictDeps = true;
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "DenysMb";
     repo = "Kontainer";
     tag = finalAttrs.version;
-    hash = "sha256-FE3brkJC0kWF0kEi40istzZdzWY6nBXxMVsVHHgSh9U=";
+    hash = "sha256-W1wQ643ny67O6BOO2x6kjtIvFqGO27CFKKAdjDGbh1s=";
   };
 
   nativeBuildInputs = [

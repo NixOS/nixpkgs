@@ -1,8 +1,8 @@
 {
-  k3sVersion = "1.35.6+k3s1";
-  k3sCommit = "87243446a2c2fe958c31ad552fe38ebf96757b06";
-  k3sRepoSha256 = "0hcd2pyd66isnii7x6nbw420n0sc7rwrbws4aayakas1xi0yrkzq";
-  k3sVendorHash = "sha256-U8JM3CKLGUMWLntMyczrHCW+WMAeiDy2xwzR39InvCM=";
+  k3sVersion = "1.35.7+k3s1";
+  k3sCommit = "cd43afc7151132bac92feacd3e4d2127ea1e70d0";
+  k3sRepoSha256 = "1m9kwz8i1sqjgmc71qknmr87c9g8z7r2wl9440r32lfzxq8a6g1b";
+  k3sVendorHash = "sha256-0MVOVrRWZ/xyTaRq5Nw5ogxIGZLArDVA1wiHmiwKqFA=";
   chartVersions = import ./chart-versions.nix;
   imagesVersions = builtins.fromJSON (builtins.readFile ./images-versions.json);
   k3sRootVersion = "0.15.2";
@@ -17,5 +17,5 @@
   flannelPluginVersion = "v1.9.0-flannel1";
   kubeRouterVersion = "v2.6.3-k3s1";
   criDockerdVersion = "v0.3.19-k3s3";
-  helmJobVersion = "v0.11.1-build20260615";
+  helmJobVersion = "v0.13.3-build20260727";
 }
