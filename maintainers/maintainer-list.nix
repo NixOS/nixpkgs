@@ -28347,6 +28347,15 @@
     githubId = 45526311;
     name = "TheTaoOfSu";
   };
+  TheToddLuci0 = {
+    github = "TheToddLuci0";
+    githubId = 26094248;
+    name = "Logan Woolery";
+    keys = [
+      { fingerprint = "87FA EE52 6515 AA13 B025  8957 9C29 A212 F5B2 F101"; }
+      { fingerprint = "E26D 48B3 08C7 C1C3 9CD3  C3E6 86B3 5D97 89EB E4A5"; }
+    ];
+  };
   theuni = {
     email = "ct@flyingcircus.io";
     github = "ctheune";
