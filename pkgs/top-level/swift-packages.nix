@@ -160,6 +160,27 @@ makeScopeWithSplicing' {
             ''
           );
 
+      fixUnhelpfulCmakeRpathsHook = makeSetupHook { name = "fix-unhelpful-cmake-rpaths-hook"; } (
+        # Swift disables environmental rpaths and tries to set `$ORIGIN`. The latter is probably fine, but the former
+        # messes with the tooling in Nixpkgs. This hook removes both of them just to be safe.
+        writeShellScript "fix-unhelpful-cmake-rpaths-hook" ''
+          function fixUnhelpfulCmakeRpaths() {
+            local f
+            while IFS= read -d "" f; do
+              if [[ "$(basename "$f")" = CMakeLists.txt || "''${f##*.}" = cmake ]]; then
+                echo "removing unhelpful rpath settings from '$f'"
+                # CMake allows non-zero numbers (including floating point numbers) to be truthy values, but assume that
+                # Swift isn’t doing something odd like using 3.141592653589793 as a truth value.
+                sed -E -i "$f" \
+                  -e 's/(^|\s|CMAKE_)INSTALL_RPATH "[^"]*"/\1INSTALL_RPATH ""/' \
+                  -e 's/(^|\s|CMAKE_)INSTALL_REMOVE_ENVIRONMENT_RPATH (1|ON|TRUE|Y|YES)/\1INSTALL_REMOVE_ENVIRONMENT_RPATH OFF/'
+              fi
+            done < <(grep -rlZ RPATH)
+          }
+          postPatchHooks+=(fixUnhelpfulCmakeRpaths)
+        ''
+      );
+
       /**
         Provides a list of patches for the specified major.minor version.
 
@@ -223,6 +244,7 @@ makeScopeWithSplicing' {
         swift_sources
         # Hooks to make it easier to deal with Swift packaging
         createToolchainStubsHook
+        fixUnhelpfulCmakeRpathsHook
         ;
 
       llvmPackages_upstream = llvmPackages;
