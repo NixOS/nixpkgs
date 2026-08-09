@@ -4105,8 +4105,8 @@ with pkgs;
     ];
   };
 
-  swiftPackages_ng = recurseIntoAttrs (callPackage ./swift-packages.nix { });
-  inherit (swiftPackages_ng)
+  swiftPackages = recurseIntoAttrs (callPackage ./swift-packages.nix { });
+  inherit (swiftPackages)
     fetchSwiftPMDeps
     sourcekit-lsp
     swift

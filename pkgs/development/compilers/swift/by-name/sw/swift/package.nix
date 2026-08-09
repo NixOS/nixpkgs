@@ -16,9 +16,9 @@
   swift-foundation,
   swift-foundation-icu,
   swift-testing,
+  swift_release,
   swiftc,
   symlinkJoin,
-  swift_release,
   enableRepl ? true, # Whether to build and include LLDB for the Swift REPL.
 }:
 
