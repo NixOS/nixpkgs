@@ -55,6 +55,44 @@ in
               Enabling this option will skip systemd tracking and its setup in NixOS.
             '';
           };
+          SKIP_GPU = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = ''
+              Whether to disable GPU monitoring.
+              Enabling this option will skip GPU tracking.
+            '';
+          };
+          GPU_COLLECTOR = lib.mkOption {
+            type =
+              with lib.types;
+              listOf (enum [
+                "nvml"
+                "nvidia-smi"
+                "amd_sysfs"
+                "rocm-smi"
+                "intel_gpu_top"
+                "nvtop"
+              ]);
+            default =
+              let
+                hasDriver = driver: builtins.elem driver config.services.xserver.videoDrivers;
+              in
+              lib.optionals (hasDriver "nvidia") [ "nvidia-smi" ]
+              ++ lib.optionals (hasDriver "amdgpu") [ "rocm-smi" ]
+              ++ lib.optionals (hasDriver "intel") [ "intel_gpu_top" ];
+            defaultText = lib.literalExpression ''
+              Automatically populated based on `config.services.xserver.videoDrivers`.
+            '';
+            example = [
+              "nvidia-smi"
+              "intel_gpu_top"
+            ];
+            description = ''
+              List of collectors or a comma-separated string to use for GPU monitoring.
+              If left unconfigured, it will attempt to detect the correct collector based on the system's video drivers.
+            '';
+          };
         };
       };
       default = { };
@@ -125,78 +163,95 @@ in
       after = [ "network-online.target" ];
 
       environment = lib.mapAttrs (
-        _: value: if lib.isBool value then (lib.boolToString value) else value
+        _: value:
+        if lib.isBool value then
+          (lib.boolToString value)
+        else if lib.isList value then
+          lib.concatStringsSep "," value
+        else
+          value
       ) cfg.environment;
 
       path =
         cfg.extraPath
         ++ lib.optionals cfg.smartmon.enable [ cfg.smartmon.package ]
-        ++ lib.optionals (builtins.elem "nvidia" config.services.xserver.videoDrivers) [
-          (lib.getBin config.hardware.nvidia.package)
-        ]
-        ++ lib.optionals (builtins.elem "amdgpu" config.services.xserver.videoDrivers) [
-          (lib.getBin pkgs.rocmPackages.rocm-smi)
-        ]
-        ++ lib.optionals (builtins.elem "intel" config.services.xserver.videoDrivers) [
-          (lib.getBin pkgs.intel-gpu-tools)
-        ];
-
-      serviceConfig = {
-        ExecStart = ''
-          ${cfg.package}/bin/beszel-agent
-        '';
-
-        EnvironmentFile = cfg.environmentFile;
-
-        # adds ability to monitor docker/podman containers
-        SupplementaryGroups =
-          lib.optionals config.virtualisation.docker.enable [ "docker" ]
-          ++ lib.optionals (
-            config.virtualisation.podman.enable && config.virtualisation.podman.dockerSocket.enable
-          ) [ "podman" ]
-          ++ lib.optionals cfg.smartmon.enable [ "disk" ];
-
-        DynamicUser = true;
-        User = "beszel-agent";
-
-        # Capabilities needed for SMART monitoring
-        AmbientCapabilities = lib.mkIf cfg.smartmon.enable [
-          "CAP_SYS_RAWIO"
-          "CAP_SYS_ADMIN"
-        ];
-        CapabilityBoundingSet = lib.mkIf cfg.smartmon.enable [
-          "CAP_SYS_RAWIO"
-          "CAP_SYS_ADMIN"
-        ];
-
-        # Device access for SMART monitoring
-        DeviceAllow = lib.mkIf (cfg.smartmon.enable && cfg.smartmon.deviceAllow != [ ]) (
-          map (device: "${device} r") cfg.smartmon.deviceAllow
+        ++ lib.optionals (!cfg.environment.SKIP_GPU) (
+          let
+            hasCollector = collector: builtins.elem collector cfg.environment.GPU_COLLECTOR;
+          in
+          lib.optionals (hasCollector "nvidia-smi") [ (lib.getBin config.hardware.nvidia.package) ]
+          ++ lib.optionals (hasCollector "rocm-smi") [ (lib.getBin pkgs.rocmPackages.rocm-smi) ]
+          ++ lib.optionals (hasCollector "intel_gpu_top") [ (lib.getBin pkgs.intel-gpu-tools) ]
+          ++ lib.optionals (hasCollector "nvtop") [ (lib.getBin pkgs.nvtopPackages.full) ]
         );
 
-        LockPersonality = true;
-        NoNewPrivileges = !cfg.smartmon.enable;
-        PrivateDevices = !cfg.smartmon.enable;
-        PrivateTmp = true;
-        PrivateUsers = !cfg.smartmon.enable && !cfg.environment.SKIP_SYSTEMD;
-        ProtectClock = true;
-        ProtectControlGroups = "strict";
-        ProtectHome = "read-only";
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        ProtectSystem = "strict";
-        Restart = "on-failure";
-        RestartSec = "30s";
-        RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-        SystemCallArchitectures = "native";
-        SystemCallErrorNumber = "EPERM";
-        SystemCallFilter = [ "@system-service" ];
-        Type = "simple";
-        UMask = 27;
-      };
+      serviceConfig =
+        let
+          needsIntelPmu =
+            !cfg.environment.SKIP_GPU && builtins.elem "intel_gpu_top" cfg.environment.GPU_COLLECTOR;
+        in
+        {
+          ExecStart = ''
+            ${cfg.package}/bin/beszel-agent
+          '';
+
+          EnvironmentFile = cfg.environmentFile;
+
+          # adds ability to monitor docker/podman containers
+          SupplementaryGroups =
+            lib.optionals config.virtualisation.docker.enable [ "docker" ]
+            ++ lib.optionals (
+              config.virtualisation.podman.enable && config.virtualisation.podman.dockerSocket.enable
+            ) [ "podman" ]
+            ++ lib.optionals cfg.smartmon.enable [ "disk" ];
+
+          DynamicUser = true;
+          User = "beszel-agent";
+
+          # Capabilities needed for
+          #   SMART monitoring
+          #   Intel (i)GPUs
+          AmbientCapabilities =
+            lib.optionals cfg.smartmon.enable [
+              "CAP_SYS_RAWIO"
+              "CAP_SYS_ADMIN"
+            ]
+            ++ lib.optionals needsIntelPmu [ "CAP_PERFMON" ];
+          CapabilityBoundingSet =
+            lib.optionals cfg.smartmon.enable [
+              "CAP_SYS_RAWIO"
+              "CAP_SYS_ADMIN"
+            ]
+            ++ lib.optionals needsIntelPmu [ "CAP_PERFMON" ];
+
+          # Device access for SMART monitoring
+          DeviceAllow = lib.mkIf (cfg.smartmon.enable && cfg.smartmon.deviceAllow != [ ]) (
+            map (device: "${device} r") cfg.smartmon.deviceAllow
+          );
+
+          LockPersonality = true;
+          NoNewPrivileges = !cfg.smartmon.enable;
+          PrivateDevices = !cfg.smartmon.enable && cfg.environment.SKIP_GPU;
+          PrivateUsers = !cfg.smartmon.enable && !cfg.environment.SKIP_SYSTEMD && cfg.environment.SKIP_GPU;
+          PrivateTmp = true;
+          ProtectClock = true;
+          ProtectControlGroups = "strict";
+          ProtectHome = "read-only";
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectSystem = "strict";
+          Restart = "on-failure";
+          RestartSec = "30s";
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          SystemCallArchitectures = "native";
+          SystemCallErrorNumber = "EPERM";
+          SystemCallFilter = [ "@system-service" ] ++ lib.optionals needsIntelPmu [ "perf_event_open" ];
+          Type = "simple";
+          UMask = 27;
+        };
     };
 
     networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [
