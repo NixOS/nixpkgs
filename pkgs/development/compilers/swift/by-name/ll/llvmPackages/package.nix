@@ -143,6 +143,16 @@ let
               }
             );
 
+          lld = prev.lld.overrideAttrs (old: {
+            patches =
+              (old.patches or [ ])
+              # Don’t apply the patch to upstream LLVM. It doesn’t apply.
+              ++ lib.optionals (old.version != lib.getVersion llvmPackages.lld) [
+                # This was disabled for apparently political reasons. LLD works fine on Darwin.
+                ./patches/lld/0001-Revert-lld-Disable-ability-to-link-Mach-O-for-Darwin.patch
+              ];
+          });
+
           lldb =
             let
               python3-with-distutils = python3.withPackages (pkgs: [ pkgs.distutils ]);
