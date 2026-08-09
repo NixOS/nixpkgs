@@ -3,7 +3,6 @@
   automake,
   boost,
   buildNpmPackage,
-  closurecompiler,
   fetchFromGitHub,
   glibc,
   harfbuzz,
@@ -13,7 +12,6 @@
   x265,
   libde265,
   icu,
-  jdk,
   lib,
   nodejs-slim,
   openssl,
@@ -78,8 +76,8 @@ let
   hyphen-src = fetchFromGitHub {
     owner = "hunspell";
     repo = "hyphen";
-    rev = "73dd2967c8e1e4f6d7334ee9e539a323d6e66cbd";
-    hash = "sha256-WIHpSkOwHkhMvEKxOlgf6gsPs9T3xkzguD8ONXARf1U=";
+    rev = "dcd90f0056cfbcbd2d389b7a13db45ddf5b0b98e";
+    hash = "sha256-LFR6YxigU+srOy374DY2sQ6/WPu90+ksIK2xvkHlEz4=";
   };
   # see DocumentServer/core/Common/3dParty/md/fetch.py
   md4c-src = fetchFromGitHub {
@@ -129,14 +127,14 @@ let
 
   # x2t is not 'directly' versioned, so we version it after the version
   # of documentserver it's pulled into as a submodule
-  version = "9.3.1";
-  core-rev = "7043b3609328e917a4791aec8f3e8fca3225120f";
+  version = "9.4.0";
+  core-rev = "3250a848ee4ef20c2fb8c38dc86350ec579124b8";
   core = fetchFromGitHub {
     owner = "ONLYOFFICE";
     repo = "core";
     # rev that the 'core' submodule in documentserver points at
     rev = core-rev;
-    hash = "sha256-tCYc5R0dlEBoEaUo3DY6GCDJjoBZIaz8Syik0Z30s/s=";
+    hash = "sha256-rJYCcU9SEaKd1dfASAKJIlZfLHyjSoCpVQdz6UQHuW8=";
   };
   # mini implementation of https://github.com/kentcdodds/cross-env
   # because that was not trivial to package and we don't need most
@@ -158,8 +156,8 @@ let
     subprocess.run(cmd, env=env)
   '';
   # rev that the 'web-apps' submodule in documentserver points at
-  web-apps-rev = "1c8ca9987876bada73c0bde21367da09c0e1ed83";
-  web-apps-hash = "sha256-1OniYHaf5kMVYJbEThkeuWfJPxaJoaYqiHaBTi/euAc=";
+  web-apps-rev = "9c0ca538c3b211052347df09d2a4d6781f023403";
+  web-apps-hash = "sha256-1OniYHaf5kMVYJbEThkeuWfJPxaJoaY0iHaBTi/euAc=";
   web-apps-mobile = buildNpmPackage (finalAttrs: {
     name = "web-apps-mobile";
 
@@ -178,7 +176,7 @@ let
 
     sourceRoot = "${finalAttrs.src.name}/vendor/framework7-react";
 
-    npmDepsHash = "sha256-EBUseLFZ5Hc1DHRWL/2erOjlxfm4wHgyIURi5XTXNP8=";
+    npmDepsHash = "sha256-0BUseLFZ5Hc1DHRWL/2erOjlxfm4wHgyIURi5XTXNP8=";
 
     dontNpmBuild = true;
 
@@ -239,7 +237,7 @@ let
       ./web-apps-no-mobile.patch
     ];
 
-    npmDepsHash = "sha256-Uen7gl6w/0A4MDk+7j+exkdwfCYqMSPJidad8AM60eQ=";
+    npmDepsHash = "sha256-Uen7gl6w00A4MDk+7j+exkdwfCYqMSPJidad8AM60eQ=";
 
     nativeBuildInputs = [
       autoconf
@@ -293,37 +291,30 @@ let
       runHook postInstall
     '';
   });
-  sdkjs = buildNpmPackage (finalAttrs: {
+  sdkjs = stdenv.mkDerivation (finalAttrs: {
     name = "onlyoffice-core-sdkjs";
     src = fetchFromGitHub {
       owner = "ONLYOFFICE";
       repo = "sdkjs";
       # rev that the 'sdkjs' submodule in documentserver points at
-      rev = "aa78926242b3da023255d9c7e9180e5a3294167b";
-      hash = "sha256-wZh4TH7+f1dr8sx2C3k3U8zRWLBxmKx8MocLBbPdhJA=";
+      rev = "72b0421c0bbf9d01eed9cf14834ae47eb2df1b50";
+      hash = "sha256-wPH1avXwBtwoJnffJhLdmt/qQW43O9lp1f2Z+plhCBs=";
     };
     sourceRoot = "${finalAttrs.src.name}/build";
 
-    postPatch = ''
-      cp npm-shrinkwrap.json package-lock.json
-    '';
-
-    npmDepsHash = "sha256-C+qp5d4wYmlrEGjIeBsjRhpivy6wKBppJWbcj1z9fbM=";
-
-    dontNpmBuild = true;
-
     nativeBuildInputs = [
-      grunt-cli
-      jdk
+      python3
     ];
 
-    postBuild = ''
-      chmod u+w ..
+    buildPhase = ''
+      runHook preBuild
 
-      # the one from node_modules seems a weird hybrid between dynamic and static linking
-      cp ${closurecompiler}/bin/closure-compiler node_modules/google-closure-compiler-linux/compiler
+      chmod -R u+w ..
+      mkdir ../deploy
 
-      grunt
+      python3 build.py
+
+      runHook postBuild
     '';
 
     installPhase = ''
