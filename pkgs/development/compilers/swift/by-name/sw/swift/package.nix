@@ -193,6 +193,7 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail @objdump@ ${lib.escapeShellArg (lib.getExe' llvmPackages_upstream.llvm "llvm-objdump")} \
         --replace-fail @install_name_tool@ ${lib.escapeShellArg (lib.getExe' llvmPackages_upstream.llvm "llvm-install-name-tool")} \
         --replace-fail @stdlibPath@ ${lib.escapeShellArg stdlib.out} \
+        --replace-fail @store-dir@ ${lib.escapeShellArg builtins.storeDir} \
         --replace-fail @swiftPath@ "$out" \
         --replace-fail @swiftPlatform@ ${stdenv.hostPlatform.swift.platform}
     ''}
