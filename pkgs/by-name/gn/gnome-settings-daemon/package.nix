@@ -1,10 +1,11 @@
 {
   alsa-lib,
+  bashNonInteractive,
   buildPackages,
   colord,
-  docbook-xsl-nons,
-  fetchpatch,
+  cups,
   fetchurl,
+  fontconfig,
   gcr_4,
   geoclue2,
   geocode-glib_2,
@@ -16,13 +17,12 @@
   gsettings-desktop-schemas,
   lib,
   libcanberra,
-  libgnomekbd,
   libgudev,
   libgweather,
   libnotify,
   libpulseaudio,
-  libxml2,
-  libxslt,
+  libx11,
+  libxfixes,
   meson,
   modemmanager,
   networkmanager,
@@ -30,7 +30,6 @@
   perl,
   pkg-config,
   polkit,
-  python3,
   replaceVars,
   stdenv,
   systemd,
@@ -44,6 +43,9 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-settings-daemon";
   version = "50.1";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-settings-daemon/${lib.versions.major finalAttrs.version}/gnome-settings-daemon-${finalAttrs.version}.tar.xz";
@@ -65,23 +67,22 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    docbook-xsl-nons
     gettext
     glib
-    libxml2
-    libxslt
     meson
     ninja
     perl
     pkg-config
-    python3
     udevCheckHook
     wrapGAppsNoGuiHook
   ];
 
   buildInputs = [
     alsa-lib
+    bashNonInteractive
     colord
+    cups
+    fontconfig
     gcr_4
     geoclue2
     geocode-glib_2
@@ -89,11 +90,12 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-desktop
     gsettings-desktop-schemas
     libcanberra
-    libgnomekbd # for org.gnome.libgnomekbd.keyboard schema
     libgudev
     libgweather
     libnotify
     libpulseaudio
+    libx11
+    libxfixes
     modemmanager
     networkmanager
     polkit
