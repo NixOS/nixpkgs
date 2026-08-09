@@ -61,8 +61,10 @@ in
   generateSplicesForMkScope,
   llvmPackages,
   makeScopeWithSplicing',
+  makeSetupHook,
   stdenvNoCC,
   swiftPackages,
+  writeShellScript,
   otherSplices ? generateSplicesForMkScope "swiftPackages",
 }:
 
@@ -116,6 +118,47 @@ makeScopeWithSplicing' {
           ln -s ${lib.getExe' llvmPackages.llvm "llvm-libtool-darwin"} "$out/bin/libtool"
         '';
       };
+
+      llvm_readtapi = stdenvNoCC.mkDerivation {
+        pname = "llvm-readtapi";
+        version = lib.getVersion llvmPackages.llvm;
+
+        buildCommand = ''
+          mkdir -p "$out/bin"
+          ln -s ${lib.getExe' llvmPackages.llvm "llvm-readtapi"} "$out/bin/llvm-readtapi"
+        '';
+      };
+
+      createToolchainStubsHook =
+        makeSetupHook
+          {
+            name = "create-toolchain-stubs-hook";
+            substitutions = {
+              swiftPlatform = stdenvNoCC.hostPlatform.swift.platform;
+            };
+          }
+          (
+            # The Swift toolchain expects shared libraries to be found in `lib/swift/<platform>`, but we want them in
+            # just `lib`. Trying to patch them out is difficult, so we create text-based stubs on Darwin and symlink
+            # the libraries into the expected place on ELF platforms.
+            writeShellScript "create-toolchain-stubs-hook" ''
+              function createToolchainStubsHook() {
+                local dylib
+                for dylib in "''${!outputLib}/lib"/*; do
+                  if isMachO "$dylib"; then
+                    echo "generating text-based stubs for $dylib"
+                    ${lib.getExe' llvm_readtapi "llvm-readtapi"} --filetype=tbd-v4 \
+                      "$dylib" -o "''${!outputDev}/lib/swift/@swiftPlatform@/$(basename "$dylib" .dylib).tbd"
+                  elif isELF "$dylib"; then
+                    echo "symlinking $dylib into the standard location"
+                    ln -s "$dylib" "''${!outputDev}/lib/swift/@swiftPlatform@/$(basename "$dylib")"
+                  fi
+                done
+              }
+
+              postInstallHooks+=(createToolchainStubsHook)
+            ''
+          );
 
       /**
         Provides a list of patches for the specified major.minor version.
@@ -174,7 +217,13 @@ makeScopeWithSplicing' {
 
       buildSwiftPackages = bootstrapStage1SwiftPackages;
 
-      inherit llvm_libtool patchesForVersion swift_sources;
+      inherit
+        llvm_libtool
+        patchesForVersion
+        swift_sources
+        # Hooks to make it easier to deal with Swift packaging
+        createToolchainStubsHook
+        ;
 
       llvmPackages_upstream = llvmPackages;
 
