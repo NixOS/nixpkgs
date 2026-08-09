@@ -68,7 +68,6 @@ let
         swift-corelibs-foundation.dev
         swift-foundation-icu.out
         swift-foundation.dev
-        swift-foundation.out
       ]
     );
   };

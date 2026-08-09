@@ -1,6 +1,7 @@
 {
   lib,
   cmake,
+  createToolchainStubsHook,
   fetchFromGitHub,
   ninja,
   patchesForVersion,
@@ -54,6 +55,9 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     swift-minimal
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isElf [
+    createToolchainStubsHook # Darwin only builds FoundationMacros, so it doesn’t need stubs.
   ];
 
   buildInputs = [
