@@ -188,10 +188,10 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs subprojects/keycodemapdb/tools/keymap-gen
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # don't use version script and don't export symbols
-    substituteInPlace src/meson.build \
-      --replace-fail "spice_gtk_version_script = [" "# spice_gtk_version_script = [" \
-      --replace-fail ",--version-script=@0@'.format(spice_client_glib_syms_path)" "'"
+    # drm/drm_fourcc.h is a Linux kernel uAPI header; only one constant is used
+    substituteInPlace src/channel-display.c --replace-fail \
+      '#include <drm/drm_fourcc.h>' \
+      '#define DRM_FORMAT_MOD_INVALID 0x00ffffffffffffffULL'
   '';
 
   meta = {
