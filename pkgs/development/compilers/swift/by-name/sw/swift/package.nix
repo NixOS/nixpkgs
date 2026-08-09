@@ -68,7 +68,6 @@ let
         swift-corelibs-libdispatch-no-overlay.dev
       ]
       ++ lib.optionals (swift-foundation != null) [
-        swift-corelibs-foundation.out
         swift-corelibs-foundation.dev
         swift-foundation-icu.out
         swift-foundation.dev
