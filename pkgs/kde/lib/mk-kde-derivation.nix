@@ -9,6 +9,7 @@ self:
   python3,
   python3Packages,
   jq,
+  writers,
 }:
 let
   dependencies = (lib.importJSON ../generated/dependencies.json).dependencies;
@@ -54,6 +55,14 @@ let
     name = "kf6-move-outputs-hook";
     meta.license = lib.licenses.mit;
   } ./move-outputs-hook.sh;
+
+  darwinBundleHook = makeSetupHook {
+    name = "kf6-darwin-bundle-hook";
+    meta.license = lib.licenses.mit;
+  } ./darwin-bundle-hook.sh;
+
+  # Compatibility layer for getting past iconutil not being in the nix sandbox.
+  iconutilCompat = writers.writePython3Bin "iconutil" { } ./iconutil-compat.py;
 
   qmllintHook = makeSetupHook {
     name = "qmllint-validate-hook";
@@ -121,6 +130,11 @@ let
       qt6.wrapQtAppsHook
       moveOutputsHook
       qmllintHook
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwinBundleHook
+      iconutilCompat
+      python3Packages.icnsutil
     ]
     ++ lib.optionals hasPythonBindings [
       python3Packages.shiboken6
