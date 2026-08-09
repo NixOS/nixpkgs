@@ -52,16 +52,19 @@ index f897953c..393572ed 100644
              show_chooser()
  
 diff --git a/bottles/frontend/views/bottle_preferences.py b/bottles/frontend/views/bottle_preferences.py
-index 1e0090f8..983097f2 100644
+index 2bc2235e..34db4dbd 100644
 --- a/bottles/frontend/views/bottle_preferences.py
 +++ b/bottles/frontend/views/bottle_preferences.py
-@@ -148,7 +148,7 @@ class PreferencesView(Adw.PreferencesPage):
-         self.queue = details.queue
-         self.details = details
+@@ -173,9 +173,6 @@ class PreferencesView(Adw.PreferencesPage):
+                 )
+             )
  
--        if not gamemode_available or not Xdp.Portal.running_under_sandbox():
-+        if not gamemode_available:
-             return
+-        if not Xdp.Portal.running_under_sandbox():
+-            return
+-
+         _not_available = _("This feature is unavailable on your system.")
+         _flatpak_not_available = _("{} To add this feature, please run").format(
+             _not_available
  
          _not_available = _("This feature is unavailable on your system.")
 diff --git a/bottles/frontend/views/list.py b/bottles/frontend/views/list.py
