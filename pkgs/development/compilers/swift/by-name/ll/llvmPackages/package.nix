@@ -163,9 +163,9 @@ let
                   # consists of only one path (and is not a list). It needs to point to the stdlib.
                   ./patches/lldb/0001-Set-stdlib-path-on-Linux.patch
                   # Otherwise, linking `lldb-server` fails with a missing symbol error on Linux.
-                  ./patches/${lib.versions.major final.release_version}/lldb/0002-Link-lldb-server-to-swiftCore.patch
+                  ./patches/lldb/0002-Link-lldb-server-to-swiftCore.patch
                   # Don’t resolve the liblldb symlink to help it find the Swift toolchain that it’s linked into.
-                  ./patches/${lib.versions.major final.release_version}/lldb/0003-Don-t-follow-symlinks-when-finding-liblldb.patch
+                  ./patches/lldb/0003-Don-t-follow-symlinks-when-finding-liblldb.patch
                   # Darwin needs to find the path to LLDB via the main executable because dyld always resolves symlinks
                   # when loading dylibs from disk.
                   ./patches/lldb/0004-Use-the-LLDB-executable-path-to-find-the-stdlib.patch
