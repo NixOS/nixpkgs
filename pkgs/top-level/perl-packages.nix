@@ -39604,6 +39604,11 @@ with self;
       MojoliciousPluginOpenAPI
       RoleTiny
     ];
+    # Mojolicious 9.48 enforces CSRF token validation (CVE-2026-15747); these
+    # tests drive forms without a token and fail with 400 "CSRF token failure".
+    preCheck = ''
+      rm t/plugin/auth/github.t t/plugin/form/bootstrap4.t
+    '';
     meta = {
       homepage = "http://preaction.me/yancy/";
       description = "Best Web Framework Deserves the Best CMS";
