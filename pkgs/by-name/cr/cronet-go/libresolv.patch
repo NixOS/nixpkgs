@@ -1,6 +1,6 @@
 --- a/naiveproxy/src/build/config/mac/BUILD.gn
 +++ b/naiveproxy/src/build/config/mac/BUILD.gn
-@@ -14,7 +14,7 @@ import("//build/toolchain/siso.gni")
+@@ -14,7 +14,7 @@
  # is applied to all targets. It is here to separate out the logic.
  config("compiler") {
    # These flags are shared between the C compiler and linker.
