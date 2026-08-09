@@ -117,10 +117,6 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   disabledTestPaths = [
     # Require internet access
     "test/integration_tests"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Passes, but hangs the build after Pytest completes
-    "test/torchaudio_unittest/models/models_test.py::TestConvTasNet"
   ];
 
   disabledTests = [
@@ -140,6 +136,9 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     "AutogradCPUTest"
     "TestAutogradLfilterCPU"
     "TestWav2Vec2Model"
+
+    # Massive RAM usage
+    "TestConvTasNet"
   ]
   ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
     # AssertionError: Tensor-likes are not close!
