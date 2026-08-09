@@ -121,7 +121,7 @@ let
     RestrictNamespaces = true;
     RestrictRealtime = true;
     RestrictSUIDSGID = true;
-    SupplementaryGroups = lib.optional enableRedis redisServer.user;
+    SupplementaryGroups = lib.optional enableRedis redisServer.group;
     SystemCallArchitectures = "native";
     SystemCallFilter = [
       "@system-service"
