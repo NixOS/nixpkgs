@@ -8,6 +8,12 @@
   swift,
 }:
 
+let
+  swift' = swift.override {
+    enableRepl = false;
+  };
+in
+
 # Swift-ASN1 is a dependency of SwiftPM. It must be built with CMake to avoid dependency cycles.
 stdenv.mkDerivation (finalAttrs: {
   pname = "swift-asn1";
@@ -42,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-    swift
+    swift'
   ];
 
   postInstall = ''

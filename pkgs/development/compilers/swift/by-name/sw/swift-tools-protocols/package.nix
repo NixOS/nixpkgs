@@ -12,6 +12,10 @@
 
 let
   swiftPlatform = stdenv.hostPlatform.swift.platform;
+
+  swift' = swift.override {
+    enableRepl = false;
+  };
 in
 
 # The version of swift-tools-protocols comes from Swift’s `update_checkout` script. It is unfortunately not tagged
@@ -49,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-    swift
+    swift'
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvm_libtool ];
 

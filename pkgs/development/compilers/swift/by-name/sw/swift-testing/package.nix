@@ -16,7 +16,10 @@ let
 
   # Can’t use `swift-minimal`. Swift Testing fails to build using the classic Swift frontend.
   # It requires the new Swift compiler driver.
-  swift' = swift.override { swift-testing = null; };
+  swift' = swift.override {
+    swift-testing = null;
+    enableRepl = false;
+  };
 in
 
 stdenv.mkDerivation (finalAttrs: {
