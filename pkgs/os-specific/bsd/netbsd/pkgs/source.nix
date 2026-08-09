@@ -39,13 +39,25 @@ let
   ];
 in
 
-# Every set is rooted at `usr/src`; strip that so the result has `lib`, `sys`,
-# `share` and friends directly at the top, which is the layout the rest of this
-# package set indexes into. `CVS` bookkeeping directories are an artifact of
-# how the sets are cut and are of no use to us.
-runCommand "netbsd-source-${version}" { } ''
-  mkdir -p "$out"
-  for set in ${lib.escapeShellArgs sets}; do
-    tar -xzf "$set" -C "$out" --strip-components=2 --exclude CVS usr/src
-  done
-''
+runCommand "netbsd-source-${version}" { } (
+  # Every set is rooted at `usr/src`; strip that so the result has `lib`,
+  # `sys`, `share` and friends directly at the top, which is the layout the
+  # rest of this package set indexes into. `CVS` bookkeeping directories are
+  # an artifact of how the sets are cut and are of no use to us.
+  ''
+    mkdir -p "$out"
+    for set in ${lib.escapeShellArgs sets}; do
+      tar -xzf "$set" -C "$out" --strip-components=2 --exclude CVS usr/src
+    done
+  ''
+  # The sets ship the generated `configure` scripts without the executable bit.
+  # NetBSD's own build never noticed, because it invokes them as
+  # `${HOST_SH} configure`; stdenv's `configurePhase` only runs `./configure`
+  # when it is executable, and otherwise reports "no configure script, doing
+  # nothing" and leaves the build to fail later on a missing generated file.
+  # `fetchcvs` used to preserve the bit, so this is a difference we have to
+  # make up for rather than a change in intent.
+  + ''
+    find "$out" -type f -name configure -exec chmod +x {} +
+  ''
+)
