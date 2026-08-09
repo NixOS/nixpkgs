@@ -582,6 +582,42 @@ rec {
     "${getBin x}/bin/${y}";
 
   /**
+    Get the path to the main darwin app of a package based on `meta.mainDarwinApp`
+
+    # Inputs
+
+    `x`
+
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    getDarwinApp :: Derivation -> StorePath
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.meta.getDarwinApp` usage example
+
+    ```nix
+    getDarwinApp pkgs.vscodium
+    => "/nix/store/0y95mgmlrs8cayv2cnj23xjfljwhlib0-vscodium-1.121.03429/Applications/VSCodium.app"
+    getDarwinApp pkgs.slack
+    => "/nix/store/g52cl8dblki8dr5bkr0vajpkralkmhi0-slack-4.49.89/Applications/Slack.app"
+    ```
+
+    :::
+  */
+  getDarwinApp =
+    x:
+    getDarwinApp' x (
+      x.meta.mainDarwinApp or (builtins.throw "getDarwinApp: Package ${
+        lib.strings.escapeNixIdentifier x.meta.name or x.pname or x.name
+      } does not have the meta.mainDarwinApp attribute. If the package has a main darwin app, please set `meta.mainDarwinApp` in its definition to make this error go away. Otherwise, if the package does not have a main darwin app, or if you don't control its definition, use getDarwinApp' to specify the name to the program, such as lib.getDarwinApp' vscodium \"VSCodium.app\".")
+    );
+
+  /**
     Get the path of an darwin app for a derivation.
 
     # Inputs

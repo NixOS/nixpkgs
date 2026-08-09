@@ -452,6 +452,7 @@ let
         getLicenseFromSpdxIdOr
         getExe
         getExe'
+        getDarwinApp
         getDarwinApp'
         ;
       inherit (self.filesystem)
