@@ -94,13 +94,65 @@ makeScopeWithSplicing' {
           ln -s ${lib.getExe' llvmPackages.llvm "llvm-libtool-darwin"} "$out/bin/libtool"
         '';
       };
+
+      /**
+        Provides a list of patches for the specified major.minor version.
+
+        # Inputs
+        `path`
+        : The path where to get patches (excluding version-based path components).
+          The function at `<path>/<version.major>.<version.minor>/default.nix` is called with `callPackage`.
+
+        `version`
+        : The package’s version for which to get patches (typically `finalAttrs.version`)
+
+        `...`
+        : Additional arguments passed to `callPackage`.
+
+        # Type
+        ```
+        patchesForVersion :: { path :: Path, version :: String, ... } -> [Derivation | Path]
+
+        # Examples
+        :::{.example}
+        ## `patchesForVersion` usage example
+
+        ```nix
+        patches = patchesForVersion {
+          version = "6.2.4";
+          path = ./patches;
+        }
+        => [
+        [
+          <path>/patches/6.2/0001-Read-C-and-C-stdlib-flags-from-the-wrapped-compiler.patch
+          <path>/patches/6.2/0002-Use-Nixpkgs-C-and-C-stdlib-paths-in-ClangImporter.patch
+          <path>/patches/6.2/0003-cmark-build-revamp.patch
+          <path>/patches/6.2/0004-sil-missing-headers.patch
+          «derivation /nix/store/nwpjbbdszqzk0idizcm5rza1w4iql0m1-0005-specify-liblto-path.patch.drv»
+          <path>/patches/6.2/0006-use-nixpkgs-libdispatch.patch
+          «derivation /nix/store/bxj26lblfhjz77aliyjgz6alpcxazs2l-0007-Help-Swift-JIT-find-the-separate-stdlib-and-framewor.patch.drv»
+          «derivation /nix/store/x3nk6n2ar2j31xb40cijg7dalwrcm2sn-cfbe70db5d1e65bed2388f97ee52f65719c812b3.patch?full_index=1.drv»
+        ]
+        ```
+
+        :::
+      */
+      patchesForVersion =
+        { path, version, ... }@args:
+        let
+          args' = lib.removeAttrs args [
+            "path"
+            "version"
+          ];
+        in
+        self.callPackage (lib.path.append path (lib.versions.majorMinor version)) args';
     in
     {
       bootstrapStage = 2;
 
       buildSwiftPackages = bootstrapStage1SwiftPackages;
 
-      inherit llvm_libtool;
+      inherit llvm_libtool patchesForVersion;
 
       llvmPackages_upstream = llvmPackages;
 
