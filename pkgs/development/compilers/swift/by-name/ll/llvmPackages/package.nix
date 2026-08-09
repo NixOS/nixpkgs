@@ -29,7 +29,17 @@ let
     # The patch needs slightly tweaked to apply to Swift’s LLDB fork.
     "lldb/backport-ParseTrieEntries-fixes.patch" = [ { path = ./patches; } ];
     # Update backport of the Darwin triple changes for macOS 27.
-    "llvm/backport-darwin-triple-parsing.patch" = [ { path = ./patches; } ];
+    "llvm/backport-darwin-triple-parsing.patch" = [
+      {
+        before = "21";
+        path = ./patches/19;
+      }
+      # This is an empty patch because Swift’s LLVM 21 fork already has this change.
+      {
+        after = "21";
+        path = ./patches/21;
+      }
+    ];
     # Backport support for arm64e.x1, the new cpu subtype for A20 and M6
     "llvm/backport-minimal-arm64e_x1-support.patch" = [
       {
@@ -52,11 +62,13 @@ let
           llvmPackages = llvmPackages_19;
           patchOverrides = basePatchOverrides;
         };
-        "6.3.3" = {
+        "6.4.0" = {
           swiftLlvmVersion = "21.0.0"; # From https://github.com/swiftlang/swift/blob/swift-$swiftVersion-RELEASE/utils/build_swift/build_swift/defaults.py#L51
           llvmVersion = "21.1.6"; # From https://github.com/swiftlang/llvm-project/blob/swift-$swiftVersion-RELEASE/cmake/Modules/LLVMVersion.cmake
           llvmPackages = llvmPackages_21;
           patchOverrides = basePatchOverrides // {
+            # This is an empty patch because Swift’s LLVM fork already has this change.
+            "llvm/get-rid-of-incorrect-std-template-specializations.patch" = [ { path = ./patches/21; } ];
             # Swift’s LLVM fork needs to use `sys::path::make_absolute` instead of `sys::fs::make_absolute`.
             "llvm/gnu-install-dirs.patch" = [ { path = ./patches/21; } ];
             # This is an empty patch because Swift’s LLVM fork already has this change.

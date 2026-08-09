@@ -3,7 +3,6 @@
   callPackage,
   cmake,
   fetchFromGitHub,
-  fetchpatch2,
   llvmPackages,
   ninja,
   replaceVars,
@@ -71,8 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./patches/0001-gnu-install-dirs.patch
-    # Use swift-corelibs-xctest even on Darwin (because XCTest.framework is not available in nixpkgs).
-    ./patches/0002-darwin-swift-corelibs-xctest.patch
     # SwiftPM tries to use `sandbox-exec` for sandboxing, which will fail when it is run in the Nix sandbox.
     ./patches/0003-disable-sandbox.patch
     # SwiftPM falls back to looking for manifests and plugins in the Swift compiler location. Find them in $out.
@@ -93,13 +90,12 @@ stdenv.mkDerivation (finalAttrs: {
     })
     # SwiftPM tries to find Clang via `CC`, but that can be GCC on Linux, which doesn’t actually work with SwiftPM.
     ./patches/0011-Always-find-Clang-in-the-toolchain.patch
-    # Build missing `swift-package-collection` and `swift-package-registry` binaries.
-    (fetchpatch2 {
-      url = "https://github.com/swiftlang/swift-package-manager/commit/e1910f814cc1be40c709c3987a29488b9bee2f92.patch?full_index=1";
-      hash = "sha256-4Ew/cKlk+Zn8cIQvh0jQy4Fz+xGYBYwch4+SBu1nKpI=";
-    })
     # Include the Darwin testing helper in the CMake-built package.
     ./patches/0012-Build-and-install-the-Darwin-testing-helper-for-the-.patch
+    # SwiftPM makes assumptions about where the toolchain is that don’t hold in Nixpkgs.
+    (replaceVars ./patches/0013-Help-SwiftPM-find-the-toolchain-in-the-store.patch {
+      store-dir = builtins.storeDir;
+    })
   ];
 
   postPatch = ''

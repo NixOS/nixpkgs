@@ -1,0 +1,131 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sun, 4 Jan 2026 14:37:05 -0500
+Subject: [PATCH 1/9] Read C and C++ stdlib flags from the wrapped compiler
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+On most platforms supported by Nixpkgs, the C and C++ standard libraries
+are located separately and are not part of the sysroot, but Swift’s
+ClangImporter assumes they are part of the sysroot by default.
+
+While it is possible to create a sysroot for use with Swift, this has
+negative affects on every package that wants to use Swift and compile
+C++ code. The C++ library must be removed from the standard platform
+configuration, which makes adding Swift as a dependency too disruptive.
+---
+ lib/ClangImporter/ClangImporter.cpp     |  8 ++++
+ lib/ClangImporter/ClangIncludePaths.cpp |  9 +++++
+ lib/ClangImporter/ClangIncludePaths.h   | 51 +++++++++++++++++++++++++
+ 3 files changed, 68 insertions(+)
+
+diff --git a/lib/ClangImporter/ClangImporter.cpp b/lib/ClangImporter/ClangImporter.cpp
+index 2815b8baf4c..fcc047c9a18 100644
+--- a/lib/ClangImporter/ClangImporter.cpp
++++ b/lib/ClangImporter/ClangImporter.cpp
+@@ -624,6 +624,14 @@ void importer::getNormalInvocationArguments(
+     });
+   }
+ 
++  // Ensure libc is available. The C standard library is separate from the sysroot
++  // on most platforms in Nixpkgs. (Darwin is a prominent exception.)
++  addFlagsFromNixCC(invocationArgStrs, "libc-cflags");
++  
++  // Ensure the libc++ headers are available. The C++ standard library is separate
++  // from the sysroot on most platforms in Nixpkgs.
++  addFlagsFromNixCC(invocationArgStrs, "libcxx-cxxflags");
++
+   if (LangOpts.EnableCXXInterop) {
+     if (auto path = getCxxShimModuleMapPath(searchPathOpts, LangOpts, triple)) {
+       invocationArgStrs.push_back((Twine("-fmodule-map-file=") + *path).str());
+diff --git a/lib/ClangImporter/ClangIncludePaths.cpp b/lib/ClangImporter/ClangIncludePaths.cpp
+index 5bc725811f7..875f5be1024 100644
+--- a/lib/ClangImporter/ClangIncludePaths.cpp
++++ b/lib/ClangImporter/ClangIncludePaths.cpp
+@@ -191,6 +191,15 @@ ClangImporter::createClangArgs(const ClangImporterOptions &ClangImporterOpts,
+   for (const auto &each : ClangImporterOpts.ExtraArgs) {
+     clangArgs.push_back(each.c_str());
+   }
++
++  // Ensure libc is available. The C standard library is separate from the sysroot
++  // on most platforms in Nixpkgs. (Darwin is a prominent exception.)
++  addFlagsFromNixCC(clangArgs, "libc-cflags");
++  
++  // Ensure the libc++ headers are available. The C++ standard library is separate
++  // from the sysroot on most platforms in Nixpkgs.
++  addFlagsFromNixCC(clangArgs, "libcxx-cxxflags");
++
+   llvm::opt::InputArgList clangDriverArgs =
+       parseClangDriverArgs(clangDriver, clangArgs);
+   // If a sysroot was explicitly passed to Swift, make sure to pass it to the
+diff --git a/lib/ClangImporter/ClangIncludePaths.h b/lib/ClangImporter/ClangIncludePaths.h
+index 7f08397fa7d..69be98357d9 100644
+--- a/lib/ClangImporter/ClangIncludePaths.h
++++ b/lib/ClangImporter/ClangIncludePaths.h
+@@ -14,6 +14,8 @@
+ #define SWIFT_CLANG_INCLUDE_PATHS_H
+ 
+ #include "swift/AST/ASTContext.h"
++#include "llvm/ADT/StringRef.h"
++#include "llvm/Support/CommandLine.h"
+ 
+ namespace swift {
+ 
+@@ -23,4 +25,53 @@ getCxxShimModuleMapPath(SearchPathOptions &opts, const LangOptions &langOpts,
+ 
+ } // namespace swift
+ 
++template<typename T>
++void addFlagsFromNixCC(std::vector<T> &invocationArgStrs, const char* flagFile) {
++  auto swiftPath = llvm::sys::fs::getMainExecutable(nullptr, nullptr);
++
++  if (swiftPath != "") {
++    llvm::BumpPtrAllocator allocator;
++    llvm::StringSaver saver(allocator);
++    
++    // Read `flagFile` from Clang’s `nix-support` folder by finding it relative to the store
++    // location of `clang`, which is expected to be adjacent to Swift in `$out/bin`.
++    llvm::SmallString<256> clangPath = llvm::StringRef(swiftPath);
++    llvm::sys::path::remove_filename(clangPath);
++    llvm::sys::path::append(clangPath, "clang");
++    
++    llvm::SmallString<256> path;
++   
++    // This shouldn’t happen, but if `real_path` fails to resolve `clang`, give up.
++    if (llvm::sys::fs::real_path(clangPath, path, /*expand_tilde*/ true)) { return; }
++
++    llvm::sys::path::remove_filename(path);
++    llvm::sys::path::remove_filename(path);
++    llvm::sys::path::append(path, "nix-support", flagFile);
++
++    // Treat `flagFile` as a response file for Clang. Because Clang expects response
++    // files to be expanded already at this point, it has to be expanded manually.
++    if (auto buffer = llvm::vfs::getRealFileSystem()->getBufferForFile(path)) {
++      auto contents = (*buffer)->getMemBufferRef().getBuffer();
++      llvm::SmallVector<const char*> args;
++#if _WIN32
++      llvm::cl::TokenizeWindowsCommandLineNoCopy(contents, saver, args);
++#else
++      llvm::cl::TokenizeGNUCommandLine(contents, saver, args);
++#endif
++      for (auto arg : args) {
++        auto arg_str = [&arg = arg]() constexpr {
++          if constexpr (std::is_same<T, const char *>::value) {
++            // This leaks, but there doesn’t seem to be a better way.
++            auto len = std::strlen(arg) + 1;
++            return std::strncpy(new char[len], arg, len);
++          } else {
++            return arg;
++          }
++        }();
++        invocationArgStrs.push_back(arg_str);
++      }
++    }
++  }
++}
++
+ #endif // SWIFT_CLANG_INCLUDE_PATHS_H
+-- 
+2.54.0
+

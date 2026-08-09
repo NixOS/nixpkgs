@@ -1,0 +1,31 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Thu, 24 Sep 2026 20:02:54 -0400
+Subject: [PATCH 8/9] Disable availability checking when building the Runtime
+ module
+
+We want to keep strict availability enabled so that the stdlib modules
+and text-based stubs match what is deployed with the OS and shipped in
+the SDK, but we need to be able to build the stdlib to generate those
+modules and stubs. Disabling the checks lets us do that.
+---
+ stdlib/public/RuntimeModule/CMakeLists.txt | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/stdlib/public/RuntimeModule/CMakeLists.txt b/stdlib/public/RuntimeModule/CMakeLists.txt
+index 43742dbf48d..0137f07bfe0 100644
+--- a/stdlib/public/RuntimeModule/CMakeLists.txt
++++ b/stdlib/public/RuntimeModule/CMakeLists.txt
+@@ -104,7 +104,8 @@ set(runtime_compile_flags
+   "-Xcc;-I${CMAKE_BINARY_DIR}/include"
+   "-Xcc;-I${SWIFT_STDLIB_SOURCE_DIR}/public/RuntimeModule/modules"
+   "-disable-upcoming-feature;MemberImportVisibility"
+-  "-enable-experimental-feature;Reparenting")
++  "-enable-experimental-feature;Reparenting"
++  "-Xfrontend;-disable-availability-checking")
+ 
+ ###TODO: Add these when we add static linking support
+ #
+-- 
+2.54.0
+
