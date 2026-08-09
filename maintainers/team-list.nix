@@ -751,6 +751,7 @@ with lib.maintainers;
 
   swift = {
     members = [
+      reckenrode
       samasaur
       stephank
     ];
