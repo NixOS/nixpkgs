@@ -9,6 +9,7 @@
   gnumake,
   gnused,
   iconv,
+  libtapi,
   llvmPackages,
   ninja,
   replaceVars,
@@ -16,6 +17,7 @@
   stdenv,
   swift,
   swift-argument-parser,
+  swift-corelibs-xctest,
   swift-driver,
   swift-llbuild,
   swift-system,
@@ -66,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
       inherit gnused;
       inherit iconv;
       inherit what;
+      tapi = lib.getBin libtapi;
     })
     # Swift Build checks whether the SDK is Xcode by looking at the `DEVELOPER_DIR` path for Xcode.
     # Have it treat store paths as being Xcode SDKs so that the nixpkgs SDK is treated as a Darwin platform.
@@ -74,6 +77,18 @@ stdenv.mkDerivation (finalAttrs: {
     })
     # Don’t look in the build directory for bundles. Look only in the store.
     ./patches/0003-find-bundles-in-store.patch
+    # Swift Build makes assumptions about the layout of the toolchain (e.g., that paths begin with `usr`) that
+    # are not true for the toolchain Nixpkgs.
+    (replaceVars ./patches/0004-Help-Swift-Build-find-things-in-the-store.patch {
+      store-dir = builtins.storeDir;
+    })
+    # Swift Build expects to find the testing macros in the toolchain path starting at `usr/lib/swift/host/testing`,
+    # but the Nixpkgs toolchain installs them to `lib/swift/host/testing`.
+    ./patches/0005-Locate-Swift-Testing-macros-in-the-Nixpkgs-toolchain.patch
+    # We don’t have the XCTest frameworks from Xcode on Darwin, so link against what we do have.
+    (replaceVars ./patches/0006-Link-against-XCTest-from-swift-corelibs-xctest-even-.patch {
+      inherit swift-corelibs-xctest;
+    })
   ];
 
   # FIXME: Make this a patch

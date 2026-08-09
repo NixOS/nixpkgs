@@ -1,17 +1,17 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Randy Eckenrode <randy@largeandhighquality.com>
 Date: Sat, 13 Dec 2025 22:57:10 -0500
-Subject: [PATCH 02/11] darwin-swift-corelibs-xctest
+Subject: [PATCH 02/13] darwin-swift-corelibs-xctest
 
 ---
- .../Commands/Utilities/TestingSupport.swift   | 65 -------------------
- 1 file changed, 65 deletions(-)
+ .../Commands/Utilities/TestingSupport.swift   | 69 -------------------
+ 1 file changed, 69 deletions(-)
 
 diff --git a/Sources/Commands/Utilities/TestingSupport.swift b/Sources/Commands/Utilities/TestingSupport.swift
-index 2d6d12beb..e8348bd72 100644
+index 6132b8b7b..a340cefb9 100644
 --- a/Sources/Commands/Utilities/TestingSupport.swift
 +++ b/Sources/Commands/Utilities/TestingSupport.swift
-@@ -29,46 +29,6 @@ import func TSCBasic.withTemporaryFile
+@@ -86,46 +86,6 @@ extension DebuggerError: CustomStringConvertible {
  /// Note: In the long term this should be factored into a reusable module that
  /// can run and report results on tests from both CLI and libSwiftPM API.
  enum TestingSupport {
@@ -58,23 +58,27 @@ index 2d6d12beb..e8348bd72 100644
      static func getTestSuites(
          in testProducts: [BuiltTestProduct],
          swiftCommandState: SwiftCommandState,
-@@ -112,30 +72,6 @@ enum TestingSupport {
-     ) throws -> [TestSuite] {
+@@ -172,34 +132,6 @@ enum TestingSupport {
+     ) async throws -> [TestSuite] {
          // Run the correct tool.
          var args = [String]()
 -        #if os(macOS)
+-        let env = try await Self.constructTestEnvironment(
+-            toolchain: try swiftCommandState.getTargetToolchain(),
+-            destinationBuildParameters: swiftCommandState.buildParametersForTest(
+-                enableCodeCoverage: enableCodeCoverage,
+-                shouldSkipBuilding: shouldSkipBuilding,
+-                experimentalTestOutput: experimentalTestOutput
+-            ).productsBuildParameters,
+-            sanitizers: sanitizers,
+-            library: .xctest,
+-            testProductPaths: [path],
+-            interopMode: nil, // Interop not required when listing tests
+-            buildSystem: buildSystem
+-        )
+-        let helperPath = try Self.xctestHelperPath(swiftCommandState: swiftCommandState).pathString
 -        let data: String = try withTemporaryFile { tempFile in
--            args = [try Self.xctestHelperPath(swiftCommandState: swiftCommandState).pathString, path.pathString, tempFile.path.pathString]
--            let env = try Self.constructTestEnvironment(
--                toolchain: try swiftCommandState.getTargetToolchain(),
--                destinationBuildParameters: swiftCommandState.buildParametersForTest(
--                    enableCodeCoverage: enableCodeCoverage,
--                    shouldSkipBuilding: shouldSkipBuilding,
--                    experimentalTestOutput: experimentalTestOutput
--                ).productsBuildParameters,
--                sanitizers: sanitizers,
--                library: .xctest
--            )
+-            args = [helperPath, path.pathString, tempFile.path.pathString]
 -            try Self.runProcessWithExistenceCheck(
 -                path: path,
 -                fileSystem: swiftCommandState.fileSystem,
@@ -86,10 +90,10 @@ index 2d6d12beb..e8348bd72 100644
 -            return try swiftCommandState.fileSystem.readFileContents(AbsolutePath(tempFile.path))
 -        }
 -        #else
-         let env = try Self.constructTestEnvironment(
+         let env = try await Self.constructTestEnvironment(
              toolchain: try swiftCommandState.getTargetToolchain(),
              destinationBuildParameters: swiftCommandState.buildParametersForTest(
-@@ -152,7 +88,6 @@ enum TestingSupport {
+@@ -219,7 +151,6 @@ enum TestingSupport {
              args: args,
              env: env
          )

@@ -24,10 +24,6 @@
   })
   # Use libdispatch from nixpkgs instead of building it in-tree
   ./0006-use-nixpkgs-libdispatch.patch
-  # The Swift JIT needs help finding dylibs when they are linked into the toolchain at `$out/lib`.
-  (replaceVars ./0007-Help-Swift-JIT-find-the-separate-stdlib-and-framewor.patch {
-    swiftPlatform = stdenv.hostPlatform.swift.platform;
-  })
   # Fix missing <cstdint> when building against libstdc++ 15
   (fetchpatch2 {
     url = "https://github.com/swiftlang/swift/commit/a5c727125e952839c373fe47e9f9e359db3d4d38.patch?full_index=1";

@@ -1,0 +1,57 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Fri, 25 Sep 2026 20:49:51 -0400
+Subject: [PATCH 12/13] Help SwiftPM find the toolchain in the store
+
+---
+ Sources/PackageModel/Toolchain.swift | 31 +++++++++++++++++-----------
+ 1 file changed, 19 insertions(+), 12 deletions(-)
+
+diff --git a/Sources/PackageModel/Toolchain.swift b/Sources/PackageModel/Toolchain.swift
+index 93d19bf55..c2ccbe71d 100644
+--- a/Sources/PackageModel/Toolchain.swift
++++ b/Sources/PackageModel/Toolchain.swift
+@@ -112,21 +112,28 @@ extension Toolchain {
+     public var toolchainDir: AbsolutePath {
+         get throws {
+             let compilerPath = try resolveSymlinks(swiftCompilerPath)
+-            let os = ProcessInfo.hostOperatingSystem
+-            switch os {
+-            case .windows, .macOS, .linux, .android:
++            // If the compiler is in the store, assume the whole toolchain is in the store.
++            if compilerPath.isDescendant(of: try AbsolutePath(validating: "@store-dir@")) {
+                 return compilerPath
+                     .parentDirectory // bin
+-                    .parentDirectory // usr
+                     .parentDirectory // <toolchain>
+-            case .freebsd, .openbsd:
+-                return compilerPath
+-                    .parentDirectory // bin
+-                    .parentDirectory // local
+-                    .parentDirectory // usr
+-                    .parentDirectory // <toolchain>
+-            case .unknown:
+-                throw UnknownToolchainLayout(os: os)
++            } else {
++                let os = ProcessInfo.hostOperatingSystem
++                switch os {
++                case .windows, .macOS, .linux, .android:
++                        return compilerPath
++                            .parentDirectory // bin
++                            .parentDirectory // usr
++                            .parentDirectory // <toolchain>
++                case .freebsd, .openbsd:
++                    return compilerPath
++                        .parentDirectory // bin
++                        .parentDirectory // local
++                        .parentDirectory // usr
++                        .parentDirectory // <toolchain>
++                case .unknown:
++                    throw UnknownToolchainLayout(os: os)
++                }
+             }
+         }
+     }
+-- 
+2.54.0
+

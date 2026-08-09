@@ -2,6 +2,7 @@
   lib,
   apple-sdk_14,
   apple-sdk_26,
+  apple-sdk_27,
   bootstrapStage,
   buildSwiftPackages,
   cmake,
@@ -65,7 +66,11 @@ let
   isBootstrapToolchain62 = lib.versions.majorMinor swift_release == "6.2";
 
   # SDK versions past 14.x don’t work with the c++-based bootstrap compiler due to unconditionally exposing macros.
-  build-sdk = if bootstrapStage == 2 then apple-sdk_26 else apple-sdk_14;
+  build-sdk =
+    if bootstrapStage == 2 then
+      (if isBootstrapToolchain62 then apple-sdk_26 else apple-sdk_27)
+    else
+      apple-sdk_14;
 
   # `buildSwiftPackages` is always the previous stage. Building the stage 2 compiler requires linking against the
   # separately built stdlib because it does not build its own. Override the stage 1 compiler to use it.
