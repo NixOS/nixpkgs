@@ -70,7 +70,9 @@ let
     if [[ "$USER" != ${cfg.user} ]]; then
       ${
         if config.security.sudo.enable then
-          "sudo='exec ${config.security.wrapperDir}/sudo -u ${cfg.user} -E'"
+          "sudo='exec ${config.security.wrapperDir}/sudo -u ${cfg.user} -g ${cfg.group} ${
+            lib.optionalString enableRedis " -g " + redisServer.group
+          } -E'"
         else
           ">&2 echo 'Aborting, paperless-manage must be run as user `${cfg.user}`!'; exit 2"
       }
