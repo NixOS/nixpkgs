@@ -1,8 +1,8 @@
 let
-  autoCalledPackages = import ./by-name-overlay.nix ../development/compilers/swift_ng/by-name;
+  autoCalledPackages = import ./by-name-overlay.nix ../development/compilers/swift/by-name;
 
   swift_sources_6_2 = builtins.fromJSON (
-    builtins.readFile ../development/compilers/swift_ng/sources-6.2.json
+    builtins.readFile ../development/compilers/swift/sources-6.2.json
   );
 
   mkBootstrapSwiftPackages =
@@ -51,8 +51,8 @@ in
   llvmPackages,
   makeScopeWithSplicing',
   stdenvNoCC,
-  swiftPackages_ng,
-  otherSplices ? generateSplicesForMkScope "swiftPackages_ng",
+  swiftPackages,
+  otherSplices ? generateSplicesForMkScope "swiftPackages",
 }:
 
 let
@@ -61,15 +61,13 @@ let
   # - Stage 1 builds a Swift compiler using the stage 0 Swift compiler. Features needed to build macros are enabled.
   # - Stage 2 builds a full Swift compiler and stdlib using the stage 1 compiler.
   bootstrapStage0SwiftPackages = mkBootstrapSwiftPackages {
-    inherit lib;
-    swiftPackages = swiftPackages_ng;
+    inherit lib swiftPackages;
     bootstrapStage = 0;
-    buildSwiftPackages = swiftPackages_ng.overrideScope (_: _: { swift = null; });
+    buildSwiftPackages = swiftPackages.overrideScope (_: _: { swift = null; });
   };
 
   bootstrapStage1SwiftPackages = mkBootstrapSwiftPackages {
-    inherit lib;
-    swiftPackages = swiftPackages_ng;
+    inherit lib swiftPackages;
     bootstrapStage = 1;
     buildSwiftPackages = bootstrapStage0SwiftPackages;
   };

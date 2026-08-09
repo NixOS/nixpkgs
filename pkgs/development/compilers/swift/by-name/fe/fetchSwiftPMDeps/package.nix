@@ -68,12 +68,12 @@ let
           cp "$resolved" "$stagingResolved"
         fi
 
-        if [ -n "$(jq --raw-output '.pins[] | select(.kind != "remoteSourceControl")' < "$resolved")" ]; then
+        if [ -n "$(jq --raw-output '.pins[] | select(.kind != "remoteSourceControl")' < "$stagingResolved")" ]; then
           echo "Only Git-based dependencies are supported by fetchSwiftPMDeps"
           exit 1
         fi
 
-        jq --raw-output0 '.pins[] | select(.kind == "remoteSourceControl")' < "$resolved" | while IFS= read -d "" pin; do
+        jq --raw-output0 '.pins[] | select(.kind == "remoteSourceControl")' < "$stagingResolved" | while IFS= read -d "" pin; do
           url=$(jq --raw-output '.location' <<< "$pin")
           name=$(basename "$url" .git)
           rev=$(jq --raw-output '.state.revision' <<< "$pin")
