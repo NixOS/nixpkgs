@@ -7,7 +7,7 @@
 
 let
   inherit (tcl) stdenv;
-  inherit (lib) getBin optionalAttrs;
+  inherit (lib) getExe' optionalAttrs;
 
   defaultTclPkgConfigureFlags = [
     "--with-tcl=${tcl}/lib"
@@ -72,7 +72,7 @@ lib.extendMkDerivation {
             configureFlags;
 
         env = {
-          TCLSH = "${getBin tcl}/bin/tclsh";
+          TCLSH = "${getExe' tcl "tclsh"}";
         }
         // args.env or { };
 
