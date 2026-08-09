@@ -170,6 +170,9 @@ stdenv.mkDerivation (finalAttrs: {
       done
     fi
 
+    # Swift Build expects to find and load libclang from the toolchain.
+    ln -s ${lib.escapeShellArg (lib.getLib llvmPackages.libclang)}/lib/libclang${stdenv.hostPlatform.extensions.sharedLibrary} "$out/lib/libclang${stdenv.hostPlatform.extensions.sharedLibrary}"
+
     # Propagated inputs in `$dev/nix-support` have to be substituted to use this derivation instead of swiftc.
     for f in "$out/nix-support/"*; do
       orig=$(readlink "$f")
