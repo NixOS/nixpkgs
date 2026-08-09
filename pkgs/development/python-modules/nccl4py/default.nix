@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
   cudaPackages,
   addDriverRunpath,
 
@@ -25,11 +26,16 @@ buildPythonPackage (finalAttrs: {
   # `nccl4py` is versioned independently of `nccl` and should be the
   # same as the contents of
   # `${cudaPackages.nccl.src}/bindings/nccl4py/nccl/_version.py`
-  version = "0.3.0";
+  version = "0.3.1";
   pyproject = true;
   __structuredAttrs = true;
 
-  inherit (cudaPackages.nccl) src;
+  src = fetchFromGitHub {
+    owner = "NVIDIA";
+    repo = "nccl";
+    tag = "nccl4py-v${finalAttrs.version}";
+    hash = "sha256-jpgCUnUWWl2oihtHibgoQRnnXsQC6vlIjVX73i3bVqw=";
+  };
   sourceRoot = "${finalAttrs.src.name}/bindings/nccl4py";
 
   postPatch =
