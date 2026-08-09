@@ -3,6 +3,7 @@
   config,
   apple-sdk_14,
   apple-sdk_26,
+  apple-sdk_27,
   callPackage,
   llvmPackages,
   llvmPackages_upstream,
@@ -26,7 +27,11 @@ let
   includeTesting = swiftc.supportsMacros && swift-testing != null;
 
   # Need to use an older SDK if `swiftc` does not support macros.
-  propagated-sdk = if swiftc.supportsMacros then apple-sdk_26 else apple-sdk_14;
+  propagated-sdk =
+    if swiftc.supportsMacros then
+      (if lib.versions.majorMinor swift_release == "6.2" then apple-sdk_26 else apple-sdk_27)
+    else
+      apple-sdk_14;
 
   # The toolchain needs to propagate libdispatch with and without the Swift overlay to make sure it propagates
   # both the non-Swift shared libraries and the Swift overlay shared library.

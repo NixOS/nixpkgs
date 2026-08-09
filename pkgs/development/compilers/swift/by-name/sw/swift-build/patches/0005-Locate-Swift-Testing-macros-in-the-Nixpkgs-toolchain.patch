@@ -1,0 +1,39 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Mon, 12 Oct 2026 14:57:41 -0400
+Subject: [PATCH 5/6] Locate Swift Testing macros in the Nixpkgs toolchain
+
+---
+ Sources/SWBCore/Settings/Settings.swift | 2 +-
+ Sources/SWBCore/ToolchainRegistry.swift | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Sources/SWBCore/Settings/Settings.swift b/Sources/SWBCore/Settings/Settings.swift
+index d1deb913..18e4525a 100644
+--- a/Sources/SWBCore/Settings/Settings.swift
++++ b/Sources/SWBCore/Settings/Settings.swift
+@@ -4742,7 +4742,7 @@ private class SettingsBuilder: ProjectMatchLookup {
+             }
+         }
+ 
+-        let testingPluginsPath = "/usr/lib/swift/host/plugins/testing"
++        let testingPluginsPath = "/lib/swift/host/plugins/testing"
+         switch (ToolchainStyle(toolchain)) {
+         case let .xcode(isDefault):
+             // This target is using a built-in Xcode toolchain, and that should
+diff --git a/Sources/SWBCore/ToolchainRegistry.swift b/Sources/SWBCore/ToolchainRegistry.swift
+index 27b6f5c2..866d1f72 100644
+--- a/Sources/SWBCore/ToolchainRegistry.swift
++++ b/Sources/SWBCore/ToolchainRegistry.swift
+@@ -403,7 +403,7 @@ public final class Toolchain: Hashable, Sendable {
+ 
+     func testingLibrarySearchPath(forPlatformNamed platformName: String) -> Path? {
+         if testingLibraryPlatformNames.contains(platformName) {
+-            path.join("usr").join("lib").join("swift").join(platformName).join("testing")
++            path.join("lib").join("swift").join(platformName).join("testing")
+         } else {
+             nil
+         }
+-- 
+2.54.0
+
