@@ -1,39 +1,26 @@
 {
   lib,
   stdenv,
-  writeText,
-  runtimeShell,
 }:
 
-let
-  script = writeText "script" ''
-    #!${runtimeShell}
-
-    if command -v sendmail > /dev/null 2>&1 && [ "$(command -v sendmail)" != "{{MYPATH}}" ]; then
-      exec sendmail "$@"
-    elif [ -x /run/wrappers/bin/sendmail ]; then
-      exec /run/wrappers/bin/sendmail "$@"
-    elif [ -x /run/current-system/sw/bin/sendmail ]; then
-      exec /run/current-system/sw/bin/sendmail "$@"
-    else
-      echo "Unable to find system sendmail." >&2
-      exit 1
-    fi
-  '';
-in
 stdenv.mkDerivation {
   pname = "system-sendmail";
   version = "1.0";
 
-  src = script;
+  src = ./sendmail.c;
 
   dontUnpack = true;
-  dontInstall = true;
 
   buildPhase = ''
-    mkdir -p $out/bin
-    < $src sed "s#{{MYPATH}}#$out/bin/sendmail#" > $out/bin/sendmail
-    chmod +x $out/bin/sendmail
+    runHook preBuild
+    $CC -O2 -Wall -Wextra -DPATH_SELF="\"$out/bin/sendmail\"" -o sendmail "$src"
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 sendmail $out/bin/sendmail
+    runHook postInstall
   '';
 
   meta = {
