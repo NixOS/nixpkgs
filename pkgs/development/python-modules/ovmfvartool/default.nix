@@ -8,7 +8,7 @@
 
 buildPythonPackage {
   pname = "ovmfvartool";
-  version = "unstable-2022-09-04";
+  version = "unstable-2025-10-26";
   format = "setuptools";
 
   src = fetchFromGitHub {

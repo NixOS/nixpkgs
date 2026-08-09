@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "lukesmithxyz-bible-kjv";
-  version = "unstable-2022-06-01";
+  version = "unstable-2022-07-01";
 
   src = fetchFromGitHub {
     owner = "lukesmithxyz";

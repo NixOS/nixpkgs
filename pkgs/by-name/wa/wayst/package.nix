@@ -39,7 +39,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "wayst";
-  version = "0-unstable-2023-07-16";
+  version = "0-unstable-2023-06-06";
 
   src = fetchFromGitHub {
     owner = "91861";

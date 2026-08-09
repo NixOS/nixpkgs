@@ -9,7 +9,7 @@
 }:
 stdenv.mkDerivation {
   pname = "msi-ec-kmods";
-  version = "0-unstable-2025-09-17";
+  version = "0-unstable-2025-09-14";
 
   src = fetchFromGitHub {
     owner = "BeardOverflow";

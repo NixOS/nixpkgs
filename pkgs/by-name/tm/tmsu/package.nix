@@ -7,7 +7,7 @@
 
 buildGoModule {
   pname = "tmsu";
-  version = "0.7.5-unstable-2024-06-08";
+  version = "0.7.5-unstable-2022-11-30";
 
   src = fetchFromGitHub {
     owner = "oniony";

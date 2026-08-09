@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "fasd";
-  version = "unstable-2016-08-11";
+  version = "unstable-2015-11-06";
 
   src = fetchFromGitHub {
     owner = "clvv";

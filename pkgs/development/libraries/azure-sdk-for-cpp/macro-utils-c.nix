@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   # Same version as in VCPKG as of February 2025.
   # https://github.com/microsoft/vcpkg/blob/master/ports/azure-macro-utils-c/portfile.cmake
   pname = "azure-macro-utils-c";
-  version = "1.1.0-unstable-2022-01-21";
+  version = "1.1.0-unstable-2019-10-17";
 
   src = fetchFromGitHub {
     owner = "Azure";

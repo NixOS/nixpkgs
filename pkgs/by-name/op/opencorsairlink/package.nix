@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "OpenCorsairLink";
-  version = "0-unstable-2019-12-23";
+  version = "0-unstable-2020-01-29";
 
   buildInputs = [ libusb1 ];
   nativeBuildInputs = [ pkg-config ];

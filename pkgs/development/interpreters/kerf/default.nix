@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "kerf";
-  version = "unstable-2022-08-05";
+  version = "unstable-2022-07-24";
 
   src = fetchFromGitHub {
     owner = "kevinlawler";

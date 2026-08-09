@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "libndtypes";
-  version = "unstable-2019-08-01";
+  version = "unstable-2019-07-30";
 
   outputs = [
     "out"

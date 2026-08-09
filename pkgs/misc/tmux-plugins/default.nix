@@ -95,7 +95,7 @@ in
 
   better-mouse-mode = mkTmuxPlugin {
     pluginName = "better-mouse-mode";
-    version = "unstable-2021-08-02";
+    version = "unstable-2017-10-16";
     src = fetchFromGitHub {
       owner = "NHDaly";
       repo = "tmux-better-mouse-mode";

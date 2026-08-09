@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "minimax-mcp";
-  version = "0-unstable-2026-03-19";
+  version = "0-unstable-2026-01-07";
 
   src = fetchFromGitHub {
     owner = "MiniMax-AI";

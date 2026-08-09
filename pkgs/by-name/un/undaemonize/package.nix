@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "undaemonize";
-  version = "0-unstable-2017-07-11";
+  version = "0-unstable-2017-02-09";
 
   src = fetchFromGitHub {
     repo = "undaemonize";

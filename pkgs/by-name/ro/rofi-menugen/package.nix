@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation {
   pname = "rofi-menugen";
-  version = "0-unstable-2015-12-28";
+  version = "0-unstable-2016-02-16";
 
   src = fetchFromGitHub {
     owner = "octotep";

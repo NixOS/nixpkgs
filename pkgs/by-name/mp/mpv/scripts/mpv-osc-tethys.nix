@@ -6,7 +6,7 @@
 }:
 buildLua (finalAttrs: {
   pname = "mpv-osc-tethys";
-  version = "0-unstable-2024-08-19";
+  version = "0-unstable-2024-04-30";
 
   scriptPath = "osc_tethys.lua";
   extraScriptsToCopy = [ "mpv_thumbnail_script_server.lua" ];

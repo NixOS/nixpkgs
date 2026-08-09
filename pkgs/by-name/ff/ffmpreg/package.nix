@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "ffmpreg";
-  version = "0.1.2-unstable-2026-03-25";
+  version = "0.1.2-unstable-2026-01-30";
 
   src = fetchFromGitHub {
     owner = "yazaldefilimone";

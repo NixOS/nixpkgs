@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "mdbook-man";
-  version = "0-unstable-2022-11-05";
+  version = "0-unstable-2022-10-06";
 
   src = fetchFromGitHub {
     owner = "vv9k";

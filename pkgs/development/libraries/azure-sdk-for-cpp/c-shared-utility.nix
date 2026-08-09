@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   pname = "azure-c-shared-utility";
   # Same version as in VCPKG as of July 2025.
   # https://github.com/microsoft/vcpkg/blob/master/ports/azure-c-shared-utility/portfile.cmake
-  version = "LTS_07_2022_Ref02-unstable-2025-03-31";
+  version = "LTS_07_2022_Ref02-unstable-2025-01-28";
 
   src = fetchFromGitHub {
     owner = "Azure";

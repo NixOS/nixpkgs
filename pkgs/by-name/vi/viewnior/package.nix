@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation {
   pname = "viewnior-gtk3";
-  version = "1.8-unstable-2023-11-23";
+  version = "1.8-unstable-2024-10-19";
 
   src = fetchFromGitHub {
     #owner = "hellosiyan";

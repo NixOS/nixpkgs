@@ -7,7 +7,7 @@
 }:
 buildGhidraExtension {
   pname = "ret-sync-ghidra";
-  version = "0-unstable-2024-05-29";
+  version = "0-unstable-2023-09-14";
 
   src = fetchFromGitHub {
     owner = "bootleg";

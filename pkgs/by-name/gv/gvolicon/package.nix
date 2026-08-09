@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation {
   pname = "gvolicon";
-  version = "0-unstable-2014-04-28";
+  version = "0-unstable-2016-06-16";
 
   src = fetchFromGitHub {
     owner = "Hjdskes";

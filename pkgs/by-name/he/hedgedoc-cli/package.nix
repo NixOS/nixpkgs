@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hedgedoc-cli";
-  version = "1.0-unstable-2025-05-01";
+  version = "1.0-unstable-2022-06-05";
 
   src = fetchFromGitHub {
     owner = "hedgedoc";

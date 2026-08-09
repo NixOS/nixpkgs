@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation {
   pname = "sycl-info";
-  version = "0-unstable-2019-11-19";
+  version = "0-unstable-2019-11-26";
 
   src = fetchFromGitHub {
     owner = "codeplaysoftware";

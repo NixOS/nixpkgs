@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "qmarkdowntextedit";
-  version = "unstable-2023-04-02";
+  version = "unstable-2023-05-02";
 
   src = fetchFromGitHub {
     owner = "pbek";

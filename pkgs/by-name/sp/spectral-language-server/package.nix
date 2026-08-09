@@ -64,7 +64,7 @@ let
 in
 buildNpmPackage {
   pname = "spectral-language-server";
-  version = "1.0.8-unstable-2023-06-06";
+  version = "1.0.8-unstable-2023-07-06";
 
   src = fetchFromGitHub {
     owner = "luizcorreia";

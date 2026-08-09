@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libnop";
-  version = "0-unstable-2022-09-04";
+  version = "0-unstable-2022-04-09";
 
   src = fetchFromGitHub {
     owner = "luxonis";

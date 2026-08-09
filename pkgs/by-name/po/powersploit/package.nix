@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "powersploit";
-  version = "3.0.0-unstable-2020-08-22";
+  version = "3.0.0-unstable-2020-08-17";
 
   src = fetchFromGitHub {
     owner = "PowerShellMafia";

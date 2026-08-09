@@ -7,7 +7,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ropr";
-  version = "0.2.26-unstable-2025-07-20";
+  version = "0.2.26-unstable-2024-10-06";
 
   src = fetchFromGitHub {
     owner = "Ben-Lichtman";

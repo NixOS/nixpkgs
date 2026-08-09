@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "nightdiamond-cursors";
-  version = "0-unstable-2026-05-11";
+  version = "0-unstable-2026-04-28";
 
   src = fetchFromGitHub {
     owner = "vimlinuz";

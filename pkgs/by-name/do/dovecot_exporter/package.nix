@@ -7,7 +7,7 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "dovecot_exporter";
-  version = "0.1.3-unstable-2019-07-19";
+  version = "0.1.3-unstable-2019-07-09";
 
   src = fetchFromGitHub {
     owner = "kumina";

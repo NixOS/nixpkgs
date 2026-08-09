@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "ledger-udev-rules";
-  version = "0-unstable-2024-02-12";
+  version = "0-unstable-2024-02-21";
 
   src = fetchFromGitHub {
     owner = "LedgerHQ";

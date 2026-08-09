@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "dirt";
-  version = "0-unstable-2025-03-30";
+  version = "0-unstable-2025-01-21";
 
   src = fetchFromGitHub {
     repo = "Dirt";

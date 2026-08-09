@@ -45,7 +45,7 @@
 
 stdenv.mkDerivation {
   pname = "cinelerra-cv";
-  version = "2.3-unstable-2025-01-25";
+  version = "2.3-unstable-2025-01-23";
 
   src = fetchFromGitHub {
     owner = "cinelerra-cv-team";

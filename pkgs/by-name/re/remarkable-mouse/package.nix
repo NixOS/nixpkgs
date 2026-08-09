@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "remarkable-mouse";
-  version = "unstable-2024-02-23";
+  version = "unstable-2025-02-23";
 
   src = fetchFromGitHub {
     owner = "Evidlo";

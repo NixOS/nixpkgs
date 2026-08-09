@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "osgQt";
-  version = "3.5.7-unstable-2025-10-08";
+  version = "3.5.7-unstable-2025-09-24";
 
   src = fetchFromGitHub {
     owner = "openscenegraph";

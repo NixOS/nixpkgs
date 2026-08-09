@@ -9,7 +9,7 @@
 }:
 stdenv.mkDerivation {
   pname = "qcom-diag";
-  version = "unstable-2026-04-18";
+  version = "unstable-2026-07-09";
 
   src = fetchFromGitHub {
     owner = "linux-msm";

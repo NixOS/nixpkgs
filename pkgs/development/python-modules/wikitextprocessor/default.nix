@@ -15,7 +15,7 @@
 
 buildPythonPackage {
   pname = "wikitextprocessor";
-  version = "0.4.96-unstable-2026-03-06";
+  version = "0.4.96-unstable-2026-03-09";
   pyproject = true;
 
   src = fetchFromGitHub {

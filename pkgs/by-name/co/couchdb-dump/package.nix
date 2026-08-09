@@ -13,7 +13,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "couchdb-dump";
-  version = "0-unstable-2021-07-24";
+  version = "0-unstable-2021-06-24";
 
   src = fetchFromGitHub {
     owner = "danielebailo";

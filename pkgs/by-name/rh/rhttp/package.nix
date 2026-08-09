@@ -5,7 +5,7 @@
 }:
 buildGoModule {
   pname = "rhttp";
-  version = "0-unstable-2024-04-28";
+  version = "0-unstable-2024-04-16";
 
   __structuredAttrs = true;
   strictDeps = true;

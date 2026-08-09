@@ -22,7 +22,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "primus-lib";
-  version = "unstable-2015-04-28";
+  version = "unstable-2015-03-28";
 
   src = fetchFromGitHub {
     owner = "amonakov";

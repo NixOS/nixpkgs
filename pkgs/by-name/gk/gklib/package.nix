@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gklib";
-  version = "5.1.1-unstable-2025-07-15";
+  version = "5.1.1-unstable-2025-07-05";
 
   src = fetchFromGitHub {
     owner = "KarypisLab";

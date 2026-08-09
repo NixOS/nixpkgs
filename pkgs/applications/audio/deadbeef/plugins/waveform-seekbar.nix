@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "deadbeef-waveform-seekbar-plugin";
-  version = "0-unstable-2024-11-13";
+  version = "0-unstable-2024-09-13";
 
   # using a fork because original throws a compilation error
   src = fetchFromGitHub {

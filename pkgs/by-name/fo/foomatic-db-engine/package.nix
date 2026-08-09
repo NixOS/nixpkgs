@@ -18,7 +18,7 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "foomatic-db-engine";
-  version = "0-unstable-2026-04-13";
+  version = "0-unstable-2026-04-03";
 
   src = fetchFromGitHub {
     # there is also a daily snapshot at the `downloadPage`,

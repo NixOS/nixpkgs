@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation {
   pname = "vpnc";
-  version = "0-unstable-2025-06-16";
+  version = "0-unstable-2025-05-20";
 
   src = fetchFromGitHub {
     owner = "streambinder";

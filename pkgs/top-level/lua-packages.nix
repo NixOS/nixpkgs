@@ -83,7 +83,7 @@ rec {
 
     stdenv.mkDerivation {
       pname = "awesome-wm-widgets";
-      version = "0-unstable-2024-02-15";
+      version = "0-unstable-2025-02-16";
 
       src = fetchFromGitHub {
         owner = "streetturtle";

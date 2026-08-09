@@ -6,7 +6,7 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "gokrazy";
-  version = "0-unstable-2026-07-23";
+  version = "0-unstable-2026-07-03";
 
   src = fetchFromGitHub {
     owner = "gokrazy";

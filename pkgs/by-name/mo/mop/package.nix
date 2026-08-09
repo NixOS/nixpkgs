@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "mop";
-  version = "0-unstable-2025-12-20";
+  version = "0-unstable-2025-08-17";
 
   src = fetchFromGitHub {
     owner = "mop-tracker";

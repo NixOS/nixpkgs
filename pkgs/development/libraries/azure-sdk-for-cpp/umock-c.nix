@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   pname = "azure-umock-c";
   # Same version as in VCPKG as of February 2025.
   # https://github.com/microsoft/vcpkg/blob/master/ports/umock-c/portfile.cmake
-  version = "1.1.0-unstable-2022-01-21";
+  version = "1.1.0-unstable-2020-03-04";
 
   src = fetchFromGitHub {
     owner = "Azure";

@@ -6,7 +6,7 @@
 
 buildPythonPackage {
   pname = "typechecks";
-  version = "unstable-2023-07-13";
+  version = "unstable-2018-02-23";
   format = "setuptools";
 
   src = fetchFromGitHub {
