@@ -12,7 +12,7 @@
   installShellFiles,
   callPackage,
   zlib,
-  swiftPackages,
+  swift,
   icu,
   lndir,
   replaceVars,
@@ -226,13 +226,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
             // lib.optionalAttrs finalAttrs.finalPackage.hasILCompiler {
               aot = mkConsoleTest {
                 name = "aot";
-                stdenv = if stdenv.hostPlatform.isDarwin then swiftPackages.stdenv else stdenv;
+                inherit stdenv;
                 usePackageSource = true;
                 buildInputs = [
                   zlib
                 ]
                 ++ lib.optionals stdenv.hostPlatform.isDarwin [
-                  swiftPackages.swift
+                  swift
                   darwin.ICU
                 ];
                 build = ''
