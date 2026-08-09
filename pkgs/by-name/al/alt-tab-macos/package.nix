@@ -1,17 +1,16 @@
 {
   lib,
-  swiftPackages,
   fetchFromGitHub,
   actool,
   lld,
+  stdenv,
+  swift,
   makeWrapper,
   nix-update-script,
   rcodesign,
 }:
 
 let
-  inherit (swiftPackages) stdenv swift;
-
   toPlist = lib.generators.toPlist { escape = true; };
   deploymentTarget = "14.0";
   sdkVersion = "26.0";
