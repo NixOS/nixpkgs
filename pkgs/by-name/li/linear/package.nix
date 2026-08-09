@@ -41,6 +41,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "App to manage software development and track bugs";
     homepage = "https://linear.app/";
     license = lib.licenses.unfree;
+    mainDarwinApp = "Linear.app";
     maintainers = with lib.maintainers; [
       wini
       pradyuman
