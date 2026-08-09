@@ -28769,6 +28769,13 @@
     githubId = 1334474;
     name = "Timothy Stott";
   };
+  tincotema = {
+    email = "tincotema@tincotema.org";
+    github = "tincotema";
+    githubId = 41209208;
+    name = "tincotema";
+    keys = [ { fingerprint = "F9D5 F663 E497 5CB1 66B5  FEA2 A961 39D7 C110 556C"; } ];
+  };
   tiptenbrink = {
     email = "tip@tenbrinkmeijs.com";
     github = "tiptenbrink";
