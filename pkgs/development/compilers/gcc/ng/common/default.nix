@@ -181,6 +181,27 @@ makeScopeWithSplicing' {
         stdenv = overrideCC stdenv buildGccPackages.gccNoLibgcc;
       };
 
+      # The bootstrap step between `gccNoLibgcc` and `gccWithLibc`: libgcc is
+      # available, libc is not yet. Compiling a libc needs exactly this — libc's
+      # own sources call into libgcc (integer/floating-point helpers, stack
+      # unwinding), so `gccNoLibgcc` is not enough, while `gccWithLibc` cannot
+      # be used to build the very libc it depends on.
+      #
+      # `binutilsNoLibc` is what keeps libc out: it supplies the header-only
+      # `preLibcHeaders` instead of a real libc, so nothing here refers to a
+      # libc derivation and the cycle stays broken.
+      gccWithLibgcc = wrapCCWith {
+        cc = gccPackages.gcc-unwrapped;
+        libcxx = null;
+        bintools = binutilsNoLibc;
+        extraPackages = [
+          targetGccPackages.libgcc
+        ];
+        nixSupport.cc-cflags = [
+          "-B${targetGccPackages.libgcc}/lib"
+        ];
+      };
+
       gccWithLibc = wrapCCWith {
         cc = gccPackages.gcc-unwrapped;
         libcxx = null;
