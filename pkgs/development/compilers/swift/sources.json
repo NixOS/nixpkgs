@@ -57,6 +57,9 @@
   "swift-llbuild": {
     "hash": "sha256-w4P8eMRe+9pMuRQURmku7Z6MrPlLSDqMXuvVkUJHfiw="
   },
+  "swift-lmdb": {
+    "hash": "sha256-gTCzlvrrQhTsl9FI04nU9vkv7ZB2kEGz487r+r+0w40="
+  },
   "swift-package-manager": {
     "hash": "sha256-Gu5NFuowFzdZuj/qraR3RjBFCsrvDWjGoiSNYHJTY5g="
   },
