@@ -7,7 +7,6 @@
   cmake,
   darwin,
   fetchFromGitHub,
-  fetchpatch2,
   libedit,
   libffi,
   libuuid,
@@ -15,9 +14,9 @@
   llvmPackages,
   llvm_libtool,
   ninja,
+  patchesForVersion,
   perl,
   python3,
-  replaceVars,
   srcOnly,
   stdenv,
   stdlib,
@@ -73,7 +72,10 @@ let
     else
       buildSwiftPackages.swift;
 
-  swift-driver = swift.swift-driver or null;
+  # Only use early Swift compiler driver if the version of the bootstrap compiler matches the target compiler.
+  swift-driver = lib.optionalDrvAttr (
+    swift != null && lib.getVersion swift == swift_release
+  ) swift.swift-driver or null;
 
   inherit (llvmPackages)
     clang
@@ -146,51 +148,11 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${lib.escapeShellArg srcs.swift-syntax} "$NIX_BUILD_TOP/swift-syntax"
   '';
 
-  patches = [
-    # ClangImporter needs help finding the location of libc and libc++ (and using it).
-    ./patches/0001-Read-C-and-C-stdlib-flags-from-the-wrapped-compiler.patch
-    ./patches/0002-Use-Nixpkgs-C-and-C-stdlib-paths-in-ClangImporter.patch
-    # Backport linking against an external swift-cmark.
-    # From https://github.com/swiftlang/swift/pull/70791.
-    ./patches/0003-cmark-build-revamp.patch
-    # Fix compilation errors when building the SIL module during bootstrap.
-    # error: field has incomplete type 'clang::DeclContext::all_lookups_iterator'
-    # error: field has incomplete type 'clang::DeclContext::ddiag_iterator'
-    ./patches/0004-sil-missing-headers.patch
-    # Use libLTO.dylib from the LLVM built for Swift
-    (replaceVars ./patches/0005-specify-liblto-path.patch {
-      libllvm_path = lib.getLib libllvm;
-    })
-    # Use libdispatch from nixpkgs instead of building it in-tree
-    ./patches/0006-use-nixpkgs-libdispatch.patch
-    # The Swift JIT needs help finding dylibs when they are linked into the toolchain at `$out/lib`.
-    (replaceVars ./patches/0007-Help-Swift-JIT-find-the-separate-stdlib-and-framewor.patch {
-      swiftPlatform = stdenv.hostPlatform.swift.platform;
-    })
-    # Fix missing <cstdint> when building against libstdc++ 15
-    (fetchpatch2 {
-      url = "https://github.com/swiftlang/swift/commit/a5c727125e952839c373fe47e9f9e359db3d4d38.patch?full_index=1";
-      hash = "sha256-OoTcPyqTzAhkxaRAMeu+hab3yoIDRPq6YzK5hrLk4Jg=";
-    })
-    # Fix missing null-terminator on Linux, which results in a crash in `swift repl`.
-    (fetchpatch2 {
-      url = "https://github.com/swiftlang/swift/commit/cfbe70db5d1e65bed2388f97ee52f65719c812b3.patch?full_index=1";
-      hash = "sha256-XxdP3Qs2YfT20d5E216cOQy+fUgYQpwMDWSyl77NQHw=";
-    })
-  ]
-  ++ lib.optionals (bootstrapStage == 0) [
-    # Revert optimizer changes that cause the C++-based bootstrap compiler to be unable to compile functions with
-    # infinite loops that return from the loop. This doesn’t affect the later stages, so it’s applied conditionally.
-    # https://github.com/swiftlang/swift/pull/79186
-    ./patches/0008-revert-optimizer-changes.patch
-    # Work around a compiler crash by partially reverting https://github.com/swiftlang/swift/pull/80920.
-    ./patches/0009-siloptimizer-bootstrap-workaround.patch
-  ]
-  ++ lib.optionals (bootstrapStage == 1) [
-    # Stage 1 doesn’t have a compiler that supports _StringProcessing.
-    # This isn’t a problem on Darwin, but it fails on Linux.
-    ./patches/0010-Remove-dependency-on-_StringProcessing-during-stage-.patch
-  ];
+  patches = patchesForVersion {
+    inherit (finalAttrs) version;
+    inherit bootstrapStage libllvm;
+    path = ./patches;
+  };
 
   postPatch = ''
     # Swift doesn’t really _need_ LLVM’s build folder. It only needs to find a built LLVM, which we can provide.
@@ -416,63 +378,72 @@ stdenv.mkDerivation (finalAttrs: {
       ln -s swift-frontend "''${!outputBin}/bin/swift"
       ln -s swift-frontend "''${!outputBin}/bin/swiftc"
     ''
-    + lib.optionalString (bootstrapStage == 2) ''
-      mkdir -p "$static/lib"
+    + lib.optionalString (bootstrapStage == 2) (
+      ''
+        mkdir -p "$static/lib"
 
-      # Copy Swift compiler libraries needed by LLDB into $static. The following list should match the ones found at:
-      # - https://github.com/swiftlang/llvm-project/blob/swift-$swiftVersion-RELEASE/lldb/source/Plugins/ExpressionParser/Swift/CMakeLists.txt
-      # - https://github.com/swiftlang/llvm-project/blob/swift-$swiftVersion-RELEASE/lldb/source/Plugins/Language/Swift/CMakeLists.txt
-      # - https://github.com/swiftlang/llvm-project/blob/swift-$swiftVersion-RELEASE/lldb/source/Plugins/LanguageRuntime/Swift/CMakeLists.txt
-      # - https://github.com/swiftlang/llvm-project/blob/swift-$swiftVersion-RELEASE/lldb/source/Symbol/CMakeLists.txt
-      # - https://github.com/swiftlang/swift/blob/swift-$swiftVersion-RELEASE/SwiftCompilerSources/CMakeLists.txt
-      declare -a swiftLibs=(
-        libswiftAST
-        libswiftASTSectionImporter
-        libswiftBasic
-        libswiftClangImporter
-        libswiftFrontend
-        libswiftIDE
-        libswiftParse
-        libswiftRemoteAST
-        libswiftRemoteInspection
-        libswiftSIL
-        libswiftSILOptimizer
-        libswiftSerialization
-      )
-      # These are dependencies of the above
-      declare -a swiftLibsDeps=(
-        lib_CompilerRegexParser
-        libswiftAPIDigester
-        libswiftASTGen
-        libswiftCompilerModules
-        libswiftConstExtract
-        libswiftDemangling
-        libswiftDriver
-        libswiftIDEUtilsBridging
-        libswiftIRGen
-        libswiftLLVMPasses
-        libswiftLocalization
-        libswiftMacroEvaluation
-        libswiftMarkup
-        libswiftOption
-        libswiftSILGen
-        libswiftSema
-        libswiftSymbolGraphGen
-        swift/host/compiler/lib_Compiler_SwiftLibraryPluginProviderCShims
-        swift/host/compiler/lib_Compiler_SwiftSyntaxCShims
-        swift/host/lib_SwiftLibraryPluginProviderCShims
-        swift/host/lib_SwiftSyntaxCShims
-      )
-      for swiftLib in "''${swiftLibs[@]}" "''${swiftLibsDeps[@]}"; do
-        src=lib/$swiftLib${stdenv.hostPlatform.extensions.staticLibrary}
-        dest=$static/lib/$swiftLib${stdenv.hostPlatform.extensions.staticLibrary}
-        ninja "$(basename "$src")" # Make sure the static library was built. Some aren’t by default.
-        mkdir -p "$(dirname "$dest")"
-        cp -v "$src" "$dest"
-      done
-      # swiftCompilerStub is actually just an object file
-      cp SwiftCompilerSources/CMakeFiles/swiftCompilerStub.dir/stubs.cpp.o "$static/lib/stubs.cpp.o"
-    '';
+        # Copy Swift compiler libraries needed by LLDB into $static. The following list should match the ones found at:
+        # - https://github.com/swiftlang/llvm-project/blob/swift-$swiftVersion-RELEASE/lldb/source/Plugins/ExpressionParser/Swift/CMakeLists.txt
+        # - https://github.com/swiftlang/llvm-project/blob/swift-$swiftVersion-RELEASE/lldb/source/Plugins/Language/Swift/CMakeLists.txt
+        # - https://github.com/swiftlang/llvm-project/blob/swift-$swiftVersion-RELEASE/lldb/source/Plugins/LanguageRuntime/Swift/CMakeLists.txt
+        # - https://github.com/swiftlang/llvm-project/blob/swift-$swiftVersion-RELEASE/lldb/source/Symbol/CMakeLists.txt
+        # - https://github.com/swiftlang/swift/blob/swift-$swiftVersion-RELEASE/SwiftCompilerSources/CMakeLists.txt
+        declare -a swiftLibs=(
+          libswiftAST
+          libswiftASTSectionImporter
+          libswiftBasic
+          libswiftClangImporter
+          libswiftFrontend
+          libswiftIDE
+          libswiftParse
+          libswiftRemoteAST
+          libswiftRemoteInspection
+          libswiftSIL
+          libswiftSILOptimizer
+          libswiftSerialization
+        )
+        # These are dependencies of the above
+        declare -a swiftLibsDeps=(
+          lib_CompilerRegexParser
+          libswiftAPIDigester
+          libswiftASTGen
+          libswiftCompilerModules
+          libswiftConstExtract
+          libswiftDemangling
+          libswiftDriver
+          libswiftIDEUtilsBridging
+          libswiftIRGen
+          libswiftLLVMPasses
+          libswiftLocalization
+          libswiftMacroEvaluation
+          libswiftMarkup
+          libswiftOption
+          libswiftSILGen
+          libswiftSema
+          libswiftSymbolGraphGen
+          swift/host/compiler/lib_Compiler_SwiftLibraryPluginProviderCShims
+          swift/host/compiler/lib_Compiler_SwiftSyntaxCShims
+          swift/host/lib_SwiftLibraryPluginProviderCShims
+          swift/host/lib_SwiftSyntaxCShims
+        )
+      ''
+      + lib.optionalString (lib.versionAtLeast finalAttrs.version "6.3") ''
+        swiftLibsDeps+=(
+          libswiftBasicSwift
+        )
+      ''
+      + ''
+        for swiftLib in "''${swiftLibs[@]}" "''${swiftLibsDeps[@]}"; do
+          src=lib/$swiftLib${stdenv.hostPlatform.extensions.staticLibrary}
+          dest=$static/lib/$swiftLib${stdenv.hostPlatform.extensions.staticLibrary}
+          ninja "$(basename "$src")" # Make sure the static library was built. Some aren’t by default.
+          mkdir -p "$(dirname "$dest")"
+          cp -v "$src" "$dest"
+        done
+        # swiftCompilerStub is actually just an object file
+        cp SwiftCompilerSources/CMakeFiles/swiftCompilerStub.dir/stubs.cpp.o "$static/lib/stubs.cpp.o"
+      ''
+    );
 
   postFixup =
     # The Swift fork of LLDB needs several internal headers and build artifacts. These are copied in `postFixup` instead

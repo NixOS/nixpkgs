@@ -1,13 +1,13 @@
 {
-  "originHash" : "5f567b0c0cf4b1a211e9fb649f0b00e14f04b8ea55a3c96cc77462e3b6f933be",
+  "originHash" : "b58ae896243a3a46da20f874853ae8db67bfc6fbd93d54c9607f4ffa3ff1d020",
   "pins" : [
     {
       "identity" : "indexstore-db",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftlang/indexstore-db.git",
       "state" : {
-        "branch" : "release/6.2",
-        "revision" : "cf29ef4e5e5243a3b6f518d72c6e527b5290375a"
+        "branch" : "release/6.3",
+        "revision" : "003ac41513ba291f10ff1a0147ae68588914668d"
       }
     },
     {
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-asn1.git",
       "state" : {
-        "revision" : "a9a5efd40eaf558a2bcd48d64b1d1646be686008",
-        "version" : "1.7.1"
+        "revision" : "3b6410f7dee09eb33cdd26260c5fd47fda19b0e2",
+        "version" : "1.7.3"
       }
     },
     {
@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-certificates.git",
       "state" : {
-        "revision" : "2f797305c1b5b982acaa6005d8a9f970cc4e97ff",
-        "version" : "1.5.0"
+        "branch" : "1.10.1",
+        "revision" : "386001a92200c70fd06217b3ccad58d7226edb84"
       }
     },
     {
@@ -51,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftlang/swift-cmark.git",
       "state" : {
-        "branch" : "release/6.2",
-        "revision" : "5d9bdaa4228b381639fff09403e39a04926e2dbe"
+        "branch" : "gfm",
+        "revision" : "0c8947bbd58c491c54aae114aca40621cddc8357"
       }
     },
     {
@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-collections.git",
       "state" : {
-        "revision" : "c11818f3cae0780656baa430b49e7f163f08dffd",
-        "version" : "1.1.6"
+        "branch" : "1.1.6",
+        "revision" : "c11818f3cae0780656baa430b49e7f163f08dffd"
       }
     },
     {
@@ -69,8 +69,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-crypto.git",
       "state" : {
-        "revision" : "629f0b679d0fd0a6ae823d7f750b9ab032c00b80",
-        "version" : "3.0.0"
+        "branch" : "3.12.5",
+        "revision" : "d79c573e1b400d670ed12c0cb29d33f2c0f5ab70"
       }
     },
     {
@@ -78,8 +78,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftlang/swift-docc.git",
       "state" : {
-        "branch" : "release/6.2",
-        "revision" : "4be8229cd268c2e4d036a848376b290ecbbc4d64"
+        "branch" : "release/6.3",
+        "revision" : "4c926bd9bd9038212a63f85978dab7825accb16d"
       }
     },
     {
@@ -87,8 +87,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftlang/swift-docc-symbolkit.git",
       "state" : {
-        "branch" : "release/6.2",
-        "revision" : "467084cd380d352abcd128b27927ecdc8cb5bae8"
+        "branch" : "release/6.3",
+        "revision" : "89e737aca30bd42a9f7e114e609884267ea6aabe"
       }
     },
     {
@@ -96,8 +96,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftlang/swift-driver.git",
       "state" : {
-        "branch" : "release/6.2",
-        "revision" : "aedacc6c1583db4f2989a367e3c41968558a5b8e"
+        "branch" : "release/6.3",
+        "revision" : "7d6b844f0c2497a997770a11536598b187066be9"
       }
     },
     {
@@ -105,8 +105,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftlang/swift-format.git",
       "state" : {
-        "branch" : "release/6.2",
-        "revision" : "63687c7f450abe1fc96765e2caf173e82ebe780d"
+        "branch" : "release/6.3",
+        "revision" : "2e80d506509d17bec8d459752a57bb05039e100d"
       }
     },
     {
@@ -114,8 +114,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftlang/swift-llbuild.git",
       "state" : {
-        "branch" : "release/6.2",
-        "revision" : "073dff55529d7c4ecbd615ab5f5ac52ae5b380da"
+        "branch" : "release/6.3",
+        "revision" : "e38525ae3519021f014ad91e7bf86e7ae86044f5"
       }
     },
     {
@@ -123,7 +123,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftlang/swift-lmdb.git",
       "state" : {
-        "branch" : "release/6.2",
+        "branch" : "release/6.3",
         "revision" : "1ad9a2d80b6fcde498c2242f509bd1be7d667ff8"
       }
     },
@@ -132,8 +132,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftlang/swift-markdown.git",
       "state" : {
-        "branch" : "release/6.2",
-        "revision" : "9063d10a2ac546227a0f08f3f7b4c6029d2757b1"
+        "branch" : "release/6.3",
+        "revision" : "de3e245b6044386b623ecce11d1ccb5fe766e3db"
       }
     },
     {
@@ -141,8 +141,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-nio.git",
       "state" : {
-        "revision" : "cd3e1152083706d77b223fb29110e590efcc70c0",
-        "version" : "2.101.2"
+        "revision" : "21de5f08c1a166a6dd293d0e587ad977bf8dac5d",
+        "version" : "2.103.0"
       }
     },
     {
@@ -150,8 +150,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftlang/swift-package-manager.git",
       "state" : {
-        "branch" : "release/6.2",
-        "revision" : "215e9f91823d7e44c379fa17bf1eef189438fc24"
+        "branch" : "release/6.3",
+        "revision" : "f096e728bff0aa5449b0fcf7ab4619472d968e1c"
       }
     },
     {
@@ -159,8 +159,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftlang/swift-syntax.git",
       "state" : {
-        "branch" : "release/6.2",
-        "revision" : "5a87516fc3dddbd23cb76358eb489915ee86b444"
+        "branch" : "release/6.3",
+        "revision" : "79e4b74a295b6eb74a8b585e3a39d29e70c1dbd1"
       }
     },
     {
@@ -168,17 +168,26 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-system.git",
       "state" : {
-        "revision" : "7502b711c92a17741fa625d722b0ccbd595d8ed1",
-        "version" : "1.7.2"
+        "branch" : "1.5.0",
+        "revision" : "61e4ca4b81b9e09e2ec863b00c340eb13497dac6"
       }
     },
     {
       "identity" : "swift-toolchain-sqlite",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/swiftlang/swift-toolchain-sqlite",
+      "location" : "https://github.com/swiftlang/swift-toolchain-sqlite.git",
       "state" : {
-        "revision" : "05c9f4d17fae1eb586e716e11e5aa52bac464d00",
-        "version" : "1.0.10"
+        "branch" : "1.0.7",
+        "revision" : "b45b80b943e88db3cb8ddea798fa3fa9912375ff"
+      }
+    },
+    {
+      "identity" : "swift-tools-protocols",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swiftlang/swift-tools-protocols.git",
+      "state" : {
+        "revision" : "f86b413a803761408e5e718912c46d75a340801b",
+        "version" : "0.0.9"
       }
     },
     {
@@ -186,8 +195,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftlang/swift-tools-support-core.git",
       "state" : {
-        "branch" : "release/6.2",
-        "revision" : "5a993c8848487c934d53ffceef8e1cad0a241dc1"
+        "branch" : "release/6.3",
+        "revision" : "44be92e627f754f593ca99f1b0c982e389e9bb20"
       }
     }
   ],

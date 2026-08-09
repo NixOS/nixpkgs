@@ -8,10 +8,10 @@ Subject: [PATCH 05/11] fix-manifest-path
  1 file changed, 8 insertions(+)
 
 diff --git a/Sources/PackageModel/UserToolchain.swift b/Sources/PackageModel/UserToolchain.swift
-index 7f21304c6..39d7333c5 100644
+index 4bb37aa69..45e5f05d4 100644
 --- a/Sources/PackageModel/UserToolchain.swift
 +++ b/Sources/PackageModel/UserToolchain.swift
-@@ -956,6 +956,14 @@ public final class UserToolchain: Toolchain {
+@@ -1024,6 +1024,14 @@ public final class UserToolchain: Toolchain {
              }
          }
  
