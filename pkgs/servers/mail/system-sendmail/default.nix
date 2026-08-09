@@ -9,6 +9,9 @@ stdenv.mkDerivation {
 
   src = ./sendmail.c;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   dontUnpack = true;
 
   buildPhase = ''
