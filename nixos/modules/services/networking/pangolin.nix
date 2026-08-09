@@ -275,7 +275,7 @@ in
             Group = "fossorial";
             WorkingDirectory = cfg.dataDir;
             Restart = "always";
-            EnvironmentFile = cfg.environmentFile;
+            EnvironmentFile = lib.optionals (cfg.environmentFile != null) [ cfg.environmentFile ];
             # hardening
             ProtectSystem = "full";
             ProtectHome = true;
@@ -364,7 +364,7 @@ in
             Group = "fossorial";
             WorkingDirectory = cfg.dataDir;
             Restart = "always";
-            EnvironmentFile = cfg.environmentFile;
+            EnvironmentFile = lib.optionals (cfg.environmentFile != null) [ cfg.environmentFile ];
             ReadWritePaths = "${cfg.dataDir}/config";
             # hardening
             AmbientCapabilities = [

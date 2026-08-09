@@ -327,7 +327,7 @@ in
           Type = "simple";
           Restart = "on-failure";
 
-          EnvironmentFile = cfg.environmentFile;
+          EnvironmentFile = lib.optionals (cfg.environmentFile != null) [ cfg.environmentFile ];
           WorkingDirectory = cfg.home;
         };
       };

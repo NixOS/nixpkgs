@@ -847,7 +847,7 @@ in
             ProtectSystem = "strict";
             RestrictNamespaces = true;
             RestrictSUIDSGID = true;
-            EnvironmentFile = cfg.environmentFile;
+            EnvironmentFile = lib.optionals (cfg.environmentFile != null) [ cfg.environmentFile ];
             WorkingDirectory = cfg.dataDir;
           }
           (mkIf (cfg.dataDir == "/var/lib/mattermost") {

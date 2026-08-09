@@ -76,7 +76,7 @@ in
         StateDirectory = "yarr";
         StateDirectoryMode = "0700";
         WorkingDirectory = "/var/lib/yarr";
-        EnvironmentFile = cfg.environmentFile;
+        EnvironmentFile = lib.optionals (cfg.environmentFile != null) [ cfg.environmentFile ];
 
         LoadCredential = mkIf (cfg.authFilePath != null) "authfile:${cfg.authFilePath}";
 
