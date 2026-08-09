@@ -11,20 +11,21 @@
   pytestCheckHook,
   pytest-rerunfailures,
   pytest-xdist,
+  scikit-build-core,
   setuptools,
   tomli-w,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "setuptools-git-versioning";
-  version = "3.0.1";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dolfinus";
     repo = "setuptools-git-versioning";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rAJ9OvSKhQ3sMN5DlUg2tfR42Ae7jjz9en3gfRnXb3I=";
+    hash = "sha256-d6d8taSSAjvirivf1WaEICq0XbrYQzC2LB//LpGpHhI=";
   };
 
   nativeBuildInputs = [ pyprojectVersionPatchHook ];
@@ -49,6 +50,7 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     pytest-rerunfailures
     pytest-xdist
+    scikit-build-core
     tomli-w
   ];
 
