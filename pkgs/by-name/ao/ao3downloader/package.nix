@@ -45,7 +45,6 @@ python312Packages.buildPythonApplication (finalAttrs: {
   nativeCheckInputs = with python312Packages; [
     pytestCheckHook
     syrupy
-    pythonImportsCheckHook
   ];
 
   meta = {
