@@ -1,0 +1,34 @@
+From 4fa9323aa6c029049848bf619b11fc790d9cecc2 Mon Sep 17 00:00:00 2001
+From: Chris Moultrie <tebriel@frodux.in>
+Date: Sun, 9 Aug 2026 18:08:21 -0400
+Subject: [PATCH] pytest: Parametrize compatability with 9.1.1
+
+---
+ fittrackee/tests/workouts/test_workouts_model.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/fittrackee/tests/workouts/test_workouts_model.py b/fittrackee/tests/workouts/test_workouts_model.py
+index 077a8a86e..ca4175a6f 100644
+--- a/fittrackee/tests/workouts/test_workouts_model.py
++++ b/fittrackee/tests/workouts/test_workouts_model.py
+@@ -1199,7 +1199,7 @@ class TestWorkoutModelForOwner(WorkoutModelTestCase):
+         )
+ 
+     @pytest.mark.parametrize(
+-        "input_args,",
++        "input_args",
+         [
+             {"light": False},
+             {"light": False, "with_equipments": True},
+@@ -1226,7 +1226,7 @@ class TestWorkoutModelForOwner(WorkoutModelTestCase):
+             equipment_bike_user_1.serialize(current_user=user_1)
+         ]
+ 
+-    @pytest.mark.parametrize("input_args,", [{}, {"light": True}])
++    @pytest.mark.parametrize("input_args", [{}, {"light": True}])
+     def test_serializer_does_not_return_equipments(
+         self,
+         app: Flask,
+-- 
+2.54.0
+
