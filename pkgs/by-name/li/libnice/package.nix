@@ -6,16 +6,21 @@
   meson,
   ninja,
   pkg-config,
-  python3,
-  gobject-introspection,
-  gtk-doc,
-  docbook_xsl,
-  docbook_xml_dtd_412,
   glib,
   gupnp-igd,
   gst_all_1,
   gnutls,
+  enableDocumentation ? stdenv.buildPlatform == stdenv.hostPlatform,
+  gtk-doc,
+  docbook_xsl,
+  docbook_xml_dtd_412,
   graphviz,
+  python3,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  buildPackages,
+  gobject-introspection,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "dev"
   ]
-  ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
+  ++ lib.optionals enableDocumentation [ "devdoc" ];
 
   src = fetchurl {
     url = "https://libnice.freedesktop.org/releases/libnice-${finalAttrs.version}.tar.gz";
@@ -51,18 +56,26 @@ stdenv.mkDerivation (finalAttrs: {
     ./musl.patch
   ];
 
+  # specifies <1.30, but also works with later versions
+  postPatch = ''
+    substituteInPlace docs/reference/libnice/meson.build \
+      --replace-fail "version: '<1.30', " ""
+  '';
+
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    python3
+  ]
+  ++ lib.optionals withIntrospection [
     gobject-introspection
-
-    # documentation
+  ]
+  ++ lib.optionals enableDocumentation [
     gtk-doc
     docbook_xsl
     docbook_xml_dtd_412
     graphviz
+    python3
   ];
 
   buildInputs = [
@@ -76,11 +89,18 @@ stdenv.mkDerivation (finalAttrs: {
     glib
   ];
 
-  mesonFlags = [
-    "-Dgtk_doc=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "enabled" else "disabled"}"
-    "-Dintrospection=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "enabled" else "disabled"}"
-    "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-  ];
+  mesonFlags = lib.mapAttrsToList lib.mesonEnable {
+    gtk_doc = enableDocumentation;
+    introspection = withIntrospection;
+
+    # requires many dependencies and probably not useful for our users
+    examples = false;
+    tests = finalAttrs.finalPackage.doCheck;
+
+    gstreamer = true;
+
+    glib_debug = false;
+  };
 
   # Tests are flaky
   # see https://github.com/NixOS/nixpkgs/pull/53293#issuecomment-453739295
