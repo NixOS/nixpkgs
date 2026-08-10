@@ -1,0 +1,10 @@
+diff --git a/package.json b/package.json
+index 910fc3ef..49a819cf 100644
+--- a/package.json
++++ b/package.json
+@@ -1,4 +1,5 @@
+ {
++  "files": ["backend/*", "frontend/dist/*", "lib/*"],
+   "name": "aurral",
+   "version": "2.0.0",
+   "description": "Aurral artist request manager",
