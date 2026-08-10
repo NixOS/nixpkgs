@@ -8,6 +8,9 @@ stdenvNoCC.mkDerivation {
   pname = "bibata-modern-catppuccin-mocha-blue";
   version = "unstable-2026-08-10";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "https://github.com/dimunyx/Bibata-Modern-Catppuccin-Mocha-Blue/raw/refs/heads/main/pkgs/Bibata-Modern-Catppuccin-Mocha-Blue.tar.xz";
     hash = "sha256-gNdBFXAaaeRKIgYM8Nwl8X+Wupa3CLHeJ49A35/Ams8=";
