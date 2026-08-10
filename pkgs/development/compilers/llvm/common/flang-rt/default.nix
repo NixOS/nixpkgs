@@ -41,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
         cp -r ${monorepoSrc}/${finalAttrs.pname} "$out"
         cp -r ${monorepoSrc}/flang "$out"
         cp -r ${monorepoSrc}/runtimes "$out"
+        cp -r ${monorepoSrc}/libc/ "$out"
       '';
 
   sourceRoot = "${finalAttrs.src.name}/runtimes";
