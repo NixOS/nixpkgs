@@ -3728,6 +3728,8 @@ let
 
       nsd.vscode-epics = callPackage ./nsd.vscode-epics { };
 
+      ocamlpro.superbol = callPackage ./ocamlpro.superbol { };
+
       ocamllabs.ocaml-platform = buildVscodeMarketplaceExtension {
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/ocamllabs.ocaml-platform/changelog";
