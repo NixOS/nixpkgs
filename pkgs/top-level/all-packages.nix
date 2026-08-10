@@ -2616,6 +2616,8 @@ with pkgs;
     openrgb-plugin-hardwaresync
   ];
 
+  openscadPackages = lib.recurseIntoAttrs (callPackage ../top-level/openscad-packages.nix { });
+
   opensshPackages = dontRecurseIntoAttrs (callPackage ../tools/networking/openssh { });
 
   openssh = opensshPackages.openssh.override {
