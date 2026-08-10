@@ -128,6 +128,8 @@ in
 
   config = callPackage ./config.nix { };
 
+  eval-perf = callPackage ./eval-perf { };
+
   top-level = callPackage ./top-level { };
 
   haskell = callPackage ./haskell { };
