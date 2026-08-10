@@ -123,6 +123,14 @@
   # disabled by default for now to reduce closure size
   onnxSupport ? false && lib.meta.availableOn stdenv.hostPlatform onnxruntime,
   onnxruntime,
+  # build additional plugins that are rarely used
+  # transitional flag until we move to a gst-plugins-rs style plugin selection system
+  enableAdditionalPlugins ? false,
+  zvbi,
+  google-cloud-cpp,
+  crc32c, # from google-cloud-cpp
+  tinyalsa,
+  vo-amrwbenc,
 }:
 
 let
@@ -223,6 +231,13 @@ stdenv.mkDerivation (finalAttrs: {
     wildmidi
     svt-av1
     libltc # used by timecode plugin
+  ]
+  ++ lib.optionals enableAdditionalPlugins [
+    zvbi
+    tinyalsa
+    vo-amrwbenc
+    google-cloud-cpp
+    crc32c
   ]
   ++ lib.optionals onnxSupport [
     onnxruntime
@@ -343,15 +358,15 @@ stdenv.mkDerivation (finalAttrs: {
     opensles = false; # not packaged in nixpkgs as of writing
     svthevcenc = false; # required `SvtHevcEnc` library not packaged in nixpkgs as of writing
     svtjpegxs = false; # not packaged in nixpkgs as of writing
-    teletext = false;
-    tinyalsa = false;
-    voamrwbenc = false;
+    teletext = enableAdditionalPlugins;
+    tinyalsa = enableAdditionalPlugins;
+    voamrwbenc = enableAdditionalPlugins;
     vulkan = vulkanSupport;
     wasapi = false; # not packaged in nixpkgs as of writing / no Windows support
     wasapi2 = false; # not packaged in nixpkgs as of writing / no Windows support
     wpe = false; # required `wpe-webkit` library not packaged in nixpkgs as of writing
     wpe2 = false;
-    gs = false; # depends on `google-cloud-cpp`
+    gs = enableAdditionalPlugins; # depends on `google-cloud-cpp`
     onnx = onnxSupport;
     openaptx = true; # since gstreamer-1.20.1 `libfreeaptx` is supported for circumventing the dubious license conflict with `libopenaptx`
     opencv = opencvSupport; # Reduces rebuild size when `config.cudaSupport = true`
@@ -458,6 +473,7 @@ stdenv.mkDerivation (finalAttrs: {
         enableZbar = true;
         faacSupport = true;
         opencvSupport = true;
+        enableAdditionalPlugins = true;
       };
 
       lgplOnly = gst-plugins-bad.override {
