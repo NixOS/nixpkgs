@@ -10,7 +10,7 @@
 }:
 
 python3Packages.buildPythonApplication {
-  name = "nix-vars";
+  name = "nixos-vars";
   format = "pyproject";
   nativeBuildInputs = [
     python3Packages.setuptools
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication {
   src = ./src;
 
   postFixup = ''
-    wrapProgram $out/bin/nix-vars \
+    wrapProgram $out/bin/nixos-vars \
       --prefix PATH : ${bubblewrap}/bin
   '';
 
@@ -48,6 +48,6 @@ python3Packages.buildPythonApplication {
       lassulus
       prescientmoon
     ];
-    mainProgram = "nix-vars";
+    mainProgram = "nixos-vars";
   };
 }
