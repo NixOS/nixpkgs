@@ -14247,6 +14247,8 @@ self: super: with self; {
 
   pybox2d = callPackage ../development/python-modules/pybox2d { };
 
+  pybraendstofpriser = callPackage ../development/python-modules/pybraendstofpriser { };
+
   pybravia = callPackage ../development/python-modules/pybravia { };
 
   pybreaker = callPackage ../development/python-modules/pybreaker { };
