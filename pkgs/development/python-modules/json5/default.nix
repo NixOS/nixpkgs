@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "json5";
-  version = "0.13.0";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dpranke";
     repo = "pyjson5";
     tag = "v${version}";
-    hash = "sha256-KL5YsWSHS8xI+lQB+ZtdEKUHGKICOduZsBd51z4jItw=";
+    hash = "sha256-/Y8/IA3j5CJutqMM5fI/bWZrxOHWsEdYfuvWPTjFAJk=";
   };
 
   build-system = [ setuptools ];
