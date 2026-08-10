@@ -56,13 +56,13 @@ let
     domain = "gitlab.freedesktop.org";
     owner = "poppler";
     repo = "test";
-    rev = "f0068e9c530017ad811d1f28b95f9b7f59264e37";
-    hash = "sha256-Xf8duSh0r1o09b5BKB7mBvzrMfXYlzTuTOuK2ZCeItc=";
+    rev = "5368d7e64682ab07a22ce241fe0671234229ab84";
+    hash = "sha256-HKCRfSodCmGR6wn8G9o1g96Q5rEO07TCTuHFigJw2FU=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "poppler-${suffix}";
-  version = "26.06.0"; # beware: updates often break cups-filters build, check scribus too!
+  version = "26.08.0"; # beware: updates often break cups-filters build, check scribus too!
 
   outputs = [
     "out"
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://poppler.freedesktop.org/poppler-${finalAttrs.version}.tar.xz";
-    hash = "sha256-TLTlo9yMte7HUciiPIuhn2H5be3AzQfSruawyOLPa6Q=";
+    hash = "sha256-3JBuaM6mmBCXBqxqo9LJ1FEvz8rELZC4r82khtG5q9A=";
   };
 
   nativeBuildInputs = [
