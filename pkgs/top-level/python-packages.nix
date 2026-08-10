@@ -11932,6 +11932,8 @@ self: super: with self; {
 
   nskeyedunarchiver = callPackage ../development/python-modules/nskeyedunarchiver { };
 
+  nslookup = callPackage ../development/python-modules/nslookup { };
+
   nsw-fuel-api-client = callPackage ../development/python-modules/nsw-fuel-api-client { };
 
   nsz = callPackage ../development/python-modules/nsz { };
@@ -15280,8 +15282,6 @@ self: super: with self; {
   pynputfix = callPackage ../development/python-modules/pynputfix { };
 
   pynrrd = callPackage ../development/python-modules/pynrrd { };
-
-  pynslookup = callPackage ../development/python-modules/pynslookup { };
 
   pynuki = callPackage ../development/python-modules/pynuki { };
 

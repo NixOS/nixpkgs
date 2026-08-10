@@ -7,7 +7,7 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "pynslookup";
+  pname = "nslookup";
   version = "1.9.0";
   pyproject = true;
 
