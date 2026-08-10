@@ -913,103 +913,216 @@ stdenv.mkDerivation {
 [automatic-package-updates]: #automatic-package-updates
 
 The [community bot `r-ryantm`](https://nix-community.org/update-bot/), periodically tries to update all packages in Nixpkgs.
-`r-ryantm` runs the program [`nixpkgs-update`](https://nix-community.github.io/nixpkgs-update/) to find new versions of packages.
-In most cases, `nixpkgs-update` will be capable of finding new versions and perform the update with out any special instructions.
-Putting a `passthru.updateScript` attribute sets an explicit update procedure for `nixpkgs-update`, but this is not required for most cases.
-To learn more about the default update procedures, read their [FAQ for Nixpkgs maintainers](https://nix-community.github.io/nixpkgs-update/nixpkgs-maintainer-faq/).
+It runs the program [`nixpkgs-update`](https://nix-community.github.io/nixpkgs-update/) which finds new versions of packages, modifies the relevant files, and opens a Nixpkgs PR.
+`nixpkgs-update` has a specific set of capabilities of finding new versions for a package, and updating Nix files accordingly (see their [FAQ](https://nix-community.github.io/nixpkgs-update/nixpkgs-maintainer-faq/)).
+However, setting a `passthru.updateScript` for a package, sets an explicit update procedure for `nixpkgs-update`, that can find the latest version more reliably than `nixpkgs-update`, and modify the necessary files more correctly.
 
-> [!Note]
-> A common pattern is to use the [`nix-update-script`](../pkgs/by-name/ni/nix-update/nix-update-script.nix) function provided in Nixpkgs, which makes automatic updates use [`nix-update`](https://github.com/Mic92/nix-update):
->
-> ```nix
-> { stdenv, nix-update-script }:
-> stdenv.mkDerivation {
->   # ...
->   passthru.updateScript = nix-update-script { };
-> }
-> ```
->
-> `nix-update` is a little bit more flexible than `nixpkgs-update` in performing updates, so it can be useful for cases such as:
->
->  - A `nix-update` CLI flag like `--version branch` or `--version-regex` are needed to make the update work.
->  - You don't want to rely upon new versions to be listed in [Repology](https://repology.org/), and `nix-update` finds new versions easily (e.g GitLab projects).
+### Valid `passthru.updateScript` values
 
-The `passthru.updateScript` attribute can contain one of the following:
+Below are the types of values that can be used as `passthru.updateScript`.
 
-- an executable file, either on the file system:
+#### Executable File
 
-  ```nix
-  { stdenv }:
-  stdenv.mkDerivation {
-    # ...
-    passthru.updateScript = ./update.sh;
-  }
-  ```
+Either on the file system:
 
-  or inside the expression itself:
+```nix
+{
+  # ...
+  stdenv,
+  # ...
+}:
+stdenv.mkDerivation {
+  # ...
+  passthru.updateScript = ./update.sh;
+  # ...
+}
+```
 
-  ```nix
-  { stdenv, writeScript }:
-  stdenv.mkDerivation {
-    # ...
-    passthru.updateScript = writeScript "update-zoom-us" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
+Or inside the expression itself:
 
-      set -eu -o pipefail
+```nix
+{
+  # ...
+  stdenv,
+  # ...
+  writeScript,
+}:
+stdenv.mkDerivation {
+  # ...
+  passthru.updateScript = writeScript "update-zoom-us" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
-      version="$(curl -sI https://zoom.us/client/latest/zoom_x86_64.tar.xz | grep -Fi 'Location:' | pcre2grep -o1 '/(([0-9]\.?)+)/')"
-      update-source-version zoom-us "$version"
-    '';
-  }
-  ```
+    set -eu -o pipefail
 
-- a list, a script file followed by arguments to be passed to it:
+    version="$(curl -sI https://zoom.us/client/latest/zoom_x86_64.tar.xz | grep -Fi 'Location:' | pcre2grep -o1 '/(([0-9]\.?)+)/')"
+    update-source-version zoom-us "$version"
+  '';
+  # ...
+}
+```
 
-  ```nix
-  { stdenv }:
-  stdenv.mkDerivation {
-    # ...
-    passthru.updateScript = [
+#### List of Script & Arguments
+
+Example:
+
+```nix
+{
+  # ...
+  stdenv,
+  # ...
+}:
+stdenv.mkDerivation (finalAttrs: {
+  # ...
+  passthru.updateScript = [
+    ../../update.sh
+    finalAttrs.pname
+    "--requested-release=unstable"
+  ];
+  # ...
+})
+```
+
+#### Attribute Set
+
+A `passthru.updateScript` equal to an attribute set, can have several attributes, all used in the following example, and described below.
+
+```nix
+{
+  # ...
+  stdenv,
+  # ...
+}:
+stdenv.mkDerivation (finalAttrs: {
+  # ...
+  passthru.updateScript = {
+    command = [
       ../../update.sh
-      pname
-      "--requested-release=unstable"
+      finalAttrs.pname
     ];
+    attrPath = finalAttrs.pname;
+    supportedFeatures = [
+      "commit"
+    ];
+  };
+  # ...
+})
+```
+
+##### `command` (string or list of strings, mandatory)
+
+A [string](#executable-file) or [list of strings](#list-of-script--arguments) as described in the above linked sections
+
+##### `attrPath` (string, optional)
+
+A string containing the canonical attribute path for the package.
+If present, it will be passed to the update script instead of the attribute path on which the package was discovered during Nixpkgs traversal.
+
+##### `supportedFeatures` (list, optional)
+
+A list of the extra features the script supports.
+Below is a description of each of these features.
+
+###### `commit`
+
+This feature allows update scripts to *ask* `update.nix` to create Git commits.
+
+When support of this feature is declared, whenever the update script exits with `0` return status, it is expected to print a JSON list containing an object described below for each updated attribute to standard output.
+Example:
+
+```json
+[
+  {
+    "attrPath": "volume_key",
+    "oldVersion": "0.3.11",
+    "newVersion": "0.3.12",
+    "files": [
+      "/path/to/nixpkgs/pkgs/development/libraries/volume-key/default.nix"
+    ]
   }
-  ```
+]
+```
 
-- an attribute set containing:
-  - `command`
+When `update.nix` is run with `--arg commit true`, it will create a separate commit for each of the objects.
+An empty list can be returned when the script did not update any files; for example, when the package is already at the latest version.
 
-    A string or list in the [format expected by `passthru.updateScript`][automatic-package-updates]
+The commit object contains the following values:
 
-  - `attrPath` (optional)
+- `attrPath` – a string containing the attribute path
+- `oldVersion` – a string containing the old version
+- `newVersion` – a string containing the new version
+- `files` – a non-empty list of file paths (as strings) to add to the commit
+- `commitBody` (optional) – a string with extra content to be appended to the default commit message (useful for adding changelog links)
+- `commitMessage` (optional) – a string to use instead of the default commit message
 
-    A string containing the canonical attribute path for the package.
+If the returned list contains exactly one object (e.g. `[{}]`), all values are optional and will be determined automatically.
 
-    If present, it will be passed to the update script instead of the attribute path on which the package was discovered during Nixpkgs traversal.
+### General Purpose Update Scripts
 
-  - `supportedFeatures` (optional)
+For most software distributed by Nixpkgs, you don't have to write a custom `passthru.updateScript`.
+Nixpkgs provides a few general purpose Nix functions that can be used instead, described below.
 
-    A list of the [extra features the script supports][supported-features].
+#### `nix-update-script`
 
-    ```nix
-    { stdenv }:
-    stdenv.mkDerivation rec {
-      pname = "my-package";
-      # ...
-      passthru.updateScript = {
-        command = [
-          ../../update.sh
-          pname
-        ];
-        attrPath = pname;
-        supportedFeatures = [
-          # ...
-        ];
-      };
-    }
-    ```
+The program [`nix-update`](https://github.com/Mic92/nix-update) is a Python utility that is capable of finding new versions from numerous repositories and updating the Nix files accordingly.
+Below is an example usage of it as a `passthru.updateScript`.
+
+```nix
+{
+  stdenv,
+  # ...
+  nix-update-script,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  # ...
+  passthru.updateScript = nix-update-script { };
+  # ...
+})
+```
+
+Adding a `nix-update` CLI flag like `--version branch` or `--version-regex` can be done with e.g:
+
+```nix
+nix-update-script {
+  extraArgs = [
+    "--version-regex"
+    "release-(.*)"
+  ];
+}
+```
+
+The main `nix-update` argument - the attribute path, can be controlled via the `attrPath` Nix argument:
+
+```nix
+nix-update-script {
+  attrPath = "my-attr";
+}
+```
+
+#### `genericUpdater`
+
+Used to implement other updaters. `gitUpdater`, `directoryListingUpdater` and more are implemented via it.
+
+#### `gitUpdater`
+
+Used to update `src` attributes to new Git tags, for fetchers like `fetchgit`, `fetchFromGitHub`, `fetchFromGitLab` and alike. Accepted arguments:
+
+TODO...
+
+#### `unstableGitUpdater`
+
+Similar to `gitUpdater`, but updates the `rev` and `version` attribute per [Nixpkgs versioning conventions](#versioning) to the latest untagged revision.
+
+<!-- TODO: Describe `httpTwoLevelsUpdater`? -->
+
+#### `directoryListingUpdater`
+
+TODO...
+
+#### `_experimental-update-script-combinators`
+
+TODO...
 
 ### How are update scripts executed?
 
@@ -1031,45 +1144,7 @@ Furthermore each update script will be passed the following environment variable
 > Also note that `update.nix` executes update scripts in parallel by default, so you should avoid running `git commit` or any other commands that cannot handle that.
 
 While update scripts should not create commits themselves, `update.nix` supports automatically creating commits when running it with `--arg commit true`.
-If you need to customize commit message, you can have the update script implement the `commit` feature.
-
-### Supported features
-[update-script-supported-features]: #supported-features
-
-- `commit`
-
-  This feature allows update scripts to *ask* `update.nix` to create Git commits.
-
-  When support of this feature is declared, whenever the update script exits with `0` return status, it is expected to print a JSON list containing an object described below for each updated attribute to standard output.
-  Example:
-
-  ```json
-  [
-    {
-      "attrPath": "volume_key",
-      "oldVersion": "0.3.11",
-      "newVersion": "0.3.12",
-      "files": [
-        "/path/to/nixpkgs/pkgs/development/libraries/volume-key/default.nix"
-      ]
-    }
-  ]
-  ```
-  :::
-
-  When `update.nix` is run with `--arg commit true`, it will create a separate commit for each of the objects.
-  An empty list can be returned when the script did not update any files; for example, when the package is already at the latest version.
-
-  The commit object contains the following values:
-
-  - `attrPath` – a string containing the attribute path
-  - `oldVersion` – a string containing the old version
-  - `newVersion` – a string containing the new version
-  - `files` – a non-empty list of file paths (as strings) to add to the commit
-  - `commitBody` (optional) – a string with extra content to be appended to the default commit message (useful for adding changelog links)
-  - `commitMessage` (optional) – a string to use instead of the default commit message
-
-  If the returned list contains exactly one object (e.g. `[{}]`), all values are optional and will be determined automatically.
+If you need to customize commit message, you can have the update script implement the `commit` feature, as described in [`commit` supported feature](#commit).
 
 ## Reviewing contributions
 

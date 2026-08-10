@@ -96,6 +96,10 @@ flutter344.buildFlutterApplication {
 
   flutterBuildFlags = [ "--dart-define=APP_ENV=stable" ];
 
+  # RustLib.init() loads librust_api.so with dlopen(), which ignores
+  # RUNPATH and only consults LD_LIBRARY_PATH
+  extraWrapProgramArgs = "--prefix LD_LIBRARY_PATH : $out/app/flclash/lib";
+
   desktopItems = [
     (makeDesktopItem {
       name = "flclash";
