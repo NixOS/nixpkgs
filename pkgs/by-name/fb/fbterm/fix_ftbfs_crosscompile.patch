@@ -1,0 +1,23 @@
+--- fbterm-1.7.orig/configure.ac
++++ fbterm-1.7/configure.ac
+@@ -83,16 +83,16 @@
+ 	fi
+ fi
+ 
+-if test x"$EPOLL" = xauto -a x"$cross_compiling" = xno; then
+-  AC_RUN_IFELSE(
++if test x"$EPOLL" = xauto; then
++  AC_COMPILE_IFELSE(
+     AC_LANG_PROGRAM([[#include <sys/epoll.h>]],
+       [[if (epoll_create(10) >= 0) return 0; return 1;]]),
+     [EPOLL=yes]
+   )
+ fi
+ 
+-if test x"$SIGNALFD" = xauto -a x"$cross_compiling" = xno; then
+-  AC_RUN_IFELSE(
++if test x"$SIGNALFD" = xauto; then
++  AC_COMPILE_IFELSE(
+     AC_LANG_PROGRAM([[#include <sys/signalfd.h>]],
+       [[sigset_t mask; if (signalfd(-1, &mask, 0) >= 0) return 0; return 1;]]),
+     [SIGNALFD=yes]

@@ -1,0 +1,47 @@
+--- pdisk/pdisk-9/file_media.c	2010-03-05 16:09:50.000000000 -0700
++++ pdisk-9/file_media.c	2020-04-13 07:15:59.940941095 -0700
+@@ -59,7 +59,7 @@
+  */
+ #ifdef __linux__
+ #define LOFF_MAX 9223372036854775807LL
+-extern __loff_t llseek __P ((int __fd, __loff_t __offset, int __whence));
++/* extern __loff_t llseek __P ((int __fd, __loff_t __offset, int __whence)); */
+ #else
+ #ifdef __unix__
+ #define loff_t off_t
+@@ -186,7 +186,7 @@
+ 	    if (size == 0) {
+ 		break;
+ 	    }
+-	    if ((x = llseek(fd, (loff_t)0, 0)) < 0) {
++	    if ((x = lseek(fd, (loff_t)0, 0)) < 0) {
+ 		error(errno, "Can't seek on file");
+ 		break;
+ 	    }
+@@ -221,7 +221,7 @@
+ 	if (a != 0) {
+ 	    a->m.kind = file_info.kind;
+ 	    a->m.grain = compute_block_size(fd);
+-	    off = llseek(fd, (loff_t)0, 2);	/* seek to end of media */
++	    off = lseek(fd, (loff_t)0, 2);	/* seek to end of media */
+ #if !defined(__linux__) && !defined(__unix__)
+ 	    if (off <= 0) {
+ 		off = 1; /* XXX not right? */
+@@ -281,7 +281,7 @@
+     } else {
+ 	/* do the read */
+ 	off = offset;
+-	if ((off = llseek(a->fd, off, 0)) >= 0) {
++	if ((off = lseek(a->fd, off, 0)) >= 0) {
+ 	    if ((t = read(a->fd, address, count)) == (ssize_t)count) {
+ 		rtn_value = 1;
+ 	    } else {
+@@ -318,7 +318,7 @@
+     } else {
+ 	/* do the write  */
+ 	off = offset;
+-	if ((off = llseek(a->fd, off, 0)) >= 0) {
++	if ((off = lseek(a->fd, off, 0)) >= 0) {
+ 		if ((t = write(a->fd, address, count)) == (ssize_t)count) {
+ 		if (off + count > a->m.size_in_bytes) {
+ 			a->m.size_in_bytes = off + count;

@@ -1,0 +1,11 @@
+--- pokerth-1.1.2-rc/src/net/common/serveracceptwebhelper.cpp
++++ pokerth-1.1.2-rc/src/net/common/serveracceptwebhelper.cpp
+@@ -29,6 +29,8 @@
+  * as that of the covered work.                                              *
+  *****************************************************************************/
+ 
++#include <boost/bind.hpp>
++
+ #include <net/serveracceptwebhelper.h>
+ #include <net/sessiondata.h>
+ #include <net/webreceivebuffer.h>

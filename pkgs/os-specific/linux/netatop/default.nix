@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   kernel,
   kernelModuleMakeFlags,
   kmod,
@@ -37,10 +36,8 @@ stdenv.mkDerivation {
     # fix install paths and install the .ko instead of trying to invoke dkms
     ./fix-makefile-install.patch
     # replace init_module as needed by Linux 6.15 and above (backwards compatible)
-    (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/netatop_kernel_6.15.patch?h=netatop-dkms&id=e5da6fa4fee5499c3e437cdd34281dd2b200508f";
-      hash = "sha256-JyNQNyDJQkM/hLpb/hp3Sw2tMA8XnYogduGDFqTQ3nQ=";
-    })
+    # Vendored from https://aur.archlinux.org/cgit/aur.git/plain/netatop_kernel_6.15.patch?h=netatop-dkms&id=e5da6fa4fee5499c3e437cdd34281dd2b200508f
+    ./netatop_kernel_6.15.patch
   ];
   preConfigure = ''
     patchShebangs mkversion

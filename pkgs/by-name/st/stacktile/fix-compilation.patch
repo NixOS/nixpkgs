@@ -1,0 +1,11 @@
+--- a/stacktile.c
++++ b/stacktile.c
+@@ -928,7 +928,7 @@
+ 		}
+ }
+ 
+-static void noop () {}
++static void noop (void *, struct zriver_output_status_v1 *, uint32_t) {}
+ 
+ static const struct zriver_output_status_v1_listener river_output_status_listener = {
+ 	.focused_tags = noop,

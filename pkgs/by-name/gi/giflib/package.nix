@@ -33,10 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isMinGW [
     # Build dll libraries.
-    (fetchurl {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/001-mingw-build.patch?h=mingw-w64-giflib&id=b7311edf54824ac797c7916cd3ddc3a4b2368a19";
-      hash = "sha256-bBx7lw7FWtxZJ+E9AAbKIpCGcJnS5lrGpjYcv/zBtKk=";
-    })
+    # Vendored from https://aur.archlinux.org/cgit/aur.git/plain/001-mingw-build.patch?h=mingw-w64-giflib&id=b7311edf54824ac797c7916cd3ddc3a4b2368a19
+    ./001-mingw-build.patch
 
     # Install executables.
     ./mingw-install-exes.patch

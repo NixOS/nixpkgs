@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   installShellFiles,
   libbsd,
 }:
@@ -20,25 +19,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # Fix makefile for Unix
-    (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/makefile.patch?h=pdisk&id=39dc371712d2f7dbd38f6e8ddc6ba661faa1a7a9";
-      sha256 = "sha256-mLFclu8IlDN/gxNTI7Kei6ARketlAhJRu8ForFUzFU0=";
-    })
+    # Vendored from https://aur.archlinux.org/cgit/aur.git/plain/makefile.patch?h=pdisk&id=39dc371712d2f7dbd38f6e8ddc6ba661faa1a7a9
+    ./makefile.patch
     # Fix lseek usage in file_media.c
-    (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/file_media.c.patch?h=pdisk&id=39dc371712d2f7dbd38f6e8ddc6ba661faa1a7a9";
-      sha256 = "sha256-CCq5fApwx6w1GKDrgP+0nUdQy/5z5ON7/fdp4M63nko=";
-    })
+    # Vendored from https://aur.archlinux.org/cgit/aur.git/plain/file_media.c.patch?h=pdisk&id=39dc371712d2f7dbd38f6e8ddc6ba661faa1a7a9
+    ./file_media.c.patch
     # Fix open_partition_map call in cvt_pt.c
-    (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/cvt_pt.c.patch?h=pdisk&id=39dc371712d2f7dbd38f6e8ddc6ba661faa1a7a9";
-      sha256 = "sha256-jScPfzt9/fQHkf2MfHLvYsh/Rw2NZZXkzZiiVo8F5Mc=";
-    })
+    # Vendored from https://aur.archlinux.org/cgit/aur.git/plain/cvt_pt.c.patch?h=pdisk&id=39dc371712d2f7dbd38f6e8ddc6ba661faa1a7a9
+    ./cvt_pt.c.patch
     # Replace removed sys_nerr and sys_errlist with strerror
-    (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/linux_strerror.patch?h=pdisk&id=d0c930ea8bcac008bbd0ade1811133a625caea54";
-      sha256 = "sha256-HGJIS+vTn6456KtaETutIgTPPBm2C9OHf1anG8yaJPo=";
-    })
+    # Vendored from https://aur.archlinux.org/cgit/aur.git/plain/linux_strerror.patch?h=pdisk&id=d0c930ea8bcac008bbd0ade1811133a625caea54
+    ./linux_strerror.patch
 
     # Fix missing includes on Linux
     ./cmdline.patch

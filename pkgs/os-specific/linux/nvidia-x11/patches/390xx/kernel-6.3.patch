@@ -1,0 +1,89 @@
+diff --git a/kernel/common/inc/nv-linux.h b/kernel/common/inc/nv-linux.h
+index 2c4cb7b..f68fcf2 100644
+--- a/kernel/common/inc/nv-linux.h
++++ b/kernel/common/inc/nv-linux.h
+@@ -1996,4 +1996,17 @@ static inline NvU64 nv_expand_nvlink_addr(NvU64 addr47)
+ #include <linux/backlight.h>
+ #endif
+ 
++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 3, 0)
++// Rel. commit "mm: introduce vma->vm_flags wrapper functions" (Suren Baghdasaryan, 26 Jan 2023)
++static inline void vm_flags_set(struct vm_area_struct *vma, vm_flags_t flags)
++{
++    vma->vm_flags |= flags;
++}
++
++static inline void vm_flags_clear(struct vm_area_struct *vma, vm_flags_t flags)
++{
++    vma->vm_flags &= ~flags;
++}
++#endif
++
+ #endif  /* _NV_LINUX_H_ */
+diff --git a/kernel/nvidia-drm/nvidia-drm-fb.c b/kernel/nvidia-drm/nvidia-drm-fb.c
+index 725164a..c35e0ee 100644
+--- a/kernel/nvidia-drm/nvidia-drm-fb.c
++++ b/kernel/nvidia-drm/nvidia-drm-fb.c
+@@ -29,6 +29,7 @@
+ #include "nvidia-drm-fb.h"
+ #include "nvidia-drm-utils.h"
+ #include "nvidia-drm-gem.h"
++#include "nvidia-drm-helper.h"
+ 
+ #include <drm/drm_crtc_helper.h>
+ 
+diff --git a/kernel/nvidia-uvm/uvm8.c b/kernel/nvidia-uvm/uvm8.c
+index 11cb373..49e1047 100644
+--- a/kernel/nvidia-uvm/uvm8.c
++++ b/kernel/nvidia-uvm/uvm8.c
+@@ -658,7 +658,7 @@ static int uvm_mmap(struct file *filp, struct vm_area_struct *vma)
+     // Using VM_DONTCOPY would be nice, but madvise(MADV_DOFORK) can reset that
+     // so we have to handle vm_open on fork anyway. We could disable MADV_DOFORK
+     // with VM_IO, but that causes other mapping issues.
+-    vma->vm_flags |= VM_MIXEDMAP | VM_DONTEXPAND;
++    vm_flags_set(vma, VM_MIXEDMAP | VM_DONTEXPAND);
+ 
+     vma->vm_ops = &uvm_vm_ops_managed;
+ 
+diff --git a/kernel/nvidia/nv-mmap.c b/kernel/nvidia/nv-mmap.c
+index 0b0a6f2..da891ff 100644
+--- a/kernel/nvidia/nv-mmap.c
++++ b/kernel/nvidia/nv-mmap.c
+@@ -447,7 +447,7 @@ int nvidia_mmap_helper(
+             addr  = mmap_start;
+             
+             // Needed for the linux kernel for mapping compound pages
+-            vma->vm_flags |= VM_MIXEDMAP;
++            vm_flags_set(vma, VM_MIXEDMAP);
+ 
+             for (j = 0; j < pages; j++)
+             {
+@@ -471,7 +471,7 @@ int nvidia_mmap_helper(
+             }
+         }
+ 
+-        vma->vm_flags |= VM_IO;
++        vm_flags_set(vma, VM_IO);
+     }
+     else
+     {
+@@ -533,15 +533,15 @@ int nvidia_mmap_helper(
+ 
+         NV_PRINT_AT(NV_DBG_MEMINFO, at);
+ 
+-        vma->vm_flags |= (VM_IO | VM_LOCKED | VM_RESERVED);
+-        vma->vm_flags |= (VM_DONTEXPAND | VM_DONTDUMP);
++        vm_flags_set(vma, VM_IO | VM_LOCKED | VM_RESERVED);
++        vm_flags_set(vma, VM_DONTEXPAND | VM_DONTDUMP);
+     }
+ 
+     if ((prot & NV_PROTECT_WRITEABLE) == 0)
+     {
+         vma->vm_page_prot = NV_PGPROT_READ_ONLY(vma->vm_page_prot);
+-        vma->vm_flags &= ~VM_WRITE;
+-        vma->vm_flags &= ~VM_MAYWRITE;
++        vm_flags_clear(vma, VM_WRITE);
++        vm_flags_clear(vma, VM_MAYWRITE);
+     }
+ 
+     vma->vm_ops = &nv_vm_ops;

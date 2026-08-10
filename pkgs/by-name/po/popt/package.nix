@@ -24,12 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isMinGW [
       # Do not require <sys/ioctl.h>
-      (fetchpatch2 {
-        url = "https://aur.archlinux.org/cgit/aur.git/plain/get-w32-console-maxcols.mingw32.patch?h=mingw-w64-popt&id=63f2cdb0de116362c49681cef20f7a8b4355e85a";
-        sha256 = "zv43l1RBqNzT/JG+jQaMVFaFv+ZYPuIiAtKUDzJJBbc=";
-        stripLen = 1;
-        extraPrefix = "src/";
-      })
+      # Vendored from https://aur.archlinux.org/cgit/aur.git/plain/get-w32-console-maxcols.mingw32.patch?h=mingw-w64-popt&id=63f2cdb0de116362c49681cef20f7a8b4355e85a
+      ./get-w32-console-maxcols.mingw32.patch
 
       # Do not try to detect setuid, it is not a thing.
       (fetchpatch2 {

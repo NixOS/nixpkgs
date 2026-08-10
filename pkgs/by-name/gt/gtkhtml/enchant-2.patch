@@ -1,0 +1,22 @@
+--- a/components/editor/gtkhtml-spell-checker.c	2018-02-24 10:36:50.592732000 +0000
++++ b/components/editor/gtkhtml-spell-checker.c	2018-02-24 10:41:41.450950010 +0000
+@@ -375,7 +375,7 @@
+ 	if ((dict = spell_checker_request_dict (checker)) == NULL)
+ 		return;
+ 
+-	enchant_dict_add_to_pwl (dict, word, length);
++	enchant_dict_add (dict, word, length);
+ 	g_signal_emit (G_OBJECT (checker), signals[ADDED], 0, word, length);
+ }
+ 
+--- a/configure.ac	2018-02-24 10:33:32.311420000 +0000
++++ b/configure.ac	2018-02-24 10:32:33.630608000 +0000
+@@ -140,7 +140,7 @@
+ dnl **********************************
+ dnl GTKHTML modules
+ dnl **********************************
+-GTKHTML_MODULES="gtk+-3.0 >= gtk_minimum_version enchant >= enchant_minimum_version gsettings-desktop-schemas iso-codes cairo >= cairo_minimum_version"
++GTKHTML_MODULES="gtk+-3.0 >= gtk_minimum_version enchant-2 >= enchant_minimum_version gsettings-desktop-schemas iso-codes cairo >= cairo_minimum_version"
+ PKG_CHECK_MODULES(GTKHTML, $GTKHTML_MODULES)
+ AC_SUBST(GTKHTML_CFLAGS)
+ AC_SUBST(GTKHTML_LIBS)

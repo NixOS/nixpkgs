@@ -1,0 +1,24 @@
+--- a/smem.c.orig	2015-08-10 07:17:29.000000000 +0700
++++ b/smem.c	2026-02-02 14:21:34.293937205 +0700
+@@ -151,7 +151,8 @@
+     return 0;
+ }
+ 
+-void cleanup() {
++void cleanup(int sig) {
++    (void)sig;
+     fprintf(stderr,"Terminated by signal. Clean exit.\n");
+     if (devrandom)
+             fclose(devrandom);
+--- a/sswap.c.orig	2015-08-10 07:17:29.000000000 +0700
++++ b/sswap.c	2026-02-02 14:21:36.433670110 +0700
+@@ -63,7 +63,8 @@
+     exit(1);
+ }
+ 
+-void cleanup() {
++void cleanup(int sig) {
++    (void)sig;
+     fprintf(stderr,"\nTerminated by signal. Clean exit.\n");
+     close(fd);
+     sync();

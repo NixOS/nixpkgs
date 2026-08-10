@@ -38,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
       interpolation; GIF animation support.
     '';
 
+    knownVulnerabilities = [ "using a package soure from a compromised upstream (AUR)" ];
     license = lib.licenses.lgpl2Plus;
 
     maintainers = [ ];

@@ -1,0 +1,83 @@
+--- pokerth-1.1.2-rc/src/third_party/websocketpp/websocketpp/transport/asio/connection.hpp
++++ pokerth-1.1.2-rc/src/third_party/websocketpp/websocketpp/transport/asio/connection.hpp
+@@ -311,9 +311,10 @@
+      * needed.
+      */
+     timer_ptr set_timer(long duration, timer_handler callback) {
+-        timer_ptr new_timer = lib::make_shared<lib::asio::steady_timer>(
+-            lib::ref(*m_io_service),
+-            lib::asio::milliseconds(duration)
++        timer_ptr new_timer(
++            new lib::asio::steady_timer(
++                *m_io_service,
++                lib::asio::milliseconds(duration))
+         );
+ 
+         if (config::enable_multithreading) {
+@@ -461,8 +462,7 @@
+         m_io_service = io_service;
+ 
+         if (config::enable_multithreading) {
+-            m_strand = lib::make_shared<lib::asio::io_service::strand>(
+-                lib::ref(*io_service));
++            m_strand.reset(new lib::asio::io_service::strand(*io_service));
+         }
+ 
+         lib::error_code ec = socket_con_type::init_asio(io_service, m_strand,
+--- pokerth-1.1.2-rc/src/third_party/websocketpp/websocketpp/transport/asio/endpoint.hpp
++++ pokerth-1.1.2-rc/src/third_party/websocketpp/websocketpp/transport/asio/endpoint.hpp
+@@ -191,8 +191,7 @@
+ 
+         m_io_service = ptr;
+         m_external_io_service = true;
+-        m_acceptor = lib::make_shared<lib::asio::ip::tcp::acceptor>(
+-            lib::ref(*m_io_service));
++        m_acceptor.reset(new lib::asio::ip::tcp::acceptor(*m_io_service));
+ 
+         m_state = READY;
+         ec = lib::error_code();
+@@ -660,9 +659,7 @@
+      * @since 0.3.0
+      */
+     void start_perpetual() {
+-        m_work = lib::make_shared<lib::asio::io_service::work>(
+-            lib::ref(*m_io_service)
+-        );
++        m_work.reset(new lib::asio::io_service::work(*m_io_service));
+     }
+ 
+     /// Clears the endpoint's perpetual flag, allowing it to exit when empty
+@@ -826,8 +823,7 @@
+ 
+         // Create a resolver
+         if (!m_resolver) {
+-            m_resolver = lib::make_shared<lib::asio::ip::tcp::resolver>(
+-                lib::ref(*m_io_service));
++            m_resolver.reset(new lib::asio::ip::tcp::resolver(*m_io_service));
+         }
+ 
+         tcon->set_uri(u);
+--- pokerth-1.1.2-rc/src/third_party/websocketpp/websocketpp/transport/asio/security/none.hpp
++++ pokerth-1.1.2-rc/src/third_party/websocketpp/websocketpp/transport/asio/security/none.hpp
+@@ -168,8 +168,7 @@
+             return socket::make_error_code(socket::error::invalid_state);
+         }
+ 
+-        m_socket = lib::make_shared<lib::asio::ip::tcp::socket>(
+-            lib::ref(*service));
++        m_socket.reset(new lib::asio::ip::tcp::socket(*service));
+ 
+         m_state = READY;
+ 
+--- pokerth-1.1.2-rc/src/third_party/websocketpp/websocketpp/transport/asio/security/tls.hpp
++++ pokerth-1.1.2-rc/src/third_party/websocketpp/websocketpp/transport/asio/security/tls.hpp
+@@ -193,8 +193,7 @@
+         if (!m_context) {
+             return socket::make_error_code(socket::error::invalid_tls_context);
+         }
+-        m_socket = lib::make_shared<socket_type>(
+-            _WEBSOCKETPP_REF(*service),lib::ref(*m_context));
++        m_socket.reset(new socket_type(*service, *m_context));
+ 
+         m_io_service = service;
+         m_strand = strand;

@@ -1,0 +1,70 @@
+diff --git a/kernel/common/inc/nv-mm.h b/kernel/common/inc/nv-mm.h
+index aec55b0..acd396d 100644
+--- a/kernel/common/inc/nv-mm.h
++++ b/kernel/common/inc/nv-mm.h
+@@ -23,6 +23,7 @@
+ #ifndef __NV_MM_H__
+ #define __NV_MM_H__
+ 
++#include <linux/version.h>
+ #include "conftest.h"
+ 
+ #if !defined(NV_VM_FAULT_T_IS_PRESENT)
+@@ -47,7 +48,27 @@ typedef int vm_fault_t;
+  *
+  */
+ 
+-#if defined(NV_GET_USER_PAGES_HAS_TASK_STRUCT)
++// Rel. commit. "mm/gup: remove unused vmas parameter from get_user_pages()" (Lorenzo Stoakes, 14 May 2023)
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 5, 0)
++#include <linux/mm.h>
++
++static inline long NV_GET_USER_PAGES(unsigned long start,
++                                     unsigned long nr_pages,
++                                     int write,
++                                     int force,
++                                     struct page **pages,
++                                     struct vm_area_struct **vmas)
++{
++    unsigned int flags = 0;
++
++    if (write)
++        flags |= FOLL_WRITE;
++    if (force)
++        flags |= FOLL_FORCE;
++
++    return get_user_pages(start, nr_pages, flags, pages);
++}
++#elif defined(NV_GET_USER_PAGES_HAS_TASK_STRUCT)
+     #if defined(NV_GET_USER_PAGES_HAS_WRITE_AND_FORCE_ARGS)
+         #define NV_GET_USER_PAGES(start, nr_pages, write, force, pages, vmas) \
+             get_user_pages(current, current->mm, start, nr_pages, write, force, pages, vmas)
+@@ -130,7 +151,27 @@ typedef int vm_fault_t;
+  *
+  */
+ 
+-#if defined(NV_GET_USER_PAGES_REMOTE_PRESENT)
++// Rel. commit. "mm/gup: remove unused vmas parameter from get_user_pages_remote()" (Lorenzo Stoakes, 14 May 2023)
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 5, 0)
++static inline long NV_GET_USER_PAGES_REMOTE(struct task_struct *tsk,
++                                            struct mm_struct *mm,
++                                            unsigned long start,
++                                            unsigned long nr_pages,
++                                            int write,
++                                            int force,
++                                            struct page **pages,
++                                            struct vm_area_struct **vmas)
++{
++    unsigned int flags = 0;
++
++    if (write)
++        flags |= FOLL_WRITE;
++    if (force)
++        flags |= FOLL_FORCE;
++
++    return get_user_pages_remote(mm, start, nr_pages, flags, pages, NULL);
++}
++#elif defined(NV_GET_USER_PAGES_REMOTE_PRESENT)
+     #if defined(NV_GET_USER_PAGES_REMOTE_HAS_WRITE_AND_FORCE_ARGS)
+         #define NV_GET_USER_PAGES_REMOTE    get_user_pages_remote
+     #else

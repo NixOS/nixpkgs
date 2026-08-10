@@ -1,0 +1,335 @@
+diff --git a/Action.c b/Action.c
+index 986b354..28ae865 100644
+--- a/Action.c
++++ b/Action.c
+@@ -644,7 +644,7 @@
+ } helpLeft[] = {
+    { .key = "      #: ",  .roInactive = false, .info = "hide/show header meters" },
+    { .key = "    Tab: ",  .roInactive = false, .info = "switch to next screen tab" },
+-   { .key = " Arrows: ",  .roInactive = false, .info = "scroll process list" },
++   { .key = "   hjkl: ",  .roInactive = false, .info = "scroll process list" },
+    { .key = " Digits: ",  .roInactive = false, .info = "incremental PID search" },
+    { .key = "   F3 /: ",  .roInactive = false, .info = "incremental name search" },
+    { .key = "   F4 \\: ", .roInactive = false, .info = "incremental name filtering" },
+@@ -673,7 +673,7 @@
+    { .key = "  Space: ", .roInactive = false, .info = "tag process" },
+    { .key = "      c: ", .roInactive = false, .info = "tag process and its children" },
+    { .key = "      U: ", .roInactive = false, .info = "untag all processes" },
+-   { .key = "   F9 k: ", .roInactive = true,  .info = "kill process/tagged processes" },
++   { .key = "   F9 x: ", .roInactive = true,  .info = "kill process/tagged processes" },
+    { .key = "   F7 ]: ", .roInactive = true,  .info = "higher priority (root only)" },
+    { .key = "   F8 [: ", .roInactive = true,  .info = "lower priority (+ nice)" },
+ #if (defined(HAVE_LIBHWLOC) || defined(HAVE_AFFINITY))
+@@ -681,15 +681,15 @@
+ #endif
+    { .key = "      e: ", .roInactive = false, .info = "show process environment" },
+    { .key = "      i: ", .roInactive = true,  .info = "set IO priority" },
+-   { .key = "      l: ", .roInactive = true,  .info = "list open files with lsof" },
+-   { .key = "      x: ", .roInactive = false, .info = "list file locks of process" },
++   { .key = "      L: ", .roInactive = true,  .info = "list open files with lsof" },
++   { .key = "      X: ", .roInactive = false, .info = "list file locks of process" },
+    { .key = "      s: ", .roInactive = true,  .info = "trace syscalls with strace" },
+    { .key = "      w: ", .roInactive = false, .info = "wrap process command in multiple lines" },
+ #ifdef SCHEDULER_SUPPORT
+    { .key = "      Y: ", .roInactive = true,  .info = "set scheduling policy" },
+ #endif
+    { .key = " F2 C S: ", .roInactive = false, .info = "setup" },
+-   { .key = " F1 h ?: ", .roInactive = false, .info = "show this help screen" },
++   { .key = "   F1 ?: ", .roInactive = false, .info = "show this help screen" },
+    { .key = "  F10 q: ", .roInactive = false, .info = "quit" },
+    { .key = NULL, .info = NULL }
+ };
+@@ -905,6 +905,7 @@
+    keys['H'] = actionToggleUserlandThreads;
+    keys['I'] = actionInvertSortOrder;
+    keys['K'] = actionToggleKernelThreads;
++   keys['L'] = actionLsof;
+    keys['M'] = actionSortByMemory;
+    keys['N'] = actionSortByPID;
+    keys['O'] = actionToggleRunningInContainer;
+@@ -912,6 +913,7 @@
+    keys['S'] = actionSetup;
+    keys['T'] = actionSortByTime;
+    keys['U'] = actionUntagAll;
++   keys['X'] = actionShowLocks;
+ #ifdef SCHEDULER_SUPPORT
+    keys['Y'] = actionSetSchedPolicy;
+ #endif
+@@ -924,17 +926,15 @@
+    keys['a'] = actionSetAffinity;
+    keys['c'] = actionTagAllChildren;
+    keys['e'] = actionShowEnvScreen;
+-   keys['h'] = actionHelp;
+-   keys['k'] = actionKill;
+-   keys['l'] = actionLsof;
+    keys['m'] = actionToggleMergedCommand;
++   keys['o'] = actionExpandCollapseOrSortColumn;
+    keys['p'] = actionToggleProgramPath;
+    keys['q'] = actionQuit;
+    keys['s'] = actionStrace;
+    keys['t'] = actionToggleTreeView;
+    keys['u'] = actionFilterByUser;
+    keys['w'] = actionShowCommandScreen;
+-   keys['x'] = actionShowLocks;
++   keys['x'] = actionKill;
+    keys[KEY_F(1)] = actionHelp;
+    keys[KEY_F(2)] = actionSetup;
+    keys[KEY_F(3)] = actionIncSearch;
+diff --git a/CategoriesPanel.c b/CategoriesPanel.c
+index 530093c..2eefee1 100644
+--- a/CategoriesPanel.c
++++ b/CategoriesPanel.c
+@@ -123,6 +123,12 @@
+    HandlerResult result = IGNORED;
+ 
+    int selected = Panel_getSelectedIndex(super);
++   switch (ch) {
++      case 'h': ch = KEY_LEFT; break;
++      case 'j': ch = KEY_DOWN; break;
++      case 'k': ch = KEY_UP; break;
++      case 'l': ch = KEY_RIGHT; break;
++   }
+    switch (ch) {
+       case EVENT_SET_SELECTED:
+          result = HANDLED;
+diff --git a/MainPanel.c b/MainPanel.c
+index 7852c08..0207e45 100644
+--- a/MainPanel.c
++++ b/MainPanel.c
+@@ -56,7 +56,7 @@
+    return Row_sortKeyString(row);
+ }
+ 
+-static HandlerResult MainPanel_eventHandler(Panel* super, int ch) {
++HandlerResult MainPanel_eventHandler(Panel* super, int ch) {
+    MainPanel* this = (MainPanel*) super;
+    Machine* host = this->state->host;
+    Htop_Reaction reaction = HTOP_OK;
+diff --git a/MainPanel.h b/MainPanel.h
+index 105b46d..c92cac3 100644
+--- a/MainPanel.h
++++ b/MainPanel.h
+@@ -49,4 +49,6 @@
+ 
+ void MainPanel_delete(Object* object);
+ 
++HandlerResult MainPanel_eventHandler(Panel* super, int ch);
++
+ #endif
+diff --git a/Panel.c b/Panel.c
+index 4784a65..5a0619f 100644
+--- a/Panel.c
++++ b/Panel.c
+@@ -360,6 +360,7 @@
+ 
+    switch (key) {
+       case KEY_DOWN:
++      case 'j':
+       case KEY_CTRL('N'):
+       #ifdef KEY_C_DOWN
+       case KEY_C_DOWN:
+@@ -368,6 +369,7 @@
+          break;
+ 
+       case KEY_UP:
++      case 'k':
+       case KEY_CTRL('P'):
+       #ifdef KEY_C_UP
+       case KEY_C_UP:
+@@ -376,7 +378,7 @@
+          break;
+ 
+       case KEY_LEFT:
+-      case KEY_CTRL('B'):
++      case 'h':
+          if (this->scrollH > 0) {
+             this->scrollH -= MAXIMUM(CRT_scrollHAmount, 0);
+             this->needsRedraw = true;
+@@ -384,16 +386,28 @@
+          break;
+ 
+       case KEY_RIGHT:
+-      case KEY_CTRL('F'):
++      case 'l':
+          this->scrollH += CRT_scrollHAmount;
+          this->needsRedraw = true;
+          break;
+ 
++      case KEY_CTRL('U'):
++         this->selected -= (this->h - 1) / 2;
++         this->needsRedraw = true;
++         break;
++
++      case KEY_CTRL('D'):
++         this->selected += (this->h - 1) / 2;
++         this->needsRedraw = true;
++         break;
++
+       case KEY_PPAGE:
++      case KEY_CTRL('B'):
+          PANEL_SCROLL(-(this->h - Panel_headerHeight(this)));
+          break;
+ 
+       case KEY_NPAGE:
++      case KEY_CTRL('F'):
+          PANEL_SCROLL(+(this->h - Panel_headerHeight(this)));
+          break;
+ 
+@@ -406,10 +420,12 @@
+          break;
+ 
+       case KEY_HOME:
++      case 'g':
+          this->selected = 0;
+          break;
+ 
+       case KEY_END:
++      case 'G':
+          this->selected = size - 1;
+          break;
+ 
+diff --git a/ScreenManager.c b/ScreenManager.c
+index 6f3b059..e369209 100644
+--- a/ScreenManager.c
++++ b/ScreenManager.c
+@@ -17,6 +17,7 @@
+ 
+ #include "CRT.h"
+ #include "FunctionBar.h"
++#include "MainPanel.h"
+ #include "Machine.h"
+ #include "Macros.h"
+ #include "Object.h"
+@@ -322,15 +323,16 @@
+          continue;
+       }
+ 
+-      switch (ch) {
+-         case KEY_ALT('H'): ch = KEY_LEFT; break;
+-         case KEY_ALT('J'): ch = KEY_DOWN; break;
+-         case KEY_ALT('K'): ch = KEY_UP; break;
+-         case KEY_ALT('L'): ch = KEY_RIGHT; break;
+-      }
+-
+       redraw = true;
+       if (Panel_eventHandlerFn(panelFocus)) {
++         if (Panel_eventHandlerFn(panelFocus) != MainPanel_eventHandler) {
++            switch (ch) {
++               case 'h': case KEY_ALT('H'): ch = KEY_LEFT; break;
++               case 'j': case KEY_ALT('J'): ch = KEY_DOWN; break;
++               case 'k': case KEY_ALT('K'): ch = KEY_UP; break;
++               case 'l': case KEY_ALT('L'): ch = KEY_RIGHT; break;
++            }
++         }
+          result = Panel_eventHandler(panelFocus, ch);
+       }
+       if (result & SYNTH_KEY) {
+@@ -367,7 +369,7 @@
+       case KEY_FOCUS_OUT:
+          break;
+       case KEY_LEFT:
+-      case KEY_CTRL('B'):
++      case 'h':
+          if (this->panelCount < 2) {
+             goto defaultHandler;
+          }
+@@ -388,7 +390,7 @@
+ 
+          break;
+       case KEY_RIGHT:
+-      case KEY_CTRL('F'):
++      case 'l':
+       case 9:
+          if (this->panelCount < 2) {
+             goto defaultHandler;
+diff --git a/htop.1.in b/htop.1.in
+index 40e4832..d786a2c 100644
+--- a/htop.1.in
++++ b/htop.1.in
+@@ -102,27 +102,30 @@
+ Select the next / the previous screen tab to display.
+ You can enable showing the screen tab names in the Setup screen (F2).
+ .TP
+-.B Up, Alt-k
++.B Up, k (vim patch)
+ Select (highlight) the previous process in the process list. Scroll the list
+ if necessary.
+ .TP
+-.B Down, Alt-j
++.B Down, j (vim patch)
+ Select (highlight) the next process in the process list. Scroll the list if
+ necessary.
+ .TP
+-.B Left, Alt-h
++.B Left, h (vim patch)
+ Scroll the process list left.
+ .TP
+-.B Right, Alt-l
++.B Right, l (vim patch)
+ Scroll the process list right.
+ .TP
+-.B PgUp, PgDn
++.B PgUp, Ctrl-B (vim patch), PgDn, Ctrl-F (vim patch)
+ Scroll the process list up or down one window.
+ .TP
+-.B Home
++.B Ctrl-U (vim patch), Ctrl-D (vim patch)
++Scroll the process list up or down half a window.
++.TP
++.B Home, g (vim patch)
+ Scroll to the top of the process list and select the first process.
+ .TP
+-.B End
++.B End, G (vim patch)
+ Scroll to the bottom of the process list and select the last process.
+ .TP
+ .B Ctrl-A, ^
+@@ -149,7 +152,7 @@
+ will attach it to the currently selected process, presenting a live
+ update of system calls issued by the process.
+ .TP
+-.B l
++.B L (vim patch)
+ Display open files for a process: if lsof(1) is installed, pressing this key
+ will display the list of file descriptors opened by the process.
+ .TP
+@@ -157,10 +160,10 @@
+ Display the command line of the selected process in a separate screen, wrapped
+ onto multiple lines as needed.
+ .TP
+-.B x
++.B X (vim patch)
+ Display the active file locks of the selected process in a separate screen.
+ .TP
+-.B F1, h, ?
++.B F1, ?
+ Go to the help screen
+ .TP
+ .B F2, S
+@@ -191,7 +194,7 @@
+ your previously selected sort view. Selecting a sort view will exit
+ tree view.
+ .TP
+-.B F6, <, >
++.B F6, <, >, o (vim patch)
+ Selects a field for sorting, also accessible through < and >.
+ The current sort field is indicated by a highlight in the header.
+ .TP
+@@ -209,7 +212,7 @@
+ .B Shift-F8, {
+ Decrease the selected process's autogroup priority (add to autogroup 'nice' value)
+ .TP
+-.B F9, k
++.B F9, x (vim patch)
+ "Kill" process: sends a signal which is selected in a menu, to one or a group
+ of processes. If processes were tagged, sends the signal to all tagged processes.
+ If none is tagged, sends to the currently selected process.
+@@ -221,7 +224,7 @@
+ Invert the sort order: if sort order is increasing, switch to decreasing, and
+ vice-versa.
+ .TP
+-.B +, \-, *
++.B +, \-, *, o (vim patch)
+ When in tree view mode, expand or collapse subtree. When a subtree is collapsed
+ a "+" sign shows to the left of the process name.
+ Pressing "*" will expand or collapse all children of PIDs without parents, so

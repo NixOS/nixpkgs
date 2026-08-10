@@ -1,0 +1,57 @@
+--- pdisk-9-orig/errors.c	2010-03-06 08:09:50.000000000 +0900
++++ pdisk-9/errors.c	2022-06-22 21:39:55.959385243 +0900
+@@ -30,9 +30,7 @@
+ #include <errno.h>
+ 
+ // for exit()
+-#ifndef __linux__
+ #include <stdlib.h>
+-#endif
+ // for strrchr
+ #include <string.h>
+ 
+@@ -142,16 +140,17 @@
+     vfprintf(stderr, fmt, ap);
+     va_end(ap);
+ 
+-#if defined(__linux__) || defined(NeXT) || defined(__unix__)
++#if defined(__linux__)
++    if (value > 0) {
++	fprintf(stderr, "  (%s)", strerror(value));
++    }
++#elif defined(NeXT) || defined(__unix__)
+     if (value > 0 && value < sys_nerr) {
+-	fprintf(stderr, "  (%s)\n", sys_errlist[value]);
+-    } else {
+-	fprintf(stderr, "\n");
++	fprintf(stderr, "  (%s)", sys_errlist[value]);
+     }
+-#else
++#endif
+     fprintf(stderr, "\n");
+     printf("Processing stopped: Choose 'Quit' from the file menu to quit.\n\n");
+-#endif
+     exit(value);
+ }
+ 
+@@ -171,13 +170,14 @@
+     vfprintf(stderr, fmt, ap);
+     va_end(ap);
+ 
+-#if defined(__linux__) || defined(NeXT) || defined(__unix__)
++#if defined(__linux__)
++    if (value > 0) {
++	fprintf(stderr, "  (%s)", strerror(value));
++    }
++#elif defined(NeXT) || defined(__unix__)
+     if (value > 0 && value < sys_nerr) {
+-	fprintf(stderr, "  (%s)\n", sys_errlist[value]);
+-    } else {
+-	fprintf(stderr, "\n");
++	fprintf(stderr, "  (%s)", sys_errlist[value]);
+     }
+-#else
+-    fprintf(stderr, "\n");
+ #endif
++    fprintf(stderr, "\n");
+ }

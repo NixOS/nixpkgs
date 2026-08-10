@@ -1,0 +1,94 @@
+diff --git a/kernel/nvidia-drm/nvidia-drm-drv.c b/kernel/nvidia-drm/nvidia-drm-drv.c
+index 1291893..53dfad8 100644
+--- a/kernel/nvidia-drm/nvidia-drm-drv.c
++++ b/kernel/nvidia-drm/nvidia-drm-drv.c
+@@ -84,6 +84,10 @@
+ #include <drm/drm_atomic_helper.h>
+ #endif
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 12, 0)
++#include <drm/drm_client.h>
++#endif
++
+ static struct nv_drm_device *dev_list = NULL;
+ 
+ #if defined(NV_DRM_ATOMIC_MODESET_AVAILABLE)
+@@ -168,7 +172,12 @@ static const struct drm_mode_config_funcs nv_mode_config_funcs = {
+     .atomic_check  = nv_drm_atomic_check,
+     .atomic_commit = nv_drm_atomic_commit,
+ 
++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 12, 0)
++    // Rel. commit. "drm: Remove struct drm_mode_config_funcs.output_poll_changed" (Thomas Zimmermann, 12 Aug 2024)
++    // Replace this callback with a DRM client's hotplug callback.
++    // This is required for e.g. /sys/class/drm/card*/modes to work.
+     .output_poll_changed = nv_drm_output_poll_changed,
++#endif
+ };
+ 
+ static void nv_drm_event_callback(const struct NvKmsKapiEvent *event)
+@@ -652,6 +661,10 @@ static const struct file_operations nv_drm_fops = {
+     .read           = drm_read,
+ 
+     .llseek         = noop_llseek,
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 12, 0)
++    // Rel. commit. "fs: move FMODE_UNSIGNED_OFFSET to fop_flags" (Christian Brauner, 9 Aug 2024)
++    .fop_flags      = FOP_UNSIGNED_OFFSET,
++#endif
+ };
+ 
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 8, 0)
+@@ -790,7 +803,18 @@ static void nv_drm_update_drm_driver_features(void)
+ #endif /* NV_DRM_ATOMIC_MODESET_AVAILABLE */
+ }
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 12, 0)
++static int hotplug_helper_client_hotplug(struct drm_client_dev *client)
++{
++    nv_drm_output_poll_changed(client->dev);
++    return 0;
++}
+ 
++static const struct drm_client_funcs nv_hotplug_helper_client_funcs = {
++    .owner      = THIS_MODULE,
++    .hotplug    = hotplug_helper_client_hotplug,
++};
++#endif
+ 
+ /*
+  * Helper function for allocate/register DRM device for given NVIDIA GPU ID.
+@@ -844,6 +868,20 @@ static void nv_drm_register_drm_device(const nv_gpu_info_t *gpu_info)
+         goto failed_drm_register;
+     }
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 12, 0)
++    /* Register a DRM client for receiving hotplug events */
++    struct drm_client_dev *client = kzalloc(sizeof(*client), GFP_KERNEL);
++    if (client == NULL || drm_client_init(dev, client,
++        "nv-hotplug-helper", &nv_hotplug_helper_client_funcs)) {
++        printk(KERN_WARNING "Failed to initialize the nv-hotplug-helper DRM client"
++            " (ensure DRM kernel mode setting is enabled via nvidia-drm.modeset=1).\n");
++        goto failed_drm_client_init;
++    }
++
++    drm_client_register(client);
++    pr_info("Registered the nv-hotplug-helper DRM client.\n");
++#endif
++
+     /* Add NVIDIA-DRM device into list */
+ 
+     nv_dev->next = dev_list;
+@@ -851,6 +889,14 @@ static void nv_drm_register_drm_device(const nv_gpu_info_t *gpu_info)
+ 
+     return; /* Success */
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 12, 0)
++failed_drm_client_init:
++
++    kfree(client);
++    drm_dev_unregister(dev);
++
++#endif
++
+ failed_drm_register:
+ 
+     nv_drm_dev_free(dev);

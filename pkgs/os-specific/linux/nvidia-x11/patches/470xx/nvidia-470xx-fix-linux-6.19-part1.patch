@@ -1,0 +1,487 @@
+From 509447266ca6cca596cbd6a6bf01175a6189ccb8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Joan=20Bruguera=20Mic=C3=B3?= <joanbrugueram@gmail.com>
+Date: Sun, 26 Oct 2025 11:24:50 +0000
+Subject: [PATCH 1/2] Tentative fix for NVIDIA 470.256.02 driver for Linux
+ 6.19-rc1 (part 1: DRM state pointer cleanup)
+
+In commit 'drm/atomic: Change state pointers to a more meaningful name'
+(Maxime Ripard, 8 Oct 2025), 'state' is renamed to 'state_to_destroy'.
+
+Don't work around it, rather clean up usages of the deprecated macros.
+---
+ nvidia-drm/nvidia-drm-crtc.c    |   6 +-
+ nvidia-drm/nvidia-drm-drv.c     |   4 +-
+ nvidia-drm/nvidia-drm-helper.c  | 137 --------------------------------
+ nvidia-drm/nvidia-drm-helper.h  | 121 ----------------------------
+ nvidia-drm/nvidia-drm-modeset.c |  42 ++++------
+ 5 files changed, 22 insertions(+), 288 deletions(-)
+
+diff --git a/nvidia-drm/nvidia-drm-crtc.c b/nvidia-drm/nvidia-drm-crtc.c
+index 20a3158..69db1cb 100644
+--- a/nvidia-drm/nvidia-drm-crtc.c
++++ b/nvidia-drm/nvidia-drm-crtc.c
+@@ -310,7 +310,7 @@ static int nv_drm_plane_atomic_check(struct drm_plane *plane,
+         goto done;
+     }
+ 
+-    nv_drm_for_each_crtc_in_state(plane_state->state, crtc, crtc_state, i) {
++    for_each_new_crtc_in_state(plane_state->state, crtc, crtc_state, i) {
+         struct nv_drm_crtc_state *nv_crtc_state = to_nv_crtc_state(crtc_state);
+         struct NvKmsKapiHeadRequestedConfig *head_req_config =
+             &nv_crtc_state->req_config;
+@@ -634,8 +634,8 @@ static int nv_drm_crtc_atomic_check(struct drm_crtc *crtc,
+ 
+         req_config->flags.displaysChanged = NV_TRUE;
+ 
+-        nv_drm_for_each_connector_in_state(crtc_state->state,
+-                                           connector, connector_state, j) {
++        for_each_new_connector_in_state(crtc_state->state,
++                                        connector, connector_state, j) {
+             if (connector_state->crtc != crtc) {
+                 continue;
+             }
+diff --git a/nvidia-drm/nvidia-drm-drv.c b/nvidia-drm/nvidia-drm-drv.c
+index 9da3294..1b6e2be 100644
+--- a/nvidia-drm/nvidia-drm-drv.c
++++ b/nvidia-drm/nvidia-drm-drv.c
+@@ -616,13 +616,13 @@ void nv_drm_master_drop(struct drm_device *dev, struct drm_file *file_priv)
+ 
+     drm_modeset_lock_all(dev);
+ 
+-    if ((err = nv_drm_atomic_helper_disable_all(
++    if ((err = drm_atomic_helper_disable_all(
+             dev,
+             dev->mode_config.acquire_ctx)) != 0) {
+ 
+         NV_DRM_DEV_LOG_ERR(
+             nv_dev,
+-            "nv_drm_atomic_helper_disable_all failed with error code %d !",
++            "drm_atomic_helper_disable_all failed with error code %d !",
+             err);
+     }
+ 
+diff --git a/nvidia-drm/nvidia-drm-helper.c b/nvidia-drm/nvidia-drm-helper.c
+index 8fc8620..f91f522 100644
+--- a/nvidia-drm/nvidia-drm-helper.c
++++ b/nvidia-drm/nvidia-drm-helper.c
+@@ -64,141 +64,4 @@ static void __nv_drm_framebuffer_put(struct drm_framebuffer *fb)
+ 
+ }
+ 
+-/*
+- * drm_atomic_helper_disable_all() has been added by commit
+- * 1494276000db789c6d2acd85747be4707051c801, which is Signed-off-by:
+- *     Thierry Reding <treding@nvidia.com>
+- *     Daniel Vetter <daniel.vetter@ffwll.ch>
+- *
+- * drm_atomic_helper_disable_all() is copied from
+- * linux/drivers/gpu/drm/drm_atomic_helper.c and modified to use
+- * nv_drm_for_each_crtc instead of drm_for_each_crtc to loop over all crtcs,
+- * use nv_drm_for_each_*_in_state instead of for_each_connector_in_state to loop
+- * over all modeset object states, and use drm_atomic_state_free() if
+- * drm_atomic_state_put() is not available.
+- *
+- * drm_atomic_helper_disable_all() is copied from
+- *     linux/drivers/gpu/drm/drm_atomic_helper.c @
+- *     49d70aeaeca8f62b72b7712ecd1e29619a445866, which has the following
+- * copyright and license information:
+- *
+- * Copyright (C) 2014 Red Hat
+- * Copyright (C) 2014 Intel Corp.
+- *
+- * Permission is hereby granted, free of charge, to any person obtaining a
+- * copy of this software and associated documentation files (the "Software"),
+- * to deal in the Software without restriction, including without limitation
+- * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+- * and/or sell copies of the Software, and to permit persons to whom the
+- * Software is furnished to do so, subject to the following conditions:
+- *
+- * The above copyright notice and this permission notice shall be included in
+- * all copies or substantial portions of the Software.
+- *
+- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+- * THE COPYRIGHT HOLDER(S) OR AUTHOR(S) BE LIABLE FOR ANY CLAIM, DAMAGES OR
+- * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+- * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+- * OTHER DEALINGS IN THE SOFTWARE.
+- *
+- * Authors:
+- * Rob Clark <robdclark@gmail.com>
+- * Daniel Vetter <daniel.vetter@ffwll.ch>
+- */
+-int nv_drm_atomic_helper_disable_all(struct drm_device *dev,
+-                                     struct drm_modeset_acquire_ctx *ctx)
+-{
+-    struct drm_atomic_state *state;
+-    struct drm_connector_state *conn_state;
+-    struct drm_connector *conn;
+-    struct drm_plane_state *plane_state;
+-    struct drm_plane *plane;
+-    struct drm_crtc_state *crtc_state;
+-    struct drm_crtc *crtc;
+-    unsigned plane_mask = 0;
+-    int ret, i;
+-
+-    state = drm_atomic_state_alloc(dev);
+-    if (!state)
+-        return -ENOMEM;
+-
+-    state->acquire_ctx = ctx;
+-
+-    nv_drm_for_each_crtc(crtc, dev) {
+-        crtc_state = drm_atomic_get_crtc_state(state, crtc);
+-        if (IS_ERR(crtc_state)) {
+-            ret = PTR_ERR(crtc_state);
+-            goto free;
+-        }
+-
+-        crtc_state->active = false;
+-
+-        ret = drm_atomic_set_mode_prop_for_crtc(crtc_state, NULL);
+-        if (ret < 0)
+-            goto free;
+-
+-        ret = drm_atomic_add_affected_planes(state, crtc);
+-        if (ret < 0)
+-            goto free;
+-
+-        ret = drm_atomic_add_affected_connectors(state, crtc);
+-        if (ret < 0)
+-            goto free;
+-    }
+-
+-    nv_drm_for_each_connector_in_state(state, conn, conn_state, i) {
+-        ret = drm_atomic_set_crtc_for_connector(conn_state, NULL);
+-        if (ret < 0)
+-            goto free;
+-    }
+-
+-    nv_drm_for_each_plane_in_state(state, plane, plane_state, i) {
+-        ret = drm_atomic_set_crtc_for_plane(plane_state, NULL);
+-        if (ret < 0)
+-            goto free;
+-
+-        drm_atomic_set_fb_for_plane(plane_state, NULL);
+-        plane_mask |= NVBIT(drm_plane_index(plane));
+-        plane->old_fb = plane->fb;
+-    }
+-
+-    ret = drm_atomic_commit(state);
+-free:
+-    if (plane_mask) {
+-        drm_for_each_plane_mask(plane, dev, plane_mask) {
+-            if (ret == 0) {
+-                plane->fb = NULL;
+-                plane->crtc = NULL;
+-
+-                WARN_ON(plane->state->fb);
+-                WARN_ON(plane->state->crtc);
+-
+-                if (plane->old_fb)
+-                    __nv_drm_framebuffer_put(plane->old_fb);
+-           }
+-           plane->old_fb = NULL;
+-       }
+-    }
+-
+-#if defined(NV_DRM_ATOMIC_STATE_REF_COUNTING_PRESENT)
+-    drm_atomic_state_put(state);
+-#else
+-    if (ret != 0) {
+-        drm_atomic_state_free(state);
+-    } else {
+-        /*
+-         * In case of success, drm_atomic_commit() takes care to cleanup and
+-         * free @state.
+-         *
+-         * Comment placed above drm_atomic_commit() says: The caller must not
+-         * free or in any other way access @state. If the function fails then
+-         * the caller must clean up @state itself.
+-         */
+-    }
+-#endif
+-    return ret;
+-}
+-
+ #endif /* NV_DRM_ATOMIC_MODESET_AVAILABLE */
+diff --git a/nvidia-drm/nvidia-drm-helper.h b/nvidia-drm/nvidia-drm-helper.h
+index 1ce4fba..dc92948 100644
+--- a/nvidia-drm/nvidia-drm-helper.h
++++ b/nvidia-drm/nvidia-drm-helper.h
+@@ -156,127 +156,6 @@ nv_drm_prime_pages_to_sg(struct drm_device *dev,
+ #include <drm/drm_atomic.h>
+ #include <drm/drm_atomic_helper.h>
+ 
+-int nv_drm_atomic_helper_disable_all(struct drm_device *dev,
+-                                     struct drm_modeset_acquire_ctx *ctx);
+-
+-/*
+- * for_each_connector_in_state(), for_each_crtc_in_state() and
+- * for_each_plane_in_state() were added by kernel commit
+- * df63b9994eaf942afcdb946d27a28661d7dfbf2a which was Signed-off-by:
+- *      Ander Conselvan de Oliveira <ander.conselvan.de.oliveira@intel.com>
+- *      Daniel Vetter <daniel.vetter@ffwll.ch>
+- *
+- * for_each_connector_in_state(), for_each_crtc_in_state() and
+- * for_each_plane_in_state() were copied from
+- *      include/drm/drm_atomic.h @
+- *      21a01abbe32a3cbeb903378a24e504bfd9fe0648
+- * which has the following copyright and license information:
+- *
+- * Copyright (C) 2014 Red Hat
+- * Copyright (C) 2014 Intel Corp.
+- *
+- * Permission is hereby granted, free of charge, to any person obtaining a
+- * copy of this software and associated documentation files (the "Software"),
+- * to deal in the Software without restriction, including without limitation
+- * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+- * and/or sell copies of the Software, and to permit persons to whom the
+- * Software is furnished to do so, subject to the following conditions:
+- *
+- * The above copyright notice and this permission notice shall be included in
+- * all copies or substantial portions of the Software.
+- *
+- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+- * THE COPYRIGHT HOLDER(S) OR AUTHOR(S) BE LIABLE FOR ANY CLAIM, DAMAGES OR
+- * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+- * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+- * OTHER DEALINGS IN THE SOFTWARE.
+- *
+- * Authors:
+- * Rob Clark <robdclark@gmail.com>
+- * Daniel Vetter <daniel.vetter@ffwll.ch>
+- */
+-
+-/**
+- * nv_drm_for_each_connector_in_state - iterate over all connectors in an
+- * atomic update
+- * @__state: &struct drm_atomic_state pointer
+- * @connector: &struct drm_connector iteration cursor
+- * @connector_state: &struct drm_connector_state iteration cursor
+- * @__i: int iteration cursor, for macro-internal use
+- *
+- * This iterates over all connectors in an atomic update. Note that before the
+- * software state is committed (by calling drm_atomic_helper_swap_state(), this
+- * points to the new state, while afterwards it points to the old state. Due to
+- * this tricky confusion this macro is deprecated.
+- */
+-#if !defined(for_each_connector_in_state)
+-#define nv_drm_for_each_connector_in_state(__state,                         \
+-                                           connector, connector_state, __i) \
+-       for ((__i) = 0;                                                      \
+-            (__i) < (__state)->num_connector &&                             \
+-            ((connector) = (__state)->connectors[__i].ptr,                  \
+-            (connector_state) = (__state)->connectors[__i].state, 1);       \
+-            (__i)++)                                                        \
+-               for_each_if (connector)
+-#else
+-#define nv_drm_for_each_connector_in_state(__state,                         \
+-                                           connector, connector_state, __i) \
+-    for_each_connector_in_state(__state, connector, connector_state, __i)
+-#endif
+-
+-
+-/**
+- * nv_drm_for_each_crtc_in_state - iterate over all CRTCs in an atomic update
+- * @__state: &struct drm_atomic_state pointer
+- * @crtc: &struct drm_crtc iteration cursor
+- * @crtc_state: &struct drm_crtc_state iteration cursor
+- * @__i: int iteration cursor, for macro-internal use
+- *
+- * This iterates over all CRTCs in an atomic update. Note that before the
+- * software state is committed (by calling drm_atomic_helper_swap_state(), this
+- * points to the new state, while afterwards it points to the old state. Due to
+- * this tricky confusion this macro is deprecated.
+- */
+-#if !defined(for_each_crtc_in_state)
+-#define nv_drm_for_each_crtc_in_state(__state, crtc, crtc_state, __i) \
+-       for ((__i) = 0;                                                \
+-            (__i) < (__state)->dev->mode_config.num_crtc &&           \
+-            ((crtc) = (__state)->crtcs[__i].ptr,                      \
+-            (crtc_state) = (__state)->crtcs[__i].state, 1);           \
+-            (__i)++)                                                  \
+-               for_each_if (crtc_state)
+-#else
+-#define nv_drm_for_each_crtc_in_state(__state, crtc, crtc_state, __i) \
+-    for_each_crtc_in_state(__state, crtc, crtc_state, __i)
+-#endif
+-
+-/**
+- * nv_drm_for_each_plane_in_state - iterate over all planes in an atomic update
+- * @__state: &struct drm_atomic_state pointer
+- * @plane: &struct drm_plane iteration cursor
+- * @plane_state: &struct drm_plane_state iteration cursor
+- * @__i: int iteration cursor, for macro-internal use
+- *
+- * This iterates over all planes in an atomic update. Note that before the
+- * software state is committed (by calling drm_atomic_helper_swap_state(), this
+- * points to the new state, while afterwards it points to the old state. Due to
+- * this tricky confusion this macro is deprecated.
+- */
+-#if !defined(for_each_plane_in_state)
+-#define nv_drm_for_each_plane_in_state(__state, plane, plane_state, __i) \
+-       for ((__i) = 0;                                                   \
+-            (__i) < (__state)->dev->mode_config.num_total_plane &&       \
+-            ((plane) = (__state)->planes[__i].ptr,                       \
+-            (plane_state) = (__state)->planes[__i].state, 1);            \
+-            (__i)++)                                                     \
+-               for_each_if (plane_state)
+-#else
+-#define nv_drm_for_each_plane_in_state(__state, plane, plane_state, __i) \
+-    for_each_plane_in_state(__state, plane, plane_state, __i)
+-#endif
+-
+ static inline struct drm_crtc *nv_drm_crtc_find(struct drm_device *dev,
+     uint32_t id)
+ {
+diff --git a/nvidia-drm/nvidia-drm-modeset.c b/nvidia-drm/nvidia-drm-modeset.c
+index 123a126..640b341 100644
+--- a/nvidia-drm/nvidia-drm-modeset.c
++++ b/nvidia-drm/nvidia-drm-modeset.c
+@@ -86,9 +86,9 @@ void nv_drm_atomic_state_free(struct drm_atomic_state *state)
+  * is swapped into current state.
+  */
+ static bool __will_generate_flip_event(struct drm_crtc *crtc,
+-                                       struct drm_crtc_state *old_crtc_state)
++                                       struct drm_crtc_state *old_crtc_state,
++                                       struct drm_crtc_state *new_crtc_state)
+ {
+-    struct drm_crtc_state *new_crtc_state = crtc->state;
+     struct nv_drm_crtc_state *nv_new_crtc_state =
+         to_nv_crtc_state(new_crtc_state);
+     struct drm_plane_state *old_plane_state = NULL;
+@@ -107,7 +107,7 @@ static bool __will_generate_flip_event(struct drm_crtc *crtc,
+     }
+ 
+     /* Find out whether primary & overlay flip done events will be generated. */
+-    nv_drm_for_each_plane_in_state(old_crtc_state->state,
++    for_each_old_plane_in_state(old_crtc_state->state,
+         plane, old_plane_state, i) {
+         if (old_plane_state->crtc != crtc) {
+            continue;
+@@ -166,13 +166,13 @@ static int __nv_drm_get_syncpt_data(
+     struct nv_drm_device *nv_dev,
+     struct drm_crtc *crtc,
+     struct drm_crtc_state *old_crtc_state,
++    struct drm_crtc_state *new_crtc_state,
+     struct NvKmsKapiRequestedModeSetConfig *requested_config,
+     struct NvKmsKapiModeSetReplyConfig *reply_config)
+ {
+     struct nv_drm_crtc *nv_crtc = to_nv_crtc(crtc);
+     struct NvKmsKapiHeadReplyConfig *head_reply_config;
+     struct nv_drm_plane_state *plane_state;
+-    struct drm_crtc_state *new_crtc_state = crtc->state;
+     struct drm_plane_state *old_plane_state = NULL;
+     struct drm_plane_state *new_plane_state = NULL;
+     struct drm_plane *plane = NULL;
+@@ -188,14 +188,12 @@ static int __nv_drm_get_syncpt_data(
+ 
+     head_reply_config = &reply_config->headReplyConfig[nv_crtc->head];
+ 
+-    nv_drm_for_each_plane_in_state(old_crtc_state->state, plane, old_plane_state, i) {
++    for_each_oldnew_plane_in_state(old_crtc_state->state, plane, old_plane_state, new_plane_state, i) {
+ 
+         if (plane->type == DRM_PLANE_TYPE_CURSOR || old_plane_state->crtc != crtc) {
+             continue;
+         }
+ 
+-        new_plane_state = plane->state;
+-
+         if (new_plane_state->crtc != crtc) {
+             continue;
+         }
+@@ -262,21 +260,14 @@ nv_drm_atomic_apply_modeset_config(struct drm_device *dev,
+         &(to_nv_atomic_state(state)->config);
+     struct NvKmsKapiModeSetReplyConfig reply_config = { };
+     struct drm_crtc *crtc;
+-    struct drm_crtc_state *crtc_state;
++    struct drm_crtc_state *old_crtc_state, *new_crtc_state;
+     int i;
+     int ret;
+ 
+     memset(requested_config, 0, sizeof(*requested_config));
+ 
+     /* Loop over affected crtcs and construct NvKmsKapiRequestedModeSetConfig */
+-    nv_drm_for_each_crtc_in_state(state, crtc, crtc_state, i) {
+-        /*
+-         * When committing a state, the new state is already stored in
+-         * crtc->state. When checking a proposed state, the proposed state is
+-         * stored in crtc_state.
+-         */
+-        struct drm_crtc_state *new_crtc_state =
+-                               commit ? crtc->state : crtc_state;
++    for_each_oldnew_crtc_in_state(state, crtc, old_crtc_state, new_crtc_state, i) {
+         struct nv_drm_crtc *nv_crtc = to_nv_crtc(crtc);
+ 
+         requested_config->headRequestedConfig[nv_crtc->head] =
+@@ -285,7 +276,6 @@ nv_drm_atomic_apply_modeset_config(struct drm_device *dev,
+         requested_config->headsMask |= 1 << nv_crtc->head;
+ 
+         if (commit) {
+-            struct drm_crtc_state *old_crtc_state = crtc_state;
+             struct nv_drm_crtc_state *nv_new_crtc_state =
+                 to_nv_crtc_state(new_crtc_state);
+ 
+@@ -297,7 +287,7 @@ nv_drm_atomic_apply_modeset_config(struct drm_device *dev,
+              * If flip event will be generated by hardware
+              * then defer flip object processing to flip event from hardware.
+              */
+-            if (__will_generate_flip_event(crtc, old_crtc_state)) {
++            if (__will_generate_flip_event(crtc, old_crtc_state, new_crtc_state)) {
+                 nv_drm_crtc_enqueue_flip(nv_crtc,
+                                          nv_new_crtc_state->nv_flip);
+ 
+@@ -322,10 +312,12 @@ nv_drm_atomic_apply_modeset_config(struct drm_device *dev,
+     }
+ 
+     if (commit && nv_dev->supportsSyncpts) {
+-        nv_drm_for_each_crtc_in_state(state, crtc, crtc_state, i) {
++        for_each_oldnew_crtc_in_state(state, crtc, old_crtc_state,
++                                      new_crtc_state, i) {
+             /*! loop over affected crtcs and get NvKmsKapiModeSetReplyConfig */
+-            ret = __nv_drm_get_syncpt_data(
+-                      nv_dev, crtc, crtc_state, requested_config, &reply_config);
++            ret = __nv_drm_get_syncpt_data(nv_dev, crtc,
++                                           old_crtc_state, new_crtc_state,
++                                           requested_config, &reply_config);
+             if (ret != 0) {
+                 return ret;
+             }
+@@ -410,7 +402,7 @@ int nv_drm_atomic_commit(struct drm_device *dev,
+ 
+     int i;
+     struct drm_crtc *crtc = NULL;
+-    struct drm_crtc_state *crtc_state = NULL;
++    struct drm_crtc_state *new_crtc_state = NULL;
+     struct nv_drm_device *nv_dev = to_nv_device(dev);
+ 
+     /*
+@@ -420,7 +412,7 @@ int nv_drm_atomic_commit(struct drm_device *dev,
+      * updates to complete.
+      */
+     if (nonblock) {
+-        nv_drm_for_each_crtc_in_state(state, crtc, crtc_state, i) {
++        for_each_new_crtc_in_state(state, crtc, new_crtc_state, i) {
+             struct nv_drm_crtc *nv_crtc = to_nv_crtc(crtc);
+ 
+             /*
+@@ -494,10 +486,10 @@ int nv_drm_atomic_commit(struct drm_device *dev,
+         goto done;
+     }
+ 
+-    nv_drm_for_each_crtc_in_state(state, crtc, crtc_state, i) {
++    for_each_new_crtc_in_state(state, crtc, new_crtc_state, i) {
+         struct nv_drm_crtc *nv_crtc = to_nv_crtc(crtc);
+         struct nv_drm_crtc_state *nv_new_crtc_state =
+-            to_nv_crtc_state(crtc->state);
++            to_nv_crtc_state(new_crtc_state);
+ 
+         /*
+          * If nv_drm_atomic_apply_modeset_config() hasn't consumed the flip
+-- 
+2.51.2
+

@@ -1,0 +1,16 @@
+diff --git a/kernel/nvidia-drm/nvidia-drm-drv.c b/kernel/nvidia-drm/nvidia-drm-drv.c
+index caa9e8c..132d4d4 100644
+--- a/kernel/nvidia-drm/nvidia-drm-drv.c
++++ b/kernel/nvidia-drm/nvidia-drm-drv.c
+@@ -705,7 +705,11 @@ static struct drm_driver nv_drm_driver = {
+     .ioctls                 = nv_drm_ioctls,
+     .num_ioctls             = ARRAY_SIZE(nv_drm_ioctls),
+ 
++// Rel. commit "drm/prime: Unexport helpers for fd/handle conversion" (Thomas Zimmermann, 20 Jun 2023)
++// This function is no longer exported, but leaving it to NULL is equivalent
++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 6, 0)
+     .prime_handle_to_fd     = drm_gem_prime_handle_to_fd,
++#endif
+ 
+ #if defined(NV_DRM_DRIVER_HAS_GEM_PRIME_CALLBACKS)
+     .gem_prime_export       = nv_drm_gem_prime_export,

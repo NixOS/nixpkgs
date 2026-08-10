@@ -1,0 +1,12 @@
+diff -urN openmsx-20.0.ORIG/src/utils/view.hh openmsx-20.0/src/utils/view.hh
+--- openmsx-20.0.ORIG/src/utils/view.hh	2025-06-21 11:34:58.698594203 +0200
++++ openmsx-20.0/src/utils/view.hh	2025-06-21 11:41:07.208322456 +0200
+@@ -207,7 +207,7 @@
+ 
+ 	[[nodiscard]] constexpr friend difference_type operator-(const TransformIterator& x, const TransformIterator& y)
+ 	{
+-		return x.it - y.it;
++		return std::distance(y.it, x.it);
+ 	}
+ 
+ 	[[nodiscard]] constexpr reference operator[](difference_type n)

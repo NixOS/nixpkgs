@@ -1,0 +1,11 @@
+--- a/siplib/siplib.c
++++ b/siplib/siplib.c
+@@ -13747,7 +13747,7 @@
+ 
+     while (frame != NULL && depth > 0)
+     {
+-        frame = frame->f_back;
++        frame = PyFrame_GetBack(frame);
+         --depth;
+     }
+ 

@@ -1,0 +1,151 @@
+From 5abaa0e1f22d528d0e1ac9e72ce70e788a7a3b39 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Joan=20Bruguera=20Mic=C3=B3?= <joanbrugueram@gmail.com>
+Date: Sun, 7 Dec 2025 20:35:30 +0000
+Subject: [PATCH 2/2] Tentative fix for NVIDIA 470.256.02 driver for Linux
+ 6.19-rc1 (part 2: rest of fixes)
+
+---
+ common/inc/nv-memdbg.h       |  5 +++--
+ common/inc/nv-time.h         | 10 ++++++++--
+ conftest.sh                  | 11 ++++++++++-
+ nvidia-drm/nvidia-drm-priv.h |  3 +++
+ nvidia/nv-dma.c              |  7 +++++++
+ nvidia/os-interface.c        |  2 +-
+ 6 files changed, 32 insertions(+), 6 deletions(-)
+
+diff --git a/common/inc/nv-memdbg.h b/common/inc/nv-memdbg.h
+index c618ead..8212d44 100644
+--- a/common/inc/nv-memdbg.h
++++ b/common/inc/nv-memdbg.h
+@@ -28,8 +28,9 @@ void nv_memdbg_exit(void);
+ 
+ #else
+ 
+-#define NV_MEMDBG_ADD(ptr, size)
+-#define NV_MEMDBG_REMOVE(ptr, size)
++// NB: Using while(0) to avoid -Wempty-body warnings
++#define NV_MEMDBG_ADD(ptr, size) while(0)
++#define NV_MEMDBG_REMOVE(ptr, size) while(0)
+ 
+ #endif /* NV_MEM_LOGGER */
+ 
+diff --git a/common/inc/nv-time.h b/common/inc/nv-time.h
+index 0133383..584633f 100644
+--- a/common/inc/nv-time.h
++++ b/common/inc/nv-time.h
+@@ -31,6 +31,12 @@
+ 
+ #include <nvstatus.h>
+ 
++#include <linux/version.h>
++#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 11, 0)
++// Rel. commit "treewide: Remove in_irq()" (Matthew Wilcox, 24 Oct 2025)
++#define in_hardirq in_irq
++#endif
++
+ #define NV_MAX_ISR_DELAY_US           20000
+ #define NV_MAX_ISR_DELAY_MS           (NV_MAX_ISR_DELAY_US / 1000)
+ #define NV_NSECS_TO_JIFFIES(nsec)     ((nsec) * HZ / 1000000000)
+@@ -141,7 +147,7 @@ static inline NV_STATUS nv_sleep_us(unsigned int us)
+     ktime_get_real_ts64(&tm1);
+ #endif
+ 
+-    if (in_irq() && (us > NV_MAX_ISR_DELAY_US))
++    if (in_hardirq() && (us > NV_MAX_ISR_DELAY_US))
+         return NV_ERR_GENERIC;
+ 
+     mdelay_safe_msec = us / 1000;
+@@ -187,7 +193,7 @@ static inline NV_STATUS nv_sleep_ms(unsigned int ms)
+     tm_start = tm_aux;
+ #endif
+ 
+-    if (in_irq() && (ms > NV_MAX_ISR_DELAY_MS))
++    if (in_hardirq() && (ms > NV_MAX_ISR_DELAY_MS))
+     {
+         return NV_ERR_GENERIC;
+     }
+diff --git a/conftest.sh b/conftest.sh
+index 263a404..294d6e5 100755
+--- a/conftest.sh
++++ b/conftest.sh
+@@ -208,6 +208,11 @@ build_cflags() {
+ 
+     # Specify the C standard, instead of defaulting to the compiler's
+     CFLAGS="$CFLAGS -std=gnu17"
++
++    # Rel. commit "Kbuild: enable -fms-extensions" (Rasmus Villemoes, 20 Oct 2025)
++    # Enable the flags since the Linux headers use those extensions in some structs
++    # See https://www.phoronix.com/news/Linux-6.19-Patch-Would-MS-Ext
++    CFLAGS="$CFLAGS -fms-extensions"
+ }
+ 
+ CONFTEST_PREAMBLE="#include \"conftest/headers.h\"
+@@ -5013,7 +5018,11 @@ compile_test() {
+             CODE="
+             #include <linux/mm_types.h>
+             int conftest_vm_area_struct_has_const_vm_flags(void) {
+-                return offsetof(struct vm_area_struct, __vm_flags);
++                // Rel. commit 'mm: introduce VMA flags bitmap type' (Lorenzo Stoakes, 14 Nov 2025)
++                // Check for the const-ness of vm_flags directly: If vm_flags
++                // is not const, _Generic doesn't match and the build fails)
++                struct vm_area_struct vma;
++                return _Generic(&vma.vm_flags, const typeof(vma.vm_flags) *: 1);
+             }"
+ 
+             compile_check_conftest "$CODE" "NV_VM_AREA_STRUCT_HAS_CONST_VM_FLAGS" "" "types"
+diff --git a/nvidia-drm/nvidia-drm-priv.h b/nvidia-drm/nvidia-drm-priv.h
+index dce6a53..ac932f9 100644
+--- a/nvidia-drm/nvidia-drm-priv.h
++++ b/nvidia-drm/nvidia-drm-priv.h
+@@ -39,6 +39,9 @@
+ #include <drm/drm_gem.h>
+ #endif
+ 
++// Rel. commit "drm/mm: replace drm_print.h include with a forward declaration" (Jani Nikula, 29 Oct 2025)
++#include <drm/drm_print.h>
++
+ #include "nvidia-drm-os-interface.h"
+ 
+ #include "nvkms-kapi.h"
+diff --git a/nvidia/nv-dma.c b/nvidia/nv-dma.c
+index 9f1ea11..e08d7c8 100644
+--- a/nvidia/nv-dma.c
++++ b/nvidia/nv-dma.c
+@@ -12,6 +12,7 @@
+ 
+ #include "os-interface.h"
+ #include "nv-linux.h"
++#include <linux/version.h>
+ 
+ #define NV_DMA_DEV_PRINTF(debuglevel, dma_dev, format, ... )                \
+     nv_printf(debuglevel, "NVRM: %s: " format,                              \
+@@ -764,7 +765,13 @@ static NvBool nv_dma_is_map_resource_implemented
+ #endif
+     }
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 19, 0)
++    // Rel. commit "dma-mapping: remove unused mapping resource callbacks" (Leon Romanovsky, 15 Oct 2025)
++    // https://lore.kernel.org/all/20251015-remove-map-page-v5-0-3bbfe3a25cdf@kernel.org/
++    return (ops->map_phys != NULL);
++#else
+     return (ops->map_resource != NULL);
++#endif
+ #else
+     return NV_FALSE;
+ #endif
+diff --git a/nvidia/os-interface.c b/nvidia/os-interface.c
+index e7c1f9d..7379965 100644
+--- a/nvidia/os-interface.c
++++ b/nvidia/os-interface.c
+@@ -229,7 +229,7 @@ NvBool NV_API_CALL os_semaphore_may_sleep(void)
+ 
+ NvBool NV_API_CALL os_is_isr(void)
+ {
+-    return (in_irq());
++    return (in_hardirq());
+ }
+ 
+ // return TRUE if the caller is the super-user
+-- 
+2.52.0
+

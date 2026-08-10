@@ -1,0 +1,10 @@
+--- fbterm-1.7.orig/src/fbio.cpp
++++ fbterm-1.7/src/fbio.cpp
+@@ -30,6 +30,7 @@
+ #define NR_EPOLL_FDS 10
+ s32 epollFd;
+ #else
++#include <sys/select.h>
+ static fd_set fds;
+ static u32 maxfd = 0;
+ #endif

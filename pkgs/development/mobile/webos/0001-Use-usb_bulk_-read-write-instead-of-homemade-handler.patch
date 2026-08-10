@@ -1,0 +1,78 @@
+--- a/src/host/usb-linux.c
++++ b/src/host/usb-linux.c
+@@ -49,20 +49,8 @@
+ 
+ #define USBDEVFS_IOCTL_TIMEOUT  2000
+ 
+-struct myusb_dev_handle {
+-	int fd;
+-
+-	// other stuff here
+-};
+-
+ typedef struct {
+-	union {
+-		usb_dev_handle *handle;
+-
+-		/* XXX cheezy hack to let us get to the file descriptor hidden in the libusb handle */
+-		struct myusb_dev_handle *myhandle;
+-	};
+-
++	usb_dev_handle *handle;
+ 	novacom_usbll_handle_t usbll_handle;
+ 
+ 	bool shutdown;
+@@ -218,7 +206,7 @@
+ 					if (!handle) continue;
+ 
+ #if USB_SCAN_TRACE
+-					log_printf(LOG_SPEW, "opened usb handle: fd %d\n", ((struct myusb_dev_handle *)handle)->fd);
++					log_printf(LOG_SPEW, "opened usb handle: devnum %d\n", dev->devnum);
+ #endif
+ 
+ 					int eps[2];
+@@ -281,17 +269,10 @@
+ static int novacom_usb_read(novacom_usb_handle_t *handle, void *buf, size_t len)
+ {
+ //	TRACEF("handle %p, buf %p, len %d, timeout %d\n", handle, buf, len, timeout);
+-//	TRACEF("fd %d\n", handle->myhandle->fd);
+-
+-	struct usbdevfs_bulktransfer bulktransfer;
+-
+-	bulktransfer.ep = handle->rxep;
+-	bulktransfer.len = len;
+-	bulktransfer.timeout = handle->rx_timeout;
+-	bulktransfer.data = buf;
+ 
+ 	int rc;
+-	rc = ioctl(handle->myhandle->fd, USBDEVFS_BULK, &bulktransfer);
++
++	rc = usb_bulk_read(handle->handle, handle->rxep, buf, len, handle->rx_timeout);
+ 	if (rc > 0) { //now check the packet header
+ 
+ 		if (novacom_usbll_check_packet_header(buf, rc)) { //bad packet
+@@ -303,22 +284,11 @@
+ 	return rc;
+ }
+ 
+-static int novacom_usb_write(novacom_usb_handle_t *handle, const void *buf, size_t len)
++static int novacom_usb_write(novacom_usb_handle_t *handle, void *buf, size_t len)
+ {
+ //	TRACEF("handle %p, buf %p, len %d, timeout %d\n", handle, buf, len, timeout);
+-//	TRACEF("fd %d\n", handle->myhandle->fd);
+-
+-	struct usbdevfs_bulktransfer bulktransfer;
+ 
+-	bulktransfer.ep = handle->txep;
+-	bulktransfer.len = len;
+-	bulktransfer.timeout = handle->tx_timeout;
+-	bulktransfer.data = (void *)buf;
+-
+-	int rc;
+-	rc = ioctl(handle->myhandle->fd, USBDEVFS_BULK, &bulktransfer);
+-//	TRACEF("rc %d\n", rc);
+-	return rc;
++	return usb_bulk_write(handle->handle, handle->txep, buf, len, handle->tx_timeout);	
+ }
+ 
+ struct usb_thread_args {

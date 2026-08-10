@@ -1,0 +1,11 @@
+--- a/src/plugins/styles/gtk2/qgtkstyle.cpp
++++ b/src/plugins/styles/gtk2/qgtkstyle.cpp
+@@ -442,6 +442,8 @@
+     if (app->desktopSettingsAware() && d->isThemeAvailable()) {
+ #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+         QApplicationPrivate::setSystemPalette(standardPalette());
++#else
++        QApplication::setPalette(standardPalette());
+ #endif
+         QApplicationPrivate::setSystemFont(d->getThemeFont());
+         d->applyCustomPaletteHash();

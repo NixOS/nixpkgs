@@ -1,0 +1,25 @@
+From: Benjamin ROBIN <dev@benjarobin.fr>
+Date: Sun, 12 May 2024 17:45:43 +0200
+Subject: [PATCH 2/3] Fix conftest to use a short wchar_t
+
+Fix build error about ``const efi_char16_t *v = L"SecureBoot"``
+when including include/linux/efi.h
+---
+ conftest.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/conftest.sh b/conftest.sh
+--- a/conftest.sh
++++ b/conftest.sh
+@@ -101,7 +101,7 @@ test_header_presence() {
+ build_cflags() {
+     BASE_CFLAGS="-O2 -D__KERNEL__ \
+ -DKBUILD_BASENAME=\"#conftest$$\" -DKBUILD_MODNAME=\"#conftest$$\" \
+--nostdinc -isystem $ISYSTEM \
++-nostdinc -isystem $ISYSTEM -fshort-wchar \
+ -Wno-implicit-function-declaration -Wno-strict-prototypes \
+ -Wno-incompatible-pointer-types"
+ 
+     if [ "$OUTPUT" != "$SOURCES" ]; then
+---
+2.45.0

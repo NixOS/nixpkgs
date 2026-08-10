@@ -1,7 +1,6 @@
 {
   lib,
   fetchurl,
-  fetchpatch,
   buildPythonPackage,
   python,
   isPyPy,
@@ -24,11 +23,8 @@ buildPythonPackage rec {
   };
 
   patches = lib.optionals (pythonAtLeast "3.11") [
-    (fetchpatch {
-      name = "sip-4-python3-11.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/python3-11.patch?h=sip4&id=67b5907227e68845cdfafcf050fedb89ed653585";
-      sha256 = "sha256-cmuz2y5+T8EM/h03G2oboSnnOwrUjVKt2TUQaC9YAdE=";
-    })
+    # Vendored from https://aur.archlinux.org/cgit/aur.git/plain/python3-11.patch?h=sip4&id=67b5907227e68845cdfafcf050fedb89ed653585
+    ./sip-4-python3-11.patch
   ];
 
   postPatch = lib.optionalString (pythonAtLeast "3.12") ''

@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchpatch2,
   fetchFromGitHub,
   pkg-config,
   SDL2,
@@ -34,11 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    (fetchpatch2 {
-      name = "fix_view_operator.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/fix_view_operator.patch?h=openmsx&id=aa63ce478c7f528d60b79bcf4c9427101caa3b94";
-      hash = "sha256-3wmUJQrM5P3zfFJt+HF32AchNSqCgFTnQ508Bztg4uA=";
-    })
+    # Vendored from https://aur.archlinux.org/cgit/aur.git/plain/fix_view_operator.patch?h=openmsx&id=aa63ce478c7f528d60b79bcf4c9427101caa3b94
+    ./fix_view_operator.patch
   ];
 
   nativeBuildInputs = [

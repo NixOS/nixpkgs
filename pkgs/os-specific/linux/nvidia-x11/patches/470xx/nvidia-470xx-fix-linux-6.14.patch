@@ -1,0 +1,26 @@
+From bee3ff1153f7b42491d2a0552d6f9a66a307ec1a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Joan=20Bruguera=20Mic=C3=B3?= <joanbrugueram@gmail.com>
+Date: Sun, 15 Dec 2024 17:56:03 +0000
+Subject: [PATCH] Tentative fix for NVIDIA 470.256.02 driver for Linux 6.14-rc1
+
+---
+ nvidia-drm/nvidia-drm-drv.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/nvidia-drm/nvidia-drm-drv.c b/nvidia-drm/nvidia-drm-drv.c
+index 0b1181d..b50b17a 100644
+--- a/nvidia-drm/nvidia-drm-drv.c
++++ b/nvidia-drm/nvidia-drm-drv.c
+@@ -882,7 +882,10 @@ static struct drm_driver nv_drm_driver = {
+     .name                   = "nvidia-drm",
+ 
+     .desc                   = "NVIDIA DRM driver",
++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 14, 0)
++    // Rel. commit. "drm: remove driver date from struct drm_driver and all drivers" (Jani Nikula, 4 Dec 2024)
+     .date                   = "20160202",
++#endif
+ 
+ #if defined(NV_DRM_DRIVER_HAS_DEVICE_LIST)
+     .device_list            = LIST_HEAD_INIT(nv_drm_driver.device_list),
+-- 
+2.48.1

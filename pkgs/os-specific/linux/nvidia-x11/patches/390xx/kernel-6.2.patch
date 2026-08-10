@@ -1,0 +1,145 @@
+From 5db7eb5a62003bbe04f3f07d089fcf5445b34a29 Mon Sep 17 00:00:00 2001
+From: Joan Bruguera <joanbrugueram@gmail.com>
+Date: Sun, 25 Dec 2022 22:05:14 +0000
+Subject: [PATCH] Tentative fix for NVIDIA 470.161.03 driver for Linux 6.2-rc1
+
+---
+ kernel/nvidia-drm/nvidia-drm-connector.c | 22 ++++++++++++++++++++++
+ kernel/nvidia-drm/nvidia-drm-drv.c       |  4 ++++
+ kernel/nvidia/nv-acpi.c                  | 19 ++++++++++++++++---
+ 3 files changed, 42 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/nvidia-drm/nvidia-drm-connector.c b/kernel/nvidia-drm/nvidia-drm-connector.c
+index 6fbcd63..a5ab9e9 100644
+--- a/kernel/nvidia-drm/nvidia-drm-connector.c
++++ b/kernel/nvidia-drm/nvidia-drm-connector.c
+@@ -20,6 +20,8 @@
+  * DEALINGS IN THE SOFTWARE.
+  */
+ 
++#include <linux/version.h>
++#include <drm/drm_edid.h>
+ #include "nvidia-drm-conftest.h" /* NV_DRM_ATOMIC_MODESET_AVAILABLE */
+ 
+ #if defined(NV_DRM_ATOMIC_MODESET_AVAILABLE)
+@@ -98,6 +100,7 @@ __nv_drm_detect_encoder(struct NvKmsKapiDynamicDisplayParams *pDetectParams,
+             break;
+     }
+ 
++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 2, 0)
+     if (connector->override_edid) {
+         const struct drm_property_blob *edid = connector->edid_blob_ptr;
+ 
+@@ -110,6 +113,25 @@ __nv_drm_detect_encoder(struct NvKmsKapiDynamicDisplayParams *pDetectParams,
+                     sizeof(pDetectParams->edid.buffer));
+         }
+     }
++#else
++    // Rel. commit "drm/edid: detach debugfs EDID override from EDID property update" (Jani Nikula, 24 Oct 2022)
++    // NOTE: HUGE HACK!
++    mutex_lock(&connector->edid_override_mutex);
++    if (connector->edid_override) {
++        const struct edid *edid = drm_edid_raw(connector->edid_override);
++        size_t edid_length = EDID_LENGTH * (edid->extensions + 1);
++        if (edid_length <= sizeof(pDetectParams->edid.buffer)) {
++            memcpy(pDetectParams->edid.buffer, edid, edid_length);
++            pDetectParams->edid.bufferSize = edid_length;
++            pDetectParams->overrideEdid = NV_TRUE;
++        } else {
++            WARN_ON(edid_length >
++                    sizeof(pDetectParams->edid.buffer));
++        }
++    }
++    mutex_unlock(&connector->edid_override_mutex);
++
++#endif
+ 
+     if (!nvKms->getDynamicDisplayInfo(nv_dev->pDevice, pDetectParams)) {
+         NV_DRM_DEV_LOG_ERR(
+diff --git a/kernel/nvidia-drm/nvidia-drm-drv.c b/kernel/nvidia-drm/nvidia-drm-drv.c
+index 6d007b1..d08ab4c 100644
+--- a/kernel/nvidia-drm/nvidia-drm-drv.c
++++ b/kernel/nvidia-drm/nvidia-drm-drv.c
+@@ -20,6 +20,7 @@
+  * DEALINGS IN THE SOFTWARE.
+  */
+ 
++#include <linux/version.h>
+ #include "nvidia-drm-conftest.h" /* NV_DRM_AVAILABLE and NV_DRM_DRM_GEM_H_PRESENT */
+ 
+ #include "nvidia-drm-priv.h"
+@@ -240,9 +241,12 @@ nv_drm_init_mode_config(struct nv_drm_device *nv_dev,
+     dev->mode_config.preferred_depth = 24;
+     dev->mode_config.prefer_shadow = 1;
+ 
++// Rel. commit "drm: Remove drm_mode_config::fb_base" (Zack Rusin, 18 Oct 2022)
++#if defined(CONFIG_FB) && LINUX_VERSION_CODE < KERNEL_VERSION(6, 2, 0)
+     /* Currently unused. Update when needed. */
+ 
+     dev->mode_config.fb_base = 0;
++#endif
+ 
+ #if defined(NV_DRM_CRTC_STATE_HAS_ASYNC_FLIP) || \
+     defined(NV_DRM_CRTC_STATE_HAS_PAGEFLIP_FLAGS)
+diff --git a/kernel/nvidia/nv-acpi.c b/kernel/nvidia/nv-acpi.c
+index 07501eb..1fdf71c 100644
+--- a/kernel/nvidia/nv-acpi.c
++++ b/kernel/nvidia/nv-acpi.c
+@@ -8,6 +8,7 @@
+  * _NVRM_COPYRIGHT_END_
+  */
+ 
++#include <linux/version.h>
+ #define  __NO_VERSION__
+ 
+ #include "os-interface.h"
+@@ -24,7 +25,10 @@ static NV_STATUS   nv_acpi_extract_object  (const union acpi_object *, void *, N
+ 
+ static int         nv_acpi_add             (struct acpi_device *);
+ 
+-#if !defined(NV_ACPI_DEVICE_OPS_REMOVE_ARGUMENT_COUNT) || (NV_ACPI_DEVICE_OPS_REMOVE_ARGUMENT_COUNT == 2)
++// Rel. commit "ACPI: make remove callback of ACPI driver void" (Dawei Li, 14 Nov 2022)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 2, 0))
++static void        nv_acpi_remove_one_arg_void(struct acpi_device *device);
++#elif !defined(NV_ACPI_DEVICE_OPS_REMOVE_ARGUMENT_COUNT) || (NV_ACPI_DEVICE_OPS_REMOVE_ARGUMENT_COUNT == 2)
+ static int         nv_acpi_remove_two_args(struct acpi_device *device, int type);
+ #else
+ static int         nv_acpi_remove_one_arg(struct acpi_device *device);
+@@ -80,7 +84,10 @@ static const struct acpi_driver nv_acpi_driver_template = {
+     .ids = nv_video_device_ids,
+     .ops = {
+         .add = nv_acpi_add,
+-#if !defined(NV_ACPI_DEVICE_OPS_REMOVE_ARGUMENT_COUNT) || (NV_ACPI_DEVICE_OPS_REMOVE_ARGUMENT_COUNT == 2)
++// Rel. commit "ACPI: make remove callback of ACPI driver void" (Dawei Li, 14 Nov 2022)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 2, 0))
++        .remove = nv_acpi_remove_one_arg_void,
++#elif !defined(NV_ACPI_DEVICE_OPS_REMOVE_ARGUMENT_COUNT) || (NV_ACPI_DEVICE_OPS_REMOVE_ARGUMENT_COUNT == 2)
+         .remove = nv_acpi_remove_two_args,
+ #else
+         .remove = nv_acpi_remove_one_arg,
+@@ -342,7 +349,10 @@ static int nv_acpi_add(struct acpi_device *device)
+     return 0;
+ }
+ 
+-#if !defined(NV_ACPI_DEVICE_OPS_REMOVE_ARGUMENT_COUNT) || (NV_ACPI_DEVICE_OPS_REMOVE_ARGUMENT_COUNT == 2)
++// Rel. commit "ACPI: make remove callback of ACPI driver void" (Dawei Li, 14 Nov 2022)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 2, 0))
++static void nv_acpi_remove_one_arg_void(struct acpi_device *device)
++#elif !defined(NV_ACPI_DEVICE_OPS_REMOVE_ARGUMENT_COUNT) || (NV_ACPI_DEVICE_OPS_REMOVE_ARGUMENT_COUNT == 2)
+ static int nv_acpi_remove_two_args(struct acpi_device *device, int type)
+ #else
+ static int nv_acpi_remove_one_arg(struct acpi_device *device)
+@@ -396,7 +406,10 @@ static int nv_acpi_remove_one_arg(struct acpi_device *device)
+         device->driver_data = NULL;
+     }
+ 
++// Rel. commit "ACPI: make remove callback of ACPI driver void" (Dawei Li, 14 Nov 2022)
++#if (LINUX_VERSION_CODE < KERNEL_VERSION(6, 2, 0))
+     return status;
++#endif
+ }
+ 
+ /*
+-- 
+2.39.0
+

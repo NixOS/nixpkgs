@@ -1,0 +1,319 @@
+diff -U 3 -r a/cmake/modules/FindTaglib.cmake b/cmake/modules/FindTaglib.cmake
+--- a/cmake/modules/FindTaglib.cmake	2009-03-13 22:40:24.000000000 +0100
++++ b/cmake/modules/FindTaglib.cmake	2024-03-18 20:02:47.451289583 +0100
+@@ -11,7 +11,7 @@
+ # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+ 
+ if(NOT TAGLIB_MIN_VERSION)
+-  set(TAGLIB_MIN_VERSION "1.4")
++  set(TAGLIB_MIN_VERSION "2.0")
+ endif(NOT TAGLIB_MIN_VERSION)
+ 
+ if(NOT WIN32)
+@@ -29,10 +29,10 @@
+ 
+   exec_program(${TAGLIBCONFIG_EXECUTABLE} ARGS --version RETURN_VALUE _return_VALUE OUTPUT_VARIABLE TAGLIB_VERSION)
+ 
+-  if(TAGLIB_VERSION STRLESS "${TAGLIB_MIN_VERSION}")
++  if("${TAGLIB_MIN_VERSION}" VERSION_GREATER TAGLIB_VERSION)
+      message(STATUS "TagLib version not found: version searched :${TAGLIB_MIN_VERSION}, found ${TAGLIB_VERSION}")
+      set(TAGLIB_FOUND FALSE)
+-  else(TAGLIB_VERSION STRLESS "${TAGLIB_MIN_VERSION}")
++  else("${TAGLIB_MIN_VERSION}" VERSION_GREATER TAGLIB_VERSION)
+ 
+      exec_program(${TAGLIBCONFIG_EXECUTABLE} ARGS --libs RETURN_VALUE _return_VALUE OUTPUT_VARIABLE TAGLIB_LIBRARIES)
+ 
+@@ -42,7 +42,7 @@
+         set(TAGLIB_FOUND TRUE)
+      endif(TAGLIB_LIBRARIES AND TAGLIB_CFLAGS)
+      string(REGEX REPLACE " *-I" ";" TAGLIB_INCLUDES "${TAGLIB_CFLAGS}")
+-  endif(TAGLIB_VERSION STRLESS "${TAGLIB_MIN_VERSION}") 
++  endif("${TAGLIB_MIN_VERSION}" VERSION_GREATER TAGLIB_VERSION) 
+   mark_as_advanced(TAGLIB_CFLAGS TAGLIB_LIBRARIES TAGLIB_INCLUDES)
+ 
+ else(TAGLIBCONFIG_EXECUTABLE)
+diff -U 3 -r a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt	2009-09-17 21:31:50.000000000 +0200
++++ b/CMakeLists.txt	2024-03-18 20:05:05.486108470 +0100
+@@ -14,7 +14,7 @@
+ if (CMAKE_COMPILER_IS_GNUCXX)
+    if (CMAKE_SYSTEM_NAME MATCHES Linux)
+      set ( CMAKE_C_FLAGS     "${CMAKE_C_FLAGS} -Wno-long-long -ansi -Wundef -Wcast-align -Werror-implicit-function-declaration -Wchar-subscripts -Wall -W -Wpointer-arith -Wwrite-strings -Wformat-security -Wmissing-format-attribute -fno-common")
+-     set ( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -ansi -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wwrite-strings -Wformat-security -fno-check-new -fno-common")
++     set ( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -ansi -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wwrite-strings -Wformat-security -fno-check-new -fno-common -std=c++11")
+    endif (CMAKE_SYSTEM_NAME MATCHES Linux)
+ endif (CMAKE_COMPILER_IS_GNUCXX)
+ if(MSVC)
+@@ -43,7 +43,7 @@
+     set(TAGLIB_LIBRARIES tag)
+ else(NOT "${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")
+ # or separately ?
+-    set(TAGLIB_MIN_VERSION "1.6")
++    set(TAGLIB_MIN_VERSION "2.0")
+     find_package(Taglib REQUIRED)
+ endif(NOT "${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")
+ 
+diff -U 3 -r a/taglib-extras/audible/audibletag.cpp b/taglib-extras/audible/audibletag.cpp
+--- a/taglib-extras/audible/audibletag.cpp	2009-09-17 17:38:07.000000000 +0200
++++ b/taglib-extras/audible/audibletag.cpp	2024-03-18 19:33:40.553079218 +0100
+@@ -40,11 +40,11 @@
+ using namespace TagLibExtras;
+ 
+ Audible::Tag::Tag() {
+-    m_title = TagLib::String::null;
+-    m_artist = TagLib::String::null;
+-    m_album = TagLib::String::null;
+-    m_comment = TagLib::String::null;
+-    m_genre = TagLib::String::null;
++    m_title = TagLib::String();
++    m_artist = TagLib::String();
++    m_album = TagLib::String();
++    m_comment = TagLib::String();
++    m_genre = TagLib::String();
+     m_year = 0;
+     m_track = 0;
+     m_userID = 0;
+@@ -55,11 +55,11 @@
+ }
+ 
+ bool Audible::Tag::isEmpty() const {
+-    return  m_title == TagLib::String::null &&
+-        m_artist == TagLib::String::null &&
+-        m_album == TagLib::String::null && 
+-        m_comment == TagLib::String::null &&
+-        m_genre == TagLib::String::null &&
++    return  m_title == TagLib::String() &&
++        m_artist == TagLib::String() &&
++        m_album == TagLib::String() && 
++        m_comment == TagLib::String() &&
++        m_genre == TagLib::String() &&
+         m_year == 0 &&
+         m_track == 0 &&
+         m_userID == 0;
+@@ -114,7 +114,7 @@
+         }
+         else if(!strcmp(name, "description"))
+         {
+-            if( m_comment.isNull() )
++            if( m_comment.isEmpty() )
+                 m_comment = TagLib::String(value, TagLib::String::Latin1);
+         }
+         else if(!strcmp(name, "pubdate"))
+diff -U 3 -r a/taglib-extras/audible/audibletag.h b/taglib-extras/audible/audibletag.h
+--- a/taglib-extras/audible/audibletag.h	2009-09-17 17:38:07.000000000 +0200
++++ b/taglib-extras/audible/audibletag.h	2024-03-18 19:31:45.715118382 +0100
+@@ -52,30 +52,30 @@
+ 
+                 /*!
+                  * Returns the track name; if no track name is present in the tag
+-                 * TagLib::String::null will be returned.
++                 * TagLib::String() will be returned.
+                  */
+                 virtual TagLib::String title() const { return m_title; }
+ 
+                 /*!
+                  * Returns the artist name; if no artist name is present in the tag
+-                 * TagLib::String::null will be returned.
++                 * TagLib::String() will be returned.
+                  */
+                 virtual TagLib::String artist() const { return m_artist; }
+ 
+                 /*!
+                  * Returns the album name; if no album name is present in the tag
+-                 * TagLib::String::null will be returned.
++                 * TagLib::String() will be returned.
+                  */
+                 virtual TagLib::String album() const { return m_album; }
+ 
+                 /*!
+                  * Returns the track comment; if no comment is present in the tag
+-                 * TagLib::String::null will be returned.
++                 * TagLib::String() will be returned.
+                  */
+                 virtual TagLib::String comment() const { return m_comment; }
+ 
+                 /*!
+-                 * Returns the genre name; if no genre is present in the tag TagLib::String::null
++                 * Returns the genre name; if no genre is present in the tag TagLib::String()
+                  * will be returned.
+                  */
+                 virtual TagLib::String genre() const { return m_genre; }
+@@ -83,45 +83,45 @@
+                 /*!
+                  * Returns the year; if there is no year set, this will return 0.
+                  */
+-                virtual TagLib::uint year() const { return m_year; }
++                virtual unsigned int year() const { return m_year; }
+ 
+                 /*!
+                  * Returns the track number; if there is no track number set, this will
+                  * return 0.
+                  */
+-                virtual TagLib::uint track() const { return m_track; }
++                virtual unsigned int track() const { return m_track; }
+ 
+                 /*!
+                  * Returns the user id for this file.
+                  */
+-                virtual TagLib::uint userID() const { return m_userID; }
++                virtual unsigned int userID() const { return m_userID; }
+ 
+                 /*!
+-                 * Sets the title to \a s.  If \a s is TagLib::String::null then this value will be
++                 * Sets the title to \a s.  If \a s is TagLib::String() then this value will be
+                  * cleared.
+                  */
+                 virtual void setTitle(const TagLib::String &s) { m_title = s; }
+ 
+                 /*!
+-                 * Sets the artist to \a s.  If \a s is TagLib::String::null then this value will be
++                 * Sets the artist to \a s.  If \a s is TagLib::String() then this value will be
+                  * cleared.
+                  */
+                 virtual void setArtist(const TagLib::String &s) { m_artist = s; }
+ 
+                 /*!
+-                 * Sets the album to \a s.  If \a s is TagLib::String::null then this value will be
++                 * Sets the album to \a s.  If \a s is TagLib::String() then this value will be
+                  * cleared.
+                  */
+                 virtual void setAlbum(const TagLib::String &s) { m_album = s; } 
+ 
+                 /*!
+-                 * Sets the album to \a s.  If \a s is TagLib::String::null then this value will be
++                 * Sets the album to \a s.  If \a s is TagLib::String() then this value will be
+                  * cleared.
+                  */
+                 virtual void setComment(const TagLib::String &s) { m_comment = s; }
+ 
+                 /*!
+-                 * Sets the genre to \a s.  If \a s is TagLib::String::null then this value will be
++                 * Sets the genre to \a s.  If \a s is TagLib::String() then this value will be
+                  * cleared.  For tag formats that use a fixed set of genres, the appropriate
+                  * value will be selected based on a string comparison.  A list of available
+                  * genres for those formats should be available in that type's
+@@ -132,12 +132,12 @@
+                 /*!
+                  * Sets the year to \a i.  If \a s is 0 then this value will be cleared.
+                  */
+-                virtual void setYear(TagLib::uint i) { m_year = i; }
++                virtual void setYear(unsigned int i) { m_year = i; }
+ 
+                 /*!
+                  * Sets the track to \a i.  If \a s is 0 then this value will be cleared.
+                  */
+-                virtual void setTrack(TagLib::uint i) { m_track = i; }
++                virtual void setTrack(unsigned int i) { m_track = i; }
+ 
+                 /*!
+                  * Returns true if the tag does not contain any data.  This should be
+@@ -159,7 +159,7 @@
+                  */
+                 static void duplicate(const Tag *source, Tag *target, bool overwrite = true);
+ 
+-                virtual void setUserID(TagLib::uint id) { m_userID = id; }
++                virtual void setUserID(unsigned int id) { m_userID = id; }
+ 
+                 int getTagsEndOffset();
+ 
+@@ -171,9 +171,9 @@
+                 TagLib::String m_album;
+                 TagLib::String m_comment;
+                 TagLib::String m_genre;
+-                TagLib::uint m_year;
+-                TagLib::uint m_track;
+-                TagLib::uint m_userID;
++                unsigned int m_year;
++                unsigned int m_track;
++                unsigned int m_userID;
+                 bool readTag( FILE *fp, char **name, char **value);
+                 int m_tagsEndOffset;
+         };
+diff -U 3 -r a/taglib-extras/rmff/realmediafile.cpp b/taglib-extras/rmff/realmediafile.cpp
+--- a/taglib-extras/rmff/realmediafile.cpp	2009-09-17 17:38:07.000000000 +0200
++++ b/taglib-extras/rmff/realmediafile.cpp	2024-03-18 19:25:30.819973309 +0100
+@@ -78,12 +78,12 @@
+     return m_rmff->genre();
+ }
+ 
+-TagLib::uint RealMedia::Tag::year() const
++unsigned int RealMedia::Tag::year() const
+ {
+     return m_rmff->year();
+ }
+ 
+-TagLib::uint RealMedia::Tag::track() const
++unsigned int RealMedia::Tag::track() const
+ {
+     return m_rmff->track();
+ }
+@@ -113,12 +113,12 @@
+ // TODO: write support
+ }
+ 
+-void   RealMedia::Tag::setYear( TagLib::uint )
++void   RealMedia::Tag::setYear( unsigned int )
+ {
+ // TODO: write support
+ }
+ 
+-void   RealMedia::Tag::setTrack( TagLib::uint )
++void   RealMedia::Tag::setTrack( unsigned int )
+ {
+ // TODO: write support
+ }
+diff -U 3 -r a/taglib-extras/rmff/realmediafile.h b/taglib-extras/rmff/realmediafile.h
+--- a/taglib-extras/rmff/realmediafile.h	2009-09-21 16:34:45.000000000 +0200
++++ b/taglib-extras/rmff/realmediafile.h	2024-03-18 19:25:44.642920743 +0100
+@@ -54,15 +54,15 @@
+          virtual TagLib::String   album () const;
+          virtual TagLib::String   comment () const;
+          virtual TagLib::String   genre () const;
+-         virtual TagLib::uint   year () const;
+-         virtual TagLib::uint   track () const;
++         virtual unsigned int   year () const;
++         virtual unsigned int   track () const;
+          virtual void   setTitle (const TagLib::String &s);
+          virtual void   setArtist (const TagLib::String &s);
+          virtual void   setAlbum (const TagLib::String &s);
+          virtual void   setComment (const TagLib::String &s);
+          virtual void   setGenre (const TagLib::String &s);
+-         virtual void   setYear (TagLib::uint i);
+-         virtual void   setTrack (TagLib::uint i);
++         virtual void   setYear (unsigned int i);
++         virtual void   setTrack (unsigned int i);
+ 
+          bool isEmpty() const;
+          void duplicate(const Tag *source, Tag *target, bool overwrite);
+diff -U 3 -r a/taglib-extras/rmff/rmff.cpp b/taglib-extras/rmff/rmff.cpp
+--- a/taglib-extras/rmff/rmff.cpp	2009-09-17 17:38:07.000000000 +0200
++++ b/taglib-extras/rmff/rmff.cpp	2024-03-18 19:25:59.039184503 +0100
+@@ -98,12 +98,12 @@
+    return !m_err && m_id3v1tag ? m_id3v1tag->tag()->genre() : "";
+ }
+ 
+-TagLib::uint   RealMedia::RealMediaFF::year() const
++unsigned int   RealMedia::RealMediaFF::year() const
+ {
+    return !m_err && m_id3v1tag ? m_id3v1tag->tag()->year() : 0;
+ }
+ 
+-TagLib::uint   RealMedia::RealMediaFF::track() const
++unsigned int   RealMedia::RealMediaFF::track() const
+ {
+    return !m_err && m_id3v1tag ? m_id3v1tag->tag()->track() : 0;
+ }
+diff -U 3 -r a/taglib-extras/rmff/rmff.h b/taglib-extras/rmff/rmff.h
+--- a/taglib-extras/rmff/rmff.h	2009-09-17 17:38:07.000000000 +0200
++++ b/taglib-extras/rmff/rmff.h	2024-03-18 19:26:08.022265920 +0100
+@@ -290,8 +290,8 @@
+          TagLib::String   album () const;
+          TagLib::String   comment () const;
+          TagLib::String   genre () const;
+-         TagLib::uint     year () const;
+-         TagLib::uint     track () const;
++         unsigned int     year () const;
++         unsigned int     track () const;
+          // TODO write support
+          //void     setTitle (const String &s);
+          //void     setArtist (const String &s);

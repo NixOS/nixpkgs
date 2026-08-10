@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchpatch2,
   fetchurl,
   cmake,
   pkg-config,
@@ -25,10 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    (fetchpatch2 {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/cmake_min_version.patch?h=libgaminggear&id=bfe7db62db76dbcefa8ba47640a35c80183f91d3";
-      hash = "sha256-loznfqxlucYlDUSYotMdUBmivKu+DD+OYhRIWpcrSgE=";
-    })
+    # Vendored from https://aur.archlinux.org/cgit/aur.git/plain/cmake_min_version.patch?h=libgaminggear&id=bfe7db62db76dbcefa8ba47640a35c80183f91d3
+    ./cmake_min_version.patch
   ];
 
   outputs = [

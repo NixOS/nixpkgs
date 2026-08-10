@@ -1,0 +1,102 @@
+--- a/doc/fbterm.1.in	2010-10-18 11:20:11.000000000 +0300
++++ b/doc/fbterm.1.in	2021-11-27 23:11:43.270223092 +0300
+@@ -176,6 +176,9 @@
+
+ A new terminfo database entry named "fbterm" was added to use these private sequences, all program based on terminfo should work with it.
+ By default, FbTerm sets environment variable "TERM" to value "linux", user need run "TERM=fbterm /path/to/program" to enable 256 color mode.
++
++The palette colors may be changed in the configuration using options "\fIcolor-num\fR=RRGGBB", where "num" is a color number from 0 to 255.
++
+ .SH "INPUT METHOD"
+ Instead of adding input method directly in FbTerm, a client-server based input method framework is designed to do
+ this work. FbTerm acts as a client, standalone IM program as a server, and they run in separated processes.
+--- a/src/fbshell.cpp	2010-10-18 11:20:11.000000000 +0300
++++ b/src/fbshell.cpp	2021-11-27 23:48:54.286721768 +0300
+@@ -39,7 +39,7 @@
+ #define screen (Screen::instance())
+ #define manager (FbShellManager::instance())
+
+-static const Color defaultPalette[NR_COLORS] = {
++static Color defaultPalette[NR_COLORS] = {
+ 	{0x00, 0x00, 0x00}, /* 0 */
+ 	{0xaa, 0x00, 0x00}, /* 1 */
+ 	{0x00, 0xaa, 0x00}, /* 2 */
+@@ -322,11 +322,11 @@
+ 	if (foreground) {
+ 		color = 7;
+ 		Config::instance()->getOption("color-foreground", color);
+-		if (color > 7) color = 7;
++		if (color >= NR_COLORS) color = 7;
+ 	} else {
+ 		color = 0;
+ 		Config::instance()->getOption("color-background", color);
+-		if (color > 7) color = 0;
++		if (color >= NR_COLORS) color = 0;
+ 	}
+
+ 	return color;
+@@ -552,6 +552,8 @@
+
+ void FbShell::switchVt(bool enter, FbShell *peer)
+ {
++	configColors();
++
+ 	if (tty0_fd == -1) tty0_fd = open("/dev/tty0", O_RDWR);
+ 	if (tty0_fd != -1) {
+ 		seteuid(0);
+@@ -771,3 +773,34 @@
+
+ 	return false;
+ }
++
++void FbShell::configColors(){
++	s8 varColor[32], color[7], rgb[3];
++	u32 i,j,k,x;
++	for(k=0;k<NR_COLORS;k++){
++		sprintf(varColor,"color-%d",k);
++		Config::instance()->getOption(varColor, color, sizeof(color));
++		for(i=0;i<3;i++){
++			rgb[i]=0;
++			for(j=0;j<2;j++){
++				x=i*2+j;
++				if(('0' <= color[x]) && (color[x] <= '9'))
++					rgb[i]|=(color[x]-48);
++				else if(('A' <= color[x]) && (color[x] <= 'F'))
++					rgb[i]|=(color[x]-55);
++				else if(('a' <= color[x]) && (color[x] <= 'f'))
++					rgb[i]|=(color[x]-87);
++				else
++					goto NoTouch;
++				if(!j)
++					rgb[i]<<=4;
++			}
++			if(i==2){
++				defaultPalette[k].red=rgb[0];
++				defaultPalette[k].green=rgb[1];
++				defaultPalette[k].blue=rgb[2];
++			}
++		}
++NoTouch:;
++	}
++}
+--- a/src/fbshell.h	2010-10-18 11:20:11.000000000 +0300
++++ b/src/fbshell.h	2021-11-27 23:48:54.286721768 +0300
+@@ -58,6 +58,7 @@
+ 	void changeMode(ModeType type, u16 val);
+ 	void reportCursor();
+ 	void reportMode();
++	void configColors();
+
+ 	struct Cursor {
+ 		Cursor() {
+--- a/src/screen_render.cpp
++++ b/src/screen_render.cpp
+@@ -78,7 +78,7 @@
+
+ 		u32 color = 0;
+ 		Config::instance()->getOption("color-background", color);
+-		if (color > 7) color = 0;
++		if (color >= NR_COLORS) color = 0;
+		bgcolor = color;
+
+		u32 size = mBytesPerLine * ((mRotateType == Rotate0 || mRotateType == Rotate180) ? mHeight : mWidth);
