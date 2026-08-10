@@ -608,7 +608,7 @@ rec {
     description = "fileset";
     descriptionClass = "noun";
     check = isFileset;
-    merge = loc: defs: unions (map (x: x.value) defs);
+    merge = loc: defs: unions (getValues defs);
     emptyValue.value = empty;
   };
 
