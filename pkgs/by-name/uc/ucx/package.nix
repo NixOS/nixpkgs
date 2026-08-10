@@ -54,6 +54,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Td6L5wXDadIbHfk251bj6k9J3kIjqCYVx5lDso/u76M=";
   };
 
+  # UCX uses the `#pragma omp master` declaration which is deprecated since
+  # OpenMP 5.1. Since UCX builds with -Werror by default, this causes build
+  # failures in GCC 16 which introduced the `deprecated-openmp` warning.
+  # Accordingly, we replace it with the new `#pragma omp masked` version in
+  # compilers which support OpenMP 5.1.
+  # https://github.com/openucx/ucx/pull/11697
+  patches = [ ./deprecated-openmp-pragma.patch ];
+
   postPatch = ''
     patchShebangs config/nvcc_wrap.sh
   '';
