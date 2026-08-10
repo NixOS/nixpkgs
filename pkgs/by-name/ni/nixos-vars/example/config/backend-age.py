@@ -31,8 +31,7 @@ delete_parser.add_argument("generator")
 delete_parser.add_argument("filename")
 
 fixup_parser = subparsers.add_parser("fixup")
-fixup_parser.add_argument("generator")
-fixup_parser.add_argument("filename")
+fixup_parser.add_argument("filelist")
 
 deploy_local_parser = subparsers.add_parser("deploy-local")
 deploy_local_parser.add_argument("system_root", type=Path)
@@ -44,28 +43,28 @@ args = vars(parser.parse_args())
 with open(args["config"]) as f:
     config = json.loads(f.read())
 
-hostDirectory = Path(config["hostDirectory"])
-targetDirectory = Path(config["targetDirectory"])
+host_directory = Path(config["hostDirectory"])
+target_directory = Path(config["targetDirectory"])
 
 
-def hostSecretPath(generator, filename):
-    return hostDirectory / "generators" / generator / "files" / filename
+def host_secret_path(generator, filename):
+    return host_directory / "generators" / generator / "files" / filename
 
 
-def targetSecretPath(generator, filename):
-    return targetDirectory / generator / filename
+def target_secret_path(generator, filename):
+    return target_directory / generator / filename
 
 
-def listHostSecrets():
+def list_host_secrets():
     out = []
-    if hostDirectory.exists():
-        for generator in hostDirectory.iterdir():
+    if host_directory.exists():
+        for generator in host_directory.iterdir():
             for file in (generator / "files").iterdir():
                 out.append((generator.name, file.name))
     return out
 
 
-def getSecret(generator, file, outPath):
+def get_secret(generator, file, out_path):
     identity = config["generators"][generator]["identity"]["host"]
     command = [
         "age",
@@ -73,80 +72,79 @@ def getSecret(generator, file, outPath):
         "--identity",
         identity,
         "--output",
-        outPath,
-        hostSecretPath(generator, file),
+        out_path,
+        host_secret_path(generator, file),
     ]
 
     subprocess.run(command, check=True)
 
 
-def setSecret(generator, filename, inPath):
-    outPath = hostSecretPath(generator, filename)
-    outPath.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
+def set_secret(generator, filename, in_path):
+    out_path = host_secret_path(generator, filename)
+    out_path.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
 
-    command = ["age", "--encrypt", "--output", outPath]
-    for publicKey in config["generators"][generator]["publicKeys"]:
-        command += ["--recipient", publicKey]
-    command += [inPath]
+    command = ["age", "--encrypt", "--output", out_path]
+    for pub_key in config["generators"][generator]["publicKeys"]:
+        command += ["--recipient", pub_key]
+    command += [in_path]
 
     subprocess.run(command, check=True)
 
 
-if args["command"] == "get":
-    generator = args["generator"]
-    getSecret(generator, args["filename"], os.environ["out"])
-elif args["command"] == "set":
-    setSecret(args["generator"], args["filename"], os.environ["in"])
-elif args["command"] == "exists":
-    if not hostSecretPath(args["generator"], args["filename"]).exists():
-        sys.exit(42)
-elif args["command"] == "list":
-    for generator, filename in listHostSecrets():
-        print(f"{generator} {filename}")
-elif args["command"] == "delete":
-    hostSecretPath(args["generator"], args["filename"]).unlink(missing_ok=True)
-elif args["command"] == "fixup":
-    with tempfile.NamedTemporaryFile() as fp:
-        fp = Path(fp.name)
-        generator = args["generator"]
-        filename = args["filename"]
-        getSecret(generator, filename, fp)
-        setSecret(generator, filename, fp)
-elif args["command"] == "deploy-local":
-    systemRoot = args["system_root"]
-    if not systemRoot.exists():
-        raise f"Directory '{systemRoot}' does not exist"
-    for line in sys.stdin:
+def parse_file_list(lines):
+    pairs = []
+    for line in lines:
         if not line:
             continue
 
         parts = line.strip().split()
         if len(parts) != 2:
-            raise f"Malformed input for deployLocal command: {line}"
+            raise Exception(f"Malformed file list line: {line}")
 
         [generator, filename] = parts
-        inPath = hostSecretPath(generator, filename)
-        if not inPath.exists():
-            raise f"Missing secret file '{generator}/{filename}'"
+        pairs.append((generator, filename))
 
-        outPath = targetSecretPath(generator, filename)
+    return pairs
+
+
+if args["command"] == "get":
+    generator = args["generator"]
+    get_secret(generator, args["filename"], os.environ["out"])
+elif args["command"] == "set":
+    set_secret(args["generator"], args["filename"], os.environ["in"])
+elif args["command"] == "exists":
+    if not host_secret_path(args["generator"], args["filename"]).exists():
+        sys.exit(42)
+elif args["command"] == "list":
+    for generator, filename in list_host_secrets():
+        print(f"{generator} {filename}")
+elif args["command"] == "delete":
+    host_secret_path(args["generator"], args["filename"]).unlink(missing_ok=True)
+elif args["command"] == "fixup":
+    with tempfile.NamedTemporaryFile() as fp:
+        fp = Path(fp.name)
+        for generator, filename in parse_file_list(args["filelist"].split("\n")):
+            get_secret(generator, filename, fp)
+            set_secret(generator, filename, fp)
+elif args["command"] == "deploy-local":
+    sys_root = args["system_root"]
+    if not sys_root.exists():
+        raise Exception(f"Directory '{sys_root}' does not exist")
+    for generator, filename in parse_file_list(sys.stdin):
+        in_path = host_secret_path(generator, filename)
+        if not in_path.exists():
+            raise Exception(f"Missing secret file '{generator}/{filename}'")
+
+        out_path = target_secret_path(generator, filename)
         # TODO: is there a better way to do this?
-        outPath = Path(f"{systemRoot}{outPath}")
-        outPath.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
-        inPath.copy(outPath)
+        out_path = Path(f"{sys_root}{out_path}")
+        out_path.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
+        in_path.copy(out_path)
 elif args["command"] == "deploy":
     with tarfile.open("sample.tar.gz", "w|", fileobj=sys.stdout.buffer) as tar:
-        for line in sys.stdin:
-            if not line:
-                continue
+        for generator, filename in parse_file_list(sys.stdin):
+            in_path = host_secret_path(generator, filename)
+            if not in_path.exists():
+                raise Exception(f"Missing secret file '{generator}/{filename}'")
 
-            parts = line.strip().split()
-            if len(parts) != 2:
-                raise f"Malformed input for deployLocal command: {line}"
-
-            [generator, filename] = parts
-            inPath = hostSecretPath(generator, filename)
-            if not inPath.exists():
-                raise f"Missing secret file '{generator}/{filename}'"
-
-            tar.add(inPath, arcname=f"{generator}/{filename}")
+            tar.add(in_path, arcname=f"{generator}/{filename}")
