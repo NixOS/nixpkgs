@@ -29,7 +29,6 @@ python3Packages.buildPythonApplication {
       python3
       bubblewrap
       ruff
-      age # Here to ease playing with the age backend
     ];
   };
 
