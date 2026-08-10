@@ -498,6 +498,8 @@ let
 
         dream-pure = callPackage ../development/ocaml-modules/dream/pure.nix { };
 
+        drom = callPackage ../development/ocaml-modules/drom { };
+
         dscheck = callPackage ../development/ocaml-modules/dscheck { };
 
         dssi = callPackage ../development/ocaml-modules/dssi { };
