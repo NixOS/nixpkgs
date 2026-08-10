@@ -4,6 +4,7 @@
   callPackage,
   makeSetupHook,
   runCommand,
+  tcl,
   tzdata,
   zip,
   zlib,
@@ -37,18 +38,26 @@ let
     ''
     + extraPatch;
 
-    nativeBuildInputs = lib.optionals (lib.versionAtLeast version "9.0") [
-      # Only used to detect the presence of zlib. Could be replaced with a stub.
-      zip
-    ];
+    nativeBuildInputs =
+      lib.optionals (lib.versionAtLeast version "9.0") [
+        # Only used to detect the presence of zlib. Could be replaced with a stub.
+        zip
+      ]
+      ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) tcl;
 
     buildInputs = lib.optionals (lib.versionAtLeast version "9.0") [
       zlib
     ];
 
-    preConfigure = ''
-      cd unix
-    '';
+    preConfigure =
+      if stdenv.hostPlatform.isWindows then
+        ''
+          cd win
+        ''
+      else
+        ''
+          cd unix
+        '';
 
     # Note: pre-9.0 flags are temporarily interspersed to avoid a mass rebuild.
     configureFlags =
@@ -111,15 +120,19 @@ let
       let
         dllExtension = stdenv.hostPlatform.extensions.sharedLibrary;
         staticExtension = stdenv.hostPlatform.extensions.staticLibrary;
+        exeExtension = stdenv.hostPlatform.extensions.executable;
+        # Windows tags files as e.g. tclsh86.exe instead of tclsh8.6
+        binRelease =
+          if stdenv.hostPlatform.isWindows then (builtins.replaceStrings [ "." ] [ "" ] release) else release;
       in
       ''
         make install-private-headers
-        ln -s $out/bin/tclsh${release} $out/bin/tclsh
-        if [[ -e $out/lib/libtcl${release}${staticExtension} ]]; then
-          ln -s $out/lib/libtcl${release}${staticExtension} $out/lib/libtcl${staticExtension}
+        ln -s $out/bin/tclsh${binRelease}${exeExtension} $out/bin/tclsh${exeExtension}
+        if [[ -e $out/lib/libtcl${binRelease}${staticExtension} ]]; then
+          ln -s $out/lib/libtcl${binRelease}${staticExtension} $out/lib/libtcl${staticExtension}
         fi
-        ${lib.optionalString (!stdenv.hostPlatform.isStatic) ''
-          ln -s $out/lib/libtcl${release}${dllExtension} $out/lib/libtcl${dllExtension}
+        ${lib.optionalString (!stdenv.hostPlatform.isStatic && !stdenv.hostPlatform.isWindows) ''
+          ln -s $out/lib/libtcl${binRelease}${dllExtension} $out/lib/libtcl${dllExtension}
         ''}
       '';
 
