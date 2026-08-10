@@ -24,7 +24,6 @@
 }:
 
 let
-  pname = "sparrow";
   version = "2.5.3";
 
   openjdk = zulu25.override { enableJavaFX = true; };
@@ -51,7 +50,7 @@ let
     ."${stdenvNoCC.hostPlatform.system}";
 
   src = fetchurl {
-    url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/sparrowwallet-${version}-${sparrowArch}.tar.gz";
+    url = "https://github.com/sparrowwallet/sparrow/releases/download/${version}/sparrowwallet-${version}-${sparrowArch}.tar.gz";
     hash =
       {
         x86_64-linux = "sha256-xRtMh8nYHzjMyb8zSPQZNIbcfQIuKk4izfPW/PLK2zg=";
@@ -85,12 +84,12 @@ let
   };
 
   manifest = fetchurl {
-    url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-manifest.txt";
+    url = "https://github.com/sparrowwallet/sparrow/releases/download/${version}/sparrow-${version}-manifest.txt";
     hash = "sha256-oVR5lJOWHTyEe+fBbxa+ZPh9GERHlZbZMPmaGImmdhg=";
   };
 
   manifestSignature = fetchurl {
-    url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-manifest.txt.asc";
+    url = "https://github.com/sparrowwallet/sparrow/releases/download/${version}/sparrow-${version}-manifest.txt.asc";
     hash = "sha256-9ohRv/3rcOr78Mr0Bfny9zn+SqpLFaf0hn9G2LMAc8Q=";
   };
 
@@ -141,7 +140,7 @@ let
 
     XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS \
     LD_LIBRARY_PATH=@nativeLibs@''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH} \
-    ${openjdk}/bin/java ''${params[@]} $@
+    ${openjdk}/bin/java "''${params[@]}" "$@"
   '';
 
   torWrapper = writeScript "tor-wrapper" ''
@@ -199,41 +198,23 @@ let
 
       # Delete unneeded native libs.
 
-      rm -fR com.sparrowwallet.merged.module/com/sun/jna/freebsd-x86-64
-      rm -fR com.sparrowwallet.merged.module/com/sun/jna/dragonflybsd-x86-64
-      rm -fR com.sparrowwallet.merged.module/com/sun/jna/freebsd-aarch64
-      rm -fR com.sparrowwallet.merged.module/com/sun/jna/freebsd-x86
-      rm -fR com.sparrowwallet.merged.module/com/sun/jna/linux-arm
-      rm -fR com.sparrowwallet.merged.module/com/sun/jna/linux-armel
-      rm -fR com.sparrowwallet.merged.module/com/sun/jna/linux-mips64el
-      rm -fR com.sparrowwallet.merged.module/com/sun/jna/linux-ppc
-      rm -fR com.sparrowwallet.merged.module/com/sun/jna/linux-ppc64le
-      rm -fR com.sparrowwallet.merged.module/com/sun/jna/linux-s390x
-      rm -fR com.sparrowwallet.merged.module/com/sun/jna/linux-x86
-      rm -fR com.sparrowwallet.merged.module/com/sun/jna/openbsd-x86-64
-      rm -fR com.sparrowwallet.merged.module/com/sun/jna/openbsd-x86
-      rm -fR com.sparrowwallet.merged.module/com/sun/jna/sunos-sparc
-      rm -fR com.sparrowwallet.merged.module/com/sun/jna/sunos-sparcv9
-      rm -fR com.sparrowwallet.merged.module/com/sun/jna/sunos-x86-64
-      rm -fR com.sparrowwallet.merged.module/com/sun/jna/sunos-x86
-      rm -fR com.github.sarxos.webcam.capture/com/github/sarxos/webcam/ds/buildin/lib/linux_armel
-      rm -fR com.github.sarxos.webcam.capture/com/github/sarxos/webcam/ds/buildin/lib/linux_armhf
-      rm -fR com.github.sarxos.webcam.capture/com/github/sarxos/webcam/ds/buildin/lib/linux_x86
-      rm -fR openpnp.capture.java/darwin-aarch64
-      rm -fR openpnp.capture.java/darwin-x86-64
-      rm -fR openpnp.capture.java/win32-x86-64
-      rm -fR com.nativelibs4java.bridj/org/bridj/lib/linux_arm32_armel
-      rm -fR com.nativelibs4java.bridj/org/bridj/lib/linux_armel
-      rm -fR com.nativelibs4java.bridj/org/bridj/lib/linux_armhf
-      rm -fR com.nativelibs4java.bridj/org/bridj/lib/linux_x86
-      rm -fR com.nativelibs4java.bridj/org/bridj/lib/sunos_x64
-      rm -fR com.nativelibs4java.bridj/org/bridj/lib/sunos_x86
-      rm -fR com.sparrowwallet.merged.module/linux-arm
-      rm -fR com.sparrowwallet.merged.module/linux-x86
-      rm -fR com.fazecast.jSerialComm/FreeBSD
-      rm -fR com.fazecast.jSerialComm/OpenBSD
-      rm -fR com.fazecast.jSerialComm/Android
-      rm -fR com.fazecast.jSerialComm/Solaris
+      rm -R com.sparrowwallet.merged.module/com/sun/jna/win32
+      rm -R com.fazecast.jSerialComm/FreeBSD
+      rm -R com.fazecast.jSerialComm/OpenBSD
+      rm -R com.fazecast.jSerialComm/Android
+      rm -R com.fazecast.jSerialComm/Solaris
+      rm -R com.fazecast.jSerialComm/OSX
+      rm -R com.fazecast.jSerialComm/Windows
+      rm -R com.fazecast.jSerialComm/Linux/armv5
+      rm -R com.fazecast.jSerialComm/Linux/armv6hf
+      rm -R com.fazecast.jSerialComm/Linux/armv7hf
+      rm -R com.fazecast.jSerialComm/Linux/armv8_32
+      rm -R com.fazecast.jSerialComm/Linux/ppc64le
+      rm -R com.fazecast.jSerialComm/Linux/x86
+
+      echo "--- Remaining native libraries in modules ---"
+      find . -name "*.so" -o -name "*.dll" -o -name "*.dylib" -o -name "*.jnilib" -o -name "*.a"
+      echo "--------------------------------------------"
 
       ls | xargs -d " " -- echo > ../manifest.txt
       find . | grep "\.so$" | xargs -- chmod ugo+x
@@ -337,10 +318,11 @@ stdenvNoCC.mkDerivation rec {
 
     mkdir -p $out/bin $out
     ln -s ${sparrow-modules}/modules $out/lib
-    install -D -m 777 ${launcher} $out/bin/sparrow-desktop
+    install -D -m 555 ${launcher} $out/bin/sparrow-desktop
     substituteAllInPlace $out/bin/sparrow-desktop
-    substituteInPlace $out/bin/sparrow-desktop --subst-var-by jdkModules ${jdk-modules}
-    substituteInPlace $out/bin/sparrow-desktop --subst-var-by nativeLibs ${sparrow-modules}/native-libs
+    substituteInPlace $out/bin/sparrow-desktop \
+      --subst-var-by jdkModules ${jdk-modules} \
+      --subst-var-by nativeLibs ${sparrow-modules}/native-libs
 
     mkdir -p $out/share/icons
     ln -s ${sparrow-icons}/hicolor $out/share/icons
