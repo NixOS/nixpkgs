@@ -12,18 +12,18 @@
 }:
 let
   pname = "beeper";
-  version = "4.3.0";
+  version = "4.3.20";
 
   inherit (stdenv.hostPlatform) system;
 
   sources = {
     x86_64-linux = fetchurl {
       url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}-x86_64.AppImage";
-      hash = "sha256-/DJmQMQGzZFnONjQZ9fr9NDtGv9Kg8jF8aBzAOUyCUg=";
+      hash = "sha256-9xlsLhJ2Z0ICaAmdYSraNK11+YPbvgiXJDD2e+lJaQE=";
     };
     aarch64-linux = fetchurl {
       url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}-arm64.AppImage";
-      hash = "sha256-zZIbcE78XcXremyWjs3jsiBRTwP24y45CfZHJym8MhQ=";
+      hash = "sha256-ukAZMw7XUQGpUY/QcV/JVZSN3PsTKFJskp7h1n9he6o=";
     };
   };
 
