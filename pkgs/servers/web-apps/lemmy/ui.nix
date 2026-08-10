@@ -90,7 +90,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       happysalada
       billewanick
       georgyo
+      lucasew
     ];
+    teams = [ lib.teams.ngi ];
     inherit (nodejs.meta) platforms;
   };
 })
