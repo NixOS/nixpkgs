@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
+  testers,
   replaceVars,
   meson,
   ninja,
@@ -461,6 +461,11 @@ stdenv.mkDerivation (finalAttrs: {
       lgplOnly = gst-plugins-bad.override {
         enableGplPlugins = false;
       };
+
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+        versionCheck = true;
+      };
     };
 
     updateScript = directoryListingUpdater { odd-unstable = true; };
@@ -476,6 +481,33 @@ stdenv.mkDerivation (finalAttrs: {
       a real live maintainer, or some actual wide use.
     '';
     license = if enableGplPlugins then lib.licenses.gpl2Plus else lib.licenses.lgpl2Plus;
+    pkgConfigModules = lib.map (m: "gstreamer-${m}-1.0") (
+      [
+        "analytics"
+        "bad-audio"
+        "codecparsers"
+        "insertbin"
+        "mpegts"
+        "mse"
+        "photography"
+        "play"
+        "player"
+        "plugins-bad"
+        "sctp"
+        "transcoder"
+        "webrtc"
+        "webrtc-nice"
+      ]
+      ++ lib.optional (gst-plugins-base.waylandEnabled) "wayland"
+      ++ lib.optional (gst-plugins-base.waylandEnabled && stdenv.hostPlatform.isLinux) "va"
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        "cuda"
+        "hip"
+        "hip-gl"
+      ]
+      ++ lib.optional vulkanSupport "vulkan"
+      ++ lib.optional (vulkanSupport && gst-plugins-base.waylandEnabled) "vulkan-wayland"
+    );
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ tmarkus ];
   };
