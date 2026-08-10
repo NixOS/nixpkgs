@@ -4,8 +4,7 @@
   lib,
   pkg-config,
   alsa-lib,
-  # FIXME: unpin when upstream supports ffmpeg 9
-  ffmpeg_8,
+  ffmpeg,
   libjack2,
   libogg,
   libpulseaudio,
@@ -26,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     alsa-lib
-    ffmpeg_8
+    ffmpeg
     libjack2
     libogg
     libpulseaudio
