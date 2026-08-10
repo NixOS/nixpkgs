@@ -84,7 +84,9 @@ rustPlatform.buildRustPackage rec {
       happysalada
       billewanick
       georgyo
+      lucasew
     ];
+    teams = [ lib.teams.ngi ];
     mainProgram = "lemmy_server";
   };
 }

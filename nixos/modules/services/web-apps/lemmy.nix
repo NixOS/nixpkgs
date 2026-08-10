@@ -11,7 +11,11 @@ let
   settingsFormat = pkgs.formats.json { };
 in
 {
-  meta.maintainers = with maintainers; [ happysalada ];
+  meta.maintainers = with maintainers; [
+    happysalada
+    lucasew
+  ];
+  meta.teams = [ teams.ngi ];
   meta.doc = ./lemmy.md;
 
   imports = [
