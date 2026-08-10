@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
       lib.maintainers.Deizuu
     ];
     description = "Neural Amp Modeler LV2 plugin implementation";
-    homepage = finalAttrs.src.meta.homepage;
+    homepage = "https://github.com/mikeoliphant/neural-amp-modeler-lv2";
     license = lib.licenses.gpl3Only;
   };
 })
