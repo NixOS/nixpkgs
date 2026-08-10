@@ -1,0 +1,185 @@
+mono: metadata: add <runpath> element to .config files.
+
+This new element is of the form:
+
+<runpath path="/path1/to/libs:/path2/to/libs:..."/>
+
+(the : will actually be whatever G_SEARCHPATH_SEPARATOR_S is, so likely ; on
+windows and : elsewhere).
+
+* mono/metadata/metadata-internals.h (struct _MonoImage): new 'runpath' field.
+* mono/metadata/mono-config.c (runpath_init, runpath_start, runpath_handler):
+  new functions and parser using them to populate runpath field from <runpath>
+  element.
+  (mono_config_init): register runpath_handler.
+* mono/metadata/assembly.c (mono_assembly_load_full_gac_base_default): new
+  'requesting' parameter, use it to search the requesting assembly's runpath
+  first.
+  (mono_assembly_request_byname_nosearch): use it.
+
+
+diff --git a/mono/metadata/assembly.c b/mono/metadata/assembly.c
+index f9feaacf2c1..8c71ad0eb95 100644
+--- a/mono/metadata/assembly.c
++++ b/mono/metadata/assembly.c
+@@ -376,7 +376,7 @@ mono_assembly_invoke_search_hook_internal (MonoAssemblyLoadContext *alc, MonoAss
+ static MonoAssembly*
+ mono_assembly_request_byname_nosearch (MonoAssemblyName *aname, const MonoAssemblyByNameRequest *req, MonoImageOpenStatus *status);
+ static MonoAssembly*
+-mono_assembly_load_full_gac_base_default (MonoAssemblyName *aname, const char *basedir, MonoAssemblyLoadContext *alc, MonoAssemblyContextKind asmctx, MonoImageOpenStatus *status);
++mono_assembly_load_full_gac_base_default (MonoAssemblyName *aname, MonoAssembly *requesting, const char *basedir, MonoAssemblyLoadContext *alc, MonoAssemblyContextKind asmctx, MonoImageOpenStatus *status);
+ static MonoAssembly*
+ chain_redirections_loadfrom (MonoAssemblyLoadContext *alc, MonoImage *image, MonoImageOpenStatus *out_status);
+ static MonoAssembly*
+@@ -4655,7 +4655,7 @@ mono_assembly_request_byname_nosearch (MonoAssemblyName *aname,
+ 	}
+ 
+ #ifndef ENABLE_NETCORE
+-	result = mono_assembly_load_full_gac_base_default (aname, req->basedir, req->request.alc, req->request.asmctx, status);
++	result = mono_assembly_load_full_gac_base_default (aname, req->requesting_assembly, req->basedir, req->request.alc, req->request.asmctx, status);
+ #endif
+ 	return result;
+ }
+@@ -4667,6 +4667,7 @@ mono_assembly_request_byname_nosearch (MonoAssemblyName *aname,
+  */
+ MonoAssembly*
+ mono_assembly_load_full_gac_base_default (MonoAssemblyName *aname,
++                                          MonoAssembly *requesting,
+ 					  const char *basedir,
+ 					  MonoAssemblyLoadContext *alc,
+ 					  MonoAssemblyContextKind asmctx,
+@@ -4718,6 +4719,23 @@ mono_assembly_load_full_gac_base_default (MonoAssemblyName *aname,
+ 			filename = g_strconcat (aname->name, ext, (const char*)NULL);
+ 		}
+ 
++                if (requesting
++                    && requesting->image
++                    && requesting->image->runpath) {
++                    char **runpath = requesting->image->runpath;
++                    int j;
++                    for (j = 0; runpath[j]; j++) {
++                        fullpath = g_build_filename (runpath[j], filename, NULL);
++                        result = mono_assembly_request_open (fullpath, &req, status);
++                        g_free (fullpath);
++                        if (result) {
++                            result->in_gac = FALSE;
++                            g_free (filename);
++                            return result;
++                        }
++                    }
++                }
++
+ #ifndef DISABLE_GAC
+ 		const gboolean refonly = asmctx == MONO_ASMCTX_REFONLY;
+ 
+diff --git a/mono/metadata/image.c b/mono/metadata/image.c
+index e0b86dd3d09..12a8094e4e0 100644
+--- a/mono/metadata/image.c
++++ b/mono/metadata/image.c
+@@ -2363,6 +2363,9 @@ mono_image_close_except_pools (MonoImage *image)
+ 
+ 	mono_metadata_clean_for_image (image);
+ 
++        if (image->runpath)
++            g_strfreev (image->runpath);
++
+ 	/*
+ 	 * The caches inside a MonoImage might refer to metadata which is stored in referenced 
+ 	 * assemblies, so we can't release these references in mono_assembly_close () since the
+diff --git a/mono/metadata/metadata-internals.h b/mono/metadata/metadata-internals.h
+index 9388d69b0fd..93f4b880c61 100644
+--- a/mono/metadata/metadata-internals.h
++++ b/mono/metadata/metadata-internals.h
+@@ -423,6 +423,12 @@ struct _MonoImage {
+ 	/**/
+ 	MonoTableInfo        tables [MONO_TABLE_NUM];
+ 
++    /*
++      Search path to be tried first when looking for assemblies referenced by
++      this image, or NULL. Is a NULL-terminated vector.
++     */
++        char               **runpath;
++
+ 	/*
+ 	 * references is initialized only by using the mono_assembly_open
+ 	 * function, and not by using the lowlevel mono_image_open.
+diff --git a/mono/metadata/mono-config.c b/mono/metadata/mono-config.c
+index d973de53c8c..8888c7b4fac 100644
+--- a/mono/metadata/mono-config.c
++++ b/mono/metadata/mono-config.c
+@@ -21,6 +21,7 @@
+ #include "mono/metadata/metadata-internals.h"
+ #include "mono/metadata/object-internals.h"
+ #include "mono/utils/mono-logger-internals.h"
++#include "mono/utils/mono-path.h"
+ 
+ #if defined(TARGET_PS3)
+ #define CONFIG_OS "CellOS"
+@@ -464,6 +465,59 @@ aot_cache_handler = {
+ 	NULL, /* finish */
+ };
+ 
++static void*
++runpath_init (MonoImage *assembly)
++{
++    return assembly;
++}
++
++static void
++runpath_start (gpointer user_data,
++               const gchar         *element_name,
++               const gchar        **attribute_names,
++               const gchar        **attribute_values)
++{
++    MonoImage *assembly = (MonoImage *) user_data;
++    int i;
++
++    if (strcmp (element_name, "runpath") != 0)
++        return;
++
++    for (i = 0; attribute_names[i]; i++)
++        {
++            if(!strcmp (attribute_names [i], "path"))
++                {
++                    char **splitted, **dest;
++
++                    splitted = g_strsplit (attribute_values[i],
++                                           G_SEARCHPATH_SEPARATOR_S,
++                                           1000);
++                    if (assembly->runpath)
++                        g_strfreev (assembly->runpath);
++                    assembly->runpath = dest = splitted;
++                    while (*splitted) {
++                        char *tmp = *splitted;
++                        if (*tmp)
++                            *dest++ = mono_path_canonicalize (tmp);
++                        g_free (tmp);
++                        splitted++;
++                    }
++                    *dest = *splitted;
++                    break;
++                }
++        }
++}
++
++static const MonoParseHandler
++runpath_handler = {
++    "runpath",
++    runpath_init,
++    runpath_start,
++    NULL, /* text */
++    NULL, /* end */
++    NULL, /* finish */
++};
++
+ static int inited = 0;
+ 
+ static void
+@@ -476,6 +530,7 @@ mono_config_init (void)
+ #endif
+ 	g_hash_table_insert (config_handlers, (gpointer) legacyUEP_handler.element_name, (gpointer) &legacyUEP_handler);
+ 	g_hash_table_insert (config_handlers, (gpointer) aot_cache_handler.element_name, (gpointer) &aot_cache_handler);
++        g_hash_table_insert (config_handlers, (gpointer) runpath_handler.element_name, (gpointer) &runpath_handler);
+ }
+ 
+ /**

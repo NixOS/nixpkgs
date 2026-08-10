@@ -1,0 +1,4493 @@
+The result of cherry-picking every commit (except ones that seemed to not
+affect the compiler itself) from mono-5.10.0.179 to mono-6.12.0.206 that
+touched ./mcs/mcs.
+
+Mono seems to consistently, almost as a rule, depend on C# features before
+they implement them.  This is extremely awkward for building using previous
+versions, so hopefully this will allow us to jump straight to a high version.
+
+Includes the following commits, in order of most-recent to least-recent:
+
+b3911589b37
+6700dd220fe
+2a7dfb28e07
+eea6f11a3e6
+3fc047c6f3a
+ac6666f5b0b
+927b27bb9d8
+4ab24d4c059
+aa836b46a23
+ee7dccfb320
+23510f26915
+d9f26547d88
+9dc1c885a0f
+ef558ead89a
+2cb7909b13c
+0390ea2e78c
+b4f6659bdc0
+e92d6070eaf
+4c5b3fbd4f4
+e6507f2da8a
+656a4b1120c
+9bd2fa4cf33
+be2d1aeffe0
+454a76cfa4a
+60c1ee454d4
+53f1ef506ea
+d3487bfebb3
+92f6e5b1a81
+
+diff --git a/.gitignore b/.gitignore
+index c6ef19a849b..c37d4fce3f0 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -40,6 +40,7 @@ Ankh.NoLoad
+ *.gpState
+ .vscode/
+ *.exp
++.vs/
+ 
+ # Tooling
+ _ReSharper*/
+diff --git a/mcs/class/Commons.Xml.Relaxng/Makefile b/mcs/class/Commons.Xml.Relaxng/Makefile
+index 1febae4eb1e..f9b57fea265 100644
+--- a/mcs/class/Commons.Xml.Relaxng/Makefile
++++ b/mcs/class/Commons.Xml.Relaxng/Makefile
+@@ -22,7 +22,7 @@ EXTRA_DISTFILES = \
+ 	$(RESOURCE_FILES)
+ 
+ Commons.Xml.Relaxng.Rnc/RncParser.cs: Commons.Xml.Relaxng.Rnc/RncParser.jay $(topdir)/jay/skeleton.cs
+-	$(topdir)/jay/jay -ctv < $(topdir)/jay/skeleton.cs $(CURDIR)/Commons.Xml.Relaxng.Rnc/RncParser.jay > Commons.Xml.Relaxng.Rnc/RncParser.cs
++	$(topdir)/jay/jay -ctv -o Commons.Xml.Relaxng.Rnc/RncParser.cs $< < $(topdir)/jay/skeleton.cs
+ 
+ BUILT_SOURCES = Commons.Xml.Relaxng.Rnc/RncParser.cs
+ 
+diff --git a/mcs/class/Microsoft.Build/Makefile b/mcs/class/Microsoft.Build/Makefile
+index 2dcbefdf7f9..1a711069b0b 100644
+--- a/mcs/class/Microsoft.Build/Makefile
++++ b/mcs/class/Microsoft.Build/Makefile
+@@ -26,7 +26,7 @@ EXTRA_DISTFILES = \
+ EXPR_PARSER = Microsoft.Build.Internal/ExpressionParser
+ 
+ $(EXPR_PARSER).cs: $(EXPR_PARSER).jay $(topdir)/jay/skeleton.cs
+-	(cd Microsoft.Build.Internal; $(topdir)/../jay/jay -ctv < $(topdir)/../jay/skeleton.cs ExpressionParser.jay > ExpressionParser.cs)
++	(cd Microsoft.Build.Internal; $(topdir)/../jay/jay -ctv -o ExpressionParser.cs ExpressionParser.jay < $(topdir)/../jay/skeleton.cs )
+ 
+ BUILT_SOURCES = $(EXPR_PARSER).cs
+ 
+diff --git a/mcs/class/Mono.CSharp/Makefile b/mcs/class/Mono.CSharp/Makefile
+index 7b1986b78e5..3615532853d 100644
+--- a/mcs/class/Mono.CSharp/Makefile
++++ b/mcs/class/Mono.CSharp/Makefile
+@@ -24,7 +24,7 @@ LIB_MCS_FLAGS += $(REFERENCE_SOURCES_FLAGS)
+ BUILT_SOURCES = $(PROFILE)-parser.cs
+ 
+ $(PROFILE)-parser.cs: $(topdir)/mcs/cs-parser.jay $(topdir)/jay/skeleton.cs
+-	$(topdir)/jay/jay -c < $(topdir)/jay/skeleton.cs $< > $(PROFILE)-jay-tmp.out && mv $(PROFILE)-jay-tmp.out $@
++	$(topdir)/jay/jay -c -o $(PROFILE)-jay-tmp.out $< < $(topdir)/jay/skeleton.cs && mv $(PROFILE)-jay-tmp.out $@
+ 
+ include ../../build/library.make
+ 
+diff --git a/mcs/class/Mono.Xml.Ext/Makefile b/mcs/class/Mono.Xml.Ext/Makefile
+index dc49f816fee..16498215a38 100644
+--- a/mcs/class/Mono.Xml.Ext/Makefile
++++ b/mcs/class/Mono.Xml.Ext/Makefile
+@@ -29,13 +29,13 @@ Mono.Xml.XPath2/XQueryParser.jay: Mono.Xml.XPath2/ParserBase.jay $(SKELETON)
+ Mono.Xml.XPath2/XPath2Parser.cs: Mono.Xml.XPath2/XPath2Parser.jay
+ 	echo "#define XPATH2_PARSER" > $@
+ 	echo "#if NET_2_0" >> $@
+-	$(topdir)/jay/jay -ct < $(SKELETON) $(CURDIR)/$< >>$@
++	$(topdir)/jay/jay -ct $(CURDIR)/$< < $(SKELETON) >>$@
+ 	echo "#endif" >> $@
+ 
+ Mono.Xml.XPath2/XQueryParser.cs: Mono.Xml.XPath2/XQueryParser.jay $(SKELETON)
+ 	echo "#define XQUERY_PARSER" > $@
+ 	echo "#if NET_2_0" >> $@
+-	$(topdir)/jay/jay -ct < $(SKELETON) $(CURDIR)/$< >>$@
++	$(topdir)/jay/jay -ct $(CURDIR)/$< < $(SKELETON) >>$@
+ 	echo "#endif" >> $@
+ 
+ Mono.Xml.XPath2/XPath2Tokenizer.cs: Mono.Xml.XPath2/TokenizerBase.cs
+diff --git a/mcs/class/corlib/System/RuntimeArgumentHandle.cs b/mcs/class/corlib/System/RuntimeArgumentHandle.cs
+index 216c4ea3924..c10d3f174d1 100644
+--- a/mcs/class/corlib/System/RuntimeArgumentHandle.cs
++++ b/mcs/class/corlib/System/RuntimeArgumentHandle.cs
+@@ -31,13 +31,9 @@
+ // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ //
+ 
+-using System;
+-using System.Runtime.InteropServices;
+-
+ namespace System
+ {
+-	[ComVisible (true)]
+-	public struct RuntimeArgumentHandle
++	public ref struct RuntimeArgumentHandle
+ 	{
+ #pragma warning disable 649
+ 		internal IntPtr args;
+diff --git a/mcs/class/referencesource/mscorlib/system/typedreference.cs b/mcs/class/referencesource/mscorlib/system/typedreference.cs
+index 80bef5ab852..a30541f4399 100644
+--- a/mcs/class/referencesource/mscorlib/system/typedreference.cs
++++ b/mcs/class/referencesource/mscorlib/system/typedreference.cs
+@@ -19,7 +19,11 @@ namespace System {
+     [CLSCompliant(false)] 
+     [System.Runtime.InteropServices.ComVisible(true)]
+     [System.Runtime.Versioning.NonVersionable] // This only applies to field layout
+-    public struct TypedReference
++    public
++#if MONO
++    ref
++#endif
++    struct TypedReference
+     {
+ #if MONO
+ #pragma warning disable 169
+diff --git a/mcs/errors/cs0151-4.cs b/mcs/errors/cs0151-4.cs
+index 0e45b1a9049..c9e05589e4d 100644
+--- a/mcs/errors/cs0151-4.cs
++++ b/mcs/errors/cs0151-4.cs
+@@ -1,5 +1,6 @@
+ // CS0151: A switch expression of type `S1?' cannot be converted to an integral type, bool, char, string, enum or nullable type
+-// Line: 24
++// Line: 25
++// Compiler options: -langversion:5
+ 
+ using System;
+ 
+diff --git a/mcs/errors/cs0273-2.cs b/mcs/errors/cs0273-2.cs
+new file mode 100644
+index 00000000000..b0bdbef9e75
+--- /dev/null
++++ b/mcs/errors/cs0273-2.cs
+@@ -0,0 +1,9 @@
++// CS0273: The accessibility modifier of the `C.S2.set' accessor must be more restrictive than the modifier of the property or indexer `C.S2'
++// Line: 7
++// Compiler options: -langversion:7.2
++
++ class C
++ {
++	private string S2 { get; private protected set; }
++ }
++
+diff --git a/mcs/errors/cs0280.cs b/mcs/errors/cs0280.cs
+new file mode 100644
+index 00000000000..62be8e39585
+--- /dev/null
++++ b/mcs/errors/cs0280.cs
+@@ -0,0 +1,22 @@
++// CS0280: `C.Fixable.GetPinnableReference(int)' has the wrong signature to be used in extensible fixed statement
++// Line: 11
++// Compiler options: -unsafe -langversion:latest -warnaserror
++
++using System;
++
++unsafe class C
++{
++	public static void Main ()
++	{
++		fixed (int* p = new Fixable ()) {
++		}
++	}
++
++	struct Fixable
++	{
++		public ref int GetPinnableReference (int i = 1)
++		{
++			throw new NotImplementedException ();
++		}
++	}
++}
+\ No newline at end of file
+diff --git a/mcs/errors/cs0826-9.cs b/mcs/errors/cs0826-9.cs
+deleted file mode 100644
+index 4e098969b8c..00000000000
+--- a/mcs/errors/cs0826-9.cs
++++ /dev/null
+@@ -1,16 +0,0 @@
+-// CS0826: The type of an implicitly typed array cannot be inferred from the initializer. Try specifying array type explicitly
+-// Line: 8
+-
+-class C
+-{
+-	static void Main()
+-	{
+-		object o = 1;
+-		dynamic d = 1;
+-		
+-		var a = new[] {
+-			new { X = o },
+-			new { X = d }
+-		};
+-	}
+-}
+diff --git a/mcs/errors/cs1013-1.cs b/mcs/errors/cs1013-1.cs
+new file mode 100644
+index 00000000000..01827df4995
+--- /dev/null
++++ b/mcs/errors/cs1013-1.cs
+@@ -0,0 +1,8 @@
++// CS1013: Invalid number
++// Line : 6
++
++class X
++{
++    static int i = 0b;
++    static void Main () {}
++}
+\ No newline at end of file
+diff --git a/mcs/errors/cs1013-2.cs b/mcs/errors/cs1013-2.cs
+new file mode 100644
+index 00000000000..c868cb2a769
+--- /dev/null
++++ b/mcs/errors/cs1013-2.cs
+@@ -0,0 +1,7 @@
++// CS1013: Invalid number
++// Line : 6
++
++class X
++{
++    static int i = 0x0_;
++}
+\ No newline at end of file
+diff --git a/mcs/errors/cs1013-3.cs b/mcs/errors/cs1013-3.cs
+new file mode 100644
+index 00000000000..3145b1ba596
+--- /dev/null
++++ b/mcs/errors/cs1013-3.cs
+@@ -0,0 +1,7 @@
++// CS1013: Invalid number
++// Line : 6
++
++class X
++{
++    static int i = 1_;
++}
+\ No newline at end of file
+diff --git a/mcs/errors/cs1013-4.cs b/mcs/errors/cs1013-4.cs
+new file mode 100644
+index 00000000000..3a5e744ff4f
+--- /dev/null
++++ b/mcs/errors/cs1013-4.cs
+@@ -0,0 +1,7 @@
++// CS1013: Invalid number
++// Line : 6
++
++class X
++{
++    static double i = 1_.2;
++}
+\ No newline at end of file
+diff --git a/mcs/errors/cs1013-5.cs b/mcs/errors/cs1013-5.cs
+new file mode 100644
+index 00000000000..8082743c0b5
+--- /dev/null
++++ b/mcs/errors/cs1013-5.cs
+@@ -0,0 +1,7 @@
++// CS1013: Invalid number
++// Line : 6
++
++class X
++{
++    static int i = 1_e1;
++}
+\ No newline at end of file
+diff --git a/mcs/errors/cs1013-6.cs b/mcs/errors/cs1013-6.cs
+new file mode 100644
+index 00000000000..d2cea2c72dd
+--- /dev/null
++++ b/mcs/errors/cs1013-6.cs
+@@ -0,0 +1,7 @@
++// CS1013: Invalid number
++// Line : 6
++
++class X
++{
++    static float i = 1_f;
++}
+\ No newline at end of file
+diff --git a/mcs/errors/cs1013-7.cs b/mcs/errors/cs1013-7.cs
+new file mode 100644
+index 00000000000..8030d6ed095
+--- /dev/null
++++ b/mcs/errors/cs1013-7.cs
+@@ -0,0 +1,7 @@
++// CS1013: Invalid number
++// Line : 6
++
++class X
++{
++    static int i = 0x_1;
++}
+\ No newline at end of file
+diff --git a/mcs/errors/cs1013-8.cs b/mcs/errors/cs1013-8.cs
+new file mode 100644
+index 00000000000..d26c7acacb7
+--- /dev/null
++++ b/mcs/errors/cs1013-8.cs
+@@ -0,0 +1,7 @@
++// CS1013: Invalid number
++// Line : 6
++
++class X
++{
++    static int i = 0b_1;
++}
+\ No newline at end of file
+diff --git a/mcs/errors/cs1021-4.cs b/mcs/errors/cs1021-4.cs
+new file mode 100644
+index 00000000000..75c2ff70360
+--- /dev/null
++++ b/mcs/errors/cs1021-4.cs
+@@ -0,0 +1,8 @@
++// CS1021: Integral constant is too large
++// Line: 6
++
++class X {
++	public static void Main() {
++		int h = 0b11111111111111111111111111111111111111111111111111111111111111111;
++	}
++}
+diff --git a/mcs/errors/cs1061-18.cs b/mcs/errors/cs1061-18.cs
+new file mode 100644
+index 00000000000..3ac82b7f2d3
+--- /dev/null
++++ b/mcs/errors/cs1061-18.cs
+@@ -0,0 +1,10 @@
++// CS1061: Type `int' does not contain a definition for `__0' and no extension method `__0' of type `int' could be found. Are you missing an assembly reference?
++// Line: 8
++
++static class C
++{
++	static void Main ()
++	{
++		int c = 0.__0;
++	}
++}
+\ No newline at end of file
+diff --git a/mcs/errors/cs1525-27.cs b/mcs/errors/cs1525-27.cs
+index dc184931667..d4c1f326be2 100644
+--- a/mcs/errors/cs1525-27.cs
++++ b/mcs/errors/cs1525-27.cs
+@@ -1,4 +1,4 @@
+-// CS1525: Unexpected symbol `fe', expecting `class', `delegate', `enum', `interface', `partial', or `struct'
++// CS1525: Unexpected symbol `fe', expecting `class', `delegate', `enum', `interface', `partial', `ref', or `struct'
+ // Line: 6
+ 
+ namespace X
+diff --git a/mcs/errors/cs1525-43.cs b/mcs/errors/cs1525-43.cs
+index d83d4d847fa..26f466a2528 100644
+--- a/mcs/errors/cs1525-43.cs
++++ b/mcs/errors/cs1525-43.cs
+@@ -1,4 +1,4 @@
+-// CS1525: Unexpected symbol `)', expecting `(', `[', `out', `params', `ref', `this', or `type'
++// CS1525: Unexpected symbol `)'
+ // Line: 6
+ 
+ class TestClass
+diff --git a/mcs/errors/cs1527-2.cs b/mcs/errors/cs1527-2.cs
+index d38945f3c89..0256ee2b354 100644
+--- a/mcs/errors/cs1527-2.cs
++++ b/mcs/errors/cs1527-2.cs
+@@ -1,4 +1,4 @@
+-// CS1527: Namespace elements cannot be explicitly declared as private, protected or protected internal
++// CS1527: Namespace elements cannot be explicitly declared as private, protected, protected internal, or private protected
+ // Line: 4
+ 
+ protected interface IFoo {
+diff --git a/mcs/errors/cs1527-3.cs b/mcs/errors/cs1527-3.cs
+index 763c75958ee..469d74cbb99 100644
+--- a/mcs/errors/cs1527-3.cs
++++ b/mcs/errors/cs1527-3.cs
+@@ -1,4 +1,4 @@
+-// CS1527: Namespace elements cannot be explicitly declared as private, protected or protected internal
++// CS1527: Namespace elements cannot be explicitly declared as private, protected, protected internal, or private protected
+ // Line: 4
+ 
+ protected internal enum E {
+diff --git a/mcs/errors/cs1527.cs b/mcs/errors/cs1527.cs
+index 189cc472f4c..e847fd14e11 100644
+--- a/mcs/errors/cs1527.cs
++++ b/mcs/errors/cs1527.cs
+@@ -1,4 +1,5 @@
+-// CS1527: Namespace elements cannot be explicitly declared as private, protected or protected internal
+-// Line:
++// CS1527: Namespace elements cannot be explicitly declared as private, protected, protected internal, or private protected
++// Line: 4
++
+ private class X {
+ }
+diff --git a/mcs/errors/cs1611-2.cs b/mcs/errors/cs1611-2.cs
+new file mode 100644
+index 00000000000..882231378f0
+--- /dev/null
++++ b/mcs/errors/cs1611-2.cs
+@@ -0,0 +1,8 @@
++// CS1611: The params parameter cannot be declared as ref, out or in
++// Line: 6
++// Compiler options: -langversion:latest
++
++class Test
++{
++    public static void Error (params in int args) {}
++}
+\ No newline at end of file
+diff --git a/mcs/errors/cs1611.cs b/mcs/errors/cs1611.cs
+index 8df10fac0ce..469e083ec3c 100644
+--- a/mcs/errors/cs1611.cs
++++ b/mcs/errors/cs1611.cs
+@@ -1,4 +1,4 @@
+-// CS1611: The params parameter cannot be declared as ref or out
++// CS1611: The params parameter cannot be declared as ref, out or in
+ // Line: 6
+ 
+ class Test
+diff --git a/mcs/errors/cs1644-61.cs b/mcs/errors/cs1644-61.cs
+new file mode 100644
+index 00000000000..d58ba64c7ec
+--- /dev/null
++++ b/mcs/errors/cs1644-61.cs
+@@ -0,0 +1,11 @@
++// CS1644: Feature `digit separators' cannot be used because it is not part of the C# 6.0 language specification
++// Line: 9
++// Compiler options: -langversion:6
++
++class X
++{
++	int Test ()
++	{
++		var i = 1_0;
++	}
++}
+diff --git a/mcs/errors/cs1644-62.cs b/mcs/errors/cs1644-62.cs
+new file mode 100644
+index 00000000000..5a29839610d
+--- /dev/null
++++ b/mcs/errors/cs1644-62.cs
+@@ -0,0 +1,10 @@
++// CS1644: Feature `private protected' cannot be used because it is not part of the C# 6.0 language specification
++// Line: 7
++// Compiler options: -langversion:6
++
++class C
++{
++	private protected enum E
++	{
++	}
++}
+\ No newline at end of file
+diff --git a/mcs/errors/cs1644-63.cs b/mcs/errors/cs1644-63.cs
+new file mode 100644
+index 00000000000..ce61d5ce046
+--- /dev/null
++++ b/mcs/errors/cs1644-63.cs
+@@ -0,0 +1,22 @@
++// CS1644: Feature `extensible fixed statement' cannot be used because it is not part of the C# 7.2 language specification 
++// Line: 11
++// Compiler options: -unsafe -langversion:7.2
++
++using System;
++
++unsafe class C
++{
++	public static void Main ()
++	{
++		fixed (int* p = new Fixable ()) {
++		}
++	}
++
++	struct Fixable
++	{
++		public ref int GetPinnableReference ()
++		{
++			throw new NotImplementedException ();
++		}
++	}
++}
+\ No newline at end of file
+diff --git a/mcs/errors/cs1644-64.cs b/mcs/errors/cs1644-64.cs
+new file mode 100644
+index 00000000000..88917a0a5d5
+--- /dev/null
++++ b/mcs/errors/cs1644-64.cs
+@@ -0,0 +1,13 @@
++// CS1644: Feature `expression body property accessor' cannot be used because it is not part of the C# 6.0 language specification 
++// Line: 11
++// Compiler options: -langversion:6
++
++using System;
++
++class C
++{
++	public int Integer
++	{
++		get => 0;
++	}
++}
+\ No newline at end of file
+diff --git a/mcs/errors/cs1644-65.cs b/mcs/errors/cs1644-65.cs
+new file mode 100644
+index 00000000000..dea648b7846
+--- /dev/null
++++ b/mcs/errors/cs1644-65.cs
+@@ -0,0 +1,13 @@
++// CS1644: Feature `expression body property accessor' cannot be used because it is not part of the C# 6.0 language specification 
++// Line: 11
++// Compiler options: -langversion:6
++
++using System;
++
++class C
++{
++	public int this[int i]
++	{
++		get => i;
++	}
++}
+\ No newline at end of file
+diff --git a/mcs/errors/cs1644-66.cs b/mcs/errors/cs1644-66.cs
+new file mode 100644
+index 00000000000..3f393b50d30
+--- /dev/null
++++ b/mcs/errors/cs1644-66.cs
+@@ -0,0 +1,17 @@
++// CS1644: Feature `expression body event accessor' cannot be used because it is not part of the C# 6.0 language specification 
++// Line: 11
++// Compiler options: -langversion:6
++
++using System;
++
++class C
++{
++	public event EventHandler Event
++	{
++		add => Ignore ();
++	}
++
++	static void Ignore ()
++	{
++	}
++}
+\ No newline at end of file
+diff --git a/mcs/errors/cs1763-2.cs b/mcs/errors/cs1763-2.cs
+index 72f5370949a..7e4d091fc72 100644
+--- a/mcs/errors/cs1763-2.cs
++++ b/mcs/errors/cs1763-2.cs
+@@ -1,4 +1,4 @@
+-// CS1763: Optional parameter `o' of type `object' can only be initialized with `null'
++// CS1763: Optional parameter `o' of type `object' can only be initialized with default value
+ // Line: 6
+ 
+ class C
+diff --git a/mcs/errors/cs1763.cs b/mcs/errors/cs1763.cs
+index d10a7bf2c20..03b5f28a19d 100644
+--- a/mcs/errors/cs1763.cs
++++ b/mcs/errors/cs1763.cs
+@@ -1,4 +1,4 @@
+-// CS1763: Optional parameter `o' of type `object' can only be initialized with `null'
++// CS1763: Optional parameter `o' of type `object' can only be initialized with default value
+ // Line: 6
+ 
+ class C
+diff --git a/mcs/errors/cs8326.cs b/mcs/errors/cs8326.cs
+new file mode 100644
+index 00000000000..efd3a84fea7
+--- /dev/null
++++ b/mcs/errors/cs8326.cs
+@@ -0,0 +1,13 @@
++// CS8326: Both ref conditional operators must be ref values
++// Line: 11
++
++class Program
++{
++	static int x, y;
++
++	public static void Main ()
++	{
++		bool b = false;
++		ref int targetBucket = ref b ? x : y;
++	}
++}
+\ No newline at end of file
+diff --git a/mcs/errors/cs8327.cs b/mcs/errors/cs8327.cs
+new file mode 100644
+index 00000000000..8d0ccd86a70
+--- /dev/null
++++ b/mcs/errors/cs8327.cs
+@@ -0,0 +1,14 @@
++// CS8327: The ref conditional expression types `int' and `byte' have to match
++// Line: 12
++
++class Program
++{
++	static int x;
++	static byte y;
++
++	public static void Main ()
++	{
++		bool b = false;
++		ref int targetBucket = ref b ? ref x : ref y;
++	}
++}
+\ No newline at end of file
+diff --git a/mcs/errors/cs0428-2.cs b/mcs/errors/cs8385-2.cs
+similarity index 50%
+rename from mcs/errors/cs0428-2.cs
+rename to mcs/errors/cs8385-2.cs
+index 5f468fd519a..cc7860faa62 100644
+--- a/mcs/errors/cs0428-2.cs
++++ b/mcs/errors/cs8385-2.cs
+@@ -1,4 +1,4 @@
+-// CS0428: Cannot convert method group `Main' to non-delegate type `void*'. Consider using parentheses to invoke the method
++// CS8385: The given expression cannot be used in a fixed statement
+ // Line: 9
+ // Compiler options: -unsafe
+ 
+diff --git a/mcs/errors/cs0213-2.cs b/mcs/errors/cs8385.cs
+similarity index 54%
+rename from mcs/errors/cs0213-2.cs
+rename to mcs/errors/cs8385.cs
+index ae72e4cd9aa..5fa9f794ccf 100644
+--- a/mcs/errors/cs0213-2.cs
++++ b/mcs/errors/cs8385.cs
+@@ -1,4 +1,4 @@
+-// CS0213: You cannot use the fixed statement to take the address of an already fixed expression
++// CS8385: The given expression cannot be used in a fixed statement
+ // Line: 9
+ // Compiler options: -unsafe
+ 
+diff --git a/mcs/errors/known-issues-net_4_x b/mcs/errors/known-issues-net_4_x
+index c9ed9317350..54902e03e7b 100644
+--- a/mcs/errors/known-issues-net_4_x
++++ b/mcs/errors/known-issues-net_4_x
+@@ -14,6 +14,9 @@
+ # Parser problems
+ cs0080.cs 
+ 
++# Undocumented switch governing rules
++cs0151-4.cs NO ERROR
++
+ # Operators
+ cs0457-2.cs
+ cs0457.cs
+diff --git a/mcs/ilasm/Makefile b/mcs/ilasm/Makefile
+index 090d1cc3231..4ca11545781 100644
+--- a/mcs/ilasm/Makefile
++++ b/mcs/ilasm/Makefile
+@@ -13,7 +13,7 @@ EXTRA_DISTFILES = \
+ 	$(wildcard tests/*.il)
+ 
+ ILParser.cs: parser/ILParser.jay $(topdir)/jay/skeleton.cs
+-	$(topdir)/jay/jay -ct < $(topdir)/jay/skeleton.cs $(CURDIR)/$< >$@
++	$(topdir)/jay/jay -ct -o $@ $(CURDIR)/$< < $(topdir)/jay/skeleton.cs
+ 
+ include ../build/executable.make
+ 
+diff --git a/mcs/jay/defs.h b/mcs/jay/defs.h
+index 2aade48dac2..3bd3c5859ce 100644
+--- a/mcs/jay/defs.h
++++ b/mcs/jay/defs.h
+@@ -236,12 +236,14 @@ extern char *input_file_name;
+ extern char *prolog_file_name;
+ extern char *local_file_name;
+ extern char *verbose_file_name;
++extern char *output_file_name;
+ 
+ extern FILE *action_file;
+ extern FILE *input_file;
+ extern FILE *prolog_file;
+ extern FILE *local_file;
+ extern FILE *verbose_file;
++extern FILE *output_file;
+ 
+ extern int nitems;
+ extern int nrules;
+diff --git a/mcs/jay/main.c b/mcs/jay/main.c
+index fcac218b1df..7fb5e6c8ccb 100644
+--- a/mcs/jay/main.c
++++ b/mcs/jay/main.c
+@@ -63,6 +63,7 @@ char *input_file_name = "";
+ char *prolog_file_name;
+ char *local_file_name;
+ char *verbose_file_name;
++char *output_file_name = 0;
+ 
+ FILE *action_file;	/*  a temp file, used to save actions associated    */
+ 			/*  with rules until the parser is written	    */
+@@ -70,6 +71,7 @@ FILE *input_file;	/*  the input file				    */
+ FILE *prolog_file;	/*  temp files, used to save text until all	    */
+ FILE *local_file;	/*  symbols have been defined			    */
+ FILE *verbose_file;	/*  y.output					    */
++FILE *output_file; /* defaults to stdout */
+ 
+ int nitems;
+ int nrules;
+@@ -106,6 +108,7 @@ int k;
+     if (action_file) { fclose(action_file); unlink(action_file_name); }
+     if (prolog_file) { fclose(prolog_file); unlink(prolog_file_name); }
+     if (local_file) { fclose(local_file); unlink(local_file_name); }
++    if (output_file && (output_file != stdout)) { fclose(output_file); if (k != 0) unlink(output_file_name); }
+     exit(k);
+ }
+ 
+@@ -137,7 +140,7 @@ set_signals()
+ 
+ usage()
+ {
+-    fprintf(stderr, "usage: %s [-tvcp] [-b file_prefix] filename\n", myname);
++    fprintf(stderr, "usage: %s [-tvcp] [-b file_prefix] [-o output_filename] input_filename\n", myname);
+     exit(1);
+ }
+ 
+@@ -167,9 +170,9 @@ char *argv[];
+ 	    if (i + 1 < argc) usage();
+ 	    return;
+ 
+-        case '-':
+-            ++i;
+-            goto no_more_options;
++    case '-':
++        ++i;
++        goto no_more_options;
+ 
+ 	case 'b':
+ 	    if (*++s)
+@@ -180,13 +183,22 @@ char *argv[];
+ 		usage();
+ 	    continue;
+ 
+-        case 't':
+-            tflag = 1;
+-            break;
++    case 'o':
++        if (*++s)
++            output_file_name = s;
++        else if (++i < argc)
++            output_file_name = argv[i];
++        else
++            usage();
++        continue;
++
++    case 't':
++        tflag = 1;
++        break;
+ 
+ 	case 'p':
+-            print_skel_dir ();
+-            break;
++        print_skel_dir ();
++        break;
+ 
+ 	case 'c':
+ 	    csharp = 1;
+@@ -217,12 +229,12 @@ char *argv[];
+ 		vflag = 1;
+ 		break;
+ 
+-            case 'p':
+-                print_skel_dir ();
+-                break;
++        case 'p':
++            print_skel_dir ();
++            break;
+ 
+-            case 'c':
+-		csharp = 1;
++        case 'c':
++		    csharp = 1;
+ 	        line_format = "#line %d \"%s\"\n";
+         	default_line_format = "#line default\n";
+ 
+@@ -355,6 +367,17 @@ open_files()
+ 	if (verbose_file == 0)
+ 	    open_error(verbose_file_name);
+     }
++
++    if (output_file == 0)
++    {
++        if (output_file_name != 0) {
++            output_file = fopen(output_file_name, "w");
++            if (output_file == 0)
++                open_error(output_file_name);
++        } else {
++            output_file = stdout;
++        }
++    }
+ }
+ 
+ 
+diff --git a/mcs/jay/output.c b/mcs/jay/output.c
+index d1e2c14a1b2..ab9b2043be9 100644
+--- a/mcs/jay/output.c
++++ b/mcs/jay/output.c
+@@ -73,7 +73,7 @@ output () {
+       fprintf(stderr, "jay: line %d is too long\n", lno), done(1);
+     switch (buf[0]) {
+     case '#':	continue;
+-    case 't':	if (!tflag) fputs("//t", stdout);
++    case 't':	if (!tflag) fputs("//t", output_file);
+     case '.':	break;
+     default:
+       cp = strtok(buf, " \t\r\n");
+@@ -93,7 +93,7 @@ output () {
+           fprintf(stderr, "jay: unknown call (%s) in line %d\n", cp, lno);
+       continue;
+     }
+-    fputs(buf+1, stdout), ++ outline;
++    fputs(buf+1, output_file), ++ outline;
+   }
+   free_parser();
+ }
+@@ -103,19 +103,19 @@ output_rule_data()
+     register int i;
+     register int j;
+ 
+-	printf("/*\n All more than 3 lines long rules are wrapped into a method\n*/\n");
++	fprintf(output_file, "/*\n All more than 3 lines long rules are wrapped into a method\n*/\n");
+ 
+     for (i = 0; i < nmethods; ++i)
+ 	{
+-		printf("%s", methods[i]);
++		fprintf(output_file, "%s", methods[i]);
+ 		FREE(methods[i]);
+-		printf("\n\n");
++		fprintf(output_file, "\n\n");
+ 	}
+ 	FREE(methods);
+ 
+-	printf(default_line_format, ++outline + 1);
++	fprintf(output_file, default_line_format, ++outline + 1);
+ 
+-    printf("  %s static %s short [] yyLhs  = {%16d,",
++    fprintf(output_file, "  %s static %s short [] yyLhs  = {%16d,",
+ 	   csharp ? "" : " protected",
+ 	   csharp ? "readonly" : "final",
+ 	    symbol_value[start_symbol]);
+@@ -126,18 +126,18 @@ output_rule_data()
+ 	if (j >= 10)
+ 	{
+ 	    ++outline;
+-	    putchar('\n');
++	    putc('\n', output_file);
+ 	    j = 1;
+ 	}
+         else
+ 	    ++j;
+ 
+-        printf("%5d,", symbol_value[rlhs[i]]);
++        fprintf(output_file, "%5d,", symbol_value[rlhs[i]]);
+     }
+     outline += 2;
+-    printf("\n  };\n");
++    fprintf(output_file, "\n  };\n");
+ 
+-    printf("  %s static %s short [] yyLen = {%12d,",
++    fprintf(output_file, "  %s static %s short [] yyLen = {%12d,",
+ 	   csharp ? "" : "protected",
+ 	   csharp ? "readonly" : "final",
+ 	   2);
+@@ -148,16 +148,16 @@ output_rule_data()
+ 	if (j >= 10)
+ 	{
+ 	    ++outline;
+-	    putchar('\n');
++	    putc('\n', output_file);
+ 	    j = 1;
+ 	}
+ 	else
+ 	  j++;
+ 
+-        printf("%5d,", rrhs[i + 1] - rrhs[i] - 1);
++        fprintf(output_file, "%5d,", rrhs[i + 1] - rrhs[i] - 1);
+     }
+     outline += 2;
+-    printf("\n  };\n");
++    fprintf(output_file, "\n  };\n");
+ }
+ 
+ 
+@@ -165,7 +165,7 @@ output_yydefred()
+ {
+     register int i, j;
+ 
+-    printf("  %s static %s short [] yyDefRed = {%13d,",
++    fprintf(output_file, "  %s static %s short [] yyDefRed = {%13d,",
+ 	   csharp ? "" : "protected",
+ 	   csharp ? "readonly" : "final",	   
+ 	    (defred[0] ? defred[0] - 2 : 0));
+@@ -178,15 +178,15 @@ output_yydefred()
+ 	else
+ 	{
+ 	    ++outline;
+-	    putchar('\n');
++	    putc('\n', output_file);
+ 	    j = 1;
+ 	}
+ 
+-	printf("%5d,", (defred[i] ? defred[i] - 2 : 0));
++	fprintf(output_file, "%5d,", (defred[i] ? defred[i] - 2 : 0));
+     }
+ 
+     outline += 2;
+-    printf("\n  };\n");
++    fprintf(output_file, "\n  };\n");
+ }
+ 
+ 
+@@ -309,7 +309,7 @@ goto_actions()
+     state_count = NEW2(nstates, short);
+ 
+     k = default_goto(start_symbol + 1);
+-    printf("  protected static %s short [] yyDgoto  = {%14d,", csharp ? "readonly" : "final", k);
++    fprintf(output_file, "  protected static %s short [] yyDgoto  = {%14d,", csharp ? "readonly" : "final", k);
+     save_column(start_symbol + 1, k);
+ 
+     j = 10;
+@@ -318,19 +318,19 @@ goto_actions()
+ 	if (j >= 10)
+ 	{
+ 	    ++outline;
+-	    putchar('\n');
++	    putc('\n', output_file);
+ 	    j = 1;
+ 	}
+ 	else
+ 	    ++j;
+ 
+ 	k = default_goto(i);
+-	printf("%5d,", k);
++	fprintf(output_file, "%5d,", k);
+ 	save_column(i, k);
+     }
+ 
+     outline += 2;
+-    printf("\n  };\n");
++    fprintf(output_file, "\n  };\n");
+     FREE(state_count);
+ }
+ 
+@@ -633,7 +633,7 @@ output_base()
+ {
+     register int i, j;
+ 
+-    printf("  protected static %s short [] yySindex = {%13d,", csharp? "readonly":"final", base[0]);
++    fprintf(output_file, "  protected static %s short [] yySindex = {%13d,", csharp? "readonly":"final", base[0]);
+ 
+     j = 10;
+     for (i = 1; i < nstates; i++)
+@@ -641,17 +641,17 @@ output_base()
+ 	if (j >= 10)
+ 	{
+ 	    ++outline;
+-	    putchar('\n');
++	    putc('\n', output_file);
+ 	    j = 1;
+ 	}
+ 	else
+ 	    ++j;
+ 
+-	printf("%5d,", base[i]);
++	fprintf(output_file, "%5d,", base[i]);
+     }
+ 
+     outline += 2;
+-    printf("\n  };\n  protected static %s short [] yyRindex = {%13d,",
++    fprintf(output_file, "\n  };\n  protected static %s short [] yyRindex = {%13d,",
+ 	   csharp ? "readonly" : "final",
+ 	    base[nstates]);
+ 
+@@ -661,17 +661,17 @@ output_base()
+ 	if (j >= 10)
+ 	{
+ 	    ++outline;
+-	    putchar('\n');
++	    putc('\n', output_file);
+ 	    j = 1;
+ 	}
+ 	else
+ 	    ++j;
+ 
+-	printf("%5d,", base[i]);
++	fprintf(output_file, "%5d,", base[i]);
+     }
+ 
+     outline += 2;
+-    printf("\n  };\n  protected static %s short [] yyGindex = {%13d,",
++    fprintf(output_file, "\n  };\n  protected static %s short [] yyGindex = {%13d,",
+ 	   csharp ? "readonly" : "final",
+ 	    base[2*nstates]);
+ 
+@@ -681,17 +681,17 @@ output_base()
+ 	if (j >= 10)
+ 	{
+ 	    ++outline;
+-	    putchar('\n');
++	    putc('\n', output_file);
+ 	    j = 1;
+ 	}
+ 	else
+ 	    ++j;
+ 
+-	printf("%5d,", base[i]);
++	fprintf(output_file, "%5d,", base[i]);
+     }
+ 
+     outline += 2;
+-    printf("\n  };\n");
++    fprintf(output_file, "\n  };\n");
+     FREE(base);
+ }
+ 
+@@ -702,7 +702,7 @@ output_table()
+     register int i;
+     register int j;
+ 
+-    printf("  protected static %s short [] yyTable = {%14d,", csharp ? "readonly" : "final", table[0]);
++    fprintf(output_file, "  protected static %s short [] yyTable = {%14d,", csharp ? "readonly" : "final", table[0]);
+ 
+     j = 10;
+     for (i = 1; i <= high; i++)
+@@ -710,17 +710,17 @@ output_table()
+ 	if (j >= 10)
+ 	{
+ 	    ++outline;
+-	    putchar('\n');
++	    putc('\n', output_file);
+ 	    j = 1;
+ 	}
+ 	else
+ 	    ++j;
+ 
+-	printf("%5d,", table[i]);
++	fprintf(output_file, "%5d,", table[i]);
+     }
+ 
+     outline += 2;
+-    printf("\n  };\n");
++    fprintf(output_file, "\n  };\n");
+     FREE(table);
+ }
+ 
+@@ -731,7 +731,7 @@ output_check()
+     register int i;
+     register int j;
+ 
+-    printf("  protected static %s short [] yyCheck = {%14d,",
++    fprintf(output_file, "  protected static %s short [] yyCheck = {%14d,",
+ 	   csharp ? "readonly" : "final",
+ 	    check[0]);
+ 
+@@ -741,17 +741,17 @@ output_check()
+ 	if (j >= 10)
+ 	{
+ 	    ++outline;
+-	    putchar('\n');
++	    putc('\n', output_file);
+ 	    j = 1;
+ 	}
+ 	else
+ 	    ++j;
+ 
+-	printf("%5d,", check[i]);
++	fprintf(output_file, "%5d,", check[i]);
+     }
+ 
+     outline += 2;
+-    printf("\n  };\n");
++    fprintf(output_file, "\n  };\n");
+     FREE(check);
+ }
+ 
+@@ -801,30 +801,30 @@ char *prefix;
+ 	if (is_C_identifier(s))
+ 	{
+ 	    if (prefix)
+-	        printf("  %s ", prefix);
++	        fprintf(output_file, "  %s ", prefix);
+ 	    c = *s;
+ 	    if (c == '"')
+ 	    {
+ 		while ((c = *++s) != '"')
+ 		{
+-		    putchar(c);
++		    putc(c, output_file);
+ 		}
+ 	    }
+ 	    else
+ 	    {
+ 		do
+ 		{
+-		    putchar(c);
++		    putc(c, output_file);
+ 		}
+ 		while (c = *++s);
+ 	    }
+ 	    ++outline;
+-	    printf(" = %d%s\n", symbol_value[i], csharp ? ";" : ";");
++	    fprintf(output_file, " = %d%s\n", symbol_value[i], csharp ? ";" : ";");
+ 	}
+     }
+ 
+     ++outline;
+-    printf("  %s yyErrorCode = %d%s\n", prefix ? prefix : "", symbol_value[1], csharp ? ";" : ";");
++    fprintf(output_file, "  %s yyErrorCode = %d%s\n", prefix ? prefix : "", symbol_value[1], csharp ? ";" : ";");
+ }
+ 
+ 
+@@ -842,14 +842,14 @@ char *name;
+     if ((c = getc(in)) != EOF) {
+       if (c ==  '\n')
+ 	++outline;
+-      putchar(c);
++      putc(c, output_file);
+       while ((c = getc(in)) != EOF)
+       {
+ 	if (c == '\n')
+ 	    ++outline;
+-    	putchar(c);
++    	putc(c, output_file);
+       }
+-      printf(default_line_format, ++outline + 1);
++      fprintf(output_file, default_line_format, ++outline + 1);
+     }
+     fclose(in);
+ }
+@@ -862,67 +862,67 @@ output_debug()
+     char * prefix = tflag ? "" : "//t";
+ 
+     ++outline;
+-    printf("  protected %s int yyFinal = %d;\n", csharp ? "const" : "static final", final_state);
++    fprintf(output_file, "  protected %s int yyFinal = %d;\n", csharp ? "const" : "static final", final_state);
+ 
+       ++outline;
+-	  printf ("%s // Put this array into a separate class so it is only initialized if debugging is actually used\n", prefix);
+-	  printf ("%s // Use MarshalByRefObject to disable inlining\n", prefix);
+-	  printf("%s class YYRules %s {\n", prefix, csharp ? ": MarshalByRefObject" : "");
+-      printf("%s  public static %s string [] yyRule = {\n", prefix, csharp ? "readonly" : "final");
++	  fprintf(output_file, "%s // Put this array into a separate class so it is only initialized if debugging is actually used\n", prefix);
++	  fprintf(output_file, "%s // Use MarshalByRefObject to disable inlining\n", prefix);
++	  fprintf(output_file, "%s class YYRules %s {\n", prefix, csharp ? ": MarshalByRefObject" : "");
++      fprintf(output_file, "%s  public static %s string [] yyRule = {\n", prefix, csharp ? "readonly" : "final");
+       for (i = 2; i < nrules; ++i)
+       {
+-	  printf("%s    \"%s :", prefix, symbol_name[rlhs[i]]);
++	  fprintf(output_file, "%s    \"%s :", prefix, symbol_name[rlhs[i]]);
+ 	  for (j = rrhs[i]; ritem[j] > 0; ++j)
+ 	  {
+ 	      s = symbol_name[ritem[j]];
+ 	      if (s[0] == '"')
+ 	      {
+-		  printf(" \\\"");
++		  fprintf(output_file, " \\\"");
+ 		  while (*++s != '"')
+ 		  {
+ 		      if (*s == '\\')
+ 		      {
+ 			  if (s[1] == '\\')
+-			      printf("\\\\\\\\");
++			      fprintf(output_file, "\\\\\\\\");
+ 			  else
+-			      printf("\\\\%c", s[1]);
++			      fprintf(output_file, "\\\\%c", s[1]);
+ 			  ++s;
+ 		      }
+ 		      else
+-			  putchar(*s);
++			  putc(*s, output_file);
+ 		  }
+-		  printf("\\\"");
++		  fprintf(output_file, "\\\"");
+ 	      }
+ 	      else if (s[0] == '\'')
+ 	      {
+ 		  if (s[1] == '"')
+-		      printf(" '\\\"'");
++		      fprintf(output_file, " '\\\"'");
+ 		  else if (s[1] == '\\')
+ 		  {
+ 		      if (s[2] == '\\')
+-			  printf(" '\\\\\\\\");
++			  fprintf(output_file, " '\\\\\\\\");
+ 		      else
+-			  printf(" '\\\\%c", s[2]);
++			  fprintf(output_file, " '\\\\%c", s[2]);
+ 		      s += 2;
+ 		      while (*++s != '\'')
+-			  putchar(*s);
+-		      putchar('\'');
++			  putc(*s, output_file);
++		      putc('\'', output_file);
+ 		  }
+ 		  else
+-		      printf(" '%c'", s[1]);
++		      fprintf(output_file, " '%c'", s[1]);
+ 	      }
+ 	      else
+-		  printf(" %s", s);
++		  fprintf(output_file, " %s", s);
+ 	  }
+ 	  ++outline;
+-	  printf("\",\n");
++	  fprintf(output_file, "\",\n");
+       }
+       ++ outline;
+-      printf("%s  };\n", prefix);
+-	  printf ("%s public static string getRule (int index) {\n", prefix);
+-	  printf ("%s    return yyRule [index];\n", prefix);
+-	  printf ("%s }\n", prefix);
+-	  printf ("%s}\n", prefix);
++      fprintf(output_file, "%s  };\n", prefix);
++	  fprintf(output_file, "%s public static string getRule (int index) {\n", prefix);
++	  fprintf(output_file, "%s    return yyRule [index];\n", prefix);
++	  fprintf(output_file, "%s }\n", prefix);
++	  fprintf(output_file, "%s}\n", prefix);
+ 
+     max = 0;
+     for (i = 2; i < ntokens; ++i)
+@@ -931,7 +931,7 @@ output_debug()
+ 
+ 	/* need yyNames for yyExpecting() */
+ 
+-      printf("  protected static %s string [] yyNames = {", csharp ? "readonly" : "final");
++      fprintf(output_file, "  protected static %s string [] yyNames = {", csharp ? "readonly" : "final");
+       symnam = (char **) MALLOC((max+1)*sizeof(char *));
+       if (symnam == 0) no_space();
+   
+@@ -943,7 +943,7 @@ output_debug()
+ 	  symnam[symbol_value[i]] = symbol_name[i];
+       symnam[0] = "end-of-file";
+   
+-      j = 70; fputs("    ", stdout);
++      j = 70; fputs("    ", output_file);
+       for (i = 0; i <= max; ++i)
+       {
+ 	  if (s = symnam[i])
+@@ -965,25 +965,25 @@ output_debug()
+ 		  if (j > 70)
+ 		  {
+ 		      ++outline;
+-		      printf("\n    ");
++		      fprintf(output_file, "\n    ");
+ 		      j = k;
+ 		  }
+-		  printf("\"\\\"");
++		  fprintf(output_file, "\"\\\"");
+ 		  s = symnam[i];
+ 		  while (*++s != '"')
+ 		  {
+ 		      if (*s == '\\')
+ 		      {
+-			  printf("\\\\");
++			  fprintf(output_file, "\\\\");
+ 			  if (*++s == '\\')
+-			      printf("\\\\");
++			      fprintf(output_file, "\\\\");
+ 			  else
+-			      putchar(*s);
++			      putc(*s, output_file);
+ 		      }
+ 		      else
+-			  putchar(*s);
++			  putc(*s, output_file);
+ 		  }
+-		  printf("\\\"\",");
++		  fprintf(output_file, "\\\"\",");
+ 	      }
+ 	      else if (s[0] == '\'')
+ 	      {
+@@ -993,10 +993,10 @@ output_debug()
+ 		      if (j > 70)
+ 		      {
+ 			  ++outline;
+-		      	  printf("\n    ");
++		      	  fprintf(output_file, "\n    ");
+ 			  j = 7;
+ 		      }
+-		      printf("\"'\\\"'\",");
++		      fprintf(output_file, "\"'\\\"'\",");
+ 		  }
+ 		  else
+ 		  {
+@@ -1015,25 +1015,25 @@ output_debug()
+ 		      if (j > 70)
+ 		      {
+ 			  ++outline;
+-		      	  printf("\n    ");
++		      	  fprintf(output_file, "\n    ");
+ 			  j = k;
+ 		      }
+-		      printf("\"'");
++		      fprintf(output_file, "\"'");
+ 		      s = symnam[i];
+ 		      while (*++s != '\'')
+ 		      {
+ 			  if (*s == '\\')
+ 			  {
+-			      printf("\\\\");
++			      fprintf(output_file, "\\\\");
+ 			      if (*++s == '\\')
+-				  printf("\\\\");
++				  fprintf(output_file, "\\\\");
+ 			      else
+-				  putchar(*s);
++				  putc(*s, output_file);
+ 			  }
+ 			  else
+-			      putchar(*s);
++			      putc(*s, output_file);
+ 		      }
+-		      printf("'\",");
++		      fprintf(output_file, "'\",");
+ 		  }
+ 	      }
+ 	      else
+@@ -1043,12 +1043,12 @@ output_debug()
+ 		  if (j > 70)
+ 		  {
+ 		      ++outline;
+-		      printf("\n    ");
++		      fprintf(output_file, "\n    ");
+ 		      j = k;
+ 		  }
+-		  putchar('"');
+-		  do { putchar(*s); } while (*++s);
+-		  printf("\",");
++		  putc('"', output_file);
++		  do { putc(*s, output_file); } while (*++s);
++		  fprintf(output_file, "\",");
+ 	      }
+ 	  }
+ 	  else
+@@ -1057,14 +1057,14 @@ output_debug()
+ 	      if (j > 70)
+ 	      {
+ 		  ++outline;
+-		  printf("\n    ");
++		  fprintf(output_file, "\n    ");
+ 		  j = 5;
+ 	      }
+-	      printf("null,");
++	      fprintf(output_file, "null,");
+ 	  }
+       }
+       outline += 2;
+-      printf("\n  };\n");
++      fprintf(output_file, "\n  };\n");
+       FREE(symnam);
+ }
+ 
+@@ -1084,19 +1084,19 @@ output_trailing_text()
+ 	if ((c = getc(in)) == EOF)
+ 	    return;
+         ++outline;
+-	printf(line_format, lineno, input_file_name);
++	fprintf(output_file, line_format, lineno, input_file_name);
+ 	if (c == '\n')
+ 	    ++outline;
+-	putchar(c);
++	putc(c, output_file);
+ 	last = c;
+     }
+     else
+     {
+ 	++outline;
+-	printf(line_format, lineno, input_file_name);
+-	do { putchar(c); } while ((c = *++cptr) != '\n');
++	fprintf(output_file, line_format, lineno, input_file_name);
++	do { putc(c, output_file); } while ((c = *++cptr) != '\n');
+ 	++outline;
+-	putchar('\n');
++	putc('\n', output_file);
+ 	last = '\n';
+     }
+ 
+@@ -1104,16 +1104,16 @@ output_trailing_text()
+     {
+ 	if (c == '\n')
+ 	    ++outline;
+-	putchar(c);
++	putc(c, output_file);
+ 	last = c;
+     }
+ 
+     if (last != '\n')
+     {
+ 	++outline;
+-	putchar('\n');
++	putc('\n', output_file);
+     }
+-    printf(default_line_format, ++outline + 1);
++    fprintf(output_file, default_line_format, ++outline + 1);
+ }
+ 
+ 
+@@ -1132,22 +1132,22 @@ output_semantic_actions()
+     last = c;
+     if (c == '\n')
+ 	++outline;
+-    putchar(c);
++    putc(c, output_file);
+     while ((c = getc(action_file)) != EOF)
+     {
+ 	if (c == '\n')
+ 	    ++outline;
+-	putchar(c);
++	putc(c, output_file);
+ 	last = c;
+     }
+ 
+     if (last != '\n')
+     {
+ 	++outline;
+-	putchar('\n');
++	putc('\n', output_file);
+     }
+ 
+-    printf(default_line_format, ++outline + 1);
++    fprintf(output_file, default_line_format, ++outline + 1);
+ }
+ 
+ 
+diff --git a/mcs/mcs/Makefile b/mcs/mcs/Makefile
+index dbd71a3d581..dbf040afdd6 100644
+--- a/mcs/mcs/Makefile
++++ b/mcs/mcs/Makefile
+@@ -32,7 +32,7 @@ BUILT_SOURCES = cs-parser.cs
+ CLEAN_FILES += y.output
+ 
+ %-parser.cs: %-parser.jay $(topdir)/jay/skeleton.cs
+-	$(topdir)/jay/jay $(JAY_FLAGS) < $(topdir)/jay/skeleton.cs $< > jay-tmp.out && mv jay-tmp.out $@
++	$(topdir)/jay/jay $(JAY_FLAGS) -o jay-tmp.out $< < $(topdir)/jay/skeleton.cs && mv jay-tmp.out $@
+ 
+ KEEP_OUTPUT_FILE_COPY = yes
+ 
+diff --git a/mcs/mcs/argument.cs b/mcs/mcs/argument.cs
+index 5b1003dbadf..4c75e41a9e5 100644
+--- a/mcs/mcs/argument.cs
++++ b/mcs/mcs/argument.cs
+@@ -38,6 +38,8 @@ namespace Mono.CSharp
+ 			// Conditional instance expression inserted as the first argument
+ 			ExtensionTypeConditionalAccess = 5 | ConditionalAccessFlag,
+ 
++			Readonly = 6,
++
+ 			ConditionalAccessFlag = 1 << 7
+ 		}
+ 
+diff --git a/mcs/mcs/assembly.cs b/mcs/mcs/assembly.cs
+index aa4c54317a2..96e43e70d99 100644
+--- a/mcs/mcs/assembly.cs
++++ b/mcs/mcs/assembly.cs
+@@ -554,7 +554,8 @@ namespace Mono.CSharp
+ 						if (prop != null) {
+ 							AttributeEncoder encoder = new AttributeEncoder ();
+ 							encoder.EncodeNamedPropertyArgument (prop, new BoolLiteral (Compiler.BuiltinTypes, true, Location.Null));
+-							SetCustomAttribute (pa.Constructor, encoder.ToArray ());
++							SetCustomAttribute (pa.Constructor, encoder.ToArray (out var references));
++							module.AddAssemblyReferences (references);
+ 						}
+ 					}
+ 				}
+diff --git a/mcs/mcs/attribute.cs b/mcs/mcs/attribute.cs
+index 83d403118ad..faf2cfaa1d8 100644
+--- a/mcs/mcs/attribute.cs
++++ b/mcs/mcs/attribute.cs
+@@ -1064,8 +1064,10 @@ namespace Mono.CSharp {
+ 			}
+ 
+ 			byte[] cdata;
++			List<Assembly> references;
+ 			if (pos_args == null && named_values == null) {
+ 				cdata = AttributeEncoder.Empty;
++				references = null;
+ 			} else {
+ 				AttributeEncoder encoder = new AttributeEncoder ();
+ 
+@@ -1138,7 +1140,7 @@ namespace Mono.CSharp {
+ 					encoder.EncodeEmptyNamedArguments ();
+ 				}
+ 
+-				cdata = encoder.ToArray ();
++				cdata = encoder.ToArray (out references);
+ 			}
+ 
+ 			if (!IsConditionallyExcluded (ctor.DeclaringType)) {
+@@ -1157,6 +1159,8 @@ namespace Mono.CSharp {
+ 					Error_AttributeEmitError (e.Message);
+ 					return;
+ 				}
++
++				context.Module.AddAssemblyReferences (references);
+ 			}
+ 
+ 			if (!usage_attr.AllowMultiple && allEmitted != null) {
+@@ -1415,6 +1419,7 @@ namespace Mono.CSharp {
+ 		byte[] buffer;
+ 		int pos;
+ 		const ushort Version = 1;
++		List<Assembly> imports;
+ 
+ 		static AttributeEncoder ()
+ 		{
+@@ -1594,7 +1599,15 @@ namespace Mono.CSharp {
+ 		public void EncodeTypeName (TypeSpec type)
+ 		{
+ 			var old_type = type.GetMetaInfo ();
+-			Encode (type.MemberDefinition.IsImported ? old_type.AssemblyQualifiedName : old_type.FullName);
++			if (type.MemberDefinition.IsImported) {
++				if (imports == null)
++					imports = new List<Assembly> ();
++
++				imports.Add (old_type.Assembly);
++				Encode (old_type.AssemblyQualifiedName);
++			} else {
++				Encode (old_type.FullName);
++			}
+ 		}
+ 
+ 		public void EncodeTypeName (TypeContainer type)
+@@ -1675,8 +1688,10 @@ namespace Mono.CSharp {
+ 			Encode (value);
+ 		}
+ 
+-		public byte[] ToArray ()
++		public byte[] ToArray (out List<Assembly> assemblyReferences)
+ 		{
++			assemblyReferences = imports;
++
+ 			byte[] buf = new byte[pos];
+ 			Array.Copy (buffer, buf, pos);
+ 			return buf;
+@@ -1990,7 +2005,8 @@ namespace Mono.CSharp {
+ 			encoder.Encode ((int) state);
+ 			encoder.EncodeEmptyNamedArguments ();
+ 
+-			builder.SetCustomAttribute ((ConstructorInfo) ctor.GetMetaInfo (), encoder.ToArray ());
++			builder.SetCustomAttribute ((ConstructorInfo) ctor.GetMetaInfo (), encoder.ToArray (out var references));
++			module.AddAssemblyReferences (references);
+ 		}
+ 	}
+ 
+@@ -2024,7 +2040,8 @@ namespace Mono.CSharp {
+ 			encoder.Encode ((int) modes);
+ 			encoder.EncodeEmptyNamedArguments ();
+ 
+-			builder.SetCustomAttribute ((ConstructorInfo) ctor.GetMetaInfo (), encoder.ToArray ());
++			builder.SetCustomAttribute ((ConstructorInfo) ctor.GetMetaInfo (), encoder.ToArray (out var references));
++			module.AddAssemblyReferences (references);
+ 		}
+ 	}
+ 
+@@ -2050,7 +2067,8 @@ namespace Mono.CSharp {
+ 			encoder.Encode ((uint) bits[0]);
+ 			encoder.EncodeEmptyNamedArguments ();
+ 
+-			builder.SetCustomAttribute ((ConstructorInfo) ctor.GetMetaInfo (), encoder.ToArray ());
++			builder.SetCustomAttribute ((ConstructorInfo) ctor.GetMetaInfo (), encoder.ToArray (out var references));
++			module.AddAssemblyReferences (references);
+ 		}
+ 
+ 		public void EmitAttribute (FieldBuilder builder, decimal value, Location loc)
+@@ -2068,7 +2086,8 @@ namespace Mono.CSharp {
+ 			encoder.Encode ((uint) bits[0]);
+ 			encoder.EncodeEmptyNamedArguments ();
+ 
+-			builder.SetCustomAttribute ((ConstructorInfo) ctor.GetMetaInfo (), encoder.ToArray ());
++			builder.SetCustomAttribute ((ConstructorInfo) ctor.GetMetaInfo (), encoder.ToArray (out var references));
++			module.AddAssemblyReferences (references);
+ 		}
+ 	}
+ 
+@@ -2092,7 +2111,8 @@ namespace Mono.CSharp {
+ 			encoder.EncodeTypeName (type);
+ 			encoder.EncodeEmptyNamedArguments ();
+ 
+-			builder.SetCustomAttribute ((ConstructorInfo) ctor.GetMetaInfo (), encoder.ToArray ());
++			builder.SetCustomAttribute ((ConstructorInfo) ctor.GetMetaInfo (), encoder.ToArray (out var references));
++			module.AddAssemblyReferences (references);
+ 		}
+ 	}
+ 
+diff --git a/mcs/mcs/class.cs b/mcs/mcs/class.cs
+index 6b1adc297a3..dc61f6dc627 100644
+--- a/mcs/mcs/class.cs
++++ b/mcs/mcs/class.cs
+@@ -2117,7 +2117,8 @@ namespace Mono.CSharp
+ 			encoder.Encode (GetAttributeDefaultMember ());
+ 			encoder.EncodeEmptyNamedArguments ();
+ 
+-			TypeBuilder.SetCustomAttribute ((ConstructorInfo) ctor.GetMetaInfo (), encoder.ToArray ());
++			TypeBuilder.SetCustomAttribute ((ConstructorInfo) ctor.GetMetaInfo (), encoder.ToArray (out var references));
++			Module.AddAssemblyReferences (references);
+ 		}
+ 
+ 		public override void VerifyMembers ()
+@@ -3962,7 +3963,10 @@ namespace Mono.CSharp
+ 					Report.Error (4013, Location,
+ 						"Local variables of type `{0}' cannot be used inside anonymous methods, lambda expressions or query expressions",
+ 						MemberType.GetSignatureForError ());
+-				} else if (MemberType.IsByRefLike) {
++				} else if (MemberType.IsSpecialRuntimeType) {
++					Report.Error (610, Location,
++						"Field or property cannot be of type `{0}'", MemberType.GetSignatureForError ());
++				} else {
+ 					if ((ModFlags & (Modifiers.ABSTRACT | Modifiers.EXTERN)) != 0)
+ 						return;
+ 
+@@ -3975,9 +3979,6 @@ namespace Mono.CSharp
+ 					Report.Error (8345, Location,
+ 						"Field or auto-implemented property cannot be of type `{0}' unless it is an instance member of a ref struct",
+ 						MemberType.GetSignatureForError ());
+-				} else {
+-					Report.Error (610, Location, 
+-						"Field or property cannot be of type `{0}'", MemberType.GetSignatureForError ());
+ 				}
+ 			}
+ 		}
+diff --git a/mcs/mcs/convert.cs b/mcs/mcs/convert.cs
+index ae153fc49e8..2c8d2a0204c 100644
+--- a/mcs/mcs/convert.cs
++++ b/mcs/mcs/convert.cs
+@@ -1232,6 +1232,13 @@ namespace Mono.CSharp {
+ 					FindApplicableUserDefinedConversionOperators (rc, operators, source_type_expr, target_type, restr, ref candidates);
+ 				}
+ 
++				if (source_type_expr == source && source_type.IsNullableType) {
++					operators = MemberCache.GetUserOperator (source_type.TypeArguments [0], Operator.OpType.Implicit, declared_only);
++					if (operators != null) {
++						FindApplicableUserDefinedConversionOperators (rc, operators, source_type_expr, target_type, restr, ref candidates);
++					}
++				}
++
+ 				if (!implicitOnly) {
+ 					operators = MemberCache.GetUserOperator (source_type, Operator.OpType.Explicit, declared_only);
+ 					if (operators != null) {
+diff --git a/mcs/mcs/cs-parser.jay b/mcs/mcs/cs-parser.jay
+index 4d6fcb44c0d..4ca3bf74f3d 100644
+--- a/mcs/mcs/cs-parser.jay
++++ b/mcs/mcs/cs-parser.jay
+@@ -34,13 +34,16 @@ namespace Mono.CSharp
+ 			Params	= 1 << 4,
+ 			Arglist	= 1 << 5,
+ 			DefaultValue = 1 << 6,
++			ReadOnly = 1 << 7,
+ 			
+-			All = Ref | Out | This | Params | Arglist | DefaultValue,
++			All = Ref | Out | This | Params | Arglist | DefaultValue | ReadOnly,
+ 			PrimaryConstructor = Ref | Out | Params | DefaultValue
+ 		}
+ 		
+ 		static readonly object ModifierNone = 0;
+-	
++		static readonly object RefStructToken = new object ();
++		static readonly object RefPartialStructToken = new object ();
++
+ 		NamespaceContainer current_namespace;
+ 		TypeContainer current_container;
+ 		TypeDefinition current_type;
+@@ -338,6 +341,7 @@ namespace Mono.CSharp
+ %token OPEN_BRACKET_EXPR
+ %token OPEN_PARENS_DECONSTRUCT
+ %token REF_STRUCT
++%token REF_PARTIAL
+ 
+ // Make the parser go into eval mode parsing (statements and compilation units).
+ %token EVAL_STATEMENT_PARSER
+@@ -648,8 +652,8 @@ namespace_or_type_declaration
+ 			TypeContainer ds = (TypeContainer)$1;
+ 
+ 			if ((ds.ModFlags & (Modifiers.PRIVATE | Modifiers.PROTECTED)) != 0){
+-				report.Error (1527, ds.Location, 
+-				"Namespace elements cannot be explicitly declared as private, protected or protected internal");
++				report.Error (1527, ds.Location,
++				"Namespace elements cannot be explicitly declared as private, protected, protected internal, or private protected");
+ 			}
+ 
+ 			// Here is a trick, for explicit attributes we don't know where they belong to until
+@@ -1028,7 +1032,15 @@ struct_keyword
+ 			FeatureIsNotAvailable (GetLocation ($1), "ref structs");
+ 		}
+ 
+-		$$ = this;
++		$$ = RefStructToken;
++	  }
++	| REF_PARTIAL STRUCT
++	  {
++		if (lang_version < LanguageVersion.V_7_2) {
++			FeatureIsNotAvailable (GetLocation ($1), "ref structs");
++		}
++
++		$$ = RefPartialStructToken;
+ 	  }
+ 	;
+ 
+@@ -1043,8 +1055,13 @@ struct_declaration
+ 		if ((mods & Modifiers.READONLY) != 0 && lang_version < LanguageVersion.V_7_2) {
+ 			FeatureIsNotAvailable (GetLocation ($4), "readonly structs");
+ 		}
+-		if ($4 != null)
++		if ($4 != null) {
+ 			mods |= Modifiers.REF;
++			if ($4 == RefPartialStructToken) {
++				mods |= Modifiers.PARTIAL;
++				$3 = $4;
++			}
++		}
+ 
+ 		lexer.ConstraintsParsing = true;
+ 		valid_param_mod = ParameterModifierType.PrimaryConstructor;
+@@ -1469,7 +1486,7 @@ method_header
+ 	  OPEN_PARENS
+ 	  {
+ 		lexer.parsing_generic_declaration = false;
+-	  	valid_param_mod = ParameterModifierType.All;
++		valid_param_mod = ParameterModifierType.All;
+ 	  }
+ 	  opt_formal_parameter_list CLOSE_PARENS 
+ 	  {
+@@ -1569,7 +1586,7 @@ constructor_body
+ 	 expression SEMICOLON
+ 	 {
+ 		lexer.parsing_block = 0;
+-		current_block.AddStatement (new ContextualReturn ((Expression) $3));
++		current_block.AddStatement (CreateExpressionBodiedStatement ((Expression) $3));
+ 		var b = end_block (GetLocation ($4));
+ 		b.IsCompilerGenerated = true;
+ 		$$ = b;
+@@ -1590,7 +1607,7 @@ expression_block
+ 	 lambda_arrow_expression SEMICOLON
+ 	 {
+ 		lexer.parsing_block = 0;
+-		current_block.AddStatement (new ContextualReturn ((Expression) $3));
++		current_block.AddStatement (CreateExpressionBodiedStatement ((Expression) $3));
+ 		var b = end_block (GetLocation ($4));
+ 		b.IsCompilerGenerated = true;
+ 		$$ = b;
+@@ -1794,7 +1811,9 @@ parameter_modifiers
+   		Parameter.Modifier mod = (Parameter.Modifier)$1 | p2;
+   		if (((Parameter.Modifier)$1 & p2) == p2) {
+   			Error_DuplicateParameterModifier (lexer.Location, p2);
+-  		} else {
++		} else if ((mod & ~(Parameter.Modifier.This | Parameter.Modifier.ReadOnly)) == 0) {
++			// ok
++		} else {
+ 	  		switch (mod & ~Parameter.Modifier.This) {
+   				case Parameter.Modifier.REF:
+ 					report.Error (1101, lexer.Location, "The parameter modifiers `this' and `ref' cannot be used altogether");
+@@ -1836,6 +1855,13 @@ parameter_modifier
+ 	  			
+ 		$$ = Parameter.Modifier.This;
+ 	  }
++	| IN
++	  {
++		if (lang_version < LanguageVersion.V_7_2)
++			FeatureIsNotAvailable (GetLocation ($1), "readonly references");
++
++		$$ = Parameter.Modifier.ReadOnly;
++	  }
+ 	;
+ 
+ parameter_array
+@@ -1871,7 +1897,7 @@ params_modifier
+ 		if ((mod & Parameter.Modifier.This) != 0) {
+ 			report.Error (1104, GetLocation ($1), "The parameter modifiers `this' and `params' cannot be used altogether");
+ 		} else {
+-			report.Error (1611, GetLocation ($1), "The params parameter cannot be declared as ref or out");
++			report.Error (1611, GetLocation ($1), "The params parameter cannot be declared as ref, out or in");
+ 		}	  
+ 	  }
+ 	| PARAMS params_modifier
+@@ -2004,7 +2030,7 @@ indexer_declaration
+ 	: opt_attributes opt_modifiers
+ 	  ref_member_type indexer_declaration_name OPEN_BRACKET
+ 	  {
+-	  	valid_param_mod = ParameterModifierType.Params | ParameterModifierType.DefaultValue;
++		valid_param_mod = ParameterModifierType.Params | ParameterModifierType.DefaultValue | ParameterModifierType.ReadOnly;
+ 	  }
+ 	  opt_formal_parameter_list CLOSE_BRACKET 
+ 	  {
+@@ -2181,6 +2207,11 @@ set_accessor_declaration
+ accessor_body
+ 	: block
+ 	| expression_block
++	  {
++		if (lang_version < LanguageVersion.V_7) {
++			FeatureIsNotAvailable (GetLocation ($1), "expression body property accessor");
++		}
++	  }
+ 	| SEMICOLON
+ 	  {
+ 		// TODO: lbag
+@@ -2331,7 +2362,7 @@ operator_type
+ operator_declarator
+ 	: operator_type OPERATOR overloadable_operator OPEN_PARENS
+ 	  {
+-		valid_param_mod = ParameterModifierType.DefaultValue;
++		valid_param_mod = ParameterModifierType.DefaultValue | ParameterModifierType.ReadOnly;
+ 		if ((Operator.OpType) $3 == Operator.OpType.Is)
+ 			valid_param_mod |= ParameterModifierType.Out;
+ 	  }
+@@ -2418,7 +2449,7 @@ overloadable_operator
+ conversion_operator_declarator
+ 	: IMPLICIT OPERATOR type OPEN_PARENS
+ 	  {
+-		valid_param_mod = ParameterModifierType.DefaultValue;
++		valid_param_mod = ParameterModifierType.DefaultValue | ParameterModifierType.ReadOnly;
+ 	  }
+ 	  opt_formal_parameter_list CLOSE_PARENS
+ 	  {
+@@ -2441,7 +2472,7 @@ conversion_operator_declarator
+ 	  }
+ 	| EXPLICIT OPERATOR type OPEN_PARENS
+ 	  {
+-		valid_param_mod = ParameterModifierType.DefaultValue;
++		valid_param_mod = ParameterModifierType.DefaultValue | ParameterModifierType.ReadOnly;
+ 	  }
+ 	  opt_formal_parameter_list CLOSE_PARENS
+ 	  {
+@@ -2850,6 +2881,11 @@ event_accessor_block
+ 	  }
+ 	| block
+ 	| expression_block
++	  {
++		if (lang_version < LanguageVersion.V_7) {
++			FeatureIsNotAvailable (GetLocation ($1), "expression body event accessor");
++		}
++	  }
+ 	;
+ 
+ attributes_without_members
+@@ -3014,7 +3050,7 @@ delegate_declaration
+ 	  ref_member_type type_declaration_name
+ 	  OPEN_PARENS
+ 	  {
+-		valid_param_mod = ParameterModifierType.Ref | ParameterModifierType.Out | ParameterModifierType.Params | ParameterModifierType.DefaultValue;
++		valid_param_mod = ParameterModifierType.Ref | ParameterModifierType.Out | ParameterModifierType.Params | ParameterModifierType.DefaultValue | ParameterModifierType.ReadOnly;
+ 	  }
+ 	  opt_formal_parameter_list CLOSE_PARENS
+ 	  {
+@@ -3927,7 +3963,15 @@ non_simple_argument
+ 	  {
+ 		$$ = new Argument (new Arglist (GetLocation ($1)));
+ 		lbag.AddLocation ($$, GetLocation ($2), GetLocation ($3));
+-	  }	  
++	  }
++	| IN variable_reference
++	  {
++		if (lang_version < LanguageVersion.V_7_2)
++			FeatureIsNotAvailable (GetLocation ($1), "readonly references");
++
++		$$ = new Argument ((Expression) $2, Argument.AType.Readonly);
++		lbag.AddLocation ($$, GetLocation ($1));
++	  }
+ 	;
+ 
+ out_variable_declaration
+@@ -4408,7 +4452,7 @@ opt_anonymous_method_signature
+ anonymous_method_signature
+ 	: OPEN_PARENS
+ 	  {
+-	  	valid_param_mod = ParameterModifierType.Ref | ParameterModifierType.Out;
++		valid_param_mod = ParameterModifierType.Ref | ParameterModifierType.Out | ParameterModifierType.ReadOnly;
+ 	  }
+ 	  opt_formal_parameter_list CLOSE_PARENS
+ 	  {
+@@ -5014,36 +5058,47 @@ null_coalescing_expression
+ 	  }
+ 	;
+ 
++
++conditional_oper_expr
++	: expression
++	| stackalloc_expression
++	;
++
+ conditional_expression
+ 	: null_coalescing_expression
+-	| null_coalescing_expression INTERR expression COLON expression
++	| null_coalescing_expression INTERR conditional_oper_expr COLON conditional_oper_expr
+ 	  {
+ 		$$ = new Conditional (new BooleanExpression ((Expression) $1), (Expression) $3, (Expression) $5, GetLocation ($2));
+ 		lbag.AddLocation ($$, GetLocation ($4));
+ 	  }
+-	| null_coalescing_expression INTERR expression COLON THROW prefixed_unary_expression
++	| null_coalescing_expression INTERR conditional_oper_expr COLON THROW prefixed_unary_expression
+ 	  {
+ 		if (lang_version < LanguageVersion.V_7)
+-			FeatureIsNotAvailable (lexer.Location, "throw expression");
++			FeatureIsNotAvailable (GetLocation ($5), "throw expression");
+ 
+ 		var expr = new ThrowExpression ((Expression) $6, GetLocation ($5));
+ 		$$ = new Conditional (new BooleanExpression ((Expression) $1), (Expression) $3, expr, GetLocation ($2));
+ 		lbag.AddLocation ($$, GetLocation ($4));
+ 	  }
+-	| null_coalescing_expression INTERR expression error
++	| null_coalescing_expression INTERR reference_expression COLON reference_expression
++	  {
++		$$ = new Conditional (new BooleanExpression ((Expression) $1), (Expression) $3, (Expression) $5, GetLocation ($2));
++		lbag.AddLocation ($$, GetLocation ($4));
++	  }
++	| null_coalescing_expression INTERR conditional_oper_expr error
+ 	  {
+ 		Error_SyntaxError (yyToken);
+ 
+ 		$$ = new Conditional (new BooleanExpression ((Expression) $1), (Expression) $3, null, GetLocation ($2));
+ 	  }
+-	| null_coalescing_expression INTERR expression COLON error
++	| null_coalescing_expression INTERR conditional_oper_expr COLON error
+ 	  {
+ 		Error_SyntaxError (yyToken);
+ 
+ 		$$ = new Conditional (new BooleanExpression ((Expression) $1), (Expression) $3, null, GetLocation ($2));
+ 		lbag.AddLocation ($$, GetLocation ($4));
+ 	  }
+-	| null_coalescing_expression INTERR expression COLON CLOSE_BRACE
++	| null_coalescing_expression INTERR conditional_oper_expr COLON CLOSE_BRACE
+ 	  {
+ 		Error_SyntaxError (Token.CLOSE_BRACE);
+ 
+@@ -5308,7 +5363,7 @@ lambda_expression
+ 	  }
+ 	| OPEN_PARENS_LAMBDA
+ 	  {
+-	  	valid_param_mod = ParameterModifierType.Ref | ParameterModifierType.Out;
++		valid_param_mod = ParameterModifierType.Ref | ParameterModifierType.Out | ParameterModifierType.ReadOnly;
+ 	  }
+ 	  opt_lambda_parameter_list CLOSE_PARENS ARROW 
+ 	  {
+@@ -5322,7 +5377,7 @@ lambda_expression
+ 	  }
+ 	| ASYNC OPEN_PARENS_LAMBDA
+ 	  {
+-	  	valid_param_mod = ParameterModifierType.Ref | ParameterModifierType.Out;	  
++		valid_param_mod = ParameterModifierType.Ref | ParameterModifierType.Out | ParameterModifierType.ReadOnly;
+ 	  }
+ 	  opt_lambda_parameter_list CLOSE_PARENS ARROW 
+ 	  {
+@@ -5522,10 +5577,17 @@ modifiers
+ 		if ((m1 & m2) != 0) {
+ 			report.Error (1004, lexer.Location - ModifiersExtensions.Name (m2).Length,
+ 				"Duplicate `{0}' modifier", ModifiersExtensions.Name (m2));
+-		} else if ((m2 & Modifiers.AccessibilityMask) != 0 && (m1 & Modifiers.AccessibilityMask) != 0 &&
+-			((m2 | m1 & Modifiers.AccessibilityMask) != (Modifiers.PROTECTED | Modifiers.INTERNAL))) {
+-			report.Error (107, lexer.Location - ModifiersExtensions.Name (m2).Length,
+-				"More than one protection modifier specified");
++		} else if ((m2 & Modifiers.AccessibilityMask) != 0 && (m1 & Modifiers.AccessibilityMask) != 0) {
++			var accessibility = (m2 | m1 & Modifiers.AccessibilityMask);
++
++			if (accessibility == (Modifiers.PRIVATE | Modifiers.PROTECTED)) {
++				if (lang_version < LanguageVersion.V_7_2) {
++					FeatureIsNotAvailable (lexer.Location, "private protected");
++				}
++			} else if (accessibility != (Modifiers.PROTECTED | Modifiers.INTERNAL)) {
++				report.Error (107, lexer.Location - ModifiersExtensions.Name (m2).Length,
++					"More than one protection modifier specified");
++			}
+ 		}
+ 		
+ 		$$ = m1 | m2;
+@@ -6223,11 +6285,28 @@ block_variable_initializer
+ 	| STACKALLOC simple_type
+ 	  {
+ 		report.Error (1575, GetLocation ($1), "A stackalloc expression requires [] after type");
+-		$$ = new StackAlloc ((Expression) $2, null, GetLocation ($1));		
++		$$ = new StackAlloc ((Expression) $2, null, GetLocation ($1));
+ 	  }
+ 	| reference_expression
+ 	;
+ 
++stackalloc_expression
++	: STACKALLOC simple_type OPEN_BRACKET_EXPR expression CLOSE_BRACKET
++	  {
++		if (lang_version < LanguageVersion.V_7_2) {
++			FeatureIsNotAvailable (GetLocation ($1), "ref structs");
++		}
++
++		$$ = new SpanStackAlloc ((Expression) $2, (Expression) $4, GetLocation ($1));
++		lbag.AddLocation ($$, GetLocation ($3), GetLocation ($5));
++	  }
++	| STACKALLOC simple_type
++	  {
++		report.Error (1575, GetLocation ($1), "A stackalloc expression requires [] after type");
++		$$ = new StackAlloc ((Expression) $2, null, GetLocation ($1));
++	  }
++	;
++
+ reference_expression
+ 	: REF expression
+ 	  {
+@@ -7699,7 +7778,7 @@ doc_cref
+ 	  }
+ 	| doc_type_declaration_name DOT THIS OPEN_BRACKET
+ 	  {
+-		valid_param_mod = ParameterModifierType.Ref | ParameterModifierType.Out;
++		valid_param_mod = ParameterModifierType.Ref | ParameterModifierType.Out | ParameterModifierType.ReadOnly;
+ 	  }
+ 	  opt_doc_parameters CLOSE_BRACKET
+ 	  {
+@@ -7743,7 +7822,7 @@ opt_doc_method_sig
+ 	: /* empty */
+ 	| OPEN_PARENS
+ 	  {
+-		valid_param_mod = ParameterModifierType.Ref | ParameterModifierType.Out;
++		valid_param_mod = ParameterModifierType.Ref | ParameterModifierType.Out | ParameterModifierType.ReadOnly;
+ 	  }
+ 	  opt_doc_parameters CLOSE_PARENS
+ 	  {
+@@ -7951,6 +8030,14 @@ static bool IsUnaryOperator (Operator.OpType op)
+ 	return false;
+ }
+ 
++static Statement CreateExpressionBodiedStatement (Expression expr)
++{
++	if (expr is ThrowExpression te)
++		return new StatementExpression (te);
++
++	return new ContextualReturn (expr);
++}
++
+ void syntax_error (Location l, string msg)
+ {
+ 	report.Error (1003, l, "Syntax error, " + msg);
+@@ -8430,6 +8517,8 @@ static string GetTokenName (int token)
+ 	case Token.READONLY:
+ 		return "readonly";
+ 	case Token.REF:
++	case Token.REF_STRUCT:
++	case Token.REF_PARTIAL:
+ 		return "ref";
+ 	case Token.RETURN:
+ 		return "return";
+@@ -8444,7 +8533,6 @@ static string GetTokenName (int token)
+ 	case Token.STATIC:
+ 		return "static";
+ 	case Token.STRUCT:
+-	case Token.REF_STRUCT:
+ 		return "struct";
+ 	case Token.SWITCH:
+ 		return "switch";
+diff --git a/mcs/mcs/cs-tokenizer.cs b/mcs/mcs/cs-tokenizer.cs
+index 37edb5c1224..db5ba1f1f1b 100644
+--- a/mcs/mcs/cs-tokenizer.cs
++++ b/mcs/mcs/cs-tokenizer.cs
+@@ -825,8 +825,7 @@ namespace Mono.CSharp
+ 					next_token == Token.CLASS ||
+ 					next_token == Token.STRUCT ||
+ 					next_token == Token.INTERFACE ||
+-					next_token == Token.VOID ||
+-					next_token == Token.REF_STRUCT;
++					next_token == Token.VOID;
+ 
+ 				PopPosition ();
+ 
+@@ -916,14 +915,20 @@ namespace Mono.CSharp
+ 
+ 				break;
+ 			case Token.REF:
+-				if (peek_token () == Token.STRUCT) {
++				var pp = peek_token ();
++				switch (pp) {
++				case Token.STRUCT:
+ 					token ();
+ 					res = Token.REF_STRUCT;
++					break;
++				case Token.PARTIAL:
++					token ();
++					res = Token.REF_PARTIAL;
++					break;
+ 				}
+ 				break;
+ 			}
+ 
+-
+ 			return res;
+ 		}
+ 
+@@ -1212,6 +1217,7 @@ namespace Mono.CSharp
+ 
+ 				case Token.REF:
+ 				case Token.OUT:
++				case Token.IN:
+ 					can_be_type = is_type = false;
+ 					continue;
+ 
+@@ -1406,6 +1412,8 @@ namespace Mono.CSharp
+ 			case Token.INTERPOLATED_STRING:
+ 			case Token.THROW:
+ 			case Token.DEFAULT_COLON:
++			case Token.REF:
++			case Token.STACKALLOC:
+ 				next_token = Token.INTERR;
+ 				break;
+ 				
+@@ -1567,28 +1575,53 @@ namespace Mono.CSharp
+ 		{
+ 			int d;
+ 			bool seen_digits = false;
+-			
+-			if (c != -1){
++			bool digit_separator = false;
++			int prev = c;
++			var loc = Location;
++
++			if (prev != -1){
+ 				if (number_pos == MaxNumberLength)
+ 					Error_NumericConstantTooLong ();
+-				number_builder [number_pos++] = (char) c;
++				number_builder [number_pos++] = (char) prev;
+ 			}
+-			
++
+ 			//
+ 			// We use peek_char2, because decimal_digits needs to do a 
+ 			// 2-character look-ahead (5.ToString for example).
+ 			//
+ 			while ((d = peek_char2 ()) != -1){
+-				if (d >= '0' && d <= '9'){
++				if (d >= '0' && d <= '9') {
+ 					if (number_pos == MaxNumberLength)
+ 						Error_NumericConstantTooLong ();
+-					number_builder [number_pos++] = (char) d;
+-					get_char ();
++					number_builder [number_pos++] = (char)d;
++					prev = get_char ();
+ 					seen_digits = true;
+-				} else
+-					break;
++					continue;
++				} else if (d == '_') {
++					if (!digit_separator) {
++						if (context.Settings.Version < LanguageVersion.V_7)
++							Report.FeatureIsNotAvailable (context, Location, "digit separators");
++
++						digit_separator = true;
++					}
++
++					if (prev == '.')
++						break;
++
++					if (prev == 'e' || prev == 'E')
++						Error_InvalidNumber ();
++
++					prev = get_char();
++					continue;
++				}
++
++				break;
+ 			}
+ 			
++			if (prev == '_') {
++				Error_InvalidNumber ();
++			}
++
+ 			return seen_digits;
+ 		}
+ 
+@@ -1716,9 +1749,8 @@ namespace Mono.CSharp
+ 			} catch (OverflowException) {
+ 				Error_NumericConstantTooLong ();
+ 				return new IntLiteral (context.BuiltinTypes, 0, loc);
+-			}
+-			catch (FormatException) {
+-				Report.Error (1013, Location, "Invalid number");
++			} catch (FormatException) {
++				Error_InvalidNumber ();
+ 				return new IntLiteral (context.BuiltinTypes, 0, loc);
+ 			}
+ 		}
+@@ -1757,14 +1789,41 @@ namespace Mono.CSharp
+ 		{
+ 			int d;
+ 			ulong ul;
+-			
+-			get_char ();
++			bool digit_separator = false;
++			int prev = get_char ();
++
+ 			while ((d = peek_char ()) != -1){
+ 				if (is_hex (d)){
+ 					number_builder [number_pos++] = (char) d;
+ 					get_char ();
+-				} else
+-					break;
++
++					prev = d;
++					continue;
++				}
++
++				if (d == '_') {
++					if (prev == 'x' || prev == 'X')
++						Error_InvalidNumber ();
++
++					get_char ();
++
++					if (!digit_separator) {
++						if (context.Settings.Version < LanguageVersion.V_7)
++							Report.FeatureIsNotAvailable (context, Location, "digit separators");
++
++						digit_separator = true;
++					}
++
++					prev = d;
++					continue;
++				}
++
++				break;
++			}
++
++			if (number_pos == 0 || prev == '_') {
++				Error_InvalidNumber ();
++				return new IntLiteral (context.BuiltinTypes, 0, loc);
+ 			}
+ 			
+ 			string s = new String (number_builder, 0, number_pos);
+@@ -1779,13 +1838,65 @@ namespace Mono.CSharp
+ 			} catch (OverflowException){
+ 				Error_NumericConstantTooLong ();
+ 				return new IntLiteral (context.BuiltinTypes, 0, loc);
+-			}
+-			catch (FormatException) {
+-				Report.Error (1013, Location, "Invalid number");
++			} catch (FormatException) {
++				Error_InvalidNumber ();
+ 				return new IntLiteral (context.BuiltinTypes, 0, loc);
+ 			}
+ 		}
+ 
++		ILiteralConstant handle_binary (Location loc)
++		{
++			int d;
++			ulong ul = 0;
++			bool digit_separator = false;
++			int digits = 0;
++			int prev = get_char ();
++
++			while ((d = peek_char ()) != -1){
++
++				if (d == '0' || d == '1') {
++					ul = (ul << 1);
++					digits++;
++					if (d == '1')
++						ul |= 1;
++					get_char ();
++					if (digits > 64) {
++						Error_NumericConstantTooLong ();
++						return new IntLiteral (context.BuiltinTypes, 0, loc);
++					}
++
++					prev = d;
++					continue;
++				}
++
++				if (d == '_') {
++					if (prev == 'b' || prev == 'B')
++						Error_InvalidNumber ();
++
++					get_char ();
++
++					if (!digit_separator) {
++						if (context.Settings.Version < LanguageVersion.V_7)
++							Report.FeatureIsNotAvailable (context, Location, "digit separators");
++						
++						digit_separator = true;
++					}
++
++					prev = d;
++					continue;
++				}
++				 
++				break;
++			}
++
++			if (digits == 0 || prev == '_') {
++				Error_InvalidNumber ();
++				return new IntLiteral (context.BuiltinTypes, 0, loc);
++			}
++
++			return integer_type_suffix (ul, peek_char (), loc);
++		}
++		
+ 		//
+ 		// Invoked if we know we have .digits or digits
+ 		//
+@@ -1817,7 +1928,20 @@ namespace Mono.CSharp
+ 
+ 						return Token.LITERAL;
+ 					}
++
++					if (peek == 'b' || peek == 'B'){
++						if (context.Settings.Version < LanguageVersion.V_7)
++							Report.FeatureIsNotAvailable (context, Location, "binary literals");
++
++						val = res = handle_binary (loc);
++#if FULL_AST
++						res.ParsedValue = reader.ReadChars (read_start, reader.Position - 1);
++#endif
++
++						return Token.LITERAL;
++					}
+ 				}
++
+ 				decimal_digits (c);
+ 				c = peek_char ();
+ 			}
+@@ -1869,7 +1993,7 @@ namespace Mono.CSharp
+ 						Error_NumericConstantTooLong ();
+ 					number_builder [number_pos++] = '+';
+ 				}
+-					
++
+ 				decimal_digits (c);
+ 				c = peek_char ();
+ 			}
+@@ -2944,6 +3068,11 @@ namespace Mono.CSharp
+ 		{
+ 			Report.Error (1021, Location, "Integral constant is too large");			
+ 		}
++
++		void Error_InvalidNumber ()
++		{
++			Report.Error (1013, Location, "Invalid number");
++		}
+ 		
+ 		void Error_InvalidDirective ()
+ 		{
+diff --git a/mcs/mcs/ecore.cs b/mcs/mcs/ecore.cs
+index 20ee9e73b19..d5926bf4d1f 100644
+--- a/mcs/mcs/ecore.cs
++++ b/mcs/mcs/ecore.cs
+@@ -241,7 +241,7 @@ namespace Mono.CSharp {
+ 
+ 		protected void CheckExpressionVariable (ResolveContext rc)
+ 		{
+-			if (rc.HasAny (ResolveContext.Options.BaseInitializer | ResolveContext.Options.FieldInitializerScope)) {
++			if (rc.HasAny (ResolveContext.Options.BaseInitializer | ResolveContext.Options.FieldInitializerScope) && rc.CurrentAnonymousMethod == null) {
+ 				rc.Report.Error (8200, loc, "Out variable and pattern variable declarations are not allowed within constructor initializers, field initializers, or property initializers");
+ 			} else if (rc.HasSet (ResolveContext.Options.QueryClauseScope)) {
+ 				rc.Report.Error (8201, loc, "Out variable and pattern variable declarations are not allowed within a query clause");
+diff --git a/mcs/mcs/expression.cs b/mcs/mcs/expression.cs
+index 518ccc8ef43..87db14a0ce7 100644
+--- a/mcs/mcs/expression.cs
++++ b/mcs/mcs/expression.cs
+@@ -920,7 +920,7 @@ namespace Mono.CSharp
+ 
+ 		public override bool ContainsEmitWithAwait ()
+ 		{
+-			throw new NotImplementedException ();
++			return false;
+ 		}
+ 
+ 		public override Expression CreateExpressionTree (ResolveContext ec)
+@@ -2051,7 +2051,11 @@ namespace Mono.CSharp
+ 
+ 						if (d.BuiltinType == BuiltinTypeSpec.Type.Dynamic)
+ 							return this;
+-						
++
++						// TODO: Requires custom optimized version with variable store
++						if (Variable != null)
++							return this;
++
+ 						//
+ 						// Turn is check into simple null check for implicitly convertible reference types
+ 						//
+@@ -2757,6 +2761,12 @@ namespace Mono.CSharp
+ 			}
+ 		}
+ 
++		public override bool IsNull {
++			get {
++				return TypeSpec.IsReferenceType (type);
++			}
++		}
++
+ 		public override bool ContainsEmitWithAwait ()
+ 		{
+ 			return false;
+@@ -5669,6 +5679,12 @@ namespace Mono.CSharp
+ 				ConvCast.Emit (ec, enum_conversion);
+ 		}
+ 
++		public override void EmitPrepare (EmitContext ec)
++		{
++			Left.EmitPrepare (ec);
++			Right.EmitPrepare (ec);
++		}
++
+ 		public override void EmitSideEffect (EmitContext ec)
+ 		{
+ 			if ((oper & Operator.LogicalMask) != 0 ||
+@@ -6385,7 +6401,7 @@ namespace Mono.CSharp
+ 							}
+ 						}
+ 
+-						if (conv_false_expr != null) {
++						if (conv_false_expr != null && false_type != InternalType.ErrorType && true_type != InternalType.ErrorType) {
+ 							ec.Report.Error (172, true_expr.Location,
+ 								"Type of conditional expression cannot be determined as `{0}' and `{1}' convert implicitly to each other",
+ 									true_type.GetSignatureForError (), false_type.GetSignatureForError ());
+@@ -6398,7 +6414,7 @@ namespace Mono.CSharp
+ 				} else if ((conv = Convert.ImplicitConversion (ec, false_expr, true_type, loc)) != null) {
+ 					false_expr = conv;
+ 				} else {
+-					if (false_type != InternalType.ErrorType) {
++					if (false_type != InternalType.ErrorType && true_type != InternalType.ErrorType) {
+ 						ec.Report.Error (173, true_expr.Location,
+ 							"Type of conditional expression cannot be determined because there is no implicit conversion between `{0}' and `{1}'",
+ 							true_type.GetSignatureForError (), false_type.GetSignatureForError ());
+@@ -6427,6 +6443,30 @@ namespace Mono.CSharp
+ 			return this;
+ 		}
+ 
++		public override Expression DoResolveLValue (ResolveContext rc, Expression right_side)
++		{
++			expr = expr.Resolve (rc);
++			true_expr = true_expr.Resolve (rc);
++			false_expr = false_expr.Resolve (rc);
++
++			if (true_expr == null || false_expr == null || expr == null)
++				return null;
++			
++			if (!(true_expr is ReferenceExpression && false_expr is ReferenceExpression)) {
++				rc.Report.Error (8326, expr.Location, "Both ref conditional operators must be ref values");
++				return null;
++			}
++
++			if (!TypeSpecComparer.IsEqual (true_expr.Type, false_expr.Type)) {
++				rc.Report.Error (8327, true_expr.Location, "The ref conditional expression types `{0}' and `{1}' have to match",
++				                 true_expr.Type.GetSignatureForError (), false_expr.Type.GetSignatureForError ()); 
++			}
++
++			eclass = ExprClass.Value;
++			type = true_expr.Type;
++			return this;
++		}
++
+ 		public override void Emit (EmitContext ec)
+ 		{
+ 			Label false_target = ec.DefineLabel ();
+@@ -6774,7 +6814,7 @@ namespace Mono.CSharp
+ 						"Cannot use fixed variable `{0}' inside an anonymous method, lambda expression or query expression",
+ 						GetSignatureForError ());
+ 				} else if (local_info.IsByRef || local_info.Type.IsByRefLike) {
+-					if (ec.CurrentAnonymousMethod is StateMachineInitializer) {
++					if (local_info.Type.IsSpecialRuntimeType || ec.CurrentAnonymousMethod is StateMachineInitializer) {
+ 						// It's reported later as 4012/4013
+ 					} else {
+ 						ec.Report.Error (8175, loc,
+@@ -11877,12 +11917,17 @@ namespace Mono.CSharp
+ 			if (!TypeManager.VerifyUnmanaged (ec.Module, otype, loc))
+ 				return null;
+ 
+-			type = PointerContainer.MakeType (ec.Module, otype);
++			ResolveExpressionType (ec, otype);
+ 			eclass = ExprClass.Value;
+ 
+ 			return this;
+ 		}
+ 
++		protected virtual void ResolveExpressionType (ResolveContext rc, TypeSpec elementType)
++		{
++			type = PointerContainer.MakeType (rc.Module, elementType);
++		}
++
+ 		public override void Emit (EmitContext ec)
+ 		{
+ 			int size = BuiltinTypeSpec.GetSize (otype);
+@@ -11931,14 +11976,36 @@ namespace Mono.CSharp
+ 		public bool ResolveSpanConversion (ResolveContext rc, TypeSpec spanType)
+ 		{
+ 			ctor = MemberCache.FindMember (spanType, MemberFilter.Constructor (ParametersCompiled.CreateFullyResolved (PointerContainer.MakeType (rc.Module, rc.Module.Compiler.BuiltinTypes.Void), rc.Module.Compiler.BuiltinTypes.Int)), BindingRestriction.DeclaredOnly) as MethodSpec;
+-			if (ctor == null)
++			if (ctor == null) {
++				this.type = InternalType.ErrorType;
+ 				return false;
++			}
+ 			
+ 			this.type = spanType;
+ 			return true;
+ 		}
+ 	}
+ 
++	class SpanStackAlloc : StackAlloc
++	{
++		public SpanStackAlloc (Expression type, Expression count, Location l)
++			: base (type, count, l)
++		{
++		}
++
++		protected override void ResolveExpressionType (ResolveContext rc, TypeSpec elementType)
++		{
++			var span = rc.Module.PredefinedTypes.SpanGeneric.Resolve ();
++			if (span == null) {
++				type = InternalType.ErrorType;
++				return;
++			}
++
++			type = span.MakeGenericType (rc, new [] { elementType });
++			ResolveSpanConversion (rc, type);
++		}
++	}
++
+ 	//
+ 	// An object initializer expression
+ 	//
+@@ -13085,6 +13152,9 @@ namespace Mono.CSharp
+ 			if (expr is IAssignMethod)
+ 				return true;
+ 
++			if (expr is Conditional)
++				return true;
++
+ 			var invocation = expr as Invocation;
+ 			if (invocation?.Type.Kind == MemberKind.ByRef)
+ 				return true;
+@@ -13232,6 +13302,10 @@ namespace Mono.CSharp
+ 			this.loc = loc;
+ 		}
+ 
++		protected override void CloneTo (CloneContext clonectx, Expression t)
++		{
++		}
++
+ 		public override Expression CreateExpressionTree (ResolveContext ec)
+ 		{
+ 			throw new NotImplementedException ();
+diff --git a/mcs/mcs/field.cs b/mcs/mcs/field.cs
+index 86bb028defc..8c667328143 100644
+--- a/mcs/mcs/field.cs
++++ b/mcs/mcs/field.cs
+@@ -542,7 +542,7 @@ namespace Mono.CSharp
+ 				}
+ 			);
+ 
+-			fixed_buffer_type.SetCustomAttribute ((ConstructorInfo) ctor.GetMetaInfo (), encoder.ToArray ());
++			fixed_buffer_type.SetCustomAttribute ((ConstructorInfo) ctor.GetMetaInfo (), encoder.ToArray (out _));
+ #endif
+ 			//
+ 			// Don't emit FixedBufferAttribute attribute for private types
+@@ -559,7 +559,8 @@ namespace Mono.CSharp
+ 			encoder.Encode (buffer_size);
+ 			encoder.EncodeEmptyNamedArguments ();
+ 
+-			FieldBuilder.SetCustomAttribute ((ConstructorInfo) ctor.GetMetaInfo (), encoder.ToArray ());
++			FieldBuilder.SetCustomAttribute ((ConstructorInfo) ctor.GetMetaInfo (), encoder.ToArray (out var references));
++			Module.AddAssemblyReferences (references);
+ 		}
+ 	}
+ 
+diff --git a/mcs/mcs/generic.cs b/mcs/mcs/generic.cs
+index ec2965df63b..0c7032b2088 100644
+--- a/mcs/mcs/generic.cs
++++ b/mcs/mcs/generic.cs
+@@ -3381,7 +3381,7 @@ namespace Mono.CSharp {
+ 					continue;
+ 
+ 				var bound = candidates [ci];
+-				if (bound.Type == best_candidate)
++				if (TypeSpecComparer.IsEqual (bound.Type, best_candidate))
+ 					continue;
+ 
+ 				int cii = 0;
+diff --git a/mcs/mcs/modifiers.cs b/mcs/mcs/modifiers.cs
+index 926ab5d1848..21dd52b3b14 100644
+--- a/mcs/mcs/modifiers.cs
++++ b/mcs/mcs/modifiers.cs
+@@ -74,6 +74,8 @@ namespace Mono.CSharp
+ 				return "internal";
+ 			case Modifiers.PRIVATE:
+ 				return "private";
++			case Modifiers.PRIVATE | Modifiers.PROTECTED:
++				return "private protected";
+ 			default:
+ 				throw new NotImplementedException (mod.ToString ());
+ 			}
+@@ -129,12 +131,16 @@ namespace Mono.CSharp
+ 			if ((modB & Modifiers.PUBLIC) != 0) {
+ 				flags = Modifiers.PROTECTED | Modifiers.INTERNAL | Modifiers.PRIVATE;
+ 			} else if ((modB & Modifiers.PROTECTED) != 0) {
+-				if ((modB & Modifiers.INTERNAL) != 0)
+-					flags = Modifiers.PROTECTED | Modifiers.INTERNAL;
+-
+-				flags |= Modifiers.PRIVATE;
+-			} else if ((modB & Modifiers.INTERNAL) != 0)
++				if ((modB & Modifiers.INTERNAL) != 0) {
++					flags = Modifiers.PROTECTED | Modifiers.INTERNAL | Modifiers.PRIVATE;
++				} else {
++					modA &= ~Modifiers.PROTECTED;
++					flags = Modifiers.PRIVATE;
++				}
++			} else if ((modB & Modifiers.INTERNAL) != 0) {
++				modA &= ~Modifiers.PROTECTED;
+ 				flags = Modifiers.PRIVATE;
++			}
+ 
+ 			return modB != modA && (modA & (~flags)) == 0;
+ 		}
+@@ -151,6 +157,8 @@ namespace Mono.CSharp
+ 			} else {
+ 				if ((mod_flags & Modifiers.PUBLIC) != 0)
+ 					t = TypeAttributes.NestedPublic;
++				else if ((mod_flags & (Modifiers.PROTECTED | Modifiers.PRIVATE)) == (Modifiers.PROTECTED | Modifiers.PRIVATE))
++					t = TypeAttributes.NestedFamANDAssem;
+ 				else if ((mod_flags & Modifiers.PRIVATE) != 0)
+ 					t = TypeAttributes.NestedPrivate;
+ 				else if ((mod_flags & (Modifiers.PROTECTED | Modifiers.INTERNAL)) == (Modifiers.PROTECTED | Modifiers.INTERNAL))
+@@ -173,18 +181,27 @@ namespace Mono.CSharp
+ 		{
+ 			FieldAttributes fa = 0;
+ 
+-			if ((mod_flags & Modifiers.PUBLIC) != 0)
++			switch (mod_flags & Modifiers.AccessibilityMask) {
++			case Modifiers.PUBLIC:
+ 				fa |= FieldAttributes.Public;
+-			if ((mod_flags & Modifiers.PRIVATE) != 0)
++				break;
++			case Modifiers.PRIVATE:
+ 				fa |= FieldAttributes.Private;
+-			if ((mod_flags & Modifiers.PROTECTED) != 0) {
+-				if ((mod_flags & Modifiers.INTERNAL) != 0)
+-					fa |= FieldAttributes.FamORAssem;
+-				else 
+-					fa |= FieldAttributes.Family;
+-			} else {
+-				if ((mod_flags & Modifiers.INTERNAL) != 0)
+-					fa |= FieldAttributes.Assembly;
++				break;
++			case Modifiers.PROTECTED | Modifiers.INTERNAL:
++				fa |= FieldAttributes.FamORAssem;
++				break;
++			case Modifiers.PROTECTED:
++				fa |= FieldAttributes.Family;
++				break;
++			case Modifiers.INTERNAL:
++				fa |= FieldAttributes.Assembly;
++				break;
++			case Modifiers.PRIVATE | Modifiers.PROTECTED:
++				fa |= FieldAttributes.FamANDAssem;
++				break;
++			default:
++				throw new NotImplementedException (mod_flags.ToString ());
+ 			}
+ 
+ 			if ((mod_flags & Modifiers.STATIC) != 0)
+@@ -215,6 +232,9 @@ namespace Mono.CSharp
+ 			case Modifiers.INTERNAL:
+ 				ma |= MethodAttributes.Assembly;
+ 				break;
++			case Modifiers.PRIVATE | Modifiers.PROTECTED:
++				ma |= MethodAttributes.FamANDAssem;
++				break;
+ 			default:
+ 				throw new NotImplementedException (mod_flags.ToString ());
+ 			}
+diff --git a/mcs/mcs/module.cs b/mcs/mcs/module.cs
+index 2293d825b36..4680433bb01 100644
+--- a/mcs/mcs/module.cs
++++ b/mcs/mcs/module.cs
+@@ -480,6 +480,18 @@ namespace Mono.CSharp
+ 			attributes.AddAttribute (attr);
+ 		}
+ 
++		public void AddAssemblyReferences (List<Assembly> names)
++		{
++			if (names == null)
++				return;
++
++#if STATIC
++			foreach (var name in names) {
++				Builder.__GetAssemblyToken (name);
++			}
++#endif
++		}
++
+ 		public override void AddTypeContainer (TypeContainer tc)
+ 		{
+ 			AddTypeContainerMember (tc);
+diff --git a/mcs/mcs/parameter.cs b/mcs/mcs/parameter.cs
+index cc10eee162b..95851478010 100644
+--- a/mcs/mcs/parameter.cs
++++ b/mcs/mcs/parameter.cs
+@@ -221,12 +221,13 @@ namespace Mono.CSharp {
+ 			REF = 1 << 1,
+ 			OUT = 1 << 2,
+ 			This = 1 << 3,
+-			CallerMemberName = 1 << 4,
+-			CallerLineNumber = 1 << 5,
+-			CallerFilePath = 1 << 6,
++			ReadOnly = 1 << 4,
++			CallerMemberName = 1 << 5,
++			CallerLineNumber = 1 << 6,
++			CallerFilePath = 1 << 7,
+ 
+ 			RefOutMask = REF | OUT,
+-			ModifierMask = PARAMS | REF | OUT | This,
++			ModifierMask = PARAMS | REF | OUT | This | ReadOnly,
+ 			CallerMask = CallerMemberName | CallerLineNumber | CallerFilePath
+ 		}
+ 
+@@ -1474,9 +1475,9 @@ namespace Mono.CSharp {
+ 					}
+ 				}
+ 
+-				if (!expr.IsNull && TypeSpec.IsReferenceType (parameter_type) && parameter_type.BuiltinType != BuiltinTypeSpec.Type.String) {
++				if (!res.IsNull && TypeSpec.IsReferenceType (parameter_type) && parameter_type.BuiltinType != BuiltinTypeSpec.Type.String) {
+ 					rc.Report.Error (1763, Location,
+-						"Optional parameter `{0}' of type `{1}' can only be initialized with `null'",
++						"Optional parameter `{0}' of type `{1}' can only be initialized with default value",
+ 						p.Name, parameter_type.GetSignatureForError ());
+ 
+ 					return;
+diff --git a/mcs/mcs/report.cs b/mcs/mcs/report.cs
+index cc3d82b26e0..5d64c8e766e 100644
+--- a/mcs/mcs/report.cs
++++ b/mcs/mcs/report.cs
+@@ -42,7 +42,7 @@ namespace Mono.CSharp {
+ 		public static readonly int[] AllWarnings = new int[] {
+ 			28, 67, 78,
+ 			105, 108, 109, 114, 162, 164, 168, 169, 183, 184, 197,
+-			219, 251, 252, 253, 278, 282,
++			219, 251, 252, 253, 278, 280, 282,
+ 			402, 414, 419, 420, 429, 436, 437, 440, 458, 464, 465, 467, 469, 472, 473,
+ 			612, 618, 626, 628, 642, 649, 652, 657, 658, 659, 660, 661, 665, 672, 675, 693,
+ 			728,
+@@ -107,6 +107,15 @@ namespace Mono.CSharp {
+ 			case LanguageVersion.V_7:
+ 				version = "7.0";
+ 				break;
++			case LanguageVersion.V_7_1:
++				version = "7.1";
++				break;
++			case LanguageVersion.V_7_2:
++				version = "7.2";
++				break;
++			case LanguageVersion.V_7_3:
++				version = "7.3";
++				break;
+ 			default:
+ 				throw new InternalErrorException ("Invalid feature version", compiler.Settings.Version);
+ 			}
+diff --git a/mcs/mcs/settings.cs b/mcs/mcs/settings.cs
+index 37664187c71..976c9b68128 100644
+--- a/mcs/mcs/settings.cs
++++ b/mcs/mcs/settings.cs
+@@ -32,10 +32,11 @@ namespace Mono.CSharp {
+ 		V_7 = 7,
+ 		V_7_1 = 71,
+ 		V_7_2 = 72,
++		V_7_3 = 73,
+ 		Experimental = 100,
+ 
+ 		Default = V_7,
+-		Latest = V_7_2
++		Latest = V_7_3
+ 	}
+ 
+ 	public enum RuntimeVersion
+@@ -1270,6 +1271,7 @@ namespace Mono.CSharp {
+ 			case "/highentropyva+":
+ 			case "/highentropyva-":
+ 			case "/link":
++			case "/sourcelink":
+ 			case "/moduleassemblyname":
+ 			case "/nowin32manifest":
+ 			case "/pdb":
+diff --git a/mcs/mcs/statement.cs b/mcs/mcs/statement.cs
+index 9c51128548f..c8b77c1adc1 100644
+--- a/mcs/mcs/statement.cs
++++ b/mcs/mcs/statement.cs
+@@ -928,8 +928,7 @@ namespace Mono.CSharp {
+ 		public override Reachability MarkReachable (Reachability rc)
+ 		{
+ 			base.MarkReachable (rc);
+-			expr.MarkReachable (rc);
+-			return rc;
++			return expr.MarkReachable (rc);
+ 		}
+ 
+ 		public override bool Resolve (BlockContext ec)
+@@ -2419,6 +2418,7 @@ namespace Mono.CSharp {
+ 			IsLocked = 1 << 8,
+ 			SymbolFileHidden = 1 << 9,
+ 			ByRef = 1 << 10,
++			PointerByRef = 1 << 11,
+ 
+ 			ReadonlyMask = 1 << 20
+ 		}
+@@ -2609,20 +2609,22 @@ namespace Mono.CSharp {
+ 
+ 			if (IsByRef) {
+ 				builder = ec.DeclareLocal (ReferenceContainer.MakeType (ec.Module, Type), IsFixed);
++			} else if ((flags & Flags.PointerByRef) != 0) {
++				builder = ec.DeclareLocal (ReferenceContainer.MakeType (ec.Module, ((PointerContainer) Type).Element), IsFixed);
+ 			} else {
+ 				//
+ 				// All fixed variabled are pinned, a slot has to be alocated
+ 				//
+-				builder = ec.DeclareLocal(Type, IsFixed);
++				builder = ec.DeclareLocal (Type, IsFixed);
+ 			}
+ 
+ 			if ((flags & Flags.SymbolFileHidden) == 0)
+ 				ec.DefineLocalVariable (name, builder);
+ 		}
+ 
+-		public static LocalVariable CreateCompilerGenerated (TypeSpec type, Block block, Location loc, bool writeToSymbolFile = false)
++		public static LocalVariable CreateCompilerGenerated (TypeSpec type, Block block, Location loc, bool writeToSymbolFile = false, Flags additionalFlags = 0)
+ 		{
+-			LocalVariable li = new LocalVariable (block, GetCompilerGeneratedName (block), Flags.CompilerGenerated | Flags.Used, loc);
++			LocalVariable li = new LocalVariable (block, GetCompilerGeneratedName (block), Flags.CompilerGenerated | Flags.Used | additionalFlags, loc);
+ 			if (!writeToSymbolFile)
+ 				li.flags |= Flags.SymbolFileHidden;
+ 			
+@@ -2725,6 +2727,11 @@ namespace Mono.CSharp {
+ 			flags |= Flags.Used;
+ 		}
+ 
++		public void SetIsPointerByRef ()
++		{
++			flags |= Flags.PointerByRef;
++		}
++
+ 		public void SetHasAddressTaken ()
+ 		{
+ 			flags |= (Flags.AddressTaken | Flags.Used);
+@@ -6562,18 +6569,26 @@ namespace Mono.CSharp {
+ 
+ 				// TODO: Should use Binary::Add
+ 				pinned_string.Emit (ec);
+-				ec.Emit (OpCodes.Conv_I);
++				ec.Emit (OpCodes.Conv_U);
+ 
+ 				var m = ec.Module.PredefinedMembers.RuntimeHelpersOffsetToStringData.Resolve (loc);
+ 				if (m == null)
+ 					return;
+ 
++				var null_value = ec.DefineLabel ();
++				vi.EmitAssign (ec);
++				vi.Emit (ec);
++				ec.Emit (OpCodes.Brfalse_S, null_value);
++
++				vi.Emit (ec);
+ 				PropertyExpr pe = new PropertyExpr (m, pinned_string.Location);
+ 				//pe.InstanceExpression = pinned_string;
+ 				pe.Resolve (new ResolveContext (ec.MemberContext)).Emit (ec);
+ 
+ 				ec.Emit (OpCodes.Add);
+ 				vi.EmitAssign (ec);
++
++				ec.MarkLabel (null_value);
+ 			}
+ 
+ 			public override void EmitExit (EmitContext ec)
+@@ -6660,31 +6675,94 @@ namespace Mono.CSharp {
+ 					return new ExpressionEmitter (res, li);
+ 				}
+ 
+-				bool already_fixed = true;
+-
+ 				//
+ 				// Case 4: & object.
+ 				//
+ 				Unary u = res as Unary;
+ 				if (u != null) {
++					bool already_fixed = true;
++
+ 					if (u.Oper == Unary.Operator.AddressOf) {
+ 						IVariableReference vr = u.Expr as IVariableReference;
+ 						if (vr == null || !vr.IsFixed) {
+ 							already_fixed = false;
+ 						}
+ 					}
+-				} else if (initializer is Cast) {
++
++					if (already_fixed) {
++						bc.Report.Error (213, loc, "You cannot use the fixed statement to take the address of an already fixed expression");
++						return null;
++					}
++
++					res = Convert.ImplicitConversionRequired (bc, res, li.Type, loc);
++					return new ExpressionEmitter (res, li);
++				}
++
++				if (initializer is Cast) {
+ 					bc.Report.Error (254, initializer.Location, "The right hand side of a fixed statement assignment may not be a cast expression");
+ 					return null;
+ 				}
+ 
+-				if (already_fixed) {
+-					bc.Report.Error (213, loc, "You cannot use the fixed statement to take the address of an already fixed expression");
++				//
++				// Case 5: by-ref GetPinnableReference method on the rhs expression
++				//
++				var method = GetPinnableReference (bc, res);
++				if (method == null) {
++					bc.Report.Error (8385, initializer.Location, "The given expression cannot be used in a fixed statement");
++					return null;
++				}
++
++				var compiler = bc.Module.Compiler;
++				if (compiler.Settings.Version < LanguageVersion.V_7_3) {
++					bc.Report.FeatureIsNotAvailable (compiler, initializer.Location, "extensible fixed statement");
++				}
++
++				method.InstanceExpression = res;
++				res = new Invocation.Predefined (method, null).ResolveLValue (bc, EmptyExpression.OutAccess);
++				if (res == null)
++					return null;
++
++				ReferenceContainer rType = (ReferenceContainer)method.BestCandidateReturnType;
++				PointerContainer lType = li.Type as PointerContainer;
++				if (rType.Element != lType?.Element) {
++					// CSC: Should be better error code
++					res.Error_ValueCannotBeConverted (bc, lType, false);
++					return null;
+ 				}
+ 
+-				res = Convert.ImplicitConversionRequired (bc, res, li.Type, loc);
++				li.SetIsPointerByRef ();
+ 				return new ExpressionEmitter (res, li);
+ 			}
++
++			MethodGroupExpr GetPinnableReference (BlockContext bc, Expression expr)
++			{
++				TypeSpec type = expr.Type;
++				var mexpr = Expression.MemberLookup (bc, false, type,
++					"GetPinnableReference", 0, Expression.MemberLookupRestrictions.ExactArity, loc);
++
++				if (mexpr == null)
++					return null;
++
++				var mg = mexpr as MethodGroupExpr;
++				if (mg == null)
++					return null;
++
++				mg.InstanceExpression = expr;
++
++				// TODO: handle extension methods
++				Arguments args = new Arguments (0);
++				mg = mg.OverloadResolve (bc, ref args, null, OverloadResolver.Restrictions.None);
++
++				if (mg == null || mg.BestCandidate.IsStatic || !mg.BestCandidate.IsPublic || mg.BestCandidateReturnType.Kind != MemberKind.ByRef || !mg.BestCandidate.Parameters.IsEmpty) {
++					if (bc.Module.Compiler.Settings.Version > LanguageVersion.V_7_2) {
++						bc.Report.Warning (280, 2, expr.Location, "`{0}' has the wrong signature to be used in extensible fixed statement", mg.GetSignatureForError ());
++					}
++
++					return null;
++				}
++
++				return mg;
++			}
+ 		}
+ 
+ 
+diff --git a/mcs/mcs/tuples.cs b/mcs/mcs/tuples.cs
+index 901efdc9541..0b56859615f 100644
+--- a/mcs/mcs/tuples.cs
++++ b/mcs/mcs/tuples.cs
+@@ -267,6 +267,11 @@ namespace Mono.CSharp
+ 			this.Location = expr.Location;
+ 		}
+ 
++		public TupleLiteralElement Clone (CloneContext clonectx)
++		{
++			return new TupleLiteralElement (Name, Expr.Clone (clonectx), Location);
++		}
++
+ 		public string Name { get; private set; }
+ 		public Expression Expr { get; set; }
+ 		public Location Location { get; private set; }
+@@ -288,6 +293,16 @@ namespace Mono.CSharp
+ 			}
+ 		}
+ 
++		protected override void CloneTo (CloneContext clonectx, Expression t)
++		{
++			var clone = new List<TupleLiteralElement> (elements.Count);
++			foreach (var te in elements)
++				clone.Add (te.Clone (clonectx));
++
++			TupleLiteral target = (TupleLiteral)t;
++			target.elements = clone;
++		}
++
+ 		public static bool ContainsNoTypeElement (TypeSpec type)
+ 		{
+ 			var ta = type.TypeArguments;
+@@ -432,6 +447,7 @@ namespace Mono.CSharp
+ 	{
+ 		Expression source;
+ 		List<Expression> targetExprs;
++		List<Expression> tempExprs;
+ 		List<BlockVariable> variables;
+ 		Expression instance;
+ 
+@@ -440,6 +456,8 @@ namespace Mono.CSharp
+ 			this.source = source;
+ 			this.targetExprs = targetExprs;
+ 			this.loc = loc;
++
++			tempExprs = new List<Expression> ();
+ 		}
+ 
+ 		public TupleDeconstruct (List<BlockVariable> variables, Expression source, Location loc)
+@@ -447,6 +465,8 @@ namespace Mono.CSharp
+ 			this.source = source;
+ 			this.variables = variables;
+ 			this.loc = loc;
++
++			tempExprs = new List<Expression> ();
+ 		}
+ 
+ 		public override Expression CreateExpressionTree (ResolveContext ec)
+@@ -492,6 +512,15 @@ namespace Mono.CSharp
+ 					instance = expr_variable.CreateReferenceExpression (rc, loc);
+ 				}
+ 
++				var element_srcs = new List<Expression> ();
++				var src_names = new List<string> ();
++				for (int i = 0; i < target_count; ++i) {
++					var element_src = tupleLiteral == null ? new MemberAccess (instance, NamedTupleSpec.GetElementPropertyName (i)) : tupleLiteral.Elements [i].Expr;
++					element_srcs.Add (element_src);
++					if (element_src is VariableReference)
++						src_names.Add ((element_src as VariableReference)?.Name);
++				}
++
+ 				for (int i = 0; i < target_count; ++i) {
+ 					var tle = src_type.TypeArguments [i];
+ 
+@@ -522,8 +551,17 @@ namespace Mono.CSharp
+ 						variable.PrepareAssignmentAnalysis ((BlockContext)rc);
+ 					}
+ 
+-					var element_src = tupleLiteral == null ? new MemberAccess (instance, NamedTupleSpec.GetElementPropertyName (i)) : tupleLiteral.Elements [i].Expr;
+-					targetExprs [i] = new SimpleAssign (targetExprs [i], element_src).Resolve (rc);
++					var element_target = (targetExprs [i] as SimpleName)?.LookupNameExpression (rc, MemberLookupRestrictions.None);
++
++					if (element_target != null && src_names.Contains ((element_target as VariableReference)?.Name)) {
++						var tempType = element_target.Resolve (rc).Type;
++
++						var temp = new LocalTemporary (tempType);
++						tempExprs.Add (new SimpleAssign (temp, element_srcs [i]).Resolve (rc));
++						targetExprs [i] = new SimpleAssign (targetExprs [i], temp).Resolve (rc);
++					} else {
++						targetExprs [i] = new SimpleAssign (targetExprs [i], element_srcs [i]).Resolve (rc);
++					}
+ 				}
+ 
+ 				eclass = ExprClass.Value;
+@@ -557,9 +595,24 @@ namespace Mono.CSharp
+ 			if (instance != null)
+ 				((ExpressionStatement)source).EmitStatement (ec);
+ 
+-			foreach (ExpressionStatement expr in targetExprs)
++			foreach (ExpressionStatement expr in tempExprs) {
++				var temp = (expr as Assign)?.Target as LocalTemporary;
++				if (temp == null)
++					continue;
++
++				temp.AddressOf (ec, AddressOp.LoadStore);
++				ec.Emit (OpCodes.Initobj, temp.Type);
++				expr.Emit (ec);
++			}
++
++			foreach (ExpressionStatement expr in targetExprs) {
+ 				expr.Emit (ec);
+ 
++				var temp = (expr as Assign)?.Source as LocalTemporary;
++				if (temp != null)
++					temp.Release (ec);
++			}
++
+ 			var ctor = MemberCache.FindMember (type, MemberFilter.Constructor (null), BindingRestriction.DeclaredOnly | BindingRestriction.InstanceOnly) as MethodSpec;
+ 			ec.Emit (OpCodes.Newobj, ctor);
+ 		}
+@@ -574,9 +627,24 @@ namespace Mono.CSharp
+ 			
+ 			if (instance != null)
+ 				((ExpressionStatement) source).EmitStatement (ec);
+-			
+-			foreach (ExpressionStatement expr in targetExprs)
++
++			foreach (ExpressionStatement expr in tempExprs) {
++				var temp = (expr as Assign)?.Target as LocalTemporary;
++				if (temp == null)
++					continue;
++
++				temp.AddressOf (ec, AddressOp.LoadStore);
++				ec.Emit (OpCodes.Initobj, temp.Type);
++				expr.EmitStatement (ec);
++			}
++
++			foreach (ExpressionStatement expr in targetExprs) {
+ 				expr.EmitStatement (ec);
++
++				var temp = (expr as Assign)?.Source as LocalTemporary;
++				if (temp != null)
++					temp.Release (ec);
++			}
+ 		}
+ 
+ 		public void Emit (EmitContext ec, bool leave_copy)
+@@ -594,6 +662,7 @@ namespace Mono.CSharp
+ 
+ 		public override void FlowAnalysis (FlowAnalysisContext fc)
+ 		{
++			source.FlowAnalysis (fc);
+ 			foreach (var expr in targetExprs)
+ 				expr.FlowAnalysis (fc);
+ 		}
+diff --git a/mcs/tests/dtest-066.cs b/mcs/tests/dtest-066.cs
+new file mode 100644
+index 00000000000..893fb40dffa
+--- /dev/null
++++ b/mcs/tests/dtest-066.cs
+@@ -0,0 +1,13 @@
++class C
++{
++	static void Main()
++	{
++		object o = 1;
++		dynamic d = 1;
++		
++		var a = new[] {
++			new { X = o },
++			new { X = d }
++		};
++	}
++}
+diff --git a/mcs/tests/gtest-647.cs b/mcs/tests/gtest-647.cs
+new file mode 100644
+index 00000000000..4aae641f85f
+--- /dev/null
++++ b/mcs/tests/gtest-647.cs
+@@ -0,0 +1,34 @@
++using System;
++
++public class Program
++{
++	public static int Main ()
++	{
++		int B = default (MyStruct?); 
++		if (MyStruct.counter != 1)
++			return 1;
++
++		switch (default (MyStruct?)) {
++			case 0:
++				break;
++			default:
++				return 2;
++		}
++
++		if (MyStruct.counter != 2)
++			return 4;
++
++		return 0;
++	}
++
++	public struct MyStruct
++	{
++		public static int counter;
++
++		public static implicit operator int (MyStruct? s)
++		{
++			++counter;
++			return 0;
++		}
++	}
++}
+\ No newline at end of file
+diff --git a/mcs/tests/test-928.cs b/mcs/tests/test-928.cs
+index 90180137957..290ee4d1fb3 100644
+--- a/mcs/tests/test-928.cs
++++ b/mcs/tests/test-928.cs
+@@ -15,6 +15,24 @@ unsafe class Program
+ 		}
+ 	}
+ 
++	public static bool StringNull (string s)
++	{
++		unsafe {
++			fixed (char *a = s) {
++				return a == null;
++			}
++		}
++	}
++
++	public static bool ArrayNull (int[] a)
++	{
++		unsafe {
++			fixed (int *e = a) {
++				return e == null;
++			}
++		}
++	}
++
+ 	public static int Main ()
+ 	{
+ 		Test ();
+@@ -24,6 +42,12 @@ unsafe class Program
+ 		if (lv.IsPinned)
+ 			return 1;
+ 
++		if (!StringNull (null))
++			return 1;
++
++		if (!ArrayNull (null))
++			return 2;
++
+ 		return 0;
+ 	}
+ }
+diff --git a/mcs/tests/test-948.cs b/mcs/tests/test-948.cs
+index 34b3ab9a0c4..563e37dc7d5 100644
+--- a/mcs/tests/test-948.cs
++++ b/mcs/tests/test-948.cs
+@@ -1,4 +1,4 @@
+-// Compiler options: -langversion:7.2 -unsafe
++// Compiler options: -langversion:7.2 /unsafe
+ 
+ using System;
+ 
+@@ -7,10 +7,16 @@ class X
+ 	public static void Main ()
+ 	{
+ 		Span<int> stackSpan = stackalloc int[100];
++
++		bool b = false;
++
++		var r1 = !b ? stackalloc char[1] : throw null;
++		var r2 = b ? throw null : stackalloc char[1];
++		var r3 = b ? stackalloc char[1] : stackalloc char[2];
+ 	}
+ 
++	// Disables verifier
+ 	unsafe void Foo ()
+ 	{
+-
+ 	}
+-}
+\ No newline at end of file
++}
+diff --git a/mcs/tests/test-950.cs b/mcs/tests/test-950.cs
+new file mode 100644
+index 00000000000..fef764c85cc
+--- /dev/null
++++ b/mcs/tests/test-950.cs
+@@ -0,0 +1,12 @@
++using System;
++
++public class B
++{
++	public static void Main ()
++	{
++		int a = 1_0_3;
++		double b = 0__0e+1_1;
++		int c = 0b0__1_0;
++		int d = 0x0__F_0;
++	}
++}
+\ No newline at end of file
+diff --git a/mcs/tests/test-960.cs b/mcs/tests/test-960.cs
+new file mode 100644
+index 00000000000..ac2a1ca7435
+--- /dev/null
++++ b/mcs/tests/test-960.cs
+@@ -0,0 +1,20 @@
++// Compiler options: -langversion:7.2
++
++public class B
++{
++	private protected enum E
++	{
++	}
++
++	public int Index { get; protected private set; }
++
++	internal string S1 { get; private protected set; }
++
++	protected string S2 { get; private protected set; }
++
++	private protected int field;
++
++	public static void Main ()
++	{
++	}
++}
+\ No newline at end of file
+diff --git a/mcs/tests/test-961.cs b/mcs/tests/test-961.cs
+new file mode 100644
+index 00000000000..efe19673875
+--- /dev/null
++++ b/mcs/tests/test-961.cs
+@@ -0,0 +1,34 @@
++// Compiler options: -langversion:latest
++
++using System;
++
++public static class B {
++	public static void Main ()
++	{
++		int lo = 1;
++		Bar (in lo);		
++	}
++
++	public static void Bar (in int arg)
++	{
++	}
++
++	static void Foo (this in int src)
++	{
++		D p = (in int a) => {};
++	}
++
++}
++
++delegate void D (in int arg);
++
++class M
++{
++	int this[in int a] { set { } }
++	public static implicit operator string (in M m) => null;
++	public M (in int arg) { }
++
++	public void Test2 (in int arg)
++	{
++	}
++}
+\ No newline at end of file
+diff --git a/mcs/tests/test-anon-123.cs b/mcs/tests/test-anon-123.cs
+index 91c72b45afe..45aab27c0a5 100644
+--- a/mcs/tests/test-anon-123.cs
++++ b/mcs/tests/test-anon-123.cs
+@@ -1,3 +1,4 @@
++// Compiler options: -langversion:latest
+ // Cloning tests
+ 
+ using System;
+@@ -103,7 +104,11 @@ public class C : B
+ 			default:
+ 				break;
+ 			}
+-		});		
++		});
++
++		Test (() => {
++			char ch = default;
++		});
+ 		
+ 		var c = new C ();
+ 		c.InstanceTests ();
+diff --git a/mcs/tests/test-binaryliteral.cs b/mcs/tests/test-binaryliteral.cs
+new file mode 100644
+index 00000000000..3d9cc89bcbd
+--- /dev/null
++++ b/mcs/tests/test-binaryliteral.cs
+@@ -0,0 +1,57 @@
++
++class Demo {
++	static int Main ()
++	{
++		if (0b1 != 1)
++			return 1;
++		var hex1 = 0x123ul;
++		var bin1  = 0b100100011ul;
++		var bin11 = 0b100100011lu;
++		if (hex1 != bin1)
++			return 2;
++		if (hex1 != bin11)
++			return 3;
++		if (hex1.GetType () != bin1.GetType ())
++			return 4;
++		if (hex1.GetType () != bin11.GetType ())
++			return 5;
++
++		var hex2 = 0x7FFFFFFF;
++		var bin2 = 0b1111111111111111111111111111111;
++
++		if (hex2 != bin2)
++			return 6;
++		if (hex2.GetType () != bin2.GetType ())
++			return 7;
++
++		var hex3 = 0xFFFFFFFF;
++		var bin3 = 0b11111111111111111111111111111111;
++		if (hex3 != bin3)
++			return 8;
++		if (hex3.GetType () != bin3.GetType ())
++			return 9;
++
++		var hex4 = 0xFFFFFFFFu;
++		var bin4 = 0b11111111111111111111111111111111u;
++		if (hex4 != bin4)
++			return 10;
++		if (hex4.GetType () != bin4.GetType ())
++			return 11;
++
++		var hex5 = 0x7FFFFFFFFFFFFFFF;
++		var bin5 = 0b111111111111111111111111111111111111111111111111111111111111111;
++		if (hex5 != bin5)
++			return 12;
++		if (hex5.GetType () != bin5.GetType ())
++			return 13;
++
++		var hex6 = 0xFFFFFFFFFFFFFFFF;
++		var bin6 = 0b1111111111111111111111111111111111111111111111111111111111111111;
++		if (hex6 != bin6)
++			return 14;
++		if (hex6.GetType () != bin6.GetType ())
++			return 15;
++
++		return 0;
++	}
++}
+\ No newline at end of file
+diff --git a/mcs/tests/test-decl-expr-05.cs b/mcs/tests/test-decl-expr-05.cs
+index 730fd4278ca..907cde0b8d7 100644
+--- a/mcs/tests/test-decl-expr-05.cs
++++ b/mcs/tests/test-decl-expr-05.cs
+@@ -6,6 +6,11 @@ class X
+ 		{
+ 			arg = s.ToString ();
+ 		}
++
++		while (true && Call (out string s2))
++		{
++			arg = s2.ToString ();
++		}
+ 	}
+ 
+ 	static bool Call (out string s)
+diff --git a/mcs/tests/test-decl-expr-06.cs b/mcs/tests/test-decl-expr-06.cs
+new file mode 100644
+index 00000000000..9734f2ec2a7
+--- /dev/null
++++ b/mcs/tests/test-decl-expr-06.cs
+@@ -0,0 +1,17 @@
++using System;
++
++public class C
++{
++	Func<bool> f = () => Foo (out int arg);
++
++	static bool Foo (out int arg)
++	{
++		arg = 2;
++		return false;
++	}
++
++	public static void Main ()
++	{
++		new C ();
++	}
++}
+\ No newline at end of file
+diff --git a/mcs/tests/test-default-01.cs b/mcs/tests/test-default-01.cs
+index 823e33c451b..28aff830cd9 100644
+--- a/mcs/tests/test-default-01.cs
++++ b/mcs/tests/test-default-01.cs
+@@ -41,7 +41,11 @@ static class X
+ 	static System.Func<int> M4 ()
+ 	{
+ 		return () => default;
+-	} 
++	}
++
++	static void Foo (II a = default (II), II b = default, II c = (II) null)
++	{
++	}
+ }
+ /*
+ enum E
+@@ -49,4 +53,10 @@ enum E
+ 	A = default,
+ 	B = default + 1
+ }
+-*/
+\ No newline at end of file
++*/
++
++
++interface II
++{
++
++}
+\ No newline at end of file
+diff --git a/mcs/tests/test-fixed-01.cs b/mcs/tests/test-fixed-01.cs
+new file mode 100644
+index 00000000000..4684b0c5a06
+--- /dev/null
++++ b/mcs/tests/test-fixed-01.cs
+@@ -0,0 +1,20 @@
++// Compiler options: -unsafe -langversion:latest
++
++unsafe class C
++{
++	public static void Main ()
++	{
++		fixed (int* p = new Fixable ()) {
++			System.Console.WriteLine (*p);
++			System.Console.WriteLine (p [2]);
++		}
++	}
++
++	struct Fixable
++	{
++		public ref int GetPinnableReference ()
++		{
++			return ref (new int[] { 1, 2, 3 })[0];
++		}
++	}
++}
+\ No newline at end of file
+diff --git a/mcs/tests/test-pattern-13.cs b/mcs/tests/test-pattern-13.cs
+new file mode 100644
+index 00000000000..315c7a9e4be
+--- /dev/null
++++ b/mcs/tests/test-pattern-13.cs
+@@ -0,0 +1,19 @@
++using System;
++
++class C : B
++{
++
++}
++
++public class B
++{
++	public static void Main ()
++	{
++		C c = new C ();
++
++		if (c is B b)
++		{
++			Console.WriteLine (b == null);
++		}
++	}
++}
+\ No newline at end of file
+diff --git a/mcs/tests/test-ref-07.cs b/mcs/tests/test-ref-07.cs
+index 4aa16579752..f17cfb443b5 100644
+--- a/mcs/tests/test-ref-07.cs
++++ b/mcs/tests/test-ref-07.cs
+@@ -1,6 +1,6 @@
+ // Compiler options: -langversion:latest
+ 
+-public readonly partial ref struct Test
++public readonly ref partial struct Test
+ {
+ 	public static void Main ()
+ 	{
+@@ -14,6 +14,11 @@ public readonly partial ref struct Test
+ 	}
+ }
+ 
++ref partial struct Test
++{
++
++}
++
+ ref struct Second
+ {
+ 	Test field;
+diff --git a/mcs/tests/test-ref-11.cs b/mcs/tests/test-ref-11.cs
+new file mode 100644
+index 00000000000..8d392a77d07
+--- /dev/null
++++ b/mcs/tests/test-ref-11.cs
+@@ -0,0 +1,13 @@
++class Program
++{
++	static int x;
++	static int y;
++
++    public static int Main ()
++    {
++    	bool b = false;
++        ref int targetBucket = ref b ? ref x : ref y;
++
++        return 0;
++    }
++}
+\ No newline at end of file
+diff --git a/mcs/tests/test-ref-12.cs b/mcs/tests/test-ref-12.cs
+new file mode 100644
+index 00000000000..786a4162f4f
+--- /dev/null
++++ b/mcs/tests/test-ref-12.cs
+@@ -0,0 +1,22 @@
++// Compiler options: -unsafe
++
++unsafe class X
++{
++	public static void Main ()
++	{
++		void* pointer = null;
++ 		Bar (ref Foo (ref *(byte*)pointer));
++	}
++
++	static int field;
++
++	static ref int Foo (ref byte b)
++	{
++		return ref field;
++	}
++
++	static void Bar (ref int i)
++	{
++
++	}
++}
+\ No newline at end of file
+diff --git a/mcs/tests/test-tuple-02.cs b/mcs/tests/test-tuple-02.cs
+index c0492759452..ab722642aeb 100644
+--- a/mcs/tests/test-tuple-02.cs
++++ b/mcs/tests/test-tuple-02.cs
+@@ -26,6 +26,11 @@ class TupleConversions
+ 		(string v1, object v2) b = ("a", "b");
+ 
+ 		(int v1, long v2)? x = null;
++
++        var array = new [] {
++            (name: "A", offset: 0),
++            (name: "B", size: 4)
++        };		
+ 	}
+ 
+ 	static void Foo<T> (T arg)
+diff --git a/mcs/tests/test-tuple-08.cs b/mcs/tests/test-tuple-08.cs
+new file mode 100644
+index 00000000000..fd3375b4df6
+--- /dev/null
++++ b/mcs/tests/test-tuple-08.cs
+@@ -0,0 +1,24 @@
++using System;
++using System.Collections.Generic;
++using System.Threading.Tasks;
++
++class X
++{
++	public static void Main ()
++	{
++		var x = new X ();
++		x.Test ().Wait ();
++	}
++
++	int a, b;
++
++	async Task Test ()
++	{
++		(a, b) = await Waiting ();
++	}
++
++	Task<(int, int)> Waiting ()
++	{
++		return Task.FromResult ((1, 3));
++	}
++}
+\ No newline at end of file
+diff --git a/mcs/tests/test-tuple-10.cs b/mcs/tests/test-tuple-10.cs
+new file mode 100644
+index 00000000000..82f4e01ec1f
+--- /dev/null
++++ b/mcs/tests/test-tuple-10.cs
+@@ -0,0 +1,9 @@
++using System.Linq;
++
++class Program {
++    public static int Main ()
++    {
++        var l = (from f in (typeof (Program)).GetFields() select (name: f.Name, offset: 0)).ToList();
++        return 0;
++    }
++}
+\ No newline at end of file
+diff --git a/mcs/tests/test-tuple-11.cs b/mcs/tests/test-tuple-11.cs
+new file mode 100644
+index 00000000000..b2aeb24026c
+--- /dev/null
++++ b/mcs/tests/test-tuple-11.cs
+@@ -0,0 +1,20 @@
++using System;
++
++class Program
++{
++	public static int Main ()
++	{
++		int x = 1;
++		int y = 2;
++
++		(x, y) = (y, x);
++
++		if (x != 2)
++			return 1;
++
++		if (y != 1)
++			return 2;
++
++		return 0;
++	}
++}
+diff --git a/mcs/tests/ver-il-net_4_x.xml b/mcs/tests/ver-il-net_4_x.xml
+index 4dbc7042a8a..2bde8270338 100644
+--- a/mcs/tests/ver-il-net_4_x.xml
++++ b/mcs/tests/ver-il-net_4_x.xml
+@@ -3168,6 +3168,33 @@
+       </method>
+     </type>
+   </test>
++  <test name="dtest-066.cs">
++    <type name="C">
++      <method name="Void Main()" attrs="145">
++        <size>41</size>
++      </method>
++      <method name="Void .ctor()" attrs="6278">
++        <size>7</size>
++      </method>
++    </type>
++    <type name="&lt;&gt;__AnonType0`1[&lt;X&gt;__T]">
++      <method name="&lt;X&gt;__T get_X()" attrs="2182">
++        <size>7</size>
++      </method>
++      <method name="Boolean Equals(System.Object)" attrs="198">
++        <size>39</size>
++      </method>
++      <method name="Int32 GetHashCode()" attrs="198">
++        <size>63</size>
++      </method>
++      <method name="System.String ToString()" attrs="198">
++        <size>67</size>
++      </method>
++      <method name="Void .ctor(&lt;X&gt;__T)" attrs="6278">
++        <size>14</size>
++      </method>
++    </type>
++  </test>
+   <test name="dtest-anontype-01.cs">
+     <type name="C">
+       <method name="Void Main()" attrs="150">
+@@ -11064,7 +11091,7 @@
+     </type>
+     <type name="X">
+       <method name="Int32 Beer(System.Nullable`1[IrishPub])" attrs="145">
+-        <size>72</size>
++        <size>60</size>
+       </method>
+       <method name="Int32 Test(System.Nullable`1[System.Int32])" attrs="145">
+         <size>62</size>
+@@ -19508,7 +19535,7 @@
+     </type>
+     <type name="C">
+       <method name="Int32 Main()" attrs="150">
+-        <size>267</size>
++        <size>255</size>
+       </method>
+       <method name="Void .ctor()" attrs="6278">
+         <size>7</size>
+@@ -19742,7 +19769,7 @@
+   <test name="gtest-629.cs">
+     <type name="Program">
+       <method name="Void Main()" attrs="150">
+-        <size>116</size>
++        <size>121</size>
+       </method>
+       <method name="Void .ctor()" attrs="6278">
+         <size>7</size>
+@@ -20147,6 +20174,21 @@
+       </method>
+     </type>
+   </test>
++  <test name="gtest-647.cs">
++    <type name="Program">
++      <method name="Int32 Main()" attrs="150">
++        <size>99</size>
++      </method>
++      <method name="Void .ctor()" attrs="6278">
++        <size>7</size>
++      </method>
++    </type>
++    <type name="Program+MyStruct">
++      <method name="Int32 op_Implicit(System.Nullable`1[Program+MyStruct])" attrs="2198">
++        <size>22</size>
++      </method>
++    </type>
++  </test>
+   <test name="gtest-anontype-01.cs">
+     <type name="Test">
+       <method name="Int32 Main()" attrs="150">
+@@ -47609,7 +47651,7 @@
+         <size>7</size>
+       </method>
+       <method name="Void CopyTo(Int32, Char[], Int32, Int32)" attrs="145">
+-        <size>73</size>
++        <size>78</size>
+       </method>
+     </type>
+   </test>
+@@ -51468,10 +51510,10 @@
+   <test name="test-88.cs">
+     <type name="X">
+       <method name="Void f(System.String)" attrs="145">
+-        <size>20</size>
++        <size>12</size>
+       </method>
+       <method name="Int32 Main()" attrs="150">
+-        <size>70</size>
++        <size>62</size>
+       </method>
+       <method name="Void .ctor()" attrs="6278">
+         <size>7</size>
+@@ -52148,7 +52190,7 @@
+         <size>14</size>
+       </method>
+       <method name="Void Outer(System.String)" attrs="145">
+-        <size>29</size>
++        <size>34</size>
+       </method>
+       <method name="Void Inner(Char* ByRef, Char*)" attrs="145">
+         <size>10</size>
+@@ -52359,10 +52401,10 @@
+   <test name="test-928.cs">
+     <type name="Program">
+       <method name="Void Test()" attrs="150">
+-        <size>25</size>
++        <size>30</size>
+       </method>
+       <method name="Int32 Main()" attrs="150">
+-        <size>105</size>
++        <size>141</size>
+       </method>
+       <method name="Boolean &lt;Main&gt;m__0(System.Reflection.LocalVariableInfo)" attrs="145">
+         <size>29</size>
+@@ -52370,6 +52412,12 @@
+       <method name="Void .ctor()" attrs="6278">
+         <size>7</size>
+       </method>
++      <method name="Boolean StringNull(System.String)" attrs="150">
++        <size>32</size>
++      </method>
++      <method name="Boolean ArrayNull(Int32[])" attrs="150">
++        <size>45</size>
++      </method>
+     </type>
+   </test>
+   <test name="test-929.cs">
+@@ -52814,7 +52862,7 @@
+   <test name="test-948.cs">
+     <type name="X">
+       <method name="Void Main()" attrs="150">
+-        <size>16</size>
++        <size>103</size>
+       </method>
+       <method name="Void Foo()" attrs="129">
+         <size>2</size>
+@@ -52834,6 +52882,16 @@
+       </method>
+     </type>
+   </test>
++  <test name="test-950.cs">
++    <type name="B">
++      <method name="Void Main()" attrs="150">
++        <size>23</size>
++      </method>
++      <method name="Void .ctor()" attrs="6278">
++        <size>7</size>
++      </method>
++    </type>
++  </test>
+   <test name="test-96.cs">
+     <type name="N1.A">
+       <method name="Int32 Main()" attrs="150">
+@@ -52858,6 +52916,80 @@
+       </method>
+     </type>
+   </test>
++  <test name="test-960.cs">
++    <type name="B">
++      <method name="Int32 get_Index()" attrs="2182">
++        <size>14</size>
++      </method>
++      <method name="Void set_Index(Int32)" attrs="2178">
++        <size>8</size>
++      </method>
++      <method name="System.String get_S1()" attrs="2179">
++        <size>14</size>
++      </method>
++      <method name="Void set_S1(System.String)" attrs="2178">
++        <size>8</size>
++      </method>
++      <method name="System.String get_S2()" attrs="2180">
++        <size>14</size>
++      </method>
++      <method name="Void set_S2(System.String)" attrs="2178">
++        <size>8</size>
++      </method>
++      <method name="Void Main()" attrs="150">
++        <size>2</size>
++      </method>
++      <method name="Void .ctor()" attrs="6278">
++        <size>7</size>
++      </method>
++    </type>
++  </test>
++  <test name="test-961.cs">
++    <type name="B">
++      <method name="Void Main()" attrs="150">
++        <size>10</size>
++      </method>
++      <method name="Void Foo(Int32)" attrs="145">
++        <size>32</size>
++      </method>
++      <method name="Void &lt;Foo&gt;m__0(Int32)" attrs="145">
++        <size>2</size>
++      </method>
++    </type>
++    <type name="D">
++      <method name="Void Invoke(Int32)" attrs="454">
++        <size>0</size>
++      </method>
++      <method name="System.IAsyncResult BeginInvoke(Int32, System.AsyncCallback, System.Object)" attrs="454">
++        <size>0</size>
++      </method>
++      <method name="Void EndInvoke(System.IAsyncResult)" attrs="454">
++        <size>0</size>
++      </method>
++      <method name="Void .ctor(Object, IntPtr)" attrs="6278">
++        <size>0</size>
++      </method>
++    </type>
++    <type name="M">
++      <method name="Void set_Item(Int32, Int32)" attrs="2177">
++        <size>2</size>
++      </method>
++      <method name="System.String op_Implicit(M)" attrs="2198">
++        <size>9</size>
++      </method>
++      <method name="Void Test2(Int32)" attrs="134">
++        <size>2</size>
++      </method>
++      <method name="Void .ctor(Int32)" attrs="6278">
++        <size>8</size>
++      </method>
++    </type>
++    <type name="B">
++      <method name="Void Bar(Int32)" attrs="150">
++        <size>2</size>
++      </method>
++    </type>
++  </test>
+   <test name="test-97.cs">
+     <type name="X">
+       <method name="Int32 Main()" attrs="150">
+@@ -54448,7 +54580,7 @@
+         <size>19</size>
+       </method>
+       <method name="Void Main()" attrs="150">
+-        <size>247</size>
++        <size>281</size>
+       </method>
+       <method name="Void &lt;BaseM&gt;__BaseCallProxy0()" attrs="129">
+         <size>7</size>
+@@ -54518,6 +54650,9 @@
+       <method name="Void &lt;Main&gt;m__5(E)" attrs="145">
+         <size>35</size>
+       </method>
++      <method name="Void &lt;Main&gt;m__6()" attrs="145">
++        <size>4</size>
++      </method>
+     </type>
+   </test>
+   <test name="test-anon-124.cs">
+@@ -67020,6 +67155,16 @@
+       </method>
+     </type>
+   </test>
++  <test name="test-binaryliteral.cs">
++    <type name="Demo">
++      <method name="Int32 Main()" attrs="145">
++        <size>503</size>
++      </method>
++      <method name="Void .ctor()" attrs="6278">
++        <size>7</size>
++      </method>
++    </type>
++  </test>
+   <test name="test-cls-00.cs">
+     <type name="CLSCLass_6">
+       <method name="Void add_Disposed(Delegate)" attrs="2182">
+@@ -68641,7 +68786,7 @@
+   <test name="test-decl-expr-05.cs">
+     <type name="X">
+       <method name="Void Test(System.String)" attrs="129">
+-        <size>29</size>
++        <size>62</size>
+       </method>
+       <method name="Boolean Call(System.String ByRef)" attrs="145">
+         <size>17</size>
+@@ -68654,6 +68799,22 @@
+       </method>
+     </type>
+   </test>
++  <test name="test-decl-expr-06.cs">
++    <type name="C">
++      <method name="Boolean Foo(Int32 ByRef)" attrs="145">
++        <size>13</size>
++      </method>
++      <method name="Void Main()" attrs="150">
++        <size>8</size>
++      </method>
++      <method name="Boolean &lt;f&gt;m__0()" attrs="145">
++        <size>15</size>
++      </method>
++      <method name="Void .ctor()" attrs="6278">
++        <size>42</size>
++      </method>
++    </type>
++  </test>
+   <test name="test-default-01.cs">
+     <type name="X">
+       <method name="Void Main()" attrs="150">
+@@ -68674,6 +68835,9 @@
+       <method name="Int32 &lt;M4&gt;m__0()" attrs="145">
+         <size>9</size>
+       </method>
++      <method name="Void Foo(II, II, II)" attrs="145">
++        <size>2</size>
++      </method>
+     </type>
+   </test>
+   <test name="test-default-02.cs">
+@@ -69158,6 +69322,21 @@
+       </method>
+     </type>
+   </test>
++  <test name="test-fixed-01.cs">
++    <type name="C">
++      <method name="Void Main()" attrs="150">
++        <size>39</size>
++      </method>
++      <method name="Void .ctor()" attrs="6278">
++        <size>7</size>
++      </method>
++    </type>
++    <type name="C+Fixable">
++      <method name="Int32&amp; GetPinnableReference()" attrs="134">
++        <size>32</size>
++      </method>
++    </type>
++  </test>
+   <test name="test-interpolation-01.cs">
+     <type name="Test">
+       <method name="Int32 Main()" attrs="150">
+@@ -72564,7 +72743,7 @@
+     </type>
+     <type name="X+&lt;Test&gt;c__Iterator0">
+       <method name="Boolean MoveNext()" attrs="486">
+-        <size>184</size>
++        <size>206</size>
+       </method>
+       <method name="Int32 System.Collections.Generic.IEnumerator&lt;int&gt;.get_Current()" attrs="2529">
+         <size>14</size>
+@@ -72750,6 +72929,21 @@
+       </method>
+     </type>
+   </test>
++  <test name="test-pattern-13.cs">
++    <type name="C">
++      <method name="Void .ctor()" attrs="6278">
++        <size>7</size>
++      </method>
++    </type>
++    <type name="B">
++      <method name="Void Main()" attrs="150">
++        <size>35</size>
++      </method>
++      <method name="Void .ctor()" attrs="6278">
++        <size>7</size>
++      </method>
++    </type>
++  </test>
+   <test name="test-pragma-unrecognized.cs">
+     <type name="C">
+       <method name="Void Main()" attrs="150">
+@@ -73155,6 +73349,11 @@
+     </type>
+   </test>
+   <test name="test-ref-07.cs">
++    <type name="TestMain">
++      <method name="Void Main()" attrs="150">
++        <size>6</size>
++      </method>
++    </type>
+     <type name="Test">
+       <method name="Void Main()" attrs="150">
+         <size>18</size>
+@@ -73243,6 +73442,32 @@
+       </method>
+     </type>
+   </test>
++  <test name="test-ref-11.cs">
++    <type name="Program">
++      <method name="Int32 Main()" attrs="150">
++        <size>34</size>
++      </method>
++      <method name="Void .ctor()" attrs="6278">
++        <size>7</size>
++      </method>
++    </type>
++  </test>
++  <test name="test-ref-12.cs">
++    <type name="X">
++      <method name="Void Main()" attrs="150">
++        <size>16</size>
++      </method>
++      <method name="Int32&amp; Foo(Byte ByRef)" attrs="145">
++        <size>14</size>
++      </method>
++      <method name="Void Bar(Int32 ByRef)" attrs="145">
++        <size>2</size>
++      </method>
++      <method name="Void .ctor()" attrs="6278">
++        <size>7</size>
++      </method>
++    </type>
++  </test>
+   <test name="test-static-using-01.cs">
+     <type name="A.B.X">
+       <method name="Int32 Test()" attrs="150">
+@@ -73482,7 +73707,7 @@
+         <size>32</size>
+       </method>
+       <method name="Int32 Test()" attrs="134">
+-        <size>10</size>
++        <size>2</size>
+       </method>
+       <method name="System.Object Foo()" attrs="129">
+         <size>10</size>
+@@ -73491,16 +73716,16 @@
+         <size>23</size>
+       </method>
+       <method name="Void Test3(Int32 ByRef)" attrs="145">
+-        <size>3</size>
++        <size>2</size>
+       </method>
+       <method name="Int32 get_Item(Int32)" attrs="2177">
+-        <size>10</size>
++        <size>2</size>
+       </method>
+       <method name="Void add_Event(System.Action)" attrs="2182">
+-        <size>3</size>
++        <size>2</size>
+       </method>
+       <method name="Void remove_Event(System.Action)" attrs="2182">
+-        <size>3</size>
++        <size>2</size>
+       </method>
+       <method name="Void TestExpr_1(Boolean)" attrs="129">
+         <size>21</size>
+@@ -73527,7 +73752,7 @@
+         <size>7</size>
+       </method>
+       <method name="Int32 TestExpr_6(Int32 ByRef)" attrs="145">
+-        <size>10</size>
++        <size>2</size>
+       </method>
+       <method name="Int32 TestExpr_7(Int32 ByRef)" attrs="129">
+         <size>15</size>
+@@ -73569,7 +73794,7 @@
+   <test name="test-tuple-02.cs">
+     <type name="TupleConversions">
+       <method name="Void Main()" attrs="150">
+-        <size>314</size>
++        <size>368</size>
+       </method>
+       <method name="Void Foo[T](T)" attrs="145">
+         <size>2</size>
+@@ -73761,6 +73986,29 @@
+       </method>
+     </type>
+   </test>
++  <test name="test-tuple-10.cs">
++    <type name="Program">
++      <method name="Int32 Main()" attrs="150">
++        <size>65</size>
++      </method>
++      <method name="System.ValueTuple`2[System.String,System.Int32] &lt;Main&gt;m__0(System.Reflection.FieldInfo)" attrs="145">
++        <size>21</size>
++      </method>
++      <method name="Void .ctor()" attrs="6278">
++        <size>7</size>
++      </method>
++    </type>
++  </test>
++  <test name="test-tuple-11.cs">
++    <type name="Program">
++      <method name="Int32 Main()" attrs="150">
++        <size>70</size>
++      </method>
++      <method name="Void .ctor()" attrs="6278">
++        <size>7</size>
++      </method>
++    </type>
++  </test>
+   <test name="test-var-01.cs">
+     <type name="Test">
+       <method name="Int32 Main()" attrs="150">
+@@ -73896,4 +74144,4 @@
+       </method>
+     </type>
+   </test>
+-</tests>
+\ No newline at end of file
++</tests>
+diff --git a/msvc/scripts/System.Web.pre b/msvc/scripts/System.Web.pre
+index c071bf45bfd..8f8d262597f 100644
+--- a/msvc/scripts/System.Web.pre
++++ b/msvc/scripts/System.Web.pre
+@@ -1 +1 @@
+-@MONO@ $(ProjectDir)\..\lib\net_4_x\culevel.exe -o $(ProjectDir)\System.Web\UplevelHelper.cs $(ProjectDir)\UplevelHelperDefinitions.xml
++@MONO@ $([MSBuild]::GetDirectoryNameOfFileAbove($(TargetDir), culevel.exe))\culevel.exe -o $(ProjectDir)\System.Web\UplevelHelper.cs $(ProjectDir)\UplevelHelperDefinitions.xml
+diff --git a/msvc/scripts/genproj.cs b/msvc/scripts/genproj.cs
+index 3987abb212b..1440800b2b3 100644
+--- a/msvc/scripts/genproj.cs
++++ b/msvc/scripts/genproj.cs
+@@ -27,27 +27,43 @@ public enum Target {
+ 
+ class SlnGenerator {
+ 	public static readonly string NewLine = "\r\n"; //Environment.NewLine; // "\n"; 
+-	public SlnGenerator (string formatVersion = "2012")
++	public SlnGenerator (string slnVersion)
+ 	{
+-		switch (formatVersion) {
+-		case "2008":
+-			this.header = MakeHeader ("10.00", "2008");
+-			break;
+-		default:
+-			this.header = MakeHeader ("12.00", "2012");
+-			break;
+-		}
++		Console.WriteLine("Requested sln version is {0}", slnVersion);
++		this.header = MakeHeader ("12.00", "15", "15.0.0.0");
+ 	}
+ 
+-	const string project_start = "Project(\"{{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}}\") = \"{0}\", \"{1}\", \"{2}\""; // Note: No need to double up on {} around {2}
++	const string project_start = "Project(\"{0}\") = \"{1}\", \"{2}\", \"{3}\""; // Note: No need to double up on {} around {2}
+ 	const string project_end = "EndProject";
+ 
++	public List<string> profiles = new List<string> {
++		"net_4_x",
++		"monodroid",
++		"monotouch",
++		"monotouch_tv",
++		"monotouch_watch",
++		"orbis",
++		"unreal",
++		"wasm",
++		"winaot",
++		"xammac",
++	};
++
++	const string jay_vcxproj_guid = "{5D485D32-3B9F-4287-AB24-C8DA5B89F537}";
++	const string jay_sln_guid = "{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}";
++
+ 	public List<MsbuildGenerator.VsCsproj> libraries = new List<MsbuildGenerator.VsCsproj> ();
+ 	string header;
+ 
+-	string MakeHeader (string formatVersion, string yearTag)
++	string MakeHeader (string formatVersion, string yearTag, string minimumVersion)
+ 	{
+-		return string.Format ("Microsoft Visual Studio Solution File, Format Version {0}" + NewLine + "# Visual Studio {1}", formatVersion, yearTag);
++		return string.Format (
++			"Microsoft Visual Studio Solution File, Format Version {0}" + NewLine + 
++			"# Visual Studio {1}" + NewLine + 
++			"MinimumVisualStudioVersion = {2}", 
++			formatVersion, yearTag,
++			minimumVersion
++		);
+ 	}
+ 
+ 	public void Add (MsbuildGenerator.VsCsproj vsproj)
+@@ -59,6 +75,40 @@ class SlnGenerator {
+ 		}
+ 	}
+ 
++	private void WriteProjectReference (StreamWriter sln, string prefixGuid, string library, string relativePath, string projectGuid, params string[] dependencyGuids)
++	{
++		sln.WriteLine (project_start, prefixGuid, library, relativePath, projectGuid);
++
++		foreach (var guid in dependencyGuids) {
++    		sln.WriteLine ("    ProjectSection(ProjectDependencies) = postProject");
++    		sln.WriteLine ("        {0} = {0}", guid);
++    		sln.WriteLine ("    EndProjectSection");
++		}
++
++		sln.WriteLine (project_end);
++	}
++
++	private void WriteProjectReference (StreamWriter sln, string slnFullPath, MsbuildGenerator.VsCsproj proj)
++	{
++		var unixProjFile = proj.csProjFilename.Replace ("\\", "/");
++		var fullProjPath = Path.GetFullPath (unixProjFile);
++		var relativePath = MsbuildGenerator.GetRelativePath (slnFullPath, fullProjPath);
++		var dependencyGuids = new string[0];
++		if (proj.preBuildEvent.Contains ("jay"))
++			dependencyGuids = new [] { jay_vcxproj_guid };
++		WriteProjectReference(sln, "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}", proj.library, relativePath, proj.projectGuid, dependencyGuids);
++	}
++
++	private void WriteProjectConfigurationPlatforms (StreamWriter sln, string guid, string platformToBuild)
++	{
++		foreach (var profile in profiles) {
++			sln.WriteLine ("\t\t{0}.Debug|{1}.ActiveCfg = Debug|{2}", guid, profile, platformToBuild);
++			sln.WriteLine ("\t\t{0}.Debug|{1}.Build.0 = Debug|{2}", guid, profile, platformToBuild);
++			sln.WriteLine ("\t\t{0}.Release|{1}.ActiveCfg = Release|{2}", guid, profile, platformToBuild);
++			sln.WriteLine ("\t\t{0}.Release|{1}.Build.0 = Release|{2}", guid, profile, platformToBuild);
++		}
++	}
++
+ 	public void Write (string filename)
+ 	{
+ 		var fullPath = Path.GetDirectoryName (filename) + "/";
+@@ -66,27 +116,32 @@ class SlnGenerator {
+ 		using (var sln = new StreamWriter (filename)) {
+ 			sln.WriteLine ();
+ 			sln.WriteLine (header);
++
++			// Manually insert jay's vcxproj. We depend on jay.exe to perform build steps later.
++			WriteProjectReference (sln, jay_sln_guid, "jay", "mcs\\jay\\jay.vcxproj", jay_vcxproj_guid);
++
+ 			foreach (var proj in libraries) {
+-				var unixProjFile = proj.csProjFilename.Replace ("\\", "/");
+-				var fullProjPath = Path.GetFullPath (unixProjFile);
+-				sln.WriteLine (project_start, proj.library, MsbuildGenerator.GetRelativePath (fullPath, fullProjPath), proj.projectGuid);
+-				sln.WriteLine (project_end);
++				WriteProjectReference (sln, fullPath, proj);
+ 			}
++
+ 			sln.WriteLine ("Global");
+ 
+ 			sln.WriteLine ("\tGlobalSection(SolutionConfigurationPlatforms) = preSolution");
+-			sln.WriteLine ("\t\tDebug|Any CPU = Debug|Any CPU");
+-			sln.WriteLine ("\t\tRelease|Any CPU = Release|Any CPU");
++			foreach (var profile in profiles) {
++				sln.WriteLine ("\t\tDebug|{0} = Debug|{0}", profile);
++				sln.WriteLine ("\t\tRelease|{0} = Release|{0}", profile);
++			}
+ 			sln.WriteLine ("\tEndGlobalSection");
+ 
+ 			sln.WriteLine ("\tGlobalSection(ProjectConfigurationPlatforms) = postSolution");
++
++			// Manually insert jay's configurations because they are different
++			WriteProjectConfigurationPlatforms (sln, jay_vcxproj_guid, "Win32");
++
+ 			foreach (var proj in libraries) {
+-				var guid = proj.projectGuid;
+-				sln.WriteLine ("\t\t{0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU", guid);
+-				sln.WriteLine ("\t\t{0}.Debug|Any CPU.Build.0 = Debug|Any CPU", guid);
+-				sln.WriteLine ("\t\t{0}.Release|Any CPU.ActiveCfg = Release|Any CPU", guid);
+-				sln.WriteLine ("\t\t{0}.Release|Any CPU.Build.0 = Release|Any CPU", guid);
++				WriteProjectConfigurationPlatforms (sln, proj.projectGuid, "Any CPU");
+ 			}
++
+ 			sln.WriteLine ("\tEndGlobalSection");
+ 
+ 			sln.WriteLine ("\tGlobalSection(SolutionProperties) = preSolution");
+@@ -634,6 +689,7 @@ class MsbuildGenerator {
+ 		public List<VsCsproj> projReferences = new List<VsCsproj> ();
+ 		public string library;
+ 		public MsbuildGenerator MsbuildGenerator;
++		public string preBuildEvent, postBuildEvent;
+ 	}
+ 
+ 	public VsCsproj Csproj;
+@@ -682,7 +738,7 @@ class MsbuildGenerator {
+ 				fx_version = "4.0";
+ 				profile = "net_4_0";
+ 			} else if (response.Contains (profile_4_x)) {
+-				fx_version = "4.5";
++				fx_version = "4.6.2";
+ 				profile = "net_4_x";
+ 			}
+ 		}
+@@ -882,6 +938,26 @@ class MsbuildGenerator {
+ 
+ 		bool basic_or_build = (library.Contains ("-basic") || library.Contains ("-build"));
+ 
++		// If an EXE is built with nostdlib, it won't work unless run with mono.exe. This stops our build steps
++		//  from working in visual studio (because we already replace @MONO@ with '' on Windows.)
++
++		if (Target != Target.Library)
++			StdLib = true;
++
++		// We have our target framework set to 4.5 in many places because broken scripts check for files with 4.5
++		//  in the path, even though we compile code that uses 4.6 features. So we need to manually fix that here.
++
++		if (fx_version == "4.5")
++			fx_version = "4.6.2";
++
++		// The VS2017 signing system fails to sign using this key for some reason, so for now,
++		//  just disable code signing for the nunit assemblies. It's not important.
++		// I'd rather fix this by updating the makefiles but it seems to be impossible to disable
++		//  code signing in our make system...
++
++		if (StrongNameKeyFile?.Contains("nunit.snk") ?? false)
++			StrongNameKeyFile = null;
++
+ 		//
+ 		// Replace the template values
+ 		//
+@@ -894,6 +970,9 @@ class MsbuildGenerator {
+ 				"    <AssemblyOriginatorKeyFile>{0}</AssemblyOriginatorKeyFile>",
+ 				StrongNameKeyFile, StrongNameDelaySign ? "    <DelaySign>true</DelaySign>" + NewLine : "");
+ 		}
++
++		string assemblyName = Path.GetFileNameWithoutExtension (output_name);
++
+ 		Csproj.output = template.
+ 			Replace ("@OUTPUTTYPE@", Target == Target.Library ? "Library" : "Exe").
+ 			Replace ("@SIGNATURE@", strongNameSection).
+@@ -906,7 +985,7 @@ class MsbuildGenerator {
+ 			Replace ("@NOCONFIG@", "<NoConfig>" + (!load_default_config).ToString () + "</NoConfig>").
+ 			Replace ("@ALLOWUNSAFE@", Unsafe ? "<AllowUnsafeBlocks>true</AllowUnsafeBlocks>" : "").
+ 			Replace ("@FX_VERSION", fx_version).
+-			Replace ("@ASSEMBLYNAME@", Path.GetFileNameWithoutExtension (output_name)).
++			Replace ("@ASSEMBLYNAME@", assemblyName).
+ 			Replace ("@OUTPUTDIR@", build_output_dir).
+ 			Replace ("@OUTPUTSUFFIX@", Path.GetFileName (build_output_dir)).
+ 			Replace ("@DEFINECONSTANTS@", defines.ToString ()).
+@@ -920,7 +999,11 @@ class MsbuildGenerator {
+ 			Replace ("@ADDITIONALLIBPATHS@", String.Empty).
+ 			Replace ("@RESOURCES@", resources.ToString ()).
+ 			Replace ("@OPTIMIZE@", Optimize ? "true" : "false").
+-			Replace ("@SOURCES@", sources.ToString ());
++			Replace ("@SOURCES@", sources.ToString ()).
++			Replace ("@METADATAVERSION@", assemblyName == "mscorlib" ? "<RuntimeMetadataVersion>Mono</RuntimeMetadataVersion>" : "");
++
++		Csproj.preBuildEvent = prebuild;
++		Csproj.postBuildEvent = postbuild;
+ 
+ 		//Console.WriteLine ("Generated {0}", ofile.Replace ("\\", "/"));
+ 		using (var o = new StreamWriter (generatedProjFile)) {
+@@ -939,15 +1022,13 @@ class MsbuildGenerator {
+ 		if (q != -1)
+ 			target = target + Load (library.Substring (0, q) + suffix);
+ 
+-		if (target.IndexOf ("@MONO@") != -1){
+-			target_unix = target.Replace ("@MONO@", "mono").Replace ("@CAT@", "cat");
+-			target_windows = target.Replace ("@MONO@", "").Replace ("@CAT@", "type");
+-		} else {
+-			target_unix = target.Replace ("jay.exe", "jay");
+-			target_windows = target;
+-		}
++		target_unix = target.Replace ("@MONO@", "mono").Replace ("@CAT@", "cat");
++		target_windows = target.Replace ("@MONO@", "").Replace ("@CAT@", "type");
++
++		target_unix = target_unix.Replace ("\\jay\\jay.exe", "\\jay\\jay\\jay");
++
+ 		target_unix = target_unix.Replace ("@COPY@", "cp");
+-		target_windows = target_unix.Replace ("@COPY@", "copy");
++		target_windows = target_windows.Replace ("@COPY@", "copy");
+ 
+ 		target_unix = target_unix.Replace ("\r", "");
+ 		const string condition_unix    = "Condition=\" '$(OS)' != 'Windows_NT' \"";
