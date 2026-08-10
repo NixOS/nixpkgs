@@ -100,6 +100,35 @@ stdenv.mkDerivation (finalAttrs: {
     cd "$buildRoot/gcc"
 
     (
+  ''
+  # `AS`, `CC`, `CPP` and `LD` still name the *target* tools at this point,
+  # under their machine-prefixed names. Snapshot them before the
+  # `*_FOR_BUILD` assignments below overwrite them.
+  #
+  # Deriving `AS_FOR_TARGET` from `$AS` *after* `AS=$AS_FOR_BUILD` asked for
+  # the basename of the build assembler -- plain `as` -- inside the target
+  # compiler's `bin`, and a cross wrapper installs only prefixed names, so
+  # the path did not exist. Likewise `ld`.
+  #
+  # That is not an error `gcc/configure` reports. It probes the target
+  # assembler and linker for capabilities, and a probe it cannot run simply
+  # records "no"; with neither tool found, *every* `gcc_cv_as_*`/`gcc_cv_ld_*`
+  # answer came back "no". The one that matters here is
+  # `HAVE_LD_EH_FRAME_HDR`: `unwind-dw2-fde-dip.c` gates `USE_PT_GNU_EH_FRAME`
+  # on it, so without it the unwinder is compiled with no `dl_iterate_phdr`
+  # lookup at all -- only the `__register_frame` registry, which nothing
+  # populates for normally linked objects. libgcc and libstdc++ then build,
+  # link and install perfectly cleanly, and every C++ `throw` finds no FDE
+  # and calls `std::terminate`.
+  #
+  # `CPP` in particular is not always exported, so fall back to the
+  # machine-prefixed name the wrappers install.
+  + ''
+    targetAs=$(basename "''${AS:-${stdenv.hostPlatform.config}-as}")
+    targetCc=$(basename "''${CC:-${stdenv.hostPlatform.config}-cc}")
+    targetCpp=$(basename "''${CPP:-${stdenv.hostPlatform.config}-cpp}")
+    targetLd=$(basename "''${LD:-${stdenv.hostPlatform.config}-ld}")
+
     export AS_FOR_BUILD=${lib.getExe' buildPackages.stdenv.cc "$(basename $AS_FOR_BUILD)"}
     export CC_FOR_BUILD=${lib.getExe' buildPackages.stdenv.cc "$(basename $CC_FOR_BUILD)"}
     export CPP_FOR_BUILD=${lib.getExe' buildPackages.stdenv.cc "$(basename $CPP_FOR_BUILD)"}
@@ -112,10 +141,10 @@ stdenv.mkDerivation (finalAttrs: {
     export CXX=$CXX_FOR_BUILD
     export LD=$LD_FOR_BUILD
 
-    export AS_FOR_TARGET=${lib.getExe' stdenv.cc "$(basename $AS)"}
-    export CC_FOR_TARGET=${lib.getExe' stdenv.cc "$(basename $CC)"}
-    export CPP_FOR_TARGET=${lib.getExe' stdenv.cc "$(basename $CPP)"}
-    export LD_FOR_TARGET=${lib.getExe' stdenv.cc.bintools "$(basename $LD)"}
+    export AS_FOR_TARGET=${lib.getExe' stdenv.cc "$targetAs"}
+    export CC_FOR_TARGET=${lib.getExe' stdenv.cc "$targetCc"}
+    export CPP_FOR_TARGET=${lib.getExe' stdenv.cc "$targetCpp"}
+    export LD_FOR_TARGET=${lib.getExe' stdenv.cc.bintools "$targetLd"}
 
     export NIX_CFLAGS_COMPILE_FOR_BUILD+=' -DGENERATOR_FILE=1'
 
