@@ -16,6 +16,7 @@
   rust-jemalloc-sys,
   tsgolint,
   versionCheckHook,
+  darwin,
 }:
 
 # Build with pnpm instead of buildRustPackage because the upstream npm CLI is the
@@ -60,6 +61,19 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ rust-jemalloc-sys ];
 
   env.OXC_VERSION = finalAttrs.version;
+
+  # @napi-rs/cli >= 3.8 reads the process start time via `/bin/ps` while
+  # acquiring its filesystem reconciliation lock. The Darwin build sandbox
+  # denies that exec; Node raises it as a synchronous `spawn EPERM` from
+  # execFile, which escapes napi's callback-based error handling. Point the
+  # lookup at a store `ps` so the sandbox allows it. The result is only used
+  # to detect stale lock files.
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    for cli in node_modules/.pnpm/@napi-rs+cli@*/node_modules/@napi-rs/cli/dist/cli.js; do
+      substituteInPlace "$cli" \
+        --replace-fail '"/bin/ps"' '"${darwin.adv_cmds}/bin/ps"'
+    done
+  '';
 
   buildPhase = ''
     runHook preBuild
