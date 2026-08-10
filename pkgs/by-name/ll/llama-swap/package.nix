@@ -137,7 +137,7 @@ buildGoModule (finalAttrs: {
   doInstallCheck = true;
   versionCheckProgramArg = "-version";
 
-  passthru.tests.nixos = nixosTests.llama-swap;
+  passthru.tests.nixos = if withUI then nixosTests.llama-swap.full else nixosTests.llama-swap.minimal;
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--subpackage"
