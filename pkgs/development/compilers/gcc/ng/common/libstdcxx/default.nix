@@ -101,6 +101,30 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +x "$configureScript"
 
   ''
+  # Build libstdc++ with the *C* driver, not `g++`. `g++` implies `-lstdc++`,
+  # which cannot be satisfied while building the very library that provides
+  # it, and the link fails with `cannot find -lstdc++`.
+  #
+  # This is not our invention; it is what a monolithic build does, and
+  # `libstdc++-v3/src/Makefile.am` says so where it defines `CXXLINK`:
+  #
+  #     We cannot allow g++ to be used since this would add -lstdc++ to the
+  #     link line which of course is problematic at this point.  So, we get
+  #     the top-level directory to configure libstdc++-v3 to use gcc as the
+  #     C++ compilation driver.
+  #
+  # The top level does that through `RAW_CXX_FOR_TARGET`, which is `xgcc`
+  # -- not `xg++` -- plus `-shared-libgcc` and `-nostdinc++`. Building
+  # standalone there is no top level to arrange it, so arrange it here. The
+  # C driver still compiles `.cc` as C++ by extension; what it drops is the
+  # implicit `-lstdc++`. `-shared-libgcc` puts back the linkage `g++` would
+  # have chosen, which the C driver does not default to, and `-nostdinc++`
+  # keeps any already-installed C++ headers out of a build whose whole
+  # purpose is to produce them.
+  + ''
+    cxxForLibstdcxx="$CC -shared-libgcc -nostdinc++"
+
+  ''
   # Put libgcc's `gthr-default.h` where libstdc++ expects to find it.
   #
   # It is not a source file. In a monolithic build libgcc's Makefile creates
@@ -125,6 +149,9 @@ stdenv.mkDerivation (finalAttrs: {
   # to actually be there.
   + ''
     cp ${lib.getDev libgcc}/include/gthr-default.h "$sourceRoot/../libgcc/gthr-default.h"
+
+    export CXX="$cxxForLibstdcxx"
+    echo "libstdcxx: building with CXX=$CXX"
   '';
 
   configurePlatforms = [
