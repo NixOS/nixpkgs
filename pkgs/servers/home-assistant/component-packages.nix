@@ -2258,7 +2258,8 @@
       ];
     "gatus" =
       ps: with ps; [
-      ]; # missing inputs: gatus-api
+        gatus-api
+      ];
     "gaviota" =
       ps: with ps; [
       ];
@@ -8301,6 +8302,7 @@
     "garages_amsterdam"
     "gardena_bluetooth"
     "gate"
+    "gatus"
     "gdacs"
     "generic"
     "generic_hygrostat"
