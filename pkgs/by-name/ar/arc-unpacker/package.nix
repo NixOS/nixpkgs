@@ -17,8 +17,11 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "arc_unpacker";
-  version = "unstable-2021-08-06";
+  pname = "arc-unpacker";
+  version = "0.11-unstable-2021-09-06";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "vn-tools";

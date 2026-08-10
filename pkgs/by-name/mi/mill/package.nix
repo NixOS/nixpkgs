@@ -8,8 +8,10 @@
   zlib,
   writeScript,
   stdenv,
+  coreutils,
   curl,
-  libxml2,
+  gnugrep,
+  gnused,
   common-updater-scripts,
 }:
 
@@ -68,13 +70,24 @@ stdenvNoCC.mkDerivation rec {
     set -eu -o pipefail
     PATH=${
       lib.makeBinPath [
+        coreutils
         curl
-        libxml2 # xmllint
+        gnugrep
+        gnused
         common-updater-scripts
       ]
     }:$PATH
     metadataUrl="https://repo1.maven.org/maven2/com/lihaoyi/mill-dist/maven-metadata.xml"
-    latestVersion="$(curl -sS $metadataUrl | xmllint --xpath '/metadata/versioning/release/text()' -)"
+    # Maven's <release>/<latest> just reflect whatever was published most recently, which
+    # for mill includes milestone (-M1, -M2, ...) and per-commit dev builds (-N-<sha>).
+    # Filter the full <version> list down to plain X.Y.Z semver and take the highest.
+    latestVersion="$(
+      curl -sS $metadataUrl \
+        | grep -oE '<version>[0-9]+\.[0-9]+\.[0-9]+</version>' \
+        | sed -E 's#</?version>##g' \
+        | sort -V \
+        | tail -n1
+    )"
 
     ${lib.strings.concatStrings (
       builtins.map (

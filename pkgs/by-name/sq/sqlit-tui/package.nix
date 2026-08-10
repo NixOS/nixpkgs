@@ -8,7 +8,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sqlit-tui";
-  version = "1.5.2";
+  version = "1.6.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "Maxteabag";
     repo = "sqlit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HFr4dZlquFrdj2R1EJ8vWEtQa4/GpRhArqvfDKvAEws=";
+    hash = "sha256-LAWlUnRa+i+XQN8Sl7ri4i0UGjyqV7MTz1X+XgNDAcI=";
   };
 
   build-system = with python3Packages; [
