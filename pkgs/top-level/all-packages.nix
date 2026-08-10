@@ -7368,6 +7368,11 @@ with pkgs;
   inherit (mailmanPackages) mailman mailman-hyperkitty;
   mailman-web = mailmanPackages.web;
 
+  mdbook-rss-feed-full = mdbook-rss-feed.override {
+    withAtom = true;
+    withJsonFeed = true;
+  };
+
   micro-full = micro.wrapper.override {
     extraPackages = [
       wl-clipboard
