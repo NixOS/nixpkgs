@@ -163,10 +163,9 @@ let
         # Use the split GCC package set (`gccNGPackages`) instead of the
         # monolithic `gcc`.
         #
-        # I (@Ericson2314) plan on making more obscure low-tier
-        # platforms (e.g. NetBSD) use it soon, so we can dogfood GCC NG
-        # and thereby iron out its bugs.
-        useGccNG = final.isCygwin;
+        # NetBSD is here to dogfood it: it is low tier and has to use GCC
+        # rather than LLVM.
+        useGccNG = final.isCygwin || final.isNetBSD;
 
         libc =
           if final.isDarwin then
