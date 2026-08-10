@@ -4,6 +4,7 @@
   dbus,
   fetchFromGitHub,
   lib,
+  libinput,
   libx11,
   libxext,
   libxrandr,
@@ -26,16 +27,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wayvr";
-  version = "26.7.1";
+  version = "26.8.0";
 
   src = fetchFromGitHub {
     owner = "wlx-team";
     repo = "wayvr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SdHN3jDe2QJaRORy452RP7kTMxPOZOB/yjpApUOLhRU=";
+    hash = "sha256-0llU19bFJJ4yJvA6eGzOzyW8TnnurTS9js3/r+UAVCQ=";
   };
 
-  cargoHash = "sha256-eGmlFtlorKG7uygLer3UW6ERLQzdugoYyXVSC2sFh+k=";
+  cargoHash = "sha256-yUHLtB3/cBEWVAN1vuGLLlLFqJ25ucIy6qqInTGaOvA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -46,6 +47,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     alsa-lib
     dav1d
     dbus
+    libinput
     libx11
     libxext
     libxrandr
