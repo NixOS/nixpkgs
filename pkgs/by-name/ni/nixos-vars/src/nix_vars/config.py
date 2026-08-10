@@ -15,13 +15,15 @@ class VarsPromptBackend:
 @dataclass
 class VarsPrompt:
     name: str
-    description: str
+    label: str
+    description: Optional[str]
     backend: str
     type: str  # There's probably a way to type this properly..
 
     def from_jsom(name: str, json: Any) -> Self:
         return VarsPrompt(
             name=name,
+            label=json["label"],
             description=json["description"],
             backend=json["backend"],
             type=json["type"],

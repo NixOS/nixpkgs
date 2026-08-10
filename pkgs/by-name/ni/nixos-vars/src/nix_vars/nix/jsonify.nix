@@ -66,7 +66,12 @@ else
     }) cfg.promptBackends;
 
     prompts = lib.mapAttrs (_: prompt: {
-      inherit (prompt) description type backend;
+      inherit (prompt)
+        label
+        description
+        type
+        backend
+        ;
     }) cfg.prompts;
 
     generatorBackends = lib.mapAttrs (_: backend: {

@@ -19,7 +19,8 @@
     age.ssh.target = "root@lapetus.overlay.moonythm.dev";
     age.ssh.identity = "/home/moon/.ssh/id_ed25519";
 
-    prompts.example.description = "Your name";
+    prompts.example.label = "Your name";
+    prompts.example.description = "the person to address the greeting to";
     prompts.example.type = "multiline";
 
     generators.example = {
