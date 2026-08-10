@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   hatch-vcs,
@@ -62,6 +63,10 @@ buildPythonPackage rec {
   pytestFlags = [
     # broken in nix env
     "--deselect=tests/test_local.py::TestLocalMachine::test_local"
+  ]
+  # HACK https://github.com/tomerfiliba/plumbum/issues/844
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--deselect=tests/test_local.py::TestLocalMachine::test_pgrep"
   ];
 
   meta = {
