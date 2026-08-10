@@ -11,6 +11,7 @@
   ptpython,
   pydantic,
   python,
+  pythonOlder,
   ovmfvartool,
   remote-pdb,
   ruff,
@@ -28,6 +29,7 @@
 
   enableNspawn ? false,
   enableOCR ? false,
+  enableRuntimeDeps ? true,
   extraPythonPackages ? (_: [ ]),
 }:
 
@@ -35,6 +37,8 @@ buildPythonApplication {
   pname = "nixos-test-driver";
   version = "1.1";
   pyproject = true;
+
+  disabled = pythonOlder "3.13";
 
   src = ./src;
 
@@ -44,25 +48,31 @@ buildPythonApplication {
 
   dependencies = [
     colorama
-    ipython
     junit-xml
-    ptpython
     pydantic
     ovmfvartool
     remote-pdb
+  ]
+  ++ lib.optionals enableRuntimeDeps [
+    ipython
+    ptpython
   ]
   ++ extraPythonPackages python.pkgs;
 
   propagatedBuildInputs = [
     coreutils
-    netpbm
-    socat
-    util-linux
-    vde2
   ]
-  ++ lib.optionals stdenv.isLinux [
-    vhost-device-vsock
-  ]
+  ++ lib.optionals enableRuntimeDeps (
+    [
+      netpbm
+      socat
+      util-linux
+      vde2
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      vhost-device-vsock
+    ]
+  )
   ++ lib.optionals enableNspawn [
     systemd
   ]
@@ -74,7 +84,7 @@ buildPythonApplication {
   # containers test requires extra nix features that are not available in ofborg.
   passthru.tests = removeAttrs nixosTests.nixos-test-driver [ "containers" ];
 
-  doCheck = true;
+  doCheck = enableRuntimeDeps;
 
   nativeCheckInputs = [
     ruff
