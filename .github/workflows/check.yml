@@ -134,6 +134,35 @@ jobs:
           GH_TOKEN: ${{ steps.app-token.outputs.token || github.token }}
         run: gh api /rate_limit | jq
 
+  github-script:
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
+          sparse-checkout: .github/actions
+
+      - name: Checkout merge and target commits
+        uses: ./.github/actions/checkout
+        with:
+          merged-as-untrusted-at: ${{ inputs.mergedSha }}
+          target-as-trusted-at: ${{ inputs.targetSha }}
+
+      - name: Install dependencies to trusted/
+        run: |
+          npm ci --package-lock-only=false
+          echo "$PWD/node_modules/.bin" >> "$GITHUB_PATH"
+        working-directory: nixpkgs/trusted/ci/github-script
+
+      - name: Link trusted/ dependencies to untrusted/
+        run: ln -s "$PWD/trusted/ci/github-script/node_modules" untrusted/ci/github-script/node_modules
+        working-directory: nixpkgs
+
+      - name: Type-check ci/github-script
+        run: tsc --build
+        working-directory: nixpkgs/untrusted/ci/github-script
+
   owners:
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 5
@@ -142,6 +171,7 @@ jobs:
         with:
           persist-credentials: false
           sparse-checkout: .github/actions
+
       - name: Checkout merge and target commits
         uses: ./.github/actions/checkout
         with:
