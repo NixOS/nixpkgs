@@ -613,6 +613,7 @@ let
         ez_api = callPackage ../development/ocaml-modules/ez_api { };
         ez_cmdliner = callPackage ../development/ocaml-modules/ez_cmdliner { };
         ez_file = callPackage ../development/ocaml-modules/ez_file { };
+        ez_opam_file = callPackage ../development/ocaml-modules/ez_opam_file { };
         ez_subst = callPackage ../development/ocaml-modules/ez_subst { };
 
         ezgzip = callPackage ../development/ocaml-modules/ezgzip { };
