@@ -122,5 +122,6 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl21
       mpl11
     ];
+    maintainers = with lib.maintainers; [ tmarkus ];
   };
 })
