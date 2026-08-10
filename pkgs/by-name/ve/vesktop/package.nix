@@ -30,7 +30,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vesktop";
-  version = "1.6.5-unstable-2026-07-16";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "Vencord";
