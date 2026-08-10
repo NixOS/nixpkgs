@@ -39,7 +39,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     vips
   ];
 
-  extraBuildInputs = [ libsass ];
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_11;
@@ -75,22 +74,22 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     done
   '';
 
-  distPhase = "true";
-
   passthru = {
     updateScript = ./update.py;
     tests.lemmy-ui = nixosTests.lemmy;
   };
 
   meta = {
-    description = "Building a federated alternative to reddit in rust";
+    description = "Web frontend for a federated link aggregator";
     homepage = "https://join-lemmy.org/";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       happysalada
       billewanick
       georgyo
+      lucasew
     ];
+    teams = [ lib.teams.ngi ];
     inherit (nodejs.meta) platforms;
   };
 })
