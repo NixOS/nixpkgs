@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  testers,
   fetchurl,
   fetchpatch,
   meson,
@@ -106,6 +107,8 @@ stdenv.mkDerivation (finalAttrs: {
   # see https://github.com/NixOS/nixpkgs/pull/53293#issuecomment-453739295
   doCheck = false;
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = {
     changelog = "https://gitlab.freedesktop.org/libnice/libnice/-/blob/${finalAttrs.version}/NEWS";
     description = "GLib ICE implementation";
@@ -117,6 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
       It provides a GLib-based library, libnice and a Glib-free library,
       libstun as well as GStreamer elements.'';
     homepage = "https://libnice.freedesktop.org/";
+    pkgConfigModules = [ "nice" ];
     platforms = lib.platforms.unix;
     license = with lib.licenses; [
       lgpl21
