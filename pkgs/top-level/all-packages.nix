@@ -5924,8 +5924,7 @@ with pkgs;
 
   lcms = lcms2;
 
-  libappindicator-gtk2 = libappindicator.override { gtkVersion = "2"; };
-  libappindicator-gtk3 = libappindicator.override { gtkVersion = "3"; };
+  libappindicator-gtk3 = libappindicator;
 
   libbass = (callPackage ../development/libraries/audio/libbass { }).bass;
   libbass_fx = (callPackage ../development/libraries/audio/libbass { }).bass_fx;
