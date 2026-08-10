@@ -465,7 +465,8 @@ div.appendix .variablelist .term {
   font-display: swap;
 }
 
-.chapter {
+div.chapter,
+div.page {
   content-visibility: auto;
 }
 

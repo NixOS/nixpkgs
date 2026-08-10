@@ -45,11 +45,6 @@
   # list it returns.
   stdenvStages ? import ../stdenv,
 
-  # Temporary parameter to unify nixpkgs/pkgs evaluation
-  # Internal, do not use this manually!
-  # Will be removed again within the next releases
-  _configDefinitions ? null,
-
   # Ignore unexpected args.
   ...
 }@args:
@@ -114,13 +109,11 @@ let
       (throwIfNot (lib.all lib.isFunction overlays) "All overlays passed to nixpkgs must be functions.")
       (throwIfNot (lib.isList crossOverlays) "The crossOverlays argument to nixpkgs must be a list.")
       (throwIfNot (lib.all lib.isFunction crossOverlays) "All crossOverlays passed to nixpkgs must be functions.")
-      (throwIf (
-        ((localSystem.isDarwin && localSystem.isx86) || (crossSystem.isDarwin && crossSystem.isx86))
-        && config.allowDeprecatedx86_64Darwin != "force"
-      ) x86_64DarwinDeprecationMessage)
       (
-        throwIfNot (_configDefinitions == null || config0 == { })
-          "The `_configDefinitions` argument is an internal interface and must not be combined with `config`."
+        throwIf (
+          ((localSystem.isDarwin && localSystem.isx86) || (crossSystem.isDarwin && crossSystem.isx86))
+          && config.allowDeprecatedx86_64Darwin != "force"
+        ) x86_64DarwinDeprecationMessage
       );
 
   localSystem = lib.systems.elaborate args.localSystem;
@@ -145,24 +138,20 @@ let
 
   # Allow both:
   # { /* the config */ } and
-  # { lib, pkgs, ... } : { /* the config */ }
+  # { pkgs, ... } : { /* the config */ }
   config1 = if lib.isFunction config0 then config0 { inherit lib pkgs; } else config0;
 
   configEval = lib.evalModules {
     modules = [
       ./config.nix
-    ]
-    ++ (
-      if _configDefinitions != null then
-        map (def: lib.modules.setDefaultModuleLocation def.file def.value) _configDefinitions
-      else
-        [
-          {
-            _file = "nixpkgs.config";
-            config = config1;
-          }
-        ]
-    );
+      (
+        { options, ... }:
+        {
+          _file = "nixpkgs.config";
+          config = config1;
+        }
+      )
+    ];
     class = "nixpkgsConfig";
   };
 

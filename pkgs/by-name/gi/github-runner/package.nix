@@ -366,6 +366,7 @@ buildDotnetModule (finalAttrs: {
       kfollesdal
       aanderse
       zimbatm
+      schmittlauch
     ];
     platforms = [
       "x86_64-linux"
