@@ -22,7 +22,7 @@ let
     mkOption (
       removeAttrs args [ "feature" ]
       // {
-        type = args.type or (types.uniq types.bool);
+        type = args.type or types.bool;
         default = args.default or false;
         description = (
           (args.description or ''
