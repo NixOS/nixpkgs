@@ -112,5 +112,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
       tebriel
       traxys
     ];
+    knownVulnerabilities = [
+      # https://github.com/SamR1/FitTrackee/security/advisories/GHSA-rc38-72q6-pc7w
+      "GHSA-rc38-72q6-pc7w: JWT logout bypass in FitTrackee"
+    ];
   };
 })
