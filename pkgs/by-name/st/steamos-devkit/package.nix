@@ -7,24 +7,26 @@
   makeDesktopItem,
   pkg-config,
   SDL2,
+  which,
+  yad,
 }:
 let
-  # steamos-devkit requires a build of the unreleased pyimgui 2.0 branch, move to pythonPackages when 2.0 is released.
+  # see pyproject.toml in steamos-devkit
   pyimgui = python3.pkgs.buildPythonPackage {
     pname = "pyimgui";
-    version = "2.0.0";
+    version = "2.0.0-dev";
     format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "pyimgui";
       repo = "pyimgui";
-      rev = "2.0.0";
+      rev = "5842ee415f9357a9418cc8341d621b6e1e2aaddd";
       fetchSubmodules = true;
-      sha256 = "sha256-sw/bLTdrnPhBhrnk5yyXCbEK4kMo+PdEvoMJ9aaZbsE=";
+      sha256 = "sha256-YuDLzm5QKuDjmcGHVbqxP5GwBFCvmBLYtPlKoHxZu6U=";
     };
 
     nativeBuildInputs = with python3.pkgs; [
-      cython_0
+      cython
       pkg-config
       SDL2
     ];
@@ -39,6 +41,33 @@ let
     doCheck = false;
     pythonImportsCheck = [ "imgui" ];
   };
+
+  # see pyproject.toml in steamos-devkit
+  xdialog = python3.pkgs.buildPythonPackage rec {
+    pname = "xdialog";
+    version = "c55ca29e69b124818a960d55e3ca0c7e559a8dda";
+    format = "setuptools";
+
+    src = fetchFromGitHub {
+      owner = "TTimo";
+      repo = "xdialog";
+      rev = version;
+      fetchSubmodules = true;
+      sha256 = "sha256-oSekemXXofQFSBa6UqiuW8311sgV6JSb4vInBJEvVu0=";
+    };
+
+    postPatch = ''
+      substituteInPlace xdialog/__init__.py --replace-fail "'which'" "'${which}/bin/which'"
+      substituteInPlace xdialog/__init__.py --replace-fail "'yad'" "'${yad}/bin/yad'"
+    '';
+
+    buildInputs = [
+      copyDesktopItems
+    ];
+
+    pythonImportsCheck = [ "xdialog" ];
+  };
+
   steamos-devkit-script = ''
     #!${python3.interpreter}
     import os
@@ -58,33 +87,37 @@ let
 in
 python3.pkgs.buildPythonPackage rec {
   pname = "steamos-devkit";
-  version = "0.20240216.0";
-  format = "setuptools";
+  version = "0.20260803.0";
+  pyproject = true;
 
   src = fetchFromGitLab {
     domain = "gitlab.steamos.cloud";
     owner = "devkit";
     repo = "steamos-devkit";
     rev = "v${version}";
-    sha256 = "sha256-eOtESkGMIjcijAFITOcYKPsXH6xH/Xcj9D+OItMqebM=";
+    sha256 = "sha256-gMeOVn5aMSlyLQ2CLCsdbPn0UZCi4otOFVGakAl7+T8=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     appdirs
     bcrypt
     cffi
     cryptography
     idna
     ifaddr
-    netifaces
+    netifaces-plus
     numpy
     paramiko
     pycparser
     pyimgui
     pynacl
     pysdl2
+    setuptools
+    shiv
     signalslot
     six
+    xdialog
+    zeroconf
   ];
 
   nativeBuildInputs = [
@@ -102,11 +135,22 @@ python3.pkgs.buildPythonPackage rec {
     ln -s $prevRoot/setup/shiv-linux-setup.py $sourceRoot/setup.py
   '';
 
+  patches = [
+    ./0001-make-steamos-devkit-root-relocatable.diff
+  ];
+
+  postPatch = ''
+    # Move ROOT_DIR from bin to share/steamos-devkit
+    substituteInPlace devkit_client/__init__.py --replace-fail "@ROOT_DIR@" "'$out/share/steamos-devkit'"
+  '';
+
   postInstall = ''
     mkdir -p $out/bin
+    mkdir -p $out/share/steamos-devkit
 
-    # These are various assets like scripts that steamos-devkit will copy to the remote device
-    cp -R ./devkit-utils $out/${python3.sitePackages}/devkit-utils
+    # These are various assets like scripts that steamos-devkit requires
+    cp -R ./devkit-utils $out/share/steamos-devkit/devkit-utils
+    cp -R ./logo-steamdeck-256.tga $out/share/steamos-devkit
 
     # writeScript + symlink will be ignored by wrapPythonPrograms
     # Copying it is undesirable too, just write it directly to a script instead
@@ -119,6 +163,9 @@ python3.pkgs.buildPythonPackage rec {
   # There are no checks for steamos-devkit
   doCheck = false;
   pythonImportsCheck = [ "devkit_client" ];
+
+  # importlib.metadata.PackageNotFoundError: No package metadata was found for steamos-devkit
+  dontCheckPythonMetadata = true;
 
   desktopItems = [
     (makeDesktopItem {
