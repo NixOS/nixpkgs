@@ -27,20 +27,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "2.32.6";
+  version = "2.33.7";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     tag = "n8n@${finalAttrs.version}";
-    hash = "sha256-wWm6vGyJ2I2SBU38gRGaZG2FR5FBxH6V/sWQwn5B4Ac=";
+    hash = "sha256-6QysdmXgSxfJpNaL10HogrnNYEyrxZLdkfgBnRiXWX4=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 4;
-    hash = "sha256-D8CKJxU2RoMjNrqIgGDE3mFBjc0kqFLQzT/DdUpiNmY=";
+    hash = "sha256-Ei/8j+KvhZVgqteA+bqNsL11IMGzWn3OHngDpsEH6jk=";
   };
 
   nativeBuildInputs = [
@@ -104,8 +104,12 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/{bin,lib/n8n}
     cp -r {packages,node_modules} $out/lib/n8n
 
+    # node must be on PATH: in internal runner mode the CLI spawns the
+    # JS task runner via `spawn('node', ...)`, and since 2.33 a failed
+    # spawn crashes n8n instead of being silently ignored
     makeWrapper $out/lib/n8n/packages/cli/bin/n8n $out/bin/n8n \
-      --set N8N_RELEASE_TYPE "stable"
+      --set N8N_RELEASE_TYPE "stable" \
+      --prefix PATH : ${lib.makeBinPath [ nodejs ]}
 
     # JavaScript runner
     makeWrapper ${nodejs}/bin/node $out/bin/n8n-task-runner \
