@@ -1,17 +1,21 @@
 {
-  apple-sdk_15,
-  buildGoModule,
-  buildPackages,
-  darwin,
-  fetchFromGitHub,
-  gn,
   lib,
-  ninja,
-  python3,
+  buildGoModule,
+  fetchFromGitHub,
   replaceVars,
   stdenvNoCC,
   symlinkJoin,
+
+  # nativeBuildInputs
+  buildPackages,
+  gn,
+  ninja,
+  python3,
   xcbuild,
+
+  # buildInputs
+  apple-sdk_15,
+  darwin,
 }:
 let
   llvmCcAndBintools = symlinkJoin {
@@ -24,15 +28,16 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cronet-go";
-  version = "148.0.7778.96-1-unstable-2026-07-12";
+  # NOTE: https://github.com/SagerNet/sing-box/blob/stable/.github/CRONET_GO_VERSION
+  version = "150.0.7871.63-1";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "SagerNet";
     repo = "cronet-go";
-    rev = "617d38f41f935b46a68f550d9add2e38abb3f168";
+    rev = "7e27f60f7f04a1c762b6bb69b4a44d7b24cd7a5d";
     fetchSubmodules = true;
-    hash = "sha256-UK7mv0TuhJX4y64DhH49t5mgZFGhMx4Viy/chulKD4s=";
+    hash = "sha256-dTKKl32saIIVt8ue105Xw643TBNEf09H38GbSdEcmKQ=";
   };
 
   patches = [
@@ -43,6 +48,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       libresolv = lib.getInclude darwin.libresolv;
     }
   );
+
+  postPatch = ''
+    patchShebangs --build naiveproxy/src/build/toolchain/apple/linker_driver.py
+  '';
 
   nativeBuildInputs = [
     buildPackages.rustc.llvmPackages.bintools

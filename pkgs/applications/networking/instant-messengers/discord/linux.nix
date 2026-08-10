@@ -152,7 +152,8 @@ let
   # where Discord's JS moduleUpdater expects them.
   stageModules = writeShellScript "discord-stage-modules" ''
     store_modules="$1"
-    modules_dir="''${XDG_CONFIG_HOME:-$HOME/.config}/${lib.toLower binaryName}/${version}/modules"
+    user_data_dir="''${DISCORD_USER_DATA_DIR-''${XDG_CONFIG_HOME:-$HOME/.config}}"
+    modules_dir="$user_data_dir''${user_data_dir:+/}${lib.toLower binaryName}/${version}/modules"
     rm -rf "$modules_dir"
     mkdir -p "$modules_dir"
     for m in ${lib.concatStringsSep " " (lib.attrNames moduleSrcs)}; do

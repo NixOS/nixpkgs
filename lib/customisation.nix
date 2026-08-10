@@ -2,6 +2,7 @@
 
 let
   inherit (builtins)
+    catAttrs
     intersectAttrs
     unsafeGetAttrPos
     ;
@@ -406,7 +407,7 @@ rec {
           ++ [
             {
               name = "all";
-              value = map (x: x.value) outputsList;
+              value = catAttrs "value" outputsList;
             }
           ]
         )

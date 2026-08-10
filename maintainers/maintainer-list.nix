@@ -1966,6 +1966,13 @@
     githubId = 143312793;
     name = "Annin";
   };
+  annoyingrains = {
+    email = "avali@avali.zone";
+    matrix = "@avali:avali.zone";
+    github = "AnnoyingRain5";
+    githubId = 35289650;
+    name = "AnnoyingRains";
+  };
   anntnzrb = {
     github = "anntnzrb";
     githubId = 51257127;
@@ -13986,6 +13993,12 @@
     github = "jsoo1";
     name = "John Soo";
     githubId = 10039785;
+  };
+  jsqu4re = {
+    email = "johannes.jeising@gmail.com";
+    github = "jsqu4re";
+    githubId = 35706792;
+    name = "Johannes Jeising";
   };
   jsusk = {
     email = "joshua@suskalo.org";

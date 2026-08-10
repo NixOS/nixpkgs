@@ -12,12 +12,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "git-repo";
-  version = "2.65";
+  version = "2.66";
 
   src = fetchFromGitiles {
     url = "https://android.googlesource.com/tools/repo";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ToJj5WS74vwCAX53UB5zgy1K54y1gNK+1d4qQLmp1L8=";
+    hash = "sha256-LNUbVSucZDVLlt2OHitxkxNKPdFUurWrZCf5FTCV4Ss=";
   };
 
   # Fix 'NameError: name 'ssl' is not defined'
