@@ -35,8 +35,6 @@
   fromVCS ? false,
   getVersionFile,
   buildGccPackages,
-  targetPackages,
-  libc,
   bintools,
   # Build the shared runtime libraries, and so have the driver's specs emit
   # `-lgcc_s`. Derived the way the monolithic build derives it.
@@ -300,8 +298,14 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-system-zlib"
     "--without-included-gettext"
     "--enable-linker-build-id"
-    "--with-sysroot=${lib.getDev (targetPackages.libc or libc)}"
-    "--with-native-system-header-dir=/include"
+    # Deliberately *no* `--with-sysroot` / `--with-native-system-header-dir`
+    # pointing at the target libc. Baking a libc store path into the compiler
+    # makes every libc change rebuild the compiler, which is precisely the
+    # coupling this split package set exists to remove. cc-wrapper already
+    # supplies the target libc (`-idirafter <libc.dev>/include` and the
+    # corresponding `-B`/`-L` flags), so the compiler proper does not need to
+    # know about it -- exactly as in the LLVM package set, where `clang`
+    # likewise carries no libc reference (`--without-headers` above).
   ]
   ++ lib.optionals enablePlugin [
     "--enable-plugin"
@@ -313,6 +317,20 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionals (targetPlatform.isAarch || targetPlatform.isAvr || targetPlatform.isx86_64) [
       "--with-multilib-list="
     ];
+
+  # `LIMITS_H_TEST` decides whether gcc's generated `syslimits.h` chains to the
+  # target libc's `limits.h` (`#include_next`) or is emitted self-contained. It
+  # defaults to a `[ -f $(BUILD_SYSTEM_HEADER_DIR)/limits.h ]` probe, which
+  # necessarily fails here: we deliberately do not point the compiler at a
+  # sysroot (see `configureFlags`), so there is no libc for it to find at build
+  # time.
+  #
+  # Self-contained is the wrong answer regardless. Every target in this package
+  # set is hosted, and cc-wrapper always supplies a libc, so the chained header
+  # is what resolves correctly at *use* time. Without it, anything the libc's
+  # `limits.h` defines and gcc's does not -- `PATH_MAX` being the common one --
+  # goes missing from every libgcc source that needs it.
+  makeFlags = [ "LIMITS_H_TEST=true" ];
 
   doCheck = false;
 

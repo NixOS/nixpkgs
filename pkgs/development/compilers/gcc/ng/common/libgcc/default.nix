@@ -120,6 +120,25 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionalString enableShared (
       import ../../../common/libgcc-buildstuff.nix { inherit lib stdenv; }
     )
+    # gcc's installed `limits.h` chains to the target libc's with
+    # `#include_next`. Where the compiler has a libc — headers-only or real —
+    # that resolves, and it has to: some targets build libgcc sources that need
+    # what only the libc header defines. Where it does not, the chain has
+    # nowhere to land, and
+    # even configure's `AC_PROG_CPP` probe fails -- it includes `<limits.h>`
+    # precisely because that "exists even on freestanding compilers" -- after
+    # which configure falls back to `/lib/cpp` and reports that as the error.
+    #
+    # Only in that case, put gcc's own `glimits.h` earlier on the include path
+    # for this build. That is the self-contained variant, the same file gcc
+    # installs when configured against no libc, so nothing is invented here.
+    # The compiler keeps shipping the chained header either way, which is what
+    # has to stay correct for everything compiled against a real libc later.
+    + lib.optionalString (libc == null) ''
+      mkdir -p "$NIX_BUILD_TOP/freestanding-include"
+      cp gcc/glimits.h "$NIX_BUILD_TOP/freestanding-include/limits.h"
+      export NIX_CFLAGS_COMPILE="-isystem $NIX_BUILD_TOP/freestanding-include ''${NIX_CFLAGS_COMPILE-}"
+    ''
     + ''
       sourceRoot=$(readlink -e "./libgcc")
     '';
@@ -249,6 +268,21 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-vtable-verify"
 
     "--with-system-zlib"
+  ]
+  # `gcc/configure` sets `inhibit_libc=true` when host != target and
+  # `$target_header_dir/stdio.h` does not exist. `inhibit_libc` makes
+  # `tsystem.h` skip <unistd.h> and friends, which is fine for the generic
+  # sources but breaks the target-specific ones that genuinely need libc
+  # declarations -- the profiling support files are the usual casualty.
+  #
+  # `target_header_dir` is derived from `--with-sysroot`, *not* from
+  # `--with-headers`, so the sysroot pair is what has to be set. Point it at
+  # whichever libc the compiler carries, which in the bootstrap build is the
+  # headers-only one. This affects only the `gcc/configure` run that generates
+  # libgcc's makefile fragments, not the compiler that gets shipped.
+  ++ lib.optionals (libc != null) [
+    "--with-sysroot=${lib.getDev libc}"
+    "--with-native-system-header-dir=/include"
   ]
   ++
     lib.optional (!stdenv.hostPlatform.isRiscV)
