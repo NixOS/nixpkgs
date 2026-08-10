@@ -100,6 +100,7 @@
   libfreeaptx,
   zxing-cpp,
   usrsctp,
+  libltc,
   directoryListingUpdater,
   enableGplPlugins ? true,
   bluezSupport ? stdenv.hostPlatform.isLinux,
@@ -220,6 +221,7 @@ stdenv.mkDerivation (finalAttrs: {
     usrsctp
     wildmidi
     svt-av1
+    libltc # used by timecode plugin
   ]
   ++ lib.optionals onnxSupport [
     onnxruntime
