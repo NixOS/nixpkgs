@@ -5,7 +5,6 @@
   python3,
   python3Packages,
   ruff,
-  age,
   makeWrapper,
   bubblewrap,
 }:
