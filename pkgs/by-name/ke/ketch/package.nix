@@ -7,7 +7,7 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "ketch";
-  version = "0.12.0";
+  version = "0.14.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -16,7 +16,7 @@ buildGoModule (finalAttrs: {
     owner = "1broseidon";
     repo = "ketch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qp4EwQBrN0ic/gUAvBAirz03kL7Vjhs1LbKBd+uXmHA=";
+    hash = "sha256-SBf9PYBcZ+odOLLdafI6dRczpyYZSYP5zo/0PAEWAiU=";
   };
 
   vendorHash = "sha256-Kk7fY27y1ziJEMpwRUoGfslGYYQdayLDuuRvNyfiAy8=";
