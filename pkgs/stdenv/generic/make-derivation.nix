@@ -14,7 +14,6 @@ let
     attrNames
     concatLists
     concatMap
-    concatMapStrings
     concatMapStringsSep
     concatStringsSep
     elem
@@ -486,31 +485,23 @@ let
           actualValue;
       outputs' = if separateDebugInfo' then outputs ++ [ "debug" ] else outputs;
 
-      checkDependencyList = checkDependencyList' [ ];
-      checkDependencyList' =
-        positions: name: deps:
+      checkDependencyList =
+        name: deps:
         if all isSingularDependency deps then
           deps
         else
-          # iterate again with the index if an invalid type was passed, or we
-          # need to recurse into a sublist. making sublists take longer is
-          # worth it, since nobody uses them and handling them makes normal
-          # dependencies slower
+          # iterate again with the index if an invalid type was passed
           seq (foldl' (
             index: dep:
             if isSingularDependency dep then
               index + 1
             else if isList dep then
-              warn
-                ''
-                  Dependency of package '${attrs.name or attrs.pname}' uses a nested list in attribute '${name}'.
-                  This is deprecated as of Nixpkgs release 26.05, and support will
-                  be removed in a future nixpkgs release.''
-                (seq (checkDependencyList' ([ index ] ++ positions) name dep) (index + 1))
+              throw ''
+                Dependency of package '${attrs.name or attrs.pname}' uses a nested list in attribute '${name}'.
+                Support for these is removed as of Nixpkgs release 26.11. Dependency lists should instead be
+                concatenated together using '++' or 'builtins.concatLists'.''
             else
-              throw "Dependency is not of a valid type: ${
-                concatMapStrings (ix: "element ${toString ix} of ") ([ index ] ++ positions)
-              }${name} for ${attrs.name or attrs.pname}"
+              throw "Dependency is not of a valid type: element ${toString index} of ${name} for ${attrs.name or attrs.pname}"
           ) 1 deps) deps;
     in
     if
