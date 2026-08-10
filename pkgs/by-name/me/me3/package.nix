@@ -79,7 +79,7 @@ let
 in
 symlinkJoin {
   inherit version;
-  name = "me3";
+  pname = "me3";
 
   paths = [
     me3-cli
